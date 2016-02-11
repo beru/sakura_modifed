@@ -31,14 +31,14 @@
 #pragma once
 
 #include <Windows.h>
-class CEditView;
+class EditView;
 
-class CMacroBeforeAfter {
+class MacroBeforeAfter {
 public:
-	CMacroBeforeAfter() : m_nOpeBlkCount(0), m_bDrawSwitchOld(true) {};
-	virtual ~CMacroBeforeAfter() {};
-	virtual void ExecKeyMacroBefore(class CEditView* pcEditView, int flags);
-	virtual void ExecKeyMacroAfter(class CEditView* pcEditView, int flags, bool bRet);
+	MacroBeforeAfter() : m_nOpeBlkCount(0), m_bDrawSwitchOld(true) {};
+	virtual ~MacroBeforeAfter() {};
+	virtual void ExecKeyMacroBefore(class EditView* pcEditView, int flags);
+	virtual void ExecKeyMacroAfter(class EditView* pcEditView, int flags, bool bRet);
 private:
 	int m_nOpeBlkCount;
 	bool m_bDrawSwitchOld;
@@ -48,7 +48,7 @@ private:
 	@brief マクロを処理するエンジン部分の基底クラス
 
 */
-class CMacroManagerBase : CMacroBeforeAfter {
+class MacroManagerBase : MacroBeforeAfter {
 public:
 
 	/*! キーボードマクロの実行
@@ -58,8 +58,8 @@ public:
 		
 		@date 2007.07.20 genta マクロ実行属性を渡すためにflagsを追加
 	*/
-	virtual bool ExecKeyMacro(class CEditView* pcEditView, int flags) const = 0;
-	virtual void ExecKeyMacro2(class CEditView* pcEditView, int flags);
+	virtual bool ExecKeyMacro(class EditView* pcEditView, int flags) const = 0;
+	virtual void ExecKeyMacro2(class EditView* pcEditView, int flags);
 	
 	/*! キーボードマクロをファイルから読み込む
 
@@ -75,12 +75,12 @@ public:
 	*/
 	virtual bool LoadKeyMacroStr(HINSTANCE hInstance, const TCHAR* pszCode) = 0;
 
-	// static CMacroManagerBase* Creator(const char* str);
+	// static MacroManagerBase* Creator(const char* str);
 	// 純粋仮想クラスは実体化できないのでFactoryは不要。
 	// 継承先クラスでは必要。
 	
 	// デストラクタのvirtualを忘れずに
-	virtual ~CMacroManagerBase();
+	virtual ~MacroManagerBase();
 	
 
 protected:
@@ -96,7 +96,7 @@ public:
 	bool IsReady() { return m_nReady; }
 
 	// Constructor
-	CMacroManagerBase();
+	MacroManagerBase();
 
 };
 

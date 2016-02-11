@@ -32,7 +32,7 @@ using namespace std;
 //               コンストラクタ・デストラクタ                  //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-CTextMetrics::CTextMetrics()
+TextMetrics::TextMetrics()
 {
 	//$ 適当な仮値で初期化。実際には使う側でSet～を呼ぶので、これらの仮値が参照されることは無い。
 	SetHankakuWidth(10);
@@ -41,11 +41,11 @@ CTextMetrics::CTextMetrics()
 	SetHankakuDy(24);
 }
 
-CTextMetrics::~CTextMetrics()
+TextMetrics::~TextMetrics()
 {
 }
 
-void CTextMetrics::CopyTextMetricsStatus(CTextMetrics* pDst) const
+void TextMetrics::CopyTextMetricsStatus(TextMetrics* pDst) const
 {
 	pDst->SetHankakuWidth	(GetHankakuWidth());		// 半角文字の幅
 	pDst->SetHankakuHeight	(GetHankakuHeight());		// 文字の高さ
@@ -57,7 +57,7 @@ void CTextMetrics::CopyTextMetricsStatus(CTextMetrics* pDst) const
 	※ビルド種により、微妙にサイズが変わるようでした。
 	　サイズを合わせるため、適当な文字で調整。
 */
-void CTextMetrics::Update(HFONT hFont)
+void TextMetrics::Update(HFONT hFont)
 {
 	HDC hdc = GetDC(NULL);
 	{
@@ -80,27 +80,27 @@ void CTextMetrics::Update(HFONT hFont)
 //                           設定                              //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-void CTextMetrics::SetHankakuWidth(int nHankakuWidth)
+void TextMetrics::SetHankakuWidth(int nHankakuWidth)
 {
 	m_nCharWidth = nHankakuWidth;
 }
 
 // 半角文字の縦幅を設定。単位はピクセル。
-void CTextMetrics::SetHankakuHeight(int nHankakuHeight)
+void TextMetrics::SetHankakuHeight(int nHankakuHeight)
 {
 	m_nCharHeight = nHankakuHeight;
 }
 
 
 //文字間隔基準設定。nDxBasisは半角文字の基準ピクセル幅。SetHankakuDx
-void CTextMetrics::SetHankakuDx(int nDxBasis)
+void TextMetrics::SetHankakuDx(int nDxBasis)
 {
 	m_nDxBasis = nDxBasis;
 	for (int i=0; i<_countof(m_anHankakuDx); ++i) m_anHankakuDx[i] = GetHankakuDx();
 	for (int i=0; i<_countof(m_anZenkakuDx); ++i) m_anZenkakuDx[i] = GetZenkakuDx();
 }
 
-void CTextMetrics::SetHankakuDy(int nDyBasis)
+void TextMetrics::SetHankakuDy(int nDyBasis)
 {
 	m_nDyBasis = nDyBasis;
 }
@@ -110,7 +110,7 @@ void CTextMetrics::SetHankakuDy(int nDyBasis)
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 // 指定した文字列により文字間隔配列を生成する。
-const int* CTextMetrics::GenerateDxArray(
+const int* TextMetrics::GenerateDxArray(
 	std::vector<int>* vResultArray, // [out] 文字間隔配列の受け取りコンテナ
 	const wchar_t* pText,           // [in]  文字列
 	int nLength,                    // [in]  文字列長
@@ -177,7 +177,7 @@ const int* CTextMetrics::GenerateDxArray(
 }
 
 // 文字列のピクセル幅を返す。
-int CTextMetrics::CalcTextWidth(
+int TextMetrics::CalcTextWidth(
 	const wchar_t* pText, // 文字列
 	int nLength,          // 文字列長
 	const int* pnDx       // 文字間隔の入った配列
@@ -195,7 +195,7 @@ int CTextMetrics::CalcTextWidth(
 }
 
 // 文字列のピクセル幅を返す。
-int CTextMetrics::CalcTextWidth2(
+int TextMetrics::CalcTextWidth2(
 	const wchar_t* pText, // 文字列
 	int nLength,          // 文字列長
 	int nHankakuDx        // 半角文字の文字間隔
@@ -203,7 +203,7 @@ int CTextMetrics::CalcTextWidth2(
 {
 	// 文字間隔配列を生成
 	vector<int> vDxArray;
-	const int* pDxArray = CTextMetrics::GenerateDxArray(
+	const int* pDxArray = TextMetrics::GenerateDxArray(
 		&vDxArray,
 		pText,
 		nLength,

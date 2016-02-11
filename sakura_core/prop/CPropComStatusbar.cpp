@@ -40,18 +40,18 @@ static const DWORD p_helpids[] = {
 	@param wParam パラメータ1
 	@param lParam パラメータ2
 */
-INT_PTR CALLBACK CPropStatusbar::DlgProc_page(
+INT_PTR CALLBACK PropStatusbar::DlgProc_page(
 	HWND hwndDlg,
 	UINT uMsg,
 	WPARAM wParam,
 	LPARAM lParam
 	)
 {
-	return DlgProc(reinterpret_cast<pDispatchPage>(&CPropStatusbar::DispatchEvent), hwndDlg, uMsg, wParam, lParam);
+	return DlgProc(reinterpret_cast<pDispatchPage>(&PropStatusbar::DispatchEvent), hwndDlg, uMsg, wParam, lParam);
 }
 
 // メッセージ処理
-INT_PTR CPropStatusbar::DispatchEvent(
+INT_PTR PropStatusbar::DispatchEvent(
     HWND	hwndDlg,	// handle to dialog box
     UINT	uMsg,		// message
     WPARAM	wParam,		// first message parameter
@@ -113,7 +113,7 @@ INT_PTR CPropStatusbar::DispatchEvent(
 }
 
 // ダイアログデータの設定
-void CPropStatusbar::SetData(HWND hwndDlg)
+void PropStatusbar::SetData(HWND hwndDlg)
 {
 	auto& csStatusbar = m_Common.m_sStatusbar;
 	// 示文字コードの指定
@@ -133,7 +133,7 @@ void CPropStatusbar::SetData(HWND hwndDlg)
 }
 
 // ダイアログデータの取得
-int CPropStatusbar::GetData(HWND hwndDlg)
+int PropStatusbar::GetData(HWND hwndDlg)
 {
 	auto& csStatusbar = m_Common.m_sStatusbar;
 	// 表示文字コードの指定

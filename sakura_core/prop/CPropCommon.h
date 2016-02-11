@@ -42,9 +42,9 @@
 #include "env/CommonSetting.h"
 
 struct DLLSHAREDATA;
-class CImageListMgr;
+class ImageListMgr;
 class CSMacroMgr;
-class CMenuDrawer;// 2002/2/10 aroka to here
+class MenuDrawer;// 2002/2/10 aroka to here
 
 /*! プロパティシート番号
 	@date 2008.6.22 Uchi #define -> enum に変更	
@@ -82,16 +82,16 @@ enum PropComSheetOrder {
 
 	@date 2002.2.17 YAZAKI CShareDataのインスタンスは、CProcessにひとつあるのみ。
 */
-class CPropCommon {
+class PropCommon {
 public:
 	/*
 	||  Constructors
 	*/
-	CPropCommon();
-	~CPropCommon();
+	PropCommon();
+	~PropCommon();
 	//	Sep. 29, 2001 genta マクロクラスを渡すように;
-//@@@ 2002.01.03 YAZAKI m_tbMyButtonなどをCShareDataからCMenuDrawerへ移動したことによる修正。
-	void Create( HWND, CImageListMgr*, CMenuDrawer* );	// 初期化
+//@@@ 2002.01.03 YAZAKI m_tbMyButtonなどをCShareDataからMenuDrawerへ移動したことによる修正。
+	void Create( HWND, ImageListMgr*, MenuDrawer* );	// 初期化
 
 	/*
 	||  Attributes & Operations
@@ -116,14 +116,14 @@ public:
 	DLLSHAREDATA*		m_pShareData;
 	int					m_nKeywordSet1;
 	//	Oct. 16, 2000 genta
-	CImageListMgr*	m_pcIcons;	//	Image List
+	ImageListMgr*	m_pcIcons;	//	Image List
 	
 	//	Oct. 2, 2001 genta 外部マクロ追加に伴う，対応部分の別クラス化
 	//	Oct. 15, 2001 genta Lookupはダイアログボックス内で別インスタンスを作るように
 	//	(検索対象として，設定用common領域を指すようにするため．)
-	CFuncLookup			m_cLookup;
+	FuncLookup			m_cLookup;
 
-	CMenuDrawer*		m_pcMenuDrawer;
+	MenuDrawer*		m_pcMenuDrawer;
 	/*
 	|| ダイアログデータ
 	*/
@@ -157,12 +157,12 @@ protected:
 
 	// 汎用ダイアログプロシージャ
 	static INT_PTR DlgProc(
-		INT_PTR (CPropCommon::*DispatchPage)( HWND, UINT, WPARAM, LPARAM ),
+		INT_PTR (PropCommon::*DispatchPage)( HWND, UINT, WPARAM, LPARAM ),
 		HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam );
 	static INT_PTR DlgProc2( // 独立ウィンドウ用
-		INT_PTR (CPropCommon::*DispatchPage)( HWND, UINT, WPARAM, LPARAM ),
+		INT_PTR (PropCommon::*DispatchPage)( HWND, UINT, WPARAM, LPARAM ),
 		HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam );
-	typedef	INT_PTR (CPropCommon::*pDispatchPage)( HWND, UINT, WPARAM, LPARAM );
+	typedef	INT_PTR (PropCommon::*pDispatchPage)( HWND, UINT, WPARAM, LPARAM );
 
 	int nLastPos_Macro; // 前回フォーカスのあった場所
 	int m_nLastPos_FILENAME; // 前回フォーカスのあった場所 ファイル名タブ用
@@ -184,11 +184,11 @@ protected:
 
 	1つのプロパティページ毎に定義
 	Dialog procedureとEvent Dispatcherがページごとにある．
-	変数の定義はCPropCommonで行う
+	変数の定義はPropCommonで行う
 */
 //==============================================================
 // 全般ページ
-class CPropGeneral : CPropCommon {
+class PropGeneral : PropCommon {
 public:
 	// Dialog Procedure
 	static INT_PTR CALLBACK DlgProc_page(
@@ -202,7 +202,7 @@ protected:
 
 //==============================================================
 // ファイルページ
-class CPropFile : CPropCommon {
+class PropFile : PropCommon {
 public:
 	// Dialog Procedure
 	static INT_PTR CALLBACK DlgProc_page(
@@ -220,7 +220,7 @@ private:
 
 //==============================================================
 // キー割り当てページ
-class CPropKeybind : CPropCommon {
+class PropKeybind : PropCommon {
 public:
 	// Dialog Procedure
 	static INT_PTR CALLBACK DlgProc_page(
@@ -240,7 +240,7 @@ private:
 
 //==============================================================
 // ツールバーページ
-class CPropToolbar : CPropCommon {
+class PropToolbar : PropCommon {
 public:
 	// Dialog Procedure
 	static INT_PTR CALLBACK DlgProc_page(
@@ -257,7 +257,7 @@ private:
 
 //==============================================================
 // キーワードページ
-class CPropKeyword : CPropCommon {
+class PropKeyword : PropCommon {
 public:
 	// Dialog Procedure
 	static INT_PTR CALLBACK DlgProc_page(
@@ -284,7 +284,7 @@ private:
 
 //==============================================================
 // カスタムメニューページ
-class CPropCustmenu : CPropCommon {
+class PropCustmenu : PropCommon {
 public:
 	// Dialog Procedure
 	static INT_PTR CALLBACK DlgProc_page(
@@ -301,7 +301,7 @@ protected:
 
 //==============================================================
 // 書式ページ
-class CPropFormat : CPropCommon {
+class PropFormat : PropCommon {
 public:
 	// Dialog Procedure
 	static INT_PTR CALLBACK DlgProc_page(
@@ -322,7 +322,7 @@ private:
 
 //==============================================================
 // 支援ページ
-class CPropHelper : CPropCommon {
+class PropHelper : PropCommon {
 public:
 	// Dialog Procedure
 	static INT_PTR CALLBACK DlgProc_page(
@@ -336,7 +336,7 @@ protected:
 
 //==============================================================
 // バックアップページ
-class CPropBackup : CPropCommon {
+class PropBackup : PropCommon {
 public:
 	// Dialog Procedure
 	static INT_PTR CALLBACK DlgProc_page(
@@ -356,7 +356,7 @@ private:
 
 //==============================================================
 // ウィンドウページ
-class CPropWin : CPropCommon {
+class PropWin : PropCommon {
 public:
 	// Dialog Procedure
 	static INT_PTR CALLBACK DlgProc_page(
@@ -374,7 +374,7 @@ private:
 
 //==============================================================
 // タブ動作ページ
-class CPropTab : CPropCommon {
+class PropTab : PropCommon {
 public:
 	// Dialog Procedure
 	static INT_PTR CALLBACK DlgProc_page(
@@ -391,7 +391,7 @@ private:
 
 //==============================================================
 // 編集ページ
-class CPropEdit : CPropCommon {
+class PropEdit : PropCommon {
 public:
 	// Dialog Procedure
 	static INT_PTR CALLBACK DlgProc_page(
@@ -408,7 +408,7 @@ private:
 
 //==============================================================
 // 検索ページ
-class CPropGrep : CPropCommon {
+class PropGrep : PropCommon {
 public:
 	// Dialog Procedure
 	static INT_PTR CALLBACK DlgProc_page(
@@ -425,7 +425,7 @@ private:
 
 //==============================================================
 // マクロページ
-class CPropMacro : CPropCommon {
+class PropMacro : PropCommon {
 public:
 	// Dialog Procedure
 	static INT_PTR CALLBACK DlgProc_page(
@@ -448,7 +448,7 @@ private:
 
 //==============================================================
 // ファイル名表示ページ
-class CPropFileName : CPropCommon {
+class PropFileName : PropCommon {
 public:
 	// Dialog Procedure
 	static INT_PTR CALLBACK DlgProc_page(
@@ -467,7 +467,7 @@ private:
 
 //==============================================================
 // ステータスバーページ
-class CPropStatusbar : CPropCommon {
+class PropStatusbar : PropCommon {
 public:
 	// Dialog Procedure
 	static INT_PTR CALLBACK DlgProc_page(
@@ -481,7 +481,7 @@ protected:
 
 //==============================================================
 // プラグインページ
-class CPropPlugin : CPropCommon {
+class PropPlugin : PropCommon {
 public:
 	// Dialog Procedure
 	static INT_PTR CALLBACK DlgProc_page(
@@ -502,7 +502,7 @@ private:
 
 //==============================================================
 // メインメニューページ
-class CPropMainMenu : CPropCommon {
+class PropMainMenu : PropCommon {
 public:
 	// Dialog Procedure
 	static INT_PTR CALLBACK DlgProc_page(

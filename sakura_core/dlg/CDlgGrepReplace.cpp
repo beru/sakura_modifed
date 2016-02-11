@@ -61,7 +61,7 @@ const DWORD p_helpids[] = {
 	0, 0
 };
 
-CDlgGrepReplace::CDlgGrepReplace()
+DlgGrepReplace::DlgGrepReplace()
 {
 	if (0 < m_pShareData->m_searchKeywords.m_aReplaceKeys.size()) {
 		m_strText2 = m_pShareData->m_searchKeywords.m_aReplaceKeys[0];
@@ -72,7 +72,7 @@ CDlgGrepReplace::CDlgGrepReplace()
 
 
 // モーダルダイアログの表示
-int CDlgGrepReplace::DoModal(
+int DlgGrepReplace::DoModal(
 	HINSTANCE hInstance,
 	HWND hwndParent,
 	const TCHAR* pszCurrentFilePath,
@@ -99,10 +99,10 @@ int CDlgGrepReplace::DoModal(
 		_tcscpy(m_szCurrentFilePath, pszCurrentFilePath);
 	}
 
-	return (int)CDialog::DoModal( hInstance, hwndParent, IDD_GREP_REPLACE, lParam );
+	return (int)Dialog::DoModal( hInstance, hwndParent, IDD_GREP_REPLACE, lParam );
 }
 
-BOOL CDlgGrepReplace::OnInitDialog(
+BOOL DlgGrepReplace::OnInitDialog(
 	HWND hwndDlg,
 	WPARAM wParam,
 	LPARAM lParam
@@ -117,18 +117,18 @@ BOOL CDlgGrepReplace::OnInitDialog(
 	HFONT hFont = SetMainFont(GetItemHwnd( IDC_COMBO_TEXT2 ));
 	m_cFontText2.SetFont(hFontOld, hFont, GetItemHwnd( IDC_COMBO_TEXT2 ));
 
-	return CDlgGrep::OnInitDialog( hwndDlg, wParam, lParam );
+	return DlgGrep::OnInitDialog( hwndDlg, wParam, lParam );
 }
 
 
-BOOL CDlgGrepReplace::OnDestroy()
+BOOL DlgGrepReplace::OnDestroy()
 {
 	m_cFontText2.ReleaseOnDestroy();
-	return CDlgGrep::OnDestroy();
+	return DlgGrep::OnDestroy();
 }
 
 
-BOOL CDlgGrepReplace::OnBnClicked(int wID)
+BOOL DlgGrepReplace::OnBnClicked(int wID)
 {
 	switch (wID) {
 	case IDC_BUTTON_HELP:
@@ -138,7 +138,7 @@ BOOL CDlgGrepReplace::OnBnClicked(int wID)
 	case IDOK:
 		{
 			bool bStop = false;
-			CEditView* pcEditView = (CEditView*)m_lParam;
+			EditView* pcEditView = (EditView*)m_lParam;
 			if (IsButtonChecked(IDC_CHK_PASTE)
 				&& !pcEditView->m_pcEditDoc->m_cDocEditor.IsEnablePaste()
 			) {
@@ -153,13 +153,13 @@ BOOL CDlgGrepReplace::OnBnClicked(int wID)
 		}
 	}
 	// 基底クラスメンバ
-	return CDlgGrep::OnBnClicked( wID );
+	return DlgGrep::OnBnClicked( wID );
 }
 
 
 
 // ダイアログデータの設定
-void CDlgGrepReplace::SetData(void)
+void DlgGrepReplace::SetData(void)
 {
 	// 置換後
 	SetItemText(IDC_COMBO_TEXT2, m_strText2.c_str() );
@@ -169,14 +169,14 @@ void CDlgGrepReplace::SetData(void)
 		Combo_AddString(hwndCombo, replaceKeys[i]);
 	}
 	CheckDlgButtonBool(GetHwnd(), IDC_CHK_BACKUP, m_bBackup);
-	CDlgGrep::SetData();
+	DlgGrep::SetData();
 }
 
 
 /*! ダイアログデータの取得
 	TRUE==正常  FALSE==入力エラー
 */
-int CDlgGrepReplace::GetData(void)
+int DlgGrepReplace::GetData(void)
 {
 	m_bPaste = IsButtonChecked(IDC_CHK_PASTE);
 
@@ -194,19 +194,19 @@ int CDlgGrepReplace::GetData(void)
 	m_bBackup = IsButtonChecked(IDC_CHK_BACKUP);
 	m_pShareData->m_common.m_sSearch.m_bGrepBackup = m_bBackup;
 
-	if (!CDlgGrep::GetData()) {
+	if (!DlgGrep::GetData()) {
 		return FALSE;
 	}
 
 	if (m_strText2.size() < _MAX_PATH) {
-		CSearchKeywordManager().AddToReplaceKeyArr( m_strText2.c_str() );
+		SearchKeywordManager().AddToReplaceKeyArr( m_strText2.c_str() );
 	}
 	m_nReplaceKeySequence = GetDllShareData().m_common.m_sSearch.m_nReplaceKeySequence;
 
 	return TRUE;
 }
 
-LPVOID CDlgGrepReplace::GetHelpIdTable(void)
+LPVOID DlgGrepReplace::GetHelpIdTable(void)
 {
 	return (LPVOID)p_helpids;
 }

@@ -22,13 +22,13 @@ class EditDoc; // 2002/2/10 aroka
 
 //! ファンクションキーウィンドウ
 // @date 2002.2.17 YAZAKI CShareDataのインスタンスは、CProcessにひとつあるのみ。
-class CFuncKeyWnd : public CWnd {
+class FuncKeyWnd : public Wnd {
 public:
 	/*
 	||  Constructors
 	*/
-	CFuncKeyWnd();
-	virtual ~CFuncKeyWnd();
+	FuncKeyWnd();
+	virtual ~FuncKeyWnd();
 	/*
 	|| メンバ関数
 	*/

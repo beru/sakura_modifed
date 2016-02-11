@@ -14,7 +14,7 @@
 	Please contact the copyright holder to use this code for other purpose.
 */
 
-class CTipWnd;
+class TipWnd;
 
 #pragma once
 
@@ -23,13 +23,13 @@ class CTipWnd;
 /*-----------------------------------------------------------------------
 クラスの宣言
 -----------------------------------------------------------------------*/
-class CTipWnd : public CWnd {
+class TipWnd : public Wnd {
 public:
 	/*
 	||  Constructors
 	*/
-	CTipWnd();
-	~CTipWnd();
+	TipWnd();
+	~TipWnd();
 	void Create(HINSTANCE, HWND);	// 初期化
 
 	/*
@@ -50,7 +50,7 @@ protected: // 2002/2/10 aroka アクセス権変更
 	HFONT		m_hFont;
 
 public:
-	CNativeW	m_cKey;			// キーの内容データ
+	NativeW	m_cKey;			// キーの内容データ
 	bool		m_KeyWasHit;	// キーがヒットしたか
 	int			m_nSearchLine;	// 辞書のヒット行	// 2006.04.10 fon
 	int			m_nSearchDict;	// ヒット辞書番号	// 2006.04.10 fon

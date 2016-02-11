@@ -244,7 +244,7 @@ void CommandLine::ParseCommandLine(LPCTSTR pszCmdLineSrc, bool bResponse)
 		}
 	}
 	if (bFind) {
-		CSakuraEnvironment::ResolvePath(szPath);
+		SakuraEnvironment::ResolvePath(szPath);
 		_tcscpy(m_fi.m_szPath, szPath);	// ファイル名
 		nPos = i + 1;
 	}else {
@@ -311,7 +311,7 @@ void CommandLine::ParseCommandLine(LPCTSTR pszCmdLineSrc, bool bResponse)
 			}
 
 			if (szPath[0] != _T('\0')) {
-				CSakuraEnvironment::ResolvePath(szPath);
+				SakuraEnvironment::ResolvePath(szPath);
 				if (m_fi.m_szPath[0] == _T('\0')) {
 					_tcscpy(m_fi.m_szPath, szPath );
 				}else {
@@ -500,7 +500,7 @@ void CommandLine::ParseCommandLine(LPCTSTR pszCmdLineSrc, bool bResponse)
 
 	// レスポンスファイル解析
 	if (cmResponseFile.GetStringLength() && bResponse) {
-		CTextInputStream input(cmResponseFile.GetStringPtr());
+		TextInputStream input(cmResponseFile.GetStringPtr());
 		if (!input.Good()) {
 			return;
 		}

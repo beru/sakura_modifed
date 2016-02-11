@@ -24,14 +24,14 @@
 
 /*! 行コメントデリミタを管理する
 
-	@note CLineCommentは、共有メモリSTypeConfigに含まれるので、メンバ変数は常に実体を持っていなければならない。
+	@note LineCommentは、共有メモリSTypeConfigに含まれるので、メンバ変数は常に実体を持っていなければならない。
 */
-class CLineComment {
+class LineComment {
 public:
 	/*
 	||  Constructors：コンパイラ標準を使用。
 	*/
-	CLineComment();
+	LineComment();
 
 	void CopyTo(const int n, const wchar_t* buffer, int nCommentPos);	// 行コメントデリミタをコピーする
 	bool Match(int nPos, const CStringRef& cStr) const;				// 行コメントに値するか確認する

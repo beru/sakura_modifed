@@ -38,10 +38,10 @@
 	共通設定のウィンドウ設定で，ウィンドウ位置を指定するために補助的に
 	使用されるダイアログボックス
 */
-class CDlgWinSize : public CDialog {
+class DlgWinSize : public Dialog {
 public:
-	CDlgWinSize();
-	~CDlgWinSize();
+	DlgWinSize();
+	~DlgWinSize();
 	int DoModal(HINSTANCE, HWND, EWinSizeMode&, EWinSizeMode&, int&, RECT&);	// モーダルダイアログの表示
 
 protected:

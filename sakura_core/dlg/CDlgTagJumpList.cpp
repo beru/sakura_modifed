@@ -125,19 +125,19 @@ static const TCHAR* p_extentions[] = {
 					NULL,									NULL
 };
 
-inline bool CDlgTagJumpList::IsDirectTagJump() {
+inline bool DlgTagJumpList::IsDirectTagJump() {
 	return m_bDirectTagJump;
 }
 
-inline void CDlgTagJumpList::ClearPrevFindInfo() {
+inline void DlgTagJumpList::ClearPrevFindInfo() {
 	m_psFindPrev->m_nMatchAll = -1;
 	m_psFind0Match->m_nDepth  = -1;
 	m_psFind0Match->m_nMatchAll = 0;
 }
 
 
-CDlgTagJumpList::CDlgTagJumpList(bool bDirectTagJump)
-	: CDialog(true),
+DlgTagJumpList::DlgTagJumpList(bool bDirectTagJump)
+	: Dialog(true),
 	m_bDirectTagJump(bDirectTagJump),
 	m_nIndex(-1),
 	m_pszFileName(NULL),
@@ -165,7 +165,7 @@ CDlgTagJumpList::CDlgTagJumpList(bool bDirectTagJump)
 	ClearPrevFindInfo();
 }
 
-CDlgTagJumpList::~CDlgTagJumpList()
+DlgTagJumpList::~DlgTagJumpList()
 {
 	Empty();
 
@@ -186,7 +186,7 @@ CDlgTagJumpList::~CDlgTagJumpList()
 	@author MIK
 	@date 2005.03.31 新規作成
 */
-void CDlgTagJumpList::StopTimer(void)
+void DlgTagJumpList::StopTimer(void)
 {
 	if (m_nTimerId != 0) {
 		::KillTimer(GetHwnd(), m_nTimerId);
@@ -203,7 +203,7 @@ void CDlgTagJumpList::StopTimer(void)
 	@author MIK
 	@date 2005.03.31 新規作成
 */
-void CDlgTagJumpList::StartTimer(int nDelay = TAGJUMP_TIMER_DELAY)
+void DlgTagJumpList::StartTimer(int nDelay = TAGJUMP_TIMER_DELAY)
 {
 	StopTimer();
 	m_nTimerId = ::SetTimer(GetHwnd(), 12345, nDelay, NULL);
@@ -215,7 +215,7 @@ void CDlgTagJumpList::StartTimer(int nDelay = TAGJUMP_TIMER_DELAY)
 	@author MIK
 	@date 2005.03.31 新規作成
 */
-void CDlgTagJumpList::Empty(void)
+void DlgTagJumpList::Empty(void)
 {
 	m_nIndex = -1;
 	m_pcList->Empty();
@@ -226,19 +226,19 @@ void CDlgTagJumpList::Empty(void)
 
 	@param[in] lParam 0=ダイレクトタグジャンプ, 1=キーワードを指定してタグジャンプ
 */
-int CDlgTagJumpList::DoModal(
+int DlgTagJumpList::DoModal(
 	HINSTANCE	hInstance,
 	HWND		hwndParent,
 	LPARAM		lParam
 )
 {
-	int ret = (int)CDialog::DoModal(hInstance, hwndParent, IDD_TAGJUMPLIST, lParam);
+	int ret = (int)Dialog::DoModal(hInstance, hwndParent, IDD_TAGJUMPLIST, lParam);
 	StopTimer();
 	return ret;
 }
 
 // ダイアログデータの設定
-void CDlgTagJumpList::SetData(void)
+void DlgTagJumpList::SetData(void)
 {
 	if (IsDirectTagJump()) {
 		m_bTagJumpICase = FALSE;
@@ -261,7 +261,7 @@ void CDlgTagJumpList::SetData(void)
 		CheckButton(IDC_CHECK_ANYWHERE, m_bTagJumpAnyWhere);
 		m_bTagJumpExactMatch = FALSE;
 		Combo_LimitText(hwndKey, _MAX_PATH-1);
-		CRecentTagjumpKeyword cRecentTagJump;
+		RecentTagjumpKeyword cRecentTagJump;
 		for (int i=0; i<cRecentTagJump.GetItemCount(); ++i) {
 			Combo_AddString(hwndKey, cRecentTagJump.GetItemText(i));
 		}
@@ -289,7 +289,7 @@ void CDlgTagJumpList::SetData(void)
 	@date 2005.03.31 MIK 
 		ダイアログOpen時以外にも更新が必要なためSetData()より分離
 */
-void CDlgTagJumpList::UpdateData(bool bInit)
+void DlgTagJumpList::UpdateData(bool bInit)
 {
 	HWND	hwndList;
 	LV_ITEM	lvi;
@@ -381,7 +381,7 @@ void CDlgTagJumpList::UpdateData(bool bInit)
 
 	@date 2005.04.03 MIK 設定値の保存処理追加
 */
-int CDlgTagJumpList::GetData(void)
+int DlgTagJumpList::GetData(void)
 {
 	HWND hwndList = GetItemHwnd(IDC_LIST_TAGJUMP);
 	m_nIndex = ListView_GetNextItem(hwndList, -1, LVIS_SELECTED);
@@ -400,7 +400,7 @@ int CDlgTagJumpList::GetData(void)
 		SetKeyword(tmp);
 
 		// 設定を保存
-		CRecentTagjumpKeyword cRecentTagJumpKeyword;
+		RecentTagjumpKeyword cRecentTagJumpKeyword;
 		cRecentTagJumpKeyword.AppendItem(m_pszKeyword);
 		cRecentTagJumpKeyword.Terminate();
 	}
@@ -414,7 +414,7 @@ int CDlgTagJumpList::GetData(void)
 	@date 2005.03.31 MIK
 		階層カラムの追加．キーワード指定欄の追加
 */
-BOOL CDlgTagJumpList::OnInitDialog(
+BOOL DlgTagJumpList::OnInitDialog(
 	HWND hwndDlg,
 	WPARAM wParam,
 	LPARAM lParam
@@ -430,7 +430,7 @@ BOOL CDlgTagJumpList::OnInitDialog(
 	::SetWindowLongPtr(GetHwnd(), DWLP_USER, lParam);
 
 	CreateSizeBox();
-	CDialog::OnSize();
+	Dialog::OnSize();
 	
 	::GetWindowRect(hwndDlg, &rc);
 	m_ptDefaultSize.x = rc.right - rc.left;
@@ -460,7 +460,7 @@ BOOL CDlgTagJumpList::OnInitDialog(
 	rc.left = rc.top = rc.right = rc.bottom = 0;
 	::GetWindowRect(hwndList, &rc);
 	
-	int nWidth = (rc.right - rc.left) - ::GetSystemMetrics(SM_CXHSCROLL) - CTextWidthCalc::WIDTH_MARGIN_SCROLLBER;
+	int nWidth = (rc.right - rc.left) - ::GetSystemMetrics(SM_CXHSCROLL) - TextWidthCalc::WIDTH_MARGIN_SCROLLBER;
 
 	col.mask     = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
 	col.fmt      = LVCFMT_LEFT;
@@ -530,12 +530,12 @@ BOOL CDlgTagJumpList::OnInitDialog(
 	SetComboBoxDeleter(hwndKey, &m_comboDel);
 
 	// 基底クラスメンバ
-	CDialog::OnInitDialog(GetHwnd(), wParam, lParam);
+	Dialog::OnInitDialog(GetHwnd(), wParam, lParam);
 	
 	return bRet;
 }
 
-BOOL CDlgTagJumpList::OnBnClicked(int wID)
+BOOL DlgTagJumpList::OnBnClicked(int wID)
 {
 	switch (wID) {
 	case IDC_BUTTON_HELP:
@@ -579,11 +579,11 @@ BOOL CDlgTagJumpList::OnBnClicked(int wID)
 	}
 
 	// 基底クラスメンバ
-	return CDialog::OnBnClicked(wID);
+	return Dialog::OnBnClicked(wID);
 }
 
 
-INT_PTR CDlgTagJumpList::DispatchEvent(
+INT_PTR DlgTagJumpList::DispatchEvent(
 	HWND hWnd,
 	UINT wMsg,
 	WPARAM wParam,
@@ -591,7 +591,7 @@ INT_PTR CDlgTagJumpList::DispatchEvent(
 	)
 {
 	INT_PTR result;
-	result = CDialog::DispatchEvent(hWnd, wMsg, wParam, lParam);
+	result = Dialog::DispatchEvent(hWnd, wMsg, wParam, lParam);
 
 	if (wMsg == WM_GETMINMAXINFO) {
 		return OnMinMaxInfo(lParam);
@@ -600,10 +600,10 @@ INT_PTR CDlgTagJumpList::DispatchEvent(
 }
 
 
-BOOL CDlgTagJumpList::OnSize(WPARAM wParam, LPARAM lParam)
+BOOL DlgTagJumpList::OnSize(WPARAM wParam, LPARAM lParam)
 {
 	// 基底クラスメンバ
-	CDialog::OnSize(wParam, lParam);
+	Dialog::OnSize(wParam, lParam);
 
 	GetWindowRect(&GetDllShareData().m_common.m_sOthers.m_rcTagJumpDialog);
 
@@ -621,15 +621,15 @@ BOOL CDlgTagJumpList::OnSize(WPARAM wParam, LPARAM lParam)
 }
 
 
-BOOL CDlgTagJumpList::OnMove(WPARAM wParam, LPARAM lParam)
+BOOL DlgTagJumpList::OnMove(WPARAM wParam, LPARAM lParam)
 {
 	GetWindowRect(&GetDllShareData().m_common.m_sOthers.m_rcTagJumpDialog);
 
-	return CDialog::OnMove(wParam, lParam);
+	return Dialog::OnMove(wParam, lParam);
 }
 
 
-BOOL CDlgTagJumpList::OnMinMaxInfo(LPARAM lParam)
+BOOL DlgTagJumpList::OnMinMaxInfo(LPARAM lParam)
 {
 	LPMINMAXINFO lpmmi = (LPMINMAXINFO) lParam;
 	if (m_ptDefaultSize.x < 0) {
@@ -643,7 +643,7 @@ BOOL CDlgTagJumpList::OnMinMaxInfo(LPARAM lParam)
 }
 
 
-BOOL CDlgTagJumpList::OnNotify(WPARAM wParam, LPARAM lParam)
+BOOL DlgTagJumpList::OnNotify(WPARAM wParam, LPARAM lParam)
 {
 	NMHDR* pNMHDR = (NMHDR*)lParam;
 	HWND hwndList = GetItemHwnd(IDC_LIST_TAGJUMP);
@@ -659,7 +659,7 @@ BOOL CDlgTagJumpList::OnNotify(WPARAM wParam, LPARAM lParam)
 	}
 
 	// 基底クラスメンバ
-	return CDialog::OnNotify(wParam, lParam);
+	return Dialog::OnNotify(wParam, lParam);
 }
 
 /*!
@@ -667,7 +667,7 @@ BOOL CDlgTagJumpList::OnNotify(WPARAM wParam, LPARAM lParam)
 
 	タイマーを停止し，候補リストを更新する
 */
-BOOL CDlgTagJumpList::OnTimer(WPARAM wParam)
+BOOL DlgTagJumpList::OnTimer(WPARAM wParam)
 {
 	StopTimer();
 
@@ -681,39 +681,39 @@ BOOL CDlgTagJumpList::OnTimer(WPARAM wParam)
 
 	タイマーを開始し，候補リストを更新する準備をする
 */
-BOOL CDlgTagJumpList::OnCbnEditChange(HWND hwndCtl, int wID)
+BOOL DlgTagJumpList::OnCbnEditChange(HWND hwndCtl, int wID)
 {
 	StartTimer();
 
 	// 基底クラスメンバ
-	return CDialog::OnCbnEditChange(hwndCtl, wID);
+	return Dialog::OnCbnEditChange(hwndCtl, wID);
 }
 
-BOOL CDlgTagJumpList::OnCbnSelChange(HWND hwndCtl, int wID)
+BOOL DlgTagJumpList::OnCbnSelChange(HWND hwndCtl, int wID)
 {
 	StartTimer();
 
 	// 基底クラスメンバ
-	return CDialog::OnCbnSelChange(hwndCtl, wID);
+	return Dialog::OnCbnSelChange(hwndCtl, wID);
 }
 
 #if 0
-BOOL CDlgTagJumpList::OnEnChange(HWND hwndCtl, int wID)
+BOOL DlgTagJumpList::OnEnChange(HWND hwndCtl, int wID)
 {
 	StartTimer();
 
 	// 基底クラスメンバ
-	return CDialog::OnEnChange(hwndCtl, wID);
+	return Dialog::OnEnChange(hwndCtl, wID);
 }
 #endif
 
-LPVOID CDlgTagJumpList::GetHelpIdTable(void)
+LPVOID DlgTagJumpList::GetHelpIdTable(void)
 {
 	return (LPVOID)p_helpids;
 }
 
 #if 0
-bool CDlgTagJumpList::AddParamA(
+bool DlgTagJumpList::AddParamA(
 	const ACHAR* s0,
 	const ACHAR* s1,
 	int n2,
@@ -733,7 +733,7 @@ bool CDlgTagJumpList::AddParamA(
 }
 #endif
 
-bool CDlgTagJumpList::GetSelectedFullPathAndLine(
+bool DlgTagJumpList::GetSelectedFullPathAndLine(
 	TCHAR *fullPath,
 	int count,
 	int* lineNum,
@@ -753,7 +753,7 @@ bool CDlgTagJumpList::GetSelectedFullPathAndLine(
 	@param lineNum [out] オプション
 	@param depth [out] オプション
 */
-bool CDlgTagJumpList::GetFullPathAndLine(
+bool DlgTagJumpList::GetFullPathAndLine(
 	int index,
 	TCHAR* fullPath,
 	int count,
@@ -805,7 +805,7 @@ bool CDlgTagJumpList::GetFullPathAndLine(
 /*!
 	@return 「.ext」形式のタイプ情報。 freeすること
 */
-TCHAR* CDlgTagJumpList::GetNameByType(const TCHAR type, const TCHAR* name)
+TCHAR* DlgTagJumpList::GetNameByType(const TCHAR type, const TCHAR* name)
 {
 	const TCHAR* p;
 	TCHAR*	token;
@@ -841,7 +841,7 @@ TCHAR* CDlgTagJumpList::GetNameByType(const TCHAR type, const TCHAR* name)
 /*!
 	基準ファイル名を設定
 */
-void CDlgTagJumpList::SetFileName(const TCHAR* pszFileName)
+void DlgTagJumpList::SetFileName(const TCHAR* pszFileName)
 {
 	assert_warning(pszFileName);
 	if (!pszFileName) return;
@@ -857,7 +857,7 @@ void CDlgTagJumpList::SetFileName(const TCHAR* pszFileName)
 	検索キーワードの設定
 
 */
-void CDlgTagJumpList::SetKeyword(const wchar_t* pszKeyword)
+void DlgTagJumpList::SetKeyword(const wchar_t* pszKeyword)
 {
 	if (!pszKeyword) return;
 
@@ -895,7 +895,7 @@ typedef struct tagTagPathInfo {
 	@return 選択されたアイテムのindex
 
 */
-int CDlgTagJumpList::SearchBestTag(void)
+int DlgTagJumpList::SearchBestTag(void)
 {
 	if (m_pcList->GetCount() <= 0) return -1;	// 選べません。
 	if (!m_pszFileName) return 0;
@@ -1024,7 +1024,7 @@ int CDlgTagJumpList::SearchBestTag(void)
 /*!
 	@param bNewFind 新しい検索条件(次・前のときfalse)
 */
-void CDlgTagJumpList::FindNext(bool bNewFind)
+void DlgTagJumpList::FindNext(bool bNewFind)
 {
 	wchar_t	szKey[MAX_TAG_STRING_LENGTH];
 	szKey[0] = 0;
@@ -1050,7 +1050,7 @@ void CDlgTagJumpList::FindNext(bool bNewFind)
 /*!
 	ダイレクトタグジャンプ検索(DoModal前に実行)
 */
-int CDlgTagJumpList::FindDirectTagJump()
+int DlgTagJumpList::FindDirectTagJump()
 {
 	return find_key_core(
 		0,	// 0開始
@@ -1063,7 +1063,7 @@ int CDlgTagJumpList::FindDirectTagJump()
 	);
 }
 
-void CDlgTagJumpList::find_key(const wchar_t* keyword)
+void DlgTagJumpList::find_key(const wchar_t* keyword)
 {
 	SetItemText(IDC_STATIC_KEYWORD, LS(STR_DLGTAGJMP3));
 	::UpdateWindow(GetItemHwnd(IDC_STATIC_KEYWORD));
@@ -1089,7 +1089,7 @@ void CDlgTagJumpList::find_key(const wchar_t* keyword)
 		「全tagsの検索結果をソートして先頭からCapaticyまで」を「tagsファイル順(=depth)順、キーワード順」に変更
 	@date 2010.07.21 find_key→find_key_coreにして、CViewCommander::Command_TagJumpByTagsFileと統合
 */
-int CDlgTagJumpList::find_key_core(
+int DlgTagJumpList::find_key_core(
 	int nTop,
 	const wchar_t* keyword,
 	bool bTagJumpAnyWhere,		// 部分一致
@@ -1102,7 +1102,7 @@ int CDlgTagJumpList::find_key_core(
 	assert_warning(!(bTagJumpAnyWhere && bTagJumpExactMatch));
 
 	// to_acharは一時バッファで破壊される可能性があるのでコピー
-	CNativeA cmemKeyA = CNativeA(to_achar(keyword));
+	NativeA cmemKeyA = NativeA(to_achar(keyword));
 	const ACHAR* paszKeyword = cmemKeyA.GetStringPtr();
 	int	length = cmemKeyA.GetStringLength();
 
@@ -1389,13 +1389,13 @@ next_line:
 /*!
 	パスからファイル名部分のみを取り出す．(2バイト対応)
 */
-const TCHAR* CDlgTagJumpList::GetFileName(void)
+const TCHAR* DlgTagJumpList::GetFileName(void)
 {
 	return GetFileTitlePointer(GetFilePath());
 }
 
 
-void CDlgTagJumpList::SetTextDir()
+void DlgTagJumpList::SetTextDir()
 {
 	if (GetHwnd()) {
 		SetItemText(IDC_STATIC_BASEDIR, _T(""));
@@ -1407,7 +1407,7 @@ void CDlgTagJumpList::SetTextDir()
 	}
 }
 
-int CDlgTagJumpList::CalcMaxUpDirectory(const TCHAR* p)
+int DlgTagJumpList::CalcMaxUpDirectory(const TCHAR* p)
 {
 	int loop = CalcDirectoryDepth(p);
 	if (loop <  0) loop =  0;
@@ -1424,7 +1424,7 @@ int CDlgTagJumpList::CalcMaxUpDirectory(const TCHAR* p)
 	@retval pszOutput 成功 「C:\dir1\filename.txt」の形式(..\付加は廃止)
 	@retval NULL   失敗
 */
-TCHAR* CDlgTagJumpList::GetFullPathFromDepth(TCHAR* pszOutput, int count,
+TCHAR* DlgTagJumpList::GetFullPathFromDepth(TCHAR* pszOutput, int count,
 	TCHAR* basePath, const TCHAR* fileName, int depth)
 {
 	DEBUG_TRACE(_T("base  %ts\n"), basePath);
@@ -1456,7 +1456,7 @@ TCHAR* CDlgTagJumpList::GetFullPathFromDepth(TCHAR* pszOutput, int count,
 /*!
 	ディレクトリとディレクトリを連結する
 */
-TCHAR* CDlgTagJumpList::CopyDirDir(TCHAR* dest, const TCHAR* target, const TCHAR* base)
+TCHAR* DlgTagJumpList::CopyDirDir(TCHAR* dest, const TCHAR* target, const TCHAR* base)
 {
 	if (_IS_REL_PATH(target)) {
 		auto_strcpy(dest, base);
@@ -1474,7 +1474,7 @@ TCHAR* CDlgTagJumpList::CopyDirDir(TCHAR* dest, const TCHAR* target, const TCHAR
 	in == C:\dir\subdir\
 	out == C:\dir\
 */
-TCHAR* CDlgTagJumpList::DirUp(TCHAR* dir)
+TCHAR* DlgTagJumpList::DirUp(TCHAR* dir)
 {
 	CutLastYenFromDirectoryPath(dir);
 	const TCHAR* p = GetFileTitlePointer(dir); // 最後の\の次の文字を取得 last_index_of('\\') + 1;

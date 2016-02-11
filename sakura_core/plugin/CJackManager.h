@@ -60,7 +60,7 @@ enum EJack {
 struct JackDef {
 	EJack			ppId;
 	const WCHAR*	szName;
-	CPlug::Array	plugs;	// ジャックに関連付けられたプラグ
+	Plug::Array	plugs;	// ジャックに関連付けられたプラグ
 };
 
 // プラグ登録結果
@@ -71,17 +71,17 @@ enum ERegisterPlugResult {
 };
 
 // ジャック管理クラス
-class CJackManager : public TSingleton<CJackManager> {
-	friend class TSingleton<CJackManager>;
-	CJackManager();
+class JackManager : public TSingleton<JackManager> {
+	friend class TSingleton<JackManager>;
+	JackManager();
 
 	typedef std::wstring wstring;
 
 	// 操作
 public:
-	ERegisterPlugResult RegisterPlug(wstring pszJack, CPlug* plug);	// プラグをジャックに関連付ける
-	bool UnRegisterPlug(wstring pszJack, CPlug* plug);	// プラグの関連付けを解除する
-	bool GetUsablePlug(EJack jack, PlugId plugId, CPlug::Array* plugs);	// 利用可能なプラグを検索する
+	ERegisterPlugResult RegisterPlug(wstring pszJack, Plug* plug);	// プラグをジャックに関連付ける
+	bool UnRegisterPlug(wstring pszJack, Plug* plug);	// プラグの関連付けを解除する
+	bool GetUsablePlug(EJack jack, PlugId plugId, Plug::Array* plugs);	// 利用可能なプラグを検索する
 private:
 	EJack GetJackFromName(wstring sName);	// ジャック名をジャック番号に変換する
 
@@ -91,8 +91,8 @@ public:
 	EFunctionCode GetCommandCode(int index) const;		// プラグインコマンドの機能コードを返す
 	int GetCommandName(int funccode, WCHAR* buf, int size) const;	// プラグインコマンドの名前を返す
 	int GetCommandCount() const;	// プラグインコマンドの数を返す
-	CPlug* GetCommandById(int id) const;	// IDに合致するコマンドプラグを返す
-	const CPlug::Array& GetPlugs(EJack jack) const;	// プラグを返す
+	Plug* GetCommandById(int id) const;	// IDに合致するコマンドプラグを返す
+	const Plug::Array& GetPlugs(EJack jack) const;	// プラグを返す
 	// TODO: 作りが一貫してないので整理する syat
 
 	// メンバ変数

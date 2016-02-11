@@ -63,7 +63,7 @@ void CType_Vb::InitTypeConfigImp(TypeConfig* pType)
 	Aug  7, 2003 little YOSHI  ダブルクォーテーションで囲まれたテキストを無視するようにした
 	                           関数名などをVBの名前付け規則より255文字に拡張
 */
-void CDocOutline::MakeFuncList_VisualBasic(CFuncInfoArr* pcFuncInfoArr)
+void DocOutline::MakeFuncList_VisualBasic(FuncInfoArr* pcFuncInfoArr)
 {
 	const int	nMaxWordLeng = 255;	// Aug 7, 2003 little YOSHI  VBの名前付け規則より255文字に拡張
 	LogicInt		nLineLen = LogicInt(0);//: 2002/2/3 aroka 警告対策：初期化
@@ -106,7 +106,7 @@ void CDocOutline::MakeFuncList_VisualBasic(CFuncInfoArr* pcFuncInfoArr)
 		bDQuote	= false;
 		for (int i=0; i<nLineLen; ++i) {
 			// 2005-09-02 D.S.Koba GetSizeOfChar
-			nCharChars = CNativeW::GetSizeOfChar(pLine, nLineLen, i);
+			nCharChars = NativeW::GetSizeOfChar(pLine, nLineLen, i);
 			if (nCharChars == 0) {
 				nCharChars = 1;
 			}

@@ -5,7 +5,7 @@
 #include "util/string_ex2.h"
 
 // 空白→TAB変換。単独のスペースは変換しない
-bool Converter_SpaceToTab::DoConvert(CNativeW* pcData)
+bool Converter_SpaceToTab::DoConvert(NativeW* pcData)
 {
 	using namespace WCODE;
 
@@ -15,7 +15,7 @@ bool Converter_SpaceToTab::DoConvert(CNativeW* pcData)
 	int		i;
 	int		nPosDes;
 	int		nPosX;
-	CEol	cEol;
+	Eol	cEol;
 
 	bool	bSpace = false;	// スペースの処理中かどうか
 	int		j;

@@ -18,7 +18,7 @@
 #include "extmodule/CMigemo.h"
 #include "CEditApp.h"
 #include "util/design_template.h"
-class CEditWnd;
+class EditWnd;
 
 /*-----------------------------------------------------------------------
 クラスの宣言
@@ -26,7 +26,7 @@ class CEditWnd;
 /*!
 	@brief エディタプロセスクラス
 	
-	エディタプロセスはCEditWndクラスのインスタンスを作る。
+	エディタプロセスはEditWndクラスのインスタンスを作る。
 */
 class NormalProcess : public Process {
 public:
@@ -45,6 +45,6 @@ protected:
 	HANDLE _GetInitializeMutex() const; // 2002/2/8 aroka
 
 private:
-	CEditApp*	m_pcEditApp;	// 2007.10.23 kobake
+	EditApp*	m_pcEditApp;	// 2007.10.23 kobake
 };
 

@@ -45,7 +45,7 @@ protected:
 #endif
 public:
 	HINSTANCE		GetProcessInstance() const { return m_hInstance; }
-	CShareData&		GetShareData()   { return *m_pcShareData; }
+	ShareData&		GetShareData()   { return *m_pcShareData; }
 	HWND			GetMainWindow() const { return m_hWnd; }
 
 private:
@@ -62,7 +62,7 @@ private:
 		PMINIDUMP_CALLBACK_INFORMATION CallbackParam
 	);
 #endif
-	CShareData* m_pcShareData;
+	ShareData* m_pcShareData;
 
 private:
 };

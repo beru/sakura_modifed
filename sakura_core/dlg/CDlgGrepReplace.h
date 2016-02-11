@@ -15,19 +15,19 @@
 	Please contact the copyright holder to use this code for other purpose.
 */
 
-class CDlgGrep;
+class DlgGrep;
 
 #include "dlg/CDialog.h"
 #include "dlg/CDlgGrep.h"
 
 //! GREP置換ダイアログボックス
-class CDlgGrepReplace : public CDlgGrep
+class DlgGrepReplace : public DlgGrep
 {
 public:
 	/*
 	||  Constructors
 	*/
-	CDlgGrepReplace();
+	DlgGrepReplace();
 	/*
 	||  Attributes & Operations
 	*/
@@ -40,7 +40,7 @@ public:
 	int				m_nReplaceKeySequence;	//!< 置換後シーケンス
 
 protected:
-	CFontAutoDeleter		m_cFontText2;
+	FontAutoDeleter		m_cFontText2;
 
 	/*
 	||  実装ヘルパ関数

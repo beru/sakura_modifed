@@ -65,7 +65,7 @@ const DWORD p_helpids[] = {	//12000
 
 static void SetGrepFolder(HWND hwndCtrl, LPCTSTR folder);
 
-CDlgGrep::CDlgGrep()
+DlgGrep::DlgGrep()
 {
 	m_bSubFolder = FALSE;				// サブフォルダからも検索する
 	m_bFromThisText = FALSE;			// この編集中のテキストから検索する
@@ -88,7 +88,7 @@ CDlgGrep::CDlgGrep()
 
 	@date 2013.03.24 novice 新規作成
 */
-BOOL CDlgGrep::OnCbnDropDown(HWND hwndCtl, int wID)
+BOOL DlgGrep::OnCbnDropDown(HWND hwndCtl, int wID)
 {
 	auto& searchKeywords = m_pShareData->m_searchKeywords;
 	switch (wID) {
@@ -117,11 +117,11 @@ BOOL CDlgGrep::OnCbnDropDown(HWND hwndCtl, int wID)
 		}
 		break;
 	}
-	return CDialog::OnCbnDropDown( hwndCtl, wID );
+	return Dialog::OnCbnDropDown( hwndCtl, wID );
 }
 
 // モーダルダイアログの表示
-int CDlgGrep::DoModal(
+int DlgGrep::DoModal(
 	HINSTANCE hInstance,
 	HWND hwndParent,
 	const TCHAR* pszCurrentFilePath
@@ -151,14 +151,14 @@ int CDlgGrep::DoModal(
 		_tcscpy(m_szCurrentFilePath, pszCurrentFilePath);
 	}
 
-	return (int)CDialog::DoModal(hInstance, hwndParent, IDD_GREP, (LPARAM)NULL);
+	return (int)Dialog::DoModal(hInstance, hwndParent, IDD_GREP, (LPARAM)NULL);
 }
 
 // 2007.02.09 bosagami
 LRESULT CALLBACK OnFolderProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
 WNDPROC g_pOnFolderProc;
 
-BOOL CDlgGrep::OnInitDialog(
+BOOL DlgGrep::OnInitDialog(
 	HWND hwndDlg,
 	WPARAM wParam,
 	LPARAM lParam
@@ -213,7 +213,7 @@ BOOL CDlgGrep::OnInitDialog(
 
 	// 基底クラスメンバ
 //	CreateSizeBox();
-	return CDialog::OnInitDialog(hwndDlg, wParam, lParam);
+	return Dialog::OnInitDialog(hwndDlg, wParam, lParam);
 }
 
 /*! @brief フォルダ指定EditBoxのコールバック関数
@@ -238,7 +238,7 @@ LRESULT CALLBACK OnFolderProc(
 		DragQueryFile((HDROP)wparam, 0, sPath, _countof2(sPath) - 1);
 
 		// ファイルパスの解決
-		CSakuraEnvironment::ResolvePath(sPath);
+		SakuraEnvironment::ResolvePath(sPath);
 		
 		// ファイルがドロップされた場合はフォルダを切り出す
 		// フォルダの場合は最後が失われるのでsplitしてはいけない．
@@ -254,13 +254,13 @@ LRESULT CALLBACK OnFolderProc(
 	return  CallWindowProc(g_pOnFolderProc, hwnd, msg, wparam, lparam);
 }
 
-BOOL CDlgGrep::OnDestroy()
+BOOL DlgGrep::OnDestroy()
 {
 	m_cFontText.ReleaseOnDestroy();
-	return CDialog::OnDestroy();
+	return Dialog::OnDestroy();
 }
 
-BOOL CDlgGrep::OnBnClicked(int wID)
+BOOL DlgGrep::OnBnClicked(int wID)
 {
 	switch (wID) {
 	case IDC_BUTTON_HELP:
@@ -416,12 +416,12 @@ BOOL CDlgGrep::OnBnClicked(int wID)
 	}
 
 	// 基底クラスメンバ
-	return CDialog::OnBnClicked(wID);
+	return Dialog::OnBnClicked(wID);
 }
 
 
 // ダイアログデータの設定
-void CDlgGrep::SetData(void)
+void DlgGrep::SetData(void)
 {
 	// 検索文字列
 	SetItemText(IDC_COMBO_TEXT, m_strText.c_str());
@@ -550,7 +550,7 @@ void CDlgGrep::SetData(void)
 /*!
 	現在編集中ファイルから検索チェックでの設定
 */
-void CDlgGrep::SetDataFromThisText(bool bChecked)
+void DlgGrep::SetDataFromThisText(bool bChecked)
 {
 	bool bEnableControls = true;
 	if (m_szCurrentFilePath[0] != 0 && bChecked) {
@@ -575,7 +575,7 @@ void CDlgGrep::SetDataFromThisText(bool bChecked)
 
 // ダイアログデータの取得
 // TRUE==正常  FALSE==入力エラー
-int CDlgGrep::GetData(void)
+int DlgGrep::GetData(void)
 {
 	// サブフォルダからも検索する
 	m_bSubFolder = IsButtonChecked(IDC_CHK_SUBFOLDER);
@@ -727,28 +727,28 @@ int CDlgGrep::GetData(void)
 		}
 		// To Here Jun. 26, 2001 genta 正規表現ライブラリ差し替え
 		if (m_strText.size() < _MAX_PATH) {
-			CSearchKeywordManager().AddToSearchKeyArr(m_strText.c_str());
+			SearchKeywordManager().AddToSearchKeyArr(m_strText.c_str());
 			csSearch.m_searchOption = m_searchOption;		// 検索オプション
 		}
 	}else {
 		// 2014.07.01 空キーも登録する
-		CSearchKeywordManager().AddToSearchKeyArr( L"" );
+		SearchKeywordManager().AddToSearchKeyArr( L"" );
 	}
 
 	// この編集中のテキストから検索する場合、履歴に残さない	Uchi 2008/5/23
 	if (!m_bFromThisText) {
 		// 検索ファイル
-		CSearchKeywordManager().AddToGrepFileArr(m_szFile);
+		SearchKeywordManager().AddToGrepFileArr(m_szFile);
 
 		// 検索フォルダ
-		CSearchKeywordManager().AddToGrepFolderArr(m_szFolder);
+		SearchKeywordManager().AddToGrepFolderArr(m_szFolder);
 	}
 
 	return TRUE;
 }
 
 //@@@ 2002.01.18 add start
-LPVOID CDlgGrep::GetHelpIdTable(void)
+LPVOID DlgGrep::GetHelpIdTable(void)
 {
 	return (LPVOID)p_helpids;
 }

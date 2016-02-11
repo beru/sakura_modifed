@@ -36,21 +36,21 @@
 #include "util/design_template.h"
 #include "CPrint.h" // 2002/2/10 aroka
 
-class CColorStrategy;
-class CColorStrategyPool;
-class CDlgCancel;
-class CEditWnd;
+class ColorStrategy;
+class ColorStrategyPool;
+class DlgCancel;
+class EditWnd;
 class Layout;
 class LayoutMgr;
 
-class CPrintPreview {
+class PrintPreview {
 // メンバ関数宣言
 public:
 	/*
 	||  コンストラクタ
 	*/
-	CPrintPreview(class CEditWnd* pParentWnd);
-	~CPrintPreview();
+	PrintPreview(class EditWnd* pParentWnd);
+	~PrintPreview();
 	
 	/*
 	||	イベント
@@ -112,11 +112,11 @@ protected:
 	||	フォントは、半角フォントと全角フォントしかないことも期待してよい。
 	*/
 	void DrawHeaderFooter(HDC hdc, const Rect& rect , bool bHeader);
-	CColorStrategy* DrawPageTextFirst(int nPageNum);
-	CColorStrategy* DrawPageText(HDC, int, int, int nPageNum, CDlgCancel*, CColorStrategy* pStrategyStart);
+	ColorStrategy* DrawPageTextFirst(int nPageNum);
+	ColorStrategy* DrawPageText(HDC, int, int, int nPageNum, DlgCancel*, ColorStrategy* pStrategyStart);
 
 	// 印刷／プレビュー 行描画
-	CColorStrategy* Print_DrawLine(
+	ColorStrategy* Print_DrawLine(
 		HDC				hdc,
 		POINT			ptDraw,		// 描画座標。HDC内部単位。
 		const wchar_t*	pLine,
@@ -125,7 +125,7 @@ protected:
 		int				nLineLen,
 		LayoutInt		nIndent,	// 折り返しインデント桁数 // 2006.08.14 Moca
 		const Layout*	pcLayout = NULL,	// 色付用Layout
-		CColorStrategy*	pStrategyStart = NULL
+		ColorStrategy*	pStrategyStart = NULL
 	);
 
 	// 印刷／プレビュー ブロック描画
@@ -143,11 +143,11 @@ protected:
 		const int*		pDxArray
 	);
 
-	// 指定ロジック位置のCColorStrategyを取得
-	CColorStrategy* GetColorStrategy(
+	// 指定ロジック位置のColorStrategyを取得
+	ColorStrategy* GetColorStrategy(
 		const CStringRef&	cStringLine,
 		int					iLogic,
-		CColorStrategy*		pStrategy,
+		ColorStrategy*		pStrategy,
 		bool&				bChange
 	);
 
@@ -193,9 +193,9 @@ public:
 	// none
 
 protected:
-	CEditWnd*		m_pParentWnd;	//	親のCEditDoc*。
+	EditWnd*		m_pParentWnd;	//	親のCEditDoc*。
 
-	// 2006.08.17 Moca YAZAKIさんのメモの通りDC/BMPをCEditDocからCPrintPreviewへ移動
+	// 2006.08.17 Moca YAZAKIさんのメモの通りDC/BMPをCEditDocからPrintPreviewへ移動
 	HDC				m_hdcCompatDC;		// 再描画用コンパチブルDC
 	HBITMAP			m_hbmpCompatBMP;	// 再描画用メモリBMP
 	HBITMAP			m_hbmpCompatBMPOld;	// 再描画用メモリBMP(OLD)
@@ -252,7 +252,7 @@ protected:
 	int				m_nAscentHan;				// 半角文字のアセント（文字高/基準ラインからの高さ）
 	int				m_nAscentZen;				// 全角文字のアセント（文字高/基準ラインからの高さ）
 
-	CColorStrategyPool*	m_pool;					// 色定義管理情報
+	ColorStrategyPool*	m_pool;					// 色定義管理情報
 
 public:
 	class LayoutMgr*	m_pLayoutMgr_Print;		// 印刷用のレイアウト管理情報
@@ -260,12 +260,12 @@ protected:
 	TypeConfig m_typePrint;
 
 	// プレビューから出ても現在のプリンタ情報を記憶しておけるようにstaticにする 2003.05.02 かろと 
-	static CPrint	m_cPrint;					// 現在のプリンタ情報
+	static Print	m_cPrint;					// 現在のプリンタ情報
 
 	bool			m_bLockSetting;				// 設定のロック
 	bool			m_bDemandUpdateSetting;		// 設定の更新要求
 
 private:
-	DISALLOW_COPY_AND_ASSIGN(CPrintPreview);
+	DISALLOW_COPY_AND_ASSIGN(PrintPreview);
 };
 

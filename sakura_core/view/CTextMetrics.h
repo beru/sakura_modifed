@@ -27,14 +27,14 @@
 
 #include <vector>
 
-class CTextMetrics;
+class TextMetrics;
 
-class CTextMetrics {
+class TextMetrics {
 public:
 	// コンストラクタ・デストラクタ
-	CTextMetrics();
-	virtual ~CTextMetrics();
-	void CopyTextMetricsStatus(CTextMetrics* pDst) const;
+	TextMetrics();
+	virtual ~TextMetrics();
+	void CopyTextMetricsStatus(TextMetrics* pDst) const;
 	void Update(HFONT hFont);
 
 	// 設定

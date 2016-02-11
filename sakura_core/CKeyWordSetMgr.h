@@ -65,13 +65,13 @@
 	頻繁にずらす操作が発生しないよう，nKeyWordSetBlockSize(50個)ずつの
 	ブロック単位で場所を確保するようにしている．
 */
-class CKeyWordSetMgr {
+class KeyWordSetMgr {
 public:
 	/*
 	||  Constructors
 	*/
-	CKeyWordSetMgr();
-	~CKeyWordSetMgr();
+	KeyWordSetMgr();
+	~KeyWordSetMgr();
 	
 	///	@name キーワードセット操作
 	bool AddKeyWordSet(							// セットの追加
@@ -109,7 +109,7 @@ public:
 	//@{
 	///	@name 検索
 	//int SearchKeyWord(int , const char*, int);				// ｎ番目のセットから指定キーワードをサーチ 無いときは-1を返す
-//	BOOL IsModify(CKeyWordSetMgr&, BOOL* pnModifyFlagArr);	// 変更状況を調査	// Uchi 2010/4/14 実体が無いので削除
+//	BOOL IsModify(KeyWordSetMgr&, BOOL* pnModifyFlagArr);	// 変更状況を調査	// Uchi 2010/4/14 実体が無いので削除
 	int SearchKeyWord2(int nIdx , const wchar_t* pszKeyWord, int nKeyWordLen);	// ｎ番目のセットから指定キーワードをバイナリサーチ。見つかれば 0以上を返す	//MIK
 	int SearchKeyWordSet(const wchar_t* pszKeyWord);		// キーワードセット名からセット番号を取得。見つからなければ -1を返す	// Uchi 2010/4/14
 	//@}
@@ -124,7 +124,7 @@ public:
 	/*
 	|| 演算子
 	*/
-	const CKeyWordSetMgr& operator = (CKeyWordSetMgr&);
+	const KeyWordSetMgr& operator = (KeyWordSetMgr&);
 	/*
 	||  Attributes & Operations
 	*/

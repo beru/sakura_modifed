@@ -115,14 +115,14 @@ static WNDPROC	m_wpEdit = NULL;
 	@param wParam パラメータ1
 	@param lParam パラメータ2
 */
-INT_PTR CALLBACK CPropMainMenu::DlgProc_page(
+INT_PTR CALLBACK PropMainMenu::DlgProc_page(
 	HWND hwndDlg,
 	UINT uMsg,
 	WPARAM wParam,
 	LPARAM lParam
 	)
 {
-	return DlgProc(reinterpret_cast<pDispatchPage>(&CPropMainMenu::DispatchEvent), hwndDlg, uMsg, wParam, lParam);
+	return DlgProc(reinterpret_cast<pDispatchPage>(&PropMainMenu::DispatchEvent), hwndDlg, uMsg, wParam, lParam);
 }
 
 
@@ -207,7 +207,7 @@ static LRESULT CALLBACK WindowProcEdit(
 }
 
 // Menu メッセージ処理
-INT_PTR CPropMainMenu::DispatchEvent(
+INT_PTR PropMainMenu::DispatchEvent(
 	HWND	hwndDlg,	// handle to dialog box
 	UINT	uMsg,		// message
 	WPARAM	wParam,		// first message parameter
@@ -239,7 +239,7 @@ INT_PTR CPropMainMenu::DispatchEvent(
 	HTREEITEM		htiTemp2;
 	TV_DISPINFO*	ptdi;
 
-	CDlgInput1		cDlgInput1;
+	DlgInput1		cDlgInput1;
 
 	static	bool	bInMove;
 	bool			bIsNode;
@@ -448,7 +448,7 @@ INT_PTR CPropMainMenu::DispatchEvent(
 						cProfile.SetReadingMode();
 						cProfile.ReadProfileRes(MAKEINTRESOURCE(IDR_MENU1), MAKEINTRESOURCE(ID_RC_TYPE_INI));
 
-						CShareData_IO::IO_MainMenu(cProfile, m_Common.m_sMainMenu, false);
+						ShareData_IO::IO_MainMenu(cProfile, m_Common.m_sMainMenu, false);
 						
 						SetData(hwndDlg); 
 					}
@@ -851,10 +851,10 @@ wstring RemoveAmpersand(wstring sLavel)
 }
 
 // ダイアログデータの設定 MainMenu
-void CPropMainMenu::SetData(HWND hwndDlg)
+void PropMainMenu::SetData(HWND hwndDlg)
 {
-	CMainMenu*	pcMenuTBL = m_Common.m_sMainMenu.m_cMainMenuTbl;
-	CMainMenu*	pcFunc;
+	MainMenu*	pcMenuTBL = m_Common.m_sMainMenu.m_cMainMenuTbl;
+	MainMenu*	pcFunc;
 	HWND		hwndCombo;
 	HWND		hwndCheck;
 	HWND		hwndTreeRes;
@@ -957,7 +957,7 @@ void CPropMainMenu::SetData(HWND hwndDlg)
 }
 
 // ダイアログデータの取得 MainMenu
-int CPropMainMenu::GetData(HWND hwndDlg)
+int PropMainMenu::GetData(HWND hwndDlg)
 {
 	HWND		hwndTreeRes;
 	HWND		hwndCheck;
@@ -980,15 +980,15 @@ int CPropMainMenu::GetData(HWND hwndDlg)
 }
 
 // ダイアログデータの取得 TreeViewの 1 level
-bool CPropMainMenu::GetDataTree(
+bool PropMainMenu::GetDataTree(
 	HWND hwndTree,
 	HTREEITEM htiTrg,
 	int nLevel
 	)
 {
 	static	bool	bOptionOk;
-	CMainMenu*		pcMenuTBL = m_Common.m_sMainMenu.m_cMainMenuTbl;
-	CMainMenu*		pcFunc;
+	MainMenu*		pcMenuTBL = m_Common.m_sMainMenu.m_cMainMenuTbl;
+	MainMenu*		pcFunc;
 	HTREEITEM		s;
 	HTREEITEM		ts;
 	TV_ITEM			tvi;			// 取得用
@@ -1097,7 +1097,7 @@ bool CPropMainMenu::GetDataTree(
 }
 
 // メインメニュー設定をインポートする
-void CPropMainMenu::Import(HWND hwndDlg)
+void PropMainMenu::Import(HWND hwndDlg)
 {
 	CImpExpMainMenu	cImpExp(m_Common);
 
@@ -1110,7 +1110,7 @@ void CPropMainMenu::Import(HWND hwndDlg)
 }
 
 // メインメニュー設定をエクスポートする
-void CPropMainMenu::Export(HWND hwndDlg)
+void PropMainMenu::Export(HWND hwndDlg)
 {
 	CImpExpMainMenu	cImpExp(m_Common);
 	GetData(hwndDlg);
@@ -1257,7 +1257,7 @@ static const TCHAR* MakeDispLabel(MainMenuWork* pFunc)
 
 
 // メニューの検査
-bool CPropMainMenu::Check_MainMenu(
+bool PropMainMenu::Check_MainMenu(
 	HWND		hwndTree,		// handle to TreeView
 	wstring&	sErrMsg			// エラーメッセージ
 	)
@@ -1273,7 +1273,7 @@ bool CPropMainMenu::Check_MainMenu(
 }
 
 // メニューの検査 TreeViewの 1 level
-bool CPropMainMenu::Check_MainMenu_Sub(
+bool PropMainMenu::Check_MainMenu_Sub(
 	HWND		hwndTree,		// handle to dialog box
 	HTREEITEM 	htiTrg,			// ターゲット
 	int 		nLevel,

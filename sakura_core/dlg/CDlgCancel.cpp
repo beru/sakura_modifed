@@ -13,7 +13,7 @@
 #include "StdAfx.h"
 #include "dlg/CDlgCancel.h"
 
-CDlgCancel::CDlgCancel()
+DlgCancel::DlgCancel()
 {
 	m_bCANCEL = false;	// IDCANCELボタンが押された
 	m_bAutoCleanup = false;
@@ -22,14 +22,14 @@ CDlgCancel::CDlgCancel()
 /** 標準以外のメッセージを捕捉する
 	@date 2008.05.28 ryoji 新規作成
 */
-INT_PTR CDlgCancel::DispatchEvent(
+INT_PTR DlgCancel::DispatchEvent(
 	HWND hWnd,
 	UINT wMsg,
 	WPARAM wParam,
 	LPARAM lParam
 	)
 {
-	INT_PTR result = CDialog::DispatchEvent(hWnd, wMsg, wParam, lParam);
+	INT_PTR result = Dialog::DispatchEvent(hWnd, wMsg, wParam, lParam);
 	switch (wMsg) {
 	case WM_CLOSE:
 		if (m_bAutoCleanup) {
@@ -50,35 +50,35 @@ INT_PTR CDlgCancel::DispatchEvent(
 /** 自動破棄を遅延実行する
 	@date 2008.05.28 ryoji 新規作成
 */
-void CDlgCancel::DeleteAsync(void)
+void DlgCancel::DeleteAsync(void)
 {
 	m_bAutoCleanup = true;
 	::PostMessage(GetHwnd(), WM_CLOSE, 0, 0);
 }
 
 // モーダルダイアログの表示
-int CDlgCancel::DoModal(
+int DlgCancel::DoModal(
 	HINSTANCE hInstance,
 	HWND hwndParent,
 	int nDlgTemplete
 	)
 {
 	m_bCANCEL = false;	// IDCANCELボタンが押された
-	return (int)CDialog::DoModal(hInstance, hwndParent, nDlgTemplete, (LPARAM)NULL);
+	return (int)Dialog::DoModal(hInstance, hwndParent, nDlgTemplete, (LPARAM)NULL);
 }
 
 // モードレスダイアログの表示
-HWND CDlgCancel::DoModeless(
+HWND DlgCancel::DoModeless(
 	HINSTANCE hInstance,
 	HWND hwndParent,
 	int nDlgTemplete
 	)
 {
 	m_bCANCEL = false;	// IDCANCELボタンが押された
-	return CDialog::DoModeless(hInstance, hwndParent, nDlgTemplete, (LPARAM)NULL, SW_SHOW);
+	return Dialog::DoModeless(hInstance, hwndParent, nDlgTemplete, (LPARAM)NULL, SW_SHOW);
 }
 
-BOOL CDlgCancel::OnInitDialog(
+BOOL DlgCancel::OnInitDialog(
 	HWND hwndDlg,
 	WPARAM wParam,
 	LPARAM lParam
@@ -96,10 +96,10 @@ BOOL CDlgCancel::OnInitDialog(
 
 	// 基底クラスメンバ
 //	CreateSizeBox();
-	return CDialog::OnInitDialog(hwndDlg, wParam, lParam);
+	return Dialog::OnInitDialog(hwndDlg, wParam, lParam);
 }
 
-BOOL CDlgCancel::OnBnClicked(int wID)
+BOOL DlgCancel::OnBnClicked(int wID)
 {
 	switch (wID) {
 	case IDCANCEL:
@@ -115,7 +115,7 @@ const DWORD p_helpids[] = {
 	0, 0
 };
 
-LPVOID CDlgCancel::GetHelpIdTable(void)
+LPVOID DlgCancel::GetHelpIdTable(void)
 {
 	return (LPVOID)p_helpids;
 }

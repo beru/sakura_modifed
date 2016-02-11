@@ -30,14 +30,14 @@
 /*!	コンストラクタ
 	@date 2002.2.17 YAZAKI CShareDataのインスタンスは、CProcessにひとつあるのみ。
 */
-CMRUFile::CMRUFile()
+MRUFile::MRUFile()
 {
 	//	初期化。
 	m_pShareData = &GetDllShareData();
 }
 
 // デストラクタ
-CMRUFile::~CMRUFile()
+MRUFile::~MRUFile()
 {
 	m_cRecentFile.Terminate();
 }
@@ -52,7 +52,7 @@ CMRUFile::~CMRUFile()
 
 	2010/5/21 Uchi 組み直し
 */
-HMENU CMRUFile::CreateMenu(CMenuDrawer* pCMenuDrawer) const
+HMENU MRUFile::CreateMenu(MenuDrawer* pCMenuDrawer) const
 {
 	//	空メニューを作る
 	HMENU hMenuPopUp = ::CreatePopupMenu();	// Jan. 29, 2002 genta
@@ -69,16 +69,16 @@ HMENU CMRUFile::CreateMenu(CMenuDrawer* pCMenuDrawer) const
 
 	2010/5/21 Uchi 組み直し
 */
-HMENU CMRUFile::CreateMenu(HMENU hMenuPopUp, CMenuDrawer* pCMenuDrawer) const
+HMENU MRUFile::CreateMenu(HMENU hMenuPopUp, MenuDrawer* pCMenuDrawer) const
 {
 	TCHAR szMenu[_MAX_PATH * 2 + 10];				//	メニューキャプション
 	const BOOL bMenuIcon = m_pShareData->m_common.m_sWindow.m_bMenuIcon;
-	CFileNameManager::getInstance()->TransformFileName_MakeCache();
+	FileNameManager::getInstance()->TransformFileName_MakeCache();
 
 	NONCLIENTMETRICS met;
 	met.cbSize = CCSIZEOF_STRUCT(NONCLIENTMETRICS, lfMessageFont);
 	::SystemParametersInfo(SPI_GETNONCLIENTMETRICS, met.cbSize, &met, 0);
-	CDCFont dcFont(met.lfMenuFont);
+	DCFont dcFont(met.lfMenuFont);
 
 	for (int i=0; i<m_cRecentFile.GetItemCount(); ++i) {
 		//	「共通設定」→「全般」→「ファイルの履歴MAX」を反映
@@ -91,7 +91,7 @@ HMENU CMRUFile::CreateMenu(HMENU hMenuPopUp, CMenuDrawer* pCMenuDrawer) const
 		const EditInfo* p = m_cRecentFile.GetItem(i);
 		bool bFavorite = m_cRecentFile.IsFavorite(i);
 		bool bFavoriteLabel = bFavorite && !bMenuIcon;
-		CFileNameManager::getInstance()->GetMenuFullLabel_MRU(szMenu, _countof(szMenu), p, -1, bFavoriteLabel, i, dcFont.GetHDC());
+		FileNameManager::getInstance()->GetMenuFullLabel_MRU(szMenu, _countof(szMenu), p, -1, bFavoriteLabel, i, dcFont.GetHDC());
 
 		// メニューに追加。
 		pCMenuDrawer->MyAppendMenu(
@@ -107,7 +107,7 @@ HMENU CMRUFile::CreateMenu(HMENU hMenuPopUp, CMenuDrawer* pCMenuDrawer) const
 	return hMenuPopUp;
 }
 
-BOOL CMRUFile::DestroyMenu(HMENU hMenuPopUp) const
+BOOL MRUFile::DestroyMenu(HMENU hMenuPopUp) const
 {
 	return ::DestroyMenu(hMenuPopUp);
 }
@@ -119,7 +119,7 @@ BOOL CMRUFile::DestroyMenu(HMENU hMenuPopUp) const
 	最後の要素の次にはNULLが入る．
 	予め呼び出す側で最大値+1の領域を確保しておくこと．
 */
-std::vector<LPCTSTR> CMRUFile::GetPathList() const
+std::vector<LPCTSTR> MRUFile::GetPathList() const
 {
 	std::vector<LPCTSTR> ret;
 	for (int i=0; i<m_cRecentFile.GetItemCount(); ++i) {
@@ -133,7 +133,7 @@ std::vector<LPCTSTR> CMRUFile::GetPathList() const
 }
 
 // アイテム数を返す
-int CMRUFile::Length(void) const
+int MRUFile::Length(void) const
 {
 	return m_cRecentFile.GetItemCount();
 }
@@ -141,7 +141,7 @@ int CMRUFile::Length(void) const
 /*!
 	ファイル履歴のクリア
 */
-void CMRUFile::ClearAll(void)
+void MRUFile::ClearAll(void)
 {
 	m_cRecentFile.DeleteAllItem();
 }
@@ -155,7 +155,7 @@ void CMRUFile::ClearAll(void)
 	@retval TRUE データが格納された
 	@retval FALSE 正しくない番号が指定された．データは格納されなかった．
 */
-bool CMRUFile::GetEditInfo(int num, EditInfo* pfi) const
+bool MRUFile::GetEditInfo(int num, EditInfo* pfi) const
 {
 	const EditInfo*	p = m_cRecentFile.GetItem(num);
 	if (!p) {
@@ -178,7 +178,7 @@ bool CMRUFile::GetEditInfo(int num, EditInfo* pfi) const
 
 	@date 2001.12.26 CShareData::IsExistInMRUListから移動した。（YAZAKI）
 */
-bool CMRUFile::GetEditInfo(const TCHAR* pszPath, EditInfo* pfi) const
+bool MRUFile::GetEditInfo(const TCHAR* pszPath, EditInfo* pfi) const
 {
 	const EditInfo*	p = m_cRecentFile.GetItem(m_cRecentFile.FindItemByPath(pszPath));
 	if (!p) {
@@ -199,7 +199,7 @@ bool CMRUFile::GetEditInfo(const TCHAR* pszPath, EditInfo* pfi) const
 	@date 2001.03.29 MIK リムーバブルディスク上のファイルを登録しないようにした。
 	@date 2001.12.26 YAZAKI CShareData::AddMRUListから移動
 */
-void CMRUFile::Add(EditInfo* pEditInfo)
+void MRUFile::Add(EditInfo* pEditInfo)
 {
 	//	ファイル名が無ければ無視
 	if (!pEditInfo || pEditInfo->m_szPath[0] == L'\0') {
@@ -211,7 +211,7 @@ void CMRUFile::Add(EditInfo* pEditInfo)
 		int nSize = m_pShareData->m_history.m_aExceptMRU.size();
 		for (int i=0; i<nSize; ++i) {
 			TCHAR szExceptMRU[_MAX_PATH];
-			CFileNameManager::ExpandMetaToFolder(m_pShareData->m_history.m_aExceptMRU[i], szExceptMRU, _countof(szExceptMRU));
+			FileNameManager::ExpandMetaToFolder(m_pShareData->m_history.m_aExceptMRU[i], szExceptMRU, _countof(szExceptMRU));
 			if (_tcsistr(pEditInfo->m_szPath,  szExceptMRU)) {
 				return;
 			}
@@ -237,8 +237,8 @@ void CMRUFile::Add(EditInfo* pEditInfo)
 	_tcscpy(szFolder, szDrive);
 	_tcscat(szFolder, szDir);
 
-	//	Folderを、CMRUFolderに登録
-	CMRUFolder cMRUFolder;
+	//	Folderを、MRUFolderに登録
+	MRUFolder cMRUFolder;
 	cMRUFolder.Add(szFolder);
 
 	m_cRecentFile.AppendItem(&tmpEditInfo);

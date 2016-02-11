@@ -258,7 +258,7 @@ int CColor_Quote::Match_Quote(
 	int nCharChars;
 	for (int i=nPos; i<cLineStr.GetLength(); ++i) {
 		// 2005-09-02 D.S.Koba GetSizeOfChar
-		nCharChars = (Int)t_max(LogicInt(1), CNativeW::GetSizeOfChar(cLineStr.GetPtr(), cLineStr.GetLength(), i));
+		nCharChars = (Int)t_max(LogicInt(1), NativeW::GetSizeOfChar(cLineStr.GetPtr(), cLineStr.GetLength(), i));
 		if (escapeType == STRING_LITERAL_CPP) {
 			// エスケープ \"
 			if (nCharChars == 1 && cLineStr.At(i) == L'\\') {
@@ -309,9 +309,9 @@ int CColor_Quote::Match_QuoteStr(const wchar_t* pszQuote, int nQuoteLen, int nPo
 		if (quote1 == pLine[i] && wmemcmp(pszQuote + 1, pLine + i + 1, nQuoteLen - 1) == 0) {
 			return i + nQuoteLen;
 		}
-		nCharChars = (Int)t_max(LogicInt(1), CNativeW::GetSizeOfChar(pLine, cLineStr.GetLength(), i));
+		nCharChars = (Int)t_max(LogicInt(1), NativeW::GetSizeOfChar(pLine, cLineStr.GetLength(), i));
 		if (bEscape && pLine[i] == L'\\') {
-			i += (Int)t_max(LogicInt(1), CNativeW::GetSizeOfChar(pLine, cLineStr.GetLength(), i + nCharChars));
+			i += (Int)t_max(LogicInt(1), NativeW::GetSizeOfChar(pLine, cLineStr.GetLength(), i + nCharChars));
 		}
 	}
 	return cLineStr.GetLength();

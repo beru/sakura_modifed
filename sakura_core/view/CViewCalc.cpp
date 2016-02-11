@@ -6,7 +6,7 @@
 #include "doc/layout/CLayout.h"
 
 // 外部依存
-LayoutInt CViewCalc::GetTabSpace() const
+LayoutInt ViewCalc::GetTabSpace() const
 {
 	return m_pOwner->m_pcEditDoc->m_cLayoutMgr.GetTabSpace();
 }
@@ -14,12 +14,12 @@ LayoutInt CViewCalc::GetTabSpace() const
 
 /* 指定された桁に対応する行のデータ内の位置を調べる Ver1
 	
-	@@@ 2002.09.28 YAZAKI CDocLine版
+	@@@ 2002.09.28 YAZAKI DocLine版
 */
-LogicInt CViewCalc::LineColumnToIndex(const CDocLine* pcDocLine, LayoutInt nColumn) const
+LogicInt ViewCalc::LineColumnToIndex(const DocLine* pcDocLine, LayoutInt nColumn) const
 {
 	LogicInt i2 = LogicInt(0);
-	CMemoryIterator it(pcDocLine, GetTabSpace());
+	MemoryIterator it(pcDocLine, GetTabSpace());
 	while (!it.end()) {
 		it.scanNext();
 		if (it.getColumn() + it.getColumnDelta() > nColumn) {
@@ -36,10 +36,10 @@ LogicInt CViewCalc::LineColumnToIndex(const CDocLine* pcDocLine, LayoutInt nColu
 	
 	@@@ 2002.09.28 YAZAKI Layoutが必要になりました。
 */
-LogicInt CViewCalc::LineColumnToIndex(const Layout* pcLayout, LayoutInt nColumn) const
+LogicInt ViewCalc::LineColumnToIndex(const Layout* pcLayout, LayoutInt nColumn) const
 {
 	LogicInt i2 = LogicInt(0);
-	CMemoryIterator it(pcLayout, GetTabSpace());
+	MemoryIterator it(pcLayout, GetTabSpace());
 	while (!it.end()) {
 		it.scanNext();
 		if (it.getColumn() + it.getColumnDelta() > nColumn) {
@@ -59,13 +59,13 @@ LogicInt CViewCalc::LineColumnToIndex(const Layout* pcLayout, LayoutInt nColumn)
   それ以外の場合はpnLineAllColLenに０をセットする
   @@@ 2002.09.28 YAZAKI Layoutが必要になりました。
 */
-LogicInt CViewCalc::LineColumnToIndex2(const Layout* pcLayout, LayoutInt nColumn, LayoutInt* pnLineAllColLen) const
+LogicInt ViewCalc::LineColumnToIndex2(const Layout* pcLayout, LayoutInt nColumn, LayoutInt* pnLineAllColLen) const
 {
 	*pnLineAllColLen = LayoutInt(0);
 
 	LogicInt i2 = LogicInt(0);
 	LayoutInt nPosX2 = LayoutInt(0);
-	CMemoryIterator it(pcLayout, GetTabSpace());
+	MemoryIterator it(pcLayout, GetTabSpace());
 	while (!it.end()) {
 		it.scanNext();
 		if (it.getColumn() + it.getColumnDelta() > nColumn) {
@@ -87,11 +87,11 @@ LogicInt CViewCalc::LineColumnToIndex2(const Layout* pcLayout, LayoutInt nColumn
 ||
 ||	@@@ 2002.09.28 YAZAKI Layoutが必要になりました。
 */
-LayoutInt CViewCalc::LineIndexToColumn(const Layout* pcLayout, LogicInt nIndex) const
+LayoutInt ViewCalc::LineIndexToColumn(const Layout* pcLayout, LogicInt nIndex) const
 {
 	//	以下、iterator版
 	LayoutInt nPosX2 = LayoutInt(0);
-	CMemoryIterator it(pcLayout, GetTabSpace());
+	MemoryIterator it(pcLayout, GetTabSpace());
 	while (!it.end()) {
 		it.scanNext();
 		if (it.getIndex() + it.getIndexDelta() > nIndex) {
@@ -107,12 +107,12 @@ LayoutInt CViewCalc::LineIndexToColumn(const Layout* pcLayout, LogicInt nIndex) 
 /*
 ||	指定された行のデータ内の位置に対応する桁の位置を調べる
 ||
-||	@@@ 2002.09.28 YAZAKI CDocLine版
+||	@@@ 2002.09.28 YAZAKI DocLine版
 */
-LayoutInt CViewCalc::LineIndexToColumn(const CDocLine* pcDocLine, LogicInt nIndex) const
+LayoutInt ViewCalc::LineIndexToColumn(const DocLine* pcDocLine, LogicInt nIndex) const
 {
 	LayoutInt nPosX2 = LayoutInt(0);
-	CMemoryIterator it(pcDocLine, GetTabSpace());
+	MemoryIterator it(pcDocLine, GetTabSpace());
 	while (!it.end()) {
 		it.scanNext();
 		if (it.getIndex() + it.getIndexDelta() > nIndex) {

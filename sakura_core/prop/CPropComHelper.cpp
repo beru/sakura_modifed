@@ -76,19 +76,19 @@ static const DWORD p_helpids[] = {	//10600
 	@param wParam パラメータ1
 	@param lParam パラメータ2
 */
-INT_PTR CALLBACK CPropHelper::DlgProc_page(
+INT_PTR CALLBACK PropHelper::DlgProc_page(
 	HWND hwndDlg,
 	UINT uMsg,
 	WPARAM wParam,
 	LPARAM lParam
 	)
 {
-	return DlgProc(reinterpret_cast<pDispatchPage>(&CPropHelper::DispatchEvent), hwndDlg, uMsg, wParam, lParam);
+	return DlgProc(reinterpret_cast<pDispatchPage>(&PropHelper::DispatchEvent), hwndDlg, uMsg, wParam, lParam);
 }
 //	To Here Jun. 2, 2001 genta
 
 // Helper メッセージ処理
-INT_PTR CPropHelper::DispatchEvent(
+INT_PTR PropHelper::DispatchEvent(
 	HWND	hwndDlg,	// handle to dialog box
 	UINT	uMsg,		// message
 	WPARAM	wParam,		// first message parameter
@@ -126,7 +126,7 @@ INT_PTR CPropHelper::DispatchEvent(
 			switch (wID) {
 			case IDC_BUTTON_OPENHELP1:	// 外部ヘルプ１の「参照...」ボタン
 				{
-					CDlgOpenFile	cDlgOpenFile;
+					DlgOpenFile	cDlgOpenFile;
 					TCHAR			szPath[_MAX_PATH];
 					// 2003.06.23 Moca 相対パスは実行ファイルからのパス
 					// 2007.05.21 ryoji 相対パスは設定ファイルからのパスを優先
@@ -150,7 +150,7 @@ INT_PTR CPropHelper::DispatchEvent(
 				return TRUE;
 			case IDC_BUTTON_OPENEXTHTMLHELP:	// 外部HTMLヘルプの「参照...」ボタン
 				{
-					CDlgOpenFile	cDlgOpenFile;
+					DlgOpenFile	cDlgOpenFile;
 					TCHAR			szPath[_MAX_PATH];
 					// 2003.06.23 Moca 相対パスは実行ファイルからのパス
 					// 2007.05.21 ryoji 相対パスは設定ファイルからのパスを優先
@@ -193,7 +193,7 @@ INT_PTR CPropHelper::DispatchEvent(
 			// ai 02/05/21 Add E
 			case IDC_BUTTON_OPENMDLL:	// MIGEMODLL場所指定「参照...」ボタン
 				{
-					CDlgOpenFile	cDlgOpenFile;
+					DlgOpenFile	cDlgOpenFile;
 					TCHAR			szPath[_MAX_PATH];
 					// 2003.06.23 Moca 相対パスは実行ファイルからのパス
 					// 2007.05.21 ryoji 相対パスは設定ファイルからのパスを優先
@@ -295,7 +295,7 @@ INT_PTR CPropHelper::DispatchEvent(
 }
 
 // ダイアログデータの設定 Helper
-void CPropHelper::SetData(HWND hwndDlg)
+void PropHelper::SetData(HWND hwndDlg)
 {
 	auto& csHelper = m_Common.m_sHelper;
 	
@@ -323,7 +323,7 @@ void CPropHelper::SetData(HWND hwndDlg)
 
 
 // ダイアログデータの取得 Helper
-int CPropHelper::GetData(HWND hwndDlg)
+int PropHelper::GetData(HWND hwndDlg)
 {
 	auto& csHelper = m_Common.m_sHelper;
 	

@@ -99,7 +99,7 @@ int CALLBACK SetData_EnumFontFamProc(
 	LPARAM			lParam 	// address of application-defined data
 )
 {
-	CDlgPrintSetting* pCDlgPrintSetting = (CDlgPrintSetting*)lParam;
+	DlgPrintSetting* pCDlgPrintSetting = (DlgPrintSetting*)lParam;
 	HWND hwndComboFontHan = ::GetDlgItem(pCDlgPrintSetting->GetHwnd(), IDC_COMBO_FONT_HAN);
 	HWND hwndComboFontZen = ::GetDlgItem(pCDlgPrintSetting->GetHwnd(), IDC_COMBO_FONT_ZEN);
 
@@ -113,7 +113,7 @@ int CALLBACK SetData_EnumFontFamProc(
 }
 
 // モーダルダイアログの表示
-int CDlgPrintSetting::DoModal(
+int DlgPrintSetting::DoModal(
 	HINSTANCE		hInstance,
 	HWND			hwndParent,
 	int*			pnCurrentPrintSetting,
@@ -127,7 +127,7 @@ int CDlgPrintSetting::DoModal(
 	}
 	m_nLineNumberColumns = nLineNumberColumns;
 
-	int nRet = (int)CDialog::DoModal(hInstance, hwndParent, IDD_PRINTSETTING, (LPARAM)NULL);
+	int nRet = (int)Dialog::DoModal(hInstance, hwndParent, IDD_PRINTSETTING, (LPARAM)NULL);
 	if (nRet != FALSE) {
 		*pnCurrentPrintSetting = m_nCurrentPrintSetting;
 		for (int i=0; i<MAX_PRINTSETTINGARR; ++i) {
@@ -137,7 +137,7 @@ int CDlgPrintSetting::DoModal(
 	return nRet;
 }
 
-BOOL CDlgPrintSetting::OnInitDialog(
+BOOL DlgPrintSetting::OnInitDialog(
 	HWND hwndDlg,
 	WPARAM wParam,
 	LPARAM lParam
@@ -152,7 +152,7 @@ BOOL CDlgPrintSetting::OnInitDialog(
 	Combo_SetExtendedUI(GetItemHwnd(IDC_COMBO_PAPER), TRUE);
 
 	// タイマーでの更新をやめて、能動的に更新要求する 2013.5.5 aroka
-	// CDialog::OnInitDialogの奥でOnChangeSettingTypeが呼ばれるのでここでは更新要求しない
+	// Dialog::OnInitDialogの奥でOnChangeSettingTypeが呼ばれるのでここでは更新要求しない
 	//	::SetTimer(GetHwnd(), IDT_PRINTSETTING, 500, NULL);
 	// UpdatePrintableLineAndColumn();
 
@@ -163,10 +163,10 @@ BOOL CDlgPrintSetting::OnInitDialog(
 	m_nFontHeight = lf.lfHeight;		// フォントサイズ
 
 	// 基底クラスメンバ
-	return CDialog::OnInitDialog(GetHwnd(), wParam, lParam);
+	return Dialog::OnInitDialog(GetHwnd(), wParam, lParam);
 }
 
-BOOL CDlgPrintSetting::OnDestroy(void)
+BOOL DlgPrintSetting::OnDestroy(void)
 {
 	::KillTimer(GetHwnd(), IDT_PRINTSETTING);
 
@@ -182,13 +182,13 @@ BOOL CDlgPrintSetting::OnDestroy(void)
 	}
 
 	// 基底クラスメンバ
-	return CDialog::OnDestroy();
+	return Dialog::OnDestroy();
 }
 
 
-BOOL CDlgPrintSetting::OnNotify(WPARAM wParam, LPARAM lParam)
+BOOL DlgPrintSetting::OnNotify(WPARAM wParam, LPARAM lParam)
 {
-	CDlgInput1 cDlgInput1;
+	DlgInput1 cDlgInput1;
 	BOOL bSpinDown;
 	int idCtrl = (int)wParam;
 	NM_UPDOWN* pMNUD = (NM_UPDOWN*)lParam;
@@ -214,7 +214,7 @@ BOOL CDlgPrintSetting::OnNotify(WPARAM wParam, LPARAM lParam)
 	return TRUE;
 }
 
-BOOL CDlgPrintSetting::OnCbnSelChange(HWND hwndCtl, int wID)
+BOOL DlgPrintSetting::OnCbnSelChange(HWND hwndCtl, int wID)
 {
 //	if (GetItemHwnd(IDC_COMBO_SETTINGNAME) == hwndCtl) {
 	switch (wID) {
@@ -226,16 +226,16 @@ BOOL CDlgPrintSetting::OnCbnSelChange(HWND hwndCtl, int wID)
 	case IDC_COMBO_FONT_ZEN:
 	case IDC_COMBO_PAPER:
 		UpdatePrintableLineAndColumn();
-		break;	// ここでは行と桁の更新要求のみ。後の処理はCDialogに任せる。
+		break;	// ここでは行と桁の更新要求のみ。後の処理はDialogに任せる。
 	}
 	return FALSE;
 }
 
 
-BOOL CDlgPrintSetting::OnBnClicked(int wID)
+BOOL DlgPrintSetting::OnBnClicked(int wID)
 {
 	TCHAR szWork[256];
-	CDlgInput1 cDlgInput1;
+	DlgInput1 cDlgInput1;
 	HWND hwndComboSettingName;
 	auto& curPS = m_PrintSettingArr[m_nCurrentPrintSetting];
 
@@ -359,17 +359,17 @@ BOOL CDlgPrintSetting::OnBnClicked(int wID)
 	case IDC_RADIO_PORTRAIT:
 	case IDC_RADIO_LANDSCAPE:
 		UpdatePrintableLineAndColumn();
-		break;	// ここでは行と桁の更新要求のみ。後の処理はCDialogに任せる。
+		break;	// ここでは行と桁の更新要求のみ。後の処理はDialogに任せる。
 	case IDC_CHECK_LINENUMBER:
 		UpdatePrintableLineAndColumn();
-		break;	// ここでは行と桁の更新要求のみ。後の処理はCDialogに任せる。
+		break;	// ここでは行と桁の更新要求のみ。後の処理はDialogに任せる。
 	}
 	// 基底クラスメンバ
-	return CDialog::OnBnClicked(wID);
+	return Dialog::OnBnClicked(wID);
 }
 
 
-BOOL CDlgPrintSetting::OnStnClicked(int wID)
+BOOL DlgPrintSetting::OnStnClicked(int wID)
 {
 	switch (wID) {
 	case IDC_STATIC_ENABLECOLUMNS:
@@ -383,18 +383,18 @@ BOOL CDlgPrintSetting::OnStnClicked(int wID)
 		return TRUE;
 	}
 	// 基底クラスメンバ
-	return CDialog::OnStnClicked(wID);
+	return Dialog::OnStnClicked(wID);
 }
 
 
-BOOL CDlgPrintSetting::OnEnChange(HWND hwndCtl, int wID)
+BOOL DlgPrintSetting::OnEnChange(HWND hwndCtl, int wID)
 {
 	switch (wID) {
 	case IDC_EDIT_FONTHEIGHT:	// フォント幅の最小値が非０のため'12'と入力すると'1'のところで蹴られてしまう 2013.5.5 aroka
 		if (GetItemInt(IDC_EDIT_FONTHEIGHT, NULL, FALSE) >= 10) {	// 二桁以上の場合は領域チェック 2013.5.20 aroka
 			UpdatePrintableLineAndColumn();
 		}
-		break;	// ここでは行と桁の更新要求のみ。後の処理はCDialogに任せる。
+		break;	// ここでは行と桁の更新要求のみ。後の処理はDialogに任せる。
 	case IDC_EDIT_LINESPACE:
 	case IDC_EDIT_DANSUU:
 	case IDC_EDIT_DANSPACE:
@@ -403,14 +403,14 @@ BOOL CDlgPrintSetting::OnEnChange(HWND hwndCtl, int wID)
 	case IDC_EDIT_MARGINLX:
 	case IDC_EDIT_MARGINRX:
 		UpdatePrintableLineAndColumn();
-		break;	// ここでは行と桁の更新要求のみ。後の処理はCDialogに任せる。
+		break;	// ここでは行と桁の更新要求のみ。後の処理はDialogに任せる。
 	}
 	// 基底クラスメンバ
-	return CDialog::OnEnChange(hwndCtl, wID);
+	return Dialog::OnEnChange(hwndCtl, wID);
 }
 
 
-BOOL CDlgPrintSetting::OnEnKillFocus(HWND hwndCtl, int wID)
+BOOL DlgPrintSetting::OnEnKillFocus(HWND hwndCtl, int wID)
 {
 	switch (wID) {
 	case IDC_EDIT_FONTHEIGHT:
@@ -428,15 +428,15 @@ BOOL CDlgPrintSetting::OnEnKillFocus(HWND hwndCtl, int wID)
 	case IDC_EDIT_FOOT2:
 	case IDC_EDIT_FOOT3:
 		UpdatePrintableLineAndColumn();
-		break;	// ここでは行と桁の更新要求のみ。後の処理はCDialogに任せる。
+		break;	// ここでは行と桁の更新要求のみ。後の処理はDialogに任せる。
 	}
 	// 基底クラスメンバ
-	return CDialog::OnEnKillFocus(hwndCtl, wID);
+	return Dialog::OnEnKillFocus(hwndCtl, wID);
 }
 
 
 // ダイアログデータの設定
-void CDlgPrintSetting::SetData(void)
+void DlgPrintSetting::SetData(void)
 {
 	// フォント一覧
 	HDC hdc = ::GetDC(m_hwndParent);
@@ -456,9 +456,9 @@ void CDlgPrintSetting::SetData(void)
 	HWND hwndComboPaper = GetItemHwnd(IDC_COMBO_PAPER);
 	Combo_ResetContent(hwndComboPaper);
 	// 2006.08.14 Moca 用紙名一覧の重複削除
-	for (int i=0; i<CPrint::m_nPaperInfoArrNum; ++i) {
-		int nItemIdx = Combo_AddString(hwndComboPaper, CPrint::m_paperInfoArr[i].m_pszName);
-		Combo_SetItemData(hwndComboPaper, nItemIdx, CPrint::m_paperInfoArr[i].m_nId);
+	for (int i=0; i<Print::m_nPaperInfoArrNum; ++i) {
+		int nItemIdx = Combo_AddString(hwndComboPaper, Print::m_paperInfoArr[i].m_pszName);
+		Combo_SetItemData(hwndComboPaper, nItemIdx, Print::m_paperInfoArr[i].m_nId);
 	}
 
 	// 印刷設定名一覧
@@ -483,7 +483,7 @@ void CDlgPrintSetting::SetData(void)
 
 // ダイアログデータの取得
 // TRUE==正常 FALSE==入力エラー
-int CDlgPrintSetting::GetData(void)
+int DlgPrintSetting::GetData(void)
 {
 	HWND hwndCtrl;
 	int nIdx1;
@@ -613,7 +613,7 @@ int CDlgPrintSetting::GetData(void)
 }
 
 // 設定のタイプが変わった
-void CDlgPrintSetting::OnChangeSettingType(BOOL bGetData)
+void DlgPrintSetting::OnChangeSettingType(BOOL bGetData)
 {
 	if (bGetData) {
 		GetData();
@@ -727,7 +727,7 @@ const struct {
 };
 
 // スピンコントロールの処理
-void CDlgPrintSetting::OnSpin(int nCtrlId, BOOL bDown)
+void DlgPrintSetting::OnSpin(int nCtrlId, BOOL bDown)
 {
 	int		nData = 0;
 	int		nCtrlIdEDIT = 0;
@@ -759,7 +759,7 @@ void CDlgPrintSetting::OnSpin(int nCtrlId, BOOL bDown)
 
 
 // 入力値(数値)のエラーチェックをして正しい値を返す
-int CDlgPrintSetting::DataCheckAndCorrect(int nCtrlId, int nData)
+int DlgPrintSetting::DataCheckAndCorrect(int nCtrlId, int nData)
 {
 	int nIdx = -1;
 	switch (nCtrlId) {
@@ -789,7 +789,7 @@ int CDlgPrintSetting::DataCheckAndCorrect(int nCtrlId, int nData)
 	@date 2013.05.05 aroka OnTimerから移動
 	@retval 印字可能領域があれば TRUE  // 2013.05.20 aroka
 */
-BOOL CDlgPrintSetting::CalcPrintableLineAndColumn()
+BOOL DlgPrintSetting::CalcPrintableLineAndColumn()
 {
 	int			nEnableColumns;		// 行あたりの文字数
 	int			nEnableLines;		// 縦方向の行数
@@ -805,7 +805,7 @@ BOOL CDlgPrintSetting::CalcPrintableLineAndColumn()
 	dmDummy.dmPaperSize = pPS->m_nPrintPaperSize;
 	dmDummy.dmOrientation = pPS->m_nPrintPaperOrientation;
 	// 用紙の幅、高さ
-	if (!CPrint::GetPaperSize(
+	if (!Print::GetPaperSize(
 			&nPaperAllWidth,
 			&nPaperAllHeight,
 			&dmDummy
@@ -817,9 +817,9 @@ BOOL CDlgPrintSetting::CalcPrintableLineAndColumn()
 		return FALSE;
 	}
 	// 行あたりの文字数(行番号込み)
-	nEnableColumns = CPrint::CalculatePrintableColumns(pPS, nPaperAllWidth, pPS->m_bPrintLineNumber ? m_nLineNumberColumns : 0);	// 印字可能桁数/ページ
+	nEnableColumns = Print::CalculatePrintableColumns(pPS, nPaperAllWidth, pPS->m_bPrintLineNumber ? m_nLineNumberColumns : 0);	// 印字可能桁数/ページ
 	// 縦方向の行数
-	nEnableLines = CPrint::CalculatePrintableLines(pPS, nPaperAllHeight);			// 印字可能行数/ページ
+	nEnableLines = Print::CalculatePrintableLines(pPS, nPaperAllHeight);			// 印字可能行数/ページ
 
 	SetItemInt(IDC_STATIC_ENABLECOLUMNS, nEnableColumns, FALSE);
 	SetItemInt(IDC_STATIC_ENABLELINES, nEnableLines, FALSE);
@@ -844,7 +844,7 @@ BOOL CDlgPrintSetting::CalcPrintableLineAndColumn()
 
 // 行数と桁数の更新を要求（メッセージキューにポストする）
 // ダイアログ初期化の途中で EN_CHANGE に反応すると計算がおかしくなるため、関数呼び出しではなくPostMessageで処理 2013.5.5 aroka
-void CDlgPrintSetting::UpdatePrintableLineAndColumn()
+void DlgPrintSetting::UpdatePrintableLineAndColumn()
 {
 	m_bPrintableLinesAndColumnInvalid = true;
 	::PostMessageA(GetHwnd(), WM_COMMAND, MAKELONG(IDC_STATIC_ENABLECOLUMNS, STN_CLICKED), (LPARAM)GetItemHwnd(IDC_STATIC_ENABLECOLUMNS));
@@ -852,7 +852,7 @@ void CDlgPrintSetting::UpdatePrintableLineAndColumn()
 
 
 //@@@ 2002.01.18 add start
-LPVOID CDlgPrintSetting::GetHelpIdTable(void)
+LPVOID DlgPrintSetting::GetHelpIdTable(void)
 {
 	return (LPVOID)p_helpids;
 }
@@ -860,7 +860,7 @@ LPVOID CDlgPrintSetting::GetHelpIdTable(void)
 
 
 // フォント名/使用ボタンの設定
-void CDlgPrintSetting::SetFontName(
+void DlgPrintSetting::SetFontName(
 	int idTxt,
 	int idUse,
 	LOGFONT& lf,

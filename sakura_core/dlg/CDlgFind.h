@@ -21,12 +21,12 @@
 /*-----------------------------------------------------------------------
 クラスの宣言
 -----------------------------------------------------------------------*/
-class CDlgFind : public CDialog {
+class DlgFind : public Dialog {
 public:
 	/*
 	||  Constructors
 	*/
-	CDlgFind();
+	DlgFind();
 	/*
 	||  Attributes & Operations
 	*/
@@ -41,9 +41,9 @@ public:
 
 	LogicPoint	m_ptEscCaretPos_PHY;	// 検索開始時のカーソル位置退避エリア
 
-	CRecentSearch			m_cRecentSearch;
+	RecentSearch			m_cRecentSearch;
 	ComboBoxItemDeleter	m_comboDel;
-	CFontAutoDeleter		m_cFontText;
+	FontAutoDeleter		m_cFontText;
 
 protected:
 //@@@ 2002.2.2 YAZAKI CShareDataに移動

@@ -23,7 +23,7 @@
 */
 #pragma once
 
-class CEditView;
+class EditView;
 
 
 // クリッピング領域を計算する際のフラグ
@@ -36,12 +36,12 @@ enum EPaintArea{
 	PAINT_ALL        = PAINT_LINENUMBER | PAINT_RULER | PAINT_BODY, // ぜんぶ
 };
 
-class CEditView_Paint {
+class EditView_Paint {
 public:
-	virtual CEditView* GetEditView() = 0;
+	virtual EditView* GetEditView() = 0;
 
 public:
-	virtual ~CEditView_Paint() {}
+	virtual ~EditView_Paint() {}
 	void Call_OnPaint(
 		int nPaintFlag,   // 描画する領域を選択する
 		bool bUseMemoryDC // メモリDCを使用する

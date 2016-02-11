@@ -29,7 +29,7 @@
 #include "parse/CWordParse.h"
 #include "util/string_ex2.h"
 
-const int STRNCMP_MAX = 100;	// MAXキーワード長：strnicmp文字列比較最大値(CEditView::KeySearchCore) 	// 2006.04.10 fon
+const int STRNCMP_MAX = 100;	// MAXキーワード長：strnicmp文字列比較最大値(EditView::KeySearchCore) 	// 2006.04.10 fon
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                           検索                              //
@@ -39,9 +39,9 @@ const int STRNCMP_MAX = 100;	// MAXキーワード長：strnicmp文字列比較最大値(CEditV
 
 	@date 2006.04.10 fon OnTimer, CreatePopUpMenu_Rから分離
 */
-BOOL CEditView::KeyWordHelpSearchDict(LID_SKH nID, POINT* po, RECT* rc)
+BOOL EditView::KeyWordHelpSearchDict(LID_SKH nID, POINT* po, RECT* rc)
 {
-	CNativeW cmemCurText;
+	NativeW cmemCurText;
 	// キーワードヘルプを使用するか？
 	if (!m_pTypeData->m_bUseKeyWordHelp)	// キーワードヘルプ機能を使用する	// 2006.04.10 fon
 		goto end_of_search;
@@ -74,7 +74,7 @@ BOOL CEditView::KeyWordHelpSearchDict(LID_SKH nID, POINT* po, RECT* rc)
 			goto end_of_search;
 		break;
 	default:
-		PleaseReportToAuthor(NULL, _T("CEditView::KeyWordHelpSearchDict\nnID=%d"), (int)nID);
+		PleaseReportToAuthor(NULL, _T("EditView::KeyWordHelpSearchDict\nnID=%d"), (int)nID);
 	}
 	// 選択範囲のデータを取得(複数行選択の場合は先頭の行のみ)
 	if (GetSelectedDataOne(cmemCurText, STRNCMP_MAX + 1)) {
@@ -85,7 +85,7 @@ BOOL CEditView::KeyWordHelpSearchDict(LID_SKH nID, POINT* po, RECT* rc)
 	}else
 		goto end_of_search;
 
-	if (CNativeW::IsEqual(cmemCurText, m_cTipWnd.m_cKey)	// 既に検索済みか
+	if (NativeW::IsEqual(cmemCurText, m_cTipWnd.m_cKey)	// 既に検索済みか
 		&& !m_cTipWnd.m_KeyWasHit							// 該当するキーがなかった
 	) {
 		goto end_of_search;
@@ -109,9 +109,9 @@ end_of_search:
 
 	@date 2006.04.10 fon KeyWordHelpSearchDictから分離
 */
-bool CEditView::KeySearchCore(const CNativeW* pcmemCurText)
+bool EditView::KeySearchCore(const NativeW* pcmemCurText)
 {
-	CNativeW*	pcmemRefKey;
+	NativeW*	pcmemRefKey;
 	int			nCmpLen = STRNCMP_MAX; // 2006.04.10 fon
 	int			nLine; // 2006.04.10 fon
 	
@@ -130,7 +130,7 @@ bool CEditView::KeySearchCore(const CNativeW* pcmemCurText)
 		auto& keyHelpInfo = m_pTypeData->m_KeyHelpArr[i];
 		if (keyHelpInfo.m_bUse) {
 			// 2006.04.10 fon (nCmpLen, pcmemRefKey,nSearchLine)引数を追加
-			CNativeW* pcmemRefText;
+			NativeW* pcmemRefText;
 			int nSearchResult = m_cDicMgr.DicMgr::Search(
 				pcmemCurText->GetStringPtr(),
 				nCmpLen,
@@ -202,7 +202,7 @@ bool CEditView::KeySearchCore(const CNativeW* pcmemCurText)
 	return false;
 }
 
-bool CEditView::MiniMapCursorLineTip(POINT* po, RECT* rc, bool* pbHide)
+bool EditView::MiniMapCursorLineTip(POINT* po, RECT* rc, bool* pbHide)
 {
 	*pbHide = true;
 	if (!m_bMiniMap) {
@@ -233,7 +233,7 @@ bool CEditView::MiniMapCursorLineTip(POINT* po, RECT* rc, bool* pbHide)
 		*pbHide = false; // 表示継続
 		return false;
 	}
-	CNativeW cmemCurText;
+	NativeW cmemCurText;
 	LayoutYInt nTipBeginLine = ptNew.y;
 	LayoutYInt nTipEndLine = ptNew.y + LayoutYInt(4);
 	for (LayoutYInt nCurLine=nTipBeginLine; nCurLine<nTipEndLine; ++nCurLine) {
@@ -242,7 +242,7 @@ bool CEditView::MiniMapCursorLineTip(POINT* po, RECT* rc, bool* pbHide)
 			pcLayout = GetDocument()->m_cLayoutMgr.SearchLineByLayoutY( nCurLine );
 		}
 		if (pcLayout) {
-			CNativeW cmemCurLine;
+			NativeW cmemCurLine;
 			{
 				LogicInt nLineLen = pcLayout->GetLengthWithoutEOL();
 				const wchar_t* pszData = pcLayout->GetPtr();
@@ -250,8 +250,8 @@ bool CEditView::MiniMapCursorLineTip(POINT* po, RECT* rc, bool* pbHide)
 				int pre = 0;
 				int i = 0;
 				int k = 0;
-				int charSize = CNativeW::GetSizeOfChar( pszData, nLineLen, i );
-				int charWidth = t_max(1, (int)(Int)CNativeW::GetKetaOfChar( pszData, nLineLen, i ));
+				int charSize = NativeW::GetSizeOfChar( pszData, nLineLen, i );
+				int charWidth = t_max(1, (int)(Int)NativeW::GetKetaOfChar( pszData, nLineLen, i ));
 				int charType = 0;
 				// 連続する"\t" " " を " "1つにする
 				// 左からnLimitLengthまでの幅を切り取り
@@ -269,8 +269,8 @@ bool CEditView::MiniMapCursorLineTip(POINT* po, RECT* rc, bool* pbHide)
 						charType = 0;
 					}
 					i += charSize;
-					charSize = CNativeW::GetSizeOfChar( pszData, nLineLen, i );
-					charWidth = t_max(1, (int)(Int)CNativeW::GetKetaOfChar( pszData, nLineLen, i ));
+					charSize = NativeW::GetSizeOfChar( pszData, nLineLen, i );
+					charWidth = t_max(1, (int)(Int)NativeW::GetKetaOfChar( pszData, nLineLen, i ));
 				}
 				cmemCurLine.AppendString( pszData + pre , i - pre );
 			}
@@ -293,9 +293,9 @@ bool CEditView::MiniMapCursorLineTip(POINT* po, RECT* rc, bool* pbHide)
 }
 
 // 現在カーソル位置単語または選択範囲より検索等のキーを取得
-void CEditView::GetCurrentTextForSearch(CNativeW& cmemCurText, bool bStripMaxPath /* = true */, bool bTrimSpaceTab /* = false */)
+void EditView::GetCurrentTextForSearch(NativeW& cmemCurText, bool bStripMaxPath /* = true */, bool bTrimSpaceTab /* = false */)
 {
-	CNativeW cmemTopic = L"";
+	NativeW cmemTopic = L"";
 
 	cmemCurText.SetString(L"");
 	if (GetSelectionInfo().IsTextSelected()) {	// テキストが選択されているか
@@ -383,7 +383,7 @@ void CEditView::GetCurrentTextForSearch(CNativeW& cmemCurText, bool bStripMaxPat
 	@date 2006.08.23 ryoji 新規作成
 	@date 2014.07.01 Moca bGetHistory追加、戻り値をboolに変更
 */
-bool CEditView::GetCurrentTextForSearchDlg(CNativeW& cmemCurText, bool bGetHistory)
+bool EditView::GetCurrentTextForSearchDlg(NativeW& cmemCurText, bool bGetHistory)
 {
 	bool bStripMaxPath = false;
 	cmemCurText.SetString(L"");
@@ -435,7 +435,7 @@ bool CEditView::GetCurrentTextForSearchDlg(CNativeW& cmemCurText, bool bGetHisto
 		(単語検索時) 指定位置が検索文字列に含まれる何番目の単語の始まりであるか。
 		(それ以外) 指定位置が検索文字列の始まりだった。
 */
-int CEditView::IsSearchString(
+int EditView::IsSearchString(
 	const CStringRef&	cStr,
 	/*
 	const wchar_t*	pszData,
@@ -467,7 +467,7 @@ int CEditView::IsSearchString(
 	}else if (m_curSearchOption.bWordOnly) { // 単語検索
 		// 指定位置の単語の範囲を調べる
 		LogicInt posWordHead, posWordEnd;
-		if (!CWordParse::WhereCurrentWord_2(cStr.GetPtr(), LogicInt(cStr.GetLength()), nPos, &posWordHead, &posWordEnd, NULL, NULL)) {
+		if (!WordParse::WhereCurrentWord_2(cStr.GetPtr(), LogicInt(cStr.GetLength()), nPos, &posWordHead, &posWordEnd, NULL, NULL)) {
 			return 0; // 指定位置に単語が見つからなかった。
  		}
 		if (nPos != posWordHead) {
@@ -485,7 +485,7 @@ int CEditView::IsSearchString(
 		for (const wchar_t* p=m_strCurSearchKey.data(); p<searchKeyEnd; ) {
 			LogicInt begin, end; // 検索語に含まれる単語?の位置。WhereCurrentWord_2()の仕様では空白文字列も単語に含まれる。
 			if (1
-				&& CWordParse::WhereCurrentWord_2(p, LogicInt(searchKeyEnd - p), LogicInt(0), &begin, &end, NULL, NULL)
+				&& WordParse::WhereCurrentWord_2(p, LogicInt(searchKeyEnd - p), LogicInt(0), &begin, &end, NULL, NULL)
 				&& begin == 0
 				&& begin < end
 			) {
@@ -500,7 +500,7 @@ int CEditView::IsSearchString(
 				}
 				p += end;
 			}else {
-				p += CNativeW::GetSizeOfChar(p, searchKeyEnd - p, 0);
+				p += NativeW::GetSizeOfChar(p, searchKeyEnd - p, 0);
 			}
 		}
 		return 0; // 指定位置の単語と検索文字列に含まれる単語は一致しなかった。

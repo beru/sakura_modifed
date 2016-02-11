@@ -36,7 +36,7 @@
 #include "charset/codechecker.h"
 
 // Base64デコード
-bool Decode_Base64Decode::DoDecode(const CNativeW& pcSrc, CMemory* pcDst)
+bool Decode_Base64Decode::DoDecode(const NativeW& pcSrc, Memory* pcDst)
 {
 	using namespace WCODE;
 

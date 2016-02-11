@@ -28,7 +28,7 @@
 #include "sakura_rc.h" // 2002/2/10 aroka 復帰
 #include "sakura.hh"
 
-// バージョン情報 CDlgAbout.cpp	//@@@ 2002.01.07 add start MIK
+// バージョン情報 DlgAbout.cpp	//@@@ 2002.01.07 add start MIK
 const DWORD p_helpids[] = {	//12900
 	IDOK,					HIDOK_ABOUT,
 	IDC_EDIT_ABOUT,			HIDC_ABOUT_EDIT_ABOUT,
@@ -102,14 +102,14 @@ const DWORD p_helpids[] = {	//12900
 /*!
 	標準以外のメッセージを捕捉する
 */
-INT_PTR CDlgAbout::DispatchEvent(
+INT_PTR DlgAbout::DispatchEvent(
 	HWND hWnd,
 	UINT wMsg,
 	WPARAM wParam,
 	LPARAM lParam
 	)
 {
-	INT_PTR result = CDialog::DispatchEvent(hWnd, wMsg, wParam, lParam);
+	INT_PTR result = Dialog::DispatchEvent(hWnd, wMsg, wParam, lParam);
 	switch (wMsg) {
 	case WM_CTLCOLORDLG:
 	case WM_CTLCOLORSTATIC:
@@ -126,9 +126,9 @@ INT_PTR CDlgAbout::DispatchEvent(
 // To Here Nov. 7, 2000 genta
 
 // モーダルダイアログの表示
-int CDlgAbout::DoModal(HINSTANCE hInstance, HWND hwndParent)
+int DlgAbout::DoModal(HINSTANCE hInstance, HWND hwndParent)
 {
-	return (int)CDialog::DoModal(hInstance, hwndParent, IDD_ABOUT, (LPARAM)NULL);
+	return (int)Dialog::DoModal(hInstance, hwndParent, IDD_ABOUT, (LPARAM)NULL);
 }
 
 /*! 初期化処理
@@ -136,7 +136,7 @@ int CDlgAbout::DoModal(HINSTANCE hInstance, HWND hwndParent)
 	@date 2011.04.10 nasukoji	各国語メッセージリソース対応
 	@date 2013.04.07 novice svn revision 情報追加
 */
-BOOL CDlgAbout::OnInitDialog(
+BOOL DlgAbout::OnInitDialog(
 	HWND hwndDlg,
 	WPARAM wParam,
 	LPARAM lParam
@@ -255,11 +255,11 @@ BOOL CDlgAbout::OnInitDialog(
 	//m_UrlOrgWnd.SubclassWindow(GetItemHwnd(IDC_STATIC_URL_ORG));
 
 	// 基底クラスメンバ
-	return CDialog::OnInitDialog(GetHwnd(), wParam, lParam);
+	return Dialog::OnInitDialog(GetHwnd(), wParam, lParam);
 }
 
 
-BOOL CDlgAbout::OnBnClicked(int wID)
+BOOL DlgAbout::OnBnClicked(int wID)
 {
 	switch (wID) {
 	case IDC_BUTTON_COPY:
@@ -271,10 +271,10 @@ BOOL CDlgAbout::OnBnClicked(int wID)
  		}
 		return TRUE;
 	}
-	return CDialog::OnBnClicked(wID);
+	return Dialog::OnBnClicked(wID);
 }
 
-BOOL CDlgAbout::OnStnClicked(int wID)
+BOOL DlgAbout::OnStnClicked(int wID)
 {
 	switch (wID) {
 	// 2006.07.27 genta 原作者連絡先のボタンを削除 (ヘルプから削除されているため)
@@ -289,16 +289,16 @@ BOOL CDlgAbout::OnStnClicked(int wID)
 		}
 	}
 	// 基底クラスメンバ
-	return CDialog::OnStnClicked(wID);
+	return Dialog::OnStnClicked(wID);
 }
 
 //@@@ 2002.01.18 add start
-LPVOID CDlgAbout::GetHelpIdTable(void)
+LPVOID DlgAbout::GetHelpIdTable(void)
 {
 	return (LPVOID)p_helpids;
 }
 
-BOOL CUrlWnd::SetSubclassWindow(HWND hWnd)
+BOOL UrlWnd::SetSubclassWindow(HWND hWnd)
 {
 	// STATICウィンドウをサブクラス化する
 	// 元のSTATICは WS_TABSTOP, SS_NOTIFY スタイルのものを使用すること
@@ -331,14 +331,14 @@ BOOL CUrlWnd::SetSubclassWindow(HWND hWnd)
 	return TRUE;
 }
 
-LRESULT CALLBACK CUrlWnd::UrlWndProc(
+LRESULT CALLBACK UrlWnd::UrlWndProc(
 	HWND hWnd,
 	UINT msg,
 	WPARAM wParam,
 	LPARAM lParam
 	)
 {
-	CUrlWnd* pUrlWnd = (CUrlWnd*)GetWindowLongPtr(hWnd, GWLP_USERDATA);
+	UrlWnd* pUrlWnd = (UrlWnd*)GetWindowLongPtr(hWnd, GWLP_USERDATA);
 
 	HDC hdc;
 	POINT pt;

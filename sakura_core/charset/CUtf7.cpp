@@ -47,7 +47,7 @@ int Utf7::_Utf7SetBToUni_block(const char* pSrc, const int nSrcLen, wchar_t* pDs
 	ndecoded_len = _DecodeBase64(pSrc, nSrcLen, pbuf);
 	int nModLen = ndecoded_len % sizeof(wchar_t);
 	ndecoded_len = ndecoded_len - nModLen;
-	CMemory::SwapHLByte(pbuf, ndecoded_len);  // UTF-16 BE を UTF-16 LE に直す
+	Memory::SwapHLByte(pbuf, ndecoded_len);  // UTF-16 BE を UTF-16 LE に直す
 	memcpy(reinterpret_cast<char*>(pDst), pbuf, ndecoded_len);
 	bool bError = false;
 	if (nModLen) {
@@ -119,7 +119,7 @@ int Utf7::Utf7ToUni(const char* pSrc, const int nSrcLen, wchar_t* pDst, bool* pb
 
 // UTF-7→Unicodeコード変換
 // 2007.08.13 kobake 作成
-EConvertResult Utf7::UTF7ToUnicode( const CMemory& cSrc, CNativeW* pDstMem )
+EConvertResult Utf7::UTF7ToUnicode( const Memory& cSrc, NativeW* pDstMem )
 {
 	// データ取得
 	int nDataLen;
@@ -176,7 +176,7 @@ int Utf7::_UniToUtf7SetB_block(const wchar_t* pSrc, const int nSrcLen, char* pDs
 
 	// // UTF-16 LE → UTF-16 BE
 	wcsncpy(&psrc[0], pSrc, nSrcLen);
-	CMemory::SwapHLByte(reinterpret_cast<char*>(psrc), nSrcLen * sizeof(wchar_t));
+	Memory::SwapHLByte(reinterpret_cast<char*>(psrc), nSrcLen * sizeof(wchar_t));
 
 	// 書き込み
 	char* pw = pDst;
@@ -237,7 +237,7 @@ int Utf7::UniToUtf7(const wchar_t* pSrc, const int nSrcLen, char* pDst)
 /*! コード変換 Unicode→UTF-7
 	@date 2002.10.25 Moca UTF-7で直接エンコードできる文字をRFCに合わせて制限した
 */
-EConvertResult Utf7::UnicodeToUTF7(const CNativeW& cSrc, CMemory* pDstMem)
+EConvertResult Utf7::UnicodeToUTF7(const NativeW& cSrc, Memory* pDstMem)
 {
 
 	// データ取得
@@ -262,13 +262,13 @@ EConvertResult Utf7::UnicodeToUTF7(const CNativeW& cSrc, CMemory* pDstMem)
 }
 
 // BOMデータ取得
-void Utf7::GetBom(CMemory* pcmemBom)
+void Utf7::GetBom(Memory* pcmemBom)
 {
 	static const BYTE UTF7_BOM[]= {'+', '/', 'v', '8', '-'};
 	pcmemBom->SetRawData(UTF7_BOM, sizeof(UTF7_BOM));
 }
 
-void Utf7::GetEol(CMemory* pcmemEol, EEolType eEolType)
+void Utf7::GetEol(Memory* pcmemEol, EEolType eEolType)
 {
 	static const struct{
 		const char* szData;

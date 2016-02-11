@@ -111,7 +111,7 @@ const char* GetNextLine(
 	int				nDataLen,
 	int*			pnLineLen,
 	int*			pnBgn,
-	CEol*			pcEol
+	Eol*			pcEol
 	)
 {
 	int nBgn = *pnBgn;
@@ -145,7 +145,7 @@ const wchar_t* GetNextLineW(
 	int				nDataLen,	//!< [in]	検索文字列の文字数
 	int*			pnLineLen,	//!< [out]	1行の文字数を返すただしEOLは含まない
 	int*			pnBgn,		//!< [i/o]	検索文字列のオフセット位置
-	CEol*			pcEol,		//!< [out]	EOL
+	Eol*			pcEol,		//!< [out]	EOL
 	bool			bExtEol
 	)
 {
@@ -187,7 +187,7 @@ static EEolType GetEOLTypeUniBE(const wchar_t* pszData, int nDataLen)
 
 	// 改行コードの長さを調べる
 	for (int i=1; i<EOL_TYPE_NUM; ++i) {
-		CEol cEol((EEolType)i);
+		Eol cEol((EEolType)i);
 		if (cEol.GetLen() <= nDataLen && auto_memcmp(pszData, aEolTable[i], cEol.GetLen()) == 0) {
 			return gm_pnEolTypeArr[i];
 		}
@@ -205,7 +205,7 @@ const wchar_t* GetNextLineWB(
 	int			nDataLen,	//!< [in]	検索文字列の文字数
 	int*		pnLineLen,	//!< [out]	1行の文字数を返すただしEOLは含まない
 	int*		pnBgn,		//!< [i/o]	検索文字列のオフセット位置
-	CEol*		pcEol		//!< [i/o]	EOL
+	Eol*		pcEol		//!< [i/o]	EOL
 	)
 {
 	int nBgn = *pnBgn;
@@ -254,7 +254,7 @@ const char* GetNextLimitedLengthText(
 	int i;
 	for (i=nBgn; i+1<nTextLen; ++i) {
 		// 2005-09-02 D.S.Koba GetSizeOfChar
-		int nCharChars = CNativeA::GetSizeOfChar(pText, nTextLen, i);
+		int nCharChars = NativeA::GetSizeOfChar(pText, nTextLen, i);
 		if (nCharChars == 0) {
 			nCharChars = 1;
 		}
@@ -274,16 +274,16 @@ int LimitStringLengthW(
 	const wchar_t*	pszData,		//!< [in]
 	int				nDataLength,	//!< [in]
 	int				nLimitLength,	//!< [in]
-	CNativeW&		cmemDes			//!< [out]
+	NativeW&		cmemDes			//!< [out]
 	)
 {
 	int n = nDataLength;
 	if (n > nLimitLength) {
 		int i = 0;
-		int charSize = CNativeW::GetSizeOfChar(pszData, nDataLength, i);
+		int charSize = NativeW::GetSizeOfChar(pszData, nDataLength, i);
 		for (; i+charSize<=nLimitLength;) {
 			i += charSize;
-			charSize = CNativeW::GetSizeOfChar(pszData, nDataLength, i);
+			charSize = NativeW::GetSizeOfChar(pszData, nDataLength, i);
 		}
 		n = i;
 	}

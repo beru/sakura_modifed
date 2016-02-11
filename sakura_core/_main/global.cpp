@@ -19,8 +19,8 @@
 #include "window/CEditWnd.h"
 #include "CNormalProcess.h"
 
-// 2007.10.02 kobake CEditWndのインスタンスへのポインタをここに保存しておく
-CEditWnd* g_pcEditWnd = NULL;
+// 2007.10.02 kobake EditWndのインスタンスへのポインタをここに保存しておく
+EditWnd* g_pcEditWnd = NULL;
 
 
 // 選択領域描画用パラメータ

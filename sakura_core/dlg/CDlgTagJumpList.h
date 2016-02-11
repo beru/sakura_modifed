@@ -47,13 +47,13 @@ class SortedTagJumpList;
 	ダイレクトタグジャンプで複数の候補がある場合及び
 	キーワード指定タグジャンプのためのダイアログボックス制御
 */
-class CDlgTagJumpList : public CDialog {
+class DlgTagJumpList : public Dialog {
 public:
 	/*
 	||  Constructors
 	*/
-	CDlgTagJumpList(bool bDirectTagJump);
-	~CDlgTagJumpList();
+	DlgTagJumpList(bool bDirectTagJump);
+	~DlgTagJumpList();
 
 	/*
 	||  Attributes & Operations
@@ -149,18 +149,18 @@ private:
 	TagFindState* m_psFindPrev;	// 前回の最後に検索した状態
 	TagFindState* m_psFind0Match;	// 前回の1つもHitしなかった最後のtags
 
-	CNativeW	m_strOldKeyword;	// 前回のキーワード
+	NativeW	m_strOldKeyword;	// 前回のキーワード
 	bool	m_bOldTagJumpICase;		// 前回の大文字小文字を同一視
 	bool	m_bOldTagJumpAnyWhere;	// 前回の文字列の途中にマッチ
 
 	ComboBoxItemDeleter	m_comboDel;
-	CRecentTagjumpKeyword	m_cRecentKeyword;
+	RecentTagjumpKeyword	m_cRecentKeyword;
 	
 	POINT	m_ptDefaultSize;
 	RECT	m_rcItems[11];
 
 private:
-	DISALLOW_COPY_AND_ASSIGN(CDlgTagJumpList);
+	DISALLOW_COPY_AND_ASSIGN(DlgTagJumpList);
 };
 
 

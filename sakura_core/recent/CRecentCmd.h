@@ -27,19 +27,19 @@
 #include "util/StaticType.h"
 #include "config/maxdata.h" // MAX_CMDLEN
 
-typedef StaticString<TCHAR, MAX_CMDLEN> CCmdString;
+typedef StaticString<TCHAR, MAX_CMDLEN> CmdString;
 
 // コマンドの履歴を管理 (RECENT_FOR_CMD)
-class CRecentCmd : public CRecentImp<CCmdString, LPCTSTR> {
+class RecentCmd : public RecentImp<CmdString, LPCTSTR> {
 public:
 	// 生成
-	CRecentCmd();
+	RecentCmd();
 
 	// オーバーライド
-	int				CompareItem(const CCmdString* p1, LPCTSTR p2) const;
-	void			CopyItem(CCmdString* dst, LPCTSTR src) const;
+	int				CompareItem(const CmdString* p1, LPCTSTR p2) const;
+	void			CopyItem(CmdString* dst, LPCTSTR src) const;
 	const TCHAR*	GetItemText(int nIndex) const;
-	bool			DataToReceiveType(LPCTSTR* dst, const CCmdString* src) const;
-	bool			TextToDataType(CCmdString* dst, LPCTSTR pszText) const;
+	bool			DataToReceiveType(LPCTSTR* dst, const CmdString* src) const;
+	bool			TextToDataType(CmdString* dst, LPCTSTR pszText) const;
 };
 

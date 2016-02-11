@@ -23,19 +23,19 @@
 */
 #pragma once
 
-class CEditView;
+class EditView;
 
 #include "basis/SakuraBasis.h"
 #include "doc/layout/CLayout.h"
 
-class CViewSelect {
+class ViewSelect {
 public:
-	CEditView* GetEditView() { return m_pcEditView; }
-	const CEditView* GetEditView() const { return m_pcEditView; }
+	EditView* GetEditView() { return m_pcEditView; }
+	const EditView* GetEditView() const { return m_pcEditView; }
 
 public:
-	CViewSelect(CEditView* pcEditView);
-	void CopySelectStatus(CViewSelect* pSelect) const;
+	ViewSelect(EditView* pcEditView);
+	void CopySelectStatus(ViewSelect* pSelect) const;
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                      ëIëîÕàÕÇÃïœçX                         //
@@ -142,7 +142,7 @@ public:
 
 private:
 	// éQè∆
-	CEditView*	m_pcEditView;
+	EditView*	m_pcEditView;
 
 public:
 

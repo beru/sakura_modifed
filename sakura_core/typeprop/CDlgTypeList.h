@@ -25,7 +25,7 @@ using std::wstring;
 /*!
 	@brief ファイルタイプ一覧ダイアログ
 */
-class CDlgTypeList : public CDialog {
+class CDlgTypeList : public Dialog {
 public:
 	// 型
 	struct Result {

@@ -27,20 +27,20 @@
 #include "docplus/CModifyManager.h"
 #include "docplus/CFuncListManager.h"
 
-class CDocLine;
+class DocLine;
 class OpeBlk;
 
 // 文書データ1行
-class CDocLine {
+class DocLine {
 protected:
 	friend class DocLineMgr; //######仮
 public:
 	// コンストラクタ・デストラクタ
-	CDocLine();
-	~CDocLine();
+	DocLine();
+	~DocLine();
 
 	// 判定
-	bool			IsEmptyLine() const;		// このCDocLineが空行（スペース、タブ、改行記号のみの行）かどうか。
+	bool			IsEmptyLine() const;		// このDocLineが空行（スペース、タブ、改行記号のみの行）かどうか。
 
 	// データ取得
 	LogicInt		GetLengthWithoutEOL() const			{ return m_cLine.GetStringLength() - m_cEol.GetLen(); } // 戻り値は文字単位。
@@ -70,43 +70,43 @@ public:
 			return CStringRef(NULL, 0);
 		}
 	}
-	const CEol& GetEol() const { return m_cEol; }
-	void SetEol(const CEol& cEol, OpeBlk* pcOpeBlk);
+	const Eol& GetEol() const { return m_cEol; }
+	void SetEol(const Eol& cEol, OpeBlk* pcOpeBlk);
 	void SetEol(); // 現在のバッファから設定
 
-	const CNativeW& _GetDocLineDataWithEOL() const { return m_cLine; } //###仮
-	CNativeW& _GetDocLineData() { return m_cLine; }
+	const NativeW& _GetDocLineDataWithEOL() const { return m_cLine; } //###仮
+	NativeW& _GetDocLineData() { return m_cLine; }
 
 	// データ設定
 	void SetDocLineString(const wchar_t* pData, int nLength);
-	void SetDocLineString(const CNativeW& cData);
-	void SetDocLineStringMove(CNativeW* pcData);
+	void SetDocLineString(const NativeW& cData);
+	void SetDocLineStringMove(NativeW* pcData);
 
 	// チェーン属性
-	CDocLine* GetPrevLine() { return m_pPrev; }
-	const CDocLine* GetPrevLine() const { return m_pPrev; }
-	CDocLine* GetNextLine() { return m_pNext; }
-	const CDocLine* GetNextLine() const { return m_pNext; }
-	void _SetPrevLine(CDocLine* pcDocLine) { m_pPrev = pcDocLine; }
-	void _SetNextLine(CDocLine* pcDocLine) { m_pNext = pcDocLine; }
+	DocLine* GetPrevLine() { return m_pPrev; }
+	const DocLine* GetPrevLine() const { return m_pPrev; }
+	DocLine* GetNextLine() { return m_pNext; }
+	const DocLine* GetNextLine() const { return m_pNext; }
+	void _SetPrevLine(DocLine* pcDocLine) { m_pPrev = pcDocLine; }
+	void _SetNextLine(DocLine* pcDocLine) { m_pNext = pcDocLine; }
 	
 private: //####
-	CDocLine*	m_pPrev;	// 一つ前の要素
-	CDocLine*	m_pNext;	// 一つ後の要素
+	DocLine*	m_pPrev;	// 一つ前の要素
+	DocLine*	m_pNext;	// 一つ後の要素
 private:
-	CNativeW	m_cLine;	// データ  2007.10.11 kobake ポインタではなく、実体を持つように変更
-	CEol		m_cEol;		// 行末コード
+	NativeW	m_cLine;	// データ  2007.10.11 kobake ポインタではなく、実体を持つように変更
+	Eol		m_cEol;		// 行末コード
 public:
 	// 拡張情報 $$分離中
 	struct MarkType {
-		CLineModified	m_cModified;	// 変更フラグ
-		CLineBookmarked	m_cBookmarked;	// ブックマーク
-		CLineFuncList	m_cFuncList;	//関数リストマーク
-		CLineDiffed		m_cDiffmarked;	// DIFF差分情報
+		LineModified	m_cModified;	// 変更フラグ
+		LineBookmarked	m_cBookmarked;	// ブックマーク
+		LineFuncList	m_cFuncList;	//関数リストマーク
+		LineDiffed		m_cDiffmarked;	// DIFF差分情報
 	};
 	MarkType m_sMark;
 
 private:
-	DISALLOW_COPY_AND_ASSIGN(CDocLine);
+	DISALLOW_COPY_AND_ASSIGN(DocLine);
 };
 

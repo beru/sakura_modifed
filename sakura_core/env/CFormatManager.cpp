@@ -39,7 +39,7 @@
 	pszDateFormat：
 		カスタムのときのフォーマット
 */
-const TCHAR* CFormatManager::MyGetDateFormat(const SYSTEMTIME& systime, TCHAR* pszDest, int nDestLen)
+const TCHAR* FormatManager::MyGetDateFormat(const SYSTEMTIME& systime, TCHAR* pszDest, int nDestLen)
 {
 	return MyGetDateFormat(
 		systime,
@@ -50,7 +50,7 @@ const TCHAR* CFormatManager::MyGetDateFormat(const SYSTEMTIME& systime, TCHAR* p
 	);
 }
 
-const TCHAR* CFormatManager::MyGetDateFormat(
+const TCHAR* FormatManager::MyGetDateFormat(
 	const SYSTEMTIME&	systime,
 	TCHAR*				pszDest,
 	int					nDestLen,
@@ -73,7 +73,7 @@ const TCHAR* CFormatManager::MyGetDateFormat(
 
 
 // 時刻をフォーマット
-const TCHAR* CFormatManager::MyGetTimeFormat(const SYSTEMTIME& systime, TCHAR* pszDest, int nDestLen)
+const TCHAR* FormatManager::MyGetTimeFormat(const SYSTEMTIME& systime, TCHAR* pszDest, int nDestLen)
 {
 	return MyGetTimeFormat(
 		systime,
@@ -85,7 +85,7 @@ const TCHAR* CFormatManager::MyGetTimeFormat(const SYSTEMTIME& systime, TCHAR* p
 }
 
 // 時刻をフォーマット
-const TCHAR* CFormatManager::MyGetTimeFormat(
+const TCHAR* FormatManager::MyGetTimeFormat(
 	const SYSTEMTIME&	systime,
 	TCHAR*				pszDest,
 	int					nDestLen,

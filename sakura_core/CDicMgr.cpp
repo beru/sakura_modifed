@@ -44,8 +44,8 @@ DicMgr::~DicMgr()
 BOOL DicMgr::Search(
 	const wchar_t*		pszKey,				// 検索キーワード
 	const int			nCmpLen,			// 検索キーワードの長さ
-	CNativeW**			ppcmemKey,			// 見つかったキーワード．呼び出し元の責任で解放する．
-	CNativeW**			ppcmemMean,			// 見つかったキーワードに対応する辞書内容．呼び出し元の責任で解放する．
+	NativeW**			ppcmemKey,			// 見つかったキーワード．呼び出し元の責任で解放する．
+	NativeW**			ppcmemMean,			// 見つかったキーワードに対応する辞書内容．呼び出し元の責任で解放する．
 	const TCHAR*		pszKeyWordHelpFile,	// キーワードヘルプファイルのパス名
 	int*				pLine				// 見つかったキーワードのキーワードヘルプファイル内での行番号
 	)
@@ -62,7 +62,7 @@ BOOL DicMgr::Search(
 	}
 	// 2003.06.23 Moca 相対パスは実行ファイルからのパスとして開く
 	// 2007.05.19 ryoji 相対パスは設定ファイルからのパスを優先
-	CTextInputStream_AbsIni in(pszKeyWordHelpFile);
+	TextInputStream_AbsIni in(pszKeyWordHelpFile);
 	if (!in) {
 		return FALSE;
 	}
@@ -94,10 +94,10 @@ BOOL DicMgr::Search(
 						}
 					}
 					// キーワードのセット
-					*ppcmemKey = new CNativeW;	// 2006.04.10 fon
+					*ppcmemKey = new NativeW;	// 2006.04.10 fon
 					(*ppcmemKey)->SetString(pszToken);
 					// 意味のセット
-					*ppcmemMean = new CNativeW;
+					*ppcmemMean = new NativeW;
 					(*ppcmemMean)->SetString(pszWork);
 
 					*pLine = line;	// 2006.04.10 fon
@@ -130,7 +130,7 @@ int DicMgr::HokanSearch(
 		return 0;
 	}
 
-	CTextInputStream_AbsIni in(pszKeyWordFile);
+	TextInputStream_AbsIni in(pszKeyWordFile);
 	if (!in) {
 		return 0;
 	}

@@ -36,7 +36,7 @@ class Decode_UuDecode : public Decode {
 
 	TCHAR m_aFilename[_MAX_PATH];
 public:
-	bool DoDecode(const CNativeW& cData, CMemory* pDst);
+	bool DoDecode(const NativeW& cData, Memory* pDst);
 	void CopyFilename(TCHAR* pcDst) const { _tcscpy(pcDst, m_aFilename); }
 };
 

@@ -137,7 +137,7 @@ bool CodeTypeName::UseBom()
 	if (msCodeSet.find(m_eCodeType) == msCodeSet.end()) {
 		if (IsValidCodeOrCPType(m_eCodeType)) {
 			CodePage encoding(m_eCodeType);
-			CMemory mem;
+			Memory mem;
 			encoding.GetBom(&mem);
 			return 0 < mem.GetRawLength();
 		}

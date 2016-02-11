@@ -10,12 +10,12 @@
 using namespace std;
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-//                     CTextInputStream                        //
+//                     TextInputStream                        //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-CTextInputStream::CTextInputStream(const TCHAR* tszPath)
+TextInputStream::TextInputStream(const TCHAR* tszPath)
 	:
-	CStream(tszPath, _T("rb"))
+	Stream(tszPath, _T("rb"))
 {
 	m_bIsUtf8 = false;
 
@@ -37,22 +37,22 @@ CTextInputStream::CTextInputStream(const TCHAR* tszPath)
 }
 
 /*
-CTextInputStream::CTextInputStream()
-: CStream()
+TextInputStream::TextInputStream()
+: Stream()
 {
 	m_bIsUtf8=false;
 }
 */
 
-CTextInputStream::~CTextInputStream()
+TextInputStream::~TextInputStream()
 {
 }
 
 
-wstring CTextInputStream::ReadLineW()
+wstring TextInputStream::ReadLineW()
 {
 	//$$ 非効率だけど今のところは許して。。
-	CNativeW line;
+	NativeW line;
 	line.AllocStringBuffer(60);
 	for (;;) {
 		int c = getc(GetFp());
@@ -91,21 +91,21 @@ wstring CTextInputStream::ReadLineW()
 
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-//                     CTextOutputStream                       //
+//                     TextOutputStream                       //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-CTextOutputStream::CTextOutputStream(
+TextOutputStream::TextOutputStream(
 	const TCHAR* tszPath,
 	ECodeType eCodeType,
 	bool bExceptionMode,
 	bool bBom
 	)
-	: COutputStream(tszPath, _T("wb"), bExceptionMode)
+	: OutputStream(tszPath, _T("wb"), bExceptionMode)
 {
 	m_pcCodeBase = CodeFactory::CreateCodeBase(eCodeType, 0);
 	if (Good() && bBom) {
 		// BOM付加
-		CMemory cmemBom;
+		Memory cmemBom;
 		m_pcCodeBase->GetBom(&cmemBom);
 		if (cmemBom.GetRawLength() > 0) {
 			fwrite(cmemBom.GetRawPtr(), cmemBom.GetRawLength(), 1, GetFp());
@@ -113,12 +113,12 @@ CTextOutputStream::CTextOutputStream(
 	}
 }
 
-CTextOutputStream::~CTextOutputStream()
+TextOutputStream::~TextOutputStream()
 {
 	delete m_pcCodeBase;
 }
 
-void CTextOutputStream::WriteString(
+void TextOutputStream::WriteString(
 	const wchar_t*	szData,	//!< 書き込む文字列
 	int				nLen	//!< 書き込む文字列長。-1を渡すと自動計算。
 	)
@@ -146,8 +146,8 @@ void CTextOutputStream::WriteString(
 		const wchar_t* lf = (q < pEnd) ? q : NULL;
 		if (lf) {
 			// \nの前まで(p～lf)出力
-			CNativeW cSrc(p, lf-p);
-			CMemory cDst;
+			NativeW cSrc(p, lf-p);
+			Memory cDst;
 			m_pcCodeBase->UnicodeToCode(cSrc, &cDst); // コード変換
 			fwrite(cDst.GetRawPtr(), 1, cDst.GetRawLength(), GetFp());
 
@@ -160,8 +160,8 @@ void CTextOutputStream::WriteString(
 			p = lf + 1;
 		}else {
 			// 残りぜんぶ出力
-			CNativeW cSrc(p, pEnd - p);
-			CMemory cDst;
+			NativeW cSrc(p, pEnd - p);
+			Memory cDst;
 			m_pcCodeBase->UnicodeToCode(cSrc, &cDst); // コード変換
 			fwrite(cDst.GetRawPtr(), 1, cDst.GetRawLength(), GetFp());
 			break;
@@ -169,7 +169,7 @@ void CTextOutputStream::WriteString(
 	}
 }
 
-void CTextOutputStream::WriteF(const wchar_t* format, ...)
+void TextOutputStream::WriteF(const wchar_t* format, ...)
 {
 	// テキスト整形 -> buf
 	static wchar_t buf[16*1024]; //$$ 確保しすぎかも？
@@ -184,7 +184,7 @@ void CTextOutputStream::WriteF(const wchar_t* format, ...)
 
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-//                  CTextInputStream_AbsIni                    //
+//                  TextInputStream_AbsIni                    //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 static
@@ -206,12 +206,12 @@ const TCHAR* _Resolve(
 }
 
 
-CTextInputStream_AbsIni::CTextInputStream_AbsIni(
+TextInputStream_AbsIni::TextInputStream_AbsIni(
 	const TCHAR* fname,
 	bool bOrExedir
 	)
 	:
-	CTextInputStream(_Resolve(fname, bOrExedir))
+	TextInputStream(_Resolve(fname, bOrExedir))
 {
 }
 

@@ -26,16 +26,16 @@
 #include "util/design_template.h" // TSingleton
 #include "doc/CDocListener.h" // DocListenerEx
 
-class CDocLine;
+class DocLine;
 class DocLineMgr;
 
 // Modified管理
-class CModifyManager :
-	public TSingleton<CModifyManager>,
+class ModifyManager :
+	public TSingleton<ModifyManager>,
 	public DocListenerEx
 {
-	friend class TSingleton<CModifyManager>;
-	CModifyManager() {}
+	friend class TSingleton<ModifyManager>;
+	ModifyManager() {}
 
 public:
 	void OnAfterSave(const SaveInfo& sSaveInfo);
@@ -43,11 +43,11 @@ public:
 };
 
 // 行に付加するModified情報
-class CLineModified {
+class LineModified {
 public:
-	CLineModified() : m_nModifiedSeq(0) { }
+	LineModified() : m_nModifiedSeq(0) { }
 	int GetSeq() const { return m_nModifiedSeq; }
-	CLineModified& operator = (int seq) {
+	LineModified& operator = (int seq) {
 		m_nModifiedSeq = seq;
 		return *this;
 	}
@@ -56,12 +56,12 @@ private:
 };
 
 // 行全体のModified情報アクセサ
-class CModifyVisitor {
+class ModifyVisitor {
 public:
 	// 状態
-	bool IsLineModified(const CDocLine* pcDocLine, int nSaveSeq) const;
-	int GetLineModifiedSeq(const CDocLine* pcDocLine) const;
-	void SetLineModified(CDocLine* pcDocLine, int nModifiedSeq);
+	bool IsLineModified(const DocLine* pcDocLine, int nSaveSeq) const;
+	int GetLineModifiedSeq(const DocLine* pcDocLine) const;
+	void SetLineModified(DocLine* pcDocLine, int nModifiedSeq);
 
 	// 一括操作
 	void ResetAllModifyFlag(DocLineMgr* pcDocLineMgr, int nSeq);	// 行変更状態をすべてリセット

@@ -40,10 +40,10 @@ INT_PTR CALLBACK CDlgInput1Proc(
 	LPARAM lParam 	// second message parameter
 	)
 {
-	CDlgInput1* pCDlgInput1;
+	DlgInput1* pCDlgInput1;
 	switch (uMsg) {
 	case WM_INITDIALOG:
-		pCDlgInput1 = (CDlgInput1*)lParam;
+		pCDlgInput1 = (DlgInput1*)lParam;
 		if (pCDlgInput1) {
 			return pCDlgInput1->DispatchEvent(hwndDlg, uMsg, wParam, lParam);
 		}else {
@@ -51,7 +51,7 @@ INT_PTR CALLBACK CDlgInput1Proc(
 		}
 	default:
 		// Modified by KEITA for WIN64 2003.9.6
-		pCDlgInput1 = (CDlgInput1*)::GetWindowLongPtr(hwndDlg, DWLP_USER);
+		pCDlgInput1 = (DlgInput1*)::GetWindowLongPtr(hwndDlg, DWLP_USER);
 		if (pCDlgInput1) {
 			return pCDlgInput1->DispatchEvent(hwndDlg, uMsg, wParam, lParam);
 		}else {
@@ -61,20 +61,20 @@ INT_PTR CALLBACK CDlgInput1Proc(
 }
 
 
-CDlgInput1::CDlgInput1()
+DlgInput1::DlgInput1()
 {
 	return;
 }
 
 
-CDlgInput1::~CDlgInput1()
+DlgInput1::~DlgInput1()
 {
 	return;
 }
 
 
 // モードレスダイアログの表示
-BOOL CDlgInput1::DoModal(
+BOOL DlgInput1::DoModal(
 	HINSTANCE		hInstApp,
 	HWND			hwndParent,
 	const TCHAR*	pszTitle,
@@ -102,7 +102,7 @@ BOOL CDlgInput1::DoModal(
 	return bRet;
 }
 
-BOOL CDlgInput1::DoModal(
+BOOL DlgInput1::DoModal(
 	HINSTANCE		hInstApp,
 	HWND			hwndParent,
 	const TCHAR*	pszTitle,
@@ -122,7 +122,7 @@ BOOL CDlgInput1::DoModal(
 
 
 // ダイアログのメッセージ処理
-INT_PTR CDlgInput1::DispatchEvent(
+INT_PTR DlgInput1::DispatchEvent(
 	HWND hwndDlg,	// handle to dialog box
 	UINT uMsg,		// message
 	WPARAM wParam,	// first message parameter

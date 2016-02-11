@@ -24,8 +24,8 @@
 #pragma once
 
 #include "doc/CDocListener.h"
-class CDlgCancel;
-class CEditView;
+class DlgCancel;
+class EditView;
 class SearchStringPattern;
 class GrepEnumKeys;
 class GrepEnumFiles;
@@ -73,14 +73,14 @@ public:
 
 	static void CreateFolders( const TCHAR* pszPath, std::vector<std::tstring>& vPaths );
 	static std::tstring ChopYen( const std::tstring& str );
-	static void AddTail( CEditView* pcEditView, const CNativeW& cmem, bool bAddStdout );
+	static void AddTail( EditView* pcEditView, const NativeW& cmem, bool bAddStdout );
 
 	// Grep実行
 	DWORD DoGrep(
-		CEditView*				pcViewDst,
+		EditView*				pcViewDst,
 		bool					bGrepReplace,
-		const CNativeW*			pcmGrepKey,
-		const CNativeW*			pcmGrepReplace,
+		const NativeW*			pcmGrepKey,
+		const NativeW*			pcmGrepReplace,
 		const CNativeT*			pcmGrepFile,
 		const CNativeT*			pcmGrepFolder,
 		bool					bGrepCurFolder,
@@ -101,10 +101,10 @@ public:
 private:
 	// Grep実行
 	int DoGrepTree(
-		CEditView*				pcViewDst,
-		CDlgCancel*				pcDlgCancel,		//!< [in] Cancelダイアログへのポインタ
+		EditView*				pcViewDst,
+		DlgCancel*				pcDlgCancel,		//!< [in] Cancelダイアログへのポインタ
 		const wchar_t*			pszKey,				//!< [in] 検索パターン
-		const CNativeW&			cmGrepReplace,
+		const NativeW&			cmGrepReplace,
 		GrepEnumKeys&			cGrepEnumKeys,		//!< [in] 検索対象ファイルパターン(!で除外指定)
 		GrepEnumFiles&			cGrepExceptAbsFiles,
 		GrepEnumFolders&		cGrepExceptAbsFolders,
@@ -113,7 +113,7 @@ private:
 		const SearchOption&		searchOption,		//!< [in] 検索オプション
 		const GrepOption&		sGrepOption,		//!< [in] Grepオプション
 		const SearchStringPattern& pattern,		//!< [in] 検索パターン
-		CBregexp*				pRegexp,			//!< [in] 正規表現コンパイルデータ。既にコンパイルされている必要がある
+		Bregexp*				pRegexp,			//!< [in] 正規表現コンパイルデータ。既にコンパイルされている必要がある
 		int						nNest,				//!< [in] ネストレベル
 		bool&					bOutputBaseFolder,
 		int*					pnHitCount			//!< [i/o] ヒット数の合計
@@ -121,14 +121,14 @@ private:
 
 	// Grep実行
 	int DoGrepFile(
-		CEditView*				pcViewDst,
-		CDlgCancel*				pcDlgCancel,
+		EditView*				pcViewDst,
+		DlgCancel*				pcDlgCancel,
 		const wchar_t*			pszKey,
 		const TCHAR*			pszFile,
 		const SearchOption&		searchOption,
 		const GrepOption&		sGrepOption,
 		const SearchStringPattern& pattern,
-		CBregexp*				pRegexp,		//	Jun. 27, 2001 genta	正規表現ライブラリの差し替え
+		Bregexp*				pRegexp,		//	Jun. 27, 2001 genta	正規表現ライブラリの差し替え
 		int*					pnHitCount,
 		const TCHAR*			pszFullPath,
 		const TCHAR*			pszBaseFolder,
@@ -136,19 +136,19 @@ private:
 		const TCHAR*			pszRelPath,
 		bool&					bOutputBaseFolder,
 		bool&					bOutputFolderName,
-		CNativeW&				cmemMessage
+		NativeW&				cmemMessage
 	);
 
 	int DoGrepReplaceFile(
-		CEditView*				pcViewDst,
-		CDlgCancel*				pcDlgCancel,
+		EditView*				pcViewDst,
+		DlgCancel*				pcDlgCancel,
 		const wchar_t*			pszKey,
-		const CNativeW&			cmGrepReplace,
+		const NativeW&			cmGrepReplace,
 		const TCHAR*			pszFile,
 		const SearchOption&		searchOption,
 		const GrepOption&		sGrepOption,
 		const SearchStringPattern& pattern,
-		CBregexp*				pRegexp,
+		Bregexp*				pRegexp,
 		int*					pnHitCount,
 		const TCHAR*			pszFullPath,
 		const TCHAR*			pszBaseFolder,
@@ -156,13 +156,13 @@ private:
 		const TCHAR*			pszRelPath,
 		bool&					bOutputBaseFolder,
 		bool&					bOutputFolderName,
-		CNativeW&				cmemMessage
+		NativeW&				cmemMessage
 	);
 
 	// Grep結果をpszWorkに格納
 	void SetGrepResult(
 		// データ格納先
-		CNativeW&		cmemMessage,
+		NativeW&		cmemMessage,
 		// マッチしたファイルの情報
 		const TCHAR*	pszFilePath,	//	フルパス or 相対パス
 		const TCHAR*	pszCodeName,	//	文字コード情報"[SJIS]"とか

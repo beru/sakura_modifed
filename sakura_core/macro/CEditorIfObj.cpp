@@ -31,38 +31,38 @@
 #include "macro/CSMacroMgr.h"
 
 // コマンド情報を取得する
-MacroFuncInfoArray CEditorIfObj::GetMacroCommandInfo() const
+MacroFuncInfoArray EditorIfObj::GetMacroCommandInfo() const
 {
 	return CSMacroMgr::m_MacroFuncInfoCommandArr;
 }
 
 // 関数情報を取得する
-MacroFuncInfoArray CEditorIfObj::GetMacroFuncInfo() const
+MacroFuncInfoArray EditorIfObj::GetMacroFuncInfo() const
 {
 	return CSMacroMgr::m_MacroFuncInfoArr;
 }
 
 // 関数を処理する
-bool CEditorIfObj::HandleFunction(
-	CEditView* View,
+bool EditorIfObj::HandleFunction(
+	EditView* View,
 	EFunctionCode ID,
 	const VARIANT* Arguments,
 	const int ArgSize,
 	VARIANT& Result
 	)
 {
-	return CMacro::HandleFunction(View, ID, Arguments, ArgSize, Result);
+	return Macro::HandleFunction(View, ID, Arguments, ArgSize, Result);
 }
 
 // コマンドを処理する
-bool CEditorIfObj::HandleCommand(
-	CEditView* View,
+bool EditorIfObj::HandleCommand(
+	EditView* View,
 	EFunctionCode ID,
 	const WCHAR* Arguments[],
 	const int ArgLengths[],
 	const int ArgSize
 	)
 {
-	return CMacro::HandleCommand(View, ID, Arguments, ArgLengths, ArgSize);
+	return Macro::HandleCommand(View, ID, Arguments, ArgLengths, ArgSize);
 }
 

@@ -74,7 +74,7 @@ int CDlgTypeList::DoModal(HINSTANCE hInstance, HWND hwndParent, Result* psResult
 	m_nSettingType = psResult->cDocumentType;
 	m_bAlertFileAssociation = true;
 	m_bEnableTempChange = psResult->bTempChange;
-	nRet = (int)CDialog::DoModal(hInstance, hwndParent, IDD_TYPELIST, (LPARAM)NULL);
+	nRet = (int)Dialog::DoModal(hInstance, hwndParent, IDD_TYPELIST, (LPARAM)NULL);
 	if (nRet == -1) {
 		return FALSE;
 	}else {
@@ -152,7 +152,7 @@ BOOL CDlgTypeList::OnBnClicked(int wID)
 		return TRUE;
 	}
 	// 基底クラスメンバ
-	return CDialog::OnBnClicked(wID);
+	return Dialog::OnBnClicked(wID);
 
 }
 
@@ -171,7 +171,7 @@ BOOL CDlgTypeList::OnActivate(WPARAM wParam, LPARAM lParam)
 	}
 
 	// 基底クラスメンバ
-	return CDialog::OnActivate(wParam, lParam);
+	return Dialog::OnActivate(wParam, lParam);
 }
 
 
@@ -181,12 +181,12 @@ INT_PTR CDlgTypeList::DispatchEvent(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM 
 	HWND hwndDblClick = GetItemHwnd(IDC_CHECK_EXT_DBLCLICK);
 
 	INT_PTR result;
-	result = CDialog::DispatchEvent(hWnd, wMsg, wParam, lParam);
+	result = Dialog::DispatchEvent(hWnd, wMsg, wParam, lParam);
 	if (wMsg == WM_COMMAND) {
 		HWND hwndList = GetItemHwnd(IDC_LIST_TYPES);
 		int nIdx = List_GetCurSel(hwndList);
 		const TypeConfigMini* type = NULL;
-		CDocTypeManager().GetTypeConfigMini(CTypeConfig(nIdx), &type);
+		DocTypeManager().GetTypeConfigMini(CTypeConfig(nIdx), &type);
 		if (LOWORD(wParam) == IDC_LIST_TYPES) {
 			switch (HIWORD(wParam)) {
 			case LBN_SELCHANGE:
@@ -202,19 +202,19 @@ INT_PTR CDlgTypeList::DispatchEvent(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM 
 					if (!m_bRegistryChecked[nIdx]) {
 						TCHAR exts[_countof(type->m_szTypeExts)] = {0};
 						_tcscpy(exts, type->m_szTypeExts);
-						TCHAR *ext = _tcstok( exts, CDocTypeManager::m_typeExtSeps );
+						TCHAR *ext = _tcstok( exts, DocTypeManager::m_typeExtSeps );
 
 						m_bExtRMenu[nIdx] = true;
 						m_bExtDblClick[nIdx] = true;
 						while (ext) {
-							if (!_tcspbrk(ext, CDocTypeManager::m_typeExtWildcards)) {
+							if (!_tcspbrk(ext, DocTypeManager::m_typeExtWildcards)) {
 								bool bRMenu;
 								bool bDblClick;
 								CheckExt(ext, &bRMenu, &bDblClick);
 								m_bExtRMenu[nIdx] &= bRMenu;
 								m_bExtDblClick[nIdx] &= bDblClick;
 							}
-							ext = _tcstok( NULL, CDocTypeManager::m_typeExtSeps );
+							ext = _tcstok( NULL, DocTypeManager::m_typeExtSeps );
 						}
 						m_bRegistryChecked[nIdx] = true;
 					}
@@ -232,10 +232,10 @@ INT_PTR CDlgTypeList::DispatchEvent(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM 
 			}
 			TCHAR exts[_countof(type->m_szTypeExts)] = {0};
 			_tcscpy(exts, type->m_szTypeExts);
-			TCHAR *ext = _tcstok( exts, CDocTypeManager::m_typeExtSeps );
+			TCHAR *ext = _tcstok( exts, DocTypeManager::m_typeExtSeps );
 			int nRet;
 			while (ext) {
-				if (_tcspbrk(ext, CDocTypeManager::m_typeExtWildcards) == NULL) {
+				if (_tcspbrk(ext, DocTypeManager::m_typeExtWildcards) == NULL) {
 					if (checked) {	//「右クリック」チェックON
 						if ((nRet = RegistExt( ext, true )) != 0 ) {
 	
@@ -254,7 +254,7 @@ INT_PTR CDlgTypeList::DispatchEvent(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM 
 						}
 					}
 				}
-				ext = _tcstok( NULL, CDocTypeManager::m_typeExtSeps );
+				ext = _tcstok( NULL, DocTypeManager::m_typeExtSeps );
 			}
 			m_bExtRMenu[nIdx] = checked;
 			::EnableWindow(hwndDblClick, checked);
@@ -271,10 +271,10 @@ INT_PTR CDlgTypeList::DispatchEvent(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM 
 			}
 			TCHAR exts[_countof(type->m_szTypeExts)] = {0};
 			_tcscpy(exts, type->m_szTypeExts);
-			TCHAR *ext = _tcstok( exts, CDocTypeManager::m_typeExtSeps );
+			TCHAR *ext = _tcstok( exts, DocTypeManager::m_typeExtSeps );
 			int nRet;
 			while (ext) {
-				if (_tcspbrk(ext, CDocTypeManager::m_typeExtWildcards) == NULL) {
+				if (_tcspbrk(ext, DocTypeManager::m_typeExtWildcards) == NULL) {
 					if ((nRet = RegistExt( ext, checked )) != 0) {
 
 						TCHAR buf[BUFFER_SIZE] = {0};
@@ -283,7 +283,7 @@ INT_PTR CDlgTypeList::DispatchEvent(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM 
 						break;
 					}
 				}
-				ext = _tcstok( NULL, CDocTypeManager::m_typeExtSeps );
+				ext = _tcstok( NULL, DocTypeManager::m_typeExtSeps );
 			}
 			m_bExtDblClick[nIdx] = checked;
 			return TRUE;
@@ -321,7 +321,7 @@ void CDlgTypeList::SetData(int selIdx)
 	List_ResetContent(hwndList);	// リストを空にする
 	for (nIdx=0; nIdx<GetDllShareData().m_nTypesCount; ++nIdx) {
 		const TypeConfigMini* type;
-		CDocTypeManager().GetTypeConfigMini(CTypeConfig(nIdx), &type);
+		DocTypeManager().GetTypeConfigMini(CTypeConfig(nIdx), &type);
 		if (type->m_szTypeExts[0] != _T('\0')) {		// タイプ属性：拡張子リスト
 			auto_sprintf_s(szText, _T("%ts (%ts)"),
 				type->m_szTypeName,	// タイプ属性：名称
@@ -371,31 +371,31 @@ LPVOID CDlgTypeList::GetHelpIdTable(void)
 
 static void SendChangeSetting()
 {
-	CAppNodeGroupHandle(0).SendMessageToAllEditors(
+	AppNodeGroupHandle(0).SendMessageToAllEditors(
 		MYWM_CHANGESETTING,
 		(WPARAM)0,
 		(LPARAM)PM_CHANGESETTING_ALL,
-		CEditWnd::getInstance()->GetHwnd()
+		EditWnd::getInstance()->GetHwnd()
 	);
 }
 
 static void SendChangeSettingType(int nType)
 {
-	CAppNodeGroupHandle(0).SendMessageToAllEditors(
+	AppNodeGroupHandle(0).SendMessageToAllEditors(
 		MYWM_CHANGESETTING,
 		(WPARAM)nType,
 		(LPARAM)PM_CHANGESETTING_TYPE,
-		CEditWnd::getInstance()->GetHwnd()
+		EditWnd::getInstance()->GetHwnd()
 	);
 }
 
 static void SendChangeSettingType2(int nType)
 {
-	CAppNodeGroupHandle(0).SendMessageToAllEditors(
+	AppNodeGroupHandle(0).SendMessageToAllEditors(
 		MYWM_CHANGESETTING,
 		(WPARAM)nType,
 		(LPARAM)PM_CHANGESETTING_TYPE2,
-		CEditWnd::getInstance()->GetHwnd()
+		EditWnd::getInstance()->GetHwnd()
 	);
 }
 
@@ -407,11 +407,11 @@ bool CDlgTypeList::Import()
 	int nIdx = List_GetCurSel(hwndList);
 	TypeConfig type;
 	// ベースのデータは基本
-	CDocTypeManager().GetTypeConfig(CTypeConfig(0), type);
+	DocTypeManager().GetTypeConfig(CTypeConfig(0), type);
 
 	CImpExpType	cImpExpType(nIdx, type, hwndList);
 	const TypeConfigMini* typeMini;
-	CDocTypeManager().GetTypeConfigMini(CTypeConfig(nIdx), &typeMini);
+	DocTypeManager().GetTypeConfigMini(CTypeConfig(nIdx), &typeMini);
 	int id = typeMini->m_id;
 
 	// インポート
@@ -427,15 +427,15 @@ bool CDlgTypeList::Import()
 		type.m_nIdx = nIdx;
 	}else {
 		// UIを表示している間にずれているかもしれないのでindex再取得
-		nIdx = CDocTypeManager().GetDocumentTypeOfId(id).GetIndex();
+		nIdx = DocTypeManager().GetDocumentTypeOfId(id).GetIndex();
 		if (nIdx == -1) {
 			return false;
 		}
 		type.m_nIdx = nIdx;
 	}
-	type.m_nRegexKeyMagicNumber = CRegexKeyword::GetNewMagicNumber();
+	type.m_nRegexKeyMagicNumber = RegexKeyword::GetNewMagicNumber();
 	// 適用
-	CDocTypeManager().SetTypeConfig(CTypeConfig(nIdx), type);
+	DocTypeManager().SetTypeConfig(CTypeConfig(nIdx), type);
 	if (!bAdd) {
 		SendChangeSettingType(nIdx);
 	}
@@ -453,7 +453,7 @@ bool CDlgTypeList::Export()
 	HWND hwndList = GetItemHwnd(IDC_LIST_TYPES);
 	int nIdx = List_GetCurSel(hwndList);
 	TypeConfig types;
-	CDocTypeManager().GetTypeConfig(CTypeConfig(nIdx), types);
+	DocTypeManager().GetTypeConfig(CTypeConfig(nIdx), types);
 
 	CImpExpType	cImpExpType(nIdx, types, hwndList);
 
@@ -479,7 +479,7 @@ bool CDlgTypeList::InitializeType(void)
 		return true;
 	}
 	const TypeConfigMini* typeMini;
-	CDocTypeManager().GetTypeConfigMini(CTypeConfig(iDocType), &typeMini);
+	DocTypeManager().GetTypeConfigMini(CTypeConfig(iDocType), &typeMini);
 	int nRet;
 	if (typeMini->m_szTypeExts[0] != _T('\0')) { 
 		nRet = ::MYMESSAGEBOX(
@@ -493,13 +493,13 @@ bool CDlgTypeList::InitializeType(void)
 		}
 	}
 
-	iDocType = CDocTypeManager().GetDocumentTypeOfId(typeMini->m_id).GetIndex();
+	iDocType = DocTypeManager().GetDocumentTypeOfId(typeMini->m_id).GetIndex();
 	if (iDocType == -1) {
 		return false;
 	}
 //	_DefaultConfig(&types);		// 規定値をコピー
 	TypeConfig type;
-	CDocTypeManager().GetTypeConfig(CTypeConfig(0), type); 	// 基本をコピー
+	DocTypeManager().GetTypeConfig(CTypeConfig(0), type); 	// 基本をコピー
 
 	// 同じ名前にならないように数字をつける
 	int nNameNum = iDocType + 1;
@@ -514,7 +514,7 @@ bool CDlgTypeList::InitializeType(void)
 			continue;
 		}
 		const TypeConfigMini* typeMini2;
-		CDocTypeManager().GetTypeConfigMini(CTypeConfig(i), &typeMini2);
+		DocTypeManager().GetTypeConfigMini(CTypeConfig(i), &typeMini2);
 		if (auto_strcmp(typeMini2->m_szTypeName, type.m_szTypeName) == 0) {
 			i = 0;
 			bUpdate = true;
@@ -523,9 +523,9 @@ bool CDlgTypeList::InitializeType(void)
 	type.m_szTypeExts[0] = 0;
 	type.m_nIdx = iDocType;
 	type.m_id = (::GetTickCount() & 0x3fffffff) + iDocType * 0x10000;
-	type.m_nRegexKeyMagicNumber = CRegexKeyword::GetNewMagicNumber();
+	type.m_nRegexKeyMagicNumber = RegexKeyword::GetNewMagicNumber();
 
-	CDocTypeManager().SetTypeConfig(CTypeConfig(iDocType), type);
+	DocTypeManager().SetTypeConfig(CTypeConfig(iDocType), type);
 
 	SendChangeSettingType(iDocType);
 
@@ -544,7 +544,7 @@ bool CDlgTypeList::CopyType()
 	HWND hwndList = GetDlgItem(hwndDlg, IDC_LIST_TYPES);
 	int iDocType = List_GetCurSel(hwndList);
 	TypeConfig type;
-	CDocTypeManager().GetTypeConfig(CTypeConfig(iDocType), type);
+	DocTypeManager().GetTypeConfig(CTypeConfig(iDocType), type);
 	// 名前に2等を付ける
 	int n = 1;
 	bool bUpdate = true;
@@ -578,19 +578,19 @@ bool CDlgTypeList::CopyType()
 			bUpdate = false;
 		}
 		const TypeConfigMini* typeMini;
-		CDocTypeManager().GetTypeConfigMini(CTypeConfig(i), &typeMini);
+		DocTypeManager().GetTypeConfigMini(CTypeConfig(i), &typeMini);
 		if (auto_strcmp(typeMini->m_szTypeName, type.m_szTypeName) == 0) {
 			i = -1;
 			bUpdate = true;
 		}
 	}
-	if (!CDocTypeManager().AddTypeConfig(CTypeConfig(nNewTypeIndex))) {
+	if (!DocTypeManager().AddTypeConfig(CTypeConfig(nNewTypeIndex))) {
 		return false;
 	}
 	type.m_id = (::GetTickCount() & 0x3fffffff) + nNewTypeIndex * 0x10000;
 	type.m_nIdx = nNewTypeIndex;
-	type.m_nRegexKeyMagicNumber = CRegexKeyword::GetNewMagicNumber();
-	CDocTypeManager().SetTypeConfig(CTypeConfig(nNewTypeIndex), type);
+	type.m_nRegexKeyMagicNumber = RegexKeyword::GetNewMagicNumber();
+	DocTypeManager().SetTypeConfig(CTypeConfig(nNewTypeIndex), type);
 	SetData(nNewTypeIndex);
 	return true;
 }
@@ -605,12 +605,12 @@ bool CDlgTypeList::UpType()
 	}
 	auto type1 = std::make_unique<TypeConfig>();
 	auto type2 = std::make_unique<TypeConfig>();
-	CDocTypeManager().GetTypeConfig(CTypeConfig(iDocType), *type1);
-	CDocTypeManager().GetTypeConfig(CTypeConfig(iDocType - 1), *type2);
+	DocTypeManager().GetTypeConfig(CTypeConfig(iDocType), *type1);
+	DocTypeManager().GetTypeConfig(CTypeConfig(iDocType - 1), *type2);
 	--(type1->m_nIdx);
 	++(type2->m_nIdx);
-	CDocTypeManager().SetTypeConfig(CTypeConfig(iDocType), *type2);
-	CDocTypeManager().SetTypeConfig(CTypeConfig(iDocType - 1), *type1);
+	DocTypeManager().SetTypeConfig(CTypeConfig(iDocType), *type2);
+	DocTypeManager().SetTypeConfig(CTypeConfig(iDocType - 1), *type1);
 	SendChangeSettingType2(iDocType);
 	SendChangeSettingType2(iDocType - 1);
 	SetData(iDocType - 1);
@@ -627,12 +627,12 @@ bool CDlgTypeList::DownType()
 	}
 	auto type1 = std::make_unique<TypeConfig>();
 	auto type2 = std::make_unique<TypeConfig>();
-	CDocTypeManager().GetTypeConfig(CTypeConfig(iDocType), *type1);
-	CDocTypeManager().GetTypeConfig(CTypeConfig(iDocType + 1), *type2);
+	DocTypeManager().GetTypeConfig(CTypeConfig(iDocType), *type1);
+	DocTypeManager().GetTypeConfig(CTypeConfig(iDocType + 1), *type2);
 	++(type1->m_nIdx);
 	--(type2->m_nIdx);
-	CDocTypeManager().SetTypeConfig(CTypeConfig(iDocType), *type2);
-	CDocTypeManager().SetTypeConfig(CTypeConfig(iDocType + 1), *type1);
+	DocTypeManager().SetTypeConfig(CTypeConfig(iDocType), *type2);
+	DocTypeManager().SetTypeConfig(CTypeConfig(iDocType + 1), *type1);
 	SendChangeSettingType2(iDocType);
 	SendChangeSettingType2(iDocType + 1);
 	SetData(iDocType + 1);
@@ -642,7 +642,7 @@ bool CDlgTypeList::DownType()
 bool CDlgTypeList::AddType()
 {
 	int nNewTypeIndex = GetDllShareData().m_nTypesCount;
-	if (!CDocTypeManager().AddTypeConfig(CTypeConfig(nNewTypeIndex))) {
+	if (!DocTypeManager().AddTypeConfig(CTypeConfig(nNewTypeIndex))) {
 		return false;
 	}
 	SetData(nNewTypeIndex);
@@ -659,7 +659,7 @@ bool CDlgTypeList::DelType()
 		return true;
 	}
 	const TypeConfigMini* typeMini;
-	if (!CDocTypeManager().GetTypeConfigMini(CTypeConfig(iDocType), &typeMini)) {
+	if (!DocTypeManager().GetTypeConfigMini(CTypeConfig(iDocType), &typeMini)) {
 		// 謎のエラー
 		return false;
 	}
@@ -670,12 +670,12 @@ bool CDlgTypeList::DelType()
 		return false;
 	}
 	// ダイアログを出している間にタイプ別リストが更新されたかもしれないのでidから再検索
-	CTypeConfig config = CDocTypeManager().GetDocumentTypeOfId(type.m_id);
+	CTypeConfig config = DocTypeManager().GetDocumentTypeOfId(type.m_id);
 	if (!config.IsValidType()) {
 		return false;
 	}
 	iDocType = config.GetIndex();
-	CDocTypeManager().DelTypeConfig(config);
+	DocTypeManager().DelTypeConfig(config);
 	if (GetDllShareData().m_nTypesCount <= iDocType) {
 		iDocType = GetDllShareData().m_nTypesCount - 1;
 	}

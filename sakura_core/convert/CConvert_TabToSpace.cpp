@@ -5,7 +5,7 @@
 #include "util/string_ex2.h"
 
 // TAB→空白
-bool Converter_TabToSpace::DoConvert(CNativeW* pcData)
+bool Converter_TabToSpace::DoConvert(NativeW* pcData)
 {
 	using namespace WCODE;
 
@@ -15,7 +15,7 @@ bool Converter_TabToSpace::DoConvert(CNativeW* pcData)
 	int	nPosDes;
 	int	nPosX;
 	int	nWork;
-	CEol cEol;
+	Eol cEol;
 	nBgn = 0;
 	nPosDes = 0;
 	// CRLFで区切られる「行」を返す。CRLFは行長に加えない

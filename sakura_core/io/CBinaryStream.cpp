@@ -4,7 +4,7 @@
 
 CBinaryInputStream::CBinaryInputStream(LPCTSTR tszFilePath)
 	:
-	CStream(tszFilePath, _T("rb"))
+	Stream(tszFilePath, _T("rb"))
 {
 }
 
@@ -26,7 +26,7 @@ int CBinaryInputStream::Read(void* pBuffer, int nSizeInBytes)
 
 CBinaryOutputStream::CBinaryOutputStream(LPCTSTR tszFilePath, bool bExceptionMode)
 	:
-	COutputStream(tszFilePath, _T("wb"), bExceptionMode)
+	OutputStream(tszFilePath, _T("wb"), bExceptionMode)
 {
 }
 

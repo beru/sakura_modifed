@@ -39,18 +39,18 @@
 #include "recent/CRecentFile.h"
 
 struct EditInfo; // 2004.04.11 genta パラメータ内のstructを削除するため．doxygen対策
-class CMenuDrawer;
+class MenuDrawer;
 
 //	@date 2002.2.17 YAZAKI CShareDataのインスタンスは、CProcessにひとつあるのみ。
-class CMRUFile {
+class MRUFile {
 public:
 	//	コンストラクタ
-	CMRUFile();
-	~CMRUFile();
+	MRUFile();
+	~MRUFile();
 
 	//	メニューを取得する
-	HMENU CreateMenu(CMenuDrawer* pCMenuDrawer) const;	//	うーん。pCMenuDrawerが必要なくなるといいなぁ。
-	HMENU CreateMenu(HMENU hMenu, CMenuDrawer* pCMenuDrawer) const;	//	2010/5/21 Uchi
+	HMENU CreateMenu(MenuDrawer* pCMenuDrawer) const;	//	うーん。pCMenuDrawerが必要なくなるといいなぁ。
+	HMENU CreateMenu(HMENU hMenu, MenuDrawer* pCMenuDrawer) const;	//	2010/5/21 Uchi
 	BOOL DestroyMenu(HMENU hMenu) const;
 	
 	//	ファイル名の一覧を教えて
@@ -69,6 +69,6 @@ protected:
 	struct DLLSHAREDATA* m_pShareData;		//	共有メモリを参照するよ。
 	
 private:
-	CRecentFile	m_cRecentFile;	// 履歴	//@@@ 2003.04.08 MIK
+	RecentFile	m_cRecentFile;	// 履歴	//@@@ 2003.04.08 MIK
 };
 

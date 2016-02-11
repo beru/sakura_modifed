@@ -82,26 +82,26 @@ const DWORD p_helpids[] = {	//13300
 	0, 0
 };
 
-CDlgFileTree::CDlgFileTree()
+DlgFileTree::DlgFileTree()
 {
 	m_bInMove = false;
 }
 
 /*! モーダルダイアログの表示
-	lParam は CDlgFuncList*
+	lParam は DlgFuncList*
 	入力はlParam経由で取得。
-	結果の設定はCDlgFileTreeが直接共通設定・タイプ別・設定ファイルに書き込みをして
+	結果の設定はDlgFileTreeが直接共通設定・タイプ別・設定ファイルに書き込みをして
 	呼び出し元は、再表示で設定される
 */
-int CDlgFileTree::DoModal(
+int DlgFileTree::DoModal(
 	HINSTANCE	hInstance,
 	HWND		hwndParent,
 	LPARAM		lParam
 	)
 {
-	m_pcDlgFuncList = reinterpret_cast<CDlgFuncList*>(lParam);
+	m_pcDlgFuncList = reinterpret_cast<DlgFuncList*>(lParam);
 	m_nDocType = m_pcDlgFuncList->m_nDocType;
-	return (int)CDialog::DoModal(hInstance, hwndParent, IDD_FILETREE, lParam);
+	return (int)Dialog::DoModal(hInstance, hwndParent, IDD_FILETREE, lParam);
 }
 
 
@@ -130,7 +130,7 @@ static TCHAR* GetFileTreeLabel(const FileTreeItem& item)
 }
 
 // ダイアログデータの設定
-void CDlgFileTree::SetData()
+void DlgFileTree::SetData()
 {
 	HWND hwndTree = GetItemHwnd(IDC_TREE_FL);
 	std::vector<HTREEITEM> hParentTree;
@@ -171,7 +171,7 @@ void CDlgFileTree::SetData()
 	return;
 }
 
-void CDlgFileTree::SetDataItem(int nItemIndex)
+void DlgFileTree::SetDataItem(int nItemIndex)
 {
 	HWND hwndDlg = GetHwnd();
 	bool bDummy = false;
@@ -202,7 +202,7 @@ void CDlgFileTree::SetDataItem(int nItemIndex)
 	return;
 }
 
-void CDlgFileTree::ChangeEnableItemType()
+void DlgFileTree::ChangeEnableItemType()
 {
 	HWND hwndDlg = GetHwnd();
 	bool bGrepEnable = false;
@@ -224,7 +224,7 @@ void CDlgFileTree::ChangeEnableItemType()
 	EnableItem(IDC_CHECK_SYSTEM, bGrepEnable);
 }
 
-void CDlgFileTree::ChangeEnableAddInsert()
+void DlgFileTree::ChangeEnableAddInsert()
 {
 	bool bSaveShareData = (m_fileTreeSetting.m_szLoadProjectIni[0] == _T('\0'));
 	if (bSaveShareData) {
@@ -242,7 +242,7 @@ void CDlgFileTree::ChangeEnableAddInsert()
 
 // ダイアログデータの取得
 // TRUE==正常  FALSE==入力エラー
-int CDlgFileTree::GetData()
+int DlgFileTree::GetData()
 {
 	HWND hwndDlg = GetHwnd();
 	FileTree* pFileTree;
@@ -251,7 +251,7 @@ int CDlgFileTree::GetData()
 	if (m_fileTreeSetting.m_eFileTreeSettingOrgType == EFileTreeSettingFrom_Common) {
 		pFileTree = &GetDllShareData().m_common.m_sOutline.m_sFileTree;
 	}else {
-		if (!CDocTypeManager().GetTypeConfig(CTypeConfig(m_nDocType), type)) {
+		if (!DocTypeManager().GetTypeConfig(CTypeConfig(m_nDocType), type)) {
 			bTypeError = true;
 			pFileTree = NULL;
 		}else {
@@ -274,7 +274,7 @@ int CDlgFileTree::GetData()
 			}
 		}
 		if (m_fileTreeSetting.m_eFileTreeSettingOrgType == EFileTreeSettingFrom_Type) {
-			CDocTypeManager().SetTypeConfig(CTypeConfig(m_nDocType), type);
+			DocTypeManager().SetTypeConfig(CTypeConfig(m_nDocType), type);
 		}
 	}
 	if (!bSaveShareData) {
@@ -289,7 +289,7 @@ int CDlgFileTree::GetData()
 	return TRUE;
 }
 
-bool CDlgFileTree::GetDataTree(
+bool DlgFileTree::GetDataTree(
 	std::vector<FileTreeItem>& data,
 	HTREEITEM hItem,
 	int nLevel,
@@ -321,7 +321,7 @@ bool CDlgFileTree::GetDataTree(
 	return true;
 }
 
-int CDlgFileTree::GetDataItem(FileTreeItem& item)
+int DlgFileTree::GetDataItem(FileTreeItem& item)
 {
 	item = FileTreeItem(); // 初期化
 	BOOL bGrepEnable = FALSE;
@@ -349,7 +349,7 @@ int CDlgFileTree::GetDataItem(FileTreeItem& item)
 	return TRUE;
 }
 
-BOOL CDlgFileTree::OnInitDialog(
+BOOL DlgFileTree::OnInitDialog(
 	HWND hwndDlg,
 	WPARAM wParam,
 	LPARAM lParam
@@ -363,15 +363,15 @@ BOOL CDlgFileTree::OnInitDialog(
 	EditCtl_LimitText(GetItemHwnd(IDC_EDIT_LABEL), item.m_szLabelName.GetBufferCount() -1);
 	EditCtl_LimitText(GetItemHwnd(IDC_EDIT_FILE), item.m_szTargetFile.GetBufferCount() -1);
 
-	CFilePath path;
+	FilePath path;
 	m_pcDlgFuncList->LoadFileTreeSetting(m_fileTreeSetting, path);
 	SetDataInit();
 
 	// 基底クラスメンバ
-	return CDialog::OnInitDialog(GetHwnd(), wParam, lParam);
+	return Dialog::OnInitDialog(GetHwnd(), wParam, lParam);
 }
 
-void CDlgFileTree::SetDataInit()
+void DlgFileTree::SetDataInit()
 {
 	HWND hwndDlg = GetHwnd();
 	bool bEnableDefIni = true;
@@ -392,13 +392,13 @@ void CDlgFileTree::SetDataInit()
 		TCHAR szMsg[_MAX_PATH+200];
 		const TCHAR* pFile = m_fileTreeSetting.m_szLoadProjectIni;
 		TCHAR szFilePath[_MAX_PATH];
-		CTextWidthCalc calc(GetHwnd(), IDC_STATIC_SETTFING_FROM);
+		TextWidthCalc calc(GetHwnd(), IDC_STATIC_SETTFING_FROM);
 		RECT rc;
 		::GetWindowRect(GetItemHwnd(IDC_STATIC_SETTFING_FROM), &rc);
 		const int xWidth = calc.GetTextWidth(_T("x"));
 		const int ctrlWidth = rc.right - rc.left;
 		int nMaxCch = ctrlWidth / xWidth;
-		CFileNameManager::getInstance()->GetTransformFileNameFast(pFile, szFilePath, _countof(szFilePath), calc.GetDC(), true, nMaxCch);
+		FileNameManager::getInstance()->GetTransformFileNameFast(pFile, szFilePath, _countof(szFilePath), calc.GetDC(), true, nMaxCch);
 		wsprintf(szMsg, LS(STR_FILETREE_FROM_FILE), szFilePath);
 		SetItemText(IDC_STATIC_SETTFING_FROM, szMsg);
 		bEnableDefIni = false;
@@ -408,7 +408,7 @@ void CDlgFileTree::SetDataInit()
 	SetItemText(IDC_EDIT_DEFINI, m_fileTreeSetting.m_szDefaultProjectIni); 
 }
 
-HTREEITEM CDlgFileTree::InsertTreeItem(
+HTREEITEM DlgFileTree::InsertTreeItem(
 	FileTreeItem& item,
 	HTREEITEM htiParent,
 	HTREEITEM htiInsert
@@ -495,7 +495,7 @@ static HTREEITEM FileTreeCopy(
 }
 
 
-BOOL CDlgFileTree::OnBnClicked(int wID)
+BOOL DlgFileTree::OnBnClicked(int wID)
 {
 	switch (wID) {
 	case IDC_BUTTON_REF1:
@@ -562,7 +562,7 @@ BOOL CDlgFileTree::OnBnClicked(int wID)
 				}
 			}else {
 				// RADIO_FILE == file
-				CDlgOpenFile dlg;
+				DlgOpenFile dlg;
 				TCHAR szDir[_MAX_PATH];
 				GetInidir(szDir);
 				dlg.Create( G_AppInstance(), hwndDlg, _T("*.*"), szDir,
@@ -732,7 +732,7 @@ BOOL CDlgFileTree::OnBnClicked(int wID)
 		return TRUE;
 	case IDC_BUTTON_FILEADD:
 		{
-			CDlgOpenFile dlg;
+			DlgOpenFile dlg;
 			LoadInfo sLoadInfo;
 			std::vector<std::tstring> aFileNames;
 			dlg.Create( G_AppInstance(), GetHwnd(), _T("*.*"), _T("."),
@@ -792,7 +792,7 @@ BOOL CDlgFileTree::OnBnClicked(int wID)
 		return TRUE;
 	case IDC_BUTTON_REPLACE:
 		{
-			CDlgInput1 dlgInput;
+			DlgInput1 dlgInput;
 			std::tstring strMsg = LS(STR_FILETREE_REPLACE_PATH_FROM);
 			std::tstring strTitle = LS(STR_DLGREPLC_STR);
 			TCHAR szPathFrom[_MAX_PATH];
@@ -957,10 +957,10 @@ BOOL CDlgFileTree::OnBnClicked(int wID)
 	}
 
 	// 基底クラスメンバ
-	return CDialog::OnBnClicked(wID);
+	return Dialog::OnBnClicked(wID);
 }
 
-BOOL CDlgFileTree::OnNotify(WPARAM wParam, LPARAM lParam)
+BOOL DlgFileTree::OnNotify(WPARAM wParam, LPARAM lParam)
 {
 	NMHDR* pNMHDR = (NMHDR*)lParam;
 	TV_DISPINFO* ptdi = (TV_DISPINFO*)lParam;
@@ -1001,10 +1001,10 @@ BOOL CDlgFileTree::OnNotify(WPARAM wParam, LPARAM lParam)
 		}
 	}
 	// 基底クラスメンバ
-	return CDialog::OnNotify(wParam, lParam);
+	return Dialog::OnNotify(wParam, lParam);
 }
 
-LPVOID CDlgFileTree::GetHelpIdTable(void)
+LPVOID DlgFileTree::GetHelpIdTable(void)
 {
 	return (LPVOID)p_helpids;
 }

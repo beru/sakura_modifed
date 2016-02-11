@@ -64,20 +64,20 @@ static const DWORD p_helpids[] = {	//10000
 	@param wParam パラメータ1
 	@param lParam パラメータ2
 */
-INT_PTR CALLBACK CPropBackup::DlgProc_page(
+INT_PTR CALLBACK PropBackup::DlgProc_page(
 	HWND hwndDlg,
 	UINT uMsg,
 	WPARAM wParam,
 	LPARAM lParam
 	)
 {
-	return DlgProc(reinterpret_cast<pDispatchPage>(&CPropBackup::DispatchEvent), hwndDlg, uMsg, wParam, lParam);
+	return DlgProc(reinterpret_cast<pDispatchPage>(&PropBackup::DispatchEvent), hwndDlg, uMsg, wParam, lParam);
 }
 //	To Here Jun. 2, 2001 genta
 
 
 // メッセージ処理
-INT_PTR CPropBackup::DispatchEvent(
+INT_PTR PropBackup::DispatchEvent(
 	HWND hwndDlg,
 	UINT uMsg,
 	WPARAM wParam,
@@ -237,7 +237,7 @@ INT_PTR CPropBackup::DispatchEvent(
 		IDC_RADIO_BACKUP_TYPE2
 		を廃止してレイアウト変更
 */
-void CPropBackup::SetData(HWND hwndDlg)
+void PropBackup::SetData(HWND hwndDlg)
 {
 //	BOOL	bRet;
 
@@ -335,7 +335,7 @@ void CPropBackup::SetData(HWND hwndDlg)
 
 
 // ダイアログデータの取得
-int CPropBackup::GetData(HWND hwndDlg)
+int PropBackup::GetData(HWND hwndDlg)
 {
 	auto& csBackup = m_Common.m_sBackup;
 
@@ -460,7 +460,7 @@ void ShowEnable(
 	::EnableWindow(hWnd, bEnable && bShow);		// bShow=false,bEnable=trueの場合ショートカットキーが変な動きをするので修正	2010/5/27 Uchi
 }
 
-void CPropBackup::EnableBackupInput(HWND hwndDlg)
+void PropBackup::EnableBackupInput(HWND hwndDlg)
 {
 	#define SHOWENABLE(id, show, enable) ShowEnable(::GetDlgItem(hwndDlg, id), show, enable)
 
@@ -518,7 +518,7 @@ void CPropBackup::EnableBackupInput(HWND hwndDlg)
 	@note 詳細設定切り替え時のデフォルトをオプションに合わせるため、
 		m_szBackUpPathAdvanced を更新する
 */
-void CPropBackup::UpdateBackupFile(HWND hwndDlg)	//	バックアップファイルの詳細設定
+void PropBackup::UpdateBackupFile(HWND hwndDlg)	//	バックアップファイルの詳細設定
 {
 	wchar_t temp[MAX_PATH];
 	auto& csBackup = m_Common.m_sBackup;

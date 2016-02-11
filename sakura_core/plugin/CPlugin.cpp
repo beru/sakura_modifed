@@ -31,27 +31,27 @@
 #include "CJackManager.h"
 
 /////////////////////////////////////////////
-// CPlug メンバ関数
-bool CPlug::Invoke(CEditView* view, CWSHIfObj::List& params) {
+// Plug メンバ関数
+bool Plug::Invoke(EditView* view, WSHIfObj::List& params) {
 	return m_cPlugin.InvokePlug(view, *this, params);
 }
 
-EFunctionCode CPlug::GetFunctionCode() const {
+EFunctionCode Plug::GetFunctionCode() const {
 	return GetPluginFunctionCode(m_cPlugin.m_id, m_id);
 }
 
 /////////////////////////////////////////////
-// CPlugin メンバ関数
+// Plugin メンバ関数
 
 // コンストラクタ
-CPlugin::CPlugin(const tstring& sBaseDir)
+Plugin::Plugin(const tstring& sBaseDir)
 	: m_sBaseDir(sBaseDir)
 {
 	m_nCommandCount = 0;
 }
 
 // デストラクタ
-CPlugin::~CPlugin(void)
+Plugin::~Plugin(void)
 {
 	for (auto it=m_options.begin(); it!=m_options.end(); ++it) {
 		delete *it;
@@ -59,7 +59,7 @@ CPlugin::~CPlugin(void)
 }
 
 // プラグイン定義ファイルのCommonセクションを読み込む
-bool CPlugin::ReadPluginDefCommon(
+bool Plugin::ReadPluginDefCommon(
 	DataProfile *cProfile,
 	DataProfile *cProfileMlang
 	)
@@ -89,12 +89,12 @@ bool CPlugin::ReadPluginDefCommon(
 
 // プラグイン定義ファイルのPlugセクションを読み込む
 // @date 2011.08.20 syat Plugセクションも複数定義可能とする
-bool CPlugin::ReadPluginDefPlug(
+bool Plugin::ReadPluginDefPlug(
 	DataProfile *cProfile,
 	DataProfile *cProfileMlang
 	)
 {
-	std::vector<JackDef> jacks = CJackManager::getInstance()->GetJackDef();
+	std::vector<JackDef> jacks = JackManager::getInstance()->GetJackDef();
 	wchar_t szIndex[8];
 
 	for (size_t i=0; i<jacks.size(); ++i) {
@@ -118,7 +118,7 @@ bool CPlugin::ReadPluginDefPlug(
 					sLabel = sHandler;		// Labelが無ければハンドラ名で代用
 				}
 
-				CPlug *newPlug = CreatePlug(*this, nCount, sKey, sHandler, sLabel);
+				Plug *newPlug = CreatePlug(*this, nCount, sKey, sHandler, sLabel);
 				m_plugs.push_back(newPlug);
 			}else {
 				break;		// 定義がなければ読み込みを終了
@@ -130,7 +130,7 @@ bool CPlugin::ReadPluginDefPlug(
 }
 
 // プラグイン定義ファイルのCommandセクションを読み込む
-bool CPlugin::ReadPluginDefCommand(
+bool Plugin::ReadPluginDefCommand(
 	DataProfile *cProfile,
 	DataProfile *cProfileMlang
 	)
@@ -170,7 +170,7 @@ bool CPlugin::ReadPluginDefCommand(
 }
 
 // プラグイン定義ファイルのOptionセクションを読み込む	// 2010/3/24 Uchi
-bool CPlugin::ReadPluginDefOption(
+bool Plugin::ReadPluginDefOption(
 	DataProfile *cProfile,
 	DataProfile *cProfileMlang
 	)
@@ -224,7 +224,7 @@ bool CPlugin::ReadPluginDefOption(
 				sLabel = sKey;
 			}
 
-			m_options.push_back(new CPluginOption(this, sLabel, sSection, sKey, sType, sSelect, sDefaultVal, nCount));
+			m_options.push_back(new PluginOption(this, sLabel, sSection, sKey, sType, sSelect, sDefaultVal, nCount));
 		}
 	}
 
@@ -232,18 +232,18 @@ bool CPlugin::ReadPluginDefOption(
 }
 
 // プラグインフォルダ基準の相対パスをフルパスに変換
-CPlugin::tstring CPlugin::GetFilePath(const tstring& sFileName) const
+Plugin::tstring Plugin::GetFilePath(const tstring& sFileName) const
 {
 	return m_sBaseDir + _T("\\") + to_tchar(sFileName.c_str());
 }
 
-CPlugin::tstring CPlugin::GetFolderName() const
+Plugin::tstring Plugin::GetFolderName() const
 {
 	return tstring(GetFileTitlePointer(m_sBaseDir.c_str()));
 }
 
 // コマンドを追加する
-int CPlugin::AddCommand(
+int Plugin::AddCommand(
 	const WCHAR* handler,
 	const WCHAR* label,
 	const WCHAR* icon,
@@ -255,7 +255,7 @@ int CPlugin::AddCommand(
 
 	// コマンドプラグIDは1から振る
 	++m_nCommandCount;
-	CPlug* newPlug = CreatePlug(*this, m_nCommandCount, PP_COMMAND_STR, wstring(handler), wstring(label));
+	Plug* newPlug = CreatePlug(*this, m_nCommandCount, PP_COMMAND_STR, wstring(handler), wstring(label));
 	if (icon) {
 		newPlug->m_sIcon = icon;
 	}
@@ -263,7 +263,7 @@ int CPlugin::AddCommand(
 	m_plugs.push_back(newPlug);
 
 	if (doRegister) {
-		CJackManager::getInstance()->RegisterPlug(PP_COMMAND_STR, newPlug);
+		JackManager::getInstance()->RegisterPlug(PP_COMMAND_STR, newPlug);
 	}
 	return newPlug->GetFunctionCode();
 }
@@ -290,7 +290,7 @@ std::vector<std::wstring> wstring_split(
 }
 
 //!	プラグイン定義ファイルのStringセクションを読み込む
-bool CPlugin::ReadPluginDefString(
+bool Plugin::ReadPluginDefString(
 	DataProfile* cProfile,
 	DataProfile* cProfileMlang
 	)

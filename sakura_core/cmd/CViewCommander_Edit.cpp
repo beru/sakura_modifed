@@ -52,12 +52,12 @@ void ViewCommander::Command_WCHAR(
 	auto& typeData = m_pCommanderView->m_pTypeData;
 
 	// 現在位置にデータを挿入
-	CNativeW cmemDataW2;
+	NativeW cmemDataW2;
 	cmemDataW2 = wcChar;
 	if (WCODE::IsLineDelimiter(wcChar, GetDllShareData().m_common.m_sEdit.m_bEnableExtEol)) { 
 		// 現在、Enterなどで挿入する改行コードの種類を取得
 		if (bConvertEOL) {
-			CEol cWork = pDoc->m_cDocEditor.GetNewLineCode();
+			Eol cWork = pDoc->m_cDocEditor.GetNewLineCode();
 			cmemDataW2.SetString(cWork.GetValue2(), cWork.GetLen());
 		}
 
@@ -71,7 +71,7 @@ void ViewCommander::Command_WCHAR(
 			auto& layoutMgr = pDoc->m_cLayoutMgr;
 			const wchar_t* pLine = layoutMgr.GetLineStr(caret.GetCaretLayoutPos().GetY2(), &nLineLen, &pCLayout);
 			if (pCLayout) {
-				const CDocLine* pcDocLine = pDoc->m_cDocLineMgr.GetLine(pCLayout->GetLogicLineNo());
+				const DocLine* pcDocLine = pDoc->m_cDocLineMgr.GetLine(pCLayout->GetLogicLineNo());
 				pLine = pcDocLine->GetDocLineStrWithEOL(&nLineLen);
 				if (pLine) {
 					/*
@@ -89,7 +89,7 @@ void ViewCommander::Command_WCHAR(
 					// 指定された桁に対応する行のデータ内の位置を調べる
 					for (nPos=LogicInt(0); nPos<nLineLen && nPos<ptXY.GetX2();) {
 						// 2005-09-02 D.S.Koba GetSizeOfChar
-						LogicInt nCharChars = CNativeW::GetSizeOfChar(pLine, nLineLen, nPos);
+						LogicInt nCharChars = NativeW::GetSizeOfChar(pLine, nLineLen, nPos);
 
 						// その他のインデント文字
 						if (0 < nCharChars
@@ -122,7 +122,7 @@ end_of_for:;
 					}
 
 					// インデント取得
-					//CNativeW cmemIndent;
+					//NativeW cmemIndent;
 					//cmemIndent.SetString(pLine, nPos);
 
 					// インデント付加
@@ -173,14 +173,14 @@ end_of_for:;
 	default:
 		// プラグインから検索する
 		{
-			CPlug::Array plugs;
-			CJackManager::getInstance()->GetUsablePlug(PP_SMARTINDENT, nSIndentType, &plugs);
+			Plug::Array plugs;
+			JackManager::getInstance()->GetUsablePlug(PP_SMARTINDENT, nSIndentType, &plugs);
 
 			if (plugs.size() > 0) {
 				assert_warning(1 == plugs.size());
 				// インタフェースオブジェクト準備
-				CWSHIfObj::List params;
-				CSmartIndentIfObj* objIndent = new CSmartIndentIfObj(wcChar);	// スマートインデントオブジェクト
+				WSHIfObj::List params;
+				SmartIndentIfObj* objIndent = new SmartIndentIfObj(wcChar);	// スマートインデントオブジェクト
 				objIndent->AddRef();
 				params.push_back(objIndent);
 
@@ -909,10 +909,10 @@ void ViewCommander::DelCharForOverwrite(
 				const CStringRef line = pcLayout->GetDocLineRef()->GetStringRefWithEOL();
 				LogicInt nPos = GetCaret().GetCaretLogicPos().GetX();
 				if (line.At(nPos) != WCODE::TAB) {
-					LayoutInt nKetaBefore = CNativeW::GetKetaOfChar(line, nPos);
-					LayoutInt nKetaAfter = CNativeW::GetKetaOfChar(pszInput, nLen, 0);
+					LayoutInt nKetaBefore = NativeW::GetKetaOfChar(line, nPos);
+					LayoutInt nKetaAfter = NativeW::GetKetaOfChar(pszInput, nLen, 0);
 					nKetaDiff = nKetaBefore - nKetaAfter;
-					nPos += CNativeW::GetSizeOfChar(line.GetPtr(), line.GetLength(), nPos);
+					nPos += NativeW::GetSizeOfChar(line.GetPtr(), line.GetLength(), nPos);
 					nDelLen = 1;
 					if (nKetaDiff < 0 && nPos < line.GetLength()) {
 						wchar_t c = line.At(nPos);
@@ -923,7 +923,7 @@ void ViewCommander::DelCharForOverwrite(
 							)
 						) {
 							nDelLen = 2;
-							LayoutInt nKetaBefore2 = CNativeW::GetKetaOfChar(line, nPos);
+							LayoutInt nKetaBefore2 = NativeW::GetKetaOfChar(line, nPos);
 							nKetaAfterIns = nKetaBefore + nKetaBefore2 - nKetaAfter;
 						}
 					}
@@ -945,7 +945,7 @@ void ViewCommander::DelCharForOverwrite(
 				m_pCommanderView->DeleteData(false);
 			}
 		}
-		CNativeW tmp;
+		NativeW tmp;
 		for (LayoutInt i=LayoutInt(0); i<nKetaDiff; ++i) {
 			tmp.AppendString(L" ");
 		}

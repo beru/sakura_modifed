@@ -58,19 +58,19 @@ static const DWORD p_helpids[] = {	//10210
 	@param wParam パラメータ1
 	@param lParam パラメータ2
 */
-INT_PTR CALLBACK CPropEdit::DlgProc_page(
+INT_PTR CALLBACK PropEdit::DlgProc_page(
 	HWND hwndDlg,
 	UINT uMsg,
 	WPARAM wParam,
 	LPARAM lParam
 	)
 {
-	return DlgProc(reinterpret_cast<pDispatchPage>(&CPropEdit::DispatchEvent), hwndDlg, uMsg, wParam, lParam);
+	return DlgProc(reinterpret_cast<pDispatchPage>(&PropEdit::DispatchEvent), hwndDlg, uMsg, wParam, lParam);
 }
 //	To Here Jun. 2, 2001 genta
 
 // メッセージ処理
-INT_PTR CPropEdit::DispatchEvent(
+INT_PTR PropEdit::DispatchEvent(
     HWND		hwndDlg,	// handle to dialog box
     UINT		uMsg,		// message
     WPARAM		wParam,		// first message parameter
@@ -118,7 +118,7 @@ INT_PTR CPropEdit::DispatchEvent(
 					TCHAR szMetaPath[_MAX_PATH];
 					TCHAR szPath[_MAX_PATH];
 					::DlgItem_GetText(hwndDlg, IDC_EDIT_FILEOPENDIR, szMetaPath, _countof(szMetaPath));
-					CFileNameManager::ExpandMetaToFolder(szMetaPath, szPath, _countof(szPath));
+					FileNameManager::ExpandMetaToFolder(szMetaPath, szPath, _countof(szPath));
 					if (SelectDir(hwndDlg, LS(STR_PROPEDIT_SELECT_DIR), szPath, szPath)) {
 						CNativeT cmem(szPath);
 						cmem.Replace(_T("%"), _T("%%"));
@@ -173,7 +173,7 @@ INT_PTR CPropEdit::DispatchEvent(
 
 
 // ダイアログデータの設定
-void CPropEdit::SetData(HWND hwndDlg)
+void PropEdit::SetData(HWND hwndDlg)
 {
 	auto& csEdit = m_Common.m_sEdit;
 	// ドラッグ & ドロップ編集
@@ -236,7 +236,7 @@ void CPropEdit::SetData(HWND hwndDlg)
 
 
 // ダイアログデータの取得
-int CPropEdit::GetData(HWND hwndDlg)
+int PropEdit::GetData(HWND hwndDlg)
 {
 	auto& csEdit = m_Common.m_sEdit;
 	
@@ -298,7 +298,7 @@ int CPropEdit::GetData(HWND hwndDlg)
 
 	@date 2013.03.31 novice 新規作成
 */
-void CPropEdit::EnableEditPropInput(HWND hwndDlg)
+void PropEdit::EnableEditPropInput(HWND hwndDlg)
 {
 	// 指定フォルダ
 	if (DlgButton_IsChecked(hwndDlg, IDC_RADIO_SELDIR)) {

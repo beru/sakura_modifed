@@ -10,14 +10,14 @@
 	@retval true	成功 現在位置のデータは「単語」と認識する。
 	@retval false	失敗 現在位置のデータは「単語」とは言いきれない気がする。
 */
-bool CWordParse::WhereCurrentWord_2(
+bool WordParse::WhereCurrentWord_2(
 	const wchar_t*	pLine,			// [in]  調べるメモリ全体の先頭アドレス
 	LogicInt		nLineLen,		// [in]  調べるメモリ全体の有効長
 	LogicInt		nIdx,			// [in]  調査開始地点:pLineからの相対的な位置
 	LogicInt*		pnIdxFrom,		// [out] 単語が見つかった場合は、単語の先頭インデックスを返す。
 	LogicInt*		pnIdxTo,		// [out] 単語が見つかった場合は、単語の終端の次のバイトの先頭インデックスを返す。
-	CNativeW*		pcmcmWord,		// [out] 単語が見つかった場合は、現在単語を切り出して指定されたCMemoryオブジェクトに格納する。情報が不要な場合はNULLを指定する。
-	CNativeW*		pcmcmWordLeft	// [out] 単語が見つかった場合は、現在単語の左に位置する単語を切り出して指定されたCMemoryオブジェクトに格納する。情報が不要な場合はNULLを指定する。
+	NativeW*		pcmcmWord,		// [out] 単語が見つかった場合は、現在単語を切り出して指定されたCMemoryオブジェクトに格納する。情報が不要な場合はNULLを指定する。
+	NativeW*		pcmcmWordLeft	// [out] 単語が見つかった場合は、現在単語の左に位置する単語を切り出して指定されたCMemoryオブジェクトに格納する。情報が不要な場合はNULLを指定する。
 	)
 {
 	using namespace WCODE;
@@ -42,7 +42,7 @@ bool CWordParse::WhereCurrentWord_2(
 
 	// 文字種類が変わるまで前方へサーチ
 	LogicInt nIdxNext = nIdx;
-	LogicInt nCharChars = LogicInt(&pLine[nIdxNext] - CNativeW::GetCharPrev(pLine, nLineLen, &pLine[nIdxNext]));
+	LogicInt nCharChars = LogicInt(&pLine[nIdxNext] - NativeW::GetCharPrev(pLine, nLineLen, &pLine[nIdxNext]));
 	while (nCharChars > 0) {
 		LogicInt nIdxNextPrev = nIdxNext;
 		nIdxNext -= nCharChars;
@@ -54,7 +54,7 @@ bool CWordParse::WhereCurrentWord_2(
 			break;
 		}
 		nCharKind = nCharKindMerge;
-		nCharChars = LogicInt(&pLine[nIdxNext] - CNativeW::GetCharPrev(pLine, nLineLen, &pLine[nIdxNext]));
+		nCharChars = LogicInt(&pLine[nIdxNext] - NativeW::GetCharPrev(pLine, nLineLen, &pLine[nIdxNext]));
 	}
 	*pnIdxFrom = nIdxNext;
 
@@ -64,7 +64,7 @@ bool CWordParse::WhereCurrentWord_2(
 
 	// 文字種類が変わるまで後方へサーチ
 	nIdxNext = nIdx;
-	nCharChars = CNativeW::GetSizeOfChar(pLine, nLineLen, nIdxNext); // 2005-09-02 D.S.Koba GetSizeOfChar
+	nCharChars = NativeW::GetSizeOfChar(pLine, nLineLen, nIdxNext); // 2005-09-02 D.S.Koba GetSizeOfChar
 	while (nCharChars > 0) {
 		nIdxNext += nCharChars;
 		ECharKind	nCharKindNext = WhatKindOfChar(pLine, nLineLen, nIdxNext);
@@ -74,7 +74,7 @@ bool CWordParse::WhereCurrentWord_2(
 			break;
 		}
 		nCharKind = nCharKindMerge;
-		nCharChars = CNativeW::GetSizeOfChar(pLine, nLineLen, nIdxNext); // 2005-09-02 D.S.Koba GetSizeOfChar
+		nCharChars = NativeW::GetSizeOfChar(pLine, nLineLen, nIdxNext); // 2005-09-02 D.S.Koba GetSizeOfChar
 	}
 	*pnIdxTo = nIdxNext;
 
@@ -108,7 +108,7 @@ inline bool isCSymbolZen(wchar_t c)
 
 
 // 現在位置の文字の種類を調べる
-ECharKind CWordParse::WhatKindOfChar(
+ECharKind WordParse::WhatKindOfChar(
 	const wchar_t*	pData,
 	int				pDataLen,
 	int				nIdx
@@ -116,7 +116,7 @@ ECharKind CWordParse::WhatKindOfChar(
 {
 	using namespace WCODE;
 
-	int nCharChars = CNativeW::GetSizeOfChar(pData, pDataLen, nIdx);
+	int nCharChars = NativeW::GetSizeOfChar(pData, pDataLen, nIdx);
 	if (nCharChars == 0) {
 		return CK_NULL;	// NULL
 	}else if (nCharChars == 1) {
@@ -168,7 +168,7 @@ ECharKind CWordParse::WhatKindOfChar(
 
 
 // 二つの文字を結合したものの種類を調べる
-ECharKind CWordParse::WhatKindOfTwoChars(
+ECharKind WordParse::WhatKindOfTwoChars(
 	ECharKind kindPre,
 	ECharKind kindCur
 	)
@@ -210,7 +210,7 @@ ECharKind CWordParse::WhatKindOfTwoChars(
 
 
 // 二つの文字を結合したものの種類を調べる
-ECharKind CWordParse::WhatKindOfTwoChars4KW(
+ECharKind WordParse::WhatKindOfTwoChars4KW(
 	ECharKind kindPre,
 	ECharKind kindCur
 	)
@@ -256,7 +256,7 @@ ECharKind CWordParse::WhatKindOfTwoChars4KW(
 	pLine（長さ：nLineLen）の文字列から単語を探す。
 	探し始める位置はnIdxで指定。方向は後方に限定。単語の両端で止まらない（関係ないから）
 */
-bool CWordParse::SearchNextWordPosition(
+bool WordParse::SearchNextWordPosition(
 	const wchar_t*	pLine,
 	LogicInt		nLineLen,
 	LogicInt		nIdx,			//	桁数
@@ -272,7 +272,7 @@ bool CWordParse::SearchNextWordPosition(
 
 	LogicInt nIdxNext = nIdx;
 	// 2005-09-02 D.S.Koba GetSizeOfChar
-	LogicInt nCharChars = CNativeW::GetSizeOfChar(pLine, nLineLen, nIdxNext);
+	LogicInt nCharChars = NativeW::GetSizeOfChar(pLine, nLineLen, nIdxNext);
 	while (nCharChars > 0) {
 		nIdxNext += nCharChars;
 		ECharKind nCharKindNext = WhatKindOfChar(pLine, nLineLen, nIdxNext);
@@ -292,7 +292,7 @@ bool CWordParse::SearchNextWordPosition(
 			nCharKind = nCharKindMerge;
 		}
 		// 2005-09-02 D.S.Koba GetSizeOfChar
-		nCharChars = CNativeW::GetSizeOfChar(pLine, nLineLen, nIdxNext);
+		nCharChars = NativeW::GetSizeOfChar(pLine, nLineLen, nIdxNext);
 	}
 	return false;
 }
@@ -302,7 +302,7 @@ bool CWordParse::SearchNextWordPosition(
 	pLine（長さ：nLineLen）の文字列から単語を探す。
 	探し始める位置はnIdxで指定。方向は後方に限定。単語の両端で止まらない（関係ないから）
 */
-bool CWordParse::SearchNextWordPosition4KW(
+bool WordParse::SearchNextWordPosition4KW(
 	const wchar_t*	pLine,
 	LogicInt		nLineLen,
 	LogicInt		nIdx,			//	桁数
@@ -318,7 +318,7 @@ bool CWordParse::SearchNextWordPosition4KW(
 
 	LogicInt nIdxNext = nIdx;
 	// 2005-09-02 D.S.Koba GetSizeOfChar
-	LogicInt nCharChars = CNativeW::GetSizeOfChar(pLine, nLineLen, nIdxNext);
+	LogicInt nCharChars = NativeW::GetSizeOfChar(pLine, nLineLen, nIdxNext);
 	while (nCharChars > 0) {
 		nIdxNext += nCharChars;
 		ECharKind nCharKindNext = WhatKindOfChar(pLine, nLineLen, nIdxNext);
@@ -338,7 +338,7 @@ bool CWordParse::SearchNextWordPosition4KW(
 			nCharKind = nCharKindMerge;
 		}
 		// 2005-09-02 D.S.Koba GetSizeOfChar
-		nCharChars = CNativeW::GetSizeOfChar(pLine, nLineLen, nIdxNext);
+		nCharChars = NativeW::GetSizeOfChar(pLine, nLineLen, nIdxNext);
 	}
 	return false;
 }

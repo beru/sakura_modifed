@@ -1,4 +1,4 @@
-// 2008.XX.XX kobake CShareDataから分離
+// 2008.XX.XX kobake ShareDataから分離
 /*
 	Copyright (C) 2008, kobake
 
@@ -51,13 +51,13 @@ void SetValueLimit(T& target, int maxval)
 }
 
 // 共有データのロード
-bool CShareData_IO::LoadShareData()
+bool ShareData_IO::LoadShareData()
 {
 	return ShareData_IO_2(true);
 }
 
 // 共有データの保存
-void CShareData_IO::SaveShareData()
+void ShareData_IO::SaveShareData()
 {
 	ShareData_IO_2(false);
 }
@@ -70,10 +70,10 @@ void CShareData_IO::SaveShareData()
 	@date 2004-01-11 D.S.Koba Profile変更によるコード簡略化
 	@date 2005-04-05 D.S.Koba 各セクションの入出力を関数として分離
 */
-bool CShareData_IO::ShareData_IO_2(bool bRead)
+bool ShareData_IO::ShareData_IO_2(bool bRead)
 {
-	//MY_RUNNINGTIMER(cRunningTimer, "CShareData_IO::ShareData_IO_2");
-	CShareData* pcShare = CShareData::getInstance();
+	//MY_RUNNINGTIMER(cRunningTimer, "ShareData_IO::ShareData_IO_2");
+	ShareData* pcShare = ShareData::getInstance();
 
 	DataProfile	cProfile;
 
@@ -86,7 +86,7 @@ bool CShareData_IO::ShareData_IO_2(bool bRead)
 
 	std::tstring strProfileName = to_tchar(CommandLine::getInstance()->GetProfileName());
 	TCHAR szIniFileName[_MAX_PATH + 1];
-	CFileNameManager::getInstance()->GetIniFileName( szIniFileName, strProfileName.c_str(), bRead );	// 2007.05.19 ryoji iniファイル名を取得する
+	FileNameManager::getInstance()->GetIniFileName( szIniFileName, strProfileName.c_str(), bRead );	// 2007.05.19 ryoji iniファイル名を取得する
 
 //	MYTRACE(_T("Iniファイル処理-1 所要時間(ミリ秒) = %d\n"), cRunningTimer.Read());
 
@@ -120,7 +120,7 @@ bool CShareData_IO::ShareData_IO_2(bool bRead)
 	}
 //	MYTRACE(_T("Iniファイル処理 0 所要時間(ミリ秒) = %d\n"), cRunningTimer.Read());
 
-	CMenuDrawer* pcMenuDrawer = new CMenuDrawer; // 2010/7/4 Uchi
+	MenuDrawer* pcMenuDrawer = new MenuDrawer; // 2010/7/4 Uchi
 
 	if (bRead) {
 		DLLSHAREDATA* pShareData = &GetDllShareData();
@@ -169,7 +169,7 @@ bool CShareData_IO::ShareData_IO_2(bool bRead)
 
 	@date 2005-04-07 D.S.Koba ShareData_IO_2から分離。読み込み時の初期化を修正
 */
-void CShareData_IO::ShareData_IO_Mru(DataProfile& cProfile)
+void ShareData_IO::ShareData_IO_Mru(DataProfile& cProfile)
 {
 	DLLSHAREDATA* pShare = &GetDllShareData();
 
@@ -262,7 +262,7 @@ void CShareData_IO::ShareData_IO_Mru(DataProfile& cProfile)
 
 	@date 2005-04-07 D.S.Koba ShareData_IO_2から分離。読み込み時の初期化を修正
 */
-void CShareData_IO::ShareData_IO_Keys(DataProfile& cProfile)
+void ShareData_IO::ShareData_IO_Keys(DataProfile& cProfile)
 {
 	DLLSHAREDATA* pShare = &GetDllShareData();
 
@@ -292,7 +292,7 @@ void CShareData_IO::ShareData_IO_Keys(DataProfile& cProfile)
 
 	@date 2005-04-07 D.S.Koba ShareData_IO_2から分離。読み込み時の初期化を修正
 */
-void CShareData_IO::ShareData_IO_Grep(DataProfile& cProfile)
+void ShareData_IO::ShareData_IO_Grep(DataProfile& cProfile)
 {
 	DLLSHAREDATA* pShare = &GetDllShareData();
 
@@ -323,7 +323,7 @@ void CShareData_IO::ShareData_IO_Grep(DataProfile& cProfile)
 
 	@date 2005-04-07 D.S.Koba ShareData_IO_2から分離。
 */
-void CShareData_IO::ShareData_IO_Folders(DataProfile& cProfile)
+void ShareData_IO::ShareData_IO_Folders(DataProfile& cProfile)
 {
 	DLLSHAREDATA* pShare = &GetDllShareData();
 
@@ -340,7 +340,7 @@ void CShareData_IO::ShareData_IO_Folders(DataProfile& cProfile)
 
 	@date 2005-04-07 D.S.Koba ShareData_IO_2から分離。読み込み時の初期化を修正
 */
-void CShareData_IO::ShareData_IO_Cmd(DataProfile& cProfile)
+void ShareData_IO::ShareData_IO_Cmd(DataProfile& cProfile)
 {
 	DLLSHAREDATA* pShare = &GetDllShareData();
 
@@ -370,7 +370,7 @@ void CShareData_IO::ShareData_IO_Cmd(DataProfile& cProfile)
 
 	@date 2005-04-07 D.S.Koba ShareData_IO_2から分離。読み込み時の初期化を修正
 */
-void CShareData_IO::ShareData_IO_Nickname(DataProfile& cProfile)
+void ShareData_IO::ShareData_IO_Nickname(DataProfile& cProfile)
 {
 	DLLSHAREDATA* pShare = &GetDllShareData();
 
@@ -433,7 +433,7 @@ static bool ShareData_IO_RECT(DataProfile& cProfile, const WCHAR* pszSecName, co
 
 	@date 2005-04-07 D.S.Koba ShareData_IO_2から分離。
 */
-void CShareData_IO::ShareData_IO_Common(DataProfile& cProfile)
+void ShareData_IO::ShareData_IO_Common(DataProfile& cProfile)
 {
 	DLLSHAREDATA* pShare = &GetDllShareData();
 
@@ -759,7 +759,7 @@ EFunctionCode GetPlugCmdInfoByName(
 		return F_INVALID;
 	}
 	
-	return CPlug::GetPluginFunctionCode(nId, nNo);
+	return Plug::GetPluginFunctionCode(nId, nNo);
 }
 
 // プラグインコマンドを機能番号から名前へ変換
@@ -772,8 +772,8 @@ bool GetPlugCmdInfoByFuncCode(
 		return false;
 	}
 
-	PluginId nID = CPlug::GetPluginId(eFuncCode);
-	PlugId nNo = CPlug::GetPlugId(eFuncCode);
+	PluginId nID = Plug::GetPluginId(eFuncCode);
+	PlugId nNo = Plug::GetPlugId(eFuncCode);
 	if (nID < 0 || nNo < 0) {
 		return false;
 	}
@@ -791,7 +791,7 @@ bool GetPlugCmdInfoByFuncCode(
 
 	@date 2005-04-07 D.S.Koba ShareData_IO_2から分離。読み込み時の初期化を修正
 */
-void CShareData_IO::ShareData_IO_Toolbar(DataProfile& cProfile, CMenuDrawer* pcMenuDrawer)
+void ShareData_IO::ShareData_IO_Toolbar(DataProfile& cProfile, MenuDrawer* pcMenuDrawer)
 {
 	DLLSHAREDATA* pShare = &GetDllShareData();
 
@@ -858,7 +858,7 @@ void CShareData_IO::ShareData_IO_Toolbar(DataProfile& cProfile, CMenuDrawer* pcM
 
 	@date 2010.08.21 Moca 旧ShareData_IO_CustMenuをIO_CustMenuに変更
 */
-void CShareData_IO::ShareData_IO_CustMenu(DataProfile& cProfile)
+void ShareData_IO::ShareData_IO_CustMenu(DataProfile& cProfile)
 {
 	IO_CustMenu(cProfile, GetDllShareData().m_common.m_sCustomMenu, false);
 }
@@ -871,7 +871,7 @@ void CShareData_IO::ShareData_IO_CustMenu(DataProfile& cProfile)
 
 	@date 2005-04-07 D.S.Koba ShareData_IO_2から分離。
 */
-void CShareData_IO::IO_CustMenu(DataProfile& cProfile, CommonSetting_CustomMenu& menu, bool bOutCmdName)
+void ShareData_IO::IO_CustMenu(DataProfile& cProfile, CommonSetting_CustomMenu& menu, bool bOutCmdName)
 {
 	static const WCHAR* pszSecName = LTEXT("CustMenu");
 	wchar_t szKeyName[64];
@@ -942,7 +942,7 @@ void CShareData_IO::IO_CustMenu(DataProfile& cProfile, CommonSetting_CustomMenu&
 
 	@date 2005-04-07 D.S.Koba ShareData_IO_2から分離。
 */
-void CShareData_IO::ShareData_IO_Font(DataProfile& cProfile)
+void ShareData_IO::ShareData_IO_Font(DataProfile& cProfile)
 {
 	DLLSHAREDATA* pShare = &GetDllShareData();
 
@@ -957,7 +957,7 @@ void CShareData_IO::ShareData_IO_Font(DataProfile& cProfile)
 /*!
 	@brief 共有データのKeyBindセクションの入出力
 */
-void CShareData_IO::ShareData_IO_KeyBind(DataProfile& cProfile)
+void ShareData_IO::ShareData_IO_KeyBind(DataProfile& cProfile)
 {
 	DLLSHAREDATA* pShare = &GetDllShareData();
 	IO_KeyBind(cProfile, pShare->m_common.m_sKeyBind, false);	// add Parameter 2008/5/24
@@ -973,7 +973,7 @@ void CShareData_IO::ShareData_IO_KeyBind(DataProfile& cProfile)
 	@date 2012.11.20 aroka 引数を CommonSetting_KeyBind に変更
 	@date 2012.11.25 aroka マウスコードの固定と重複排除
 */
-void CShareData_IO::IO_KeyBind(DataProfile& cProfile, CommonSetting_KeyBind& sKeyBind, bool bOutCmdName)
+void ShareData_IO::IO_KeyBind(DataProfile& cProfile, CommonSetting_KeyBind& sKeyBind, bool bOutCmdName)
 {
 	static const WCHAR* szSecName = L"KeyBind";
 	WCHAR	szKeyName[64];
@@ -1151,7 +1151,7 @@ void CShareData_IO::IO_KeyBind(DataProfile& cProfile, CommonSetting_KeyBind& sKe
 
 	@date 2005-04-07 D.S.Koba ShareData_IO_2から分離。
 */
-void CShareData_IO::ShareData_IO_Print(DataProfile& cProfile)
+void ShareData_IO::ShareData_IO_Print(DataProfile& cProfile)
 {
 	DLLSHAREDATA* pShare = &GetDllShareData();
 
@@ -1274,7 +1274,7 @@ void CShareData_IO::ShareData_IO_Print(DataProfile& cProfile)
 	@date 2005-04-07 D.S.Koba ShareData_IO_2から分離。
 	@date 2010/04/17 Uchi ループ内をShareData_IO_Type_Oneに分離。
 */
-void CShareData_IO::ShareData_IO_Types(DataProfile& cProfile)
+void ShareData_IO::ShareData_IO_Types(DataProfile& cProfile)
 {
 	DLLSHAREDATA* pShare = &GetDllShareData();
 	WCHAR szKey[32];
@@ -1285,7 +1285,7 @@ void CShareData_IO::ShareData_IO_Types(DataProfile& cProfile)
 	}
 	SetValueLimit(pShare->m_nTypesCount, 1, MAX_TYPES);
 	// 注：コントロールプロセス専用
-	std::vector<TypeConfig*>& types = CShareData::getInstance()->GetTypeSettings();
+	std::vector<TypeConfig*>& types = ShareData::getInstance()->GetTypeSettings();
 	for (int i=GetDllShareData().m_nTypesCount; i<nCountOld; ++i) {
 		delete types[i];
 		types[i] = NULL;
@@ -1337,7 +1337,7 @@ void CShareData_IO::ShareData_IO_Types(DataProfile& cProfile)
 
 	@date 2010/04/17 Uchi ShareData_IO_TypesOneから分離。
 */
-void CShareData_IO::ShareData_IO_Type_One(DataProfile& cProfile, TypeConfig& types, const WCHAR* pszSecName)
+void ShareData_IO::ShareData_IO_Type_One(DataProfile& cProfile, TypeConfig& types, const WCHAR* pszSecName)
 {
 	WCHAR	szKeyName[64];
 	WCHAR	szKeyData[MAX_REGEX_KEYWORDLEN + 20];
@@ -1725,14 +1725,14 @@ void CShareData_IO::ShareData_IO_Type_One(DataProfile& cProfile, TypeConfig& typ
 
 	@date 2005-04-07 D.S.Koba ShareData_IO_2から分離。
 */
-void CShareData_IO::ShareData_IO_KeyWords(DataProfile& cProfile)
+void ShareData_IO::ShareData_IO_KeyWords(DataProfile& cProfile)
 {
 	DLLSHAREDATA* pShare = &GetDllShareData();
 
 	static const WCHAR* pszSecName = LTEXT("KeyWords");
 	WCHAR			szKeyName[64];
 	WCHAR			szKeyData[1024];
-	CKeyWordSetMgr*	pCKeyWordSetMgr = &pShare->m_common.m_sSpecialKeyword.m_CKeyWordSetMgr;
+	KeyWordSetMgr*	pCKeyWordSetMgr = &pShare->m_common.m_sSpecialKeyword.m_CKeyWordSetMgr;
 	int				nKeyWordSetNum = pCKeyWordSetMgr->m_nKeyWordSetNum;
 
 	cProfile.IOProfileData(pszSecName, LTEXT("nCurrentKeyWordSetIdx")	, pCKeyWordSetMgr->m_nCurrentKeyWordSetIdx);
@@ -1804,7 +1804,7 @@ void CShareData_IO::ShareData_IO_KeyWords(DataProfile& cProfile)
 
 	@date 2005-04-07 D.S.Koba ShareData_IO_2から分離。
 */
-void CShareData_IO::ShareData_IO_Macro(DataProfile& cProfile)
+void ShareData_IO::ShareData_IO_Macro(DataProfile& cProfile)
 {
 	DLLSHAREDATA* pShare = &GetDllShareData();
 
@@ -1834,7 +1834,7 @@ void CShareData_IO::ShareData_IO_Macro(DataProfile& cProfile)
 
 	@date 2008/6/21 Uchi
 */
-void CShareData_IO::ShareData_IO_Statusbar(DataProfile& cProfile)
+void ShareData_IO::ShareData_IO_Statusbar(DataProfile& cProfile)
 {
 	static const WCHAR* pszSecName = LTEXT("Statusbar");
 	CommonSetting_Statusbar& statusbar = GetDllShareData().m_common.m_sStatusbar;
@@ -1854,7 +1854,7 @@ void CShareData_IO::ShareData_IO_Statusbar(DataProfile& cProfile)
 
 	@date 2009/11/30 syat
 */
-void CShareData_IO::ShareData_IO_Plugin(DataProfile& cProfile, CMenuDrawer* pcMenuDrawer)
+void ShareData_IO::ShareData_IO_Plugin(DataProfile& cProfile, MenuDrawer* pcMenuDrawer)
 {
 	static const WCHAR* pszSecName = LTEXT("Plugin");
 	CommonSetting& common = GetDllShareData().m_common;
@@ -1882,7 +1882,7 @@ void CShareData_IO::ShareData_IO_Plugin(DataProfile& cProfile, CMenuDrawer* pcMe
 		// Command 仮設定	// 2010/7/4 Uchi
 		if (pluginrec.m_szId[0] != '\0' && pluginrec.m_nCmdNum >0) {
 			for (int j=1; j<=pluginrec.m_nCmdNum; ++j) {
-				pcMenuDrawer->AddToolButton(CMenuDrawer::TOOLBAR_ICON_PLUGCOMMAND_DEFAULT, CPlug::GetPluginFunctionCode(i, j));
+				pcMenuDrawer->AddToolButton(MenuDrawer::TOOLBAR_ICON_PLUGCOMMAND_DEFAULT, Plug::GetPluginFunctionCode(i, j));
 			}
 		}
 	}
@@ -1898,7 +1898,7 @@ struct MainMenuAddItemInfo
 	bool m_bAddNextSeparete;
 };
 
-void CShareData_IO::ShareData_IO_MainMenu(DataProfile& cProfile)
+void ShareData_IO::ShareData_IO_MainMenu(DataProfile& cProfile)
 {
 	IO_MainMenu(cProfile, GetDllShareData().m_common.m_sMainMenu, false);		// 2010/5/15 Uchi
 
@@ -1950,7 +1950,7 @@ void CShareData_IO::ShareData_IO_MainMenu(DataProfile& cProfile)
 			if (item.m_nVer <= nVersion) {
 				continue;
 			}
-			CMainMenu* pcMenuTlb = mainmenu.m_cMainMenuTbl;
+			MainMenu* pcMenuTlb = mainmenu.m_cMainMenuTbl;
 			int k = 0;
 			for (; k<mainmenu.m_nMainMenuNum; ++k) {
 				if (pcMenuTlb[k].m_nFunc == item.m_nAddFuncCode) {
@@ -1977,7 +1977,7 @@ void CShareData_IO::ShareData_IO_MainMenu(DataProfile& cProfile)
 								mainmenu.m_nMenuTopIdx[n] += 1 + nAddSep;
 							}
 						}
-						CMainMenu* pcMenu = &pcMenuTlb[r+1];
+						MainMenu* pcMenu = &pcMenuTlb[r+1];
 						const int nLevel = pcMenuTlb[r].m_nLevel;
 						if (item.m_bAddPrevSeparete) {
 							pcMenu->m_nType    = T_SEPARATOR;
@@ -2024,7 +2024,7 @@ void CShareData_IO::ShareData_IO_MainMenu(DataProfile& cProfile)
 	@date 2010/5/15 Uchi
 	@date 2014.11.21 Moca pData追加。データのみのタイプを追加
 */
-void CShareData_IO::IO_MainMenu(
+void ShareData_IO::IO_MainMenu(
 	DataProfile& cProfile,
 	std::vector<std::wstring>* pData,
 	CommonSetting_MainMenu& mainmenu,
@@ -2071,7 +2071,7 @@ void CShareData_IO::IO_MainMenu(
 	int nIdx = 0;
 	for (int i=0; i<mainmenu.m_nMainMenuNum; ++i) {
 		// メインメニューテーブル
-		CMainMenu* pcMenu = &mainmenu.m_cMainMenuTbl[i];
+		MainMenu* pcMenu = &mainmenu.m_cMainMenuTbl[i];
 
 		auto_sprintf(szKeyName, LTEXT("MM[%03d]"), i);
 		if (cProfile.IsReadingMode()) {
@@ -2190,7 +2190,7 @@ void CShareData_IO::IO_MainMenu(
 
 	@date 2005-04-07 D.S.Koba ShareData_IO_2から分離。
 */
-void CShareData_IO::ShareData_IO_Other(DataProfile& cProfile)
+void ShareData_IO::ShareData_IO_Other(DataProfile& cProfile)
 {
 	DLLSHAREDATA* pShare = &GetDllShareData();
 
@@ -2255,7 +2255,7 @@ void CShareData_IO::ShareData_IO_Other(DataProfile& cProfile)
 	@param[in]		pszSecName		セクション名
 	@param[in,out]	pColorInfoArr	書き出し、読み込み対象の色設定へのポインタ (入出力方向はbReadに依存)
 */
-void CShareData_IO::IO_ColorSet(DataProfile* pcProfile, const WCHAR* pszSecName, ColorInfo* pColorInfoArr)
+void ShareData_IO::IO_ColorSet(DataProfile* pcProfile, const WCHAR* pszSecName, ColorInfo* pColorInfoArr)
 {
 	WCHAR	szKeyName[256];
 	WCHAR	szKeyData[1024];
@@ -2360,7 +2360,7 @@ void ShareData_IO_Sub_LogFont(DataProfile& cProfile, const WCHAR* pszSecName,
 }
 
 
-void CShareData_IO::ShareData_IO_FileTree( DataProfile& cProfile, FileTree& fileTree, const WCHAR* pszSecName )
+void ShareData_IO::ShareData_IO_FileTree( DataProfile& cProfile, FileTree& fileTree, const WCHAR* pszSecName )
 {
 	cProfile.IOProfileData( pszSecName, L"bFileTreeProject", fileTree.m_bProject );
 	cProfile.IOProfileData( pszSecName, L"szFileTreeProjectIni", fileTree.m_szProjectIni );
@@ -2371,7 +2371,7 @@ void CShareData_IO::ShareData_IO_FileTree( DataProfile& cProfile, FileTree& file
 	}
 }
 
-void CShareData_IO::ShareData_IO_FileTreeItem(
+void ShareData_IO::ShareData_IO_FileTreeItem(
 	DataProfile& cProfile, FileTreeItem& item, const WCHAR* pszSecName, int i )
 {
 	WCHAR szKey[64];

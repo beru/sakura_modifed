@@ -55,7 +55,7 @@ void CType_Tex::InitTypeConfigImp(TypeConfig* pType)
 	@date 2003.07.21 naoh 新規作成
 	@date 2005.01.03 naoh 「マ」などの"}"を含む文字に対する修正、prosperのslideに対応
 */
-void CDocOutline::MakeTopicList_tex(CFuncInfoArr* pcFuncInfoArr)
+void DocOutline::MakeTopicList_tex(FuncInfoArr* pcFuncInfoArr)
 {
 	const wchar_t*	pLine;
 	LogicInt		nLineLen;

@@ -47,7 +47,7 @@ const DWORD p_helpids[] = {	//12100
 	0, 0
 };	//@@@ 2002.01.07 add end MIK
 
-CDlgExec::CDlgExec()
+DlgExec::DlgExec()
 {
 	m_szCommand[0] = _T('\0');	// コマンドライン
 	return;
@@ -58,15 +58,15 @@ static const int codeTable2[] = { 0x00, 0x10, 0x100 };
 
 
 // モーダルダイアログの表示
-int CDlgExec::DoModal(HINSTANCE hInstance, HWND hwndParent, LPARAM lParam)
+int DlgExec::DoModal(HINSTANCE hInstance, HWND hwndParent, LPARAM lParam)
 {
 	m_szCommand[0] = _T('\0');	// コマンドライン
 	m_bEditable = EditDoc::GetInstance(0)->IsEditable();
-	return (int)CDialog::DoModal(hInstance, hwndParent, IDD_EXEC, lParam);
+	return (int)Dialog::DoModal(hInstance, hwndParent, IDD_EXEC, lParam);
 }
 
 
-BOOL CDlgExec::OnInitDialog(
+BOOL DlgExec::OnInitDialog(
 	HWND hwnd,
 	WPARAM wParam,
 	LPARAM lParam
@@ -85,7 +85,7 @@ BOOL CDlgExec::OnInitDialog(
 		Combo_AddString(hwndCombo, CodeTypeName(codes[i]).Normal());
 	}
 
-	BOOL bRet = CDialog::OnInitDialog(hwnd, wParam, lParam);
+	BOOL bRet = Dialog::OnInitDialog(hwnd, wParam, lParam);
 
 	m_comboDel = ComboBoxItemDeleter();
 	m_comboDel.pRecent = &m_cRecentCmd;
@@ -97,9 +97,9 @@ BOOL CDlgExec::OnInitDialog(
 }
 
 // ダイアログデータの設定
-void CDlgExec::SetData(void)
+void DlgExec::SetData(void)
 {
-//	MYTRACE(_T("CDlgExec::SetData()"));
+//	MYTRACE(_T("DlgExec::SetData()"));
 	/*****************************
 	*           初期             *
 	*****************************/
@@ -177,7 +177,7 @@ void CDlgExec::SetData(void)
 
 
 // ダイアログデータの取得
-int CDlgExec::GetData(void)
+int DlgExec::GetData(void)
 {
 	GetItemText(IDC_COMBO_m_szCommand, m_szCommand, _countof(m_szCommand));
 	if (IsButtonChecked(IDC_CHECK_CUR_DIR)) {
@@ -204,7 +204,7 @@ int CDlgExec::GetData(void)
 }
 
 
-BOOL CDlgExec::OnBnClicked(int wID)
+BOOL DlgExec::OnBnClicked(int wID)
 {
 	switch (wID) {
 	case IDC_CHECK_GETSTDOUT:
@@ -234,7 +234,7 @@ BOOL CDlgExec::OnBnClicked(int wID)
 	// From Here Mar. 28, 2001 JEPRO
 	case IDC_BUTTON_REFERENCE:	// ファイル名の「参照...」ボタン
 		{
-			CDlgOpenFile	cDlgOpenFile;
+			DlgOpenFile	cDlgOpenFile;
 			TCHAR			szPath[_MAX_PATH + 1];
 			int				size = _countof(szPath) - 1;
 			_tcsncpy(szPath, m_szCommand, size);
@@ -275,7 +275,7 @@ BOOL CDlgExec::OnBnClicked(int wID)
 }
 
 //@@@ 2002.01.18 add start
-LPVOID CDlgExec::GetHelpIdTable(void)
+LPVOID DlgExec::GetHelpIdTable(void)
 {
 	return (LPVOID)p_helpids;
 }

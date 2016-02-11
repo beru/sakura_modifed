@@ -197,7 +197,7 @@ int OutlinePython::ScanNormal(const wchar_t* data, int linelen, int start_offset
 	bool bExtEol = GetDllShareData().m_common.m_sEdit.m_bEnableExtEol;
 
 	for (int col=start_offset; col<linelen; ++col) {
-		int nCharChars = CNativeW::GetSizeOfChar(data, linelen, col);
+		int nCharChars = NativeW::GetSizeOfChar(data, linelen, col);
 		if (1 < nCharChars) {
 			col += (nCharChars - 1);
 			continue;
@@ -266,7 +266,7 @@ int OutlinePython::ScanString(const wchar_t* data, int linelen, int start_offset
 
 	int quote_char = m_quote_char;
 	for (int col=start_offset; col<linelen; ++col) {
-		int nCharChars = CNativeW::GetSizeOfChar(data, linelen, col);
+		int nCharChars = NativeW::GetSizeOfChar(data, linelen, col);
 		if (1 < nCharChars) {
 			col += (nCharChars - 1);
 			continue;
@@ -384,7 +384,7 @@ void OutlinePython::DoScanLine(const wchar_t* data, int linelen, int start_offse
 
 	@date 2007.02.08 genta V‹Kì¬
 */
-void CDocOutline::MakeFuncList_python(CFuncInfoArr* pcFuncInfoArr)
+void DocOutline::MakeFuncList_python(FuncInfoArr* pcFuncInfoArr)
 {
 	LogicInt	nLineLen;
 	LogicInt	nLineCount;

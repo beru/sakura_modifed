@@ -23,13 +23,13 @@
 */
 #pragma once
 
-class CNativeW;
-class CNativeA;
+class NativeW;
+class NativeA;
 
 #ifdef _UNICODE
-typedef CNativeW CNativeT;
+typedef NativeW CNativeT;
 #else
-typedef CNativeA CNativeT;
+typedef NativeA CNativeT;
 #endif
 
 

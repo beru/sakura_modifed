@@ -57,7 +57,7 @@ void FillSolidRect(HDC hdc, int x, int y, int cx, int cy, COLORREF clr)
 
 
 //	@date 2002.2.17 YAZAKI CShareDataのインスタンスは、CProcessにひとつあるのみ。
-CMenuDrawer::CMenuDrawer()
+MenuDrawer::MenuDrawer()
 {
 	// 共有データ構造体のアドレスを返す
 	m_pShareData = &GetDllShareData();
@@ -71,7 +71,7 @@ CMenuDrawer::CMenuDrawer()
 	m_hCompBitmap = NULL;
 	m_hCompDC = NULL;
 
-//@@@ 2002.01.03 YAZAKI m_tbMyButtonなどをCShareDataからCMenuDrawerへ移動したことによる修正。	/* ツールバーのボタン TBBUTTON構造体 */
+//@@@ 2002.01.03 YAZAKI m_tbMyButtonなどをCShareDataからMenuDrawerへ移動したことによる修正。	/* ツールバーのボタン TBBUTTON構造体 */
 	/* ツールバーのボタン TBBUTTON構造体 */
 	/*
 	typedef struct _TBBUTTON {
@@ -124,7 +124,7 @@ CMenuDrawer::CMenuDrawer()
 //	注2.「コマンド一覧」に入ってないコマンドもわかっている範囲で位置予約にしておいた
 //  注3. F_DISABLE は未定義用(ダミーとしても使う)
 //	注4. ユーザー用に確保された場所は特にないので各段の空いている後ろの方を使ってください。
-//	注5. アイコンビットマップの有効段数は、CImageListMgr の MAX_Y です。
+//	注5. アイコンビットマップの有効段数は、ImageListMgr の MAX_Y です。
 
 	static const int tbd[] = {
 /* ファイル操作系(1段目32個: 1-32) */
@@ -733,7 +733,7 @@ CMenuDrawer::CMenuDrawer()
 }
 
 
-CMenuDrawer::~CMenuDrawer()
+MenuDrawer::~MenuDrawer()
 {
 	if (m_hFontMenu) {
 		::DeleteObject(m_hFontMenu);
@@ -743,10 +743,10 @@ CMenuDrawer::~CMenuDrawer()
 	return;
 }
 
-void CMenuDrawer::Create(
+void MenuDrawer::Create(
 	HINSTANCE hInstance,
 	HWND hWndOwner,
-	CImageListMgr* pcIcons
+	ImageListMgr* pcIcons
 	)
 {
 	m_hInstance = hInstance;
@@ -757,7 +757,7 @@ void CMenuDrawer::Create(
 }
 
 
-void CMenuDrawer::ResetContents(void)
+void MenuDrawer::ResetContents(void)
 {
 	LOGFONT	lf;
 	m_menuItems.clear();
@@ -800,7 +800,7 @@ void CMenuDrawer::ResetContents(void)
 
 
 /* メニュー項目を追加 */
-void CMenuDrawer::MyAppendMenu(
+void MenuDrawer::MyAppendMenu(
 	HMENU			hMenu,
 	int				nFlag,
 	UINT_PTR		nFuncId,
@@ -827,7 +827,7 @@ void CMenuDrawer::MyAppendMenu(
 	if (nFuncId != 0) {
 		// メニューラベルの作成
 		auto& csKeyBind = m_pShareData->m_common.m_sKeyBind;
-		CKeyBind::GetMenuLabel(
+		KeyBind::GetMenuLabel(
 			m_hInstance,
 			csKeyBind.m_nKeyNameArrNum,
 			csKeyBind.m_pKeyNameArr,
@@ -898,7 +898,7 @@ void CMenuDrawer::MyAppendMenu(
 /*
 	ツールバー番号をボタン配列のindexに変換する
 */
-inline int CMenuDrawer::ToolbarNoToIndex(int nToolbarNo) const
+inline int MenuDrawer::ToolbarNoToIndex(int nToolbarNo) const
 {
 	if (nToolbarNo < 0) {
 		return -1;
@@ -914,7 +914,7 @@ inline int CMenuDrawer::ToolbarNoToIndex(int nToolbarNo) const
 /*
 	ツールバー番号からアイコン番号を取得
 */
-inline int CMenuDrawer::GetIconIdByFuncId(int nFuncID) const
+inline int MenuDrawer::GetIconIdByFuncId(int nFuncID) const
 {
 	int index = FindIndexFromCommandId(nFuncID, false);
 	if (index < 0) {
@@ -929,7 +929,7 @@ inline int CMenuDrawer::GetIconIdByFuncId(int nFuncID) const
 	@retval 0  機能がない場合
 	@retval 1 <= val 機能のメニュー幅/セパレータの場合はダミーの値
 */
-int CMenuDrawer::MeasureItem(int nFuncID, int* pnItemHeight)
+int MenuDrawer::MeasureItem(int nFuncID, int* pnItemHeight)
 {
 	const TCHAR* pszLabel;
 	Rect rc, rcSp;
@@ -974,7 +974,7 @@ int CMenuDrawer::MeasureItem(int nFuncID, int* pnItemHeight)
 	@date 2010.07.24 Moca アイコン部分をボタン色にしてフラット表示にするなどの変更
 		大きいフォント、黒背景対応
 */
-void CMenuDrawer::DrawItem(DRAWITEMSTRUCT* lpdis)
+void MenuDrawer::DrawItem(DRAWITEMSTRUCT* lpdis)
 {
 	int			j;
 	int			nItemStrLen;
@@ -1178,7 +1178,7 @@ void CMenuDrawer::DrawItem(DRAWITEMSTRUCT* lpdis)
 	mii.cch = _countof(szText) - 1;
 	if (::GetMenuItemInfo((HMENU)lpdis->hwndItem, lpdis->itemID, FALSE, &mii) != 0
 		&& !mii.hSubMenu
-		&& /* CEditWnd */::FuncID_To_HelpContextID((EFunctionCode)lpdis->itemID) == 0 	// 機能IDに対応するメニューコンテキスト番号を返す
+		&& /* EditWnd */::FuncID_To_HelpContextID((EFunctionCode)lpdis->itemID) == 0 	// 機能IDに対応するメニューコンテキスト番号を返す
 	) {
 		//@@@ 2001.12.21 YAZAKI
 		if (lpdis->itemState & ODS_SELECTED) {
@@ -1271,7 +1271,7 @@ void CMenuDrawer::DrawItem(DRAWITEMSTRUCT* lpdis)
 // 2010.07.12 Moca グレーの3D表示をやめる
 #ifdef DRAW_MENU_ICON_3DBUTTON
 		// チェック状態なら凹んだ3D枠を描画する
-		CSplitBoxWnd::Draw3dRect(
+		SplitBoxWnd::Draw3dRect(
 			hdc, lpdis->rcItem.left + 1, lpdis->rcItem.top,
 			2 + 16 + 2, lpdis->rcItem.bottom - lpdis->rcItem.top,
 			::GetSysColor(COLOR_3DSHADOW),
@@ -1341,7 +1341,7 @@ void CMenuDrawer::DrawItem(DRAWITEMSTRUCT* lpdis)
 // 2010.07.12 Moca グレーの3D表示をやめる
 #ifdef DRAW_MENU_ICON_3DBUTTON
 					// アイコンを囲む枠(メニューの高さいっぱい)
-					CSplitBoxWnd::Draw3dRect(
+					SplitBoxWnd::Draw3dRect(
 						hdc, lpdis->rcItem.left + 1, lpdis->rcItem.top,
 						2 + 16 + 2, lpdis->rcItem.bottom - lpdis->rcItem.top,
 						::GetSysColor(COLOR_3DHIGHLIGHT),
@@ -1438,19 +1438,19 @@ void CMenuDrawer::DrawItem(DRAWITEMSTRUCT* lpdis)
 	
 	@date 20100724 Moca バックサーフェス用に新設
 */
-void CMenuDrawer::EndDrawMenu()
+void MenuDrawer::EndDrawMenu()
 {
 	DeleteCompDC();
 }
 
 
-void CMenuDrawer::DeleteCompDC()
+void MenuDrawer::DeleteCompDC()
 {
 	if (m_hCompDC) {
 		::SelectObject(m_hCompDC, m_hCompBitmapOld);
 		::DeleteObject(m_hCompBitmap);
 		::DeleteObject(m_hCompDC);
-//		DEBUG_TRACE(_T("CMenuDrawer::DeleteCompDC %x\n"), m_hCompDC);
+//		DEBUG_TRACE(_T("MenuDrawer::DeleteCompDC %x\n"), m_hCompDC);
 		m_hCompDC = NULL;
 		m_hCompBitmap = NULL;
 		m_hCompBitmapOld = NULL;
@@ -1463,7 +1463,7 @@ void CMenuDrawer::DeleteCompDC()
 	@date 2010.06.24 Moca 新規作成
 	@note この値がiniのツールバーアイテムの記録に使われる
 */
-int CMenuDrawer::FindToolbarNoFromCommandId(int idCommand, bool bOnlyFunc) const
+int MenuDrawer::FindToolbarNoFromCommandId(int idCommand, bool bOnlyFunc) const
 {
 	// 先に存在確認をする
 	int index = FindIndexFromCommandId(idCommand, bOnlyFunc);
@@ -1488,7 +1488,7 @@ int CMenuDrawer::FindToolbarNoFromCommandId(int idCommand, bool bOnlyFunc) const
 	@date 2005.08.09 aroka m_nMyButtonNum隠蔽のため追加
 	@date 2005.11.02 ryoji bOnlyFuncパラメータを追加
  */
-int CMenuDrawer::FindIndexFromCommandId(int idCommand, bool bOnlyFunc) const
+int MenuDrawer::FindIndexFromCommandId(int idCommand, bool bOnlyFunc) const
 {
 	if (bOnlyFunc) {
 		// 機能の範囲外（セパレータや折り返しなど特別なもの）は除外する
@@ -1518,7 +1518,7 @@ int CMenuDrawer::FindIndexFromCommandId(int idCommand, bool bOnlyFunc) const
 	@date 2007.11.02 ryoji 範囲外の場合は未定義のボタン情報を返すように
 	@date 2010.06.24 Moca 引数をツールバー番号に変更
  */
-TBBUTTON CMenuDrawer::getButton(int nToolbarNo) const
+TBBUTTON MenuDrawer::getButton(int nToolbarNo) const
 {
 	int index = ToolbarNoToIndex(nToolbarNo);
 	if (0 <= index && index < m_nMyButtonNum) {
@@ -1533,7 +1533,7 @@ TBBUTTON CMenuDrawer::getButton(int nToolbarNo) const
 }
 
 
-int CMenuDrawer::Find(int nFuncID)
+int MenuDrawer::Find(int nFuncID)
 {
 	int i;
 	int nItemNum = (int)m_menuItems.size();
@@ -1550,7 +1550,7 @@ int CMenuDrawer::Find(int nFuncID)
 }
 
 
-const TCHAR* CMenuDrawer::GetLabel(int nFuncID)
+const TCHAR* MenuDrawer::GetLabel(int nFuncID)
 {
 	int i;
 	if ((i = Find(nFuncID)) == -1) {
@@ -1559,7 +1559,7 @@ const TCHAR* CMenuDrawer::GetLabel(int nFuncID)
 	return m_menuItems[i].m_cmemLabel.GetStringPtr();
 }
 
-TCHAR CMenuDrawer::GetAccelCharFromLabel(const TCHAR* pszLabel)
+TCHAR MenuDrawer::GetAccelCharFromLabel(const TCHAR* pszLabel)
 {
 	int nLen = (int)_tcslen(pszLabel);
 	for (int i=0; i+1<nLen; ++i) {
@@ -1580,7 +1580,7 @@ struct WorkData {
 };
 
 // メニューアクセスキー押下時の処理(WM_MENUCHAR処理)
-LRESULT CMenuDrawer::OnMenuChar(
+LRESULT MenuDrawer::OnMenuChar(
 	HWND hwnd,
 	UINT uMsg,
 	WPARAM wParam,
@@ -1654,7 +1654,7 @@ LRESULT CMenuDrawer::OnMenuChar(
 
 
 // TBBUTTON構造体にデータをセット
-void CMenuDrawer::SetTBBUTTONVal(
+void MenuDrawer::SetTBBUTTONVal(
 	TBBUTTON*	ptb,
 	int			iBitmap,
 	int			idCommand,
@@ -1687,7 +1687,7 @@ typedef struct _TBBUTTON {
 // ツールバーボタンを追加する
 //	マネージメント機能追加	2010/7/3 Uchi 
 //		全ウィンドウで同じ機能番号の場合、同じICON番号を持つように調整
-void CMenuDrawer::AddToolButton(int iBitmap, int iCommand)
+void MenuDrawer::AddToolButton(int iBitmap, int iCommand)
 {
 	TBBUTTON tbb;
 	int 	iCmdNo;

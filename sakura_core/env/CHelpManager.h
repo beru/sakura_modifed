@@ -31,9 +31,9 @@
 
 
 // ƒwƒ‹ƒvŠÇ—
-class CHelpManager {
+class HelpManager {
 public:
-	CHelpManager() {
+	HelpManager() {
 		m_pShareData = &GetDllShareData();
 	}
 	// ƒwƒ‹ƒvŠÖ˜A	//@@@ 2002.2.3 YAZAKI

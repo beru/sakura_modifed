@@ -58,10 +58,10 @@
 #include "util/design_template.h"
 
 class CSMacroMgr; // 2002/2/10 aroka
-class CEditWnd; // Sep. 10, 2002 genta
+class EditWnd; // Sep. 10, 2002 genta
 struct EditInfo; // 20050705 aroka
-class CFuncInfoArr;
-class CEditApp;
+class FuncInfoArr;
+class EditApp;
 
 /*!
 	文書関連情報の管理
@@ -78,11 +78,11 @@ class EditDoc
 {
 public:
 	// コンストラクタ・デストラクタ
-	EditDoc(CEditApp* pcApp);
+	EditDoc(EditApp* pcApp);
 	~EditDoc();
 
 	// 初期化
-	BOOL Create(CEditWnd* pcEditWnd);
+	BOOL Create(EditWnd* pcEditWnd);
 	void InitDoc();		// 既存データのクリア
 	void InitAllView();	// 全ビューの初期化：ファイルオープン/クローズ時等に、ビューを初期化する
 	void Clear();
@@ -119,7 +119,7 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 public:
 	// 参照
-	CEditWnd*		m_pcEditWnd;	// Sep. 10, 2002
+	EditWnd*		m_pcEditWnd;	// Sep. 10, 2002
 
 	// データ構造
 	DocLineMgr		m_cDocLineMgr;
@@ -127,19 +127,19 @@ public:
 
 	// 各種機能
 public:
-	CDocFile			m_cDocFile;
-	CDocFileOperation	m_cDocFileOperation;
-	CDocEditor			m_cDocEditor;
-	CDocType			m_cDocType;
-	CCookieManager		m_cCookie;
+	DocFile			m_cDocFile;
+	DocFileOperation	m_cDocFileOperation;
+	DocEditor			m_cDocEditor;
+	DocType			m_cDocType;
+	CookieManager		m_cCookie;
 
 	// ヘルパ
 public:
-	CBackupAgent		m_cBackupAgent;
-	CAutoSaveAgent		m_cAutoSaveAgent;		// 自動保存管理
-	CAutoReloadAgent	m_cAutoReloadAgent;
-	CDocOutline			m_cDocOutline;
-	CDocLocker			m_cDocLocker;
+	BackupAgent		m_cBackupAgent;
+	AutoSaveAgent		m_cAutoSaveAgent;		// 自動保存管理
+	AutoReloadAgent	m_cAutoReloadAgent;
+	DocOutline			m_cDocOutline;
+	DocLocker			m_cDocLocker;
 
 	// 動的状態
 public:
@@ -147,7 +147,7 @@ public:
 
 	// 環境情報
 public:
-	CFuncLookup		m_cFuncLookup;				// 機能名，機能番号などのresolve
+	FuncLookup		m_cFuncLookup;				// 機能名，機能番号などのresolve
 
 	// 未整理変数
 public:

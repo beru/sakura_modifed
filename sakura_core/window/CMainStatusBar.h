@@ -25,12 +25,12 @@
 
 #include "doc/CDocListener.h"
 
-class CEditWnd;
+class EditWnd;
 
 class CMainStatusBar : public DocListenerEx {
 public:
 	// 作成・破棄
-	CMainStatusBar(CEditWnd* pOwner);
+	CMainStatusBar(EditWnd* pOwner);
 	void CreateStatusBar();		// ステータスバー作成
 	void DestroyStatusBar();	// ステータスバー破棄
 	void SendStatusMessage2(const TCHAR* msg);	//	Jul. 9, 2005 genta メニューバー右端には出したくない長めのメッセージを出す
@@ -52,7 +52,7 @@ public:
 	// 設定
 	void SetStatusText(int nIndex, int nOption, const TCHAR* pszText);
 private:
-	CEditWnd*	m_pOwner;
+	EditWnd*	m_pOwner;
 	HWND		m_hwndStatusBar;
 	HWND		m_hwndProgressBar;
 };

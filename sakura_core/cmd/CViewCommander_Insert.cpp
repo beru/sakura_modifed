@@ -25,7 +25,7 @@ void ViewCommander::Command_INS_DATE(void)
 	TCHAR szText[1024];
 	SYSTEMTIME systime;
 	::GetLocalTime(&systime);
-	CFormatManager().MyGetDateFormat(systime, szText, _countof(szText) - 1);
+	FormatManager().MyGetDateFormat(systime, szText, _countof(szText) - 1);
 
 	// テキストを貼り付け ver1
 	Command_INSTEXT(true, to_wchar(szText), LogicInt(-1), TRUE);
@@ -39,7 +39,7 @@ void ViewCommander::Command_INS_TIME(void)
 	TCHAR szText[1024];
 	SYSTEMTIME systime;
 	::GetLocalTime(&systime);
-	CFormatManager().MyGetTimeFormat(systime, szText, _countof(szText) - 1);
+	FormatManager().MyGetTimeFormat(systime, szText, _countof(szText) - 1);
 
 	// テキストを貼り付け ver1
 	Command_INSTEXT(true, to_wchar(szText), LogicInt(-1), TRUE);
@@ -53,7 +53,7 @@ void ViewCommander::Command_INS_TIME(void)
 */
 void ViewCommander::Command_CtrlCode_Dialog(void)
 {
-	CDlgCtrlCode cDlgCtrlCode;
+	DlgCtrlCode cDlgCtrlCode;
 
 	// コントロールコード入力ダイアログを表示する
 	if (cDlgCtrlCode.DoModal(G_AppInstance(), m_pCommanderView->GetHwnd(), (LPARAM)GetDocument())) {

@@ -65,7 +65,7 @@ class CFigureSpace : public CFigure {
 public:
 	virtual bool DrawImp(ColorStrategyInfo* pInfo);
 protected:
-	virtual void DispSpace(CGraphics& gr, DispPos* pDispPos, CEditView* pcView, bool bTrans) const = 0;
+	virtual void DispSpace(Graphics& gr, DispPos* pDispPos, EditView* pcView, bool bTrans) const = 0;
 	virtual EColorIndexType GetColorIdx(void) const = 0;
 
 	// êFï™ÇØï\é¶ëŒè€îªíË

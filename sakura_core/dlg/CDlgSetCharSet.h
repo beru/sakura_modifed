@@ -16,12 +16,12 @@
 #include "dlg/CDialog.h"
 
 // 文字コードセット設定ダイアログボックス
-class CDlgSetCharSet : public CDialog {
+class DlgSetCharSet : public Dialog {
 public:
 	/*
 	||  Constructors
 	*/
-	CDlgSetCharSet();
+	DlgSetCharSet();
 	/*
 	||  Attributes & Operations
 	*/

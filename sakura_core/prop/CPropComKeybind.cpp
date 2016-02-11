@@ -60,14 +60,14 @@ static const DWORD p_helpids[] = {	//10700
 	@param wParam パラメータ1
 	@param lParam パラメータ2
 */
-INT_PTR CALLBACK CPropKeybind::DlgProc_page(
+INT_PTR CALLBACK PropKeybind::DlgProc_page(
 	HWND hwndDlg,
 	UINT uMsg,
 	WPARAM wParam,
 	LPARAM lParam
 	)
 {
-	return DlgProc(reinterpret_cast<pDispatchPage>(&CPropKeybind::DispatchEvent), hwndDlg, uMsg, wParam, lParam);
+	return DlgProc(reinterpret_cast<pDispatchPage>(&PropKeybind::DispatchEvent), hwndDlg, uMsg, wParam, lParam);
 }
 //	To Here Jun. 2, 2001 genta
 
@@ -94,7 +94,7 @@ LRESULT CALLBACK CPropComKeybindWndProc(
 
 
 // Keybind メッセージ処理
-INT_PTR CPropKeybind::DispatchEvent(
+INT_PTR PropKeybind::DispatchEvent(
 	HWND	hwndDlg,	// handle to dialog box
 	UINT	uMsg,	// message
 	WPARAM	wParam,	// first message parameter
@@ -296,7 +296,7 @@ INT_PTR CPropKeybind::DispatchEvent(
 				nFuncCode = m_cLookup.Pos2FuncCode(nIndex2, nIndex3);	// Oct. 2, 2001 genta
 				// 機能に対応するキー名の取得(複数)
 				CNativeT**	ppcAssignedKeyList;
-				nAssignedKeyNum = CKeyBind::GetKeyStrList(	// 機能に対応するキー名の取得(複数)
+				nAssignedKeyNum = KeyBind::GetKeyStrList(	// 機能に対応するキー名の取得(複数)
 					G_AppInstance(), csKeybind.m_nKeyNameArrNum, (KEYDATA*)csKeybind.m_pKeyNameArr,
 					&ppcAssignedKeyList, nFuncCode,
 					FALSE	// 2007.02.22 ryoji デフォルト機能は取得しない
@@ -417,7 +417,7 @@ INT_PTR CPropKeybind::DispatchEvent(
 
 
 // ダイアログデータの設定 Keybind
-void CPropKeybind::SetData(HWND hwndDlg)
+void PropKeybind::SetData(HWND hwndDlg)
 {
 	// 機能種別一覧に文字列をセット（コンボボックス）
 	HWND hwndCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_FUNCKIND);
@@ -438,13 +438,13 @@ void CPropKeybind::SetData(HWND hwndDlg)
 
 
 // ダイアログデータの取得 Keybind
-int CPropKeybind::GetData(HWND hwndDlg)
+int PropKeybind::GetData(HWND hwndDlg)
 {
 	return TRUE;
 }
 	
 // Keybind: キーリストをチェックボックスの状態に合わせて更新する
-void CPropKeybind::ChangeKeyList(HWND hwndDlg) {
+void PropKeybind::ChangeKeyList(HWND hwndDlg) {
 	HWND	hwndKeyList;
 	int 	nIndex;
 	int 	nIndexTop;
@@ -482,7 +482,7 @@ void CPropKeybind::ChangeKeyList(HWND hwndDlg) {
 }
 
 // Keybind:キー割り当て設定をインポートする
-void CPropKeybind::Import(HWND hwndDlg)
+void PropKeybind::Import(HWND hwndDlg)
 {
 	CImpExpKeybind	cImpExpKeybind(m_Common);
 
@@ -504,7 +504,7 @@ void CPropKeybind::Import(HWND hwndDlg)
 
 
 // Keybind:キー割り当て設定をエクスポートする
-void CPropKeybind::Export(HWND hwndDlg)
+void PropKeybind::Export(HWND hwndDlg)
 {
 	CImpExpKeybind	cImpExpKeybind(m_Common);
 

@@ -51,9 +51,9 @@ struct Share_FileNameManagement {
 
 
 // ÉtÉ@ÉCÉãñºä«óù
-class CFileNameManager : public TSingleton<CFileNameManager> {
-	friend class TSingleton<CFileNameManager>;
-	CFileNameManager() {
+class FileNameManager : public TSingleton<FileNameManager> {
+	friend class TSingleton<FileNameManager>;
+	FileNameManager() {
 		m_pShareData = &GetDllShareData();
 		m_nTransformFileNameCount = -1;
 	}

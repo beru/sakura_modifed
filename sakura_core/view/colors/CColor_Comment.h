@@ -30,7 +30,7 @@
 //                        行コメント                           //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-class CColor_LineComment : public CColorStrategy {
+class Color_LineComment : public ColorStrategy {
 public:
 	virtual EColorIndexType GetStrategyColor() const { return COLORIDX_COMMENT; }
 	virtual void InitStrategyStatus() {}
@@ -44,9 +44,9 @@ public:
 //                    ブロックコメント１                       //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-class CColor_BlockComment : public CColorStrategy {
+class Color_BlockComment : public ColorStrategy {
 public:
-	CColor_BlockComment(EColorIndexType nType) : m_nType(nType), m_nCOMMENTEND(0) {}
+	Color_BlockComment(EColorIndexType nType) : m_nType(nType), m_nCOMMENTEND(0) {}
 	virtual void Update(void)
 	{
 		const EditDoc* pCEditDoc = EditDoc::GetInstance(0);
@@ -60,7 +60,7 @@ public:
 	virtual bool Disp() const { return m_pTypeData->m_ColorInfoArr[COLORIDX_COMMENT].m_bDisp; }
 private:
 	EColorIndexType m_nType;
-	const CBlockComment* m_pcBlockComment;
+	const BlockComment* m_pcBlockComment;
 	int m_nCOMMENTEND;
 };
 

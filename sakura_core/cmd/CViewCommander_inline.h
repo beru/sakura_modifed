@@ -34,7 +34,7 @@ inline EditDoc* ViewCommander::GetDocument()
 	return m_pCommanderView->m_pcEditDoc;
 }
 
-inline CEditWnd* ViewCommander::GetEditWindow()
+inline EditWnd* ViewCommander::GetEditWindow()
 {
 	return m_pCommanderView->m_pcEditWnd;
 }
@@ -60,7 +60,7 @@ inline LayoutRange& ViewCommander::GetSelect()
 	return m_pCommanderView->GetSelectionInfo().m_sSelect;
 }
 
-inline CCaret& ViewCommander::GetCaret()
+inline Caret& ViewCommander::GetCaret()
 {
 	return m_pCommanderView->GetCaret();
 }

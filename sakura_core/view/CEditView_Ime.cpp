@@ -38,7 +38,7 @@
 
 	@date  2006.12.04 ryoji 新規作成（関数化）
 */
-bool CEditView::IsImeON(void)
+bool EditView::IsImeON(void)
 {
 	bool bRet;
 	HIMC	hIme;
@@ -63,7 +63,7 @@ bool CEditView::IsImeON(void)
 }
 
 // IME編集エリアの位置を変更
-void CEditView::SetIMECompFormPos(void)
+void EditView::SetIMECompFormPos(void)
 {
 	//
 	// If current composition form mode is near caret operation,
@@ -89,7 +89,7 @@ void CEditView::SetIMECompFormPos(void)
 
 
 // IME編集エリアの表示フォントを変更
-void CEditView::SetIMECompFormFont(void)
+void EditView::SetIMECompFormFont(void)
 {
 	//
 	// If current composition form mode is near caret operation,
@@ -118,7 +118,7 @@ void CEditView::SetIMECompFormFont(void)
 	@date 2002.04.09 minfu
 	@date 2010.03.16 Moca IMR_DOCUMENTFEED対応
 */
-LRESULT CEditView::SetReconvertStruct(PRECONVERTSTRING pReconv, bool bUnicode, bool bDocumentFeed)
+LRESULT EditView::SetReconvertStruct(PRECONVERTSTRING pReconv, bool bUnicode, bool bDocumentFeed)
 {
 	if (!bDocumentFeed) {
 		m_nLastReconvIndex = -1;
@@ -155,7 +155,7 @@ LRESULT CEditView::SetReconvertStruct(PRECONVERTSTRING pReconv, bool bUnicode, b
 				ptSelectTo.x = ptSelect.x;
 			}else {
 				// 2010.04.06 対象をptSelect.yの行からカーソル行に変更
-				const CDocLine* pDocLine = m_pcEditDoc->m_cDocLineMgr.GetLine(GetCaret().GetCaretLogicPos().y);
+				const DocLine* pDocLine = m_pcEditDoc->m_cDocLineMgr.GetLine(GetCaret().GetCaretLogicPos().y);
 				LogicInt targetY = GetCaret().GetCaretLogicPos().y;
 				// カーソル行が実質無選択なら、直前・直後の行を選択
 				if (ptSelect.y == GetCaret().GetCaretLogicPos().y
@@ -197,7 +197,7 @@ LRESULT CEditView::SetReconvertStruct(PRECONVERTSTRING pReconv, bool bUnicode, b
 	// 以下 ptSelect.y ptSelect.x, nSelectedLen を使用
 
 	// ドキュメント行取得 -> pcCurDocLine
-	CDocLine* pcCurDocLine = m_pcEditDoc->m_cDocLineMgr.GetLine(ptSelect.GetY2());
+	DocLine* pcCurDocLine = m_pcEditDoc->m_cDocLineMgr.GetLine(ptSelect.GetY2());
 	if (!pcCurDocLine)
 		return 0;
 
@@ -285,8 +285,8 @@ LRESULT CEditView::SetReconvertStruct(PRECONVERTSTRING pReconv, bool bUnicode, b
 	DWORD       dwCompStrOffset;    // byte
 	DWORD       dwCompStrLen;       // CHARs
 	DWORD       dwInsByteCount = 0; // byte
-	CNativeW    cmemBuf1;
-	CNativeA    cmemBuf2;
+	NativeW    cmemBuf1;
+	NativeA    cmemBuf2;
 	const void* pszReconv; 
 	const void* pszInsBuffer;
 
@@ -426,7 +426,7 @@ LRESULT CEditView::SetReconvertStruct(PRECONVERTSTRING pReconv, bool bUnicode, b
 }
 
 // 再変換用 エディタ上の選択範囲を変更する 2002.04.09 minfu
-LRESULT CEditView::SetSelectionFromReonvert(const PRECONVERTSTRING pReconv, bool bUnicode) {
+LRESULT EditView::SetSelectionFromReonvert(const PRECONVERTSTRING pReconv, bool bUnicode) {
 	
 	// 再変換情報が保存されているか
 	if ((m_nLastReconvIndex < 0) || (m_nLastReconvLine < 0))
@@ -447,7 +447,7 @@ LRESULT CEditView::SetSelectionFromReonvert(const PRECONVERTSTRING pReconv, bool
 		dwLen    = pReconv->dwCompStrLen;					// 0または文字列長。文字単位。
 	}else {
 	// ANSI→UNICODE
-		CNativeW	cmemBuf;
+		NativeW	cmemBuf;
 
 		// 考慮文字列の開始から対象文字列の開始まで
 		if (pReconv->dwCompStrOffset > 0) {

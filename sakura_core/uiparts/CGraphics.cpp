@@ -28,7 +28,7 @@ protected:
 
 static CGDIStock s_cGDIStock;	// 唯一の CGDIStock オブジェクト
 
-void CGraphics::Init(HDC hdc)
+void Graphics::Init(HDC hdc)
 {
 	m_hdc = hdc;
 	// ペン
@@ -39,7 +39,7 @@ void CGraphics::Init(HDC hdc)
 	m_bDynamicBrush = false;
 }
 
-CGraphics::~CGraphics()
+Graphics::~Graphics()
 {
 	ClearClipping();
 	ClearMyFont();
@@ -53,7 +53,7 @@ CGraphics::~CGraphics()
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 
-void CGraphics::_InitClipping()
+void Graphics::_InitClipping()
 {
 	if (m_vClippingRgns.empty()) {
 		// 元のクリッピング領域を取得
@@ -69,7 +69,7 @@ void CGraphics::_InitClipping()
 	}
 }
 
-void CGraphics::PushClipping(const RECT& rc)
+void Graphics::PushClipping(const RECT& rc)
 {
 	_InitClipping();
 	// 新しく作成→HDCに設定→スタックに保存
@@ -78,7 +78,7 @@ void CGraphics::PushClipping(const RECT& rc)
 	m_vClippingRgns.push_back(hrgnNew);
 }
 
-void CGraphics::PopClipping()
+void Graphics::PopClipping()
 {
 	if (m_vClippingRgns.size() >= 2) {
 		// 最後の要素を削除
@@ -89,7 +89,7 @@ void CGraphics::PopClipping()
 	}
 }
 
-void CGraphics::ClearClipping()
+void Graphics::ClearClipping()
 {
 	// 元のクリッピングに戻す
 	if (!m_vClippingRgns.empty()) {
@@ -108,7 +108,7 @@ void CGraphics::ClearClipping()
 //                      テキスト文字色                         //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-void CGraphics::PushTextForeColor(COLORREF color)
+void Graphics::PushTextForeColor(COLORREF color)
 {
 	// 設定
 	COLORREF cOld = ::SetTextColor(m_hdc, color);
@@ -119,7 +119,7 @@ void CGraphics::PushTextForeColor(COLORREF color)
 	m_vTextForeColors.push_back(color);
 }
 
-void CGraphics::PopTextForeColor()
+void Graphics::PopTextForeColor()
 {
 	// 戻す
 	if (m_vTextForeColors.size() >= 2) {
@@ -128,7 +128,7 @@ void CGraphics::PopTextForeColor()
 	}
 }
 
-void CGraphics::ClearTextForeColor()
+void Graphics::ClearTextForeColor()
 {
 	if (!m_vTextForeColors.empty()) {
 		::SetTextColor(m_hdc, m_vTextForeColors[0]);
@@ -141,7 +141,7 @@ void CGraphics::ClearTextForeColor()
 //                      テキスト背景色                         //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-void CGraphics::PushTextBackColor(COLORREF color)
+void Graphics::PushTextBackColor(COLORREF color)
 {
 	// 設定
 	COLORREF cOld = ::SetBkColor(m_hdc, color);
@@ -152,7 +152,7 @@ void CGraphics::PushTextBackColor(COLORREF color)
 	m_vTextBackColors.push_back(color);
 }
 
-void CGraphics::PopTextBackColor()
+void Graphics::PopTextBackColor()
 {
 	// 戻す
 	if (m_vTextBackColors.size() >= 2) {
@@ -161,7 +161,7 @@ void CGraphics::PopTextBackColor()
 	}
 }
 
-void CGraphics::ClearTextBackColor()
+void Graphics::ClearTextBackColor()
 {
 	if (!m_vTextBackColors.empty()) {
 		::SetBkColor(m_hdc, m_vTextBackColors[0]);
@@ -174,7 +174,7 @@ void CGraphics::ClearTextBackColor()
 //                         テキスト                            //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-void CGraphics::RestoreTextColors()
+void Graphics::RestoreTextColors()
 {
 	PopTextForeColor();
 	PopTextBackColor();
@@ -187,7 +187,7 @@ void CGraphics::RestoreTextColors()
 //                         フォント                            //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-void CGraphics::PushMyFont(const Font& sFont)
+void Graphics::PushMyFont(const Font& sFont)
 {
 	// 設定
 	HFONT hFontOld = (HFONT)SelectObject(m_hdc, sFont.m_hFont);
@@ -200,7 +200,7 @@ void CGraphics::PushMyFont(const Font& sFont)
 	m_vFonts.push_back(sFont);
 }
 
-void CGraphics::PopMyFont()
+void Graphics::PopMyFont()
 {
 	// 戻す
 	if (m_vFonts.size() >= 2) {
@@ -209,7 +209,7 @@ void CGraphics::PopMyFont()
 	}
 }
 
-void CGraphics::ClearMyFont()
+void Graphics::ClearMyFont()
 {
 	if (!m_vFonts.empty()) {
 		SelectObject(m_hdc, m_vFonts[0].m_hFont);
@@ -221,7 +221,7 @@ void CGraphics::ClearMyFont()
 //                           ペン                              //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-void CGraphics::PushPen(COLORREF color, int nPenWidth, int nStyle)
+void Graphics::PushPen(COLORREF color, int nPenWidth, int nStyle)
 {
 	HPEN hpnNew = CreatePen(nStyle, nPenWidth, color);
 	HPEN hpnOld = (HPEN)SelectObject(m_hdc, hpnNew);
@@ -231,7 +231,7 @@ void CGraphics::PushPen(COLORREF color, int nPenWidth, int nStyle)
 	}
 }
 
-void CGraphics::PopPen()
+void Graphics::PopPen()
 {
 	// 選択する候補
 	HPEN hpnNew = NULL;
@@ -259,7 +259,7 @@ void CGraphics::PopPen()
 }
 
 
-void CGraphics::ClearPen()
+void Graphics::ClearPen()
 {
 	if (m_hpnOrg) {
 		SelectObject(m_hdc, m_hpnOrg);
@@ -273,7 +273,7 @@ void CGraphics::ClearPen()
 }
 
 //$$note: 高速化
-COLORREF CGraphics::GetPenColor() const
+COLORREF Graphics::GetPenColor() const
 {
 	if (m_vPens.size()) {
 		LOGPEN logpen;
@@ -291,7 +291,7 @@ COLORREF CGraphics::GetPenColor() const
 //                          ブラシ                             //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-void CGraphics::_InitBrushColor()
+void Graphics::_InitBrushColor()
 {
 	if (m_vBrushes.empty()) {
 		// 元のブラシを取得
@@ -302,7 +302,7 @@ void CGraphics::_InitBrushColor()
 	}
 }
 
-void CGraphics::PushBrushColor(COLORREF color)
+void Graphics::PushBrushColor(COLORREF color)
 {
 	//####ここで効率化できる
 
@@ -313,7 +313,7 @@ void CGraphics::PushBrushColor(COLORREF color)
 	m_vBrushes.push_back(hbrNew);
 }
 
-void CGraphics::PopBrushColor()
+void Graphics::PopBrushColor()
 {
 	if (m_vBrushes.size() >= 2) {
 		// 最後から2番目の要素をHDCに設定
@@ -324,7 +324,7 @@ void CGraphics::PopBrushColor()
 	}
 }
 
-void CGraphics::ClearBrush()
+void Graphics::ClearBrush()
 {
 	// 元のブラシに戻す
 	if (!m_vBrushes.empty()) {
@@ -345,7 +345,7 @@ void CGraphics::ClearBrush()
 
 
 //$$note:高速化
-void CGraphics::DrawDotLine(int x1, int y1, int x2, int y2)
+void Graphics::DrawDotLine(int x1, int y1, int x2, int y2)
 {
 	COLORREF c = GetPenColor();
 	int my = t_unit(y2 - y1) * 2;
@@ -404,7 +404,7 @@ HBRUSH GetDropRectBrush()
 }
 
 // ドロップ先の矩形を描画する
-void CGraphics::DrawDropRect(
+void Graphics::DrawDropRect(
 	LPCRECT lpRectNew,
 	SIZE sizeNew,
 	LPCRECT lpRectLast,

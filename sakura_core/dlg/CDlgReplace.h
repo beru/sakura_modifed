@@ -27,12 +27,12 @@
 /*!
 	@brief 置換ダイアログボックス
 */
-class CDlgReplace : public CDialog {
+class DlgReplace : public Dialog {
 public:
 	/*
 	||  Constructors
 	*/
-	CDlgReplace();
+	DlgReplace();
 	/*
 	||  Attributes & Operations
 	*/
@@ -55,12 +55,12 @@ public:
 	LogicPoint		m_ptEscCaretPos_PHY;	// 検索/置換開始時のカーソル位置退避エリア
 
 protected:
-	CRecentSearch			m_cRecentSearch;
+	RecentSearch			m_cRecentSearch;
 	ComboBoxItemDeleter	m_comboDelText;
-	CRecentReplace			m_cRecentReplace;
+	RecentReplace			m_cRecentReplace;
 	ComboBoxItemDeleter	m_comboDelText2;
-	CFontAutoDeleter		m_cFontText;
-	CFontAutoDeleter		m_cFontText2;
+	FontAutoDeleter		m_cFontText;
+	FontAutoDeleter		m_cFontText2;
 
 	/*
 	||  実装ヘルパ関数

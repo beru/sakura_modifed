@@ -28,7 +28,7 @@
 		   distribution.
 */
 
-class CDlgCtrlCode;
+class DlgCtrlCode;
 
 #pragma once
 
@@ -37,12 +37,12 @@ class CDlgCtrlCode;
 	@brief コントロールコード入力ダイアログボックス
 */
 // 2007.10.18 kobake GetCharCode()を作成。
-class CDlgCtrlCode : public CDialog {
+class DlgCtrlCode : public Dialog {
 public:
 	/*
 	||  Constructors
 	*/
-	CDlgCtrlCode();
+	DlgCtrlCode();
 
 	/*
 	||  Attributes & Operations

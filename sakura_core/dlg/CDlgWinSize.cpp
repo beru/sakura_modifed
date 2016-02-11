@@ -53,19 +53,19 @@ static const DWORD p_helpids[] = {	// 2006.10.10 ryoji
 	0, 0
 };
 
-CDlgWinSize::CDlgWinSize()
+DlgWinSize::DlgWinSize()
 {
 	return;
 }
 
-CDlgWinSize::~CDlgWinSize()
+DlgWinSize::~DlgWinSize()
 {
 	return;
 }
 
 
 // !モーダルダイアログの表示
-int CDlgWinSize::DoModal(
+int DlgWinSize::DoModal(
 	HINSTANCE		hInstance,
 	HWND			hwndParent,
 	EWinSizeMode&	eSaveWinSize,	// [in/out] ウィンドウ位置継承
@@ -78,7 +78,7 @@ int CDlgWinSize::DoModal(
 	m_eSaveWinPos  = eSaveWinPos;
 	m_nWinSizeType = nWinSizeType;
 	m_rc = rc;
-	(void)CDialog::DoModal(hInstance, hwndParent, IDD_WINPOSSIZE, (LPARAM)NULL);
+	(void)Dialog::DoModal(hInstance, hwndParent, IDD_WINPOSSIZE, (LPARAM)NULL);
 	eSaveWinSize = m_eSaveWinSize;
 	eSaveWinPos  = m_eSaveWinPos;
 	nWinSizeType = m_nWinSizeType;
@@ -88,7 +88,7 @@ int CDlgWinSize::DoModal(
 
 /*! 初期化処理
 */
-BOOL CDlgWinSize::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
+BOOL DlgWinSize::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
 {
 	_SetHwnd(hwndDlg);
 
@@ -102,11 +102,11 @@ BOOL CDlgWinSize::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
 	UpDown_SetRange(GetItemHwnd(IDC_SPIN_WX), 30000, -30000);
 	UpDown_SetRange(GetItemHwnd(IDC_SPIN_WY), 30000, -30000);
 
-	return CDialog::OnInitDialog(hwndDlg, wParam, lParam);
+	return Dialog::OnInitDialog(hwndDlg, wParam, lParam);
 }
 
 
-BOOL CDlgWinSize::OnBnClicked(int wID)
+BOOL DlgWinSize::OnBnClicked(int wID)
 {
 	switch (wID) {
 	case IDC_BUTTON_HELP:	// 2006/09/09 novice id修正
@@ -124,12 +124,12 @@ BOOL CDlgWinSize::OnBnClicked(int wID)
 	case IDCANCEL:
 		GetData();
 	}
-	return CDialog::OnBnClicked(wID);
+	return Dialog::OnBnClicked(wID);
 }
 
 /*! @brief ダイアログボックスにデータを設定
 */
-void CDlgWinSize::SetData(void)
+void DlgWinSize::SetData(void)
 {
 	switch (m_eSaveWinSize) {
 	case 1:
@@ -175,7 +175,7 @@ void CDlgWinSize::SetData(void)
 
 /*! ダイアログボックスのデータを読み出す
 */
-int CDlgWinSize::GetData(void)
+int DlgWinSize::GetData(void)
 {
 	if (IsButtonChecked(IDC_RADIO_WINSIZE_DEF)) {
 		m_eSaveWinSize = WINSIZEMODE_DEF;
@@ -215,7 +215,7 @@ int CDlgWinSize::GetData(void)
 
 /*! 利用可能・不可の状態を更新する
 */
-void CDlgWinSize::RenewItemState(void)
+void DlgWinSize::RenewItemState(void)
 {
 	bool state = IsButtonChecked(IDC_RADIO_WINPOS_SET);
 	EnableItem(IDC_EDIT_WX, state);
@@ -227,7 +227,7 @@ void CDlgWinSize::RenewItemState(void)
 	EnableItem(IDC_EDIT_SY, state);
 }
 
-LPVOID CDlgWinSize::GetHelpIdTable(void)
+LPVOID DlgWinSize::GetHelpIdTable(void)
 {
 	return (LPVOID)p_helpids;
 }

@@ -44,7 +44,7 @@
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 // マウス左ボタン押下
-void CEditView::OnLBUTTONDOWN(WPARAM fwKeys, int _xPos , int _yPos)
+void EditView::OnLBUTTONDOWN(WPARAM fwKeys, int _xPos , int _yPos)
 {
 	Point ptMouse(_xPos, _yPos);
 
@@ -68,7 +68,7 @@ void CEditView::OnLBUTTONDOWN(WPARAM fwKeys, int _xPos , int _yPos)
 		return;
 	}
 
-	CNativeW	cmemCurText;
+	NativeW	cmemCurText;
 	const wchar_t*	pLine;
 	LogicInt		nLineLen;
 
@@ -527,7 +527,7 @@ normal_action:;
 	
 	@date 2007.11.15 nasukoji	新規作成
 */
-bool CEditView::CheckTripleClick(Point ptMouse)
+bool EditView::CheckTripleClick(Point ptMouse)
 {
 
 	// トリプルクリックチェック有効でない（時刻がセットされていない）
@@ -563,7 +563,7 @@ bool CEditView::CheckTripleClick(Point ptMouse)
 }
 
 // マウス右ボタン押下
-void CEditView::OnRBUTTONDOWN(WPARAM fwKeys, int xPos , int yPos)
+void EditView::OnRBUTTONDOWN(WPARAM fwKeys, int xPos , int yPos)
 {
 	if (m_nAutoScrollMode) {
 		AutoScrollExit();
@@ -591,7 +591,7 @@ void CEditView::OnRBUTTONDOWN(WPARAM fwKeys, int xPos , int yPos)
 }
 
 // マウス右ボタン開放
-void CEditView::OnRBUTTONUP(WPARAM fwKeys, int xPos , int yPos)
+void EditView::OnRBUTTONUP(WPARAM fwKeys, int xPos , int yPos)
 {
 	if (GetSelectionInfo().IsMouseSelecting()) {	// 範囲選択中
 		// マウス左ボタン開放のメッセージ処理
@@ -627,7 +627,7 @@ void CEditView::OnRBUTTONUP(WPARAM fwKeys, int xPos , int yPos)
 	@date 2008.10.06 nasukoji	マウス中ボタン押下中のホイール操作対応
 	@date 2009.01.17 nasukoji	ボタンUPでコマンドを起動するように変更
 */
-void CEditView::OnMBUTTONDOWN(WPARAM fwKeys, int xPos , int yPos)
+void EditView::OnMBUTTONDOWN(WPARAM fwKeys, int xPos , int yPos)
 {
 	int nIdx = getCtrlKeyState();
 	if (GetDllShareData().m_common.m_sKeyBind.m_pKeyNameArr[(int)eMouseFunction::CenterClick].m_nFuncCodeArr[nIdx] == F_AUTOSCROLL) {
@@ -652,7 +652,7 @@ void CEditView::OnMBUTTONDOWN(WPARAM fwKeys, int xPos , int yPos)
 	
 	@date 2009.01.17 nasukoji	新規作成（ボタンUPでコマンドを起動するように変更）
 */
-void CEditView::OnMBUTTONUP(WPARAM fwKeys, int xPos , int yPos)
+void EditView::OnMBUTTONUP(WPARAM fwKeys, int xPos , int yPos)
 {
 	int		nIdx;
 	int		nFuncID;
@@ -698,14 +698,14 @@ void CEditView::OnMBUTTONUP(WPARAM fwKeys, int xPos , int yPos)
 
 void CALLBACK AutoScrollTimerProc(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime)
 {
-	CEditView*	pCEditView;
-	pCEditView = (CEditView*)::GetWindowLongPtr(hwnd, 0);
+	EditView*	pCEditView;
+	pCEditView = (EditView*)::GetWindowLongPtr(hwnd, 0);
 	if (pCEditView) {
 		pCEditView->AutoScrollOnTimer();
 	}
 }
 
-void CEditView::AutoScrollEnter()
+void EditView::AutoScrollEnter()
 {
 	m_bAutoScrollVertical = GetTextArea().m_nViewRowNum < m_pcEditDoc->m_cLayoutMgr.GetLineCount() + 2;
 	m_bAutoScrollHorizontal = GetTextArea().m_nViewColNum < GetRightEdgeForScrollBar();
@@ -724,7 +724,7 @@ void CEditView::AutoScrollEnter()
 	::SetCursor(hCursor);
 }
 
-void CEditView::AutoScrollExit()
+void EditView::AutoScrollExit()
 {
 	if (m_nAutoScrollMode) {
 		::ReleaseCapture();
@@ -736,7 +736,7 @@ void CEditView::AutoScrollExit()
 	m_nAutoScrollMode = 0;
 }
 
-void CEditView::AutoScrollMove(Point& point)
+void EditView::AutoScrollMove(Point& point)
 {
 	const Point relPos = point - m_cAutoScrollMousePos;
 	int idcX, idcY;
@@ -770,7 +770,7 @@ void CEditView::AutoScrollMove(Point& point)
 	::SetCursor(hCursor);
 }
 
-void CEditView::AutoScrollOnTimer()
+void EditView::AutoScrollOnTimer()
 {
 	Point cursorPos;
 	::GetCursorPos(&cursorPos);
@@ -807,7 +807,7 @@ void CEditView::AutoScrollOnTimer()
 	@date 2004.10.11 novice マウス中ボタン対応のため変更
 	@date 2009.01.17 nasukoji	ボタンUPでコマンドを起動するように変更
 */
-void CEditView::OnXLBUTTONDOWN(WPARAM fwKeys, int xPos , int yPos)
+void EditView::OnXLBUTTONDOWN(WPARAM fwKeys, int xPos , int yPos)
 {
 	if (m_nAutoScrollMode) {
 		AutoScrollExit();
@@ -824,7 +824,7 @@ void CEditView::OnXLBUTTONDOWN(WPARAM fwKeys, int xPos , int yPos)
 
 	@date 2009.01.17 nasukoji	新規作成（ボタンUPでコマンドを起動するように変更）
 */
-void CEditView::OnXLBUTTONUP(WPARAM fwKeys, int xPos , int yPos)
+void EditView::OnXLBUTTONUP(WPARAM fwKeys, int xPos , int yPos)
 {
 	int		nIdx;
 	int		nFuncID;
@@ -869,7 +869,7 @@ void CEditView::OnXLBUTTONUP(WPARAM fwKeys, int xPos , int yPos)
 	@date 2004.10.11 novice マウス中ボタン対応のため変更
 	@date 2009.01.17 nasukoji	ボタンUPでコマンドを起動するように変更
 */
-void CEditView::OnXRBUTTONDOWN(WPARAM fwKeys, int xPos , int yPos)
+void EditView::OnXRBUTTONDOWN(WPARAM fwKeys, int xPos , int yPos)
 {
 	if (m_nAutoScrollMode) {
 		AutoScrollExit();
@@ -886,7 +886,7 @@ void CEditView::OnXRBUTTONDOWN(WPARAM fwKeys, int xPos , int yPos)
 
 	@date 2009.01.17 nasukoji	新規作成（ボタンUPでコマンドを起動するように変更）
 */
-void CEditView::OnXRBUTTONUP(WPARAM fwKeys, int xPos , int yPos)
+void EditView::OnXRBUTTONUP(WPARAM fwKeys, int xPos , int yPos)
 {
 	int		nIdx;
 	int		nFuncID;
@@ -923,7 +923,7 @@ void CEditView::OnXRBUTTONUP(WPARAM fwKeys, int xPos , int yPos)
 }
 
 // マウス移動のメッセージ処理
-void CEditView::OnMOUSEMOVE(WPARAM fwKeys, int xPos_, int yPos_)
+void EditView::OnMOUSEMOVE(WPARAM fwKeys, int xPos_, int yPos_)
 {
 	Point ptMouse(xPos_, yPos_);
 
@@ -964,7 +964,7 @@ void CEditView::OnMOUSEMOVE(WPARAM fwKeys, int xPos_, int yPos_)
 		}
 		if (m_bMiniMapMouseDown) {
 			LayoutPoint ptNew;
-			CTextArea& area = GetTextArea();
+			TextArea& area = GetTextArea();
 			area.ClientToLayout( ptMouse, &ptNew );
 			// ミニマップの上下スクロール
 			if (ptNew.y < 0) {
@@ -991,7 +991,7 @@ void CEditView::OnMOUSEMOVE(WPARAM fwKeys, int xPos_, int yPos_)
 			if (ptNew.y < 0) {
 				ptNew.y = LayoutYInt(0);
 			}
-			CEditView& view = m_pcEditWnd->GetActiveView();
+			EditView& view = m_pcEditWnd->GetActiveView();
 			ptNew.x = 0;
 			LogicPoint ptNewLogic;
 			view.GetCaret().GetAdjustCursorPos(&ptNew);
@@ -1268,7 +1268,7 @@ void CEditView::OnMOUSEMOVE(WPARAM fwKeys, int xPos_, int yPos_)
 	2011.11.16 Moca スクロール変化量への対応
 	2013.09.10 Moca スペシャルスクロールの不具合の修正
 */
-LRESULT CEditView::OnMOUSEWHEEL2(WPARAM wParam, LPARAM lParam, bool bHorizontalMsg, EFunctionCode nCmdFuncID)
+LRESULT EditView::OnMOUSEWHEEL2(WPARAM wParam, LPARAM lParam, bool bHorizontalMsg, EFunctionCode nCmdFuncID)
 {
 //	WORD	fwKeys;
 	short	zDelta;
@@ -1282,7 +1282,7 @@ LRESULT CEditView::OnMOUSEWHEEL2(WPARAM wParam, LPARAM lParam, bool bHorizontalM
 	zDelta = (short) HIWORD(wParam);	// wheel rotation
 //	xPos = (short) LOWORD(lParam);		// horizontal position of pointer
 //	yPos = (short) HIWORD(lParam);		// vertical position of pointer
-//	MYTRACE(_T("CEditView::DispatchEvent() WM_MOUSEWHEEL fwKeys=%xh zDelta=%d xPos=%d yPos=%d \n"), fwKeys, zDelta, xPos, yPos);
+//	MYTRACE(_T("EditView::DispatchEvent() WM_MOUSEWHEEL fwKeys=%xh zDelta=%d xPos=%d yPos=%d \n"), fwKeys, zDelta, xPos, yPos);
 
 	if (bHorizontalMsg) {
 		if (0 < zDelta) {
@@ -1462,7 +1462,7 @@ LRESULT CEditView::OnMOUSEWHEEL2(WPARAM wParam, LPARAM lParam, bool bHorizontalM
 
 
 // 垂直マウススクロール
-LRESULT CEditView::OnMOUSEWHEEL(WPARAM wParam, LPARAM lParam)
+LRESULT EditView::OnMOUSEWHEEL(WPARAM wParam, LPARAM lParam)
 {
 	return OnMOUSEWHEEL2(wParam, lParam, false, F_0);
 }
@@ -1473,7 +1473,7 @@ LRESULT CEditView::OnMOUSEWHEEL(WPARAM wParam, LPARAM lParam)
 	によると、WM_MOUSEHWHEELを処理した場合はTRUEを返す必要があるそうです。
 	MSDNのWM_MOUSEHWHEEL Messageのページは間違っているので注意。
 */
-LRESULT CEditView::OnMOUSEHWHEEL(WPARAM wParam, LPARAM lParam)
+LRESULT EditView::OnMOUSEHWHEEL(WPARAM wParam, LPARAM lParam)
 {
 	return OnMOUSEWHEEL2(wParam, lParam, true, F_0);
 }
@@ -1493,7 +1493,7 @@ LRESULT CEditView::OnMOUSEHWHEEL(WPARAM wParam, LPARAM lParam)
 
 	@date 2009.01.17 nasukoji	新規作成
 */
-bool CEditView::IsSpecialScrollMode(int nSelect)
+bool EditView::IsSpecialScrollMode(int nSelect)
 {
 	bool bSpecialScrollMode;
 
@@ -1532,7 +1532,7 @@ bool CEditView::IsSpecialScrollMode(int nSelect)
 
 
 // マウス左ボタン開放のメッセージ処理
-void CEditView::OnLBUTTONUP(WPARAM fwKeys, int xPos , int yPos)
+void EditView::OnLBUTTONUP(WPARAM fwKeys, int xPos , int yPos)
 {
 //	MYTRACE(_T("OnLBUTTONUP()\n"));
 
@@ -1573,7 +1573,7 @@ static unsigned __stdcall ShellExecuteProc(LPVOID lpParameter)
 
 // マウス左ボタンダブルクリック
 // 2007.01.18 kobake IsCurrentPositionURL仕様変更に伴い、処理の書き換え
-void CEditView::OnLBUTTONDBLCLK(WPARAM fwKeys, int _xPos , int _yPos)
+void EditView::OnLBUTTONDBLCLK(WPARAM fwKeys, int _xPos , int _yPos)
 {
 	Point ptMouse(_xPos, _yPos);
 
@@ -1633,7 +1633,7 @@ void CEditView::OnLBUTTONDBLCLK(WPARAM fwKeys, int _xPos , int _yPos)
 		// GREP出力モードまたはデバッグモード かつ マウス左ボタンダブルクリックでタグジャンプ の場合
 		//	2004.09.20 naoh 外部コマンドの出力からTagjumpできるように
 		if (1
-			&& (CEditApp::getInstance()->m_pcGrepAgent->m_bGrepMode || AppMode::getInstance()->IsDebugMode())
+			&& (EditApp::getInstance()->m_pcGrepAgent->m_bGrepMode || AppMode::getInstance()->IsDebugMode())
 			&& GetDllShareData().m_common.m_sSearch.m_bGTJW_LDBLCLK
 		) {
 			// タグジャンプ機能
@@ -1722,9 +1722,9 @@ void CEditView::OnLBUTTONDBLCLK(WPARAM fwKeys, int _xPos , int _yPos)
 //                           D&D                               //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-STDMETHODIMP CEditView::DragEnter(LPDATAOBJECT pDataObject, DWORD dwKeyState, POINTL pt, LPDWORD pdwEffect)
+STDMETHODIMP EditView::DragEnter(LPDATAOBJECT pDataObject, DWORD dwKeyState, POINTL pt, LPDWORD pdwEffect)
 {
-	DEBUG_TRACE(_T("CEditView::DragEnter()\n"));
+	DEBUG_TRACE(_T("EditView::DragEnter()\n"));
 	//「OLEによるドラッグ & ドロップを使う」オプションが無効の場合にはドロップを受け付けない
 	if (!GetDllShareData().m_common.m_sEdit.m_bUseOLE_DragDrop) return E_UNEXPECTED;
 
@@ -1761,9 +1761,9 @@ STDMETHODIMP CEditView::DragEnter(LPDATAOBJECT pDataObject, DWORD dwKeyState, PO
 	return S_OK;
 }
 
-STDMETHODIMP CEditView::DragOver(DWORD dwKeyState, POINTL pt, LPDWORD pdwEffect)
+STDMETHODIMP EditView::DragOver(DWORD dwKeyState, POINTL pt, LPDWORD pdwEffect)
 {
-	DEBUG_TRACE(_T("CEditView::DragOver()\n"));
+	DEBUG_TRACE(_T("EditView::DragOver()\n"));
 
 	// マウス移動のメッセージ処理
 	::ScreenToClient(GetHwnd(), (LPPOINT)&pt);
@@ -1774,7 +1774,7 @@ STDMETHODIMP CEditView::DragOver(DWORD dwKeyState, POINTL pt, LPDWORD pdwEffect)
 
 	*pdwEffect = TranslateDropEffect(m_cfDragData, dwKeyState, pt, *pdwEffect);
 
-	CEditView* pcDragSourceView = m_pcEditWnd->GetDragSourceView();
+	EditView* pcDragSourceView = m_pcEditWnd->GetDragSourceView();
 
 	// ドラッグ元が他ビューで、このビューのカーソルがドラッグ元の選択範囲内の場合は禁止マークにする
 	// ※自ビューのときは禁止マークにしない（他アプリでも多くはそうなっている模様）	// 2009.06.09 ryoji
@@ -1787,9 +1787,9 @@ STDMETHODIMP CEditView::DragOver(DWORD dwKeyState, POINTL pt, LPDWORD pdwEffect)
 	return S_OK;
 }
 
-STDMETHODIMP CEditView::DragLeave(void)
+STDMETHODIMP EditView::DragLeave(void)
 {
-	DEBUG_TRACE(_T("CEditView::DragLeave()\n"));
+	DEBUG_TRACE(_T("EditView::DragLeave()\n"));
 	// 選択テキストのドラッグ中か
 	_SetDragMode(FALSE);
 
@@ -1806,14 +1806,14 @@ STDMETHODIMP CEditView::DragLeave(void)
 	return S_OK;
 }
 
-STDMETHODIMP CEditView::Drop(LPDATAOBJECT pDataObject, DWORD dwKeyState, POINTL pt, LPDWORD pdwEffect)
+STDMETHODIMP EditView::Drop(LPDATAOBJECT pDataObject, DWORD dwKeyState, POINTL pt, LPDWORD pdwEffect)
 {
-	DEBUG_TRACE(_T("CEditView::Drop()\n"));
+	DEBUG_TRACE(_T("EditView::Drop()\n"));
 	BOOL		bBoxData;
 	BOOL		bMove;
 	bool		bMoveToPrev = false;
 	RECT		rcSel;
-	CNativeW	cmemBuf;
+	NativeW	cmemBuf;
 	bool		bBeginBoxSelect_Old = false;
 
 	LayoutRange sSelectBgn_Old;
@@ -1843,7 +1843,7 @@ STDMETHODIMP CEditView::Drop(LPDATAOBJECT pDataObject, DWORD dwKeyState, POINTL 
 		return PostMyDropFiles(pDataObject);
 
 	// 外部からのドロップは以後の処理ではコピーと同様に扱う
-	CEditView* pcDragSourceView = m_pcEditWnd->GetDragSourceView();
+	EditView* pcDragSourceView = m_pcEditWnd->GetDragSourceView();
 	bMove = (*pdwEffect == DROPEFFECT_MOVE) && pcDragSourceView;
 	bBoxData = m_bDragBoxData;
 
@@ -2083,7 +2083,7 @@ STDMETHODIMP CEditView::Drop(LPDATAOBJECT pDataObject, DWORD dwKeyState, POINTL 
 /** 独自ドロップファイルメッセージをポストする
 	@date 2008.06.20 ryoji 新規作成
 */
-STDMETHODIMP CEditView::PostMyDropFiles(LPDATAOBJECT pDataObject)
+STDMETHODIMP EditView::PostMyDropFiles(LPDATAOBJECT pDataObject)
 {
 	HGLOBAL hData = GetGlobalData(pDataObject, CF_HDROP);
 	if (!hData)
@@ -2113,7 +2113,7 @@ STDMETHODIMP CEditView::PostMyDropFiles(LPDATAOBJECT pDataObject)
 /** 独自ドロップファイルメッセージ処理
 	@date 2008.06.20 ryoji 新規作成
 */
-void CEditView::OnMyDropFiles(HDROP hDrop)
+void EditView::OnMyDropFiles(HDROP hDrop)
 {
 	// 普通にメニュー操作ができるように入力状態をフォアグランドウィンドウにアタッチする
 	int nTid2 = ::GetWindowThreadProcessId(::GetForegroundWindow(), NULL);
@@ -2156,7 +2156,7 @@ void CEditView::OnMyDropFiles(HDROP hDrop)
 
 	case 100:	// パス名を貼り付ける
 	case 101:	// ファイル名を貼り付ける
-		CNativeW cmemBuf;
+		NativeW cmemBuf;
 		UINT nFiles;
 		TCHAR szPath[_MAX_PATH];
 		TCHAR szExt[_MAX_EXT];
@@ -2224,7 +2224,7 @@ void CEditView::OnMyDropFiles(HDROP hDrop)
 	::GlobalFree(hDrop);
 }
 
-CLIPFORMAT CEditView::GetAvailableClipFormat(LPDATAOBJECT pDataObject)
+CLIPFORMAT EditView::GetAvailableClipFormat(LPDATAOBJECT pDataObject)
 {
 	CLIPFORMAT cf = 0;
 	CLIPFORMAT cfSAKURAClip = Clipboard::GetSakuraFormat();
@@ -2241,12 +2241,12 @@ CLIPFORMAT CEditView::GetAvailableClipFormat(LPDATAOBJECT pDataObject)
 	return cf;
 }
 
-DWORD CEditView::TranslateDropEffect(CLIPFORMAT cf, DWORD dwKeyState, POINTL pt, DWORD dwEffect)
+DWORD EditView::TranslateDropEffect(CLIPFORMAT cf, DWORD dwKeyState, POINTL pt, DWORD dwEffect)
 {
 	if (cf == CF_HDROP)	// 2008.06.20 ryoji
 		return DROPEFFECT_LINK;
 
-	CEditView* pcDragSourceView = m_pcEditWnd->GetDragSourceView();
+	EditView* pcDragSourceView = m_pcEditWnd->GetDragSourceView();
 
 	// 2008.06.21 ryoji
 	// Win 98/Me 環境では外部からのドラッグ時に GetKeyState() ではキー状態を正しく取得できないため、
@@ -2267,7 +2267,7 @@ DWORD CEditView::TranslateDropEffect(CLIPFORMAT cf, DWORD dwKeyState, POINTL pt,
 	return dwEffect;
 }
 
-bool CEditView::IsDragSource(void)
+bool EditView::IsDragSource(void)
 {
 	return (this == m_pcEditWnd->GetDragSourceView());
 }

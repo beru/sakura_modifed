@@ -2,11 +2,11 @@
 #include "StdAfx.h"
 #include "CBregexpDll2.h"
 
-CBregexpDll2::CBregexpDll2()
+BregexpDll2::BregexpDll2()
 {
 }
 
-CBregexpDll2::~CBregexpDll2()
+BregexpDll2::~BregexpDll2()
 {
 }
 
@@ -17,7 +17,7 @@ CBregexpDll2::~CBregexpDll2()
 		@li 指定有りの場合はそれのみを返す
 		@li 指定無し(NULLまたは空文字列)の場合はBREGONIG, BREGEXPの順で試みる
 */
-LPCTSTR CBregexpDll2::GetDllNameImp(int index)
+LPCTSTR BregexpDll2::GetDllNameImp(int index)
 {
 	return _T("bregonig.dll");
 }
@@ -31,7 +31,7 @@ LPCTSTR CBregexpDll2::GetDllNameImp(int index)
 	@retval 0 成功
 	@retval 1 アドレス取得に失敗
 */
-bool CBregexpDll2::InitDllImp()
+bool BregexpDll2::InitDllImp()
 {
 	// DLL内関数名リスト
 	const ImportTable table[] = {

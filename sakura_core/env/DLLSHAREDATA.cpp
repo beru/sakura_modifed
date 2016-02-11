@@ -54,16 +54,16 @@ int ShareDataLockCounter::GetLockCounter() {
 	return GetDllShareData().m_nLockCount;
 }
 
-class CLockCancel: public CDlgCancel {
+class CLockCancel: public DlgCancel {
 public:
 	virtual BOOL OnInitDialog(HWND hwnd, WPARAM wParam, LPARAM lParam) {
-		BOOL ret = CDlgCancel::OnInitDialog(hwnd, wParam, lParam);
+		BOOL ret = DlgCancel::OnInitDialog(hwnd, wParam, lParam);
 		HWND hwndCancel = GetHwnd();
 		HWND hwndMsg = ::GetDlgItem(hwndCancel, IDC_STATIC_MSG);
 		HWND hwndCancelButton = ::GetDlgItem(hwndCancel, IDCANCEL);
 		HWND hwndKensuu = ::GetDlgItem(hwndCancel, IDC_STATIC_KENSUU);
 		LPCTSTR msg = LS(STR_PRINT_WAITING);
-		CTextWidthCalc calc(hwndMsg);
+		TextWidthCalc calc(hwndMsg);
 		calc.SetTextWidthIfMax(msg);
 		RECT rc;
 		GetItemClientRect(IDC_STATIC_MSG, rc);

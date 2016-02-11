@@ -15,7 +15,7 @@ bool CFigure_CtrlCode::Match(const wchar_t* pText, int nTextLen) const
 	return (!(pText[0] & 0xFF80) && WCODE::IsControlCode(pText[0]));
 }
 
-void CFigure_CtrlCode::DispSpace(CGraphics& gr, DispPos* pDispPos, CEditView* pcView, bool bTrans) const
+void CFigure_CtrlCode::DispSpace(Graphics& gr, DispPos* pDispPos, EditView* pcView, bool bTrans) const
 {
 	// クリッピング矩形を計算。画面外なら描画しない
 	RECT rc;
@@ -44,7 +44,7 @@ void CFigure_CtrlCode::DispSpace(CGraphics& gr, DispPos* pDispPos, CEditView* pc
 bool CFigure_HanBinary::Match(const wchar_t* pText, int nTextLen) const
 {
 	int nLen = pText[1]? 2:1;	// ※ pText は常に終端よりも手前
-	if (CNativeW::GetKetaOfChar(pText, nLen, 0) == 1) {	// 半角
+	if (NativeW::GetKetaOfChar(pText, nLen, 0) == 1) {	// 半角
 		ECharSet e;
 		CheckUtf16leChar(pText, nLen, &e, UC_NONCHARACTER);
 		if (e == CHARSET_BINARY) {
@@ -54,7 +54,7 @@ bool CFigure_HanBinary::Match(const wchar_t* pText, int nTextLen) const
 	return false;
 }
 
-void CFigure_HanBinary::DispSpace(CGraphics& gr, DispPos* pDispPos, CEditView* pcView, bool bTrans) const
+void CFigure_HanBinary::DispSpace(Graphics& gr, DispPos* pDispPos, EditView* pcView, bool bTrans) const
 {
 	// クリッピング矩形を計算。画面外なら描画しない
 	RECT rc;
@@ -83,7 +83,7 @@ void CFigure_HanBinary::DispSpace(CGraphics& gr, DispPos* pDispPos, CEditView* p
 bool CFigure_ZenBinary::Match(const wchar_t* pText, int nTextLen) const
 {
 	int nLen = pText[1]? 2:1;	// ※ pText は常に終端よりも手前
-	if (CNativeW::GetKetaOfChar(pText, nLen, 0) > 1) {	// 全角
+	if (NativeW::GetKetaOfChar(pText, nLen, 0) > 1) {	// 全角
 		ECharSet e;
 		CheckUtf16leChar(pText, nLen, &e, UC_NONCHARACTER);
 		if (e == CHARSET_BINARY) {
@@ -93,7 +93,7 @@ bool CFigure_ZenBinary::Match(const wchar_t* pText, int nTextLen) const
 	return false;
 }
 
-void CFigure_ZenBinary::DispSpace(CGraphics& gr, DispPos* pDispPos, CEditView* pcView, bool bTrans) const
+void CFigure_ZenBinary::DispSpace(Graphics& gr, DispPos* pDispPos, EditView* pcView, bool bTrans) const
 {
 	// クリッピング矩形を計算。画面外なら描画しない
 	RECT rc;

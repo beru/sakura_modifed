@@ -46,7 +46,7 @@
 #include "util/shell.h"
 #include "sakura_rc.h"
 
-int	CPropCommon::SearchIntArr(int nKey, int* pnArr, int nArrNum)
+int	PropCommon::SearchIntArr(int nKey, int* pnArr, int nArrNum)
 {
 	for (int i=0; i<nArrNum; ++i) {
 		if (nKey == pnArr[i]) {
@@ -67,17 +67,17 @@ int	CPropCommon::SearchIntArr(int nKey, int* pnArr, int nArrNum)
 	@param wParam パラメータ1
 	@param lParam パラメータ2
 */
-INT_PTR CPropCommon::DlgProc(
-	INT_PTR (CPropCommon::*DispatchPage)(HWND, UINT, WPARAM, LPARAM),
+INT_PTR PropCommon::DlgProc(
+	INT_PTR (PropCommon::*DispatchPage)(HWND, UINT, WPARAM, LPARAM),
 	HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam
 )
 {
 	PROPSHEETPAGE*	pPsp;
-	CPropCommon*	pCPropCommon;
+	PropCommon*	pCPropCommon;
 	switch (uMsg) {
 	case WM_INITDIALOG:
 		pPsp = (PROPSHEETPAGE*)lParam;
-		pCPropCommon = (CPropCommon*)(pPsp->lParam);
+		pCPropCommon = (PropCommon*)(pPsp->lParam);
 		if (pCPropCommon) {
 			return (pCPropCommon->*DispatchPage)(hwndDlg, uMsg, wParam, pPsp->lParam);
 		}else {
@@ -85,7 +85,7 @@ INT_PTR CPropCommon::DlgProc(
 		}
 	default:
 		// Modified by KEITA for WIN64 2003.9.6
-		pCPropCommon = (CPropCommon*)::GetWindowLongPtr(hwndDlg, DWLP_USER);
+		pCPropCommon = (PropCommon*)::GetWindowLongPtr(hwndDlg, DWLP_USER);
 		if (pCPropCommon) {
 			return (pCPropCommon->*DispatchPage)(hwndDlg, uMsg, wParam, lParam);
 		}else {
@@ -96,15 +96,15 @@ INT_PTR CPropCommon::DlgProc(
 //	To Here Jun. 2, 2001 genta
 
 // 独立ウィンドウ用 2013.3.14 aroka
-INT_PTR CPropCommon::DlgProc2(
-	INT_PTR (CPropCommon::*DispatchPage)(HWND, UINT, WPARAM, LPARAM),
+INT_PTR PropCommon::DlgProc2(
+	INT_PTR (PropCommon::*DispatchPage)(HWND, UINT, WPARAM, LPARAM),
 	HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam
 )
 {
-	CPropCommon*	pCPropCommon;
+	PropCommon*	pCPropCommon;
 	switch (uMsg) {
 	case WM_INITDIALOG:
-		pCPropCommon = (CPropCommon*)(lParam);
+		pCPropCommon = (PropCommon*)(lParam);
 		if (pCPropCommon) {
 			return (pCPropCommon->*DispatchPage)(hwndDlg, uMsg, IDOK, lParam);
 		}else {
@@ -112,7 +112,7 @@ INT_PTR CPropCommon::DlgProc2(
 		}
 	default:
 		// Modified by KEITA for WIN64 2003.9.6
-		pCPropCommon = (CPropCommon*)::GetWindowLongPtr(hwndDlg, DWLP_USER);
+		pCPropCommon = (PropCommon*)::GetWindowLongPtr(hwndDlg, DWLP_USER);
 		if (pCPropCommon) {
 			return (pCPropCommon->*DispatchPage)(hwndDlg, uMsg, wParam, lParam);
 		}else {
@@ -122,27 +122,27 @@ INT_PTR CPropCommon::DlgProc2(
 }
 
 //	@date 2002.2.17 YAZAKI CShareDataのインスタンスは、CProcessにひとつあるのみ。
-CPropCommon::CPropCommon()
+PropCommon::PropCommon()
 {
 	{
-		assert(sizeof(CPropGeneral)   - sizeof(CPropCommon) == 0);
-		assert(sizeof(CPropWin)       - sizeof(CPropCommon) == 0);
-		assert(sizeof(CPropMainMenu)  - sizeof(CPropCommon) == 0);
-		assert(sizeof(CPropToolbar)   - sizeof(CPropCommon) == 0);
-		assert(sizeof(CPropTab)       - sizeof(CPropCommon) == 0);
-		assert(sizeof(CPropStatusbar) - sizeof(CPropCommon) == 0);
-		assert(sizeof(CPropEdit)      - sizeof(CPropCommon) == 0);
-		assert(sizeof(CPropFile)      - sizeof(CPropCommon) == 0);
-		assert(sizeof(CPropFileName)  - sizeof(CPropCommon) == 0);
-		assert(sizeof(CPropBackup)    - sizeof(CPropCommon) == 0);
-		assert(sizeof(CPropFormat)    - sizeof(CPropCommon) == 0);
-		assert(sizeof(CPropGrep)      - sizeof(CPropCommon) == 0);
-		assert(sizeof(CPropKeybind)   - sizeof(CPropCommon) == 0);
-		assert(sizeof(CPropCustmenu)  - sizeof(CPropCommon) == 0);
-		assert(sizeof(CPropKeyword)   - sizeof(CPropCommon) == 0);
-		assert(sizeof(CPropHelper)    - sizeof(CPropCommon) == 0);
-		assert(sizeof(CPropMacro)     - sizeof(CPropCommon) == 0);
-		assert(sizeof(CPropPlugin)    - sizeof(CPropCommon) == 0);
+		assert(sizeof(PropGeneral)   - sizeof(PropCommon) == 0);
+		assert(sizeof(PropWin)       - sizeof(PropCommon) == 0);
+		assert(sizeof(PropMainMenu)  - sizeof(PropCommon) == 0);
+		assert(sizeof(PropToolbar)   - sizeof(PropCommon) == 0);
+		assert(sizeof(PropTab)       - sizeof(PropCommon) == 0);
+		assert(sizeof(PropStatusbar) - sizeof(PropCommon) == 0);
+		assert(sizeof(PropEdit)      - sizeof(PropCommon) == 0);
+		assert(sizeof(PropFile)      - sizeof(PropCommon) == 0);
+		assert(sizeof(PropFileName)  - sizeof(PropCommon) == 0);
+		assert(sizeof(PropBackup)    - sizeof(PropCommon) == 0);
+		assert(sizeof(PropFormat)    - sizeof(PropCommon) == 0);
+		assert(sizeof(PropGrep)      - sizeof(PropCommon) == 0);
+		assert(sizeof(PropKeybind)   - sizeof(PropCommon) == 0);
+		assert(sizeof(PropCustmenu)  - sizeof(PropCommon) == 0);
+		assert(sizeof(PropKeyword)   - sizeof(PropCommon) == 0);
+		assert(sizeof(PropHelper)    - sizeof(PropCommon) == 0);
+		assert(sizeof(PropMacro)     - sizeof(PropCommon) == 0);
+		assert(sizeof(PropPlugin)    - sizeof(PropCommon) == 0);
 	}
 
 	// 共有データ構造体のアドレスを返す
@@ -157,14 +157,14 @@ CPropCommon::CPropCommon()
 }
 
 
-CPropCommon::~CPropCommon()
+PropCommon::~PropCommon()
 {
 }
 
 
 // 初期化
-//@@@ 2002.01.03 YAZAKI m_tbMyButtonなどをCShareDataからCMenuDrawerへ移動したことによる修正。
-void CPropCommon::Create(HWND hwndParent, CImageListMgr* pcIcons, CMenuDrawer* pMenuDrawer)
+//@@@ 2002.01.03 YAZAKI m_tbMyButtonなどをCShareDataからMenuDrawerへ移動したことによる修正。
+void PropCommon::Create(HWND hwndParent, ImageListMgr* pcIcons, MenuDrawer* pMenuDrawer)
 {
 	m_hwndParent = hwndParent;	// オーナーウィンドウのハンドル
 	m_pcIcons = pcIcons;
@@ -174,7 +174,7 @@ void CPropCommon::Create(HWND hwndParent, CImageListMgr* pcIcons, CMenuDrawer* p
 	//                  m_Common.m_sMacro.m_MacroTable（ローカルメンバ）でm_cLookupを初期化する
 	m_cLookup.Init(m_Common.m_sMacro.m_MacroTable, &m_Common);	//	機能名・番号resolveクラス．
 
-//@@@ 2002.01.03 YAZAKI m_tbMyButtonなどをCShareDataからCMenuDrawerへ移動したことによる修正。
+//@@@ 2002.01.03 YAZAKI m_tbMyButtonなどをCShareDataからMenuDrawerへ移動したことによる修正。
 	m_pcMenuDrawer = pMenuDrawer;
 
 	return;
@@ -197,7 +197,7 @@ struct ComPropSheetInfo {
 /*! プロパティシートの作成
 	@date 2002.2.17 YAZAKI CShareDataのインスタンスは、CProcessにひとつあるのみ。
 */
-INT_PTR CPropCommon::DoPropertySheet(int nPageNum, bool bTrayProc)
+INT_PTR PropCommon::DoPropertySheet(int nPageNum, bool bTrayProc)
 {
 	INT_PTR				nRet;
 	int					nIdx;
@@ -210,24 +210,24 @@ INT_PTR CPropCommon::DoPropertySheet(int nPageNum, bool bTrayProc)
 	// 順序変更 Win,Toolbar,Tab,Statusbarの順に、File,FileName 順に	2008/6/22 Uchi 
 	// DProcの変更	2010/5/9 Uchi
 	static const ComPropSheetInfo ComPropSheetInfoList[] = {
-		{ STR_PROPCOMMON_GENERAL,	IDD_PROP_GENERAL,	CPropGeneral::DlgProc_page },
-		{ STR_PROPCOMMON_WINDOW,	IDD_PROP_WIN,		CPropWin::DlgProc_page },
-		{ STR_PROPCOMMON_MAINMENU,	IDD_PROP_MAINMENU,	CPropMainMenu::DlgProc_page },	// 2010/5/8 Uchi
-		{ STR_PROPCOMMON_TOOLBAR,	IDD_PROP_TOOLBAR,	CPropToolbar::DlgProc_page },
-		{ STR_PROPCOMMON_TABS,		IDD_PROP_TAB,		CPropTab::DlgProc_page },
-		{ STR_PROPCOMMON_STATBAR,	IDD_PROP_STATUSBAR,	CPropStatusbar::DlgProc_page },	// 文字コード表示指定	2008/6/21	Uchi
-		{ STR_PROPCOMMON_EDITING,	IDD_PROP_EDIT,		CPropEdit::DlgProc_page },
-		{ STR_PROPCOMMON_FILE,		IDD_PROP_FILE,		CPropFile::DlgProc_page },
-		{ STR_PROPCOMMON_FILENAME,	IDD_PROP_FNAME,		CPropFileName::DlgProc_page },
-		{ STR_PROPCOMMON_BACKUP,	IDD_PROP_BACKUP,	CPropBackup::DlgProc_page },
-		{ STR_PROPCOMMON_FORMAT,	IDD_PROP_FORMAT,	CPropFormat::DlgProc_page },
-		{ STR_PROPCOMMON_SEARCH,	IDD_PROP_GREP,		CPropGrep::DlgProc_page },	// 2006.08.23 ryoji タイトル変更（Grep -> 検索）
-		{ STR_PROPCOMMON_KEYS,		IDD_PROP_KEYBIND,	CPropKeybind::DlgProc_page },
-		{ STR_PROPCOMMON_CUSTMENU,	IDD_PROP_CUSTMENU,	CPropCustmenu::DlgProc_page },
-		{ STR_PROPCOMMON_KEYWORD,	IDD_PROP_KEYWORD,	CPropKeyword::DlgProc_page },
-		{ STR_PROPCOMMON_SUPPORT,	IDD_PROP_HELPER,	CPropHelper::DlgProc_page },
-		{ STR_PROPCOMMON_MACRO,		IDD_PROP_MACRO,		CPropMacro::DlgProc_page },
-		{ STR_PROPCOMMON_PLUGIN,	IDD_PROP_PLUGIN,	CPropPlugin::DlgProc_page },
+		{ STR_PROPCOMMON_GENERAL,	IDD_PROP_GENERAL,	PropGeneral::DlgProc_page },
+		{ STR_PROPCOMMON_WINDOW,	IDD_PROP_WIN,		PropWin::DlgProc_page },
+		{ STR_PROPCOMMON_MAINMENU,	IDD_PROP_MAINMENU,	PropMainMenu::DlgProc_page },	// 2010/5/8 Uchi
+		{ STR_PROPCOMMON_TOOLBAR,	IDD_PROP_TOOLBAR,	PropToolbar::DlgProc_page },
+		{ STR_PROPCOMMON_TABS,		IDD_PROP_TAB,		PropTab::DlgProc_page },
+		{ STR_PROPCOMMON_STATBAR,	IDD_PROP_STATUSBAR,	PropStatusbar::DlgProc_page },	// 文字コード表示指定	2008/6/21	Uchi
+		{ STR_PROPCOMMON_EDITING,	IDD_PROP_EDIT,		PropEdit::DlgProc_page },
+		{ STR_PROPCOMMON_FILE,		IDD_PROP_FILE,		PropFile::DlgProc_page },
+		{ STR_PROPCOMMON_FILENAME,	IDD_PROP_FNAME,		PropFileName::DlgProc_page },
+		{ STR_PROPCOMMON_BACKUP,	IDD_PROP_BACKUP,	PropBackup::DlgProc_page },
+		{ STR_PROPCOMMON_FORMAT,	IDD_PROP_FORMAT,	PropFormat::DlgProc_page },
+		{ STR_PROPCOMMON_SEARCH,	IDD_PROP_GREP,		PropGrep::DlgProc_page },	// 2006.08.23 ryoji タイトル変更（Grep -> 検索）
+		{ STR_PROPCOMMON_KEYS,		IDD_PROP_KEYBIND,	PropKeybind::DlgProc_page },
+		{ STR_PROPCOMMON_CUSTMENU,	IDD_PROP_CUSTMENU,	PropCustmenu::DlgProc_page },
+		{ STR_PROPCOMMON_KEYWORD,	IDD_PROP_KEYWORD,	PropKeyword::DlgProc_page },
+		{ STR_PROPCOMMON_SUPPORT,	IDD_PROP_HELPER,	PropHelper::DlgProc_page },
+		{ STR_PROPCOMMON_MACRO,		IDD_PROP_MACRO,		PropMacro::DlgProc_page },
+		{ STR_PROPCOMMON_PLUGIN,	IDD_PROP_PLUGIN,	PropPlugin::DlgProc_page },
 	};
 
 	std::tstring		sTabname[_countof(ComPropSheetInfoList)];
@@ -309,7 +309,7 @@ INT_PTR CPropCommon::DoPropertySheet(int nPageNum, bool bTrayProc)
 /*!	ShareDataから一時領域へ設定をコピーする
 	@date 2002.12.11 Moca CEditDoc::OpenPropertySheetから移動
 */
-void CPropCommon::InitData(void)
+void PropCommon::InitData(void)
 {
 	m_Common = m_pShareData->m_common;
 
@@ -317,7 +317,7 @@ void CPropCommon::InitData(void)
 	for (int i=0; i<GetDllShareData().m_nTypesCount; ++i) {
 		KeywordSetIndex indexs;
 		TypeConfig type;
-		CDocTypeManager().GetTypeConfig(CTypeConfig(i), type);
+		DocTypeManager().GetTypeConfig(CTypeConfig(i), type);
 		indexs.typeId = type.m_id;
 		for (int j=0; j<MAX_KEYWORDSET_PER_TYPE; ++j) {
 			indexs.index[j] = type.m_nKeyWordSetIdx[j];
@@ -330,22 +330,22 @@ void CPropCommon::InitData(void)
 	@note ShareDataにコピーするだけなので，更新要求などは，利用する側で処理してもらう
 	@date 2002.12.11 Moca CEditDoc::OpenPropertySheetから移動
 */
-void CPropCommon::ApplyData(void)
+void PropCommon::ApplyData(void)
 {
 	m_pShareData->m_common = m_Common;
 
 	const int nSize = (int)m_Types_nKeyWordSetIdx.size();
 	for (int i=0; i<nSize; ++i) {
-		CTypeConfig configIdx = CDocTypeManager().GetDocumentTypeOfId(m_Types_nKeyWordSetIdx[i].typeId);
+		CTypeConfig configIdx = DocTypeManager().GetDocumentTypeOfId(m_Types_nKeyWordSetIdx[i].typeId);
 		if (configIdx.IsValidType()) {
 			TypeConfig type;
-			CDocTypeManager().GetTypeConfig(configIdx, type);
+			DocTypeManager().GetTypeConfig(configIdx, type);
 			// 2002/04/25 YAZAKI TypeConfig全体を保持する必要はない。
 			// 変更された設定値のコピー
 			for (int j = 0; j < MAX_KEYWORDSET_PER_TYPE; ++j) {
 				type.m_nKeyWordSetIdx[j] = m_Types_nKeyWordSetIdx[i].index[j];
 			}
-			CDocTypeManager().SetTypeConfig(configIdx, type);
+			DocTypeManager().SetTypeConfig(configIdx, type);
 		}
 	}
 }
@@ -353,7 +353,7 @@ void CPropCommon::ApplyData(void)
 
 // ヘルプ
 // Stonee, 2001/05/18 機能番号からヘルプトピック番号を調べるようにした
-void CPropCommon::OnHelp(HWND hwndParent, int nPageID)
+void PropCommon::OnHelp(HWND hwndParent, int nPageID)
 {
 	int		nContextID;
 	switch (nPageID) {
@@ -434,7 +434,7 @@ void CPropCommon::OnHelp(HWND hwndParent, int nPageID)
 /*!	コントロールにフォント設定する
 	@date 2013.04.24 Uchi
 */
-HFONT CPropCommon::SetCtrlFont(HWND hwndDlg, int idc_ctrl, const LOGFONT& lf)
+HFONT PropCommon::SetCtrlFont(HWND hwndDlg, int idc_ctrl, const LOGFONT& lf)
 {
 	HFONT	hFont;
 	HWND	hCtrl;
@@ -453,7 +453,7 @@ HFONT CPropCommon::SetCtrlFont(HWND hwndDlg, int idc_ctrl, const LOGFONT& lf)
 /*!	フォントラベルにフォントとフォント名設定する
 	@date 2013.04.24 Uchi
 */
-HFONT CPropCommon::SetFontLabel(HWND hwndDlg, int idc_static, const LOGFONT& lf, int nps)
+HFONT PropCommon::SetFontLabel(HWND hwndDlg, int idc_static, const LOGFONT& lf, int nps)
 {
 	HFONT	hFont;
 	TCHAR	szFontName[80];

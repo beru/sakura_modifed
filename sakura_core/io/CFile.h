@@ -23,7 +23,7 @@
 */
 #pragma once
 
-#include "basis/CMyString.h" //CFilePath
+#include "basis/CMyString.h" //FilePath
 #include "util/file.h"
 
 // ファイルの排他制御モード  2007.10.11 kobake 作成
@@ -33,13 +33,13 @@ enum EShareMode{
 	SHAREMODE_DENY_READWRITE,	// 他プロセスからの読み書きを禁止
 };
 
-class CFile {
+class File {
 public:
 	// コンストラクタ・デストラクタ
-	CFile(LPCTSTR pszPath = NULL);
-	virtual ~CFile();
+	File(LPCTSTR pszPath = NULL);
+	virtual ~File();
 	// パス
-	const CFilePath& GetFilePathClass() const { return m_szFilePath; }
+	const FilePath& GetFilePathClass() const { return m_szFilePath; }
 	LPCTSTR GetFilePath() const { return m_szFilePath; }
 	// 設定
 	void SetFilePath(LPCTSTR pszPath) { m_szFilePath.Assign(pszPath); }
@@ -55,17 +55,17 @@ public:
 	EShareMode GetShareMode() const { return m_nFileShareModeOld; }
 	void SetShareMode(EShareMode eShareMode) { m_nFileShareModeOld = eShareMode; }
 private:
-	CFilePath	m_szFilePath;				// ファイルパス
+	FilePath	m_szFilePath;				// ファイルパス
 	HANDLE		m_hLockedFile;				// ロックしているファイルのハンドル
 	EShareMode	m_nFileShareModeOld;		// ファイルの排他制御モード
 };
 
 
 // 一時ファイル
-class CTmpFile {
+class TmpFile {
 public:
-	CTmpFile() { m_fp = tmpfile(); }
-	~CTmpFile() { fclose(m_fp); }
+	TmpFile() { m_fp = tmpfile(); }
+	~TmpFile() { fclose(m_fp); }
 	FILE* GetFilePointer() const { return m_fp; }
 private:
 	FILE* m_fp;

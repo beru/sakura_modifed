@@ -110,8 +110,8 @@ struct CompareListViewLParam {
 */
 
 
-CDlgFavorite::CDlgFavorite()
-	 : CDialog(true)
+DlgFavorite::DlgFavorite()
+	 : Dialog(true)
 {
 	m_nCurrentTab = 0;
 	m_szMsg[0] = 0;
@@ -243,7 +243,7 @@ CDlgFavorite::CDlgFavorite()
 	m_ptDefaultSize.y = -1;
 }
 
-CDlgFavorite::~CDlgFavorite()
+DlgFavorite::~DlgFavorite()
 {
 	for (int nTab=0; m_aFavoriteInfo[nTab].m_pRecent; ++nTab) {
 		m_aFavoriteInfo[nTab].m_pRecent->Terminate();
@@ -251,17 +251,17 @@ CDlgFavorite::~CDlgFavorite()
 }
 
 // モーダルダイアログの表示
-int CDlgFavorite::DoModal(
+int DlgFavorite::DoModal(
 	HINSTANCE	hInstance,
 	HWND		hwndParent,
 	LPARAM		lParam
 )
 {
-	return (int)CDialog::DoModal(hInstance, hwndParent, IDD_FAVORITE, lParam);
+	return (int)Dialog::DoModal(hInstance, hwndParent, IDD_FAVORITE, lParam);
 }
 
 // ダイアログデータの設定
-void CDlgFavorite::SetData(void)
+void DlgFavorite::SetData(void)
 {
 	for (int nTab=0; m_aFavoriteInfo[nTab].m_pRecent; ++nTab) {
 		SetDataOne(nTab, 0);
@@ -278,7 +278,7 @@ void CDlgFavorite::SetData(void)
 	@param nIndex       タブのIndex
 	@param nLvItemIndex 選択・表示したいListViewのIndex。-1で選択しない
 */
-void CDlgFavorite::SetDataOne(int nIndex, int nLvItemIndex)
+void DlgFavorite::SetDataOne(int nIndex, int nLvItemIndex)
 {
 	LV_ITEM	lvi;
 	int nNewFocus = -1;
@@ -343,7 +343,7 @@ void CDlgFavorite::SetDataOne(int nIndex, int nLvItemIndex)
 	
 	@retval TRUE 正常(今のところFALSEは返さない)
 */
-int CDlgFavorite::GetData(void)
+int DlgFavorite::GetData(void)
 {
 	for (int nTab=0; m_aFavoriteInfo[nTab].m_pRecent; ++nTab) {
 		if (m_aFavoriteInfo[nTab].m_bHaveFavorite) {
@@ -357,7 +357,7 @@ int CDlgFavorite::GetData(void)
 	return TRUE;
 }
 
-BOOL CDlgFavorite::OnInitDialog(
+BOOL DlgFavorite::OnInitDialog(
 	HWND hwndDlg,
 	WPARAM wParam,
 	LPARAM lParam
@@ -380,7 +380,7 @@ BOOL CDlgFavorite::OnInitDialog(
 	}
 
 	CreateSizeBox();
-	CDialog::OnSize();
+	Dialog::OnSize();
 
 	RECT rcDialog = GetDllShareData().m_common.m_sOthers.m_rcFavoriteDialog;
 	if (0
@@ -414,20 +414,20 @@ BOOL CDlgFavorite::OnInitDialog(
 	std::tstring pszFavTest = LS(STR_DLGFAV_FAVORITE);
 	TCHAR* pszFAVORITE_TEXT = const_cast<TCHAR*>(pszFavTest.c_str());
 	const int nListViewWidthClient = rc.right - rc.left
-		 - CTextWidthCalc::WIDTH_MARGIN_SCROLLBER - ::GetSystemMetrics(SM_CXVSCROLL);
+		 - TextWidthCalc::WIDTH_MARGIN_SCROLLBER - ::GetSystemMetrics(SM_CXVSCROLL);
 	// 初期値は従来方式の%指定
 	int nItemCx = nListViewWidthClient * 16 / 100;
 	int nSubItem1Cx = nListViewWidthClient * 79 / 100;
 	
 	{
 		// 適用されているフォントから算出
-		CTextWidthCalc calc(hwndBaseList);
-		calc.SetTextWidthIfMax(pszFAVORITE_TEXT, CTextWidthCalc::WIDTH_LV_HEADER);
+		TextWidthCalc calc(hwndBaseList);
+		calc.SetTextWidthIfMax(pszFAVORITE_TEXT, TextWidthCalc::WIDTH_LV_HEADER);
 		TCHAR szBuf[200];
 		for (int i=0; i<40; ++i) {
 			//「M (非表示)」等の幅を求める
 			FormatFavoriteColumn(szBuf, _countof(szBuf), i, false);
-			calc.SetTextWidthIfMax(szBuf, CTextWidthCalc::WIDTH_LV_ITEM_CHECKBOX);
+			calc.SetTextWidthIfMax(szBuf, TextWidthCalc::WIDTH_LV_ITEM_CHECKBOX);
 		}
 		
 		if (0 < calc.GetCx()) {
@@ -474,10 +474,10 @@ BOOL CDlgFavorite::OnInitDialog(
 	TabCtrl_SetCurSel(hwndTab, m_nCurrentTab);
 	//ChangeSlider(m_nCurrentTab);
 
-	return CDialog::OnInitDialog(GetHwnd(), wParam, lParam);
+	return Dialog::OnInitDialog(GetHwnd(), wParam, lParam);
 }
 
-BOOL CDlgFavorite::OnBnClicked(int wID)
+BOOL DlgFavorite::OnBnClicked(int wID)
 {
 	switch (wID) {
 	case IDC_BUTTON_HELP:
@@ -576,10 +576,10 @@ BOOL CDlgFavorite::OnBnClicked(int wID)
 	}
 
 	// 基底クラスメンバ
-	return CDialog::OnBnClicked(wID);
+	return Dialog::OnBnClicked(wID);
 }
 
-BOOL CDlgFavorite::OnNotify(WPARAM wParam, LPARAM lParam)
+BOOL DlgFavorite::OnNotify(WPARAM wParam, LPARAM lParam)
 {
 	LPNMHDR	lpnmhdr;
 	HWND	hwndTab;
@@ -661,10 +661,10 @@ BOOL CDlgFavorite::OnNotify(WPARAM wParam, LPARAM lParam)
 	}
 
 	// 基底クラスメンバ
-	return CDialog::OnNotify(wParam, lParam);
+	return Dialog::OnNotify(wParam, lParam);
 }
 
-void CDlgFavorite::TabSelectChange(bool bSetFocus)
+void DlgFavorite::TabSelectChange(bool bSetFocus)
 {
 	SetItemText(IDC_STATIC_FAVORITE_MSG, _T(""));
 	HWND hwndTab = GetItemHwnd(IDC_TAB_FAVORITE);
@@ -690,7 +690,7 @@ void CDlgFavorite::TabSelectChange(bool bSetFocus)
 	}
 }
 
-BOOL CDlgFavorite::OnActivate(WPARAM wParam, LPARAM lParam)
+BOOL DlgFavorite::OnActivate(WPARAM wParam, LPARAM lParam)
 {
 	switch (LOWORD(wParam)) {
 	case WA_ACTIVE:
@@ -706,10 +706,10 @@ BOOL CDlgFavorite::OnActivate(WPARAM wParam, LPARAM lParam)
 	}
 
 	// 基底クラスメンバ
-	return CDialog::OnActivate(wParam, lParam);
+	return Dialog::OnActivate(wParam, lParam);
 }
 
-LPVOID CDlgFavorite::GetHelpIdTable(void)
+LPVOID DlgFavorite::GetHelpIdTable(void)
 {
 	return (LPVOID)p_helpids;
 }
@@ -717,7 +717,7 @@ LPVOID CDlgFavorite::GetHelpIdTable(void)
 /*
 	リストを更新する。
 */
-bool CDlgFavorite::RefreshList(void)
+bool DlgFavorite::RefreshList(void)
 {
 	int		nTab;
 	bool	bret;
@@ -750,7 +750,7 @@ bool CDlgFavorite::RefreshList(void)
 /*
 	履歴種別リストのうち1個のリストビューを更新する。
 */
-bool CDlgFavorite::RefreshListOne(int nIndex)
+bool DlgFavorite::RefreshListOne(int nIndex)
 {
 	HWND	hwndList;
 	int		nCount;
@@ -797,7 +797,7 @@ changed:
 }
 
 // お気に入りのフラグだけ適用
-void CDlgFavorite::GetFavorite(int nIndex)
+void DlgFavorite::GetFavorite(int nIndex)
 {
 	Recent* const pRecent = m_aFavoriteInfo[nIndex].m_pRecent;
 	const HWND hwndList = m_aListViewInfo[nIndex].hListView;
@@ -816,7 +816,7 @@ void CDlgFavorite::GetFavorite(int nIndex)
 	選択中の項目を削除
 	リストの更新もする
 */
-int CDlgFavorite::DeleteSelected()
+int DlgFavorite::DeleteSelected()
 {
 	SetItemText(IDC_STATIC_FAVORITE_MSG, _T(""));
 	int     nDelItemCount = 0;
@@ -881,7 +881,7 @@ int CDlgFavorite::DeleteSelected()
 	return nDelItemCount;
 }
 
-void CDlgFavorite::UpdateUIState()
+void DlgFavorite::UpdateUIState()
 {
 	Recent& recent = *(m_aFavoriteInfo[m_nCurrentTab].m_pRecent);
 
@@ -902,7 +902,7 @@ void CDlgFavorite::UpdateUIState()
 		0 < recent.GetItemCount());
 }
 
-void CDlgFavorite::AddItem()
+void DlgFavorite::AddItem()
 {
 	if (!m_aFavoriteInfo[m_nCurrentTab].m_bEditable) {
 		return;
@@ -911,7 +911,7 @@ void CDlgFavorite::AddItem()
 	int max_size = _MAX_PATH;
 	szAddText[0] = 0;
 
-	CDlgInput1	cDlgInput1;
+	DlgInput1	cDlgInput1;
 	std::tstring strTitle = LS(STR_DLGFAV_ADD);
 	std::tstring strMessage = LS(STR_DLGFAV_ADD_PROMPT);
 	if (
@@ -935,7 +935,7 @@ void CDlgFavorite::AddItem()
 	}
 }
 
-void CDlgFavorite::EditItem()
+void DlgFavorite::EditItem()
 {
 	if (!m_aFavoriteInfo[m_nCurrentTab].m_bEditable) {
 		return;
@@ -951,7 +951,7 @@ void CDlgFavorite::EditItem()
 			TCHAR szText[_MAX_PATH];
 			int max_size = _MAX_PATH;
 			_tcsncpy_s(szText, max_size, recent.GetItemText(nRecIndex), _TRUNCATE);
-			CDlgInput1	cDlgInput1;
+			DlgInput1	cDlgInput1;
 			std::tstring strTitle = LS(STR_DLGFAV_EDIT);
 			std::tstring strMessage = LS(STR_DLGFAV_EDIT_PROMPT);
 			if (
@@ -975,7 +975,7 @@ void CDlgFavorite::EditItem()
 	}
 }
 
-void CDlgFavorite::RightMenu(POINT& menuPos)
+void DlgFavorite::RightMenu(POINT& menuPos)
 {
 	HMENU hMenu = ::CreatePopupMenu();
 	const int MENU_EDIT = 100;
@@ -1108,7 +1108,7 @@ static int ListView_GetLParamInt(HWND hwndList, int lvIndex)
 	@param bReverse      ソート済みの場合に降順に切り替える
 */
 // static
-void CDlgFavorite::ListViewSort(
+void DlgFavorite::ListViewSort(
 	ListViewSortInfo& info,
 	const Recent* pRecent,
 	int column,
@@ -1183,7 +1183,7 @@ static int CALLBACK CompareListViewFunc(
 	return pCompInfo->bAbsOrder ? nRet : -nRet;
 }
 
-INT_PTR CDlgFavorite::DispatchEvent(
+INT_PTR DlgFavorite::DispatchEvent(
 	HWND hWnd,
 	UINT wMsg,
 	WPARAM wParam,
@@ -1191,7 +1191,7 @@ INT_PTR CDlgFavorite::DispatchEvent(
 	)
 {
 	INT_PTR result;
-	result = CDialog::DispatchEvent(hWnd, wMsg, wParam, lParam);
+	result = Dialog::DispatchEvent(hWnd, wMsg, wParam, lParam);
 
 	if (wMsg == WM_GETMINMAXINFO) {
 		return OnMinMaxInfo(lParam);
@@ -1199,10 +1199,10 @@ INT_PTR CDlgFavorite::DispatchEvent(
 	return result;
 }
 
-BOOL CDlgFavorite::OnSize(WPARAM wParam, LPARAM lParam)
+BOOL DlgFavorite::OnSize(WPARAM wParam, LPARAM lParam)
 {
 	// 基底クラスメンバ
-	CDialog::OnSize(wParam, lParam);
+	Dialog::OnSize(wParam, lParam);
 
 	GetWindowRect(&GetDllShareData().m_common.m_sOthers.m_rcFavoriteDialog);
 
@@ -1224,14 +1224,14 @@ BOOL CDlgFavorite::OnSize(WPARAM wParam, LPARAM lParam)
 	return TRUE;
 }
 
-BOOL CDlgFavorite::OnMove(WPARAM wParam, LPARAM lParam)
+BOOL DlgFavorite::OnMove(WPARAM wParam, LPARAM lParam)
 {
 	GetWindowRect(&GetDllShareData().m_common.m_sOthers.m_rcFavoriteDialog);
 	
-	return CDialog::OnMove(wParam, lParam);
+	return Dialog::OnMove(wParam, lParam);
 }
 
-BOOL CDlgFavorite::OnMinMaxInfo(LPARAM lParam)
+BOOL DlgFavorite::OnMinMaxInfo(LPARAM lParam)
 {
 	LPMINMAXINFO lpmmi = (LPMINMAXINFO) lParam;
 	if (m_ptDefaultSize.x < 0) {

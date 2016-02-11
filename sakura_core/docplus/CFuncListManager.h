@@ -24,15 +24,15 @@
 */
 #pragma once
 
-class CDocLine;
+class DocLine;
 class DocLineMgr;
 
 //! 行に付加するModified情報
-class CLineFuncList{
+class LineFuncList {
 public:
-	CLineFuncList() : m_bFuncList(false) { }
+	LineFuncList() : m_bFuncList(false) { }
 	bool GetFuncListMark() const { return m_bFuncList; }
-	CLineFuncList& operator = (bool bSet)
+	LineFuncList& operator = (bool bSet)
 	{
 		m_bFuncList = bSet;
 		return *this;
@@ -42,12 +42,12 @@ private:
 };
 
 //! 行全体のFuncList情報アクセサ
-class CFuncListManager{
+class FuncListManager {
 public:
 	//状態
-	bool IsLineFuncList(const CDocLine* pcDocLine, bool bFlag) const;
-	bool GetLineFuncList(const CDocLine* pcDocLine) const;
-	void SetLineFuncList(CDocLine* pcDocLine, bool bFlag);
+	bool IsLineFuncList(const DocLine* pcDocLine, bool bFlag) const;
+	bool GetLineFuncList(const DocLine* pcDocLine) const;
+	void SetLineFuncList(DocLine* pcDocLine, bool bFlag);
 	bool SearchFuncListMark(const DocLineMgr*, LogicInt, eSearchDirection, LogicInt* ) const;					//!< 関数リストマーク検索
 
 	//一括操作

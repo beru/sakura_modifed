@@ -51,20 +51,20 @@ const DWORD p_helpids[] = {
 	0, 0
 };
 
-CDlgProfileMgr::CDlgProfileMgr()
-	: CDialog(false, false)
+DlgProfileMgr::DlgProfileMgr()
+	: Dialog(false, false)
 {
 	return;
 }
 
 //! モーダルダイアログの表示
-int CDlgProfileMgr::DoModal(
+int DlgProfileMgr::DoModal(
 	HINSTANCE hInstance,
 	HWND hwndParent,
 	LPARAM lParam
 	)
 {
-	return (int)CDialog::DoModal(hInstance, hwndParent, IDD_PROFILEMGR, lParam);
+	return (int)Dialog::DoModal(hInstance, hwndParent, IDD_PROFILEMGR, lParam);
 }
 
 
@@ -76,7 +76,7 @@ static std::tstring GetProfileMgrFileName(LPCTSTR profName = NULL)
 	static bool bSet = false;
 	if (!bSet) {
 		pszPath = szPath;
-		CFileNameManager::GetIniFileNameDirect( szPath, szPath2, _T("") );
+		FileNameManager::GetIniFileNameDirect( szPath, szPath2, _T("") );
 		if (szPath[0] == _T('\0')) {
 			pszPath = szPath2;
 		}
@@ -107,13 +107,13 @@ static std::tstring GetProfileMgrFileName(LPCTSTR profName = NULL)
 
 
 //! ダイアログデータの設定
-void CDlgProfileMgr::SetData()
+void DlgProfileMgr::SetData()
 {
 	SetData(-1);
 }
 
 
-void CDlgProfileMgr::SetData( int nSelIndex )
+void DlgProfileMgr::SetData( int nSelIndex )
 {
 	int nExtent = 0;
 	HWND hwndList = GetItemHwnd(IDC_LIST_PROFILE);
@@ -126,8 +126,8 @@ void CDlgProfileMgr::SetData( int nSelIndex )
 		strdef += _T("*");
 	}
 	List_AddString(hwndList, strdef.c_str());
-	CTextWidthCalc calc(hwndList);
-	calc.SetDefaultExtend(CTextWidthCalc::WIDTH_MARGIN_SCROLLBER);
+	TextWidthCalc calc(hwndList);
+	calc.SetDefaultExtend(TextWidthCalc::WIDTH_MARGIN_SCROLLBER);
 	int count = (int)settings.m_vProfList.size();
 	for (int i=0; i<count; ++i) {
 		std::tstring str = settings.m_vProfList[i];
@@ -168,12 +168,12 @@ static bool MyList_GetText(
 
 
 //! ダイアログデータの取得
-int CDlgProfileMgr::GetData()
+int DlgProfileMgr::GetData()
 {
 	return GetData(true);
 }
 
-int CDlgProfileMgr::GetData(bool bStart)
+int DlgProfileMgr::GetData(bool bStart)
 {
 	HWND hwndList = GetItemHwnd(IDC_LIST_PROFILE);
 	int nCurIndex = List_GetCurSel(hwndList);
@@ -201,7 +201,7 @@ int CDlgProfileMgr::GetData(bool bStart)
 }
 
 
-BOOL CDlgProfileMgr::OnBnClicked( int wID )
+BOOL DlgProfileMgr::OnBnClicked( int wID )
 {
 	switch (wID) {
 	case IDC_BUTTON_PROF_CREATE:
@@ -256,7 +256,7 @@ BOOL CDlgProfileMgr::OnBnClicked( int wID )
 }
 
 
-INT_PTR CDlgProfileMgr::DispatchEvent(
+INT_PTR DlgProfileMgr::DispatchEvent(
 	HWND hWnd,
 	UINT wMsg,
 	WPARAM wParam,
@@ -264,7 +264,7 @@ INT_PTR CDlgProfileMgr::DispatchEvent(
 	)
 {
 	INT_PTR result;
-	result = CDialog::DispatchEvent(hWnd, wMsg, wParam, lParam);
+	result = Dialog::DispatchEvent(hWnd, wMsg, wParam, lParam);
 	switch (wMsg) {
 	case WM_COMMAND:
 		{
@@ -284,7 +284,7 @@ INT_PTR CDlgProfileMgr::DispatchEvent(
 }
 
 
-void CDlgProfileMgr::UpdateIni()
+void DlgProfileMgr::UpdateIni()
 {
 	HWND hwndList = GetItemHwnd(IDC_LIST_PROFILE);
 	ProfileSettings settings;
@@ -330,9 +330,9 @@ static bool IsProfileDuplicate(
 	return false;
 }
 
-void CDlgProfileMgr::CreateProf()
+void DlgProfileMgr::CreateProf()
 {
-	CDlgInput1 cDlgInput1;
+	DlgInput1 cDlgInput1;
 	int max_size = _MAX_PATH;
 	TCHAR szText[_MAX_PATH];
 	std::tstring strTitle = LS(STR_DLGPROFILE_NEW_PROF_TITLE);
@@ -374,7 +374,7 @@ void CDlgProfileMgr::CreateProf()
 }
 
 
-void CDlgProfileMgr::DeleteProf()
+void DlgProfileMgr::DeleteProf()
 {
 	HWND hwndList = GetItemHwnd(IDC_LIST_PROFILE);
 	int nCurIndex = List_GetCurSel(hwndList);
@@ -387,10 +387,10 @@ void CDlgProfileMgr::DeleteProf()
 }
 
 
-void CDlgProfileMgr::RenameProf()
+void DlgProfileMgr::RenameProf()
 {
 	HWND hwndList = GetItemHwnd(IDC_LIST_PROFILE);
-	CDlgInput1 cDlgInput1;
+	DlgInput1 cDlgInput1;
 	int nCurIndex = List_GetCurSel(hwndList);
 	TCHAR szText[_MAX_PATH];
 	bool bDefault = MyList_GetText(hwndList, nCurIndex, szText);
@@ -451,7 +451,7 @@ void CDlgProfileMgr::RenameProf()
 }
 
 
-void CDlgProfileMgr::SetDefaultProf(int index)
+void DlgProfileMgr::SetDefaultProf(int index)
 {
 	ClearDefaultProf();
 	HWND hwndList = GetItemHwnd(IDC_LIST_PROFILE);
@@ -463,7 +463,7 @@ void CDlgProfileMgr::SetDefaultProf(int index)
 }
 
 
-void CDlgProfileMgr::ClearDefaultProf()
+void DlgProfileMgr::ClearDefaultProf()
 {
 	HWND hwndList = GetItemHwnd(IDC_LIST_PROFILE);
 	int nCount = List_GetCount(hwndList);
@@ -531,7 +531,7 @@ static bool IOProfSettings(
 }
 
 
-bool CDlgProfileMgr::ReadProfSettings(ProfileSettings& settings)
+bool DlgProfileMgr::ReadProfSettings(ProfileSettings& settings)
 {
 	auto_strcpy(settings.m_szDllLanguage, _T(""));
 	settings.m_nDefaultIndex = 0;
@@ -542,13 +542,13 @@ bool CDlgProfileMgr::ReadProfSettings(ProfileSettings& settings)
 }
 
 
-bool CDlgProfileMgr::WriteProfSettings(ProfileSettings& settings)
+bool DlgProfileMgr::WriteProfSettings(ProfileSettings& settings)
 {
 	return IOProfSettings( settings, true );
 }
 
 
-LPVOID CDlgProfileMgr::GetHelpIdTable(void)
+LPVOID DlgProfileMgr::GetHelpIdTable(void)
 {
 	return (LPVOID)p_helpids;
 }

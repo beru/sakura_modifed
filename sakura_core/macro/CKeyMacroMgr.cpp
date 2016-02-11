@@ -27,17 +27,17 @@
 #include "CMacroFactory.h"
 #include "io/CTextStream.h"
 
-CKeyMacroMgr::CKeyMacroMgr()
+KeyMacroMgr::KeyMacroMgr()
 {
 	m_pTop = NULL;
 	m_pBot = NULL;
 //	m_nKeyMacroDataArrNum = 0;	2002.2.2 YAZAKI
 	// Apr. 29, 2002 genta
-	// m_nReadyはCMacroManagerBaseへ
+	// m_nReadyはMacroManagerBaseへ
 	return;
 }
 
-CKeyMacroMgr::~CKeyMacroMgr()
+KeyMacroMgr::~KeyMacroMgr()
 {
 	// キーマクロのバッファをクリアする
 	ClearAll();
@@ -46,10 +46,10 @@ CKeyMacroMgr::~CKeyMacroMgr()
 
 
 // キーマクロのバッファをクリアする
-void CKeyMacroMgr::ClearAll(void)
+void KeyMacroMgr::ClearAll(void)
 {
-	CMacro* p = m_pTop;
-	CMacro* del_p;
+	Macro* p = m_pTop;
+	Macro* del_p;
 	while (p) {
 		del_p = p;
 		p = p->GetNext();
@@ -66,21 +66,21 @@ void CKeyMacroMgr::ClearAll(void)
 	機能番号と、引数ひとつを追加版。
 	@date 2002.2.2 YAZAKI pcEditViewも渡すようにした。
 */
-void CKeyMacroMgr::Append(
+void KeyMacroMgr::Append(
 	EFunctionCode	nFuncID,
 	const LPARAM*	lParams,
-	CEditView*		pcEditView
+	EditView*		pcEditView
 )
 {
-	auto macro = new CMacro(nFuncID);
+	auto macro = new Macro(nFuncID);
 	macro->AddLParam(lParams, pcEditView);
 	Append(macro);
 }
 
 /*! キーマクロのバッファにデータ追加
-	CMacroを指定して追加する版
+	Macroを指定して追加する版
 */
-void CKeyMacroMgr::Append(CMacro* macro)
+void KeyMacroMgr::Append(Macro* macro)
 {
 	if (m_pTop) {
 		m_pBot->SetNext(macro);
@@ -98,9 +98,9 @@ void CKeyMacroMgr::Append(CMacro* macro)
 /*! キーボードマクロの保存
 	エラーメッセージは出しません。呼び出し側でよきにはからってください。
 */
-bool CKeyMacroMgr::SaveKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath) const
+bool KeyMacroMgr::SaveKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath) const
 {
-	CTextOutputStream out(pszPath);
+	TextOutputStream out(pszPath);
 	if (!out) {
 		return false;
 	}
@@ -109,7 +109,7 @@ bool CKeyMacroMgr::SaveKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath) const
 	out.WriteF(LSW(STR_ERR_DLGKEYMACMGR1));
 
 	// マクロ内容
-	CMacro* p = m_pTop;
+	Macro* p = m_pTop;
 	while (p) {
 		p->Save(hInstance, out);
 		p = p->GetNext();
@@ -122,14 +122,14 @@ bool CKeyMacroMgr::SaveKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath) const
 
 
 /** キーボードマクロの実行
-	CMacroに委譲。
+	Macroに委譲。
 	
-	@date 2007.07.20 genta flags追加．CMacro::Exec()に
+	@date 2007.07.20 genta flags追加．Macro::Exec()に
 		FA_FROMMACROを含めた値を渡す．
 */
-bool CKeyMacroMgr::ExecKeyMacro(CEditView* pcEditView, int flags) const
+bool KeyMacroMgr::ExecKeyMacro(EditView* pcEditView, int flags) const
 {
-	CMacro* p = m_pTop;
+	Macro* p = m_pTop;
 	int macroflag = flags | FA_FROMMACRO;
 	bool bRet = true;
 	while (p) {
@@ -145,12 +145,12 @@ bool CKeyMacroMgr::ExecKeyMacro(CEditView* pcEditView, int flags) const
 /*! キーボードマクロの読み込み
 	エラーメッセージは出しません。呼び出し側でよきにはからってください。
 */
-bool CKeyMacroMgr::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
+bool KeyMacroMgr::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
 {
 	// キーマクロのバッファをクリアする
 	ClearAll();
 
-	CTextInputStream in(pszPath);
+	TextInputStream in(pszPath);
 	if (!in) {
 		m_nReady = false;
 		return false;
@@ -161,7 +161,7 @@ bool CKeyMacroMgr::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
 	EFunctionCode	nFuncID;
 	int		i;
 	int		nBgn, nEnd;
-	CMacro* macro = NULL;
+	Macro* macro = NULL;
 
 	// Jun. 16, 2002 genta
 	m_nReady = true;	// エラーがあればfalseになる
@@ -210,7 +210,7 @@ bool CKeyMacroMgr::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
 		//@@@ 2002.2.2 YAZAKI マクロをCSMacroMgrに統一
 		nFuncID = CSMacroMgr::GetFuncInfoByName(hInstance, szFuncName, szFuncNameJapanese);
 		if (nFuncID != -1) {
-			macro = new CMacro(nFuncID);
+			macro = new Macro(nFuncID);
 			// Jun. 16, 2002 genta プロトタイプチェック用に追加
 			int nArgs;
 			const MacroFuncInfo* mInfo= CSMacroMgr::GetFuncInfoByID(nFuncID);
@@ -300,7 +300,7 @@ bool CKeyMacroMgr::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
 						break;
 					}
 
-					CNativeW cmemWork;
+					NativeW cmemWork;
 					cmemWork.SetString(strLine.c_str() + nBgn, nEnd - nBgn);
 					// 2014.01.28 「"\\'"」のような場合の不具合を修正
 					cmemWork.Replace( L"\\\\", L"\\\1" ); // 一時置換(最初に必要)
@@ -316,7 +316,7 @@ bool CKeyMacroMgr::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
 						size_t nLen = cmemWork.GetStringLength();
 						size_t nBegin = 0;
 						const wchar_t* p = cmemWork.GetStringPtr();
-						CNativeW cmemTemp;
+						NativeW cmemTemp;
 						for (size_t n=0; n<nLen; ++n) {
 							if (n + 1 < nLen && p[n] == L'\\' && p[n+1] == L'u') {
 								size_t k;
@@ -383,7 +383,7 @@ bool CKeyMacroMgr::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
 						}
 					}
 
-					CNativeW cmemWork;
+					NativeW cmemWork;
 					cmemWork.SetString(strLine.c_str() + nBgn, nEnd - nBgn);
 					// Jun. 16, 2002 genta
 					// 数字の中にquotationは入っていないよ
@@ -437,7 +437,7 @@ bool CKeyMacroMgr::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
 }
 
 // キーボードマクロを文字列から読み込み
-bool CKeyMacroMgr::LoadKeyMacroStr(HINSTANCE hInstance, const TCHAR* pszCode)
+bool KeyMacroMgr::LoadKeyMacroStr(HINSTANCE hInstance, const TCHAR* pszCode)
 {
 	// 一時ファイル名を作成
 	TCHAR szTempDir[_MAX_PATH];
@@ -445,7 +445,7 @@ bool CKeyMacroMgr::LoadKeyMacroStr(HINSTANCE hInstance, const TCHAR* pszCode)
 	if (::GetTempPath(_MAX_PATH, szTempDir) == 0) return FALSE;
 	if (::GetTempFileName(szTempDir, _T("mac"), 0, szTempFile) == 0) return FALSE;
 	// 一時ファイルに書き込む
-	CTextOutputStream out = CTextOutputStream(szTempFile);
+	TextOutputStream out = TextOutputStream(szTempFile);
 	out.WriteString(to_wchar(pszCode));
 	out.Close();
 
@@ -466,10 +466,10 @@ bool CKeyMacroMgr::LoadKeyMacroStr(HINSTANCE hInstance, const TCHAR* pszCode)
 	@date 2004-01-31 genta RegisterExtの廃止のためRegisterCreatorに置き換え
 		そのため，過ったオブジェクト生成を行わないために拡張子チェックは必須．
 */
-CMacroManagerBase* CKeyMacroMgr::Creator(const TCHAR* ext)
+MacroManagerBase* KeyMacroMgr::Creator(const TCHAR* ext)
 {
 	if (_tcscmp(ext, _T("mac")) == 0) {
-		return new CKeyMacroMgr;
+		return new KeyMacroMgr;
 	}
 	return NULL;
 }
@@ -478,10 +478,10 @@ CMacroManagerBase* CKeyMacroMgr::Creator(const TCHAR* ext)
 
 	@date 2004.01.31 genta RegisterExtの廃止のためRegisterCreatorに置き換え
 */
-void CKeyMacroMgr::declare (void)
+void KeyMacroMgr::declare (void)
 {
 	// 常に実行
-	CMacroFactory::getInstance()->RegisterCreator(Creator);
+	MacroFactory::getInstance()->RegisterCreator(Creator);
 }
 // To Here Apr. 29, 2002 genta
 

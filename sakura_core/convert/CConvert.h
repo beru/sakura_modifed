@@ -30,10 +30,10 @@
 class ConvertMediator {
 public:
 	// 機能種別によるバッファの変換
-	static void ConvMemory(CNativeW* pCMemory, EFunctionCode nFuncCode, int nTabWidth, int nStartColumn);
+	static void ConvMemory(NativeW* pCMemory, EFunctionCode nFuncCode, int nTabWidth, int nStartColumn);
 
 protected:
-	static void Command_TRIM2(CNativeW* pCMemory, BOOL bLeft);
+	static void Command_TRIM2(NativeW* pCMemory, BOOL bLeft);
 };
 
 class Converter {
@@ -41,7 +41,7 @@ public:
 	virtual ~Converter() {}
 
 	// インターフェース
-	void CallConvert( CNativeW* pcData )
+	void CallConvert( NativeW* pcData )
 	{
 		bool bRet = DoConvert(pcData);
 		if (!bRet) {
@@ -50,6 +50,6 @@ public:
 	}
 
 	// 実装
-	virtual bool DoConvert(CNativeW* pcData) = 0;
+	virtual bool DoConvert(NativeW* pcData) = 0;
 };
 

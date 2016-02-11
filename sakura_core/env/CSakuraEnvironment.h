@@ -25,11 +25,11 @@
 
 #include <string>
 
-class CEditWnd;
+class EditWnd;
 
-class CSakuraEnvironment {
+class SakuraEnvironment {
 public:
-	static CEditWnd* GetMainWindow();
+	static EditWnd* GetMainWindow();
 	static void ExpandParameter(const wchar_t* pszSource, wchar_t* pszBuffer, int nBufferLen);
 	static std::tstring GetDlgInitialDir(bool bControlProcess = false);
 

@@ -21,10 +21,10 @@
 #include "env/DLLSHAREDATA.h"
 
 
-// CTipWndクラス デストラクタ
-CTipWnd::CTipWnd()
+// TipWndクラス デストラクタ
+TipWnd::TipWnd()
 	:
-	CWnd(_T("::CTipWnd"))
+	Wnd(_T("::TipWnd"))
 {
 	m_hFont = NULL;
 	m_KeyWasHit = FALSE;	// キーがヒットしたか
@@ -32,8 +32,8 @@ CTipWnd::CTipWnd()
 }
 
 
-// CTipWndクラス デストラクタ
-CTipWnd::~CTipWnd()
+// TipWndクラス デストラクタ
+TipWnd::~TipWnd()
 {
 	if (m_hFont) {
 		::DeleteObject(m_hFont);
@@ -44,9 +44,9 @@ CTipWnd::~CTipWnd()
 
 
 // 初期化
-void CTipWnd::Create(HINSTANCE hInstance, HWND hwndParent)
+void TipWnd::Create(HINSTANCE hInstance, HWND hwndParent)
 {
-	LPCTSTR pszClassName = _T("CTipWnd");
+	LPCTSTR pszClassName = _T("TipWnd");
 	
 	// ウィンドウクラス作成
 	RegisterWC(
@@ -62,8 +62,8 @@ void CTipWnd::Create(HINSTANCE hInstance, HWND hwndParent)
 
 	// 基底クラスメンバ呼び出し
 	// 2006.01.09 ryoji 初期状態を不可視にする
-	// 実質的には見えないCTipWndが最前面にあると判断されてしまう場合があるため
-	CWnd::Create(
+	// 実質的には見えないTipWndが最前面にあると判断されてしまう場合があるため
+	Wnd::Create(
 		hwndParent,
 		WS_EX_TOOLWINDOW, // extended window style	// 2002/2/3 GAE
 		pszClassName,	// Pointer to a null-terminated string or is an atom.
@@ -87,17 +87,17 @@ void CTipWnd::Create(HINSTANCE hInstance, HWND hwndParent)
 
 /*!	CreateWindowの後
 
-	CWnd::AfterCreateWindowでウィンドウを表示するようになっているのを
+	Wnd::AfterCreateWindowでウィンドウを表示するようになっているのを
 	動かなくするための空関数
 
 	@date 2006.01.09 genta 新規作成
 */
-void CTipWnd::AfterCreateWindow(void)
+void TipWnd::AfterCreateWindow(void)
 {
 }
 
 // Tipを表示
-void CTipWnd::Show(int nX, int nY, const TCHAR* szText, RECT* pRect)
+void TipWnd::Show(int nX, int nY, const TCHAR* szText, RECT* pRect)
 {
 	if (szText) {
 		m_cInfo.SetString(szText);
@@ -130,7 +130,7 @@ void CTipWnd::Show(int nX, int nY, const TCHAR* szText, RECT* pRect)
 }
 
 // ウィンドウのサイズを決める
-void CTipWnd::ComputeWindowSize(
+void TipWnd::ComputeWindowSize(
 	HDC				hdc,
 	HFONT			hFont,
 	const TCHAR*	pszText,
@@ -189,7 +189,7 @@ void CTipWnd::ComputeWindowSize(
 
 
 // ウィンドウのテキストを表示
-void CTipWnd::DrawTipText(
+void TipWnd::DrawTipText(
 	HDC				hdc,
 	HFONT			hFont,
 	const TCHAR*	pszText
@@ -250,7 +250,7 @@ void CTipWnd::DrawTipText(
 
 
 // Tipを消す
-void CTipWnd::Hide(void)
+void TipWnd::Hide(void)
 {
 	::ShowWindow(GetHwnd(), SW_HIDE);
 //	::DestroyWindow(GetHwnd());
@@ -259,7 +259,7 @@ void CTipWnd::Hide(void)
 
 
 // 描画処理
-LRESULT CTipWnd::OnPaint(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l_Param)
+LRESULT TipWnd::OnPaint(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l_Param)
 {
 	PAINTSTRUCT	ps;
 	RECT	rc;
@@ -275,7 +275,7 @@ LRESULT CTipWnd::OnPaint(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l_Param)
 
 
 // 2001/06/19 Start by asa-o: ウィンドウのサイズを得る
-void CTipWnd::GetWindowSize(LPRECT pRect)
+void TipWnd::GetWindowSize(LPRECT pRect)
 {
 	HDC hdc = ::GetDC(GetHwnd());
 	const TCHAR* pszText = m_cInfo.GetStringPtr();

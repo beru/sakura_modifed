@@ -25,7 +25,7 @@
 
 #include "view/colors/CColorStrategy.h"
 
-class CColor_Heredoc : public CColorStrategy {
+class Color_Heredoc : public ColorStrategy {
 public:
 	virtual EColorIndexType GetStrategyColor() const { return COLORIDX_HEREDOC; }
 	virtual LayoutColorInfo* GetStrategyColorInfo() const;

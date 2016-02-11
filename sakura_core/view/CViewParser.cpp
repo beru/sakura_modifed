@@ -9,7 +9,7 @@
 	カーソル直前の単語を取得 単語の長さを返します
 	単語区切り
 */
-int CViewParser::GetLeftWord(CNativeW* pcmemWord, int nMaxWordLen) const
+int ViewParser::GetLeftWord(NativeW* pcmemWord, int nMaxWordLen) const
 {
 	LogicInt	nLineLen;
 	LogicInt	nIdx;
@@ -41,14 +41,14 @@ int CViewParser::GetLeftWord(CNativeW* pcmemWord, int nMaxWordLen) const
 			return 0;
 		}
 
-		nCharChars = &pLine[nLineLen] - CNativeW::GetCharPrev(pLine, nLineLen, &pLine[nLineLen]);
+		nCharChars = &pLine[nLineLen] - NativeW::GetCharPrev(pLine, nLineLen, &pLine[nLineLen]);
 		if (nCharChars == 0) {
 			return 0;
 		}
 		nIdxTo = nLineLen;
 		nIdx = nIdxTo - LogicInt(nCharChars);
 	}else {
-		nCharChars = &pLine[nIdxTo] - CNativeW::GetCharPrev(pLine, nLineLen, &pLine[nIdxTo]);
+		nCharChars = &pLine[nIdxTo] - NativeW::GetCharPrev(pLine, nLineLen, &pLine[nIdxTo]);
 		if (nCharChars == 0) {
 			return 0;
 		}
@@ -62,7 +62,7 @@ int CViewParser::GetLeftWord(CNativeW* pcmemWord, int nMaxWordLen) const
 	}
 
 	// 現在位置の単語の範囲を調べる
-	CNativeW cmemWord;
+	NativeW cmemWord;
 	LayoutRange sRange;
 	bool bResult = m_pEditView->m_pcEditDoc->m_cLayoutMgr.WhereCurrentWord(
 		nCurLine,
@@ -89,8 +89,8 @@ int CViewParser::GetLeftWord(CNativeW* pcmemWord, int nMaxWordLen) const
 	
 	@date 2006.03.24 fon (CEditView::Command_SELECTWORDを流用)
 */
-bool CViewParser::GetCurrentWord(
-	CNativeW* pcmemWord
+bool ViewParser::GetCurrentWord(
+	NativeW* pcmemWord
 ) const
 {
 	const Layout* pcLayout = m_pEditView->m_pcEditDoc->m_cLayoutMgr.SearchLineByLayoutY(m_pEditView->GetCaret().GetCaretLayoutPos().GetY2());

@@ -92,10 +92,10 @@ bool ProcessFactory::ProfileSelect(
 	LPCTSTR lpCmdLine
 	)
 {
-	CDlgProfileMgr dlgProf;
+	DlgProfileMgr dlgProf;
 	ProfileSettings settings;
 
-	CDlgProfileMgr::ReadProfSettings( settings );
+	DlgProfileMgr::ReadProfSettings( settings );
 	SelectLang::InitializeLanguageEnvironment();
 	SelectLang::ChangeLang( settings.m_szDllLanguage );
 
@@ -362,7 +362,7 @@ bool ProcessFactory::TestWriteQuit()
 	if (CommandLine::getInstance()->IsWriteQuit()) {
 		TCHAR szIniFileIn[_MAX_PATH];
 		TCHAR szIniFileOut[_MAX_PATH];
-		CFileNameManager::getInstance()->GetIniFileNameDirect( szIniFileIn, szIniFileOut, _T("") );
+		FileNameManager::getInstance()->GetIniFileNameDirect( szIniFileIn, szIniFileOut, _T("") );
 		if (szIniFileIn[0] != _T('\0')) {	// マルチユーザ用設定か
 			// 既にマルチユーザ用のiniファイルがあればEXE基準のiniファイルに上書き更新して終了
 			if (fexist(szIniFileIn)) {

@@ -29,7 +29,7 @@ const int MAX_X = MAX_TOOLBAR_ICON_X;
 const int MAX_Y = MAX_TOOLBAR_ICON_Y;	// 2002.01.17
 
 // コンストラクタ
-CImageListMgr::CImageListMgr()
+ImageListMgr::ImageListMgr()
 	:
 	m_cx(16),
 	m_cy(16),
@@ -63,7 +63,7 @@ void FillSolidRect(
 }
 
 //	Destructor
-CImageListMgr::~CImageListMgr()
+ImageListMgr::~ImageListMgr()
 {
 	//	2003.07.21 Image Listの代わりに描画用bitmapを解放
 	if (m_hIconBitmap) {
@@ -81,7 +81,7 @@ CImageListMgr::~CImageListMgr()
 	
 	@date 2003.07.21 genta ImageListの構築は行わない．代わりにbitmapをそのまま保持する．
 */
-bool CImageListMgr::Create(HINSTANCE hInstance)
+bool ImageListMgr::Create(HINSTANCE hInstance)
 {
 	MY_RUNNINGTIMER(cRunningTimer, "CImageListMgr::Create");
 	if (m_hIconBitmap) {	//	既に構築済みなら無視する
@@ -187,7 +187,7 @@ bool CImageListMgr::Create(HINSTANCE hInstance)
 	@date 2003.08.27 Moca 背景は透過処理に変更し、colBkColorを削除
 	@date 2010.01.30 syat 透明にする色を引数に移動
 */
-void CImageListMgr::MyBitBlt(
+void ImageListMgr::MyBitBlt(
 	HDC drawdc, 
 	int nXDest, 
 	int nYDest, 
@@ -249,7 +249,7 @@ void CImageListMgr::MyBitBlt(
 	@date 2003.07.21 genta 以前のCMenuDrawerより移転復活
 	@date 2003.08.27 Moca 背景色は透過処理する
 */
-void CImageListMgr::DitherBlt2(
+void ImageListMgr::DitherBlt2(
 	HDC drawdc,
 	int nXDest,
 	int nYDest,
@@ -343,7 +343,7 @@ void CImageListMgr::DitherBlt2(
 	@date 2003.09.06 genta Mocaさんの背景色透過処理に伴い，背景色引数削除
 	@date 2007.11.02 ryoji アイコン番号が負の場合は描画しない
 */
-bool CImageListMgr::Draw(
+bool ImageListMgr::Draw(
 	int index,
 	HDC dc,
 	int x,
@@ -372,14 +372,14 @@ bool CImageListMgr::Draw(
 
 	@date 2003.07.21 genta 個数を自分で管理する必要がある．
 */
-int CImageListMgr::Count() const
+int ImageListMgr::Count() const
 {
 	return m_nIconCount;
 //	return MAX_X * MAX_Y;
 }
 
 /*!	アイコンを追加してそのIDを返す */
-int CImageListMgr::Add(const TCHAR* szPath)
+int ImageListMgr::Add(const TCHAR* szPath)
 {
 	if ((m_nIconCount % MAX_X) == 0) {
 		Extend();
@@ -415,7 +415,7 @@ int CImageListMgr::Add(const TCHAR* szPath)
 }
 
 // ビットマップを一行（MAX_X個）拡張する
-void CImageListMgr::Extend(bool bExtend)
+void ImageListMgr::Extend(bool bExtend)
 {
 	int curY = m_nIconCount / MAX_X;
 	if (curY < MAX_Y) {
@@ -448,7 +448,7 @@ void CImageListMgr::Extend(bool bExtend)
 	m_hIconBitmap = hDestBmp;
 }
 
-void CImageListMgr::ResetExtend()
+void ImageListMgr::ResetExtend()
 {
 	m_nIconCount = MAX_TOOLBAR_ICON_COUNT;
 	Extend(false);

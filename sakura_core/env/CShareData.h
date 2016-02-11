@@ -32,38 +32,38 @@
 
 #include "CSelectLang.h"		// 2011.04.10 nasukoji
 
-class CShareData;
+class ShareData;
 
 // 2010.04.19 Moca DLLSHAREDATA関連はDLLSHAREDATA.h等最低限必要な場所へ移動
-// CShareData.hは、自分のInterfaceしか提供しません。別にDLLSHAREDATA.hをincludeすること。
+// ShareData.hは、自分のInterfaceしか提供しません。別にDLLSHAREDATA.hをincludeすること。
 struct DLLSHAREDATA;
 struct TypeConfig;
 class Mutex;
 
 /*!	@brief 共有データの管理
 
-	CShareDataはCProcessのメンバであるため，両者の寿命は同一です．
+	ShareDataはCProcessのメンバであるため，両者の寿命は同一です．
 	本来はCProcessオブジェクトを通じてアクセスするべきですが，
 	CProcess内のデータ領域へのポインタをstatic変数に保存することで
 	Singletonのようにどこからでもアクセスできる構造になっています．
 
 	共有メモリへのポインタをm_pShareDataに保持します．このメンバは
-	公開されていますが，CShareDataによってMap/Unmapされるために
+	公開されていますが，ShareDataによってMap/Unmapされるために
 	ChareDataの消滅によってポインタm_pShareDataも無効になることに
 	注意してください．
 
-	@date 2002.01.03 YAZAKI m_tbMyButtonなどをCShareDataからCMenuDrawerへ移動したことによる修正。
+	@date 2002.01.03 YAZAKI m_tbMyButtonなどをShareDataからCMenuDrawerへ移動したことによる修正。
 */
-class CShareData : public TSingleton<CShareData> {
-	friend class TSingleton<CShareData>;
-	CShareData();
-	~CShareData();
+class ShareData : public TSingleton<ShareData> {
+	friend class TSingleton<ShareData>;
+	ShareData();
+	~ShareData();
 
 public:
 	/*
 	||  Attributes & Operations
 	*/
-	bool InitShareData();	// CShareDataクラスの初期化処理
+	bool InitShareData();	// ShareDataクラスの初期化処理
 	void RefreshString();	// 言語選択後に共有メモリ内の文字列を更新する
 	
 	// MRU系

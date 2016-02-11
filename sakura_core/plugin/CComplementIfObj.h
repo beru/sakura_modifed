@@ -32,7 +32,7 @@
 #include "macro/CWSHIfObj.h"
 #include "util/ole_convert.h"
 
-class CComplementIfObj : public CWSHIfObj {
+class ComplementIfObj : public WSHIfObj {
 	// 型定義
 	enum FuncId {
 		F_OL_COMMAND_FIRST = 0,					// ↓コマンドは以下に追加する
@@ -44,9 +44,9 @@ class CComplementIfObj : public CWSHIfObj {
 
 	// コンストラクタ
 public:
-	CComplementIfObj(std::wstring& curWord, CHokanMgr* pMgr, int option)
+	ComplementIfObj(std::wstring& curWord, CHokanMgr* pMgr, int option)
 		:
-		CWSHIfObj(L"Complement", false),
+		WSHIfObj(L"Complement", false),
 		m_sCurrentWord(curWord),
 		m_pHokanMgr(pMgr),
 		m_nOption(option)
@@ -55,7 +55,7 @@ public:
 
 	// デストラクタ
 public:
-	~CComplementIfObj() {}
+	~ComplementIfObj() {}
 
 	// 実装
 public:
@@ -65,7 +65,7 @@ public:
 	MacroFuncInfoArray GetMacroFuncInfo() const { return m_MacroFuncInfoArr; };
 	// 関数を処理する
 	bool HandleFunction(
-		CEditView*		View,
+		EditView*		View,
 		EFunctionCode	ID,
 		const VARIANT*	Arguments,
 		const int		ArgSize,
@@ -109,7 +109,7 @@ public:
 	}
 	
 	// コマンドを処理する
-	bool HandleCommand(CEditView* View, EFunctionCode ID, const WCHAR* Arguments[], const int ArgLengths[], const int ArgSize) {
+	bool HandleCommand(EditView* View, EFunctionCode ID, const WCHAR* Arguments[], const int ArgLengths[], const int ArgSize) {
 		return false;
 	}
 
@@ -125,14 +125,14 @@ private:
 };
 
 // コマンド情報
-MacroFuncInfo CComplementIfObj::m_MacroFuncInfoCommandArr[] = {
+MacroFuncInfo ComplementIfObj::m_MacroFuncInfoCommandArr[] = {
 	//ID									関数名							引数										戻り値の型	m_pszData
 	// 終端
 	{F_INVALID,	NULL, {VT_EMPTY, VT_EMPTY, VT_EMPTY, VT_EMPTY},	VT_EMPTY,	NULL}
 };
 
 // 関数情報
-MacroFuncInfo CComplementIfObj::m_MacroFuncInfoArr[] = {
+MacroFuncInfo ComplementIfObj::m_MacroFuncInfoArr[] = {
 	//ID								関数名				引数										戻り値の型	m_pszData
 	{EFunctionCode(F_CM_GETCURRENTWORD),L"GetCurrentWord",	{VT_EMPTY, VT_EMPTY, VT_EMPTY, VT_EMPTY},	VT_BSTR,	NULL }, // 補完対象の文字列を取得
 	{EFunctionCode(F_CM_GETOPTION),		L"GetOption",		{VT_EMPTY, VT_EMPTY, VT_EMPTY, VT_EMPTY},	VT_I4,		NULL }, // 補完対象の文字列を取得

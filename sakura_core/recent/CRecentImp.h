@@ -30,15 +30,15 @@
 
 
 template <class DATA_TYPE, class RECEIVE_TYPE = const DATA_TYPE*>
-class CRecentImp : public Recent {
+class RecentImp : public Recent {
 private:
-	typedef CRecentImp<DATA_TYPE, RECEIVE_TYPE>	Me;
+	typedef RecentImp<DATA_TYPE, RECEIVE_TYPE>	Me;
 	typedef DATA_TYPE							DataType;
 	typedef RECEIVE_TYPE						ReceiveType;
 
 public:
-	CRecentImp() { Terminate(); }
-	virtual ~CRecentImp() { Terminate(); }
+	RecentImp() { Terminate(); }
+	virtual ~RecentImp() { Terminate(); }
 
 protected:
 	// ê∂ê¨

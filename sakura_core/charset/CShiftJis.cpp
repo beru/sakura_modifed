@@ -106,8 +106,8 @@ int ShiftJis::SjisToUni(const char* pSrc, const int nSrcLen, wchar_t* pDst, bool
 
 // コード変換 SJIS→Unicode
 EConvertResult ShiftJis::SJISToUnicode(
-	const CMemory& cSrc,
-	CNativeW* pDstMem
+	const Memory& cSrc,
+	NativeW* pDstMem
 	)
 {
 	// ソース取得
@@ -200,10 +200,10 @@ int ShiftJis::UniToSjis(const wchar_t* pSrc, const int nSrcLen, char* pDst, bool
 
 
 // コード変換 Unicode→SJIS
-EConvertResult ShiftJis::UnicodeToSJIS( const CNativeW& cSrc, CMemory* pDstMem )
+EConvertResult ShiftJis::UnicodeToSJIS( const NativeW& cSrc, Memory* pDstMem )
 {
 	// 状態
-	const CMemory* pMem = cSrc._GetMemory();
+	const Memory* pMem = cSrc._GetMemory();
 
 	// ソース取得
 	const wchar_t* pSrc = reinterpret_cast<const wchar_t*>(pMem->GetRawPtr());
@@ -236,7 +236,7 @@ EConvertResult ShiftJis::UnicodeToSJIS( const CNativeW& cSrc, CMemory* pDstMem )
 // 文字コード表示用	UNICODE → Hex 変換	2008/6/9 Uchi
 EConvertResult ShiftJis::UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR* pDst, const CommonSetting_Statusbar* psStatusbar)
 {
-	CNativeW		cCharBuffer;
+	NativeW		cCharBuffer;
 	EConvertResult	res;
 	int				i;
 	unsigned char*	ps;

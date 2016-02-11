@@ -25,7 +25,7 @@
 #include "util/file.h"
 
 /*! @brief PCRE メタキャラクタのエスケープ処理を行う。
- （CMigemo::migemo_setproc_int2char の引数として使用）
+ （Migemo::migemo_setproc_int2char の引数として使用）
  @param[in] in 入力文字コード(unsigned int)
  @param[out] out 出力バイト列(unsigned char*)
  @return 出力された文字列のバイト数。
@@ -40,7 +40,7 @@ int __cdecl pcre_int2char_utf8(unsigned int, unsigned char*);
 //-----------------------------------------
 // DLL 初期化関数
 //-----------------------------------------
-bool CMigemo::InitDllImp()
+bool Migemo::InitDllImp()
 {
 	// staticにしてはいけないらしい
 	const ImportTable table[] = {
@@ -87,13 +87,13 @@ bool CMigemo::InitDllImp()
 	return true;
 }
 
-int CMigemo::DeInitDll(void)
+int Migemo::DeInitDll(void)
 {
 	migemo_close();
 	return 0;
 }
 
-LPCTSTR CMigemo::GetDllNameImp(int nIndex)
+LPCTSTR Migemo::GetDllNameImp(int nIndex)
 {
 	if (nIndex == 0) {
 		TCHAR* szDll;
@@ -116,7 +116,7 @@ LPCTSTR CMigemo::GetDllNameImp(int nIndex)
 	}
 }
 
-long CMigemo::migemo_open(char* dict)
+long Migemo::migemo_open(char* dict)
 {	
 
 	if (!IsAvailable())
@@ -136,7 +136,7 @@ long CMigemo::migemo_open(char* dict)
 	return 1;
 }
 
-void CMigemo::migemo_close()
+void Migemo::migemo_close()
 {
 	if (!IsAvailable() || !m_migemo) {
 		return;
@@ -149,7 +149,7 @@ void CMigemo::migemo_close()
 	}
 }
 
-unsigned char* CMigemo::migemo_query(unsigned char* query)
+unsigned char* Migemo::migemo_query(unsigned char* query)
 {
 	if (!IsAvailable() || !m_migemo) {
 		return NULL;
@@ -162,11 +162,11 @@ unsigned char* CMigemo::migemo_query(unsigned char* query)
 	}
 }
 
-std::wstring CMigemo::migemo_query_w(const wchar_t* query)
+std::wstring Migemo::migemo_query_w(const wchar_t* query)
 {
 	if (m_bUtf8) {
-		CNativeW cnvStr;
-		CNativeA utf8Str;
+		NativeW cnvStr;
+		NativeA utf8Str;
 		cnvStr.SetString(query);
 		Utf8::UnicodeToUTF8(cnvStr, utf8Str._GetMemory());
 		unsigned char* ret;
@@ -182,7 +182,7 @@ std::wstring CMigemo::migemo_query_w(const wchar_t* query)
 	return retVal;
 }
 
-void CMigemo::migemo_release(unsigned char* str)
+void Migemo::migemo_release(unsigned char* str)
 {
 	if (!IsAvailable() || !m_migemo) {
 		return;
@@ -195,7 +195,7 @@ void CMigemo::migemo_release(unsigned char* str)
 	}
 
 }
-int CMigemo::migemo_set_operator(int index, unsigned char* op)
+int Migemo::migemo_set_operator(int index, unsigned char* op)
 {
 	if (!IsAvailable() || !m_migemo) {
 		return 0;
@@ -207,7 +207,7 @@ int CMigemo::migemo_set_operator(int index, unsigned char* op)
 		return (*m_migemo_set_operator)(m_migemo, index, op);
 	}
 }
-const unsigned char* CMigemo::migemo_get_operator(int index)
+const unsigned char* Migemo::migemo_get_operator(int index)
 {
 	if (!IsAvailable() || !m_migemo) {
 		return NULL;
@@ -220,7 +220,7 @@ const unsigned char* CMigemo::migemo_get_operator(int index)
 	}
 }
 
-void CMigemo::migemo_setproc_char2int(MIGEMO_PROC_CHAR2INT proc)
+void Migemo::migemo_setproc_char2int(MIGEMO_PROC_CHAR2INT proc)
 {
 	if (!IsAvailable() || !m_migemo) {
 		return ;
@@ -233,7 +233,7 @@ void CMigemo::migemo_setproc_char2int(MIGEMO_PROC_CHAR2INT proc)
 	}
 }
 
-void CMigemo::migemo_setproc_int2char(MIGEMO_PROC_INT2CHAR proc)
+void Migemo::migemo_setproc_int2char(MIGEMO_PROC_INT2CHAR proc)
 {
 	if (!IsAvailable() || !m_migemo) {
 		return;
@@ -246,7 +246,7 @@ void CMigemo::migemo_setproc_int2char(MIGEMO_PROC_INT2CHAR proc)
 	}
 }
 
-int CMigemo::migemo_load_a(int dict_id, const char* dict_file)
+int Migemo::migemo_load_a(int dict_id, const char* dict_file)
 {
 	if (!IsAvailable() || !m_migemo) {
 		return 0;
@@ -259,14 +259,14 @@ int CMigemo::migemo_load_a(int dict_id, const char* dict_file)
 	}
 }
 
-int CMigemo::migemo_load_w(int dict_id, const wchar_t* dict_file)
+int Migemo::migemo_load_w(int dict_id, const wchar_t* dict_file)
 {
 	char szBuf[_MAX_PATH];
 	wcstombs2(szBuf, dict_file, _countof(szBuf));
 	return migemo_load_a(dict_id, szBuf);
 }
 
-int CMigemo::migemo_is_enable()
+int Migemo::migemo_is_enable()
 {
 	if (!IsAvailable() || !m_migemo) {
 		return 0;
@@ -279,7 +279,7 @@ int CMigemo::migemo_is_enable()
 	}
 }
 
-int CMigemo::migemo_load_all()
+int Migemo::migemo_load_all()
 {
 	if (!migemo_is_enable()) {
 		
@@ -338,7 +338,7 @@ int CMigemo::migemo_load_all()
 }
 
 
-CMigemo::~CMigemo()
+Migemo::~Migemo()
 {
 }
 

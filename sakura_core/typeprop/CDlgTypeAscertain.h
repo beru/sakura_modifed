@@ -42,7 +42,7 @@ using std::tstring;
 /*!
 	@brief ファイルタイプ一覧ダイアログ
 */
-class CDlgTypeAscertain : public CDialog {
+class CDlgTypeAscertain : public Dialog {
 public:
 	// 型
 	struct AscertainInfo {

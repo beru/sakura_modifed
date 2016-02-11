@@ -38,7 +38,7 @@ private:
 	static const COLORREF INVALID_COLOR = 0xFFFFFFFF; // ñ≥å¯Ç»êFíËêî
 
 public:
-	CTypeSupport(const CEditView* pEditView, EColorIndexType eColorIdx)
+	CTypeSupport(const EditView* pEditView, EColorIndexType eColorIdx)
 		:
 		m_pFontset(&pEditView->GetFontset()),
 		m_nColorIdx(ToColorInfoArrIndex(eColorIdx))
@@ -91,7 +91,7 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                           ï`âÊ                              //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-	void FillBack(CGraphics& gr, const RECT& rc) {
+	void FillBack(Graphics& gr, const RECT& rc) {
 		gr.FillSolidMyRect(rc, m_pColorInfoArr->m_sColorAttr.m_cBACK);
 	}
 
@@ -105,7 +105,7 @@ public:
 		return sFont;
 	}
 	
-	void SetGraphicsState_WhileThisObj(CGraphics& gr) {
+	void SetGraphicsState_WhileThisObj(Graphics& gr) {
 		if (m_gr) {
 			RewindGraphicsState(*m_gr);
 		}
@@ -120,7 +120,7 @@ public:
 		gr.PushMyFont(GetTypeFont());
 	}
 	
-	void RewindGraphicsState(CGraphics& gr) {
+	void RewindGraphicsState(Graphics& gr) {
 		if (m_gr) {
 			gr.PopTextBackColor();
 			gr.PopTextForeColor();
@@ -130,11 +130,11 @@ public:
 	}
 
 private:
-	const CViewFont*	m_pFontset;
+	const ViewFont*	m_pFontset;
 	const TypeConfig*	m_pTypes;
 	int					m_nColorIdx;
 	const ColorInfo*	m_pColorInfoArr;
 
-	CGraphics* m_gr;    // ê›íËÇïœçXÇµÇΩHDC
+	Graphics* m_gr;    // ê›íËÇïœçXÇµÇΩHDC
 };
 

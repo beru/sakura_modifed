@@ -52,49 +52,49 @@
 	削除操作はサブクラスにまかせる
 
 */
-class CMarkMgr {
+class MarkMgr {
 public:
 
 	//	項目のクラス
-	class CMark {
+	class Mark {
 	public:
 		//	constructor
-		CMark(const LogicPoint& pt) : m_ptLogic(pt) { }
+		Mark(const LogicPoint& pt) : m_ptLogic(pt) { }
 
 		LogicPoint GetPosition() const { return m_ptLogic; }
 		void SetPosition(const LogicPoint& pt) { m_ptLogic = pt; }
 
 		bool IsValid(void) const { return true; }
 
-		bool operator == (CMark &r) const { return m_ptLogic.y == r.m_ptLogic.y; }
-		bool operator != (CMark &r) const { return m_ptLogic.y != r.m_ptLogic.y; }
+		bool operator == (Mark &r) const { return m_ptLogic.y == r.m_ptLogic.y; }
+		bool operator != (Mark &r) const { return m_ptLogic.y != r.m_ptLogic.y; }
 
 	private:
 		LogicPoint m_ptLogic;
 	};
 
-	// GENERATE_FACTORY(CMark, CMarkFactory);	//	CMark用Factory class
+	// GENERATE_FACTORY(Mark, CMarkFactory);	//	Mark用Factory class
 
 	//	型宣言
-	typedef std::vector<CMark> CMarkChain;
-	typedef std::vector<CMark>::const_iterator	CMarkIterator;
+	typedef std::vector<Mark> CMarkChain;
+	typedef std::vector<Mark>::const_iterator	CMarkIterator;
 
 	//	Interface
 	//	constructor
-	CMarkMgr() : m_nCurpos(0), m_nMaxitem(10) {}
-	// CMarkMgr(const CDocLineMgr *p) : doc(p) {}
+	MarkMgr() : m_nCurpos(0), m_nMaxitem(10) {}
+	// MarkMgr(const CDocLineMgr *p) : doc(p) {}
 
 	int Count(void) const { return (int)m_cMarkChain.size(); }	//!<	項目数を返す
 	int GetMax(void) const { return m_nMaxitem; }	//!<	最大項目数を返す
 	void SetMax(int max);	//!<	最大項目数を設定
 
-	virtual void Add(const CMark& m) = 0;	//!<	要素の追加
+	virtual void Add(const Mark& m) = 0;	//!<	要素の追加
 
 	//	Apr. 1, 2001 genta
 	virtual void Flush(void);	//!<	要素の全消去
 
 	//!	要素の取得
-	const CMark& GetCurrent(void) const { return m_cMarkChain[m_nCurpos]; }
+	const Mark& GetCurrent(void) const { return m_cMarkChain[m_nCurpos]; }
 
 	//	有効性の確認
 	bool  CheckCurrent(void) const;
@@ -105,7 +105,7 @@ public:
 	bool NextValid(void);
 	bool PrevValid(void);
 
-	const CMark& operator[](int index) const { return m_cMarkChain[index]; }
+	const Mark& operator[](int index) const { return m_cMarkChain[index]; }
 
 	//	連続取得インターフェース
 //	CMarkIterator CurrentPos(void) const { return (CMarkIterator)m_cMarkChain.begin() + m_nCurpos; }
@@ -121,7 +121,7 @@ protected:
 
 	int m_nMaxitem;	//	保管可能アイテムの最大数
 private:
-	//CMarkMgr(const CMarkMgr&);	//	Copy禁止
+	//MarkMgr(const MarkMgr&);	//	Copy禁止
 
 };
 
@@ -129,11 +129,11 @@ private:
 /*!
 	@brief 移動履歴の管理クラス
 
-	CMarkMgr を継承し、動作が規定されていない部分を実装する。
+	MarkMgr を継承し、動作が規定されていない部分を実装する。
 */
-class CAutoMarkMgr : public CMarkMgr {
+class AutoMarkMgr : public MarkMgr {
 public:
-	virtual void Add(const CMark& m);	// 要素の追加
+	virtual void Add(const Mark& m);	// 要素の追加
 	virtual void Expire(void);			// 要素数の調整
 };
 

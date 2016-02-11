@@ -46,7 +46,7 @@
 #endif
 #endif
 
-void _DispWrap(CGraphics& gr, DispPos* pDispPos, const CEditView* pcView, LayoutYInt nLineNum);
+void _DispWrap(Graphics& gr, DispPos* pDispPos, const EditView* pcView, LayoutYInt nLineNum);
 
 /*
 	PAINT_LINENUMBER = (1<<0), // 行番号
@@ -54,12 +54,12 @@ void _DispWrap(CGraphics& gr, DispPos* pDispPos, const CEditView* pcView, Layout
 	PAINT_BODY       = (1<<2), // 本文
 */
 
-void CEditView_Paint::Call_OnPaint(
+void EditView_Paint::Call_OnPaint(
 	int nPaintFlag,   // 描画する領域を選択する
 	bool bUseMemoryDC // メモリDCを使用する
 )
 {
-	CEditView* pView = GetEditView();
+	EditView* pView = GetEditView();
 
 	// 各要素
 	Rect rcLineNumber(0, pView->GetTextArea().GetAreaTop(), pView->GetTextArea().GetAreaLeft(), pView->GetTextArea().GetAreaBottom());
@@ -90,7 +90,7 @@ void CEditView_Paint::Call_OnPaint(
 
 	@date 2001/06/21 asa-o 「スクロールバーの状態を更新する」「カーソル移動」削除
 */
-void CEditView::RedrawAll()
+void EditView::RedrawAll()
 {
 	if (!GetHwnd()) {
 		return;
@@ -122,7 +122,7 @@ void CEditView::RedrawAll()
 }
 
 // 2001/06/21 Start by asa-o 再描画
-void CEditView::Redraw()
+void EditView::Redraw()
 {
 	if (!GetHwnd()) {
 		return;
@@ -144,7 +144,7 @@ void CEditView::Redraw()
 }
 // 2001/06/21 End
 
-void CEditView::RedrawLines(LayoutYInt top, LayoutYInt bottom)
+void EditView::RedrawLines(LayoutYInt top, LayoutYInt bottom)
 {
 	if (!GetHwnd()) {
 		return;
@@ -179,7 +179,7 @@ void MyFillRect(HDC hdc, RECT& re)
 	::ExtTextOut(hdc, re.left, re.top, ETO_OPAQUE|ETO_CLIPPED, &re, _T(""), 0, NULL);
 }
 
-void CEditView::DrawBackImage(HDC hdc, RECT& rcPaint, HDC hdcBgImg)
+void EditView::DrawBackImage(HDC hdc, RECT& rcPaint, HDC hdcBgImg)
 {
 #if 0
 //	テスト背景パターン
@@ -196,7 +196,7 @@ void CEditView::DrawBackImage(HDC hdc, RECT& rcPaint, HDC hdcBgImg)
 #else
 	CTypeSupport cTextType(this, COLORIDX_TEXT);
 	COLORREF colorOld = ::SetBkColor(hdc, cTextType.GetBackColor());
-	const CTextArea& area = GetTextArea();
+	const TextArea& area = GetTextArea();
 	const EditDoc& doc  = *m_pcEditDoc;
 	const TypeConfig& typeConfig = doc.m_cDocType.GetDocumentAttribute();
 
@@ -346,10 +346,10 @@ void CEditView::DrawBackImage(HDC hdc, RECT& rcPaint, HDC hdcBgImg)
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 /*! 指定位置のColorIndexの取得
-	CEditView::DrawLogicLineを元にしたためCEditView::DrawLogicLineに
+	EditView::DrawLogicLineを元にしたためEditView::DrawLogicLineに
 	修正があった場合は、ここも修正が必要。
 */
-Color3Setting CEditView::GetColorIndex(
+Color3Setting EditView::GetColorIndex(
 	const Layout*			pcLayout,
 	LayoutYInt				nLineNum,
 	int						nIndex,
@@ -364,7 +364,7 @@ Color3Setting CEditView::GetColorIndex(
 		return cColor;
 	}
 	// 2014.12.30 Skipモードの時もCOLORIDX_TEXT
-	if (CColorStrategyPool::getInstance()->IsSkipBeforeLayout()) {
+	if (ColorStrategyPool::getInstance()->IsSkipBeforeLayout()) {
 		Color3Setting cColor = { COLORIDX_TEXT, COLORIDX_TEXT, COLORIDX_TEXT };
 		return cColor;
 	}
@@ -392,8 +392,8 @@ Color3Setting CEditView::GetColorIndex(
 		colorInfo = pcLayoutLineFirst->GetColorInfo();
 		pInfo->m_nPosInLogic = pcLayoutLineFirst->GetLogicOffset();
 
-		// CColorStrategyPool初期化
-		CColorStrategyPool* pool = CColorStrategyPool::getInstance();
+		// ColorStrategyPool初期化
+		ColorStrategyPool* pool = ColorStrategyPool::getInstance();
 		pool->SetCurrentView(this);
 		pool->NotifyOnStartScanLogic();
 
@@ -418,11 +418,11 @@ Color3Setting CEditView::GetColorIndex(
 	}
 
 	// 文字列参照
-	const CDocLine* pcDocLine = pcLayout->GetDocLineRef();
+	const DocLine* pcDocLine = pcLayout->GetDocLineRef();
 	CStringRef cLineStr(pcDocLine->GetPtr(), pcDocLine->GetLengthWithEOL());
 
 	// color strategy
-	CColorStrategyPool* pool = CColorStrategyPool::getInstance();
+	ColorStrategyPool* pool = ColorStrategyPool::getInstance();
 	pInfo->m_pStrategy = pool->GetStrategyByColor(eRet);
 	if (pInfo->m_pStrategy) {
 		pInfo->m_pStrategy->InitStrategyStatus();
@@ -440,7 +440,7 @@ Color3Setting CEditView::GetColorIndex(
 		pInfo->CheckChangeColor(cLineStr);
 
 		// 1文字進む
-		pInfo->m_nPosInLogic += CNativeW::GetSizeOfChar(
+		pInfo->m_nPosInLogic += NativeW::GetSizeOfChar(
 									cLineStr.GetPtr(),
 									cLineStr.GetLength(),
 									pInfo->m_nPosInLogic
@@ -465,8 +465,8 @@ Color3Setting CEditView::GetColorIndex(
 
 	@date 2013.05.08 novice 範囲外チェック削除
 */
-void CEditView::SetCurrentColor(
-	CGraphics& gr,
+void EditView::SetCurrentColor(
+	Graphics& gr,
 	EColorIndexType eColorIndex,
 	EColorIndexType eColorIndex2,
 	EColorIndexType eColorIndexBg
@@ -527,7 +527,7 @@ inline COLORREF MakeColor2(COLORREF a, COLORREF b, int alpha)
 #endif
 }
 
-COLORREF CEditView::GetTextColorByColorInfo2(const ColorInfo& info, const ColorInfo& info2)
+COLORREF EditView::GetTextColorByColorInfo2(const ColorInfo& info, const ColorInfo& info2)
 {
 	if (info.m_sColorAttr.m_cTEXT != info.m_sColorAttr.m_cBACK) {
 		return info.m_sColorAttr.m_cTEXT;
@@ -540,7 +540,7 @@ COLORREF CEditView::GetTextColorByColorInfo2(const ColorInfo& info, const ColorI
 	return MakeColor2(info.m_sColorAttr.m_cTEXT, info2.m_sColorAttr.m_cTEXT, alpha);
 }
 
-COLORREF CEditView::GetBackColorByColorInfo2(const ColorInfo& info, const ColorInfo& info2)
+COLORREF EditView::GetBackColorByColorInfo2(const ColorInfo& info, const ColorInfo& info2)
 {
 	if (info.m_sColorAttr.m_cTEXT != info.m_sColorAttr.m_cBACK) {
 		return info.m_sColorAttr.m_cBACK;
@@ -558,7 +558,7 @@ COLORREF CEditView::GetBackColorByColorInfo2(const ColorInfo& info, const ColorI
 //                           描画                              //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-void CEditView::OnPaint(HDC _hdc, PAINTSTRUCT *pPs, BOOL bDrawFromComptibleBmp)
+void EditView::OnPaint(HDC _hdc, PAINTSTRUCT *pPs, BOOL bDrawFromComptibleBmp)
 {
 	bool bChangeFont = m_bMiniMap;
 	if (bChangeFont) {
@@ -579,10 +579,10 @@ void CEditView::OnPaint(HDC _hdc, PAINTSTRUCT *pPs, BOOL bDrawFromComptibleBmp)
 	@date 2007.09.09 Moca 元々無効化されていた第三パラメータのbUseMemoryDCをbDrawFromComptibleBmpに変更。
 	@date 2009.03.26 ryoji 行番号のみ描画を通常の行描画と分離（効率化）
 */
-void CEditView::OnPaint2(HDC _hdc, PAINTSTRUCT *pPs, BOOL bDrawFromComptibleBmp)
+void EditView::OnPaint2(HDC _hdc, PAINTSTRUCT *pPs, BOOL bDrawFromComptibleBmp)
 {
-//	MY_RUNNINGTIMER(cRunningTimer, "CEditView::OnPaint");
-	CGraphics gr(_hdc);
+//	MY_RUNNINGTIMER(cRunningTimer, "EditView::OnPaint");
+	Graphics gr(_hdc);
 
 	// 2004.01.28 Moca デスクトップに作画しないように
 	if (!GetHwnd() || !_hdc) {
@@ -678,7 +678,7 @@ void CEditView::OnPaint2(HDC _hdc, PAINTSTRUCT *pPs, BOOL bDrawFromComptibleBmp)
 		DrawBracketPair(false);
 	}
 
-	CEditView& cActiveView = m_pcEditWnd->GetActiveView();
+	EditView& cActiveView = m_pcEditWnd->GetActiveView();
 	m_nPageViewTop = cActiveView.GetTextArea().GetViewTopLine();
 	m_nPageViewBottom = cActiveView.GetTextArea().GetBottomLine();
 
@@ -877,13 +877,13 @@ void CEditView::OnPaint2(HDC _hdc, PAINTSTRUCT *pPs, BOOL bDrawFromComptibleBmp)
 	@date 2001.12.21 YAZAKI 改行記号の描きかたを変更
 	@date 2007.08.31 kobake 引数 bDispBkBitmap を削除
 */
-bool CEditView::DrawLogicLine(
+bool EditView::DrawLogicLine(
 	HDC				_hdc,			// [in]     作画対象
 	DispPos*		_pDispPos,		// [in/out] 描画する箇所、描画元ソース
 	LayoutInt		nLineTo			// [in]     作画終了するレイアウト行番号
 )
 {
-//	MY_RUNNINGTIMER(cRunningTimer, "CEditView::DrawLogicLine");
+//	MY_RUNNINGTIMER(cRunningTimer, "EditView::DrawLogicLine");
 	bool bDispEOF = false;
 	ColorStrategyInfo _sInfo;
 	ColorStrategyInfo* pInfo = &_sInfo;
@@ -891,8 +891,8 @@ bool CEditView::DrawLogicLine(
 	pInfo->m_pDispPos = _pDispPos;
 	pInfo->m_pcView = this;
 
-	// CColorStrategyPool初期化
-	CColorStrategyPool* pool = CColorStrategyPool::getInstance();
+	// ColorStrategyPool初期化
+	ColorStrategyPool* pool = ColorStrategyPool::getInstance();
 	pool->SetCurrentView(this);
 	pool->NotifyOnStartScanLogic();
 	bool bSkipBeforeLayout = pool->IsSkipBeforeLayout();
@@ -969,7 +969,7 @@ bool CEditView::DrawLogicLine(
 	レイアウト行を1行描画
 */
 // 改行記号を描画した場合はtrueを返す？
-bool CEditView::DrawLayoutLine(ColorStrategyInfo* pInfo)
+bool EditView::DrawLayoutLine(ColorStrategyInfo* pInfo)
 {
 	bool bDispEOF = false;
 	CTypeSupport cTextType(this, COLORIDX_TEXT);
@@ -984,7 +984,7 @@ bool CEditView::DrawLayoutLine(ColorStrategyInfo* pInfo)
 	}
 
 	// 文字列参照
-	const CDocLine* pcDocLine = pInfo->GetDocLine();
+	const DocLine* pcDocLine = pInfo->GetDocLine();
 	CStringRef cLineStr = pcDocLine->GetStringRefWithEOL();
 
 	// 描画範囲外の場合は色切替だけで抜ける
@@ -998,7 +998,7 @@ bool CEditView::DrawLayoutLine(ColorStrategyInfo* pInfo)
 				bChange |= pInfo->CheckChangeColor(cLineStr);
 
 				// 1文字進む
-				pInfo->m_nPosInLogic += CNativeW::GetSizeOfChar(
+				pInfo->m_nPosInLogic += NativeW::GetSizeOfChar(
 											cLineStr.GetPtr(),
 											cLineStr.GetLength(),
 											pInfo->m_nPosInLogic
@@ -1017,7 +1017,7 @@ bool CEditView::DrawLayoutLine(ColorStrategyInfo* pInfo)
 	CTypeSupport	cCaretLineBg(this, COLORIDX_CARETLINEBG);
 	CTypeSupport	cEvenLineBg(this, COLORIDX_EVENLINEBG);
 	CTypeSupport	cPageViewBg(this, COLORIDX_PAGEVIEW);
-	CEditView& cActiveView = m_pcEditWnd->GetActiveView();
+	EditView& cActiveView = m_pcEditWnd->GetActiveView();
 	CTypeSupport&	cBackType = (cCaretLineBg.IsDisp() &&
 		GetCaret().GetCaretLayoutPos().GetY() == pInfo->m_pDispPos->GetLayoutLineRef() && !m_bMiniMap
 			? cCaretLineBg
@@ -1071,7 +1071,7 @@ bool CEditView::DrawLayoutLine(ColorStrategyInfo* pInfo)
 			bSkipRight = true; // 次の行は別のロジック行なのでスキップ可能
 		}
 		if (!bSkipRight) {
-			bSkipRight = CColorStrategyPool::getInstance()->IsSkipBeforeLayout();
+			bSkipRight = ColorStrategyPool::getInstance()->IsSkipBeforeLayout();
 		}
 	}
 	// 行終端または折り返しに達するまでループ
@@ -1100,7 +1100,7 @@ bool CEditView::DrawLayoutLine(ColorStrategyInfo* pInfo)
 	}
 
 	// 必要ならEOF描画
-	void _DispEOF(CGraphics& gr, DispPos* pDispPos, const CEditView* pcView);
+	void _DispEOF(Graphics& gr, DispPos* pDispPos, const EditView* pcView);
 	if (pcLayout && !pcLayout->GetNextLayout() && pcLayout->GetLayoutEol().GetLen() == 0) {
 		// 有文字行のEOF
 		_DispEOF(pInfo->m_gr, pInfo->m_pDispPos, this);
@@ -1204,10 +1204,10 @@ bool CEditView::DrawLayoutLine(ColorStrategyInfo* pInfo)
 
 	@note
 	CCEditView::DrawLogicLine() での作画(WM_PAINT)時に、1レイアウト行をまとめて反転処理するための関数。
-	範囲選択の随時更新は、CEditView::DrawSelectArea() が選択・反転解除を行う。
+	範囲選択の随時更新は、EditView::DrawSelectArea() が選択・反転解除を行う。
 	
 */
-void CEditView::DispTextSelected(
+void EditView::DispTextSelected(
 	HDC				hdc,		// 作画対象ビットマップを含むデバイス
 	LayoutInt		nLineNum,	// 反転処理対象レイアウト行番号(0開始)
 	const Point&	ptXY,		// (相対レイアウト0桁目の左端座標, 対象行の上端座標)
@@ -1311,7 +1311,7 @@ void CEditView::DispTextSelected(
 	@param cy ウィンドウの幅
 	@return true: ビットマップを利用可能 / false: ビットマップの作成・更新に失敗
 
-	@date 2007.09.09 Moca CEditView::OnSizeから分離。
+	@date 2007.09.09 Moca EditView::OnSizeから分離。
 		単純に生成するだけだったものを、仕様変更に従い内容コピーを追加。
 		サイズが同じときは何もしないように変更
 
@@ -1320,7 +1320,7 @@ void CEditView::DispTextSelected(
 		カーソル位置横縦線変更時には、互換BMPから画面に元の情報を復帰させている。
 
 */
-bool CEditView::CreateOrUpdateCompatibleBitmap(int cx, int cy)
+bool EditView::CreateOrUpdateCompatibleBitmap(int cx, int cy)
 {
 	if (!m_hdcCompatDC) {
 		return false;
@@ -1330,7 +1330,7 @@ bool CEditView::CreateOrUpdateCompatibleBitmap(int cx, int cy)
 	int nBmpHeightNew = ((cy + 63) & (0x7fffffff - 63));
 	if (nBmpWidthNew != m_nCompatBMPWidth || nBmpHeightNew != m_nCompatBMPHeight) {
 #if 0
-	MYTRACE(_T("CEditView::CreateOrUpdateCompatibleBitmap(%d, %d): resized\n"), cx, cy);
+	MYTRACE(_T("EditView::CreateOrUpdateCompatibleBitmap(%d, %d): resized\n"), cx, cy);
 #endif
 		HDC	hdc = ::GetDC(GetHwnd());
 		HBITMAP hBitmapNew = NULL;
@@ -1379,7 +1379,7 @@ bool CEditView::CreateOrUpdateCompatibleBitmap(int cx, int cy)
 		親ウィンドウが非表示・最小化された場合に削除される。
 	@date 2007.09.09 Moca 新規作成 
 */
-void CEditView::DeleteCompatibleBitmap()
+void EditView::DeleteCompatibleBitmap()
 {
 	if (m_hbmpCompatBMP) {
 		::SelectObject(m_hdcCompatDC, m_hbmpCompatBMPOld);
@@ -1398,7 +1398,7 @@ void CEditView::DeleteCompatibleBitmap()
 
 	@date 2007.09.30 genta 関数化
 */
-void CEditView::UseCompatibleDC(BOOL fCache)
+void EditView::UseCompatibleDC(BOOL fCache)
 {
 	// From Here 2007.09.09 Moca 互換BMPによる画面バッファ
 	if (fCache) {
@@ -1406,16 +1406,16 @@ void CEditView::UseCompatibleDC(BOOL fCache)
 			HDC hdc = ::GetDC(GetHwnd());
 			m_hdcCompatDC = ::CreateCompatibleDC(hdc);
 			::ReleaseDC(GetHwnd(), hdc);
-			DEBUG_TRACE(_T("CEditView::UseCompatibleDC: Created\n"), fCache);
+			DEBUG_TRACE(_T("EditView::UseCompatibleDC: Created\n"), fCache);
 		}else {
-			DEBUG_TRACE(_T("CEditView::UseCompatibleDC: Reused\n"), fCache);
+			DEBUG_TRACE(_T("EditView::UseCompatibleDC: Reused\n"), fCache);
 		}
 	}else {
 		//	CompatibleBitmapが残っているかもしれないので最初に削除
 		DeleteCompatibleBitmap();
 		if (m_hdcCompatDC) {
 			::DeleteDC(m_hdcCompatDC);
-			DEBUG_TRACE(_T("CEditView::UseCompatibleDC: Deleted.\n"));
+			DEBUG_TRACE(_T("EditView::UseCompatibleDC: Deleted.\n"));
 			m_hdcCompatDC = NULL;
 		}
 	}

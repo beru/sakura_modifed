@@ -9,7 +9,7 @@
 //               コンストラクタ・デストラクタ                  //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-CDocLocker::CDocLocker()
+DocLocker::DocLocker()
 	:
 	m_bIsDocWritable(true)
 {
@@ -19,7 +19,7 @@ CDocLocker::CDocLocker()
 //                        ロード前後                           //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-void CDocLocker::OnAfterLoad(const LoadInfo& sLoadInfo)
+void DocLocker::OnAfterLoad(const LoadInfo& sLoadInfo)
 {
 	EditDoc* pcDoc = GetListeningDoc();
 
@@ -37,7 +37,7 @@ void CDocLocker::OnAfterLoad(const LoadInfo& sLoadInfo)
 //                        セーブ前後                           //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-void CDocLocker::OnBeforeSave(const SaveInfo& sSaveInfo)
+void DocLocker::OnBeforeSave(const SaveInfo& sSaveInfo)
 {
 	EditDoc* pcDoc = GetListeningDoc();
 
@@ -45,7 +45,7 @@ void CDocLocker::OnBeforeSave(const SaveInfo& sSaveInfo)
 	pcDoc->m_cDocFileOperation.DoFileUnlock();
 }
 
-void CDocLocker::OnAfterSave(const SaveInfo& sSaveInfo)
+void DocLocker::OnAfterSave(const SaveInfo& sSaveInfo)
 {
 	EditDoc* pcDoc = GetListeningDoc();
 
@@ -61,7 +61,7 @@ void CDocLocker::OnAfterSave(const SaveInfo& sSaveInfo)
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 // 書き込めるか検査
-void CDocLocker::CheckWritable(bool bMsg)
+void DocLocker::CheckWritable(bool bMsg)
 {
 	EditDoc* pcDoc = GetListeningDoc();
 
@@ -78,14 +78,14 @@ void CDocLocker::CheckWritable(bool bMsg)
 	}
 
 	// 書き込めるか検査
-	CDocFile& cDocFile = pcDoc->m_cDocFile;
+	DocFile& cDocFile = pcDoc->m_cDocFile;
 	m_bIsDocWritable = cDocFile.IsFileWritable();
 	if (!m_bIsDocWritable && bMsg) {
 		// 排他されている場合だけメッセージを出す
 		// その他の原因（ファイルシステムのセキュリティ設定など）では読み取り専用と同様にメッセージを出さない
 		if (::GetLastError() == ERROR_SHARING_VIOLATION) {
 			TopWarningMessage(
-				CEditWnd::getInstance()->GetHwnd(),
+				EditWnd::getInstance()->GetHwnd(),
 				LS(STR_ERR_DLGEDITDOC21),	// "%ts\nは現在他のプロセスによって書込みが禁止されています。"
 				cDocFile.GetFilePathClass().IsValidPath() ? cDocFile.GetFilePath() : LS(STR_NO_TITLE1)	// "(無題)"
 			);

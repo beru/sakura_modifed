@@ -14,7 +14,7 @@
 #include "StdAfx.h"
 #include "CLineComment.h"
 
-CLineComment::CLineComment()
+LineComment::LineComment()
 {
 	for (int i=0; i<COMMENT_DELIMITER_NUM; ++i) {
 		m_pszLineComment[i][0] = '\0';
@@ -28,7 +28,7 @@ CLineComment::CLineComment()
 	@param buffer [in]      コメント文字列
 	@param nCommentPos [in] コメント位置．-1のときは指定無し．
 */
-void CLineComment::CopyTo(const int n, const wchar_t* buffer, int nCommentPos)
+void LineComment::CopyTo(const int n, const wchar_t* buffer, int nCommentPos)
 {
 	int nStrLen = wcslen(buffer);
 	if (0 < nStrLen && nStrLen < COMMENT_DELIMITER_BUFFERSIZE) {
@@ -42,7 +42,7 @@ void CLineComment::CopyTo(const int n, const wchar_t* buffer, int nCommentPos)
 	}
 }
 
-bool CLineComment::Match(int nPos, const CStringRef& cStr) const
+bool LineComment::Match(int nPos, const CStringRef& cStr) const
 {
 	for (int i=0; i<COMMENT_DELIMITER_NUM; ++i) {
 		if (1

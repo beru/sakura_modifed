@@ -77,27 +77,27 @@ const DWORD p_helpids[] = {
 	0, 0
 };
 
-CDlgPluginOption::CDlgPluginOption()
+DlgPluginOption::DlgPluginOption()
 {
 
 }
 
-CDlgPluginOption::~CDlgPluginOption()
+DlgPluginOption::~DlgPluginOption()
 {
 
 }
 
 // モーダルダイアログの表示
-int CDlgPluginOption::DoModal(
+int DlgPluginOption::DoModal(
 	HINSTANCE			hInstance,
 	HWND				hwndParent,
-	CPropPlugin*		cPropPlugin,
+	PropPlugin*		cPropPlugin,
 	int 				ID
 )
 {
 	// プラグイン番号（エディタがふる番号）
 	m_ID = ID;
-	m_cPlugin = CPluginManager::getInstance()->GetPlugin(m_ID);
+	m_cPlugin = PluginManager::getInstance()->GetPlugin(m_ID);
 	m_cPropPlugin = cPropPlugin;
 
 	if (!m_cPlugin) {
@@ -105,11 +105,11 @@ int CDlgPluginOption::DoModal(
 		return 0;
 	}
 
-	return (int)CDialog::DoModal(hInstance, hwndParent, IDD_PLUGIN_OPTION, (LPARAM)NULL);
+	return (int)Dialog::DoModal(hInstance, hwndParent, IDD_PLUGIN_OPTION, (LPARAM)NULL);
 }
 
 // ダイアログデータの設定
-void CDlgPluginOption::SetData(void)
+void DlgPluginOption::SetData(void)
 {
 	HWND	hwndList;
 	int		i;
@@ -130,8 +130,8 @@ void CDlgPluginOption::SetData(void)
 	cProfile->SetReadingMode();
 	cProfile->ReadProfile(m_cPlugin->GetOptionPath().c_str());
 
-	CPluginOption* cOpt;
-	CPluginOption::ArrayIter it;
+	PluginOption* cOpt;
+	PluginOption::ArrayIter it;
 	for (i=0, it=m_cPlugin->m_options.begin(); it!=m_cPlugin->m_options.end(); ++i, ++it) {
 		cOpt = *it;
 
@@ -216,7 +216,7 @@ void CDlgPluginOption::SetData(void)
 
 // ダイアログデータの取得
 // TRUE==正常  FALSE==入力エラー
-int CDlgPluginOption::GetData(void)
+int DlgPluginOption::GetData(void)
 {
 	// .ini ファイルへの書き込み
 	LV_ITEM	lvi;
@@ -229,9 +229,9 @@ int CDlgPluginOption::GetData(void)
 	cProfile->ReadProfile(m_cPlugin->GetOptionPath().c_str());
 	cProfile->SetWritingMode();
 
-	CPluginOption* cOpt;
+	PluginOption* cOpt;
 	TCHAR	buf[MAX_LENGTH_VALUE + 1];
-	CPluginOption::ArrayIter it;
+	PluginOption::ArrayIter it;
 	int i;
 	for (i=0, it=m_cPlugin->m_options.begin(); it!=m_cPlugin->m_options.end(); ++i, ++it) {
 		cOpt = *it;
@@ -289,7 +289,7 @@ int CDlgPluginOption::GetData(void)
 	return TRUE;
 }
 
-BOOL CDlgPluginOption::OnInitDialog(
+BOOL DlgPluginOption::OnInitDialog(
 	HWND hwndDlg,
 	WPARAM wParam,
 	LPARAM lParam
@@ -338,10 +338,10 @@ BOOL CDlgPluginOption::OnInitDialog(
 	EditCtl_LimitText(GetDlgItem(hwndDlg, IDC_EDIT_PLUGIN_OPTION_NUM), 11);
 
 	// 基底クラスメンバ
-	return CDialog::OnInitDialog(GetHwnd(), wParam, lParam);
+	return Dialog::OnInitDialog(GetHwnd(), wParam, lParam);
 }
 
-BOOL CDlgPluginOption::OnNotify(WPARAM wParam, LPARAM lParam)
+BOOL DlgPluginOption::OnNotify(WPARAM wParam, LPARAM lParam)
 {
 	NMHDR* pNMHDR;
 	int idCtrl = (int)wParam;
@@ -380,11 +380,11 @@ BOOL CDlgPluginOption::OnNotify(WPARAM wParam, LPARAM lParam)
 	}
 
 	// 基底クラスメンバ
-	return CDialog::OnNotify(wParam, lParam);
+	return Dialog::OnNotify(wParam, lParam);
 }
 
 
-BOOL CDlgPluginOption::OnBnClicked(int wID)
+BOOL DlgPluginOption::OnBnClicked(int wID)
 {
 	switch (wID) {
 	case IDC_CHECK_PLUGIN_OPTION:
@@ -428,10 +428,10 @@ BOOL CDlgPluginOption::OnBnClicked(int wID)
 	}
 
 	// 基底クラスメンバ
-	return CDialog::OnBnClicked(wID);
+	return Dialog::OnBnClicked(wID);
 }
 
-BOOL CDlgPluginOption::OnCbnSelChange(HWND hwndCtl, int wID)
+BOOL DlgPluginOption::OnCbnSelChange(HWND hwndCtl, int wID)
 {
 	switch (wID) {
 	case IDC_COMBO_PLUGIN_OPTION:
@@ -441,11 +441,11 @@ BOOL CDlgPluginOption::OnCbnSelChange(HWND hwndCtl, int wID)
 	}
 
 	// 基底クラスメンバ
-	return CDialog::OnCbnSelChange(hwndCtl, wID);
+	return Dialog::OnCbnSelChange(hwndCtl, wID);
 }
 
 
-BOOL CDlgPluginOption::OnEnChange(HWND hwndCtl, int wID)
+BOOL DlgPluginOption::OnEnChange(HWND hwndCtl, int wID)
 {
 	switch (wID) {
 	case IDC_EDIT_PLUGIN_OPTION:
@@ -457,11 +457,11 @@ BOOL CDlgPluginOption::OnEnChange(HWND hwndCtl, int wID)
 	}
 
 	// 基底クラスメンバ
-	return CDialog::OnEnChange(hwndCtl, wID);
+	return Dialog::OnEnChange(hwndCtl, wID);
 }
 
 
-BOOL CDlgPluginOption::OnActivate(WPARAM wParam, LPARAM lParam)
+BOOL DlgPluginOption::OnActivate(WPARAM wParam, LPARAM lParam)
 {
 	switch (LOWORD(wParam)) {
 	case WA_INACTIVE:
@@ -474,17 +474,17 @@ BOOL CDlgPluginOption::OnActivate(WPARAM wParam, LPARAM lParam)
 	}
 
 	// 基底クラスメンバ
-	return CDialog::OnActivate(wParam, lParam);
+	return Dialog::OnActivate(wParam, lParam);
 }
 
 
-LPVOID CDlgPluginOption::GetHelpIdTable(void)
+LPVOID DlgPluginOption::GetHelpIdTable(void)
 {
 	return (LPVOID)p_helpids;
 }
 
 
-void CDlgPluginOption::ChangeListPosition(void)
+void DlgPluginOption::ChangeListPosition(void)
 {
 	HWND hwndList = GetItemHwnd(IDC_LIST_PLUGIN_OPTIONS);
 
@@ -518,7 +518,7 @@ void CDlgPluginOption::ChangeListPosition(void)
 	SetItemText(IDC_EDIT_PLUGIN_OPTION, buf);
 }
 
-void CDlgPluginOption::MoveFocusToEdit(void)
+void DlgPluginOption::MoveFocusToEdit(void)
 {
 	// 現在のFocus取得
 	int iLine = ListView_GetNextItem(GetItemHwnd(IDC_LIST_PLUGIN_OPTIONS), -1, LVNI_SELECTED);
@@ -546,7 +546,7 @@ void CDlgPluginOption::MoveFocusToEdit(void)
 
 
 // 編集領域に書き込み
-void CDlgPluginOption::SetToEdit(int iLine)
+void DlgPluginOption::SetToEdit(int iLine)
 {
 	HWND hwndList = GetItemHwnd(IDC_LIST_PLUGIN_OPTIONS);
 
@@ -620,7 +620,7 @@ void CDlgPluginOption::SetToEdit(int iLine)
 }
 
 // 編集領域の切り替え
-void CDlgPluginOption::SelectEdit(int IDCenable)
+void DlgPluginOption::SelectEdit(int IDCenable)
 {
 	CtrlShow(GetHwnd(), IDC_EDIT_PLUGIN_OPTION,        (IDCenable == IDC_EDIT_PLUGIN_OPTION));
 	CtrlShow(GetHwnd(), IDC_EDIT_PLUGIN_OPTION_DIR,    (IDCenable == IDC_EDIT_PLUGIN_OPTION_DIR));
@@ -632,7 +632,7 @@ void CDlgPluginOption::SelectEdit(int IDCenable)
 }
 
 // 編集領域から戻し
-void CDlgPluginOption::SetFromEdit(int iLine)
+void DlgPluginOption::SetFromEdit(int iLine)
 {
 	HWND hwndList = GetItemHwnd(IDC_LIST_PLUGIN_OPTIONS);
 
@@ -675,7 +675,7 @@ void CDlgPluginOption::SetFromEdit(int iLine)
 }
 
 // 選択用文字列分解
-void CDlgPluginOption::SepSelect(
+void DlgPluginOption::SepSelect(
 	wstring sTrg,
 	wstring* spView,
 	wstring* spValue
@@ -695,7 +695,7 @@ void CDlgPluginOption::SepSelect(
 }
 
 // ディレクトリを選択する
-void CDlgPluginOption::SelectDirectory(int iLine)
+void DlgPluginOption::SelectDirectory(int iLine)
 {
 	TCHAR szDir[_MAX_PATH + 1];
 

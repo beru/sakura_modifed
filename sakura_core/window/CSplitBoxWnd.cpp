@@ -16,21 +16,21 @@
 #include "window/CSplitBoxWnd.h"
 
 
-CSplitBoxWnd::CSplitBoxWnd()
+SplitBoxWnd::SplitBoxWnd()
 	:
-	CWnd(_T("::CSplitBoxWnd"))
+	Wnd(_T("::SplitBoxWnd"))
 {
 	m_bVertical = TRUE;	// 垂直分割ボックスか
 	return;
 }
 
 
-CSplitBoxWnd::~CSplitBoxWnd()
+SplitBoxWnd::~SplitBoxWnd()
 {
 }
 
 
-HWND CSplitBoxWnd::Create(HINSTANCE hInstance, HWND hwndParent, int bVertical)
+HWND SplitBoxWnd::Create(HINSTANCE hInstance, HWND hwndParent, int bVertical)
 {
 	int			nCyHScroll;
 	int			nCxVScroll;
@@ -65,7 +65,7 @@ HWND CSplitBoxWnd::Create(HINSTANCE hInstance, HWND hwndParent, int bVertical)
 	::GetClientRect(GetParentHwnd(), &rc);
 
 	// 基底クラスメンバ呼び出し
-	return CWnd::Create(
+	return Wnd::Create(
 		hwndParent,
 		0, // extended window style
 		pszClassName,	// Pointer to a null-terminated string or is an atom.
@@ -81,7 +81,7 @@ HWND CSplitBoxWnd::Create(HINSTANCE hInstance, HWND hwndParent, int bVertical)
 
 
 // 描画処理
-void CSplitBoxWnd::Draw3dRect(
+void SplitBoxWnd::Draw3dRect(
 	HDC hdc, int x, int y, int cx, int cy,
 	COLORREF clrTopLeft, COLORREF clrBottomRight
 	)
@@ -105,7 +105,7 @@ void CSplitBoxWnd::Draw3dRect(
 }
 
 
-void CSplitBoxWnd::FillSolidRect(HDC hdc, int x, int y, int cx, int cy, COLORREF clr)
+void SplitBoxWnd::FillSolidRect(HDC hdc, int x, int y, int cx, int cy, COLORREF clr)
 {
 	RECT	rc;
 	::SetBkColor(hdc, clr);
@@ -116,7 +116,7 @@ void CSplitBoxWnd::FillSolidRect(HDC hdc, int x, int y, int cx, int cy, COLORREF
 
 
 // WM_PAINT
-LRESULT CSplitBoxWnd::OnPaint(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+LRESULT SplitBoxWnd::OnPaint(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	HDC			hdc;
 	PAINTSTRUCT	ps;
@@ -158,7 +158,7 @@ LRESULT CSplitBoxWnd::OnPaint(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam
 
 
 // WM_LBUTTONDOWN
-LRESULT CSplitBoxWnd::OnLButtonDown(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+LRESULT SplitBoxWnd::OnLButtonDown(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	HDC			hdc;
 	RECT		rc;
@@ -218,7 +218,7 @@ LRESULT CSplitBoxWnd::OnLButtonDown(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
 
 
 // WM_MOUSEMOVE
-LRESULT CSplitBoxWnd::OnMouseMove(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+LRESULT SplitBoxWnd::OnMouseMove(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	HDC			hdc;
 	int			xPos;
@@ -348,7 +348,7 @@ LRESULT CSplitBoxWnd::OnMouseMove(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
 
 
 // WM_LBUTTONUP
-LRESULT CSplitBoxWnd::OnLButtonUp(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+LRESULT SplitBoxWnd::OnLButtonUp(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	HDC			hdc;
 	RECT		rc;
@@ -417,7 +417,7 @@ LRESULT CSplitBoxWnd::OnLButtonUp(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
 
 
 // WM_LBUTTONDBLCLK
-LRESULT CSplitBoxWnd::OnLButtonDblClk(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+LRESULT SplitBoxWnd::OnLButtonDblClk(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	RECT	rc;
 	int		nCyHScroll;

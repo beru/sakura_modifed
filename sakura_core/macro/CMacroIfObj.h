@@ -30,7 +30,7 @@
 #include "CEditApp.h"
 
 // マクロWSHオブジェクト
-class CMacroIfObj : public CWSHIfObj {
+class MacroIfObj : public WSHIfObj {
 	// 型定義
 	enum FuncId {
 		F_MA_COMMAND_FIRST = 0,					//↓コマンドは以下に追加する
@@ -53,8 +53,8 @@ public:
 
 	// コンストラクタ
 public:
-	CMacroIfObj(tagModeID nMode, LPCWSTR Ext, int flags, LPCWSTR Source)
-		: CWSHIfObj(L"Macro", false)
+	MacroIfObj(tagModeID nMode, LPCWSTR Ext, int flags, LPCWSTR Source)
+		: WSHIfObj(L"Macro", false)
 	{
 		m_nMode = nMode;
 		m_Ext = Ext;
@@ -64,13 +64,13 @@ public:
 		m_nIndex = INVALID_MACRO_IDX;
 		if (nMode == MACRO_MODE_EXEC) {
 			// 呼び出しの直前で設定されている番号を保存する
-			m_nIndex = CEditApp::getInstance()->m_pcSMacroMgr->GetCurrentIdx();
+			m_nIndex = EditApp::getInstance()->m_pcSMacroMgr->GetCurrentIdx();
 		}
 	}
 
 	// デストラクタ
 public:
-	virtual ~CMacroIfObj() {}
+	virtual ~MacroIfObj() {}
 
 	// 実装
 public:
@@ -103,7 +103,7 @@ public:
 	// 関数を処理する
 	virtual
 	bool HandleFunction(
-		CEditView*		View,
+		EditView*		View,
 		EFunctionCode	ID,
 		const VARIANT*	Arguments,
 		const int		ArgSize,
@@ -146,7 +146,7 @@ public:
 	// コマンドを処理する
 	virtual
 	bool HandleCommand(
-		CEditView*		View,
+		EditView*		View,
 		EFunctionCode	ID,
 		const WCHAR*	Arguments[],
 		const int		ArgLengths[],

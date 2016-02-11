@@ -58,7 +58,7 @@ void CType_Html::InitTypeConfigImp(TypeConfig* pType)
 	@date 2004.04.20 Moca コメント処理と、不明な終了タグを無視する処理を追加
 	@date 2008.08.15 aroka 見出しと段落の深さ制御を追加 2008.09.07修正
 */
-void CDocOutline::MakeTopicList_html(CFuncInfoArr* pcFuncInfoArr)
+void DocOutline::MakeTopicList_html(FuncInfoArr* pcFuncInfoArr)
 {
 	const wchar_t*	pLineBuf;	//	pLineBuf は行全体を指し、
 	const wchar_t*	pLine;		//	pLine は処理中の文字以降の部分を指します。
@@ -128,7 +128,7 @@ void CDocOutline::MakeTopicList_html(CFuncInfoArr* pcFuncInfoArr)
 				) {
 					break;
 				}
-				int nCharSize = CNativeW::GetSizeOfChar(pLine, nLineLen-i, j);
+				int nCharSize = NativeW::GetSizeOfChar(pLine, nLineLen-i, j);
 				memcpy(szTitle + j, pLine + j, nCharSize * sizeof(wchar_t));
 				j += nCharSize;
 			}

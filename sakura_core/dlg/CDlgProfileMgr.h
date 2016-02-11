@@ -42,13 +42,13 @@ struct ProfileSettings
 	bool m_bDefaultSelect;
 };
 
-class CDlgProfileMgr : public CDialog
+class DlgProfileMgr : public Dialog
 {
 public:
 	/*
 	||  Constructors
 	*/
-	CDlgProfileMgr();
+	DlgProfileMgr();
 	/*
 	||  Attributes & Operations
 	*/

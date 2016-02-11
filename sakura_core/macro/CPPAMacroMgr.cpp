@@ -19,13 +19,13 @@
 #include "io/CTextStream.h"
 using namespace std;
 
-CPPA CPPAMacroMgr::m_cPPA;
+CPPA PPAMacroMgr::m_cPPA;
 
-CPPAMacroMgr::CPPAMacroMgr()
+PPAMacroMgr::PPAMacroMgr()
 {
 }
 
-CPPAMacroMgr::~CPPAMacroMgr()
+PPAMacroMgr::~PPAMacroMgr()
 {
 }
 
@@ -35,7 +35,7 @@ CPPAMacroMgr::~CPPAMacroMgr()
 
 	@date 2007.07.20 genta flags追加
 */
-bool CPPAMacroMgr::ExecKeyMacro(CEditView* pcEditView, int flags) const
+bool PPAMacroMgr::ExecKeyMacro(EditView* pcEditView, int flags) const
 {
 	m_cPPA.SetSource(to_achar(m_cBuffer.GetStringPtr()));
 	return m_cPPA.Execute(pcEditView, flags);
@@ -44,15 +44,15 @@ bool CPPAMacroMgr::ExecKeyMacro(CEditView* pcEditView, int flags) const
 /*! キーボードマクロの読み込み（ファイルから）
 	エラーメッセージは出しません。呼び出し側でよきにはからってください。
 */
-bool CPPAMacroMgr::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
+bool PPAMacroMgr::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
 {
-	CTextInputStream in(pszPath);
+	TextInputStream in(pszPath);
 	if (!in) {
 		m_nReady = false;
 		return false;
 	}
 
-	CNativeW cmemWork;
+	NativeW cmemWork;
 
 	// バッファ（cmemWork）にファイル内容を読み込み、m_cPPAに渡す。
 	while (in) {
@@ -71,7 +71,7 @@ bool CPPAMacroMgr::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
 /*! キーボードマクロの読み込み（文字列から）
 	エラーメッセージは出しません。呼び出し側でよきにはからってください。
 */
-bool CPPAMacroMgr::LoadKeyMacroStr(HINSTANCE hInstance, const TCHAR* pszCode)
+bool PPAMacroMgr::LoadKeyMacroStr(HINSTANCE hInstance, const TCHAR* pszCode)
 {
 	m_cBuffer.SetNativeData(to_wchar(pszCode));	// m_cBufferにコピー
 
@@ -89,10 +89,10 @@ bool CPPAMacroMgr::LoadKeyMacroStr(HINSTANCE hInstance, const TCHAR* pszCode)
 		そのため，過ったオブジェクト生成を行わないために拡張子チェックは必須．
 
 */
-CMacroManagerBase* CPPAMacroMgr::Creator(const TCHAR* ext)
+MacroManagerBase* PPAMacroMgr::Creator(const TCHAR* ext)
 {
 	if (_tcscmp(ext, _T("ppa")) == 0) {
-		return new CPPAMacroMgr;
+		return new PPAMacroMgr;
 	}
 	return NULL;
 }
@@ -103,10 +103,10 @@ CMacroManagerBase* CPPAMacroMgr::Creator(const TCHAR* ext)
 
 	@date 2004.01.31 genta RegisterExtの廃止のためRegisterCreatorに置き換え
 */
-void CPPAMacroMgr::declare (void)
+void PPAMacroMgr::declare (void)
 {
 	if (DLL_SUCCESS == m_cPPA.InitDll()) {
-		CMacroFactory::getInstance()->RegisterCreator(Creator);
+		MacroFactory::getInstance()->RegisterCreator(Creator);
 	}
 }
 // To Here Apr. 29, 2002 genta

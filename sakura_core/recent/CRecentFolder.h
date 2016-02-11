@@ -31,10 +31,10 @@
 typedef StaticString<TCHAR, _MAX_PATH> CPathString;
 
 // フォルダの履歴を管理 (RECENT_FOR_FOLDER)
-class CRecentFolder : public CRecentImp<CPathString, LPCTSTR> {
+class RecentFolder : public RecentImp<CPathString, LPCTSTR> {
 public:
 	// 生成
-	CRecentFolder();
+	RecentFolder();
 
 	// オーバーライド
 	int				CompareItem(const CPathString* p1, LPCTSTR p2) const;

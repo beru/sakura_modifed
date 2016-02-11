@@ -29,7 +29,7 @@
 // ”¼Šp‚É‚Å‚«‚é‚à‚Ì‚Í‘S•””¼Šp‚É•ÏŠ·
 class Converter_ToHankaku : public Converter {
 public:
-	bool DoConvert(CNativeW* pcData);
+	bool DoConvert(NativeW* pcData);
 };
 
 enum EToHankakuMode{

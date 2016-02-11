@@ -108,13 +108,13 @@ inline bool DlgItem_Enable(HWND hwndDlg, int nIDDlgItem, bool nEnable) {
 
 // ïùåvéZï‚èïÉNÉâÉX
 // ç≈ëÂÇÃïùÇïÒçêÇµÇ‹Ç∑
-class CTextWidthCalc {
+class TextWidthCalc {
 public:
-	CTextWidthCalc(HWND hParentDlg, int nID);
-	CTextWidthCalc(HWND hwndThis);
-	CTextWidthCalc(HFONT font);
-	CTextWidthCalc(HDC hdc);
-	virtual ~CTextWidthCalc();
+	TextWidthCalc(HWND hParentDlg, int nID);
+	TextWidthCalc(HWND hwndThis);
+	TextWidthCalc(HFONT font);
+	TextWidthCalc(HDC hdc);
+	virtual ~TextWidthCalc();
 	void Reset() { nCx = 0; nExt = 0; }
 	void SetCx(int cx = 0) { nCx = cx; }
 	void SetDefaultExtend(int extCx = 0) { nExt = 0; }
@@ -149,10 +149,10 @@ private:
 	bool  bFromDC;
 };
 
-class CFontAutoDeleter {
+class FontAutoDeleter {
 public:
-	CFontAutoDeleter();
-	~CFontAutoDeleter();
+	FontAutoDeleter();
+	~FontAutoDeleter();
 	void SetFont(HFONT hfontOld, HFONT hfont, HWND hwnd);
 	void ReleaseOnDestroy();
 	// void Release();
@@ -163,16 +163,16 @@ private:
 	HWND  m_hwnd;
 };
 
-class CDCFont
+class DCFont
 {
 public:
-	CDCFont(LOGFONT& font, HWND hwnd = NULL) {
+	DCFont(LOGFONT& font, HWND hwnd = NULL) {
 		m_hwnd = hwnd;
 		m_hDC = ::GetDC(hwnd);
 		HFONT hFont = ::CreateFontIndirect(&font);
 		m_hFontOld = (HFONT)::SelectObject(m_hDC, hFont);
 	}
-	~CDCFont() {
+	~DCFont() {
 		if (m_hDC) {
 			::SelectObject(m_hDC, m_hFontOld);
 			::ReleaseDC(m_hwnd, m_hDC);

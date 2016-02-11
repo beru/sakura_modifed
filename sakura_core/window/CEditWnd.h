@@ -64,10 +64,10 @@
 
 static const int MENUBAR_MESSAGE_MAX_LEN = 30;
 
-//@@@ 2002.01.14 YAZAKI 印刷プレビューをCPrintPreviewに独立させたことによる変更
-class CPrintPreview; // 2002/2/10 aroka
+//@@@ 2002.01.14 YAZAKI 印刷プレビューをPrintPreviewに独立させたことによる変更
+class PrintPreview; // 2002/2/10 aroka
 class DropTarget;
-class CPlug;
+class Plug;
 class EditDoc;
 struct DLLSHAREDATA;
 
@@ -92,13 +92,13 @@ struct TabGroupInfo {
 // 2002.02.17 YAZAKI CShareDataのインスタンスは、CProcessにひとつあるのみ。
 // 2007.10.30 kobake IsFuncEnable,IsFuncCheckedをFunccode.hに移動
 // 2007.10.30 kobake OnHelp_MenuItemをCEditAppに移動
-class CEditWnd :
-	public TSingleton<CEditWnd>,
+class EditWnd :
+	public TSingleton<EditWnd>,
 	public DocListenerEx
 {
-	friend class TSingleton<CEditWnd>;
-	CEditWnd();
-	~CEditWnd();
+	friend class TSingleton<EditWnd>;
+	EditWnd();
+	~EditWnd();
 
 public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -109,7 +109,7 @@ public:
 	//! 作成
 	HWND Create(
 		EditDoc*		pcEditDoc,
-		CImageListMgr*	pcIcons,
+		ImageListMgr*	pcIcons,
 		int				nGroup
 	);
 	void _GetTabGroupInfo(TabGroupInfo* pTabGroupInfo, int& nGroup);
@@ -173,12 +173,12 @@ public:
 	void InitMenu(HMENU, UINT, BOOL);
 	void InitMenu_Function(HMENU , EFunctionCode, const wchar_t*, const wchar_t*);
 	bool InitMenu_Special(HMENU , EFunctionCode);
-	void InitMenubarMessageFont(void);			//	メニューバーへのメッセージ表示機能をCEditWndより移管	//	Dec. 4, 2002 genta
+	void InitMenubarMessageFont(void);			//	メニューバーへのメッセージ表示機能をEditWndより移管	//	Dec. 4, 2002 genta
 	LRESULT WinListMenu(HMENU hMenu, EditNode* pEditNodeArr, int nRowNum, bool bFull);	//!< ウィンドウ一覧メニュー作成処理		2006.03.23 fon
 	LRESULT PopupWinList(bool bMousePos);		//!< ウィンドウ一覧ポップアップ表示処理		2006.03.23 fon	// 2007.02.28 ryoji フルパス指定のパラメータを削除
 	void RegisterPluginCommand();				// プラグインコマンドをエディタに登録する
 	void RegisterPluginCommand(int id);			// プラグインコマンドをエディタに登録する
-	void RegisterPluginCommand(CPlug* id);		// プラグインコマンドをエディタに登録する
+	void RegisterPluginCommand(Plug* id);		// プラグインコマンドをエディタに登録する
 
 	void SetMenuFuncSel(HMENU hMenu, EFunctionCode nFunc, const WCHAR* sKey, bool flag);				// 表示の動的選択	2010/5/19 Uchi
 
@@ -229,7 +229,7 @@ public:
 	//                           表示                              //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	void PrintMenubarMessage(const TCHAR* msg);
-	void SendStatusMessage(const TCHAR* msg);		//	Dec. 4, 2002 genta 実体をCEditViewから移動
+	void SendStatusMessage(const TCHAR* msg);		//	Dec. 4, 2002 genta 実体をEditViewから移動
 	
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                      ウィンドウ操作                         //
@@ -247,7 +247,7 @@ public:
 	void SetActivePane(int);	// アクティブなペインを設定
 	int GetActivePane(void) const { return m_nActivePaneIndex; }	// アクティブなペインを取得		2007.08.26 kobake const追加
 	bool SetDrawSwitchOfAllViews(bool bDraw);						// すべてのペインの描画スイッチを設定する	2008.06.08 ryoji
-	void RedrawAllViews(CEditView* pcViewExclude);				// すべてのペインをRedrawする
+	void RedrawAllViews(EditView* pcViewExclude);				// すべてのペインをRedrawする
 	void Views_DisableSelectArea(bool bRedraw);
 	BOOL DetectWidthOfLineNumberAreaAllPane(bool bRedraw);	// すべてのペインで、行番号表示に必要な幅を再設定する（必要なら再描画する）
 	bool WrapWindowWidth(int nPane);	// 右端で折り返す			2008.06.08 ryoji
@@ -258,27 +258,27 @@ public:
 	LogicPointEx* SavePhysPosOfAllView();
 	void RestorePhysPosOfAllView(LogicPointEx* pptPosArray);
 	// 互換BMPによる画面バッファ 2007.09.09 Moca
-	void Views_DeleteCompatibleBitmap(); //!< CEditViewの画面バッファを削除
+	void Views_DeleteCompatibleBitmap(); //!< EditViewの画面バッファを削除
 	
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                       各種アクセサ                          //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	HWND			GetHwnd() const			{ return m_hWnd; }
-	CMenuDrawer&	GetMenuDrawer()			{ return m_cMenuDrawer; }
+	MenuDrawer&	GetMenuDrawer()			{ return m_cMenuDrawer; }
 	EditDoc*		GetDocument()			{ return m_pcEditDoc; }
 	const EditDoc*	GetDocument() const		{ return m_pcEditDoc; }
 
 	// ビュー
-	const CEditView&	GetActiveView() const		{ return *m_pcEditView; }
-	CEditView&			GetActiveView()				{ return *m_pcEditView; }
-	const CEditView&	GetView(int n) const		{ return *m_pcEditViewArr[n]; }
-	CEditView&			GetView(int n)				{ return *m_pcEditViewArr[n]; }
-	CEditView&          GetMiniMap()       { return *m_pcEditViewMiniMap; }
+	const EditView&	GetActiveView() const		{ return *m_pcEditView; }
+	EditView&			GetActiveView()				{ return *m_pcEditView; }
+	const EditView&	GetView(int n) const		{ return *m_pcEditViewArr[n]; }
+	EditView&			GetView(int n)				{ return *m_pcEditViewArr[n]; }
+	EditView&          GetMiniMap()       { return *m_pcEditViewMiniMap; }
 	bool				IsEnablePane(int n) const	{ return 0 <= n && n < m_nEditViewCount; }
 	int					GetAllViewCount() const		{ return m_nEditViewCount; }
 
-	CEditView*			GetDragSourceView() const	{ return m_pcDragSourceView; }
-	void				SetDragSourceView(CEditView* pcDragSourceView)	{ m_pcDragSourceView = pcDragSourceView; }
+	EditView*			GetDragSourceView() const	{ return m_pcDragSourceView; }
+	void				SetDragSourceView(EditView* pcDragSourceView)	{ m_pcDragSourceView = pcDragSourceView; }
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                         実装補助                            //
@@ -351,31 +351,31 @@ public:
 	// 子ウィンドウ
 	CMainToolBar	m_cToolbar;			//!< ツールバー
 	CTabWnd			m_cTabWnd;			//!< タブウィンドウ	//@@@ 2003.05.31 MIK
-	CFuncKeyWnd		m_cFuncKeyWnd;		//!< ファンクションバー
+	FuncKeyWnd		m_cFuncKeyWnd;		//!< ファンクションバー
 	CMainStatusBar	m_cStatusBar;		//!< ステータスバー
-	CPrintPreview*	m_pPrintPreview;	//!< 印刷プレビュー表示情報。必要になったときのみインスタンスを生成する。
+	PrintPreview*	m_pPrintPreview;	//!< 印刷プレビュー表示情報。必要になったときのみインスタンスを生成する。
 
 	CSplitterWnd	m_cSplitterWnd;		//!< 分割フレーム
-	CEditView*		m_pcDragSourceView;	//!< ドラッグ元のビュー
-	CViewFont*		m_pcViewFont;		//!< フォント
-	CViewFont*		m_pcViewFontMiniMap;		//!< フォント
+	EditView*		m_pcDragSourceView;	//!< ドラッグ元のビュー
+	ViewFont*		m_pcViewFont;		//!< フォント
+	ViewFont*		m_pcViewFontMiniMap;		//!< フォント
 
 	// ダイアログ達
-	CDlgFind		m_cDlgFind;			//「検索」ダイアログ
-	CDlgReplace		m_cDlgReplace;		//「置換」ダイアログ
-	CDlgJump		m_cDlgJump;			//「指定行へジャンプ」ダイアログ
-	CDlgGrep		m_cDlgGrep;			// Grepダイアログ
-	CDlgGrepReplace	m_cDlgGrepReplace;	// Grep置換ダイアログ
-	CDlgFuncList	m_cDlgFuncList;		// アウトライン解析結果ダイアログ
+	DlgFind		m_cDlgFind;			//「検索」ダイアログ
+	DlgReplace		m_cDlgReplace;		//「置換」ダイアログ
+	DlgJump		m_cDlgJump;			//「指定行へジャンプ」ダイアログ
+	DlgGrep		m_cDlgGrep;			// Grepダイアログ
+	DlgGrepReplace	m_cDlgGrepReplace;	// Grep置換ダイアログ
+	DlgFuncList	m_cDlgFuncList;		// アウトライン解析結果ダイアログ
 	CHokanMgr		m_cHokanMgr;		// 入力補完
-	CDlgSetCharSet	m_cDlgSetCharSet;	//「文字コードセット設定」ダイアログ
+	DlgSetCharSet	m_cDlgSetCharSet;	//「文字コードセット設定」ダイアログ
 
 private:
 	// 2010.04.10 Moca  public -> private. 起動直後は[0]のみ有効 4つとは限らないので注意
 	EditDoc* 		m_pcEditDoc;
-	CEditView*		m_pcEditViewArr[4];		//!< ビュー
-	CEditView*		m_pcEditView;			//!< 有効なビュー
-	CEditView*		m_pcEditViewMiniMap;	//!< ミニマップ
+	EditView*		m_pcEditViewArr[4];		//!< ビュー
+	EditView*		m_pcEditView;			//!< 有効なビュー
+	EditView*		m_pcEditViewMiniMap;	//!< ミニマップ
 	int				m_nActivePaneIndex;		//!< 有効なビューのindex
 	int				m_nEditViewCount;		//!< 有効なビューの数
 	const int		m_nEditViewMaxCount;	//!< ビューの最大数=4
@@ -384,7 +384,7 @@ private:
 	DLLSHAREDATA*	m_pShareData;
 
 	// ヘルパ
-	CMenuDrawer		m_cMenuDrawer;
+	MenuDrawer		m_cMenuDrawer;
 
 	// メッセージID
 	UINT			m_uMSIMEReconvertMsg;

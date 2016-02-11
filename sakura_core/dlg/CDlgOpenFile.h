@@ -29,19 +29,19 @@
 struct LoadInfo;	// doc/CDocListener.h
 struct SaveInfo;	// doc/CDocListener.h
 struct OPENFILENAMEZ;
-class CDlgOpenFileMem;
+class DlgOpenFileMem;
 
 
 /*!	ファイルオープンダイアログボックス
 
 	@date 2002.2.17 YAZAKI CShareDataのインスタンスは、CProcessにひとつあるのみ。
 */
-class CDlgOpenFile
+class DlgOpenFile
 {
 public:
 	// コンストラクタ・デストラクタ
-	CDlgOpenFile();
-	~CDlgOpenFile();
+	DlgOpenFile();
+	~DlgOpenFile();
 	void Create(
 		HINSTANCE					hInstance,
 		HWND						hwndParent,
@@ -58,7 +58,7 @@ public:
 	bool DoModalSaveDlg(SaveInfo*	pSaveInfo, bool bSimpleMode);		// 保存ダイアログ モーダルダイアログの表示
 
 protected:
-	CDlgOpenFileMem*	m_mem;
+	DlgOpenFileMem*	m_mem;
 
 	/*
 	||  実装ヘルパ関数
@@ -82,7 +82,7 @@ protected:
 	friend UINT_PTR CALLBACK OFNHookProc(HWND hdlg, UINT uiMsg, WPARAM wParam, LPARAM lParam);
 
 private:
-	DISALLOW_COPY_AND_ASSIGN(CDlgOpenFile);
+	DISALLOW_COPY_AND_ASSIGN(DlgOpenFile);
 };
 
 

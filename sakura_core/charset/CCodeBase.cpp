@@ -10,7 +10,7 @@
 #include "env/CShareData.h"
 #include "env/DLLSHAREDATA.h"
 
-void CodeBase::GetBom(CMemory* pcmemBom) { pcmemBom->Clear(); }					// BOMデータ取得
+void CodeBase::GetBom(Memory* pcmemBom) { pcmemBom->Clear(); }					// BOMデータ取得
 
 // 表示用16表示	UNICODE → Hex 変換	2008/6/9 Uchi
 EConvertResult CodeBase::UnicodeToHex(
@@ -43,7 +43,7 @@ EConvertResult CodeBase::UnicodeToHex(
 bool CodeBase::MIMEHeaderDecode(
 	const char* pSrc,
 	const int nSrcLen,
-	CMemory* pcMem,
+	Memory* pcMem,
 	const ECodeType eCodetype
 	)
 {
@@ -58,7 +58,7 @@ bool CodeBase::MIMEHeaderDecode(
 		return false;
 	}
 
-	CMemory cmembuf;
+	Memory cmembuf;
 	int i = 0;
 	int j = 0;
 	while (i < nSrcLen) {
@@ -97,7 +97,7 @@ bool CodeBase::MIMEHeaderDecode(
 */
 // CShiftJisより移動 2010/6/13 Uchi
 void CodeBase::S_GetEol(
-	CMemory* pcmemEol,
+	Memory* pcmemEol,
 	EEolType eEolType
 	)
 {

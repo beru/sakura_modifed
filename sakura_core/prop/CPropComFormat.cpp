@@ -18,7 +18,7 @@
 #include "StdAfx.h"
 #include "prop/CPropCommon.h"
 #include "util/shell.h"
-#include "env/DLLSHAREDATA.h" // CFormatManager.hより前に必要
+#include "env/DLLSHAREDATA.h" // FormatManager.hより前に必要
 #include "env/CFormatManager.h"
 #include "sakura_rc.h"
 #include "sakura.hh"
@@ -78,18 +78,18 @@ static const char* p_time_form[] = {
 	@param wParam パラメータ1
 	@param lParam パラメータ2
 */
-INT_PTR CALLBACK CPropFormat::DlgProc_page(
+INT_PTR CALLBACK PropFormat::DlgProc_page(
 	HWND hwndDlg,
 	UINT uMsg,
 	WPARAM wParam,
 	LPARAM lParam
 	)
 {
-	return DlgProc(reinterpret_cast<pDispatchPage>(&CPropFormat::DispatchEvent), hwndDlg, uMsg, wParam, lParam);
+	return DlgProc(reinterpret_cast<pDispatchPage>(&PropFormat::DispatchEvent), hwndDlg, uMsg, wParam, lParam);
 }
 //	To Here Jun. 2, 2001 genta
 
-void CPropFormat::ChangeDateExample(HWND hwndDlg)
+void PropFormat::ChangeDateExample(HWND hwndDlg)
 {
 	auto& csFormat = m_Common.m_sFormat;
 	// ダイアログデータの取得 Format
@@ -99,12 +99,12 @@ void CPropFormat::ChangeDateExample(HWND hwndDlg)
 	TCHAR szText[1024];
 	SYSTEMTIME systime;
 	::GetLocalTime(&systime);
-	CFormatManager().MyGetDateFormat(systime, szText, _countof(szText) - 1, csFormat.m_nDateFormatType, csFormat.m_szDateFormat);
+	FormatManager().MyGetDateFormat(systime, szText, _countof(szText) - 1, csFormat.m_nDateFormatType, csFormat.m_szDateFormat);
 	::DlgItem_SetText(hwndDlg, IDC_EDIT_DFORM_EX, szText);
 	return;
 }
 
-void CPropFormat::ChangeTimeExample(HWND hwndDlg)
+void PropFormat::ChangeTimeExample(HWND hwndDlg)
 {
 	auto& csFormat = m_Common.m_sFormat;
 	// ダイアログデータの取得 Format
@@ -114,14 +114,14 @@ void CPropFormat::ChangeTimeExample(HWND hwndDlg)
 	TCHAR szText[1024];
 	SYSTEMTIME systime;
 	::GetLocalTime(&systime);
-	CFormatManager().MyGetTimeFormat(systime, szText, _countof(szText) - 1, csFormat.m_nTimeFormatType, csFormat.m_szTimeFormat);
+	FormatManager().MyGetTimeFormat(systime, szText, _countof(szText) - 1, csFormat.m_nTimeFormatType, csFormat.m_szTimeFormat);
 	::DlgItem_SetText(hwndDlg, IDC_EDIT_TFORM_EX, szText);
 	return;
 }
 
 
 // Format メッセージ処理
-INT_PTR CPropFormat::DispatchEvent(
+INT_PTR PropFormat::DispatchEvent(
 	HWND	hwndDlg,	// handle to dialog box
 	UINT	uMsg,	// message
 	WPARAM	wParam,	// first message parameter
@@ -255,7 +255,7 @@ INT_PTR CPropFormat::DispatchEvent(
 
 
 // ダイアログデータの設定 Format
-void CPropFormat::SetData(HWND hwndDlg)
+void PropFormat::SetData(HWND hwndDlg)
 {
 	auto& csFormat = m_Common.m_sFormat;
 	
@@ -294,7 +294,7 @@ void CPropFormat::SetData(HWND hwndDlg)
 
 
 // ダイアログデータの取得 Format
-int CPropFormat::GetData(HWND hwndDlg)
+int PropFormat::GetData(HWND hwndDlg)
 {
 	auto& csFormat = m_Common.m_sFormat;
 	// 見出し記号
@@ -336,7 +336,7 @@ int CPropFormat::GetData(HWND hwndDlg)
 //	From Here Sept. 10, 2000 JEPRO
 //	チェック状態に応じてダイアログボックス要素のEnable/Disableを
 //	適切に設定する
-void CPropFormat::EnableFormatPropInput(HWND hwndDlg)
+void PropFormat::EnableFormatPropInput(HWND hwndDlg)
 {
 	//	日付書式をカスタムにするかどうか
 	if (IsDlgButtonChecked(hwndDlg, IDC_RADIO_DFORM_1)) {

@@ -33,7 +33,7 @@
 bool CFigure_Text::DrawImp(ColorStrategyInfo* pInfo)
 {
 	int nIdx = pInfo->GetPosInLogic();
-	int nLength = CNativeW::GetSizeOfChar(	// サロゲートペア対策	2008.10.12 ryoji
+	int nLength = NativeW::GetSizeOfChar(	// サロゲートペア対策	2008.10.12 ryoji
 						pInfo->m_pLineOfLogic,
 						pInfo->GetDocLine()->GetLengthWithoutEOL(),
 						nIdx
@@ -66,7 +66,7 @@ bool CFigureSpace::DrawImp(ColorStrategyInfo* pInfo)
 	DrawImp_StylePop(pInfo);
 	DrawImp_DrawUnderline(pInfo, sPos);
 	// 1文字前提
-	pInfo->m_nPosInLogic += CNativeW::GetSizeOfChar(	// 行末以外はここでスキャン位置を１字進める
+	pInfo->m_nPosInLogic += NativeW::GetSizeOfChar(	// 行末以外はここでスキャン位置を１字進める
 		pInfo->m_pLineOfLogic,
 		pInfo->GetDocLine()->GetLengthWithoutEOL(),
 		pInfo->GetPosInLogic()
@@ -78,7 +78,7 @@ bool CFigureSpace::DrawImp_StyleSelect(ColorStrategyInfo* pInfo)
 {
 	// この DrawImp はここ（基本クラス）でデフォルト動作を実装しているが
 	// 仮想関数なので派生クラス側のオーバーライドで個別に仕様変更可能
-	CEditView* pcView = pInfo->m_pcView;
+	EditView* pcView = pInfo->m_pcView;
 
 	CTypeSupport cCurrentType(pcView, pInfo->GetCurrentColor());	// 周辺の色（現在の指定色/選択色）
 	CTypeSupport cCurrentType2(pcView, pInfo->GetCurrentColor2());	// 周辺の色（現在の指定色）
@@ -142,7 +142,7 @@ void CFigureSpace::DrawImp_StylePop(ColorStrategyInfo* pInfo)
 
 void CFigureSpace::DrawImp_DrawUnderline(ColorStrategyInfo* pInfo, DispPos& sPos)
 {
-	CEditView* pcView = pInfo->m_pcView;
+	EditView* pcView = pInfo->m_pcView;
 
 	CTypeSupport cCurrentType(pcView, pInfo->GetCurrentColor());	// 周辺の色
 	bool blendColor = pInfo->GetCurrentColor() != pInfo->GetCurrentColor2() && cCurrentType.GetTextColor() == cCurrentType.GetBackColor(); // 選択混合色

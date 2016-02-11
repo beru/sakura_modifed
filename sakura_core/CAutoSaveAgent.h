@@ -36,19 +36,19 @@
 // 分→ミリ秒に変換するための係数
 const int MSec2Min = 1000 * 60;
 
-/*! @class CPassiveTimer CAutoSave.h
+/*! @class PassiveTimer CAutoSave.h
 	基準時刻からの経過時間が設定間隔を過ぎたかどうかを判定する。
 	頻繁に呼び出されるタイマーが既に別の場所にあるとき、それよりも間隔が広くて
 	間隔の厳密さが要求されない用途に利用可能。
 	ファイルの自動保存で使っている。
 	@author genta
 */
-class CPassiveTimer {
+class PassiveTimer {
 public:
 	/*!
 		初期値は間隔1msecでタイマーは無効。
 	*/
-	CPassiveTimer() : nInterval(1), bEnabled(false) { Reset(); }
+	PassiveTimer() : nInterval(1), bEnabled(false) { Reset(); }
 
 	// 時間間隔
 	void SetInterval(int m);	// 時間間隔の設定
@@ -69,12 +69,12 @@ private:
 };
 
 
-class CAutoSaveAgent : public DocListenerEx {
+class AutoSaveAgent : public DocListenerEx {
 public:
 	void CheckAutoSave();
 	void ReloadAutoSaveParam();	// 設定をSharedAreaから読み出す
 
 private:
-	CPassiveTimer m_cPassiveTimer;
+	PassiveTimer m_cPassiveTimer;
 };
 

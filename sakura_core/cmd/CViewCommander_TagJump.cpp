@@ -363,7 +363,7 @@ void ViewCommander::Command_TAGJUMPBACK(void)
 	TagJump tagJump;
 
 	// タグジャンプ情報の参照
-	if (!CTagJumpManager().PopTagJump(&tagJump) || !IsSakuraMainWindow(tagJump.hwndReferer)) {
+	if (!TagJumpManager().PopTagJump(&tagJump) || !IsSakuraMainWindow(tagJump.hwndReferer)) {
 		m_pCommanderView->SendStatusMessage(LS(STR_ERR_TAGJMPBK1));
 		// 2004.07.10 Moca m_TagJumpNumを0にしなくてもいいと思う
 		// GetDllShareData().m_TagJumpNum = 0;
@@ -403,7 +403,7 @@ bool ViewCommander::Command_TagsMake(void)
 	}
 
 	// ダイアログを表示する
-	CDlgTagsMake	cDlgTagsMake;
+	DlgTagsMake	cDlgTagsMake;
 	if (!cDlgTagsMake.DoModal(G_AppInstance(), m_pCommanderView->GetHwnd(), 0, szTargetPath)) return false;
 
 	TCHAR	cmdline[1024];
@@ -420,7 +420,7 @@ bool ViewCommander::Command_TagsMake(void)
 	}
 
 	HANDLE	hStdOutWrite, hStdOutRead;
-	CDlgCancel	cDlgCancel;
+	DlgCancel	cDlgCancel;
 	CWaitCursor	cWaitCursor(m_pCommanderView->GetHwnd());
 
 	PROCESS_INFORMATION	pi = {0};
@@ -613,7 +613,7 @@ bool ViewCommander::Command_TagJumpByTagsFileMsg(bool bMsg)
 */
 bool ViewCommander::Command_TagJumpByTagsFile(bool bClose)
 {
-	CNativeW cmemKeyW;
+	NativeW cmemKeyW;
 	m_pCommanderView->GetCurrentTextForSearch(cmemKeyW, true, true);
 	if (cmemKeyW.GetStringLength() == 0) {
 		return false;
@@ -623,7 +623,7 @@ bool ViewCommander::Command_TagJumpByTagsFile(bool bClose)
 	if (!Sub_PreProcTagJumpByTagsFile(szDirFile, _countof(szDirFile))) {
 		return false;
 	}
-	CDlgTagJumpList	cDlgTagJumpList(true);	// タグジャンプリスト
+	DlgTagJumpList	cDlgTagJumpList(true);	// タグジャンプリスト
 	
 	cDlgTagJumpList.SetFileName(szDirFile);
 	cDlgTagJumpList.SetKeyword(cmemKeyW.GetStringPtr());
@@ -669,7 +669,7 @@ bool ViewCommander::Command_TagJumpByTagsFileKeyword(const wchar_t* keyword)
 		return false;
 	}
 
-	CDlgTagJumpList	cDlgTagJumpList(false);
+	DlgTagJumpList	cDlgTagJumpList(false);
 	cDlgTagJumpList.SetFileName(szCurrentPath);
 	cDlgTagJumpList.SetKeyword(keyword);
 
@@ -703,7 +703,7 @@ bool ViewCommander::Sub_PreProcTagJumpByTagsFile(TCHAR* szCurrentPath, int count
 		// 2010.04.02 (無題)でもタグジャンプできるように
 		// Grep、アウトプットは行番号タグジャンプがあるので無効にする(要検討)
 		if (
-			CEditApp::getInstance()->m_pcGrepAgent->m_bGrepMode
+			EditApp::getInstance()->m_pcGrepAgent->m_bGrepMode
 		    || AppMode::getInstance()->IsDebugMode()
 		) {
 		    return false;
@@ -720,7 +720,7 @@ bool ViewCommander::Sub_PreProcTagJumpByTagsFile(TCHAR* szCurrentPath, int count
 		// (無題)でもファイル名を要求してくるのでダミーをつける
 		// 現在のタイプ別の1番目の拡張子を拝借
 		TCHAR szExts[MAX_TYPES_EXTS];
-		CDocTypeManager::GetFirstExt(m_pCommanderView->m_pTypeData->m_szTypeExts, szExts, _countof(szExts));
+		DocTypeManager::GetFirstExt(m_pCommanderView->m_pTypeData->m_szTypeExts, szExts, _countof(szExts));
 		int nExtLen = auto_strlen( szExts );
 		_tcscat(szCurrentPath, _T("\\dmy"));
 		if (nExtLen) {

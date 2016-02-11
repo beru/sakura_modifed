@@ -33,7 +33,7 @@
 #include "dlg/CDialog.h"
 #include "config/maxdata.h" // MAX_KEYWORDSET_PER_TYPE
  
-class CKeyWordSetMgr;
+class KeyWordSetMgr;
 
 /*
 	強調キーワード選択可能数
@@ -44,10 +44,10 @@ class CKeyWordSetMgr;
 //	2005.01.13 genta ShareDataの定義と連動させる
 const int KEYWORD_SELECT_NUM = MAX_KEYWORDSET_PER_TYPE;
 
-class CDlgKeywordSelect : public CDialog {
+class DlgKeywordSelect : public Dialog {
 public:
-	CDlgKeywordSelect();
-	~CDlgKeywordSelect();
+	DlgKeywordSelect();
+	~DlgKeywordSelect();
 	int DoModal(HINSTANCE, HWND, int* pnSet);
 
 protected:
@@ -59,6 +59,6 @@ protected:
 	LPVOID GetHelpIdTable(void);
 
 	int m_nSet[ KEYWORD_SELECT_NUM ];
-	CKeyWordSetMgr*	m_pCKeyWordSetMgr;
+	KeyWordSetMgr*	m_pCKeyWordSetMgr;
 };
 

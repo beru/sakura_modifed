@@ -36,13 +36,13 @@
 
 // 履歴とお気に入りの管理」ダイアログ
 // アクセス方法：[設定] - [履歴の管理]
-class CDlgFavorite : public CDialog {
+class DlgFavorite : public Dialog {
 public:
 	/*
 	||  Constructors
 	*/
-	CDlgFavorite();
-	~CDlgFavorite();
+	DlgFavorite();
+	~DlgFavorite();
 
 	/*
 	||  Attributes & Operations
@@ -80,15 +80,15 @@ protected:
 	void	RightMenu(POINT&);
 
 private:
-	CRecentFile			m_cRecentFile;
-	CRecentFolder		m_cRecentFolder;
-	CRecentExceptMRU	m_cRecentExceptMRU;
-	CRecentSearch		m_cRecentSearch;
-	CRecentReplace		m_cRecentReplace;
-	CRecentGrepFile		m_cRecentGrepFile;
-	CRecentGrepFolder	m_cRecentGrepFolder;
-	CRecentCmd			m_cRecentCmd;
-	CRecentCurDir		m_cRecentCurDir;
+	RecentFile			m_cRecentFile;
+	RecentFolder		m_cRecentFolder;
+	RecentExceptMRU	m_cRecentExceptMRU;
+	RecentSearch		m_cRecentSearch;
+	RecentReplace		m_cRecentReplace;
+	RecentGrepFile		m_cRecentGrepFile;
+	RecentGrepFolder	m_cRecentGrepFolder;
+	RecentCmd			m_cRecentCmd;
+	RecentCurDir		m_cRecentCurDir;
 
 	enum {
 		// 管理数

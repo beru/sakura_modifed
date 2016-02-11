@@ -11,7 +11,7 @@
 	Please contact the copyright holder to use this code for other purpose.
 */
 
-class CDlgCompare;
+class DlgCompare;
 
 #pragma once
 
@@ -19,12 +19,12 @@ class CDlgCompare;
 /*!
 	@brief ファイル比較ダイアログボックス
 */
-class CDlgCompare : public CDialog {
+class DlgCompare : public Dialog {
 public:
 	/*
 	||  Constructors
 	*/
-	CDlgCompare();
+	DlgCompare();
 	
 	/*
 	||  Attributes & Operations

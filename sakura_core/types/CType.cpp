@@ -56,16 +56,16 @@ void CType::InitTypeConfig(int nIdx, TypeConfig& type)
 
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-//                        CShareData                           //
+//                        ShareData                           //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 /*!	@brief 共有メモリ初期化/タイプ別設定
 
 	タイプ別設定の初期化処理
 
-	@date 2005.01.30 genta CShareData::Init()から分離．
+	@date 2005.01.30 genta ShareData::Init()から分離．
 */
-void CShareData::InitTypeConfigs(
+void ShareData::InitTypeConfigs(
 	DLLSHAREDATA* pShareData,
 	std::vector<TypeConfig*>& types
 	)
@@ -109,10 +109,10 @@ void CShareData::InitTypeConfigs(
 
 	強調キーワード関連の初期化処理
 
-	@date 2005.01.30 genta CShareData::Init()から分離．
+	@date 2005.01.30 genta ShareData::Init()から分離．
 		キーワード定義を関数の外に出し，登録をマクロ化して簡潔に．
 */
-void CShareData::InitKeyword(DLLSHAREDATA* pShareData)
+void ShareData::InitKeyword(DLLSHAREDATA* pShareData)
 {
 	// 強調キーワードのテストデータ
 	pShareData->m_common.m_sSpecialKeyword.m_CKeyWordSetMgr.m_nCurrentKeyWordSetIdx = 0;

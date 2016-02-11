@@ -19,7 +19,7 @@
 #include "sakura_rc.h"
 #include "sakura.hh"
 
-// 文字コードセット設定 CDlgSetCharSet
+// 文字コードセット設定 DlgSetCharSet
 const DWORD p_helpids[] = {
 	IDOK,							HIDOK_GREP,							// 検索
 	IDCANCEL,						HIDCANCEL_GREP,						// キャンセル
@@ -31,7 +31,7 @@ const DWORD p_helpids[] = {
 };
 
 
-CDlgSetCharSet::CDlgSetCharSet()
+DlgSetCharSet::DlgSetCharSet()
 {
 	m_pnCharSet = NULL;			// 文字コードセット
 	m_pbBom = NULL;				// 文字コードセット
@@ -40,7 +40,7 @@ CDlgSetCharSet::CDlgSetCharSet()
 
 
 // モーダルダイアログの表示
-int CDlgSetCharSet::DoModal(
+int DlgSetCharSet::DoModal(
 	HINSTANCE hInstance,
 	HWND hwndParent,
 	ECodeType* pnCharSet,
@@ -50,11 +50,11 @@ int CDlgSetCharSet::DoModal(
 	m_pnCharSet = pnCharSet;	// 文字コードセット
 	m_pbBom = pbBom;			// BOM
 
-	return (int)CDialog::DoModal(hInstance, hwndParent, IDD_SETCHARSET, (LPARAM)NULL);
+	return (int)Dialog::DoModal(hInstance, hwndParent, IDD_SETCHARSET, (LPARAM)NULL);
 }
 
 
-BOOL CDlgSetCharSet::OnInitDialog(
+BOOL DlgSetCharSet::OnInitDialog(
 	HWND hwndDlg,
 	WPARAM wParam,
 	LPARAM lParam
@@ -77,11 +77,11 @@ BOOL CDlgSetCharSet::OnInitDialog(
 	}
 
 	// 基底クラスメンバ
-	return CDialog::OnInitDialog(hwndDlg, wParam, lParam);
+	return Dialog::OnInitDialog(hwndDlg, wParam, lParam);
 }
 
 
-BOOL CDlgSetCharSet::OnBnClicked(int wID)
+BOOL DlgSetCharSet::OnBnClicked(int wID)
 {
 	switch (wID) {
 	case IDC_CHECK_CP:
@@ -107,12 +107,12 @@ BOOL CDlgSetCharSet::OnBnClicked(int wID)
 	}
 
 	// 基底クラスメンバ
-	return CDialog::OnBnClicked(wID);
+	return Dialog::OnBnClicked(wID);
 }
 
 
 // BOM の設定
-void CDlgSetCharSet::SetBOM(void)
+void DlgSetCharSet::SetBOM(void)
 {
 	WPARAM fCheck;
 	int nIdx = Combo_GetCurSel(m_hwndCharSet);
@@ -134,7 +134,7 @@ void CDlgSetCharSet::SetBOM(void)
 
 
 // 文字コード選択時の処理
-BOOL CDlgSetCharSet::OnCbnSelChange(HWND hwndCtl, int wID)
+BOOL DlgSetCharSet::OnCbnSelChange(HWND hwndCtl, int wID)
 {
 	int 		nIdx;
 	LRESULT		lRes;
@@ -165,14 +165,14 @@ BOOL CDlgSetCharSet::OnCbnSelChange(HWND hwndCtl, int wID)
 }
 
 
-LPVOID CDlgSetCharSet::GetHelpIdTable(void)
+LPVOID DlgSetCharSet::GetHelpIdTable(void)
 {
 	return (LPVOID)p_helpids;
 }
 
 
 // ダイアログデータの設定
-void CDlgSetCharSet::SetData(void)
+void DlgSetCharSet::SetData(void)
 {
 	// 文字コードセット
 	CodeTypesForCombobox cCodeTypes;
@@ -203,7 +203,7 @@ void CDlgSetCharSet::SetData(void)
 
 // ダイアログデータの取得
 // TRUE==正常  FALSE==入力エラー
-int CDlgSetCharSet::GetData(void)
+int DlgSetCharSet::GetData(void)
 {
 	// 文字コードセット
 	int nIdx = Combo_GetCurSel(m_hwndCharSet);

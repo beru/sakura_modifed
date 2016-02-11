@@ -7,7 +7,7 @@
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 // できる限り全角カタカナにする
-bool Converter_ToZenkata::DoConvert(CNativeW* pcData)
+bool Converter_ToZenkata::DoConvert(NativeW* pcData)
 {
 	// 半角カナ→全角カナ
 	// 文字数が減ることはあっても増えることは無いので、これでＯＫ

@@ -86,12 +86,12 @@ private:
 
 // ‹¤’ÊŒ^
 typedef StaticString<TCHAR, _MAX_PATH> SFilePath;
-class CFilePath : public StaticString<TCHAR, _MAX_PATH> {
+class FilePath : public StaticString<TCHAR, _MAX_PATH> {
 private:
 	typedef StaticString<TCHAR, _MAX_PATH> Super;
 public:
-	CFilePath() : Super() { }
-	CFilePath(const TCHAR* rhs) : Super(rhs) { }
+	FilePath() : Super() { }
+	FilePath(const TCHAR* rhs) : Super(rhs) { }
 
 	bool IsValidPath() const { return At(0) != _T('\0'); }
 	std::tstring GetDirPath() const {

@@ -31,7 +31,7 @@
 #include "macro/CWSHManager.h"
 
 // デストラクタ
-CWSHPlugin::~CWSHPlugin(void)
+WSHPlugin::~WSHPlugin(void)
 {
 	for (auto it=m_plugs.begin(); it!=m_plugs.end(); ++it) {
 		delete *it;
@@ -39,7 +39,7 @@ CWSHPlugin::~CWSHPlugin(void)
 }
 
 // プラグイン定義ファイルを読み込む
-bool CWSHPlugin::ReadPluginDef(
+bool WSHPlugin::ReadPluginDef(
 	DataProfile* cProfile,
 	DataProfile* cProfileMlang
 	)
@@ -65,7 +65,7 @@ bool CWSHPlugin::ReadPluginDef(
 }
 
 // オプションファイルを読み込む
-bool CWSHPlugin::ReadPluginOption(
+bool WSHPlugin::ReadPluginOption(
 	DataProfile* cProfile
 	)
 {
@@ -73,19 +73,19 @@ bool CWSHPlugin::ReadPluginOption(
 }
 
 // プラグを実行する
-bool CWSHPlugin::InvokePlug(
-	CEditView* view,
-	CPlug& plug,
-	CWSHIfObj::List& params
+bool WSHPlugin::InvokePlug(
+	EditView* view,
+	Plug& plug,
+	WSHIfObj::List& params
 	)
 {
-	CWSHPlug& wshPlug = static_cast<CWSHPlug&>(plug);
-	CWSHMacroManager* pWsh = NULL;
+	WSHPlug& wshPlug = static_cast<WSHPlug&>(plug);
+	WSHMacroManager* pWsh = NULL;
 
 	if (!m_bUseCache || !wshPlug.m_Wsh) {
-		CFilePath path(plug.m_cPlugin.GetFilePath(to_tchar(plug.m_sHandler.c_str())).c_str());
+		FilePath path(plug.m_cPlugin.GetFilePath(to_tchar(plug.m_sHandler.c_str())).c_str());
 
-		pWsh = (CWSHMacroManager*)CWSHMacroManager::Creator(path.GetExt(true));
+		pWsh = (WSHMacroManager*)WSHMacroManager::Creator(path.GetExt(true));
 		if (!pWsh) {
 			return false;
 		}
@@ -101,7 +101,7 @@ bool CWSHPlugin::InvokePlug(
 		pWsh = wshPlug.m_Wsh;
 	}
 
-	CPluginIfObj cPluginIfo(*this);		// Pluginオブジェクトを追加
+	PluginIfObj cPluginIfo(*this);		// Pluginオブジェクトを追加
 	cPluginIfo.AddRef();
 	cPluginIfo.SetPlugIndex(plug.m_id);	// 実行中プラグ番号を提供
 	pWsh->AddParam(&cPluginIfo);

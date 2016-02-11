@@ -2,8 +2,8 @@
 #include "util/tchar_convert.h"
 #include "mem/CRecycledBuffer.h"
 
-static CRecycledBuffer        g_bufSmall;
-static CRecycledBufferDynamic g_bufBig;
+static RecycledBuffer        g_bufSmall;
+static RecycledBufferDynamic g_bufBig;
 
 
 const WCHAR* to_wchar(const ACHAR* src)

@@ -108,7 +108,7 @@ EConvertResult CodePage::CPToUni(const char* pSrc, const int nSrcLen, wchar_t* p
 
 /*!	CODEPAGE→Unicodeコード変換
 */
-EConvertResult CodePage::CPToUnicode(const CMemory& cSrc, CNativeW* pDst, int codepageEx)
+EConvertResult CodePage::CPToUnicode(const Memory& cSrc, NativeW* pDst, int codepageEx)
 {
 	// エラー状態
 	bool bError = false;
@@ -170,7 +170,7 @@ EConvertResult CodePage::UniToCP(const wchar_t* pSrc, const int nSrcLen, char* p
 }
 
 
-EConvertResult CodePage::UnicodeToCP(const CNativeW& cSrc, CMemory* pDst, int codepageEx)
+EConvertResult CodePage::UnicodeToCP(const NativeW& cSrc, Memory* pDst, int codepageEx)
 {
 	const wchar_t* pSrc = cSrc.GetStringPtr();
 	int nSrcLen = cSrc.GetStringLength();
@@ -214,27 +214,27 @@ EConvertResult CodePage::UnicodeToCP(const CNativeW& cSrc, CMemory* pDst, int co
 	return ret;
 }
 
-void CodePage::GetEol(CMemory* pcmemEol, EEolType eEolType)
+void CodePage::GetEol(Memory* pcmemEol, EEolType eEolType)
 {
-	CNativeW temp;
+	NativeW temp;
 	Unicode().GetEol(temp._GetMemory(), eEolType);
 	UnicodeToCode(temp, pcmemEol);
-	CNativeW temp2;
+	NativeW temp2;
 	CodeToUnicode(*pcmemEol, &temp2);
 	// 双方向変換ができる場合だけ設定
-	if (!CNativeW::IsEqual(temp, temp2)) {
+	if (!NativeW::IsEqual(temp, temp2)) {
 		pcmemEol->Clear();
 	}
 }
 
-void CodePage::GetBom(CMemory* pcmemBom)
+void CodePage::GetBom(Memory* pcmemBom)
 {
-	CNativeW temp;
+	NativeW temp;
 	Unicode().GetBom(temp._GetMemory());
 	UnicodeToCode(temp, pcmemBom);
-	CNativeW temp2;
+	NativeW temp2;
 	CodeToUnicode(*pcmemBom, &temp2);
-	if (!CNativeW::IsEqual(temp, temp2)) {
+	if (!NativeW::IsEqual(temp, temp2)) {
 		pcmemBom->Clear();
 	}
 }
@@ -477,7 +477,7 @@ int CodePage::AddComboCodePages(HWND hwnd, HWND combo, int nSelCode)
 		}
 	}
 	// 幅を変更
-	CDialog::OnCbnDropDown(combo, true);
+	Dialog::OnCbnDropDown(combo, true);
 	return nSel;
 }
 

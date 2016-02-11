@@ -35,9 +35,9 @@
 /*!	m_aSearchKeysÇ…pszSearchKeyÇí«â¡Ç∑ÇÈÅB
 	YAZAKI
 */
-void CSearchKeywordManager::AddToSearchKeyArr(const wchar_t* pszSearchKey)
+void SearchKeywordManager::AddToSearchKeyArr(const wchar_t* pszSearchKey)
 {
-	CRecentSearch cRecentSearchKey;
+	RecentSearch cRecentSearchKey;
 	cRecentSearchKey.AppendItem(pszSearchKey);
 	cRecentSearchKey.Terminate();
 	GetDllShareData().m_common.m_sSearch.m_nSearchKeySequence++;
@@ -46,9 +46,9 @@ void CSearchKeywordManager::AddToSearchKeyArr(const wchar_t* pszSearchKey)
 /*!	m_aReplaceKeysÇ…pszReplaceKeyÇí«â¡Ç∑ÇÈ
 	YAZAKI
 */
-void CSearchKeywordManager::AddToReplaceKeyArr(const wchar_t* pszReplaceKey)
+void SearchKeywordManager::AddToReplaceKeyArr(const wchar_t* pszReplaceKey)
 {
-	CRecentReplace cRecentReplaceKey;
+	RecentReplace cRecentReplaceKey;
 	cRecentReplaceKey.AppendItem(pszReplaceKey);
 	cRecentReplaceKey.Terminate();
 	GetDllShareData().m_common.m_sSearch.m_nReplaceKeySequence++;
@@ -59,9 +59,9 @@ void CSearchKeywordManager::AddToReplaceKeyArr(const wchar_t* pszReplaceKey)
 /*!	m_aGrepFilesÇ…pszGrepFileÇí«â¡Ç∑ÇÈ
 	YAZAKI
 */
-void CSearchKeywordManager::AddToGrepFileArr(const TCHAR* pszGrepFile)
+void SearchKeywordManager::AddToGrepFileArr(const TCHAR* pszGrepFile)
 {
-	CRecentGrepFile cRecentGrepFile;
+	RecentGrepFile cRecentGrepFile;
 	cRecentGrepFile.AppendItem(pszGrepFile);
 	cRecentGrepFile.Terminate();
 }
@@ -69,9 +69,9 @@ void CSearchKeywordManager::AddToGrepFileArr(const TCHAR* pszGrepFile)
 /*!	m_aGrepFolders.size()Ç…pszGrepFolderÇí«â¡Ç∑ÇÈ
 	YAZAKI
 */
-void CSearchKeywordManager::AddToGrepFolderArr(const TCHAR* pszGrepFolder)
+void SearchKeywordManager::AddToGrepFolderArr(const TCHAR* pszGrepFolder)
 {
-	CRecentGrepFolder cRecentGrepFolder;
+	RecentGrepFolder cRecentGrepFolder;
 	cRecentGrepFolder.AppendItem(pszGrepFolder);
 	cRecentGrepFolder.Terminate();
 }

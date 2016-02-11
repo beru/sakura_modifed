@@ -31,8 +31,8 @@
 #include "CFileExt.h"
 #include <Shlwapi.h>	// PathMatchSpec
 
-const TCHAR* CDocTypeManager::m_typeExtSeps = _T(" ;,");	// タイプ別拡張子 区切り文字
-const TCHAR* CDocTypeManager::m_typeExtWildcards = _T("*?");	// タイプ別拡張子 ワイルドカード
+const TCHAR* DocTypeManager::m_typeExtSeps = _T(" ;,");	// タイプ別拡張子 区切り文字
+const TCHAR* DocTypeManager::m_typeExtWildcards = _T("*?");	// タイプ別拡張子 ワイルドカード
 
 static Mutex g_cDocTypeMutex(FALSE, GSTR_MUTEX_SAKURA_DOCTYPE);
 
@@ -44,7 +44,7 @@ static Mutex g_cDocTypeMutex(FALSE, GSTR_MUTEX_SAKURA_DOCTYPE);
 	拡張子を切り出して GetDocumentTypeOfExt に渡すだけ．
 	@date 2014.12.06 syat ワイルドカード対応。２重拡張子対応をやめる
 */
-CTypeConfig CDocTypeManager::GetDocumentTypeOfPath(const TCHAR* pszFilePath)
+CTypeConfig DocTypeManager::GetDocumentTypeOfPath(const TCHAR* pszFilePath)
 {
 	// ファイル名を抽出
 	const TCHAR* pszFileName = pszFilePath;
@@ -75,12 +75,12 @@ CTypeConfig CDocTypeManager::GetDocumentTypeOfPath(const TCHAR* pszFilePath)
 	@date 2012.10.22 Moca ２重拡張子, 拡張子なしに対応
 	@date 2014.12.06 syat GetDocumentTypeOfPathに統合
 */
-CTypeConfig CDocTypeManager::GetDocumentTypeOfExt(const TCHAR* pszExt)
+CTypeConfig DocTypeManager::GetDocumentTypeOfExt(const TCHAR* pszExt)
 {
 	return GetDocumentTypeOfPath(pszExt);
 }
 
-CTypeConfig CDocTypeManager::GetDocumentTypeOfId(int id)
+CTypeConfig DocTypeManager::GetDocumentTypeOfId(int id)
 {
 	for (int i=0; i<m_pShareData->m_nTypesCount; ++i) {
 		const TypeConfigMini* mini;
@@ -92,7 +92,7 @@ CTypeConfig CDocTypeManager::GetDocumentTypeOfId(int id)
 	return CTypeConfig(-1);	// ハズレ
 }
 
-bool CDocTypeManager::GetTypeConfig(CTypeConfig cDocumentType, TypeConfig& type)
+bool DocTypeManager::GetTypeConfig(CTypeConfig cDocumentType, TypeConfig& type)
 {
 	int n = cDocumentType.GetIndex();
 	if (0 <= n && n < m_pShareData->m_nTypesCount) {
@@ -110,7 +110,7 @@ bool CDocTypeManager::GetTypeConfig(CTypeConfig cDocumentType, TypeConfig& type)
 	return false;
 }
 
-bool CDocTypeManager::SetTypeConfig(CTypeConfig cDocumentType, const TypeConfig& type)
+bool DocTypeManager::SetTypeConfig(CTypeConfig cDocumentType, const TypeConfig& type)
 {
 	int n = cDocumentType.GetIndex();
 	if (0 <= n && n < m_pShareData->m_nTypesCount) {
@@ -123,7 +123,7 @@ bool CDocTypeManager::SetTypeConfig(CTypeConfig cDocumentType, const TypeConfig&
 	return false;
 }
 
-bool CDocTypeManager::GetTypeConfigMini(CTypeConfig cDocumentType, const TypeConfigMini** type)
+bool DocTypeManager::GetTypeConfigMini(CTypeConfig cDocumentType, const TypeConfigMini** type)
 {
 	int n = cDocumentType.GetIndex();
 	if (0 <= n && n < m_pShareData->m_nTypesCount) {
@@ -133,13 +133,13 @@ bool CDocTypeManager::GetTypeConfigMini(CTypeConfig cDocumentType, const TypeCon
 	return false;
 }
 
-bool CDocTypeManager::AddTypeConfig(CTypeConfig cDocumentType)
+bool DocTypeManager::AddTypeConfig(CTypeConfig cDocumentType)
 {
 	LockGuard<Mutex> guard(g_cDocTypeMutex);
 	return FALSE != SendMessage(m_pShareData->m_handles.m_hwndTray, MYWM_ADD_TYPESETTING, (WPARAM)cDocumentType.GetIndex(), 0);
 }
 
-bool CDocTypeManager::DelTypeConfig(CTypeConfig cDocumentType)
+bool DocTypeManager::DelTypeConfig(CTypeConfig cDocumentType)
 {
 	LockGuard<Mutex> guard(g_cDocTypeMutex);
 	return FALSE != SendMessage(m_pShareData->m_handles.m_hwndTray, MYWM_DEL_TYPESETTING, (WPARAM)cDocumentType.GetIndex(), 0);
@@ -151,7 +151,7 @@ bool CDocTypeManager::DelTypeConfig(CTypeConfig cDocumentType)
 	@param pszTypeExts [in] タイプ別拡張子（ワイルドカードを含む）
 	@param pszFileName [in] ファイル名
 */
-bool CDocTypeManager::IsFileNameMatch(const TCHAR* pszTypeExts, const TCHAR* pszFileName)
+bool DocTypeManager::IsFileNameMatch(const TCHAR* pszTypeExts, const TCHAR* pszFileName)
 {
 	TCHAR szWork[MAX_TYPES_EXTS];
 
@@ -184,7 +184,7 @@ bool CDocTypeManager::IsFileNameMatch(const TCHAR* pszTypeExts, const TCHAR* psz
 	@param szFirstExt  [out] 先頭拡張子
 	@param nBuffSize   [in] 先頭拡張子のバッファサイズ
 */
-void CDocTypeManager::GetFirstExt(const TCHAR* pszTypeExts, TCHAR szFirstExt[], int nBuffSize)
+void DocTypeManager::GetFirstExt(const TCHAR* pszTypeExts, TCHAR szFirstExt[], int nBuffSize)
 {
 	TCHAR szWork[MAX_TYPES_EXTS];
 
@@ -209,7 +209,7 @@ void CDocTypeManager::GetFirstExt(const TCHAR* pszTypeExts, TCHAR szFirstExt[], 
 
 	@date 2014.12.06 syat CFileExtから移動
 */
-bool CDocTypeManager::ConvertTypesExtToDlgExt( const TCHAR *pszSrcExt, const TCHAR* szExt, TCHAR *pszDstExt )
+bool DocTypeManager::ConvertTypesExtToDlgExt( const TCHAR *pszSrcExt, const TCHAR* szExt, TCHAR *pszDstExt )
 {
 	TCHAR	*token;
 	TCHAR	*p;

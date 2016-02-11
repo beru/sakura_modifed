@@ -33,25 +33,25 @@
 #include <string>
 #include "plugin/SakuraPlugin.h"
 
-class CEditView;
+class EditView;
 
 ///////////////////////////////////////////////////////////////////////////////
 // Plugin macro manager
-class CPluginMacroManager: public CMacroManagerBase {
+class PluginMacroManager: public MacroManagerBase {
 public:
-	CPluginMacroManager(const WCHAR* Ext, CPlug* plug);
-	virtual ~CPluginMacroManager();
+	PluginMacroManager(const WCHAR* Ext, Plug* plug);
+	virtual ~PluginMacroManager();
 
-	virtual bool ExecKeyMacro(class CEditView* pcEditView, int flags) const;
+	virtual bool ExecKeyMacro(class EditView* pcEditView, int flags) const;
 	virtual bool LoadKeyMacro(HINSTANCE hInstance, const TCHAR* Path);
 	virtual bool LoadKeyMacroStr(HINSTANCE hInstance, const TCHAR* Code);
 
-	static CMacroManagerBase* Creator(const TCHAR* Ext);
+	static MacroManagerBase* Creator(const TCHAR* Ext);
 	static void declare(void);
 
 protected:
 	std::wstring	m_Source;	// マクロスクリプト
 	std::wstring	m_Ext;		// 拡張子
-	CPlug*			m_Plug;		// プラグイン
+	Plug*			m_Plug;		// プラグイン
 };
 

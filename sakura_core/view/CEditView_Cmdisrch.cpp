@@ -1,5 +1,5 @@
 /*!	@file
-	@brief CEditViewクラスのインクリメンタルサーチ関連コマンド処理系関数群
+	@brief EditViewクラスのインクリメンタルサーチ関連コマンド処理系関数群
 
 	@author genta
 	@date	2005/01/10 作成
@@ -32,7 +32,7 @@
 		SHIFT+文字の後でSPACEを入力するようなケースで
 		SHIFTの解放が遅れても文字が入らなくなることを防ぐため．
 */
-void CEditView::TranslateCommand_isearch(
+void EditView::TranslateCommand_isearch(
 	EFunctionCode&	nCommand,
 	bool&			bRedraw,
 	LPARAM&			lparam1,
@@ -88,7 +88,7 @@ void CEditView::TranslateCommand_isearch(
 
 	@date 2005.01.10 genta 各コマンドに入っていた処理を1カ所に移動
 */
-bool CEditView::ProcessCommand_isearch(
+bool EditView::ProcessCommand_isearch(
 	int	nCommand,
 	bool	bRedraw,
 	LPARAM	lparam1,
@@ -145,7 +145,7 @@ bool CEditView::ProcessCommand_isearch(
 	@date 2012.10.11 novice m_sCurSearchOption/m_sSearchOptionの同期をswitchの前に変更
 	@date 2012.10.11 novice MIGEMOの処理をcase内に移動
 */
-void CEditView::ISearchEnter(int mode, eSearchDirection direction)
+void EditView::ISearchEnter(int mode, eSearchDirection direction)
 {
 
 	if (m_nISearchMode == mode) {
@@ -190,7 +190,7 @@ void CEditView::ISearchEnter(int mode, eSearchDirection direction)
 				return;
 			}
 			if (!m_pcmigemo) {
-				m_pcmigemo = CMigemo::getInstance();
+				m_pcmigemo = Migemo::getInstance();
 				m_pcmigemo->InitDll();
 			}
 			// migemo dll チェック
@@ -246,11 +246,11 @@ void CEditView::ISearchEnter(int mode, eSearchDirection direction)
 }
 
 // インクリメンタルサーチモードから抜ける
-void CEditView::ISearchExit()
+void EditView::ISearchExit()
 {
 	// シーケンスを上書きして現在の検索キーを維持する
 	if (m_strCurSearchKey.size() < _MAX_PATH) {
-		CSearchKeywordManager().AddToSearchKeyArr(m_strCurSearchKey.c_str());
+		SearchKeywordManager().AddToSearchKeyArr(m_strCurSearchKey.c_str());
 	}
 	m_nCurSearchKeySequence = GetDllShareData().m_common.m_sSearch.m_nSearchKeySequence;
 	GetDllShareData().m_common.m_sSearch.m_searchOption = m_curSearchOption;
@@ -277,7 +277,7 @@ void CEditView::ISearchExit()
 	
 	@param wChar [in] 追加する文字 (1byte or 2byte)
 */
-void CEditView::ISearchExec(DWORD wChar)
+void EditView::ISearchExec(DWORD wChar)
 {
 	// 特殊文字は処理しない
 	switch (wChar) {
@@ -310,7 +310,7 @@ void CEditView::ISearchExec(DWORD wChar)
 	
 	@param pszText [in] 追加する文字列
 */
-void CEditView::ISearchExec(LPCWSTR pszText)
+void EditView::ISearchExec(LPCWSTR pszText)
 {
 	// 一文字ずつ分解して実行
 
@@ -336,7 +336,7 @@ void CEditView::ISearchExec(LPCWSTR pszText)
 
 	@param bNext [in] true:次の候補を検索, false:現在のカーソル位置のまま検索
 */
-void CEditView::ISearchExec(bool bNext) 
+void EditView::ISearchExec(bool bNext) 
 {
 	// 検索を実行する.
 
@@ -365,7 +365,7 @@ void CEditView::ISearchExec(bool bNext)
 			int nIdxP;
 			auto& docLineMgr = m_pcEditDoc->m_cDocLineMgr;
 			nLineP =  docLineMgr.GetLineCount() - LogicInt(1);
-			CDocLine* pDocLine = docLineMgr.GetLine(nLineP);
+			DocLine* pDocLine = docLineMgr.GetLine(nLineP);
 			nIdxP = pDocLine->GetLengthWithEOL() -1;
 			LayoutPoint ptTmp;
 			m_pcEditDoc->m_cLayoutMgr.LogicToLayout(LogicPoint(nIdxP, nLineP), &ptTmp);
@@ -452,7 +452,7 @@ void CEditView::ISearchExec(bool bNext)
 }
 
 // バックスペースを押されたときの処理
-void CEditView::ISearchBack(void) {
+void EditView::ISearchBack(void) {
 	if (m_nISearchHistoryCount == 0) return;
 	
 	if (m_nISearchHistoryCount == 1) {
@@ -463,7 +463,7 @@ void CEditView::ISearchBack(void) {
 		size_t l = m_strCurSearchKey.size();
 		if (l > 0) {
 			// 最後の文字の一つ前
-			wchar_t* p = (wchar_t*)CNativeW::GetCharPrev(m_strCurSearchKey.c_str(), l, &m_strCurSearchKey.c_str()[l]);
+			wchar_t* p = (wchar_t*)NativeW::GetCharPrev(m_strCurSearchKey.c_str(), l, &m_strCurSearchKey.c_str()[l]);
 			size_t new_len = p - m_strCurSearchKey.c_str();
 			m_strCurSearchKey.resize(new_len);
 			//m_szCurSrchKey[l-1] = '\0';
@@ -502,7 +502,7 @@ void CEditView::ISearchBack(void) {
 }
 
 // 入力文字から、検索文字を生成する。
-void CEditView::ISearchWordMake(void)
+void EditView::ISearchWordMake(void)
 {
 	switch (m_nISearchMode) {
 	case 1: // 通常インクリメンタルサーチ
@@ -534,7 +534,7 @@ void CEditView::ISearchWordMake(void)
 	@date 2004/10/13
 	@date 2005.01.13 genta 文字列修正
 */
-void CEditView::ISearchSetStatusMsg(CNativeT* msg) const
+void EditView::ISearchSetStatusMsg(CNativeT* msg) const
 {
 
 	switch (m_nISearchMode) {
@@ -571,7 +571,7 @@ void CEditView::ISearchSetStatusMsg(CNativeT* msg) const
 	
 	@date 2005.01.10 genta 新規作成
 */
-bool CEditView::IsISearchEnabled(int nCommand) const
+bool EditView::IsISearchEnabled(int nCommand) const
 {
 	switch (nCommand) {
 	case F_ISEARCH_NEXT:

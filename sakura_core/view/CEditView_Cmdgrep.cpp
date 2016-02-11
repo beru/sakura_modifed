@@ -1,5 +1,5 @@
 /*!	@file
-	@brief CEditViewクラスのgrep関連コマンド処理系関数群
+	@brief EditViewクラスのgrep関連コマンド処理系関数群
 
 	@author genta
 	@date	2005/01/10 作成
@@ -26,7 +26,7 @@
 /*!
 	コマンドコードの変換(grep mode時)
 */
-void CEditView::TranslateCommand_grep(
+void EditView::TranslateCommand_grep(
 	EFunctionCode&	nCommand,
 	bool&			bRedraw,
 	LPARAM&			lparam1,
@@ -35,7 +35,7 @@ void CEditView::TranslateCommand_grep(
 	LPARAM&			lparam4
 )
 {
-	if (!CEditApp::getInstance()->m_pcGrepAgent->m_bGrepMode)
+	if (!EditApp::getInstance()->m_pcGrepAgent->m_bGrepMode)
 		return;
 
 	if (nCommand == F_WCHAR) {

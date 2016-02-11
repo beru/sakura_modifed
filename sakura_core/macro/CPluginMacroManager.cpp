@@ -34,24 +34,24 @@
 #include "plugin/CJackManager.h"
 
 ///////////////////////////////////////////////////////////////////////////////
-CPluginMacroManager::CPluginMacroManager(const WCHAR* Ext, CPlug* plug)
+PluginMacroManager::PluginMacroManager(const WCHAR* Ext, Plug* plug)
 {
 	m_Ext = Ext;
 	m_Plug = plug;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-CPluginMacroManager::~CPluginMacroManager()
+PluginMacroManager::~PluginMacroManager()
 {
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // マクロを実行する
-bool CPluginMacroManager::ExecKeyMacro(CEditView* EditView, int flags) const
+bool PluginMacroManager::ExecKeyMacro(EditView* EditView, int flags) const
 {
 	bool result = false;
-	CWSHIfObj::List params;
-	CMacroIfObj* objMacro = new CMacroIfObj(CMacroIfObj::MACRO_MODE_EXEC, m_Ext.c_str(), flags, m_Source.c_str());
+	WSHIfObj::List params;
+	MacroIfObj* objMacro = new MacroIfObj(MacroIfObj::MACRO_MODE_EXEC, m_Ext.c_str(), flags, m_Source.c_str());
 	if (objMacro) {
 		objMacro->AddRef();
 		params.push_back(objMacro);
@@ -67,10 +67,10 @@ bool CPluginMacroManager::ExecKeyMacro(CEditView* EditView, int flags) const
 
 ///////////////////////////////////////////////////////////////////////////////
 //	ファイルからマクロを読み込む
-bool CPluginMacroManager::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* Path)
+bool PluginMacroManager::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* Path)
 {
 	m_Source = L"";
-	CTextInputStream in(Path);
+	TextInputStream in(Path);
 	if (in) {
 		while (in) {
 			m_Source += in.ReadLineW() + L"\r\n";
@@ -82,7 +82,7 @@ bool CPluginMacroManager::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* Path)
 
 ///////////////////////////////////////////////////////////////////////////////
 // 文字列からマクロを読み込む
-bool CPluginMacroManager::LoadKeyMacroStr(HINSTANCE hInstance, const TCHAR* Code)
+bool PluginMacroManager::LoadKeyMacroStr(HINSTANCE hInstance, const TCHAR* Code)
 {
 	m_Source = to_wchar(Code);
 	return true;
@@ -90,29 +90,29 @@ bool CPluginMacroManager::LoadKeyMacroStr(HINSTANCE hInstance, const TCHAR* Code
 
 ///////////////////////////////////////////////////////////////////////////////
 // 拡張子が一致したらオブジェクトを生成する
-CMacroManagerBase* CPluginMacroManager::Creator(const TCHAR* Ext)
+MacroManagerBase* PluginMacroManager::Creator(const TCHAR* Ext)
 {
-	CWSHIfObj::List params;
+	WSHIfObj::List params;
 #ifdef _UNICODE
-	CMacroIfObj* objMacro = new CMacroIfObj(CMacroIfObj::MACRO_MODE_CREATOR, Ext, 0, L"");
+	MacroIfObj* objMacro = new MacroIfObj(MacroIfObj::MACRO_MODE_CREATOR, Ext, 0, L"");
 #else
-	CNativeW szWideExt(to_wchar(Ext));
-	CMacroIfObj* objMacro = new CMacroIfObj(CMacroIfObj::MACRO_MODE_CREATOR, szWideExt.GetStringPtr(), 0, L"");
+	NativeW szWideExt(to_wchar(Ext));
+	MacroIfObj* objMacro = new MacroIfObj(MacroIfObj::MACRO_MODE_CREATOR, szWideExt.GetStringPtr(), 0, L"");
 #endif
 	objMacro->AddRef();
 	params.push_back(objMacro);
 
-	CPlug::Array plugs;
-	CJackManager::getInstance()->GetUsablePlug(PP_MACRO, 0, &plugs);
+	Plug::Array plugs;
+	JackManager::getInstance()->GetUsablePlug(PP_MACRO, 0, &plugs);
 	for (auto it=plugs.begin(); it!=plugs.end(); ++it) {
 		objMacro->SetMatch(0);	// Check macro ext mode
 		(*it)->Invoke(NULL, params);
 		if (objMacro->IsMatch()) {
 			objMacro->Release();
 #ifdef _UNICODE
-			return new CPluginMacroManager(Ext, *it);
+			return new PluginMacroManager(Ext, *it);
 #else
-			return new CPluginMacroManager(szWideExt.GetStringPtr(), *it);
+			return new PluginMacroManager(szWideExt.GetStringPtr(), *it);
 #endif
 		}
 	}
@@ -122,8 +122,8 @@ CMacroManagerBase* CPluginMacroManager::Creator(const TCHAR* Ext)
 
 ///////////////////////////////////////////////////////////////////////////////
 // Register plugin macro manager
-void CPluginMacroManager::declare(void)
+void PluginMacroManager::declare(void)
 {
-	CMacroFactory::getInstance()->RegisterCreator(Creator);
+	MacroFactory::getInstance()->RegisterCreator(Creator);
 }
 

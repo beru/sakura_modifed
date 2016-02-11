@@ -1,5 +1,5 @@
 /*!	@file
-	@brief CEditViewクラスのコマンド処理系関数群
+	@brief EditViewクラスのコマンド処理系関数群
 
 	@author Norio Nakatani
 	@date	1998/07/17 作成
@@ -34,11 +34,11 @@
 #include "CEditApp.h"
 #include "plugin/CJackManager.h"
 
-ViewCommander::ViewCommander(CEditView* pEditView)
+ViewCommander::ViewCommander(EditView* pEditView)
 	: m_pCommanderView(pEditView)
 {
 	m_bPrevCommand = 0;
-	m_pcSMacroMgr = CEditApp::getInstance()->m_pcSMacroMgr;
+	m_pcSMacroMgr = EditApp::getInstance()->m_pcSMacroMgr;
 }
 
 
@@ -676,13 +676,13 @@ bool ViewCommander::HandleCommand(
 		{
 			m_pCommanderView->SetUndoBuffer(true); // 2013.05.01 追加。再帰対応
 
-			CPlug::Array plugs;
-			CJackManager::getInstance()->GetUsablePlug(PP_COMMAND, nCommand, &plugs);
+			Plug::Array plugs;
+			JackManager::getInstance()->GetUsablePlug(PP_COMMAND, nCommand, &plugs);
 
 			if (plugs.size() > 0) {
 				assert_warning(plugs.size() == 1);
 				// インタフェースオブジェクト準備
-				CWSHIfObj::List params;
+				WSHIfObj::List params;
 				// プラグイン呼び出し
 				(*plugs.begin())->Invoke(m_pCommanderView, params);
 
@@ -727,7 +727,7 @@ LogicInt ViewCommander::ConvertEol(
 {
 	// original by 2009.02.28 salarm
 	LogicInt nConvertedTextLen;
-	CEol eol = GetDocument()->m_cDocEditor.GetNewLineCode();
+	Eol eol = GetDocument()->m_cDocEditor.GetNewLineCode();
 
 	nConvertedTextLen = 0;
 	bool bExtEol = GetDllShareData().m_common.m_sEdit.m_bEnableExtEol;

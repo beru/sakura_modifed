@@ -216,7 +216,7 @@ public:
 	virtual HRESULT __stdcall GetWindow(
 	    /* [out] */ HWND *phwnd)
 	{
-		*phwnd = CEditWnd::getInstance()->m_cSplitterWnd.GetHwnd();
+		*phwnd = EditWnd::getInstance()->m_cSplitterWnd.GetHwnd();
 		return S_OK;
 	}
 
@@ -280,7 +280,7 @@ struct AbortMacroParam {
 	HANDLE hEvent;
 	IActiveScript* pEngine;				// ActiveScript
 	int nCancelTimer;
-	CEditView* view;
+	EditView* view;
 };
 
 // WSHマクロ実行を中止するスレッド
@@ -294,7 +294,7 @@ static unsigned __stdcall AbortMacroProc(LPVOID lpParameter)
 		DEBUG_TRACE(_T("AbortMacro: Show Dialog\n"));
 
 		MSG msg;
-		CDlgCancel cDlgCancel;
+		DlgCancel cDlgCancel;
 		HWND hwndDlg = cDlgCancel.DoModeless(G_AppInstance(), NULL, IDD_MACRORUNNING);	// エディタビジーでも表示できるよう、親を指定しない
 		// ダイアログタイトルとファイル名を設定
 		::SendMessage(hwndDlg, WM_SETTEXT, 0, (LPARAM)GSTR_APPNAME);
@@ -367,7 +367,7 @@ bool CWSHClient::Execute(const wchar_t* AScript)
 				AbortMacroParam sThreadParam;
 				sThreadParam.pEngine = m_Engine;
 				sThreadParam.nCancelTimer = GetDllShareData().m_common.m_sMacro.m_nMacroCancelTimer;
-				sThreadParam.view = (CEditView*)m_Data;
+				sThreadParam.view = (EditView*)m_Data;
 
 				HANDLE hThread = NULL;
 				unsigned int nThreadId = 0;

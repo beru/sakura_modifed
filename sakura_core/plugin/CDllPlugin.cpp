@@ -30,29 +30,29 @@
 #include "view/CEditView.h"
 
 // デストラクタ
-CDllPlugin::~CDllPlugin(void)
+DllPlugin::~DllPlugin(void)
 {
 	for (auto it=m_plugs.begin(); it!=m_plugs.end(); ++it) {
-		delete (CDllPlug*)(*it);
+		delete (DllPlug*)(*it);
 	}
 }
 
 // プラグの生成
-// CPlugの代わりにCDllPlugを作成する
-CPlug* CDllPlugin::CreatePlug(
-	CPlugin& plugin,
+// Plugの代わりにDllPlugを作成する
+Plug* DllPlugin::CreatePlug(
+	Plugin& plugin,
 	PlugId id,
 	const wstring& sJack,
 	const wstring& sHandler,
 	const wstring& sLabel
 	)
 {
-	CDllPlug* newPlug = new CDllPlug(plugin, id, sJack, sHandler, sLabel);
+	DllPlug* newPlug = new DllPlug(plugin, id, sJack, sHandler, sLabel);
 	return newPlug;
 }
 
 // プラグイン定義ファイルの読み込み
-bool CDllPlugin::ReadPluginDef(
+bool DllPlugin::ReadPluginDef(
 	DataProfile* cProfile,
 	DataProfile* cProfileMlang
 	)
@@ -78,10 +78,10 @@ bool CDllPlugin::ReadPluginDef(
 }
 
 // プラグ実行
-bool CDllPlugin::InvokePlug(
-	CEditView* view,
-	CPlug& plug_raw,
-	CWSHIfObj::List& params
+bool DllPlugin::InvokePlug(
+	EditView* view,
+	Plug& plug_raw,
+	WSHIfObj::List& params
 	)
 {
 	tstring dllPath = GetFilePath(to_tchar(m_sDllName.c_str()));
@@ -91,7 +91,7 @@ bool CDllPlugin::InvokePlug(
 		return false;
 	}
 
-	CDllPlug& plug = *(static_cast<CDllPlug*>(&plug_raw));
+	DllPlug& plug = *(static_cast<DllPlug*>(&plug_raw));
 	if (!plug.m_handler) {
 		// DLL関数の取得
 		ImportTable imp[2] = {
@@ -104,7 +104,7 @@ bool CDllPlugin::InvokePlug(
 			return false;
 		}
 	}
-	CMacroBeforeAfter ba;
+	MacroBeforeAfter ba;
 	int flags = FA_NONRECORD | FA_FROMMACRO;
 	ba.ExecKeyMacroBefore(view, flags);
 	// DLL関数の呼び出し

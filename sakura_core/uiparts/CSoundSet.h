@@ -23,9 +23,9 @@
 */
 #pragma once
 
-class CSoundSet {
+class SoundSet {
 public:
-	CSoundSet() : m_nMuteCount(0) { }
+	SoundSet() : m_nMuteCount(0) { }
 	void NeedlessToSaveBeep(); // 上書き不要ビープ音
 	void MuteOn() { ++m_nMuteCount; }
 	void MuteOff() { --m_nMuteCount; }

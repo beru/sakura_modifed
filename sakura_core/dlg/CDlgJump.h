@@ -14,18 +14,18 @@
 	Please contact the copyright holder to use this code for other purpose.
 */
 
-class CDlgJump;
+class DlgJump;
 
 #pragma once
 
 #include "dlg/CDialog.h"
 // 指定行へのジャンプダイアログボックス
-class CDlgJump : public CDialog {
+class DlgJump : public Dialog {
 public:
 	/*
 	||  Constructors
 	*/
-	CDlgJump();
+	DlgJump();
 	/*
 	||  Attributes & Operations
 	*/

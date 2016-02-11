@@ -43,7 +43,7 @@
 	@date 2004/06/21 V‹Kì¬
 	@date 2004/06/22 Moca ˆê”t‚É‚È‚Á‚½‚çˆê”ÔŒÃ‚¢î•ñ‚ðíœ‚µ‚»‚±‚ÉV‚µ‚¢î•ñ‚ð“ü‚ê‚é
 */
-void CTagJumpManager::PushTagJump(const TagJump* pTagJump)
+void TagJumpManager::PushTagJump(const TagJump* pTagJump)
 {
 	int i = m_pShareData->m_tagJump.m_TagJumpTop + 1;
 	if (MAX_TAGJUMPNUM <= i) {
@@ -69,7 +69,7 @@ void CTagJumpManager::PushTagJump(const TagJump* pTagJump)
 	@date 2004/06/21 V‹Kì¬
 	@date 2004/06/22 Moca SetTagJump•ÏX‚É‚æ‚éC³
 */
-bool CTagJumpManager::PopTagJump(TagJump *pTagJump)
+bool TagJumpManager::PopTagJump(TagJump *pTagJump)
 {
 	if (0 < m_pShareData->m_tagJump.m_TagJumpNum) {
 		*pTagJump = m_pShareData->m_tagJump.m_TagJump[m_pShareData->m_tagJump.m_TagJumpTop--];

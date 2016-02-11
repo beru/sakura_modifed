@@ -33,17 +33,17 @@
 //                      メッセージ処理                         //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-typedef INT_PTR (CPropTypes::*DISPATCH_EVENT_TYPE)(HWND, UINT, WPARAM, LPARAM);
+typedef INT_PTR (PropTypes::*DISPATCH_EVENT_TYPE)(HWND, UINT, WPARAM, LPARAM);
 
 // 共通ダイアログプロシージャ
 INT_PTR CALLBACK PropTypesCommonProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam, DISPATCH_EVENT_TYPE pDispatch)
 {
 	PROPSHEETPAGE* pPsp;
-	CPropTypes* pCPropTypes;
+	PropTypes* pCPropTypes;
 	switch (uMsg) {
 	case WM_INITDIALOG:
 		pPsp = (PROPSHEETPAGE*)lParam;
-		pCPropTypes = reinterpret_cast<CPropTypes*>(pPsp->lParam);
+		pCPropTypes = reinterpret_cast<PropTypes*>(pPsp->lParam);
 		if (pCPropTypes) {
 			return (pCPropTypes->*pDispatch)(hwndDlg, uMsg, wParam, pPsp->lParam);
 		}else {
@@ -51,7 +51,7 @@ INT_PTR CALLBACK PropTypesCommonProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPA
 		}
 	default:
 		// Modified by KEITA for WIN64 2003.9.6
-		pCPropTypes = (CPropTypes*)::GetWindowLongPtr(hwndDlg, DWLP_USER);
+		pCPropTypes = (PropTypes*)::GetWindowLongPtr(hwndDlg, DWLP_USER);
 		if (pCPropTypes) {
 			return (pCPropTypes->*pDispatch)(hwndDlg, uMsg, wParam, lParam);
 		}else {
@@ -61,7 +61,7 @@ INT_PTR CALLBACK PropTypesCommonProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPA
 }
 
 // 各種ダイアログプロシージャ
-typedef	INT_PTR (CPropTypes::*pDispatchPage)(HWND, UINT, WPARAM, LPARAM);
+typedef	INT_PTR (PropTypes::*pDispatchPage)(HWND, UINT, WPARAM, LPARAM);
 #define GEN_PROPTYPES_CALLBACK(FUNC, CLASS) \
 INT_PTR CALLBACK FUNC(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam) \
 { \
@@ -80,15 +80,15 @@ GEN_PROPTYPES_CALLBACK(PropTypesKeyHelp,	CPropTypesKeyHelp)
 //                        生成と破棄                           //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-CPropTypes::CPropTypes()
+PropTypes::PropTypes()
 {
 	{
-		assert(sizeof(CPropTypesScreen)  - sizeof(CPropTypes) == 0);
-		assert(sizeof(CPropTypesWindow)  - sizeof(CPropTypes) == 0);
-		assert(sizeof(CPropTypesColor)   - sizeof(CPropTypes) == 0);
-		assert(sizeof(CPropTypesSupport) - sizeof(CPropTypes) == 0);
-		assert(sizeof(CPropTypesRegex)   - sizeof(CPropTypes) == 0);
-		assert(sizeof(CPropTypesKeyHelp) - sizeof(CPropTypes) == 0);
+		assert(sizeof(CPropTypesScreen)  - sizeof(PropTypes) == 0);
+		assert(sizeof(CPropTypesWindow)  - sizeof(PropTypes) == 0);
+		assert(sizeof(CPropTypesColor)   - sizeof(PropTypes) == 0);
+		assert(sizeof(CPropTypesSupport) - sizeof(PropTypes) == 0);
+		assert(sizeof(CPropTypesRegex)   - sizeof(PropTypes) == 0);
+		assert(sizeof(CPropTypesKeyHelp) - sizeof(PropTypes) == 0);
 	}
 
 	// 共有データ構造体のアドレスを返す
@@ -105,12 +105,12 @@ CPropTypes::CPropTypes()
 	(static_cast<CPropTypesScreen*>(this))->CPropTypes_Screen();
 }
 
-CPropTypes::~CPropTypes()
+PropTypes::~PropTypes()
 {
 }
 
 // 初期化
-void CPropTypes::Create(HINSTANCE hInstApp, HWND hwndParent)
+void PropTypes::Create(HINSTANCE hInstApp, HWND hwndParent)
 {
 	m_hInstance = hInstApp;		// アプリケーションインスタンスのハンドル
 	m_hwndParent = hwndParent;	// オーナーウィンドウのハンドル
@@ -124,7 +124,7 @@ struct TypePropSheetInfo {
 
 // キーワード：タイプ別設定タブ順序(プロパティシート)
 // プロパティシートの作成
-INT_PTR CPropTypes::DoPropertySheet(int nPageNum)
+INT_PTR PropTypes::DoPropertySheet(int nPageNum)
 {
 	INT_PTR	nRet;
 	int		nIdx;
@@ -235,7 +235,7 @@ INT_PTR CPropTypes::DoPropertySheet(int nPageNum)
 // 2001.05.18 Stonee 機能番号からヘルプトピック番号を調べるようにした
 // 2001.07.03 JEPRO  支援タブのヘルプを有効化
 // 2001.11.17 MIK    IDD_PROP_REGEX
-void CPropTypes::OnHelp(HWND hwndParent, int nPageID)
+void PropTypes::OnHelp(HWND hwndParent, int nPageID)
 {
 	int nContextID;
 	switch (nPageID) {
@@ -256,7 +256,7 @@ void CPropTypes::OnHelp(HWND hwndParent, int nPageID)
 /*!	コントロールにフォント設定する
 	@date 2013.04.24 Uchi
 */
-HFONT CPropTypes::SetCtrlFont(HWND hwndDlg, int idc_ctrl, const LOGFONT& lf)
+HFONT PropTypes::SetCtrlFont(HWND hwndDlg, int idc_ctrl, const LOGFONT& lf)
 {
 
 	// 論理フォントを作成
@@ -274,7 +274,7 @@ HFONT CPropTypes::SetCtrlFont(HWND hwndDlg, int idc_ctrl, const LOGFONT& lf)
 /*!	フォントラベルにフォントとフォント名設定する
 	@date 2013.04.24 Uchi
 */
-HFONT CPropTypes::SetFontLabel(HWND hwndDlg, int idc_static, const LOGFONT& lf, int nps, bool bUse)
+HFONT PropTypes::SetFontLabel(HWND hwndDlg, int idc_static, const LOGFONT& lf, int nps, bool bUse)
 {
 	HFONT	hFont;
 

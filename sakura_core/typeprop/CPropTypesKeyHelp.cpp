@@ -235,7 +235,7 @@ INT_PTR CPropTypesKeyHelp::DispatchEvent(
 
 				// 指定したパスに辞書があるかチェックする
 				{
-					CTextInputStream_AbsIni in(szPath);
+					TextInputStream_AbsIni in(szPath);
 					if (!in) {
 						ErrorMessage(hwndDlg, LS(STR_PROPTYPKEYHELP_ERR_OPEN), szPath);
 						return FALSE;
@@ -466,7 +466,7 @@ INT_PTR CPropTypesKeyHelp::DispatchEvent(
 
 			case IDC_BUTTON_KEYHELP_REF:	// キーワードヘルプ 辞書ファイルの「参照...」ボタン
 				{
-					CDlgOpenFile	cDlgOpenFile;
+					DlgOpenFile	cDlgOpenFile;
 					// ファイルオープンダイアログの初期化
 					// 2007.05.19 ryoji 相対パスは設定ファイルからのパスを優先
 					TCHAR szWk[_MAX_PATH];

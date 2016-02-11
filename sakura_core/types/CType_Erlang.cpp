@@ -398,7 +398,7 @@ void OutlineErlang::build_arity(int arity)
 	-> または when があれば関数定義と見なす(次の行にまたがっても良い)
 	途中 % (コメント) が現れたら行末まで読み飛ばす
 */
-void CDocOutline::MakeFuncList_Erlang(CFuncInfoArr* pcFuncInfoArr)
+void DocOutline::MakeFuncList_Erlang(FuncInfoArr* pcFuncInfoArr)
 {
 
 	OutlineErlang erl_state_machine;

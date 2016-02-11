@@ -19,14 +19,14 @@
 /*!
 	@brief About Box管理
 	
-	DispatchEventを独自に定義することで，CDialogでサポートされていない
+	DispatchEventを独自に定義することで，Dialogでサポートされていない
 	メッセージを捕捉する．
 */
 
-class CUrlWnd {
+class UrlWnd {
 public:
-	CUrlWnd() { m_hWnd = NULL; m_hFont = NULL; m_bHilighted = FALSE; m_pOldProc = NULL; }
-	virtual ~CUrlWnd() { ; }
+	UrlWnd() { m_hWnd = NULL; m_hFont = NULL; m_bHilighted = FALSE; m_pOldProc = NULL; }
+	virtual ~UrlWnd() { ; }
 	BOOL SetSubclassWindow(HWND hWnd);
 	HWND GetHwnd() const { return m_hWnd; }
 protected:
@@ -38,7 +38,7 @@ protected:
 	WNDPROC m_pOldProc;
 };
 
-class CDlgAbout : public CDialog {
+class DlgAbout : public Dialog {
 public:
 	int DoModal(HINSTANCE, HWND);	// モーダルダイアログの表示
 	// Nov. 7, 2000 genta	標準以外のメッセージを捕捉する
@@ -49,7 +49,7 @@ protected:
 	BOOL OnStnClicked(int);
 	LPVOID GetHelpIdTable(void);	//@@@ 2002.01.18 add
 private:
-	CUrlWnd m_UrlUrWnd;
-	CUrlWnd m_UrlOrgWnd;
+	UrlWnd m_UrlUrWnd;
+	UrlWnd m_UrlOrgWnd;
 };
 

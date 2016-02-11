@@ -29,15 +29,15 @@
 
 #include <ShlDisp.h>
 
-class CZipFile {
+class ZipFile {
 private:
 	IShellDispatch*	psd;
 	Folder*			pZipFile;
 	std::tstring	sZipName;
 
 public:
-	CZipFile();		// コンストラクタ
-	~CZipFile();	// デストラクタ
+	ZipFile();		// コンストラクタ
+	~ZipFile();	// デストラクタ
 
 public:
 	bool	IsOk() { return (psd != NULL); }			// Zip Folderが使用できるか?

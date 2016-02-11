@@ -25,7 +25,7 @@
 #include "doc/CEditDoc.h"
 
 class FuncInfo;
-class CFuncInfoArr; // 2002/2/10 aroka
+class FuncInfoArr; // 2002/2/10 aroka
 class DataProfile;
 
 #define OUTLINE_LAYOUT_FOREGROUND (0)
@@ -39,7 +39,7 @@ enum EFileTreeSettingFrom{
 	EFileTreeSettingFrom_File
 };
 
-class CFileTreeSetting{
+class FileTreeSetting {
 public:
 	std::vector<FileTreeItem>	m_aItems;		//!< ツリーアイテム
 	bool		m_bProject;				//!< プロジェクトファイルモード
@@ -51,16 +51,16 @@ public:
 
 
 //!	アウトライン解析ダイアログボックス
-class CDlgFuncList : public CDialog {
+class DlgFuncList : public Dialog {
 public:
 	/*
 	||  Constructors
 	*/
-	CDlgFuncList();
+	DlgFuncList();
 	/*
 	||  Attributes & Operations
 	*/
-	HWND DoModeless(HINSTANCE, HWND, LPARAM, CFuncInfoArr*, LayoutInt, LayoutInt, int, int, bool); // モードレスダイアログの表示
+	HWND DoModeless(HINSTANCE, HWND, LPARAM, FuncInfoArr*, LayoutInt, LayoutInt, int, int, bool); // モードレスダイアログの表示
 	void ChangeView(LPARAM);	// モードレス時：検索対象となるビューの変更
 	bool IsDocking() { return m_eDockSide > DOCKSIDE_FLOAT; }
 	EDockSide GetDockSide() { return m_eDockSide; }
@@ -83,26 +83,26 @@ protected:
 public:
 	//! 現在の種別と同じなら
 	bool CheckListType(int nOutLineType) const { return nOutLineType == m_nOutlineType; }
-	void Redraw(int nOutLineType, int nListType, CFuncInfoArr*, LayoutInt nCurLine, LayoutInt nCurCol);
+	void Redraw(int nOutLineType, int nListType, FuncInfoArr*, LayoutInt nCurLine, LayoutInt nCurCol);
 	void Refresh(void);
 	bool ChangeLayout(int nId);
 	void OnOutlineNotify(WPARAM wParam, LPARAM lParam);
 	void SyncColor(void);
 	void SetWindowText(const TCHAR* szTitle);		// ダイアログタイトルの設定
 	EFunctionCode GetFuncCodeRedraw(int outlineType);
-	void LoadFileTreeSetting( CFileTreeSetting&, SFilePath& );
-	static void ReadFileTreeIni( DataProfile&, CFileTreeSetting& );
+	void LoadFileTreeSetting( FileTreeSetting&, SFilePath& );
+	static void ReadFileTreeIni( DataProfile&, FileTreeSetting& );
 
 protected:
 	bool m_bInChangeLayout;
 
-	CFuncInfoArr*	m_pcFuncInfoArr;	// 関数情報配列
+	FuncInfoArr*	m_pcFuncInfoArr;	// 関数情報配列
 	LayoutInt		m_nCurLine;			// 現在行
 	LayoutInt		m_nCurCol;			// 現在桁
 	int				m_nSortCol;			// ソートする列番号
 	int				m_nSortColOld;		//!< ソートする列番号(OLD)
 	bool			m_bSortDesc;		//!< 降順
-	CNativeW		m_cmemClipText;		// クリップボードコピー用テキスト
+	NativeW		m_cmemClipText;		// クリップボードコピー用テキスト
 	bool			m_bLineNumIsCRLF;	// 行番号の表示 false=折り返し単位／true=改行単位
 	int				m_nListType;		// 一覧の種類
 public:
@@ -206,7 +206,7 @@ private:
 	int			m_nCapturingBtn;
 	
 	TypeConfig m_type;
-	CFileTreeSetting	m_fileTreeSetting;
+	FileTreeSetting	m_fileTreeSetting;
 
 	static LPDLGTEMPLATE m_pDlgTemplate;
 	static DWORD m_dwDlgTmpSize;

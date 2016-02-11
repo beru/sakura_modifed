@@ -33,10 +33,10 @@ class FuncInfo;
 #define FL_OBJ_ELEMENT_MAX	30	// プラグインで追加可能な定数の上限
 
 // アウトライン解析 データ配列
-class CFuncInfoArr {
+class FuncInfoArr {
 public:
-	CFuncInfoArr();		// CFuncInfoArrクラス構築
-	~CFuncInfoArr();	// CFuncInfoArrクラス消滅
+	FuncInfoArr();		// FuncInfoArrクラス構築
+	~FuncInfoArr();	// FuncInfoArrクラス消滅
 	FuncInfo* GetAt(int);		// 0<=の指定番号のデータを返す
 	void AppendData(FuncInfo*);	// 配列の最後にデータを追加する
 	void AppendData(LogicInt, LayoutInt, const TCHAR*, int, int nDepth = 0);		// 配列の最後にデータを追加する 2002.04.01 YAZAKI 深さ導入
@@ -59,6 +59,6 @@ private:
 	int			m_nAppendTextLenMax;
 
 private:
-	DISALLOW_COPY_AND_ASSIGN(CFuncInfoArr);
+	DISALLOW_COPY_AND_ASSIGN(FuncInfoArr);
 };
 

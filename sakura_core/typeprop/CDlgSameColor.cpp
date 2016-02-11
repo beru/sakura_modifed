@@ -75,7 +75,7 @@ CDlgSameColor::~CDlgSameColor()
 INT_PTR CDlgSameColor::DispatchEvent(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM lParam)
 {
 	INT_PTR result;
-	result = CDialog::DispatchEvent(hWnd, wMsg, wParam, lParam);
+	result = Dialog::DispatchEvent(hWnd, wMsg, wParam, lParam);
 	switch (wMsg) {
 	case WM_COMMAND:
 		// 色選択リストボックスの選択が変更された場合の処理
@@ -116,7 +116,7 @@ int CDlgSameColor::DoModal(HINSTANCE hInstance, HWND hwndParent, WORD wID, TypeC
 	m_pTypes = pTypes;
 	m_cr = cr;
 
-	(void)CDialog::DoModal(hInstance, hwndParent, IDD_SAMECOLOR, (LPARAM)NULL);
+	(void)Dialog::DoModal(hInstance, hwndParent, IDD_SAMECOLOR, (LPARAM)NULL);
 
 	return TRUE;
 }
@@ -126,7 +126,7 @@ int CDlgSameColor::DoModal(HINSTANCE hInstance, HWND hwndParent, WORD wID, TypeC
 */
 BOOL CDlgSameColor::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
 {
-	BOOL bRet = CDialog::OnInitDialog(hwndDlg, wParam, lParam);
+	BOOL bRet = Dialog::OnInitDialog(hwndDlg, wParam, lParam);
 
 	HWND hwndStatic = GetItemHwnd(IDC_STATIC_COLOR);
 	HWND hwndList = GetItemHwnd(IDC_LIST_COLORS);
@@ -255,7 +255,7 @@ BOOL CDlgSameColor::OnBnClicked(int wID)
 	case IDCANCEL:
 		break;
 	}
-	return CDialog::OnBnClicked(wID);
+	return Dialog::OnBnClicked(wID);
 }
 
 /*! WM_DRAWITEM 処理
@@ -269,7 +269,7 @@ BOOL CDlgSameColor::OnDrawItem(WPARAM wParam, LPARAM lParam)
 	}
 
 	// 描画対象
-	CGraphics gr(pDis->hDC);
+	Graphics gr(pDis->hDC);
 
 	//
 	// 色選択リストの描画処理
@@ -396,7 +396,7 @@ LRESULT CALLBACK CDlgSameColor::ColorStatic_SubclassProc(HWND hwnd, UINT uMsg, W
 		rc.right -=2;
 		rc.bottom -= 2;
 		{
-			CGraphics gr(hDC);
+			Graphics gr(hDC);
 			gr.SetBrushColor(pCDlgSameColor->m_cr);
 			gr.SetPen(::GetSysColor(COLOR_3DSHADOW));
 			::RoundRect(gr, rc.left, rc.top, rc.right, rc.bottom, 5, 5);

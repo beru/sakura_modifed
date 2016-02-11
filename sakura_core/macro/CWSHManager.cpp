@@ -46,15 +46,15 @@ static void MacroError(
 	void* Data
 	)
 {
-	CEditView *View = reinterpret_cast<CEditView*>(Data);
+	EditView *View = reinterpret_cast<EditView*>(Data);
 	MessageBox(View->GetHwnd(), to_tchar(Description), to_tchar(Source), MB_ICONERROR);
 }
 
-CWSHMacroManager::CWSHMacroManager(std::wstring const AEngineName) : m_EngineName(AEngineName)
+WSHMacroManager::WSHMacroManager(std::wstring const AEngineName) : m_EngineName(AEngineName)
 {
 }
 
-CWSHMacroManager::~CWSHMacroManager()
+WSHMacroManager::~WSHMacroManager()
 {
 }
 
@@ -64,13 +64,13 @@ CWSHMacroManager::~CWSHMacroManager()
 	
 	@date 2007.07.20 genta : flags追加
 */
-bool CWSHMacroManager::ExecKeyMacro(CEditView* EditView, int flags) const
+bool WSHMacroManager::ExecKeyMacro(EditView* EditView, int flags) const
 {
 	auto engine = std::make_unique<CWSHClient>(m_EngineName.c_str(), MacroError, EditView);
 	bool bRet = false;
 	if (engine->m_Valid) {
 		// インタフェースオブジェクトの登録
-		CWSHIfObj* objEditor = new CEditorIfObj();
+		WSHIfObj* objEditor = new EditorIfObj();
 		objEditor->ReadyMethods(EditView, flags);
 		engine->AddInterfaceObject(objEditor);
 		for (auto it=m_Params.begin(); it!=m_Params.end(); ++it) {
@@ -89,12 +89,12 @@ bool CWSHMacroManager::ExecKeyMacro(CEditView* EditView, int flags) const
 	@param hInstance [in] インスタンスハンドル(未使用)
 	@param pszPath   [in] ファイルのパス
 */
-bool CWSHMacroManager::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
+bool WSHMacroManager::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
 {
 	// ソース読み込み -> m_Source
 	m_Source = L"";
 	
-	CTextInputStream in(pszPath);
+	TextInputStream in(pszPath);
 	if (!in) {
 		return false;
 	}
@@ -111,14 +111,14 @@ bool CWSHMacroManager::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
 	@param hInstance [in] インスタンスハンドル(未使用)
 	@param pszCode   [in] マクロコード
 */
-bool CWSHMacroManager::LoadKeyMacroStr(HINSTANCE hInstance, const TCHAR* pszCode)
+bool WSHMacroManager::LoadKeyMacroStr(HINSTANCE hInstance, const TCHAR* pszCode)
 {
 	// ソース読み込み -> m_Source
 	m_Source = to_wchar(pszCode);
 	return true;
 }
 
-CMacroManagerBase* CWSHMacroManager::Creator(const TCHAR* FileExt)
+MacroManagerBase* WSHMacroManager::Creator(const TCHAR* FileExt)
 {
 	TCHAR FileExtWithDot[1024], FileType[1024], EngineName[1024]; // 1024を超えたら後は知りません
 	
@@ -130,32 +130,32 @@ CMacroManagerBase* CWSHMacroManager::Creator(const TCHAR* FileExt)
 		if (ReadRegistry(HKEY_CLASSES_ROOT, FileType, NULL, EngineName, 1024)) {
 			wchar_t EngineNameW[1024];
 			_tcstowcs(EngineNameW, EngineName, _countof(EngineNameW));
-			return new CWSHMacroManager(EngineNameW);
+			return new WSHMacroManager(EngineNameW);
 		}
 	}
 	return NULL;
 }
 
-void CWSHMacroManager::declare()
+void WSHMacroManager::declare()
 {
 	// 暫定
-	CMacroFactory::getInstance()->RegisterCreator(Creator);
+	MacroFactory::getInstance()->RegisterCreator(Creator);
 }
 
 // インタフェースオブジェクトを追加する
-void CWSHMacroManager::AddParam(CWSHIfObj* param)
+void WSHMacroManager::AddParam(WSHIfObj* param)
 {
 	m_Params.push_back(param);
 }
 
 // インタフェースオブジェクト達を追加する
-void CWSHMacroManager::AddParam(CWSHIfObj::List& params)
+void WSHMacroManager::AddParam(WSHIfObj::List& params)
 {
 	m_Params.insert(m_Params.end(), params.begin(), params.end());
 }
 
 // インタフェースオブジェクトを削除する
-void CWSHMacroManager::ClearParam()
+void WSHMacroManager::ClearParam()
 {
 	m_Params.clear();
 }

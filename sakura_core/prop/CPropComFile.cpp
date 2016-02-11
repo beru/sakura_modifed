@@ -61,19 +61,19 @@ TYPE_NAME_ID<EShareMode> ShareModeArr[] = {
 	@param wParam パラメータ1
 	@param lParam パラメータ2
 */
-INT_PTR CALLBACK CPropFile::DlgProc_page(
+INT_PTR CALLBACK PropFile::DlgProc_page(
 	HWND hwndDlg,
 	UINT uMsg,
 	WPARAM wParam,
 	LPARAM lParam
 	)
 {
-	return DlgProc(reinterpret_cast<pDispatchPage>(&CPropFile::DispatchEvent), hwndDlg, uMsg, wParam, lParam);
+	return DlgProc(reinterpret_cast<pDispatchPage>(&PropFile::DispatchEvent), hwndDlg, uMsg, wParam, lParam);
 }
 // To Here Jun. 2, 2001 genta
 
 // ファイルページ メッセージ処理
-INT_PTR CPropFile::DispatchEvent(
+INT_PTR PropFile::DispatchEvent(
 	HWND	hwndDlg,	// handle to dialog box
 	UINT	uMsg,	// message
 	WPARAM	wParam,	// first message parameter
@@ -267,7 +267,7 @@ INT_PTR CPropFile::DispatchEvent(
 
 	@param hwndDlg プロパティページのWindow Handle
 */
-void CPropFile::SetData(HWND hwndDlg)
+void PropFile::SetData(HWND hwndDlg)
 {
 	auto& csFile = m_Common.m_sFile;
 	//--- File ---
@@ -344,7 +344,7 @@ void CPropFile::SetData(HWND hwndDlg)
 	@param hwndDlg プロパティページのWindow Handle
 	@return 常にTRUE
 */
-int CPropFile::GetData(HWND hwndDlg)
+int PropFile::GetData(HWND hwndDlg)
 {
 	auto& csFile = m_Common.m_sFile;
 
@@ -432,7 +432,7 @@ int CPropFile::GetData(HWND hwndDlg)
 
 	@param hwndDlg プロパティシートのWindow Handle
 */
-void CPropFile::EnableFilePropInput(HWND hwndDlg)
+void PropFile::EnableFilePropInput(HWND hwndDlg)
 {
 
 	//	Drop時の動作

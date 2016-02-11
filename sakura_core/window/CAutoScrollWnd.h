@@ -24,18 +24,18 @@
 #pragma once
 
 #include "CWnd.h"
-class CEditView;
+class EditView;
 
-class CAutoScrollWnd : public CWnd {
+class AutoScrollWnd : public Wnd {
 public:
-	CAutoScrollWnd();
-	virtual ~CAutoScrollWnd();
-	HWND Create(HINSTANCE, HWND , bool, bool, const Point&, CEditView*);
+	AutoScrollWnd();
+	virtual ~AutoScrollWnd();
+	HWND Create(HINSTANCE, HWND , bool, bool, const Point&, EditView*);
 	void Close();
 
 private:
 	HBITMAP	m_hCenterImg;
-	CEditView*	m_cView;
+	EditView*	m_cView;
 protected:
 	// âºëzä÷êî
 

@@ -11,7 +11,7 @@
 	Please contact the copyright holder to use this code for other purpose.
 */
 
-class CDlgInput1;
+class DlgInput1;
 
 #pragma once
 
@@ -21,13 +21,13 @@ class CDlgInput1;
 /*!
 	@brief １行入力ダイアログボックス
 */
-class CDlgInput1 {
+class DlgInput1 {
 public:
 	/*
 	||  Constructors
 	*/
-	CDlgInput1();
-	~CDlgInput1();
+	DlgInput1();
+	~DlgInput1();
 	BOOL DoModal(HINSTANCE, HWND, const TCHAR*, const TCHAR*, int, TCHAR*);		// モードレスダイアログの表示
 	BOOL DoModal(HINSTANCE, HWND, const TCHAR*, const TCHAR*, int, NOT_TCHAR*);	// モードレスダイアログの表示
 	/*

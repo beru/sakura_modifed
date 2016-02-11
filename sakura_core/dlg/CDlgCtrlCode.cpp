@@ -94,23 +94,23 @@ struct ctrl_info_t {
 // LMP: Added, nasukoji changed
 static ResourceString cLabel_jname[_countof(p_ctrl_list)];
 
-CDlgCtrlCode::CDlgCtrlCode()
+DlgCtrlCode::DlgCtrlCode()
 {
 	m_nCode = L'\0';
 }
 
 // モーダルダイアログの表示
-int CDlgCtrlCode::DoModal(
+int DlgCtrlCode::DoModal(
 	HINSTANCE	hInstance,
 	HWND		hwndParent,
 	LPARAM		lParam
 )
 {
-	return (int)CDialog::DoModal(hInstance, hwndParent, IDD_CTRLCODE, lParam);
+	return (int)Dialog::DoModal(hInstance, hwndParent, IDD_CTRLCODE, lParam);
 }
 
 // ダイアログデータの設定
-void CDlgCtrlCode::SetData(void)
+void DlgCtrlCode::SetData(void)
 {
 	LV_ITEM	lvi;
 
@@ -179,7 +179,7 @@ void CDlgCtrlCode::SetData(void)
 
 // ダイアログデータの取得
 // TRUE==正常  FALSE==入力エラー
-int CDlgCtrlCode::GetData(void)
+int DlgCtrlCode::GetData(void)
 {
 	HWND hwndList = GetItemHwnd(IDC_LIST_CTRLCODE);
 	// 選択中のキー番号を探す。
@@ -192,7 +192,7 @@ int CDlgCtrlCode::GetData(void)
 	return TRUE;
 }
 
-BOOL CDlgCtrlCode::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
+BOOL DlgCtrlCode::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
 {
 	_SetHwnd(hwndDlg);
 
@@ -230,10 +230,10 @@ BOOL CDlgCtrlCode::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
 	ListView_InsertColumn(hwndList, 3, &col);
 
 	// 基底クラスメンバ
-	return CDialog::OnInitDialog(GetHwnd(), wParam, lParam);
+	return Dialog::OnInitDialog(GetHwnd(), wParam, lParam);
 }
 
-BOOL CDlgCtrlCode::OnBnClicked(int wID)
+BOOL DlgCtrlCode::OnBnClicked(int wID)
 {
 	switch (wID) {
 	case IDC_BUTTON_HELP:
@@ -253,7 +253,7 @@ BOOL CDlgCtrlCode::OnBnClicked(int wID)
 	}
 
 	// 基底クラスメンバ
-	return CDialog::OnBnClicked(wID);
+	return Dialog::OnBnClicked(wID);
 }
 
 #ifdef __MINGW32__
@@ -266,7 +266,7 @@ typedef struct tagNMKEY {
 #endif
 #endif
 
-BOOL CDlgCtrlCode::OnNotify(WPARAM wParam, LPARAM lParam)
+BOOL DlgCtrlCode::OnNotify(WPARAM wParam, LPARAM lParam)
 {
 	NMHDR* pNMHDR = (NMHDR*) lParam;
 	HWND hwndList = GetItemHwnd(IDC_LIST_CTRLCODE);
@@ -303,10 +303,10 @@ BOOL CDlgCtrlCode::OnNotify(WPARAM wParam, LPARAM lParam)
 	}
 
 	// 基底クラスメンバ
-	return CDialog::OnNotify(wParam, lParam);
+	return Dialog::OnNotify(wParam, lParam);
 }
 
-LPVOID CDlgCtrlCode::GetHelpIdTable(void)
+LPVOID DlgCtrlCode::GetHelpIdTable(void)
 {
 	return (LPVOID)p_helpids;
 }

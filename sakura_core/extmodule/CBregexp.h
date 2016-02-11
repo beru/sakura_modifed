@@ -61,10 +61,10 @@
 	@date 2005.03.19 かろと リファクタリング。クラス内部を隠蔽
 	@date 2006.01.22 かろと オプション追加・名称変更(全て行置換用Globalオプション追加のため)
 */
-class CBregexp : public CBregexpDll2 {
+class Bregexp : public BregexpDll2 {
 public:
-	CBregexp();
-	virtual ~CBregexp();
+	Bregexp();
+	virtual ~Bregexp();
 
 	// 2006.01.22 かろと オプション追加・名称変更
 	enum Option {
@@ -222,5 +222,5 @@ private:
 // 正規表現ライブラリのバージョン取得
 bool CheckRegexpVersion( HWND hWnd, int nCmpId, bool bShowMsg = false );
 bool CheckRegexpSyntax( const wchar_t* szPattern, HWND hWnd, bool bShowMessage, int nOption = -1, bool bKakomi = false );// 2002/2/1 hor追加
-bool InitRegexp( HWND hWnd, CBregexp& rRegexp, bool bShowMessage );
+bool InitRegexp( HWND hWnd, Bregexp& rRegexp, bool bShowMessage );
 

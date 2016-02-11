@@ -37,12 +37,12 @@
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                       外部コマンド                          //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-class COutputAdapterDefault: public COutputAdapter
+class COutputAdapterDefault: public OutputAdapter
 {
 public:
-	COutputAdapterDefault(CEditView* view, BOOL bToEditWindow) : m_bWindow(bToEditWindow), m_view(view)
+	COutputAdapterDefault(EditView* view, BOOL bToEditWindow) : m_bWindow(bToEditWindow), m_view(view)
 	{
-		m_pCShareData = CShareData::getInstance();
+		m_pCShareData = ShareData::getInstance();
 		m_pCommander  = &(view->GetCommander());
 	}
 	~COutputAdapterDefault(){};
@@ -55,15 +55,15 @@ protected:
 	void OutputBuf(const WCHAR* pBuf, int size);
 
 	BOOL			m_bWindow;
-	CEditView*		m_view;
-	CShareData*		m_pCShareData;
+	EditView*		m_view;
+	ShareData*		m_pCShareData;
 	ViewCommander*	m_pCommander;
 };
 
 class COutputAdapterUTF8: public COutputAdapterDefault
 {
 public:
-	COutputAdapterUTF8(CEditView* view, BOOL bToEditWindow) : COutputAdapterDefault(view, bToEditWindow)
+	COutputAdapterUTF8(EditView* view, BOOL bToEditWindow) : COutputAdapterDefault(view, bToEditWindow)
 		,pcCodeBase(CodeFactory::CreateCodeBase(CODE_UTF8,0))
 	{}
 	~COutputAdapterUTF8(){};
@@ -107,12 +107,12 @@ protected:
 
 	TODO:	標準入力・標準エラーの取込選択。カレントディレクトリ。UTF-8等への対応
 */
-bool CEditView::ExecCmd( const TCHAR* pszCmd, int nFlgOpt, const TCHAR* pszCurDir, COutputAdapter* customOa )
+bool EditView::ExecCmd( const TCHAR* pszCmd, int nFlgOpt, const TCHAR* pszCurDir, OutputAdapter* customOa )
 {
 	HANDLE hStdOutWrite, hStdOutRead;
 	PROCESS_INFORMATION	pi = {0};
-	CDlgCancel cDlgCancel;
-	COutputAdapter* oaInst = NULL;
+	DlgCancel cDlgCancel;
+	OutputAdapter* oaInst = NULL;
 
 	bool bEditable = m_pcEditDoc->IsEditable();
 
@@ -179,7 +179,7 @@ bool CEditView::ExecCmd( const TCHAR* pszCmd, int nFlgOpt, const TCHAR* pszCurDi
 
 		GetTempPath(MAX_PATH, szPathName);
 		GetTempFileName(szPathName, TEXT("skr_"), 0, szTempFileName);
-		DEBUG_TRACE(_T("CEditView::ExecCmd() TempFilename=[%ts]\n"), szTempFileName);
+		DEBUG_TRACE(_T("EditView::ExecCmd() TempFilename=[%ts]\n"), szTempFileName);
 
 		int nFlgOpt = bBeforeTextSelected ? 0x01 : 0x00;		// 選択範囲を出力
 		if (!GetCommander().Command_PUTFILE(to_wchar(szTempFileName), sendEncoding, nFlgOpt)) {	// 一時ファイル出力
@@ -296,7 +296,7 @@ bool CEditView::ExecCmd( const TCHAR* pszCmd, int nFlgOpt, const TCHAR* pszCurDi
 					: (outputEncoding == CODE_UTF8
 						? new COutputAdapterUTF8(this, bToEditWindow)
 						: new COutputAdapterDefault(this, bToEditWindow)) );
-		COutputAdapter& oa = customOa ? *customOa: *oaInst;
+		OutputAdapter& oa = customOa ? *customOa: *oaInst;
 
 		// 中断ダイアログ表示
 		if (oa.IsEnableRunningDlg()) {
@@ -311,8 +311,8 @@ bool CEditView::ExecCmd( const TCHAR* pszCmd, int nFlgOpt, const TCHAR* pszCurDi
 			TCHAR szTextDate[1024], szTextTime[1024];
 			SYSTEMTIME systime;
 			::GetLocalTime(&systime);
-			CFormatManager().MyGetDateFormat(systime, szTextDate, _countof(szTextDate) - 1);
-			CFormatManager().MyGetTimeFormat(systime, szTextTime, _countof(szTextTime) - 1);
+			FormatManager().MyGetDateFormat(systime, szTextDate, _countof(szTextDate) - 1);
+			FormatManager().MyGetTimeFormat(systime, szTextTime, _countof(szTextTime) - 1);
 			WCHAR szOutTemp[1024 * 2 + 100];
 			oa.OutputW(L"\r\n");
 			oa.OutputW(L"#============================================================\r\n");
@@ -427,7 +427,7 @@ bool CEditView::ExecCmd( const TCHAR* pszCmd, int nFlgOpt, const TCHAR* pszCurDi
 						int j;
 						for (j=0; j<(int)read_cnt-1; ++j) {
 							//	2007.09.10 ryoji
-							if (CNativeA::GetSizeOfChar(work, read_cnt, j) == 2) {
+							if (NativeA::GetSizeOfChar(work, read_cnt, j) == 2) {
 								++j;
 							}else {
 								if (work[j] == _T2(PIPE_CHAR, '\r') && work[j + 1] == _T2(PIPE_CHAR,'\n')) {
@@ -637,7 +637,7 @@ bool COutputAdapterDefault::OutputW(const WCHAR* pBuf, int size)
 */
 bool COutputAdapterDefault::OutputA(const ACHAR* pBuf, int size)
 {
-	CNativeW buf;
+	NativeW buf;
 	if (size == -1) {
 		buf.SetStringOld(pBuf);
 	}else {
@@ -653,8 +653,8 @@ bool COutputAdapterDefault::OutputA(const ACHAR* pBuf, int size)
 */
 bool COutputAdapterUTF8::OutputA(const ACHAR* pBuf, int size)
 {
-	CMemory input;
-	CNativeW buf;
+	Memory input;
+	NativeW buf;
 	if (size == -1) {
 		input.SetRawData(pBuf, strlen(pBuf));
 	}else {

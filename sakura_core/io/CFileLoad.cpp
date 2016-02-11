@@ -53,14 +53,14 @@
 */
 
 //! ロード用バッファサイズの初期値 */
-const int CFileLoad::gm_nBufSizeDef = 32768;
+const int FileLoad::gm_nBufSizeDef = 32768;
 // (最適値がマシンによって違うのでとりあえず32KB確保する)
 
 // ロード用バッファサイズの設定可能な最低値
 // const int gm_nBufSizeMin = 1024;
 
 //! コンストラクタ
-CFileLoad::CFileLoad(const EncodingConfig& encode)
+FileLoad::FileLoad(const EncodingConfig& encode)
 {
 	m_pEencoding = &encode;
 
@@ -84,7 +84,7 @@ CFileLoad::CFileLoad(const EncodingConfig& encode)
 }
 
 //! デストラクタ
-CFileLoad::~CFileLoad(void)
+FileLoad::~FileLoad(void)
 {
 	if (m_hFile) {
 		FileClose();
@@ -107,7 +107,7 @@ CFileLoad::~CFileLoad(void)
 	@date 2003.06.08 Moca CODE_AUTODETECTを指定できるように変更
 	@date 2003.07.26 ryoji BOM引数追加
 */
-ECodeType CFileLoad::FileOpen(
+ECodeType FileLoad::FileOpen(
 	LPCTSTR pFileName,
 	bool bBigFile,
 	ECodeType charCode,
@@ -120,9 +120,9 @@ ECodeType CFileLoad::FileOpen(
 	// FileCloseを呼んでからにしてください
 	if (m_hFile) {
 #ifdef _DEBUG
-		::MessageBox(NULL, _T("CFileLoad::FileOpen\nFileCloseを呼んでからにしてください") , NULL, MB_OK);
+		::MessageBox(NULL, _T("FileLoad::FileOpen\nFileCloseを呼んでからにしてください") , NULL, MB_OK);
 #endif
-		throw CError_FileOpen();
+		throw Error_FileOpen();
 	}
 	HANDLE hFile = ::CreateFile(
 		pFileName,
@@ -136,7 +136,7 @@ ECodeType CFileLoad::FileOpen(
 		NULL						// テンプレートファイルのハンドル
 	);
 	if (hFile == INVALID_HANDLE_VALUE) {
-		throw CError_FileOpen();
+		throw Error_FileOpen();
 	}
 	m_hFile = hFile;
 
@@ -146,13 +146,13 @@ ECodeType CFileLoad::FileOpen(
 		DWORD lastError = ::GetLastError();
 		if (NO_ERROR != lastError) {
 			FileClose();
-			throw CError_FileOpen();
+			throw Error_FileOpen();
 		}
 	}
 	if (!bBigFile && 0x80000000 <= fileSize.QuadPart) {
 		// ファイルが大きすぎる(2GB位)
 		FileClose();
-		throw CError_FileOpen();
+		throw Error_FileOpen();
 	}
 	m_nFileSize = fileSize.QuadPart;
 
@@ -184,9 +184,9 @@ ECodeType CFileLoad::FileOpen(
 	m_nFileDataLen = m_nFileSize;
 	bool bBom = false;
 	if (0 < m_nReadDataLen) {
-		CMemory headData(m_pReadBuf, t_min(m_nReadDataLen, 10));
-		CNativeW headUni;
-		CIoBridge::FileToImpl(headData, &headUni, m_pCodeBase, m_nFlag);
+		Memory headData(m_pReadBuf, t_min(m_nReadDataLen, 10));
+		NativeW headUni;
+		IoBridge::FileToImpl(headData, &headUni, m_pCodeBase, m_nFlag);
 		if (1 <= headUni.GetStringLength() && headUni.GetStringPtr()[0] == 0xfeff) {
 			bBom = true;
 		}
@@ -234,7 +234,7 @@ ECodeType CFileLoad::FileOpen(
 	ファイルを閉じる
 	読み込み用バッファとm_memLineもクリアされる
 */
-void CFileLoad::FileClose(void)
+void FileLoad::FileClose(void)
 {
 	ReadBufEmpty();
 	if (m_hFile) {
@@ -258,16 +258,16 @@ void CFileLoad::FileClose(void)
 /*! 1行読み込み
 	UTF-7場合、データ内のNEL,PS,LS等の改行までを1行として取り出す
 */
-EConvertResult CFileLoad::ReadLine(
-	CNativeW* pUnicodeBuffer,
-	CEol* pcEol
+EConvertResult FileLoad::ReadLine(
+	NativeW* pUnicodeBuffer,
+	Eol* pcEol
 	)
 {
 	if (m_CharCode != CODE_UTF7 && m_CharCode != CP_UTF7) {
 		return ReadLine_core( pUnicodeBuffer, pcEol );
 	}
 	if (m_nReadOffset2 == m_cLineTemp.GetStringLength()) {
-		CEol cEol;
+		Eol cEol;
 		EConvertResult e = ReadLine_core(&m_cLineTemp, &cEol);
 		if (e == RESULT_FAILURE) {
 			pUnicodeBuffer->_GetMemory()->SetRawDataHoldBuffer( L"", 0 );
@@ -279,7 +279,7 @@ EConvertResult CFileLoad::ReadLine(
 	}
 	int nOffsetTemp = m_nReadOffset2;
 	int nRetLineLen;
-	CEol cEolTemp;
+	Eol cEolTemp;
 	const wchar_t* pRet = GetNextLineW( m_cLineTemp.GetStringPtr(),
 										m_cLineTemp.GetStringLength(),
 										&nRetLineLen,
@@ -311,16 +311,16 @@ EConvertResult CFileLoad::ReadLine(
 	@return	NULL以外	1行を保持しているデータの先頭アドレスを返す。永続的ではない一時的な領域。
 			NULL		データがなかった
 */
-EConvertResult CFileLoad::ReadLine_core(
-	CNativeW*	pUnicodeBuffer,	//!< [out] UNICODEデータ受け取りバッファ。改行も含めて読み取る。
-	CEol*		pcEol			//!< [i/o]
+EConvertResult FileLoad::ReadLine_core(
+	NativeW*	pUnicodeBuffer,	//!< [out] UNICODEデータ受け取りバッファ。改行も含めて読み取る。
+	Eol*		pcEol			//!< [i/o]
 	)
 {
 	EConvertResult eRet = RESULT_COMPLETE;
 
 #ifdef _DEBUG
 	if (m_eMode < FLMODE_READY) {
-		MYTRACE(_T("CFileLoad::ReadLine(): m_eMode = %d\n"), m_eMode);
+		MYTRACE(_T("FileLoad::ReadLine(): m_eMode = %d\n"), m_eMode);
 		return RESULT_FAILURE;
 	}
 #endif
@@ -370,7 +370,7 @@ EConvertResult CFileLoad::ReadLine_core(
 	m_nReadLength += m_cLineBuffer.GetRawLength();
 
 	// 文字コード変換 cLineBuffer -> pUnicodeBuffer
-	EConvertResult eConvertResult = CIoBridge::FileToImpl(m_cLineBuffer, pUnicodeBuffer, m_pCodeBase, m_nFlag);
+	EConvertResult eConvertResult = IoBridge::FileToImpl(m_cLineBuffer, pUnicodeBuffer, m_pCodeBase, m_nFlag);
 	if (eConvertResult == RESULT_LOSESOME) {
 		eRet = RESULT_LOSESOME;
 	}
@@ -381,7 +381,7 @@ EConvertResult CFileLoad::ReadLine_core(
 	if (m_nLineIndex == 0) {
 		if (m_bBomExist && 1 <= pUnicodeBuffer->GetStringLength()) {
 			if (pUnicodeBuffer->GetStringPtr()[0] == 0xfeff) {
-				CNativeW tmp(pUnicodeBuffer->GetStringPtr() + 1, pUnicodeBuffer->GetStringLength() - 1);
+				NativeW tmp(pUnicodeBuffer->GetStringPtr() + 1, pUnicodeBuffer->GetStringLength() - 1);
 				*pUnicodeBuffer = tmp;
 			}
 		}
@@ -397,7 +397,7 @@ EConvertResult CFileLoad::ReadLine_core(
 	バッファにデータを読み込む
 	@note エラー時は throw する
 */
-void CFileLoad::Buffering(void)
+void FileLoad::Buffering(void)
 {
 	// メモリー確保
 	if (!m_pReadBuf) {
@@ -410,7 +410,7 @@ void CFileLoad::Buffering(void)
 
 		m_pReadBuf = (char*) malloc(nBufSize);
 		if (!m_pReadBuf) {
-			throw CError_FileRead(); // メモリー確保に失敗
+			throw Error_FileRead(); // メモリー確保に失敗
 		}
 		m_nReadDataLen = 0;
 		m_nReadBufSize = nBufSize;
@@ -435,7 +435,7 @@ void CFileLoad::Buffering(void)
 /*!
 	バッファクリア
 */
-void CFileLoad::ReadBufEmpty(void)
+void FileLoad::ReadBufEmpty(void)
 {
 	if (m_pReadBuf) {
 		free(m_pReadBuf);
@@ -450,7 +450,7 @@ void CFileLoad::ReadBufEmpty(void)
 	 現在の進行率を取得する
 	 @return 0% - 100%  若干誤差が出る
 */
-int CFileLoad::GetPercent(void) {
+int FileLoad::GetPercent(void) {
 	int nRet;
 	if (m_nFileDataLen == 0 || m_nFileDataLen < m_nReadLength) {
 		nRet = 100;
@@ -463,12 +463,12 @@ int CFileLoad::GetPercent(void) {
 /*!
 	GetNextLineの汎用文字コード版
 */
-const char* CFileLoad::GetNextLineCharCode(
+const char* FileLoad::GetNextLineCharCode(
 	const char*	pData,			//!< [in]	検索文字列
 	int			nDataLen,		//!< [in]	検索文字列のバイト数
 	int*		pnLineLen,		//!< [out]	1行のバイト数を返すただしEOLは含まない
 	int*		pnBgn,			//!< [i/o]	検索文字列のバイト単位のオフセット位置
-	CEol*		pcEol,			//!< [i/o]	EOL
+	Eol*		pcEol,			//!< [i/o]	EOL
 	int*		pnEolLen,		//!< [out]	EOLのバイト数 (Unicodeで困らないように)
 	int*		pnBufferNext	//!< [out]	次回持越しバッファ長(EOLの断片)
 	)

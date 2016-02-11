@@ -28,9 +28,9 @@
 #include "view/colors/EColorIndexType.h"
 #include "util/design_template.h" // TSingleton
 
-class CDocLine;
+class DocLine;
 class DocLineMgr;
-class CGraphics;
+class Graphics;
 
 // DIFF情報定数
 enum EDiffMark{
@@ -42,9 +42,9 @@ enum EDiffMark{
 };
 
 // DIFF挙動の管理
-class CDiffManager : public TSingleton<CDiffManager> {
-	friend class TSingleton<CDiffManager>;
-	CDiffManager() {}
+class DiffManager : public TSingleton<DiffManager> {
+	friend class TSingleton<DiffManager>;
+	DiffManager() {}
 
 public:
 	void SetDiffUse(bool b) { m_bIsDiffUse = b; }
@@ -55,39 +55,39 @@ private:
 };
 
 // 行に付加するDIFF情報
-class CLineDiffed {
+class LineDiffed {
 public:
-	CLineDiffed() : m_nDiffed(MARK_DIFF_NONE) { }
+	LineDiffed() : m_nDiffed(MARK_DIFF_NONE) { }
 	operator EDiffMark() const { return m_nDiffed; }
-	CLineDiffed& operator = (EDiffMark e) { m_nDiffed = e; return *this; }
+	LineDiffed& operator = (EDiffMark e) { m_nDiffed = e; return *this; }
 private:
 	EDiffMark m_nDiffed;
 };
 
 // 行のDIFF情報取得
-class CDiffLineGetter {
+class DiffLineGetter {
 public:
-	CDiffLineGetter(const CDocLine* pcDocLine) : m_pcDocLine(pcDocLine) { }
+	DiffLineGetter(const DocLine* pcDocLine) : m_pcDocLine(pcDocLine) { }
 	EDiffMark GetLineDiffMark() const;
 	bool GetDiffColor(EColorIndexType* nColor) const;
-	bool DrawDiffMark(CGraphics& gr, int y, int nLineHeight, COLORREF color) const;
+	bool DrawDiffMark(Graphics& gr, int y, int nLineHeight, COLORREF color) const;
 private:
-	const CDocLine* m_pcDocLine;
+	const DocLine* m_pcDocLine;
 };
 
 // 行のDIFF情報設定
-class CDiffLineSetter {
+class DiffLineSetter {
 public:
-	CDiffLineSetter(CDocLine* pcDocLine) : m_pcDocLine(pcDocLine) { }
+	DiffLineSetter(DocLine* pcDocLine) : m_pcDocLine(pcDocLine) { }
 	void SetLineDiffMark(EDiffMark mark);
 private:
-	CDocLine* m_pcDocLine;
+	DocLine* m_pcDocLine;
 };
 
 // 行全体のDIFF情報管理
-class CDiffLineMgr {
+class DiffLineMgr {
 public:
-	CDiffLineMgr(DocLineMgr* pcDocLineMgr) : m_pcDocLineMgr(pcDocLineMgr) { }
+	DiffLineMgr(DocLineMgr* pcDocLineMgr) : m_pcDocLineMgr(pcDocLineMgr) { }
 	void ResetAllDiffMark();															// 差分表示の全解除
 	bool SearchDiffMark(LogicInt , eSearchDirection, LogicInt*);						// 差分検索
 	void SetDiffMarkRange(EDiffMark nMode, LogicInt nStartLine, LogicInt nEndLine);	// 差分範囲の登録

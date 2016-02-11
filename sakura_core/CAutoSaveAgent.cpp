@@ -38,7 +38,7 @@
 //
 //	自動保存を行うかどうかのチェック
 //
-void CAutoSaveAgent::CheckAutoSave()
+void AutoSaveAgent::CheckAutoSave()
 {
 	if (m_cPassiveTimer.CheckAction()) {
 		EditDoc* pcDoc = GetListeningDoc();
@@ -64,7 +64,7 @@ void CAutoSaveAgent::CheckAutoSave()
 //
 //	設定変更を自動保存動作に反映する
 //
-void CAutoSaveAgent::ReloadAutoSaveParam()
+void AutoSaveAgent::ReloadAutoSaveParam()
 {
 	auto& csBackup = GetDllShareData().m_common.m_sBackup;
 	m_cPassiveTimer.SetInterval(csBackup.GetAutoBackupInterval());
@@ -72,7 +72,7 @@ void CAutoSaveAgent::ReloadAutoSaveParam()
 }
 
 //----------------------------------------------------------
-//	class CPassiveTimer
+//	class PassiveTimer
 //
 //----------------------------------------------------------
 /*!
@@ -80,7 +80,7 @@ void CAutoSaveAgent::ReloadAutoSaveParam()
 	@param m 間隔(min)
 	間隔を0以下に設定したときは1秒とみなす。設定可能な最大間隔は35792分。
 */
-void CPassiveTimer::SetInterval(int m)
+void PassiveTimer::SetInterval(int m)
 {
 	if (m <= 0) {
 		m = 1;
@@ -95,7 +95,7 @@ void CPassiveTimer::SetInterval(int m)
 	@param flag true:有効 / false: 無効
 	無効→有効に切り替えたときはリセットされる。
 */
-void CPassiveTimer::Enable(bool flag)
+void PassiveTimer::Enable(bool flag)
 {
 	if (bEnabled != flag) {	//	変更があるとき
 		bEnabled = flag;
@@ -112,7 +112,7 @@ void CPassiveTimer::Enable(bool flag)
 	@retval true 所定時間が経過した。このときは測定基準が自動的にリセットされる。
 	@retval false 所定の時間に達していない。
 */
-bool CPassiveTimer::CheckAction(void)
+bool PassiveTimer::CheckAction(void)
 {
 	if (!IsEnabled()) {	//	有効でなければ何もしない
 		return false;

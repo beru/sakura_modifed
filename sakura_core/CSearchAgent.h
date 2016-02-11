@@ -27,7 +27,7 @@
 
 class DocLineMgr;
 struct DocLineReplaceArg;
-class CBregexp;
+class Bregexp;
 
 // #define SEARCH_STRING_KMP
 #define SEARCH_STRING_SUNDAY_QUICK
@@ -35,20 +35,20 @@ class CBregexp;
 class SearchStringPattern {
 public:
 	SearchStringPattern();
-	SearchStringPattern(HWND, const wchar_t* pszPattern, int nPatternLen, const SearchOption& searchOption, CBregexp* pRegexp);
+	SearchStringPattern(HWND, const wchar_t* pszPattern, int nPatternLen, const SearchOption& searchOption, Bregexp* pRegexp);
 	~SearchStringPattern();
 	void Reset();
-	bool SetPattern(HWND hwnd, const wchar_t* pszPattern, int nPatternLen, const SearchOption& searchOption, CBregexp* pRegexp){
+	bool SetPattern(HWND hwnd, const wchar_t* pszPattern, int nPatternLen, const SearchOption& searchOption, Bregexp* pRegexp){
 		return SetPattern(hwnd, pszPattern, nPatternLen, NULL, searchOption, pRegexp);
 	}
-	bool SetPattern(HWND, const wchar_t* pszPattern, int nPatternLen, const wchar_t* pszPattern2, const SearchOption& searchOption, CBregexp* pRegexp);
+	bool SetPattern(HWND, const wchar_t* pszPattern, int nPatternLen, const wchar_t* pszPattern2, const SearchOption& searchOption, Bregexp* pRegexp);
 	const wchar_t* GetKey() const { return m_pszKey; }
 	const wchar_t* GetCaseKey() const { return m_pszCaseKeyRef; }
 	int GetLen() const { return m_nPatternLen; }
 	bool GetIgnoreCase() const { return !m_pSearchOption->bLoHiCase; }
 	bool GetLoHiCase() const { return m_pSearchOption->bLoHiCase; }
 	const SearchOption& GetSearchOption() const { return *m_pSearchOption; }
-	CBregexp* GetRegexp() const { return m_pRegexp; }
+	Bregexp* GetRegexp() const { return m_pRegexp; }
 #ifdef SEARCH_STRING_KMP
 	const int* GetKMPNextTable() const { return m_pnNextPossArr; }
 #endif
@@ -62,7 +62,7 @@ private:
 	// 外部依存
 	const wchar_t* m_pszKey;
 	const SearchOption* m_pSearchOption;
-	mutable CBregexp* m_pRegexp;
+	mutable Bregexp* m_pRegexp;
 
 	const wchar_t* m_pszCaseKeyRef;
 
@@ -119,7 +119,7 @@ public:
 public:
 	SearchAgent(DocLineMgr* pcDocLineMgr) : m_pcDocLineMgr(pcDocLineMgr) { }
 
-	bool WhereCurrentWord(LogicInt , LogicInt , LogicInt* , LogicInt*, CNativeW*, CNativeW*);	// 現在位置の単語の範囲を調べる
+	bool WhereCurrentWord(LogicInt , LogicInt , LogicInt* , LogicInt*, NativeW*, NativeW*);	// 現在位置の単語の範囲を調べる
 
 	bool PrevOrNextWord(LogicInt , LogicInt , LogicInt* , bool bLEFT, bool bStopsBothEnds);	// 現在位置の左右の単語の先頭位置を調べる
 	//	Jun. 26, 2001 genta	正規表現ライブラリの差し替え

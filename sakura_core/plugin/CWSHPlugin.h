@@ -33,47 +33,47 @@
 #define PII_WSH						L"Wsh"			// WSHセクション
 #define PII_WSH_USECACHE			L"UseCache"		// 読み込んだスクリプトを再利用する
 
-class CWSHPlug : public CPlug {
+class WSHPlug : public Plug {
 public:
-	CWSHPlug(CPlugin& plugin, PlugId id, wstring sJack, wstring sHandler, wstring sLabel) :
-		CPlug(plugin, id, sJack, sHandler, sLabel)
+	WSHPlug(Plugin& plugin, PlugId id, wstring sJack, wstring sHandler, wstring sLabel) :
+		Plug(plugin, id, sJack, sHandler, sLabel)
 	{
 		m_Wsh = NULL;
 	}
-	virtual ~CWSHPlug() {
+	virtual ~WSHPlug() {
 		if (m_Wsh) {
 			delete m_Wsh;
 			m_Wsh = NULL;
 		}
 	}
-	CWSHMacroManager* m_Wsh;
+	WSHMacroManager* m_Wsh;
 };
 
-class CWSHPlugin : public CPlugin {
+class WSHPlugin : public Plugin {
 	// コンストラクタ
 public:
-	CWSHPlugin(const tstring& sBaseDir) : CPlugin(sBaseDir) {
+	WSHPlugin(const tstring& sBaseDir) : Plugin(sBaseDir) {
 		m_bUseCache = false;
 	}
 
 	// デストラクタ
 public:
-	~CWSHPlugin(void);
+	~WSHPlugin(void);
 
 	// 操作
-	// CPlugインスタンスの作成。ReadPluginDefPlug/Command から呼ばれる。
-	virtual CPlug* CreatePlug(CPlugin& plugin, PlugId id, wstring sJack, wstring sHandler, wstring sLabel) {
-		return new CWSHPlug(plugin, id, sJack, sHandler, sLabel);
+	// Plugインスタンスの作成。ReadPluginDefPlug/Command から呼ばれる。
+	virtual Plug* CreatePlug(Plugin& plugin, PlugId id, wstring sJack, wstring sHandler, wstring sLabel) {
+		return new WSHPlug(plugin, id, sJack, sHandler, sLabel);
 	}
 
 	// 実装
 public:
 	bool ReadPluginDef(DataProfile *cProfile, DataProfile *cProfileMlang);
 	bool ReadPluginOption(DataProfile *cProfile);
-	CPlug::Array GetPlugs() const {
+	Plug::Array GetPlugs() const {
 		return m_plugs;
 	}
-	bool InvokePlug(CEditView* view, CPlug& plug, CWSHIfObj::List& params);
+	bool InvokePlug(EditView* view, Plug& plug, WSHIfObj::List& params);
 
 	// メンバ変数
 private:

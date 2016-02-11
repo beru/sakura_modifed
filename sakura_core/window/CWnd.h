@@ -24,7 +24,7 @@
 -----------------------------------------------------------------------*/
 // ウィンドウの基本クラス
 /*!
-	@par CWndクラスの基本的な機能
+	@par Wndクラスの基本的な機能
 	@li ウィンドウ作成
 	@li ウィンドウメッセージ配送
 
@@ -32,13 +32,13 @@
 	@li RegisterWC()	ウィンドウクラス登録
 	@li Create()		ウィンドウ作成
 */
-class CWnd {
+class Wnd {
 protected:
 	friend LRESULT CALLBACK CWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 public:
 	// Constructors
-	CWnd(const TCHAR* pszInheritanceAppend = _T(""));
-	virtual ~CWnd();
+	Wnd(const TCHAR* pszInheritanceAppend = _T(""));
+	virtual ~Wnd();
 	/*
 	||  Attributes & Operations
 	*/

@@ -22,8 +22,8 @@
 
 #include "types/CType.h" // TypeConfig
 
-class CPropTypes;
-class CKeyWordSetMgr;
+class PropTypes;
+class KeyWordSetMgr;
 
 /*-----------------------------------------------------------------------
 定数
@@ -68,12 +68,12 @@ enum PropTypeSheetOrder {
 
 	@date 2002.2.17 YAZAKI CShareDataのインスタンスは、CProcessにひとつあるのみ。
 */
-class CPropTypes {
+class PropTypes {
 
 public:
 	// 生成と破棄
-	CPropTypes();
-	~CPropTypes();
+	PropTypes();
+	~PropTypes();
 	void Create(HINSTANCE, HWND);		// 初期化
 	INT_PTR DoPropertySheet(int);		// プロパティシートの作成
 
@@ -107,7 +107,7 @@ protected:
 	DWORD			m_dwCustColors[16];						// フォントDialogカスタムパレット
 	int				m_nSet[ MAX_KEYWORDSET_PER_TYPE ];		// keyword set index  2005.01.13 MIK
 	int				m_nCurrentColorType;					// 現在選択されている色タイプ
-	CKeyWordSetMgr*	m_pCKeyWordSetMgr;						// メモリ削減のためポインタに  Mar. 31, 2003 genta
+	KeyWordSetMgr*	m_pCKeyWordSetMgr;						// メモリ削減のためポインタに  Mar. 31, 2003 genta
 	bool			m_bChangeKeyWordSet;
 
 	// フォント表示用データ
@@ -133,12 +133,12 @@ protected:
 	@brief タイプ別設定プロパティページクラス
 
 	プロパティページ毎に定義
-	変数の定義はCPropTypesで行う
+	変数の定義はPropTypesで行う
 */
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                        スクリーン                           //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-class CPropTypesScreen : CPropTypes {
+class CPropTypesScreen : PropTypes {
 public:
 	INT_PTR DispatchEvent(HWND, UINT, WPARAM, LPARAM);			// メッセージ処理
 protected:
@@ -156,7 +156,7 @@ public:
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                          ウィンドウ                         //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-class CPropTypesWindow : CPropTypes {
+class CPropTypesWindow : PropTypes {
 public:
 	INT_PTR DispatchEvent(HWND, UINT, WPARAM, LPARAM);			// メッセージ処理
 protected:
@@ -173,7 +173,7 @@ private:
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                          カラー                             //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-class CPropTypesColor : CPropTypes {
+class CPropTypesColor : PropTypes {
 public:
 	INT_PTR DispatchEvent(HWND, UINT, WPARAM, LPARAM);	// メッセージ処理
 protected:
@@ -195,7 +195,7 @@ private:
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                           支援                              //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-class CPropTypesSupport : CPropTypes {
+class CPropTypesSupport : PropTypes {
 public:
 	INT_PTR DispatchEvent(HWND, UINT, WPARAM, LPARAM);				// メッセージ処理
 protected:
@@ -209,7 +209,7 @@ public:
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                    正規表現キーワード                       //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-class CPropTypesRegex : CPropTypes {
+class CPropTypesRegex : PropTypes {
 public:
 	INT_PTR DispatchEvent(HWND, UINT, WPARAM, LPARAM);			// メッセージ処理
 protected:														  
@@ -228,7 +228,7 @@ private:
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                     キーワードヘルプ                        //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-class CPropTypesKeyHelp : CPropTypes {
+class CPropTypesKeyHelp : PropTypes {
 public:
 	INT_PTR DispatchEvent(HWND, UINT, WPARAM, LPARAM);			// メッセージ処理
 protected:

@@ -26,19 +26,19 @@
 #include "CRecentImp.h"
 #include "util/StaticType.h"
 
-typedef StaticString<WCHAR, _MAX_PATH> CSearchString;
+typedef StaticString<WCHAR, _MAX_PATH> SearchString;
 
 // 検索の履歴を管理 (RECENT_FOR_SEARCH)
-class CRecentSearch : public CRecentImp<CSearchString, LPCWSTR> {
+class RecentSearch : public RecentImp<SearchString, LPCWSTR> {
 public:
 	// 生成
-	CRecentSearch();
+	RecentSearch();
 
 	// オーバーライド
-	int				CompareItem(const CSearchString* p1, LPCWSTR p2) const;
-	void			CopyItem(CSearchString* dst, LPCWSTR src) const;
+	int				CompareItem(const SearchString* p1, LPCWSTR p2) const;
+	void			CopyItem(SearchString* dst, LPCWSTR src) const;
 	const TCHAR*	GetItemText(int nIndex) const;
-	bool			DataToReceiveType(LPCWSTR* dst, const CSearchString* src) const;
-	bool			TextToDataType(CSearchString* dst, LPCTSTR pszText) const;
+	bool			DataToReceiveType(LPCWSTR* dst, const SearchString* src) const;
+	bool			TextToDataType(SearchString* dst, LPCTSTR pszText) const;
 };
 

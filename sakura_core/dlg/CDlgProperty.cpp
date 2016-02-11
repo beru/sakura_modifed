@@ -58,16 +58,16 @@ const DWORD p_helpids[] = {	//12600
 };	//@@@ 2002.01.07 add end MIK
 
 // モーダルダイアログの表示
-int CDlgProperty::DoModal(
+int DlgProperty::DoModal(
 	HINSTANCE hInstance,
 	HWND hwndParent,
 	LPARAM lParam
 	)
 {
-	return (int)CDialog::DoModal(hInstance, hwndParent, IDD_PROPERTY_FILE, lParam);
+	return (int)Dialog::DoModal(hInstance, hwndParent, IDD_PROPERTY_FILE, lParam);
 }
 
-BOOL CDlgProperty::OnBnClicked(int wID)
+BOOL DlgProperty::OnBnClicked(int wID)
 {
 	switch (wID) {
 	case IDC_BUTTON_HELP:
@@ -84,7 +84,7 @@ BOOL CDlgProperty::OnBnClicked(int wID)
 //		return TRUE;
 	}
 	// 基底クラスメンバ
-	return CDialog::OnBnClicked(wID);
+	return Dialog::OnBnClicked(wID);
 }
 
 
@@ -92,7 +92,7 @@ BOOL CDlgProperty::OnBnClicked(int wID)
 
 	@date 2002.2.17 YAZAKI CShareDataのインスタンスは、CProcessにひとつあるのみ。
 */
-void CDlgProperty::SetData(void)
+void DlgProperty::SetData(void)
 {
 	EditDoc* pCEditDoc = (EditDoc*)m_lParam;
 	CNativeT cmemProp;
@@ -275,7 +275,7 @@ end_of_CodeTest:;
 }
 
 //@@@ 2002.01.18 add start
-LPVOID CDlgProperty::GetHelpIdTable(void)
+LPVOID DlgProperty::GetHelpIdTable(void)
 {
 	return (LPVOID)p_helpids;
 }

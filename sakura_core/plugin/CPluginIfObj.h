@@ -36,7 +36,7 @@
 #include "view/CEditView.h"
 #include "CPlugin.h"
 
-class CPluginIfObj : public CWSHIfObj {
+class PluginIfObj : public WSHIfObj {
 	// 型定義
 	enum FuncId {
 		F_PL_COMMAND_FIRST = 0,					// ↓コマンドは以下に追加する
@@ -54,9 +54,9 @@ class CPluginIfObj : public CWSHIfObj {
 
 	// コンストラクタ
 public:
-	CPluginIfObj(CPlugin& cPlugin)
+	PluginIfObj(Plugin& cPlugin)
 		:
-		CWSHIfObj(L"Plugin", false),
+		WSHIfObj(L"Plugin", false),
 		m_cPlugin(cPlugin)
 	{
 		m_nPlugIndex = -1;
@@ -64,7 +64,7 @@ public:
 
 	// デストラクタ
 public:
-	~CPluginIfObj() {}
+	~PluginIfObj() {}
 
 	// 操作
 public:
@@ -80,7 +80,7 @@ public:
 		return m_MacroFuncInfoArr;
 	}
 	// 関数を処理する
-	bool HandleFunction(CEditView* View, EFunctionCode ID, const VARIANT* Arguments, const int ArgSize, VARIANT& Result) {
+	bool HandleFunction(EditView* View, EFunctionCode ID, const VARIANT* Arguments, const int ArgSize, VARIANT& Result) {
 		Variant varCopy;	// VT_BYREFだと困るのでコピー用
 
 		switch (LOWORD(ID)) {
@@ -156,7 +156,7 @@ public:
 		return false;
 	}
 	// コマンドを処理する
-	bool HandleCommand(CEditView* View, EFunctionCode ID, const WCHAR* Arguments[], const int ArgLengths[], const int ArgSize) {
+	bool HandleCommand(EditView* View, EFunctionCode ID, const WCHAR* Arguments[], const int ArgLengths[], const int ArgSize) {
 		switch (LOWORD(ID)) {
 		case F_PL_SETOPTION:			// オプションファイルに値を書く
 			{
@@ -185,7 +185,7 @@ public:
 	// メンバ変数
 public:
 private:
-	CPlugin& m_cPlugin;
+	Plugin& m_cPlugin;
 	static MacroFuncInfo m_MacroFuncInfoCommandArr[];	// コマンド情報(戻り値なし)
 	static MacroFuncInfo m_MacroFuncInfoArr[];	// 関数情報(戻り値あり)
 	int m_nPlugIndex;	// 実行中プラグの番号

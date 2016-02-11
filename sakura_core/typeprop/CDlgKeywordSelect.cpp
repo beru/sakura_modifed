@@ -66,27 +66,27 @@ static const int keyword_select_target_combo[KEYWORD_SELECT_NUM] = {
 };
 
 
-CDlgKeywordSelect::CDlgKeywordSelect()
+DlgKeywordSelect::DlgKeywordSelect()
 {
 	m_pCKeyWordSetMgr = &(m_pShareData->m_common.m_sSpecialKeyword.m_CKeyWordSetMgr);
 
 	return;
 }
 
-CDlgKeywordSelect::~CDlgKeywordSelect()
+DlgKeywordSelect::~DlgKeywordSelect()
 {
 	return;
 }
 
 
 // モーダルダイアログの表示
-int CDlgKeywordSelect::DoModal(HINSTANCE hInstance, HWND hwndParent, int* pnSet)
+int DlgKeywordSelect::DoModal(HINSTANCE hInstance, HWND hwndParent, int* pnSet)
 {
 	for (int i=0; i<KEYWORD_SELECT_NUM; ++i) {
 		m_nSet[i] = pnSet[i];
 	}
 
-	(void)CDialog::DoModal(hInstance, hwndParent, IDD_DIALOG_KEYWORD_SELECT, (LPARAM)NULL);
+	(void)Dialog::DoModal(hInstance, hwndParent, IDD_DIALOG_KEYWORD_SELECT, (LPARAM)NULL);
 
 	for (int i=0; i<KEYWORD_SELECT_NUM; ++i) {
 		pnSet[i] = m_nSet[i];
@@ -96,15 +96,15 @@ int CDlgKeywordSelect::DoModal(HINSTANCE hInstance, HWND hwndParent, int* pnSet)
 }
 
 // 初期化処理
-BOOL CDlgKeywordSelect::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
+BOOL DlgKeywordSelect::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
 {
 	_SetHwnd(hwndDlg);
 
-	return CDialog::OnInitDialog(hwndDlg, wParam, lParam);
+	return Dialog::OnInitDialog(hwndDlg, wParam, lParam);
 }
 
 
-BOOL CDlgKeywordSelect::OnBnClicked(int wID)
+BOOL DlgKeywordSelect::OnBnClicked(int wID)
 {
 	switch (wID) {
 	case IDOK:
@@ -113,11 +113,11 @@ BOOL CDlgKeywordSelect::OnBnClicked(int wID)
 	case IDCANCEL:
 		break;
 	}
-	return CDialog::OnBnClicked(wID);
+	return Dialog::OnBnClicked(wID);
 }
 
 // ダイアログデータの設定
-void CDlgKeywordSelect::SetData(void)
+void DlgKeywordSelect::SetData(void)
 {
 	for (int index=0; index<KEYWORD_SELECT_NUM; ++index) {
 		HWND hwndCombo = GetItemHwnd(keyword_select_target_combo[index]);
@@ -146,7 +146,7 @@ void CDlgKeywordSelect::SetData(void)
 
 
 // ダイアログデータの設定
-int CDlgKeywordSelect::GetData(void)
+int DlgKeywordSelect::GetData(void)
 {
 	for (int index=0; index<KEYWORD_SELECT_NUM; ++index) {
 		HWND hwndCombo = GetItemHwnd(keyword_select_target_combo[index]);
@@ -162,7 +162,7 @@ int CDlgKeywordSelect::GetData(void)
 	return TRUE;
 }
 
-LPVOID CDlgKeywordSelect::GetHelpIdTable(void)
+LPVOID DlgKeywordSelect::GetHelpIdTable(void)
 {
 	return (LPVOID)p_helpids;
 }

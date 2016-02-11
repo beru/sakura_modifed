@@ -377,7 +377,7 @@ INT_PTR CPropTypesColor::DispatchEvent(
 				m_Types.m_ColorInfoArr[m_nCurrentColorType].m_bDisp = ::IsDlgButtonCheckedBool(hwndDlg, IDC_CHECK_DISP);
 				// 現在選択されている色タイプ
 				List_SetCurSel(hwndListColor, m_nCurrentColorType);
-				m_Types.m_nRegexKeyMagicNumber = CRegexKeyword::GetNewMagicNumber();	// Need Compile	//@@@ 2001.11.17 add MIK 正規表現キーワードのため
+				m_Types.m_nRegexKeyMagicNumber = RegexKeyword::GetNewMagicNumber();	// Need Compile	//@@@ 2001.11.17 add MIK 正規表現キーワードのため
 				return TRUE;
 			case IDC_CHECK_BOLD:	// 太字か
 				m_Types.m_ColorInfoArr[m_nCurrentColorType].m_sFontAttr.m_bBoldFont = ::IsDlgButtonCheckedBool(hwndDlg, IDC_CHECK_BOLD);
@@ -392,7 +392,7 @@ INT_PTR CPropTypesColor::DispatchEvent(
 
 			case IDC_BUTTON_IMPORT:	// 色の設定をインポート
 				Import(hwndDlg);
-				m_Types.m_nRegexKeyMagicNumber = CRegexKeyword::GetNewMagicNumber();	// Need Compile	//@@@ 2001.11.17 add MIK 正規表現キーワードのため
+				m_Types.m_nRegexKeyMagicNumber = RegexKeyword::GetNewMagicNumber();	// Need Compile	//@@@ 2001.11.17 add MIK 正規表現キーワードのため
 				return TRUE;
 
 			case IDC_BUTTON_EXPORT:	// 色の設定をエクスポート
@@ -412,7 +412,7 @@ INT_PTR CPropTypesColor::DispatchEvent(
 			// 強調キーワードの選択
 			case IDC_BUTTON_KEYWORD_SELECT:
 				{
-					CDlgKeywordSelect cDlgKeywordSelect;
+					DlgKeywordSelect cDlgKeywordSelect;
 					// 強調キーワード1を取得する。
 					HWND hwndCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_SET);
 					int nIdx = Combo_GetCurSel(hwndCombo);
@@ -434,8 +434,8 @@ INT_PTR CPropTypesColor::DispatchEvent(
 			// 強調キーワードの選択
 			case IDC_BUTTON_EDITKEYWORD:
 				{
-					auto pPropKeyword = std::make_unique<CPropKeyword>();
-					CPropCommon* pCommon = (CPropCommon*)pPropKeyword.get();
+					auto pPropKeyword = std::make_unique<PropKeyword>();
+					PropCommon* pCommon = (PropCommon*)pPropKeyword.get();
 					pCommon->m_hwndParent = ::GetParent(hwndDlg);
 					pCommon->InitData();
 					pCommon->m_nKeywordSet1 = m_nSet[0];
@@ -443,7 +443,7 @@ INT_PTR CPropTypesColor::DispatchEvent(
 						SelectLang::getLangRsrcInstance(),
 						MAKEINTRESOURCE(IDD_PROP_KEYWORD),
 						hwndDlg,
-						CPropKeyword::DlgProc_dialog,
+						PropKeyword::DlgProc_dialog,
 						(LPARAM)pPropKeyword.get()
 					);
 					if (res == IDOK) {
@@ -669,7 +669,7 @@ void CPropTypesColor::SetData(HWND hwndDlg)
 	hwndWork = ::GetDlgItem(hwndDlg, IDC_LIST_COLORS);
 	List_ResetContent(hwndWork);  // リストを空にする
 	// 2014.11.25 大きいフォント対応
-	int nItemHeight = CTextWidthCalc(hwndWork).GetTextHeight();
+	int nItemHeight = TextWidthCalc(hwndWork).GetTextHeight();
 	List_SetItemHeight(hwndWork, 0, nItemHeight + 4);
 	for (int i=0; i<COLORIDX_LAST; ++i) {
 		GetDefaultColorInfoName(&m_Types.m_ColorInfoArr[i], i);
@@ -863,7 +863,7 @@ void CPropTypesColor::DrawColorButton(DRAWITEMSTRUCT* pDis, COLORREF cColor)
 	RECT		rcFocus;
 
 	// 描画対象
-	CGraphics gr(pDis->hDC);
+	Graphics gr(pDis->hDC);
 
 	// ボタンの表面の色で塗りつぶす
 	gr.SetBrushColor(cBtnFace);
@@ -1050,7 +1050,7 @@ void CPropTypesColor::DrawColorListItem(DRAWITEMSTRUCT* pDis)
 	}
 
 	// 描画対象
-	CGraphics gr(pDis->hDC);
+	Graphics gr(pDis->hDC);
 
 //	rc0 = pDis->rcItem;
 	rc1 = pDis->rcItem;

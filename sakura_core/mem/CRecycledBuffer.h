@@ -1,7 +1,7 @@
 // 一時的なメモリブロックをローテーションして使いまわすためのモノ
 // Getで取得したメモリブロックは、「ある程度の期間」上書きされないことが保障される。
 // その「期間」とは、Getを呼んでから再度CHAIN_COUNT回、Getを呼び出すまでの間である。
-// 取得したメモリブロックはCRecycledBufferの管理下にあるため、解放してはいけない。
+// 取得したメモリブロックはRecycledBufferの管理下にあるため、解放してはいけない。
 /*
 	Copyright (C) 2008, kobake
 
@@ -27,7 +27,7 @@
 */
 #pragma once
 
-class CRecycledBuffer {
+class RecycledBuffer {
 // コンフィグ
 private:
 	static const int BLOCK_SIZE  = 1024;	// ブロックサイズ。バイト単位。
@@ -35,7 +35,7 @@ private:
 
 // コンストラクタ・デストラクタ
 public:
-	CRecycledBuffer() {
+	RecycledBuffer() {
 		m_current=0;
 	}
 
@@ -67,20 +67,20 @@ private:
 	int  m_current;
 };
 
-class CRecycledBufferDynamic {
+class RecycledBufferDynamic {
 // コンフィグ
 private:
 	static const int CHAIN_COUNT = 64;   // 再利用可能なブロック数。
 
 // コンストラクタ・デストラクタ
 public:
-	CRecycledBufferDynamic() {
+	RecycledBufferDynamic() {
 		m_current=0;
 		for (int i=0; i<_countof(m_buf); ++i) {
 			m_buf[i] = NULL;
 		}
 	}
-	~CRecycledBufferDynamic() {
+	~RecycledBufferDynamic() {
 		for (int i=0; i<_countof(m_buf); ++i) {
 			if (m_buf[i])delete[] m_buf[i];
 		}

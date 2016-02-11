@@ -245,7 +245,7 @@ int CJis::JisToUni(const char* pSrc, const int nSrcLen, wchar_t* pDst, bool* pbE
 
 // E-Mail(JIS→Unicode)コード変換
 // 2007.08.13 kobake 追加
-EConvertResult CJis::JISToUnicode(const CMemory& cSrc, CNativeW* pDstMem, bool base64decode)
+EConvertResult CJis::JISToUnicode(const Memory& cSrc, NativeW* pDstMem, bool base64decode)
 {
 	// ソースを取得
 	int nSrcLen;
@@ -258,7 +258,7 @@ EConvertResult CJis::JISToUnicode(const CMemory& cSrc, CNativeW* pDstMem, bool b
 	// ソースバッファポインタとソースの長さ
 	const char* psrc = pSrc;
 	int nsrclen = nSrcLen;
-	CMemory cmem;
+	Memory cmem;
 
 	if (base64decode) {
 		// ISO-2202-J 用の MIME ヘッダーをデコード
@@ -445,7 +445,7 @@ int CJis::UniToJis(const wchar_t* pSrc, const int nSrcLen, char* pDst, bool* pbE
 }
 
 
-EConvertResult CJis::UnicodeToJIS(const CNativeW& cSrc, CMemory* pDstMem)
+EConvertResult CJis::UnicodeToJIS(const NativeW& cSrc, Memory* pDstMem)
 {
 	// ソースを取得
 	const wchar_t* pSrc = cSrc.GetStringPtr();
@@ -485,7 +485,7 @@ EConvertResult CJis::UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR* p
 	}
 
 	// 1文字データバッファ
-	CNativeW cCharBuffer;
+	NativeW cCharBuffer;
 	cCharBuffer.SetString(cSrc, 1);
 
 	// JIS 変換

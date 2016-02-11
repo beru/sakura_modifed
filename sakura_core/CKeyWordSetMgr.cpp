@@ -47,10 +47,10 @@ inline int GetAlignmentSize(int nSize)
 }
 
 /*!
-	@note CKeyWordSetMgrは共有メモリ構造体に埋め込まれているため，
+	@note KeyWordSetMgrは共有メモリ構造体に埋め込まれているため，
 	そのままではコンストラクタが動かないことに注意．
 */
-CKeyWordSetMgr::CKeyWordSetMgr(void)
+KeyWordSetMgr::KeyWordSetMgr(void)
 {
 	m_nCurrentKeyWordSetIdx = 0;
 	m_nKeyWordSetNum = 0;
@@ -60,7 +60,7 @@ CKeyWordSetMgr::CKeyWordSetMgr(void)
 	return;
 }
 
-CKeyWordSetMgr::~CKeyWordSetMgr(void)
+KeyWordSetMgr::~KeyWordSetMgr(void)
 {
 	m_nKeyWordSetNum = 0;
 	return;
@@ -73,7 +73,7 @@ CKeyWordSetMgr::~CKeyWordSetMgr(void)
 	
 	@date 2004.07.29 Moca 可変長記憶
 */
-void CKeyWordSetMgr::ResetAllKeyWordSet(void)
+void KeyWordSetMgr::ResetAllKeyWordSet(void)
 {
 	m_nKeyWordSetNum = 0;
 	for (int i=0; i<MAX_SETNUM+1; ++i) {
@@ -84,7 +84,7 @@ void CKeyWordSetMgr::ResetAllKeyWordSet(void)
 	}
 }
 
-const CKeyWordSetMgr& CKeyWordSetMgr::operator = (CKeyWordSetMgr& cKeyWordSetMgr)
+const KeyWordSetMgr& KeyWordSetMgr::operator = (KeyWordSetMgr& cKeyWordSetMgr)
 {
 //	int		nDataLen;
 //	char*	pData;
@@ -111,7 +111,7 @@ const CKeyWordSetMgr& CKeyWordSetMgr::operator = (CKeyWordSetMgr& cKeyWordSetMgr
 	@date 2005.01.26 Moca 新規作成
 	@date 2005.01.29 genta サイズ0で作成→reallocするように
 */
-bool CKeyWordSetMgr::AddKeyWordSet(
+bool KeyWordSetMgr::AddKeyWordSet(
 	const wchar_t*	pszSetName,		// [in] セット名
 	bool			bKEYWORDCASE,	// [in] 大文字小文字の区別．true:あり, false:無し
 	int				nSize			// [in] 最初に領域を確保するサイズ．
@@ -139,7 +139,7 @@ bool CKeyWordSetMgr::AddKeyWordSet(
 }
 
 // ｎ番目のセットを削除
-bool CKeyWordSetMgr::DelKeyWordSet(int nIdx)
+bool KeyWordSetMgr::DelKeyWordSet(int nIdx)
 {
 	if (m_nKeyWordSetNum <= nIdx ||
 		0 > nIdx
@@ -176,7 +176,7 @@ bool CKeyWordSetMgr::DelKeyWordSet(int nIdx)
 
 	@param nIdx [in] セット番号 0～キーワードセット数-1
 */
-const wchar_t* CKeyWordSetMgr::GetTypeName(int nIdx)
+const wchar_t* KeyWordSetMgr::GetTypeName(int nIdx)
 {
 	if (nIdx < 0 || m_nKeyWordSetNum <= nIdx) {
 		return NULL;
@@ -188,7 +188,7 @@ const wchar_t* CKeyWordSetMgr::GetTypeName(int nIdx)
 
 	@date 2005.01.26 Moca 新規作成
 */
-const wchar_t* CKeyWordSetMgr::SetTypeName(int nIdx, const wchar_t* name)
+const wchar_t* KeyWordSetMgr::SetTypeName(int nIdx, const wchar_t* name)
 {
 	if (!name || nIdx < 0 || m_nKeyWordSetNum <= nIdx) {
 		return NULL;
@@ -199,7 +199,7 @@ const wchar_t* CKeyWordSetMgr::SetTypeName(int nIdx, const wchar_t* name)
 }
 
 // ｎ番目のセットのキーワードの数を返す
-int CKeyWordSetMgr::GetKeyWordNum(int nIdx)
+int KeyWordSetMgr::GetKeyWordNum(int nIdx)
 {
 	if (nIdx < 0 || m_nKeyWordSetNum <= nIdx) {
 		return 0;
@@ -212,7 +212,7 @@ int CKeyWordSetMgr::GetKeyWordNum(int nIdx)
 	@param nIdx [in] キーワードセット番号
 	@param nIdx2 [in] キーワード番号
 */
-const wchar_t* CKeyWordSetMgr::GetKeyWord(int nIdx, int nIdx2)
+const wchar_t* KeyWordSetMgr::GetKeyWord(int nIdx, int nIdx2)
 {
 	if (nIdx < 0 || m_nKeyWordSetNum <= nIdx) {
 		return NULL;
@@ -224,7 +224,7 @@ const wchar_t* CKeyWordSetMgr::GetKeyWord(int nIdx, int nIdx2)
 }
 
 // ｎ番目のセットのｍ番目のキーワードを編集
-const wchar_t* CKeyWordSetMgr::UpdateKeyWord(
+const wchar_t* KeyWordSetMgr::UpdateKeyWord(
 	int				nIdx,		// [in] キーワードセット番号
 	int				nIdx2,		// [in] キーワード番号
 	const WCHAR*	pszKeyWord	// [in] 設定するキーワード
@@ -263,7 +263,7 @@ const wchar_t* CKeyWordSetMgr::UpdateKeyWord(
 		3: キーワード不正，4: キーワード重複
 
 */
-int CKeyWordSetMgr::AddKeyWord(int nIdx, const wchar_t* pszKeyWord)
+int KeyWordSetMgr::AddKeyWord(int nIdx, const wchar_t* pszKeyWord)
 {
 	if (m_nKeyWordSetNum <= nIdx) {
 		return 1;
@@ -304,7 +304,7 @@ int CKeyWordSetMgr::AddKeyWord(int nIdx, const wchar_t* pszKeyWord)
 	@param nIdx [in] キーワードセット番号
 	@param nIdx2 [in] キーワード番号
 */
-int CKeyWordSetMgr::DelKeyWord(int nIdx, int nIdx2)
+int KeyWordSetMgr::DelKeyWord(int nIdx, int nIdx2)
 {
 	if (nIdx < 0 || m_nKeyWordSetNum <= nIdx) {
 		return 1;
@@ -341,7 +341,7 @@ int CKeyWordSetMgr::DelKeyWord(int nIdx, int nIdx2)
 
 */
 typedef int (__cdecl *qsort_callback)(const void *, const void *);
-void CKeyWordSetMgr::SortKeyWord(int nIdx)
+void KeyWordSetMgr::SortKeyWord(int nIdx)
 {
 	// nIdxのセットをソートする。
 	if (m_bKEYWORDCASEArr[nIdx]) {
@@ -364,7 +364,7 @@ void CKeyWordSetMgr::SortKeyWord(int nIdx)
 	return;
 }
 
-void CKeyWordSetMgr::KeywordMaxLen(int nIdx)
+void KeyWordSetMgr::KeywordMaxLen(int nIdx)
 {
 	int nMaxLen = 0;
 	const int nEnd = m_nStartIdx[nIdx] + m_nKeyWordNumArr[nIdx];
@@ -385,7 +385,7 @@ void CKeyWordSetMgr::KeywordMaxLen(int nIdx)
 	@retval -2     見つからなかったが、pszKeywordから始まるキーワードが存在している。
 	@retval intmax 見つかったが、pszKeywordから始まる、より長いキーワードが存在している。
 */
-int CKeyWordSetMgr::SearchKeyWord2(
+int KeyWordSetMgr::SearchKeyWord2(
 	int nIdx,
 	const wchar_t* pszKeyWord,
 	int nKeyWordLen
@@ -439,7 +439,7 @@ int CKeyWordSetMgr::SearchKeyWord2(
 // MIK END
 
 // MIK START 2000.12.01 START
-void CKeyWordSetMgr::SetKeyWordCase(int nIdx, bool bCase)
+void KeyWordSetMgr::SetKeyWordCase(int nIdx, bool bCase)
 {
 	// 大文字小文字判断は１ビットあれば実現できる。
 	// 今はint型(sizeof(int) * セット数 = 4 * 100 = 400)だが,
@@ -450,7 +450,7 @@ void CKeyWordSetMgr::SetKeyWordCase(int nIdx, bool bCase)
 	return;
 }
 
-bool CKeyWordSetMgr::GetKeyWordCase(int nIdx)
+bool KeyWordSetMgr::GetKeyWordCase(int nIdx)
 {
 	return m_bKEYWORDCASEArr[nIdx];
 }
@@ -464,7 +464,7 @@ bool CKeyWordSetMgr::GetKeyWordCase(int nIdx)
 	@author Moca
 	@date 2004.07.29 Moca CShareData::ShareData_IO_2内のコードを元に移築・作成
 */
-int CKeyWordSetMgr::SetKeyWordArr(
+int KeyWordSetMgr::SetKeyWordArr(
 	int				nIdx,			// [in] キーワードセット番号
 	int				nSize,			// [in] キーワード数
 	const wchar_t*	pszKeyWordArr	// [in]「key\\tword\\t\\0」又は「key\\0word\\0\\0」の形式
@@ -498,7 +498,7 @@ int CKeyWordSetMgr::SetKeyWordArr(
 
 	@return 登録したキーワード数．0は失敗．
 */
-int CKeyWordSetMgr::SetKeyWordArr(
+int KeyWordSetMgr::SetKeyWordArr(
 	int				nIdx,				// [in] キーワードセット番号
 	int				nSize,				// [in] ppszKeyWordArrの要素数
 	const wchar_t*	ppszKeyWordArr[]	// [in] キーワードの配列(重複・長さ制限等、考慮済みであること)
@@ -525,7 +525,7 @@ int CKeyWordSetMgr::SetKeyWordArr(
 	
 	@return 削除したキーワード数
 */
-int CKeyWordSetMgr::CleanKeyWords(int nIdx)
+int KeyWordSetMgr::CleanKeyWords(int nIdx)
 {
 	// 先にソートしておかないと、後で順番が変わると都合が悪い
 	if (m_IsSorted[nIdx] == 0) {
@@ -570,7 +570,7 @@ int CKeyWordSetMgr::CleanKeyWords(int nIdx)
 	@date 2005.01.26 Moca 新規作成
 	@date 2005.01.29 genta 割り当て済みの領域に空きがあれば拡張不能でも追加可能
 */
-bool CKeyWordSetMgr::CanAddKeyWord(int nIdx)
+bool KeyWordSetMgr::CanAddKeyWord(int nIdx)
 {
 	//	割り当て済みの領域の空きをまず調べる
 	int nSizeOld = GetAllocSize(nIdx);
@@ -592,7 +592,7 @@ bool CKeyWordSetMgr::CanAddKeyWord(int nIdx)
 /*!	新しいキーワードセットのキーワード領域を確保する
 	m_nKeyWordSetNumは、呼び出し側が、呼び出した後に + 1する
 */
-bool CKeyWordSetMgr::KeyWordAlloc(int nSize)
+bool KeyWordSetMgr::KeyWordAlloc(int nSize)
 {
 	// assert(m_nKeyWordSetNum < MAX_SETNUM);
 	// assert(0 <= nSize);
@@ -617,7 +617,7 @@ bool CKeyWordSetMgr::KeyWordAlloc(int nSize)
 	@param nIdx [in] キーワードセット番号
 	@param nSize [in] 必要なキーワード数 (0～)
 */
-bool CKeyWordSetMgr::KeyWordReAlloc(int nIdx, int nSize)
+bool KeyWordSetMgr::KeyWordReAlloc(int nIdx, int nSize)
 {
 	// assert(0 <= nIdx && nIdx < m_nKeyWordSetNum);
 
@@ -659,7 +659,7 @@ bool CKeyWordSetMgr::KeyWordReAlloc(int nIdx, int nSize)
 	@param nIdx [in] キーワードセット番号
 	@return キーワードセットに割り当て済みのキーワード数
 */
-int CKeyWordSetMgr::GetAllocSize(int nIdx) const
+int KeyWordSetMgr::GetAllocSize(int nIdx) const
 {
 	return m_nStartIdx[nIdx + 1] - m_nStartIdx[nIdx];
 }
@@ -670,7 +670,7 @@ int CKeyWordSetMgr::GetAllocSize(int nIdx) const
 	
 	@return 共有空き領域(キーワード数)
 */
-int CKeyWordSetMgr::GetFreeSize(void) const 
+int KeyWordSetMgr::GetFreeSize(void) const 
 {
 	return MAX_KEYWORDNUM - m_nStartIdx[m_nKeyWordSetNum];
 }
@@ -679,7 +679,7 @@ int CKeyWordSetMgr::GetFreeSize(void) const
 
 // キーワードセット名からセット番号を取得。見つからなければ -1
 //	Uchi 2010/4/14
-int  CKeyWordSetMgr::SearchKeyWordSet(const wchar_t* pszKeyWord)
+int  KeyWordSetMgr::SearchKeyWordSet(const wchar_t* pszKeyWord)
 {
 	int nIdx = -1;
 	for (int i=0; i<m_nKeyWordSetNum; ++i) {

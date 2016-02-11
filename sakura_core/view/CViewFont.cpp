@@ -27,7 +27,7 @@
 
 /*! フォント作成
 */
-void CViewFont::CreateFont(const LOGFONT *plf)
+void ViewFont::CreateFont(const LOGFONT *plf)
 {
 	LOGFONT	lf;
 	int miniSize = GetDllShareData().m_common.m_sWindow.m_nMiniMapFontSize;
@@ -84,7 +84,7 @@ void CViewFont::CreateFont(const LOGFONT *plf)
 }
 
 // フォント削除
-void CViewFont::DeleteFont()
+void ViewFont::DeleteFont()
 {
 	DeleteObject(m_hFont_HAN);
 	DeleteObject(m_hFont_HAN_BOLD);
@@ -96,7 +96,7 @@ void CViewFont::DeleteFont()
 	@param m_bBoldFont trueで太字
 	@param m_bUnderLine trueで下線
 */
-HFONT CViewFont::ChooseFontHandle(FontAttr sFontAttr) const
+HFONT ViewFont::ChooseFontHandle(FontAttr sFontAttr) const
 {
 	if (sFontAttr.m_bBoldFont) {		// 太字か
 		if (sFontAttr.m_bUnderLine) {	// 下線か

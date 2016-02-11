@@ -27,21 +27,21 @@
 #include "view/CEditView.h"
 #include "sakura_rc.h"
 
-CAutoScrollWnd::CAutoScrollWnd()
+AutoScrollWnd::AutoScrollWnd()
 	:
-	CWnd(_T("::CAutoScrollWnd"))
+	Wnd(_T("::AutoScrollWnd"))
 {
 	m_hCenterImg = NULL;
 	return;
 }
 
 
-CAutoScrollWnd::~CAutoScrollWnd()
+AutoScrollWnd::~AutoScrollWnd()
 {
 }
 
 
-HWND CAutoScrollWnd::Create(HINSTANCE hInstance, HWND hwndParent, bool bVertical, bool bHorizontal, const Point& point, CEditView* view)
+HWND AutoScrollWnd::Create(HINSTANCE hInstance, HWND hwndParent, bool bVertical, bool bHorizontal, const Point& point, EditView* view)
 {
 	LPCTSTR pszClassName;
 
@@ -77,7 +77,7 @@ HWND CAutoScrollWnd::Create(HINSTANCE hInstance, HWND hwndParent, bool bVertical
 	);
 
 	// 基底クラスメンバ呼び出し
-	return CWnd::Create(
+	return Wnd::Create(
 		// 初期化
 		hwndParent,
 		0,
@@ -92,7 +92,7 @@ HWND CAutoScrollWnd::Create(HINSTANCE hInstance, HWND hwndParent, bool bVertical
 	);
 }
 
-void CAutoScrollWnd::Close()
+void AutoScrollWnd::Close()
 {
 	this->DestroyWindow();
 
@@ -102,7 +102,7 @@ void CAutoScrollWnd::Close()
 	}
 }
 
-LRESULT CAutoScrollWnd::OnLButtonDown(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
+LRESULT AutoScrollWnd::OnLButtonDown(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
 {
 	if (m_cView->m_nAutoScrollMode) {
 		m_cView->AutoScrollExit();
@@ -110,7 +110,7 @@ LRESULT CAutoScrollWnd::OnLButtonDown(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM
 	return 0;
 }
 
-LRESULT CAutoScrollWnd::OnRButtonDown(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
+LRESULT AutoScrollWnd::OnRButtonDown(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
 {
 	if (m_cView->m_nAutoScrollMode) {
 		m_cView->AutoScrollExit();
@@ -118,7 +118,7 @@ LRESULT CAutoScrollWnd::OnRButtonDown(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM
 	return 0;
 }
 
-LRESULT CAutoScrollWnd::OnMButtonDown(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
+LRESULT AutoScrollWnd::OnMButtonDown(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
 {
 	if (m_cView->m_nAutoScrollMode) {
 		m_cView->AutoScrollExit();
@@ -127,7 +127,7 @@ LRESULT CAutoScrollWnd::OnMButtonDown(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM
 }
 
 
-LRESULT CAutoScrollWnd::OnPaint(HWND hwnd, UINT, WPARAM, LPARAM)
+LRESULT AutoScrollWnd::OnPaint(HWND hwnd, UINT, WPARAM, LPARAM)
 {
 	PAINTSTRUCT ps;
 	HDC hdc = ::BeginPaint(hwnd, &ps);

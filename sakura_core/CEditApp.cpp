@@ -38,7 +38,7 @@
 #include "util/module.h"
 #include "util/shell.h"
 
-void CEditApp::Create(HINSTANCE hInst, int nGroupId)
+void EditApp::Create(HINSTANCE hInst, int nGroupId)
 {
 	m_hInst = hInst;
 
@@ -63,7 +63,7 @@ void CEditApp::Create(HINSTANCE hInst, int nGroupId)
 	m_pcSMacroMgr = new CSMacroMgr();
 
 	// ウィンドウの作成
-	m_pcEditWnd = CEditWnd::getInstance();
+	m_pcEditWnd = EditWnd::getInstance();
 
 	m_pcEditDoc->Create(m_pcEditWnd);
 	m_pcEditWnd->Create(m_pcEditDoc, &m_cIcons, nGroupId);
@@ -72,7 +72,7 @@ void CEditApp::Create(HINSTANCE hInst, int nGroupId)
 	m_pcMruListener = new MruListener();
 
 	// プロパティ管理
-	m_pcPropertyManager = new CPropertyManager();
+	m_pcPropertyManager = new PropertyManager();
 	m_pcPropertyManager->Create(
 		m_pcEditWnd->GetHwnd(),
 		&GetIcons(),
@@ -80,7 +80,7 @@ void CEditApp::Create(HINSTANCE hInst, int nGroupId)
 	);
 }
 
-CEditApp::~CEditApp()
+EditApp::~EditApp()
 {
 	delete m_pcSMacroMgr;
 	delete m_pcPropertyManager;
@@ -93,7 +93,7 @@ CEditApp::~CEditApp()
 }
 
 // 共通設定 プロパティシート
-bool CEditApp::OpenPropertySheet(int nPageNum)
+bool EditApp::OpenPropertySheet(int nPageNum)
 {
 	// プロパティシートの作成
 	bool bRet = m_pcPropertyManager->OpenPropertySheet(m_pcEditWnd->GetHwnd(), nPageNum, false);
@@ -105,7 +105,7 @@ bool CEditApp::OpenPropertySheet(int nPageNum)
 }
 
 // タイプ別設定 プロパティシート
-bool CEditApp::OpenPropertySheetTypes(int nPageNum, CTypeConfig nSettingType)
+bool EditApp::OpenPropertySheetTypes(int nPageNum, CTypeConfig nSettingType)
 {
 	bool bRet = m_pcPropertyManager->OpenPropertySheetTypes(m_pcEditWnd->GetHwnd(), nPageNum, nSettingType);
 

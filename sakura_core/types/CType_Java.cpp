@@ -61,7 +61,7 @@ enum EFuncListJavaMode {
 };
 
 /* Java関数リスト作成 */
-void CDocOutline::MakeFuncList_Java(CFuncInfoArr* pcFuncInfoArr)
+void DocOutline::MakeFuncList_Java(FuncInfoArr* pcFuncInfoArr)
 {
 	const wchar_t*	pLine;
 	LogicInt	nLineLen;
@@ -98,7 +98,7 @@ void CDocOutline::MakeFuncList_Java(CFuncInfoArr* pcFuncInfoArr)
 	for (nLineCount=LogicInt(0); nLineCount<m_pcDocRef->m_cDocLineMgr.GetLineCount(); ++nLineCount) {
 		pLine = m_pcDocRef->m_cDocLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
 		for (i=0; i<nLineLen; i+=nCharChars) {
-			nCharChars = CNativeW::GetSizeOfChar(pLine, nLineLen, i);
+			nCharChars = NativeW::GetSizeOfChar(pLine, nLineLen, i);
 
 			/* エスケープシーケンスは常に取り除く */
 			if (L'\\' == pLine[i]) {

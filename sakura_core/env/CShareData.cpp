@@ -51,8 +51,8 @@ struct ARRHEAD {
 const unsigned int uShareDataVersion = N_SHAREDATA_VERSION;
 
 // CShareData_new2.cppと統合
-//@@@ 2002.01.03 YAZAKI m_tbMyButtonなどをCShareDataからCMenuDrawerへ移動
-CShareData::CShareData()
+//@@@ 2002.01.03 YAZAKI m_tbMyButtonなどをShareDataからCMenuDrawerへ移動
+ShareData::ShareData()
 {
 	m_hFileMap   = NULL;
 	m_pShareData = NULL;
@@ -63,7 +63,7 @@ CShareData::CShareData()
 	共有メモリ領域がある場合はプロセスのアドレス空間から､
 	すでにマップされているファイル ビューをアンマップする。
 */
-CShareData::~CShareData()
+ShareData::~ShareData()
 {
 	if (m_pShareData) {
 		// プロセスのアドレス空間から､ すでにマップされているファイル ビューをアンマップします
@@ -87,13 +87,13 @@ CShareData::~CShareData()
 
 static Mutex g_cMutexShareWork( FALSE, GSTR_MUTEX_SAKURA_SHAREWORK );
  
-Mutex& CShareData::GetMutexShareWork(){
+Mutex& ShareData::GetMutexShareWork(){
 	return g_cMutexShareWork;
 }
 
-//! CShareDataクラスの初期化処理
+//! ShareDataクラスの初期化処理
 /*!
-	CShareDataクラスを利用する前に必ず呼び出すこと。
+	ShareDataクラスを利用する前に必ず呼び出すこと。
 
 	@retval true 初期化成功
 	@retval false 初期化失敗
@@ -102,9 +102,9 @@ Mutex& CShareData::GetMutexShareWork(){
 	異なる場合は致命的エラーを防ぐためにfalseを返します。CProcess::Initialize()
 	でInit()に失敗するとメッセージを出してエディタの起動を中止します。
 */
-bool CShareData::InitShareData()
+bool ShareData::InitShareData()
 {
-	MY_RUNNINGTIMER(cRunningTimer, "CShareData::InitShareData");
+	MY_RUNNINGTIMER(cRunningTimer, "ShareData::InitShareData");
 
 	m_hwndTraceOutSource = NULL;	// 2006.06.26 ryoji
 
@@ -176,10 +176,10 @@ bool CShareData::InitShareData()
 		}
 
 //@@@ 2001.12.26 YAZAKI MRUリストは、CMRUに依頼する
-		CMRUFile cMRU;
+		MRUFile cMRU;
 		cMRU.ClearAll();
-//@@@ 2001.12.26 YAZAKI OPENFOLDERリストは、CMRUFolderにすべて依頼する
-		CMRUFolder cMRUFolder;
+//@@@ 2001.12.26 YAZAKI OPENFOLDERリストは、MRUFolderにすべて依頼する
+		MRUFolder cMRUFolder;
 		cMRUFolder.ClearAll();
 
 // From Here Sept. 19, 2000 JEPRO コメントアウトになっていた初めのブロックを復活しその下をコメントアウト
@@ -652,7 +652,7 @@ bool CShareData::InitShareData()
 			cProfile.SetReadingMode();
 			cProfile.ReadProfileRes( MAKEINTRESOURCE(IDR_MENU1), MAKEINTRESOURCE(ID_RC_TYPE_INI), &data );
 
-			CShareData_IO::IO_MainMenu( cProfile, &data, m_pShareData->m_common.m_sMainMenu, false );
+			ShareData_IO::IO_MainMenu( cProfile, &data, m_pShareData->m_common.m_sMainMenu, false );
 		}
 
 		{
@@ -661,17 +661,17 @@ bool CShareData::InitShareData()
 
 		{
 			/* m_PrintSettingArr[0]を設定して、残りの1～7にコピーする。
-				必要になるまで遅らせるために、CPrintに、CShareDataを操作する権限を与える。
+				必要になるまで遅らせるために、Printに、ShareDataを操作する権限を与える。
 				YAZAKI.
 			*/
 			{
 				/*
-					2006.08.16 Moca 初期化単位を PRINTSETTINGに変更。CShareDataには依存しない。
+					2006.08.16 Moca 初期化単位を PRINTSETTINGに変更。ShareDataには依存しない。
 				*/
 				TCHAR szSettingName[64];
 				int i = 0;
 				auto_sprintf( szSettingName, _T("印刷設定 %d"), i + 1 );
-				CPrint::SettingInitialize( m_pShareData->m_PrintSettingArr[0], szSettingName );	//	初期化命令。
+				Print::SettingInitialize( m_pShareData->m_PrintSettingArr[0], szSettingName );	//	初期化命令。
 			}
 			for (int i=1; i<MAX_PRINTSETTINGARR; ++i) {
 				m_pShareData->m_PrintSettingArr[i] = m_pShareData->m_PrintSettingArr[0];
@@ -748,7 +748,7 @@ bool CShareData::InitShareData()
 static
 void ConvertLangString(wchar_t* pBuf, size_t chBufSize, std::wstring& org, std::wstring& to)
 {
-	CNativeW mem;
+	NativeW mem;
 	mem.SetString(pBuf);
 	mem.Replace(org.c_str(), to.c_str());
 	auto_strncpy(pBuf, mem.GetStringPtr(), chBufSize);
@@ -758,7 +758,7 @@ void ConvertLangString(wchar_t* pBuf, size_t chBufSize, std::wstring& org, std::
 static
 void ConvertLangString(char* pBuf, size_t chBufSize, std::wstring& org, std::wstring& to)
 {
-	CNativeA mem;
+	NativeA mem;
 	mem.SetString(pBuf);
 	mem.Replace_j(to_achar(org.c_str()), to_achar(to.c_str()));
 	auto_strncpy(pBuf, mem.GetStringPtr(), chBufSize);
@@ -820,7 +820,7 @@ void ConvertLangValueImpl(
 	2. SelectLang呼び出し
 	3. 2回目呼び出し、valuesを使って新設定の言語に書き換え
 */
-void CShareData::ConvertLangValues(std::vector<std::wstring>& values, bool bSetValues)
+void ShareData::ConvertLangValues(std::vector<std::wstring>& values, bool bSetValues)
 {
 	DLLSHAREDATA& shareData = *m_pShareData;
 	int index = 0;
@@ -903,7 +903,7 @@ void CShareData::ConvertLangValues(std::vector<std::wstring>& values, bool bSetV
 	@retval	true すでに開いていた
 	@retval	false 開いていなかった
 */
-bool CShareData::IsPathOpened(const TCHAR* pszPath, HWND* phwndOwner)
+bool ShareData::IsPathOpened(const TCHAR* pszPath, HWND* phwndOwner)
 {
 	*phwndOwner = NULL;
 
@@ -916,7 +916,7 @@ bool CShareData::IsPathOpened(const TCHAR* pszPath, HWND* phwndOwner)
 	}
 
 	// 現在の編集ウィンドウの数を調べる
-	if (CAppNodeGroupHandle(0).GetEditorWindowsNum() == 0) {
+	if (AppNodeGroupHandle(0).GetEditorWindowsNum() == 0) {
 		return false;
 	}
 	
@@ -954,7 +954,7 @@ bool CShareData::IsPathOpened(const TCHAR* pszPath, HWND* phwndOwner)
 
 	@date 2007.03.12 maru 新規作成
 */
-bool CShareData::ActiveAlreadyOpenedWindow(const TCHAR* pszPath, HWND* phwndOwner, ECodeType nCharCode)
+bool ShareData::ActiveAlreadyOpenedWindow(const TCHAR* pszPath, HWND* phwndOwner, ECodeType nCharCode)
 {
 	if (IsPathOpened(pszPath, phwndOwner)) {
 		
@@ -991,7 +991,7 @@ bool CShareData::ActiveAlreadyOpenedWindow(const TCHAR* pszPath, HWND* phwndOwne
 		ActivateFrameWindow(*phwndOwner);
 
 		// MRUリストへの登録
-		CMRUFile().Add(pfi);
+		MRUFile().Add(pfi);
 		return true;
 	}else {
 		return false;
@@ -1007,7 +1007,7 @@ bool CShareData::ActiveAlreadyOpenedWindow(const TCHAR* pszPath, HWND* phwndOwne
 	@param lpFmt [in] 書式指定文字列(wchar_t版)
 	@date 2010.02.22 Moca auto_vsprintfから tchar_vsnprintf_s に変更.長すぎるときは切り詰められる
 */
-void CShareData::TraceOut(LPCTSTR lpFmt, ...)
+void ShareData::TraceOut(LPCTSTR lpFmt, ...)
 {
 	if (!OpenDebugWindow(m_hwndTraceOutSource, false)) {
 		return;
@@ -1040,7 +1040,7 @@ void CShareData::TraceOut(LPCTSTR lpFmt, ...)
 	@param  len   pStrの文字数(終端NULを含まない) -1で自動計算
 	@date 2010.05.11 Moca 新設
 */
-void CShareData::TraceOutString(const wchar_t* pStr, int len)
+void ShareData::TraceOutString(const wchar_t* pStr, int len)
 {
 	if (!OpenDebugWindow(m_hwndTraceOutSource, false)) {
 		return;
@@ -1055,7 +1055,7 @@ void CShareData::TraceOutString(const wchar_t* pStr, int len)
 	int outPos = 0;
 	if (len == 0) {
 		// 0のときは何も追加しないが、カーソル移動が発生する
-		LockGuard<Mutex> guard( CShareData::GetMutexShareWork() );
+		LockGuard<Mutex> guard( ShareData::GetMutexShareWork() );
 		pOutBuffer[0] = L'\0';
 		::SendMessage(m_pShareData->m_handles.m_hwndDebug, MYWM_ADDSTRINGLEN_W, 0, 0);
 	}else {
@@ -1074,7 +1074,7 @@ void CShareData::TraceOutString(const wchar_t* pStr, int len)
 					--outLen;
 				}
 			}
-			LockGuard<Mutex> guard( CShareData::GetMutexShareWork() );
+			LockGuard<Mutex> guard( ShareData::GetMutexShareWork() );
 			wmemcpy(pOutBuffer, pStr + outPos, outLen);
 			pOutBuffer[outLen] = L'\0';
 			DWORD_PTR dwMsgResult;
@@ -1096,7 +1096,7 @@ void CShareData::TraceOutString(const wchar_t* pStr, int len)
 	@return true:表示できた。またはすでに表示されている。
 	@date 2010.05.11 Moca TraceOutから分離
 */
-bool CShareData::OpenDebugWindow(HWND hwnd, bool bAllwaysActive)
+bool ShareData::OpenDebugWindow(HWND hwnd, bool bAllwaysActive)
 {
 	bool ret = true;
 	if (!m_pShareData->m_handles.m_hwndDebug
@@ -1133,13 +1133,13 @@ bool CShareData::OpenDebugWindow(HWND hwnd, bool bAllwaysActive)
 }
 
 // iniファイルの保存先がユーザ別設定フォルダかどうか	// 2007.05.25 ryoji
-bool CShareData::IsPrivateSettings(void) {
+bool ShareData::IsPrivateSettings(void) {
 	return m_pShareData->m_fileNameManagement.m_IniFolder.m_bWritePrivate;
 }
 
 
 /*
-	CShareData::CheckMRUandOPENFOLDERList
+	ShareData::CheckMRUandOPENFOLDERList
 	MRUとOPENFOLDERリストの存在チェックなど
 	存在しないファイルやフォルダはMRUやOPENFOLDERリストから削除する
 
@@ -1165,7 +1165,7 @@ bool CShareData::IsPrivateSettings(void) {
 	
 	@note idxは正確なものでなければならない。(内部で正当性チェックを行っていない)
 */
-int CShareData::GetMacroFilename(int idx, TCHAR* pszPath, int nBufLen)
+int ShareData::GetMacroFilename(int idx, TCHAR* pszPath, int nBufLen)
 {
 	if (idx != -1 && !m_pShareData->m_common.m_sMacro.m_MacroTable[idx].IsEnabled())
 		return 0;
@@ -1229,7 +1229,7 @@ int CShareData::GetMacroFilename(int idx, TCHAR* pszPath, int nBufLen)
 	idxは正確なものでなければならない。
 	YAZAKI
 */
-bool CShareData::BeReloadWhenExecuteMacro(int idx)
+bool ShareData::BeReloadWhenExecuteMacro(int idx)
 {
 	if (!m_pShareData->m_common.m_sMacro.m_MacroTable[idx].IsEnabled()) {
 		return false;
@@ -1243,10 +1243,10 @@ bool CShareData::BeReloadWhenExecuteMacro(int idx)
 	ツールバー関連の初期化処理
 
 	@author genta
-	@date 2005.01.30 genta CShareData::Init()から分離．
+	@date 2005.01.30 genta ShareData::Init()から分離．
 		一つずつ設定しないで一気にデータ転送するように．
 */
-void CShareData::InitToolButtons(DLLSHAREDATA* pShareData)
+void ShareData::InitToolButtons(DLLSHAREDATA* pShareData)
 {
 	// ツールバーボタン構造体
 	// Sept. 16, 2000 JEPRO
@@ -1305,9 +1305,9 @@ void CShareData::InitToolButtons(DLLSHAREDATA* pShareData)
 
 	ポップアップメニューの初期化処理
 
-	@date 2005.01.30 genta CShareData::Init()から分離．
+	@date 2005.01.30 genta ShareData::Init()から分離．
 */
-void CShareData::InitPopupMenu(DLLSHAREDATA* pShareData)
+void ShareData::InitPopupMenu(DLLSHAREDATA* pShareData)
 {
 	// カスタムメニュー 規定値
 	
@@ -1486,26 +1486,26 @@ void CShareData::InitPopupMenu(DLLSHAREDATA* pShareData)
 }
 
 // 言語選択後に共有メモリ内の文字列を更新する
-void CShareData::RefreshString()
+void ShareData::RefreshString()
 {
 
 	RefreshKeyAssignString(m_pShareData);
 }
 
-void CShareData::CreateTypeSettings()
+void ShareData::CreateTypeSettings()
 {
 	if (!m_pvTypeSettings) {
 		m_pvTypeSettings = new std::vector<TypeConfig*>();
 	}
 }
 
-std::vector<TypeConfig*>& CShareData::GetTypeSettings()
+std::vector<TypeConfig*>& ShareData::GetTypeSettings()
 {
 	return *m_pvTypeSettings;
 }
 
 
-void CShareData::InitFileTree( FileTree* setting )
+void ShareData::InitFileTree( FileTree* setting )
 {
 	setting->m_bProject = true;
 	for (int i=0; i<(int)_countof(setting->m_aItems); ++i) {

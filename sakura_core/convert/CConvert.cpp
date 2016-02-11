@@ -29,7 +29,7 @@
 
 // 機能種別によるバッファの変換
 void ConvertMediator::ConvMemory(
-	CNativeW* pCMemory,
+	NativeW* pCMemory,
 	EFunctionCode nFuncCode,
 	int nTabWidth,
 	int nStartColumn
@@ -63,7 +63,7 @@ void ConvertMediator::ConvMemory(
 
 	ECodeType ecode = CODE_NONE;
 	if (nFuncCode == F_CODECNV_AUTO2SJIS) {
-		CodeMediator ccode(CEditWnd::getInstance()->GetDocument()->m_cDocType.GetDocumentAttribute().m_encoding);
+		CodeMediator ccode(EditWnd::getInstance()->GetDocument()->m_cDocType.GetDocumentAttribute().m_encoding);
 		ecode = ccode.CheckKanjiCode(
 			reinterpret_cast<const char*>(pCMemory->_GetMemory()->GetRawPtr()),
 			pCMemory->_GetMemory()->GetRawLength());

@@ -26,14 +26,14 @@
 
 	@date 2002.2.17 YAZAKI CShareDataのインスタンスは、CProcessにひとつあるのみ。
 */
-CMRUFolder::CMRUFolder()
+MRUFolder::MRUFolder()
 {
 	// 初期化。
 	m_pShareData = &GetDllShareData();
 }
 
 // デストラクタ
-CMRUFolder::~CMRUFolder()
+MRUFolder::~MRUFolder()
 {
 	m_cRecentFolder.Terminate();
 }
@@ -47,7 +47,7 @@ CMRUFolder::~CMRUFolder()
 
 	2010/5/21 Uchi 組み直し
 */
-HMENU CMRUFolder::CreateMenu(CMenuDrawer* pCMenuDrawer) const
+HMENU MRUFolder::CreateMenu(MenuDrawer* pCMenuDrawer) const
 {
 	HMENU hMenuPopUp = ::CreatePopupMenu();	// Jan. 29, 2002 genta
 	return CreateMenu(hMenuPopUp, pCMenuDrawer);
@@ -62,16 +62,16 @@ HMENU CMRUFolder::CreateMenu(CMenuDrawer* pCMenuDrawer) const
 	@author Norio Nakantani
 	@return メニューのハンドル
 */
-HMENU CMRUFolder::CreateMenu(HMENU	hMenuPopUp, CMenuDrawer* pCMenuDrawer) const
+HMENU MRUFolder::CreateMenu(HMENU	hMenuPopUp, MenuDrawer* pCMenuDrawer) const
 {
 	TCHAR szMenu[_MAX_PATH * 2 + 10];				//	メニューキャプション
 
 	NONCLIENTMETRICS met;
 	met.cbSize = CCSIZEOF_STRUCT(NONCLIENTMETRICS, lfMessageFont);
 	::SystemParametersInfo(SPI_GETNONCLIENTMETRICS, met.cbSize, &met, 0);
-	CDCFont dcFont(met.lfMenuFont);
+	DCFont dcFont(met.lfMenuFont);
 
-	CFileNameManager::getInstance()->TransformFileName_MakeCache();
+	FileNameManager::getInstance()->TransformFileName_MakeCache();
 	for (int i=0; i<m_cRecentFolder.GetItemCount(); ++i) {
 		//	「共通設定」→「全般」→「ファイルの履歴MAX」を反映
 		if (i >= m_cRecentFolder.GetViewCount()) {
@@ -81,7 +81,7 @@ HMENU CMRUFolder::CreateMenu(HMENU	hMenuPopUp, CMenuDrawer* pCMenuDrawer) const
 		const TCHAR* pszFolder = m_cRecentFolder.GetItemText(i);
 		bool bFavorite = m_cRecentFolder.IsFavorite(i);
 		bool bFavoriteLabel = bFavorite && !m_pShareData->m_common.m_sWindow.m_bMenuIcon;
-		CFileNameManager::getInstance()->GetMenuFullLabel(szMenu, _countof(szMenu), true, pszFolder, -1, false, CODE_NONE, bFavoriteLabel, i, true, dcFont.GetHDC());
+		FileNameManager::getInstance()->GetMenuFullLabel(szMenu, _countof(szMenu), true, pszFolder, -1, false, CODE_NONE, bFavoriteLabel, i, true, dcFont.GetHDC());
 
 		// メニューに追加
 		pCMenuDrawer->MyAppendMenu(
@@ -97,7 +97,7 @@ HMENU CMRUFolder::CreateMenu(HMENU	hMenuPopUp, CMenuDrawer* pCMenuDrawer) const
 	return hMenuPopUp;
 }
 
-std::vector<LPCTSTR> CMRUFolder::GetPathList() const
+std::vector<LPCTSTR> MRUFolder::GetPathList() const
 {
 	std::vector<LPCTSTR> ret;
 	for (int i=0; i<m_cRecentFolder.GetItemCount(); ++i) {
@@ -110,12 +110,12 @@ std::vector<LPCTSTR> CMRUFolder::GetPathList() const
 	return ret;
 }
 
-int CMRUFolder::Length() const
+int MRUFolder::Length() const
 {
 	return m_cRecentFolder.GetItemCount();
 }
 
-void CMRUFolder::ClearAll()
+void MRUFolder::ClearAll()
 {
 	m_cRecentFolder.DeleteAllItem();
 }
@@ -124,7 +124,7 @@ void CMRUFolder::ClearAll()
 
 	@date 2001.12.26  CShareData::AddOPENFOLDERListから移動した。（YAZAKI）
 */
-void CMRUFolder::Add(const TCHAR* pszFolder)
+void MRUFolder::Add(const TCHAR* pszFolder)
 {
 	if (!pszFolder
 	 || pszFolder[0] == _T('\0')
@@ -137,7 +137,7 @@ void CMRUFolder::Add(const TCHAR* pszFolder)
 		int nSize = m_pShareData->m_history.m_aExceptMRU.size();
 		for (int i=0; i<nSize; ++i) {
 			TCHAR szExceptMRU[_MAX_PATH];
-			CFileNameManager::ExpandMetaToFolder(m_pShareData->m_history.m_aExceptMRU[i], szExceptMRU, _countof(szExceptMRU));
+			FileNameManager::ExpandMetaToFolder(m_pShareData->m_history.m_aExceptMRU[i], szExceptMRU, _countof(szExceptMRU));
 			if (_tcsistr(pszFolder, szExceptMRU)) {
 				return;
 			}
@@ -147,7 +147,7 @@ void CMRUFolder::Add(const TCHAR* pszFolder)
 	m_cRecentFolder.AppendItem(pszFolder);
 }
 
-const TCHAR* CMRUFolder::GetPath(int num) const
+const TCHAR* MRUFolder::GetPath(int num) const
 {
 	return m_cRecentFolder.GetItemText(num);
 }

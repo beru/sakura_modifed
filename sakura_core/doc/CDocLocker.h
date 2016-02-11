@@ -25,9 +25,9 @@
 
 #include "doc/CDocListener.h"
 
-class CDocLocker : public DocListenerEx {
+class DocLocker : public DocListenerEx {
 public:
-	CDocLocker();
+	DocLocker();
 
 	// ÉNÉäÉA
 	void Clear(void) { m_bIsDocWritable = true; }

@@ -7,7 +7,7 @@
 
 	@par TODO
 	@li 未知のエンジンに対応できるようCMacroFactoryを変更 → 要議論
-	@li CEditView::HandleCommandを使う → CMacro::HandleCommandでもなにかやってるようなのでいじらない方が？
+	@li EditView::HandleCommandを使う → CMacro::HandleCommandでもなにかやってるようなのでいじらない方が？
 	@li vector::reserveを使う → CSMacroMgrで個数が宣言されて無いので見送り
 	@li 再描画の代わりにShowEditCaret → protectedですよー
 */
@@ -26,31 +26,31 @@
 #include "macro/CSMacroMgr.h"
 #include "macro/CMacroManagerBase.h"
 #include "macro/CWSHIfObj.h"
-class CEditView;
+class EditView;
 
 typedef void (*EngineCallback)(wchar_t* Ext, char* EngineName);
 
-class CWSHMacroManager : public CMacroManagerBase {
+class WSHMacroManager : public MacroManagerBase {
 public:
-	CWSHMacroManager(std::wstring const AEngineName);
-	virtual ~CWSHMacroManager();
+	WSHMacroManager(std::wstring const AEngineName);
+	virtual ~WSHMacroManager();
 
 	// 2007.07.20 genta : flags追加
-	virtual bool ExecKeyMacro(CEditView *EditView, int flags) const;
+	virtual bool ExecKeyMacro(EditView *EditView, int flags) const;
 	virtual bool LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath);
 	virtual bool LoadKeyMacroStr(HINSTANCE hInstance, const TCHAR* pszCode);
 
-	static CMacroManagerBase* Creator(const TCHAR* FileExt);
+	static MacroManagerBase* Creator(const TCHAR* FileExt);
 	static void declare();
 
-	void AddParam(CWSHIfObj* param);				// インタフェースオブジェクトを追加する
-	void AddParam(CWSHIfObj::List& params);		// インタフェースオブジェクト達を追加する
+	void AddParam(WSHIfObj* param);				// インタフェースオブジェクトを追加する
+	void AddParam(WSHIfObj::List& params);		// インタフェースオブジェクト達を追加する
 	void ClearParam();								// インタフェースオブジェクトを削除する
 protected:
 	std::wstring m_Source;
 	std::wstring m_EngineName;
-	CWSHIfObj::List m_Params;
-	// 2009.10.29 syat CWSHIfObjへ移動
+	WSHIfObj::List m_Params;
+	// 2009.10.29 syat WSHIfObjへ移動
 	////	2007.07.20 genta : flags追加
 	//static void ReadyCommands(CIfObj *Object, MacroFuncInfo *Info, int flags);
 };

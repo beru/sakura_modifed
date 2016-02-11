@@ -33,7 +33,7 @@
 #include <string>
 #include <vector>
 #include "_os/OleTypes.h"
-class CEditView;
+class EditView;
 
 // COMˆê”Ê
 

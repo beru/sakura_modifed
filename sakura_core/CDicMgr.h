@@ -33,7 +33,7 @@ public:
 	*/
 //	BOOL Open(char*);
 	static
-	BOOL Search(const wchar_t*, const int, CNativeW**, CNativeW**, const TCHAR*, int*);	// 2006.04.10 fon (const int, CMemory**, int*)ˆø”‚ğ’Ç‰Á
+	BOOL Search(const wchar_t*, const int, NativeW**, NativeW**, const TCHAR*, int*);	// 2006.04.10 fon (const int, CMemory**, int*)ˆø”‚ğ’Ç‰Á
 	
 	static
 	int HokanSearch(const wchar_t* , bool, vector_ex<std::wstring>&, int, const TCHAR*);

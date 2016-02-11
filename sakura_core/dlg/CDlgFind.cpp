@@ -44,7 +44,7 @@ const DWORD p_helpids[] = {	//11800
 	0, 0
 };	//@@@ 2002.01.07 add end MIK
 
-CDlgFind::CDlgFind()
+DlgFind::DlgFind()
 {
 	m_searchOption.Reset();
 	return;
@@ -56,7 +56,7 @@ CDlgFind::CDlgFind()
 
 	@date 2013.03.24 novice 新規作成
 */
-BOOL CDlgFind::OnCbnDropDown(HWND hwndCtl, int wID)
+BOOL DlgFind::OnCbnDropDown(HWND hwndCtl, int wID)
 {
 	switch (wID) {
 	case IDC_COMBO_TEXT:
@@ -69,12 +69,12 @@ BOOL CDlgFind::OnCbnDropDown(HWND hwndCtl, int wID)
 		}
 		break;
 	}
-	return CDialog::OnCbnDropDown( hwndCtl, wID );
+	return Dialog::OnCbnDropDown( hwndCtl, wID );
 }
 
 
 // モードレスダイアログの表示
-HWND CDlgFind::DoModeless(
+HWND DlgFind::DoModeless(
 	HINSTANCE hInstance,
 	HWND hwndParent,
 	LPARAM lParam
@@ -83,26 +83,26 @@ HWND CDlgFind::DoModeless(
 	auto& csSearch = m_pShareData->m_common.m_sSearch;
 	m_searchOption = csSearch.m_searchOption;		// 検索オプション
 	m_bNOTIFYNOTFOUND = csSearch.m_bNOTIFYNOTFOUND;	// 検索／置換  見つからないときメッセージを表示
-	m_ptEscCaretPos_PHY = ((CEditView*)lParam)->GetCaret().GetCaretLogicPos();	// 検索開始時のカーソル位置退避
-	((CEditView*)lParam)->m_bSearch = TRUE;							// 検索開始位置の登録有無		02/07/28 ai
-	return CDialog::DoModeless(hInstance, hwndParent, IDD_FIND, lParam, SW_SHOW);
+	m_ptEscCaretPos_PHY = ((EditView*)lParam)->GetCaret().GetCaretLogicPos();	// 検索開始時のカーソル位置退避
+	((EditView*)lParam)->m_bSearch = TRUE;							// 検索開始位置の登録有無		02/07/28 ai
+	return Dialog::DoModeless(hInstance, hwndParent, IDD_FIND, lParam, SW_SHOW);
 }
 
 // モードレス時：検索対象となるビューの変更
-void CDlgFind::ChangeView(LPARAM pcEditView)
+void DlgFind::ChangeView(LPARAM pcEditView)
 {
 	m_lParam = pcEditView;
 	return;
 }
 
 
-BOOL CDlgFind::OnInitDialog(
+BOOL DlgFind::OnInitDialog(
 	HWND hwnd,
 	WPARAM wParam,
 	LPARAM lParam
 	)
 {
-	BOOL bRet = CDialog::OnInitDialog(hwnd, wParam, lParam);
+	BOOL bRet = Dialog::OnInitDialog(hwnd, wParam, lParam);
 	m_comboDel = ComboBoxItemDeleter();
 	m_comboDel.pRecent = &m_cRecentSearch;
 	SetComboBoxDeleter(GetItemHwnd(IDC_COMBO_TEXT), &m_comboDel);
@@ -115,17 +115,17 @@ BOOL CDlgFind::OnInitDialog(
 }
 
 
-BOOL CDlgFind::OnDestroy()
+BOOL DlgFind::OnDestroy()
 {
 	m_cFontText.ReleaseOnDestroy();
-	return CDialog::OnDestroy();
+	return Dialog::OnDestroy();
 }
 
 
 // ダイアログデータの設定
-void CDlgFind::SetData(void)
+void DlgFind::SetData(void)
 {
-//	MYTRACE(_T("CDlgFind::SetData()"));
+//	MYTRACE(_T("DlgFind::SetData()"));
 
 	/*****************************
 	*           初期化           *
@@ -191,7 +191,7 @@ void CDlgFind::SetData(void)
 
 // 検索文字列リストの設定
 // 2010/5/28 Uchi
-void CDlgFind::SetCombosList(void)
+void DlgFind::SetCombosList(void)
 {
 	// 検索文字列
 	HWND hwndCombo = GetItemHwnd(IDC_COMBO_TEXT);
@@ -208,9 +208,9 @@ void CDlgFind::SetCombosList(void)
 
 
 // ダイアログデータの取得
-int CDlgFind::GetData(void)
+int DlgFind::GetData(void)
 {
-//	MYTRACE(_T("CDlgFind::GetData()"));
+//	MYTRACE(_T("DlgFind::GetData()"));
 
 	// 英大文字と英小文字を区別する
 	m_searchOption.bLoHiCase = IsButtonChecked(IDC_CHK_LOHICASE);
@@ -256,10 +256,10 @@ int CDlgFind::GetData(void)
 		// 検索文字列
 		//@@@ 2002.2.2 YAZAKI CShareDataに移動
 		if (m_strText.size() < _MAX_PATH) {
-			CSearchKeywordManager().AddToSearchKeyArr(m_strText.c_str());
+			SearchKeywordManager().AddToSearchKeyArr(m_strText.c_str());
 			m_pShareData->m_common.m_sSearch.m_searchOption = m_searchOption;		// 検索オプション
 		}
-		CEditView* pcEditView = (CEditView*)m_lParam;
+		EditView* pcEditView = (EditView*)m_lParam;
 		if (1
 			&& pcEditView->m_strCurSearchKey == m_strText
 			&& pcEditView->m_curSearchOption == m_searchOption
@@ -282,10 +282,10 @@ int CDlgFind::GetData(void)
 }
 
 
-BOOL CDlgFind::OnBnClicked(int wID)
+BOOL DlgFind::OnBnClicked(int wID)
 {
 	int nRet;
-	CEditView*	pcEditView = (CEditView*)m_lParam;
+	EditView*	pcEditView = (EditView*)m_lParam;
 	switch (wID) {
 	case IDC_BUTTON_HELP:
 		//「検索」のヘルプ
@@ -406,19 +406,19 @@ BOOL CDlgFind::OnBnClicked(int wID)
 	return FALSE;
 }
 
-BOOL CDlgFind::OnActivate(WPARAM wParam, LPARAM lParam)
+BOOL DlgFind::OnActivate(WPARAM wParam, LPARAM lParam)
 {
 	// 0文字幅マッチ描画のON/OFF	// 2009.11.29 ryoji
-	CEditView* pcEditView = (CEditView*)m_lParam;
+	EditView* pcEditView = (EditView*)m_lParam;
 	LayoutRange cRangeSel = pcEditView->GetSelectionInfo().m_sSelect;
 	if (cRangeSel.IsValid() && cRangeSel.IsLineOne() && cRangeSel.IsOne())
 		pcEditView->InvalidateRect(NULL);	// アクティブ化／非アクティブ化が完了してから再描画
 
-	return CDialog::OnActivate(wParam, lParam);
+	return Dialog::OnActivate(wParam, lParam);
 }
 
 //@@@ 2002.01.18 add start
-LPVOID CDlgFind::GetHelpIdTable(void)
+LPVOID DlgFind::GetHelpIdTable(void)
 {
 	return (LPVOID)p_helpids;
 }

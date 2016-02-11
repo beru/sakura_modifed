@@ -39,9 +39,9 @@ struct Share_SearchKeywords {
 };
 
 // 検索キーワード管理
-class CSearchKeywordManager {
+class SearchKeywordManager {
 public:
-	CSearchKeywordManager() {
+	SearchKeywordManager() {
 		m_pShareData = &GetDllShareData();
 	}
 	//@@@ 2002.2.2 YAZAKI

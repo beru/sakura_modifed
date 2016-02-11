@@ -50,10 +50,10 @@ bool _IsPosKeywordHead(const CStringRef& cStr, int nPos)
 */
 bool ColorStrategyInfo::CheckChangeColor(const CStringRef& cLineStr)
 {
-	CColorStrategyPool* pool = CColorStrategyPool::getInstance();
+	ColorStrategyPool* pool = ColorStrategyPool::getInstance();
 	pool->SetCurrentView(m_pcView);
-	CColor_Found*  pcFound  = pool->GetFoundStrategy();
-	CColor_Select* pcSelect = pool->GetSelectStrategy();
+	Color_Found*  pcFound  = pool->GetFoundStrategy();
+	Color_Select* pcSelect = pool->GetSelectStrategy();
 	bool bChange = false;
 
 	// 選択範囲色終了
@@ -140,7 +140,7 @@ bool ColorStrategyInfo::CheckChangeColor(const CStringRef& cLineStr)
 	if (m_pcView->m_bMiniMap) {
 		CTypeSupport cPageViewBg(m_pcView, COLORIDX_PAGEVIEW);
 		if (cPageViewBg.IsDisp()) {
-			CEditView& cActiveView = m_pcView->m_pcEditWnd->GetActiveView();
+			EditView& cActiveView = m_pcView->m_pcEditWnd->GetActiveView();
 			LayoutInt curLine = m_pDispPos->GetLayoutLineRef();
 			if (m_colorIdxBackLine == COLORIDX_PAGEVIEW) {
 				if (cActiveView.GetTextArea().GetViewTopLine() <= curLine && curLine < cActiveView.GetTextArea().GetBottomLine()) {
@@ -190,19 +190,19 @@ void ColorStrategyInfo::DoChangeColor(Color3Setting *pcColor)
 //                          プール                             //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-CColorStrategyPool::CColorStrategyPool()
+ColorStrategyPool::ColorStrategyPool()
 {
-	m_pcView = &(CEditWnd::getInstance()->GetView(0));
-	m_pcSelectStrategy = new CColor_Select();
-	m_pcFoundStrategy = new CColor_Found();
-//	m_vStrategies.push_back(new CColor_Found);				// マッチ文字列
+	m_pcView = &(EditWnd::getInstance()->GetView(0));
+	m_pcSelectStrategy = new Color_Select();
+	m_pcFoundStrategy = new Color_Found();
+//	m_vStrategies.push_back(new Color_Found);				// マッチ文字列
 	m_vStrategies.push_back(new CColor_RegexKeyword);		// 正規表現キーワード
-	m_vStrategies.push_back(new CColor_Heredoc);			// ヒアドキュメント
-	m_vStrategies.push_back(new CColor_BlockComment(COLORIDX_BLOCK1));	// ブロックコメント
-	m_vStrategies.push_back(new CColor_BlockComment(COLORIDX_BLOCK2));	// ブロックコメント2
-	m_vStrategies.push_back(new CColor_LineComment);		// 行コメント
-	m_vStrategies.push_back(new CColor_SingleQuote);		// シングルクォーテーション文字列
-	m_vStrategies.push_back(new CColor_DoubleQuote);		// ダブルクォーテーション文字列
+	m_vStrategies.push_back(new Color_Heredoc);			// ヒアドキュメント
+	m_vStrategies.push_back(new Color_BlockComment(COLORIDX_BLOCK1));	// ブロックコメント
+	m_vStrategies.push_back(new Color_BlockComment(COLORIDX_BLOCK2));	// ブロックコメント2
+	m_vStrategies.push_back(new Color_LineComment);		// 行コメント
+	m_vStrategies.push_back(new Color_SingleQuote);		// シングルクォーテーション文字列
+	m_vStrategies.push_back(new Color_DoubleQuote);		// ダブルクォーテーション文字列
 	m_vStrategies.push_back(new CColor_Url);				// URL
 	m_vStrategies.push_back(new CColor_Numeric);			// 半角数字
 	m_vStrategies.push_back(new CColor_KeywordSet);			// キーワードセット
@@ -211,7 +211,7 @@ CColorStrategyPool::CColorStrategyPool()
 	OnChangeSetting();
 }
 
-CColorStrategyPool::~CColorStrategyPool()
+ColorStrategyPool::~ColorStrategyPool()
 {
 	SAFE_DELETE(m_pcSelectStrategy);
 	SAFE_DELETE(m_pcFoundStrategy);
@@ -223,7 +223,7 @@ CColorStrategyPool::~CColorStrategyPool()
 	m_vStrategies.clear();
 }
 
-CColorStrategy*	CColorStrategyPool::GetStrategyByColor(EColorIndexType eColor) const
+ColorStrategy*	ColorStrategyPool::GetStrategyByColor(EColorIndexType eColor) const
 {
 	if (COLORIDX_SEARCH <= eColor && eColor <= COLORIDX_SEARCHTAIL) {
 		return m_pcFoundStrategy;
@@ -237,7 +237,7 @@ CColorStrategy*	CColorStrategyPool::GetStrategyByColor(EColorIndexType eColor) c
 	return NULL;
 }
 
-void CColorStrategyPool::NotifyOnStartScanLogic()
+void ColorStrategyPool::NotifyOnStartScanLogic()
 {
 	m_pcSelectStrategy->OnStartScanLogic();
 	m_pcFoundStrategy->OnStartScanLogic();
@@ -248,8 +248,8 @@ void CColorStrategyPool::NotifyOnStartScanLogic()
 }
 
 // 2005.11.20 Mocaコメントの色分けがON/OFF関係なく行われていたバグを修正
-void CColorStrategyPool::CheckColorMODE(
-	CColorStrategy**	ppcColorStrategy,	// [in/out]
+void ColorStrategyPool::CheckColorMODE(
+	ColorStrategy**	ppcColorStrategy,	// [in/out]
 	int					nPos,
 	const CStringRef&	cLineStr
 )
@@ -277,7 +277,7 @@ void CColorStrategyPool::CheckColorMODE(
 
 /*! 設定更新
 */
-void CColorStrategyPool::OnChangeSetting(void)
+void ColorStrategyPool::OnChangeSetting(void)
 {
 	m_vStrategiesDisp.clear();
 
@@ -294,12 +294,12 @@ void CColorStrategyPool::OnChangeSetting(void)
 	}
 
 	// CheckColorMODE 用
-	m_pcHeredoc = static_cast<CColor_Heredoc*>(GetStrategyByColor(COLORIDX_HEREDOC));
-	m_pcBlockComment1 = static_cast<CColor_BlockComment*>(GetStrategyByColor(COLORIDX_BLOCK1));	// ブロックコメント
-	m_pcBlockComment2 = static_cast<CColor_BlockComment*>(GetStrategyByColor(COLORIDX_BLOCK2));	// ブロックコメント2
-	m_pcLineComment = static_cast<CColor_LineComment*>(GetStrategyByColor(COLORIDX_COMMENT));	// 行コメント
-	m_pcSingleQuote = static_cast<CColor_SingleQuote*>(GetStrategyByColor(COLORIDX_SSTRING));	// シングルクォーテーション文字列
-	m_pcDoubleQuote = static_cast<CColor_DoubleQuote*>(GetStrategyByColor(COLORIDX_WSTRING));	// ダブルクォーテーション文字列
+	m_pcHeredoc = static_cast<Color_Heredoc*>(GetStrategyByColor(COLORIDX_HEREDOC));
+	m_pcBlockComment1 = static_cast<Color_BlockComment*>(GetStrategyByColor(COLORIDX_BLOCK1));	// ブロックコメント
+	m_pcBlockComment2 = static_cast<Color_BlockComment*>(GetStrategyByColor(COLORIDX_BLOCK2));	// ブロックコメント2
+	m_pcLineComment = static_cast<Color_LineComment*>(GetStrategyByColor(COLORIDX_COMMENT));	// 行コメント
+	m_pcSingleQuote = static_cast<Color_SingleQuote*>(GetStrategyByColor(COLORIDX_SSTRING));	// シングルクォーテーション文字列
+	m_pcDoubleQuote = static_cast<Color_DoubleQuote*>(GetStrategyByColor(COLORIDX_WSTRING));	// ダブルクォーテーション文字列
 
 	// 色分けをしない場合に、処理をスキップできるように確認する
 	const TypeConfig& type = EditDoc::GetInstance(0)->m_cDocType.GetDocumentAttribute();
@@ -357,7 +357,7 @@ void CColorStrategyPool::OnChangeSetting(void)
 	}
 }
 
-bool CColorStrategyPool::IsSkipBeforeLayout()
+bool ColorStrategyPool::IsSkipBeforeLayout()
 {
 	if (!m_bSkipBeforeLayoutGeneral) {
 		return false;

@@ -39,13 +39,13 @@
 #include "_main/global.h"
 
 //! メモリバッファクラス
-class CMemory {
+class Memory {
 	// コンストラクタ・デストラクタ
 public:
-	CMemory();
-	CMemory(const CMemory& rhs);
-	CMemory(const void* pData, int nDataLenBytes);
-	virtual ~CMemory();
+	Memory();
+	Memory(const Memory& rhs);
+	Memory(const void* pData, int nDataLenBytes);
+	virtual ~Memory();
 protected:
 	void _init_members();
 
@@ -53,11 +53,11 @@ protected:
 public:
 	void AllocBuffer(int);								//!< バッファサイズの調整。必要に応じて拡大する。
 	void SetRawData(const void* pData, int nDataLen);		//!< バッファの内容を置き換える
-	void SetRawData(const CMemory&);						//!< バッファの内容を置き換える
+	void SetRawData(const Memory&);						//!< バッファの内容を置き換える
 	void SetRawDataHoldBuffer( const void* pData, int nDataLen );    //!< バッファの内容を置き換える(バッファを保持)
-	void SetRawDataHoldBuffer( const CMemory& );                     //!< バッファの内容を置き換える(バッファを保持)
+	void SetRawDataHoldBuffer( const Memory& );                     //!< バッファの内容を置き換える(バッファを保持)
 	void AppendRawData(const void* pData, int nDataLen);	//!< バッファの最後にデータを追加する
-	void AppendRawData(const CMemory*);					//!< バッファの最後にデータを追加する
+	void AppendRawData(const Memory*);					//!< バッファの最後にデータを追加する
 	void Clean() { _Empty(); }
 	void Clear() { _Empty(); }
 
@@ -68,15 +68,15 @@ public:
 	int GetRawLength() const { return m_nRawLen; }			//!< データ長を返す。バイト単位。
 
 	// 演算子
-	const CMemory& operator = (const CMemory&);
+	const Memory& operator = (const Memory&);
 
 	// 比較
-	static int IsEqual(CMemory&, CMemory&);	// 等しい内容か
+	static int IsEqual(Memory&, Memory&);	// 等しい内容か
 
 	// 変換関数
 	static void SwapHLByte(char*, const int); // 下記関数のstatic関数版
 	void SwapHLByte();			// Byteを交換する
-	bool SwabHLByte( const CMemory& ); // Byteを交換する(コピー版)
+	bool SwabHLByte( const Memory& ); // Byteを交換する(コピー版)
 
 
 protected:
@@ -88,7 +88,7 @@ protected:
 public:
 	void _AppendSz(const char* str);
 	void _SetRawLength(int nLength);
-	void swap(CMemory& left) {
+	void swap(Memory& left) {
 		std::swap(m_nDataBufSize, left.m_nDataBufSize);
 		std::swap(m_pRawData, left.m_pRawData);
 		std::swap(m_nRawLen, left.m_nRawLen);
@@ -115,14 +115,14 @@ private: // 2002/2/10 aroka アクセス権変更
 //                     inline関数の実装                        //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 inline
-const void* CMemory::GetRawPtr(int* pnLength) const //!< データへのポインタと長さ返す
+const void* Memory::GetRawPtr(int* pnLength) const //!< データへのポインタと長さ返す
 {
 	if (pnLength) *pnLength = GetRawLength();
 	return m_pRawData;
 }
 
 inline
-void* CMemory::GetRawPtr(int* pnLength) //!< データへのポインタと長さ返す
+void* Memory::GetRawPtr(int* pnLength) //!< データへのポインタと長さ返す
 {
 	if (pnLength) *pnLength = GetRawLength();
 	return m_pRawData;

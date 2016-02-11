@@ -51,7 +51,7 @@ void CType_Asm::InitTypeConfigImp(TypeConfig* pType)
 	@author MIK
 	@date 2004.04.12 çÏÇËíºÇµ
 */
-void CDocOutline::MakeTopicList_asm(CFuncInfoArr* pcFuncInfoArr)
+void DocOutline::MakeTopicList_asm(FuncInfoArr* pcFuncInfoArr)
 {
 	LogicInt nTotalLine;
 

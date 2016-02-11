@@ -7,13 +7,13 @@
 #include "codechecker.h"
 
 
-void UnicodeBe::GetBom(CMemory* pcmemBom)
+void UnicodeBe::GetBom(Memory* pcmemBom)
 {
 	static const BYTE UTF16BE_BOM[] = {0xFE, 0xFF};
 	pcmemBom->SetRawData(UTF16BE_BOM, sizeof(UTF16BE_BOM));
 }
 
-void UnicodeBe::GetEol(CMemory* pcmemEol, EEolType eEolType)
+void UnicodeBe::GetEol(Memory* pcmemEol, EEolType eEolType)
 {
 	static const struct{
 		const void* pData;

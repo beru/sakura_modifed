@@ -33,43 +33,43 @@
 #include "StdAfx.h"
 #include "CUxTheme.h"
 
-CUxTheme::CUxTheme()
+UxTheme::UxTheme()
 	:
 	m_bInitialized(false)
 {
 }
 
-CUxTheme::~CUxTheme()
+UxTheme::~UxTheme()
 {
 }
 
 
 /*! DLL のロード
 
-	一度しか LoadLibrary() 実行しないこと以外は CDllImp::Init() と同じ
+	一度しか LoadLibrary() 実行しないこと以外は DllImp::Init() と同じ
 	（UxTheme 未対応 OS での LoadLibrary() 失敗の繰返しを防ぐ）
 
 	@author ryoji
 	@date 2007.04.01 ryoji 新規
 */
-bool CUxTheme::InitThemeDll(TCHAR* str)
+bool UxTheme::InitThemeDll(TCHAR* str)
 {
 	if (m_bInitialized) {
 		return IsAvailable();
 	}
 	m_bInitialized = true;
-	return CDllImp::InitDll(str) == DLL_SUCCESS;
+	return DllImp::InitDll(str) == DLL_SUCCESS;
 }
 
 /*!
 	UxTheme のファイル名を渡す
 */
-LPCTSTR CUxTheme::GetDllNameImp(int nIndex)
+LPCTSTR UxTheme::GetDllNameImp(int nIndex)
 {
 	return _T("UxTheme.dll");
 }
 
-bool CUxTheme::InitDllImp()
+bool UxTheme::InitDllImp()
 {
 	const ImportTable table[] = {
 		{ &m_pfnIsThemeActive,							"IsThemeActive" },
@@ -89,7 +89,7 @@ bool CUxTheme::InitDllImp()
 }
 
 // IsThemeActive API Wrapper
-BOOL CUxTheme::IsThemeActive(VOID)
+BOOL UxTheme::IsThemeActive(VOID)
 {
 	if (!InitThemeDll()) {
 		return FALSE;
@@ -98,7 +98,7 @@ BOOL CUxTheme::IsThemeActive(VOID)
 }
 
 // SetWindowTheme API Wrapper
-HRESULT CUxTheme::SetWindowTheme(HWND hwnd, LPCWSTR pszSubAppName, LPCWSTR pszSubIdList)
+HRESULT UxTheme::SetWindowTheme(HWND hwnd, LPCWSTR pszSubAppName, LPCWSTR pszSubIdList)
 {
 	if (!InitThemeDll()) {
 		return S_FALSE;
@@ -107,7 +107,7 @@ HRESULT CUxTheme::SetWindowTheme(HWND hwnd, LPCWSTR pszSubAppName, LPCWSTR pszSu
 }
 
 // SetWindowTheme API Wrapper
-HTHEME CUxTheme::OpenThemeData(HWND hwnd, LPCWSTR pszClassList)
+HTHEME UxTheme::OpenThemeData(HWND hwnd, LPCWSTR pszClassList)
 {
 	if (!InitThemeDll()) {
 		return NULL;
@@ -116,7 +116,7 @@ HTHEME CUxTheme::OpenThemeData(HWND hwnd, LPCWSTR pszClassList)
 }
 
 // SetWindowTheme API Wrapper
-HRESULT CUxTheme::DrawThemeBackground(HTHEME htheme, HDC hdc, int iPartId, int iStateId, RECT* prc, RECT* prcClip)
+HRESULT UxTheme::DrawThemeBackground(HTHEME htheme, HDC hdc, int iPartId, int iStateId, RECT* prc, RECT* prcClip)
 {
 	if (!InitThemeDll()) {
 		return S_FALSE;
@@ -125,7 +125,7 @@ HRESULT CUxTheme::DrawThemeBackground(HTHEME htheme, HDC hdc, int iPartId, int i
 }
 
 // SetWindowTheme API Wrapper
-HRESULT CUxTheme::DrawThemeParentBackground(HWND hwnd, HDC hdc, RECT *prc)
+HRESULT UxTheme::DrawThemeParentBackground(HWND hwnd, HDC hdc, RECT *prc)
 {
 	if (!InitThemeDll()) {
 		return S_FALSE;
@@ -134,7 +134,7 @@ HRESULT CUxTheme::DrawThemeParentBackground(HWND hwnd, HDC hdc, RECT *prc)
 }
 
 // SetWindowTheme API Wrapper
-HRESULT CUxTheme::IsThemeBackgroundPartiallyTransparent(HTHEME htheme, int iPartId, int iStateId)
+HRESULT UxTheme::IsThemeBackgroundPartiallyTransparent(HTHEME htheme, int iPartId, int iStateId)
 {
 	if (!InitThemeDll()) {
 		return S_FALSE;

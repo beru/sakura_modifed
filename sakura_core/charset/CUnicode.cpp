@@ -6,12 +6,12 @@
 #include "mem/CMemory.h"
 #include "CEol.h"
 
-EConvertResult Unicode::_UnicodeToUnicode_in( const CMemory& cSrc, CNativeW* pDstMem, const bool bBigEndian )
+EConvertResult Unicode::_UnicodeToUnicode_in( const Memory& cSrc, NativeW* pDstMem, const bool bBigEndian )
 {
 	// É\Å[ÉXéÊìæ
 	int nSrcLen;
 	const unsigned char* pSrc = reinterpret_cast<const unsigned char*>( cSrc.GetRawPtr(&nSrcLen) );
-	CMemory* pDstMem2 = pDstMem->_GetMemory();
+	Memory* pDstMem2 = pDstMem->_GetMemory();
 
 	EConvertResult res = RESULT_COMPLETE;
 	bool bCopy = false;
@@ -46,7 +46,7 @@ EConvertResult Unicode::_UnicodeToUnicode_in( const CMemory& cSrc, CNativeW* pDs
 }
 
 
-EConvertResult Unicode::_UnicodeToUnicode_out( const CNativeW& cSrc, CMemory* pDstMem, const bool bBigEndian )
+EConvertResult Unicode::_UnicodeToUnicode_out( const NativeW& cSrc, Memory* pDstMem, const bool bBigEndian )
 {
 	if (bBigEndian == true) {
 		if (cSrc._GetMemory() == pDstMem) {
@@ -68,14 +68,14 @@ EConvertResult Unicode::_UnicodeToUnicode_out( const CNativeW& cSrc, CMemory* pD
 
 
 
-void Unicode::GetBom(CMemory* pcmemBom)
+void Unicode::GetBom(Memory* pcmemBom)
 {
 	static const BYTE UTF16LE_BOM[] = {0xFF, 0xFE};
 	pcmemBom->SetRawData(UTF16LE_BOM, sizeof(UTF16LE_BOM));
 }
 
 
-void Unicode::GetEol(CMemory* pcmemEol, EEolType eEolType)
+void Unicode::GetEol(Memory* pcmemEol, EEolType eEolType)
 {
 	static const struct{
 		const void* pData;

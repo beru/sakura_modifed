@@ -12,7 +12,7 @@
 #include "env/DLLSHAREDATA.h"
 #include "types/CTypeSupport.h"
 
-CViewSelect::CViewSelect(CEditView* pcEditView)
+ViewSelect::ViewSelect(EditView* pcEditView)
 : m_pcEditView(pcEditView)
 {
 	m_bSelectingLock   = false;	// 選択状態のロック
@@ -28,7 +28,7 @@ CViewSelect::CViewSelect(CEditView* pcEditView)
 	m_nLastSelectedByteLen = 0;	// 前回選択時の選択バイト数
 }
 
-void CViewSelect::CopySelectStatus(CViewSelect* pSelect) const
+void ViewSelect::CopySelectStatus(ViewSelect* pSelect) const
 {
 	pSelect->m_bSelectingLock		= m_bSelectingLock;		// 選択状態のロック
 	pSelect->m_bBeginSelect			= m_bBeginSelect;		// 範囲選択中
@@ -42,9 +42,9 @@ void CViewSelect::CopySelectStatus(CViewSelect* pSelect) const
 }
 
 // 現在のカーソル位置から選択を開始する
-void CViewSelect::BeginSelectArea(const LayoutPoint* po)
+void ViewSelect::BeginSelectArea(const LayoutPoint* po)
 {
-	const CEditView* pView = GetEditView();
+	const EditView* pView = GetEditView();
 	LayoutPoint temp;
 	if (!po) {
 		temp = pView->GetCaret().GetCaretLayoutPos();
@@ -56,10 +56,10 @@ void CViewSelect::BeginSelectArea(const LayoutPoint* po)
 
 
 // 現在の選択範囲を非選択状態に戻す
-void CViewSelect::DisableSelectArea(bool bDraw, bool bDrawBracketCursorLine)
+void ViewSelect::DisableSelectArea(bool bDraw, bool bDrawBracketCursorLine)
 {
-	const CEditView* pView = GetEditView();
-	CEditView* pView2 = GetEditView();
+	const EditView* pView = GetEditView();
+	EditView* pView2 = GetEditView();
 
 	m_sSelectOld = m_sSelect;		// 範囲選択(Old)
 	m_sSelect.Clear(-1);
@@ -83,7 +83,7 @@ void CViewSelect::DisableSelectArea(bool bDraw, bool bDrawBracketCursorLine)
 
 
 // 現在のカーソル位置によって選択範囲を変更
-void CViewSelect::ChangeSelectAreaByCurrentCursor(const LayoutPoint& ptCaretPos)
+void ViewSelect::ChangeSelectAreaByCurrentCursor(const LayoutPoint& ptCaretPos)
 {
 	m_sSelectOld = m_sSelect; // 範囲選択(Old)
 
@@ -101,7 +101,7 @@ void CViewSelect::ChangeSelectAreaByCurrentCursor(const LayoutPoint& ptCaretPos)
 
 
 // 現在のカーソル位置によって選択範囲を変更(テストのみ)
-void CViewSelect::ChangeSelectAreaByCurrentCursorTEST(
+void ViewSelect::ChangeSelectAreaByCurrentCursorTEST(
 	const LayoutPoint& ptCaretPos,
 	LayoutRange* pSelect
 )
@@ -148,9 +148,9 @@ void CViewSelect::ChangeSelectAreaByCurrentCursorTEST(
 	@date 2007.09.09 Moca 互換BMPによる画面バッファ
 		画面バッファが有効時、画面と互換BMPの両方の反転処理を行う。
 */
-void CViewSelect::DrawSelectArea(bool bDrawBracketCursorLine)
+void ViewSelect::DrawSelectArea(bool bDrawBracketCursorLine)
 {
-	CEditView* pView = GetEditView();
+	EditView* pView = GetEditView();
 
 	if (!pView->GetDrawSwitch()) {
 		return;
@@ -162,7 +162,7 @@ void CViewSelect::DrawSelectArea(bool bDrawBracketCursorLine)
 		if (m_sSelect != m_sSelectOld) {
 			// 選択色表示の時は、WM_PAINT経由で作画
 			const int nCharWidth = pView->GetTextMetrics().GetHankakuDx();
-			const CTextArea& area =  pView->GetTextArea();
+			const TextArea& area =  pView->GetTextArea();
 			LayoutRect rcOld; // LayoutRect
 			TwoPointToRect(&rcOld, m_sSelectOld.GetFrom(), m_sSelectOld.GetTo());
 			LayoutRect rcNew; // LayoutRect
@@ -222,7 +222,7 @@ void CViewSelect::DrawSelectArea(bool bDrawBracketCursorLine)
 			Rect rcArea;
 			pView->GetTextArea().GenerateTextAreaRect(&rcArea);
 			RECT rcUpdate;
-			CEditView& view = *pView;
+			EditView& view = *pView;
 			if (::IntersectRect(&rcUpdate, &rcPx, &rcArea)) {
 				HDC hdc = view.GetDC();
 				PAINTSTRUCT ps;
@@ -271,9 +271,9 @@ void CViewSelect::DrawSelectArea(bool bDrawBracketCursorLine)
 /*!
 	反転用再作画処理本体
 */
-void CViewSelect::DrawSelectArea2(HDC hdc) const
+void ViewSelect::DrawSelectArea2(HDC hdc) const
 {
-	CEditView const * const pView = GetEditView();
+	EditView const * const pView = GetEditView();
 
 	// 2006.10.01 Moca 重複コード統合
 	HBRUSH      hBrush = ::CreateSolidBrush(SELECTEDAREA_RGB);
@@ -482,13 +482,13 @@ void CViewSelect::DrawSelectArea2(HDC hdc) const
 
 	@date 2006.03.29 Moca 3000桁制限を撤廃．
 */
-void CViewSelect::DrawSelectAreaLine(
+void ViewSelect::DrawSelectAreaLine(
 	HDC					hdc,		// [in] 描画領域のDevice Context Handle
 	LayoutInt			nLineNum,	// [in] 描画対象行(レイアウト行)
 	const LayoutRange&	sRange		// [in] 選択範囲(レイアウト単位)
 ) const
 {
-	CEditView const * const pView = m_pcEditView;
+	EditView const * const pView = m_pcEditView;
 	bool bCompatBMP = pView->m_hbmpCompatBMP && hdc != pView->m_hdcCompatDC;
 
 	const LayoutMgr& layoutMgr = pView->m_pcEditDoc->m_cLayoutMgr;
@@ -499,7 +499,7 @@ void CViewSelect::DrawSelectAreaLine(
 	LayoutInt nSelectTo = lineArea.GetTo().GetX2();
 	if (nSelectFrom == INT_MAX || nSelectTo == INT_MAX) {
 		LayoutInt nPosX = LayoutInt(0);
-		CMemoryIterator it = CMemoryIterator(pcLayout, layoutMgr.GetTabSpace());
+		MemoryIterator it = MemoryIterator(pcLayout, layoutMgr.GetTabSpace());
 		
 		while (!it.end()) {
 			it.scanNext();
@@ -558,14 +558,14 @@ void CViewSelect::DrawSelectAreaLine(
 	}
 }
 
-void CViewSelect::GetSelectAreaLineFromRange(
+void ViewSelect::GetSelectAreaLineFromRange(
 	LayoutRange& ret,
 	LayoutInt nLineNum,
 	const Layout* pcLayout,
 	const LayoutRange&	sRange
 ) const
 {
-	const CEditView& view = *GetEditView();
+	const EditView& view = *GetEditView();
 	if (nLineNum >= sRange.GetFrom().y && nLineNum <= sRange.GetTo().y ||
 		nLineNum >= sRange.GetTo().y && nLineNum <= sRange.GetFrom().y
 	) {
@@ -619,9 +619,9 @@ void CViewSelect::GetSelectAreaLineFromRange(
 	@date 2006.06.06 ryoji 選択範囲の行が実在しない場合の対策を追加
 	@date 2006.06.28 syat バイト数カウントを追加
 */
-void CViewSelect::PrintSelectionInfoMsg() const
+void ViewSelect::PrintSelectionInfoMsg() const
 {
-	const CEditView* pView = GetEditView();
+	const EditView* pView = GetEditView();
 
 	//	出力されないなら計算を省略
 	if (!pView->m_pcEditWnd->m_cStatusBar.SendStatusMessage2IsEffective())
@@ -629,7 +629,7 @@ void CViewSelect::PrintSelectionInfoMsg() const
 
 	LayoutInt nLineCount = pView->m_pcEditDoc->m_cLayoutMgr.GetLineCount();
 	if (!IsTextSelected() || m_sSelect.GetFrom().y >= nLineCount) { // 先頭行が実在しない
-		const_cast<CEditView*>(pView)->GetCaret().m_bClearStatus = false;
+		const_cast<EditView*>(pView)->GetCaret().m_bClearStatus = false;
 		if (IsBoxSelecting()) {
 			pView->m_pcEditWnd->m_cStatusBar.SendStatusMessage2(_T("box selecting"));
 		}else if (m_bSelectingLock) {
@@ -666,7 +666,7 @@ void CViewSelect::PrintSelectionInfoMsg() const
 		const wchar_t* pLine;	//	データを受け取る
 		LogicInt	nLineLen;		//	行の長さ
 		const Layout*	pcLayout;
-		CViewSelect* thiz = const_cast<CViewSelect*>(this);	// const外しthis
+		ViewSelect* thiz = const_cast<ViewSelect*>(this);	// const外しthis
 
 		// 共通設定・選択文字数を文字単位ではなくバイト単位で表示する
 		bool bCountByByteCommon = GetDllShareData().m_common.m_sStatusbar.m_bDispSelCountByByte;
@@ -682,10 +682,10 @@ void CViewSelect::PrintSelectionInfoMsg() const
 				//  内部文字コードから現在の文字コードに変換し、バイト数を取得する。
 				//  コード変換は負荷がかかるため、選択範囲の増減分のみを対象とする。
 
-				CNativeW cmemW;
-				CMemory cmemCode;
+				NativeW cmemW;
+				Memory cmemCode;
 
-				// 増減分文字列の取得にCEditView::GetSelectedDataを使いたいが、m_sSelect限定のため、
+				// 増減分文字列の取得にEditView::GetSelectedDataを使いたいが、m_sSelect限定のため、
 				// 呼び出し前にm_sSelectを書き換える。呼出し後に元に戻すので、constと言えないこともない。
 				LayoutRange rngSelect = m_sSelect;		// 選択領域の退避
 				bool bSelExtend;						// 選択領域拡大フラグ
@@ -716,7 +716,7 @@ void CViewSelect::PrintSelectionInfoMsg() const
 						thiz->m_sSelect = LayoutRange(m_sSelectOld.GetTo(), m_sSelect.GetTo());
 					}
 
-					const_cast<CEditView*>(pView)->GetSelectedDataSimple(cmemW);
+					const_cast<EditView*>(pView)->GetSelectedDataSimple(cmemW);
 					thiz->m_sSelect = rngSelect;		// m_sSelectを元に戻す
 				}else if (
 					m_bSelectAreaChanging
@@ -732,11 +732,11 @@ void CViewSelect::PrintSelectionInfoMsg() const
 						thiz->m_sSelect = LayoutRange(m_sSelectOld.GetFrom(), m_sSelect.GetFrom());
 					}
 
-					const_cast<CEditView*>(pView)->GetSelectedDataSimple(cmemW);
+					const_cast<EditView*>(pView)->GetSelectedDataSimple(cmemW);
 					thiz->m_sSelect = rngSelect;		// m_sSelectを元に戻す
 				}else {
 					// 選択領域全体をコード変換対象にする
-					const_cast<CEditView*>(pView)->GetSelectedDataSimple(cmemW);
+					const_cast<EditView*>(pView)->GetSelectedDataSimple(cmemW);
 					bSelExtend = true;
 					thiz->m_nLastSelectedByteLen = 0;
 				}
@@ -822,7 +822,7 @@ void CViewSelect::PrintSelectionInfoMsg() const
 		);
 #endif
 	}
-	const_cast<CEditView*>(pView)->GetCaret().m_bClearStatus = false;
+	const_cast<EditView*>(pView)->GetCaret().m_bClearStatus = false;
 	pView->m_pcEditWnd->m_cStatusBar.SendStatusMessage2(msg);
 }
 

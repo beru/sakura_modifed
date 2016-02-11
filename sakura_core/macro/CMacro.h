@@ -1,7 +1,7 @@
 /*!	@file
 	@brief キーボードマクロ
 
-	CMacroのインスタンスひとつが、1コマンドになる。
+	Macroのインスタンスひとつが、1コマンドになる。
 
 	@author Norio Nakatani
 */
@@ -37,8 +37,8 @@
 #include <ObjIdl.h>  // VARIANT等
 #include "func/Funccode.h"
 
-class CTextOutputStream;
-class CEditView;
+class TextOutputStream;
+class EditView;
 
 enum EMacroParamType{
 	EMacroParamTypeNull,
@@ -89,31 +89,31 @@ struct MacroParam {
 	@li 引数を新たに追加するには、AddParam()を使用する。
 	  AddParamにどんな値が渡されてもよいように準備するコト。
 	  渡された値が数値なのか、文字列へのポインタなのかは、m_nFuncID（機能 ID）によって、このクラス内で判別し、よろしくやること。
-	@li 引数は、CMacro内部ではすべて文字列で保持すること（数値97は、"97"として保持）（いまのところ）
+	@li 引数は、Macro内部ではすべて文字列で保持すること（数値97は、"97"として保持）（いまのところ）
 */
-class CMacro {
+class Macro {
 public:
 	/*
 	||  Constructors
 	*/
-	CMacro(EFunctionCode nFuncID);	// 機能IDを指定して初期化
-	~CMacro();
+	Macro(EFunctionCode nFuncID);	// 機能IDを指定して初期化
+	~Macro();
 	void ClearMacroParam();
 
-	void SetNext(CMacro* pNext) { m_pNext = pNext; }
-	CMacro* GetNext() { return m_pNext; }
+	void SetNext(Macro* pNext) { m_pNext = pNext; }
+	Macro* GetNext() { return m_pNext; }
 	// 2007.07.20 genta : flags追加
-	bool Exec(CEditView* pcEditView, int flags) const; // 2007.09.30 kobake const追加
-	void Save(HINSTANCE hInstance, CTextOutputStream& out) const; // 2007.09.30 kobake const追加
+	bool Exec(EditView* pcEditView, int flags) const; // 2007.09.30 kobake const追加
+	void Save(HINSTANCE hInstance, TextOutputStream& out) const; // 2007.09.30 kobake const追加
 	
-	void AddLParam(const LPARAM* lParam, const CEditView* pcEditView );	//@@@ 2002.2.2 YAZAKI pcEditViewも渡す
+	void AddLParam(const LPARAM* lParam, const EditView* pcEditView );	//@@@ 2002.2.2 YAZAKI pcEditViewも渡す
 	void AddStringParam( const WCHAR* szParam, int nLength = -1 );
 	void AddStringParam(const ACHAR* lParam) { return AddStringParam(to_wchar(lParam)); }
 	void AddIntParam( const int nParam );
 	int GetParamCount() const;
 
-	static bool HandleCommand(CEditView* View, EFunctionCode ID, const WCHAR* Argument[], const int ArgLengths[], const int ArgSize);
-	static bool HandleFunction(CEditView* View, EFunctionCode ID, const VARIANT* Arguments, const int ArgSize, VARIANT& Result);
+	static bool HandleCommand(EditView* View, EFunctionCode ID, const WCHAR* Argument[], const int ArgLengths[], const int ArgSize);
+	static bool HandleFunction(EditView* View, EFunctionCode ID, const VARIANT* Arguments, const int ArgSize, VARIANT& Result);
 	// 2009.10.29 syat HandleCommandとHandleFunctionの引数を少しそろえた
 #if 0
 	/*
@@ -133,6 +133,6 @@ protected:
 	EFunctionCode	m_nFuncID;		// 機能ID
 	MacroParam*	m_pParamTop;	// パラメータ
 	MacroParam*	m_pParamBot;
-	CMacro*			m_pNext;		// 次のマクロへのポインタ
+	Macro*			m_pNext;		// 次のマクロへのポインタ
 };
 

@@ -24,7 +24,7 @@
 #include "StdAfx.h"
 #include <io.h>	// access
 #include "CReadManager.h"
-#include "CEditApp.h"	// CAppExitException
+#include "CEditApp.h"	// AppExitException
 #include "window/CEditWnd.h"
 #include "charset/CCodeMediator.h"
 #include "io/CFileLoad.h"
@@ -36,7 +36,7 @@
 	@note	Windows用にコーディングしてある
 	@retval	TRUE	正常読み込み
 	@retval	FALSE	エラー(またはユーザによるキャンセル?)
-	@date	2002/08/30 Moca 旧ReadFileを元に作成 ファイルアクセスに関する部分をCFileLoadで行う
+	@date	2002/08/30 Moca 旧ReadFileを元に作成 ファイルアクセスに関する部分をFileLoadで行う
 	@date	2003/07/26 ryoji BOMの状態の取得を追加
 */
 EConvertResult ReadManager::ReadFile_To_CDocLineMgr(
@@ -49,7 +49,7 @@ EConvertResult ReadManager::ReadFile_To_CDocLineMgr(
 
 	// 文字コード種別
 	const TypeConfigMini* type;
-	CDocTypeManager().GetTypeConfigMini( sLoadInfo.nType, &type );
+	DocTypeManager().GetTypeConfigMini( sLoadInfo.nType, &type );
 	ECodeType eCharCode = sLoadInfo.eCharCode;
 	if (eCharCode == CODE_AUTODETECT) {
 		CodeMediator cmediator( type->m_encoding );
@@ -77,7 +77,7 @@ EConvertResult ReadManager::ReadFile_To_CDocLineMgr(
 	EConvertResult eRet = RESULT_COMPLETE;
 
 	try {
-		CFileLoad cfl(type->m_encoding);
+		FileLoad cfl(type->m_encoding);
 
 		bool bBigFile;
 #ifdef _WIN64
@@ -98,10 +98,10 @@ EConvertResult ReadManager::ReadFile_To_CDocLineMgr(
 		}
 
 		// ReadLineはファイルから 文字コード変換された1行を読み出します
-		// エラー時はthrow CError_FileRead を投げます
+		// エラー時はthrow Error_FileRead を投げます
 		int				nLineNum = 0;
-		CEol			cEol;
-		CNativeW		cUnicodeBuffer;
+		Eol			cEol;
+		NativeW		cUnicodeBuffer;
 		EConvertResult	eRead;
 		while ((eRead = cfl.ReadLine( &cUnicodeBuffer, &cEol )) != RESULT_FAILURE) {
 			if (eRead == RESULT_LOSESOME) {
@@ -110,49 +110,49 @@ EConvertResult ReadManager::ReadFile_To_CDocLineMgr(
 			const wchar_t* pLine = cUnicodeBuffer.GetStringPtr();
 			int nLineLen = cUnicodeBuffer.GetStringLength();
 			++nLineNum;
-			CDocEditAgent(pcDocLineMgr).AddLineStrX( pLine, nLineLen );
+			DocEditAgent(pcDocLineMgr).AddLineStrX( pLine, nLineLen );
 			// 経過通知
 			if (nLineNum % 512 == 0) {
 				NotifyProgress(cfl.GetPercent());
 				// 処理中のユーザー操作を可能にする
 				if (!::BlockingHook( NULL )) {
-					throw CAppExitException(); // 中断検出
+					throw AppExitException(); // 中断検出
 				}
 			}
 		}
 
 		// ファイルをクローズする
 		cfl.FileClose();
-	}catch (CAppExitException) {
+	}catch (AppExitException) {
 		// WM_QUITが発生した
 		return RESULT_FAILURE;
-	}catch (CError_FileOpen) {
+	}catch (Error_FileOpen) {
 		eRet = RESULT_FAILURE;
 		if (!fexist(pszPath)) {
 			// ファイルがない
 			ErrorMessage(
-				CEditWnd::getInstance()->GetHwnd(),
+				EditWnd::getInstance()->GetHwnd(),
 				LS(STR_ERR_DLGDOCLM1),	// Mar. 24, 2001 jepro 若干修正
 				pszPath
 			);
 		}else if (_taccess(pszPath, 4) == -1) {
 			// 読み込みアクセス権がない
 			ErrorMessage(
-				CEditWnd::getInstance()->GetHwnd(),
+				EditWnd::getInstance()->GetHwnd(),
 				LS(STR_ERR_DLGDOCLM2),
 				pszPath
 			 );
 		}else {
 			ErrorMessage(
-				CEditWnd::getInstance()->GetHwnd(),
+				EditWnd::getInstance()->GetHwnd(),
 				LS(STR_ERR_DLGDOCLM3),
 				pszPath
 			 );
 		}
-	}catch (CError_FileRead) {
+	}catch (Error_FileRead) {
 		eRet = RESULT_FAILURE;
 		ErrorMessage(
-			CEditWnd::getInstance()->GetHwnd(),
+			EditWnd::getInstance()->GetHwnd(),
 			LS(STR_ERR_DLGDOCLM4),
 			pszPath
 		 );

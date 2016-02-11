@@ -13,9 +13,9 @@
 //                  ファイル属性操作クラス                     //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-class CFileAttribute {
+class FileAttribute {
 public:
-	CFileAttribute(const TCHAR* tszPath)
+	FileAttribute(const TCHAR* tszPath)
 		:
 		m_strPath(tszPath),
 		m_bAttributeChanged(false),
@@ -58,7 +58,7 @@ private:
 //               コンストラクタ・デストラクタ                  //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-CStream::CStream(
+Stream::Stream(
 	const TCHAR* tszPath,
 	const TCHAR* tszMode,
 	bool bExceptionMode
@@ -71,7 +71,7 @@ CStream::CStream(
 }
 
 /*
-CStream::CStream()
+Stream::Stream()
 {
 	m_fp = NULL;
 	m_pcFileAttribute = NULL;
@@ -79,7 +79,7 @@ CStream::CStream()
 }
 */
 
-CStream::~CStream()
+Stream::~Stream()
 {
 	Close();
 }
@@ -88,7 +88,7 @@ CStream::~CStream()
 //                    オープン・クローズ                       //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //
-void CStream::Open(
+void Stream::Open(
 	const TCHAR* tszPath,
 	const TCHAR* tszMode
 	)
@@ -96,7 +96,7 @@ void CStream::Open(
 	Close(); // 既に開いていたら、一度閉じる
 
 	// 属性変更：隠しorシステムファイルはCの関数で読み書きできないので属性を変更する
-	m_pcFileAttribute = new CFileAttribute(tszPath);
+	m_pcFileAttribute = new FileAttribute(tszPath);
 	m_pcFileAttribute->PopAttribute(FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_SYSTEM);
 
 	// オープン
@@ -107,11 +107,11 @@ void CStream::Open(
 
 	// エラー処理
 	if (!m_fp && IsExceptionMode()) {
-		throw CError_FileOpen();
+		throw Error_FileOpen();
 	}
 }
 
-void CStream::Close()
+void Stream::Close()
 {
 	// クローズ
 	if (m_fp) {
@@ -131,14 +131,14 @@ void CStream::Close()
 //                           操作                              //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-void CStream::SeekSet(	// シーク
+void Stream::SeekSet(	// シーク
 	long offset	// ストリーム先頭からのオフセット 
 	)
 {
 	fseek(m_fp, offset, SEEK_SET);
 }
 
-void CStream::SeekEnd(  // シーク
+void Stream::SeekEnd(  // シーク
 	long offset // ストリーム終端からのオフセット
 	)
 {

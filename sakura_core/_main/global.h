@@ -186,9 +186,9 @@ struct SearchOption {
 
 };
 
-// 2007.10.02 kobake CEditWndのインスタンスへのポインタをここに保存しておく
-class CEditWnd;
-extern CEditWnd* g_pcEditWnd;
+// 2007.10.02 kobake EditWndのインスタンスへのポインタをここに保存しておく
+class EditWnd;
+extern EditWnd* g_pcEditWnd;
 
 HINSTANCE G_AppInstance();
 

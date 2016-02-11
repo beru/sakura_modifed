@@ -36,12 +36,12 @@
 class CodeBase;
 
 // テキスト入力ストリーム (UTF-8, SJIS)
-class CTextInputStream : public CStream {
+class TextInputStream : public Stream {
 public:
 	// コンストラクタ・デストラクタ
-	CTextInputStream(const TCHAR* tszPath);
-	CTextInputStream();
-	virtual ~CTextInputStream();
+	TextInputStream(const TCHAR* tszPath);
+	TextInputStream();
+	virtual ~TextInputStream();
 
 	// 操作
 	std::wstring ReadLineW(); //!< 1行読込。改行は削る
@@ -52,11 +52,11 @@ private:
 
 // テキスト出力ストリーム
 // 2008.01.26 kobake 出力文字コードを任意で指定できるように変更
-class CTextOutputStream : public COutputStream {
+class TextOutputStream : public OutputStream {
 public:
 	// コンストラクタ・デストラクタ
-	CTextOutputStream(const TCHAR* tszPath, ECodeType eCodeType = CODE_UTF8, bool bExceptionMode = false, bool bBom = true);
-	virtual ~CTextOutputStream();
+	TextOutputStream(const TCHAR* tszPath, ECodeType eCodeType = CODE_UTF8, bool bExceptionMode = false, bool bBom = true);
+	virtual ~TextOutputStream();
 
 	// 文字列書込。改行を入れたい場合は、文字列内に'\n'を含めること。(クラス側で適切な改行コードに変換して出力します)
 	void WriteString(const wchar_t* szData, int nLen = -1);
@@ -71,8 +71,8 @@ private:
 
 
 // テキスト入力ストリーム。相対パスの場合はINIファイルのパスからの相対パスとして開く。
-class CTextInputStream_AbsIni : public CTextInputStream {
+class TextInputStream_AbsIni : public TextInputStream {
 public:
-	CTextInputStream_AbsIni(const TCHAR* tszPath, bool bOrExedir = true);
+	TextInputStream_AbsIni(const TCHAR* tszPath, bool bOrExedir = true);
 };
 

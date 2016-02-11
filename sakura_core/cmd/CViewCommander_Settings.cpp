@@ -32,18 +32,18 @@
 
 /*! ツールバーの表示/非表示
 
-	@date 2006.12.19 ryoji 表示切替は CEditWnd::LayoutToolBar(), CEditWnd::EndLayoutBars() で行うように変更
+	@date 2006.12.19 ryoji 表示切替は EditWnd::LayoutToolBar(), EditWnd::EndLayoutBars() で行うように変更
 */
 void ViewCommander::Command_SHOWTOOLBAR(void)
 {
-	CEditWnd* pCEditWnd = GetEditWindow();	// Sep. 10, 2002 genta
+	EditWnd* pCEditWnd = GetEditWindow();	// Sep. 10, 2002 genta
 
 	GetDllShareData().m_common.m_sWindow.m_bDispTOOLBAR = ((!pCEditWnd->m_cToolbar.GetToolbarHwnd())? TRUE: FALSE);	// ツールバー表示
 	pCEditWnd->LayoutToolBar();
 	pCEditWnd->EndLayoutBars();
 
 	// 全ウィンドウに変更を通知する。
-	CAppNodeGroupHandle(0).PostMessageToAllEditors(
+	AppNodeGroupHandle(0).PostMessageToAllEditors(
 		MYWM_BAR_CHANGE_NOTIFY,
 		(WPARAM)eBarChangeNotifyType::Toolbar,
 		(LPARAM)pCEditWnd->GetHwnd(),
@@ -54,18 +54,18 @@ void ViewCommander::Command_SHOWTOOLBAR(void)
 
 /*! ファンクションキーの表示/非表示
 
-	@date 2006.12.19 ryoji 表示切替は CEditWnd::LayoutFuncKey(), CEditWnd::EndLayoutBars() で行うように変更
+	@date 2006.12.19 ryoji 表示切替は EditWnd::LayoutFuncKey(), EditWnd::EndLayoutBars() で行うように変更
 */
 void ViewCommander::Command_SHOWFUNCKEY(void)
 {
-	CEditWnd* pCEditWnd = GetEditWindow();	// Sep. 10, 2002 genta
+	EditWnd* pCEditWnd = GetEditWindow();	// Sep. 10, 2002 genta
 
 	GetDllShareData().m_common.m_sWindow.m_bDispFUNCKEYWND = ((!pCEditWnd->m_cFuncKeyWnd.GetHwnd())? TRUE: FALSE);	// ファンクションキー表示
 	pCEditWnd->LayoutFuncKey();
 	pCEditWnd->EndLayoutBars();
 
 	// 全ウィンドウに変更を通知する。
-	CAppNodeGroupHandle(0).PostMessageToAllEditors(
+	AppNodeGroupHandle(0).PostMessageToAllEditors(
 		MYWM_BAR_CHANGE_NOTIFY,
 		(WPARAM)eBarChangeNotifyType::FuncKey,
 		(LPARAM)pCEditWnd->GetHwnd(),
@@ -78,12 +78,12 @@ void ViewCommander::Command_SHOWFUNCKEY(void)
 
 	@author MIK
 	@date 2003.06.10 新規作成
-	@date 2006.12.19 ryoji 表示切替は CEditWnd::LayoutTabBar(), CEditWnd::EndLayoutBars() で行うように変更
+	@date 2006.12.19 ryoji 表示切替は EditWnd::LayoutTabBar(), EditWnd::EndLayoutBars() で行うように変更
 	@date 2007.06.20 ryoji グループIDリセット
  */
 void ViewCommander::Command_SHOWTAB(void)
 {
-	CEditWnd* pCEditWnd = GetEditWindow();	// Sep. 10, 2002 genta
+	EditWnd* pCEditWnd = GetEditWindow();	// Sep. 10, 2002 genta
 
 	GetDllShareData().m_common.m_sTabBar.m_bDispTabWnd = !pCEditWnd->m_cTabWnd.GetHwnd();	// タブバー表示
 	pCEditWnd->LayoutTabBar();
@@ -99,8 +99,8 @@ void ViewCommander::Command_SHOWTAB(void)
 	}
 
 	// 全ウィンドウに変更を通知する。
-	CAppNodeManager::getInstance()->ResetGroupId();
-	CAppNodeGroupHandle(0).PostMessageToAllEditors(
+	AppNodeManager::getInstance()->ResetGroupId();
+	AppNodeGroupHandle(0).PostMessageToAllEditors(
 		MYWM_BAR_CHANGE_NOTIFY,
 		(WPARAM)eBarChangeNotifyType::Tab,
 		(LPARAM)pCEditWnd->GetHwnd(),
@@ -111,18 +111,18 @@ void ViewCommander::Command_SHOWTAB(void)
 
 /*! ステータスバーの表示/非表示
 
-	@date 2006.12.19 ryoji 表示切替は CEditWnd::LayoutStatusBar(), CEditWnd::EndLayoutBars() で行うように変更
+	@date 2006.12.19 ryoji 表示切替は EditWnd::LayoutStatusBar(), EditWnd::EndLayoutBars() で行うように変更
 */
 void ViewCommander::Command_SHOWSTATUSBAR(void)
 {
-	CEditWnd* pCEditWnd = GetEditWindow();	// Sep. 10, 2002 genta
+	EditWnd* pCEditWnd = GetEditWindow();	// Sep. 10, 2002 genta
 
 	GetDllShareData().m_common.m_sWindow.m_bDispSTATUSBAR = ((!pCEditWnd->m_cStatusBar.GetStatusHwnd())? TRUE: FALSE);	// ステータスバー表示
 	pCEditWnd->LayoutStatusBar();
 	pCEditWnd->EndLayoutBars();
 
 	// 全ウィンドウに変更を通知する。
-	CAppNodeGroupHandle(0).PostMessageToAllEditors(
+	AppNodeGroupHandle(0).PostMessageToAllEditors(
 		MYWM_BAR_CHANGE_NOTIFY,
 		(WPARAM)eBarChangeNotifyType::StatusBar,
 		(LPARAM)pCEditWnd->GetHwnd(),
@@ -136,14 +136,14 @@ void ViewCommander::Command_SHOWSTATUSBAR(void)
 */
 void ViewCommander::Command_SHOWMINIMAP(void)
 {
-	CEditWnd*	pCEditWnd = GetEditWindow();	//	Sep. 10, 2002 genta
+	EditWnd*	pCEditWnd = GetEditWindow();	//	Sep. 10, 2002 genta
 
 	GetDllShareData().m_common.m_sWindow.m_bDispMiniMap = (pCEditWnd->GetMiniMap().GetHwnd() == NULL);
 	pCEditWnd->LayoutMiniMap();
 	pCEditWnd->EndLayoutBars();
 
 	//全ウィンドウに変更を通知する。
-	CAppNodeGroupHandle(0).PostMessageToAllEditors(
+	AppNodeGroupHandle(0).PostMessageToAllEditors(
 		MYWM_BAR_CHANGE_NOTIFY,
 		(WPARAM)eBarChangeNotifyType::MiniMap,
 		(LPARAM)pCEditWnd->GetHwnd(),
@@ -166,7 +166,7 @@ void ViewCommander::Command_TYPE_LIST(void)
 			HandleCommand(F_CHANGETYPE, true, (LPARAM)sResult.cDocumentType.GetIndex() + 1, 0, 0, 0);
 		}else {
 			// タイプ別設定
-			CEditApp::getInstance()->OpenPropertySheetTypes(-1, sResult.cDocumentType);
+			EditApp::getInstance()->OpenPropertySheetTypes(-1, sResult.cDocumentType);
 		}
 	}
 	return;
@@ -182,7 +182,7 @@ void ViewCommander::Command_CHANGETYPE(int nTypePlusOne)
 	}
 	if (type.IsValidType() && type.GetIndex() < GetDllShareData().m_nTypesCount) {
 		const TypeConfigMini* pConfig;
-		CDocTypeManager().GetTypeConfigMini(type, &pConfig);
+		DocTypeManager().GetTypeConfigMini(type, &pConfig);
 		GetDocument()->m_cDocType.SetDocumentTypeIdx(pConfig->m_id, true);
 		GetDocument()->m_cDocType.LockDocumentType();
 		GetDocument()->OnChangeType();
@@ -193,7 +193,7 @@ void ViewCommander::Command_CHANGETYPE(int nTypePlusOne)
 // タイプ別設定
 void ViewCommander::Command_OPTION_TYPE(void)
 {
-	CEditApp::getInstance()->OpenPropertySheetTypes(-1, GetDocument()->m_cDocType.GetDocumentType());
+	EditApp::getInstance()->OpenPropertySheetTypes(-1, GetDocument()->m_cDocType.GetDocumentType());
 }
 
 
@@ -201,7 +201,7 @@ void ViewCommander::Command_OPTION_TYPE(void)
 void ViewCommander::Command_OPTION(void)
 {
 	// 設定プロパティシート テスト用
-	CEditApp::getInstance()->OpenPropertySheet(-1);
+	EditApp::getInstance()->OpenPropertySheet(-1);
 }
 
 
@@ -219,7 +219,7 @@ void ViewCommander::Command_FONT(void)
 #else
 	bool bFixedFont = true;
 #endif
-	if (MySelectFont(&lf, &nPointSize, CEditWnd::getInstance()->m_cSplitterWnd.GetHwnd(), bFixedFont)) {
+	if (MySelectFont(&lf, &nPointSize, EditWnd::getInstance()->m_cSplitterWnd.GetHwnd(), bFixedFont)) {
 		csView.m_lf = lf;
 		csView.m_nPointSize = nPointSize;
 
@@ -230,11 +230,11 @@ void ViewCommander::Command_FONT(void)
 		}
 		// 設定変更を反映させる
 		// 全編集ウィンドウへメッセージをポストする
-		CAppNodeGroupHandle(0).PostMessageToAllEditors(
+		AppNodeGroupHandle(0).PostMessageToAllEditors(
 			MYWM_SAVEEDITSTATE,
 			(WPARAM)0, (LPARAM)0, hwndFrame
 		);
-		CAppNodeGroupHandle(0).PostMessageToAllEditors(
+		AppNodeGroupHandle(0).PostMessageToAllEditors(
 			MYWM_CHANGESETTING,
 			(WPARAM)0, (LPARAM)PM_CHANGESETTING_FONT, hwndFrame
 		);
@@ -306,7 +306,7 @@ void ViewCommander::Command_SETFONTSIZE(int fontSize, int shift, int mode)
 	}else if (mode == 1) {
 		CTypeConfig nDocType = GetDocument()->m_cDocType.GetDocumentType();
 		auto type = std::make_unique<TypeConfig>();
-		if (!CDocTypeManager().GetTypeConfig(nDocType, *type)) {
+		if (!DocTypeManager().GetTypeConfig(nDocType, *type)) {
 			// 謎のエラー
 			return;
 		}
@@ -314,7 +314,7 @@ void ViewCommander::Command_SETFONTSIZE(int fontSize, int shift, int mode)
 		type->m_lf = lf;
 		type->m_lf.lfHeight = lfHeight;
 		type->m_nPointSize = nPointSize;
-		CDocTypeManager().SetTypeConfig(nDocType, *type);
+		DocTypeManager().SetTypeConfig(nDocType, *type);
 		nTypeIndex = nDocType.GetIndex();
 	}else if (mode == 2) {
 		GetDocument()->m_blfCurTemp = true;
@@ -330,7 +330,7 @@ void ViewCommander::Command_SETFONTSIZE(int fontSize, int shift, int mode)
 	// 新たにタイプ別や一時設定が有効になってもフォント名は変わらないのでSIZEのみの変更通知をする
 	if (mode == 0 || mode == 1) {
 		// 全編集ウィンドウへメッセージをポストする
-		CAppNodeGroupHandle(0).PostMessageToAllEditors(
+		AppNodeGroupHandle(0).PostMessageToAllEditors(
 			MYWM_CHANGESETTING,
 			(WPARAM)nTypeIndex,
 			(LPARAM)PM_CHANGESETTING_FONTSIZE,
@@ -350,19 +350,19 @@ void ViewCommander::Command_SETFONTSIZE(int fontSize, int shift, int mode)
 	@date 2005.08.14 genta ここでの設定は共通設定に反映しない．
 	@date 2005.10.22 aroka 現在のウィンドウ幅→最大値→文書タイプの初期値 をトグルにする
 
-	@note 変更する順序を変更したときはCEditWnd::InitMenu()も変更すること
-	@sa CEditWnd::InitMenu()
+	@note 変更する順序を変更したときはEditWnd::InitMenu()も変更すること
+	@sa EditWnd::InitMenu()
 */
 void ViewCommander::Command_WRAPWINDOWWIDTH(void)	// Oct. 7, 2000 JEPRO WRAPWINDIWWIDTH を WRAPWINDOWWIDTH に変更
 {
 	// Jan. 8, 2006 genta 判定処理をm_pCommanderView->GetWrapMode()へ移動
-	CEditView::TOGGLE_WRAP_ACTION nWrapMode;
+	EditView::TOGGLE_WRAP_ACTION nWrapMode;
 	LayoutInt newKetas;
 	
 	nWrapMode = m_pCommanderView->GetWrapMode(&newKetas);
 	GetDocument()->m_nTextWrapMethodCur = (int)eTextWrappingMethod::SettingWidth;
 	GetDocument()->m_bTextWrapMethodCurTemp = !(GetDocument()->m_nTextWrapMethodCur == m_pCommanderView->m_pTypeData->m_nTextWrapMethod);
-	if (nWrapMode == CEditView::TGWRAP_NONE) {
+	if (nWrapMode == EditView::TGWRAP_NONE) {
 		return;	// 折り返し桁は元のまま
 	}
 
@@ -387,7 +387,7 @@ void ViewCommander::Command_WRAPWINDOWWIDTH(void)	// Oct. 7, 2000 JEPRO WRAPWIND
 */
 void ViewCommander::Command_Favorite(void)
 {
-	CDlgFavorite	cDlgFavorite;
+	DlgFavorite	cDlgFavorite;
 
 	// ダイアログを表示する
 	if (!cDlgFavorite.DoModal(G_AppInstance(), m_pCommanderView->GetHwnd(), (LPARAM)GetDocument())) {

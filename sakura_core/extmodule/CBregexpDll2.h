@@ -41,13 +41,13 @@ typedef struct bregexp {
 
 // BREGONIG.DLLをラップしたもの。
 // 2007.09.13 kobake 作成
-class CBregexpDll2 : public CDllImp {
+class BregexpDll2 : public DllImp {
 public:
-	CBregexpDll2();
-	virtual ~CBregexpDll2();
+	BregexpDll2();
+	virtual ~BregexpDll2();
 
 protected:
-	// CDllImpインタフェース
+	// DllImpインタフェース
 	virtual LPCTSTR GetDllNameImp(int nIndex); // Jul. 5, 2001 genta インターフェース変更に伴う引数追加
 	virtual bool InitDllImp();
 

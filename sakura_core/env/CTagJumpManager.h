@@ -58,9 +58,9 @@ struct Share_TagJump {
 };
 
 
-class CTagJumpManager {
+class TagJumpManager {
 public:
-	CTagJumpManager() {
+	TagJumpManager() {
 		m_pShareData = &GetDllShareData();
 	}
 	// タグジャンプ関連	// 2004/06/21 novice タグジャンプ機能追加

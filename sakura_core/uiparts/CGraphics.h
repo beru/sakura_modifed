@@ -68,11 +68,11 @@ struct Font {
 
 // 描画管理
 // 最新実装：ブラシ
-class CGraphics {
+class Graphics {
 public:
-	CGraphics(const CGraphics& rhs) { Init(rhs.m_hdc); }
-	CGraphics(HDC hdc = NULL) { Init(hdc); }
-	~CGraphics();
+	Graphics(const Graphics& rhs) { Init(rhs.m_hdc); }
+	Graphics(HDC hdc = NULL) { Init(hdc); }
+	~Graphics();
 	void Init(HDC hdc);
 
 	operator HDC() const { return m_hdc; }
@@ -202,8 +202,8 @@ public:
 
 private:
 	// 型
-	typedef TOriginalHolder<COLORREF>	COrgColor;
-	typedef TOriginalHolder<int>		COrgInt;
+	typedef TOriginalHolder<COLORREF>	OrgColor;
+	typedef TOriginalHolder<int>		OrgInt;
 private:
 	HDC					m_hdc;
 
@@ -216,7 +216,7 @@ private:
 	std::vector<Font>		m_vFonts;
 
 	// テキスト
-	COrgInt				m_nTextModeOrg;
+	OrgInt				m_nTextModeOrg;
 
 	// ペン
 	HPEN				m_hpnOrg;

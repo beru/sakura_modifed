@@ -25,12 +25,12 @@
 
 #include "mem/CMemory.h"
 
-// ※CMemoryをprotect継承することにより、あまり自由にCMemoryを使えないようにしておく
-class CNative : protected CMemory {
+// ※Memoryをprotect継承することにより、あまり自由にMemoryを使えないようにしておく
+class Native : protected Memory {
 public:
-	// CMemory*ポインタを得る
-	CMemory* _GetMemory() { return static_cast<CMemory*>(this); }
-	const CMemory* _GetMemory() const { return static_cast<const CMemory*>(this); }
+	// Memory*ポインタを得る
+	Memory* _GetMemory() { return static_cast<Memory*>(this); }
+	const Memory* _GetMemory() const { return static_cast<const Memory*>(this); }
 
 public:
 	// 汎用

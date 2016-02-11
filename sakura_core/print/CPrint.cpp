@@ -40,7 +40,7 @@
 
 
 // 2006.08.14 Moca 用紙名一覧の重複削除・情報の統合
-const PAPER_INFO CPrint::m_paperInfoArr[] = {
+const PAPER_INFO Print::m_paperInfoArr[] = {
 	// 	用紙ID, 幅
 	{DMPAPER_A4,                  2100,  2970, _T("A4 (210 x 297 mm)")},
 	{DMPAPER_A3,                  2970,  4200, _T("A3 (297 x 420 mm)")},
@@ -85,18 +85,18 @@ const PAPER_INFO CPrint::m_paperInfoArr[] = {
 	{DMPAPER_FANFOLD_LGL_GERMAN,  2159,  3302, _T("German Legal Fanfold (8 1/2 x 13 inch)")},
 };
 
-const int CPrint::m_nPaperInfoArrNum = _countof(m_paperInfoArr);
+const int Print::m_nPaperInfoArrNum = _countof(m_paperInfoArr);
 
 
 
-CPrint::CPrint(void)
+Print::Print(void)
 {
 	m_hDevMode	= NULL;
 	m_hDevNames	= NULL;
 	return;
 }
 
-CPrint::~CPrint(void)
+Print::~Print(void)
 {
 	// メモリ割り当て済みならば、解放する
 	// 2003.05.18 かろと
@@ -121,7 +121,7 @@ CPrint::~CPrint(void)
 	@author かろと
 	@date 2003.
 */
-BOOL CPrint::PrintDlg(
+BOOL Print::PrintDlg(
 	PRINTDLG* pPD,
 	MYDEVMODE* pMYDEVMODE
 	)
@@ -202,7 +202,7 @@ BOOL CPrint::PrintDlg(
 ** 
 ** @param pMYDEVMODE 	[out] 	印刷設定
 */
-BOOL CPrint::GetDefaultPrinter(MYDEVMODE* pMYDEVMODE)
+BOOL Print::GetDefaultPrinter(MYDEVMODE* pMYDEVMODE)
 {
 	PRINTDLG	pd;
 	// 2009.08.08 印刷で用紙サイズ、横指定が効かない問題対応 syat
@@ -277,7 +277,7 @@ BOOL CPrint::GetDefaultPrinter(MYDEVMODE* pMYDEVMODE)
 /*! 
 ** @brief プリンタをオープンし、hDCを作成する
 */
-HDC CPrint::CreateDC(
+HDC Print::CreateDC(
 	MYDEVMODE*	pMYDEVMODE,
 	TCHAR*		pszErrMsg		// エラーメッセージ格納場所
 )
@@ -351,7 +351,7 @@ end_of_func:;
 
 
 // 印刷/プレビューに必要な情報を取得
-BOOL CPrint::GetPrintMetrics(
+BOOL Print::GetPrintMetrics(
 	MYDEVMODE*	pMYDEVMODE,
 	short*		pnPaperAllWidth,	// 用紙幅
 	short*		pnPaperAllHeight,	// 用紙高さ
@@ -410,7 +410,7 @@ BOOL CPrint::GetPrintMetrics(
 
 
 // 用紙の幅、高さ
-BOOL CPrint::GetPaperSize(
+BOOL Print::GetPaperSize(
 	short*		pnPaperAllWidth,
 	short*		pnPaperAllHeight,
 	MYDEVMODE*	pDEVMODE
@@ -455,7 +455,7 @@ BOOL CPrint::GetPaperSize(
 
 
 // 印刷 ジョブ開始
-BOOL CPrint::PrintOpen(
+BOOL Print::PrintOpen(
 	TCHAR*		pszJobName,
 	MYDEVMODE*	pMYDEVMODE,
 	HDC*		phdc,
@@ -503,14 +503,14 @@ end_of_func:;
 
 
 // 印刷 ページ開始
-void CPrint::PrintStartPage(HDC hdc)
+void Print::PrintStartPage(HDC hdc)
 {
 	::StartPage(hdc);
 }
 
 
 // 印刷 ページ終了
-void CPrint::PrintEndPage(HDC hdc)
+void Print::PrintEndPage(HDC hdc)
 {
 	::EndPage(hdc);
 
@@ -518,7 +518,7 @@ void CPrint::PrintEndPage(HDC hdc)
 
 
 // 印刷 ジョブ終了
-void CPrint::PrintClose(HDC hdc)
+void Print::PrintClose(HDC hdc)
 {
 	::EndDoc(hdc);
 	::DeleteDC(hdc);
@@ -526,7 +526,7 @@ void CPrint::PrintClose(HDC hdc)
 
 
 // 用紙の名前を取得
-TCHAR* CPrint::GetPaperName(int nPaperSize, TCHAR* pszPaperName)
+TCHAR* Print::GetPaperName(int nPaperSize, TCHAR* pszPaperName)
 {
 	// 2006.08.14 Moca 用紙情報の統合
 	const PAPER_INFO* paperInfo = FindPaperInfo(nPaperSize);
@@ -542,7 +542,7 @@ TCHAR* CPrint::GetPaperName(int nPaperSize, TCHAR* pszPaperName)
 	用紙情報の取得
 	@date 2006.08.14 Moca 新規作成 用紙情報の統合
 */
-const PAPER_INFO* CPrint::FindPaperInfo(int id)
+const PAPER_INFO* Print::FindPaperInfo(int id)
 {
 	for (int i=0; i<m_nPaperInfoArrNum; ++i) {
 		if (m_paperInfoArr[i].m_nId == id) {
@@ -560,7 +560,7 @@ const PAPER_INFO* CPrint::FindPaperInfo(int id)
 	@date 2006.08.14 Moca  Initializeから名称変更。初期化単位をShareDate全てからPRINTSETTING単位に変更．
 		本関数からDLLSHAREDATAへアクセスする代わりに，CShareDataからPPRINTSETTING単位で逐一渡してもらう．
 */
-void CPrint::SettingInitialize(PRINTSETTING& pPrintSetting, const TCHAR* settingName)
+void Print::SettingInitialize(PRINTSETTING& pPrintSetting, const TCHAR* settingName)
 {
 	_tcscpy_s(pPrintSetting.m_szPrintSettingName, settingName);		// 印刷設定の名前
 	_tcscpy(pPrintSetting.m_szPrintFontFaceHan, _T("ＭＳ 明朝"));		// 印刷フォント
@@ -605,7 +605,7 @@ void CPrint::SettingInitialize(PRINTSETTING& pPrintSetting, const TCHAR* setting
 	印字可能桁数の計算
 	@date 2013.05.10 aroka 新規作成
 */
-int CPrint::CalculatePrintableColumns(PRINTSETTING* pPS, int nPaperAllWidth, int nLineNumberColumns)
+int Print::CalculatePrintableColumns(PRINTSETTING* pPS, int nPaperAllWidth, int nLineNumberColumns)
 {
 	int nPrintablePaperWidth = nPaperAllWidth - pPS->m_nPrintMarginLX - pPS->m_nPrintMarginRX;
 	if (nPrintablePaperWidth < 0) { return 0; }
@@ -625,7 +625,7 @@ int CPrint::CalculatePrintableColumns(PRINTSETTING* pPS, int nPaperAllWidth, int
 	印字可能行数の計算
 	@date 2013.05.10 aroka 新規作成
 */
-int CPrint::CalculatePrintableLines(
+int Print::CalculatePrintableLines(
 	PRINTSETTING* pPS,
 	int nPaperAllHeight
 	)
@@ -647,7 +647,7 @@ int CPrint::CalculatePrintableLines(
 	ヘッダ高さの計算(行送り分こみ)
 	@date 2013.05.16 Uchi 新規作成
 */
-int CPrint::CalcHeaderHeight(PRINTSETTING* pPS)
+int Print::CalcHeaderHeight(PRINTSETTING* pPS)
 {
 	if (pPS->m_szHeaderForm[0][0] == _T('\0')
 		&& pPS->m_szHeaderForm[1][0] == _T('\0')
@@ -672,7 +672,7 @@ int CPrint::CalcHeaderHeight(PRINTSETTING* pPS)
 	フッタ高さの計算(行送り分こみ)
 	@date 2013.05.16 Uchi 新規作成
 */
-int CPrint::CalcFooterHeight(PRINTSETTING* pPS)
+int Print::CalcFooterHeight(PRINTSETTING* pPS)
 {
 	if (pPS->m_szFooterForm[0][0] == _T('\0')
 	 && pPS->m_szFooterForm[1][0] == _T('\0')

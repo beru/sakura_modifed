@@ -28,7 +28,7 @@
 */
 void ViewCommander::Command_GREP_DIALOG(void)
 {
-	CNativeW cmemCurText;
+	NativeW cmemCurText;
 	// 2014.07.01 複数Grepウィンドウを使い分けている場合などに影響しないように、未設定のときだけHistoryを見る
 	bool bGetHistory = GetEditWindow()->m_cDlgGrep.m_bSetText == false;
 
@@ -55,17 +55,17 @@ void ViewCommander::Command_GREP_DIALOG(void)
 */
 void ViewCommander::Command_GREP(void)
 {
-	CNativeW cmWork1;
+	NativeW cmWork1;
 	CNativeT cmWork2;
 	CNativeT cmWork3;
-	CNativeW		cmWork4;
+	NativeW		cmWork4;
 
 	auto& dlgGrep = GetEditWindow()->m_cDlgGrep;
 	cmWork1.SetString(dlgGrep.m_strText.c_str());
 	cmWork2.SetString(dlgGrep.m_szFile);
 	cmWork3.SetString(dlgGrep.m_szFolder);
 
-	auto& grepAgent = *CEditApp::getInstance()->m_pcGrepAgent;
+	auto& grepAgent = *EditApp::getInstance()->m_pcGrepAgent;
 	auto& doc = *GetDocument();
 	/*	今のEditViewにGrep結果を表示する。
 		Grepモードのとき、または未編集で無題かつアウトプットでない場合。
@@ -84,9 +84,9 @@ void ViewCommander::Command_GREP(void)
 	) {
 		// 2011.01.23 Grepタイプ別適用
 		if (!doc.m_cDocEditor.IsModified() && doc.m_cDocLineMgr.GetLineCount() == 0) {
-			CTypeConfig cTypeGrep = CDocTypeManager().GetDocumentTypeOfExt(_T("grepout"));
+			CTypeConfig cTypeGrep = DocTypeManager().GetDocumentTypeOfExt(_T("grepout"));
 			const TypeConfigMini* pConfig;
-			CDocTypeManager().GetTypeConfigMini(cTypeGrep, &pConfig);
+			DocTypeManager().GetTypeConfigMini(cTypeGrep, &pConfig);
 			doc.m_cDocType.SetDocumentTypeIdx(pConfig->m_id);
 			doc.m_cDocType.LockDocumentType();
 			doc.OnChangeType();
@@ -115,9 +115,9 @@ void ViewCommander::Command_GREP(void)
 		);
 
 		// プラグイン：DocumentOpenイベント実行
-		CPlug::Array plugs;
-		CWSHIfObj::List params;
-		CJackManager::getInstance()->GetUsablePlug(PP_DOCUMENT_OPEN, 0, &plugs);
+		Plug::Array plugs;
+		WSHIfObj::List params;
+		JackManager::getInstance()->GetUsablePlug(PP_DOCUMENT_OPEN, 0, &plugs);
 		for (auto it=plugs.begin(); it!=plugs.end(); ++it) {
 			(*it)->Invoke(&GetEditWindow()->GetActiveView(), params);
 		}
@@ -140,8 +140,8 @@ void ViewCommander::Command_GREP(void)
 */
 void ViewCommander::Command_GREP_REPLACE_DLG( void )
 {
-	CNativeW cmemCurText;
-	CDlgGrepReplace& cDlgGrepRep = GetEditWindow()->m_cDlgGrepReplace;
+	NativeW cmemCurText;
+	DlgGrepReplace& cDlgGrepRep = GetEditWindow()->m_cDlgGrepReplace;
 
 	// 複数Grepウィンドウを使い分けている場合などに影響しないように、未設定のときだけHistoryを見る
 	bool bGetHistory = cDlgGrepRep.m_bSetText == false;
@@ -169,12 +169,12 @@ void ViewCommander::Command_GREP_REPLACE_DLG( void )
 */
 void ViewCommander::Command_GREP_REPLACE(void)
 {
-	CNativeW cmWork1;
+	NativeW cmWork1;
 	CNativeT cmWork2;
 	CNativeT cmWork3;
-	CNativeW cmWork4;
+	NativeW cmWork4;
 
-	CDlgGrepReplace& cDlgGrepRep = GetEditWindow()->m_cDlgGrepReplace;
+	DlgGrepReplace& cDlgGrepRep = GetEditWindow()->m_cDlgGrepReplace;
 	cmWork1.SetString( cDlgGrepRep.m_strText.c_str() );
 	cmWork2.SetString( cDlgGrepRep.m_szFile );
 	cmWork3.SetString( cDlgGrepRep.m_szFolder );
@@ -184,14 +184,14 @@ void ViewCommander::Command_GREP_REPLACE(void)
 		Grepモードのとき、または未編集で無題かつアウトプットでない場合。
 		自ウィンドウがGrep実行中も、(異常終了するので)別ウィンドウにする
 	*/
-	if (( CEditApp::getInstance()->m_pcGrepAgent->m_bGrepMode &&
-		  !CEditApp::getInstance()->m_pcGrepAgent->m_bGrepRunning ) ||
+	if (( EditApp::getInstance()->m_pcGrepAgent->m_bGrepMode &&
+		  !EditApp::getInstance()->m_pcGrepAgent->m_bGrepRunning ) ||
 		( !GetDocument()->m_cDocEditor.IsModified() &&
 		  !GetDocument()->m_cDocFile.GetFilePathClass().IsValidPath() &&		// 現在編集中のファイルのパス
 		  !AppMode::getInstance()->IsDebugMode()
 		)
 	) {
-		CEditApp::getInstance()->m_pcGrepAgent->DoGrep(
+		EditApp::getInstance()->m_pcGrepAgent->DoGrep(
 			m_pCommanderView,
 			true,
 			&cmWork1,

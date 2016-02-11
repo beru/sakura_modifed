@@ -31,7 +31,7 @@
 #include "macro/CWSHIfObj.h"
 
 // スマートインデント用WSHオブジェクト
-class CSmartIndentIfObj : public CWSHIfObj {
+class SmartIndentIfObj : public WSHIfObj {
 	// 型定義
 	enum FuncId {
 		F_SI_COMMAND_FIRST = 0,					// ↓コマンドは以下に追加する
@@ -43,15 +43,15 @@ class CSmartIndentIfObj : public CWSHIfObj {
 
 	// コンストラクタ
 public:
-	CSmartIndentIfObj(wchar_t ch)
-		: CWSHIfObj(L"Indent", false)
+	SmartIndentIfObj(wchar_t ch)
+		: WSHIfObj(L"Indent", false)
 		, m_wcChar(ch)
 	{
 	}
 
 	// デストラクタ
 public:
-	~CSmartIndentIfObj() {}
+	~SmartIndentIfObj() {}
 
 	// 実装
 public:
@@ -74,7 +74,7 @@ public:
 		return macroFuncInfoNotCommandArr;
 	}
 	// 関数を処理する
-	bool HandleFunction(CEditView* View, EFunctionCode ID, const VARIANT* Arguments, const int ArgSize, VARIANT& Result) {
+	bool HandleFunction(EditView* View, EFunctionCode ID, const VARIANT* Arguments, const int ArgSize, VARIANT& Result) {
 		switch (LOWORD(ID)) {
 		case F_SI_GETCHAR:						// 押下したキーを取得する
 			{
@@ -88,7 +88,7 @@ public:
 		return false;
 	}
 	// コマンドを処理する
-	bool HandleCommand(CEditView* View, EFunctionCode ID, const WCHAR* Arguments[], const int ArgLengths[], const int ArgSize) {
+	bool HandleCommand(EditView* View, EFunctionCode ID, const WCHAR* Arguments[], const int ArgLengths[], const int ArgSize) {
 		return false;
 	}
 

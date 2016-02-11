@@ -33,7 +33,7 @@
 //                           生成                              //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-CRecentCurDir::CRecentCurDir()
+RecentCurDir::RecentCurDir()
 {
 	Create(
 		GetShareData()->m_history.m_aCurDirs.dataPtr(),
@@ -53,29 +53,29 @@ CRecentCurDir::CRecentCurDir()
 
 	@note	取得後のポインタはユーザ管理の構造体にキャストして参照してください。
 */
-const TCHAR* CRecentCurDir::GetItemText(int nIndex) const
+const TCHAR* RecentCurDir::GetItemText(int nIndex) const
 {
 	return *GetItem(nIndex);
 }
 
-bool CRecentCurDir::DataToReceiveType(LPCTSTR* dst, const CCurDirString* src) const
+bool RecentCurDir::DataToReceiveType(LPCTSTR* dst, const CurDirString* src) const
 {
 	*dst = *src;
 	return true;
 }
 
-bool CRecentCurDir::TextToDataType(CCurDirString* dst, LPCTSTR pszText) const
+bool RecentCurDir::TextToDataType(CurDirString* dst, LPCTSTR pszText) const
 {
 	CopyItem(dst, pszText);
 	return true;
 }
 
-int CRecentCurDir::CompareItem(const CCurDirString* p1, LPCTSTR p2) const
+int RecentCurDir::CompareItem(const CurDirString* p1, LPCTSTR p2) const
 {
 	return _tcscmp(*p1, p2);
 }
 
-void CRecentCurDir::CopyItem(CCurDirString* dst, LPCTSTR src) const
+void RecentCurDir::CopyItem(CurDirString* dst, LPCTSTR src) const
 {
 	_tcscpy(*dst, src);
 }

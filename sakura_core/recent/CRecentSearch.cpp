@@ -33,7 +33,7 @@
 //                           生成                              //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-CRecentSearch::CRecentSearch()
+RecentSearch::RecentSearch()
 {
 	Create(
 		GetShareData()->m_searchKeywords.m_aSearchKeys.dataPtr(),
@@ -53,29 +53,29 @@ CRecentSearch::CRecentSearch()
 
 	@note	取得後のポインタはユーザ管理の構造体にキャストして参照してください。
 */
-const TCHAR* CRecentSearch::GetItemText(int nIndex) const
+const TCHAR* RecentSearch::GetItemText(int nIndex) const
 {
 	return to_tchar(*GetItem(nIndex));
 }
 
-bool CRecentSearch::DataToReceiveType(LPCWSTR* dst, const CSearchString* src) const
+bool RecentSearch::DataToReceiveType(LPCWSTR* dst, const SearchString* src) const
 {
 	*dst = *src;
 	return true;
 }
 
-bool CRecentSearch::TextToDataType(CSearchString* dst, LPCTSTR pszText) const
+bool RecentSearch::TextToDataType(SearchString* dst, LPCTSTR pszText) const
 {
 	CopyItem(dst, to_wchar(pszText));
 	return true;
 }
 
-int CRecentSearch::CompareItem(const CSearchString* p1, LPCWSTR p2) const
+int RecentSearch::CompareItem(const SearchString* p1, LPCWSTR p2) const
 {
 	return wcscmp(*p1, p2);
 }
 
-void CRecentSearch::CopyItem(CSearchString* dst, LPCWSTR src) const
+void RecentSearch::CopyItem(SearchString* dst, LPCWSTR src) const
 {
 	wcscpy(*dst, src);
 }

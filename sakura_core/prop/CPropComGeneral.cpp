@@ -67,19 +67,19 @@ static const DWORD p_helpids[] = {	//10900
 	@param wParam パラメータ1
 	@param lParam パラメータ2
 */
-INT_PTR CALLBACK CPropGeneral::DlgProc_page(
+INT_PTR CALLBACK PropGeneral::DlgProc_page(
 	HWND hwndDlg,
 	UINT uMsg,
 	WPARAM wParam,
 	LPARAM lParam
 	)
 {
-	return DlgProc(reinterpret_cast<pDispatchPage>(&CPropGeneral::DispatchEvent), hwndDlg, uMsg, wParam, lParam);
+	return DlgProc(reinterpret_cast<pDispatchPage>(&PropGeneral::DispatchEvent), hwndDlg, uMsg, wParam, lParam);
 }
 
 
 // General メッセージ処理
-INT_PTR CPropGeneral::DispatchEvent(
+INT_PTR PropGeneral::DispatchEvent(
 	HWND	hwndDlg,	// handle to dialog box
 	UINT	uMsg,		// message
 	WPARAM	wParam,		// first message parameter
@@ -137,7 +137,7 @@ INT_PTR CPropGeneral::DispatchEvent(
 //@@@ 2001.12.26 YAZAKI MRUリストは、CMRUに依頼する
 //				m_pShareData->m_sHistory.m_nMRUArrNum = 0;
 				{
-					CMRUFile cMRU;
+					MRUFile cMRU;
 					cMRU.ClearAll();
 				}
 				InfoMessage(hwndDlg, LS(STR_PROPCOMGEN_FILE2));
@@ -149,10 +149,10 @@ INT_PTR CPropGeneral::DispatchEvent(
 				) {
 					return TRUE;
 				}
-//@@@ 2001.12.26 YAZAKI OPENFOLDERリストは、CMRUFolderにすべて依頼する
+//@@@ 2001.12.26 YAZAKI OPENFOLDERリストは、MRUFolderにすべて依頼する
 //				m_pShareData->m_sHistory.m_nOPENFOLDERArrNum = 0;
 				{
-					CMRUFolder cMRUFolder;	//	MRUリストの初期化。ラベル内だと問題あり？
+					MRUFolder cMRUFolder;	//	MRUリストの初期化。ラベル内だと問題あり？
 					cMRUFolder.ClearAll();
 				}
 				InfoMessage(hwndDlg, LS(STR_PROPCOMGEN_DIR2));
@@ -295,7 +295,7 @@ INT_PTR CPropGeneral::DispatchEvent(
 
 
 // ダイアログデータの設定 General
-void CPropGeneral::SetData(HWND hwndDlg)
+void PropGeneral::SetData(HWND hwndDlg)
 {
 	auto& csGeneral = m_Common.m_sGeneral;
 
@@ -390,7 +390,7 @@ void CPropGeneral::SetData(HWND hwndDlg)
 
 
 // ダイアログデータの取得 General
-int CPropGeneral::GetData(HWND hwndDlg)
+int PropGeneral::GetData(HWND hwndDlg)
 {
 	auto& csGeneral = m_Common.m_sGeneral;
 	
@@ -458,7 +458,7 @@ int CPropGeneral::GetData(HWND hwndDlg)
 	}
 
 	{	// 履歴の管理	//@@@ 2003.04.09 MIK
-		CRecentFile	cRecentFile;
+		RecentFile	cRecentFile;
 		cRecentFile.UpdateView();
 		cRecentFile.Terminate();
 	}
@@ -473,7 +473,7 @@ int CPropGeneral::GetData(HWND hwndDlg)
 	}
 
 	{	// 履歴の管理	//@@@ 2003.04.09 MIK
-		CRecentFolder	cRecentFolder;
+		RecentFolder	cRecentFolder;
 		cRecentFolder.UpdateView();
 		cRecentFolder.Terminate();
 	}

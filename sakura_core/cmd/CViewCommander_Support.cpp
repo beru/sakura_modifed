@@ -71,7 +71,7 @@ retry:;
 		}
 	}
 #endif
-	CNativeW cmemData;
+	NativeW cmemData;
 	// カーソル直前の単語を取得
 	if (0 < m_pCommanderView->GetParser().GetLeftWord(&cmemData, 100)) {
 		m_pCommanderView->ShowHokanMgr(cmemData, true);
@@ -132,7 +132,7 @@ void ViewCommander::Command_MENU_ALLFUNC(void)
 //	To Here Sept. 15, 2000 (Oct. 7, 2000 300→500; Nov. 3, 2000 500→540)
 	po.y = 0;
 
-	CEditWnd* pCEditWnd = GetEditWindow();	// Sep. 10, 2002 genta
+	EditWnd* pCEditWnd = GetEditWindow();	// Sep. 10, 2002 genta
 	::GetClientRect(pCEditWnd->GetHwnd(), &rc);
 	po.x = t_min(po.x, rc.right);
 	::ClientToScreen(pCEditWnd->GetHwnd(), &po);
@@ -142,7 +142,7 @@ void ViewCommander::Command_MENU_ALLFUNC(void)
 	pCEditWnd->GetMenuDrawer().ResetContents();
 
 	// Oct. 3, 2001 genta
-	CFuncLookup& FuncLookup = GetDocument()->m_cFuncLookup;
+	FuncLookup& FuncLookup = GetDocument()->m_cFuncLookup;
 	HMENU hMenu = ::CreatePopupMenu();
 // Oct. 14, 2000 JEPRO 「--未定義--」を表示させないように変更したことで1番(カーソル移動系)が前にシフトされた(この変更によって i=1→i=0 と変更)
 	// Oct. 3, 2001 genta
@@ -192,7 +192,7 @@ void ViewCommander::Command_MENU_ALLFUNC(void)
 void ViewCommander::Command_EXTHELP1(void)
 {
 retry:;
-	if (!CHelpManager().ExtWinHelpIsSet(&(GetDocument()->m_cDocType.GetDocumentAttribute()))) {
+	if (!HelpManager().ExtWinHelpIsSet(&(GetDocument()->m_cDocType.GetDocumentAttribute()))) {
 //	if (wcslen(GetDllShareData().m_common.m_szExtHelp1) == 0) {
 		ErrorBeep();
 // From Here Sept. 15, 2000 JEPRO
@@ -206,7 +206,7 @@ retry:;
 			)
 		) {
 			// 共通設定 プロパティシート
-			if (!CEditApp::getInstance()->OpenPropertySheet(ID_PROPCOM_PAGENUM_HELPER)) {
+			if (!EditApp::getInstance()->OpenPropertySheet(ID_PROPCOM_PAGENUM_HELPER)) {
 				return;
 			}
 			goto retry;
@@ -216,8 +216,8 @@ retry:;
 		}
 	}
 
-	CNativeW cmemCurText;
-	const TCHAR* helpfile = CHelpManager().GetExtWinHelp(&(GetDocument()->m_cDocType.GetDocumentAttribute()));
+	NativeW cmemCurText;
+	const TCHAR* helpfile = HelpManager().GetExtWinHelp(&(GetDocument()->m_cDocType.GetDocumentAttribute()));
 
 	// 現在カーソル位置単語または選択範囲より検索等のキーを取得
 	m_pCommanderView->GetCurrentTextForSearch(cmemCurText, false);
@@ -263,7 +263,7 @@ void ViewCommander::Command_EXTHTMLHELP(const WCHAR* _helpfile, const WCHAR* kwd
 	// From Here Jul. 5, 2002 genta
 	const TCHAR* filename = NULL;
 	if (helpfile.length() == 0) {
-		while (!CHelpManager().ExtHTMLHelpIsSet(&(GetDocument()->m_cDocType.GetDocumentAttribute()))) {
+		while (!HelpManager().ExtHTMLHelpIsSet(&(GetDocument()->m_cDocType.GetDocumentAttribute()))) {
 			ErrorBeep();
 	// From Here Sept. 15, 2000 JEPRO
 	//		[Esc]キーと[x]ボタンでも中止できるように変更
@@ -278,11 +278,11 @@ void ViewCommander::Command_EXTHTMLHELP(const WCHAR* _helpfile, const WCHAR* kwd
 				return;
 			}
 			// 共通設定 プロパティシート
-			if (!CEditApp::getInstance()->OpenPropertySheet(ID_PROPCOM_PAGENUM_HELPER)) {
+			if (!EditApp::getInstance()->OpenPropertySheet(ID_PROPCOM_PAGENUM_HELPER)) {
 				return;
 			}
 		}
-		filename = CHelpManager().GetExtHTMLHelp(&(GetDocument()->m_cDocType.GetDocumentAttribute()));
+		filename = HelpManager().GetExtHTMLHelp(&(GetDocument()->m_cDocType.GetDocumentAttribute()));
 	}else {
 		filename = helpfile.c_str();
 	}
@@ -290,7 +290,7 @@ void ViewCommander::Command_EXTHTMLHELP(const WCHAR* _helpfile, const WCHAR* kwd
 
 	// Jul. 5, 2002 genta
 	// キーワードの外部指定を可能に
-	CNativeW	cmemCurText;
+	NativeW	cmemCurText;
 	if (kwd && kwd[0] != _T('\0')) {
 		cmemCurText.SetString(kwd);
 	}else {
@@ -299,7 +299,7 @@ void ViewCommander::Command_EXTHTMLHELP(const WCHAR* _helpfile, const WCHAR* kwd
 	}
 
 	// HtmlHelpビューアはひとつ
-	if (CHelpManager().HTMLHelpIsSingle(&(GetDocument()->m_cDocType.GetDocumentAttribute()))) {
+	if (HelpManager().HTMLHelpIsSingle(&(GetDocument()->m_cDocType.GetDocumentAttribute()))) {
 		// タスクトレイのプロセスにHtmlHelpを起動させる
 		// 2003.06.23 Moca 相対パスは実行ファイルからのパス
 		// 2007.05.21 ryoji 相対パスは設定ファイルからのパスを優先
@@ -364,7 +364,7 @@ void ViewCommander::Command_EXTHTMLHELP(const WCHAR* _helpfile, const WCHAR* kwd
 // バージョン情報
 void ViewCommander::Command_ABOUT(void)
 {
-	CDlgAbout cDlgAbout;
+	DlgAbout cDlgAbout;
 	cDlgAbout.DoModal(G_AppInstance(), m_pCommanderView->GetHwnd());
 	return;
 }

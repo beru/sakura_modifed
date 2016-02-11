@@ -33,7 +33,7 @@
 #include "window/CEditWnd.h"
 #include "debug/CRunningTimer.h"
 
-CDocEditor::CDocEditor(EditDoc* pcDoc)
+DocEditor::DocEditor(EditDoc* pcDoc)
 	:
 	m_pcDocRef(pcDoc),
 	m_cNewLineCode(EOL_CRLF),	// New Line Type
@@ -54,7 +54,7 @@ CDocEditor::CDocEditor(EditDoc* pcDoc)
 	@author genta
 	@date 2002.01.22 新規作成
 */
-void CDocEditor::SetModified(bool flag, bool redraw)
+void DocEditor::SetModified(bool flag, bool redraw)
 {
 	if (m_bIsDocModified == flag)	// 変更がなければ何もしない
 		return;
@@ -64,13 +64,13 @@ void CDocEditor::SetModified(bool flag, bool redraw)
 		m_pcDocRef->m_pcEditWnd->UpdateCaption();
 }
 
-void CDocEditor::OnBeforeLoad(LoadInfo* sLoadInfo)
+void DocEditor::OnBeforeLoad(LoadInfo* sLoadInfo)
 {
 	// ビューのテキスト選択解除
 	GetListeningDoc()->m_pcEditWnd->Views_DisableSelectArea(true);
 }
 
-void CDocEditor::OnAfterLoad(const LoadInfo& sLoadInfo)
+void DocEditor::OnAfterLoad(const LoadInfo& sLoadInfo)
 {
 	EditDoc* pcDoc = GetListeningDoc();
 
@@ -83,7 +83,7 @@ void CDocEditor::OnAfterLoad(const LoadInfo& sLoadInfo)
 		}else {
 			SetNewLineCode(EOL_CRLF);
 		}
-		CDocLine* pFirstlineinfo = pcDoc->m_cDocLineMgr.GetLine(LogicInt(0));
+		DocLine* pFirstlineinfo = pcDoc->m_cDocLineMgr.GetLine(LogicInt(0));
 		if (pFirstlineinfo) {
 			EEolType t = pFirstlineinfo->GetEol();
 			if (t != EOL_NONE && t != EOL_UNKNOWN) {
@@ -101,7 +101,7 @@ void CDocEditor::OnAfterLoad(const LoadInfo& sLoadInfo)
 	AppMode::getInstance()->SetViewMode(sLoadInfo.bViewMode);		// ビューモード	##ここも、アリかな
 }
 
-void CDocEditor::OnAfterSave(const SaveInfo& sSaveInfo)
+void DocEditor::OnAfterSave(const SaveInfo& sSaveInfo)
 {
 	EditDoc* pcDoc = GetListeningDoc();
 
@@ -121,7 +121,7 @@ void CDocEditor::OnAfterSave(const SaveInfo& sSaveInfo)
 	
 	@date Nov 20, 2000 genta
 */
-void CDocEditor::SetImeMode(int mode)
+void DocEditor::SetImeMode(int mode)
 {
 	HWND hwnd = m_pcDocRef->m_pcEditWnd->GetActiveView().GetHwnd();
 	HIMC hIme = ImmGetContext(hwnd); //######大丈夫？ // 2013.06.04 EditWndからViewに変更
@@ -170,10 +170,10 @@ void CDocEditor::SetImeMode(int mode)
 	@param cEol     [in] 行末コード
 
 */
-void CDocEditAgent::AddLineStrX(const wchar_t* pData, int nDataLen)
+void DocEditAgent::AddLineStrX(const wchar_t* pData, int nDataLen)
 {
 	// チェーン適用
-	CDocLine* pDocLine = m_pcDocLineMgr->AddNewLine();
+	DocLine* pDocLine = m_pcDocLineMgr->AddNewLine();
 
 	// インスタンス設定
 	pDocLine->SetDocLineString(pData, nDataLen);

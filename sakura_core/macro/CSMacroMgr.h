@@ -41,7 +41,7 @@
 #include "config/maxdata.h"
 #include "util/design_template.h"
 
-class CEditView;
+class EditView;
 
 
 const int STAND_KEYMACRO	= -1;	// 標準マクロ(キーマクロ)
@@ -73,13 +73,13 @@ typedef MacroFuncInfo* MacroFuncInfoArray;
 -----------------------------------------------------------------------*/
 class CSMacroMgr {
 	// データの型宣言
-	CMacroManagerBase* m_cSavedKeyMacro[MAX_CUSTMACRO];	// キーマクロをカスタムメニューの数だけ管理
+	MacroManagerBase* m_cSavedKeyMacro[MAX_CUSTMACRO];	// キーマクロをカスタムメニューの数だけ管理
 	// Jun. 16, 2002 genta
 	// キーマクロに標準マクロ以外のマクロを読み込めるように
-	CMacroManagerBase* m_pKeyMacro;	// 標準の（保存ができる）キーマクロも管理
+	MacroManagerBase* m_pKeyMacro;	// 標準の（保存ができる）キーマクロも管理
 
 	// 一時マクロ（名前を指定してマクロ実行）を管理
-	CMacroManagerBase* m_pTempMacro;
+	MacroManagerBase* m_pTempMacro;
 
 public:
 
@@ -96,7 +96,7 @@ public:
 	void ClearAll(void);	// キーマクロのバッファをクリアする
 
 	// キーボードマクロの実行
-	BOOL Exec(int idx, HINSTANCE hInstance, CEditView* pcEditView, int flags);
+	BOOL Exec(int idx, HINSTANCE hInstance, EditView* pcEditView, int flags);
 	
 	//	実行可能か？CShareDataに問い合わせ
 	bool IsEnabled(int idx) const {
@@ -132,7 +132,7 @@ public:
 	void UnloadAll(void);
 
 	// キーマクロのバッファにデータ追加
-	int Append(int idx, EFunctionCode nFuncID, const LPARAM* lParams, CEditView* pcEditView);
+	int Append(int idx, EFunctionCode nFuncID, const LPARAM* lParams, EditView* pcEditView);
 
 	/*
 	||  Attributes & Operations
@@ -157,11 +157,11 @@ public:
 	}
 
 	// Oct. 22, 2008 syat 一時マクロ導入
-	CMacroManagerBase* SetTempMacro(CMacroManagerBase *newMacro);
+	MacroManagerBase* SetTempMacro(MacroManagerBase *newMacro);
 
 private:
 	DLLSHAREDATA*	m_pShareData;
-	CMacroManagerBase** Idx2Ptr(int idx);
+	MacroManagerBase** Idx2Ptr(int idx);
 
 	/*!	実行中マクロのインデックス番号 (INVALID_MACRO_IDX:無効)
 		@date Sep. 15, 2005 FILE

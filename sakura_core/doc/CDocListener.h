@@ -68,7 +68,7 @@ enum ECallbackResult {
 //###
 struct LoadInfo {
 	// 入力
-	CFilePath	cFilePath;
+	FilePath	cFilePath;
 	ECodeType	eCharCode;
 	bool		bViewMode;
 	bool		bWritableNoMsg; //<! 書き込み禁止メッセージを表示しない
@@ -93,7 +93,7 @@ struct LoadInfo {
 	}
 
 	LoadInfo(
-		const CFilePath&	_cFilePath,
+		const FilePath&	_cFilePath,
 		ECodeType			_eCodeType,
 		bool				_bReadOnly,
 		CTypeConfig			_nType = CTypeConfig(-1)
@@ -114,11 +114,11 @@ struct LoadInfo {
 };
 
 struct SaveInfo {
-	CFilePath	cFilePath;	// 保存ファイル名
+	FilePath	cFilePath;	// 保存ファイル名
 	ECodeType	eCharCode;	// 保存文字コードセット
 	bool		bBomExist;	// 保存時BOM付加
 	bool		bChgCodeSet;// 文字コードセット変更	2013/5/19 Uchi
-	CEol		cEol;		// 保存改行コード
+	Eol		cEol;		// 保存改行コード
 
 	// モード
 	bool		bOverwriteMode;	// 上書き要求
@@ -135,9 +135,9 @@ struct SaveInfo {
 	}
 
 	SaveInfo(
-		const CFilePath& _cFilePath,
+		const FilePath& _cFilePath,
 		ECodeType _eCodeType,
-		const CEol& _cEol,
+		const Eol& _cEol,
 		bool _bBomExist
 	)
 		: 
@@ -238,8 +238,8 @@ public:
 
 
 #include <exception>
-class CFlowInterruption : public std::exception {
+class FlowInterruption : public std::exception {
 public:
-	const char* what() const throw() { return "CFlowInterruption"; }
+	const char* what() const throw() { return "FlowInterruption"; }
 };
 

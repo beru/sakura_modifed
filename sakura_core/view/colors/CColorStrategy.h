@@ -28,7 +28,7 @@
 #include "EColorIndexType.h"
 #include "uiparts/CGraphics.h"
 
-class CEditView;
+class EditView;
 
 bool _IsPosKeywordHead(const CStringRef& cStr, int nPos);
 
@@ -74,11 +74,11 @@ const TCHAR* GetColorNameByIndex(int index);
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 struct DispPos;
-class CColorStrategy;
+class ColorStrategy;
 #include "view/DispPos.h"
 
-class CColor_Found;
-class CColor_Select;
+class Color_Found;
+class Color_Select;
 
 // 色設定
 struct Color3Setting {
@@ -102,8 +102,8 @@ struct ColorStrategyInfo {
 	}
 
 	// 参照
-	CEditView*	m_pcView;
-	CGraphics	m_gr;	// (SColorInfoでは未使用)
+	EditView*	m_pcView;
+	Graphics	m_gr;	// (SColorInfoでは未使用)
 
 	// スキャン位置
 	LPCWSTR			m_pLineOfLogic;
@@ -114,9 +114,9 @@ struct ColorStrategyInfo {
 	DispPos			m_sDispPosBegin;
 
 	// 色変え
-	CColorStrategy*		m_pStrategy;
-	CColor_Found*		m_pStrategyFound;
-	CColor_Select*		m_pStrategySelect;
+	ColorStrategy*		m_pStrategy;
+	Color_Found*		m_pStrategyFound;
+	Color_Select*		m_pStrategySelect;
 	EColorIndexType		m_colorIdxBackLine;
 	Color3Setting		m_cIndex;
 
@@ -132,7 +132,7 @@ struct ColorStrategyInfo {
 		return m_nPosInLogic;
 	}
 	
-	const CDocLine* GetDocLine() const {
+	const DocLine* GetDocLine() const {
 		return m_pDispPos->GetLayoutRef()->GetDocLineRef();
 	}
 	
@@ -142,9 +142,9 @@ struct ColorStrategyInfo {
 	
 };
 
-class CColorStrategy {
+class ColorStrategy {
 public:
-	virtual ~CColorStrategy() {}
+	virtual ~ColorStrategy() {}
 	// 色定義
 	virtual EColorIndexType GetStrategyColor() const = 0;
 	virtual LayoutColorInfo* GetStrategyColorInfo() const {
@@ -180,28 +180,28 @@ protected:
 
 #include "util/design_template.h"
 #include <vector>
-class CColor_LineComment;
-class CColor_BlockComment;
-class CColor_BlockComment;
-class CColor_SingleQuote;
-class CColor_DoubleQuote;
-class CColor_Heredoc;
+class Color_LineComment;
+class Color_BlockComment;
+class Color_BlockComment;
+class Color_SingleQuote;
+class Color_DoubleQuote;
+class Color_Heredoc;
 
-class CColorStrategyPool : public TSingleton<CColorStrategyPool> {
-	friend class TSingleton<CColorStrategyPool>;
-	CColorStrategyPool();
-	virtual ~CColorStrategyPool();
+class ColorStrategyPool : public TSingleton<ColorStrategyPool> {
+	friend class TSingleton<ColorStrategyPool>;
+	ColorStrategyPool();
+	virtual ~ColorStrategyPool();
 
 public:
 
 	// 取得
-	CColorStrategy*	GetStrategy(int nIndex) const { return m_vStrategiesDisp[nIndex]; }
+	ColorStrategy*	GetStrategy(int nIndex) const { return m_vStrategiesDisp[nIndex]; }
 	int				GetStrategyCount() const { return (int)m_vStrategiesDisp.size(); }
-	CColorStrategy*	GetStrategyByColor(EColorIndexType eColor) const;
+	ColorStrategy*	GetStrategyByColor(EColorIndexType eColor) const;
 
 	// 特定取得
-	CColor_Found*   GetFoundStrategy() const { return m_pcFoundStrategy; }
-	CColor_Select*  GetSelectStrategy() const { return m_pcSelectStrategy; }
+	Color_Found*   GetFoundStrategy() const { return m_pcFoundStrategy; }
+	Color_Select*  GetSelectStrategy() const { return m_pcSelectStrategy; }
 
 	// イベント
 	void NotifyOnStartScanLogic();
@@ -211,30 +211,30 @@ public:
 	*/
 	//@@@ 2002.09.22 YAZAKI
 	// 2005.11.21 Moca 引用符の色分け情報を引数から除去
-	void CheckColorMODE(CColorStrategy** ppcColorStrategy, int nPos, const CStringRef& cLineStr);
+	void CheckColorMODE(ColorStrategy** ppcColorStrategy, int nPos, const CStringRef& cLineStr);
 	bool IsSkipBeforeLayout();	// レイアウトが行頭からチェックしなくていいか判定
 
 	// 設定変更
 	void OnChangeSetting(void);
 
 	// ビューの設定・取得
-	CEditView* GetCurrentView(void) const { return m_pcView; }
-	void SetCurrentView(CEditView* pcView) { m_pcView = pcView; }
+	EditView* GetCurrentView(void) const { return m_pcView; }
+	void SetCurrentView(EditView* pcView) { m_pcView = pcView; }
 
 private:
-	std::vector<CColorStrategy*>	m_vStrategies;
-	std::vector<CColorStrategy*>	m_vStrategiesDisp;	// 色分け表示対象
-	CColor_Found*					m_pcFoundStrategy;
-	CColor_Select*					m_pcSelectStrategy;
+	std::vector<ColorStrategy*>	m_vStrategies;
+	std::vector<ColorStrategy*>	m_vStrategiesDisp;	// 色分け表示対象
+	Color_Found*					m_pcFoundStrategy;
+	Color_Select*					m_pcSelectStrategy;
 
-	CColor_LineComment*				m_pcLineComment;
-	CColor_BlockComment*			m_pcBlockComment1;
-	CColor_BlockComment*			m_pcBlockComment2;
-	CColor_SingleQuote*				m_pcSingleQuote;
-	CColor_DoubleQuote*				m_pcDoubleQuote;
-	CColor_Heredoc*					m_pcHeredoc;
+	Color_LineComment*				m_pcLineComment;
+	Color_BlockComment*			m_pcBlockComment1;
+	Color_BlockComment*			m_pcBlockComment2;
+	Color_SingleQuote*				m_pcSingleQuote;
+	Color_DoubleQuote*				m_pcDoubleQuote;
+	Color_Heredoc*					m_pcHeredoc;
 
-	CEditView*						m_pcView;
+	EditView*						m_pcView;
 
 	bool	m_bSkipBeforeLayoutGeneral;
 	bool	m_bSkipBeforeLayoutFound;

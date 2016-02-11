@@ -30,16 +30,16 @@
 class UnicodeBe : public CodeBase {
 public:
 	// CodeBaseインターフェース
-	EConvertResult CodeToUnicode(const CMemory& cSrc, CNativeW* pDst){ return UnicodeBEToUnicode(cSrc, pDst); }	//!< 特定コード → UNICODE    変換
-	EConvertResult UnicodeToCode(const CNativeW& cSrc, CMemory* pDst){ return UnicodeToUnicodeBE(cSrc, pDst); }	//!< UNICODE    → 特定コード 変換
-	void GetBom(CMemory* pcmemBom);	//!< BOMデータ取得
-	void GetEol(CMemory* pcmemEol, EEolType eEolType);	//!< 改行データ取得
+	EConvertResult CodeToUnicode(const Memory& cSrc, NativeW* pDst){ return UnicodeBEToUnicode(cSrc, pDst); }	//!< 特定コード → UNICODE    変換
+	EConvertResult UnicodeToCode(const NativeW& cSrc, Memory* pDst){ return UnicodeToUnicodeBE(cSrc, pDst); }	//!< UNICODE    → 特定コード 変換
+	void GetBom(Memory* pcmemBom);	//!< BOMデータ取得
+	void GetEol(Memory* pcmemEol, EEolType eEolType);	//!< 改行データ取得
 
 public:
 
-	inline static EConvertResult UnicodeBEToUnicode(const CMemory& cSrc, CNativeW* pDst)
+	inline static EConvertResult UnicodeBEToUnicode(const Memory& cSrc, NativeW* pDst)
 		{ return Unicode::_UnicodeToUnicode_in(cSrc, pDst, true); }	// UnicodeBE → Unicodeコード変換 //2007.08.13 kobake 追加
-	inline static EConvertResult UnicodeToUnicodeBE(const CNativeW& cSrc, CMemory* pDst)
+	inline static EConvertResult UnicodeToUnicodeBE(const NativeW& cSrc, Memory* pDst)
 		{ return Unicode::_UnicodeToUnicode_out(cSrc, pDst, true); }	// Unicode   → UnicodeBEコード変換
 
 };

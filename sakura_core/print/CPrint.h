@@ -124,7 +124,7 @@ struct PRINTSETTING {
 
 	オブジェクト指向でないクラス
 */
-class CPrint {
+class Print {
 public:
 	static const PAPER_INFO m_paperInfoArr[];	// 用紙情報一覧
 	static const int m_nPaperInfoArrNum; // 用紙情報一覧の要素数
@@ -152,8 +152,8 @@ public:
 	/*
 	||  Constructors
 	*/
-	CPrint();
-	~CPrint();
+	Print();
+	~Print();
 
 	/*
 	||  Attributes & Operations

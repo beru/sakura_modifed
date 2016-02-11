@@ -41,7 +41,7 @@ public:
 	}
 };
 
-void CColor_Heredoc::SetStrategyColorInfo(const LayoutColorInfo* colorInfo)
+void Color_Heredoc::SetStrategyColorInfo(const LayoutColorInfo* colorInfo)
 {
 	if (colorInfo) {
 		const CLayoutColorHeredocInfo* info = dynamic_cast<const CLayoutColorHeredocInfo*>(colorInfo);
@@ -53,14 +53,14 @@ void CColor_Heredoc::SetStrategyColorInfo(const LayoutColorInfo* colorInfo)
 	}
 }
 
-LayoutColorInfo* CColor_Heredoc::GetStrategyColorInfo() const
+LayoutColorInfo* Color_Heredoc::GetStrategyColorInfo() const
 {
 	CLayoutColorHeredocInfo* info = new CLayoutColorHeredocInfo();
 	info->m_id.assign(m_pszId, m_nSize);
 	return info;
 }
 
-bool CColor_Heredoc::BeginColor(const CStringRef& cStr, int nPos)
+bool Color_Heredoc::BeginColor(const CStringRef& cStr, int nPos)
 {
 	if (!cStr.IsValid()) return false;
 
@@ -123,7 +123,7 @@ bool CColor_Heredoc::BeginColor(const CStringRef& cStr, int nPos)
 	return false;
 }
 
-bool CColor_Heredoc::EndColor(const CStringRef& cStr, int nPos)
+bool Color_Heredoc::EndColor(const CStringRef& cStr, int nPos)
 {
 	if (this->m_nCOMMENTEND == 0) {
 		if (1

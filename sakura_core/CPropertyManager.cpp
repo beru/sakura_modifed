@@ -28,10 +28,10 @@
 #include "env/CDocTypeManager.h"
 #include <memory>
 
-void CPropertyManager::Create(
+void PropertyManager::Create(
 	HWND			hwndOwner,
-	CImageListMgr*	pImageList,
-	CMenuDrawer*	pMenuDrawer
+	ImageListMgr*	pImageList,
+	MenuDrawer*	pMenuDrawer
 	)
 {
 	m_hwndOwner = hwndOwner;
@@ -43,17 +43,17 @@ void CPropertyManager::Create(
 }
 
 // 共通設定 プロパティシート
-bool CPropertyManager::OpenPropertySheet(
+bool PropertyManager::OpenPropertySheet(
 	HWND	hWnd,
 	int		nPageNum,
 	bool	bTrayProc
 	)
 {
 	bool bRet;
-	auto pcPropCommon = std::make_unique<CPropCommon>();
+	auto pcPropCommon = std::make_unique<PropCommon>();
 	pcPropCommon->Create(m_hwndOwner, m_pImageList, m_pMenuDrawer);
 
-	// 2002.12.11 Moca この部分で行われていたデータのコピーをCPropCommonに移動・関数化
+	// 2002.12.11 Moca この部分で行われていたデータのコピーをPropCommonに移動・関数化
 	// 共通設定の一時設定領域にSharaDataをコピーする
 	pcPropCommon->InitData();
 
@@ -64,7 +64,7 @@ bool CPropertyManager::OpenPropertySheet(
 	// プロパティシートの作成
 	if (pcPropCommon->DoPropertySheet(m_nPropComPageNum, bTrayProc)) {
 
-		// 2002.12.11 Moca この部分で行われていたデータのコピーをCPropCommonに移動・関数化
+		// 2002.12.11 Moca この部分で行われていたデータのコピーをPropCommonに移動・関数化
 		// ShareData に 設定を適用・コピーする
 		// 2007.06.20 ryoji グループ化に変更があったときはグループIDをリセットする
 		auto& csTabBar = GetDllShareData().m_common.m_sTabBar;
@@ -80,7 +80,7 @@ bool CPropertyManager::OpenPropertySheet(
 		// ここでしか適用しないと、ほかのウィンドウが変更されません。
 
 		if (bGroup != (csTabBar.m_bDispTabWnd && !csTabBar.m_bDispTabWndMultiWin )) {
-			CAppNodeManager::getInstance()->ResetGroupId();
+			AppNodeManager::getInstance()->ResetGroupId();
 		}
 
 		// アクセラレータテーブルの再作成
@@ -88,7 +88,7 @@ bool CPropertyManager::OpenPropertySheet(
 
 		// 設定変更を反映させる
 		// 全編集ウィンドウへメッセージをポストする
-		CAppNodeGroupHandle(0).SendMessageToAllEditors(
+		AppNodeGroupHandle(0).SendMessageToAllEditors(
 			MYWM_CHANGESETTING,
 			(WPARAM)0,
 			(LPARAM)PM_CHANGESETTING_ALL,
@@ -109,18 +109,18 @@ bool CPropertyManager::OpenPropertySheet(
 
 
 // タイプ別設定 プロパティシート
-bool CPropertyManager::OpenPropertySheetTypes(
+bool PropertyManager::OpenPropertySheetTypes(
 	HWND		hWnd,
 	int			nPageNum,
 	CTypeConfig	nSettingType
 	)
 {
 	bool bRet;
-	auto pcPropTypes = std::make_unique<CPropTypes>();
+	auto pcPropTypes = std::make_unique<PropTypes>();
 	pcPropTypes->Create(G_AppInstance(), m_hwndOwner);
 
 	auto pType = std::make_unique<TypeConfig>();
-	CDocTypeManager().GetTypeConfig(nSettingType, *pType);
+	DocTypeManager().GetTypeConfig(nSettingType, *pType);
 	pcPropTypes->SetTypeData(*pType);
 	// Mar. 31, 2003 genta メモリ削減のためポインタに変更しProperySheet内で取得するように
 
@@ -136,21 +136,21 @@ bool CPropertyManager::OpenPropertySheetTypes(
 
 		pcPropTypes->GetTypeData(*pType);
 
-		CDocTypeManager().SetTypeConfig(nSettingType, *pType);
+		DocTypeManager().SetTypeConfig(nSettingType, *pType);
 
 		// アクセラレータテーブルの再作成
 		// ::SendMessage(GetDllShareData().m_handles.m_hwndTray, MYWM_CHANGESETTING,  (WPARAM)0, (LPARAM)PM_CHANGESETTING_ALL);
 
 		// 設定変更を反映させる
 		// 全編集ウィンドウへメッセージをポストする
-		CAppNodeGroupHandle(0).SendMessageToAllEditors(
+		AppNodeGroupHandle(0).SendMessageToAllEditors(
 			MYWM_CHANGESETTING,
 			(WPARAM)nSettingType.GetIndex(),
 			(LPARAM)PM_CHANGESETTING_TYPE,
 			hWnd
 		);
 		if (pcPropTypes->GetChangeKeyWordSet()) {
-			CAppNodeGroupHandle(0).SendMessageToAllEditors(
+			AppNodeGroupHandle(0).SendMessageToAllEditors(
 				WM_COMMAND,
 				(WPARAM)MAKELONG(F_REDRAW, 0),
 				(LPARAM)0,

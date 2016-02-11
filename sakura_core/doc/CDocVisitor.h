@@ -27,11 +27,11 @@
 
 class EditDoc;
 
-class CDocVisitor {
+class DocVisitor {
 public:
-	CDocVisitor(EditDoc* pcDoc) : m_pcDocRef(pcDoc) { }
+	DocVisitor(EditDoc* pcDoc) : m_pcDocRef(pcDoc) { }
 
-	void SetAllEol(CEol cEol); // 改行コードを統一する
+	void SetAllEol(Eol cEol); // 改行コードを統一する
 private:
 	EditDoc* m_pcDocRef;
 };

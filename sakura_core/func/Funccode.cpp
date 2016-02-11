@@ -1002,7 +1002,7 @@ bool IsFuncEnable(const EditDoc* pcEditDoc, const DLLSHAREDATA* pShareData, EFun
 	switch (nId) {
 	case F_RECKEYMACRO:	// キーマクロの記録開始／終了
 		if (pShareData->m_flags.m_bRecordingKeyMacro) {	// キーボードマクロの記録中
-			return (pShareData->m_flags.m_hwndRecordingKeyMacro == CEditWnd::getInstance()->GetHwnd());	// キーボードマクロを記録中のウィンドウ
+			return (pShareData->m_flags.m_hwndRecordingKeyMacro == EditWnd::getInstance()->GetHwnd());	// キーボードマクロを記録中のウィンドウ
 		}else {
 			return true;
 		}
@@ -1011,20 +1011,20 @@ bool IsFuncEnable(const EditDoc* pcEditDoc, const DLLSHAREDATA* pShareData, EFun
 		// キーマクロエンジン以外のマクロを読み込んでいるときは
 		// 実行はできるが保存はできない．
 		if (pShareData->m_flags.m_bRecordingKeyMacro) {	// キーボードマクロの記録中
-			return (pShareData->m_flags.m_hwndRecordingKeyMacro == CEditWnd::getInstance()->GetHwnd());	// キーボードマクロを記録中のウィンドウ
+			return (pShareData->m_flags.m_hwndRecordingKeyMacro == EditWnd::getInstance()->GetHwnd());	// キーボードマクロを記録中のウィンドウ
 		}else {
-			return CEditApp::getInstance()->m_pcSMacroMgr->IsSaveOk();
+			return EditApp::getInstance()->m_pcSMacroMgr->IsSaveOk();
 		}
 	case F_EXECKEYMACRO:	// キーマクロの実行
 		if (pShareData->m_flags.m_bRecordingKeyMacro) {	// キーボードマクロの記録中
-			return (pShareData->m_flags.m_hwndRecordingKeyMacro == CEditWnd::getInstance()->GetHwnd());	// キーボードマクロを記録中のウィンドウ
+			return (pShareData->m_flags.m_hwndRecordingKeyMacro == EditWnd::getInstance()->GetHwnd());	// キーボードマクロを記録中のウィンドウ
 		}else {
 			//@@@ 2002.1.24 YAZAKI m_szKeyMacroFileNameにファイル名がコピーされているかどうか。
 			return (pShareData->m_common.m_sMacro.m_szKeyMacroFileName[0] != NULL);
 		}
 	case F_LOADKEYMACRO:	// キーマクロの読み込み
 		if (pShareData->m_flags.m_bRecordingKeyMacro) {	// キーボードマクロの記録中
-			return (pShareData->m_flags.m_hwndRecordingKeyMacro == CEditWnd::getInstance()->GetHwnd());	// キーボードマクロを記録中のウィンドウ
+			return (pShareData->m_flags.m_hwndRecordingKeyMacro == EditWnd::getInstance()->GetHwnd());	// キーボードマクロを記録中のウィンドウ
 		}else {
 			return true;
 		}
@@ -1045,7 +1045,7 @@ bool IsFuncEnable(const EditDoc* pcEditDoc, const DLLSHAREDATA* pShareData, EFun
 	case F_DIFF_NEXT:	// 次の差分へ	//@@@ 2002.05.25 MIK
 	case F_DIFF_PREV:	// 前の差分へ	//@@@ 2002.05.25 MIK
 	case F_DIFF_RESET:	// 差分の全解除	//@@@ 2002.05.25 MIK
-		return CDiffManager::getInstance()->IsDiffUse();
+		return DiffManager::getInstance()->IsDiffUse();
 	case F_DIFF_DIALOG:	// DIFF差分表示	//@@@ 2002.05.25 MIK
 		//if (pcEditDoc->IsModified()) return false;
 		//if (! pcEditDoc->m_cDocFile.GetFilePathClass().IsValidPath()) return false;
@@ -1166,7 +1166,7 @@ bool IsFuncEnable(const EditDoc* pcEditDoc, const DLLSHAREDATA* pShareData, EFun
 	case F_TAGJUMP_KEYWORD:	// キーワードを指定してダイレクトタグジャンプ	//@@@ 2005.03.31 MIK
 	// 2003.05.12 MIK タグファイル作成先を選べるようにしたので、常に作成可能とする
 //	case F_TAGS_MAKE:	// タグファイルの作成	//@@@ 2003.04.13 MIK
-		return (!CEditApp::getInstance()->m_pcGrepAgent->m_bGrepMode
+		return (!EditApp::getInstance()->m_pcGrepAgent->m_bGrepMode
 			&& pcEditDoc->m_cDocFile.GetFilePathClass().IsValidPath()
 		);
 		
@@ -1210,9 +1210,9 @@ bool IsFuncEnable(const EditDoc* pcEditDoc, const DLLSHAREDATA* pShareData, EFun
 // 機能がチェック状態か調べる
 bool IsFuncChecked(const EditDoc* pcEditDoc, const DLLSHAREDATA* pShareData, EFunctionCode nId)
 {
-	CEditWnd* pCEditWnd;
+	EditWnd* pCEditWnd;
 	// Modified by KEITA for WIN64 2003.9.6
-	pCEditWnd = (CEditWnd*)::GetWindowLongPtr(CEditWnd::getInstance()->GetHwnd(), GWLP_USERDATA);
+	pCEditWnd = (EditWnd*)::GetWindowLongPtr(EditWnd::getInstance()->GetHwnd(), GWLP_USERDATA);
 //@@@ 2002.01.14 YAZAKI 印刷プレビューをCPrintPreviewに独立させたことにより、プレビュー判定削除
 	ECodeType eDocCode = pcEditDoc->GetDocumentEncoding();
 	switch (nId) {
@@ -1227,7 +1227,7 @@ bool IsFuncChecked(const EditDoc* pcEditDoc, const DLLSHAREDATA* pShareData, EFu
 	case F_FILE_REOPEN_UTF7:		return CODE_UTF7 == eDocCode;
 	case F_RECKEYMACRO:	// キーマクロの記録開始／終了
 		if (pShareData->m_flags.m_bRecordingKeyMacro) {	// キーボードマクロの記録中
-			return (pShareData->m_flags.m_hwndRecordingKeyMacro == CEditWnd::getInstance()->GetHwnd());	// キーボードマクロを記録中のウィンドウ
+			return (pShareData->m_flags.m_hwndRecordingKeyMacro == EditWnd::getInstance()->GetHwnd());	// キーボードマクロを記録中のウィンドウ
 		}else {
 			return false;
 		}

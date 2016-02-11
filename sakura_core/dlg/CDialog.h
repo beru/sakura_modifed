@@ -18,7 +18,7 @@
 
 #pragma once
 
-class CDialog;
+class Dialog;
 
 struct DLLSHAREDATA;
 class Recent;
@@ -68,13 +68,13 @@ struct ComboBoxItemDeleter
 
 	@date 2002.2.17 YAZAKI CShareDataのインスタンスは、CProcessにひとつあるのみ。
 */
-class CDialog {
+class Dialog {
 public:
 	/*
 	||  Constructors
 	*/
-	CDialog( bool bSizable = false, bool bCheckShareData = true );
-	virtual ~CDialog();
+	Dialog( bool bSizable = false, bool bCheckShareData = true );
+	virtual ~Dialog();
 	/*
 	||  Attributes & Operations
 	*/

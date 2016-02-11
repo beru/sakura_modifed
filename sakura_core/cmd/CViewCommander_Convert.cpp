@@ -238,14 +238,14 @@ void ViewCommander::Command_BASE64DECODE(void)
 	}
 	// 選択範囲のデータを取得
 	// 正常時はTRUE,範囲未選択の場合はFALSEを返す
-	CNativeW ctextBuf;
+	NativeW ctextBuf;
 	if (!m_pCommanderView->GetSelectedDataSimple(ctextBuf)) {
 		ErrorBeep();
 		return;
 	}
 
 	// Base64デコード
-	CMemory cmemBuf;
+	Memory cmemBuf;
 	bool bret = Decode_Base64Decode().CallDecode(ctextBuf, &cmemBuf);
 	if (!bret) {
 		return;
@@ -286,14 +286,14 @@ void ViewCommander::Command_UUDECODE(void)
 
 	// 選択範囲のデータを取得 -> cmemBuf
 	// 正常時はTRUE,範囲未選択の場合はFALSEを返す
-	CNativeW ctextBuf;
+	NativeW ctextBuf;
 	if (!m_pCommanderView->GetSelectedDataSimple(ctextBuf)) {
 		ErrorBeep();
 		return;
 	}
 
 	// uudecode(デコード)  ctextBuf -> cmemBin, szPath
-	CMemory cmemBin;
+	Memory cmemBin;
 	TCHAR szPath[_MAX_PATH] = _T("");
 	Decode_UuDecode decoder;
 	if (!decoder.CallDecode(ctextBuf, &cmemBin)) {

@@ -25,7 +25,7 @@
 //	@date 2002.2.17 YAZAKI CShareDataのインスタンスは、CProcessにひとつあるのみ。
 CSplitterWnd::CSplitterWnd()
 	:
-	CWnd(_T("::CSplitterWnd")),
+	Wnd(_T("::CSplitterWnd")),
 	m_pcEditWnd(NULL),
 	m_nAllSplitRows(1),					// 分割行数
 	m_nAllSplitCols(1),					// 分割桁数
@@ -80,7 +80,7 @@ HWND CSplitterWnd::Create(HINSTANCE hInstance, HWND hwndParent, void* pCEditWnd)
 	}
 
 	// 基底クラスメンバ呼び出し
-	return CWnd::Create(
+	return Wnd::Create(
 		hwndParent,
 		0, // extended window style
 		pszClassName,	// Pointer to a null-terminated string or is an atom.
@@ -121,11 +121,11 @@ void CSplitterWnd::SetChildWndArr(HWND* hwndEditViewArr)
 // 分割フレーム描画
 void CSplitterWnd::DrawFrame(HDC hdc, RECT* prc)
 {
-	CSplitBoxWnd::Draw3dRect(hdc, prc->left, prc->top, prc->right, prc->bottom,
+	SplitBoxWnd::Draw3dRect(hdc, prc->left, prc->top, prc->right, prc->bottom,
 		::GetSysColor(COLOR_3DSHADOW),
 		::GetSysColor(COLOR_3DHILIGHT)
 	);
-	CSplitBoxWnd::Draw3dRect(hdc, prc->left + 1, prc->top + 1, prc->right - 2, prc->bottom - 2,
+	SplitBoxWnd::Draw3dRect(hdc, prc->left + 1, prc->top + 1, prc->right - 2, prc->bottom - 2,
 		RGB(0, 0, 0),
 		::GetSysColor(COLOR_3DFACE)
 	);
@@ -238,9 +238,9 @@ void CSplitterWnd::DoSplit(int nHorizontal, int nVertical)
 	RECT		rc;
 	int			nAllSplitRowsOld = m_nAllSplitRows;	// 分割行数
 	int			nAllSplitColsOld = m_nAllSplitCols;	// 分割桁数
-	CEditView*	pcViewArr[MAXCOUNTOFVIEW];
+	EditView*	pcViewArr[MAXCOUNTOFVIEW];
 	bool		bSizeBox;
-	CEditWnd*	pCEditWnd = (CEditWnd*)m_pcEditWnd;
+	EditWnd*	pCEditWnd = (EditWnd*)m_pcEditWnd;
 	
 	bool bVUp = false;
 	bool bHUp = false;
@@ -296,7 +296,7 @@ void CSplitterWnd::DoSplit(int nHorizontal, int nVertical)
 
 	int v;
 	for (v=0; v<m_nChildWndCount; ++v) {
-		pcViewArr[v] = (CEditView*)::GetWindowLongPtr(m_ChildWndArr[v], 0);
+		pcViewArr[v] = (EditView*)::GetWindowLongPtr(m_ChildWndArr[v], 0);
 	}
 	::GetClientRect(GetHwnd(), &rc);
 	if (nHorizontal < nLimit) {
@@ -809,12 +809,12 @@ LRESULT CSplitterWnd::OnPaint(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam
 // ウィンドウサイズの変更処理
 LRESULT CSplitterWnd::OnSize(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-	CEditWnd*	pCEditWnd = (CEditWnd*)m_pcEditWnd;
-	CEditView*	pcViewArr[MAXCOUNTOFVIEW];
+	EditWnd*	pCEditWnd = (EditWnd*)m_pcEditWnd;
+	EditView*	pcViewArr[MAXCOUNTOFVIEW];
 	int			nFrameWidth = 3;
 	bool		bSizeBox;
 	for (int i=0; i<m_nChildWndCount; ++i) {
-		pcViewArr[i] = (CEditView*)::GetWindowLongPtr(m_ChildWndArr[i], 0);
+		pcViewArr[i] = (EditView*)::GetWindowLongPtr(m_ChildWndArr[i], 0);
 	}
 
 	/*

@@ -7,7 +7,7 @@
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 // 半角カナ→全角カナ
-bool Converter_HankataToZenkata::DoConvert(CNativeW* pcData)
+bool Converter_HankataToZenkata::DoConvert(NativeW* pcData)
 {
 	// 半角カナ→全角カナ
 	// 文字数が減ることはあっても増えることは無いので、これでＯＫ

@@ -45,9 +45,9 @@
 
 typedef std::wstring wstring;
 
-CEditWnd* CSakuraEnvironment::GetMainWindow()
+EditWnd* SakuraEnvironment::GetMainWindow()
 {
-	return CEditWnd::getInstance();
+	return EditWnd::getInstance();
 }
 
 enum EExpParamName
@@ -107,7 +107,7 @@ wchar_t* ExParam_LongName( wchar_t* q, wchar_t* q_max, EExpParamName eLongParam 
 	@date 2008.05.05 novice GetModuleHandle(NULL)→NULLに変更
 	@date 2012.10.11 Moca 特殊文字n追加
 */
-void CSakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszBuffer, int nBufferLen)
+void SakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszBuffer, int nBufferLen)
 {
 	const EditDoc* pcDoc = EditDoc::GetInstance(0); //###
 
@@ -207,8 +207,8 @@ void CSakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszB
 				NONCLIENTMETRICS met;
 				met.cbSize = CCSIZEOF_STRUCT(NONCLIENTMETRICS, lfMessageFont);
 				::SystemParametersInfo(SPI_GETNONCLIENTMETRICS, met.cbSize, &met, 0);
-				CDCFont dcFont(met.lfCaptionFont, GetMainWindow()->GetHwnd());
-				CFileNameManager::getInstance()->GetTransformFileNameFast( pcDoc->m_cDocFile.GetFilePath(), szText, 1023, dcFont.GetHDC(), true );
+				DCFont dcFont(met.lfCaptionFont, GetMainWindow()->GetHwnd());
+				FileNameManager::getInstance()->GetTransformFileNameFast( pcDoc->m_cDocFile.GetFilePath(), szText, 1023, dcFont.GetHDC(), true );
 				q = wcs_pushT(q, q_max - q, szText);
 				++p;
 			}
@@ -216,11 +216,11 @@ void CSakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszB
 		// To Here 2003/06/21 Moca
 		case L'n':
 			if (!pcDoc->m_cDocFile.GetFilePathClass().IsValidPath()) {
-				if (CEditApp::getInstance()->m_pcGrepAgent->m_bGrepMode) {
+				if (EditApp::getInstance()->m_pcGrepAgent->m_bGrepMode) {
 				}else if (AppMode::getInstance()->IsDebugMode()) {
 				}else {
 					WCHAR szText[10];
-					const EditNode* node = CAppNodeManager::getInstance()->GetEditNode(GetMainWindow()->GetHwnd());
+					const EditNode* node = AppNodeManager::getInstance()->GetEditNode(GetMainWindow()->GetHwnd());
 					if (0 < node->m_nId) {
 						swprintf(szText, L"%d", node->m_nId);
 						q = wcs_pushW(q, q_max - q, szText);
@@ -254,8 +254,8 @@ void CSakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszB
 				NONCLIENTMETRICS met;
 				met.cbSize = CCSIZEOF_STRUCT(NONCLIENTMETRICS, lfMessageFont);
 				::SystemParametersInfo(SPI_GETNONCLIENTMETRICS, met.cbSize, &met, 0);
-				CDCFont dcFont(met.lfCaptionFont, GetMainWindow()->GetHwnd());
-				CFileNameManager::getInstance()->GetTransformFileNameFast( to_tchar(buff), szText, _countof(szText)-1, dcFont.GetHDC(), true );
+				DCFont dcFont(met.lfCaptionFont, GetMainWindow()->GetHwnd());
+				FileNameManager::getInstance()->GetTransformFileNameFast( to_tchar(buff), szText, _countof(szText)-1, dcFont.GetHDC(), true );
 				q = wcs_pushT(q, q_max - q, szText);
 			}
 			++p;
@@ -315,7 +315,7 @@ void CSakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszB
 			break;
 		case L'C':	// 現在選択中のテキスト
 			{
-				CNativeW cmemCurText;
+				NativeW cmemCurText;
 				GetMainWindow()->GetActiveView().GetCurrentTextForSearch(cmemCurText);
 
 				q = wcs_pushW(q, q_max - q, cmemCurText.GetStringPtr(), cmemCurText.GetStringLength());
@@ -346,7 +346,7 @@ void CSakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszB
 				TCHAR szText[1024];
 				SYSTEMTIME systime;
 				::GetLocalTime(&systime);
-				CFormatManager().MyGetDateFormat(systime, szText, _countof(szText) - 1);
+				FormatManager().MyGetDateFormat(systime, szText, _countof(szText) - 1);
 				q = wcs_pushT(q, q_max - q, szText);
 				++p;
 			}
@@ -356,14 +356,14 @@ void CSakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszB
 				TCHAR szText[1024];
 				SYSTEMTIME systime;
 				::GetLocalTime(&systime);
-				CFormatManager().MyGetTimeFormat(systime, szText, _countof(szText) - 1);
+				FormatManager().MyGetTimeFormat(systime, szText, _countof(szText) - 1);
 				q = wcs_pushT(q, q_max - q, szText);
 				++p;
 			}
 			break;
 		case L'p':	// 現在のページ
 			{
-				CEditWnd* pcEditWnd = GetMainWindow();	// Sep. 10, 2002 genta
+				EditWnd* pcEditWnd = GetMainWindow();	// Sep. 10, 2002 genta
 				if (pcEditWnd->m_pPrintPreview) {
 					wchar_t szText[1024];
 					_itow(pcEditWnd->m_pPrintPreview->GetCurPageNum() + 1, szText, 10);
@@ -377,7 +377,7 @@ void CSakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszB
 			break;
 		case L'P':	// 総ページ
 			{
-				CEditWnd* pcEditWnd = GetMainWindow();	// Sep. 10, 2002 genta
+				EditWnd* pcEditWnd = GetMainWindow();	// Sep. 10, 2002 genta
 				if (pcEditWnd->m_pPrintPreview) {
 					wchar_t szText[1024];
 					_itow(pcEditWnd->m_pPrintPreview->GetAllPageNum(), szText, 10);
@@ -392,7 +392,7 @@ void CSakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszB
 		case L'D':	// タイムスタンプ
 			if (!pcDoc->m_cDocFile.IsFileTimeZero()) {
 				TCHAR szText[1024];
-				CFormatManager().MyGetDateFormat(
+				FormatManager().MyGetDateFormat(
 					pcDoc->m_cDocFile.GetFileSysTime(),
 					szText,
 					_countof(szText) - 1
@@ -407,7 +407,7 @@ void CSakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszB
 		case L'T':	// タイムスタンプ
 			if (!pcDoc->m_cDocFile.IsFileTimeZero()) {
 				TCHAR szText[1024];
-				CFormatManager().MyGetTimeFormat(
+				FormatManager().MyGetTimeFormat(
 					pcDoc->m_cDocFile.GetFileSysTime(),
 					szText,
 					_countof(szText) - 1
@@ -440,7 +440,7 @@ void CSakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszB
 			// Grep Key文字列 MAX 32文字
 			// 中身はSetParentCaption()より移植
 			{
-				CNativeW cmemDes;
+				NativeW cmemDes;
 				// m_szGrepKey → cmemDes
 				LimitStringLengthW(AppMode::getInstance()->m_szGrepKey, wcslen(AppMode::getInstance()->m_szGrepKey), (q_max - q > 32 ? 32 : q_max - q - 3), cmemDes);
 				if ((int)wcslen(AppMode::getInstance()->m_szGrepKey) > cmemDes.GetStringLength()) {
@@ -464,7 +464,7 @@ void CSakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszB
 			{
 				TCHAR	szPath[_MAX_PATH + 1];
 				std::tstring strProfileName = to_tchar(CommandLine::getInstance()->GetProfileName());
-				CFileNameManager::getInstance()->GetIniFileName( szPath, strProfileName.c_str() );
+				FileNameManager::getInstance()->GetIniFileName( szPath, strProfileName.c_str() );
 				q = wcs_pushT( q, q_max - q, szPath );
 				++p;
 			}
@@ -473,7 +473,7 @@ void CSakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszB
 			// 現在実行しているマクロファイルパスの取得
 			{
 				// 実行中マクロのインデックス番号 (INVALID_MACRO_IDX:無効 / STAND_KEYMACRO:標準マクロ)
-				CSMacroMgr* pcSMacroMgr = CEditApp::getInstance()->m_pcSMacroMgr;
+				CSMacroMgr* pcSMacroMgr = EditApp::getInstance()->m_pcSMacroMgr;
 				switch (pcSMacroMgr->GetCurrentIdx()) {
 				case INVALID_MACRO_IDX:
 					break;
@@ -489,7 +489,7 @@ void CSakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszB
 				default:
 					{
 						TCHAR szMacroFilePath[_MAX_PATH * 2];
-						int n = CShareData::getInstance()->GetMacroFilename(pcSMacroMgr->GetCurrentIdx(), szMacroFilePath, _countof(szMacroFilePath));
+						int n = ShareData::getInstance()->GetMacroFilename(pcSMacroMgr->GetCurrentIdx(), szMacroFilePath, _countof(szMacroFilePath));
 						if (0 < n) {
 							q = wcs_pushT(q, q_max - q, szMacroFilePath);
 						}
@@ -570,7 +570,7 @@ void CSakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszB
 	@author genta
 	@date 2003.03.31 genta 作成
 */
-const wchar_t* CSakuraEnvironment::_ExParam_SkipCond(const wchar_t* pszSource, int part)
+const wchar_t* SakuraEnvironment::_ExParam_SkipCond(const wchar_t* pszSource, int part)
 {
 	if (part == 0)
 		return pszSource;
@@ -618,7 +618,7 @@ const wchar_t* CSakuraEnvironment::_ExParam_SkipCond(const wchar_t* pszSource, i
 	@date 2003.03.31 genta 作成
 
 */
-int CSakuraEnvironment::_ExParam_Evaluate(const wchar_t* pCond)
+int SakuraEnvironment::_ExParam_Evaluate(const wchar_t* pCond)
 {
 	const EditDoc* pcDoc = EditDoc::GetInstance(0); //###
 
@@ -632,7 +632,7 @@ int CSakuraEnvironment::_ExParam_Evaluate(const wchar_t* pCond)
 			return 2; // 上記以外
 		}
 	case L'w': // $w Grepモード/Output Mode
-		if (CEditApp::getInstance()->m_pcGrepAgent->m_bGrepMode) {
+		if (EditApp::getInstance()->m_pcGrepAgent->m_bGrepMode) {
 			return 0;
 		}else if (AppMode::getInstance()->IsDebugMode()) {
 			return 1;
@@ -640,7 +640,7 @@ int CSakuraEnvironment::_ExParam_Evaluate(const wchar_t* pCond)
 			return 2;
 		}
 	case L'M': // $M キーボードマクロの記録中
-		if (GetDllShareData().m_flags.m_bRecordingKeyMacro && GetDllShareData().m_flags.m_hwndRecordingKeyMacro == CEditWnd::getInstance()->GetHwnd()) { /* ウィンドウ */
+		if (GetDllShareData().m_flags.m_bRecordingKeyMacro && GetDllShareData().m_flags.m_hwndRecordingKeyMacro == EditWnd::getInstance()->GetHwnd()) { /* ウィンドウ */
 			return 0;
 		}else {
 			return 1;
@@ -658,7 +658,7 @@ int CSakuraEnvironment::_ExParam_Evaluate(const wchar_t* pCond)
 			return 1;
 		}
 	case L'I': // $I アイコン化されているか
-		if (::IsIconic(CEditWnd::getInstance()->GetHwnd())) {
+		if (::IsIconic(EditWnd::getInstance()->GetHwnd())) {
 			return 0;
 		}else {
  			return 1;
@@ -691,7 +691,7 @@ wchar_t* ExParam_LongName( wchar_t* q, wchar_t* q_max, EExpParamName eLongParam 
 	@param bControlProcess [in] trueのときはOPENDIALOGDIR_CUR->OPENDIALOGDIR_MRUに変更
 	@return 初期フォルダ
 */
-std::tstring CSakuraEnvironment::GetDlgInitialDir(bool bControlProcess)
+std::tstring SakuraEnvironment::GetDlgInitialDir(bool bControlProcess)
 {
 	EditDoc* pcDoc = EditDoc::GetInstance(0); //######
 	if (pcDoc && pcDoc->m_cDocFile.GetFilePathClass().IsValidPath()) {
@@ -718,7 +718,7 @@ std::tstring CSakuraEnvironment::GetDlgInitialDir(bool bControlProcess)
 		break;
 	case OPENDIALOGDIR_MRU:
 		{
-			const CMRUFolder cMRU;
+			const MRUFolder cMRU;
 			auto& vMRU = cMRU.GetPathList();
 			int nCount = cMRU.Length();
 			for (int i=0; i<nCount ; ++i) {
@@ -740,7 +740,7 @@ std::tstring CSakuraEnvironment::GetDlgInitialDir(bool bControlProcess)
 	case OPENDIALOGDIR_SEL:
 		{
 			TCHAR szSelDir[_MAX_PATH];
-			CFileNameManager::ExpandMetaToFolder(GetDllShareData().m_common.m_sEdit.m_OpenDialogSelDir, szSelDir, _countof(szSelDir));
+			FileNameManager::ExpandMetaToFolder(GetDllShareData().m_common.m_sEdit.m_OpenDialogSelDir, szSelDir, _countof(szSelDir));
 			return szSelDir;
 		}
 		break;
@@ -750,7 +750,7 @@ std::tstring CSakuraEnvironment::GetDlgInitialDir(bool bControlProcess)
 	}
 }
 
-void CSakuraEnvironment::ResolvePath(TCHAR* pszPath)
+void SakuraEnvironment::ResolvePath(TCHAR* pszPath)
 {
 	// pszPath -> pSrc
 	TCHAR* pSrc = pszPath;

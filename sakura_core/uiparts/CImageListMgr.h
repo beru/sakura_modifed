@@ -48,12 +48,12 @@
 		初期Win95でイメージの表示ができなかった．それらを回避するためにImageListの使用をやめて
 		当初の独自描画に戻した．
 */
-class CImageListMgr {
+class ImageListMgr {
 public:
 
 	//	constructor
-	CImageListMgr();
-	~CImageListMgr();
+	ImageListMgr();
+	~ImageListMgr();
 
 	bool Create(HINSTANCE hInstance);	//	生成
 	

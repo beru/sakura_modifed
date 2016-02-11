@@ -28,15 +28,15 @@
 #include "doc/logic/CDocLine.h"
 
 
-bool CFuncListManager::IsLineFuncList(const CDocLine* pcDocLine, bool bFlag) const
+bool FuncListManager::IsLineFuncList(const DocLine* pcDocLine, bool bFlag) const
 {
 	return pcDocLine->m_sMark.m_cFuncList.GetFuncListMark() != bFlag;
 }
-bool CFuncListManager::GetLineFuncList(const CDocLine* pcDocLine) const
+bool FuncListManager::GetLineFuncList(const DocLine* pcDocLine) const
 {
 	return pcDocLine->m_sMark.m_cFuncList.GetFuncListMark();
 }
-void CFuncListManager::SetLineFuncList(CDocLine* pcDocLine, bool bFlag)
+void FuncListManager::SetLineFuncList(DocLine* pcDocLine, bool bFlag)
 {
 	pcDocLine->m_sMark.m_cFuncList = bFlag;
 }
@@ -45,7 +45,7 @@ void CFuncListManager::SetLineFuncList(CDocLine* pcDocLine, bool bFlag)
 	@author	MIK
 	@date	2002.05.25
 */
-bool CFuncListManager::SearchFuncListMark(
+bool FuncListManager::SearchFuncListMark(
 	const DocLineMgr*	pcDocLineMgr,
 	LogicInt			nLineNum,		//!< 検索開始行
 	eSearchDirection	bPrevOrNext,
@@ -57,7 +57,7 @@ bool CFuncListManager::SearchFuncListMark(
 	if (bPrevOrNext == eSearchDirection::Backward) {
 		// 後方検索(↑)
 		--nLinePos;
-		const CDocLine*	pDocLine = pcDocLineMgr->GetLine( nLinePos );
+		const DocLine*	pDocLine = pcDocLineMgr->GetLine( nLinePos );
 		while (pDocLine) {
 			if (GetLineFuncList(pDocLine)) {
 				*pnLineNum = nLinePos;				// マッチ行
@@ -69,7 +69,7 @@ bool CFuncListManager::SearchFuncListMark(
 	}else {
 		// 前方検索(↓)
 		++nLinePos;
-		const CDocLine*	pDocLine = pcDocLineMgr->GetLine( nLinePos );
+		const DocLine*	pDocLine = pcDocLineMgr->GetLine( nLinePos );
 		while (pDocLine) {
 			if (GetLineFuncList(pDocLine)) {
 				*pnLineNum = nLinePos;				// マッチ行
@@ -83,11 +83,11 @@ bool CFuncListManager::SearchFuncListMark(
 }
 
 // 関数リストマークをすべてリセット
-void CFuncListManager::ResetAllFucListMark(DocLineMgr* pcDocLineMgr, bool bFlag)
+void FuncListManager::ResetAllFucListMark(DocLineMgr* pcDocLineMgr, bool bFlag)
 {
-	CDocLine* pDocLine = pcDocLineMgr->GetDocLineTop();
+	DocLine* pDocLine = pcDocLineMgr->GetDocLineTop();
 	while (pDocLine) {
-		CDocLine* pDocLineNext = pDocLine->GetNextLine();
+		DocLine* pDocLineNext = pDocLine->GetNextLine();
 		SetLineFuncList(pDocLine, bFlag);
 		pDocLine = pDocLineNext;
 	}

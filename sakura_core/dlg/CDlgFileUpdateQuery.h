@@ -33,9 +33,9 @@
 
 #include "dlg/CDialog.h"
 
-class CDlgFileUpdateQuery : public CDialog {
+class DlgFileUpdateQuery : public Dialog {
 public:
-	CDlgFileUpdateQuery(const TCHAR* filename, bool IsModified)
+	DlgFileUpdateQuery(const TCHAR* filename, bool IsModified)
 		:
 		m_pFilename(filename),
 		m_bModified(IsModified)

@@ -35,12 +35,12 @@ INT_PTR CALLBACK MyDialogProc(
 	UINT uMsg,		// message
 	WPARAM wParam,	// first message parameter
 	LPARAM lParam 	// second message parameter
-)
+	)
 {
-	CDialog* pCDialog;
+	Dialog* pCDialog;
 	switch (uMsg) {
 	case WM_INITDIALOG:
-		pCDialog = (CDialog*) lParam;
+		pCDialog = (Dialog*) lParam;
 		if (pCDialog) {
 			return pCDialog->DispatchEvent(hwndDlg, uMsg, wParam, lParam);
 		}else {
@@ -48,7 +48,7 @@ INT_PTR CALLBACK MyDialogProc(
 		}
 	default:
 		// Modified by KEITA for WIN64 2003.9.6
-		pCDialog = (CDialog*)::GetWindowLongPtr(hwndDlg, DWLP_USER);
+		pCDialog = (Dialog*)::GetWindowLongPtr(hwndDlg, DWLP_USER);
 		if (pCDialog) {
 			return pCDialog->DispatchEvent(hwndDlg, uMsg, wParam, lParam);
 		}else {
@@ -62,9 +62,9 @@ INT_PTR CALLBACK MyDialogProc(
 
 	@date 2002.2.17 YAZAKI CShareDataのインスタンスは、CProcessにひとつあるのみ。
 */
-CDialog::CDialog(bool bSizable, bool bCheckShareData)
+Dialog::Dialog(bool bSizable, bool bCheckShareData)
 {
-//	MYTRACE(_T("CDialog::CDialog()\n"));
+//	MYTRACE(_T("Dialog::Dialog()\n"));
 	// 共有データ構造体のアドレスを返す
 	m_pShareData = &GetDllShareData(bCheckShareData);
 
@@ -83,9 +83,9 @@ CDialog::CDialog(bool bSizable, bool bCheckShareData)
 	return;
 }
 
-CDialog::~CDialog()
+Dialog::~Dialog()
 {
-//	MYTRACE(_T("CDialog::~CDialog()\n"));
+//	MYTRACE(_T("Dialog::~Dialog()\n"));
 	CloseDialog(0);
 	return;
 }
@@ -97,7 +97,7 @@ CDialog::~CDialog()
 
 	@date 2011.04.10 nasukoji	各国語メッセージリソース対応
 */
-INT_PTR CDialog::DoModal(
+INT_PTR Dialog::DoModal(
 	HINSTANCE hInstance,
 	HWND hwndParent,
 	int nDlgTemplete,
@@ -126,7 +126,7 @@ INT_PTR CDialog::DoModal(
 
 	@date 2011.04.10 nasukoji	各国語メッセージリソース対応
 */
-HWND CDialog::DoModeless(
+HWND Dialog::DoModeless(
 	HINSTANCE hInstance,
 	HWND hwndParent,
 	int nDlgTemplete,
@@ -153,7 +153,7 @@ HWND CDialog::DoModeless(
 	return m_hWnd;
 }
 
-HWND CDialog::DoModeless(
+HWND Dialog::DoModeless(
 	HINSTANCE hInstance,
 	HWND hwndParent,
 	LPCDLGTEMPLATE lpTemplate,
@@ -179,7 +179,7 @@ HWND CDialog::DoModeless(
 	return m_hWnd;
 }
 
-void CDialog::CloseDialog(int nModalRetVal)
+void Dialog::CloseDialog(int nModalRetVal)
 {
 	if (m_hWnd) {
 		if (m_bModal) {
@@ -193,7 +193,7 @@ void CDialog::CloseDialog(int nModalRetVal)
 }
 
 
-BOOL CDialog::OnInitDialog(
+BOOL Dialog::OnInitDialog(
 	HWND hwndDlg,
 	WPARAM wParam,
 	LPARAM lParam
@@ -212,13 +212,13 @@ BOOL CDialog::OnInitDialog(
 	return TRUE;
 }
 
-void CDialog::SetDialogPosSize()
+void Dialog::SetDialogPosSize()
 {
 #if 0
 	// ダイアログのサイズ、位置の再現
 	if (m_xPos != -1 && m_yPos != -1) {
 		::SetWindowPos(m_hWnd, NULL, m_xPos, m_yPos, 0, 0, SWP_NOSIZE | SWP_NOOWNERZORDER | SWP_NOZORDER);
-		DEBUG_TRACE(_T("CDialog::OnInitDialog() m_xPos=%d m_yPos=%d\n"), m_xPos, m_yPos);
+		DEBUG_TRACE(_T("Dialog::OnInitDialog() m_xPos=%d m_yPos=%d\n"), m_xPos, m_yPos);
 	}
 	if (m_nWidth != -1 && m_nHeight != -1) {
 		::SetWindowPos(m_hWnd, NULL, 0, 0, m_nWidth, m_nHeight, SWP_NOMOVE | SWP_NOOWNERZORDER | SWP_NOZORDER);
@@ -288,7 +288,7 @@ void CDialog::SetDialogPosSize()
 	}
 }
 
-BOOL CDialog::OnDestroy(void)
+BOOL Dialog::OnDestroy(void)
 {
 	// ウィンドウ位置・サイズを記憶
 	WINDOWPLACEMENT cWindowPlacement;
@@ -315,7 +315,7 @@ BOOL CDialog::OnDestroy(void)
 }
 
 
-BOOL CDialog::OnBnClicked(int wID)
+BOOL Dialog::OnBnClicked(int wID)
 {
 	switch (wID) {
 	case IDCANCEL:	// Fall through.
@@ -326,12 +326,12 @@ BOOL CDialog::OnBnClicked(int wID)
 	return FALSE;
 }
 
-BOOL CDialog::OnSize()
+BOOL Dialog::OnSize()
 {
-	return CDialog::OnSize(0, 0);
+	return Dialog::OnSize(0, 0);
 }
 
-BOOL CDialog::OnSize(WPARAM wParam, LPARAM lParam)
+BOOL Dialog::OnSize(WPARAM wParam, LPARAM lParam)
 {
 	RECT rc;
 	::GetWindowRect(m_hWnd, &rc);
@@ -377,7 +377,7 @@ BOOL CDialog::OnSize(WPARAM wParam, LPARAM lParam)
 
 }
 
-BOOL CDialog::OnMove(WPARAM wParam, LPARAM lParam)
+BOOL Dialog::OnMove(WPARAM wParam, LPARAM lParam)
 {
 	// ダイアログの位置の記憶
 	if (!m_bInited) {
@@ -391,12 +391,12 @@ BOOL CDialog::OnMove(WPARAM wParam, LPARAM lParam)
 	m_yPos = rc.top;
 	m_nWidth = rc.right - rc.left;
 	m_nHeight = rc.bottom - rc.top;
-	DEBUG_TRACE(_T("CDialog::OnMove() m_xPos=%d m_yPos=%d\n"), m_xPos, m_yPos);
+	DEBUG_TRACE(_T("Dialog::OnMove() m_xPos=%d m_yPos=%d\n"), m_xPos, m_yPos);
 	return TRUE;
 
 }
 
-void CDialog::CreateSizeBox(void)
+void Dialog::CreateSizeBox(void)
 {
 	// サイズボックス
 	m_hwndSizeBox = ::CreateWindowEx(
@@ -419,14 +419,14 @@ void CDialog::CreateSizeBox(void)
 
 
 // ダイアログのメッセージ処理
-INT_PTR CDialog::DispatchEvent(
+INT_PTR Dialog::DispatchEvent(
 	HWND hwndDlg,
 	UINT uMsg,
 	WPARAM wParam,
 	LPARAM lParam
 	)
 {
-//	DEBUG_TRACE(_T("CDialog::DispatchEvent() uMsg == %xh\n"), uMsg);
+//	DEBUG_TRACE(_T("Dialog::DispatchEvent() uMsg == %xh\n"), uMsg);
 	switch (uMsg) {
 	case WM_INITDIALOG:	return OnInitDialog(hwndDlg, wParam, lParam);
 	case WM_DESTROY:	return OnDestroy();
@@ -451,7 +451,7 @@ INT_PTR CDialog::DispatchEvent(
 	return FALSE;
 }
 
-BOOL CDialog::OnCommand(WPARAM wParam, LPARAM lParam)
+BOOL Dialog::OnCommand(WPARAM wParam, LPARAM lParam)
 {
 	WORD	wNotifyCode;
 	WORD	wID;
@@ -506,14 +506,14 @@ BOOL CDialog::OnCommand(WPARAM wParam, LPARAM lParam)
 }
 
 //@@@ 2002.01.18 add start
-BOOL CDialog::OnPopupHelp(WPARAM wPara, LPARAM lParam)
+BOOL Dialog::OnPopupHelp(WPARAM wPara, LPARAM lParam)
 {
 	HELPINFO* p = (HELPINFO*) lParam;
 	MyWinHelp((HWND)p->hItemHandle, HELP_WM_HELP, (ULONG_PTR)GetHelpIdTable());	// 2006.10.10 ryoji MyWinHelpに変更に変更
 	return TRUE;
 }
 
-BOOL CDialog::OnContextMenu(WPARAM wPara, LPARAM lParam)
+BOOL Dialog::OnContextMenu(WPARAM wPara, LPARAM lParam)
 {
 	MyWinHelp(m_hWnd, HELP_CONTEXTMENU, (ULONG_PTR)GetHelpIdTable());	// 2006.10.10 ryoji MyWinHelpに変更に変更
 	return TRUE;
@@ -523,13 +523,13 @@ const DWORD p_helpids[] = {
 	0, 0
 };
 
-LPVOID CDialog::GetHelpIdTable(void)
+LPVOID Dialog::GetHelpIdTable(void)
 {
 	return (LPVOID)p_helpids;
 }
 //@@@ 2002.01.18 add end
 
-BOOL CDialog::OnCbnSelEndOk(HWND hwndCtl, int wID)
+BOOL Dialog::OnCbnSelEndOk(HWND hwndCtl, int wID)
 {
 	// コンボボックスのリストを表示したまま文字列を編集し、Enterキーを
 	// 押すと文字列が消える現象の対策。
@@ -555,7 +555,7 @@ BOOL CDialog::OnCbnSelEndOk(HWND hwndCtl, int wID)
 	return TRUE;
 }
 
-BOOL CDialog::OnCbnDropDown(HWND hwndCtl, int wID)
+BOOL Dialog::OnCbnDropDown(HWND hwndCtl, int wID)
 {
 	return OnCbnDropDown( hwndCtl, false );
 }
@@ -571,7 +571,7 @@ BOOL CDialog::OnCbnDropDown(HWND hwndCtl, int wID)
 	@author ryoji
 	@date 2009.03.29 新規作成
 */
-BOOL CDialog::OnCbnDropDown(HWND hwndCtl, bool scrollBar)
+BOOL Dialog::OnCbnDropDown(HWND hwndCtl, bool scrollBar)
 {
 	SIZE sizeText;
 	const int nMargin = 8;
@@ -606,14 +606,14 @@ BOOL CDialog::OnCbnDropDown(HWND hwndCtl, bool scrollBar)
 /*! ファイル選択
 	@note 実行ファイルのパスor設定ファイルのパスが含まれる場合は相対パスに変換
 */
-BOOL CDialog::SelectFile(
+BOOL Dialog::SelectFile(
 	HWND parent,
 	HWND hwndCtl,
 	const TCHAR* filter,
 	bool resolvePath
 	)
 {
-	CDlgOpenFile cDlgOpenFile;
+	DlgOpenFile cDlgOpenFile;
 	TCHAR szFilePath[_MAX_PATH + 1];
 	TCHAR szPath[_MAX_PATH + 1];
 	::GetWindowText(hwndCtl, szFilePath, _countof(szFilePath));
@@ -646,7 +646,7 @@ BOOL CDialog::SelectFile(
 
 
 // static
-bool CDialog::DirectoryUp(TCHAR* szDir)
+bool Dialog::DirectoryUp(TCHAR* szDir)
 {
 	int nLen = auto_strlen(szDir);
 	if (3 < nLen) {
@@ -667,7 +667,7 @@ bool CDialog::DirectoryUp(TCHAR* szDir)
 }
 
 // コントロールに画面のフォントを設定	2012/11/27 Uchi
-HFONT CDialog::SetMainFont(HWND hTarget)
+HFONT Dialog::SetMainFont(HWND hTarget)
 {
 	if (!hTarget) {
 		return NULL;
@@ -705,7 +705,7 @@ HFONT CDialog::SetMainFont(HWND hTarget)
 	return hFont;
 }
 
-void CDialog::ResizeItem(
+void Dialog::ResizeItem(
 	HWND hTarget,
 	const POINT& ptDlgDefault,
 	const POINT& ptDlgNew,
@@ -754,7 +754,7 @@ void CDialog::ResizeItem(
 	}
 }
 
-void CDialog::GetItemClientRect(int wID, RECT& rc)
+void Dialog::GetItemClientRect(int wID, RECT& rc)
 {
 	POINT po;
 	::GetWindowRect(GetItemHwnd(wID), &rc);
@@ -902,7 +902,7 @@ LRESULT CALLBACK SubComboBoxProc(
 }
 
 
-void CDialog::SetComboBoxDeleter(HWND hwndCtl, ComboBoxItemDeleter* data)
+void Dialog::SetComboBoxDeleter(HWND hwndCtl, ComboBoxItemDeleter* data)
 {
 	if (!data->pRecent) {
 		return;

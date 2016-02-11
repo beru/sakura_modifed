@@ -29,6 +29,6 @@
 // 半角カナ→全角カナ
 class Converter_HankataToZenkata : public Converter {
 public:
-	bool DoConvert(CNativeW* pcData);
+	bool DoConvert(NativeW* pcData);
 };
 

@@ -23,34 +23,34 @@
 */
 #pragma once
 
-class CEditView;
+class EditView;
 enum EFunctionCode;
 class EditDoc;
 struct DLLSHAREDATA;
 class OpeBlk;
-class CCaret;
-class CEditWnd;
-class CColorStrategy;
-class CColorStrategyPool;
+class Caret;
+class EditWnd;
+class ColorStrategy;
+class ColorStrategyPool;
 class CSMacroMgr;
 #include "CEol.h"
 
 class ViewCommander {
 public:
-	ViewCommander(CEditView* pEditView);
+	ViewCommander(EditView* pEditView);
 
 public:
 	// 外部依存
 	EditDoc* GetDocument();
-	CEditWnd* GetEditWindow();
+	EditWnd* GetEditWindow();
 	HWND GetMainWindow();
 	OpeBlk* GetOpeBlk();
 	void SetOpeBlk(OpeBlk* p);
 	LayoutRange& GetSelect();
-	CCaret& GetCaret();
+	Caret& GetCaret();
 
 private:
-	CEditView*		m_pCommanderView;
+	EditView*		m_pCommanderView;
 	CSMacroMgr*		m_pcSMacroMgr;
 
 public:
@@ -225,7 +225,7 @@ public:
 	void Command_COPYLINESWITHLINENUMBER(void);		// 選択範囲内全行行番号付きコピー
 	void Command_COPY_COLOR_HTML(bool bLineNumber = false);	// 選択範囲内全行行番号付きコピー
 	void Command_COPY_COLOR_HTML_LINENUMBER(void);		// 選択範囲内色付きHTMLコピー
-	CColorStrategy* GetColorStrategyHTML(const CStringRef&, int, const CColorStrategyPool*, CColorStrategy**, CColorStrategy**, bool& bChange);
+	ColorStrategy* GetColorStrategyHTML(const CStringRef&, int, const ColorStrategyPool*, ColorStrategy**, ColorStrategy**, bool& bChange);
 	void Command_CREATEKEYBINDLIST(void);				// キー割り当て一覧をコピー // Sept. 15, 2000 JEPRO	Command_の作り方がわからないので殺してある
 
 

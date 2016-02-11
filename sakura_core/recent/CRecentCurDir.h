@@ -27,19 +27,19 @@
 #include "CRecentImp.h"
 #include "util/StaticType.h"
 
-typedef StaticString<TCHAR, _MAX_PATH> CCurDirString;
+typedef StaticString<TCHAR, _MAX_PATH> CurDirString;
 
 // コマンドの履歴を管理 (RECENT_FOR_CUR_DIR)
-class CRecentCurDir : public CRecentImp<CCurDirString, LPCTSTR> {
+class RecentCurDir : public RecentImp<CurDirString, LPCTSTR> {
 public:
 	// 生成
-	CRecentCurDir();
+	RecentCurDir();
 
 	// オーバーライド
-	int				CompareItem(const CCurDirString* p1, LPCTSTR p2) const;
-	void			CopyItem(CCurDirString* dst, LPCTSTR src) const;
+	int				CompareItem(const CurDirString* p1, LPCTSTR p2) const;
+	void			CopyItem(CurDirString* dst, LPCTSTR src) const;
 	const TCHAR*	GetItemText(int nIndex) const;
-	bool			DataToReceiveType(LPCTSTR* dst, const CCurDirString* src) const;
-	bool			TextToDataType(CCurDirString* dst, LPCTSTR pszText) const;
+	bool			DataToReceiveType(LPCTSTR* dst, const CurDirString* src) const;
+	bool			TextToDataType(CurDirString* dst, LPCTSTR pszText) const;
 };
 

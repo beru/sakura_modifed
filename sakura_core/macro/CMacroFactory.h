@@ -36,28 +36,28 @@
 #include <string>
 #include "util/design_template.h"
 
-class CMacroManagerBase;
+class MacroManagerBase;
 
 /*!
 	@brief マクロHandler生成クラス
 	
 	@par 初期化
-	CMacroManagerBase::declare() により，MacroEngineのCreaterの登録
+	MacroManagerBase::declare() により，MacroEngineのCreaterの登録
 	RegisterEngine() 及び 対応拡張子の登録 RegisterExt() が呼び出される．
 	
 	@par 呼び出し
-	CMacroFactory::Create()を拡張子を引数にして呼び出すと対応する
+	MacroFactory::Create()を拡張子を引数にして呼び出すと対応する
 	マクロエンジンが返される．得られたEngineに対してLoadKeyMacro()及び
 	ExecKeyMacro() を呼び出すことでマクロの読み込み・実行が行われる．
 
 	Singleton
 */
-class CMacroFactory : public TSingleton<CMacroFactory> {
-	friend class TSingleton<CMacroFactory>;
-	CMacroFactory();
+class MacroFactory : public TSingleton<MacroFactory> {
+	friend class TSingleton<MacroFactory>;
+	MacroFactory();
 
 public:
-	typedef CMacroManagerBase* (*Creator)(const TCHAR*);
+	typedef MacroManagerBase* (*Creator)(const TCHAR*);
 
 	bool RegisterCreator(Creator);
 	// Jan. 31, 2004 genta
@@ -65,7 +65,7 @@ public:
 	//bool RegisterExt(const char*, Creator);
 	bool Unregister(Creator);
 
-	CMacroManagerBase* Create(const TCHAR* ext);
+	MacroManagerBase* Create(const TCHAR* ext);
 
 private:
 	std::tstring Ext2Key(const TCHAR* ext);

@@ -19,7 +19,7 @@ bool CFigure_ZenSpace::Match(const wchar_t* pText, int nTextLen) const
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 // 全角スペース描画
-void CFigure_ZenSpace::DispSpace(CGraphics& gr, DispPos* pDispPos, CEditView* pcView, bool bTrans) const
+void CFigure_ZenSpace::DispSpace(Graphics& gr, DispPos* pDispPos, EditView* pcView, bool bTrans) const
 {
 	// クリッピング矩形を計算。画面外なら描画しない
 	RECT rc;

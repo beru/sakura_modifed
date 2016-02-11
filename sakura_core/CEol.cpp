@@ -1,5 +1,5 @@
 /*!	@file
-	@brief CEolクラスの実装
+	@brief Eolクラスの実装
 
 	@author genta
 	@date 2000/05/15 新規作成 genta
@@ -138,19 +138,19 @@ EEolType _GetEOLType_unibe(const char* pszData, int nDataLen)
 
 
 // 現在のEOL長を取得。文字単位。
-LogicInt CEol::GetLen() const
+LogicInt Eol::GetLen() const
 {
 	return LogicInt(g_aEolTable[m_eEolType].m_nLen);
 }
 
 // 現在のEOLの名称取得
-const TCHAR* CEol::GetName() const
+const TCHAR* Eol::GetName() const
 {
 	return g_aEolTable[m_eEolType].m_szName;
 }
 
 // 現在のEOL文字列先頭へのポインタを取得
-const wchar_t* CEol::GetValue2() const
+const wchar_t* Eol::GetValue2() const
 {
 	return g_aEolTable[m_eEolType].m_szDataW;
 }
@@ -161,7 +161,7 @@ const wchar_t* CEol::GetValue2() const
 	@retval true 正常終了。設定が反映された。
 	@retval false 異常終了。強制的にCRLFに設定。
 */
-bool CEol::SetType(EEolType t)
+bool Eol::SetType(EEolType t)
 {
 	if (t < EOL_NONE || EOL_CODEMAX <= t) {
 		//	異常値
@@ -173,22 +173,22 @@ bool CEol::SetType(EEolType t)
 	return true;
 }
 
-void CEol::SetTypeByString(const wchar_t* pszData, int nDataLen)
+void Eol::SetTypeByString(const wchar_t* pszData, int nDataLen)
 {
 	SetType(GetEOLType(pszData, nDataLen));
 }
 
-void CEol::SetTypeByString(const char* pszData, int nDataLen)
+void Eol::SetTypeByString(const char* pszData, int nDataLen)
 {
 	SetType(GetEOLType(pszData, nDataLen));
 }
 
-void CEol::SetTypeByStringForFile_uni(const char* pszData, int nDataLen)
+void Eol::SetTypeByStringForFile_uni(const char* pszData, int nDataLen)
 {
 	SetType(_GetEOLType_uni(pszData, nDataLen));
 }
 
-void CEol::SetTypeByStringForFile_unibe(const char* pszData, int nDataLen)
+void Eol::SetTypeByStringForFile_unibe(const char* pszData, int nDataLen)
 {
 	SetType(_GetEOLType_unibe(pszData, nDataLen));
 }

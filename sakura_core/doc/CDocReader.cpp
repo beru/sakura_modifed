@@ -8,9 +8,9 @@
 	@retval 全行データ。freeで開放しなければならない。
 	@note   Debug版のテストにのみ使用している。
 */
-wchar_t* CDocReader::GetAllData(int* pnDataLen)
+wchar_t* DocReader::GetAllData(int* pnDataLen)
 {
-	const CDocLine* pDocLine = m_pcDocLineMgr->GetDocLineTop();
+	const DocLine* pDocLine = m_pcDocLineMgr->GetDocLineTop();
 	int nDataLen = 0;
 	while (pDocLine) {
 		// Oct. 7, 2002 YAZAKI
@@ -42,9 +42,9 @@ wchar_t* CDocReader::GetAllData(int* pnDataLen)
 	return pData;
 }
 
-const wchar_t* CDocReader::GetLineStr(LogicInt nLine, LogicInt* pnLineLen)
+const wchar_t* DocReader::GetLineStr(LogicInt nLine, LogicInt* pnLineLen)
 {
-	const CDocLine* pDocLine = m_pcDocLineMgr->GetLine(nLine);
+	const DocLine* pDocLine = m_pcDocLineMgr->GetLine(nLine);
 	if (!pDocLine) {
 		*pnLineLen = LogicInt(0);
 		return NULL;
@@ -59,9 +59,9 @@ const wchar_t* CDocReader::GetLineStr(LogicInt nLine, LogicInt* pnLineLen)
 	@author Moca
 	@date 2003.06.22
 */
-const wchar_t* CDocReader::GetLineStrWithoutEOL(LogicInt nLine, int* pnLineLen)
+const wchar_t* DocReader::GetLineStrWithoutEOL(LogicInt nLine, int* pnLineLen)
 {
-	const CDocLine* pDocLine = m_pcDocLineMgr->GetLine(nLine);
+	const DocLine* pDocLine = m_pcDocLineMgr->GetLine(nLine);
 	if (!pDocLine) {
 		*pnLineLen = 0;
 		return NULL;
@@ -78,7 +78,7 @@ const wchar_t* CDocReader::GetLineStrWithoutEOL(LogicInt nLine, int* pnLineLen)
 	データが1行もないときは、長さ0、ポインタNULLが返る。
 
 */
-const wchar_t* CDocReader::GetFirstLinrStr(int* pnLineLen)
+const wchar_t* DocReader::GetFirstLinrStr(int* pnLineLen)
 {
 	const wchar_t* pszLine;
 	if (m_pcDocLineMgr->GetLineCount() == LogicInt(0)) {
@@ -86,7 +86,7 @@ const wchar_t* CDocReader::GetFirstLinrStr(int* pnLineLen)
 		*pnLineLen = 0;
 	}else {
 		pszLine = m_pcDocLineMgr->GetDocLineTop()->GetDocLineStrWithEOL(pnLineLen);
-		m_pcDocLineMgr->m_pDocLineCurrent = const_cast<CDocLine*>(m_pcDocLineMgr->GetDocLineTop()->GetNextLine());
+		m_pcDocLineMgr->m_pDocLineCurrent = const_cast<DocLine*>(m_pcDocLineMgr->GetDocLineTop()->GetNextLine());
 	}
 	return pszLine;
 }
@@ -100,7 +100,7 @@ const wchar_t* CDocReader::GetFirstLinrStr(int* pnLineLen)
 	GetFirstLinrStr()が呼び出されていないとNULLが返る
 
 */
-const wchar_t* CDocReader::GetNextLinrStr(int* pnLineLen)
+const wchar_t* DocReader::GetNextLinrStr(int* pnLineLen)
 {
 	const wchar_t* pszLine;
 	if (!m_pcDocLineMgr->m_pDocLineCurrent) {

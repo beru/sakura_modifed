@@ -23,19 +23,19 @@
 */
 #pragma once
 
-class CViewFont;
-class CEditView;
+class ViewFont;
+class EditView;
 class LayoutMgr;
 #include "DispPos.h"
 
-class CTextArea {
+class TextArea {
 public:
-	CTextArea(CEditView* pEditView);
+	TextArea(EditView* pEditView);
 	
 	virtual
-	~CTextArea();
+	~TextArea();
 	
-	void CopyTextAreaStatus(CTextArea* pDst) const;
+	void CopyTextAreaStatus(TextArea* pDst) const;
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                     ƒrƒ…[î•ñ‚ğæ“¾                        //
@@ -195,7 +195,7 @@ public:
 
 private:
 	// QÆ
-	CEditView*	m_pEditView;
+	EditView*	m_pEditView;
 
 public:
 	// ‰æ–Êî•ñ

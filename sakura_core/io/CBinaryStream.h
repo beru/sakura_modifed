@@ -25,7 +25,7 @@
 
 #include "CStream.h"
 
-class CBinaryInputStream : public CStream {
+class CBinaryInputStream : public Stream {
 public:
 	CBinaryInputStream(LPCTSTR tszFilePath);
 
@@ -37,7 +37,7 @@ public:
 	int Read(void* pBuffer, int nSizeInBytes);
 };
 
-class CBinaryOutputStream : public COutputStream {
+class CBinaryOutputStream : public OutputStream {
 public:
 	CBinaryOutputStream(LPCTSTR tszFilePath, bool bExceptionMode = false);
 };

@@ -397,7 +397,7 @@ void ViewCommander::Command_DUPLICATELINE(void)
 {
 	int				bCRLF;
 	int				bAddCRLF;
-	CNativeW		cmemBuf;
+	NativeW		cmemBuf;
 
 	auto& selInfo = m_pCommanderView->GetSelectionInfo();
 	if (selInfo.IsTextSelected()) {	// テキストが選択されているか
@@ -455,7 +455,7 @@ void ViewCommander::Command_DUPLICATELINE(void)
 	cmemBuf.SetString(pcLayout->GetPtr(), pcLayout->GetLengthWithoutEOL() + pcLayout->GetLayoutEol().GetLen());	// ※pcLayout->GetLengthWithEOL()は、EOLの長さを必ず1にするので使えない。
 	if (bAddCRLF) {
 		// 現在、Enterなどで挿入する改行コードの種類を取得
-		CEol cWork = GetDocument()->m_cDocEditor.GetNewLineCode();
+		Eol cWork = GetDocument()->m_cDocEditor.GetNewLineCode();
 		cmemBuf.AppendString(cWork.GetValue2(), cWork.GetLen());
 	}
 

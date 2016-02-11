@@ -43,8 +43,8 @@ void ViewCommander::Command_RECKEYMACRO(void)
 		//@@@ 2002.1.24 YAZAKI キーマクロをマクロ用フォルダに「RecKey.mac」という名で保存
 		TCHAR szInitDir[MAX_PATH];
 		int nRet;
-		// 2003.06.23 Moca 記録用キーマクロのフルパスをCShareData経由で取得
-		nRet = CShareData::getInstance()->GetMacroFilename(-1, szInitDir, MAX_PATH);
+		// 2003.06.23 Moca 記録用キーマクロのフルパスをShareData経由で取得
+		nRet = ShareData::getInstance()->GetMacroFilename(-1, szInitDir, MAX_PATH);
 		auto& csMacro = GetDllShareData().m_common.m_sMacro;
 		if (nRet <= 0) {
 			ErrorMessage(m_pCommanderView->GetHwnd(), LS(STR_ERR_CEDITVIEW_CMD24), nRet);
@@ -104,7 +104,7 @@ void ViewCommander::Command_SAVEKEYMACRO(void)
 		_tcscpy(szInitDir, macroFolder);	// マクロ用フォルダ
 	}
 	// ファイルオープンダイアログの初期化
-	CDlgOpenFile	cDlgOpenFile;
+	DlgOpenFile	cDlgOpenFile;
 	cDlgOpenFile.Create(
 		G_AppInstance(),
 		m_pCommanderView->GetHwnd(),
@@ -151,7 +151,7 @@ void ViewCommander::Command_LOADKEYMACRO(void)
 		_tcscpy_s(szInitDir, pszFolder);	// マクロ用フォルダ
 	}
 	// ファイルオープンダイアログの初期化
-	CDlgOpenFile cDlgOpenFile;
+	DlgOpenFile cDlgOpenFile;
 	cDlgOpenFile.Create(
 		G_AppInstance(),
 		m_pCommanderView->GetHwnd(),
@@ -239,7 +239,7 @@ void ViewCommander::Command_EXECEXTMACRO(const WCHAR* pszPathW, const WCHAR* psz
 			_tcscpy_s(szInitDir, pszFolder);	// マクロ用フォルダ
 		}
 		// ファイルオープンダイアログの初期化
-		CDlgOpenFile cDlgOpenFile;
+		DlgOpenFile cDlgOpenFile;
 		cDlgOpenFile.Create(
 			G_AppInstance(),
 			m_pCommanderView->GetHwnd(),
@@ -268,7 +268,7 @@ void ViewCommander::Command_EXECEXTMACRO(const WCHAR* pszPathW, const WCHAR* psz
 	}
 
 	// 古い一時マクロの退避
-	CMacroManagerBase* oldMacro = m_pcSMacroMgr->SetTempMacro(NULL);
+	MacroManagerBase* oldMacro = m_pcSMacroMgr->SetTempMacro(NULL);
 
 	BOOL bLoadResult = m_pcSMacroMgr->Load(
 		TEMP_KEYMACRO,
@@ -302,7 +302,7 @@ void ViewCommander::Command_EXECEXTMACRO(const WCHAR* pszPathW, const WCHAR* psz
 */
 void ViewCommander::Command_EXECCOMMAND_DIALOG(void)
 {
-	CDlgExec cDlgExec;
+	DlgExec cDlgExec;
 
 	// モードレスダイアログの表示
 	if (!cDlgExec.DoModal(G_AppInstance(), m_pCommanderView->GetHwnd(), 0)) {
@@ -316,7 +316,7 @@ void ViewCommander::Command_EXECCOMMAND_DIALOG(void)
 	if (curDir[0] == L'\0') {
 		pszDir = NULL;
 	}else {
-		CRecentCurDir cRecentCurDir;
+		RecentCurDir cRecentCurDir;
 		cRecentCurDir.AppendItem(cDlgExec.m_szCurDir);
 		cRecentCurDir.Terminate();
 	}
@@ -341,7 +341,7 @@ void ViewCommander::Command_EXECCOMMAND(
 	// パラメータ置換 (超暫定)
 	const int bufmax = 1024;
 	wchar_t buf[bufmax + 1];
-	CSakuraEnvironment::ExpandParameter(cmd_string, buf, bufmax);
+	SakuraEnvironment::ExpandParameter(cmd_string, buf, bufmax);
 
 	// 子プロセスの標準出力をリダイレクトする
 	std::tstring buf2 = to_tchar(buf);

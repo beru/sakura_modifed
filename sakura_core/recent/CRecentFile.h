@@ -27,10 +27,10 @@
 #include "EditInfo.h" //EditInfo
 
 // EditInfoの履歴を管理 (RECENT_FOR_FILE)
-class CRecentFile : public CRecentImp<EditInfo> {
+class RecentFile : public RecentImp<EditInfo> {
 public:
 	// 生成
-	CRecentFile();
+	RecentFile();
 
 	// オーバーライド
 	int				CompareItem(const EditInfo* p1, const EditInfo* p2) const;

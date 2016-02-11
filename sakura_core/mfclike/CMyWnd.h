@@ -29,9 +29,9 @@
 	2008.01.26 kobake çÏê¨
 */
 
-class CMyWnd {
+class MyWnd {
 public:
-	CMyWnd() : m_hWnd(NULL) { }
+	MyWnd() : m_hWnd(NULL) { }
 
 	void SetHwnd(HWND hwnd) { m_hWnd = hwnd; }
 	HWND GetHwnd() const { return m_hWnd; }
@@ -45,7 +45,7 @@ public:
 		HRGN hrgnUpdate,
 		RECT* prcUpdate,
 		UINT uFlags
-	)
+		)
 	{
 		return ::ScrollWindowEx(m_hWnd, dx, dy, prcScroll, prcClip, hrgnUpdate, prcUpdate, uFlags);
 	}

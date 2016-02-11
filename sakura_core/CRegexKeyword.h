@@ -1,5 +1,5 @@
 /*!	@file
-	@brief CRegexKeyword Library
+	@brief RegexKeyword Library
 
 	正規表現キーワードを扱う。
 	BREGEXP.DLLを利用する。
@@ -54,10 +54,10 @@ typedef struct RegexInfo_t {
 /*!
 	正規表現キーワードを扱う。
 */
-class CRegexKeyword : public CBregexp {
+class RegexKeyword : public Bregexp {
 public:
-	CRegexKeyword(LPCTSTR);
-	~CRegexKeyword();
+	RegexKeyword(LPCTSTR);
+	~RegexKeyword();
 
 	// 行検索開始
 	bool RegexKeyLineStart(void);

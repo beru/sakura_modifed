@@ -454,7 +454,7 @@ struct CommonSetting_ToolBar {
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 struct CommonSetting_SpecialKeyword {
 	// 強調キーワード設定
-	CKeyWordSetMgr		m_CKeyWordSetMgr;					// 強調キーワード
+	KeyWordSetMgr		m_CKeyWordSetMgr;					// 強調キーワード
 	char				m_szKeyWordSetDir[MAX_PATH];		// 強調キーワードファイルのディレクトリ
 };
 
@@ -670,7 +670,7 @@ enum EMainMenuType {
 	T_SPECIAL,		// 特殊機能コマンド
 }; 
 
-class CMainMenu {
+class MainMenu {
 public:
 	EMainMenuType	m_nType;		// 種類
 	EFunctionCode	m_nFunc;		// Function
@@ -683,7 +683,7 @@ struct CommonSetting_MainMenu {
 	int				m_nVersion;							// メインメニューバージョン
 	int				m_nMenuTopIdx[MAX_MAINMENU_TOP];	// メインメニュートップレベル
 	int 			m_nMainMenuNum;						// メインメニューデータの数
-	CMainMenu		m_cMainMenuTbl[MAX_MAINMENU];		// メインメニューデータ
+	MainMenu		m_cMainMenuTbl[MAX_MAINMENU];		// メインメニューデータ
 	bool 			m_bMainMenuKeyParentheses;			// アクセスキーを()付で表示
 };
 

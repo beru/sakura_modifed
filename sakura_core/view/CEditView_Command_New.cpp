@@ -1,5 +1,5 @@
 /*!	@file
-	@brief CEditViewクラスのコマンド処理系関数群
+	@brief EditViewクラスのコマンド処理系関数群
 
 	@author Norio Nakatani
 */
@@ -69,7 +69,7 @@ static void StringToOpeLineData(const wchar_t* pLineData, int nLineDataLen, OpeL
 
 	@date 2002/03/24 YAZAKI bUndo削除
 */
-void CEditView::InsertData_CEditView(
+void EditView::InsertData_CEditView(
 	LayoutPoint	ptInsertPos,	// [in] 挿入位置
 	const wchar_t*	pData,			// [in] 挿入テキスト
 	int				nDataLen,		// [in] 挿入テキスト長。文字単位。
@@ -78,7 +78,7 @@ void CEditView::InsertData_CEditView(
 )
 {
 #ifdef _DEBUG
-	MY_RUNNINGTIMER(cRunningTimer, "CEditView::InsertData_CEditView");
+	MY_RUNNINGTIMER(cRunningTimer, "EditView::InsertData_CEditView");
 #endif
 
 	// 2007.10.18 kobake COpe処理をここにまとめる
@@ -110,7 +110,7 @@ void CEditView::InsertData_CEditView(
 	LogicInt		nLineLen;
 	const Layout*	pcLayout;
 	const wchar_t*	pLine = m_pcEditDoc->m_cLayoutMgr.GetLineStr(ptInsertPos.GetY2(), &nLineLen, &pcLayout);
-	bool			bLineModifiedChange = (pLine)? !CModifyVisitor().IsLineModified(pcLayout->GetDocLineRef(),
+	bool			bLineModifiedChange = (pLine)? !ModifyVisitor().IsLineModified(pcLayout->GetDocLineRef(),
 		GetDocument()->m_cDocEditor.m_cOpeBuf.GetNoModifiedSeq()): true;
 
 	// 禁則の有無
@@ -125,7 +125,7 @@ void CEditView::InsertData_CEditView(
 	LayoutInt	nLineAllColLen;
 	LogicInt	nIdxFrom = LogicInt(0);
 	LayoutInt	nColumnFrom = ptInsertPos.GetX2();
-	CNativeW	cMem(L"");
+	NativeW	cMem(L"");
 	OpeLineData insData;
 	if (pLine) {
 		// 更新が前行からになる可能性を調べる	// 2009.02.17 ryoji
@@ -311,7 +311,7 @@ void CEditView::InsertData_CEditView(
 			// 2014.07.16 他のビュー(ミニマップ)の再描画を抑制する
 			if (nInsLineNum == 0) {
 				for (int i=0; i<m_pcEditWnd->GetAllViewCount(); ++i) {
-					CEditView* pcView = &m_pcEditWnd->GetView(i);
+					EditView* pcView = &m_pcEditWnd->GetView(i);
 					if (pcView == this) {
 						continue;
 					}
@@ -360,14 +360,14 @@ void CEditView::InsertData_CEditView(
 	@date 2007/10/17 kobake (重要)pcMemの所有者が条件によりCOpeに移ったり移らなかったりする振る舞いは
 	                        非常にややこしく混乱の元になるため、常に、pcMemの所有者は移さないように仕様変更。
 */
-void CEditView::DeleteData2(
+void EditView::DeleteData2(
 	const LayoutPoint& _ptCaretPos,
 	LogicInt			nDelLen,
-	CNativeW*			pcMem
+	NativeW*			pcMem
 )
 {
 #ifdef _DEBUG
-	MY_RUNNINGTIMER(cRunningTimer, "CEditView::DeleteData(1)");
+	MY_RUNNINGTIMER(cRunningTimer, "EditView::DeleteData(1)");
 #endif
 	LogicInt nLineLen;
 	const Layout* pcLayout;
@@ -443,13 +443,13 @@ void CEditView::DeleteData2(
 
 	@date 2002/03/24 YAZAKI bUndo削除
 */
-void CEditView::DeleteData(
+void EditView::DeleteData(
 	bool	bRedraw
 //	BOOL	bUndo	// Undo操作かどうか
 )
 {
 #ifdef _DEBUG
-	MY_RUNNINGTIMER(cRunningTimer, "CEditView::DeleteData(2)");
+	MY_RUNNINGTIMER(cRunningTimer, "EditView::DeleteData(2)");
 #endif
 	LogicInt	nLineLen;
 	LayoutInt	nLineNum;
@@ -619,7 +619,7 @@ void CEditView::DeleteData(
 			nNxtIdx = nCurIdx + pcLayout->GetLayoutEol().GetLen();
 			nNxtPos = GetCaret().GetCaretLayoutPos().GetX() + LayoutInt((Int)pcLayout->GetLayoutEol().GetLen()); // ※改行コードの文字数を文字幅と見なす
 		}else {
-			nNxtIdx = LogicInt(CNativeW::GetCharNext(pLine, nLineLen, &pLine[nCurIdx]) - pLine);
+			nNxtIdx = LogicInt(NativeW::GetCharNext(pLine, nLineLen, &pLine[nCurIdx]) - pLine);
 			// 指定された行のデータ内の位置に対応する桁の位置を調べる
 			nNxtPos = LineIndexToColumn(pcLayout, nNxtIdx);
 		}
@@ -666,7 +666,7 @@ end_of_func:;
 }
 
 
-void CEditView::ReplaceData_CEditView(
+void EditView::ReplaceData_CEditView(
 	const LayoutRange&	sDelRange,			//!< [in]  削除範囲レイアウト単位
 	const wchar_t*		pInsData,			//!< [in]  挿入するデータ
 	LogicInt			nInsDataLen,		//!< [in]  挿入するデータの長さ
@@ -687,7 +687,7 @@ void CEditView::ReplaceData_CEditView(
 	}
 }
 
-void CEditView::ReplaceData_CEditView2(
+void EditView::ReplaceData_CEditView2(
 	const LogicRange&	sDelRange,			// 削除範囲。ロジック単位。
 	const wchar_t*		pInsData,			// 挿入するデータ
 	LogicInt			nInsDataLen,		// 挿入するデータの長さ
@@ -707,7 +707,7 @@ void CEditView::ReplaceData_CEditView2(
 // データ置換 削除&挿入にも使える
 // Jun 23, 2000 genta 変数名を書き換え忘れていたのを修正
 // Jun. 1, 2000 genta DeleteDataから移動した
-bool CEditView::ReplaceData_CEditView3(
+bool EditView::ReplaceData_CEditView3(
 	LayoutRange	sDelRange,			//!< [in]  削除範囲レイアウト単位
 	OpeLineData*	pcmemCopyOfDeleted,	//!< [out] 削除されたデータのコピー(NULL可能)
 	OpeLineData*	pInsData,			//!< [in]  挿入するデータ
@@ -737,7 +737,7 @@ bool CEditView::ReplaceData_CEditView3(
 		if (!bFastMode) {
 			line = layoutMgr.GetLineStr(sDelRange.GetFrom().GetY2(), &len, &pcLayout);
 		}
-		bLineModifiedChange = (line)? !CModifyVisitor().IsLineModified(pcLayout->GetDocLineRef(), GetDocument()->m_cDocEditor.m_cOpeBuf.GetNoModifiedSeq()): true;
+		bLineModifiedChange = (line)? !ModifyVisitor().IsLineModified(pcLayout->GetDocLineRef(), GetDocument()->m_cDocEditor.m_cOpeBuf.GetNoModifiedSeq()): true;
 		if (line) {
 			LogicInt pos = LineColumnToIndex(pcLayout, sDelRange.GetFrom().GetX2());
 			//	Jun. 1, 2000 genta
@@ -894,7 +894,7 @@ bool CEditView::ReplaceData_CEditView3(
 				LayoutYInt nLayoutTop = LRArg.nModLineFrom;
 				LayoutYInt nLayoutBottom = LRArg.nModLineTo + 1 + nAddLine;
 				for (int i=0; i<m_pcEditWnd->GetAllViewCount(); ++i) {
-					CEditView* pcView = &m_pcEditWnd->GetView(i);
+					EditView* pcView = &m_pcEditWnd->GetView(i);
 					if (pcView == this) {
 						continue;
 					}
@@ -966,18 +966,18 @@ bool CEditView::ReplaceData_CEditView3(
 
 
 // 2005.10.11 ryoji 前の行にある末尾の空白を削除
-void CEditView::RTrimPrevLine(void)
+void EditView::RTrimPrevLine(void)
 {
 	LogicPoint ptCaretPos_PHY = GetCaret().GetCaretLogicPos();
 
 	if (GetCaret().GetCaretLogicPos().y > 0) {
 		int nLineLen;
-		const wchar_t*	pLine = CDocReader(m_pcEditDoc->m_cDocLineMgr).GetLineStrWithoutEOL(GetCaret().GetCaretLogicPos().GetY2() - LogicInt(1), &nLineLen);
+		const wchar_t*	pLine = DocReader(m_pcEditDoc->m_cDocLineMgr).GetLineStrWithoutEOL(GetCaret().GetCaretLogicPos().GetY2() - LogicInt(1), &nLineLen);
 		if (pLine && nLineLen > 0) {
 			int i = 0;
 			int j = 0;
 			while (i < nLineLen) {
-				int nCharChars = CNativeW::GetSizeOfChar(pLine, nLineLen, i);
+				int nCharChars = NativeW::GetSizeOfChar(pLine, nLineLen, i);
 				if (!WCODE::IsBlank(pLine[i])) {
 					j = i + nCharChars;
 				}

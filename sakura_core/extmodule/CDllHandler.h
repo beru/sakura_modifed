@@ -35,20 +35,20 @@
 #include <string>
 #include "_main/global.h"
 
-/*! CDllImp をラップ
-	CDllImp::DeinitDll を呼び忘れないためのヘルパ的クラス。
+/*! DllImp をラップ
+	DllImp::DeinitDll を呼び忘れないためのヘルパ的クラス。
 	今のところDeinitDllが使われている箇所が無いので、このクラスの出番はありませんが。
 	2008.05.10 kobake 作成
 */
 template <class DLLIMP>
-class CDllHandler {
+class DllHandler {
 public:
 	// コンストラクタ・デストラクタ
-	CDllHandler() {
+	DllHandler() {
 		m_pcDllImp = new DLLIMP();
 		m_pcDllImp->InitDll();
 	}
-	~CDllHandler() {
+	~DllHandler() {
 		m_pcDllImp->DeinitDll(true); // ※終了処理に失敗しても強制的にDLL解放
 		delete m_pcDllImp;
 	}
@@ -83,7 +83,7 @@ enum EDllResult {
 										純粋仮想関数はやめてプレースホルダーを用意する．
 	@date 2008.05.10 kobake 整理。派生クラスは、～Impをオーバーロードすれば良いという方式です。
 */
-class CDllImp {
+class DllImp {
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                            型                               //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -103,8 +103,8 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 public:
 	// コンストラクタ・デストラクタ
-	CDllImp();
-	virtual ~CDllImp();
+	DllImp();
+	virtual ~DllImp();
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                         DLLロード                           //

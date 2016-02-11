@@ -47,19 +47,19 @@ static const DWORD p_helpids[] = {	//10500
 	@param wParam パラメータ1
 	@param lParam パラメータ2
 */
-INT_PTR CALLBACK CPropGrep::DlgProc_page(
+INT_PTR CALLBACK PropGrep::DlgProc_page(
 	HWND hwndDlg,
 	UINT uMsg,
 	WPARAM wParam,
 	LPARAM lParam
 	)
 {
-	return DlgProc(reinterpret_cast<pDispatchPage>(&CPropGrep::DispatchEvent), hwndDlg, uMsg, wParam, lParam);
+	return DlgProc(reinterpret_cast<pDispatchPage>(&PropGrep::DispatchEvent), hwndDlg, uMsg, wParam, lParam);
 }
 //	To Here Jun. 2, 2001 genta
 
 // メッセージ処理
-INT_PTR CPropGrep::DispatchEvent(
+INT_PTR PropGrep::DispatchEvent(
 	HWND hwndDlg,
 	UINT uMsg,
 	WPARAM wParam,
@@ -138,7 +138,7 @@ struct tagTagJumpMode{
 };
 
 // ダイアログデータの設定
-void CPropGrep::SetData(HWND hwndDlg)
+void PropGrep::SetData(HWND hwndDlg)
 {
 	auto& csSearch = m_Common.m_sSearch;
 	// 2006.08.23 ryoji カーソル位置の文字列をデフォルトの検索文字列にする
@@ -205,7 +205,7 @@ void CPropGrep::SetData(HWND hwndDlg)
 
 
 // ダイアログデータの取得
-int CPropGrep::GetData(HWND hwndDlg)
+int PropGrep::GetData(HWND hwndDlg)
 {
 	auto& csSearch = m_Common.m_sSearch;
 
@@ -240,12 +240,12 @@ int CPropGrep::GetData(HWND hwndDlg)
 	return TRUE;
 }
 
-void CPropGrep::SetRegexpVersion(HWND hwndDlg)
+void PropGrep::SetRegexpVersion(HWND hwndDlg)
 {
 	TCHAR regexp_dll[_MAX_PATH];
 	
 	::DlgItem_GetText(hwndDlg, IDC_EDIT_REGEXPLIB, regexp_dll, _countof(regexp_dll));
-	CBregexp breg;
+	Bregexp breg;
 	if (DLL_SUCCESS != breg.InitDll(regexp_dll)) {
 		::DlgItem_SetText(hwndDlg, IDC_LABEL_REGEXP_VER, LS(STR_PROPCOMGREP_DLL));
 		return;

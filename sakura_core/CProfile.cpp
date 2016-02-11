@@ -114,7 +114,7 @@ bool Profile::ReadProfile(const TCHAR* pszProfileName)
 //	LARGE_INTEGER start;
 //	QueryPerformanceCounter(&start);
 
-	CTextInputStream in(m_strProfileName.c_str());
+	TextInputStream in(m_strProfileName.c_str());
 	if (!in) {
 		return false;
 	}
@@ -172,8 +172,8 @@ bool Profile::ReadProfileRes(
 	char*		pn;
 	size_t		lnsz;
 	wstring		line;
-	CMemory cmLine;
-	CNativeW cmLineW;
+	Memory cmLine;
+	NativeW cmLineW;
 	m_strProfileName = _T("-Res-");
 
 	if (1
@@ -314,7 +314,7 @@ bool Profile::_WriteFile(
 	const vector<wstring>&	vecLine			// [out] ï∂éöóÒäiî[êÊ
 	)
 {
-	CTextOutputStream out(strFilename.c_str());
+	TextOutputStream out(strFilename.c_str());
 	if (!out) {
 		return false;
 	}

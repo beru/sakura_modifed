@@ -165,7 +165,7 @@ INT_PTR CPropTypesRegex::DispatchEvent(
 						EnableWindow(GetDlgItem(hwndDlg, IDC_CHECK_REGEX), FALSE);
 					}
 				}
-				m_Types.m_nRegexKeyMagicNumber = CRegexKeyword::GetNewMagicNumber();	// Need Compile
+				m_Types.m_nRegexKeyMagicNumber = RegexKeyword::GetNewMagicNumber();	// Need Compile
 				return TRUE;
 
 			case IDC_BUTTON_REGEX_INS:	// 挿入
@@ -451,7 +451,7 @@ INT_PTR CPropTypesRegex::DispatchEvent(
 
 			case IDC_BUTTON_REGEX_IMPORT:	// インポート
 				Import(hwndDlg);
-				m_Types.m_nRegexKeyMagicNumber = CRegexKeyword::GetNewMagicNumber();	// Need Compile	//@@@ 2001.11.17 add MIK 正規表現キーワードのため
+				m_Types.m_nRegexKeyMagicNumber = RegexKeyword::GetNewMagicNumber();	// Need Compile	//@@@ 2001.11.17 add MIK 正規表現キーワードのため
 				return TRUE;
 
 			case IDC_BUTTON_REGEX_EXPORT:	// エクスポート
@@ -669,18 +669,18 @@ int CPropTypesRegex::GetData(HWND hwndDlg)
 	*pKeyword = L'\0'; // 番兵
 
 	// タイプ設定の変更があった
-	m_Types.m_nRegexKeyMagicNumber = CRegexKeyword::GetNewMagicNumber();
+	m_Types.m_nRegexKeyMagicNumber = RegexKeyword::GetNewMagicNumber();
 //	m_Types.m_nRegexKeyMagicNumber = 0;	// Not Compiled.
 
 	return TRUE;
 }
 
 /*!
-	@date 2010.07.11 Moca 今のところCRegexKeyword::RegexKeyCheckSyntaxと同一なので、中身を削除して転送関数に変更
+	@date 2010.07.11 Moca 今のところRegexKeyword::RegexKeyCheckSyntaxと同一なので、中身を削除して転送関数に変更
 */
 BOOL CPropTypesRegex::RegexKakomiCheck(const wchar_t* s)
 {
-	return CRegexKeyword::RegexKeyCheckSyntax(s);
+	return RegexKeyword::RegexKeyCheckSyntax(s);
 }
 //@@@ 2001.11.17 add end MIK
 

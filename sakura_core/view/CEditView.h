@@ -66,23 +66,23 @@
 #include "util/container.h"		// vector_ex
 #include "util/design_template.h"
 
-class CViewFont;
-class CRuler;
+class ViewFont;
+class Ruler;
 class DropTarget; /// 2002/2/3 aroka ヘッダ軽量化
 class OpeBlk;///
-class CSplitBoxWnd;///
-class CRegexKeyword;///
-class CAutoMarkMgr; /// 2002/2/3 aroka ヘッダ軽量化 to here
+class SplitBoxWnd;///
+class RegexKeyword;///
+class AutoMarkMgr; /// 2002/2/3 aroka ヘッダ軽量化 to here
 class EditDoc;	//	2002/5/13 YAZAKI ヘッダ軽量化
 class Layout;	//	2002/5/13 YAZAKI ヘッダ軽量化
-class CMigemo;	// 2004.09.14 isearch
+class Migemo;	// 2004.09.14 isearch
 struct ColorStrategyInfo;
 struct Color3Setting;
-class COutputAdapter;
+class OutputAdapter;
 
 // struct DispPos; //	誰かがincludeしてます
 // class CColorStrategy;	// 誰かがincludeしてます
-class CColor_Found;
+class Color_Found;
 
 #ifndef IDM_COPYDICINFO
 #define IDM_COPYDICINFO 2000
@@ -109,13 +109,13 @@ const int CMD_FROM_MOUSE = 2;
 	
 	@date 2002.2.17 YAZAKI CShareDataのインスタンスは、CProcessにひとつあるのみ。
 */
-// 2007.08.25 kobake 文字間隔配列の機能をCTextMetricsに移動
+// 2007.08.25 kobake 文字間隔配列の機能をTextMetricsに移動
 // 2007.10.02 kobake Command_TRIM2をCConvertに移動
 
-class CEditView :
-	public CViewCalc, //$$ これが親クラスである必要は無いが、このクラスのメソッド呼び出しが多いので、暫定的に親クラスとする。
-	public CEditView_Paint,
-	public CMyWnd,
+class EditView :
+	public ViewCalc, //$$ これが親クラスである必要は無いが、このクラスのメソッド呼び出しが多いので、暫定的に親クラスとする。
+	public EditView_Paint,
+	public MyWnd,
 	public DocListenerEx
 {
 public:
@@ -131,10 +131,10 @@ public:
 	bool IsBkBitmap() const { return m_pcEditDoc->m_hBackImg != NULL; }
 
 public:
-	CEditView* GetEditView() {
+	EditView* GetEditView() {
 		return this;
 	}
-	const CEditView* GetEditView() const {
+	const EditView* GetEditView() const {
 		return this;
 	}
 
@@ -143,8 +143,8 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 public:
 	// Constructors
-	CEditView(CEditWnd* pcEditWnd);
-	~CEditView();
+	EditView(EditWnd* pcEditWnd);
+	~EditView();
 	void Close();
 	// 初期化系メンバ関数
 	BOOL Create(
@@ -154,14 +154,14 @@ public:
 		BOOL		bShow,		//!< 作成時に表示するかどうか
 		bool		bMiniMap
 	);
-	void CopyViewStatus(CEditView*) const;					// 自分の表示状態を他のビューにコピー
+	void CopyViewStatus(EditView*) const;					// 自分の表示状態を他のビューにコピー
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                      クリップボード                         //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 public:
 	// 取得
-	bool MyGetClipboardData(CNativeW&, bool*, bool* = NULL);			// クリップボードからデータを取得
+	bool MyGetClipboardData(NativeW&, bool*, bool* = NULL);			// クリップボードからデータを取得
 
 	// 設定
 	bool MySetClipboardData(const ACHAR*, int, bool bColumnSelect, bool = false);	// クリップボードにデータを設定
@@ -232,7 +232,7 @@ protected:
 	// 色分け
 public:
 	Color3Setting GetColorIndex(const Layout* pcLayout, LayoutYInt nLineNum, int nIndex, ColorStrategyInfo* pInfo, bool bPrev = false);	// 指定位置のColorIndexの取得 02/12/13 ai
-	void SetCurrentColor(CGraphics& gr, EColorIndexType, EColorIndexType, EColorIndexType);
+	void SetCurrentColor(Graphics& gr, EColorIndexType, EColorIndexType, EColorIndexType);
 	COLORREF GetTextColorByColorInfo2(const ColorInfo& info, const ColorInfo& info2);
 	COLORREF GetBackColorByColorInfo2(const ColorInfo& info, const ColorInfo& info2);
 
@@ -312,9 +312,9 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 public:
 	// 2002/01/19 novice public属性に変更
-	bool GetSelectedDataSimple(CNativeW&);// 選択範囲のデータを取得
-	bool GetSelectedDataOne(CNativeW& cmemBuf, int nMaxLen);
-	bool GetSelectedData(CNativeW*, bool, const wchar_t*, bool, bool bAddCRLFWhenCopy, EEolType neweol = EOL_UNKNOWN);	// 選択範囲のデータを取得
+	bool GetSelectedDataSimple(NativeW&);// 選択範囲のデータを取得
+	bool GetSelectedDataOne(NativeW& cmemBuf, int nMaxLen);
+	bool GetSelectedData(NativeW*, bool, const wchar_t*, bool, bool bAddCRLFWhenCopy, EEolType neweol = EOL_UNKNOWN);	// 選択範囲のデータを取得
 	int IsCurrentPositionSelected(LayoutPoint ptCaretPos);					// 指定カーソル位置が選択エリア内にあるか
 	int IsCurrentPositionSelectedTEST(const LayoutPoint& ptCaretPos, const LayoutRange& sSelect) const; // 指定カーソル位置が選択エリア内にあるか
 	// 2006.07.09 genta 行桁指定によるカーソル移動(選択領域を考慮)
@@ -330,7 +330,7 @@ public:
 	bool IsCurrentPositionURL(const LayoutPoint& ptCaretPos, LogicRange* pUrlRange, std::wstring* pwstrURL); // カーソル位置にURLが有る場合のその範囲を調べる
 	bool CheckTripleClick(Point ptMouse);							// トリプルクリックをチェックする	// 2007.10.02 nasukoji
 	
-	bool ExecCmd(const TCHAR*, int, const TCHAR*, COutputAdapter* = NULL) ;			// 子プロセスの標準出力をリダイレクトする
+	bool ExecCmd(const TCHAR*, int, const TCHAR*, OutputAdapter* = NULL) ;			// 子プロセスの標準出力をリダイレクトする
 	void AddToCmdArr(const TCHAR*);
 	BOOL ChangeCurRegexp(bool bRedrawIfChanged = true);									// 2002.01.16 hor 正規表現の検索パターンを必要に応じて更新する(ライブラリが使用できないときはFALSEを返す)
 	void SendStatusMessage(const TCHAR* msg);					// 2002.01.26 hor 検索／置換／ブックマーク検索時の状態をステータスバーに表示する
@@ -364,7 +364,7 @@ public:
 	void DeleteData2(
 		const LayoutPoint&	ptCaretPos,
 		LogicInt			nDelLen,
-		CNativeW*			pcMem
+		NativeW*			pcMem
 	);
 
 	// 現在位置のデータ削除
@@ -428,22 +428,22 @@ public:
 	//	Jan. 10, 2005 インクリメンタルサーチ
 	bool IsISearchEnabled(int nCommand) const;
 
-	bool KeySearchCore(const CNativeW* pcmemCurText);	// 2006.04.10 fon
+	bool KeySearchCore(const NativeW* pcmemCurText);	// 2006.04.10 fon
 	bool MiniMapCursorLineTip(POINT* po, RECT* rc, bool* pbHide);
 
-	/*!	CEditView::KeyWordHelpSearchDictのコール元指定用ローカルID
+	/*!	EditView::KeyWordHelpSearchDictのコール元指定用ローカルID
 		@date 2006.04.10 fon 新規作成
 	*/
 	enum LID_SKH {
-		LID_SKH_ONTIMER		= 1,	//!< CEditView::OnTimer
-		LID_SKH_POPUPMENU_R = 2,	//!< CEditView::CreatePopUpMenu_R
+		LID_SKH_ONTIMER		= 1,	//!< EditView::OnTimer
+		LID_SKH_POPUPMENU_R = 2,	//!< EditView::CreatePopUpMenu_R
 	};
 	BOOL KeyWordHelpSearchDict(LID_SKH nID, POINT* po, RECT* rc);	// 2006.04.10 fon
 
 	int IsSearchString(const CStringRef& cStr, LogicInt, LogicInt*, LogicInt*) const;	// 現在位置が検索文字列に該当するか	// 2002.02.08 hor 引数追加
 
-	void GetCurrentTextForSearch(CNativeW&, bool bStripMaxPath = true, bool bTrimSpaceTab = false);			// 現在カーソル位置単語または選択範囲より検索等のキーを取得
-	bool GetCurrentTextForSearchDlg(CNativeW&, bool bGetHistory = false);		// 現在カーソル位置単語または選択範囲より検索等のキーを取得（ダイアログ用） 2006.08.23 ryoji
+	void GetCurrentTextForSearch(NativeW&, bool bStripMaxPath = true, bool bTrimSpaceTab = false);			// 現在カーソル位置単語または選択範囲より検索等のキーを取得
+	bool GetCurrentTextForSearchDlg(NativeW&, bool bGetHistory = false);		// 現在カーソル位置単語または選択範囲より検索等のキーを取得（ダイアログ用） 2006.08.23 ryoji
 
 private:
 	// インクリメンタルサーチ 
@@ -480,7 +480,7 @@ public:
 	void PostprocessCommand_hokan(void);
 
 	// 補完ウィンドウを表示する。Ctrl+Spaceや、文字の入力/削除時に呼び出されます。 YAZAKI 2002/03/11
-	void ShowHokanMgr(CNativeW& cmemData, bool bAutoDecided);
+	void ShowHokanMgr(NativeW& cmemData, bool bAutoDecided);
 
 	int HokanSearchByFile(const wchar_t*, bool, vector_ex<std::wstring>&, int); // 2003.06.25 Moca
 
@@ -554,26 +554,26 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 public:
 	// 主要構成部品アクセス
-	CTextArea& GetTextArea() { assert(m_pcTextArea); return *m_pcTextArea; }
-	const CTextArea& GetTextArea() const { assert(m_pcTextArea); return *m_pcTextArea; }
-	CCaret& GetCaret() { assert(m_pcCaret); return *m_pcCaret; }
-	const CCaret& GetCaret() const { assert(m_pcCaret); return *m_pcCaret; }
-	CRuler& GetRuler() { assert(m_pcRuler); return *m_pcRuler; }
-	const CRuler& GetRuler() const { assert(m_pcRuler); return *m_pcRuler; }
+	TextArea& GetTextArea() { assert(m_pcTextArea); return *m_pcTextArea; }
+	const TextArea& GetTextArea() const { assert(m_pcTextArea); return *m_pcTextArea; }
+	Caret& GetCaret() { assert(m_pcCaret); return *m_pcCaret; }
+	const Caret& GetCaret() const { assert(m_pcCaret); return *m_pcCaret; }
+	Ruler& GetRuler() { assert(m_pcRuler); return *m_pcRuler; }
+	const Ruler& GetRuler() const { assert(m_pcRuler); return *m_pcRuler; }
 
 	// 主要属性アクセス
-	CTextMetrics& GetTextMetrics() { return m_cTextMetrics; }
-	const CTextMetrics& GetTextMetrics() const { return m_cTextMetrics; }
-	CViewSelect& GetSelectionInfo() { return m_cViewSelect; }
-	const CViewSelect& GetSelectionInfo() const { return m_cViewSelect; }
+	TextMetrics& GetTextMetrics() { return m_cTextMetrics; }
+	const TextMetrics& GetTextMetrics() const { return m_cTextMetrics; }
+	ViewSelect& GetSelectionInfo() { return m_cViewSelect; }
+	const ViewSelect& GetSelectionInfo() const { return m_cViewSelect; }
 
 	// 主要オブジェクトアクセス
-	CViewFont& GetFontset() { assert(m_pcViewFont); return *m_pcViewFont; }
-	const CViewFont& GetFontset() const { assert(m_pcViewFont); return *m_pcViewFont; }
+	ViewFont& GetFontset() { assert(m_pcViewFont); return *m_pcViewFont; }
+	const ViewFont& GetFontset() const { assert(m_pcViewFont); return *m_pcViewFont; }
 
 	// 主要ヘルパアクセス
-	const CViewParser& GetParser() const { return m_cParser; }
-	const CTextDrawer& GetTextDrawer() const { return m_cTextDrawer; }
+	const ViewParser& GetParser() const { return m_cParser; }
+	const TextDrawer& GetTextDrawer() const { return m_cTextDrawer; }
 	ViewCommander& GetCommander() { return m_cCommander; }
 
 
@@ -582,25 +582,25 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 public:
 	// 参照
-	CEditWnd*			m_pcEditWnd;	//!< ウィンドウ
+	EditWnd*			m_pcEditWnd;	//!< ウィンドウ
 	EditDoc*			m_pcEditDoc;	//!< ドキュメント
 	const TypeConfig*	m_pTypeData;
 
 	// 主要構成部品
-	CTextArea*		m_pcTextArea;
-	CCaret*			m_pcCaret;
-	CRuler*			m_pcRuler;
+	TextArea*		m_pcTextArea;
+	Caret*			m_pcCaret;
+	Ruler*			m_pcRuler;
 
 	// 主要属性
-	CTextMetrics	m_cTextMetrics;
-	CViewSelect		m_cViewSelect;
+	TextMetrics	m_cTextMetrics;
+	ViewSelect		m_cViewSelect;
 
 	// 主要オブジェクト
-	CViewFont*		m_pcViewFont;
+	ViewFont*		m_pcViewFont;
 
 	// 主要ヘルパ
-	CViewParser		m_cParser;
-	CTextDrawer		m_cTextDrawer;
+	ViewParser		m_cParser;
+	TextDrawer		m_cTextDrawer;
 	ViewCommander	m_cCommander;
 
 public:
@@ -610,9 +610,9 @@ public:
 	int				m_nVScrollRate;		// 垂直スクロールバーの縮尺
 	HWND			m_hwndHScrollBar;	// 水平スクロールバーウィンドウハンドル
 	HWND			m_hwndSizeBox;		// サイズボックスウィンドウハンドル
-	CSplitBoxWnd*	m_pcsbwVSplitBox;	// 垂直分割ボックス
-	CSplitBoxWnd*	m_pcsbwHSplitBox;	// 水平分割ボックス
-	CAutoScrollWnd	m_cAutoScrollWnd;	//!< オートスクロール
+	SplitBoxWnd*	m_pcsbwVSplitBox;	// 垂直分割ボックス
+	SplitBoxWnd*	m_pcsbwHSplitBox;	// 水平分割ボックス
+	AutoScrollWnd	m_cAutoScrollWnd;	//!< オートスクロール
 
 public:
 	// 描画
@@ -667,7 +667,7 @@ public:
 
 	// 検索
 	SearchStringPattern m_sSearchPattern;
-	mutable CBregexp	m_CurRegexp;				// コンパイルデータ
+	mutable Bregexp	m_CurRegexp;				// コンパイルデータ
 	bool				m_bCurSrchKeyMark;			// 検索文字列のマーク
 	bool				m_bCurSearchUpdate;			// コンパイルデータ更新要求
 	int					m_nCurSearchKeySequence;	// 検索キーシーケンス
@@ -695,7 +695,7 @@ public:
 
 	// 辞書Tip関連
 	DWORD			m_dwTipTimer;			// Tip起動タイマー
-	CTipWnd			m_cTipWnd;				// Tip表示ウィンドウ
+	TipWnd			m_cTipWnd;				// Tip表示ウィンドウ
 	POINT			m_poTipCurPos;			// Tip起動時のマウスカーソル位置
 	bool			m_bInMenuLoop;			// メニュー モーダル ループに入っています
 	DicMgr			m_cDicMgr;				// 辞書マネージャ
@@ -719,26 +719,26 @@ public:
 	FP_ATOK_RECONV	m_AT_ImmSetReconvertString;
 
 	// その他
-	CAutoMarkMgr*	m_cHistory;	//	Jump履歴
-	CRegexKeyword*	m_cRegexKeyword;	//@@@ 2001.11.17 add MIK
+	AutoMarkMgr*	m_cHistory;	//	Jump履歴
+	RegexKeyword*	m_cRegexKeyword;	//@@@ 2001.11.17 add MIK
 	int				m_nMyIndex;	// 分割状態
-	CMigemo*		m_pcmigemo;
+	Migemo*		m_pcmigemo;
 	bool			m_bMiniMap;
 	bool			m_bMiniMapMouseDown;
 	LayoutInt		m_nPageViewTop;
 	LayoutInt		m_nPageViewBottom;
 
 private:
-	DISALLOW_COPY_AND_ASSIGN(CEditView);
+	DISALLOW_COPY_AND_ASSIGN(EditView);
 };
 
 
 
-class COutputAdapter
+class OutputAdapter
 {
 public:
-	COutputAdapter(){};
-	virtual  ~COutputAdapter(){};
+	OutputAdapter(){};
+	virtual  ~OutputAdapter(){};
 
 	virtual bool OutputW(const WCHAR* pBuf, int size = -1) = 0;
 	virtual bool OutputA(const ACHAR* pBuf, int size = -1) = 0;

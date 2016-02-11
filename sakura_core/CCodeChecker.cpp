@@ -17,18 +17,18 @@
 //! DocLineMgrが保持するデータに異なる改行コードが混在しているかどうか判定する
 static bool _CheckSavingEolcode(
 	const DocLineMgr& pcDocLineMgr,
-	CEol cEolType
+	Eol cEolType
 	)
 {
 	bool bMix = false;
 	if (cEolType == EOL_NONE) {	// 改行コード変換なし
-		CEol cEolCheck;	// 比較対象EOL
-		const CDocLine* pcDocLine = pcDocLineMgr.GetDocLineTop();
+		Eol cEolCheck;	// 比較対象EOL
+		const DocLine* pcDocLine = pcDocLineMgr.GetDocLineTop();
 		if (pcDocLine) {
 			cEolCheck = pcDocLine->GetEol();
 		}
 		while (pcDocLine) {
-			CEol cEol = pcDocLine->GetEol();
+			Eol cEol = pcDocLine->GetEol();
 			if (cEol != cEolCheck && cEol != EOL_NONE) {
 				bMix = true;
 				break;
@@ -44,25 +44,25 @@ static EConvertResult _CheckSavingCharcode(
 	const DocLineMgr& pcDocLineMgr,
 	ECodeType eCodeType,
 	LogicPoint& point,
-	CNativeW& wc
+	NativeW& wc
 	)
 {
-	const CDocLine*	pcDocLine = pcDocLineMgr.GetDocLineTop();
+	const DocLine*	pcDocLine = pcDocLineMgr.GetDocLineTop();
 	const bool bCodePageMode = IsValidCodeOrCPType(eCodeType) && !IsValidCodeType(eCodeType);
 	CodeBase* pCodeBase = CodeFactory::CreateCodeBase(eCodeType, 0);
-	CMemory cmemTmp;	// バッファを再利用
-	CNativeW cmemTmp2;
+	Memory cmemTmp;	// バッファを再利用
+	NativeW cmemTmp2;
 	LogicInt nLine = LogicInt(0);
 	while (pcDocLine) {
 		// コード変換 pcDocLine -> cmemTmp
-		EConvertResult e = CIoBridge::ImplToFile(
+		EConvertResult e = IoBridge::ImplToFile(
 			pcDocLine->_GetDocLineDataWithEOL(),
 			&cmemTmp,
 			pCodeBase
 		);
 		if (bCodePageMode) {
 			// コードページはRESULT_LOSESOMEを返さないので、自分で文字列比較する
-			EConvertResult e2 = CIoBridge::FileToImpl(
+			EConvertResult e2 = IoBridge::FileToImpl(
 				cmemTmp,
 				&cmemTmp2,
 				pCodeBase,
@@ -87,7 +87,7 @@ static EConvertResult _CheckSavingCharcode(
 				point.y = nLine;
 				point.x = LogicInt(nPos);
 				// 変換できなかった位置の1文字取得
-				wc.SetString( p + nPos, (Int)CNativeW::GetSizeOfChar( p, nDocLineLen, nPos ) );
+				wc.SetString( p + nPos, (Int)NativeW::GetSizeOfChar( p, nDocLineLen, nPos ) );
 				delete pCodeBase;
 				return RESULT_LOSESOME;
 			}
@@ -99,12 +99,12 @@ static EConvertResult _CheckSavingCharcode(
 				point.x = LogicInt(-1);
 				const WCHAR* pLine = pcDocLine->GetPtr();
 				const LogicInt nLineLen = pcDocLine->GetLengthWithEOL();
-				LogicInt chars = CNativeW::GetSizeOfChar( pLine, nLineLen, 0 );
+				LogicInt chars = NativeW::GetSizeOfChar( pLine, nLineLen, 0 );
 				LogicInt nPos = LogicInt(0);
-				CNativeW mem;
+				NativeW mem;
 				while (0 < chars) {
 					mem.SetStringHoldBuffer( pLine + nPos, chars );
-					EConvertResult e2 = CIoBridge::ImplToFile(
+					EConvertResult e2 = IoBridge::ImplToFile(
 						mem,
 						&cmemTmp,
 						pCodeBase
@@ -115,7 +115,7 @@ static EConvertResult _CheckSavingCharcode(
 						break;
 					}
 					nPos += chars;
-					chars = CNativeW::GetSizeOfChar( pLine, nLineLen, nPos );
+					chars = NativeW::GetSizeOfChar( pLine, nLineLen, nPos );
 				}
 			}
 			delete pCodeBase;
@@ -131,7 +131,7 @@ static EConvertResult _CheckSavingCharcode(
 }
 
 
-ECallbackResult CCodeChecker::OnCheckSave(SaveInfo* pSaveInfo)
+ECallbackResult CodeChecker::OnCheckSave(SaveInfo* pSaveInfo)
 {
 	EditDoc* pcDoc = GetListeningDoc();
 
@@ -146,7 +146,7 @@ ECallbackResult CCodeChecker::OnCheckSave(SaveInfo* pSaveInfo)
 	// ユーザ問い合わせ
 	if (bTmpResult) {
 		int nDlgResult = MYMESSAGEBOX(
-			CEditWnd::getInstance()->GetHwnd(),
+			EditWnd::getInstance()->GetHwnd(),
 			MB_YESNOCANCEL | MB_ICONWARNING,
 			GSTR_APPNAME,
 			LS(STR_CODECHECKER_EOL_UNIFY),
@@ -161,7 +161,7 @@ ECallbackResult CCodeChecker::OnCheckSave(SaveInfo* pSaveInfo)
 
 	// 指定文字コードで安全に保存できるかどうか判定
 	LogicPoint point;
-	CNativeW cmemChar(L"", 0);
+	NativeW cmemChar(L"", 0);
 	EConvertResult nTmpResult = _CheckSavingCharcode(
 		pcDoc->m_cDocLineMgr, pSaveInfo->eCharCode,
 		point, cmemChar
@@ -184,7 +184,7 @@ ECallbackResult CCodeChecker::OnCheckSave(SaveInfo* pSaveInfo)
 				szCharCode, &GetDllShareData().m_common.m_sStatusbar );
 		}
 		int nDlgResult = MYMESSAGEBOX(
-			CEditWnd::getInstance()->GetHwnd(),
+			EditWnd::getInstance()->GetHwnd(),
 			MB_YESNOCANCEL | MB_ICONWARNING,
 			GSTR_APPNAME,
 			LS(STR_CODECHECKER_CONFORM_LOSESOME),
@@ -208,11 +208,11 @@ ECallbackResult CCodeChecker::OnCheckSave(SaveInfo* pSaveInfo)
 	return CALLBACK_CONTINUE;
 }
 
-void CCodeChecker::OnFinalSave(ESaveResult eSaveResult)
+void CodeChecker::OnFinalSave(ESaveResult eSaveResult)
 {
 	// カキコ結果
 	if (eSaveResult == SAVED_LOSESOME) {
-		ErrorMessage(CEditWnd::getInstance()->GetHwnd(), LS(STR_CODECHECKER_LOSESOME_SAVE));
+		ErrorMessage(EditWnd::getInstance()->GetHwnd(), LS(STR_CODECHECKER_LOSESOME_SAVE));
 	}
 }
 
@@ -220,11 +220,11 @@ void CCodeChecker::OnFinalSave(ESaveResult eSaveResult)
 //                     ロード時チェック                        //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-void CCodeChecker::OnFinalLoad(ELoadResult eLoadResult)
+void CodeChecker::OnFinalLoad(ELoadResult eLoadResult)
 {
 	if (eLoadResult == LOADED_LOSESOME) {
 		ErrorMessage(
-			CEditWnd::getInstance()->GetHwnd(),
+			EditWnd::getInstance()->GetHwnd(),
 			LS(STR_CODECHECKER_LOSESOME_ROAD)
 		);
 	}

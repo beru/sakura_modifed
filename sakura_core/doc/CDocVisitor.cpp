@@ -8,9 +8,9 @@
 
 
 // 改行コードを統一する
-void CDocVisitor::SetAllEol(CEol cEol)
+void DocVisitor::SetAllEol(Eol cEol)
 {
-	CEditView* pcView = &CEditWnd::getInstance()->GetActiveView();
+	EditView* pcView = &EditWnd::getInstance()->GetActiveView();
 
 	// アンドゥ記録開始
 	if (!pcView->m_bDoing_UndoRedo) {
@@ -32,7 +32,7 @@ void CDocVisitor::SetAllEol(CEol cEol)
 		LogicInt nLine = LogicInt(0);
 		OpeBlk* pcOpeBlk = pcView->m_bDoing_UndoRedo ? NULL : pcView->m_cCommander.GetOpeBlk();
 		for (;;) {
-			CDocLine* pcDocLine = m_pcDocRef->m_cDocLineMgr.GetLine(nLine); //#######非効率
+			DocLine* pcDocLine = m_pcDocRef->m_cDocLineMgr.GetLine(nLine); //#######非効率
 			if (!pcDocLine) {
 				break;
 			}

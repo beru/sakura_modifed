@@ -6,9 +6,9 @@
 #include "types/CTypeSupport.h"
 
 // 2007.08.28 kobake 追加
-void _DispTab(CGraphics& gr, DispPos* pDispPos, const CEditView* pcView);
+void _DispTab(Graphics& gr, DispPos* pDispPos, const EditView* pcView);
 // タブ矢印描画関数	//@@@ 2003.03.26 MIK
-void _DrawTabArrow(CGraphics& gr, int nPosX, int nPosY, int nWidth, int nHeight, bool bBold, COLORREF pColor);
+void _DrawTabArrow(Graphics& gr, int nPosX, int nPosY, int nWidth, int nHeight, bool bBold, COLORREF pColor);
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                         CFigure_Tab                         //
@@ -31,13 +31,13 @@ bool CFigure_Tab::Match(const wchar_t* pText, int nTextLen) const
 	@date 2003.03.26 MIK タブ矢印表示
 	@date 2013.05.31 novice TAB表示対応(文字指定/短い矢印/長い矢印)
 */
-void CFigure_Tab::DispSpace(CGraphics& gr, DispPos* pDispPos, CEditView* pcView, bool bTrans) const
+void CFigure_Tab::DispSpace(Graphics& gr, DispPos* pDispPos, EditView* pcView, bool bTrans) const
 {
 	DispPos& sPos = *pDispPos;
 
 	// 必要なインターフェース
-	const CTextMetrics* pMetrics = &pcView->GetTextMetrics();
-	const CTextArea* pArea = &pcView->GetTextArea();
+	const TextMetrics* pMetrics = &pcView->GetTextMetrics();
+	const TextArea* pArea = &pcView->GetTextArea();
 
 	int nLineHeight = pMetrics->GetHankakuDy();
 	int nCharWidth = pMetrics->GetHankakuDx();
@@ -88,7 +88,7 @@ void CFigure_Tab::DispSpace(CGraphics& gr, DispPos* pDispPos, CEditView* pcView,
 				// 文字色や太字かどうかを現在の DC から調べる	// 2009.05.29 ryoji 
 				// （検索マッチ等の状況に柔軟に対応するため、ここは記号の色指定には決め打ちしない）
 				//	太字かどうか設定も見る様にする 2013/4/11 Uchi
-				// 2013.06.21 novice 文字色、太字をCGraphicsから取得
+				// 2013.06.21 novice 文字色、太字をGraphicsから取得
 
 				if (TABARROW_SHORT == m_pTypeData->m_bTabArrow) {
 					if (rcClip2.left <= sPos.GetDrawPos().x) { // Apr. 1, 2003 MIK 行番号と重なる
@@ -128,7 +128,7 @@ void CFigure_Tab::DispSpace(CGraphics& gr, DispPos* pDispPos, CEditView* pcView,
 	タブ矢印描画関数
 */
 void _DrawTabArrow(
-	CGraphics&	gr,
+	Graphics&	gr,
 	int			nPosX,   // ピクセルX
 	int			nPosY,   // ピクセルY
 	int			nWidth,  // ピクセルW

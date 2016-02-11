@@ -22,14 +22,14 @@
 #include "EditInfo.h"
 #include "util/design_template.h"
 
-class CMemory;
+class Memory;
 
 /*!	検索オプション
 	20020118 aroka
 */
 struct GrepInfo {
-	CNativeW		cmGrepKey;				//!< 検索キー
-	CNativeW		cmGrepRep;				//!< 置換キー
+	NativeW		cmGrepKey;				//!< 検索キー
+	NativeW		cmGrepRep;				//!< 置換キー
 	CNativeT		cmGrepFile;				//!< 検索対象ファイル
 	CNativeT		cmGrepFolder;			//!< 検索対象フォルダ
 	SearchOption	grepSearchOption;		//!< 検索オプション
@@ -113,9 +113,9 @@ private:
 	GrepInfo	m_gi;				//!
 	bool		m_bViewMode;		//! [out] TRUE: Read Only
 	int			m_nGroup;			//! グループID	// 2007.06.26 ryoji
-	CNativeW	m_cmMacro;			//! [out] マクロファイル名／マクロ文
-	CNativeW	m_cmMacroType;		//! [out] マクロ種別
-	CNativeW	m_cmProfile;		//! プロファイル名
+	NativeW	m_cmMacro;			//! [out] マクロファイル名／マクロ文
+	NativeW	m_cmMacroType;		//! [out] マクロ種別
+	NativeW	m_cmProfile;		//! プロファイル名
 	std::vector<std::tstring> m_vFiles;	//!< ファイル名(複数)
 };
 

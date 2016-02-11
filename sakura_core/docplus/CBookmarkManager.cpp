@@ -6,18 +6,18 @@
 #include "extmodule/CBregexp.h"
 
 
-bool CBookmarkGetter::IsBookmarked() const { return m_pcDocLine->m_sMark.m_cBookmarked; }
-void CBookmarkSetter::SetBookmark(bool bFlag) { m_pcDocLine->m_sMark.m_cBookmarked = bFlag; }
+bool BookmarkGetter::IsBookmarked() const { return m_pcDocLine->m_sMark.m_cBookmarked; }
+void BookmarkSetter::SetBookmark(bool bFlag) { m_pcDocLine->m_sMark.m_cBookmarked = bFlag; }
 
 // ブックマークの全解除
 /*
 	@date 2001.12.03 hor
 */
-void CBookmarkManager::ResetAllBookMark(void)
+void BookmarkManager::ResetAllBookMark(void)
 {
-	CDocLine* pDocLine = m_pcDocLineMgr->GetDocLineTop();
+	DocLine* pDocLine = m_pcDocLineMgr->GetDocLineTop();
 	while (pDocLine) {
-		CBookmarkSetter(pDocLine).SetBookmark(false);
+		BookmarkSetter(pDocLine).SetBookmark(false);
 		pDocLine = pDocLine->GetNextLine();
 	}
 }
@@ -27,7 +27,7 @@ void CBookmarkManager::ResetAllBookMark(void)
 /*
 	@date 2001.12.03 hor
 */
-bool CBookmarkManager::SearchBookMark(
+bool BookmarkManager::SearchBookMark(
 	LogicInt			nLineNum,		// 検索開始行
 	eSearchDirection	bPrevOrNext,	// 0==前方検索 1==後方検索
 	LogicInt*			pnLineNum 		// マッチ行
@@ -38,9 +38,9 @@ bool CBookmarkManager::SearchBookMark(
 	// 前方検索
 	if (bPrevOrNext == eSearchDirection::Backward) {
 		--nLinePos;
-		CDocLine* pDocLine = m_pcDocLineMgr->GetLine(nLinePos);
+		DocLine* pDocLine = m_pcDocLineMgr->GetLine(nLinePos);
 		while (pDocLine) {
-			if (CBookmarkGetter(pDocLine).IsBookmarked()) {
+			if (BookmarkGetter(pDocLine).IsBookmarked()) {
 				*pnLineNum = nLinePos;				// マッチ行
 				return true;
 			}
@@ -50,9 +50,9 @@ bool CBookmarkManager::SearchBookMark(
 	// 後方検索
 	}else {
 		++nLinePos;
-		CDocLine* pDocLine = m_pcDocLineMgr->GetLine(nLinePos);
+		DocLine* pDocLine = m_pcDocLineMgr->GetLine(nLinePos);
 		while (pDocLine) {
-			if (CBookmarkGetter(pDocLine).IsBookmarked()) {
+			if (BookmarkGetter(pDocLine).IsBookmarked()) {
 				*pnLineNum = nLinePos;				// マッチ行
 				return true;
 			}
@@ -67,9 +67,9 @@ bool CBookmarkManager::SearchBookMark(
 /*
 	@date 2002.01.16 hor
 */
-void CBookmarkManager::SetBookMarks(wchar_t* pMarkLines)
+void BookmarkManager::SetBookMarks(wchar_t* pMarkLines)
 {
-	CDocLine* pCDocLine;
+	DocLine* pCDocLine;
 	wchar_t delim[] = L", ";
 	wchar_t* p = pMarkLines;
 	if (p[0] == L':') {
@@ -104,7 +104,7 @@ void CBookmarkManager::SetBookMarks(wchar_t* pMarkLines)
 					nLineNum += nLineTemp;
 					pCDocLine = m_pcDocLineMgr->GetLine(LogicInt(nLineNum));
 					if (pCDocLine) {
-						CBookmarkSetter(pCDocLine).SetBookmark(true);
+						BookmarkSetter(pCDocLine).SetBookmark(true);
 					}
 					++nLineNum;
 					nLineTemp = 0;
@@ -122,7 +122,7 @@ void CBookmarkManager::SetBookMarks(wchar_t* pMarkLines)
 			while (wcschr(delim, *p)) ++p;
 			pCDocLine = m_pcDocLineMgr->GetLine(LogicInt(_wtol(p)));
 			if (pCDocLine) {
-				CBookmarkSetter(pCDocLine).SetBookmark(true);
+				BookmarkSetter(pCDocLine).SetBookmark(true);
 			}
 			p += wcslen(p) + 1;
 		}
@@ -135,7 +135,7 @@ void CBookmarkManager::SetBookMarks(wchar_t* pMarkLines)
 	@date 2002.01.16 hor
 	@date 2014.04.24 Moca ver2 差分32進数方式に変更
 */
-LPCWSTR CBookmarkManager::GetBookMarks()
+LPCWSTR BookmarkManager::GetBookMarks()
 {
 	static wchar_t szText[MAX_MARKLINES_LEN + 1];	// 2002.01.17 // Feb. 17, 2003 genta staticに
 	wchar_t szBuff[10];
@@ -143,10 +143,10 @@ LPCWSTR CBookmarkManager::GetBookMarks()
 	LogicInt nLinePos = LogicInt(0);
 	LogicInt nLinePosOld = LogicInt(-1);
 	int nTextLen = 2;
-	CDocLine* pCDocLine = m_pcDocLineMgr->GetLine(nLinePos);
+	DocLine* pCDocLine = m_pcDocLineMgr->GetLine(nLinePos);
 	wcscpy(szText, L":0");
 	while (pCDocLine) {
-		if (CBookmarkGetter(pCDocLine).IsBookmarked()) {
+		if (BookmarkGetter(pCDocLine).IsBookmarked()) {
 			LogicInt nDiff = nLinePos - nLinePosOld - LogicInt(1);
 			nLinePosOld = nLinePos;
 			if (nDiff == LogicInt(0)) {
@@ -199,7 +199,7 @@ LPCWSTR CBookmarkManager::GetBookMarks()
 /*
 	@date 2002.01.16 hor
 */
-void CBookmarkManager::MarkSearchWord(
+void BookmarkManager::MarkSearchWord(
 	const SearchStringPattern& pattern
 	)
 {
@@ -208,14 +208,14 @@ void CBookmarkManager::MarkSearchWord(
 
 	// 1 == 正規表現
 	if (searchOption.bRegularExp) {
-		CBregexp* pRegexp = pattern.GetRegexp();
-		CDocLine* pDocLine = m_pcDocLineMgr->GetLine(LogicInt(0));
+		Bregexp* pRegexp = pattern.GetRegexp();
+		DocLine* pDocLine = m_pcDocLineMgr->GetLine(LogicInt(0));
 		while (pDocLine) {
-			if (!CBookmarkGetter(pDocLine).IsBookmarked()) {
+			if (!BookmarkGetter(pDocLine).IsBookmarked()) {
 				const wchar_t* pLine = pDocLine->GetDocLineStrWithEOL(&nLineLen);
 				// 2005.03.19 かろと 前方一致サポートのためのメソッド変更
 				if (pRegexp->Match(pLine, nLineLen, 0)) {
-					CBookmarkSetter(pDocLine).SetBookmark(true);
+					BookmarkSetter(pDocLine).SetBookmark(true);
 				}
 			}
 			pDocLine = pDocLine->GetNextLine();
@@ -227,13 +227,13 @@ void CBookmarkManager::MarkSearchWord(
 		// 検索語を単語に分割して searchWordsに格納する。
 		std::vector<std::pair<const wchar_t*, LogicInt> > searchWords; // 単語の開始位置と長さの配列。
 		SearchAgent::CreateWordList(searchWords, pszPattern, nPatternLen);
-		CDocLine* pDocLine = m_pcDocLineMgr->GetLine(LogicInt(0));
+		DocLine* pDocLine = m_pcDocLineMgr->GetLine(LogicInt(0));
 		while (pDocLine) {
-			if (!CBookmarkGetter(pDocLine).IsBookmarked()) {
+			if (!BookmarkGetter(pDocLine).IsBookmarked()) {
 				const wchar_t* pLine = pDocLine->GetDocLineStrWithEOL(&nLineLen);
 				int nMatchLen;
 				if (SearchAgent::SearchStringWord(pLine, nLineLen, 0, searchWords, searchOption.bLoHiCase, &nMatchLen)) {
-					CBookmarkSetter(pDocLine).SetBookmark(true);
+					BookmarkSetter(pDocLine).SetBookmark(true);
 				}
 			}
 			// 次の行を見に行く
@@ -241,9 +241,9 @@ void CBookmarkManager::MarkSearchWord(
 		}
 	}else {
 		// 検索条件の情報
-		CDocLine* pDocLine = m_pcDocLineMgr->GetLine(LogicInt(0));
+		DocLine* pDocLine = m_pcDocLineMgr->GetLine(LogicInt(0));
 		while (pDocLine) {
-			if (!CBookmarkGetter(pDocLine).IsBookmarked()) {
+			if (!BookmarkGetter(pDocLine).IsBookmarked()) {
 				const wchar_t* pLine = pDocLine->GetDocLineStrWithEOL(&nLineLen);
 				if (SearchAgent::SearchString(
 					pLine,
@@ -252,7 +252,7 @@ void CBookmarkManager::MarkSearchWord(
 					pattern
 					)
 				) {
-					CBookmarkSetter(pDocLine).SetBookmark(true);
+					BookmarkSetter(pDocLine).SetBookmark(true);
 				}
 			}
 			pDocLine = pDocLine->GetNextLine();

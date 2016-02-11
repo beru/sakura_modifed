@@ -36,7 +36,7 @@
 	@date 2003/02/18 ai
 	@param flag [in] モード(true:登録, false:解除)
 */
-void CEditView::SetBracketPairPos(bool flag)
+void EditView::SetBracketPairPos(bool flag)
 {
 	// 03/03/06 ai すべて置換、すべて置換後のUndo&Redoがかなり遅い問題に対応
 	if (m_bDoing_UndoRedo || !GetDrawSwitch()) {
@@ -101,7 +101,7 @@ void CEditView::SetBracketPairPos(bool flag)
 	@date 2002/09/18 ai
 	@date 2003/02/18 ai 再描画対応の為大改造
 */
-void CEditView::DrawBracketPair(bool bDraw)
+void EditView::DrawBracketPair(bool bDraw)
 {
 	// 03/03/06 ai すべて置換、すべて置換後のUndo&Redoがかなり遅い問題に対応
 	if (m_bDoing_UndoRedo || !GetDrawSwitch()) {
@@ -133,7 +133,7 @@ void CEditView::DrawBracketPair(bool bDraw)
 		return;
 	}
 	
-	CGraphics gr;
+	Graphics gr;
 	gr.Init(::GetDC(GetHwnd()));
 	bool bCaretChange = false;
 	gr.SetTextBackTransparent(true);
@@ -210,7 +210,7 @@ void CEditView::DrawBracketPair(bool bDraw)
 					int nHeight = GetTextMetrics().GetHankakuDy();
 					int nLeft = (GetTextArea().GetDocumentLeftClientPointX()) + (Int)ptColLine.x * nWidth;
 					int nTop  = (Int)(ptColLine.GetY2() - GetTextArea().GetViewTopLine()) * nHeight + GetTextArea().GetAreaTop();
-					LayoutInt charsWidth = CNativeW::GetKetaOfChar(pLine, nLineLen, OutputX);
+					LayoutInt charsWidth = NativeW::GetKetaOfChar(pLine, nLineLen, OutputX);
 
 					// 色設定
 					CTypeSupport cTextType(this, COLORIDX_TEXT);
@@ -330,7 +330,7 @@ static const KAKKO_T g_aKakkos[] = {
 	@date Feb. 03, 2001 MIK 全角括弧に対応
 	@date Sep. 18, 2002 ai modeの追加
 */
-bool CEditView::SearchBracket(
+bool EditView::SearchBracket(
 	const LayoutPoint&	ptLayout,
 	LayoutPoint*		pptLayoutNew,
 	int*				mode
@@ -370,7 +370,7 @@ bool CEditView::SearchBracket(
 		return false;	//	前の文字はない
 	}
 
-	const wchar_t* bPos = CNativeW::GetCharPrev(cline, ptPos.x, cline + ptPos.x);
+	const wchar_t* bPos = NativeW::GetCharPrev(cline, ptPos.x, cline + ptPos.x);
 	int nCharSize = cline + ptPos.x - bPos;
 	// 括弧処理 2007.10.16 kobake
 	if (nCharSize == 1) {
@@ -403,7 +403,7 @@ bool CEditView::SearchBracket(
 	@retval false 失敗
 */
 // 03/01/08 ai
-bool CEditView::SearchBracketForward(
+bool EditView::SearchBracketForward(
 	LogicPoint		ptPos,
 	LayoutPoint*	pptLayoutNew,
 	const wchar_t*	upChar,
@@ -419,7 +419,7 @@ bool CEditView::SearchBracketForward(
 	// 初期位置の設定
 	m_pcEditDoc->m_cLayoutMgr.LogicToLayout(ptPos, &ptColLine);	// 02/09/19 ai
 	LayoutInt nSearchNum = (GetTextArea().GetBottomLine()) - ptColLine.y;					// 02/09/19 ai
-	CDocLine* ci = m_pcEditDoc->m_cDocLineMgr.GetLine(ptPos.GetY2());
+	DocLine* ci = m_pcEditDoc->m_cDocLineMgr.GetLine(ptPos.GetY2());
 	const wchar_t* cline = ci->GetDocLineStrWithEOL(&len);
 	const wchar_t* lineend = cline + len;
 	const wchar_t* cPos = cline + ptPos.x;
@@ -429,7 +429,7 @@ bool CEditView::SearchBracketForward(
 
 	do {
 		while (cPos < lineend) {
-			const wchar_t* nPos = CNativeW::GetCharNext(cline, len, cPos);
+			const wchar_t* nPos = NativeW::GetCharNext(cline, len, cPos);
 			if (nPos - cPos > 1) {
 				// skip
 				cPos = nPos;
@@ -490,7 +490,7 @@ bool CEditView::SearchBracketForward(
 	@retval true 成功
 	@retval false 失敗
 */
-bool CEditView::SearchBracketBackward(
+bool EditView::SearchBracketBackward(
 	LogicPoint		ptPos,
 	LayoutPoint*	pptLayoutNew,
 	const wchar_t*	dnChar,
@@ -505,13 +505,13 @@ bool CEditView::SearchBracketBackward(
 	// 初期位置の設定
 	m_pcEditDoc->m_cLayoutMgr.LogicToLayout(ptPos, &ptColLine);	// 02/09/19 ai
 	LayoutInt nSearchNum = ptColLine.y - GetTextArea().GetViewTopLine();										// 02/09/19 ai
-	CDocLine* ci = m_pcEditDoc->m_cDocLineMgr.GetLine(ptPos.GetY2());
+	DocLine* ci = m_pcEditDoc->m_cDocLineMgr.GetLine(ptPos.GetY2());
 	const wchar_t* cline = ci->GetDocLineStrWithEOL(&len);
 	const wchar_t* cPos = cline + ptPos.x;
 
 	do {
 		while (cPos > cline) {
-			const wchar_t* pPos = CNativeW::GetCharPrev(cline, len, cPos);
+			const wchar_t* pPos = NativeW::GetCharPrev(cline, len, cPos);
 			if (cPos - pPos > 1) {
 				//	skip
 				cPos = pPos;
@@ -568,7 +568,7 @@ bool CEditView::SearchBracketBackward(
 	@retval true 括弧
 	@retval false 非括弧
 */
-bool CEditView::IsBracket(const wchar_t* pLine, LogicInt x, LogicInt size)
+bool EditView::IsBracket(const wchar_t* pLine, LogicInt x, LogicInt size)
 {
 	// 括弧処理 2007.10.16 kobake
 	if (size == 1) {

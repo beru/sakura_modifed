@@ -34,7 +34,7 @@
 
 /*!	外部Winヘルプが設定されているか確認。
 */
-bool CHelpManager::ExtWinHelpIsSet(const TypeConfig* type)
+bool HelpManager::ExtWinHelpIsSet(const TypeConfig* type)
 {
 	if (m_pShareData->m_common.m_sHelper.m_szExtHelp[0] != L'\0') {
 		return true;	// 共通設定に設定されている
@@ -49,7 +49,7 @@ bool CHelpManager::ExtWinHelpIsSet(const TypeConfig* type)
 	タイプ別設定にファイル名が設定されていれば、そのファイル名を返します。
 	そうでなければ、共通設定のファイル名を返します。
 */
-const TCHAR* CHelpManager::GetExtWinHelp(const TypeConfig* type)
+const TCHAR* HelpManager::GetExtWinHelp(const TypeConfig* type)
 {
 	if (type && type->m_szExtHelp[0] != _T('\0')) {
 		return type->m_szExtHelp;
@@ -60,7 +60,7 @@ const TCHAR* CHelpManager::GetExtWinHelp(const TypeConfig* type)
 
 /*!	外部HTMLヘルプが設定されているか確認。
 */
-bool CHelpManager::ExtHTMLHelpIsSet(const TypeConfig* type)
+bool HelpManager::ExtHTMLHelpIsSet(const TypeConfig* type)
 {
 	if (m_pShareData->m_common.m_sHelper.m_szExtHtmlHelp[0] != L'\0') {
 		return true;	// 共通設定に設定されている
@@ -75,7 +75,7 @@ bool CHelpManager::ExtHTMLHelpIsSet(const TypeConfig* type)
 	タイプ別設定にファイル名が設定されていれば、そのファイル名を返します。
 	そうでなければ、共通設定のファイル名を返します。
 */
-const TCHAR* CHelpManager::GetExtHTMLHelp(const TypeConfig* type)
+const TCHAR* HelpManager::GetExtHTMLHelp(const TypeConfig* type)
 {
 	if (type && type->m_szExtHtmlHelp[0] != _T('\0')) {
 		return type->m_szExtHtmlHelp;
@@ -86,7 +86,7 @@ const TCHAR* CHelpManager::GetExtHTMLHelp(const TypeConfig* type)
 
 /*!	ビューアを複数起動しないがONかを返す。
 */
-bool CHelpManager::HTMLHelpIsSingle(const TypeConfig* type)
+bool HelpManager::HTMLHelpIsSingle(const TypeConfig* type)
 {
 	if (type && type->m_szExtHtmlHelp[0] != L'\0') {
 		return type->m_bHtmlHelpIsSingle;

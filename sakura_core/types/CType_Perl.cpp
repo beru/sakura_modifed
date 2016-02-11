@@ -65,7 +65,7 @@ void CType_Perl::InitTypeConfigImp(TypeConfig* pType)
 
 	@date 2005.06.18 genta パッケージ区切りを表す ::と'を考慮するように
 */
-void CDocOutline::MakeFuncList_Perl(CFuncInfoArr* pcFuncInfoArr)
+void DocOutline::MakeFuncList_Perl(FuncInfoArr* pcFuncInfoArr)
 {
 	const wchar_t*	pLine;
 	LogicInt		nLineLen;
@@ -84,7 +84,7 @@ void CDocOutline::MakeFuncList_Perl(CFuncInfoArr* pcFuncInfoArr)
 		for (i=0; i<nLineLen; ++i) {
 			/* 1バイト文字だけを処理する */
 			// 2005-09-02 D.S.Koba GetSizeOfChar
-			nCharChars = CNativeW::GetSizeOfChar(pLine, nLineLen, i);
+			nCharChars = NativeW::GetSizeOfChar(pLine, nLineLen, i);
 			if (1 < nCharChars) {
 				break;
 			}

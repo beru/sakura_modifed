@@ -30,15 +30,15 @@ class CCesu8 : public CodeBase {
 public:
 
 	// CodeBaseインターフェース
-	EConvertResult CodeToUnicode(const CMemory& cSrc, CNativeW* pDst) {	//!< 特定コード → UNICODE    変換
+	EConvertResult CodeToUnicode(const Memory& cSrc, NativeW* pDst) {	//!< 特定コード → UNICODE    変換
 		return Utf8::CESU8ToUnicode(cSrc, pDst);
 	}
 	
-	EConvertResult UnicodeToCode(const CNativeW& cSrc, CMemory* pDst) {	//!< UNICODE    → 特定コード 変換
+	EConvertResult UnicodeToCode(const NativeW& cSrc, Memory* pDst) {	//!< UNICODE    → 特定コード 変換
 		return Utf8::UnicodeToCESU8(cSrc, pDst);
 	}
 	
-	void GetBom(CMemory* pcmemBom);	//!< BOMデータ取得
+	void GetBom(Memory* pcmemBom);	//!< BOMデータ取得
 	// GetEolはCodeBaseに移動	2010/6/13 Uchi
 	EConvertResult UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR* pDst, const CommonSetting_Statusbar* psStatusbar) {			//!< UNICODE → Hex 変換
 		return Utf8()._UnicodeToHex(cSrc, iSLen, pDst, psStatusbar, true);

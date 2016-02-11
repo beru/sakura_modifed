@@ -30,9 +30,9 @@
 class EditDoc;
 class DocLineMgr;
 
-class CDocEditor : public DocListenerEx {
+class DocEditor : public DocListenerEx {
 public:
-	CDocEditor(EditDoc* pcDoc);
+	DocEditor(EditDoc* pcDoc);
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                         イベント                            //
@@ -59,8 +59,8 @@ public:
 	void SetImeMode(int mode);	// IME状態の設定
 
 	// May 15, 2000 genta
-	CEol  GetNewLineCode() const { return m_cNewLineCode; }
-	void  SetNewLineCode(const CEol& t) { m_cNewLineCode = t; }
+	Eol  GetNewLineCode() const { return m_cNewLineCode; }
+	void  SetNewLineCode(const Eol& t) { m_cNewLineCode = t; }
 
 	// Oct. 2, 2005 genta 挿入モードの設定
 	bool IsInsMode() const { return m_bInsMode; }
@@ -83,7 +83,7 @@ public:
 
 public:
 	EditDoc*		m_pcDocRef;
-	CEol 			m_cNewLineCode;				//!< Enter押下時に挿入する改行コード種別
+	Eol 			m_cNewLineCode;				//!< Enter押下時に挿入する改行コード種別
 	OpeBuf			m_cOpeBuf;					//!< アンドゥバッファ
 	OpeBlk*		m_pcOpeBlk;					//!< 操作ブロック
 	int				m_nOpeBlkRedawCount;		//!< OpeBlkの再描画非対象数
@@ -92,9 +92,9 @@ public:
 };
 
 
-class CDocEditAgent {
+class DocEditAgent {
 public:
-	CDocEditAgent(DocLineMgr* pcDocLineMgr) : m_pcDocLineMgr(pcDocLineMgr) { }
+	DocEditAgent(DocLineMgr* pcDocLineMgr) : m_pcDocLineMgr(pcDocLineMgr) { }
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                           操作                              //

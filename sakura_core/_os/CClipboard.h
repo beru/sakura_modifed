@@ -23,7 +23,7 @@
 */
 #pragma once
 
-class CEol;
+class Eol;
 
 // サクラエディタ用クリップボードクラス。後々はこの中で全てのクリップボードAPIを呼ばせたい。
 class Clipboard {
@@ -36,11 +36,11 @@ public:
 	void Empty(); // クリップボードを空にする
 	void Close(); // クリップボードを閉じる
 	bool SetText(const wchar_t* pData, int nDataLen, bool bColumnSelect, bool bLineSelect, UINT uFormat = (UINT)-1);   // テキストを設定する
-	bool SetHtmlText(const CNativeW& cmemBUf);
-	bool GetText(CNativeW* cmemBuf, bool* pbColumnSelect, bool* pbLineSelect, const CEol& cEol, UINT uGetFormat = (UINT)-1); // テキストを取得する
+	bool SetHtmlText(const NativeW& cmemBUf);
+	bool GetText(NativeW* cmemBuf, bool* pbColumnSelect, bool* pbLineSelect, const Eol& cEol, UINT uGetFormat = (UINT)-1); // テキストを取得する
 	bool IsIncludeClipboradFormat(const wchar_t* pFormatName);
 	bool SetClipboradByFormat(const CStringRef& cstr, const wchar_t* pFormatName, int nMode, int nEndMode);
-	bool GetClipboradByFormat(CNativeW& mem, const wchar_t* pFormatName, int nMode, int nEndMode, const CEol& cEol);
+	bool GetClipboradByFormat(NativeW& mem, const wchar_t* pFormatName, int nMode, int nEndMode, const Eol& cEol);
 	
 	// 演算子
 	operator bool() const { return m_bOpenResult != FALSE; } // クリップボードを開けたならtrue

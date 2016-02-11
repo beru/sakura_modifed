@@ -265,7 +265,7 @@ void ViewCommander::Command_JUMP(void)
 // ブックマークの設定・解除を行う(トグル動作)
 void ViewCommander::Command_BOOKMARK_SET(void)
 {
-	CDocLine* pCDocLine;
+	DocLine* pCDocLine;
 	auto& selInfo = m_pCommanderView->GetSelectionInfo();
 	auto& sSelect = selInfo.m_sSelect;
 	auto& lineMgr = GetDocument()->m_cDocLineMgr;
@@ -285,12 +285,12 @@ void ViewCommander::Command_BOOKMARK_SET(void)
 		);
 		for (LogicInt nY=ptFrom.GetY2(); nY<=ptTo.y; ++nY) {
 			pCDocLine = lineMgr.GetLine(nY);
-			CBookmarkSetter cBookmark(pCDocLine);
+			BookmarkSetter cBookmark(pCDocLine);
 			if (pCDocLine) cBookmark.SetBookmark(!cBookmark.IsBookmarked());
 		}
 	}else {
 		pCDocLine = lineMgr.GetLine(GetCaret().GetCaretLogicPos().GetY2());
-		CBookmarkSetter cBookmark(pCDocLine);
+		BookmarkSetter cBookmark(pCDocLine);
 		if (pCDocLine) cBookmark.SetBookmark(!cBookmark.IsBookmarked());
 	}
 
@@ -313,7 +313,7 @@ void ViewCommander::Command_BOOKMARK_NEXT(void)
 	nYOld = ptXY.y;					// hor
 
 re_do:;								// hor
-	if (CBookmarkManager(&GetDocument()->m_cDocLineMgr).SearchBookMark(ptXY.GetY2(), eSearchDirection::Forward, &tmp_y)) {
+	if (BookmarkManager(&GetDocument()->m_cDocLineMgr).SearchBookMark(ptXY.GetY2(), eSearchDirection::Forward, &tmp_y)) {
 		ptXY.y = tmp_y;
 		bFound = TRUE;
 		LayoutPoint ptLayout;
@@ -357,7 +357,7 @@ void ViewCommander::Command_BOOKMARK_PREV(void)
 	nYOld = ptXY.y;						// hor
 
 re_do:;								// hor
-	if (CBookmarkManager(&GetDocument()->m_cDocLineMgr).SearchBookMark(ptXY.GetY2(), eSearchDirection::Backward, &tmp_y)) {
+	if (BookmarkManager(&GetDocument()->m_cDocLineMgr).SearchBookMark(ptXY.GetY2(), eSearchDirection::Backward, &tmp_y)) {
 		ptXY.y = tmp_y;
 		bFound = TRUE;				// hor
 		LayoutPoint ptLayout;
@@ -392,7 +392,7 @@ re_do:;								// hor
 // ブックマークをクリアする
 void ViewCommander::Command_BOOKMARK_RESET(void)
 {
-	CBookmarkManager(&GetDocument()->m_cDocLineMgr).ResetAllBookMark();
+	BookmarkManager(&GetDocument()->m_cDocLineMgr).ResetAllBookMark();
 	// 2002.01.16 hor 分割したビューも更新
 	GetEditWindow()->Views_Redraw();
 }
@@ -407,7 +407,7 @@ void ViewCommander::Command_BOOKMARK_PATTERN(void)
 	if (!m_pCommanderView->ChangeCurRegexp(false)) {
 		return;
 	}
-	CBookmarkManager(&GetDocument()->m_cDocLineMgr).MarkSearchWord(
+	BookmarkManager(&GetDocument()->m_cDocLineMgr).MarkSearchWord(
 		m_pCommanderView->m_sSearchPattern
 	);
 	// 2002.01.16 hor 分割したビューも更新
@@ -423,7 +423,7 @@ void ViewCommander::Command_FUNCLIST_NEXT(void)
 	int nYOld = ptXY.y;
 
 	for (int n=0; n<2; ++n) {
-		if (CFuncListManager().SearchFuncListMark(&GetDocument()->m_cDocLineMgr,
+		if (FuncListManager().SearchFuncListMark(&GetDocument()->m_cDocLineMgr,
 				ptXY.GetY2(), eSearchDirection::Forward, &ptXY.y)) {
 			LayoutPoint ptLayout;
 			GetDocument()->m_cLayoutMgr.LogicToLayout(ptXY,&ptLayout);
@@ -454,7 +454,7 @@ void ViewCommander::Command_FUNCLIST_PREV(void)
 	int nYOld = ptXY.y;
 
 	for (int n=0; n<2; ++n) {
-		if (CFuncListManager().SearchFuncListMark(
+		if (FuncListManager().SearchFuncListMark(
 			&GetDocument()->m_cDocLineMgr,
 			ptXY.GetY2(),
 			eSearchDirection::Backward,

@@ -88,7 +88,7 @@ void CType_Text::InitTypeConfigImp(TypeConfig* pType)
 	@date 2007.8頃   kobake 機械的にUNICODE化
 	@date 2007.11.29 kobake UNICODE対応できてなかったので修正
 */
-void CDocOutline::MakeTopicList_txt(CFuncInfoArr* pcFuncInfoArr)
+void DocOutline::MakeTopicList_txt(FuncInfoArr* pcFuncInfoArr)
 {
 	using namespace WCODE;
 
@@ -126,12 +126,12 @@ void CDocOutline::MakeTopicList_txt(CFuncInfoArr* pcFuncInfoArr)
 		}
 
 		// 先頭文字が見出し記号のいずれかであれば、次へ進む
-		int nCharChars = CNativeW::GetSizeOfChar(pLine, nLineLen, i);
+		int nCharChars = NativeW::GetSizeOfChar(pLine, nLineLen, i);
 		int nCharChars2;
 		int j;
 		for (j=0; j<nStartsLen; j+=nCharChars2) {
 			// 2005-09-02 D.S.Koba GetSizeOfChar
-			nCharChars2 = CNativeW::GetSizeOfChar(pszStarts, nStartsLen, j);
+			nCharChars2 = NativeW::GetSizeOfChar(pszStarts, nStartsLen, j);
 			if (nCharChars == nCharChars2) {
 				if (wmemcmp(&pLine[i], &pszStarts[j], nCharChars) == 0) {
 					break;
@@ -254,7 +254,7 @@ void CDocOutline::MakeTopicList_txt(CFuncInfoArr* pcFuncInfoArr)
 	@date 2003.05.25 genta 実装方法一部修正
 	@date 2003.06.21 Moca 階層が2段以上深くなる場合を考慮
 */
-void CDocOutline::MakeTopicList_wztxt(CFuncInfoArr* pcFuncInfoArr)
+void DocOutline::MakeTopicList_wztxt(FuncInfoArr* pcFuncInfoArr)
 {
 	int levelPrev = 0;
 	bool bExtEol = GetDllShareData().m_common.m_sEdit.m_bEnableExtEol;

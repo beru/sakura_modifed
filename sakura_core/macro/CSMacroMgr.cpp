@@ -489,7 +489,7 @@ MacroFuncInfo CSMacroMgr::m_MacroFuncInfoArr[] =
 };
 
 /*!
-	@date 2002.02.17 YAZAKI CShareDataのインスタンスは、CProcessにひとつあるのみ。
+	@date 2002.02.17 YAZAKI ShareDataのインスタンスは、CProcessにひとつあるのみ。
 	@date 2002.04.29 genta オブジェクトの実体は実行時まで生成しない。
 */
 CSMacroMgr::CSMacroMgr()
@@ -498,9 +498,9 @@ CSMacroMgr::CSMacroMgr()
 	
 	m_pShareData = &GetDllShareData();
 	
-	CPPAMacroMgr::declare();
-	CKeyMacroMgr::declare();
-	CWSHMacroManager::declare();
+	PPAMacroMgr::declare();
+	KeyMacroMgr::declare();
+	WSHMacroManager::declare();
 	
 	for (int i=0; i<MAX_CUSTMACRO; ++i) {
 		m_cSavedKeyMacro[i] = NULL;
@@ -547,19 +547,19 @@ int CSMacroMgr::Append(
 	int				idx,		//
 	EFunctionCode	nFuncID,	// [in] 機能番号
 	const LPARAM*	lParams,	// [in] パラメータ。
-	CEditView*		pcEditView	// 
+	EditView*		pcEditView	// 
 )
 {
 	assert(idx == STAND_KEYMACRO);
 	if (idx == STAND_KEYMACRO) {
-		CKeyMacroMgr* pKeyMacro = dynamic_cast<CKeyMacroMgr*>(m_pKeyMacro);
+		KeyMacroMgr* pKeyMacro = dynamic_cast<KeyMacroMgr*>(m_pKeyMacro);
 		if (!pKeyMacro) {
 			// 1. 実体がまだ無い場合
-			// 2. CKeyMacroMgr以外の物が入っていた場合
+			// 2. KeyMacroMgr以外の物が入っていた場合
 			// いずれにしても再生成する．
 			delete m_pKeyMacro;
-			m_pKeyMacro = new CKeyMacroMgr;
-			pKeyMacro = dynamic_cast<CKeyMacroMgr*>(m_pKeyMacro);
+			m_pKeyMacro = new KeyMacroMgr;
+			pKeyMacro = dynamic_cast<KeyMacroMgr*>(m_pKeyMacro);
 		}
 		pKeyMacro->Append(nFuncID, lParams, pcEditView);
 	}
@@ -569,7 +569,7 @@ int CSMacroMgr::Append(
 
 /*!	@brief キーボードマクロの実行
 
-	CShareDataからファイル名を取得し、実行する。
+	ShareDataからファイル名を取得し、実行する。
 
 	@param hInstance [in] インスタンス
 	@param hwndParent [in] 親ウィンドウの
@@ -582,7 +582,7 @@ int CSMacroMgr::Append(
 BOOL CSMacroMgr::Exec(
 	int idx,
 	HINSTANCE hInstance,
-	CEditView* pcEditView,
+	EditView* pcEditView,
 	int flags
 	)
 {
@@ -615,12 +615,12 @@ BOOL CSMacroMgr::Exec(
 
 	// 読み込み前か、毎回読み込む設定の場合は、ファイルを読み込みなおす
 	// Apr. 29, 2002 genta
-	if (!m_cSavedKeyMacro[idx] || CShareData::getInstance()->BeReloadWhenExecuteMacro(idx)) {
-		// CShareDataから、マクロファイル名を取得
+	if (!m_cSavedKeyMacro[idx] || ShareData::getInstance()->BeReloadWhenExecuteMacro(idx)) {
+		// ShareDataから、マクロファイル名を取得
 		// Jun. 08, 2003 Moca 呼び出し側でパス名を用意
 		// Jun. 16, 2003 genta 書式をちょっと変更
 		TCHAR ptr[_MAX_PATH * 2];
-		int n = CShareData::getInstance()->GetMacroFilename(idx, ptr, _countof(ptr));
+		int n = ShareData::getInstance()->GetMacroFilename(idx, ptr, _countof(ptr));
 		if  (n <= 0) {
 			return FALSE;
 		}
@@ -658,7 +658,7 @@ bool CSMacroMgr::Load(
 	const TCHAR* pszType
 	)
 {
-	CMacroManagerBase** ppMacro = Idx2Ptr(idx);
+	MacroManagerBase** ppMacro = Idx2Ptr(idx);
 
 	if (!ppMacro) {
 		DEBUG_TRACE(_T("CSMacroMgr::Load() Out of range: idx=%d Path=%ts\n"), idx, pszPath);
@@ -688,7 +688,7 @@ bool CSMacroMgr::Load(
 	}
 
 	m_sMacroPath = _T("");
-	*ppMacro = CMacroFactory::getInstance()->Create(ext);
+	*ppMacro = MacroFactory::getInstance()->Create(ext);
 	if (!*ppMacro) {
 		return false;
 	}
@@ -746,7 +746,7 @@ bool CSMacroMgr::Save(
 {
 	assert(idx == STAND_KEYMACRO);
 	if (idx == STAND_KEYMACRO) {
-		CKeyMacroMgr* pKeyMacro = dynamic_cast<CKeyMacroMgr*>(m_pKeyMacro);
+		KeyMacroMgr* pKeyMacro = dynamic_cast<KeyMacroMgr*>(m_pKeyMacro);
 		if (pKeyMacro) {
 			return pKeyMacro->SaveKeyMacro(hInstance, pszPath);
 		}
@@ -770,7 +770,7 @@ bool CSMacroMgr::Save(
 */
 void CSMacroMgr::Clear(int idx)
 {
-	CMacroManagerBase **ppMacro = Idx2Ptr(idx);
+	MacroManagerBase **ppMacro = Idx2Ptr(idx);
 	if (ppMacro) {
 		delete *ppMacro;
 		*ppMacro = NULL;
@@ -1241,7 +1241,7 @@ BOOL CSMacroMgr::CanFuncIsKeyMacro(int nFuncID)
 	@param idx [in] マクロ番号(0-), STAND_KEYMACROは標準キーマクロバッファ、TEMP_KEYMACROは一時マクロバッファを表す．
 	@return オブジェクト位置へのポインタ．マクロ番号が不当な場合はNULL．
 */
-CMacroManagerBase** CSMacroMgr::Idx2Ptr(int idx)
+MacroManagerBase** CSMacroMgr::Idx2Ptr(int idx)
 {
 	//	Jun. 16, 2002 genta
 	//	キーマクロ以外のマクロを読み込めるように
@@ -1266,7 +1266,7 @@ CMacroManagerBase** CSMacroMgr::Idx2Ptr(int idx)
 */
 bool CSMacroMgr::IsSaveOk(void)
 {
-	return !dynamic_cast<CKeyMacroMgr*>(m_pKeyMacro) ? false : true;
+	return !dynamic_cast<KeyMacroMgr*>(m_pKeyMacro) ? false : true;
 }
 
 /*!
@@ -1275,9 +1275,9 @@ bool CSMacroMgr::IsSaveOk(void)
 	@param newMacro [in] 新しいマクロバッファのポインタ．
 	@return 前の一時マクロバッファのポインタ．
 */
-CMacroManagerBase* CSMacroMgr::SetTempMacro(CMacroManagerBase *newMacro)
+MacroManagerBase* CSMacroMgr::SetTempMacro(MacroManagerBase *newMacro)
 {
-	CMacroManagerBase* oldMacro = m_pTempMacro;
+	MacroManagerBase* oldMacro = m_pTempMacro;
 	m_pTempMacro = newMacro;
 	return oldMacro;
 }

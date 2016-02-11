@@ -33,7 +33,7 @@
 #include "util/window.h"
 #include "uiparts/CImageListMgr.h"
 
-CMainToolBar::CMainToolBar(CEditWnd* pOwner)
+CMainToolBar::CMainToolBar(EditWnd* pOwner)
 	:
 	m_pOwner(pOwner),
 	m_hwndToolBar(NULL),
@@ -44,7 +44,7 @@ CMainToolBar::CMainToolBar(CEditWnd* pOwner)
 {
 }
 
-void CMainToolBar::Create(CImageListMgr* pcIcons)
+void CMainToolBar::Create(ImageListMgr* pcIcons)
 {
 	m_pcIcons = pcIcons;
 }
@@ -59,7 +59,7 @@ void CMainToolBar::ProcSearchBox(MSG *msg)
 			if (0 < GetSearchKey(strText)) {	// キー文字列がある
 				if (strText.size() < _MAX_PATH) {
 					// 検索キーを登録
-					CSearchKeywordManager().AddToSearchKeyArr(strText.c_str());
+					SearchKeywordManager().AddToSearchKeyArr(strText.c_str());
 				}
 				m_pOwner->GetActiveView().m_strCurSearchKey = strText;
 				m_pOwner->GetActiveView().m_bCurSearchUpdate = true;
@@ -141,7 +141,7 @@ void CMainToolBar::CreateToolBar(void)
 			0, 0, 0, 0,
 			m_pOwner->GetHwnd(),
 			NULL,
-			CEditApp::getInstance()->GetAppInstance(),
+			EditApp::getInstance()->GetAppInstance(),
 			NULL
 		);
 
@@ -177,7 +177,7 @@ void CMainToolBar::CreateToolBar(void)
 		0, 0,
 		m_pOwner->GetHwnd(),
 		(HMENU)ID_TOOLBAR,
-		CEditApp::getInstance()->GetAppInstance(),
+		EditApp::getInstance()->GetAppInstance(),
 		NULL
 	);
 	if (!m_hwndToolBar) {
@@ -280,7 +280,7 @@ void CMainToolBar::CreateToolBar(void)
 								WS_CHILD | WS_VISIBLE | WS_TABSTOP | WS_VSCROLL | CBS_DROPDOWN
 								/*| CBS_SORT*/ | CBS_AUTOHSCROLL /*| CBS_DISABLENOSCROLL*/,
 								rc.left, rc.top + 1, rc.right - rc.left, (rc.bottom - rc.top) * 10,
-								m_hwndToolBar, (HMENU)(INT_PTR)tbb.idCommand, CEditApp::getInstance()->GetAppInstance(), NULL);
+								m_hwndToolBar, (HMENU)(INT_PTR)tbb.idCommand, EditApp::getInstance()->GetAppInstance(), NULL);
 						if (m_hwndSearchBox) {
 							m_pOwner->SetCurrentFocus(0);
 
@@ -313,7 +313,7 @@ void CMainToolBar::CreateToolBar(void)
 
 							m_comboDel = ComboBoxItemDeleter(); // 再表示用の初期化
 							m_comboDel.pRecent = &m_cRecentSearch;
-							CDialog::SetComboBoxDeleter(m_hwndSearchBox, &m_comboDel);
+							Dialog::SetComboBoxDeleter(m_hwndSearchBox, &m_comboDel);
 						}
 						break;
 

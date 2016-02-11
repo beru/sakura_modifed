@@ -20,8 +20,8 @@
 
 class DropTarget;
 class CYbInterfaceBase;
-class CEditWnd;	// 2008.06.20 ryoji
-class CEditView;// 2002/2/3 aroka ヘッダ軽量化
+class EditWnd;	// 2008.06.20 ryoji
+class EditView;// 2002/2/3 aroka ヘッダ軽量化
 
 /*-----------------------------------------------------------------------
 クラスの宣言
@@ -73,16 +73,16 @@ public:
 	/*
 	||  Constructors
 	*/
-	DropTarget(CEditWnd*);	// 2008.06.20 ryoji
-	DropTarget(CEditView*);
+	DropTarget(EditWnd*);	// 2008.06.20 ryoji
+	DropTarget(EditView*);
 	~DropTarget();
 	/*
 	||  Attributes & Operations
 	*/
 private: // 2002/2/10 aroka アクセス権変更
-	CEditWnd*		m_pcEditWnd;	// 2008.06.20 ryoji
+	EditWnd*		m_pcEditWnd;	// 2008.06.20 ryoji
 	HWND			m_hWnd_DropTarget;
-	CEditView*		m_pcEditView;
+	EditView*		m_pcEditView;
 	//	static REFIID	m_owniid;
 public:
 	BOOL			Register_DropTarget(HWND);

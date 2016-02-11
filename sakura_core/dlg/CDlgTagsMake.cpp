@@ -50,7 +50,7 @@ const DWORD p_helpids[] = {	//13700
 	0, 0
 };
 
-CDlgTagsMake::CDlgTagsMake()
+DlgTagsMake::DlgTagsMake()
 {
 	m_szPath[0] = 0;
 	m_szTagsCmdLine[0] = 0;
@@ -59,7 +59,7 @@ CDlgTagsMake::CDlgTagsMake()
 }
 
 // モーダルダイアログの表示
-int CDlgTagsMake::DoModal(
+int DlgTagsMake::DoModal(
 	HINSTANCE		hInstance,
 	HWND			hwndParent,
 	LPARAM			lParam,
@@ -67,10 +67,10 @@ int CDlgTagsMake::DoModal(
 	)
 {
 	_tcscpy( m_szPath, pszPath );
-	return (int)CDialog::DoModal(hInstance, hwndParent, IDD_TAG_MAKE, lParam);
+	return (int)Dialog::DoModal(hInstance, hwndParent, IDD_TAG_MAKE, lParam);
 }
 
-BOOL CDlgTagsMake::OnBnClicked(int wID)
+BOOL DlgTagsMake::OnBnClicked(int wID)
 {
 	switch (wID) {
 	case IDC_BUTTON_HELP:
@@ -105,7 +105,7 @@ BOOL CDlgTagsMake::OnBnClicked(int wID)
 	}
 
 	// 基底クラスメンバ
-	return CDialog::OnBnClicked(wID);
+	return Dialog::OnBnClicked(wID);
 }
 
 /*!
@@ -113,7 +113,7 @@ BOOL CDlgTagsMake::OnBnClicked(int wID)
 	
 	@param hwndDlg [in] ダイアログボックスのウィンドウハンドル
 */
-void CDlgTagsMake::SelectFolder()
+void DlgTagsMake::SelectFolder()
 {
 	HWND hwndDlg = GetHwnd();
 	TCHAR szPath[_MAX_PATH + 1];
@@ -134,7 +134,7 @@ void CDlgTagsMake::SelectFolder()
 }
 
 // ダイアログデータの設定
-void CDlgTagsMake::SetData(void)
+void DlgTagsMake::SetData(void)
 {
 	// 作成フォルダ
 	Combo_LimitText(GetItemHwnd(IDC_EDIT_TAG_MAKE_FOLDER), _countof(m_szPath));
@@ -156,7 +156,7 @@ void CDlgTagsMake::SetData(void)
 
 // ダイアログデータの取得
 // TRUE==正常  FALSE==入力エラー
-int CDlgTagsMake::GetData(void)
+int DlgTagsMake::GetData(void)
 {
 	// フォルダ
 	GetItemText(IDC_EDIT_TAG_MAKE_FOLDER, m_szPath, _countof(m_szPath));
@@ -179,7 +179,7 @@ int CDlgTagsMake::GetData(void)
 	return TRUE;
 }
 
-LPVOID CDlgTagsMake::GetHelpIdTable(void)
+LPVOID DlgTagsMake::GetHelpIdTable(void)
 {
 	return (LPVOID)p_helpids;
 }

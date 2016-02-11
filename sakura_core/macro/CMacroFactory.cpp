@@ -35,7 +35,7 @@
 
 static const TCHAR NULSTR[] = _T("");
 
-CMacroFactory::CMacroFactory()
+MacroFactory::MacroFactory()
 {}
 
 /*!
@@ -47,7 +47,7 @@ CMacroFactory::CMacroFactory()
 	@li NULLは""にする。
 	@li アルファベットは小文字に統一
 */
-std::tstring CMacroFactory::Ext2Key(const TCHAR* ext)
+std::tstring MacroFactory::Ext2Key(const TCHAR* ext)
 {
 	if (!ext) {
 		ext = NULSTR;
@@ -67,11 +67,11 @@ std::tstring CMacroFactory::Ext2Key(const TCHAR* ext)
 	
 	@param f [in] 登録するFactory関数
 	
-	@sa CMacroFactory::RegisterExts
+	@sa MacroFactory::RegisterExts
 
 	@date 2002.08.25 genta 追加
 */
-bool CMacroFactory::RegisterCreator(Creator f)
+bool MacroFactory::RegisterCreator(Creator f)
 {
 	if (!f) {
 		return false;
@@ -86,7 +86,7 @@ bool CMacroFactory::RegisterCreator(Creator f)
 	
 	@param f [in] 登録解除するCreator
 */
-bool CMacroFactory::Unregister(Creator f)
+bool MacroFactory::Unregister(Creator f)
 {
 	// Creator Listからの削除
 	auto c_it = m_mMacroCreators.begin();
@@ -115,15 +115,15 @@ bool CMacroFactory::Unregister(Creator f)
 	@pararm ext [in] 拡張子
 	@return Macroオブジェクト。適切なものが見つからなければNULL。
 */
-CMacroManagerBase* CMacroFactory::Create(const TCHAR* ext)
+MacroManagerBase* MacroFactory::Create(const TCHAR* ext)
 {
 	std::tstring key = Ext2Key(ext);
 
 	// Creatorを順に試す
 	for (auto c_it=m_mMacroCreators.begin(); c_it!=m_mMacroCreators.end(); ++c_it) {
-		CMacroManagerBase* pobj = (*c_it)(key.c_str());
+		MacroManagerBase* pobj = (*c_it)(key.c_str());
 		if (pobj) {
-			DEBUG_TRACE(_T("CMacroFactory::Create/ Answered for (%ts)\n"), key.c_str());
+			DEBUG_TRACE(_T("MacroFactory::Create/ Answered for (%ts)\n"), key.c_str());
 			return pobj;
 		}
 	}

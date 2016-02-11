@@ -32,7 +32,7 @@
 #include <string>
 #include "_os/OleTypes.h"
 
-class CCookieManager {
+class CookieManager {
 	typedef std::wstring wstring;
 
 public:

@@ -36,7 +36,7 @@
 //                        生成と破棄                           //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-CDllImp::CDllImp()
+DllImp::DllImp()
 	:
 	m_hInstance(NULL)
 {
@@ -45,7 +45,7 @@ CDllImp::CDllImp()
 /*!
 	オブジェクト消滅前にDLLが読み込まれた状態であればDLLの解放を行う．
 */
-CDllImp::~CDllImp()
+DllImp::~DllImp()
 {
 	if (IsAvailable()) {
 		DeinitDll(true);
@@ -56,7 +56,7 @@ CDllImp::~CDllImp()
 //                         DLLロード                           //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-EDllResult CDllImp::InitDll(LPCTSTR pszSpecifiedDllName)
+EDllResult DllImp::InitDll(LPCTSTR pszSpecifiedDllName)
 {
 	if (IsAvailable()) {
 		// 既に利用可能で有れば何もしない．
@@ -121,7 +121,7 @@ EDllResult CDllImp::InitDll(LPCTSTR pszSpecifiedDllName)
 	}
 }
 
-bool CDllImp::DeinitDll(bool force)
+bool DllImp::DeinitDll(bool force)
 {
 	if (!m_hInstance || (!IsAvailable())) {
 		// DLLが読み込まれていなければ何もしない
@@ -151,7 +151,7 @@ bool CDllImp::DeinitDll(bool force)
 //                           属性                              //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-LPCTSTR CDllImp::GetLoadedDllName() const
+LPCTSTR DllImp::GetLoadedDllName() const
 {
 	return m_strLoadedDllName.c_str();
 }
@@ -164,7 +164,7 @@ LPCTSTR CDllImp::GetLoadedDllName() const
 /*!
 	実装を省略できるようにするため、空の関数を用意しておく
 */
-bool CDllImp::DeinitDllImp()
+bool DllImp::DeinitDllImp()
 {
 	return true;
 }
@@ -182,7 +182,7 @@ bool CDllImp::DeinitDllImp()
 	@retval true 全てのアドレスが設定された。
 	@retval false アドレスの取得に失敗した関数があった。
 */
-bool CDllImp::RegisterEntries(const ImportTable table[])
+bool DllImp::RegisterEntries(const ImportTable table[])
 {
 	if (!IsAvailable()) {
 		return false;

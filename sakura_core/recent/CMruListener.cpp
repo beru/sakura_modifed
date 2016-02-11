@@ -60,7 +60,7 @@ void MruListener::OnBeforeLoad(LoadInfo* pLoadInfo)
 	EditInfo	fi;
 	ECodeType ePrevCode = CODE_NONE;
 	int nPrevTypeId = -1;
-	if (CMRUFile().GetEditInfo(pLoadInfo->cFilePath, &fi)) {
+	if (MRUFile().GetEditInfo(pLoadInfo->cFilePath, &fi)) {
 		ePrevCode = fi.m_nCharCode;
 		nPrevTypeId = fi.m_nTypeId;
 	}
@@ -68,10 +68,10 @@ void MruListener::OnBeforeLoad(LoadInfo* pLoadInfo)
 	// タイプ別設定
 	if (!pLoadInfo->nType.IsValidType()) {
 		if (0 <= nPrevTypeId) {
-			pLoadInfo->nType = CDocTypeManager().GetDocumentTypeOfId(nPrevTypeId);
+			pLoadInfo->nType = DocTypeManager().GetDocumentTypeOfId(nPrevTypeId);
 		}
 		if (!pLoadInfo->nType.IsValidType()) {
-			pLoadInfo->nType = CDocTypeManager().GetDocumentTypeOfPath(pLoadInfo->cFilePath);
+			pLoadInfo->nType = DocTypeManager().GetDocumentTypeOfPath(pLoadInfo->cFilePath);
 		}
 	}
 
@@ -80,7 +80,7 @@ void MruListener::OnBeforeLoad(LoadInfo* pLoadInfo)
 		if (fexist(pLoadInfo->cFilePath)) {
 			// デフォルト文字コード認識のために一時的に読み込み対象ファイルのファイルタイプを適用する
 			const TypeConfigMini* type;
-			CDocTypeManager().GetTypeConfigMini(pLoadInfo->nType, &type);
+			DocTypeManager().GetTypeConfigMini(pLoadInfo->nType, &type);
 			CodeMediator cmediator(type->m_encoding);
 			pLoadInfo->eCharCode = cmediator.CheckKanjiCodeOfFile(pLoadInfo->cFilePath);
 		}else {
@@ -91,7 +91,7 @@ void MruListener::OnBeforeLoad(LoadInfo* pLoadInfo)
 	}
 	if (CODE_NONE == pLoadInfo->eCharCode) {
 		const TypeConfigMini* type;
-		if (CDocTypeManager().GetTypeConfigMini(pLoadInfo->nType, &type)) {
+		if (DocTypeManager().GetTypeConfigMini(pLoadInfo->nType, &type)) {
 			pLoadInfo->eCharCode = type->m_encoding.m_eDefaultCodetype;	// 無効値の回避	// 2011.01.24 ryoji CODE_DEFAULT -> m_eDefaultCodetype
 		}else {
 			pLoadInfo->eCharCode = GetDllShareData().m_TypeBasis.m_encoding.m_eDefaultCodetype;
@@ -108,7 +108,7 @@ void MruListener::OnBeforeLoad(LoadInfo* pLoadInfo)
 			CodePage::GetNameLong(szCpNameNew, pLoadInfo->eCharCode);
 			ConfirmBeep();
 			int nRet = MYMESSAGEBOX(
-				CEditWnd::getInstance()->GetHwnd(),
+				EditWnd::getInstance()->GetHwnd(),
 				MB_YESNO | MB_ICONQUESTION | MB_TOPMOST,
 				LS(STR_ERR_DLGEDITDOC5),
 				LS(STR_ERR_DLGEDITDOC6),
@@ -144,7 +144,7 @@ void MruListener::OnAfterLoad(const LoadInfo& sLoadInfo)
 {
 	EditDoc* pcDoc = GetListeningDoc();
 
-	CMRUFile cMRU;
+	MRUFile cMRU;
 
 	EditInfo eiOld;
 	bool bIsExistInMRU = cMRU.GetEditInfo(pcDoc->m_cDocFile.GetFilePath(), &eiOld);
@@ -156,7 +156,7 @@ void MruListener::OnAfterLoad(const LoadInfo& sLoadInfo)
 		pcDoc->m_cLayoutMgr.LogicToLayout(eiOld.m_ptCursor, &ptCaretPos);
 
 		// ビュー取得
-		CEditView& cView = pcDoc->m_pcEditWnd->GetActiveView();
+		EditView& cView = pcDoc->m_pcEditWnd->GetActiveView();
 
 		if (ptCaretPos.GetY2() >= pcDoc->m_cLayoutMgr.GetLineCount()) {
 			// ファイルの最後に移動
@@ -166,7 +166,7 @@ void MruListener::OnAfterLoad(const LoadInfo& sLoadInfo)
 			cView.GetTextArea().SetViewLeftCol(eiOld.m_nViewLeftCol); // 2001/10/20 novice
 			// From Here Mar. 28, 2003 MIK
 			// 改行の真ん中にカーソルが来ないように。
-			const CDocLine *pTmpDocLine = pcDoc->m_cDocLineMgr.GetLine(eiOld.m_ptCursor.GetY2());	// 2008.08.22 ryoji 改行単位の行番号を渡すように修正
+			const DocLine *pTmpDocLine = pcDoc->m_cDocLineMgr.GetLine(eiOld.m_ptCursor.GetY2());	// 2008.08.22 ryoji 改行単位の行番号を渡すように修正
 			if (pTmpDocLine) {
 				if (pTmpDocLine->GetLengthWithoutEOL() < eiOld.m_ptCursor.x) {
 					ptCaretPos.x--;
@@ -181,7 +181,7 @@ void MruListener::OnAfterLoad(const LoadInfo& sLoadInfo)
 	// ブックマーク復元  // 2002.01.16 hor
 	if (bIsExistInMRU) {
 		if (GetDllShareData().m_common.m_sFile.GetRestoreBookmarks()) {
-			CBookmarkManager(&pcDoc->m_cDocLineMgr).SetBookMarks(eiOld.m_szMarkLines);
+			BookmarkManager(&pcDoc->m_cDocLineMgr).SetBookMarks(eiOld.m_szMarkLines);
 		}
 	}else {
 		eiOld.m_szMarkLines[0] = 0;
@@ -234,10 +234,10 @@ void MruListener::_HoldBookmarks_And_AddToMRU()
 	pcDoc->GetEditInfo(&fi);
 
 	// ブックマーク情報の保存
-	wcscpy_s(fi.m_szMarkLines, CBookmarkManager(&pcDoc->m_cDocLineMgr).GetBookMarks());
+	wcscpy_s(fi.m_szMarkLines, BookmarkManager(&pcDoc->m_cDocLineMgr).GetBookMarks());
 
 	// MRUリストに登録
-	CMRUFile cMRU;
+	MRUFile cMRU;
 	cMRU.Add(&fi);
 }
 

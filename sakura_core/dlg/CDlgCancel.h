@@ -13,7 +13,7 @@
 	Please contact the copyright holder to use this code for other purpose.
 */
 
-class CDlgCancel;
+class DlgCancel;
 
 #pragma once
 
@@ -23,12 +23,12 @@ class CDlgCancel;
 /*!
 	@brief キャンセルボタンダイアログ
 */
-class CDlgCancel : public CDialog {
+class DlgCancel : public Dialog {
 public:
 	/*
 	||  Constructors
 	*/
-	CDlgCancel();
+	DlgCancel();
 //	void Create(HINSTANCE, HWND);	// 初期化
 
 	/*

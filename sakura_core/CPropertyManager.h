@@ -26,12 +26,12 @@
 #include "prop/CPropCommon.h"
 #include "typeprop/CPropTypes.h"
 
-class CImageListMgr;
-class CMenuDrawer;
+class ImageListMgr;
+class MenuDrawer;
 
-class CPropertyManager {
+class PropertyManager {
 public:
-	void Create(HWND, CImageListMgr*, CMenuDrawer*);
+	void Create(HWND, ImageListMgr*, MenuDrawer*);
 
 	/*
 	|| ‚»‚Ì‘¼
@@ -41,8 +41,8 @@ public:
 
 private:
 	HWND			m_hwndOwner;
-	CImageListMgr*	m_pImageList;
-	CMenuDrawer*	m_pMenuDrawer;
+	ImageListMgr*	m_pImageList;
+	MenuDrawer*	m_pMenuDrawer;
 
 	int				m_nPropComPageNum;
 	int				m_nPropTypePageNum;

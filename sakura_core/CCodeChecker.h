@@ -26,12 +26,12 @@
 #include "doc/CDocListener.h"
 #include "util/design_template.h"
 
-class CCodeChecker :
+class CodeChecker :
 	public DocListenerEx,
-	public TSingleton<CCodeChecker>
+	public TSingleton<CodeChecker>
 {
-	friend class TSingleton<CCodeChecker>;
-	CCodeChecker() {}
+	friend class TSingleton<CodeChecker>;
+	CodeChecker() {}
 	
 public:
 	// セーブ時チェック

@@ -58,13 +58,13 @@ NormalProcess::~NormalProcess()
 /*!
 	@brief エディタプロセスを初期化する
 	
-	CEditWndを作成する。
+	EditWndを作成する。
 	
 	@author aroka
 	@date 2002/01/07
 
 	@date 2002.2.17 YAZAKI CShareDataのインスタンスは、Processにひとつあるのみ。
-	@date 2004.05.13 Moca CEditWnd::Create()に失敗した場合にfalseを返すように．
+	@date 2004.05.13 Moca EditWnd::Create()に失敗した場合にfalseを返すように．
 	@date 2007.06.26 ryoji グループIDを指定して編集ウィンドウを作成する
 	@date 2012.02.25 novice 複数ファイル読み込み
 */
@@ -133,29 +133,29 @@ bool NormalProcess::InitializeProcess()
 	// プラグイン読み込み
 	MY_TRACETIME(cRunningTimer, "Before Init Jack");
 	// ジャック初期化
-	CJackManager::getInstance();
+	JackManager::getInstance();
 	MY_TRACETIME(cRunningTimer, "After Init Jack");
 
 	MY_TRACETIME(cRunningTimer, "Before Load Plugins");
 	// プラグイン読み込み
-	CPluginManager::getInstance()->LoadAllPlugin();
+	PluginManager::getInstance()->LoadAllPlugin();
 	MY_TRACETIME(cRunningTimer, "After Load Plugins");
 
 	// エディタアプリケーションを作成。2007.10.23 kobake
 	// グループIDを取得
 	int nGroupId = cmdLine.GetGroupId();
 	if (GetDllShareData().m_common.m_sTabBar.m_bNewWindow && nGroupId == -1) {
-		nGroupId = CAppNodeManager::getInstance()->GetFreeGroupId();
+		nGroupId = AppNodeManager::getInstance()->GetFreeGroupId();
 	}
 	// CEditAppを作成
-	m_pcEditApp = CEditApp::getInstance();
+	m_pcEditApp = EditApp::getInstance();
 	m_pcEditApp->Create(GetProcessInstance(), nGroupId);
-	CEditWnd* pEditWnd = m_pcEditApp->GetEditWindow();
+	EditWnd* pEditWnd = m_pcEditApp->GetEditWindow();
 	auto& activeView = pEditWnd->GetActiveView();
 	if (!pEditWnd->GetHwnd()) {
 		::ReleaseMutex(hMutex);
 		::CloseHandle(hMutex);
-		return false;	// 2009.06.23 ryoji CEditWnd::Create()失敗のため終了
+		return false;	// 2009.06.23 ryoji EditWnd::Create()失敗のため終了
 	}
 
 	// コマンドラインの解析		2002/2/8 aroka ここに移動
@@ -166,7 +166,7 @@ bool NormalProcess::InitializeProcess()
 	MY_TRACETIME(cRunningTimer, "CheckFile");
 
 	// -1: SetDocumentTypeWhenCreate での強制指定なし
-	const CTypeConfig nType = (fi.m_szDocType[0] == '\0' ? CTypeConfig(-1) : CDocTypeManager().GetDocumentTypeOfExt(fi.m_szDocType));
+	const CTypeConfig nType = (fi.m_szDocType[0] == '\0' ? CTypeConfig(-1) : DocTypeManager().GetDocumentTypeOfExt(fi.m_szDocType));
 
 	if (bDebugMode) {
 		// デバッグモニタモードに設定
@@ -174,7 +174,7 @@ bool NormalProcess::InitializeProcess()
 		AppMode::getInstance()->SetDebugModeON();
 		if (!AppMode::getInstance()->IsDebugMode()) {
 			// デバッグではなくて(無題)
-			CAppNodeManager::getInstance()->GetNoNameNumber(pEditWnd->GetHwnd());
+			AppNodeManager::getInstance()->GetNoNameNumber(pEditWnd->GetHwnd());
 			pEditWnd->UpdateCaption();
 		}
 		// 2004.09.20 naoh アウトプット用タイプ別設定
@@ -226,19 +226,19 @@ bool NormalProcess::InitializeProcess()
 			pEditWnd->m_cDlgFuncList.Refresh();	// アウトラインを再解析する
 			//return true; // 2003.06.23 Moca
 		}else {
-			CAppNodeManager::getInstance()->GetNoNameNumber(pEditWnd->GetHwnd());
+			AppNodeManager::getInstance()->GetNoNameNumber(pEditWnd->GetHwnd());
 			pEditWnd->UpdateCaption();
 			
 			//-GREPDLGでダイアログを出す。　引数も反映（2002/03/24 YAZAKI）
 			if (gi.cmGrepKey.GetStringLength() < _MAX_PATH) {
-				CSearchKeywordManager().AddToSearchKeyArr(gi.cmGrepKey.GetStringPtr());
+				SearchKeywordManager().AddToSearchKeyArr(gi.cmGrepKey.GetStringPtr());
 			}
 			if (gi.cmGrepFile.GetStringLength() < _MAX_PATH) {
-				CSearchKeywordManager().AddToGrepFileArr(gi.cmGrepFile.GetStringPtr());
+				SearchKeywordManager().AddToGrepFileArr(gi.cmGrepFile.GetStringPtr());
 			}
 			CNativeT cmemGrepFolder = gi.cmGrepFolder;
 			if (gi.cmGrepFolder.GetStringLength() < _MAX_PATH) {
-				CSearchKeywordManager().AddToGrepFolderArr(gi.cmGrepFolder.GetStringPtr());
+				SearchKeywordManager().AddToGrepFolderArr(gi.cmGrepFolder.GetStringPtr());
 				// 2013.05.21 指定なしの場合はカレントフォルダにする
 				if (cmemGrepFolder.GetStringLength() == 0) {
 					TCHAR szCurDir[_MAX_PATH];
@@ -284,16 +284,16 @@ bool NormalProcess::InitializeProcess()
 		}
 
 		// プラグイン：EditorStartイベント実行
-		CPlug::Array plugs;
-		CWSHIfObj::List params;
-		CJackManager::getInstance()->GetUsablePlug(PP_EDITOR_START, 0, &plugs);
+		Plug::Array plugs;
+		WSHIfObj::List params;
+		JackManager::getInstance()->GetUsablePlug(PP_EDITOR_START, 0, &plugs);
 		for (auto it=plugs.begin(); it!=plugs.end(); ++it) {
 			(*it)->Invoke(&activeView, params);
 		}
 
 		// プラグイン：DocumentOpenイベント実行
 		plugs.clear();
-		CJackManager::getInstance()->GetUsablePlug(PP_DOCUMENT_OPEN, 0, &plugs);
+		JackManager::getInstance()->GetUsablePlug(PP_DOCUMENT_OPEN, 0, &plugs);
 		for (auto it=plugs.begin(); it!=plugs.end(); ++it) {
 			(*it)->Invoke(&activeView, params);
 		}
@@ -364,7 +364,7 @@ bool NormalProcess::InitializeProcess()
 				// From Here Mar. 28, 2003 MIK
 				// 改行の真ん中にカーソルが来ないように。
 				// 2008.08.20 ryoji 改行単位の行番号を渡すように修正
-				const CDocLine* pTmpDocLine = pEditWnd->GetDocument()->m_cDocLineMgr.GetLine(fi.m_ptCursor.GetY2());
+				const DocLine* pTmpDocLine = pEditWnd->GetDocument()->m_cDocLineMgr.GetLine(fi.m_ptCursor.GetY2());
 				if (pTmpDocLine) {
 					if (pTmpDocLine->GetLengthWithoutEOL() < fi.m_ptCursor.x) {
 						ptPos.x--;
@@ -388,7 +388,7 @@ bool NormalProcess::InitializeProcess()
 		}
 		if (!pEditWnd->GetDocument()->m_cDocFile.GetFilePathClass().IsValidPath()) {
 			pEditWnd->GetDocument()->SetCurDirNotitle();	// (無題)ウィンドウ
-			CAppNodeManager::getInstance()->GetNoNameNumber(pEditWnd->GetHwnd());
+			AppNodeManager::getInstance()->GetNoNameNumber(pEditWnd->GetHwnd());
 			pEditWnd->UpdateCaption();
 		}
 	}
@@ -417,9 +417,9 @@ bool NormalProcess::InitializeProcess()
 	}
 
 	// プラグイン：EditorStartイベント実行
-	CPlug::Array plugs;
-	CWSHIfObj::List params;
-	CJackManager::getInstance()->GetUsablePlug(
+	Plug::Array plugs;
+	WSHIfObj::List params;
+	JackManager::getInstance()->GetUsablePlug(
 			PP_EDITOR_START,
 			0,
 			&plugs
@@ -466,7 +466,7 @@ bool NormalProcess::InitializeProcess()
 
 	// プラグイン：DocumentOpenイベント実行
 	plugs.clear();
-	CJackManager::getInstance()->GetUsablePlug(PP_DOCUMENT_OPEN, 0, &plugs);
+	JackManager::getInstance()->GetUsablePlug(PP_DOCUMENT_OPEN, 0, &plugs);
 	for (auto it=plugs.begin(); it!=plugs.end(); ++it) {
 		(*it)->Invoke(&activeView, params);
 	}
@@ -499,7 +499,7 @@ bool NormalProcess::MainLoop()
 void NormalProcess::OnExitProcess()
 {
 	// プラグイン解放
-	CPluginManager::getInstance()->UnloadAllPlugin();		// Mpve here	2010/7/11 Uchi
+	PluginManager::getInstance()->UnloadAllPlugin();		// Mpve here	2010/7/11 Uchi
 }
 
 

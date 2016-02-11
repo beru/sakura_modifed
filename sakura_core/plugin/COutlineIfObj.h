@@ -30,7 +30,7 @@
 #include "macro/CWSHIfObj.h"
 #include "outline/CFuncInfo.h"	// FUNCINFO_INFOMASK
 
-class COutlineIfObj : public CWSHIfObj {
+class OutlineIfObj : public WSHIfObj {
 	// 型定義
 	enum FuncId {
 		F_OL_COMMAND_FIRST = 0,					// ↓コマンドは以下に追加する
@@ -48,9 +48,9 @@ class COutlineIfObj : public CWSHIfObj {
 
 	// コンストラクタ
 public:
-	COutlineIfObj(CFuncInfoArr& cFuncInfoArr)
+	OutlineIfObj(FuncInfoArr& cFuncInfoArr)
 		:
-		CWSHIfObj(L"Outline", false),
+		WSHIfObj(L"Outline", false),
 		m_nListType(OUTLINE_PLUGIN),
 		m_cFuncInfoArr(cFuncInfoArr)
 	{
@@ -58,7 +58,7 @@ public:
 
 	// デストラクタ
 public:
-	~COutlineIfObj() {}
+	~OutlineIfObj() {}
 
 	// 実装
 public:
@@ -67,11 +67,11 @@ public:
 	// 関数情報を取得する
 	MacroFuncInfoArray GetMacroFuncInfo() const { return m_MacroFuncInfoArr; }
 	// 関数を処理する
-	bool HandleFunction(CEditView* View, EFunctionCode ID, const VARIANT *Arguments, const int ArgSize, VARIANT &Result) {
+	bool HandleFunction(EditView* View, EFunctionCode ID, const VARIANT *Arguments, const int ArgSize, VARIANT &Result) {
 		return false;
 	}
 	// コマンドを処理する
-	bool HandleCommand(CEditView* View, EFunctionCode ID, const WCHAR* Arguments[], const int ArgLengths[], const int ArgSize) {
+	bool HandleCommand(EditView* View, EFunctionCode ID, const WCHAR* Arguments[], const int ArgLengths[], const int ArgSize) {
 		switch (LOWORD(ID)) {
 		case F_OL_ADDFUNCINFO:			// アウトライン解析に追加する
 		case F_OL_ADDFUNCINFO2:			// アウトライン解析に追加する（深さ指定）
@@ -171,7 +171,7 @@ public:
 	tstring m_sOutlineTitle;
 	EOutlineType m_nListType;
 private:
-	CFuncInfoArr& m_cFuncInfoArr;
+	FuncInfoArr& m_cFuncInfoArr;
 	static MacroFuncInfo m_MacroFuncInfoCommandArr[];	// コマンド情報(戻り値なし)
 	static MacroFuncInfo m_MacroFuncInfoArr[];	// 関数情報(戻り値あり)
 };
@@ -180,7 +180,7 @@ VARTYPE g_OutlineIfObj_MacroArgEx_s[] = {VT_BSTR};
 MacroFuncInfoEx g_OutlineIfObj_FuncInfoEx_s = {5, 5, g_OutlineIfObj_MacroArgEx_s};
 
 // コマンド情報
-MacroFuncInfo COutlineIfObj::m_MacroFuncInfoCommandArr[] = {
+MacroFuncInfo OutlineIfObj::m_MacroFuncInfoCommandArr[] = {
 	// ID									関数名							引数										戻り値の型	m_pszData
 	{EFunctionCode(F_OL_ADDFUNCINFO),		LTEXT("AddFuncInfo"),			{VT_I4, VT_I4, VT_BSTR, VT_I4},				VT_EMPTY,	NULL }, // アウトライン解析に追加する
 	{EFunctionCode(F_OL_ADDFUNCINFO2),		LTEXT("AddFuncInfo2"),			{VT_I4, VT_I4, VT_BSTR, VT_I4},				VT_EMPTY,	NULL }, // アウトライン解析に追加する（深さ指定）
@@ -194,7 +194,7 @@ MacroFuncInfo COutlineIfObj::m_MacroFuncInfoCommandArr[] = {
 };
 
 // 関数情報
-MacroFuncInfo COutlineIfObj::m_MacroFuncInfoArr[] = {
+MacroFuncInfo OutlineIfObj::m_MacroFuncInfoArr[] = {
 	//ID									関数名							引数										戻り値の型	m_pszData
 	//	終端
 	{F_INVALID,	NULL, {VT_EMPTY, VT_EMPTY, VT_EMPTY, VT_EMPTY},	VT_EMPTY,	NULL}

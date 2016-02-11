@@ -42,14 +42,14 @@
 //               コンストラクタ・デストラクタ                  //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-void CMemory::_init_members()
+void Memory::_init_members()
 {
 	m_nDataBufSize = 0;
 	m_pRawData = NULL;
 	m_nRawLen = 0;
 }
 
-CMemory::CMemory()
+Memory::Memory()
 {
 	_init_members();
 }
@@ -57,7 +57,7 @@ CMemory::CMemory()
 /*
 	@note 格納データにはNULLを含むことができる
 */
-CMemory::CMemory(
+Memory::Memory(
 	const void*	pData,			// 格納データアドレス
 	int			nDataLenBytes	// 格納データの有効長
 	)
@@ -66,14 +66,14 @@ CMemory::CMemory(
 	SetRawData(pData, nDataLenBytes);
 }
 
-CMemory::CMemory(const CMemory& rhs)
+Memory::Memory(const Memory& rhs)
 {
 	_init_members();
 	SetRawData(rhs);
 }
 
 
-CMemory::~CMemory()
+Memory::~Memory()
 {
 	_Empty();
 }
@@ -82,7 +82,7 @@ CMemory::~CMemory()
 //                          演算子                             //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-const CMemory& CMemory::operator = (const CMemory& rhs)
+const Memory& Memory::operator = (const Memory& rhs)
 {
 	if (this != &rhs) {
 		SetRawData(rhs);
@@ -98,7 +98,7 @@ const CMemory& CMemory::operator = (const CMemory& rhs)
 /*
 || バッファの最後にデータを追加する（protectメンバ
 */
-void CMemory::_AddData(const void* pData, int nDataLen)
+void Memory::_AddData(const void* pData, int nDataLen)
 {
 	if (!m_pRawData) {
 		return;
@@ -112,7 +112,7 @@ void CMemory::_AddData(const void* pData, int nDataLen)
 
 
 // 等しい内容か
-int CMemory::IsEqual(CMemory& cmem1, CMemory& cmem2)
+int Memory::IsEqual(Memory& cmem1, Memory& cmem2)
 {
 	int nLen1;
 	int nLen2;
@@ -134,7 +134,7 @@ int CMemory::IsEqual(CMemory& cmem1, CMemory& cmem2)
 	
 	@note	nBufLen が2の倍数でないときは、最後の1バイトは交換されない
 */
-void CMemory::SwapHLByte(char* pData, const int nDataLen) {
+void Memory::SwapHLByte(char* pData, const int nDataLen) {
 	unsigned char ctemp;
 
 	//pBuf = (unsigned char*)GetRawPtr(&nBufLen);
@@ -177,7 +177,7 @@ void CMemory::SwapHLByte(char* pData, const int nDataLen) {
 	
 	@note	nBufLen が2の倍数でないときは、最後の1バイトは交換されない
 */
-void CMemory::SwapHLByte(void) {
+void Memory::SwapHLByte(void) {
 	int nBufLen;
 	char* pBuf = reinterpret_cast<char*>(GetRawPtr(&nBufLen));
 	SwapHLByte(pBuf, nBufLen);
@@ -224,7 +224,7 @@ void CMemory::SwapHLByte(void) {
 */
 }
 
-bool CMemory::SwabHLByte(const CMemory& mem)
+bool Memory::SwabHLByte(const Memory& mem)
 {
 	if (this == &mem) {
 		SwapHLByte();
@@ -252,7 +252,7 @@ bool CMemory::SwabHLByte(const CMemory& mem)
 /*
 || バッファサイズの調整
 */
-void CMemory::AllocBuffer(int nNewDataLen)
+void Memory::AllocBuffer(int nNewDataLen)
 {
 	char* pWork = NULL;
 
@@ -296,7 +296,7 @@ void CMemory::AllocBuffer(int nNewDataLen)
 
 
 // バッファの内容を置き換える
-void CMemory::SetRawData(
+void Memory::SetRawData(
 	const void* pData,
 	int nDataLen
 	)
@@ -309,7 +309,7 @@ void CMemory::SetRawData(
 
 
 // バッファの内容を置き換える
-void CMemory::SetRawData(const CMemory& pcmemData)
+void Memory::SetRawData(const Memory& pcmemData)
 {
 	int nDataLen;
 	const void*	pData = pcmemData.GetRawPtr(&nDataLen);
@@ -320,7 +320,7 @@ void CMemory::SetRawData(const CMemory& pcmemData)
 }
 
 //! バッファの内容を置き換える
-void CMemory::SetRawDataHoldBuffer(
+void Memory::SetRawDataHoldBuffer(
 	const void* pData,
 	int nDataLen
 	)
@@ -337,7 +337,7 @@ void CMemory::SetRawDataHoldBuffer(
 }
 
 //! バッファの内容を置き換える
-void CMemory::SetRawDataHoldBuffer(const CMemory& pcmemData)
+void Memory::SetRawDataHoldBuffer(const Memory& pcmemData)
 {
 	if (this == &pcmemData) {
 		return;
@@ -349,7 +349,7 @@ void CMemory::SetRawDataHoldBuffer(const CMemory& pcmemData)
 
 
 // バッファの最後にデータを追加する（publicメンバ）
-void CMemory::AppendRawData(
+void Memory::AppendRawData(
 	const void* pData,
 	int nDataLenBytes
 	)
@@ -362,10 +362,10 @@ void CMemory::AppendRawData(
 }
 
 // バッファの最後にデータを追加する（publicメンバ）
-void CMemory::AppendRawData(const CMemory* pcmemData)
+void Memory::AppendRawData(const Memory* pcmemData)
 {
 	if (this == pcmemData) {
-		CMemory cm = *pcmemData;
+		Memory cm = *pcmemData;
 		AppendRawData(&cm);
 	}
 	int	nDataLen;
@@ -374,7 +374,7 @@ void CMemory::AppendRawData(const CMemory* pcmemData)
 	_AddData(pData, nDataLen);
 }
 
-void CMemory::_Empty(void)
+void Memory::_Empty(void)
 {
 	free(m_pRawData);
 	m_pRawData = NULL;
@@ -384,7 +384,7 @@ void CMemory::_Empty(void)
 }
 
 
-void CMemory::_AppendSz(const char* str)
+void Memory::_AppendSz(const char* str)
 {
 	int len = strlen(str);
 	AllocBuffer(m_nRawLen + len);
@@ -392,7 +392,7 @@ void CMemory::_AppendSz(const char* str)
 }
 
 
-void CMemory::_SetRawLength(int nLength)
+void Memory::_SetRawLength(int nLength)
 {
 	assert(m_nRawLen <= m_nDataBufSize-2);
 	m_nRawLen = nLength;

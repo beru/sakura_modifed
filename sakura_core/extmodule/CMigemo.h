@@ -51,15 +51,15 @@ typedef struct _migemo migemo;
 #include "CDllHandler.h"
 #include "util/design_template.h"
 
-class CMigemo :
-	public TSingleton<CMigemo>,
-	public CDllImp
+class Migemo :
+	public TSingleton<Migemo>,
+	public DllImp
 {
-	friend class TSingleton<CMigemo>;
-	CMigemo() {}
+	friend class TSingleton<Migemo>;
+	Migemo() {}
 
 public:
-	virtual ~CMigemo();
+	virtual ~Migemo();
 
 	// Entry Point
 protected:

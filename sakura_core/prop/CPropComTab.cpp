@@ -85,19 +85,19 @@ TYPE_NAME_ID<ETabPosition> TabPosArr[] = {
 	@param wParam[in] パラメータ1
 	@param lParam[in] パラメータ2
 */
-INT_PTR CALLBACK CPropTab::DlgProc_page(
+INT_PTR CALLBACK PropTab::DlgProc_page(
 	HWND hwndDlg,
 	UINT uMsg,
 	WPARAM wParam,
 	LPARAM lParam
 	)
 {
-	return DlgProc(reinterpret_cast<pDispatchPage>(&CPropTab::DispatchEvent), hwndDlg, uMsg, wParam, lParam);
+	return DlgProc(reinterpret_cast<pDispatchPage>(&PropTab::DispatchEvent), hwndDlg, uMsg, wParam, lParam);
 }
 //	To Here Jun. 2, 2001 genta
 
 // メッセージ処理
-INT_PTR CPropTab::DispatchEvent(
+INT_PTR PropTab::DispatchEvent(
 	HWND hwndDlg,
 	UINT uMsg,
 	WPARAM wParam,
@@ -200,7 +200,7 @@ INT_PTR CPropTab::DispatchEvent(
 
 
 // ダイアログデータの設定
-void CPropTab::SetData(HWND hwndDlg)
+void PropTab::SetData(HWND hwndDlg)
 {
 	auto& csTabBar = m_Common.m_sTabBar;
 
@@ -249,7 +249,7 @@ void CPropTab::SetData(HWND hwndDlg)
 }
 
 // ダイアログデータの取得
-int CPropTab::GetData(HWND hwndDlg)
+int PropTab::GetData(HWND hwndDlg)
 {
 	auto& csTabBar = m_Common.m_sTabBar;
 	//	Feb. 11, 2007 genta「ウィンドウ」シートより移動
@@ -281,7 +281,7 @@ int CPropTab::GetData(HWND hwndDlg)
 
 	@date 2007.02.12 genta 新規作成
 */
-void CPropTab::EnableTabPropInput(HWND hwndDlg)
+void PropTab::EnableTabPropInput(HWND hwndDlg)
 {
 	
 	bool bTabWnd = DlgButton_IsChecked(hwndDlg, IDC_CHECK_DispTabWnd);

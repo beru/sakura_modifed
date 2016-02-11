@@ -55,13 +55,13 @@ private:
 
 
 //! UNICODE文字列管理クラス
-class CNativeW : public CNative {
+class NativeW : public Native {
 public:
 	// コンストラクタ・デストラクタ
-	CNativeW();
-	CNativeW(const CNativeW&);
-	CNativeW(const wchar_t* pData, int nDataLen); //!< nDataLenは文字単位。
-	CNativeW(const wchar_t* pData);
+	NativeW();
+	NativeW(const NativeW&);
+	NativeW(const wchar_t* pData, int nDataLen); //!< nDataLenは文字単位。
+	NativeW(const wchar_t* pData);
 
 	// 管理
 	void AllocStringBuffer(int nDataLen);                    //!< (重要：nDataLenは文字単位) バッファサイズの調整。必要に応じて拡大する。
@@ -73,21 +73,21 @@ public:
 	void AppendString(const wchar_t* pszData);               //!< バッファの最後にデータを追加する
 	void AppendString(const wchar_t* pszData, int nLength);  //!< バッファの最後にデータを追加する。nLengthは文字単位。成功すればtrue。メモリ確保に失敗したらfalseを返す。
 
-	// CNativeW
-	void SetNativeData(const CNativeW& pcNative);            //!< バッファの内容を置き換える
-	void AppendNativeData(const CNativeW&);                  //!< バッファの最後にデータを追加する
+	// NativeW
+	void SetNativeData(const NativeW& pcNative);            //!< バッファの内容を置き換える
+	void AppendNativeData(const NativeW&);                  //!< バッファの最後にデータを追加する
 
 	// 演算子
-	const CNativeW& operator += (wchar_t wch)				{ AppendString(&wch, 1);   return *this; }
-	const CNativeW& operator = (wchar_t wch)				{ SetString(&wch, 1);      return *this; }
-	const CNativeW& operator += (const CNativeW& rhs)		{ AppendNativeData(rhs); return *this; }
-	const CNativeW& operator = (const CNativeW& rhs)		{ SetNativeData(rhs);    return *this; }
-	CNativeW operator + (const CNativeW& rhs) const			{ CNativeW tmp = *this; return tmp += rhs; }
+	const NativeW& operator += (wchar_t wch)				{ AppendString(&wch, 1);   return *this; }
+	const NativeW& operator = (wchar_t wch)				{ SetString(&wch, 1);      return *this; }
+	const NativeW& operator += (const NativeW& rhs)		{ AppendNativeData(rhs); return *this; }
+	const NativeW& operator = (const NativeW& rhs)		{ SetNativeData(rhs);    return *this; }
+	NativeW operator + (const NativeW& rhs) const			{ NativeW tmp = *this; return tmp += rhs; }
 
 	// ネイティブ取得インターフェース
 	wchar_t operator [] (int nIndex) const;					//!< 任意位置の文字取得。nIndexは文字単位。
 	LogicInt GetStringLength() const {						//!< 文字列長を返す。文字単位。
-		return LogicInt(CNative::GetRawLength() / sizeof(wchar_t));
+		return LogicInt(Native::GetRawLength() / sizeof(wchar_t));
 	}
 	const wchar_t* GetStringPtr() const {
 		return reinterpret_cast<const wchar_t*>(GetRawPtr());
@@ -120,7 +120,7 @@ public:
 			_SetStringLength(n);
 		}
 	}
-	void swap(CNativeW& left) {
+	void swap(NativeW& left) {
 		_GetMemory()->swap(*left._GetMemory());
 	}
 	
@@ -133,7 +133,7 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	
 	//! 同一の文字列ならtrue
-	static bool IsEqual(const CNativeW& cmem1, const CNativeW& cmem2);
+	static bool IsEqual(const NativeW& cmem1, const NativeW& cmem2);
 
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -204,7 +204,7 @@ public:
 
 namespace std {
 	template <>
-	inline void swap(CNativeW& n1, CNativeW& n2) {
+	inline void swap(NativeW& n1, NativeW& n2) {
 		n1.swap(n2);
 	}
 }

@@ -23,22 +23,22 @@
 */
 #pragma once
 
-class CEditView;
+class EditView;
 
 // 品詞解析クラス
-class CViewParser {
+class ViewParser {
 public:
-	CViewParser(const CEditView* pEditView) : m_pEditView(pEditView) { }
-	virtual ~CViewParser() {}
+	ViewParser(const EditView* pEditView) : m_pEditView(pEditView) { }
+	virtual ~ViewParser() {}
 
 	// カーソル直前の単語を取得
-	int GetLeftWord(CNativeW* pcmemWord, int nMaxWordLen) const;
+	int GetLeftWord(NativeW* pcmemWord, int nMaxWordLen) const;
 
 	// キャレット位置の単語を取得
 	// 2006.03.24 fon
-	bool GetCurrentWord(CNativeW* pcmemWord) const;
+	bool GetCurrentWord(NativeW* pcmemWord) const;
 
 private:
-	const CEditView* m_pEditView;
+	const EditView* m_pEditView;
 };
 

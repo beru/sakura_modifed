@@ -208,7 +208,7 @@ void ViewCommander::Command_INDENT(
 						{ rcSel.GetTo().x, &nIdxTo, &xLayoutTo },
 						{ LayoutInt(-1), 0, 0 }
 					};
-					CMemoryIterator it(pcLayout, this->GetDocument()->m_cLayoutMgr.GetTabSpace());
+					MemoryIterator it(pcLayout, this->GetDocument()->m_cLayoutMgr.GetTabSpace());
 					for (int i=0; 0<=sortedKetas[i].keta; ++i) {
 						for (; !it.end(); it.addDelta()) {
 							if (sortedKetas[i].keta == it.getColumn()) {
@@ -567,7 +567,7 @@ void ViewCommander::Command_TRIM(
 	)
 {
 	bool bBeDisableSelectArea = false;
-	CViewSelect& cViewSelect = m_pCommanderView->GetSelectionInfo();
+	ViewSelect& cViewSelect = m_pCommanderView->GetSelectionInfo();
 
 	if (!cViewSelect.IsTextSelected()) {	// 非選択時は行選択に変更
 		cViewSelect.m_sSelect.SetFrom(
@@ -596,14 +596,14 @@ void ViewCommander::Command_TRIM(
 // from CViewCommander_New.cpp
 // 物理行のソートに使う構造体
 struct SortData {
-	const CNativeW* pCmemLine;
+	const NativeW* pCmemLine;
 	CStringRef sKey;
 };
 
 inline
 int CNativeW_comp(
-	const CNativeW& lhs,
-	const CNativeW& rhs
+	const NativeW& lhs,
+	const NativeW& rhs
 	)
 {
 	// 比較長には終端NULを含めないといけない
@@ -700,7 +700,7 @@ void ViewCommander::Command_SORT(BOOL bAsc)	// bAsc:TRUE=昇順,FALSE=降順
 		// その行も選択範囲に加える
 		if (sSelectOld.GetTo().x > 0) {
 			// 2006.03.31 Moca nSelectLineToOldは、物理行なのでLayout系からDocLine系に修正
-			const CDocLine* pcDocLine = GetDocument()->m_cDocLineMgr.GetLine(sSelectOld.GetTo().GetY2());
+			const DocLine* pcDocLine = GetDocument()->m_cDocLineMgr.GetLine(sSelectOld.GetTo().GetY2());
 			if (pcDocLine && EOL_NONE != pcDocLine->GetEol()) {
 				sSelectOld.GetToPointer()->y++;
 			}
@@ -716,8 +716,8 @@ void ViewCommander::Command_SORT(BOOL bAsc)	// bAsc:TRUE=昇順,FALSE=降順
 	
 	sta.reserve(sSelectOld.GetTo().GetY2() - sSelectOld.GetFrom().GetY2());
 	for (LogicInt i=sSelectOld.GetFrom().GetY2(); i<sSelectOld.GetTo().y; ++i) {
-		const CDocLine* pcDocLine = GetDocument()->m_cDocLineMgr.GetLine(i);
-		const CNativeW& cmemLine = pcDocLine->_GetDocLineDataWithEOL();
+		const DocLine* pcDocLine = GetDocument()->m_cDocLineMgr.GetLine(i);
+		const NativeW& cmemLine = pcDocLine->_GetDocLineDataWithEOL();
 		const wchar_t* pLine = cmemLine.GetStringPtr(&nLineLen);
 		LogicInt nLineLenWithoutEOL = pcDocLine->GetLengthWithoutEOL();
 		if (!pLine) {
@@ -766,7 +766,7 @@ void ViewCommander::Command_SORT(BOOL bAsc)	// bAsc:TRUE=昇順,FALSE=降順
 		repData[i].cmemLine.SetString(sta[i]->pCmemLine->GetStringPtr(), sta[i]->pCmemLine->GetStringLength());
 		if (pStrLast == sta[i]->pCmemLine->GetStringPtr()) {
 			// 元最終行に改行がないのでつける
-			CEol cWork = GetDocument()->m_cDocEditor.GetNewLineCode();
+			Eol cWork = GetDocument()->m_cDocEditor.GetNewLineCode();
 			repData[i].cmemLine.AppendString(cWork.GetValue2(), cWork.GetLen());
 		}
 	}
@@ -869,7 +869,7 @@ void ViewCommander::Command_MERGE(void)
 		}
 #else
 		// 2010.08.22 Moca ソートと仕様を合わせる
-		const CDocLine* pcDocLine = GetDocument()->m_cDocLineMgr.GetLine(sSelectOld.GetTo().GetY2());
+		const DocLine* pcDocLine = GetDocument()->m_cDocLineMgr.GetLine(sSelectOld.GetTo().GetY2());
 		if (pcDocLine && EOL_NONE != pcDocLine->GetEol()) {
 			sSelectOld.GetToPointer()->y++;
 		}

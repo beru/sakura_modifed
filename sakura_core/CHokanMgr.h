@@ -23,7 +23,7 @@
 
 	@date 2003.06.25 Moca ファイル内からの補完機能を追加
 */
-class CHokanMgr : public CDialog {
+class CHokanMgr : public Dialog {
 public:
 	/*
 	||  Constructors
@@ -44,7 +44,7 @@ public:
 		bool			bHokanByFile,			// 編集中データから候補を探す。 2003.06.23 Moca
 		int				nHokanType,
 		bool			bHokanByKeyword,
-		CNativeW*		pcmemHokanWord = NULL	// 補完候補が１つのときこれに格納 2001/06/19 asa-o
+		NativeW*		pcmemHokanWord = NULL	// 補完候補が１つのときこれに格納 2001/06/19 asa-o
 	);
 	void HokanSearchByKeyword(
 		const wchar_t*	pszCurWord,
@@ -74,7 +74,7 @@ public:
 
 	static bool AddKouhoUnique(vector_ex<std::wstring>&, const std::wstring&);
 
-	CNativeW		m_cmemCurWord;
+	NativeW		m_cmemCurWord;
 	vector_ex<std::wstring>	m_vKouho;
 	int				m_nKouhoNum;
 

@@ -86,15 +86,15 @@ bool SetSpecialFuncName(EFunctionCode code, wchar_t* ptr)
 	@param wParam パラメータ1
 	@param lParam パラメータ2
 */
-INT_PTR CALLBACK CPropCustmenu::DlgProc_page(
+INT_PTR CALLBACK PropCustmenu::DlgProc_page(
 	HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-	return DlgProc(reinterpret_cast<pDispatchPage>(&CPropCustmenu::DispatchEvent), hwndDlg, uMsg, wParam, lParam);
+	return DlgProc(reinterpret_cast<pDispatchPage>(&PropCustmenu::DispatchEvent), hwndDlg, uMsg, wParam, lParam);
 }
 //	To Here Jun. 2, 2001 genta
 
 // Custom menu メッセージ処理
-INT_PTR CPropCustmenu::DispatchEvent(
+INT_PTR PropCustmenu::DispatchEvent(
 	HWND	hwndDlg,	// handle to dialog box
 	UINT	uMsg,		// message
 	WPARAM	wParam,		// first message parameter
@@ -120,7 +120,7 @@ INT_PTR CPropCustmenu::DispatchEvent(
 	WCHAR		szLabel[300];
 	WCHAR		szLabel2[300];
 
-	CDlgInput1	cDlgInput1;
+	DlgInput1	cDlgInput1;
 	auto& csCustomMenu = m_Common.m_sCustomMenu;
 
 	switch (uMsg) {
@@ -637,7 +637,7 @@ INT_PTR CPropCustmenu::DispatchEvent(
 
 
 // ダイアログデータの設定 Custom menu
-void CPropCustmenu::SetData(HWND hwndDlg)
+void PropCustmenu::SetData(HWND hwndDlg)
 {
 	// 機能種別一覧に文字列をセット（コンボボックス）
 	HWND hwndCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_FUNCKIND);
@@ -663,7 +663,7 @@ void CPropCustmenu::SetData(HWND hwndDlg)
 	List_SetCurSel(hwndLIST_RES, 0);
 }
 
-void CPropCustmenu::SetDataMenuList(HWND hwndDlg, int nIdx)
+void PropCustmenu::SetDataMenuList(HWND hwndDlg, int nIdx)
 {
 	WCHAR szLabel[300];
 	WCHAR szLabel2[300];
@@ -704,14 +704,14 @@ void CPropCustmenu::SetDataMenuList(HWND hwndDlg, int nIdx)
 
 
 // ダイアログデータの取得 Custom menu
-int CPropCustmenu::GetData(HWND hwndDlg)
+int PropCustmenu::GetData(HWND hwndDlg)
 {
 	return TRUE;
 }
 
 
 // カスタムメニュー設定をインポートする
-void CPropCustmenu::Import(HWND hwndDlg)
+void PropCustmenu::Import(HWND hwndDlg)
 {
 	CImpExpCustMenu	cImpExpCustMenu(m_Common);
 	// インポート
@@ -725,7 +725,7 @@ void CPropCustmenu::Import(HWND hwndDlg)
 }
 
 // カスタムメニュー設定をエクスポートする
-void CPropCustmenu::Export(HWND hwndDlg)
+void PropCustmenu::Export(HWND hwndDlg)
 {
 	CImpExpCustMenu	cImpExpCustMenu(m_Common);
 	// エクスポート

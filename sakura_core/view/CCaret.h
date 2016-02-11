@@ -24,16 +24,16 @@
 #pragma once
 
 #define _CARETMARGINRATE 20
-class CTextArea;
-class CEditView;
+class TextArea;
+class EditView;
 class EditDoc;
-class CTextMetrics;
-class CCaret;
-class CEditWnd;
+class TextMetrics;
+class Caret;
+class EditWnd;
 
-class CCaretUnderLine {
+class CaretUnderLine {
 public:
-	CCaretUnderLine(CEditView* pcEditView)
+	CaretUnderLine(EditView* pcEditView)
 		:
 		m_pcEditView(pcEditView)
 	{
@@ -71,18 +71,18 @@ private:
 	// ロックカウンタ。0のときは、ロックされていない。UnLockが呼ばれすぎても負にはならない
 	int m_nLockCounter;
 	int m_nUnderLineLockCounter;
-	CEditView* m_pcEditView;
+	EditView* m_pcEditView;
 	bool m_bUnderLineDoNotOFF;
 	bool m_bVertLineDoNotOFF;
 };
 
 
-class CCaret {
+class Caret {
 public:
-	CCaret(CEditView* pEditView, const EditDoc* pEditDoc);
+	Caret(EditView* pEditView, const EditDoc* pEditDoc);
 	
 	virtual
-	~CCaret();
+	~Caret();
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                         外部依存                            //
@@ -120,7 +120,7 @@ public:
 	}
 
 	// コピー
-	void CopyCaretStatus(CCaret* pDestCaret) const;
+	void CopyCaretStatus(Caret* pDestCaret) const;
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                           移動                              //
@@ -194,7 +194,7 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 private:
 	// 参照
-	CEditView*				m_pEditView;
+	EditView*				m_pEditView;
 	const EditDoc*			m_pEditDoc;
 
 	// キャレット位置
@@ -224,13 +224,13 @@ private:
 
 	// アンダーライン
 public:
-	mutable CCaretUnderLine m_cUnderLine;
+	mutable CaretUnderLine m_cUnderLine;
 	
 	bool			m_bClearStatus;
 };
 
 
-/*!	@brief CCaret::m_nCaretPosX_Prev
+/*!	@brief Caret::m_nCaretPosX_Prev
 	直前のX座標記憶用
 
 	フリーカーソルモードでない場合にカーソルを上下に移動させた場合
@@ -239,7 +239,7 @@ public:
 	するための変数．
 	
 	@par 使い方
-	読み出しはCEditView::Cursor_UPDOWN()のみで行う．
+	読み出しはEditView::Cursor_UPDOWN()のみで行う．
 	カーソル上下移動以外でカーソル移動を行った場合には
 	直ちにm_nCaretPosXの値を設定する．そうしないと
 	その直後のカーソル上下移動で移動前のX座標に戻ってしまう．

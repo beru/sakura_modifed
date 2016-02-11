@@ -25,7 +25,7 @@
 
 #include "view/colors/CColorStrategy.h"
 
-class CColor_Numeric : public CColorStrategy {
+class CColor_Numeric : public ColorStrategy {
 public:
 	CColor_Numeric() : m_nCOMMENTEND(0) { }
 	virtual EColorIndexType GetStrategyColor() const { return COLORIDX_DIGIT; }

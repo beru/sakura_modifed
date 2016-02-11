@@ -19,12 +19,12 @@
 /*-----------------------------------------------------------------------
 クラスの宣言
 -----------------------------------------------------------------------*/
-class CDlgExec : public CDialog {
+class DlgExec : public Dialog {
 public:
 	/*
 	||  Constructors
 	*/
-	CDlgExec();
+	DlgExec();
 	/*
 	||  Attributes & Operations
 	*/
@@ -37,9 +37,9 @@ public:
 
 protected:
 	ComboBoxItemDeleter m_comboDel;
-	CRecentCmd m_cRecentCmd;
+	RecentCmd m_cRecentCmd;
 	ComboBoxItemDeleter m_comboDelCur;
-	CRecentCurDir m_cRecentCur;
+	RecentCurDir m_cRecentCur;
 
 	// オーバーライド?
 	int GetData(void);	// ダイアログデータの取得

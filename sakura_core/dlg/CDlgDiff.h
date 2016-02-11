@@ -29,7 +29,7 @@
 		   distribution.
 */
 
-class CDlgDiff;
+class DlgDiff;
 
 #pragma once
 
@@ -38,12 +38,12 @@ class CDlgDiff;
 	@brief DIFF差分表示ダイアログボックス
 */
 // Feb. 28, 2004 genta 最後に選択されていた番号を保存する
-class CDlgDiff : public CDialog {
+class DlgDiff : public Dialog {
 public:
 	/*
 	||  Constructors
 	*/
-	CDlgDiff();
+	DlgDiff();
 
 	/*
 	||  Attributes & Operations

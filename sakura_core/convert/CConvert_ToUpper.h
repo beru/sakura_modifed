@@ -27,6 +27,6 @@
 
 class Converter_ToUpper : public Converter {
 public:
-	bool DoConvert(CNativeW* pcData);
+	bool DoConvert(NativeW* pcData);
 };
 

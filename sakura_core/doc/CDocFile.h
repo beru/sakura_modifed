@@ -30,7 +30,7 @@ class EditDoc;
 
 //####本来はここにあるべきでは無い
 struct FileInfo {
-	friend class CDocFile;
+	friend class DocFile;
 protected:
 	ECodeType	eCharCode;
 	bool		bBomExist;
@@ -49,9 +49,9 @@ public:
 	void	SetFileTime(FILETIME& Time)			{ cFileTime.SetFILETIME(Time); }
 };
 
-class CDocFile : public CFile {
+class DocFile : public File {
 public:
-	CDocFile(EditDoc* pcDoc) : m_pcDocRef(pcDoc) {}
+	DocFile(EditDoc* pcDoc) : m_pcDocRef(pcDoc) {}
 
 	void			SetCodeSet(ECodeType eCodeSet, bool bBomExist)		{ m_sFileInfo.SetCodeSet(eCodeSet, bBomExist); }	// 文字コードセットを設定
 	void			SetCodeSetChg(ECodeType eCodeSet, bool bBomExist)	{ m_sFileInfo.eCharCode = eCodeSet; m_sFileInfo.bBomExist = bBomExist; }	// 文字コードセットを設定(文字コード指定用)
@@ -73,6 +73,6 @@ public:
 public: //####
 	EditDoc*	m_pcDocRef;
 	FileInfo	m_sFileInfo;
-	CFilePath	m_szSaveFilePath;	// 保存時のファイルのパス（マクロ用）	// 2006.09.04 ryoji
+	FilePath	m_szSaveFilePath;	// 保存時のファイルのパス（マクロ用）	// 2006.09.04 ryoji
 };
 

@@ -31,9 +31,9 @@
 #include <list>
 #include <string>
 
-class CPluginManager : public TSingleton<CPluginManager> {
-	friend class TSingleton<CPluginManager>;
-	CPluginManager();
+class PluginManager : public TSingleton<PluginManager> {
+	friend class TSingleton<PluginManager>;
+	PluginManager();
 
 	// 型定義
 private:
@@ -47,13 +47,13 @@ public:
 	bool SearchNewPlugin(CommonSetting& common, HWND hWndOwner);		// 新規プラグインを導入する
 	int InstallPlugin(CommonSetting& common, const TCHAR* pszPluginName, HWND hWndOwner, wstring& errorMsg, bool bUpdate = false);	// プラグインの初期導入をする
 	bool InstZipPlugin(CommonSetting& common, HWND hWndOwner, const tstring& sZipName, bool bInSearch=false);		// Zipプラグインを追加する
-	CPlugin* GetPlugin(int id);		// プラグインを取得する
+	Plugin* GetPlugin(int id);		// プラグインを取得する
 	void UninstallPlugin(CommonSetting& common, int id);		// プラグインを削除する
 
 private:
-	CPlugin* LoadPlugin(const TCHAR* pszPluginDir, const TCHAR* pszPluginName, const TCHAR* pszLangName);	// プラグインを読み込む
-	bool RegisterPlugin(CPlugin* plugin);		// プラグインをCJackManagerに登録する
-	bool UnRegisterPlugin(CPlugin* plugin);	// プラグインのCJackManagerの登録を解除する
+	Plugin* LoadPlugin(const TCHAR* pszPluginDir, const TCHAR* pszPluginName, const TCHAR* pszLangName);	// プラグインを読み込む
+	bool RegisterPlugin(Plugin* plugin);		// プラグインをCJackManagerに登録する
+	bool UnRegisterPlugin(Plugin* plugin);	// プラグインのCJackManagerの登録を解除する
 
 	// 属性
 public:
@@ -66,7 +66,7 @@ public:
 
 	// メンバ変数
 private:
-	CPlugin::List m_plugins;
+	Plugin::List m_plugins;
 	tstring m_sBaseDir;					// pluginsフォルダのパス
 	tstring m_sExePluginDir;			// Exeフォルダ配下pluginsフォルダのパス
 

@@ -26,19 +26,19 @@
 #include "CRecentImp.h"
 #include "util/StaticType.h"
 
-typedef StaticString<TCHAR, _MAX_PATH> CGrepFolderString;
+typedef StaticString<TCHAR, _MAX_PATH> GrepFolderString;
 
 // GREPフォルダの履歴を管理 (RECENT_FOR_GREP_FOLDER)
-class CRecentGrepFolder : public CRecentImp<CGrepFolderString, LPCTSTR> {
+class RecentGrepFolder : public RecentImp<GrepFolderString, LPCTSTR> {
 public:
 	// 生成
-	CRecentGrepFolder();
+	RecentGrepFolder();
 
 	// オーバーライド
-	int				CompareItem(const CGrepFolderString* p1, LPCTSTR p2) const;
-	void			CopyItem(CGrepFolderString* dst, LPCTSTR src) const;
+	int				CompareItem(const GrepFolderString* p1, LPCTSTR p2) const;
+	void			CopyItem(GrepFolderString* dst, LPCTSTR src) const;
 	const TCHAR*	GetItemText(int nIndex) const;
-	bool			DataToReceiveType(LPCTSTR* dst, const CGrepFolderString* src) const;
-	bool			TextToDataType(CGrepFolderString* dst, LPCTSTR pszText) const;
+	bool			DataToReceiveType(LPCTSTR* dst, const GrepFolderString* src) const;
+	bool			TextToDataType(GrepFolderString* dst, LPCTSTR pszText) const;
 };
 

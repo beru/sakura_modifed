@@ -26,19 +26,19 @@
 #include "CRecentImp.h"
 #include "util/StaticType.h"
 
-typedef StaticString<TCHAR, _MAX_PATH> CGrepFileString;
+typedef StaticString<TCHAR, _MAX_PATH> GrepFileString;
 
 // GREPファイルの履歴を管理 (RECENT_FOR_GREP_FILE)
-class CRecentGrepFile : public CRecentImp<CGrepFileString, LPCTSTR> {
+class RecentGrepFile : public RecentImp<GrepFileString, LPCTSTR> {
 public:
 	// 生成
-	CRecentGrepFile();
+	RecentGrepFile();
 
 	// オーバーライド
-	int				CompareItem(const CGrepFileString* p1, LPCTSTR p2) const;
-	void			CopyItem(CGrepFileString* dst, LPCTSTR src) const;
+	int				CompareItem(const GrepFileString* p1, LPCTSTR p2) const;
+	void			CopyItem(GrepFileString* dst, LPCTSTR src) const;
 	const TCHAR*	GetItemText(int nIndex) const;
-	bool			DataToReceiveType(LPCTSTR* dst, const CGrepFileString* src) const;
-	bool			TextToDataType(CGrepFileString* dst, LPCTSTR pszText) const;
+	bool			DataToReceiveType(LPCTSTR* dst, const GrepFileString* src) const;
+	bool			TextToDataType(GrepFileString* dst, LPCTSTR pszText) const;
 };
 

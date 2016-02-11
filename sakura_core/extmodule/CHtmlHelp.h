@@ -40,10 +40,10 @@
 
 	HTMLヘルプコンポーネントの動的ロードをサポートするクラス
 */
-class CHtmlHelp : public CDllImp {
+class HtmlHelpDll : public DllImp {
 public:
-	CHtmlHelp() {}
-	virtual ~CHtmlHelp();
+	HtmlHelpDll() {}
+	virtual ~HtmlHelpDll();
 
 	// HtmlHelp のEntry Point
 	typedef HWND (WINAPI* Proc_HtmlHelp)(HWND, LPCTSTR, UINT, DWORD_PTR);

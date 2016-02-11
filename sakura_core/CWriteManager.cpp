@@ -3,7 +3,7 @@
 #include <list>
 #include "doc/logic/CDocLineMgr.h"
 #include "doc/logic/CDocLine.h"
-#include "CEditApp.h" // CAppExitException
+#include "CEditApp.h" // AppExitException
 #include "window/CEditWnd.h"
 #include "charset/CCodeFactory.h"
 #include "charset/CCodeBase.h"
@@ -28,13 +28,13 @@ EConvertResult WriteManager::WriteFile_From_CDocLineMgr(
 
 	{
 		// 変換テスト
-		CNativeW buffer = L"abcde";
-		CMemory tmp;
+		NativeW buffer = L"abcde";
+		Memory tmp;
 		EConvertResult e = pcCodeBase->UnicodeToCode( buffer, &tmp );
 		if (e == RESULT_FAILURE) {
 			nRetVal=RESULT_FAILURE;
 			ErrorMessage(
-				CEditWnd::getInstance()->GetHwnd(),
+				EditWnd::getInstance()->GetHwnd(),
 				LS(STR_FILESAVE_CONVERT_ERROR),
 				sSaveInfo.cFilePath.c_str()
 			);
@@ -49,14 +49,14 @@ EConvertResult WriteManager::WriteFile_From_CDocLineMgr(
 
 		// 各行出力
 		int nLineNumber = 0;
-		const CDocLine*	pcDocLine = pcDocLineMgr.GetDocLineTop();
+		const DocLine*	pcDocLine = pcDocLineMgr.GetDocLineTop();
 		// 1行目
 		{
 			++nLineNumber;
-			CMemory cmemOutputBuffer;
+			Memory cmemOutputBuffer;
 			{
-				CNativeW cstrSrc;
-				CMemory cstrBomCheck;
+				NativeW cstrSrc;
+				Memory cstrBomCheck;
 				pcCodeBase->GetBom(&cstrBomCheck);
 				if (sSaveInfo.bBomExist && 0 < cstrBomCheck.GetRawLength()) {
 					// 1行目にはBOMを付加する。エンコーダでbomがある場合のみ付加する。
@@ -72,11 +72,11 @@ EConvertResult WriteManager::WriteFile_From_CDocLineMgr(
 				if (e == RESULT_FAILURE) {
 					nRetVal = RESULT_FAILURE;
 					ErrorMessage(
-						CEditWnd::getInstance()->GetHwnd(),
+						EditWnd::getInstance()->GetHwnd(),
 						LS(STR_FILESAVE_CONVERT_ERROR),
 						sSaveInfo.cFilePath.c_str()
 					);
-					throw CError_FileWrite();
+					throw Error_FileWrite();
 				}
 			}
 			out.Write(cmemOutputBuffer.GetRawPtr(), cmemOutputBuffer.GetRawLength());
@@ -92,12 +92,12 @@ EConvertResult WriteManager::WriteFile_From_CDocLineMgr(
 				NotifyProgress(nLineNumber * 100 / pcDocLineMgr.GetLineCount());
 				// 処理中のユーザー操作を可能にする
 				if (!::BlockingHook(NULL)) {
-					throw CAppExitException(); // 中断検出
+					throw AppExitException(); // 中断検出
 				}
 			}
 
 			// 1行出力 -> cmemOutputBuffer
-			CMemory cmemOutputBuffer;
+			Memory cmemOutputBuffer;
 			{
 				// 書き込み時のコード変換 cstrSrc -> cmemOutputBuffer
 				EConvertResult e = pcCodeBase->UnicodeToCode(
@@ -112,7 +112,7 @@ EConvertResult WriteManager::WriteFile_From_CDocLineMgr(
 				if (e == RESULT_FAILURE) {
 					nRetVal = RESULT_FAILURE;
 					ErrorMessage(
-						CEditWnd::getInstance()->GetHwnd(),
+						EditWnd::getInstance()->GetHwnd(),
 						LS(STR_FILESAVE_CONVERT_ERROR),
 						sSaveInfo.cFilePath.c_str()
 					);
@@ -129,16 +129,16 @@ EConvertResult WriteManager::WriteFile_From_CDocLineMgr(
 
 		// ファイルクローズ
 		out.Close();
-	}catch (CError_FileOpen) { //########### 現時点では、この例外が発生した場合は正常に動作できない
+	}catch (Error_FileOpen) { //########### 現時点では、この例外が発生した場合は正常に動作できない
 		ErrorMessage(
-			CEditWnd::getInstance()->GetHwnd(),
+			EditWnd::getInstance()->GetHwnd(),
 			LS(STR_SAVEAGENT_OTHER_APP),
 			sSaveInfo.cFilePath.c_str()
 		);
 		nRetVal = RESULT_FAILURE;
-	}catch (CError_FileWrite) {
+	}catch (Error_FileWrite) {
 		nRetVal = RESULT_FAILURE;
-	}catch (CAppExitException) {
+	}catch (AppExitException) {
 		// 中断検出
 		return RESULT_FAILURE;
 	}

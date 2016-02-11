@@ -39,8 +39,8 @@
 
 
 // コマンド・関数を準備する
-void CWSHIfObj::ReadyMethods(
-	CEditView* pView,
+void WSHIfObj::ReadyMethods(
+	EditView* pView,
 	int flags
 	)
 {
@@ -48,7 +48,7 @@ void CWSHIfObj::ReadyMethods(
 	// 2007.07.20 genta : コマンドに混ぜ込むフラグを渡す
 	ReadyCommands(GetMacroCommandInfo(), flags | FA_FROMMACRO);
 	ReadyCommands(GetMacroFuncInfo(), 0);
-	/* CWSHIfObjを継承したサブクラスからReadyMethodsを呼び出した場合、
+	/* WSHIfObjを継承したサブクラスからReadyMethodsを呼び出した場合、
 	 * サブクラスのGetMacroCommandInfo,GetMacroFuncInfoが呼び出される。 */
 }
 
@@ -56,7 +56,7 @@ void CWSHIfObj::ReadyMethods(
 
 	@date 2007.07.20 genta flags追加．flagはコマンド登録段階で混ぜておく．
 */
-void CWSHIfObj::ReadyCommands(
+void WSHIfObj::ReadyCommands(
 	MacroFuncInfo* Info,
 	int flags
 	)
@@ -94,8 +94,8 @@ void CWSHIfObj::ReadyCommands(
 			varArg,
 			ArgCount,
 			Info->m_varResult,
-			reinterpret_cast<CIfObjMethod>(&CWSHIfObj::MacroCommand)
-			/* CWSHIfObjを継承したサブクラスからReadyCommandsを呼び出した場合、
+			reinterpret_cast<CIfObjMethod>(&WSHIfObj::MacroCommand)
+			/* WSHIfObjを継承したサブクラスからReadyCommandsを呼び出した場合、
 			 * サブクラスのMacroCommandが呼び出される。 */
 		);
 		delete [] varArgTmp;
@@ -109,7 +109,7 @@ void CWSHIfObj::ReadyCommands(
 	@date 2005.06.27 zenryaku 戻り値の受け取りが無くてもエラーにせずに関数を実行する
 	@date 2013.06.07 Moca 5つ以上の引数の時ずれるのを修正。NULを含む文字列対応
 */
-HRESULT CWSHIfObj::MacroCommand(
+HRESULT WSHIfObj::MacroCommand(
 	int IntID,
 	DISPPARAMS* Arguments,
 	VARIANT* Result,

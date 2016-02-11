@@ -3,7 +3,7 @@
 #include "window/CEditWnd.h"
 #include "CEditApp.h"
 
-CMainStatusBar::CMainStatusBar(CEditWnd* pOwner)
+CMainStatusBar::CMainStatusBar(EditWnd* pOwner)
 	:
 	m_pOwner(pOwner),
 	m_hwndStatusBar(NULL),
@@ -38,7 +38,7 @@ void CMainStatusBar::CreateStatusBar()
 		13,
 		m_hwndStatusBar,
 		NULL,
-		CEditApp::getInstance()->GetAppInstance(),
+		EditApp::getInstance()->GetAppInstance(),
 		0
 	);
 

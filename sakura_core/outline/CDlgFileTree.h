@@ -37,10 +37,10 @@
 /*!
 	@brief ファイルツリー設定ダイアログ
 */
-class CDlgFileTree : public CDialog
+class DlgFileTree : public Dialog
 {
 public:
-	CDlgFileTree();
+	DlgFileTree();
 
 	int DoModal(HINSTANCE, HWND, LPARAM);
 
@@ -61,8 +61,8 @@ private:
 	HTREEITEM InsertTreeItem(FileTreeItem&, HTREEITEM, HTREEITEM);
 
 private:
-	CDlgFuncList*		m_pcDlgFuncList;
-	CFileTreeSetting	m_fileTreeSetting;
+	DlgFuncList*		m_pcDlgFuncList;
+	FileTreeSetting	m_fileTreeSetting;
 	std::vector<int>	m_aItemRemoveList;
 	int					m_nlParamCount;
 	int					m_nDocType;

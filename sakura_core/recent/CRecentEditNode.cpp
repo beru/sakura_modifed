@@ -32,7 +32,7 @@
 //                           生成                              //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-CRecentEditNode::CRecentEditNode()
+RecentEditNode::RecentEditNode()
 {
 	Create(
 		GetShareData()->m_nodes.m_pEditArr,
@@ -52,28 +52,28 @@ CRecentEditNode::CRecentEditNode()
 
 	@note	取得後のポインタはユーザ管理の構造体にキャストして参照してください。
 */
-const TCHAR* CRecentEditNode::GetItemText(int nIndex) const
+const TCHAR* RecentEditNode::GetItemText(int nIndex) const
 {
 	return _T("WIN"); // ※テキスト情報は無い (GetWindowTextしてあげても良いけど、この関数は実行されないので、意味は無い)
 }
 
-bool CRecentEditNode::DataToReceiveType(const EditNode** dst, const EditNode* src) const
+bool RecentEditNode::DataToReceiveType(const EditNode** dst, const EditNode* src) const
 {
 	*dst = src;
 	return true;
 }
 
-bool CRecentEditNode::TextToDataType(EditNode* dst, LPCTSTR pszText) const
+bool RecentEditNode::TextToDataType(EditNode* dst, LPCTSTR pszText) const
 {
 	return false;
 }
 
-int CRecentEditNode::CompareItem(const EditNode* p1, const EditNode* p2) const
+int RecentEditNode::CompareItem(const EditNode* p1, const EditNode* p2) const
 {
 	return p1->m_hWnd - p2->m_hWnd;
 }
 
-void CRecentEditNode::CopyItem(EditNode* dst, const EditNode* src) const
+void RecentEditNode::CopyItem(EditNode* dst, const EditNode* src) const
 {
 	*dst = *src;
 }
@@ -82,7 +82,7 @@ void CRecentEditNode::CopyItem(EditNode* dst, const EditNode* src) const
 //                   固有インターフェース                      //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-int CRecentEditNode::FindItemByHwnd(HWND hwnd) const
+int RecentEditNode::FindItemByHwnd(HWND hwnd) const
 {
 	int n = GetItemCount();
 	for (int i=0; i<n; ++i) {
@@ -93,7 +93,7 @@ int CRecentEditNode::FindItemByHwnd(HWND hwnd) const
 	return -1;
 }
 
-void CRecentEditNode::DeleteItemByHwnd(HWND hwnd)
+void RecentEditNode::DeleteItemByHwnd(HWND hwnd)
 {
 	int n = FindItemByHwnd(hwnd);
 	if (n != -1) {

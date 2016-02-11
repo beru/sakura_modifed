@@ -50,17 +50,17 @@
 
 
 // Compile時、行頭置換(len=0)の時にダミー文字列(１つに統一) by かろと
-const wchar_t CBregexp::m_tmpBuf[2] = L"\0";
+const wchar_t Bregexp::m_tmpBuf[2] = L"\0";
 
 
-CBregexp::CBregexp()
+Bregexp::Bregexp()
 	: m_pRegExp(NULL)
 	, m_ePatType(PAT_NORMAL)	// Jul, 25, 2002 genta
 {
 	m_szMsg[0] = L'\0';
 }
 
-CBregexp::~CBregexp()
+Bregexp::~Bregexp()
 {
 	// コンパイルバッファを解放
 	ReleaseCompileBuffer();
@@ -75,7 +75,7 @@ CBregexp::~CBregexp()
 ** 
 ** @date 2005.03.20 かろと 関数に切り出し
 */
-int CBregexp::CheckPattern(const wchar_t* szPattern)
+int Bregexp::CheckPattern(const wchar_t* szPattern)
 {
 	static const wchar_t TOP_MATCH[] = L"/^\\(*\\^/k";							// 行頭パターンのチェック用パターン
 	static const wchar_t DOL_MATCH[] = L"/\\\\\\$$/k";							// \$(行末パターンでない)チェック用パターン
@@ -138,7 +138,7 @@ int CBregexp::CheckPattern(const wchar_t* szPattern)
 ** 
 ** @date 2003.05.03 かろと 関数に切り出し
 */
-wchar_t* CBregexp::MakePatternSub(
+wchar_t* Bregexp::MakePatternSub(
 	const wchar_t*	szPattern,	// 検索パターン
 	const wchar_t*	szPattern2,	// 置換パターン(NULLなら検索)
 	const wchar_t*	szAdd2,		// 置換パターンの後ろに付け加えるパターン($1など) 
@@ -229,7 +229,7 @@ wchar_t* CBregexp::MakePatternSub(
 **
 ** @date 2003.05.03 かろと 関数に切り出し
 */
-wchar_t* CBregexp::MakePattern(const wchar_t* szPattern, const wchar_t* szPattern2, int nOption) 
+wchar_t* Bregexp::MakePattern(const wchar_t* szPattern, const wchar_t* szPattern2, int nOption) 
 {
 	using namespace WCODE;
 	static const wchar_t* szCRLF = CRLF;		// 復帰・改行
@@ -296,7 +296,7 @@ wchar_t* CBregexp::MakePattern(const wchar_t* szPattern, const wchar_t* szPatter
 
 
 /*!
-	CBregexp::MakePattern()の代替。
+	Bregexp::MakePattern()の代替。
 	* エスケープされておらず、文字集合と \Q...\Eの中にない . を [^\r\n] に置換する。
 	* エスケープされておらず、文字集合と \Q...\Eの中にない $ を (?<![\r\n])(?=\r|$) に置換する。
 	これは「改行」の意味を LF のみ(BREGEXP.DLLの仕様)から、CR, LF, CRLF に拡張するための変更である。
@@ -304,7 +304,7 @@ wchar_t* CBregexp::MakePattern(const wchar_t* szPattern, const wchar_t* szPatter
 	正規表現DLLに与えられる文字列の末尾は文書末とはいえず、$ がマッチする必要はないだろう。
 	$ が行文字列末尾にマッチしないことは、一括置換での期待しない置換を防ぐために必要である。
 */
-wchar_t* CBregexp::MakePatternAlternate(const wchar_t* const szSearch, const wchar_t* const szReplace, int nOption)
+wchar_t* Bregexp::MakePatternAlternate(const wchar_t* const szSearch, const wchar_t* const szReplace, int nOption)
 {
 	this->CheckPattern(szSearch);
 
@@ -424,7 +424,7 @@ wchar_t* CBregexp::MakePatternAlternate(const wchar_t* const szSearch, const wch
 	@retval true 成功
 	@retval false 失敗
 */
-bool CBregexp::Compile(const wchar_t* szPattern0, const wchar_t* szPattern1, int nOption, bool bKakomi)
+bool Bregexp::Compile(const wchar_t* szPattern0, const wchar_t* szPattern1, int nOption, bool bKakomi)
 {
 
 	// DLLが利用可能でないときはエラー終了
@@ -478,7 +478,7 @@ bool CBregexp::Compile(const wchar_t* szPattern0, const wchar_t* szPattern1, int
 	@retval false No Match または エラー。エラーは GetLastMessage()により判定可能。
 
 */
-bool CBregexp::Match(const wchar_t* target, int len, int nStart)
+bool Bregexp::Match(const wchar_t* target, int len, int nStart)
 {
 	int matched;		// 検索一致したか? >0:Match, 0:NoMatch, <0:Error
 
@@ -533,7 +533,7 @@ bool CBregexp::Match(const wchar_t* target, int len, int nStart)
 
 	@date	2007.01.16 ryoji 戻り値を置換個数に変更
 */
-int CBregexp::Replace(const wchar_t* szTarget, int nLen, int nStart)
+int Bregexp::Replace(const wchar_t* szTarget, int nLen, int nStart)
 {
 	// DLLが利用可能でないとき、または構造体が未設定の時はエラー終了
 	if (!IsAvailable() || !m_pRegExp) {
@@ -577,7 +577,7 @@ int CBregexp::Replace(const wchar_t* szTarget, int nLen, int nStart)
 //>> 2002/03/27 Azumaiya
 
 
-const TCHAR* CBregexp::GetLastMessage() const
+const TCHAR* Bregexp::GetLastMessage() const
 {
 	return to_tchar(m_szMsg);
 }
@@ -595,7 +595,7 @@ const TCHAR* CBregexp::GetLastMessage() const
 */
 bool InitRegexp(
 	HWND		hWnd,			// [in] ダイアログボックスのウィンドウハンドル。バージョン番号の設定が不要であればNULL。
-	CBregexp&	rRegexp,		// [in] チェックに利用するCBregexpクラスへの参照
+	Bregexp&	rRegexp,		// [in] チェックに利用するBregexpクラスへの参照
 	bool		bShowMessage	// [in] 初期化失敗時にエラーメッセージを出すフラグ
 )
 {
@@ -637,7 +637,7 @@ bool CheckRegexpVersion(
 	bool	bShowMessage	// [in] 初期化失敗時にエラーメッセージを出すフラグ
 )
 {
-	CBregexp cRegexp;
+	Bregexp cRegexp;
 
 	if (!InitRegexp(hWnd, cRegexp, bShowMessage)) {
 		if (hWnd) {
@@ -669,13 +669,13 @@ bool CheckRegexpSyntax(
 	int				nOption,
 	bool			bKakomi)
 {
-	CBregexp cRegexp;
+	Bregexp cRegexp;
 
 	if (!InitRegexp(hWnd, cRegexp, bShowMessage)) {
 		return false;
 	}
 	if (nOption == -1) {
-		nOption = CBregexp::optCaseSensitive;
+		nOption = Bregexp::optCaseSensitive;
 	}
 	if (!cRegexp.Compile(szPattern, NULL, nOption, bKakomi)) {	// 2002/2/1 hor追加
 		if (bShowMessage) {

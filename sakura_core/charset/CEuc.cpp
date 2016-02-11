@@ -71,7 +71,7 @@ int CEuc::EucjpToUni(const char* pSrc, const int nSrcLen, wchar_t* pDst, bool* p
 
 // EUC→Unicodeコード変換
 // 2007.08.13 kobake 追加
-EConvertResult CEuc::EUCToUnicode(const CMemory& cSrc, CNativeW* pDstMem)
+EConvertResult CEuc::EUCToUnicode(const Memory& cSrc, NativeW* pDstMem)
 {
 	// ソース取得
 	int nSrcLen;
@@ -154,7 +154,7 @@ int CEuc::UniToEucjp(const wchar_t* pSrc, const int nSrcLen, char* pDst, bool* p
 }
 
 
-EConvertResult CEuc::UnicodeToEUC(const CNativeW& cSrc, CMemory* pDstMem)
+EConvertResult CEuc::UnicodeToEUC(const NativeW& cSrc, Memory* pDstMem)
 {
 	// エラー状態
 	bool bError = false;
@@ -183,7 +183,7 @@ EConvertResult CEuc::UnicodeToEUC(const CNativeW& cSrc, CMemory* pDstMem)
 // 文字コード表示用	UNICODE → Hex 変換	2008/6/9 Uchi
 EConvertResult CEuc::UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR* pDst, const CommonSetting_Statusbar* psStatusbar)
 {
-	CNativeW cCharBuffer;
+	NativeW cCharBuffer;
 	// 2008/6/21 Uchi
 	if (psStatusbar->m_bDispUniInEuc) {
 		// Unicodeで表示

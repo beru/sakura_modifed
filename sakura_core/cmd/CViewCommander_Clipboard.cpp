@@ -52,7 +52,7 @@ void ViewCommander::Command_CUT(void)
 
 	// 選択範囲のデータを取得
 	// 正常時はTRUE,範囲未選択の場合はFALSEを返す
-	CNativeW cmemBuf;
+	NativeW cmemBuf;
 	if (!m_pCommanderView->GetSelectedData(&cmemBuf, false, NULL, false, GetDllShareData().m_common.m_sEdit.m_bAddCRLFWhenCopy)) {
 		ErrorBeep();
 		return;
@@ -80,7 +80,7 @@ void ViewCommander::Command_COPY(
 	EEolType	neweol					// [in] コピーするときのEOL。
 	)
 {
-	CNativeW cmemBuf;
+	NativeW cmemBuf;
 	auto& selInfo = m_pCommanderView->GetSelectionInfo();
 	auto& csEdit = GetDllShareData().m_common.m_sEdit;
 	// クリップボードに入れるべきテキストデータを、cmemBufに格納する
@@ -162,7 +162,7 @@ void ViewCommander::Command_PASTE(int option)
 
 	auto& commonSetting = GetDllShareData().m_common;
 	// クリップボードからデータを取得 -> cmemClip, bColumnSelect
-	CNativeW	cmemClip;
+	NativeW	cmemClip;
 	bool		bColumnSelect;
 	bool		bLineSelect = false;
 	bool		bLineSelectOption = 
@@ -408,7 +408,7 @@ void ViewCommander::Command_PASTEBOX(int option)
 	}
 
 	// クリップボードからデータを取得
-	CNativeW cmemClip;
+	NativeW cmemClip;
 	if (!m_pCommanderView->MyGetClipboardData(cmemClip, NULL)) {
 		ErrorBeep();
 		return;
@@ -664,7 +664,7 @@ static bool AppendHTMLColor(
 	const ColorAttr& sColorAttrLast, ColorAttr& sColorAttrLast2,
 	const FontAttr& sFontAttrLast, FontAttr& sFontAttrLast2,
 	const WCHAR* pAppendStr, int nLen,
-	CNativeW& cmemClip
+	NativeW& cmemClip
 	)
 {
 	if (sFontAttrLast.m_bBoldFont != sFontAttrLast2.m_bBoldFont
@@ -715,7 +715,7 @@ static bool AppendHTMLColor(
 		sColorAttrLast2 = sColorAttrLast;
 		sFontAttrLast2  = sFontAttrLast;
 	}
-	CNativeW cmemBuf(pAppendStr, nLen);
+	NativeW cmemBuf(pAppendStr, nLen);
 	cmemBuf.Replace(L"&", L"&amp;");
 	cmemBuf.Replace(L"<", L"&lt;");
 	cmemBuf.Replace(L">", L"&gt;");
@@ -815,7 +815,7 @@ void ViewCommander::Command_COPY_COLOR_HTML(bool bLineNumber)
 	int nLineNumberMaxLen = 0;
 	WCHAR szLineFormat[10];
 	szLineFormat[0] = L'\0';
-	CNativeW cmemNullLine;
+	NativeW cmemNullLine;
 	if (bLineNumber) {
 		int nLineNumberMax;
 		if (type.m_bLineNumIsCRLF) {
@@ -842,7 +842,7 @@ void ViewCommander::Command_COPY_COLOR_HTML(bool bLineNumber)
 	}else {
 		nBuffSize += (Int)(nLineNumberMaxLen * (sSelectLogic.GetTo().y - sSelectLogic.GetFrom().y + 1));
 	}
-	CNativeW cmemClip;
+	NativeW cmemClip;
 	cmemClip.AllocStringBuffer(nBuffSize + 11);
 	{
 		COLORREF cBACK = type.m_ColorInfoArr[COLORIDX_TEXT].m_sColorAttr.m_cBACK;
@@ -853,7 +853,7 @@ void ViewCommander::Command_COPY_COLOR_HTML(bool bLineNumber)
 	}
 	LayoutInt nLayoutLineNum = rcSel.top;
 	const LogicInt nLineNumLast = sSelectLogic.GetTo().y;
-	const CDocLine* pcDocLine = pcLayoutTop->GetDocLineRef();
+	const DocLine* pcDocLine = pcLayoutTop->GetDocLineRef();
 	const Layout* pcLayout = pcLayoutTop;
 	while (pcLayout && pcLayout->GetLogicOffset()) {
 		pcLayout = pcLayout->GetPrevLayout();
@@ -866,7 +866,7 @@ void ViewCommander::Command_COPY_COLOR_HTML(bool bLineNumber)
 	FontAttr sFontAttrNext = { false, false };
 	FontAttr sFontAttrLast = { false, false };
 	FontAttr sFontAttrLast2 = { false, false };
-	CColorStrategyPool* pool = CColorStrategyPool::getInstance();
+	ColorStrategyPool* pool = ColorStrategyPool::getInstance();
 	pool->SetCurrentView(m_pCommanderView);
 	for (auto nLineNum = sSelectLogic.GetFrom().y;
 		nLineNum <= nLineNumLast;
@@ -876,9 +876,9 @@ void ViewCommander::Command_COPY_COLOR_HTML(bool bLineNumber)
 			break;
 		}
 		pool->NotifyOnStartScanLogic();
-		CColorStrategy* pStrategyNormal = nullptr;
-		CColorStrategy* pStrategyFound = nullptr;
-		CColorStrategy* pStrategy = nullptr;
+		ColorStrategy* pStrategyNormal = nullptr;
+		ColorStrategy* pStrategyFound = nullptr;
+		ColorStrategy* pStrategy = nullptr;
 		CStringRef cStringLine(pcDocLine->GetPtr(), pcDocLine->GetLengthWithEOL());
 		{
 			pStrategy = pStrategyNormal = pool->GetStrategyByColor(pcLayout->GetColorTypePrev());
@@ -1059,14 +1059,14 @@ void ViewCommander::Command_COPY_COLOR_HTML(bool bLineNumber)
 
 
 /*!
-	@date 2014.12.30 Moca 同じCColorStrategyで違う色に切り替わったときに対応
+	@date 2014.12.30 Moca 同じColorStrategyで違う色に切り替わったときに対応
 */
-CColorStrategy* ViewCommander::GetColorStrategyHTML(
+ColorStrategy* ViewCommander::GetColorStrategyHTML(
 	const CStringRef&	cStringLine,
 	int					iLogic,
-	const CColorStrategyPool*	pool,
-	CColorStrategy**	ppStrategy,
-	CColorStrategy**	ppStrategyFound,		// [in,out]
+	const ColorStrategyPool*	pool,
+	ColorStrategy**	ppStrategy,
+	ColorStrategy**	ppStrategyFound,		// [in,out]
 	bool& bChange
 	)
 {
@@ -1080,7 +1080,7 @@ CColorStrategy* ViewCommander::GetColorStrategyHTML(
 
 	// 検索色開始
 	if (!*ppStrategyFound) {
-		CColor_Found*  pcFound  = pool->GetFoundStrategy();
+		Color_Found*  pcFound  = pool->GetFoundStrategy();
 		if (pcFound->BeginColor(cStringLine, iLogic)) {
 			*ppStrategyFound = pcFound;
 			bChange = true;
@@ -1172,9 +1172,9 @@ void ViewCommander::Command_COPYTAG(void)
 // Dec. 26, 2000 JEPRO // Jan. 24, 2001 JEPRO debug version (directed by genta)
 void ViewCommander::Command_CREATEKEYBINDLIST(void)
 {
-	CNativeW cMemKeyList;
+	NativeW cMemKeyList;
 	auto& csKeyBind = GetDllShareData().m_common.m_sKeyBind;
-	CKeyBind::CreateKeyBindList(
+	KeyBind::CreateKeyBindList(
 		G_AppInstance(),
 		csKeyBind.m_nKeyNameArrNum,
 		csKeyBind.m_pKeyNameArr,
@@ -1186,7 +1186,7 @@ void ViewCommander::Command_CREATEKEYBINDLIST(void)
 	// Windowsクリップボードにコピー
 	// 2004.02.17 Moca 関数化
 	SetClipboardText(
-		CEditWnd::getInstance()->m_cSplitterWnd.GetHwnd(),
+		EditWnd::getInstance()->m_cSplitterWnd.GetHwnd(),
 		cMemKeyList.GetStringPtr(),
 		cMemKeyList.GetStringLength()
 	);

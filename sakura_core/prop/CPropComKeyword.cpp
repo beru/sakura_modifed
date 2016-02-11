@@ -56,28 +56,28 @@ static const DWORD p_helpids[] = {	//10800
 	@param wParam パラメータ1
 	@param lParam パラメータ2
 */
-INT_PTR CALLBACK CPropKeyword::DlgProc_page(
+INT_PTR CALLBACK PropKeyword::DlgProc_page(
 	HWND hwndDlg,
 	UINT uMsg,
 	WPARAM wParam,
 	LPARAM lParam
 	)
 {
-	return DlgProc(reinterpret_cast<pDispatchPage>(&CPropKeyword::DispatchEvent), hwndDlg, uMsg, wParam, lParam);
+	return DlgProc(reinterpret_cast<pDispatchPage>(&PropKeyword::DispatchEvent), hwndDlg, uMsg, wParam, lParam);
 }
 //	To Here Jun. 2, 2001 genta
-INT_PTR CALLBACK CPropKeyword::DlgProc_dialog(
+INT_PTR CALLBACK PropKeyword::DlgProc_dialog(
 	HWND hwndDlg,
 	UINT uMsg,
 	WPARAM wParam,
 	LPARAM lParam
 	)
 {
-	return DlgProc2(reinterpret_cast<pDispatchPage>(&CPropKeyword::DispatchEvent), hwndDlg, uMsg, wParam, lParam);
+	return DlgProc2(reinterpret_cast<pDispatchPage>(&PropKeyword::DispatchEvent), hwndDlg, uMsg, wParam, lParam);
 }
 
 // Keyword メッセージ処理
-INT_PTR CPropKeyword::DispatchEvent(
+INT_PTR PropKeyword::DispatchEvent(
 	HWND	hwndDlg,	// handle to dialog box
 	UINT	uMsg,		// message
 	WPARAM	wParam,		// first message parameter
@@ -95,7 +95,7 @@ INT_PTR CPropKeyword::DispatchEvent(
 	static HWND			hwndCOMBO_SET;
 	static HWND			hwndLIST_KEYWORD;
 	RECT				rc;
-	CDlgInput1			cDlgInput1;
+	DlgInput1			cDlgInput1;
 	wchar_t				szKeyWord[MAX_KEYWORDLEN + 1];
 	LONG_PTR			lStyle;
 	LV_DISPINFO*		plvdi;
@@ -299,7 +299,7 @@ INT_PTR CPropKeyword::DispatchEvent(
 					pszLabel[0] = 0;
 					for (i=0; i<GetDllShareData().m_nTypesCount; ++i) {
 						auto type = std::make_unique<TypeConfig>();
-						CDocTypeManager().GetTypeConfig(CTypeConfig(i), *type);
+						DocTypeManager().GetTypeConfig(CTypeConfig(i), *type);
 						// 2002/04/25 YAZAKI TypeConfig全体を保持する必要はないし、m_pShareDataを直接見ても問題ない。
 						if (nIndex1 == m_Types_nKeyWordSetIdx[i].index[0]
 						||  nIndex1 == m_Types_nKeyWordSetIdx[i].index[1]
@@ -464,12 +464,12 @@ INT_PTR CPropKeyword::DispatchEvent(
 }
 
 // リスト中で選択されているキーワードを編集する
-void CPropKeyword::Edit_List_KeyWord(HWND hwndDlg, HWND hwndLIST_KEYWORD)
+void PropKeyword::Edit_List_KeyWord(HWND hwndDlg, HWND hwndLIST_KEYWORD)
 {
 	int			nIndex1;
 	LV_ITEM		lvi;
 	wchar_t		szKeyWord[MAX_KEYWORDLEN + 1];
-	CDlgInput1	cDlgInput1;
+	DlgInput1	cDlgInput1;
 
 	nIndex1 = ListView_GetNextItem(hwndLIST_KEYWORD, -1, LVNI_ALL | LVNI_SELECTED);
 	if (nIndex1 == -1) {
@@ -509,7 +509,7 @@ void CPropKeyword::Edit_List_KeyWord(HWND hwndDlg, HWND hwndLIST_KEYWORD)
 
 
 // リスト中で選択されているキーワードを削除する
-void CPropKeyword::Delete_List_KeyWord(HWND hwndDlg, HWND hwndLIST_KEYWORD)
+void PropKeyword::Delete_List_KeyWord(HWND hwndDlg, HWND hwndLIST_KEYWORD)
 {
 	int			nIndex1;
 	LV_ITEM		lvi;
@@ -539,7 +539,7 @@ void CPropKeyword::Delete_List_KeyWord(HWND hwndDlg, HWND hwndLIST_KEYWORD)
 
 
 // リスト中のキーワードをインポートする
-void CPropKeyword::Import_List_KeyWord(HWND hwndDlg, HWND hwndLIST_KEYWORD)
+void PropKeyword::Import_List_KeyWord(HWND hwndDlg, HWND hwndLIST_KEYWORD)
 {
 	auto& keywordSetMgr = m_Common.m_sSpecialKeyword.m_CKeyWordSetMgr;
 	
@@ -560,7 +560,7 @@ void CPropKeyword::Import_List_KeyWord(HWND hwndDlg, HWND hwndLIST_KEYWORD)
 }
 
 // リスト中のキーワードをエクスポートする
-void CPropKeyword::Export_List_KeyWord(HWND hwndDlg, HWND hwndLIST_KEYWORD)
+void PropKeyword::Export_List_KeyWord(HWND hwndDlg, HWND hwndLIST_KEYWORD)
 {
 	auto& keywordSetMgr = m_Common.m_sSpecialKeyword.m_CKeyWordSetMgr;
 
@@ -579,7 +579,7 @@ void CPropKeyword::Export_List_KeyWord(HWND hwndDlg, HWND hwndLIST_KEYWORD)
 
 
 // キーワードを整頓する
-void CPropKeyword::Clean_List_KeyWord(HWND hwndDlg, HWND hwndLIST_KEYWORD)
+void PropKeyword::Clean_List_KeyWord(HWND hwndDlg, HWND hwndLIST_KEYWORD)
 {
 	if (IDYES == ::MessageBox(hwndDlg, LS(STR_PROPCOMKEYWORD_DEL),
 			GSTR_APPNAME, MB_YESNO | MB_ICONQUESTION)
@@ -593,7 +593,7 @@ void CPropKeyword::Clean_List_KeyWord(HWND hwndDlg, HWND hwndLIST_KEYWORD)
 }
 
 // ダイアログデータの設定 Keyword
-void CPropKeyword::SetData(HWND hwndDlg)
+void PropKeyword::SetData(HWND hwndDlg)
 {
 	// セット名コンボボックスの値セット
 	HWND hwndWork = ::GetDlgItem(hwndDlg, IDC_COMBO_SET);
@@ -617,7 +617,7 @@ void CPropKeyword::SetData(HWND hwndDlg)
 
 
 // ダイアログデータの設定 Keyword 指定キーワードセットの設定
-void CPropKeyword::SetKeyWordSet(HWND hwndDlg, int nIdx)
+void PropKeyword::SetKeyWordSet(HWND hwndDlg, int nIdx)
 {
 	int		i;
 	int		nNum;
@@ -686,18 +686,18 @@ void CPropKeyword::SetKeyWordSet(HWND hwndDlg, int nIdx)
 
 
 // ダイアログデータの取得 Keyword
-int CPropKeyword::GetData(HWND hwndDlg)
+int PropKeyword::GetData(HWND hwndDlg)
 {
 	return TRUE;
 }
 
 // ダイアログデータの取得 Keyword 指定キーワードセットの取得
-void CPropKeyword::GetKeyWordSet(HWND hwndDlg, int nIdx)
+void PropKeyword::GetKeyWordSet(HWND hwndDlg, int nIdx)
 {
 }
 
 // キーワード数を表示する。
-void CPropKeyword::DispKeywordCount(HWND hwndDlg)
+void PropKeyword::DispKeywordCount(HWND hwndDlg)
 {
 	HWND hwndList = ::GetDlgItem(hwndDlg, IDC_LIST_KEYWORD);
 	int n = ListView_GetItemCount(hwndList);

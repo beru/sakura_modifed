@@ -32,7 +32,7 @@
 struct LoadInfo;
 struct EditInfo;
 struct DLLSHAREDATA;
-class CPropertyManager;
+class PropertyManager;
 
 // 常駐部の管理
 /*!
@@ -92,7 +92,7 @@ public:
 	/*
 	|| 実装ヘルパ系
 	*/
-	static void DoGrepCreateWindow(HINSTANCE hinst, HWND, CDlgGrep& cDlgGrep);
+	static void DoGrepCreateWindow(HINSTANCE hinst, HWND, DlgGrep& cDlgGrep);
 protected:
 	void	DoGrep();	// Stonee, 2001/03/21
 	BOOL TrayMessage(HWND , DWORD , UINT , HICON , const TCHAR* );	// タスクトレイのアイコンに関する処理
@@ -110,18 +110,18 @@ protected:
 	|| メンバ変数
 	*/
 private:
-	CMenuDrawer			m_cMenuDrawer;
-	CPropertyManager*	m_pcPropertyManager;
+	MenuDrawer			m_cMenuDrawer;
+	PropertyManager*	m_pcPropertyManager;
 	bool					m_bUseTrayMenu;			// トレイメニュー表示中
 	HINSTANCE			m_hInstance;
 	HWND					m_hWnd;
 	BOOL					m_bCreatedTrayIcon;		// トレイにアイコンを作った
 
 	DLLSHAREDATA*		m_pShareData;
-	CDlgGrep				m_cDlgGrep;				// Jul. 2, 2001 genta
+	DlgGrep				m_cDlgGrep;				// Jul. 2, 2001 genta
 	int					m_nCurSearchKeySequence;
 
-	CImageListMgr		m_hIcons;
+	ImageListMgr		m_hIcons;
 
 	UINT					m_uCreateTaskBarMsg;	// RegisterMessageで得られるMessage IDの保管場所。Apr. 24, 2001 genta
 

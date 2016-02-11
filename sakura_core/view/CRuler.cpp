@@ -5,7 +5,7 @@
 #include "doc/CEditDoc.h"
 #include "types/CTypeSupport.h"
 
-CRuler::CRuler(const CEditView* pEditView, const EditDoc* pEditDoc)
+Ruler::Ruler(const EditView* pEditView, const EditDoc* pEditDoc)
 : m_pEditView(pEditView)
 , m_pEditDoc(pEditDoc)
 {
@@ -13,12 +13,12 @@ CRuler::CRuler(const CEditView* pEditView, const EditDoc* pEditDoc)
 	m_nOldRulerWidth = 0;	// 前回描画したルーラーのキャレット幅   2002.02.25 Add By KK
 }
 
-CRuler::~CRuler()
+Ruler::~Ruler()
 {
 }
 
 // 2007.08.26 kobake UNICODE用にX位置を変更
-void CRuler::_DrawRulerCaret(CGraphics& gr, int nCaretDrawPosX, int nCaretWidth)
+void Ruler::_DrawRulerCaret(Graphics& gr, int nCaretDrawPosX, int nCaretWidth)
 {
 	// 描画領域 -> hRgn
 	RECT rc;
@@ -54,7 +54,7 @@ void CRuler::_DrawRulerCaret(CGraphics& gr, int nCaretDrawPosX, int nCaretWidth)
 	@param hdc [in] デバイスコンテキスト
 	DispRulerの内容を元に作成
 */
-void CRuler::DrawRulerCaret(CGraphics& gr)
+void Ruler::DrawRulerCaret(Graphics& gr)
 {
 	if (1
 		&& m_pEditView->GetTextArea().GetViewLeftCol() <= m_pEditView->GetCaret().GetCaretLayoutPos().GetX()
@@ -81,7 +81,7 @@ void CRuler::DrawRulerCaret(CGraphics& gr)
 }
 
 // ルーラーの背景のみ描画 2007.08.29 kobake 追加
-void CRuler::DrawRulerBg(CGraphics& gr)
+void Ruler::DrawRulerBg(Graphics& gr)
 {
 	// 必要なインターフェース
 	CommonSetting* pCommon = &GetDllShareData().m_common;
@@ -177,7 +177,7 @@ void CRuler::DrawRulerBg(CGraphics& gr)
 
 	@date 2005.08.14 genta 折り返し幅をLayoutMgrから取得するように
 */
-void CRuler::DispRuler(HDC hdc)
+void Ruler::DispRuler(HDC hdc)
 {
 	// サポート
 	CTypeSupport cRulerType(m_pEditView, COLORIDX_RULER);
@@ -190,7 +190,7 @@ void CRuler::DispRuler(HDC hdc)
 	}
 
 	// 描画対象
-	CGraphics gr(hdc);
+	Graphics gr(hdc);
 
 	// 2002.02.25 Add By KK ルーラー全体を描き直す必要がない場合は、ルーラ上のキャレットのみ描きなおす 
 	if (!m_bRedrawRuler) {

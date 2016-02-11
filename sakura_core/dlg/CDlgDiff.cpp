@@ -81,8 +81,8 @@ static const AnchorListItem anchorList[] = {
 };
 
 
-CDlgDiff::CDlgDiff()
-	: CDialog(true)
+DlgDiff::DlgDiff()
+	: Dialog(true)
 	, m_nIndexSave( 0 )
 {
 	// サイズ変更時に位置を制御するコントロール数
@@ -99,7 +99,7 @@ CDlgDiff::CDlgDiff()
 }
 
 // モーダルダイアログの表示
-int CDlgDiff::DoModal(
+int DlgDiff::DoModal(
 	HINSTANCE			hInstance,
 	HWND				hwndParent,
 	LPARAM				lParam,
@@ -107,10 +107,10 @@ int CDlgDiff::DoModal(
 )
 {
 	_tcscpy(m_szFile1, pszPath);
-	return (int)CDialog::DoModal(hInstance, hwndParent, IDD_DIFF, lParam);
+	return (int)Dialog::DoModal(hInstance, hwndParent, IDD_DIFF, lParam);
 }
 
-BOOL CDlgDiff::OnBnClicked(int wID)
+BOOL DlgDiff::OnBnClicked(int wID)
 {
 	switch (wID) {
 	case IDC_BUTTON_HELP:
@@ -120,7 +120,7 @@ BOOL CDlgDiff::OnBnClicked(int wID)
 
 	case IDC_BUTTON_DIFF_DST:	// 参照
 		{
-			CDlgOpenFile cDlgOpenFile;
+			DlgOpenFile cDlgOpenFile;
 			TCHAR szPath[_MAX_PATH];
 			_tcscpy(szPath, m_szFile2);
 			// ファイルオープンダイアログの初期化
@@ -190,11 +190,11 @@ BOOL CDlgDiff::OnBnClicked(int wID)
 	}
 
 	// 基底クラスメンバ
-	return CDialog::OnBnClicked(wID);
+	return Dialog::OnBnClicked(wID);
 }
 
 // ダイアログデータの設定
-void CDlgDiff::SetData(void)
+void DlgDiff::SetData(void)
 {
 	// オプション
 	m_nDiffFlgOpt = m_pShareData->m_nDiffFlgOpt;
@@ -236,7 +236,7 @@ void CDlgDiff::SetData(void)
 		int			selCode = CODE_NONE;
 
 		// 自分の文字コードを取得
-		::SendMessage(CEditWnd::getInstance()->GetHwnd(), MYWM_GETFILEINFO, 0, 0);
+		::SendMessage(EditWnd::getInstance()->GetHwnd(), MYWM_GETFILEINFO, 0, 0);
 		EditInfo* pFileInfo = &m_pShareData->m_workBuffer.m_EditInfo_MYWM_GETFILEINFO;
 		code = pFileInfo->m_nCharCode;
 
@@ -244,10 +244,10 @@ void CDlgDiff::SetData(void)
 		HWND hwndList = GetItemHwnd(IDC_LIST_DIFF_FILES);
 
 		// 現在開いている編集窓のリストをメニューにする
-		int nRowNum = CAppNodeManager::getInstance()->GetOpenedWindowArr(&pEditNode, TRUE);
+		int nRowNum = AppNodeManager::getInstance()->GetOpenedWindowArr(&pEditNode, TRUE);
 		if (nRowNum > 0) {
 			// 水平スクロール幅は実際に表示する文字列の幅を計測して決める	// 2009.09.26 ryoji
-			CTextWidthCalc calc(hwndList);
+			TextWidthCalc calc(hwndList);
 			int score = 0;
 			TCHAR szFile1[_MAX_PATH];
 			SplitPath_FolderAndFile(m_szFile1, NULL, szFile1);
@@ -257,15 +257,15 @@ void CDlgDiff::SetData(void)
 				pFileInfo = (EditInfo*)&m_pShareData->m_workBuffer.m_EditInfo_MYWM_GETFILEINFO;
 
 				// 自分ならスキップ
-				if (pEditNode[i].GetHwnd() == CEditWnd::getInstance()->GetHwnd()) {
+				if (pEditNode[i].GetHwnd() == EditWnd::getInstance()->GetHwnd()) {
 					// 同じ形式にしておく。ただしアクセスキー番号はなし
-					CFileNameManager::getInstance()->GetMenuFullLabel_WinListNoEscape( szName, _countof(szName), pFileInfo, pEditNode[i].m_nId, -1, calc.GetDC() );
+					FileNameManager::getInstance()->GetMenuFullLabel_WinListNoEscape( szName, _countof(szName), pFileInfo, pEditNode[i].m_nId, -1, calc.GetDC() );
 					SetItemText(IDC_STATIC_DIFF_SRC, szName);
 					continue;
 				}
 
 				// 番号はウィンドウ一覧と同じ番号を使う
-				CFileNameManager::getInstance()->GetMenuFullLabel_WinListNoEscape( szName, _countof(szName), pFileInfo, pEditNode[i].m_nId, i, calc.GetDC() );
+				FileNameManager::getInstance()->GetMenuFullLabel_WinListNoEscape( szName, _countof(szName), pFileInfo, pEditNode[i].m_nId, i, calc.GetDC() );
 
 
 				// リストに登録する
@@ -327,7 +327,7 @@ void CDlgDiff::SetData(void)
 
 // ダイアログデータの取得
 // TRUE==正常  FALSE==入力エラー
-int CDlgDiff::GetData(void)
+int DlgDiff::GetData(void)
 {
 	BOOL ret = TRUE;
 
@@ -388,7 +388,7 @@ int CDlgDiff::GetData(void)
 	return ret;
 }
 
-BOOL CDlgDiff::OnLbnSelChange(HWND hwndCtl, int wID)
+BOOL DlgDiff::OnLbnSelChange(HWND hwndCtl, int wID)
 {
 	HWND hwndList = GetItemHwnd(IDC_LIST_DIFF_FILES);
 	if (hwndList == hwndCtl) {
@@ -398,10 +398,10 @@ BOOL CDlgDiff::OnLbnSelChange(HWND hwndCtl, int wID)
 	}
 
 	// 基底クラスメンバ
-	return CDialog::OnLbnSelChange(hwndCtl, wID);
+	return Dialog::OnLbnSelChange(hwndCtl, wID);
 }
 
-BOOL CDlgDiff::OnEnChange(HWND hwndCtl, int wID)
+BOOL DlgDiff::OnEnChange(HWND hwndCtl, int wID)
 {
 	HWND hwndEdit = GetItemHwnd(IDC_EDIT_DIFF_DST);
 	if (hwndEdit == hwndCtl) {
@@ -417,25 +417,25 @@ BOOL CDlgDiff::OnEnChange(HWND hwndCtl, int wID)
 	}
 
 	// 基底クラスメンバ
-	return CDialog::OnEnChange(hwndCtl, wID);
+	return Dialog::OnEnChange(hwndCtl, wID);
 }
 
-LPVOID CDlgDiff::GetHelpIdTable(void)
+LPVOID DlgDiff::GetHelpIdTable(void)
 {
 	return (LPVOID)p_helpids;
 }
 
 
-INT_PTR CDlgDiff::DispatchEvent(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM lParam)
+INT_PTR DlgDiff::DispatchEvent(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM lParam)
 {
-	INT_PTR result = CDialog::DispatchEvent(hWnd, wMsg, wParam, lParam);
+	INT_PTR result = Dialog::DispatchEvent(hWnd, wMsg, wParam, lParam);
 	if (wMsg == WM_GETMINMAXINFO) {
 		return OnMinMaxInfo(lParam);
 	}
 	return result;
 }
 
-BOOL CDlgDiff::OnInitDialog(
+BOOL DlgDiff::OnInitDialog(
 	HWND hwndDlg,
 	WPARAM wParam,
 	LPARAM lParam
@@ -444,7 +444,7 @@ BOOL CDlgDiff::OnInitDialog(
 	_SetHwnd(hwndDlg);
 
 	CreateSizeBox();
-	CDialog::OnSize();
+	Dialog::OnSize();
 	
 	LONG_PTR lStyle;
 	lStyle = ::GetWindowLongPtr(GetItemHwnd(IDC_FRAME_DIFF_DST), GWL_EXSTYLE);
@@ -473,13 +473,13 @@ BOOL CDlgDiff::OnInitDialog(
 		m_nHeight = rcDialog.bottom - rcDialog.top;
 	}
 
-	return CDialog::OnInitDialog(hwndDlg, wParam, lParam);
+	return Dialog::OnInitDialog(hwndDlg, wParam, lParam);
 }
 
-BOOL CDlgDiff::OnSize(WPARAM wParam, LPARAM lParam)
+BOOL DlgDiff::OnSize(WPARAM wParam, LPARAM lParam)
 {
 	// 基底クラスメンバ
-	CDialog::OnSize(wParam, lParam);
+	Dialog::OnSize(wParam, lParam);
 
 	GetWindowRect(&GetDllShareData().m_common.m_sOthers.m_rcDiffDialog);
 
@@ -496,14 +496,14 @@ BOOL CDlgDiff::OnSize(WPARAM wParam, LPARAM lParam)
 	return TRUE;
 }
 
-BOOL CDlgDiff::OnMove(WPARAM wParam, LPARAM lParam)
+BOOL DlgDiff::OnMove(WPARAM wParam, LPARAM lParam)
 {
 	GetWindowRect(&GetDllShareData().m_common.m_sOthers.m_rcDiffDialog);
 	
-	return CDialog::OnMove(wParam, lParam);
+	return Dialog::OnMove(wParam, lParam);
 }
 
-BOOL CDlgDiff::OnMinMaxInfo(LPARAM lParam)
+BOOL DlgDiff::OnMinMaxInfo(LPARAM lParam)
 {
 	LPMINMAXINFO lpmmi = (LPMINMAXINFO) lParam;
 	if (m_ptDefaultSize.x < 0) {
@@ -516,7 +516,7 @@ BOOL CDlgDiff::OnMinMaxInfo(LPARAM lParam)
 	return 0;
 }
 
-BOOL CDlgDiff::OnLbnDblclk( int wID )
+BOOL DlgDiff::OnLbnDblclk( int wID )
 {
 	HWND hwndList = GetDlgItem( GetHwnd(), IDC_LIST_DIFF_FILES );
 	if (List_GetCurSel(hwndList) == LB_ERR) {

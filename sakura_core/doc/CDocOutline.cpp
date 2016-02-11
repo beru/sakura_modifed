@@ -51,10 +51,10 @@ struct OneRule {
 
 	@date 2002.04.01 YAZAKI
 	@date 2002.11.03 Moca 引数nMaxCountを追加。バッファ長チェックをするように変更
-	@date 2013.06.02 _tfopen_absini,fgetwsをCTextInputStream_AbsIniに変更。UTF-8対応。Regex対応
+	@date 2013.06.02 _tfopen_absini,fgetwsをTextInputStream_AbsIniに変更。UTF-8対応。Regex対応
 	@date 2014.06.20 RegexReplace 正規表現置換モード追加
 */
-int CDocOutline::ReadRuleFile(
+int DocOutline::ReadRuleFile(
 	const TCHAR*	pszFilename,
 	OneRule*		pcOneRule,
 	int				nMaxCount,
@@ -64,7 +64,7 @@ int CDocOutline::ReadRuleFile(
 {
 	// 2003.06.23 Moca 相対パスは実行ファイルからのパスとして開く
 	// 2007.05.19 ryoji 相対パスは設定ファイルからのパスを優先
-	CTextInputStream_AbsIni	file = CTextInputStream_AbsIni(pszFilename);
+	TextInputStream_AbsIni	file = TextInputStream_AbsIni(pszFilename);
 	if (!file.Good()) {
 		return 0;
 	}
@@ -78,7 +78,7 @@ int CDocOutline::ReadRuleFile(
 	bRegex = false;
 	bool bRegexReplace = false;
 	title = L"";
-	int regexOption = CBregexp::optCaseSensitive;
+	int regexOption = Bregexp::optCaseSensitive;
 	
 	// 通常モード
 	// key1,key2 /// GroupName,Lv=1
@@ -180,25 +180,25 @@ int CDocOutline::ReadRuleFile(
 				}else if (strLine.length() >= 7 && _wcsnicmp(strLine.c_str() + 1, L"Title=", 6) == 0) {
 					title = strLine.c_str() + 7;
 				}else if (strLine.length() > 13 && _wcsnicmp(strLine.c_str() + 1, L"RegexOption=", 12) == 0) {
-					int nCaseFlag = CBregexp::optCaseSensitive;
+					int nCaseFlag = Bregexp::optCaseSensitive;
 					regexOption = 0;
 					for (int i=13; i<(int)strLine.length(); ++i) {
 						if (strLine[i] == L'i') {
 							nCaseFlag = 0;
 						}else if (strLine[i] == L'g') {
-							regexOption |= CBregexp::optGlobal;
+							regexOption |= Bregexp::optGlobal;
 						}else if (strLine[i] == L'x') {
-							regexOption |= CBregexp::optExtend;
+							regexOption |= Bregexp::optExtend;
 						}else if (strLine[i] == L'a') {
-							regexOption |= CBregexp::optASCII;
+							regexOption |= Bregexp::optASCII;
 						}else if (strLine[i] == L'u') {
-							regexOption |= CBregexp::optUnicode;
+							regexOption |= Bregexp::optUnicode;
 						}else if (strLine[i] == L'd') {
-							regexOption |= CBregexp::optDefault;
+							regexOption |= Bregexp::optDefault;
 						}else if (strLine[i] == L'l') {
-							regexOption |= CBregexp::optLocale;
+							regexOption |= Bregexp::optLocale;
 						}else if (strLine[i] == L'R') {
-							regexOption |= CBregexp::optR;
+							regexOption |= Bregexp::optR;
 						}
 					}
 					regexOption |= nCaseFlag;
@@ -217,7 +217,7 @@ int CDocOutline::ReadRuleFile(
 		最大値以上は追加せずに無視する
 	@date 2007.11.29 kobake OneRule test[1024] でスタックが溢れていたのを修正
 */
-void CDocOutline::MakeFuncList_RuleFile(CFuncInfoArr* pcFuncInfoArr, std::tstring& sTitleOverride)
+void DocOutline::MakeFuncList_RuleFile(FuncInfoArr* pcFuncInfoArr, std::tstring& sTitleOverride)
 {
 	// ルールファイルの内容をバッファに読み込む
 	auto_array_ptr<OneRule> test(new OneRule[1024]);	// 1024個許可。 2007.11.29 kobake スタック使いすぎなので、ヒープに確保するように修正。
@@ -239,9 +239,9 @@ void CDocOutline::MakeFuncList_RuleFile(CFuncInfoArr* pcFuncInfoArr, std::tstrin
 	wchar_t		pszStack[nMaxStack][256];
 	wchar_t		nLvStack[nMaxStack];
 	wchar_t		szTitle[256];			// 一時領域
-	CBregexp* pRegex = NULL;
+	Bregexp* pRegex = NULL;
 	if (bRegex) {
-		pRegex = new CBregexp[nCount];
+		pRegex = new Bregexp[nCount];
 		for (int i=0; i<nCount; ++i) {
 			if (test[i].nLength == 0) {
 				continue;
@@ -285,7 +285,7 @@ void CDocOutline::MakeFuncList_RuleFile(CFuncInfoArr* pcFuncInfoArr, std::tstrin
 		}else {
 			len = wcslen(g);
 		}
-		CNativeW mem;
+		NativeW mem;
 		mem.SetString(g, len);
 		pcFuncInfoArr->AppendData(LogicInt(1), LayoutInt(1), mem.GetStringPtr(), FUNCINFO_NOCLIPTEXT, nDepth);
 		nDepth = 1;
@@ -435,7 +435,7 @@ void CDocOutline::MakeFuncList_RuleFile(CFuncInfoArr* pcFuncInfoArr, std::tstrin
 	@date 2005.10.11 ryoji "ａ@" の右２バイトが全角空白と判定される問題の対処
 	@date 2005.11.03 genta 文字列長修正．右端のゴミを除去
 */
-void CDocOutline::MakeFuncList_BookMark(CFuncInfoArr* pcFuncInfoArr)
+void DocOutline::MakeFuncList_BookMark(FuncInfoArr* pcFuncInfoArr)
 {
 	LogicInt nLineLen;
 	BOOL bMarkUpBlankLineEnable = GetDllShareData().m_common.m_sOutline.m_bMarkUpBlankLineEnable;	// 空行をマーク対象にするフラグ 20020119 aroka
@@ -444,7 +444,7 @@ void CDocOutline::MakeFuncList_BookMark(CFuncInfoArr* pcFuncInfoArr)
 	int nCharChars;
 
 	for (LogicInt nLineCount=LogicInt(0); nLineCount<nLineLast; ++nLineCount) {
-		if (!CBookmarkGetter(m_pcDocRef->m_cDocLineMgr.GetLine(nLineCount)).IsBookmarked()) continue;
+		if (!BookmarkGetter(m_pcDocRef->m_cDocLineMgr.GetLine(nLineCount)).IsBookmarked()) continue;
 		const wchar_t* pLine = m_pcDocRef->m_cDocLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
 		if (!pLine) {
 			break;
@@ -476,7 +476,7 @@ void CDocOutline::MakeFuncList_BookMark(CFuncInfoArr* pcFuncInfoArr)
 		k = pos_wo_space = leftspace;
 		bool bExtEol = GetDllShareData().m_common.m_sEdit.m_bEnableExtEol;
 		while (k < nLineLen) {
-			nCharChars = CNativeW::GetSizeOfChar(pLine, nLineLen, k);
+			nCharChars = NativeW::GetSizeOfChar(pLine, nLineLen, k);
 			if (nCharChars == 1) {
 				if (!(
 						WCODE::IsLineDelimiter(pLine[k], bExtEol) ||

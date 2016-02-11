@@ -26,14 +26,14 @@
 #include "recent/CRecent.h"
 #include "dlg/CDialog.h"
 
-class CEditWnd;
-class CImageListMgr;
+class EditWnd;
+class ImageListMgr;
 
 class CMainToolBar {
 public:
-	CMainToolBar(CEditWnd* pOwner);
+	CMainToolBar(EditWnd* pOwner);
 
-	void Create(CImageListMgr* pcIcons);
+	void Create(ImageListMgr* pcIcons);
 
 	// 作成・破棄
 	void CreateToolBar(void);		// ツールバー作成
@@ -63,7 +63,7 @@ public:
 	void SetFocusSearchBox(void) const;		// ツールバー検索ボックスへフォーカスを移動		2006.06.04 yukihane
 
 private:
-	CEditWnd*	m_pOwner;
+	EditWnd*	m_pOwner;
     HWND		m_hwndToolBar;
 
 	// 子ウィンドウ
@@ -74,7 +74,7 @@ private:
 	HFONT		m_hFontSearchBox;	// 検索コンボボックスのフォント
 
 	ComboBoxItemDeleter	m_comboDel;
-	CRecentSearch			m_cRecentSearch;
-	CImageListMgr*			m_pcIcons;
+	RecentSearch			m_cRecentSearch;
+	ImageListMgr*			m_pcIcons;
 };
 

@@ -25,7 +25,7 @@ enum class eOpeCode {
 
 class LineData {
 public:
-	CNativeW cmemLine;
+	NativeW cmemLine;
 	int nSeq;
 	void swap(LineData& o) {
 		std::swap(cmemLine, o.cmemLine);

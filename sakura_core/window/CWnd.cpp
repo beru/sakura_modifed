@@ -18,10 +18,10 @@
 #include "util/os.h" // WM_MOUSEWHEEL
 
 
-// CWndウィンドウメッセージのコールバック関数
+// Wndウィンドウメッセージのコールバック関数
 LRESULT CALLBACK CWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-	CWnd* pCWnd = (CWnd*)::GetWindowLongPtr(hwnd, GWLP_USERDATA);
+	Wnd* pCWnd = (Wnd*)::GetWindowLongPtr(hwnd, GWLP_USERDATA);
 
 	if (pCWnd) {
 		// クラスオブジェクトのポインタを使ってメッセージを配送する
@@ -44,16 +44,16 @@ namespace CWindowCreationHook {
 		if (nCode == HCBT_CREATEWND) {
 			HWND hwnd = (HWND)wParam;
 			CBT_CREATEWND* pCreateWnd = (CBT_CREATEWND*)lParam;
-			CWnd* pcWnd = static_cast<CWnd*>(pCreateWnd->lpcs->lpCreateParams);
+			Wnd* pcWnd = static_cast<Wnd*>(pCreateWnd->lpcs->lpCreateParams);
 
-			// CWnd以外のウィンドウ生成イベントは無視する
+			// Wnd以外のウィンドウ生成イベントは無視する
 			WNDPROC wndproc = (WNDPROC)::GetWindowLongPtr(hwnd, GWLP_WNDPROC);
 			if (wndproc != CWndProc) goto next;
 
-			// ウィンドウにCWndを関連付ける
+			// ウィンドウにWndを関連付ける
 			::SetWindowLongPtr(hwnd, GWLP_USERDATA, (LONG_PTR)pcWnd);
 
-			// CWndにウィンドウを関連付ける
+			// Wndにウィンドウを関連付ける
 			pcWnd->_SetHwnd(hwnd);
 		}
 next:
@@ -79,18 +79,18 @@ next:
 } // namespace CWindowCreationHook
 
 
-CWnd::CWnd(const TCHAR* pszInheritanceAppend)
+Wnd::Wnd(const TCHAR* pszInheritanceAppend)
 {
 	m_hInstance = NULL;		// アプリケーションインスタンスのハンドル
 	m_hwndParent = NULL;	// オーナーウィンドウのハンドル
 	m_hWnd = NULL;			// このウィンドウのハンドル
 #ifdef _DEBUG
-	_tcscpy(m_szClassInheritances, _T("CWnd"));
+	_tcscpy(m_szClassInheritances, _T("Wnd"));
 	_tcscat(m_szClassInheritances, pszInheritanceAppend);
 #endif
 }
 
-CWnd::~CWnd()
+Wnd::~Wnd()
 {
 	if (::IsWindow(m_hWnd)) {
 		// クラスオブジェクトのポインタをNULLにして拡張ウィンドウメモリに格納しておく
@@ -104,7 +104,7 @@ CWnd::~CWnd()
 
 
 // ウィンドウクラス作成
-ATOM CWnd::RegisterWC(
+ATOM Wnd::RegisterWC(
 	// WNDCLASS用
 	HINSTANCE	hInstance,
 	HICON		hIcon,			// Handle to the class icon.
@@ -137,7 +137,7 @@ ATOM CWnd::RegisterWC(
 }
 
 // 作成
-HWND CWnd::Create(
+HWND Wnd::Create(
 	// CreateWindowEx()用
 	HWND		hwndParent,
 	DWORD		dwExStyle,		// extended window style
@@ -181,7 +181,7 @@ HWND CWnd::Create(
 	CWindowCreationHook::Unuse();
 
 	if (!m_hWnd) {
-		::MessageBox(m_hwndParent, _T("CWnd::Create()\n\n::CreateWindowEx failed."), _T("error"), MB_OK);
+		::MessageBox(m_hwndParent, _T("Wnd::Create()\n\n::CreateWindowEx failed."), _T("error"), MB_OK);
 		return NULL;
 	}
 
@@ -192,7 +192,7 @@ HWND CWnd::Create(
 
 
 // メッセージ配送
-LRESULT CWnd::DispatchEvent(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
+LRESULT Wnd::DispatchEvent(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
 {
 	#define CALLH(message, method) case message: return method(hwnd, msg, wp, lp)
 	switch (msg) {
@@ -235,20 +235,20 @@ LRESULT CWnd::DispatchEvent(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
 }
 
 // アプリケーション定義のメッセージ(WM_APP <= msg <= 0xBFFF)
-LRESULT CWnd::DispatchEvent_WM_APP(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
+LRESULT Wnd::DispatchEvent_WM_APP(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
 {
 	return CallDefWndProc(hwnd, msg, wp, lp);
 }
 
 // デフォルトメッセージ処理
-LRESULT CWnd::CallDefWndProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
+LRESULT Wnd::CallDefWndProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
 {
 	return ::DefWindowProc(hwnd, msg, wp, lp);
 }
 
 
 // ウィンドウを破棄
-void CWnd::DestroyWindow()
+void Wnd::DestroyWindow()
 {
 	if (m_hWnd) {
 		::DestroyWindow(m_hWnd);

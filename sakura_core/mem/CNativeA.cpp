@@ -7,22 +7,22 @@
 #include "charset/charcode.h"
 #include "util/string_ex2.h"
 
-CNativeA::CNativeA(const char* szData)
+NativeA::NativeA(const char* szData)
 	:
-	CNative()
+	Native()
 {
 	SetString(szData);
 }
 
-CNativeA::CNativeA()
+NativeA::NativeA()
 	:
-	CNative()
+	Native()
 {
 }
 
-CNativeA::CNativeA(const CNativeA& rhs)
+NativeA::NativeA(const NativeA& rhs)
 	:
-	CNative()
+	Native()
 {
 	SetString(rhs.GetStringPtr(), rhs.GetStringLength());
 }
@@ -33,37 +33,37 @@ CNativeA::CNativeA(const CNativeA& rhs)
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 // バッファの内容を置き換える
-void CNativeA::SetString(const char* pszData)
+void NativeA::SetString(const char* pszData)
 {
 	SetString(pszData, strlen(pszData));
 }
 
 // バッファの内容を置き換える。nLenは文字単位。
-void CNativeA::SetString(const char* pData, int nDataLen)
+void NativeA::SetString(const char* pData, int nDataLen)
 {
 	int nDataLenBytes = nDataLen * sizeof(char);
-	CNative::SetRawData(pData, nDataLenBytes);
+	Native::SetRawData(pData, nDataLenBytes);
 }
 
 // バッファの内容を置き換える
-void CNativeA::SetNativeData(const CNativeA& pcNative)
+void NativeA::SetNativeData(const NativeA& pcNative)
 {
-	CNative::SetRawData(pcNative);
+	Native::SetRawData(pcNative);
 }
 
 // バッファの最後にデータを追加する
-void CNativeA::AppendString(const char* pszData)
+void NativeA::AppendString(const char* pszData)
 {
 	AppendString(pszData, strlen(pszData));
 }
 
 // バッファの最後にデータを追加する。nLengthは文字単位。
-void CNativeA::AppendString(const char* pszData, int nLength)
+void NativeA::AppendString(const char* pszData, int nLength)
 {
-	CNative::AppendRawData(pszData, nLength * sizeof(char));
+	Native::AppendRawData(pszData, nLength * sizeof(char));
 }
 
-const CNativeA& CNativeA::operator = (char cChar)
+const NativeA& NativeA::operator = (char cChar)
 {
 	char pszChar[2];
 	pszChar[0] = cChar;
@@ -73,18 +73,18 @@ const CNativeA& CNativeA::operator = (char cChar)
 }
 
 // バッファの最後にデータを追加する
-void CNativeA::AppendNativeData(const CNativeA& pcNative)
+void NativeA::AppendNativeData(const NativeA& pcNative)
 {
 	AppendString(pcNative.GetStringPtr(), pcNative.GetStringLength());
 }
 
 // (重要：nDataLenは文字単位) バッファサイズの調整。必要に応じて拡大する。
-void CNativeA::AllocStringBuffer(int nDataLen)
+void NativeA::AllocStringBuffer(int nDataLen)
 {
-	CNative::AllocBuffer(nDataLen * sizeof(char));
+	Native::AllocBuffer(nDataLen * sizeof(char));
 }
 
-const CNativeA& CNativeA::operator += (char ch)
+const NativeA& NativeA::operator += (char ch)
 {
 	char szChar[2] = {ch, '\0'};
 	AppendString(szChar);
@@ -95,7 +95,7 @@ const CNativeA& CNativeA::operator += (char ch)
 //                           互換                              //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-void CNativeA::SetStringNew(
+void NativeA::SetStringNew(
 	const wchar_t* wszData,
 	int nDataLen
 	)
@@ -106,7 +106,7 @@ void CNativeA::SetStringNew(
 	delete[] tmp;
 }
 
-void CNativeA::SetStringNew(const wchar_t* wszData)
+void NativeA::SetStringNew(const wchar_t* wszData)
 {
 	SetStringNew(wszData, wcslen(wszData));
 }
@@ -116,12 +116,12 @@ void CNativeA::SetStringNew(const wchar_t* wszData)
 //              ネイティブ取得インターフェース                 //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-int CNativeA::GetStringLength() const
+int NativeA::GetStringLength() const
 {
-	return CNative::GetRawLength() / sizeof(char);
+	return Native::GetRawLength() / sizeof(char);
 }
 
-const char* CNativeA::GetStringPtr(int* pnLength) const
+const char* NativeA::GetStringPtr(int* pnLength) const
 {
 	if (pnLength) {
 		*pnLength = GetStringLength();
@@ -130,7 +130,7 @@ const char* CNativeA::GetStringPtr(int* pnLength) const
 }
 
 // 任意位置の文字取得。nIndexは文字単位。
-char CNativeA::operator[](int nIndex) const
+char NativeA::operator[](int nIndex) const
 {
 	if (nIndex < GetStringLength()) {
 		return GetStringPtr()[nIndex];
@@ -144,12 +144,12 @@ char CNativeA::operator[](int nIndex) const
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 // 文字列置換
-void CNativeA::Replace(
+void NativeA::Replace(
 	const char* pszFrom,
 	const char* pszTo
 	)
 {
-	CNativeA	cmemWork;
+	NativeA	cmemWork;
 	int			nFromLen = strlen(pszFrom);
 	int			nToLen = strlen(pszTo);
 	int			nBgnOld = 0;
@@ -174,12 +174,12 @@ void CNativeA::Replace(
 }
 
 // 文字列置換（日本語考慮版）
-void CNativeA::Replace_j(
+void NativeA::Replace_j(
 	const char* pszFrom,
 	const char* pszTo
 	)
 {
-	CNativeA	cmemWork;
+	NativeA	cmemWork;
 	int			nFromLen = strlen(pszFrom);
 	int			nToLen = strlen(pszTo);
 	int			nBgnOld = 0;
@@ -212,7 +212,7 @@ void CNativeA::Replace_j(
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 // 小文字
-void CNativeA::ToLower()
+void NativeA::ToLower()
 {
 	unsigned char* pBuf = (unsigned char*)GetStringPtr();
 	int nBufLen = GetStringLength();
@@ -255,7 +255,7 @@ void CNativeA::ToLower()
 }
 
 // 大文字
-void CNativeA::ToUpper()
+void NativeA::ToUpper()
 {
 	unsigned char* pBuf = (unsigned char*)GetStringPtr();
 	int nBufLen = GetStringLength();
@@ -299,7 +299,7 @@ void CNativeA::ToUpper()
 
 
 // 半角→全角
-void CNativeA::ToZenkaku(
+void NativeA::ToZenkaku(
 	int bHiragana,		// 1== ひらがな 0==カタカナ // 2==英数専用 2001/07/30 Misaka 追加
 	int bHanKataOnly	// 1== 半角カタカナにのみ作用する
 	)
@@ -422,13 +422,13 @@ void CNativeA::ToZenkaku(
 
 
 // TAB→空白
-void CNativeA::TABToSPACE(int nTabSpace	/* TABの文字数 */)
+void NativeA::TABToSPACE(int nTabSpace	/* TABの文字数 */)
 {
 	using namespace ACODE;
 	const char*	pLine;
 	int nLineLen;
 //	BOOL		bEOL;
-	CEol cEol;
+	Eol cEol;
 	int nBgn = 0;
 	int nPosDes = 0;
 	// CRLFで区切られる「行」を返す。CRLFは行長に加えない
@@ -472,7 +472,7 @@ void CNativeA::TABToSPACE(int nTabSpace	/* TABの文字数 */)
 				}
 			}
 		}
-		CMemory cEolMem; ShiftJis::S_GetEol(&cEolMem, cEol.GetType());
+		Memory cEolMem; ShiftJis::S_GetEol(&cEolMem, cEol.GetType());
 		auto_memcpy(&pDes[nPosDes], (const char*)cEolMem.GetRawPtr(), cEolMem.GetRawLength());
 		nPosDes += cEolMem.GetRawLength();
 	}
@@ -491,7 +491,7 @@ void CNativeA::TABToSPACE(int nTabSpace	/* TABの文字数 */)
 	@author Stonee
 	@date 2001/5/27
 */
-void CNativeA::SPACEToTAB(int nTabSpace)
+void NativeA::SPACEToTAB(int nTabSpace)
 {
 	using namespace ACODE;
 
@@ -500,7 +500,7 @@ void CNativeA::SPACEToTAB(int nTabSpace)
 	int			nBgn;
 	int			nPosDes;
 	int			nPosX;
-	CEol		cEol;
+	Eol		cEol;
 
 	bool bSpace = false;	// スペースの処理中かどうか
 	int nStartPos;
@@ -594,7 +594,7 @@ void CNativeA::SPACEToTAB(int nTabSpace)
 		}
 
 		// 行末の処理
-		CMemory cEolMem; ShiftJis::S_GetEol(&cEolMem, cEol.GetType());
+		Memory cEolMem; ShiftJis::S_GetEol(&cEolMem, cEol.GetType());
 		auto_memcpy(&pDes[nPosDes], (const char*)cEolMem.GetRawPtr(), cEolMem.GetRawLength());
 		nPosDes += cEolMem.GetRawLength();
 	}
@@ -610,7 +610,7 @@ void CNativeA::SPACEToTAB(int nTabSpace)
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 // 指定した位置の文字が何バイト文字かを返す
-int CNativeA::GetSizeOfChar(
+int NativeA::GetSizeOfChar(
 	const char* pData,
 	int nDataLen,
 	int nIdx
@@ -621,14 +621,14 @@ int CNativeA::GetSizeOfChar(
 
 // ポインタで示した文字の次にある文字の位置を返します
 // 次にある文字がバッファの最後の位置を越える場合は&pData[nDataLen]を返します
-const char* CNativeA::GetCharNext(
+const char* NativeA::GetCharNext(
 	const char* pData,
 	int nDataLen,
 	const char* pDataCurrent
 	)
 {
 //#ifdef _DEBUG
-//	CRunningTimer cRunningTimer("CMemory::MemCharNext");
+//	CRunningTimer cRunningTimer("Memory::MemCharNext");
 //#endif
 
 	const char*	pNext;
@@ -657,10 +657,10 @@ const char* CNativeA::GetCharNext(
 
 // ポインタで示した文字の直前にある文字の位置を返します
 // 直前にある文字がバッファの先頭の位置を越える場合はpDataを返します
-const char* CNativeA::GetCharPrev(const char* pData, int nDataLen, const char* pDataCurrent)
+const char* NativeA::GetCharPrev(const char* pData, int nDataLen, const char* pDataCurrent)
 {
 //#ifdef _DEBUG
-//	CRunningTimer cRunningTimer("CMemory::MemCharPrev");
+//	CRunningTimer cRunningTimer("Memory::MemCharPrev");
 //#endif
 
 	const char*	pPrev = ::CharPrevA(pData, pDataCurrent);
@@ -694,19 +694,19 @@ const char* CNativeA::GetCharPrev(const char* pData, int nDataLen, const char* p
 }
 
 
-void CNativeA::AppendStringNew(const wchar_t* pszData)
+void NativeA::AppendStringNew(const wchar_t* pszData)
 {
 	AppendStringNew(pszData, wcslen(pszData));
 }
 
-void CNativeA::AppendStringNew(const wchar_t* pData, int nDataLen)
+void NativeA::AppendStringNew(const wchar_t* pData, int nDataLen)
 {
 	char* buf = wcstombs_new(pData, nDataLen);
 	AppendString(buf);
 	delete[] buf;
 }
 
-const wchar_t* CNativeA::GetStringW() const
+const wchar_t* NativeA::GetStringW() const
 {
 	return to_wchar(GetStringPtr(), GetStringLength());
 }

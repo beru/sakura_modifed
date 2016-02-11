@@ -99,7 +99,7 @@ int CLatin1::Latin1ToUni(const char* pSrc, const int nSrcLen, wchar_t* pDst, boo
 
 
 // コード変換 Latin1→Unicode
-EConvertResult CLatin1::Latin1ToUnicode( const CMemory& cSrc, CNativeW* pDstMem )
+EConvertResult CLatin1::Latin1ToUnicode( const Memory& cSrc, NativeW* pDstMem )
 {
 	// ソース取得
 	int nSrcLen;
@@ -193,7 +193,7 @@ int CLatin1::UniToLatin1(const wchar_t* pSrc, const int nSrcLen, char* pDst, boo
 
 
 // コード変換 Unicode→Latin1
-EConvertResult CLatin1::UnicodeToLatin1( const CNativeW& cSrc, CMemory* pDstMem )
+EConvertResult CLatin1::UnicodeToLatin1( const NativeW& cSrc, Memory* pDstMem )
 {
 	// ソース取得
 	const wchar_t* pSrc = cSrc.GetStringPtr();
@@ -233,7 +233,7 @@ EConvertResult CLatin1::UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR
 		return CodeBase::UnicodeToHex(cSrc, iSLen, pDst, psStatusbar);
 	}
 
-	CNativeW cCharBuffer;
+	NativeW cCharBuffer;
 	cCharBuffer.SetString(cSrc, 1);
 
 	bool bbinary = false;

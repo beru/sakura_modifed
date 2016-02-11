@@ -28,7 +28,7 @@
 		   distribution.
 */
 
-class CDlgTagsMake;
+class DlgTagsMake;
 
 #pragma once
 
@@ -36,12 +36,12 @@ class CDlgTagsMake;
 /*!
 	@brief タグファイル作成ダイアログボックス
 */
-class CDlgTagsMake : public CDialog {
+class DlgTagsMake : public Dialog {
 public:
 	/*
 	||  Constructors
 	*/
-	CDlgTagsMake();
+	DlgTagsMake();
 
 	/*
 	||  Attributes & Operations

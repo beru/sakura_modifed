@@ -1,5 +1,5 @@
 /*!	@file
-	@brief LayoutとCDocLineのイテレータ
+	@brief LayoutとDocLineのイテレータ
 
 	@author Yazaki
 	@date 2002/09/25 新規作成
@@ -27,10 +27,10 @@
 #include "doc/logic/CDocLine.h"
 
 // ブロックコメントデリミタを管理する
-class CMemoryIterator {
+class MemoryIterator {
 public:
-	// CDocLine用コンストラクタ
-	CMemoryIterator(const CDocLine* pcT, LayoutInt nTabSpace)
+	// DocLine用コンストラクタ
+	MemoryIterator(const DocLine* pcT, LayoutInt nTabSpace)
 		:
 		m_pLine(pcT ? pcT->GetPtr() : NULL),
 		m_nLineLen(pcT ? pcT->GetLengthWithEOL() : 0),
@@ -41,7 +41,7 @@ public:
 	}
 
 	// Layout用コンストラクタ
-	CMemoryIterator(const Layout* pcT, LayoutInt nTabSpace)
+	MemoryIterator(const Layout* pcT, LayoutInt nTabSpace)
 		:
 		m_pLine(pcT ? pcT->GetPtr() : NULL),
 		m_nLineLen(pcT ? pcT->GetLengthWithEOL() : 0),
@@ -72,7 +72,7 @@ public:
 		// 2007.09.04 kobake UNICODE化：データ増分と桁増分を別々の値として計算する。
 
 		// データ増分を計算
-		m_nIndex_Delta = LogicInt(CNativeW::GetSizeOfChar(m_pLine, m_nLineLen, m_nIndex));
+		m_nIndex_Delta = LogicInt(NativeW::GetSizeOfChar(m_pLine, m_nLineLen, m_nIndex));
 		if (m_nIndex_Delta == 0) {
 			m_nIndex_Delta = LogicInt(1);
 		}
@@ -81,7 +81,7 @@ public:
 		if (m_pLine[m_nIndex] == WCODE::TAB) {
 			m_nColumn_Delta = m_nTabSpace - (m_nColumn % m_nTabSpace);
 		}else {
-			m_nColumn_Delta = LayoutInt(CNativeW::GetKetaOfChar(m_pLine, m_nLineLen, m_nIndex));
+			m_nColumn_Delta = LayoutInt(NativeW::GetKetaOfChar(m_pLine, m_nLineLen, m_nIndex));
 //			if (m_nColumn_Delta == 0) {				// 削除 サロゲートペア対策	2008/7/5 Uchi
 //				m_nColumn_Delta = LayoutInt(1);
 //			}

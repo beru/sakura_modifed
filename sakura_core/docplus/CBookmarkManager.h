@@ -25,44 +25,44 @@
 
 #include "_main/global.h" // eSearchDirection, SearchOption
 
-class CDocLine;
+class DocLine;
 class DocLineMgr;
-class CBregexp;
+class Bregexp;
 
 #include "CSearchAgent.h"
 
 // 行に付加するブックマーク情報
-class CLineBookmarked {
+class LineBookmarked {
 public:
-	CLineBookmarked() : m_bBookmarked(false) { }
+	LineBookmarked() : m_bBookmarked(false) { }
 	operator bool() const { return m_bBookmarked; }
-	CLineBookmarked& operator = (bool b) { m_bBookmarked = b; return *this; }
+	LineBookmarked& operator = (bool b) { m_bBookmarked = b; return *this; }
 private:
 	bool m_bBookmarked;
 };
 
 // 行のブックマーク情報の取得
-class CBookmarkGetter {
+class BookmarkGetter {
 public:
-	CBookmarkGetter(const CDocLine* pcDocLine) : m_pcDocLine(pcDocLine) { }
+	BookmarkGetter(const DocLine* pcDocLine) : m_pcDocLine(pcDocLine) { }
 	bool IsBookmarked() const;
 private:
-	const CDocLine* m_pcDocLine;
+	const DocLine* m_pcDocLine;
 };
 
 // 行のブックマーク情報の取得・設定
-class CBookmarkSetter : public CBookmarkGetter {
+class BookmarkSetter : public BookmarkGetter {
 public:
-	CBookmarkSetter(CDocLine* pcDocLine) : CBookmarkGetter(pcDocLine), m_pcDocLine(pcDocLine) { }
+	BookmarkSetter(DocLine* pcDocLine) : BookmarkGetter(pcDocLine), m_pcDocLine(pcDocLine) { }
 	void SetBookmark(bool bFlag);
 private:
-	CDocLine* m_pcDocLine;
+	DocLine* m_pcDocLine;
 };
 
 // 行全体のブックマーク情報の管理
-class CBookmarkManager {
+class BookmarkManager {
 public:
-	CBookmarkManager(DocLineMgr* pcDocLineMgr) : m_pcDocLineMgr(pcDocLineMgr) { }
+	BookmarkManager(DocLineMgr* pcDocLineMgr) : m_pcDocLineMgr(pcDocLineMgr) { }
 
 	void ResetAllBookMark();															// ブックマークの全解除
 	bool SearchBookMark(LogicInt nLineNum, eSearchDirection, LogicInt* pnLineNum);	// ブックマーク検索

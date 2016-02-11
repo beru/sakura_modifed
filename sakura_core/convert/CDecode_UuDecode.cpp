@@ -7,13 +7,13 @@
 #include "CEol.h"
 
 // Uudecode (デコード）
-bool Decode_UuDecode::DoDecode(const CNativeW& pcSrc, CMemory* pcDst)
+bool Decode_UuDecode::DoDecode(const NativeW& pcSrc, Memory* pcDst)
 {
 	const WCHAR *psrc, *pline;
 	int nsrclen;
 	char *pw, *pw_base;
 	int nlinelen, ncuridx;
-	CEol ceol;
+	Eol ceol;
 	bool bsuccess = false;
 
 	pcDst->Clear();

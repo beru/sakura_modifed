@@ -198,7 +198,7 @@ int ViewCommander::Command_LEFT(bool bSelect, bool bRepeat)
 			) {
 				// 前のレイアウト行の、折り返し桁一つ手前または改行文字の手前に移動する。
 				pcLayout = GetDocument()->m_cLayoutMgr.SearchLineByLayoutY( ptCaretMove.GetY2() - LayoutInt(1) );
-				CMemoryIterator it(pcLayout, GetDocument()->m_cLayoutMgr.GetTabSpace());
+				MemoryIterator it(pcLayout, GetDocument()->m_cLayoutMgr.GetTabSpace());
 				while (!it.end()) {
 					it.scanNext();
 					if (it.getIndex() + it.getIndexDelta() > pcLayout->GetLengthWithoutEOL()) {
@@ -222,7 +222,7 @@ int ViewCommander::Command_LEFT(bool bSelect, bool bRepeat)
 		}
 		//  2004.03.28 Moca EOFだけの行以降の途中にカーソルがあると落ちるバグ修正
 		else if (pcLayout) {
-			CMemoryIterator it(pcLayout, GetDocument()->m_cLayoutMgr.GetTabSpace());
+			MemoryIterator it(pcLayout, GetDocument()->m_cLayoutMgr.GetTabSpace());
 			while (!it.end()) {
 				it.scanNext();
 				if ( it.getColumn() + it.getColumnDelta() > ptCaretMove.GetX2() - 1 ){
@@ -309,7 +309,7 @@ void ViewCommander::Command_RIGHT(
 			const bool nextline_exists = pcLayout->GetNextLayout() || pcLayout->GetLayoutEol() != EOL_NONE; // EOFのみの行も含め、キャレットが移動可能な次行が存在するか。
 
 			// 現在のキャレットの右の位置(to_x)を求める。
-			CMemoryIterator it(pcLayout, GetDocument()->m_cLayoutMgr.GetTabSpace());
+			MemoryIterator it(pcLayout, GetDocument()->m_cLayoutMgr.GetTabSpace());
 			for (; !it.end(); it.scanNext(), it.addDelta()) {
 				if (ptCaret.x < it.getColumn()) {
 					break;
@@ -1038,7 +1038,7 @@ void ViewCommander::Command_WndScrollUp(void)
 */
 void ViewCommander::Command_GONEXTPARAGRAPH(bool bSelect)
 {
-	CDocLine* pcDocLine;
+	DocLine* pcDocLine;
 	int nCaretPointer = 0;
 	auto& docLineMgr = GetDocument()->m_cDocLineMgr;
 	
@@ -1112,7 +1112,7 @@ void ViewCommander::Command_GONEXTPARAGRAPH(bool bSelect)
 void ViewCommander::Command_GOPREVPARAGRAPH(bool bSelect)
 {
 	auto& docLineMgr = GetDocument()->m_cDocLineMgr;
-	CDocLine* pcDocLine;
+	DocLine* pcDocLine;
 	int nCaretPointer = -1;
 
 	bool nFirstLineIsEmptyLine = false;
@@ -1267,23 +1267,23 @@ void ViewCommander::Command_MODIFYLINE_NEXT( bool bSelect )
 	auto& docLineMgr = GetDocument()->m_cDocLineMgr;
 	LogicInt nYOld = GetCaret().GetCaretLogicPos().y;
 	LogicPoint ptXY(0, nYOld);
-	const CDocLine* pcDocLine = docLineMgr.GetLine(ptXY.GetY2());
+	const DocLine* pcDocLine = docLineMgr.GetLine(ptXY.GetY2());
 	const int nSaveSeq = GetDocument()->m_cDocEditor.m_cOpeBuf.GetNoModifiedSeq();
 	bool bModified = false;
 	if (docLineMgr.GetLineCount() == 0) {
 		return;
 	}
 	if (pcDocLine) {
-		bModified = CModifyVisitor().IsLineModified(pcDocLine, nSaveSeq);
+		bModified = ModifyVisitor().IsLineModified(pcDocLine, nSaveSeq);
 		ptXY.y++;
 		pcDocLine = pcDocLine->GetNextLine();
 	}
 	for (int n=0; n<2; ++n) {
 		while (pcDocLine) {
-			if (CModifyVisitor().IsLineModified(pcDocLine, nSaveSeq) != bModified
+			if (ModifyVisitor().IsLineModified(pcDocLine, nSaveSeq) != bModified
 				|| (
 					ptXY.y == 0
-					&& CModifyVisitor().IsLineModified(pcDocLine, nSaveSeq)
+					&& ModifyVisitor().IsLineModified(pcDocLine, nSaveSeq)
 				)
 			) {
 				LayoutPoint ptLayout;
@@ -1298,7 +1298,7 @@ void ViewCommander::Command_MODIFYLINE_NEXT( bool bSelect )
 			pcDocLine = pcDocLine->GetNextLine();
 		}
 		if (n == 0 && bModified) {
-			const CDocLine* pcDocLineLast = docLineMgr.GetDocLineBottom();
+			const DocLine* pcDocLineLast = docLineMgr.GetDocLineBottom();
 			bool bSkip = false;
 			LogicPoint pos;
 			if (pcDocLineLast) {
@@ -1346,24 +1346,24 @@ void ViewCommander::Command_MODIFYLINE_PREV( bool bSelect )
 	LogicInt nYOld = GetCaret().GetCaretLogicPos().y;
 	LogicInt nYOld2 = nYOld;
 	LogicPoint ptXY(0, nYOld);
-	const CDocLine* pcDocLine = docLineMgr.GetLine(ptXY.GetY2());
+	const DocLine* pcDocLine = docLineMgr.GetLine(ptXY.GetY2());
 	const int nSaveSeq = GetDocument()->m_cDocEditor.m_cOpeBuf.GetNoModifiedSeq();
 	bool bModified = false;
 	bool bLast = false;
 	if (!pcDocLine) {
 		// [EOF]
-		const CDocLine* pcDocLineLast = docLineMgr.GetLine(ptXY.GetY2() - 1);
+		const DocLine* pcDocLineLast = docLineMgr.GetLine(ptXY.GetY2() - 1);
 		if (!pcDocLineLast) {
 			// 1行もない
 			return;
 		}
-		bModified = CModifyVisitor().IsLineModified(pcDocLineLast, nSaveSeq);
+		bModified = ModifyVisitor().IsLineModified(pcDocLineLast, nSaveSeq);
 		ptXY.y--;
 		pcDocLine = pcDocLineLast;
 		bLast = true;
 	}
 	if (!bLast) {
-		const CDocLine* pcDocLineLast = docLineMgr.GetDocLineBottom();
+		const DocLine* pcDocLineLast = docLineMgr.GetDocLineBottom();
 		if (pcDocLineLast && pcDocLineLast->GetEol() == EOL_NONE) {
 			LogicPoint pos;
 			pos.x = pcDocLine->GetLengthWithoutEOL();
@@ -1375,19 +1375,19 @@ void ViewCommander::Command_MODIFYLINE_PREV( bool bSelect )
 		}
 	}
 	assert( pcDocLine );
-	bModified = CModifyVisitor().IsLineModified(pcDocLine, nSaveSeq);
+	bModified = ModifyVisitor().IsLineModified(pcDocLine, nSaveSeq);
 	nYOld2 = ptXY.y;
 	ptXY.y--;
 	pcDocLine = pcDocLine->GetPrevLine();
 	if (pcDocLine && !bLast) {
-		bModified = CModifyVisitor().IsLineModified(pcDocLine, nSaveSeq);
+		bModified = ModifyVisitor().IsLineModified(pcDocLine, nSaveSeq);
 		nYOld2 = ptXY.y;
 		ptXY.y--;
 		pcDocLine = pcDocLine->GetPrevLine();
 	}
 	for (int n=0; n<2; ++n) {
 		while (pcDocLine) {
-			bool bModifiedTemp = CModifyVisitor().IsLineModified(pcDocLine, nSaveSeq);
+			bool bModifiedTemp = ModifyVisitor().IsLineModified(pcDocLine, nSaveSeq);
 			if (bModifiedTemp != bModified) {
 				// 検出された位置の1行後ろ(MODIFYLINE_NEXTと同じ位置)に止まる
 				ptXY.y = nYOld2;
@@ -1405,9 +1405,9 @@ void ViewCommander::Command_MODIFYLINE_PREV( bool bSelect )
 		}
 		if (n == 0) {
 			// 先頭行チェック
-			const CDocLine* pcDocLineTemp = docLineMgr.GetDocLineTop();
+			const DocLine* pcDocLineTemp = docLineMgr.GetDocLineTop();
 			assert( pcDocLineTemp );
-			if (CModifyVisitor().IsLineModified(pcDocLineTemp, nSaveSeq) != false) {
+			if (ModifyVisitor().IsLineModified(pcDocLineTemp, nSaveSeq) != false) {
 				if (GetCaret().GetCaretLogicPos() != LogicPoint(0,0)) {
 					ptXY = LogicPoint(0,0);
 					LayoutPoint ptLayout;
@@ -1425,9 +1425,9 @@ void ViewCommander::Command_MODIFYLINE_PREV( bool bSelect )
 			break;
 		}
 		if (n == 0) {
-			const CDocLine* pcDocLineTemp = docLineMgr.GetDocLineBottom();
+			const DocLine* pcDocLineTemp = docLineMgr.GetDocLineBottom();
 			assert( pcDocLineTemp );
-			if (CModifyVisitor().IsLineModified(pcDocLineTemp, nSaveSeq) != false) {
+			if (ModifyVisitor().IsLineModified(pcDocLineTemp, nSaveSeq) != false) {
 				// 最終行が変更行の場合は、[EOF]に止まる
 				LogicPoint pos;
 				if (pcDocLineTemp->GetEol() != EOL_NONE) {

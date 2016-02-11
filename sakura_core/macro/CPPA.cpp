@@ -61,7 +61,7 @@ CPPA::~CPPA()
 }
 
 // @date 2002.2.17 YAZAKI CShareData‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‚ÍACProcess‚É‚Ð‚Æ‚Â‚ ‚é‚Ì‚ÝB
-bool CPPA::Execute(CEditView* pcEditView, int flags)
+bool CPPA::Execute(EditView* pcEditView, int flags)
 {
 	// PPA‚Ì‘½d‹N“®‹ÖŽ~ 2008.10.22 syat
 	if (CPPA::m_bIsRunning) {
@@ -418,7 +418,7 @@ void __stdcall CPPA::stdProc(
 	const WCHAR** tmpArguments = (const WCHAR**)tmpArguments2;
 
 	// ˆ—
-	bool bRet = CMacro::HandleCommand(
+	bool bRet = Macro::HandleCommand(
 		m_CurInstance->m_pcEditView,
 		(EFunctionCode)(eIndex | m_CurInstance->m_commandflags),
 		tmpArguments,
@@ -527,7 +527,7 @@ void __stdcall CPPA::stdStrFunc(
 /*!
 	ˆø”Œ^•ÏŠ·
 
-	•¶Žš—ñ‚Å—^‚¦‚ç‚ê‚½ˆø”‚ðVARIANT/BSTR‚É•ÏŠ·‚µ‚ÄCMacro::HandleFunction()‚ðŒÄ‚Ñ‚¾‚·
+	•¶Žš—ñ‚Å—^‚¦‚ç‚ê‚½ˆø”‚ðVARIANT/BSTR‚É•ÏŠ·‚µ‚ÄMacro::HandleFunction()‚ðŒÄ‚Ñ‚¾‚·
 	@author Moca
 */
 bool CPPA::CallHandleFunction(
@@ -581,7 +581,7 @@ bool CPPA::CallHandleFunction(
 	}
 
 	if (Index >= F_FUNCTION_FIRST) {
-		bool Ret = CMacro::HandleFunction(m_CurInstance->m_pcEditView, (EFunctionCode)Index, vtArg, ArgCnt, *Result);
+		bool Ret = Macro::HandleFunction(m_CurInstance->m_pcEditView, (EFunctionCode)Index, vtArg, ArgCnt, *Result);
 		for (int i=0; i<maxArgSize && i<ArgSize; ++i) {
 			::VariantClear(&vtArg[i]);
 		}

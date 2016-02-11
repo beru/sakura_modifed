@@ -26,19 +26,19 @@
 #include "CRecentImp.h"
 #include "util/StaticType.h"
 
-typedef StaticString<WCHAR, _MAX_PATH> CReplaceString;
+typedef StaticString<WCHAR, _MAX_PATH> ReplaceString;
 
 // 置換の履歴を管理 (RECENT_FOR_REPLACE)
-class CRecentReplace : public CRecentImp<CReplaceString, LPCWSTR> {
+class RecentReplace : public RecentImp<ReplaceString, LPCWSTR> {
 public:
 	// 生成
-	CRecentReplace();
+	RecentReplace();
 
 	// オーバーライド
-	int				CompareItem(const CReplaceString* p1, LPCWSTR p2) const;
-	void			CopyItem(CReplaceString* dst, LPCWSTR src) const;
+	int				CompareItem(const ReplaceString* p1, LPCWSTR p2) const;
+	void			CopyItem(ReplaceString* dst, LPCWSTR src) const;
 	const TCHAR*	GetItemText(int nIndex) const;
-	bool			DataToReceiveType(LPCWSTR* dst, const CReplaceString* src) const;
-	bool			TextToDataType(CReplaceString* dst, LPCTSTR pszText) const;
+	bool			DataToReceiveType(LPCWSTR* dst, const ReplaceString* src) const;
+	bool			TextToDataType(ReplaceString* dst, LPCTSTR pszText) const;
 };
 

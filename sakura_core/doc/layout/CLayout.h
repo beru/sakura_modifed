@@ -37,7 +37,7 @@ public:
 	*/
 	// 2007.08.23 kobake コンストラクタでメンバ変数を初期化するようにした
 	Layout(
-		const CDocLine*	pcDocLine,		//!< 実データへの参照
+		const DocLine*	pcDocLine,		//!< 実データへの参照
 		LogicPoint		ptLogicPos,		//!< 実データ参照位置
 		LogicInt		nLength,		//!< 実データ内データ長
 		EColorIndexType	nTypePrev,
@@ -98,10 +98,10 @@ public:
 	void _SetNextLayout(Layout* pcLayout) { m_pNext = pcLayout; }
 
 	// 実データ参照
-	const CDocLine* GetDocLineRef() const { if (this) return m_pCDocLine; else return NULL; } //$$note:高速化
+	const DocLine* GetDocLineRef() const { if (this) return m_pCDocLine; else return NULL; } //$$note:高速化
 
 	// その他属性参照
-	const CEol& GetLayoutEol() const { return m_cEol; }
+	const Eol& GetLayoutEol() const { return m_cEol; }
 	const LayoutColorInfo* GetColorInfo() const { return m_cExInfo.GetColorInfo(); }
 	LayoutExInfo* GetLayoutExInfo() {
 		return &m_cExInfo;
@@ -112,14 +112,14 @@ private:
 	Layout*			m_pNext;
 
 	// データ参照範囲
-	const CDocLine*		m_pCDocLine;		//!< 実データへの参照
+	const DocLine*		m_pCDocLine;		//!< 実データへの参照
 	LogicPoint			m_ptLogicPos;		//!< 対応するロジック参照位置
 	LogicInt			m_nLength;			//!< このレイアウト行の長さ。文字単位。
 	
 	// その他属性
 	EColorIndexType		m_nTypePrev;		//!< タイプ 0=通常 1=行コメント 2=ブロックコメント 3=シングルクォーテーション文字列 4=ダブルクォーテーション文字列
 	LayoutInt			m_nIndent;			//!< このレイアウト行のインデント数 @@@ 2002.09.23 YAZAKI
-	CEol				m_cEol;
+	Eol				m_cEol;
 	LayoutInt			m_nLayoutWidth;		//!< このレイアウト行の改行を含むレイアウト長（「折り返さない」選択時のみ）	// 2009.08.28 nasukoji
 	LayoutExInfo		m_cExInfo;			//!< 色分け詳細情報
 

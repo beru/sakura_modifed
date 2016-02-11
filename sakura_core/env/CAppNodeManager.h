@@ -26,7 +26,7 @@
 #include "util/design_template.h"
 #include "config/maxdata.h"
 
-class CAppNodeGroupHandle;
+class AppNodeGroupHandle;
 
 // 編集ウィンドウノード
 struct EditNode {
@@ -44,7 +44,7 @@ struct EditNode {
 	HWND GetSafeHwnd() const { if (this) return m_hWnd; else return NULL; }
 	int GetId() const { return GetSafeId(); }
 	int GetSafeId() const { if (this) return m_nId; else return 0; }
-	CAppNodeGroupHandle GetGroup() const;
+	AppNodeGroupHandle GetGroup() const;
 	bool IsTopInGroup() const;
 };
 
@@ -66,19 +66,19 @@ struct Share_Nodes {
 
 
 // ノードアクセサ
-class CAppNodeHandle {
+class AppNodeHandle {
 public:
-	CAppNodeHandle(HWND hwnd);
+	AppNodeHandle(HWND hwnd);
 	EditNode* operator->() { return m_pNodeRef; }
 private:
 	EditNode* m_pNodeRef;
 };
 
 // グループアクセサ
-class CAppNodeGroupHandle {
+class AppNodeGroupHandle {
 public:
-	CAppNodeGroupHandle(int nGroupId) : m_nGroup(nGroupId) { }
-	CAppNodeGroupHandle(HWND hwnd) { m_nGroup = CAppNodeHandle(hwnd)->GetGroup(); }
+	AppNodeGroupHandle(int nGroupId) : m_nGroup(nGroupId) { }
+	AppNodeGroupHandle(HWND hwnd) { m_nGroup = AppNodeHandle(hwnd)->GetGroup(); }
 
 	EditNode* GetTopEditNode() { return GetEditNodeAt(0); }	//
 	EditNode* GetEditNodeAt(int nIndex);					// 指定位置の編集ウィンドウ情報を取得する
@@ -94,7 +94,7 @@ public:
 	bool SendMessageToAllEditors(UINT uMsg, WPARAM wParam, LPARAM lParam, HWND hWndLast);	// 全編集ウィンドウへメッセージを送る		// 2007.06.20 ryoji nGroup引数追加
 
 public:
-	bool operator == (const CAppNodeGroupHandle& rhs) const { return m_nGroup == rhs.m_nGroup; }
+	bool operator == (const AppNodeGroupHandle& rhs) const { return m_nGroup == rhs.m_nGroup; }
 	bool IsValidGroup() const { return m_nGroup >= 0; }
 	operator int() const { return m_nGroup; }
 
@@ -103,9 +103,9 @@ private:
 };
 
 
-class CAppNodeManager : public TSingleton<CAppNodeManager> {
-	friend class TSingleton<CAppNodeManager>;
-	CAppNodeManager() {}
+class AppNodeManager : public TSingleton<AppNodeManager> {
+	friend class TSingleton<AppNodeManager>;
+	AppNodeManager() {}
 
 public:
 	// グループ
@@ -132,12 +132,12 @@ public:
 };
 
 
-inline CAppNodeGroupHandle EditNode::GetGroup() const { if (this) return m_nGroup; else return 0; }
+inline AppNodeGroupHandle EditNode::GetGroup() const { if (this) return m_nGroup; else return 0; }
 
-inline bool EditNode::IsTopInGroup() const { return this && (CAppNodeGroupHandle(m_nGroup).GetEditNodeAt(0) == this); }
+inline bool EditNode::IsTopInGroup() const { return this && (AppNodeGroupHandle(m_nGroup).GetEditNodeAt(0) == this); }
 
-inline CAppNodeHandle::CAppNodeHandle(HWND hwnd)
+inline AppNodeHandle::AppNodeHandle(HWND hwnd)
 {
-	m_pNodeRef = CAppNodeManager::getInstance()->GetEditNode(hwnd);
+	m_pNodeRef = AppNodeManager::getInstance()->GetEditNode(hwnd);
 }
 

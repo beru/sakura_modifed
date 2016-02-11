@@ -32,7 +32,7 @@
 #include "view/figures/CFigureManager.h"
 #include "env/DllShareData.h"
 
-CDocType::CDocType(EditDoc* pcDoc)
+DocType::DocType(EditDoc* pcDoc)
 	:
 	m_pcDocRef(pcDoc),
 	m_nSettingType(0),			// Sep. 11, 2002 genta
@@ -42,14 +42,14 @@ CDocType::CDocType(EditDoc* pcDoc)
 }
 
 // 文書種別の設定
-void CDocType::SetDocumentType(CTypeConfig type, bool force, bool bTypeOnly)
+void DocType::SetDocumentType(CTypeConfig type, bool force, bool bTypeOnly)
 {
 	if (!m_nSettingTypeLocked || force) {
 		m_nSettingType = type;
-		if (!CDocTypeManager().GetTypeConfig(m_nSettingType, m_typeConfig)) {
+		if (!DocTypeManager().GetTypeConfig(m_nSettingType, m_typeConfig)) {
 			// 削除されてる/不正
-			m_nSettingType = CDocTypeManager().GetDocumentTypeOfPath(m_pcDocRef->m_cDocFile.GetFilePath());
-			CDocTypeManager().GetTypeConfig(m_nSettingType, m_typeConfig);
+			m_nSettingType = DocTypeManager().GetDocumentTypeOfPath(m_pcDocRef->m_cDocFile.GetFilePath());
+			DocTypeManager().GetTypeConfig(m_nSettingType, m_typeConfig);
 		}
 		if (bTypeOnly) {
 			return;	// bTypeOnly == true は特殊ケース（一時利用）に限定
@@ -57,15 +57,15 @@ void CDocType::SetDocumentType(CTypeConfig type, bool force, bool bTypeOnly)
 		UnlockDocumentType();
 	}else {
 		// データは更新しておく
-		CTypeConfig temp = CDocTypeManager().GetDocumentTypeOfId(m_typeConfig.m_id);
+		CTypeConfig temp = DocTypeManager().GetDocumentTypeOfId(m_typeConfig.m_id);
 		if (temp.IsValidType()) {
 			m_nSettingType = temp;
-			CDocTypeManager().GetTypeConfig(m_nSettingType, m_typeConfig);
+			DocTypeManager().GetTypeConfig(m_nSettingType, m_typeConfig);
 		}else {
 			m_nSettingType = type;
-			if (!CDocTypeManager().GetTypeConfig(m_nSettingType, m_typeConfig)) {
-				m_nSettingType = CDocTypeManager().GetDocumentTypeOfPath(m_pcDocRef->m_cDocFile.GetFilePath());
-				CDocTypeManager().GetTypeConfig(m_nSettingType, m_typeConfig);
+			if (!DocTypeManager().GetTypeConfig(m_nSettingType, m_typeConfig)) {
+				m_nSettingType = DocTypeManager().GetDocumentTypeOfPath(m_pcDocRef->m_cDocFile.GetFilePath());
+				DocTypeManager().GetTypeConfig(m_nSettingType, m_typeConfig);
 			}
 		}
 		if (bTypeOnly) {
@@ -74,13 +74,13 @@ void CDocType::SetDocumentType(CTypeConfig type, bool force, bool bTypeOnly)
 	}
 
 	// タイプ別設定更新を反映
-	CColorStrategyPool::getInstance()->OnChangeSetting();
+	ColorStrategyPool::getInstance()->OnChangeSetting();
 	CFigureManager::getInstance()->OnChangeSetting();
 	this->SetDocumentIcon();	// Sep. 11, 2002 genta
 	m_pcDocRef->SetBackgroundImage();
 }
 
-void CDocType::SetDocumentTypeIdx(int id, bool force)
+void DocType::SetDocumentTypeIdx(int id, bool force)
 {
 	int setId = m_typeConfig.m_id;
 	if (!m_nSettingTypeLocked || force) {
@@ -88,7 +88,7 @@ void CDocType::SetDocumentTypeIdx(int id, bool force)
 			setId = id;
 		}
 	}
-	CTypeConfig temp = CDocTypeManager().GetDocumentTypeOfId(setId);
+	CTypeConfig temp = DocTypeManager().GetDocumentTypeOfId(setId);
 	if (temp.IsValidType()) {
 		m_nSettingType = temp;
 		m_typeConfig.m_nIdx = temp.GetIndex();
@@ -105,10 +105,10 @@ void CDocType::SetDocumentTypeIdx(int id, bool force)
 	@author genta
 	@date 2002.09.10
 */
-void CDocType::SetDocumentIcon()
+void DocType::SetDocumentIcon()
 {
 	// Grepモードの時はアイコンを変更しない
-	if (CEditApp::getInstance()->m_pcGrepAgent->m_bGrepMode) {
+	if (EditApp::getInstance()->m_pcGrepAgent->m_bGrepMode) {
 		return;
 	}
 	

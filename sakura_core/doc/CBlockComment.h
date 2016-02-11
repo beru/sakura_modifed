@@ -33,10 +33,10 @@ enum ECommentType {
 #define BLOCKCOMMENT_BUFFERSIZE	16
 
 // 2005.11.10 Moca アクセス関数追加
-class CBlockComment {
+class BlockComment {
 public:
 	// 生成と破棄
-	CBlockComment();
+	BlockComment();
 
 	// 設定
 	void SetBlockCommentRule(const wchar_t* pszFrom, const wchar_t* pszTo);	// 行コメントデリミタをコピーする

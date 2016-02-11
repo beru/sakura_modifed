@@ -13,7 +13,7 @@
 	Please contact the copyright holder to use this code for other purpose.
 */
 
-class CDlgGrep;
+class DlgGrep;
 
 #pragma once
 
@@ -22,12 +22,12 @@ class CDlgGrep;
 #include "util/window.h"
 
 //! GREPダイアログボックス
-class CDlgGrep : public CDialog {
+class DlgGrep : public Dialog {
 public:
 	/*
 	||  Constructors
 	*/
-	CDlgGrep();
+	DlgGrep();
 	/*
 	||  Attributes & Operations
 	*/
@@ -56,12 +56,12 @@ public:
 	SFilePath	m_szCurrentFilePath;
 protected:
 	ComboBoxItemDeleter	m_comboDelText;
-	CRecentSearch			m_cRecentSearch;
+	RecentSearch			m_cRecentSearch;
 	ComboBoxItemDeleter	m_comboDelFile;
-	CRecentGrepFile			m_cRecentGrepFile;
+	RecentGrepFile			m_cRecentGrepFile;
 	ComboBoxItemDeleter	m_comboDelFolder;
-	CRecentGrepFolder		m_cRecentGrepFolder;
-	CFontAutoDeleter		m_cFontText;
+	RecentGrepFolder		m_cRecentGrepFolder;
+	FontAutoDeleter		m_cFontText;
 
 	/*
 	||  実装ヘルパ関数

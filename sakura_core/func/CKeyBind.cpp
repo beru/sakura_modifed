@@ -48,12 +48,12 @@ static void SetKeyNameArrVal(
 );
 
 
-CKeyBind::CKeyBind()
+KeyBind::KeyBind()
 {
 }
 
 
-CKeyBind::~CKeyBind()
+KeyBind::~KeyBind()
 {
 }
 
@@ -61,7 +61,7 @@ CKeyBind::~CKeyBind()
 /*! Windows アクセラレータの作成
 	@date 2007.02.22 ryoji デフォルト機能割り当てに関する処理を追加
 */
-HACCEL CKeyBind::CreateAccerelator(
+HACCEL KeyBind::CreateAccerelator(
 	int			nKeyNameArrNum,
 	KEYDATA*	pKeyNameArr
 	)
@@ -114,7 +114,7 @@ HACCEL CKeyBind::CreateAccerelator(
 
 	@date 2007.02.22 ryoji デフォルト機能割り当てに関する処理を追加
 */
-EFunctionCode CKeyBind::GetFuncCode(
+EFunctionCode KeyBind::GetFuncCode(
 	WORD		nAccelCmd,
 	int			nKeyNameArrNum,
 	KEYDATA*	pKeyNameArr,
@@ -145,12 +145,12 @@ EFunctionCode CKeyBind::GetFuncCode(
 	@date Oct. 31, 2001 genta 動的な機能名に対応するため引数追加
 	@date 2007.02.22 ryoji デフォルト機能割り当てに関する処理を追加
 */
-int CKeyBind::CreateKeyBindList(
+int KeyBind::CreateKeyBindList(
 	HINSTANCE		hInstance,		// [in] インスタンスハンドル
 	int				nKeyNameArrNum,	// [in]
 	KEYDATA*		pKeyNameArr,	// [out]
-	CNativeW&		cMemList,		//
-	CFuncLookup*	pcFuncLookup,	// [in] 機能番号→名前の対応を取る
+	NativeW&		cMemList,		//
+	FuncLookup*	pcFuncLookup,	// [in] 機能番号→名前の対応を取る
 	bool			bGetDefFuncCode // [in] ON:デフォルト機能割り当てを使う/OFF:使わない デフォルト:true
 	)
 {
@@ -257,7 +257,7 @@ int CKeyBind::CreateKeyBindList(
 	@param[in]	nFuncId 検索対象機能ID
 	@param[in]	bGetDefFuncCode 標準機能を取得するかどうか
 */
-bool CKeyBind::GetKeyStrSub(
+bool KeyBind::GetKeyStrSub(
 	int&		nKeyNameArrBegin,
 	int			nKeyNameArrEnd,
 	KEYDATA*	pKeyNameArr,
@@ -299,7 +299,7 @@ bool CKeyBind::GetKeyStrSub(
 	@date 2007.11.04 genta マウスクリックよりキー割り当ての優先度を上げる
 	@date 2007.11.04 genta 共通機能のサブルーチン化
 */
-int CKeyBind::GetKeyStr(
+int KeyBind::GetKeyStr(
 	HINSTANCE	hInstance,
 	int			nKeyNameArrNum,
 	KEYDATA*	pKeyNameArr,
@@ -335,7 +335,7 @@ int CKeyBind::GetKeyStr(
 	@date 2007.02.22 ryoji デフォルト機能割り当てに関する処理を追加
 	@date 2007.11.04 genta 共通機能のサブルーチン化
 */
-int CKeyBind::GetKeyStrList(
+int KeyBind::GetKeyStrList(
 	HINSTANCE	hInstance,
 	int			nKeyNameArrNum,
 	KEYDATA*	pKeyNameArr,
@@ -393,7 +393,7 @@ int CKeyBind::GetKeyStrList(
 	@return アクセスキー付きの文字列
 	@data 2013.12.09 novice アクセスキーと文字列の比較で小文字も有効にする
 */
-TCHAR* CKeyBind::MakeMenuLabel(const TCHAR* sName, const TCHAR* sKey)
+TCHAR* KeyBind::MakeMenuLabel(const TCHAR* sName, const TCHAR* sKey)
 {
 	const int MAX_LABEL_CCH = _MAX_PATH * 2 + 30;
 	static TCHAR sLabel[MAX_LABEL_CCH];
@@ -439,7 +439,7 @@ TCHAR* CKeyBind::MakeMenuLabel(const TCHAR* sName, const TCHAR* sKey)
 	2010/5/17	アクセスキーの追加
 	@date 2014.05.04 Moca LABEL_MAX=256 => nLabelSize
 */
-TCHAR* CKeyBind::GetMenuLabel(
+TCHAR* KeyBind::GetMenuLabel(
 	HINSTANCE		hInstance,
 	int				nKeyNameArrNum,
 	KEYDATA*		pKeyNameArr,
@@ -489,7 +489,7 @@ TCHAR* CKeyBind::GetMenuLabel(
 
 	@date 2007.02.22 ryoji 新規作成
 */
-EFunctionCode CKeyBind::GetDefFuncCode(int nKeyCode, int nState)
+EFunctionCode KeyBind::GetDefFuncCode(int nKeyCode, int nState)
 {
 	DLLSHAREDATA* pShareData = &GetDllShareData();
 	if (!pShareData) {
@@ -526,7 +526,7 @@ EFunctionCode CKeyBind::GetDefFuncCode(int nKeyCode, int nState)
 
 	@date 2007.03.07 ryoji インライン関数から通常の関数に変更（BCCの最適化バグ対策）
 */
-EFunctionCode CKeyBind::GetFuncCodeAt(KEYDATA& KeyData, int nState, bool bGetDefFuncCode)
+EFunctionCode KeyBind::GetFuncCodeAt(KEYDATA& KeyData, int nState, bool bGetDefFuncCode)
 {
 	if (KeyData.m_nFuncCodeArr[nState] != 0) {
 		return KeyData.m_nFuncCodeArr[nState];
@@ -799,10 +799,10 @@ const int jpVKEXNamesLen = _countof( jpVKEXNames );
 
 	デフォルトキー割り当て関連の初期化処理
 
-	@date 2005.01.30 genta CShareData::Init()から分離
+	@date 2005.01.30 genta ShareData::Init()から分離
 	@date 2007.11.04 genta キー設定数がDLLSHAREの領域を超えたら起動できないように
 */
-bool CShareData::InitKeyAssign(DLLSHAREDATA* pShareData)
+bool ShareData::InitKeyAssign(DLLSHAREDATA* pShareData)
 {
 	/********************/
 	/* 共通設定の規定値 */
@@ -839,7 +839,7 @@ bool CShareData::InitKeyAssign(DLLSHAREDATA* pShareData)
 }
 
 //!	@brief 言語選択後の文字列更新処理
-void CShareData::RefreshKeyAssignString(DLLSHAREDATA* pShareData)
+void ShareData::RefreshKeyAssignString(DLLSHAREDATA* pShareData)
 {
 	const int nKeyDataInitNum = _countof(KeyDataInit);
 	for (int i=0; i<nKeyDataInitNum; ++i) {

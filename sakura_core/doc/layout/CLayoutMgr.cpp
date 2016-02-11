@@ -352,7 +352,7 @@ Layout* LayoutMgr::InsertLineNext(
 	@date 2009.08.28 nasukoji	レイアウト長を引数に追加
 */
 Layout* LayoutMgr::CreateLayout(
-	CDocLine*		pCDocLine,
+	DocLine*		pCDocLine,
 	LogicPoint		ptLogicPos,
 	LogicInt		nLength,
 	EColorIndexType	nTypePrev,
@@ -487,7 +487,7 @@ void LayoutMgr::GetEndLayoutPos(
 		// 末尾に改行がある
 		ptLayoutEnd->Set(LayoutInt(0), GetLineCount());
 	}else {
-		CMemoryIterator it(btm, GetTabSpace());
+		MemoryIterator it(btm, GetTabSpace());
 		while (!it.end()) {
 			it.scanNext();
 			it.addDelta();
@@ -635,8 +635,8 @@ bool LayoutMgr::WhereCurrentWord(
 	LayoutInt		nLineNum,
 	LogicInt		nIdx,
 	LayoutRange*	pSelect,		// [out]
-	CNativeW*		pcmcmWord,		// [out]
-	CNativeW*		pcmcmWordLeft	// [out]
+	NativeW*		pcmcmWord,		// [out]
+	NativeW*		pcmcmWordLeft	// [out]
 	)
 {
 	const Layout* pLayout = SearchLineByLayoutY(nLineNum);
@@ -843,7 +843,7 @@ void LayoutMgr::LogicToLayout(
 				}
 
 				// 文字ロジック幅 -> nCharChars
-				LogicInt nCharChars = CNativeW::GetSizeOfChar(pData, nDataLen, i);
+				LogicInt nCharChars = NativeW::GetSizeOfChar(pData, nDataLen, i);
 				if (nCharChars == 0) {
 					nCharChars = LogicInt(1);
 				}
@@ -854,7 +854,7 @@ void LayoutMgr::LogicToLayout(
 					// Sep. 23, 2002 genta メンバー関数を使うように
 					nCharKetas = GetActualTabSpace(nCaretPosX);
 				}else {
-					nCharKetas = CNativeW::GetKetaOfChar(pData, nDataLen, i);
+					nCharKetas = NativeW::GetKetaOfChar(pData, nDataLen, i);
 				}
 //				if (nCharKetas == 0)				// 削除 サロゲートペア対策	2008/7/5 Uchi
 //					nCharKetas = LayoutInt(1);
@@ -973,7 +973,7 @@ checkloop:;
 	for (i=LogicInt(0); i<nDataLen; ++i) {
 		// 文字ロジック幅 -> nCharChars
 		LogicInt	nCharChars;
-		nCharChars = CNativeW::GetSizeOfChar(pData, nDataLen, i);
+		nCharChars = NativeW::GetSizeOfChar(pData, nDataLen, i);
 		if (nCharChars == 0)
 			nCharChars = LogicInt(1);
 		
@@ -982,7 +982,7 @@ checkloop:;
 		if (pData[i] == WCODE::TAB) {
 			nCharKetas = GetActualTabSpace(nX);
 		}else {
-			nCharKetas = CNativeW::GetKetaOfChar(pData, nDataLen, i);
+			nCharKetas = NativeW::GetKetaOfChar(pData, nDataLen, i);
 		}
 //		if (nCharKetas == 0)				// 削除 サロゲートペア対策	2008/7/5 Uchi
 //			nCharKetas = LayoutInt(1);
@@ -1046,7 +1046,7 @@ void LayoutMgr::DUMP()
 		MYTRACE(_T("\tm_enumEOLType =%ls\n"),	pLayout->GetLayoutEol().GetName());
 		MYTRACE(_T("\tm_nEOLLen =%d\n"),		pLayout->GetLayoutEol().GetLen());
 		MYTRACE(_T("\tm_nTypePrev=%d\n"),		pLayout->GetColorTypePrev());
-		const wchar_t* pData = CDocReader(*m_pcDocLineMgr).GetLineStr(pLayout->GetLogicLineNo(), &nDataLen);
+		const wchar_t* pData = DocReader(*m_pcDocLineMgr).GetLineStr(pLayout->GetLogicLineNo(), &nDataLen);
 		MYTRACE(_T("\t[%ls]\n"), pData);
 		pLayout = pLayoutNext;
 	}

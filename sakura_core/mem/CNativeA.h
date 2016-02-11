@@ -25,20 +25,20 @@
 
 #include "CNative.h"
 
-class CNativeA : public CNative {
+class NativeA : public Native {
 public:
-	CNativeA();
-	CNativeA(const CNativeA& rhs);
-	CNativeA(const char* szData);
-	CNativeA(const char* pData, int nLength);
+	NativeA();
+	NativeA(const NativeA& rhs);
+	NativeA(const char* szData);
+	NativeA(const char* pData, int nLength);
 
 	// ネイティブ設定
 	void SetString(const char* pszData);                  //!< バッファの内容を置き換える
 	void SetString(const char* pData, int nDataLen);      //!< バッファの内容を置き換える。nDataLenは文字単位。
-	void SetNativeData(const CNativeA& pcNative);         //!< バッファの内容を置き換える
+	void SetNativeData(const NativeA& pcNative);         //!< バッファの内容を置き換える
 	void AppendString(const char* pszData);               //!< バッファの最後にデータを追加する
 	void AppendString(const char* pszData, int nLength);  //!< バッファの最後にデータを追加する。nLengthは文字単位。
-	void AppendNativeData(const CNativeA& pcNative);      //!< バッファの最後にデータを追加する
+	void AppendNativeData(const NativeA& pcNative);      //!< バッファの最後にデータを追加する
 	void AllocStringBuffer(int nDataLen);            //!< (重要：nDataLenは文字単位) バッファサイズの調整。必要に応じて拡大する。
 
 	// ネイティブ取得
@@ -53,8 +53,8 @@ public:
 	const char* GetStringPtr(int* pnLength) const; // [out]pnLengthは文字単位。
 
 	// 演算子
-	const CNativeA& operator = (char);
-	const CNativeA& operator += (char);
+	const NativeA& operator = (char);
+	const NativeA& operator += (char);
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                           変換                              //

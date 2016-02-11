@@ -5,33 +5,33 @@
 #include "doc/logic/CDocLine.h"
 
 
-void CModifyManager::OnAfterSave(const SaveInfo& sSaveInfo)
+void ModifyManager::OnAfterSave(const SaveInfo& sSaveInfo)
 {
 	EditDoc* pcDoc = GetListeningDoc();
 
 	// 行変更状態をすべてリセット
-	CModifyVisitor().ResetAllModifyFlag(&pcDoc->m_cDocLineMgr, pcDoc->m_cDocEditor.m_cOpeBuf.GetCurrentPointer());
+	ModifyVisitor().ResetAllModifyFlag(&pcDoc->m_cDocLineMgr, pcDoc->m_cDocEditor.m_cOpeBuf.GetCurrentPointer());
 }
 
-bool CModifyVisitor::IsLineModified(const CDocLine* pcDocLine, int saveSeq) const
+bool ModifyVisitor::IsLineModified(const DocLine* pcDocLine, int saveSeq) const
 {
 	return pcDocLine->m_sMark.m_cModified.GetSeq() != saveSeq;
 }
 
-int CModifyVisitor::GetLineModifiedSeq(const CDocLine* pcDocLine) const
+int ModifyVisitor::GetLineModifiedSeq(const DocLine* pcDocLine) const
 {
 	return pcDocLine->m_sMark.m_cModified.GetSeq();
 }
 
-void CModifyVisitor::SetLineModified(CDocLine* pcDocLine, int seq)
+void ModifyVisitor::SetLineModified(DocLine* pcDocLine, int seq)
 {
 	pcDocLine->m_sMark.m_cModified = seq;
 }
 
 // 行変更状態をすべてリセット
 /*
-  ・変更フラグCDocLineオブジェクト作成時にはTRUEである
-  ・変更回数はCDocLineオブジェクト作成時には1である
+  ・変更フラグDocLineオブジェクト作成時にはTRUEである
+  ・変更回数はDocLineオブジェクト作成時には1である
 
   ファイルを読み込んだときは変更フラグを FALSEにする
   ファイルを読み込んだときは変更回数を 0にする
@@ -42,11 +42,11 @@ void CModifyVisitor::SetLineModified(CDocLine* pcDocLine, int seq)
   変更回数はUndoしたときに-1される
   変更回数が0になった場合は変更フラグをFALSEにする
 */
-void CModifyVisitor::ResetAllModifyFlag(DocLineMgr* pcDocLineMgr, int seq)
+void ModifyVisitor::ResetAllModifyFlag(DocLineMgr* pcDocLineMgr, int seq)
 {
-	CDocLine* pDocLine = pcDocLineMgr->GetDocLineTop();
+	DocLine* pDocLine = pcDocLineMgr->GetDocLineTop();
 	while (pDocLine) {
-		CDocLine* pDocLineNext = pDocLine->GetNextLine();
+		DocLine* pDocLineNext = pDocLine->GetNextLine();
 		SetLineModified(pDocLine, seq);
 		pDocLine = pDocLineNext;
 	}

@@ -18,8 +18,8 @@
 #include "outline/CFuncInfo.h"
 
 
-// CFuncInfoArrクラス構築
-CFuncInfoArr::CFuncInfoArr()
+// FuncInfoArrクラス構築
+FuncInfoArr::FuncInfoArr()
 {
 	m_nFuncInfoArrNum = 0;		// 配列要素数
 	m_ppcFuncInfoArr = NULL;	// 配列
@@ -28,14 +28,14 @@ CFuncInfoArr::CFuncInfoArr()
 }
 
 
-// CFuncInfoArrクラス消滅
-CFuncInfoArr::~CFuncInfoArr()
+// FuncInfoArrクラス消滅
+FuncInfoArr::~FuncInfoArr()
 {
 	Empty();
 	return;
 }
 
-void CFuncInfoArr::Empty(void)
+void FuncInfoArr::Empty(void)
 {
 	if (m_nFuncInfoArrNum > 0 && m_ppcFuncInfoArr) {
 		for (int i=0; i<m_nFuncInfoArrNum; ++i) {
@@ -54,7 +54,7 @@ void CFuncInfoArr::Empty(void)
 
 // 0<=の指定番号のデータを返す
 // データがない場合はNULLを返す
-FuncInfo* CFuncInfoArr::GetAt(int nIdx)
+FuncInfo* FuncInfoArr::GetAt(int nIdx)
 {
 	if (nIdx >= m_nFuncInfoArrNum) {
 		return NULL;
@@ -63,7 +63,7 @@ FuncInfo* CFuncInfoArr::GetAt(int nIdx)
 }
 
 //! 配列の最後にデータを追加する
-void CFuncInfoArr::AppendData(FuncInfo* pcFuncInfo)
+void FuncInfoArr::AppendData(FuncInfo* pcFuncInfo)
 {
 	if (m_nFuncInfoArrNum == 0) {
 		m_ppcFuncInfoArr = (FuncInfo**)malloc(sizeof(FuncInfo*) * (m_nFuncInfoArrNum + 1));
@@ -80,7 +80,7 @@ void CFuncInfoArr::AppendData(FuncInfo* pcFuncInfo)
 
 	@date 2002.04.01 YAZAKI 深さ導入
 */
-void CFuncInfoArr::AppendData(
+void FuncInfoArr::AppendData(
 	LogicInt		nFuncLineCRLF,		//!< 関数のある行(CRLF単位)
 	LogicInt		nFuncColCRLF,		//!< 関数のある桁(CRLF単位)
 	LayoutInt		nFuncLineLAYOUT,	//!< 関数のある行(折り返し単位)
@@ -103,7 +103,7 @@ void CFuncInfoArr::AppendData(
 	return;
 }
 
-void CFuncInfoArr::AppendData(
+void FuncInfoArr::AppendData(
 	LogicInt			nFuncLineCRLF,		//!< 関数のある行(CRLF単位)
 	LogicInt			nFuncColCRLF,		//!< 関数のある桁(CRLF単位)
 	LayoutInt			nFuncLineLAYOUT,	//!< 関数のある行(折り返し単位)
@@ -125,7 +125,7 @@ void CFuncInfoArr::AppendData(
 }
 
 
-void CFuncInfoArr::AppendData(
+void FuncInfoArr::AppendData(
 	LogicInt		nFuncLineCRLF,		//!< 関数のある行(CRLF単位)
 	LayoutInt		nFuncLineLAYOUT,	//!< 関数のある行(折り返し単位)
 	const TCHAR*	pszFuncName,		//!< 関数名
@@ -144,7 +144,7 @@ void CFuncInfoArr::AppendData(
 	return;
 }
 
-void CFuncInfoArr::AppendData(
+void FuncInfoArr::AppendData(
 	LogicInt			nFuncLineCRLF,		//!< 関数のある行(CRLF単位)
 	LayoutInt			nFuncLineLAYOUT,	//!< 関数のある行(折り返し単位)
 	const NOT_TCHAR*	pszFuncName,		//!< 関数名
@@ -156,7 +156,7 @@ void CFuncInfoArr::AppendData(
 }
 
 
-void CFuncInfoArr::DUMP(void)
+void FuncInfoArr::DUMP(void)
 {
 #ifdef _DEBUG
 	MYTRACE(_T("=============================\n"));
@@ -173,7 +173,7 @@ void CFuncInfoArr::DUMP(void)
 #endif
 }
 
-void CFuncInfoArr::SetAppendText(
+void FuncInfoArr::SetAppendText(
 	int info,
 	const std::wstring& s,
 	bool overwrite
@@ -200,7 +200,7 @@ void CFuncInfoArr::SetAppendText(
 	}
 }
 
-std::wstring CFuncInfoArr::GetAppendText(int info)
+std::wstring FuncInfoArr::GetAppendText(int info)
 {
 	if (m_AppendTextArr.find(info) == m_AppendTextArr.end()) {
 		// キーが存在しない場合、空文字列を返す

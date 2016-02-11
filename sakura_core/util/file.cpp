@@ -266,7 +266,7 @@ void AddLastYenFromDirectoryPath(CHAR* pszFolder)
 		// フォルダの最後が半角かつ'\\'でない場合は、付加する
 		int	nFolderLen = auto_strlen(pszFolder);
 		if (0 < nFolderLen) {
-			int	nCharChars = &pszFolder[nFolderLen] - CNativeA::GetCharPrev(pszFolder, nFolderLen, &pszFolder[nFolderLen]);
+			int	nCharChars = &pszFolder[nFolderLen] - NativeA::GetCharPrev(pszFolder, nFolderLen, &pszFolder[nFolderLen]);
 			if (nCharChars == 1 && ('\\' == pszFolder[nFolderLen - 1] || '/' == pszFolder[nFolderLen - 1])) {
 			}else {
 				pszFolder[nFolderLen] = '\\';
@@ -526,7 +526,7 @@ void GetInidir(
 	TCHAR szPath[_MAX_PATH];
 
 	// sakura.ini のパスを取得
-	CFileNameManager::getInstance()->GetIniFileName( szPath, strProfileName.c_str() );
+	FileNameManager::getInstance()->GetIniFileName( szPath, strProfileName.c_str() );
 	if (!szFile) {
 		SplitPath_FolderAndFile( szPath, pDir, NULL );
 	}else {
@@ -567,7 +567,7 @@ void GetInidirOrExedir(
 	}
 
 	// EXE基準のフルパスが実在すればそのパスを返す
-	if (CShareData::getInstance()->IsPrivateSettings()) {	// INIとEXEでパスが異なる場合
+	if (ShareData::getInstance()->IsPrivateSettings()) {	// INIとEXEでパスが異なる場合
 		TCHAR szExedir[_MAX_PATH];
 		GetExedir(szExedir, szFile);
 		if (fexist(szExedir)) {
@@ -1207,7 +1207,7 @@ void GetStrTrancateWidth(
 	// できるだけ左側から表示
 	// \\server\dir...
 	const int nPathLen = auto_strlen(path);
-	CTextWidthCalc calc(hDC);
+	TextWidthCalc calc(hDC);
 	if (calc.GetTextWidth(path) <= nPxWidth) {
 		_tcsncpy_s(dest, nSize, path, _TRUNCATE);
 		return;
@@ -1249,7 +1249,7 @@ void GetShortViewPath(
 	int nLeft = 0; // 左側固定表示部分
 	int nSkipLevel = 1;
 	const int nPathLen = auto_strlen(path);
-	CTextWidthCalc calc(hDC);
+	TextWidthCalc calc(hDC);
 	if (calc.GetTextWidth(path) <= nPxWidth) {
 		// 全部表示可能
 		_tcsncpy_s(dest, nSize, path, _TRUNCATE);

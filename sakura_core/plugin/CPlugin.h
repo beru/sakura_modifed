@@ -62,26 +62,26 @@ typedef int PlugId;
 #define PII_OPTION					L"Option"		// オプション定義情報	// 2010/3/24 Uchi
 
 
-class CPlugin;
+class Plugin;
 
 // プラグ（プラグイン内の処理単位）クラス
-class CPlug {
+class Plug {
 	// 型定義
 protected:
 	typedef std::wstring wstring;
 public:
 	/*!
-	  CPlug::Arrayはstd::vectorなので、要素の追加削除（insert/erase）をすると
+	  Plug::Arrayはstd::vectorなので、要素の追加削除（insert/erase）をすると
 	  イテレータが無効になることがある。そのため変数に格納したイテレータを
 	  insert/eraseの第一引数に指定すると、VC2005でビルドエラーが出る。
 	  かわりにbegin/endからの相対位置指定や、インデックス指定を使うこと。
 	*/
-	typedef std::vector<CPlug*> Array;			// プラグのリスト
+	typedef std::vector<Plug*> Array;			// プラグのリスト
 	typedef Array::const_iterator ArrayIter;	// そのイテレータ
 
 	// コンストラクタ
 public:
-	CPlug(CPlugin& plugin, PlugId id, const wstring& sJack, const wstring& sHandler, const wstring& sLabel)
+	Plug(Plugin& plugin, PlugId id, const wstring& sJack, const wstring& sHandler, const wstring& sLabel)
 		:
 		m_id(id),
 		m_sJack(sJack),
@@ -92,11 +92,11 @@ public:
 	}
 	// デストラクタ
 public:
-	virtual ~CPlug() {}
+	virtual ~Plug() {}
 
 	// 操作
 public:
-	bool Invoke(CEditView* view, CWSHIfObj::List& params);	// プラグを実行する
+	bool Invoke(EditView* view, WSHIfObj::List& params);	// プラグを実行する
 
 	// 属性
 public:
@@ -162,24 +162,24 @@ public:
 	const wstring m_sHandler;			// ハンドラ文字列（関数名）
 	const wstring m_sLabel;				// ラベル文字列
 	wstring m_sIcon;					// アイコンのファイルパス
-	CPlugin& m_cPlugin;					// 親プラグイン
+	Plugin& m_cPlugin;					// 親プラグイン
 };
 
 // オプション定義	// 2010/3/24 Uchi
 std::vector<std::wstring> wstring_split(std::wstring, wchar_t);
 
-class CPluginOption {
+class PluginOption {
 	// 型定義
 protected:
 	typedef std::wstring wstring;
 public:
-	typedef std::vector<CPluginOption*> Array;	// オプションのリスト
+	typedef std::vector<PluginOption*> Array;	// オプションのリスト
 	typedef Array::const_iterator ArrayIter;	// そのイテレータ
 
 	// コンストラクタ
 public:
-	CPluginOption(
-		CPlugin* parent,
+	PluginOption(
+		Plugin* parent,
 		const wstring& sLabel,
 		const wstring& sSection,
 		const wstring& sKey,
@@ -203,7 +203,7 @@ public:
 
 	// デストラクタ
 public:
-	~CPluginOption() {}
+	~PluginOption() {}
 
 	// 操作
 public:
@@ -220,7 +220,7 @@ public:
 	wstring	GetDefaultVal() { return m_sDefaultVal; }
 
 protected:
-	CPlugin*	m_parent;
+	Plugin*	m_parent;
 	wstring		m_sLabel;
 	wstring		m_sSection;
 	wstring		m_sKey;
@@ -233,23 +233,23 @@ protected:
 
 // プラグインクラス
 
-class CPlugin {
+class Plugin {
 	// 型定義
 protected:
 	typedef std::wstring wstring;
 	typedef std::string string;
 
 public:
-	typedef std::list<CPlugin*> List;		// プラグインのリスト
+	typedef std::list<Plugin*> List;		// プラグインのリスト
 	typedef List::const_iterator ListIter;	// そのイテレータ
 
 	// コンストラクタ
 public:
-	CPlugin(const tstring& sBaseDir);
+	Plugin(const tstring& sBaseDir);
 
 	// デストラクタ
 public:
-	virtual ~CPlugin(void);
+	virtual ~Plugin(void);
 
 	// 操作
 public:
@@ -263,9 +263,9 @@ protected:
 	bool ReadPluginDefOption(DataProfile *cProfile, DataProfile *cProfileMlang);	// プラグイン定義ファイルのOptionセクションを読み込む	// 2010/3/24 Uchi
 	bool ReadPluginDefString(DataProfile *cProfile, DataProfile *cProfileMlang);	// プラグイン定義ファイルのStringセクションを読み込む
 
-	// CPlugインスタンスの作成。ReadPluginDefPlug/Command から呼ばれる。
-	virtual CPlug* CreatePlug(CPlugin& plugin, PlugId id, wstring sJack, wstring sHandler, wstring sLabel) {
-		return new CPlug(plugin, id, sJack, sHandler, sLabel);
+	// Plugインスタンスの作成。ReadPluginDefPlug/Command から呼ばれる。
+	virtual Plug* CreatePlug(Plugin& plugin, PlugId id, wstring sJack, wstring sHandler, wstring sLabel) {
+		return new Plug(plugin, id, sJack, sHandler, sLabel);
 	}
 
 //	void NormalizeExtList(const wstring& sExtList, wstring& sOut);	// カンマ区切り拡張子リストを正規化する
@@ -276,7 +276,7 @@ public:
 	tstring GetPluginDefPath() const { return GetFilePath(PII_FILENAME); }	// プラグイン定義ファイルのパス
 	tstring GetOptionPath() const { return m_sOptionDir + PII_OPTFILEEXT; }	// オプションファイルのパス
 	tstring GetFolderName() const;	// プラグインのフォルダ名を取得
-	virtual CPlug::Array GetPlugs() const = 0;								// プラグの一覧
+	virtual Plug::Array GetPlugs() const = 0;								// プラグの一覧
 
 	// メンバ変数
 public:
@@ -290,17 +290,17 @@ public:
 	tstring m_sBaseDir;
 	tstring m_sOptionDir;
 	tstring m_sLangName;		// 言語名
-	CPluginOption::Array m_options;		// オプション	// 2010/3/24 Uchi
+	PluginOption::Array m_options;		// オプション	// 2010/3/24 Uchi
 	std::vector<std::wstring> m_aStrings;	// 文字列
 private:
 	bool m_bLoaded;
 protected:
-	CPlug::Array m_plugs;
+	Plug::Array m_plugs;
 	int m_nCommandCount;
 
 	// 非実装提供
 public:
-	virtual bool InvokePlug(CEditView* view, CPlug& plug, CWSHIfObj::List& param) = 0;			// プラグを実行する
+	virtual bool InvokePlug(EditView* view, Plug& plug, WSHIfObj::List& param) = 0;			// プラグを実行する
 	virtual bool ReadPluginDef(DataProfile* cProfile, DataProfile* cProfileMlang) = 0;		// プラグイン定義ファイルを読み込む
 	virtual bool ReadPluginOption(DataProfile* cProfile) = 0;									// オプションファイルを読み込む
 };

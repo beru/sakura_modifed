@@ -54,14 +54,14 @@ static const DWORD p_helpids[] = {	//11000
 	@param wParam パラメータ1
 	@param lParam パラメータ2
 */
-INT_PTR CALLBACK CPropToolbar::DlgProc_page(
+INT_PTR CALLBACK PropToolbar::DlgProc_page(
 	HWND hwndDlg,
 	UINT uMsg,
 	WPARAM wParam,
 	LPARAM lParam
 	)
 {
-	return DlgProc(reinterpret_cast<pDispatchPage>(&CPropToolbar::DispatchEvent), hwndDlg, uMsg, wParam, lParam);
+	return DlgProc(reinterpret_cast<pDispatchPage>(&PropToolbar::DispatchEvent), hwndDlg, uMsg, wParam, lParam);
 }
 
 //	To Here Jun. 2, 2001 genta
@@ -134,7 +134,7 @@ static int nToolBarListBoxTopMargin = 0;
 
 
 // Toolbar メッセージ処理
-INT_PTR CPropToolbar::DispatchEvent(
+INT_PTR PropToolbar::DispatchEvent(
 	HWND	hwndDlg,	// handle to dialog box
 	UINT	uMsg,		// message
 	WPARAM	wParam,		// first message parameter
@@ -168,7 +168,7 @@ INT_PTR CPropToolbar::DispatchEvent(
 
 		{
 			// 2014.11.25 フォントの高さが正しくなかったバグを修正
-			CTextWidthCalc calc(hwndResList);
+			TextWidthCalc calc(hwndResList);
 			int nFontHeight = calc.GetTextHeight();
 			nListItemHeight = 18; //Oct. 18, 2000 JEPRO 「ツールバー」タブでの機能アイテムの行間を少し狭くして表示行数を増やした(20→18 これ以上小さくしても効果はないようだ)
 			if (nListItemHeight < nFontHeight) {
@@ -288,7 +288,7 @@ INT_PTR CPropToolbar::DispatchEvent(
 					}
 					//	From Here Apr. 13, 2002 genta
 					//	2010.06.25 Moca 折り返しのツールバーのボタン番号定数名を変更。最後ではなく固定値にする
-					nIndex1 = ::Listbox_INSERTDATA(hwndResList, nIndex1, CMenuDrawer::TOOLBAR_BUTTON_F_TOOLBARWRAP);
+					nIndex1 = ::Listbox_INSERTDATA(hwndResList, nIndex1, MenuDrawer::TOOLBAR_BUTTON_F_TOOLBARWRAP);
 					if (nIndex1 == LB_ERR || nIndex1 == LB_ERRSPACE) {
 						break;
 					}
@@ -462,7 +462,7 @@ INT_PTR CPropToolbar::DispatchEvent(
 }
 
 // ダイアログデータの設定 Toolbar
-void CPropToolbar::SetData(HWND hwndDlg)
+void PropToolbar::SetData(HWND hwndDlg)
 {
 	// 機能種別一覧に文字列をセット(コンボボックス)
 	HWND hwndCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_FUNCKIND);
@@ -476,7 +476,7 @@ void CPropToolbar::SetData(HWND hwndDlg)
 	HWND hwndResList = ::GetDlgItem(hwndDlg, IDC_LIST_RES);
 
 	// 2014.11.25 フォントの高さが正しくなかったバグを修正
-	int nFontHeight = CTextWidthCalc(hwndResList).GetTextHeight();
+	int nFontHeight = TextWidthCalc(hwndResList).GetTextHeight();
 
 	int nListItemHeight = 18; // Oct. 18, 2000 JEPRO 「ツールバー」タブでのツールバーアイテムの行間を少し狭くして表示行数を増やした(20→18 これ以上小さくしても効果はないようだ)
 	if (nListItemHeight < nFontHeight) {
@@ -505,7 +505,7 @@ void CPropToolbar::SetData(HWND hwndDlg)
 
 
 // ダイアログデータの取得 Toolbar
-int CPropToolbar::GetData(HWND hwndDlg)
+int PropToolbar::GetData(HWND hwndDlg)
 {
 	HWND hwndResList = ::GetDlgItem(hwndDlg, IDC_LIST_RES);
 	auto& csToolBar = m_Common.m_sToolBar;
@@ -534,7 +534,7 @@ int CPropToolbar::GetData(HWND hwndDlg)
 	@date 2005.08.09 aroka CPropCommon.cpp から移動
 	@date 2007.11.02 ryoji ボタンとセパレータとで処理を分ける
 */
-void CPropToolbar::DrawToolBarItemList(DRAWITEMSTRUCT* pDis)
+void PropToolbar::DrawToolBarItemList(DRAWITEMSTRUCT* pDis)
 {
 	TBBUTTON	tbb;
 
@@ -552,7 +552,7 @@ void CPropToolbar::DrawToolBarItemList(DRAWITEMSTRUCT* pDis)
 	if ((int)pDis->itemID < 0) {
 	}else {
 
-//@@@ 2002.01.03 YAZAKI m_tbMyButtonなどをCShareDataからCMenuDrawerへ移動したことによる修正。
+//@@@ 2002.01.03 YAZAKI m_tbMyButtonなどをCShareDataからMenuDrawerへ移動したことによる修正。
 //		tbb = m_cShareData.m_tbMyButton[pDis->itemData];
 //		tbb = m_pcMenuDrawer->m_tbMyButton[pDis->itemData];
 		tbb = m_pcMenuDrawer->getButton(pDis->itemData);

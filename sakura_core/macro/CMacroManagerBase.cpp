@@ -33,10 +33,10 @@
 #include "cmd/CViewCommander_inline.h"
 #include "COpeBlk.h"
 
-// CMacroBeforeAfter
+// MacroBeforeAfter
 
-void CMacroBeforeAfter::ExecKeyMacroBefore(
-	class CEditView* pcEditView,
+void MacroBeforeAfter::ExecKeyMacroBefore(
+	class EditView* pcEditView,
 	int flags
 	)
 {
@@ -49,8 +49,8 @@ void CMacroBeforeAfter::ExecKeyMacroBefore(
 	m_bDrawSwitchOld = pcEditView->GetDrawSwitch();
 }
 
-void CMacroBeforeAfter::ExecKeyMacroAfter(
-	class CEditView* pcEditView,
+void MacroBeforeAfter::ExecKeyMacroAfter(
+	class EditView* pcEditView,
 	int flags,
 	bool bRet
 	)
@@ -72,19 +72,19 @@ void CMacroBeforeAfter::ExecKeyMacroAfter(
 	pcEditView->m_pcEditWnd->SetDrawSwitchOfAllViews(m_bDrawSwitchOld);
 }
 
-// CMacroManagerBase
+// MacroManagerBase
 // デフォルトのコンストラクタ・デストラクタ
 
-CMacroManagerBase::CMacroManagerBase()
+MacroManagerBase::MacroManagerBase()
 	:
 	m_nReady(false)
 {}
 
-CMacroManagerBase::~CMacroManagerBase()
+MacroManagerBase::~MacroManagerBase()
 {}
 
-void CMacroManagerBase::ExecKeyMacro2(
-	class CEditView* pcEditView,
+void MacroManagerBase::ExecKeyMacro2(
+	class EditView* pcEditView,
 	int flags
 	)
 {

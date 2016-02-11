@@ -201,7 +201,7 @@ ECodeType CodeMediator::CheckKanjiCodeOfFile(const TCHAR* pszFile)
 	}
 
 	// データ確保
-	CMemory cMem;
+	Memory cMem;
 	cMem.AllocBuffer(nBufLen);
 	void* pBuf = cMem.GetRawPtr();
 

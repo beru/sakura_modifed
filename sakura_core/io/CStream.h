@@ -23,20 +23,20 @@
 */
 #pragma once
 
-class CFileAttribute;
+class FileAttribute;
 
 // 例外
-class CError_FileOpen {};	// 例外：ファイルオープンに失敗
-class CError_FileWrite {};	// 例外：ファイル書き込み失敗
-class CError_FileRead {};	// 例外：ファイル読み込み失敗
+class Error_FileOpen {};	// 例外：ファイルオープンに失敗
+class Error_FileWrite {};	// 例外：ファイル書き込み失敗
+class Error_FileRead {};	// 例外：ファイル読み込み失敗
 
 // ストリーム基底クラス
-class CStream {
+class Stream {
 public:
 	// コンストラクタ・デストラクタ
-	CStream(const TCHAR* tszPath, const TCHAR* tszMode, bool bExceptionMode = false);
-//	CStream();
-	virtual ~CStream();
+	Stream(const TCHAR* tszPath, const TCHAR* tszMode, bool bExceptionMode = false);
+//	Stream();
+	virtual ~Stream();
 
 	// 演算子
 	operator bool() const { return Good(); }
@@ -64,16 +64,16 @@ public:
 	bool IsExceptionMode() const { return m_bExceptionMode; }
 private:
 	FILE*			m_fp;
-	CFileAttribute*	m_pcFileAttribute;
+	FileAttribute*	m_pcFileAttribute;
 	bool			m_bExceptionMode;
 };
 
 
-class COutputStream : public CStream {
+class OutputStream : public Stream {
 public:
-	COutputStream(const TCHAR* tszPath, const TCHAR* tszMode, bool bExceptionMode = false)
+	OutputStream(const TCHAR* tszPath, const TCHAR* tszMode, bool bExceptionMode = false)
 		:
-		CStream(tszPath, tszMode, bExceptionMode)
+		Stream(tszPath, tszMode, bExceptionMode)
 	{
 	}
 
@@ -81,7 +81,7 @@ public:
 	int Write(const void* pBuffer, int nSizeInBytes) {
 		int nRet = fwrite(pBuffer, 1, nSizeInBytes, GetFp());
 		if (nRet != nSizeInBytes && IsExceptionMode()) {
-			throw CError_FileWrite();
+			throw Error_FileWrite();
 		}
 		return nRet;
 	}

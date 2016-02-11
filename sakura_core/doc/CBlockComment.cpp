@@ -16,7 +16,7 @@
 #include "CBlockComment.h"
 #include "mem/CMemory.h"
 
-CBlockComment::CBlockComment()
+BlockComment::BlockComment()
 {
 	m_szBlockCommentFrom[0] = '\0';
 	m_szBlockCommentTo[0] = '\0';
@@ -27,7 +27,7 @@ CBlockComment::CBlockComment()
 /*!
 	ブロックコメントデリミタをコピーする
 */
-void CBlockComment::SetBlockCommentRule(
+void BlockComment::SetBlockCommentRule(
 	const wchar_t* pszFrom,	// [in] コメント開始文字列
 	const wchar_t* pszTo	// [in] コメント終了文字列
 	)
@@ -56,7 +56,7 @@ void CBlockComment::SetBlockCommentRule(
 	@retval true  一致した
 	@retval false 一致しなかった
 */
-bool CBlockComment::Match_CommentFrom(
+bool BlockComment::Match_CommentFrom(
 	int					nPos,		// [in] 探索開始位置
 	const CStringRef&	cStr		// [in] 探索対象文字列 ※探索開始位置のポインタではないことに注意
 	/*
@@ -79,7 +79,7 @@ bool CBlockComment::Match_CommentFrom(
 
 	@return 当てはまった位置を返すが、当てはまらなかったときは、nLineLenをそのまま返す。
 */
-int CBlockComment::Match_CommentTo(
+int BlockComment::Match_CommentTo(
 	int					nPos,		// [in] 探索開始位置
 	const CStringRef&	cStr		// [in] 探索対象文字列 ※探索開始位置のポインタではないことに注意
 	/*

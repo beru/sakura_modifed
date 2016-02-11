@@ -33,7 +33,7 @@
 //               コンストラクタ・デストラクタ                  //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-CAutoReloadAgent::CAutoReloadAgent()
+AutoReloadAgent::AutoReloadAgent()
 	:
 	m_eWatchUpdate(WU_QUERY),
 	m_nPauseCount(0)
@@ -45,14 +45,14 @@ CAutoReloadAgent::CAutoReloadAgent()
 //                        セーブ前後                           //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-void CAutoReloadAgent::OnBeforeSave(const SaveInfo& sSaveInfo)
+void AutoReloadAgent::OnBeforeSave(const SaveInfo& sSaveInfo)
 {
 	//	Sep. 7, 2003 genta
 	//	保存が完了するまではファイル更新の通知を抑制する
 	PauseWatching();
 }
 
-void CAutoReloadAgent::OnAfterSave(const SaveInfo& sSaveInfo)
+void AutoReloadAgent::OnAfterSave(const SaveInfo& sSaveInfo)
 {
 	//	Sep. 7, 2003 genta
 	//	ファイル更新の通知を元に戻す
@@ -69,7 +69,7 @@ void CAutoReloadAgent::OnAfterSave(const SaveInfo& sSaveInfo)
 //                        ロード前後                           //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-void CAutoReloadAgent::OnAfterLoad(const LoadInfo& sLoadInfo)
+void AutoReloadAgent::OnAfterLoad(const LoadInfo& sLoadInfo)
 {
 	//pcDoc->m_cDocFile.m_sFileInfo.cFileTime.SetFILETIME(ftime); //#####既に設定済みのはず
 }
@@ -78,7 +78,7 @@ void CAutoReloadAgent::OnAfterLoad(const LoadInfo& sLoadInfo)
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                         各種判定                            //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-bool CAutoReloadAgent::_ToDoChecking() const
+bool AutoReloadAgent::_ToDoChecking() const
 {
 	const CommonSetting_File& setting = GetDllShareData().m_common.m_sFile;
 	HWND hwndActive = ::GetActiveWindow();
@@ -88,7 +88,7 @@ bool CAutoReloadAgent::_ToDoChecking() const
 		|| m_eWatchUpdate == WU_NONE
 		|| setting.m_nFileShareMode != SHAREMODE_NOT_EXCLUSIVE	 // ファイルの排他制御モード
 		|| !hwndActive		// アクティブ？
-		|| hwndActive != CEditWnd::getInstance()->GetHwnd()
+		|| hwndActive != EditWnd::getInstance()->GetHwnd()
 		|| !GetListeningDoc()->m_cDocFile.GetFilePathClass().IsValidPath()
 		|| GetListeningDoc()->m_cDocFile.IsFileTimeZero()	// 現在編集中のファイルのタイムスタンプ
 		|| GetListeningDoc()->m_pcEditWnd->m_pPrintPreview	// 印刷プレビュー中	2013/5/8 Uchi
@@ -98,7 +98,7 @@ bool CAutoReloadAgent::_ToDoChecking() const
 	return true;
 }
 
-bool CAutoReloadAgent::_IsFileUpdatedByOther(FILETIME* pNewFileTime) const
+bool AutoReloadAgent::_IsFileUpdatedByOther(FILETIME* pNewFileTime) const
 {
 	// ファイルスタンプをチェックする
 	// 2005.10.20 ryoji FindFirstFileを使うように変更（ファイルがロックされていてもタイムスタンプ取得可能）
@@ -117,7 +117,7 @@ bool CAutoReloadAgent::_IsFileUpdatedByOther(FILETIME* pNewFileTime) const
 }
 
 // ファイルのタイムスタンプのチェック処理
-void CAutoReloadAgent::CheckFileTimeStamp()
+void AutoReloadAgent::CheckFileTimeStamp()
 {
 	// 未編集で再ロード時の遅延
 	if (m_eWatchUpdate == WU_AUTOLOAD) {
@@ -167,10 +167,10 @@ void CAutoReloadAgent::CheckFileTimeStamp()
 		{
 			PauseWatching(); // 更新監視の抑制
 
-			CDlgFileUpdateQuery dlg(pcDoc->m_cDocFile.GetFilePath(), pcDoc->m_cDocEditor.IsModified());
+			DlgFileUpdateQuery dlg(pcDoc->m_cDocFile.GetFilePath(), pcDoc->m_cDocEditor.IsModified());
 			int result = dlg.DoModal(
 				G_AppInstance(),
-				CEditWnd::getInstance()->GetHwnd(),
+				EditWnd::getInstance()->GetHwnd(),
 				IDD_FILEUPDATEQUERY,
 				0
 			);

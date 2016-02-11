@@ -27,10 +27,10 @@
 struct EditNode;
 
 // EditNode(ウィンドウリスト)の履歴を管理 (RECENT_FOR_EDITNODE)
-class CRecentEditNode : public CRecentImp<EditNode> {
+class RecentEditNode : public RecentImp<EditNode> {
 public:
 	// 生成
-	CRecentEditNode();
+	RecentEditNode();
 
 	// オーバーライド
 	int				CompareItem(const EditNode* p1, const EditNode* p2) const;

@@ -26,7 +26,7 @@
 #include "sakura_rc.h"
 #include "sakura.hh"
 
-// ファイル内容比較 CDlgCompare.cpp	//@@@ 2002.01.07 add start MIK
+// ファイル内容比較 DlgCompare.cpp	//@@@ 2002.01.07 add start MIK
 const DWORD p_helpids[] = {	//12300
 //	IDC_STATIC,						-1,
 	IDOK,							HIDOK_CMP,					// OK
@@ -47,8 +47,8 @@ static const AnchorListItem anchorList[] = {
 	{IDC_STATIC_COMPARESRC, ANCHOR_LEFT_RIGHT},
 };
 
-CDlgCompare::CDlgCompare()
-	: CDialog(true)
+DlgCompare::DlgCompare()
+	: Dialog(true)
 {
 	// サイズ変更時に位置を制御するコントロール数
 	assert(_countof(anchorList) == _countof(m_rcItems));
@@ -62,7 +62,7 @@ CDlgCompare::CDlgCompare()
 
 
 // モーダルダイアログの表示
-int CDlgCompare::DoModal(
+int DlgCompare::DoModal(
 	HINSTANCE		hInstance,
 	HWND			hwndParent,
 	LPARAM			lParam,
@@ -74,10 +74,10 @@ int CDlgCompare::DoModal(
 	m_pszPath = pszPath;
 	m_pszCompareLabel = pszCompareLabel;
 	m_phwndCompareWnd = phwndCompareWnd;
-	return CDialog::DoModal(hInstance, hwndParent, IDD_COMPARE, lParam);
+	return Dialog::DoModal(hInstance, hwndParent, IDD_COMPARE, lParam);
 }
 
-BOOL CDlgCompare::OnBnClicked(int wID)
+BOOL DlgCompare::OnBnClicked(int wID)
 {
 	switch (wID) {
 	case IDC_BUTTON_HELP:
@@ -86,7 +86,7 @@ BOOL CDlgCompare::OnBnClicked(int wID)
 		MyWinHelp(GetHwnd(), HELP_CONTEXT, ::FuncID_To_HelpContextID(F_COMPARE));	// 2006.10.10 ryoji MyWinHelpに変更に変更
 		return TRUE;
 // From Here Oct. 10, 2000 JEPRO added  Ref. code はCDlgFind.cpp の OnBnClicked
-// チェックボックスをボタン化してCDlgCompare.cppに直接書き込んでみたが失敗
+// チェックボックスをボタン化してDlgCompare.cppに直接書き込んでみたが失敗
 // ダイアログのボタンは下に不可視化しておいてあります。
 // 以下の追加コードは全部消して結構ですから誰か作ってください。水平スクロールも入れてくれるとなおうれしいです。
 //	case IDC_BUTTON1:	/* 上下に表示 */
@@ -119,12 +119,12 @@ BOOL CDlgCompare::OnBnClicked(int wID)
 		return TRUE;
 	}
 	// 基底クラスメンバ
-	return CDialog::OnBnClicked(wID);
+	return Dialog::OnBnClicked(wID);
 }
 
 
 // ダイアログデータの設定
-void CDlgCompare::SetData(void)
+void DlgCompare::SetData(void)
 {
 	EditNode*	pEditNodeArr;
 	TCHAR		szMenu[512];
@@ -136,10 +136,10 @@ void CDlgCompare::SetData(void)
 //	setlocale (LC_ALL, "C");
 
 	// 現在開いている編集窓のリストをメニューにする
-	int nRowNum = CAppNodeManager::getInstance()->GetOpenedWindowArr(&pEditNodeArr, TRUE);
+	int nRowNum = AppNodeManager::getInstance()->GetOpenedWindowArr(&pEditNodeArr, TRUE);
 	if (nRowNum > 0) {
 		// 水平スクロール幅は実際に表示する文字列の幅を計測して決める	// 2009.09.26 ryoji
-		CTextWidthCalc calc(hwndList);
+		TextWidthCalc calc(hwndList);
 		int score = 0;
 		TCHAR szFile1[_MAX_PATH];
 		SplitPath_FolderAndFile(m_pszPath, NULL, szFile1);
@@ -149,14 +149,14 @@ void CDlgCompare::SetData(void)
 			EditInfo* pfi = (EditInfo*)&m_pShareData->m_workBuffer.m_EditInfo_MYWM_GETFILEINFO;
 
 //@@@ 2001.12.26 YAZAKI ファイル名で比較すると(無題)だったときに問題同士の比較ができない
-			if (pEditNodeArr[i].GetHwnd() == CEditWnd::getInstance()->GetHwnd()) {
+			if (pEditNodeArr[i].GetHwnd() == EditWnd::getInstance()->GetHwnd()) {
 				// 2010.07.30 自分の名前もここから設定する
-				CFileNameManager::getInstance()->GetMenuFullLabel_WinListNoEscape( szMenu, _countof(szMenu), pfi, pEditNodeArr[i].m_nId, -1, calc.GetDC() );
+				FileNameManager::getInstance()->GetMenuFullLabel_WinListNoEscape( szMenu, _countof(szMenu), pfi, pEditNodeArr[i].m_nId, -1, calc.GetDC() );
 				SetItemText(IDC_STATIC_COMPARESRC, szMenu);
 				continue;
 			}
 			// 番号は ウィンドウリストと同じになるようにする
-			CFileNameManager::getInstance()->GetMenuFullLabel_WinListNoEscape( szMenu, _countof(szMenu), pfi, pEditNodeArr[i].m_nId, i, calc.GetDC() );
+			FileNameManager::getInstance()->GetMenuFullLabel_WinListNoEscape( szMenu, _countof(szMenu), pfi, pEditNodeArr[i].m_nId, i, calc.GetDC() );
 
 			int nItem = ::List_AddString(hwndList, szMenu);
 			List_SetItemData(hwndList, nItem, pEditNodeArr[i].GetHwnd());
@@ -196,7 +196,7 @@ void CDlgCompare::SetData(void)
 
 // ダイアログデータの取得
 // TRUE==正常  FALSE==入力エラー
-int CDlgCompare::GetData(void)
+int DlgCompare::GetData(void)
 {
 	HWND hwndList = GetItemHwnd(IDC_LIST_FILES);
 	int nItem = List_GetCurSel(hwndList);
@@ -209,9 +209,9 @@ int CDlgCompare::GetData(void)
 		EditInfo* pfi = (EditInfo*)&m_pShareData->m_workBuffer.m_EditInfo_MYWM_GETFILEINFO;
 
 		// 2010.07.30 パス名はやめて表示名に変更
-		int nId = CAppNodeManager::getInstance()->GetEditNode(*m_phwndCompareWnd)->GetId();
-		CTextWidthCalc calc(hwndList);
-		CFileNameManager::getInstance()->GetMenuFullLabel_WinListNoEscape( m_pszCompareLabel, _MAX_PATH/*長さ不明*/, pfi, nId, -1, calc.GetDC() );
+		int nId = AppNodeManager::getInstance()->GetEditNode(*m_phwndCompareWnd)->GetId();
+		TextWidthCalc calc(hwndList);
+		FileNameManager::getInstance()->GetMenuFullLabel_WinListNoEscape( m_pszCompareLabel, _MAX_PATH/*長さ不明*/, pfi, nId, -1, calc.GetDC() );
 
 		// 左右に並べて表示
 		m_bCompareAndTileHorz = IsButtonChecked(IDC_CHECK_TILE_H);
@@ -221,22 +221,22 @@ int CDlgCompare::GetData(void)
 }
 
 //@@@ 2002.01.18 add start
-LPVOID CDlgCompare::GetHelpIdTable(void)
+LPVOID DlgCompare::GetHelpIdTable(void)
 {
 	return (LPVOID)p_helpids;
 }
 //@@@ 2002.01.18 add end
 
-INT_PTR CDlgCompare::DispatchEvent(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM lParam)
+INT_PTR DlgCompare::DispatchEvent(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM lParam)
 {
-	INT_PTR result = CDialog::DispatchEvent(hWnd, wMsg, wParam, lParam);
+	INT_PTR result = Dialog::DispatchEvent(hWnd, wMsg, wParam, lParam);
 	if (wMsg == WM_GETMINMAXINFO) {
 		return OnMinMaxInfo(lParam);
 	}
 	return result;
 }
 
-BOOL CDlgCompare::OnInitDialog(
+BOOL DlgCompare::OnInitDialog(
 	HWND hwndDlg,
 	WPARAM wParam,
 	LPARAM lParam
@@ -245,7 +245,7 @@ BOOL CDlgCompare::OnInitDialog(
 	_SetHwnd(hwndDlg);
 
 	CreateSizeBox();
-	CDialog::OnSize();
+	Dialog::OnSize();
 	
 	RECT rc;
 	::GetWindowRect(hwndDlg, &rc);
@@ -266,13 +266,13 @@ BOOL CDlgCompare::OnInitDialog(
 		m_nHeight = rcDialog.bottom - rcDialog.top;
 	}
 
-	return CDialog::OnInitDialog(hwndDlg, wParam, lParam);
+	return Dialog::OnInitDialog(hwndDlg, wParam, lParam);
 }
 
-BOOL CDlgCompare::OnSize(WPARAM wParam, LPARAM lParam)
+BOOL DlgCompare::OnSize(WPARAM wParam, LPARAM lParam)
 {
 	// 基底クラスメンバ
-	CDialog::OnSize(wParam, lParam);
+	Dialog::OnSize(wParam, lParam);
 
 	GetWindowRect(&GetDllShareData().m_common.m_sOthers.m_rcCompareDialog);
 
@@ -288,13 +288,13 @@ BOOL CDlgCompare::OnSize(WPARAM wParam, LPARAM lParam)
 	return TRUE;
 }
 
-BOOL CDlgCompare::OnMove(WPARAM wParam, LPARAM lParam)
+BOOL DlgCompare::OnMove(WPARAM wParam, LPARAM lParam)
 {
 	GetWindowRect(&GetDllShareData().m_common.m_sOthers.m_rcCompareDialog);
-	return CDialog::OnMove(wParam, lParam);
+	return Dialog::OnMove(wParam, lParam);
 }
 
-BOOL CDlgCompare::OnMinMaxInfo(LPARAM lParam)
+BOOL DlgCompare::OnMinMaxInfo(LPARAM lParam)
 {
 	LPMINMAXINFO lpmmi = (LPMINMAXINFO) lParam;
 	if (m_ptDefaultSize.x < 0) {

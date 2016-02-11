@@ -23,16 +23,16 @@
 */
 #pragma once
 
-class CTextArea;
-class CEditView;
+class TextArea;
+class EditView;
 class EditDoc;
-class CTextMetrics;
-class CGraphics;
+class TextMetrics;
+class Graphics;
 
-class CRuler {
+class Ruler {
 public:
-	CRuler(const CEditView* pEditView, const EditDoc* pEditDoc);
-	virtual ~CRuler();
+	Ruler(const EditView* pEditView, const EditDoc* pEditDoc);
+	virtual ~Ruler();
 	
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                     インターフェース                        //
@@ -42,23 +42,23 @@ public:
 	void DispRuler(HDC);
 	
 	// ルーラーの背景のみ描画 2007.08.29 kobake 追加
-	void DrawRulerBg(CGraphics& gr);
+	void DrawRulerBg(Graphics& gr);
 	
 	void SetRedrawFlag() { m_bRedrawRuler = true; }
 	bool GetRedrawFlag() { return m_bRedrawRuler; }
 	
 private:
 	// ルーラーのキャレットのみ描画 2002.02.25 Add By KK
-	void DrawRulerCaret(CGraphics& gr);
+	void DrawRulerCaret(Graphics& gr);
 	
-	void _DrawRulerCaret(CGraphics& gr, int nCaretDrawX, int nCaretWidth);
+	void _DrawRulerCaret(Graphics& gr, int nCaretDrawX, int nCaretWidth);
 	
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                       メンバ変数群                          //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 private:
 	// 参照
-	const CEditView*	m_pEditView;
+	const EditView*	m_pEditView;
 	const EditDoc*		m_pEditDoc;
 	
 	// 状態

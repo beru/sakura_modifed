@@ -1,7 +1,7 @@
 #include "StdAfx.h"
 #include "CSoundSet.h"
 
-void CSoundSet::NeedlessToSaveBeep()
+void SoundSet::NeedlessToSaveBeep()
 {
 	if (m_nMuteCount >= 1)
 		return;

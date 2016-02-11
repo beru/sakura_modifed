@@ -51,16 +51,16 @@ ECallbackResult SaveAgent::OnCheckSave(SaveInfo* pSaveInfo)
 		&& pSaveInfo->IsSamePath(pcDoc->m_cDocFile.GetFilePath())
 	) {
 		ErrorBeep();
-		TopErrorMessage(CEditWnd::getInstance()->GetHwnd(), LS(STR_SAVEAGENT_VIEW_FILE));
+		TopErrorMessage(EditWnd::getInstance()->GetHwnd(), LS(STR_SAVEAGENT_VIEW_FILE));
 		return CALLBACK_INTERRUPT;
 	}
 
 	// 他ウィンドウで開いているか確認する	// 2009.04.07 ryoji
 	if (!pSaveInfo->IsSamePath(pcDoc->m_cDocFile.GetFilePath())) {
 		HWND hwndOwner;
-		if (CShareData::getInstance()->IsPathOpened(pSaveInfo->cFilePath, &hwndOwner)) {
+		if (ShareData::getInstance()->IsPathOpened(pSaveInfo->cFilePath, &hwndOwner)) {
 			ErrorMessage(
-				CEditWnd::getInstance()->GetHwnd(),
+				EditWnd::getInstance()->GetHwnd(),
 				LS(STR_SAVEAGENT_OTHER),
 				(LPCTSTR)pSaveInfo->cFilePath
 			);
@@ -78,18 +78,18 @@ ECallbackResult SaveAgent::OnCheckSave(SaveInfo* pSaveInfo)
 		}
 		try {
 			bool bExist = fexist(pSaveInfo->cFilePath);
-			CStream out(pSaveInfo->cFilePath, _T("ab"), true);	// 実際の保存は "wb" だがここは "ab"（ファイル内容は破棄しない）でチェックする	// 2009.08.21 ryoji
+			Stream out(pSaveInfo->cFilePath, _T("ab"), true);	// 実際の保存は "wb" だがここは "ab"（ファイル内容は破棄しない）でチェックする	// 2009.08.21 ryoji
 			out.Close();
 			if (!bExist) {
 				::DeleteFile(pSaveInfo->cFilePath);
 			}
-		}catch (CError_FileOpen) {
+		}catch (Error_FileOpen) {
 			// ※ たとえ上書き保存の場合でもここでの失敗では書込み禁止へは遷移しない
 			if (bLock) {
 				pcDoc->m_cDocFileOperation.DoFileLock(false);
 			}
 			ErrorMessage(
-				CEditWnd::getInstance()->GetHwnd(),
+				EditWnd::getInstance()->GetHwnd(),
 				LS(STR_SAVEAGENT_OTHER_APP),
 				pSaveInfo->cFilePath.c_str()
 			);
@@ -107,7 +107,7 @@ void SaveAgent::OnBeforeSave(const SaveInfo& sSaveInfo)
 	EditDoc* pcDoc = GetListeningDoc();
 
 	// 改行コード統一
-	CDocVisitor(pcDoc).SetAllEol(sSaveInfo.cEol);
+	DocVisitor(pcDoc).SetAllEol(sSaveInfo.cEol);
 }
 
 void SaveAgent::OnSave(const SaveInfo& sSaveInfo)
@@ -116,7 +116,7 @@ void SaveAgent::OnSave(const SaveInfo& sSaveInfo)
 
 	// カキコ
 	WriteManager cWriter;
-	CEditApp::getInstance()->m_pcVisualProgress->ProgressListener::Listen(&cWriter);
+	EditApp::getInstance()->m_pcVisualProgress->ProgressListener::Listen(&cWriter);
 	cWriter.WriteFile_From_CDocLineMgr(
 		pcDoc->m_cDocLineMgr,
 		sSaveInfo

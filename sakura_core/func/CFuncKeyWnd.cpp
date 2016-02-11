@@ -38,8 +38,8 @@ LRESULT CALLBACK CFuncKeyWndProc(
 	LPARAM	lParam 	// second message parameter
 )
 {
-	CFuncKeyWnd*	pCFuncKeyWnd;
-	pCFuncKeyWnd = (CFuncKeyWnd*)::GetWindowLongPtr(hwnd, GWLP_USERDATA);
+	FuncKeyWnd*	pCFuncKeyWnd;
+	pCFuncKeyWnd = (FuncKeyWnd*)::GetWindowLongPtr(hwnd, GWLP_USERDATA);
 	if (pCFuncKeyWnd) {
 		return pCFuncKeyWnd->DispatchEvent(hwnd, uMsg, wParam, lParam);
 	}
@@ -49,9 +49,9 @@ LRESULT CALLBACK CFuncKeyWndProc(
 
 
 // @date 2002.2.17 YAZAKI CShareDataのインスタンスは、CProcessにひとつあるのみ。
-CFuncKeyWnd::CFuncKeyWnd()
+FuncKeyWnd::FuncKeyWnd()
 	:
-	CWnd(_T("::CFuncKeyWnd"))
+	Wnd(_T("::FuncKeyWnd"))
 {
 	m_pcEditDoc = NULL;
 	// 共有データ構造体のアドレスを返す
@@ -94,7 +94,7 @@ CFuncKeyWnd::CFuncKeyWnd()
 }
 
 
-CFuncKeyWnd::~CFuncKeyWnd()
+FuncKeyWnd::~FuncKeyWnd()
 {
 	// 表示用フォント
 	::DeleteObject(m_hFont);
@@ -102,14 +102,14 @@ CFuncKeyWnd::~CFuncKeyWnd()
 }
 
 // ウィンドウ オープン
-HWND CFuncKeyWnd::Open(
+HWND FuncKeyWnd::Open(
 	HINSTANCE	hInstance,
 	HWND		hwndParent,
 	EditDoc*	pCEditDoc,
 	bool		bSizeBox
 )
 {
-	LPCTSTR pszClassName = _T("CFuncKeyWnd");
+	LPCTSTR pszClassName = _T("FuncKeyWnd");
 
 	m_pcEditDoc = pCEditDoc;
 	m_bSizeBox = bSizeBox;
@@ -134,7 +134,7 @@ HWND CFuncKeyWnd::Open(
 	);
 
 	// 基底クラスメンバ呼び出し
-	CWnd::Create(
+	Wnd::Create(
 		hwndParent,
 		0,								// extended window style
 		pszClassName,					// Pointer to a null-terminated string or is an atom.
@@ -177,19 +177,19 @@ HWND CFuncKeyWnd::Open(
 
 
 // ウィンドウ クローズ
-void CFuncKeyWnd::Close(void)
+void FuncKeyWnd::Close(void)
 {
 	this->DestroyWindow();
 }
 
 
 //// WM_SIZE処理
-//void CFuncKeyWnd::OnSize(
+//void FuncKeyWnd::OnSize(
 //	WPARAM	wParam,	// first message parameter
 //	LPARAM	lParam 	// second message parameter
 
 // WM_SIZE処理
-LRESULT CFuncKeyWnd::OnSize(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+LRESULT FuncKeyWnd::OnSize(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	if (!GetHwnd()) {
 		return 0L;
@@ -220,7 +220,7 @@ LRESULT CFuncKeyWnd::OnSize(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 
 #if 0//////////////////////////////////////////////////////////////
-LRESULT CFuncKeyWnd::DispatchEvent(
+LRESULT FuncKeyWnd::DispatchEvent(
 	HWND	hwnd,	// handle of window
 	UINT	uMsg,	// message identifier
 	WPARAM	wParam,	// first message parameter
@@ -243,7 +243,7 @@ LRESULT CFuncKeyWnd::DispatchEvent(
 #endif//////////////////////////////////////////////////////////////
 
 
-LRESULT CFuncKeyWnd::OnCommand(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
+LRESULT FuncKeyWnd::OnCommand(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	HWND hwndCtl = (HWND) lParam;		// handle of control
 //	switch (wNotifyCode) {
@@ -264,7 +264,7 @@ LRESULT CFuncKeyWnd::OnCommand(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam
 
 
 // WM_TIMERタイマーの処理
-LRESULT CFuncKeyWnd::OnTimer(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+LRESULT FuncKeyWnd::OnTimer(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	//	return;
 	if (!GetHwnd()) {
@@ -285,8 +285,8 @@ LRESULT CFuncKeyWnd::OnTimer(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		// ファンクションキーの機能名を取得
 		auto& csKeyBind = m_pShareData->m_common.m_sKeyBind;
 		for (int i=0; i<_countof(m_szFuncNameArr); ++i) {
-			// 2007.02.22 ryoji CKeyBind::GetFuncCode()を使う
-			EFunctionCode nFuncCode = CKeyBind::GetFuncCode(
+			// 2007.02.22 ryoji KeyBind::GetFuncCode()を使う
+			EFunctionCode nFuncCode = KeyBind::GetFuncCode(
 				(WORD)(((VK_F1 + i) | ((WORD)((BYTE)(nIdx))) << 8)),
 				csKeyBind.m_nKeyNameArrNum,
 				csKeyBind.m_pKeyNameArr
@@ -326,7 +326,7 @@ LRESULT CFuncKeyWnd::OnTimer(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 
 // WM_DESTROY処理
-LRESULT CFuncKeyWnd::OnDestroy(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+LRESULT FuncKeyWnd::OnDestroy(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	// タイマーを削除
 	Timer_ONOFF(false); // 20060126 aroka
@@ -352,7 +352,7 @@ LRESULT CFuncKeyWnd::OnDestroy(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPara
 
 
 // ボタンのサイズを計算
-int CFuncKeyWnd::CalcButtonSize(void)
+int FuncKeyWnd::CalcButtonSize(void)
 {
 	RECT rc;
 	GetWindowRect(&rc);
@@ -377,7 +377,7 @@ int CFuncKeyWnd::CalcButtonSize(void)
 /*! ボタンの生成
 	@date 2007.02.05 ryoji ボタンの水平位置・幅の設定処理を削除（OnSizeで再配置されるので不要）
 */
-void CFuncKeyWnd::CreateButtons(void)
+void FuncKeyWnd::CreateButtons(void)
 {
 	RECT rcParent;
 	GetWindowRect(&rcParent);
@@ -412,7 +412,7 @@ void CFuncKeyWnd::CreateButtons(void)
 
 
 // サイズボックスの表示／非表示切り替え
-void CFuncKeyWnd::SizeBox_ONOFF(bool bSizeBox)
+void FuncKeyWnd::SizeBox_ONOFF(bool bSizeBox)
 {
 	RECT rc;
 	GetWindowRect(&rc);
@@ -451,7 +451,7 @@ void CFuncKeyWnd::SizeBox_ONOFF(bool bSizeBox)
 // ファンクションキー表示はタイマーにより更新しているが、
 // アプリのフォーカスが外れたときに親ウィンドウからON/OFFを
 // 呼び出してもらうことにより、余計な負荷を停止したい。
-void CFuncKeyWnd::Timer_ONOFF(bool bStart)
+void FuncKeyWnd::Timer_ONOFF(bool bStart)
 {
 	if (GetHwnd()) {
 		if (bStart) {

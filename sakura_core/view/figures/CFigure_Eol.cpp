@@ -31,7 +31,7 @@
 #include "window/CEditWnd.h"
 
 // 折り返し描画
-void _DispWrap(CGraphics& gr, DispPos* pDispPos, const CEditView* pcView);
+void _DispWrap(Graphics& gr, DispPos* pDispPos, const EditView* pcView);
 
 // EOF描画関数
 // 実際には pX と nX が更新される。
@@ -39,11 +39,11 @@ void _DispWrap(CGraphics& gr, DispPos* pDispPos, const CEditView* pcView);
 // 2007.08.25 kobake 戻り値を void に変更。引数 x, y を DispPos に変更
 // 2007.08.25 kobake 引数から nCharWidth, nLineHeight を削除
 // 2007.08.28 kobake 引数 fuOptions を削除
-//void _DispEOF(CGraphics& gr, DispPos* pDispPos, const CEditView* pcView, bool bTrans);
+//void _DispEOF(Graphics& gr, DispPos* pDispPos, const EditView* pcView, bool bTrans);
 
 // 改行記号描画
 // 2007.08.30 kobake 追加
-void _DispEOL(CGraphics& gr, DispPos* pDispPos, CEol cEol, const CEditView* pcView, bool bTrans);
+void _DispEOL(Graphics& gr, DispPos* pDispPos, Eol cEol, const EditView* pcView, bool bTrans);
 
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -63,11 +63,11 @@ bool CFigure_Eol::Match(const wchar_t* pText, int nTextLen) const
 //$$ 高速化可能。
 bool CFigure_Eol::DrawImp(ColorStrategyInfo* pInfo)
 {
-	CEditView* pcView = pInfo->m_pcView;
+	EditView* pcView = pInfo->m_pcView;
 
 	// 改行取得
 	const Layout* pcLayout = pInfo->m_pDispPos->GetLayoutRef();
-	CEol cEol = pcLayout->GetLayoutEol();
+	Eol cEol = pcLayout->GetLayoutEol();
 	if (cEol.GetLen()) {
 		// CFigureSpace::DrawImp_StyleSelectもどき。選択・検索色を優先する
 		CTypeSupport cCurrentType(pcView, pInfo->GetCurrentColor());	// 周辺の色（現在の指定色/選択色）
@@ -132,7 +132,7 @@ bool CFigure_Eol::DrawImp(ColorStrategyInfo* pInfo)
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 // 折り返し描画
-void _DispWrap(CGraphics& gr, DispPos* pDispPos, const CEditView* pcView, LayoutYInt nLineNum)
+void _DispWrap(Graphics& gr, DispPos* pDispPos, const EditView* pcView, LayoutYInt nLineNum)
 {
 	RECT rcClip2;
 	if (pcView->GetTextArea().GenerateClipRect(&rcClip2, *pDispPos, 1)) {
@@ -146,7 +146,7 @@ void _DispWrap(CGraphics& gr, DispPos* pDispPos, const CEditView* pcView, Layout
 		EColorIndexType eBgcolorOverwrite = COLORIDX_WRAP;
 		bool bTrans = pcView->IsBkBitmap();
 		if (cWrapType.IsDisp()) {
-			CEditView& cActiveView = pcView->m_pcEditWnd->GetActiveView();
+			EditView& cActiveView = pcView->m_pcEditWnd->GetActiveView();
 			if (cBgLineType.IsDisp() && pcView->GetCaret().GetCaretLayoutPos().GetY2() == nLineNum) {
 				if (bBgcolor) {
 					eBgcolorOverwrite = COLORIDX_CARETLINEBG;
@@ -210,9 +210,9 @@ EOF記号の描画
 @date 2007.08.30 kobake 引数 EofColInfo 削除
 */
 void _DispEOF(
-	CGraphics&			gr,			// [in] 描画対象のDevice Context
+	Graphics&			gr,			// [in] 描画対象のDevice Context
 	DispPos*			pDispPos,	// [in] 表示座標
-	const CEditView*	pcView
+	const EditView*	pcView
 )
 {
 	// 描画に使う色情報
@@ -223,8 +223,8 @@ void _DispEOF(
 	bool bTrans = pcView->IsBkBitmap() && cEofType.GetBackColor() == cTextType.GetBackColor();
 
 	// 必要なインターフェースを取得
-	const CTextMetrics* pMetrics = &pcView->GetTextMetrics();
-	const CTextArea* pArea = &pcView->GetTextArea();
+	const TextMetrics* pMetrics = &pcView->GetTextMetrics();
+	const TextArea* pArea = &pcView->GetTextArea();
 
 	// 定数
 	static const wchar_t	szEof[] = L"[EOF]";
@@ -262,15 +262,15 @@ void _DispEOF(
 // May 23, 2000 genta
 //@@@ 2001.12.21 YAZAKI 改行記号の書きかたが変だったので修正
 void _DrawEOL(
-	CGraphics&		gr,
+	Graphics&		gr,
 	const Rect&	rcEol,
-	CEol			cEol,
+	Eol			cEol,
 	bool			bBold,
 	COLORREF		pColor
 );
 
 // 2007.08.30 kobake 追加
-void _DispEOL(CGraphics& gr, DispPos* pDispPos, CEol cEol, const CEditView* pcView, bool bTrans)
+void _DispEOL(Graphics& gr, DispPos* pDispPos, Eol cEol, const EditView* pcView, bool bTrans)
 {
 	RECT rcClip2;
 	if (pcView->GetTextArea().GenerateClipRect(&rcClip2, *pDispPos, 2)) {
@@ -301,7 +301,7 @@ void _DispEOL(CGraphics& gr, DispPos* pDispPos, CEol cEol, const CEditView* pcVi
 			// 描画
 			// 文字色や太字かどうかを現在の DC から調べる	// 2009.05.29 ryoji 
 			// （検索マッチ等の状況に柔軟に対応するため、ここは記号の色指定には決め打ちしない）
-			// 2013.06.21 novice 文字色、太字をCGraphicsから取得
+			// 2013.06.21 novice 文字色、太字をGraphicsから取得
 			_DrawEOL(gr, rcEol, cEol, gr.GetCurrentMyFontBold(), gr.GetCurrentTextForeColor());
 
 			// リージョン破棄
@@ -328,9 +328,9 @@ void _DispEOL(CGraphics& gr, DispPos* pDispPos, CEol cEol, const CEditView* pcVi
 						矢印の先頭を、sx, syにして描画ルーチン書き直し。
 */
 void _DrawEOL(
-	CGraphics&		gr,			// Device Context Handle
+	Graphics&		gr,			// Device Context Handle
 	const Rect&	rcEol,		// 描画領域
-	CEol			cEol,		// 行末コード種別
+	Eol			cEol,		// 行末コード種別
 	bool			bBold,		// TRUE: 太字
 	COLORREF		pColor		// 色
 )

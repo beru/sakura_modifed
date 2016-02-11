@@ -99,7 +99,7 @@ INT_PTR CPropTypesSupport::DispatchEvent(
 			switch (wID) {
 			case IDC_BUTTON_HOKANFILE_REF:	// 入力補完 単語ファイルの「参照...」ボタン
 				{
-					CDlgOpenFile	cDlgOpenFile;
+					DlgOpenFile	cDlgOpenFile;
 					TCHAR			szPath[_MAX_PATH + 1];
 					// 2003.06.23 Moca 相対パスは実行ファイルからのパスとして開く
 					// 2007.05.19 ryoji 相対パスは設定ファイルからのパスを優先
@@ -123,7 +123,7 @@ INT_PTR CPropTypesSupport::DispatchEvent(
 				return TRUE;
 			case IDC_BUTTON_TYPEOPENHELP:	// 外部ヘルプ１の「参照...」ボタン
 				{
-					CDlgOpenFile	cDlgOpenFile;
+					DlgOpenFile	cDlgOpenFile;
 					TCHAR			szPath[_MAX_PATH + 1];
 					// 2003.06.23 Moca 相対パスは実行ファイルからのパスとして開く
 					// 2007.05.21 ryoji 相対パスは設定ファイルからのパスを優先
@@ -147,7 +147,7 @@ INT_PTR CPropTypesSupport::DispatchEvent(
 				return TRUE;
 			case IDC_BUTTON_TYPEOPENEXTHTMLHELP:	// 外部HTMLヘルプの「参照...」ボタン
 				{
-					CDlgOpenFile	cDlgOpenFile;
+					DlgOpenFile	cDlgOpenFile;
 					TCHAR			szPath[_MAX_PATH + 1];
 					// 2003.06.23 Moca 相対パスは実行ファイルからのパスとして開く
 					// 2007.05.21 ryoji 相対パスは設定ファイルからのパスを優先

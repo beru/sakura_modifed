@@ -16,14 +16,14 @@
 #include "CDocLine.h"
 #include "mem/CMemory.h"
 
-CDocLine::CDocLine()
+DocLine::DocLine()
 	:
 	m_pPrev(NULL),
 	m_pNext(NULL)
 {
 }
 
-CDocLine::~CDocLine()
+DocLine::~DocLine()
 {
 }
 
@@ -33,7 +33,7 @@ CDocLine::~CDocLine()
 
 	2002/04/26 YAZAKI
 */
-bool CDocLine::IsEmptyLine() const
+bool DocLine::IsEmptyLine() const
 {
 	const wchar_t* pLine = GetPtr();
 	int nLineLen = GetLengthWithoutEOL();
@@ -45,7 +45,7 @@ bool CDocLine::IsEmptyLine() const
 	return true;	// すべてスペースかタブだけだったらtrue。
 }
 
-void CDocLine::SetEol()
+void DocLine::SetEol()
 {
 	const wchar_t* pData = m_cLine.GetStringPtr();
 	int nLength = m_cLine.GetStringLength();
@@ -61,24 +61,24 @@ void CDocLine::SetEol()
 }
 
 
-void CDocLine::SetDocLineString(const wchar_t* pData, int nLength)
+void DocLine::SetDocLineString(const wchar_t* pData, int nLength)
 {
 	m_cLine.SetString(pData, nLength);
 	SetEol();
 }
 
-void CDocLine::SetDocLineString(const CNativeW& cData)
+void DocLine::SetDocLineString(const NativeW& cData)
 {
 	SetDocLineString(cData.GetStringPtr(), cData.GetStringLength());
 }
 
-void CDocLine::SetDocLineStringMove(CNativeW* pcDataFrom)
+void DocLine::SetDocLineStringMove(NativeW* pcDataFrom)
 {
 	m_cLine.swap(*pcDataFrom);
 	SetEol();
 }
 
-void CDocLine::SetEol(const CEol& cEol, OpeBlk* pcOpeBlk)
+void DocLine::SetEol(const Eol& cEol, OpeBlk* pcOpeBlk)
 {
 	// 改行コードを削除
 	for (int i=0; i<(Int)m_cEol.GetLen(); ++i) {

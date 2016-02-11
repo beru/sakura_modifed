@@ -51,7 +51,7 @@ const int LUOFFSET_PLUGIN = 2;
 
 	@date 2007.11.02 ryoji bGetUnavailableパラメータ追加
 */
-EFunctionCode CFuncLookup::Pos2FuncCode(int category, int position, bool bGetUnavailable) const
+EFunctionCode FuncLookup::Pos2FuncCode(int category, int position, bool bGetUnavailable) const
 {
 	if (category < 0 || position < 0) {
 		return F_DISABLE;
@@ -77,7 +77,7 @@ EFunctionCode CFuncLookup::Pos2FuncCode(int category, int position, bool bGetUna
 		}
 	}else if (category == nsFuncCode::nFuncKindNum + LUOFFSET_PLUGIN) {
 		// プラグイン
-		return CJackManager::getInstance()->GetCommandCode(position);
+		return JackManager::getInstance()->GetCommandCode(position);
 	}
 	return F_DISABLE;
 }
@@ -89,7 +89,7 @@ EFunctionCode CFuncLookup::Pos2FuncCode(int category, int position, bool bGetUna
 
 	@date 2007.11.02 ryoji 処理を簡素化
 */
-bool CFuncLookup::Pos2FuncName(
+bool FuncLookup::Pos2FuncName(
 	int		category,	// [in]  分類番号 (0-)
 	int		position,	// [in]  分類中のindex (0-)
 	WCHAR*	ptr,		// [out] 文字列を格納するバッファの先頭
@@ -111,7 +111,7 @@ bool CFuncLookup::Pos2FuncName(
 
 	@date 2007.11.02 ryoji 未登録マクロも文字列を格納．戻り値の意味を変更（文字列は必ず格納）．
 */
-bool CFuncLookup::Funccode2Name(int funccode, WCHAR* ptr, int bufsize) const
+bool FuncLookup::Funccode2Name(int funccode, WCHAR* ptr, int bufsize) const
 {
 	LPCWSTR pszStr = NULL;
 
@@ -141,7 +141,7 @@ bool CFuncLookup::Funccode2Name(int funccode, WCHAR* ptr, int bufsize) const
 			return true;	// 定義されたコマンド
 		}
 	}else if (F_PLUGCOMMAND_FIRST <= funccode && funccode < F_PLUGCOMMAND_LAST) {
-		if (CJackManager::getInstance()->GetCommandName(funccode, ptr, bufsize) > 0) {
+		if (JackManager::getInstance()->GetCommandName(funccode, ptr, bufsize) > 0) {
 			return true;	// プラグインコマンド
 		}
 	}
@@ -161,7 +161,7 @@ bool CFuncLookup::Funccode2Name(int funccode, WCHAR* ptr, int bufsize) const
 	
 	@return NULL 分類名称．取得に失敗したらNULL．
 */
-const TCHAR* CFuncLookup::Category2Name(int category) const
+const TCHAR* FuncLookup::Category2Name(int category) const
 {
 	if (category < 0) {
 		return NULL;
@@ -182,7 +182,7 @@ const TCHAR* CFuncLookup::Category2Name(int category) const
 
 	@param hComboBox [in(out)] データを設定するコンボボックス
 */
-void CFuncLookup::SetCategory2Combo(HWND hComboBox) const
+void FuncLookup::SetCategory2Combo(HWND hComboBox) const
 {
 	// コンボボックスを初期化する
 	Combo_ResetContent(hComboBox);
@@ -207,7 +207,7 @@ void CFuncLookup::SetCategory2Combo(HWND hComboBox) const
 
 	@date 2007.11.02 ryoji 未定義コマンドは除外．処理も簡素化．
 */
-void CFuncLookup::SetListItem(HWND hListBox, int category) const
+void FuncLookup::SetListItem(HWND hListBox, int category) const
 {
 	WCHAR pszLabel[256];
 	// リストを初期化する
@@ -228,7 +228,7 @@ void CFuncLookup::SetListItem(HWND hListBox, int category) const
 	
 	@param category [in] 機能分類番号
 */
-int CFuncLookup::GetItemCount(int category) const
+int FuncLookup::GetItemCount(int category) const
 {
 	if (category < 0) {
 		return 0;
@@ -243,7 +243,7 @@ int CFuncLookup::GetItemCount(int category) const
 		return MAX_CUSTOM_MENU;
 	}else if (category == nsFuncCode::nFuncKindNum + LUOFFSET_PLUGIN) {
 		// プラグインコマンド
-		return CJackManager::getInstance()->GetCommandCount();
+		return JackManager::getInstance()->GetCommandCount();
 	}
 	return 0;
 }
@@ -254,7 +254,7 @@ int CFuncLookup::GetItemCount(int category) const
 	
 	@return NULL 分類名称．取得に失敗したらNULL．
 */
-const WCHAR* CFuncLookup::Custmenu2Name(int index, WCHAR buf[], int bufSize) const
+const WCHAR* FuncLookup::Custmenu2Name(int index, WCHAR buf[], int bufSize) const
 {
 	if (index < 0 || CUSTMENU_INDEX_FOR_TABWND < index) {
 		return NULL;

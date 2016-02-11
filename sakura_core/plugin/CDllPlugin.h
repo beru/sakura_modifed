@@ -34,11 +34,11 @@
 
 typedef void (*DllPlugHandler)();
 
-class CDllPlug : public CPlug {
+class DllPlug : public Plug {
 public:
-	CDllPlug(CPlugin& plugin, PlugId id, const wstring& sJack, const wstring& sHandler, const wstring& sLabel)
+	DllPlug(Plugin& plugin, PlugId id, const wstring& sJack, const wstring& sHandler, const wstring& sLabel)
 		:
-		CPlug(plugin, id, sJack, sHandler, sLabel),
+		Plug(plugin, id, sJack, sHandler, sLabel),
 		m_handler(NULL)
 	{
 	}
@@ -46,22 +46,22 @@ public:
 	DllPlugHandler m_handler;
 };
 
-class CDllPlugin :
-	public CPlugin,
-	public CDllImp
+class DllPlugin :
+	public Plugin,
+	public DllImp
 {
 	// コンストラクタ
 public:
-	CDllPlugin(const tstring& sBaseDir)
+	DllPlugin(const tstring& sBaseDir)
 		:
-		CPlugin(sBaseDir),
-		CDllImp()
+		Plugin(sBaseDir),
+		DllImp()
 	{
 	}
 
 	// デストラクタ
 public:
-	~CDllPlugin(void);
+	~DllPlugin(void);
 
 	// 実装
 public:
@@ -69,11 +69,11 @@ public:
 	bool ReadPluginOption(DataProfile* cProfile) {
 		return true;
 	}
-	CPlug* CreatePlug(CPlugin& plugin, PlugId id, const wstring& sJack, const wstring& sHandler, const wstring& sLabel);
-	CPlug::Array GetPlugs() const {
+	Plug* CreatePlug(Plugin& plugin, PlugId id, const wstring& sJack, const wstring& sHandler, const wstring& sLabel);
+	Plug::Array GetPlugs() const {
 		return m_plugs;
 	}
-	bool InvokePlug(CEditView* view, CPlug& plug, CWSHIfObj::List& params);
+	bool InvokePlug(EditView* view, Plug& plug, WSHIfObj::List& params);
 
 	bool InitDllImp() {
 		return true;

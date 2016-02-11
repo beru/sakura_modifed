@@ -29,7 +29,7 @@
 		   distribution.
 */
 
-class CDlgProperty;
+class DlgProperty;
 
 #pragma once
 
@@ -37,7 +37,7 @@ class CDlgProperty;
 /*-----------------------------------------------------------------------
 クラスの宣言
 -----------------------------------------------------------------------*/
-class CDlgProperty : public CDialog {
+class DlgProperty : public Dialog {
 public:
 	int DoModal(HINSTANCE, HWND, LPARAM);	// モーダルダイアログの表示
 protected:

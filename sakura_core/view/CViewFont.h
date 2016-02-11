@@ -25,13 +25,13 @@
 
 #include "doc/CDocTypeSetting.h" // ColorInfo !!
 
-class CViewFont {
+class ViewFont {
 public:
-	CViewFont(const LOGFONT *plf, bool bMiniMap = false) {
+	ViewFont(const LOGFONT *plf, bool bMiniMap = false) {
 		m_bMiniMap = bMiniMap;
 		CreateFont(plf);
 	}
-	virtual ~CViewFont() {
+	virtual ~ViewFont() {
 		DeleteFont();
 	}
 

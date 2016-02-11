@@ -31,9 +31,9 @@
 #include <limits.h>
 
 /*! スクロールバー作成
-	@date 2006.12.19 ryoji 新規作成（CEditView::Createから分離）
+	@date 2006.12.19 ryoji 新規作成（EditView::Createから分離）
 */
-BOOL CEditView::CreateScrollBar()
+BOOL EditView::CreateScrollBar()
 {
 	// スクロールバーの作成
 	m_hwndVScrollBar = ::CreateWindowEx(
@@ -129,7 +129,7 @@ BOOL CEditView::CreateScrollBar()
 /*! スクロールバー破棄
 	@date 2006.12.19 ryoji 新規作成
 */
-void CEditView::DestroyScrollBar()
+void EditView::DestroyScrollBar()
 {
 	if (m_hwndVScrollBar) {
 		::DestroyWindow(m_hwndVScrollBar);
@@ -156,7 +156,7 @@ void CEditView::DestroyScrollBar()
 	@date 2004.09.11 genta スクロール行数を返すように．
 		未使用のhwndScrollBar引数削除．
 */
-LayoutInt CEditView::OnVScroll(int nScrollCode, int nPos)
+LayoutInt EditView::OnVScroll(int nScrollCode, int nPos)
 {
 	LayoutInt nScrollVal = LayoutInt(0);
 
@@ -218,7 +218,7 @@ LayoutInt CEditView::OnVScroll(int nScrollCode, int nPos)
 	@date 2004.09.11 genta スクロール桁数を返すように．
 		未使用のhwndScrollBar引数削除．
 */
-LayoutInt CEditView::OnHScroll(int nScrollCode, int nPos)
+LayoutInt EditView::OnHScroll(int nScrollCode, int nPos)
 {
 	const LayoutInt nHScrollNum = LayoutInt(4);
 	LayoutInt nScrollVal = LayoutInt(0);
@@ -278,7 +278,7 @@ LayoutInt CEditView::OnHScroll(int nScrollCode, int nPos)
 	@date 2008.06.08 ryoji 水平スクロール範囲にぶら下げ余白を追加
 	@date 2009.08.28 nasukoji	「折り返さない」選択時のスクロールバー調整
 */
-void CEditView::AdjustScrollBars()
+void EditView::AdjustScrollBars()
 {
 	if (!GetDrawSwitch()) {
 		return;
@@ -349,7 +349,7 @@ void CEditView::AdjustScrollBars()
 
 	@date 2004.09.11 genta 行数を戻り値として返すように．(同期スクロール用)
 */
-LayoutInt CEditView::ScrollAtV(LayoutInt nPos)
+LayoutInt EditView::ScrollAtV(LayoutInt nPos)
 {
 	LayoutInt	nScrollRowNum;
 	if (nPos < 0) {
@@ -426,7 +426,7 @@ LayoutInt CEditView::ScrollAtV(LayoutInt nPos)
 	@date 2008.06.08 ryoji 水平スクロール範囲にぶら下げ余白を追加
 	@date 2009.08.28 nasukoji	「折り返さない」選択時右に行き過ぎないようにする
 */
-LayoutInt CEditView::ScrollAtH(LayoutInt nPos)
+LayoutInt EditView::ScrollAtH(LayoutInt nPos)
 {
 	if (nPos < 0) {
 		nPos = LayoutInt(0);
@@ -501,9 +501,9 @@ LayoutInt CEditView::ScrollAtH(LayoutInt nPos)
 }
 
 
-void CEditView::ScrollDraw(LayoutInt nScrollRowNum, LayoutInt nScrollColNum, const RECT& rcScroll, const RECT& rcClip, const RECT& rcClip2)
+void EditView::ScrollDraw(LayoutInt nScrollRowNum, LayoutInt nScrollColNum, const RECT& rcScroll, const RECT& rcClip, const RECT& rcClip2)
 {
-	const CTextArea& area = GetTextArea();
+	const TextArea& area = GetTextArea();
 
 	// 背景は画面に対して固定か
 	bool bBackImgFixed = IsBkBitmap() &&
@@ -594,10 +594,10 @@ void CEditView::ScrollDraw(LayoutInt nScrollRowNum, LayoutInt nScrollColNum, con
 }
 
 
-void CEditView::MiniMapRedraw(bool bUpdateAll)
+void EditView::MiniMapRedraw(bool bUpdateAll)
 {
 	if (this == &m_pcEditWnd->GetActiveView() && m_pcEditWnd->GetMiniMap().GetHwnd()) {
-		CEditView& miniMap = m_pcEditWnd->GetMiniMap();
+		EditView& miniMap = m_pcEditWnd->GetMiniMap();
 		LayoutYInt nViewTop = miniMap.m_nPageViewTop;
 		LayoutYInt nViewBottom = miniMap.m_nPageViewBottom;
 		LayoutYInt nDiff = nViewTop - GetTextArea().GetViewTopLine();
@@ -676,13 +676,13 @@ void CEditView::MiniMapRedraw(bool bUpdateAll)
 	@note 動作の詳細は設定や機能拡張により変更になる可能性がある
 
 */
-void CEditView::SyncScrollV(LayoutInt line)
+void EditView::SyncScrollV(LayoutInt line)
 {
 	if (GetDllShareData().m_common.m_sWindow.m_bSplitterWndVScroll && line != 0 
 		&& m_pcEditWnd->IsEnablePane(m_nMyIndex^0x01) 
 		&& 0 <= m_nMyIndex
 	) {
-		CEditView&	editView = m_pcEditWnd->GetView(m_nMyIndex^0x01);
+		EditView&	editView = m_pcEditWnd->GetView(m_nMyIndex^0x01);
 #if 0
 		//	差分を保ったままスクロールする場合
 		editView.ScrollByV(line);
@@ -704,13 +704,13 @@ void CEditView::SyncScrollV(LayoutInt line)
 
 	@note 動作の詳細は設定や機能拡張により変更になる可能性がある
 */
-void CEditView::SyncScrollH(LayoutInt col)
+void EditView::SyncScrollH(LayoutInt col)
 {
 	if (GetDllShareData().m_common.m_sWindow.m_bSplitterWndHScroll && col != 0
 		&& m_pcEditWnd->IsEnablePane(m_nMyIndex^0x02)
 		&& 0 <= m_nMyIndex
 	) {
-		CEditView& cEditView = m_pcEditWnd->GetView(m_nMyIndex^0x02);
+		EditView& cEditView = m_pcEditWnd->GetView(m_nMyIndex^0x02);
 		HDC hdc = ::GetDC(cEditView.GetHwnd());
 		
 #if 0
@@ -728,7 +728,7 @@ void CEditView::SyncScrollH(LayoutInt col)
 /** 折り返し桁以後のぶら下げ余白計算
 	@date 2008.06.08 ryoji 新規作成
 */
-LayoutInt CEditView::GetWrapOverhang(void) const
+LayoutInt EditView::GetWrapOverhang(void) const
 {
 	int nMargin = 1;	// 折り返し記号
 	if (!m_pTypeData->m_bKinsokuHide) {	// ぶら下げを隠す時はスキップ	2012/11/30 Uchi
@@ -745,7 +745,7 @@ LayoutInt CEditView::GetWrapOverhang(void) const
 	@retval 折り返し桁数
 	@date 2008.06.08 ryoji 新規作成
 */
-LayoutInt CEditView::ViewColNumToWrapColNum(LayoutInt nViewColNum) const
+LayoutInt EditView::ViewColNumToWrapColNum(LayoutInt nViewColNum) const
 {
 	// ぶら下げ余白を差し引く
 	int nWidth = (Int)(nViewColNum - GetWrapOverhang());
@@ -779,7 +779,7 @@ LayoutInt CEditView::ViewColNumToWrapColNum(LayoutInt nViewColNum) const
 
 	@date 2009.08.28 nasukoji	新規作成
 */
-LayoutInt CEditView::GetRightEdgeForScrollBar(void)
+LayoutInt EditView::GetRightEdgeForScrollBar(void)
 {
 	// 折り返し桁以後のぶら下げ余白計算
 	LayoutInt nWidth = m_pcEditDoc->m_cLayoutMgr.GetMaxLineKetas() + GetWrapOverhang();

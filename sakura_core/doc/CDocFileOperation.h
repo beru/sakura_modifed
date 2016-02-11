@@ -28,9 +28,9 @@
 
 class EditDoc;
 
-class CDocFileOperation {
+class DocFileOperation {
 public:
-	CDocFileOperation(EditDoc* pcDoc) : m_pcDocRef(pcDoc) { }
+	DocFileOperation(EditDoc* pcDoc) : m_pcDocRef(pcDoc) { }
 
 	// ÉçÉbÉN
 	bool _ToDoLock() const;

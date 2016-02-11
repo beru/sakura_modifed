@@ -25,7 +25,7 @@ bool _GetKeywordLength(
 	LogicInt nWordLen = LogicInt(0);
 	LayoutInt nWordKetas = LayoutInt(0);
 	while (nPos < cLineStr.GetLength() && IS_KEYWORD_CHAR(cLineStr.At(nPos))) {
-		LayoutInt k = CNativeW::GetKetaOfChar(cLineStr, nPos);
+		LayoutInt k = NativeW::GetKetaOfChar(cLineStr, nPos);
 		if (k == 0) {
 			k = LayoutInt(1);
 		}
@@ -131,7 +131,7 @@ void LayoutMgr::_DoKutoBurasage(LayoutWork* pWork)
 		&& (pWork->eKinsokuType == KINSOKU_TYPE_NONE)
 	) {
 		// 2007.09.07 kobake   レイアウトとロジックの区別
-		LayoutInt nCharKetas = CNativeW::GetKetaOfChar(pWork->cLineStr, pWork->nPos);
+		LayoutInt nCharKetas = NativeW::GetKetaOfChar(pWork->cLineStr, pWork->nPos);
 
 		if (1
 			&& IsKinsokuPosKuto(GetMaxLineKetas() - pWork->nPosX, nCharKetas)
@@ -153,8 +153,8 @@ void LayoutMgr::_DoGyotoKinsoku(LayoutWork* pWork, PF_OnLine pfOnLine)
 		&& (pWork->eKinsokuType == KINSOKU_TYPE_NONE)
 	) {
 		// 2007.09.07 kobake   レイアウトとロジックの区別
-		LayoutInt nCharKetas2 = CNativeW::GetKetaOfChar(pWork->cLineStr, pWork->nPos);
-		LayoutInt nCharKetas3 = CNativeW::GetKetaOfChar(pWork->cLineStr, pWork->nPos + 1);
+		LayoutInt nCharKetas2 = NativeW::GetKetaOfChar(pWork->cLineStr, pWork->nPos);
+		LayoutInt nCharKetas3 = NativeW::GetKetaOfChar(pWork->cLineStr, pWork->nPos + 1);
 
 		if (1
 			&& IsKinsokuPosHead(GetMaxLineKetas() - pWork->nPosX, nCharKetas2, nCharKetas3)
@@ -179,8 +179,8 @@ void LayoutMgr::_DoGyomatsuKinsoku(LayoutWork* pWork, PF_OnLine pfOnLine)
 		&& (pWork->nPosX > pWork->nIndent)	// 2004.04.09 pWork->nPosXの解釈変更のため，行頭チェックも変更
 		&& (pWork->eKinsokuType == KINSOKU_TYPE_NONE)
 	) {	// 行末禁則する && 行末付近 && 行頭でないこと(無限に禁則してしまいそう)
-		LayoutInt nCharKetas2 = CNativeW::GetKetaOfChar(pWork->cLineStr, pWork->nPos);
-		LayoutInt nCharKetas3 = CNativeW::GetKetaOfChar(pWork->cLineStr, pWork->nPos + 1);
+		LayoutInt nCharKetas2 = NativeW::GetKetaOfChar(pWork->cLineStr, pWork->nPos);
+		LayoutInt nCharKetas3 = NativeW::GetKetaOfChar(pWork->cLineStr, pWork->nPos + 1);
 
 		if (1
 			&& IsKinsokuPosTail(GetMaxLineKetas() - pWork->nPosX, nCharKetas2, nCharKetas3)
@@ -226,7 +226,7 @@ void LayoutMgr::_MakeOneLine(LayoutWork* pWork, PF_OnLine pfOnLine)
 	if (pWork->pcColorStrategy) {
 		pWork->pcColorStrategy->InitStrategyStatus();
 	}
-	CColorStrategyPool& color = *CColorStrategyPool::getInstance();
+	ColorStrategyPool& color = *ColorStrategyPool::getInstance();
 
 	// 1ロジック行を消化するまでループ
 	while (pWork->nPos < nLength) {
@@ -268,7 +268,7 @@ void LayoutMgr::_MakeOneLine(LayoutWork* pWork, PF_OnLine pfOnLine)
 				break;
 			}
 			// 2007.09.07 kobake   ロジック幅とレイアウト幅を区別
-			LayoutInt nCharKetas = CNativeW::GetKetaOfChar(pWork->cLineStr, pWork->nPos);
+			LayoutInt nCharKetas = NativeW::GetKetaOfChar(pWork->cLineStr, pWork->nPos);
 //			if (nCharKetas == 0) {				// 削除 サロゲートペア対策	2008/7/5 Uchi
 //				nCharKetas = LayoutInt(1);
 //			}
@@ -475,7 +475,7 @@ LayoutInt LayoutMgr::DoLayout_Range(
 	LayoutWork _sWork;
 	LayoutWork* pWork = &_sWork;
 	pWork->pLayout					= pLayoutPrev;
-	pWork->pcColorStrategy			= CColorStrategyPool::getInstance()->GetStrategyByColor(nCurrentLineType);
+	pWork->pcColorStrategy			= ColorStrategyPool::getInstance()->GetStrategyByColor(nCurrentLineType);
 	pWork->colorPrev				= nCurrentLineType;
 	pWork->exInfoPrev.SetColorInfo(colorInfo);
 	pWork->bNeedChangeCOMMENTMODE	= false;

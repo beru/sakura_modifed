@@ -58,7 +58,7 @@ static bool Commander_COMPARE_core(
 			pLineSrc = docMgr.GetLine(poSrc.y)->GetDocLineStrWithEOL(&nLineLenSrc);
 			do {
 				// m_workBuffer#m_Workの排他制御。外部コマンド出力/TraceOut/Diffが対象
-				LockGuard<Mutex> guard( CShareData::GetMutexShareWork() );
+				LockGuard<Mutex> guard( ShareData::GetMutexShareWork() );
 				// 行(改行単位)データの要求
 				nLineLenDes = ::SendMessage( hwnd, MYWM_GETLINEDATA, poDes.y, nLineOffset );
 				if (nLineLenDes < 0) {
@@ -116,7 +116,7 @@ void ViewCommander::Command_COMPARE(void)
 {
 	HWND		hwndCompareWnd = NULL;
 	TCHAR		szPath[_MAX_PATH + 1];
-	CDlgCompare	cDlgCompare;
+	DlgCompare	cDlgCompare;
 	HWND		hwndMsgBox;	//@@@ 2003.06.12 MIK
 	auto& commonSetting = GetDllShareData().m_common;
 	auto& csCompare = commonSetting.m_sCompare;
@@ -227,7 +227,7 @@ static
 ECodeType GetFileCharCode( LPCTSTR pszFile )
 {
 	const TypeConfigMini* typeMini;
-	CDocTypeManager().GetTypeConfigMini( CDocTypeManager().GetDocumentTypeOfPath( pszFile ), &typeMini );
+	DocTypeManager().GetTypeConfigMini( DocTypeManager().GetDocumentTypeOfPath( pszFile ), &typeMini );
 	return CodeMediator(typeMini->m_encoding).CheckKanjiCodeOfFile( pszFile );
 }
 
@@ -322,7 +322,7 @@ void ViewCommander::Command_Diff(const WCHAR* _szDiffFile2, int nFlgOpt)
 */
 void ViewCommander::Command_Diff_Dialog(void)
 {
-	CDlgDiff cDlgDiff;
+	DlgDiff cDlgDiff;
 	bool bTmpFile1 = false, bTmpFile2 = false;
 
 	auto& docFile = GetDocument()->m_cDocFile;
@@ -421,7 +421,7 @@ void ViewCommander::Command_Diff_Next(void)
 	auto& selInfo = m_pCommanderView->GetSelectionInfo();
 
 re_do:;	
-	if (CDiffLineMgr(&GetDocument()->m_cDocLineMgr).SearchDiffMark(ptXY.GetY2(), eSearchDirection::Forward, &tmp_y)) {
+	if (DiffLineMgr(&GetDocument()->m_cDocLineMgr).SearchDiffMark(ptXY.GetY2(), eSearchDirection::Forward, &tmp_y)) {
 		ptXY.y = tmp_y;
 		bFound = true;
 		LayoutPoint ptXY_Layout;
@@ -472,7 +472,7 @@ void ViewCommander::Command_Diff_Prev(void)
 	auto& selInfo = m_pCommanderView->GetSelectionInfo();
 
 re_do:;
-	if (CDiffLineMgr(&GetDocument()->m_cDocLineMgr).SearchDiffMark(ptXY.GetY2(), eSearchDirection::Backward, &tmp_y)) {
+	if (DiffLineMgr(&GetDocument()->m_cDocLineMgr).SearchDiffMark(ptXY.GetY2(), eSearchDirection::Backward, &tmp_y)) {
 		ptXY.y = tmp_y;
 		bFound = true;
 		LayoutPoint ptXY_Layout;
@@ -516,7 +516,7 @@ re_do:;
 */
 void ViewCommander::Command_Diff_Reset(void)
 {
-	CDiffLineMgr(&GetDocument()->m_cDocLineMgr).ResetAllDiffMark();
+	DiffLineMgr(&GetDocument()->m_cDocLineMgr).ResetAllDiffMark();
 
 	// 分割したビューも更新
 	GetEditWindow()->Views_Redraw();

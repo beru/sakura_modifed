@@ -7,7 +7,7 @@
 //               コンストラクタ・デストラクタ                  //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-CFile::CFile(LPCTSTR pszPath)
+File::File(LPCTSTR pszPath)
 	:
 	m_hLockedFile(INVALID_HANDLE_VALUE),
 	m_nFileShareModeOld(SHAREMODE_NOT_EXCLUSIVE)
@@ -17,7 +17,7 @@ CFile::CFile(LPCTSTR pszPath)
 	}
 }
 
-CFile::~CFile()
+File::~File()
 {
 	FileUnlock();
 }
@@ -26,17 +26,17 @@ CFile::~CFile()
 //                         各種判定                            //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-bool CFile::IsFileExist() const
+bool File::IsFileExist() const
 {
 	return fexist(GetFilePath());
 }
 
-bool CFile::HasWritablePermission() const
+bool File::HasWritablePermission() const
 {
 	return _taccess(GetFilePath(), 2) != -1;
 }
 
-bool CFile::IsFileWritable() const
+bool File::IsFileWritable() const
 {
 	// 書き込めるか検査
 	// Note. 他のプロセスが明示的に書き込み禁止しているかどうか
@@ -58,7 +58,7 @@ bool CFile::IsFileWritable() const
 	return true;
 }
 
-bool CFile::IsFileReadable() const
+bool File::IsFileReadable() const
 {
 	HANDLE hTest = CreateFile(
 		this->GetFilePath(),
@@ -82,7 +82,7 @@ bool CFile::IsFileReadable() const
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 // ファイルの排他ロック解除
-void CFile::FileUnlock()
+void File::FileUnlock()
 {
 	// クローズ
 	if (m_hLockedFile != INVALID_HANDLE_VALUE) {
@@ -92,7 +92,7 @@ void CFile::FileUnlock()
 }
 
 // ファイルの排他ロック
-bool CFile::FileLock(EShareMode eShareMode, bool bMsg)
+bool File::FileLock(EShareMode eShareMode, bool bMsg)
 {
 	// ロック解除
 	FileUnlock();
@@ -135,7 +135,7 @@ bool CFile::FileLock(EShareMode eShareMode, bool bMsg)
 		default:						pszMode = LS(STR_EXCLU_UNDEFINED); break;
 		}
 		TopWarningMessage(
-			CEditWnd::getInstance()->GetHwnd(),
+			EditWnd::getInstance()->GetHwnd(),
 			LS(STR_FILE_LOCK_ERR),
 			GetFilePathClass().IsValidPath() ? GetFilePath() : LS(STR_NO_TITLE1),
 			pszMode

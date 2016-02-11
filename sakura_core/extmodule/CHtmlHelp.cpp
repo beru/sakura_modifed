@@ -33,19 +33,19 @@
 #include "StdAfx.h"
 #include "CHtmlHelp.h"
 
-CHtmlHelp::~CHtmlHelp(void)
+HtmlHelpDll::~HtmlHelpDll(void)
 {
 }
 
 /*!
 	HTML Help ‚Ìƒtƒ@ƒCƒ‹–¼‚ð“n‚·
 */
-LPCTSTR CHtmlHelp::GetDllNameImp(int nIndex)
+LPCTSTR HtmlHelpDll::GetDllNameImp(int nIndex)
 {
 	return _T("HHCTRL.OCX");
 }
 
-bool CHtmlHelp::InitDllImp()
+bool HtmlHelpDll::InitDllImp()
 {
 	HtmlHelp = (Proc_HtmlHelp) ::GetProcAddress(
 		GetInstance(),

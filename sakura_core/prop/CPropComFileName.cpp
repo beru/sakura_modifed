@@ -58,17 +58,17 @@ static const DWORD p_helpids[] = {	//13400
 };
 
 
-INT_PTR CALLBACK CPropFileName::DlgProc_page(
+INT_PTR CALLBACK PropFileName::DlgProc_page(
 	HWND hwndDlg,
 	UINT uMsg,
 	WPARAM wParam,
 	LPARAM lParam
 	)
 {
-	return DlgProc(reinterpret_cast<pDispatchPage>(&CPropFileName::DispatchEvent), hwndDlg, uMsg, wParam, lParam);
+	return DlgProc(reinterpret_cast<pDispatchPage>(&PropFileName::DispatchEvent), hwndDlg, uMsg, wParam, lParam);
 }
 
-INT_PTR CPropFileName::DispatchEvent(
+INT_PTR PropFileName::DispatchEvent(
 	HWND hwndDlg,
 	UINT uMsg,
 	WPARAM wParam,
@@ -278,7 +278,7 @@ INT_PTR CPropFileName::DispatchEvent(
 
 	@param hwndDlg ダイアログボックスのウィンドウハンドル
 */
-void CPropFileName::SetData(HWND hwndDlg)
+void PropFileName::SetData(HWND hwndDlg)
 {
 	::CheckDlgButtonBool( hwndDlg, IDC_CHECK_SHORTPATH, m_Common.m_sFileName.m_bTransformShortPath );
 	::SetDlgItemInt( hwndDlg, IDC_EDIT_SHORTMAXWIDTH, m_Common.m_sFileName.m_nTransformShortMaxWidth, FALSE );
@@ -331,7 +331,7 @@ void CPropFileName::SetData(HWND hwndDlg)
 	@param hwndDlg ダイアログボックスのウィンドウハンドル
 */
 
-int CPropFileName::GetData(HWND hwndDlg)
+int PropFileName::GetData(HWND hwndDlg)
 {
 	auto& csFileName = m_Common.m_sFileName;
 
@@ -364,7 +364,7 @@ int CPropFileName::GetData(HWND hwndDlg)
 }
 
 
-int CPropFileName::SetListViewItem_FILENAME(
+int PropFileName::SetListViewItem_FILENAME(
 	HWND hListView,
 	int nIndex,
 	LPTSTR szFrom,
@@ -407,7 +407,7 @@ int CPropFileName::SetListViewItem_FILENAME(
 }
 
 
-void CPropFileName::GetListViewItem_FILENAME(
+void PropFileName::GetListViewItem_FILENAME(
 	HWND hListView,
 	int nIndex,
 	LPTSTR szFrom,
@@ -419,7 +419,7 @@ void CPropFileName::GetListViewItem_FILENAME(
 }
 
 
-int CPropFileName::MoveListViewItem_FILENAME(
+int PropFileName::MoveListViewItem_FILENAME(
 	HWND hListView,
 	int nIndex,
 	int nIndex2

@@ -32,7 +32,7 @@
 //                           生成                              //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-CRecentReplace::CRecentReplace()
+RecentReplace::RecentReplace()
 {
 	Create(
 		GetShareData()->m_searchKeywords.m_aReplaceKeys.dataPtr(),
@@ -52,30 +52,30 @@ CRecentReplace::CRecentReplace()
 
 	@note	取得後のポインタはユーザ管理の構造体にキャストして参照してください。
 */
-const TCHAR* CRecentReplace::GetItemText(int nIndex) const
+const TCHAR* RecentReplace::GetItemText(int nIndex) const
 {
 	return to_tchar(*GetItem(nIndex));
 }
 
-bool CRecentReplace::DataToReceiveType(LPCWSTR* dst, const CReplaceString* src) const
+bool RecentReplace::DataToReceiveType(LPCWSTR* dst, const ReplaceString* src) const
 {
 	*dst = *src;
 	return true;
 }
 
-bool CRecentReplace::TextToDataType(CReplaceString* dst, LPCTSTR pszText) const
+bool RecentReplace::TextToDataType(ReplaceString* dst, LPCTSTR pszText) const
 {
 	CopyItem(dst, to_wchar(pszText));
 	return true;
 }
 
 
-int CRecentReplace::CompareItem(const CReplaceString* p1, LPCWSTR p2) const
+int RecentReplace::CompareItem(const ReplaceString* p1, LPCWSTR p2) const
 {
 	return wcscmp(*p1, p2);
 }
 
-void CRecentReplace::CopyItem(CReplaceString* dst, LPCWSTR src) const
+void RecentReplace::CopyItem(ReplaceString* dst, LPCWSTR src) const
 {
 	wcscpy(*dst, src);
 }

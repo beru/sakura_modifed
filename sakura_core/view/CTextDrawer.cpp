@@ -35,7 +35,7 @@
 #include "charset/charcode.h"
 #include "doc/layout/CLayout.h"
 
-const CTextArea* CTextDrawer::GetTextArea() const
+const TextArea* TextDrawer::GetTextArea() const
 {
 	return &m_pEditView->GetTextArea();
 }
@@ -48,7 +48,7 @@ using namespace std;
 @@@ 2002.09.22 YAZAKI    const unsigned char* pDataを、const char* pDataに変更
 @@@ 2007.08.25 kobake 戻り値を void に変更。引数 x, y を DispPos に変更
 */
-void CTextDrawer::DispText(HDC hdc, DispPos* pDispPos, const wchar_t* pData, int nLength, bool bTransparent) const
+void TextDrawer::DispText(HDC hdc, DispPos* pDispPos, const wchar_t* pData, int nLength, bool bTransparent) const
 {
 	if (0 >= nLength) {
 		return;
@@ -57,8 +57,8 @@ void CTextDrawer::DispText(HDC hdc, DispPos* pDispPos, const wchar_t* pData, int
 	int y = pDispPos->GetDrawPos().y;
 
 	// 必要なインターフェースを取得
-	const CTextMetrics* pMetrics = &m_pEditView->GetTextMetrics();
-	const CTextArea* pArea = GetTextArea();
+	const TextMetrics* pMetrics = &m_pEditView->GetTextMetrics();
+	const TextArea* pArea = GetTextArea();
 
 	// 文字間隔配列を生成
 	static vector<int> vDxArray(1);
@@ -95,8 +95,8 @@ void CTextDrawer::DispText(HDC hdc, DispPos* pDispPos, const wchar_t* pData, int
 		if (x < 0) {
 			int nLeftLayout = (0 - x) / nDx - 1;
 			while (nBeforeLayout < nLeftLayout) {
-				nBeforeLayout += CNativeW::GetKetaOfChar(pData, nLength, nBeforeLogic);
-				nBeforeLogic  += CNativeW::GetSizeOfChar(pData, nLength, nBeforeLogic);
+				nBeforeLayout += NativeW::GetKetaOfChar(pData, nLength, nBeforeLogic);
+				nBeforeLogic  += NativeW::GetSizeOfChar(pData, nLength, nBeforeLogic);
 			}
 		}
 
@@ -165,15 +165,15 @@ end:
 	    縦線の色がテキストの背景色と同じ場合は、縦線の背景色をEXORで作画する
 	@note Common::m_nVertLineOffsetにより、指定桁の前の文字の上に作画されることがある。
 */
-void CTextDrawer::DispVerticalLines(
-	CGraphics&	gr,			// 作画するウィンドウのDC
+void TextDrawer::DispVerticalLines(
+	Graphics&	gr,			// 作画するウィンドウのDC
 	int			nTop,		// 線を引く上端のクライアント座標y
 	int			nBottom,	// 線を引く下端のクライアント座標y
 	LayoutInt	nLeftCol,	// 線を引く範囲の左桁の指定
 	LayoutInt	nRightCol	// 線を引く範囲の右桁の指定(-1で未指定)
 ) const
 {
-	const CEditView* pView = m_pEditView;
+	const EditView* pView = m_pEditView;
 	
 	const TypeConfig& typeData = pView->m_pcEditDoc->m_cDocType.GetDocumentAttribute();
 	
@@ -283,15 +283,15 @@ void CTextDrawer::DispVerticalLines(
 	}
 }
 
-void CTextDrawer::DispNoteLine(
-	CGraphics&	gr,			//!< 作画するウィンドウのDC
+void TextDrawer::DispNoteLine(
+	Graphics&	gr,			//!< 作画するウィンドウのDC
 	int			nTop,		//!< 線を引く上端のクライアント座標y
 	int			nBottom,	//!< 線を引く下端のクライアント座標y
 	int			nLeft,		//!< 線を引く左端
 	int			nRight		//!< 線を引く右端
 ) const
 {
-	const CEditView* pView=m_pEditView;
+	const EditView* pView=m_pEditView;
 
 	CTypeSupport cNoteLine(pView, COLORIDX_NOTELINE);
 	if (cNoteLine.IsDisp()) {
@@ -322,17 +322,17 @@ void CTextDrawer::DispNoteLine(
 /*!	折り返し桁縦線の描画
 	@date 2009.10.24 ryoji 新規作成
 */
-void CTextDrawer::DispWrapLine(
-	CGraphics&	gr,			// 作画するウィンドウのDC
+void TextDrawer::DispWrapLine(
+	Graphics&	gr,			// 作画するウィンドウのDC
 	int			nTop,		// 線を引く上端のクライアント座標y
 	int			nBottom		// 線を引く下端のクライアント座標y
 ) const
 {
-	const CEditView* pView = m_pEditView;
+	const EditView* pView = m_pEditView;
 	CTypeSupport cWrapType(pView, COLORIDX_WRAP);
 	if (!cWrapType.IsDisp()) return;
 
-	const CTextArea& rArea = *GetTextArea();
+	const TextArea& rArea = *GetTextArea();
 	const LayoutInt nWrapKetas = pView->m_pcEditDoc->m_cLayoutMgr.GetMaxLineKetas();
 	const int nCharDx = pView->GetTextMetrics().GetHankakuDx();
 	int nXPos = rArea.GetAreaLeft() + (Int)(nWrapKetas - rArea.GetViewLeftCol()) * nCharDx;
@@ -353,8 +353,8 @@ void CTextDrawer::DispWrapLine(
 //                          行番号                             //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-void CTextDrawer::DispLineNumber(
-	CGraphics&		gr,
+void TextDrawer::DispLineNumber(
+	Graphics&		gr,
 	LayoutInt		nLineNum,
 	int				y
 ) const
@@ -362,7 +362,7 @@ void CTextDrawer::DispLineNumber(
 	//$$ 高速化：SearchLineByLayoutYにキャッシュを持たせる
 	const Layout*	pcLayout = EditDoc::GetInstance(0)->m_cLayoutMgr.SearchLineByLayoutY(nLineNum);
 
-	const CEditView* pView = m_pEditView;
+	const EditView* pView = m_pEditView;
 	const TypeConfig* pTypes = &pView->m_pcEditDoc->m_cDocType.GetDocumentAttribute();
 
 	int				nLineHeight = pView->GetTextMetrics().GetHankakuDy();
@@ -387,14 +387,14 @@ void CTextDrawer::DispLineNumber(
 	//                     nColorIndexを決定                       //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	EColorIndexType nColorIndex = COLORIDX_GYOU;	// 行番号
-	const CDocLine*	pCDocLine = NULL;
+	const DocLine*	pCDocLine = NULL;
 	bool bGyouMod = false;
 	if (pcLayout) {
 		pCDocLine = pcLayout->GetDocLineRef();
 
 		if (1
 			&& pView->GetDocument()->m_cDocEditor.IsModified()
-			&& CModifyVisitor().IsLineModified(
+			&& ModifyVisitor().IsLineModified(
 				pCDocLine,
 				pView->GetDocument()->m_cDocEditor.m_cOpeBuf.GetNoModifiedSeq()
 			)
@@ -409,11 +409,11 @@ void CTextDrawer::DispLineNumber(
 
 	if (pCDocLine) {
 		// DIFF色設定
-		CDiffLineGetter(pCDocLine).GetDiffColor(&nColorIndex);
+		DiffLineGetter(pCDocLine).GetDiffColor(&nColorIndex);
 
 		// 02/10/16 ai
 		// ブックマークの表示
-		if (CBookmarkGetter(pCDocLine).IsBookmarked()) {
+		if (BookmarkGetter(pCDocLine).IsBookmarked()) {
 			if (CTypeSupport(pView, COLORIDX_MARK).IsDisp()) {
 				nColorIndex = COLORIDX_MARK;
 			}
@@ -497,7 +497,7 @@ void CTextDrawer::DispLineNumber(
 				}else {
 					_itow(pcLayout->GetLogicLineNo() + 1, szLineNum, 10);	// 対応する論理行番号
 //###デバッグ用
-//					_itow(CModifyVisitor().GetLineModifiedSeq(pCDocLine), szLineNum, 10);	// 行の変更番号
+//					_itow(ModifyVisitor().GetLineModifiedSeq(pCDocLine), szLineNum, 10);	// 行の変更番号
 				}
 			}else {
 				// 物理行（レイアウト行）番号表示モード
@@ -551,7 +551,7 @@ void CTextDrawer::DispLineNumber(
 	if (pCDocLine) {
 		// 2001.12.03 hor
 		// とりあえずブックマークに縦線
-		if (CBookmarkGetter(pCDocLine).IsBookmarked() && !cMarkType.IsDisp()) {
+		if (BookmarkGetter(pCDocLine).IsBookmarked() && !cMarkType.IsDisp()) {
 			gr.PushPen(cColorType.GetTextColor(), 2);
 			::MoveToEx(gr, 1, y, NULL);
 			::LineTo(gr, 1, y + nLineHeight);
@@ -559,7 +559,7 @@ void CTextDrawer::DispLineNumber(
 		}
 
 		// DIFFマーク描画
-		CDiffLineGetter(pCDocLine).DrawDiffMark(gr, y, nLineHeight, fgcolor);
+		DiffLineGetter(pCDocLine).DrawDiffMark(gr, y, nLineHeight, fgcolor);
 	}
 
 	// 行番号とテキストの隙間の描画

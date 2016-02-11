@@ -11,7 +11,7 @@
 	Please contact the copyright holder to use this code for other purpose.
 */
 
-class CSplitBoxWnd;
+class SplitBoxWnd;
 
 #pragma once
 
@@ -24,13 +24,13 @@ class CSplitBoxWnd;
 /*!
 	@brief 分割ボックスウィンドウクラス
 */
-class CSplitBoxWnd : public CWnd {
+class SplitBoxWnd : public Wnd {
 public:
 	/*
 	||  Constructors
 	*/
-	CSplitBoxWnd();
-	virtual ~CSplitBoxWnd();
+	SplitBoxWnd();
+	virtual ~SplitBoxWnd();
 	HWND Create(HINSTANCE, HWND, int);
 	
 	static void Draw3dRect(HDC, int, int, int, int, COLORREF, COLORREF);

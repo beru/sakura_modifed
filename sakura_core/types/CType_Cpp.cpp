@@ -142,12 +142,12 @@ bool C_IsLineEsc(const wchar_t* s, int len)
 		if (len == 1) {
 			return(true);
 		}else if (len == 2) {
-			if (CNativeW::GetSizeOfChar(s, 2 , 0) == 1)
+			if (NativeW::GetSizeOfChar(s, 2 , 0) == 1)
 				return(true);
 		}else { // 残り３バイト以上
-			if (CNativeW::GetSizeOfChar(s, len , len-2) == 1)
+			if (NativeW::GetSizeOfChar(s, len , len-2) == 1)
 				return(true);
-			if (CNativeW::GetSizeOfChar(s, len , len-3) == 2)
+			if (NativeW::GetSizeOfChar(s, len , len-3) == 2)
 				return(true);
 		}
 	}
@@ -352,8 +352,8 @@ LogicInt CCppPreprocessMng::ScanLine(
 	@param pcFuncInfoArr [out] 関数一覧を返すためのクラス。
 	ここに関数のリストを登録する。
 */
-void CDocOutline::MakeFuncList_C(
-	CFuncInfoArr* pcFuncInfoArr,
+void DocOutline::MakeFuncList_C(
+	FuncInfoArr* pcFuncInfoArr,
 	bool bVisibleMemberFunc
 	)
 {
@@ -1207,7 +1207,7 @@ void CDocOutline::MakeFuncList_C(
 
 
 // C/C++スマートインデント処理
-void CEditView::SmartIndent_CPP(wchar_t wcChar)
+void EditView::SmartIndent_CPP(wchar_t wcChar)
 {
 	const wchar_t*	pLine;
 	LogicInt		nLineLen;
@@ -1275,7 +1275,7 @@ void CEditView::SmartIndent_CPP(wchar_t wcChar)
 				}
 				if (i < nLineLen) {
 					// 2005-09-02 D.S.Koba GetSizeOfChar
-					nCharChars = CNativeW::GetSizeOfChar(pLine, nLineLen, i);
+					nCharChars = NativeW::GetSizeOfChar(pLine, nLineLen, i);
 					if (nCharChars == 1 && (pLine[i] == L')' || pLine[i] == L'}')) {
 						wcChar = pLine[i];
 					}
@@ -1323,12 +1323,12 @@ void CEditView::SmartIndent_CPP(wchar_t wcChar)
 						continue;	// EOF のみの行
 					break;
 				}
-				nCharChars = LogicInt(&pLine2[nWork] - CNativeW::GetCharPrev(pLine2, nLineLen2, &pLine2[nWork]));
+				nCharChars = LogicInt(&pLine2[nWork] - NativeW::GetCharPrev(pLine2, nLineLen2, &pLine2[nWork]));
 				k = nWork - nCharChars;
 			}else {
 				if (!pLine2)
 					break;
-				nCharChars = LogicInt(&pLine2[nLineLen2] - CNativeW::GetCharPrev(pLine2, nLineLen2, &pLine2[nLineLen2]));
+				nCharChars = LogicInt(&pLine2[nLineLen2] - NativeW::GetCharPrev(pLine2, nLineLen2, &pLine2[nLineLen2]));
 				k = nLineLen2 - nCharChars;
 			}
 
@@ -1382,7 +1382,7 @@ void CEditView::SmartIndent_CPP(wchar_t wcChar)
 						}
 					}
 				}
-				nCharChars = LogicInt(&pLine2[k] - CNativeW::GetCharPrev(pLine2, nLineLen2, &pLine2[k]));
+				nCharChars = LogicInt(&pLine2[k] - NativeW::GetCharPrev(pLine2, nLineLen2, &pLine2[k]));
 				if (nCharChars == 0) {
 					nCharChars = LogicInt(1);
 				}
@@ -1410,7 +1410,7 @@ void CEditView::SmartIndent_CPP(wchar_t wcChar)
 					int i;
 					i = m = 0;
 					while (i < nDataLen) {
-						nCharChars = CNativeW::GetSizeOfChar(pszData, nDataLen, i);
+						nCharChars = NativeW::GetSizeOfChar(pszData, nDataLen, i);
 						if (nCharChars == 1 && pszData[i] == WCODE::TAB) {
 							m += (Int)m_pcEditDoc->m_cLayoutMgr.GetActualTabSpace(LayoutInt(m));
 						}else {

@@ -43,7 +43,7 @@ const DWORD p_helpids[] = {	//12800
 	0, 0
 };	//@@@ 2002.01.07 add end MIK
 
-CDlgJump::CDlgJump()
+DlgJump::DlgJump()
 {
 	m_nLineNum = 0;			// 行番号
 	m_bPLSQL = FALSE;		// PL/SQLソースの有効行か
@@ -54,19 +54,19 @@ CDlgJump::CDlgJump()
 }
 
 // モーダルダイアログの表示
-int CDlgJump::DoModal(
+int DlgJump::DoModal(
 	HINSTANCE	hInstance,
 	HWND		hwndParent,
 	LPARAM		lParam
 )
 {
-	return CDialog::DoModal(hInstance, hwndParent, IDD_JUMP, lParam);
+	return Dialog::DoModal(hInstance, hwndParent, IDD_JUMP, lParam);
 }
 
 
 // From Here Oct. 6, 2000 JEPRO added 行番号入力ボックスにスピンコントロールを付けるため
 // CDlgPrintSetting.cppのOnNotifyとOnSpin及びCpropComFile.cppのDispatchEvent_p2内のcase WM_NOTIFYを参考にした
-BOOL CDlgJump::OnNotify(WPARAM wParam, LPARAM lParam)
+BOOL DlgJump::OnNotify(WPARAM wParam, LPARAM lParam)
 {
 	int nData;
 	int idCtrl = (int)wParam;
@@ -106,7 +106,7 @@ BOOL CDlgJump::OnNotify(WPARAM wParam, LPARAM lParam)
 // To Here Oct. 6, 2000
 
 
-BOOL CDlgJump::OnCbnSelChange(HWND hwndCtl, int wID)
+BOOL DlgJump::OnCbnSelChange(HWND hwndCtl, int wID)
 {
 	int	nIndex;
 	int	nWorkLine;
@@ -120,7 +120,7 @@ BOOL CDlgJump::OnCbnSelChange(HWND hwndCtl, int wID)
 	return FALSE;
 }
 
-BOOL CDlgJump::OnBnClicked(int wID)
+BOOL DlgJump::OnBnClicked(int wID)
 {
 	switch (wID) {
 	case IDC_BUTTON_HELP:
@@ -179,15 +179,15 @@ BOOL CDlgJump::OnBnClicked(int wID)
 		return TRUE;
 	}
 	// 基底クラスメンバ
-	return CDialog::OnBnClicked(wID);
+	return Dialog::OnBnClicked(wID);
 }
 
 
 // ダイアログデータの設定
-void CDlgJump::SetData(void)
+void DlgJump::SetData(void)
 {
 	EditDoc* pCEditDoc = (EditDoc*)m_lParam;
-	CFuncInfoArr cFuncInfoArr;
+	FuncInfoArr cFuncInfoArr;
 	wchar_t szText[1024];
 	int nIndexCurSel = 0;	// Sep. 11, 2004 genta 初期化
 
@@ -304,7 +304,7 @@ void CDlgJump::SetData(void)
 
 // ダイアログデータの取得
 // TRUE==正常   FALSE==入力エラー
-int CDlgJump::GetData(void)
+int DlgJump::GetData(void)
 {
 	BOOL pTranslated;
 
@@ -332,7 +332,7 @@ int CDlgJump::GetData(void)
 }
 
 //@@@ 2002.01.18 add start
-LPVOID CDlgJump::GetHelpIdTable(void)
+LPVOID DlgJump::GetHelpIdTable(void)
 {
 	return (LPVOID)p_helpids;
 }

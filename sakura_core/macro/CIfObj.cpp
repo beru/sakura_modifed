@@ -43,13 +43,13 @@
 
 /////////////////////////////////////////////
 // スクリプトに渡されるオブジェクトの型情報
-class CIfObjTypeInfo: public ImplementsIUnknown<ITypeInfo> {
+class IfObjTypeInfo: public ImplementsIUnknown<ITypeInfo> {
 private:
 	const IfObj::CMethodInfoList& m_MethodsRef;
 	const std::wstring& m_sName;
 	TYPEATTR m_TypeAttr;
 public:
-	CIfObjTypeInfo(const IfObj::CMethodInfoList& methods, const std::wstring& sName);
+	IfObjTypeInfo(const IfObj::CMethodInfoList& methods, const std::wstring& sName);
 
 	virtual HRESULT STDMETHODCALLTYPE GetTypeAttr(
 					/* [out] */ TYPEATTR __RPC_FAR *__RPC_FAR *ppTypeAttr)
@@ -217,7 +217,7 @@ public:
 	}
 };
 
-CIfObjTypeInfo::CIfObjTypeInfo(const IfObj::CMethodInfoList& methods,
+IfObjTypeInfo::IfObjTypeInfo(const IfObj::CMethodInfoList& methods,
 							   const std::wstring& sName)
 	:
 	ImplementsIUnknown<ITypeInfo>(),
@@ -229,7 +229,7 @@ CIfObjTypeInfo::CIfObjTypeInfo(const IfObj::CMethodInfoList& methods,
 	m_TypeAttr.cFuncs = (WORD)m_MethodsRef.size();
 }
 
-HRESULT STDMETHODCALLTYPE CIfObjTypeInfo::GetFuncDesc(
+HRESULT STDMETHODCALLTYPE IfObjTypeInfo::GetFuncDesc(
 			/* [in] */ UINT index,
 			/* [out] */ FUNCDESC __RPC_FAR *__RPC_FAR *ppFuncDesc)
 {
@@ -240,7 +240,7 @@ HRESULT STDMETHODCALLTYPE CIfObjTypeInfo::GetFuncDesc(
 	return S_OK;
 }
 
-HRESULT STDMETHODCALLTYPE CIfObjTypeInfo::GetNames(
+HRESULT STDMETHODCALLTYPE IfObjTypeInfo::GetNames(
     /* [in] */ MEMBERID memid,
     /* [length_is][size_is][out] */ BSTR __RPC_FAR *rgBstrNames,
     /* [in] */ UINT cMaxNames,
@@ -323,7 +323,7 @@ HRESULT STDMETHODCALLTYPE IfObj::GetTypeInfo(
 	/* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo)
 {
 	if (!m_TypeInfo) {
-		m_TypeInfo = new CIfObjTypeInfo(this->m_Methods, this->m_sName);
+		m_TypeInfo = new IfObjTypeInfo(this->m_Methods, this->m_sName);
 		m_TypeInfo->AddRef();
 	}
 	(*ppTInfo) = m_TypeInfo;

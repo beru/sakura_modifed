@@ -30,7 +30,7 @@
 
 	2017/5/17 CFile.h‚©‚çˆÚ“®
 */
-const TCHAR* CDocFile::GetSaveFilePath(void) const
+const TCHAR* DocFile::GetSaveFilePath(void) const
 {
 	if (m_szSaveFilePath.IsValidPath()) {
 		return m_szSaveFilePath;

@@ -23,26 +23,26 @@
 */
 #pragma once
 
-class CTextMetrics;
-class CTextArea;
-class CViewFont;
-class CEol;
-class CEditView;
+class TextMetrics;
+class TextArea;
+class ViewFont;
+class Eol;
+class EditView;
 class Layout;
 #include "DispPos.h"
 
-class CGraphics;
+class Graphics;
 
-class CTextDrawer {
+class TextDrawer {
 public:
-	CTextDrawer(const CEditView* pEditView) : m_pEditView(pEditView) { }
-	virtual ~CTextDrawer() {}
+	TextDrawer(const EditView* pEditView) : m_pEditView(pEditView) { }
+	virtual ~TextDrawer() {}
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                         外部依存                            //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	// 領域のインスタンスを求める
-	const CTextArea* GetTextArea() const;
+	const TextArea* GetTextArea() const;
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                     インターフェース                        //
@@ -53,19 +53,19 @@ public:
 	void DispText(HDC hdc, DispPos* pDispPos, const wchar_t* pData, int nLength, bool bTransparent = false) const; // テキスト表示
 
 	//!	ノート線描画
-	void DispNoteLine( CGraphics& gr, int nTop, int nBottom, int nLeft, int nRight ) const;
+	void DispNoteLine( Graphics& gr, int nTop, int nBottom, int nLeft, int nRight ) const;
 
 	// -- -- 指定桁縦線描画 -- -- //
 	// 指定桁縦線描画関数	// 2005.11.08 Moca
-	void DispVerticalLines(CGraphics& gr, int nTop, int nBottom, LayoutInt nLeftCol, LayoutInt nRightCol) const;
+	void DispVerticalLines(Graphics& gr, int nTop, int nBottom, LayoutInt nLeftCol, LayoutInt nRightCol) const;
 
 	// -- -- 折り返し桁縦線描画 -- -- //
-	void DispWrapLine(CGraphics& gr, int nTop, int nBottom) const;
+	void DispWrapLine(Graphics& gr, int nTop, int nBottom) const;
 
 	// -- -- 行番号 -- -- //
-	void DispLineNumber(CGraphics& gr, LayoutInt nLineNum, int y) const;		// 行番号表示
+	void DispLineNumber(Graphics& gr, LayoutInt nLineNum, int y) const;		// 行番号表示
 
 private:
-	const CEditView* m_pEditView;
+	const EditView* m_pEditView;
 };
 

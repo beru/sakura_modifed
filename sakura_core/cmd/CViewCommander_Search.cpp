@@ -47,7 +47,7 @@ void ViewCommander::Command_SEARCH_BOX(void)
 void ViewCommander::Command_SEARCH_DIALOG(void)
 {
 	// 現在カーソル位置単語または選択範囲より検索等のキーを取得
-	CNativeW cmemCurText;
+	NativeW cmemCurText;
 	m_pCommanderView->GetCurrentTextForSearchDlg(cmemCurText);	// 2006.08.23 ryoji ダイアログ専用関数に変更
 
 	auto& dlgFind = GetEditWindow()->m_cDlgFind;
@@ -173,7 +173,7 @@ void ViewCommander::Command_SEARCH_NEXT(
 			// 現在、長さ０でマッチしている場合は物理行で１文字進める(無限マッチ対策)
 			if (nIdx < nLineLen) {
 				// 2005-09-02 D.S.Koba GetSizeOfChar
-				nIdx += LogicInt(CNativeW::GetSizeOfChar(pLine, nLineLen, nIdx) == 2 ? 2 : 1);
+				nIdx += LogicInt(NativeW::GetSizeOfChar(pLine, nLineLen, nIdx) == 2 ? 2 : 1);
 			}else {
 				// 念のため行末は別処理
 				++nIdx;
@@ -302,7 +302,7 @@ end_of_func:;
 
 		// 検索／置換  見つからないときメッセージを表示
 		if (!pszNotFoundMessage) {
-			CNativeW KeyName;
+			NativeW KeyName;
 			LimitStringLengthW(m_pCommanderView->m_strCurSearchKey.c_str(), m_pCommanderView->m_strCurSearchKey.size(), _MAX_PATH, KeyName);
 			if ((size_t)KeyName.GetStringLength() < m_pCommanderView->m_strCurSearchKey.size()) {
 				KeyName.AppendString(L"...");
@@ -459,7 +459,7 @@ end_of_func:;
 // To Here 2002.01.26 hor
 
 		// 検索／置換  見つからないときメッセージを表示
-		CNativeW KeyName;
+		NativeW KeyName;
 		LimitStringLengthW(m_pCommanderView->m_strCurSearchKey.c_str(), m_pCommanderView->m_strCurSearchKey.size(),
 			_MAX_PATH, KeyName);
 		if ((size_t)KeyName.GetStringLength() < m_pCommanderView->m_strCurSearchKey.size()) {
@@ -482,7 +482,7 @@ void ViewCommander::Command_REPLACE_DIALOG(void)
 	bool bSelected = false;
 
 	// 現在カーソル位置単語または選択範囲より検索等のキーを取得
-	CNativeW cmemCurText;
+	NativeW cmemCurText;
 	m_pCommanderView->GetCurrentTextForSearchDlg(cmemCurText);	// 2006.08.23 ryoji ダイアログ専用関数に変更
 
 	auto& dlgReplace = GetEditWindow()->m_cDlgReplace;
@@ -573,7 +573,7 @@ void ViewCommander::Command_REPLACE(HWND hwndParent)
 	m_pCommanderView->GetSelectionInfo().DisableSelectArea(true);
 
 	// 2004.06.01 Moca 検索中に、他のプロセスによってm_aReplaceKeysが書き換えられても大丈夫なように
-	const CNativeW	cMemRepKey(dlgReplace.m_strText2.c_str());
+	const NativeW	cMemRepKey(dlgReplace.m_strText2.c_str());
 
 	// 次を検索
 	Command_SEARCH_NEXT(true, true, false, hwndParent, NULL);
@@ -623,7 +623,7 @@ void ViewCommander::Command_REPLACE(HWND hwndParent)
 		}else if (bRegularExp) { // 検索／置換  1==正規表現
 			// 先読みに対応するために物理行末までを使うように変更 2005/03/27 かろと
 			// 2002/01/19 novice 正規表現による文字列置換
-			CBregexp cRegexp;
+			Bregexp cRegexp;
 
 			if (!InitRegexp(m_pCommanderView->GetHwnd(), cRegexp, true)) {
 				return;	// 失敗return;
@@ -639,8 +639,8 @@ void ViewCommander::Command_REPLACE(HWND hwndParent)
 			// →これでは「検索の後ろの文字が改行だったら次の行頭へ移動」が処理できない
 			// → Oct. 30, 「検索の後ろの文字が改行だったら・・」の処理をやめる（誰もしらないみたいなので）
 			// Nov. 9, 2005 かろと 正規表現で選択始点・終点への挿入方法を変更(再)
-			CNativeW cMemMatchStr; cMemMatchStr.SetString(L"$&");
-			CNativeW cMemRepKey2;
+			NativeW cMemMatchStr; cMemMatchStr.SetString(L"$&");
+			NativeW cMemRepKey2;
 			if (nReplaceTarget == 1) {	// 選択始点へ挿入
 				cMemRepKey2 = cMemRepKey;
 				cMemRepKey2 += cMemMatchStr;
@@ -663,7 +663,7 @@ void ViewCommander::Command_REPLACE(HWND hwndParent)
 					// ０文字マッチの時(無限置換にならないように１文字進める)
 					if (nIdxTo < nLen) {
 						// 2005-09-02 D.S.Koba GetSizeOfChar
-						nIdxTo += LogicInt(CNativeW::GetSizeOfChar(pLine, nLen, nIdxTo) == 2 ? 2 : 1);
+						nIdxTo += LogicInt(NativeW::GetSizeOfChar(pLine, nLen, nIdxTo) == 2 ? 2 : 1);
 					}
 					// 無限置換しないように、１文字増やしたので１文字選択に変更
 					// 選択始点・終点への挿入の場合も０文字マッチ時は動作は同じになるので
@@ -775,7 +775,7 @@ void ViewCommander::Command_REPLACE_ALL()
 	int	nAllLineNumLogicOrg = (Int)GetDocument()->m_cDocLineMgr.GetLineCount();
 
 	// 進捗表示&中止ダイアログの作成
-	CDlgCancel	cDlgCancel;
+	DlgCancel	cDlgCancel;
 	HWND		hwndCancel = cDlgCancel.DoModeless(G_AppInstance(), m_pCommanderView->GetHwnd(), IDD_REPLACERUNNING);
 	::EnableWindow(m_pCommanderView->GetHwnd(), FALSE);
 	::EnableWindow(::GetParent(m_pCommanderView->GetHwnd()), FALSE);
@@ -850,7 +850,7 @@ void ViewCommander::Command_REPLACE_ALL()
 	const wchar_t* szREPLACEKEY;		// 置換後文字列。
 	bool		bColumnSelect = false;	// 矩形貼り付けを行うかどうか。
 	bool		bLineSelect = false;	// ラインモード貼り付けを行うかどうか
-	CNativeW	cmemClip;				// 置換後文字列のデータ（データを格納するだけで、ループ内ではこの形ではデータを扱いません）。
+	NativeW	cmemClip;				// 置換後文字列のデータ（データを格納するだけで、ループ内ではこの形ではデータを扱いません）。
 
 	// クリップボードからのデータ貼り付けかどうか。
 	if (nPaste != 0) {
@@ -922,7 +922,7 @@ void ViewCommander::Command_REPLACE_ALL()
 
 	// クラス関係をループの中で宣言してしまうと、毎ループごとにコンストラクタ、デストラクタが
 	// 呼ばれて遅くなるので、ここで宣言。
-	CBregexp cRegexp;
+	Bregexp cRegexp;
 	// 初期化も同様に毎ループごとにやると遅いので、最初に済ましてしまう。
 	if (bRegularExp && nPaste == 0) {
 		if (!InitRegexp(m_pCommanderView->GetHwnd(), cRegexp, true)) {
@@ -934,8 +934,8 @@ void ViewCommander::Command_REPLACE_ALL()
 		}
 
 		// Nov. 9, 2005 かろと 正規表現で選択始点・終点への挿入方法を変更(再)
-		CNativeW cMemRepKey2;
-		CNativeW cMemMatchStr;
+		NativeW cMemRepKey2;
+		NativeW cMemMatchStr;
 		cMemMatchStr.SetString(L"$&");
 		if (nReplaceTarget == 1) {	// 選択始点へ挿入
 			cMemRepKey2 = cmemClip;
@@ -947,8 +947,8 @@ void ViewCommander::Command_REPLACE_ALL()
 			cMemRepKey2 = cmemClip;
 		}
 		// 正規表現オプションの設定2006.04.01 かろと
-		int nFlag = (m_pCommanderView->m_curSearchOption.bLoHiCase ? CBregexp::optCaseSensitive : CBregexp::optNothing);
-		nFlag |= (bConsecutiveAll ? CBregexp::optNothing : CBregexp::optGlobal);	// 2007.01.16 ryoji
+		int nFlag = (m_pCommanderView->m_curSearchOption.bLoHiCase ? Bregexp::optCaseSensitive : Bregexp::optNothing);
+		nFlag |= (bConsecutiveAll ? Bregexp::optNothing : Bregexp::optGlobal);	// 2007.01.16 ryoji
 		cRegexp.Compile(m_pCommanderView->m_strCurSearchKey.c_str(), cMemRepKey2.GetStringPtr(), nFlag);
 	}
 
@@ -1131,7 +1131,7 @@ void ViewCommander::Command_REPLACE_ALL()
 				cSelectLogic.SetFrom(LogicPoint(LogicXInt(0), y)); // 行頭
 				cSelectLogic.SetTo(LogicPoint(LogicXInt(0), y + LogicInt(1))); // 次行の行頭
 				if (GetDocument()->m_cDocLineMgr.GetLineCount() == y + LogicInt(1)) {
-					const CDocLine* pLine = GetDocument()->m_cDocLineMgr.GetLine(y);
+					const DocLine* pLine = GetDocument()->m_cDocLineMgr.GetLine(y);
 					if (pLine->GetEol() == EOL_NONE) {
 						// EOFは最終データ行にぶら下がりなので、選択終端は行末
 						cSelectLogic.SetTo(LogicPoint(pLine->GetLengthWithEOL(), y)); // 対象行の行末
@@ -1176,7 +1176,7 @@ void ViewCommander::Command_REPLACE_ALL()
 		}else if (bRegularExp) { // 検索／置換  1==正規表現
 			// 2002/01/19 novice 正規表現による文字列置換
 			// 物理行、物理行長、物理行での検索マッチ位置
-			const CDocLine* pcDocLine;
+			const DocLine* pcDocLine;
 			const wchar_t* pLine;
 			LogicInt nLogicLineNum;
 			LogicInt nIdx;
@@ -1245,7 +1245,7 @@ void ViewCommander::Command_REPLACE_ALL()
 					    // ０文字マッチの時(無限置換にならないように１文字進める)
 					    if (nIdxTo < nLen) {
 						    // 2005-09-02 D.S.Koba GetSizeOfChar
-						    nIdxTo += LogicInt(CNativeW::GetSizeOfChar(pLine, nLen, nIdxTo) == 2 ? 2 : 1);
+						    nIdxTo += LogicInt(NativeW::GetSizeOfChar(pLine, nLen, nIdxTo) == 2 ? 2 : 1);
 					    }
 					    // 無限置換しないように、１文字増やしたので１文字選択に変更
 					    // 選択始点・終点への挿入の場合も０文字マッチ時は動作は同じになるので
@@ -1445,7 +1445,7 @@ void ViewCommander::Command_SEARCH_CLEARMARK(void)
 	if (m_pCommanderView->GetSelectionInfo().IsTextSelected()) {
 
 		// 検索文字列取得
-		CNativeW	cmemCurText;
+		NativeW	cmemCurText;
 		m_pCommanderView->GetCurrentTextForSearch(cmemCurText, false);
 		auto& csSearch = GetDllShareData().m_common.m_sSearch;
 
@@ -1458,7 +1458,7 @@ void ViewCommander::Command_SEARCH_CLEARMARK(void)
 
 		// 共有データへ登録
 		if (cmemCurText.GetStringLength() < _MAX_PATH) {
-			CSearchKeywordManager().AddToSearchKeyArr(cmemCurText.GetStringPtr());
+			SearchKeywordManager().AddToSearchKeyArr(cmemCurText.GetStringPtr());
 			csSearch.m_searchOption = m_pCommanderView->m_curSearchOption;
 		}
 		m_pCommanderView->m_nCurSearchKeySequence = csSearch.m_nSearchKeySequence;

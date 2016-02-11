@@ -33,7 +33,7 @@
 
 	@note	取得後のポインタはユーザ管理の構造体にキャストして参照してください。
 */
-const TCHAR* CRecentFile::GetItemText(int nIndex) const
+const TCHAR* RecentFile::GetItemText(int nIndex) const
 {
 	return GetItem(nIndex)->m_szPath;
 }
@@ -43,7 +43,7 @@ const TCHAR* CRecentFile::GetItemText(int nIndex) const
 //                           生成                              //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-CRecentFile::CRecentFile()
+RecentFile::RecentFile()
 {
 	Create(
 		GetShareData()->m_history.m_fiMRUArr,
@@ -54,13 +54,13 @@ CRecentFile::CRecentFile()
 	);
 }
 
-bool CRecentFile::DataToReceiveType(const EditInfo** dst, const EditInfo* src) const
+bool RecentFile::DataToReceiveType(const EditInfo** dst, const EditInfo* src) const
 {
 	*dst = src;
 	return true;
 }
 
-bool CRecentFile::TextToDataType(EditInfo* dst, LPCTSTR pszText) const
+bool RecentFile::TextToDataType(EditInfo* dst, LPCTSTR pszText) const
 {
 	if (_countof(dst->m_szPath) < auto_strlen(pszText) + 1) {
 		return false;
@@ -69,12 +69,12 @@ bool CRecentFile::TextToDataType(EditInfo* dst, LPCTSTR pszText) const
 	return true;
 }
 
-int CRecentFile::CompareItem(const EditInfo* p1, const EditInfo* p2) const
+int RecentFile::CompareItem(const EditInfo* p1, const EditInfo* p2) const
 {
 	return _tcsicmp(p1->m_szPath, p2->m_szPath);
 }
 
-void CRecentFile::CopyItem(EditInfo* dst, const EditInfo* src) const
+void RecentFile::CopyItem(EditInfo* dst, const EditInfo* src) const
 {
 	memcpy_raw(dst, src, sizeof(*dst));
 }
@@ -83,7 +83,7 @@ void CRecentFile::CopyItem(EditInfo* dst, const EditInfo* src) const
 //                   固有インターフェース                      //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-int CRecentFile::FindItemByPath(const TCHAR* pszPath) const
+int RecentFile::FindItemByPath(const TCHAR* pszPath) const
 {
 	int n = GetItemCount();
 	for (int i=0; i<n; ++i) {

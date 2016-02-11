@@ -31,10 +31,10 @@
 #include "types/CType.h" // CTypeConfig
 #include "env/CDocTypeManager.h"
 
-class CDocType {
+class DocType {
 public:
 	// 生成と破棄
-	CDocType(EditDoc* pcDoc);
+	DocType(EditDoc* pcDoc);
 	
 	// ロック機能	// Nov. 29, 2000 genta 設定の一時変更時に拡張子による強制的な設定変更を無効にする
 	void LockDocumentType() { m_nSettingTypeLocked = true; }

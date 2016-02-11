@@ -68,17 +68,17 @@ DocLineMgr::~DocLineMgr()
 
 
 // pPosの直前に新しい行を挿入
-CDocLine* DocLineMgr::InsertNewLine(CDocLine* pPos)
+DocLine* DocLineMgr::InsertNewLine(DocLine* pPos)
 {
-	CDocLine* pcDocLineNew = new CDocLine;
+	DocLine* pcDocLineNew = new DocLine;
 	_InsertBeforePos(pcDocLineNew, pPos);
 	return pcDocLineNew;
 }
 
 // 最下部に新しい行を挿入
-CDocLine* DocLineMgr::AddNewLine()
+DocLine* DocLineMgr::AddNewLine()
 {
-	CDocLine* pcDocLineNew = new CDocLine;
+	DocLine* pcDocLineNew = new DocLine;
 	_PushBottom(pcDocLineNew);
 	return pcDocLineNew;
 }
@@ -86,9 +86,9 @@ CDocLine* DocLineMgr::AddNewLine()
 // 全ての行を削除する
 void DocLineMgr::DeleteAllLine()
 {
-	CDocLine* pDocLine = m_pDocLineTop;
+	DocLine* pDocLine = m_pDocLineTop;
 	while (pDocLine) {
-		CDocLine* pDocLineNext = pDocLine->GetNextLine();
+		DocLine* pDocLineNext = pDocLine->GetNextLine();
 		delete pDocLine;
 		pDocLine = pDocLineNext;
 	}
@@ -97,7 +97,7 @@ void DocLineMgr::DeleteAllLine()
 
 
 // 行の削除
-void DocLineMgr::DeleteLine(CDocLine* pcDocLineDel)
+void DocLineMgr::DeleteLine(DocLine* pcDocLineDel)
 {
 	// Prev切り離し
 	if (pcDocLineDel->GetPrevLine()) {
@@ -140,7 +140,7 @@ void DocLineMgr::DeleteLine(CDocLine* pcDocLineDel)
 	@param nLine [in] 行番号
 	@return 行オブジェクトへのポインタ。該当行がない場合はNULL。
 */
-const CDocLine* DocLineMgr::GetLine(LogicInt nLine) const
+const DocLine* DocLineMgr::GetLine(LogicInt nLine) const
 {
 	if (m_nLines == LogicInt(0)) {
 		return NULL;
@@ -150,7 +150,7 @@ const CDocLine* DocLineMgr::GetLine(LogicInt nLine) const
 		return NULL;
 	}
 	LogicInt nCounter;
-	CDocLine* pDocLine;
+	DocLine* pDocLine;
 	// 2004.03.28 Moca m_pCodePrevReferより、Top,Botのほうが近い場合は、そちらを利用する
 	LogicInt nPrevToLineNumDiff = t_abs(m_nPrevReferLine - nLine);
 	if (!m_pCodePrevRefer
@@ -238,12 +238,12 @@ void DocLineMgr::_Init()
 	m_nPrevReferLine = LogicInt(0);
 	m_pCodePrevRefer = NULL;
 	m_pDocLineCurrent = NULL;
-	CDiffManager::getInstance()->SetDiffUse(false);	// DIFF使用中	//@@@ 2002.05.25 MIK     //##後でCDocListener::OnClear (OnAfterClose) を作成し、そこに移動
+	DiffManager::getInstance()->SetDiffUse(false);	// DIFF使用中	//@@@ 2002.05.25 MIK     //##後でCDocListener::OnClear (OnAfterClose) を作成し、そこに移動
 }
 
 // -- -- チェーン関数 -- -- // 2007.10.11 kobake 作成
 // 最下部に挿入
-void DocLineMgr::_PushBottom(CDocLine* pDocLineNew)
+void DocLineMgr::_PushBottom(DocLine* pDocLineNew)
 {
 	if (!m_pDocLineTop) {
 		m_pDocLineTop = pDocLineNew;
@@ -260,7 +260,7 @@ void DocLineMgr::_PushBottom(CDocLine* pDocLineNew)
 }
 
 // pPosの直前に挿入。pPosにNULLを指定した場合は、最下部に追加。
-void DocLineMgr::_InsertBeforePos(CDocLine* pDocLineNew, CDocLine* pPos)
+void DocLineMgr::_InsertBeforePos(DocLine* pDocLineNew, DocLine* pPos)
 {
 	// New.Nextを設定
 	pDocLineNew->m_pNext = pPos;
@@ -286,7 +286,7 @@ void DocLineMgr::_InsertBeforePos(CDocLine* pDocLineNew, CDocLine* pPos)
 }
 
 // pPosの直後に挿入。pPosにNULLを指定した場合は、先頭に追加。
-void DocLineMgr::_InsertAfterPos(CDocLine* pDocLineNew, CDocLine* pPos)
+void DocLineMgr::_InsertAfterPos(DocLine* pDocLineNew, DocLine* pPos)
 {
 	// New.Prevを設定
 	pDocLineNew->m_pPrev = pPos;
@@ -328,8 +328,8 @@ void DocLineMgr::DUMP()
 #ifdef _DEBUG
 	MYTRACE(_T("------------------------\n"));
 	
-	CDocLine* pDocLineNext;
-	CDocLine* pDocLineEnd = NULL;
+	DocLine* pDocLineNext;
+	DocLine* pDocLineEnd = NULL;
 	
 	// 正当性を調べる
 	bool bIncludeCurrent = false;
@@ -341,7 +341,7 @@ void DocLineMgr::DUMP()
 	if (m_pDocLineBot->m_pNext) {
 		MYTRACE(_T("error: m_pDocLineBot->m_pNext != NULL\n"));
 	}
-	CDocLine* pDocLine = m_pDocLineTop;
+	DocLine* pDocLine = m_pDocLineTop;
 	while (pDocLine) {
 		if (m_pDocLineCurrent == pDocLine) {
 			bIncludeCurrent = true;

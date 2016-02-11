@@ -285,7 +285,7 @@ int CALLBACK PropSheetProc(
 INT_PTR MyPropertySheet(LPPROPSHEETHEADER lppsph)
 {
 	// 個人設定フォルダを使用するときは「設定フォルダ」ボタンを追加する
-	if (CShareData::getInstance()->IsPrivateSettings()) {
+	if (ShareData::getInstance()->IsPrivateSettings()) {
 		lppsph->dwFlags |= PSH_USECALLBACK;
 		lppsph->pfnCallback = PropSheetProc;
 	}
@@ -360,9 +360,9 @@ DWORD NetConnect (const TCHAR strNetWorkPass[])
 	HTML Helpコンポーネントのアクセスを提供する。
 	内部で保持すべきデータは特になく、至る所から使われるのでGlobal変数にするが、
 	直接のアクセスはOpenHtmlHelp()関数のみから行う。
-	他のファイルからはCHtmlHelpクラスは隠されている。
+	他のファイルからはHtmlHelpクラスは隠されている。
 */
-CHtmlHelp g_cHtmlHelp;
+HtmlHelpDll g_cHtmlHelp;
 
 /*!
 	HTML Helpを開く

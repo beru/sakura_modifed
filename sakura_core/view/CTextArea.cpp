@@ -13,7 +13,7 @@
 #include <math.h>
 #endif
 
-CTextArea::CTextArea(CEditView* pEditView)
+TextArea::TextArea(EditView* pEditView)
 : m_pEditView(pEditView)
 {
 	DLLSHAREDATA* pShareData = &GetDllShareData();
@@ -31,11 +31,11 @@ CTextArea::CTextArea(CEditView* pEditView)
 	m_nViewAlignTop = GetTopYohaku();		// 表示域の上端座標
 }
 
-CTextArea::~CTextArea()
+TextArea::~TextArea()
 {
 }
 
-void CTextArea::CopyTextAreaStatus(CTextArea* pDst) const
+void TextArea::CopyTextAreaStatus(TextArea* pDst) const
 {
 	pDst->SetAreaLeft				(this->GetAreaLeft());		// 表示域の左端座標
 	pDst->m_nViewAlignLeftCols		= this->m_nViewAlignLeftCols;	// 行番号域の桁数
@@ -49,9 +49,9 @@ void CTextArea::CopyTextAreaStatus(CTextArea* pDst) const
 }
 
 // 表示域の再計算
-void CTextArea::UpdateViewColRowNums()
+void TextArea::UpdateViewColRowNums()
 {
-	CEditView* pView = m_pEditView;
+	EditView* pView = m_pEditView;
 	// Note: マイナスの割り算は処理系依存です。
 	// 0だとカーソルを設定できない・選択できないなど動作不良になるので1以上にする
 	m_nViewColNum = LayoutInt(t_max(1, t_max(0, m_nViewCx - 1) / pView->GetTextMetrics().GetHankakuDx()));	// 表示域の桁数
@@ -59,9 +59,9 @@ void CTextArea::UpdateViewColRowNums()
 }
 
 //フォント変更の際、各種パラメータを計算し直す
-void CTextArea::UpdateAreaMetrics(HDC hdc)
+void TextArea::UpdateAreaMetrics(HDC hdc)
 {
-	CEditView* pView = m_pEditView;
+	EditView* pView = m_pEditView;
 
 	if (pView->m_bMiniMap) {
 		// 文字間隔
@@ -82,9 +82,9 @@ void CTextArea::UpdateAreaMetrics(HDC hdc)
 	UpdateViewColRowNums();
 }
 
-void CTextArea::GenerateCharRect(RECT* rc, const DispPos& sPos, int nHankakuNum) const
+void TextArea::GenerateCharRect(RECT* rc, const DispPos& sPos, int nHankakuNum) const
 {
-	const CEditView* pView = m_pEditView;
+	const EditView* pView = m_pEditView;
 
 	rc->left   = sPos.GetDrawPos().x;
 	rc->right  = sPos.GetDrawPos().x + pView->GetTextMetrics().GetHankakuDx() * nHankakuNum;
@@ -92,7 +92,7 @@ void CTextArea::GenerateCharRect(RECT* rc, const DispPos& sPos, int nHankakuNum)
 	rc->bottom = sPos.GetDrawPos().y + pView->GetTextMetrics().GetHankakuDy();
 }
 
-bool CTextArea::TrimRectByArea(RECT* rc) const
+bool TextArea::TrimRectByArea(RECT* rc) const
 {
 	// 左はみ出し調整
 	if (rc->left < GetAreaLeft()) {
@@ -108,16 +108,16 @@ bool CTextArea::TrimRectByArea(RECT* rc) const
 	return true;
 }
 
-bool CTextArea::GenerateClipRect(RECT* rc, const DispPos& sPos, int nHankakuNum) const
+bool TextArea::GenerateClipRect(RECT* rc, const DispPos& sPos, int nHankakuNum) const
 {
 	GenerateCharRect(rc, sPos, nHankakuNum);
 	return TrimRectByArea(rc);
 }
 
 // 右の残りを表す矩形を生成する
-bool CTextArea::GenerateClipRectRight(RECT* rc, const DispPos& sPos) const
+bool TextArea::GenerateClipRectRight(RECT* rc, const DispPos& sPos) const
 {
-	const CEditView* pView = m_pEditView;
+	const EditView* pView = m_pEditView;
 
 	rc->left   = sPos.GetDrawPos().x;
 	rc->right  = GetAreaRight();
@@ -138,7 +138,7 @@ bool CTextArea::GenerateClipRectRight(RECT* rc, const DispPos& sPos) const
 	return true;
 }
 
-bool CTextArea::GenerateClipRectLine(RECT* rc, const DispPos& sPos) const
+bool TextArea::GenerateClipRectLine(RECT* rc, const DispPos& sPos) const
 {
 	rc->left   = 0;
 	rc->right  = GetAreaRight();
@@ -151,10 +151,10 @@ bool CTextArea::GenerateClipRectLine(RECT* rc, const DispPos& sPos) const
 /*
 行番号表示に必要な幅を設定。幅が変更された場合はTRUEを返す
 */
-bool CTextArea::DetectWidthOfLineNumberArea(bool bRedraw)
+bool TextArea::DetectWidthOfLineNumberArea(bool bRedraw)
 {
-	const CEditView* pView = m_pEditView;
-	CEditView* pView2 = m_pEditView;
+	const EditView* pView = m_pEditView;
+	EditView* pView2 = m_pEditView;
 
 	int				nViewAlignLeftNew;
 
@@ -214,9 +214,9 @@ bool CTextArea::DetectWidthOfLineNumberArea(bool bRedraw)
 
 
 // 行番号表示に必要な桁数を計算
-int CTextArea::DetectWidthOfLineNumberArea_calculate(const LayoutMgr* pLayoutMgr, bool bLayout) const
+int TextArea::DetectWidthOfLineNumberArea_calculate(const LayoutMgr* pLayoutMgr, bool bLayout) const
 {
-	const CEditView* pView = m_pEditView;
+	const EditView* pView = m_pEditView;
 
 	int nAllLines; //$$ 単位混在
 
@@ -264,7 +264,7 @@ int CTextArea::DetectWidthOfLineNumberArea_calculate(const LayoutMgr* pLayoutMgr
 	}
 }
 
-void CTextArea::TextArea_OnSize(
+void TextArea::TextArea_OnSize(
 	const Size& sizeClient, // ウィンドウのクライアントサイズ
 	int nCxVScroll,            // 垂直スクロールバーの横幅
 	int nCyHScroll             // 水平スクロールバーの縦幅
@@ -276,15 +276,15 @@ void CTextArea::TextArea_OnSize(
 }
 
 
-int CTextArea::GetDocumentLeftClientPointX() const
+int TextArea::GetDocumentLeftClientPointX() const
 {
 	return GetAreaLeft() - (Int)GetViewLeftCol() * m_pEditView->GetTextMetrics().GetHankakuDx();
 }
 
 // クライアント座標からレイアウト位置に変換する
-void CTextArea::ClientToLayout(Point ptClient, LayoutPoint* pptLayout) const
+void TextArea::ClientToLayout(Point ptClient, LayoutPoint* pptLayout) const
 {
-	const CEditView* pView = m_pEditView;
+	const EditView* pView = m_pEditView;
 	pptLayout->Set(
 		GetViewLeftCol() + LayoutInt((ptClient.x - GetAreaLeft()) / pView->GetTextMetrics().GetHankakuDx()),
 		GetViewTopLine() + LayoutInt((ptClient.y - GetAreaTop()) / pView->GetTextMetrics().GetHankakuDy())
@@ -293,7 +293,7 @@ void CTextArea::ClientToLayout(Point ptClient, LayoutPoint* pptLayout) const
 
 
 // 行番号エリアも含む範囲
-void CTextArea::GenerateTopRect   (RECT* rc, LayoutInt nLineCount) const
+void TextArea::GenerateTopRect   (RECT* rc, LayoutInt nLineCount) const
 {
 	rc->left   = 0; //m_nViewAlignLeft;
 	rc->right  = m_nViewAlignLeft + m_nViewCx;
@@ -302,7 +302,7 @@ void CTextArea::GenerateTopRect   (RECT* rc, LayoutInt nLineCount) const
 }
 
 // 行番号エリアも含む範囲
-void CTextArea::GenerateBottomRect(RECT* rc, LayoutInt nLineCount) const
+void TextArea::GenerateBottomRect(RECT* rc, LayoutInt nLineCount) const
 {
 	rc->left   = 0; //m_nViewAlignLeft;
 	rc->right  = m_nViewAlignLeft + m_nViewCx;
@@ -310,7 +310,7 @@ void CTextArea::GenerateBottomRect(RECT* rc, LayoutInt nLineCount) const
 	rc->bottom = m_nViewAlignTop  + m_nViewCy;
 }
 
-void CTextArea::GenerateLeftRect  (RECT* rc, LayoutInt nColCount) const
+void TextArea::GenerateLeftRect  (RECT* rc, LayoutInt nColCount) const
 {
 	rc->left   = m_nViewAlignLeft;
 	rc->right  = m_nViewAlignLeft + (Int)nColCount * m_pEditView->GetTextMetrics().GetHankakuDx();
@@ -318,7 +318,7 @@ void CTextArea::GenerateLeftRect  (RECT* rc, LayoutInt nColCount) const
 	rc->bottom = m_nViewAlignTop + m_nViewCy;
 }
 
-void CTextArea::GenerateRightRect (RECT* rc, LayoutInt nColCount) const
+void TextArea::GenerateRightRect (RECT* rc, LayoutInt nColCount) const
 {
 	rc->left   = m_nViewAlignLeft + m_nViewCx - (Int)nColCount * m_pEditView->GetTextMetrics().GetHankakuDx(); // 2008.01.26 kobake 符号が逆になってたのを修正
 	rc->right  = m_nViewAlignLeft + m_nViewCx;
@@ -326,7 +326,7 @@ void CTextArea::GenerateRightRect (RECT* rc, LayoutInt nColCount) const
 	rc->bottom = m_nViewAlignTop  + m_nViewCy;
 }
 
-void CTextArea::GenerateLineNumberRect(RECT* rc) const
+void TextArea::GenerateLineNumberRect(RECT* rc) const
 {
 	rc->left   = 0;
 	rc->right  = m_nViewAlignLeft;
@@ -334,7 +334,7 @@ void CTextArea::GenerateLineNumberRect(RECT* rc) const
 	rc->bottom = m_nViewAlignTop + m_nViewCy;
 }
 
-void CTextArea::GenerateTextAreaRect(RECT* rc) const
+void TextArea::GenerateTextAreaRect(RECT* rc) const
 {
 	rc->left   = 0;
 	rc->right  = m_nViewAlignLeft + m_nViewCx;
@@ -343,7 +343,7 @@ void CTextArea::GenerateTextAreaRect(RECT* rc) const
 }
 
 
-int CTextArea::GenerateYPx(LayoutYInt nLineNum) const
+int TextArea::GenerateYPx(LayoutYInt nLineNum) const
 {
 	LayoutYInt nY = nLineNum - GetViewTopLine();
 	int ret;

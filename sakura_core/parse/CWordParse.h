@@ -25,7 +25,7 @@
 #pragma once
 
 #include "basis/SakuraBasis.h"
-class CNativeW;
+class NativeW;
 
 // 文字種類識別子
 enum ECharKind {
@@ -56,7 +56,7 @@ enum ECharKind {
 	CK_ZEN_ETC,			// 全角のその他（漢字など）
 };
 
-class CWordParse {
+class WordParse {
 public:
 	// 2001.06.23 N.Nakatani
 	// 2007.09.30 kobake     CDocLineMgrから移動
@@ -72,8 +72,8 @@ public:
 		LogicInt		nIdx,			// [out] 調査開始地点:pLineからの相対的な位置
 		LogicInt*		pnIdxFrom,		// [out] 単語が見つかった場合は、単語の先頭インデックスを返す。
 		LogicInt*		pnIdxTo,		// [out] 単語が見つかった場合は、単語の終端の次のバイトの先頭インデックスを返す。
-		CNativeW*		pcmcmWord,		// [out] 単語が見つかった場合は、現在単語を切り出して指定されたCMemoryオブジェクトに格納する。情報が不要な場合はNULLを指定する。
-		CNativeW*		pcmcmWordLeft	// [out] 単語が見つかった場合は、現在単語の左に位置する単語を切り出して指定されたCMemoryオブジェクトに格納する。情報が不要な場合はNULLを指定する。
+		NativeW*		pcmcmWord,		// [out] 単語が見つかった場合は、現在単語を切り出して指定されたCMemoryオブジェクトに格納する。情報が不要な場合はNULLを指定する。
+		NativeW*		pcmcmWordLeft	// [out] 単語が見つかった場合は、現在単語の左に位置する単語を切り出して指定されたCMemoryオブジェクトに格納する。情報が不要な場合はNULLを指定する。
 	);
 
 	// 現在位置の文字の種類を調べる
@@ -129,7 +129,7 @@ bool IsMailAddress(const wchar_t*, int, int*);	// 現在位置がメールアドレスならば
 
 
 // ACHAR 版
-inline bool CWordParse::_match_charlist(const ACHAR c, const ACHAR* pszList)
+inline bool WordParse::_match_charlist(const ACHAR c, const ACHAR* pszList)
 {
 	for (int i=0; pszList[i]!='\0'; ++i) {
 		if (pszList[i] == c) {
@@ -139,7 +139,7 @@ inline bool CWordParse::_match_charlist(const ACHAR c, const ACHAR* pszList)
 	return false;
 }
 // WCHAR 版
-inline bool CWordParse::_match_charlist(const WCHAR c, const WCHAR* pszList)
+inline bool WordParse::_match_charlist(const WCHAR c, const WCHAR* pszList)
 {
 	for (int i=0; pszList[i]!=L'\0'; ++i) {
 		if (pszList[i] == c) {
@@ -159,7 +159,7 @@ inline bool CWordParse::_match_charlist(const WCHAR c, const WCHAR* pszList)
 	@return 読んだデータの長さ。
 */
 template <class CHAR_TYPE>
-int CWordParse::GetWord(
+int WordParse::GetWord(
 	const CHAR_TYPE* pS,
 	const int nLen,
 	const CHAR_TYPE* pszSplitCharList,

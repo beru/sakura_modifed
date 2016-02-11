@@ -67,7 +67,7 @@ void ViewCommander::Command_FILENEW(void)
 	sLoadInfo.cFilePath = _T("");
 	sLoadInfo.eCharCode = CODE_NONE;
 	sLoadInfo.bViewMode = false;
-	std::tstring curDir = CSakuraEnvironment::GetDlgInitialDir();
+	std::tstring curDir = SakuraEnvironment::GetDlgInitialDir();
 	ControlTray::OpenNewEditor(
 		G_AppInstance(),
 		m_pCommanderView->GetHwnd(),
@@ -89,7 +89,7 @@ void ViewCommander::Command_FILENEW_NEWWINDOW(void)
 	sLoadInfo.cFilePath = _T("");
 	sLoadInfo.eCharCode = CODE_DEFAULT;
 	sLoadInfo.bViewMode = false;
-	std::tstring curDir = CSakuraEnvironment::GetDlgInitialDir();
+	std::tstring curDir = SakuraEnvironment::GetDlgInitialDir();
 	ControlTray::OpenNewEditor(
 		G_AppInstance(),
 		m_pCommanderView->GetHwnd(),
@@ -135,7 +135,7 @@ void ViewCommander::Command_FILEOPEN(
 			if (auto_stricmp(defName.c_str(), szPath) == 0) {
 				// defNameはフォルダ名だった
 			}else {
-				CFilePath path = defName.c_str();
+				FilePath path = defName.c_str();
 				if (auto_stricmp(path.GetDirPath().c_str(), szPath) == 0) {
 					// フォルダ名までは実在している
 					sLoadInfo.cFilePath = defName.c_str();
@@ -143,7 +143,7 @@ void ViewCommander::Command_FILEOPEN(
 			}
 		}
 		bool bDlgResult = GetDocument()->m_cDocFileOperation.OpenFileDialog(
-			CEditWnd::getInstance()->GetHwnd(),	// [in]  オーナーウィンドウ
+			EditWnd::getInstance()->GetHwnd(),	// [in]  オーナーウィンドウ
 			defName.length() == 0 ? NULL : defName.c_str(),	// [in]  フォルダ
 			&sLoadInfo,							// [out] ロード情報受け取り
 			files								// [out] ファイル名
@@ -158,7 +158,7 @@ void ViewCommander::Command_FILEOPEN(
 			sFilesLoadInfo.cFilePath = files[i].c_str();
 			ControlTray::OpenNewEditor(
 				G_AppInstance(),
-				CEditWnd::getInstance()->GetHwnd(),
+				EditWnd::getInstance()->GetHwnd(),
 				sFilesLoadInfo,
 				NULL,
 				true
@@ -200,9 +200,9 @@ bool ViewCommander::Command_FILESAVE(bool warnbeep, bool askname)
 	sSaveInfo.bOverwriteMode = true; // 上書き要求
 
 	// 上書き処理
-	if (!warnbeep) CEditApp::getInstance()->m_cSoundSet.MuteOn();
+	if (!warnbeep) EditApp::getInstance()->m_cSoundSet.MuteOn();
 	bool bRet = pcDoc->m_cDocFileOperation.DoSaveFlow(&sSaveInfo);
-	if (!warnbeep) CEditApp::getInstance()->m_cSoundSet.MuteOff();
+	if (!warnbeep) EditApp::getInstance()->m_cSoundSet.MuteOff();
 
 	return bRet;
 }
@@ -242,7 +242,7 @@ bool ViewCommander::Command_FILESAVEAS(
 */
 bool ViewCommander::Command_FILESAVEALL(void)
 {
-	CAppNodeGroupHandle(0).SendMessageToAllEditors(
+	AppNodeGroupHandle(0).SendMessageToAllEditors(
 		WM_COMMAND,
 		MAKELONG(F_FILESAVE_QUIET, 0),
 		0,
@@ -273,9 +273,9 @@ void ViewCommander::Command_FILECLOSE_OPEN(
 	GetDocument()->m_cDocFileOperation.FileCloseOpen(LoadInfo(to_tchar(filename), nCharCode, bViewMode));
 
 	// プラグイン：DocumentOpenイベント実行
-	CPlug::Array plugs;
-	CWSHIfObj::List params;
-	CJackManager::getInstance()->GetUsablePlug(PP_DOCUMENT_OPEN, 0, &plugs);
+	Plug::Array plugs;
+	WSHIfObj::List params;
+	JackManager::getInstance()->GetUsablePlug(PP_DOCUMENT_OPEN, 0, &plugs);
 	for (auto it=plugs.begin(); it!=plugs.end(); ++it) {
 		(*it)->Invoke(&GetEditWindow()->GetActiveView(), params);
 	}
@@ -539,7 +539,7 @@ void ViewCommander::Command_PROPERTY_FILE(void)
 		int		nDataAllLen;
 		RunningTimer cRunningTimer("ViewCommander::Command_PROPERTY_FILE 全行データを返すテスト");
 		cRunningTimer.Reset();
-		pDataAll = CDocReader(GetDocument()->m_cDocLineMgr).GetAllData(&nDataAllLen);
+		pDataAll = DocReader(GetDocument()->m_cDocLineMgr).GetAllData(&nDataAllLen);
 //		MYTRACE(_T("全データ取得             (%dバイト) 所要時間(ミリ秒) = %d\n"), nDataAllLen, cRunningTimer.Read());
 		free(pDataAll);
 		pDataAll = NULL;
@@ -548,7 +548,7 @@ void ViewCommander::Command_PROPERTY_FILE(void)
 #endif
 
 
-	CDlgProperty	cDlgProperty;
+	DlgProperty	cDlgProperty;
 //	cDlgProperty.Create(G_AppInstance(), m_pCommanderView->GetHwnd(), GetDocument());
 	cDlgProperty.DoModal(G_AppInstance(), m_pCommanderView->GetHwnd(), (LPARAM)GetDocument());
 	return;
@@ -557,7 +557,7 @@ void ViewCommander::Command_PROPERTY_FILE(void)
 
 void ViewCommander::Command_PROFILEMGR( void )
 {
-	CDlgProfileMgr profMgr;
+	DlgProfileMgr profMgr;
 	if (profMgr.DoModal( G_AppInstance(), m_pCommanderView->GetHwnd(), 0 )) {
 		TCHAR szOpt[MAX_PATH+10];
 		auto_sprintf( szOpt, _T("-PROF=\"%ts\""), profMgr.m_strProfileName.c_str() );
@@ -638,14 +638,14 @@ bool ViewCommander::Command_PUTFILE(
 			CBinaryOutputStream out(to_tchar(filename), true);
 
 			// 選択範囲の取得 -> cMem
-			CNativeW cMem;
+			NativeW cMem;
 			m_pCommanderView->GetSelectedDataSimple(cMem);
 
 			// BOM追加
-			CNativeW cMem2;
-			const CNativeW* pConvBuffer;
+			NativeW cMem2;
+			const NativeW* pConvBuffer;
 			if (bBom) {
-				CNativeW cmemBom;
+				NativeW cmemBom;
 				std::unique_ptr<CodeBase> pcUtf16(CodeFactory::CreateCodeBase(CODE_UNICODE, 0));
 				pcUtf16->GetBom(cmemBom._GetMemory());
 				cMem2.AppendNativeData(cmemBom);
@@ -657,20 +657,20 @@ bool ViewCommander::Command_PUTFILE(
 			}
 
 			// 書き込み時のコード変換 -> cDst
-			CMemory cDst;
+			Memory cDst;
 			pcSaveCode->UnicodeToCode(*pConvBuffer, &cDst);
 
 			// 書込
 			if (0 < cDst.GetRawLength())
 				out.Write(cDst.GetRawPtr(), cDst.GetRawLength());
-		}catch (CError_FileOpen) {
+		}catch (Error_FileOpen) {
 			WarningMessage(
 				NULL,
 				LS(STR_SAVEAGENT_OTHER_APP),
 				to_tchar(filename)
 			);
 			bResult = false;
-		}catch (CError_FileWrite) {
+		}catch (Error_FileWrite) {
 			WarningMessage(
 				NULL,
 				LS(STR_ERR_DLGEDITVWCMDNW11)
@@ -679,7 +679,7 @@ bool ViewCommander::Command_PUTFILE(
 		}
 	}else {	// ファイル全体を出力
 		HWND		hwndProgress;
-		CEditWnd*	pCEditWnd = GetEditWindow();
+		EditWnd*	pCEditWnd = GetEditWindow();
 
 		if (pCEditWnd) {
 			hwndProgress = pCEditWnd->m_cStatusBar.GetProgressHwnd();
@@ -731,11 +731,11 @@ bool ViewCommander::Command_INSFILE(
 	int nFlgOpt
 	)
 {
-	CFileLoad	cfl(m_pCommanderView->m_pTypeData->m_encoding);
-	CEol cEol;
+	FileLoad	cfl(m_pCommanderView->m_pTypeData->m_encoding);
+	Eol cEol;
 	int			nLineNum = 0;
 
-	CDlgCancel*	pcDlgCancel = NULL;
+	DlgCancel*	pcDlgCancel = NULL;
 	HWND		hwndCancel = NULL;
 	HWND		hwndProgress = NULL;
 	int			nOldPercent = -1;
@@ -759,7 +759,7 @@ bool ViewCommander::Command_INSFILE(
 	ECodeType	nSaveCharCode = nCharCode;
 	if (nSaveCharCode == CODE_AUTODETECT) {
 		EditInfo    fi;
-		const CMRUFile  cMRU;
+		const MRUFile  cMRU;
 		if (cMRU.GetEditInfo(to_tchar(filename), &fi)) {
 				nSaveCharCode = fi.m_nCharCode;
 		}else {
@@ -782,7 +782,7 @@ bool ViewCommander::Command_INSFILE(
 
 		// ファイルサイズが65KBを越えたら進捗ダイアログ表示
 		if (0x10000 < cfl.GetFileSize()) {
-			pcDlgCancel = new CDlgCancel;
+			pcDlgCancel = new DlgCancel;
 			if ((hwndCancel = pcDlgCancel->DoModeless(::GetModuleHandle(NULL), NULL, IDD_OPERATIONRUNNING))) {
 				hwndProgress = ::GetDlgItem(hwndCancel, IDC_PROGRESS);
 				Progress_SetRange(hwndProgress, 0, 101);
@@ -791,8 +791,8 @@ bool ViewCommander::Command_INSFILE(
 		}
 
 		// ReadLineはファイルから 文字コード変換された1行を読み出します
-		// エラー時はthrow CError_FileRead を投げます
-		CNativeW cBuf;
+		// エラー時はthrow Error_FileRead を投げます
+		NativeW cBuf;
 		while (RESULT_FAILURE != cfl.ReadLine(&cBuf, &cEol)) {
 
 			const wchar_t*	pLine = cBuf.GetStringPtr();
@@ -824,10 +824,10 @@ bool ViewCommander::Command_INSFILE(
 		}
 		// ファイルを明示的に閉じるが、ここで閉じないときはデストラクタで閉じている
 		cfl.FileClose();
-	}catch (CError_FileOpen) {
+	}catch (Error_FileOpen) {
 		WarningMessage(NULL, LS(STR_GREP_ERR_FILEOPEN), to_tchar(filename));
 		bResult = false;
-	}catch (CError_FileRead) {
+	}catch (Error_FileRead) {
 		WarningMessage(NULL, LS(STR_ERR_DLGEDITVWCMDNW12));
 		bResult = false;
 	} // 例外処理終わり

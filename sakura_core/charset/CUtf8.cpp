@@ -9,7 +9,7 @@
 #include "env/DLLSHAREDATA.h"
 
 //! BOMデータ取得
-void Utf8::GetBom(CMemory* pcmemBom)
+void Utf8::GetBom(Memory* pcmemBom)
 {
 	static const BYTE UTF8_BOM[] = {0xEF, 0xBB, 0xBF};
 	pcmemBom->SetRawData(UTF8_BOM, sizeof(UTF8_BOM));
@@ -17,7 +17,7 @@ void Utf8::GetBom(CMemory* pcmemBom)
 
 
 
-void Utf8::GetEol(CMemory* pcmemEol, EEolType eEolType){
+void Utf8::GetEol(Memory* pcmemEol, EEolType eEolType){
 	static const struct{
 		const char* szData;
 		int nLen;
@@ -87,7 +87,7 @@ int Utf8::Utf8ToUni(const char* pSrc, const int nSrcLen, wchar_t* pDst, bool bCE
 
 //! UTF-8→Unicodeコード変換
 // 2007.08.13 kobake 作成
-EConvertResult Utf8::_UTF8ToUnicode( const CMemory& cSrc, CNativeW* pDstMem, bool bCESU8Mode/*, bool decodeMime*/ )
+EConvertResult Utf8::_UTF8ToUnicode( const Memory& cSrc, NativeW* pDstMem, bool bCESU8Mode/*, bool decodeMime*/ )
 {
 	// データ取得
 	int nSrcLen;
@@ -100,7 +100,7 @@ EConvertResult Utf8::_UTF8ToUnicode( const CMemory& cSrc, CNativeW* pDstMem, boo
 	const char* psrc = pSrc;
 	int nsrclen = nSrcLen;
 
-//	CMemory cmem;
+//	Memory cmem;
 //	// MIME ヘッダーデコード
 //	if (decodeMime) {
 //		bool bret = MIMEHeaderDecode(pSrc, nSrcLen, &cmem, CODE_UTF8);
@@ -176,7 +176,7 @@ int Utf8::UniToUtf8(const wchar_t* pSrc, const int nSrcLen, char* pDst, bool* pb
 
 
 //! コード変換 Unicode→UTF-8
-EConvertResult Utf8::_UnicodeToUTF8( const CNativeW& cSrc, CMemory* pDstMem, bool bCesu8Mode )
+EConvertResult Utf8::_UnicodeToUTF8( const NativeW& cSrc, Memory* pDstMem, bool bCesu8Mode )
 {
 	// ソースを取得
 	const wchar_t* pSrc = cSrc.GetStringPtr();
@@ -207,7 +207,7 @@ EConvertResult Utf8::_UnicodeToUTF8( const CNativeW& cSrc, CMemory* pDstMem, boo
 // 文字コード表示用	UNICODE → Hex 変換	2008/6/21 Uchi
 EConvertResult Utf8::_UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR* pDst, const CommonSetting_Statusbar* psStatusbar, const bool bCESUMode)
 {
-	CNativeW		cBuff;
+	NativeW		cBuff;
 	EConvertResult	res;
 	int				i;
 	TCHAR*			pd;

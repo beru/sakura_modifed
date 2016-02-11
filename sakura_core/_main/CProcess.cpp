@@ -36,7 +36,7 @@ Process::Process(
 	, m_pfnMiniDumpWriteDump(NULL)
 #endif
 {
-	m_pcShareData = CShareData::getInstance();
+	m_pcShareData = ShareData::getInstance();
 }
 
 /*!

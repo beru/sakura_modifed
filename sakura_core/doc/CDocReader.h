@@ -26,9 +26,9 @@
 class DocLineMgr;
 
 // as decorator
-class CDocReader {
+class DocReader {
 public:
-	CDocReader(const DocLineMgr& pcDocLineMgr) : m_pcDocLineMgr(&pcDocLineMgr) { }
+	DocReader(const DocLineMgr& pcDocLineMgr) : m_pcDocLineMgr(&pcDocLineMgr) { }
 
 	wchar_t* GetAllData(int* pnDataLen);	// 全行データを返す
 	const wchar_t* GetLineStr(LogicInt , LogicInt*);

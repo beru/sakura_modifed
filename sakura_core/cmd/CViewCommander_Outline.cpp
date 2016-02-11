@@ -57,7 +57,7 @@ bool ViewCommander::Command_FUNCLIST(
 //		return TRUE;
 //	}
 
-	static CFuncInfoArr	cFuncInfoArr;
+	static FuncInfoArr	cFuncInfoArr;
 //	int		nLine;
 //	int		nListType;
 	std::tstring sTitleOverride;				// プラグインによるダイアログタイトル上書き
@@ -132,14 +132,14 @@ bool ViewCommander::Command_FUNCLIST(
 	default:
 		// プラグインから検索する
 		{
-			CPlug::Array plugs;
-			CJackManager::getInstance()->GetUsablePlug(PP_OUTLINE, nOutlineType, &plugs);
+			Plug::Array plugs;
+			JackManager::getInstance()->GetUsablePlug(PP_OUTLINE, nOutlineType, &plugs);
 
 			if (plugs.size() > 0) {
 				assert_warning(1 == plugs.size());
 				// インタフェースオブジェクト準備
-				CWSHIfObj::List params;
-				COutlineIfObj* objOutline = new COutlineIfObj(cFuncInfoArr);
+				WSHIfObj::List params;
+				OutlineIfObj* objOutline = new OutlineIfObj(cFuncInfoArr);
 				objOutline->AddRef();
 				params.push_back(objOutline);
 				// プラグイン呼び出し

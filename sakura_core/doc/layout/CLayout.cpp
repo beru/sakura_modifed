@@ -49,7 +49,7 @@ LayoutInt Layout::CalcLayoutWidth(const LayoutMgr& cLayoutMgr) const
 		if (pText[i] == WCODE::TAB) {
 			nWidth += cLayoutMgr.GetActualTabSpace(nWidth);
 		}else {
-			nWidth += CNativeW::GetKetaOfChar(pText, nTextLen, i);
+			nWidth += NativeW::GetKetaOfChar(pText, nTextLen, i);
 		}
 	}
 	return nWidth;
@@ -70,7 +70,7 @@ LayoutInt Layout::CalcLayoutOffset(
 			if (pLine[i] == WCODE::TAB) {
 				nRet += cLayoutMgr.GetActualTabSpace(nRet);
 			}else {
-				nRet += CNativeW::GetKetaOfChar(pLine, nLineLen, i);
+				nRet += NativeW::GetKetaOfChar(pLine, nLineLen, i);
 			}
 		}
 	}

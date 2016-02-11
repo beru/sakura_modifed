@@ -65,7 +65,7 @@ int CDlgTypeAscertain::DoModal(
 
 	m_psi->nColorType = -1;
 
-	return (int)CDialog::DoModal(hInstance, hwndParent, IDD_TYPE_ASCERTAIN, (LPARAM)NULL);
+	return (int)Dialog::DoModal(hInstance, hwndParent, IDD_TYPE_ASCERTAIN, (LPARAM)NULL);
 }
 
 // ボタンクリック
@@ -98,7 +98,7 @@ BOOL CDlgTypeAscertain::OnBnClicked(int wID)
 		return TRUE;
 	}
 	// 基底クラスメンバ
-	return CDialog::OnBnClicked(wID);
+	return Dialog::OnBnClicked(wID);
 }
 
 
@@ -122,7 +122,7 @@ void CDlgTypeAscertain::SetData(void)
 	// エディタ内の設定
 	for (int nIdx=0; nIdx<GetDllShareData().m_nTypesCount; ++nIdx) {
 		const TypeConfigMini* type;
-		CDocTypeManager().GetTypeConfigMini(CTypeConfig(nIdx), &type);
+		DocTypeManager().GetTypeConfigMini(CTypeConfig(nIdx), &type);
 		if (type->m_szTypeExts[0] != _T('\0')) {		// タイプ属性：拡張子リスト
 			auto_sprintf_s(szText, _T("%ts (%ts)"),
 				type->m_szTypeName,	// タイプ属性：名称

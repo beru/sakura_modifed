@@ -34,9 +34,9 @@ ECallbackResult GrepAgent::OnBeforeClose()
 	// GREP処理中は終了できない
 	if (m_bGrepRunning) {
 		// アクティブにする
-		ActivateFrameWindow(CEditWnd::getInstance()->GetHwnd());	//@@@ 2003.06.25 MIK
+		ActivateFrameWindow(EditWnd::getInstance()->GetHwnd());	//@@@ 2003.06.25 MIK
 		TopInfoMessage(
-			CEditWnd::getInstance()->GetHwnd(),
+			EditWnd::getInstance()->GetHwnd(),
 			LS(STR_GREP_RUNNINNG)
 		);
 		return CALLBACK_INTERRUPT;
@@ -120,12 +120,12 @@ std::tstring GrepAgent::ChopYen( const std::tstring& str )
 	return dst;
 }
 
-void GrepAgent::AddTail( CEditView* pcEditView, const CNativeW& cmem, bool bAddStdout )
+void GrepAgent::AddTail( EditView* pcEditView, const NativeW& cmem, bool bAddStdout )
 {
 	if (bAddStdout) {
 		HANDLE out = ::GetStdHandle(STD_OUTPUT_HANDLE);
 		if (out && out != INVALID_HANDLE_VALUE) {
-			CMemory cmemOut;
+			Memory cmemOut;
 			std::unique_ptr<CodeBase> pcCodeBase( CodeFactory::CreateCodeBase(
 					pcEditView->GetDocument()->GetDocumentEncoding(), 0) );
 			pcCodeBase->UnicodeToCode( cmem, &cmemOut );
@@ -148,10 +148,10 @@ void GrepAgent::AddTail( CEditView* pcEditView, const CNativeW& cmem, bool bAddS
   @date 2012.10.13 novice 検索オプションをクラスごと代入
 */
 DWORD GrepAgent::DoGrep(
-	CEditView*				pcViewDst,
+	EditView*				pcViewDst,
 	bool					bGrepReplace,
-	const CNativeW*			pcmGrepKey,
-	const CNativeW*			pcmGrepReplace,
+	const NativeW*			pcmGrepKey,
+	const NativeW*			pcmGrepReplace,
 	const CNativeT*			pcmGrepFile,
 	const CNativeT*			pcmGrepFolder,
 	bool					bGrepCurFolder,
@@ -170,7 +170,7 @@ DWORD GrepAgent::DoGrep(
 )
 {
 #ifdef _DEBUG
-	RunningTimer cRunningTimer("CEditView::DoGrep");
+	RunningTimer cRunningTimer("EditView::DoGrep");
 #endif
 
 	// 再入不可
@@ -182,11 +182,11 @@ DWORD GrepAgent::DoGrep(
 	this->m_bGrepRunning = true;
 
 	int			nHitCount = 0;
-	CDlgCancel	cDlgCancel;
+	DlgCancel	cDlgCancel;
 	HWND		hwndCancel;
 	//	Jun. 27, 2001 genta	正規表現ライブラリの差し替え
-	CBregexp	cRegexp;
-	CNativeW	cmemMessage;
+	Bregexp	cRegexp;
+	NativeW	cmemMessage;
 	int			nWork;
 	GrepOption	sGrepOption;
 
@@ -216,7 +216,7 @@ DWORD GrepAgent::DoGrep(
 	pcViewDst->m_nCurSearchKeySequence = GetDllShareData().m_common.m_sSearch.m_nSearchKeySequence;
 
 	// 置換後文字列の準備
-	CNativeW cmemReplace;
+	NativeW cmemReplace;
 	if (bGrepReplace) {
 		if (bGrepPaste) {
 			// 矩形・ラインモード貼り付けは未サポート
@@ -342,8 +342,8 @@ DWORD GrepAgent::DoGrep(
 	hIconSmall = GetAppIcon(G_AppInstance(), ICON_DEFAULT_GREP, FN_GREP_ICON, true);
 
 	//	Sep. 10, 2002 genta
-	//	CEditWndに新設した関数を使うように
-	CEditWnd*	pCEditWnd = CEditWnd::getInstance();	//	Sep. 10, 2002 genta
+	//	EditWndに新設した関数を使うように
+	EditWnd*	pCEditWnd = EditWnd::getInstance();	//	Sep. 10, 2002 genta
 	pCEditWnd->SetWindowIcon(hIconSmall, ICON_SMALL);
 	pCEditWnd->SetWindowIcon(hIconBig, ICON_BIG);
 
@@ -372,10 +372,10 @@ DWORD GrepAgent::DoGrep(
 	nWork = pcmGrepKey->GetStringLength(); // 2003.06.10 Moca あらかじめ長さを計算しておく
 
 	// 最後にテキストを追加
-	CNativeW cmemWork;
+	NativeW cmemWork;
 	cmemMessage.AppendString(LSW(STR_GREP_SEARCH_CONDITION));	//L"\r\n□検索条件  "
 	if (0 < nWork) {
-		CNativeW cmemWork2;
+		NativeW cmemWork2;
 		cmemWork2.SetNativeData(*pcmGrepKey);
 		const TypeConfig& type = pcViewDst->m_pcEditDoc->m_cDocType.GetDocumentAttribute();
 		if (!type.m_ColorInfoArr[COLORIDX_WSTRING].m_bDisp) {
@@ -404,7 +404,7 @@ DWORD GrepAgent::DoGrep(
 		if (bGrepPaste) {
 			cmemMessage.AppendString( LSW(STR_GREP_PASTE_CLIPBOAD) );
 		}else {
-			CNativeW cmemWork2;
+			NativeW cmemWork2;
 			cmemWork2.SetNativeData( cmemReplace );
 			const TypeConfig& type = pcViewDst->m_pcEditDoc->m_cDocType.GetDocumentAttribute();
 			if (!type.m_ColorInfoArr[COLORIDX_WSTRING].m_bDisp) {
@@ -539,8 +539,8 @@ DWORD GrepAgent::DoGrep(
 	// 2003.06.23 Moca 共通設定で変更できるように
 	// 2008.06.08 ryoji 全ビューの表示ON/OFFを同期させる
 //	SetDrawSwitch(false);
-	if (!CEditWnd::getInstance()->UpdateTextWrap()) {	// 折り返し方法関連の更新
-		CEditWnd::getInstance()->RedrawAllViews(pcViewDst);	//	他のペインの表示を更新
+	if (!EditWnd::getInstance()->UpdateTextWrap()) {	// 折り返し方法関連の更新
+		EditWnd::getInstance()->RedrawAllViews(pcViewDst);	//	他のペインの表示を更新
 	}
 	const bool bDrawSwitchOld = pcViewDst->SetDrawSwitch(GetDllShareData().m_common.m_sSearch.m_bGrepRealTimeView != 0);
 
@@ -581,7 +581,7 @@ DWORD GrepAgent::DoGrep(
 	}
 	if (nGrepTreeResult == -1 && sGrepOption.bGrepHeader) {
 		const wchar_t* p = LSW(STR_GREP_SUSPENDED);	// L"中断しました。\r\n"
-		CNativeW cmemSuspend;
+		NativeW cmemSuspend;
 		cmemSuspend.SetString( p );
 		AddTail( pcViewDst, cmemSuspend, sGrepOption.bGrepStdout );
 	}
@@ -592,7 +592,7 @@ DWORD GrepAgent::DoGrep(
 		}else {
 			auto_sprintf( szBuffer, LSW( STR_GREP_MATCH_COUNT ), nHitCount );
 		}
-		CNativeW cmemOutput;
+		NativeW cmemOutput;
 		cmemOutput.SetString( szBuffer );
 		AddTail( pcViewDst, cmemOutput, sGrepOption.bGrepStdout );
 #ifdef _DEBUG
@@ -606,7 +606,7 @@ DWORD GrepAgent::DoGrep(
 	cDlgCancel.CloseDialog(0);
 
 	// アクティブにする
-	ActivateFrameWindow(CEditWnd::getInstance()->GetHwnd());
+	ActivateFrameWindow(EditWnd::getInstance()->GetHwnd());
 
 	// アンドゥバッファの処理
 	pcViewDst->SetUndoBuffer();
@@ -646,10 +646,10 @@ DWORD GrepAgent::DoGrep(
 		大部分が変更されたため，個別の変更点記入は無し．
 */
 int GrepAgent::DoGrepTree(
-	CEditView*				pcViewDst,
-	CDlgCancel*				pcDlgCancel,		//!< [in] Cancelダイアログへのポインタ
+	EditView*				pcViewDst,
+	DlgCancel*				pcDlgCancel,		//!< [in] Cancelダイアログへのポインタ
 	const wchar_t*			pszKey,				//!< [in] 検索キー
-	const CNativeW&			cmGrepReplace,
+	const NativeW&			cmGrepReplace,
 	GrepEnumKeys&			cGrepEnumKeys,		//!< [in] 検索対象ファイルパターン
 	GrepEnumFiles&			cGrepExceptAbsFiles,	//!< [in] 除外ファイル絶対パス
 	GrepEnumFolders&		cGrepExceptAbsFolders,	//!< [in] 除外フォルダ絶対パス
@@ -658,7 +658,7 @@ int GrepAgent::DoGrepTree(
 	const SearchOption&		searchOption,		//!< [in] 検索オプション
 	const GrepOption&		sGrepOption,		//!< [in] Grepオプション
 	const SearchStringPattern& pattern,		//!< [in] 検索パターン
-	CBregexp*				pRegexp,			//!< [in] 正規表現コンパイルデータ。既にコンパイルされている必要がある
+	Bregexp*				pRegexp,			//!< [in] 正規表現コンパイルデータ。既にコンパイルされている必要がある
 	int						nNest,				//!< [in] ネストレベル
 	bool&					bOutputBaseFolder,	//!< [i/o] ベースフォルダ名出力
 	int*					pnHitCount			//!< [i/o] ヒット数の合計
@@ -666,7 +666,7 @@ int GrepAgent::DoGrepTree(
 {
 	pcDlgCancel->SetItemText(IDC_STATIC_CURPATH, pszPath);
 
-	CNativeW	cmemMessage;
+	NativeW	cmemMessage;
 	int			nWork = 0;
 	int			nHitCountOld = -100;
 	bool		bOutputFolderName = false;
@@ -692,7 +692,7 @@ int GrepAgent::DoGrepTree(
 		}
 
 		// 表示設定をチェック
-		CEditWnd::getInstance()->SetDrawSwitchOfAllViews(
+		EditWnd::getInstance()->SetDrawSwitchOfAllViews(
 			pcDlgCancel->IsButtonChecked(IDC_CHECK_REALTIMEVIEW)
 		);
 
@@ -767,8 +767,8 @@ int GrepAgent::DoGrepTree(
 			if (0 < cmemMessage.GetStringLength()) {
 				AddTail( pcViewDst, cmemMessage, sGrepOption.bGrepStdout );
 				pcViewDst->GetCommander().Command_GOFILEEND(FALSE);
-				if (!CEditWnd::getInstance()->UpdateTextWrap()) {	// 折り返し方法関連の更新	// 2008.06.10 ryoji
-					CEditWnd::getInstance()->RedrawAllViews(pcViewDst);	//	他のペインの表示を更新
+				if (!EditWnd::getInstance()->UpdateTextWrap()) {	// 折り返し方法関連の更新	// 2008.06.10 ryoji
+					EditWnd::getInstance()->RedrawAllViews(pcViewDst);	//	他のペインの表示を更新
 				}
 				cmemMessage.Clear();
 			}
@@ -784,8 +784,8 @@ int GrepAgent::DoGrepTree(
 	if (0 < cmemMessage.GetStringLength()) {
 		AddTail( pcViewDst, cmemMessage, sGrepOption.bGrepStdout );
 		pcViewDst->GetCommander().Command_GOFILEEND(false);
-		if (!CEditWnd::getInstance()->UpdateTextWrap()) {	// 折り返し方法関連の更新
-			CEditWnd::getInstance()->RedrawAllViews(pcViewDst);	//	他のペインの表示を更新
+		if (!EditWnd::getInstance()->UpdateTextWrap()) {	// 折り返し方法関連の更新
+			EditWnd::getInstance()->RedrawAllViews(pcViewDst);	//	他のペインの表示を更新
 		}
 		cmemMessage.Clear();
 	}
@@ -812,7 +812,7 @@ int GrepAgent::DoGrepTree(
 				goto cancel_return;
 			}
 			// 表示設定をチェック
-			CEditWnd::getInstance()->SetDrawSwitchOfAllViews(
+			EditWnd::getInstance()->SetDrawSwitchOfAllViews(
 				pcDlgCancel->IsButtonChecked(IDC_CHECK_REALTIMEVIEW)
 			);
 
@@ -855,8 +855,8 @@ cancel_return:;
 	if (0 < cmemMessage.GetStringLength()) {
 		AddTail( pcViewDst, cmemMessage, sGrepOption.bGrepStdout );
 		pcViewDst->GetCommander().Command_GOFILEEND(false);
-		if (!CEditWnd::getInstance()->UpdateTextWrap()) {	// 折り返し方法関連の更新
-			CEditWnd::getInstance()->RedrawAllViews(pcViewDst);	//	他のペインの表示を更新
+		if (!EditWnd::getInstance()->UpdateTextWrap()) {	// 折り返し方法関連の更新
+			EditWnd::getInstance()->RedrawAllViews(pcViewDst);	//	他のペインの表示を更新
 		}
 		cmemMessage.Clear();
 	}
@@ -874,7 +874,7 @@ cancel_return:;
 */
 void GrepAgent::SetGrepResult(
 	// データ格納先
-	CNativeW& cmemMessage,
+	NativeW& cmemMessage,
 	// マッチしたファイルの情報
 	const TCHAR*		pszFilePath,	//!< [in] フルパス or 相対パス
 	const TCHAR*		pszCodeName,	//!< [in] 文字コード情報．" [SJIS]"とか
@@ -892,7 +892,7 @@ void GrepAgent::SetGrepResult(
 )
 {
 
-	CNativeW cmemBuf(L"");
+	NativeW cmemBuf(L"");
 	wchar_t strWork[64];
 	const wchar_t* pDispData;
 	int k;
@@ -954,7 +954,7 @@ void GrepAgent::SetGrepResult(
 }
 
 static void OutputPathInfo(
-	CNativeW&		cmemMessage,
+	NativeW&		cmemMessage,
 	GrepOption		sGrepOption,
 	const TCHAR*	pszFullPath,
 	const TCHAR*	pszBaseFolder,
@@ -1017,24 +1017,24 @@ static void OutputPathInfo(
 }
 
 /*!
-	Grep実行 (CFileLoadを使ったテスト版)
+	Grep実行 (FileLoadを使ったテスト版)
 
 	@retval -1 GREPのキャンセル
 	@retval それ以外 ヒット数(ファイル検索時はファイル数)
 
 	@date 2001/06/27 genta	正規表現ライブラリの差し替え
-	@date 2002/08/30 Moca CFileLoadを使ったテスト版
+	@date 2002/08/30 Moca FileLoadを使ったテスト版
 	@date 2004/03/28 genta 不要な引数nNest, bGrepSubFolder, pszPathを削除
 */
 int GrepAgent::DoGrepFile(
-	CEditView*				pcViewDst,			//!< 
-	CDlgCancel*				pcDlgCancel,		//!< [in] Cancelダイアログへのポインタ
+	EditView*				pcViewDst,			//!< 
+	DlgCancel*				pcDlgCancel,		//!< [in] Cancelダイアログへのポインタ
 	const wchar_t*			pszKey,				//!< [in] 検索パターン
 	const TCHAR*			pszFile,			//!< [in] 処理対象ファイル名(表示用)
 	const SearchOption&		searchOption,		//!< [in] 検索オプション
 	const GrepOption&		sGrepOption,		//!< [in] Grepオプション
 	const SearchStringPattern& pattern,		//!< [in] 検索パターン
-	CBregexp*				pRegexp,			//!< [in] 正規表現コンパイルデータ。既にコンパイルされている必要がある
+	Bregexp*				pRegexp,			//!< [in] 正規表現コンパイルデータ。既にコンパイルされている必要がある
 	int*					pnHitCount,			//!< [i/o] ヒット数の合計．元々の値に見つかった数を加算して返す．
 	const TCHAR*			pszFullPath,		//!< [in] 処理対象ファイルパス C:\Folder\SubFolder\File.ext
 	const TCHAR*			pszBaseFolder,		//!< [in] 検索フォルダ C:\Folder
@@ -1042,7 +1042,7 @@ int GrepAgent::DoGrepFile(
 	const TCHAR*			pszRelPath,			//!< [in] 相対パス File.ext(bGrepSeparateFolder) または  SubFolder\File.ext(!bGrepSeparateFolder)
 	bool&					bOutputBaseFolder,	//!< 
 	bool&					bOutputFolderName,	//!< 
-	CNativeW&				cmemMessage			//!< 
+	NativeW&				cmemMessage			//!< 
 )
 {
 	int		nHitCount;
@@ -1053,11 +1053,11 @@ int GrepAgent::DoGrepFile(
 	int		nColumn;
 	BOOL	bOutFileName;
 	bOutFileName = FALSE;
-	CEol	cEol;
+	Eol	cEol;
 	int		nEolCodeLen;
 	const TypeConfigMini* type;
-	CDocTypeManager().GetTypeConfigMini(CDocTypeManager().GetDocumentTypeOfPath(pszFile), &type);
-	CFileLoad	cfl(type->m_encoding);	// 2012/12/18 Uchi 検査するファイルのデフォルトの文字コードを取得する様に
+	DocTypeManager().GetTypeConfigMini(DocTypeManager().GetDocumentTypeOfPath(pszFile), &type);
+	FileLoad	cfl(type->m_encoding);	// 2012/12/18 Uchi 検査するファイルのデフォルトの文字コードを取得する様に
 	int		nOldPercent = 0;
 
 	int	nKeyLen = wcslen(pszKey);
@@ -1197,7 +1197,7 @@ int GrepAgent::DoGrepFile(
 		}
 
 		// 注意 : cfl.ReadLine が throw する可能性がある
-		CNativeW cUnicodeBuffer;
+		NativeW cUnicodeBuffer;
 		while (RESULT_FAILURE != cfl.ReadLine(&cUnicodeBuffer, &cEol)) {
 			const wchar_t*	pLine = cUnicodeBuffer.GetStringPtr();
 			int		nLineLen = cUnicodeBuffer.GetStringLength();
@@ -1217,7 +1217,7 @@ int GrepAgent::DoGrepFile(
 					return -1;
 				}
 				//	2003.06.23 Moca 表示設定をチェック
-				CEditWnd::getInstance()->SetDrawSwitchOfAllViews(
+				EditWnd::getInstance()->SetDrawSwitchOfAllViews(
 					pcDlgCancel->IsButtonChecked(IDC_CHECK_REALTIMEVIEW)
 				);
 				// 2002/08/30 Moca 進行状態を表示する(5MB以上)
@@ -1257,7 +1257,7 @@ int GrepAgent::DoGrepFile(
 					int matchlen = pRegexp->GetMatchLen();
 #ifdef _DEBUG
 					if (nIndex <= nIndexPrev) {
-						MYTRACE(_T("ERROR: CEditView::DoGrepFile() nIndex <= nIndexPrev break \n"));
+						MYTRACE(_T("ERROR: EditView::DoGrepFile() nIndex <= nIndexPrev break \n"));
 						break;
 					}
 					nIndexPrev = nIndex;
@@ -1296,7 +1296,7 @@ int GrepAgent::DoGrepFile(
 					//	探し始める位置を補正
 					//	2003.06.10 Moca マッチした文字列の後ろから次の検索を開始する
 					if (matchlen <= 0) {
-						matchlen = CNativeW::GetSizeOfChar(pLine, nLineLen, nIndex);
+						matchlen = NativeW::GetSizeOfChar(pLine, nLineLen, nIndex);
 						if (matchlen <= 0) {
 							matchlen = 1;
 						}
@@ -1444,8 +1444,8 @@ int GrepAgent::DoGrepFile(
 				nOutputHitCount = nHitCount;
 				AddTail( pcViewDst, cmemMessage, sGrepOption.bGrepStdout );
 				pcViewDst->GetCommander().Command_GOFILEEND( FALSE );
-				if (!CEditWnd::getInstance()->UpdateTextWrap()) {	// 折り返し方法関連の更新	// 2008.06.10 ryoji
-					CEditWnd::getInstance()->RedrawAllViews( pcViewDst );	//	他のペインの表示を更新
+				if (!EditWnd::getInstance()->UpdateTextWrap()) {	// 折り返し方法関連の更新	// 2008.06.10 ryoji
+					EditWnd::getInstance()->RedrawAllViews( pcViewDst );	//	他のペインの表示を更新
 				}
 				cmemMessage._SetStringLength(0);
 			}
@@ -1459,14 +1459,14 @@ int GrepAgent::DoGrepFile(
 		// ファイルを明示的に閉じるが、ここで閉じないときはデストラクタで閉じている
 		cfl.FileClose();
 	} // try
-	catch (CError_FileOpen) {
-		CNativeW str(LSW(STR_GREP_ERR_FILEOPEN));
+	catch (Error_FileOpen) {
+		NativeW str(LSW(STR_GREP_ERR_FILEOPEN));
 		str.Replace(L"%ts", to_wchar(pszFullPath));
 		cmemMessage.AppendNativeData( str );
 		return 0;
 	}
-	catch (CError_FileRead) {
-		CNativeW str(LSW(STR_GREP_ERR_FILEREAD));
+	catch (Error_FileRead) {
+		NativeW str(LSW(STR_GREP_ERR_FILEREAD));
 		str.Replace(L"%ts", to_wchar(pszFullPath));
 		cmemMessage.AppendNativeData( str );
 	} // 例外処理終わり
@@ -1474,20 +1474,20 @@ int GrepAgent::DoGrepFile(
 	return nHitCount;
 }
 
-class CError_WriteFileOpen
+class Error_WriteFileOpen
 {
 public:
-	virtual ~CError_WriteFileOpen(){}
+	virtual ~Error_WriteFileOpen(){}
 };
 
-class CWriteData {
+class WriteData {
 public:
-	CWriteData(int& hit,
+	WriteData(int& hit,
 				LPCTSTR name,
 				ECodeType code_,
 				bool bBom_,
 				bool bOldSave_,
-				CNativeW& message)
+				NativeW& message)
 		:
 		nHitCount(hit),
 		fileName(name),
@@ -1500,7 +1500,7 @@ public:
 		memMessage(message)
 	{
 	}
-	void AppendBuffer(const CNativeW& strLine)
+	void AppendBuffer(const NativeW& strLine)
 	{
 		if (!out) {
 			bufferSize += strLine.GetStringLength();
@@ -1520,11 +1520,11 @@ public:
 			name += _T(".skrnew");
 			try {
 				out = new CBinaryOutputStream(name.c_str(), true);
-			}catch (CError_FileOpen) {
-				throw CError_WriteFileOpen();
+			}catch (Error_FileOpen) {
+				throw Error_WriteFileOpen();
 			}
 			if (bBom) {
-				CMemory cBom;
+				Memory cBom;
 				pcCodeBase->GetBom(&cBom);
 				out->Write(cBom.GetRawPtr(), cBom.GetRawLength());
 			}
@@ -1532,12 +1532,12 @@ public:
 				Output(buffer[i]);
 			}
 			buffer.clear();
-			std::deque<CNativeW>().swap(buffer);
+			std::deque<NativeW>().swap(buffer);
 		}
 	}
-	void Output(const CNativeW& strLine)
+	void Output(const NativeW& strLine)
 	{
-		CMemory dest;
+		Memory dest;
 		pcCodeBase->UnicodeToCode(strLine, &dest);
 		// 場合によっては改行ごとではないので、JIS/UTF-7での出力が一定でない可能性あり
 		out->Write(dest.GetRawPtr(), dest.GetRawLength());
@@ -1592,7 +1592,7 @@ public:
 		}
 		return;
 	}
-	~CWriteData()
+	~WriteData()
 	{
 		if (out) {
 			out->Close();
@@ -1610,10 +1610,10 @@ private:
 	bool bBom;
 	bool bOldSave;
 	size_t bufferSize;
-	std::deque<CNativeW> buffer;
+	std::deque<NativeW> buffer;
 	CBinaryOutputStream* out;
 	std::unique_ptr<CodeBase> pcCodeBase;
-	CNativeW&	memMessage;
+	NativeW&	memMessage;
 };
 
 /*!
@@ -1621,15 +1621,15 @@ private:
 	@date 2013.06.12 Moca 新規作成
 */
 int GrepAgent::DoGrepReplaceFile(
-	CEditView*				pcViewDst,
-	CDlgCancel*				pcDlgCancel,
+	EditView*				pcViewDst,
+	DlgCancel*				pcDlgCancel,
 	const wchar_t*			pszKey,
-	const CNativeW&			cmGrepReplace,
+	const NativeW&			cmGrepReplace,
 	const TCHAR*			pszFile,
 	const SearchOption&		searchOption,
 	const GrepOption&		sGrepOption,
 	const SearchStringPattern& pattern,
-	CBregexp*				pRegexp,		//	Jun. 27, 2001 genta	正規表現ライブラリの差し替え
+	Bregexp*				pRegexp,		//	Jun. 27, 2001 genta	正規表現ライブラリの差し替え
 	int*					pnHitCount,
 	const TCHAR*			pszFullPath,
 	const TCHAR*			pszBaseFolder,
@@ -1637,22 +1637,22 @@ int GrepAgent::DoGrepReplaceFile(
 	const TCHAR*			pszRelPath,
 	bool&					bOutputBaseFolder,
 	bool&					bOutputFolderName,
-	CNativeW&				cmemMessage
+	NativeW&				cmemMessage
 )
 {
 	LONGLONG	nLine = 0;
 	int		nHitCount = 0;
 	ECodeType	nCharCode;
 	BOOL	bOutFileName = FALSE;
-	CEol	cEol;
+	Eol	cEol;
 	int		nEolCodeLen;
 	int		nOldPercent = 0;
 	int	nKeyLen = wcslen( pszKey );
 	const TCHAR*	pszCodeName = _T("");
 
 	const TypeConfigMini* type;
-	CDocTypeManager().GetTypeConfigMini( CDocTypeManager().GetDocumentTypeOfPath( pszFile ), &type );
-	CFileLoad	cfl( type->m_encoding );	// 2012/12/18 Uchi 検査するファイルのデフォルトの文字コードを取得する様に
+	DocTypeManager().GetTypeConfigMini( DocTypeManager().GetDocumentTypeOfPath( pszFile ), &type );
+	FileLoad	cfl( type->m_encoding );	// 2012/12/18 Uchi 検査するファイルのデフォルトの文字コードを取得する様に
 	bool bBom;
 	// ファイル名表示
 	const TCHAR* pszDispFilePath = ( sGrepOption.bGrepSeparateFolder || sGrepOption.bGrepOutputBaseFolder ) ? pszRelPath : pszFullPath;
@@ -1663,7 +1663,7 @@ int GrepAgent::DoGrepReplaceFile(
 		// FileCloseで明示的に閉じるが、閉じていないときはデストラクタで閉じる
 		// 2003.06.10 Moca 文字コード判定処理もFileOpenで行う
 		nCharCode = cfl.FileOpen( pszFullPath, true, sGrepOption.nGrepCharSet, GetDllShareData().m_common.m_sFile.GetAutoMIMEdecode(), &bBom );
-		CWriteData output(nHitCount, pszFullPath, nCharCode, bBom, sGrepOption.bGrepBackup, cmemMessage );
+		WriteData output(nHitCount, pszFullPath, nCharCode, bBom, sGrepOption.bGrepBackup, cmemMessage );
 		TCHAR szCpName[100];
 		{
 			if (sGrepOption.nGrepCharSet == CODE_AUTODETECT) {
@@ -1691,9 +1691,9 @@ int GrepAgent::DoGrepReplaceFile(
 			SearchAgent::CreateWordList( searchWords, pszKey, nKeyLen );
 		}
 	
-		CNativeW cOutBuffer;
+		NativeW cOutBuffer;
 		// 注意 : cfl.ReadLine が throw する可能性がある
-		CNativeW cUnicodeBuffer;
+		NativeW cUnicodeBuffer;
 		while (cfl.ReadLine(&cUnicodeBuffer, &cEol) != RESULT_FAILURE) {
 			const wchar_t*	pLine = cUnicodeBuffer.GetStringPtr();
 			int nLineLen = cUnicodeBuffer.GetStringLength();
@@ -1712,7 +1712,7 @@ int GrepAgent::DoGrepReplaceFile(
 					return -1;
 				}
 				//	2003.06.23 Moca 表示設定をチェック
-				CEditWnd::getInstance()->SetDrawSwitchOfAllViews(
+				EditWnd::getInstance()->SetDrawSwitchOfAllViews(
 					pcDlgCancel->IsButtonChecked(IDC_CHECK_REALTIMEVIEW)
 				);
 				// 2002/08/30 Moca 進行状態を表示する(5MB以上)
@@ -1795,7 +1795,7 @@ int GrepAgent::DoGrepReplaceFile(
 					//	探し始める位置を補正
 					//	2003.06.10 Moca マッチした文字列の後ろから次の検索を開始する
 					if (matchlen <= 0) {
-						matchlen = CNativeW::GetSizeOfChar( pLine, nLineLen, nIndex );
+						matchlen = NativeW::GetSizeOfChar( pLine, nLineLen, nIndex );
 						if (matchlen <= 0) {
 							matchlen = 1;
 						}
@@ -1920,8 +1920,8 @@ int GrepAgent::DoGrepReplaceFile(
 				nOutputHitCount = nHitCount;
 				AddTail( pcViewDst, cmemMessage, sGrepOption.bGrepStdout );
 				pcViewDst->GetCommander().Command_GOFILEEND( FALSE );
-				if (!CEditWnd::getInstance()->UpdateTextWrap())	// 折り返し方法関連の更新	// 2008.06.10 ryoji
-					CEditWnd::getInstance()->RedrawAllViews( pcViewDst );	//	他のペインの表示を更新
+				if (!EditWnd::getInstance()->UpdateTextWrap())	// 折り返し方法関連の更新	// 2008.06.10 ryoji
+					EditWnd::getInstance()->RedrawAllViews( pcViewDst );	//	他のペインの表示を更新
 				cmemMessage._SetStringLength(0);
 			}
 		}
@@ -1930,19 +1930,19 @@ int GrepAgent::DoGrepReplaceFile(
 		cfl.FileClose();
 		output.Close();
 	} // try
-	catch( CError_FileOpen ){
-		CNativeW str(LSW(STR_GREP_ERR_FILEOPEN));
+	catch( Error_FileOpen ){
+		NativeW str(LSW(STR_GREP_ERR_FILEOPEN));
 		str.Replace(L"%ts", to_wchar(pszFullPath));
 		cmemMessage.AppendNativeData(str);
 		return 0;
-	}catch (CError_FileRead) {
-		CNativeW str(LSW(STR_GREP_ERR_FILEREAD));
+	}catch (Error_FileRead) {
+		NativeW str(LSW(STR_GREP_ERR_FILEREAD));
 		str.Replace(L"%ts", to_wchar(pszFullPath));
 		cmemMessage.AppendNativeData(str);
-	}catch (CError_WriteFileOpen) {
+	}catch (Error_WriteFileOpen) {
 		std::tstring file = pszFullPath;
 		file += _T(".skrnew");
-		CNativeW str(LSW(STR_GREP_ERR_FILEWRITE));
+		NativeW str(LSW(STR_GREP_ERR_FILEWRITE));
 		str.Replace(L"%ts", to_wchar(file.c_str()));
 		cmemMessage.AppendNativeData( str );
 	} // 例外処理終わり

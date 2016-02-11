@@ -47,7 +47,7 @@ void CType_Sql::InitTypeConfigImp(TypeConfig* pType)
 
 
 // PL/SQL関数リスト作成
-void CDocOutline::MakeFuncList_PLSQL(CFuncInfoArr* pcFuncInfoArr)
+void DocOutline::MakeFuncList_PLSQL(FuncInfoArr* pcFuncInfoArr)
 {
 	const wchar_t*	pLine;
 	LogicInt		nLineLen;
@@ -75,7 +75,7 @@ void CDocOutline::MakeFuncList_PLSQL(CFuncInfoArr* pcFuncInfoArr)
 		for (int i=0; i<nLineLen; ++i) {
 			// 1バイト文字だけを処理する
 			// 2005-09-02 D.S.Koba GetSizeOfChar
-			nCharChars = CNativeW::GetSizeOfChar(pLine, nLineLen, i);
+			nCharChars = NativeW::GetSizeOfChar(pLine, nLineLen, i);
 			if (nCharChars == 0) {
 				nCharChars = 1;
 			}

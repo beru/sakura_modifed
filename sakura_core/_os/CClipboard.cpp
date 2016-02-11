@@ -219,16 +219,16 @@ bool Clipboard::SetText(
 	return true;
 }
 
-bool Clipboard::SetHtmlText(const CNativeW& cmemBUf)
+bool Clipboard::SetHtmlText(const NativeW& cmemBUf)
 {
 	if (!m_bOpenResult) {
 		return false;
 	}
 
-	CNativeA cmemUtf8;
+	NativeA cmemUtf8;
 	Utf8().UnicodeToCode(cmemBUf, cmemUtf8._GetMemory());
 
-	CNativeA cmemHeader;
+	NativeA cmemHeader;
 	char szFormat[32];
 	size_t size = cmemUtf8.GetStringLength() + 134;
 	cmemHeader.AppendString("Version:0.9\r\n");
@@ -239,7 +239,7 @@ bool Clipboard::SetHtmlText(const CNativeW& cmemBUf)
 	sprintf(szFormat, "EndFragment:%08d\r\n", size);
 	cmemHeader.AppendString(szFormat);
 	cmemHeader.AppendString("<html><body>\r\n<!--StartFragment -->\r\n");
-	CNativeA cmemFooter;
+	NativeA cmemFooter;
 	cmemFooter.AppendString("\r\n<!--EndFragment-->\r\n</body></html>\r\n");
 
 	size_t nLen = cmemHeader.GetStringLength() + cmemUtf8.GetStringLength() + cmemFooter.GetStringLength();
@@ -273,7 +273,7 @@ bool Clipboard::SetHtmlText(const CNativeW& cmemBUf)
 	@param [in] cEol HDROP形式のときの改行コード
 	@param [in] uGetFormat クリップボード形式
 */
-bool Clipboard::GetText(CNativeW* cmemBuf, bool* pbColumnSelect, bool* pbLineSelect, const CEol& cEol, UINT uGetFormat)
+bool Clipboard::GetText(NativeW* cmemBuf, bool* pbColumnSelect, bool* pbLineSelect, const Eol& cEol, UINT uGetFormat)
 {
 	if (!m_bOpenResult) {
 		return false;
@@ -348,8 +348,8 @@ bool Clipboard::GetText(CNativeW* cmemBuf, bool* pbColumnSelect, bool* pbLineSel
 	if (hText) {
 		char* szData = GlobalLockChar(hText);
 		// SJIS→UNICODE
-		CMemory cmemSjis(szData, GlobalSize(hText));
-		CNativeW cmemUni;
+		Memory cmemSjis(szData, GlobalSize(hText));
+		NativeW cmemUni;
 		ShiftJis::SJISToUnicode(cmemSjis, &cmemUni);
 		cmemSjis.Clean();
 		// '\0'までを取得
@@ -479,7 +479,7 @@ bool Clipboard::SetClipboradByFormat(const CStringRef& cstr, const wchar_t* pFor
 		return false;
 	}
 
-	CMemory cmemBuf;
+	Memory cmemBuf;
 	char* pBuf = NULL;
 	size_t nTextByteLen = 0;
 	if (nMode == -1) {
@@ -571,7 +571,7 @@ static int GetLengthByMode(HGLOBAL hClipData, const BYTE* pData, int nMode, int 
 	@param nEndMode -1:文字コードに依存 0:GlobalSize 1:strlen 2:wcslen 4:wchar32_tの文字列
 	@date 2013.06.12 Moca 新規作成
 */
-bool Clipboard::GetClipboradByFormat(CNativeW& mem, const wchar_t* pFormatName, int nMode, int nEndMode, const CEol& cEol)
+bool Clipboard::GetClipboradByFormat(NativeW& mem, const wchar_t* pFormatName, int nMode, int nEndMode, const Eol& cEol)
 {
 	mem.SetString(L"");
 	CLIPFORMAT uFormat = GetClipFormat(pFormatName);
@@ -634,7 +634,7 @@ bool Clipboard::GetClipboradByFormat(CNativeW& mem, const wchar_t* pFormatName, 
 			if (eMode == CODE_UNICODE) {
 				mem.SetString((wchar_t*)pData, nLength / sizeof(wchar_t));
 			}else {
-				CMemory cmem;
+				Memory cmem;
 				cmem.SetRawData(pData, nLength);
 				if (cmem.GetRawPtr()) {
 					CodeBase* pCode = CodeFactory::CreateCodeBase(eMode, GetDllShareData().m_common.m_sFile.GetAutoMIMEdecode());

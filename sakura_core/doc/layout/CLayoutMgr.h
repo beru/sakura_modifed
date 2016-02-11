@@ -33,14 +33,14 @@
 #include "util/container.h"
 #include "util/design_template.h"
 
-class CBregexp;// 2002/2/10 aroka
+class Bregexp;// 2002/2/10 aroka
 class Layout;// 2002/2/10 aroka
 class DocLineMgr;// 2002/2/10 aroka
-class CDocLine;// 2002/2/10 aroka
-class CMemory;// 2002/2/10 aroka
+class DocLine;// 2002/2/10 aroka
+class Memory;// 2002/2/10 aroka
 class EditDoc;// 2003/07/20 genta
 class SearchStringPattern;
-class CColorStrategy;
+class ColorStrategy;
 
 // レイアウト中の禁則タイプ	//@@@ 2002.04.20 MIK
 enum EKinsokuType {
@@ -125,7 +125,7 @@ public:
 	Layout*		SearchLineByLayoutY(LayoutInt nLineLayout) { return const_cast<Layout*>(static_cast<const LayoutMgr*>(this)->SearchLineByLayoutY(nLineLayout)); }
 
 	// ワードを探す
-	bool			WhereCurrentWord(LayoutInt , LogicInt , LayoutRange* pSelect, CNativeW*, CNativeW*);	// 現在位置の単語の範囲を調べる
+	bool			WhereCurrentWord(LayoutInt , LogicInt , LayoutRange* pSelect, NativeW*, NativeW*);	// 現在位置の単語の範囲を調べる
 
 	// 判定
 	bool			IsEndOfLine(const LayoutPoint& ptLinePos);	// 指定位置が行末(改行文字の直前)か調べる	//@@@ 2002.04.18 MIK
@@ -251,9 +251,9 @@ protected:
 		Layout*		pLayoutCalculated;
 
 		// ループ外
-		CDocLine*		pcDocLine;
+		DocLine*		pcDocLine;
 		Layout*		pLayout;
-		CColorStrategy*	pcColorStrategy;
+		ColorStrategy*	pcColorStrategy;
 		EColorIndexType	colorPrev;
 		LayoutExInfo	exInfoPrev;
 		LogicInt		nCurLine;
@@ -315,7 +315,7 @@ protected:
 	*/
 	//@@@ 2002.09.23 YAZAKI
 	// 2009.08.28 nasukoji	nPosX引数追加
-	Layout* CreateLayout(CDocLine* pCDocLine, LogicPoint ptLogicPos, LogicInt nLength, EColorIndexType nTypePrev, LayoutInt nIndent, LayoutInt nPosX, LayoutColorInfo*);
+	Layout* CreateLayout(DocLine* pCDocLine, LogicPoint ptLogicPos, LogicInt nLength, EColorIndexType nTypePrev, LayoutInt nIndent, LayoutInt nPosX, LayoutColorInfo*);
 	Layout* InsertLineNext(Layout*, Layout*);
 	void AddLineBottom(Layout*);
 

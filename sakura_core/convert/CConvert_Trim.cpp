@@ -17,14 +17,14 @@
 	@date 2001.12.03 hor    新規作成
 	@date 2007.10.18 kobake Converter_Trimに移動
 */
-bool Converter_Trim::DoConvert(CNativeW* pcData)
+bool Converter_Trim::DoConvert(NativeW* pcData)
 {
 	const wchar_t*	pLine;
 	int			nLineLen;
 	int			nBgn;
 	int			i, j;
 	int			nPosDes;
-	CEol		cEol;
+	Eol		cEol;
 	int			nCharChars;
 
 	nBgn = 0;
@@ -69,7 +69,7 @@ bool Converter_Trim::DoConvert(CNativeW* pcData)
 				// 2005.10.11 ryoji 右から遡るのではなく左から探すように修正（"ａ@" の右２バイトが全角空白と判定される問題の対処）
 				i = j = 0;
 				while (i < nLineLen) {
-					nCharChars = CNativeW::GetSizeOfChar(pLine, nLineLen, i);
+					nCharChars = NativeW::GetSizeOfChar(pLine, nLineLen, i);
 					if (!WCODE::IsBlank(pLine[i])) {
 						j = i + nCharChars;
 					}

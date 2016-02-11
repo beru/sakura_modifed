@@ -19,9 +19,9 @@
 
 #include "Funccode_enum.h"
 
-class CMenuDrawer;
+class MenuDrawer;
 
-class CImageListMgr;// 2002/2/10 aroka
+class ImageListMgr;// 2002/2/10 aroka
 struct DLLSHAREDATA;
 
 //#define MAX_MENUPOS	10
@@ -50,14 +50,14 @@ struct DLLSHAREDATA;
 	@date 2002.2.17 YAZAKI CShareDataのインスタンスは、CProcessにひとつあるのみ。
 	@date 20050809 aroka クラス外部からアクセスされないメンバはprivateにした。
 */
-class CMenuDrawer {
+class MenuDrawer {
 public:
 	/*
 	||  Constructors
 	*/
-	CMenuDrawer();
-	~CMenuDrawer();
-	void Create(HINSTANCE, HWND, CImageListMgr*);
+	MenuDrawer();
+	~MenuDrawer();
+	void Create(HINSTANCE, HWND, ImageListMgr*);
 
 	/*
 	||  Attributes & Operations
@@ -102,7 +102,7 @@ private:
 	HINSTANCE		m_hInstance;
 	HWND			m_hWndOwner;
 
-//@@@ 2002.01.03 YAZAKI m_tbMyButtonなどをCShareDataからCMenuDrawerへ移動したことによる修正。
+//@@@ 2002.01.03 YAZAKI m_tbMyButtonなどをCShareDataからMenuDrawerへ移動したことによる修正。
 // 2009.11.14 syat プラグインコマンド動的追加のためvector化
 	std::vector<TBBUTTON>	m_tbMyButton;	/* ツールバーのボタン */
 	int				m_nMyButtonNum;
@@ -127,7 +127,7 @@ private:
 public:
 	// 2010.01.30 syat アイコンイメージリストをprivate->public
 	//	Oct. 16, 2000 genta
-	CImageListMgr* m_pcIcons;	//	Image List
+	ImageListMgr* m_pcIcons;	//	Image List
 
 protected:
 	/*
@@ -135,7 +135,7 @@ protected:
 	*/
 	int GetData(void);	/* ダイアログデータの取得 */
 
-//@@@ 2002.01.03 YAZAKI m_tbMyButtonなどをCShareDataからCMenuDrawerへ移動したことによる修正。
+//@@@ 2002.01.03 YAZAKI m_tbMyButtonなどをCShareDataからMenuDrawerへ移動したことによる修正。
 	void SetTBBUTTONVal(TBBUTTON*, int, int, BYTE, BYTE, DWORD_PTR, INT_PTR) const;	/* TBBUTTON構造体にデータをセット */
 };
 

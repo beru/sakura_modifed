@@ -29,21 +29,21 @@
 #include "uiparts/CSoundSet.h"
 #include "uiparts/CImageListMgr.h"
 class EditDoc;
-class CEditWnd;
+class EditWnd;
 class LoadAgent;
 class SaveAgent;
 class VisualProgress;
 class MruListener;
 class CSMacroMgr;
-class CPropertyManager;
+class PropertyManager;
 class GrepAgent;
 enum EFunctionCode;
 
 // エディタ部分アプリケーションクラス。CNormalProcess1個につき、1個存在。
-class CEditApp : public TSingleton<CEditApp> {
-	friend class TSingleton<CEditApp>;
-	CEditApp() {}
-	virtual ~CEditApp();
+class EditApp : public TSingleton<EditApp> {
+	friend class TSingleton<EditApp>;
+	EditApp() {}
+	virtual ~EditApp();
 
 public:
 	void Create(HINSTANCE hInst, int);
@@ -52,10 +52,10 @@ public:
 	HINSTANCE GetAppInstance() const { return m_hInst; }	// インスタンスハンドル取得
 
 	// ウィンドウ情報
-	CEditWnd* GetEditWindow() { return m_pcEditWnd; }		// ウィンドウ取得
+	EditWnd* GetEditWindow() { return m_pcEditWnd; }		// ウィンドウ取得
 
 	EditDoc*		GetDocument() { return m_pcEditDoc; }
-	CImageListMgr&	GetIcons() { return m_cIcons; }
+	ImageListMgr&	GetIcons() { return m_cIcons; }
 
 	bool OpenPropertySheet(int nPageNum);
 	bool OpenPropertySheetTypes(int nPageNum, CTypeConfig nSettingType);
@@ -67,7 +67,7 @@ public:
 	EditDoc*			m_pcEditDoc;
 
 	// ウィンドウ
-	CEditWnd*			m_pcEditWnd;
+	EditWnd*			m_pcEditWnd;
 
 	// IO管理
 	LoadAgent*			m_pcLoadAgent;
@@ -78,19 +78,19 @@ public:
 	MruListener*		m_pcMruListener;		// MRU管理
 	CSMacroMgr*			m_pcSMacroMgr;			// マクロ管理
 private:
-	CPropertyManager*	m_pcPropertyManager;	// プロパティ管理
+	PropertyManager*	m_pcPropertyManager;	// プロパティ管理
 public:
 	GrepAgent*			m_pcGrepAgent;			// GREPモード
-	CSoundSet			m_cSoundSet;			// サウンド管理
+	SoundSet			m_cSoundSet;			// サウンド管理
 
 	// GUIオブジェクト
-	CImageListMgr		m_cIcons;				// Image List
+	ImageListMgr		m_cIcons;				// Image List
 };
 
 
 // WM_QUIT検出例外
-class CAppExitException : public std::exception {
+class AppExitException : public std::exception {
 public:
-	const char* what() const throw() { return "CAppExitException"; }
+	const char* what() const throw() { return "AppExitException"; }
 };
 

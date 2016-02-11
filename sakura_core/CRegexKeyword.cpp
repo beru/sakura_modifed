@@ -1,5 +1,5 @@
 /*!	@file
-	@brief CRegexKeyword Library
+	@brief RegexKeyword Library
 
 	正規表現キーワードを扱う。
 	BREGEXP.DLLを利用する。
@@ -77,10 +77,10 @@
 	@date 2002.2.17 YAZAKI CShareDataのインスタンスは、CProcessにひとつあるのみ。
 	@date 2007.08.12 genta 正規表現DLL指定のため引数追加
 */
-CRegexKeyword::CRegexKeyword(LPCTSTR regexp_dll )
+RegexKeyword::RegexKeyword(LPCTSTR regexp_dll )
 {
 	InitDll(regexp_dll);	// 2007.08.12 genta 引数追加
-	MYDBGMSG("CRegexKeyword")
+	MYDBGMSG("RegexKeyword")
 
 	m_pTypes    = NULL;
 	m_nTypeIndex = -1;
@@ -94,9 +94,9 @@ CRegexKeyword::CRegexKeyword(LPCTSTR regexp_dll )
 
 	コンパイル済みデータの破棄を行う。
 */
-CRegexKeyword::~CRegexKeyword()
+RegexKeyword::~RegexKeyword()
 {
-	MYDBGMSG("~CRegexKeyword")
+	MYDBGMSG("~RegexKeyword")
 	// コンパイル済みのバッファを解放する。
 	for (int i=0; i<MAX_REGEX_KEYWORD; ++i) {
 		if (m_sInfo[i].pBregexp && IsAvailable()) {
@@ -118,7 +118,7 @@ CRegexKeyword::~CRegexKeyword()
 
 	@retval TRUE 成功
 */
-bool CRegexKeyword::RegexKeyInit(void)
+bool RegexKeyword::RegexKeyInit(void)
 {
 	MYDBGMSG("RegexKeyInit")
 	m_nTypeIndex = -1;
@@ -153,7 +153,7 @@ bool CRegexKeyword::RegexKeyInit(void)
 
 	@note タイプ設定が変わったら再ロードしコンパイルする。
 */
-bool CRegexKeyword::RegexKeySetTypes(const TypeConfig *pTypesPtr)
+bool RegexKeyword::RegexKeySetTypes(const TypeConfig *pTypesPtr)
 {
 	MYDBGMSG("RegexKeySetTypes")
 	if (!pTypesPtr)  {
@@ -197,7 +197,7 @@ bool CRegexKeyword::RegexKeySetTypes(const TypeConfig *pTypesPtr)
 	キーワードはコンパイルデータとして内部変数にコピーする。
 	先頭指定、色指定側の使用・未使用をチェックする。
 */
-bool CRegexKeyword::RegexKeyCompile(void)
+bool RegexKeyword::RegexKeyCompile(void)
 {
 	static const wchar_t dummy[2] = L"\0";
 	const struct RegexKeywordInfo	*rp;
@@ -315,7 +315,7 @@ bool CRegexKeyword::RegexKeyCompile(void)
 	@note それぞれの行検索の最初に実行する。
 	タイプ設定等が変更されている場合はリロードする。
 */
-bool CRegexKeyword::RegexKeyLineStart(void)
+bool RegexKeyword::RegexKeyLineStart(void)
 {
 	MYDBGMSG("RegexKeyLineStart")
 
@@ -355,7 +355,7 @@ bool CRegexKeyword::RegexKeyLineStart(void)
 
 	@note RegexKeyLineStart関数によって初期化されていること。
 */
-bool CRegexKeyword::RegexIsKeyword(
+bool RegexKeyword::RegexIsKeyword(
 	const CStringRef&	cStr,		// [in] 検索対象文字列
 //	const wchar_t*		pLine,		// [in] １行のデータ
 	int					nPos,		// [in] 検索開始オフセット
@@ -434,7 +434,7 @@ bool CRegexKeyword::RegexIsKeyword(
 	return false;
 }
 
-bool CRegexKeyword::RegexKeyCheckSyntax(const wchar_t* s)
+bool RegexKeyword::RegexKeyCheckSyntax(const wchar_t* s)
 {
 	static const wchar_t* kakomi[7 * 2] = {
 		L"/",  L"/k",
@@ -467,7 +467,7 @@ bool CRegexKeyword::RegexKeyCheckSyntax(const wchar_t* s)
 //@@@ 2001.11.17 add end MIK
 
 // static
-DWORD CRegexKeyword::GetNewMagicNumber()
+DWORD RegexKeyword::GetNewMagicNumber()
 {
 	return ::GetTickCount();
 }

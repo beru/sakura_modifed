@@ -61,20 +61,20 @@ static const DWORD p_helpids[] = {	//11200
 	@param wParam パラメータ1
 	@param lParam パラメータ2
 */
-INT_PTR CALLBACK CPropWin::DlgProc_page(
+INT_PTR CALLBACK PropWin::DlgProc_page(
 	HWND hwndDlg,
 	UINT uMsg,
 	WPARAM wParam,
 	LPARAM lParam
 	)
 {
-	return DlgProc(reinterpret_cast<pDispatchPage>(&CPropWin::DispatchEvent), hwndDlg, uMsg, wParam, lParam);
+	return DlgProc(reinterpret_cast<pDispatchPage>(&PropWin::DispatchEvent), hwndDlg, uMsg, wParam, lParam);
 	}
 //	To Here Jun. 2, 2001 genta
 
 
 // メッセージ処理
-INT_PTR CPropWin::DispatchEvent(
+INT_PTR PropWin::DispatchEvent(
 	HWND	hwndDlg,	// handle to dialog box
 	UINT	uMsg,	// message
 	WPARAM	wParam,	// first message parameter
@@ -215,7 +215,7 @@ INT_PTR CPropWin::DispatchEvent(
 			case IDC_BUTTON_WINSIZE:
 				{
 					auto& csWindow = m_Common.m_sWindow;
-					CDlgWinSize cDlgWinSize;
+					DlgWinSize cDlgWinSize;
 					RECT rc;
 					rc.right  = csWindow.m_nWinSizeCX;
 					rc.bottom = csWindow.m_nWinSizeCY;
@@ -265,7 +265,7 @@ INT_PTR CPropWin::DispatchEvent(
 }
 
 // ダイアログデータの設定
-void CPropWin::SetData(HWND hwndDlg)
+void PropWin::SetData(HWND hwndDlg)
 {
 //	BOOL	bRet;
 	auto& csWindow = m_Common.m_sWindow;
@@ -353,7 +353,7 @@ void CPropWin::SetData(HWND hwndDlg)
 
 
 // ダイアログデータの取得
-int CPropWin::GetData(HWND hwndDlg)
+int PropWin::GetData(HWND hwndDlg)
 {
 	auto& csWindow = m_Common.m_sWindow;
 
@@ -452,7 +452,7 @@ int CPropWin::GetData(HWND hwndDlg)
 //	From Here Sept. 9, 2000 JEPRO
 //	チェック状態に応じてダイアログボックス要素のEnable/Disableを
 //	適切に設定する
-void CPropWin::EnableWinPropInput(HWND hwndDlg)
+void PropWin::EnableWinPropInput(HWND hwndDlg)
 {
 	//	ファクションキーを表示するかどうか
 	if (DlgButton_IsChecked(hwndDlg, IDC_CHECK_DispFUNCKEYWND)) {

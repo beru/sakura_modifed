@@ -54,7 +54,7 @@ const DWORD p_helpids[] = {	//11900
 	0, 0
 };	//@@@ 2002.01.07 add end MIK
 
-CDlgReplace::CDlgReplace()
+DlgReplace::DlgReplace()
 {
 	m_searchOption.Reset();	// 検索オプション
 	m_bConsecutiveAll = FALSE;	//「すべて置換」は置換の繰返し	// 2007.01.16 ryoji
@@ -71,7 +71,7 @@ CDlgReplace::CDlgReplace()
 
 	@date 2013.03.24 novice 新規作成
 */
-BOOL CDlgReplace::OnCbnDropDown(HWND hwndCtl, int wID)
+BOOL DlgReplace::OnCbnDropDown(HWND hwndCtl, int wID)
 {
 	switch (wID) {
 	case IDC_COMBO_TEXT:
@@ -91,11 +91,11 @@ BOOL CDlgReplace::OnCbnDropDown(HWND hwndCtl, int wID)
 		}
 		break;
 	}
-	return CDialog::OnCbnDropDown( hwndCtl, wID );
+	return Dialog::OnCbnDropDown( hwndCtl, wID );
 }
 
 // モードレスダイアログの表示
-HWND CDlgReplace::DoModeless(
+HWND DlgReplace::DoModeless(
 	HINSTANCE hInstance,
 	HWND hwndParent,
 	LPARAM lParam,
@@ -108,13 +108,13 @@ HWND CDlgReplace::DoModeless(
 	m_bSelectedArea = csSearch.m_bSelectedArea;		// 選択範囲内置換
 	m_bNOTIFYNOTFOUND = csSearch.m_bNOTIFYNOTFOUND;	// 検索／置換  見つからないときメッセージを表示
 	m_bSelected = bSelected;
-	m_ptEscCaretPos_PHY = ((CEditView*)lParam)->GetCaret().GetCaretLogicPos();	// 検索/置換開始時のカーソル位置退避
-	((CEditView*)lParam)->m_bSearch = true;			// 検索/置換開始位置の登録有無			02/07/28 ai
-	return CDialog::DoModeless(hInstance, hwndParent, IDD_REPLACE, lParam, SW_SHOW);
+	m_ptEscCaretPos_PHY = ((EditView*)lParam)->GetCaret().GetCaretLogicPos();	// 検索/置換開始時のカーソル位置退避
+	((EditView*)lParam)->m_bSearch = true;			// 検索/置換開始位置の登録有無			02/07/28 ai
+	return Dialog::DoModeless(hInstance, hwndParent, IDD_REPLACE, lParam, SW_SHOW);
 }
 
 // モードレス時：置換・検索対象となるビューの変更
-void CDlgReplace::ChangeView(LPARAM pcEditView)
+void DlgReplace::ChangeView(LPARAM pcEditView)
 {
 	m_lParam = pcEditView;
 	return;
@@ -122,7 +122,7 @@ void CDlgReplace::ChangeView(LPARAM pcEditView)
 
 
 // ダイアログデータの設定
-void CDlgReplace::SetData(void)
+void DlgReplace::SetData(void)
 {
 	auto& csSearch = m_pShareData->m_common.m_sSearch;
 
@@ -192,7 +192,7 @@ void CDlgReplace::SetData(void)
 
 // 検索文字列/置換後文字列リストの設定
 // 2010/5/26 Uchi
-void CDlgReplace::SetCombosList(void)
+void DlgReplace::SetCombosList(void)
 {
 	// 検索文字列
 	HWND hwndCombo = GetItemHwnd(IDC_COMBO_TEXT);
@@ -223,7 +223,7 @@ void CDlgReplace::SetCombosList(void)
 
 // ダイアログデータの取得
 // 0==条件未入力  0より大きい==正常   0より小さい==入力エラー
-int CDlgReplace::GetData(void)
+int DlgReplace::GetData(void)
 {
 	auto& csSearch = m_pShareData->m_common.m_sSearch;
 
@@ -285,11 +285,11 @@ int CDlgReplace::GetData(void)
 		// 検索文字列
 		//@@@ 2002.2.2 YAZAKI CShareData.AddToSearchKeyArr()追加に伴う変更
 		if (m_strText.size() < _MAX_PATH) {
-			CSearchKeywordManager().AddToSearchKeyArr(m_strText.c_str());
+			SearchKeywordManager().AddToSearchKeyArr(m_strText.c_str());
 			csSearch.m_searchOption = m_searchOption;		// 検索オプション
 		}
 		// 2011.12.18 viewに直接設定
-		CEditView* pcEditView = (CEditView*)m_lParam;
+		EditView* pcEditView = (EditView*)m_lParam;
 		if (pcEditView->m_strCurSearchKey == m_strText && pcEditView->m_curSearchOption == m_searchOption) {
 		}else {
 			pcEditView->m_strCurSearchKey = m_strText;
@@ -301,7 +301,7 @@ int CDlgReplace::GetData(void)
 		// 置換後文字列
 		//@@@ 2002.2.2 YAZAKI CShareData.AddToReplaceKeyArr()追加に伴う変更
 		if (m_strText2.size() < _MAX_PATH) {
-			CSearchKeywordManager().AddToReplaceKeyArr(m_strText2.c_str());
+			SearchKeywordManager().AddToReplaceKeyArr(m_strText2.c_str());
 		}
 		m_nReplaceKeySequence = GetDllShareData().m_common.m_sSearch.m_nReplaceKeySequence;
 
@@ -333,7 +333,7 @@ int CDlgReplace::GetData(void)
 }
 
 
-BOOL CDlgReplace::OnInitDialog(
+BOOL DlgReplace::OnInitDialog(
 	HWND hwndDlg,
 	WPARAM wParam,
 	LPARAM lParam
@@ -382,22 +382,22 @@ BOOL CDlgReplace::OnInitDialog(
 	m_cFontText2.SetFont(hFontOld, hFont, GetItemHwnd(IDC_COMBO_TEXT2));
 
 	// 基底クラスメンバ
-	return CDialog::OnInitDialog(hwndDlg, wParam, lParam);
+	return Dialog::OnInitDialog(hwndDlg, wParam, lParam);
 }
 
 
-BOOL CDlgReplace::OnDestroy()
+BOOL DlgReplace::OnDestroy()
 {
 	m_cFontText.ReleaseOnDestroy();
 	m_cFontText2.ReleaseOnDestroy();
-	return CDialog::OnDestroy();
+	return Dialog::OnDestroy();
 }
 
 
-BOOL CDlgReplace::OnBnClicked(int wID)
+BOOL DlgReplace::OnBnClicked(int wID)
 {
 	int nRet;
-	CEditView* pcEditView = (CEditView*)m_lParam;
+	EditView* pcEditView = (EditView*)m_lParam;
 
 	switch (wID) {
 	case IDC_CHK_PASTE:
@@ -568,7 +568,7 @@ BOOL CDlgReplace::OnBnClicked(int wID)
 			}// 02/07/28 ai end
 
 			// 置換
-			//@@@ 2002.2.2 YAZAKI 置換コマンドをCEditViewに新設
+			//@@@ 2002.2.2 YAZAKI 置換コマンドをEditViewに新設
 			//@@@ 2002/04/08 YAZAKI 親ウィンドウのハンドルを渡すように変更。
 			pcEditView->GetCommander().HandleCommand(F_REPLACE, true, (LPARAM)GetHwnd(), 0, 0, 0);
 			// 再描画
@@ -617,22 +617,22 @@ BOOL CDlgReplace::OnBnClicked(int wID)
 	}
 
 	// 基底クラスメンバ
-	return CDialog::OnBnClicked(wID);
+	return Dialog::OnBnClicked(wID);
 }
 
-BOOL CDlgReplace::OnActivate(WPARAM wParam, LPARAM lParam)
+BOOL DlgReplace::OnActivate(WPARAM wParam, LPARAM lParam)
 {
 	// 0文字幅マッチ描画のON/OFF	// 2009.11.29 ryoji
-	CEditView*	pcEditView = (CEditView*)m_lParam;
+	EditView*	pcEditView = (EditView*)m_lParam;
 	LayoutRange cRangeSel = pcEditView->GetSelectionInfo().m_sSelect;
 	if (cRangeSel.IsValid() && cRangeSel.IsLineOne() && cRangeSel.IsOne())
 		pcEditView->InvalidateRect(NULL);	// アクティブ化／非アクティブ化が完了してから再描画
 
-	return CDialog::OnActivate(wParam, lParam);
+	return Dialog::OnActivate(wParam, lParam);
 }
 
 //@@@ 2002.01.18 add start
-LPVOID CDlgReplace::GetHelpIdTable(void)
+LPVOID DlgReplace::GetHelpIdTable(void)
 {
 	return (LPVOID)p_helpids;
 }

@@ -445,7 +445,7 @@ bool CheckUUHeader(const CHAR_TYPE* pSrc, const int nLen, TCHAR* pszFilename)
 
 	// begin を取得
 
-	pr += CWordParse::GetWord(pr, pr_end - pr, pszSplitChars, &pwstart, &nwlen);
+	pr += WordParse::GetWord(pr, pr_end - pr, pszSplitChars, &pwstart, &nwlen);
 	if (nwlen != 5) {
 		// error.
 		return false;
@@ -464,7 +464,7 @@ bool CheckUUHeader(const CHAR_TYPE* pSrc, const int nLen, TCHAR* pszFilename)
 
 	// 3桁の8進数（Unix システムのパーミッション）を取得
 
-	pr += CWordParse::GetWord(pr, pr_end - pr, pszSplitChars, &pwstart, &nwlen);
+	pr += WordParse::GetWord(pr, pr_end - pr, pszSplitChars, &pwstart, &nwlen);
 	if (nwlen != 3) {
 		// error.
 		return false;
@@ -487,7 +487,7 @@ bool CheckUUHeader(const CHAR_TYPE* pSrc, const int nLen, TCHAR* pszFilename)
 
 	// 書き出し用のファイル名を取得
 
-	pr += CWordParse::GetWord(pr, pr_end - pr, pszSplitChars, &pwstart, &nwlen);
+	pr += WordParse::GetWord(pr, pr_end - pr, pszSplitChars, &pwstart, &nwlen);
 	// 末尾の空白・改行文字をスキップ
 	for (; nwlen>0; --nwlen) {
 		CHAR_TYPE c = pwstart[nwlen - 1];
@@ -603,10 +603,10 @@ enum EEncodingMethod {
 /*!
 	MIMEヘッダーデコード補助関数
 
-	@return  CMemory と置き換えられる入力文字列長 (nSkipLen)
+	@return  Memory と置き換えられる入力文字列長 (nSkipLen)
 */
 template <class CHAR_TYPE>
-int _DecodeMimeHeader(const CHAR_TYPE* pSrc, const int nSrcLen, CMemory* pcMem_alt, ECodeType* peCodetype)
+int _DecodeMimeHeader(const CHAR_TYPE* pSrc, const int nSrcLen, Memory* pcMem_alt, ECodeType* peCodetype)
 {
 	ECodeType ecode = CODE_NONE;
 	EEncodingMethod emethod = EM_NONE;

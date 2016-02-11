@@ -52,7 +52,7 @@
 	@date 2003.01.27 Moca 新規作成
 	@note 連続して呼び出す場合のため、展開済みメタ文字列をキャッシュして高速化している。
 */
-LPTSTR CFileNameManager::GetTransformFileNameFast( LPCTSTR pszSrc, LPTSTR pszDest, int nDestLen, HDC hDC, bool bFitMode, int cchMaxWidth )
+LPTSTR FileNameManager::GetTransformFileNameFast( LPCTSTR pszSrc, LPTSTR pszDest, int nDestLen, HDC hDC, bool bFitMode, int cchMaxWidth )
 {
 	TCHAR szBuf[_MAX_PATH + 1];
 
@@ -66,7 +66,7 @@ LPTSTR CFileNameManager::GetTransformFileNameFast( LPCTSTR pszSrc, LPTSTR pszDes
 		if (cchMaxWidth == 0) {
 			cchMaxWidth = csFileName.m_nTransformShortMaxWidth;
 		}
-		CTextWidthCalc calc(hDC);
+		TextWidthCalc calc(hDC);
 		nPxWidth = calc.GetTextWidth(_T("x")) * cchMaxWidth;
 	}
 
@@ -100,7 +100,7 @@ LPTSTR CFileNameManager::GetTransformFileNameFast( LPCTSTR pszSrc, LPTSTR pszDes
 	@date 2003.01.27 Moca 新規作成
 	@date 2003.06.23 Moca 関数名変更
 */
-int CFileNameManager::TransformFileName_MakeCache(void) {
+int FileNameManager::TransformFileName_MakeCache(void) {
 	int nCount = 0;
 	auto& csFileName = m_pShareData->m_common.m_sFileName;
 	for (int i=0; i<csFileName.m_nTransformFileNameArrNum; ++i) {
@@ -126,7 +126,7 @@ int CFileNameManager::TransformFileName_MakeCache(void) {
 	@date 2002.11.27 Moca 新規作成
 	@note 大小文字を区別しない。nDestLenに達したときは後ろを切り捨てられる
 */
-LPCTSTR CFileNameManager::GetFilePathFormat(LPCTSTR pszSrc, LPTSTR pszDest, int nDestLen, LPCTSTR pszFrom, LPCTSTR pszTo)
+LPCTSTR FileNameManager::GetFilePathFormat(LPCTSTR pszSrc, LPTSTR pszDest, int nDestLen, LPCTSTR pszFrom, LPCTSTR pszTo)
 {
 	int nSrcLen  = _tcslen(pszSrc);
 	int nFromLen = _tcslen(pszFrom);
@@ -162,7 +162,7 @@ LPCTSTR CFileNameManager::GetFilePathFormat(LPCTSTR pszSrc, LPTSTR pszDest, int 
 	@retval false バッファが足りなかった，またはエラー。pszDesは不定
 	@date 2002.11.27 Moca 作成開始
 */
-bool CFileNameManager::ExpandMetaToFolder(LPCTSTR pszSrc, LPTSTR pszDes, int nDesLen)
+bool FileNameManager::ExpandMetaToFolder(LPCTSTR pszSrc, LPTSTR pszDes, int nDesLen)
 {
 #define _USE_META_ALIAS
 #ifdef _USE_META_ALIAS
@@ -330,7 +330,7 @@ bool CFileNameManager::ExpandMetaToFolder(LPCTSTR pszSrc, LPTSTR pszDes, int nDe
 
 
 // static
-TCHAR CFileNameManager::GetAccessKeyByIndex(int index, bool bZeroOrigin)
+TCHAR FileNameManager::GetAccessKeyByIndex(int index, bool bZeroOrigin)
 {
 	if (index < 0) {
 		return 0;
@@ -342,7 +342,7 @@ TCHAR CFileNameManager::GetAccessKeyByIndex(int index, bool bZeroOrigin)
 
 static void GetAccessKeyLabelByIndex(TCHAR* pszLabel, bool bEspaceAmp, int index, bool bZeroOrigin)
 {
-	TCHAR c = CFileNameManager::GetAccessKeyByIndex(index, bZeroOrigin);
+	TCHAR c = FileNameManager::GetAccessKeyByIndex(index, bZeroOrigin);
 	if (c) {
 		if (bEspaceAmp) {
 			pszLabel[0] = _T('&');
@@ -364,7 +364,7 @@ static void GetAccessKeyLabelByIndex(TCHAR* pszLabel, bool bEspaceAmp, int index
 	@param index         いつも0originで指定。 -1で非表示
 	@param bZeroOrigin   アクセスキーを0から振る
 */
-bool CFileNameManager::GetMenuFullLabel(
+bool FileNameManager::GetMenuFullLabel(
 	TCHAR* pszOutput, int nBuffSize, bool bEspaceAmp,
 	const EditInfo* editInfo, int nId, bool bFavorite,
 	int index, bool bAccKeyZeroOrigin, HDC hDC
@@ -380,7 +380,7 @@ bool CFileNameManager::GetMenuFullLabel(
 		
 		GetAccessKeyLabelByIndex(szAccKey, bEspaceAmp, index, bAccKeyZeroOrigin);
 		//pfi->m_szGrepKeyShort → cmemDes
-		CNativeW cmemDes;
+		NativeW cmemDes;
 		int nGrepKeyLen = wcslen(pfi->m_szGrepKey);
 		const int GREPKEY_LIMIT_LEN = 64;
 		// CSakuraEnvironment::ExpandParameter では 32文字制限
@@ -414,7 +414,7 @@ bool CFileNameManager::GetMenuFullLabel(
 	return 0 < ret;
 }
 
-bool CFileNameManager::GetMenuFullLabel(
+bool FileNameManager::GetMenuFullLabel(
 	TCHAR* pszOutput, int nBuffSize, bool bEspaceAmp,
 	const TCHAR* pszFile, int nId, bool bModified, ECodeType nCharCode, bool bFavorite,
 	int index, bool bAccKeyZeroOrigin, HDC hDC
@@ -474,7 +474,7 @@ bool CFileNameManager::GetMenuFullLabel(
 	@date 2007.09.04 ryoji 新規作成
 	@date 2008.05.05 novice GetModuleHandle(NULL)→NULLに変更
 */
-void CFileNameManager::GetIniFileNameDirect( LPTSTR pszPrivateIniFile, LPTSTR pszIniFile, LPCTSTR pszProfName )
+void FileNameManager::GetIniFileNameDirect( LPTSTR pszPrivateIniFile, LPTSTR pszIniFile, LPCTSTR pszProfName )
 {
 	TCHAR szPath[_MAX_PATH];
 	TCHAR szDrive[_MAX_DRIVE];
@@ -547,7 +547,7 @@ void CFileNameManager::GetIniFileNameDirect( LPTSTR pszPrivateIniFile, LPTSTR ps
 	@author ryoji
 	@date 2007.05.19 ryoji 新規作成
 */
-void CFileNameManager::GetIniFileName( LPTSTR pszIniFileName, LPCTSTR pszProfName, BOOL bRead/*=FALSE*/ )
+void FileNameManager::GetIniFileName( LPTSTR pszIniFileName, LPCTSTR pszProfName, BOOL bRead/*=FALSE*/ )
 {
 	auto& iniFolder = m_pShareData->m_fileNameManagement.m_IniFolder;
 	if (!iniFolder.m_bInit) {

@@ -32,7 +32,7 @@
 //                           生成                              //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-CRecentGrepFolder::CRecentGrepFolder()
+RecentGrepFolder::RecentGrepFolder()
 {
 	Create(
 		GetShareData()->m_searchKeywords.m_aGrepFolders.dataPtr(),
@@ -52,29 +52,29 @@ CRecentGrepFolder::CRecentGrepFolder()
 
 	@note	取得後のポインタはユーザ管理の構造体にキャストして参照してください。
 */
-const TCHAR* CRecentGrepFolder::GetItemText(int nIndex) const
+const TCHAR* RecentGrepFolder::GetItemText(int nIndex) const
 {
 	return *GetItem(nIndex);
 }
 
-bool CRecentGrepFolder::DataToReceiveType(LPCTSTR* dst, const CGrepFolderString* src) const
+bool RecentGrepFolder::DataToReceiveType(LPCTSTR* dst, const GrepFolderString* src) const
 {
 	*dst = *src;
 	return true;
 }
 
-bool CRecentGrepFolder::TextToDataType(CGrepFolderString* dst, LPCTSTR pszText) const
+bool RecentGrepFolder::TextToDataType(GrepFolderString* dst, LPCTSTR pszText) const
 {
 	CopyItem(dst, pszText);
 	return true;
 }
 
-int CRecentGrepFolder::CompareItem(const CGrepFolderString* p1, LPCTSTR p2) const
+int RecentGrepFolder::CompareItem(const GrepFolderString* p1, LPCTSTR p2) const
 {
 	return _tcsicmp(*p1, p2);
 }
 
-void CRecentGrepFolder::CopyItem(CGrepFolderString* dst, LPCTSTR src) const
+void RecentGrepFolder::CopyItem(GrepFolderString* dst, LPCTSTR src) const
 {
 	_tcscpy(*dst, src);
 }

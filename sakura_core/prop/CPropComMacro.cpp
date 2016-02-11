@@ -69,14 +69,14 @@ static const DWORD p_helpids[] = {	//11700
 	@param wParam パラメータ1
 	@param lParam パラメータ2
 */
-INT_PTR CALLBACK CPropMacro::DlgProc_page(
+INT_PTR CALLBACK PropMacro::DlgProc_page(
 	HWND hwndDlg,
 	UINT uMsg,
 	WPARAM wParam,
 	LPARAM lParam
 	)
 {
-	return DlgProc(reinterpret_cast<pDispatchPage>(&CPropMacro::DispatchEvent), hwndDlg, uMsg, wParam, lParam);
+	return DlgProc(reinterpret_cast<pDispatchPage>(&PropMacro::DispatchEvent), hwndDlg, uMsg, wParam, lParam);
 }
 
 /*! Macroページのメッセージ処理
@@ -85,7 +85,7 @@ INT_PTR CALLBACK CPropMacro::DlgProc_page(
 	@param wParam パラメータ1
 	@param lParam パラメータ2
 */
-INT_PTR CPropMacro::DispatchEvent(
+INT_PTR PropMacro::DispatchEvent(
 	HWND hwndDlg,
 	UINT uMsg,
 	WPARAM wParam,
@@ -214,7 +214,7 @@ INT_PTR CPropMacro::DispatchEvent(
 
 	@param hwndDlg ダイアログボックスのウィンドウハンドル
 */
-void CPropMacro::SetData(HWND hwndDlg)
+void PropMacro::SetData(HWND hwndDlg)
 {
 	int index;
 	LVITEM sItem;
@@ -292,7 +292,7 @@ void CPropMacro::SetData(HWND hwndDlg)
 	@param hwndDlg ダイアログボックスのウィンドウハンドル
 */
 
-int CPropMacro::GetData(HWND hwndDlg)
+int PropMacro::GetData(HWND hwndDlg)
 {
 	int index;
 	LVITEM sItem;
@@ -382,7 +382,7 @@ struct ColumnData_CPropMacro_Init {
 	int width;
 };
 
-void CPropMacro::InitDialog(HWND hwndDlg)
+void PropMacro::InitDialog(HWND hwndDlg)
 {
 	struct ColumnData_CPropMacro_Init ColumnList[] = {
 		{ STR_PROPCOMMACR_LIST1, 40 },
@@ -455,7 +455,7 @@ void CPropMacro::InitDialog(HWND hwndDlg)
 	Combo_SetCurSel(hNumCombo, 0);
 }
 
-void CPropMacro::SetMacro2List_Macro(HWND hwndDlg)
+void PropMacro::SetMacro2List_Macro(HWND hwndDlg)
 {
 	int index;
 	LVITEM sItem;
@@ -566,7 +566,7 @@ void CPropMacro::SetMacro2List_Macro(HWND hwndDlg)
 
 	@param hwndDlg [in] ダイアログボックスのウィンドウハンドル
 */
-void CPropMacro::SelectBaseDir_Macro(HWND hwndDlg)
+void PropMacro::SelectBaseDir_Macro(HWND hwndDlg)
 {
 	TCHAR szDir[_MAX_PATH];
 
@@ -595,7 +595,7 @@ void CPropMacro::SelectBaseDir_Macro(HWND hwndDlg)
 
 	@param hwndDlg [in] ダイアログボックスのウィンドウハンドル
 */
-void CPropMacro::OnFileDropdown_Macro(HWND hwndDlg)
+void PropMacro::OnFileDropdown_Macro(HWND hwndDlg)
 {
 	HANDLE hFind;
 	HWND hCombo = ::GetDlgItem(hwndDlg, IDC_MACROPATH);
@@ -638,7 +638,7 @@ void CPropMacro::OnFileDropdown_Macro(HWND hwndDlg)
     FindClose(hFind);
 }
 
-void CPropMacro::CheckListPosition_Macro(HWND hwndDlg)
+void PropMacro::CheckListPosition_Macro(HWND hwndDlg)
 {
 	HWND hListView = ::GetDlgItem(hwndDlg, IDC_MACROLIST);
 	HWND hNum = ::GetDlgItem(hwndDlg, IDC_COMBO_MACROID);
