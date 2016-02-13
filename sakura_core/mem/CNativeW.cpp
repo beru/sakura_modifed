@@ -89,9 +89,9 @@ void NativeW::AppendString(const wchar_t* pszData, int nLength)
 }
 
 // バッファの最後にデータを追加する
-void NativeW::AppendNativeData(const NativeW& cmemData)
+void NativeW::AppendNativeData(const NativeW& memData)
 {
-	Native::AppendRawData(cmemData.GetStringPtr(), cmemData.GetRawLength());
+	Native::AppendRawData(memData.GetStringPtr(), memData.GetRawLength());
 }
 
 // -- -- charからの移行用 -- -- //
@@ -142,18 +142,18 @@ wchar_t NativeW::operator[](int nIndex) const
 
 // 等しい内容か
 bool NativeW::IsEqual(
-	const NativeW& cmem1,
-	const NativeW& cmem2
+	const NativeW& mem1,
+	const NativeW& mem2
 	)
 {
-	if (&cmem1 == &cmem2) {
+	if (&mem1 == &mem2) {
 		return true;
 	}
 
 	int nLen1;
 	int nLen2;
-	const wchar_t* psz1 = cmem1.GetStringPtr(&nLen1);
-	const wchar_t* psz2 = cmem2.GetStringPtr(&nLen2);
+	const wchar_t* psz1 = mem1.GetStringPtr(&nLen1);
+	const wchar_t* psz2 = mem2.GetStringPtr(&nLen2);
 	
 	if (nLen1 == nLen2) {
 		if (wmemcmp(psz1, psz2, nLen1) == 0) {

@@ -746,12 +746,12 @@ MenuDrawer::~MenuDrawer()
 void MenuDrawer::Create(
 	HINSTANCE hInstance,
 	HWND hWndOwner,
-	ImageListMgr* pcIcons
+	ImageListMgr* pIcons
 	)
 {
 	m_hInstance = hInstance;
 	m_hWndOwner = hWndOwner;
-	m_pIcons = pcIcons;
+	m_pIcons = pIcons;
 
 	return;
 }

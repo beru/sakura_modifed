@@ -71,11 +71,11 @@ int Euc::EucjpToUni(const char* pSrc, const int nSrcLen, wchar_t* pDst, bool* pb
 
 // EUC→Unicodeコード変換
 // 2007.08.13 kobake 追加
-CodeConvertResult Euc::EUCToUnicode(const Memory& cSrc, NativeW* pDstMem)
+CodeConvertResult Euc::EUCToUnicode(const Memory& src, NativeW* pDstMem)
 {
 	// ソース取得
 	int nSrcLen;
-	const char* pSrc = reinterpret_cast<const char*>( cSrc.GetRawPtr(&nSrcLen) );
+	const char* pSrc = reinterpret_cast<const char*>( src.GetRawPtr(&nSrcLen) );
 	if (nSrcLen == 0) {
 		pDstMem->Clear();
 		return CodeConvertResult::Complete;
@@ -154,13 +154,13 @@ int Euc::UniToEucjp(const wchar_t* pSrc, const int nSrcLen, char* pDst, bool* pb
 }
 
 
-CodeConvertResult Euc::UnicodeToEUC(const NativeW& cSrc, Memory* pDstMem)
+CodeConvertResult Euc::UnicodeToEUC(const NativeW& src, Memory* pDstMem)
 {
 	// エラー状態
 	bool bError = false;
 
-	const wchar_t* pSrc = cSrc.GetStringPtr();
-	int nSrcLen = cSrc.GetStringLength();
+	const wchar_t* pSrc = src.GetStringPtr();
+	int nSrcLen = src.GetStringLength();
 
 	// 必要なバッファサイズを調べてメモリを確保
 	assert(nSrcLen != 0);

@@ -36,9 +36,9 @@ enum WatchUpdate {
 class AutoReloadAgent : public DocListenerEx {
 public:
 	AutoReloadAgent();
-	void OnBeforeSave(const SaveInfo& sSaveInfo);
-	void OnAfterSave(const SaveInfo& sSaveInfo);
-	void OnAfterLoad(const LoadInfo& sLoadInfo);
+	void OnBeforeSave(const SaveInfo& saveInfo);
+	void OnAfterSave(const SaveInfo& saveInfo);
+	void OnAfterLoad(const LoadInfo& loadInfo);
 	
 	// ŠÄŽ‹‚ÌˆêŽž’âŽ~
 	void PauseWatching() { ++m_nPauseCount; }

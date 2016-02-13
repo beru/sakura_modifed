@@ -63,14 +63,14 @@ FuncInfo* FuncInfoArr::GetAt(int nIdx)
 }
 
 //! 配列の最後にデータを追加する
-void FuncInfoArr::AppendData(FuncInfo* pcFuncInfo)
+void FuncInfoArr::AppendData(FuncInfo* pFuncInfo)
 {
 	if (m_nFuncInfoArrNum == 0) {
 		m_ppcFuncInfoArr = (FuncInfo**)malloc(sizeof(FuncInfo*) * (m_nFuncInfoArrNum + 1));
 	}else {
 		m_ppcFuncInfoArr = (FuncInfo**)realloc(m_ppcFuncInfoArr, sizeof(FuncInfo*) * (m_nFuncInfoArrNum + 1));
 	}
-	m_ppcFuncInfoArr[m_nFuncInfoArrNum] = pcFuncInfo;
+	m_ppcFuncInfoArr[m_nFuncInfoArrNum] = pFuncInfo;
 	++m_nFuncInfoArrNum;
 	return;
 }
@@ -91,15 +91,15 @@ void FuncInfoArr::AppendData(
 	int				nDepth				//!< 深さ
 	)
 {
-	FuncInfo* pcFuncInfo = new FuncInfo(nFuncLineCRLF,
-										  nFuncColCRLF,
-										  nFuncLineLAYOUT,
-										  nFuncColLAYOUT,
-										  pszFuncName,
-										  pszFileName,
-										  nInfo);
-	pcFuncInfo->m_nDepth = nDepth;
-	AppendData(pcFuncInfo);
+	FuncInfo* pFuncInfo = new FuncInfo(nFuncLineCRLF,
+									  nFuncColCRLF,
+									  nFuncLineLAYOUT,
+									  nFuncColLAYOUT,
+									  pszFuncName,
+									  pszFileName,
+									  nInfo);
+	pFuncInfo->m_nDepth = nDepth;
+	AppendData(pFuncInfo);
 	return;
 }
 

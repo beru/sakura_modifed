@@ -279,7 +279,7 @@ bool OutputAdapterDiff::OutputA(const ACHAR* pBuf, int size)
 void EditView::AnalyzeDiffInfo(
 	const char*	pszDiffInfo,
 	int			nFlgFile12
-)
+	)
 {
 	/*
 	 * 99a99		旧ファイル99行の次行に新ファイル99行が追加された。
@@ -347,7 +347,9 @@ void EditView::AnalyzeDiffInfo(
 	}
 
 	// 行末に達してなければエラー
-	if (*q) return;
+	if (*q) {
+		return;
+	}
 
 	// 抽出したDIFF情報から行番号に差分マークを付ける
 	if (nFlgFile12 == 0) {	// 編集中ファイルは旧ファイル
@@ -378,9 +380,9 @@ bool MakeDiffTmpFile_core(TextOutputStream& out, HWND hwnd, EditView& view, bool
 				break;
 			}
 			if (bBom) {
-				NativeW cLine2(L"\ufeff");
-				cLine2.AppendString(pLineData, nLineLen);
-				out.WriteString(cLine2.GetStringPtr(), cLine2.GetStringLength());
+				NativeW line2(L"\ufeff");
+				line2.AppendString(pLineData, nLineLen);
+				out.WriteString(line2.GetStringPtr(), line2.GetStringLength());
 				bBom = false;
 			}else {
 				out.WriteString(pLineData,nLineLen);
@@ -510,7 +512,7 @@ BOOL EditView::MakeDiffTmpFile2(
 	bool bBom = false;
 	const TypeConfigMini* typeMini;
 	DocTypeManager().GetTypeConfigMini(DocTypeManager().GetDocumentTypeOfPath( orgName ), &typeMini);
-	FileLoad cfl(typeMini->m_encoding);
+	FileLoad fl(typeMini->m_encoding);
 	TextOutputStream out(tmpName, saveCode, true, false);
 	if (!out) {
 		WarningMessage(NULL, LS(STR_DIFF_FAILED_TEMP));
@@ -523,26 +525,26 @@ BOOL EditView::MakeDiffTmpFile2(
 #else
 		bBigFile = false;
 #endif
-		cfl.FileOpen(
+		fl.FileOpen(
 			orgName,
 			bBigFile,
 			code,
 			GetDllShareData().m_common.m_file.GetAutoMIMEdecode(),
 			&bBom
 		);
-		NativeW cLine;
-		Eol cEol;
-		while (cfl.ReadLine(&cLine, &cEol) != CodeConvertResult::Failure) {
+		NativeW line;
+		Eol eol;
+		while (fl.ReadLine(&line, &eol) != CodeConvertResult::Failure) {
 			const wchar_t*	pLineData;
 			LogicInt		nLineLen;
-			pLineData= cLine.GetStringPtr(&nLineLen);
+			pLineData= line.GetStringPtr(&nLineLen);
 			if (nLineLen == 0 || !pLineData) {
 				break;
 			}
 			if (bBom) {
-				NativeW cLine2(L"\ufeff");
-				cLine2.AppendString(pLineData, nLineLen);
-				out.WriteString(cLine2.GetStringPtr(), cLine2.GetStringLength());
+				NativeW line2(L"\ufeff");
+				line2.AppendString(pLineData, nLineLen);
+				out.WriteString(line2.GetStringPtr(), line2.GetStringLength());
 				bBom = false;
 			}else {
 				out.WriteString(pLineData,nLineLen);

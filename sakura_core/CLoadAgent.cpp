@@ -172,7 +172,7 @@ void LoadAgent::OnBeforeLoad(LoadInfo* pLoadInfo)
 {
 }
 
-LoadResultType LoadAgent::OnLoad(const LoadInfo& sLoadInfo)
+LoadResultType LoadAgent::OnLoad(const LoadInfo& loadInfo)
 {
 	LoadResultType eRet = LoadResultType::OK;
 	EditDoc* pDoc = GetListeningDoc();
@@ -181,10 +181,10 @@ LoadResultType LoadAgent::OnLoad(const LoadInfo& sLoadInfo)
 	pDoc->InitDoc(); //$$
 
 	// パスを確定
-	pDoc->SetFilePathAndIcon( sLoadInfo.filePath );
+	pDoc->SetFilePathAndIcon( loadInfo.filePath );
 
 	// 文書種別確定
-	pDoc->m_docType.SetDocumentType( sLoadInfo.nType, true );
+	pDoc->m_docType.SetDocumentType( loadInfo.nType, true );
 	pDoc->m_pEditWnd->m_pViewFontMiniMap->UpdateFont(&pDoc->m_pEditWnd->GetLogfont());
 	InitCharWidthCache( pDoc->m_pEditWnd->m_pViewFontMiniMap->GetLogfont(), CharWidthFontMode::MiniMap );
 	SelectCharWidthCache( CharWidthFontMode::Edit, pDoc->m_pEditWnd->GetLogfontCacheMode() );
@@ -204,13 +204,13 @@ LoadResultType LoadAgent::OnLoad(const LoadInfo& sLoadInfo)
 	}
 
 	// ファイルが存在する場合はファイルを読む
-	if (fexist(sLoadInfo.filePath)) {
+	if (fexist(loadInfo.filePath)) {
 		// CDocLineMgrの構成
 		ReadManager cReader;
 		ProgressSubject* pOld = EditApp::getInstance()->m_pVisualProgress->ProgressListener::Listen(&cReader);
 		CodeConvertResult eReadResult = cReader.ReadFile_To_CDocLineMgr(
 			&pDoc->m_docLineMgr,
-			sLoadInfo,
+			loadInfo,
 			&pDoc->m_docFile.m_fileInfo
 		);
 		if (eReadResult == CodeConvertResult::LoseSome) {
@@ -220,9 +220,9 @@ LoadResultType LoadAgent::OnLoad(const LoadInfo& sLoadInfo)
 	}else {
 		// 存在しないときもドキュメントに文字コードを反映する
 		const TypeConfig& types = pDoc->m_docType.GetDocumentAttribute();
-		pDoc->m_docFile.SetCodeSet( sLoadInfo.eCharCode, 
-			( sLoadInfo.eCharCode == types.m_encoding.m_eDefaultCodetype ) ?
-				types.m_encoding.m_bDefaultBom : CodeTypeName( sLoadInfo.eCharCode ).IsBomDefOn() );
+		pDoc->m_docFile.SetCodeSet( loadInfo.eCharCode, 
+			( loadInfo.eCharCode == types.m_encoding.m_eDefaultCodetype ) ?
+				types.m_encoding.m_bDefaultBom : CodeTypeName( loadInfo.eCharCode ).IsBomDefOn() );
 	}
 
 	// レイアウト情報の変更
@@ -245,7 +245,7 @@ LoadResultType LoadAgent::OnLoad(const LoadInfo& sLoadInfo)
 }
 
 
-void LoadAgent::OnAfterLoad(const LoadInfo& sLoadInfo)
+void LoadAgent::OnAfterLoad(const LoadInfo& loadInfo)
 {
 	EditDoc* pDoc = GetListeningDoc();
 
@@ -289,8 +289,8 @@ void LoadAgent::OnFinalLoad(LoadResultType eLoadResult)
 		EditWnd::getInstance()->Views_RedrawAll(); // ビュー再描画
 		InvalidateRect( EditWnd::getInstance()->GetHwnd(), NULL, TRUE );
 	}
-	Caret& cCaret = EditWnd::getInstance()->GetActiveView().GetCaret();
-	cCaret.MoveCursor(cCaret.GetCaretLayoutPos(), true);
+	Caret& caret = EditWnd::getInstance()->GetActiveView().GetCaret();
+	caret.MoveCursor(caret.GetCaretLayoutPos(), true);
 	EditWnd::getInstance()->GetActiveView().AdjustScrollBars();
 }
 

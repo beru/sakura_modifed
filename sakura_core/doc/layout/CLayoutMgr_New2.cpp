@@ -63,7 +63,7 @@ void LayoutMgr::ReplaceData_CLayoutMgr(
 	DocLineReplaceArg DLRArg;
 	DLRArg.delRange.SetFrom(ptFrom);	// 削除範囲from
 	DLRArg.delRange.SetTo(ptTo);		// 削除範囲to
-	DLRArg.pcmemDeleted = pArg->pcmemDeleted;	// 削除されたデータを保存
+	DLRArg.pMemDeleted = pArg->pMemDeleted;	// 削除されたデータを保存
 	DLRArg.pInsData = pArg->pInsData;			// 挿入するデータ
 	DLRArg.nDelSeq = pArg->nDelSeq;
 	SearchAgent(m_pDocLineMgr).ReplaceData(

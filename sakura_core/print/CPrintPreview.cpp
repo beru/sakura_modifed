@@ -784,9 +784,9 @@ void PrintPreview::OnChangePrintSetting(void)
 
 	// 印字可能領域がない場合は印刷プレビューを終了する 2013.5.10 aroka
 	if (m_bPreview_EnableColumns == 0 || m_bPreview_EnableLines == 0) {
-		EditWnd* pcEditWnd = m_pParentWnd;
-		pcEditWnd->PrintPreviewModeONOFF();
-		pcEditWnd->SendStatusMessage(LS(STR_ERR_DLGPRNPRVW3_1));
+		EditWnd* pEditWnd = m_pParentWnd;
+		pEditWnd->PrintPreviewModeONOFF();
+		pEditWnd->SendStatusMessage(LS(STR_ERR_DLGPRNPRVW3_1));
 		return;
 	}
 
@@ -807,13 +807,13 @@ void PrintPreview::OnChangePrintSetting(void)
 	ref.m_cLineComment.CopyTo(0, L"", -1);	// 行コメントデリミタ
 	ref.m_cLineComment.CopyTo(1, L"", -1);	// 行コメントデリミタ2
 	ref.m_cLineComment.CopyTo(2, L"", -1);	// 行コメントデリミタ3	// Jun. 01, 2001 JEPRO 追加
-	ref.m_cBlockComments[0].SetBlockCommentRule(L"", L"");	// ブロックコメントデリミタ
-	ref.m_cBlockComments[1].SetBlockCommentRule(L"", L"");	// ブロックコメントデリミタ2
+	ref.m_blockComments[0].SetBlockCommentRule(L"", L"");	// ブロックコメントデリミタ
+	ref.m_blockComments[1].SetBlockCommentRule(L"", L"");	// ブロックコメントデリミタ2
 
 	ref.m_nStringType = StringLiteralType::CPP;		// 文字列区切り記号エスケープ方法  0=[\"][\'] 1=[""]['']
-	ref.m_ColorInfoArr[COLORIDX_COMMENT].m_bDisp = false;
-	ref.m_ColorInfoArr[COLORIDX_SSTRING].m_bDisp = false;
-	ref.m_ColorInfoArr[COLORIDX_WSTRING].m_bDisp = false;
+	ref.m_colorInfoArr[COLORIDX_COMMENT].m_bDisp = false;
+	ref.m_colorInfoArr[COLORIDX_SSTRING].m_bDisp = false;
+	ref.m_colorInfoArr[COLORIDX_WSTRING].m_bDisp = false;
 	ref.m_bKinsokuHead = m_pPrintSetting->m_bPrintKinsokuHead,	// 行頭禁則する	//@@@ 2002.04.08 MIK
 	ref.m_bKinsokuTail = m_pPrintSetting->m_bPrintKinsokuTail,	// 行末禁則する	//@@@ 2002.04.08 MIK
 	ref.m_bKinsokuRet = m_pPrintSetting->m_bPrintKinsokuRet,	// 改行文字をぶら下げる	//@@@ 2002.04.13 MIK
@@ -1148,16 +1148,16 @@ void PrintPreview::OnPrint(void)
 		}
 
 		const LayoutInt	nPageTopLineNum = LayoutInt(((nFrom + i) * m_pPrintSetting->m_nPrintDansuu) * m_bPreview_EnableLines);
-		const Layout*		pcPageTopLayout = m_pLayoutMgr_Print->SearchLineByLayoutY(nPageTopLineNum);
+		const Layout*		pPageTopLayout = m_pLayoutMgr_Print->SearchLineByLayoutY(nPageTopLineNum);
 		if (m_pPrintSetting->m_bColorPrint
 			&& !(i == 0)
-			&& pcPageTopLayout->GetLogicOffset() == 0
+			&& pPageTopLayout->GetLogicOffset() == 0
 		) {
-			pStrategy = m_pool->GetStrategyByColor(pcPageTopLayout->GetColorTypePrev());
+			pStrategy = m_pool->GetStrategyByColor(pPageTopLayout->GetColorTypePrev());
 			m_pool->NotifyOnStartScanLogic();
 			if (pStrategy) {
 				pStrategy->InitStrategyStatus();
-				pStrategy->SetStrategyColorInfo(pcPageTopLayout->GetColorInfo());
+				pStrategy->SetStrategyColorInfo(pPageTopLayout->GetColorInfo());
 			}
 		}
 		// 印刷/印刷プレビュー ページテキストの描画
@@ -1374,25 +1374,25 @@ ColorStrategy* PrintPreview::DrawPageTextFirst(int nPageNum)
 		m_pool->SetCurrentView(&(m_pParentWnd->GetActiveView()));
 
 		const LayoutInt	nPageTopLineNum = LayoutInt((nPageNum * m_pPrintSetting->m_nPrintDansuu) * m_bPreview_EnableLines);
-		const Layout*		pcPageTopLayout = m_pLayoutMgr_Print->SearchLineByLayoutY(nPageTopLineNum);
+		const Layout*	pPageTopLayout = m_pLayoutMgr_Print->SearchLineByLayoutY(nPageTopLineNum);
 
-		if (pcPageTopLayout) {
-			const LogicInt		nPageTopOff = pcPageTopLayout->GetLogicOffset();
+		if (pPageTopLayout) {
+			const LogicInt		nPageTopOff = pPageTopLayout->GetLogicOffset();
 
 			// ページトップの物理行の先頭を検索
-			while (pcPageTopLayout->GetLogicOffset()) {
-				pcPageTopLayout = pcPageTopLayout->GetPrevLayout();
+			while (pPageTopLayout->GetLogicOffset()) {
+				pPageTopLayout = pPageTopLayout->GetPrevLayout();
 			}
 
 			// 論理行先頭のColorStrategy取得
-			pStrategy = m_pool->GetStrategyByColor(pcPageTopLayout->GetColorTypePrev());
+			pStrategy = m_pool->GetStrategyByColor(pPageTopLayout->GetColorTypePrev());
 			m_pool->NotifyOnStartScanLogic();
 			if (pStrategy) {
 				pStrategy->InitStrategyStatus();
-				pStrategy->SetStrategyColorInfo(pcPageTopLayout->GetColorInfo());
+				pStrategy->SetStrategyColorInfo(pPageTopLayout->GetColorInfo());
 			}
 			if (nPageTopOff) {
-				StringRef	csr = pcPageTopLayout->GetDocLineRef()->GetStringRefWithEOL();
+				StringRef	csr = pPageTopLayout->GetDocLineRef()->GetStringRefWithEOL();
 				LogicInt	iLogic;
 				for (iLogic=0; iLogic<nPageTopOff; ++iLogic) {
 					bool bChange;
@@ -1454,8 +1454,8 @@ ColorStrategy* PrintPreview::DrawPageText(
 				「段数が1のときに、1ページあたりに何行入るか（m_bPreview_EnableLines）」
 			*/
 			const LayoutInt nLineNum = LayoutInt((nPageNum * m_pPrintSetting->m_nPrintDansuu + nDan) * m_bPreview_EnableLines + i);
-			const Layout* pcLayout = m_pLayoutMgr_Print->SearchLineByLayoutY(nLineNum);
-			if (!pcLayout) {
+			const Layout* pLayout = m_pLayoutMgr_Print->SearchLineByLayoutY(nLineNum);
+			if (!pLayout) {
 				break;
 			}
 			// 行番号を表示するか
@@ -1464,10 +1464,10 @@ ColorStrategy* PrintPreview::DrawPageText(
 				// 行番号の表示 false=折り返し単位／true=改行単位
 				if (m_pParentWnd->GetDocument()->m_docType.GetDocumentAttribute().m_bLineNumIsCRLF) {
 					// 論理行番号表示モード
-					if (pcLayout->GetLogicOffset() != 0) { // 折り返しレイアウト行
+					if (pLayout->GetLogicOffset() != 0) { // 折り返しレイアウト行
 						wcscpy_s(szLineNum, L" ");
 					}else {
-						_itow(pcLayout->GetLogicLineNo() + 1, szLineNum, 10);	// 対応する論理行番号
+						_itow(pLayout->GetLogicLineNo() + 1, szLineNum, 10);	// 対応する論理行番号
 					}
 				}else {
 					// 物理行(レイアウト行)番号表示モード
@@ -1503,7 +1503,7 @@ ColorStrategy* PrintPreview::DrawPageText(
 				);
 			}
 
-			const int nLineLen = pcLayout->GetLengthWithoutEOL();
+			const int nLineLen = pLayout->GetLengthWithoutEOL();
 			if (nLineLen == 0) {
 				continue;
 			}
@@ -1511,13 +1511,13 @@ ColorStrategy* PrintPreview::DrawPageText(
 			// 物理行頭の色指定を取得
 			if (m_pPrintSetting->m_bColorPrint
 				&& !(nDan == 0 && i == 0)
-				&& pcLayout->GetLogicOffset() == 0
+				&& pLayout->GetLogicOffset() == 0
 			) {
-				pStrategy = m_pool->GetStrategyByColor(pcLayout->GetColorTypePrev());
+				pStrategy = m_pool->GetStrategyByColor(pLayout->GetColorTypePrev());
 				m_pool->NotifyOnStartScanLogic();
 				if (pStrategy) {
 					pStrategy->InitStrategyStatus();
-					pStrategy->SetStrategyColorInfo(pcLayout->GetColorInfo());
+					pStrategy->SetStrategyColorInfo(pLayout->GetColorInfo());
 				}
 			}
 			// 印刷／プレビュー 行描画
@@ -1527,12 +1527,12 @@ ColorStrategy* PrintPreview::DrawPageText(
 					nBasePosX,
 					nDirectY * (nOffY + nLineHeight * i)
 				),
-				pcLayout->GetDocLineRef()->GetPtr(),	// pcLayout->GetPtr(),
-				(Int)pcLayout->GetDocLineRef()->GetLengthWithEOL(),
-				(Int)pcLayout->GetLogicOffset(),
+				pLayout->GetDocLineRef()->GetPtr(),	// pLayout->GetPtr(),
+				(Int)pLayout->GetDocLineRef()->GetLengthWithEOL(),
+				(Int)pLayout->GetLogicOffset(),
 				nLineLen,
-				pcLayout->GetIndent(), // 2006.05.16 Add Moca. レイアウトインデント分ずらす。
-				m_pPrintSetting->m_bColorPrint ? pcLayout : NULL,
+				pLayout->GetIndent(), // 2006.05.16 Add Moca. レイアウトインデント分ずらす。
+				m_pPrintSetting->m_bColorPrint ? pLayout : NULL,
 				pStrategy
 			);
 		}
@@ -1631,7 +1631,7 @@ ColorStrategy* PrintPreview::Print_DrawLine(
 	int				nLineStart,
 	int				nLineLen,
 	LayoutInt		nIndent,  // 2006.08.14 Moca 追加
-	const Layout*	pcLayout,	//!< 色付用Layout
+	const Layout*	pLayout,	//!< 色付用Layout
 	ColorStrategy*	pStrategyStart
 	)
 {
@@ -1688,7 +1688,7 @@ ColorStrategy* PrintPreview::Print_DrawLine(
 		}
 
 		bool bChange = false;
-		pStrategy = pcLayout ? GetColorStrategy(cStringLine, iLogic, pStrategy, bChange) : NULL;
+		pStrategy = pLayout ? GetColorStrategy(cStringLine, iLogic, pStrategy, bChange) : NULL;
 
 		// タブ文字出現 or 文字種(全角／半角)の境界 or 色指定の境界
 		if (nKind != nKindLast || bChange) {
@@ -1700,7 +1700,7 @@ ColorStrategy* PrintPreview::Print_DrawLine(
 					pLine + nLineStart,
 					iLogic - nBgnLogic,
 					nKindLast,
-					pcLayout,	//!< 色設定用Layout
+					pLayout,	//!< 色設定用Layout
 					nColorIdx,
 					nBgnLogic - nLineStart,
 					nLayoutX,
@@ -1737,7 +1737,7 @@ ColorStrategy* PrintPreview::Print_DrawLine(
 			pLine + nLineStart,
 			nLineStart + nLineLen - nBgnLogic,
 			nKindLast,
-			pcLayout,	//!< 色設定用Layout
+			pLayout,	//!< 色設定用Layout
 			nColorIdx,
 			nBgnLogic - nLineStart,
 			nLayoutX,
@@ -1750,10 +1750,10 @@ ColorStrategy* PrintPreview::Print_DrawLine(
 	::SelectObject(hdc, m_hFontHan);
 
 	// 色を元に戻す	2012-03-07 ossan
-	if (pcLayout) {
+	if (pLayout) {
 		int nColorIdx = ToColorInfoArrIndex(COLORIDX_TEXT);
 		if (nColorIdx != -1) {
-			const ColorInfo& info = m_pParentWnd->GetDocument()->m_docType.GetDocumentAttribute().m_ColorInfoArr[nColorIdx];
+			const ColorInfo& info = m_pParentWnd->GetDocument()->m_docType.GetDocumentAttribute().m_colorInfoArr[nColorIdx];
 			::SetTextColor(hdc, info.m_colorAttr.m_cTEXT);
 //			::SetBkColor(hdc, info.m_colBACK);
 		}
@@ -1773,7 +1773,7 @@ void PrintPreview::Print_DrawBlock(
 	const wchar_t*	pPhysicalLine,
 	int				nBlockLen,	// iLogic - nBgnLogic
 	int				nKind,
-	const Layout*	pcLayout,	//!< 色設定用Layout
+	const Layout*	pLayout,	//!< 色設定用Layout
 	int				nColorIdx,
 	int				nBgnPhysical,	// nBgnLogic - nLineStart
 	LayoutInt		nLayoutX,
@@ -1781,15 +1781,15 @@ void PrintPreview::Print_DrawBlock(
 	const int*		pDxArray
 	)
 {
-	if (nKind == 2 && !pcLayout) {
+	if (nKind == 2 && !pLayout) {
 		// TABはカラーで無ければ印字不要
 		return;
 	}
 	HFONT hFont = (nKind == 1) ? m_hFontZen : m_hFontHan;
 	// 色設定
-	if (pcLayout) {
+	if (pLayout) {
 		if (nColorIdx != -1) {
-			const ColorInfo& info = m_pParentWnd->GetDocument()->m_docType.GetDocumentAttribute().m_ColorInfoArr[nColorIdx];
+			const ColorInfo& info = m_pParentWnd->GetDocument()->m_docType.GetDocumentAttribute().m_colorInfoArr[nColorIdx];
 			if (nKind == 2 && !info.m_fontAttr.m_bUnderLine) {
 				// TABは下線が無ければ印字不要
 				return;
@@ -1830,21 +1830,21 @@ void PrintPreview::Print_DrawBlock(
 	@date 2014.12.30 Moca 正規表現の違う色が並んでいた場合に色替えできてなかったバグを修正
 */
 ColorStrategy* PrintPreview::GetColorStrategy(
-	const StringRef&	cStringLine,
+	const StringRef&	stringLine,
 	int					iLogic,
 	ColorStrategy*		pStrategy,
 	bool&				bChange
 	)
 {
 	if (pStrategy) {
-		if (pStrategy->EndColor(cStringLine, iLogic)) {
+		if (pStrategy->EndColor(stringLine, iLogic)) {
 			pStrategy = NULL;
 			bChange = true;
 		}
 	}
 	if (!pStrategy) {
 		for (int i=0; i<m_pool->GetStrategyCount(); ++i) {
-			if (m_pool->GetStrategy(i)->BeginColor(cStringLine, iLogic)) {
+			if (m_pool->GetStrategy(i)->BeginColor(stringLine, iLogic)) {
 				pStrategy = m_pool->GetStrategy(i);
 				bChange = true;
 				break;

@@ -99,11 +99,11 @@ int Latin1::Latin1ToUni(const char* pSrc, const int nSrcLen, wchar_t* pDst, bool
 
 
 // コード変換 Latin1→Unicode
-CodeConvertResult Latin1::Latin1ToUnicode( const Memory& cSrc, NativeW* pDstMem )
+CodeConvertResult Latin1::Latin1ToUnicode( const Memory& src, NativeW* pDstMem )
 {
 	// ソース取得
 	int nSrcLen;
-	const char* pSrc = reinterpret_cast<const char*>( cSrc.GetRawPtr(&nSrcLen) );
+	const char* pSrc = reinterpret_cast<const char*>( src.GetRawPtr(&nSrcLen) );
 	if (nSrcLen == 0) {
 		pDstMem->Clear();
 		return CodeConvertResult::Complete;
@@ -193,11 +193,11 @@ int Latin1::UniToLatin1(const wchar_t* pSrc, const int nSrcLen, char* pDst, bool
 
 
 // コード変換 Unicode→Latin1
-CodeConvertResult Latin1::UnicodeToLatin1( const NativeW& cSrc, Memory* pDstMem )
+CodeConvertResult Latin1::UnicodeToLatin1( const NativeW& src, Memory* pDstMem )
 {
 	// ソース取得
-	const wchar_t* pSrc = cSrc.GetStringPtr();
-	int nSrcLen = cSrc.GetStringLength();
+	const wchar_t* pSrc = src.GetStringPtr();
+	int nSrcLen = src.GetStringLength();
 	if (nSrcLen == 0) {
 		pDstMem->Clear();
 		return CodeConvertResult::Complete;

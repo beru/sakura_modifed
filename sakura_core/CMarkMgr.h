@@ -76,15 +76,15 @@ public:
 	// GENERATE_FACTORY(Mark, CMarkFactory);	//	Mark用Factory class
 
 	//	型宣言
-	typedef std::vector<Mark> CMarkChain;
-	typedef std::vector<Mark>::const_iterator	CMarkIterator;
+	typedef std::vector<Mark> MarkChain;
+	typedef std::vector<Mark>::const_iterator	MarkIterator;
 
 	//	Interface
 	//	constructor
 	MarkMgr() : m_nCurpos(0), m_nMaxitem(10) {}
 	// MarkMgr(const CDocLineMgr *p) : doc(p) {}
 
-	int Count(void) const { return (int)m_cMarkChain.size(); }	//!<	項目数を返す
+	int Count(void) const { return (int)m_markChain.size(); }	//!<	項目数を返す
 	int GetMax(void) const { return m_nMaxitem; }	//!<	最大項目数を返す
 	void SetMax(int max);	//!<	最大項目数を設定
 
@@ -94,7 +94,7 @@ public:
 	virtual void Flush(void);	//!<	要素の全消去
 
 	//!	要素の取得
-	const Mark& GetCurrent(void) const { return m_cMarkChain[m_nCurpos]; }
+	const Mark& GetCurrent(void) const { return m_markChain[m_nCurpos]; }
 
 	//	有効性の確認
 	bool  CheckCurrent(void) const;
@@ -105,18 +105,18 @@ public:
 	bool NextValid(void);
 	bool PrevValid(void);
 
-	const Mark& operator[](int index) const { return m_cMarkChain[index]; }
+	const Mark& operator[](int index) const { return m_markChain[index]; }
 
 	//	連続取得インターフェース
-//	CMarkIterator CurrentPos(void) const { return (CMarkIterator)m_cMarkChain.begin() + m_nCurpos; }
-//	CMarkIterator Begin(void) const { return (CMarkIterator)m_cMarkChain.begin(); }
-//	CMarkIterator End(void) const { return (CMarkIterator)m_cMarkChain.end(); }
+//	MarkIterator CurrentPos(void) const { return (MarkIterator)m_markChain.begin() + m_nCurpos; }
+//	MarkIterator Begin(void) const { return (MarkIterator)m_markChain.begin(); }
+//	MarkIterator End(void) const { return (MarkIterator)m_markChain.end(); }
 
 protected:
 	virtual void Expire(void) = 0;
 
 	// CMarkFactory m_factory;	//	Factory Class (マクロで生成される）
-	CMarkChain m_cMarkChain;	//	マークデータ本体
+	MarkChain m_markChain;	//	マークデータ本体
 	int m_nCurpos;	//	現在位置（番号）
 
 	int m_nMaxitem;	//	保管可能アイテムの最大数

@@ -39,15 +39,15 @@ void ViewCommander::Command_WordDeleteToStart(void)
 	}
 
 	if (!m_pCommanderView->m_bDoing_UndoRedo) {	// アンドゥ・リドゥの実行中か
-		MoveCaretOpe*	pcOpe = new MoveCaretOpe();
+		MoveCaretOpe*	pOpe = new MoveCaretOpe();
 		GetDocument()->m_layoutMgr.LayoutToLogic(
 			GetSelect().GetTo(),
-			&pcOpe->m_ptCaretPos_PHY_Before
+			&pOpe->m_ptCaretPos_PHY_Before
 		);
-		pcOpe->m_ptCaretPos_PHY_After = pcOpe->m_ptCaretPos_PHY_Before;	// 操作後のキャレット位置
+		pOpe->m_ptCaretPos_PHY_After = pOpe->m_ptCaretPos_PHY_Before;	// 操作後のキャレット位置
 
 		// 操作の追加
-		GetOpeBlk()->AppendOpe(pcOpe);
+		GetOpeBlk()->AppendOpe(pOpe);
 	}
 
 	// 削除
@@ -76,14 +76,14 @@ void ViewCommander::Command_WordDeleteToEnd(void)
 		return;
 	}
 	if (!m_pCommanderView->m_bDoing_UndoRedo) {	// アンドゥ・リドゥの実行中か
-		MoveCaretOpe*	pcOpe = new MoveCaretOpe();
+		MoveCaretOpe*	pOpe = new MoveCaretOpe();
 		GetDocument()->m_layoutMgr.LayoutToLogic(
 			GetSelect().GetFrom(),
-			&pcOpe->m_ptCaretPos_PHY_Before
+			&pOpe->m_ptCaretPos_PHY_Before
 		);
-		pcOpe->m_ptCaretPos_PHY_After = pcOpe->m_ptCaretPos_PHY_Before;	// 操作後のキャレット位置
+		pOpe->m_ptCaretPos_PHY_After = pOpe->m_ptCaretPos_PHY_Before;	// 操作後のキャレット位置
 		// 操作の追加
-		GetOpeBlk()->AppendOpe(pcOpe);
+		GetOpeBlk()->AppendOpe(pOpe);
 	}
 	// 削除
 	m_pCommanderView->DeleteData(true);

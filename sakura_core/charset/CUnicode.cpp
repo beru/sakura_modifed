@@ -6,11 +6,11 @@
 #include "mem/CMemory.h"
 #include "CEol.h"
 
-CodeConvertResult Unicode::_UnicodeToUnicode_in( const Memory& cSrc, NativeW* pDstMem, const bool bBigEndian )
+CodeConvertResult Unicode::_UnicodeToUnicode_in( const Memory& src, NativeW* pDstMem, const bool bBigEndian )
 {
 	// ソース取得
 	int nSrcLen;
-	const unsigned char* pSrc = reinterpret_cast<const unsigned char*>( cSrc.GetRawPtr(&nSrcLen) );
+	const unsigned char* pSrc = reinterpret_cast<const unsigned char*>( src.GetRawPtr(&nSrcLen) );
 	Memory* pDstMem2 = pDstMem->_GetMemory();
 
 	CodeConvertResult res = CodeConvertResult::Complete;
@@ -20,7 +20,7 @@ CodeConvertResult Unicode::_UnicodeToUnicode_in( const Memory& cSrc, NativeW* pD
 		pDstMem2->AllocBuffer( nSrcLen + 1 );
 		unsigned char* pDst  = reinterpret_cast<unsigned char*>( pDstMem2->GetRawPtr() );
 		if (pDstMem2->GetRawPtr()) {
-			if (&cSrc != pDstMem2) {
+			if (&src != pDstMem2) {
 				pDstMem2->SetRawDataHoldBuffer(pSrc, nSrcLen);
 				bCopy = true;
 			}
@@ -33,9 +33,9 @@ CodeConvertResult Unicode::_UnicodeToUnicode_in( const Memory& cSrc, NativeW* pD
 	}
 
 	if (bBigEndian) {
-		if (&cSrc != pDstMem2 && !bCopy) {
+		if (&src != pDstMem2 && !bCopy) {
 			// コピーしつつ UnicodeBe -> Unicode
-			pDstMem2->SwabHLByte(cSrc);
+			pDstMem2->SwabHLByte(src);
 		}else {
 			pDstMem2->SwapHLByte();  // UnicodeBe -> Unicode
 		}
@@ -46,17 +46,17 @@ CodeConvertResult Unicode::_UnicodeToUnicode_in( const Memory& cSrc, NativeW* pD
 }
 
 
-CodeConvertResult Unicode::_UnicodeToUnicode_out( const NativeW& cSrc, Memory* pDstMem, const bool bBigEndian )
+CodeConvertResult Unicode::_UnicodeToUnicode_out( const NativeW& src, Memory* pDstMem, const bool bBigEndian )
 {
 	if (bBigEndian == true) {
-		if (cSrc._GetMemory() == pDstMem) {
+		if (src._GetMemory() == pDstMem) {
 			pDstMem->SwapHLByte();   // Unicode -> UnicodeBe
 		}else {
-			pDstMem->SwabHLByte(*(cSrc._GetMemory()));
+			pDstMem->SwabHLByte(*(src._GetMemory()));
 		}
 	}else {
-		if (cSrc._GetMemory() != pDstMem) {
-			pDstMem->SetRawDataHoldBuffer(*(cSrc._GetMemory()));
+		if (src._GetMemory() != pDstMem) {
+			pDstMem->SetRawDataHoldBuffer(*(src._GetMemory()));
 		}else {
 			// 何もしない
 		}

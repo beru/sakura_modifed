@@ -95,53 +95,53 @@ BOOL DlgProperty::OnBnClicked(int wID)
 void DlgProperty::SetData(void)
 {
 	EditDoc* pEditDoc = (EditDoc*)m_lParam;
-	CNativeT cmemProp;
+	CNativeT memProp;
 	TCHAR szWork[500];
 
 	HANDLE nFind;
 	WIN32_FIND_DATA	wfd;
 	// Aug. 16, 2000 genta	全角化
-	cmemProp.AppendString(LS(STR_DLGFLPROP_FILENAME));
-	cmemProp.AppendString(pEditDoc->m_docFile.GetFilePath());
-	cmemProp.AppendString(_T("\r\n"));
+	memProp.AppendString(LS(STR_DLGFLPROP_FILENAME));
+	memProp.AppendString(pEditDoc->m_docFile.GetFilePath());
+	memProp.AppendString(_T("\r\n"));
 
-	cmemProp.AppendString(LS(STR_DLGFLPROP_FILETYPE));
-	cmemProp.AppendString(pEditDoc->m_docType.GetDocumentAttribute().m_szTypeName);
-	cmemProp.AppendString(_T("\r\n"));
+	memProp.AppendString(LS(STR_DLGFLPROP_FILETYPE));
+	memProp.AppendString(pEditDoc->m_docType.GetDocumentAttribute().m_szTypeName);
+	memProp.AppendString(_T("\r\n"));
 
-	cmemProp.AppendString(LS(STR_DLGFLPROP_ENCODING));
+	memProp.AppendString(LS(STR_DLGFLPROP_ENCODING));
 	{
 		TCHAR szCpName[100];
 		CodePage::GetNameNormal(szCpName, pEditDoc->GetDocumentEncoding());
-		cmemProp.AppendString( szCpName );
+		memProp.AppendString( szCpName );
 	}
 	// From Here  2008/4/27 Uchi
 	if (pEditDoc->GetDocumentBomExist()) {
-		cmemProp.AppendString(LS(STR_DLGFLPROP_WITH_BOM));
+		memProp.AppendString(LS(STR_DLGFLPROP_WITH_BOM));
 	}
 	// To Here  2008/4/27 Uchi
-	cmemProp.AppendString(_T("\r\n"));
+	memProp.AppendString(_T("\r\n"));
 
 	auto_sprintf(szWork, LS(STR_DLGFLPROP_LINE_COUNT), pEditDoc->m_docLineMgr.GetLineCount());
-	cmemProp.AppendString(szWork);
+	memProp.AppendString(szWork);
 
 	auto_sprintf(szWork, LS(STR_DLGFLPROP_LAYOUT_LINE), pEditDoc->m_layoutMgr.GetLineCount());
-	cmemProp.AppendString(szWork);
+	memProp.AppendString(szWork);
 
 	if (AppMode::getInstance()->IsViewMode()) {
-		cmemProp.AppendString(LS(STR_DLGFLPROP_VIEW_MODE));	// 2009.04.11 ryoji 「上書き禁止モード」→「ビューモード」
+		memProp.AppendString(LS(STR_DLGFLPROP_VIEW_MODE));	// 2009.04.11 ryoji 「上書き禁止モード」→「ビューモード」
 	}
 	if (pEditDoc->m_docEditor.IsModified()) {
-		cmemProp.AppendString(LS(STR_DLGFLPROP_MODIFIED));
+		memProp.AppendString(LS(STR_DLGFLPROP_MODIFIED));
 	}else {
-		cmemProp.AppendString(LS(STR_DLGFLPROP_NOT_MODIFIED));
+		memProp.AppendString(LS(STR_DLGFLPROP_NOT_MODIFIED));
 	}
 
 	auto_sprintf(szWork, LS(STR_DLGFLPROP_CMD_COUNT), pEditDoc->m_nCommandExecNum);
-	cmemProp.AppendString(szWork);
+	memProp.AppendString(szWork);
 
 	auto_sprintf(szWork, LS(STR_DLGFLPROP_FILE_INFO), pEditDoc->m_docLineMgr.GetLineCount());
-	cmemProp.AppendString(szWork);
+	memProp.AppendString(szWork);
 
 	if ((nFind = ::FindFirstFile(pEditDoc->m_docFile.GetFilePath(), &wfd)) != INVALID_HANDLE_VALUE) {
 		if (pEditDoc->m_docFile.IsFileLocking()) {
@@ -152,87 +152,87 @@ void DlgProperty::SetData(void)
 			}else {
 				auto_sprintf(szWork, LS(STR_DLGFLPROP_LOCK));
 			}
-			cmemProp.AppendString(szWork);
+			memProp.AppendString(szWork);
 		}else {
 			auto_sprintf(szWork, LS(STR_DLGFLPROP_NOT_LOCK));
-			cmemProp.AppendString(szWork);
+			memProp.AppendString(szWork);
 		}
 
 		auto_sprintf(szWork, LS(STR_DLGFLPROP_ATTRIBUTES), pEditDoc->m_docLineMgr.GetLineCount());
-		cmemProp.AppendString(szWork);
+		memProp.AppendString(szWork);
 		if (wfd.dwFileAttributes & FILE_ATTRIBUTE_ARCHIVE) {
-			cmemProp.AppendString(LS(STR_DLGFLPROP_AT_ARCHIVE));
+			memProp.AppendString(LS(STR_DLGFLPROP_AT_ARCHIVE));
 		}
 		if (wfd.dwFileAttributes & FILE_ATTRIBUTE_COMPRESSED) {
-			cmemProp.AppendString(LS(STR_DLGFLPROP_AT_COMPRESS));
+			memProp.AppendString(LS(STR_DLGFLPROP_AT_COMPRESS));
 		}
 		if (wfd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
-			cmemProp.AppendString(LS(STR_DLGFLPROP_AT_FOLDER));
+			memProp.AppendString(LS(STR_DLGFLPROP_AT_FOLDER));
 		}
 		if (wfd.dwFileAttributes & FILE_ATTRIBUTE_HIDDEN) {
-			cmemProp.AppendString(LS(STR_DLGFLPROP_AT_HIDDEN));
+			memProp.AppendString(LS(STR_DLGFLPROP_AT_HIDDEN));
 		}
 		if (wfd.dwFileAttributes & FILE_ATTRIBUTE_NORMAL) {
-			cmemProp.AppendString(LS(STR_DLGFLPROP_AT_NORMAL));
+			memProp.AppendString(LS(STR_DLGFLPROP_AT_NORMAL));
 		}
 		if (wfd.dwFileAttributes & FILE_ATTRIBUTE_OFFLINE) {
-			cmemProp.AppendString(LS(STR_DLGFLPROP_AT_OFFLINE));
+			memProp.AppendString(LS(STR_DLGFLPROP_AT_OFFLINE));
 		}
 		if (wfd.dwFileAttributes & FILE_ATTRIBUTE_READONLY) {
-			cmemProp.AppendString(LS(STR_DLGFLPROP_AT_READONLY));
+			memProp.AppendString(LS(STR_DLGFLPROP_AT_READONLY));
 		}
 		if (wfd.dwFileAttributes & FILE_ATTRIBUTE_SYSTEM) {
-			cmemProp.AppendString(LS(STR_DLGFLPROP_AT_SYSTEM));
+			memProp.AppendString(LS(STR_DLGFLPROP_AT_SYSTEM));
 		}
 		if (wfd.dwFileAttributes & FILE_ATTRIBUTE_TEMPORARY) {
-			cmemProp.AppendString(LS(STR_DLGFLPROP_AT_TEMP));
+			memProp.AppendString(LS(STR_DLGFLPROP_AT_TEMP));
 		}
-		cmemProp.AppendString(_T("\r\n"));
+		memProp.AppendString(_T("\r\n"));
 
-		cmemProp.AppendString(LS(STR_DLGFLPROP_CREATE_DT));
-		FileTime ctimeCreation = wfd.ftCreationTime;
+		memProp.AppendString(LS(STR_DLGFLPROP_CREATE_DT));
+		FileTime timeCreation = wfd.ftCreationTime;
 		auto_sprintf(szWork, LS(STR_DLGFLPROP_YMDHMS),
-			ctimeCreation->wYear,
-			ctimeCreation->wMonth,
-			ctimeCreation->wDay,
-			ctimeCreation->wHour,
-			ctimeCreation->wMinute,
-			ctimeCreation->wSecond
+			timeCreation->wYear,
+			timeCreation->wMonth,
+			timeCreation->wDay,
+			timeCreation->wHour,
+			timeCreation->wMinute,
+			timeCreation->wSecond
 		);
-		cmemProp.AppendString(szWork);
-		cmemProp.AppendString(_T("\r\n"));
+		memProp.AppendString(szWork);
+		memProp.AppendString(_T("\r\n"));
 
-		cmemProp.AppendString(LS(STR_DLGFLPROP_UPDATE_DT));
-		FileTime ctimeLastWrite = wfd.ftLastWriteTime;
+		memProp.AppendString(LS(STR_DLGFLPROP_UPDATE_DT));
+		FileTime timeLastWrite = wfd.ftLastWriteTime;
 		auto_sprintf(szWork, LS(STR_DLGFLPROP_YMDHMS),
-			ctimeLastWrite->wYear,
-			ctimeLastWrite->wMonth,
-			ctimeLastWrite->wDay,
-			ctimeLastWrite->wHour,
-			ctimeLastWrite->wMinute,
-			ctimeLastWrite->wSecond
+			timeLastWrite->wYear,
+			timeLastWrite->wMonth,
+			timeLastWrite->wDay,
+			timeLastWrite->wHour,
+			timeLastWrite->wMinute,
+			timeLastWrite->wSecond
 		);
-		cmemProp.AppendString(szWork);
-		cmemProp.AppendString(_T("\r\n"));
+		memProp.AppendString(szWork);
+		memProp.AppendString(_T("\r\n"));
 
-		cmemProp.AppendString(LS(STR_DLGFLPROP_ACCESS_DT));
-		FileTime ctimeLastAccess = wfd.ftLastAccessTime;
+		memProp.AppendString(LS(STR_DLGFLPROP_ACCESS_DT));
+		FileTime timeLastAccess = wfd.ftLastAccessTime;
 		auto_sprintf(szWork, LS(STR_DLGFLPROP_YMDHMS),
-			ctimeLastAccess->wYear,
-			ctimeLastAccess->wMonth,
-			ctimeLastAccess->wDay,
-			ctimeLastAccess->wHour,
-			ctimeLastAccess->wMinute,
-			ctimeLastAccess->wSecond
+			timeLastAccess->wYear,
+			timeLastAccess->wMonth,
+			timeLastAccess->wDay,
+			timeLastAccess->wHour,
+			timeLastAccess->wMinute,
+			timeLastAccess->wSecond
 		);
-		cmemProp.AppendString(szWork);
-		cmemProp.AppendString(_T("\r\n"));
+		memProp.AppendString(szWork);
+		memProp.AppendString(_T("\r\n"));
 
 		auto_sprintf(szWork, LS(STR_DLGFLPROP_DOS_NAME), wfd.cAlternateFileName);
-		cmemProp.AppendString(szWork);
+		memProp.AppendString(szWork);
 
 		auto_sprintf( szWork, LS(STR_DLGFLPROP_FILE_SIZE), wfd.nFileSizeLow );
-		cmemProp.AppendString(szWork);
+		memProp.AppendString(szWork);
 
 		::FindClose(nFind);
 	}
@@ -240,7 +240,7 @@ void DlgProperty::SetData(void)
 
 #ifdef _DEBUG/////////////////////////////////////////////////////
 	// メモリ確保 & ファイル読み込み
-	CNativeT ctext;
+	CNativeT text;
 	BinaryInputStream in(pEditDoc->m_docFile.GetFilePath());
 	if (!in) {
 		goto end_of_CodeTest;
@@ -259,8 +259,8 @@ void DlgProperty::SetData(void)
 	in.Close();
 
 	// ESIのデバッグ情報
-	ESI::GetDebugInfo(pBuf, nBufLen, &ctext);
-	cmemProp.AppendNativeData(ctext);
+	ESI::GetDebugInfo(pBuf, nBufLen, &text);
+	memProp.AppendNativeData(text);
 
 	if (hgData) {
 		::GlobalUnlock(hgData);
@@ -269,7 +269,7 @@ void DlgProperty::SetData(void)
 	}
 end_of_CodeTest:;
 #endif //ifdef _DEBUG/////////////////////////////////////////////////////
-	SetItemText(IDC_EDIT_PROPERTY, cmemProp.GetStringPtr());
+	SetItemText(IDC_EDIT_PROPERTY, memProp.GetStringPtr());
 
 	return;
 }

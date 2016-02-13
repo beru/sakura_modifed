@@ -14,7 +14,8 @@
 #endif
 
 TextArea::TextArea(EditView* pEditView)
-: m_pEditView(pEditView)
+	:
+	m_pEditView(pEditView)
 {
 	DLLSHAREDATA* pShareData = &GetDllShareData();
 
@@ -82,14 +83,14 @@ void TextArea::UpdateAreaMetrics(HDC hdc)
 	UpdateViewColRowNums();
 }
 
-void TextArea::GenerateCharRect(RECT* rc, const DispPos& sPos, int nHankakuNum) const
+void TextArea::GenerateCharRect(RECT* rc, const DispPos& pos, int nHankakuNum) const
 {
 	const EditView* pView = m_pEditView;
 
-	rc->left   = sPos.GetDrawPos().x;
-	rc->right  = sPos.GetDrawPos().x + pView->GetTextMetrics().GetHankakuDx() * nHankakuNum;
-	rc->top    = sPos.GetDrawPos().y;
-	rc->bottom = sPos.GetDrawPos().y + pView->GetTextMetrics().GetHankakuDy();
+	rc->left   = pos.GetDrawPos().x;
+	rc->right  = pos.GetDrawPos().x + pView->GetTextMetrics().GetHankakuDx() * nHankakuNum;
+	rc->top    = pos.GetDrawPos().y;
+	rc->bottom = pos.GetDrawPos().y + pView->GetTextMetrics().GetHankakuDy();
 }
 
 bool TextArea::TrimRectByArea(RECT* rc) const
@@ -108,21 +109,21 @@ bool TextArea::TrimRectByArea(RECT* rc) const
 	return true;
 }
 
-bool TextArea::GenerateClipRect(RECT* rc, const DispPos& sPos, int nHankakuNum) const
+bool TextArea::GenerateClipRect(RECT* rc, const DispPos& pos, int nHankakuNum) const
 {
-	GenerateCharRect(rc, sPos, nHankakuNum);
+	GenerateCharRect(rc, pos, nHankakuNum);
 	return TrimRectByArea(rc);
 }
 
 // 右の残りを表す矩形を生成する
-bool TextArea::GenerateClipRectRight(RECT* rc, const DispPos& sPos) const
+bool TextArea::GenerateClipRectRight(RECT* rc, const DispPos& pos) const
 {
 	const EditView* pView = m_pEditView;
 
-	rc->left   = sPos.GetDrawPos().x;
+	rc->left   = pos.GetDrawPos().x;
 	rc->right  = GetAreaRight();
-	rc->top    = sPos.GetDrawPos().y;
-	rc->bottom = sPos.GetDrawPos().y + pView->GetTextMetrics().GetHankakuDy();
+	rc->top    = pos.GetDrawPos().y;
+	rc->bottom = pos.GetDrawPos().y + pView->GetTextMetrics().GetHankakuDy();
 
 	// 左はみ出し調整
 	if (rc->left < GetAreaLeft()) {
@@ -138,12 +139,12 @@ bool TextArea::GenerateClipRectRight(RECT* rc, const DispPos& sPos) const
 	return true;
 }
 
-bool TextArea::GenerateClipRectLine(RECT* rc, const DispPos& sPos) const
+bool TextArea::GenerateClipRectLine(RECT* rc, const DispPos& pos) const
 {
 	rc->left   = 0;
 	rc->right  = GetAreaRight();
-	rc->top    = sPos.GetDrawPos().y;
-	rc->bottom = sPos.GetDrawPos().y + m_pEditView->GetTextMetrics().GetHankakuDy();
+	rc->top    = pos.GetDrawPos().y;
+	rc->bottom = pos.GetDrawPos().y + m_pEditView->GetTextMetrics().GetHankakuDy();
 	return true;
 }
 
@@ -156,9 +157,9 @@ bool TextArea::DetectWidthOfLineNumberArea(bool bRedraw)
 	const EditView* pView = m_pEditView;
 	EditView* pView2 = m_pEditView;
 
-	int				nViewAlignLeftNew;
+	int nViewAlignLeftNew;
 
-	if (pView->m_pTypeData->m_ColorInfoArr[COLORIDX_GYOU].m_bDisp && !pView->m_bMiniMap) {
+	if (pView->m_pTypeData->m_colorInfoArr[COLORIDX_GYOU].m_bDisp && !pView->m_bMiniMap) {
 		// 行番号表示に必要な桁数を計算
 		int i = DetectWidthOfLineNumberArea_calculate(&pView->m_pEditDoc->m_layoutMgr);
 		nViewAlignLeftNew = pView->GetTextMetrics().GetHankakuDx() * (i + 1);	// 表示域の左端座標
@@ -268,7 +269,7 @@ void TextArea::TextArea_OnSize(
 	const Size& sizeClient, // ウィンドウのクライアントサイズ
 	int nCxVScroll,            // 垂直スクロールバーの横幅
 	int nCyHScroll             // 水平スクロールバーの縦幅
-)
+	)
 {
 	m_nViewCx = sizeClient.cx - nCxVScroll - GetAreaLeft(); // 表示域の幅
 	m_nViewCy = sizeClient.cy - nCyHScroll - GetAreaTop();  // 表示域の高さ
@@ -293,7 +294,7 @@ void TextArea::ClientToLayout(Point ptClient, LayoutPoint* pptLayout) const
 
 
 // 行番号エリアも含む範囲
-void TextArea::GenerateTopRect   (RECT* rc, LayoutInt nLineCount) const
+void TextArea::GenerateTopRect(RECT* rc, LayoutInt nLineCount) const
 {
 	rc->left   = 0; //m_nViewAlignLeft;
 	rc->right  = m_nViewAlignLeft + m_nViewCx;
@@ -310,7 +311,7 @@ void TextArea::GenerateBottomRect(RECT* rc, LayoutInt nLineCount) const
 	rc->bottom = m_nViewAlignTop  + m_nViewCy;
 }
 
-void TextArea::GenerateLeftRect  (RECT* rc, LayoutInt nColCount) const
+void TextArea::GenerateLeftRect(RECT* rc, LayoutInt nColCount) const
 {
 	rc->left   = m_nViewAlignLeft;
 	rc->right  = m_nViewAlignLeft + (Int)nColCount * m_pEditView->GetTextMetrics().GetHankakuDx();
@@ -318,7 +319,7 @@ void TextArea::GenerateLeftRect  (RECT* rc, LayoutInt nColCount) const
 	rc->bottom = m_nViewAlignTop + m_nViewCy;
 }
 
-void TextArea::GenerateRightRect (RECT* rc, LayoutInt nColCount) const
+void TextArea::GenerateRightRect(RECT* rc, LayoutInt nColCount) const
 {
 	rc->left   = m_nViewAlignLeft + m_nViewCx - (Int)nColCount * m_pEditView->GetTextMetrics().GetHankakuDx(); // 2008.01.26 kobake 符号が逆になってたのを修正
 	rc->right  = m_nViewAlignLeft + m_nViewCx;

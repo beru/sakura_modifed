@@ -187,17 +187,17 @@ void Graphics::RestoreTextColors()
 //                         フォント                            //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-void Graphics::PushMyFont(const Font& sFont)
+void Graphics::PushMyFont(const Font& font)
 {
 	// 設定
-	HFONT hFontOld = (HFONT)SelectObject(m_hdc, sFont.m_hFont);
+	HFONT hFontOld = (HFONT)SelectObject(m_hdc, font.m_hFont);
 
 	// 記録
 	if (m_vFonts.empty()) {
 		Font sFontOld = { { false, false }, hFontOld };
 		m_vFonts.push_back(sFontOld);
 	}
-	m_vFonts.push_back(sFont);
+	m_vFonts.push_back(font);
 }
 
 void Graphics::PopMyFont()

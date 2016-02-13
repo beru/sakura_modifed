@@ -384,7 +384,7 @@ void OutlinePython::DoScanLine(const wchar_t* data, int linelen, int start_offse
 
 	@date 2007.02.08 genta V‹Kì¬
 */
-void DocOutline::MakeFuncList_python(FuncInfoArr* pcFuncInfoArr)
+void DocOutline::MakeFuncList_python(FuncInfoArr* pFuncInfoArr)
 {
 	LogicInt	nLineLen;
 	LogicInt	nLineCount;
@@ -529,7 +529,7 @@ void DocOutline::MakeFuncList_python(FuncInfoArr* pcFuncInfoArr)
 				LogicPoint(LogicInt(0), nLineCount),
 				&ptPosXY
 			);
-			pcFuncInfoArr->AppendData(
+			pFuncInfoArr->AppendData(
 				nLineCount + LogicInt(1),
 				ptPosXY.GetY2() + LayoutInt(1),
 				szWord,

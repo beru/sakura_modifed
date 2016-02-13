@@ -110,14 +110,14 @@ BOOL DlgFind::OnInitDialog(
 	// フォント設定	2012/11/27 Uchi
 	HFONT hFontOld = (HFONT)::SendMessage(GetItemHwnd(IDC_COMBO_TEXT), WM_GETFONT, 0, 0);
 	HFONT hFont = SetMainFont(GetItemHwnd(IDC_COMBO_TEXT));
-	m_cFontText.SetFont(hFontOld, hFont, GetItemHwnd(IDC_COMBO_TEXT));
+	m_fontText.SetFont(hFontOld, hFont, GetItemHwnd(IDC_COMBO_TEXT));
 	return bRet;
 }
 
 
 BOOL DlgFind::OnDestroy()
 {
-	m_cFontText.ReleaseOnDestroy();
+	m_fontText.ReleaseOnDestroy();
 	return Dialog::OnDestroy();
 }
 
@@ -285,7 +285,7 @@ int DlgFind::GetData(void)
 BOOL DlgFind::OnBnClicked(int wID)
 {
 	int nRet;
-	EditView*	pcEditView = (EditView*)m_lParam;
+	EditView*	pEditView = (EditView*)m_lParam;
 	switch (wID) {
 	case IDC_BUTTON_HELP:
 		//「検索」のヘルプ
@@ -332,17 +332,17 @@ BOOL DlgFind::OnBnClicked(int wID)
 				CloseDialog(1);
 			}else {
 				// 前を検索
-				pcEditView->GetCommander().HandleCommand(F_SEARCH_PREV, true, (LPARAM)GetHwnd(), 0, 0, 0);
+				pEditView->GetCommander().HandleCommand(F_SEARCH_PREV, true, (LPARAM)GetHwnd(), 0, 0, 0);
 
 				// 再描画 2005.04.06 zenryaku 0文字幅マッチでキャレットを表示するため
-				pcEditView->Redraw();	// 前回0文字幅マッチの消去にも必要
+				pEditView->Redraw();	// 前回0文字幅マッチの消去にも必要
 
 				// 02/06/26 ai Start
 				// 検索開始位置を登録
-				if (pcEditView->m_bSearch != FALSE) {
+				if (pEditView->m_bSearch != FALSE) {
 					// 検索開始時のカーソル位置登録条件変更 02/07/28 ai start
-					pcEditView->m_ptSrchStartPos_PHY = m_ptEscCaretPos_PHY;
-					pcEditView->m_bSearch = FALSE;
+					pEditView->m_ptSrchStartPos_PHY = m_ptEscCaretPos_PHY;
+					pEditView->m_bSearch = FALSE;
 					// 02/07/28 ai end
 				}//  02/06/26 ai End
 
@@ -363,16 +363,16 @@ BOOL DlgFind::OnBnClicked(int wID)
 				CloseDialog(2);
 			}else {
 				// 次を検索
-				pcEditView->GetCommander().HandleCommand(F_SEARCH_NEXT, true, (LPARAM)GetHwnd(), 0, 0, 0);
+				pEditView->GetCommander().HandleCommand(F_SEARCH_NEXT, true, (LPARAM)GetHwnd(), 0, 0, 0);
 
 				// 再描画 2005.04.06 zenryaku 0文字幅マッチでキャレットを表示するため
-				pcEditView->Redraw();	// 前回0文字幅マッチの消去にも必要
+				pEditView->Redraw();	// 前回0文字幅マッチの消去にも必要
 
 				// 検索開始位置を登録
-				if (pcEditView->m_bSearch != FALSE) {
+				if (pEditView->m_bSearch != FALSE) {
 					// 検索開始時のカーソル位置登録条件変更 02/07/28 ai start
-					pcEditView->m_ptSrchStartPos_PHY = m_ptEscCaretPos_PHY;
-					pcEditView->m_bSearch = FALSE;
+					pEditView->m_ptSrchStartPos_PHY = m_ptEscCaretPos_PHY;
+					pEditView->m_bSearch = FALSE;
 				}
 
 				// 検索ダイアログを自動的に閉じる
@@ -389,7 +389,7 @@ BOOL DlgFind::OnBnClicked(int wID)
 			if (m_bModal) {		// モーダルダイアログか
 				CloseDialog(2);
 			}else {
-				pcEditView->GetCommander().HandleCommand(F_BOOKMARK_PATTERN, false, 0, 0, 0, 0);
+				pEditView->GetCommander().HandleCommand(F_BOOKMARK_PATTERN, false, 0, 0, 0, 0);
 				// 検索ダイアログを自動的に閉じる
 				if (m_pShareData->m_common.m_search.m_bAutoCloseDlgFind) {
 					CloseDialog(0);
@@ -410,8 +410,8 @@ BOOL DlgFind::OnActivate(WPARAM wParam, LPARAM lParam)
 {
 	// 0文字幅マッチ描画のON/OFF	// 2009.11.29 ryoji
 	EditView* pEditView = (EditView*)m_lParam;
-	LayoutRange cRangeSel = pEditView->GetSelectionInfo().m_select;
-	if (cRangeSel.IsValid() && cRangeSel.IsLineOne() && cRangeSel.IsOne())
+	LayoutRange rangeSel = pEditView->GetSelectionInfo().m_select;
+	if (rangeSel.IsValid() && rangeSel.IsLineOne() && rangeSel.IsOne())
 		pEditView->InvalidateRect(NULL);	// アクティブ化／非アクティブ化が完了してから再描画
 
 	return Dialog::OnActivate(wParam, lParam);

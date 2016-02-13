@@ -180,12 +180,12 @@ void Ruler::DrawRulerBg(Graphics& gr)
 void Ruler::DispRuler(HDC hdc)
 {
 	// サポート
-	TypeSupport cRulerType(m_pEditView, COLORIDX_RULER);
+	TypeSupport rulerType(m_pEditView, COLORIDX_RULER);
 
 	if (!m_pEditView->GetDrawSwitch()) {
 		return;
 	}
-	if (!cRulerType.IsDisp()) {
+	if (!rulerType.IsDisp()) {
 		return;
 	}
 

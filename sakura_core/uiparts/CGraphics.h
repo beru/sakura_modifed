@@ -133,13 +133,13 @@ public:
 		Font sFont = { { false, false }, hFont };
 		PushMyFont(sFont);
 	}
-	void PushMyFont(const Font& sFont);
+	void PushMyFont(const Font& font);
 	void PopMyFont();
 	void ClearMyFont();
 	// ÉtÉHÉìÉgê›íË
-	void SetMyFont(const Font& sFont) {
+	void SetMyFont(const Font& font) {
 		ClearMyFont();
-		PushMyFont(sFont);
+		PushMyFont(font);
 	}
 	bool GetCurrentMyFontBold() {
 		assert(!m_vFonts.empty());

@@ -6,21 +6,21 @@
 #include "doc/layout/CLayout.h"
 #include "types/CTypeSupport.h"
 
-static int IsNumber(const StringRef& cStr, int offset);	// 数値ならその長さを返す	//@@@ 2001.02.17 by MIK
+static int IsNumber(const StringRef& str, int offset);	// 数値ならその長さを返す	//@@@ 2001.02.17 by MIK
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                         半角数値                            //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-bool Color_Numeric::BeginColor(const StringRef& cStr, int nPos)
+bool Color_Numeric::BeginColor(const StringRef& str, int nPos)
 {
-	if (!cStr.IsValid()) return false;
+	if (!str.IsValid()) return false;
 
 	int	nnn;
 
 	if (1
-		&& _IsPosKeywordHead(cStr, nPos)
-		&& (nnn = IsNumber(cStr, nPos)) > 0
+		&& _IsPosKeywordHead(str, nPos)
+		&& (nnn = IsNumber(str, nPos)) > 0
 	) {		// 半角数字を表示する
 		// キーワード文字列の終端をセットする
 		this->m_nCOMMENTEND = nPos + nnn;
@@ -30,7 +30,7 @@ bool Color_Numeric::BeginColor(const StringRef& cStr, int nPos)
 }
 
 
-bool Color_Numeric::EndColor(const StringRef& cStr, int nPos)
+bool Color_Numeric::EndColor(const StringRef& str, int nPos)
 {
 	return (nPos == this->m_nCOMMENTEND);
 }
@@ -65,7 +65,7 @@ bool Color_Numeric::EndColor(const StringRef& cStr, int nPos)
  *   10進数, 16進数, LF接尾語, 浮動小数点数, 負符号
  *   IPアドレスのドット連結(本当は数値じゃないんだよね)
  */
-static int IsNumber(const StringRef& cStr, /*const wchar_t* buf,*/ int offset/*, int length*/)
+static int IsNumber(const StringRef& str, /*const wchar_t* buf,*/ int offset/*, int length*/)
 {
 	register const wchar_t* p;
 	register const wchar_t* q;
@@ -73,8 +73,8 @@ static int IsNumber(const StringRef& cStr, /*const wchar_t* buf,*/ int offset/*,
 	register int d = 0;
 	register int f = 0;
 
-	p = cStr.GetPtr() + offset;
-	q = cStr.GetPtr() + cStr.GetLength();
+	p = str.GetPtr() + offset;
+	q = str.GetPtr() + str.GetLength();
 
 	if (*p == L'0') {  // 10進数,Cの16進数
 		++p; ++i;

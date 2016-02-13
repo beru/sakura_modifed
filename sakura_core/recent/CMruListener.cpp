@@ -36,7 +36,7 @@
 //                        セーブ前後                           //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-void MruListener::OnAfterSave(const SaveInfo& sSaveInfo)
+void MruListener::OnAfterSave(const SaveInfo& saveInfo)
 {
 	_HoldBookmarks_And_AddToMRU();
 }
@@ -140,48 +140,48 @@ void MruListener::OnBeforeLoad(LoadInfo* pLoadInfo)
 }
 
 
-void MruListener::OnAfterLoad(const LoadInfo& sLoadInfo)
+void MruListener::OnAfterLoad(const LoadInfo& loadInfo)
 {
-	EditDoc* pcDoc = GetListeningDoc();
+	EditDoc* pDoc = GetListeningDoc();
 
-	MRUFile cMRU;
+	MRUFile mru;
 
 	EditInfo eiOld;
-	bool bIsExistInMRU = cMRU.GetEditInfo(pcDoc->m_docFile.GetFilePath(), &eiOld);
+	bool bIsExistInMRU = mru.GetEditInfo(pDoc->m_docFile.GetFilePath(), &eiOld);
 
 	// キャレット位置の復元
 	if (bIsExistInMRU && GetDllShareData().m_common.m_file.GetRestoreCurPosition()) {
 		// キャレット位置取得
 		LayoutPoint ptCaretPos;
-		pcDoc->m_layoutMgr.LogicToLayout(eiOld.m_ptCursor, &ptCaretPos);
+		pDoc->m_layoutMgr.LogicToLayout(eiOld.m_ptCursor, &ptCaretPos);
 
 		// ビュー取得
-		EditView& cView = pcDoc->m_pEditWnd->GetActiveView();
+		EditView& view = pDoc->m_pEditWnd->GetActiveView();
 
-		if (ptCaretPos.GetY2() >= pcDoc->m_layoutMgr.GetLineCount()) {
+		if (ptCaretPos.GetY2() >= pDoc->m_layoutMgr.GetLineCount()) {
 			// ファイルの最後に移動
-			cView.GetCommander().HandleCommand(F_GOFILEEND, false, 0, 0, 0, 0);
+			view.GetCommander().HandleCommand(F_GOFILEEND, false, 0, 0, 0, 0);
 		}else {
-			cView.GetTextArea().SetViewTopLine(eiOld.m_nViewTopLine); // 2001/10/20 novice
-			cView.GetTextArea().SetViewLeftCol(eiOld.m_nViewLeftCol); // 2001/10/20 novice
+			view.GetTextArea().SetViewTopLine(eiOld.m_nViewTopLine); // 2001/10/20 novice
+			view.GetTextArea().SetViewLeftCol(eiOld.m_nViewLeftCol); // 2001/10/20 novice
 			// From Here Mar. 28, 2003 MIK
 			// 改行の真ん中にカーソルが来ないように。
-			const DocLine *pTmpDocLine = pcDoc->m_docLineMgr.GetLine(eiOld.m_ptCursor.GetY2());	// 2008.08.22 ryoji 改行単位の行番号を渡すように修正
+			const DocLine *pTmpDocLine = pDoc->m_docLineMgr.GetLine(eiOld.m_ptCursor.GetY2());	// 2008.08.22 ryoji 改行単位の行番号を渡すように修正
 			if (pTmpDocLine) {
 				if (pTmpDocLine->GetLengthWithoutEOL() < eiOld.m_ptCursor.x) {
 					ptCaretPos.x--;
 				}
 			}
 			// To Here Mar. 28, 2003 MIK
-			cView.GetCaret().MoveCursor(ptCaretPos, true);
-			cView.GetCaret().m_nCaretPosX_Prev = cView.GetCaret().GetCaretLayoutPos().GetX2();
+			view.GetCaret().MoveCursor(ptCaretPos, true);
+			view.GetCaret().m_nCaretPosX_Prev = view.GetCaret().GetCaretLayoutPos().GetX2();
 		}
 	}
 
 	// ブックマーク復元  // 2002.01.16 hor
 	if (bIsExistInMRU) {
 		if (GetDllShareData().m_common.m_file.GetRestoreBookmarks()) {
-			BookmarkManager(&pcDoc->m_docLineMgr).SetBookMarks(eiOld.m_szMarkLines);
+			BookmarkManager(&pDoc->m_docLineMgr).SetBookMarks(eiOld.m_szMarkLines);
 		}
 	}else {
 		eiOld.m_szMarkLines[0] = 0;
@@ -189,16 +189,16 @@ void MruListener::OnAfterLoad(const LoadInfo& sLoadInfo)
 
 	// MRUリストへの登録
 	EditInfo	eiNew;
-	pcDoc->GetEditInfo(&eiNew);
+	pDoc->GetEditInfo(&eiNew);
 	// 2014.07.04 ブックマークの保持(エディタが落ちたときブックマークが消えるため)
 	if (bIsExistInMRU) {
 		if (GetDllShareData().m_common.m_file.GetRestoreBookmarks()) {
 			// SetBookMarksでデータがNUL区切りに書き換わっているので再取得
-			cMRU.GetEditInfo(pcDoc->m_docFile.GetFilePath(), &eiOld);
+			mru.GetEditInfo(pDoc->m_docFile.GetFilePath(), &eiOld);
 			auto_strcpy(eiNew.m_szMarkLines, eiOld.m_szMarkLines);
 		}
 	}
-	cMRU.Add(&eiNew);
+	mru.Add(&eiNew);
 }
 
 
@@ -229,12 +229,12 @@ CallbackResultType MruListener::OnBeforeClose()
 void MruListener::_HoldBookmarks_And_AddToMRU()
 {
 	// EditInfo取得
-	EditDoc* pcDoc = GetListeningDoc();
+	EditDoc* pDoc = GetListeningDoc();
 	EditInfo fi;
-	pcDoc->GetEditInfo(&fi);
+	pDoc->GetEditInfo(&fi);
 
 	// ブックマーク情報の保存
-	wcscpy_s(fi.m_szMarkLines, BookmarkManager(&pcDoc->m_docLineMgr).GetBookMarks());
+	wcscpy_s(fi.m_szMarkLines, BookmarkManager(&pDoc->m_docLineMgr).GetBookMarks());
 
 	// MRUリストに登録
 	MRUFile cMRU;

@@ -219,18 +219,18 @@ bool Clipboard::SetText(
 	return true;
 }
 
-bool Clipboard::SetHtmlText(const NativeW& cmemBUf)
+bool Clipboard::SetHtmlText(const NativeW& memBUf)
 {
 	if (!m_bOpenResult) {
 		return false;
 	}
 
-	NativeA cmemUtf8;
-	Utf8().UnicodeToCode(cmemBUf, cmemUtf8._GetMemory());
+	NativeA memUtf8;
+	Utf8().UnicodeToCode(memBUf, memUtf8._GetMemory());
 
 	NativeA cmemHeader;
 	char szFormat[32];
-	size_t size = cmemUtf8.GetStringLength() + 134;
+	size_t size = memUtf8.GetStringLength() + 134;
 	cmemHeader.AppendString("Version:0.9\r\n");
 	cmemHeader.AppendString("StartHTML:00000097\r\n");
 	sprintf(szFormat, "EndHTML:%08d\r\n", size + 36);
@@ -242,7 +242,7 @@ bool Clipboard::SetHtmlText(const NativeW& cmemBUf)
 	NativeA cmemFooter;
 	cmemFooter.AppendString("\r\n<!--EndFragment-->\r\n</body></html>\r\n");
 
-	size_t nLen = cmemHeader.GetStringLength() + cmemUtf8.GetStringLength() + cmemFooter.GetStringLength();
+	size_t nLen = cmemHeader.GetStringLength() + memUtf8.GetStringLength() + cmemFooter.GetStringLength();
 	// 領域確保
 	HGLOBAL hgClipText = ::GlobalAlloc(
 		GMEM_MOVEABLE | GMEM_DDESHARE,
@@ -255,8 +255,8 @@ bool Clipboard::SetHtmlText(const NativeW& cmemBUf)
 	// 確保した領域にデータをコピー
 	char* pszClip = GlobalLockChar(hgClipText);
 	memcpy_raw(pszClip, cmemHeader.GetStringPtr(), cmemHeader.GetStringLength());	// データ
-	memcpy_raw(pszClip + cmemHeader.GetStringLength(), cmemUtf8.GetStringPtr(), cmemUtf8.GetStringLength());	// データ
-	memcpy_raw(pszClip + cmemHeader.GetStringLength() + cmemUtf8.GetStringLength(), cmemFooter.GetStringPtr(), cmemFooter.GetStringLength());	// データ
+	memcpy_raw(pszClip + cmemHeader.GetStringLength(), memUtf8.GetStringPtr(), memUtf8.GetStringLength());	// データ
+	memcpy_raw(pszClip + cmemHeader.GetStringLength() + memUtf8.GetStringLength(), cmemFooter.GetStringPtr(), cmemFooter.GetStringLength());	// データ
 	pszClip[nLen] = '\0';				// 終端ヌル
 	::GlobalUnlock(hgClipText);
 
@@ -267,13 +267,13 @@ bool Clipboard::SetHtmlText(const NativeW& cmemBUf)
 }
 
 /*! テキストを取得する
-	@param [out] cmemBuf 取得したテキストの格納先
+	@param [out] pMemBuf 取得したテキストの格納先
 	@param [in/out] pbColumnSelect 矩形選択形式
 	@param [in/out] pbLineSelect 行選択形式
-	@param [in] cEol HDROP形式のときの改行コード
+	@param [in] eol HDROP形式のときの改行コード
 	@param [in] uGetFormat クリップボード形式
 */
-bool Clipboard::GetText(NativeW* cmemBuf, bool* pbColumnSelect, bool* pbLineSelect, const Eol& cEol, UINT uGetFormat)
+bool Clipboard::GetText(NativeW* pMemBuf, bool* pbColumnSelect, bool* pbLineSelect, const Eol& eol, UINT uGetFormat)
 {
 	if (!m_bOpenResult) {
 		return false;
@@ -319,7 +319,7 @@ bool Clipboard::GetText(NativeW* cmemBuf, bool* pbColumnSelect, bool* pbLineSele
 			BYTE* pData = (BYTE*)::GlobalLock(hSakura);
 			size_t nLength        = *((int*)pData);
 			const wchar_t* szData = (const wchar_t*)(pData + sizeof(int));
-			cmemBuf->SetString(szData, nLength);
+			pMemBuf->SetString(szData, nLength);
 			::GlobalUnlock(hSakura);
 			return true;
 		}
@@ -334,7 +334,7 @@ bool Clipboard::GetText(NativeW* cmemBuf, bool* pbColumnSelect, bool* pbLineSele
 	if (hUnicode) {
 		//DWORD nLen = GlobalSize(hUnicode);
 		wchar_t* szData = GlobalLockWChar(hUnicode);
-		cmemBuf->SetString(szData);
+		pMemBuf->SetString(szData);
 		::GlobalUnlock(hUnicode);
 		return true;
 	}
@@ -354,7 +354,7 @@ bool Clipboard::GetText(NativeW* cmemBuf, bool* pbColumnSelect, bool* pbLineSele
 		cmemSjis.Clean();
 		// '\0'までを取得
 		cmemUni._SetStringLength(auto_strlen(cmemUni.GetStringPtr()));
-		cmemUni.swap(*cmemBuf);
+		cmemUni.swap(*pMemBuf);
 		::GlobalUnlock(hText);
 		return true;
 	}
@@ -373,9 +373,9 @@ bool Clipboard::GetText(NativeW* cmemBuf, bool* pbColumnSelect, bool* pbLineSele
 			for (int nLoop=0; nLoop<nMaxCnt; ++nLoop) {
 				DragQueryFile(hDrop, nLoop, sTmpPath, _countof(sTmpPath) - 1);
 				// 2012.10.05 Moca ANSI版に合わせて最終行にも改行コードをつける
-				cmemBuf->AppendStringT(sTmpPath);
+				pMemBuf->AppendStringT(sTmpPath);
 				if (nMaxCnt > 1) {
-					cmemBuf->AppendString(cEol.GetValue2());
+					pMemBuf->AppendString(eol.GetValue2());
 				}
 			}
 			return true;
@@ -467,7 +467,7 @@ static int GetEndModeByMode(int nMode, int nEndMode)
 }
 
 bool Clipboard::SetClipboradByFormat(
-	const StringRef& cstr,
+	const StringRef& str,
 	const wchar_t* pFormatName,
 	int nMode,
 	int nEndMode
@@ -479,7 +479,7 @@ bool Clipboard::SetClipboradByFormat(
 	}
 	if (nMode == -2) {
 		if (uFormat == CF_UNICODETEXT || uFormat == GetSakuraFormat()) {
-			return SetText(cstr.GetPtr(), cstr.GetLength(), false, false, uFormat);
+			return SetText(str.GetPtr(), str.GetLength(), false, false, uFormat);
 		}
 		return false;
 	}
@@ -489,11 +489,11 @@ bool Clipboard::SetClipboradByFormat(
 	size_t nTextByteLen = 0;
 	if (nMode == -1) {
 		// バイナリモード U+00 - U+ffを0x00 - 0xffにマッピング
-		cmemBuf.AllocBuffer(cstr.GetLength());
-		cmemBuf._SetRawLength(cstr.GetLength());
+		cmemBuf.AllocBuffer(str.GetLength());
+		cmemBuf._SetRawLength(str.GetLength());
 		pBuf = (char*)cmemBuf.GetRawPtr();
-		size_t len = cstr.GetLength();
-		const wchar_t* pMem = cstr.GetPtr();
+		size_t len = str.GetLength();
+		const wchar_t* pMem = str.GetPtr();
 		for (size_t i=0; i<len; ++i) {
 			pBuf[i] = (unsigned char)pMem[i];
 			if (0xff < pMem[i]) {
@@ -507,11 +507,11 @@ bool Clipboard::SetClipboradByFormat(
 			return false;
 		}
 		if (eMode == CODE_UNICODE) {
-			pBuf = (char*)cstr.GetPtr();
-			nTextByteLen = cstr.GetLength() * sizeof(wchar_t);
+			pBuf = (char*)str.GetPtr();
+			nTextByteLen = str.GetLength() * sizeof(wchar_t);
 		}else {
 			CodeBase* pCode = CodeFactory::CreateCodeBase(eMode, GetDllShareData().m_common.m_file.GetAutoMIMEdecode());
-			if (pCode->UnicodeToCode(cstr, &cmemBuf) == CodeConvertResult::Failure) {
+			if (pCode->UnicodeToCode(str, &cmemBuf) == CodeConvertResult::Failure) {
 				return false;
 			}
 			delete pCode;
@@ -586,7 +586,7 @@ bool Clipboard::GetClipboradByFormat(
 	const wchar_t* pFormatName,
 	int nMode,
 	int nEndMode,
-	const Eol& cEol
+	const Eol& eol
 	)
 {
 	mem.SetString(L"");
@@ -600,7 +600,7 @@ bool Clipboard::GetClipboradByFormat(
 	if (nMode == -2) {
 		bool bret = false;
 		if (GetDataType() != -1) {
-			bret = GetText(&mem, NULL, NULL, cEol, uFormat);
+			bret = GetText(&mem, NULL, NULL, eol, uFormat);
 			if (!bret) {
 				mem.SetString(L"");
 			}

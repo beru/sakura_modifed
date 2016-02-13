@@ -161,7 +161,7 @@ void ViewCommander::Command_PASTE(int option)
 	}
 
 	auto& commonSetting = GetDllShareData().m_common;
-	// クリップボードからデータを取得 -> cmemClip, bColumnSelect
+	// クリップボードからデータを取得 -> memClip, bColumnSelect
 	NativeW	cmemClip;
 	bool		bColumnSelect;
 	bool		bLineSelect = false;
@@ -318,9 +318,9 @@ void ViewCommander::Command_PASTEBOX(
 			GetCaret().m_nCaretPosX_Prev = GetCaret().GetCaretLayoutPos().GetX2();
 			// カーソル行が最後の行かつ行末に改行が無く、挿入すべきデータがまだある場合
 			bool bAddLastCR = false;
-			const Layout*	pcLayout;
+			const Layout*	pLayout;
 			LogicInt		nLineLen = LogicInt(0);
-			const wchar_t* pLine = GetDocument()->m_layoutMgr.GetLineStr(GetCaret().GetCaretLayoutPos().GetY2(), &nLineLen, &pcLayout);
+			const wchar_t* pLine = GetDocument()->m_layoutMgr.GetLineStr(GetCaret().GetCaretLayoutPos().GetY2(), &nLineLen, &pLayout);
 
 			if (pLine && 1 <= nLineLen) {
 				if (WCODE::IsLineDelimiter(pLine[nLineLen - 1], bExtEol)) {
@@ -333,7 +333,7 @@ void ViewCommander::Command_PASTEBOX(
 
 			if (bAddLastCR) {
 //				MYTRACE(_T(" カーソル行が最後の行かつ行末に改行が無く、\n挿入すべきデータがまだある場合は行末に改行を挿入。\n"));
-				LayoutInt nInsPosX = m_pCommanderView->LineIndexToColumn(pcLayout, nLineLen);
+				LayoutInt nInsPosX = m_pCommanderView->LineIndexToColumn(pLayout, nLineLen);
 
 				m_pCommanderView->InsertData_CEditView(
 					LayoutPoint(nInsPosX, GetCaret().GetCaretLayoutPos().GetY2()),
@@ -456,7 +456,7 @@ void ViewCommander::Command_INSTEXT(
 	bool			bNoWaitCursor,	// 
 	bool			bLinePaste,		// [in] ラインモード貼り付け
 	bool			bFastMode,		// [in] 高速モード(レイアウト座標は無視する)
-	const LogicRange*	pcSelectLogic	// [in] オプション。高速モードのときの削除範囲ロジック単位
+	const LogicRange*	pSelectLogic	// [in] オプション。高速モードのときの削除範囲ロジック単位
 	)
 {
 	auto& selInfo = m_pCommanderView->GetSelectionInfo();
@@ -517,7 +517,7 @@ void ViewCommander::Command_INSTEXT(
 					bRedraw,
 					m_pCommanderView->m_bDoing_UndoRedo ? NULL : GetOpeBlk(),
 					bFastMode,
-					pcSelectLogic
+					pSelectLogic
 				);
 				if (!bLinePaste)	// 2007.10.04 ryoji
 					goto end_of_func;
@@ -661,65 +661,65 @@ void ViewCommander::Command_COPYLINESWITHLINENUMBER(void)
 
 
 static bool AppendHTMLColor(
-	const ColorAttr& sColorAttrLast, ColorAttr& sColorAttrLast2,
-	const FontAttr& sFontAttrLast, FontAttr& sFontAttrLast2,
+	const ColorAttr& colorAttrLast, ColorAttr& colorAttrLast2,
+	const FontAttr& fontAttrLast, FontAttr& fontAttrLast2,
 	const WCHAR* pAppendStr, int nLen,
-	NativeW& cmemClip
+	NativeW& memClip
 	)
 {
-	if (sFontAttrLast.m_bBoldFont != sFontAttrLast2.m_bBoldFont
-		|| sFontAttrLast.m_bUnderLine != sFontAttrLast2.m_bUnderLine
-		|| sColorAttrLast.m_cTEXT != sColorAttrLast2.m_cTEXT
-		|| sColorAttrLast.m_cBACK != sColorAttrLast2.m_cBACK
+	if (fontAttrLast.m_bBoldFont != fontAttrLast2.m_bBoldFont
+		|| fontAttrLast.m_bUnderLine != fontAttrLast2.m_bUnderLine
+		|| colorAttrLast.m_cTEXT != colorAttrLast2.m_cTEXT
+		|| colorAttrLast.m_cBACK != colorAttrLast2.m_cBACK
 	) {
-		if (sFontAttrLast2.m_bBoldFont) {
-			cmemClip.AppendString(L"</b>", 4);
+		if (fontAttrLast2.m_bBoldFont) {
+			memClip.AppendString(L"</b>", 4);
 		}
-		if (sFontAttrLast2.m_bUnderLine) {
-			if (sColorAttrLast.m_cTEXT != sColorAttrLast2.m_cTEXT
-				|| sColorAttrLast.m_cBACK != sColorAttrLast2.m_cBACK
-				|| sFontAttrLast.m_bUnderLine != sFontAttrLast2.m_bUnderLine
+		if (fontAttrLast2.m_bUnderLine) {
+			if (colorAttrLast.m_cTEXT != colorAttrLast2.m_cTEXT
+				|| colorAttrLast.m_cBACK != colorAttrLast2.m_cBACK
+				|| fontAttrLast.m_bUnderLine != fontAttrLast2.m_bUnderLine
 			) {
-				cmemClip.AppendString(L"</u>", 4);
+				memClip.AppendString(L"</u>", 4);
 			}
 		}
-		if (sColorAttrLast.m_cTEXT != sColorAttrLast2.m_cTEXT
-			|| sColorAttrLast.m_cBACK != sColorAttrLast2.m_cBACK
+		if (colorAttrLast.m_cTEXT != colorAttrLast2.m_cTEXT
+			|| colorAttrLast.m_cBACK != colorAttrLast2.m_cBACK
 		) {
-			if (sColorAttrLast2.m_cTEXT != (COLORREF)-1) {
-				cmemClip.AppendString(L"</span>", 7);
+			if (colorAttrLast2.m_cTEXT != (COLORREF)-1) {
+				memClip.AppendString(L"</span>", 7);
 			}
-			if (sColorAttrLast.m_cTEXT != (COLORREF)-1) {
-				if (sColorAttrLast.m_cTEXT != sColorAttrLast2.m_cTEXT
-					|| sColorAttrLast.m_cBACK != sColorAttrLast2.m_cBACK
+			if (colorAttrLast.m_cTEXT != (COLORREF)-1) {
+				if (colorAttrLast.m_cTEXT != colorAttrLast2.m_cTEXT
+					|| colorAttrLast.m_cBACK != colorAttrLast2.m_cBACK
 				) {
 					WCHAR szColor[60];
-					DWORD dwTEXTColor = (GetRValue(sColorAttrLast.m_cTEXT) << 16) + (GetGValue(sColorAttrLast.m_cTEXT) << 8) + GetBValue(sColorAttrLast.m_cTEXT);
-					DWORD dwBACKColor = (GetRValue(sColorAttrLast.m_cBACK) << 16) + (GetGValue(sColorAttrLast.m_cBACK) << 8) + GetBValue(sColorAttrLast.m_cBACK);
+					DWORD dwTEXTColor = (GetRValue(colorAttrLast.m_cTEXT) << 16) + (GetGValue(colorAttrLast.m_cTEXT) << 8) + GetBValue(colorAttrLast.m_cTEXT);
+					DWORD dwBACKColor = (GetRValue(colorAttrLast.m_cBACK) << 16) + (GetGValue(colorAttrLast.m_cBACK) << 8) + GetBValue(colorAttrLast.m_cBACK);
 					swprintf(szColor, L"<span style=\"color:#%06x;background-color:#%06x\">", dwTEXTColor, dwBACKColor);
-					cmemClip.AppendString(szColor);
+					memClip.AppendString(szColor);
 				}
 			}
 		}
-		if (sFontAttrLast.m_bUnderLine) {
-			if (sColorAttrLast.m_cTEXT != sColorAttrLast2.m_cTEXT
-				|| sColorAttrLast.m_cBACK != sColorAttrLast2.m_cBACK
-				|| sFontAttrLast.m_bUnderLine != sFontAttrLast2.m_bUnderLine
+		if (fontAttrLast.m_bUnderLine) {
+			if (colorAttrLast.m_cTEXT != colorAttrLast2.m_cTEXT
+				|| colorAttrLast.m_cBACK != colorAttrLast2.m_cBACK
+				|| fontAttrLast.m_bUnderLine != fontAttrLast2.m_bUnderLine
 			) {
-				cmemClip.AppendString(L"<u>", 3);
+				memClip.AppendString(L"<u>", 3);
 			}
 		}
-		if (sFontAttrLast.m_bBoldFont) {
-			cmemClip.AppendString(L"<b>", 3);
+		if (fontAttrLast.m_bBoldFont) {
+			memClip.AppendString(L"<b>", 3);
 		}
-		sColorAttrLast2 = sColorAttrLast;
-		sFontAttrLast2  = sFontAttrLast;
+		colorAttrLast2 = colorAttrLast;
+		fontAttrLast2  = fontAttrLast;
 	}
 	NativeW cmemBuf(pAppendStr, nLen);
 	cmemBuf.Replace(L"&", L"&amp;");
 	cmemBuf.Replace(L"<", L"&lt;");
 	cmemBuf.Replace(L">", L"&gt;");
-	cmemClip.AppendNativeData(cmemBuf);
+	memClip.AppendNativeData(cmemBuf);
 	if (0 < nLen) {
 		return WCODE::IsLineDelimiter(
 			pAppendStr[nLen-1],
@@ -845,7 +845,7 @@ void ViewCommander::Command_COPY_COLOR_HTML(bool bLineNumber)
 	NativeW cmemClip;
 	cmemClip.AllocStringBuffer(nBuffSize + 11);
 	{
-		COLORREF cBACK = type.m_ColorInfoArr[COLORIDX_TEXT].m_colorAttr.m_cBACK;
+		COLORREF cBACK = type.m_colorInfoArr[COLORIDX_TEXT].m_colorAttr.m_cBACK;
 		DWORD dwBACKColor = (GetRValue(cBACK) << 16) + (GetGValue(cBACK) << 8) + GetBValue(cBACK);
 		WCHAR szBuf[50];
 		swprintf(szBuf, L"<pre style=\"background-color:#%06x\">", dwBACKColor);
@@ -888,7 +888,7 @@ void ViewCommander::Command_COPY_COLOR_HTML(bool bLineNumber)
 			}
 			int nColorIdx = ToColorInfoArrIndex(pLayout->GetColorTypePrev());
 			if (nColorIdx != -1) {
-				const ColorInfo& info = type.m_ColorInfoArr[nColorIdx];
+				const ColorInfo& info = type.m_colorInfoArr[nColorIdx];
 				sFontAttr = info.m_fontAttr;
 				sColorAttr = info.m_colorAttr;
 			}
@@ -959,7 +959,7 @@ void ViewCommander::Command_COPY_COLOR_HTML(bool bLineNumber)
 				if (bChange) {
 					int nColorIdx = ToColorInfoArrIndex(pStrategy ? pStrategy->GetStrategyColor() : COLORIDX_TEXT);
 					if (nColorIdx != -1) {
-						const ColorInfo& info = type.m_ColorInfoArr[nColorIdx];
+						const ColorInfo& info = type.m_colorInfoArr[nColorIdx];
 						sColorAttrNext = info.m_colorAttr;
 						sFontAttrNext  = info.m_fontAttr;
 					}
@@ -1062,7 +1062,7 @@ void ViewCommander::Command_COPY_COLOR_HTML(bool bLineNumber)
 	@date 2014.12.30 Moca 同じColorStrategyで違う色に切り替わったときに対応
 */
 ColorStrategy* ViewCommander::GetColorStrategyHTML(
-	const StringRef&	cStringLine,
+	const StringRef&	stringLine,
 	int					iLogic,
 	const ColorStrategyPool*	pool,
 	ColorStrategy**	ppStrategy,
@@ -1072,7 +1072,7 @@ ColorStrategy* ViewCommander::GetColorStrategyHTML(
 {
 	// 検索色終了
 	if (*ppStrategyFound) {
-		if ((*ppStrategyFound)->EndColor(cStringLine, iLogic)) {
+		if ((*ppStrategyFound)->EndColor(stringLine, iLogic)) {
 			*ppStrategyFound = NULL;
 			bChange = true;
 		}
@@ -1081,7 +1081,7 @@ ColorStrategy* ViewCommander::GetColorStrategyHTML(
 	// 検索色開始
 	if (!*ppStrategyFound) {
 		Color_Found*  pcFound  = pool->GetFoundStrategy();
-		if (pcFound->BeginColor(cStringLine, iLogic)) {
+		if (pcFound->BeginColor(stringLine, iLogic)) {
 			*ppStrategyFound = pcFound;
 			bChange = true;
 		}
@@ -1089,7 +1089,7 @@ ColorStrategy* ViewCommander::GetColorStrategyHTML(
 
 	// 色終了
 	if (*ppStrategy) {
-		if ((*ppStrategy)->EndColor(cStringLine, iLogic)) {
+		if ((*ppStrategy)->EndColor(stringLine, iLogic)) {
 			*ppStrategy = NULL;
 			bChange = true;
 		}
@@ -1099,7 +1099,7 @@ ColorStrategy* ViewCommander::GetColorStrategyHTML(
 	if (!*ppStrategy) {
 		int size = pool->GetStrategyCount();
 		for (int i=0; i<size; ++i) {
-			if (pool->GetStrategy(i)->BeginColor(cStringLine, iLogic)) {
+			if (pool->GetStrategy(i)->BeginColor(stringLine, iLogic)) {
 				*ppStrategy = pool->GetStrategy(i);
 				bChange = true;
 				break;

@@ -143,13 +143,13 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 public:
 	// Constructors
-	EditView(EditWnd* pcEditWnd);
+	EditView(EditWnd* pEditWnd);
 	~EditView();
 	void Close();
 	// 初期化系メンバ関数
 	BOOL Create(
 		HWND		hwndParent,	//!< 親
-		EditDoc*	pcEditDoc,	//!< 参照するドキュメント
+		EditDoc*	pEditDoc,	//!< 参照するドキュメント
 		int			nMyIndex,	//!< ビューのインデックス
 		BOOL		bShow,		//!< 作成時に表示するかどうか
 		bool		bMiniMap
@@ -177,7 +177,7 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 public:
 	// ドキュメントイベント
-	void OnAfterLoad(const LoadInfo& sLoadInfo);
+	void OnAfterLoad(const LoadInfo& loadInfo);
 	// メッセージディスパッチャ
 	LRESULT DispatchEvent(HWND, UINT, WPARAM, LPARAM);
 	//
@@ -231,7 +231,7 @@ protected:
 
 	// 色分け
 public:
-	Color3Setting GetColorIndex(const Layout* pcLayout, LayoutYInt nLineNum, int nIndex, ColorStrategyInfo* pInfo, bool bPrev = false);	// 指定位置のColorIndexの取得 02/12/13 ai
+	Color3Setting GetColorIndex(const Layout* pLayout, LayoutYInt nLineNum, int nIndex, ColorStrategyInfo* pInfo, bool bPrev = false);	// 指定位置のColorIndexの取得 02/12/13 ai
 	void SetCurrentColor(Graphics& gr, EColorIndexType, EColorIndexType, EColorIndexType);
 	COLORREF GetTextColorByColorInfo2(const ColorInfo& info, const ColorInfo& info2);
 	COLORREF GetBackColorByColorInfo2(const ColorInfo& info, const ColorInfo& info2);
@@ -313,10 +313,10 @@ public:
 public:
 	// 2002/01/19 novice public属性に変更
 	bool GetSelectedDataSimple(NativeW&);// 選択範囲のデータを取得
-	bool GetSelectedDataOne(NativeW& cmemBuf, int nMaxLen);
+	bool GetSelectedDataOne(NativeW& memBuf, int nMaxLen);
 	bool GetSelectedData(NativeW*, bool, const wchar_t*, bool, bool bAddCRLFWhenCopy, EolType neweol = EolType::Unknown);	// 選択範囲のデータを取得
 	int IsCurrentPositionSelected(LayoutPoint ptCaretPos);					// 指定カーソル位置が選択エリア内にあるか
-	int IsCurrentPositionSelectedTEST(const LayoutPoint& ptCaretPos, const LayoutRange& sSelect) const; // 指定カーソル位置が選択エリア内にあるか
+	int IsCurrentPositionSelectedTEST(const LayoutPoint& ptCaretPos, const LayoutRange& select) const; // 指定カーソル位置が選択エリア内にあるか
 	// 2006.07.09 genta 行桁指定によるカーソル移動(選択領域を考慮)
 	void MoveCursorSelecting(LayoutPoint ptWk_CaretPos, bool bSelect, int = _CARETMARGINRATE);
 	void ConvSelectedArea(EFunctionCode);								// 選択エリアのテキストを指定方法で変換
@@ -364,7 +364,7 @@ public:
 	void DeleteData2(
 		const LayoutPoint&	ptCaretPos,
 		LogicInt			nDelLen,
-		NativeW*			pcMem
+		NativeW*			pMem
 	);
 
 	// 現在位置のデータ削除
@@ -385,7 +385,7 @@ public:
 		const wchar_t*		pInsData,			// 挿入するデータ
 		LogicInt			nInsDataLen,		// 挿入するデータの長さ
 		bool				bRedraw,
-		OpeBlk*			pcOpeBlk,
+		OpeBlk*				pOpeBlk,
 		bool				bFastMode = false,
 		const LogicRange*	psDelRangeLogicFast = NULL
 	);
@@ -394,15 +394,15 @@ public:
 		const wchar_t*		pInsData,			// 挿入するデータ
 		LogicInt			nInsDataLen,		// 挿入するデータの長さ
 		bool				bRedraw,
-		OpeBlk*			pcOpeBlk,
+		OpeBlk*				pOpeBlk,
 		bool				bFastMode = false
 	);
 	bool ReplaceData_CEditView3(
-		LayoutRange	delRange,			// 削除範囲。レイアウト単位。
-		OpeLineData*	pcmemCopyOfDeleted,	// 削除されたデータのコピー(NULL可能)
+		LayoutRange		delRange,			// 削除範囲。レイアウト単位。
+		OpeLineData*	pMemCopyOfDeleted,	// 削除されたデータのコピー(NULL可能)
 		OpeLineData*	pInsData,
 		bool			bRedraw,
-		OpeBlk*		pcOpeBlk,
+		OpeBlk*			pOpeBlk,
 		int				nDelSeq,
 		int*			pnInsSeq,
 		bool			bFastMode = false,
@@ -428,7 +428,7 @@ public:
 	//	Jan. 10, 2005 インクリメンタルサーチ
 	bool IsISearchEnabled(int nCommand) const;
 
-	bool KeySearchCore(const NativeW* pcmemCurText);	// 2006.04.10 fon
+	bool KeySearchCore(const NativeW* pMemCurText);	// 2006.04.10 fon
 	bool MiniMapCursorLineTip(POINT* po, RECT* rc, bool* pbHide);
 
 	/*!	EditView::KeyWordHelpSearchDictのコール元指定用ローカルID
@@ -440,7 +440,7 @@ public:
 	};
 	BOOL KeyWordHelpSearchDict(LID_SKH nID, POINT* po, RECT* rc);	// 2006.04.10 fon
 
-	int IsSearchString(const StringRef& cStr, LogicInt, LogicInt*, LogicInt*) const;	// 現在位置が検索文字列に該当するか	// 2002.02.08 hor 引数追加
+	int IsSearchString(const StringRef& str, LogicInt, LogicInt*, LogicInt*) const;	// 現在位置が検索文字列に該当するか	// 2002.02.08 hor 引数追加
 
 	void GetCurrentTextForSearch(NativeW&, bool bStripMaxPath = true, bool bTrimSpaceTab = false);			// 現在カーソル位置単語または選択範囲より検索等のキーを取得
 	bool GetCurrentTextForSearchDlg(NativeW&, bool bGetHistory = false);		// 現在カーソル位置単語または選択範囲より検索等のキーを取得（ダイアログ用） 2006.08.23 ryoji
@@ -480,7 +480,7 @@ public:
 	void PostprocessCommand_hokan(void);
 
 	// 補完ウィンドウを表示する。Ctrl+Spaceや、文字の入力/削除時に呼び出されます。 YAZAKI 2002/03/11
-	void ShowHokanMgr(NativeW& cmemData, bool bAutoDecided);
+	void ShowHokanMgr(NativeW& memData, bool bAutoDecided);
 
 	int HokanSearchByFile(const wchar_t*, bool, vector_ex<std::wstring>&, int); // 2003.06.25 Moca
 

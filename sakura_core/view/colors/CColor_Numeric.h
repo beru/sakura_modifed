@@ -30,9 +30,9 @@ public:
 	Color_Numeric() : m_nCOMMENTEND(0) { }
 	virtual EColorIndexType GetStrategyColor() const { return COLORIDX_DIGIT; }
 	virtual void InitStrategyStatus() { m_nCOMMENTEND = 0; }
-	virtual bool BeginColor(const StringRef& cStr, int nPos);
-	virtual bool EndColor(const StringRef& cStr, int nPos);
-	virtual bool Disp() const { return m_pTypeData->m_ColorInfoArr[COLORIDX_DIGIT].m_bDisp; }
+	virtual bool BeginColor(const StringRef& str, int nPos);
+	virtual bool EndColor(const StringRef& str, int nPos);
+	virtual bool Disp() const { return m_pTypeData->m_colorInfoArr[COLORIDX_DIGIT].m_bDisp; }
 private:
 	int m_nCOMMENTEND;
 };

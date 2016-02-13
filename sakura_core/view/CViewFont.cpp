@@ -42,7 +42,7 @@ void ViewFont::CreateFont(const LOGFONT *plf)
 		lf.lfOutPrecision = outPrec;
 	}
 	m_hFont_HAN = CreateFontIndirect(&lf);
-	m_LogFont = lf;
+	m_logFont = lf;
 
 	// ‘¾šƒtƒHƒ“ƒgì¬
 	lf = *plf;

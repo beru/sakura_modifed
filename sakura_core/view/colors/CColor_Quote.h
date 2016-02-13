@@ -43,11 +43,11 @@ public:
 	virtual LayoutColorInfo* GetStrategyColorInfo() const;
 	virtual void InitStrategyStatus() { m_nCOMMENTEND = -1; }
 	virtual void SetStrategyColorInfo(const LayoutColorInfo*);
-	virtual bool BeginColor(const StringRef& cStr, int nPos);
-	virtual bool EndColor(const StringRef& cStr, int nPos);
-	virtual bool Disp() const { return m_pTypeData->m_ColorInfoArr[this->GetStrategyColor()].m_bDisp; }
+	virtual bool BeginColor(const StringRef& str, int nPos);
+	virtual bool EndColor(const StringRef& str, int nPos);
+	virtual bool Disp() const { return m_pTypeData->m_colorInfoArr[this->GetStrategyColor()].m_bDisp; }
 	
-	static bool IsCppRawString(const StringRef& cStr, int nPos);
+	static bool IsCppRawString(const StringRef& str, int nPos);
 	static int Match_Quote(wchar_t wcQuote, int nPos, const StringRef& lineStr, StringLiteralType escapeType, bool* pbEscapeEnd = NULL);
 	static int Match_QuoteStr(const wchar_t* szQuote, int nQuoteLen, int nPos, const StringRef& lineStr, bool bEscape);
 private:

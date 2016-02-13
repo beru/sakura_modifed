@@ -33,7 +33,7 @@ class MainToolBar {
 public:
 	MainToolBar(EditWnd* pOwner);
 
-	void Create(ImageListMgr* pcIcons);
+	void Create(ImageListMgr* pIcons);
 
 	// 作成・破棄
 	void CreateToolBar(void);		// ツールバー作成

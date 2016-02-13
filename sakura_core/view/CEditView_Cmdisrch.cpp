@@ -373,19 +373,19 @@ void EditView::ISearchExec(bool bNext)
 			nLine = ptTmp.GetY2();
 		}
 	}else if (GetSelectionInfo().IsTextSelected()) {
-		auto& sSelect = GetSelectionInfo().m_select;
+		auto& select = GetSelectionInfo().m_select;
 		switch ((int)m_nISearchDirection * 2 + (bNext ? 1: 0)) {
 		case 2 : // 前方検索で現在位置から検索のとき
 		case 1 : // 後方検索で次を検索のとき
 			// 選択範囲の先頭を検索開始位置に
-			nLine = sSelect.GetFrom().GetY2();
-			nIdx1 = sSelect.GetFrom().GetX2();
+			nLine = select.GetFrom().GetY2();
+			nIdx1 = select.GetFrom().GetX2();
 			break;
 		case 0 : // 前方検索で次を検索
 		case 3 : // 後方検索で現在位置から検索
 			// 選択範囲の後ろから
-			nLine = sSelect.GetTo().GetY2();
-			nIdx1 = sSelect.GetTo().GetX2();
+			nLine = select.GetTo().GetY2();
+			nIdx1 = select.GetTo().GetX2();
 			break;
 		}
 	}else {

@@ -316,9 +316,9 @@ void ViewCommander::Command_UNDO(void)
 
 	MY_RUNNINGTIMER(cRunningTimer, "ViewCommander::Command_UNDO()");
 
-	Ope*		pcOpe = NULL;
+	Ope*		pOpe = NULL;
 
-	OpeBlk*	pcOpeBlk;
+	OpeBlk*	pOpeBlk;
 	int			nOpeBlkNum;
 	bool		bIsModified;
 //	int			nNewLine;	// 挿入された部分の次の位置の行
@@ -335,8 +335,8 @@ void ViewCommander::Command_UNDO(void)
 	// 現在のUndo対象の操作ブロックを返す
 	auto& caret = GetCaret();
 	auto& docEditor = GetDocument()->m_docEditor;
-	if ((pcOpeBlk = docEditor.m_opeBuf.DoUndo(&bIsModified))) {
-		nOpeBlkNum = pcOpeBlk->GetNum();
+	if ((pOpeBlk = docEditor.m_opeBuf.DoUndo(&bIsModified))) {
+		nOpeBlkNum = pOpeBlk->GetNum();
 		bool bDraw = (nOpeBlkNum < 5) && m_pCommanderView->GetDrawSwitch();
 		bool bDrawAll = false;
 		const bool bDrawSwitchOld = m_pCommanderView->SetDrawSwitch(bDraw);	// hor
@@ -352,7 +352,7 @@ void ViewCommander::Command_UNDO(void)
 		const bool bFastMode = (100 < nOpeBlkNum);
 		auto& layoutMgr = GetDocument()->m_layoutMgr;
 		for (int i=nOpeBlkNum-1; i>=0; --i) {
-			Ope* pOpe = pcOpeBlk->GetOpe(i);
+			Ope* pOpe = pOpeBlk->GetOpe(i);
 			if (bFastMode) {
 				caret.MoveCursorFastMode(pOpe->m_ptCaretPos_PHY_After);
 			}else {
@@ -570,8 +570,8 @@ void ViewCommander::Command_REDO(void)
 	}
 	MY_RUNNINGTIMER(cRunningTimer, "ViewCommander::Command_REDO()");
 
-	Ope*		pcOpe = NULL;
-	OpeBlk*	pcOpeBlk;
+	Ope*		pOpe = NULL;
+	OpeBlk*	pOpeBlk;
 	int			nOpeBlkNum;
 //	int			nNewLine;	// 挿入された部分の次の位置の行
 //	int			nNewPos;	// 挿入された部分の次の位置のデータ位置
@@ -588,8 +588,8 @@ void ViewCommander::Command_REDO(void)
 
 	// 現在のRedo対象の操作ブロックを返す
 	auto& caret = GetCaret();
-	if ((pcOpeBlk = docEditor.m_opeBuf.DoRedo(&bIsModified))) {
-		nOpeBlkNum = pcOpeBlk->GetNum();
+	if ((pOpeBlk = docEditor.m_opeBuf.DoRedo(&bIsModified))) {
+		nOpeBlkNum = pOpeBlk->GetNum();
 		bool bDraw = (nOpeBlkNum < 5) && m_pCommanderView->GetDrawSwitch();
 		bool bDrawAll = false;
 		const bool bDrawSwitchOld = m_pCommanderView->SetDrawSwitch(bDraw);	// 2007.07.22 ryoji
@@ -604,28 +604,28 @@ void ViewCommander::Command_REDO(void)
 		const bool bFastMode = (100 < nOpeBlkNum);
 		auto& layoutMgr = GetDocument()->m_layoutMgr;
 		for (int i=0; i<nOpeBlkNum; ++i) {
-			pcOpe = pcOpeBlk->GetOpe(i);
+			pOpe = pOpeBlk->GetOpe(i);
 			if (bFastMode) {
 				if (i == 0) {
 					layoutMgr.LogicToLayout(
-						pcOpe->m_ptCaretPos_PHY_Before,
+						pOpe->m_ptCaretPos_PHY_Before,
 						&ptCaretPos_Before
 					);
 					caret.MoveCursor(ptCaretPos_Before, true);
 				}else {
-					caret.MoveCursorFastMode(pcOpe->m_ptCaretPos_PHY_Before);
+					caret.MoveCursorFastMode(pOpe->m_ptCaretPos_PHY_Before);
 				}
 			}else {
 				layoutMgr.LogicToLayout(
-					pcOpe->m_ptCaretPos_PHY_Before,
+					pOpe->m_ptCaretPos_PHY_Before,
 					&ptCaretPos_Before
 				);
 				caret.MoveCursor(ptCaretPos_Before, (i == 0));
 			}
-			switch (pcOpe->GetCode()) {
+			switch (pOpe->GetCode()) {
 			case OpeCode::Insert:
 				{
-					InsertOpe* pInsertOpe = static_cast<InsertOpe*>(pcOpe);
+					InsertOpe* pInsertOpe = static_cast<InsertOpe*>(pOpe);
 
 					// 2007.10.17 kobake メモリリークしてました。修正。
 					if (0 < pInsertOpe->m_cOpeLineData.size()) {
@@ -633,7 +633,7 @@ void ViewCommander::Command_REDO(void)
 						LayoutRange sRange;
 						sRange.Set(ptCaretPos_Before);
 						LogicRange cSelectLogic;
-						cSelectLogic.Set(pcOpe->m_ptCaretPos_PHY_Before);
+						cSelectLogic.Set(pOpe->m_ptCaretPos_PHY_Before);
 						bDrawAll |= m_pCommanderView->ReplaceData_CEditView3(
 							sRange,
 							NULL,										// 削除されたデータのコピー(NULL可能)
@@ -652,7 +652,7 @@ void ViewCommander::Command_REDO(void)
 				break;
 			case OpeCode::Delete:
 				{
-					DeleteOpe* pDeleteOpe = static_cast<DeleteOpe*>(pcOpe);
+					DeleteOpe* pDeleteOpe = static_cast<DeleteOpe*>(pOpe);
 
 					if (bFastMode) {
 					}else {
@@ -662,7 +662,7 @@ void ViewCommander::Command_REDO(void)
 						);
 					}
 					LogicRange cSelectLogic;
-					cSelectLogic.SetFrom(pcOpe->m_ptCaretPos_PHY_Before);
+					cSelectLogic.SetFrom(pOpe->m_ptCaretPos_PHY_Before);
 					cSelectLogic.SetTo(pDeleteOpe->m_ptCaretPos_PHY_To);
 
 					// データ置換 削除&挿入にも使える
@@ -681,7 +681,7 @@ void ViewCommander::Command_REDO(void)
 				break;
 			case OpeCode::Replace:
 				{
-					ReplaceOpe* pReplaceOpe = static_cast<ReplaceOpe*>(pcOpe);
+					ReplaceOpe* pReplaceOpe = static_cast<ReplaceOpe*>(pOpe);
 
 					if (bFastMode) {
 					}else {
@@ -691,7 +691,7 @@ void ViewCommander::Command_REDO(void)
 						);
 					}
 					LogicRange cSelectLogic;
-					cSelectLogic.SetFrom(pcOpe->m_ptCaretPos_PHY_Before);
+					cSelectLogic.SetFrom(pOpe->m_ptCaretPos_PHY_Before);
 					cSelectLogic.SetTo(pReplaceOpe->m_ptCaretPos_PHY_To);
 
 					// データ置換 削除&挿入にも使える
@@ -720,16 +720,16 @@ void ViewCommander::Command_REDO(void)
 						layoutMgr.CalculateTextWidth();
 					}
 					layoutMgr.LogicToLayout(
-						pcOpe->m_ptCaretPos_PHY_After, &ptCaretPos_After);
+						pOpe->m_ptCaretPos_PHY_After, &ptCaretPos_After);
 					caret.MoveCursor(ptCaretPos_After, true);
 					// 通常モードではReplaceData_CEditViewの中で設定される
 					caret.m_nCaretPosX_Prev = caret.GetCaretLayoutPos().GetX();
 				}else {
-					caret.MoveCursorFastMode(pcOpe->m_ptCaretPos_PHY_After);
+					caret.MoveCursorFastMode(pOpe->m_ptCaretPos_PHY_After);
 				}
 			}else {
 				layoutMgr.LogicToLayout(
-					pcOpe->m_ptCaretPos_PHY_After, &ptCaretPos_After);
+					pOpe->m_ptCaretPos_PHY_After, &ptCaretPos_After);
 				caret.MoveCursor(ptCaretPos_After, (i == nOpeBlkNum - 1));
 			}
 			if (hwndProgress && (i % 100) == 0) {

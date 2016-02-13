@@ -43,7 +43,7 @@ void EditView::SetBracketPairPos(bool flag)
 		return;
 	}
 
-	if (!m_pTypeData->m_ColorInfoArr[COLORIDX_BRACKET_PAIR].m_bDisp) {
+	if (!m_pTypeData->m_colorInfoArr[COLORIDX_BRACKET_PAIR].m_bDisp) {
 		return;
 	}
 
@@ -108,7 +108,7 @@ void EditView::DrawBracketPair(bool bDraw)
 		return;
 	}
 
-	if (!m_pTypeData->m_ColorInfoArr[COLORIDX_BRACKET_PAIR].m_bDisp) {
+	if (!m_pTypeData->m_colorInfoArr[COLORIDX_BRACKET_PAIR].m_bDisp) {
 		return;
 	}
 
@@ -165,33 +165,33 @@ void EditView::DrawBracketPair(bool bDraw)
 			) {	// 選択範囲描画済みで消去対象の括弧が選択範囲内の場合
 				continue;
 			}
-			const Layout* pcLayout;
+			const Layout* pLayout;
 			LogicInt		nLineLen;
-			const wchar_t*	pLine = m_pEditDoc->m_layoutMgr.GetLineStr(ptColLine.GetY2(), &nLineLen, &pcLayout);
+			const wchar_t*	pLine = m_pEditDoc->m_layoutMgr.GetLineStr(ptColLine.GetY2(), &nLineLen, &pLayout);
 			if (pLine) {
 				EColorIndexType nColorIndex;
-				LogicInt	OutputX = LineColumnToIndex(pcLayout, ptColLine.GetX2());
+				LogicInt	OutputX = LineColumnToIndex(pLayout, ptColLine.GetX2());
 				if (bDraw) {
 					nColorIndex = COLORIDX_BRACKET_PAIR;
 				}else {
 					if (IsBracket(pLine, OutputX, LogicInt(1))) {
-						DispPos _sPos(0, 0); // 注意：この値はダミー。CheckChangeColorでの参照位置は不正確
-						ColorStrategyInfo _sInfo;
-						ColorStrategyInfo* pInfo = &_sInfo;
-						pInfo->m_pDispPos = &_sPos;
+						DispPos pos(0, 0); // 注意：この値はダミー。CheckChangeColorでの参照位置は不正確
+						ColorStrategyInfo csInfo;
+						ColorStrategyInfo* pInfo = &csInfo;
+						pInfo->m_pDispPos = &pos;
 						pInfo->m_pView = this;
 
 						// 03/10/24 ai 折り返し行のColorIndexが正しく取得できない問題に対応
 						// 2009.02.07 ryoji GetColorIndex に渡すインデックスの仕様変更（元はこっちの仕様だった模様）
-						Color3Setting cColor = GetColorIndex(pcLayout, ptColLine.GetY2(), OutputX, pInfo);
+						Color3Setting cColor = GetColorIndex(pLayout, ptColLine.GetY2(), OutputX, pInfo);
 						nColorIndex = cColor.eColorIndex2;
 					}else {
 						SetBracketPairPos(false);
 						break;
 					}
 				}
-				TypeSupport    cCuretLineBg(this, COLORIDX_CARETLINEBG);
-				EColorIndexType nColorIndexBg = (cCuretLineBg.IsDisp() && ptColLine.GetY2() == GetCaret().GetCaretLayoutPos().GetY2()
+				TypeSupport    curetLineBg(this, COLORIDX_CARETLINEBG);
+				EColorIndexType nColorIndexBg = (curetLineBg.IsDisp() && ptColLine.GetY2() == GetCaret().GetCaretLayoutPos().GetY2()
 					? COLORIDX_CARETLINEBG
 					: TypeSupport(this, COLORIDX_EVENLINEBG).IsDisp() && ptColLine.GetY2() % 2 == 1
 						? COLORIDX_EVENLINEBG
@@ -213,14 +213,14 @@ void EditView::DrawBracketPair(bool bDraw)
 					LayoutInt charsWidth = NativeW::GetKetaOfChar(pLine, nLineLen, OutputX);
 
 					// 色設定
-					TypeSupport cTextType(this, COLORIDX_TEXT);
-					cTextType.SetGraphicsState_WhileThisObj(gr);
+					TypeSupport textType(this, COLORIDX_TEXT);
+					textType.SetGraphicsState_WhileThisObj(gr);
 					// 2013.05.24 背景色がテキストの背景色と同じならカーソル行の背景色を適用
-					TypeSupport cColorIndexType(this, nColorIndex);
-					TypeSupport cColorIndexBgType(this, nColorIndexBg);
-					TypeSupport* pcColorBack = &cColorIndexType;
-					if (cColorIndexType.GetBackColor() == cTextType.GetBackColor() && nColorIndexBg != COLORIDX_TEXT) {
-						pcColorBack = &cColorIndexBgType;
+					TypeSupport colorIndexType(this, nColorIndex);
+					TypeSupport colorIndexBgType(this, nColorIndexBg);
+					TypeSupport* pColorBack = &colorIndexType;
+					if (colorIndexType.GetBackColor() == textType.GetBackColor() && nColorIndexBg != COLORIDX_TEXT) {
+						pColorBack = &colorIndexBgType;
 					}
 
 					SetCurrentColor(gr, nColorIndex, nColorIndex, nColorIndexBg);
@@ -228,7 +228,7 @@ void EditView::DrawBracketPair(bool bDraw)
 					// DEBUG_TRACE(_T("DrawBracket %d %d ") , ptColLine.y, ptColLine.x);
 					if (1
 						&& IsBkBitmap()
-						&& cTextType.GetBackColor() == pcColorBack->GetBackColor()
+						&& textType.GetBackColor() == pColorBack->GetBackColor()
 					) {
 						bTrans = true;
 						RECT rcChar;
@@ -242,13 +242,13 @@ void EditView::DrawBracketPair(bool bDraw)
 						::SelectObject(hdcBgImg, hBmpOld);
 						::DeleteDC(hdcBgImg);
 					}
-					DispPos sPos(nWidth, nHeight);
-					sPos.InitDrawPos(Point(nLeft, nTop));
-					GetTextDrawer().DispText(gr, &sPos,  &pLine[OutputX], 1, bTrans);
+					DispPos pos(nWidth, nHeight);
+					pos.InitDrawPos(Point(nLeft, nTop));
+					GetTextDrawer().DispText(gr, &pos,  &pLine[OutputX], 1, bTrans);
 					GetTextDrawer().DispNoteLine(gr, nTop, nTop + nHeight, nLeft, nLeft + (Int)charsWidth * nWidth);
 					// 2006.04.30 Moca 対括弧の縦線対応
 					GetTextDrawer().DispVerticalLines(gr, nTop, nTop + nHeight, ptColLine.x, ptColLine.x + charsWidth); // ※括弧が全角幅である場合を考慮
-					cTextType.RewindGraphicsState(gr);
+					textType.RewindGraphicsState(gr);
 				}
 
 				if (1

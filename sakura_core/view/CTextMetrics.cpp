@@ -117,7 +117,7 @@ const int* TextMetrics::GenerateDxArray(
 	int	nHankakuDx,					// [in]  半角文字の文字間隔
 	int	nTabSpace,					// [in]  TAB幅
 	int	nIndent						// [in]  インデント(TAB対応用)
-)
+	)
 {
 	bool bHigh;				// サロゲートペア（上位）
 

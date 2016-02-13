@@ -23,9 +23,9 @@ Color_KeywordSet::Color_KeywordSet()
 
 
 // 2005.01.13 MIK 強調キーワード数追加に伴う配列化
-bool Color_KeywordSet::BeginColor(const StringRef& cStr, int nPos)
+bool Color_KeywordSet::BeginColor(const StringRef& str, int nPos)
 {
-	if (!cStr.IsValid()) {
+	if (!str.IsValid()) {
 		return false; // どうにもできない。
 	}
 
@@ -34,21 +34,21 @@ bool Color_KeywordSet::BeginColor(const StringRef& cStr, int nPos)
 			現在位置からキーワードを抜き出し、そのキーワードが登録単語ならば、色を変える
 	*/
 
-	const ECharKind charKind = WordParse::WhatKindOfChar(cStr.GetPtr(), cStr.GetLength() , nPos);
+	const ECharKind charKind = WordParse::WhatKindOfChar(str.GetPtr(), str.GetLength() , nPos);
 	if (charKind <= CK_SPACE) {
 		return false; // この文字はキーワード対象文字ではない。
 	}
 	if (0 < nPos) {
-		const ECharKind charKindPrev = WordParse::WhatKindOfChar(cStr.GetPtr(), cStr.GetLength() , nPos-1);
+		const ECharKind charKindPrev = WordParse::WhatKindOfChar(str.GetPtr(), str.GetLength() , nPos-1);
 		const ECharKind charKindTwo = WordParse::WhatKindOfTwoChars4KW(charKindPrev, charKind);
 		if (charKindTwo != CK_NULL) {
 			return false;
 		}
 	}
 
-	const int posNextWordHead = NextWordBreak(cStr, nPos);
+	const int posNextWordHead = NextWordBreak(str, nPos);
 	for (int i=0; i<MAX_KEYWORDSET_PER_TYPE; ++i) {
-		if (!m_pTypeData->m_ColorInfoArr[COLORIDX_KEYWORD1 + i].m_bDisp) {
+		if (!m_pTypeData->m_colorInfoArr[COLORIDX_KEYWORD1 + i].m_bDisp) {
 			continue; // 色設定が非表示なのでスキップ。
 		}
 		const int iKwdSet = m_pTypeData->m_nKeyWordSetIdx[i];
@@ -58,7 +58,7 @@ bool Color_KeywordSet::BeginColor(const StringRef& cStr, int nPos)
 		int posWordEnd = nPos; ///< nPos...posWordEndがキーワード。
 		int posWordEndCandidate = posNextWordHead; ///< nPos...posWordEndCandidateはキーワード候補。
 		do {
-			const int ret = GetDllShareData().m_common.m_specialKeyword.m_CKeyWordSetMgr.SearchKeyWord2(iKwdSet, cStr.GetPtr() + nPos, posWordEndCandidate - nPos);
+			const int ret = GetDllShareData().m_common.m_specialKeyword.m_CKeyWordSetMgr.SearchKeyWord2(iKwdSet, str.GetPtr() + nPos, posWordEndCandidate - nPos);
 			if (0 <= ret) {
 				// 登録されたキーワードだった。
 				posWordEnd = posWordEndCandidate;
@@ -78,7 +78,7 @@ bool Color_KeywordSet::BeginColor(const StringRef& cStr, int nPos)
 				// CKeyWordSetMgr::SearchKeyWord2()から想定外の戻り値。
 				break;
 			}
-		}while (posWordEndCandidate < cStr.GetLength() && ((posWordEndCandidate = NextWordBreak(cStr, posWordEndCandidate)) != 0));
+		}while (posWordEndCandidate < str.GetLength() && ((posWordEndCandidate = NextWordBreak(str, posWordEndCandidate)) != 0));
 
 		// nPos...posWordEnd がキーワード。
 		if (nPos < posWordEnd) {
@@ -90,7 +90,7 @@ bool Color_KeywordSet::BeginColor(const StringRef& cStr, int nPos)
 	return false;
 }
 
-bool Color_KeywordSet::EndColor(const StringRef& cStr, int nPos)
+bool Color_KeywordSet::EndColor(const StringRef& str, int nPos)
 {
 	return nPos == this->m_nCOMMENTEND;
 }

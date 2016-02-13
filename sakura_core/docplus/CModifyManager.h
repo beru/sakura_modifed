@@ -38,7 +38,7 @@ class ModifyManager :
 	ModifyManager() {}
 
 public:
-	void OnAfterSave(const SaveInfo& sSaveInfo);
+	void OnAfterSave(const SaveInfo& saveInfo);
 
 };
 

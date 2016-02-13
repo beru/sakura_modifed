@@ -294,8 +294,8 @@ static unsigned __stdcall AbortMacroProc(LPVOID lpParameter)
 		DEBUG_TRACE(_T("AbortMacro: Show Dialog\n"));
 
 		MSG msg;
-		DlgCancel cDlgCancel;
-		HWND hwndDlg = cDlgCancel.DoModeless(G_AppInstance(), NULL, IDD_MACRORUNNING);	// エディタビジーでも表示できるよう、親を指定しない
+		DlgCancel dlgCancel;
+		HWND hwndDlg = dlgCancel.DoModeless(G_AppInstance(), NULL, IDD_MACRORUNNING);	// エディタビジーでも表示できるよう、親を指定しない
 		// ダイアログタイトルとファイル名を設定
 		::SendMessage(hwndDlg, WM_SETTEXT, 0, (LPARAM)GSTR_APPNAME);
 		::SendMessage(GetDlgItem(hwndDlg, IDC_STATIC_CMD),
@@ -305,10 +305,10 @@ static unsigned __stdcall AbortMacroProc(LPVOID lpParameter)
 		for (;;) {
 			DWORD dwResult = MsgWaitForMultipleObjects(1, &pParam->hEvent, FALSE, INFINITE, QS_ALLINPUT);
 			if (dwResult == WAIT_OBJECT_0) {
-				::SendMessage(cDlgCancel.GetHwnd(), WM_CLOSE, 0, 0);
+				::SendMessage(dlgCancel.GetHwnd(), WM_CLOSE, 0, 0);
 			}else if (dwResult == WAIT_OBJECT_0 + 1) {
 				while (::PeekMessage(&msg , NULL , 0 , 0, PM_REMOVE)) {
-					if (cDlgCancel.GetHwnd() && ::IsDialogMessage(cDlgCancel.GetHwnd(), &msg)) {
+					if (dlgCancel.GetHwnd() && ::IsDialogMessage(dlgCancel.GetHwnd(), &msg)) {
 					}else {
 						::TranslateMessage(&msg);
 						::DispatchMessage(&msg);
@@ -318,12 +318,12 @@ static unsigned __stdcall AbortMacroProc(LPVOID lpParameter)
 				// MsgWaitForMultipleObjectsに与えたハンドルのエラー
 				break;
 			}
-			if (!bCanceled && cDlgCancel.IsCanceled()) {
+			if (!bCanceled && dlgCancel.IsCanceled()) {
 				DEBUG_TRACE(_T("Canceld\n"));
 				bCanceled = true;
-				cDlgCancel.CloseDialog(0);
+				dlgCancel.CloseDialog(0);
 			}
-			if (!cDlgCancel.GetHwnd()) {
+			if (!dlgCancel.GetHwnd()) {
 				DEBUG_TRACE(_T("Close\n"));
 				break;
 			}

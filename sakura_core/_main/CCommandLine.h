@@ -28,10 +28,10 @@ class Memory;
 	20020118 aroka
 */
 struct GrepInfo {
-	NativeW			cmGrepKey;				// 検索キー
-	NativeW			cmGrepRep;				// 置換キー
-	CNativeT		cmGrepFile;				// 検索対象ファイル
-	CNativeT		cmGrepFolder;			// 検索対象フォルダ
+	NativeW			mGrepKey;				// 検索キー
+	NativeW			mGrepRep;				// 置換キー
+	CNativeT		mGrepFile;				// 検索対象ファイル
+	CNativeT		mGrepFolder;			// 検索対象フォルダ
 	SearchOption	grepSearchOption;		// 検索オプション
 	bool			bGrepCurFolder;			// カレントディレクトリを維持
 	bool			bGrepStdout;			// 標準出力モード

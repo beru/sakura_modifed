@@ -491,7 +491,7 @@ INT_PTR PropTypesRegex::DispatchEvent(
 						if ((g_ColorAttributeArr[i].fAttribute & COLOR_ATTRIB_NO_TEXT) == 0 &&
 							(g_ColorAttributeArr[i].fAttribute & COLOR_ATTRIB_NO_BACK) == 0
 						) {	// 2006.12.18 ryoji フラグ利用で簡素化
-							if (m_Types.m_ColorInfoArr[i].m_nColorIdx == COLORIDX_REGEX1) {
+							if (m_Types.m_colorInfoArr[i].m_nColorIdx == COLORIDX_REGEX1) {
 								Combo_SetCurSel(hwndCombo, j);	// コンボボックスのデフォルト選択
 								break;
 							}
@@ -512,7 +512,7 @@ INT_PTR PropTypesRegex::DispatchEvent(
 						if ((g_ColorAttributeArr[i].fAttribute & COLOR_ATTRIB_NO_TEXT) == 0 &&
 							(g_ColorAttributeArr[i].fAttribute & COLOR_ATTRIB_NO_BACK) == 0
 						) {	// 2006.12.18 ryoji フラグ利用で簡素化
-							if (_tcscmp(m_Types.m_ColorInfoArr[i].m_szName, szColorIndex) == 0) {
+							if (_tcscmp(m_Types.m_colorInfoArr[i].m_szName, szColorIndex) == 0) {
 								Combo_SetCurSel(hwndCombo, j);
 								break;
 							}
@@ -555,12 +555,12 @@ void PropTypesRegex::SetData(HWND hwndDlg)
 	HWND hwndWork = ::GetDlgItem(hwndDlg, IDC_COMBO_REGEX_COLOR);
 	Combo_ResetContent(hwndWork);  // コンボボックスを空にする
 	for (int i=0; i<COLORIDX_LAST; ++i) {
-		GetDefaultColorInfoName(&m_Types.m_ColorInfoArr[i], i);
+		GetDefaultColorInfoName(&m_Types.m_colorInfoArr[i], i);
 		if ((g_ColorAttributeArr[i].fAttribute & COLOR_ATTRIB_NO_TEXT) == 0 &&
 			(g_ColorAttributeArr[i].fAttribute & COLOR_ATTRIB_NO_BACK) == 0
 		) {	// 2006.12.18 ryoji フラグ利用で簡素化
-			int j = Combo_AddString(hwndWork, m_Types.m_ColorInfoArr[i].m_szName);
-			if (m_Types.m_ColorInfoArr[i].m_nColorIdx == COLORIDX_REGEX1) {
+			int j = Combo_AddString(hwndWork, m_Types.m_colorInfoArr[i].m_szName);
+			if (m_Types.m_colorInfoArr[i].m_nColorIdx == COLORIDX_REGEX1) {
 				Combo_SetCurSel(hwndWork, j);	// コンボボックスのデフォルト選択
 			}
 		}
@@ -607,7 +607,7 @@ void PropTypesRegex::SetDataKeywordList(HWND hwndDlg)
 		lvi.mask     = LVIF_TEXT;
 		lvi.iItem    = i;
 		lvi.iSubItem = 1;
-		lvi.pszText  = m_Types.m_ColorInfoArr[m_Types.m_RegexKeywordArr[i].m_nColorIndex].m_szName;
+		lvi.pszText  = m_Types.m_colorInfoArr[m_Types.m_RegexKeywordArr[i].m_nColorIndex].m_szName;
 		ListView_SetItem(hwndWork, &lvi);
 		for (; *pKeyword!='\0'; ++pKeyword) {
 			;
@@ -653,7 +653,7 @@ int PropTypesRegex::GetData(HWND hwndDlg)
 			// 色指定文字列を番号に変換する
 			m_Types.m_RegexKeywordArr[i].m_nColorIndex = COLORIDX_REGEX1;
 			for (j=0; j<COLORIDX_LAST; ++j) {
-				if (_tcscmp(m_Types.m_ColorInfoArr[j].m_szName, szColorIndex) == 0) {
+				if (_tcscmp(m_Types.m_colorInfoArr[j].m_szName, szColorIndex) == 0) {
 					m_Types.m_RegexKeywordArr[i].m_nColorIndex = j;
 					break;
 				}

@@ -35,7 +35,7 @@ struct RegexKeywordInfo {
 
 
 // 正規表現キーワード検索情報構造体
-typedef struct RegexInfo_t {
+struct RegexInfo {
 	BREGEXP_W* pBregexp;	// BREGEXP_W構造体
 #ifdef USE_PARENT
 #else
@@ -47,7 +47,7 @@ typedef struct RegexInfo_t {
 	int    nLength;		// マッチした長さ
 	int    nHead;		// 先頭のみチェックするか？
 	int    nFlag;		// 色指定のチェックが入っているか？ YES=RK_EMPTY, NO=RK_NOMATCH
-} REGEX_INFO;
+};
 
 
 // 正規表現キーワードクラス
@@ -62,7 +62,7 @@ public:
 	// 行検索開始
 	bool RegexKeyLineStart(void);
 	// 行検索
-	bool RegexIsKeyword(const StringRef& cStr, int nPos, int* nMatchLen, int* nMatchColor);
+	bool RegexIsKeyword(const StringRef& str, int nPos, int* nMatchLen, int* nMatchColor);
 	// タイプ設定
 	bool RegexKeySetTypes(const TypeConfig* pTypesPtr);
 
@@ -86,7 +86,7 @@ private:
 	int				m_nTypeId;					// タイプ設定ID
 	DWORD			m_nCompiledMagicNumber;		// コンパイル済みか？
 	int				m_nRegexKeyCount;			// 現在のキーワード数
-	REGEX_INFO		m_sInfo[MAX_REGEX_KEYWORD];	// キーワード一覧(BREGEXPコンパイル対象)
+	RegexInfo		m_sInfo[MAX_REGEX_KEYWORD];	// キーワード一覧(BREGEXPコンパイル対象)
 #ifdef USE_PARENT
 #else
 	wchar_t			m_keywordList[MAX_REGEX_KEYWORDLISTLEN];

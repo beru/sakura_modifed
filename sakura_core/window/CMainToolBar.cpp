@@ -44,9 +44,9 @@ MainToolBar::MainToolBar(EditWnd* pOwner)
 {
 }
 
-void MainToolBar::Create(ImageListMgr* pcIcons)
+void MainToolBar::Create(ImageListMgr* pIcons)
 {
-	m_pIcons = pcIcons;
+	m_pIcons = pIcons;
 }
 
 // 検索ボックスでの処理

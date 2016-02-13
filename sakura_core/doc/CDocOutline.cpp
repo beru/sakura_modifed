@@ -56,7 +56,7 @@ struct OneRule {
 */
 int DocOutline::ReadRuleFile(
 	const TCHAR*	pszFilename,
-	OneRule*		pcOneRule,
+	OneRule*		pOneRule,
 	int				nMaxCount,
 	bool&			bRegex,
 	std::wstring&	title
@@ -147,15 +147,15 @@ int DocOutline::ReadRuleFile(
 				nLv = _wtoi(p + 4);
 			}
 			while (pszToken) {
-				wcsncpy(pcOneRule[nCount].szMatch, pszToken, 255);
-				wcsncpy_s( pcOneRule[nCount].szText, _countof(pcOneRule[0].szText), pszTextReplace, _TRUNCATE );
-				wcsncpy(pcOneRule[nCount].szGroupName, pszWork, 255);
-				pcOneRule[nCount].szMatch[255] = L'\0';
-				pcOneRule[nCount].szGroupName[255] = L'\0';
-				pcOneRule[nCount].nLv = nLv;
-				pcOneRule[nCount].nLength = wcslen(pcOneRule[nCount].szMatch);
-				pcOneRule[nCount].nRegexOption = regexOption;
-				pcOneRule[nCount].nRegexMode = bRegexRep2 ? 1 : 0; // ï∂éöóÒÇ™ê≥ÇµÇ¢éûÇæÇØReplaceMode
+				wcsncpy(pOneRule[nCount].szMatch, pszToken, 255);
+				wcsncpy_s( pOneRule[nCount].szText, _countof(pOneRule[0].szText), pszTextReplace, _TRUNCATE );
+				wcsncpy(pOneRule[nCount].szGroupName, pszWork, 255);
+				pOneRule[nCount].szMatch[255] = L'\0';
+				pOneRule[nCount].szGroupName[255] = L'\0';
+				pOneRule[nCount].nLv = nLv;
+				pOneRule[nCount].nLength = wcslen(pOneRule[nCount].szMatch);
+				pOneRule[nCount].nRegexOption = regexOption;
+				pOneRule[nCount].nRegexMode = bRegexRep2 ? 1 : 0; // ï∂éöóÒÇ™ê≥ÇµÇ¢éûÇæÇØReplaceMode
 				++nCount;
 				if (bTopDummy || bRegex) {
 					pszToken = NULL;

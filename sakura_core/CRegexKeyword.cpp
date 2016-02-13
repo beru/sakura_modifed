@@ -276,7 +276,7 @@ bool RegexKeyword::RegexKeyCompile(void)
 				 && COLORIDX_REGEX10 >= rp->m_nColorIndex
 				) {
 					// 色指定でチェックが入ってなければ検索しなくてもよい
-					if (m_pTypes->m_ColorInfoArr[rp->m_nColorIndex].m_bDisp) {
+					if (m_pTypes->m_colorInfoArr[rp->m_nColorIndex].m_bDisp) {
 						m_sInfo[i].nFlag = RK_EMPTY;
 					}else {
 						// 正規表現では色指定のチェックを見る。
@@ -356,13 +356,13 @@ bool RegexKeyword::RegexKeyLineStart(void)
 	@note RegexKeyLineStart関数によって初期化されていること。
 */
 bool RegexKeyword::RegexIsKeyword(
-	const StringRef&	cStr,		// [in] 検索対象文字列
+	const StringRef&	str,		// [in] 検索対象文字列
 //	const wchar_t*		pLine,		// [in] １行のデータ
 	int					nPos,		// [in] 検索開始オフセット
 //	int					nLineLen,	// [in] １行の長さ
 	int*				nMatchLen,	// [out] マッチした長さ
 	int*				nMatchColor	// [out] マッチした色番号
-)
+	)
 {
 	MYDBGMSG("RegexIsKeyword")
 
@@ -394,15 +394,15 @@ bool RegexKeyword::RegexIsKeyword(
 			if (m_sInfo[i].nOffset < nPos) {
 #ifdef USE_PARENT
 				int matched = ExistBMatchEx()
-					? BMatchEx(NULL, cStr.GetPtr(), cStr.GetPtr() + nPos, cStr.GetPtr() + cStr.GetLength(), &m_sInfo[i].pBregexp, m_szMsg)
-					: BMatch(NULL,                  cStr.GetPtr() + nPos, cStr.GetPtr() + cStr.GetLength(), &m_sInfo[i].pBregexp, m_szMsg);
+					? BMatchEx(NULL, str.GetPtr(), str.GetPtr() + nPos, str.GetPtr() + str.GetLength(), &m_sInfo[i].pBregexp, m_szMsg)
+					: BMatch(NULL,                  str.GetPtr() + nPos, str.GetPtr() + str.GetLength(), &m_sInfo[i].pBregexp, m_szMsg);
 #else
 				int matched = ExistBMatchEx()
-					? BMatchEx(NULL, cStr.GetPtr(), cStr.GetPtr() + nPos, cStr.GetPtr() + cStr.GetLength(), &m_sInfo[i].pBregexp, m_szMsg);
-					: BMatch(NULL,                  cStr.GetPtr() + nPos, cStr.GetPtr() + cStr.GetLength(), &m_sInfo[i].pBregexp, m_szMsg);
+					? BMatchEx(NULL, str.GetPtr(), str.GetPtr() + nPos, str.GetPtr() + str.GetLength(), &m_sInfo[i].pBregexp, m_szMsg);
+					: BMatch(NULL,                  str.GetPtr() + nPos, str.GetPtr() + str.GetLength(), &m_sInfo[i].pBregexp, m_szMsg);
 #endif
 				if (matched) {
-					m_sInfo[i].nOffset = m_sInfo[i].pBregexp->startp[0] - cStr.GetPtr();
+					m_sInfo[i].nOffset = m_sInfo[i].pBregexp->startp[0] - str.GetPtr();
 					m_sInfo[i].nLength = m_sInfo[i].pBregexp->endp[0] - m_sInfo[i].pBregexp->startp[0];
 					m_sInfo[i].nMatch  = RK_MATCH;
 				

@@ -60,9 +60,9 @@ Figure& FigureManager::GetFigure(const wchar_t* pText, int nTextLen)
 {
 	int size = (int)m_vFiguresDisp.size();
 	for (int i=0; i<size; ++i) {
-		Figure* pcFigure = m_vFiguresDisp[i];
-		if (pcFigure->Match(pText, nTextLen)) {
-			return *pcFigure;
+		Figure* pFigure = m_vFiguresDisp[i];
+		if (pFigure->Match(pText, nTextLen)) {
+			return *pFigure;
 		}
 	}
 

@@ -170,9 +170,13 @@ DlgTagJumpList::~DlgTagJumpList()
 {
 	Empty();
 
-	if (m_pszFileName) free(m_pszFileName);
+	if (m_pszFileName) {
+		free(m_pszFileName);
+	}
 	m_pszFileName = NULL;
-	if (m_pszKeyword) free(m_pszKeyword);
+	if (m_pszKeyword) {
+		free(m_pszKeyword);
+	}
 	m_pszKeyword = NULL;
 
 	StopTimer();
@@ -324,7 +328,7 @@ void DlgTagJumpList::UpdateData(bool bInit)
 		auto_sprintf( tmp, _T("%d"), item->no );
 		ListView_SetItemText(hwndList, nIndex, 2, tmp);
 
-		TCHAR	*p;
+		TCHAR* p;
 		p = GetNameByType(item->type, item->filename);
 		ListView_SetItemText(hwndList, nIndex, 3, p);
 		free(p);
@@ -845,9 +849,13 @@ TCHAR* DlgTagJumpList::GetNameByType(const TCHAR type, const TCHAR* name)
 void DlgTagJumpList::SetFileName(const TCHAR* pszFileName)
 {
 	assert_warning(pszFileName);
-	if (!pszFileName) return;
+	if (!pszFileName) {
+		return;
+	}
 
-	if (m_pszFileName) free(m_pszFileName);
+	if (m_pszFileName) {
+		free(m_pszFileName);
+	}
 
 	m_pszFileName = _tcsdup(pszFileName);
 	
@@ -1123,8 +1131,8 @@ int DlgTagJumpList::find_key_core(
 		ClearPrevFindInfo();
 		return -1;
 	}
-	SortedTagJumpList& cList = *m_pList;
-	const int nCap = cList.GetCapacity();
+	SortedTagJumpList& list = *m_pList;
+	const int nCap = list.GetCapacity();
 	TagFindState state;
 	state.m_nDepth    = 0;
 	state.m_nMatchAll = 0;
@@ -1191,7 +1199,7 @@ int DlgTagJumpList::find_key_core(
 			int  nLines = 0;
 			int  baseDirId = 0;
 			if (state.m_bJumpPath) {
-				baseDirId = cList.AddBaseDir(state.m_szCurPath);
+				baseDirId = list.AddBaseDir(state.m_szCurPath);
 			}
 			state.m_nNextMode = nDefaultNextMode;
 
@@ -1262,11 +1270,11 @@ int DlgTagJumpList::find_key_core(
 							if (state.m_bJumpPath) {
 								// パス親読み替え中は、相対パスだった場合に連結が必要
 								CopyDirDir(baseWork, to_tchar(s[1]), state.m_szCurPath);
-								baseDirId = cList.AddBaseDir(baseWork);
+								baseDirId = list.AddBaseDir(baseWork);
 							}else {
 								auto_strcpy(baseWork, to_tchar(s[1]));
 								AddLastYenFromDirectoryPath(baseWork);
-								baseDirId = cList.AddBaseDir(baseWork);
+								baseDirId = list.AddBaseDir(baseWork);
 							}
 						}
 					}
@@ -1326,8 +1334,8 @@ int DlgTagJumpList::find_key_core(
 				if (cmp == 0) {
 					state.m_nMatchAll++;
 					if (nTop < state.m_nMatchAll) {
-						if (cList.GetCount() < nCap) {
-							cList.AddParamA(s[0], s[1], n2, s[2][0], s[3], state.m_nDepth, baseDirId);
+						if (list.GetCount() < nCap) {
+							list.AddParamA(s[0], s[1], n2, s[2][0], s[3], state.m_nDepth, baseDirId);
 						}else {
 							// 探索打ち切り(次ページでやり直し)
 							m_bNextItem = true;

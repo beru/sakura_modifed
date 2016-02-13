@@ -59,8 +59,8 @@ protected:
 	ComboBoxItemDeleter	m_comboDelText;
 	RecentReplace			m_recentReplace;
 	ComboBoxItemDeleter	m_comboDelText2;
-	FontAutoDeleter		m_cFontText;
-	FontAutoDeleter		m_cFontText2;
+	FontAutoDeleter		m_fontText;
+	FontAutoDeleter		m_fontText2;
 
 	/*
 	||  é¿ëïÉwÉãÉpä÷êî

@@ -26,12 +26,12 @@ VisualProgress::~VisualProgress()
 //                        ロード前後                           //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-void VisualProgress::OnBeforeLoad(LoadInfo* sLoadInfo)
+void VisualProgress::OnBeforeLoad(LoadInfo* loadInfo)
 {
 	_Begin();
 }
 
-void VisualProgress::OnAfterLoad(const LoadInfo& sLoadInfo)
+void VisualProgress::OnAfterLoad(const LoadInfo& loadInfo)
 {
 	_End();
 }
@@ -41,7 +41,7 @@ void VisualProgress::OnAfterLoad(const LoadInfo& sLoadInfo)
 //                        セーブ前後                           //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-void VisualProgress::OnBeforeSave(const SaveInfo& sSaveInfo)
+void VisualProgress::OnBeforeSave(const SaveInfo& saveInfo)
 {
 	_Begin();
 }

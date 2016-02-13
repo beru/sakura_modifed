@@ -111,13 +111,13 @@ const char* GetNextLine(
 	int				nDataLen,
 	int*			pnLineLen,
 	int*			pnBgn,
-	Eol*			pcEol
+	Eol*			pEol
 	)
 {
 	int nBgn = *pnBgn;
 
 	//	May 15, 2000 genta
-	pcEol->SetType(EolType::None);
+	pEol->SetType(EolType::None);
 	if (*pnBgn >= nDataLen) {
 		return NULL;
 	}
@@ -126,11 +126,11 @@ const char* GetNextLine(
 		// 改行コードがあった
 		if (pData[i] == '\n' || pData[i] == '\r') {
 			// 行終端子の種類を調べる
-			pcEol->SetTypeByString(&pData[i], nDataLen - i);
+			pEol->SetTypeByString(&pData[i], nDataLen - i);
 			break;
 		}
 	}
-	*pnBgn = i + pcEol->GetLen();
+	*pnBgn = i + pEol->GetLen();
 	*pnLineLen = i - nBgn;
 	return &pData[nBgn];
 }
@@ -145,13 +145,13 @@ const wchar_t* GetNextLineW(
 	int				nDataLen,	//!< [in]	検索文字列の文字数
 	int*			pnLineLen,	//!< [out]	1行の文字数を返すただしEOLは含まない
 	int*			pnBgn,		//!< [i/o]	検索文字列のオフセット位置
-	Eol*			pcEol,		//!< [out]	EOL
+	Eol*			pEol,		//!< [out]	EOL
 	bool			bExtEol
 	)
 {
 	int nBgn = *pnBgn;
 
-	pcEol->SetType(EolType::None);
+	pEol->SetType(EolType::None);
 	if (*pnBgn >= nDataLen) {
 		return NULL;
 	}
@@ -160,11 +160,11 @@ const wchar_t* GetNextLineW(
 		// 改行コードがあった
 		if (WCODE::IsLineDelimiter(pData[i], bExtEol)) {
 			// 行終端子の種類を調べる
-			pcEol->SetTypeByString(&pData[i], nDataLen - i);
+			pEol->SetTypeByString(&pData[i], nDataLen - i);
 			break;
 		}
 	}
-	*pnBgn = i + pcEol->GetLen();
+	*pnBgn = i + pEol->GetLen();
 	*pnLineLen = i - nBgn;
 	return &pData[nBgn];
 }
@@ -205,12 +205,12 @@ const wchar_t* GetNextLineWB(
 	int			nDataLen,	//!< [in]	検索文字列の文字数
 	int*		pnLineLen,	//!< [out]	1行の文字数を返すただしEOLは含まない
 	int*		pnBgn,		//!< [i/o]	検索文字列のオフセット位置
-	Eol*		pcEol		//!< [i/o]	EOL
+	Eol*		pEol		//!< [i/o]	EOL
 	)
 {
 	int nBgn = *pnBgn;
 
-	pcEol->SetType(EolType::None);
+	pEol->SetType(EolType::None);
 	if (*pnBgn >= nDataLen) {
 		return NULL;
 	}
@@ -219,11 +219,11 @@ const wchar_t* GetNextLineWB(
 		// 改行コードがあった
 		if (pData[i] == (wchar_t)0x0a00 || pData[i] == (wchar_t)0x0d00) {
 			// 行終端子の種類を調べる
-			pcEol->SetType(GetEOLTypeUniBE(&pData[i], nDataLen - i));
+			pEol->SetType(GetEOLTypeUniBE(&pData[i], nDataLen - i));
 			break;
 		}
 	}
-	*pnBgn = i + pcEol->GetLen();
+	*pnBgn = i + pEol->GetLen();
 	*pnLineLen = i - nBgn;
 	return &pData[nBgn];
 }
@@ -274,7 +274,7 @@ int LimitStringLengthW(
 	const wchar_t*	pszData,		//!< [in]
 	int				nDataLength,	//!< [in]
 	int				nLimitLength,	//!< [in]
-	NativeW&		cmemDes			//!< [out]
+	NativeW&		memDes			//!< [out]
 	)
 {
 	int n = nDataLength;
@@ -287,7 +287,7 @@ int LimitStringLengthW(
 		}
 		n = i;
 	}
-	cmemDes.SetString(pszData, n);
+	memDes.SetString(pszData, n);
 	return n;
 }
 

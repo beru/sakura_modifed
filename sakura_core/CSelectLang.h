@@ -111,7 +111,7 @@ protected:
 
 	static LoadStrBuffer m_acLoadStrBufferTemp[4];		// 文字列読み込みバッファの配列（ResourceString::LoadStringSt() が使用する）
 	static int m_nDataTempArrayIndex;					// 最後に使用したバッファのインデックス（ResourceString::LoadStringSt() が使用する）
-	LoadStrBuffer m_cLoadStrBuffer;					// 文字列読み込みバッファ（ResourceString::LoadString() が使用する）
+	LoadStrBuffer m_loadStrBuffer;					// 文字列読み込みバッファ（ResourceString::LoadString() が使用する）
 
 public:
 	/*
@@ -125,9 +125,9 @@ public:
 	/*
 	||  Attributes & Operations
 	*/
-	/*virtual*/ LPCTSTR GetStringPtr() const { return m_cLoadStrBuffer.GetStringPtr(); }	// 読み込んだ文字列のポインタを返す
-//	/*virtual*/ int GetBufferSize() const { return m_cLoadStrBuffer.GetBufferSize(); }		// 読み込みバッファのサイズ（TCHAR単位）を返す
-	/*virtual*/ int GetStringLength() const { return m_cLoadStrBuffer.GetStringLength(); }	// 読み込んだ文字数（TCHAR単位）を返す
+	/*virtual*/ LPCTSTR GetStringPtr() const { return m_loadStrBuffer.GetStringPtr(); }	// 読み込んだ文字列のポインタを返す
+//	/*virtual*/ int GetBufferSize() const { return m_loadStrBuffer.GetBufferSize(); }		// 読み込みバッファのサイズ（TCHAR単位）を返す
+	/*virtual*/ int GetStringLength() const { return m_loadStrBuffer.GetStringLength(); }	// 読み込んだ文字数（TCHAR単位）を返す
 
 	static LPCTSTR LoadStringSt( UINT uid );			// 静的バッファに文字列リソースを読み込む（各国語メッセージリソース対応）
 	/*virtual*/ LPCTSTR Load( UINT uid );			// 文字列リソースを読み込む（各国語メッセージリソース対応）

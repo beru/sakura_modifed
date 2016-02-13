@@ -115,7 +115,7 @@ BOOL DlgGrepReplace::OnInitDialog(
 
 	HFONT hFontOld = (HFONT)::SendMessage(GetItemHwnd( IDC_COMBO_TEXT2 ), WM_GETFONT, 0, 0);
 	HFONT hFont = SetMainFont(GetItemHwnd( IDC_COMBO_TEXT2 ));
-	m_cFontText2.SetFont(hFontOld, hFont, GetItemHwnd( IDC_COMBO_TEXT2 ));
+	m_fontText2.SetFont(hFontOld, hFont, GetItemHwnd( IDC_COMBO_TEXT2 ));
 
 	return DlgGrep::OnInitDialog( hwndDlg, wParam, lParam );
 }
@@ -123,7 +123,7 @@ BOOL DlgGrepReplace::OnInitDialog(
 
 BOOL DlgGrepReplace::OnDestroy()
 {
-	m_cFontText2.ReleaseOnDestroy();
+	m_fontText2.ReleaseOnDestroy();
 	return DlgGrep::OnDestroy();
 }
 

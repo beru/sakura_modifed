@@ -460,10 +460,10 @@ bool AppNodeGroupHandle::SendMessageToAllEditors(
 void AppNodeManager::ResetGroupId()
 {
 	DLLSHAREDATA* pShare = &GetDllShareData();
-	auto& sNodes = pShare->m_nodes;
-	int nGroup = ++sNodes.m_nGroupSequences;
-	for (int i=0; i<sNodes.m_nEditArrNum; ++i) {
-		auto& node = sNodes.m_pEditArr[i];
+	auto& nodes = pShare->m_nodes;
+	int nGroup = ++nodes.m_nGroupSequences;
+	for (int i=0; i<nodes.m_nEditArrNum; ++i) {
+		auto& node = nodes.m_pEditArr[i];
 		if (IsSakuraMainWindow(node.m_hWnd)) {
 			node.m_nGroup = nGroup;
 		}
@@ -482,9 +482,9 @@ void AppNodeManager::ResetGroupId()
 EditNode* AppNodeManager::GetEditNode(HWND hWnd)
 {
 	DLLSHAREDATA* pShare = &GetDllShareData();
-	auto& sNodes = pShare->m_nodes;
-	for (int i=0; i<sNodes.m_nEditArrNum; ++i) {
-		auto& node = sNodes.m_pEditArr[i];
+	auto& nodes = pShare->m_nodes;
+	for (int i=0; i<nodes.m_nEditArrNum; ++i) {
+		auto& node = nodes.m_pEditArr[i];
 		if (hWnd == node.m_hWnd) {
 			if (IsSakuraMainWindow(node.m_hWnd)) {
 				return &node;
@@ -546,27 +546,27 @@ int AppNodeManager::GetOpenedWindowArr(EditNode** ppEditNode, BOOL bSort, BOOL b
 int AppNodeManager::_GetOpenedWindowArrCore(EditNode** ppEditNode, BOOL bSort, BOOL bGSort/* = FALSE */)
 {
 	DLLSHAREDATA* pShare = &GetDllShareData();
-	auto& sNodes = pShare->m_nodes;
+	auto& nodes = pShare->m_nodes;
 
 	// 編集ウィンドウ数を取得する。
 	*ppEditNode = nullptr;
-	if (sNodes.m_nEditArrNum <= 0)
+	if (nodes.m_nEditArrNum <= 0)
 		return 0;
 
 	// 編集ウィンドウリスト格納領域を作成する。
-	*ppEditNode = new EditNode[sNodes.m_nEditArrNum];
+	*ppEditNode = new EditNode[nodes.m_nEditArrNum];
 	if (!(*ppEditNode))
 		return 0;
 
 	// 拡張リストを作成する
 	// ソート処理用の拡張リスト
-	std::vector<EditNodeEx> nodes(sNodes.m_nEditArrNum);
-	EditNodeEx*	pNode = &nodes[0];
+	std::vector<EditNodeEx> nodesEx(nodes.m_nEditArrNum);
+	EditNodeEx*	pNode = &nodesEx[0];
 
 	// 拡張リストの各要素に編集ウィンドウリストの各要素へのポインタを格納する
 	int nRowNum = 0;	// 編集ウィンドウ数
-	for (int i=0; i<sNodes.m_nEditArrNum; ++i) {
-		auto& node = sNodes.m_pEditArr[i];
+	for (int i=0; i<nodes.m_nEditArrNum; ++i) {
+		auto& node = nodes.m_pEditArr[i];
 		if (IsSakuraMainWindow(node.m_hWnd)) {
 			pNode[nRowNum].p = &node;	// ポインタ格納
 			pNode[nRowNum].nGroupMru = -1;	// グループ単位のMRU番号初期化
@@ -612,7 +612,7 @@ int AppNodeManager::_GetOpenedWindowArrCore(EditNode** ppEditNode, BOOL bSort, B
 
 		// インデックスを付ける。
 		// このインデックスは m_pEditArr の配列番号です。
-		(*ppEditNode)[i].m_nIndex = pNode[i].p - sNodes.m_pEditArr;	// ポインタ減算＝配列番号
+		(*ppEditNode)[i].m_nIndex = pNode[i].p - nodes.m_pEditArr;	// ポインタ減算＝配列番号
 	}
 
 	return nRowNum;
@@ -655,24 +655,24 @@ bool AppNodeManager::ReorderTab(HWND hwndSrc, HWND hwndDst)
 	int	nIndex;
 
 	nArr0 = p[nDstTab].m_nIndex;
-	auto& sNodes = pShare->m_nodes;
-	nIndex = sNodes.m_pEditArr[nArr0].m_nIndex;
+	auto& nodes = pShare->m_nodes;
+	nIndex = nodes.m_pEditArr[nArr0].m_nIndex;
 	if (nSrcTab < nDstTab) {
 		// タブ左方向ローテート
 		for (int i=nDstTab-1; i>=nSrcTab; --i) {
 			nArr1 = p[i].m_nIndex;
-			sNodes.m_pEditArr[nArr0].m_nIndex = sNodes.m_pEditArr[nArr1].m_nIndex;
+			nodes.m_pEditArr[nArr0].m_nIndex = nodes.m_pEditArr[nArr1].m_nIndex;
 			nArr0 = nArr1;
 		}
 	}else {
 		// タブ右方向ローテート
 		for (int i=nDstTab+1; i<=nSrcTab; ++i) {
 			nArr1 = p[i].m_nIndex;
-			sNodes.m_pEditArr[nArr0].m_nIndex = sNodes.m_pEditArr[nArr1].m_nIndex;
+			nodes.m_pEditArr[nArr0].m_nIndex = nodes.m_pEditArr[nArr1].m_nIndex;
 			nArr0 = nArr1;
 		}
 	}
-	sNodes.m_pEditArr[nArr0].m_nIndex = nIndex;
+	nodes.m_pEditArr[nArr0].m_nIndex = nIndex;
 
 	if (p) {
 		delete[] p;
@@ -744,9 +744,9 @@ bool AppNodeManager::IsSameGroup(HWND hWnd1, HWND hWnd2)
 		return true;
 	}
 	auto* pNodeMgr = AppNodeManager::getInstance();
-	AppNodeGroupHandle cGroup1 = pNodeMgr->GetEditNode(hWnd1)->GetGroup();
-	AppNodeGroupHandle cGroup2 = pNodeMgr->GetEditNode(hWnd2)->GetGroup();
-	if (cGroup1.IsValidGroup() && cGroup1 == cGroup2) {
+	AppNodeGroupHandle group1 = pNodeMgr->GetEditNode(hWnd1)->GetGroup();
+	AppNodeGroupHandle group2 = pNodeMgr->GetEditNode(hWnd2)->GetGroup();
+	if (group1.IsValidGroup() && group1 == group2) {
 		return true;
 	}
 

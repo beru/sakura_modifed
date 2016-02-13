@@ -133,7 +133,7 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	
 	//! 同一の文字列ならtrue
-	static bool IsEqual(const NativeW& cmem1, const NativeW& cmem2);
+	static bool IsEqual(const NativeW& mem1, const NativeW& mem2);
 
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -197,8 +197,8 @@ public:
 	static const wchar_t* GetCharNext(const wchar_t* pData, int nDataLen, const wchar_t* pDataCurrent); //!< ポインタで示した文字の次にある文字の位置を返します
 	static const wchar_t* GetCharPrev(const wchar_t* pData, int nDataLen, const wchar_t* pDataCurrent); //!< ポインタで示した文字の直前にある文字の位置を返します
 
-	static LayoutInt GetKetaOfChar(const StringRef& cStr, int nIdx) { //!< 指定した位置の文字が半角何個分かを返す
-		return GetKetaOfChar(cStr.GetPtr(), cStr.GetLength(), nIdx);
+	static LayoutInt GetKetaOfChar(const StringRef& str, int nIdx) { //!< 指定した位置の文字が半角何個分かを返す
+		return GetKetaOfChar(str.GetPtr(), str.GetLength(), nIdx);
 	}
 };
 

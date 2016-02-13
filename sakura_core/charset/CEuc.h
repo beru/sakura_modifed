@@ -30,15 +30,15 @@
 class Euc : public CodeBase {
 public:
 	// CodeBaseインターフェース
-	CodeConvertResult CodeToUnicode(const Memory& cSrc, NativeW* pDst){ return EUCToUnicode(cSrc, pDst); }	//!< 特定コード → UNICODE    変換
-	CodeConvertResult UnicodeToCode(const NativeW& cSrc, Memory* pDst){ return UnicodeToEUC(cSrc, pDst); }	//!< UNICODE    → 特定コード 変換
+	CodeConvertResult CodeToUnicode(const Memory& src, NativeW* pDst){ return EUCToUnicode(src, pDst); }	//!< 特定コード → UNICODE    変換
+	CodeConvertResult UnicodeToCode(const NativeW& src, Memory* pDst){ return UnicodeToEUC(src, pDst); }	//!< UNICODE    → 特定コード 変換
 // GetEolはCodeBaseに移動	2010/6/13 Uchi
-	CodeConvertResult UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR* pDst, const CommonSetting_StatusBar* psStatusbar);			//!< UNICODE → Hex 変換
+	CodeConvertResult UnicodeToHex(const wchar_t* pSrc, const int iSLen, TCHAR* pDst, const CommonSetting_StatusBar* psStatusbar);			//!< UNICODE → Hex 変換
 
 public:
 	// 実装
-	static CodeConvertResult EUCToUnicode(const Memory& cSrc, NativeW* pDstMem);		// EUC       → Unicodeコード変換  //2007.08.13 kobake 追加
-	static CodeConvertResult UnicodeToEUC(const NativeW& cSrc, Memory* pDstMem);		// Unicode   → EUCコード変換
+	static CodeConvertResult EUCToUnicode(const Memory& src, NativeW* pDstMem);		// EUC       → Unicodeコード変換  //2007.08.13 kobake 追加
+	static CodeConvertResult UnicodeToEUC(const NativeW& src, Memory* pDstMem);		// Unicode   → EUCコード変換
 
 public:
 	// 実装

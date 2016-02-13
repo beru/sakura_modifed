@@ -178,19 +178,19 @@ public:
 
 	// ロード前後
 	CallbackResultType NotifyCheckLoad	(LoadInfo* pLoadInfo);
-	void NotifyBeforeLoad			(LoadInfo* sLoadInfo);
-	LoadResultType NotifyLoad		(const LoadInfo& sLoadInfo);
+	void NotifyBeforeLoad			(LoadInfo* pLoadInfo);
+	LoadResultType NotifyLoad		(const LoadInfo& loadInfo);
 	void NotifyLoading				(int nPer);
-	void NotifyAfterLoad			(const LoadInfo& sLoadInfo);
+	void NotifyAfterLoad			(const LoadInfo& loadInfo);
 	void NotifyFinalLoad			(LoadResultType eLoadResult);
 
 	// セーブ前後
 	CallbackResultType NotifyCheckSave	(SaveInfo* pSaveInfo);
 	CallbackResultType NotifyPreBeforeSave(SaveInfo* pSaveInfo);
-	void NotifyBeforeSave			(const SaveInfo& sSaveInfo);
-	void NotifySave					(const SaveInfo& sSaveInfo);
+	void NotifyBeforeSave			(const SaveInfo& saveInfo);
+	void NotifySave					(const SaveInfo& saveInfo);
 	void NotifySaving				(int nPer);
-	void NotifyAfterSave			(const SaveInfo& sSaveInfo);
+	void NotifyAfterSave			(const SaveInfo& saveInfo);
 	void NotifyFinalSave			(SaveResultType eSaveResult);
 
 	// クローズ前後
@@ -209,19 +209,19 @@ public:
 	// -- -- 各種イベント -- -- //
 	// ロード前後
 	virtual CallbackResultType	OnCheckLoad	(LoadInfo* pLoadInfo)		{ return CallbackResultType::Continue; }	// 本当にロードを行うかの判定を行う
-	virtual void			OnBeforeLoad(LoadInfo* sLoadInfo)			{ return ; }	// ロード事前処理
-	virtual LoadResultType		OnLoad		(const LoadInfo& sLoadInfo) { return LoadResultType::NoImplement; }	// ロード処理
+	virtual void			OnBeforeLoad(LoadInfo* loadInfo)			{ return ; }	// ロード事前処理
+	virtual LoadResultType		OnLoad		(const LoadInfo& loadInfo)	{ return LoadResultType::NoImplement; }	// ロード処理
 	virtual void			OnLoading	(int nPer)						{ return ; }	// ロード処理の経過情報を受信
-	virtual void			OnAfterLoad	(const LoadInfo& sLoadInfo) 	{ return ; }	// ロード事後処理
+	virtual void			OnAfterLoad	(const LoadInfo& loadInfo) 		{ return ; }	// ロード事後処理
 	virtual void			OnFinalLoad	(LoadResultType eLoadResult)	{ return ; }	// ロードフローの最後に必ず呼ばれる
 
 	// セーブ前後
 	virtual CallbackResultType OnCheckSave	(SaveInfo* pSaveInfo)		{ return CallbackResultType::Continue; }	// 本当にセーブを行うかの判定を行う
 	virtual CallbackResultType OnPreBeforeSave	(SaveInfo* pSaveInfo)	{ return CallbackResultType::Continue; }	// セーブ事前おまけ処理 ($$ 仮)
-	virtual void			OnBeforeSave(const SaveInfo& sSaveInfo)		{ return ; }	// セーブ事前処理
-	virtual void			OnSave		(const SaveInfo& sSaveInfo)		{ return ; }	// セーブ処理
+	virtual void			OnBeforeSave(const SaveInfo& saveInfo)		{ return ; }	// セーブ事前処理
+	virtual void			OnSave		(const SaveInfo& saveInfo)		{ return ; }	// セーブ処理
 	virtual void			OnSaving	(int nPer)						{ return ; }	// セーブ処理の経過情報を受信
-	virtual void			OnAfterSave	(const SaveInfo& sSaveInfo)		{ return ; }	// セーブ事後処理
+	virtual void			OnAfterSave	(const SaveInfo& saveInfo)		{ return ; }	// セーブ事後処理
 	virtual void			OnFinalSave	(SaveResultType eSaveResult)	{ return ; }	// セーブフローの最後に必ず呼ばれる
 
 	// クローズ前後

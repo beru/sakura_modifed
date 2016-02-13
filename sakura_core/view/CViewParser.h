@@ -32,11 +32,11 @@ public:
 	virtual ~ViewParser() {}
 
 	// カーソル直前の単語を取得
-	int GetLeftWord(NativeW* pcmemWord, int nMaxWordLen) const;
+	int GetLeftWord(NativeW* pMemWord, int nMaxWordLen) const;
 
 	// キャレット位置の単語を取得
 	// 2006.03.24 fon
-	bool GetCurrentWord(NativeW* pcmemWord) const;
+	bool GetCurrentWord(NativeW* pMemWord) const;
 
 private:
 	const EditView* m_pEditView;

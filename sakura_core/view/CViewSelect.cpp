@@ -12,8 +12,9 @@
 #include "env/DLLSHAREDATA.h"
 #include "types/CTypeSupport.h"
 
-ViewSelect::ViewSelect(EditView* pcEditView)
-: m_pEditView(pcEditView)
+ViewSelect::ViewSelect(EditView* pEditView)
+	:
+	m_pEditView(pEditView)
 {
 	m_bSelectingLock   = false;	// 選択状態のロック
 	m_bBeginSelect     = false;		// 範囲選択中
@@ -352,7 +353,7 @@ void ViewSelect::DrawSelectArea2(HDC hdc) const
 		HRGN hrgnDraw = ::CreateRectRgnIndirect(&rcNew2);
 		{
 			// 旧選択矩形と新選択矩形のリージョンを結合し､ 重なりあう部分だけを除去します
-			if (NULLREGION != ::CombineRgn(hrgnDraw, hrgnOld, hrgnNew, RGN_XOR)) {
+			if (::CombineRgn(hrgnDraw, hrgnOld, hrgnNew, RGN_XOR) != NULLREGION) {
 
 				// 2002.02.16 hor
 				// 結合後のエリアにEOFが含まれる場合はEOF以降の部分を除去します
@@ -486,24 +487,24 @@ void ViewSelect::DrawSelectAreaLine(
 	HDC					hdc,		// [in] 描画領域のDevice Context Handle
 	LayoutInt			nLineNum,	// [in] 描画対象行(レイアウト行)
 	const LayoutRange&	range		// [in] 選択範囲(レイアウト単位)
-) const
+	) const
 {
 	EditView const * const pView = m_pEditView;
 	bool bCompatBMP = pView->m_hbmpCompatBMP && hdc != pView->m_hdcCompatDC;
 
 	const LayoutMgr& layoutMgr = pView->m_pEditDoc->m_layoutMgr;
-	const Layout* pcLayout = layoutMgr.SearchLineByLayoutY(nLineNum);
+	const Layout* pLayout = layoutMgr.SearchLineByLayoutY(nLineNum);
 	LayoutRange lineArea;
-	GetSelectAreaLineFromRange(lineArea, nLineNum, pcLayout, range);
+	GetSelectAreaLineFromRange(lineArea, nLineNum, pLayout, range);
 	LayoutInt nSelectFrom = lineArea.GetFrom().GetX2();
 	LayoutInt nSelectTo = lineArea.GetTo().GetX2();
 	if (nSelectFrom == INT_MAX || nSelectTo == INT_MAX) {
 		LayoutInt nPosX = LayoutInt(0);
-		MemoryIterator it = MemoryIterator(pcLayout, layoutMgr.GetTabSpace());
+		MemoryIterator it = MemoryIterator(pLayout, layoutMgr.GetTabSpace());
 		
 		while (!it.end()) {
 			it.scanNext();
-			if (it.getIndex() + it.getIndexDelta() > pcLayout->GetLengthWithoutEOL()) {
+			if (it.getIndex() + it.getIndexDelta() > pLayout->GetLengthWithoutEOL()) {
 				nPosX ++;
 				break;
 			}
@@ -561,7 +562,7 @@ void ViewSelect::DrawSelectAreaLine(
 void ViewSelect::GetSelectAreaLineFromRange(
 	LayoutRange& ret,
 	LayoutInt nLineNum,
-	const Layout* pcLayout,
+	const Layout* pLayout,
 	const LayoutRange&	range
 	) const
 {
@@ -591,10 +592,10 @@ void ViewSelect::GetSelectAreaLineFromRange(
 					nSelectFrom = range.GetFrom().GetX2();
 					nSelectTo   = nX_Layout;
 				}else if (nLineNum == range.GetTo().GetY2()) {
-					nSelectFrom = pcLayout ? pcLayout->GetIndent() : LayoutInt(0);
+					nSelectFrom = pLayout ? pLayout->GetIndent() : LayoutInt(0);
 					nSelectTo   = range.GetTo().GetX2();
 				}else {
-					nSelectFrom = pcLayout ? pcLayout->GetIndent() : LayoutInt(0);
+					nSelectFrom = pLayout ? pLayout->GetIndent() : LayoutInt(0);
 					nSelectTo   = nX_Layout;
 				}
 			}
@@ -665,7 +666,7 @@ void ViewSelect::PrintSelectionInfoMsg() const
 		int select_sum = 0;	//	バイト数合計
 		const wchar_t* pLine;	//	データを受け取る
 		LogicInt	nLineLen;		//	行の長さ
-		const Layout*	pcLayout;
+		const Layout*	pLayout;
 		ViewSelect* thiz = const_cast<ViewSelect*>(this);	// const外しthis
 
 		// 共通設定・選択文字数を文字単位ではなくバイト単位で表示する
@@ -675,15 +676,15 @@ void ViewSelect::PrintSelectionInfoMsg() const
 								pView->m_pEditWnd->m_nSelectCountMode == SelectCountMode::ByByte);
 
 		//	1行目
-		pLine = pView->m_pEditDoc->m_layoutMgr.GetLineStr(m_select.GetFrom().GetY2(), &nLineLen, &pcLayout);
+		pLine = pView->m_pEditDoc->m_layoutMgr.GetLineStr(m_select.GetFrom().GetY2(), &nLineLen, &pLayout);
 		if (pLine) {
 			if (bCountByByte) {
 				//  バイト数でカウント
 				//  内部文字コードから現在の文字コードに変換し、バイト数を取得する。
 				//  コード変換は負荷がかかるため、選択範囲の増減分のみを対象とする。
 
-				NativeW cmemW;
-				Memory cmemCode;
+				NativeW memW;
+				Memory memCode;
 
 				// 増減分文字列の取得にEditView::GetSelectedDataを使いたいが、m_select限定のため、
 				// 呼び出し前にm_selectを書き換える。呼出し後に元に戻すので、constと言えないこともない。
@@ -691,9 +692,9 @@ void ViewSelect::PrintSelectionInfoMsg() const
 				bool bSelExtend;						// 選択領域拡大フラグ
 
 				// 最終行の処理
-				pLine = pView->m_pEditDoc->m_layoutMgr.GetLineStr(m_select.GetTo().y, &nLineLen, &pcLayout);
+				pLine = pView->m_pEditDoc->m_layoutMgr.GetLineStr(m_select.GetTo().y, &nLineLen, &pLayout);
 				if (pLine) {
-					if (pView->LineColumnToIndex(pcLayout, m_select.GetTo().GetX2()) == 0) {
+					if (pView->LineColumnToIndex(pLayout, m_select.GetTo().GetX2()) == 0) {
 						//	最終行の先頭にキャレットがある場合は
 						//	その行を行数に含めない
 						--select_line;
@@ -716,7 +717,7 @@ void ViewSelect::PrintSelectionInfoMsg() const
 						thiz->m_select = LayoutRange(m_selectOld.GetTo(), m_select.GetTo());
 					}
 
-					const_cast<EditView*>(pView)->GetSelectedDataSimple(cmemW);
+					const_cast<EditView*>(pView)->GetSelectedDataSimple(memW);
 					thiz->m_select = rngSelect;		// m_selectを元に戻す
 				}else if (
 					m_bSelectAreaChanging
@@ -732,23 +733,23 @@ void ViewSelect::PrintSelectionInfoMsg() const
 						thiz->m_select = LayoutRange(m_selectOld.GetFrom(), m_select.GetFrom());
 					}
 
-					const_cast<EditView*>(pView)->GetSelectedDataSimple(cmemW);
+					const_cast<EditView*>(pView)->GetSelectedDataSimple(memW);
 					thiz->m_select = rngSelect;		// m_selectを元に戻す
 				}else {
 					// 選択領域全体をコード変換対象にする
-					const_cast<EditView*>(pView)->GetSelectedDataSimple(cmemW);
+					const_cast<EditView*>(pView)->GetSelectedDataSimple(memW);
 					bSelExtend = true;
 					thiz->m_nLastSelectedByteLen = 0;
 				}
 				//  現在の文字コードに変換し、バイト長を取得する
 				CodeBase* pCode = CodeFactory::CreateCodeBase(pView->m_pEditDoc->GetDocumentEncoding(), false);
-				pCode->UnicodeToCode(cmemW, &cmemCode);
+				pCode->UnicodeToCode(memW, &memCode);
 				delete pCode;
 
 				if (bSelExtend) {
-					select_sum = m_nLastSelectedByteLen + cmemCode.GetRawLength();
+					select_sum = m_nLastSelectedByteLen + memCode.GetRawLength();
 				}else {
-					select_sum = m_nLastSelectedByteLen - cmemCode.GetRawLength();
+					select_sum = m_nLastSelectedByteLen - memCode.GetRawLength();
 				}
 				thiz->m_nLastSelectedByteLen = select_sum;
 
@@ -762,13 +763,13 @@ void ViewSelect::PrintSelectionInfoMsg() const
 				//	1行だけ選択されている場合
 				if (m_select.IsLineOne()) {
 					select_sum =
-						pView->LineColumnToIndex(pcLayout, m_select.GetTo().GetX2())
-						- pView->LineColumnToIndex(pcLayout, m_select.GetFrom().GetX2());
+						pView->LineColumnToIndex(pLayout, m_select.GetTo().GetX2())
+						- pView->LineColumnToIndex(pLayout, m_select.GetFrom().GetX2());
 				}else {	//	2行以上選択されている場合
 					select_sum =
-						pcLayout->GetLengthWithoutEOL()
-						+ pcLayout->GetLayoutEol().GetLen()
-						- pView->LineColumnToIndex(pcLayout, m_select.GetFrom().GetX2());
+						pLayout->GetLengthWithoutEOL()
+						+ pLayout->GetLayoutEol().GetLen()
+						- pView->LineColumnToIndex(pLayout, m_select.GetFrom().GetX2());
 
 					//	GetSelectedDataと似ているが，先頭行と最終行は排除している
 					//	Aug. 16, 2005 aroka nLineNumはfor以降でも使われるのでforの前で宣言する
@@ -778,17 +779,17 @@ void ViewSelect::PrintSelectionInfoMsg() const
 						nLineNum < m_select.GetTo().GetY2();
 						++nLineNum
 					) {
-						pLine = pView->m_pEditDoc->m_layoutMgr.GetLineStr(nLineNum, &nLineLen, &pcLayout);
+						pLine = pView->m_pEditDoc->m_layoutMgr.GetLineStr(nLineNum, &nLineLen, &pLayout);
 						//	2006.06.06 ryoji 指定行のデータが存在しない場合の対策
 						if (!pLine)
 							break;
-						select_sum += pcLayout->GetLengthWithoutEOL() + pcLayout->GetLayoutEol().GetLen();
+						select_sum += pLayout->GetLengthWithoutEOL() + pLayout->GetLayoutEol().GetLen();
 					}
 
 					//	最終行の処理
-					pLine = pView->m_pEditDoc->m_layoutMgr.GetLineStr(nLineNum, &nLineLen, &pcLayout);
+					pLine = pView->m_pEditDoc->m_layoutMgr.GetLineStr(nLineNum, &nLineLen, &pLayout);
 					if (pLine) {
-						int last_line_chars = pView->LineColumnToIndex(pcLayout, m_select.GetTo().GetX2());
+						int last_line_chars = pView->LineColumnToIndex(pLayout, m_select.GetTo().GetX2());
 						select_sum += last_line_chars;
 						if (last_line_chars == 0) {
 							//	最終行の先頭にキャレットがある場合は

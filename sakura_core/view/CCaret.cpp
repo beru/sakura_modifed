@@ -430,9 +430,9 @@ bool Caret::GetAdjustCursorPos(
 	if (ptPosXY2.y >= nLayoutLineCount) {
 		if (0 < nLayoutLineCount) {
 			ptPosXY2.y = nLayoutLineCount - 1;
-			const Layout* pcLayout = m_pEditDoc->m_layoutMgr.SearchLineByLayoutY(ptPosXY2.GetY2());
-			if (pcLayout->GetLayoutEol() == EolType::None) {
-				ptPosXY2.x = m_pEditView->LineIndexToColumn(pcLayout, (LogicInt)pcLayout->GetLengthWithEOL());
+			const Layout* pLayout = m_pEditDoc->m_layoutMgr.SearchLineByLayoutY(ptPosXY2.GetY2());
+			if (pLayout->GetLayoutEol() == EolType::None) {
+				ptPosXY2.x = m_pEditView->LineIndexToColumn(pLayout, (LogicInt)pLayout->GetLengthWithEOL());
 				// [EOF]のみ折り返すのはやめる	// 2009.02.17 ryoji
 				// 復活するなら ptPosXY2.x に折り返し行インデントを適用するのがよい
 
@@ -542,15 +542,15 @@ void Caret::ShowEditCaret()
 
 			const wchar_t*	pLine = NULL;
 			LogicInt		nLineLen = LogicInt(0);
-			const Layout*	pcLayout = NULL;
+			const Layout*	pLayout = NULL;
 			if (bShowCaret) {
 				// 画面外のときはGetLineStrを呼ばない
-				pLine = pLayoutMgr->GetLineStr(GetCaretLayoutPos().GetY2(), &nLineLen, &pcLayout);
+				pLine = pLayoutMgr->GetLineStr(GetCaretLayoutPos().GetY2(), &nLineLen, &pLayout);
 			}
 
 			if (pLine) {
 				// 指定された桁に対応する行のデータ内の位置を調べる
-				int nIdxFrom = GetCaretLogicPos().GetX() - pcLayout->GetLogicOffset();
+				int nIdxFrom = GetCaretLogicPos().GetX() - pLayout->GetLogicOffset();
 				if (0
 					|| nIdxFrom >= nLineLen
 					|| WCODE::IsLineDelimiter(pLine[nIdxFrom], GetDllShareData().m_common.m_edit.m_bEnableExtEol)
@@ -576,14 +576,14 @@ void Caret::ShowEditCaret()
 
 		const wchar_t*	pLine = NULL;
 		LogicInt		nLineLen = LogicInt(0);
-		const Layout*	pcLayout = NULL;
+		const Layout*	pLayout = NULL;
 		if (bShowCaret) {
-			pLine= pLayoutMgr->GetLineStr(GetCaretLayoutPos().GetY2(), &nLineLen, &pcLayout);
+			pLine= pLayoutMgr->GetLineStr(GetCaretLayoutPos().GetY2(), &nLineLen, &pLayout);
 		}
 
 		if (pLine) {
 			// 指定された桁に対応する行のデータ内の位置を調べる
-			int nIdxFrom = m_pEditView->LineColumnToIndex(pcLayout, GetCaretLayoutPos().GetX2());
+			int nIdxFrom = m_pEditView->LineColumnToIndex(pLayout, GetCaretLayoutPos().GetX2());
 			if (0
 				|| nIdxFrom >= nLineLen
 				|| WCODE::IsLineDelimiter(pLine[nIdxFrom], GetDllShareData().m_common.m_edit.m_bEnableExtEol)
@@ -600,7 +600,7 @@ void Caret::ShowEditCaret()
 	}
 
 	//	キャレット色の取得
-	const ColorInfo* ColorInfoArr = pTypes->m_ColorInfoArr;
+	const ColorInfo* ColorInfoArr = pTypes->m_colorInfoArr;
 	int nCaretColor = (ColorInfoArr[COLORIDX_CARET_IME].m_bDisp && m_pEditView->IsImeON())? COLORIDX_CARET_IME: COLORIDX_CARET;
 	COLORREF crCaret = ColorInfoArr[nCaretColor].m_colorAttr.m_cTEXT;
 	COLORREF crBack = ColorInfoArr[COLORIDX_TEXT].m_colorAttr.m_cBACK;
@@ -670,9 +670,9 @@ void Caret::ShowCaretPosInfo()
 	HWND hwndStatusBar = m_pEditDoc->m_pEditWnd->m_statusBar.GetStatusHwnd();
 
 	// カーソル位置の文字列を取得
-	const Layout*	pcLayout;
+	const Layout*	pLayout;
 	LogicInt		nLineLen;
-	const wchar_t*	pLine = pLayoutMgr->GetLineStr(GetCaretLayoutPos().GetY2(), &nLineLen, &pcLayout);
+	const wchar_t*	pLine = pLayoutMgr->GetLineStr(GetCaretLayoutPos().GetY2(), &nLineLen, &pLayout);
 
 	// -- -- -- -- 文字コード情報 -> pszCodeName -- -- -- -- //
 	const TCHAR* pszCodeName;
@@ -709,68 +709,68 @@ void Caret::ShowCaretPosInfo()
 	if (pTypes->m_bLineNumIsCRLF) {
 		ptCaret.x = 0;
 		ptCaret.y = (Int)GetCaretLogicPos().y;
-		if (pcLayout) {
+		if (pLayout) {
 			// 2014.01.10 改行のない大きい行があると遅いのでキャッシュする
 			LayoutInt offset;
-			if (m_nLineLogicNoCache == pcLayout->GetLogicLineNo()
+			if (m_nLineLogicNoCache == pLayout->GetLogicLineNo()
 				&& m_nLineNoCache == GetCaretLayoutPos().GetY2()
-				&& m_nLineLogicModCache == ModifyVisitor().GetLineModifiedSeq( pcLayout->GetDocLineRef() )
+				&& m_nLineLogicModCache == ModifyVisitor().GetLineModifiedSeq( pLayout->GetDocLineRef() )
 			) {
 				offset = m_nOffsetCache;
 			}else if (
-				m_nLineLogicNoCache == pcLayout->GetLogicLineNo()
+				m_nLineLogicNoCache == pLayout->GetLogicLineNo()
 				&& m_nLineNoCache < GetCaretLayoutPos().GetY2()
-				&& m_nLineLogicModCache == ModifyVisitor().GetLineModifiedSeq( pcLayout->GetDocLineRef() )
+				&& m_nLineLogicModCache == ModifyVisitor().GetLineModifiedSeq( pLayout->GetDocLineRef() )
 			) {
 				// 下移動
-				offset = pcLayout->CalcLayoutOffset(*pLayoutMgr, m_nLogicOffsetCache, m_nOffsetCache);
+				offset = pLayout->CalcLayoutOffset(*pLayoutMgr, m_nLogicOffsetCache, m_nOffsetCache);
 				m_nOffsetCache = offset;
-				m_nLogicOffsetCache = pcLayout->GetLogicOffset();
+				m_nLogicOffsetCache = pLayout->GetLogicOffset();
 				m_nLineNoCache = GetCaretLayoutPos().GetY2();
-			}else if (m_nLineLogicNoCache == pcLayout->GetLogicLineNo()
+			}else if (m_nLineLogicNoCache == pLayout->GetLogicLineNo()
 				&& m_nLineNo50Cache <= GetCaretLayoutPos().GetY2()
 				&& GetCaretLayoutPos().GetY2() <= m_nLineNo50Cache + 50
-				&& m_nLineLogicModCache == ModifyVisitor().GetLineModifiedSeq( pcLayout->GetDocLineRef() )
+				&& m_nLineLogicModCache == ModifyVisitor().GetLineModifiedSeq( pLayout->GetDocLineRef() )
 			) {
 				// 上移動
-				offset = pcLayout->CalcLayoutOffset(*pLayoutMgr, m_nLogicOffset50Cache, m_nOffset50Cache);
+				offset = pLayout->CalcLayoutOffset(*pLayoutMgr, m_nLogicOffset50Cache, m_nOffset50Cache);
 				m_nOffsetCache = offset;
-				m_nLogicOffsetCache = pcLayout->GetLogicOffset();
+				m_nLogicOffsetCache = pLayout->GetLogicOffset();
 				m_nLineNoCache = GetCaretLayoutPos().GetY2();
 			}else {
 			// 2013.05.11 折り返しなしとして計算する
-				const Layout* pcLayout50 = pcLayout;
+				const Layout* pLayout50 = pLayout;
 				LayoutInt nLineNum = GetCaretLayoutPos().GetY2();
 				for (;;) {
-					if (pcLayout50->GetLogicOffset() == 0) {
+					if (pLayout50->GetLogicOffset() == 0) {
 						break;
 					}
 					if (nLineNum + 50 == GetCaretLayoutPos().GetY2()) {
 						break;
 					}
-					pcLayout50 = pcLayout50->GetPrevLayout();
+					pLayout50 = pLayout50->GetPrevLayout();
 					--nLineNum;
 				}
-				m_nOffset50Cache = pcLayout50->CalcLayoutOffset(*pLayoutMgr);
-				m_nLogicOffset50Cache = pcLayout50->GetLogicOffset();
+				m_nOffset50Cache = pLayout50->CalcLayoutOffset(*pLayoutMgr);
+				m_nLogicOffset50Cache = pLayout50->GetLogicOffset();
 				m_nLineNo50Cache = nLineNum;
 				
-				offset = pcLayout->CalcLayoutOffset(*pLayoutMgr, m_nLogicOffset50Cache, m_nOffset50Cache);
+				offset = pLayout->CalcLayoutOffset(*pLayoutMgr, m_nLogicOffset50Cache, m_nOffset50Cache);
 				m_nOffsetCache = offset;
-				m_nLogicOffsetCache = pcLayout->GetLogicOffset();
-				m_nLineLogicNoCache = pcLayout->GetLogicLineNo();
+				m_nLogicOffsetCache = pLayout->GetLogicOffset();
+				m_nLineLogicNoCache = pLayout->GetLogicLineNo();
 				m_nLineNoCache = GetCaretLayoutPos().GetY2();
-				m_nLineLogicModCache = ModifyVisitor().GetLineModifiedSeq( pcLayout->GetDocLineRef() );
+				m_nLineLogicModCache = ModifyVisitor().GetLineModifiedSeq( pLayout->GetDocLineRef() );
 			}
 			Layout cLayout(
-				pcLayout->GetDocLineRef(),
-				pcLayout->GetLogicPos(),
-				pcLayout->GetLengthWithEOL(),
-				pcLayout->GetColorTypePrev(),
+				pLayout->GetDocLineRef(),
+				pLayout->GetLogicPos(),
+				pLayout->GetLengthWithEOL(),
+				pLayout->GetColorTypePrev(),
 				offset,
 				NULL
 			);
-			ptCaret.x = (Int)m_pEditView->LineIndexToColumn(&cLayout, GetCaretLogicPos().x - pcLayout->GetLogicPos().x);
+			ptCaret.x = (Int)m_pEditView->LineIndexToColumn(&cLayout, GetCaretLogicPos().x - pLayout->GetLogicPos().x);
 		}
 	// 行番号をレイアウト単位で表示
 	}else {
@@ -787,9 +787,9 @@ void Caret::ShowCaretPosInfo()
 	TCHAR szCaretChar[32] = _T("");
 	if (pLine) {
 		// 指定された桁に対応する行のデータ内の位置を調べる
-		LogicInt nIdx = GetCaretLogicPos().GetX2() - pcLayout->GetLogicOffset();
+		LogicInt nIdx = GetCaretLogicPos().GetX2() - pLayout->GetLogicOffset();
 		if (nIdx < nLineLen) {
-			if (nIdx < nLineLen - (pcLayout->GetLayoutEol().GetLen() ? 1 : 0)) {
+			if (nIdx < nLineLen - (pLayout->GetLayoutEol().GetLen() ? 1 : 0)) {
 				//auto_sprintf(szCaretChar, _T("%04x"),);
 				// 任意の文字コードからUnicodeへ変換する		2008/6/9 Uchi
 				CodeBase* pCode = CodeFactory::CreateCodeBase(m_pEditDoc->GetDocumentEncoding(), false);
@@ -803,7 +803,7 @@ void Caret::ShowCaretPosInfo()
 					delete pCode;
 				}
 			}else {
-				_tcscpy_s(szCaretChar, _countof(szCaretChar), pcLayout->GetLayoutEol().GetName());
+				_tcscpy_s(szCaretChar, _countof(szCaretChar), pLayout->GetLayoutEol().GetName());
 			}
 		}
 	}
@@ -1137,7 +1137,7 @@ LayoutInt Caret::MoveCursorProperly(
 )
 {
 	LogicInt		nLineLen;
-	const Layout*	pcLayout;
+	const Layout*	pLayout;
 
 	if (0 > ptNewXY.y) {
 		ptNewXY.y = LayoutInt(0);
@@ -1170,24 +1170,24 @@ LayoutInt Caret::MoveCursorProperly(
 		ptNewXY.Set(LayoutInt(0), LayoutInt(0));
 	}else {
 		// 移動先の行のデータを取得
-		layoutMgr.GetLineStr(ptNewXY.GetY2(), &nLineLen, &pcLayout);
+		layoutMgr.GetLineStr(ptNewXY.GetY2(), &nLineLen, &pLayout);
 
 		int nColWidth = m_pEditView->GetTextMetrics().GetHankakuDx();
 		LayoutInt nPosX = LayoutInt(0);
 		int i = 0;
-		MemoryIterator it(pcLayout, layoutMgr.GetTabSpace());
+		MemoryIterator it(pLayout, layoutMgr.GetTabSpace());
 		while (!it.end()) {
 			it.scanNext();
-			if (it.getIndex() + it.getIndexDelta() > LogicInt(pcLayout->GetLengthWithoutEOL())) {
+			if (it.getIndex() + it.getIndexDelta() > LogicInt(pLayout->GetLengthWithoutEOL())) {
 				i = nLineLen;
 				break;
 			}
 			if (it.getColumn() + it.getColumnDelta() > ptNewXY.GetX2()) {
 				if (1
-					&& ptNewXY.GetX2() >= (pcLayout ? pcLayout->GetIndent() : LayoutInt(0))
+					&& ptNewXY.GetX2() >= (pLayout ? pLayout->GetIndent() : LayoutInt(0))
 					&& ((ptNewXY.GetX2() - it.getColumn()) * nColWidth + dx) * 2 >= it.getColumnDelta() * nColWidth
 				) {
-				//if (ptNewXY.GetX2() >= (pcLayout ? pcLayout->GetIndent() : LayoutInt(0)) && (it.getColumnDelta() > LayoutInt(1)) && ((it.getColumn() + it.getColumnDelta() - ptNewXY.GetX2()) <= it.getColumnDelta() / 2)) {
+				//if (ptNewXY.GetX2() >= (pLayout ? pLayout->GetIndent() : LayoutInt(0)) && (it.getColumnDelta() > LayoutInt(1)) && ((it.getColumn() + it.getColumnDelta() - ptNewXY.GetX2()) <= it.getColumnDelta() / 2)) {
 					nPosX += it.getColumnDelta();
 				}
 				i = it.getIndex();

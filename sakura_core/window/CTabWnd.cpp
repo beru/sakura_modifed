@@ -125,14 +125,14 @@ LRESULT CALLBACK DefTabWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPara
 // TabWndウィンドウメッセージのコールバック関数
 LRESULT CALLBACK TabWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-	TabWnd* pcTabWnd;
+	TabWnd* pTabWnd;
 
 	// Modified by KEITA for WIN64 2003.9.6
-	pcTabWnd = (TabWnd*)::GetWindowLongPtr(hwnd, GWLP_USERDATA);
+	pTabWnd = (TabWnd*)::GetWindowLongPtr(hwnd, GWLP_USERDATA);
 
-	if (pcTabWnd) {
+	if (pTabWnd) {
 		//return
-		if (0L == pcTabWnd->TabWndDispatchEvent(hwnd, uMsg, wParam, lParam))
+		if (0L == pTabWnd->TabWndDispatchEvent(hwnd, uMsg, wParam, lParam))
 			return 0L;
 	}
 

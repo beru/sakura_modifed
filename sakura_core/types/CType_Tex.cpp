@@ -44,8 +44,8 @@ void CType_Tex::InitTypeConfigImp(TypeConfig* pType)
 	pType->m_eDefaultOutline = OUTLINE_TEX;						// アウトライン解析方法
 	pType->m_nKeyWordSetIdx[0] = 9;								// キーワードセット
 	pType->m_nKeyWordSetIdx[1] = 10;							// キーワードセット2 	// Jan. 19, 2001 JEPRO
-	pType->m_ColorInfoArr[COLORIDX_SSTRING].m_bDisp = false;	// シングルクォーテーション文字列を色分け表示しない
-	pType->m_ColorInfoArr[COLORIDX_WSTRING].m_bDisp = false;	// ダブルクォーテーション文字列を色分け表示しない
+	pType->m_colorInfoArr[COLORIDX_SSTRING].m_bDisp = false;	// シングルクォーテーション文字列を色分け表示しない
+	pType->m_colorInfoArr[COLORIDX_WSTRING].m_bDisp = false;	// ダブルクォーテーション文字列を色分け表示しない
 }
 
 
@@ -55,7 +55,7 @@ void CType_Tex::InitTypeConfigImp(TypeConfig* pType)
 	@date 2003.07.21 naoh 新規作成
 	@date 2005.01.03 naoh 「マ」などの"}"を含む文字に対する修正、prosperのslideに対応
 */
-void DocOutline::MakeTopicList_tex(FuncInfoArr* pcFuncInfoArr)
+void DocOutline::MakeTopicList_tex(FuncInfoArr* pFuncInfoArr)
 {
 	const wchar_t*	pLine;
 	LogicInt		nLineLen;
@@ -163,7 +163,7 @@ void DocOutline::MakeTopicList_tex(FuncInfoArr* pcFuncInfoArr)
 					wcscat(tmpstr, L" ");
 				}
 				wcscat(tmpstr, szTitle);
-				pcFuncInfoArr->AppendData(nLineCount + LogicInt(1), ptPos.GetY2() + LayoutInt(1), tmpstr, 0, nDepth);
+				pFuncInfoArr->AppendData(nLineCount + LogicInt(1), ptPos.GetY2() + LayoutInt(1), tmpstr, 0, nDepth);
 				if (!bNoNumber) lastSection = thisSection;
 			}
 			i += j;

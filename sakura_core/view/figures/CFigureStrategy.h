@@ -65,20 +65,20 @@ class FigureSpace : public Figure {
 public:
 	virtual bool DrawImp(ColorStrategyInfo* pInfo);
 protected:
-	virtual void DispSpace(Graphics& gr, DispPos* pDispPos, EditView* pcView, bool bTrans) const = 0;
+	virtual void DispSpace(Graphics& gr, DispPos* pDispPos, EditView* pView, bool bTrans) const = 0;
 	virtual EColorIndexType GetColorIdx(void) const = 0;
 
 	// F•ª‚¯•\Ž¦‘ÎÛ”»’è
 	virtual bool Disp(void) const {
 		EColorIndexType nColorIndex = GetColorIdx();
-		return m_pTypeData->m_ColorInfoArr[nColorIndex].m_bDisp;
+		return m_pTypeData->m_colorInfoArr[nColorIndex].m_bDisp;
 	}
 
 	virtual void Update(void) {
 		Figure::Update();
 
 		EColorIndexType nColorIndex = GetColorIdx();
-		if (m_pTypeData->m_ColorInfoArr[nColorIndex].m_bDisp) {
+		if (m_pTypeData->m_colorInfoArr[nColorIndex].m_bDisp) {
 			m_nDispColorIndex = nColorIndex;
 		}else {
 			m_nDispColorIndex = COLORIDX_TEXT;

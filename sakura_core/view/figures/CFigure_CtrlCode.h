@@ -32,7 +32,7 @@ public:
 	bool Match(const wchar_t* pText, int nTextLen) const;
 
 	// action
-	void DispSpace(Graphics& gr, DispPos* pDispPos, EditView* pcView, bool bTrans) const;
+	void DispSpace(Graphics& gr, DispPos* pDispPos, EditView* pView, bool bTrans) const;
 	EColorIndexType GetColorIdx(void) const { return COLORIDX_CTRLCODE; }
 };
 
@@ -43,7 +43,7 @@ public:
 	bool Match(const wchar_t* pText, int nTextLen) const;
 
 	// action
-	void DispSpace(Graphics& gr, DispPos* pDispPos, EditView* pcView, bool bTrans) const;
+	void DispSpace(Graphics& gr, DispPos* pDispPos, EditView* pView, bool bTrans) const;
 	EColorIndexType GetColorIdx(void) const { return COLORIDX_CTRLCODE; }
 };
 
@@ -54,7 +54,7 @@ public:
 	bool Match(const wchar_t* pText, int nTextLen) const;
 
 	// action
-	void DispSpace(Graphics& gr, DispPos* pDispPos, EditView* pcView, bool bTrans) const;
+	void DispSpace(Graphics& gr, DispPos* pDispPos, EditView* pView, bool bTrans) const;
 	EColorIndexType GetColorIdx(void) const { return COLORIDX_CTRLCODE; }
 };
 

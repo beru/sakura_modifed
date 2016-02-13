@@ -669,18 +669,18 @@ bool IsDirectory(LPCTSTR pszPath)
 */
 bool GetLastWriteTimestamp(
 	const TCHAR*	pszFileName,	// [in]  ファイルのパス
-	FileTime*		pcFileTime		// [out] 更新日時を返す場所
+	FileTime*		pFileTime		// [out] 更新日時を返す場所
 	)
 {
 	WIN32_FIND_DATA ffd;
 	HANDLE hFindFile = ::FindFirstFile(pszFileName, &ffd);
 	if (INVALID_HANDLE_VALUE != hFindFile) {
 		::FindClose(hFindFile);
-		pcFileTime->SetFILETIME(ffd.ftLastWriteTime);
+		pFileTime->SetFILETIME(ffd.ftLastWriteTime);
 		return true;
 	}else {
 		// ファイルが見つからなかった
-		pcFileTime->ClearFILETIME();
+		pFileTime->ClearFILETIME();
 		return false;
 	}
 }

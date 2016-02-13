@@ -245,11 +245,11 @@ int Jis::JisToUni(const char* pSrc, const int nSrcLen, wchar_t* pDst, bool* pbEr
 
 // E-Mail(JIS→Unicode)コード変換
 // 2007.08.13 kobake 追加
-CodeConvertResult Jis::JISToUnicode(const Memory& cSrc, NativeW* pDstMem, bool base64decode)
+CodeConvertResult Jis::JISToUnicode(const Memory& src, NativeW* pDstMem, bool base64decode)
 {
 	// ソースを取得
 	int nSrcLen;
-	const char* pSrc = reinterpret_cast<const char*>( cSrc.GetRawPtr(&nSrcLen) );
+	const char* pSrc = reinterpret_cast<const char*>( src.GetRawPtr(&nSrcLen) );
 	if (nSrcLen == 0) {
 		pDstMem->Clear();
 		return CodeConvertResult::Complete;
@@ -445,11 +445,11 @@ int Jis::UniToJis(const wchar_t* pSrc, const int nSrcLen, char* pDst, bool* pbEr
 }
 
 
-CodeConvertResult Jis::UnicodeToJIS(const NativeW& cSrc, Memory* pDstMem)
+CodeConvertResult Jis::UnicodeToJIS(const NativeW& src, Memory* pDstMem)
 {
 	// ソースを取得
-	const wchar_t* pSrc = cSrc.GetStringPtr();
-	int nSrcLen = cSrc.GetStringLength();
+	const wchar_t* pSrc = src.GetStringPtr();
+	int nSrcLen = src.GetStringLength();
 	if (nSrcLen == 0) {
 		pDstMem->Clear();
 		return CodeConvertResult::Complete;

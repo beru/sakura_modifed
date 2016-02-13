@@ -84,24 +84,24 @@ void KeyWordSetMgr::ResetAllKeyWordSet(void)
 	}
 }
 
-const KeyWordSetMgr& KeyWordSetMgr::operator = (KeyWordSetMgr& cKeyWordSetMgr)
+const KeyWordSetMgr& KeyWordSetMgr::operator = (KeyWordSetMgr& keyWordSetMgr)
 {
 //	int		nDataLen;
 //	char*	pData;
 //	int		i;
-	if (this == &cKeyWordSetMgr) {
+	if (this == &keyWordSetMgr) {
 		return *this;
 	}
-	m_nCurrentKeyWordSetIdx = cKeyWordSetMgr.m_nCurrentKeyWordSetIdx;
-	m_nKeyWordSetNum = cKeyWordSetMgr.m_nKeyWordSetNum;
+	m_nCurrentKeyWordSetIdx = keyWordSetMgr.m_nCurrentKeyWordSetIdx;
+	m_nKeyWordSetNum = keyWordSetMgr.m_nKeyWordSetNum;
 	// 配列まるごとコピー
-	memcpy_raw(m_szSetNameArr   , cKeyWordSetMgr.m_szSetNameArr   , sizeof(m_szSetNameArr)		);
-	memcpy_raw(m_bKEYWORDCASEArr, cKeyWordSetMgr.m_bKEYWORDCASEArr, sizeof(m_bKEYWORDCASEArr)	);
-	memcpy_raw(m_nStartIdx      , cKeyWordSetMgr.m_nStartIdx      , sizeof(m_nStartIdx	)		); // 2004.07.29 Moca
-	memcpy_raw(m_nKeyWordNumArr , cKeyWordSetMgr.m_nKeyWordNumArr , sizeof(m_nKeyWordNumArr)	);
-	memcpy_raw(m_szKeyWordArr   , cKeyWordSetMgr.m_szKeyWordArr   , sizeof(m_szKeyWordArr)		);
-	memcpy_raw(m_IsSorted       , cKeyWordSetMgr.m_IsSorted       , sizeof(m_IsSorted)			); // MIK 2000.12.01 binary search
-	memcpy_raw( m_nKeyWordMaxLenArr, cKeyWordSetMgr.m_nKeyWordMaxLenArr, sizeof( m_nKeyWordMaxLenArr ) ); //2014.05.04 Moca
+	memcpy_raw(m_szSetNameArr   , keyWordSetMgr.m_szSetNameArr   , sizeof(m_szSetNameArr)		);
+	memcpy_raw(m_bKEYWORDCASEArr, keyWordSetMgr.m_bKEYWORDCASEArr, sizeof(m_bKEYWORDCASEArr)	);
+	memcpy_raw(m_nStartIdx      , keyWordSetMgr.m_nStartIdx      , sizeof(m_nStartIdx	)		); // 2004.07.29 Moca
+	memcpy_raw(m_nKeyWordNumArr , keyWordSetMgr.m_nKeyWordNumArr , sizeof(m_nKeyWordNumArr)	);
+	memcpy_raw(m_szKeyWordArr   , keyWordSetMgr.m_szKeyWordArr   , sizeof(m_szKeyWordArr)		);
+	memcpy_raw(m_IsSorted       , keyWordSetMgr.m_IsSorted       , sizeof(m_IsSorted)			); // MIK 2000.12.01 binary search
+	memcpy_raw( m_nKeyWordMaxLenArr, keyWordSetMgr.m_nKeyWordMaxLenArr, sizeof( m_nKeyWordMaxLenArr ) ); //2014.05.04 Moca
 	return *this;
 }
 

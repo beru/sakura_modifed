@@ -93,7 +93,7 @@ private:
 	mutable bool		m_bModified;
 };
 
-bool GetLastWriteTimestamp(const TCHAR* filename, FileTime* pcFileTime); //	Oct. 22, 2005 genta
+bool GetLastWriteTimestamp(const TCHAR* filename, FileTime* pFileTime); //	Oct. 22, 2005 genta
 
 // •¶Žš—ñ•ªŠ„
 void my_splitpath (const char* comln , char* drv, char* dir, char* fnm, char* ext);

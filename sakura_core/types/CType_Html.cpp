@@ -41,12 +41,12 @@ void CType_Html::InitTypeConfigImp(TypeConfig* pType)
 	_tcscpy(pType->m_szTypeExts, _T("html,htm,shtml,plg"));
 
 	// 設定
-	pType->m_cBlockComments[0].SetBlockCommentRule(L"<!--", L"-->");	// ブロックコメントデリミタ
+	pType->m_blockComments[0].SetBlockCommentRule(L"<!--", L"-->");	// ブロックコメントデリミタ
 	pType->m_nStringType = StringLiteralType::HTML;							// 文字列区切り記号エスケープ方法
 	pType->m_bStringLineOnly = true;									// 文字列は行内のみ
 	pType->m_nKeyWordSetIdx[0] = 1;										// キーワードセット
 	pType->m_eDefaultOutline = OUTLINE_HTML;							// アウトライン解析方法
-	pType->m_ColorInfoArr[COLORIDX_SSTRING].m_bDisp = true;				// シングルクォートの色分けOFF
+	pType->m_colorInfoArr[COLORIDX_SSTRING].m_bDisp = true;				// シングルクォートの色分けOFF
 }
 
 
@@ -58,7 +58,7 @@ void CType_Html::InitTypeConfigImp(TypeConfig* pType)
 	@date 2004.04.20 Moca コメント処理と、不明な終了タグを無視する処理を追加
 	@date 2008.08.15 aroka 見出しと段落の深さ制御を追加 2008.09.07修正
 */
-void DocOutline::MakeTopicList_html(FuncInfoArr* pcFuncInfoArr)
+void DocOutline::MakeTopicList_html(FuncInfoArr* pFuncInfoArr)
 {
 	const wchar_t*	pLineBuf;	//	pLineBuf は行全体を指し、
 	const wchar_t*	pLine;		//	pLine は処理中の文字以降の部分を指します。
@@ -267,7 +267,7 @@ void DocOutline::MakeTopicList_html(FuncInfoArr* pcFuncInfoArr)
 							}
 						}
 						szTitle[k] = L'\0';
-						pcFuncInfoArr->AppendData(nLineCount + LogicInt(1), ptPos.GetY2() + LayoutInt(1), szTitle, 0, ++nDepth);
+						pFuncInfoArr->AppendData(nLineCount + LogicInt(1), ptPos.GetY2() + LayoutInt(1), szTitle, 0, ++nDepth);
 					}else {
 						for (; i+j<nLineLen && j<_countof(szTitle)-1; ++j) {
 							if (pLine[j] == L'>') {
@@ -276,7 +276,7 @@ void DocOutline::MakeTopicList_html(FuncInfoArr* pcFuncInfoArr)
 							szTitle[j] = pLine[j];
 						}
 						szTitle[j]	=	L'\0';
-						pcFuncInfoArr->AppendData(nLineCount + LogicInt(1), ptPos.GetY2() + LayoutInt(1), szTitle, 0, nDepth);
+						pFuncInfoArr->AppendData(nLineCount + LogicInt(1), ptPos.GetY2() + LayoutInt(1), szTitle, 0, nDepth);
 					}
 				}
 			}

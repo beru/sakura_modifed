@@ -55,9 +55,9 @@ public:
 		return FALSE;
 	}
 
-	int Enumerates( LPCTSTR lpBaseFolder, GrepEnumKeys& cGrepEnumKeys, GrepEnumOptions option, GrepEnumFiles& pExcept ){
-		m_cGrepEnumExceptFiles.Enumerates( lpBaseFolder, cGrepEnumKeys.m_vecExceptFileKeys, option, NULL );
-		return GrepEnumFiles::Enumerates( lpBaseFolder, cGrepEnumKeys.m_vecSearchFileKeys, option, &pExcept );
+	int Enumerates( LPCTSTR lpBaseFolder, GrepEnumKeys& grepEnumKeys, GrepEnumOptions option, GrepEnumFiles& pExcept ){
+		m_cGrepEnumExceptFiles.Enumerates( lpBaseFolder, grepEnumKeys.m_vecExceptFileKeys, option, NULL );
+		return GrepEnumFiles::Enumerates( lpBaseFolder, grepEnumKeys.m_vecSearchFileKeys, option, &pExcept );
 	}
 };
 

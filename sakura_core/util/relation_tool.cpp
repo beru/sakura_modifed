@@ -19,23 +19,23 @@ Subject::~Subject()
 	m_vListenersRef.clear();
 }
 
-void Subject::_AddListener(Listener* pcListener)
+void Subject::_AddListener(Listener* pListener)
 {
 	// Šù‚É’Ç‰ÁÏ‚İ‚È‚ç‰½‚à‚µ‚È‚¢
 	for (int i=0; i<(int)m_vListenersRef.size(); ++i) {
-		if (m_vListenersRef[i] == pcListener) {
+		if (m_vListenersRef[i] == pListener) {
 			return;
 		}
 	}
 	// ’Ç‰Á
-	m_vListenersRef.push_back(pcListener);
+	m_vListenersRef.push_back(pListener);
 }
 
-void Subject::_RemoveListener(Listener* pcListener)
+void Subject::_RemoveListener(Listener* pListener)
 {
 	// ”z—ñ‚©‚çíœ
 	for (int i=0; i<(int)m_vListenersRef.size(); ++i) {
-		if (m_vListenersRef[i] == pcListener) {
+		if (m_vListenersRef[i] == pListener) {
 			m_vListenersRef.erase(m_vListenersRef.begin() + i);
 			break;
 		}
@@ -56,7 +56,7 @@ Listener::~Listener()
 	Listen(NULL);
 }
 
-Subject* Listener::Listen(Subject* pcSubject)
+Subject* Listener::Listen(Subject* pSubject)
 {
 	Subject* pOld = GetListeningSubject();
 
@@ -67,7 +67,7 @@ Subject* Listener::Listen(Subject* pcSubject)
 	}
 
 	// V‚µ‚­İ’è
-	m_pSubjectRef = pcSubject;
+	m_pSubjectRef = pSubject;
 	if (m_pSubjectRef) {
 		m_pSubjectRef->_AddListener(this);
 	}

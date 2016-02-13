@@ -108,14 +108,14 @@ CodeConvertResult CodePage::CPToUni(const char* pSrc, const int nSrcLen, wchar_t
 
 /*!	CODEPAGE→Unicodeコード変換
 */
-CodeConvertResult CodePage::CPToUnicode(const Memory& cSrc, NativeW* pDst, int codepageEx)
+CodeConvertResult CodePage::CPToUnicode(const Memory& src, NativeW* pDst, int codepageEx)
 {
 	// エラー状態
 	bool bError = false;
 
 	// ソース取得
 	int nSrcLen;
-	const char* pSrc = reinterpret_cast<const char*>( cSrc.GetRawPtr(&nSrcLen) );
+	const char* pSrc = reinterpret_cast<const char*>( src.GetRawPtr(&nSrcLen) );
 
 	UINT codepage = CodePageExToMSCP(codepageEx);
 	int nDstCch = MultiByteToWideChar2(codepage, nToWideCharFlags, pSrc, nSrcLen, NULL, 0);
@@ -170,10 +170,10 @@ CodeConvertResult CodePage::UniToCP(const wchar_t* pSrc, const int nSrcLen, char
 }
 
 
-CodeConvertResult CodePage::UnicodeToCP(const NativeW& cSrc, Memory* pDst, int codepageEx)
+CodeConvertResult CodePage::UnicodeToCP(const NativeW& src, Memory* pDst, int codepageEx)
 {
-	const wchar_t* pSrc = cSrc.GetStringPtr();
-	int nSrcLen = cSrc.GetStringLength();
+	const wchar_t* pSrc = src.GetStringPtr();
+	int nSrcLen = src.GetStringLength();
 	
 	if (nSrcLen == 0) {
 		return CodeConvertResult::Complete;

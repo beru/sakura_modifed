@@ -637,16 +637,16 @@ bool CheckRegexpVersion(
 	bool	bShowMessage	// [in] 初期化失敗時にエラーメッセージを出すフラグ
 )
 {
-	Bregexp cRegexp;
+	Bregexp regexp;
 
-	if (!InitRegexp(hWnd, cRegexp, bShowMessage)) {
+	if (!InitRegexp(hWnd, regexp, bShowMessage)) {
 		if (hWnd) {
 			::DlgItem_SetText(hWnd, nCmpId, _T(" "));
 		}
 		return false;
 	}
 	if (hWnd) {
-		::DlgItem_SetText(hWnd, nCmpId, cRegexp.GetVersionT());
+		::DlgItem_SetText(hWnd, nCmpId, regexp.GetVersionT());
 	}
 	return true;
 }
@@ -669,17 +669,17 @@ bool CheckRegexpSyntax(
 	int				nOption,
 	bool			bKakomi)
 {
-	Bregexp cRegexp;
+	Bregexp regexp;
 
-	if (!InitRegexp(hWnd, cRegexp, bShowMessage)) {
+	if (!InitRegexp(hWnd, regexp, bShowMessage)) {
 		return false;
 	}
 	if (nOption == -1) {
 		nOption = Bregexp::optCaseSensitive;
 	}
-	if (!cRegexp.Compile(szPattern, NULL, nOption, bKakomi)) {	// 2002/2/1 hor追加
+	if (!regexp.Compile(szPattern, NULL, nOption, bKakomi)) {	// 2002/2/1 hor追加
 		if (bShowMessage) {
-			::MessageBox(hWnd, cRegexp.GetLastMessage(),
+			::MessageBox(hWnd, regexp.GetLastMessage(),
 				LS(STR_BREGONIG_TITLE), MB_OK | MB_ICONEXCLAMATION);
 		}
 		return false;

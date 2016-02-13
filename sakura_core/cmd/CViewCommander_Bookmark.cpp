@@ -267,20 +267,20 @@ void ViewCommander::Command_BOOKMARK_SET(void)
 {
 	DocLine* pDocLine;
 	auto& selInfo = m_pCommanderView->GetSelectionInfo();
-	auto& sSelect = selInfo.m_select;
+	auto& select = selInfo.m_select;
 	auto& lineMgr = GetDocument()->m_docLineMgr;
 	if (selInfo.IsTextSelected()
-		&& sSelect.GetFrom().y < sSelect.GetTo().y
+		&& select.GetFrom().y < select.GetTo().y
 	) {
 		LogicPoint ptFrom;
 		LogicPoint ptTo;
 		auto& layoutMgr = GetDocument()->m_layoutMgr;
 		layoutMgr.LayoutToLogic(
-			LayoutPoint(LayoutInt(0), sSelect.GetFrom().y),
+			LayoutPoint(LayoutInt(0), select.GetFrom().y),
 			&ptFrom
 		);
 		GetDocument()->m_layoutMgr.LayoutToLogic(
-			LayoutPoint(LayoutInt(0), sSelect.GetTo().y),
+			LayoutPoint(LayoutInt(0), select.GetTo().y),
 			&ptTo
 		);
 		for (LogicInt nY=ptFrom.GetY2(); nY<=ptTo.y; ++nY) {

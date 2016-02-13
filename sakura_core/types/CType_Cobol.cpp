@@ -45,7 +45,7 @@ void CType_Cobol::InitTypeConfigImp(TypeConfig* pType)
 	pType->m_nKeyWordSetIdx[0] = 3;						// キーワードセット		// Jul. 10, 2001 JEPRO
 	pType->m_eDefaultOutline = OUTLINE_COBOL;			// アウトライン解析方法
 	// 指定桁縦線	// 2005.11.08 Moca
-	pType->m_ColorInfoArr[COLORIDX_VERTLINE].m_bDisp = true;
+	pType->m_colorInfoArr[COLORIDX_VERTLINE].m_bDisp = true;
 	pType->m_nVertLineIdx[0] = LayoutInt(7);
 	pType->m_nVertLineIdx[1] = LayoutInt(8);
 	pType->m_nVertLineIdx[2] = LayoutInt(12);
@@ -54,7 +54,7 @@ void CType_Cobol::InitTypeConfigImp(TypeConfig* pType)
 
 
 //! COBOL アウトライン解析
-void DocOutline::MakeTopicList_cobol(FuncInfoArr* pcFuncInfoArr)
+void DocOutline::MakeTopicList_cobol(FuncInfoArr* pFuncInfoArr)
 {
 	const wchar_t*	pLine;
 	LogicInt		nLineLen;
@@ -133,7 +133,7 @@ void DocOutline::MakeTopicList_cobol(FuncInfoArr* pcFuncInfoArr)
 				&ptPos
 			);
 			auto_sprintf_s(szWork, L"%ls::%ls", szDivision, szLabel);
-			pcFuncInfoArr->AppendData(nLineCount + LogicInt(1), ptPos.GetY2() + LayoutInt(1) , szWork, 0);
+			pFuncInfoArr->AppendData(nLineCount + LogicInt(1), ptPos.GetY2() + LayoutInt(1) , szWork, 0);
 		}
 	}
 	return;

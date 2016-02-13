@@ -339,11 +339,11 @@ UINT_PTR CALLBACK OFNHookProc(
 			}else {
 				i = 0;
 			}
-			CodeTypesForCombobox cCodeTypes;
-			for (/*i = 0*/; i<cCodeTypes.GetCount(); ++i) {
-				nIdx = Combo_AddString(pData->m_hwndComboCODES, cCodeTypes.GetName(i));
-				Combo_SetItemData(pData->m_hwndComboCODES, nIdx, cCodeTypes.GetCode(i));
-				if (cCodeTypes.GetCode(i) == pData->m_nCharCode) {
+			CodeTypesForCombobox codeTypes;
+			for (/*i = 0*/; i<codeTypes.GetCount(); ++i) {
+				nIdx = Combo_AddString(pData->m_hwndComboCODES, codeTypes.GetName(i));
+				Combo_SetItemData(pData->m_hwndComboCODES, nIdx, codeTypes.GetCode(i));
+				if (codeTypes.GetCode(i) == pData->m_nCharCode) {
 					nIdxSel = nIdx;
 				}
 			}
@@ -536,13 +536,13 @@ UINT_PTR CALLBACK OFNHookProc(
 					DlgOpenFileData* pData = (DlgOpenFileData*)::GetWindowLongPtr(hdlg, DWLP_USER);
 					nIdx = Combo_GetCurSel((HWND) lParam);
 					lRes = Combo_GetItemData((HWND) lParam, nIdx);
-					CodeTypeName cCodeTypeName(lRes);
-					if (cCodeTypeName.UseBom()) {
+					CodeTypeName codeTypeName(lRes);
+					if (codeTypeName.UseBom()) {
 						::EnableWindow(pData->m_hwndCheckBOM, TRUE);
 						if (lRes == pData->m_nCharCode){
 							fCheck = pData->m_bBom ? BST_CHECKED: BST_UNCHECKED;
 						}else {
-							fCheck = cCodeTypeName.IsBomDefOn() ? BST_CHECKED : BST_UNCHECKED;
+							fCheck = codeTypeName.IsBomDefOn() ? BST_CHECKED : BST_UNCHECKED;
 						}
 					}else {
 						::EnableWindow( pData->m_hwndCheckBOM, FALSE );
@@ -700,7 +700,7 @@ void DlgOpenFile::Create(
 	const TCHAR*				pszDefaultPath,
 	const std::vector<LPCTSTR>& vMRU,
 	const std::vector<LPCTSTR>& vOPENFOLDER
-)
+	)
 {
 	m_mem->m_hInstance = hInstance;
 	m_mem->m_hwndParent = hwndParent;
@@ -745,10 +745,10 @@ bool DlgOpenFile::DoModal_GetOpenFileName(TCHAR* pszPath, bool bSetCurDir)
 	CurrentDirectoryBackupPoint curDirBackup;
 
 	// 2003.05.12 MIK
-	FileExt cFileExt;
-	cFileExt.AppendExtRaw(LS(STR_DLGOPNFL_EXTNAME1), m_mem->m_szDefaultWildCard);
-	cFileExt.AppendExtRaw(LS(STR_DLGOPNFL_EXTNAME2), _T("*.txt"));
-	cFileExt.AppendExtRaw(LS(STR_DLGOPNFL_EXTNAME3), _T("*.*"));
+	FileExt fileExt;
+	fileExt.AppendExtRaw(LS(STR_DLGOPNFL_EXTNAME1), m_mem->m_szDefaultWildCard);
+	fileExt.AppendExtRaw(LS(STR_DLGOPNFL_EXTNAME2), _T("*.txt"));
+	fileExt.AppendExtRaw(LS(STR_DLGOPNFL_EXTNAME3), _T("*.*"));
 
 	// 構造体の初期化
 	auto pData = std::make_unique<DlgOpenFileData>();
@@ -758,7 +758,7 @@ bool DlgOpenFile::DoModal_GetOpenFileName(TCHAR* pszPath, bool bSetCurDir)
 
 	pData->m_ofn.hwndOwner = m_mem->m_hwndParent;
 	pData->m_ofn.hInstance = SelectLang::getLangRsrcInstance();
-	pData->m_ofn.lpstrFilter = cFileExt.GetExtFilter();
+	pData->m_ofn.lpstrFilter = fileExt.GetExtFilter();
 	// From Here Jun. 23, 2002 genta
 	//「開く」での初期フォルダチェック強化
 // 2005/02/20 novice デフォルトのファイル名は何も設定しない
@@ -818,10 +818,10 @@ bool DlgOpenFile::DoModal_GetSaveFileName(TCHAR* pszPath, bool bSetCurDir)
 	CurrentDirectoryBackupPoint curDirBackup;
 
 	// 2003.05.12 MIK
-	FileExt cFileExt;
-	cFileExt.AppendExtRaw(LS(STR_DLGOPNFL_EXTNAME1), m_mem->m_szDefaultWildCard);
-	cFileExt.AppendExtRaw(LS(STR_DLGOPNFL_EXTNAME2), _T("*.txt"));
-	cFileExt.AppendExtRaw(LS(STR_DLGOPNFL_EXTNAME3), _T("*.*"));
+	FileExt fileExt;
+	fileExt.AppendExtRaw(LS(STR_DLGOPNFL_EXTNAME1), m_mem->m_szDefaultWildCard);
+	fileExt.AppendExtRaw(LS(STR_DLGOPNFL_EXTNAME2), _T("*.txt"));
+	fileExt.AppendExtRaw(LS(STR_DLGOPNFL_EXTNAME3), _T("*.*"));
 	
 	// 2010.08.28 カレントディレクトリを移動するのでパス解決する
 	if (pszPath[0]) {
@@ -840,7 +840,7 @@ bool DlgOpenFile::DoModal_GetSaveFileName(TCHAR* pszPath, bool bSetCurDir)
 	pData->m_ofn.lCustData = (LPARAM)(pData.get());
 	pData->m_ofn.hwndOwner = m_mem->m_hwndParent;
 	pData->m_ofn.hInstance = SelectLang::getLangRsrcInstance();
-	pData->m_ofn.lpstrFilter = cFileExt.GetExtFilter();
+	pData->m_ofn.lpstrFilter = fileExt.GetExtFilter();
 	pData->m_ofn.lpstrFile = pszPath; // 2005/02/20 novice デフォルトのファイル名は何も設定しない
 	pData->m_ofn.nMaxFile = _MAX_PATH;
 	pData->m_ofn.lpstrInitialDir = m_mem->m_szInitialDir;
@@ -878,13 +878,13 @@ bool DlgOpenFile::DoModalOpenDlg(
 	bool bMultiSelect = pFileNames != NULL;
 
 	// ファイルの種類	2003.05.12 MIK
-	FileExt cFileExt;
-	cFileExt.AppendExtRaw(LS(STR_DLGOPNFL_EXTNAME3), _T("*.*"));
-	cFileExt.AppendExtRaw(LS(STR_DLGOPNFL_EXTNAME2), _T("*.txt"));
+	FileExt fileExt;
+	fileExt.AppendExtRaw(LS(STR_DLGOPNFL_EXTNAME3), _T("*.*"));
+	fileExt.AppendExtRaw(LS(STR_DLGOPNFL_EXTNAME2), _T("*.txt"));
 	for (int i=0; i<GetDllShareData().m_nTypesCount; ++i) {
 		const TypeConfigMini* type;
 		DocTypeManager().GetTypeConfigMini(TypeConfigNum(i), &type);
-		cFileExt.AppendExt(type->m_szTypeName, type->m_szTypeExts);
+		fileExt.AppendExt(type->m_szTypeName, type->m_szTypeExts);
 	}
 
 	// メンバの初期化
@@ -905,7 +905,7 @@ bool DlgOpenFile::DoModalOpenDlg(
 	pData->m_ofn.lCustData = (LPARAM)(pData.get());
 	pData->m_ofn.hwndOwner = m_mem->m_hwndParent;
 	pData->m_ofn.hInstance = SelectLang::getLangRsrcInstance();
-	pData->m_ofn.lpstrFilter = cFileExt.GetExtFilter();
+	pData->m_ofn.lpstrFilter = fileExt.GetExtFilter();
 	pData->m_ofn.lpstrFile = pszPathBuf;
 	pData->m_ofn.nMaxFile = 2000;
 	pData->m_ofn.lpstrInitialDir = m_mem->m_szInitialDir;
@@ -979,10 +979,10 @@ bool DlgOpenFile::DoModalSaveDlg(
 	pData->m_bIsSaveDialog = true;	// 保存のダイアログか
 
 	// 2003.05.12 MIK
-	FileExt cFileExt;
-	cFileExt.AppendExtRaw(LS(STR_DLGOPNFL_EXTNAME1), m_mem->m_szDefaultWildCard);
-	cFileExt.AppendExtRaw(LS(STR_DLGOPNFL_EXTNAME2), _T("*.txt"));
-	cFileExt.AppendExtRaw(LS(STR_DLGOPNFL_EXTNAME3), _T("*.*"));
+	FileExt fileExt;
+	fileExt.AppendExtRaw(LS(STR_DLGOPNFL_EXTNAME1), m_mem->m_szDefaultWildCard);
+	fileExt.AppendExtRaw(LS(STR_DLGOPNFL_EXTNAME2), _T("*.txt"));
+	fileExt.AppendExtRaw(LS(STR_DLGOPNFL_EXTNAME3), _T("*.*"));
 
 	// ファイル名の初期設定	// 2006.11.10 ryoji
 	if (pSaveInfo->filePath[0] == _T('\0')) {
@@ -994,7 +994,7 @@ bool DlgOpenFile::DoModalSaveDlg(
 	pData->m_ofn.lCustData = (LPARAM)(pData.get());
 	pData->m_ofn.hwndOwner = m_mem->m_hwndParent;
 	pData->m_ofn.hInstance = SelectLang::getLangRsrcInstance();
-	pData->m_ofn.lpstrFilter = cFileExt.GetExtFilter();
+	pData->m_ofn.lpstrFilter = fileExt.GetExtFilter();
 	pData->m_ofn.lpstrFile = pSaveInfo->filePath;	// 2005/02/20 novice デフォルトのファイル名は何も設定しない
 	pData->m_ofn.nMaxFile = _MAX_PATH;
 	pData->m_ofn.lpstrInitialDir = m_mem->m_szInitialDir;
@@ -1170,7 +1170,6 @@ void DlgOpenFile::InitLayout(
 		}
 		hwndCtrl = ::GetWindow(hwndCtrl, GW_HWNDNEXT);
 	}
-
 
 	// 標準コントロールのプレースフォルダ（stc32）と子ダイアログの幅をオープンダイアログの幅にあわせる
 	//     WM_INITDIALOG を抜けるとさらにオープンダイアログ側で現在の位置関係からレイアウト調整が行われる

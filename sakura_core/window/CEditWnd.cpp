@@ -121,23 +121,23 @@ static const FuncMenuName	sFuncMenuName[] = {
 	{F_TOGGLE_KEY_SEARCH,	{F_TOGGLE_KEY_SEARCH_ON,		F_TOGGLE_KEY_SEARCH_OFF}},
 };
 
-static void ShowCodeBox(HWND hWnd, EditDoc* pcEditDoc)
+static void ShowCodeBox(HWND hWnd, EditDoc* pEditDoc)
 {
 	// カーソル位置の文字列を取得
-	const Layout*	pcLayout;
+	const Layout*	pLayout;
 	LogicInt		nLineLen;
-	const EditView* pcView = &pcEditDoc->m_pEditWnd->GetActiveView();
-	const Caret* pcCaret = &pcView->GetCaret();
-	const LayoutMgr* pLayoutMgr = &pcEditDoc->m_layoutMgr;
-	const wchar_t* pLine = pLayoutMgr->GetLineStr(pcCaret->GetCaretLayoutPos().GetY2(), &nLineLen, &pcLayout);
+	const EditView* pView = &pEditDoc->m_pEditWnd->GetActiveView();
+	const Caret* pCaret = &pView->GetCaret();
+	const LayoutMgr* pLayoutMgr = &pEditDoc->m_layoutMgr;
+	const wchar_t* pLine = pLayoutMgr->GetLineStr(pCaret->GetCaretLayoutPos().GetY2(), &nLineLen, &pLayout);
 
 	// -- -- -- -- キャレット位置の文字情報 -> szCaretChar -- -- -- -- //
 	//
 	if (pLine) {
 		// 指定された桁に対応する行のデータ内の位置を調べる
-		LogicInt nIdx = pcView->LineColumnToIndex(pcLayout, pcCaret->GetCaretLayoutPos().GetX2());
+		LogicInt nIdx = pView->LineColumnToIndex(pLayout, pCaret->GetCaretLayoutPos().GetX2());
 		if (nIdx < nLineLen) {
-			if (nIdx < nLineLen - (pcLayout->GetLayoutEol().GetLen() ? 1 : 0)) {
+			if (nIdx < nLineLen - (pLayout->GetLayoutEol().GetLen() ? 1 : 0)) {
 				// 一時的に表示方法の設定を変更する
 				CommonSetting_StatusBar sStatusbar;
 				sStatusbar.m_bDispUniInSjis		= false;
@@ -193,11 +193,11 @@ LRESULT CALLBACK CEditWndProc(
 	UINT	uMsg,	// message identifier
 	WPARAM	wParam,	// first message parameter
 	LPARAM	lParam 	// second message parameter
-)
+	)
 {
-	EditWnd* pcWnd = (EditWnd*)::GetWindowLongPtr(hwnd, GWLP_USERDATA);
-	if (pcWnd) {
-		return pcWnd->DispatchEvent(hwnd, uMsg, wParam, lParam);
+	EditWnd* pWnd = (EditWnd*)::GetWindowLongPtr(hwnd, GWLP_USERDATA);
+	if (pWnd) {
+		return pWnd->DispatchEvent(hwnd, uMsg, wParam, lParam);
 	}
 	return ::DefWindowProc(hwnd, uMsg, wParam, lParam);
 }
@@ -270,7 +270,7 @@ EditWnd::~EditWnd()
 
 // ドキュメントリスナ：セーブ後
 // 2008.02.02 kobake
-void EditWnd::OnAfterSave(const SaveInfo& sSaveInfo)
+void EditWnd::OnAfterSave(const SaveInfo& saveInfo)
 {
 	// ビュー再描画
 	this->Views_RedrawAll();
@@ -284,7 +284,9 @@ void EditWnd::OnAfterSave(const SaveInfo& sSaveInfo)
 
 void EditWnd::UpdateCaption()
 {
-	if (!GetActiveView().GetDrawSwitch()) return;
+	if (!GetActiveView().GetDrawSwitch()) {
+		return;
+	}
 
 	// キャプション文字列の生成 -> pszCap
 	wchar_t	pszCap[1024];
@@ -311,7 +313,7 @@ void EditWnd::UpdateCaption()
 
 
 // ウィンドウ生成用の矩形を取得
-void EditWnd::_GetWindowRectForInit(Rect* rcResult, int nGroup, const TabGroupInfo& sTabGroupInfo)
+void EditWnd::_GetWindowRectForInit(Rect* rcResult, int nGroup, const TabGroupInfo& tabGroupInfo)
 {
 	// ウィンドウサイズ継承
 	int	nWinCX, nWinCY;
@@ -355,11 +357,11 @@ void EditWnd::_GetWindowRectForInit(Rect* rcResult, int nGroup, const TabGroupIn
 	}
 
 	// 必要なら、タブグループにフィットするよう、変更
-	if (sTabGroupInfo.IsValid()) {
+	if (tabGroupInfo.IsValid()) {
 		RECT rcWork, rcMon;
-		GetMonitorWorkRect(sTabGroupInfo.hwndTop, &rcWork, &rcMon);
+		GetMonitorWorkRect(tabGroupInfo.hwndTop, &rcWork, &rcMon);
 
-		const WINDOWPLACEMENT& wpTop = sTabGroupInfo.wpTop;
+		const WINDOWPLACEMENT& wpTop = tabGroupInfo.wpTop;
 		nWinCX = wpTop.rcNormalPosition.right  - wpTop.rcNormalPosition.left;
 		nWinCY = wpTop.rcNormalPosition.bottom - wpTop.rcNormalPosition.top;
 		nWinOX = wpTop.rcNormalPosition.left   + (rcWork.left - rcMon.left);
@@ -370,7 +372,7 @@ void EditWnd::_GetWindowRectForInit(Rect* rcResult, int nGroup, const TabGroupIn
 	rcResult->SetXYWH(nWinOX, nWinOY, nWinCX, nWinCY);
 }
 
-HWND EditWnd::_CreateMainWindow(int nGroup, const TabGroupInfo& sTabGroupInfo)
+HWND EditWnd::_CreateMainWindow(int nGroup, const TabGroupInfo& tabGroupInfo)
 {
 	// -- -- -- -- ウィンドウクラス登録 -- -- -- -- //
 	WNDCLASSEX	wc;
@@ -401,7 +403,7 @@ HWND EditWnd::_CreateMainWindow(int nGroup, const TabGroupInfo& sTabGroupInfo)
 
 	// 矩形取得
 	Rect rc;
-	_GetWindowRectForInit(&rc, nGroup, sTabGroupInfo);
+	_GetWindowRectForInit(&rc, nGroup, tabGroupInfo);
 
 	// 作成
 	HWND hwndResult = ::CreateWindowEx(
@@ -454,7 +456,7 @@ void EditWnd::_GetTabGroupInfo(TabGroupInfo* pTabGroupInfo, int& nGroup)
 	pTabGroupInfo->wpTop = wpTop;
 }
 
-void EditWnd::_AdjustInMonitor(const TabGroupInfo& sTabGroupInfo)
+void EditWnd::_AdjustInMonitor(const TabGroupInfo& tabGroupInfo)
 {
 	RECT	rcOrg;
 	RECT	rcDesktop;
@@ -497,17 +499,17 @@ void EditWnd::_AdjustInMonitor(const TabGroupInfo& sTabGroupInfo)
 	// From Here @@@ 2003.06.13 MIK
 	if (m_pShareData->m_common.m_tabBar.m_bDispTabWnd
 		&& !m_pShareData->m_common.m_tabBar.m_bDispTabWndMultiWin
-		&& sTabGroupInfo.hwndTop
+		&& tabGroupInfo.hwndTop
 	) {
 		// 現在の先頭ウィンドウから WS_EX_TOPMOST 状態を引き継ぐ	// 2007.05.18 ryoji
-		DWORD dwExStyle = (DWORD)::GetWindowLongPtr(sTabGroupInfo.hwndTop, GWL_EXSTYLE);
+		DWORD dwExStyle = (DWORD)::GetWindowLongPtr(tabGroupInfo.hwndTop, GWL_EXSTYLE);
 		::SetWindowPos(GetHwnd(), (dwExStyle & WS_EX_TOPMOST)? HWND_TOPMOST: HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
 
 		// タブウィンドウ時は現状を維持
 		// ウィンドウサイズ継承
 		// Vista 以降の初回表示アニメーション効果を抑止する
 		if (!IsWinVista_or_later()) {
-			if (sTabGroupInfo.wpTop.showCmd == SW_SHOWMAXIMIZED) {
+			if (tabGroupInfo.wpTop.showCmd == SW_SHOWMAXIMIZED) {
 				::ShowWindow(GetHwnd(), SW_SHOWMAXIMIZED);
 			}else {
 				::ShowWindow(GetHwnd(), SW_SHOW);
@@ -519,30 +521,30 @@ void EditWnd::_AdjustInMonitor(const TabGroupInfo& sTabGroupInfo)
 			// ここでは、あとで正式に適用されるはずのドキュメントタイプを仮設定して一時描画しておく（ビューの配色切替によるちらつきを抑える）
 			// さらに、タイプを戻して画面を無効化だけしておく（何らかの原因で途中停止した場合にはもとのタイプ色で再描画されるように ← 例えばファイルサイズが大きすぎる警告を出すときなど）
 			// ※ 正攻法とはいえないかもしれないがあちこち手を入れることなく簡潔に済ませられるのでこうしておく
-			TypeConfigNum cTypeOld, cTypeNew(-1);
-			cTypeOld = GetDocument()->m_docType.GetDocumentType();	// 現在のタイプ
+			TypeConfigNum typeOld, typeNew(-1);
+			typeOld = GetDocument()->m_docType.GetDocumentType();	// 現在のタイプ
 			{
 				EditInfo ei, mruei;
 				CommandLine::getInstance()->GetEditInfo(&ei);
 				if (ei.m_szDocType[0] != '\0') {
-					cTypeNew = DocTypeManager().GetDocumentTypeOfExt(ei.m_szDocType);
+					typeNew = DocTypeManager().GetDocumentTypeOfExt(ei.m_szDocType);
 				}else {
 					if (MRUFile().GetEditInfo(ei.m_szPath, &mruei) && 0 < mruei.m_nTypeId) {
-						cTypeNew = DocTypeManager().GetDocumentTypeOfId(mruei.m_nTypeId);
+						typeNew = DocTypeManager().GetDocumentTypeOfId(mruei.m_nTypeId);
 					}
-					if (!cTypeNew.IsValidType()) {
+					if (!typeNew.IsValidType()) {
 						if (ei.m_szPath[0]) {
-							cTypeNew = DocTypeManager().GetDocumentTypeOfPath(ei.m_szPath);
+							typeNew = DocTypeManager().GetDocumentTypeOfPath(ei.m_szPath);
 						}else {
-							cTypeNew = cTypeOld;
+							typeNew = typeOld;
 						}
 					}
 				}
 			}
-			GetDocument()->m_docType.SetDocumentType(cTypeNew, true, true);	// 仮設定
+			GetDocument()->m_docType.SetDocumentType(typeNew, true, true);	// 仮設定
 
 			// 可能な限り画面描画の様子が見えないよう一時的に先頭ウィンドウの後ろに配置
-			::SetWindowPos(GetHwnd(), sTabGroupInfo.hwndTop, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
+			::SetWindowPos(GetHwnd(), tabGroupInfo.hwndTop, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
 
 			// アニメーション効果は一時的に OFF にする
 			ANIMATIONINFO ai = {sizeof(ANIMATIONINFO)};
@@ -552,18 +554,18 @@ void EditWnd::_AdjustInMonitor(const TabGroupInfo& sTabGroupInfo)
 			::SystemParametersInfo(SPI_SETANIMATION, sizeof(ANIMATIONINFO), &ai, 0);
 
 			// 可視化する（最大化のときは次の ::ShowWindow() で手前に出てしまうので、アニメーション除去効果はあるがクライアント領域のちらつきは抑えきれない）
-			int nCmdShow = (sTabGroupInfo.wpTop.showCmd == SW_SHOWMAXIMIZED)? SW_SHOWMAXIMIZED: SW_SHOWNOACTIVATE;
+			int nCmdShow = (tabGroupInfo.wpTop.showCmd == SW_SHOWMAXIMIZED)? SW_SHOWMAXIMIZED: SW_SHOWNOACTIVATE;
 			::ShowWindow(GetHwnd(), nCmdShow);
 			::UpdateWindow(GetHwnd());	// 画面更新
 			::BringWindowToTop(GetHwnd());
-			::ShowWindow(sTabGroupInfo.hwndTop , SW_HIDE);	// 以前の先頭ウィンドウはここで消しておかないと消えるアニメーションが見える場合がある
+			::ShowWindow(tabGroupInfo.hwndTop , SW_HIDE);	// 以前の先頭ウィンドウはここで消しておかないと消えるアニメーションが見える場合がある
 
 			// アニメーション効果を戻す
 			ai.iMinAnimate = iMinAnimateOld;
 			::SystemParametersInfo(SPI_SETANIMATION, sizeof(ANIMATIONINFO), &ai, 0);
 
 			// アイドリング開始時にその時点のタイプ別設定色で再描画されるようにしておく
-			GetDocument()->m_docType.SetDocumentType(cTypeOld, true, true);	// タイプ戻し
+			GetDocument()->m_docType.SetDocumentType(typeOld, true, true);	// タイプ戻し
 			::InvalidateRect(GetHwnd(), NULL, TRUE);	// 画面無効化
 		}
 	}else {
@@ -601,17 +603,17 @@ void EditWnd::_AdjustInMonitor(const TabGroupInfo& sTabGroupInfo)
 	@date 2008.04.19 ryoji 初回アイドリング検出用ゼロ秒タイマーのセット処理を追加
 */
 HWND EditWnd::Create(
-	EditDoc*		pcEditDoc,
-	ImageListMgr*	pcIcons,	// [in] Image List
+	EditDoc*		pEditDoc,
+	ImageListMgr*	pIcons,	// [in] Image List
 	int				nGroup		// [in] グループID
-)
+	)
 {
 	MY_RUNNINGTIMER(cRunningTimer, "EditWnd::Create");
 
 	// 共有データ構造体のアドレスを返す
 	m_pShareData = &GetDllShareData();
 
-	m_pEditDoc = pcEditDoc;
+	m_pEditDoc = pEditDoc;
 
 	for (int i=0; i<_countof(m_pEditViewArr); ++i) {
 		m_pEditViewArr[i] = NULL;
@@ -646,13 +648,15 @@ HWND EditWnd::Create(
 	}
 
 	// タブグループ情報取得
-	TabGroupInfo sTabGroupInfo;
-	_GetTabGroupInfo(&sTabGroupInfo, nGroup);
+	TabGroupInfo tabGroupInfo;
+	_GetTabGroupInfo(&tabGroupInfo, nGroup);
 
 
 	// -- -- -- -- ウィンドウ作成 -- -- -- -- //
-	HWND hWnd = _CreateMainWindow(nGroup, sTabGroupInfo);
-	if (!hWnd) return NULL;
+	HWND hWnd = _CreateMainWindow(nGroup, tabGroupInfo);
+	if (!hWnd) {
+		return NULL;
+	}
 	m_hWnd = hWnd;
 
 	// 初回アイドリング検出用のゼロ秒タイマーをセットする	// 2008.04.19 ryoji
@@ -675,8 +679,8 @@ HWND EditWnd::Create(
 	MyInitCommonControls();
 
 	// イメージ、ヘルパなどの作成
-	m_menuDrawer.Create(G_AppInstance(), GetHwnd(), pcIcons);
-	m_toolbar.Create(pcIcons);
+	m_menuDrawer.Create(G_AppInstance(), GetHwnd(), pIcons);
+	m_toolbar.Create(pIcons);
 
 	// プラグインコマンドを登録する
 	RegisterPluginCommand();
@@ -734,7 +738,7 @@ HWND EditWnd::Create(
 	::SetWindowLongPtr(GetHwnd(), GWLP_USERDATA, (LONG_PTR)this);
 
 	// デスクトップからはみ出さないようにする
-	_AdjustInMonitor(sTabGroupInfo);
+	_AdjustInMonitor(tabGroupInfo);
 
 	// ドロップされたファイルを受け入れる
 	::DragAcceptFiles(GetHwnd(), TRUE);
@@ -784,11 +788,11 @@ void EditWnd::OpenDocumentWhenStart(
 	if (_sLoadInfo.filePath.Length()) {
 		::ShowWindow(GetHwnd(), SW_SHOW);
 		// Oct. 03, 2004 genta コード確認は設定に依存
-		LoadInfo sLoadInfo = _sLoadInfo;
-		bool bReadResult = GetDocument()->m_docFileOperation.FileLoadWithoutAutoMacro(&sLoadInfo);	// 自動実行マクロは後で別の場所で実行される
+		LoadInfo loadInfo = _sLoadInfo;
+		bool bReadResult = GetDocument()->m_docFileOperation.FileLoadWithoutAutoMacro(&loadInfo);	// 自動実行マクロは後で別の場所で実行される
 		if (!bReadResult) {
 			// ファイルが既に開かれている
-			if (sLoadInfo.bOpened) {
+			if (loadInfo.bOpened) {
 				::PostMessage(GetHwnd(), WM_CLOSE, 0, 0);
 				// 2004.07.12 Moca return NULLだと、メッセージループを通らずにそのまま破棄されてしまい、タブの終了処理が抜ける
 				//	この後は正常ルートでメッセージループに入った後WM_CLOSEを受信して直ちにCLOSE & DESTROYとなる．
@@ -846,8 +850,8 @@ void EditWnd::LayoutMainMenu()
 {
 	TCHAR		szLabel[300];
 	TCHAR		szKey[10];
-	CommonSetting_MainMenu*	pcMenu = &m_pShareData->m_common.m_mainMenu;
-	MainMenu*	cMainMenu;
+	CommonSetting_MainMenu*	pMenu = &m_pShareData->m_common.m_mainMenu;
+	MainMenu*	mainMenu;
 	HWND		hWnd = GetHwnd();
 	HMENU		hMenu;
 	int 		nCount;
@@ -855,49 +859,49 @@ void EditWnd::LayoutMainMenu()
 
 	hMenu = ::CreateMenu();
 	auto& csKeyBind = m_pShareData->m_common.m_keyBind;
-	for (int i=0; i<MAX_MAINMENU_TOP && pcMenu->m_nMenuTopIdx[i] >= 0; ++i) {
-		nCount = (i >= MAX_MAINMENU_TOP || pcMenu->m_nMenuTopIdx[i + 1] < 0 ? pcMenu->m_nMainMenuNum : pcMenu->m_nMenuTopIdx[i+1])
-				- pcMenu->m_nMenuTopIdx[i];		// メニュー項目数
-		cMainMenu = &pcMenu->m_mainMenuTbl[pcMenu->m_nMenuTopIdx[i]];
-		switch (cMainMenu->m_nType) {
+	for (int i=0; i<MAX_MAINMENU_TOP && pMenu->m_nMenuTopIdx[i] >= 0; ++i) {
+		nCount = (i >= MAX_MAINMENU_TOP || pMenu->m_nMenuTopIdx[i + 1] < 0 ? pMenu->m_nMainMenuNum : pMenu->m_nMenuTopIdx[i+1])
+				- pMenu->m_nMenuTopIdx[i];		// メニュー項目数
+		mainMenu = &pMenu->m_mainMenuTbl[pMenu->m_nMenuTopIdx[i]];
+		switch (mainMenu->m_nType) {
 		case MainMenuType::Node:
 			// ラベル未設定かつFunctionコードがありならストリングテーブルから取得 2012/10/18 syat 各国語対応
-			pszName = (cMainMenu->m_sName[0] == L'\0' && cMainMenu->m_nFunc != F_NODE)
-								? LS(cMainMenu->m_nFunc) : to_tchar(cMainMenu->m_sName);
+			pszName = (mainMenu->m_sName[0] == L'\0' && mainMenu->m_nFunc != F_NODE)
+								? LS(mainMenu->m_nFunc) : to_tchar(mainMenu->m_sName);
 			::AppendMenu(hMenu, MF_POPUP | MF_STRING | (nCount <= 1 ? MF_GRAYED : 0), (UINT_PTR)CreatePopupMenu(), 
-				KeyBind::MakeMenuLabel(pszName, to_tchar(cMainMenu->m_sKey)));
+				KeyBind::MakeMenuLabel(pszName, to_tchar(mainMenu->m_sKey)));
 			break;
 		case MainMenuType::Leaf:
 			// メニューラベルの作成
 			// 2014.05.04 Moca プラグイン/マクロ等を置けるようにFunccode2Nameを使うように
 			{
 				WCHAR szLabelW[256];
-				GetDocument()->m_funcLookup.Funccode2Name(cMainMenu->m_nFunc, szLabelW, 256);
+				GetDocument()->m_funcLookup.Funccode2Name(mainMenu->m_nFunc, szLabelW, 256);
 				auto_strncpy(szLabel, to_tchar(szLabelW), _countof(szLabel) - 1);
 				szLabel[_countof(szLabel) - 1] = _T('\0');
 			}
-			auto_strcpy(szKey, to_tchar(cMainMenu->m_sKey));
+			auto_strcpy(szKey, to_tchar(mainMenu->m_sKey));
 			if (!KeyBind::GetMenuLabel(
 				G_AppInstance(),
 				csKeyBind.m_nKeyNameArrNum,
 				csKeyBind.m_pKeyNameArr,
-				cMainMenu->m_nFunc,
+				mainMenu->m_nFunc,
 				szLabel,
-				to_tchar(cMainMenu->m_sKey),
+				to_tchar(mainMenu->m_sKey),
 				FALSE,
 				_countof(szLabel)
 				)
 			) {
 				auto_strcpy(szLabel, _T("?"));
 			}
-			::AppendMenu(hMenu, MF_STRING, cMainMenu->m_nFunc, szLabel);
+			::AppendMenu(hMenu, MF_STRING, mainMenu->m_nFunc, szLabel);
 			break;
 		case MainMenuType::Separator:
 			::AppendMenu(hMenu, MF_SEPARATOR, 0, NULL);
 			break;
 		case MainMenuType::Special:
 			nCount = 0;
-			switch (cMainMenu->m_nFunc) {
+			switch (mainMenu->m_nFunc) {
 			case F_WINDOW_LIST:				// ウィンドウリスト
 				EditNode*	pEditNodeArr;
 				nCount = AppNodeManager::getInstance()->GetOpenedWindowArr(&pEditNodeArr, TRUE);
@@ -938,9 +942,9 @@ void EditWnd::LayoutMainMenu()
 			case F_PLUGIN_LIST:				// プラグインコマンドリスト
 				// プラグインコマンドを提供するプラグインを列挙する
 				{
-					const JackManager* pcJackManager = JackManager::getInstance();
+					const JackManager* pJackManager = JackManager::getInstance();
 
-					Plug::Array plugs = pcJackManager->GetPlugs(PP_COMMAND);
+					Plug::Array plugs = pJackManager->GetPlugs(PP_COMMAND);
 					for (auto it=plugs.begin(); it!=plugs.end(); ++it) {
 						++nCount;
 					}
@@ -948,7 +952,7 @@ void EditWnd::LayoutMainMenu()
 				break;
 			}
 			::AppendMenu(hMenu, MF_POPUP | MF_STRING | (nCount <= 0 ? MF_GRAYED : 0), (UINT_PTR)CreatePopupMenu(), 
-				KeyBind::MakeMenuLabel(LS(cMainMenu->m_nFunc), to_tchar(cMainMenu->m_sKey)));
+				KeyBind::MakeMenuLabel(LS(mainMenu->m_nFunc), to_tchar(mainMenu->m_sKey)));
 			break;
 		}
 	}
@@ -1083,7 +1087,9 @@ void EditWnd::EndLayoutBars(BOOL bAdjust/* = TRUE*/)
 
 static inline BOOL MyIsDialogMessage(HWND hwnd, MSG* msg)
 {
-	if (!hwnd) return FALSE;
+	if (!hwnd) {
+		return FALSE;
+	}
 	return ::IsDialogMessage(hwnd, msg);
 }
 
@@ -1140,7 +1146,7 @@ LRESULT EditWnd::DispatchEvent(
 	int					nItemHeight;
 	UINT				uItem;
 	LRESULT				lRes;
-	TypeConfigNum		cTypeNew;
+	TypeConfigNum		typeNew;
 
 	switch (uMsg) {
 	case WM_PAINTICON:
@@ -1179,7 +1185,7 @@ LRESULT EditWnd::DispatchEvent(
 		uItem = (UINT) LOWORD(wParam);		// menu item or submenu index
 		{
 			// メニュー機能のテキストをセット
-			CNativeT cmemWork;
+			CNativeT memWork;
 
 			// 機能に対応するキー名の取得(複数)
 			CNativeT** ppcAssignedKeyList;
@@ -1194,14 +1200,14 @@ LRESULT EditWnd::DispatchEvent(
 			if (0 < nAssignedKeyNum) {
 				for (int j=0; j<nAssignedKeyNum; ++j) {
 					if (j > 0) {
-						cmemWork.AppendString(_T(" , "));
+						memWork.AppendString(_T(" , "));
 					}
-					cmemWork.AppendNativeData(*ppcAssignedKeyList[j]);
+					memWork.AppendNativeData(*ppcAssignedKeyList[j]);
 					delete ppcAssignedKeyList[j];
 				}
 				delete[] ppcAssignedKeyList;
 			}
-			const TCHAR* pszItemStr = cmemWork.GetStringPtr();
+			const TCHAR* pszItemStr = memWork.GetStringPtr();
 			m_statusBar.SetStatusText(0, SBT_NOBORDERS, pszItemStr);
 		}
 		return 0;
@@ -1210,7 +1216,7 @@ LRESULT EditWnd::DispatchEvent(
 		idCtl = (UINT) wParam;				// コントロールのID
 		lpdis = (DRAWITEMSTRUCT*) lParam;	// 項目描画情報
 		if (IDW_STATUSBAR == idCtl) {
-			if (5 == lpdis->itemID) { // 2003.08.26 Moca idがずれて作画されなかった
+			if (lpdis->itemID == 5) { // 2003.08.26 Moca idがずれて作画されなかった
 				int	nColor;
 				if (m_pShareData->m_flags.m_bRecordingKeyMacro	// キーボードマクロの記録中
 				 && m_pShareData->m_flags.m_hwndRecordingKeyMacro == GetHwnd()	// キーボードマクロを記録中のウィンドウ
@@ -1629,7 +1635,7 @@ LRESULT EditWnd::DispatchEvent(
 			}
 
 			// タブまとめ表示では閉じる動作はオプション指定に従う	// 2006.02.13 ryoji
-			if (PM_CLOSE_EXIT != (PM_CLOSE_EXIT & wParam)) {	// 全終了要求でない場合
+			if ((wParam & PM_CLOSE_EXIT) != PM_CLOSE_EXIT) {	// 全終了要求でない場合
 				// タブまとめ表示で(無題)を残す指定の場合、残ウィンドウが１個なら新規エディタを起動して終了する
 				if (m_pShareData->m_common.m_tabBar.m_bDispTabWnd &&
 					!m_pShareData->m_common.m_tabBar.m_bDispTabWndMultiWin &&
@@ -1641,14 +1647,14 @@ LRESULT EditWnd::DispatchEvent(
 						EditNode* pEditNode = AppNodeManager::getInstance()->GetEditNode(GetHwnd());
 						if (pEditNode)
 							pEditNode->m_bClosing = TRUE;	// 自分はタブ表示してもらわなくていい
-						LoadInfo sLoadInfo;
-						sLoadInfo.filePath = _T("");
-						sLoadInfo.eCharCode = CODE_NONE;
-						sLoadInfo.bViewMode = false;
+						LoadInfo loadInfo;
+						loadInfo.filePath = _T("");
+						loadInfo.eCharCode = CODE_NONE;
+						loadInfo.bViewMode = false;
 						ControlTray::OpenNewEditor(
 							G_AppInstance(),
 							GetHwnd(),
-							sLoadInfo,
+							loadInfo,
 							NULL,
 							true
 						);
@@ -1774,9 +1780,9 @@ LRESULT EditWnd::DispatchEvent(
 			}
 			break;
 		case PM_CHANGESETTING_TYPE:
-			cTypeNew = DocTypeManager().GetDocumentTypeOfPath(GetDocument()->m_docFile.GetFilePath());
+			typeNew = DocTypeManager().GetDocumentTypeOfPath(GetDocument()->m_docFile.GetFilePath());
 			if (GetDocument()->m_docType.GetDocumentType().GetIndex() == wParam
-				|| cTypeNew.GetIndex() == wParam
+				|| typeNew.GetIndex() == wParam
 			) {
 				GetDocument()->OnChangeSetting();
 
@@ -1798,9 +1804,9 @@ LRESULT EditWnd::DispatchEvent(
 			}
 			break;
 		case PM_CHANGESETTING_TYPE2:
-			cTypeNew = DocTypeManager().GetDocumentTypeOfPath(GetDocument()->m_docFile.GetFilePath());
+			typeNew = DocTypeManager().GetDocumentTypeOfPath(GetDocument()->m_docFile.GetFilePath());
 			if (GetDocument()->m_docType.GetDocumentType().GetIndex() == wParam
-				|| cTypeNew.GetIndex() == wParam
+				|| typeNew.GetIndex() == wParam
 			) {
 				// indexのみ更新
 				GetDocument()->m_docType.SetDocumentTypeIdx();
@@ -1968,7 +1974,7 @@ LRESULT EditWnd::DispatchEvent(
 	// バーの表示・非表示	//@@@ 2003.06.10 MIK
 	case MYWM_BAR_CHANGE_NOTIFY:
 		if (GetHwnd() != (HWND)lParam) {
-			switch (wParam) {
+			switch ((BarChangeNotifyType)wParam) {
 			case BarChangeNotifyType::Toolbar:
 				LayoutToolBar();	// 2006.12.19 ryoji
 				break;
@@ -2188,29 +2194,29 @@ void EditWnd::OnCommand(WORD wNotifyCode, WORD wID , HWND hwndCtl)
 		// 最近使ったフォルダ
 		else if (wID - IDM_SELOPENFOLDER >= 0 && wID - IDM_SELOPENFOLDER < 999) {
 			// フォルダ取得
-			const MRUFolder cMRUFolder;
-			LPCTSTR pszFolderPath = cMRUFolder.GetPath(wID - IDM_SELOPENFOLDER);
+			const MRUFolder mruFolder;
+			LPCTSTR pszFolderPath = mruFolder.GetPath(wID - IDM_SELOPENFOLDER);
 
 			// Stonee, 2001/12/21 UNCであれば接続を試みる
 			NetConnect(pszFolderPath);
 
 			//「ファイルを開く」ダイアログ
-			LoadInfo sLoadInfo(_T(""), CODE_AUTODETECT, false);
-			DocFileOperation& cDocOp = GetDocument()->m_docFileOperation;
+			LoadInfo loadInfo(_T(""), CODE_AUTODETECT, false);
+			DocFileOperation& docOp = GetDocument()->m_docFileOperation;
 			std::vector<std::tstring> files;
-			if (cDocOp.OpenFileDialog(GetHwnd(), pszFolderPath, &sLoadInfo, files)) {
-				sLoadInfo.filePath = files[0].c_str();
+			if (docOp.OpenFileDialog(GetHwnd(), pszFolderPath, &loadInfo, files)) {
+				loadInfo.filePath = files[0].c_str();
 				// 開く
-				cDocOp.FileLoad(&sLoadInfo);
+				docOp.FileLoad(&loadInfo);
 
 				// 新たな編集ウィンドウを起動
 				size_t nSize = files.size();
 				for (size_t f=1; f<nSize; ++f) {
-					sLoadInfo.filePath = files[f].c_str();
+					loadInfo.filePath = files[f].c_str();
 					ControlTray::OpenNewEditor(
 						G_AppInstance(),
 						GetHwnd(),
-						sLoadInfo,
+						loadInfo,
 						NULL,
 						true
 					);
@@ -2256,7 +2262,7 @@ void EditWnd::OnCommand(WORD wNotifyCode, WORD wID , HWND hwndCtl)
 //	2010/5/16	Uchi	動的に作成する様に変更	
 void EditWnd::InitMenu(HMENU hMenu, UINT uPos, BOOL fSystemMenu)
 {
-	int		cMenuItems;
+	int		numMenuItems;
 	int		nPos;
 	HMENU	hMenuPopUp;
 
@@ -2264,8 +2270,8 @@ void EditWnd::InitMenu(HMENU hMenu, UINT uPos, BOOL fSystemMenu)
 		&& !fSystemMenu
 	) {
 		// 情報取得
-		const CommonSetting_MainMenu*	pcMenu = &m_pShareData->m_common.m_mainMenu;
-		const MainMenu*	cMainMenu;
+		const CommonSetting_MainMenu*	pMenu = &m_pShareData->m_common.m_mainMenu;
+		const MainMenu*	pMainMenu;
 		int		nIdxStr;
 		int		nIdxEnd;
 		int		nLv;
@@ -2273,51 +2279,51 @@ void EditWnd::InitMenu(HMENU hMenu, UINT uPos, BOOL fSystemMenu)
 		std::wstring tmpMenuName;
 		const wchar_t* pMenuName;
 
-		nIdxStr = pcMenu->m_nMenuTopIdx[uPos];
-		nIdxEnd = (uPos < MAX_MAINMENU_TOP) ? pcMenu->m_nMenuTopIdx[uPos + 1] : -1;
+		nIdxStr = pMenu->m_nMenuTopIdx[uPos];
+		nIdxEnd = (uPos < MAX_MAINMENU_TOP) ? pMenu->m_nMenuTopIdx[uPos + 1] : -1;
 		if (nIdxEnd < 0) {
-			nIdxEnd = pcMenu->m_nMainMenuNum;
+			nIdxEnd = pMenu->m_nMainMenuNum;
 		}
 
 		// メニュー 初期化
 		m_menuDrawer.ResetContents();
-		cMenuItems = ::GetMenuItemCount(hMenu);
-		for (int i=cMenuItems-1; i>=0; --i) {
+		numMenuItems = ::GetMenuItemCount(hMenu);
+		for (int i=numMenuItems-1; i>=0; --i) {
 			::DeleteMenu(hMenu, i, MF_BYPOSITION);
 		}
 
 		// メニュー作成
 		hSubMenu.push_back(hMenu);
 		nLv = 1;
-		if (pcMenu->m_mainMenuTbl[nIdxStr].m_nType == MainMenuType::Special) {
+		if (pMenu->m_mainMenuTbl[nIdxStr].m_nType == MainMenuType::Special) {
 			nLv = 0;
 			--nIdxStr;
 		}
 		for (int i=nIdxStr+1; i<nIdxEnd; ++i) {
-			cMainMenu = &pcMenu->m_mainMenuTbl[i];
-			if (cMainMenu->m_nLevel != nLv) {
-				nLv = cMainMenu->m_nLevel;
+			pMainMenu = &pMenu->m_mainMenuTbl[i];
+			if (pMainMenu->m_nLevel != nLv) {
+				nLv = pMainMenu->m_nLevel;
 				if (hSubMenu.size() < (size_t)nLv) {
 					// 保護
 					break;
 				}
 				hMenu = hSubMenu[nLv-1];
 			}
-			switch (cMainMenu->m_nType) {
+			switch (pMainMenu->m_nType) {
 			case MainMenuType::Node:
 				hMenuPopUp = ::CreatePopupMenu();
-				if (cMainMenu->m_nFunc != 0 && cMainMenu->m_sName[0] == L'\0') {
+				if (pMainMenu->m_nFunc != 0 && pMainMenu->m_sName[0] == L'\0') {
 					// ストリングテーブルから読み込み
-					tmpMenuName = LSW(cMainMenu->m_nFunc);
+					tmpMenuName = LSW(pMainMenu->m_nFunc);
 					if (MAX_MAIN_MENU_NAME_LEN < tmpMenuName.length()) {
 						tmpMenuName = tmpMenuName.substr(0, MAX_MAIN_MENU_NAME_LEN);
 					}
 					pMenuName = tmpMenuName.c_str();
 				}else {
-					pMenuName = cMainMenu->m_sName;
+					pMenuName = pMainMenu->m_sName;
 				}
 				m_menuDrawer.MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING | MF_POPUP, (UINT_PTR)hMenuPopUp , 
-					pMenuName, cMainMenu->m_sKey);
+					pMenuName, pMainMenu->m_sKey);
 				if (hSubMenu.size() > (size_t)nLv) {
 					hSubMenu[nLv] = hMenuPopUp;
 				}else {
@@ -2325,23 +2331,23 @@ void EditWnd::InitMenu(HMENU hMenu, UINT uPos, BOOL fSystemMenu)
 				}
 				break;
 			case MainMenuType::Leaf:
-				InitMenu_Function(hMenu, cMainMenu->m_nFunc, cMainMenu->m_sName, cMainMenu->m_sKey);
+				InitMenu_Function(hMenu, pMainMenu->m_nFunc, pMainMenu->m_sName, pMainMenu->m_sKey);
 				break;
 			case MainMenuType::Separator:
 				m_menuDrawer.MyAppendMenuSep(hMenu, MF_BYPOSITION | MF_SEPARATOR, 0, NULL);
 				break;
 			case MainMenuType::Special:
 				bool	bInList;		// リストが1個以上ある
-				bInList = InitMenu_Special(hMenu, cMainMenu->m_nFunc);
+				bInList = InitMenu_Special(hMenu, pMainMenu->m_nFunc);
 				// リストが無い場合の処理
 				if (!bInList) {
 					// 分割線に囲まれ、かつリストなし ならば 次の分割線をスキップ
 					if ((i == nIdxStr + 1
-						  || (pcMenu->m_mainMenuTbl[i - 1].m_nType == MainMenuType::Separator 
-							&& pcMenu->m_mainMenuTbl[i - 1].m_nLevel == cMainMenu->m_nLevel))
+						  || (pMenu->m_mainMenuTbl[i - 1].m_nType == MainMenuType::Separator 
+							&& pMenu->m_mainMenuTbl[i - 1].m_nLevel == pMainMenu->m_nLevel))
 						&& i + 1 < nIdxEnd
-						&& pcMenu->m_mainMenuTbl[i + 1].m_nType == MainMenuType::Separator 
-						&& pcMenu->m_mainMenuTbl[i + 1].m_nLevel == cMainMenu->m_nLevel) {
+						&& pMenu->m_mainMenuTbl[i + 1].m_nType == MainMenuType::Separator 
+						&& pMenu->m_mainMenuTbl[i + 1].m_nLevel == pMainMenu->m_nLevel) {
 						++i;		// スキップ
 					}
 				}
@@ -2360,8 +2366,8 @@ void EditWnd::InitMenu(HMENU hMenu, UINT uPos, BOOL fSystemMenu)
 //	if (m_pPrintPreview)	return;	//	印刷プレビューモードなら排除。（おそらく排除しなくてもいいと思うんだけど、念のため）
 
 	// 機能が利用可能かどうか、チェック状態かどうかを一括チェック
-	cMenuItems = ::GetMenuItemCount(hMenu);
-	for (nPos=0; nPos<cMenuItems; ++nPos) {
+	numMenuItems = ::GetMenuItemCount(hMenu);
+	for (nPos=0; nPos<numMenuItems; ++nPos) {
 		EFunctionCode	id = (EFunctionCode)::GetMenuItemID(hMenu, nPos);
 		// 機能が利用可能か調べる
 		//	Jan.  8, 2006 genta 機能が有効な場合には明示的に再設定しないようにする．
@@ -2562,18 +2568,18 @@ bool EditWnd::InitMenu_Special(HMENU hMenu, EFunctionCode eFunc)
 		// MRUリストのファイルのリストをメニューにする
 		{
 			//@@@ 2001.12.26 YAZAKI MRUリストは、CMRUに依頼する
-			const MRUFile cMRU;
-			cMRU.CreateMenu(hMenu, &m_menuDrawer);	//	ファイルメニュー
-			bInList = (cMRU.MenuLength() > 0);
+			const MRUFile mru;
+			mru.CreateMenu(hMenu, &m_menuDrawer);	//	ファイルメニュー
+			bInList = (mru.MenuLength() > 0);
 		}
 		break;
 	case F_FOLDER_USED_RECENTLY:	// 最近使ったフォルダ
 		// 最近使ったフォルダのメニューを作成
 		{
 			//@@@ 2001.12.26 YAZAKI OPENFOLDERリストは、MRUFolderにすべて依頼する
-			const MRUFolder cMRUFolder;
-			cMRUFolder.CreateMenu(hMenu, &m_menuDrawer);
-			bInList = (cMRUFolder.MenuLength() > 0);
+			const MRUFolder mruFolder;
+			mruFolder.CreateMenu(hMenu, &m_menuDrawer);
+			bInList = (mruFolder.MenuLength() > 0);
 		}
 		break;
 	case F_CUSTMENU_LIST:			// カスタムメニューリスト
@@ -2609,11 +2615,11 @@ bool EditWnd::InitMenu_Special(HMENU hMenu, EFunctionCode eFunc)
 	case F_PLUGIN_LIST:				// プラグインコマンドリスト
 		// プラグインコマンドを提供するプラグインを列挙する
 		{
-			const JackManager* pcJackManager = JackManager::getInstance();
+			const JackManager* pJackManager = JackManager::getInstance();
 			const Plugin* prevPlugin = NULL;
 			HMENU hMenuPlugin = 0;
 
-			Plug::Array plugs = pcJackManager->GetPlugs(PP_COMMAND);
+			Plug::Array plugs = pJackManager->GetPlugs(PP_COMMAND);
 			for (auto it=plugs.begin(); it!=plugs.end(); ++it) {
 				const Plugin* curPlugin = &(*it)->m_plugin;
 				if (curPlugin != prevPlugin) {
@@ -2652,8 +2658,8 @@ void EditWnd::CheckFreeSubMenu(HWND hWnd, HMENU hMenu, UINT uPos)
 // メニューバーの無効化を検査	2010/6/18 Uchi
 void EditWnd::CheckFreeSubMenuSub(HMENU hMenu, int nLv)
 {
-	int cMenuItems = ::GetMenuItemCount(hMenu);
-	for (int nPos=0; nPos<cMenuItems; ++nPos) {
+	int numMenuItems = ::GetMenuItemCount(hMenu);
+	for (int nPos=0; nPos<numMenuItems; ++nPos) {
 		HMENU hSubMenu = ::GetSubMenu(hMenu, nPos);
 		if (hSubMenu) {
 			if (::GetMenuItemCount(hSubMenu) == 0) {
@@ -3521,7 +3527,7 @@ BOOL EditWnd::DoMouseWheel(WPARAM wParam, LPARAM lParam)
 BOOL EditWnd::OnPrintPageSetting(void)
 {
 	// 印刷設定（CANCEL押したときに破棄するための領域）
-	DlgPrintSetting	cDlgPrintSetting;
+	DlgPrintSetting	dlgPrintSetting;
 	BOOL				bRes;
 	int					nCurrentPrintSetting;
 	int					nLineNumberColumns;
@@ -3533,7 +3539,7 @@ BOOL EditWnd::OnPrintPageSetting(void)
 		nLineNumberColumns = 3; // ファイルメニューからの設定時は最小値 2013.5.10 aroka
 	}
 
-	bRes = cDlgPrintSetting.DoModal(
+	bRes = dlgPrintSetting.DoModal(
 		G_AppInstance(),
 //@@@ 2002.01.14 YAZAKI 印刷プレビューをPrintPreviewに独立させたことによる変更
 		GetHwnd(),
@@ -3676,9 +3682,9 @@ int	EditWnd::CreateFileDropDownMenu(HWND hwnd)
 	m_menuDrawer.ResetContents();
 
 	// MRUリストのファイルのリストをメニューにする
-	const MRUFile cMRU;
-	hMenu = cMRU.CreateMenu(&m_menuDrawer);
-	if (cMRU.MenuLength() > 0) {
+	const MRUFile mru;
+	hMenu = mru.CreateMenu(&m_menuDrawer);
+	if (mru.MenuLength() > 0) {
 		m_menuDrawer.MyAppendMenuSep(
 			hMenu,
 			MF_BYPOSITION | MF_SEPARATOR,
@@ -3949,10 +3955,10 @@ void EditWnd::ChangeFileNameNotify(const TCHAR* pszTabCaption, const TCHAR* _psz
 	if (!pszTabCaption) pszTabCaption = _T("");	// ガード
 	if (!pszFilePath) pszFilePath = _FT("");	// ガード 2006.01.28 ryoji
 	
-	RecentEditNode	cRecentEditNode;
-	nIndex = cRecentEditNode.FindItemByHwnd(GetHwnd());
+	RecentEditNode	recentEditNode;
+	nIndex = recentEditNode.FindItemByHwnd(GetHwnd());
 	if (nIndex != -1) {
-		p = cRecentEditNode.GetItem(nIndex);
+		p = recentEditNode.GetItem(nIndex);
 		if (p) {
 			int	size = _countof(p->m_szTabCaption) - 1;
 			_tcsncpy(p->m_szTabCaption, pszTabCaption, size);
@@ -3966,7 +3972,7 @@ void EditWnd::ChangeFileNameNotify(const TCHAR* pszTabCaption, const TCHAR* _psz
 			p->m_bIsGrep = bIsGrep;
 		}
 	}
-	cRecentEditNode.Terminate();
+	recentEditNode.Terminate();
 
 	// ファイル名変更通知をブロードキャストする。
 	int nGroup = AppNodeManager::getInstance()->GetEditNode(GetHwnd())->GetGroup();
@@ -4387,20 +4393,20 @@ bool EditWnd::SetDrawSwitchOfAllViews(bool bDraw)
 	スクロールバーの状態更新はパラメータでフラグ制御 or 別関数にしたほうがいい？
 	@date 2007.07.22 ryoji スクロールバーの状態更新を追加
 
-	@param pcViewExclude [in] Redrawから除外するビュー
-	@date 2008.06.08 ryoji pcViewExclude パラメータ追加
+	@param pViewExclude [in] Redrawから除外するビュー
+	@date 2008.06.08 ryoji pViewExclude パラメータ追加
 */
-void EditWnd::RedrawAllViews(EditView* pcViewExclude)
+void EditWnd::RedrawAllViews(EditView* pViewExclude)
 {
 	for (int i=0; i<GetAllViewCount(); ++i) {
-		EditView* pcView = &GetView(i);
-		if (pcView == pcViewExclude)
+		EditView* pView = &GetView(i);
+		if (pView == pViewExclude)
 			continue;
 		if (i == m_nActivePaneIndex) {
-			pcView->RedrawAll();
+			pView->RedrawAll();
 		}else {
-			pcView->Redraw();
-			pcView->AdjustScrollBars();
+			pView->Redraw();
+			pView->AdjustScrollBars();
 		}
 	}
 	GetMiniMap().Redraw();

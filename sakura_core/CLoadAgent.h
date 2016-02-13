@@ -29,9 +29,9 @@
 class LoadAgent : public DocListenerEx {
 public:
 	CallbackResultType OnCheckLoad(LoadInfo* pLoadInfo);
-	void OnBeforeLoad(LoadInfo* sLoadInfo);
-	LoadResultType OnLoad(const LoadInfo& sLoadInfo);
-	void OnAfterLoad(const LoadInfo& sLoadInfo);
+	void OnBeforeLoad(LoadInfo* loadInfo);
+	LoadResultType OnLoad(const LoadInfo& loadInfo);
+	void OnAfterLoad(const LoadInfo& loadInfo);
 	void OnFinalLoad(LoadResultType eLoadResult);
 };
 

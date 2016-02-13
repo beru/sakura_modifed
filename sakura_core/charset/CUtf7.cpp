@@ -119,11 +119,11 @@ int Utf7::Utf7ToUni(const char* pSrc, const int nSrcLen, wchar_t* pDst, bool* pb
 
 // UTF-7→Unicodeコード変換
 // 2007.08.13 kobake 作成
-CodeConvertResult Utf7::UTF7ToUnicode( const Memory& cSrc, NativeW* pDstMem )
+CodeConvertResult Utf7::UTF7ToUnicode( const Memory& src, NativeW* pDstMem )
 {
 	// データ取得
 	int nDataLen;
-	const char* pData = reinterpret_cast<const char*>( cSrc.GetRawPtr(&nDataLen) );
+	const char* pData = reinterpret_cast<const char*>( src.GetRawPtr(&nDataLen) );
 	if (nDataLen == 0) {
 		pDstMem->Clear();
 		return CodeConvertResult::Complete;
@@ -237,12 +237,12 @@ int Utf7::UniToUtf7(const wchar_t* pSrc, const int nSrcLen, char* pDst)
 /*! コード変換 Unicode→UTF-7
 	@date 2002.10.25 Moca UTF-7で直接エンコードできる文字をRFCに合わせて制限した
 */
-CodeConvertResult Utf7::UnicodeToUTF7(const NativeW& cSrc, Memory* pDstMem)
+CodeConvertResult Utf7::UnicodeToUTF7(const NativeW& src, Memory* pDstMem)
 {
 
 	// データ取得
-	const wchar_t* pSrc = cSrc.GetStringPtr();
-	int nSrcLen = cSrc.GetStringLength();
+	const wchar_t* pSrc = src.GetStringPtr();
+	int nSrcLen = src.GetStringLength();
 	if (nSrcLen == 0) {
 		return CodeConvertResult::Failure;
 	}

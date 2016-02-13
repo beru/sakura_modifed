@@ -33,11 +33,11 @@ public:
 	void Clear(void) { m_bIsDocWritable = true; }
 
 	// ロード前後
-	void OnAfterLoad(const LoadInfo& sLoadInfo);
+	void OnAfterLoad(const LoadInfo& loadInfo);
 	
 	// セーブ前後
-	void OnBeforeSave(const SaveInfo& sSaveInfo);
-	void OnAfterSave(const SaveInfo& sSaveInfo);
+	void OnBeforeSave(const SaveInfo& saveInfo);
+	void OnAfterSave(const SaveInfo& saveInfo);
 
 	// 状態
 	bool IsDocWritable() const { return m_bIsDocWritable; }

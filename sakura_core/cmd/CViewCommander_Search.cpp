@@ -163,12 +163,12 @@ void ViewCommander::Command_SEARCH_NEXT(
 	if (!pSelectLogic) {
 		nLineNum = caret.GetCaretLayoutPos().GetY2();
 		LogicInt nLineLen = LogicInt(0); // 2004.03.17 Moca NULL == pLineのとき、nLineLenが未設定になり落ちるバグ対策
-		const Layout*	pcLayout;
-		const wchar_t*	pLine = layoutMgr.GetLineStr(nLineNum, &nLineLen, &pcLayout);
+		const Layout*	pLayout;
+		const wchar_t*	pLine = layoutMgr.GetLineStr(nLineNum, &nLineLen, &pLayout);
 
 		// 指定された桁に対応する行のデータ内の位置を調べる
 		// 2002.02.08 hor EOFのみの行からも次検索しても再検索可能に (2/2)
-		nIdx = pcLayout ? m_pCommanderView->LineColumnToIndex(pcLayout, caret.GetCaretLayoutPos().GetX2()) : LogicInt(0);
+		nIdx = pLayout ? m_pCommanderView->LineColumnToIndex(pLayout, caret.GetCaretLayoutPos().GetX2()) : LogicInt(0);
 		if (b0Match) {
 			// 現在、長さ０でマッチしている場合は物理行で１文字進める(無限マッチ対策)
 			if (nIdx < nLineLen) {

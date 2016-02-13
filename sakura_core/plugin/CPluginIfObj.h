@@ -54,10 +54,10 @@ class PluginIfObj : public WSHIfObj {
 
 	// コンストラクタ
 public:
-	PluginIfObj(Plugin& cPlugin)
+	PluginIfObj(Plugin& plugin)
 		:
 		WSHIfObj(L"Plugin", false),
-		m_plugin(cPlugin)
+		m_plugin(plugin)
 	{
 		m_nPlugIndex = -1;
 	}

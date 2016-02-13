@@ -79,10 +79,10 @@ public:
 	void SetLayoutWidth(LayoutInt nWidth) { m_nLayoutWidth = nWidth; }
 
 	//! レイアウト幅を計算。改行は含まない。2007.10.11 kobake
-	LayoutInt CalcLayoutWidth(const LayoutMgr& cLayoutMgr) const;
+	LayoutInt CalcLayoutWidth(const LayoutMgr& layoutMgr) const;
 
 	//! オフセット値をレイアウト単位に変換して取得。2007.10.17 kobake
-	LayoutInt CalcLayoutOffset(const LayoutMgr& cLayoutMgr,
+	LayoutInt CalcLayoutOffset(const LayoutMgr& layoutMgr,
 								LogicInt nStartPos = LogicInt(0),
 								LayoutInt nStartOffset = LayoutInt(0)) const;
 

@@ -185,10 +185,10 @@ BOOL DlgGrep::OnInitDialog(
 	::SendMessage(GetHwnd(), WM_SETICON, ICON_BIG, (LPARAM)hIconBig);
 
 	// 文字コードセット選択コンボボックス初期化
-	CodeTypesForCombobox cCodeTypes;
-	for (int i=0; i<cCodeTypes.GetCount(); ++i) {
-		int idx = Combo_AddString(GetItemHwnd(IDC_COMBO_CHARSET), cCodeTypes.GetName(i));
-		Combo_SetItemData(GetItemHwnd(IDC_COMBO_CHARSET), idx, cCodeTypes.GetCode(i));
+	CodeTypesForCombobox codeTypes;
+	for (int i=0; i<codeTypes.GetCount(); ++i) {
+		int idx = Combo_AddString(GetItemHwnd(IDC_COMBO_CHARSET), codeTypes.GetName(i));
+		Combo_SetItemData(GetItemHwnd(IDC_COMBO_CHARSET), idx, codeTypes.GetCode(i));
 	}
 	// 2007.02.09 bosagami
 	HWND hFolder = GetItemHwnd(IDC_COMBO_FOLDER);
@@ -209,7 +209,7 @@ BOOL DlgGrep::OnInitDialog(
 	// フォント設定	2012/11/27 Uchi
 	HFONT hFontOld = (HFONT)::SendMessage(GetItemHwnd(IDC_COMBO_TEXT), WM_GETFONT, 0, 0);
 	HFONT hFont = SetMainFont(GetItemHwnd(IDC_COMBO_TEXT));
-	m_cFontText.SetFont(hFontOld, hFont, GetItemHwnd(IDC_COMBO_TEXT));
+	m_fontText.SetFont(hFontOld, hFont, GetItemHwnd(IDC_COMBO_TEXT));
 
 	// 基底クラスメンバ
 //	CreateSizeBox();
@@ -256,7 +256,7 @@ LRESULT CALLBACK OnFolderProc(
 
 BOOL DlgGrep::OnDestroy()
 {
-	m_cFontText.ReleaseOnDestroy();
+	m_fontText.ReleaseOnDestroy();
 	return Dialog::OnDestroy();
 }
 

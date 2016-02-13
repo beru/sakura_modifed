@@ -34,9 +34,9 @@ class Color_LineComment : public ColorStrategy {
 public:
 	virtual EColorIndexType GetStrategyColor() const { return COLORIDX_COMMENT; }
 	virtual void InitStrategyStatus() {}
-	virtual bool BeginColor(const StringRef& cStr, int nPos);
-	virtual bool EndColor(const StringRef& cStr, int nPos);
-	virtual bool Disp() const { return m_pTypeData->m_ColorInfoArr[COLORIDX_COMMENT].m_bDisp; }
+	virtual bool BeginColor(const StringRef& str, int nPos);
+	virtual bool EndColor(const StringRef& str, int nPos);
+	virtual bool Disp() const { return m_pTypeData->m_colorInfoArr[COLORIDX_COMMENT].m_bDisp; }
 };
 
 
@@ -51,13 +51,13 @@ public:
 	{
 		const EditDoc* pEditDoc = EditDoc::GetInstance(0);
 		m_pTypeData = &pEditDoc->m_docType.GetDocumentAttribute();
-		m_pBlockComment = &m_pTypeData->m_cBlockComments[m_nType - COLORIDX_BLOCK1];
+		m_pBlockComment = &m_pTypeData->m_blockComments[m_nType - COLORIDX_BLOCK1];
 	}
 	virtual EColorIndexType GetStrategyColor() const { return m_nType; }
 	virtual void InitStrategyStatus() { m_nCOMMENTEND = 0; }
-	virtual bool BeginColor(const StringRef& cStr, int nPos);
-	virtual bool EndColor(const StringRef& cStr, int nPos);
-	virtual bool Disp() const { return m_pTypeData->m_ColorInfoArr[COLORIDX_COMMENT].m_bDisp; }
+	virtual bool BeginColor(const StringRef& str, int nPos);
+	virtual bool EndColor(const StringRef& str, int nPos);
+	virtual bool Disp() const { return m_pTypeData->m_colorInfoArr[COLORIDX_COMMENT].m_bDisp; }
 private:
 	EColorIndexType m_nType;
 	const BlockComment* m_pBlockComment;

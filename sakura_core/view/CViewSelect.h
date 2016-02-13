@@ -34,7 +34,7 @@ public:
 	const EditView* GetEditView() const { return m_pEditView; }
 
 public:
-	ViewSelect(EditView* pcEditView);
+	ViewSelect(EditView* pEditView);
 	void CopySelectStatus(ViewSelect* pSelect) const;
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -48,9 +48,9 @@ public:
 
 	// 選択範囲を指定する(原点未選択)
 	// 2005.06.24 Moca
-	void SetSelectArea(const LayoutRange& sRange) {
-		m_selectBgn.Set(sRange.GetFrom());
-		m_select = sRange;
+	void SetSelectArea(const LayoutRange& range) {
+		m_selectBgn.Set(range.GetFrom());
+		m_select = range;
 	}
 
 	// 単語選択開始
@@ -96,16 +96,16 @@ private:
 	void DrawSelectAreaLine(			// 指定行の選択領域の描画
 		HDC					hdc,		// [in] 描画領域のDevice Context Handle
 		LayoutInt			nLineNum,	// [in] 描画対象行(レイアウト行)
-		const LayoutRange&	sRange		// [in] 選択範囲(レイアウト単位)
+		const LayoutRange&	range		// [in] 選択範囲(レイアウト単位)
 	) const;
 public:
-	void GetSelectAreaLineFromRange(LayoutRange& ret, LayoutInt nLineNum, const Layout* pcLayout, const LayoutRange& sRange) const;
-	void GetSelectAreaLine(LayoutRange& ret, LayoutInt nLineNum, const Layout* pcLayout) const {
-		GetSelectAreaLineFromRange(ret, nLineNum, pcLayout, m_select);
+	void GetSelectAreaLineFromRange(LayoutRange& ret, LayoutInt nLineNum, const Layout* pLayout, const LayoutRange& range) const;
+	void GetSelectAreaLine(LayoutRange& ret, LayoutInt nLineNum, const Layout* pLayout) const {
+		GetSelectAreaLineFromRange(ret, nLineNum, pLayout, m_select);
 	}
-	LayoutRange GetSelectAreaLine(LayoutInt nLineNum, const Layout* pcLayout) const {
+	LayoutRange GetSelectAreaLine(LayoutInt nLineNum, const Layout* pLayout) const {
 		LayoutRange ret;
-		GetSelectAreaLineFromRange(ret, nLineNum, pcLayout, m_select);
+		GetSelectAreaLineFromRange(ret, nLineNum, pLayout, m_select);
 		return ret;
 	}
 	// 選択情報データの作成	2005.07.09 genta

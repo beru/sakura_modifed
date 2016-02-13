@@ -140,25 +140,25 @@ void ViewCommander::Command_GREP(void)
 */
 void ViewCommander::Command_GREP_REPLACE_DLG( void )
 {
-	NativeW cmemCurText;
-	DlgGrepReplace& cDlgGrepRep = GetEditWindow()->m_dlgGrepReplace;
+	NativeW memCurText;
+	DlgGrepReplace& dlgGrepRep = GetEditWindow()->m_dlgGrepReplace;
 
 	// 複数Grepウィンドウを使い分けている場合などに影響しないように、未設定のときだけHistoryを見る
-	bool bGetHistory = cDlgGrepRep.m_bSetText == false;
+	bool bGetHistory = dlgGrepRep.m_bSetText == false;
 
-	m_pCommanderView->GetCurrentTextForSearchDlg( cmemCurText, bGetHistory );
+	m_pCommanderView->GetCurrentTextForSearchDlg( memCurText, bGetHistory );
 
-	if (0 < cmemCurText.GetStringLength()) {
-		cDlgGrepRep.m_strText = cmemCurText.GetStringPtr();
-		cDlgGrepRep.m_bSetText = true;
+	if (0 < memCurText.GetStringLength()) {
+		dlgGrepRep.m_strText = memCurText.GetStringPtr();
+		dlgGrepRep.m_bSetText = true;
 	}
 	if (0 < GetDllShareData().m_searchKeywords.m_aReplaceKeys.size()) {
-		if (cDlgGrepRep.m_nReplaceKeySequence < GetDllShareData().m_common.m_search.m_nReplaceKeySequence) {
-			cDlgGrepRep.m_strText2 = GetDllShareData().m_searchKeywords.m_aReplaceKeys[0];
+		if (dlgGrepRep.m_nReplaceKeySequence < GetDllShareData().m_common.m_search.m_nReplaceKeySequence) {
+			dlgGrepRep.m_strText2 = GetDllShareData().m_searchKeywords.m_aReplaceKeys[0];
 		}
 	}
 
-	int nRet = cDlgGrepRep.DoModal( G_AppInstance(), m_pCommanderView->GetHwnd(), GetDocument()->m_docFile.GetFilePath(), (LPARAM)m_pCommanderView );
+	int nRet = dlgGrepRep.DoModal( G_AppInstance(), m_pCommanderView->GetHwnd(), GetDocument()->m_docFile.GetFilePath(), (LPARAM)m_pCommanderView );
 	if (!nRet) {
 		return;
 	}
@@ -174,11 +174,11 @@ void ViewCommander::Command_GREP_REPLACE(void)
 	CNativeT cmWork3;
 	NativeW cmWork4;
 
-	DlgGrepReplace& cDlgGrepRep = GetEditWindow()->m_dlgGrepReplace;
-	cmWork1.SetString( cDlgGrepRep.m_strText.c_str() );
-	cmWork2.SetString( cDlgGrepRep.m_szFile );
-	cmWork3.SetString( cDlgGrepRep.m_szFolder );
-	cmWork4.SetString( cDlgGrepRep.m_strText2.c_str() );
+	DlgGrepReplace& dlgGrepRep = GetEditWindow()->m_dlgGrepReplace;
+	cmWork1.SetString( dlgGrepRep.m_strText.c_str() );
+	cmWork2.SetString( dlgGrepRep.m_szFile );
+	cmWork3.SetString( dlgGrepRep.m_szFolder );
+	cmWork4.SetString( dlgGrepRep.m_strText2.c_str() );
 
 	/*	今のEditViewにGrep結果を表示する。
 		Grepモードのとき、または未編集で無題かつアウトプットでない場合。
@@ -199,18 +199,18 @@ void ViewCommander::Command_GREP_REPLACE(void)
 			&cmWork2,
 			&cmWork3,
 			false,
-			cDlgGrepRep.m_bSubFolder,
+			dlgGrepRep.m_bSubFolder,
 			false, // Stdout
 			true, // Header
-			cDlgGrepRep.m_searchOption,
-			cDlgGrepRep.m_nGrepCharSet,
-			cDlgGrepRep.m_nGrepOutputLineType,
-			cDlgGrepRep.m_nGrepOutputStyle,
-			cDlgGrepRep.m_bGrepOutputFileOnly,
-			cDlgGrepRep.m_bGrepOutputBaseFolder,
-			cDlgGrepRep.m_bGrepSeparateFolder,
-			cDlgGrepRep.m_bPaste,
-			cDlgGrepRep.m_bBackup
+			dlgGrepRep.m_searchOption,
+			dlgGrepRep.m_nGrepCharSet,
+			dlgGrepRep.m_nGrepOutputLineType,
+			dlgGrepRep.m_nGrepOutputStyle,
+			dlgGrepRep.m_bGrepOutputFileOnly,
+			dlgGrepRep.m_bGrepOutputBaseFolder,
+			dlgGrepRep.m_bGrepSeparateFolder,
+			dlgGrepRep.m_bPaste,
+			dlgGrepRep.m_bBackup
 		);
 	}else {
 		// 編集ウィンドウの上限チェック
@@ -237,26 +237,26 @@ void ViewCommander::Command_GREP_REPLACE(void)
 		cCmdLine.AppendString(_T("\" -GFOLDER=\""));
 		cCmdLine.AppendString(cmWork3.GetStringPtr());
 		cCmdLine.AppendString(_T("\" -GCODE="));
-		auto_sprintf( szTemp, _T("%d"), cDlgGrepRep.m_nGrepCharSet );
+		auto_sprintf( szTemp, _T("%d"), dlgGrepRep.m_nGrepCharSet );
 		cCmdLine.AppendString(szTemp);
 
 		//GOPTオプション
 		TCHAR	pOpt[64];
 		pOpt[0] = _T('\0');
-		if (cDlgGrepRep.m_bSubFolder				) _tcscat( pOpt, _T("S") );	// サブフォルダからも検索する
-		if (cDlgGrepRep.m_searchOption.bWordOnly	) _tcscat( pOpt, _T("W") );	// 単語単位で探す
-		if (cDlgGrepRep.m_searchOption.bLoHiCase	) _tcscat( pOpt, _T("L") );	// 英大文字と英小文字を区別する
-		if (cDlgGrepRep.m_searchOption.bRegularExp	) _tcscat( pOpt, _T("R") );	// 正規表現
-		if (cDlgGrepRep.m_nGrepOutputLineType == 1	) _tcscat( pOpt, _T("P") );	// 行を出力する
-		// if (cDlgGrepRep.m_nGrepOutputLineType == 2) _tcscat( pOpt, _T("N") );	// 否ヒット行を出力する 2014.09.23
-		if (cDlgGrepRep.m_nGrepOutputStyle == 1		) _tcscat( pOpt, _T("1") );	// Grep: 出力形式
-		if (cDlgGrepRep.m_nGrepOutputStyle == 2		) _tcscat( pOpt, _T("2") );	// Grep: 出力形式
-		if (cDlgGrepRep.m_nGrepOutputStyle == 3		) _tcscat( pOpt, _T("3") );
-		if (cDlgGrepRep.m_bGrepOutputFileOnly		) _tcscat( pOpt, _T("F") );
-		if (cDlgGrepRep.m_bGrepOutputBaseFolder		) _tcscat( pOpt, _T("B") );
-		if (cDlgGrepRep.m_bGrepSeparateFolder		) _tcscat( pOpt, _T("D") );
-		if (cDlgGrepRep.m_bPaste					) _tcscat( pOpt, _T("C") );	// クリップボードから貼り付け
-		if (cDlgGrepRep.m_bBackup					) _tcscat( pOpt, _T("O") );	// バックアップ作成
+		if (dlgGrepRep.m_bSubFolder				) _tcscat( pOpt, _T("S") );	// サブフォルダからも検索する
+		if (dlgGrepRep.m_searchOption.bWordOnly	) _tcscat( pOpt, _T("W") );	// 単語単位で探す
+		if (dlgGrepRep.m_searchOption.bLoHiCase	) _tcscat( pOpt, _T("L") );	// 英大文字と英小文字を区別する
+		if (dlgGrepRep.m_searchOption.bRegularExp	) _tcscat( pOpt, _T("R") );	// 正規表現
+		if (dlgGrepRep.m_nGrepOutputLineType == 1	) _tcscat( pOpt, _T("P") );	// 行を出力する
+		// if (dlgGrepRep.m_nGrepOutputLineType == 2) _tcscat( pOpt, _T("N") );	// 否ヒット行を出力する 2014.09.23
+		if (dlgGrepRep.m_nGrepOutputStyle == 1		) _tcscat( pOpt, _T("1") );	// Grep: 出力形式
+		if (dlgGrepRep.m_nGrepOutputStyle == 2		) _tcscat( pOpt, _T("2") );	// Grep: 出力形式
+		if (dlgGrepRep.m_nGrepOutputStyle == 3		) _tcscat( pOpt, _T("3") );
+		if (dlgGrepRep.m_bGrepOutputFileOnly		) _tcscat( pOpt, _T("F") );
+		if (dlgGrepRep.m_bGrepOutputBaseFolder		) _tcscat( pOpt, _T("B") );
+		if (dlgGrepRep.m_bGrepSeparateFolder		) _tcscat( pOpt, _T("D") );
+		if (dlgGrepRep.m_bPaste					) _tcscat( pOpt, _T("C") );	// クリップボードから貼り付け
+		if (dlgGrepRep.m_bBackup					) _tcscat( pOpt, _T("O") );	// バックアップ作成
 		if (0 < _tcslen( pOpt )) {
 			cCmdLine.AppendString( _T(" -GOPT=") );
 			cCmdLine.AppendString( pOpt );

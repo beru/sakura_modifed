@@ -43,8 +43,8 @@ public:
 
 public:
 	// 管理用
-	void _AddListener(Listener* pcListener);
-	void _RemoveListener(Listener* pcListener);
+	void _AddListener(Listener* pListener);
+	void _RemoveListener(Listener* pListener);
 
 private:
 	std::vector<Listener*> m_vListenersRef;
@@ -57,7 +57,7 @@ public:
 	virtual ~Listener();
 
 	// 公開インターフェース
-	Subject* Listen(Subject* pcSubject); // 直前にウォッチしていたサブジェクトを返す
+	Subject* Listen(Subject* pSubject); // 直前にウォッチしていたサブジェクトを返す
 	Subject* GetListeningSubject() const { return m_pSubjectRef; }
 
 private:
@@ -76,8 +76,8 @@ public:
 template <class SUBJECT>
 class ListenerT : public Listener {
 public:
-	SUBJECT* Listen(SUBJECT* pcSubject) {
-		return static_cast<SUBJECT*>(Listener::Listen(static_cast<Subject*>(pcSubject)));
+	SUBJECT* Listen(SUBJECT* pSubject) {
+		return static_cast<SUBJECT*>(Listener::Listen(static_cast<Subject*>(pSubject)));
 	}
 	SUBJECT* GetListeningSubject() const {
 		return static_cast<SUBJECT*>(Listener::GetListeningSubject());

@@ -47,7 +47,7 @@ public:
 	}
 
 	const LOGFONT& GetLogfont(int FontNo = 0) const {
-		return m_LogFont;
+		return m_logFont;
 	}
 
 private:
@@ -59,7 +59,7 @@ private:
 	HFONT	m_hFont_HAN_UL;			// 現在のフォントハンドル(下線)
 	HFONT	m_hFont_HAN_BOLD_UL;	// 現在のフォントハンドル(太字、下線)
 
-	LOGFONT	m_LogFont;
+	LOGFONT	m_logFont;
 	bool	m_bMiniMap;
 };
 

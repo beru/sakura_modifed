@@ -69,11 +69,11 @@ void KeyMacroMgr::ClearAll(void)
 void KeyMacroMgr::Append(
 	EFunctionCode	nFuncID,
 	const LPARAM*	lParams,
-	EditView*		pcEditView
+	EditView*		pEditView
 )
 {
 	auto macro = new Macro(nFuncID);
-	macro->AddLParam(lParams, pcEditView);
+	macro->AddLParam(lParams, pEditView);
 	Append(macro);
 }
 

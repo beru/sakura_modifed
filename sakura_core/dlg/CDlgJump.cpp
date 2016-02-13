@@ -187,7 +187,7 @@ BOOL DlgJump::OnBnClicked(int wID)
 void DlgJump::SetData(void)
 {
 	EditDoc* pEditDoc = (EditDoc*)m_lParam;
-	FuncInfoArr cFuncInfoArr;
+	FuncInfoArr funcInfoArr;
 	wchar_t szText[1024];
 	int nIndexCurSel = 0;	// Sep. 11, 2004 genta 初期化
 
@@ -205,14 +205,14 @@ void DlgJump::SetData(void)
 	HWND hwndCtrl = GetItemHwnd(IDC_COMBO_PLSQLBLOCKS);
 	// タイプ別に設定されたアウトライン解析方法
 	if (OUTLINE_PLSQL == pEditDoc->m_docType.GetDocumentAttribute().m_eDefaultOutline) {
-		pEditDoc->m_docOutline.MakeFuncList_PLSQL(&cFuncInfoArr);
+		pEditDoc->m_docOutline.MakeFuncList_PLSQL(&funcInfoArr);
 	}
 	//$$ 条件により、レイアウト・ロジックの単位が混在するため、ミスの原因になりやすい
 	int nWorkLine = -1;
 	int nIndex = 0;
 	int nPLSQLBlockNum = 0;
-	for (int i=0; i<cFuncInfoArr.GetNum(); ++i) {
-		FuncInfo* pFI = cFuncInfoArr.GetAt(i);
+	for (int i=0; i<funcInfoArr.GetNum(); ++i) {
+		FuncInfo* pFI = funcInfoArr.GetAt(i);
 		if (pFI->m_nInfo == 31 || pFI->m_nInfo == 41) {
 		}
 		if (pFI->m_nInfo == 31) {

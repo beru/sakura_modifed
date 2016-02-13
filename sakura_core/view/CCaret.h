@@ -33,9 +33,9 @@ class EditWnd;
 
 class CaretUnderLine {
 public:
-	CaretUnderLine(EditView* pcEditView)
+	CaretUnderLine(EditView* pEditView)
 		:
-		m_pEditView(pcEditView)
+		m_pEditView(pEditView)
 	{
 		m_nLockCounter = 0;
 		m_nUnderLineLockCounter = 0;

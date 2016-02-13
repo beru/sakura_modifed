@@ -30,12 +30,12 @@ class Cesu8 : public CodeBase {
 public:
 
 	// CodeBaseインターフェース
-	CodeConvertResult CodeToUnicode(const Memory& cSrc, NativeW* pDst) {	//!< 特定コード → UNICODE    変換
-		return Utf8::CESU8ToUnicode(cSrc, pDst);
+	CodeConvertResult CodeToUnicode(const Memory& src, NativeW* pDst) {	//!< 特定コード → UNICODE    変換
+		return Utf8::CESU8ToUnicode(src, pDst);
 	}
 	
-	CodeConvertResult UnicodeToCode(const NativeW& cSrc, Memory* pDst) {	//!< UNICODE    → 特定コード 変換
-		return Utf8::UnicodeToCESU8(cSrc, pDst);
+	CodeConvertResult UnicodeToCode(const NativeW& src, Memory* pDst) {	//!< UNICODE    → 特定コード 変換
+		return Utf8::UnicodeToCESU8(src, pDst);
 	}
 	
 	void GetBom(Memory* pMemBom);	//!< BOMデータ取得

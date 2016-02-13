@@ -111,7 +111,7 @@ bool EditView::ExecCmd( const TCHAR* pszCmd, int nFlgOpt, const TCHAR* pszCurDir
 {
 	HANDLE hStdOutWrite, hStdOutRead;
 	PROCESS_INFORMATION	pi = {0};
-	DlgCancel cDlgCancel;
+	DlgCancel dlgCancel;
 	OutputAdapter* oaInst = NULL;
 
 	bool bEditable = m_pEditDoc->IsEditable();
@@ -300,9 +300,9 @@ bool EditView::ExecCmd( const TCHAR* pszCmd, int nFlgOpt, const TCHAR* pszCurDir
 
 		// 中断ダイアログ表示
 		if (oa.IsEnableRunningDlg()) {
-			cDlgCancel.DoModeless(G_AppInstance(), m_hwndParent, IDD_EXECRUNNING);
+			dlgCancel.DoModeless(G_AppInstance(), m_hwndParent, IDD_EXECRUNNING);
 			// ダイアログにコマンドを表示
-			::DlgItem_SetText(cDlgCancel.GetHwnd(), IDC_STATIC_CMD, pszCmd);
+			::DlgItem_SetText(dlgCancel.GetHwnd(), IDC_STATIC_CMD, pszCmd);
 		}
 		// 実行したコマンドラインを表示
 		// 2004.09.20 naoh 多少は見やすく・・・
@@ -353,7 +353,7 @@ bool EditView::ExecCmd( const TCHAR* pszCmd, int nFlgOpt, const TCHAR* pszCurDir
 				break;
 			case WAIT_OBJECT_0 + 1:
 				// 処理中のユーザー操作を可能にする
-				if (!::BlockingHook(cDlgCancel.GetHwnd())) {
+				if (!::BlockingHook(dlgCancel.GetHwnd())) {
 					// WM_QUIT受信。ただちに終了処理
 					::TerminateProcess(pi.hProcess, 0);
 					goto finish;
@@ -363,7 +363,7 @@ bool EditView::ExecCmd( const TCHAR* pszCmd, int nFlgOpt, const TCHAR* pszCurDir
 				break;
 			}
 			// 中断ボタン押下チェック
-			if (cDlgCancel.IsCanceled()) {
+			if (dlgCancel.IsCanceled()) {
 				// 指定されたプロセスと、そのプロセスが持つすべてのスレッドを終了させます。
 				::TerminateProcess(pi.hProcess, 0);
 				bCancelEnd  = true;
@@ -517,13 +517,13 @@ bool EditView::ExecCmd( const TCHAR* pszCmd, int nFlgOpt, const TCHAR* pszCurDir
 					// 2010.04.12 Moca 相手が出力しつづけていると止められないから
 					// BlockingHookとキャンセル確認を読取ループ中でも行う
 					// bLoopFlag が立っていないときは、すでにプロセスは終了しているからTerminateしない
-					if (!::BlockingHook(cDlgCancel.GetHwnd())) {
+					if (!::BlockingHook(dlgCancel.GetHwnd())) {
 						if (bLoopFlag) {
 							::TerminateProcess(pi.hProcess, 0);
 						}
 						goto finish;
 					}
-					if (cDlgCancel.IsCanceled()) {
+					if (dlgCancel.IsCanceled()) {
 						// 指定されたプロセスと、そのプロセスが持つすべてのスレッドを終了させます。
 						if (bLoopFlag) {
 							::TerminateProcess(pi.hProcess, 0);

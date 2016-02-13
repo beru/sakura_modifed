@@ -42,7 +42,7 @@
 #include "sakura_rc.h"
 #include "sakura.hh"
 
-static void LoadPluginTemp(CommonSetting& common, MenuDrawer& cMenuDrawer);
+static void LoadPluginTemp(CommonSetting& common, MenuDrawer& menuDrawer);
 
 // Popup Help用ID
 static const DWORD p_helpids[] = {	//11700
@@ -588,22 +588,22 @@ bool PropPlugin::BrowseReadMe(const std::tstring& sReadMeName)
 		CREATE_NEW_CONSOLE, NULL, NULL, &sui, &pi) != 0);
 }
 
-static void LoadPluginTemp(CommonSetting& common, MenuDrawer& cMenuDrawer)
+static void LoadPluginTemp(CommonSetting& common, MenuDrawer& menuDrawer)
 {
 	{
 		// 2013.05.31 コントロールプロセスなら即時読み込み
 		PluginManager::getInstance()->LoadAllPlugin(&common);
 		// ツールバーアイコンの更新
 		const Plug::Array& plugs = JackManager::getInstance()->GetPlugs(PP_COMMAND);
-		cMenuDrawer.m_pIcons->ResetExtend();
+		menuDrawer.m_pIcons->ResetExtend();
 		for (auto it=plugs.begin(); it!=plugs.end(); ++it) {
 			int iBitmap = MenuDrawer::TOOLBAR_ICON_PLUGCOMMAND_DEFAULT - 1;
 			const Plug* plug = *it;
 			if (!plug->m_sIcon.empty()) {
-				iBitmap = cMenuDrawer.m_pIcons->Add(
+				iBitmap = menuDrawer.m_pIcons->Add(
 					to_tchar(plug->m_plugin.GetFilePath(to_tchar(plug->m_sIcon.c_str())).c_str()));
 			}
-			cMenuDrawer.AddToolButton(iBitmap, plug->GetFunctionCode());
+			menuDrawer.AddToolButton(iBitmap, plug->GetFunctionCode());
 		}
 	}
 }

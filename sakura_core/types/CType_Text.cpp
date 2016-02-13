@@ -48,8 +48,8 @@ void CType_Text::InitTypeConfigImp(TypeConfig* pType)
 	// 設定
 	pType->m_nMaxLineKetas = LayoutInt(120);					// 折り返し桁数
 	pType->m_eDefaultOutline = OUTLINE_TEXT;					// アウトライン解析方法
-	pType->m_ColorInfoArr[COLORIDX_SSTRING].m_bDisp = false;	// Oct. 17, 2000 JEPRO	シングルクォーテーション文字列を色分け表示しない
-	pType->m_ColorInfoArr[COLORIDX_WSTRING].m_bDisp = false;	// Sept. 4, 2000 JEPRO	ダブルクォーテーション文字列を色分け表示しない
+	pType->m_colorInfoArr[COLORIDX_SSTRING].m_bDisp = false;	// Oct. 17, 2000 JEPRO	シングルクォーテーション文字列を色分け表示しない
+	pType->m_colorInfoArr[COLORIDX_WSTRING].m_bDisp = false;	// Sept. 4, 2000 JEPRO	ダブルクォーテーション文字列を色分け表示しない
 	pType->m_bKinsokuHead = false;								// 行頭禁則				//@@@ 2002.04.08 MIK
 	pType->m_bKinsokuTail = false;								// 行末禁則				//@@@ 2002.04.08 MIK
 	pType->m_bKinsokuRet  = false;								// 改行文字をぶら下げる	//@@@ 2002.04.13 MIK
@@ -88,7 +88,7 @@ void CType_Text::InitTypeConfigImp(TypeConfig* pType)
 	@date 2007.8頃   kobake 機械的にUNICODE化
 	@date 2007.11.29 kobake UNICODE対応できてなかったので修正
 */
-void DocOutline::MakeTopicList_txt(FuncInfoArr* pcFuncInfoArr)
+void DocOutline::MakeTopicList_txt(FuncInfoArr* pFuncInfoArr)
 {
 	using namespace WCODE;
 
@@ -233,7 +233,7 @@ void DocOutline::MakeTopicList_txt(FuncInfoArr* pcFuncInfoArr)
 		}
 		
 		if (bAppend) {
-			pcFuncInfoArr->AppendData(
+			pFuncInfoArr->AppendData(
 				nLineCount + LogicInt(1),
 				ptPos.GetY2() + LayoutInt(1),
 				pszText,
@@ -254,7 +254,7 @@ void DocOutline::MakeTopicList_txt(FuncInfoArr* pcFuncInfoArr)
 	@date 2003.05.25 genta 実装方法一部修正
 	@date 2003.06.21 Moca 階層が2段以上深くなる場合を考慮
 */
-void DocOutline::MakeTopicList_wztxt(FuncInfoArr* pcFuncInfoArr)
+void DocOutline::MakeTopicList_wztxt(FuncInfoArr* pFuncInfoArr)
 {
 	int levelPrev = 0;
 	bool bExtEol = GetDllShareData().m_common.m_edit.m_bEnableExtEol;
@@ -291,7 +291,7 @@ void DocOutline::MakeTopicList_wztxt(FuncInfoArr* pcFuncInfoArr)
 				// (無題)を挿入
 				//	ただし，TAG一覧には出力されないように
 				for (dummyLevel=levelPrev+1; dummyLevel<level; ++dummyLevel) {
-					pcFuncInfoArr->AppendData(
+					pFuncInfoArr->AppendData(
 						nLineCount + LogicInt(1),
 						ptPos.GetY2() + LayoutInt(1),
 						LSW(STR_NO_TITLE1),
@@ -315,7 +315,7 @@ void DocOutline::MakeTopicList_wztxt(FuncInfoArr* pcFuncInfoArr)
 				}
 			}
 			*pDest = L'\0';
-			pcFuncInfoArr->AppendData(nLineCount + LogicInt(1), ptPos.GetY2() + LayoutInt(1), szTitle, 0, level - 1);
+			pFuncInfoArr->AppendData(nLineCount + LogicInt(1), ptPos.GetY2() + LayoutInt(1), szTitle, 0, level - 1);
 		}
 	}
 }

@@ -117,13 +117,13 @@ void DlgSetCharSet::SetBOM(void)
 	WPARAM fCheck;
 	int nIdx = Combo_GetCurSel(m_hwndCharSet);
 	LRESULT lRes = Combo_GetItemData(m_hwndCharSet, nIdx);
-	CodeTypeName	cCodeTypeName(lRes);
-	if (cCodeTypeName.UseBom()) {
+	CodeTypeName codeTypeName(lRes);
+	if (codeTypeName.UseBom()) {
 		::EnableWindow(m_hwndCheckBOM, TRUE);
 		if (lRes == *m_pnCharSet) {
 			fCheck = *m_pbBom ? BST_CHECKED : BST_UNCHECKED;
 		}else {
-			fCheck = cCodeTypeName.IsBomDefOn() ? BST_CHECKED : BST_UNCHECKED;
+			fCheck = codeTypeName.IsBomDefOn() ? BST_CHECKED : BST_UNCHECKED;
 		}
 	}else {
 		::EnableWindow(m_hwndCheckBOM, FALSE);

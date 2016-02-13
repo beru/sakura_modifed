@@ -58,7 +58,7 @@ void MarkMgr::SetMax(int max)
 bool MarkMgr::CheckCurrent(void) const
 {
 	if (m_nCurpos < Count()) {
-		return m_cMarkChain[m_nCurpos].IsValid();
+		return m_markChain[m_nCurpos].IsValid();
 	}
 
 	return false;
@@ -73,7 +73,7 @@ bool MarkMgr::CheckCurrent(void) const
 bool MarkMgr::CheckPrev(void) const
 {
 	for (int i=m_nCurpos-1; i>=0; --i) {
-		if (m_cMarkChain[i].IsValid()) {
+		if (m_markChain[i].IsValid()) {
 			return true;
 		}
 	}
@@ -89,7 +89,7 @@ bool MarkMgr::CheckPrev(void) const
 bool MarkMgr::CheckNext(void) const
 {
 	for (int i=m_nCurpos+1; i<Count(); ++i) {
-		if (m_cMarkChain[i].IsValid()) {
+		if (m_markChain[i].IsValid()) {
 			return true;
 		}
 	}
@@ -105,7 +105,7 @@ bool MarkMgr::CheckNext(void) const
 bool MarkMgr::PrevValid(void)
 {
 	for (int i=m_nCurpos-1; i>=0; --i) {
-		if (m_cMarkChain[i].IsValid()) {
+		if (m_markChain[i].IsValid()) {
 			m_nCurpos = i;
 			return true;
 		}
@@ -122,7 +122,7 @@ bool MarkMgr::PrevValid(void)
 bool MarkMgr::NextValid(void)
 {
 	for (int i=m_nCurpos+1; i<Count(); ++i) {
-		if (m_cMarkChain[i].IsValid()) {
+		if (m_markChain[i].IsValid()) {
 			m_nCurpos = i;
 			return true;
 		}
@@ -139,7 +139,7 @@ bool MarkMgr::NextValid(void)
 */
 void MarkMgr::Flush(void)
 {
-	m_cMarkChain.erase(m_cMarkChain.begin(), m_cMarkChain.end());
+	m_markChain.erase(m_markChain.begin(), m_markChain.end());
 	m_nCurpos = 0;
 }
 
@@ -158,13 +158,13 @@ void MarkMgr::Flush(void)
 void AutoMarkMgr::Add(const Mark& m)
 {
 	// Œ»ÝˆÊ’u‚ª“r’†‚ÌŽž
-	if (m_nCurpos < (int)m_cMarkChain.size()) {
+	if (m_nCurpos < (int)m_markChain.size()) {
 		// Œ»ÝˆÊ’u‚Ü‚Å—v‘f‚ðíœ
-		m_cMarkChain.erase(m_cMarkChain.begin() + m_nCurpos, m_cMarkChain.end());
+		m_markChain.erase(m_markChain.begin() + m_nCurpos, m_markChain.end());
 	}
 
 	// —v‘f‚Ì’Ç‰Á
-	m_cMarkChain.push_back(m);
+	m_markChain.push_back(m);
 	++m_nCurpos;
 
 	// ‹K’è”‚ð’´‚¦‚Ä‚µ‚Ü‚¤‚Æ‚«‚Ì‘Î‰ž
@@ -177,14 +177,14 @@ void AutoMarkMgr::Add(const Mark& m)
 */
 void AutoMarkMgr::Expire(void)
 {
-	int range = m_cMarkChain.size() - GetMax();
+	int range = m_markChain.size() - GetMax();
 
 	if (range <= 0) {
 		return;
 	}
 
 	// Å‘å’l‚ð’´‚¦‚Ä‚¢‚éê‡
-	m_cMarkChain.erase(m_cMarkChain.begin(), m_cMarkChain.begin() + range);
+	m_markChain.erase(m_markChain.begin(), m_markChain.begin() + range);
 	m_nCurpos -= range;
 	if (m_nCurpos < 0) {
 		m_nCurpos = 0;

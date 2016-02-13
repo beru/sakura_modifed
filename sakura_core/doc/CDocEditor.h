@@ -39,10 +39,10 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	// ロード前後
 	void OnBeforeLoad(LoadInfo* sLoadInfo);
-	void OnAfterLoad(const LoadInfo& sLoadInfo);
+	void OnAfterLoad(const LoadInfo& loadInfo);
 
 	// セーブ前後
-	void OnAfterSave(const SaveInfo& sSaveInfo);
+	void OnAfterSave(const SaveInfo& saveInfo);
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                           状態                              //

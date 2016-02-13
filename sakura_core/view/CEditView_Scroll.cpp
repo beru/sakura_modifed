@@ -710,14 +710,14 @@ void EditView::SyncScrollH(LayoutInt col)
 		&& m_pEditWnd->IsEnablePane(m_nMyIndex^0x02)
 		&& 0 <= m_nMyIndex
 	) {
-		EditView& cEditView = m_pEditWnd->GetView(m_nMyIndex^0x02);
-		HDC hdc = ::GetDC(cEditView.GetHwnd());
+		EditView& editView = m_pEditWnd->GetView(m_nMyIndex^0x02);
+		HDC hdc = ::GetDC(editView.GetHwnd());
 		
 #if 0
 		//	差分を保ったままスクロールする場合
-		cEditView.ScrollByH(col);
+		editView.ScrollByH(col);
 #else
-		cEditView.ScrollAtH(GetTextArea().GetViewLeftCol());
+		editView.ScrollAtH(GetTextArea().GetViewLeftCol());
 #endif
 		GetRuler().SetRedrawFlag(); // 2002.02.25 Add By KK スクロール時ルーラー全体を描きなおす。
 		GetRuler().DispRuler(hdc);
@@ -790,13 +790,13 @@ LayoutInt EditView::GetRightEdgeForScrollBar(void)
 		// 選択範囲あり かつ 範囲の右端がテキストの幅より右側
 		if (GetSelectionInfo().IsTextSelected()) {
 			// 開始位置・終了位置のより右側にある方で比較
-			auto& sSelect = GetSelectionInfo().m_select;
-			if (sSelect.GetFrom().GetX2() < sSelect.GetTo().GetX2()) {
-				if (nRightEdge < sSelect.GetTo().GetX2())
-					nRightEdge = sSelect.GetTo().GetX2();
+			auto& select = GetSelectionInfo().m_select;
+			if (select.GetFrom().GetX2() < select.GetTo().GetX2()) {
+				if (nRightEdge < select.GetTo().GetX2())
+					nRightEdge = select.GetTo().GetX2();
 			}else {
-				if (nRightEdge < sSelect.GetFrom().GetX2())
-					nRightEdge = sSelect.GetFrom().GetX2();
+				if (nRightEdge < select.GetFrom().GetX2())
+					nRightEdge = select.GetFrom().GetX2();
 			}
 		}
 

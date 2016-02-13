@@ -475,10 +475,10 @@ void ViewCommander::Command_UNINDENT(wchar_t wcChar)
 		for (LayoutInt i = sSelectOld.GetFrom().GetY2(); i < sSelectOld.GetTo().GetY2(); ++i) {
 			LayoutInt nLineCountPrev = GetDocument()->m_layoutMgr.GetLineCount();
 
-			const Layout*	pcLayout;
+			const Layout*	pLayout;
 			LogicInt		nLineLen;
-			const wchar_t*	pLine = GetDocument()->m_layoutMgr.GetLineStr(i, &nLineLen, &pcLayout);
-			if (!pcLayout || pcLayout->GetLogicOffset() > 0) { // 折り返し以降の行はインデント処理を行わない
+			const wchar_t*	pLine = GetDocument()->m_layoutMgr.GetLineStr(i, &nLineLen, &pLayout);
+			if (!pLayout || pLayout->GetLogicOffset() > 0) { // 折り返し以降の行はインデント処理を行わない
 				continue;
 			}
 
@@ -567,16 +567,16 @@ void ViewCommander::Command_TRIM(
 	)
 {
 	bool bBeDisableSelectArea = false;
-	ViewSelect& cViewSelect = m_pCommanderView->GetSelectionInfo();
+	ViewSelect& viewSelect = m_pCommanderView->GetSelectionInfo();
 
-	if (!cViewSelect.IsTextSelected()) {	// 非選択時は行選択に変更
-		cViewSelect.m_select.SetFrom(
+	if (!viewSelect.IsTextSelected()) {	// 非選択時は行選択に変更
+		viewSelect.m_select.SetFrom(
 			LayoutPoint(
 				LayoutInt(0),
 				GetCaret().GetCaretLayoutPos().GetY()
 			)
 		);
-		cViewSelect.m_select.SetTo(
+		viewSelect.m_select.SetTo(
 			LayoutPoint(
 				GetDocument()->m_layoutMgr.GetMaxLineKetas(),
 				GetCaret().GetCaretLayoutPos().GetY()
@@ -588,7 +588,7 @@ void ViewCommander::Command_TRIM(
 	m_pCommanderView->ConvSelectedArea(bLeft ? F_LTRIM : F_RTRIM);
 
 	if (bBeDisableSelectArea) {
-		cViewSelect.DisableSelectArea(true);
+		viewSelect.DisableSelectArea(true);
 	}
 }
 
@@ -717,8 +717,8 @@ void ViewCommander::Command_SORT(BOOL bAsc)	// bAsc:TRUE=昇順,FALSE=降順
 	sta.reserve(sSelectOld.GetTo().GetY2() - sSelectOld.GetFrom().GetY2());
 	for (LogicInt i=sSelectOld.GetFrom().GetY2(); i<sSelectOld.GetTo().y; ++i) {
 		const DocLine* pDocLine = GetDocument()->m_docLineMgr.GetLine(i);
-		const NativeW& cmemLine = pDocLine->_GetDocLineDataWithEOL();
-		const wchar_t* pLine = cmemLine.GetStringPtr(&nLineLen);
+		const NativeW& memLine = pDocLine->_GetDocLineDataWithEOL();
+		const wchar_t* pLine = memLine.GetStringPtr(&nLineLen);
 		LogicInt nLineLenWithoutEOL = pDocLine->GetLengthWithoutEOL();
 		if (!pLine) {
 			continue;
@@ -737,7 +737,7 @@ void ViewCommander::Command_SORT(BOOL bAsc)	// bAsc:TRUE=昇順,FALSE=降順
 				pst->sKey = StringRef(L"", 0);
 			}
 		}
-		pst->pMemLine = &cmemLine;
+		pst->pMemLine = &memLine;
 		sta.push_back(pst);
 	}
 	const wchar_t* pStrLast = NULL; // 最後の行に改行がなければそのポインタ
@@ -763,22 +763,22 @@ void ViewCommander::Command_SORT(BOOL bAsc)	// bAsc:TRUE=昇順,FALSE=降順
 	int opeSeq = GetDocument()->m_docEditor.m_opeBuf.GetNextSeq();
 	for (int i=0; i<j; ++i) {
 		repData[i].nSeq = opeSeq;
-		repData[i].cmemLine.SetString(sta[i]->pMemLine->GetStringPtr(), sta[i]->pMemLine->GetStringLength());
+		repData[i].memLine.SetString(sta[i]->pMemLine->GetStringPtr(), sta[i]->pMemLine->GetStringLength());
 		if (pStrLast == sta[i]->pMemLine->GetStringPtr()) {
 			// 元最終行に改行がないのでつける
 			Eol cWork = GetDocument()->m_docEditor.GetNewLineCode();
-			repData[i].cmemLine.AppendString(cWork.GetValue2(), cWork.GetLen());
+			repData[i].memLine.AppendString(cWork.GetValue2(), cWork.GetLen());
 		}
 	}
 	if (pStrLast) {
 		// 最終行の改行を削除
 		LineData& lastData = repData[repData.size() - 1];
-		int nLen = lastData.cmemLine.GetStringLength();
+		int nLen = lastData.memLine.GetStringLength();
 		bool bExtEol = GetDllShareData().m_common.m_edit.m_bEnableExtEol;
-		while (0 <nLen && WCODE::IsLineDelimiter(lastData.cmemLine[nLen-1], bExtEol)) {
+		while (0 <nLen && WCODE::IsLineDelimiter(lastData.memLine[nLen-1], bExtEol)) {
 			--nLen;
 		}
-		lastData.cmemLine._SetStringLength(nLen);
+		lastData.memLine._SetStringLength(nLen);
 	}
 	// 2010.08.22 Moca swapで削除
 	{
@@ -914,7 +914,7 @@ void ViewCommander::Command_MERGE(void)
 		int opeSeq = GetDocument()->m_docEditor.m_opeBuf.GetNextSeq();
 		for (int idx=0; idx<nSize; ++idx) {
 			repData[idx].nSeq = opeSeq;
-			repData[idx].cmemLine.SetString(lineArr[idx].GetPtr(), lineArr[idx].GetLength());
+			repData[idx].memLine.SetString(lineArr[idx].GetPtr(), lineArr[idx].GetLength());
 		}
 		m_pCommanderView->ReplaceData_CEditView3(
 			sSelectOld_Layout,

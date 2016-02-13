@@ -45,21 +45,21 @@ AutoReloadAgent::AutoReloadAgent()
 //                        セーブ前後                           //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-void AutoReloadAgent::OnBeforeSave(const SaveInfo& sSaveInfo)
+void AutoReloadAgent::OnBeforeSave(const SaveInfo& saveInfo)
 {
 	//	Sep. 7, 2003 genta
 	//	保存が完了するまではファイル更新の通知を抑制する
 	PauseWatching();
 }
 
-void AutoReloadAgent::OnAfterSave(const SaveInfo& sSaveInfo)
+void AutoReloadAgent::OnAfterSave(const SaveInfo& saveInfo)
 {
 	//	Sep. 7, 2003 genta
 	//	ファイル更新の通知を元に戻す
 	ResumeWatching();
 
 	// 名前を付けて保存から再ロードが除去された分の不足処理を追加（ANSI版との差異）	// 2009.08.12 ryoji
-	if (!sSaveInfo.bOverwriteMode) {
+	if (!saveInfo.bOverwriteMode) {
 		m_eWatchUpdate = WU_QUERY;	// 「名前を付けて保存」で対象ファイルが変更されたので更新監視方法をデフォルトに戻す
 	}
 }
@@ -69,9 +69,9 @@ void AutoReloadAgent::OnAfterSave(const SaveInfo& sSaveInfo)
 //                        ロード前後                           //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-void AutoReloadAgent::OnAfterLoad(const LoadInfo& sLoadInfo)
+void AutoReloadAgent::OnAfterLoad(const LoadInfo& loadInfo)
 {
-	//pcDoc->m_docFile.m_sFileInfo.cFileTime.SetFILETIME(ftime); //#####既に設定済みのはず
+	//pDoc->m_docFile.m_sFileInfo.cFileTime.SetFILETIME(ftime); //#####既に設定済みのはず
 }
 
 
@@ -131,14 +131,14 @@ void AutoReloadAgent::CheckFileTimeStamp()
 		return;
 	}
 
-	EditDoc* pcDoc = GetListeningDoc();
+	EditDoc* pDoc = GetListeningDoc();
 
 	// タイムスタンプ監視
 	FILETIME ftime;
 	if (!_IsFileUpdatedByOther(&ftime)) {
 		return;
 	}
-	pcDoc->m_docFile.SetFileTime(ftime); // タイムスタンプ更新
+	pDoc->m_docFile.SetFileTime(ftime); // タイムスタンプ更新
 
 	//	From Here Dec. 4, 2002 genta
 	switch (m_eWatchUpdate) {
@@ -146,17 +146,17 @@ void AutoReloadAgent::CheckFileTimeStamp()
 		{
 			// ファイル更新のお知らせ -> ステータスバー
 			TCHAR szText[40];
-			const FileTime& ctime = pcDoc->m_docFile.GetFileTime();
-			auto_sprintf_s(szText, LS(STR_AUTORELOAD_NOFITY), ctime->wHour, ctime->wMinute, ctime->wSecond);
-			pcDoc->m_pEditWnd->SendStatusMessage(szText);
+			const FileTime& time = pDoc->m_docFile.GetFileTime();
+			auto_sprintf_s(szText, LS(STR_AUTORELOAD_NOFITY), time->wHour, time->wMinute, time->wSecond);
+			pDoc->m_pEditWnd->SendStatusMessage(szText);
 		}
 		break;
 	case WU_AUTOLOAD:		// 以後未編集で再ロード
-		if (!pcDoc->m_docEditor.IsModified()) {
+		if (!pDoc->m_docEditor.IsModified()) {
 			PauseWatching(); // 更新監視の抑制
 
 			// 同一ファイルの再オープン
-			pcDoc->m_docFileOperation.ReloadCurrentFile(pcDoc->m_docFile.GetCodeSet());
+			pDoc->m_docFileOperation.ReloadCurrentFile(pDoc->m_docFile.GetCodeSet());
 			m_eWatchUpdate = WU_AUTOLOAD;
 
 			ResumeWatching(); // 監視再開
@@ -167,7 +167,7 @@ void AutoReloadAgent::CheckFileTimeStamp()
 		{
 			PauseWatching(); // 更新監視の抑制
 
-			DlgFileUpdateQuery dlg(pcDoc->m_docFile.GetFilePath(), pcDoc->m_docEditor.IsModified());
+			DlgFileUpdateQuery dlg(pDoc->m_docFile.GetFilePath(), pDoc->m_docEditor.IsModified());
 			int result = dlg.DoModal(
 				G_AppInstance(),
 				EditWnd::getInstance()->GetHwnd(),
@@ -178,7 +178,7 @@ void AutoReloadAgent::CheckFileTimeStamp()
 			switch (result) {
 			case 1:	// 再読込
 				// 同一ファイルの再オープン
-				pcDoc->m_docFileOperation.ReloadCurrentFile(pcDoc->m_docFile.GetCodeSet());
+				pDoc->m_docFileOperation.ReloadCurrentFile(pDoc->m_docFile.GetCodeSet());
 				m_eWatchUpdate = WU_QUERY;
 				break;
 			case 2:	// 以後通知メッセージのみ
@@ -189,7 +189,7 @@ void AutoReloadAgent::CheckFileTimeStamp()
 				break;
 			case 4:	// 以後未編集で再ロード
 				// 同一ファイルの再オープン
-				pcDoc->m_docFileOperation.ReloadCurrentFile(pcDoc->m_docFile.GetCodeSet());
+				pDoc->m_docFileOperation.ReloadCurrentFile(pDoc->m_docFile.GetCodeSet());
 				m_eWatchUpdate = WU_AUTOLOAD;
 				m_nDelayCount = 0;
 				break;

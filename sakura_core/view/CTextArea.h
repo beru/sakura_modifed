@@ -176,11 +176,11 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//$ Generateなんていう大げさな名前じゃなくて、Get～で良い気がしてきた
 	//! クリッピング矩形を作成。表示範囲外だった場合はfalseを返す。
-	void GenerateCharRect(RECT* rc, const DispPos& sPos, int nHankakuNum) const;
+	void GenerateCharRect(RECT* rc, const DispPos& pos, int nHankakuNum) const;
 	bool TrimRectByArea(RECT* rc) const;
-	bool GenerateClipRect(RECT* rc, const DispPos& sPos, int nHankakuNum) const;
-	bool GenerateClipRectRight(RECT* rc, const DispPos& sPos) const; //!< 右端まで全部
-	bool GenerateClipRectLine(RECT* rc, const DispPos& sPos) const;  //!< 行全部
+	bool GenerateClipRect(RECT* rc, const DispPos& pos, int nHankakuNum) const;
+	bool GenerateClipRectRight(RECT* rc, const DispPos& pos) const; //!< 右端まで全部
+	bool GenerateClipRectLine(RECT* rc, const DispPos& pos) const;  //!< 行全部
 
 	void GenerateTopRect   (RECT* rc, LayoutInt nLineCount) const;
 	void GenerateBottomRect(RECT* rc, LayoutInt nLineCount) const;

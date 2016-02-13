@@ -50,7 +50,7 @@ public:
 	void set(const wchar_t* wszData, int nLength) { m_wstr.assign(wszData, nLength); m_delete2(m_str_cache); }
 	void set(const char* szData);
 	void set(const char* szData, int nLength);
-	void set(const String& cszData) { set(cszData.c_wstr()); }
+	void set(const String& szData) { set(szData.c_wstr()); }
 
 	// Žæ“¾
 	const wchar_t* c_wstr() const { return m_wstr.c_str(); }

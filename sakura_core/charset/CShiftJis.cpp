@@ -106,13 +106,13 @@ int ShiftJis::SjisToUni(const char* pSrc, const int nSrcLen, wchar_t* pDst, bool
 
 // コード変換 SJIS→Unicode
 CodeConvertResult ShiftJis::SJISToUnicode(
-	const Memory& cSrc,
+	const Memory& src,
 	NativeW* pDstMem
 	)
 {
 	// ソース取得
 	int nSrcLen;
-	const char* pSrc = reinterpret_cast<const char*>(cSrc.GetRawPtr(&nSrcLen));
+	const char* pSrc = reinterpret_cast<const char*>(src.GetRawPtr(&nSrcLen));
 	if (nSrcLen == 0) {
 		pDstMem->Clear();
 		return CodeConvertResult::Complete;
@@ -200,10 +200,10 @@ int ShiftJis::UniToSjis(const wchar_t* pSrc, const int nSrcLen, char* pDst, bool
 
 
 // コード変換 Unicode→SJIS
-CodeConvertResult ShiftJis::UnicodeToSJIS( const NativeW& cSrc, Memory* pDstMem )
+CodeConvertResult ShiftJis::UnicodeToSJIS( const NativeW& src, Memory* pDstMem )
 {
 	// 状態
-	const Memory* pMem = cSrc._GetMemory();
+	const Memory* pMem = src._GetMemory();
 
 	// ソース取得
 	const wchar_t* pSrc = reinterpret_cast<const wchar_t*>(pMem->GetRawPtr());

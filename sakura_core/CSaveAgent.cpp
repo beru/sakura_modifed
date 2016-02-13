@@ -102,35 +102,35 @@ CallbackResultType SaveAgent::OnCheckSave(SaveInfo* pSaveInfo)
 	return CallbackResultType::Continue;
 }
 
-void SaveAgent::OnBeforeSave(const SaveInfo& sSaveInfo)
+void SaveAgent::OnBeforeSave(const SaveInfo& saveInfo)
 {
 	EditDoc* pDoc = GetListeningDoc();
 
 	// 改行コード統一
-	DocVisitor(pDoc).SetAllEol(sSaveInfo.cEol);
+	DocVisitor(pDoc).SetAllEol(saveInfo.cEol);
 }
 
-void SaveAgent::OnSave(const SaveInfo& sSaveInfo)
+void SaveAgent::OnSave(const SaveInfo& saveInfo)
 {
 	EditDoc* pDoc = GetListeningDoc();
 
 	// カキコ
-	WriteManager cWriter;
-	EditApp::getInstance()->m_pVisualProgress->ProgressListener::Listen(&cWriter);
-	cWriter.WriteFile_From_CDocLineMgr(
+	WriteManager writer;
+	EditApp::getInstance()->m_pVisualProgress->ProgressListener::Listen(&writer);
+	writer.WriteFile_From_CDocLineMgr(
 		pDoc->m_docLineMgr,
-		sSaveInfo
+		saveInfo
 	);
 
 	// セーブ情報の確定
-	pDoc->SetFilePathAndIcon(sSaveInfo.filePath);
-	pDoc->m_docFile.SetCodeSet(sSaveInfo.eCharCode, sSaveInfo.bBomExist);
-	if (sSaveInfo.cEol.IsValid()) {
-		pDoc->m_docEditor.SetNewLineCode(sSaveInfo.cEol);
+	pDoc->SetFilePathAndIcon(saveInfo.filePath);
+	pDoc->m_docFile.SetCodeSet(saveInfo.eCharCode, saveInfo.bBomExist);
+	if (saveInfo.cEol.IsValid()) {
+		pDoc->m_docEditor.SetNewLineCode(saveInfo.cEol);
 	}
 }
 
-void SaveAgent::OnAfterSave(const SaveInfo& sSaveInfo)
+void SaveAgent::OnAfterSave(const SaveInfo& saveInfo)
 {
 	EditDoc* pDoc = GetListeningDoc();
 
@@ -143,7 +143,7 @@ void SaveAgent::OnAfterSave(const SaveInfo& sSaveInfo)
 	// タイプ別設定の変更を指示。
 	// 上書き（明示的な上書きや自動保存）では変更しない
 	// ---> 上書きの場合は一時的な折り返し桁変更やタブ幅変更を維持したままにする
-	if (!sSaveInfo.bOverwriteMode) {
+	if (!saveInfo.bOverwriteMode) {
 		pDoc->OnChangeSetting();
 	}
 }

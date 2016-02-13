@@ -30,8 +30,8 @@ public:
 	Color_KeywordSet();
 	virtual EColorIndexType GetStrategyColor() const { return (EColorIndexType)(COLORIDX_KEYWORD1 + m_nKeywordIndex); }
 	virtual void InitStrategyStatus() { m_nCOMMENTEND = 0; }
-	virtual bool BeginColor(const StringRef& cStr, int nPos);
-	virtual bool EndColor(const StringRef& cStr, int nPos);
+	virtual bool BeginColor(const StringRef& str, int nPos);
+	virtual bool EndColor(const StringRef& str, int nPos);
 	virtual bool Disp() const { return true; }
 private:
 	int m_nKeywordIndex;

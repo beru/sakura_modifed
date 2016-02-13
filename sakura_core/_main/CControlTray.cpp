@@ -101,24 +101,24 @@ void ControlTray::DoGrepCreateWindow(HINSTANCE hinst, HWND msgParent, DlgGrep& d
 	// ======= Grepの実行 =============
 	// Grep結果ウィンドウの表示
 
-	NativeW cmWork1;
-	CNativeT cmWork2;
-	CNativeT cmWork3;
-	cmWork1.SetString(dlgGrep.m_strText.c_str());
-	cmWork2.SetString(dlgGrep.m_szFile);
-	cmWork3.SetString(dlgGrep.m_szFolder);
-	cmWork1.Replace(L"\"", L"\"\"");
-	cmWork2.Replace(_T("\""), _T("\"\""));
-	cmWork3.Replace(_T("\""), _T("\"\""));
+	NativeW mWork1;
+	CNativeT mWork2;
+	CNativeT mWork3;
+	mWork1.SetString(dlgGrep.m_strText.c_str());
+	mWork2.SetString(dlgGrep.m_szFile);
+	mWork3.SetString(dlgGrep.m_szFolder);
+	mWork1.Replace(L"\"", L"\"\"");
+	mWork2.Replace(_T("\""), _T("\"\""));
+	mWork3.Replace(_T("\""), _T("\"\""));
 
 	// -GREPMODE -GKEY="1" -GFILE="*.*;*.c;*.h" -GFOLDER="c:\" -GCODE=0 -GOPT=S
 	CNativeT cmdLine;
 	cmdLine.AppendString(_T("-GREPMODE -GKEY=\""));
-	cmdLine.AppendStringW(cmWork1.GetStringPtr());
+	cmdLine.AppendStringW(mWork1.GetStringPtr());
 	cmdLine.AppendString(_T("\" -GFILE=\""));
-	cmdLine.AppendString(cmWork2.GetStringPtr());
+	cmdLine.AppendString(mWork2.GetStringPtr());
 	cmdLine.AppendString(_T("\" -GFOLDER=\""));
-	cmdLine.AppendString(cmWork3.GetStringPtr());
+	cmdLine.AppendString(mWork3.GetStringPtr());
 	cmdLine.AppendString(_T("\" -GCODE="));
 	TCHAR szTemp[20];
 	auto_sprintf_s(szTemp, _T("%d"), dlgGrep.m_nGrepCharSet);
@@ -307,7 +307,7 @@ bool ControlTray::CreateTrayIcon(HWND hWnd)
 // From Here Jan. 12, 2001 JEPRO トレイアイコンにポイントするとバージョンno.が表示されるように修正
 //			TrayMessage(GetTrayHwnd(), NIM_ADD, 0,  hIcon, GSTR_APPNAME);
 		// バージョン情報
-		// UR version no.を設定 (cf. cDlgAbout.cpp)
+		// UR version no.を設定 (cf. dlgAbout.cpp)
 		TCHAR	pszTips[64 + _MAX_PATH];
 		// 2004.05.13 Moca バージョン番号は、プロセスごとに取得する
 		DWORD dwVersionMS, dwVersionLS;
@@ -480,20 +480,20 @@ LRESULT ControlTray::DispatchEvent(
 			// 2010.08.26 ウィンドウ存在確認。消えたウィンドウを抹消する
 			bool bDelete = false;
 			bool bDelFound;
-			auto& sNodes = m_pShareData->m_nodes;
+			auto& nodes = m_pShareData->m_nodes;
 			do {
 				bDelFound = false;
-				for (int i=0; i<sNodes.m_nEditArrNum; ++i) {
-					HWND target = sNodes.m_pEditArr[i].GetHwnd();
+				for (int i=0; i<nodes.m_nEditArrNum; ++i) {
+					HWND target = nodes.m_pEditArr[i].GetHwnd();
 					if (!IsSakuraMainWindow(target)) {
-						AppNodeGroupHandle(sNodes.m_pEditArr[i].m_nGroup).DeleteEditWndList(target);
+						AppNodeGroupHandle(nodes.m_pEditArr[i].m_nGroup).DeleteEditWndList(target);
 						bDelete = bDelFound = true;
 						// 1つ削除したらやり直し
 						break;
 					}
 				}
 			}while (bDelFound);
-			if (bDelete && sNodes.m_nEditArrNum == 0) {
+			if (bDelete && nodes.m_nEditArrNum == 0) {
 				PostMessage(hwnd, MYWM_DELETE_ME, 0, 0);
 			}
 		}
@@ -803,14 +803,14 @@ LRESULT ControlTray::DispatchEvent(
 				break;
 			case F_TYPE_LIST:	// タイプ別設定一覧
 				{
-					DlgTypeList			cDlgTypeList;
-					DlgTypeList::Result	sResult;
-					sResult.documentType = TypeConfigNum(0);
-					sResult.bTempChange = false;
-					if (cDlgTypeList.DoModal(G_AppInstance(), GetTrayHwnd(), &sResult)) {
+					DlgTypeList			dlgTypeList;
+					DlgTypeList::Result	result;
+					result.documentType = TypeConfigNum(0);
+					result.bTempChange = false;
+					if (dlgTypeList.DoModal(G_AppInstance(), GetTrayHwnd(), &result)) {
 						// タイプ別設定
 						PluginManager::getInstance()->LoadAllPlugin();
-						m_pPropertyManager->OpenPropertySheetTypes(NULL, -1, sResult.documentType);
+						m_pPropertyManager->OpenPropertySheetTypes(NULL, -1, result.documentType);
 						PluginManager::getInstance()->UnloadAllPlugin();
 					}
 				}
@@ -839,8 +839,8 @@ LRESULT ControlTray::DispatchEvent(
 			case F_ABOUT:
 				// バージョン情報
 				{
-					DlgAbout cDlgAbout;
-					cDlgAbout.DoModal(m_hInstance, GetTrayHwnd());
+					DlgAbout dlgAbout;
+					dlgAbout.DoModal(m_hInstance, GetTrayHwnd());
 				}
 				break;
 //				case IDM_EXITALL:
@@ -878,13 +878,13 @@ LRESULT ControlTray::DispatchEvent(
 			case F_FILEOPEN:	// 開く
 				{
 					// ファイルオープンダイアログの初期化
-					LoadInfo sLoadInfo;
-					sLoadInfo.filePath = _T("");
-					sLoadInfo.eCharCode = CODE_AUTODETECT;	// 文字コード自動判別
-					sLoadInfo.bViewMode = false;
+					LoadInfo loadInfo;
+					loadInfo.filePath = _T("");
+					loadInfo.eCharCode = CODE_AUTODETECT;	// 文字コード自動判別
+					loadInfo.bViewMode = false;
 					// 2013.03.21 novice カレントディレクトリ変更(MRUは使用しない)
-					DlgOpenFile cDlgOpenFile;
-					cDlgOpenFile.Create(
+					DlgOpenFile dlgOpenFile;
+					dlgOpenFile.Create(
 						m_hInstance,
 						NULL,
 						_T("*.*"),
@@ -893,7 +893,7 @@ LRESULT ControlTray::DispatchEvent(
 						MRUFolder().GetPathList()	// OPENFOLDERリストのファイルのリスト
 					);
 					std::vector<std::tstring> files;
-					if (!cDlgOpenFile.DoModalOpenDlg(&sLoadInfo, &files)) {
+					if (!dlgOpenFile.DoModalOpenDlg(&loadInfo, &files)) {
 						break;
 					}
 					if (!GetTrayHwnd()) {
@@ -903,11 +903,11 @@ LRESULT ControlTray::DispatchEvent(
 					// 新たな編集ウィンドウを起動
 					size_t nSize = files.size();
 					for (size_t f=0; f<nSize; ++f) {
-						sLoadInfo.filePath = files[f].c_str();
+						loadInfo.filePath = files[f].c_str();
 						ControlTray::OpenNewEditor(
 							m_hInstance,
 							GetTrayHwnd(),
-							sLoadInfo,
+							loadInfo,
 							NULL,
 							true,
 							NULL,
@@ -948,21 +948,21 @@ LRESULT ControlTray::DispatchEvent(
 
 					// 新しい編集ウィンドウを開く
 					// From Here Oct. 27, 2000 genta	カーソル位置を復元しない機能
-					const MRUFile cMRU;
+					const MRUFile mru;
 					EditInfo openEditInfo;
-					cMRU.GetEditInfo(nId - IDM_SELMRU, &openEditInfo);
+					mru.GetEditInfo(nId - IDM_SELMRU, &openEditInfo);
 
 					if (m_pShareData->m_common.m_file.GetRestoreCurPosition()) {
 						ControlTray::OpenNewEditor2(m_hInstance, GetTrayHwnd(), &openEditInfo, false);
 					}else {
-						LoadInfo sLoadInfo;
-						sLoadInfo.filePath = openEditInfo.m_szPath;
-						sLoadInfo.eCharCode = openEditInfo.m_nCharCode;
-						sLoadInfo.bViewMode = false;
+						LoadInfo loadInfo;
+						loadInfo.filePath = openEditInfo.m_szPath;
+						loadInfo.eCharCode = openEditInfo.m_nCharCode;
+						loadInfo.bViewMode = false;
 						ControlTray::OpenNewEditor(
 							m_hInstance,
 							GetTrayHwnd(),
-							sLoadInfo,
+							loadInfo,
 							NULL,
 							false,
 							NULL,
@@ -976,15 +976,15 @@ LRESULT ControlTray::DispatchEvent(
 					&& nId - IDM_SELOPENFOLDER  < 999
 				) {
 					// MRUリストのファイルのリスト
-					const MRUFile cMRU;
-					std::vector<LPCTSTR> vMRU = cMRU.GetPathList();
+					const MRUFile mru;
+					std::vector<LPCTSTR> vMRU = mru.GetPathList();
 
 					// OPENFOLDERリストのファイルのリスト
-					const MRUFolder cMRUFolder;
-					std::vector<LPCTSTR> vOPENFOLDER = cMRUFolder.GetPathList();
+					const MRUFolder mruFolder;
+					std::vector<LPCTSTR> vOPENFOLDER = mruFolder.GetPathList();
 
 					// Stonee, 2001/12/21 UNCであれば接続を試みる
-					NetConnect(cMRUFolder.GetPath(nId - IDM_SELOPENFOLDER));
+					NetConnect(mruFolder.GetPath(nId - IDM_SELOPENFOLDER));
 
 					// ファイルオープンダイアログの初期化
 					DlgOpenFile	cDlgOpenFile;
@@ -1143,7 +1143,7 @@ void ControlTray::OnNewEditor(bool bNewWindow)
 bool ControlTray::OpenNewEditor(
 	HINSTANCE			hInstance,			//!< [in] インスタンスID (実は未使用)
 	HWND				hWndParent,			//!< [in] 親ウィンドウハンドル．エラーメッセージ表示用
-	const LoadInfo&	sLoadInfo,			//!< [in]
+	const LoadInfo&		loadInfo,			//!< [in]
 	const TCHAR*		szCmdLineOption,	//!< [in] 追加のコマンドラインオプション
 	bool				sync,				//!< [in] trueなら新規エディタの起動まで待機する
 	const TCHAR*		pszCurDir,			//!< [in] 新規エディタのカレントディレクトリ(NULL可)
@@ -1168,17 +1168,17 @@ bool ControlTray::OpenNewEditor(
 	cmdLineBuf.AppendF(_T("\"%ts\""), szEXE);
 
 	// ファイル名
-	if (sLoadInfo.filePath.c_str()[0] != _T('\0')) {
-		cmdLineBuf.AppendF(_T(" \"%ts\""), sLoadInfo.filePath.c_str());
+	if (loadInfo.filePath.c_str()[0] != _T('\0')) {
+		cmdLineBuf.AppendF(_T(" \"%ts\""), loadInfo.filePath.c_str());
 	}
 
 	// コード指定
-	if (IsValidCodeType(sLoadInfo.eCharCode)) {
-		cmdLineBuf.AppendF(_T(" -CODE=%d"), sLoadInfo.eCharCode);
+	if (IsValidCodeType(loadInfo.eCharCode)) {
+		cmdLineBuf.AppendF(_T(" -CODE=%d"), loadInfo.eCharCode);
 	}
 
 	// ビューモード指定
-	if (sLoadInfo.bViewMode) {
+	if (loadInfo.bViewMode) {
 		cmdLineBuf.AppendF(_T(" -R"));
 	}
 

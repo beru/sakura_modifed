@@ -398,7 +398,7 @@ void OutlineErlang::build_arity(int arity)
 	-> または when があれば関数定義と見なす(次の行にまたがっても良い)
 	途中 % (コメント) が現れたら行末まで読み飛ばす
 */
-void DocOutline::MakeFuncList_Erlang(FuncInfoArr* pcFuncInfoArr)
+void DocOutline::MakeFuncList_Erlang(FuncInfoArr* pFuncInfoArr)
 {
 
 	OutlineErlang erl_state_machine;
@@ -420,7 +420,7 @@ void DocOutline::MakeFuncList_Erlang(FuncInfoArr* pcFuncInfoArr)
 				LogicPoint(LogicInt(0), erl_state_machine.GetFuncLine()),
 				&ptPosXY
 			);
-			pcFuncInfoArr->AppendData(
+			pFuncInfoArr->AppendData(
 				erl_state_machine.GetFuncLine() + LogicInt(1),
 				ptPosXY.GetY2() + LayoutInt(1),
 				erl_state_machine.GetFuncName(),

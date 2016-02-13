@@ -45,7 +45,7 @@ public:
 	{
 		assert(0 <= m_nColorIdx);
 		m_pTypes = &pEditView->m_pEditDoc->m_docType.GetDocumentAttribute();
-		m_pColorInfoArr = &m_pTypes->m_ColorInfoArr[m_nColorIdx];
+		m_pColorInfoArr = &m_pTypes->m_colorInfoArr[m_nColorIdx];
 
 		m_gr = NULL;
 	}

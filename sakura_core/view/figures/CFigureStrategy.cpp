@@ -78,13 +78,13 @@ bool FigureSpace::DrawImp_StyleSelect(ColorStrategyInfo* pInfo)
 {
 	// この DrawImp はここ（基本クラス）でデフォルト動作を実装しているが
 	// 仮想関数なので派生クラス側のオーバーライドで個別に仕様変更可能
-	EditView* pcView = pInfo->m_pView;
+	EditView* pView = pInfo->m_pView;
 
-	TypeSupport currentType(pcView, pInfo->GetCurrentColor());	// 周辺の色（現在の指定色/選択色）
-	TypeSupport currentType2(pcView, pInfo->GetCurrentColor2());	// 周辺の色（現在の指定色）
-	TypeSupport textType(pcView, COLORIDX_TEXT);				// テキストの指定色
-	TypeSupport spaceType(pcView, GetDispColorIdx());	// 空白の指定色
-	TypeSupport currentTypeBg(pcView, pInfo->GetCurrentColorBg());
+	TypeSupport currentType(pView, pInfo->GetCurrentColor());	// 周辺の色（現在の指定色/選択色）
+	TypeSupport currentType2(pView, pInfo->GetCurrentColor2());	// 周辺の色（現在の指定色）
+	TypeSupport textType(pView, COLORIDX_TEXT);				// テキストの指定色
+	TypeSupport spaceType(pView, GetDispColorIdx());	// 空白の指定色
+	TypeSupport currentTypeBg(pView, pInfo->GetCurrentColorBg());
 	TypeSupport& currentType1 = (currentType.GetBackColor() == textType.GetBackColor() ? currentTypeBg: currentType);
 	TypeSupport& currentType3 = (currentType2.GetBackColor() == textType.GetBackColor() ? currentTypeBg: currentType2);
 
@@ -109,8 +109,8 @@ bool FigureSpace::DrawImp_StyleSelect(ColorStrategyInfo* pInfo)
 	if (blendColor) {
 		TypeSupport& text = spaceType.GetTextColor() == textType.GetTextColor() ? currentType2 : spaceType;
 		TypeSupport& back = spaceType.GetBackColor() == textType.GetBackColor() ? currentType3 : spaceType;
-		crText = pcView->GetTextColorByColorInfo2(currentType.GetColorInfo(), text.GetColorInfo());
-		crBack = pcView->GetBackColorByColorInfo2(currentType.GetColorInfo(), back.GetColorInfo());
+		crText = pView->GetTextColorByColorInfo2(currentType.GetColorInfo(), text.GetColorInfo());
+		crBack = pView->GetBackColorByColorInfo2(currentType.GetColorInfo(), back.GetColorInfo());
 		bBold = currentType2.IsBoldFont();
 	}else {
 		TypeSupport& text = spaceType.GetTextColor() == textType.GetTextColor() ? currentType : spaceType;
@@ -129,7 +129,7 @@ bool FigureSpace::DrawImp_StyleSelect(ColorStrategyInfo* pInfo)
 	sFont.m_fontAttr.m_bUnderLine = spaceType.HasUnderLine();
 	sFont.m_hFont = pInfo->m_pView->GetFontset().ChooseFontHandle(sFont.m_fontAttr);
 	pInfo->m_gr.PushMyFont(sFont);
-	bool bTrans = pcView->IsBkBitmap() && textType.GetBackColor() == crBack;
+	bool bTrans = pView->IsBkBitmap() && textType.GetBackColor() == crBack;
 	return bTrans;
 }
 
@@ -140,15 +140,15 @@ void FigureSpace::DrawImp_StylePop(ColorStrategyInfo* pInfo)
 	pInfo->m_gr.PopMyFont();
 }
 
-void FigureSpace::DrawImp_DrawUnderline(ColorStrategyInfo* pInfo, DispPos& sPos)
+void FigureSpace::DrawImp_DrawUnderline(ColorStrategyInfo* pInfo, DispPos& pos)
 {
-	EditView* pcView = pInfo->m_pView;
+	EditView* pView = pInfo->m_pView;
 
-	TypeSupport cCurrentType(pcView, pInfo->GetCurrentColor());	// 周辺の色
+	TypeSupport cCurrentType(pView, pInfo->GetCurrentColor());	// 周辺の色
 	bool blendColor = pInfo->GetCurrentColor() != pInfo->GetCurrentColor2() && cCurrentType.GetTextColor() == cCurrentType.GetBackColor(); // 選択混合色
 
-	TypeSupport colorStyle(pcView, blendColor ? pInfo->GetCurrentColor2() : pInfo->GetCurrentColor());	// 周辺の色
-	TypeSupport cSpaceType(pcView, GetDispColorIdx());	// 空白の指定色
+	TypeSupport colorStyle(pView, blendColor ? pInfo->GetCurrentColor2() : pInfo->GetCurrentColor());	// 周辺の色
+	TypeSupport cSpaceType(pView, GetDispColorIdx());	// 空白の指定色
 
 	if (!cSpaceType.HasUnderLine() && colorStyle.HasUnderLine()) {
 		// 下線を周辺の前景色で描画する
@@ -158,14 +158,14 @@ void FigureSpace::DrawImp_DrawUnderline(ColorStrategyInfo* pInfo, DispPos& sPos)
 		sFont.m_hFont = pInfo->m_pView->GetFontset().ChooseFontHandle(sFont.m_fontAttr);
 		pInfo->m_gr.PushMyFont(sFont);
 
-		int nLength = (Int)(pInfo->m_pDispPos->GetDrawCol() - sPos.GetDrawCol());
+		int nLength = (Int)(pInfo->m_pDispPos->GetDrawCol() - pos.GetDrawCol());
 		std::vector<wchar_t> szText(nLength);
 		wchar_t* pszText = &szText[0];
 		for (int i=0; i<nLength; ++i)
 			pszText[i] = L' ';
 		pInfo->m_pView->GetTextDrawer().DispText(
 			pInfo->m_gr,
-			&sPos,
+			&pos,
 			pszText,
 			nLength,
 			true		// 背景は透明

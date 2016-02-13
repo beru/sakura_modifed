@@ -42,7 +42,7 @@ void CType_Asm::InitTypeConfigImp(TypeConfig* pType)
 	// 設定
 	pType->m_cLineComment.CopyTo(0, L";", -1);				// 行コメントデリミタ
 	pType->m_eDefaultOutline = OUTLINE_ASM;					// アウトライン解析方法
-	pType->m_ColorInfoArr[COLORIDX_DIGIT].m_bDisp = true;
+	pType->m_colorInfoArr[COLORIDX_DIGIT].m_bDisp = true;
 }
 
 
@@ -51,7 +51,7 @@ void CType_Asm::InitTypeConfigImp(TypeConfig* pType)
 	@author MIK
 	@date 2004.04.12 作り直し
 */
-void DocOutline::MakeTopicList_asm(FuncInfoArr* pcFuncInfoArr)
+void DocOutline::MakeTopicList_asm(FuncInfoArr* pFuncInfoArr)
 {
 	LogicInt nTotalLine;
 
@@ -141,7 +141,7 @@ void DocOutline::MakeTopicList_asm(FuncInfoArr* pcFuncInfoArr)
 					LogicPoint(0, nLineCount),
 					&ptPos
 				);
-				pcFuncInfoArr->AppendData(nLineCount + LogicInt(1), ptPos.GetY2() + LayoutInt(1), entry_token, nFuncId);
+				pFuncInfoArr->AppendData(nLineCount + LogicInt(1), ptPos.GetY2() + LayoutInt(1), entry_token, nFuncId);
 			}
 		}
 

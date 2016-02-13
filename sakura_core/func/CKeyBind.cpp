@@ -149,8 +149,8 @@ int KeyBind::CreateKeyBindList(
 	HINSTANCE		hInstance,		// [in] インスタンスハンドル
 	int				nKeyNameArrNum,	// [in]
 	KEYDATA*		pKeyNameArr,	// [out]
-	NativeW&		cMemList,		//
-	FuncLookup*	pcFuncLookup,	// [in] 機能番号→名前の対応を取る
+	NativeW&		memList,		//
+	FuncLookup*		pFuncLookup,	// [in] 機能番号→名前の対応を取る
 	bool			bGetDefFuncCode // [in] ON:デフォルト機能割り当てを使う/OFF:使わない デフォルト:true
 	)
 {
@@ -159,17 +159,17 @@ int KeyBind::CreateKeyBindList(
 	WCHAR	szFuncNameJapanese[256];
 
 	int nValidKeys = 0;
-	cMemList.SetString(LTEXT(""));
+	memList.SetString(LTEXT(""));
 	const WCHAR*	pszSHIFT = LTEXT("Shift+");
 	const WCHAR*	pszCTRL  = LTEXT("Ctrl+");
 	const WCHAR*	pszALT   = LTEXT("Alt+");
 	const WCHAR*	pszTAB   = LTEXT("\t");
 	const WCHAR*	pszCR    = LTEXT("\r\n");	// \r=0x0d=CRを追加
 
-	cMemList.AppendString(LSW(STR_ERR_DLGKEYBIND1));
-	cMemList.AppendString(pszCR);
-	cMemList.AppendString(LTEXT("-----\t-----\t-----\t-----\t-----"));
-	cMemList.AppendString(pszCR);
+	memList.AppendString(LSW(STR_ERR_DLGKEYBIND1));
+	memList.AppendString(pszCR);
+	memList.AppendString(LTEXT("-----\t-----\t-----\t-----\t-----"));
+	memList.AppendString(pszCR);
 
 	for (int j=0; j<8; ++j) {
 		for (int i=0; i<nKeyNameArrNum; ++i) {
@@ -178,17 +178,17 @@ int KeyBind::CreateKeyBindList(
 			if (iFunc != 0) {
 				++nValidKeys;
 				if (j & _SHIFT) {
-					cMemList.AppendString(pszSHIFT);
+					memList.AppendString(pszSHIFT);
 				}
 				if (j & _CTRL) {
-					cMemList.AppendString(pszCTRL);
+					memList.AppendString(pszCTRL);
 				}
 				if (j & _ALT) {
-					cMemList.AppendString(pszALT);
+					memList.AppendString(pszALT);
 				}
-				cMemList.AppendString(to_wchar(pKeyNameArr[i].m_szKeyName));
+				memList.AppendString(to_wchar(pKeyNameArr[i].m_szKeyName));
 				// Oct. 31, 2001 genta 
-				if (!pcFuncLookup->Funccode2Name(
+				if (!pFuncLookup->Funccode2Name(
 					iFunc,
 					szFuncNameJapanese, 255
 					)
@@ -203,8 +203,8 @@ int KeyBind::CreateKeyBindList(
 //					pKeyNameArr[i].m_nFuncCodeArr[j],
 //					 szFuncNameJapanese, 255
 //				);
-				cMemList.AppendString(pszTAB);
-				cMemList.AppendString(szFuncNameJapanese);
+				memList.AppendString(pszTAB);
+				memList.AppendString(szFuncNameJapanese);
 
 				// 機能ID→関数名，機能名日本語
 				//@@@ 2002.2.2 YAZAKI マクロをSMacroMgrに統一
@@ -216,24 +216,24 @@ int KeyBind::CreateKeyBindList(
 				);
 
 				// 関数名
-				cMemList.AppendString(pszTAB);
-				cMemList.AppendString(szFuncName);
+				memList.AppendString(pszTAB);
+				memList.AppendString(szFuncName);
 
 				// 機能番号
-				cMemList.AppendString(pszTAB);
+				memList.AppendString(pszTAB);
 				auto_sprintf(szStr, LTEXT("%d"), iFunc);
-				cMemList.AppendString(szStr);
+				memList.AppendString(szStr);
 
 				// キーマクロに記録可能な機能かどうかを調べる
-				cMemList.AppendString(pszTAB);
+				memList.AppendString(pszTAB);
 				//@@@ 2002.2.2 YAZAKI マクロをSMacroMgrに統一
 				if (SMacroMgr::CanFuncIsKeyMacro(iFunc)) {
-					cMemList.AppendString(LTEXT("○"));
+					memList.AppendString(LTEXT("○"));
 				}else {
-					cMemList.AppendString(LTEXT("×"));
+					memList.AppendString(LTEXT("×"));
 				}
 
-				cMemList.AppendString(pszCR);
+				memList.AppendString(pszCR);
 			}
 		}
 	}
@@ -253,7 +253,7 @@ int KeyBind::CreateKeyBindList(
 	@param[in] nKeyNameArrBegin 調査終了INDEX + 1
 	@param[in] pKeyNameArr キー配列
 	@param[in] nShiftState シフト状態
-	@param[out] cMemList キー文字列設定先
+	@param[out] memList キー文字列設定先
 	@param[in]	nFuncId 検索対象機能ID
 	@param[in]	bGetDefFuncCode 標準機能を取得するかどうか
 */
@@ -262,7 +262,7 @@ bool KeyBind::GetKeyStrSub(
 	int			nKeyNameArrEnd,
 	KEYDATA*	pKeyNameArr,
 	int			nShiftState,
-	CNativeT&	cMemList,
+	CNativeT&	memList,
 	int			nFuncId,
 	bool		bGetDefFuncCode // = true
 )
@@ -276,15 +276,15 @@ bool KeyBind::GetKeyStrSub(
 		auto& keyName = pKeyNameArr[i];
 		if (nFuncId == GetFuncCodeAt(keyName, nShiftState, bGetDefFuncCode)) {
 			if (nShiftState & _SHIFT) {
-				cMemList.AppendString(pszSHIFT);
+				memList.AppendString(pszSHIFT);
 			}
 			if (nShiftState & _CTRL) {
-				cMemList.AppendString(pszCTRL);
+				memList.AppendString(pszCTRL);
 			}
 			if (nShiftState & _ALT) {
-				cMemList.AppendString(pszALT);
+				memList.AppendString(pszALT);
 			}
-			cMemList.AppendString(keyName.m_szKeyName);
+			memList.AppendString(keyName.m_szKeyName);
 			nKeyNameArrBegin = i + 1;
 			return true;
 		}
@@ -303,17 +303,17 @@ int KeyBind::GetKeyStr(
 	HINSTANCE	hInstance,
 	int			nKeyNameArrNum,
 	KEYDATA*	pKeyNameArr,
-	CNativeT&	cMemList,
+	CNativeT&	memList,
 	int			nFuncId,
 	bool		bGetDefFuncCode // = true
-)
+	)
 {
-	cMemList.SetString(_T(""));
+	memList.SetString(_T(""));
 
 	// 先にキー部分を調査する
 	for (int j=0; j<8; ++j) {
 		for (int i=(int)MouseFunctionType::KeyBegin; i<nKeyNameArrNum; /* 1を加えてはいけない */) {
-			if (GetKeyStrSub(i, nKeyNameArrNum, pKeyNameArr, j, cMemList, nFuncId, bGetDefFuncCode)) {
+			if (GetKeyStrSub(i, nKeyNameArrNum, pKeyNameArr, j, memList, nFuncId, bGetDefFuncCode)) {
 				return 1;
 			}
 		}
@@ -322,7 +322,7 @@ int KeyBind::GetKeyStr(
 	// 後にマウス部分を調査する
 	for (int j=0; j<8; ++j) {
 		for (int i=0; i<(int)MouseFunctionType::KeyBegin; /* 1を加えてはいけない */) {
-			if (GetKeyStrSub(i, nKeyNameArrNum, pKeyNameArr, j, cMemList, nFuncId, bGetDefFuncCode)) {
+			if (GetKeyStrSub(i, nKeyNameArrNum, pKeyNameArr, j, memList, nFuncId, bGetDefFuncCode)) {
 				return 1;
 			}
 		}

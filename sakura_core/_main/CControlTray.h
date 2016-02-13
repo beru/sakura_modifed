@@ -92,7 +92,7 @@ public:
 	/*
 	|| 実装ヘルパ系
 	*/
-	static void DoGrepCreateWindow(HINSTANCE hinst, HWND, DlgGrep& cDlgGrep);
+	static void DoGrepCreateWindow(HINSTANCE hinst, HWND, DlgGrep& dlgGrep);
 protected:
 	void	DoGrep();	// Stonee, 2001/03/21
 	BOOL TrayMessage(HWND , DWORD , UINT , HICON , const TCHAR* );	// タスクトレイのアイコンに関する処理

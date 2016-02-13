@@ -9,23 +9,23 @@
 	カーソル直前の単語を取得 単語の長さを返します
 	単語区切り
 */
-int ViewParser::GetLeftWord(NativeW* pcmemWord, int nMaxWordLen) const
+int ViewParser::GetLeftWord(NativeW* pMemWord, int nMaxWordLen) const
 {
 	LogicInt	nLineLen;
 	LogicInt	nIdx;
 	LogicInt	nIdxTo;
 
 	int			nCharChars;
-	const Layout* pcLayout;
+	const Layout* pLayout;
 
 	LayoutInt nCurLine = m_pEditView->GetCaret().GetCaretLayoutPos().GetY2();
-	const wchar_t* pLine = m_pEditView->m_pEditDoc->m_layoutMgr.GetLineStr(nCurLine, &nLineLen, &pcLayout);
+	const wchar_t* pLine = m_pEditView->m_pEditDoc->m_layoutMgr.GetLineStr(nCurLine, &nLineLen, &pLayout);
 	if (!pLine) {
 //		return 0;
 		nIdxTo = LogicInt(0);
 	}else {
 		// 指定された桁に対応する行のデータ内の位置を調べる Ver1
-		nIdxTo = m_pEditView->LineColumnToIndex(pcLayout, m_pEditView->GetCaret().GetCaretLayoutPos().GetX2());
+		nIdxTo = m_pEditView->LineColumnToIndex(pLayout, m_pEditView->GetCaret().GetCaretLayoutPos().GetX2());
 	}
 	if (nIdxTo == 0 || !pLine) {
 		if (nCurLine <= 0) {
@@ -62,18 +62,18 @@ int ViewParser::GetLeftWord(NativeW* pcmemWord, int nMaxWordLen) const
 	}
 
 	// 現在位置の単語の範囲を調べる
-	NativeW cmemWord;
-	LayoutRange sRange;
+	NativeW memWord;
+	LayoutRange range;
 	bool bResult = m_pEditView->m_pEditDoc->m_layoutMgr.WhereCurrentWord(
 		nCurLine,
 		nIdx,
-		&sRange,
-		&cmemWord,
-		pcmemWord
+		&range,
+		&memWord,
+		pMemWord
 	);
 	if (bResult) {
-		pcmemWord->AppendString(&pLine[nIdx], nCharChars);
-		return pcmemWord->GetStringLength();
+		pMemWord->AppendString(&pLine[nIdx], nCharChars);
+		return pMemWord->GetStringLength();
 	}else {
 		return 0;
 	}
@@ -84,30 +84,30 @@ int ViewParser::GetLeftWord(NativeW* pcmemWord, int nMaxWordLen) const
 	キャレット位置の単語を取得
 	単語区切り
 
-	@param[out] pcmemWord キャレット位置の単語
+	@param[out] pMemWord キャレット位置の単語
 	@return true: 成功，false: 失敗
 	
 	@date 2006.03.24 fon (CEditView::Command_SELECTWORDを流用)
 */
 bool ViewParser::GetCurrentWord(
-	NativeW* pcmemWord
-) const
+	NativeW* pMemWord
+	) const
 {
-	const Layout* pcLayout = m_pEditView->m_pEditDoc->m_layoutMgr.SearchLineByLayoutY(m_pEditView->GetCaret().GetCaretLayoutPos().GetY2());
-	if (!pcLayout) {
+	const Layout* pLayout = m_pEditView->m_pEditDoc->m_layoutMgr.SearchLineByLayoutY(m_pEditView->GetCaret().GetCaretLayoutPos().GetY2());
+	if (!pLayout) {
 		return false;	// 単語選択に失敗
 	}
 	
 	// 指定された桁に対応する行のデータ内の位置を調べる
-	LogicInt nIdx = m_pEditView->LineColumnToIndex(pcLayout, m_pEditView->GetCaret().GetCaretLayoutPos().GetX2());
+	LogicInt nIdx = m_pEditView->LineColumnToIndex(pLayout, m_pEditView->GetCaret().GetCaretLayoutPos().GetX2());
 	
 	// 現在位置の単語の範囲を調べる
-	LayoutRange sRange;
+	LayoutRange range;
 	bool bResult = m_pEditView->m_pEditDoc->m_layoutMgr.WhereCurrentWord(
 		m_pEditView->GetCaret().GetCaretLayoutPos().GetY2(),
 		nIdx,
-		&sRange,
-		pcmemWord,
+		&range,
+		pMemWord,
 		NULL
 	);
 

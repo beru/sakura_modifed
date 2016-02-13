@@ -112,12 +112,12 @@ void Memory::_AddData(const void* pData, int nDataLen)
 
 
 // “™‚µ‚¢“à—e‚©
-int Memory::IsEqual(Memory& cmem1, Memory& cmem2)
+int Memory::IsEqual(Memory& mem1, Memory& mem2)
 {
 	int nLen1;
 	int nLen2;
-	const char*	psz1 = (const char*)cmem1.GetRawPtr(&nLen1);
-	const char*	psz2 = (const char*)cmem2.GetRawPtr(&nLen2);
+	const char*	psz1 = (const char*)mem1.GetRawPtr(&nLen1);
+	const char*	psz2 = (const char*)mem2.GetRawPtr(&nLen2);
 	if (nLen1 == nLen2) {
 		if (memcmp(psz1, psz2, nLen1) == 0) {
 			return TRUE;

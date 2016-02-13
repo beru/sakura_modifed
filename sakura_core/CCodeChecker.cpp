@@ -28,8 +28,8 @@ static bool _CheckSavingEolcode(
 			cEolCheck = pDocLine->GetEol();
 		}
 		while (pDocLine) {
-			Eol cEol = pDocLine->GetEol();
-			if (cEol != cEolCheck && cEol != EolType::None) {
+			Eol eol = pDocLine->GetEol();
+			if (eol != cEolCheck && eol != EolType::None) {
 				bMix = true;
 				break;
 			}
@@ -133,13 +133,13 @@ static CodeConvertResult _CheckSavingCharcode(
 
 CallbackResultType CodeChecker::OnCheckSave(SaveInfo* pSaveInfo)
 {
-	EditDoc* pcDoc = GetListeningDoc();
+	EditDoc* pDoc = GetListeningDoc();
 
 	// 改行コードが混在しているかどうか判定
 	bool bTmpResult = false;
-	if (pcDoc->m_docType.GetDocumentAttribute().m_bChkEnterAtEnd) {
+	if (pDoc->m_docType.GetDocumentAttribute().m_bChkEnterAtEnd) {
 		bTmpResult = _CheckSavingEolcode(
-			pcDoc->m_docLineMgr, pSaveInfo->cEol
+			pDoc->m_docLineMgr, pSaveInfo->cEol
 		);
 	}
 
@@ -150,10 +150,10 @@ CallbackResultType CodeChecker::OnCheckSave(SaveInfo* pSaveInfo)
 			MB_YESNOCANCEL | MB_ICONWARNING,
 			GSTR_APPNAME,
 			LS(STR_CODECHECKER_EOL_UNIFY),
-			pcDoc->m_docEditor.GetNewLineCode().GetName()
+			pDoc->m_docEditor.GetNewLineCode().GetName()
 		);
 		switch (nDlgResult) {
-		case IDYES:		pSaveInfo->cEol = pcDoc->m_docEditor.GetNewLineCode(); break; // 統一
+		case IDYES:		pSaveInfo->cEol = pDoc->m_docEditor.GetNewLineCode(); break; // 統一
 		case IDNO:		break; // 続行
 		case IDCANCEL:	return CallbackResultType::Interrupt; // 中断
 		}
@@ -163,7 +163,7 @@ CallbackResultType CodeChecker::OnCheckSave(SaveInfo* pSaveInfo)
 	LogicPoint point;
 	NativeW cmemChar(L"", 0);
 	CodeConvertResult nTmpResult = _CheckSavingCharcode(
-		pcDoc->m_docLineMgr, pSaveInfo->eCharCode,
+		pDoc->m_docLineMgr, pSaveInfo->eCharCode,
 		point, cmemChar
 	);
 
@@ -200,7 +200,7 @@ CallbackResultType CodeChecker::OnCheckSave(SaveInfo* pSaveInfo)
 		case IDCANCEL:
 			{
 				LogicPoint pt(point.x < 0 ? LogicInt(0) : point.x, point.y);
-				pcDoc->m_pEditWnd->GetActiveView().GetCommander().Command_MOVECURSOR(pt, 0);
+				pDoc->m_pEditWnd->GetActiveView().GetCommander().Command_MOVECURSOR(pt, 0);
 			}
 			return CallbackResultType::Interrupt; //中断
 		}

@@ -20,11 +20,11 @@
 */
 CodeConvertResult WriteManager::WriteFile_From_CDocLineMgr(
 	const DocLineMgr&	pcDocLineMgr,	// [in]
-	const SaveInfo&	sSaveInfo		// [in]
+	const SaveInfo&	saveInfo		// [in]
 	)
 {
 	CodeConvertResult nRetVal = CodeConvertResult::Complete;
-	std::unique_ptr<CodeBase> pcCodeBase(CodeFactory::CreateCodeBase(sSaveInfo.eCharCode, 0));
+	std::unique_ptr<CodeBase> pcCodeBase(CodeFactory::CreateCodeBase(saveInfo.eCharCode, 0));
 
 	{
 		// 変換テスト
@@ -36,7 +36,7 @@ CodeConvertResult WriteManager::WriteFile_From_CDocLineMgr(
 			ErrorMessage(
 				EditWnd::getInstance()->GetHwnd(),
 				LS(STR_FILESAVE_CONVERT_ERROR),
-				sSaveInfo.filePath.c_str()
+				saveInfo.filePath.c_str()
 			);
 			return nRetVal;
 		}
@@ -45,7 +45,7 @@ CodeConvertResult WriteManager::WriteFile_From_CDocLineMgr(
 
 	try {
 		// ファイルオープン
-		BinaryOutputStream out(sSaveInfo.filePath, true);
+		BinaryOutputStream out(saveInfo.filePath, true);
 
 		// 各行出力
 		int nLineNumber = 0;
@@ -58,7 +58,7 @@ CodeConvertResult WriteManager::WriteFile_From_CDocLineMgr(
 				NativeW cstrSrc;
 				Memory cstrBomCheck;
 				pcCodeBase->GetBom(&cstrBomCheck);
-				if (sSaveInfo.bBomExist && 0 < cstrBomCheck.GetRawLength()) {
+				if (saveInfo.bBomExist && 0 < cstrBomCheck.GetRawLength()) {
 					// 1行目にはBOMを付加する。エンコーダでbomがある場合のみ付加する。
 					Unicode().GetBom(cstrSrc._GetMemory());
 				}
@@ -74,7 +74,7 @@ CodeConvertResult WriteManager::WriteFile_From_CDocLineMgr(
 					ErrorMessage(
 						EditWnd::getInstance()->GetHwnd(),
 						LS(STR_FILESAVE_CONVERT_ERROR),
-						sSaveInfo.filePath.c_str()
+						saveInfo.filePath.c_str()
 					);
 					throw Error_FileWrite();
 				}
@@ -114,7 +114,7 @@ CodeConvertResult WriteManager::WriteFile_From_CDocLineMgr(
 					ErrorMessage(
 						EditWnd::getInstance()->GetHwnd(),
 						LS(STR_FILESAVE_CONVERT_ERROR),
-						sSaveInfo.filePath.c_str()
+						saveInfo.filePath.c_str()
 					);
 					break;
 				}
@@ -133,7 +133,7 @@ CodeConvertResult WriteManager::WriteFile_From_CDocLineMgr(
 		ErrorMessage(
 			EditWnd::getInstance()->GetHwnd(),
 			LS(STR_SAVEAGENT_OTHER_APP),
-			sSaveInfo.filePath.c_str()
+			saveInfo.filePath.c_str()
 		);
 		nRetVal = CodeConvertResult::Failure;
 	}catch (Error_FileWrite) {

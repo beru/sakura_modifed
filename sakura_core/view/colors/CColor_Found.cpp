@@ -13,15 +13,15 @@ void Color_Select::OnStartScanLogic()
 	m_nSelectEnd	= LogicInt(-1);
 }
 
-bool Color_Select::BeginColor(const StringRef& cStr, int nPos)
+bool Color_Select::BeginColor(const StringRef& str, int nPos)
 {
 	assert(0);
 	return false;
 }
 
-bool Color_Select::BeginColorEx(const StringRef& cStr, int nPos, LayoutInt nLineNum, const Layout* pcLayout)
+bool Color_Select::BeginColorEx(const StringRef& str, int nPos, LayoutInt nLineNum, const Layout* pLayout)
 {
-	if (!cStr.IsValid()) return false;
+	if (!str.IsValid()) return false;
 
 	const EditView& view = *(ColorStrategyPool::getInstance()->GetCurrentView());
 	if (!view.GetSelectionInfo().IsTextSelected() || !TypeSupport(&view, COLORIDX_SELECT).IsDisp()) {
@@ -33,7 +33,7 @@ bool Color_Select::BeginColorEx(const StringRef& cStr, int nPos, LayoutInt nLine
 		return (m_nSelectStart <= nPos && nPos < m_nSelectEnd);
 	}
 	m_nSelectLine = nLineNum;
-	LayoutRange selectArea = view.GetSelectionInfo().GetSelectAreaLine(nLineNum, pcLayout);
+	LayoutRange selectArea = view.GetSelectionInfo().GetSelectAreaLine(nLineNum, pLayout);
 	LayoutInt nSelectFrom = selectArea.GetFrom().x;
 	LayoutInt nSelectTo = selectArea.GetTo().x;
 	if (nSelectFrom == nSelectTo || nSelectFrom == -1) {
@@ -41,8 +41,8 @@ bool Color_Select::BeginColorEx(const StringRef& cStr, int nPos, LayoutInt nLine
 		m_nSelectEnd = -1;
 		return false;
 	}
-	LogicInt nIdxFrom = view.LineColumnToIndex(pcLayout, nSelectFrom) + pcLayout->GetLogicOffset();
-	LogicInt nIdxTo = view.LineColumnToIndex(pcLayout, nSelectTo) + pcLayout->GetLogicOffset();
+	LogicInt nIdxFrom = view.LineColumnToIndex(pLayout, nSelectFrom) + pLayout->GetLogicOffset();
+	LogicInt nIdxTo = view.LineColumnToIndex(pLayout, nSelectTo) + pLayout->GetLogicOffset();
 	m_nSelectStart = nIdxFrom;
 	m_nSelectEnd = nIdxTo;
 	if (m_nSelectStart <= nPos && nPos < m_nSelectEnd) {
@@ -51,7 +51,7 @@ bool Color_Select::BeginColorEx(const StringRef& cStr, int nPos, LayoutInt nLine
 	return false;
 }
 
-bool Color_Select::EndColor(const StringRef& cStr, int nPos)
+bool Color_Select::EndColor(const StringRef& str, int nPos)
 {
 	// マッチ文字列終了検出
 	return (m_nSelectEnd <= nPos);
@@ -72,17 +72,17 @@ void Color_Found::OnStartScanLogic()
 
 	this->validColorNum = 0;
 	for (int color=COLORIDX_SEARCH; color<=COLORIDX_SEARCHTAIL; ++color) {
-		if (m_pTypeData->m_ColorInfoArr[color].m_bDisp) {
+		if (m_pTypeData->m_colorInfoArr[color].m_bDisp) {
 			this->highlightColors[this->validColorNum++] = EColorIndexType(color);
 		}
 	}
 }
 
-bool Color_Found::BeginColor(const StringRef& cStr, int nPos)
+bool Color_Found::BeginColor(const StringRef& str, int nPos)
 {
-	if (!cStr.IsValid()) return false;
-	const EditView* pcView = ColorStrategyPool::getInstance()->GetCurrentView();
-	if (!pcView->m_bCurSrchKeyMark || this->validColorNum == 0) {
+	if (!str.IsValid()) return false;
+	const EditView* pView = ColorStrategyPool::getInstance()->GetCurrentView();
+	if (!pView->m_bCurSrchKeyMark || this->validColorNum == 0) {
 		return false;
 	}
 
@@ -90,9 +90,9 @@ bool Color_Found::BeginColor(const StringRef& cStr, int nPos)
 	//        検索ヒットフラグ設定 -> bSearchStringMode            //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	// 2002.02.08 hor 正規表現の検索文字列マークを少し高速化
-	if (pcView->m_curSearchOption.bWordOnly || (m_nSearchResult && m_nSearchStart < nPos)) {
-		m_nSearchResult = pcView->IsSearchString(
-			cStr,
+	if (pView->m_curSearchOption.bWordOnly || (m_nSearchResult && m_nSearchStart < nPos)) {
+		m_nSearchResult = pView->IsSearchString(
+			str,
 			LogicInt(nPos),
 			&m_nSearchStart,
 			&m_nSearchEnd
@@ -102,7 +102,7 @@ bool Color_Found::BeginColor(const StringRef& cStr, int nPos)
 	return (m_nSearchResult && m_nSearchStart == nPos);
 }
 
-bool Color_Found::EndColor(const StringRef& cStr, int nPos)
+bool Color_Found::EndColor(const StringRef& str, int nPos)
 {
 	// マッチ文字列終了検出
 	return (m_nSearchEnd <= nPos); //+ == では行頭文字の場合、m_nSearchEndも０であるために文字色の解除ができないバグを修正 2003.05.03 かろと

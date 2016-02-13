@@ -261,9 +261,9 @@ LPCTSTR ResourceString::LoadStringSt(UINT uid)
 */
 LPCTSTR ResourceString::Load(UINT uid)
 {
-	m_cLoadStrBuffer.Load(uid);
+	m_loadStrBuffer.Load(uid);
 
-	return /* this-> */ m_cLoadStrBuffer.GetStringPtr();
+	return /* this-> */ m_loadStrBuffer.GetStringPtr();
 }
 
 /*!

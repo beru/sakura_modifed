@@ -39,9 +39,9 @@
 #include "types/CTypeSupport.h"
 
 
-bool _IsPosKeywordHead(const StringRef& cStr, int nPos)
+bool _IsPosKeywordHead(const StringRef& str, int nPos)
 {
-	return (nPos == 0 || !IS_KEYWORD_CHAR(cStr.At(nPos - 1)));
+	return (nPos == 0 || !IS_KEYWORD_CHAR(str.At(nPos - 1)));
 }
 
 /*! 色の切り替え判定
@@ -52,8 +52,8 @@ bool ColorStrategyInfo::CheckChangeColor(const StringRef& lineStr)
 {
 	ColorStrategyPool* pool = ColorStrategyPool::getInstance();
 	pool->SetCurrentView(m_pView);
-	Color_Found*  pcFound  = pool->GetFoundStrategy();
-	Color_Select* pcSelect = pool->GetSelectStrategy();
+	Color_Found*  pFound  = pool->GetFoundStrategy();
+	Color_Select* pSelect = pool->GetSelectStrategy();
 	bool bChange = false;
 
 	// 選択範囲色終了
@@ -65,8 +65,8 @@ bool ColorStrategyInfo::CheckChangeColor(const StringRef& lineStr)
 	}
 	// 選択範囲色開始
 	if (!m_pStrategySelect) {
-		if (pcSelect->BeginColorEx(lineStr, this->GetPosInLogic(), m_pDispPos->GetLayoutLineRef(), this->GetLayout())) {
-			m_pStrategySelect = pcSelect;
+		if (pSelect->BeginColorEx(lineStr, this->GetPosInLogic(), m_pDispPos->GetLayoutLineRef(), this->GetLayout())) {
+			m_pStrategySelect = pSelect;
 			bChange = true;
 		}
 	}
@@ -81,8 +81,8 @@ bool ColorStrategyInfo::CheckChangeColor(const StringRef& lineStr)
 
 	// 検索色開始
 	if (!m_pStrategyFound) {
-		if (pcFound->BeginColor(lineStr, this->GetPosInLogic())) {
-			m_pStrategyFound = pcFound;
+		if (pFound->BeginColor(lineStr, this->GetPosInLogic())) {
+			m_pStrategyFound = pFound;
 			bChange = true;
 		}
 	}
@@ -140,16 +140,16 @@ bool ColorStrategyInfo::CheckChangeColor(const StringRef& lineStr)
 	if (m_pView->m_bMiniMap) {
 		TypeSupport cPageViewBg(m_pView, COLORIDX_PAGEVIEW);
 		if (cPageViewBg.IsDisp()) {
-			EditView& cActiveView = m_pView->m_pEditWnd->GetActiveView();
+			EditView& activeView = m_pView->m_pEditWnd->GetActiveView();
 			LayoutInt curLine = m_pDispPos->GetLayoutLineRef();
 			if (m_colorIdxBackLine == COLORIDX_PAGEVIEW) {
-				if (cActiveView.GetTextArea().GetViewTopLine() <= curLine && curLine < cActiveView.GetTextArea().GetBottomLine()) {
+				if (activeView.GetTextArea().GetViewTopLine() <= curLine && curLine < activeView.GetTextArea().GetBottomLine()) {
 				}else {
 					m_colorIdxBackLine = COLORIDX_TEXT;
 					bChange = true;
 				}
 			}else if (m_colorIdxBackLine == COLORIDX_TEXT) {
-				if (cActiveView.GetTextArea().GetViewTopLine() <= curLine && curLine < cActiveView.GetTextArea().GetBottomLine()) {
+				if (activeView.GetTextArea().GetViewTopLine() <= curLine && curLine < activeView.GetTextArea().GetBottomLine()) {
 					m_colorIdxBackLine = COLORIDX_PAGEVIEW;
 					bChange = true;
 				}
@@ -334,11 +334,11 @@ void ColorStrategyPool::OnChangeSetting(void)
 			if (type.m_nKeyWordSetIdx[n - nKeyword1] == -1) {
 				bUnuseKeyword = true; // -1以降は無効
 			}
-			if (!bUnuseKeyword && type.m_ColorInfoArr[bSkipColorTypeTable[n]].m_bDisp) {
+			if (!bUnuseKeyword && type.m_colorInfoArr[bSkipColorTypeTable[n]].m_bDisp) {
 				m_bSkipBeforeLayoutGeneral = false;
 				break;
 			}
-		}else if (type.m_ColorInfoArr[bSkipColorTypeTable[n]].m_bDisp) {
+		}else if (type.m_colorInfoArr[bSkipColorTypeTable[n]].m_bDisp) {
 			m_bSkipBeforeLayoutGeneral = false;
 			break;
 		}
@@ -350,7 +350,7 @@ void ColorStrategyPool::OnChangeSetting(void)
 	}
 	m_bSkipBeforeLayoutFound = true;
 	for (int n=COLORIDX_SEARCH; n<=COLORIDX_SEARCHTAIL; ++n) {
-		if (type.m_ColorInfoArr[n].m_bDisp) {
+		if (type.m_colorInfoArr[n].m_bDisp) {
 			m_bSkipBeforeLayoutFound = false;
 			break;
 		}

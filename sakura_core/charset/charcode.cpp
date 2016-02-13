@@ -228,11 +228,11 @@ namespace WCODE
 	public:
 		LocalCacheSelector()
 		{
-			pcache = &m_localcache[0];
+			m_pCache = &m_localCache[0];
 			for (int i=0; i<(int)CharWidthFontMode::Max; ++i) {
 				m_parCache[i] = 0;
 			}
-			m_eLastEditCacheMode = CharWidthCacheMode::Neutral;
+			m_lastEditCacheMode = CharWidthCacheMode::Neutral;
 		}
 		~LocalCacheSelector()
 		{
@@ -244,32 +244,32 @@ namespace WCODE
 		void Init(const LOGFONT& lf, CharWidthFontMode fMode)
 	 	{
 			// Fontfaceが変更されていたらキャッシュをクリアする	2013.04.08 aroka
-			m_localcache[(int)fMode].Init(lf);
-			if (!m_localcache[(int)fMode].IsSameFontFace(lf)) {
-				m_localcache[(int)fMode].Clear();
+			m_localCache[(int)fMode].Init(lf);
+			if (!m_localCache[(int)fMode].IsSameFontFace(lf)) {
+				m_localCache[(int)fMode].Clear();
 			}
 		}
 		void Select(CharWidthFontMode fMode, CharWidthCacheMode cMode)
 		{
-			CharWidthCacheMode cmode = (cMode == CharWidthCacheMode::Neutral) ? m_eLastEditCacheMode : cMode;
+			CharWidthCacheMode cmode = (cMode == CharWidthCacheMode::Neutral) ? m_lastEditCacheMode : cMode;
 
-			pcache = &m_localcache[(int)fMode];
+			m_pCache = &m_localCache[(int)fMode];
 			if (cmode == CharWidthCacheMode::Share) {
-				pcache->SelectCache(&(GetDllShareData().m_sCharWidth));
+				m_pCache->SelectCache(&(GetDllShareData().m_sCharWidth));
 			}else {
 				if (m_parCache[(int)fMode] == 0) {
 					m_parCache[(int)fMode] = new CharWidthCache;
 				}
-				pcache->SelectCache(m_parCache[(int)fMode]);
+				m_pCache->SelectCache(m_parCache[(int)fMode]);
 			}
-			if (fMode == CharWidthFontMode::Edit) { m_eLastEditCacheMode = cmode; }
+			if (fMode == CharWidthFontMode::Edit) { m_lastEditCacheMode = cmode; }
 		}
-		LocalCache* GetCache() { return pcache; }
+		LocalCache* GetCache() { return m_pCache; }
 	private:
-		LocalCache* pcache;
-		LocalCache m_localcache[3];
+		LocalCache* m_pCache;
+		LocalCache m_localCache[3];
 		CharWidthCache* m_parCache[3];
-		CharWidthCacheMode m_eLastEditCacheMode;
+		CharWidthCacheMode m_lastEditCacheMode;
 	private:
 		DISALLOW_COPY_AND_ASSIGN(LocalCacheSelector);
 	};
@@ -280,20 +280,20 @@ namespace WCODE
 	// 文字幅の動的計算。半角ならtrue。
 	bool CalcHankakuByFont(wchar_t c)
 	{
-		LocalCache* pcache = selector.GetCache();
+		LocalCache* pCache = selector.GetCache();
 		// -- -- キャッシュが存在すれば、それをそのまま返す -- -- //
-		if (pcache->ExistCache(c)) {
-			return pcache->GetCache(c);
+		if (pCache->ExistCache(c)) {
+			return pCache->GetCache(c);
 		}
 
 		// -- -- 相対比較 -- -- //
 		bool value;
-		value = pcache->CalcHankakuByFont(c);
+		value = pCache->CalcHankakuByFont(c);
 
 		// -- -- キャッシュ更新 -- -- //
-		pcache->SetCache(c, value);
+		pCache->SetCache(c, value);
 
-		return pcache->GetCache(c);
+		return pCache->GetCache(c);
 	}
 }
 

@@ -169,12 +169,12 @@ void _DefaultConfig(TypeConfig* pType)
 	pType->m_bTabArrow = TabArrowType::String;	// タブ矢印表示	// 2001.12.03 hor	// default on 2013/4/11 Uchi
 	pType->m_bInsSpace = false;				// スペースの挿入	// 2001.12.03 hor
 	
-	//@@@ 2002.09.22 YAZAKI 以下、m_cLineCommentとm_cBlockCommentsを使うように修正
+	//@@@ 2002.09.22 YAZAKI 以下、m_cLineCommentとm_blockCommentsを使うように修正
 	pType->m_cLineComment.CopyTo(0, L"", -1);	// 行コメントデリミタ
 	pType->m_cLineComment.CopyTo(1, L"", -1);	// 行コメントデリミタ2
 	pType->m_cLineComment.CopyTo(2, L"", -1);	// 行コメントデリミタ3	//Jun. 01, 2001 JEPRO 追加
-	pType->m_cBlockComments[0].SetBlockCommentRule(L"", L"");	// ブロックコメントデリミタ
-	pType->m_cBlockComments[1].SetBlockCommentRule(L"", L"");	// ブロックコメントデリミタ2
+	pType->m_blockComments[0].SetBlockCommentRule(L"", L"");	// ブロックコメントデリミタ
+	pType->m_blockComments[1].SetBlockCommentRule(L"", L"");	// ブロックコメントデリミタ2
 
 	pType->m_nStringType = StringLiteralType::CPP;					// 文字列区切り記号エスケープ方法 0=[\"][\'] 1=[""]['']
 	pType->m_bStringLineOnly = false;
@@ -215,9 +215,9 @@ void _DefaultConfig(TypeConfig* pType)
 
 	pType->m_nIndentLayout = 0;	// 折り返しは2行目以降を字下げ表示
 
-	assert(COLORIDX_LAST <= _countof(pType->m_ColorInfoArr));
+	assert(COLORIDX_LAST <= _countof(pType->m_colorInfoArr));
 	for (int i=0; i<COLORIDX_LAST; ++i) {
-		GetDefaultColorInfo(&pType->m_ColorInfoArr[i], i);
+		GetDefaultColorInfo(&pType->m_colorInfoArr[i], i);
 	}
 	pType->m_szBackImgPath[0] = '\0';
 	pType->m_backImgPos = BGIMAGE_TOP_LEFT;

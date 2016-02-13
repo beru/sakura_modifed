@@ -108,17 +108,17 @@ public:
 	// 2007.06.26 ryoji グループ指定引数追加
 	//! 作成
 	HWND Create(
-		EditDoc*		pcEditDoc,
-		ImageListMgr*	pcIcons,
+		EditDoc*		pEditDoc,
+		ImageListMgr*	pIcons,
 		int				nGroup
 	);
 	void _GetTabGroupInfo(TabGroupInfo* pTabGroupInfo, int& nGroup);
-	void _GetWindowRectForInit(Rect* rcResult, int nGroup, const TabGroupInfo& sTabGroupInfo);	//!< ウィンドウ生成用の矩形を取得
-	HWND _CreateMainWindow(int nGroup, const TabGroupInfo& sTabGroupInfo);
-	void _AdjustInMonitor(const TabGroupInfo& sTabGroupInfo);
+	void _GetWindowRectForInit(Rect* rcResult, int nGroup, const TabGroupInfo& tabGroupInfo);	//!< ウィンドウ生成用の矩形を取得
+	HWND _CreateMainWindow(int nGroup, const TabGroupInfo& tabGroupInfo);
+	void _AdjustInMonitor(const TabGroupInfo& tabGroupInfo);
 
 	void OpenDocumentWhenStart(
-		const LoadInfo& sLoadInfo		//!< [in]
+		const LoadInfo& loadInfo		//!< [in]
 	);
 
 	void SetDocumentTypeWhenCreate(
@@ -131,7 +131,7 @@ public:
 	//                         イベント                            //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	// ドキュメントイベント
-	void OnAfterSave(const SaveInfo& sSaveInfo);
+	void OnAfterSave(const SaveInfo& saveInfo);
 
 	// 管理
 	void MessageLoop(void);								// メッセージループ
@@ -247,7 +247,7 @@ public:
 	void SetActivePane(int);	// アクティブなペインを設定
 	int GetActivePane(void) const { return m_nActivePaneIndex; }	// アクティブなペインを取得		2007.08.26 kobake const追加
 	bool SetDrawSwitchOfAllViews(bool bDraw);						// すべてのペインの描画スイッチを設定する	2008.06.08 ryoji
-	void RedrawAllViews(EditView* pcViewExclude);				// すべてのペインをRedrawする
+	void RedrawAllViews(EditView* pViewExclude);				// すべてのペインをRedrawする
 	void Views_DisableSelectArea(bool bRedraw);
 	BOOL DetectWidthOfLineNumberAreaAllPane(bool bRedraw);	// すべてのペインで、行番号表示に必要な幅を再設定する（必要なら再描画する）
 	bool WrapWindowWidth(int nPane);	// 右端で折り返す			2008.06.08 ryoji
@@ -278,7 +278,7 @@ public:
 	int					GetAllViewCount() const		{ return m_nEditViewCount; }
 
 	EditView*			GetDragSourceView() const	{ return m_pDragSourceView; }
-	void				SetDragSourceView(EditView* pcDragSourceView)	{ m_pDragSourceView = pcDragSourceView; }
+	void				SetDragSourceView(EditView* pDragSourceView)	{ m_pDragSourceView = pDragSourceView; }
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                         実装補助                            //

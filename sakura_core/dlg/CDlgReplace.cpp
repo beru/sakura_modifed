@@ -374,11 +374,11 @@ BOOL DlgReplace::OnInitDialog(
 	// フォント設定	2012/11/27 Uchi
 	HFONT hFontOld = (HFONT)::SendMessage(GetItemHwnd(IDC_COMBO_TEXT), WM_GETFONT, 0, 0);
 	HFONT hFont = SetMainFont(GetItemHwnd(IDC_COMBO_TEXT));
-	m_cFontText.SetFont(hFontOld, hFont, GetItemHwnd(IDC_COMBO_TEXT));
+	m_fontText.SetFont(hFontOld, hFont, GetItemHwnd(IDC_COMBO_TEXT));
 
 	hFontOld = (HFONT)::SendMessage(GetItemHwnd(IDC_COMBO_TEXT2), WM_GETFONT, 0, 0);
 	hFont = SetMainFont(GetItemHwnd(IDC_COMBO_TEXT2));
-	m_cFontText2.SetFont(hFontOld, hFont, GetItemHwnd(IDC_COMBO_TEXT2));
+	m_fontText2.SetFont(hFontOld, hFont, GetItemHwnd(IDC_COMBO_TEXT2));
 
 	// 基底クラスメンバ
 	return Dialog::OnInitDialog(hwndDlg, wParam, lParam);
@@ -387,8 +387,8 @@ BOOL DlgReplace::OnInitDialog(
 
 BOOL DlgReplace::OnDestroy()
 {
-	m_cFontText.ReleaseOnDestroy();
-	m_cFontText2.ReleaseOnDestroy();
+	m_fontText.ReleaseOnDestroy();
+	m_fontText2.ReleaseOnDestroy();
 	return Dialog::OnDestroy();
 }
 
@@ -622,10 +622,10 @@ BOOL DlgReplace::OnBnClicked(int wID)
 BOOL DlgReplace::OnActivate(WPARAM wParam, LPARAM lParam)
 {
 	// 0文字幅マッチ描画のON/OFF	// 2009.11.29 ryoji
-	EditView*	pcEditView = (EditView*)m_lParam;
-	LayoutRange cRangeSel = pcEditView->GetSelectionInfo().m_select;
-	if (cRangeSel.IsValid() && cRangeSel.IsLineOne() && cRangeSel.IsOne())
-		pcEditView->InvalidateRect(NULL);	// アクティブ化／非アクティブ化が完了してから再描画
+	EditView*	pEditView = (EditView*)m_lParam;
+	LayoutRange rangeSel = pEditView->GetSelectionInfo().m_select;
+	if (rangeSel.IsValid() && rangeSel.IsLineOne() && rangeSel.IsOne())
+		pEditView->InvalidateRect(NULL);	// アクティブ化／非アクティブ化が完了してから再描画
 
 	return Dialog::OnActivate(wParam, lParam);
 }

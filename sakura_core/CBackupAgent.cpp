@@ -37,7 +37,7 @@
 */
 CallbackResultType BackupAgent::OnPreBeforeSave(SaveInfo* pSaveInfo)
 {
-	EditDoc* pcDoc = GetListeningDoc();
+	EditDoc* pDoc = GetListeningDoc();
 
 	// 新しくファイルを作る場合は何もしない
 	if (!fexist(pSaveInfo->filePath)) {
@@ -50,9 +50,9 @@ CallbackResultType BackupAgent::OnPreBeforeSave(SaveInfo* pSaveInfo)
 		// ファイル保存前にバックアップ処理
 		int nBackupResult = 0;
 		{
-			pcDoc->m_docFileOperation.DoFileUnlock();	// バックアップ作成前にロックを解除する #####スマートじゃないよ！
+			pDoc->m_docFileOperation.DoFileUnlock();	// バックアップ作成前にロックを解除する #####スマートじゃないよ！
 			nBackupResult = MakeBackUp(pSaveInfo->filePath);
-			pcDoc->m_docFileOperation.DoFileLock();	// バックアップ作成後にロックを戻す #####スマートじゃないよ！
+			pDoc->m_docFileOperation.DoFileLock();	// バックアップ作成後にロックを戻す #####スマートじゃないよ！
 		}
 		switch (nBackupResult) {
 		case 2:	//	中断指示

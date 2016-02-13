@@ -120,7 +120,7 @@ INT_PTR PropCustmenu::DispatchEvent(
 	WCHAR		szLabel[300];
 	WCHAR		szLabel2[300];
 
-	DlgInput1	cDlgInput1;
+	DlgInput1	dlgInput1;
 	auto& csCustomMenu = m_common.m_customMenu;
 
 	switch (uMsg) {
@@ -246,7 +246,7 @@ INT_PTR PropCustmenu::DispatchEvent(
 				TCHAR szKey[2];
 				auto_sprintf_s(szKey, _T("%hc"), csCustomMenu.m_nCustMenuItemKeyArr[nIdx1][nIdx2]);
 				{
-					BOOL bDlgInputResult = cDlgInput1.DoModal(
+					BOOL bDlgInputResult = dlgInput1.DoModal(
 						G_AppInstance(),
 						hwndDlg,
 						LS(STR_PROPCOMCUSTMENU_AC1),

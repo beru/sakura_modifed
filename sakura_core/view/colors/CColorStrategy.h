@@ -30,7 +30,7 @@
 
 class EditView;
 
-bool _IsPosKeywordHead(const StringRef& cStr, int nPos);
+bool _IsPosKeywordHead(const StringRef& str, int nPos);
 
 // 正規表現キーワードのEColorIndexType値を作る関数
 inline
@@ -153,8 +153,8 @@ public:
 	// 色切り替え開始を検出したら、その直前までの描画を行い、さらに色設定を行う。
 	virtual void InitStrategyStatus() = 0;
 	virtual void SetStrategyColorInfo(const LayoutColorInfo* = NULL) {};
-	virtual bool BeginColor(const StringRef& cStr, int nPos) { return false; }
-	virtual bool EndColor(const StringRef& cStr, int nPos) { return true; }
+	virtual bool BeginColor(const StringRef& str, int nPos) { return false; }
+	virtual bool EndColor(const StringRef& str, int nPos) { return true; }
 	virtual bool Disp() const = 0;
 	// イベント
 	virtual void OnStartScanLogic() {}
@@ -219,7 +219,7 @@ public:
 
 	// ビューの設定・取得
 	EditView* GetCurrentView(void) const { return m_pView; }
-	void SetCurrentView(EditView* pcView) { m_pView = pcView; }
+	void SetCurrentView(EditView* pView) { m_pView = pView; }
 
 private:
 	std::vector<ColorStrategy*>	m_vStrategies;

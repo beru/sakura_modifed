@@ -6,7 +6,7 @@
 #include "types/CTypeSupport.h"
 
 // 2007.08.28 kobake 追加
-void _DispTab(Graphics& gr, DispPos* pDispPos, const EditView* pcView);
+void _DispTab(Graphics& gr, DispPos* pDispPos, const EditView* pView);
 // タブ矢印描画関数	//@@@ 2003.03.26 MIK
 void _DrawTabArrow(Graphics& gr, int nPosX, int nPosY, int nWidth, int nHeight, bool bBold, COLORREF pColor);
 
@@ -31,21 +31,21 @@ bool Figure_Tab::Match(const wchar_t* pText, int nTextLen) const
 	@date 2003.03.26 MIK タブ矢印表示
 	@date 2013.05.31 novice TAB表示対応(文字指定/短い矢印/長い矢印)
 */
-void Figure_Tab::DispSpace(Graphics& gr, DispPos* pDispPos, EditView* pcView, bool bTrans) const
+void Figure_Tab::DispSpace(Graphics& gr, DispPos* pDispPos, EditView* pView, bool bTrans) const
 {
 	DispPos& sPos = *pDispPos;
 
 	// 必要なインターフェース
-	const TextMetrics* pMetrics = &pcView->GetTextMetrics();
-	const TextArea* pArea = &pcView->GetTextArea();
+	const TextMetrics* pMetrics = &pView->GetTextMetrics();
+	const TextArea* pArea = &pView->GetTextArea();
 
 	int nLineHeight = pMetrics->GetHankakuDy();
 	int nCharWidth = pMetrics->GetHankakuDx();
 
-	TypeSupport cTabType(pcView, COLORIDX_TAB);
+	TypeSupport cTabType(pView, COLORIDX_TAB);
 
 	// これから描画するタブ幅
-	int tabDispWidth = (Int)pcView->m_pEditDoc->m_layoutMgr.GetActualTabSpace(sPos.GetDrawCol());
+	int tabDispWidth = (Int)pView->m_pEditDoc->m_layoutMgr.GetActualTabSpace(sPos.GetDrawCol());
 
 	// タブ記号領域
 	RECT rcClip2;
@@ -98,7 +98,7 @@ void Figure_Tab::DispSpace(Graphics& gr, DispPos* pDispPos, EditView* pcView, bo
 							sPos.GetDrawPos().y,
 							pMetrics->GetHankakuWidth(),
 							pMetrics->GetHankakuHeight(),
-							gr.GetCurrentMyFontBold() || m_pTypeData->m_ColorInfoArr[COLORIDX_TAB].m_fontAttr.m_bBoldFont,
+							gr.GetCurrentMyFontBold() || m_pTypeData->m_colorInfoArr[COLORIDX_TAB].m_fontAttr.m_bBoldFont,
 							gr.GetCurrentTextForeColor()
 						);
 					}
@@ -110,7 +110,7 @@ void Figure_Tab::DispSpace(Graphics& gr, DispPos* pDispPos, EditView* pcView, bo
 						sPos.GetDrawPos().y,
 						nCharWidth * tabDispWidth - (nPosLeft -  sPos.GetDrawPos().x),	// Tab Area一杯に 2013/4/11 Uchi
 						pMetrics->GetHankakuHeight(),
-						gr.GetCurrentMyFontBold() || m_pTypeData->m_ColorInfoArr[COLORIDX_TAB].m_fontAttr.m_bBoldFont,
+						gr.GetCurrentMyFontBold() || m_pTypeData->m_colorInfoArr[COLORIDX_TAB].m_fontAttr.m_bBoldFont,
 						gr.GetCurrentTextForeColor()
 					);
 				}

@@ -49,7 +49,7 @@ void DeleteOpe::DUMP(void)
 	DEBUG_TRACE(_T("\t\tm_cOpeLineData.size         = [%d]\n"), m_cOpeLineData.size());
 	for (size_t i=0; i<m_cOpeLineData.size(); ++i) {
 		DEBUG_TRACE(_T("\t\tm_cOpeLineData[%d].nSeq         = [%d]\n"), m_cOpeLineData[i].nSeq);
-		DEBUG_TRACE(_T("\t\tm_cOpeLineData[%d].cmemLine     = [%ls]\n"), m_cOpeLineData[i].cmemLine.GetStringPtr());		
+		DEBUG_TRACE(_T("\t\tm_cOpeLineData[%d].cmemLine     = [%ls]\n"), m_cOpeLineData[i].memLine.GetStringPtr());		
 	}
 	return;
 }
@@ -61,7 +61,7 @@ void InsertOpe::DUMP(void)
 	DEBUG_TRACE(_T("\t\tm_cOpeLineData.size         = [%d]\n"), m_cOpeLineData.size());
 	for (size_t i=0; i<m_cOpeLineData.size(); ++i) {
 		DEBUG_TRACE(_T("\t\tm_cOpeLineData[%d].nSeq         = [%d]\n"), m_cOpeLineData[i].nSeq);
-		DEBUG_TRACE(_T("\t\tm_cOpeLineData[%d].cmemLine     = [%ls]\n"), m_cOpeLineData[i].cmemLine.GetStringPtr());		
+		DEBUG_TRACE(_T("\t\tm_cOpeLineData[%d].cmemLine     = [%ls]\n"), m_cOpeLineData[i].memLine.GetStringPtr());		
 	}
 	return;
 }

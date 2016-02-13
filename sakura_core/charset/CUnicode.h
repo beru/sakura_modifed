@@ -29,21 +29,21 @@
 
 class Unicode : public CodeBase {
 public:
-	CodeConvertResult CodeToUnicode(const Memory& cSrc, NativeW* pDst) {	//!< 特定コード → UNICODE    変換
-		return UnicodeToUnicode_in(cSrc, pDst);
+	CodeConvertResult CodeToUnicode(const Memory& src, NativeW* pDst) {	//!< 特定コード → UNICODE    変換
+		return UnicodeToUnicode_in(src, pDst);
 	}
-	CodeConvertResult UnicodeToCode(const NativeW& cSrc, Memory* pDst) {	//!< UNICODE    → 特定コード 変換
-		return UnicodeToUnicode_out(cSrc, pDst);
+	CodeConvertResult UnicodeToCode(const NativeW& src, Memory* pDst) {	//!< UNICODE    → 特定コード 変換
+		return UnicodeToUnicode_out(src, pDst);
 	}
 	void GetBom(Memory* pMemBom);	//!< BOMデータ取得
 	void GetEol(Memory* pMemEol, EolType eolType);	//!< 改行データ取得
 
 public:
 	// 実装
-	static CodeConvertResult _UnicodeToUnicode_in(const Memory& cSrc, NativeW* pDstMem, const bool bBigEndian);		// Unicode   → Unicode (入力側)
-	static CodeConvertResult _UnicodeToUnicode_out(const NativeW& cSrc, Memory* pDstMem, const bool bBigEndian);	// Unicode   → Unicode (出力側)
-	inline static CodeConvertResult UnicodeToUnicode_in(const Memory& cSrc, NativeW* pDst){ return _UnicodeToUnicode_in(cSrc, pDst, false); }
-	inline static CodeConvertResult UnicodeToUnicode_out(const NativeW& cSrc, Memory* pDst){ return _UnicodeToUnicode_out(cSrc, pDst, false); }
+	static CodeConvertResult _UnicodeToUnicode_in(const Memory& src, NativeW* pDstMem, const bool bBigEndian);		// Unicode   → Unicode (入力側)
+	static CodeConvertResult _UnicodeToUnicode_out(const NativeW& src, Memory* pDstMem, const bool bBigEndian);	// Unicode   → Unicode (出力側)
+	inline static CodeConvertResult UnicodeToUnicode_in(const Memory& src, NativeW* pDst){ return _UnicodeToUnicode_in(src, pDst, false); }
+	inline static CodeConvertResult UnicodeToUnicode_out(const NativeW& src, Memory* pDst){ return _UnicodeToUnicode_out(src, pDst, false); }
 
 };
 

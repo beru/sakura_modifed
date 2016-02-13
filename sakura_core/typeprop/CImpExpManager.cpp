@@ -294,7 +294,7 @@ bool ImpExpType::Import(const wstring& sFileName, wstring& sErrMsg)
 {
 	wstring	files = L"";
 	wstring TmpMsg;
-	ColorInfo colorInfoArr[_countof(m_Types.m_ColorInfoArr)];				// 色設定配列(バックアップ)
+	ColorInfo colorInfoArr[_countof(m_Types.m_colorInfoArr)];				// 色設定配列(バックアップ)
 	
 	// 色の変更
 	if (m_nColorType >= MAX_TYPES) {
@@ -304,14 +304,14 @@ bool ImpExpType::Import(const wstring& sFileName, wstring& sErrMsg)
 			files += wstring(L"\n") + m_sColorFile;
 		}else {
 			// 失敗したら基本をコピー(メッセージは出さない)
-			memcpy(&colorInfoArr, GetDllShareData().m_TypeBasis.m_ColorInfoArr, sizeof(colorInfoArr));
+			memcpy(&colorInfoArr, GetDllShareData().m_TypeBasis.m_colorInfoArr, sizeof(colorInfoArr));
 			files += wstring(L"\n× ") + m_sColorFile;	// 失敗
 		}
 	}else if (m_nColorType >= 0) {
 		// 色指定(内部)
 		TypeConfig type;
 		DocTypeManager().GetTypeConfig(TypeConfigNum(m_nColorType), type);
-		memcpy(&colorInfoArr, type.m_ColorInfoArr, sizeof(colorInfoArr));
+		memcpy(&colorInfoArr, type.m_colorInfoArr, sizeof(colorInfoArr));
 	}
 
 	// 読み込み
@@ -331,9 +331,9 @@ bool ImpExpType::Import(const wstring& sFileName, wstring& sErrMsg)
 	if (m_nColorType >= 0) {
 		// 色指定あり
 		for (int i=0; i<_countof(colorInfoArr); ++i) {
-			bool bDisp = m_Types.m_ColorInfoArr[i].m_bDisp;
-			m_Types.m_ColorInfoArr[i] = colorInfoArr[i];
-			m_Types.m_ColorInfoArr[i].m_bDisp = bDisp;		// 表示フラグはファイルのものを使用する
+			bool bDisp = m_Types.m_colorInfoArr[i].m_bDisp;
+			m_Types.m_colorInfoArr[i] = colorInfoArr[i];
+			m_Types.m_colorInfoArr[i].m_bDisp = bDisp;		// 表示フラグはファイルのものを使用する
 		}
 	}
 
@@ -350,16 +350,16 @@ bool ImpExpType::Import(const wstring& sFileName, wstring& sErrMsg)
 	CommonSetting& common = m_pShareData->m_common;
 
 	// 強調キーワード
-	KeyWordSetMgr&	cKeyWordSetMgr = common.m_specialKeyword.m_CKeyWordSetMgr;
+	KeyWordSetMgr&	keyWordSetMgr = common.m_specialKeyword.m_CKeyWordSetMgr;
 	for (int i=0; i<MAX_KEYWORDSET_PER_TYPE; ++i) {
 		//types.m_nKeyWordSetIdx[i] = -1;
 		auto_sprintf_s(szKeyName, szKeyKeywordTemp, i + 1);
 		if (m_cProfile.IOProfileData(szSecTypeEx, szKeyName, MakeStringBufferW(szKeyData))) {
-			nIdx = cKeyWordSetMgr.SearchKeyWordSet(szKeyData);
+			nIdx = keyWordSetMgr.SearchKeyWordSet(szKeyData);
 			if (nIdx < 0) {
 				// エントリ作成
-				cKeyWordSetMgr.AddKeyWordSet(szKeyData, false);
-				nIdx = cKeyWordSetMgr.SearchKeyWordSet(szKeyData);
+				keyWordSetMgr.AddKeyWordSet(szKeyData, false);
+				nIdx = keyWordSetMgr.SearchKeyWordSet(szKeyData);
 			}
 			if (nIdx >= 0) {
 				auto_sprintf_s(szKeyName, szKeyKeywordCaseTemp, i + 1);
@@ -452,20 +452,20 @@ bool ImpExpType::Export(const wstring& sFileName, wstring& sErrMsg)
 	CommonSetting& common = m_pShareData->m_common;
 
 	// 強調キーワード
-	auto& cKeyWordSetMgr = common.m_specialKeyword.m_CKeyWordSetMgr;
+	auto& keyWordSetMgr = common.m_specialKeyword.m_CKeyWordSetMgr;
 	for (int i=0; i<MAX_KEYWORDSET_PER_TYPE; ++i) {
 		if (m_Types.m_nKeyWordSetIdx[i] >= 0) {
 			int nIdx = m_Types.m_nKeyWordSetIdx[i];
 			auto_sprintf_s(szKeyName, szKeyKeywordTemp, i + 1);
-			auto_strcpy(buff, cKeyWordSetMgr.GetTypeName(nIdx));
+			auto_strcpy(buff, keyWordSetMgr.GetTypeName(nIdx));
 			cProfile.IOProfileData(szSecTypeEx, szKeyName, MakeStringBufferW(buff));
 
 			// 大文字小文字区別
-			bool bCase = cKeyWordSetMgr.GetKeyWordCase(nIdx);
+			bool bCase = keyWordSetMgr.GetKeyWordCase(nIdx);
 
 			// キーワード定義ファイル出力
 			ImpExpKeyWord	cImpExpKeyWord(common, m_Types.m_nKeyWordSetIdx[i], bCase);
-			cImpExpKeyWord.SetBaseName(cKeyWordSetMgr.GetTypeName(nIdx));
+			cImpExpKeyWord.SetBaseName(keyWordSetMgr.GetTypeName(nIdx));
 
 			if (cImpExpKeyWord.Export(cImpExpKeyWord.GetFullPath(), sTmpMsg)) {
 				auto_strcpy(szFileName, cImpExpKeyWord.GetFileName().c_str());
@@ -573,7 +573,7 @@ bool ImpExpColors::Import(const wstring& sFileName, wstring& sErrMsg)
 	}
 
 	// 色設定 I/O
-	ShareData_IO::IO_ColorSet(&cProfile, szSecColor, m_ColorInfoArr);
+	ShareData_IO::IO_ColorSet(&cProfile, szSecColor, m_colorInfoArr);
 
 	return true;
 }
@@ -584,7 +584,7 @@ bool ImpExpColors::Export(const wstring& sFileName, wstring& sErrMsg)
 	// 色設定 I/O
 	DataProfile cProfile;
 	cProfile.SetWritingMode();
-	ShareData_IO::IO_ColorSet(&cProfile, szSecColor, m_ColorInfoArr);
+	ShareData_IO::IO_ColorSet(&cProfile, szSecColor, m_colorInfoArr);
 	if (!cProfile.WriteProfile(to_tchar(sFileName.c_str()), WSTR_COLORDATA_HEAD3)) { // Jan. 15, 2001 Stonee
 		sErrMsg = std::wstring(LSW(STR_IMPEXP_ERR_EXPORT)) + sFileName;
 		return false;
@@ -642,7 +642,7 @@ bool ImpExpRegex::Import(const wstring& sFileName, wstring& sErrMsg)
 				if (k == -1) {
 					// 日本語名からインデックス番号に変換する
 					for (int m=0; m<COLORIDX_LAST; ++m) {
-						if (auto_strcmp(m_Types.m_ColorInfoArr[m].m_szName, &buff[11]) == 0) {
+						if (auto_strcmp(m_Types.m_colorInfoArr[m].m_szName, &buff[11]) == 0) {
 							k = m;
 							break;
 						}
@@ -1308,19 +1308,19 @@ bool ImpExpFileTree::Export(const wstring& sFileName, wstring& sErrMsg)
 	return true;
 }
 
-void ImpExpFileTree::IO_FileTreeIni( DataProfile& cProfile, std::vector<FileTreeItem>& data )
+void ImpExpFileTree::IO_FileTreeIni( DataProfile& profile, std::vector<FileTreeItem>& data )
 {
 	const WCHAR* pszSecName = L"FileTree";
 	int nItemCount = (int)data.size();
-	cProfile.IOProfileData(pszSecName, L"nFileTreeItemCount", nItemCount);
+	profile.IOProfileData(pszSecName, L"nFileTreeItemCount", nItemCount);
 	if (nItemCount < 0) {
 		nItemCount = 0;
 	}
-	if (cProfile.IsReadingMode()) {
+	if (profile.IsReadingMode()) {
 		data.resize(nItemCount);
 	}
 	for (int i=0; i<nItemCount; ++i) {
-		ShareData_IO::ShareData_IO_FileTreeItem(cProfile, data[i], pszSecName, i);
+		ShareData_IO::ShareData_IO_FileTreeItem(profile, data[i], pszSecName, i);
 	}
 }
 

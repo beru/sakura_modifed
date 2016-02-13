@@ -547,7 +547,7 @@ int SMacroMgr::Append(
 	int				idx,		//
 	EFunctionCode	nFuncID,	// [in] 機能番号
 	const LPARAM*	lParams,	// [in] パラメータ。
-	EditView*		pcEditView	// 
+	EditView*		pEditView	// 
 )
 {
 	assert(idx == STAND_KEYMACRO);
@@ -561,7 +561,7 @@ int SMacroMgr::Append(
 			m_pKeyMacro = new KeyMacroMgr;
 			pKeyMacro = dynamic_cast<KeyMacroMgr*>(m_pKeyMacro);
 		}
-		pKeyMacro->Append(nFuncID, lParams, pcEditView);
+		pKeyMacro->Append(nFuncID, lParams, pEditView);
 	}
 	return TRUE;
 }

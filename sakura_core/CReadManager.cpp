@@ -40,20 +40,20 @@
 	@date	2003/07/26 ryoji BOMの状態の取得を追加
 */
 CodeConvertResult ReadManager::ReadFile_To_CDocLineMgr(
-	DocLineMgr*		pcDocLineMgr,	// [out]
-	const LoadInfo&	sLoadInfo,		// [in]
+	DocLineMgr*			pDocLineMgr,	// [out]
+	const LoadInfo&		loadInfo,		// [in]
 	FileInfo*			pFileInfo		// [out]
 	)
 {
-	LPCTSTR pszPath = sLoadInfo.filePath.c_str();
+	LPCTSTR pszPath = loadInfo.filePath.c_str();
 
 	// 文字コード種別
 	const TypeConfigMini* type;
-	DocTypeManager().GetTypeConfigMini( sLoadInfo.nType, &type );
-	ECodeType eCharCode = sLoadInfo.eCharCode;
+	DocTypeManager().GetTypeConfigMini( loadInfo.nType, &type );
+	ECodeType eCharCode = loadInfo.eCharCode;
 	if (eCharCode == CODE_AUTODETECT) {
-		CodeMediator cmediator( type->m_encoding );
-		eCharCode = cmediator.CheckKanjiCodeOfFile( pszPath );
+		CodeMediator mediator( type->m_encoding );
+		eCharCode = mediator.CheckKanjiCodeOfFile( pszPath );
 	}
 	if (!IsValidCodeOrCPType(eCharCode)) {
 		eCharCode = type->m_encoding.m_eDefaultCodetype;	// 2011.01.24 ryoji デフォルト文字コード
@@ -67,7 +67,7 @@ CodeConvertResult ReadManager::ReadFile_To_CDocLineMgr(
 	pFileInfo->SetCodeSet( eCharCode, bBom );
 
 	// 既存データのクリア
-	pcDocLineMgr->DeleteAllLine();
+	pDocLineMgr->DeleteAllLine();
 
 	// 処理中のユーザー操作を可能にする
 	if (!::BlockingHook(NULL)) {
@@ -77,7 +77,7 @@ CodeConvertResult ReadManager::ReadFile_To_CDocLineMgr(
 	CodeConvertResult eRet = CodeConvertResult::Complete;
 
 	try {
-		FileLoad cfl(type->m_encoding);
+		FileLoad fl(type->m_encoding);
 
 		bool bBigFile;
 #ifdef _WIN64
@@ -88,32 +88,32 @@ CodeConvertResult ReadManager::ReadFile_To_CDocLineMgr(
 		// ファイルを開く
 		// ファイルを閉じるにはFileCloseメンバ又はデストラクタのどちらかで処理できます
 		//	Jul. 28, 2003 ryoji BOMパラメータ追加
-		cfl.FileOpen( pszPath, bBigFile, eCharCode, GetDllShareData().m_common.m_file.GetAutoMIMEdecode(), &bBom );
+		fl.FileOpen( pszPath, bBigFile, eCharCode, GetDllShareData().m_common.m_file.GetAutoMIMEdecode(), &bBom );
 		pFileInfo->SetBomExist( bBom );
 
 		// ファイル時刻の取得
 		FILETIME fileTime;
-		if (cfl.GetFileTime(NULL, NULL, &fileTime)) {
+		if (fl.GetFileTime(NULL, NULL, &fileTime)) {
 			pFileInfo->SetFileTime( fileTime );
 		}
 
 		// ReadLineはファイルから 文字コード変換された1行を読み出します
 		// エラー時はthrow Error_FileRead を投げます
-		int				nLineNum = 0;
-		Eol			cEol;
-		NativeW		cUnicodeBuffer;
+		int			nLineNum = 0;
+		Eol			eol;
+		NativeW		unicodeBuffer;
 		CodeConvertResult	eRead;
-		while ((eRead = cfl.ReadLine( &cUnicodeBuffer, &cEol )) != CodeConvertResult::Failure) {
+		while ((eRead = fl.ReadLine( &unicodeBuffer, &eol )) != CodeConvertResult::Failure) {
 			if (eRead == CodeConvertResult::LoseSome) {
 				eRet = CodeConvertResult::LoseSome;
 			}
-			const wchar_t* pLine = cUnicodeBuffer.GetStringPtr();
-			int nLineLen = cUnicodeBuffer.GetStringLength();
+			const wchar_t* pLine = unicodeBuffer.GetStringPtr();
+			int nLineLen = unicodeBuffer.GetStringLength();
 			++nLineNum;
-			DocEditAgent(pcDocLineMgr).AddLineStrX( pLine, nLineLen );
+			DocEditAgent(pDocLineMgr).AddLineStrX( pLine, nLineLen );
 			// 経過通知
 			if (nLineNum % 512 == 0) {
-				NotifyProgress(cfl.GetPercent());
+				NotifyProgress(fl.GetPercent());
 				// 処理中のユーザー操作を可能にする
 				if (!::BlockingHook( NULL )) {
 					throw AppExitException(); // 中断検出
@@ -122,7 +122,7 @@ CodeConvertResult ReadManager::ReadFile_To_CDocLineMgr(
 		}
 
 		// ファイルをクローズする
-		cfl.FileClose();
+		fl.FileClose();
 	}catch (AppExitException) {
 		// WM_QUITが発生した
 		return CodeConvertResult::Failure;
@@ -157,7 +157,7 @@ CodeConvertResult ReadManager::ReadFile_To_CDocLineMgr(
 			pszPath
 		 );
 		// 既存データのクリア
-		pcDocLineMgr->DeleteAllLine();
+		pDocLineMgr->DeleteAllLine();
 	} // 例外処理終わり
 
 	NotifyProgress(0);
@@ -167,7 +167,7 @@ CodeConvertResult ReadManager::ReadFile_To_CDocLineMgr(
 	}
 
 	// 行変更状態をすべてリセット
-//	CModifyVisitor().ResetAllModifyFlag(pcDocLineMgr, 0);
+//	CModifyVisitor().ResetAllModifyFlag(pDocLineMgr, 0);
 	return eRet;
 }
 

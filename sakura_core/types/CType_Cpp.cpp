@@ -57,13 +57,13 @@ void CType_Cpp::InitTypeConfigImp(TypeConfig* pType)
 
 	// 設定
 	pType->m_cLineComment.CopyTo(0, L"//", -1);							// 行コメントデリミタ
-	pType->m_cBlockComments[0].SetBlockCommentRule(L"/*", L"*/");			// ブロックコメントデリミタ
-	pType->m_cBlockComments[1].SetBlockCommentRule(L"#if 0", L"#endif");	// ブロックコメントデリミタ2		Jul. 11, 2001 JEPRO
+	pType->m_blockComments[0].SetBlockCommentRule(L"/*", L"*/");			// ブロックコメントデリミタ
+	pType->m_blockComments[1].SetBlockCommentRule(L"#if 0", L"#endif");	// ブロックコメントデリミタ2		Jul. 11, 2001 JEPRO
 	pType->m_nKeyWordSetIdx[0] = 0;											// キーワードセット
 	pType->m_eDefaultOutline = OUTLINE_CPP;									// アウトライン解析方法
 	pType->m_eSmartIndent = SmartIndentType::Cpp;								// スマートインデント種別
-	pType->m_ColorInfoArr[COLORIDX_DIGIT].m_bDisp = true;					// 半角数値を色分け表示				Mar. 10, 2001 JEPRO
-	pType->m_ColorInfoArr[COLORIDX_BRACKET_PAIR].m_bDisp = true;			// 対括弧の強調をデフォルトONに		Sep. 21, 2002 genta 
+	pType->m_colorInfoArr[COLORIDX_DIGIT].m_bDisp = true;					// 半角数値を色分け表示				Mar. 10, 2001 JEPRO
+	pType->m_colorInfoArr[COLORIDX_BRACKET_PAIR].m_bDisp = true;			// 対括弧の強調をデフォルトONに		Sep. 21, 2002 genta 
 	pType->m_bUseHokanByFile = true;										// 入力補完 開いているファイル内から候補を探す
 	pType->m_bStringLineOnly = true; // 文字列は行内のみ
 }
@@ -349,11 +349,11 @@ LogicInt CppPreprocessMng::ScanLine(
 	- 6: 共用体("共用体")
 	- 7: 名前空間("名前空間")
 
-	@param pcFuncInfoArr [out] 関数一覧を返すためのクラス。
+	@param pFuncInfoArr [out] 関数一覧を返すためのクラス。
 	ここに関数のリストを登録する。
 */
 void DocOutline::MakeFuncList_C(
-	FuncInfoArr* pcFuncInfoArr,
+	FuncInfoArr* pFuncInfoArr,
 	bool bVisibleMemberFunc
 	)
 {
@@ -825,7 +825,7 @@ void DocOutline::MakeFuncList_C(
 #ifdef TRACE_OUTLINE
 						DEBUG_TRACE(_T("AppendData %d %ls\n"), nItemLine, szNamespace);
 #endif
-						pcFuncInfoArr->AppendData(nItemLine, ptPosXY.GetY2() + LayoutInt(1) , szNamespace, nItemFuncId);
+						pFuncInfoArr->AppendData(nItemLine, ptPosXY.GetY2() + LayoutInt(1) , szNamespace, nItemFuncId);
 						bDefinedTypedef = false;
 						nItemLine = -1;
 						//	Jan. 30, 2005 genta M2_KR_FUNC 追加
@@ -1047,7 +1047,7 @@ void DocOutline::MakeFuncList_C(
 #ifdef TRACE_OUTLINE
 						DEBUG_TRACE(_T("AppendData %d %ls\n"), nItemLine, szNamespace);
 #endif
-						pcFuncInfoArr->AppendData(nItemLine, ptPosXY.GetY2() + LayoutInt(1), szNamespace, nItemFuncId);
+						pFuncInfoArr->AppendData(nItemLine, ptPosXY.GetY2() + LayoutInt(1), szNamespace, nItemFuncId);
 					}
 					nItemLine = -1;
 					nNestLevel_template = 0;
@@ -1463,11 +1463,11 @@ void EditView::SmartIndent_CPP(wchar_t wcChar)
 		}
 		
 		// 調整によって置換される箇所
-		LayoutRange sRangeLayout;
-		m_pEditDoc->m_layoutMgr.LogicToLayout(sRangeA, &sRangeLayout);
+		LayoutRange rangeLayout;
+		m_pEditDoc->m_layoutMgr.LogicToLayout(sRangeA, &rangeLayout);
 
 		if (0
-			|| (nDataLen == 0 && sRangeLayout.IsOne())
+			|| (nDataLen == 0 && rangeLayout.IsOne())
 			|| (nDataLen == nSrcLen && wmemcmp(pszSrc, pszData, nDataLen) == 0)
 		) {
 			bChange = FALSE;
@@ -1476,7 +1476,7 @@ void EditView::SmartIndent_CPP(wchar_t wcChar)
 
 			// データ置換 削除&挿入にも使える
 			ReplaceData_CEditView(
-				sRangeLayout,
+				rangeLayout,
 				pszData,	// 挿入するデータ
 				nDataLen,	// 挿入するデータの長さ
 				true,

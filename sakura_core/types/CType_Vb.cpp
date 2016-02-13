@@ -44,9 +44,9 @@ void CType_Vb::InitTypeConfigImp(TypeConfig* pType)
 	pType->m_eDefaultOutline = OUTLINE_VB;						// アウトライン解析方法
 	pType->m_nKeyWordSetIdx[0]  = 13;							// キーワードセット
 	pType->m_nKeyWordSetIdx[1] = 14;							// キーワードセット2
-	pType->m_ColorInfoArr[COLORIDX_DIGIT].m_bDisp = true;		// 半角数値を色分け表示
+	pType->m_colorInfoArr[COLORIDX_DIGIT].m_bDisp = true;		// 半角数値を色分け表示
 	pType->m_nStringType = StringLiteralType::PLSQL;				// 文字列区切り記号エスケープ方法  0=[\"][\'] 1=[""]['']
-	pType->m_ColorInfoArr[COLORIDX_SSTRING].m_bDisp = false;	// シングルクォーテーション文字列を色分け表示しない
+	pType->m_colorInfoArr[COLORIDX_SSTRING].m_bDisp = false;	// シングルクォーテーション文字列を色分け表示しない
 	pType->m_bStringLineOnly = true; // 文字列は行内のみ
 }
 
@@ -63,7 +63,7 @@ void CType_Vb::InitTypeConfigImp(TypeConfig* pType)
 	Aug  7, 2003 little YOSHI  ダブルクォーテーションで囲まれたテキストを無視するようにした
 	                           関数名などをVBの名前付け規則より255文字に拡張
 */
-void DocOutline::MakeFuncList_VisualBasic(FuncInfoArr* pcFuncInfoArr)
+void DocOutline::MakeFuncList_VisualBasic(FuncInfoArr* pFuncInfoArr)
 {
 	const int	nMaxWordLeng = 255;	// Aug 7, 2003 little YOSHI  VBの名前付け規則より255文字に拡張
 	LogicInt		nLineLen = LogicInt(0);//: 2002/2/3 aroka 警告対策：初期化
@@ -263,7 +263,7 @@ void DocOutline::MakeFuncList_VisualBasic(FuncInfoArr* pcFuncInfoArr)
 						*/
 						LayoutPoint ptPosXY;
 						m_pDocRef->m_layoutMgr.LogicToLayout(	LogicPoint(LogicInt(0), nFuncLine - LogicInt(1)), &ptPosXY);
-						pcFuncInfoArr->AppendData(nFuncLine, ptPosXY.GetY2() + LayoutInt(1) , szFuncName, nFuncId);
+						pFuncInfoArr->AppendData(nFuncLine, ptPosXY.GetY2() + LayoutInt(1) , szFuncName, nFuncId);
 						nParseCnt = 0;
 						nFuncId	= 0;	// Jul 10, 2003  little YOSHI  論理和を使用するため、必ず初期化
 					}

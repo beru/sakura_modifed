@@ -38,7 +38,7 @@ void CType_Sql::InitTypeConfigImp(TypeConfig* pType)
 
 	// 設定
 	pType->m_cLineComment.CopyTo(0, L"--", -1);					// 行コメントデリミタ
-	pType->m_cBlockComments[0].SetBlockCommentRule(L"/*", L"*/");	// ブロックコメントデリミタ
+	pType->m_blockComments[0].SetBlockCommentRule(L"/*", L"*/");	// ブロックコメントデリミタ
 	pType->m_nStringType = StringLiteralType::PLSQL;					// 文字列区切り記号エスケープ方法  0=[\"][\'] 1=[""]['']
 	wcscpy_s(pType->m_szIndentChars, L"|★");						// その他のインデント対象文字
 	pType->m_nKeyWordSetIdx[0] = 2;									// キーワードセット
@@ -47,7 +47,7 @@ void CType_Sql::InitTypeConfigImp(TypeConfig* pType)
 
 
 // PL/SQL関数リスト作成
-void DocOutline::MakeFuncList_PLSQL(FuncInfoArr* pcFuncInfoArr)
+void DocOutline::MakeFuncList_PLSQL(FuncInfoArr* pFuncInfoArr)
 {
 	const wchar_t*	pLine;
 	LogicInt		nLineLen;
@@ -179,7 +179,7 @@ void DocOutline::MakeFuncList_PLSQL(FuncInfoArr* pcFuncInfoArr)
 								LogicPoint(0, nFuncLine - 1),
 								&ptPos
 							);
-							pcFuncInfoArr->AppendData(nFuncLine, ptPos.GetY2() + LayoutInt(1), szFuncName, nFuncId);
+							pFuncInfoArr->AppendData(nFuncLine, ptPos.GetY2() + LayoutInt(1), szFuncName, nFuncId);
 							nParseCnt = 0;
 						}
 						if (wcsicmp(szWord, L"AS") == 0) {
@@ -197,7 +197,7 @@ void DocOutline::MakeFuncList_PLSQL(FuncInfoArr* pcFuncInfoArr)
 									LogicPoint(0, nFuncLine - 1),
 									&ptPos
 								);
-								pcFuncInfoArr->AppendData(nFuncLine, ptPos.GetY2() + LayoutInt(1) , szFuncName, nFuncId);
+								pFuncInfoArr->AppendData(nFuncLine, ptPos.GetY2() + LayoutInt(1) , szFuncName, nFuncId);
 								nParseCnt = 0;
 							}else if (nFuncOrProc == 4) {
 								nFuncId = 41;	// パッケージ本体
@@ -213,7 +213,7 @@ void DocOutline::MakeFuncList_PLSQL(FuncInfoArr* pcFuncInfoArr)
 									LogicPoint(0, nFuncLine - 1),
 									&ptPos
 								);
-								pcFuncInfoArr->AppendData(nFuncLine, ptPos.GetY2() + LayoutInt(1) , szFuncName, nFuncId);
+								pFuncInfoArr->AppendData(nFuncLine, ptPos.GetY2() + LayoutInt(1) , szFuncName, nFuncId);
 								nParseCnt = 0;
 							}
 						}
@@ -311,7 +311,7 @@ void DocOutline::MakeFuncList_PLSQL(FuncInfoArr* pcFuncInfoArr)
 							LogicPoint(0, nFuncLine - 1),
 							&ptPos
 						);
-						pcFuncInfoArr->AppendData(nFuncLine, ptPos.GetY2() + LayoutInt(1) , szFuncName, nFuncId);
+						pFuncInfoArr->AppendData(nFuncLine, ptPos.GetY2() + LayoutInt(1) , szFuncName, nFuncId);
 						nParseCnt = 0;
 					}
 					nMode = 0;

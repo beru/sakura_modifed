@@ -44,8 +44,8 @@ void CType_Perl::InitTypeConfigImp(TypeConfig* pType)
 	pType->m_eDefaultOutline = OUTLINE_PERL;						// アウトライン解析方法
 	pType->m_nKeyWordSetIdx[0]  = 11;								// キーワードセット
 	pType->m_nKeyWordSetIdx[1] = 12;								// キーワードセット2
-	pType->m_ColorInfoArr[COLORIDX_DIGIT].m_bDisp = true;			// 半角数値を色分け表示
-	pType->m_ColorInfoArr[COLORIDX_BRACKET_PAIR].m_bDisp = true;	// 対括弧の強調をデフォルトON	//Sep. 21, 2002 genta
+	pType->m_colorInfoArr[COLORIDX_DIGIT].m_bDisp = true;			// 半角数値を色分け表示
+	pType->m_colorInfoArr[COLORIDX_BRACKET_PAIR].m_bDisp = true;	// 対括弧の強調をデフォルトON	//Sep. 21, 2002 genta
 	pType->m_bStringLineOnly = true; // 文字列は行内のみ
 }
 
@@ -65,7 +65,7 @@ void CType_Perl::InitTypeConfigImp(TypeConfig* pType)
 
 	@date 2005.06.18 genta パッケージ区切りを表す ::と'を考慮するように
 */
-void DocOutline::MakeFuncList_Perl(FuncInfoArr* pcFuncInfoArr)
+void DocOutline::MakeFuncList_Perl(FuncInfoArr* pFuncInfoArr)
 {
 	const wchar_t*	pLine;
 	LogicInt		nLineLen;
@@ -162,7 +162,7 @@ void DocOutline::MakeFuncList_Perl(FuncInfoArr* pcFuncInfoArr)
 						&ptPosXY
 					);
 					//	Mar. 9, 2001
-					pcFuncInfoArr->AppendData(nLineCount + LogicInt(1), ptPosXY.GetY2() + LayoutInt(1), szWord, 0);
+					pFuncInfoArr->AppendData(nLineCount + LogicInt(1), ptPosXY.GetY2() + LayoutInt(1), szWord, 0);
 
 					break;
 				}
@@ -170,7 +170,7 @@ void DocOutline::MakeFuncList_Perl(FuncInfoArr* pcFuncInfoArr)
 		}
 	}
 #ifdef _DEBUG
-	pcFuncInfoArr->DUMP();
+	pFuncInfoArr->DUMP();
 #endif
 	return;
 }

@@ -58,7 +58,7 @@ void BlockComment::SetBlockCommentRule(
 */
 bool BlockComment::Match_CommentFrom(
 	int					nPos,		// [in] 探索開始位置
-	const StringRef&	cStr		// [in] 探索対象文字列 ※探索開始位置のポインタではないことに注意
+	const StringRef&	str		// [in] 探索対象文字列 ※探索開始位置のポインタではないことに注意
 	/*
 	int				nLineLen,	// [in] pLineの長さ
 	const wchar_t*	pLine		// [in] 探索行の先頭．
@@ -68,9 +68,9 @@ bool BlockComment::Match_CommentFrom(
 	return (1
 		&& m_szBlockCommentFrom[0] != L'\0'
 		&& m_szBlockCommentTo[0] != L'\0'
-		&& nPos <= cStr.GetLength() - m_nBlockFromLen 	// ブロックコメントデリミタ(From)
-		//&& auto_memicmp(&cStr.GetPtr()[nPos], m_szBlockCommentFrom, m_nBlockFromLen) == 0	// 非ASCIIも大文字小文字を区別しない	//###locale 依存
-		&& wmemicmp_ascii(&cStr.GetPtr()[nPos], m_szBlockCommentFrom, m_nBlockFromLen) == 0	// ASCIIのみ大文字小文字を区別しない（高速）
+		&& nPos <= str.GetLength() - m_nBlockFromLen 	// ブロックコメントデリミタ(From)
+		//&& auto_memicmp(&str.GetPtr()[nPos], m_szBlockCommentFrom, m_nBlockFromLen) == 0	// 非ASCIIも大文字小文字を区別しない	//###locale 依存
+		&& wmemicmp_ascii(&str.GetPtr()[nPos], m_szBlockCommentFrom, m_nBlockFromLen) == 0	// ASCIIのみ大文字小文字を区別しない（高速）
 	);
 }
 
@@ -81,19 +81,19 @@ bool BlockComment::Match_CommentFrom(
 */
 int BlockComment::Match_CommentTo(
 	int					nPos,		// [in] 探索開始位置
-	const StringRef&	cStr		// [in] 探索対象文字列 ※探索開始位置のポインタではないことに注意
+	const StringRef&	str		// [in] 探索対象文字列 ※探索開始位置のポインタではないことに注意
 	/*
 	int				nLineLen,	// [in] pLineの長さ
 	const wchar_t*	pLine		// [in] 探索行の先頭．探索開始位置のポインタではないことに注意
 	*/
 	) const
 {
-	for (int i=nPos; i<=cStr.GetLength()-m_nBlockToLen; ++i) {
-		//if (auto_memicmp(&cStr.GetPtr()[i], m_szBlockCommentTo, m_nBlockToLen) == 0) {	// 非ASCIIも大文字小文字を区別しない	//###locale 依存
-		if (wmemicmp_ascii(&cStr.GetPtr()[i], m_szBlockCommentTo, m_nBlockToLen) == 0) {	// ASCIIのみ大文字小文字を区別しない（高速）
+	for (int i=nPos; i<=str.GetLength()-m_nBlockToLen; ++i) {
+		//if (auto_memicmp(&str.GetPtr()[i], m_szBlockCommentTo, m_nBlockToLen) == 0) {	// 非ASCIIも大文字小文字を区別しない	//###locale 依存
+		if (wmemicmp_ascii(&str.GetPtr()[i], m_szBlockCommentTo, m_nBlockToLen) == 0) {	// ASCIIのみ大文字小文字を区別しない（高速）
 			return i + m_nBlockToLen;
 		}
 	}
-	return cStr.GetLength();
+	return str.GetLength();
 }
 

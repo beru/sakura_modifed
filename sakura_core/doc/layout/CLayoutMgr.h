@@ -53,7 +53,7 @@ enum class KinsokuType {
 
 struct LayoutReplaceArg {
 	LayoutRange	delRange;		// [in]削除範囲。レイアウト単位。
-	OpeLineData*	pcmemDeleted;	// [out]削除されたデータ
+	OpeLineData*	pMemDeleted;	// [out]削除されたデータ
 	OpeLineData*	pInsData;		// [in/out]挿入するデータ
 	LayoutInt		nAddLineNum;	// [out] 再描画ヒント レイアウト行の増減
 	LayoutInt		nModLineFrom;	// [out] 再描画ヒント 変更されたレイアウト行From(レイアウト行の増減が0のとき使う)

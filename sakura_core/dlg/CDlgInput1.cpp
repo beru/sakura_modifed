@@ -90,7 +90,7 @@ BOOL DlgInput1::DoModal(
 	m_pszMessage = pszMessage;		// メッセージ
 	m_nMaxTextLen = nMaxTextLen;	// 入力サイズ上限
 //	m_pszText = pszText;			// テキスト
-	m_cmemText.SetString(pszText);
+	m_memText.SetString(pszText);
 	bRet = (BOOL)::DialogBoxParam(
 		m_hInstance,
 		MAKEINTRESOURCE(IDD_INPUT1),
@@ -98,7 +98,7 @@ BOOL DlgInput1::DoModal(
 		CDlgInput1Proc,
 		(LPARAM)this
 	);
-	_tcscpy(pszText, m_cmemText.GetStringPtr());
+	_tcscpy(pszText, m_memText.GetStringPtr());
 	return bRet;
 }
 
@@ -140,7 +140,7 @@ INT_PTR DlgInput1::DispatchEvent(
 
 		::SetWindowText(hwndDlg, m_pszTitle);	// ダイアログタイトル
 		EditCtl_LimitText(::GetDlgItem(hwndDlg, IDC_EDIT_INPUT1), m_nMaxTextLen);	// 入力サイズ上限
-		::SetDlgItemText(hwndDlg, IDC_EDIT_INPUT1, m_cmemText.GetStringPtr());		// テキスト
+		::SetDlgItemText(hwndDlg, IDC_EDIT_INPUT1, m_memText.GetStringPtr());		// テキスト
 		::SetDlgItemText(hwndDlg, IDC_STATIC_MSG, m_pszMessage);		// メッセージ
 		return TRUE;
 	case WM_COMMAND:
@@ -151,8 +151,8 @@ INT_PTR DlgInput1::DispatchEvent(
 		case BN_CLICKED:
 			switch (wID) {
 			case IDOK:
-				m_cmemText.AllocStringBuffer(::GetWindowTextLength(::GetDlgItem(hwndDlg, IDC_EDIT_INPUT1)));
-				::GetWindowText(::GetDlgItem(hwndDlg, IDC_EDIT_INPUT1), m_cmemText.GetStringPtr(), m_nMaxTextLen + 1);	// テキスト
+				m_memText.AllocStringBuffer(::GetWindowTextLength(::GetDlgItem(hwndDlg, IDC_EDIT_INPUT1)));
+				::GetWindowText(::GetDlgItem(hwndDlg, IDC_EDIT_INPUT1), m_memText.GetStringPtr(), m_nMaxTextLen + 1);	// テキスト
 				::EndDialog(hwndDlg, TRUE);
 				return TRUE;
 			case IDCANCEL:

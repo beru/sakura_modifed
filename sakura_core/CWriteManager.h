@@ -35,7 +35,7 @@ public:
 	//	Jul. 26, 2003 ryoji BOMà¯êîí«â¡
 	CodeConvertResult WriteFile_From_CDocLineMgr(
 		const DocLineMgr&	pcDocLineMgr,	// [in]
-		const SaveInfo&	sSaveInfo		// [in]
+		const SaveInfo&	saveInfo		// [in]
 	);
 };
 

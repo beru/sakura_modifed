@@ -71,23 +71,23 @@ LayoutColorInfo* Color_Quote::GetStrategyColorInfo() const
 
 // nPos "の位置
 //staic
-bool Color_Quote::IsCppRawString(const StringRef& cStr, int nPos)
+bool Color_Quote::IsCppRawString(const StringRef& str, int nPos)
 {
 	if (
 		0 < nPos
-		&& cStr.At(nPos-1) == 'R'
-		&& cStr.At(nPos) == '"'
-		&& nPos + 1 < cStr.GetLength()
+		&& str.At(nPos-1) == 'R'
+		&& str.At(nPos) == '"'
+		&& nPos + 1 < str.GetLength()
 	) {
 		// \b(u8|u|U|L|)R"[^(]*\(
 		// \b = ^|[\s!"#$%&'()=@{};:<>?,.*/\-\+\[\]\]
 		wchar_t c1 = L' ';
 		if (2 <= nPos) {
-			c1 = cStr.At(nPos-2);
+			c1 = str.At(nPos-2);
 		}
 		wchar_t c2 = L' ';
 		if (3 <= nPos) {
-			c2 = cStr.At(nPos-3);
+			c2 = str.At(nPos-3);
 		}
 		const wchar_t* pszSep = L" \t!\"#$%&'()=@{};:<>?,.*/-+[]";
 		if ((c1 == 'u' || c1 == 'U' || c1 == 'L')) {
@@ -97,7 +97,7 @@ bool Color_Quote::IsCppRawString(const StringRef& cStr, int nPos)
 		}else if (c1 == '8' && c2 == 'u') {
 			wchar_t c3 = L'\0';
 			if (4 <= nPos) {
-				c3 = cStr.At(nPos-4);
+				c3 = str.At(nPos-4);
 			}
 			if (wcschr(pszSep, c3)) {
 				return true;
@@ -109,11 +109,11 @@ bool Color_Quote::IsCppRawString(const StringRef& cStr, int nPos)
 	return false;
 }
 
-bool Color_Quote::BeginColor(const StringRef& cStr, int nPos)
+bool Color_Quote::BeginColor(const StringRef& str, int nPos)
 {
-	if (!cStr.IsValid()) return false;
+	if (!str.IsValid()) return false;
 
-	if (cStr.At(nPos) == m_cQuote) {
+	if (str.At(nPos) == m_cQuote) {
 		m_nCOMMENTEND = -1;
 		StringLiteralType nStringType = m_pTypeData->m_nStringType;
 		bool bPreString = true;
@@ -122,20 +122,20 @@ bool Color_Quote::BeginColor(const StringRef& cStr, int nPos)
 		case StringLiteralType::CPP:
 			if (
 				0 < nPos
-				&& cStr.At(nPos - 1) == 'R'
-				&& cStr.At(nPos) == '"'
-				&& nPos + 1 < cStr.GetLength()
+				&& str.At(nPos - 1) == 'R'
+				&& str.At(nPos) == '"'
+				&& nPos + 1 < str.GetLength()
 			) {
-				for (int i=nPos+1; i<cStr.GetLength(); ++i) {
-					if (cStr.At(i) == '(') {
+				for (int i=nPos+1; i<str.GetLength(); ++i) {
+					if (str.At(i) == '(') {
 						if (nPos + 1 < i) {
 							m_tag = L')';
-							m_tag.append(cStr.GetPtr() + nPos + 1, i - (nPos + 1));
+							m_tag.append(str.GetPtr() + nPos + 1, i - (nPos + 1));
 							m_tag += L'"';
 						}else {
 							m_tag.assign(L")\"", 2);
 						}
-						m_nCOMMENTEND = Match_QuoteStr(m_tag.c_str(), m_tag.size(), i + 1, cStr, false);
+						m_nCOMMENTEND = Match_QuoteStr(m_tag.c_str(), m_tag.size(), i + 1, str, false);
 						m_nColorTypeIndex = 1;
 						return true;
 					}
@@ -146,29 +146,29 @@ bool Color_Quote::BeginColor(const StringRef& cStr, int nPos)
 			{
 				int i;
 				for (i=nPos-1; 0<=i; --i) {
-					if (cStr.At(i) != L' ' && cStr.At(i) != L'\t') {
+					if (str.At(i) != L' ' && str.At(i) != L'\t') {
 						break;
 					}
 				}
-				if (!(0 <= i && cStr.At(i) == L'=')) {
+				if (!(0 <= i && str.At(i) == L'=')) {
 					bPreString = false;
 				}
 			}
 			break;
 		case StringLiteralType::CSharp:
-			if (0 < nPos && cStr.At(nPos - 1) == L'@' && m_cQuote == L'"') {
-				m_nCOMMENTEND = Match_Quote(m_cQuote, nPos + 1, cStr, StringLiteralType::PLSQL);
+			if (0 < nPos && str.At(nPos - 1) == L'@' && m_cQuote == L'"') {
+				m_nCOMMENTEND = Match_Quote(m_cQuote, nPos + 1, str, StringLiteralType::PLSQL);
 				m_nColorTypeIndex = 2;
 				return true;
 			}
 			break;
 		case StringLiteralType::Python:
 			if (
-				nPos + 2 < cStr.GetLength()
-			 	&& cStr.At(nPos + 1) == m_cQuote
-			 	&& cStr.At(nPos + 2) == m_cQuote
+				nPos + 2 < str.GetLength()
+			 	&& str.At(nPos + 1) == m_cQuote
+			 	&& str.At(nPos + 2) == m_cQuote
 			) {
-				m_nCOMMENTEND = Match_QuoteStr(m_szQuote, 3, nPos + 3, cStr, true);
+				m_nCOMMENTEND = Match_QuoteStr(m_szQuote, 3, nPos + 3, str, true);
 				m_nColorTypeIndex = 3;
 				return true;
 			}
@@ -176,7 +176,7 @@ bool Color_Quote::BeginColor(const StringRef& cStr, int nPos)
 		}
 		m_bEscapeEnd = false;
 		if (bPreString) {
-			m_nCOMMENTEND = Match_Quote(m_cQuote, nPos + 1, cStr, m_nEscapeType, m_pbEscapeEnd);
+			m_nCOMMENTEND = Match_Quote(m_cQuote, nPos + 1, str, m_nEscapeType, m_pbEscapeEnd);
 			m_nColorTypeIndex = 0;
 		}
 
@@ -184,26 +184,26 @@ bool Color_Quote::BeginColor(const StringRef& cStr, int nPos)
 		if (
 			m_pTypeData->m_bStringLineOnly
 			&& !m_bEscapeEnd
-			&& m_nCOMMENTEND == cStr.GetLength()
+			&& m_nCOMMENTEND == str.GetLength()
 		) {
 			// 終了文字列がない場合は行末までを色分け
 			if (m_pTypeData->m_bStringEndLine) {
 				// 改行コードを除く
 				if (
-					0 < cStr.GetLength()
+					0 < str.GetLength()
 					&& WCODE::IsLineDelimiter(
-						cStr.At(cStr.GetLength() - 1),
+						str.At(str.GetLength() - 1),
 						GetDllShareData().m_common.m_edit.m_bEnableExtEol
 					)
 				) {
 					if (1 &&
-						1 < cStr.GetLength()
-						&& cStr.At(cStr.GetLength() - 2) == WCODE::CR
-						&& cStr.At(cStr.GetLength() - 1) == WCODE::LF
+						1 < str.GetLength()
+						&& str.At(str.GetLength() - 2) == WCODE::CR
+						&& str.At(str.GetLength() - 1) == WCODE::LF
 					) {
-						m_nCOMMENTEND = cStr.GetLength() - 2;
+						m_nCOMMENTEND = str.GetLength() - 2;
 					}else {
-						m_nCOMMENTEND = cStr.GetLength() - 1;
+						m_nCOMMENTEND = str.GetLength() - 1;
 					}
 				}
 				return true;
@@ -219,7 +219,7 @@ bool Color_Quote::BeginColor(const StringRef& cStr, int nPos)
 	return false;
 }
 
-bool Color_Quote::EndColor(const StringRef& cStr, int nPos)
+bool Color_Quote::EndColor(const StringRef& str, int nPos)
 {
 	if (m_nCOMMENTEND == -1) {
 		// ここにくるのは行頭のはず
@@ -227,16 +227,16 @@ bool Color_Quote::EndColor(const StringRef& cStr, int nPos)
 		// クォーテーション文字列の終端があるか
 		switch (m_nColorTypeIndex) {
 		case 0:
-			m_nCOMMENTEND = Match_Quote(m_cQuote, nPos, cStr, m_nEscapeType);
+			m_nCOMMENTEND = Match_Quote(m_cQuote, nPos, str, m_nEscapeType);
 			break;
 		case 1:
-			m_nCOMMENTEND = Match_QuoteStr(m_tag.c_str(), m_tag.size(), nPos, cStr, false);
+			m_nCOMMENTEND = Match_QuoteStr(m_tag.c_str(), m_tag.size(), nPos, str, false);
 			break;
 		case 2:
-			m_nCOMMENTEND = Match_Quote(m_cQuote, nPos, cStr, StringLiteralType::PLSQL);
+			m_nCOMMENTEND = Match_Quote(m_cQuote, nPos, str, StringLiteralType::PLSQL);
 			break;
 		case 3:
-			m_nCOMMENTEND = Match_QuoteStr(m_szQuote, 3, nPos, cStr, true);
+			m_nCOMMENTEND = Match_QuoteStr(m_szQuote, 3, nPos, str, true);
 			break;
 		}
 		// -1でEndColorが呼び出されるのは行を超えてきたからなので行内チェックは不要

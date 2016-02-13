@@ -31,9 +31,9 @@ public:
 	virtual LayoutColorInfo* GetStrategyColorInfo() const;
 	virtual void InitStrategyStatus() { m_nCOMMENTEND = 0; }
 	virtual void SetStrategyColorInfo(const LayoutColorInfo*);
-	virtual bool BeginColor(const StringRef& cStr, int nPos);
-	virtual bool Disp() const { return m_pTypeData->m_ColorInfoArr[COLORIDX_HEREDOC].m_bDisp; }
-	virtual bool EndColor(const StringRef& cStr, int nPos);
+	virtual bool BeginColor(const StringRef& str, int nPos);
+	virtual bool Disp() const { return m_pTypeData->m_colorInfoArr[COLORIDX_HEREDOC].m_bDisp; }
+	virtual bool EndColor(const StringRef& str, int nPos);
 private:
 	std::wstring m_id;
 	int m_nSize;

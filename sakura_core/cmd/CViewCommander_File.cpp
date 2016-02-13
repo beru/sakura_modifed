@@ -735,7 +735,7 @@ bool ViewCommander::Command_INSFILE(
 	Eol cEol;
 	int			nLineNum = 0;
 
-	DlgCancel*	pcDlgCancel = NULL;
+	DlgCancel*	pDlgCancel = NULL;
 	HWND		hwndCancel = NULL;
 	HWND		hwndProgress = NULL;
 	int			nOldPercent = -1;
@@ -782,8 +782,8 @@ bool ViewCommander::Command_INSFILE(
 
 		// ファイルサイズが65KBを越えたら進捗ダイアログ表示
 		if (0x10000 < cfl.GetFileSize()) {
-			pcDlgCancel = new DlgCancel;
-			if ((hwndCancel = pcDlgCancel->DoModeless(::GetModuleHandle(NULL), NULL, IDD_OPERATIONRUNNING))) {
+			pDlgCancel = new DlgCancel;
+			if ((hwndCancel = pDlgCancel->DoModeless(::GetModuleHandle(NULL), NULL, IDD_OPERATIONRUNNING))) {
 				hwndProgress = ::GetDlgItem(hwndCancel, IDC_PROGRESS);
 				Progress_SetRange(hwndProgress, 0, 101);
 				Progress_SetPos(hwndProgress, 0);
@@ -802,15 +802,15 @@ bool ViewCommander::Command_INSFILE(
 			Command_INSTEXT(false, pLine, LogicInt(nLineLen), true);
 
 			// 進捗ダイアログ有無
-			if (!pcDlgCancel) {
+			if (!pDlgCancel) {
 				continue;
 			}
 			// 処理中のユーザー操作を可能にする
-			if (!::BlockingHook(pcDlgCancel->GetHwnd())) {
+			if (!::BlockingHook(pDlgCancel->GetHwnd())) {
 				break;
 			}
 			// 中断ボタン押下チェック
-			if (pcDlgCancel->IsCanceled()) {
+			if (pDlgCancel->IsCanceled()) {
 				break;
 			}
 			if ((nLineNum & 0xFF) == 0) {
@@ -832,7 +832,7 @@ bool ViewCommander::Command_INSFILE(
 		bResult = false;
 	} // 例外処理終わり
 
-	delete pcDlgCancel;
+	delete pDlgCancel;
 
 	if (bBeforeTextSelected) {	// 挿入された部分を選択状態に
 		m_pCommanderView->GetSelectionInfo().SetSelectArea(

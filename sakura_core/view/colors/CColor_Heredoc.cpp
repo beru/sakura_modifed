@@ -60,9 +60,9 @@ LayoutColorInfo* Color_Heredoc::GetStrategyColorInfo() const
 	return info;
 }
 
-bool Color_Heredoc::BeginColor(const StringRef& cStr, int nPos)
+bool Color_Heredoc::BeginColor(const StringRef& str, int nPos)
 {
-	if (!cStr.IsValid()) return false;
+	if (!str.IsValid()) return false;
 
 	// ヒアドキュメント
 	// <<<HEREDOC_ID
@@ -70,14 +70,14 @@ bool Color_Heredoc::BeginColor(const StringRef& cStr, int nPos)
 	// HEREDOC_ID
 	if (1
 		&& m_pTypeData->m_nHeredocType == HereDocType::PHP
-		&& cStr.At(nPos) == '<' && nPos + 3 < cStr.GetLength()
-		&& wmemcmp(cStr.GetPtr() + nPos + 1, L"<<", 2) == 0
+		&& str.At(nPos) == '<' && nPos + 3 < str.GetLength()
+		&& wmemcmp(str.GetPtr() + nPos + 1, L"<<", 2) == 0
 	) {
 		// <<<[\t]*((['"][_A-Za-z0-9]+['"])|[_A-Za-z0-9]+)[\r\n]+
-		const int length = cStr.GetLength();
+		const int length = str.GetLength();
 		int nPosIdStart = nPos + 3;
 		for (; nPosIdStart<length; ++nPosIdStart) {
-			if (cStr.At(nPosIdStart) != L'\t' && cStr.At(nPosIdStart) != L' ') {
+			if (str.At(nPosIdStart) != L'\t' && str.At(nPosIdStart) != L' ') {
 				break;
 			}
 		}
@@ -85,13 +85,13 @@ bool Color_Heredoc::BeginColor(const StringRef& cStr, int nPos)
 		if (!(nPosIdStart < length)) {
 			return false;
 		}
-		if (cStr.At(nPosIdStart) == L'\'' || cStr.At(nPosIdStart) == L'"') {
-			quote = cStr.At(nPosIdStart);
+		if (str.At(nPosIdStart) == L'\'' || str.At(nPosIdStart) == L'"') {
+			quote = str.At(nPosIdStart);
 			++nPosIdStart;
 		}
 		int i = nPosIdStart;
 		for (; i<length; ++i) {
-			if (!(WCODE::IsAZ(cStr.At(i)) || WCODE::Is09(cStr.At(i)) || cStr.At(i) == L'_')) {
+			if (!(WCODE::IsAZ(str.At(i)) || WCODE::Is09(str.At(i)) || str.At(i) == L'_')) {
 				break;
 			}
 		}
@@ -100,7 +100,7 @@ bool Color_Heredoc::BeginColor(const StringRef& cStr, int nPos)
 		}
 		const int k = i;
 		if (quote != L'\0') {
-			if (i < length && cStr.At(i) == quote) {
+			if (i < length && str.At(i) == quote) {
 				++i;
 			}else {
 				return false;
@@ -109,11 +109,11 @@ bool Color_Heredoc::BeginColor(const StringRef& cStr, int nPos)
 		if (
 			i < length
 			&& WCODE::IsLineDelimiter(
-				cStr.At(i),
+				str.At(i),
 				GetDllShareData().m_common.m_edit.m_bEnableExtEol
 			)
 		) {
-			m_id = std::wstring(cStr.GetPtr() + nPosIdStart, k - nPosIdStart);
+			m_id = std::wstring(str.GetPtr() + nPosIdStart, k - nPosIdStart);
 			m_pszId = m_id.c_str();
 			m_nSize = m_id.size();
 			this->m_nCOMMENTEND = length;
@@ -123,24 +123,24 @@ bool Color_Heredoc::BeginColor(const StringRef& cStr, int nPos)
 	return false;
 }
 
-bool Color_Heredoc::EndColor(const StringRef& cStr, int nPos)
+bool Color_Heredoc::EndColor(const StringRef& str, int nPos)
 {
 	if (this->m_nCOMMENTEND == 0) {
 		if (1
 			&& m_pTypeData->m_nHeredocType == HereDocType::PHP
-			&& nPos == 0 && m_nSize <= cStr.GetLength()
-			&& wmemcmp(cStr.GetPtr(), m_pszId, m_nSize) == 0
+			&& nPos == 0 && m_nSize <= str.GetLength()
+			&& wmemcmp(str.GetPtr(), m_pszId, m_nSize) == 0
 		) {
-			if (m_nSize == cStr.GetLength()) {
+			if (m_nSize == str.GetLength()) {
 				this->m_nCOMMENTEND = m_nSize;
 				return false;
 			}else {
 				int i = m_nSize;
 				if (
-					i + 1 < cStr.GetLength()
-					&& cStr.At(i) == L';'
+					i + 1 < str.GetLength()
+					&& str.At(i) == L';'
 					&& WCODE::IsLineDelimiter(
-						cStr.At(i+1),
+						str.At(i+1),
 						GetDllShareData().m_common.m_edit.m_bEnableExtEol
 					)
 				) {
@@ -148,9 +148,9 @@ bool Color_Heredoc::EndColor(const StringRef& cStr, int nPos)
 					this->m_nCOMMENTEND = i;
 					return false;
 				}else if (
-					m_nSize < cStr.GetLength()
+					m_nSize < str.GetLength()
 					&& WCODE::IsLineDelimiter(
-						cStr.At(m_nSize),
+						str.At(m_nSize),
 						GetDllShareData().m_common.m_edit.m_bEnableExtEol
 					)
 				) {
@@ -159,9 +159,9 @@ bool Color_Heredoc::EndColor(const StringRef& cStr, int nPos)
 					return false;
 				}
 			}
-			this->m_nCOMMENTEND = cStr.GetLength();
+			this->m_nCOMMENTEND = str.GetLength();
 		}else {
-			this->m_nCOMMENTEND = cStr.GetLength();
+			this->m_nCOMMENTEND = str.GetLength();
 		}
 	}else if (nPos == this->m_nCOMMENTEND) {
 		return true;

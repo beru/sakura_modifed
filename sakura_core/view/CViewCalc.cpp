@@ -36,10 +36,10 @@ LogicInt ViewCalc::LineColumnToIndex(const DocLine* pDocLine, LayoutInt nColumn)
 	
 	@@@ 2002.09.28 YAZAKI Layoutが必要になりました。
 */
-LogicInt ViewCalc::LineColumnToIndex(const Layout* pcLayout, LayoutInt nColumn) const
+LogicInt ViewCalc::LineColumnToIndex(const Layout* pLayout, LayoutInt nColumn) const
 {
 	LogicInt i2 = LogicInt(0);
-	MemoryIterator it(pcLayout, GetTabSpace());
+	MemoryIterator it(pLayout, GetTabSpace());
 	while (!it.end()) {
 		it.scanNext();
 		if (it.getColumn() + it.getColumnDelta() > nColumn) {
@@ -59,13 +59,13 @@ LogicInt ViewCalc::LineColumnToIndex(const Layout* pcLayout, LayoutInt nColumn) 
   それ以外の場合はpnLineAllColLenに０をセットする
   @@@ 2002.09.28 YAZAKI Layoutが必要になりました。
 */
-LogicInt ViewCalc::LineColumnToIndex2(const Layout* pcLayout, LayoutInt nColumn, LayoutInt* pnLineAllColLen) const
+LogicInt ViewCalc::LineColumnToIndex2(const Layout* pLayout, LayoutInt nColumn, LayoutInt* pnLineAllColLen) const
 {
 	*pnLineAllColLen = LayoutInt(0);
 
 	LogicInt i2 = LogicInt(0);
 	LayoutInt nPosX2 = LayoutInt(0);
-	MemoryIterator it(pcLayout, GetTabSpace());
+	MemoryIterator it(pLayout, GetTabSpace());
 	while (!it.end()) {
 		it.scanNext();
 		if (it.getColumn() + it.getColumnDelta() > nColumn) {
@@ -74,7 +74,7 @@ LogicInt ViewCalc::LineColumnToIndex2(const Layout* pcLayout, LayoutInt nColumn,
 		it.addDelta();
 	}
 	i2 += it.getIndex();
-	if (i2 >= pcLayout->GetLengthWithEOL()) {
+	if (i2 >= pLayout->GetLengthWithEOL()) {
 		nPosX2 += it.getColumn();
 		*pnLineAllColLen = nPosX2;
 	}
@@ -87,11 +87,11 @@ LogicInt ViewCalc::LineColumnToIndex2(const Layout* pcLayout, LayoutInt nColumn,
 ||
 ||	@@@ 2002.09.28 YAZAKI Layoutが必要になりました。
 */
-LayoutInt ViewCalc::LineIndexToColumn(const Layout* pcLayout, LogicInt nIndex) const
+LayoutInt ViewCalc::LineIndexToColumn(const Layout* pLayout, LogicInt nIndex) const
 {
 	//	以下、iterator版
 	LayoutInt nPosX2 = LayoutInt(0);
-	MemoryIterator it(pcLayout, GetTabSpace());
+	MemoryIterator it(pLayout, GetTabSpace());
 	while (!it.end()) {
 		it.scanNext();
 		if (it.getIndex() + it.getIndexDelta() > nIndex) {

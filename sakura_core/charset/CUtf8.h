@@ -32,11 +32,11 @@ class Utf8 : public CodeBase {
 public:
 
 	// CodeBaseインターフェース
-	CodeConvertResult CodeToUnicode(const Memory& cSrc, NativeW* pDst) {	//!< 特定コード → UNICODE    変換
-		return UTF8ToUnicode(cSrc, pDst);
+	CodeConvertResult CodeToUnicode(const Memory& src, NativeW* pDst) {	//!< 特定コード → UNICODE    変換
+		return UTF8ToUnicode(src, pDst);
 	}
-	CodeConvertResult UnicodeToCode(const NativeW& cSrc, Memory* pDst) {	//!< UNICODE    → 特定コード 変換
-		return UnicodeToUTF8(cSrc, pDst);
+	CodeConvertResult UnicodeToCode(const NativeW& src, Memory* pDst) {	//!< UNICODE    → 特定コード 変換
+		return UnicodeToUTF8(src, pDst);
 	}
 	void GetBom(Memory* pMemBom);																			//!< BOMデータ取得
 	void GetEol(Memory* pMemEol, EolType eolType);

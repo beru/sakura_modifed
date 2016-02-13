@@ -252,7 +252,7 @@ void CommandLine::ParseCommandLine(LPCTSTR pszCmdLineSrc, bool bResponse)
 		nPos = 0;
 	}
 
-	CNativeT cmResponseFile = _T("");
+	CNativeT mResponseFile = _T("");
 	assert(lstrlen(pszCmdLineSrc) + 1 != 0);
 	std::vector<TCHAR> szCmdLineWork(lstrlen(pszCmdLineSrc) + 1);
 	LPTSTR pszCmdLineWork = &szCmdLineWork[0];
@@ -331,7 +331,7 @@ void CommandLine::ParseCommandLine(LPCTSTR pszCmdLineSrc, bool bResponse)
 			int nArgLen;
 			switch (CheckCommandLine(pszToken, &arg, &nArgLen)) {
 			case CMDLINEOPT_AT:
-				cmResponseFile.SetStringT(arg, nArgLen);
+				mResponseFile.SetStringT(arg, nArgLen);
 				break;
 			case CMDLINEOPT_X: // X
 				// 行桁指定を1開始にした
@@ -392,23 +392,23 @@ void CommandLine::ParseCommandLine(LPCTSTR pszCmdLineSrc, bool bResponse)
 				break;
 			case CMDLINEOPT_GKEY:	// GKEY
 				// 前後の""を取り除く
-				m_gi.cmGrepKey.SetStringT(arg,  lstrlen(arg));
-				m_gi.cmGrepKey.Replace(L"\"\"", L"\"");
+				m_gi.mGrepKey.SetStringT(arg,  lstrlen(arg));
+				m_gi.mGrepKey.Replace(L"\"\"", L"\"");
 				break;
 			case CMDLINEOPT_GREPR:	//	GREPR
 				//	前後の""を取り除く
-				m_gi.cmGrepRep.SetStringT( arg,  lstrlen( arg ) );
-				m_gi.cmGrepRep.Replace( L"\"\"", L"\"" );
+				m_gi.mGrepRep.SetStringT( arg,  lstrlen( arg ) );
+				m_gi.mGrepRep.Replace( L"\"\"", L"\"" );
 				m_gi.bGrepReplace = true;
 				break;
 			case CMDLINEOPT_GFILE:	// GFILE
 				// 前後の""を取り除く
-				m_gi.cmGrepFile.SetStringT(arg,  lstrlen(arg));
-				m_gi.cmGrepFile.Replace(_T("\"\""), _T("\""));
+				m_gi.mGrepFile.SetStringT(arg,  lstrlen(arg));
+				m_gi.mGrepFile.Replace(_T("\"\""), _T("\""));
 				break;
 			case CMDLINEOPT_GFOLDER:	// GFOLDER
-				m_gi.cmGrepFolder.SetString(arg,  lstrlen(arg));
-				m_gi.cmGrepFolder.Replace(_T("\"\""), _T("\""));
+				m_gi.mGrepFolder.SetString(arg,  lstrlen(arg));
+				m_gi.mGrepFolder.Replace(_T("\"\""), _T("\""));
 				break;
 			case CMDLINEOPT_GOPT:	// GOPT
 				for (; *arg!='\0' ; ++arg) {
@@ -499,8 +499,8 @@ void CommandLine::ParseCommandLine(LPCTSTR pszCmdLineSrc, bool bResponse)
 	}
 
 	// レスポンスファイル解析
-	if (cmResponseFile.GetStringLength() && bResponse) {
-		TextInputStream input(cmResponseFile.GetStringPtr());
+	if (mResponseFile.GetStringLength() && bResponse) {
+		TextInputStream input(mResponseFile.GetStringPtr());
 		if (!input.Good()) {
 			return;
 		}

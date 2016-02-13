@@ -27,19 +27,19 @@
 #include "CColor_RegexKeyword.h"
 
 
-bool Color_RegexKeyword::BeginColor(const StringRef& cStr, int nPos)
+bool Color_RegexKeyword::BeginColor(const StringRef& str, int nPos)
 {
-	if (!cStr.IsValid()) {
+	if (!str.IsValid()) {
 		return false;
 	}
 
 	int nMatchLen;
 	int nMatchColor;
 
-	const EditView* pcView = ColorStrategyPool::getInstance()->GetCurrentView();
+	const EditView* pView = ColorStrategyPool::getInstance()->GetCurrentView();
 
 	// 正規表現キーワード
-	if (pcView->m_pRegexKeyword->RegexIsKeyword(cStr, nPos, &nMatchLen, &nMatchColor)) {
+	if (pView->m_pRegexKeyword->RegexIsKeyword(str, nPos, &nMatchLen, &nMatchColor)) {
 		this->m_nCOMMENTEND = nPos + nMatchLen;  // キーワード文字列の終端をセットする
 		this->m_nCOMMENTMODE = ToColorIndexType_RegularExpression(nMatchColor);
 		return true;
@@ -48,16 +48,16 @@ bool Color_RegexKeyword::BeginColor(const StringRef& cStr, int nPos)
 }
 
 
-bool Color_RegexKeyword::EndColor(const StringRef& cStr, int nPos)
+bool Color_RegexKeyword::EndColor(const StringRef& str, int nPos)
 {
 	return (nPos == this->m_nCOMMENTEND);
 }
 
 void Color_RegexKeyword::OnStartScanLogic()
 {
-	EditView* pcView = ColorStrategyPool::getInstance()->GetCurrentView();
+	EditView* pView = ColorStrategyPool::getInstance()->GetCurrentView();
 	if (m_pTypeData->m_bUseRegexKeyword) {
-		pcView->m_pRegexKeyword->RegexKeyLineStart();
+		pView->m_pRegexKeyword->RegexKeyLineStart();
 	}
 }
 

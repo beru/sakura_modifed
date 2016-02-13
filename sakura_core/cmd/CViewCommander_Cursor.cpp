@@ -624,14 +624,14 @@ void ViewCommander::Command_GOLINETOP(
 		LogicInt  nPosX_Logic;
 
 		nPosY_Layout = ptCaretPos.y - 1;
-		const Layout*	pcLayout;
+		const Layout*	pLayout;
 		bool			bZenSpace = m_pCommanderView->m_pTypeData->m_bAutoIndent_ZENSPACE;
 		bool			bExtEol = GetDllShareData().m_common.m_edit.m_bEnableExtEol;
 		
 		LogicInt		nLineLen;
 		do {
 			++nPosY_Layout;
-			const wchar_t*	pLine = GetDocument()->m_layoutMgr.GetLineStr(nPosY_Layout, &nLineLen, &pcLayout);
+			const wchar_t*	pLine = GetDocument()->m_layoutMgr.GetLineStr(nPosY_Layout, &nLineLen, &pLayout);
 			if (!pLine) {
 				return;
 			}
@@ -655,7 +655,7 @@ void ViewCommander::Command_GOLINETOP(
 		if (nPosX_Logic == 0) nPosY_Layout = ptCaretPos.y;	// 物理行の移動なし
 		
 		// 指定された行のデータ内の位置に対応する桁の位置を調べる
-		LayoutInt nPosX_Layout = m_pCommanderView->LineIndexToColumn(pcLayout, nPosX_Logic);
+		LayoutInt nPosX_Layout = m_pCommanderView->LineIndexToColumn(pLayout, nPosX_Logic);
 		LayoutPoint ptPos(nPosX_Layout, nPosY_Layout);
 		if (caret.GetCaretLayoutPos() != ptPos) {
 			ptCaretPos = ptPos;
@@ -701,18 +701,18 @@ void ViewCommander::Command_GOLINEEND(
 	LayoutPoint nPosXY = caret.GetCaretLayoutPos();
 	if (nOption & 8) {
 		// 改行単位の行末。1行中の最終レイアウト行を探す
-		const Layout*	pcLayout = GetDocument()->m_layoutMgr.SearchLineByLayoutY(nPosXY.y);
-		const Layout*	pcLayoutNext = pcLayout->GetNextLayout();
-		while (pcLayout && pcLayoutNext && pcLayoutNext->GetLogicOffset() != 0) {
-			pcLayout = pcLayoutNext;
-			pcLayoutNext = pcLayoutNext->GetNextLayout();
+		const Layout*	pLayout = GetDocument()->m_layoutMgr.SearchLineByLayoutY(nPosXY.y);
+		const Layout*	pLayoutNext = pLayout->GetNextLayout();
+		while (pLayout && pLayoutNext && pLayoutNext->GetLogicOffset() != 0) {
+			pLayout = pLayoutNext;
+			pLayoutNext = pLayoutNext->GetNextLayout();
 			++nPosXY.y;
 		}
 	}
 	nPosXY.x = LayoutInt(0);
-	const Layout*	pcLayout = GetDocument()->m_layoutMgr.SearchLineByLayoutY(nPosXY.y);
-	if (pcLayout)
-		nPosXY.x = pcLayout->CalcLayoutWidth(GetDocument()->m_layoutMgr);
+	const Layout*	pLayout = GetDocument()->m_layoutMgr.SearchLineByLayoutY(nPosXY.y);
+	if (pLayout)
+		nPosXY.x = pLayout->CalcLayoutWidth(GetDocument()->m_layoutMgr);
 
 	// キャレット移動
 	caret.GetAdjustCursorPos(&nPosXY);

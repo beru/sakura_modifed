@@ -145,8 +145,8 @@ INT_PTR PropTypes::DoPropertySheet(int nPageNum)
 	// カスタム色を共有メモリから取得
 	memcpy_raw( m_dwCustColors, m_pShareData->m_dwCustColors, sizeof(m_dwCustColors) );
 	// 2005.11.30 Moca カスタム色の先頭にテキスト色を設定しておく
-	m_dwCustColors[0] = m_Types.m_ColorInfoArr[COLORIDX_TEXT].m_colorAttr.m_cTEXT;
-	m_dwCustColors[1] = m_Types.m_ColorInfoArr[COLORIDX_TEXT].m_colorAttr.m_cBACK;
+	m_dwCustColors[0] = m_Types.m_colorInfoArr[COLORIDX_TEXT].m_colorAttr.m_cTEXT;
+	m_dwCustColors[1] = m_Types.m_colorInfoArr[COLORIDX_TEXT].m_colorAttr.m_cBACK;
 
 	std::tstring sTabname[_countof(TypePropSheetInfoList)];
 	m_bChangeKeyWordSet = false;

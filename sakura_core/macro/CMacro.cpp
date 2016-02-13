@@ -535,17 +535,17 @@ void Macro::Save(HINSTANCE hInstance, TextOutputStream& out) const
 
 	@param pEditView	[in]	操作対象EditView
 	@param Index	[in] 下位16bit: 機能ID, 上位ワードはそのままMacro::HandleCommand()に渡す．
-	@param Argument [in] 引数
-	@param ArgSize	[in] 引数の数
+	@param arguments [in] 引数
+	@param argSize	[in] 引数の数
 	
 	@date 2007.07.08 genta Indexのコマンド番号を下位ワードに制限
 */
 bool Macro::HandleCommand(
-	EditView*			pcEditView,
+	EditView*			pEditView,
 	const EFunctionCode	Index,
-	const WCHAR*		Argument[],
-	const int			ArgLengths[],
-	const int			ArgSize
+	const WCHAR*		arguments[],
+	const int			argLengths[],
+	const int			argSize
 	)
 {
 	std::tstring EXEC_ERROR_TITLE_string = LS(STR_ERR_DLGMACRO02);
@@ -557,7 +557,7 @@ bool Macro::HandleCommand(
 	case F_IME_CHAR:	// 日本語入力
 	case F_CTRL_CODE:
 		// Jun. 16, 2002 genta
-		if (!Argument[0]) {
+		if (!arguments[0]) {
 			::MYMESSAGEBOX(
 				NULL,
 				MB_OK | MB_ICONSTOP | MB_TOPMOST,
@@ -594,7 +594,7 @@ bool Macro::HandleCommand(
 	case F_1PageDown:
 	case F_1PageUp_Sel:
 	case F_1PageDown_Sel:
-		pcEditView->GetCommander().HandleCommand(Index, true, (Argument[0] ? _wtoi(Argument[0]) : 0), 0, 0, 0);
+		pEditView->GetCommander().HandleCommand(Index, true, (arguments[0] ? _wtoi(arguments[0]) : 0), 0, 0, 0);
 		break;
 	case F_UP_BOX:
 	case F_DOWN_BOX:
@@ -619,17 +619,17 @@ bool Macro::HandleCommand(
 			// 1: true(マクロのデフォルト値)
 			// 2: false
 			// マクロのデフォルト値はtrue(1)だが、EditView側のデフォルトは共通設定(0)
-			int nBoxLock = wtoi_def(Argument[nOptions == 1 ? 0 : 1], 1);
+			int nBoxLock = wtoi_def(arguments[nOptions == 1 ? 0 : 1], 1);
 			if (nOptions == 1) {
-				pcEditView->GetCommander().HandleCommand( Index, true, nBoxLock, 0, 0, 0 );
+				pEditView->GetCommander().HandleCommand( Index, true, nBoxLock, 0, 0, 0 );
 			}else {
-				pcEditView->GetCommander().HandleCommand( Index, true, wtoi_def(Argument[0], 0), nBoxLock, 0, 0 );
+				pEditView->GetCommander().HandleCommand( Index, true, wtoi_def(arguments[0], 0), nBoxLock, 0, 0 );
 			}
 		}
 		break;
 	case F_CHGMOD_EOL:	// 入力改行コード指定。EolTypeの数値を指定。2003.06.23 Moca
 		// Jun. 16, 2002 genta
-		if (!Argument[0]) {
+		if (!arguments[0]) {
 			::MYMESSAGEBOX(
 				NULL,
 				MB_OK | MB_ICONSTOP | MB_TOPMOST,
@@ -641,7 +641,7 @@ bool Macro::HandleCommand(
 		{
 			// マクロ引数値をEOLタイプ値に変換する	// 2009.08.18 ryoji
 			EolType nEol;
-			switch (Argument[0] ? _wtoi(Argument[0]) : 0) {
+			switch (arguments[0] ? _wtoi(arguments[0]) : 0) {
 			case 1:		nEol = EolType::CRLF; break;
 //			case 2:		nEol = EOL_LFCR; break;
 			case 3:		nEol = EolType::LF; break;
@@ -652,13 +652,13 @@ bool Macro::HandleCommand(
 			default:	nEol = EolType::None; break;
 			}
 			if (nEol != EolType::None) {
-				pcEditView->GetCommander().HandleCommand(Index, true, (int)nEol, 0, 0, 0);
+				pEditView->GetCommander().HandleCommand(Index, true, (int)nEol, 0, 0, 0);
 			}
 		}
 		break;
 	case F_SET_QUOTESTRING:	// Jan. 29, 2005 genta 追加 テキスト引数1つを取るマクロはここに統合していこう．
 		{
-			if (!Argument[0]) {
+			if (!arguments[0]) {
 				::MYMESSAGEBOX(
 					NULL,
 					MB_OK | MB_ICONSTOP | MB_TOPMOST,
@@ -667,7 +667,7 @@ bool Macro::HandleCommand(
 				);
 				return false;
 			} {
-				pcEditView->GetCommander().HandleCommand(Index, true, (LPARAM)Argument[0], 0, 0, 0);	// 標準
+				pEditView->GetCommander().HandleCommand(Index, true, (LPARAM)arguments[0], 0, 0, 0);	// 標準
 			}
 		}
 		break;
@@ -675,7 +675,7 @@ bool Macro::HandleCommand(
 	case F_ADDTAIL_W:		// この操作はキーボード操作では存在しないので保存することができない？
 	case F_INSBOXTEXT:
 		// 一つ目の引数が文字列。
-		if (!Argument[0]) {
+		if (!arguments[0]) {
 			::MYMESSAGEBOX(
 				NULL,
 				MB_OK | MB_ICONSTOP | MB_TOPMOST,
@@ -685,20 +685,20 @@ bool Macro::HandleCommand(
 			return false;
 		}
 		{
-			int len = ArgLengths[0];
-			pcEditView->GetCommander().HandleCommand(Index, true, (LPARAM)Argument[0], len, 0, 0);	// 標準
+			int len = argLengths[0];
+			pEditView->GetCommander().HandleCommand(Index, true, (LPARAM)arguments[0], len, 0, 0);	// 標準
 		}
 		break;
 	// 一つ目、二つ目とも引数は数値
 	case F_CHG_CHARSET:
 		{
-			int		nCharSet = (!Argument[0] || Argument[0][0] == '\0') ? CODE_NONE : _wtoi(Argument[0]);
-			BOOL	bBOM = (!Argument[1]) ? FALSE : (_wtoi(Argument[1]) != 0);
-			pcEditView->GetCommander().HandleCommand(Index, true, (LPARAM)nCharSet, (LPARAM)bBOM, 0, 0);
+			int		nCharSet = (!arguments[0] || arguments[0][0] == '\0') ? CODE_NONE : _wtoi(arguments[0]);
+			BOOL	bBOM = (!arguments[1]) ? FALSE : (_wtoi(arguments[1]) != 0);
+			pEditView->GetCommander().HandleCommand(Index, true, (LPARAM)nCharSet, (LPARAM)bBOM, 0, 0);
 		}
 		break;
 	case F_JUMP:		// 指定行へジャンプ（ただしPL/SQLコンパイルエラー行へのジャンプは未対応）
-		// Argument[0]へジャンプ。オプションはArgument[1]に。
+		// arguments[0]へジャンプ。オプションはarguments[1]に。
 		//		******** 以下「行番号の単位」 ********
 		//		0x00	折り返し単位の行番号
 		//		0x01	改行単位の行番号
@@ -706,7 +706,7 @@ bool Macro::HandleCommand(
 		//		0x02	PL/SQLコンパイルエラー行を処理する
 		//		未定義	テキストの□行目をブロックの1行目とする
 		//		未定義	検出されたPL/SQLパッケージのブロックから選択
-		if (!Argument[0]) {
+		if (!arguments[0]) {
 			::MYMESSAGEBOX(
 				NULL,
 				MB_OK | MB_ICONSTOP | MB_TOPMOST,
@@ -716,16 +716,16 @@ bool Macro::HandleCommand(
 			return false;
 		}
 		{
-			pcEditView->m_pEditWnd->m_dlgJump.m_nLineNum = _wtoi(Argument[0]);	// ジャンプ先
-			LPARAM lFlag = Argument[1] ? _wtoi(Argument[1]) : 1; // デフォルト1
+			pEditView->m_pEditWnd->m_dlgJump.m_nLineNum = _wtoi(arguments[0]);	// ジャンプ先
+			LPARAM lFlag = arguments[1] ? _wtoi(arguments[1]) : 1; // デフォルト1
 			GetDllShareData().m_bLineNumIsCRLF_ForJump = ((lFlag & 0x01) != 0);
-			pcEditView->m_pEditWnd->m_dlgJump.m_bPLSQL = lFlag & 0x02 ? 1 : 0;
-			pcEditView->GetCommander().HandleCommand(Index, true, 0, 0, 0, 0);	// 標準
+			pEditView->m_pEditWnd->m_dlgJump.m_bPLSQL = lFlag & 0x02 ? 1 : 0;
+			pEditView->GetCommander().HandleCommand(Index, true, 0, 0, 0, 0);	// 標準
 		}
 		break;
 	// 一つ目の引数は文字列、二つ目の引数は数値
 	case F_BOOKMARK_PATTERN:	// 2002.02.08 hor
-		if (!Argument[0]) {
+		if (!arguments[0]) {
 			::MYMESSAGEBOX(
 				NULL,
 				MB_OK | MB_ICONSTOP | MB_TOPMOST,
@@ -737,8 +737,8 @@ bool Macro::HandleCommand(
 		// NO BREAK
 	case F_SEARCH_NEXT:
 	case F_SEARCH_PREV:
-		//	Argument[0] を検索。(省略時、元の検索文字列・オプションを使う)
-		//	Argument[1]:オプション (省略時、0のみなす)
+		//	arguments[0] を検索。(省略時、元の検索文字列・オプションを使う)
+		//	arguments[1]:オプション (省略時、0のみなす)
 		//		0x01	単語単位で探す
 		//		0x02	英大文字と小文字を区別する
 		//		0x04	正規表現
@@ -748,7 +748,7 @@ bool Macro::HandleCommand(
 		//		0x800	(マクロ専用)検索キーを履歴に登録しない
 		//		0x1000	(マクロ専用)検索オプションを元に戻す
 		{
-			LPARAM lFlag = Argument[1] ? _wtoi(Argument[1]) : 0;
+			LPARAM lFlag = arguments[1] ? _wtoi(arguments[1]) : 0;
 			SearchOption searchOption;
 			searchOption.bWordOnly			= ((lFlag & 0x01) != 0);
 			searchOption.bLoHiCase			= ((lFlag & 0x02) != 0);
@@ -762,31 +762,31 @@ bool Macro::HandleCommand(
 			int nBackupSearchKeySequence;
 			if (bBackupFlag) {
 				backupFlags = GetDllShareData().m_common.m_search;
-				backupLocalFlags = pcEditView->m_curSearchOption;
-				backupStr = pcEditView->m_strCurSearchKey;
-				backupKeyMark = pcEditView->m_bCurSrchKeyMark;
-				nBackupSearchKeySequence = pcEditView->m_nCurSearchKeySequence;
+				backupLocalFlags = pEditView->m_curSearchOption;
+				backupStr = pEditView->m_strCurSearchKey;
+				backupKeyMark = pEditView->m_bCurSrchKeyMark;
+				nBackupSearchKeySequence = pEditView->m_nCurSearchKeySequence;
 				bAddHistory = false;
 			}
-			const WCHAR* pszSearchKey = wtow_def(Argument[0], L"");
+			const WCHAR* pszSearchKey = wtow_def(arguments[0], L"");
 			int nLen = wcslen( pszSearchKey );
 			if (0 < nLen) {
 				// 正規表現
 				if (lFlag & 0x04
-					&& !CheckRegexpSyntax(Argument[0], NULL, true)
+					&& !CheckRegexpSyntax(arguments[0], NULL, true)
 				) {
 					break;
 				}
 
 				// 検索文字列
 				if (nLen < _MAX_PATH && bAddHistory) {
-					SearchKeywordManager().AddToSearchKeyArr(Argument[0]);
+					SearchKeywordManager().AddToSearchKeyArr(arguments[0]);
 					GetDllShareData().m_common.m_search.m_searchOption = searchOption;
 				}
-				pcEditView->m_strCurSearchKey = Argument[0];
-				pcEditView->m_curSearchOption = searchOption;
-				pcEditView->m_bCurSearchUpdate = true;
-				pcEditView->m_nCurSearchKeySequence = GetDllShareData().m_common.m_search.m_nSearchKeySequence;
+				pEditView->m_strCurSearchKey = arguments[0];
+				pEditView->m_curSearchOption = searchOption;
+				pEditView->m_bCurSearchUpdate = true;
+				pEditView->m_nCurSearchKeySequence = GetDllShareData().m_common.m_search.m_nSearchKeySequence;
 			}
 			// 設定値バックアップ
 			// マクロパラメータ→設定値変換
@@ -795,25 +795,25 @@ bool Macro::HandleCommand(
 			GetDllShareData().m_common.m_search.m_bSearchAll			= lFlag & 0x20 ? 1 : 0;
 
 			// コマンド発行
-			pcEditView->GetCommander().HandleCommand(Index, true, 0, 0, 0, 0);
+			pEditView->GetCommander().HandleCommand(Index, true, 0, 0, 0, 0);
 			if (bBackupFlag) {
 				GetDllShareData().m_common.m_search = backupFlags;
-				pcEditView->m_curSearchOption = backupLocalFlags;
-				pcEditView->m_strCurSearchKey = backupStr;
-				pcEditView->m_bCurSearchUpdate = true;
-				pcEditView->m_nCurSearchKeySequence = GetDllShareData().m_common.m_search.m_nSearchKeySequence;
-				pcEditView->ChangeCurRegexp( backupKeyMark );
-				pcEditView->m_bCurSrchKeyMark = backupKeyMark;
+				pEditView->m_curSearchOption = backupLocalFlags;
+				pEditView->m_strCurSearchKey = backupStr;
+				pEditView->m_bCurSearchUpdate = true;
+				pEditView->m_nCurSearchKeySequence = GetDllShareData().m_common.m_search.m_nSearchKeySequence;
+				pEditView->ChangeCurRegexp( backupKeyMark );
+				pEditView->m_bCurSrchKeyMark = backupKeyMark;
 				if (!backupKeyMark) {
-					pcEditView->Redraw();
+					pEditView->Redraw();
 				}
-				pcEditView->m_nCurSearchKeySequence = nBackupSearchKeySequence;
+				pEditView->m_nCurSearchKeySequence = nBackupSearchKeySequence;
 			}
 		}
 		break;
 	case F_DIFF:
-		// Argument[0]とDiff差分表示。オプションはArgument[1]に。
-		// Argument[1]:
+		// arguments[0]とDiff差分表示。オプションはarguments[1]に。
+		// arguments[1]:
 		//		次の数値の和。
 		//		0x0001 -i ignore-case         大文字小文字同一視
 		//		0x0002 -w ignore-all-space    空白無視
@@ -825,14 +825,14 @@ bool Macro::HandleCommand(
 		// NO BREAK
 
 	case F_EXECMD:
-		// Argument[0]を実行。オプションはArgument[1]に。
-		// Argument[1]:
+		// arguments[0]を実行。オプションはarguments[1]に。
+		// arguments[1]:
 		//		次の数値の和。
 		//		0x01	標準出力を得る
 		//		0x02	標準出力をキャレット位置に	// 2007.01.02 maru 引数の拡張
 		//		0x04	編集中ファイルを標準入力へ	// 2007.01.02 maru 引数の拡張
-		// Argument[2]:カレントディレクトリ
-		if (!Argument[0]) {
+		// arguments[2]:カレントディレクトリ
+		if (!arguments[0]) {
 			::MYMESSAGEBOX(
 				NULL,
 				MB_OK | MB_ICONSTOP | MB_TOPMOST,
@@ -842,19 +842,19 @@ bool Macro::HandleCommand(
 			return false;
 		}
 		{
-			int nOpt = wtoi_def(Argument[1], 0);
-			const wchar_t* pDir = wtow_def(Argument[2], NULL);
-			pcEditView->GetCommander().HandleCommand(Index, true, (LPARAM)Argument[0], nOpt, (LPARAM)pDir, 0);
+			int nOpt = wtoi_def(arguments[1], 0);
+			const wchar_t* pDir = wtow_def(arguments[2], NULL);
+			pEditView->GetCommander().HandleCommand(Index, true, (LPARAM)arguments[0], nOpt, (LPARAM)pDir, 0);
 		}
 		break;
 
 	case F_TRACEOUT:		// 2006.05.01 マクロ用アウトプットウィンドウに出力
-		// Argument[0]を出力。オプションはArgument[1]に。
-		// Argument[1]:
+		// arguments[0]を出力。オプションはarguments[1]に。
+		// arguments[1]:
 		//		次の数値の和。
 		//		0x01	ExpandParameterによる文字列展開を行う
 		//		0x02	テキスト末尾に改行コードを付加しない
-		if (!Argument[0]) {
+		if (!arguments[0]) {
 			::MYMESSAGEBOX(
 				NULL,
 				MB_OK | MB_ICONSTOP | MB_TOPMOST,
@@ -864,34 +864,34 @@ bool Macro::HandleCommand(
 			return false;
 		}
 		{
-			pcEditView->GetCommander().HandleCommand(Index, true, (LPARAM)Argument[0], ArgLengths[0], (LPARAM)(Argument[1] ? _wtoi(Argument[1]) : 0), 0);
+			pEditView->GetCommander().HandleCommand(Index, true, (LPARAM)arguments[0], argLengths[0], (LPARAM)(arguments[1] ? _wtoi(arguments[1]) : 0), 0);
 		}
 		break;
 
 	// はじめの引数は文字列。２つ目と３つ目は数値
 	case F_PUTFILE:		// 2006.12.10 作業中ファイルの一時出力
-		// Argument[0]に出力。Argument[1]に文字コード。オプションはArgument[2]に。
-		// Argument[2]:
+		// arguments[0]に出力。arguments[1]に文字コード。オプションはarguments[2]に。
+		// arguments[2]:
 		//		次の値の和
 		//		0x01	選択範囲を出力（非選択状態なら空ファイルを生成）
 		// no break
 
 	case F_INSFILE:		// 2006.12.10 キャレット位置にファイル挿入
-		// Argument[0]に出力。Argument[1]に文字コード。オプションはArgument[2]に。
-		// Argument[2]:
+		// arguments[0]に出力。arguments[1]に文字コード。オプションはarguments[2]に。
+		// arguments[2]:
 		//		現在は特になし
-		if (!Argument[0]) {
+		if (!arguments[0]) {
 			::MYMESSAGEBOX(NULL, MB_OK | MB_ICONSTOP | MB_TOPMOST, EXEC_ERROR_TITLE,
 				LS(STR_ERR_DLGMACRO08));
 			return false;
 		}
 		{
-			pcEditView->GetCommander().HandleCommand(
+			pEditView->GetCommander().HandleCommand(
 				Index,
 				true,
-				(LPARAM)Argument[0], 
-				(LPARAM)(Argument[1] ? _wtoi(Argument[1]) : 0),
-				(LPARAM)(Argument[2] ? _wtoi(Argument[2]) : 0),
+				(LPARAM)arguments[0], 
+				(LPARAM)(arguments[1] ? _wtoi(arguments[1]) : 0),
+				(LPARAM)(arguments[2] ? _wtoi(arguments[2]) : 0),
 				0
 			);
 		}
@@ -900,8 +900,8 @@ bool Macro::HandleCommand(
 	// はじめの2つの引数は文字列。3つ目は数値
 	case F_REPLACE:
 	case F_REPLACE_ALL:
-		// Argument[0]を、Argument[1]に置換。オプションはArgument[2]に（入れる予定）
-		// Argument[2]:
+		// arguments[0]を、arguments[1]に置換。オプションはarguments[2]に（入れる予定）
+		// arguments[2]:
 		//		次の数値の和。
 		//		0x001	単語単位で探す
 		//		0x002	英大文字と小文字を区別する
@@ -922,19 +922,19 @@ bool Macro::HandleCommand(
 		//		0x400	「すべて置換」は置換の繰返し（ON:連続置換, OFF:一括置換）
 		//		0x800	(マクロ専用)検索キーを履歴に登録しない
 		//		0x1000	(マクロ専用)検索オプションを元に戻す
-		if (Argument[0] == NULL || Argument[0][0] == L'\0') {
+		if (arguments[0] == NULL || arguments[0][0] == L'\0') {
 			::MYMESSAGEBOX(NULL, MB_OK | MB_ICONSTOP | MB_TOPMOST, EXEC_ERROR_TITLE,
 				LS(STR_ERR_DLGMACRO09));
 			return false;
 		}
-		if (!Argument[1]) {
+		if (!arguments[1]) {
 			::MYMESSAGEBOX(NULL, MB_OK | MB_ICONSTOP | MB_TOPMOST, EXEC_ERROR_TITLE,
 				LS(STR_ERR_DLGMACRO10));
 			return false;
 		}
 		{
-			DlgReplace& cDlgReplace = pcEditView->m_pEditWnd->m_dlgReplace;
-			LPARAM lFlag = Argument[2] ? _wtoi(Argument[2]) : 0;
+			DlgReplace& dlgReplace = pEditView->m_pEditWnd->m_dlgReplace;
+			LPARAM lFlag = arguments[2] ? _wtoi(arguments[2]) : 0;
 			SearchOption searchOption;
 			searchOption.bWordOnly			= ((lFlag & 0x01) != 0);
 			searchOption.bLoHiCase			= ((lFlag & 0x02) != 0);
@@ -949,77 +949,77 @@ bool Macro::HandleCommand(
 			bool backupKeyMark;
 			if (bBackupFlag) {
 				backupFlags = GetDllShareData().m_common.m_search;
-				backupLocalFlags = pcEditView->m_curSearchOption;
-				backupStr = pcEditView->m_strCurSearchKey;
-				backupStrRep = cDlgReplace.m_strText2;
-				backupKeyMark = pcEditView->m_bCurSrchKeyMark;
-				nBackupSearchKeySequence = pcEditView->m_nCurSearchKeySequence;
+				backupLocalFlags = pEditView->m_curSearchOption;
+				backupStr = pEditView->m_strCurSearchKey;
+				backupStrRep = dlgReplace.m_strText2;
+				backupKeyMark = pEditView->m_bCurSrchKeyMark;
+				nBackupSearchKeySequence = pEditView->m_nCurSearchKeySequence;
 				bAddHistory = false;
 			}
 			// 正規表現
 			if (lFlag & 0x04
-				&& !CheckRegexpSyntax(Argument[0], NULL, true)
+				&& !CheckRegexpSyntax(arguments[0], NULL, true)
 			) {
 				break;
 			}
 
 			// 検索文字列
-			if (wcslen(Argument[0]) < _MAX_PATH && bAddHistory) {
-				SearchKeywordManager().AddToSearchKeyArr(Argument[0]);
+			if (wcslen(arguments[0]) < _MAX_PATH && bAddHistory) {
+				SearchKeywordManager().AddToSearchKeyArr(arguments[0]);
 				GetDllShareData().m_common.m_search.m_searchOption = searchOption;
 			}
-			pcEditView->m_strCurSearchKey = Argument[0];
-			pcEditView->m_curSearchOption = searchOption;
-			pcEditView->m_bCurSearchUpdate = true;
-			pcEditView->m_nCurSearchKeySequence = GetDllShareData().m_common.m_search.m_nSearchKeySequence;
+			pEditView->m_strCurSearchKey = arguments[0];
+			pEditView->m_curSearchOption = searchOption;
+			pEditView->m_bCurSearchUpdate = true;
+			pEditView->m_nCurSearchKeySequence = GetDllShareData().m_common.m_search.m_nSearchKeySequence;
 
 			// 置換後文字列
-			if (wcslen(Argument[1]) < _MAX_PATH && bAddHistory) {
-				SearchKeywordManager().AddToReplaceKeyArr(Argument[1]);
+			if (wcslen(arguments[1]) < _MAX_PATH && bAddHistory) {
+				SearchKeywordManager().AddToReplaceKeyArr(arguments[1]);
 			}
-			cDlgReplace.m_strText2 = Argument[1];
+			dlgReplace.m_strText2 = arguments[1];
 
 			GetDllShareData().m_common.m_search.m_bNOTIFYNOTFOUND	= lFlag & 0x08 ? 1 : 0;
 			GetDllShareData().m_common.m_search.m_bAutoCloseDlgFind	= lFlag & 0x10 ? 1 : 0;
 			GetDllShareData().m_common.m_search.m_bSearchAll			= lFlag & 0x20 ? 1 : 0;
-			cDlgReplace.m_bPaste			= lFlag & 0x40 ? 1 : 0;	// CShareDataに入れなくていいの？
-			cDlgReplace.m_bConsecutiveAll = lFlag & 0x0400 ? 1 : 0;	// 2007.01.16 ryoji
+			dlgReplace.m_bPaste			= lFlag & 0x40 ? 1 : 0;	// CShareDataに入れなくていいの？
+			dlgReplace.m_bConsecutiveAll = lFlag & 0x0400 ? 1 : 0;	// 2007.01.16 ryoji
 			if (LOWORD(Index) == F_REPLACE) {	// 2007.07.08 genta コマンドは下位ワード
 				// 置換する時は選べない
-				cDlgReplace.m_bSelectedArea = 0;
+				dlgReplace.m_bSelectedArea = 0;
 			}else if (LOWORD(Index) == F_REPLACE_ALL) {	// 2007.07.08 genta コマンドは下位ワード
 				// 全置換の時は選べる？
-				cDlgReplace.m_bSelectedArea	= lFlag & 0x80 ? 1 : 0;
+				dlgReplace.m_bSelectedArea	= lFlag & 0x80 ? 1 : 0;
 			}
-			cDlgReplace.m_nReplaceTarget	= (lFlag >> 8) & 0x03;	// 8bitシフト（0x100で割り算）	// 2007.01.16 ryoji 下位 2bitだけ取り出す
+			dlgReplace.m_nReplaceTarget	= (lFlag >> 8) & 0x03;	// 8bitシフト（0x100で割り算）	// 2007.01.16 ryoji 下位 2bitだけ取り出す
 			if (bAddHistory) {
-				GetDllShareData().m_common.m_search.m_bConsecutiveAll = cDlgReplace.m_bConsecutiveAll;
-				GetDllShareData().m_common.m_search.m_bSelectedArea = cDlgReplace.m_bSelectedArea;
+				GetDllShareData().m_common.m_search.m_bConsecutiveAll = dlgReplace.m_bConsecutiveAll;
+				GetDllShareData().m_common.m_search.m_bSelectedArea = dlgReplace.m_bSelectedArea;
 			}
 			// コマンド発行
-			pcEditView->GetCommander().HandleCommand(Index, true, 0, 0, 0, 0);
+			pEditView->GetCommander().HandleCommand(Index, true, 0, 0, 0, 0);
 			if (bBackupFlag) {
 				GetDllShareData().m_common.m_search = backupFlags;
-				pcEditView->m_curSearchOption = backupLocalFlags;
-				pcEditView->m_strCurSearchKey = backupStr;
-				pcEditView->m_bCurSearchUpdate = true;
-				cDlgReplace.m_strText2 = backupStrRep;
-				pcEditView->m_nCurSearchKeySequence = GetDllShareData().m_common.m_search.m_nSearchKeySequence;
-				pcEditView->ChangeCurRegexp( backupKeyMark );
-				pcEditView->m_bCurSrchKeyMark = backupKeyMark;
+				pEditView->m_curSearchOption = backupLocalFlags;
+				pEditView->m_strCurSearchKey = backupStr;
+				pEditView->m_bCurSearchUpdate = true;
+				dlgReplace.m_strText2 = backupStrRep;
+				pEditView->m_nCurSearchKeySequence = GetDllShareData().m_common.m_search.m_nSearchKeySequence;
+				pEditView->ChangeCurRegexp( backupKeyMark );
+				pEditView->m_bCurSrchKeyMark = backupKeyMark;
 				if (!backupKeyMark) {
-					pcEditView->Redraw();
+					pEditView->Redraw();
 				}
-				pcEditView->m_nCurSearchKeySequence = nBackupSearchKeySequence;
+				pEditView->m_nCurSearchKeySequence = nBackupSearchKeySequence;
 			}
 		}
 		break;
 	case F_GREP_REPLACE:
 	case F_GREP:
-		// Argument[0]	検索文字列
-		// Argument[1]	検索対象にするファイル名
-		// Argument[2]	検索対象にするフォルダ名
-		// Argument[3]:
+		// arguments[0]	検索文字列
+		// arguments[1]	検索対象にするファイル名
+		// arguments[2]	検索対象にするフォルダ名
+		// arguments[3]:
 		//		次の数値の和。
 		//		0x01	サブフォルダからも検索する
 		//		0x02	この編集中のテキストから検索する（未実装）
@@ -1044,7 +1044,7 @@ bool Macro::HandleCommand(
 		//		0x040000	ベースフォルダ表示
 		//		0x080000	フォルダ毎に表示
 		{
-			if (Argument[0] == NULL) {
+			if (arguments[0] == NULL) {
 				::MYMESSAGEBOX( NULL, MB_OK | MB_ICONSTOP | MB_TOPMOST, EXEC_ERROR_TITLE,
 					LS(STR_ERR_DLGMACRO11));
 				return false;
@@ -1052,24 +1052,24 @@ bool Macro::HandleCommand(
 			int ArgIndex = 0;
 			bool bGrepReplace = LOWORD(Index) == F_GREP_REPLACE;
 			if (bGrepReplace) {
-				if (ArgLengths[0] == 0) {
+				if (argLengths[0] == 0) {
 					::MYMESSAGEBOX( NULL, MB_OK | MB_ICONSTOP | MB_TOPMOST, EXEC_ERROR_TITLE,
 						LS(STR_ERR_DLGMACRO11));
 					return false;
 				}
 				ArgIndex = 1;
-				if (Argument[1] == NULL) {
+				if (arguments[1] == NULL) {
 					::MYMESSAGEBOX( NULL, MB_OK | MB_ICONSTOP | MB_TOPMOST, EXEC_ERROR_TITLE,
 						LS(STR_ERR_DLGMACRO17));
 					return false;
 				}
 			}
-			if (Argument[ArgIndex+1] == NULL) {
+			if (arguments[ArgIndex+1] == NULL) {
 				::MYMESSAGEBOX( NULL, MB_OK | MB_ICONSTOP | MB_TOPMOST, EXEC_ERROR_TITLE,
 					LS(STR_ERR_DLGMACRO12));
 				return false;
 			}
-			if (Argument[ArgIndex+2] == NULL) {
+			if (arguments[ArgIndex+2] == NULL) {
 				::MYMESSAGEBOX( NULL, MB_OK | MB_ICONSTOP | MB_TOPMOST, EXEC_ERROR_TITLE,
 					LS(STR_ERR_DLGMACRO13));
 				return false;
@@ -1077,15 +1077,15 @@ bool Macro::HandleCommand(
 			//	常に外部ウィンドウに。
 			// ======= Grepの実行 =============
 			// Grep結果ウィンドウの表示
-			NativeW cmWork1;	cmWork1.SetString( Argument[0] );	cmWork1.Replace( L"\"", L"\"\"" );	//	検索文字列
+			NativeW cmWork1;	cmWork1.SetString( arguments[0] );	cmWork1.Replace( L"\"", L"\"\"" );	//	検索文字列
 			NativeW cmWork4;
 			if (bGrepReplace) {
-				cmWork4.SetString( Argument[1] );	cmWork4.Replace( L"\"", L"\"\"" );	//	置換後
+				cmWork4.SetString( arguments[1] );	cmWork4.Replace( L"\"", L"\"\"" );	//	置換後
 			}
-			CNativeT cmWork2;	cmWork2.SetStringW( Argument[ArgIndex+1] );	cmWork2.Replace( _T("\""), _T("\"\"") );	//	ファイル名
-			CNativeT cmWork3;	cmWork3.SetStringW( Argument[ArgIndex+2] );	cmWork3.Replace( _T("\""), _T("\"\"") );	//	フォルダ名
+			CNativeT cmWork2;	cmWork2.SetStringW( arguments[ArgIndex+1] );	cmWork2.Replace( _T("\""), _T("\"\"") );	//	ファイル名
+			CNativeT cmWork3;	cmWork3.SetStringW( arguments[ArgIndex+2] );	cmWork3.Replace( _T("\""), _T("\"\"") );	//	フォルダ名
 
-			LPARAM lFlag = wtoi_def(Argument[ArgIndex+3], 5);
+			LPARAM lFlag = wtoi_def(arguments[ArgIndex+3], 5);
 
 			// 2002/09/21 Moca 文字コードセット
 			ECodeType	nCharSet;
@@ -1099,8 +1099,8 @@ bool Macro::HandleCommand(
 					nCharSet = (ECodeType)nCode;
 				}
 				// 2013.06.11 5番目の引き数を文字コードにする
-				if (ArgIndex + 5 <= ArgSize) {
-					nCharSet = (ECodeType)_wtoi(Argument[ArgIndex + 4]);
+				if (ArgIndex + 5 <= argSize) {
+					nCharSet = (ECodeType)_wtoi(arguments[ArgIndex + 4]);
 				}
 			}
 
@@ -1152,7 +1152,7 @@ bool Macro::HandleCommand(
 			sLoadInfo.bViewMode = false;
 			ControlTray::OpenNewEditor(
 				G_AppInstance(),
-				pcEditView->GetHwnd(),
+				pEditView->GetHwnd(),
 				sLoadInfo,
 				cmdLine.GetStringPtr()
 			);
@@ -1161,23 +1161,23 @@ bool Macro::HandleCommand(
 		}
 		break;
 	case F_FILEOPEN2:
-		// Argument[0]を開く。
-		if (!Argument[0]) {
+		// arguments[0]を開く。
+		if (!arguments[0]) {
 			::MYMESSAGEBOX(NULL, MB_OK | MB_ICONSTOP | MB_TOPMOST, EXEC_ERROR_TITLE,
 				LS(STR_ERR_DLGMACRO14));
 			return false;
 		}
 		{
-			int  nCharCode = wtoi_def(Argument[1], CODE_AUTODETECT);
-			BOOL nViewMode = wtoi_def(Argument[2], FALSE);
-			const WCHAR* pDefFileName = wtow_def(Argument[3], L"");
-			pcEditView->GetCommander().HandleCommand(Index, true, (LPARAM)Argument[0], (LPARAM)nCharCode, (LPARAM)nViewMode, (LPARAM)pDefFileName);
+			int  nCharCode = wtoi_def(arguments[1], CODE_AUTODETECT);
+			BOOL nViewMode = wtoi_def(arguments[2], FALSE);
+			const WCHAR* pDefFileName = wtow_def(arguments[3], L"");
+			pEditView->GetCommander().HandleCommand(Index, true, (LPARAM)arguments[0], (LPARAM)nCharCode, (LPARAM)nViewMode, (LPARAM)pDefFileName);
 		}
 		break;
 	case F_FILESAVEAS_DIALOG:
 	case F_FILESAVEAS:
-		// Argument[0]を別名で保存。
-		if (LOWORD(Index) == F_FILESAVEAS && (!Argument[0] ||  L'\0' == Argument[0][0])) {
+		// arguments[0]を別名で保存。
+		if (LOWORD(Index) == F_FILESAVEAS && (!arguments[0] ||  L'\0' == arguments[0][0])) {
 			// F_FILESAVEAS_DIALOGの場合は空文字列を許容
 			::MYMESSAGEBOX(NULL, MB_OK | MB_ICONSTOP | MB_TOPMOST, EXEC_ERROR_TITLE,
 				LS(STR_ERR_DLGMACRO15));
@@ -1187,19 +1187,19 @@ bool Macro::HandleCommand(
 			// 文字コードセット
 			// Sep. 11, 2004 genta 文字コード設定の範囲チェック
 			ECodeType nCharCode = CODE_NONE;	// デフォルト値
-			if (Argument[1]) {
-				nCharCode = (ECodeType)_wtoi(Argument[1]);
+			if (arguments[1]) {
+				nCharCode = (ECodeType)_wtoi(arguments[1]);
 			}
-			if (LOWORD(Index) == F_FILESAVEAS && IsValidCodeOrCPType(nCharCode) && nCharCode != pcEditView->m_pEditDoc->GetDocumentEncoding()) {
+			if (LOWORD(Index) == F_FILESAVEAS && IsValidCodeOrCPType(nCharCode) && nCharCode != pEditView->m_pEditDoc->GetDocumentEncoding()) {
 				// From Here Jul. 26, 2003 ryoji BOM状態を初期化
-				pcEditView->m_pEditDoc->SetDocumentEncoding(nCharCode, CodeTypeName(pcEditView->m_pEditDoc->GetDocumentEncoding()).IsBomDefOn());
+				pEditView->m_pEditDoc->SetDocumentEncoding(nCharCode, CodeTypeName(pEditView->m_pEditDoc->GetDocumentEncoding()).IsBomDefOn());
 				// To Here Jul. 26, 2003 ryoji BOM状態を初期化
 			}
 
 			// 改行コード
 			int nSaveLineCode = 0;	// デフォルト値	// Sep. 11, 2004 genta 初期値を「変更しない」に
-			if (Argument[2]) {
-				nSaveLineCode = _wtoi(Argument[2]);
+			if (arguments[2]) {
+				nSaveLineCode = _wtoi(arguments[2]);
 			}
 			EolType eEol;
 			switch (nSaveLineCode) {
@@ -1210,14 +1210,14 @@ bool Macro::HandleCommand(
 			default:	eEol = EolType::None;	break;
 			}
 			
-			pcEditView->GetCommander().HandleCommand(Index, true, (LPARAM)Argument[0], (LPARAM)nCharCode, (LPARAM)eEol, 0);
+			pEditView->GetCommander().HandleCommand(Index, true, (LPARAM)arguments[0], (LPARAM)nCharCode, (LPARAM)eEol, 0);
 		}
 		break;
 	// 2つの引数が文字列
 	// Jul. 5, 2002 genta
 	case F_EXTHTMLHELP:
 	case F_EXECEXTMACRO:				// 2009.06.14 syat
-		pcEditView->GetCommander().HandleCommand(Index, true, (LPARAM)Argument[0], (LPARAM)Argument[1], 0, 0);
+		pEditView->GetCommander().HandleCommand(Index, true, (LPARAM)arguments[0], (LPARAM)arguments[1], 0, 0);
 		break;
 	// From Here Dec. 4, 2002 genta
 	case F_FILE_REOPEN				: // 開き直す
@@ -1230,31 +1230,31 @@ bool Macro::HandleCommand(
 	case F_FILE_REOPEN_UTF7			: // UTF-7で開き直す
 		{
 			int noconfirm = 0;
-			if (Argument[0]) {
-				noconfirm = (_wtoi(Argument[0]) != 0);
+			if (arguments[0]) {
+				noconfirm = (_wtoi(arguments[0]) != 0);
 			}
-			pcEditView->GetCommander().HandleCommand(Index, true, noconfirm, 0, 0, 0);
+			pEditView->GetCommander().HandleCommand(Index, true, noconfirm, 0, 0, 0);
 		}
 		break;
 	// To Here Dec. 4, 2002 genta
 	case F_TOPMOST:
 		{
 			int lparam1;
-			if (Argument[0]) {
-				lparam1 = _wtoi(Argument[0]);
-				pcEditView->GetCommander().HandleCommand(Index, true, lparam1, 0, 0, 0);
+			if (arguments[0]) {
+				lparam1 = _wtoi(arguments[0]);
+				pEditView->GetCommander().HandleCommand(Index, true, lparam1, 0, 0, 0);
 			}
 		}
 		break;	// Jan. 29, 2005 genta 抜けていた
 	case F_TAGJUMP_KEYWORD:	// @@ 2005.03.31 MIK
 		{
 			// 引数はNULLでもOK
-			pcEditView->GetCommander().HandleCommand(Index, true, (LPARAM)Argument[0], 0, 0, 0);
+			pEditView->GetCommander().HandleCommand(Index, true, (LPARAM)arguments[0], 0, 0, 0);
 		}
 		break;
 	case F_NEXTWINDOW:
 	case F_PREVWINDOW:
-		pcEditView->GetDocument()->HandleCommand(Index);	// 2009.04.11 ryoji F_NEXTWINDOW/F_PREVWINDOWが動作しなかったのを修正
+		pEditView->GetDocument()->HandleCommand(Index);	// 2009.04.11 ryoji F_NEXTWINDOW/F_PREVWINDOWが動作しなかったのを修正
 		break;
 	case F_MESSAGEBOX:	// メッセージボックスの表示
 	case F_ERRORMSG:	// メッセージボックス（エラー）の表示
@@ -1265,28 +1265,28 @@ bool Macro::HandleCommand(
 		{
 			VARIANT vArg[2];			// HandleFunctionに渡す引数
 			VARIANT vResult;			// HandleFunctionから返る値
-			if (!Argument[0]) {
+			if (!arguments[0]) {
 				break;
 			}
-			SysString S(Argument[0], wcslen(Argument[0]));
+			SysString S(arguments[0], wcslen(arguments[0]));
 			Wrap(&vArg[0])->Receive(S);
 			int nArgSize = 1;
 			// 2つ目の引数が数値。
 			if (F_MESSAGEBOX == LOWORD(Index)) {
 				vArg[1].vt = VT_I4;
-				vArg[1].intVal = (Argument[1] ? _wtoi(Argument[1]) : 0);
+				vArg[1].intVal = (arguments[1] ? _wtoi(arguments[1]) : 0);
 				nArgSize = 2;
 			}
-			return HandleFunction(pcEditView, Index, vArg, nArgSize, vResult);
+			return HandleFunction(pEditView, Index, vArg, nArgSize, vResult);
 		}
 	case F_MOVECURSORLAYOUT:
 	case F_MOVECURSOR:
 		{
-			if (Argument[0] && Argument[1] && Argument[2]) {
-				int lparam1 = _wtoi(Argument[0]) - 1;
-				int lparam2 = _wtoi(Argument[1]) - 1;
-				int lparam3 = _wtoi(Argument[2]);
-				pcEditView->GetCommander().HandleCommand(Index, true, lparam1, lparam2, lparam3, 0);
+			if (arguments[0] && arguments[1] && arguments[2]) {
+				int lparam1 = _wtoi(arguments[0]) - 1;
+				int lparam2 = _wtoi(arguments[1]) - 1;
+				int lparam3 = _wtoi(arguments[2]);
+				pEditView->GetCommander().HandleCommand(Index, true, lparam1, lparam2, lparam3, 0);
 			}else {
 				::MYMESSAGEBOX(NULL, MB_OK | MB_ICONSTOP | MB_TOPMOST, EXEC_ERROR_TITLE,
 				LS(STR_ERR_DLGMACRO16));
@@ -1303,42 +1303,42 @@ bool Macro::HandleCommand(
 			VARIANT vResult;			// HandleFunctionから返る値
 			// 一つ目の引数が数値。
 			vArg[0].vt = VT_I4;
-			vArg[0].intVal = (Argument[0] ? _wtoi(Argument[0]) : 0);
-			return HandleFunction(pcEditView, Index, vArg, 1, vResult);
+			vArg[0].intVal = (arguments[0] ? _wtoi(arguments[0]) : 0);
+			return HandleFunction(pEditView, Index, vArg, 1, vResult);
 		}
 	case F_SETFONTSIZE:
 		{
-			int val0 = Argument[0] ? _wtoi(Argument[0]) : 0;
-			int val1 = Argument[1] ? _wtoi(Argument[1]) : 0;
-			int val2 = Argument[2] ? _wtoi(Argument[2]) : 0;
-			pcEditView->GetCommander().HandleCommand(Index, true, (LPARAM)val0, (LPARAM)val1, (LPARAM)val2, 0);
+			int val0 = arguments[0] ? _wtoi(arguments[0]) : 0;
+			int val1 = arguments[1] ? _wtoi(arguments[1]) : 0;
+			int val2 = arguments[2] ? _wtoi(arguments[2]) : 0;
+			pEditView->GetCommander().HandleCommand(Index, true, (LPARAM)val0, (LPARAM)val1, (LPARAM)val2, 0);
 		}
 		break;
 	case F_STATUSMSG:
 		{
-			if (!Argument[0]) {
+			if (!arguments[0]) {
 				::MYMESSAGEBOX(NULL, MB_OK | MB_ICONSTOP | MB_TOPMOST, EXEC_ERROR_TITLE,
 					LS(STR_ERR_DLGMACRO07));
 				return false;
 			}
-			std::tstring val0 = to_tchar(Argument[0]);
-			int val1 = Argument[1] ? _wtoi(Argument[1]) : 0;
+			std::tstring val0 = to_tchar(arguments[0]);
+			int val1 = arguments[1] ? _wtoi(arguments[1]) : 0;
 			if ((val1 & 0x03) == 0) {
-				pcEditView->SendStatusMessage(val0.c_str());
+				pEditView->SendStatusMessage(val0.c_str());
 			}else if ((val1 & 0x03) == 1) {
-				if (pcEditView->m_pEditWnd->m_statusBar.GetStatusHwnd()) {
-					pcEditView->SendStatusMessage(val0.c_str());
+				if (pEditView->m_pEditWnd->m_statusBar.GetStatusHwnd()) {
+					pEditView->SendStatusMessage(val0.c_str());
 				}else {
-					InfoMessage(pcEditView->GetHwnd(), _T("%ts"), val0.c_str());
+					InfoMessage(pEditView->GetHwnd(), _T("%ts"), val0.c_str());
 				}
 			}else if ((val1 & 0x03) == 2) {
-				pcEditView->m_pEditWnd->m_statusBar.SendStatusMessage2(val0.c_str());
+				pEditView->m_pEditWnd->m_statusBar.SendStatusMessage2(val0.c_str());
 			}
 		}
 		break;
 	case F_MSGBEEP:
 		{
-			int val0 = Argument[0] ? _wtoi(Argument[0]) : 0;
+			int val0 = arguments[0] ? _wtoi(arguments[0]) : 0;
 			switch (val0) {
 			case -1: break;
 			case 0: val0 = MB_OK; break;
@@ -1353,93 +1353,93 @@ bool Macro::HandleCommand(
 		break;
 	case F_COMMITUNDOBUFFER:
 		{
-			OpeBlk* opeBlk = pcEditView->m_commander.GetOpeBlk();
+			OpeBlk* opeBlk = pEditView->m_commander.GetOpeBlk();
 			if (opeBlk) {
 				int nCount = opeBlk->GetRefCount();
 				opeBlk->SetRefCount(1); // 強制的にリセットするため1を指定
-				pcEditView->SetUndoBuffer();
-				if (!pcEditView->m_commander.GetOpeBlk() && 0 < nCount) {
-					pcEditView->m_commander.SetOpeBlk(new OpeBlk());
-					pcEditView->m_commander.GetOpeBlk()->SetRefCount(nCount);
+				pEditView->SetUndoBuffer();
+				if (!pEditView->m_commander.GetOpeBlk() && 0 < nCount) {
+					pEditView->m_commander.SetOpeBlk(new OpeBlk());
+					pEditView->m_commander.GetOpeBlk()->SetRefCount(nCount);
 				}
 			}
 		}
 		break;
 	case F_ADDREFUNDOBUFFER:
 		{
-			OpeBlk* opeBlk = pcEditView->m_commander.GetOpeBlk();
+			OpeBlk* opeBlk = pEditView->m_commander.GetOpeBlk();
 			if (!opeBlk) {
-				pcEditView->m_commander.SetOpeBlk(new OpeBlk());
+				pEditView->m_commander.SetOpeBlk(new OpeBlk());
 			}
-			pcEditView->m_commander.GetOpeBlk()->AddRef();
+			pEditView->m_commander.GetOpeBlk()->AddRef();
 		}
 		break;
 	case F_SETUNDOBUFFER:
 		{
-			pcEditView->SetUndoBuffer();
+			pEditView->SetUndoBuffer();
 		}
 		break;
 	case F_APPENDUNDOBUFFERCURSOR:
 		{
-			OpeBlk* opeBlk = pcEditView->m_commander.GetOpeBlk();
+			OpeBlk* opeBlk = pEditView->m_commander.GetOpeBlk();
 			if (!opeBlk) {
-				pcEditView->m_commander.SetOpeBlk(new OpeBlk());
+				pEditView->m_commander.SetOpeBlk(new OpeBlk());
 			}
-			opeBlk = pcEditView->m_commander.GetOpeBlk();
+			opeBlk = pEditView->m_commander.GetOpeBlk();
 			opeBlk->AddRef();
 			opeBlk->AppendOpe(
 				new MoveCaretOpe(
-					pcEditView->GetCaret().GetCaretLogicPos()	// 操作前後のキャレット位置
+					pEditView->GetCaret().GetCaretLogicPos()	// 操作前後のキャレット位置
 				)
 			);
-			pcEditView->SetUndoBuffer();
+			pEditView->SetUndoBuffer();
 		}
 		break;
 	case F_CLIPBOARDEMPTY:
 		{
-			Clipboard clipboard(pcEditView->GetHwnd());
+			Clipboard clipboard(pEditView->GetHwnd());
 			clipboard.Empty();
 		}
 		break;
 	case F_SETVIEWTOP:
 		{
-			if (ArgSize <= 0) {
+			if (argSize <= 0) {
 				return false;
 			}
-			if (ArgLengths[0] <= 0) {
+			if (argLengths[0] <= 0) {
 				return false;
 			}
-			if (!WCODE::Is09( Argument[0][0] )) {
+			if (!WCODE::Is09( arguments[0][0] )) {
 				return false;
 			}
-			LayoutYInt nLineNum = LayoutYInt(_wtoi(Argument[0]) - 1);
+			LayoutYInt nLineNum = LayoutYInt(_wtoi(arguments[0]) - 1);
 			if (nLineNum < 0) {
 				nLineNum = LayoutYInt(0);
 			}
-			pcEditView->SyncScrollV( pcEditView->ScrollAtV( nLineNum ));
+			pEditView->SyncScrollV( pEditView->ScrollAtV( nLineNum ));
 		}
 		break;
 	case F_SETVIEWLEFT:
 		{
-			if (ArgSize <= 0) {
+			if (argSize <= 0) {
 				return false;
 			}
-			if (ArgLengths[0] <= 0) {
+			if (argLengths[0] <= 0) {
 				return false;
 			}
-			if (!WCODE::Is09( Argument[0][0] )) {
+			if (!WCODE::Is09( arguments[0][0] )) {
 				return false;
 			}
-			LayoutXInt nColumn = LayoutXInt(_wtoi(Argument[0]) - 1);
+			LayoutXInt nColumn = LayoutXInt(_wtoi(arguments[0]) - 1);
 			if (nColumn < 0) {
 				nColumn = LayoutXInt(0);
 			}
-			pcEditView->SyncScrollH( pcEditView->ScrollAtH( nColumn ) );
+			pEditView->SyncScrollH( pEditView->ScrollAtH( nColumn ) );
 		}
 		break;
 	default:
 		// 引数なし。
-		pcEditView->GetCommander().HandleCommand(Index, true, 0, 0, 0, 0);	// 標準
+		pEditView->GetCommander().HandleCommand(Index, true, 0, 0, 0, 0);	// 標準
 		break;
 	}
 	return true;
@@ -1461,7 +1461,7 @@ inline bool VariantToI4(Variant& varCopy, const VARIANT& arg)
 	@param View      [in] 対象となるView
 	@param ID        [in] 下位16bit: 関数番号
 	@param Arguments [in] 引数の配列
-	@param ArgSize   [in] 引数の数(Argument)
+	@param argSize   [in] 引数の数(arguments)
 	@param Result  [out] 結果の値を返す場所。戻り値がfalseのときは不定。
 	
 	@return true: 成功, false: 失敗

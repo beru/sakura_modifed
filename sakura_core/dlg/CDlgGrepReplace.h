@@ -40,7 +40,7 @@ public:
 	int				m_nReplaceKeySequence;	//!< 置換後シーケンス
 
 protected:
-	FontAutoDeleter		m_cFontText2;
+	FontAutoDeleter		m_fontText2;
 
 	/*
 	||  実装ヘルパ関数

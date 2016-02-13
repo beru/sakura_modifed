@@ -124,7 +124,7 @@ protected:
 		int				nLineStart,
 		int				nLineLen,
 		LayoutInt		nIndent,	// 折り返しインデント桁数 // 2006.08.14 Moca
-		const Layout*	pcLayout = NULL,	// 色付用Layout
+		const Layout*	pLayout = NULL,	// 色付用Layout
 		ColorStrategy*	pStrategyStart = NULL
 	);
 
@@ -135,7 +135,7 @@ protected:
 		const wchar_t*	pPhysicalLine,
 		int				nBlockLen,
 		int				nKind,		// 0:半角, 1:全角
-		const Layout*	pcLayout,	// 色設定用Layout
+		const Layout*	pLayout,	// 色設定用Layout
 		int				nColorIndex,
 		int				nBgnPhysical,
 		LayoutInt		nLayoutX,
@@ -145,7 +145,7 @@ protected:
 
 	// 指定ロジック位置のColorStrategyを取得
 	ColorStrategy* GetColorStrategy(
-		const StringRef&	cStringLine,
+		const StringRef&	stringLine,
 		int					iLogic,
 		ColorStrategy*		pStrategy,
 		bool&				bChange

@@ -124,7 +124,7 @@ public:
 	// Constructor
 	ImpExpColors(ColorInfo * psColorInfoArr)
 		:
-		m_ColorInfoArr(psColorInfoArr)
+		m_colorInfoArr(psColorInfoArr)
 	{
 	}
 
@@ -138,7 +138,7 @@ public:
 	const wchar_t* GetOriginExtension()	{ return L"col"; }
 
 private:
-	ColorInfo*		m_ColorInfoArr;
+	ColorInfo*		m_colorInfoArr;
 };
 
 

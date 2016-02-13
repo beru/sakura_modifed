@@ -47,11 +47,11 @@ public:
 //	virtual bool IsCode(const Memory* pMem) {return false;}  // 特定コードであればtrue
 
 	// 文字コード変換
-	virtual CodeConvertResult CodeToUnicode(const Memory& cSrc, NativeW* pDst) = 0;	// 特定コード → UNICODE    変換
-	virtual CodeConvertResult UnicodeToCode(const NativeW& cSrc, Memory* pDst) = 0;	// UNICODE    → 特定コード 変換
+	virtual CodeConvertResult CodeToUnicode(const Memory& src, NativeW* pDst) = 0;	// 特定コード → UNICODE    変換
+	virtual CodeConvertResult UnicodeToCode(const NativeW& src, Memory* pDst) = 0;	// UNICODE    → 特定コード 変換
 	// UNICODE    → 特定コード 変換
-	virtual CodeConvertResult UnicodeToCode(const StringRef& cSrc, Memory* pDst) {
-		NativeW mem(cSrc.GetPtr(), cSrc.GetLength());
+	virtual CodeConvertResult UnicodeToCode(const StringRef& src, Memory* pDst) {
+		NativeW mem(src.GetPtr(), src.GetLength());
 		return UnicodeToCode(mem, pDst);
 	}
 

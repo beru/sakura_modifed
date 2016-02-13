@@ -553,10 +553,10 @@ Plugin* PluginManager::LoadPlugin(
 	TCHAR pszBasePath[_MAX_PATH];
 	TCHAR pszPath[_MAX_PATH];
 	std::tstring strMlang;
-	DataProfile cProfDef;				// プラグイン定義ファイル
-	DataProfile cProfDefMLang;			// プラグイン定義ファイル(L10N)
-	DataProfile* pcProfDefMLang = &cProfDefMLang; 
-	DataProfile cProfOption;			// オプションファイル
+	DataProfile profDef;				// プラグイン定義ファイル
+	DataProfile profDefMLang;			// プラグイン定義ファイル(L10N)
+	DataProfile* pProfDefMLang = &profDefMLang; 
+	DataProfile profOption;			// オプションファイル
 	Plugin* plugin = NULL;
 
 #ifdef _UNICODE
@@ -565,8 +565,8 @@ Plugin* PluginManager::LoadPlugin(
 	// プラグイン定義ファイルを読み込む
 	Concat_FolderAndFile(pszPluginDir, pszPluginName, pszBasePath);
 	Concat_FolderAndFile(pszBasePath, PII_FILENAME, pszPath);
-	cProfDef.SetReadingMode();
-	if (!cProfDef.ReadProfile(pszPath)) {
+	profDef.SetReadingMode();
+	if (!profDef.ReadProfile(pszPath)) {
 		// プラグイン定義ファイルが存在しない
 		return NULL;
 	}
@@ -577,10 +577,10 @@ Plugin* PluginManager::LoadPlugin(
 	// L10N定義ファイルを読む
 	// プラグイン定義ファイルを読み込む base\pluginname\local\plugin_en_us.def
 	strMlang = std::tstring(pszBasePath) + _T("\\") + PII_L10NDIR + _T("\\") + PII_L10NFILEBASE + pszLangName + PII_L10NFILEEXT;
-	cProfDefMLang.SetReadingMode();
-	if (!cProfDefMLang.ReadProfile(strMlang.c_str())) {
+	profDefMLang.SetReadingMode();
+	if (!profDefMLang.ReadProfile(strMlang.c_str())) {
 		// プラグイン定義ファイルが存在しない
-		pcProfDefMLang = NULL;
+		pProfDefMLang = NULL;
 #ifdef _UNICODE
 		DEBUG_TRACE(_T("  L10N定義ファイル読込 %ts Not Found\n"),  strMlang.c_str() );
 #endif
@@ -591,7 +591,7 @@ Plugin* PluginManager::LoadPlugin(
 	}
 
 	std::wstring sPlugType;
-	cProfDef.IOProfileData(PII_PLUGIN, PII_PLUGIN_PLUGTYPE, sPlugType);
+	profDef.IOProfileData(PII_PLUGIN, PII_PLUGIN_PLUGTYPE, sPlugType);
 
 	if (wcsicmp(sPlugType.c_str(), L"wsh") == 0) {
 		plugin = new WSHPlugin(tstring(pszBasePath));
@@ -602,16 +602,16 @@ Plugin* PluginManager::LoadPlugin(
 	}
 	plugin->m_sOptionDir = m_sBaseDir + pszPluginName;
 	plugin->m_sLangName = pszLangName;
-	plugin->ReadPluginDef(&cProfDef, pcProfDefMLang);
+	plugin->ReadPluginDef(&profDef, pProfDefMLang);
 #ifdef _UNICODE
 	DEBUG_TRACE(_T("  プラグインタイプ %ls\n"), sPlugType.c_str() );
 #endif
 
 	// オプションファイルを読み込む
-	cProfOption.SetReadingMode();
-	if (cProfOption.ReadProfile(plugin->GetOptionPath().c_str())) {
+	profOption.SetReadingMode();
+	if (profOption.ReadProfile(plugin->GetOptionPath().c_str())) {
 		// オプションファイルが存在する場合、読み込む
-		plugin->ReadPluginOption(&cProfOption);
+		plugin->ReadPluginOption(&profOption);
 	}
 #ifdef _UNICODE
 	DEBUG_TRACE(_T("  オプションファイル読込 %ts\n"),  plugin->GetOptionPath().c_str() );

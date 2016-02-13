@@ -37,11 +37,11 @@ public:
 	virtual ~VisualProgress();
 
 	// ロード前後
-	void OnBeforeLoad(LoadInfo* sLoadInfo);
-	void OnAfterLoad(const LoadInfo& sLoadInfo);
+	void OnBeforeLoad(LoadInfo* pLoadInfo);
+	void OnAfterLoad(const LoadInfo& loadInfo);
 
 	// セーブ前後
-	void OnBeforeSave(const SaveInfo& sSaveInfo);
+	void OnBeforeSave(const SaveInfo& saveInfo);
 	void OnFinalSave(SaveResultType eSaveResult);
 
 	// プログレス受信

@@ -64,13 +64,13 @@ void DocEditor::SetModified(bool flag, bool redraw)
 		m_pDocRef->m_pEditWnd->UpdateCaption();
 }
 
-void DocEditor::OnBeforeLoad(LoadInfo* sLoadInfo)
+void DocEditor::OnBeforeLoad(LoadInfo* loadInfo)
 {
 	// ビューのテキスト選択解除
 	GetListeningDoc()->m_pEditWnd->Views_DisableSelectArea(true);
 }
 
-void DocEditor::OnAfterLoad(const LoadInfo& sLoadInfo)
+void DocEditor::OnAfterLoad(const LoadInfo& loadInfo)
 {
 	EditDoc* pDoc = GetListeningDoc();
 
@@ -98,10 +98,10 @@ void DocEditor::OnAfterLoad(const LoadInfo& sLoadInfo)
 
 	// カレントディレクトリの変更
 	::SetCurrentDirectory(pDoc->m_docFile.GetFilePathClass().GetDirPath().c_str());
-	AppMode::getInstance()->SetViewMode(sLoadInfo.bViewMode);		// ビューモード	##ここも、アリかな
+	AppMode::getInstance()->SetViewMode(loadInfo.bViewMode);		// ビューモード	##ここも、アリかな
 }
 
-void DocEditor::OnAfterSave(const SaveInfo& sSaveInfo)
+void DocEditor::OnAfterSave(const SaveInfo& saveInfo)
 {
 	EditDoc* pDoc = GetListeningDoc();
 

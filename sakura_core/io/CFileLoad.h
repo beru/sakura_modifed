@@ -62,7 +62,7 @@ public:
 	//! 1行データをロードする 順アクセス用
 	CodeConvertResult ReadLine(
 		NativeW*	pUnicodeBuffer,	//!< [out] UNICODEデータ受け取りバッファ
-		Eol*		pcEol			//!< [i/o]
+		Eol*		pEol			//!< [i/o]
 	);
 
 // 未実装関数郡

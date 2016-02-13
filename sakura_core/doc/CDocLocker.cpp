@@ -19,12 +19,12 @@ DocLocker::DocLocker()
 //                        ロード前後                           //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-void DocLocker::OnAfterLoad(const LoadInfo& sLoadInfo)
+void DocLocker::OnAfterLoad(const LoadInfo& loadInfo)
 {
 	EditDoc* pDoc = GetListeningDoc();
 
 	// 書き込めるか検査
-	CheckWritable(!sLoadInfo.bViewMode && !sLoadInfo.bWritableNoMsg);
+	CheckWritable(!loadInfo.bViewMode && !loadInfo.bWritableNoMsg);
 	if (!m_bIsDocWritable) {
 		return;
 	}
@@ -37,7 +37,7 @@ void DocLocker::OnAfterLoad(const LoadInfo& sLoadInfo)
 //                        セーブ前後                           //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-void DocLocker::OnBeforeSave(const SaveInfo& sSaveInfo)
+void DocLocker::OnBeforeSave(const SaveInfo& saveInfo)
 {
 	EditDoc* pDoc = GetListeningDoc();
 
@@ -45,7 +45,7 @@ void DocLocker::OnBeforeSave(const SaveInfo& sSaveInfo)
 	pDoc->m_docFileOperation.DoFileUnlock();
 }
 
-void DocLocker::OnAfterSave(const SaveInfo& sSaveInfo)
+void DocLocker::OnAfterSave(const SaveInfo& saveInfo)
 {
 	EditDoc* pDoc = GetListeningDoc();
 
@@ -78,8 +78,8 @@ void DocLocker::CheckWritable(bool bMsg)
 	}
 
 	// 書き込めるか検査
-	DocFile& cDocFile = pDoc->m_docFile;
-	m_bIsDocWritable = cDocFile.IsFileWritable();
+	DocFile& docFile = pDoc->m_docFile;
+	m_bIsDocWritable = docFile.IsFileWritable();
 	if (!m_bIsDocWritable && bMsg) {
 		// 排他されている場合だけメッセージを出す
 		// その他の原因（ファイルシステムのセキュリティ設定など）では読み取り専用と同様にメッセージを出さない
@@ -87,7 +87,7 @@ void DocLocker::CheckWritable(bool bMsg)
 			TopWarningMessage(
 				EditWnd::getInstance()->GetHwnd(),
 				LS(STR_ERR_DLGEDITDOC21),	// "%ts\nは現在他のプロセスによって書込みが禁止されています。"
-				cDocFile.GetFilePathClass().IsValidPath() ? cDocFile.GetFilePath() : LS(STR_NO_TITLE1)	// "(無題)"
+				docFile.GetFilePathClass().IsValidPath() ? docFile.GetFilePath() : LS(STR_NO_TITLE1)	// "(無題)"
 			);
 		}
 	}

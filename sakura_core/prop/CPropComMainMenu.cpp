@@ -853,12 +853,12 @@ wstring RemoveAmpersand(wstring sLavel)
 // ダイアログデータの設定 MainMenu
 void PropMainMenu::SetData(HWND hwndDlg)
 {
-	MainMenu*	pcMenuTBL = m_common.m_mainMenu.m_mainMenuTbl;
-	MainMenu*	pcFunc;
+	MainMenu*	pMenuTBL = m_common.m_mainMenu.m_mainMenuTbl;
+	MainMenu*	pFunc;
 	HWND		hwndCombo;
 	HWND		hwndCheck;
 	HWND		hwndTreeRes;
-	const int	MAX_LABEL_CCH = 256+10;
+	const int	MAX_LABEL_CCH = 256 + 10;
 	WCHAR		szLabel[MAX_LABEL_CCH];
 	int			nCurLevel;
 	HTREEITEM	htiItem;
@@ -892,16 +892,16 @@ void PropMainMenu::SetData(HWND hwndDlg)
 	htiParent = TVI_ROOT;
 	htiItem = TreeView_GetRoot(hwndTreeRes);
 	for (int i=0; i<m_common.m_mainMenu.m_nMainMenuNum; ++i) {
-		pcFunc = &pcMenuTBL[i];
-		if (pcFunc->m_nLevel < nCurLevel) {
+		pFunc = &pMenuTBL[i];
+		if (pFunc->m_nLevel < nCurLevel) {
 			// Level Up
-			for (; pcFunc->m_nLevel<nCurLevel; --nCurLevel) {
+			for (; pFunc->m_nLevel<nCurLevel; --nCurLevel) {
 				htiParent = (htiParent == TVI_ROOT) ? TVI_ROOT : TreeView_GetParent(hwndTreeRes, htiParent);
 				if (!htiParent)		htiParent = TVI_ROOT;
 			}
-		}else if (pcFunc->m_nLevel > nCurLevel) {
+		}else if (pFunc->m_nLevel > nCurLevel) {
 			// Level Down
-			for (htiParent=htiItem, ++nCurLevel; pcFunc->m_nLevel<nCurLevel; ++nCurLevel) {
+			for (htiParent=htiItem, ++nCurLevel; pFunc->m_nLevel<nCurLevel; ++nCurLevel) {
 				// 実行されることは無いはず（データが正常ならば）
 				htiParent = TreeView_GetChild(hwndTreeRes, htiItem);
 				if (!htiParent) {
@@ -912,21 +912,21 @@ void PropMainMenu::SetData(HWND hwndDlg)
 
 		// 内部データを作成
 		pFuncWk = &msMenu[nMenuCnt];
-		pFuncWk->m_nFunc = pcFunc->m_nFunc;
+		pFuncWk->m_nFunc = pFunc->m_nFunc;
 		pFuncWk->m_bIsNode = false;
-		switch (pcFunc->m_nType) {
+		switch (pFunc->m_nType) {
 		case MainMenuType::Leaf:
-			m_lookup.Funccode2Name(pcFunc->m_nFunc, szLabel, MAX_MAIN_MENU_NAME_LEN);
+			m_lookup.Funccode2Name(pFunc->m_nFunc, szLabel, MAX_MAIN_MENU_NAME_LEN);
 			pFuncWk->m_sName = szLabel;
 			break;
 		case MainMenuType::Separator:
 			pFuncWk->m_sName = LSW(STR_PROPCOMMAINMENU_SEP);
 			break;
 		case MainMenuType::Special:
-			pFuncWk->m_sName = pcFunc->m_sName;
+			pFuncWk->m_sName = pFunc->m_sName;
 			if (pFuncWk->m_sName.empty()) {
 				for (int j=0; j<_countof(sSpecialFuncs); ++j) {
-					if (pcFunc->m_nFunc == sSpecialFuncs[j].m_nFunc) {
+					if (pFunc->m_nFunc == sSpecialFuncs[j].m_nFunc) {
 						pFuncWk->m_sName = RemoveAmpersand(LSW(sSpecialFuncs[j].m_nNameId));
 						break;
 					}
@@ -937,13 +937,13 @@ void PropMainMenu::SetData(HWND hwndDlg)
 			pFuncWk->m_bIsNode = true;
 			// ラベル編集後のノードはiniから、それ以外はリソースからラベルを取得 2012.10.14 syat 各国語対応
 			if (pFuncWk->m_nFunc == F_NODE) {
-				pFuncWk->m_sName = RemoveAmpersand(pcFunc->m_sName);
+				pFuncWk->m_sName = RemoveAmpersand(pFunc->m_sName);
 			}else {
 				pFuncWk->m_sName = LSW(pFuncWk->m_nFunc);
 			}
 			break;
 		}
-		auto_strcpy(pFuncWk->m_sKey, pcFunc->m_sKey);
+		auto_strcpy(pFuncWk->m_sKey, pFunc->m_sKey);
 		pFuncWk->m_bDupErr = false;
 		// TreeViewに挿入
 		tvis.item.mask = TVIF_TEXT | TVIF_PARAM | TVIF_CHILDREN;
@@ -951,7 +951,7 @@ void PropMainMenu::SetData(HWND hwndDlg)
 		tvis.hInsertAfter = TVI_LAST;
 		tvis.item.pszText = const_cast<TCHAR*>(MakeDispLabel(pFuncWk));
 		tvis.item.lParam = nMenuCnt++;								// 内部データインデックスのインクリメント
-		tvis.item.cChildren = (pcFunc->m_nType == MainMenuType::Node);
+		tvis.item.cChildren = (pFunc->m_nType == MainMenuType::Node);
 		htiItem = TreeView_InsertItem(hwndTreeRes, &tvis);
 	}
 }
@@ -987,8 +987,8 @@ bool PropMainMenu::GetDataTree(
 	)
 {
 	static	bool	bOptionOk;
-	MainMenu*		pcMenuTBL = m_common.m_mainMenu.m_mainMenuTbl;
-	MainMenu*		pcFunc;
+	MainMenu*		pMenuTbl = m_common.m_mainMenu.m_mainMenuTbl;
+	MainMenu*		pFunc;
 	HTREEITEM		s;
 	HTREEITEM		ts;
 	TV_ITEM			tvi;			// 取得用
@@ -1020,40 +1020,40 @@ bool PropMainMenu::GetDataTree(
 			// Top Levelの記録
 			m_common.m_mainMenu.m_nMenuTopIdx[nTopCount++] = m_common.m_mainMenu.m_nMainMenuNum;
 		}
-		pcFunc = &pcMenuTBL[m_common.m_mainMenu.m_nMainMenuNum++];
+		pFunc = &pMenuTbl[m_common.m_mainMenu.m_nMainMenuNum++];
 
 		switch (pFuncWk->m_nFunc) {
 		case F_NODE:
-			pcFunc->m_nType = MainMenuType::Node;
-			auto_strcpy_s(pcFunc->m_sName, MAX_MAIN_MENU_NAME_LEN + 1, SupplementAmpersand(pFuncWk->m_sName).c_str());
+			pFunc->m_nType = MainMenuType::Node;
+			auto_strcpy_s(pFunc->m_sName, MAX_MAIN_MENU_NAME_LEN + 1, SupplementAmpersand(pFuncWk->m_sName).c_str());
 			break;
 		case F_SEPARATOR:
-			pcFunc->m_nType = MainMenuType::Separator;
-			pcFunc->m_sName[0] = L'\0';
+			pFunc->m_nType = MainMenuType::Separator;
+			pFunc->m_sName[0] = L'\0';
 			break;
 		default:
 			if (pFuncWk->m_bIsNode) {
 				// コマンド定義外のIDの場合、ノードとして扱う 2012.10.14 syat 各国語対応
-				pcFunc->m_nType = MainMenuType::Node;
-				pcFunc->m_sName[0] = L'\0';	// 名前は、リソースから取得するため空白に設定
+				pFunc->m_nType = MainMenuType::Node;
+				pFunc->m_sName[0] = L'\0';	// 名前は、リソースから取得するため空白に設定
 				break;
 			}
 			if (pFuncWk->m_nFunc >= F_SPECIAL_FIRST && pFuncWk->m_nFunc <= F_SPECIAL_LAST) {
-				pcFunc->m_nType = MainMenuType::Special;
+				pFunc->m_nType = MainMenuType::Special;
 				// 2014.05.04 nLevel == 0 のときも"名前なし"にする
-					pcFunc->m_sName[0] = L'\0';
+					pFunc->m_sName[0] = L'\0';
 			}else {
 				if (pFuncWk->m_nFunc == F_OPTION) {
 					bOptionOk = true;
 				}
-				pcFunc->m_nType = MainMenuType::Leaf;
-				pcFunc->m_sName[0] = L'\0';
+				pFunc->m_nType = MainMenuType::Leaf;
+				pFunc->m_sName[0] = L'\0';
 			}
 			break;
 		}
-		pcFunc->m_nFunc = pFuncWk->m_nFunc;
-		auto_strcpy(pcFunc->m_sKey, pFuncWk->m_sKey);
-		pcFunc->m_nLevel = nLevel;
+		pFunc->m_nFunc = pFuncWk->m_nFunc;
+		auto_strcpy(pFunc->m_sKey, pFuncWk->m_sKey);
+		pFunc->m_nLevel = nLevel;
 
 		if (tvi.cChildren) {
 			ts = TreeView_GetChild(hwndTree, s);	//	子の取得
@@ -1070,24 +1070,24 @@ bool PropMainMenu::GetDataTree(
 			// Top Levelの記録
 			m_common.m_mainMenu.m_nMenuTopIdx[nTopCount++] = m_common.m_mainMenu.m_nMainMenuNum;
 			// Top Levelの追加（ダミー）
-			pcFunc = &pcMenuTBL[m_common.m_mainMenu.m_nMainMenuNum++];
-			pcFunc->m_nType = MainMenuType::Node;
-			pcFunc->m_nFunc = F_NODE;
-			auto_strcpy(pcFunc->m_sName, L"auto_add");
-			pcFunc->m_sKey[0] = L'\0';
-			pcFunc->m_nLevel = nLevel++;
+			pFunc = &pMenuTbl[m_common.m_mainMenu.m_nMainMenuNum++];
+			pFunc->m_nType = MainMenuType::Node;
+			pFunc->m_nFunc = F_NODE;
+			auto_strcpy(pFunc->m_sName, L"auto_add");
+			pFunc->m_sKey[0] = L'\0';
+			pFunc->m_nLevel = nLevel++;
 		}else {
 			// 末尾に追加を指定
 			nLevel = 1;
 		}
 		if (m_common.m_mainMenu.m_nMainMenuNum < MAX_MAINMENU) {
 			// 共通設定
-			pcFunc = &pcMenuTBL[m_common.m_mainMenu.m_nMainMenuNum++];
-			pcFunc->m_nType = MainMenuType::Leaf;
-			pcFunc->m_nFunc = F_OPTION;
-			pcFunc->m_sName[0] = L'\0';
-			pcFunc->m_sKey[0] = L'\0';
-			pcFunc->m_nLevel = nLevel;
+			pFunc = &pMenuTbl[m_common.m_mainMenu.m_nMainMenuNum++];
+			pFunc->m_nType = MainMenuType::Leaf;
+			pFunc->m_nFunc = F_OPTION;
+			pFunc->m_sName[0] = L'\0';
+			pFunc->m_sKey[0] = L'\0';
+			pFunc->m_nLevel = nLevel;
 		}else {
 			// 登録数 over
 			return false;

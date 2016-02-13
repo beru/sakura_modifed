@@ -72,17 +72,17 @@ void EditView::SetIMECompFormPos(void)
 	// composition window position.
 	//
 	//
-	COMPOSITIONFORM	CompForm;
+	COMPOSITIONFORM	compForm;
 	HIMC			hIMC = ::ImmGetContext(GetHwnd());
 	POINT			point;
 
 	::GetCaretPos(&point);
-	CompForm.dwStyle = CFS_POINT;
-	CompForm.ptCurrentPos.x = (long) point.x;
-	CompForm.ptCurrentPos.y = (long) point.y + GetCaret().GetCaretSize().cy - GetTextMetrics().GetHankakuHeight();
+	compForm.dwStyle = CFS_POINT;
+	compForm.ptCurrentPos.x = (long) point.x;
+	compForm.ptCurrentPos.y = (long) point.y + GetCaret().GetCaretSize().cy - GetTextMetrics().GetHankakuHeight();
 
 	if (hIMC) {
-		::ImmSetCompositionWindow(hIMC, &CompForm);
+		::ImmSetCompositionWindow(hIMC, &compForm);
 	}
 	::ImmReleaseContext(GetHwnd() , hIMC);
 }
@@ -196,16 +196,16 @@ LRESULT EditView::SetReconvertStruct(PRECONVERTSTRING pReconv, bool bUnicode, bo
 	nSelectedLen = ptSelectTo.x - ptSelect.x;
 	// 以下 ptSelect.y ptSelect.x, nSelectedLen を使用
 
-	// ドキュメント行取得 -> pcCurDocLine
-	DocLine* pcCurDocLine = m_pEditDoc->m_docLineMgr.GetLine(ptSelect.GetY2());
-	if (!pcCurDocLine)
+	// ドキュメント行取得 -> pCurDocLine
+	DocLine* pCurDocLine = m_pEditDoc->m_docLineMgr.GetLine(ptSelect.GetY2());
+	if (!pCurDocLine)
 		return 0;
 
 	// テキスト取得 -> pLine, nLineLen
-	const int nLineLen = pcCurDocLine->GetLengthWithoutEOL();
+	const int nLineLen = pCurDocLine->GetLengthWithoutEOL();
 	if (nLineLen == 0)
 		return 0;
-	const wchar_t* pLine = pcCurDocLine->GetPtr();
+	const wchar_t* pLine = pCurDocLine->GetPtr();
 
 	// 2010.04.17 行頭から←選択だと「SelectToが改行の後ろの位置」にあるため範囲を調整する
 	// フリーカーソル選択でも行末より後ろにカーソルがある

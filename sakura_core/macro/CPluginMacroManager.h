@@ -42,7 +42,7 @@ public:
 	PluginMacroManager(const WCHAR* Ext, Plug* plug);
 	virtual ~PluginMacroManager();
 
-	virtual bool ExecKeyMacro(class EditView* pcEditView, int flags) const;
+	virtual bool ExecKeyMacro(class EditView* pEditView, int flags) const;
 	virtual bool LoadKeyMacro(HINSTANCE hInstance, const TCHAR* Path);
 	virtual bool LoadKeyMacroStr(HINSTANCE hInstance, const TCHAR* Code);
 

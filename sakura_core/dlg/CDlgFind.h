@@ -43,7 +43,7 @@ public:
 
 	RecentSearch			m_recentSearch;
 	ComboBoxItemDeleter	m_comboDel;
-	FontAutoDeleter		m_cFontText;
+	FontAutoDeleter		m_fontText;
 
 protected:
 //@@@ 2002.2.2 YAZAKI CShareData‚ÉˆÚ“®

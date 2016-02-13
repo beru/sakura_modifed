@@ -67,9 +67,9 @@ void DocLine::SetDocLineString(const wchar_t* pData, int nLength)
 	SetEol();
 }
 
-void DocLine::SetDocLineString(const NativeW& cData)
+void DocLine::SetDocLineString(const NativeW& data)
 {
-	SetDocLineString(cData.GetStringPtr(), cData.GetStringLength());
+	SetDocLineString(data.GetStringPtr(), data.GetStringLength());
 }
 
 void DocLine::SetDocLineStringMove(NativeW* pDataFrom)

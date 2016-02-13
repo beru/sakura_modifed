@@ -202,29 +202,29 @@ bool PPA::InitDllImp()
 
 /*! PPAに関数を登録するための文字列を作成する
 
-	@param cMacroFuncInfo [in]	マクロデータ
+	@param macroFuncInfo [in]	マクロデータ
 	@param szBuffer [out]		生成した文字列を入れるバッファへのポインタ
 
 	@note バッファサイズは 9 + 3 + メソッド名の長さ + 13 * 4 + 9 + 5 は最低必要
 
 	@date 2003.06.01 Moca
 				スタティックメンバに変更
-				cMacroFuncInfo.m_pszDataを書き換えないように変更
+				macroFuncInfo.m_pszDataを書き換えないように変更
 
 	@date 2003.06.16 genta 無駄なnew/deleteを避けるためバッファを外から与えるように
 */
-char* PPA::GetDeclarations( const MacroFuncInfo& cMacroFuncInfo, char* szBuffer )
+char* PPA::GetDeclarations( const MacroFuncInfo& macroFuncInfo, char* szBuffer )
 {
 	char szType[20];	// procedure/function用バッファ
 	char szReturn[20];	// 戻り値型用バッファ
-	if (cMacroFuncInfo.m_varResult == VT_EMPTY) {
+	if (macroFuncInfo.m_varResult == VT_EMPTY) {
 		strcpy(szType, "procedure");
 		szReturn[0] = '\0';
 	}else {
 		strcpy(szType, "function");
-		if (cMacroFuncInfo.m_varResult == VT_BSTR) {
+		if (macroFuncInfo.m_varResult == VT_BSTR) {
 			strcpy(szReturn, ": string");
-		}else if (cMacroFuncInfo.m_varResult == VT_I4) {
+		}else if (macroFuncInfo.m_varResult == VT_I4) {
 			strcpy(szReturn, ": Integer");
 		}else {
 			szReturn[0] = '\0';
@@ -236,10 +236,10 @@ char* PPA::GetDeclarations( const MacroFuncInfo& cMacroFuncInfo, char* szBuffer 
 	for (i=0; i<8; ++i) {
 		VARTYPE type = VT_EMPTY;
 		if (i < 4) {
-			type = cMacroFuncInfo.m_varArguments[i];
+			type = macroFuncInfo.m_varArguments[i];
 		}else {
-			if (cMacroFuncInfo.m_pData && i < cMacroFuncInfo.m_pData->m_nArgMinSize) {
-				type = cMacroFuncInfo.m_pData->m_pVarArgEx[i - 4];
+			if (macroFuncInfo.m_pData && i < macroFuncInfo.m_pData->m_nArgMinSize) {
+				type = macroFuncInfo.m_pData->m_pVarArgEx[i - 4];
 			}
 		}
 		if (type == VT_EMPTY) {
@@ -265,17 +265,17 @@ char* PPA::GetDeclarations( const MacroFuncInfo& cMacroFuncInfo, char* szBuffer 
 		}
 		auto_sprintf( szBuffer, "%hs S_%ls(%hs)%hs; index %d;",
 			szType,
-			cMacroFuncInfo.m_pszFuncName,
+			macroFuncInfo.m_pszFuncName,
 			szArgument,
 			szReturn,
-			cMacroFuncInfo.m_nFuncID
+			macroFuncInfo.m_nFuncID
 		);
 	}else {
 		auto_sprintf( szBuffer, "%hs S_%ls%hs; index %d;",
 			szType,
-			cMacroFuncInfo.m_pszFuncName,
+			macroFuncInfo.m_pszFuncName,
 			szReturn,
-			cMacroFuncInfo.m_nFuncID
+			macroFuncInfo.m_nFuncID
 		);
 	}
 	// Jun. 01, 2003 Moca / Jun. 16, 2003 genta

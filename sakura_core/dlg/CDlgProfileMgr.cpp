@@ -187,15 +187,15 @@ int DlgProfileMgr::GetData(bool bStart)
 	bool bDefaultSelect = IsButtonChecked(IDC_CHECK_PROF_DEFSTART);
 	ProfileSettings settings;
 	ReadProfSettings(settings);
-	bool bWrtie = false;
+	bool bWrite = false;
 	if (settings.m_bDefaultSelect != bDefaultSelect) {
-		bWrtie = true;
+		bWrite = true;
 	}
 	if (bDefaultSelect && bStart) {
-		bWrtie = true;
+		bWrite = true;
 		SetDefaultProf( nCurIndex );
 	}
-	if (bWrtie) {
+	if (bWrite) {
 		UpdateIni();
 	}
 	return 1;

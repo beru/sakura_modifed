@@ -61,7 +61,7 @@ protected:
 	RecentGrepFile			m_recentGrepFile;
 	ComboBoxItemDeleter	m_comboDelFolder;
 	RecentGrepFolder		m_recentGrepFolder;
-	FontAutoDeleter		m_cFontText;
+	FontAutoDeleter		m_fontText;
 
 	/*
 	||  À‘•ƒwƒ‹ƒpŠÖ”

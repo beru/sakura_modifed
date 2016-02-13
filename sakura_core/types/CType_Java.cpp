@@ -39,12 +39,12 @@ void CType_Java::InitTypeConfigImp(TypeConfig* pType)
 
 	// 設定
 	pType->m_cLineComment.CopyTo(0, L"//", -1);						// 行コメントデリミタ
-	pType->m_cBlockComments[0].SetBlockCommentRule(L"/*", L"*/");	// ブロックコメントデリミタ
+	pType->m_blockComments[0].SetBlockCommentRule(L"/*", L"*/");	// ブロックコメントデリミタ
 	pType->m_nKeyWordSetIdx[0] = 4;									// キーワードセット
 	pType->m_eDefaultOutline = OUTLINE_JAVA;						// アウトライン解析方法
 	pType->m_eSmartIndent = SmartIndentType::Cpp;						// スマートインデント種別
-	pType->m_ColorInfoArr[COLORIDX_DIGIT].m_bDisp = true;			// 半角数値を色分け表示			// Mar. 10, 2001 JEPRO
-	pType->m_ColorInfoArr[COLORIDX_BRACKET_PAIR].m_bDisp = true;	// 対括弧の強調をデフォルトONに	// Sep. 21, 2002 genta
+	pType->m_colorInfoArr[COLORIDX_DIGIT].m_bDisp = true;			// 半角数値を色分け表示			// Mar. 10, 2001 JEPRO
+	pType->m_colorInfoArr[COLORIDX_BRACKET_PAIR].m_bDisp = true;	// 対括弧の強調をデフォルトONに	// Sep. 21, 2002 genta
 	pType->m_bStringLineOnly = true; // 文字列は行内のみ
 }
 
@@ -61,7 +61,7 @@ enum EFuncListJavaMode {
 };
 
 /* Java関数リスト作成 */
-void DocOutline::MakeFuncList_Java(FuncInfoArr* pcFuncInfoArr)
+void DocOutline::MakeFuncList_Java(FuncInfoArr* pFuncInfoArr)
 {
 	const wchar_t*	pLine;
 	LogicInt	nLineLen;
@@ -171,7 +171,7 @@ void DocOutline::MakeFuncList_Java(FuncInfoArr* pcFuncInfoArr)
 						);
 						wchar_t szWork[256];
 						if (0 < auto_snprintf_s(szWork, _countof(szWork), L"%ls::%ls", szClass, LSW(STR_OUTLINE_JAVA_DEFPOS))) {
-							pcFuncInfoArr->AppendData(ptPosXY_Logic.GetY2() + LogicInt(1), ptPosXY_Layout.GetY2() + LayoutInt(1), szWork, nFuncId); //2007.10.09 kobake レイアウト・ロジックの混在バグ修正
+							pFuncInfoArr->AppendData(ptPosXY_Logic.GetY2() + LogicInt(1), ptPosXY_Layout.GetY2() + LayoutInt(1), szWork, nFuncId); //2007.10.09 kobake レイアウト・ロジックの混在バグ修正
 						}
 					}
 
@@ -265,7 +265,7 @@ void DocOutline::MakeFuncList_Java(FuncInfoArr* pcFuncInfoArr)
 							);
 							wchar_t szWork[256];
 							if (0 < auto_snprintf_s(szWork, _countof(szWork), L"%ls::%ls", szClass, szFuncName)) {
-								pcFuncInfoArr->AppendData(nFuncLine, ptPosXY.GetY2() + LayoutInt(1), szWork, nFuncId);
+								pFuncInfoArr->AppendData(nFuncLine, ptPosXY.GetY2() + LayoutInt(1), szWork, nFuncId);
 							}
 						}
 					}
@@ -402,7 +402,7 @@ void DocOutline::MakeFuncList_Java(FuncInfoArr* pcFuncInfoArr)
 							);
 							wchar_t szWork[256];
 							if (0 < auto_snprintf_s(szWork, _countof(szWork), L"%ls::%ls", szClass, szFuncName)) {
-								pcFuncInfoArr->AppendData(nFuncLine, ptPosXY.GetY2() + LayoutInt(1), szWork, nFuncId);
+								pFuncInfoArr->AppendData(nFuncLine, ptPosXY.GetY2() + LayoutInt(1), szWork, nFuncId);
 							}
 						}
 					}
@@ -431,7 +431,7 @@ void DocOutline::MakeFuncList_Java(FuncInfoArr* pcFuncInfoArr)
 		}
 	}
 #ifdef _DEBUG
-	pcFuncInfoArr->DUMP();
+	pFuncInfoArr->DUMP();
 #endif
 	return;
 }

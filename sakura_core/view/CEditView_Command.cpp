@@ -418,18 +418,18 @@ void EditView::CopyCurLine(
 		return;
 	}
 
-	const Layout* pcLayout = m_pEditDoc->m_layoutMgr.SearchLineByLayoutY(GetCaret().GetCaretLayoutPos().y);
-	if (!pcLayout) {
+	const Layout* pLayout = m_pEditDoc->m_layoutMgr.SearchLineByLayoutY(GetCaret().GetCaretLayoutPos().y);
+	if (!pLayout) {
 		return;
 	}
 
 	// クリップボードに入れるべきテキストデータを、cmemBufに格納する
 	NativeW cmemBuf;
-	cmemBuf.SetString(pcLayout->GetPtr(), pcLayout->GetLengthWithoutEOL());
-	if (pcLayout->GetLayoutEol().GetLen() != 0) {
+	cmemBuf.SetString(pLayout->GetPtr(), pLayout->GetLengthWithoutEOL());
+	if (pLayout->GetLayoutEol().GetLen() != 0) {
 		cmemBuf.AppendString(
 			(neweol == EolType::Unknown) ?
-				pcLayout->GetLayoutEol().GetValue2() : Eol(neweol).GetValue2()
+				pLayout->GetLayoutEol().GetValue2() : Eol(neweol).GetValue2()
 		);
 	}else if (bAddCRLFWhenCopy) {	// 2007.10.08 ryoji bAddCRLFWhenCopy対応処理追加
 		cmemBuf.AppendString(

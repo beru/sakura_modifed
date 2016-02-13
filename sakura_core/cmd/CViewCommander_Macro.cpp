@@ -36,10 +36,10 @@
 // キーマクロの記録開始／終了
 void ViewCommander::Command_RECKEYMACRO(void)
 {
-	auto& sFlags = GetDllShareData().m_flags;
-	if (sFlags.m_bRecordingKeyMacro) {									// キーボードマクロの記録中
-		sFlags.m_bRecordingKeyMacro = FALSE;
-		sFlags.m_hwndRecordingKeyMacro = NULL;							// キーボードマクロを記録中のウィンドウ
+	auto& flags = GetDllShareData().m_flags;
+	if (flags.m_bRecordingKeyMacro) {									// キーボードマクロの記録中
+		flags.m_bRecordingKeyMacro = FALSE;
+		flags.m_hwndRecordingKeyMacro = NULL;							// キーボードマクロを記録中のウィンドウ
 		//@@@ 2002.1.24 YAZAKI キーマクロをマクロ用フォルダに「RecKey.mac」という名で保存
 		TCHAR szInitDir[MAX_PATH];
 		int nRet;
@@ -62,8 +62,8 @@ void ViewCommander::Command_RECKEYMACRO(void)
 			ErrorMessage(	m_pCommanderView->GetHwnd(), LS(STR_ERR_CEDITVIEW_CMD25), csMacro.m_szKeyMacroFileName);
 		}
 	}else {
-		sFlags.m_bRecordingKeyMacro = TRUE;
-		sFlags.m_hwndRecordingKeyMacro = GetMainWindow();	// キーボードマクロを記録中のウィンドウ
+		flags.m_bRecordingKeyMacro = TRUE;
+		flags.m_hwndRecordingKeyMacro = GetMainWindow();	// キーボードマクロを記録中のウィンドウ
 		// キーマクロのバッファをクリアする
 		//@@@ 2002.1.24 m_CKeyMacroMgrをCEditDocへ移動
 		//@@@ 2002.2.2 YAZAKI マクロをCSMacroMgrに統一
@@ -82,9 +82,9 @@ void ViewCommander::Command_RECKEYMACRO(void)
 // キーマクロの保存
 void ViewCommander::Command_SAVEKEYMACRO(void)
 {
-	auto& sFlags = GetDllShareData().m_flags;
-	sFlags.m_bRecordingKeyMacro = FALSE;
-	sFlags.m_hwndRecordingKeyMacro = NULL;	// キーボードマクロを記録中のウィンドウ
+	auto& flags = GetDllShareData().m_flags;
+	flags.m_bRecordingKeyMacro = FALSE;
+	flags.m_hwndRecordingKeyMacro = NULL;	// キーボードマクロを記録中のウィンドウ
 
 	// Jun. 16, 2002 genta
 	if (!m_pSMacroMgr->IsSaveOk()) {
@@ -134,9 +134,9 @@ void ViewCommander::Command_SAVEKEYMACRO(void)
  */
 void ViewCommander::Command_LOADKEYMACRO(void)
 {
-	auto& sFlags = GetDllShareData().m_flags;
-	sFlags.m_bRecordingKeyMacro = FALSE;
-	sFlags.m_hwndRecordingKeyMacro = NULL;	// キーボードマクロを記録中のウィンドウ
+	auto& flags = GetDllShareData().m_flags;
+	flags.m_bRecordingKeyMacro = FALSE;
+	flags.m_hwndRecordingKeyMacro = NULL;	// キーボードマクロを記録中のウィンドウ
 
 	TCHAR szPath[_MAX_PATH + 1];
 	TCHAR szInitDir[_MAX_PATH + 1];
@@ -175,13 +175,13 @@ void ViewCommander::Command_LOADKEYMACRO(void)
 // キーマクロの実行
 void ViewCommander::Command_EXECKEYMACRO(void)
 {
-	auto& sFlags = GetDllShareData().m_flags;
+	auto& flags = GetDllShareData().m_flags;
 	//@@@ 2002.1.24 YAZAKI 記録中は終了してから実行
-	if (sFlags.m_bRecordingKeyMacro) {
+	if (flags.m_bRecordingKeyMacro) {
 		Command_RECKEYMACRO();
 	}
-	sFlags.m_bRecordingKeyMacro = FALSE;
-	sFlags.m_hwndRecordingKeyMacro = NULL;	// キーボードマクロを記録中のウィンドウ
+	flags.m_bRecordingKeyMacro = FALSE;
+	flags.m_hwndRecordingKeyMacro = NULL;	// キーボードマクロを記録中のウィンドウ
 
 	// キーボードマクロの実行
 	//@@@ 2002.1.24 YAZAKI
@@ -253,18 +253,18 @@ void ViewCommander::Command_EXECEXTMACRO(const WCHAR* pszPathW, const WCHAR* psz
 		pszType = NULL;
 	}
 
-	auto& sFlags = GetDllShareData().m_flags;
+	auto& flags = GetDllShareData().m_flags;
 	// キーマクロ記録中の場合、追加する
-	if (sFlags.m_bRecordingKeyMacro &&						// キーボードマクロの記録中
-		sFlags.m_hwndRecordingKeyMacro == GetMainWindow()	// キーボードマクロを記録中のウィンドウ
+	if (flags.m_bRecordingKeyMacro &&						// キーボードマクロの記録中
+		flags.m_hwndRecordingKeyMacro == GetMainWindow()	// キーボードマクロを記録中のウィンドウ
 	) {
 		LPARAM lparams[] = {(LPARAM)pszPath, 0, 0, 0};
 		m_pSMacroMgr->Append(STAND_KEYMACRO, F_EXECEXTMACRO, lparams, m_pCommanderView);
 
 		// キーマクロの記録を一時停止する
-		sFlags.m_bRecordingKeyMacro = FALSE;
-		hwndRecordingKeyMacro = sFlags.m_hwndRecordingKeyMacro;
-		sFlags.m_hwndRecordingKeyMacro = NULL;	// キーボードマクロを記録中のウィンドウ
+		flags.m_bRecordingKeyMacro = FALSE;
+		hwndRecordingKeyMacro = flags.m_hwndRecordingKeyMacro;
+		flags.m_hwndRecordingKeyMacro = NULL;	// キーボードマクロを記録中のウィンドウ
 	}
 
 	// 古い一時マクロの退避
@@ -290,8 +290,8 @@ void ViewCommander::Command_EXECEXTMACRO(const WCHAR* pszPathW, const WCHAR* psz
 
 	// キーマクロ記録中だった場合は再開する
 	if (hwndRecordingKeyMacro) {
-		sFlags.m_bRecordingKeyMacro = TRUE;
-		sFlags.m_hwndRecordingKeyMacro = hwndRecordingKeyMacro;	// キーボードマクロを記録中のウィンドウ
+		flags.m_bRecordingKeyMacro = TRUE;
+		flags.m_hwndRecordingKeyMacro = hwndRecordingKeyMacro;	// キーボードマクロを記録中のウィンドウ
 	}
 	return;
 }

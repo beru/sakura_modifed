@@ -72,12 +72,12 @@ void EditView::PostprocessCommand_hokan(void)
 /*!	補完ウィンドウを表示する
 	ウィンドウを表示した後は、HokanMgrに任せるので、ShowHokanMgrの知るところではない。
 	
-	@param cmemData [in] 補完する元のテキスト 「Ab」などがくる。
+	@param memData [in] 補完する元のテキスト 「Ab」などがくる。
 	@param bAutoDecided [in] 候補が1つだったら確定する
 
 	@date 2005.01.10 genta CEditView_Commandから移動
 */
-void EditView::ShowHokanMgr(NativeW& cmemData, bool bAutoDecided)
+void EditView::ShowHokanMgr(NativeW& memData, bool bAutoDecided)
 {
 	// 補完対象ワードリストを調べる
 	NativeW	cmemHokanWord;
@@ -101,7 +101,7 @@ void EditView::ShowHokanMgr(NativeW& cmemData, bool bAutoDecided)
 	}
 	this->ClientToScreen(&poWin);
 	poWin.x -= (
-		cmemData.GetStringLength()
+		memData.GetStringLength()
 		 * GetTextMetrics().GetHankakuDx()
 	);
 
@@ -109,11 +109,11 @@ void EditView::ShowHokanMgr(NativeW& cmemData, bool bAutoDecided)
 		ただし、bAutoDecided == trueの場合は、補完候補が1つのときは、ウィンドウを表示しない。
 		詳しくは、Search()の説明を参照のこと。
 	*/
-	NativeW* pcmemHokanWord;
+	NativeW* pMemHokanWord;
 	if (bAutoDecided) {
-		pcmemHokanWord = &cmemHokanWord;
+		pMemHokanWord = &cmemHokanWord;
 	}else {
-		pcmemHokanWord = NULL;
+		pMemHokanWord = NULL;
 	}
 
 	// 入力補完ウィンドウ作成
@@ -134,13 +134,13 @@ void EditView::ShowHokanMgr(NativeW& cmemData, bool bAutoDecided)
 		&poWin,
 		GetTextMetrics().GetHankakuHeight(),
 		GetTextMetrics().GetHankakuDx(),
-		cmemData.GetStringPtr(),
+		memData.GetStringPtr(),
 		m_pTypeData->m_szHokanFile,
 		m_pTypeData->m_bHokanLoHiCase,
 		m_pTypeData->m_bUseHokanByFile, // 2003.06.22 Moca
 		m_pTypeData->m_nHokanType,
 		m_pTypeData->m_bUseHokanByKeyword,
-		pcmemHokanWord
+		pMemHokanWord
 	);
 	// 補完候補の数によって動作を変える
 	if (nKouhoNum <= 0) {				//	候補無し
