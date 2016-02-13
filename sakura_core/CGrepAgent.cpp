@@ -347,9 +347,9 @@ DWORD GrepAgent::DoGrep(
 	pEditWnd->SetWindowIcon(hIconSmall, ICON_SMALL);
 	pEditWnd->SetWindowIcon(hIconBig, ICON_BIG);
 
-	GrepEnumKeys cGrepEnumKeys;
+	GrepEnumKeys grepEnumKeys;
 	{
-		int nErrorNo = cGrepEnumKeys.SetFileKeys(pmGrepFile->GetStringPtr());
+		int nErrorNo = grepEnumKeys.SetFileKeys(pmGrepFile->GetStringPtr());
 		if (nErrorNo != 0) {
 			this->m_bGrepRunning = false;
 			pViewDst->m_bDoing_UndoRedo = false;
@@ -372,11 +372,11 @@ DWORD GrepAgent::DoGrep(
 	nWork = pmGrepKey->GetStringLength(); // 2003.06.10 Moca あらかじめ長さを計算しておく
 
 	// 最後にテキストを追加
-	NativeW cmemWork;
+	NativeW memWork;
 	memMessage.AppendString(LSW(STR_GREP_SEARCH_CONDITION));	//L"\r\n□検索条件  "
 	if (0 < nWork) {
-		NativeW cmemWork2;
-		cmemWork2.SetNativeData(*pmGrepKey);
+		NativeW memWork2;
+		memWork2.SetNativeData(*pmGrepKey);
 		const TypeConfig& type = pViewDst->m_pEditDoc->m_docType.GetDocumentAttribute();
 		if (!type.m_colorInfoArr[COLORIDX_WSTRING].m_bDisp) {
 			// 2011.11.28 色指定が無効ならエスケープしない
@@ -384,28 +384,28 @@ DWORD GrepAgent::DoGrep(
 		if (type.m_nStringType == StringLiteralType::CPP || type.m_nStringType == StringLiteralType::CSharp
 			|| type.m_nStringType == StringLiteralType::Python
 		) {	// 文字列区切り記号エスケープ方法
-			cmemWork2.Replace(L"\\", L"\\\\");
-			cmemWork2.Replace(L"\'", L"\\\'");
-			cmemWork2.Replace(L"\"", L"\\\"");
+			memWork2.Replace(L"\\", L"\\\\");
+			memWork2.Replace(L"\'", L"\\\'");
+			memWork2.Replace(L"\"", L"\\\"");
 		}else if (type.m_nStringType == StringLiteralType::PLSQL) {
-			cmemWork2.Replace(L"\'", L"\'\'");
-			cmemWork2.Replace(L"\"", L"\"\"");
+			memWork2.Replace(L"\'", L"\'\'");
+			memWork2.Replace(L"\"", L"\"\"");
 		}
-		cmemWork.AppendString(L"\"");
-		cmemWork.AppendNativeData(cmemWork2);
-		cmemWork.AppendString(L"\"\r\n");
+		memWork.AppendString(L"\"");
+		memWork.AppendNativeData(memWork2);
+		memWork.AppendString(L"\"\r\n");
 	}else {
-		cmemWork.AppendString(LSW(STR_GREP_SEARCH_FILE));	// L"「ファイル検索」\r\n"
+		memWork.AppendString(LSW(STR_GREP_SEARCH_FILE));	// L"「ファイル検索」\r\n"
 	}
-	memMessage += cmemWork;
+	memMessage += memWork;
 
 	if (bGrepReplace) {
 		memMessage.AppendString( LSW(STR_GREP_REPLACE_TO) );
 		if (bGrepPaste) {
 			memMessage.AppendString( LSW(STR_GREP_PASTE_CLIPBOAD) );
 		}else {
-			NativeW cmemWork2;
-			cmemWork2.SetNativeData( memReplace );
+			NativeW memWork2;
+			memWork2.SetNativeData( memReplace );
 			const TypeConfig& type = pViewDst->m_pEditDoc->m_docType.GetDocumentAttribute();
 			if (!type.m_colorInfoArr[COLORIDX_WSTRING].m_bDisp) {
 				// 2011.11.28 色指定が無効ならエスケープしない
@@ -415,15 +415,15 @@ DWORD GrepAgent::DoGrep(
 				|| type.m_nStringType == StringLiteralType::CSharp
 				|| type.m_nStringType == StringLiteralType::Python
 			) {	// 文字列区切り記号エスケープ方法
-				cmemWork2.Replace( L"\\", L"\\\\" );
-				cmemWork2.Replace( L"\'", L"\\\'" );
-				cmemWork2.Replace( L"\"", L"\\\"" );
+				memWork2.Replace( L"\\", L"\\\\" );
+				memWork2.Replace( L"\'", L"\\\'" );
+				memWork2.Replace( L"\"", L"\\\"" );
 			}else if (type.m_nStringType == StringLiteralType::PLSQL) {
-				cmemWork2.Replace( L"\'", L"\'\'" );
-				cmemWork2.Replace( L"\"", L"\"\"" );
+				memWork2.Replace( L"\'", L"\'\'" );
+				memWork2.Replace( L"\"", L"\"\"" );
 			}
 			memMessage.AppendString( L"\"" );
-			memMessage.AppendNativeData( cmemWork2 );
+			memMessage.AppendNativeData( memWork2 );
 			memMessage.AppendString( L"\"\r\n" );
 		}
 	}
@@ -433,8 +433,8 @@ DWORD GrepAgent::DoGrep(
 	if (pViewDst->m_pEditDoc->m_docType.GetDocumentAttribute().m_nStringType == StringLiteralType::CPP) {	// 文字列区切り記号エスケープ方法  0=[\"][\'] 1=[""]['']
 	}else {
 	}
-	cmemWork.SetStringT(pmGrepFile->GetStringPtr());
-	memMessage += cmemWork;
+	memWork.SetStringT(pmGrepFile->GetStringPtr());
+	memMessage += memWork;
 
 	memMessage.AppendString(L"\r\n");
 	memMessage.AppendString(LSW(STR_GREP_SEARCH_FOLDER));	// L"フォルダ   "
@@ -453,12 +453,12 @@ DWORD GrepAgent::DoGrep(
 				grepFolder += sPath;
 			}
 		}
-		cmemWork.SetStringT(grepFolder.c_str());
+		memWork.SetStringT(grepFolder.c_str());
 	}
 	if (pViewDst->m_pEditDoc->m_docType.GetDocumentAttribute().m_nStringType == StringLiteralType::CPP) {	// 文字列区切り記号エスケープ方法  0=[\"][\'] 1=[""]['']
 	}else {
 	}
-	memMessage += cmemWork;
+	memMessage += memWork;
 	memMessage.AppendString(L"\r\n");
 
 	const wchar_t*	pszWork;
@@ -544,11 +544,11 @@ DWORD GrepAgent::DoGrep(
 	}
 	const bool bDrawSwitchOld = pViewDst->SetDrawSwitch(GetDllShareData().m_common.m_search.m_bGrepRealTimeView != 0);
 
-	GrepEnumOptions cGrepEnumOptions;
-	GrepEnumFiles cGrepExceptAbsFiles;
-	cGrepExceptAbsFiles.Enumerates(_T(""), cGrepEnumKeys.m_vecExceptAbsFileKeys, cGrepEnumOptions);
-	GrepEnumFolders cGrepExceptAbsFolders;
-	cGrepExceptAbsFolders.Enumerates(_T(""), cGrepEnumKeys.m_vecExceptAbsFolderKeys, cGrepEnumOptions);
+	GrepEnumOptions grepEnumOptions;
+	GrepEnumFiles grepExceptAbsFiles;
+	grepExceptAbsFiles.Enumerates(_T(""), grepEnumKeys.m_vecExceptAbsFileKeys, grepEnumOptions);
+	GrepEnumFolders grepExceptAbsFolders;
+	grepExceptAbsFolders.Enumerates(_T(""), grepEnumKeys.m_vecExceptAbsFolderKeys, grepEnumOptions);
 
 	int nGrepTreeResult = 0;
 
@@ -560,9 +560,9 @@ DWORD GrepAgent::DoGrep(
 			&dlgCancel,
 			pmGrepKey->GetStringPtr(),
 			memReplace,
-			cGrepEnumKeys,
-			cGrepExceptAbsFiles,
-			cGrepExceptAbsFolders,
+			grepEnumKeys,
+			grepExceptAbsFiles,
+			grepExceptAbsFolders,
 			sPath.c_str(),
 			sPath.c_str(),
 			searchOption,
@@ -581,9 +581,9 @@ DWORD GrepAgent::DoGrep(
 	}
 	if (nGrepTreeResult == -1 && grepOption.bGrepHeader) {
 		const wchar_t* p = LSW(STR_GREP_SUSPENDED);	// L"中断しました。\r\n"
-		NativeW cmemSuspend;
-		cmemSuspend.SetString( p );
-		AddTail( pViewDst, cmemSuspend, grepOption.bGrepStdout );
+		NativeW memSuspend;
+		memSuspend.SetString( p );
+		AddTail( pViewDst, memSuspend, grepOption.bGrepStdout );
 	}
 	if (grepOption.bGrepHeader) {
 		WCHAR szBuffer[128];
@@ -592,13 +592,13 @@ DWORD GrepAgent::DoGrep(
 		}else {
 			auto_sprintf( szBuffer, LSW( STR_GREP_MATCH_COUNT ), nHitCount );
 		}
-		NativeW cmemOutput;
-		cmemOutput.SetString( szBuffer );
-		AddTail( pViewDst, cmemOutput, grepOption.bGrepStdout );
+		NativeW memOutput;
+		memOutput.SetString( szBuffer );
+		AddTail( pViewDst, memOutput, grepOption.bGrepStdout );
 #ifdef _DEBUG
 		auto_sprintf( szBuffer, LSW(STR_GREP_TIMER), runningTimer.Read() );
-		cmemOutput.SetString( szBuffer );
-		AddTail( pViewDst, cmemOutput, grepOption.bGrepStdout );
+		memOutput.SetString( szBuffer );
+		AddTail( pViewDst, memOutput, grepOption.bGrepStdout );
 #endif
 	}
 	pViewDst->GetCaret().MoveCursor(LayoutPoint(LayoutInt(0), tmp_PosY_Layout), true);	// カーソルをGrep直前の位置に戻す。
@@ -671,16 +671,16 @@ int GrepAgent::DoGrepTree(
 	int			nHitCountOld = -100;
 	bool		bOutputFolderName = false;
 	int			nBasePathLen = auto_strlen(pszBasePath);
-	GrepEnumOptions cGrepEnumOptions;
-	GrepEnumFilterFiles cGrepEnumFilterFiles;
-	cGrepEnumFilterFiles.Enumerates( pszPath, grepEnumKeys, cGrepEnumOptions, grepExceptAbsFiles );
+	GrepEnumOptions grepEnumOptions;
+	GrepEnumFilterFiles grepEnumFilterFiles;
+	grepEnumFilterFiles.Enumerates( pszPath, grepEnumKeys, grepEnumOptions, grepExceptAbsFiles );
 
 	/*
 	 * カレントフォルダのファイルを探索する。
 	 */
-	int count = cGrepEnumFilterFiles.GetCount();
+	int count = grepEnumFilterFiles.GetCount();
 	for (int i=0; i<count; ++i) {
-		LPCTSTR lpFileName = cGrepEnumFilterFiles.GetFileName(i);
+		LPCTSTR lpFileName = grepEnumFilterFiles.GetFileName(i);
 
 		// 処理中のユーザー操作を可能にする
 		if (!::BlockingHook(pDlgCancel->GetHwnd())) {
@@ -754,7 +754,7 @@ int GrepAgent::DoGrepTree(
 		if (pViewDst->GetDrawSwitch()) {
 			if (pszKey[0] != LTEXT('\0')) {
 				// データ検索のときファイルの合計が最大10MBを超えたら表示
-				nWork += (cGrepEnumFilterFiles.GetFileSizeLow(i) + 1023) / 1024;
+				nWork += (grepEnumFilterFiles.GetFileSizeLow(i) + 1023) / 1024;
 			}
 			if (*pnHitCount - nHitCountOld && 
 				(*pnHitCount < 20 || 10000 < nWork)
@@ -794,13 +794,13 @@ int GrepAgent::DoGrepTree(
 	 * サブフォルダを検索する。
 	 */
 	if (grepOption.bGrepSubFolder) {
-		GrepEnumOptions cGrepEnumOptionsDir;
-		GrepEnumFilterFolders cGrepEnumFilterFolders;
-		cGrepEnumFilterFolders.Enumerates( pszPath, grepEnumKeys, cGrepEnumOptionsDir, grepExceptAbsFolders );
+		GrepEnumOptions grepEnumOptionsDir;
+		GrepEnumFilterFolders grepEnumFilterFolders;
+		grepEnumFilterFolders.Enumerates( pszPath, grepEnumKeys, grepEnumOptionsDir, grepExceptAbsFolders );
 
-		int count = cGrepEnumFilterFolders.GetCount();
+		int count = grepEnumFilterFolders.GetCount();
 		for (int i=0; i<count; ++i) {
-			LPCTSTR lpFileName = cGrepEnumFilterFolders.GetFileName(i);
+			LPCTSTR lpFileName = grepEnumFilterFolders.GetFileName(i);
 
 			// サブフォルダの探索を再帰呼び出し。
 			// 処理中のユーザー操作を可能にする

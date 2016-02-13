@@ -38,7 +38,7 @@ public:
 	//                         イベント                            //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	// ロード前後
-	void OnBeforeLoad(LoadInfo* sLoadInfo);
+	void OnBeforeLoad(LoadInfo* pLoadInfo);
 	void OnAfterLoad(const LoadInfo& loadInfo);
 
 	// セーブ前後

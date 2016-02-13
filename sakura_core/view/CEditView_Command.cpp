@@ -221,14 +221,14 @@ open_c:;
 	if (ShareData::getInstance()->IsPathOpened(szPath, &hwndOwner)) {
 	}else {
 		// 文字コードはこのファイルに合わせる
-		LoadInfo sLoadInfo;
-		sLoadInfo.filePath = szPath;
-		sLoadInfo.eCharCode = GetDocument()->GetDocumentEncoding();
-		sLoadInfo.bViewMode = false;
+		LoadInfo loadInfo;
+		loadInfo.filePath = szPath;
+		loadInfo.eCharCode = GetDocument()->GetDocumentEncoding();
+		loadInfo.bViewMode = false;
 		ControlTray::OpenNewEditor(
 			G_AppInstance(),
 			this->GetHwnd(),
-			sLoadInfo,
+			loadInfo,
 			NULL,
 			true
 		);

@@ -468,7 +468,7 @@ void Macro::Save(HINSTANCE hInstance, TextOutputStream& out) const
 	WCHAR			szFuncNameJapanese[500];
 	int				nTextLen;
 	const WCHAR*	pText;
-	NativeW		cmemWork;
+	NativeW		memWork;
 	int nFuncID = m_nFuncID;
 
 	// 2002.2.2 YAZAKI SMacroMgrに頼む
@@ -487,20 +487,20 @@ void Macro::Save(HINSTANCE hInstance, TextOutputStream& out) const
 			case MacroParamType::Str:
 				pText = pParam->m_pData;
 				nTextLen = pParam->m_nDataLen;
-				cmemWork.SetString( pText, nTextLen );
-				cmemWork.Replace( L"\\", L"\\\\" );
-				cmemWork.Replace( L"\'", L"\\\'" );
-				cmemWork.Replace( L"\r", L"\\\r" );
-				cmemWork.Replace( L"\n", L"\\\n" );
-				cmemWork.Replace( L"\t", L"\\\t" );
-				cmemWork.Replace( L"\0", 1, L"\\u0000", 6 );
+				memWork.SetString( pText, nTextLen );
+				memWork.Replace( L"\\", L"\\\\" );
+				memWork.Replace( L"\'", L"\\\'" );
+				memWork.Replace( L"\r", L"\\\r" );
+				memWork.Replace( L"\n", L"\\\n" );
+				memWork.Replace( L"\t", L"\\\t" );
+				memWork.Replace( L"\0", 1, L"\\u0000", 6 );
 				const wchar_t u0085[] = {0x85, 0};
-				cmemWork.Replace( u0085, L"\\u0085" );
-				cmemWork.Replace( L"\u2028", L"\\u2028" );
-				cmemWork.Replace( L"\u2029", L"\\u2029" );
+				memWork.Replace( u0085, L"\\u0085" );
+				memWork.Replace( L"\u2028", L"\\u2028" );
+				memWork.Replace( L"\u2029", L"\\u2029" );
 				for (int c=0; c<0x20; ++c) {
-					int nLen = cmemWork.GetStringLength();
-					const wchar_t* p = cmemWork.GetStringPtr();
+					int nLen = memWork.GetStringLength();
+					const wchar_t* p = memWork.GetStringPtr();
 					for (int i=0; i<nLen; ++i) {
 						if (p[i] == c) {
 							wchar_t from[2];
@@ -508,15 +508,15 @@ void Macro::Save(HINSTANCE hInstance, TextOutputStream& out) const
 							from[0] = c;
 							from[1] = L'\0';
 							auto_sprintf( to, L"\\u%4x", c );
-							cmemWork.Replace( from, to );
+							memWork.Replace( from, to );
 							break;
 						}
 					}
 				}
 				const wchar_t u007f[] = {0x7f, 0};
-				cmemWork.Replace( u007f, L"\\u007f" );
+				memWork.Replace( u007f, L"\\u007f" );
 				out.WriteString( L"'" );
-				out.WriteString( cmemWork.GetStringPtr(), cmemWork.GetStringLength() );
+				out.WriteString( memWork.GetStringPtr(), memWork.GetStringLength() );
 				out.WriteString( L"'" );
 				break;
 			}
@@ -1146,14 +1146,14 @@ bool Macro::HandleCommand(
 			}
 
 			// 新規編集ウィンドウの追加 ver 0
-			LoadInfo sLoadInfo;
-			sLoadInfo.filePath = _T("");
-			sLoadInfo.eCharCode = CODE_NONE;
-			sLoadInfo.bViewMode = false;
+			LoadInfo loadInfo;
+			loadInfo.filePath = _T("");
+			loadInfo.eCharCode = CODE_NONE;
+			loadInfo.bViewMode = false;
 			ControlTray::OpenNewEditor(
 				G_AppInstance(),
 				pEditView->GetHwnd(),
-				sLoadInfo,
+				loadInfo,
 				cmdLine.GetStringPtr()
 			);
 			// ======= Grepの実行 =============

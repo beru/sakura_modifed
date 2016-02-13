@@ -782,13 +782,13 @@ HWND EditWnd::Create(
 
 // 起動時のファイルオープン処理
 void EditWnd::OpenDocumentWhenStart(
-	const LoadInfo& _sLoadInfo		// [in]
+	const LoadInfo& argLoadInfo		// [in]
 	)
 {
-	if (_sLoadInfo.filePath.Length()) {
+	if (argLoadInfo.filePath.Length()) {
 		::ShowWindow(GetHwnd(), SW_SHOW);
 		// Oct. 03, 2004 genta コード確認は設定に依存
-		LoadInfo loadInfo = _sLoadInfo;
+		LoadInfo loadInfo = argLoadInfo;
 		bool bReadResult = GetDocument()->m_docFileOperation.FileLoadWithoutAutoMacro(&loadInfo);	// 自動実行マクロは後で別の場所で実行される
 		if (!bReadResult) {
 			// ファイルが既に開かれている
@@ -2188,8 +2188,8 @@ void EditWnd::OnCommand(WORD wNotifyCode, WORD wID , HWND hwndCtl)
 			const MRUFile cMRU;
 			EditInfo checkEditInfo;
 			cMRU.GetEditInfo(wID - IDM_SELMRU, &checkEditInfo);
-			LoadInfo sLoadInfo(checkEditInfo.m_szPath, checkEditInfo.m_nCharCode, false);
-			GetDocument()->m_docFileOperation.FileLoad(&sLoadInfo);	//	Oct.  9, 2004 genta 共通関数化
+			LoadInfo loadInfo(checkEditInfo.m_szPath, checkEditInfo.m_nCharCode, false);
+			GetDocument()->m_docFileOperation.FileLoad(&loadInfo);	//	Oct.  9, 2004 genta 共通関数化
 		}
 		// 最近使ったフォルダ
 		else if (wID - IDM_SELOPENFOLDER >= 0 && wID - IDM_SELOPENFOLDER < 999) {
@@ -2778,14 +2778,14 @@ void EditWnd::OnDropFiles(HDROP hDrop)
 			//	2005.06.24 Moca
 			if (GetDocument()->IsAcceptLoad()) {
 				// ファイル読み込み
-				LoadInfo sLoadInfo(szFile, CODE_AUTODETECT, false);
-				GetDocument()->m_docFileOperation.FileLoad(&sLoadInfo);
+				LoadInfo loadInfo(szFile, CODE_AUTODETECT, false);
+				GetDocument()->m_docFileOperation.FileLoad(&loadInfo);
 			}else {
 				// ファイルをドロップしたときは閉じて開く
 				if (csFile.m_bDropFileAndClose) {
 					// ファイル読み込み
-					LoadInfo sLoadInfo(szFile, CODE_AUTODETECT, false);
-					GetDocument()->m_docFileOperation.FileCloseOpen(sLoadInfo);
+					LoadInfo loadInfo(szFile, CODE_AUTODETECT, false);
+					GetDocument()->m_docFileOperation.FileCloseOpen(loadInfo);
 				}else {
 					// 編集ウィンドウの上限チェック
 					if (m_pShareData->m_nodes.m_nEditArrNum >= MAX_EDITWINDOWS) {	// 最大値修正	//@@@ 2003.05.31 MIK
@@ -2793,14 +2793,14 @@ void EditWnd::OnDropFiles(HDROP hDrop)
 						return;
 					}
 					// 新たな編集ウィンドウを起動
-					LoadInfo sLoadInfo;
-					sLoadInfo.filePath = szFile;
-					sLoadInfo.eCharCode = CODE_NONE;
-					sLoadInfo.bViewMode = false;
+					LoadInfo loadInfo;
+					loadInfo.filePath = szFile;
+					loadInfo.eCharCode = CODE_NONE;
+					loadInfo.bViewMode = false;
 					ControlTray::OpenNewEditor(
 						G_AppInstance(),
 						GetHwnd(),
-						sLoadInfo
+						loadInfo
 					);
 				}
 			}

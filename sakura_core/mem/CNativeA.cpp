@@ -149,7 +149,7 @@ void NativeA::Replace(
 	const char* pszTo
 	)
 {
-	NativeA	cmemWork;
+	NativeA	memWork;
 	int			nFromLen = strlen(pszFrom);
 	int			nToLen = strlen(pszTo);
 	int			nBgnOld = 0;
@@ -157,9 +157,9 @@ void NativeA::Replace(
 	while (nBgn <= GetStringLength() - nFromLen) {
 		if (auto_memcmp(&GetStringPtr()[nBgn], pszFrom, nFromLen) == 0) {
 			if (0  < nBgn - nBgnOld) {
-				cmemWork.AppendString(&GetStringPtr()[nBgnOld], nBgn - nBgnOld);
+				memWork.AppendString(&GetStringPtr()[nBgnOld], nBgn - nBgnOld);
 			}
-			cmemWork.AppendString(pszTo, nToLen);
+			memWork.AppendString(pszTo, nToLen);
 			nBgn = nBgn + nFromLen;
 			nBgnOld = nBgn;
 		}else {
@@ -167,9 +167,9 @@ void NativeA::Replace(
 		}
 	}
 	if (0 < GetStringLength() - nBgnOld) {
-		cmemWork.AppendString(&GetStringPtr()[nBgnOld], GetStringLength() - nBgnOld);
+		memWork.AppendString(&GetStringPtr()[nBgnOld], GetStringLength() - nBgnOld);
 	}
-	SetNativeData(cmemWork);
+	SetNativeData(memWork);
 	return;
 }
 
@@ -179,7 +179,7 @@ void NativeA::Replace_j(
 	const char* pszTo
 	)
 {
-	NativeA	cmemWork;
+	NativeA	memWork;
 	int			nFromLen = strlen(pszFrom);
 	int			nToLen = strlen(pszTo);
 	int			nBgnOld = 0;
@@ -187,9 +187,9 @@ void NativeA::Replace_j(
 	while (nBgn <= GetStringLength() - nFromLen) {
 		if (memcmp(&GetStringPtr()[nBgn], pszFrom, nFromLen) == 0) {
 			if (0 < nBgn - nBgnOld) {
-				cmemWork.AppendString(&GetStringPtr()[nBgnOld], nBgn - nBgnOld);
+				memWork.AppendString(&GetStringPtr()[nBgnOld], nBgn - nBgnOld);
 			}
-			cmemWork.AppendString(pszTo, nToLen);
+			memWork.AppendString(pszTo, nToLen);
 			nBgn = nBgn + nFromLen;
 			nBgnOld = nBgn;
 		}else {
@@ -200,9 +200,9 @@ void NativeA::Replace_j(
 		}
 	}
 	if (0  < GetStringLength() - nBgnOld) {
-		cmemWork.AppendString(&GetStringPtr()[nBgnOld], GetStringLength() - nBgnOld);
+		memWork.AppendString(&GetStringPtr()[nBgnOld], GetStringLength() - nBgnOld);
 	}
-	SetNativeData(cmemWork);
+	SetNativeData(memWork);
 	return;
 }
 

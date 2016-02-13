@@ -32,6 +32,6 @@ public:
 	void OnAfterSave(const SaveInfo& saveInfo);
 	void OnFinalSave(SaveResultType eSaveResult);
 private:
-	SaveInfo	m_sSaveInfoForRollback;
+	SaveInfo	m_saveInfoForRollback;
 };
 

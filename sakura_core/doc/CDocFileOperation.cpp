@@ -213,13 +213,13 @@ void DocFileOperation::ReloadCurrentFile(
 	LayoutPoint	ptCaretPosXY = caret.GetCaretLayoutPos();
 
 	// ロード
-	LoadInfo sLoadInfo;
-	sLoadInfo.filePath = m_pDocRef->m_docFile.GetFilePath();
-	sLoadInfo.eCharCode = nCharCode;
-	sLoadInfo.bViewMode = AppMode::getInstance()->IsViewMode(); // 2014.06.13 IsEditable->IsViewModeに戻す。かわりに bForceNoMsgを追加
-	sLoadInfo.bWritableNoMsg = !m_pDocRef->IsEditable(); // すでに編集できない状態ならファイルロックのメッセージを表示しない
-	sLoadInfo.bRequestReload = true;
-	bool bRet = this->DoLoadFlow(&sLoadInfo);
+	LoadInfo loadInfo;
+	loadInfo.filePath = m_pDocRef->m_docFile.GetFilePath();
+	loadInfo.eCharCode = nCharCode;
+	loadInfo.bViewMode = AppMode::getInstance()->IsViewMode(); // 2014.06.13 IsEditable->IsViewModeに戻す。かわりに bForceNoMsgを追加
+	loadInfo.bWritableNoMsg = !m_pDocRef->IsEditable(); // すでに編集できない状態ならファイルロックのメッセージを表示しない
+	loadInfo.bRequestReload = true;
+	bool bRet = this->DoLoadFlow(&loadInfo);
 
 	// カーソル位置復元 (※ここではオプションのカーソル位置復元（＝改行単位）が指定されていない場合でも復元する)
 	// 2007.08.23 ryoji 表示領域復元
@@ -323,11 +323,11 @@ bool DocFileOperation::SaveFileDialog(
 //「ファイル名を付けて保存」ダイアログ
 bool DocFileOperation::SaveFileDialog(LPTSTR szPath)
 {
-	SaveInfo sSaveInfo;
-	sSaveInfo.filePath = szPath;
-	sSaveInfo.eCharCode = CODE_CODEMAX; //###トリッキー
-	bool bRet = SaveFileDialog(&sSaveInfo);
-	_tcscpy_s(szPath, _MAX_PATH, sSaveInfo.filePath);
+	SaveInfo saveInfo;
+	saveInfo.filePath = szPath;
+	saveInfo.eCharCode = CODE_CODEMAX; //###トリッキー
+	bool bRet = SaveFileDialog(&saveInfo);
+	_tcscpy_s(szPath, _MAX_PATH, saveInfo.filePath);
 	return bRet;
 }
 
@@ -434,13 +434,13 @@ bool DocFileOperation::FileSave()
 	}
 
 	// セーブ情報
-	SaveInfo sSaveInfo;
-	m_pDocRef->GetSaveInfo(&sSaveInfo);
-	sSaveInfo.cEol = EolType::None;			// 改行コード無変換
-	sSaveInfo.bOverwriteMode = true;	// 上書き要求
+	SaveInfo saveInfo;
+	m_pDocRef->GetSaveInfo(&saveInfo);
+	saveInfo.cEol = EolType::None;			// 改行コード無変換
+	saveInfo.bOverwriteMode = true;	// 上書き要求
 
 	// 上書き処理
-	return m_pDocRef->m_docFileOperation.DoSaveFlow(&sSaveInfo);
+	return m_pDocRef->m_docFileOperation.DoSaveFlow(&saveInfo);
 }
 
 
@@ -456,33 +456,33 @@ bool DocFileOperation::FileSaveAs(
 	)
 {
 	// セーブ情報
-	SaveInfo sSaveInfo;
-	m_pDocRef->GetSaveInfo(&sSaveInfo);
-	sSaveInfo.cEol = EolType::None; // 初期値は変換しない
+	SaveInfo saveInfo;
+	m_pDocRef->GetSaveInfo(&saveInfo);
+	saveInfo.cEol = EolType::None; // 初期値は変換しない
 	if (filename) {
 		// ダイアログなし保存、またはマクロの引数あり
-		sSaveInfo.filePath = to_tchar(filename);
+		saveInfo.filePath = to_tchar(filename);
 		if (EolType::None <= eEolType && eEolType < EolType::CodeMax) {
-			sSaveInfo.cEol = eEolType;
+			saveInfo.cEol = eEolType;
 		}
-		if (IsValidCodeType(eCodeType) && eCodeType != sSaveInfo.eCharCode) {
-			sSaveInfo.eCharCode = eCodeType;
-			sSaveInfo.bBomExist = CodeTypeName(eCodeType).IsBomDefOn();
+		if (IsValidCodeType(eCodeType) && eCodeType != saveInfo.eCharCode) {
+			saveInfo.eCharCode = eCodeType;
+			saveInfo.bBomExist = CodeTypeName(eCodeType).IsBomDefOn();
 		}
 	}
 	if (bDialog) {
 		if (!filename && AppMode::getInstance()->IsViewMode()) {
-			sSaveInfo.filePath = _T(""); //※読み込み専用モードのときはファイル名を指定しない
+			saveInfo.filePath = _T(""); //※読み込み専用モードのときはファイル名を指定しない
 		}
 
 		// ダイアログ表示
-		if (!SaveFileDialog(&sSaveInfo)) {
+		if (!SaveFileDialog(&saveInfo)) {
 			return false;
 		}
 	}
 
 	// セーブ処理
-	if (DoSaveFlow(&sSaveInfo)) {
+	if (DoSaveFlow(&saveInfo)) {
 		// オープン後自動実行マクロを実行する（ANSI版ではここで再ロード実行→自動実行マクロが実行される）
 		// 提案時の Patches#1550557 に、「名前を付けて保存」でオープン後自動実行マクロが実行されることの是非について議論の経緯あり
 		//   →”ファイル名に応じて表示を変化させるマクロとかを想定すると、これはこれでいいように思います。”
@@ -556,7 +556,7 @@ bool DocFileOperation::FileClose()
 /* 閉じて開く
 	@date 2006.12.30 ryoji CEditView::Command_FILESAVEAS()から処理本体を切り出し
 */
-void DocFileOperation::FileCloseOpen(const LoadInfo& loadInfo)
+void DocFileOperation::FileCloseOpen(const LoadInfo& argLoadInfo)
 {
 	// ファイルを閉じるときのMRU登録 & 保存確認 & 保存実行
 	if (!m_pDocRef->OnFileClose(false)) {
@@ -572,22 +572,22 @@ void DocFileOperation::FileCloseOpen(const LoadInfo& loadInfo)
 	}
 
 	// ファイル名指定が無い場合はダイアログで入力させる
-	LoadInfo sLoadInfo = loadInfo;
-	if (sLoadInfo.filePath.Length() == 0) {
+	LoadInfo loadInfo = argLoadInfo;
+	if (loadInfo.filePath.Length() == 0) {
 		std::vector<std::tstring> files;
-		if (!OpenFileDialog(EditWnd::getInstance()->GetHwnd(), NULL, &sLoadInfo, files)) {
+		if (!OpenFileDialog(EditWnd::getInstance()->GetHwnd(), NULL, &loadInfo, files)) {
 			return;
 		}
-		sLoadInfo.filePath = files[0].c_str();
+		loadInfo.filePath = files[0].c_str();
 		// 他のファイルは新規ウィンドウ
 		size_t nSize = files.size();
 		for (size_t i=1; i<nSize; ++i) {
-			LoadInfo sFilesLoadInfo = sLoadInfo;
-			sFilesLoadInfo.filePath = files[i].c_str();
+			LoadInfo filesLoadInfo = loadInfo;
+			filesLoadInfo.filePath = files[i].c_str();
 			ControlTray::OpenNewEditor(
 				G_AppInstance(),
 				EditWnd::getInstance()->GetHwnd(),
-				sFilesLoadInfo,
+				filesLoadInfo,
 				NULL,
 				true
 			);
@@ -601,7 +601,7 @@ void DocFileOperation::FileCloseOpen(const LoadInfo& loadInfo)
 	m_pDocRef->InitAllView();
 
 	// 開く
-	FileLoadWithoutAutoMacro(&sLoadInfo);
+	FileLoadWithoutAutoMacro(&loadInfo);
 
 	if (!m_pDocRef->m_docFile.GetFilePathClass().IsValidPath()) {
 		m_pDocRef->SetCurDirNotitle();

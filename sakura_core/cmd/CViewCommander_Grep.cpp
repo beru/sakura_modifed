@@ -262,14 +262,14 @@ void ViewCommander::Command_GREP_REPLACE(void)
 			cCmdLine.AppendString( pOpt );
 		}
 
-		LoadInfo sLoadInfo;
-		sLoadInfo.filePath = _T("");
-		sLoadInfo.eCharCode = CODE_NONE;
-		sLoadInfo.bViewMode = false;
+		LoadInfo loadInfo;
+		loadInfo.filePath = _T("");
+		loadInfo.eCharCode = CODE_NONE;
+		loadInfo.bViewMode = false;
 		ControlTray::OpenNewEditor(
 			G_AppInstance(),
 			m_pCommanderView->GetHwnd(),
-			sLoadInfo,
+			loadInfo,
 			cCmdLine.GetStringPtr(),
 			false,
 			NULL,

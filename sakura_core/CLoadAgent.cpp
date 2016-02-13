@@ -47,11 +47,11 @@ CallbackResultType LoadAgent::OnCheckLoad(LoadInfo* pLoadInfo)
 	// フォルダが指定された場合は「ファイルを開く」ダイアログを表示し、実際のファイル入力を促す
 	if (IsDirectory(pLoadInfo->filePath)) {
 		std::vector<std::tstring> files;
-		LoadInfo sLoadInfo(_T(""), CODE_AUTODETECT, false);
+		LoadInfo loadInfo(_T(""), CODE_AUTODETECT, false);
 		bool bDlgResult = pDoc->m_docFileOperation.OpenFileDialog(
 			EditWnd::getInstance()->GetHwnd(),
 			pLoadInfo->filePath,	// 指定されたフォルダ
-			&sLoadInfo,
+			&loadInfo,
 			files
 		);
 		if (!bDlgResult) {
@@ -59,21 +59,21 @@ CallbackResultType LoadAgent::OnCheckLoad(LoadInfo* pLoadInfo)
 		}
 		size_t nSize = files.size();
 		if (0 < nSize) {
-			sLoadInfo.filePath = files[0].c_str();
+			loadInfo.filePath = files[0].c_str();
 			// 他のファイルは新規ウィンドウ
 			for (size_t i=1; i<nSize; ++i) {
-				LoadInfo sFilesLoadInfo = sLoadInfo;
-				sFilesLoadInfo.filePath = files[i].c_str();
+				LoadInfo filesLoadInfo = loadInfo;
+				filesLoadInfo.filePath = files[i].c_str();
 				ControlTray::OpenNewEditor(
 					G_AppInstance(),
 					EditWnd::getInstance()->GetHwnd(),
-					sFilesLoadInfo,
+					filesLoadInfo,
 					NULL,
 					true
 				);
 			}
 		}
-		*pLoadInfo = sLoadInfo;
+		*pLoadInfo = loadInfo;
 	}
 
 	// 他のウィンドウで既に開かれている場合は、それをアクティブにする

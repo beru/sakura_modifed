@@ -996,9 +996,9 @@ LRESULT ControlTray::DispatchEvent(
 						vMRU,
 						vOPENFOLDER
 					);
-					LoadInfo sLoadInfo(_T(""), CODE_AUTODETECT, false);
+					LoadInfo loadInfo(_T(""), CODE_AUTODETECT, false);
 					std::vector<std::tstring> files;
-					if (!cDlgOpenFile.DoModalOpenDlg(&sLoadInfo, &files)) {
+					if (!cDlgOpenFile.DoModalOpenDlg(&loadInfo, &files)) {
 						break;
 					}
 					if (!GetTrayHwnd()) {
@@ -1008,11 +1008,11 @@ LRESULT ControlTray::DispatchEvent(
 					// 新たな編集ウィンドウを起動
 					size_t nSize = files.size();
 					for (size_t f=0; f<nSize; ++f) {
-						sLoadInfo.filePath = files[f].c_str();
+						loadInfo.filePath = files[f].c_str();
 						ControlTray::OpenNewEditor(
 							m_hInstance,
 							GetTrayHwnd(),
-							sLoadInfo,
+							loadInfo,
 							NULL,
 							true,
 							NULL,

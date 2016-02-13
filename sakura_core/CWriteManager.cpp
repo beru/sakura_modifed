@@ -53,19 +53,19 @@ CodeConvertResult WriteManager::WriteFile_From_CDocLineMgr(
 		// 1行目
 		{
 			++nLineNumber;
-			Memory cmemOutputBuffer;
+			Memory memOutputBuffer;
 			{
-				NativeW cstrSrc;
-				Memory cstrBomCheck;
-				pcCodeBase->GetBom(&cstrBomCheck);
-				if (saveInfo.bBomExist && 0 < cstrBomCheck.GetRawLength()) {
+				NativeW strSrc;
+				Memory strBomCheck;
+				pcCodeBase->GetBom(&strBomCheck);
+				if (saveInfo.bBomExist && 0 < strBomCheck.GetRawLength()) {
 					// 1行目にはBOMを付加する。エンコーダでbomがある場合のみ付加する。
-					Unicode().GetBom(cstrSrc._GetMemory());
+					Unicode().GetBom(strSrc._GetMemory());
 				}
 				if (pDocLine) {
-					cstrSrc.AppendNativeData(pDocLine->_GetDocLineDataWithEOL());
+					strSrc.AppendNativeData(pDocLine->_GetDocLineDataWithEOL());
 				}
-				CodeConvertResult e = pcCodeBase->UnicodeToCode(cstrSrc, &cmemOutputBuffer);
+				CodeConvertResult e = pcCodeBase->UnicodeToCode(strSrc, &memOutputBuffer);
 				if (e == CodeConvertResult::LoseSome) {
 					nRetVal = CodeConvertResult::LoseSome;
 				}
@@ -79,7 +79,7 @@ CodeConvertResult WriteManager::WriteFile_From_CDocLineMgr(
 					throw Error_FileWrite();
 				}
 			}
-			out.Write(cmemOutputBuffer.GetRawPtr(), cmemOutputBuffer.GetRawLength());
+			out.Write(memOutputBuffer.GetRawPtr(), memOutputBuffer.GetRawLength());
 			if (pDocLine) {
 				pDocLine = pDocLine->GetNextLine();
 			}
@@ -96,13 +96,13 @@ CodeConvertResult WriteManager::WriteFile_From_CDocLineMgr(
 				}
 			}
 
-			// 1行出力 -> cmemOutputBuffer
-			Memory cmemOutputBuffer;
+			// 1行出力 -> memOutputBuffer
+			Memory memOutputBuffer;
 			{
-				// 書き込み時のコード変換 cstrSrc -> cmemOutputBuffer
+				// 書き込み時のコード変換 strSrc -> memOutputBuffer
 				CodeConvertResult e = pcCodeBase->UnicodeToCode(
 					pDocLine->_GetDocLineDataWithEOL(),
-					&cmemOutputBuffer
+					&memOutputBuffer
 				);
 				if (e == CodeConvertResult::LoseSome) {
 					if (nRetVal == CodeConvertResult::Complete) {
@@ -120,8 +120,8 @@ CodeConvertResult WriteManager::WriteFile_From_CDocLineMgr(
 				}
 			}
 
-			// ファイルに出力 cmemOutputBuffer -> fp
-			out.Write(cmemOutputBuffer.GetRawPtr(), cmemOutputBuffer.GetRawLength());
+			// ファイルに出力 memOutputBuffer -> fp
+			out.Write(memOutputBuffer.GetRawPtr(), memOutputBuffer.GetRawLength());
 
 			// 次の行へ
 			pDocLine = pDocLine->GetNextLine();

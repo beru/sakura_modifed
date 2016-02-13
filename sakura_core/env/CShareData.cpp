@@ -1107,16 +1107,16 @@ bool ShareData::OpenDebugWindow(HWND hwnd, bool bAllwaysActive)
 		// （m_hwndTraceOutSource は CEditWnd::Create() で予め設定）
 		// ちょっと不恰好だけど、TraceOut() の引数にいちいち起動元を指定するのも．．．
 		// 2010.05.11 Moca m_hwndTraceOutSourceは依然として使っていますが引数にしました
-		LoadInfo sLoadInfo;
-		sLoadInfo.filePath = _T("");
+		LoadInfo loadInfo;
+		loadInfo.filePath = _T("");
 		// CODE_SJIS->CODE_UNICODE	2008/6/8 Uchi
 		// CODE_UNICODE->CODE_NONE	2010.05.11 Moca デフォルト文字コードで設定できるように無指定に変更
-		sLoadInfo.eCharCode = CODE_NONE;
-		sLoadInfo.bViewMode = false;
+		loadInfo.eCharCode = CODE_NONE;
+		loadInfo.bViewMode = false;
 		ret = ControlTray::OpenNewEditor(
 			NULL,
 			hwnd,
-			sLoadInfo,
+			loadInfo,
 			_T("-DEBUGMODE"),
 			true
 		);

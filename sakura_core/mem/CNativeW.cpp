@@ -186,18 +186,18 @@ void NativeW::Replace(
 	int nToLen
 	)
 {
-	NativeW cmemWork;
+	NativeW memWork;
 	int nBgnOld = 0;
 	int nBgn = 0;
 	while (nBgn <= GetStringLength() - nFromLen) {
 		if (wmemcmp(&GetStringPtr()[nBgn], pszFrom, nFromLen) == 0) {
 			if (nBgnOld == 0 && nFromLen <= nToLen) {
-				cmemWork.AllocStringBuffer(GetStringLength());
+				memWork.AllocStringBuffer(GetStringLength());
 			}
 			if (0  < nBgn - nBgnOld) {
-				cmemWork.AppendString(&GetStringPtr()[nBgnOld], nBgn - nBgnOld);
+				memWork.AppendString(&GetStringPtr()[nBgnOld], nBgn - nBgnOld);
 			}
-			cmemWork.AppendString(pszTo, nToLen);
+			memWork.AppendString(pszTo, nToLen);
 			nBgn = nBgn + nFromLen;
 			nBgnOld = nBgn;
 		}else {
@@ -206,9 +206,9 @@ void NativeW::Replace(
 	}
 	if (nBgnOld != 0) {
 		if (0 < GetStringLength() - nBgnOld) {
-			cmemWork.AppendString(&GetStringPtr()[nBgnOld], GetStringLength() - nBgnOld);
+			memWork.AppendString(&GetStringPtr()[nBgnOld], GetStringLength() - nBgnOld);
 		}
-		SetNativeData(cmemWork);
+		SetNativeData(memWork);
 	}else {
 		if (!this->GetStringPtr()) {
 			this->SetString(L"");

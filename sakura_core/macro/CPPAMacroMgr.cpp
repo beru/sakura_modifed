@@ -52,17 +52,17 @@ bool PPAMacroMgr::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
 		return false;
 	}
 
-	NativeW cmemWork;
+	NativeW memWork;
 
-	// バッファ（cmemWork）にファイル内容を読み込み、m_cPPAに渡す。
+	// バッファ（memWork）にファイル内容を読み込み、m_cPPAに渡す。
 	while (in) {
 		wstring szLine = in.ReadLineW();
 		szLine += L"\n";
-		cmemWork.AppendString(szLine.c_str());
+		memWork.AppendString(szLine.c_str());
 	}
 	in.Close();
 
-	m_cBuffer.SetNativeData(cmemWork);	// m_cBufferにコピー
+	m_cBuffer.SetNativeData(memWork);	// m_cBufferにコピー
 
 	m_nReady = true;
 	return true;

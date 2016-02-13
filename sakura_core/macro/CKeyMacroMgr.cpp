@@ -300,23 +300,23 @@ bool KeyMacroMgr::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
 						break;
 					}
 
-					NativeW cmemWork;
-					cmemWork.SetString(strLine.c_str() + nBgn, nEnd - nBgn);
+					NativeW memWork;
+					memWork.SetString(strLine.c_str() + nBgn, nEnd - nBgn);
 					// 2014.01.28 「"\\'"」のような場合の不具合を修正
-					cmemWork.Replace( L"\\\\", L"\\\1" ); // 一時置換(最初に必要)
-					cmemWork.Replace(LTEXT("\\\'"), LTEXT("\'"));
+					memWork.Replace( L"\\\\", L"\\\1" ); // 一時置換(最初に必要)
+					memWork.Replace(LTEXT("\\\'"), LTEXT("\'"));
 
 					// Jun. 16, 2002 genta double quotationもエスケープ解除
-					cmemWork.Replace(LTEXT("\\\""), LTEXT("\""));
-					cmemWork.Replace( L"\\r", L"\r" );
-					cmemWork.Replace( L"\\n", L"\n" );
-					cmemWork.Replace( L"\\t", L"\t" );
+					memWork.Replace(LTEXT("\\\""), LTEXT("\""));
+					memWork.Replace( L"\\r", L"\r" );
+					memWork.Replace( L"\\n", L"\n" );
+					memWork.Replace( L"\\t", L"\t" );
 					{
 						// \uXXXX 置換
-						size_t nLen = cmemWork.GetStringLength();
+						size_t nLen = memWork.GetStringLength();
 						size_t nBegin = 0;
-						const wchar_t* p = cmemWork.GetStringPtr();
-						NativeW cmemTemp;
+						const wchar_t* p = memWork.GetStringPtr();
+						NativeW memTemp;
 						for (size_t n=0; n<nLen; ++n) {
 							if (n + 1 < nLen && p[n] == L'\\' && p[n+1] == L'u') {
 								size_t k;
@@ -329,7 +329,7 @@ bool KeyMacroMgr::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
 									++k
 								) {
 								}
-								cmemTemp.AppendString( p + nBegin, n - nBegin );
+								memTemp.AppendString( p + nBegin, n - nBegin );
 								nBegin = k;
 								if (0 < k - n - 2) {
 									wchar_t hex[5];
@@ -337,20 +337,20 @@ bool KeyMacroMgr::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
 									hex[k - n - 2] = L'\0';
 									wchar_t* pEnd = NULL;
 									wchar_t c = static_cast<wchar_t>(wcstol(hex, &pEnd, 16));
-									cmemTemp.AppendString( &c, 1 );
+									memTemp.AppendString( &c, 1 );
 								}
 								n = k - 1;
 							}
 						}
 						if (nBegin != 0) {
 							if (0 < nLen - nBegin) {
-								cmemTemp.AppendString( p + nBegin, nLen - nBegin );
+								memTemp.AppendString( p + nBegin, nLen - nBegin );
 							}
-							cmemWork.swap( cmemTemp );
+							memWork.swap( memTemp );
 						}
 					}
-					cmemWork.Replace( L"\\\1", L"\\" ); // 一時置換を\に戻す(最後でないといけない)
-					macro->AddStringParam( cmemWork.GetStringPtr(), cmemWork.GetStringLength() );	//	引数を文字列として追加
+					memWork.Replace( L"\\\1", L"\\" ); // 一時置換を\に戻す(最後でないといけない)
+					macro->AddStringParam( memWork.GetStringPtr(), memWork.GetStringLength() );	//	引数を文字列として追加
 				}else if (Is09(szLine[i]) || szLine[i] == L'-') {	// 数字で始まったら数字列だ(-記号も含む)。
 					// Jun. 16, 2002 genta プロトタイプチェック
 					// Jun. 27, 2002 genta 余分な引数を無視するよう，VT_EMPTYを許容する．
@@ -383,13 +383,13 @@ bool KeyMacroMgr::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
 						}
 					}
 
-					NativeW cmemWork;
-					cmemWork.SetString(strLine.c_str() + nBgn, nEnd - nBgn);
+					NativeW memWork;
+					memWork.SetString(strLine.c_str() + nBgn, nEnd - nBgn);
 					// Jun. 16, 2002 genta
 					// 数字の中にquotationは入っていないよ
-					//cmemWork.Replace(L"\\\'", L"\'");
-					//cmemWork.Replace(L"\\\\", L"\\");
-					macro->AddIntParam( _wtoi(cmemWork.GetStringPtr()) );	//	引数を数字として追加
+					//memWork.Replace(L"\\\'", L"\'");
+					//memWork.Replace(L"\\\\", L"\\");
+					macro->AddIntParam( _wtoi(memWork.GetStringPtr()) );	//	引数を数字として追加
 				// Jun. 16, 2002 genta
 				}else if (szLine[i] == LTEXT(')')) {
 					// 引数無し

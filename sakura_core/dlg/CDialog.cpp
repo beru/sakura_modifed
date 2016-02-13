@@ -277,14 +277,14 @@ void Dialog::SetDialogPosSize()
 			m_nHeight = rc.bottom - rc.top;
 		}
 
-		WINDOWPLACEMENT cWindowPlacement;
-		cWindowPlacement.length = sizeof(cWindowPlacement);
-		cWindowPlacement.showCmd = m_nShowCmd;	// ç≈ëÂâªÅEç≈è¨âª
-		cWindowPlacement.rcNormalPosition.left = m_xPos;
-		cWindowPlacement.rcNormalPosition.top = m_yPos;
-		cWindowPlacement.rcNormalPosition.right = m_nWidth + m_xPos;
-		cWindowPlacement.rcNormalPosition.bottom = m_nHeight + m_yPos;
-		::SetWindowPlacement(m_hWnd, &cWindowPlacement);
+		WINDOWPLACEMENT windowPlacement;
+		windowPlacement.length = sizeof(windowPlacement);
+		windowPlacement.showCmd = m_nShowCmd;	// ç≈ëÂâªÅEç≈è¨âª
+		windowPlacement.rcNormalPosition.left = m_xPos;
+		windowPlacement.rcNormalPosition.top = m_yPos;
+		windowPlacement.rcNormalPosition.right = m_nWidth + m_xPos;
+		windowPlacement.rcNormalPosition.bottom = m_nHeight + m_yPos;
+		::SetWindowPlacement(m_hWnd, &windowPlacement);
 	}
 }
 

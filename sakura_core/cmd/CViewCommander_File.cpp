@@ -63,15 +63,15 @@
 void ViewCommander::Command_FILENEW(void)
 {
 	// 新たな編集ウィンドウを起動
-	LoadInfo sLoadInfo;
-	sLoadInfo.filePath = _T("");
-	sLoadInfo.eCharCode = CODE_NONE;
-	sLoadInfo.bViewMode = false;
+	LoadInfo loadInfo;
+	loadInfo.filePath = _T("");
+	loadInfo.eCharCode = CODE_NONE;
+	loadInfo.bViewMode = false;
 	std::tstring curDir = SakuraEnvironment::GetDlgInitialDir();
 	ControlTray::OpenNewEditor(
 		G_AppInstance(),
 		m_pCommanderView->GetHwnd(),
-		sLoadInfo,
+		loadInfo,
 		NULL,
 		false,
 		curDir.c_str(),
@@ -85,15 +85,15 @@ void ViewCommander::Command_FILENEW(void)
 void ViewCommander::Command_FILENEW_NEWWINDOW(void)
 {
 	// 新たな編集ウィンドウを起動
-	LoadInfo sLoadInfo;
-	sLoadInfo.filePath = _T("");
-	sLoadInfo.eCharCode = CODE_DEFAULT;
-	sLoadInfo.bViewMode = false;
+	LoadInfo loadInfo;
+	loadInfo.filePath = _T("");
+	loadInfo.eCharCode = CODE_DEFAULT;
+	loadInfo.bViewMode = false;
 	std::tstring curDir = SakuraEnvironment::GetDlgInitialDir();
 	ControlTray::OpenNewEditor(
 		G_AppInstance(),
 		m_pCommanderView->GetHwnd(),
-		sLoadInfo,
+		loadInfo,
 		NULL,
 		false,
 		curDir.c_str(),
@@ -119,12 +119,12 @@ void ViewCommander::Command_FILEOPEN(
 		nCharCode = CODE_AUTODETECT;
 	}
 	// ロード情報
-	LoadInfo sLoadInfo(filename ? to_tchar(filename) : _T(""), nCharCode, bViewMode);
+	LoadInfo loadInfo(filename ? to_tchar(filename) : _T(""), nCharCode, bViewMode);
 	std::vector<std::tstring> files;
 	std::tstring defName = (defaultName ? to_tchar(defaultName) : _T(""));
 
 	// 必要であれば「ファイルを開く」ダイアログ
-	if (!sLoadInfo.filePath.IsValidPath()) {
+	if (!loadInfo.filePath.IsValidPath()) {
 		if (!defName.empty()) {
 			TCHAR szPath[_MAX_PATH];
 			TCHAR szDir[_MAX_DIR];
@@ -138,28 +138,28 @@ void ViewCommander::Command_FILEOPEN(
 				FilePath path = defName.c_str();
 				if (auto_stricmp(path.GetDirPath().c_str(), szPath) == 0) {
 					// フォルダ名までは実在している
-					sLoadInfo.filePath = defName.c_str();
+					loadInfo.filePath = defName.c_str();
 				}
 			}
 		}
 		bool bDlgResult = GetDocument()->m_docFileOperation.OpenFileDialog(
 			EditWnd::getInstance()->GetHwnd(),	// [in]  オーナーウィンドウ
 			defName.length() == 0 ? NULL : defName.c_str(),	// [in]  フォルダ
-			&sLoadInfo,							// [out] ロード情報受け取り
+			&loadInfo,							// [out] ロード情報受け取り
 			files								// [out] ファイル名
 		);
 		if (!bDlgResult) return;
 
-		sLoadInfo.filePath = files[0].c_str();
+		loadInfo.filePath = files[0].c_str();
 		// 他のファイルは新規ウィンドウ
 		int nSize = (int)files.size();
 		for (int i=1; i<nSize; ++i) {
-			LoadInfo sFilesLoadInfo = sLoadInfo;
-			sFilesLoadInfo.filePath = files[i].c_str();
+			LoadInfo filesLoadInfo = loadInfo;
+			filesLoadInfo.filePath = files[i].c_str();
 			ControlTray::OpenNewEditor(
 				G_AppInstance(),
 				EditWnd::getInstance()->GetHwnd(),
-				sFilesLoadInfo,
+				filesLoadInfo,
 				NULL,
 				true
 			);
@@ -167,7 +167,7 @@ void ViewCommander::Command_FILEOPEN(
 	}
 
 	// 開く
-	GetDocument()->m_docFileOperation.FileLoad(&sLoadInfo);
+	GetDocument()->m_docFileOperation.FileLoad(&loadInfo);
 }
 
 
@@ -194,14 +194,14 @@ bool ViewCommander::Command_FILESAVE(bool warnbeep, bool askname)
 	}
 
 	// セーブ情報
-	SaveInfo sSaveInfo;
-	pDoc->GetSaveInfo(&sSaveInfo);
-	sSaveInfo.cEol = EolType::None; // 改行コード無変換
-	sSaveInfo.bOverwriteMode = true; // 上書き要求
+	SaveInfo saveInfo;
+	pDoc->GetSaveInfo(&saveInfo);
+	saveInfo.cEol = EolType::None; // 改行コード無変換
+	saveInfo.bOverwriteMode = true; // 上書き要求
 
 	// 上書き処理
 	if (!warnbeep) EditApp::getInstance()->m_soundSet.MuteOn();
-	bool bRet = pDoc->m_docFileOperation.DoSaveFlow(&sSaveInfo);
+	bool bRet = pDoc->m_docFileOperation.DoSaveFlow(&saveInfo);
 	if (!warnbeep) EditApp::getInstance()->m_soundSet.MuteOff();
 
 	return bRet;
@@ -561,14 +561,14 @@ void ViewCommander::Command_PROFILEMGR( void )
 	if (profMgr.DoModal( G_AppInstance(), m_pCommanderView->GetHwnd(), 0 )) {
 		TCHAR szOpt[MAX_PATH+10];
 		auto_sprintf( szOpt, _T("-PROF=\"%ts\""), profMgr.m_strProfileName.c_str() );
-		LoadInfo sLoadInfo;
-		sLoadInfo.filePath = _T("");
-		sLoadInfo.eCharCode = CODE_DEFAULT;
-		sLoadInfo.bViewMode = false;
+		LoadInfo loadInfo;
+		loadInfo.filePath = _T("");
+		loadInfo.eCharCode = CODE_DEFAULT;
+		loadInfo.bViewMode = false;
 		ControlTray::OpenNewEditor(
 			G_AppInstance(),
 			m_pCommanderView->GetHwnd(),
-			sLoadInfo,
+			loadInfo,
 			szOpt,
 			false,
 			NULL,

@@ -1730,8 +1730,8 @@ void DlgFuncList::SetTreeFileSub(
 	}
 
 	int count = 0;
-	GrepEnumKeys cGrepEnumKeys;
-	int errNo = cGrepEnumKeys.SetFileKeys( m_fileTreeSetting.m_aItems[nItem].m_szTargetFile );
+	GrepEnumKeys grepEnumKeys;
+	int errNo = grepEnumKeys.SetFileKeys( m_fileTreeSetting.m_aItems[nItem].m_szTargetFile );
 	if (errNo != 0) {
 		TVINSERTSTRUCT tvis;
 		tvis.hParent      = hParent;
@@ -1741,37 +1741,37 @@ void DlgFuncList::SetTreeFileSub(
 		TreeView_InsertItem(hwndTree, &tvis);
 		return;
 	}
-	GrepEnumOptions cGrepEnumOptions;
-	cGrepEnumOptions.m_bIgnoreHidden   = m_fileTreeSetting.m_aItems[nItem].m_bIgnoreHidden;
-	cGrepEnumOptions.m_bIgnoreReadOnly = m_fileTreeSetting.m_aItems[nItem].m_bIgnoreReadOnly;
-	cGrepEnumOptions.m_bIgnoreSystem   = m_fileTreeSetting.m_aItems[nItem].m_bIgnoreSystem;
-	GrepEnumFiles cGrepExceptAbsFiles;
-	cGrepExceptAbsFiles.Enumerates(_T(""), cGrepEnumKeys.m_vecExceptAbsFileKeys, cGrepEnumOptions);
-	GrepEnumFolders cGrepExceptAbsFolders;
-	cGrepExceptAbsFolders.Enumerates(_T(""), cGrepEnumKeys.m_vecExceptAbsFolderKeys, cGrepEnumOptions);
+	GrepEnumOptions grepEnumOptions;
+	grepEnumOptions.m_bIgnoreHidden   = m_fileTreeSetting.m_aItems[nItem].m_bIgnoreHidden;
+	grepEnumOptions.m_bIgnoreReadOnly = m_fileTreeSetting.m_aItems[nItem].m_bIgnoreReadOnly;
+	grepEnumOptions.m_bIgnoreSystem   = m_fileTreeSetting.m_aItems[nItem].m_bIgnoreSystem;
+	GrepEnumFiles grepExceptAbsFiles;
+	grepExceptAbsFiles.Enumerates(_T(""), grepEnumKeys.m_vecExceptAbsFileKeys, grepEnumOptions);
+	GrepEnumFolders grepExceptAbsFolders;
+	grepExceptAbsFolders.Enumerates(_T(""), grepEnumKeys.m_vecExceptAbsFolderKeys, grepEnumOptions);
 
 	//フォルダ一覧作成
-	GrepEnumFilterFolders cGrepEnumFilterFolders;
-	cGrepEnumFilterFolders.Enumerates( basePath.c_str(), cGrepEnumKeys, cGrepEnumOptions, cGrepExceptAbsFolders );
-	int nItemCount = cGrepEnumFilterFolders.GetCount();
+	GrepEnumFilterFolders grepEnumFilterFolders;
+	grepEnumFilterFolders.Enumerates( basePath.c_str(), grepEnumKeys, grepEnumOptions, grepExceptAbsFolders );
+	int nItemCount = grepEnumFilterFolders.GetCount();
 	count = nItemCount;
 	for (int i=0; i<nItemCount; ++i) {
 		TVINSERTSTRUCT tvis;
 		tvis.hParent      = hParent;
 		tvis.item.mask    = TVIF_TEXT | TVIF_PARAM | TVIF_CHILDREN;
-		tvis.item.pszText = const_cast<TCHAR*>(cGrepEnumFilterFolders.GetFileName(i));
+		tvis.item.pszText = const_cast<TCHAR*>(grepEnumFilterFolders.GetFileName(i));
 		tvis.item.lParam  = -2;
 		tvis.item.cChildren = 1; // ダミーの子要素を持たせて[+]を表示
 		TreeView_InsertItem(hwndTree, &tvis);
 	}
 
 	//ファイル一覧作成
-	GrepEnumFilterFiles cGrepEnumFilterFiles;
-	cGrepEnumFilterFiles.Enumerates( basePath.c_str(), cGrepEnumKeys, cGrepEnumOptions, cGrepExceptAbsFiles );
-	nItemCount = cGrepEnumFilterFiles.GetCount();
+	GrepEnumFilterFiles grepEnumFilterFiles;
+	grepEnumFilterFiles.Enumerates( basePath.c_str(), grepEnumKeys, grepEnumOptions, grepExceptAbsFiles );
+	nItemCount = grepEnumFilterFiles.GetCount();
 	count += nItemCount;
 	for (int i=0; i<nItemCount; ++i) {
-		const TCHAR* pFile = cGrepEnumFilterFiles.GetFileName(i);
+		const TCHAR* pFile = grepEnumFilterFiles.GetFileName(i);
 		TVINSERTSTRUCT tvis;
 		tvis.hParent      = hParent;
 		tvis.item.mask    = TVIF_TEXT | TVIF_PARAM;
@@ -1857,12 +1857,12 @@ BOOL DlgFuncList::OnInitDialog(
 	EditView* pEditView = (EditView*)m_lParam;
 	if (pEditView) {
 		if (!IsDocking() && m_pShareData->m_common.m_outline.m_bRememberOutlineWindowPos) {
-			WINDOWPLACEMENT cWindowPlacement;
-			cWindowPlacement.length = sizeof(cWindowPlacement);
-			if (::GetWindowPlacement(pEditView->m_pEditWnd->GetHwnd(), &cWindowPlacement)) {
+			WINDOWPLACEMENT windowPlacement;
+			windowPlacement.length = sizeof(windowPlacement);
+			if (::GetWindowPlacement(pEditView->m_pEditWnd->GetHwnd(), &windowPlacement)) {
 				// ウィンドウ位置・サイズを-1以外の値にしておくと、Dialogで使用される．
-				m_xPos = m_pShareData->m_common.m_outline.m_xOutlineWindowPos + cWindowPlacement.rcNormalPosition.left;
-				m_yPos = m_pShareData->m_common.m_outline.m_yOutlineWindowPos + cWindowPlacement.rcNormalPosition.top;
+				m_xPos = m_pShareData->m_common.m_outline.m_xOutlineWindowPos + windowPlacement.rcNormalPosition.left;
+				m_yPos = m_pShareData->m_common.m_outline.m_yOutlineWindowPos + windowPlacement.rcNormalPosition.top;
 				m_nWidth =  m_pShareData->m_common.m_outline.m_widthOutlineWindow;
 				m_nHeight = m_pShareData->m_common.m_outline.m_heightOutlineWindow;
 			}
@@ -2388,12 +2388,12 @@ BOOL DlgFuncList::OnDestroy(void)
 	HWND hwndEdit = pEditView->m_pEditWnd->GetHwnd();
 	if (!IsDocking() && m_pShareData->m_common.m_outline.m_bRememberOutlineWindowPos) {
 		// 親のウィンドウ位置・サイズを記憶
-		WINDOWPLACEMENT cWindowPlacement;
-		cWindowPlacement.length = sizeof(cWindowPlacement);
-		if (::GetWindowPlacement(hwndEdit, &cWindowPlacement)) {
+		WINDOWPLACEMENT windowPlacement;
+		windowPlacement.length = sizeof(windowPlacement);
+		if (::GetWindowPlacement(hwndEdit, &windowPlacement)) {
 			// ウィンドウ位置・サイズを記憶
-			m_pShareData->m_common.m_outline.m_xOutlineWindowPos = m_xPos - cWindowPlacement.rcNormalPosition.left;
-			m_pShareData->m_common.m_outline.m_yOutlineWindowPos = m_yPos - cWindowPlacement.rcNormalPosition.top;
+			m_pShareData->m_common.m_outline.m_xOutlineWindowPos = m_xPos - windowPlacement.rcNormalPosition.left;
+			m_pShareData->m_common.m_outline.m_yOutlineWindowPos = m_yPos - windowPlacement.rcNormalPosition.top;
 			m_pShareData->m_common.m_outline.m_widthOutlineWindow = m_nWidth;
 			m_pShareData->m_common.m_outline.m_heightOutlineWindow = m_nHeight;
 		}

@@ -733,11 +733,11 @@ BOOL DlgFileTree::OnBnClicked(int wID)
 	case IDC_BUTTON_FILEADD:
 		{
 			DlgOpenFile dlg;
-			LoadInfo sLoadInfo;
+			LoadInfo loadInfo;
 			std::vector<std::tstring> aFileNames;
 			dlg.Create( G_AppInstance(), GetHwnd(), _T("*.*"), _T("."),
 				std::vector<LPCTSTR>(), std::vector<LPCTSTR>() );
-			if (dlg.DoModalOpenDlg(&sLoadInfo, &aFileNames, false)) {
+			if (dlg.DoModalOpenDlg(&loadInfo, &aFileNames, false)) {
 				if (0 < aFileNames.size()) {
 					HWND hwndTree = GetItemHwnd(IDC_TREE_FL);
 					HTREEITEM htiInsert = NULL;
