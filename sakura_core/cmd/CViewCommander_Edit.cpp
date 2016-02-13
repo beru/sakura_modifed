@@ -66,12 +66,12 @@ void ViewCommander::Command_WCHAR(
 			m_pCommanderView->DeleteData(true);
 		}
 		if (typeData->m_bAutoIndent) {	// オートインデント
-			const Layout* pCLayout;
+			const Layout* pLayout;
 			LogicInt nLineLen;
 			auto& layoutMgr = pDoc->m_layoutMgr;
-			const wchar_t* pLine = layoutMgr.GetLineStr(caret.GetCaretLayoutPos().GetY2(), &nLineLen, &pCLayout);
-			if (pCLayout) {
-				const DocLine* pDocLine = pDoc->m_docLineMgr.GetLine(pCLayout->GetLogicLineNo());
+			const wchar_t* pLine = layoutMgr.GetLineStr(caret.GetCaretLayoutPos().GetY2(), &nLineLen, &pLayout);
+			if (pLayout) {
+				const DocLine* pDocLine = pDoc->m_docLineMgr.GetLine(pLayout->GetLogicLineNo());
 				pLine = pDocLine->GetDocLineStrWithEOL(&nLineLen);
 				if (pLine) {
 					/*
@@ -342,26 +342,26 @@ void ViewCommander::Command_UNDO(void)
 		const bool bDrawSwitchOld = m_pCommanderView->SetDrawSwitch(bDraw);	// hor
 
 
-		WaitCursor cWaitCursor(m_pCommanderView->GetHwnd(), 1000 < nOpeBlkNum);
+		WaitCursor waitCursor(m_pCommanderView->GetHwnd(), 1000 < nOpeBlkNum);
 		HWND hwndProgress = NULL;
 		int nProgressPos = 0;
-		if (cWaitCursor.IsEnable()) {
+		if (waitCursor.IsEnable()) {
 			hwndProgress = m_pCommanderView->StartProgress();
 		}
 
 		const bool bFastMode = (100 < nOpeBlkNum);
 		auto& layoutMgr = GetDocument()->m_layoutMgr;
 		for (int i=nOpeBlkNum-1; i>=0; --i) {
-			Ope* pcOpe = pcOpeBlk->GetOpe(i);
+			Ope* pOpe = pcOpeBlk->GetOpe(i);
 			if (bFastMode) {
-				caret.MoveCursorFastMode(pcOpe->m_ptCaretPos_PHY_After);
+				caret.MoveCursorFastMode(pOpe->m_ptCaretPos_PHY_After);
 			}else {
 				layoutMgr.LogicToLayout(
-					pcOpe->m_ptCaretPos_PHY_After,
+					pOpe->m_ptCaretPos_PHY_After,
 					&ptCaretPos_After
 				);
 				layoutMgr.LogicToLayout(
-					pcOpe->m_ptCaretPos_PHY_Before,
+					pOpe->m_ptCaretPos_PHY_Before,
 					&ptCaretPos_Before
 				);
 
@@ -369,97 +369,97 @@ void ViewCommander::Command_UNDO(void)
 				caret.MoveCursor(ptCaretPos_After, false);
 			}
 
-			switch (pcOpe->GetCode()) {
+			switch (pOpe->GetCode()) {
 			case OpeCode::Insert:
 				{
-					InsertOpe* pcInsertOpe = static_cast<InsertOpe*>(pcOpe);
+					InsertOpe* pInsertOpe = static_cast<InsertOpe*>(pOpe);
 
 					// 選択範囲の変更
 					LogicRange cSelectLogic;
-					cSelectLogic.SetFrom(pcOpe->m_ptCaretPos_PHY_Before);
-					cSelectLogic.SetTo(pcOpe->m_ptCaretPos_PHY_After);
+					cSelectLogic.SetFrom(pOpe->m_ptCaretPos_PHY_Before);
+					cSelectLogic.SetTo(pOpe->m_ptCaretPos_PHY_After);
 					if (bFastMode) {
 					}else {
-						selInfo.m_sSelectBgn.SetFrom(ptCaretPos_Before);
-						selInfo.m_sSelectBgn.SetTo(selInfo.m_sSelectBgn.GetFrom());
-						selInfo.m_sSelect.SetFrom(ptCaretPos_Before);
-						selInfo.m_sSelect.SetTo(ptCaretPos_After);
+						selInfo.m_selectBgn.SetFrom(ptCaretPos_Before);
+						selInfo.m_selectBgn.SetTo(selInfo.m_selectBgn.GetFrom());
+						selInfo.m_select.SetFrom(ptCaretPos_Before);
+						selInfo.m_select.SetTo(ptCaretPos_After);
 					}
 
 					// データ置換 削除&挿入にも使える
 					bDrawAll |= m_pCommanderView->ReplaceData_CEditView3(
-						selInfo.m_sSelect,				// 削除範囲
-						&pcInsertOpe->m_cOpeLineData,	// 削除されたデータのコピー(NULL可能)
+						selInfo.m_select,				// 削除範囲
+						&pInsertOpe->m_cOpeLineData,	// 削除されたデータのコピー(NULL可能)
 						NULL,
 						bDraw,						// 再描画するか否か
 						NULL,
-						pcInsertOpe->m_nOrgSeq,
+						pInsertOpe->m_nOrgSeq,
 						NULL,
 						bFastMode,
 						&cSelectLogic
 					);
 
 					// 選択範囲の変更
-					selInfo.m_sSelectBgn.Clear(-1); // 範囲選択(原点)
-					selInfo.m_sSelect.Clear(-1);
+					selInfo.m_selectBgn.Clear(-1); // 範囲選択(原点)
+					selInfo.m_select.Clear(-1);
 				}
 				break;
 			case OpeCode::Delete:
 				{
-					DeleteOpe* pcDeleteOpe = static_cast<DeleteOpe*>(pcOpe);
+					DeleteOpe* pDeleteOpe = static_cast<DeleteOpe*>(pOpe);
 
 					// 2007.10.17 kobake メモリリークしてました。修正。
-					if (0 < pcDeleteOpe->m_cOpeLineData.size()) {
+					if (0 < pDeleteOpe->m_cOpeLineData.size()) {
 						// データ置換 削除&挿入にも使える
 						LayoutRange sRange;
 						sRange.Set(ptCaretPos_Before);
 						LogicRange cSelectLogic;
-						cSelectLogic.Set(pcOpe->m_ptCaretPos_PHY_Before);
+						cSelectLogic.Set(pOpe->m_ptCaretPos_PHY_Before);
 						bDrawAll |= m_pCommanderView->ReplaceData_CEditView3(
 							sRange,
 							NULL,										// 削除されたデータのコピー(NULL可能)
-							&pcDeleteOpe->m_cOpeLineData,
+							&pDeleteOpe->m_cOpeLineData,
 							bDraw,										// 再描画するか否か
 							NULL,
 							0,
-							&pcDeleteOpe->m_nOrgSeq,
+							&pDeleteOpe->m_nOrgSeq,
 							bFastMode,
 							&cSelectLogic
 						);
 					}
-					pcDeleteOpe->m_cOpeLineData.clear();
+					pDeleteOpe->m_cOpeLineData.clear();
 				}
 				break;
 			case OpeCode::Replace:
 				{
-					ReplaceOpe* pcReplaceOpe = static_cast<ReplaceOpe*>(pcOpe);
+					ReplaceOpe* pReplaceOpe = static_cast<ReplaceOpe*>(pOpe);
 
 					LayoutRange sRange;
 					sRange.SetFrom(ptCaretPos_Before);
 					sRange.SetTo(ptCaretPos_After);
 					LogicRange cSelectLogic;
-					cSelectLogic.SetFrom(pcOpe->m_ptCaretPos_PHY_Before);
-					cSelectLogic.SetTo(pcOpe->m_ptCaretPos_PHY_After);
+					cSelectLogic.SetFrom(pOpe->m_ptCaretPos_PHY_Before);
+					cSelectLogic.SetTo(pOpe->m_ptCaretPos_PHY_After);
 
 					// データ置換 削除&挿入にも使える
 					bDrawAll |= m_pCommanderView->ReplaceData_CEditView3(
 						sRange,				// 削除範囲
-						&pcReplaceOpe->m_pcmemDataIns,	// 削除されたデータのコピー(NULL可能)
-						&pcReplaceOpe->m_pcmemDataDel,	// 挿入するデータ
+						&pReplaceOpe->m_pcmemDataIns,	// 削除されたデータのコピー(NULL可能)
+						&pReplaceOpe->m_pcmemDataDel,	// 挿入するデータ
 						bDraw,						// 再描画するか否か
 						NULL,
-						pcReplaceOpe->m_nOrgInsSeq,
-						&pcReplaceOpe->m_nOrgDelSeq,
+						pReplaceOpe->m_nOrgInsSeq,
+						&pReplaceOpe->m_nOrgDelSeq,
 						bFastMode,
 						&cSelectLogic
 					);
-					pcReplaceOpe->m_pcmemDataDel.clear();
+					pReplaceOpe->m_pcmemDataDel.clear();
 				}
 				break;
 			case OpeCode::MoveCaret:
 				// カーソルを移動
 				if (bFastMode) {
-					caret.MoveCursorFastMode(pcOpe->m_ptCaretPos_PHY_After);
+					caret.MoveCursorFastMode(pOpe->m_ptCaretPos_PHY_After);
 				}else {
 					caret.MoveCursor(ptCaretPos_After, false);
 				}
@@ -470,22 +470,22 @@ void ViewCommander::Command_UNDO(void)
 				if (i == 0) {
 					layoutMgr._DoLayout();
 					GetEditWindow()->ClearViewCaretPosInfo();
-					if (GetDocument()->m_nTextWrapMethodCur == (int)TextWrappingMethod::NoWrapping) {
+					if (GetDocument()->m_nTextWrapMethodCur == TextWrappingMethod::NoWrapping) {
 						layoutMgr.CalculateTextWidth();
 					}
 					layoutMgr.LogicToLayout(
-						pcOpe->m_ptCaretPos_PHY_Before,
+						pOpe->m_ptCaretPos_PHY_Before,
 						&ptCaretPos_Before
 					);
 					caret.MoveCursor(ptCaretPos_Before, true);
 					// 通常モードではReplaceData_CEditViewの中で設定される
 					caret.m_nCaretPosX_Prev = caret.GetCaretLayoutPos().GetX();
 				}else {
-					caret.MoveCursorFastMode(pcOpe->m_ptCaretPos_PHY_Before);
+					caret.MoveCursorFastMode(pOpe->m_ptCaretPos_PHY_Before);
 				}
 			}else {
 				layoutMgr.LogicToLayout(
-					pcOpe->m_ptCaretPos_PHY_Before,
+					pOpe->m_ptCaretPos_PHY_Before,
 					&ptCaretPos_Before
 				);
 				// カーソルを移動
@@ -594,10 +594,10 @@ void ViewCommander::Command_REDO(void)
 		bool bDrawAll = false;
 		const bool bDrawSwitchOld = m_pCommanderView->SetDrawSwitch(bDraw);	// 2007.07.22 ryoji
 
-		WaitCursor cWaitCursor(m_pCommanderView->GetHwnd(), 1000 < nOpeBlkNum);
+		WaitCursor waitCursor(m_pCommanderView->GetHwnd(), 1000 < nOpeBlkNum);
 		HWND hwndProgress = NULL;
 		int nProgressPos = 0;
-		if (cWaitCursor.IsEnable()) {
+		if (waitCursor.IsEnable()) {
 			hwndProgress = m_pCommanderView->StartProgress();
 		}
 
@@ -625,10 +625,10 @@ void ViewCommander::Command_REDO(void)
 			switch (pcOpe->GetCode()) {
 			case OpeCode::Insert:
 				{
-					InsertOpe* pcInsertOpe = static_cast<InsertOpe*>(pcOpe);
+					InsertOpe* pInsertOpe = static_cast<InsertOpe*>(pcOpe);
 
 					// 2007.10.17 kobake メモリリークしてました。修正。
-					if (0 < pcInsertOpe->m_cOpeLineData.size()) {
+					if (0 < pInsertOpe->m_cOpeLineData.size()) {
 						// データ置換 削除&挿入にも使える
 						LayoutRange sRange;
 						sRange.Set(ptCaretPos_Before);
@@ -637,42 +637,42 @@ void ViewCommander::Command_REDO(void)
 						bDrawAll |= m_pCommanderView->ReplaceData_CEditView3(
 							sRange,
 							NULL,										// 削除されたデータのコピー(NULL可能)
-							&pcInsertOpe->m_cOpeLineData,				// 挿入するデータ
+							&pInsertOpe->m_cOpeLineData,				// 挿入するデータ
 							bDraw,										// 再描画するか否か
 							NULL,
 							0,
-							&pcInsertOpe->m_nOrgSeq,
+							&pInsertOpe->m_nOrgSeq,
 							bFastMode,
 							&cSelectLogic
 						);
 
 					}
-					pcInsertOpe->m_cOpeLineData.clear();
+					pInsertOpe->m_cOpeLineData.clear();
 				}
 				break;
 			case OpeCode::Delete:
 				{
-					DeleteOpe* pcDeleteOpe = static_cast<DeleteOpe*>(pcOpe);
+					DeleteOpe* pDeleteOpe = static_cast<DeleteOpe*>(pcOpe);
 
 					if (bFastMode) {
 					}else {
 						layoutMgr.LogicToLayout(
-							pcDeleteOpe->m_ptCaretPos_PHY_To,
+							pDeleteOpe->m_ptCaretPos_PHY_To,
 							&ptCaretPos_To
 						);
 					}
 					LogicRange cSelectLogic;
 					cSelectLogic.SetFrom(pcOpe->m_ptCaretPos_PHY_Before);
-					cSelectLogic.SetTo(pcDeleteOpe->m_ptCaretPos_PHY_To);
+					cSelectLogic.SetTo(pDeleteOpe->m_ptCaretPos_PHY_To);
 
 					// データ置換 削除&挿入にも使える
 					bDrawAll |= m_pCommanderView->ReplaceData_CEditView3(
 						LayoutRange(ptCaretPos_Before, ptCaretPos_To),
-						&pcDeleteOpe->m_cOpeLineData,	// 削除されたデータのコピー(NULL可能)
+						&pDeleteOpe->m_cOpeLineData,	// 削除されたデータのコピー(NULL可能)
 						NULL,
 						bDraw,
 						NULL,
-						pcDeleteOpe->m_nOrgSeq,
+						pDeleteOpe->m_nOrgSeq,
 						NULL,
 						bFastMode,
 						&cSelectLogic
@@ -681,32 +681,32 @@ void ViewCommander::Command_REDO(void)
 				break;
 			case OpeCode::Replace:
 				{
-					ReplaceOpe* pcReplaceOpe = static_cast<ReplaceOpe*>(pcOpe);
+					ReplaceOpe* pReplaceOpe = static_cast<ReplaceOpe*>(pcOpe);
 
 					if (bFastMode) {
 					}else {
 						layoutMgr.LogicToLayout(
-							pcReplaceOpe->m_ptCaretPos_PHY_To,
+							pReplaceOpe->m_ptCaretPos_PHY_To,
 							&ptCaretPos_To
 						);
 					}
 					LogicRange cSelectLogic;
 					cSelectLogic.SetFrom(pcOpe->m_ptCaretPos_PHY_Before);
-					cSelectLogic.SetTo(pcReplaceOpe->m_ptCaretPos_PHY_To);
+					cSelectLogic.SetTo(pReplaceOpe->m_ptCaretPos_PHY_To);
 
 					// データ置換 削除&挿入にも使える
 					bDrawAll |= m_pCommanderView->ReplaceData_CEditView3(
 						LayoutRange(ptCaretPos_Before, ptCaretPos_To),
-						&pcReplaceOpe->m_pcmemDataDel,	// 削除されたデータのコピー(NULL可能)
-						&pcReplaceOpe->m_pcmemDataIns,	// 挿入するデータ
+						&pReplaceOpe->m_pcmemDataDel,	// 削除されたデータのコピー(NULL可能)
+						&pReplaceOpe->m_pcmemDataIns,	// 挿入するデータ
 						bDraw,
 						NULL,
-						pcReplaceOpe->m_nOrgDelSeq,
-						&pcReplaceOpe->m_nOrgInsSeq,
+						pReplaceOpe->m_nOrgDelSeq,
+						&pReplaceOpe->m_nOrgInsSeq,
 						bFastMode,
 						&cSelectLogic
 					);
-					pcReplaceOpe->m_pcmemDataIns.clear();
+					pReplaceOpe->m_pcmemDataIns.clear();
 				}
 				break;
 			case OpeCode::MoveCaret:
@@ -716,7 +716,7 @@ void ViewCommander::Command_REDO(void)
 				if (i == nOpeBlkNum - 1) {
 					layoutMgr._DoLayout();
 					GetEditWindow()->ClearViewCaretPosInfo();
-					if (GetDocument()->m_nTextWrapMethodCur == (int)TextWrappingMethod::NoWrapping) {
+					if (GetDocument()->m_nTextWrapMethodCur == TextWrappingMethod::NoWrapping) {
 						layoutMgr.CalculateTextWidth();
 					}
 					layoutMgr.LogicToLayout(
@@ -799,13 +799,13 @@ void ViewCommander::Command_DELETE(void)
 		// 2008.08.03 nasukoji	選択範囲なしでDELETEを実行した場合、カーソル位置まで半角スペースを挿入した後改行を削除して次行と連結する
 		auto& caret = GetCaret();
 		if (layoutMgr.GetLineCount() > caret.GetCaretLayoutPos().GetY2()) {
-			const Layout* pcLayout = layoutMgr.SearchLineByLayoutY(caret.GetCaretLayoutPos().GetY2());
-			if (pcLayout) {
+			const Layout* pLayout = layoutMgr.SearchLineByLayoutY(caret.GetCaretLayoutPos().GetY2());
+			if (pLayout) {
 				LayoutInt nLineLen;
 				LogicInt nIndex;
-				nIndex = m_pCommanderView->LineColumnToIndex2(pcLayout, caret.GetCaretLayoutPos().GetX2(), &nLineLen);
+				nIndex = m_pCommanderView->LineColumnToIndex2(pLayout, caret.GetCaretLayoutPos().GetX2(), &nLineLen);
 				if (nLineLen != 0) {	// 折り返しや改行コードより右の場合には nLineLen に行全体の表示桁数が入る
-					if (pcLayout->GetLayoutEol().GetType() != EolType::None) {	// 行終端は改行コードか?
+					if (pLayout->GetLayoutEol().GetType() != EolType::None) {	// 行終端は改行コードか?
 						Command_INSTEXT(true, L"", LogicInt(0), FALSE);	// カーソル位置まで半角スペース挿入
 					}else {	// 行終端が折り返し
 						// 折り返し行末ではスペース挿入後、次の文字を削除する	// 2009.02.19 ryoji
@@ -815,13 +815,13 @@ void ViewCommander::Command_DELETE(void)
 
 						if (nLineLen < caret.GetCaretLayoutPos().GetX2()) {	// 折り返し行末とカーソルの間に隙間がある
 							Command_INSTEXT(true, L"", LogicInt(0), FALSE);	// カーソル位置まで半角スペース挿入
-							pcLayout = layoutMgr.SearchLineByLayoutY(caret.GetCaretLayoutPos().GetY2());
-							nIndex = m_pCommanderView->LineColumnToIndex2(pcLayout, caret.GetCaretLayoutPos().GetX2(), &nLineLen);
+							pLayout = layoutMgr.SearchLineByLayoutY(caret.GetCaretLayoutPos().GetY2());
+							nIndex = m_pCommanderView->LineColumnToIndex2(pLayout, caret.GetCaretLayoutPos().GetX2(), &nLineLen);
 						}
 						if (nLineLen != 0) {	// （スペース挿入後も）折り返し行末なら次文字を削除するために次行の先頭に移動する必要がある
-							if (pcLayout->GetNextLayout()) {	// 最終行末ではない
+							if (pLayout->GetNextLayout()) {	// 最終行末ではない
 								LayoutPoint ptLay;
-								LogicPoint ptLog(pcLayout->GetLogicOffset() + nIndex, pcLayout->GetLogicLineNo());
+								LogicPoint ptLog(pLayout->GetLogicOffset() + nIndex, pLayout->GetLogicLineNo());
 								layoutMgr.LogicToLayout(ptLog, &ptLay);
 								caret.MoveCursor(ptLay, true);
 								caret.m_nCaretPosX_Prev = caret.GetCaretLayoutPos().GetX2();
@@ -856,14 +856,14 @@ void ViewCommander::Command_DELETE_BACK(void)
 		LogicPoint		ptLogicPos_Old = caret.GetCaretLogicPos();
 		BOOL bBool = Command_LEFT(false, false);
 		if (bBool) {
-			const Layout* pcLayout = GetDocument()->m_layoutMgr.SearchLineByLayoutY(caret.GetCaretLayoutPos().GetY2());
-			if (pcLayout) {
+			const Layout* pLayout = GetDocument()->m_layoutMgr.SearchLineByLayoutY(caret.GetCaretLayoutPos().GetY2());
+			if (pLayout) {
 				LayoutInt nLineLen;
-				LogicInt nIdx = m_pCommanderView->LineColumnToIndex2(pcLayout, caret.GetCaretLayoutPos().GetX2(), &nLineLen);
+				LogicInt nIdx = m_pCommanderView->LineColumnToIndex2(pLayout, caret.GetCaretLayoutPos().GetX2(), &nLineLen);
 				if (nLineLen == 0) {	// 折り返しや改行コードより右の場合には nLineLen に行全体の表示桁数が入る
 					// 右からの移動では折り返し末尾文字は削除するが改行は削除しない
 					// 下から（下の行の行頭から）の移動では改行も削除する
-					if (nIdx < pcLayout->GetLengthWithoutEOL() || caret.GetCaretLayoutPos().GetY2() < ptLayoutPos_Old.GetY2()) {
+					if (nIdx < pLayout->GetLengthWithoutEOL() || caret.GetCaretLayoutPos().GetY2() < ptLayoutPos_Old.GetY2()) {
 						if (!m_pCommanderView->m_bDoing_UndoRedo) {	// アンドゥ・リドゥの実行中か
 							// 操作の追加
 							GetOpeBlk()->AppendOpe(
@@ -891,16 +891,16 @@ void ViewCommander::DelCharForOverwrite(
 {
 	bool bEol = false;
 	bool bDelete = true;
-	const Layout* pcLayout = GetDocument()->m_layoutMgr.SearchLineByLayoutY(GetCaret().GetCaretLayoutPos().GetY2());
+	const Layout* pLayout = GetDocument()->m_layoutMgr.SearchLineByLayoutY(GetCaret().GetCaretLayoutPos().GetY2());
 	int nDelLen = LogicInt(0);
 	LayoutInt nKetaDiff = LayoutInt(0);
 	LayoutInt nKetaAfterIns = LayoutInt(0);
-	if (pcLayout) {
+	if (pLayout) {
 		// 指定された桁に対応する行のデータ内の位置を調べる
-		LogicInt nIdxTo = m_pCommanderView->LineColumnToIndex(pcLayout, GetCaret().GetCaretLayoutPos().GetX2());
-		if (nIdxTo >= pcLayout->GetLengthWithoutEOL()) {
+		LogicInt nIdxTo = m_pCommanderView->LineColumnToIndex(pLayout, GetCaret().GetCaretLayoutPos().GetX2());
+		if (nIdxTo >= pLayout->GetLengthWithoutEOL()) {
 			bEol = true;	// 現在位置は改行または折り返し以後
-			if (pcLayout->GetLayoutEol() != EolType::None) {
+			if (pLayout->GetLayoutEol() != EolType::None) {
 				if (GetDllShareData().m_common.m_edit.m_bNotOverWriteCRLF) {	// 改行は上書きしない
 					// 現在位置が改行ならば削除しない
 					bDelete = false;
@@ -909,7 +909,7 @@ void ViewCommander::DelCharForOverwrite(
 		}else {
 			// 文字幅に合わせてスペースを詰める
 			if (GetDllShareData().m_common.m_edit.m_bOverWriteFixMode) {
-				const StringRef line = pcLayout->GetDocLineRef()->GetStringRefWithEOL();
+				const StringRef line = pLayout->GetDocLineRef()->GetStringRefWithEOL();
 				LogicInt nPos = GetCaret().GetCaretLogicPos().GetX();
 				if (line.At(nPos) != WCODE::TAB) {
 					LayoutInt nKetaBefore = NativeW::GetKetaOfChar(line, nPos);

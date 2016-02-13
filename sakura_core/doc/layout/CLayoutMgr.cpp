@@ -69,15 +69,15 @@ LayoutMgr::~LayoutMgr()
 ||
 */
 void LayoutMgr::Create(
-	EditDoc* pcEditDoc,
-	DocLineMgr* pcDocLineMgr
+	EditDoc* pEditDoc,
+	DocLineMgr* pDocLineMgr
 	)
 {
 	_Empty();
 	Init();
 	// Jun. 20, 2003 genta EditDocへのポインタ追加
-	m_pEditDoc = pcEditDoc;
-	m_pDocLineMgr = pcDocLineMgr;
+	m_pEditDoc = pEditDoc;
+	m_pDocLineMgr = pDocLineMgr;
 }
 
 
@@ -352,7 +352,7 @@ Layout* LayoutMgr::InsertLineNext(
 	@date 2009.08.28 nasukoji	レイアウト長を引数に追加
 */
 Layout* LayoutMgr::CreateLayout(
-	DocLine*		pCDocLine,
+	DocLine*		pDocLine,
 	LogicPoint		ptLogicPos,
 	LogicInt		nLength,
 	EColorIndexType	nTypePrev,
@@ -362,7 +362,7 @@ Layout* LayoutMgr::CreateLayout(
 	)
 {
 	Layout* pLayout = new Layout(
-		pCDocLine,
+		pDocLine,
 		ptLogicPos,
 		nLength,
 		nTypePrev,
@@ -370,13 +370,13 @@ Layout* LayoutMgr::CreateLayout(
 		colorInfo
 	);
 
-	if (pCDocLine->GetEol() == EolType::None) {
+	if (pDocLine->GetEol() == EolType::None) {
 		pLayout->m_eol.SetType(EolType::None);	// 改行コードの種類
 	}else {
 		if (pLayout->GetLogicOffset() + pLayout->GetLengthWithEOL() >
-			pCDocLine->GetLengthWithEOL() - pCDocLine->GetEol().GetLen()
+			pDocLine->GetLengthWithEOL() - pDocLine->GetEol().GetLen()
 		) {
-			pLayout->m_eol = pCDocLine->GetEol();	// 改行コードの種類
+			pLayout->m_eol = pDocLine->GetEol();	// 改行コードの種類
 		}else {
 			pLayout->m_eol = EolType::None;	// 改行コードの種類
 		}
@@ -387,7 +387,7 @@ Layout* LayoutMgr::CreateLayout(
 	// パフォーマンスの低下が気にならない程なら全ての折り返し方法で計算する
 	// ようにしても良いと思う。
 	// （その場合LayoutMgr::CalculateTextWidth()の呼び出し箇所をチェック）
-	pLayout->SetLayoutWidth((m_pEditDoc->m_nTextWrapMethodCur == (int)TextWrappingMethod::NoWrapping) ? nPosX : LayoutInt(0));
+	pLayout->SetLayoutWidth((m_pEditDoc->m_nTextWrapMethodCur == TextWrappingMethod::NoWrapping) ? nPosX : LayoutInt(0));
 
 	return pLayout;
 }
@@ -933,11 +933,11 @@ void LayoutMgr::LayoutToLogicEx(
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	BOOL bEOF = FALSE;
 	LayoutInt nX;
-	const Layout* pcLayout = SearchLineByLayoutY(ptLayout.GetY2());
-	if (!pcLayout) {
+	const Layout* pLayout = SearchLineByLayoutY(ptLayout.GetY2());
+	if (!pLayout) {
 		if (0 < ptLayout.y) {
-			pcLayout = SearchLineByLayoutY(ptLayout.GetY2() - LayoutInt(1));
-			if (!pcLayout) {
+			pLayout = SearchLineByLayoutY(ptLayout.GetY2() - LayoutInt(1));
+			if (!pLayout) {
 				pptLogic->Set(LogicInt(0), m_pDocLineMgr->GetLineCount());
 				return;
 			}else {
@@ -949,7 +949,7 @@ void LayoutMgr::LayoutToLogicEx(
 					pptLogic->y = m_pDocLineMgr->GetLineCount() - 1; // 2002/2/10 aroka DocLineMgr変更
 					bEOF = TRUE;
 					// nX = LayoutInt(MAXLINEKETAS);
-					nX = pcLayout->GetIndent();
+					nX = pLayout->GetIndent();
 					goto checkloop;
 				}
 			}
@@ -959,14 +959,14 @@ void LayoutMgr::LayoutToLogicEx(
 		pptLogic->Set(LogicInt(0), m_pDocLineMgr->GetLineCount());
 		return;
 	}else {
-		pptLogic->y = pcLayout->GetLogicLineNo();
+		pptLogic->y = pLayout->GetLogicLineNo();
 	}
 	
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                        Ｘ値の決定                           //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	pData = GetLineStr(ptLayout.GetY2(), &nDataLen);
-	nX = pcLayout ? pcLayout->GetIndent() : LayoutInt(0);
+	nX = pLayout ? pLayout->GetIndent() : LayoutInt(0);
 
 checkloop:;
 	LogicInt i;
@@ -999,7 +999,7 @@ checkloop:;
 		}
 		i += nCharChars - LogicInt(1);
 	}
-	i += pcLayout->GetLogicOffset();
+	i += pLayout->GetLogicOffset();
 	pptLogic->x = i;
 	pptLogic->ext = ptLayout.GetX2() - nX;
 	return;

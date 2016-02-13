@@ -71,7 +71,7 @@ const DWORD p_helpids[] = {	//12700
 int DlgTypeList::DoModal(HINSTANCE hInstance, HWND hwndParent, Result* psResult)
 {
 	int	nRet;
-	m_nSettingType = psResult->cDocumentType;
+	m_nSettingType = psResult->documentType;
 	m_bAlertFileAssociation = true;
 	m_bEnableTempChange = psResult->bTempChange;
 	nRet = (int)Dialog::DoModal(hInstance, hwndParent, IDD_TYPELIST, (LPARAM)NULL);
@@ -79,7 +79,7 @@ int DlgTypeList::DoModal(HINSTANCE hInstance, HWND hwndParent, Result* psResult)
 		return FALSE;
 	}else {
 		// Œ‹‰Ê
-		psResult->cDocumentType = TypeConfigNum(nRet & ~PROP_TEMPCHANGE_FLAG);
+		psResult->documentType = TypeConfigNum(nRet & ~PROP_TEMPCHANGE_FLAG);
 		psResult->bTempChange   = ((nRet & PROP_TEMPCHANGE_FLAG) != 0);
 		return TRUE;
 	}

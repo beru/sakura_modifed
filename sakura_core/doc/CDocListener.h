@@ -200,7 +200,7 @@ public:
 // Listener‚Í1‚Â‚ÌSubject‚ğŠÏ@‚·‚é
 class DocListener : public ListenerT<DocSubject> {
 public:
-	DocListener(DocSubject* pcDoc = NULL);
+	DocListener(DocSubject* pDoc = NULL);
 	virtual ~DocListener();
 
 	// -- -- ‘®« -- -- //
@@ -232,7 +232,7 @@ public:
 class EditDoc;
 class DocListenerEx : public DocListener {
 public:
-	DocListenerEx(DocSubject* pcDoc = NULL) : DocListener(pcDoc) { }
+	DocListenerEx(DocSubject* pDoc = NULL) : DocListener(pDoc) { }
 	EditDoc* GetListeningDoc() const;
 };
 

@@ -582,7 +582,7 @@ LayoutInt LayoutMgr::DoLayout_Range(
 */
 void LayoutMgr::CalculateTextWidth_Range(const CalTextWidthArg* pctwArg)
 {
-	if (m_pEditDoc->m_nTextWrapMethodCur == (int)TextWrappingMethod::NoWrapping) {	// 「折り返さない」
+	if (m_pEditDoc->m_nTextWrapMethodCur == TextWrappingMethod::NoWrapping) {	// 「折り返さない」
 		LayoutInt nCalTextWidthLinesFrom(0);	// テキスト最大幅の算出開始レイアウト行
 		LayoutInt nCalTextWidthLinesTo(0);	// テキスト最大幅の算出終了レイアウト行
 		bool bCalTextWidth = true;		// テキスト最大幅の算出要求をON

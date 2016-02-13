@@ -5,7 +5,7 @@
 #include "util/string_ex2.h"
 
 // 空白→TAB変換。単独のスペースは変換しない
-bool Converter_SpaceToTab::DoConvert(NativeW* pcData)
+bool Converter_SpaceToTab::DoConvert(NativeW* pData)
 {
 	using namespace WCODE;
 
@@ -24,7 +24,7 @@ bool Converter_SpaceToTab::DoConvert(NativeW* pcData)
 	nBgn = 0;
 	nPosDes = 0;
 	// 変換後に必要なバイト数を調べる
-	while ((pLine = GetNextLineW(pcData->GetStringPtr(), pcData->GetStringLength(), &nLineLen, &nBgn, &cEol, m_bExtEol))) {
+	while ((pLine = GetNextLineW(pData->GetStringPtr(), pData->GetStringLength(), &nLineLen, &nBgn, &cEol, m_bExtEol))) {
 		if (0 < nLineLen) {
 			nPosDes += nLineLen;
 		}
@@ -38,10 +38,10 @@ bool Converter_SpaceToTab::DoConvert(NativeW* pcData)
 	nBgn = 0;
 	nPosDes = 0;
 	// CRLFで区切られる「行」を返す。CRLFは行長に加えない
-	while ((pLine = GetNextLineW(pcData->GetStringPtr(), pcData->GetStringLength(), &nLineLen, &nBgn, &cEol, m_bExtEol))) {
+	while ((pLine = GetNextLineW(pData->GetStringPtr(), pData->GetStringLength(), &nLineLen, &nBgn, &cEol, m_bExtEol))) {
 		if (0 < nLineLen) {
 			// 先頭行については開始桁位置を考慮する（さらに折り返し関連の対策が必要？）
-			nPosX = (pcData->GetStringPtr() == pLine)? m_nStartColumn: 0;	// 処理中のiに対応する表示桁位置
+			nPosX = (pData->GetStringPtr() == pLine)? m_nStartColumn: 0;	// 処理中のiに対応する表示桁位置
 			bSpace = false;	// 直前がスペースか
 			nStartPos = 0;	// スペースの先頭
 			for (i=0; i<nLineLen; ++i) {
@@ -114,7 +114,7 @@ bool Converter_SpaceToTab::DoConvert(NativeW* pcData)
 	}
 	pDes[nPosDes] = L'\0';
 
-	pcData->SetString(pDes, nPosDes);
+	pData->SetString(pDes, nPosDes);
 	return true;
 }
 

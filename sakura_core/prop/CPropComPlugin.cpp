@@ -558,23 +558,23 @@ std::tstring PropPlugin::GetReadMeFile(const std::tstring& sName)
 bool PropPlugin::BrowseReadMe(const std::tstring& sReadMeName)
 {
 	// -- -- -- -- コマンドライン文字列を生成 -- -- -- -- //
-	CommandLineString cCmdLineBuf;
+	CommandLineString cmdLineBuf;
 
 	// アプリケーションパス
 	TCHAR szExePath[MAX_PATH + 1];
 	::GetModuleFileName(NULL, szExePath, _countof(szExePath));
-	cCmdLineBuf.AppendF(_T("\"%ts\""), szExePath);
+	cmdLineBuf.AppendF(_T("\"%ts\""), szExePath);
 
 	// ファイル名
-	cCmdLineBuf.AppendF(_T(" \"%ts\""), sReadMeName.c_str());
+	cmdLineBuf.AppendF(_T(" \"%ts\""), sReadMeName.c_str());
 
 	// コマンドラインオプション
-	cCmdLineBuf.AppendF(_T(" -R -CODE=99"));
+	cmdLineBuf.AppendF(_T(" -R -CODE=99"));
 
 	// グループID
 	int nGroup = GetDllShareData().m_nodes.m_nGroupSequences;
 	if (nGroup > 0) {
-		cCmdLineBuf.AppendF(_T(" -GROUP=%d"), nGroup + 1);
+		cmdLineBuf.AppendF(_T(" -GROUP=%d"), nGroup + 1);
 	}
 
 	// CreateProcessに渡すSTARTUPINFOを作成
@@ -583,7 +583,7 @@ bool PropPlugin::BrowseReadMe(const std::tstring& sReadMeName)
 
 	PROCESS_INFORMATION	pi = {0};
 	TCHAR	szCmdLine[1024];
-	auto_strcpy_s(szCmdLine, _countof(szCmdLine), cCmdLineBuf.c_str());
+	auto_strcpy_s(szCmdLine, _countof(szCmdLine), cmdLineBuf.c_str());
 	return (::CreateProcess(NULL, szCmdLine, NULL, NULL, TRUE,
 		CREATE_NEW_CONSOLE, NULL, NULL, &sui, &pi) != 0);
 }
@@ -601,7 +601,7 @@ static void LoadPluginTemp(CommonSetting& common, MenuDrawer& cMenuDrawer)
 			const Plug* plug = *it;
 			if (!plug->m_sIcon.empty()) {
 				iBitmap = cMenuDrawer.m_pIcons->Add(
-					to_tchar(plug->m_cPlugin.GetFilePath(to_tchar(plug->m_sIcon.c_str())).c_str()));
+					to_tchar(plug->m_plugin.GetFilePath(to_tchar(plug->m_sIcon.c_str())).c_str()));
 			}
 			cMenuDrawer.AddToolButton(iBitmap, plug->GetFunctionCode());
 		}

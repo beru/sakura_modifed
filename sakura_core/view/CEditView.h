@@ -666,7 +666,7 @@ public:
 	bool			m_bAutoScrollHorizontal;	//!< 水平スクロール可
 
 	// 検索
-	SearchStringPattern m_sSearchPattern;
+	SearchStringPattern m_searchPattern;
 	mutable Bregexp		m_CurRegexp;				// コンパイルデータ
 	bool				m_bCurSrchKeyMark;			// 検索文字列のマーク
 	bool				m_bCurSearchUpdate;			// コンパイルデータ更新要求
@@ -719,8 +719,8 @@ public:
 	FP_ATOK_RECONV	m_AT_ImmSetReconvertString;
 
 	// その他
-	AutoMarkMgr*	m_cHistory;	//	Jump履歴
-	RegexKeyword*	m_cRegexKeyword;	//@@@ 2001.11.17 add MIK
+	AutoMarkMgr*	m_pHistory;	//	Jump履歴
+	RegexKeyword*	m_pRegexKeyword;	//@@@ 2001.11.17 add MIK
 	int				m_nMyIndex;	// 分割状態
 	Migemo*			m_pMigemo;
 	bool			m_bMiniMap;

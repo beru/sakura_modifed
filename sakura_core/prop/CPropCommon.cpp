@@ -73,21 +73,21 @@ INT_PTR PropCommon::DlgProc(
 )
 {
 	PROPSHEETPAGE*	pPsp;
-	PropCommon*	pCPropCommon;
+	PropCommon*	pPropCommon;
 	switch (uMsg) {
 	case WM_INITDIALOG:
 		pPsp = (PROPSHEETPAGE*)lParam;
-		pCPropCommon = (PropCommon*)(pPsp->lParam);
-		if (pCPropCommon) {
-			return (pCPropCommon->*DispatchPage)(hwndDlg, uMsg, wParam, pPsp->lParam);
+		pPropCommon = (PropCommon*)(pPsp->lParam);
+		if (pPropCommon) {
+			return (pPropCommon->*DispatchPage)(hwndDlg, uMsg, wParam, pPsp->lParam);
 		}else {
 			return FALSE;
 		}
 	default:
 		// Modified by KEITA for WIN64 2003.9.6
-		pCPropCommon = (PropCommon*)::GetWindowLongPtr(hwndDlg, DWLP_USER);
-		if (pCPropCommon) {
-			return (pCPropCommon->*DispatchPage)(hwndDlg, uMsg, wParam, lParam);
+		pPropCommon = (PropCommon*)::GetWindowLongPtr(hwndDlg, DWLP_USER);
+		if (pPropCommon) {
+			return (pPropCommon->*DispatchPage)(hwndDlg, uMsg, wParam, lParam);
 		}else {
 			return FALSE;
 		}
@@ -101,20 +101,20 @@ INT_PTR PropCommon::DlgProc2(
 	HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam
 )
 {
-	PropCommon*	pCPropCommon;
+	PropCommon*	pPropCommon;
 	switch (uMsg) {
 	case WM_INITDIALOG:
-		pCPropCommon = (PropCommon*)(lParam);
-		if (pCPropCommon) {
-			return (pCPropCommon->*DispatchPage)(hwndDlg, uMsg, IDOK, lParam);
+		pPropCommon = (PropCommon*)(lParam);
+		if (pPropCommon) {
+			return (pPropCommon->*DispatchPage)(hwndDlg, uMsg, IDOK, lParam);
 		}else {
 			return FALSE;
 		}
 	default:
 		// Modified by KEITA for WIN64 2003.9.6
-		pCPropCommon = (PropCommon*)::GetWindowLongPtr(hwndDlg, DWLP_USER);
-		if (pCPropCommon) {
-			return (pCPropCommon->*DispatchPage)(hwndDlg, uMsg, wParam, lParam);
+		pPropCommon = (PropCommon*)::GetWindowLongPtr(hwndDlg, DWLP_USER);
+		if (pPropCommon) {
+			return (pPropCommon->*DispatchPage)(hwndDlg, uMsg, wParam, lParam);
 		}else {
 			return FALSE;
 		}

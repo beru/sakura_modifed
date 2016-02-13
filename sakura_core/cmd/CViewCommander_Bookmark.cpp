@@ -265,9 +265,9 @@ void ViewCommander::Command_JUMP(void)
 // ブックマークの設定・解除を行う(トグル動作)
 void ViewCommander::Command_BOOKMARK_SET(void)
 {
-	DocLine* pCDocLine;
+	DocLine* pDocLine;
 	auto& selInfo = m_pCommanderView->GetSelectionInfo();
-	auto& sSelect = selInfo.m_sSelect;
+	auto& sSelect = selInfo.m_select;
 	auto& lineMgr = GetDocument()->m_docLineMgr;
 	if (selInfo.IsTextSelected()
 		&& sSelect.GetFrom().y < sSelect.GetTo().y
@@ -284,14 +284,14 @@ void ViewCommander::Command_BOOKMARK_SET(void)
 			&ptTo
 		);
 		for (LogicInt nY=ptFrom.GetY2(); nY<=ptTo.y; ++nY) {
-			pCDocLine = lineMgr.GetLine(nY);
-			BookmarkSetter cBookmark(pCDocLine);
-			if (pCDocLine) cBookmark.SetBookmark(!cBookmark.IsBookmarked());
+			pDocLine = lineMgr.GetLine(nY);
+			BookmarkSetter cBookmark(pDocLine);
+			if (pDocLine) cBookmark.SetBookmark(!cBookmark.IsBookmarked());
 		}
 	}else {
-		pCDocLine = lineMgr.GetLine(GetCaret().GetCaretLogicPos().GetY2());
-		BookmarkSetter cBookmark(pCDocLine);
-		if (pCDocLine) cBookmark.SetBookmark(!cBookmark.IsBookmarked());
+		pDocLine = lineMgr.GetLine(GetCaret().GetCaretLogicPos().GetY2());
+		BookmarkSetter cBookmark(pDocLine);
+		if (pDocLine) cBookmark.SetBookmark(!cBookmark.IsBookmarked());
 	}
 
 	// 2002.01.16 hor 分割したビューも更新
@@ -408,7 +408,7 @@ void ViewCommander::Command_BOOKMARK_PATTERN(void)
 		return;
 	}
 	BookmarkManager(&GetDocument()->m_docLineMgr).MarkSearchWord(
-		m_pCommanderView->m_sSearchPattern
+		m_pCommanderView->m_searchPattern
 	);
 	// 2002.01.16 hor 分割したビューも更新
 	GetEditWindow()->Views_Redraw();

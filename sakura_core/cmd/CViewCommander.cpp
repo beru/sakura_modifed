@@ -442,9 +442,9 @@ bool ViewCommander::HandleCommand(
 	case F_GREP_REPLACE:	Command_GREP_REPLACE();break;							//Grep置換
 	case F_JUMP_DIALOG:		Command_JUMP_DIALOG(); break;					// 指定行ヘジャンプダイアログの表示
 	case F_JUMP:			Command_JUMP(); break;							// 指定行ヘジャンプ
-	case F_OUTLINE:			bRet = Command_FUNCLIST((int)lparam1, OUTLINE_DEFAULT); break;	// アウトライン解析
-	case F_OUTLINE_TOGGLE:	bRet = Command_FUNCLIST((int)ShowDialogType::Toggle, OUTLINE_DEFAULT); break;	// アウトライン解析(toggle) // 20060201 aroka
-	case F_FILETREE:		bRet = Command_FUNCLIST( (BOOL)lparam1 ,OUTLINE_FILETREE ); break;	//ファイルツリー
+	case F_OUTLINE:			bRet = Command_FUNCLIST((ShowDialogType)lparam1, OUTLINE_DEFAULT); break;	// アウトライン解析
+	case F_OUTLINE_TOGGLE:	bRet = Command_FUNCLIST(ShowDialogType::Toggle, OUTLINE_DEFAULT); break;	// アウトライン解析(toggle) // 20060201 aroka
+	case F_FILETREE:		bRet = Command_FUNCLIST((ShowDialogType)lparam1 ,OUTLINE_FILETREE ); break;	//ファイルツリー
 	case F_TAGJUMP:			Command_TAGJUMP(lparam1 != 0); break;			// タグジャンプ機能 // Apr. 03, 2003 genta 引数追加
 	case F_TAGJUMP_CLOSE:	Command_TAGJUMP(true); break;					// タグジャンプ(元ウィンドウClose)	// Apr. 03, 2003 genta
 	case F_TAGJUMPBACK:		Command_TAGJUMPBACK(); break;					// タグジャンプバック機能
@@ -463,7 +463,7 @@ bool ViewCommander::HandleCommand(
 	case F_BOOKMARK_NEXT:	Command_BOOKMARK_NEXT(); break;					// 次のブックマークへ
 	case F_BOOKMARK_PREV:	Command_BOOKMARK_PREV(); break;					// 前のブックマークへ
 	case F_BOOKMARK_RESET:	Command_BOOKMARK_RESET(); break;				// ブックマークの全解除
-	case F_BOOKMARK_VIEW:	bRet = Command_FUNCLIST((BOOL)lparam1 , OUTLINE_BOOKMARK); break;	// アウトライン解析
+	case F_BOOKMARK_VIEW:	bRet = Command_FUNCLIST((ShowDialogType)lparam1 , OUTLINE_BOOKMARK); break;	// アウトライン解析
 // To Here 2001.12.03 hor
 	case F_BOOKMARK_PATTERN:Command_BOOKMARK_PATTERN(); break;				// 2002.01.16 hor 指定パターンに一致する行をマーク
 	case F_JUMP_SRCHSTARTPOS:	Command_JUMP_SRCHSTARTPOS(); break;			// 検索開始位置へ戻る 02/06/26 ai
@@ -504,7 +504,7 @@ bool ViewCommander::HandleCommand(
 	case F_TMPWRAPNOWRAP:	HandleCommand(F_TEXTWRAPMETHOD, bRedraw, (LPARAM)TextWrappingMethod::NoWrapping, 0, 0, 0); break;	// 折り返さない（一時設定）			// 2008.05.30 nasukoji
 	case F_TMPWRAPSETTING:	HandleCommand(F_TEXTWRAPMETHOD, bRedraw, (LPARAM)TextWrappingMethod::SettingWidth, 0, 0, 0); break;	// 指定桁で折り返す（一時設定）		// 2008.05.30 nasukoji
 	case F_TMPWRAPWINDOW:	HandleCommand(F_TEXTWRAPMETHOD, bRedraw, (LPARAM)TextWrappingMethod::WindowWidth, 0, 0, 0); break;	// 右端で折り返す（一時設定）		// 2008.05.30 nasukoji
-	case F_TEXTWRAPMETHOD:	Command_TEXTWRAPMETHOD((int)lparam1); break;			// テキストの折り返し方法	// 2008.05.30 nasukoji
+	case F_TEXTWRAPMETHOD:	Command_TEXTWRAPMETHOD((TextWrappingMethod)lparam1); break;			// テキストの折り返し方法	// 2008.05.30 nasukoji
 	case F_SELECT_COUNT_MODE:	Command_SELECT_COUNT_MODE((int)lparam1); break;		// 文字カウントの方法		// 2009.07.06 syat
 
 	// マクロ系

@@ -33,7 +33,7 @@
 // OsVersionInfoÇÃì‡ïîstaticïœêîÇÃíËã`
 // èâä˙âªÇÕIsValidVersion()Ç≈çsÇ§
 BOOL	 		OsVersionInfo::m_bSuccess;
-OSVERSIONINFO	OsVersionInfo::m_cOsVersionInfo;
+OSVERSIONINFO	OsVersionInfo::m_osVersionInfo;
 #ifdef USE_SSE2
 bool			COsVersionInfo::m_bSSE2;
 #endif
@@ -45,9 +45,9 @@ bool			OsVersionInfo::m_bWine;
 */
 OsVersionInfo::OsVersionInfo(bool pbStart)
 {
-	memset_raw(&m_cOsVersionInfo, 0, sizeof(m_cOsVersionInfo));
-	m_cOsVersionInfo.dwOSVersionInfoSize = sizeof(m_cOsVersionInfo);
-	m_bSuccess = ::GetVersionEx(&m_cOsVersionInfo);
+	memset_raw(&m_osVersionInfo, 0, sizeof(m_osVersionInfo));
+	m_osVersionInfo.dwOSVersionInfoSize = sizeof(m_osVersionInfo);
+	m_bSuccess = ::GetVersionEx(&m_osVersionInfo);
 
 #ifdef USE_SSE2
  		int data[4];

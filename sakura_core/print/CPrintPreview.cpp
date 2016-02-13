@@ -1416,7 +1416,7 @@ ColorStrategy* PrintPreview::DrawPageText(
 	int				nOffX,
 	int				nOffY,
 	int				nPageNum,
-	DlgCancel*		pCDlgCancel,
+	DlgCancel*		pDlgCancel,
 	ColorStrategy* pStrategyStart
 	)
 {
@@ -1440,9 +1440,9 @@ ColorStrategy* PrintPreview::DrawPageText(
 		
 		int i; //	行数カウンタ
 		for (i=0; i<m_bPreview_EnableLines; ++i) {
-			if (pCDlgCancel) {
+			if (pDlgCancel) {
 				// 処理中のユーザー操作を可能にする
-				if (!::BlockingHook(pCDlgCancel->GetHwnd())) {
+				if (!::BlockingHook(pDlgCancel->GetHwnd())) {
 					return NULL;
 				}
 			}
@@ -1903,12 +1903,12 @@ int CALLBACK PrintPreview::MyEnumFontFamProc(
 	LPARAM			lParam 		// address of application-defined data
 	)
 {
-	PrintPreview* pCPrintPreview = (PrintPreview*)lParam;
-	if (_tcscmp(pelf->elfLogFont.lfFaceName, pCPrintPreview->m_pPrintSetting->m_szPrintFontFaceHan) == 0) {
-		pCPrintPreview->SetPreviewFontHan(&pelf->elfLogFont);
+	PrintPreview* pPrintPreview = (PrintPreview*)lParam;
+	if (_tcscmp(pelf->elfLogFont.lfFaceName, pPrintPreview->m_pPrintSetting->m_szPrintFontFaceHan) == 0) {
+		pPrintPreview->SetPreviewFontHan(&pelf->elfLogFont);
 	}
-	if (_tcscmp(pelf->elfLogFont.lfFaceName, pCPrintPreview->m_pPrintSetting->m_szPrintFontFaceZen) == 0) {
-		pCPrintPreview->SetPreviewFontZen(&pelf->elfLogFont);
+	if (_tcscmp(pelf->elfLogFont.lfFaceName, pPrintPreview->m_pPrintSetting->m_szPrintFontFaceZen) == 0) {
+		pPrintPreview->SetPreviewFontZen(&pelf->elfLogFont);
 	}
 
 	return 1;
@@ -2040,22 +2040,22 @@ INT_PTR CALLBACK PrintPreview::PrintPreviewBar_DlgProc(
 	LPARAM lParam 	// second message parameter
 	)
 {
-	PrintPreview* pCPrintPreview;
+	PrintPreview* pPrintPreview;
 	switch (uMsg) {
 	case WM_INITDIALOG:
 		// Modified by KEITA for WIN64 2003.9.6
 		::SetWindowLongPtr(hwndDlg, DWLP_USER, lParam);
 		// 2007.02.11 Moca WM_INITもDispatchEvent_PPBを呼ぶように
-		pCPrintPreview = (PrintPreview*)lParam;
-		if (pCPrintPreview) {
-			return pCPrintPreview->DispatchEvent_PPB(hwndDlg, uMsg, wParam, lParam);
+		pPrintPreview = (PrintPreview*)lParam;
+		if (pPrintPreview) {
+			return pPrintPreview->DispatchEvent_PPB(hwndDlg, uMsg, wParam, lParam);
 		}
 		return TRUE;
 	default:
 		// Modified by KEITA for WIN64 2003.9.6
-		pCPrintPreview = (PrintPreview*)::GetWindowLongPtr(hwndDlg, DWLP_USER);
-		if (pCPrintPreview) {
-			return pCPrintPreview->DispatchEvent_PPB(hwndDlg, uMsg, wParam, lParam);
+		pPrintPreview = (PrintPreview*)::GetWindowLongPtr(hwndDlg, DWLP_USER);
+		if (pPrintPreview) {
+			return pPrintPreview->DispatchEvent_PPB(hwndDlg, uMsg, wParam, lParam);
 		}else {
 			return FALSE;
 		}

@@ -83,7 +83,7 @@ bool WSHPlugin::InvokePlug(
 	WSHMacroManager* pWsh = NULL;
 
 	if (!m_bUseCache || !wshPlug.m_Wsh) {
-		FilePath path(plug.m_cPlugin.GetFilePath(to_tchar(plug.m_sHandler.c_str())).c_str());
+		FilePath path(plug.m_plugin.GetFilePath(to_tchar(plug.m_sHandler.c_str())).c_str());
 
 		pWsh = (WSHMacroManager*)WSHMacroManager::Creator(path.GetExt(true));
 		if (!pWsh) {

@@ -109,7 +109,7 @@ wchar_t* ExParam_LongName( wchar_t* q, wchar_t* q_max, EExpParamName eLongParam 
 */
 void SakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszBuffer, int nBufferLen)
 {
-	const EditDoc* pcDoc = EditDoc::GetInstance(0); //###
+	const EditDoc* pDoc = EditDoc::GetInstance(0); //###
 
 	// Apr. 03, 2003 genta 固定文字列をまとめる
 	const wstring	PRINT_PREVIEW_ONLY		= LSW(STR_PREVIEW_ONLY);	// L"(印刷プレビューでのみ使用できます)";
@@ -136,11 +136,11 @@ void SakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszBu
 			++p;
 			break;
 		case L'F':	// 開いているファイルの名前（フルパス）
-			if (!pcDoc->m_docFile.GetFilePathClass().IsValidPath()) {
+			if (!pDoc->m_docFile.GetFilePathClass().IsValidPath()) {
 				q = wcs_pushW(q, q_max - q, NO_TITLE.c_str(), NO_TITLE_LEN);
 				++p;
 			}else {
-				r = to_wchar(pcDoc->m_docFile.GetFilePath());
+				r = to_wchar(pDoc->m_docFile.GetFilePath());
 				q = wcs_pushW(q, q_max - q, r, wcslen(r));
 				++p;
 			}
@@ -149,25 +149,25 @@ void SakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszBu
 			// Oct. 28, 2001 genta
 			// ファイル名のみを渡すバージョン
 			// ポインタを末尾に
-			if (!pcDoc->m_docFile.GetFilePathClass().IsValidPath()) {
+			if (!pDoc->m_docFile.GetFilePathClass().IsValidPath()) {
 				q = wcs_pushW(q, q_max - q, NO_TITLE.c_str(), NO_TITLE_LEN);
 				++p;
 			}else {
 				// 2002.10.13 Moca ファイル名(パスなし)を取得。日本語対応
 				// 万一\\が末尾にあってもその後ろには\0があるのでアクセス違反にはならない。
-				q = wcs_pushT(q, q_max - q, pcDoc->m_docFile.GetFileName());
+				q = wcs_pushT(q, q_max - q, pDoc->m_docFile.GetFileName());
 				++p;
 			}
 			break;
 		case L'g':	// 開いているファイルの名前（拡張子を除くファイル名のみ）
 			// From Here Sep. 16, 2002 genta
-			if (!pcDoc->m_docFile.GetFilePathClass().IsValidPath()) {
+			if (!pDoc->m_docFile.GetFilePathClass().IsValidPath()) {
 				q = wcs_pushW(q, q_max - q, NO_TITLE.c_str(), NO_TITLE_LEN);
 				++p;
 			}else {
 				// ポインタを末尾に
 				const wchar_t *dot_position, *end_of_path;
-				r = to_wchar(pcDoc->m_docFile.GetFileName()); // 2002.10.13 Moca ファイル名(パスなし)を取得。日本語対応
+				r = to_wchar(pDoc->m_docFile.GetFileName()); // 2002.10.13 Moca ファイル名(パスなし)を取得。日本語対応
 				end_of_path = dot_position = r + wcslen(r);
 				// 後ろから.を探す
 				for (--dot_position; dot_position>r && *dot_position!='.'; --dot_position)
@@ -183,12 +183,12 @@ void SakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszBu
 			// To Here Sep. 16, 2002 genta
 		case L'/':	// 開いているファイルの名前（フルパス。パスの区切りが/）
 			// Oct. 28, 2001 genta
-			if (!pcDoc->m_docFile.GetFilePathClass().IsValidPath()) {
+			if (!pDoc->m_docFile.GetFilePathClass().IsValidPath()) {
 				q = wcs_pushW(q, q_max - q, NO_TITLE.c_str(), NO_TITLE_LEN);
 				++p;
 			}else {
 				// パスの区切りとして'/'を使うバージョン
-				for (r=to_wchar(pcDoc->m_docFile.GetFilePath()); *r!=L'\0' && q<q_max; ++r, ++q) {
+				for (r=to_wchar(pDoc->m_docFile.GetFilePath()); *r!=L'\0' && q<q_max; ++r, ++q) {
 					if (*r == L'\\')
 						*q = L'/';
 					else
@@ -199,7 +199,7 @@ void SakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszBu
 			break;
 		// From Here 2003/06/21 Moca
 		case L'N':	// 開いているファイルの名前(簡易表示)
-			if (!pcDoc->m_docFile.GetFilePathClass().IsValidPath()) {
+			if (!pDoc->m_docFile.GetFilePathClass().IsValidPath()) {
 				q = wcs_pushW(q, q_max - q, NO_TITLE.c_str(), NO_TITLE_LEN);
 				++p;
 			}else {
@@ -208,14 +208,14 @@ void SakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszBu
 				met.cbSize = CCSIZEOF_STRUCT(NONCLIENTMETRICS, lfMessageFont);
 				::SystemParametersInfo(SPI_GETNONCLIENTMETRICS, met.cbSize, &met, 0);
 				DCFont dcFont(met.lfCaptionFont, GetMainWindow()->GetHwnd());
-				FileNameManager::getInstance()->GetTransformFileNameFast( pcDoc->m_docFile.GetFilePath(), szText, 1023, dcFont.GetHDC(), true );
+				FileNameManager::getInstance()->GetTransformFileNameFast( pDoc->m_docFile.GetFilePath(), szText, 1023, dcFont.GetHDC(), true );
 				q = wcs_pushT(q, q_max - q, szText);
 				++p;
 			}
 			break;
 		// To Here 2003/06/21 Moca
 		case L'n':
-			if (!pcDoc->m_docFile.GetFilePathClass().IsValidPath()) {
+			if (!pDoc->m_docFile.GetFilePathClass().IsValidPath()) {
 				if (EditApp::getInstance()->m_pGrepAgent->m_bGrepMode) {
 				}else if (AppMode::getInstance()->IsDebugMode()) {
 				}else {
@@ -230,14 +230,14 @@ void SakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszBu
 			++p;
 			break;
 		case L'E':	// 開いているファイルのあるフォルダの名前(簡易表示)	2012/12/2 Uchi
-			if (!pcDoc->m_docFile.GetFilePathClass().IsValidPath()) {
+			if (!pDoc->m_docFile.GetFilePathClass().IsValidPath()) {
 				q = wcs_pushW(q, q_max - q, NO_TITLE.c_str(), NO_TITLE_LEN);
 			}else {
 				WCHAR	buff[_MAX_PATH];		// \の処理をする為WCHAR
 				WCHAR*	pEnd;
 				WCHAR*	p;
 
-				wcscpy_s(buff, _MAX_PATH, to_wchar(pcDoc->m_docFile.GetFilePath()));
+				wcscpy_s(buff, _MAX_PATH, to_wchar(pDoc->m_docFile.GetFilePath()));
 				pEnd = NULL;
 				for (p=buff; *p!='\0'; ++p) {
 					if (*p == L'\\') {
@@ -261,14 +261,14 @@ void SakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszBu
 			++p;
 			break;
 		case L'e':	// 開いているファイルのあるフォルダの名前		2012/12/2 Uchi
-			if (!pcDoc->m_docFile.GetFilePathClass().IsValidPath()) {
+			if (!pDoc->m_docFile.GetFilePathClass().IsValidPath()) {
 				q = wcs_pushW(q, q_max - q, NO_TITLE.c_str(), NO_TITLE_LEN);
 			}else {
 				const WCHAR* pStr;
 				const WCHAR* pEnd;
 				const WCHAR* p;
 				
-				pStr = to_wchar(pcDoc->m_docFile.GetFilePath());
+				pStr = to_wchar(pDoc->m_docFile.GetFilePath());
 				pEnd = pStr - auto_strlen(pStr) - 1;
 				for (p=pStr; *p!='\0'; ++p) {
 					if (*p == L'\\') {
@@ -282,7 +282,7 @@ void SakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszBu
 		// From Here Jan. 15, 2002 hor
 		case L'B':	// タイプ別設定の名前			2013/03/28 Uchi
 			{
-				const TypeConfig& sTypeCongig = pcDoc->m_docType.GetDocumentAttribute();
+				const TypeConfig& sTypeCongig = pDoc->m_docType.GetDocumentAttribute();
 				if (sTypeCongig.m_nIdx > 0) {	// 基本は表示しない
 					q = wcs_pushT(q, q_max - q, sTypeCongig.m_szTypeName);
 				}
@@ -290,10 +290,10 @@ void SakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszBu
 			}
 			break;
 		case L'b':	// 開いているファイルの拡張子	2013/03/28 Uchi
-			if (pcDoc->m_docFile.GetFilePathClass().IsValidPath()) {
+			if (pDoc->m_docFile.GetFilePathClass().IsValidPath()) {
 				// ポインタを末尾に
 				const wchar_t *dot_position, *end_of_path;
-				r = to_wchar(pcDoc->m_docFile.GetFileName());
+				r = to_wchar(pDoc->m_docFile.GetFileName());
 				end_of_path = dot_position = r + wcslen(r);
 				// 後ろから.を探す
 				while (--dot_position >= r && *dot_position != L'.')
@@ -308,7 +308,7 @@ void SakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszBu
 		case L'Q':	// 印刷ページ設定の名前			2013/03/28 Uchi
 			{
 				PRINTSETTING* ps = &GetDllShareData().m_PrintSettingArr[
-					 pcDoc->m_docType.GetDocumentAttribute().m_nCurrentPrintSetting];
+					 pDoc->m_docType.GetDocumentAttribute().m_nCurrentPrintSetting];
 				q = wcs_pushT(q, q_max - q, ps->m_szPrintSettingName);
 				++p;
 			}
@@ -363,10 +363,10 @@ void SakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszBu
 			break;
 		case L'p':	// 現在のページ
 			{
-				EditWnd* pcEditWnd = GetMainWindow();	// Sep. 10, 2002 genta
-				if (pcEditWnd->m_pPrintPreview) {
+				EditWnd* pEditWnd = GetMainWindow();	// Sep. 10, 2002 genta
+				if (pEditWnd->m_pPrintPreview) {
 					wchar_t szText[1024];
-					_itow(pcEditWnd->m_pPrintPreview->GetCurPageNum() + 1, szText, 10);
+					_itow(pEditWnd->m_pPrintPreview->GetCurPageNum() + 1, szText, 10);
 					q = wcs_pushW(q, q_max - q, szText, wcslen(szText));
 					++p;
 				}else {
@@ -377,10 +377,10 @@ void SakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszBu
 			break;
 		case L'P':	// 総ページ
 			{
-				EditWnd* pcEditWnd = GetMainWindow();	// Sep. 10, 2002 genta
-				if (pcEditWnd->m_pPrintPreview) {
+				EditWnd* pEditWnd = GetMainWindow();	// Sep. 10, 2002 genta
+				if (pEditWnd->m_pPrintPreview) {
 					wchar_t szText[1024];
-					_itow(pcEditWnd->m_pPrintPreview->GetAllPageNum(), szText, 10);
+					_itow(pEditWnd->m_pPrintPreview->GetAllPageNum(), szText, 10);
 					q = wcs_pushW(q, q_max - q, szText);
 					++p;
 				}else {
@@ -390,10 +390,10 @@ void SakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszBu
 			}
 			break;
 		case L'D':	// タイムスタンプ
-			if (!pcDoc->m_docFile.IsFileTimeZero()) {
+			if (!pDoc->m_docFile.IsFileTimeZero()) {
 				TCHAR szText[1024];
 				FormatManager().MyGetDateFormat(
-					pcDoc->m_docFile.GetFileSysTime(),
+					pDoc->m_docFile.GetFileSysTime(),
 					szText,
 					_countof(szText) - 1
 				);
@@ -405,10 +405,10 @@ void SakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszBu
 			}
 			break;
 		case L'T':	// タイムスタンプ
-			if (!pcDoc->m_docFile.IsFileTimeZero()) {
+			if (!pDoc->m_docFile.IsFileTimeZero()) {
 				TCHAR szText[1024];
 				FormatManager().MyGetTimeFormat(
-					pcDoc->m_docFile.GetFileSysTime(),
+					pDoc->m_docFile.GetFileSysTime(),
 					szText,
 					_countof(szText) - 1
 				);
@@ -473,12 +473,12 @@ void SakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszBu
 			// 現在実行しているマクロファイルパスの取得
 			{
 				// 実行中マクロのインデックス番号 (INVALID_MACRO_IDX:無効 / STAND_KEYMACRO:標準マクロ)
-				SMacroMgr* pcSMacroMgr = EditApp::getInstance()->m_pSMacroMgr;
-				switch (pcSMacroMgr->GetCurrentIdx()) {
+				SMacroMgr* pSMacroMgr = EditApp::getInstance()->m_pSMacroMgr;
+				switch (pSMacroMgr->GetCurrentIdx()) {
 				case INVALID_MACRO_IDX:
 					break;
 				case TEMP_KEYMACRO:
-					q = wcs_pushT(q, q_max - q, pcSMacroMgr->GetFile(TEMP_KEYMACRO));
+					q = wcs_pushT(q, q_max - q, pSMacroMgr->GetFile(TEMP_KEYMACRO));
 					break;
 				case STAND_KEYMACRO:
 					{
@@ -489,7 +489,7 @@ void SakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszBu
 				default:
 					{
 						TCHAR szMacroFilePath[_MAX_PATH * 2];
-						int n = ShareData::getInstance()->GetMacroFilename(pcSMacroMgr->GetCurrentIdx(), szMacroFilePath, _countof(szMacroFilePath));
+						int n = ShareData::getInstance()->GetMacroFilename(pSMacroMgr->GetCurrentIdx(), szMacroFilePath, _countof(szMacroFilePath));
 						if (0 < n) {
 							q = wcs_pushT(q, q_max - q, szMacroFilePath);
 						}
@@ -621,7 +621,7 @@ const wchar_t* SakuraEnvironment::_ExParam_SkipCond(const wchar_t* pszSource, in
 */
 int SakuraEnvironment::_ExParam_Evaluate(const wchar_t* pCond)
 {
-	const EditDoc* pcDoc = EditDoc::GetInstance(0); //###
+	const EditDoc* pDoc = EditDoc::GetInstance(0); //###
 
 	switch (*pCond) {
 	case L'R': // $R ビューモードおよび読み取り専用属性
@@ -647,13 +647,13 @@ int SakuraEnvironment::_ExParam_Evaluate(const wchar_t* pCond)
 			return 1;
 		}
 	case L'U': // $U 更新
-		if (pcDoc->m_docEditor.IsModified()) {
+		if (pDoc->m_docEditor.IsModified()) {
 			return 0;
 		}else {
 			return 1;
 		}
 	case L'N': // $N 新規/(無題)		2012/12/2 Uchi
-		if (!pcDoc->m_docFile.GetFilePathClass().IsValidPath()) {
+		if (!pDoc->m_docFile.GetFilePathClass().IsValidPath()) {
 			return 0;
 		}else {
 			return 1;
@@ -694,9 +694,9 @@ wchar_t* ExParam_LongName( wchar_t* q, wchar_t* q_max, EExpParamName eLongParam 
 */
 std::tstring SakuraEnvironment::GetDlgInitialDir(bool bControlProcess)
 {
-	EditDoc* pcDoc = EditDoc::GetInstance(0); //######
-	if (pcDoc && pcDoc->m_docFile.GetFilePathClass().IsValidPath()) {
-		return to_tchar(pcDoc->m_docFile.GetFilePathClass().GetDirPath().c_str());
+	EditDoc* pDoc = EditDoc::GetInstance(0); //######
+	if (pDoc && pDoc->m_docFile.GetFilePathClass().IsValidPath()) {
+		return to_tchar(pDoc->m_docFile.GetFilePathClass().GetDirPath().c_str());
 	}
 
 	EOpenDialogDir eOpenDialogDir = GetDllShareData().m_common.m_edit.m_eOpenDialogDir;

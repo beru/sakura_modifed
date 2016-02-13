@@ -36,18 +36,18 @@
 */
 void ViewCommander::Command_SHOWTOOLBAR(void)
 {
-	EditWnd* pCEditWnd = GetEditWindow();	// Sep. 10, 2002 genta
+	EditWnd* pEditWnd = GetEditWindow();	// Sep. 10, 2002 genta
 
-	GetDllShareData().m_common.m_window.m_bDispTOOLBAR = ((!pCEditWnd->m_toolbar.GetToolbarHwnd())? TRUE: FALSE);	// ツールバー表示
-	pCEditWnd->LayoutToolBar();
-	pCEditWnd->EndLayoutBars();
+	GetDllShareData().m_common.m_window.m_bDispTOOLBAR = ((!pEditWnd->m_toolbar.GetToolbarHwnd())? TRUE: FALSE);	// ツールバー表示
+	pEditWnd->LayoutToolBar();
+	pEditWnd->EndLayoutBars();
 
 	// 全ウィンドウに変更を通知する。
 	AppNodeGroupHandle(0).PostMessageToAllEditors(
 		MYWM_BAR_CHANGE_NOTIFY,
 		(WPARAM)BarChangeNotifyType::Toolbar,
-		(LPARAM)pCEditWnd->GetHwnd(),
-		pCEditWnd->GetHwnd()
+		(LPARAM)pEditWnd->GetHwnd(),
+		pEditWnd->GetHwnd()
 	);
 }
 
@@ -58,18 +58,18 @@ void ViewCommander::Command_SHOWTOOLBAR(void)
 */
 void ViewCommander::Command_SHOWFUNCKEY(void)
 {
-	EditWnd* pCEditWnd = GetEditWindow();	// Sep. 10, 2002 genta
+	EditWnd* pEditWnd = GetEditWindow();	// Sep. 10, 2002 genta
 
-	GetDllShareData().m_common.m_window.m_bDispFUNCKEYWND = ((!pCEditWnd->m_funcKeyWnd.GetHwnd())? TRUE: FALSE);	// ファンクションキー表示
-	pCEditWnd->LayoutFuncKey();
-	pCEditWnd->EndLayoutBars();
+	GetDllShareData().m_common.m_window.m_bDispFUNCKEYWND = ((!pEditWnd->m_funcKeyWnd.GetHwnd())? TRUE: FALSE);	// ファンクションキー表示
+	pEditWnd->LayoutFuncKey();
+	pEditWnd->EndLayoutBars();
 
 	// 全ウィンドウに変更を通知する。
 	AppNodeGroupHandle(0).PostMessageToAllEditors(
 		MYWM_BAR_CHANGE_NOTIFY,
 		(WPARAM)BarChangeNotifyType::FuncKey,
-		(LPARAM)pCEditWnd->GetHwnd(),
-		pCEditWnd->GetHwnd()
+		(LPARAM)pEditWnd->GetHwnd(),
+		pEditWnd->GetHwnd()
 	);
 }
 
@@ -83,11 +83,11 @@ void ViewCommander::Command_SHOWFUNCKEY(void)
  */
 void ViewCommander::Command_SHOWTAB(void)
 {
-	EditWnd* pCEditWnd = GetEditWindow();	// Sep. 10, 2002 genta
+	EditWnd* pEditWnd = GetEditWindow();	// Sep. 10, 2002 genta
 
-	GetDllShareData().m_common.m_tabBar.m_bDispTabWnd = !pCEditWnd->m_tabWnd.GetHwnd();	// タブバー表示
-	pCEditWnd->LayoutTabBar();
-	pCEditWnd->EndLayoutBars();
+	GetDllShareData().m_common.m_tabBar.m_bDispTabWnd = !pEditWnd->m_tabWnd.GetHwnd();	// タブバー表示
+	pEditWnd->LayoutTabBar();
+	pEditWnd->EndLayoutBars();
 
 	// まとめるときは WS_EX_TOPMOST 状態を同期する	// 2007.05.18 ryoji
 	if (GetDllShareData().m_common.m_tabBar.m_bDispTabWnd
@@ -103,8 +103,8 @@ void ViewCommander::Command_SHOWTAB(void)
 	AppNodeGroupHandle(0).PostMessageToAllEditors(
 		MYWM_BAR_CHANGE_NOTIFY,
 		(WPARAM)BarChangeNotifyType::Tab,
-		(LPARAM)pCEditWnd->GetHwnd(),
-		pCEditWnd->GetHwnd()
+		(LPARAM)pEditWnd->GetHwnd(),
+		pEditWnd->GetHwnd()
 	);
 }
 
@@ -115,18 +115,18 @@ void ViewCommander::Command_SHOWTAB(void)
 */
 void ViewCommander::Command_SHOWSTATUSBAR(void)
 {
-	EditWnd* pCEditWnd = GetEditWindow();	// Sep. 10, 2002 genta
+	EditWnd* pEditWnd = GetEditWindow();	// Sep. 10, 2002 genta
 
-	GetDllShareData().m_common.m_window.m_bDispSTATUSBAR = ((!pCEditWnd->m_statusBar.GetStatusHwnd())? TRUE: FALSE);	// ステータスバー表示
-	pCEditWnd->LayoutStatusBar();
-	pCEditWnd->EndLayoutBars();
+	GetDllShareData().m_common.m_window.m_bDispSTATUSBAR = ((!pEditWnd->m_statusBar.GetStatusHwnd())? TRUE: FALSE);	// ステータスバー表示
+	pEditWnd->LayoutStatusBar();
+	pEditWnd->EndLayoutBars();
 
 	// 全ウィンドウに変更を通知する。
 	AppNodeGroupHandle(0).PostMessageToAllEditors(
 		MYWM_BAR_CHANGE_NOTIFY,
 		(WPARAM)BarChangeNotifyType::StatusBar,
-		(LPARAM)pCEditWnd->GetHwnd(),
-		pCEditWnd->GetHwnd()
+		(LPARAM)pEditWnd->GetHwnd(),
+		pEditWnd->GetHwnd()
 	);
 }
 
@@ -136,18 +136,18 @@ void ViewCommander::Command_SHOWSTATUSBAR(void)
 */
 void ViewCommander::Command_SHOWMINIMAP(void)
 {
-	EditWnd*	pCEditWnd = GetEditWindow();	//	Sep. 10, 2002 genta
+	EditWnd*	pEditWnd = GetEditWindow();	//	Sep. 10, 2002 genta
 
-	GetDllShareData().m_common.m_window.m_bDispMiniMap = (pCEditWnd->GetMiniMap().GetHwnd() == NULL);
-	pCEditWnd->LayoutMiniMap();
-	pCEditWnd->EndLayoutBars();
+	GetDllShareData().m_common.m_window.m_bDispMiniMap = (pEditWnd->GetMiniMap().GetHwnd() == NULL);
+	pEditWnd->LayoutMiniMap();
+	pEditWnd->EndLayoutBars();
 
 	//全ウィンドウに変更を通知する。
 	AppNodeGroupHandle(0).PostMessageToAllEditors(
 		MYWM_BAR_CHANGE_NOTIFY,
 		(WPARAM)BarChangeNotifyType::MiniMap,
-		(LPARAM)pCEditWnd->GetHwnd(),
-		pCEditWnd->GetHwnd()
+		(LPARAM)pEditWnd->GetHwnd(),
+		pEditWnd->GetHwnd()
 	);
 }
 
@@ -155,18 +155,18 @@ void ViewCommander::Command_SHOWMINIMAP(void)
 // タイプ別設定一覧
 void ViewCommander::Command_TYPE_LIST(void)
 {
-	DlgTypeList cDlgTypeList;
-	DlgTypeList::Result sResult;
-	sResult.cDocumentType = GetDocument()->m_docType.GetDocumentType();
-	sResult.bTempChange = true;
-	if (cDlgTypeList.DoModal(G_AppInstance(), m_pCommanderView->GetHwnd(), &sResult)) {
+	DlgTypeList dlgTypeList;
+	DlgTypeList::Result result;
+	result.documentType = GetDocument()->m_docType.GetDocumentType();
+	result.bTempChange = true;
+	if (dlgTypeList.DoModal(G_AppInstance(), m_pCommanderView->GetHwnd(), &result)) {
 		// Nov. 29, 2000 genta
 		// 一時的な設定適用機能を無理矢理追加
-		if (sResult.bTempChange) {
-			HandleCommand(F_CHANGETYPE, true, (LPARAM)sResult.cDocumentType.GetIndex() + 1, 0, 0, 0);
+		if (result.bTempChange) {
+			HandleCommand(F_CHANGETYPE, true, (LPARAM)result.documentType.GetIndex() + 1, 0, 0, 0);
 		}else {
 			// タイプ別設定
-			EditApp::getInstance()->OpenPropertySheetTypes(-1, sResult.cDocumentType);
+			EditApp::getInstance()->OpenPropertySheetTypes(-1, result.documentType);
 		}
 	}
 	return;
@@ -360,7 +360,7 @@ void ViewCommander::Command_WRAPWINDOWWIDTH(void)	// Oct. 7, 2000 JEPRO WRAPWIND
 	LayoutInt newKetas;
 	
 	nWrapMode = m_pCommanderView->GetWrapMode(&newKetas);
-	GetDocument()->m_nTextWrapMethodCur = (int)TextWrappingMethod::SettingWidth;
+	GetDocument()->m_nTextWrapMethodCur = TextWrappingMethod::SettingWidth;
 	GetDocument()->m_bTextWrapMethodCurTemp = !(GetDocument()->m_nTextWrapMethodCur == m_pCommanderView->m_pTypeData->m_nTextWrapMethod);
 	if (nWrapMode == EditView::TGWRAP_NONE) {
 		return;	// 折り返し桁は元のまま
@@ -387,10 +387,10 @@ void ViewCommander::Command_WRAPWINDOWWIDTH(void)	// Oct. 7, 2000 JEPRO WRAPWIND
 */
 void ViewCommander::Command_Favorite(void)
 {
-	DlgFavorite	cDlgFavorite;
+	DlgFavorite	dlgFavorite;
 
 	// ダイアログを表示する
-	if (!cDlgFavorite.DoModal(G_AppInstance(), m_pCommanderView->GetHwnd(), (LPARAM)GetDocument())) {
+	if (!dlgFavorite.DoModal(G_AppInstance(), m_pCommanderView->GetHwnd(), (LPARAM)GetDocument())) {
 		return;
 	}
 
@@ -411,12 +411,12 @@ void ViewCommander::Command_Favorite(void)
 	@date 2008.05.31 nasukoji	新規作成
 	@date 2009.08.28 nasukoji	テキストの最大幅を算出する
 */
-void ViewCommander::Command_TEXTWRAPMETHOD(int nWrapMethod)
+void ViewCommander::Command_TEXTWRAPMETHOD(TextWrappingMethod nWrapMethod)
 {
-	EditDoc* pcDoc = GetDocument();
+	EditDoc* pDoc = GetDocument();
 
 	// 現在の設定値と同じなら何もしない
-	if (pcDoc->m_nTextWrapMethodCur == nWrapMethod)
+	if (pDoc->m_nTextWrapMethodCur == nWrapMethod)
 		return;
 
 	int nWidth;
@@ -427,7 +427,7 @@ void ViewCommander::Command_TEXTWRAPMETHOD(int nWrapMethod)
 		break;
 
 	case TextWrappingMethod::SettingWidth:	// 指定桁で折り返す
-		nWidth = (Int)pcDoc->m_docType.GetDocumentAttribute().m_nMaxLineKetas;
+		nWidth = (Int)pDoc->m_docType.GetDocumentAttribute().m_nMaxLineKetas;
 		break;
 
 	case TextWrappingMethod::WindowWidth:		// 右端で折り返す
@@ -439,20 +439,20 @@ void ViewCommander::Command_TEXTWRAPMETHOD(int nWrapMethod)
 		return;	// 不正な値の時は何もしない
 	}
 
-	pcDoc->m_nTextWrapMethodCur = nWrapMethod;	// 設定を記憶
+	pDoc->m_nTextWrapMethodCur = nWrapMethod;	// 設定を記憶
 
 	// 折り返し方法の一時設定適用／一時設定適用解除	// 2008.06.08 ryoji
-	pcDoc->m_bTextWrapMethodCurTemp = !(pcDoc->m_docType.GetDocumentAttribute().m_nTextWrapMethod == nWrapMethod);
+	pDoc->m_bTextWrapMethodCurTemp = !(pDoc->m_docType.GetDocumentAttribute().m_nTextWrapMethod == nWrapMethod);
 
 	// 折り返し位置を変更
-	GetEditWindow()->ChangeLayoutParam(false, pcDoc->m_layoutMgr.GetTabSpace(), (LayoutInt)nWidth);
+	GetEditWindow()->ChangeLayoutParam(false, pDoc->m_layoutMgr.GetTabSpace(), (LayoutInt)nWidth);
 
 	// 2009.08.28 nasukoji	「折り返さない」ならテキスト最大幅を算出、それ以外は変数をクリア
-	if (pcDoc->m_nTextWrapMethodCur == (int)TextWrappingMethod::NoWrapping) {
-		pcDoc->m_layoutMgr.CalculateTextWidth();		// テキスト最大幅を算出する
+	if (pDoc->m_nTextWrapMethodCur == TextWrappingMethod::NoWrapping) {
+		pDoc->m_layoutMgr.CalculateTextWidth();		// テキスト最大幅を算出する
 		GetEditWindow()->RedrawAllViews(NULL);		// スクロールバーの更新が必要なので再表示を実行する
 	}else {
-		pcDoc->m_layoutMgr.ClearLayoutLineWidth();		// 各行のレイアウト行長の記憶をクリアする
+		pDoc->m_layoutMgr.ClearLayoutLineWidth();		// 各行のレイアウト行長の記憶をクリアする
 	}
 }
 

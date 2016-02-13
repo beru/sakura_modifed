@@ -23,8 +23,8 @@ public:
 
 void Color_Quote::Update(void)
 {
-	const EditDoc* pCEditDoc = EditDoc::GetInstance(0);
-	m_pTypeData = &pCEditDoc->m_docType.GetDocumentAttribute();
+	const EditDoc* pEditDoc = EditDoc::GetInstance(0);
+	m_pTypeData = &pEditDoc->m_docType.GetDocumentAttribute();
 	m_nStringType = m_pTypeData->m_nStringType;
 	StringLiteralType nEspaceTypeList[] = {
 		StringLiteralType::CPP,

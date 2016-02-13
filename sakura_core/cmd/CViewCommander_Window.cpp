@@ -426,70 +426,70 @@ void ViewCommander::Command_GROUPCLOSE(void)
 // 次のグループ			// 2007.06.20 ryoji
 void ViewCommander::Command_NEXTGROUP(void)
 {
-	TabWnd* pcTabWnd = &GetEditWindow()->m_tabWnd;
-	if (!pcTabWnd->GetHwnd())
+	TabWnd* pTabWnd = &GetEditWindow()->m_tabWnd;
+	if (!pTabWnd->GetHwnd())
 		return;
-	pcTabWnd->NextGroup();
+	pTabWnd->NextGroup();
 }
 
 
 // 前のグループ			// 2007.06.20 ryoji
 void ViewCommander::Command_PREVGROUP(void)
 {
-	TabWnd* pcTabWnd = &GetEditWindow()->m_tabWnd;
-	if (!pcTabWnd->GetHwnd())
+	TabWnd* pTabWnd = &GetEditWindow()->m_tabWnd;
+	if (!pTabWnd->GetHwnd())
 		return;
-	pcTabWnd->PrevGroup();
+	pTabWnd->PrevGroup();
 }
 
 
 // タブを右に移動		// 2007.06.20 ryoji
 void ViewCommander::Command_TAB_MOVERIGHT(void)
 {
-	TabWnd* pcTabWnd = &GetEditWindow()->m_tabWnd;
-	if (!pcTabWnd->GetHwnd())
+	TabWnd* pTabWnd = &GetEditWindow()->m_tabWnd;
+	if (!pTabWnd->GetHwnd())
 		return;
-	pcTabWnd->MoveRight();
+	pTabWnd->MoveRight();
 }
 
 
 // タブを左に移動		// 2007.06.20 ryoji
 void ViewCommander::Command_TAB_MOVELEFT(void)
 {
-	TabWnd* pcTabWnd = &GetEditWindow()->m_tabWnd;
-	if (!pcTabWnd->GetHwnd())
+	TabWnd* pTabWnd = &GetEditWindow()->m_tabWnd;
+	if (!pTabWnd->GetHwnd())
 		return;
-	pcTabWnd->MoveLeft();
+	pTabWnd->MoveLeft();
 }
 
 
 // 新規グループ			// 2007.06.20 ryoji
 void ViewCommander::Command_TAB_SEPARATE(void)
 {
-	TabWnd* pcTabWnd = &GetEditWindow()->m_tabWnd;
-	if (!pcTabWnd->GetHwnd())
+	TabWnd* pTabWnd = &GetEditWindow()->m_tabWnd;
+	if (!pTabWnd->GetHwnd())
 		return;
-	pcTabWnd->Separate();
+	pTabWnd->Separate();
 }
 
 
 // 次のグループに移動	// 2007.06.20 ryoji
 void ViewCommander::Command_TAB_JOINTNEXT(void)
 {
-	TabWnd* pcTabWnd = &GetEditWindow()->m_tabWnd;
-	if (!pcTabWnd->GetHwnd())
+	TabWnd* pTabWnd = &GetEditWindow()->m_tabWnd;
+	if (!pTabWnd->GetHwnd())
 		return;
-	pcTabWnd->JoinNext();
+	pTabWnd->JoinNext();
 }
 
 
 // 前のグループに移動	// 2007.06.20 ryoji
 void ViewCommander::Command_TAB_JOINTPREV(void)
 {
-	TabWnd* pcTabWnd = &GetEditWindow()->m_tabWnd;
-	if (!pcTabWnd->GetHwnd())
+	TabWnd* pTabWnd = &GetEditWindow()->m_tabWnd;
+	if (!pTabWnd->GetHwnd())
 		return;
-	pcTabWnd->JoinPrev();
+	pTabWnd->JoinPrev();
 }
 
 

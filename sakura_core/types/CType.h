@@ -123,7 +123,7 @@ struct TypeConfig {
 	int					m_id;
 	TCHAR				m_szTypeName[64];				//!< タイプ属性：名称
 	TCHAR				m_szTypeExts[MAX_TYPES_EXTS];	//!< タイプ属性：拡張子リスト
-	int					m_nTextWrapMethod;				//!< テキストの折り返し方法		// 2008.05.30 nasukoji
+	TextWrappingMethod	m_nTextWrapMethod;				//!< テキストの折り返し方法		// 2008.05.30 nasukoji
 	LayoutInt			m_nMaxLineKetas;				//!< 折り返し桁数
 	int					m_nColumnSpace;					//!< 文字と文字の隙間
 	int					m_nLineSpace;					//!< 行間のすきま

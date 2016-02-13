@@ -117,17 +117,17 @@ int ESI::GetIndexById(const ECodeType eCodeType) const
 */
 void ESI::SetEvaluation(const ECodeType eCodeId, const int v1, const int v2)
 {
-	struct tagEncodingInfo* pcEI;
+	struct tagEncodingInfo* pEI;
 
 	int nidx = GetIndexById(eCodeId);
 	if (eCodeId == CODE_UNICODE || eCodeId == CODE_UNICODEBE) {
-		pcEI = &m_aWcInfo[nidx];
+		pEI = &m_aWcInfo[nidx];
 	}else {
-		pcEI = &m_aMbcInfo[nidx];
+		pEI = &m_aMbcInfo[nidx];
 	}
-	pcEI->eCodeID = eCodeId;
-	pcEI->nSpecific = v1;
-	pcEI->nPoints = v2;
+	pEI->eCodeID = eCodeId;
+	pEI->nSpecific = v1;
+	pEI->nPoints = v2;
 
 	return;
 }
@@ -142,16 +142,16 @@ void ESI::SetEvaluation(const ECodeType eCodeId, const int v1, const int v2)
 */
 void ESI::GetEvaluation(const ECodeType eCodeId, int* pv1, int* pv2) const
 {
-	const struct tagEncodingInfo* pcEI;
+	const struct tagEncodingInfo* pEI;
 
 	int nidx = GetIndexById(eCodeId);
 	if (eCodeId == CODE_UNICODE || eCodeId == CODE_UNICODEBE) {
-		pcEI = &m_aWcInfo[nidx];
+		pEI = &m_aWcInfo[nidx];
 	}else {
-		pcEI = &m_aMbcInfo[nidx];
+		pEI = &m_aMbcInfo[nidx];
 	}
-	*pv1 = pcEI->nSpecific;
-	*pv2 = pcEI->nPoints;
+	*pv1 = pEI->nSpecific;
+	*pv2 = pEI->nPoints;
 
 	return;
 }
@@ -1181,11 +1181,11 @@ void ESI::GetDebugInfo(const char* pS, const int nLen, CNativeT* pcmtxtOut)
 	int v1, v2, v3, v4;
 
 	EditDoc& doc = *EditWnd::getInstance()->GetDocument();
-	ESI cesi(doc.m_docType.GetDocumentAttribute().m_encoding);
+	ESI esi(doc.m_docType.GetDocumentAttribute().m_encoding);
 
 	// テスト実行
-	cesi.SetInformation(pS, nLen/*, CODE_SJIS*/);
-	ECodeType ecode_result = CodeMediator::CheckKanjiCode(&cesi);
+	esi.SetInformation(pS, nLen/*, CODE_SJIS*/);
+	ECodeType ecode_result = CodeMediator::CheckKanjiCode(&esi);
 
 	//
 	// 判別結果を分析
@@ -1193,11 +1193,11 @@ void ESI::GetDebugInfo(const char* pS, const int nLen, CNativeT* pcmtxtOut)
 	pcmtxtOut->AppendString(LS(STR_ESI_CHARCODE_DETECT));	// "--文字コード調査結果-----------\r\n"
 	pcmtxtOut->AppendString(LS(STR_ESI_RESULT_STATE));	// "判別結果の状態\r\n"
 
-	if (cesi.m_nTargetDataLen < 1 || cesi.m_dwStatus == ESI_NOINFORMATION) {
+	if (esi.m_nTargetDataLen < 1 || esi.m_dwStatus == ESI_NOINFORMATION) {
 		pcmtxtOut->AppendString(LS(STR_ESI_NO_INFO));	// "\t判別結果を取得できません。\r\n"
 		return;
 	}
-	if (cesi.m_dwStatus != ESI_NODETECTED) {
+	if (esi.m_dwStatus != ESI_NODETECTED) {
 		// nstat == CESI_MBC_DETECTED or CESI_WC_DETECTED
 		pcmtxtOut->AppendString(LS(STR_ESI_DETECTED));	// "\tおそらく正常に判定されました。\r\n"
 	}else {
@@ -1217,19 +1217,19 @@ void ESI::GetDebugInfo(const char* pS, const int nLen, CNativeT* pcmtxtOut)
 	pcmtxtOut->AppendString(szWork);
 	pcmtxtOut->AppendString(LS(STR_ESI_SAMPLE_LEN));	// "サンプルデータ長\r\n"
 
-	auto_sprintf(szWork, LS(STR_ESI_SAMPLE_LEN_FORMAT), cesi.GetDataLen());	// "\t%d バイト\r\n"
+	auto_sprintf(szWork, LS(STR_ESI_SAMPLE_LEN_FORMAT), esi.GetDataLen());	// "\t%d バイト\r\n"
 	pcmtxtOut->AppendString(szWork);
 	pcmtxtOut->AppendString(LS(STR_ESI_BYTES_AND_POINTS));	// "固有バイト数とポイント数\r\n"
 
 	pcmtxtOut->AppendString(_T("\tUNICODE\r\n"));
-	cesi.GetEvaluation(CODE_UNICODE, &v1, &v2);
-	cesi.GetEvaluation(CODE_UNICODEBE, &v3, &v4);
+	esi.GetEvaluation(CODE_UNICODE, &v1, &v2);
+	esi.GetEvaluation(CODE_UNICODEBE, &v3, &v4);
 	auto_sprintf(szWork, LS(STR_ESI_UTF16LE_B_AND_P), v1, v2); // "\t\tUTF16LE 固有バイト数 %d,\tポイント数 %d\r\n"
 	pcmtxtOut->AppendString(szWork);
 	auto_sprintf(szWork, LS(STR_ESI_UTF16BE_B_AND_P), v3, v4); // "\t\tUTF16BE 固有バイト数 %d,\tポイント数 %d\r\n"
 	pcmtxtOut->AppendString(szWork);
 	pcmtxtOut->AppendString(LS(STR_ESI_BOM));	// "\t\tBOM の推測結果　"
-	switch (cesi.m_eWcBomType) {
+	switch (esi.m_eWcBomType) {
 	case BOMType::LittleEndian:
 		auto_sprintf( szWork, _T("LE\r\n") );
 		break;
@@ -1242,16 +1242,16 @@ void ESI::GetDebugInfo(const char* pS, const int nLen, CNativeT* pcmtxtOut)
 	pcmtxtOut->AppendString(szWork);
 	pcmtxtOut->AppendString(LS(STR_ESI_MBC_OTHER_UNICODE));
 	for (int i=0; i<NUM_OF_MBCODE; ++i) {
-		if (!IsValidCodeType(cesi.m_apMbcInfo[i]->eCodeID)) {
-			cesi.m_apMbcInfo[i]->eCodeID = CODE_SJIS;
+		if (!IsValidCodeType(esi.m_apMbcInfo[i]->eCodeID)) {
+			esi.m_apMbcInfo[i]->eCodeID = CODE_SJIS;
 		}
-		cesi.GetEvaluation(cesi.m_apMbcInfo[i]->eCodeID, &v1, &v2);
+		esi.GetEvaluation(esi.m_apMbcInfo[i]->eCodeID, &v1, &v2);
 		auto_sprintf(szWork, LS(STR_ESI_OTHER_B_AND_P),	// "\t\t%d.%ts\t固有バイト数 %d\tポイント数 %d\r\n"
-			i + 1, CodeTypeName(cesi.m_apMbcInfo[i]->eCodeID).Normal(), v1, v2
+			i + 1, CodeTypeName(esi.m_apMbcInfo[i]->eCodeID).Normal(), v1, v2
 		);
 		pcmtxtOut->AppendString(szWork);
 	}
-	auto_sprintf(szWork, LS(STR_ESI_EUC_ZENKAKU), static_cast<double>(cesi.m_nMbcEucZenHirakata)/cesi.m_nMbcEucZen);	// "\t\t・EUC全角カナかな/EUC全角\t%6.3f\r\n"
+	auto_sprintf(szWork, LS(STR_ESI_EUC_ZENKAKU), static_cast<double>(esi.m_nMbcEucZenHirakata)/esi.m_nMbcEucZen);	// "\t\t・EUC全角カナかな/EUC全角\t%6.3f\r\n"
 	pcmtxtOut->AppendString(szWork);
 
 	pcmtxtOut->AppendString(LS(STR_ESI_RESULT));	// "判定結果\r\n"

@@ -315,7 +315,7 @@ protected:
 	*/
 	//@@@ 2002.09.23 YAZAKI
 	// 2009.08.28 nasukoji	nPosXà¯êîí«â¡
-	Layout* CreateLayout(DocLine* pCDocLine, LogicPoint ptLogicPos, LogicInt nLength, EColorIndexType nTypePrev, LayoutInt nIndent, LayoutInt nPosX, LayoutColorInfo*);
+	Layout* CreateLayout(DocLine* pDocLine, LogicPoint ptLogicPos, LogicInt nLength, EColorIndexType nTypePrev, LayoutInt nIndent, LayoutInt nPosX, LayoutColorInfo*);
 	Layout* InsertLineNext(Layout*, Layout*);
 	void AddLineBottom(Layout*);
 

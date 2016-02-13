@@ -32,7 +32,7 @@ class DocLineMgr;
 
 class DocEditor : public DocListenerEx {
 public:
-	DocEditor(EditDoc* pcDoc);
+	DocEditor(EditDoc* pDoc);
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                         ÉCÉxÉìÉg                            //
@@ -94,7 +94,7 @@ public:
 
 class DocEditAgent {
 public:
-	DocEditAgent(DocLineMgr* pcDocLineMgr) : m_pDocLineMgr(pcDocLineMgr) { }
+	DocEditAgent(DocLineMgr* pDocLineMgr) : m_pDocLineMgr(pDocLineMgr) { }
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                           ëÄçÏ                              //

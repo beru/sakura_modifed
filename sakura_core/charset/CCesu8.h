@@ -38,7 +38,7 @@ public:
 		return Utf8::UnicodeToCESU8(cSrc, pDst);
 	}
 	
-	void GetBom(Memory* pcmemBom);	//!< BOMデータ取得
+	void GetBom(Memory* pMemBom);	//!< BOMデータ取得
 	// GetEolはCodeBaseに移動	2010/6/13 Uchi
 	CodeConvertResult UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR* pDst, const CommonSetting_StatusBar* psStatusbar) {			//!< UNICODE → Hex 変換
 		return Utf8()._UnicodeToHex(cSrc, iSLen, pDst, psStatusbar, true);

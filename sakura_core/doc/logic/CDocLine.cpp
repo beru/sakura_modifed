@@ -72,13 +72,13 @@ void DocLine::SetDocLineString(const NativeW& cData)
 	SetDocLineString(cData.GetStringPtr(), cData.GetStringLength());
 }
 
-void DocLine::SetDocLineStringMove(NativeW* pcDataFrom)
+void DocLine::SetDocLineStringMove(NativeW* pDataFrom)
 {
-	m_line.swap(*pcDataFrom);
+	m_line.swap(*pDataFrom);
 	SetEol();
 }
 
-void DocLine::SetEol(const Eol& cEol, OpeBlk* pcOpeBlk)
+void DocLine::SetEol(const Eol& eol, OpeBlk* pOpeBlk)
 {
 	// 改行コードを削除
 	for (int i=0; i<(Int)m_eol.GetLen(); ++i) {
@@ -86,7 +86,7 @@ void DocLine::SetEol(const Eol& cEol, OpeBlk* pcOpeBlk)
 	}
 
 	// 改行コードを挿入
-	m_eol = cEol;
-	m_line += cEol.GetValue2();
+	m_eol = eol;
+	m_line += eol.GetValue2();
 }
 

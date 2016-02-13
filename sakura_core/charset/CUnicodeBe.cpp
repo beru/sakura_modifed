@@ -7,13 +7,13 @@
 #include "codechecker.h"
 
 
-void UnicodeBe::GetBom(Memory* pcmemBom)
+void UnicodeBe::GetBom(Memory* pMemBom)
 {
 	static const BYTE UTF16BE_BOM[] = {0xFE, 0xFF};
-	pcmemBom->SetRawData(UTF16BE_BOM, sizeof(UTF16BE_BOM));
+	pMemBom->SetRawData(UTF16BE_BOM, sizeof(UTF16BE_BOM));
 }
 
-void UnicodeBe::GetEol(Memory* pcmemEol, EolType eEolType)
+void UnicodeBe::GetEol(Memory* pMemEol, EolType eolType)
 {
 	static const struct{
 		const void* pData;
@@ -28,5 +28,5 @@ void UnicodeBe::GetEol(Memory* pcmemEol, EolType eEolType)
 		{ "\x20\x28",			1 * sizeof(wchar_t) },	// EolType::LS
 		{ "\x20\x29",			1 * sizeof(wchar_t) },	// EolType::PS
 	};
-	pcmemEol->SetRawData(aEolTable[(int)eEolType].pData, aEolTable[(int)eEolType].nLen);
+	pMemEol->SetRawData(aEolTable[(int)eolType].pData, aEolTable[(int)eolType].nLen);
 }

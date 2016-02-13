@@ -87,7 +87,7 @@ public:
 		m_sJack(sJack),
 		m_sHandler(sHandler),
 		m_sLabel(sLabel),
-		m_cPlugin(plugin)
+		m_plugin(plugin)
 	{
 	}
 	// デストラクタ
@@ -162,7 +162,7 @@ public:
 	const wstring m_sHandler;			// ハンドラ文字列（関数名）
 	const wstring m_sLabel;				// ラベル文字列
 	wstring m_sIcon;					// アイコンのファイルパス
-	Plugin& m_cPlugin;					// 親プラグイン
+	Plugin& m_plugin;					// 親プラグイン
 };
 
 // オプション定義	// 2010/3/24 Uchi

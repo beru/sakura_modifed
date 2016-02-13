@@ -166,9 +166,9 @@ BOOL DlgAbout::OnInitDialog(
 	//      Compile Info: V 1400  WR WIN600/I601/C000/N600
 	//      Last Modified: 1999/9/9 00:00:00
 	//      (あればSKR_PATCH_INFOの文字列がそのまま表示)
-	CNativeT cmemMsg;
-	cmemMsg.AppendString(LS(STR_DLGABOUT_APPNAME));
-	cmemMsg.AppendString(_T("   "));
+	CNativeT memMsg;
+	memMsg.AppendString(LS(STR_DLGABOUT_APPNAME));
+	memMsg.AppendString(_T("   "));
 
 	// バージョン&リビジョン情報
 	DWORD dwVersionMS, dwVersionLS;
@@ -183,25 +183,25 @@ BOOL DlgAbout::OnInitDialog(
 		HIWORD(dwVersionLS),
 		LOWORD(dwVersionLS)
 	);
-	cmemMsg.AppendString(szMsg);
+	memMsg.AppendString(szMsg);
 
-	cmemMsg.AppendString(_T("\r\n"));
+	memMsg.AppendString(_T("\r\n"));
 
 	// 共有メモリ情報
 	auto_sprintf(szMsg,  _T("      Share Ver: %3d\r\n"),
 		N_SHAREDATA_VERSION
 	);
-	cmemMsg.AppendString(szMsg);
+	memMsg.AppendString(szMsg);
 
 	// コンパイル情報
-	cmemMsg.AppendString(_T("      Compile Info: "));
+	memMsg.AppendString(_T("      Compile Info: "));
 	int Compiler_ver = COMPILER_VER;
 	auto_sprintf(szMsg, _T(COMPILER_TYPE) _T(TARGET_M_SUFFIX) _T("%d ")
 			TSTR_TARGET_MODE _T(" WIN%03x/I%03x/C%03x/N%03x\r\n"),
 		Compiler_ver,
 		WINVER, _WIN32_IE, MY_WIN32_WINDOWS, MY_WIN32_WINNT
 	);
-	cmemMsg.AppendString(szMsg);
+	memMsg.AppendString(szMsg);
 
 	// 更新日情報
 	FileTime fileTime;
@@ -214,18 +214,18 @@ BOOL DlgAbout::OnInitDialog(
 		fileTime->wMinute,
 		fileTime->wSecond
 	);
-	cmemMsg.AppendString(szMsg);
+	memMsg.AppendString(szMsg);
 
 	// パッチの情報をコンパイル時に渡せるようにする
 #ifdef SKR_PATCH_INFO
-	cmemMsg.AppendString(_T("      "));
+	memMsg.AppendString(_T("      "));
 	const TCHAR* ptszPatchInfo = to_tchar(SKR_PATCH_INFO);
 	int patchInfoLen = auto_strlen(ptszPatchInfo);
-	cmemMsg.AppendString(ptszPatchInfo, t_min(80, patchInfoLen));
+	memMsg.AppendString(ptszPatchInfo, t_min(80, patchInfoLen));
 #endif
-	cmemMsg.AppendString(_T("\r\n"));
+	memMsg.AppendString(_T("\r\n"));
 
-	SetItemText(IDC_EDIT_VER, cmemMsg.GetStringPtr());
+	SetItemText(IDC_EDIT_VER, memMsg.GetStringPtr());
 
 	// From Here Jun. 8, 2001 genta
 	// Edit Boxにメッセージを追加する．

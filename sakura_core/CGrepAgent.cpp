@@ -254,7 +254,7 @@ DWORD GrepAgent::DoGrep(
 		Note: ここで強調するのは最後の検索文字列であって
 		Grep対象パターンではないことに注意
 	*/
-	if (!pcViewDst->m_sSearchPattern.SetPattern(pcViewDst->GetHwnd(),
+	if (!pcViewDst->m_searchPattern.SetPattern(pcViewDst->GetHwnd(),
 												pcViewDst->m_strCurSearchKey.c_str(),
 												pcViewDst->m_strCurSearchKey.size(),
 												pcViewDst->m_curSearchOption,
@@ -343,9 +343,9 @@ DWORD GrepAgent::DoGrep(
 
 	//	Sep. 10, 2002 genta
 	//	EditWndに新設した関数を使うように
-	EditWnd*	pCEditWnd = EditWnd::getInstance();	//	Sep. 10, 2002 genta
-	pCEditWnd->SetWindowIcon(hIconSmall, ICON_SMALL);
-	pCEditWnd->SetWindowIcon(hIconBig, ICON_BIG);
+	EditWnd*	pEditWnd = EditWnd::getInstance();	//	Sep. 10, 2002 genta
+	pEditWnd->SetWindowIcon(hIconSmall, ICON_SMALL);
+	pEditWnd->SetWindowIcon(hIconBig, ICON_BIG);
 
 	GrepEnumKeys cGrepEnumKeys;
 	{
@@ -619,11 +619,11 @@ DWORD GrepAgent::DoGrep(
 	pcViewDst->m_bDoing_UndoRedo = false;
 
 	// 表示処理ON/OFF
-	pCEditWnd->SetDrawSwitchOfAllViews(bDrawSwitchOld);
+	pEditWnd->SetDrawSwitchOfAllViews(bDrawSwitchOld);
 
 	// 再描画
-	if (!pCEditWnd->UpdateTextWrap()) {	// 折り返し方法関連の更新	// 2008.06.10 ryoji
-		pCEditWnd->RedrawAllViews(NULL);
+	if (!pEditWnd->UpdateTextWrap()) {	// 折り返し方法関連の更新	// 2008.06.10 ryoji
+		pEditWnd->RedrawAllViews(NULL);
 	}
 
 	if (!bGrepCurFolder) {
@@ -892,7 +892,7 @@ void GrepAgent::SetGrepResult(
 )
 {
 
-	NativeW cmemBuf(L"");
+	NativeW memBuf(L"");
 	wchar_t strWork[64];
 	const wchar_t* pDispData;
 	int k;
@@ -903,19 +903,19 @@ void GrepAgent::SetGrepResult(
 	// ノーマル
 	case 1:
 		if (sGrepOption.bGrepOutputBaseFolder || sGrepOption.bGrepSeparateFolder) {
-			cmemBuf.AppendString(L"・");
+			memBuf.AppendString(L"・");
 		}
-		cmemBuf.AppendStringT(pszFilePath);
+		memBuf.AppendStringT(pszFilePath);
 		::auto_sprintf( strWork, L"(%I64d,%d)", nLine, nColumn );
-		cmemBuf.AppendString(strWork);
-		cmemBuf.AppendStringT(pszCodeName);
-		cmemBuf.AppendString(L": ");
+		memBuf.AppendString(strWork);
+		memBuf.AppendStringT(pszCodeName);
+		memBuf.AppendString(L": ");
 		nMaxOutStr = 2000; // 2003.06.10 Moca 最大長変更
 		break;
 	// WZ風
 	case 2:
 		::auto_sprintf( strWork, L"・(%6I64d,%-5d): ", nLine, nColumn );
-		cmemBuf.AppendString(strWork);
+		memBuf.AppendString(strWork);
 		nMaxOutStr = 2500; // 2003.06.10 Moca 最大長変更
 		break;
 	// 結果のみ
@@ -945,8 +945,8 @@ void GrepAgent::SetGrepResult(
 		}
 	}
 
-	cmemMessage.AllocStringBuffer(cmemMessage.GetStringLength() + cmemBuf.GetStringLength() + 2);
-	cmemMessage.AppendNativeData(cmemBuf);
+	cmemMessage.AllocStringBuffer(cmemMessage.GetStringLength() + memBuf.GetStringLength() + 2);
+	cmemMessage.AppendNativeData(memBuf);
 	cmemMessage.AppendString(pDispData, k);
 	if (bEOL) {
 		cmemMessage.AppendString(L"\r\n", 2);

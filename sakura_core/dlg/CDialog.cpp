@@ -37,20 +37,20 @@ INT_PTR CALLBACK MyDialogProc(
 	LPARAM lParam 	// second message parameter
 	)
 {
-	Dialog* pCDialog;
+	Dialog* pDialog;
 	switch (uMsg) {
 	case WM_INITDIALOG:
-		pCDialog = (Dialog*) lParam;
-		if (pCDialog) {
-			return pCDialog->DispatchEvent(hwndDlg, uMsg, wParam, lParam);
+		pDialog = (Dialog*) lParam;
+		if (pDialog) {
+			return pDialog->DispatchEvent(hwndDlg, uMsg, wParam, lParam);
 		}else {
 			return FALSE;
 		}
 	default:
 		// Modified by KEITA for WIN64 2003.9.6
-		pCDialog = (Dialog*)::GetWindowLongPtr(hwndDlg, DWLP_USER);
-		if (pCDialog) {
-			return pCDialog->DispatchEvent(hwndDlg, uMsg, wParam, lParam);
+		pDialog = (Dialog*)::GetWindowLongPtr(hwndDlg, DWLP_USER);
+		if (pDialog) {
+			return pDialog->DispatchEvent(hwndDlg, uMsg, wParam, lParam);
 		}else {
 			return FALSE;
 		}
@@ -291,14 +291,14 @@ void Dialog::SetDialogPosSize()
 BOOL Dialog::OnDestroy(void)
 {
 	// ウィンドウ位置・サイズを記憶
-	WINDOWPLACEMENT cWindowPlacement;
-	cWindowPlacement.length = sizeof(cWindowPlacement);
-	if (::GetWindowPlacement(m_hWnd, &cWindowPlacement)) {
-		m_nShowCmd = cWindowPlacement.showCmd;	// 最大化・最小化
-		m_xPos = cWindowPlacement.rcNormalPosition.left;
-		m_yPos = cWindowPlacement.rcNormalPosition.top;
-		m_nWidth = cWindowPlacement.rcNormalPosition.right - cWindowPlacement.rcNormalPosition.left;
-		m_nHeight = cWindowPlacement.rcNormalPosition.bottom - cWindowPlacement.rcNormalPosition.top;
+	WINDOWPLACEMENT windowPlacement;
+	windowPlacement.length = sizeof(windowPlacement);
+	if (::GetWindowPlacement(m_hWnd, &windowPlacement)) {
+		m_nShowCmd = windowPlacement.showCmd;	// 最大化・最小化
+		m_xPos = windowPlacement.rcNormalPosition.left;
+		m_yPos = windowPlacement.rcNormalPosition.top;
+		m_nWidth = windowPlacement.rcNormalPosition.right - windowPlacement.rcNormalPosition.left;
+		m_nHeight = windowPlacement.rcNormalPosition.bottom - windowPlacement.rcNormalPosition.top;
 		// 2014.11.28 フォント変更によるサイズ変更対応
 		if (!m_bSizable) {
 			m_nWidth = -1;
@@ -383,7 +383,7 @@ BOOL Dialog::OnMove(WPARAM wParam, LPARAM lParam)
 	if (!m_bInited) {
 		return TRUE;
 	}
-	RECT	rc;
+	RECT rc;
 	::GetWindowRect(m_hWnd, &rc);
 
 	// ダイアログのサイズの記憶
@@ -613,7 +613,7 @@ BOOL Dialog::SelectFile(
 	bool resolvePath
 	)
 {
-	DlgOpenFile cDlgOpenFile;
+	DlgOpenFile dlgOpenFile;
 	TCHAR szFilePath[_MAX_PATH + 1];
 	TCHAR szPath[_MAX_PATH + 1];
 	::GetWindowText(hwndCtl, szFilePath, _countof(szFilePath));
@@ -625,13 +625,13 @@ BOOL Dialog::SelectFile(
 		auto_strcpy(szPath, szFilePath);
 	}
 	// ファイルオープンダイアログの初期化
-	cDlgOpenFile.Create(
+	dlgOpenFile.Create(
 		::GetModuleHandle(NULL),
 		parent,
 		filter,
 		szPath
 	);
-	if (cDlgOpenFile.DoModal_GetOpenFileName(szPath)) {
+	if (dlgOpenFile.DoModal_GetOpenFileName(szPath)) {
 		const TCHAR* fileName;
 		if (resolvePath) {
 			fileName = GetRelPath(szPath);

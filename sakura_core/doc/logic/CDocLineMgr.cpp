@@ -70,17 +70,17 @@ DocLineMgr::~DocLineMgr()
 // pPosの直前に新しい行を挿入
 DocLine* DocLineMgr::InsertNewLine(DocLine* pPos)
 {
-	DocLine* pcDocLineNew = new DocLine;
-	_InsertBeforePos(pcDocLineNew, pPos);
-	return pcDocLineNew;
+	DocLine* pDocLineNew = new DocLine;
+	_InsertBeforePos(pDocLineNew, pPos);
+	return pDocLineNew;
 }
 
 // 最下部に新しい行を挿入
 DocLine* DocLineMgr::AddNewLine()
 {
-	DocLine* pcDocLineNew = new DocLine;
-	_PushBottom(pcDocLineNew);
-	return pcDocLineNew;
+	DocLine* pDocLineNew = new DocLine;
+	_PushBottom(pDocLineNew);
+	return pDocLineNew;
 }
 
 // 全ての行を削除する
@@ -97,29 +97,29 @@ void DocLineMgr::DeleteAllLine()
 
 
 // 行の削除
-void DocLineMgr::DeleteLine(DocLine* pcDocLineDel)
+void DocLineMgr::DeleteLine(DocLine* pDocLineDel)
 {
 	// Prev切り離し
-	if (pcDocLineDel->GetPrevLine()) {
-		pcDocLineDel->GetPrevLine()->m_pNext = pcDocLineDel->GetNextLine();
+	if (pDocLineDel->GetPrevLine()) {
+		pDocLineDel->GetPrevLine()->m_pNext = pDocLineDel->GetNextLine();
 	}else {
-		m_pDocLineTop = pcDocLineDel->GetNextLine();
+		m_pDocLineTop = pDocLineDel->GetNextLine();
 	}
 
 	// Next切り離し
-	if (pcDocLineDel->GetNextLine()) {
-		pcDocLineDel->m_pNext->m_pPrev = pcDocLineDel->GetPrevLine();
+	if (pDocLineDel->GetNextLine()) {
+		pDocLineDel->m_pNext->m_pPrev = pDocLineDel->GetPrevLine();
 	}else {
-		m_pDocLineBot = pcDocLineDel->GetPrevLine();
+		m_pDocLineBot = pDocLineDel->GetPrevLine();
 	}
 	
 	// 参照切り離し
-	if (m_pCodePrevRefer == pcDocLineDel) {
-		m_pCodePrevRefer = pcDocLineDel->GetNextLine();
+	if (m_pCodePrevRefer == pDocLineDel) {
+		m_pCodePrevRefer = pDocLineDel->GetNextLine();
 	}
 
 	// データ削除
-	delete pcDocLineDel;
+	delete pDocLineDel;
 
 	// 行数減算
 	--m_nLines;

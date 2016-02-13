@@ -186,17 +186,17 @@ void DiffLineMgr::SetDiffMarkRange(DiffMark nMode, LogicInt nStartLine, LogicInt
 	LogicInt nLines = m_pDocLineMgr->GetLineCount();
 	if (nLines <= nEndLine) {
 		nEndLine = nLines - LogicInt(1);
-		DocLine* pCDocLine = m_pDocLineMgr->GetLine(nEndLine);
-		if (pCDocLine) {
-			DiffLineSetter(pCDocLine).SetLineDiffMark(DiffMark::DeleteEx);
+		DocLine* pDocLine = m_pDocLineMgr->GetLine(nEndLine);
+		if (pDocLine) {
+			DiffLineSetter(pDocLine).SetLineDiffMark(DiffMark::DeleteEx);
 		}
 	}
 
 	// 行範囲にマークをつける
 	for (LogicInt i=nStartLine; i<=nEndLine; ++i) {
-		DocLine* pCDocLine = m_pDocLineMgr->GetLine(i);
-		if (pCDocLine) {
-			DiffLineSetter(pCDocLine).SetLineDiffMark(nMode);
+		DocLine* pDocLine = m_pDocLineMgr->GetLine(i);
+		if (pDocLine) {
+			DiffLineSetter(pDocLine).SetLineDiffMark(nMode);
 		}
 	}
 

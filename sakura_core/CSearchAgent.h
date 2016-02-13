@@ -117,7 +117,7 @@ public:
 	);
 
 public:
-	SearchAgent(DocLineMgr* pcDocLineMgr) : m_pDocLineMgr(pcDocLineMgr) { }
+	SearchAgent(DocLineMgr* pDocLineMgr) : m_pDocLineMgr(pDocLineMgr) { }
 
 	bool WhereCurrentWord(LogicInt , LogicInt , LogicInt* , LogicInt*, NativeW*, NativeW*);	// Œ»İˆÊ’u‚Ì’PŒê‚Ì”ÍˆÍ‚ğ’²‚×‚é
 

@@ -170,8 +170,8 @@ BOOL DlgJump::OnBnClicked(int wID)
 		}
 // To Here Feb. 20, 2001
 		{	//@@@ 2002.2.2 YAZAKI 指定行へジャンプを、ダイアログを表示するコマンドと、実際にジャンプするコマンドに分離。
-			EditDoc* pCEditDoc = (EditDoc*)m_lParam;
-			pCEditDoc->m_pEditWnd->GetActiveView().GetCommander().HandleCommand(F_JUMP, true, 0, 0, 0, 0);	// ジャンプコマンド発行
+			EditDoc* pEditDoc = (EditDoc*)m_lParam;
+			pEditDoc->m_pEditWnd->GetActiveView().GetCommander().HandleCommand(F_JUMP, true, 0, 0, 0, 0);	// ジャンプコマンド発行
 		}
 		return TRUE;
 	case IDCANCEL:
@@ -186,7 +186,7 @@ BOOL DlgJump::OnBnClicked(int wID)
 // ダイアログデータの設定
 void DlgJump::SetData(void)
 {
-	EditDoc* pCEditDoc = (EditDoc*)m_lParam;
+	EditDoc* pEditDoc = (EditDoc*)m_lParam;
 	FuncInfoArr cFuncInfoArr;
 	wchar_t szText[1024];
 	int nIndexCurSel = 0;	// Sep. 11, 2004 genta 初期化
@@ -204,8 +204,8 @@ void DlgJump::SetData(void)
 	// PL/SQL関数リスト作成
 	HWND hwndCtrl = GetItemHwnd(IDC_COMBO_PLSQLBLOCKS);
 	// タイプ別に設定されたアウトライン解析方法
-	if (OUTLINE_PLSQL == pCEditDoc->m_docType.GetDocumentAttribute().m_eDefaultOutline) {
-		pCEditDoc->m_docOutline.MakeFuncList_PLSQL(&cFuncInfoArr);
+	if (OUTLINE_PLSQL == pEditDoc->m_docType.GetDocumentAttribute().m_eDefaultOutline) {
+		pEditDoc->m_docOutline.MakeFuncList_PLSQL(&cFuncInfoArr);
 	}
 	//$$ 条件により、レイアウト・ロジックの単位が混在するため、ミスの原因になりやすい
 	int nWorkLine = -1;

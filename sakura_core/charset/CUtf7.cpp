@@ -262,13 +262,13 @@ CodeConvertResult Utf7::UnicodeToUTF7(const NativeW& cSrc, Memory* pDstMem)
 }
 
 // BOMƒf[ƒ^Žæ“¾
-void Utf7::GetBom(Memory* pcmemBom)
+void Utf7::GetBom(Memory* pMemBom)
 {
 	static const BYTE UTF7_BOM[]= {'+', '/', 'v', '8', '-'};
-	pcmemBom->SetRawData(UTF7_BOM, sizeof(UTF7_BOM));
+	pMemBom->SetRawData(UTF7_BOM, sizeof(UTF7_BOM));
 }
 
-void Utf7::GetEol(Memory* pcmemEol, EolType eEolType)
+void Utf7::GetEol(Memory* pMemEol, EolType eolType)
 {
 	static const struct{
 		const char* szData;
@@ -283,5 +283,5 @@ void Utf7::GetEol(Memory* pcmemEol, EolType eEolType)
 		{ "+ICg-",		5 },	// EolType::LS
 		{ "+ICk-",		5 },	// EolType::PS
 	};
-	pcmemEol->SetRawData(aEolTable[(int)eEolType].szData, aEolTable[(int)eEolType].nLen);
+	pMemEol->SetRawData(aEolTable[(int)eolType].szData, aEolTable[(int)eolType].nLen);
 }

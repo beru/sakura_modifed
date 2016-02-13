@@ -88,10 +88,10 @@ BOOL DlgExec::OnInitDialog(
 	BOOL bRet = Dialog::OnInitDialog(hwnd, wParam, lParam);
 
 	m_comboDel = ComboBoxItemDeleter();
-	m_comboDel.pRecent = &m_cRecentCmd;
+	m_comboDel.pRecent = &m_recentCmd;
 	SetComboBoxDeleter(GetItemHwnd(IDC_COMBO_m_szCommand), &m_comboDel);
 	m_comboDelCur = ComboBoxItemDeleter();
-	m_comboDelCur.pRecent = &m_cRecentCur;
+	m_comboDelCur.pRecent = &m_recentCur;
 	SetComboBoxDeleter(GetItemHwnd(IDC_COMBO_CUR_DIR), &m_comboDelCur);
 	return bRet;
 }

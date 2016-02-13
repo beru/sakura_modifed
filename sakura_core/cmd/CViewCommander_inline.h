@@ -57,7 +57,7 @@ inline void ViewCommander::SetOpeBlk(OpeBlk* p)
 
 inline LayoutRange& ViewCommander::GetSelect()
 {
-	return m_pCommanderView->GetSelectionInfo().m_sSelect;
+	return m_pCommanderView->GetSelectionInfo().m_select;
 }
 
 inline Caret& ViewCommander::GetCaret()

@@ -464,12 +464,12 @@ void EditView::DeleteData(
 	auto& selInfo = GetSelectionInfo();
 	// テキストの存在しないエリアの削除は、選択範囲のキャンセルとカーソル移動のみとする	// 2008.08.05 ryoji
 	if (selInfo.IsTextSelected()) {		// テキストが選択されているか
-		if (IsEmptyArea(selInfo.m_sSelect.GetFrom(), selInfo.m_sSelect.GetTo(), true, selInfo.IsBoxSelecting())) {
+		if (IsEmptyArea(selInfo.m_select.GetFrom(), selInfo.m_select.GetTo(), true, selInfo.IsBoxSelecting())) {
 			// カーソルを選択範囲の左上に移動
 			GetCaret().MoveCursor(
 				LayoutPoint(
-					selInfo.m_sSelect.GetFrom().GetX2() < selInfo.m_sSelect.GetTo().GetX2() ? selInfo.m_sSelect.GetFrom().GetX2() : selInfo.m_sSelect.GetTo().GetX2(),
-					selInfo.m_sSelect.GetFrom().GetY2() < selInfo.m_sSelect.GetTo().GetY2() ? selInfo.m_sSelect.GetFrom().GetY2() : selInfo.m_sSelect.GetTo().GetY2()
+					selInfo.m_select.GetFrom().GetX2() < selInfo.m_select.GetTo().GetX2() ? selInfo.m_select.GetFrom().GetX2() : selInfo.m_select.GetTo().GetX2(),
+					selInfo.m_select.GetFrom().GetY2() < selInfo.m_select.GetTo().GetY2() ? selInfo.m_select.GetFrom().GetY2() : selInfo.m_select.GetTo().GetY2()
 				), bRedraw
 			);
 			GetCaret().m_nCaretPosX_Prev = GetCaret().GetCaretLayoutPos().GetX2();
@@ -486,7 +486,7 @@ void EditView::DeleteData(
 
 	// テキストが選択されているか
 	if (selInfo.IsTextSelected()) {
-		WaitCursor cWaitCursor(this->GetHwnd());  // 2002.02.05 hor
+		WaitCursor waitCursor(this->GetHwnd());  // 2002.02.05 hor
 		if (!m_bDoing_UndoRedo) {	// アンドゥ・リドゥの実行中か
 			// 操作の追加
 			m_commander.GetOpeBlk()->AppendOpe(
@@ -506,8 +506,8 @@ void EditView::DeleteData(
 			// ２点を対角とする矩形を求める
 			TwoPointToRect(
 				&rcSel,
-				selInfo.m_sSelect.GetFrom(),	// 範囲選択開始
-				selInfo.m_sSelect.GetTo()		// 範囲選択終了
+				selInfo.m_select.GetFrom(),	// 範囲選択開始
+				selInfo.m_select.GetTo()		// 範囲選択終了
 			);
 			// 現在の選択範囲を非選択状態に戻す
 			selInfo.DisableSelectArea(bRedraw);
@@ -585,7 +585,7 @@ void EditView::DeleteData(
 		}else {
 			// データ置換 削除&挿入にも使える
 			ReplaceData_CEditView(
-				selInfo.m_sSelect,
+				selInfo.m_select,
 				L"",					// 挿入するデータ
 				LogicInt(0),			// 挿入するデータの長さ
 				bRedraw,
@@ -748,7 +748,7 @@ bool EditView::ReplaceData_CEditView3(
 			//	これをやってしまうと存在しない行をPointして落ちる．
 			if (delRange.GetFrom().y < layoutMgr.GetLineCount() - 1 && pos >= len) {
 				if (delRange.GetFrom().y == delRange.GetTo().y) {
-					//	GetSelectionInfo().m_sSelect.GetFrom().y <= GetSelectionInfo().m_sSelect.GetTo().y はチェックしない
+					//	GetSelectionInfo().m_select.GetFrom().y <= GetSelectionInfo().m_select.GetTo().y はチェックしない
 					LayoutPoint tmp = delRange.GetFrom();
 					tmp.y++;
 					tmp.x = LayoutInt(0);

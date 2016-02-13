@@ -218,7 +218,7 @@ int DocOutline::ReadRuleFile(
 	@date 2007.11.29 kobake OneRule test[1024] でスタックが溢れていたのを修正
 */
 void DocOutline::MakeFuncList_RuleFile(
-	FuncInfoArr* pcFuncInfoArr,
+	FuncInfoArr* pFuncInfoArr,
 	std::tstring& sTitleOverride
 	)
 {
@@ -290,7 +290,7 @@ void DocOutline::MakeFuncList_RuleFile(
 		}
 		NativeW mem;
 		mem.SetString(g, len);
-		pcFuncInfoArr->AppendData(LogicInt(1), LayoutInt(1), mem.GetStringPtr(), FUNCINFO_NOCLIPTEXT, nDepth);
+		pFuncInfoArr->AppendData(LogicInt(1), LayoutInt(1), mem.GetStringPtr(), FUNCINFO_NOCLIPTEXT, nDepth);
 		nDepth = 1;
 	}
 	for (LogicInt nLineCount=LogicInt(0); nLineCount<m_pDocRef->m_docLineMgr.GetLineCount(); ++nLineCount) {
@@ -420,7 +420,7 @@ void DocOutline::MakeFuncList_RuleFile(
 		}
 		
 		if (bAppend) {
-			pcFuncInfoArr->AppendData(nLineCount + LogicInt(1), ptPos.GetY2() + LayoutInt(1) , pszText, 0, nDepth);
+			pFuncInfoArr->AppendData(nLineCount + LogicInt(1), ptPos.GetY2() + LayoutInt(1) , pszText, 0, nDepth);
 			++nDepth;
 		}
 		delete [] pszText;
@@ -438,7 +438,7 @@ void DocOutline::MakeFuncList_RuleFile(
 	@date 2005.10.11 ryoji "ａ@" の右２バイトが全角空白と判定される問題の対処
 	@date 2005.11.03 genta 文字列長修正．右端のゴミを除去
 */
-void DocOutline::MakeFuncList_BookMark(FuncInfoArr* pcFuncInfoArr)
+void DocOutline::MakeFuncList_BookMark(FuncInfoArr* pFuncInfoArr)
 {
 	LogicInt nLineLen;
 	BOOL bMarkUpBlankLineEnable = GetDllShareData().m_common.m_outline.m_bMarkUpBlankLineEnable;	// 空行をマーク対象にするフラグ 20020119 aroka
@@ -502,7 +502,7 @@ void DocOutline::MakeFuncList_BookMark(FuncInfoArr* pcFuncInfoArr)
 		LayoutPoint ptXY;
 		//int nX,nY
 		m_pDocRef->m_layoutMgr.LogicToLayout(	LogicPoint(LogicInt(0), nLineCount), &ptXY);
-		pcFuncInfoArr->AppendData(nLineCount + LogicInt(1), ptXY.GetY2()+LayoutInt(1) , pszText, 0);
+		pFuncInfoArr->AppendData(nLineCount + LogicInt(1), ptXY.GetY2()+LayoutInt(1) , pszText, 0);
 	}
 	return;
 }

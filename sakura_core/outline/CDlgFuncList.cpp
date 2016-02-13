@@ -109,30 +109,30 @@ int CALLBACK DlgFuncList::CompareFunc_Asc(
 	LPARAM lParamSort
 	)
 {
-	DlgFuncList* pcDlgFuncList = (DlgFuncList*)lParamSort;
+	DlgFuncList* pDlgFuncList = (DlgFuncList*)lParamSort;
 
-	FuncInfo* pcFuncInfo1 = pcDlgFuncList->m_pFuncInfoArr->GetAt(lParam1);
-	if (!pcFuncInfo1) {
+	FuncInfo* pFuncInfo1 = pDlgFuncList->m_pFuncInfoArr->GetAt(lParam1);
+	if (!pFuncInfo1) {
 		return -1;
 	}
-	FuncInfo* pcFuncInfo2 = pcDlgFuncList->m_pFuncInfoArr->GetAt(lParam2);
-	if (!pcFuncInfo2) {
+	FuncInfo* pFuncInfo2 = pDlgFuncList->m_pFuncInfoArr->GetAt(lParam2);
+	if (!pFuncInfo2) {
 		return -1;
 	}
 	//	Apr. 23, 2005 genta 行番号を左端へ
-	if (FL_COL_NAME == pcDlgFuncList->m_nSortCol) {	// 名前でソート
-		return auto_stricmp(pcFuncInfo1->m_memFuncName.GetStringPtr(), pcFuncInfo2->m_memFuncName.GetStringPtr());
+	if (pDlgFuncList->m_nSortCol == FL_COL_NAME) {	// 名前でソート
+		return auto_stricmp(pFuncInfo1->m_memFuncName.GetStringPtr(), pFuncInfo2->m_memFuncName.GetStringPtr());
 	}
 	//	Apr. 23, 2005 genta 行番号を左端へ
-	if (FL_COL_ROW == pcDlgFuncList->m_nSortCol) {	// 行（＋桁）でソート
-		if (pcFuncInfo1->m_nFuncLineCRLF < pcFuncInfo2->m_nFuncLineCRLF) {
+	if (pDlgFuncList->m_nSortCol == FL_COL_ROW) {	// 行（＋桁）でソート
+		if (pFuncInfo1->m_nFuncLineCRLF < pFuncInfo2->m_nFuncLineCRLF) {
 			return -1;
 		}else
-		if (pcFuncInfo1->m_nFuncLineCRLF == pcFuncInfo2->m_nFuncLineCRLF) {
-			if (pcFuncInfo1->m_nFuncColCRLF < pcFuncInfo2->m_nFuncColCRLF) {
+		if (pFuncInfo1->m_nFuncLineCRLF == pFuncInfo2->m_nFuncLineCRLF) {
+			if (pFuncInfo1->m_nFuncColCRLF < pFuncInfo2->m_nFuncColCRLF) {
 				return -1;
 			}else
-			if (pcFuncInfo1->m_nFuncColCRLF == pcFuncInfo2->m_nFuncColCRLF) {
+			if (pFuncInfo1->m_nFuncColCRLF == pFuncInfo2->m_nFuncColCRLF) {
 				return 0;
 			}else {
 				return 1;
@@ -141,22 +141,22 @@ int CALLBACK DlgFuncList::CompareFunc_Asc(
 			return 1;
 		}
 	}
-	if (FL_COL_COL == pcDlgFuncList->m_nSortCol) {	// 桁でソート
-		if (pcFuncInfo1->m_nFuncColCRLF < pcFuncInfo2->m_nFuncColCRLF) {
+	if (FL_COL_COL == pDlgFuncList->m_nSortCol) {	// 桁でソート
+		if (pFuncInfo1->m_nFuncColCRLF < pFuncInfo2->m_nFuncColCRLF) {
 			return -1;
 		}else
-		if (pcFuncInfo1->m_nFuncColCRLF == pcFuncInfo2->m_nFuncColCRLF) {
+		if (pFuncInfo1->m_nFuncColCRLF == pFuncInfo2->m_nFuncColCRLF) {
 			return 0;
 		}else {
 			return 1;
 		}
 	}
 	// From Here 2001.12.07 hor
-	if (FL_COL_REMARK == pcDlgFuncList->m_nSortCol) {	// 備考でソート
-		if (pcFuncInfo1->m_nInfo < pcFuncInfo2->m_nInfo) {
+	if (FL_COL_REMARK == pDlgFuncList->m_nSortCol) {	// 備考でソート
+		if (pFuncInfo1->m_nInfo < pFuncInfo2->m_nInfo) {
 			return -1;
 		}else
-		if (pcFuncInfo1->m_nInfo == pcFuncInfo2->m_nInfo) {
+		if (pFuncInfo1->m_nInfo == pFuncInfo2->m_nInfo) {
 			return 0;
 		}else {
 			return 1;
@@ -247,10 +247,10 @@ INT_PTR DlgFuncList::DispatchEvent(
 		// セッション内全体での最近アクティブウィンドウがアクティブになってしまう．
 		// それでは都合が悪いので，特別に以下の処理を行って他と同様な挙動が得られるようにする．
 		if ((BOOL)wParam) {
-			EditView* pcEditView = (EditView*)m_lParam;
-			EditWnd* pcEditWnd = pcEditView->m_pEditWnd;
+			EditView* pEditView = (EditView*)m_lParam;
+			EditWnd* pEditWnd = pEditView->m_pEditWnd;
 			if (::GetActiveWindow() == GetHwnd()) {
-				::SetActiveWindow(pcEditWnd->GetHwnd());
+				::SetActiveWindow(pEditWnd->GetHwnd());
 				BlockingHook(NULL);	// キュー内に溜まっているメッセージを処理
 				::SetActiveWindow(GetHwnd());
 				return 0L;
@@ -351,8 +351,8 @@ HWND DlgFuncList::DoModeless(
 	bool			bLineNumIsCRLF		// 行番号の表示 false=折り返し単位／true=改行単位
 	)
 {
-	EditView* pcEditView = (EditView*)lParam;
-	if (!pcEditView) {
+	EditView* pEditView = (EditView*)lParam;
+	if (!pEditView) {
 		return NULL;
 	}
 	m_pFuncInfoArr = pcFuncInfoArr;	// 関数情報配列
@@ -361,7 +361,7 @@ HWND DlgFuncList::DoModeless(
 	m_nOutlineType = nOutlineType;		// アウトライン解析の種別
 	m_nListType = nListType;			// 一覧の種類
 	m_bLineNumIsCRLF = bLineNumIsCRLF;	// 行番号の表示 false=折り返し単位／true=改行単位
-	m_nDocType = pcEditView->GetDocument()->m_docType.GetDocumentType().GetIndex();
+	m_nDocType = pEditView->GetDocument()->m_docType.GetDocumentType().GetIndex();
 	DocTypeManager().GetTypeConfig(TypeConfigNum(m_nDocType), m_type);
 	m_nSortCol = m_type.m_nOutlineSortCol;
 	m_nSortColOld = m_nSortCol;
@@ -402,7 +402,7 @@ HWND DlgFuncList::DoModeless(
 		pDlgTemplate->style = (WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | DS_SETFONT);
 		hwndRet = Dialog::DoModeless(hInstance, MyGetAncestor(hwndParent, GA_ROOT), pDlgTemplate, lParam, SW_HIDE);
 		::GlobalFree(pDlgTemplate);
-		pcEditView->m_pEditWnd->EndLayoutBars(m_bEditWndReady);	// 画面の再レイアウト
+		pEditView->m_pEditWnd->EndLayoutBars(m_bEditWndReady);	// 画面の再レイアウト
 	}else {
 		hwndRet = Dialog::DoModeless(
 			hInstance,
@@ -567,8 +567,8 @@ void DlgFuncList::SetData()
 			const int nNum = m_pFuncInfoArr->GetNum();
 			int nBuffLen = 0;
 			for (int i=0; i<nNum; ++i) {
-				const FuncInfo* pcFuncInfo = m_pFuncInfoArr->GetAt(i);
-				nBuffLen += pcFuncInfo->m_memFuncName.GetStringLength();
+				const FuncInfo* pFuncInfo = m_pFuncInfoArr->GetAt(i);
+				nBuffLen += pFuncInfo->m_memFuncName.GetStringLength();
 			}
 			m_memClipText.AllocStringBuffer(nBuffLen + nBuffLenTag * nNum);
 		}
@@ -1514,7 +1514,7 @@ void DlgFuncList::SetTree(bool tagjump, bool nolabel)
 		hItem = TreeView_InsertItem(hwndTree, &cTVInsertStruct);
 		phParentStack[nStackPointer + 1] = hItem;
 
-		// pcFuncInfoに登録されている行数、桁を確認して、選択するアイテムを考える
+		// pFuncInfoに登録されている行数、桁を確認して、選択するアイテムを考える
 		bool bFileSelect = false;
 		if (pcFuncInfo->m_memFileName.GetStringPtr() && m_pFuncInfoArr->m_szFilePath[0]) {
 			if (auto_stricmp(pcFuncInfo->m_memFileName.GetStringPtr(), m_pFuncInfoArr->m_szFilePath.c_str()) == 0) {
@@ -3470,7 +3470,7 @@ void DlgFuncList::Refresh(void)
 	BOOL bReloaded = ChangeLayout(OUTLINE_LAYOUT_FILECHANGED);	// 現在設定に従ってアウトライン画面を再配置する
 	if (!bReloaded && pcEditWnd->m_dlgFuncList.GetHwnd()) {
 		int nOutlineType = GetOutlineTypeRedraw(m_nOutlineType);
-		pcEditWnd->GetActiveView().GetCommander().Command_FUNCLIST((int)ShowDialogType::Reload, nOutlineType);	// 開く	※ HandleCommand(F_OUTLINE,...) だと印刷プレビュー状態で実行されないので Command_FUNCLIST()
+		pcEditWnd->GetActiveView().GetCommander().Command_FUNCLIST(ShowDialogType::Reload, nOutlineType);	// 開く	※ HandleCommand(F_OUTLINE,...) だと印刷プレビュー状態で実行されないので Command_FUNCLIST()
 	}
 	if (MyGetAncestor(::GetForegroundWindow(), GA_ROOTOWNER2) == pcEditWnd->GetHwnd()) {
 		::SetFocus(pcEditWnd->GetActiveView().GetHwnd());	// フォーカスを戻す
@@ -3520,7 +3520,7 @@ bool DlgFuncList::ChangeLayout(int nId)
 				}
 			}
 			int nOutlineType = GetOutlineTypeRedraw(m_nOutlineType);	// ブックマークかアウトライン解析かは最後に開いていた時の状態を引き継ぐ（初期状態はアウトライン解析）
-			pcEditView->GetCommander().Command_FUNCLIST((int)ShowDialogType::Normal, nOutlineType);	// 開く	※ HandleCommand(F_OUTLINE,...) だと印刷プレビュー状態で実行されないので Command_FUNCLIST()
+			pcEditView->GetCommander().Command_FUNCLIST(ShowDialogType::Normal, nOutlineType);	// 開く	※ HandleCommand(F_OUTLINE,...) だと印刷プレビュー状態で実行されないので Command_FUNCLIST()
 			if (nId == OUTLINE_LAYOUT_BACKGROUND) {
 				::EnableWindow(pcEditView->m_pEditWnd->GetHwnd(), TRUE);
 			}
@@ -3561,7 +3561,7 @@ bool DlgFuncList::ChangeLayout(int nId)
 				}
 			}
 			int nOutlineType = GetOutlineTypeRedraw(m_nOutlineType);
-			pcEditView->GetCommander().Command_FUNCLIST((int)ShowDialogType::Normal, nOutlineType);	// 開く	※ HandleCommand(F_OUTLINE,...) だと印刷プレビュー状態で実行されないので Command_FUNCLIST()
+			pcEditView->GetCommander().Command_FUNCLIST(ShowDialogType::Normal, nOutlineType);	// 開く	※ HandleCommand(F_OUTLINE,...) だと印刷プレビュー状態で実行されないので Command_FUNCLIST()
 			if (nId == OUTLINE_LAYOUT_BACKGROUND) {
 				::EnableWindow(pcEditView->m_pEditWnd->GetHwnd(), TRUE);
 			}

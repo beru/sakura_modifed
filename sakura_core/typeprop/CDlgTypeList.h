@@ -29,7 +29,7 @@ class DlgTypeList : public Dialog {
 public:
 	// Œ^
 	struct Result {
-		TypeConfigNum	cDocumentType;	// •¶‘í—Ş
+		TypeConfigNum	documentType;	// •¶‘í—Ş
 		bool			bTempChange;	// ‹ŒPROP_TEMPCHANGE_FLAG
 	};
 

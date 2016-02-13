@@ -37,9 +37,9 @@ public:
 
 protected:
 	ComboBoxItemDeleter m_comboDel;
-	RecentCmd m_cRecentCmd;
+	RecentCmd m_recentCmd;
 	ComboBoxItemDeleter m_comboDelCur;
-	RecentCurDir m_cRecentCur;
+	RecentCurDir m_recentCur;
 
 	// オーバーライド?
 	int GetData(void);	// ダイアログデータの取得

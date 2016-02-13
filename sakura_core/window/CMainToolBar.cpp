@@ -312,7 +312,7 @@ void MainToolBar::CreateToolBar(void)
 							AcceptSharedSearchKey();
 
 							m_comboDel = ComboBoxItemDeleter(); // Ä•\¦—p‚Ì‰Šú‰»
-							m_comboDel.pRecent = &m_cRecentSearch;
+							m_comboDel.pRecent = &m_recentSearch;
 							Dialog::SetComboBoxDeleter(m_hwndSearchBox, &m_comboDel);
 						}
 						break;

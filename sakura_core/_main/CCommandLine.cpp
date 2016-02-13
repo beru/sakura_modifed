@@ -315,7 +315,7 @@ void CommandLine::ParseCommandLine(LPCTSTR pszCmdLineSrc, bool bResponse)
 				if (m_fi.m_szPath[0] == _T('\0')) {
 					_tcscpy(m_fi.m_szPath, szPath );
 				}else {
-					m_vFiles.push_back(szPath);
+					m_fileNames.push_back(szPath);
 				}
 			}
 		}else {

@@ -80,13 +80,13 @@ bool FigureSpace::DrawImp_StyleSelect(ColorStrategyInfo* pInfo)
 	// 仮想関数なので派生クラス側のオーバーライドで個別に仕様変更可能
 	EditView* pcView = pInfo->m_pView;
 
-	TypeSupport cCurrentType(pcView, pInfo->GetCurrentColor());	// 周辺の色（現在の指定色/選択色）
-	TypeSupport cCurrentType2(pcView, pInfo->GetCurrentColor2());	// 周辺の色（現在の指定色）
-	TypeSupport cTextType(pcView, COLORIDX_TEXT);				// テキストの指定色
-	TypeSupport cSpaceType(pcView, GetDispColorIdx());	// 空白の指定色
-	TypeSupport cCurrentTypeBg(pcView, pInfo->GetCurrentColorBg());
-	TypeSupport& cCurrentType1 = (cCurrentType.GetBackColor() == cTextType.GetBackColor() ? cCurrentTypeBg: cCurrentType);
-	TypeSupport& cCurrentType3 = (cCurrentType2.GetBackColor() == cTextType.GetBackColor() ? cCurrentTypeBg: cCurrentType2);
+	TypeSupport currentType(pcView, pInfo->GetCurrentColor());	// 周辺の色（現在の指定色/選択色）
+	TypeSupport currentType2(pcView, pInfo->GetCurrentColor2());	// 周辺の色（現在の指定色）
+	TypeSupport textType(pcView, COLORIDX_TEXT);				// テキストの指定色
+	TypeSupport spaceType(pcView, GetDispColorIdx());	// 空白の指定色
+	TypeSupport currentTypeBg(pcView, pInfo->GetCurrentColorBg());
+	TypeSupport& currentType1 = (currentType.GetBackColor() == textType.GetBackColor() ? currentTypeBg: currentType);
+	TypeSupport& currentType3 = (currentType2.GetBackColor() == textType.GetBackColor() ? currentTypeBg: currentType2);
 
 	// 空白記号類は特に明示指定した部分以外はなるべく周辺の指定に合わせるようにしてみた	// 2009.05.30 ryoji
 	// 例えば、下線を指定していない場合、正規表現キーワード内なら正規表現キーワード側の下線指定に従うほうが自然な気がする。
@@ -104,32 +104,32 @@ bool FigureSpace::DrawImp_StyleSelect(ColorStrategyInfo* pInfo)
 	// ・混合色の場合は従来通り。
 	COLORREF crText;
 	COLORREF crBack;
-	bool blendColor = pInfo->GetCurrentColor() != pInfo->GetCurrentColor2() && cCurrentType.GetTextColor() == cCurrentType.GetBackColor(); // 選択混合色
+	bool blendColor = pInfo->GetCurrentColor() != pInfo->GetCurrentColor2() && currentType.GetTextColor() == currentType.GetBackColor(); // 選択混合色
 	bool bBold;
 	if (blendColor) {
-		TypeSupport& cText = cSpaceType.GetTextColor() == cTextType.GetTextColor() ? cCurrentType2 : cSpaceType;
-		TypeSupport& cBack = cSpaceType.GetBackColor() == cTextType.GetBackColor() ? cCurrentType3 : cSpaceType;
-		crText = pcView->GetTextColorByColorInfo2(cCurrentType.GetColorInfo(), cText.GetColorInfo());
-		crBack = pcView->GetBackColorByColorInfo2(cCurrentType.GetColorInfo(), cBack.GetColorInfo());
-		bBold = cCurrentType2.IsBoldFont();
+		TypeSupport& text = spaceType.GetTextColor() == textType.GetTextColor() ? currentType2 : spaceType;
+		TypeSupport& back = spaceType.GetBackColor() == textType.GetBackColor() ? currentType3 : spaceType;
+		crText = pcView->GetTextColorByColorInfo2(currentType.GetColorInfo(), text.GetColorInfo());
+		crBack = pcView->GetBackColorByColorInfo2(currentType.GetColorInfo(), back.GetColorInfo());
+		bBold = currentType2.IsBoldFont();
 	}else {
-		TypeSupport& cText = cSpaceType.GetTextColor() == cTextType.GetTextColor() ? cCurrentType : cSpaceType;
-		TypeSupport& cBack = cSpaceType.GetBackColor() == cTextType.GetBackColor() ? cCurrentType1 : cSpaceType;
-		crText = cText.GetTextColor();
-		crBack = cBack.GetBackColor();
-		bBold = cCurrentType.IsBoldFont();
+		TypeSupport& text = spaceType.GetTextColor() == textType.GetTextColor() ? currentType : spaceType;
+		TypeSupport& back = spaceType.GetBackColor() == textType.GetBackColor() ? currentType1 : spaceType;
+		crText = text.GetTextColor();
+		crBack = back.GetBackColor();
+		bBold = currentType.IsBoldFont();
 	}
-	//cSpaceType.SetGraphicsState_WhileThisObj(pInfo->gr);
+	//spaceType.SetGraphicsState_WhileThisObj(pInfo->gr);
 
 	pInfo->m_gr.PushTextForeColor(crText);
 	pInfo->m_gr.PushTextBackColor(crBack);
 	// Figureが下線指定ならこちらで下線を指定。元の色のほうが下線指定なら、DrawImp_DrawUnderlineで下線だけ指定
 	Font sFont;
-	sFont.m_fontAttr.m_bBoldFont = cSpaceType.IsBoldFont() || bBold;
-	sFont.m_fontAttr.m_bUnderLine = cSpaceType.HasUnderLine();
+	sFont.m_fontAttr.m_bBoldFont = spaceType.IsBoldFont() || bBold;
+	sFont.m_fontAttr.m_bUnderLine = spaceType.HasUnderLine();
 	sFont.m_hFont = pInfo->m_pView->GetFontset().ChooseFontHandle(sFont.m_fontAttr);
 	pInfo->m_gr.PushMyFont(sFont);
-	bool bTrans = pcView->IsBkBitmap() && cTextType.GetBackColor() == crBack;
+	bool bTrans = pcView->IsBkBitmap() && textType.GetBackColor() == crBack;
 	return bTrans;
 }
 

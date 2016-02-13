@@ -403,8 +403,8 @@ bool ViewCommander::Command_TagsMake(void)
 	}
 
 	// ダイアログを表示する
-	DlgTagsMake	cDlgTagsMake;
-	if (!cDlgTagsMake.DoModal(G_AppInstance(), m_pCommanderView->GetHwnd(), 0, szTargetPath)) return false;
+	DlgTagsMake	dlgTagsMake;
+	if (!dlgTagsMake.DoModal(G_AppInstance(), m_pCommanderView->GetHwnd(), 0, szTargetPath)) return false;
 
 	TCHAR	cmdline[1024];
 	// exeのあるフォルダ
@@ -420,8 +420,8 @@ bool ViewCommander::Command_TagsMake(void)
 	}
 
 	HANDLE	hStdOutWrite, hStdOutRead;
-	DlgCancel	cDlgCancel;
-	WaitCursor	cWaitCursor(m_pCommanderView->GetHwnd());
+	DlgCancel	dlgCancel;
+	WaitCursor	waitCursor(m_pCommanderView->GetHwnd());
 
 	PROCESS_INFORMATION	pi = {0};
 
@@ -454,10 +454,10 @@ bool ViewCommander::Command_TagsMake(void)
 
 	TCHAR	options[1024];
 	_tcscpy(options, _T("--excmd=n"));	// デフォルトのオプション
-	if (cDlgTagsMake.m_nTagsOpt & 0x0001) _tcscat(options, _T(" -R"));	// サブフォルダも対象
-	if (cDlgTagsMake.m_szTagsCmdLine[0] != _T('\0')) {	// 個別指定のコマンドライン
+	if (dlgTagsMake.m_nTagsOpt & 0x0001) _tcscat(options, _T(" -R"));	// サブフォルダも対象
+	if (dlgTagsMake.m_szTagsCmdLine[0] != _T('\0')) {	// 個別指定のコマンドライン
 		_tcscat(options, _T(" "));
-		_tcscat(options, cDlgTagsMake.m_szTagsCmdLine);
+		_tcscat(options, dlgTagsMake.m_szTagsCmdLine);
 	}
 	_tcscat(options, _T(" *"));	// 配下のすべてのファイル
 
@@ -492,7 +492,7 @@ bool ViewCommander::Command_TagsMake(void)
 	// コマンドライン実行
 	BOOL bProcessResult = CreateProcess(
 		NULL, cmdline, NULL, NULL, TRUE,
-		CREATE_NEW_CONSOLE, NULL, cDlgTagsMake.m_szPath, &sui, &pi
+		CREATE_NEW_CONSOLE, NULL, dlgTagsMake.m_szPath, &sui, &pi
 	);
 	if (!bProcessResult) {
 		WarningMessage(m_pCommanderView->GetHwnd(), LS(STR_ERR_CEDITVIEW_CMD04), cmdline);
@@ -505,7 +505,7 @@ bool ViewCommander::Command_TagsMake(void)
 		bool	bLoopFlag = true;
 
 		// 中断ダイアログ表示
-		HWND hwndCancel = cDlgCancel.DoModeless(G_AppInstance(), m_pCommanderView->m_hwndParent, IDD_EXECRUNNING);
+		HWND hwndCancel = dlgCancel.DoModeless(G_AppInstance(), m_pCommanderView->m_hwndParent, IDD_EXECRUNNING);
 		HWND hwndMsg = ::GetDlgItem(hwndCancel, IDC_STATIC_CMD);
 		SetWindowText(hwndMsg, LS(STR_ERR_CEDITVIEW_CMD05));
 
@@ -522,7 +522,7 @@ bool ViewCommander::Command_TagsMake(void)
 				break;
 			case WAIT_OBJECT_0 + 1:
 				// 処理中のユーザー操作を可能にする
-				if (!::BlockingHook(cDlgCancel.GetHwnd())) {
+				if (!::BlockingHook(dlgCancel.GetHwnd())) {
 					break;
 				}
 				break;
@@ -531,7 +531,7 @@ bool ViewCommander::Command_TagsMake(void)
 			}
 
 			// 中断ボタン押下チェック
-			if (cDlgCancel.IsCanceled()) {
+			if (dlgCancel.IsCanceled()) {
 				// 指定されたプロセスと、そのプロセスが持つすべてのスレッドを終了させます。
 				::TerminateProcess(pi.hProcess, 0);
 				break;
@@ -558,7 +558,7 @@ bool ViewCommander::Command_TagsMake(void)
 						if (pi.hProcess) CloseHandle(pi.hProcess);
 						if (pi.hThread) CloseHandle(pi.hThread);
 
-						cDlgCancel.CloseDialog(TRUE);
+						dlgCancel.CloseDialog(TRUE);
 
 						work[read_cnt] = L'\0';	// Nov. 15, 2003 genta 表示用に0終端する
 						WarningMessage(m_pCommanderView->GetHwnd(), LS(STR_ERR_CEDITVIEW_CMD06), work); // 2003.11.09 じゅうじ
@@ -580,7 +580,7 @@ finish:
 	if (pi.hProcess) CloseHandle(pi.hProcess);
 	if (pi.hThread) CloseHandle(pi.hThread);
 
-	cDlgCancel.CloseDialog(TRUE);
+	dlgCancel.CloseDialog(TRUE);
 
 	InfoMessage(m_pCommanderView->GetHwnd(), LS(STR_ERR_CEDITVIEW_CMD07));
 
@@ -613,9 +613,9 @@ bool ViewCommander::Command_TagJumpByTagsFileMsg(bool bMsg)
 */
 bool ViewCommander::Command_TagJumpByTagsFile(bool bClose)
 {
-	NativeW cmemKeyW;
-	m_pCommanderView->GetCurrentTextForSearch(cmemKeyW, true, true);
-	if (cmemKeyW.GetStringLength() == 0) {
+	NativeW memKeyW;
+	m_pCommanderView->GetCurrentTextForSearch(memKeyW, true, true);
+	if (memKeyW.GetStringLength() == 0) {
 		return false;
 	}
 	
@@ -623,16 +623,16 @@ bool ViewCommander::Command_TagJumpByTagsFile(bool bClose)
 	if (!Sub_PreProcTagJumpByTagsFile(szDirFile, _countof(szDirFile))) {
 		return false;
 	}
-	DlgTagJumpList	cDlgTagJumpList(true);	// タグジャンプリスト
+	DlgTagJumpList	dlgTagJumpList(true);	// タグジャンプリスト
 	
-	cDlgTagJumpList.SetFileName(szDirFile);
-	cDlgTagJumpList.SetKeyword(cmemKeyW.GetStringPtr());
+	dlgTagJumpList.SetFileName(szDirFile);
+	dlgTagJumpList.SetKeyword(memKeyW.GetStringPtr());
 
-	int nMatchAll = cDlgTagJumpList.FindDirectTagJump();
+	int nMatchAll = dlgTagJumpList.FindDirectTagJump();
 
 	// 複数あれば選択してもらう。
 	if (1 < nMatchAll) {
-		if (! cDlgTagJumpList.DoModal(G_AppInstance(), m_pCommanderView->GetHwnd(), (LPARAM)0)) {
+		if (! dlgTagJumpList.DoModal(G_AppInstance(), m_pCommanderView->GetHwnd(), (LPARAM)0)) {
 			nMatchAll = 0;
 			return true;	// キャンセル
 		}
@@ -644,7 +644,7 @@ bool ViewCommander::Command_TagJumpByTagsFile(bool bClose)
 		TCHAR fileName[1024];
 		int   fileLine;
 
-		if (!cDlgTagJumpList.GetSelectedFullPathAndLine(fileName, _countof(fileName), &fileLine , NULL)) {
+		if (!dlgTagJumpList.GetSelectedFullPathAndLine(fileName, _countof(fileName), &fileLine , NULL)) {
 			return false;
 		}
 		return m_pCommanderView->TagJumpSub(fileName, Point(0, fileLine), bClose);
@@ -669,18 +669,18 @@ bool ViewCommander::Command_TagJumpByTagsFileKeyword(const wchar_t* keyword)
 		return false;
 	}
 
-	DlgTagJumpList	cDlgTagJumpList(false);
-	cDlgTagJumpList.SetFileName(szCurrentPath);
-	cDlgTagJumpList.SetKeyword(keyword);
+	DlgTagJumpList	dlgTagJumpList(false);
+	dlgTagJumpList.SetFileName(szCurrentPath);
+	dlgTagJumpList.SetKeyword(keyword);
 
-	if (!cDlgTagJumpList.DoModal(G_AppInstance(), m_pCommanderView->GetHwnd(), 0)) {
+	if (!dlgTagJumpList.DoModal(G_AppInstance(), m_pCommanderView->GetHwnd(), 0)) {
 		return true;	// キャンセル
 	}
 
 	// タグジャンプする。
 	TCHAR fileName[1024];
 	int	 fileLine;	// 行番号
-	if (!cDlgTagJumpList.GetSelectedFullPathAndLine(fileName, _countof(fileName), &fileLine, NULL)) {
+	if (!dlgTagJumpList.GetSelectedFullPathAndLine(fileName, _countof(fileName), &fileLine, NULL)) {
 		return false;
 	}
 

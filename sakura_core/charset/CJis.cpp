@@ -18,7 +18,7 @@
 
 // @author D. S. Koba
 // 星マークを添えてあるものは、書き込みで使われる。
-const char Jis::JISESCDATA_ASCII7[]			= "\x1b" "(B";  // ☆
+const char Jis::JISESCDATA_ASCII7[]				= "\x1b" "(B";  // ☆
 const char Jis::JISESCDATA_JISX0201Latin[]		= "\x1b" "(J";
 const char Jis::JISESCDATA_JISX0201Latin_OLD[]	= "\x1b" "(H";
 const char Jis::JISESCDATA_JISX0201Katakana[]	= "\x1b" "(I";  // ☆

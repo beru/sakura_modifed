@@ -55,7 +55,7 @@ private: // 2002/2/3 aroka
 	int				m_nDragPosY;			// ドラッグ位置Ｙ
 	int				m_nActivePane;			// アクティブなペイン
 public: // 2002/2/3 aroka
-	HWND Create(HINSTANCE, HWND, void* pCEditWnd);	// 初期化
+	HWND Create(HINSTANCE, HWND, void* pEditWnd);	// 初期化
 	void SetChildWndArr(HWND*);	// 子ウィンドウの設定 
 	void DoSplit(int, int);		// ウィンドウの分割
 	void SetActivePane(int);	// アクティブペインの設定

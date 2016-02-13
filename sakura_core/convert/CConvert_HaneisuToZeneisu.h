@@ -28,6 +28,6 @@
 // ”¼Šp‰p”¨‘SŠp‰p”
 class Converter_HaneisuToZeneisu : public Converter {
 public:
-	bool DoConvert(NativeW* pcData);
+	bool DoConvert(NativeW* pData);
 };
 

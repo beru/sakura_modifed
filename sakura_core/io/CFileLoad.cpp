@@ -260,18 +260,18 @@ void FileLoad::FileClose(void)
 */
 CodeConvertResult FileLoad::ReadLine(
 	NativeW* pUnicodeBuffer,
-	Eol* pcEol
+	Eol* pEol
 	)
 {
 	if (m_CharCode != CODE_UTF7 && m_CharCode != CP_UTF7) {
-		return ReadLine_core( pUnicodeBuffer, pcEol );
+		return ReadLine_core( pUnicodeBuffer, pEol );
 	}
 	if (m_nReadOffset2 == m_cLineTemp.GetStringLength()) {
 		Eol cEol;
 		CodeConvertResult e = ReadLine_core(&m_cLineTemp, &cEol);
 		if (e == CodeConvertResult::Failure) {
 			pUnicodeBuffer->_GetMemory()->SetRawDataHoldBuffer( L"", 0 );
-			*pcEol = cEol;
+			*pEol = cEol;
 			return CodeConvertResult::Failure;
 		}
 		m_nReadOffset2 = 0;
@@ -299,7 +299,7 @@ CodeConvertResult FileLoad::ReadLine(
 		pUnicodeBuffer->_GetMemory()->SetRawDataHoldBuffer(L"", 0);
 		pUnicodeBuffer->AppendString(pRet, nRetLineLen + cEolTemp.GetLen());
 	}
-	*pcEol = cEolTemp;
+	*pEol = cEolTemp;
 	return m_nTempResult;
 }
 

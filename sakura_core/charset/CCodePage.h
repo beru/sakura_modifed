@@ -57,8 +57,8 @@ public:
 	//CodeBaseインターフェース
 	CodeConvertResult CodeToUnicode(const Memory& cSrc, NativeW* pDst){ return CPToUnicode(cSrc, pDst, m_nCodePageEx); }	//!< 特定コード → UNICODE    変換
 	CodeConvertResult UnicodeToCode(const NativeW& cSrc, Memory* pDst){ return UnicodeToCP(cSrc, pDst, m_nCodePageEx); }	//!< UNICODE    → 特定コード 変換
-	void GetEol(Memory* pcmemEol, EolType eEolType);	//!< 改行データ取得
-	void GetBom(Memory* pcmemBom);	//!< BOMデータ取得
+	void GetEol(Memory* pMemEol, EolType eolType);	//!< 改行データ取得
+	void GetBom(Memory* pMemBom);	//!< BOMデータ取得
 	CodeConvertResult UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR* pDst, const CommonSetting_StatusBar* psStatusbar);			//!< UNICODE → Hex 変換
 
 public:

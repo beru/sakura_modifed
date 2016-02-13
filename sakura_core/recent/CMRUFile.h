@@ -49,8 +49,8 @@ public:
 	~MRUFile();
 
 	//	メニューを取得する
-	HMENU CreateMenu(MenuDrawer* pCMenuDrawer) const;	//	うーん。pCMenuDrawerが必要なくなるといいなぁ。
-	HMENU CreateMenu(HMENU hMenu, MenuDrawer* pCMenuDrawer) const;	//	2010/5/21 Uchi
+	HMENU CreateMenu(MenuDrawer* pMenuDrawer) const;	//	うーん。pMenuDrawerが必要なくなるといいなぁ。
+	HMENU CreateMenu(HMENU hMenu, MenuDrawer* pMenuDrawer) const;	//	2010/5/21 Uchi
 	BOOL DestroyMenu(HMENU hMenu) const;
 	
 	//	ファイル名の一覧を教えて
@@ -58,7 +58,7 @@ public:
 
 	//	アクセス関数
 	int Length(void) const;	//	アイテムの数。
-	int MenuLength(void) const { return t_min(Length(), m_cRecentFile.GetViewCount()); }	//	メニューに表示されるアイテムの数
+	int MenuLength(void) const { return t_min(Length(), m_recentFile.GetViewCount()); }	//	メニューに表示されるアイテムの数
 	void ClearAll(void);	//	アイテムを削除～。
 	bool GetEditInfo(int num, EditInfo* pfi) const;				//	番号で指定したEditInfo（情報をまるごと）
 	bool GetEditInfo(const TCHAR* pszPath, EditInfo* pfi) const;	//	ファイル名で指定したEditInfo（情報をまるごと）
@@ -69,6 +69,6 @@ protected:
 	struct DLLSHAREDATA* m_pShareData;		//	共有メモリを参照するよ。
 	
 private:
-	RecentFile	m_cRecentFile;	// 履歴	//@@@ 2003.04.08 MIK
+	RecentFile	m_recentFile;	// 履歴	//@@@ 2003.04.08 MIK
 };
 

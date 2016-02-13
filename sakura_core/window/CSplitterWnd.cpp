@@ -55,12 +55,12 @@ SplitterWnd::~SplitterWnd()
 
 
 // 初期化
-HWND SplitterWnd::Create(HINSTANCE hInstance, HWND hwndParent, void* pCEditWnd)
+HWND SplitterWnd::Create(HINSTANCE hInstance, HWND hwndParent, void* pEditWnd)
 {
 	LPCTSTR pszClassName = _T("SplitterWndClass");
 	
 	// 初期化
-	m_pEditWnd	= pCEditWnd;
+	m_pEditWnd	= pEditWnd;
 
 	// ウィンドウクラス作成
 	ATOM atWork;
@@ -240,7 +240,7 @@ void SplitterWnd::DoSplit(int nHorizontal, int nVertical)
 	int			nAllSplitColsOld = m_nAllSplitCols;	// 分割桁数
 	EditView*	pcViewArr[MAXCOUNTOFVIEW];
 	bool		bSizeBox;
-	EditWnd*	pCEditWnd = (EditWnd*)m_pEditWnd;
+	EditWnd*	pEditWnd = (EditWnd*)m_pEditWnd;
 	
 	bool bVUp = false;
 	bool bHUp = false;
@@ -253,37 +253,37 @@ void SplitterWnd::DoSplit(int nHorizontal, int nVertical)
 	if (nVertical != 0 || nHorizontal != 0) {
 		// 分割指示。まだ未作成なら2つ目以降のビューを作成します
 		// 今のところは分割数に関係なく4つまで一度に作ります。
-		pCEditWnd->CreateEditViewBySplit(2*2);
+		pEditWnd->CreateEditViewBySplit(2*2);
 	}
 	/*
 	|| ファンクションキーを下に表示している場合はサイズボックスを表示しない
 	|| ステータスパーを表示している場合はサイズボックスを表示しない
 	*/
-	if (!pCEditWnd
+	if (!pEditWnd
 		|| (
-			pCEditWnd->m_funcKeyWnd.GetHwnd()
+			pEditWnd->m_funcKeyWnd.GetHwnd()
 	 		&& m_pShareData->m_common.m_window.m_nFUNCKEYWND_Place == 1	// ファンクションキー表示位置／0:上 1:下
 	 	)
 	) {
 		bSizeBox = false;
-	}else if (pCEditWnd->m_tabWnd.GetHwnd()
+	}else if (pEditWnd->m_tabWnd.GetHwnd()
 		&& m_pShareData->m_common.m_tabBar.m_eTabPosition == TabPosition::Bottom
 	) {
 		bSizeBox = false;
 	}else {
 		bSizeBox = true;
 		// ステータスパーを表示している場合はサイズボックスを表示しない
-		if (pCEditWnd->m_statusBar.GetStatusHwnd()) {
+		if (pEditWnd->m_statusBar.GetStatusHwnd()) {
 			bSizeBox = false;
 		}
 	}
-	if (pCEditWnd->m_dlgFuncList.GetHwnd()) {
-		DockSideType eDockSideFL = pCEditWnd->m_dlgFuncList.GetDockSide();
+	if (pEditWnd->m_dlgFuncList.GetHwnd()) {
+		DockSideType eDockSideFL = pEditWnd->m_dlgFuncList.GetDockSide();
 		if (eDockSideFL == DockSideType::Right || eDockSideFL == DockSideType::Bottom) {
 			bSizeBox = false;
 		}
 	}
-	if (pCEditWnd->GetMiniMap().GetHwnd()) {
+	if (pEditWnd->GetMiniMap().GetHwnd()) {
 		bSizeBox = false;
 	}
 	// メインウィンドウが最大化されている場合はサイズボックスを表示しない
@@ -809,7 +809,7 @@ LRESULT SplitterWnd::OnPaint(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 // ウィンドウサイズの変更処理
 LRESULT SplitterWnd::OnSize(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-	EditWnd*	pCEditWnd = (EditWnd*)m_pEditWnd;
+	EditWnd*	pEditWnd = (EditWnd*)m_pEditWnd;
 	EditView*	pcViewArr[MAXCOUNTOFVIEW];
 	int			nFrameWidth = 3;
 	bool		bSizeBox;
@@ -821,31 +821,31 @@ LRESULT SplitterWnd::OnSize(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	|| ファンクションキーを下に表示している場合はサイズボックスを表示しない
 	|| ステータスパーを表示している場合はサイズボックスを表示しない
 	*/
-	if (!pCEditWnd
+	if (!pEditWnd
 	 	|| (
-	 		pCEditWnd->m_funcKeyWnd.GetHwnd()
+	 		pEditWnd->m_funcKeyWnd.GetHwnd()
 	  		&& m_pShareData->m_common.m_window.m_nFUNCKEYWND_Place == 1	// ファンクションキー表示位置／0:上 1:下
 	 	)
 	) {
 		bSizeBox = false;
-	}else if (pCEditWnd->m_tabWnd.GetHwnd()
+	}else if (pEditWnd->m_tabWnd.GetHwnd()
 		&& m_pShareData->m_common.m_tabBar.m_eTabPosition == TabPosition::Bottom
 	) {
 		bSizeBox = false;
 	}else {
 		bSizeBox = true;
 		// ステータスパーを表示している場合はサイズボックスを表示しない
-		if (pCEditWnd->m_statusBar.GetStatusHwnd()) {
+		if (pEditWnd->m_statusBar.GetStatusHwnd()) {
 			bSizeBox = false;
 		}
 	}
-	if (pCEditWnd->m_dlgFuncList.GetHwnd()) {
-		DockSideType eDockSideFL = pCEditWnd->m_dlgFuncList.GetDockSide();
+	if (pEditWnd->m_dlgFuncList.GetHwnd()) {
+		DockSideType eDockSideFL = pEditWnd->m_dlgFuncList.GetDockSide();
 		if (eDockSideFL == DockSideType::Right || eDockSideFL == DockSideType::Bottom) {
 			bSizeBox = false;
 		}
 	}
-	if (pCEditWnd->GetMiniMap().GetHwnd()) {
+	if (pEditWnd->GetMiniMap().GetHwnd()) {
 		bSizeBox = false;
 	}
 

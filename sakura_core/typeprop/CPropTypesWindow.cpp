@@ -124,9 +124,9 @@ INT_PTR PropTypesWindow::DispatchEvent(
 					// 文字コードの変更をBOMチェックボックスに反映
 					i = Combo_GetCurSel((HWND) lParam);
 					if (CB_ERR != i) {
-						CodeTypeName	cCodeTypeName(Combo_GetItemData((HWND)lParam, i));
-						::CheckDlgButton(hwndDlg, IDC_CHECK_DEFAULT_BOM, (cCodeTypeName.IsBomDefOn() ?  BST_CHECKED : BST_UNCHECKED));
-						::EnableWindow(::GetDlgItem(hwndDlg, IDC_CHECK_DEFAULT_BOM), cCodeTypeName.UseBom());
+						CodeTypeName	codeTypeName(Combo_GetItemData((HWND)lParam, i));
+						::CheckDlgButton(hwndDlg, IDC_CHECK_DEFAULT_BOM, (codeTypeName.IsBomDefOn() ?  BST_CHECKED : BST_UNCHECKED));
+						::EnableWindow(::GetDlgItem(hwndDlg, IDC_CHECK_DEFAULT_BOM), codeTypeName.UseBom());
 					}
 					break;
 				}
@@ -292,12 +292,12 @@ void PropTypesWindow::SetData(HWND hwndDlg)
 		int		nSel= 0;
 		int		j = 0;
 		hCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_DEFAULT_CODETYPE);
-		CodeTypesForCombobox cCodeTypes;
-		for (int i=0; i<cCodeTypes.GetCount(); ++i) {
-			if (CodeTypeName(cCodeTypes.GetCode(i)).CanDefault()) {
-				int idx = Combo_AddString(hCombo, cCodeTypes.GetName(i));
-				Combo_SetItemData(hCombo, idx, cCodeTypes.GetCode(i));
-				if (m_Types.m_encoding.m_eDefaultCodetype == cCodeTypes.GetCode(i)) {
+		CodeTypesForCombobox codeTypes;
+		for (int i=0; i<codeTypes.GetCount(); ++i) {
+			if (CodeTypeName(codeTypes.GetCode(i)).CanDefault()) {
+				int idx = Combo_AddString(hCombo, codeTypes.GetName(i));
+				Combo_SetItemData(hCombo, idx, codeTypes.GetCode(i));
+				if (m_Types.m_encoding.m_eDefaultCodetype == codeTypes.GetCode(i)) {
 					nSel = j;
 				}
 				++j;

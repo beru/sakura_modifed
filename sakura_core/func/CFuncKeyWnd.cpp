@@ -38,10 +38,10 @@ LRESULT CALLBACK CFuncKeyWndProc(
 	LPARAM	lParam 	// second message parameter
 	)
 {
-	FuncKeyWnd*	pCFuncKeyWnd;
-	pCFuncKeyWnd = (FuncKeyWnd*)::GetWindowLongPtr(hwnd, GWLP_USERDATA);
-	if (pCFuncKeyWnd) {
-		return pCFuncKeyWnd->DispatchEvent(hwnd, uMsg, wParam, lParam);
+	FuncKeyWnd*	pFuncKeyWnd;
+	pFuncKeyWnd = (FuncKeyWnd*)::GetWindowLongPtr(hwnd, GWLP_USERDATA);
+	if (pFuncKeyWnd) {
+		return pFuncKeyWnd->DispatchEvent(hwnd, uMsg, wParam, lParam);
 	}
 	return ::DefWindowProc(hwnd, uMsg, wParam, lParam);
 }
@@ -105,13 +105,13 @@ FuncKeyWnd::~FuncKeyWnd()
 HWND FuncKeyWnd::Open(
 	HINSTANCE	hInstance,
 	HWND		hwndParent,
-	EditDoc*	pCEditDoc,
+	EditDoc*	pEditDoc,
 	bool		bSizeBox
 	)
 {
 	LPCTSTR pszClassName = _T("FuncKeyWnd");
 
-	m_pEditDoc = pCEditDoc;
+	m_pEditDoc = pEditDoc;
 	m_bSizeBox = bSizeBox;
 	m_hwndSizeBox = NULL;
 	m_nCurrentKeyState = -1;

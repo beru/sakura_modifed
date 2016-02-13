@@ -95,9 +95,9 @@ public:
 		m_cmProfile.SetString(s);
 	}
 	bool IsProfileMgr() { return m_bProfileMgr; }
-	int GetFileNum(void) { return m_vFiles.size(); }
-	const TCHAR* GetFileName(int i) { return i < GetFileNum() ? m_vFiles[i].c_str() : NULL; }
-	void ClearFile(void) { m_vFiles.clear(); }
+	int GetFileNum(void) { return m_fileNames.size(); }
+	const TCHAR* GetFileName(int i) { return i < GetFileNum() ? m_fileNames[i].c_str() : NULL; }
+	void ClearFile(void) { m_fileNames.clear(); }
 	void ParseCommandLine(LPCTSTR pszCmdLineSrc, bool bResponse = true);
 
 // member valiables
@@ -116,6 +116,6 @@ private:
 	NativeW	m_cmMacro;				// [out] マクロファイル名／マクロ文
 	NativeW	m_cmMacroType;			// [out] マクロ種別
 	NativeW	m_cmProfile;			// プロファイル名
-	std::vector<std::tstring> m_vFiles;	//!< ファイル名(複数)
+	std::vector<std::tstring> m_fileNames;	//!< ファイル名(複数)
 };
 

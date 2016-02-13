@@ -104,7 +104,7 @@ BOOL DlgFind::OnInitDialog(
 {
 	BOOL bRet = Dialog::OnInitDialog(hwnd, wParam, lParam);
 	m_comboDel = ComboBoxItemDeleter();
-	m_comboDel.pRecent = &m_cRecentSearch;
+	m_comboDel.pRecent = &m_recentSearch;
 	SetComboBoxDeleter(GetItemHwnd(IDC_COMBO_TEXT), &m_comboDel);
 
 	// フォント設定	2012/11/27 Uchi
@@ -259,17 +259,17 @@ int DlgFind::GetData(void)
 			SearchKeywordManager().AddToSearchKeyArr(m_strText.c_str());
 			m_pShareData->m_common.m_search.m_searchOption = m_searchOption;		// 検索オプション
 		}
-		EditView* pcEditView = (EditView*)m_lParam;
+		EditView* pEditView = (EditView*)m_lParam;
 		if (1
-			&& pcEditView->m_strCurSearchKey == m_strText
-			&& pcEditView->m_curSearchOption == m_searchOption
+			&& pEditView->m_strCurSearchKey == m_strText
+			&& pEditView->m_curSearchOption == m_searchOption
 		) {
 		}else {
-			pcEditView->m_strCurSearchKey = m_strText;
-			pcEditView->m_curSearchOption = m_searchOption;
-			pcEditView->m_bCurSearchUpdate = true;
+			pEditView->m_strCurSearchKey = m_strText;
+			pEditView->m_curSearchOption = m_searchOption;
+			pEditView->m_bCurSearchUpdate = true;
 		}
-		pcEditView->m_nCurSearchKeySequence = GetDllShareData().m_common.m_search.m_nSearchKeySequence;
+		pEditView->m_nCurSearchKeySequence = GetDllShareData().m_common.m_search.m_nSearchKeySequence;
 		if (!m_bModal) {
 			// ダイアログデータの設定
 			//SetData();
@@ -409,10 +409,10 @@ BOOL DlgFind::OnBnClicked(int wID)
 BOOL DlgFind::OnActivate(WPARAM wParam, LPARAM lParam)
 {
 	// 0文字幅マッチ描画のON/OFF	// 2009.11.29 ryoji
-	EditView* pcEditView = (EditView*)m_lParam;
-	LayoutRange cRangeSel = pcEditView->GetSelectionInfo().m_sSelect;
+	EditView* pEditView = (EditView*)m_lParam;
+	LayoutRange cRangeSel = pEditView->GetSelectionInfo().m_select;
 	if (cRangeSel.IsValid() && cRangeSel.IsLineOne() && cRangeSel.IsOne())
-		pcEditView->InvalidateRect(NULL);	// アクティブ化／非アクティブ化が完了してから再描画
+		pEditView->InvalidateRect(NULL);	// アクティブ化／非アクティブ化が完了してから再描画
 
 	return Dialog::OnActivate(wParam, lParam);
 }

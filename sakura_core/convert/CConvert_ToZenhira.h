@@ -29,6 +29,6 @@
 // ‚Å‚«‚éŒÀ‚è‘SŠp‚Ð‚ç‚ª‚È‚É‚·‚é
 class Converter_ToZenhira : public Converter {
 public:
-	bool DoConvert(NativeW* pcData);
+	bool DoConvert(NativeW* pData);
 };
 

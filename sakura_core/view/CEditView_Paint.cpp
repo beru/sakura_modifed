@@ -647,9 +647,9 @@ void EditView::OnPaint2(HDC _hdc, PAINTSTRUCT *pPs, BOOL bDrawFromComptibleBmp)
 
 //@@@ 2001.11.17 add start MIK
 	// 変更があればタイプ設定を行う。
-	if (m_pTypeData->m_bUseRegexKeyword || m_cRegexKeyword->m_bUseRegexKeyword) { // OFFなのに前回のデータが残ってる
+	if (m_pTypeData->m_bUseRegexKeyword || m_pRegexKeyword->m_bUseRegexKeyword) { // OFFなのに前回のデータが残ってる
 		// タイプ別設定をする。設定済みかどうかは呼び先でチェックする。
-		m_cRegexKeyword->RegexKeySetTypes(m_pTypeData);
+		m_pRegexKeyword->RegexKeySetTypes(m_pTypeData);
 	}
 //@@@ 2001.11.17 add end MIK
 
@@ -1221,7 +1221,7 @@ void EditView::DispTextSelected(
 	int			nCharWidth = GetTextMetrics().GetHankakuDx();
 	HRGN		hrgnDraw;
 	const Layout* pcLayout = m_pEditDoc->m_layoutMgr.SearchLineByLayoutY(nLineNum);
-	LayoutRange& sSelect = GetSelectionInfo().m_sSelect;
+	LayoutRange& sSelect = GetSelectionInfo().m_select;
 
 	// 選択範囲内の行かな
 //	if (IsTextSelected()) {

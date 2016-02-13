@@ -161,8 +161,8 @@ public:
 
 	// 設定更新
 	virtual void Update(void) {
-		const EditDoc* pCEditDoc = EditDoc::GetInstance(0);
-		m_pTypeData = &pCEditDoc->m_docType.GetDocumentAttribute();
+		const EditDoc* pEditDoc = EditDoc::GetInstance(0);
+		m_pTypeData = &pEditDoc->m_docType.GetDocumentAttribute();
 	}
 
 	//#######ラップ

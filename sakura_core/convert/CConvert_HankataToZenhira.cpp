@@ -7,15 +7,15 @@
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 // ”¼ŠpƒJƒi¨‘SŠp‚Ğ‚ç‚ª‚È
-bool Converter_HankataToZenhira::DoConvert(NativeW* pcData)
+bool Converter_HankataToZenhira::DoConvert(NativeW* pData)
 {
 	// ”¼ŠpƒJƒi¨‘SŠp‚Ğ‚ç‚ª‚È
 	// •¶š”‚ªŒ¸‚é‚±‚Æ‚Í‚ ‚Á‚Ä‚à‘‚¦‚é‚±‚Æ‚Í–³‚¢‚Ì‚ÅA‚±‚ê‚Å‚n‚j
-	std::vector<wchar_t> buf(pcData->GetStringLength() + 1);
+	std::vector<wchar_t> buf(pData->GetStringLength() + 1);
 	wchar_t* pBuf = &buf[0];
 	int nDstLen = 0;
-	Convert_HankataToZenhira(pcData->GetStringPtr(), pcData->GetStringLength(), pBuf, &nDstLen);
-	pcData->SetString(pBuf, nDstLen);
+	Convert_HankataToZenhira(pData->GetStringPtr(), pData->GetStringLength(), pBuf, &nDstLen);
+	pData->SetString(pBuf, nDstLen);
 
 	return true;
 }

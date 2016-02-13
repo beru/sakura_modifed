@@ -280,10 +280,10 @@ void ViewCommander::Command_PASTEBOX(
 		m_pCommanderView->DeleteData(false/*true 2002.01.25 hor*/);
 	}
 
-	WaitCursor cWaitCursor(m_pCommanderView->GetHwnd(), 10000 < nPasteSize);
+	WaitCursor waitCursor(m_pCommanderView->GetHwnd(), 10000 < nPasteSize);
 	HWND hwndProgress = NULL;
 	int nProgressPos = 0;
-	if (cWaitCursor.IsEnable()) {
+	if (waitCursor.IsEnable()) {
 		hwndProgress = m_pCommanderView->StartProgress();
 	}
 
@@ -469,7 +469,7 @@ void ViewCommander::Command_INSTEXT(
 		nTextLen = LogicInt(wcslen(pszText));
 	}
 
-	WaitCursor cWaitCursor(
+	WaitCursor waitCursor(
 		m_pCommanderView->GetHwnd(),
 		10000 < nTextLen && !selInfo.IsBoxSelecting()
 	);
@@ -496,9 +496,9 @@ void ViewCommander::Command_INSTEXT(
 			bool bAfterEOLSelect = false;
 			if (!bFastMode) {
 				LogicInt len;
-				const Layout* pcLayout;
-				const wchar_t* line = GetDocument()->m_layoutMgr.GetLineStr(GetSelect().GetFrom().GetY2(), &len, &pcLayout);
-				int pos = (!line) ? 0 : m_pCommanderView->LineColumnToIndex(pcLayout, GetSelect().GetFrom().GetX2());
+				const Layout* pLayout;
+				const wchar_t* line = GetDocument()->m_layoutMgr.GetLineStr(GetSelect().GetFrom().GetY2(), &len, &pLayout);
+				int pos = (!line) ? 0 : m_pCommanderView->LineColumnToIndex(pLayout, GetSelect().GetFrom().GetX2());
 
 				// 開始位置が行末より後ろで、終了位置が同一行
 				if (pos >= len && GetSelect().IsLineOne()) {
@@ -752,58 +752,58 @@ void ViewCommander::Command_COPY_COLOR_HTML(bool bLineNumber)
 	LogicRange sSelectLogic;
 	sSelectLogic.Clear(-1);
 	int nBuffSize = 0;
-	const Layout* pcLayoutTop = NULL;
+	const Layout* pLayoutTop = NULL;
 	{
-		const Layout* pcLayout;
+		const Layout* pLayout;
 		{
 			LogicInt nLineLenTmp;
-			GetDocument()->m_layoutMgr.GetLineStr(rcSel.top, &nLineLenTmp, &pcLayout);
+			GetDocument()->m_layoutMgr.GetLineStr(rcSel.top, &nLineLenTmp, &pLayout);
 		}
-		pcLayoutTop = pcLayout;
+		pLayoutTop = pLayout;
 		LayoutInt i = rcSel.top;
-		for (; pcLayout && i <= rcSel.bottom; ++i, pcLayout = pcLayout->GetNextLayout()) {
+		for (; pLayout && i <= rcSel.bottom; ++i, pLayout = pLayout->GetNextLayout()) {
 			// 指定された桁に対応する行のデータ内の位置を調べる
 			LogicInt nIdxFrom;
 			LogicInt nIdxTo;
 			if (selInfo.IsBoxSelecting()) {
-				nIdxFrom = m_pCommanderView->LineColumnToIndex(pcLayout, rcSel.left);
-				nIdxTo   = m_pCommanderView->LineColumnToIndex(pcLayout, rcSel.right);
+				nIdxFrom = m_pCommanderView->LineColumnToIndex(pLayout, rcSel.left);
+				nIdxTo   = m_pCommanderView->LineColumnToIndex(pLayout, rcSel.right);
 				// 改行は除く
 				if (nIdxTo - nIdxFrom > 0) {
-					const WCHAR* pLine = pcLayout->GetPtr();
+					const WCHAR* pLine = pLayout->GetPtr();
 					if (pLine[nIdxTo - 1] == L'\n' || pLine[nIdxTo - 1] == L'\r') {
 						--nIdxTo;
 					}
 				}
 				if (i == rcSel.top) {
-					sSelectLogic.SetFromY(pcLayout->GetLogicLineNo());
+					sSelectLogic.SetFromY(pLayout->GetLogicLineNo());
 					sSelectLogic.SetFromX(nIdxFrom);
 				}
 				if (i == rcSel.bottom) {
-					sSelectLogic.SetToY(pcLayout->GetLogicLineNo());
+					sSelectLogic.SetToY(pLayout->GetLogicLineNo());
 					sSelectLogic.SetToX(nIdxTo);
 				}
 			}else {
 				if (i == rcSel.top) {
-					nIdxFrom = m_pCommanderView->LineColumnToIndex(pcLayout, rcSel.left);
-					sSelectLogic.SetFromY(pcLayout->GetLogicLineNo());
+					nIdxFrom = m_pCommanderView->LineColumnToIndex(pLayout, rcSel.left);
+					sSelectLogic.SetFromY(pLayout->GetLogicLineNo());
 					sSelectLogic.SetFromX(nIdxFrom);
 				}else {
 					nIdxFrom = LogicInt(0);
 				}
 				if (i == rcSel.bottom) {
-					nIdxTo = m_pCommanderView->LineColumnToIndex(pcLayout, rcSel.right);
-					sSelectLogic.SetToY(pcLayout->GetLogicLineNo());
+					nIdxTo = m_pCommanderView->LineColumnToIndex(pLayout, rcSel.right);
+					sSelectLogic.SetToY(pLayout->GetLogicLineNo());
 					sSelectLogic.SetToX(nIdxTo);
 				}else {
-					nIdxTo = pcLayout->GetLengthWithoutEOL();
+					nIdxTo = pLayout->GetLengthWithoutEOL();
 				}
 			}
 			nBuffSize += nIdxTo - nIdxFrom;
 			if (bLineNumLayout) {
 				nBuffSize += 2;
 			}else {
-				nBuffSize += pcLayout->GetLayoutEol().GetLen();
+				nBuffSize += pLayout->GetLayoutEol().GetLen();
 			}
 		}
 		if (sSelectLogic.GetTo().x == -1) {
@@ -853,10 +853,10 @@ void ViewCommander::Command_COPY_COLOR_HTML(bool bLineNumber)
 	}
 	LayoutInt nLayoutLineNum = rcSel.top;
 	const LogicInt nLineNumLast = sSelectLogic.GetTo().y;
-	const DocLine* pDocLine = pcLayoutTop->GetDocLineRef();
-	const Layout* pcLayout = pcLayoutTop;
-	while (pcLayout && pcLayout->GetLogicOffset()) {
-		pcLayout = pcLayout->GetPrevLayout();
+	const DocLine* pDocLine = pLayoutTop->GetDocLineRef();
+	const Layout* pLayout = pLayoutTop;
+	while (pLayout && pLayout->GetLogicOffset()) {
+		pLayout = pLayout->GetPrevLayout();
 	}
 	ColorAttr sColorAttr = { (COLORREF)-1, (COLORREF)-1 };
 	ColorAttr sColorAttrNext = { (COLORREF)-1, (COLORREF)-1 };
@@ -881,12 +881,12 @@ void ViewCommander::Command_COPY_COLOR_HTML(bool bLineNumber)
 		ColorStrategy* pStrategy = nullptr;
 		StringRef cStringLine(pDocLine->GetPtr(), pDocLine->GetLengthWithEOL());
 		{
-			pStrategy = pStrategyNormal = pool->GetStrategyByColor(pcLayout->GetColorTypePrev());
+			pStrategy = pStrategyNormal = pool->GetStrategyByColor(pLayout->GetColorTypePrev());
 			if (pStrategy) {
 				pStrategy->InitStrategyStatus();
-				pStrategy->SetStrategyColorInfo(pcLayout->GetColorInfo());
+				pStrategy->SetStrategyColorInfo(pLayout->GetColorInfo());
 			}
-			int nColorIdx = ToColorInfoArrIndex(pcLayout->GetColorTypePrev());
+			int nColorIdx = ToColorInfoArrIndex(pLayout->GetColorTypePrev());
 			if (nColorIdx != -1) {
 				const ColorInfo& info = type.m_ColorInfoArr[nColorIdx];
 				sFontAttr = info.m_fontAttr;
@@ -895,21 +895,21 @@ void ViewCommander::Command_COPY_COLOR_HTML(bool bLineNumber)
 		}
 		const WCHAR* pLine = pDocLine->GetPtr();
 		for (;
-			pcLayout->GetLogicLineNo() == nLineNum;
-			++nLayoutLineNum, pcLayout = pcLayout->GetNextLayout()
+			pLayout->GetLogicLineNo() == nLineNum;
+			++nLayoutLineNum, pLayout = pLayout->GetNextLayout()
 		) {
 			LogicInt nIdxFrom;
 			LogicInt nIdxTo;
-			const int nLineLen = pcLayout->GetLengthWithoutEOL() + pcLayout->GetLayoutEol().GetLen();
+			const int nLineLen = pLayout->GetLengthWithoutEOL() + pLayout->GetLayoutEol().GetLen();
 			if (nLayoutLineNum < rcSel.top) {
 				nIdxTo = nIdxFrom = LogicInt(-1);
 			}else {
 				if (selInfo.IsBoxSelecting()) {
-					nIdxFrom = m_pCommanderView->LineColumnToIndex(pcLayout, rcSel.left);
-					nIdxTo   = m_pCommanderView->LineColumnToIndex(pcLayout, rcSel.right);
+					nIdxFrom = m_pCommanderView->LineColumnToIndex(pLayout, rcSel.left);
+					nIdxTo   = m_pCommanderView->LineColumnToIndex(pLayout, rcSel.right);
 					// 改行は除く
 					if (nIdxTo - nIdxFrom > 0) {
-						const WCHAR* pLine = pcLayout->GetPtr();
+						const WCHAR* pLine = pLayout->GetPtr();
 						if (pLine[nIdxTo - 1] == L'\n' || pLine[nIdxTo - 1] == L'\r') {
 							--nIdxTo;
 						}
@@ -934,7 +934,7 @@ void ViewCommander::Command_COPY_COLOR_HTML(bool bLineNumber)
 			if (bLineNumber) {
 				WCHAR szLineNum[14];
 				if (type.m_bLineNumIsCRLF) {
-					if (pcLayout->GetLogicOffset() != 0) {
+					if (pLayout->GetLogicOffset() != 0) {
 						if (bLineNumLayout) {
 							cmemClip.AppendNativeData(cmemNullLine);
 						}
@@ -943,13 +943,13 @@ void ViewCommander::Command_COPY_COLOR_HTML(bool bLineNumber)
 						cmemClip.AppendString(szLineNum, ret);
 					}
 				}else {
-					if (bLineNumLayout || pcLayout->GetLogicOffset() == 0) {
+					if (bLineNumLayout || pLayout->GetLogicOffset() == 0) {
 						int ret = swprintf(szLineNum, szLineFormat, nLayoutLineNum + 1);
 						cmemClip.AppendString(szLineNum, ret);
 					}
 				}
 			}
-			const int nLineStart = pcLayout->GetLogicOffset();
+			const int nLineStart = pLayout->GetLogicOffset();
 			int nBgnLogic = nIdxFrom + nLineStart;
 			int iLogic = nLineStart;
 			bool bAddCRLF = false;
@@ -997,16 +997,16 @@ void ViewCommander::Command_COPY_COLOR_HTML(bool bLineNumber)
 			}
 			if (bLineNumber) {
 				bool bAddLineNum = true;
-				const Layout* pcLayoutNext = pcLayout->GetNextLayout();
-				if (pcLayoutNext) {
+				const Layout* pLayoutNext = pLayout->GetNextLayout();
+				if (pLayoutNext) {
 					if (type.m_bLineNumIsCRLF) {
-						if (bLineNumLayout && pcLayoutNext->GetLogicOffset() != 0) {
+						if (bLineNumLayout && pLayoutNext->GetLogicOffset() != 0) {
 							bAddLineNum = true;
 						}else {
 							bAddLineNum = true;
 						}
 					}else {
-						if (bLineNumLayout || pcLayoutNext->GetLogicOffset() == 0) {
+						if (bLineNumLayout || pLayoutNext->GetLogicOffset() == 0) {
 							bAddLineNum = true;
 						}
 					}

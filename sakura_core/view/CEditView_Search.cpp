@@ -327,8 +327,8 @@ void EditView::GetCurrentTextForSearch(NativeW& cmemCurText, bool bStripMaxPath 
 			);
 			if (bWhere) {
 				// 選択範囲の変更
-				GetSelectionInfo().m_sSelectBgn = sRange;
-				GetSelectionInfo().m_sSelect    = sRange;
+				GetSelectionInfo().m_selectBgn = sRange;
+				GetSelectionInfo().m_select    = sRange;
 
 				// 選択範囲のデータを取得
 				if (GetSelectedDataOne(cmemCurText, INT_MAX)) {
@@ -505,10 +505,10 @@ int EditView::IsSearchString(
 		}
 		return 0; // 指定位置の単語と検索文字列に含まれる単語は一致しなかった。
 	}else {
-		const wchar_t* pHit = SearchAgent::SearchString(cStr.GetPtr(), cStr.GetLength(), nPos, m_sSearchPattern);
+		const wchar_t* pHit = SearchAgent::SearchString(cStr.GetPtr(), cStr.GetLength(), nPos, m_searchPattern);
 		if (pHit) {
 			*pnSearchStart = pHit - cStr.GetPtr();
-			*pnSearchEnd = *pnSearchStart + m_sSearchPattern.GetLen();
+			*pnSearchEnd = *pnSearchStart + m_searchPattern.GetLen();
 			return 1;
 		}
 		return 0; // この行はヒットしなかった

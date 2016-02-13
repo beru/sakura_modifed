@@ -39,21 +39,21 @@ typedef INT_PTR (PropTypes::*DISPATCH_EVENT_TYPE)(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK PropTypesCommonProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam, DISPATCH_EVENT_TYPE pDispatch)
 {
 	PROPSHEETPAGE* pPsp;
-	PropTypes* pCPropTypes;
+	PropTypes* pPropTypes;
 	switch (uMsg) {
 	case WM_INITDIALOG:
 		pPsp = (PROPSHEETPAGE*)lParam;
-		pCPropTypes = reinterpret_cast<PropTypes*>(pPsp->lParam);
-		if (pCPropTypes) {
-			return (pCPropTypes->*pDispatch)(hwndDlg, uMsg, wParam, pPsp->lParam);
+		pPropTypes = reinterpret_cast<PropTypes*>(pPsp->lParam);
+		if (pPropTypes) {
+			return (pPropTypes->*pDispatch)(hwndDlg, uMsg, wParam, pPsp->lParam);
 		}else {
 			return FALSE;
 		}
 	default:
 		// Modified by KEITA for WIN64 2003.9.6
-		pCPropTypes = (PropTypes*)::GetWindowLongPtr(hwndDlg, DWLP_USER);
-		if (pCPropTypes) {
-			return (pCPropTypes->*pDispatch)(hwndDlg, uMsg, wParam, lParam);
+		pPropTypes = (PropTypes*)::GetWindowLongPtr(hwndDlg, DWLP_USER);
+		if (pPropTypes) {
+			return (pPropTypes->*pDispatch)(hwndDlg, uMsg, wParam, lParam);
 		}else {
 			return FALSE;
 		}

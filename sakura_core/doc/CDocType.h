@@ -34,7 +34,7 @@
 class DocType {
 public:
 	// 生成と破棄
-	DocType(EditDoc* pcDoc);
+	DocType(EditDoc* pDoc);
 	
 	// ロック機能	// Nov. 29, 2000 genta 設定の一時変更時に拡張子による強制的な設定変更を無効にする
 	void LockDocumentType() { m_nSettingTypeLocked = true; }

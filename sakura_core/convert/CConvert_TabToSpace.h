@@ -35,7 +35,7 @@ public:
 	{
 	}
 
-	bool DoConvert(NativeW* pcData);
+	bool DoConvert(NativeW* pData);
 
 private:
 	int m_nTabWidth;

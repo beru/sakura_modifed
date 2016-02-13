@@ -39,23 +39,23 @@ OpeBlk::~OpeBlk()
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 // 操作の追加
-bool OpeBlk::AppendOpe(Ope* pcOpe)
+bool OpeBlk::AppendOpe(Ope* pOpe)
 {
-	if (pcOpe->m_ptCaretPos_PHY_Before.HasNegative() || pcOpe->m_ptCaretPos_PHY_After.HasNegative()) {
+	if (pOpe->m_ptCaretPos_PHY_Before.HasNegative() || pOpe->m_ptCaretPos_PHY_After.HasNegative()) {
 		TopErrorMessage(NULL,
 			_T("COpeBlk::AppendOpe() error.\n")
 			_T("Bug.\n")
-			_T("pcOpe->m_ptCaretPos_PHY_Before = %d,%d\n")
-			_T("pcOpe->m_ptCaretPos_PHY_After = %d,%d\n"),
-			pcOpe->m_ptCaretPos_PHY_Before.x,
-			pcOpe->m_ptCaretPos_PHY_Before.y,
-			pcOpe->m_ptCaretPos_PHY_After.x,
-			pcOpe->m_ptCaretPos_PHY_After.y
+			_T("pOpe->m_ptCaretPos_PHY_Before = %d,%d\n")
+			_T("pOpe->m_ptCaretPos_PHY_After = %d,%d\n"),
+			pOpe->m_ptCaretPos_PHY_Before.x,
+			pOpe->m_ptCaretPos_PHY_Before.y,
+			pOpe->m_ptCaretPos_PHY_After.x,
+			pOpe->m_ptCaretPos_PHY_After.y
 		);
 	}
 
 	// 配列のメモリサイズを調整
-	m_ppCOpeArr.push_back(pcOpe);
+	m_ppCOpeArr.push_back(pOpe);
 	return true;
 }
 

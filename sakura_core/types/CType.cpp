@@ -157,7 +157,7 @@ void _DefaultConfig(TypeConfig* pType)
 /* タイプ別設定の規定値 */
 /************************/
 
-	pType->m_nTextWrapMethod = (int)TextWrappingMethod::SettingWidth;		// テキストの折り返し方法		// 2008.05.30 nasukoji
+	pType->m_nTextWrapMethod = TextWrappingMethod::SettingWidth;		// テキストの折り返し方法		// 2008.05.30 nasukoji
 	pType->m_nMaxLineKetas = LayoutInt(MAXLINEKETAS);	// 折り返し桁数
 	pType->m_nColumnSpace = 0;							// 文字と文字の隙間
 	pType->m_nLineSpace = 1;							// 行間のすきま

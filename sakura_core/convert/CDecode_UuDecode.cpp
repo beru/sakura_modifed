@@ -7,7 +7,7 @@
 #include "CEol.h"
 
 // Uudecode (デコード）
-bool Decode_UuDecode::DoDecode(const NativeW& pcSrc, Memory* pcDst)
+bool Decode_UuDecode::DoDecode(const NativeW& pSrc, Memory* pDst)
 {
 	const WCHAR *psrc, *pline;
 	int nsrclen;
@@ -16,16 +16,16 @@ bool Decode_UuDecode::DoDecode(const NativeW& pcSrc, Memory* pcDst)
 	Eol ceol;
 	bool bsuccess = false;
 
-	pcDst->Clear();
-	psrc = pcSrc.GetStringPtr();
-	nsrclen = pcSrc.GetStringLength();
+	pDst->Clear();
+	psrc = pSrc.GetStringPtr();
+	nsrclen = pSrc.GetStringLength();
 
 	if (nsrclen < 1) {
-		pcDst->_AppendSz("");
+		pDst->_AppendSz("");
 		return false;
 	}
-	pcDst->AllocBuffer((nsrclen / 4) * 3 + 10);
-	pw_base = pw = static_cast<char*>(pcDst->GetRawPtr());
+	pDst->AllocBuffer((nsrclen / 4) * 3 + 10);
+	pw_base = pw = static_cast<char*>(pDst->GetRawPtr());
 
 	// 先頭の改行・空白文字をスキップ
 	for (ncuridx=0; ncuridx<nsrclen; ++ncuridx) {
@@ -38,18 +38,18 @@ bool Decode_UuDecode::DoDecode(const NativeW& pcSrc, Memory* pcDst)
 	// ヘッダーを解析
 	pline = GetNextLineW( psrc, nsrclen, &nlinelen, &ncuridx, &ceol, false );
 	if (!CheckUUHeader(pline, nlinelen, m_aFilename)) {
-		pcDst->_AppendSz("");
+		pDst->_AppendSz("");
 		return false;
 	}
 
 	// ボディーを処理
 	while ((pline = GetNextLineW(psrc, nsrclen, &nlinelen, &ncuridx, &ceol, false))) {
 		if (ceol.GetType() != EolType::CRLF) {
-			pcDst->_AppendSz("");
+			pDst->_AppendSz("");
 			return false;
 		}
 		if (nlinelen < 1) {
-			pcDst->_AppendSz("");
+			pDst->_AppendSz("");
 			return false;
 		}
 		if (nlinelen == 1) {
@@ -69,11 +69,11 @@ bool Decode_UuDecode::DoDecode(const NativeW& pcSrc, Memory* pcDst)
 
 	// フッターを解析
 	if (!CheckUUFooter(pline, nsrclen - ncuridx)) {
-		pcDst->_AppendSz("");
+		pDst->_AppendSz("");
 		return false;
 	}
 
-	pcDst->_SetRawLength(pw - pw_base);
+	pDst->_SetRawLength(pw - pw_base);
 	return true;
 }
 

@@ -94,7 +94,7 @@ BOOL DlgProperty::OnBnClicked(int wID)
 */
 void DlgProperty::SetData(void)
 {
-	EditDoc* pCEditDoc = (EditDoc*)m_lParam;
+	EditDoc* pEditDoc = (EditDoc*)m_lParam;
 	CNativeT cmemProp;
 	TCHAR szWork[500];
 
@@ -102,49 +102,49 @@ void DlgProperty::SetData(void)
 	WIN32_FIND_DATA	wfd;
 	// Aug. 16, 2000 genta	全角化
 	cmemProp.AppendString(LS(STR_DLGFLPROP_FILENAME));
-	cmemProp.AppendString(pCEditDoc->m_docFile.GetFilePath());
+	cmemProp.AppendString(pEditDoc->m_docFile.GetFilePath());
 	cmemProp.AppendString(_T("\r\n"));
 
 	cmemProp.AppendString(LS(STR_DLGFLPROP_FILETYPE));
-	cmemProp.AppendString(pCEditDoc->m_docType.GetDocumentAttribute().m_szTypeName);
+	cmemProp.AppendString(pEditDoc->m_docType.GetDocumentAttribute().m_szTypeName);
 	cmemProp.AppendString(_T("\r\n"));
 
 	cmemProp.AppendString(LS(STR_DLGFLPROP_ENCODING));
 	{
 		TCHAR szCpName[100];
-		CodePage::GetNameNormal(szCpName, pCEditDoc->GetDocumentEncoding());
+		CodePage::GetNameNormal(szCpName, pEditDoc->GetDocumentEncoding());
 		cmemProp.AppendString( szCpName );
 	}
 	// From Here  2008/4/27 Uchi
-	if (pCEditDoc->GetDocumentBomExist()) {
+	if (pEditDoc->GetDocumentBomExist()) {
 		cmemProp.AppendString(LS(STR_DLGFLPROP_WITH_BOM));
 	}
 	// To Here  2008/4/27 Uchi
 	cmemProp.AppendString(_T("\r\n"));
 
-	auto_sprintf(szWork, LS(STR_DLGFLPROP_LINE_COUNT), pCEditDoc->m_docLineMgr.GetLineCount());
+	auto_sprintf(szWork, LS(STR_DLGFLPROP_LINE_COUNT), pEditDoc->m_docLineMgr.GetLineCount());
 	cmemProp.AppendString(szWork);
 
-	auto_sprintf(szWork, LS(STR_DLGFLPROP_LAYOUT_LINE), pCEditDoc->m_layoutMgr.GetLineCount());
+	auto_sprintf(szWork, LS(STR_DLGFLPROP_LAYOUT_LINE), pEditDoc->m_layoutMgr.GetLineCount());
 	cmemProp.AppendString(szWork);
 
 	if (AppMode::getInstance()->IsViewMode()) {
 		cmemProp.AppendString(LS(STR_DLGFLPROP_VIEW_MODE));	// 2009.04.11 ryoji 「上書き禁止モード」→「ビューモード」
 	}
-	if (pCEditDoc->m_docEditor.IsModified()) {
+	if (pEditDoc->m_docEditor.IsModified()) {
 		cmemProp.AppendString(LS(STR_DLGFLPROP_MODIFIED));
 	}else {
 		cmemProp.AppendString(LS(STR_DLGFLPROP_NOT_MODIFIED));
 	}
 
-	auto_sprintf(szWork, LS(STR_DLGFLPROP_CMD_COUNT), pCEditDoc->m_nCommandExecNum);
+	auto_sprintf(szWork, LS(STR_DLGFLPROP_CMD_COUNT), pEditDoc->m_nCommandExecNum);
 	cmemProp.AppendString(szWork);
 
-	auto_sprintf(szWork, LS(STR_DLGFLPROP_FILE_INFO), pCEditDoc->m_docLineMgr.GetLineCount());
+	auto_sprintf(szWork, LS(STR_DLGFLPROP_FILE_INFO), pEditDoc->m_docLineMgr.GetLineCount());
 	cmemProp.AppendString(szWork);
 
-	if ((nFind = ::FindFirstFile(pCEditDoc->m_docFile.GetFilePath(), &wfd)) != INVALID_HANDLE_VALUE) {
-		if (pCEditDoc->m_docFile.IsFileLocking()) {
+	if ((nFind = ::FindFirstFile(pEditDoc->m_docFile.GetFilePath(), &wfd)) != INVALID_HANDLE_VALUE) {
+		if (pEditDoc->m_docFile.IsFileLocking()) {
 			if (m_pShareData->m_common.m_file.m_nFileShareMode == SHAREMODE_DENY_WRITE) {
 				auto_sprintf(szWork, LS(STR_DLGFLPROP_W_LOCK));
 			}else if (m_pShareData->m_common.m_file.m_nFileShareMode == SHAREMODE_DENY_READWRITE) {
@@ -158,7 +158,7 @@ void DlgProperty::SetData(void)
 			cmemProp.AppendString(szWork);
 		}
 
-		auto_sprintf(szWork, LS(STR_DLGFLPROP_ATTRIBUTES), pCEditDoc->m_docLineMgr.GetLineCount());
+		auto_sprintf(szWork, LS(STR_DLGFLPROP_ATTRIBUTES), pEditDoc->m_docLineMgr.GetLineCount());
 		cmemProp.AppendString(szWork);
 		if (wfd.dwFileAttributes & FILE_ATTRIBUTE_ARCHIVE) {
 			cmemProp.AppendString(LS(STR_DLGFLPROP_AT_ARCHIVE));
@@ -241,7 +241,7 @@ void DlgProperty::SetData(void)
 #ifdef _DEBUG/////////////////////////////////////////////////////
 	// メモリ確保 & ファイル読み込み
 	CNativeT ctext;
-	BinaryInputStream in(pCEditDoc->m_docFile.GetFilePath());
+	BinaryInputStream in(pEditDoc->m_docFile.GetFilePath());
 	if (!in) {
 		goto end_of_CodeTest;
 	}

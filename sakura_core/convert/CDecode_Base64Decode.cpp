@@ -36,7 +36,7 @@
 #include "charset/codechecker.h"
 
 // Base64デコード
-bool Decode_Base64Decode::DoDecode(const NativeW& pcSrc, Memory* pcDst)
+bool Decode_Base64Decode::DoDecode(const NativeW& src, Memory* pDst)
 {
 	using namespace WCODE;
 
@@ -50,12 +50,12 @@ bool Decode_Base64Decode::DoDecode(const NativeW& pcSrc, Memory* pcDst)
 	int i, j;
 	wchar_t c = 0;
 
-	pSrc = pcSrc.GetStringPtr();
-	nSrcLen = pcSrc.GetStringLength();
-	pcDst->AllocBuffer(nSrcLen);  // 書き込みバッファを確保
-	pw_base = pw = reinterpret_cast<char*>(pcDst->GetRawPtr());
+	pSrc = src.GetStringPtr();
+	nSrcLen = src.GetStringLength();
+	pDst->AllocBuffer(nSrcLen);  // 書き込みバッファを確保
+	pw_base = pw = reinterpret_cast<char*>(pDst->GetRawPtr());
 
-	i = 0;  // pcSrc の添え字
+	i = 0;  // pSrc の添え字
 	do {
 		j = 0;
 		for (; i<nSrcLen; ++i) {
@@ -80,7 +80,7 @@ bool Decode_Base64Decode::DoDecode(const NativeW& pcSrc, Memory* pcDst)
 	//	return false;
 	//}
 
-	pcDst->_SetRawLength(pw - pw_base);
+	pDst->_SetRawLength(pw - pw_base);
 	return true;
 }
 

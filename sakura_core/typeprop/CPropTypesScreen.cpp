@@ -117,10 +117,10 @@ TYPE_NAME_ID<int> IndentTypeArr[] = {
 };
 
 // 2008.05.30 nasukoji	テキストの折り返し方法
-TYPE_NAME_ID<int> WrapMethodArr[] = {
-	{ (int)TextWrappingMethod::NoWrapping,		STR_WRAP_METHOD_NO_WRAP },		// _T("折り返さない")
-	{ (int)TextWrappingMethod::SettingWidth,	STR_WRAP_METHOD_SPEC_WIDTH },	// _T("指定桁で折り返す")
-	{ (int)TextWrappingMethod::WindowWidth,	STR_WRAP_METHOD_WIN_WIDTH },	// _T("右端で折り返す")
+TYPE_NAME_ID<TextWrappingMethod> WrapMethodArr[] = {
+	{ TextWrappingMethod::NoWrapping,	STR_WRAP_METHOD_NO_WRAP },		// _T("折り返さない")
+	{ TextWrappingMethod::SettingWidth,	STR_WRAP_METHOD_SPEC_WIDTH },	// _T("指定桁で折り返す")
+	{ TextWrappingMethod::WindowWidth,	STR_WRAP_METHOD_WIN_WIDTH },	// _T("右端で折り返す")
 };
 
 // 静的メンバ

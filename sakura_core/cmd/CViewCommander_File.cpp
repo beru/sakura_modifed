@@ -183,25 +183,25 @@ void ViewCommander::Command_FILEOPEN(
 */
 bool ViewCommander::Command_FILESAVE(bool warnbeep, bool askname)
 {
-	EditDoc* pcDoc = GetDocument();
+	EditDoc* pDoc = GetDocument();
 
 	// ファイル名が指定されていない場合は「名前を付けて保存」のフローへ遷移
 	if (!GetDocument()->m_docFile.GetFilePathClass().IsValidPath()) {
 		if (!askname) {
 			return false;	// 保存しない
 		}
-		return pcDoc->m_docFileOperation.FileSaveAs();
+		return pDoc->m_docFileOperation.FileSaveAs();
 	}
 
 	// セーブ情報
 	SaveInfo sSaveInfo;
-	pcDoc->GetSaveInfo(&sSaveInfo);
+	pDoc->GetSaveInfo(&sSaveInfo);
 	sSaveInfo.cEol = EolType::None; // 改行コード無変換
 	sSaveInfo.bOverwriteMode = true; // 上書き要求
 
 	// 上書き処理
 	if (!warnbeep) EditApp::getInstance()->m_soundSet.MuteOn();
-	bool bRet = pcDoc->m_docFileOperation.DoSaveFlow(&sSaveInfo);
+	bool bRet = pDoc->m_docFileOperation.DoSaveFlow(&sSaveInfo);
 	if (!warnbeep) EditApp::getInstance()->m_soundSet.MuteOff();
 
 	return bRet;
@@ -288,14 +288,14 @@ void ViewCommander::Command_FILE_REOPEN(
 	bool		bNoConfirm	// [in] ファイルが更新された場合に確認を行わ「ない」かどうか。true:確認しない false:確認する
 	)
 {
-	EditDoc* pcDoc = GetDocument();
-	if (!bNoConfirm && fexist(pcDoc->m_docFile.GetFilePath()) && pcDoc->m_docEditor.IsModified()) {
+	EditDoc* pDoc = GetDocument();
+	if (!bNoConfirm && fexist(pDoc->m_docFile.GetFilePath()) && pDoc->m_docEditor.IsModified()) {
 		int nDlgResult = MYMESSAGEBOX(
 			m_pCommanderView->GetHwnd(),
 			MB_OKCANCEL | MB_ICONQUESTION | MB_TOPMOST,
 			GSTR_APPNAME,
 			LS(STR_ERR_CEDITVIEW_CMD29),
-			pcDoc->m_docFile.GetFilePath()
+			pDoc->m_docFile.GetFilePath()
 		);
 		if (nDlgResult == IDOK) {
 			// 継続。下へ進む
@@ -305,7 +305,7 @@ void ViewCommander::Command_FILE_REOPEN(
 	}
 
 	// 同一ファイルの再オープン
-	pcDoc->m_docFileOperation.ReloadCurrentFile(nCharCode);
+	pDoc->m_docFileOperation.ReloadCurrentFile(nCharCode);
 }
 
 
@@ -537,13 +537,13 @@ void ViewCommander::Command_PROPERTY_FILE(void)
 		// 全行データを返すテスト
 		wchar_t*	pDataAll;
 		int		nDataAllLen;
-		RunningTimer cRunningTimer("ViewCommander::Command_PROPERTY_FILE 全行データを返すテスト");
-		cRunningTimer.Reset();
+		RunningTimer runningTimer("ViewCommander::Command_PROPERTY_FILE 全行データを返すテスト");
+		runningTimer.Reset();
 		pDataAll = DocReader(GetDocument()->m_docLineMgr).GetAllData(&nDataAllLen);
-//		MYTRACE(_T("全データ取得             (%dバイト) 所要時間(ミリ秒) = %d\n"), nDataAllLen, cRunningTimer.Read());
+//		MYTRACE(_T("全データ取得             (%dバイト) 所要時間(ミリ秒) = %d\n"), nDataAllLen, runningTimer.Read());
 		free(pDataAll);
 		pDataAll = NULL;
-//		MYTRACE(_T("全データ取得のメモリ開放 (%dバイト) 所要時間(ミリ秒) = %d\n"), nDataAllLen, cRunningTimer.Read());
+//		MYTRACE(_T("全データ取得のメモリ開放 (%dバイト) 所要時間(ミリ秒) = %d\n"), nDataAllLen, runningTimer.Read());
 	}
 #endif
 
@@ -624,7 +624,7 @@ bool ViewCommander::Command_PUTFILE(
 	}
 
 	// 2007.09.08 genta EditDoc::FileWrite()にならって砂時計カーソル
-	WaitCursor cWaitCursor(m_pCommanderView->GetHwnd());
+	WaitCursor waitCursor(m_pCommanderView->GetHwnd());
 
 	std::unique_ptr<CodeBase> pcSaveCode(CodeFactory::CreateCodeBase(nSaveCharCode, 0));
 
@@ -679,10 +679,10 @@ bool ViewCommander::Command_PUTFILE(
 		}
 	}else {	// ファイル全体を出力
 		HWND		hwndProgress;
-		EditWnd*	pCEditWnd = GetEditWindow();
+		EditWnd*	pEditWnd = GetEditWindow();
 
-		if (pCEditWnd) {
-			hwndProgress = pCEditWnd->m_statusBar.GetProgressHwnd();
+		if (pEditWnd) {
+			hwndProgress = pEditWnd->m_statusBar.GetProgressHwnd();
 		}else {
 			hwndProgress = NULL;
 		}
@@ -746,13 +746,13 @@ bool ViewCommander::Command_INSFILE(
 	}
 
 	// 2007.09.08 genta EditDoc::FileLoad()にならって砂時計カーソル
-	WaitCursor cWaitCursor(m_pCommanderView->GetHwnd());
+	WaitCursor waitCursor(m_pCommanderView->GetHwnd());
 
 	// 範囲選択中なら挿入後も選択状態にするため	// 2007.04.29 maru
 	BOOL	bBeforeTextSelected = m_pCommanderView->GetSelectionInfo().IsTextSelected();
 	LayoutPoint ptFrom;
 	if (bBeforeTextSelected) {
-		ptFrom = m_pCommanderView->GetSelectionInfo().m_sSelect.GetFrom();
+		ptFrom = m_pCommanderView->GetSelectionInfo().m_select.GetFrom();
 	}
 
 

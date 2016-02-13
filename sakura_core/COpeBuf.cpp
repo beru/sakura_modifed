@@ -58,7 +58,7 @@ bool OpeBuf::IsEnableRedo() const
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 // 操作の追加
-bool OpeBuf::AppendOpeBlk(OpeBlk* pcOpeBlk)
+bool OpeBuf::AppendOpeBlk(OpeBlk* pOpeBlk)
 {
 	// 現在位置より後ろ（アンドゥ対象）がある場合は、消去
 	int size = (int)m_vCOpeBlkArr.size();
@@ -69,7 +69,7 @@ bool OpeBuf::AppendOpeBlk(OpeBlk* pcOpeBlk)
 		m_vCOpeBlkArr.resize(m_nCurrentPointer);
 	}
 	// 配列のメモリサイズを調整
-	m_vCOpeBlkArr.push_back(pcOpeBlk);
+	m_vCOpeBlkArr.push_back(pOpeBlk);
 	++m_nCurrentPointer;
 	return true;
 }
@@ -121,14 +121,14 @@ OpeBlk* OpeBuf::DoRedo(bool* pbModified)
 	if (!IsEnableRedo()) {
 		return NULL;
 	}
-	OpeBlk* pcOpeBlk = m_vCOpeBlkArr[m_nCurrentPointer];
+	OpeBlk* pOpeBlk = m_vCOpeBlkArr[m_nCurrentPointer];
 	++m_nCurrentPointer;
 	if (m_nCurrentPointer == m_nNoModifiedIndex) {		// 無変更な状態になった位置
 		*pbModified = false;
 	}else {
 		*pbModified = true;
 	}
-	return pcOpeBlk;
+	return pOpeBlk;
 }
 
 

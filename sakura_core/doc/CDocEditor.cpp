@@ -33,9 +33,9 @@
 #include "window/CEditWnd.h"
 #include "debug/CRunningTimer.h"
 
-DocEditor::DocEditor(EditDoc* pcDoc)
+DocEditor::DocEditor(EditDoc* pDoc)
 	:
-	m_pDocRef(pcDoc),
+	m_pDocRef(pDoc),
 	m_newLineCode(EolType::CRLF),	// New Line Type
 	m_pOpeBlk(NULL),
 	m_bInsMode(true),			// Oct. 2, 2005 genta
@@ -72,18 +72,18 @@ void DocEditor::OnBeforeLoad(LoadInfo* sLoadInfo)
 
 void DocEditor::OnAfterLoad(const LoadInfo& sLoadInfo)
 {
-	EditDoc* pcDoc = GetListeningDoc();
+	EditDoc* pDoc = GetListeningDoc();
 
 	// May 12, 2000 genta
 	// 編集用改行コードの設定
 	{
-		const TypeConfig& type = pcDoc->m_docType.GetDocumentAttribute();
-		if (pcDoc->m_docFile.GetCodeSet() == type.m_encoding.m_eDefaultCodetype) {
+		const TypeConfig& type = pDoc->m_docType.GetDocumentAttribute();
+		if (pDoc->m_docFile.GetCodeSet() == type.m_encoding.m_eDefaultCodetype) {
 			SetNewLineCode(type.m_encoding.m_eDefaultEoltype);	// 2011.01.24 ryoji デフォルトEOL
 		}else {
 			SetNewLineCode(EolType::CRLF);
 		}
-		DocLine* pFirstlineinfo = pcDoc->m_docLineMgr.GetLine(LogicInt(0));
+		DocLine* pFirstlineinfo = pDoc->m_docLineMgr.GetLine(LogicInt(0));
 		if (pFirstlineinfo) {
 			EolType t = pFirstlineinfo->GetEol();
 			if (t != EolType::None && t != EolType::Unknown) {
@@ -94,16 +94,16 @@ void DocEditor::OnAfterLoad(const LoadInfo& sLoadInfo)
 
 	// Nov. 20, 2000 genta
 	// IME状態の設定
-	this->SetImeMode(pcDoc->m_docType.GetDocumentAttribute().m_nImeState);
+	this->SetImeMode(pDoc->m_docType.GetDocumentAttribute().m_nImeState);
 
 	// カレントディレクトリの変更
-	::SetCurrentDirectory(pcDoc->m_docFile.GetFilePathClass().GetDirPath().c_str());
+	::SetCurrentDirectory(pDoc->m_docFile.GetFilePathClass().GetDirPath().c_str());
 	AppMode::getInstance()->SetViewMode(sLoadInfo.bViewMode);		// ビューモード	##ここも、アリかな
 }
 
 void DocEditor::OnAfterSave(const SaveInfo& sSaveInfo)
 {
-	EditDoc* pcDoc = GetListeningDoc();
+	EditDoc* pDoc = GetListeningDoc();
 
 	this->SetModified(false, false);	// Jan. 22, 2002 genta 関数化 更新フラグのクリア
 
@@ -111,7 +111,7 @@ void DocEditor::OnAfterSave(const SaveInfo& sSaveInfo)
 	this->m_opeBuf.SetNoModified();
 
 	// カレントディレクトリの変更
-	::SetCurrentDirectory(pcDoc->m_docFile.GetFilePathClass().GetDirPath().c_str());
+	::SetCurrentDirectory(pDoc->m_docFile.GetFilePathClass().GetDirPath().c_str());
 }
 
 // From Here Nov. 20, 2000 genta

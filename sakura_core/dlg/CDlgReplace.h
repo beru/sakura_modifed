@@ -55,9 +55,9 @@ public:
 	LogicPoint		m_ptEscCaretPos_PHY;	// 検索/置換開始時のカーソル位置退避エリア
 
 protected:
-	RecentSearch			m_cRecentSearch;
+	RecentSearch			m_recentSearch;
 	ComboBoxItemDeleter	m_comboDelText;
-	RecentReplace			m_cRecentReplace;
+	RecentReplace			m_recentReplace;
 	ComboBoxItemDeleter	m_comboDelText2;
 	FontAutoDeleter		m_cFontText;
 	FontAutoDeleter		m_cFontText2;

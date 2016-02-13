@@ -139,13 +139,13 @@ public:
 	DocLocker			m_docLocker;
 
 	// 動的状態
-	int				m_nCommandExecNum;			// コマンド実行回数
+	int					m_nCommandExecNum;			// コマンド実行回数
 
 	// 環境情報
-	FuncLookup		m_funcLookup;				// 機能名，機能番号などのresolve
+	FuncLookup			m_funcLookup;				// 機能名，機能番号などのresolve
 
 	// 未整理変数
-	int				m_nTextWrapMethodCur;		// 折り返し方法					// 2008.05.30 nasukoji
+	TextWrappingMethod	m_nTextWrapMethodCur;		// 折り返し方法					// 2008.05.30 nasukoji
 	bool			m_bTextWrapMethodCurTemp;	// 折り返し方法一時設定適用中	// 2008.05.30 nasukoji
 	LOGFONT			m_lfCur;					// 一時設定フォント
 	int				m_nPointSizeCur;			// 一時設定フォントサイズ

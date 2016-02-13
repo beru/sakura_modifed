@@ -64,7 +64,7 @@ void KeyMacroMgr::ClearAll(void)
 
 /*! キーマクロのバッファにデータ追加
 	機能番号と、引数ひとつを追加版。
-	@date 2002.2.2 YAZAKI pcEditViewも渡すようにした。
+	@date 2002.2.2 YAZAKI pEditViewも渡すようにした。
 */
 void KeyMacroMgr::Append(
 	EFunctionCode	nFuncID,
@@ -127,13 +127,13 @@ bool KeyMacroMgr::SaveKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath) const
 	@date 2007.07.20 genta flags追加．Macro::Exec()に
 		FA_FROMMACROを含めた値を渡す．
 */
-bool KeyMacroMgr::ExecKeyMacro(EditView* pcEditView, int flags) const
+bool KeyMacroMgr::ExecKeyMacro(EditView* pEditView, int flags) const
 {
 	Macro* p = m_pTop;
 	int macroflag = flags | FA_FROMMACRO;
 	bool bRet = true;
 	while (p) {
-		if (!p->Exec(pcEditView, macroflag)) {
+		if (!p->Exec(pEditView, macroflag)) {
 			bRet = false;
 			break;
 		}

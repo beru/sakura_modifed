@@ -57,7 +57,7 @@ public:
 	PluginIfObj(Plugin& cPlugin)
 		:
 		WSHIfObj(L"Plugin", false),
-		m_cPlugin(cPlugin)
+		m_plugin(cPlugin)
 	{
 		m_nPlugIndex = -1;
 	}
@@ -86,7 +86,7 @@ public:
 		switch (LOWORD(ID)) {
 		case F_PL_GETPLUGINDIR:			// プラグインフォルダパスを取得する
 			{
-				SysString S(m_cPlugin.m_sBaseDir.c_str(), m_cPlugin.m_sBaseDir.size());
+				SysString S(m_plugin.m_sBaseDir.c_str(), m_plugin.m_sBaseDir.size());
 				Wrap(&Result)->Receive(S);
 			}
 			return true;
@@ -106,15 +106,15 @@ public:
 
 				cProfile.SetReadingMode();
 				if (LOWORD(ID) == F_PL_GETDEF) {
-					cProfile.ReadProfile(m_cPlugin.GetPluginDefPath().c_str());
+					cProfile.ReadProfile(m_plugin.GetPluginDefPath().c_str());
 				}else {
-					cProfile.ReadProfile(m_cPlugin.GetOptionPath().c_str());
+					cProfile.ReadProfile(m_plugin.GetOptionPath().c_str());
 				}
 				if (!cProfile.IOProfileData(sSection.c_str(), sKey.c_str(), sValue)
 					&& LOWORD(ID) == F_PL_GETOPTION
 				) {
 					// 設定されていなければデフォルトを取得 
-					for (auto it=m_cPlugin.m_options.begin(); it!=m_cPlugin.m_options.end(); ++it) {
+					for (auto it=m_plugin.m_options.begin(); it!=m_plugin.m_options.end(); ++it) {
 						wstring sSectionTmp;
 						wstring sKeyTmp;
 						(*it)->GetKey(&sSectionTmp, &sKeyTmp);
@@ -141,12 +141,12 @@ public:
 					return false;
 				}
 				if (0 < num && num < MAX_PLUG_STRING) {
-					std::wstring& str = m_cPlugin.m_aStrings[num];
+					std::wstring& str = m_plugin.m_aStrings[num];
 					SysString S(str.c_str(), str.size());
 					Wrap(&Result)->Receive(S);
 					return true;
 				}else if (num == 0) {
-					std::wstring str = to_wchar(m_cPlugin.m_sLangName.c_str());
+					std::wstring str = to_wchar(m_plugin.m_sLangName.c_str());
 					SysString S(str.c_str(), str.size());
 					Wrap(&Result)->Receive(S);
 					return true;
@@ -165,16 +165,16 @@ public:
 				if (!Arguments[2]) return false;
 				DataProfile cProfile;
 
-				cProfile.ReadProfile(m_cPlugin.GetOptionPath().c_str());
+				cProfile.ReadProfile(m_plugin.GetOptionPath().c_str());
 				cProfile.SetWritingMode();
 				wstring tmp(Arguments[2]);
 				cProfile.IOProfileData(Arguments[0], Arguments[1], tmp);
-				cProfile.WriteProfile(m_cPlugin.GetOptionPath().c_str(), (m_cPlugin.m_sName + L" プラグイン設定ファイル").c_str());
+				cProfile.WriteProfile(m_plugin.GetOptionPath().c_str(), (m_plugin.m_sName + L" プラグイン設定ファイル").c_str());
 			}
 			break;
 		case F_PL_ADDCOMMAND:			// コマンドを追加する
 			{
-				int id = m_cPlugin.AddCommand(Arguments[0], Arguments[1], Arguments[2], true);
+				int id = m_plugin.AddCommand(Arguments[0], Arguments[1], Arguments[2], true);
 				View->m_pEditWnd->RegisterPluginCommand(id);
 			}
 			break;
@@ -185,7 +185,7 @@ public:
 	// メンバ変数
 public:
 private:
-	Plugin& m_cPlugin;
+	Plugin& m_plugin;
 	static MacroFuncInfo m_MacroFuncInfoCommandArr[];	// コマンド情報(戻り値なし)
 	static MacroFuncInfo m_MacroFuncInfoArr[];	// 関数情報(戻り値あり)
 	int m_nPlugIndex;	// 実行中プラグの番号

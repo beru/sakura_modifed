@@ -4,9 +4,9 @@
 #include "CEol.h"
 
 // BOMƒf[ƒ^Žæ“¾
-void Cesu8::GetBom(Memory* pcmemBom)
+void Cesu8::GetBom(Memory* pMemBom)
 {
 	static const BYTE UTF8_BOM[] = {0xEF, 0xBB, 0xBF};
-	pcmemBom->SetRawData(UTF8_BOM, sizeof(UTF8_BOM));
+	pMemBom->SetRawData(UTF8_BOM, sizeof(UTF8_BOM));
 }
 

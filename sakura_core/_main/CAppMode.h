@@ -49,7 +49,7 @@ public:
 	void	SetDebugModeOFF();	// デバッグモニタモード解除
 
 	// イベント
-	void OnAfterSave(const SaveInfo& sSaveInfo);
+	void OnAfterSave(const SaveInfo& saveInfo);
 
 protected:
 	void _SetDebugMode(bool bDebugMode) { m_bDebugMode = bDebugMode; }

@@ -68,14 +68,14 @@ CodeConvertResult Unicode::_UnicodeToUnicode_out( const NativeW& cSrc, Memory* p
 
 
 
-void Unicode::GetBom(Memory* pcmemBom)
+void Unicode::GetBom(Memory* pMemBom)
 {
 	static const BYTE UTF16LE_BOM[] = {0xFF, 0xFE};
-	pcmemBom->SetRawData(UTF16LE_BOM, sizeof(UTF16LE_BOM));
+	pMemBom->SetRawData(UTF16LE_BOM, sizeof(UTF16LE_BOM));
 }
 
 
-void Unicode::GetEol(Memory* pcmemEol, EolType eEolType)
+void Unicode::GetEol(Memory* pMemEol, EolType eolType)
 {
 	static const struct{
 		const void* pData;
@@ -90,5 +90,5 @@ void Unicode::GetEol(Memory* pcmemEol, EolType eEolType)
 		{ L"\u2028",	1 * sizeof(wchar_t) },	// EolType::LS
 		{ L"\u2029",	1 * sizeof(wchar_t) },	// EolType::PS
 	};
-	pcmemEol->SetRawData(aEolTable[(int)eEolType].pData, aEolTable[(int)eEolType].nLen);
+	pMemEol->SetRawData(aEolTable[(int)eolType].pData, aEolTable[(int)eolType].nLen);
 }

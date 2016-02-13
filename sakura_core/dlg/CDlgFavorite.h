@@ -80,15 +80,15 @@ protected:
 	void	RightMenu(POINT&);
 
 private:
-	RecentFile			m_cRecentFile;
-	RecentFolder		m_cRecentFolder;
-	RecentExceptMRU	m_cRecentExceptMRU;
-	RecentSearch		m_cRecentSearch;
-	RecentReplace		m_cRecentReplace;
-	RecentGrepFile		m_cRecentGrepFile;
-	RecentGrepFolder	m_cRecentGrepFolder;
-	RecentCmd			m_cRecentCmd;
-	RecentCurDir		m_cRecentCurDir;
+	RecentFile			m_recentFile;
+	RecentFolder		m_recentFolder;
+	RecentExceptMRU		m_recentExceptMRU;
+	RecentSearch		m_recentSearch;
+	RecentReplace		m_recentReplace;
+	RecentGrepFile		m_recentGrepFile;
+	RecentGrepFolder	m_recentGrepFolder;
+	RecentCmd			m_recentCmd;
+	RecentCurDir		m_recentCurDir;
 
 	enum {
 		// ä«óùêî

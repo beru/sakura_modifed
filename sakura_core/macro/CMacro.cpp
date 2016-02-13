@@ -93,7 +93,7 @@ void Macro::ClearMacroParam()
 */
 void Macro::AddLParam(
 	const LPARAM* lParams,
-	const EditView* pcEditView
+	const EditView* pEditView
 	)
 {
 	int nOption = 0;
@@ -123,7 +123,7 @@ void Macro::AddLParam(
 				case F_HalfPageUp_BOX:
 				case F_HalfPageDown_BOX:
 					if (lParam == 0) {
-						AddIntParam( (Int)pcEditView->GetTextArea().m_nViewRowNum / 2 );
+						AddIntParam( (Int)pEditView->GetTextArea().m_nViewRowNum / 2 );
 					}else {
 						AddIntParam( lParam );
 					}
@@ -131,7 +131,7 @@ void Macro::AddLParam(
 				case F_1PageUp_BOX:
 				case F_1PageDown_BOX:
 					if (lParam == 0) {
-						AddIntParam( (Int)pcEditView->GetTextArea().m_nViewRowNum - 1 );
+						AddIntParam( (Int)pEditView->GetTextArea().m_nViewRowNum - 1 );
 					}else {
 						AddIntParam( lParam );
 					}
@@ -177,10 +177,10 @@ void Macro::AddLParam(
 
 	case F_JUMP:	// 指定行へジャンプ（ただしPL/SQLコンパイルエラー行へのジャンプは未対応）
 		{
-			AddIntParam(pcEditView->m_pEditWnd->m_dlgJump.m_nLineNum);
+			AddIntParam(pEditView->m_pEditWnd->m_dlgJump.m_nLineNum);
 			LPARAM lFlag = 0x00;
 			lFlag |= GetDllShareData().m_bLineNumIsCRLF_ForJump		? 0x01 : 0x00;
-			lFlag |= pcEditView->m_pEditWnd->m_dlgJump.m_bPLSQL	? 0x02 : 0x00;
+			lFlag |= pEditView->m_pEditWnd->m_dlgJump.m_bPLSQL	? 0x02 : 0x00;
 			AddIntParam(lFlag);
 		}
 		break;
@@ -189,12 +189,12 @@ void Macro::AddLParam(
 	case F_SEARCH_NEXT:
 	case F_SEARCH_PREV:
 		{
-			AddStringParam(pcEditView->m_strCurSearchKey.c_str());	// lParamを追加。
+			AddStringParam(pEditView->m_strCurSearchKey.c_str());	// lParamを追加。
 
 			LPARAM lFlag = 0x00;
-			lFlag |= pcEditView->m_curSearchOption.bWordOnly		? 0x01 : 0x00;
-			lFlag |= pcEditView->m_curSearchOption.bLoHiCase		? 0x02 : 0x00;
-			lFlag |= pcEditView->m_curSearchOption.bRegularExp		? 0x04 : 0x00;
+			lFlag |= pEditView->m_curSearchOption.bWordOnly		? 0x01 : 0x00;
+			lFlag |= pEditView->m_curSearchOption.bLoHiCase		? 0x02 : 0x00;
+			lFlag |= pEditView->m_curSearchOption.bRegularExp		? 0x04 : 0x00;
 			lFlag |= GetDllShareData().m_common.m_search.m_bNOTIFYNOTFOUND				? 0x08 : 0x00;
 			lFlag |= GetDllShareData().m_common.m_search.m_bAutoCloseDlgFind			? 0x10 : 0x00;
 			lFlag |= GetDllShareData().m_common.m_search.m_bSearchAll					? 0x20 : 0x00;
@@ -204,19 +204,19 @@ void Macro::AddLParam(
 	case F_REPLACE:
 	case F_REPLACE_ALL:
 		{
-			AddStringParam(pcEditView->m_strCurSearchKey.c_str());	// lParamを追加。
-			AddStringParam(pcEditView->m_pEditWnd->m_dlgReplace.m_strText2.c_str());	// lParamを追加。
+			AddStringParam(pEditView->m_strCurSearchKey.c_str());	// lParamを追加。
+			AddStringParam(pEditView->m_pEditWnd->m_dlgReplace.m_strText2.c_str());	// lParamを追加。
 
 			LPARAM lFlag = 0x00;
-			lFlag |= pcEditView->m_curSearchOption.bWordOnly		? 0x01 : 0x00;
-			lFlag |= pcEditView->m_curSearchOption.bLoHiCase		? 0x02 : 0x00;
-			lFlag |= pcEditView->m_curSearchOption.bRegularExp	? 0x04 : 0x00;
+			lFlag |= pEditView->m_curSearchOption.bWordOnly		? 0x01 : 0x00;
+			lFlag |= pEditView->m_curSearchOption.bLoHiCase		? 0x02 : 0x00;
+			lFlag |= pEditView->m_curSearchOption.bRegularExp	? 0x04 : 0x00;
 			lFlag |= GetDllShareData().m_common.m_search.m_bNOTIFYNOTFOUND				? 0x08 : 0x00;
 			lFlag |= GetDllShareData().m_common.m_search.m_bAutoCloseDlgFind			? 0x10 : 0x00;
 			lFlag |= GetDllShareData().m_common.m_search.m_bSearchAll					? 0x20 : 0x00;
-			lFlag |= pcEditView->m_pEditWnd->m_dlgReplace.m_bPaste					? 0x40 : 0x00;	// CShareDataに入れなくていいの？
+			lFlag |= pEditView->m_pEditWnd->m_dlgReplace.m_bPaste					? 0x40 : 0x00;	// CShareDataに入れなくていいの？
 			lFlag |= GetDllShareData().m_common.m_search.m_bSelectedArea				? 0x80 : 0x00;	// 置換する時は選べない
-			lFlag |= pcEditView->m_pEditWnd->m_dlgReplace.m_nReplaceTarget << 8;	// 8bitシフト（0x100で掛け算）
+			lFlag |= pEditView->m_pEditWnd->m_dlgReplace.m_nReplaceTarget << 8;	// 8bitシフト（0x100で掛け算）
 			lFlag |= GetDllShareData().m_common.m_search.m_bConsecutiveAll				? 0x0400: 0x00;	// 2007.01.16 ryoji
 			AddIntParam(lFlag);
 		}
@@ -224,16 +224,16 @@ void Macro::AddLParam(
 	case F_GREP_REPLACE:
 	case F_GREP:
 		{
-			DlgGrep* pcDlgGrep;
-			DlgGrepReplace* pcDlgGrepRep;
+			DlgGrep* pDlgGrep;
+			DlgGrepReplace* pDlgGrepRep;
 			if (F_GREP == m_nFuncID) {
-				pcDlgGrep = &pcEditView->m_pEditWnd->m_dlgGrep;
-				pcDlgGrepRep = NULL;
-				AddStringParam( pcDlgGrep->m_strText.c_str() );
+				pDlgGrep = &pEditView->m_pEditWnd->m_dlgGrep;
+				pDlgGrepRep = NULL;
+				AddStringParam( pDlgGrep->m_strText.c_str() );
 			}else {
-				pcDlgGrep = pcDlgGrepRep = &pcEditView->m_pEditWnd->m_dlgGrepReplace;
-				AddStringParam( pcDlgGrep->m_strText.c_str() );
-				AddStringParam( pcEditView->m_pEditWnd->m_dlgGrepReplace.m_strText2.c_str() );
+				pDlgGrep = pDlgGrepRep = &pEditView->m_pEditWnd->m_dlgGrepReplace;
+				AddStringParam( pDlgGrep->m_strText.c_str() );
+				AddStringParam( pEditView->m_pEditWnd->m_dlgGrepReplace.m_strText2.c_str() );
 			}
 			AddStringParam(GetDllShareData().m_searchKeywords.m_aGrepFiles[0]);	// lParamを追加。
 			AddStringParam(GetDllShareData().m_searchKeywords.m_aGrepFolders[0]);	// lParamを追加。
@@ -241,8 +241,8 @@ void Macro::AddLParam(
 			LPARAM lFlag = 0x00;
 			lFlag |= GetDllShareData().m_common.m_search.m_bGrepSubFolder				? 0x01 : 0x00;
 			// この編集中のテキストから検索する(0x02.未実装)
-			lFlag |= pcDlgGrep->m_searchOption.bLoHiCase		? 0x04 : 0x00;
-			lFlag |= pcDlgGrep->m_searchOption.bRegularExp	? 0x08 : 0x00;
+			lFlag |= pDlgGrep->m_searchOption.bLoHiCase		? 0x04 : 0x00;
+			lFlag |= pDlgGrep->m_searchOption.bRegularExp	? 0x08 : 0x00;
 			lFlag |= (GetDllShareData().m_common.m_search.m_nGrepCharSet == CODE_AUTODETECT) ? 0x10 : 0x00;	// 2002/09/21 Moca 下位互換性のための処理
 			lFlag |= GetDllShareData().m_common.m_search.m_nGrepOutputLineType == 1	? 0x20 : 0x00;
 			lFlag |= GetDllShareData().m_common.m_search.m_nGrepOutputLineType == 2	? 0x400000 : 0x00;	// 2014.09.23 否ヒット行
@@ -252,12 +252,12 @@ void Macro::AddLParam(
 			if (IsValidCodeType(code) || CODE_AUTODETECT == code) {
 				lFlag |= code << 8;
 			}
-			lFlag |= pcDlgGrep->m_searchOption.bWordOnly								? 0x10000 : 0x00;
+			lFlag |= pDlgGrep->m_searchOption.bWordOnly								? 0x10000 : 0x00;
 			lFlag |= GetDllShareData().m_common.m_search.m_bGrepOutputFileOnly			? 0x20000 : 0x00;
 			lFlag |= GetDllShareData().m_common.m_search.m_bGrepOutputBaseFolder		? 0x40000 : 0x00;
 			lFlag |= GetDllShareData().m_common.m_search.m_bGrepSeparateFolder			? 0x80000 : 0x00;
 			if (F_GREP_REPLACE == m_nFuncID) {
-				lFlag |= pcDlgGrepRep->m_bPaste											? 0x100000 : 0x00;
+				lFlag |= pDlgGrepRep->m_bPaste											? 0x100000 : 0x00;
 				lFlag |= GetDllShareData().m_common.m_search.m_bGrepBackup				? 0x200000 : 0x00;
 			}
 			AddIntParam(lFlag);
@@ -299,7 +299,7 @@ void Macro::AddLParam(
 	case F_HalfPageDown:
 	case F_HalfPageDown_Sel:
 		if (lParam == 0) {
-			AddIntParam( (Int)pcEditView->GetTextArea().m_nViewRowNum / 2 );
+			AddIntParam( (Int)pEditView->GetTextArea().m_nViewRowNum / 2 );
 		}else {
 			AddIntParam( lParam );
 		}
@@ -309,7 +309,7 @@ void Macro::AddLParam(
 	case F_1PageDown:
 	case F_1PageDown_Sel:
 		if (lParam == 0) {
-			AddIntParam( (Int)pcEditView->GetTextArea().m_nViewRowNum - 1 );
+			AddIntParam( (Int)pEditView->GetTextArea().m_nViewRowNum - 1 );
 		}else {
 			AddIntParam( lParam );
 		}
@@ -381,7 +381,7 @@ void Macro::AddIntParam(const int nParam)
 	}
 }
 
-/**	コマンドを実行する（pcEditView->GetCommander().HandleCommandを発行する）
+/**	コマンドを実行する（pEditView->GetCommander().HandleCommandを発行する）
 	m_nFuncIDによって、引数の型を正確に渡してあげましょう。
 	
 	@note
@@ -390,12 +390,12 @@ void Macro::AddIntParam(const int nParam)
 	引数がintのときは、*((int*)paramArr[i])として渡しましょう。
 	
 	たとえば、F_INSTEXT_Wの1つめ、2つめの引数は文字列、3つめの引数はint、4つめの引数が無し。だったりする場合は、次のようにしましょう。
-	pcEditView->GetCommander().HandleCommand(m_nFuncID, true, paramArr[0], paramArr[1], *((int*)paramArr[2]), 0);
+	pEditView->GetCommander().HandleCommand(m_nFuncID, true, paramArr[0], paramArr[1], *((int*)paramArr[2]), 0);
 	
 	@date 2007.07.20 genta : flags追加．FA_FROMMACROはflagsに含めて渡すものとする．
 		(1コマンド発行毎に毎回演算する必要はないので)
 */
-bool Macro::Exec(EditView* pcEditView, int flags) const
+bool Macro::Exec(EditView* pEditView, int flags) const
 {
 	const int maxArg = 8;
 	const WCHAR* paramArr[maxArg] = {NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
@@ -409,7 +409,7 @@ bool Macro::Exec(EditView* pcEditView, int flags) const
 		paramLenArr[i] = wcslen(paramArr[i]);
 		p = p->m_pNext;
 	}
-	return Macro::HandleCommand(pcEditView, (EFunctionCode)(m_nFuncID | flags), paramArr, paramLenArr, i);
+	return Macro::HandleCommand(pEditView, (EFunctionCode)(m_nFuncID | flags), paramArr, paramLenArr, i);
 }
 
 WCHAR* Macro::GetParamAt(MacroParam* p, int index)
@@ -530,10 +530,10 @@ void Macro::Save(HINSTANCE hInstance, TextOutputStream& out) const
 
 /**	マクロ引数変換
 
-	MacroコマンドをpcEditView->GetCommander().HandleCommandに引き渡す．
+	MacroコマンドをpEditView->GetCommander().HandleCommandに引き渡す．
 	引数がないマクロを除き，マクロとHandleCommandでの対応をここで定義する必要がある．
 
-	@param pcEditView	[in]	操作対象EditView
+	@param pEditView	[in]	操作対象EditView
 	@param Index	[in] 下位16bit: 機能ID, 上位ワードはそのままMacro::HandleCommand()に渡す．
 	@param Argument [in] 引数
 	@param ArgSize	[in] 引数の数
@@ -1105,22 +1105,22 @@ bool Macro::HandleCommand(
 			}
 
 			// -GREPMODE -GKEY="1" -GFILE="*.*;*.c;*.h" -GFOLDER="c:\" -GCODE=0 -GOPT=S
-			CNativeT cCmdLine;
+			CNativeT cmdLine;
 			TCHAR	szTemp[20];
 			TCHAR	pOpt[64];
-			cCmdLine.AppendString(_T("-GREPMODE -GKEY=\""));
-			cCmdLine.AppendStringW(cmWork1.GetStringPtr());
+			cmdLine.AppendString(_T("-GREPMODE -GKEY=\""));
+			cmdLine.AppendStringW(cmWork1.GetStringPtr());
 			if (bGrepReplace) {
-				cCmdLine.AppendString(_T("\" -GREPR=\""));
-				cCmdLine.AppendStringW(cmWork4.GetStringPtr());
+				cmdLine.AppendString(_T("\" -GREPR=\""));
+				cmdLine.AppendStringW(cmWork4.GetStringPtr());
 			}
-			cCmdLine.AppendString(_T("\" -GFILE=\""));
-			cCmdLine.AppendString(cmWork2.GetStringPtr());
-			cCmdLine.AppendString(_T("\" -GFOLDER=\""));
-			cCmdLine.AppendString(cmWork3.GetStringPtr());
-			cCmdLine.AppendString(_T("\" -GCODE="));
+			cmdLine.AppendString(_T("\" -GFILE=\""));
+			cmdLine.AppendString(cmWork2.GetStringPtr());
+			cmdLine.AppendString(_T("\" -GFOLDER=\""));
+			cmdLine.AppendString(cmWork3.GetStringPtr());
+			cmdLine.AppendString(_T("\" -GCODE="));
 			auto_sprintf( szTemp, _T("%d"), nCharSet );
-			cCmdLine.AppendString(szTemp);
+			cmdLine.AppendString(szTemp);
 
 			// GOPTオプション
 			pOpt[0] = '\0';
@@ -1142,7 +1142,7 @@ bool Macro::HandleCommand(
 			}
 			if (pOpt[0] != _T('\0')) {
 				auto_sprintf( szTemp, _T(" -GOPT=%ts"), pOpt );
-				cCmdLine.AppendString(szTemp);
+				cmdLine.AppendString(szTemp);
 			}
 
 			// 新規編集ウィンドウの追加 ver 0
@@ -1154,7 +1154,7 @@ bool Macro::HandleCommand(
 				G_AppInstance(),
 				pcEditView->GetHwnd(),
 				sLoadInfo,
-				cCmdLine.GetStringPtr()
+				cmdLine.GetStringPtr()
 			);
 			// ======= Grepの実行 =============
 			// Grep結果ウィンドウの表示
@@ -1397,8 +1397,8 @@ bool Macro::HandleCommand(
 		break;
 	case F_CLIPBOARDEMPTY:
 		{
-			Clipboard cClipboard(pcEditView->GetHwnd());
-			cClipboard.Empty();
+			Clipboard clipboard(pcEditView->GetHwnd());
+			clipboard.Empty();
 		}
 		break;
 	case F_SETVIEWTOP:
@@ -1591,7 +1591,7 @@ bool Macro::HandleFunction(
 				);
 
 				// 2009.08.28 nasukoji	「折り返さない」選択時にTAB幅が変更されたらテキスト最大幅の再算出が必要
-				if (view->m_pEditDoc->m_nTextWrapMethodCur == (int)TextWrappingMethod::NoWrapping) {
+				if (view->m_pEditDoc->m_nTextWrapMethodCur == TextWrappingMethod::NoWrapping) {
 					// 最大幅の再算出時に各行のレイアウト長の計算も行う
 					view->m_pEditDoc->m_layoutMgr.CalculateTextWidth();
 				}
@@ -1616,25 +1616,25 @@ bool Macro::HandleFunction(
 	case F_GETSELLINEFROM:
 		// 2005.07.30 maru マクロ追加
 		{
-			Wrap(&result)->Receive((Int)view->GetSelectionInfo().m_sSelect.GetFrom().y + 1);
+			Wrap(&result)->Receive((Int)view->GetSelectionInfo().m_select.GetFrom().y + 1);
 		}
 		return true;
 	case F_GETSELCOLUMNFROM:
 		// 2005.07.30 maru マクロ追加
 		{
-			Wrap(&result)->Receive((Int)view->GetSelectionInfo().m_sSelect.GetFrom().x + 1);
+			Wrap(&result)->Receive((Int)view->GetSelectionInfo().m_select.GetFrom().x + 1);
 		}
 		return true;
 	case F_GETSELLINETO:
 		// 2005.07.30 maru マクロ追加
 		{
-			Wrap(&result)->Receive((Int)view->GetSelectionInfo().m_sSelect.GetTo().y + 1);
+			Wrap(&result)->Receive((Int)view->GetSelectionInfo().m_select.GetTo().y + 1);
 		}
 		return true;
 	case F_GETSELCOLUMNTO:
 		// 2005.07.30 maru マクロ追加
 		{
-			Wrap(&result)->Receive((Int)view->GetSelectionInfo().m_sSelect.GetTo().x + 1);
+			Wrap(&result)->Receive((Int)view->GetSelectionInfo().m_select.GetTo().x + 1);
 		}
 		return true;
 	case F_ISINSMODE:
@@ -1701,7 +1701,7 @@ bool Macro::HandleFunction(
 			if (varCopy.data.iVal < MINLINEKETAS || varCopy.data.iVal > MAXLINEKETAS) {
 				return true;
 			}
-			view->m_pEditDoc->m_nTextWrapMethodCur = (int)TextWrappingMethod::SettingWidth;
+			view->m_pEditDoc->m_nTextWrapMethodCur = TextWrappingMethod::SettingWidth;
 			view->m_pEditDoc->m_bTextWrapMethodCurTemp = !(view->m_pEditDoc->m_nTextWrapMethodCur == view->m_pEditDoc->m_docType.GetDocumentAttribute().m_nTextWrapMethod);
 			view->m_pEditWnd->ChangeLayoutParam(
 				false, 
@@ -1898,7 +1898,7 @@ bool Macro::HandleFunction(
 			if (VariantChangeType(&varCopy.data, const_cast<VARIANTARG*>(&(args[0])), 0, VT_UI4) != S_OK) {
 				return false;	// VT_UI4として解釈
 			}
-			WaitCursor cWaitCursor(view->GetHwnd());	// カーソルを砂時計にする
+			WaitCursor waitCursor(view->GetHwnd());	// カーソルを砂時計にする
 			::Sleep(varCopy.data.uintVal);
 			Wrap(&result)->Receive(0);	// 戻り値は今のところ0固定
 		}
@@ -2055,9 +2055,9 @@ bool Macro::HandleFunction(
 			if (view->m_pEditDoc->m_layoutMgr.GetLineCount() == nLineNum) {
 				ret = (Int)view->m_pEditDoc->m_docLineMgr.GetLineCount() + 1;
 			}else {
-				const Layout* pcLayout = view->m_pEditDoc->m_layoutMgr.SearchLineByLayoutY(nLineNum);
-				if (pcLayout) {
-					ret = pcLayout->GetLogicLineNo() + 1;
+				const Layout* pLayout = view->m_pEditDoc->m_layoutMgr.SearchLineByLayoutY(nLineNum);
+				if (pLayout) {
+					ret = pLayout->GetLogicLineNo() + 1;
 				}else {
 					return false;
 				}
@@ -2286,8 +2286,8 @@ bool Macro::HandleFunction(
 		{
 			if (1 <= numArgs) {
 				if (!VariantToBStr(varCopy, args[0])) return false;
-				Clipboard cClipboard(view->GetHwnd());
-				bool bret = cClipboard.IsIncludeClipboradFormat(varCopy.data.bstrVal);
+				Clipboard clipboard(view->GetHwnd());
+				bool bret = clipboard.IsIncludeClipboradFormat(varCopy.data.bstrVal);
 				Wrap(&result)->Receive(bret ? 1 : 0);
 				return true;
 			}
@@ -2304,10 +2304,10 @@ bool Macro::HandleFunction(
 				}else {
 					varCopy3.data.lVal = -1;
 				}
-				Clipboard cClipboard(view->GetHwnd());
+				Clipboard clipboard(view->GetHwnd());
 				NativeW mem;
 				Eol cEol = view->m_pEditDoc->m_docEditor.GetNewLineCode();
-				cClipboard.GetClipboradByFormat(mem, varCopy.data.bstrVal, varCopy2.data.lVal, varCopy3.data.lVal, cEol);
+				clipboard.GetClipboradByFormat(mem, varCopy.data.bstrVal, varCopy2.data.lVal, varCopy3.data.lVal, cEol);
 				SysString ret = SysString(mem.GetStringPtr(), mem.GetStringLength());
 				Wrap(&result)->Receive(ret);
 				return true;
@@ -2326,9 +2326,9 @@ bool Macro::HandleFunction(
 				}else {
 					varCopy4.data.lVal = -1;
 				}
-				Clipboard cClipboard(view->GetHwnd());
+				Clipboard clipboard(view->GetHwnd());
 				StringRef cstr(varCopy.data.bstrVal, ::SysStringLen(varCopy.data.bstrVal));
-				bool bret = cClipboard.SetClipboradByFormat(cstr, varCopy2.data.bstrVal, varCopy3.data.lVal, varCopy4.data.lVal);
+				bool bret = clipboard.SetClipboradByFormat(cstr, varCopy2.data.bstrVal, varCopy3.data.lVal, varCopy4.data.lVal);
 				Wrap(&result)->Receive(bret ? 1 : 0);
 				return true;
 			}

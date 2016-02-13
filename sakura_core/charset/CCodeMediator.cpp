@@ -54,26 +54,26 @@ ECodeType CodeMediator::DetectUnicodeBom(const char* pS, const int nLen)
 
 	@note 適切な検出が行われた場合は、m_dwStatus に CESI_MB_DETECTED フラグが格納される。
 */
-ECodeType CodeMediator::DetectMBCode(ESI* pcesi)
+ECodeType CodeMediator::DetectMBCode(ESI* pEsi)
 {
-//	pcesi->m_dwStatus = ESI_NOINFORMATION;
+//	pEsi->m_dwStatus = ESI_NOINFORMATION;
 
-	if (pcesi->GetDataLen() < (pcesi->m_apMbcInfo[0]->nSpecific - pcesi->m_apMbcInfo[0]->nPoints) * 2000) {
+	if (pEsi->GetDataLen() < (pEsi->m_apMbcInfo[0]->nSpecific - pEsi->m_apMbcInfo[0]->nPoints) * 2000) {
 		// 不正バイトの割合が、全体の 0.05% 未満であることを確認。
 		// 全体の0.05%ほどの不正バイトは、無視する。
-		pcesi->SetStatus(ESI_NODETECTED);
+		pEsi->SetStatus(ESI_NODETECTED);
 		return CODE_NONE;
 	}
-	if (pcesi->m_apMbcInfo[0]->nPoints <= 0) {
-		pcesi->SetStatus(ESI_NODETECTED);
+	if (pEsi->m_apMbcInfo[0]->nPoints <= 0) {
+		pEsi->SetStatus(ESI_NODETECTED);
 		return CODE_NONE;
 	}
 
 	/*
 		判定状況を確認
 	*/
-	pcesi->SetStatus(ESI_MBC_DETECTED);
-	return pcesi->m_apMbcInfo[0]->eCodeID;
+	pEsi->SetStatus(ESI_MBC_DETECTED);
+	return pEsi->m_apMbcInfo[0]->eCodeID;
 }
 
 
@@ -85,58 +85,58 @@ ECodeType CodeMediator::DetectMBCode(ESI* pcesi)
 	@retval 0               UTF-16 LE/BE ともに検出されなかった
 
 */
-ECodeType CodeMediator::DetectUnicode(ESI* pcesi)
+ECodeType CodeMediator::DetectUnicode(ESI* pEsi)
 {
-//	pcesi->m_dwStatus = ESI_NOINFORMATION;
+//	pEsi->m_dwStatus = ESI_NOINFORMATION;
 
-	BOMType ebom_type = pcesi->GetBOMType();
-	if (ebom_type == BOMType::Unknown) {
-		pcesi->SetStatus(ESI_NODETECTED);
+	BOMType bomType = pEsi->GetBOMType();
+	if (bomType == BOMType::Unknown) {
+		pEsi->SetStatus(ESI_NODETECTED);
 		return CODE_NONE;
 	}
 
 	// 1行の平均桁数が200を超えている場合はUnicode未検出とする
-	int ndatalen = pcesi->GetDataLen();
-	int nlinebreak = pcesi->m_aWcInfo[(int)ebom_type].nSpecific;  // 改行数を nlinebreakに取得
-	if (static_cast<double>(ndatalen) / nlinebreak > 200) {
-		pcesi->SetStatus(ESI_NODETECTED);
+	int nDataLen = pEsi->GetDataLen();
+	int nLineBreak = pEsi->m_aWcInfo[(int)bomType].nSpecific;  // 改行数を nLineBreakに取得
+	if (static_cast<double>(nDataLen) / nLineBreak > 200) {
+		pEsi->SetStatus(ESI_NODETECTED);
 		return CODE_NONE;
 	}
 
-	pcesi->SetStatus(ESI_WC_DETECTED);
-	return pcesi->m_aWcInfo[(int)ebom_type].eCodeID;
+	pEsi->SetStatus(ESI_WC_DETECTED);
+	return pEsi->m_aWcInfo[(int)bomType].eCodeID;
 }
 
 
 /*
 	日本語コードセット判定
 */
-ECodeType CodeMediator::CheckKanjiCode(ESI* pcesi)
+ECodeType CodeMediator::CheckKanjiCode(ESI* pEsi)
 {
 	/*
 		判定状況は、
 		DetectMBCode(), DetectUnicode() 内で
-		cesi.m_dwStatus に記録する。
+		esi.m_dwStatus に記録する。
 	*/
 
-	if (!pcesi) {
+	if (!pEsi) {
 		return CODE_DEFAULT;
 	}
-	if (pcesi->GetMetaName() != CODE_NONE) {
-		return pcesi->GetMetaName();
+	if (pEsi->GetMetaName() != CODE_NONE) {
+		return pEsi->GetMetaName();
 	}
 	ECodeType nret;
-	nret = DetectUnicode( pcesi );
-	if (nret != CODE_NONE && pcesi->GetStatus() != ESI_NODETECTED) {
+	nret = DetectUnicode( pEsi );
+	if (nret != CODE_NONE && pEsi->GetStatus() != ESI_NODETECTED) {
 		return nret;
 	}
-	nret = DetectMBCode(pcesi);
-	if (nret != CODE_NONE && pcesi->GetStatus() != ESI_NODETECTED) {
+	nret = DetectMBCode(pEsi);
+	if (nret != CODE_NONE && pEsi->GetStatus() != ESI_NODETECTED) {
 		return nret;
 	}
 
 	// デフォルト文字コードを返す
-	return pcesi->m_pEncodingConfig->m_eDefaultCodetype;
+	return pEsi->m_pEncodingConfig->m_eDefaultCodetype;
 }
 
 
@@ -154,16 +154,16 @@ ECodeType CodeMediator::CheckKanjiCode(ESI* pcesi)
 */
 ECodeType CodeMediator::CheckKanjiCode(const char* pBuf, int nBufLen)
 {
-	ESI cesi(*m_pEncodingConfig);
+	ESI esi(*m_pEncodingConfig);
 
 	/*
 		判定状況は、
 		DetectMBCode(), DetectUnicode() 内で
-		cesi.m_dwStatus に記録する。
+		esi.m_dwStatus に記録する。
 	*/
 
-	cesi.SetInformation(pBuf, nBufLen/*, CODE_SJIS*/);
-	return CheckKanjiCode(&cesi);
+	esi.SetInformation(pBuf, nBufLen/*, CODE_SJIS*/);
+	return CheckKanjiCode(&esi);
 }
 
 
@@ -201,9 +201,9 @@ ECodeType CodeMediator::CheckKanjiCodeOfFile(const TCHAR* pszFile)
 	}
 
 	// データ確保
-	Memory cMem;
-	cMem.AllocBuffer(nBufLen);
-	void* pBuf = cMem.GetRawPtr();
+	Memory mem;
+	mem.AllocBuffer(nBufLen);
+	void* pBuf = mem.GetRawPtr();
 
 	// 読み込み
 	nBufLen = in.Read(pBuf, nBufLen);

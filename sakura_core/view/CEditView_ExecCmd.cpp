@@ -149,7 +149,7 @@ bool EditView::ExecCmd( const TCHAR* pszCmd, int nFlgOpt, const TCHAR* pszCurDir
 	LayoutPoint ptFrom(0, 0);
 	bool bBeforeTextSelected = GetSelectionInfo().IsTextSelected();
 	if (bBeforeTextSelected) {
-		ptFrom = this->GetSelectionInfo().m_sSelect.GetFrom();
+		ptFrom = this->GetSelectionInfo().m_select.GetFrom();
 	}
 
 	// 子プロセスの標準出力と接続するパイプを作成

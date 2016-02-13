@@ -37,8 +37,8 @@ LRESULT APIENTRY HokanList_SubclassProc(
 	)
 {
 	// Modified by KEITA for WIN64 2003.9.6
-	Dialog* pCDialog = (Dialog*)::GetWindowLongPtr(::GetParent(hwnd), DWLP_USER);
-	HokanMgr* pCHokanMgr = (HokanMgr*)::GetWindowLongPtr(::GetParent(hwnd), DWLP_USER);
+	Dialog* pDialog = (Dialog*)::GetWindowLongPtr(::GetParent(hwnd), DWLP_USER);
+	HokanMgr* pHokanMgr = (HokanMgr*)::GetWindowLongPtr(::GetParent(hwnd), DWLP_USER);
 	MSG* pMsg;
 	int nVKey;
 
@@ -59,9 +59,9 @@ LRESULT APIENTRY HokanList_SubclassProc(
 			}
 		}
 		// 補完実行キーなら補完する
-		if (pCHokanMgr->KeyProc(wParam, lParam) != -1) {
+		if (pHokanMgr->KeyProc(wParam, lParam) != -1) {
 			// キーストロークを親に転送
-			return ::PostMessage(::GetParent(::GetParent(pCDialog->m_hwndParent)), uMsg, wParam, lParam);
+			return ::PostMessage(::GetParent(::GetParent(pDialog->m_hwndParent)), uMsg, wParam, lParam);
 		}
 		break;
 	case WM_GETDLGCODE:
@@ -119,8 +119,8 @@ void HokanMgr::Hide(void)
 	::ShowWindow(GetHwnd(), SW_HIDE);
 	m_nCurKouhoIdx = -1;
 	// 入力フォーカスを受け取ったときの処理
-	EditView* pcEditView = reinterpret_cast<EditView*>(m_lParam);
-	pcEditView->OnSetFocus();
+	EditView* pEditView = reinterpret_cast<EditView*>(m_lParam);
+	pEditView->OnSetFocus();
 	return;
 
 }
@@ -144,7 +144,7 @@ int HokanMgr::Search(
 	NativeW*		pcmemHokanWord	// 2001/06/19 asa-o
 )
 {
-	EditView* pcEditView = reinterpret_cast<EditView*>(m_lParam);
+	EditView* pEditView = reinterpret_cast<EditView*>(m_lParam);
 
 	// 共有データ構造体のアドレスを返す
 	m_pShareData = &GetDllShareData();
@@ -168,7 +168,7 @@ int HokanMgr::Search(
 
 	// 2003.05.16 Moca 追加 編集中データ内から候補を探す
 	if (bHokanByFile) {
-		pcEditView->HokanSearchByFile(
+		pEditView->HokanSearchByFile(
 			pszCurWord,
 			bHokanLoHiCase,
 			m_vKouho,
@@ -208,7 +208,7 @@ int HokanMgr::Search(
 			objComp->AddRef();
 			params.push_back(objComp);
 			// プラグイン呼び出し
-			(*it)->Invoke(pcEditView, params);
+			(*it)->Invoke(pEditView, params);
 
 			objComp->Release();
 		}
@@ -345,8 +345,8 @@ void HokanMgr::HokanSearchByKeyword(
 	bool 			bHokanLoHiCase,
 	vector_ex<std::wstring>& 	vKouho
 ) {
-	const EditView* pcEditView = reinterpret_cast<const EditView*>(m_lParam);
-	const TypeConfig& type = pcEditView->GetDocument()->m_docType.GetDocumentAttribute();
+	const EditView* pEditView = reinterpret_cast<const EditView*>(m_lParam);
+	const TypeConfig& type = pEditView->GetDocument()->m_docType.GetDocumentAttribute();
 	KeyWordSetMgr& keywordMgr = m_pShareData->m_common.m_specialKeyword.m_CKeyWordSetMgr;
 	const int nKeyLen = wcslen(pszCurWord);
 	for (int n=0; n<MAX_KEYWORDSET_PER_TYPE; ++n) {
@@ -523,13 +523,13 @@ BOOL HokanMgr::DoHokan(int nVKey)
 	List_GetText( hwndList, nItem, &wszLabel[0] );
 
  	// テキストを貼り付け
-	EditView* pcEditView = reinterpret_cast<EditView*>(m_lParam);
+	EditView* pEditView = reinterpret_cast<EditView*>(m_lParam);
 	//	Apr. 28, 2000 genta
-	pcEditView->GetCommander().HandleCommand(F_WordDeleteToStart, false, 0, 0, 0, 0);
-	pcEditView->GetCommander().HandleCommand( F_INSTEXT_W, true, (LPARAM)&wszLabel[0], wcslen(&wszLabel[0]), TRUE, 0 );
+	pEditView->GetCommander().HandleCommand(F_WordDeleteToStart, false, 0, 0, 0, 0);
+	pEditView->GetCommander().HandleCommand( F_INSTEXT_W, true, (LPARAM)&wszLabel[0], wcslen(&wszLabel[0]), TRUE, 0 );
 
 	// Until here
-//	pcEditView->GetCommander().HandleCommand(F_INSTEXT_W, true, (LPARAM)(wszLabel + m_cmemCurWord.GetLength()), TRUE, 0, 0);
+//	pEditView->GetCommander().HandleCommand(F_INSTEXT_W, true, (LPARAM)(wszLabel + m_cmemCurWord.GetLength()), TRUE, 0, 0);
 	Hide();
 
 	m_pShareData->m_common.m_helper.m_bUseHokan = FALSE;	//	補完したら
@@ -626,12 +626,12 @@ void HokanMgr::ShowTip()
 	auto_array_ptr<WCHAR> szLabel( new WCHAR [nLabelLen + 1] );
 	List_GetText( hwndCtrl, nItem, &szLabel[0] );	// 選択中の単語を取得
 
-	EditView* pcEditView = reinterpret_cast<EditView*>(m_lParam);
+	EditView* pEditView = reinterpret_cast<EditView*>(m_lParam);
 	// すでに辞書Tipが表示されていたら
-	if (pcEditView->m_dwTipTimer == 0) {
+	if (pEditView->m_dwTipTimer == 0) {
 		// 辞書Tipを消す
-		pcEditView -> m_tipWnd.Hide();
-		pcEditView -> m_dwTipTimer = ::GetTickCount();
+		pEditView -> m_tipWnd.Hide();
+		pEditView -> m_dwTipTimer = ::GetTickCount();
 	}
 
 	// 表示する位置を決定
@@ -644,8 +644,8 @@ void HokanMgr::ShowTip()
 	if (point.y > m_poWin.y && point.y < m_poWin.y + m_nHeight) {
 		RECT rcHokanWin;
 		::SetRect(&rcHokanWin , m_poWin.x, m_poWin.y, m_poWin.x + m_nWidth, m_poWin.y + m_nHeight);
-		if (!pcEditView -> ShowKeywordHelp( point, &szLabel[0], &rcHokanWin )) {
-			pcEditView -> m_dwTipTimer = ::GetTickCount();	// 表示するべきキーワードヘルプが無い
+		if (!pEditView -> ShowKeywordHelp( point, &szLabel[0], &rcHokanWin )) {
+			pEditView -> m_dwTipTimer = ::GetTickCount();	// 表示するべきキーワードヘルプが無い
 		}
 	}
 }

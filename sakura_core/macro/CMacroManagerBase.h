@@ -37,8 +37,8 @@ class MacroBeforeAfter {
 public:
 	MacroBeforeAfter() : m_nOpeBlkCount(0), m_bDrawSwitchOld(true) {};
 	virtual ~MacroBeforeAfter() {};
-	virtual void ExecKeyMacroBefore(class EditView* pcEditView, int flags);
-	virtual void ExecKeyMacroAfter(class EditView* pcEditView, int flags, bool bRet);
+	virtual void ExecKeyMacroBefore(class EditView* pEditView, int flags);
+	virtual void ExecKeyMacroAfter(class EditView* pEditView, int flags, bool bRet);
 private:
 	int m_nOpeBlkCount;
 	bool m_bDrawSwitchOld;
@@ -58,8 +58,8 @@ public:
 		
 		@date 2007.07.20 genta マクロ実行属性を渡すためにflagsを追加
 	*/
-	virtual bool ExecKeyMacro(class EditView* pcEditView, int flags) const = 0;
-	virtual void ExecKeyMacro2(class EditView* pcEditView, int flags);
+	virtual bool ExecKeyMacro(class EditView* pEditView, int flags) const = 0;
+	virtual void ExecKeyMacro2(class EditView* pEditView, int flags);
 	
 	/*! キーボードマクロをファイルから読み込む
 

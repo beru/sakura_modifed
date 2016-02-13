@@ -31,7 +31,7 @@ public:
 	Converter_Trim(bool bLeft, bool bExtEol) : m_bLeft(bLeft), m_bExtEol(bExtEol) { }
 
 public:
-	bool DoConvert(NativeW* pcData);
+	bool DoConvert(NativeW* pData);
 
 private:
 	bool m_bLeft;

@@ -46,8 +46,8 @@ public:
 	~MRUFolder();
 
 	// メニューを取得する
-	HMENU CreateMenu(MenuDrawer* pCMenuDrawer) const;	// うーん。pCMenuDrawerが必要なくなるといいなぁ。
-	HMENU CreateMenu(HMENU hMenu, MenuDrawer* pCMenuDrawer) const;	// 2010/5/21 Uchi
+	HMENU CreateMenu(MenuDrawer* pMenuDrawer) const;	// うーん。pMenuDrawerが必要なくなるといいなぁ。
+	HMENU CreateMenu(HMENU hMenu, MenuDrawer* pMenuDrawer) const;	// 2010/5/21 Uchi
 	BOOL DestroyMenu(HMENU hMenu) const;
 	
 	// フォルダ名の一覧を教えて
@@ -55,7 +55,7 @@ public:
 
 	// アクセス関数
 	int Length() const;	// アイテムの数。
-	int MenuLength(void) const { return t_min(Length(), m_cRecentFolder.GetViewCount()); }	// メニューに表示されるアイテムの数
+	int MenuLength(void) const { return t_min(Length(), m_recentFolder.GetViewCount()); }	// メニューに表示されるアイテムの数
 	void ClearAll();					// アイテムを削除～。
 	void Add(const TCHAR* pszFolder);	// pszFolderを追加する。
 	const TCHAR* GetPath(int num) const;
@@ -65,6 +65,6 @@ protected:
 	struct DLLSHAREDATA* m_pShareData;			// 共有メモリを参照するよ。
 
 private:
-	RecentFolder m_cRecentFolder;	// 履歴	//@@@ 2003.04.08 MIK
+	RecentFolder m_recentFolder;	// 履歴	//@@@ 2003.04.08 MIK
 };
 

@@ -92,9 +92,9 @@ TypeConfigNum DocTypeManager::GetDocumentTypeOfId(int id)
 	return TypeConfigNum(-1);	// ƒnƒYƒŒ
 }
 
-bool DocTypeManager::GetTypeConfig(TypeConfigNum cDocumentType, TypeConfig& type)
+bool DocTypeManager::GetTypeConfig(TypeConfigNum documentType, TypeConfig& type)
 {
-	int n = cDocumentType.GetIndex();
+	int n = documentType.GetIndex();
 	if (0 <= n && n < m_pShareData->m_nTypesCount) {
 		if (n == 0) {
 			type = m_pShareData->m_TypeBasis;
@@ -110,9 +110,9 @@ bool DocTypeManager::GetTypeConfig(TypeConfigNum cDocumentType, TypeConfig& type
 	return false;
 }
 
-bool DocTypeManager::SetTypeConfig(TypeConfigNum cDocumentType, const TypeConfig& type)
+bool DocTypeManager::SetTypeConfig(TypeConfigNum documentType, const TypeConfig& type)
 {
-	int n = cDocumentType.GetIndex();
+	int n = documentType.GetIndex();
 	if (0 <= n && n < m_pShareData->m_nTypesCount) {
 		LockGuard<Mutex> guard(g_cDocTypeMutex);
 		m_pShareData->m_workBuffer.m_TypeConfig = type;
@@ -123,9 +123,9 @@ bool DocTypeManager::SetTypeConfig(TypeConfigNum cDocumentType, const TypeConfig
 	return false;
 }
 
-bool DocTypeManager::GetTypeConfigMini(TypeConfigNum cDocumentType, const TypeConfigMini** type)
+bool DocTypeManager::GetTypeConfigMini(TypeConfigNum documentType, const TypeConfigMini** type)
 {
-	int n = cDocumentType.GetIndex();
+	int n = documentType.GetIndex();
 	if (0 <= n && n < m_pShareData->m_nTypesCount) {
 		*type = &m_pShareData->m_TypeMini[n];
 		return true;
@@ -133,16 +133,16 @@ bool DocTypeManager::GetTypeConfigMini(TypeConfigNum cDocumentType, const TypeCo
 	return false;
 }
 
-bool DocTypeManager::AddTypeConfig(TypeConfigNum cDocumentType)
+bool DocTypeManager::AddTypeConfig(TypeConfigNum documentType)
 {
 	LockGuard<Mutex> guard(g_cDocTypeMutex);
-	return FALSE != SendMessage(m_pShareData->m_handles.m_hwndTray, MYWM_ADD_TYPESETTING, (WPARAM)cDocumentType.GetIndex(), 0);
+	return FALSE != SendMessage(m_pShareData->m_handles.m_hwndTray, MYWM_ADD_TYPESETTING, (WPARAM)documentType.GetIndex(), 0);
 }
 
-bool DocTypeManager::DelTypeConfig(TypeConfigNum cDocumentType)
+bool DocTypeManager::DelTypeConfig(TypeConfigNum documentType)
 {
 	LockGuard<Mutex> guard(g_cDocTypeMutex);
-	return FALSE != SendMessage(m_pShareData->m_handles.m_hwndTray, MYWM_DEL_TYPESETTING, (WPARAM)cDocumentType.GetIndex(), 0);
+	return FALSE != SendMessage(m_pShareData->m_handles.m_hwndTray, MYWM_DEL_TYPESETTING, (WPARAM)documentType.GetIndex(), 0);
 }
 
 /*!

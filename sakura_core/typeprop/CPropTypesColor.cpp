@@ -851,7 +851,7 @@ int PropTypesColor::GetData(HWND hwndDlg)
 
 
 // 色ボタンの描画
-void PropTypesColor::DrawColorButton(DRAWITEMSTRUCT* pDis, COLORREF cColor)
+void PropTypesColor::DrawColorButton(DRAWITEMSTRUCT* pDis, COLORREF color)
 {
 //	MYTRACE(_T("pDis->itemAction = "));
 
@@ -924,7 +924,7 @@ void PropTypesColor::DrawColorButton(DRAWITEMSTRUCT* pDis, COLORREF cColor)
 	
 	if ((pDis->itemState & ODS_DISABLED) == 0) {
 		// 指定色で塗りつぶす
-		gr.SetBrushColor(cColor);
+		gr.SetBrushColor(color);
 		gr.SetPen(cBtnShadow);
 		::RoundRect(gr, rc.left, rc.top, rc.right, rc.bottom , 5, 5);
 	}

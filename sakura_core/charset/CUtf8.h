@@ -38,21 +38,21 @@ public:
 	CodeConvertResult UnicodeToCode(const NativeW& cSrc, Memory* pDst) {	//!< UNICODE    → 特定コード 変換
 		return UnicodeToUTF8(cSrc, pDst);
 	}
-	void GetBom(Memory* pcmemBom);																			//!< BOMデータ取得
-	void GetEol(Memory* pcmemEol, EolType eEolType);
-	CodeConvertResult _UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR* pDst, const CommonSetting_StatusBar* psStatusbar, const bool CESU8Mode);			//!< UNICODE → Hex 変換
+	void GetBom(Memory* pMemBom);																			//!< BOMデータ取得
+	void GetEol(Memory* pMemEol, EolType eolType);
+	CodeConvertResult _UnicodeToHex(const wchar_t* src, const int iSLen, TCHAR* pDst, const CommonSetting_StatusBar* psStatusbar, const bool CESU8Mode);			//!< UNICODE → Hex 変換
 	CodeConvertResult UnicodeToHex(const wchar_t* ps, const int nsl, TCHAR* pd, const CommonSetting_StatusBar* psStatusbar){ return _UnicodeToHex(ps, nsl, pd, psStatusbar, false); }
 
 public:
 	// UTF-8 / CESU-8 <-> Unicodeコード変換
 	// 2007.08.13 kobake 追加
 	// 2009.01.08        CESU-8 に対応
-	static CodeConvertResult _UTF8ToUnicode( const Memory& cSrc, NativeW* pDstMem, bool bCESU8Mode );
-	static CodeConvertResult _UnicodeToUTF8( const NativeW& cSrc, Memory* pDstMem, bool bCESU8Mode );
-	inline static CodeConvertResult UTF8ToUnicode( const Memory& cSrc, NativeW* pDst ){ return _UTF8ToUnicode(cSrc, pDst, false); }	// UTF-8 -> Unicodeコード変換
-	inline static CodeConvertResult CESU8ToUnicode( const Memory& cSrc, NativeW* pDst ){ return _UTF8ToUnicode(cSrc, pDst, true); }	// CESU-8 -> Unicodeコード変換
-	inline static CodeConvertResult UnicodeToUTF8( const NativeW& cSrc, Memory* pDst ){ return  _UnicodeToUTF8(cSrc, pDst, false); }	// Unicode → UTF-8コード変換
-	inline static CodeConvertResult UnicodeToCESU8( const NativeW& cSrc, Memory* pDst ){ return _UnicodeToUTF8(cSrc, pDst, true); }	// Unicode → CESU-8コード変換
+	static CodeConvertResult _UTF8ToUnicode( const Memory& src, NativeW* pDstMem, bool bCESU8Mode );
+	static CodeConvertResult _UnicodeToUTF8( const NativeW& src, Memory* pDstMem, bool bCESU8Mode );
+	inline static CodeConvertResult UTF8ToUnicode( const Memory& src, NativeW* pDst ){ return _UTF8ToUnicode(src, pDst, false); }	// UTF-8 -> Unicodeコード変換
+	inline static CodeConvertResult CESU8ToUnicode( const Memory& src, NativeW* pDst ){ return _UTF8ToUnicode(src, pDst, true); }	// CESU-8 -> Unicodeコード変換
+	inline static CodeConvertResult UnicodeToUTF8( const NativeW& src, Memory* pDst ){ return  _UnicodeToUTF8(src, pDst, false); }	// Unicode → UTF-8コード変換
+	inline static CodeConvertResult UnicodeToCESU8( const NativeW& src, Memory* pDst ){ return _UnicodeToUTF8(src, pDst, true); }	// Unicode → CESU-8コード変換
 
 protected:
 	// 変換の実装

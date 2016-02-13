@@ -70,45 +70,45 @@ bool Figure_Eol::DrawImp(ColorStrategyInfo* pInfo)
 	Eol cEol = pcLayout->GetLayoutEol();
 	if (cEol.GetLen()) {
 		// CFigureSpace::DrawImp_StyleSelectもどき。選択・検索色を優先する
-		TypeSupport cCurrentType(pcView, pInfo->GetCurrentColor());	// 周辺の色（現在の指定色/選択色）
-		TypeSupport cCurrentType2(pcView, pInfo->GetCurrentColor2());	// 周辺の色（現在の指定色）
-		TypeSupport cTextType(pcView, COLORIDX_TEXT);				// テキストの指定色
-		TypeSupport cSpaceType(pcView, GetDispColorIdx());	// 空白の指定色
-		TypeSupport cSearchType(pcView, COLORIDX_SEARCH);	// 検索色(EOL固有)
-		TypeSupport cCurrentTypeBg(pcView, pInfo->GetCurrentColorBg());
-		TypeSupport& cCurrentType3 = (cCurrentType2.GetBackColor() == cTextType.GetBackColor() ? cCurrentTypeBg: cCurrentType2);
+		TypeSupport currentType(pcView, pInfo->GetCurrentColor());	// 周辺の色（現在の指定色/選択色）
+		TypeSupport currentType2(pcView, pInfo->GetCurrentColor2());	// 周辺の色（現在の指定色）
+		TypeSupport textType(pcView, COLORIDX_TEXT);				// テキストの指定色
+		TypeSupport spaceType(pcView, GetDispColorIdx());	// 空白の指定色
+		TypeSupport searchType(pcView, COLORIDX_SEARCH);	// 検索色(EOL固有)
+		TypeSupport currentTypeBg(pcView, pInfo->GetCurrentColorBg());
+		TypeSupport& currentType3 = (currentType2.GetBackColor() == textType.GetBackColor() ? currentTypeBg: currentType2);
 		COLORREF crText;
 		COLORREF crBack;
 		bool bSelecting = pInfo->GetCurrentColor() != pInfo->GetCurrentColor2();
-		bool blendColor = bSelecting && cCurrentType.GetTextColor() == cCurrentType.GetBackColor(); // 選択混合色
-		TypeSupport& currentStyle = blendColor ? cCurrentType2 : cCurrentType;
+		bool blendColor = bSelecting && currentType.GetTextColor() == currentType.GetBackColor(); // 選択混合色
+		TypeSupport& currentStyle = blendColor ? currentType2 : currentType;
 		TypeSupport *pcText, *pcBack;
 		if (bSelecting && !blendColor) {
 			// 選択文字色固定指定
-			pcText = &cCurrentType;
-			pcBack = &cCurrentType;
+			pcText = &currentType;
+			pcBack = &currentType;
 		}else if (pInfo->GetCurrentColor2() == COLORIDX_SEARCH) {
 			// 検索色優先
-			pcText = &cSearchType;
-			pcBack = &cSearchType;
+			pcText = &searchType;
+			pcBack = &searchType;
 		}else {
-			pcText = cSpaceType.GetTextColor() == cTextType.GetTextColor() ? &cCurrentType2 : &cSpaceType;
-			pcBack = cSpaceType.GetBackColor() == cTextType.GetBackColor() ? &cCurrentType3 : &cSpaceType;
+			pcText = spaceType.GetTextColor() == textType.GetTextColor() ? &currentType2 : &spaceType;
+			pcBack = spaceType.GetBackColor() == textType.GetBackColor() ? &currentType3 : &spaceType;
 		}
 		if (blendColor) {
 			// 混合色(検索色を優先しつつ)
-			crText = pcView->GetTextColorByColorInfo2(cCurrentType.GetColorInfo(), pcText->GetColorInfo());
-			crBack = pcView->GetBackColorByColorInfo2(cCurrentType.GetColorInfo(), pcBack->GetColorInfo());
+			crText = pcView->GetTextColorByColorInfo2(currentType.GetColorInfo(), pcText->GetColorInfo());
+			crBack = pcView->GetBackColorByColorInfo2(currentType.GetColorInfo(), pcBack->GetColorInfo());
 		}else {
 			crText = pcText->GetTextColor();
 			crBack = pcBack->GetBackColor();
 		}
 		pInfo->m_gr.PushTextForeColor(crText);
 		pInfo->m_gr.PushTextBackColor(crBack);
-		bool bTrans = pcView->IsBkBitmap() && cTextType.GetBackColor() == crBack;
+		bool bTrans = pcView->IsBkBitmap() && textType.GetBackColor() == crBack;
 		Font sFont;
-		sFont.m_fontAttr.m_bBoldFont = cSpaceType.IsBoldFont() || currentStyle.IsBoldFont();
-		sFont.m_fontAttr.m_bUnderLine = cSpaceType.HasUnderLine();
+		sFont.m_fontAttr.m_bBoldFont = spaceType.IsBoldFont() || currentStyle.IsBoldFont();
+		sFont.m_fontAttr.m_bUnderLine = spaceType.HasUnderLine();
 		sFont.m_hFont = pInfo->m_pView->GetFontset().ChooseFontHandle(sFont.m_fontAttr);
 		pInfo->m_gr.PushMyFont(sFont);
 

@@ -29,6 +29,6 @@
 // ”¼ŠpƒJƒi¨‘SŠp‚Ğ‚ç‚ª‚È
 class Converter_HankataToZenhira : public Converter {
 public:
-	bool DoConvert(NativeW* pcData);
+	bool DoConvert(NativeW* pData);
 };
 

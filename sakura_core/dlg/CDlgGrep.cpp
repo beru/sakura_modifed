@@ -197,13 +197,13 @@ BOOL DlgGrep::OnInitDialog(
 	SetWindowLongPtr(hFolder, GWLP_WNDPROC, (LONG_PTR)OnFolderProc);
 
 	m_comboDelText = ComboBoxItemDeleter();
-	m_comboDelText.pRecent = &m_cRecentSearch;
+	m_comboDelText.pRecent = &m_recentSearch;
 	SetComboBoxDeleter(GetItemHwnd(IDC_COMBO_TEXT), &m_comboDelText);
 	m_comboDelFile = ComboBoxItemDeleter();
-	m_comboDelFile.pRecent = &m_cRecentGrepFile;
+	m_comboDelFile.pRecent = &m_recentGrepFile;
 	SetComboBoxDeleter(GetItemHwnd(IDC_COMBO_FILE), &m_comboDelFile);
 	m_comboDelFolder = ComboBoxItemDeleter();
-	m_comboDelFolder.pRecent = &m_cRecentGrepFolder;
+	m_comboDelFolder.pRecent = &m_recentGrepFolder;
 	SetComboBoxDeleter(GetItemHwnd(IDC_COMBO_FOLDER), &m_comboDelFolder);
 
 	// フォント設定	2012/11/27 Uchi
@@ -230,25 +230,25 @@ LRESULT CALLBACK OnFolderProc(
 {
 	if (msg == WM_DROPFILES) do {
 		// From Here 2007.09.02 genta 
-		SFilePath sPath;
-		if (DragQueryFile((HDROP)wparam, 0, NULL, 0) > _countof2(sPath) - 1) {
+		SFilePath path;
+		if (DragQueryFile((HDROP)wparam, 0, NULL, 0) > _countof2(path) - 1) {
 			// skip if the length of the path exceeds buffer capacity
 			break;
 		}
-		DragQueryFile((HDROP)wparam, 0, sPath, _countof2(sPath) - 1);
+		DragQueryFile((HDROP)wparam, 0, path, _countof2(path) - 1);
 
 		// ファイルパスの解決
-		SakuraEnvironment::ResolvePath(sPath);
+		SakuraEnvironment::ResolvePath(path);
 		
 		// ファイルがドロップされた場合はフォルダを切り出す
 		// フォルダの場合は最後が失われるのでsplitしてはいけない．
-		if (IsFileExists(sPath, true)) {	// 第2引数がtrueだとディレクトリは対象外
+		if (IsFileExists(path, true)) {	// 第2引数がtrueだとディレクトリは対象外
 			SFilePath szWork;
-			SplitPath_FolderAndFile(sPath, szWork, NULL);
-			_tcscpy(sPath, szWork);
+			SplitPath_FolderAndFile(path, szWork, NULL);
+			_tcscpy(path, szWork);
 		}
 
-		SetGrepFolder(hwnd, sPath);
+		SetGrepFolder(hwnd, path);
 	}while (0);	// 1回しか通らない. breakでここまで飛ぶ
 
 	return  CallWindowProc(g_pOnFolderProc, hwnd, msg, wparam, lparam);
@@ -682,14 +682,14 @@ int DlgGrep::GetData(void)
 		CurrentDirectoryBackupPoint cCurDirBackup;
 
 		// 2011.11.24 Moca 複数フォルダ指定
-		std::vector<std::tstring> vPaths;
-		GrepAgent::CreateFolders(m_szFolder, vPaths);
+		std::vector<std::tstring> paths;
+		GrepAgent::CreateFolders(m_szFolder, paths);
 		int nFolderLen = 0;
 		TCHAR szFolder[_MAX_PATH];
 		szFolder[0] = _T('\0');
-		for (int i=0; i<(int)vPaths.size(); ++i) {
+		for (int i=0; i<(int)paths.size(); ++i) {
 			// 相対パス→絶対パス
-			if (!::SetCurrentDirectory(vPaths[i].c_str())) {
+			if (!::SetCurrentDirectory(paths[i].c_str())) {
 				WarningMessage(	GetHwnd(), LS(STR_DLGGREP5));
 				return FALSE;
 			}

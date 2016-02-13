@@ -34,7 +34,7 @@ public:
 	/*
 	||	PPA.DLLに委譲する部分
 	*/
-	virtual bool ExecKeyMacro(class EditView* pcEditView, int flags) const;	// PPAマクロの実行
+	virtual bool ExecKeyMacro(class EditView* pEditView, int flags) const;	// PPAマクロの実行
 	virtual bool LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath);		// キーボードマクロをファイルから読み込み、CMacroの列に変換
 	virtual bool LoadKeyMacroStr(HINSTANCE hInstance, const TCHAR* pszCode);	// キーボードマクロを文字列から読み込み、CMacroの列に変換
 

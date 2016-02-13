@@ -103,10 +103,10 @@ public:
 	void SetNext(Macro* pNext) { m_pNext = pNext; }
 	Macro* GetNext() { return m_pNext; }
 	// 2007.07.20 genta : flags’Ç‰Á
-	bool Exec(EditView* pcEditView, int flags) const; // 2007.09.30 kobake const’Ç‰Á
+	bool Exec(EditView* pEditView, int flags) const; // 2007.09.30 kobake const’Ç‰Á
 	void Save(HINSTANCE hInstance, TextOutputStream& out) const; // 2007.09.30 kobake const’Ç‰Á
 	
-	void AddLParam(const LPARAM* lParam, const EditView* pcEditView );	//@@@ 2002.2.2 YAZAKI pcEditView‚à“n‚·
+	void AddLParam(const LPARAM* lParam, const EditView* pEditView );	//@@@ 2002.2.2 YAZAKI pEditView‚à“n‚·
 	void AddStringParam( const WCHAR* szParam, int nLength = -1 );
 	void AddStringParam(const ACHAR* lParam) { return AddStringParam(to_wchar(lParam)); }
 	void AddIntParam( const int nParam );

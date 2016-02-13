@@ -111,9 +111,9 @@ public:
 	bool			m_bInitCodePage;
 
 	ComboBoxItemDeleter		m_combDelFile;
-	RecentFile				m_cRecentFile;
+	RecentFile				m_recentFile;
 	ComboBoxItemDeleter		m_combDelFolder;
-	RecentFolder			m_cRecentFolder;
+	RecentFolder			m_recentFolder;
 
 	OPENFILENAME*	m_pOf;
 	OPENFILENAMEZ	m_ofn;		// 2005.10.29 ryoji OPENFILENAMEZ「ファイルを開く」ダイアログ用構造体
@@ -363,10 +363,10 @@ UINT_PTR CALLBACK OFNHookProc(
 			// ビューモードの初期値セット
 			::CheckDlgButton(pData->m_hwndOpenDlg, chx1, pData->m_bViewMode);
 			pData->m_combDelFile = ComboBoxItemDeleter();
-			pData->m_combDelFile.pRecent = &pData->m_cRecentFile;
+			pData->m_combDelFile.pRecent = &pData->m_recentFile;
 			Dialog::SetComboBoxDeleter(pData->m_hwndComboMRU, &pData->m_combDelFile);
 			pData->m_combDelFolder = ComboBoxItemDeleter();
-			pData->m_combDelFolder.pRecent = &pData->m_cRecentFolder;
+			pData->m_combDelFolder.pRecent = &pData->m_recentFolder;
 			Dialog::SetComboBoxDeleter(pData->m_hwndComboOPENFOLDER, &pData->m_combDelFolder);
 		}
 		break;
@@ -742,7 +742,7 @@ void DlgOpenFile::Create(
 bool DlgOpenFile::DoModal_GetOpenFileName(TCHAR* pszPath, bool bSetCurDir)
 {
 	// カレントディレクトリを保存。関数から抜けるときに自動でカレントディレクトリは復元される。
-	CurrentDirectoryBackupPoint cCurDirBackup;
+	CurrentDirectoryBackupPoint curDirBackup;
 
 	// 2003.05.12 MIK
 	FileExt cFileExt;
@@ -815,7 +815,7 @@ bool DlgOpenFile::DoModal_GetOpenFileName(TCHAR* pszPath, bool bSetCurDir)
 bool DlgOpenFile::DoModal_GetSaveFileName(TCHAR* pszPath, bool bSetCurDir)
 {
 	// カレントディレクトリを保存。関数から抜けるときに自動でカレントディレクトリは復元される。
-	CurrentDirectoryBackupPoint cCurDirBackup;
+	CurrentDirectoryBackupPoint curDirBackup;
 
 	// 2003.05.12 MIK
 	FileExt cFileExt;
@@ -921,7 +921,7 @@ bool DlgOpenFile::DoModalOpenDlg(
 	}
 
 	// カレントディレクトリを保存。関数を抜けるときに自動でカレントディレクトリは復元されます。
-	CurrentDirectoryBackupPoint cCurDirBackup;
+	CurrentDirectoryBackupPoint curDirBackup;
 
 	// 2010.08.28 Moca DLLが読み込まれるので移動
 	ChangeCurrentDirectoryToExeDir();
@@ -1009,7 +1009,7 @@ bool DlgOpenFile::DoModalSaveDlg(
 	pData->m_ofn.lpstrDefExt = (pData->m_ofn.Flags & OFN_ENABLEHOOK) ? NULL: _T("");	// 2006.11.10 ryoji フックを使うときは自前で拡張子を補完する
 
 	// カレントディレクトリを保存。関数から抜けるときに自動でカレントディレクトリは復元される。
-	CurrentDirectoryBackupPoint cCurDirBackup;
+	CurrentDirectoryBackupPoint curDirBackup;
 
 	// 2010.08.28 Moca DLLが読み込まれるので移動
 	ChangeCurrentDirectoryToExeDir();

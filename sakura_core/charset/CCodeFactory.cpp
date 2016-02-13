@@ -15,13 +15,13 @@
 // move end
 #include "CLatin1.h"
 
-// eCodeTypeに適合する CodeBaseインスタンス を生成
+// codeTypeに適合する CodeBaseインスタンス を生成
 CodeBase* CodeFactory::CreateCodeBase(
-	ECodeType	eCodeType,		// 文字コード
+	ECodeType	codeType,		// 文字コード
 	int			nFlag			// bit 0: MIME Encodeされたヘッダをdecodeするかどうか
 )
 {
-  	switch (eCodeType) {
+  	switch (codeType) {
 	case CODE_SJIS:			return new ShiftJis();
 	case CODE_EUC:			return new Euc();
 	case CODE_JIS:			return new Jis((nFlag&1) == 1);
@@ -31,11 +31,11 @@ CodeBase* CodeFactory::CreateCodeBase(
 	case CODE_UNICODEBE:	return new UnicodeBe();
 	case CODE_CESU8:		return new Cesu8();
 	case CODE_LATIN1:		return new Latin1();	// 2010/3/20 Uchi
-	case CODE_CPACP:		return new CodePage(eCodeType);
-	case CODE_CPOEM:		return new CodePage(eCodeType);
+	case CODE_CPACP:		return new CodePage(codeType);
+	case CODE_CPOEM:		return new CodePage(codeType);
 	default:
-		if (IsValidCodePageEx(eCodeType)) {
-			return new CodePage(eCodeType);
+		if (IsValidCodePageEx(codeType)) {
+			return new CodePage(codeType);
 		}
 		assert_warning(0);
 	}

@@ -42,13 +42,13 @@ SaveAgent::SaveAgent()
 
 CallbackResultType SaveAgent::OnCheckSave(SaveInfo* pSaveInfo)
 {
-	EditDoc* pcDoc = GetListeningDoc();
+	EditDoc* pDoc = GetListeningDoc();
 
 	//	Jun.  5, 2004 genta
 	//	ビューモードのチェックをEditDocから上書き保存処理に移動
 	//	同名で上書きされるのを防ぐ
 	if (AppMode::getInstance()->IsViewMode()
-		&& pSaveInfo->IsSamePath(pcDoc->m_docFile.GetFilePath())
+		&& pSaveInfo->IsSamePath(pDoc->m_docFile.GetFilePath())
 	) {
 		ErrorBeep();
 		TopErrorMessage(EditWnd::getInstance()->GetHwnd(), LS(STR_SAVEAGENT_VIEW_FILE));
@@ -56,7 +56,7 @@ CallbackResultType SaveAgent::OnCheckSave(SaveInfo* pSaveInfo)
 	}
 
 	// 他ウィンドウで開いているか確認する	// 2009.04.07 ryoji
-	if (!pSaveInfo->IsSamePath(pcDoc->m_docFile.GetFilePath())) {
+	if (!pSaveInfo->IsSamePath(pDoc->m_docFile.GetFilePath())) {
 		HWND hwndOwner;
 		if (ShareData::getInstance()->IsPathOpened(pSaveInfo->filePath, &hwndOwner)) {
 			ErrorMessage(
@@ -72,9 +72,9 @@ CallbackResultType SaveAgent::OnCheckSave(SaveInfo* pSaveInfo)
 	{
 		// ロックは一時的に解除してチェックする（チェックせずに後戻りできないところまで進めるより安全）
 		// ※ ロックしていてもファイル属性やアクセス許可の変更によって書き込めなくなっていることもある
-		bool bLock = (pSaveInfo->IsSamePath(pcDoc->m_docFile.GetFilePath()) && pcDoc->m_docFile.IsFileLocking());
+		bool bLock = (pSaveInfo->IsSamePath(pDoc->m_docFile.GetFilePath()) && pDoc->m_docFile.IsFileLocking());
 		if (bLock) {
-			pcDoc->m_docFileOperation.DoFileUnlock();
+			pDoc->m_docFileOperation.DoFileUnlock();
 		}
 		try {
 			bool bExist = fexist(pSaveInfo->filePath);
@@ -86,7 +86,7 @@ CallbackResultType SaveAgent::OnCheckSave(SaveInfo* pSaveInfo)
 		}catch (Error_FileOpen) {
 			// ※ たとえ上書き保存の場合でもここでの失敗では書込み禁止へは遷移しない
 			if (bLock) {
-				pcDoc->m_docFileOperation.DoFileLock(false);
+				pDoc->m_docFileOperation.DoFileLock(false);
 			}
 			ErrorMessage(
 				EditWnd::getInstance()->GetHwnd(),
@@ -96,7 +96,7 @@ CallbackResultType SaveAgent::OnCheckSave(SaveInfo* pSaveInfo)
 			return CallbackResultType::Interrupt;
 		}
 		if (bLock) {
-			pcDoc->m_docFileOperation.DoFileLock(false);
+			pDoc->m_docFileOperation.DoFileLock(false);
 		}
 	}
 	return CallbackResultType::Continue;
@@ -104,47 +104,47 @@ CallbackResultType SaveAgent::OnCheckSave(SaveInfo* pSaveInfo)
 
 void SaveAgent::OnBeforeSave(const SaveInfo& sSaveInfo)
 {
-	EditDoc* pcDoc = GetListeningDoc();
+	EditDoc* pDoc = GetListeningDoc();
 
 	// 改行コード統一
-	DocVisitor(pcDoc).SetAllEol(sSaveInfo.cEol);
+	DocVisitor(pDoc).SetAllEol(sSaveInfo.cEol);
 }
 
 void SaveAgent::OnSave(const SaveInfo& sSaveInfo)
 {
-	EditDoc* pcDoc = GetListeningDoc();
+	EditDoc* pDoc = GetListeningDoc();
 
 	// カキコ
 	WriteManager cWriter;
 	EditApp::getInstance()->m_pVisualProgress->ProgressListener::Listen(&cWriter);
 	cWriter.WriteFile_From_CDocLineMgr(
-		pcDoc->m_docLineMgr,
+		pDoc->m_docLineMgr,
 		sSaveInfo
 	);
 
 	// セーブ情報の確定
-	pcDoc->SetFilePathAndIcon(sSaveInfo.filePath);
-	pcDoc->m_docFile.SetCodeSet(sSaveInfo.eCharCode, sSaveInfo.bBomExist);
+	pDoc->SetFilePathAndIcon(sSaveInfo.filePath);
+	pDoc->m_docFile.SetCodeSet(sSaveInfo.eCharCode, sSaveInfo.bBomExist);
 	if (sSaveInfo.cEol.IsValid()) {
-		pcDoc->m_docEditor.SetNewLineCode(sSaveInfo.cEol);
+		pDoc->m_docEditor.SetNewLineCode(sSaveInfo.cEol);
 	}
 }
 
 void SaveAgent::OnAfterSave(const SaveInfo& sSaveInfo)
 {
-	EditDoc* pcDoc = GetListeningDoc();
+	EditDoc* pDoc = GetListeningDoc();
 
 	/* 更新後のファイル時刻の取得
 	 * CloseHandle前ではFlushFileBuffersを呼んでもタイムスタンプが更新
 	 * されないことがある。
 	 */
-	GetLastWriteTimestamp(pcDoc->m_docFile.GetFilePath(), &pcDoc->m_docFile.GetFileTime());
+	GetLastWriteTimestamp(pDoc->m_docFile.GetFilePath(), &pDoc->m_docFile.GetFileTime());
 
 	// タイプ別設定の変更を指示。
 	// 上書き（明示的な上書きや自動保存）では変更しない
 	// ---> 上書きの場合は一時的な折り返し桁変更やタブ幅変更を維持したままにする
 	if (!sSaveInfo.bOverwriteMode) {
-		pcDoc->OnChangeSetting();
+		pDoc->OnChangeSetting();
 	}
 }
 

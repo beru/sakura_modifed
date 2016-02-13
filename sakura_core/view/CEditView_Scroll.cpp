@@ -784,13 +784,13 @@ LayoutInt EditView::GetRightEdgeForScrollBar(void)
 	// 折り返し桁以後のぶら下げ余白計算
 	LayoutInt nWidth = m_pEditDoc->m_layoutMgr.GetMaxLineKetas() + GetWrapOverhang();
 	
-	if (m_pEditDoc->m_nTextWrapMethodCur == (int)TextWrappingMethod::NoWrapping) {
+	if (m_pEditDoc->m_nTextWrapMethodCur == TextWrappingMethod::NoWrapping) {
 		LayoutInt nRightEdge = m_pEditDoc->m_layoutMgr.GetMaxTextWidth();	// テキストの最大幅
 
 		// 選択範囲あり かつ 範囲の右端がテキストの幅より右側
 		if (GetSelectionInfo().IsTextSelected()) {
 			// 開始位置・終了位置のより右側にある方で比較
-			auto& sSelect = GetSelectionInfo().m_sSelect;
+			auto& sSelect = GetSelectionInfo().m_select;
 			if (sSelect.GetFrom().GetX2() < sSelect.GetTo().GetX2()) {
 				if (nRightEdge < sSelect.GetTo().GetX2())
 					nRightEdge = sSelect.GetTo().GetX2();

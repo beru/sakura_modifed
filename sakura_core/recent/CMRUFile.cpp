@@ -39,37 +39,37 @@ MRUFile::MRUFile()
 // デストラクタ
 MRUFile::~MRUFile()
 {
-	m_cRecentFile.Terminate();
+	m_recentFile.Terminate();
 }
 
 /*!
 	ファイル履歴メニューの作成
 	
-	@param pCMenuDrawer [in] (out?) メニュー作成で用いるMenuDrawer
+	@param pMenuDrawer [in] (out?) メニュー作成で用いるMenuDrawer
 	
 	@author Norio Nakantani
 	@return 生成したメニューのハンドル
 
 	2010/5/21 Uchi 組み直し
 */
-HMENU MRUFile::CreateMenu(MenuDrawer* pCMenuDrawer) const
+HMENU MRUFile::CreateMenu(MenuDrawer* pMenuDrawer) const
 {
 	//	空メニューを作る
 	HMENU hMenuPopUp = ::CreatePopupMenu();	// Jan. 29, 2002 genta
-	return CreateMenu(hMenuPopUp, pCMenuDrawer);
+	return CreateMenu(hMenuPopUp, pMenuDrawer);
 }
 /*!
 	ファイル履歴メニューの作成
 	
 	@param 追加するメニューのハンドル
-	@param pCMenuDrawer [in] (out?) メニュー作成で用いるMenuDrawer
+	@param pMenuDrawer [in] (out?) メニュー作成で用いるMenuDrawer
 	
 	@author Norio Nakantani
 	@return 生成したメニューのハンドル
 
 	2010/5/21 Uchi 組み直し
 */
-HMENU MRUFile::CreateMenu(HMENU hMenuPopUp, MenuDrawer* pCMenuDrawer) const
+HMENU MRUFile::CreateMenu(HMENU hMenuPopUp, MenuDrawer* pMenuDrawer) const
 {
 	TCHAR szMenu[_MAX_PATH * 2 + 10];				//	メニューキャプション
 	const BOOL bMenuIcon = m_pShareData->m_common.m_window.m_bMenuIcon;
@@ -80,21 +80,21 @@ HMENU MRUFile::CreateMenu(HMENU hMenuPopUp, MenuDrawer* pCMenuDrawer) const
 	::SystemParametersInfo(SPI_GETNONCLIENTMETRICS, met.cbSize, &met, 0);
 	DCFont dcFont(met.lfMenuFont);
 
-	for (int i=0; i<m_cRecentFile.GetItemCount(); ++i) {
+	for (int i=0; i<m_recentFile.GetItemCount(); ++i) {
 		//	「共通設定」→「全般」→「ファイルの履歴MAX」を反映
-		if (i >= m_cRecentFile.GetViewCount()) {
+		if (i >= m_recentFile.GetViewCount()) {
 			break;
 		}
 		
 		// MRUリストの中にある開かれていないファイル
 
-		const EditInfo* p = m_cRecentFile.GetItem(i);
-		bool bFavorite = m_cRecentFile.IsFavorite(i);
+		const EditInfo* p = m_recentFile.GetItem(i);
+		bool bFavorite = m_recentFile.IsFavorite(i);
 		bool bFavoriteLabel = bFavorite && !bMenuIcon;
 		FileNameManager::getInstance()->GetMenuFullLabel_MRU(szMenu, _countof(szMenu), p, -1, bFavoriteLabel, i, dcFont.GetHDC());
 
 		// メニューに追加。
-		pCMenuDrawer->MyAppendMenu(
+		pMenuDrawer->MyAppendMenu(
 			hMenuPopUp,
 			MF_BYPOSITION | MF_STRING,
 			IDM_SELMRU + i,
@@ -122,12 +122,12 @@ BOOL MRUFile::DestroyMenu(HMENU hMenuPopUp) const
 std::vector<LPCTSTR> MRUFile::GetPathList() const
 {
 	std::vector<LPCTSTR> ret;
-	for (int i=0; i<m_cRecentFile.GetItemCount(); ++i) {
+	for (int i=0; i<m_recentFile.GetItemCount(); ++i) {
 		//「共通設定」→「全般」→「ファイルの履歴MAX」を反映
-		if (i >= m_cRecentFile.GetViewCount()) {
+		if (i >= m_recentFile.GetViewCount()) {
 			break;
 		}
-		ret.push_back(m_cRecentFile.GetItemText(i));
+		ret.push_back(m_recentFile.GetItemText(i));
 	}
 	return ret;
 }
@@ -135,7 +135,7 @@ std::vector<LPCTSTR> MRUFile::GetPathList() const
 // アイテム数を返す
 int MRUFile::Length(void) const
 {
-	return m_cRecentFile.GetItemCount();
+	return m_recentFile.GetItemCount();
 }
 
 /*!
@@ -143,7 +143,7 @@ int MRUFile::Length(void) const
 */
 void MRUFile::ClearAll(void)
 {
-	m_cRecentFile.DeleteAllItem();
+	m_recentFile.DeleteAllItem();
 }
 
 /*!
@@ -157,7 +157,7 @@ void MRUFile::ClearAll(void)
 */
 bool MRUFile::GetEditInfo(int num, EditInfo* pfi) const
 {
-	const EditInfo*	p = m_cRecentFile.GetItem(num);
+	const EditInfo*	p = m_recentFile.GetItem(num);
 	if (!p) {
 		return false;
 	}
@@ -180,7 +180,7 @@ bool MRUFile::GetEditInfo(int num, EditInfo* pfi) const
 */
 bool MRUFile::GetEditInfo(const TCHAR* pszPath, EditInfo* pfi) const
 {
-	const EditInfo*	p = m_cRecentFile.GetItem(m_cRecentFile.FindItemByPath(pszPath));
+	const EditInfo*	p = m_recentFile.GetItem(m_recentFile.FindItemByPath(pszPath));
 	if (!p) {
 		return false;
 	}
@@ -207,7 +207,7 @@ void MRUFile::Add(EditInfo* pEditInfo)
 	}
 	
 	// すでに登録されている場合は、除外指定を無視する
-	if (m_cRecentFile.FindItemByPath(pEditInfo->m_szPath) == -1) {
+	if (m_recentFile.FindItemByPath(pEditInfo->m_szPath) == -1) {
 		int nSize = m_pShareData->m_history.m_aExceptMRU.size();
 		for (int i=0; i<nSize; ++i) {
 			TCHAR szExceptMRU[_MAX_PATH];
@@ -241,7 +241,7 @@ void MRUFile::Add(EditInfo* pEditInfo)
 	MRUFolder cMRUFolder;
 	cMRUFolder.Add(szFolder);
 
-	m_cRecentFile.AppendItem(&tmpEditInfo);
+	m_recentFile.AppendItem(&tmpEditInfo);
 	
 	::SHAddToRecentDocs(SHARD_PATH, to_wchar(pEditInfo->m_szPath));
 }

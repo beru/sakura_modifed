@@ -99,9 +99,9 @@ int CALLBACK SetData_EnumFontFamProc(
 	LPARAM			lParam 	// address of application-defined data
 	)
 {
-	DlgPrintSetting* pCDlgPrintSetting = (DlgPrintSetting*)lParam;
-	HWND hwndComboFontHan = ::GetDlgItem(pCDlgPrintSetting->GetHwnd(), IDC_COMBO_FONT_HAN);
-	HWND hwndComboFontZen = ::GetDlgItem(pCDlgPrintSetting->GetHwnd(), IDC_COMBO_FONT_ZEN);
+	DlgPrintSetting* pDlgPrintSetting = (DlgPrintSetting*)lParam;
+	HWND hwndComboFontHan = ::GetDlgItem(pDlgPrintSetting->GetHwnd(), IDC_COMBO_FONT_HAN);
+	HWND hwndComboFontZen = ::GetDlgItem(pDlgPrintSetting->GetHwnd(), IDC_COMBO_FONT_ZEN);
 
 	// LOGFONT
 	if (pelf->elfLogFont.lfPitchAndFamily & FIXED_PITCH) {

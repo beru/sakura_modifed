@@ -606,7 +606,7 @@ enum EEncodingMethod {
 	@return  Memory と置き換えられる入力文字列長 (nSkipLen)
 */
 template <class CHAR_TYPE>
-int _DecodeMimeHeader(const CHAR_TYPE* pSrc, const int nSrcLen, Memory* pcMem_alt, ECodeType* peCodetype)
+int _DecodeMimeHeader(const CHAR_TYPE* pSrc, const int nSrcLen, Memory* pMem_alt, ECodeType* peCodetype)
 {
 	ECodeType ecode = CODE_NONE;
 	EEncodingMethod emethod = EM_NONE;
@@ -654,7 +654,7 @@ int _DecodeMimeHeader(const CHAR_TYPE* pSrc, const int nSrcLen, Memory* pcMem_al
 		}
 	}
 	// マッチしなかった場合
-	pcMem_alt->SetRawData("", 0);
+	pMem_alt->SetRawData("", 0);
 	if (peCodetype) {
 		*peCodetype = CODE_NONE;
 	}
@@ -673,7 +673,7 @@ finish_first_detect:;
 	//
 
 	if (pSrc + nLen_part1 + 2 >= pSrc + nSrcLen) {
-		pcMem_alt->SetRawData("", 0);
+		pMem_alt->SetRawData("", 0);
 		return 0;
 	}
 	if (sizeof(CHAR_TYPE) == 2) {
@@ -688,7 +688,7 @@ finish_first_detect:;
 	}else if (ncmpresult2 == 0) {
 		emethod = EM_QP;
 	}else {
-		pcMem_alt->SetRawData("", 0);
+		pMem_alt->SetRawData("", 0);
 		return 0;
 	}
 	nLen_part2 = 2;
@@ -710,7 +710,7 @@ finish_first_detect:;
 		}
 	}
 	if (pr == pSrc + nSrcLen - 1) {
-		pcMem_alt->SetRawData("", 0);
+		pMem_alt->SetRawData("", 0);
 		return 0;
 	}
 
@@ -719,10 +719,10 @@ finish_first_detect:;
 	//   デコード ----------------------------------------------------
 	//
 
-	pcMem_alt->AllocBuffer(pr - pr_base);
-	pdst = reinterpret_cast<char*>(pcMem_alt->GetRawPtr());
+	pMem_alt->AllocBuffer(pr - pr_base);
+	pdst = reinterpret_cast<char*>(pMem_alt->GetRawPtr());
 	if (!pdst) {
-		pcMem_alt->SetRawData("", 0);
+		pMem_alt->SetRawData("", 0);
 		return 0;
 	}
 
@@ -732,7 +732,7 @@ finish_first_detect:;
 		ndecoded_len = _DecodeQP(pr_base, pr - pr_base, pdst);
 	}
 
-	pcMem_alt->_SetRawLength(ndecoded_len);
+	pMem_alt->_SetRawLength(ndecoded_len);
 
 	return nskipped_len;
 }

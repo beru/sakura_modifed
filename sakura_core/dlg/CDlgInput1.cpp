@@ -40,20 +40,20 @@ INT_PTR CALLBACK CDlgInput1Proc(
 	LPARAM lParam 	// second message parameter
 	)
 {
-	DlgInput1* pCDlgInput1;
+	DlgInput1* pDlgInput1;
 	switch (uMsg) {
 	case WM_INITDIALOG:
-		pCDlgInput1 = (DlgInput1*)lParam;
-		if (pCDlgInput1) {
-			return pCDlgInput1->DispatchEvent(hwndDlg, uMsg, wParam, lParam);
+		pDlgInput1 = (DlgInput1*)lParam;
+		if (pDlgInput1) {
+			return pDlgInput1->DispatchEvent(hwndDlg, uMsg, wParam, lParam);
 		}else {
 			return FALSE;
 		}
 	default:
 		// Modified by KEITA for WIN64 2003.9.6
-		pCDlgInput1 = (DlgInput1*)::GetWindowLongPtr(hwndDlg, DWLP_USER);
-		if (pCDlgInput1) {
-			return pCDlgInput1->DispatchEvent(hwndDlg, uMsg, wParam, lParam);
+		pDlgInput1 = (DlgInput1*)::GetWindowLongPtr(hwndDlg, DWLP_USER);
+		if (pDlgInput1) {
+			return pDlgInput1->DispatchEvent(hwndDlg, uMsg, wParam, lParam);
 		}else {
 			return FALSE;
 		}

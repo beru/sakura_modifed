@@ -61,11 +61,11 @@ PPA::~PPA()
 }
 
 // @date 2002.2.17 YAZAKI CShareDataのインスタンスは、CProcessにひとつあるのみ。
-bool PPA::Execute(EditView* pcEditView, int flags)
+bool PPA::Execute(EditView* pEditView, int flags)
 {
 	// PPAの多重起動禁止 2008.10.22 syat
 	if (PPA::m_bIsRunning) {
-		MYMESSAGEBOX(pcEditView->GetHwnd(), MB_OK, LS(STR_ERR_DLGPPA7), LS(STR_ERR_DLGPPA1));
+		MYMESSAGEBOX(pEditView->GetHwnd(), MB_OK, LS(STR_ERR_DLGPPA7), LS(STR_ERR_DLGPPA1));
 		m_fnAbort();
 		PPA::m_bIsRunning = false;
 		return false;
@@ -73,7 +73,7 @@ bool PPA::Execute(EditView* pcEditView, int flags)
 	PPA::m_bIsRunning = true;
 
 	PpaExecInfo info;
-	info.m_pEditView = pcEditView;
+	info.m_pEditView = pEditView;
 	info.m_pShareData = &GetDllShareData();
 	info.m_bError = false;			// 2003.06.01 Moca
 	info.m_memDebug.SetString("");	// 2003.06.01 Moca

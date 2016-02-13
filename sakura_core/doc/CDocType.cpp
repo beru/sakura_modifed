@@ -32,9 +32,9 @@
 #include "view/figures/CFigureManager.h"
 #include "env/DllShareData.h"
 
-DocType::DocType(EditDoc* pcDoc)
+DocType::DocType(EditDoc* pDoc)
 	:
-	m_pDocRef(pcDoc),
+	m_pDocRef(pDoc),
 	m_nSettingType(0),			// Sep. 11, 2002 genta
 	m_typeConfig(GetDllShareData().m_TypeBasis),
 	m_nSettingTypeLocked(false)	// 設定値変更可能フラグ

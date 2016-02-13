@@ -373,7 +373,7 @@ void EditView::ISearchExec(bool bNext)
 			nLine = ptTmp.GetY2();
 		}
 	}else if (GetSelectionInfo().IsTextSelected()) {
-		auto& sSelect = GetSelectionInfo().m_sSelect;
+		auto& sSelect = GetSelectionInfo().m_select;
 		switch ((int)m_nISearchDirection * 2 + (bNext ? 1: 0)) {
 		case 2 : // 前方検索で現在位置から検索のとき
 		case 1 : // 後方検索で次を検索のとき
@@ -395,8 +395,8 @@ void EditView::ISearchExec(bool bNext)
 	}
 
 	// 桁位置からindexに変換
-	Layout* pCLayout = m_pEditDoc->m_layoutMgr.SearchLineByLayoutY(nLine);
-	LogicInt nIdx = LineColumnToIndex(pCLayout, nIdx1);
+	Layout* pLayout = m_pEditDoc->m_layoutMgr.SearchLineByLayoutY(nLine);
+	LogicInt nIdx = LineColumnToIndex(pLayout, nIdx1);
 
 	m_nISearchHistoryCount ++ ;
 
@@ -419,7 +419,7 @@ void EditView::ISearchExec(bool bNext)
 		nIdx,						// 検索開始データ位置
 		m_nISearchDirection,		// 0==前方検索 1==後方検索
 		&sMatchRange,				// マッチレイアウト範囲
-		m_sSearchPattern
+		m_searchPattern
 	);
 	if (nSearchResult == 0) {
 		// 検索結果がない
@@ -428,7 +428,7 @@ void EditView::ISearchExec(bool bNext)
 		
 		if (bNext) 	m_bISearchWrap = true;
 		if (GetSelectionInfo().IsTextSelected()) {
-			m_sISearchHistory[m_nISearchHistoryCount] = GetSelectionInfo().m_sSelect;
+			m_sISearchHistory[m_nISearchHistoryCount] = GetSelectionInfo().m_select;
 		}else {
 			m_sISearchHistory[m_nISearchHistoryCount].Set(GetCaret().GetCaretLayoutPos());
 		}
@@ -507,7 +507,7 @@ void EditView::ISearchWordMake(void)
 	switch (m_nISearchMode) {
 	case 1: // 通常インクリメンタルサーチ
 	case 2: // 正規表現インクリメンタルサーチ
-		m_sSearchPattern.SetPattern(this->GetHwnd(), m_strCurSearchKey.c_str(), m_strCurSearchKey.size(), m_curSearchOption, &m_CurRegexp);
+		m_searchPattern.SetPattern(this->GetHwnd(), m_strCurSearchKey.c_str(), m_strCurSearchKey.size(), m_curSearchOption, &m_CurRegexp);
 		break;
 	case 3: // MIGEMOインクリメンタルサーチ
 		{
@@ -516,7 +516,7 @@ void EditView::ISearchWordMake(void)
 			
 			// 検索パターンのコンパイル
 			const wchar_t* p = strMigemoWord.c_str();
-			m_sSearchPattern.SetPattern(this->GetHwnd(), p, (int)strMigemoWord.size(), m_curSearchOption, &m_CurRegexp);
+			m_searchPattern.SetPattern(this->GetHwnd(), p, (int)strMigemoWord.size(), m_curSearchOption, &m_CurRegexp);
 
 		}
 		break;

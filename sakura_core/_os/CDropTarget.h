@@ -157,7 +157,7 @@ private:
 	int m_nIndex;
 	DataObject* m_pDataObject;
 public:
-	EnumFORMATETC(DataObject* pcDataObject) : m_lRef(1), m_nIndex(0), m_pDataObject(pcDataObject) {}
+	EnumFORMATETC(DataObject* pDataObject) : m_lRef(1), m_nIndex(0), m_pDataObject(pDataObject) {}
 	STDMETHOD_(ULONG, AddRef)(void)
 	{return ::InterlockedIncrement(&m_lRef);}
 	STDMETHOD_(ULONG, Release)(void)

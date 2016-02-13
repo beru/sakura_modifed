@@ -122,7 +122,7 @@ DlgFavorite::DlgFavorite()
 
 	{
 		FavoriteInfo* pFavInfo = &m_aFavoriteInfo[0];
-		pFavInfo->m_pRecent    = &m_cRecentFile;
+		pFavInfo->m_pRecent    = &m_recentFile;
 		pFavInfo->m_strCaption = LS(STR_DLGFAV_FILE);
 		pFavInfo->m_pszCaption = const_cast<TCHAR*>(pFavInfo->m_strCaption.c_str());
 		pFavInfo->m_nId        = IDC_LIST_FAVORITE_FILE;
@@ -133,7 +133,7 @@ DlgFavorite::DlgFavorite()
 		pFavInfo->m_bAddExcept = true;
 
 		++pFavInfo;
-		pFavInfo->m_pRecent    = &m_cRecentFolder;
+		pFavInfo->m_pRecent    = &m_recentFolder;
 		pFavInfo->m_strCaption = LS(STR_DLGFAV_FOLDER);
 		pFavInfo->m_pszCaption = const_cast<TCHAR*>(pFavInfo->m_strCaption.c_str());
 		pFavInfo->m_nId        = IDC_LIST_FAVORITE_FOLDER;
@@ -144,7 +144,7 @@ DlgFavorite::DlgFavorite()
 		pFavInfo->m_bAddExcept = true;
 
 		++pFavInfo;
-		pFavInfo->m_pRecent    = &m_cRecentExceptMRU;
+		pFavInfo->m_pRecent    = &m_recentExceptMRU;
 		pFavInfo->m_strCaption = LS(STR_DLGFAV_FF_EXCLUDE);
 		pFavInfo->m_pszCaption = const_cast<TCHAR*>(pFavInfo->m_strCaption.c_str());
 		pFavInfo->m_nId        = IDC_LIST_FAVORITE_EXCEPTMRU;
@@ -156,7 +156,7 @@ DlgFavorite::DlgFavorite()
 		m_nExceptTab = (pFavInfo - m_aFavoriteInfo);
 
 		++pFavInfo;
-		pFavInfo->m_pRecent    = &m_cRecentSearch;
+		pFavInfo->m_pRecent    = &m_recentSearch;
 		pFavInfo->m_strCaption = LS(STR_DLGFAV_SEARCH);
 		pFavInfo->m_pszCaption = const_cast<TCHAR*>(pFavInfo->m_strCaption.c_str());
 		pFavInfo->m_nId        = IDC_LIST_FAVORITE_SEARCH;
@@ -167,7 +167,7 @@ DlgFavorite::DlgFavorite()
 		pFavInfo->m_bAddExcept = false;
 
 		++pFavInfo;
-		pFavInfo->m_pRecent    = &m_cRecentReplace;
+		pFavInfo->m_pRecent    = &m_recentReplace;
 		pFavInfo->m_strCaption = LS(STR_DLGFAV_REPLACE);
 		pFavInfo->m_pszCaption = const_cast<TCHAR*>(pFavInfo->m_strCaption.c_str());
 		pFavInfo->m_nId        = IDC_LIST_FAVORITE_REPLACE;
@@ -178,7 +178,7 @@ DlgFavorite::DlgFavorite()
 		pFavInfo->m_bAddExcept = false;
 
 		++pFavInfo;
-		pFavInfo->m_pRecent    = &m_cRecentGrepFile;
+		pFavInfo->m_pRecent    = &m_recentGrepFile;
 		pFavInfo->m_strCaption = LS(STR_DLGFAV_GREP_FILE);
 		pFavInfo->m_pszCaption = const_cast<TCHAR*>(pFavInfo->m_strCaption.c_str());
 		pFavInfo->m_nId        = IDC_LIST_FAVORITE_GREP_FILE;
@@ -189,7 +189,7 @@ DlgFavorite::DlgFavorite()
 		pFavInfo->m_bAddExcept = false;
 
 		++pFavInfo;
-		pFavInfo->m_pRecent    = &m_cRecentGrepFolder;
+		pFavInfo->m_pRecent    = &m_recentGrepFolder;
 		pFavInfo->m_strCaption = LS(STR_DLGFAV_GREP_FOLDER);
 		pFavInfo->m_pszCaption = const_cast<TCHAR*>(pFavInfo->m_strCaption.c_str());
 		pFavInfo->m_nId        = IDC_LIST_FAVORITE_GREP_FOLDER;
@@ -200,7 +200,7 @@ DlgFavorite::DlgFavorite()
 		pFavInfo->m_bAddExcept = false;
 
 		++pFavInfo;
-		pFavInfo->m_pRecent    = &m_cRecentCmd;
+		pFavInfo->m_pRecent    = &m_recentCmd;
 		pFavInfo->m_strCaption = LS(STR_DLGFAV_EXT_COMMAND);
 		pFavInfo->m_pszCaption = const_cast<TCHAR*>(pFavInfo->m_strCaption.c_str());
 		pFavInfo->m_nId        = IDC_LIST_FAVORITE_CMD;
@@ -211,7 +211,7 @@ DlgFavorite::DlgFavorite()
 		pFavInfo->m_bAddExcept = false;
 
 		++pFavInfo;
-		pFavInfo->m_pRecent    = &m_cRecentCurDir;
+		pFavInfo->m_pRecent    = &m_recentCurDir;
 		pFavInfo->m_strCaption = LS(STR_DLGFAV_CURRENT_DIR);
 		pFavInfo->m_pszCaption = const_cast<TCHAR*>(pFavInfo->m_strCaption.c_str());
 		pFavInfo->m_nId        = IDC_LIST_FAVORITE_CUR_DIR;

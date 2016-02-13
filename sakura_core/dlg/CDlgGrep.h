@@ -56,11 +56,11 @@ public:
 	SFilePath	m_szCurrentFilePath;
 protected:
 	ComboBoxItemDeleter	m_comboDelText;
-	RecentSearch			m_cRecentSearch;
+	RecentSearch			m_recentSearch;
 	ComboBoxItemDeleter	m_comboDelFile;
-	RecentGrepFile			m_cRecentGrepFile;
+	RecentGrepFile			m_recentGrepFile;
 	ComboBoxItemDeleter	m_comboDelFolder;
-	RecentGrepFolder		m_cRecentGrepFolder;
+	RecentGrepFolder		m_recentGrepFolder;
 	FontAutoDeleter		m_cFontText;
 
 	/*

@@ -21,11 +21,11 @@
 // Wndウィンドウメッセージのコールバック関数
 LRESULT CALLBACK CWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-	Wnd* pCWnd = (Wnd*)::GetWindowLongPtr(hwnd, GWLP_USERDATA);
+	Wnd* pWnd = (Wnd*)::GetWindowLongPtr(hwnd, GWLP_USERDATA);
 
-	if (pCWnd) {
+	if (pWnd) {
 		// クラスオブジェクトのポインタを使ってメッセージを配送する
-		return pCWnd->DispatchEvent(hwnd, uMsg, wParam, lParam);
+		return pWnd->DispatchEvent(hwnd, uMsg, wParam, lParam);
 	}else {
 		// ふつうはここには来ない
 		return ::DefWindowProc(hwnd, uMsg, wParam, lParam);
@@ -44,17 +44,17 @@ namespace CWindowCreationHook {
 		if (nCode == HCBT_CREATEWND) {
 			HWND hwnd = (HWND)wParam;
 			CBT_CREATEWND* pCreateWnd = (CBT_CREATEWND*)lParam;
-			Wnd* pcWnd = static_cast<Wnd*>(pCreateWnd->lpcs->lpCreateParams);
+			Wnd* pWnd = static_cast<Wnd*>(pCreateWnd->lpcs->lpCreateParams);
 
 			// Wnd以外のウィンドウ生成イベントは無視する
 			WNDPROC wndproc = (WNDPROC)::GetWindowLongPtr(hwnd, GWLP_WNDPROC);
 			if (wndproc != CWndProc) goto next;
 
 			// ウィンドウにWndを関連付ける
-			::SetWindowLongPtr(hwnd, GWLP_USERDATA, (LONG_PTR)pcWnd);
+			::SetWindowLongPtr(hwnd, GWLP_USERDATA, (LONG_PTR)pWnd);
 
 			// Wndにウィンドウを関連付ける
-			pcWnd->_SetHwnd(hwnd);
+			pWnd->_SetHwnd(hwnd);
 		}
 next:
 		return ::CallNextHookEx(g_hHook, nCode, wParam, lParam);

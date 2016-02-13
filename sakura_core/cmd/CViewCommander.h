@@ -279,7 +279,7 @@ public:
 	void Command_JUMP_DIALOG(void);						// 指定行ヘジャンプダイアログの表示
 	void Command_JUMP(void);							// 指定行ヘジャンプ
 // From Here 2001.12.03 hor
-	bool Command_FUNCLIST(int nAction, int nOutlineType);	// アウトライン解析 // 20060201 aroka
+	bool Command_FUNCLIST(ShowDialogType nAction, int nOutlineType);	// アウトライン解析 // 20060201 aroka
 // To Here 2001.12.03 hor
 	// Apr. 03, 2003 genta 引数追加
 	bool Command_TAGJUMP(bool bClose = false);			// タグジャンプ機能
@@ -329,7 +329,7 @@ public:
 	void Command_WRAPWINDOWWIDTH(void);				// 現在のウィンドウ幅で折り返し	// Oct. 7, 2000 JEPRO WRAPWINDIWWIDTH を WRAPWINDOWWIDTH に変更
 	void Command_Favorite(void);					// 履歴の管理	//@@@ 2003.04.08 MIK
 	void Command_SET_QUOTESTRING(const wchar_t*);	// Jan. 29, 2005 genta 引用符の設定
-	void Command_TEXTWRAPMETHOD(int);				// テキストの折り返し方法を変更する		// 2008.05.30 nasukoji
+	void Command_TEXTWRAPMETHOD(TextWrappingMethod);				// テキストの折り返し方法を変更する		// 2008.05.30 nasukoji
 	void Command_SELECT_COUNT_MODE(int nMode);		// 文字カウント方法	// 2009.07.06 syat
 
 	// マクロ系

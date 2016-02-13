@@ -27,6 +27,6 @@
 
 class Converter_ToLower : public Converter {
 public:
-	bool DoConvert(NativeW* pcData);
+	bool DoConvert(NativeW* pData);
 };
 

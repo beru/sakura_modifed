@@ -28,34 +28,34 @@ bool ViewCommander::Command_SELECTWORD(LayoutPoint* pptCaretPos)
 		si.DisableSelectArea(true);
 	}
 	LayoutPoint ptCaretPos = ((!pptCaretPos) ? GetCaret().GetCaretLayoutPos() : *pptCaretPos);
-	const Layout* pcLayout = GetDocument()->m_layoutMgr.SearchLineByLayoutY(ptCaretPos.GetY2());
-	if (!pcLayout) {
+	const Layout* pLayout = GetDocument()->m_layoutMgr.SearchLineByLayoutY(ptCaretPos.GetY2());
+	if (!pLayout) {
 		return false;	// 単語選択に失敗
 	}
 	// 指定された桁に対応する行のデータ内の位置を調べる
-	LogicInt nIdx = m_pCommanderView->LineColumnToIndex(pcLayout, ptCaretPos.GetX2());
+	LogicInt nIdx = m_pCommanderView->LineColumnToIndex(pLayout, ptCaretPos.GetX2());
 
 	// 現在位置の単語の範囲を調べる
-	LayoutRange sRange;
-	if (GetDocument()->m_layoutMgr.WhereCurrentWord(	ptCaretPos.GetY2(), nIdx, &sRange, NULL, NULL)) {
+	LayoutRange range;
+	if (GetDocument()->m_layoutMgr.WhereCurrentWord(	ptCaretPos.GetY2(), nIdx, &range, NULL, NULL)) {
 
 		// 指定された行のデータ内の位置に対応する桁の位置を調べる
 		// 2007.10.15 kobake 既にレイアウト単位なので変換は不要
 		/*
-		pcLayout = GetDocument()->m_layoutMgr.SearchLineByLayoutY(sRange.GetFrom().GetY2());
-		sRange.SetFromX(m_pCommanderView->LineIndexToColumn(pcLayout, sRange.GetFrom().x));
-		pcLayout = GetDocument()->m_layoutMgr.SearchLineByLayoutY(sRange.GetTo().GetY2());
-		sRange.SetToX(m_pCommanderView->LineIndexToColumn(pcLayout, sRange.GetTo().x));
+		pLayout = GetDocument()->m_layoutMgr.SearchLineByLayoutY(range.GetFrom().GetY2());
+		range.SetFromX(m_pCommanderView->LineIndexToColumn(pLayout, range.GetFrom().x));
+		pLayout = GetDocument()->m_layoutMgr.SearchLineByLayoutY(range.GetTo().GetY2());
+		range.SetToX(m_pCommanderView->LineIndexToColumn(pLayout, range.GetTo().x));
 		*/
 
 		// 選択範囲の変更
 		// 2005.06.24 Moca
-		si.SetSelectArea(sRange);
+		si.SetSelectArea(range);
 		// 選択領域描画
 		si.DrawSelectArea();
 
 		// 単語の先頭にカーソルを移動
-		GetCaret().MoveCursor(sRange.GetTo(), true);
+		GetCaret().MoveCursor(range.GetTo(), true);
 		GetCaret().m_nCaretPosX_Prev = GetCaret().GetCaretLayoutPos().GetX2();
 
 		return true;	// 単語選択に成功。
@@ -82,10 +82,10 @@ void ViewCommander::Command_SELECTALL(void)
 	// Jul. 29, 2006 genta 選択位置の末尾を正確に取得する
 	// マクロから取得した場合に正しい範囲が取得できないため
 	//int nX, nY;
-	LayoutRange sRange;
-	sRange.SetFrom(LayoutPoint(0, 0));
-	GetDocument()->m_layoutMgr.GetEndLayoutPos(sRange.GetToPointer());
-	si.SetSelectArea(sRange);
+	LayoutRange range;
+	range.SetFrom(LayoutPoint(0, 0));
+	GetDocument()->m_layoutMgr.GetEndLayoutPos(range.GetToPointer());
+	si.SetSelectArea(range);
 
 	// 選択領域描画
 	si.DrawSelectArea(false);
@@ -137,8 +137,8 @@ void ViewCommander::Command_SELECTLINE(int lparam)
 	
 	if (si.m_bBeginLineSelect) {
 		// 範囲選択開始行・カラムを記憶
-		si.m_sSelect.SetTo(ptCaret);
-		si.m_sSelectBgn.SetTo(ptCaret);
+		si.m_select.SetTo(ptCaret);
+		si.m_selectBgn.SetTo(ptCaret);
 	}
 
 	return;

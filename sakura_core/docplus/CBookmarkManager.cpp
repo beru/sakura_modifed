@@ -69,7 +69,7 @@ bool BookmarkManager::SearchBookMark(
 */
 void BookmarkManager::SetBookMarks(wchar_t* pMarkLines)
 {
-	DocLine* pCDocLine;
+	DocLine* pDocLine;
 	wchar_t delim[] = L", ";
 	wchar_t* p = pMarkLines;
 	if (p[0] == L':') {
@@ -102,9 +102,9 @@ void BookmarkManager::SetBookMarks(wchar_t* pMarkLines)
 				}
 				if (bSeparete) {
 					nLineNum += nLineTemp;
-					pCDocLine = m_pDocLineMgr->GetLine(LogicInt(nLineNum));
-					if (pCDocLine) {
-						BookmarkSetter(pCDocLine).SetBookmark(true);
+					pDocLine = m_pDocLineMgr->GetLine(LogicInt(nLineNum));
+					if (pDocLine) {
+						BookmarkSetter(pDocLine).SetBookmark(true);
 					}
 					++nLineNum;
 					nLineTemp = 0;
@@ -120,9 +120,9 @@ void BookmarkManager::SetBookMarks(wchar_t* pMarkLines)
 		// ‹ŒŒ`Ž® s”Ô†,‹æØ‚è
 		while (wcstok(p, delim)) {
 			while (wcschr(delim, *p)) ++p;
-			pCDocLine = m_pDocLineMgr->GetLine(LogicInt(_wtol(p)));
-			if (pCDocLine) {
-				BookmarkSetter(pCDocLine).SetBookmark(true);
+			pDocLine = m_pDocLineMgr->GetLine(LogicInt(_wtol(p)));
+			if (pDocLine) {
+				BookmarkSetter(pDocLine).SetBookmark(true);
 			}
 			p += wcslen(p) + 1;
 		}
@@ -143,10 +143,10 @@ LPCWSTR BookmarkManager::GetBookMarks()
 	LogicInt nLinePos = LogicInt(0);
 	LogicInt nLinePosOld = LogicInt(-1);
 	int nTextLen = 2;
-	DocLine* pCDocLine = m_pDocLineMgr->GetLine(nLinePos);
+	DocLine* pDocLine = m_pDocLineMgr->GetLine(nLinePos);
 	wcscpy(szText, L":0");
-	while (pCDocLine) {
-		if (BookmarkGetter(pCDocLine).IsBookmarked()) {
+	while (pDocLine) {
+		if (BookmarkGetter(pDocLine).IsBookmarked()) {
 			LogicInt nDiff = nLinePos - nLinePosOld - LogicInt(1);
 			nLinePosOld = nLinePos;
 			if (nDiff == LogicInt(0)) {
@@ -189,7 +189,7 @@ LPCWSTR BookmarkManager::GetBookMarks()
 			nTextLen += nBuff2Len;
 		}
 		++nLinePos;
-		pCDocLine = pCDocLine->GetNextLine();
+		pDocLine = pDocLine->GetNextLine();
 	}
 	return szText; // Feb. 17, 2003 genta
 }

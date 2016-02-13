@@ -92,18 +92,18 @@ DECLARE_YB_INTERFACEIMPL(IDropTarget)
 DECLARE_YB_INTERFACEIMPL(IEnumFORMATETC)
 
 
-DropTarget::DropTarget(EditWnd* pCEditWnd)
+DropTarget::DropTarget(EditWnd* pEditWnd)
 {
-	m_pEditWnd = pCEditWnd;	// 2008.06.20 ryoji
+	m_pEditWnd = pEditWnd;	// 2008.06.20 ryoji
 	m_pEditView = NULL;
 	m_hWnd_DropTarget = NULL;
 	return;
 }
 
-DropTarget::DropTarget(EditView* pCEditView)
+DropTarget::DropTarget(EditView* pEditView)
 {
 	m_pEditWnd = NULL;	// 2008.06.20 ryoji
-	m_pEditView = pCEditView;
+	m_pEditView = pEditView;
 	m_hWnd_DropTarget = NULL;
 	return;
 }

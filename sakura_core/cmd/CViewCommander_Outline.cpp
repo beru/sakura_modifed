@@ -34,7 +34,7 @@
 */
 // トグル用のフラグに変更 20060201 aroka
 bool ViewCommander::Command_FUNCLIST(
-	int nAction,
+	ShowDialogType nAction,
 	int _nOutlineType = OUTLINE_DEFAULT
 	)
 {
@@ -57,10 +57,10 @@ bool ViewCommander::Command_FUNCLIST(
 //		return TRUE;
 //	}
 
-	static FuncInfoArr	cFuncInfoArr;
+	static FuncInfoArr funcInfoArr;
 //	int		nLine;
 //	int		nListType;
-	std::tstring sTitleOverride;				// プラグインによるダイアログタイトル上書き
+	std::tstring titleOverride;				// プラグインによるダイアログタイトル上書き
 
 	// 2001.12.03 hor & 2002.3.13 YAZAKI
 	if (nOutlineType == OUTLINE_DEFAULT) {
@@ -74,7 +74,7 @@ bool ViewCommander::Command_FUNCLIST(
 	}
 
 	auto& dlgFuncList = GetEditWindow()->m_dlgFuncList;
-	if (dlgFuncList.GetHwnd() && nAction != (int)ShowDialogType::Reload) {
+	if (dlgFuncList.GetHwnd() && nAction != ShowDialogType::Reload) {
 		switch (nAction) {
 		case ShowDialogType::Normal: // アクティブにする
 			// 開いているものと種別が同じならActiveにするだけ．異なれば再解析
@@ -104,27 +104,27 @@ bool ViewCommander::Command_FUNCLIST(
 	}
 
 	// 解析結果データを空にする
-	cFuncInfoArr.Empty();
+	funcInfoArr.Empty();
 	int nListType = nOutlineType;			// 2011.06.25 syat
 
-	auto& cDocOutline = GetDocument()->m_docOutline;
+	auto& docOutline = GetDocument()->m_docOutline;
 	switch (nOutlineType) {
 	case OUTLINE_C:			// C/C++ は MakeFuncList_C
-	case OUTLINE_CPP:		cDocOutline.MakeFuncList_C(&cFuncInfoArr);break;
-	case OUTLINE_PLSQL:		cDocOutline.MakeFuncList_PLSQL(&cFuncInfoArr);break;
-	case OUTLINE_JAVA:		cDocOutline.MakeFuncList_Java(&cFuncInfoArr);break;
-	case OUTLINE_COBOL:		cDocOutline.MakeTopicList_cobol(&cFuncInfoArr);break;
-	case OUTLINE_ASM:		cDocOutline.MakeTopicList_asm(&cFuncInfoArr);break;
-	case OUTLINE_PERL:		cDocOutline.MakeFuncList_Perl(&cFuncInfoArr);break;	// Sep. 8, 2000 genta
-	case OUTLINE_VB:		cDocOutline.MakeFuncList_VisualBasic(&cFuncInfoArr);break;	// June 23, 2001 N.Nakatani
-	case OUTLINE_WZTXT:		cDocOutline.MakeTopicList_wztxt(&cFuncInfoArr);break;		// 2003.05.20 zenryaku 階層付テキスト アウトライン解析
-	case OUTLINE_HTML:		cDocOutline.MakeTopicList_html(&cFuncInfoArr);break;		// 2003.05.20 zenryaku HTML アウトライン解析
-	case OUTLINE_TEX:		cDocOutline.MakeTopicList_tex(&cFuncInfoArr);break;		// 2003.07.20 naoh TeX アウトライン解析
-	case OUTLINE_BOOKMARK:	cDocOutline.MakeFuncList_BookMark(&cFuncInfoArr);break;	// 2001.12.03 hor
-	case OUTLINE_FILE:		cDocOutline.MakeFuncList_RuleFile(&cFuncInfoArr, sTitleOverride);break;	// 2002.04.01 YAZAKI アウトライン解析にルールファイルを導入
+	case OUTLINE_CPP:		docOutline.MakeFuncList_C(&funcInfoArr);break;
+	case OUTLINE_PLSQL:		docOutline.MakeFuncList_PLSQL(&funcInfoArr);break;
+	case OUTLINE_JAVA:		docOutline.MakeFuncList_Java(&funcInfoArr);break;
+	case OUTLINE_COBOL:		docOutline.MakeTopicList_cobol(&funcInfoArr);break;
+	case OUTLINE_ASM:		docOutline.MakeTopicList_asm(&funcInfoArr);break;
+	case OUTLINE_PERL:		docOutline.MakeFuncList_Perl(&funcInfoArr);break;	// Sep. 8, 2000 genta
+	case OUTLINE_VB:		docOutline.MakeFuncList_VisualBasic(&funcInfoArr);break;	// June 23, 2001 N.Nakatani
+	case OUTLINE_WZTXT:		docOutline.MakeTopicList_wztxt(&funcInfoArr);break;		// 2003.05.20 zenryaku 階層付テキスト アウトライン解析
+	case OUTLINE_HTML:		docOutline.MakeTopicList_html(&funcInfoArr);break;		// 2003.05.20 zenryaku HTML アウトライン解析
+	case OUTLINE_TEX:		docOutline.MakeTopicList_tex(&funcInfoArr);break;		// 2003.07.20 naoh TeX アウトライン解析
+	case OUTLINE_BOOKMARK:	docOutline.MakeFuncList_BookMark(&funcInfoArr);break;	// 2001.12.03 hor
+	case OUTLINE_FILE:		docOutline.MakeFuncList_RuleFile(&funcInfoArr, titleOverride);break;	// 2002.04.01 YAZAKI アウトライン解析にルールファイルを導入
 //	case OUTLINE_UNKNOWN:	// Jul. 08, 2001 JEPRO 使わないように変更
-	case OUTLINE_PYTHON:	cDocOutline.MakeFuncList_python(&cFuncInfoArr);break;		// 2007.02.08 genta
-	case OUTLINE_ERLANG:	cDocOutline.MakeFuncList_Erlang(&cFuncInfoArr);break;		// 2009.08.10 genta
+	case OUTLINE_PYTHON:	docOutline.MakeFuncList_python(&funcInfoArr);break;		// 2007.02.08 genta
+	case OUTLINE_ERLANG:	docOutline.MakeFuncList_Erlang(&funcInfoArr);break;		// 2009.08.10 genta
 	case OUTLINE_FILETREE:	/* 特に何もしない*/ ;break;	// 2013.12.08 Moca
 	case OUTLINE_TEXT:
 		// fall though
@@ -136,17 +136,17 @@ bool ViewCommander::Command_FUNCLIST(
 			JackManager::getInstance()->GetUsablePlug(PP_OUTLINE, nOutlineType, &plugs);
 
 			if (plugs.size() > 0) {
-				assert_warning(1 == plugs.size());
+				assert_warning(plugs.size() == 1);
 				// インタフェースオブジェクト準備
 				WSHIfObj::List params;
-				OutlineIfObj* objOutline = new OutlineIfObj(cFuncInfoArr);
+				OutlineIfObj* objOutline = new OutlineIfObj(funcInfoArr);
 				objOutline->AddRef();
 				params.push_back(objOutline);
 				// プラグイン呼び出し
 				(*plugs.begin())->Invoke(m_pCommanderView, params);
 
 				nListType = objOutline->m_nListType;			// ダイアログの表示方法をを上書き
-				sTitleOverride = objOutline->m_sOutlineTitle;	// ダイアログタイトルを上書き
+				titleOverride = objOutline->m_sOutlineTitle;	// ダイアログタイトルを上書き
 
 				objOutline->Release();
 				break;
@@ -154,12 +154,12 @@ bool ViewCommander::Command_FUNCLIST(
 		}
 
 		// それ以外
-		cDocOutline.MakeTopicList_txt(&cFuncInfoArr);
+		docOutline.MakeTopicList_txt(&funcInfoArr);
 		break;
 	}
 
 	// 解析対象ファイル名
-	_tcscpy(cFuncInfoArr.m_szFilePath, GetDocument()->m_docFile.GetFilePath());
+	_tcscpy(funcInfoArr.m_szFilePath, GetDocument()->m_docFile.GetFilePath());
 
 	// アウトライン ダイアログの表示
 	LayoutPoint poCaret = GetCaret().GetCaretLayoutPos();
@@ -168,7 +168,7 @@ bool ViewCommander::Command_FUNCLIST(
 			G_AppInstance(),
 			m_pCommanderView->GetHwnd(),
 			(LPARAM)m_pCommanderView,
-			&cFuncInfoArr,
+			&funcInfoArr,
 			poCaret.GetY2() + LayoutInt(1),
 			poCaret.GetX2() + LayoutInt(1),
 			nOutlineType,
@@ -177,15 +177,15 @@ bool ViewCommander::Command_FUNCLIST(
 		);
 	}else {
 		// アクティブにする
-		dlgFuncList.Redraw(nOutlineType, nListType, &cFuncInfoArr, poCaret.GetY2() + 1, poCaret.GetX2() + 1);
+		dlgFuncList.Redraw(nOutlineType, nListType, &funcInfoArr, poCaret.GetY2() + 1, poCaret.GetX2() + 1);
 		if (bForeground) {
 			::SetFocus(dlgFuncList.GetHwnd());
 		}
 	}
 
 	// ダイアログタイトルを上書き
-	if (!sTitleOverride.empty()) {
-		dlgFuncList.SetWindowText(sTitleOverride.c_str());
+	if (!titleOverride.empty()) {
+		dlgFuncList.SetWindowText(titleOverride.c_str());
 	}
 
 	bIsProcessing = false;

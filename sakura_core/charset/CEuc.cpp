@@ -183,7 +183,7 @@ CodeConvertResult Euc::UnicodeToEUC(const NativeW& cSrc, Memory* pDstMem)
 // 文字コード表示用	UNICODE → Hex 変換	2008/6/9 Uchi
 CodeConvertResult Euc::UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR* pDst, const CommonSetting_StatusBar* psStatusbar)
 {
-	NativeW cCharBuffer;
+	NativeW charBuffer;
 	// 2008/6/21 Uchi
 	if (psStatusbar->m_bDispUniInEuc) {
 		// Unicodeで表示
@@ -191,7 +191,7 @@ CodeConvertResult Euc::UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR*
 	}
 
 	// 1文字データバッファ
-	cCharBuffer.SetString(cSrc, 1);
+	charBuffer.SetString(cSrc, 1);
 
 	bool bbinary = false;
 	if (IsBinaryOnSurrogate(cSrc[0])) {
@@ -199,16 +199,16 @@ CodeConvertResult Euc::UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR*
 	}
 
 	// EUC-JP 変換
-	CodeConvertResult res = UnicodeToEUC(cCharBuffer, cCharBuffer._GetMemory());
+	CodeConvertResult res = UnicodeToEUC(charBuffer, charBuffer._GetMemory());
 	if (res != CodeConvertResult::Complete) {
 		return res;
 	}
 
 	// Hex変換
-	unsigned char* ps = reinterpret_cast<unsigned char*>(cCharBuffer._GetMemory()->GetRawPtr());
+	unsigned char* ps = reinterpret_cast<unsigned char*>(charBuffer._GetMemory()->GetRawPtr());
 	TCHAR* pd = pDst;
 	if (!bbinary) {
-		for (int i=cCharBuffer._GetMemory()->GetRawLength(); i>0; --i, ++ps, pd+=2) {
+		for (int i=charBuffer._GetMemory()->GetRawLength(); i>0; --i, ++ps, pd+=2) {
 			auto_sprintf(pd, _T("%02X"), *ps);
 		}
 	}else {

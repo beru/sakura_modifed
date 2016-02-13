@@ -69,11 +69,11 @@ BOOL DlgSetCharSet::OnInitDialog(
 	Combo_SetExtendedUI(m_hwndCharSet, TRUE);
 
 	// 文字コードセット選択コンボボックス初期化
-	CodeTypesForCombobox cCodeTypes;
+	CodeTypesForCombobox codeTypes;
 	Combo_ResetContent(m_hwndCharSet);
-	for (int i=1; i<cCodeTypes.GetCount(); ++i) {
-		int idx = Combo_AddString(m_hwndCharSet, cCodeTypes.GetName(i));
-		Combo_SetItemData(m_hwndCharSet, idx, cCodeTypes.GetCode(i));
+	for (int i=1; i<codeTypes.GetCount(); ++i) {
+		int idx = Combo_AddString(m_hwndCharSet, codeTypes.GetName(i));
+		Combo_SetItemData(m_hwndCharSet, idx, codeTypes.GetCode(i));
 	}
 
 	// 基底クラスメンバ
@@ -146,13 +146,13 @@ BOOL DlgSetCharSet::OnCbnSelChange(HWND hwndCtl, int wID)
 		SetBOM();
 		nIdx = Combo_GetCurSel(hwndCtl);
 		lRes = Combo_GetItemData(hwndCtl, nIdx);
-		CodeTypeName	cCodeTypeName(lRes);
-		if (cCodeTypeName.UseBom()) {
+		CodeTypeName	codeTypeName(lRes);
+		if (codeTypeName.UseBom()) {
 			::EnableWindow(m_hwndCheckBOM, TRUE);
 			if (lRes == *m_pnCharSet) {
 				fCheck = *m_pbBom ? BST_CHECKED : BST_UNCHECKED;
 			}else {
-				fCheck = cCodeTypeName.IsBomDefOn() ? BST_CHECKED : BST_UNCHECKED;
+				fCheck = codeTypeName.IsBomDefOn() ? BST_CHECKED : BST_UNCHECKED;
 			}
 		}else {
 			::EnableWindow(m_hwndCheckBOM, FALSE);
@@ -175,7 +175,7 @@ LPVOID DlgSetCharSet::GetHelpIdTable(void)
 void DlgSetCharSet::SetData(void)
 {
 	// 文字コードセット
-	CodeTypesForCombobox cCodeTypes;
+	CodeTypesForCombobox codeTypes;
 
 	int nIdxOld = Combo_GetCurSel(m_hwndCharSet);
 	int nCurIdx = -1;

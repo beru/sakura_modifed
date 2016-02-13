@@ -49,8 +49,8 @@ public:
 	// 選択範囲を指定する(原点未選択)
 	// 2005.06.24 Moca
 	void SetSelectArea(const LayoutRange& sRange) {
-		m_sSelectBgn.Set(sRange.GetFrom());
-		m_sSelect = sRange;
+		m_selectBgn.Set(sRange.GetFrom());
+		m_select = sRange;
 	}
 
 	// 単語選択開始
@@ -101,11 +101,11 @@ private:
 public:
 	void GetSelectAreaLineFromRange(LayoutRange& ret, LayoutInt nLineNum, const Layout* pcLayout, const LayoutRange& sRange) const;
 	void GetSelectAreaLine(LayoutRange& ret, LayoutInt nLineNum, const Layout* pcLayout) const {
-		GetSelectAreaLineFromRange(ret, nLineNum, pcLayout, m_sSelect);
+		GetSelectAreaLineFromRange(ret, nLineNum, pcLayout, m_select);
 	}
 	LayoutRange GetSelectAreaLine(LayoutInt nLineNum, const Layout* pcLayout) const {
 		LayoutRange ret;
-		GetSelectAreaLineFromRange(ret, nLineNum, pcLayout, m_sSelect);
+		GetSelectAreaLineFromRange(ret, nLineNum, pcLayout, m_select);
 		return ret;
 	}
 	// 選択情報データの作成	2005.07.09 genta
@@ -117,7 +117,7 @@ public:
 	// テキストが選択されているか
 	// 2002/03/29 Azumaiya インライン関数化
 	bool IsTextSelected() const {
-		return m_sSelect.IsValid();
+		return m_select.IsValid();
 //		return 0 != (
 //			~((DWORD)(m_sSelect.nLineFrom | m_sSelect.nLineTo | m_sSelect.nColumnFrom | m_sSelect.nColumnTo)) >> 31
 //			);
@@ -162,9 +162,9 @@ public:
 
 	// 選択範囲を保持するための変数群
 	// これらはすべて折り返し行と、折り返し桁を保持している。
-	LayoutRange m_sSelectBgn; // 範囲選択(原点)
-	LayoutRange m_sSelect;    // 範囲選択
-	LayoutRange m_sSelectOld; // 範囲選択Old
+	LayoutRange m_selectBgn; // 範囲選択(原点)
+	LayoutRange m_select;    // 範囲選択
+	LayoutRange m_selectOld; // 範囲選択Old
 
 	Point	m_ptMouseRollPosOld;	// マウス範囲選択前回位置(XY座標)
 };

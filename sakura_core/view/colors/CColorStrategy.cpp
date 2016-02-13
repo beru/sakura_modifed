@@ -108,8 +108,8 @@ bool ColorStrategyInfo::CheckChangeColor(const StringRef& lineStr)
 	}
 
 	// カーソル行背景色
-	TypeSupport cCaretLineBg(m_pView, COLORIDX_CARETLINEBG);
-	if (cCaretLineBg.IsDisp() && !m_pView->m_bMiniMap) {
+	TypeSupport caretLineBg(m_pView, COLORIDX_CARETLINEBG);
+	if (caretLineBg.IsDisp() && !m_pView->m_bMiniMap) {
 		if (m_colorIdxBackLine == COLORIDX_CARETLINEBG) {
 			if (m_pDispPos->GetLayoutLineRef() != m_pView->GetCaret().GetCaretLayoutPos().GetY2()) {
 				m_colorIdxBackLine = COLORIDX_TEXT;

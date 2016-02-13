@@ -378,7 +378,7 @@ BOOL EditView::ChangeCurRegexp(bool bRedrawIfChanged)
 	}
 	m_bCurSearchUpdate = false;
 	if (bChangeState) {
-		if (!m_sSearchPattern.SetPattern(this->GetHwnd(), m_strCurSearchKey.c_str(), m_strCurSearchKey.size(),
+		if (!m_searchPattern.SetPattern(this->GetHwnd(), m_strCurSearchKey.c_str(), m_strCurSearchKey.size(),
 			m_curSearchOption, &m_CurRegexp)
 		) {
 				m_bCurSrchKeyMark = false;

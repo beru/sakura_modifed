@@ -94,8 +94,8 @@ public:
 	const Layout* GetPrevLayout() const { return m_pPrev; }
 	Layout* GetNextLayout() { return m_pNext; }
 	const Layout* GetNextLayout() const { return m_pNext; }
-	void _SetPrevLayout(Layout* pcLayout) { m_pPrev = pcLayout; }
-	void _SetNextLayout(Layout* pcLayout) { m_pNext = pcLayout; }
+	void _SetPrevLayout(Layout* pLayout) { m_pPrev = pLayout; }
+	void _SetNextLayout(Layout* pLayout) { m_pNext = pLayout; }
 
 	// 実データ参照
 	const DocLine* GetDocLineRef() const { if (this) return m_pDocLine; else return NULL; } //$$note:高速化

@@ -582,7 +582,7 @@ int SMacroMgr::Append(
 BOOL SMacroMgr::Exec(
 	int idx,
 	HINSTANCE hInstance,
-	EditView* pcEditView,
+	EditView* pEditView,
 	int flags
 	)
 {
@@ -593,7 +593,7 @@ BOOL SMacroMgr::Exec(
 			// Sep. 15, 2005 FILE
 			// Jul. 01, 2007 マクロの多重実行時に備えて直前のマクロ番号を退避
 			int prevmacro = SetCurrentIdx(idx);
-			m_pKeyMacro->ExecKeyMacro2(pcEditView, flags);
+			m_pKeyMacro->ExecKeyMacro2(pEditView, flags);
 			SetCurrentIdx(prevmacro);
 			return TRUE;
 		}else {
@@ -603,7 +603,7 @@ BOOL SMacroMgr::Exec(
 	if (idx == TEMP_KEYMACRO) {		// 一時マクロ
 		if (m_pTempMacro) {
 			int prevmacro = SetCurrentIdx( idx );
-			m_pTempMacro->ExecKeyMacro2(pcEditView, flags);
+			m_pTempMacro->ExecKeyMacro2(pEditView, flags);
 			SetCurrentIdx( prevmacro );
 			return TRUE;
 		}else {
@@ -634,7 +634,7 @@ BOOL SMacroMgr::Exec(
 	// Jul. 01, 2007 マクロの多重実行時に備えて直前のマクロ番号を退避
 	int prevmacro = SetCurrentIdx(idx);
 	SetCurrentIdx(idx);
-	m_cSavedKeyMacro[idx]->ExecKeyMacro2(pcEditView, flags);
+	m_cSavedKeyMacro[idx]->ExecKeyMacro2(pEditView, flags);
 	SetCurrentIdx(prevmacro);
 
 	return TRUE;

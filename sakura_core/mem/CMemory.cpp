@@ -362,14 +362,14 @@ void Memory::AppendRawData(
 }
 
 // バッファの最後にデータを追加する（publicメンバ）
-void Memory::AppendRawData(const Memory* pcmemData)
+void Memory::AppendRawData(const Memory* pMemData)
 {
-	if (this == pcmemData) {
-		Memory cm = *pcmemData;
+	if (this == pMemData) {
+		Memory cm = *pMemData;
 		AppendRawData(&cm);
 	}
 	int	nDataLen;
-	const void*	pData = pcmemData->GetRawPtr(&nDataLen);
+	const void*	pData = pMemData->GetRawPtr(&nDataLen);
 	AllocBuffer(m_nRawLen + nDataLen);
 	_AddData(pData, nDataLen);
 }

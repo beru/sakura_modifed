@@ -387,15 +387,15 @@ void TextDrawer::DispLineNumber(
 	//                     nColorIndexを決定                       //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	EColorIndexType nColorIndex = COLORIDX_GYOU;	// 行番号
-	const DocLine*	pCDocLine = NULL;
+	const DocLine*	pDocLine = NULL;
 	bool bGyouMod = false;
 	if (pcLayout) {
-		pCDocLine = pcLayout->GetDocLineRef();
+		pDocLine = pcLayout->GetDocLineRef();
 
 		if (1
 			&& pView->GetDocument()->m_docEditor.IsModified()
 			&& ModifyVisitor().IsLineModified(
-				pCDocLine,
+				pDocLine,
 				pView->GetDocument()->m_docEditor.m_opeBuf.GetNoModifiedSeq()
 			)
 		) {
@@ -407,13 +407,13 @@ void TextDrawer::DispLineNumber(
 		}
 	}
 
-	if (pCDocLine) {
+	if (pDocLine) {
 		// DIFF色設定
-		DiffLineGetter(pCDocLine).GetDiffColor(&nColorIndex);
+		DiffLineGetter(pDocLine).GetDiffColor(&nColorIndex);
 
 		// 02/10/16 ai
 		// ブックマークの表示
-		if (BookmarkGetter(pCDocLine).IsBookmarked()) {
+		if (BookmarkGetter(pDocLine).IsBookmarked()) {
 			if (TypeSupport(pView, COLORIDX_MARK).IsDisp()) {
 				nColorIndex = COLORIDX_MARK;
 			}
@@ -497,7 +497,7 @@ void TextDrawer::DispLineNumber(
 				}else {
 					_itow(pcLayout->GetLogicLineNo() + 1, szLineNum, 10);	// 対応する論理行番号
 //###デバッグ用
-//					_itow(ModifyVisitor().GetLineModifiedSeq(pCDocLine), szLineNum, 10);	// 行の変更番号
+//					_itow(ModifyVisitor().GetLineModifiedSeq(pDocLine), szLineNum, 10);	// 行の変更番号
 				}
 			}else {
 				// 物理行（レイアウト行）番号表示モード
@@ -548,10 +548,10 @@ void TextDrawer::DispLineNumber(
 	}
 
 	// 行属性描画 ($$$分離予定)
-	if (pCDocLine) {
+	if (pDocLine) {
 		// 2001.12.03 hor
 		// とりあえずブックマークに縦線
-		if (BookmarkGetter(pCDocLine).IsBookmarked() && !cMarkType.IsDisp()) {
+		if (BookmarkGetter(pDocLine).IsBookmarked() && !cMarkType.IsDisp()) {
 			gr.PushPen(cColorType.GetTextColor(), 2);
 			::MoveToEx(gr, 1, y, NULL);
 			::LineTo(gr, 1, y + nLineHeight);
@@ -559,7 +559,7 @@ void TextDrawer::DispLineNumber(
 		}
 
 		// DIFFマーク描画
-		DiffLineGetter(pCDocLine).DrawDiffMark(gr, y, nLineHeight, fgcolor);
+		DiffLineGetter(pDocLine).DrawDiffMark(gr, y, nLineHeight, fgcolor);
 	}
 
 	// 行番号とテキストの隙間の描画

@@ -338,7 +338,7 @@ normal_action:;
 				// 現在位置の単語選択
 				if (GetCommander().Command_SELECTWORD(&ptNewCaret)) {
 					bSelectWord = true;
-					GetSelectionInfo().m_sSelectBgn = GetSelectionInfo().m_sSelect;
+					GetSelectionInfo().m_selectBgn = GetSelectionInfo().m_select;
 				}
 			}else {
 
@@ -348,15 +348,15 @@ normal_action:;
 				// 指定された桁に対応する行のデータ内の位置を調べる
 				const Layout* pcLayout;
 				pLine = m_pEditDoc->m_layoutMgr.GetLineStr(
-					GetSelectionInfo().m_sSelect.GetFrom().GetY2(),
+					GetSelectionInfo().m_select.GetFrom().GetY2(),
 					&nLineLen,
 					&pcLayout
 				);
 				if (pLine) {
-					nIdx = LineColumnToIndex(pcLayout, GetSelectionInfo().m_sSelect.GetFrom().GetX2());
+					nIdx = LineColumnToIndex(pcLayout, GetSelectionInfo().m_select.GetFrom().GetX2());
 					// 現在位置の単語の範囲を調べる
 					bool bWhareResult = m_pEditDoc->m_layoutMgr.WhereCurrentWord(
-						GetSelectionInfo().m_sSelect.GetFrom().GetY2(),
+						GetSelectionInfo().m_select.GetFrom().GetY2(),
 						nIdx,
 						&sRange,
 						NULL,
@@ -376,19 +376,19 @@ normal_action:;
 							sRange.GetFrom()	// カーソル位置
 						);
 						if (nWork == -1 || nWork == 0) {
-							GetSelectionInfo().m_sSelect.SetFrom(sRange.GetFrom());
+							GetSelectionInfo().m_select.SetFrom(sRange.GetFrom());
 							if (nWorkRel == 1) {
-								GetSelectionInfo().m_sSelectBgn = sRange;
+								GetSelectionInfo().m_selectBgn = sRange;
 							}
 						}
 					}
 				}
-				pLine = m_pEditDoc->m_layoutMgr.GetLineStr(GetSelectionInfo().m_sSelect.GetTo().GetY2(), &nLineLen, &pcLayout);
+				pLine = m_pEditDoc->m_layoutMgr.GetLineStr(GetSelectionInfo().m_select.GetTo().GetY2(), &nLineLen, &pcLayout);
 				if (pLine) {
-					nIdx = LineColumnToIndex(pcLayout, GetSelectionInfo().m_sSelect.GetTo().GetX2());
+					nIdx = LineColumnToIndex(pcLayout, GetSelectionInfo().m_select.GetTo().GetX2());
 					// 現在位置の単語の範囲を調べる
 					if (m_pEditDoc->m_layoutMgr.WhereCurrentWord(
-						GetSelectionInfo().m_sSelect.GetTo().GetY2(), nIdx, &sRange, NULL, NULL)
+						GetSelectionInfo().m_select.GetTo().GetY2(), nIdx, &sRange, NULL, NULL)
 					) {
 						// 指定された行のデータ内の位置に対応する桁の位置を調べる
 						// 2007.10.15 kobake 既にレイアウト単位なので変換は不要
@@ -401,13 +401,13 @@ normal_action:;
 
 						nWork = IsCurrentPositionSelected(sRange.GetFrom());
 						if (nWork == -1 || nWork == 0) {
-							GetSelectionInfo().m_sSelect.SetTo(sRange.GetFrom());
+							GetSelectionInfo().m_select.SetTo(sRange.GetFrom());
 						}
 						if (IsCurrentPositionSelected(sRange.GetTo()) == 1) {
-							GetSelectionInfo().m_sSelect.SetTo(sRange.GetTo());
+							GetSelectionInfo().m_select.SetTo(sRange.GetTo());
 						}
 						if (nWorkRel == -1 || nWorkRel == 0) {
-							GetSelectionInfo().m_sSelectBgn=sRange;
+							GetSelectionInfo().m_selectBgn=sRange;
 						}
 					}
 				}
@@ -454,14 +454,14 @@ normal_action:;
 			//	Apr. 14, 2003 genta
 			//	行番号の下をクリックしてドラッグを開始するとおかしくなるのを修正
 			//	行番号をクリックした場合にはGetSelectionInfo().ChangeSelectAreaByCurrentCursor()にて
-			//	GetSelectionInfo().m_sSelect.GetTo().x/GetSelectionInfo().m_sSelect.GetTo().yに-1が設定されるが、上の
+			//	GetSelectionInfo().m_select.GetTo().x/GetSelectionInfo().m_select.GetTo().yに-1が設定されるが、上の
 			//	GetCommander().Command_GOLINEEND(), Command_RIGHT()によって行選択が行われる。
 			//	しかしキャレットが末尾にある場合にはキャレットが移動しないので
-			//	GetSelectionInfo().m_sSelect.GetTo().x/GetSelectionInfo().m_sSelect.GetTo().yが-1のまま残ってしまい、それが
+			//	GetSelectionInfo().m_select.GetTo().x/GetSelectionInfo().m_select.GetTo().yが-1のまま残ってしまい、それが
 			//	原点に設定されるためにおかしくなっていた。
 			//	なので、範囲選択が行われていない場合は起点末尾の設定を行わないようにする
 			if (GetSelectionInfo().IsTextSelected()) {
-				GetSelectionInfo().m_sSelectBgn.SetTo(GetSelectionInfo().m_sSelect.GetTo());
+				GetSelectionInfo().m_selectBgn.SetTo(GetSelectionInfo().m_select.GetTo());
 			}
 		}else {
 			// URLがクリックされたら選択するか
@@ -491,8 +491,8 @@ normal_action:;
 					m_pEditDoc->m_layoutMgr.LogicToLayout(LogicPoint(nUrlIdxBgn + nUrlLen, nUrlLine), sRangeB.GetToPointer());
 					*/
 
-					GetSelectionInfo().m_sSelectBgn = sRangeB;
-					GetSelectionInfo().m_sSelect = sRangeB;
+					GetSelectionInfo().m_selectBgn = sRangeB;
+					GetSelectionInfo().m_select = sRangeB;
 
 					// 選択領域描画
 					GetSelectionInfo().DrawSelectArea();
@@ -698,10 +698,10 @@ void EditView::OnMBUTTONUP(WPARAM fwKeys, int xPos , int yPos)
 
 void CALLBACK AutoScrollTimerProc(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime)
 {
-	EditView*	pCEditView;
-	pCEditView = (EditView*)::GetWindowLongPtr(hwnd, 0);
-	if (pCEditView) {
-		pCEditView->AutoScrollOnTimer();
+	EditView*	pEditView;
+	pEditView = (EditView*)::GetWindowLongPtr(hwnd, 0);
+	if (pEditView) {
+		pEditView->AutoScrollOnTimer();
 	}
 }
 
@@ -934,7 +934,7 @@ void EditView::OnMOUSEMOVE(WPARAM fwKeys, int xPos_, int yPos_)
 		}
 	}
 
-	LayoutRange sSelect_Old    = GetSelectionInfo().m_sSelect;
+	LayoutRange sSelect_Old    = GetSelectionInfo().m_select;
 
 	// オートスクロール
 	if (m_nAutoScrollMode == 1) {
@@ -1123,7 +1123,7 @@ void EditView::OnMOUSEMOVE(WPARAM fwKeys, int xPos_, int yPos_)
 			int nLineHeight = GetTextMetrics().GetHankakuHeight() + m_pTypeData->m_nLineSpace;
 
 			// 選択開始行以下へのドラッグ時は1行下にカーソルを移動する
-			if (GetTextArea().GetViewTopLine() + (ptMouse.y - GetTextArea().GetAreaTop()) / nLineHeight >= GetSelectionInfo().m_sSelectBgn.GetTo().y)
+			if (GetTextArea().GetViewTopLine() + (ptMouse.y - GetTextArea().GetAreaTop()) / nLineHeight >= GetSelectionInfo().m_selectBgn.GetTo().y)
 				nNewPos.y += nLineHeight;
 
 			// カーソルを移動
@@ -1133,7 +1133,7 @@ void EditView::OnMOUSEMOVE(WPARAM fwKeys, int xPos_, int yPos_)
 			// 2.5クリックによる行単位のドラッグ
 			if (m_dwTripleClickCheck) {
 				// 選択開始行以上にドラッグした
-				if (ptNewCursor.GetY() <= GetSelectionInfo().m_sSelectBgn.GetTo().y) {
+				if (ptNewCursor.GetY() <= GetSelectionInfo().m_selectBgn.GetTo().y) {
 					// GetCommander().Command_GOLINETOP(true, 0x09);		// 改行単位の行頭へ移動
 					LogicInt nLineLen;
 					const Layout*	pcLayout;
@@ -1152,7 +1152,7 @@ void EditView::OnMOUSEMOVE(WPARAM fwKeys, int xPos_, int yPos_)
 
 					// 選択開始行より下にカーソルがある時は1行前と物理行番号の違いをチェックする
 					// 選択開始行にカーソルがある時はチェック不要
-					if (ptNewCursor.GetY() > GetSelectionInfo().m_sSelectBgn.GetTo().y) {
+					if (ptNewCursor.GetY() > GetSelectionInfo().m_selectBgn.GetTo().y) {
 						// 1行前の物理行を取得する
 						m_pEditDoc->m_layoutMgr.LayoutToLogic(LayoutPoint(LayoutInt(0), ptNewCursor.GetY() - 1), &ptCaretPrevLog);
 					}
@@ -1548,7 +1548,7 @@ void EditView::OnLBUTTONUP(WPARAM fwKeys, int xPos , int yPos)
 		m_mouseDownPos.Set(-INT_MAX, -INT_MAX);
 
 		GetCaret().m_cUnderLine.UnderLineUnLock();
-		if (GetSelectionInfo().m_sSelect.IsOne()) {
+		if (GetSelectionInfo().m_select.IsOne()) {
 			// 現在の選択範囲を非選択状態に戻す
 			GetSelectionInfo().DisableSelectArea(true);
 		}
@@ -1609,7 +1609,7 @@ void EditView::OnLBUTTONDBLCLK(WPARAM fwKeys, int _xPos , int _yPos)
 			{
 				// URLを開く
 				// 2009.05.21 syat UNCパスだと1分以上無応答になることがあるのでスレッド化
-				WaitCursor cWaitCursor(GetHwnd());	// カーソルを砂時計にする
+				WaitCursor waitCursor(GetHwnd());	// カーソルを砂時計にする
 
 				unsigned int nThreadId;
 				LPCTSTR szUrl = to_tchar(wstrOPEN.c_str());
@@ -1708,7 +1708,7 @@ void EditView::OnLBUTTONDBLCLK(WPARAM fwKeys, int _xPos , int _yPos)
 	GetCaret().HideCaret_(GetHwnd()); // 2002/07/22 novice
 	if (GetSelectionInfo().IsTextSelected()) {
 		// 常時選択範囲の範囲
-		GetSelectionInfo().m_sSelectBgn.SetTo(GetSelectionInfo().m_sSelect.GetTo());
+		GetSelectionInfo().m_selectBgn.SetTo(GetSelectionInfo().m_select.GetTo());
 	}else {
 		// 現在のカーソル位置から選択を開始する
 		GetSelectionInfo().BeginSelectArea();
@@ -1890,8 +1890,8 @@ STDMETHODIMP EditView::Drop(LPDATAOBJECT pDataObject, DWORD dwKeyState, POINTL p
 			// 2点を対角とする矩形を求める
 			TwoPointToRect(
 				&rcSel,
-				pcDragSourceView->GetSelectionInfo().m_sSelect.GetFrom(),	// 範囲選択開始
-				pcDragSourceView->GetSelectionInfo().m_sSelect.GetTo()		// 範囲選択終了
+				pcDragSourceView->GetSelectionInfo().m_select.GetFrom(),	// 範囲選択開始
+				pcDragSourceView->GetSelectionInfo().m_select.GetTo()		// 範囲選択終了
 			);
 			++rcSel.bottom;
 			if (GetCaret().GetCaretLayoutPos().GetY() >= rcSel.bottom) {
@@ -1904,10 +1904,10 @@ STDMETHODIMP EditView::Drop(LPDATAOBJECT pDataObject, DWORD dwKeyState, POINTL p
 				bMoveToPrev = false;
 			}
 		}else {
-			if (pcDragSourceView->GetSelectionInfo().m_sSelect.GetFrom().y > GetCaret().GetCaretLayoutPos().GetY()) {
+			if (pcDragSourceView->GetSelectionInfo().m_select.GetFrom().y > GetCaret().GetCaretLayoutPos().GetY()) {
 				bMoveToPrev = true;
-			}else if (pcDragSourceView->GetSelectionInfo().m_sSelect.GetFrom().y == GetCaret().GetCaretLayoutPos().GetY()) {
-				if (pcDragSourceView->GetSelectionInfo().m_sSelect.GetFrom().x > GetCaret().GetCaretLayoutPos().GetX2()) {
+			}else if (pcDragSourceView->GetSelectionInfo().m_select.GetFrom().y == GetCaret().GetCaretLayoutPos().GetY()) {
+				if (pcDragSourceView->GetSelectionInfo().m_select.GetFrom().x > GetCaret().GetCaretLayoutPos().GetX2()) {
 					bMoveToPrev = true;
 				}else {
 					bMoveToPrev = false;
@@ -1925,8 +1925,8 @@ STDMETHODIMP EditView::Drop(LPDATAOBJECT pDataObject, DWORD dwKeyState, POINTL p
 		GetSelectionInfo().DisableSelectArea(true);
 	}else {
 		bBeginBoxSelect_Old = pcDragSourceView->GetSelectionInfo().IsBoxSelecting();
-		sSelectBgn_Old = pcDragSourceView->GetSelectionInfo().m_sSelectBgn;
-		sSelect_Old = pcDragSourceView->GetSelectionInfo().m_sSelect;
+		sSelectBgn_Old = pcDragSourceView->GetSelectionInfo().m_selectBgn;
+		sSelect_Old = pcDragSourceView->GetSelectionInfo().m_select;
 		if (bMoveToPrev) {
 			// 移動モード & 前に移動
 			// 選択エリアを削除
@@ -1934,8 +1934,8 @@ STDMETHODIMP EditView::Drop(LPDATAOBJECT pDataObject, DWORD dwKeyState, POINTL p
 				pcDragSourceView->GetSelectionInfo().DisableSelectArea(true);
 				GetSelectionInfo().DisableSelectArea(true);
 				GetSelectionInfo().SetBoxSelect(bBeginBoxSelect_Old);
-				GetSelectionInfo().m_sSelectBgn = sSelectBgn_Old;
-				GetSelectionInfo().m_sSelect = sSelect_Old;
+				GetSelectionInfo().m_selectBgn = sSelectBgn_Old;
+				GetSelectionInfo().m_select = sSelect_Old;
 			}
 			DeleteData(true);
 			GetCaret().MoveCursor(ptCaretPos_Old, true);
@@ -1992,7 +1992,7 @@ STDMETHODIMP EditView::Drop(LPDATAOBJECT pDataObject, DWORD dwKeyState, POINTL p
 			// 現在の選択範囲を記憶する	// 2008.03.26 ryoji
 			LogicRange sSelLogic;
 			m_pEditDoc->m_layoutMgr.LayoutToLogic(
-				GetSelectionInfo().m_sSelect,
+				GetSelectionInfo().m_select,
 				&sSelLogic
 			);
 
@@ -2008,8 +2008,8 @@ STDMETHODIMP EditView::Drop(LPDATAOBJECT pDataObject, DWORD dwKeyState, POINTL p
 
 			// 以前の選択範囲を選択する
 			GetSelectionInfo().SetBoxSelect(bBeginBoxSelect_Old);
-			GetSelectionInfo().m_sSelectBgn = sSelectBgn_Old;
-			GetSelectionInfo().m_sSelect = sSelect_Old;
+			GetSelectionInfo().m_selectBgn = sSelectBgn_Old;
+			GetSelectionInfo().m_select = sSelect_Old;
 
 			// 選択エリアを削除
 			DeleteData(true);
@@ -2044,7 +2044,7 @@ STDMETHODIMP EditView::Drop(LPDATAOBJECT pDataObject, DWORD dwKeyState, POINTL p
 					&sSelect
 				);
 				GetSelectionInfo().SetSelectArea(sSelect);	// 2009.07.25 ryoji
-				ptCaretPos_Old = GetSelectionInfo().m_sSelect.GetTo();
+				ptCaretPos_Old = GetSelectionInfo().m_select.GetTo();
 			}
 
 			// キャレットを移動する
@@ -2054,7 +2054,7 @@ STDMETHODIMP EditView::Drop(LPDATAOBJECT pDataObject, DWORD dwKeyState, POINTL p
 			// 削除位置から移動先へのカーソル移動をアンドゥ操作に追加する	// 2008.03.26 ryoji
 			LogicPoint ptBefore;
 			m_pEditDoc->m_layoutMgr.LayoutToLogic(
-				GetSelectionInfo().m_sSelect.GetFrom(),
+				GetSelectionInfo().m_select.GetFrom(),
 				&ptBefore
 			);
 			m_commander.GetOpeBlk()->AppendOpe(

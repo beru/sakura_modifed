@@ -33,11 +33,11 @@
 /////////////////////////////////////////////
 // Plug ÉÅÉìÉoä÷êî
 bool Plug::Invoke(EditView* view, WSHIfObj::List& params) {
-	return m_cPlugin.InvokePlug(view, *this, params);
+	return m_plugin.InvokePlug(view, *this, params);
 }
 
 EFunctionCode Plug::GetFunctionCode() const {
-	return GetPluginFunctionCode(m_cPlugin.m_id, m_id);
+	return GetPluginFunctionCode(m_plugin.m_id, m_id);
 }
 
 /////////////////////////////////////////////

@@ -36,40 +36,40 @@
 // MacroBeforeAfter
 
 void MacroBeforeAfter::ExecKeyMacroBefore(
-	class EditView* pcEditView,
+	class EditView* pEditView,
 	int flags
 	)
 {
-	OpeBlk* opeBlk = pcEditView->m_commander.GetOpeBlk();
+	OpeBlk* opeBlk = pEditView->m_commander.GetOpeBlk();
 	if (opeBlk) {
 		m_nOpeBlkCount = opeBlk->GetRefCount();
 	}else {
 		m_nOpeBlkCount = 0;
 	}
-	m_bDrawSwitchOld = pcEditView->GetDrawSwitch();
+	m_bDrawSwitchOld = pEditView->GetDrawSwitch();
 }
 
 void MacroBeforeAfter::ExecKeyMacroAfter(
-	class EditView* pcEditView,
+	class EditView* pEditView,
 	int flags,
 	bool bRet
 	)
 {
-	OpeBlk* opeBlk = pcEditView->m_commander.GetOpeBlk();
+	OpeBlk* opeBlk = pEditView->m_commander.GetOpeBlk();
 	if (0 < m_nOpeBlkCount) {
 		if (!opeBlk) {
-			pcEditView->m_commander.SetOpeBlk(new OpeBlk());
+			pEditView->m_commander.SetOpeBlk(new OpeBlk());
 		}
-		if (pcEditView->m_commander.GetOpeBlk()->GetRefCount() != m_nOpeBlkCount) {
-			pcEditView->m_commander.GetOpeBlk()->SetRefCount(m_nOpeBlkCount);
+		if (pEditView->m_commander.GetOpeBlk()->GetRefCount() != m_nOpeBlkCount) {
+			pEditView->m_commander.GetOpeBlk()->SetRefCount(m_nOpeBlkCount);
 		}
 	}else {
 		if (opeBlk) {
 			opeBlk->SetRefCount(1); // 強制的にリセットするため1を指定
-			pcEditView->SetUndoBuffer();
+			pEditView->SetUndoBuffer();
 		}
 	}
-	pcEditView->m_pEditWnd->SetDrawSwitchOfAllViews(m_bDrawSwitchOld);
+	pEditView->m_pEditWnd->SetDrawSwitchOfAllViews(m_bDrawSwitchOld);
 }
 
 // MacroManagerBase
@@ -84,12 +84,12 @@ MacroManagerBase::~MacroManagerBase()
 {}
 
 void MacroManagerBase::ExecKeyMacro2(
-	class EditView* pcEditView,
+	class EditView* pEditView,
 	int flags
 	)
 {
-	ExecKeyMacroBefore(pcEditView, flags);
-	bool b = ExecKeyMacro(pcEditView, flags);
-	ExecKeyMacroAfter(pcEditView, flags, b);
+	ExecKeyMacroBefore(pEditView, flags);
+	bool b = ExecKeyMacro(pEditView, flags);
+	ExecKeyMacroAfter(pEditView, flags, b);
 }
 

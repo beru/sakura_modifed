@@ -34,7 +34,7 @@
 
 class Decode_Base64Decode : public Decode {
 public:
-	bool DoDecode(const NativeW& cData, Memory* pcDst);
+	bool DoDecode(const NativeW& data, Memory* pDst);
 
 };
 

@@ -140,9 +140,9 @@ bool ProcessFactory::ProfileSelect(
 bool ProcessFactory::IsValidVersion()
 {
 	// Windowsバージョンのチェック
-	OsVersionInfo cOsVer(true);	// 初期化を行う
-	if (cOsVer.GetVersion()) {
-		if (!cOsVer.OsIsEnableVersion()) {
+	OsVersionInfo osVer(true);	// 初期化を行う
+	if (osVer.GetVersion()) {
+		if (!osVer.OsIsEnableVersion()) {
 			InfoMessage(NULL,
 				_T("このアプリケーションを実行するには、\n")
 #if (WINVER >= _WIN32_WINNT_WIN7)
@@ -165,7 +165,7 @@ bool ProcessFactory::IsValidVersion()
 
 	// 拡張命令セットのチェック
 #ifdef USE_SSE2
-	if (cOsVer._SupportSSE2()) {
+	if (osVer._SupportSSE2()) {
 	}else {
 		InfoMessage(NULL,
 			_T("このアプリケーションを実行するには、\n")

@@ -96,7 +96,7 @@ public:
 	void ClearAll(void);	// キーマクロのバッファをクリアする
 
 	// キーボードマクロの実行
-	BOOL Exec(int idx, HINSTANCE hInstance, EditView* pcEditView, int flags);
+	BOOL Exec(int idx, HINSTANCE hInstance, EditView* pEditView, int flags);
 	
 	//	実行可能か？CShareDataに問い合わせ
 	bool IsEnabled(int idx) const {
@@ -132,7 +132,7 @@ public:
 	void UnloadAll(void);
 
 	// キーマクロのバッファにデータ追加
-	int Append(int idx, EFunctionCode nFuncID, const LPARAM* lParams, EditView* pcEditView);
+	int Append(int idx, EFunctionCode nFuncID, const LPARAM* lParams, EditView* pEditView);
 
 	/*
 	||  Attributes & Operations

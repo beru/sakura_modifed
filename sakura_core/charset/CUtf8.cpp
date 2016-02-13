@@ -9,15 +9,15 @@
 #include "env/DLLSHAREDATA.h"
 
 //! BOMデータ取得
-void Utf8::GetBom(Memory* pcmemBom)
+void Utf8::GetBom(Memory* pMemBom)
 {
 	static const BYTE UTF8_BOM[] = {0xEF, 0xBB, 0xBF};
-	pcmemBom->SetRawData(UTF8_BOM, sizeof(UTF8_BOM));
+	pMemBom->SetRawData(UTF8_BOM, sizeof(UTF8_BOM));
 }
 
 
 
-void Utf8::GetEol(Memory* pcmemEol, EolType eEolType){
+void Utf8::GetEol(Memory* pMemEol, EolType eolType){
 	static const struct{
 		const char* szData;
 		int nLen;
@@ -31,7 +31,7 @@ void Utf8::GetEol(Memory* pcmemEol, EolType eEolType){
 		"\xe2\x80\xa8",		3,	// EolType::LS
 		"\xe2\x80\xa9",		3,	// EolType::PS
 	};
-	pcmemEol->SetRawData(aEolTable[(int)eEolType].szData, aEolTable[(int)eEolType].nLen);
+	pMemEol->SetRawData(aEolTable[(int)eolType].szData, aEolTable[(int)eolType].nLen);
 }
 
 
@@ -87,11 +87,11 @@ int Utf8::Utf8ToUni(const char* pSrc, const int nSrcLen, wchar_t* pDst, bool bCE
 
 //! UTF-8→Unicodeコード変換
 // 2007.08.13 kobake 作成
-CodeConvertResult Utf8::_UTF8ToUnicode( const Memory& cSrc, NativeW* pDstMem, bool bCESU8Mode/*, bool decodeMime*/ )
+CodeConvertResult Utf8::_UTF8ToUnicode( const Memory& src, NativeW* pDstMem, bool bCESU8Mode/*, bool decodeMime*/ )
 {
 	// データ取得
 	int nSrcLen;
-	const char* pSrc = reinterpret_cast<const char*>( cSrc.GetRawPtr(&nSrcLen) );
+	const char* pSrc = reinterpret_cast<const char*>( src.GetRawPtr(&nSrcLen) );
 	if (nSrcLen == 0) {
 		pDstMem->Clear();
 		return CodeConvertResult::Complete;
@@ -176,11 +176,11 @@ int Utf8::UniToUtf8(const wchar_t* pSrc, const int nSrcLen, char* pDst, bool* pb
 
 
 //! コード変換 Unicode→UTF-8
-CodeConvertResult Utf8::_UnicodeToUTF8( const NativeW& cSrc, Memory* pDstMem, bool bCesu8Mode )
+CodeConvertResult Utf8::_UnicodeToUTF8( const NativeW& src, Memory* pDstMem, bool bCesu8Mode )
 {
 	// ソースを取得
-	const wchar_t* pSrc = cSrc.GetStringPtr();
-	int nSrcLen = cSrc.GetStringLength();
+	const wchar_t* pSrc = src.GetStringPtr();
+	int nSrcLen = src.GetStringLength();
 	if (nSrcLen == 0) {
 		pDstMem->Clear();
 		return CodeConvertResult::Complete;
@@ -205,9 +205,9 @@ CodeConvertResult Utf8::_UnicodeToUTF8( const NativeW& cSrc, Memory* pDstMem, bo
 }
 
 // 文字コード表示用	UNICODE → Hex 変換	2008/6/21 Uchi
-CodeConvertResult Utf8::_UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR* pDst, const CommonSetting_StatusBar* psStatusbar, const bool bCESUMode)
+CodeConvertResult Utf8::_UnicodeToHex(const wchar_t* src, const int iSLen, TCHAR* pDst, const CommonSetting_StatusBar* psStatusbar, const bool bCESUMode)
 {
-	NativeW		cBuff;
+	NativeW		buff;
 	CodeConvertResult	res;
 	int				i;
 	TCHAR*			pd;
@@ -216,34 +216,34 @@ CodeConvertResult Utf8::_UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHA
 
 	if (psStatusbar->m_bDispUtf8Codepoint) {
 		// Unicodeで表示
-		return CodeBase::UnicodeToHex(cSrc, iSLen, pDst, psStatusbar);
+		return CodeBase::UnicodeToHex(src, iSLen, pDst, psStatusbar);
 	}
-	cBuff.AllocStringBuffer(4);
+	buff.AllocStringBuffer(4);
 	// 1文字データバッファ
-	if (IsUTF16High(cSrc[0]) && iSLen >= 2 && IsUTF16Low(cSrc[1])) {
-		cBuff._GetMemory()->SetRawDataHoldBuffer(cSrc, 4);
+	if (IsUTF16High(src[0]) && iSLen >= 2 && IsUTF16Low(src[1])) {
+		buff._GetMemory()->SetRawDataHoldBuffer(src, 4);
 	}else {
-		cBuff._GetMemory()->SetRawDataHoldBuffer(cSrc, 2);
-		if (IsBinaryOnSurrogate(cSrc[0])) {
+		buff._GetMemory()->SetRawDataHoldBuffer(src, 2);
+		if (IsBinaryOnSurrogate(src[0])) {
 			bbinary = true;
 		}
 	}
 
 	// UTF-8/CESU-8 変換
 	if (bCESUMode != true) {
-		res = UnicodeToUTF8(cBuff, cBuff._GetMemory());
+		res = UnicodeToUTF8(buff, buff._GetMemory());
 	}else {
-		res = UnicodeToCESU8(cBuff, cBuff._GetMemory());
+		res = UnicodeToCESU8(buff, buff._GetMemory());
 	}
 	if (res != CodeConvertResult::Complete) {
 		return res;
 	}
 
 	// Hex変換
-	ps = reinterpret_cast<unsigned char*>( cBuff._GetMemory()->GetRawPtr() );
+	ps = reinterpret_cast<unsigned char*>( buff._GetMemory()->GetRawPtr() );
 	pd = pDst;
 	if (!bbinary) {
-		for (i=cBuff._GetMemory()->GetRawLength(); i>0; --i, ++ps, pd+=2) {
+		for (i=buff._GetMemory()->GetRawLength(); i>0; --i, ++ps, pd+=2) {
 			auto_sprintf(pd, _T("%02X"), *ps);
 		}
 	}else {

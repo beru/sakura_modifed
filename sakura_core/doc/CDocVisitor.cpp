@@ -30,7 +30,7 @@ void DocVisitor::SetAllEol(Eol eol)
 	// 改行コードを統一する
 	if (eol.IsValid()) {
 		LogicInt nLine = LogicInt(0);
-		OpeBlk* pcOpeBlk = pView->m_bDoing_UndoRedo ? NULL : pView->m_commander.GetOpeBlk();
+		OpeBlk* pOpeBlk = pView->m_bDoing_UndoRedo ? NULL : pView->m_commander.GetOpeBlk();
 		for (;;) {
 			DocLine* pDocLine = m_pDocRef->m_docLineMgr.GetLine(nLine); //#######非効率
 			if (!pDocLine) {
@@ -46,7 +46,7 @@ void DocVisitor::SetAllEol(Eol eol)
 					eol.GetValue2(),
 					eol.GetLen(),
 					false,
-					pcOpeBlk,
+					pOpeBlk,
 					true
 				);
 				bReplace = true;
@@ -60,7 +60,7 @@ void DocVisitor::SetAllEol(Eol eol)
 	if (bReplace) {
 		m_pDocRef->m_layoutMgr._DoLayout();
 		m_pDocRef->m_pEditWnd->ClearViewCaretPosInfo();
-		if (m_pDocRef->m_nTextWrapMethodCur == (int)TextWrappingMethod::NoWrapping) {
+		if (m_pDocRef->m_nTextWrapMethodCur == TextWrappingMethod::NoWrapping) {
 			m_pDocRef->m_layoutMgr.CalculateTextWidth();
 		}else {
 			m_pDocRef->m_layoutMgr.ClearLayoutLineWidth();

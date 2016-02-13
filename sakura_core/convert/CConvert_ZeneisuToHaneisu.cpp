@@ -7,10 +7,10 @@
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 // ‘SŠp‰p”¨”¼Šp‰p”
-bool Converter_ZeneisuToHaneisu::DoConvert(NativeW* pcData)
+bool Converter_ZeneisuToHaneisu::DoConvert(NativeW* pData)
 {
 	// ‘SŠp‰p”¨”¼Šp‰p”
-	Convert_ZeneisuToHaneisu(pcData->GetStringPtr(), pcData->GetStringLength());
+	Convert_ZeneisuToHaneisu(pData->GetStringPtr(), pData->GetStringLength());
 
 	return true;
 }

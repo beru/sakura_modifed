@@ -29,6 +29,6 @@
 // できる限り全角カタカナにする
 class Converter_ToZenkata : public Converter {
 public:
-	bool DoConvert(NativeW* pcData);
+	bool DoConvert(NativeW* pData);
 };
 

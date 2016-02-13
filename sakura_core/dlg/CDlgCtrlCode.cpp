@@ -104,7 +104,7 @@ int DlgCtrlCode::DoModal(
 	HINSTANCE	hInstance,
 	HWND		hwndParent,
 	LPARAM		lParam
-)
+	)
 {
 	return (int)Dialog::DoModal(hInstance, hwndParent, IDD_CTRLCODE, lParam);
 }

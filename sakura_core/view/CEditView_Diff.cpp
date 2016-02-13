@@ -125,7 +125,7 @@ void EditView::ViewDiffInfo(
 	bool	bFlgFile12,		// 編集中のファイルが旧ファイル
 */
 {
-	WaitCursor	cWaitCursor(this->GetHwnd());
+	WaitCursor	waitCursor(this->GetHwnd());
 	int		nFlgFile12 = 1;
 
 	// exeのあるフォルダ

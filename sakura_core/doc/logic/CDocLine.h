@@ -71,7 +71,7 @@ public:
 		}
 	}
 	const Eol& GetEol() const { return m_eol; }
-	void SetEol(const Eol& cEol, OpeBlk* pcOpeBlk);
+	void SetEol(const Eol& eol, OpeBlk* pOpeBlk);
 	void SetEol(); // 現在のバッファから設定
 
 	const NativeW& _GetDocLineDataWithEOL() const { return m_line; } //###仮
@@ -79,8 +79,8 @@ public:
 
 	// データ設定
 	void SetDocLineString(const wchar_t* pData, int nLength);
-	void SetDocLineString(const NativeW& cData);
-	void SetDocLineStringMove(NativeW* pcData);
+	void SetDocLineString(const NativeW& data);
+	void SetDocLineStringMove(NativeW* pData);
 
 	// チェーン属性
 	DocLine* GetPrevLine() { return m_pPrev; }

@@ -39,8 +39,8 @@ public:
 
 	// Ý’èXV
 	virtual void Update(void) {
-		EditDoc* pCEditDoc = EditDoc::GetInstance(0);
-		m_pTypeData = &pCEditDoc->m_docType.GetDocumentAttribute();
+		EditDoc* pEditDoc = EditDoc::GetInstance(0);
+		m_pTypeData = &pEditDoc->m_docType.GetDocumentAttribute();
 	}
 protected:
 	const TypeConfig* m_pTypeData;

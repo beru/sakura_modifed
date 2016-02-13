@@ -214,28 +214,28 @@ CodeConvertResult CodePage::UnicodeToCP(const NativeW& cSrc, Memory* pDst, int c
 	return ret;
 }
 
-void CodePage::GetEol(Memory* pcmemEol, EolType eEolType)
+void CodePage::GetEol(Memory* pMemEol, EolType eolType)
 {
 	NativeW temp;
-	Unicode().GetEol(temp._GetMemory(), eEolType);
-	UnicodeToCode(temp, pcmemEol);
+	Unicode().GetEol(temp._GetMemory(), eolType);
+	UnicodeToCode(temp, pMemEol);
 	NativeW temp2;
-	CodeToUnicode(*pcmemEol, &temp2);
+	CodeToUnicode(*pMemEol, &temp2);
 	// ‘o•ûŒü•ÏŠ·‚ª‚Å‚«‚éê‡‚¾‚¯Ý’è
 	if (!NativeW::IsEqual(temp, temp2)) {
-		pcmemEol->Clear();
+		pMemEol->Clear();
 	}
 }
 
-void CodePage::GetBom(Memory* pcmemBom)
+void CodePage::GetBom(Memory* pMemBom)
 {
 	NativeW temp;
 	Unicode().GetBom(temp._GetMemory());
-	UnicodeToCode(temp, pcmemBom);
+	UnicodeToCode(temp, pMemBom);
 	NativeW temp2;
-	CodeToUnicode(*pcmemBom, &temp2);
+	CodeToUnicode(*pMemBom, &temp2);
 	if (!NativeW::IsEqual(temp, temp2)) {
-		pcmemBom->Clear();
+		pMemBom->Clear();
 	}
 }
 

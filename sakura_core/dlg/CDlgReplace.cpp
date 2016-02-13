@@ -288,14 +288,14 @@ int DlgReplace::GetData(void)
 			csSearch.m_searchOption = m_searchOption;		// 検索オプション
 		}
 		// 2011.12.18 viewに直接設定
-		EditView* pcEditView = (EditView*)m_lParam;
-		if (pcEditView->m_strCurSearchKey == m_strText && pcEditView->m_curSearchOption == m_searchOption) {
+		EditView* pEditView = (EditView*)m_lParam;
+		if (pEditView->m_strCurSearchKey == m_strText && pEditView->m_curSearchOption == m_searchOption) {
 		}else {
-			pcEditView->m_strCurSearchKey = m_strText;
-			pcEditView->m_curSearchOption = m_searchOption;
-			pcEditView->m_bCurSearchUpdate = true;
+			pEditView->m_strCurSearchKey = m_strText;
+			pEditView->m_curSearchOption = m_searchOption;
+			pEditView->m_bCurSearchUpdate = true;
 		}
-		pcEditView->m_nCurSearchKeySequence = GetDllShareData().m_common.m_search.m_nSearchKeySequence;
+		pEditView->m_nCurSearchKeySequence = GetDllShareData().m_common.m_search.m_nSearchKeySequence;
 
 		// 置換後文字列
 		//@@@ 2002.2.2 YAZAKI CShareData.AddToReplaceKeyArr()追加に伴う変更
@@ -365,10 +365,10 @@ BOOL DlgReplace::OnInitDialog(
 	}
 
 	m_comboDelText = ComboBoxItemDeleter();
-	m_comboDelText.pRecent = &m_cRecentSearch;
+	m_comboDelText.pRecent = &m_recentSearch;
 	SetComboBoxDeleter(GetItemHwnd(IDC_COMBO_TEXT), &m_comboDelText);
 	m_comboDelText2 = ComboBoxItemDeleter();
-	m_comboDelText2.pRecent = &m_cRecentReplace;
+	m_comboDelText2.pRecent = &m_recentReplace;
 	SetComboBoxDeleter(GetItemHwnd(IDC_COMBO_TEXT2), &m_comboDelText2);
 
 	// フォント設定	2012/11/27 Uchi
@@ -396,14 +396,14 @@ BOOL DlgReplace::OnDestroy()
 BOOL DlgReplace::OnBnClicked(int wID)
 {
 	int nRet;
-	EditView* pcEditView = (EditView*)m_lParam;
+	EditView* pEditView = (EditView*)m_lParam;
 
 	switch (wID) {
 	case IDC_CHK_PASTE:
 		// テキストの貼り付け
 		if (1
 			&& IsButtonChecked(IDC_CHK_PASTE)
-			&& !pcEditView->m_pEditDoc->m_docEditor.IsEnablePaste()
+			&& !pEditView->m_pEditDoc->m_docEditor.IsEnablePaste()
 		) {
 			OkMessage(GetHwnd(), LS(STR_DLGREPLC_CLIPBOARD));
 			CheckButton(IDC_CHK_PASTE, false);
@@ -514,16 +514,16 @@ BOOL DlgReplace::OnBnClicked(int wID)
 		if (0 < nRet) {
 
 			// 検索開始位置を登録 02/07/28 ai start
-			if (pcEditView->m_bSearch != FALSE) {
-				pcEditView->m_ptSrchStartPos_PHY = m_ptEscCaretPos_PHY;
-				pcEditView->m_bSearch = FALSE;
+			if (pEditView->m_bSearch != FALSE) {
+				pEditView->m_ptSrchStartPos_PHY = m_ptEscCaretPos_PHY;
+				pEditView->m_bSearch = FALSE;
 			}// 02/07/28 ai end
 
 			// コマンドコードによる処理振り分け
 			// 前を検索
-			pcEditView->GetCommander().HandleCommand(F_SEARCH_PREV, true, (LPARAM)GetHwnd(), 0, 0, 0);
+			pEditView->GetCommander().HandleCommand(F_SEARCH_PREV, true, (LPARAM)GetHwnd(), 0, 0, 0);
 			// 再描画（0文字幅マッチでキャレットを表示するため）
-			pcEditView->Redraw();	// 前回0文字幅マッチの消去にも必要
+			pEditView->Redraw();	// 前回0文字幅マッチの消去にも必要
 		}else if (nRet == 0) {
 			OkMessage(GetHwnd(), LS(STR_DLGREPLC_STR));
 		}
@@ -533,16 +533,16 @@ BOOL DlgReplace::OnBnClicked(int wID)
 		if (0 < nRet) {
 
 			// 検索開始位置を登録 02/07/28 ai start
-			if (pcEditView->m_bSearch) {
-				pcEditView->m_ptSrchStartPos_PHY = m_ptEscCaretPos_PHY;
-				pcEditView->m_bSearch = false;
+			if (pEditView->m_bSearch) {
+				pEditView->m_ptSrchStartPos_PHY = m_ptEscCaretPos_PHY;
+				pEditView->m_bSearch = false;
 			}// 02/07/28 ai end
 
 			// コマンドコードによる処理振り分け
 			// 次を検索
-			pcEditView->GetCommander().HandleCommand(F_SEARCH_NEXT, true, (LPARAM)GetHwnd(), 0, 0, 0);
+			pEditView->GetCommander().HandleCommand(F_SEARCH_NEXT, true, (LPARAM)GetHwnd(), 0, 0, 0);
 			// 再描画（0文字幅マッチでキャレットを表示するため）
-			pcEditView->Redraw();	// 前回0文字幅マッチの消去にも必要
+			pEditView->Redraw();	// 前回0文字幅マッチの消去にも必要
 		}else if (nRet == 0) {
 			OkMessage(GetHwnd(), LS(STR_DLGREPLC_STR));
 		}
@@ -551,7 +551,7 @@ BOOL DlgReplace::OnBnClicked(int wID)
 	case IDC_BUTTON_SETMARK:	// 2002.01.16 hor 該当行マーク
 		nRet = GetData();
 		if (0 < nRet) {
-			pcEditView->GetCommander().HandleCommand(F_BOOKMARK_PATTERN, false, 0, 0, 0, 0);
+			pEditView->GetCommander().HandleCommand(F_BOOKMARK_PATTERN, false, 0, 0, 0, 0);
 			::SendMessage(GetHwnd(), WM_NEXTDLGCTL, (WPARAM)GetItemHwnd(IDC_COMBO_TEXT), TRUE);
 		}
 		return TRUE;
@@ -561,17 +561,17 @@ BOOL DlgReplace::OnBnClicked(int wID)
 		if (0 < nRet) {
 
 			// 置換開始位置を登録 02/07/28 ai start
-			if (pcEditView->m_bSearch) {
-				pcEditView->m_ptSrchStartPos_PHY = m_ptEscCaretPos_PHY;
-				pcEditView->m_bSearch = false;
+			if (pEditView->m_bSearch) {
+				pEditView->m_ptSrchStartPos_PHY = m_ptEscCaretPos_PHY;
+				pEditView->m_bSearch = false;
 			}// 02/07/28 ai end
 
 			// 置換
 			//@@@ 2002.2.2 YAZAKI 置換コマンドをEditViewに新設
 			//@@@ 2002/04/08 YAZAKI 親ウィンドウのハンドルを渡すように変更。
-			pcEditView->GetCommander().HandleCommand(F_REPLACE, true, (LPARAM)GetHwnd(), 0, 0, 0);
+			pEditView->GetCommander().HandleCommand(F_REPLACE, true, (LPARAM)GetHwnd(), 0, 0, 0);
 			// 再描画
-			pcEditView->GetCommander().HandleCommand(F_REDRAW, true, 0, 0, 0, 0);
+			pEditView->GetCommander().HandleCommand(F_REDRAW, true, 0, 0, 0, 0);
 		}else if (nRet == 0) {
 			OkMessage(GetHwnd(), LS(STR_DLGREPLC_STR));
 		}
@@ -580,14 +580,14 @@ BOOL DlgReplace::OnBnClicked(int wID)
 		nRet = GetData();
 		if (0 < nRet) {
 			// 置換開始位置を登録 02/07/28 ai start
-			if (pcEditView->m_bSearch) {
-				pcEditView->m_ptSrchStartPos_PHY = m_ptEscCaretPos_PHY;
-				pcEditView->m_bSearch = false;
+			if (pEditView->m_bSearch) {
+				pEditView->m_ptSrchStartPos_PHY = m_ptEscCaretPos_PHY;
+				pEditView->m_bSearch = false;
 			}// 02/07/28 ai end
 
 			// すべて行置換時の処置は「すべて置換」は置換の繰返しオプションOFFの場合にして削除 2007.01.16 ryoji
-			pcEditView->GetCommander().HandleCommand(F_REPLACE_ALL, true, 0, 0, 0, 0);
-			pcEditView->GetCommander().HandleCommand(F_REDRAW, true, 0, 0, 0, 0);
+			pEditView->GetCommander().HandleCommand(F_REPLACE_ALL, true, 0, 0, 0, 0);
+			pEditView->GetCommander().HandleCommand(F_REDRAW, true, 0, 0, 0, 0);
 
 			// アクティブにする
 			ActivateFrameWindow(GetHwnd());
@@ -623,7 +623,7 @@ BOOL DlgReplace::OnActivate(WPARAM wParam, LPARAM lParam)
 {
 	// 0文字幅マッチ描画のON/OFF	// 2009.11.29 ryoji
 	EditView*	pcEditView = (EditView*)m_lParam;
-	LayoutRange cRangeSel = pcEditView->GetSelectionInfo().m_sSelect;
+	LayoutRange cRangeSel = pcEditView->GetSelectionInfo().m_select;
 	if (cRangeSel.IsValid() && cRangeSel.IsLineOne() && cRangeSel.IsOne())
 		pcEditView->InvalidateRect(NULL);	// アクティブ化／非アクティブ化が完了してから再描画
 

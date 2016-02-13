@@ -10,7 +10,7 @@
 #include "env/CShareData.h"
 #include "env/DLLSHAREDATA.h"
 
-void CodeBase::GetBom(Memory* pcmemBom) { pcmemBom->Clear(); }					// BOMデータ取得
+void CodeBase::GetBom(Memory* pMemBom) { pMemBom->Clear(); }					// BOMデータ取得
 
 // 表示用16表示	UNICODE → Hex 変換	2008/6/9 Uchi
 CodeConvertResult CodeBase::UnicodeToHex(
@@ -38,23 +38,23 @@ CodeConvertResult CodeBase::UnicodeToHex(
 /*!
 	MIME デコーダー
 
-	@param[out] pcMem デコード済みの文字列を格納
+	@param[out] pMem デコード済みの文字列を格納
 */
 bool CodeBase::MIMEHeaderDecode(
 	const char* pSrc,
 	const int nSrcLen,
-	Memory* pcMem,
-	const ECodeType eCodetype
+	Memory* pMem,
+	const ECodeType codetype
 	)
 {
 	ECodeType ecodetype;
 	int nskip_bytes;
 
 	// ソースを取得
-	pcMem->AllocBuffer(nSrcLen);
-	char* pdst = reinterpret_cast<char*>(pcMem->GetRawPtr());
+	pMem->AllocBuffer(nSrcLen);
+	char* pdst = reinterpret_cast<char*>(pMem->GetRawPtr());
 	if (!pdst) {
-		pcMem->SetRawData("", 0);
+		pMem->SetRawData("", 0);
 		return false;
 	}
 
@@ -74,7 +74,7 @@ bool CodeBase::MIMEHeaderDecode(
 			++i;
 			++j;
 		}else {
-			if (ecodetype == eCodetype) {
+			if (ecodetype == codetype) {
 				// eChartype が ecodetype と一致している場合にだけ、
 				// 変換結果をコピー
 				memcpy(&pdst[j], cmembuf.GetRawPtr(), cmembuf.GetRawLength());
@@ -88,7 +88,7 @@ bool CodeBase::MIMEHeaderDecode(
 		}
 	}
 
-	pcMem->_SetRawLength(j);
+	pMem->_SetRawLength(j);
 	return true;
 }
 
@@ -97,7 +97,7 @@ bool CodeBase::MIMEHeaderDecode(
 */
 // CShiftJisより移動 2010/6/13 Uchi
 void CodeBase::S_GetEol(
-	Memory* pcmemEol,
+	Memory* pMemEol,
 	EolType eolType
 	)
 {
@@ -114,6 +114,6 @@ void CodeBase::S_GetEol(
 		{ "",			0 },	// EolType::LS
 		{ "",			0 },	// EolType::PS
 	};
-	pcmemEol->SetRawData(aEolTable[(int)eolType].szData, aEolTable[(int)eolType].nLen);
+	pMemEol->SetRawData(aEolTable[(int)eolType].szData, aEolTable[(int)eolType].nLen);
 }
 

@@ -78,7 +78,7 @@ public:
 	static EFunctionCode GetDefFuncCode(int nKeyCode, int nState);	// キーのデフォルト機能を取得する	// 2007.02.22 ryoji
 
 	// キー割り当て一覧を作成する
-	static int CreateKeyBindList(HINSTANCE hInstance, int nKeyNameArrNum, KEYDATA* pKeyNameArr, NativeW& cMemList, FuncLookup* pcFuncLookup, bool bGetDefFuncCode = true);
+	static int CreateKeyBindList(HINSTANCE hInstance, int nKeyNameArrNum, KEYDATA* pKeyNameArr, NativeW& cMemList, FuncLookup* pFuncLookup, bool bGetDefFuncCode = true);
 	static int GetKeyStr(HINSTANCE hInstance, int nKeyNameArrNum, KEYDATA* pKeyNameArr, CNativeT& cMemList, int nFuncId, bool bGetDefFuncCode = true);	// 機能に対応するキー名の取得
 	static int GetKeyStrList(HINSTANCE	hInstance, int nKeyNameArrNum,KEYDATA* pKeyNameArr, CNativeT*** pppcMemList, int nFuncId, bool bGetDefFuncCode = true);	// 機能に対応するキー名の取得(複数)
 	static TCHAR* GetMenuLabel(HINSTANCE hInstance, int nKeyNameArrNum, KEYDATA* pKeyNameArr, int nFuncId, TCHAR* pszLabel, const TCHAR* pszKey, BOOL bKeyStr, int nLabelSize, bool bGetDefFuncCode = true);	// メニューラベルの作成	// add pszKey	2010/5/17 Uchi

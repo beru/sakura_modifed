@@ -1246,8 +1246,8 @@ LRESULT EditWnd::DispatchEvent(
 		lpmis = (MEASUREITEMSTRUCT*) lParam;	// item-size information
 		switch (lpmis->CtlType) {
 		case ODT_MENU:	// オーナー描画メニュー
-//			MenuDrawer* pCMenuDrawer;
-//			pCMenuDrawer = (MenuDrawer*)lpmis->itemData;
+//			MenuDrawer* pMenuDrawer;
+//			pMenuDrawer = (MenuDrawer*)lpmis->itemData;
 
 
 //			MYTRACE(_T("WM_MEASUREITEM  lpmis->itemID=%d\n"), lpmis->itemID);
@@ -2615,7 +2615,7 @@ bool EditWnd::InitMenu_Special(HMENU hMenu, EFunctionCode eFunc)
 
 			Plug::Array plugs = pcJackManager->GetPlugs(PP_COMMAND);
 			for (auto it=plugs.begin(); it!=plugs.end(); ++it) {
-				const Plugin* curPlugin = &(*it)->m_cPlugin;
+				const Plugin* curPlugin = &(*it)->m_plugin;
 				if (curPlugin != prevPlugin) {
 					// プラグインが変わったらプラグインポップアップメニューを登録
 					hMenuPlugin = ::CreatePopupMenu();
@@ -4269,7 +4269,7 @@ void EditWnd::InitAllViews()
 	for (int i=0; i<GetAllViewCount(); ++i) {
 		//	Apr. 1, 2001 genta
 		// 移動履歴の消去
-		GetView(i).m_cHistory->Flush();
+		GetView(i).m_pHistory->Flush();
 
 		// 現在の選択範囲を非選択状態に戻す
 		GetView(i).GetSelectionInfo().DisableSelectArea(false);
@@ -4475,7 +4475,7 @@ BOOL EditWnd::UpdateTextWrap(void)
 {
 	// この関数はコマンド実行ごとに処理の最終段階で利用する
 	// （アンドゥ登録＆全ビュー更新のタイミング）
-	if (GetDocument()->m_nTextWrapMethodCur == (int)TextWrappingMethod::WindowWidth) {
+	if (GetDocument()->m_nTextWrapMethodCur == TextWrappingMethod::WindowWidth) {
 		bool bWrap = WrapWindowWidth(0);	// 右端で折り返す
 		if (bWrap) {
 			// WrapWindowWidth() で追加した更新リージョンで画面更新する
@@ -4573,27 +4573,27 @@ LogicPointEx* EditWnd::SavePhysPosOfAllView()
 			pptPosArray[i * NUM_OF_POS + 0].y = LogicInt(0);
 		}
 		pptPosArray[i * NUM_OF_POS + 0].ext = LayoutInt(0);
-		if (GetView(i).GetSelectionInfo().m_sSelectBgn.GetFrom().y >= 0) {
+		if (GetView(i).GetSelectionInfo().m_selectBgn.GetFrom().y >= 0) {
 			GetDocument()->m_layoutMgr.LayoutToLogicEx(
-				GetView(i).GetSelectionInfo().m_sSelectBgn.GetFrom(),
+				GetView(i).GetSelectionInfo().m_selectBgn.GetFrom(),
 				&pptPosArray[i * NUM_OF_POS + 1]
 			);
 		}
-		if (GetView(i).GetSelectionInfo().m_sSelectBgn.GetTo().y >= 0) {
+		if (GetView(i).GetSelectionInfo().m_selectBgn.GetTo().y >= 0) {
 			GetDocument()->m_layoutMgr.LayoutToLogicEx(
-				GetView(i).GetSelectionInfo().m_sSelectBgn.GetTo(),
+				GetView(i).GetSelectionInfo().m_selectBgn.GetTo(),
 				&pptPosArray[i * NUM_OF_POS + 2]
 			);
 		}
-		if (GetView(i).GetSelectionInfo().m_sSelect.GetFrom().y >= 0) {
+		if (GetView(i).GetSelectionInfo().m_select.GetFrom().y >= 0) {
 			GetDocument()->m_layoutMgr.LayoutToLogicEx(
-				GetView(i).GetSelectionInfo().m_sSelect.GetFrom(),
+				GetView(i).GetSelectionInfo().m_select.GetFrom(),
 				&pptPosArray[i * NUM_OF_POS + 3]
 			);
 		}
-		if (GetView(i).GetSelectionInfo().m_sSelect.GetTo().y >= 0) {
+		if (GetView(i).GetSelectionInfo().m_select.GetTo().y >= 0) {
 			GetDocument()->m_layoutMgr.LayoutToLogicEx(
-				GetView(i).GetSelectionInfo().m_sSelect.GetTo(),
+				GetView(i).GetSelectionInfo().m_select.GetTo(),
 				&pptPosArray[i * NUM_OF_POS + 4]
 			);
 		}
@@ -4627,28 +4627,28 @@ void EditWnd::RestorePhysPosOfAllView(LogicPointEx* pptPosArray)
 		);
 		GetView(i).m_pTextArea->SetViewTopLine(tmp.GetY2());
 
-		if (GetView(i).GetSelectionInfo().m_sSelectBgn.GetFrom().y >= 0) {
+		if (GetView(i).GetSelectionInfo().m_selectBgn.GetFrom().y >= 0) {
 			GetDocument()->m_layoutMgr.LogicToLayoutEx(
 				pptPosArray[i * NUM_OF_POS + 1],
-				GetView(i).GetSelectionInfo().m_sSelectBgn.GetFromPointer()
+				GetView(i).GetSelectionInfo().m_selectBgn.GetFromPointer()
 			);
 		}
-		if (GetView(i).GetSelectionInfo().m_sSelectBgn.GetTo().y >= 0) {
+		if (GetView(i).GetSelectionInfo().m_selectBgn.GetTo().y >= 0) {
 			GetDocument()->m_layoutMgr.LogicToLayoutEx(
 				pptPosArray[i * NUM_OF_POS + 2],
-				GetView(i).GetSelectionInfo().m_sSelectBgn.GetToPointer()
+				GetView(i).GetSelectionInfo().m_selectBgn.GetToPointer()
 			);
 		}
-		if (GetView(i).GetSelectionInfo().m_sSelect.GetFrom().y >= 0) {
+		if (GetView(i).GetSelectionInfo().m_select.GetFrom().y >= 0) {
 			GetDocument()->m_layoutMgr.LogicToLayoutEx(
 				pptPosArray[i * NUM_OF_POS + 3],
-				GetView(i).GetSelectionInfo().m_sSelect.GetFromPointer()
+				GetView(i).GetSelectionInfo().m_select.GetFromPointer()
 			);
 		}
-		if (GetView(i).GetSelectionInfo().m_sSelect.GetTo().y >= 0) {
+		if (GetView(i).GetSelectionInfo().m_select.GetTo().y >= 0) {
 			GetDocument()->m_layoutMgr.LogicToLayoutEx(
 				pptPosArray[i * NUM_OF_POS + 4],
-				GetView(i).GetSelectionInfo().m_sSelect.GetToPointer()
+				GetView(i).GetSelectionInfo().m_select.GetToPointer()
 			);
 		}
 		LayoutPoint ptPosXY;
@@ -4749,7 +4749,7 @@ void EditWnd::RegisterPluginCommand(Plug* plug)
 {
 	int iBitmap = MenuDrawer::TOOLBAR_ICON_PLUGCOMMAND_DEFAULT - 1;
 	if (!plug->m_sIcon.empty()) {
-		iBitmap = m_menuDrawer.m_pIcons->Add(to_tchar(plug->m_cPlugin.GetFilePath(to_tchar(plug->m_sIcon.c_str())).c_str()));
+		iBitmap = m_menuDrawer.m_pIcons->Add(to_tchar(plug->m_plugin.GetFilePath(to_tchar(plug->m_sIcon.c_str())).c_str()));
 	}
 
 	m_menuDrawer.AddToolButton(iBitmap, plug->GetFunctionCode());

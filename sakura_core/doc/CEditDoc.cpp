@@ -179,7 +179,7 @@ EditDoc::EditDoc(EditApp* pApp)
 	// 「右端で折り返す」は、この後のOnSize()で再設定される
 	const TypeConfig& ref = m_docType.GetDocumentAttribute();
 	LayoutInt nMaxLineKetas = ref.m_nMaxLineKetas;
-	if (ref.m_nTextWrapMethod != (int)TextWrappingMethod::SettingWidth) {
+	if (ref.m_nTextWrapMethod != TextWrappingMethod::SettingWidth) {
 		nMaxLineKetas = MAXLINEKETAS;
 	}
 	m_layoutMgr.SetLayoutInfo(true, ref, ref.m_nTabSpace, nMaxLineKetas);
@@ -262,7 +262,7 @@ void EditDoc::Clear()
 	// 2008.06.07 nasukoji	折り返し方法の追加に対応
 	const TypeConfig& ref = m_docType.GetDocumentAttribute();
 	LayoutInt nMaxLineKetas = ref.m_nMaxLineKetas;
-	if (ref.m_nTextWrapMethod != (int)TextWrappingMethod::SettingWidth) {
+	if (ref.m_nTextWrapMethod != TextWrappingMethod::SettingWidth) {
 		nMaxLineKetas = MAXLINEKETAS;
 	}
 	m_layoutMgr.SetLayoutInfo(true, ref, ref.m_nTabSpace, nMaxLineKetas);
@@ -389,7 +389,7 @@ void EditDoc::InitAllView(void)
 	m_bTabSpaceCurTemp = false;
 	
 	// 2009.08.28 nasukoji	「折り返さない」ならテキスト最大幅を算出、それ以外は変数をクリア
-	if (m_nTextWrapMethodCur == (int)TextWrappingMethod::NoWrapping) {
+	if (m_nTextWrapMethodCur == TextWrappingMethod::NoWrapping) {
 		m_layoutMgr.CalculateTextWidth();		// テキスト最大幅を算出する
 	}else {
 		m_layoutMgr.ClearLayoutLineWidth();	// 各行のレイアウト行長の記憶をクリアする
@@ -658,10 +658,10 @@ void EditDoc::OnChangeSetting(
 )
 {
 	HWND hwndProgress = NULL;
-	EditWnd* pCEditWnd = m_pEditWnd;	// Sep. 10, 2002 genta
+	EditWnd* pEditWnd = m_pEditWnd;	// Sep. 10, 2002 genta
 
-	if (pCEditWnd) {
-		hwndProgress = pCEditWnd->m_statusBar.GetProgressHwnd();
+	if (pEditWnd) {
+		hwndProgress = pEditWnd->m_statusBar.GetProgressHwnd();
 		// Status Barが表示されていないときはm_hwndProgressBar == NULL
 	}
 
@@ -680,7 +680,7 @@ void EditDoc::OnChangeSetting(
 		bool bOld = m_docLocker.IsDocWritable();
 		m_docLocker.CheckWritable(bOld && !AppMode::getInstance()->IsViewMode());	// 書込可から不可に遷移したときだけメッセージを出す（出過ぎると鬱陶しいよね？）
 		if (bOld != m_docLocker.IsDocWritable()) {
-			pCEditWnd->UpdateCaption();
+			pEditWnd->UpdateCaption();
 		}
 
 		// ファイルの排他ロック
@@ -734,12 +734,12 @@ void EditDoc::OnChangeSetting(
 	if (m_blfCurTemp) {
 		if (bFontTypeOld != ref.m_bUseTypeFont) {
 			m_blfCurTemp = false;
-		}else if (nFontPointSizeOld != pCEditWnd->GetFontPointSize(false)) {
+		}else if (nFontPointSizeOld != pEditWnd->GetFontPointSize(false)) {
 			m_blfCurTemp = false; // フォント設定が変更された。元に戻す
 		}else {
 			// フォントの種類の変更に追随する
 			int lfHeight = m_lfCur.lfHeight;
-			m_lfCur = pCEditWnd->GetLogfont(false);
+			m_lfCur = pEditWnd->GetLogfont(false);
 			m_lfCur.lfHeight = lfHeight;
 		}
 	}
@@ -758,7 +758,7 @@ void EditDoc::OnChangeSetting(
 		// 2008.06.07 nasukoji	折り返し方法の追加に対応
 		// 折り返し方法の一時設定とタイプ別設定が一致したら一時設定適用中は解除
 		if (m_nTextWrapMethodCur == ref.m_nTextWrapMethod) {
-			if (m_nTextWrapMethodCur == (int)TextWrappingMethod::SettingWidth
+			if (m_nTextWrapMethodCur == TextWrappingMethod::SettingWidth
 				&& m_layoutMgr.GetMaxLineKetas() != ref.m_nMaxLineKetas
 			) {
 				// 2013.05.29 折り返し幅が違うのでそのままにする
@@ -808,7 +808,7 @@ void EditDoc::OnChangeSetting(
 	m_pEditWnd->ClearViewCaretPosInfo();
 	
 	// 2009.08.28 nasukoji	「折り返さない」ならテキスト最大幅を算出、それ以外は変数をクリア
-	if (m_nTextWrapMethodCur == (int)TextWrappingMethod::NoWrapping) {
+	if (m_nTextWrapMethodCur == TextWrappingMethod::NoWrapping) {
 		m_layoutMgr.CalculateTextWidth();		// テキスト最大幅を算出する
 	}else {
 		m_layoutMgr.ClearLayoutLineWidth();	// 各行のレイアウト行長の記憶をクリアする

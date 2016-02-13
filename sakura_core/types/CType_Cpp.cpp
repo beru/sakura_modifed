@@ -463,7 +463,7 @@ void DocOutline::MakeFuncList_C(
 	nMode = 0;
 	
 	//	Aug. 10, 2004 genta プリプロセス処理クラス
-	CppPreprocessMng cCppPMng;
+	CppPreprocessMng cppPMng;
 	bool bExtEol = GetDllShareData().m_common.m_edit.m_bEnableExtEol;
 	
 	LogicInt nLineCount;
@@ -474,7 +474,7 @@ void DocOutline::MakeFuncList_C(
 		//	プリプロセス処理
 		//	コメント中でなければプリプロセッサ指令を先に判定させる
 		if (nMode != 8 && nMode != 10) {	// chg 2005/12/6 じゅうじ 次の行が空白でもよい
-			i = cCppPMng.ScanLine(pLine, nLineLen);
+			i = cppPMng.ScanLine(pLine, nLineLen);
 		}else {
 			i = LogicInt(0);
 		}

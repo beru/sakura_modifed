@@ -4,10 +4,10 @@
 // 大文字へ変換
 // 変換できないキリル文字ёの修正	2010/6/5 Uchi
 // ラテンアルファベットの拡張対応(ラテン補助、拡張AB、拡張追加)	2010/6/5 Uchi
-bool Converter_ToUpper::DoConvert(NativeW* pcData)
+bool Converter_ToUpper::DoConvert(NativeW* pData)
 {
-	WCHAR* p = pcData->GetStringPtr();
-	WCHAR* end = p + pcData->GetStringLength();
+	WCHAR* p = pData->GetStringPtr();
+	WCHAR* end = p + pData->GetStringLength();
 	while (p < end) {
 		WCHAR& c = *p++;
 		// a-z → A-Z

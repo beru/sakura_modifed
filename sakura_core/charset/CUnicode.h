@@ -35,8 +35,8 @@ public:
 	CodeConvertResult UnicodeToCode(const NativeW& cSrc, Memory* pDst) {	//!< UNICODE    → 特定コード 変換
 		return UnicodeToUnicode_out(cSrc, pDst);
 	}
-	void GetBom(Memory* pcmemBom);	//!< BOMデータ取得
-	void GetEol(Memory* pcmemEol, EolType eEolType);	//!< 改行データ取得
+	void GetBom(Memory* pMemBom);	//!< BOMデータ取得
+	void GetEol(Memory* pMemEol, EolType eolType);	//!< 改行データ取得
 
 public:
 	// 実装

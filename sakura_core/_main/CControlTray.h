@@ -66,7 +66,7 @@ public:
 	static bool OpenNewEditor(							// 新規編集ウィンドウの追加 ver 0
 		HINSTANCE			hInstance,					// [in] インスタンスID (実は未使用)
 		HWND				hWndParent,					// [in] 親ウィンドウハンドル．エラーメッセージ表示用
-		const LoadInfo&	sLoadInfo,					// [in]
+		const LoadInfo&		loadInfo,					// [in]
 		const TCHAR*		szCmdLineOption	= NULL,		// [in] 追加のコマンドラインオプション
 		bool				sync			= false,	// [in] trueなら新規エディタの起動まで待機する
 		const TCHAR*		pszCurDir		= NULL,		// [in] 新規エディタのカレントディレクトリ

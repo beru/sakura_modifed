@@ -97,10 +97,10 @@ int DlgPluginOption::DoModal(
 {
 	// プラグイン番号（エディタがふる番号）
 	m_ID = ID;
-	m_cPlugin = PluginManager::getInstance()->GetPlugin(m_ID);
+	m_plugin = PluginManager::getInstance()->GetPlugin(m_ID);
 	m_cPropPlugin = cPropPlugin;
 
-	if (!m_cPlugin) {
+	if (!m_plugin) {
 		::ErrorMessage(hwndParent, LS(STR_DLGPLUGINOPT_LOAD));
 		return 0;
 	}
@@ -118,7 +118,7 @@ void DlgPluginOption::SetData(void)
 	bool bLoadDefault = false;
 
 	// タイトル
-	auto_sprintf(buf, LS(STR_DLGPLUGINOPT_TITLE), m_cPlugin->m_sName.c_str());
+	auto_sprintf(buf, LS(STR_DLGPLUGINOPT_TITLE), m_plugin->m_sName.c_str());
 	::SetWindowText(GetHwnd(), buf);
 
 	// リスト
@@ -128,11 +128,11 @@ void DlgPluginOption::SetData(void)
 
 	auto cProfile = std::make_unique<DataProfile>();
 	cProfile->SetReadingMode();
-	cProfile->ReadProfile(m_cPlugin->GetOptionPath().c_str());
+	cProfile->ReadProfile(m_plugin->GetOptionPath().c_str());
 
 	PluginOption* cOpt;
 	PluginOption::ArrayIter it;
-	for (i=0, it=m_cPlugin->m_options.begin(); it!=m_cPlugin->m_options.end(); ++i, ++it) {
+	for (i=0, it=m_plugin->m_options.begin(); it!=m_plugin->m_options.end(); ++i, ++it) {
 		cOpt = *it;
 
 		auto_snprintf_s(buf, _countof(buf), _T("%ls"), cOpt->GetLabel().c_str());
@@ -197,7 +197,7 @@ void DlgPluginOption::SetData(void)
 
 	if (bLoadDefault) {
 		cProfile->SetWritingMode();
-		cProfile->WriteProfile(m_cPlugin->GetOptionPath().c_str(), (m_cPlugin->m_sName + LSW(STR_DLGPLUGINOPT_INIHEAD)).c_str());
+		cProfile->WriteProfile(m_plugin->GetOptionPath().c_str(), (m_plugin->m_sName + LSW(STR_DLGPLUGINOPT_INIHEAD)).c_str());
 	}
 
 	if (i == 0) {
@@ -226,14 +226,14 @@ int DlgPluginOption::GetData(void)
 
 	auto cProfile = std::make_unique<DataProfile>();
 	cProfile->SetReadingMode();
-	cProfile->ReadProfile(m_cPlugin->GetOptionPath().c_str());
+	cProfile->ReadProfile(m_plugin->GetOptionPath().c_str());
 	cProfile->SetWritingMode();
 
 	PluginOption* cOpt;
 	TCHAR	buf[MAX_LENGTH_VALUE + 1];
 	PluginOption::ArrayIter it;
 	int i;
-	for (i=0, it=m_cPlugin->m_options.begin(); it!=m_cPlugin->m_options.end(); ++i, ++it) {
+	for (i=0, it=m_plugin->m_options.begin(); it!=m_plugin->m_options.end(); ++i, ++it) {
 		cOpt = *it;
 
 		memset_raw(&lvi, 0, sizeof(lvi));
@@ -282,8 +282,8 @@ int DlgPluginOption::GetData(void)
 	}
 
 	cProfile->WriteProfile(
-		m_cPlugin->GetOptionPath().c_str(),
-		(m_cPlugin->m_sName + LSW(STR_DLGPLUGINOPT_INIHEAD)).c_str()
+		m_plugin->GetOptionPath().c_str(),
+		(m_plugin->m_sName + LSW(STR_DLGPLUGINOPT_INIHEAD)).c_str()
 		);
 
 	return TRUE;
@@ -527,7 +527,7 @@ void DlgPluginOption::MoveFocusToEdit(void)
 
 	if (iLine >= 0) {
 		// Focusの切り替え
-		sType = m_cPlugin->m_options[iLine]->GetType();
+		sType = m_plugin->m_options[iLine]->GetType();
 		transform(sType.begin(), sType.end(), sType.begin(), my_towlower2);
 		if (sType == OPTION_TYPE_BOOL) {
 			hwndCtrl = GetItemHwnd(IDC_CHECK_PLUGIN_OPTION);
@@ -564,11 +564,11 @@ void DlgPluginOption::SetToEdit(int iLine)
 		lvi.cchTextMax = MAX_LENGTH_VALUE + 1;
 		ListView_GetItem(hwndList, &lvi);
 
-		sType = m_cPlugin->m_options[iLine]->GetType();
+		sType = m_plugin->m_options[iLine]->GetType();
 		transform(sType.begin(), sType.end(), sType.begin(), my_towlower2);
 		if (sType == OPTION_TYPE_BOOL) {
 			::CheckDlgButtonBool(GetHwnd(), IDC_CHECK_PLUGIN_OPTION, _tcscmp(buf,  BOOL_DISP_FALSE) != 0);
-			SetItemText(IDC_CHECK_PLUGIN_OPTION, m_cPlugin->m_options[iLine]->GetLabel().c_str());
+			SetItemText(IDC_CHECK_PLUGIN_OPTION, m_plugin->m_options[iLine]->GetLabel().c_str());
 
 			// 編集領域の切り替え
 			SelectEdit(IDC_CHECK_PLUGIN_OPTION);
@@ -580,7 +580,7 @@ void DlgPluginOption::SetToEdit(int iLine)
 		}else if (sType == OPTION_TYPE_SEL) {
 			// CONBO 設定
 			std::vector<wstring> selects;
-			selects = m_cPlugin->m_options[iLine]->GetSelects();
+			selects = m_plugin->m_options[iLine]->GetSelects();
 
 			HWND hwndCombo = GetItemHwnd(IDC_COMBO_PLUGIN_OPTION);
 			Combo_ResetContent(hwndCombo);
@@ -642,7 +642,7 @@ void DlgPluginOption::SetFromEdit(int iLine)
 	wstring	sType;
 
 	if (iLine >= 0) {
-		sType = m_cPlugin->m_options[iLine]->GetType();
+		sType = m_plugin->m_options[iLine]->GetType();
 		transform(sType.begin (), sType.end (), sType.begin (), my_towlower2);
 		if (sType == OPTION_TYPE_BOOL) {
 			if (IsButtonChecked(IDC_CHECK_PLUGIN_OPTION)) {
