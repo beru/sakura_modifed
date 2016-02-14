@@ -307,7 +307,7 @@ void SakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszBu
 			break;
 		case L'Q':	// 印刷ページ設定の名前			2013/03/28 Uchi
 			{
-				PRINTSETTING* ps = &GetDllShareData().m_PrintSettingArr[
+				PRINTSETTING* ps = &GetDllShareData().m_printSettingArr[
 					 pDoc->m_docType.GetDocumentAttribute().m_nCurrentPrintSetting];
 				q = wcs_pushT(q, q_max - q, ps->m_szPrintSettingName);
 				++p;
@@ -719,9 +719,9 @@ std::tstring SakuraEnvironment::GetDlgInitialDir(bool bControlProcess)
 		break;
 	case OPENDIALOGDIR_MRU:
 		{
-			const MRUFolder cMRU;
-			auto& vMRU = cMRU.GetPathList();
-			int nCount = cMRU.Length();
+			const MRUFolder mru;
+			auto& vMRU = mru.GetPathList();
+			int nCount = mru.Length();
 			for (int i=0; i<nCount ; ++i) {
 				DWORD attr = GetFileAttributes(vMRU[i]);
 				if ((attr != -1) && (attr & FILE_ATTRIBUTE_DIRECTORY) != 0) {

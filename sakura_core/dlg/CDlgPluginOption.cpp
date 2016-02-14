@@ -98,7 +98,7 @@ int DlgPluginOption::DoModal(
 	// プラグイン番号（エディタがふる番号）
 	m_ID = ID;
 	m_plugin = PluginManager::getInstance()->GetPlugin(m_ID);
-	m_cPropPlugin = cPropPlugin;
+	m_pPropPlugin = cPropPlugin;
 
 	if (!m_plugin) {
 		::ErrorMessage(hwndParent, LS(STR_DLGPLUGINOPT_LOAD));
@@ -209,7 +209,7 @@ void DlgPluginOption::SetData(void)
 	}
 
 	// ReadMe Button
-	m_sReadMeName = m_cPropPlugin->GetReadMeFile(to_tchar(m_pShareData->m_common.m_plugin.m_pluginTable[m_ID].m_szName));
+	m_sReadMeName = m_pPropPlugin->GetReadMeFile(to_tchar(m_pShareData->m_common.m_plugin.m_pluginTable[m_ID].m_szName));
 	EnableItem(IDC_PLUGIN_README, !m_sReadMeName.empty());
 	return;
 }
@@ -401,7 +401,7 @@ BOOL DlgPluginOption::OnBnClicked(int wID)
 		// ReadMe
 		{
 			if (!m_sReadMeName.empty()) {
-				if (!m_cPropPlugin->BrowseReadMe(m_sReadMeName)) {
+				if (!m_pPropPlugin->BrowseReadMe(m_sReadMeName)) {
 					WarningMessage(GetHwnd(), LS(STR_PROPCOMPLG_ERR2));
 				}
 			}else {

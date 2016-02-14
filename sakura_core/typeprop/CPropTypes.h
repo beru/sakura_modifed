@@ -107,7 +107,7 @@ protected:
 	DWORD			m_dwCustColors[16];						// フォントDialogカスタムパレット
 	int				m_nSet[ MAX_KEYWORDSET_PER_TYPE ];		// keyword set index  2005.01.13 MIK
 	int				m_nCurrentColorType;					// 現在選択されている色タイプ
-	KeyWordSetMgr*	m_pCKeyWordSetMgr;						// メモリ削減のためポインタに  Mar. 31, 2003 genta
+	KeyWordSetMgr*	m_pKeyWordSetMgr;						// メモリ削減のためポインタに  Mar. 31, 2003 genta
 	bool			m_bChangeKeyWordSet;
 
 	// フォント表示用データ

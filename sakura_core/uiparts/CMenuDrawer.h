@@ -112,7 +112,7 @@ private:
 	struct MyMenuItemInfo {
 		int				m_nBitmapIdx;
 		int				m_nFuncId;
-		CNativeT		m_cmemLabel;
+		NativeT		m_cmemLabel;
 	};
 	std::vector<MyMenuItemInfo> m_menuItems;
 	int				m_nMenuHeight;

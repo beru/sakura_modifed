@@ -454,7 +454,7 @@ struct CommonSetting_ToolBar {
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 struct CommonSetting_SpecialKeyword {
 	// 強調キーワード設定
-	KeyWordSetMgr		m_CKeyWordSetMgr;					// 強調キーワード
+	KeyWordSetMgr		m_keyWordSetMgr;					// 強調キーワード
 	char				m_szKeyWordSetDir[MAX_PATH];		// 強調キーワードファイルのディレクトリ
 };
 

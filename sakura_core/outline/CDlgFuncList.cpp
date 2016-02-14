@@ -960,7 +960,7 @@ void DlgFuncList::SetTreeJava(
 					break;
 				}
 				// 2005-09-02 D.S.Koba GetSizeOfChar
-				nCharChars = CNativeT::GetSizeOfChar(pWork, nWorkLen, k);
+				nCharChars = NativeT::GetSizeOfChar(pWork, nWorkLen, k);
 				if (nCharChars == 1 && nNestTemplate == 0 && pWork[k] == _T(':')) {
 					//	Jan. 04, 2001 genta
 					//	C++の統合のため、\に加えて::をクラス区切りとみなすように
@@ -1548,7 +1548,7 @@ void DlgFuncList::SetTree(bool tagjump, bool nolabel)
 		// クリップボードコピー用テキストを作成する
 		//	2003.06.22 Moca dummy要素はツリーに入れるがTAGJUMPには加えない
 		if (pFuncInfo->IsAddClipText()) {
-			CNativeT text;
+			NativeT text;
 			if (tagjump) {
 				const TCHAR* pszFileName = pFuncInfo->m_memFileName.GetStringPtr();
 				if (!pszFileName) {
@@ -1651,7 +1651,7 @@ void DlgFuncList::SetTreeFile()
 		// szPath => szPath2 <iniroot>展開
 		const TCHAR* pszFrom = szPath;
 		if (m_fileTreeSetting.m_szLoadProjectIni[0] != _T('\0')) {
-			CNativeT strTemp(pszFrom);
+			NativeT strTemp(pszFrom);
 			strTemp.Replace(_T("<iniroot>"), iniDirPath);
 			if (_countof(szPath2) <= strTemp.GetStringLength()) {
 				auto_strcpy_s(szPath2, _countof(szPath), _T("<Error:Long Path>"));

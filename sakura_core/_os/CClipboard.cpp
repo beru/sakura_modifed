@@ -348,13 +348,13 @@ bool Clipboard::GetText(NativeW* pMemBuf, bool* pbColumnSelect, bool* pbLineSele
 	if (hText) {
 		char* szData = GlobalLockChar(hText);
 		// SJIS→UNICODE
-		Memory cmemSjis(szData, GlobalSize(hText));
-		NativeW cmemUni;
-		ShiftJis::SJISToUnicode(cmemSjis, &cmemUni);
-		cmemSjis.Clean();
+		Memory memSjis(szData, GlobalSize(hText));
+		NativeW memUni;
+		ShiftJis::SJISToUnicode(memSjis, &memUni);
+		memSjis.Clean();
 		// '\0'までを取得
-		cmemUni._SetStringLength(auto_strlen(cmemUni.GetStringPtr()));
-		cmemUni.swap(*pMemBuf);
+		memUni._SetStringLength(auto_strlen(memUni.GetStringPtr()));
+		memUni.swap(*pMemBuf);
 		::GlobalUnlock(hText);
 		return true;
 	}
@@ -484,14 +484,14 @@ bool Clipboard::SetClipboradByFormat(
 		return false;
 	}
 
-	Memory cmemBuf;
+	Memory memBuf;
 	char* pBuf = NULL;
 	size_t nTextByteLen = 0;
 	if (nMode == -1) {
 		// バイナリモード U+00 - U+ffを0x00 - 0xffにマッピング
-		cmemBuf.AllocBuffer(str.GetLength());
-		cmemBuf._SetRawLength(str.GetLength());
-		pBuf = (char*)cmemBuf.GetRawPtr();
+		memBuf.AllocBuffer(str.GetLength());
+		memBuf._SetRawLength(str.GetLength());
+		pBuf = (char*)memBuf.GetRawPtr();
 		size_t len = str.GetLength();
 		const wchar_t* pMem = str.GetPtr();
 		for (size_t i=0; i<len; ++i) {
@@ -511,12 +511,12 @@ bool Clipboard::SetClipboradByFormat(
 			nTextByteLen = str.GetLength() * sizeof(wchar_t);
 		}else {
 			CodeBase* pCode = CodeFactory::CreateCodeBase(eMode, GetDllShareData().m_common.m_file.GetAutoMIMEdecode());
-			if (pCode->UnicodeToCode(str, &cmemBuf) == CodeConvertResult::Failure) {
+			if (pCode->UnicodeToCode(str, &memBuf) == CodeConvertResult::Failure) {
 				return false;
 			}
 			delete pCode;
-			pBuf = (char*)cmemBuf.GetRawPtr();
-			nTextByteLen = cmemBuf.GetRawLength();
+			pBuf = (char*)memBuf.GetRawPtr();
+			nTextByteLen = memBuf.GetRawLength();
 		}
  	}
 	nEndMode = GetEndModeByMode(nMode, nEndMode);
@@ -650,11 +650,11 @@ bool Clipboard::GetClipboradByFormat(
 			if (eMode == CODE_UNICODE) {
 				mem.SetString((wchar_t*)pData, nLength / sizeof(wchar_t));
 			}else {
-				Memory cmem;
-				cmem.SetRawData(pData, nLength);
-				if (cmem.GetRawPtr()) {
+				Memory tmpMem;
+				tmpMem.SetRawData(pData, nLength);
+				if (tmpMem.GetRawPtr()) {
 					CodeBase* pCode = CodeFactory::CreateCodeBase(eMode, GetDllShareData().m_common.m_file.GetAutoMIMEdecode());
-					if (pCode->CodeToUnicode(cmem, &mem) == CodeConvertResult::Failure) {
+					if (pCode->CodeToUnicode(tmpMem, &mem) == CodeConvertResult::Failure) {
 						mem.SetString(L"");
 						retVal = false;
 					}

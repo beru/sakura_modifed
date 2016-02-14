@@ -33,9 +33,9 @@ public:
 	virtual ~Decode() { }
 
 	// インターフェース
-	bool CallDecode(const NativeW& pcData, Memory* pDest)
+	bool CallDecode(const NativeW& pData, Memory* pDest)
 	{
-		bool bRet = DoDecode(pcData, pDest);
+		bool bRet = DoDecode(pData, pDest);
 		if (!bRet) {
 			ErrorMessage(NULL, LS(STR_CONVERT_ERR));
 			pDest->SetRawData("", 0);
@@ -45,7 +45,7 @@ public:
 	}
 
 	// 実装
-	virtual bool DoDecode(const NativeW& pcData, Memory* pDest) = 0;
+	virtual bool DoDecode(const NativeW& pData, Memory* pDest) = 0;
 
 };
 

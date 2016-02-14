@@ -40,7 +40,7 @@ void CType_Vb::InitTypeConfigImp(TypeConfig* pType)
 	_tcscpy(pType->m_szTypeExts, _T("bas,frm,cls,ctl,pag,dob,dsr,vb"));
 
 	// 設定
-	pType->m_cLineComment.CopyTo(0, L"'", -1);					// 行コメントデリミタ
+	pType->m_lineComment.CopyTo(0, L"'", -1);					// 行コメントデリミタ
 	pType->m_eDefaultOutline = OUTLINE_VB;						// アウトライン解析方法
 	pType->m_nKeyWordSetIdx[0]  = 13;							// キーワードセット
 	pType->m_nKeyWordSetIdx[1] = 14;							// キーワードセット2

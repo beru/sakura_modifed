@@ -86,7 +86,7 @@ private:
 	int				m_nTypeId;					// タイプ設定ID
 	DWORD			m_nCompiledMagicNumber;		// コンパイル済みか？
 	int				m_nRegexKeyCount;			// 現在のキーワード数
-	RegexInfo		m_sInfo[MAX_REGEX_KEYWORD];	// キーワード一覧(BREGEXPコンパイル対象)
+	RegexInfo		m_info[MAX_REGEX_KEYWORD];	// キーワード一覧(BREGEXPコンパイル対象)
 #ifdef USE_PARENT
 #else
 	wchar_t			m_keywordList[MAX_REGEX_KEYWORDLISTLEN];

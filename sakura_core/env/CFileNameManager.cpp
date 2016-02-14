@@ -526,10 +526,6 @@ void FileNameManager::GetIniFileNameDirect( LPTSTR pszPrivateIniFile, LPTSTR psz
 				}else {
 					auto_snprintf_s( pszPrivateIniFile, _MAX_PATH - 1, _T("%ts\\%ts\\%ts\\%ts%ts"), szPath, szDir, szFname, pszProfName, _T(".ini") );
 				}
-	
-	
-	
-	
 			}
 		}
 	}

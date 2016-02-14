@@ -427,7 +427,7 @@ void EditView::DeleteData2(
 	}
 	// 2007.10.18 kobake COpe‚Ì’Ç‰Á‚ð‚±‚±‚É‚Ü‚Æ‚ß‚é
 	if (pOpe) {
-		pOpe->m_cOpeLineData.swap(memDeleted);
+		pOpe->m_opeLineData.swap(memDeleted);
 		m_pEditDoc->m_layoutMgr.LayoutToLogic(
 			_ptCaretPos,
 			&pOpe->m_ptCaretPos_PHY_After
@@ -922,11 +922,11 @@ bool EditView::ReplaceData_CEditView3(
 	if (pMemDeleted && 0 < pMemDeleted->size()) {
 		if (pMemCopyOfDeleted) {
 			if (pOpeBlk) {
-				pReplaceOpe->m_pcmemDataDel = *pMemDeleted;
+				pReplaceOpe->m_pMemDataDel = *pMemDeleted;
 			}
 			pMemCopyOfDeleted->swap(*pMemDeleted);
 		}else if (pOpeBlk) {
-			pReplaceOpe->m_pcmemDataDel.swap(*pMemDeleted);
+			pReplaceOpe->m_pMemDataDel.swap(*pMemDeleted);
 		}
 	}
 

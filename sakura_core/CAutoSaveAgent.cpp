@@ -40,7 +40,7 @@
 //
 void AutoSaveAgent::CheckAutoSave()
 {
-	if (m_cPassiveTimer.CheckAction()) {
+	if (m_passiveTimer.CheckAction()) {
 		EditDoc* pDoc = GetListeningDoc();
 
 		//	ã‘‚«•Û‘¶
@@ -54,10 +54,10 @@ void AutoSaveAgent::CheckAutoSave()
 			return;
 		}
 
-		bool en = m_cPassiveTimer.IsEnabled();
-		m_cPassiveTimer.Enable(false);	//	2dŒÄ‚Ño‚µ‚ð–h‚®‚½‚ß
+		bool en = m_passiveTimer.IsEnabled();
+		m_passiveTimer.Enable(false);	//	2dŒÄ‚Ño‚µ‚ð–h‚®‚½‚ß
 		pDoc->m_docFileOperation.FileSave();	//	•Û‘¶
-		m_cPassiveTimer.Enable(en);
+		m_passiveTimer.Enable(en);
 	}
 }
 
@@ -67,8 +67,8 @@ void AutoSaveAgent::CheckAutoSave()
 void AutoSaveAgent::ReloadAutoSaveParam()
 {
 	auto& csBackup = GetDllShareData().m_common.m_backup;
-	m_cPassiveTimer.SetInterval(csBackup.GetAutoBackupInterval());
-	m_cPassiveTimer.Enable(csBackup.IsAutoBackupEnabled());
+	m_passiveTimer.SetInterval(csBackup.GetAutoBackupInterval());
+	m_passiveTimer.Enable(csBackup.IsAutoBackupEnabled());
 }
 
 //----------------------------------------------------------

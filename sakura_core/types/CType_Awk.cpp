@@ -33,7 +33,7 @@ void CType_Awk::InitTypeConfigImp(TypeConfig* pType)
 	_tcscpy(pType->m_szTypeExts, _T("awk"));
 
 	// 設定
-	pType->m_cLineComment.CopyTo(0, L"#", -1);			// 行コメントデリミタ
+	pType->m_lineComment.CopyTo(0, L"#", -1);			// 行コメントデリミタ
 	pType->m_eDefaultOutline = OUTLINE_TEXT;			// アウトライン解析方法
 	pType->m_nKeyWordSetIdx[0] = 6;						// キーワードセット
 }

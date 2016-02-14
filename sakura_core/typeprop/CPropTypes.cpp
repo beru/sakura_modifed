@@ -95,7 +95,7 @@ PropTypes::PropTypes()
 	m_pShareData = &GetDllShareData();
 
 	// Mar. 31, 2003 genta メモリ削減のためポインタに変更
-	m_pCKeyWordSetMgr = &m_pShareData->m_common.m_specialKeyword.m_CKeyWordSetMgr;
+	m_pKeyWordSetMgr = &m_pShareData->m_common.m_specialKeyword.m_keyWordSetMgr;
 
 	m_hInstance = NULL;		// アプリケーションインスタンスのハンドル
 	m_hwndParent = NULL;	// オーナーウィンドウのハンドル

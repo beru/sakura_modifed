@@ -43,7 +43,7 @@ public:
 	const TCHAR*	m_pszMessage;	// メッセージ
 	int			m_nMaxTextLen;		// 入力サイズ上限
 //	char*		m_pszText;			// テキスト
-	CNativeT	m_memText;			// テキスト
+	NativeT	m_memText;			// テキスト
 protected:
 	/*
 	||  実装ヘルパ関数

@@ -74,7 +74,7 @@ public:
 
 	static bool AddKouhoUnique(vector_ex<std::wstring>&, const std::wstring&);
 
-	NativeW		m_cmemCurWord;
+	NativeW		m_memCurWord;
 	vector_ex<std::wstring>	m_vKouho;
 	int				m_nKouhoNum;
 

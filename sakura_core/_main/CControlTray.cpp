@@ -102,8 +102,8 @@ void ControlTray::DoGrepCreateWindow(HINSTANCE hinst, HWND msgParent, DlgGrep& d
 	// Grep結果ウィンドウの表示
 
 	NativeW mWork1;
-	CNativeT mWork2;
-	CNativeT mWork3;
+	NativeT mWork2;
+	NativeT mWork3;
 	mWork1.SetString(dlgGrep.m_strText.c_str());
 	mWork2.SetString(dlgGrep.m_szFile);
 	mWork3.SetString(dlgGrep.m_szFolder);
@@ -112,7 +112,7 @@ void ControlTray::DoGrepCreateWindow(HINSTANCE hinst, HWND msgParent, DlgGrep& d
 	mWork3.Replace(_T("\""), _T("\"\""));
 
 	// -GREPMODE -GKEY="1" -GFILE="*.*;*.c;*.h" -GFOLDER="c:\" -GCODE=0 -GOPT=S
-	CNativeT cmdLine;
+	NativeT cmdLine;
 	cmdLine.AppendString(_T("-GREPMODE -GKEY=\""));
 	cmdLine.AppendStringW(mWork1.GetStringPtr());
 	cmdLine.AppendString(_T("\" -GFILE=\""));

@@ -238,8 +238,8 @@ void MRUFile::Add(EditInfo* pEditInfo)
 	_tcscat(szFolder, szDir);
 
 	//	FolderÇÅAMRUFolderÇ…ìoò^
-	MRUFolder cMRUFolder;
-	cMRUFolder.Add(szFolder);
+	MRUFolder mruFolder;
+	mruFolder.Add(szFolder);
 
 	m_recentFile.AppendItem(&tmpEditInfo);
 	

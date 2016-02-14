@@ -79,7 +79,7 @@ LRESULT APIENTRY HokanList_SubclassProc(
 
 HokanMgr::HokanMgr()
 {
-	m_cmemCurWord.SetString(L"");
+	m_memCurWord.SetString(L"");
 
 	m_nCurKouhoIdx = -1;
 	m_bTimerFlag = TRUE;
@@ -234,8 +234,8 @@ int HokanMgr::Search(
 	m_poWin.y = ppoWin->y;
 	m_nWinHeight = nWinHeight;
 	m_nColumnWidth = nColumnWidth;
-//	m_cmemCurWord.SetData(pszCurWord, lstrlen(pszCurWord));
-	m_cmemCurWord.SetString(pszCurWord);
+//	m_memCurWord.SetData(pszCurWord, lstrlen(pszCurWord));
+	m_memCurWord.SetString(pszCurWord);
 
 
 	m_nCurKouhoIdx = 0;
@@ -347,7 +347,7 @@ void HokanMgr::HokanSearchByKeyword(
 ) {
 	const EditView* pEditView = reinterpret_cast<const EditView*>(m_lParam);
 	const TypeConfig& type = pEditView->GetDocument()->m_docType.GetDocumentAttribute();
-	KeyWordSetMgr& keywordMgr = m_pShareData->m_common.m_specialKeyword.m_CKeyWordSetMgr;
+	KeyWordSetMgr& keywordMgr = m_pShareData->m_common.m_specialKeyword.m_keyWordSetMgr;
 	const int nKeyLen = wcslen(pszCurWord);
 	for (int n=0; n<MAX_KEYWORDSET_PER_TYPE; ++n) {
 		int kwdset = type.m_nKeyWordSetIdx[n];
@@ -529,7 +529,7 @@ BOOL HokanMgr::DoHokan(int nVKey)
 	pEditView->GetCommander().HandleCommand( F_INSTEXT_W, true, (LPARAM)&wszLabel[0], wcslen(&wszLabel[0]), TRUE, 0 );
 
 	// Until here
-//	pEditView->GetCommander().HandleCommand(F_INSTEXT_W, true, (LPARAM)(wszLabel + m_cmemCurWord.GetLength()), TRUE, 0, 0);
+//	pEditView->GetCommander().HandleCommand(F_INSTEXT_W, true, (LPARAM)(wszLabel + m_memCurWord.GetLength()), TRUE, 0, 0);
 	Hide();
 
 	m_pShareData->m_common.m_helper.m_bUseHokan = FALSE;	//	•âŠ®‚µ‚½‚ç

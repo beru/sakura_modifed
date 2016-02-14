@@ -82,7 +82,7 @@ void ViewCommander::Command_INDENT(
 		return;
 	}
 
-	LayoutRange sSelectOld;		// 範囲選択
+	LayoutRange selectOld;		// 範囲選択
 	LayoutPoint ptInserted;		// 挿入後の挿入位置
 	const struct IsIndentCharSpaceTab {
 		IsIndentCharSpaceTab() {}
@@ -140,9 +140,9 @@ void ViewCommander::Command_INDENT(
 		// From Here 2001.12.03 hor
 		// 上書モードのときは選択範囲削除
 		if (!m_pCommanderView->IsInsMode() /* Oct. 2, 2005 genta */) {
-			sSelectOld = GetSelect();
+			selectOld = GetSelect();
 			m_pCommanderView->DeleteData(false);
-			GetSelect() = sSelectOld;
+			GetSelect() = selectOld;
 			selInfo.SetBoxSelect(true);
 		}
 		// To Here 2001.12.03 hor
@@ -336,10 +336,10 @@ void ViewCommander::Command_INDENT(
 			caret.m_nCaretPosX_Prev = caret.GetCaretLayoutPos().GetX2();
 		}
 	}else {	// 通常選択(複数行)
-		sSelectOld.SetFrom(LayoutPoint(LayoutInt(0), GetSelect().GetFrom().y));
-		sSelectOld.SetTo  (LayoutPoint(LayoutInt(0), GetSelect().GetTo().y ));
+		selectOld.SetFrom(LayoutPoint(LayoutInt(0), GetSelect().GetFrom().y));
+		selectOld.SetTo  (LayoutPoint(LayoutInt(0), GetSelect().GetTo().y ));
 		if (GetSelect().GetTo().x > 0) {
-			sSelectOld.GetToPointer()->y++;
+			selectOld.GetToPointer()->y++;
 		}
 
 		// 現在の選択範囲を非選択状態に戻す
@@ -347,7 +347,7 @@ void ViewCommander::Command_INDENT(
 
 		WaitCursor waitCursor(
 			m_pCommanderView->GetHwnd(),
-			1000 < sSelectOld.GetTo().GetY2() - sSelectOld.GetFrom().GetY2()
+			1000 < selectOld.GetTo().GetY2() - selectOld.GetFrom().GetY2()
 		);
 		HWND hwndProgress = NULL;
 		int nProgressPos = 0;
@@ -355,7 +355,7 @@ void ViewCommander::Command_INDENT(
 			hwndProgress = m_pCommanderView->StartProgress();
 		}
 
-		for (LayoutInt i=sSelectOld.GetFrom().GetY2(); i<sSelectOld.GetTo().GetY2(); ++i) {
+		for (LayoutInt i=selectOld.GetFrom().GetY2(); i<selectOld.GetTo().GetY2(); ++i) {
 			LayoutInt nLineCountPrev = GetDocument()->m_layoutMgr.GetLineCount();
 			const Layout* pLayout = GetDocument()->m_layoutMgr.SearchLineByLayoutY(i);
 			if (!pLayout ||						// テキストが無いEOLの行は無視
@@ -383,10 +383,10 @@ void ViewCommander::Command_INDENT(
 
 			if (nLineCountPrev != GetDocument()->m_layoutMgr.GetLineCount()) {
 				// 行数が変化した!!
-				sSelectOld.GetToPointer()->y += GetDocument()->m_layoutMgr.GetLineCount() - nLineCountPrev;
+				selectOld.GetToPointer()->y += GetDocument()->m_layoutMgr.GetLineCount() - nLineCountPrev;
 			}
 			if (hwndProgress) {
-				int newPos = ::MulDiv((Int)i, 100, (Int)sSelectOld.GetTo().GetY());
+				int newPos = ::MulDiv((Int)i, 100, (Int)selectOld.GetTo().GetY());
 				if (newPos != nProgressPos) {
 					nProgressPos = newPos;
 					Progress_SetPos(hwndProgress, newPos + 1);
@@ -399,7 +399,7 @@ void ViewCommander::Command_INDENT(
 			::ShowWindow(hwndProgress, SW_HIDE);
 		}
 
-		GetSelect() = sSelectOld;
+		GetSelect() = selectOld;
 
 		// From Here 2001.12.03 hor
 		caret.MoveCursor(GetSelect().GetTo(), true);
@@ -453,17 +453,17 @@ void ViewCommander::Command_UNINDENT(wchar_t wcChar)
 	}else {
 		GetDocument()->m_docEditor.SetModified(true, true);	// Jan. 22, 2002 genta
 
-		LayoutRange sSelectOld;	// 範囲選択
-		sSelectOld.SetFrom(LayoutPoint(LayoutInt(0), GetSelect().GetFrom().y));
-		sSelectOld.SetTo  (LayoutPoint(LayoutInt(0), GetSelect().GetTo().y ));
+		LayoutRange selectOld;	// 範囲選択
+		selectOld.SetFrom(LayoutPoint(LayoutInt(0), GetSelect().GetFrom().y));
+		selectOld.SetTo  (LayoutPoint(LayoutInt(0), GetSelect().GetTo().y ));
 		if (GetSelect().GetTo().x > 0) {
-			sSelectOld.GetToPointer()->y++;
+			selectOld.GetToPointer()->y++;
 		}
 
 		// 現在の選択範囲を非選択状態に戻す
 		selInfo.DisableSelectArea(false);
 
-		WaitCursor waitCursor(m_pCommanderView->GetHwnd(), 1000 < sSelectOld.GetTo().GetY() - sSelectOld.GetFrom().GetY());
+		WaitCursor waitCursor(m_pCommanderView->GetHwnd(), 1000 < selectOld.GetTo().GetY() - selectOld.GetFrom().GetY());
 		HWND hwndProgress = NULL;
 		int nProgressPos = 0;
 		if (waitCursor.IsEnable()) {
@@ -472,7 +472,7 @@ void ViewCommander::Command_UNINDENT(wchar_t wcChar)
 
 		auto& caret = GetCaret();
 		LogicInt nDelLen;
-		for (LayoutInt i = sSelectOld.GetFrom().GetY2(); i < sSelectOld.GetTo().GetY2(); ++i) {
+		for (LayoutInt i = selectOld.GetFrom().GetY2(); i < selectOld.GetTo().GetY2(); ++i) {
 			LayoutInt nLineCountPrev = GetDocument()->m_layoutMgr.GetLineCount();
 
 			const Layout*	pLayout;
@@ -522,10 +522,10 @@ void ViewCommander::Command_UNINDENT(wchar_t wcChar)
 			);
 			if (nLineCountPrev != GetDocument()->m_layoutMgr.GetLineCount()) {
 				// 行数が変化した!!
-				sSelectOld.GetToPointer()->y += GetDocument()->m_layoutMgr.GetLineCount() - nLineCountPrev;
+				selectOld.GetToPointer()->y += GetDocument()->m_layoutMgr.GetLineCount() - nLineCountPrev;
 			}
 			if (hwndProgress) {
-				int newPos = ::MulDiv((Int)i, 100, (Int)sSelectOld.GetTo().GetY());
+				int newPos = ::MulDiv((Int)i, 100, (Int)selectOld.GetTo().GetY());
 				if (newPos != nProgressPos) {
 					nProgressPos = newPos;
 					Progress_SetPos(hwndProgress, newPos + 1);
@@ -536,7 +536,7 @@ void ViewCommander::Command_UNINDENT(wchar_t wcChar)
 		if (hwndProgress) {
 			::ShowWindow(hwndProgress, SW_HIDE);
 		}
-		GetSelect() = sSelectOld;	// 範囲選択
+		GetSelect() = selectOld;	// 範囲選択
 
 		// From Here 2001.12.03 hor
 		caret.MoveCursor(GetSelect().GetTo(), true);
@@ -657,8 +657,8 @@ bool SortByKeyDesc(SortData* pst1, SortData* pst2) {return CStringRef_comp(pst1-
 */
 void ViewCommander::Command_SORT(BOOL bAsc)	// bAsc:TRUE=昇順,FALSE=降順
 {
-	LayoutRange sRangeA;
-	LogicRange sSelectOld;
+	LayoutRange rangeA;
+	LogicRange selectOld;
 
 	int			nColumnFrom, nColumnTo;
 	LayoutInt	nCF(0), nCT(0);
@@ -673,7 +673,7 @@ void ViewCommander::Command_SORT(BOOL bAsc)	// bAsc:TRUE=昇順,FALSE=降順
 	}
 
 	if (selInfo.IsBoxSelecting()) {
-		sRangeA = selInfo.m_select;
+		rangeA = selInfo.m_select;
 		if (selInfo.m_select.GetFrom().x == selInfo.m_select.GetTo().x) {
 			// Aug. 14, 2005 genta 折り返し幅をLayoutMgrから取得するように
 			selInfo.m_select.SetToX(GetDocument()->m_layoutMgr.GetMaxLineKetas());
@@ -690,32 +690,32 @@ void ViewCommander::Command_SORT(BOOL bAsc)	// bAsc:TRUE=昇順,FALSE=降順
 	nCaretPosYOLD = GetCaret().GetCaretLayoutPos().GetY();
 	GetDocument()->m_layoutMgr.LayoutToLogic(
 		selInfo.m_select,
-		&sSelectOld
+		&selectOld
 	);
 
 	if (bBeginBoxSelectOld) {
-		sSelectOld.GetToPointer()->y++;
+		selectOld.GetToPointer()->y++;
 	}else {
 		// カーソル位置が行頭じゃない ＆ 選択範囲の終端に改行コードがある場合は
 		// その行も選択範囲に加える
-		if (sSelectOld.GetTo().x > 0) {
+		if (selectOld.GetTo().x > 0) {
 			// 2006.03.31 Moca nSelectLineToOldは、物理行なのでLayout系からDocLine系に修正
-			const DocLine* pDocLine = GetDocument()->m_docLineMgr.GetLine(sSelectOld.GetTo().GetY2());
+			const DocLine* pDocLine = GetDocument()->m_docLineMgr.GetLine(selectOld.GetTo().GetY2());
 			if (pDocLine && EolType::None != pDocLine->GetEol()) {
-				sSelectOld.GetToPointer()->y++;
+				selectOld.GetToPointer()->y++;
 			}
 		}
 	}
-	sSelectOld.SetFromX(LogicInt(0));
-	sSelectOld.SetToX(LogicInt(0));
+	selectOld.SetFromX(LogicInt(0));
+	selectOld.SetToX(LogicInt(0));
 
 	// 行選択されてない
-	if (sSelectOld.IsLineOne()) {
+	if (selectOld.IsLineOne()) {
 		return;
 	}
 	
-	sta.reserve(sSelectOld.GetTo().GetY2() - sSelectOld.GetFrom().GetY2());
-	for (LogicInt i=sSelectOld.GetFrom().GetY2(); i<sSelectOld.GetTo().y; ++i) {
+	sta.reserve(selectOld.GetTo().GetY2() - selectOld.GetFrom().GetY2());
+	for (LogicInt i=selectOld.GetFrom().GetY2(); i<selectOld.GetTo().y; ++i) {
 		const DocLine* pDocLine = GetDocument()->m_docLineMgr.GetLine(i);
 		const NativeW& memLine = pDocLine->_GetDocLineDataWithEOL();
 		const wchar_t* pLine = memLine.GetStringPtr(&nLineLen);
@@ -786,10 +786,10 @@ void ViewCommander::Command_SORT(BOOL bAsc)	// bAsc:TRUE=昇順,FALSE=降順
 		temp.swap(sta);
 	}
 
-	LayoutRange sSelectOld_Layout;
-	GetDocument()->m_layoutMgr.LogicToLayout(sSelectOld, &sSelectOld_Layout);
+	LayoutRange selectOld_Layout;
+	GetDocument()->m_layoutMgr.LogicToLayout(selectOld, &selectOld_Layout);
 	m_pCommanderView->ReplaceData_CEditView3(
-		sSelectOld_Layout,
+		selectOld_Layout,
 		NULL,
 		&repData,
 		false,
@@ -801,9 +801,9 @@ void ViewCommander::Command_SORT(BOOL bAsc)	// bAsc:TRUE=昇順,FALSE=降順
 	// 選択エリアの復元
 	if (bBeginBoxSelectOld) {
 		selInfo.SetBoxSelect(bBeginBoxSelectOld);
-		selInfo.m_select = sRangeA;
+		selInfo.m_select = rangeA;
 	}else {
-		selInfo.m_select = sSelectOld_Layout;
+		selInfo.m_select = selectOld_Layout;
 	}
 	if (nCaretPosYOLD == selInfo.m_select.GetFrom().y || selInfo.IsBoxSelecting()) {
 		GetCaret().MoveCursor(selInfo.m_select.GetFrom(), true);
@@ -864,8 +864,8 @@ void ViewCommander::Command_MERGE(void)
 #if 0
 		const Layout* pLayout = GetDocument()->m_layoutMgr.SearchLineByLayoutY(selInfo.m_select.GetTo().GetY2()); // 2007.10.09 kobake 単位混在バグ修正
 		if (pLayout && EolType::None != pLayout->GetLayoutEol()) {
-			sSelectOld.GetToPointer()->y++;
-			//sSelectOld.GetTo().y++;
+			selectOld.GetToPointer()->y++;
+			//selectOld.GetTo().y++;
 		}
 #else
 		// 2010.08.22 Moca ソートと仕様を合わせる
@@ -887,8 +887,8 @@ void ViewCommander::Command_MERGE(void)
 	int j = GetDocument()->m_docLineMgr.GetLineCount();
 	nMergeLayoutLines = GetDocument()->m_layoutMgr.GetLineCount();
 
-	LayoutRange sSelectOld_Layout;
-	GetDocument()->m_layoutMgr.LogicToLayout(sSelectOld, &sSelectOld_Layout);
+	LayoutRange selectOld_Layout;
+	GetDocument()->m_layoutMgr.LogicToLayout(sSelectOld, &selectOld_Layout);
 
 	// 2010.08.22 NUL対応修正
 	std::vector<StringRef> lineArr;
@@ -917,7 +917,7 @@ void ViewCommander::Command_MERGE(void)
 			repData[idx].memLine.SetString(lineArr[idx].GetPtr(), lineArr[idx].GetLength());
 		}
 		m_pCommanderView->ReplaceData_CEditView3(
-			sSelectOld_Layout,
+			selectOld_Layout,
 			NULL,
 			&repData,
 			false,
@@ -933,7 +933,7 @@ void ViewCommander::Command_MERGE(void)
 	nMergeLayoutLines -= GetDocument()->m_layoutMgr.GetLineCount();
 
 	// 選択エリアの復元
-	selInfo.m_select = sSelectOld_Layout;
+	selInfo.m_select = selectOld_Layout;
 	// 2010.08.22 座標混在バグ
 	selInfo.m_select.GetToPointer()->y -= nMergeLayoutLines;
 

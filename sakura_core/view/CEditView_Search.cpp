@@ -85,15 +85,15 @@ BOOL EditView::KeyWordHelpSearchDict(LID_SKH nID, POINT* po, RECT* rc)
 	}else
 		goto end_of_search;
 
-	if (NativeW::IsEqual(memCurText, m_tipWnd.m_cKey)	// 既に検索済みか
+	if (NativeW::IsEqual(memCurText, m_tipWnd.m_key)	// 既に検索済みか
 		&& !m_tipWnd.m_KeyWasHit							// 該当するキーがなかった
 	) {
 		goto end_of_search;
 	}
-	m_tipWnd.m_cKey = memCurText;
+	m_tipWnd.m_key = memCurText;
 
 	// 検索実行
-	if (!KeySearchCore(&m_tipWnd.m_cKey)) {
+	if (!KeySearchCore(&m_tipWnd.m_key)) {
 		goto end_of_search;
 	}
 	m_dwTipTimer = 0;		// 辞書Tipを表示している
@@ -115,12 +115,12 @@ bool EditView::KeySearchCore(const NativeW* pMemCurText)
 	int			nCmpLen = STRNCMP_MAX; // 2006.04.10 fon
 	int			nLine; // 2006.04.10 fon
 	
-	m_tipWnd.m_cInfo.SetString(_T(""));	// tooltipバッファ初期化
+	m_tipWnd.m_info.SetString(_T(""));	// tooltipバッファ初期化
 	// 1行目にキーワード表示の場合
 	if (m_pTypeData->m_bUseKeyHelpKeyDisp) {	// キーワードも表示する	// 2006.04.10 fon
-		m_tipWnd.m_cInfo.AppendString(_T("["));
-		m_tipWnd.m_cInfo.AppendString(pMemCurText->GetStringT());
-		m_tipWnd.m_cInfo.AppendString(_T("]"));
+		m_tipWnd.m_info.AppendString(_T("["));
+		m_tipWnd.m_info.AppendString(pMemCurText->GetStringT());
+		m_tipWnd.m_info.AppendString(_T("]"));
 	}
 	// 途中まで一致を使う場合
 	if (m_pTypeData->m_bUseKeyHelpPrefix)
@@ -145,24 +145,24 @@ bool EditView::KeySearchCore(const NativeW* pMemCurText)
 				// 有効になっている辞書を全部なめて、ヒットの都度説明の継ぎ増し
 				if (m_pTypeData->m_bUseKeyHelpAllSearch) {	// ヒットした次の辞書も検索	// 2006.04.10 fon
 					// バッファに前のデータが詰まっていたらseparator挿入
-					if (m_tipWnd.m_cInfo.GetStringLength() != 0)
-						m_tipWnd.m_cInfo.AppendString(LS(STR_ERR_DLGEDITVW5));
+					if (m_tipWnd.m_info.GetStringLength() != 0)
+						m_tipWnd.m_info.AppendString(LS(STR_ERR_DLGEDITVW5));
 					else
-						m_tipWnd.m_cInfo.AppendString(LS(STR_ERR_DLGEDITVW6));	// 先頭の場合
+						m_tipWnd.m_info.AppendString(LS(STR_ERR_DLGEDITVW6));	// 先頭の場合
 					// 辞書のパス挿入
 					{
 						TCHAR szFile[MAX_PATH];
 						// 2013.05.08 表示するのはファイル名(拡張子なし)のみにする
 						_tsplitpath(keyHelpInfo.m_szPath, NULL, NULL, szFile, NULL);
-						m_tipWnd.m_cInfo.AppendString(szFile);
+						m_tipWnd.m_info.AppendString(szFile);
 					}
-					m_tipWnd.m_cInfo.AppendString(_T("\n"));
+					m_tipWnd.m_info.AppendString(_T("\n"));
 					// 前方一致でヒットした単語を挿入
 					if (m_pTypeData->m_bUseKeyHelpPrefix) {	// 選択範囲で前方一致検索
-						m_tipWnd.m_cInfo.AppendString(pMemRefKey->GetStringT());
-						m_tipWnd.m_cInfo.AppendString(_T(" >>\n"));
+						m_tipWnd.m_info.AppendString(pMemRefKey->GetStringT());
+						m_tipWnd.m_info.AppendString(_T(" >>\n"));
 					}// 調査した「意味」を挿入
-					m_tipWnd.m_cInfo.AppendStringW(pszWork);
+					m_tipWnd.m_info.AppendStringW(pszWork);
 					delete pMemRefText;
 					delete pMemRefKey;	// 2006.07.02 genta
 					// タグジャンプ用の情報を残す
@@ -173,17 +173,17 @@ bool EditView::KeySearchCore(const NativeW* pMemCurText)
 					}
 				}else {	// 最初のヒット項目のみ返す場合
 					// キーワードが入っていたらseparator挿入
-					if (m_tipWnd.m_cInfo.GetStringLength() != 0)
-						m_tipWnd.m_cInfo.AppendString(_T("\n--------------------\n"));
+					if (m_tipWnd.m_info.GetStringLength() != 0)
+						m_tipWnd.m_info.AppendString(_T("\n--------------------\n"));
 					
 					// 前方一致でヒットした単語を挿入
 					if (m_pTypeData->m_bUseKeyHelpPrefix) {	// 選択範囲で前方一致検索
-						m_tipWnd.m_cInfo.AppendString(pMemRefKey->GetStringT());
-						m_tipWnd.m_cInfo.AppendString(_T(" >>\n"));
+						m_tipWnd.m_info.AppendString(pMemRefKey->GetStringT());
+						m_tipWnd.m_info.AppendString(_T(" >>\n"));
 					}
 					
 					// 調査した「意味」を挿入
-					m_tipWnd.m_cInfo.AppendStringW(pszWork);
+					m_tipWnd.m_info.AppendStringW(pszWork);
 					delete pMemRefText;
 					delete pMemRefKey;	// 2006.07.02 genta
 					// タグジャンプ用の情報を残す
@@ -284,8 +284,8 @@ bool EditView::MiniMapCursorLineTip(POINT* po, RECT* rc, bool* pbHide)
 	if (memCurText.GetStringLength() <= 0) {
 		return false;
 	}
-	m_tipWnd.m_cKey = memCurText;
-	m_tipWnd.m_cInfo = memCurText.GetStringT();
+	m_tipWnd.m_key = memCurText;
+	m_tipWnd.m_info = memCurText.GetStringT();
 	m_tipWnd.m_nSearchLine = (Int)ptNew.y;
 	m_dwTipTimer = 0;		// 辞書Tipを表示している
 	m_poTipCurPos = *po;	// 現在のマウスカーソル位置
@@ -317,18 +317,18 @@ void EditView::GetCurrentTextForSearch(NativeW& memCurText, bool bStripMaxPath /
 			LogicInt nIdx = LineColumnToIndex(pLayout, GetCaret().GetCaretLayoutPos().GetX2());
 
 			// 現在位置の単語の範囲を調べる
-			LayoutRange sRange;
+			LayoutRange range;
 			bool bWhere = m_pEditDoc->m_layoutMgr.WhereCurrentWord(
 				GetCaret().GetCaretLayoutPos().GetY2(),
 				nIdx,
-				&sRange,
+				&range,
 				NULL,
 				NULL
 			);
 			if (bWhere) {
 				// 選択範囲の変更
-				GetSelectionInfo().m_selectBgn = sRange;
-				GetSelectionInfo().m_select    = sRange;
+				GetSelectionInfo().m_selectBgn = range;
+				GetSelectionInfo().m_select    = range;
 
 				// 選択範囲のデータを取得
 				if (GetSelectedDataOne(memCurText, INT_MAX)) {
@@ -457,9 +457,9 @@ int EditView::IsSearchString(
 		** 対策として、行頭を MacthInfoに教えないといけないので、文字列の長さ・位置情報を与える形に変更
 		** 2003.05.04 かろと
 		*/
-		if (m_CurRegexp.Match(str.GetPtr(), str.GetLength(), nPos)) {
-			*pnSearchStart = m_CurRegexp.GetIndex();	// 2002.02.08 hor
-			*pnSearchEnd = m_CurRegexp.GetLastIndex();
+		if (m_curRegexp.Match(str.GetPtr(), str.GetLength(), nPos)) {
+			*pnSearchStart = m_curRegexp.GetIndex();	// 2002.02.08 hor
+			*pnSearchEnd = m_curRegexp.GetLastIndex();
 			return 1;
 		}else {
 			return 0;

@@ -50,29 +50,29 @@ static CodeConvertResult _CheckSavingCharcode(
 	const DocLine*	pDocLine = pcDocLineMgr.GetDocLineTop();
 	const bool bCodePageMode = IsValidCodeOrCPType(eCodeType) && !IsValidCodeType(eCodeType);
 	CodeBase* pCodeBase = CodeFactory::CreateCodeBase(eCodeType, 0);
-	Memory cmemTmp;	// バッファを再利用
-	NativeW cmemTmp2;
+	Memory memTmp;	// バッファを再利用
+	NativeW memTmp2;
 	LogicInt nLine = LogicInt(0);
 	while (pDocLine) {
-		// コード変換 pDocLine -> cmemTmp
+		// コード変換 pDocLine -> memTmp
 		CodeConvertResult e = IoBridge::ImplToFile(
 			pDocLine->_GetDocLineDataWithEOL(),
-			&cmemTmp,
+			&memTmp,
 			pCodeBase
 		);
 		if (bCodePageMode) {
 			// コードページはCodeConvertResult::LoseSomeを返さないので、自分で文字列比較する
 			CodeConvertResult e2 = IoBridge::FileToImpl(
-				cmemTmp,
-				&cmemTmp2,
+				memTmp,
+				&memTmp2,
 				pCodeBase,
 				0
 			);
 			const int nDocLineLen = (Int)pDocLine->GetLengthWithEOL();
-			const int nConvertLen = (Int)cmemTmp2.GetStringLength();
+			const int nConvertLen = (Int)memTmp2.GetStringLength();
 			const int nDataMinLen = t_min(nDocLineLen, nConvertLen);
 			const wchar_t* p = pDocLine->GetPtr();
-			const wchar_t* r = cmemTmp2.GetStringPtr();
+			const wchar_t* r = memTmp2.GetStringPtr();
 			int nPos = -1;
 			for (int i=0; i<nDataMinLen; ++i) {
 				if (p[i] != r[i]) {
@@ -106,7 +106,7 @@ static CodeConvertResult _CheckSavingCharcode(
 					mem.SetStringHoldBuffer( pLine + nPos, chars );
 					CodeConvertResult e2 = IoBridge::ImplToFile(
 						mem,
-						&cmemTmp,
+						&memTmp,
 						pCodeBase
 					);
 					if (e2 == CodeConvertResult::LoseSome) {

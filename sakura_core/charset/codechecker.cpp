@@ -994,7 +994,7 @@ int CheckUtf7BPart(const char* pS, const int nLen, char** ppNextChar, bool* pbEr
 	wchar_t* pdata;
 	int ndatalen, nret;
 	ECharSet echarset;
-	Memory cmbuffer;
+	Memory mbuffer;
 
 
 	if (nLen < 1) {
@@ -1084,8 +1084,8 @@ int CheckUtf7BPart(const char* pS, const int nLen, char** ppNextChar, bool* pbEr
 		goto EndFunc;
 	}
 
-	cmbuffer.AllocBuffer(nchecklen);
-	pdata = reinterpret_cast<wchar_t*>(cmbuffer.GetRawPtr());
+	mbuffer.AllocBuffer(nchecklen);
+	pdata = reinterpret_cast<wchar_t*>(mbuffer.GetRawPtr());
 	if (!pdata) {
 		goto EndFunc;
 	}

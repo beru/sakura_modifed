@@ -133,28 +133,28 @@ BOOL AppNodeGroupHandle::AddEditWndList(HWND hWnd)
 	DLLSHAREDATA* pShare = &GetDllShareData();
 
 	TabWndNotifyType subCommand = TabWndNotifyType::Add;
-	EditNode sMyEditNode = {0};
-	sMyEditNode.m_hWnd = hWnd;
+	EditNode editNode = {0};
+	editNode.m_hWnd = hWnd;
 
 	{	// 2007.07.07 genta Lock領域
 		LockGuard<Mutex> guard(g_cEditArrMutex);
 
-		RecentEditNode	cRecentEditNode;
+		RecentEditNode	recentEditNode;
 
 		// 登録済みか？
-		int nIndex = cRecentEditNode.FindItemByHwnd(hWnd);
+		int nIndex = recentEditNode.FindItemByHwnd(hWnd);
 		if (nIndex != -1) {
 			// もうこれ以上登録できないか？
-			if (cRecentEditNode.GetItemCount() >= cRecentEditNode.GetArrayCount()) {
-				cRecentEditNode.Terminate();
+			if (recentEditNode.GetItemCount() >= recentEditNode.GetArrayCount()) {
+				recentEditNode.Terminate();
 				return FALSE;
 			}
 			subCommand = TabWndNotifyType::Reorder;
 
 			// 以前の情報をコピーする。
-			EditNode* p = cRecentEditNode.GetItem(nIndex);
+			EditNode* p = recentEditNode.GetItem(nIndex);
 			if (p) {
-				sMyEditNode = *p;
+				editNode = *p;
 			}
 		}
 
@@ -164,32 +164,32 @@ BOOL AppNodeGroupHandle::AddEditWndList(HWND hWnd)
 			::SetWindowLongPtr(hWnd, sizeof(LONG_PTR) , (LONG_PTR)pShare->m_nodes.m_nSequences);
 
 			// 連番を更新する。
-			sMyEditNode.m_nIndex = pShare->m_nodes.m_nSequences;
-			sMyEditNode.m_nId = -1;
+			editNode.m_nIndex = pShare->m_nodes.m_nSequences;
+			editNode.m_nId = -1;
 
 			// タブグループ連番
 			if (m_nGroup > 0) {
-				sMyEditNode.m_nGroup = m_nGroup;	// 指定のグループ
+				editNode.m_nGroup = m_nGroup;	// 指定のグループ
 				if (pShare->m_nodes.m_nGroupSequences < m_nGroup) {
 					// 指定グループが現在のGroup Sequencesを超えていた場合の補正
 					pShare->m_nodes.m_nGroupSequences = m_nGroup;
 				}
 			}else {
-				EditNode* p = cRecentEditNode.GetItem(0);
+				EditNode* p = recentEditNode.GetItem(0);
 				if (!p) {
-					sMyEditNode.m_nGroup = ++pShare->m_nodes.m_nGroupSequences;	// 新規グループ
+					editNode.m_nGroup = ++pShare->m_nodes.m_nGroupSequences;	// 新規グループ
 				}else {
-					sMyEditNode.m_nGroup = p->m_nGroup;	// 最近アクティブのグループ
+					editNode.m_nGroup = p->m_nGroup;	// 最近アクティブのグループ
 				}
 			}
 
-			sMyEditNode.m_showCmdRestore = ::IsZoomed(hWnd)? SW_SHOWMAXIMIZED: SW_SHOWNORMAL;
-			sMyEditNode.m_bClosing = FALSE;
+			editNode.m_showCmdRestore = ::IsZoomed(hWnd)? SW_SHOWMAXIMIZED: SW_SHOWNORMAL;
+			editNode.m_bClosing = FALSE;
 		}
 
 		// 追加または先頭に移動する。
-		cRecentEditNode.AppendItem(&sMyEditNode);
-		cRecentEditNode.Terminate();
+		recentEditNode.AppendItem(&editNode);
+		recentEditNode.Terminate();
 	}	// 2007.07.07 genta Lock領域終わり
 
 	// ウィンドウ登録メッセージをブロードキャストする。
@@ -210,9 +210,9 @@ void AppNodeGroupHandle::DeleteEditWndList(HWND hWnd)
 	{	// 2007.07.07 genta Lock領域
 		LockGuard<Mutex> guard(g_cEditArrMutex);
 
-		RecentEditNode	cRecentEditNode;
-		cRecentEditNode.DeleteItemByHwnd(hWnd);
-		cRecentEditNode.Terminate();
+		RecentEditNode	recentEditNode;
+		recentEditNode.DeleteItemByHwnd(hWnd);
+		recentEditNode.Terminate();
 	}
 
 	// ウィンドウ削除メッセージをブロードキャストする。
@@ -366,7 +366,7 @@ bool relayMessageToAllEditors(
 	HWND		hWndLast,	// 最後に送りたいウィンドウ
 	int			nGroup,		// 指定グループ
 	Func		func
-)
+	)
 {
 	EditNode* pWndArr;
 	int n = AppNodeManager::getInstance()->GetOpenedWindowArr(&pWndArr, FALSE);
@@ -415,7 +415,7 @@ bool AppNodeGroupHandle::PostMessageToAllEditors(
 	WPARAM		wParam,		// 第1メッセージ パラメータ
 	LPARAM		lParam,		// 第2メッセージ パラメータ
 	HWND		hWndLast	// 最後に送りたいウィンドウ
-)
+	)
 {
 	return relayMessageToAllEditors(
 		uMsg,
@@ -437,7 +437,7 @@ bool AppNodeGroupHandle::SendMessageToAllEditors(
 	WPARAM	wParam,		// 第1メッセージ パラメータ
 	LPARAM	lParam,		// 第2メッセージ パラメータ
 	HWND	hWndLast	// 最後に送りたいウィンドウ
-)
+	)
 {
 	return relayMessageToAllEditors(
 		uMsg,

@@ -152,8 +152,8 @@ void ViewCommander::Command_LineCutToStart(void)
 
 	// 選択範囲の変更
 	// 2005.06.24 Moca
-	LayoutRange sRange(ptPos, GetCaret().GetCaretLayoutPos());
-	selInfo.SetSelectArea(sRange);
+	LayoutRange range(ptPos, GetCaret().GetCaretLayoutPos());
+	selInfo.SetSelectArea(range);
 
 	// 切り取り(選択範囲をクリップボードにコピーして削除)
 	Command_CUT();
@@ -207,8 +207,8 @@ void ViewCommander::Command_LineCutToEnd(void)
 
 	// 選択範囲の変更
 	// 2005.06.24 Moca
-	LayoutRange sRange(GetCaret().GetCaretLayoutPos(), ptPos);
-	selInfo.SetSelectArea(sRange);
+	LayoutRange range(GetCaret().GetCaretLayoutPos(), ptPos);
+	selInfo.SetSelectArea(range);
 
 	// 切り取り(選択範囲をクリップボードにコピーして削除)
 	Command_CUT();
@@ -240,8 +240,8 @@ void ViewCommander::Command_LineDeleteToStart(void)
 
 	// 選択範囲の変更
 	// 2005.06.24 Moca
-	LayoutRange sRange(ptPos, GetCaret().GetCaretLayoutPos());
-	selInfo.SetSelectArea(sRange);
+	LayoutRange range(ptPos, GetCaret().GetCaretLayoutPos());
+	selInfo.SetSelectArea(range);
 
 	// 選択領域削除
 	m_pCommanderView->DeleteData(true);
@@ -295,8 +295,8 @@ void ViewCommander::Command_LineDeleteToEnd(void)
 
 	// 選択範囲の変更
 	// 2005.06.24 Moca
-	LayoutRange sRange(caretLayoutPos, ptPos);
-	selInfo.SetSelectArea(sRange);
+	LayoutRange range(caretLayoutPos, ptPos);
+	selInfo.SetSelectArea(range);
 
 	// 選択領域削除
 	m_pCommanderView->DeleteData(true);

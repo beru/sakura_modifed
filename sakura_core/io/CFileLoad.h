@@ -132,8 +132,8 @@ protected:
 	int		m_nReadDataLen;		// 読み込みバッファの有効データサイズ
 	int		m_nReadBufOffSet;	// 読み込みバッファ中のオフセット(次の行頭位置)
 //	int		m_nReadBufSumSize;	// 今までにバッファに読み込んだデータの合計サイズ
-	Memory m_cLineBuffer;
-	NativeW m_cLineTemp;
+	Memory m_lineBuffer;
+	NativeW m_lineTemp;
 	int		m_nReadOffset2;
 	CodeConvertResult m_nTempResult;
 

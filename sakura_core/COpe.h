@@ -75,7 +75,7 @@ public:
 	virtual void DUMP(void);	// 編集操作要素のダンプ
 public:
 	LogicPoint	m_ptCaretPos_PHY_To;		//!< 操作前のキャレット位置。文字単位。	[DELETE]
-	OpeLineData	m_cOpeLineData;			//!< 操作に関連するデータ				[DELETE/INSERT]
+	OpeLineData	m_opeLineData;			//!< 操作に関連するデータ				[DELETE/INSERT]
 	int				m_nOrgSeq;
 };
 
@@ -85,7 +85,7 @@ public:
 	InsertOpe() : Ope(OpeCode::Insert) { }
 	virtual void DUMP(void);	// 編集操作要素のダンプ
 public:
-	OpeLineData	m_cOpeLineData;			//!< 操作に関連するデータ				[DELETE/INSERT]
+	OpeLineData	m_opeLineData;			//!< 操作に関連するデータ				[DELETE/INSERT]
 	int				m_nOrgSeq;
 };
 
@@ -100,8 +100,8 @@ public:
 	}
 public:
 	LogicPoint	m_ptCaretPos_PHY_To;		//!< 操作前のキャレット位置。文字単位。	[DELETE]
-	OpeLineData	m_pcmemDataIns;			//!< 操作に関連するデータ				[INSERT]
-	OpeLineData	m_pcmemDataDel;			//!< 操作に関連するデータ				[DELETE]
+	OpeLineData	m_pMemDataIns;			//!< 操作に関連するデータ				[INSERT]
+	OpeLineData	m_pMemDataDel;			//!< 操作に関連するデータ				[DELETE]
 	int				m_nOrgInsSeq;
 	int				m_nOrgDelSeq;
 };

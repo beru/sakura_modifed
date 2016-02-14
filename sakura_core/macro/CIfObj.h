@@ -40,7 +40,7 @@ class EditView;
 template <class Base>
 class ImplementsIUnknown : public Base {
 private:
-	int m_RefCount;
+	int m_refCount;
 	ImplementsIUnknown(const ImplementsIUnknown&);
 	ImplementsIUnknown& operator = (const ImplementsIUnknown&);
 public:
@@ -50,10 +50,10 @@ public:
 	virtual HRESULT STDMETHODCALLTYPE QueryInterface(REFIID iid, void ** ppvObject) {
 		return E_NOINTERFACE; 
 	}
-	virtual ULONG STDMETHODCALLTYPE AddRef() { ++ m_RefCount; return m_RefCount; }
-	virtual ULONG STDMETHODCALLTYPE Release() { -- m_RefCount; int R = m_RefCount; if (m_RefCount == 0) delete this; return R; }
+	virtual ULONG STDMETHODCALLTYPE AddRef() { ++ m_refCount; return m_refCount; }
+	virtual ULONG STDMETHODCALLTYPE Release() { -- m_refCount; int R = m_refCount; if (m_refCount == 0) delete this; return R; }
 public:
-	ImplementsIUnknown(): m_RefCount(0) {}
+	ImplementsIUnknown(): m_refCount(0) {}
 	virtual ~ImplementsIUnknown() {}
 };
 

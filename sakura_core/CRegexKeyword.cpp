@@ -99,10 +99,10 @@ RegexKeyword::~RegexKeyword()
 	MYDBGMSG("~RegexKeyword")
 	// コンパイル済みのバッファを解放する。
 	for (int i=0; i<MAX_REGEX_KEYWORD; ++i) {
-		if (m_sInfo[i].pBregexp && IsAvailable()) {
-			BRegfree(m_sInfo[i].pBregexp);
+		if (m_info[i].pBregexp && IsAvailable()) {
+			BRegfree(m_info[i].pBregexp);
 		}
-		m_sInfo[i].pBregexp = NULL;
+		m_info[i].pBregexp = NULL;
 	}
 	
 	RegexKeyInit();
@@ -127,10 +127,10 @@ bool RegexKeyword::RegexKeyInit(void)
 	m_bUseRegexKeyword = false;
 	m_nRegexKeyCount = 0;
 	for (int i=0; i<MAX_REGEX_KEYWORD; ++i) {
-		m_sInfo[i].pBregexp = NULL;
+		m_info[i].pBregexp = NULL;
 #ifdef USE_PARENT
 #else
-		m_sInfo[i].sRegexKey.m_nColorIndex = COLORIDX_REGEX1;
+		m_info[i].sRegexKey.m_nColorIndex = COLORIDX_REGEX1;
 #endif
 	}
 #ifdef USE_PARENT
@@ -205,10 +205,10 @@ bool RegexKeyword::RegexKeyCompile(void)
 	MYDBGMSG("RegexKeyCompile")
 	// コンパイル済みのバッファを解放する。
 	for (int i=0; i<MAX_REGEX_KEYWORD; ++i) {
-		if (m_sInfo[i].pBregexp && IsAvailable()) {
-			BRegfree(m_sInfo[i].pBregexp);
+		if (m_info[i].pBregexp && IsAvailable()) {
+			BRegfree(m_info[i].pBregexp);
 		}
-		m_sInfo[i].pBregexp = NULL;
+		m_info[i].pBregexp = NULL;
 	}
 
 	// コンパイルパターンを内部変数に移す。
@@ -224,7 +224,7 @@ bool RegexKeyword::RegexKeyCompile(void)
 		}
 #ifdef USE_PARENT
 #else
-		m_sInfo[i].sRegexKey.m_nColorIndex = m_pTypes->m_RegexKeywordArr[i].m_nColorIndex;
+		m_info[i].sRegexKey.m_nColorIndex = m_pTypes->m_RegexKeywordArr[i].m_nColorIndex;
 #endif
 		++m_nRegexKeyCount;
 		for (; *pKeyword!='\0'; ++pKeyword) {}
@@ -254,12 +254,12 @@ bool RegexKeyword::RegexKeyCompile(void)
 #ifdef USE_PARENT
 		rp = &m_pTypes->m_RegexKeywordArr[i];
 #else
-		rp = &m_sInfo[i].sRegexKey;
+		rp = &m_info[i].sRegexKey;
 #endif
 
 		if (RegexKeyCheckSyntax(pKeyword)) {
 			m_szMsg[0] = '\0';
-			BMatch(pKeyword, dummy, dummy + 1, &m_sInfo[i].pBregexp, m_szMsg);
+			BMatch(pKeyword, dummy, dummy + 1, &m_info[i].pBregexp, m_szMsg);
 
 			if (m_szMsg[0] == '\0') {	// エラーがないかチェックする
 				// 先頭以外は検索しなくてよい
@@ -267,9 +267,9 @@ bool RegexKeyword::RegexKeyCompile(void)
 				 || wcsncmp(RK_HEAD_STR2, pKeyword, RK_HEAD_STR2_LEN) == 0
 				 || wcsncmp(RK_HEAD_STR3, pKeyword, RK_HEAD_STR3_LEN) == 0
 				) {
-					m_sInfo[i].nHead = 1;
+					m_info[i].nHead = 1;
 				}else {
-					m_sInfo[i].nHead = 0;
+					m_info[i].nHead = 0;
 				}
 
 				if (COLORIDX_REGEX1  <= rp->m_nColorIndex
@@ -277,23 +277,23 @@ bool RegexKeyword::RegexKeyCompile(void)
 				) {
 					// 色指定でチェックが入ってなければ検索しなくてもよい
 					if (m_pTypes->m_colorInfoArr[rp->m_nColorIndex].m_bDisp) {
-						m_sInfo[i].nFlag = RK_EMPTY;
+						m_info[i].nFlag = RK_EMPTY;
 					}else {
 						// 正規表現では色指定のチェックを見る。
-						m_sInfo[i].nFlag = RK_NOMATCH;
+						m_info[i].nFlag = RK_NOMATCH;
 					}
 				}else {
 					// 正規表現以外では、色指定チェックは見ない。
 					// 例えば、半角数値は正規表現を使い、基本機能を使わないという指定もあり得るため
-					m_sInfo[i].nFlag = RK_EMPTY;
+					m_info[i].nFlag = RK_EMPTY;
 				}
 			}else {
 				// コンパイルエラーなので検索対象からはずす
-				m_sInfo[i].nFlag = RK_NOMATCH;
+				m_info[i].nFlag = RK_NOMATCH;
 			}
 		}else {
 			// 書式エラーなので検索対象からはずす
-			m_sInfo[i].nFlag = RK_NOMATCH;
+			m_info[i].nFlag = RK_NOMATCH;
 		}
 		for (; *pKeyword!='\0'; ++pKeyword) {}
 		++pKeyword;
@@ -336,10 +336,10 @@ bool RegexKeyword::RegexKeyLineStart(void)
 
 	// 検索開始のためにオフセット情報等をクリアする。
 	for (int i=0; i<m_nRegexKeyCount; ++i) {
-		m_sInfo[i].nOffset = -1;
-		// m_sInfo[i].nMatch  = RK_EMPTY;
-		m_sInfo[i].nMatch  = m_sInfo[i].nFlag;
-		m_sInfo[i].nStatus = RK_EMPTY;
+		m_info[i].nOffset = -1;
+		// m_info[i].nMatch  = RK_EMPTY;
+		m_info[i].nMatch  = m_info[i].nFlag;
+		m_info[i].nStatus = RK_EMPTY;
 	}
 
 	return true;
@@ -379,53 +379,53 @@ bool RegexKeyword::RegexIsKeyword(
 	}
 
 	for (int i=0; i<m_nRegexKeyCount; ++i) {
-		if (m_sInfo[i].nMatch != RK_NOMATCH) {  // この行にキーワードがないと分かっていない
-			if (m_sInfo[i].nOffset == nPos) {  // 以前検索した結果に一致する
-				*nMatchLen   = m_sInfo[i].nLength;
+		if (m_info[i].nMatch != RK_NOMATCH) {  // この行にキーワードがないと分かっていない
+			if (m_info[i].nOffset == nPos) {  // 以前検索した結果に一致する
+				*nMatchLen   = m_info[i].nLength;
 #ifdef USE_PARENT
 				*nMatchColor = m_pTypes->m_RegexKeywordArr[i].m_nColorIndex;
 #else
-				*nMatchColor = m_sInfo[i].sRegexKey.m_nColorIndex;
+				*nMatchColor = m_info[i].sRegexKey.m_nColorIndex;
 #endif
 				return true;  // マッチした
 			}
 
 			// 以前の結果はもう古いので再検索する
-			if (m_sInfo[i].nOffset < nPos) {
+			if (m_info[i].nOffset < nPos) {
 #ifdef USE_PARENT
 				int matched = ExistBMatchEx()
-					? BMatchEx(NULL, str.GetPtr(), str.GetPtr() + nPos, str.GetPtr() + str.GetLength(), &m_sInfo[i].pBregexp, m_szMsg)
-					: BMatch(NULL,                  str.GetPtr() + nPos, str.GetPtr() + str.GetLength(), &m_sInfo[i].pBregexp, m_szMsg);
+					? BMatchEx(NULL, str.GetPtr(), str.GetPtr() + nPos, str.GetPtr() + str.GetLength(), &m_info[i].pBregexp, m_szMsg)
+					: BMatch(NULL,                  str.GetPtr() + nPos, str.GetPtr() + str.GetLength(), &m_info[i].pBregexp, m_szMsg);
 #else
 				int matched = ExistBMatchEx()
-					? BMatchEx(NULL, str.GetPtr(), str.GetPtr() + nPos, str.GetPtr() + str.GetLength(), &m_sInfo[i].pBregexp, m_szMsg);
-					: BMatch(NULL,                  str.GetPtr() + nPos, str.GetPtr() + str.GetLength(), &m_sInfo[i].pBregexp, m_szMsg);
+					? BMatchEx(NULL, str.GetPtr(), str.GetPtr() + nPos, str.GetPtr() + str.GetLength(), &m_info[i].pBregexp, m_szMsg);
+					: BMatch(NULL,                  str.GetPtr() + nPos, str.GetPtr() + str.GetLength(), &m_info[i].pBregexp, m_szMsg);
 #endif
 				if (matched) {
-					m_sInfo[i].nOffset = m_sInfo[i].pBregexp->startp[0] - str.GetPtr();
-					m_sInfo[i].nLength = m_sInfo[i].pBregexp->endp[0] - m_sInfo[i].pBregexp->startp[0];
-					m_sInfo[i].nMatch  = RK_MATCH;
+					m_info[i].nOffset = m_info[i].pBregexp->startp[0] - str.GetPtr();
+					m_info[i].nLength = m_info[i].pBregexp->endp[0] - m_info[i].pBregexp->startp[0];
+					m_info[i].nMatch  = RK_MATCH;
 				
 					// 指定の開始位置でマッチした
-					if (m_sInfo[i].nOffset == nPos) {
-						if (m_sInfo[i].nHead != 1 || nPos == 0) {
-							*nMatchLen   = m_sInfo[i].nLength;
+					if (m_info[i].nOffset == nPos) {
+						if (m_info[i].nHead != 1 || nPos == 0) {
+							*nMatchLen   = m_info[i].nLength;
 #ifdef USE_PARENT
 							*nMatchColor = m_pTypes->m_RegexKeywordArr[i].m_nColorIndex;
 #else
-							*nMatchColor = m_sInfo[i].sRegexKey.m_nColorIndex;
+							*nMatchColor = m_info[i].sRegexKey.m_nColorIndex;
 #endif
 							return true;  // マッチした
 						}
 					}
 
 					// 行先頭を要求する正規表現では次回から無視する
-					if (m_sInfo[i].nHead == 1) {
-						m_sInfo[i].nMatch = RK_NOMATCH;
+					if (m_info[i].nHead == 1) {
+						m_info[i].nMatch = RK_NOMATCH;
 					}
 				}else {
 					// この行にこのキーワードはない
-					m_sInfo[i].nMatch = RK_NOMATCH;
+					m_info[i].nMatch = RK_NOMATCH;
 				}
 			}
 		}

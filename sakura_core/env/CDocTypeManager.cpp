@@ -211,8 +211,8 @@ void DocTypeManager::GetFirstExt(const TCHAR* pszTypeExts, TCHAR szFirstExt[], i
 */
 bool DocTypeManager::ConvertTypesExtToDlgExt( const TCHAR *pszSrcExt, const TCHAR* szExt, TCHAR *pszDstExt )
 {
-	TCHAR	*token;
-	TCHAR	*p;
+	TCHAR* token;
+	TCHAR* p;
 
 	//	2003.08.14 MIK NULL‚¶‚á‚È‚­‚Äfalse
 	if (!pszSrcExt) return false;

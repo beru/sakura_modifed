@@ -56,7 +56,7 @@ void CType_Cpp::InitTypeConfigImp(TypeConfig* pType)
 	_tcscpy(pType->m_szTypeExts, _T("c,cpp,cxx,cc,cp,c++,h,hpp,hxx,hh,hp,h++,rc,hm"));
 
 	// 設定
-	pType->m_cLineComment.CopyTo(0, L"//", -1);							// 行コメントデリミタ
+	pType->m_lineComment.CopyTo(0, L"//", -1);							// 行コメントデリミタ
 	pType->m_blockComments[0].SetBlockCommentRule(L"/*", L"*/");			// ブロックコメントデリミタ
 	pType->m_blockComments[1].SetBlockCommentRule(L"#if 0", L"#endif");	// ブロックコメントデリミタ2		Jul. 11, 2001 JEPRO
 	pType->m_nKeyWordSetIdx[0] = 0;											// キーワードセット

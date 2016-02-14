@@ -115,15 +115,15 @@ void ShareData::InitTypeConfigs(
 void ShareData::InitKeyword(DLLSHAREDATA* pShareData)
 {
 	// 強調キーワードのテストデータ
-	pShareData->m_common.m_specialKeyword.m_CKeyWordSetMgr.m_nCurrentKeyWordSetIdx = 0;
+	pShareData->m_common.m_specialKeyword.m_keyWordSetMgr.m_nCurrentKeyWordSetIdx = 0;
 
 	int nSetCount = -1;
 
 #define PopulateKeyword(name, case_sensitive, aryname) \
 	extern const wchar_t* g_ppszKeywords##aryname[]; \
 	extern int g_nKeywords##aryname; \
-	pShareData->m_common.m_specialKeyword.m_CKeyWordSetMgr.AddKeyWordSet((name), (case_sensitive));	\
-	pShareData->m_common.m_specialKeyword.m_CKeyWordSetMgr.SetKeyWordArr(++nSetCount, g_nKeywords##aryname, g_ppszKeywords##aryname);
+	pShareData->m_common.m_specialKeyword.m_keyWordSetMgr.AddKeyWordSet((name), (case_sensitive));	\
+	pShareData->m_common.m_specialKeyword.m_keyWordSetMgr.SetKeyWordArr(++nSetCount, g_nKeywords##aryname, g_ppszKeywords##aryname);
 	
 	PopulateKeyword(L"C/C++",			true,	CPP);			// セット 0の追加
 	PopulateKeyword(L"HTML",			false,	HTML);			// セット 1の追加
@@ -169,10 +169,10 @@ void _DefaultConfig(TypeConfig* pType)
 	pType->m_bTabArrow = TabArrowType::String;	// タブ矢印表示	// 2001.12.03 hor	// default on 2013/4/11 Uchi
 	pType->m_bInsSpace = false;				// スペースの挿入	// 2001.12.03 hor
 	
-	//@@@ 2002.09.22 YAZAKI 以下、m_cLineCommentとm_blockCommentsを使うように修正
-	pType->m_cLineComment.CopyTo(0, L"", -1);	// 行コメントデリミタ
-	pType->m_cLineComment.CopyTo(1, L"", -1);	// 行コメントデリミタ2
-	pType->m_cLineComment.CopyTo(2, L"", -1);	// 行コメントデリミタ3	//Jun. 01, 2001 JEPRO 追加
+	//@@@ 2002.09.22 YAZAKI 以下、m_lineCommentとm_blockCommentsを使うように修正
+	pType->m_lineComment.CopyTo(0, L"", -1);	// 行コメントデリミタ
+	pType->m_lineComment.CopyTo(1, L"", -1);	// 行コメントデリミタ2
+	pType->m_lineComment.CopyTo(2, L"", -1);	// 行コメントデリミタ3	//Jun. 01, 2001 JEPRO 追加
 	pType->m_blockComments[0].SetBlockCommentRule(L"", L"");	// ブロックコメントデリミタ
 	pType->m_blockComments[1].SetBlockCommentRule(L"", L"");	// ブロックコメントデリミタ2
 

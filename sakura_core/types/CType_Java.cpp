@@ -38,7 +38,7 @@ void CType_Java::InitTypeConfigImp(TypeConfig* pType)
 	_tcscpy(pType->m_szTypeExts, _T("java,jav"));
 
 	// 設定
-	pType->m_cLineComment.CopyTo(0, L"//", -1);						// 行コメントデリミタ
+	pType->m_lineComment.CopyTo(0, L"//", -1);						// 行コメントデリミタ
 	pType->m_blockComments[0].SetBlockCommentRule(L"/*", L"*/");	// ブロックコメントデリミタ
 	pType->m_nKeyWordSetIdx[0] = 4;									// キーワードセット
 	pType->m_eDefaultOutline = OUTLINE_JAVA;						// アウトライン解析方法

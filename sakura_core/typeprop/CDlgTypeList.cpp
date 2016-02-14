@@ -570,10 +570,10 @@ bool DlgTypeList::CopyType()
 			TCHAR szTemp[_countof(type.m_szTypeName) + 12];
 			auto_strcpy( szTemp, type.m_szTypeName );
 			int nTempLen = auto_strlen( szTemp );
-			CNativeT cmem;
+			NativeT mem;
 			// バッファをはみ出さないように
-			LimitStringLengthT( szTemp, nTempLen, _countof(type.m_szTypeName) - nLen - 1, cmem );
-			auto_strcpy( type.m_szTypeName, cmem.GetStringPtr() );
+			LimitStringLengthT( szTemp, nTempLen, _countof(type.m_szTypeName) - nLen - 1, mem );
+			auto_strcpy( type.m_szTypeName, mem.GetStringPtr() );
 			auto_strcat(type.m_szTypeName, szNum);
 			bUpdate = false;
 		}

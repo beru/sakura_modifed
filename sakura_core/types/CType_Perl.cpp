@@ -40,7 +40,7 @@ void CType_Perl::InitTypeConfigImp(TypeConfig* pType)
 	_tcscpy(pType->m_szTypeExts, _T("cgi,pl,pm"));
 
 	// 設定
-	pType->m_cLineComment.CopyTo(0, L"#", -1);						// 行コメントデリミタ
+	pType->m_lineComment.CopyTo(0, L"#", -1);						// 行コメントデリミタ
 	pType->m_eDefaultOutline = OUTLINE_PERL;						// アウトライン解析方法
 	pType->m_nKeyWordSetIdx[0]  = 11;								// キーワードセット
 	pType->m_nKeyWordSetIdx[1] = 12;								// キーワードセット2

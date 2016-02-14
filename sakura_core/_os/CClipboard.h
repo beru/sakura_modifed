@@ -37,7 +37,7 @@ public:
 	void Close(); // クリップボードを閉じる
 	bool SetText(const wchar_t* pData, int nDataLen, bool bColumnSelect, bool bLineSelect, UINT uFormat = (UINT)-1);   // テキストを設定する
 	bool SetHtmlText(const NativeW& memBUf);
-	bool GetText(NativeW* cmemBuf, bool* pbColumnSelect, bool* pbLineSelect, const Eol& eol, UINT uGetFormat = (UINT)-1); // テキストを取得する
+	bool GetText(NativeW* pMemBuf, bool* pbColumnSelect, bool* pbLineSelect, const Eol& eol, UINT uGetFormat = (UINT)-1); // テキストを取得する
 	bool IsIncludeClipboradFormat(const wchar_t* pFormatName);
 	bool SetClipboradByFormat(const StringRef& str, const wchar_t* pFormatName, int nMode, int nEndMode);
 	bool GetClipboradByFormat(NativeW& mem, const wchar_t* pFormatName, int nMode, int nEndMode, const Eol& eol);

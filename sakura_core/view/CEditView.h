@@ -455,7 +455,7 @@ private:
 	void ISearchExec(bool bNext);
 	void ISearchBack(void) ;
 	void ISearchWordMake(void);
-	void ISearchSetStatusMsg(CNativeT* msg) const;
+	void ISearchSetStatusMsg(NativeT* msg) const;
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                           括弧                              //
@@ -667,7 +667,7 @@ public:
 
 	// 検索
 	SearchStringPattern m_searchPattern;
-	mutable Bregexp		m_CurRegexp;				// コンパイルデータ
+	mutable Bregexp		m_curRegexp;				// コンパイルデータ
 	bool				m_bCurSrchKeyMark;			// 検索文字列のマーク
 	bool				m_bCurSearchUpdate;			// コンパイルデータ更新要求
 	int					m_nCurSearchKeySequence;	// 検索キーシーケンス
@@ -681,7 +681,7 @@ public:
 	bool				m_bISearchFlagHistory[256];
 	int					m_nISearchHistoryCount;
 	bool				m_bISearchFirst;
-	LayoutRange		m_sISearchHistory[256];
+	LayoutRange			m_searchHistory[256];
 
 	// マクロ
 	bool			m_bExecutingKeyMacro;	// キーボードマクロの実行中

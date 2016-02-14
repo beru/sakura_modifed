@@ -50,7 +50,7 @@ public:
 
 private:
 	int				m_nCurrentPrintSetting;
-	PRINTSETTING	m_PrintSettingArr[MAX_PRINTSETTINGARR];
+	PRINTSETTING	m_printSettingArr[MAX_PRINTSETTINGARR];
 	int				m_nLineNumberColumns;					// 行番号表示する場合の桁数
 	bool			m_bPrintableLinesAndColumnInvalid;
 	HFONT			m_hFontDlg;								// ダイアログのフォントハンドル

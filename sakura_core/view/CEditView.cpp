@@ -239,7 +239,7 @@ BOOL EditView::Create(
 
 	//	Jun. 27, 2001 genta	正規表現ライブラリの差し替え
 	//	2007.08.12 genta 初期化にShareDataの値が必要になった
-	m_CurRegexp.InitDll(GetDllShareData().m_common.m_search.m_szRegexpLib);
+	m_curRegexp.InitDll(GetDllShareData().m_common.m_search.m_szRegexpLib);
 
 	// 2004.02.08 m_hFont_ZENは未使用により削除
 	m_dwTipTimer = ::GetTickCount();	// 辞書Tip起動タイマー
@@ -2701,15 +2701,15 @@ bool  EditView::ShowKeywordHelp(POINT po, LPCWSTR pszHelp, LPRECT prcHokanWin)
 			cmemCurText.SetString(pszHelp);
 
 			// 既に検索済みか
-			if (NativeW::IsEqual(cmemCurText, m_tipWnd.m_cKey)) {
+			if (NativeW::IsEqual(cmemCurText, m_tipWnd.m_key)) {
 				// 該当するキーがなかった
 				if (!m_tipWnd.m_KeyWasHit) {
 					return false;
 				}
 			}else {
-				m_tipWnd.m_cKey = cmemCurText;
+				m_tipWnd.m_key = cmemCurText;
 				// 検索実行
-				if (!KeySearchCore(&m_tipWnd.m_cKey))	// 2006.04.10 fon
+				if (!KeySearchCore(&m_tipWnd.m_key))	// 2006.04.10 fon
 					return FALSE;
 			}
 			m_dwTipTimer = 0;	// 辞書Tipを表示している

@@ -501,7 +501,7 @@ void ShareData_IO::ShareData_IO_Common(DataProfile& profile)
 		int nDummy = _tcslen(common.m_backup.m_szBackUpFolder);
 		// フォルダの最後が「半角かつ'\\'」でない場合は、付加する
 		int	nCharChars = &common.m_backup.m_szBackUpFolder[nDummy]
-			- CNativeT::GetCharPrev(common.m_backup.m_szBackUpFolder, nDummy, &common.m_backup.m_szBackUpFolder[nDummy]);
+			- NativeT::GetCharPrev(common.m_backup.m_szBackUpFolder, nDummy, &common.m_backup.m_szBackUpFolder[nDummy]);
 		if (1
 			&& nCharChars == 1
 			&& common.m_backup.m_szBackUpFolder[nDummy - 1] == '\\'
@@ -517,7 +517,7 @@ void ShareData_IO::ShareData_IO_Common(DataProfile& profile)
 		nDummy = _tcslen(common.m_backup.m_szBackUpFolder);
 		// フォルダの最後が「半角かつ'\\'」でない場合は、付加する
 		nCharChars = &common.m_backup.m_szBackUpFolder[nDummy]
-			- CNativeT::GetCharPrev(common.m_backup.m_szBackUpFolder, nDummy, &common.m_backup.m_szBackUpFolder[nDummy]);
+			- NativeT::GetCharPrev(common.m_backup.m_szBackUpFolder, nDummy, &common.m_backup.m_szBackUpFolder[nDummy]);
 		if (1
 			&& nCharChars == 1
 			&& common.m_backup.m_szBackUpFolder[nDummy - 1] == '\\'
@@ -728,7 +728,7 @@ void ShareData_IO::ShareData_IO_Common(DataProfile& profile)
 // プラグインコマンドを名前から機能番号へ変換
 EFunctionCode GetPlugCmdInfoByName(
 	const WCHAR* pszFuncName			// [in]  プラグインコマンド名
-)
+	)
 {
 	if (!pszFuncName) {
 		return F_INVALID;
@@ -766,7 +766,7 @@ EFunctionCode GetPlugCmdInfoByName(
 bool GetPlugCmdInfoByFuncCode(
 	EFunctionCode	eFuncCode,				// [in]  機能コード
 	WCHAR*			pszFuncName				// [out] 機能名．この先にはMAX_PLUGIN_ID + 20文字のメモリが必要．
-)
+	)
 {
 	if (eFuncCode < F_PLUGCOMMAND_FIRST || eFuncCode > F_PLUGCOMMAND_LAST) {
 		return false;
@@ -1160,7 +1160,7 @@ void ShareData_IO::ShareData_IO_Print(DataProfile& profile)
 	WCHAR	szKeyData[1024];
 	for (int i=0; i<MAX_PRINTSETTINGARR; ++i) {
 		// 2005.04.07 D.S.Koba
-		PRINTSETTING& printsetting = pShare->m_PrintSettingArr[i];
+		PRINTSETTING& printsetting = pShare->m_printSettingArr[i];
 		auto_sprintf(szKeyName, LTEXT("PS[%02d].nInts"), i);
 		static const WCHAR* pszForm = LTEXT("%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d");
 		if (profile.IsReadingMode()) {
@@ -1454,17 +1454,17 @@ void ShareData_IO::ShareData_IO_Type_One(DataProfile& profile, TypeConfig& types
 		lbuf[0] = L'\0'; pos = -1;
 		bRet1 = profile.IOProfileData(pszSecName, LTEXT("szLineComment")		, MakeStringBufferW(lbuf));
 		bRet2 = profile.IOProfileData(pszSecName, LTEXT("nLineCommentColumn")	, pos);
-		if (bRet1 && bRet2) types.m_cLineComment.CopyTo(0, lbuf, pos);
+		if (bRet1 && bRet2) types.m_lineComment.CopyTo(0, lbuf, pos);
 
 		lbuf[0] = L'\0'; pos = -1;
 		bRet1 = profile.IOProfileData(pszSecName, LTEXT("szLineComment2")		, MakeStringBufferW(lbuf));
 		bRet2 = profile.IOProfileData(pszSecName, LTEXT("nLineCommentColumn2"), pos);
-		if (bRet1 && bRet2) types.m_cLineComment.CopyTo(1, lbuf, pos);
+		if (bRet1 && bRet2) types.m_lineComment.CopyTo(1, lbuf, pos);
 
 		lbuf[0] = L'\0'; pos = -1;
 		bRet1 = profile.IOProfileData(pszSecName, LTEXT("szLineComment3")		, MakeStringBufferW(lbuf));	// Jun. 01, 2001 JEPRO 追加
 		bRet2 = profile.IOProfileData(pszSecName, LTEXT("nLineCommentColumn3"), pos);	// Jun. 01, 2001 JEPRO 追加
-		if (bRet1 && bRet2) types.m_cLineComment.CopyTo(2, lbuf, pos);
+		if (bRet1 && bRet2) types.m_lineComment.CopyTo(2, lbuf, pos);
 	}else { // write
 		// Block Comment
 		profile.IOProfileData(pszSecName, LTEXT("szBlockCommentFrom")	,
@@ -1480,19 +1480,19 @@ void ShareData_IO::ShareData_IO_Type_One(DataProfile& profile, TypeConfig& types
 
 		// Line Comment
 		profile.IOProfileData(pszSecName, LTEXT("szLineComment")		,
-			MakeStringBufferW0(const_cast<wchar_t*>(types.m_cLineComment.getLineComment(0))));
+			MakeStringBufferW0(const_cast<wchar_t*>(types.m_lineComment.getLineComment(0))));
 		profile.IOProfileData(pszSecName, LTEXT("szLineComment2")		,
-			MakeStringBufferW0(const_cast<wchar_t*>(types.m_cLineComment.getLineComment(1))));
+			MakeStringBufferW0(const_cast<wchar_t*>(types.m_lineComment.getLineComment(1))));
 		profile.IOProfileData(pszSecName, LTEXT("szLineComment3")		,
-			MakeStringBufferW0(const_cast<wchar_t*>(types.m_cLineComment.getLineComment(2))));	// Jun. 01, 2001 JEPRO 追加
+			MakeStringBufferW0(const_cast<wchar_t*>(types.m_lineComment.getLineComment(2))));	// Jun. 01, 2001 JEPRO 追加
 
 		// From here May 12, 2001 genta
 		int pos;
-		pos = types.m_cLineComment.getLineCommentPos(0);
+		pos = types.m_lineComment.getLineCommentPos(0);
 		profile.IOProfileData(pszSecName, LTEXT("nLineCommentColumn")	, pos);
-		pos = types.m_cLineComment.getLineCommentPos(1);
+		pos = types.m_lineComment.getLineCommentPos(1);
 		profile.IOProfileData(pszSecName, LTEXT("nLineCommentColumn2"), pos);
-		pos = types.m_cLineComment.getLineCommentPos(2);
+		pos = types.m_lineComment.getLineCommentPos(2);
 		profile.IOProfileData(pszSecName, LTEXT("nLineCommentColumn3"), pos);	// Jun. 01, 2001 JEPRO 追加
 		// To here May 12, 2001 genta
 
@@ -1732,7 +1732,7 @@ void ShareData_IO::ShareData_IO_KeyWords(DataProfile& profile)
 	static const WCHAR* pszSecName = LTEXT("KeyWords");
 	WCHAR			szKeyName[64];
 	WCHAR			szKeyData[1024];
-	KeyWordSetMgr*	pKeyWordSetMgr = &pShare->m_common.m_specialKeyword.m_CKeyWordSetMgr;
+	KeyWordSetMgr*	pKeyWordSetMgr = &pShare->m_common.m_specialKeyword.m_keyWordSetMgr;
 	int				nKeyWordSetNum = pKeyWordSetMgr->m_nKeyWordSetNum;
 
 	profile.IOProfileData(pszSecName, LTEXT("nCurrentKeyWordSetIdx")	, pKeyWordSetMgr->m_nCurrentKeyWordSetIdx);

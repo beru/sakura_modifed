@@ -66,27 +66,27 @@ class WSHSite :
 	public IActiveScriptSiteWindow
 {
 private:
-	WSHClient *m_Client;
-	ITypeInfo *m_typeInfo;
-	ULONG m_RefCount;
+	WSHClient* m_Client;
+	ITypeInfo* m_typeInfo;
+	ULONG m_refCount;
 public:
 	WSHSite(WSHClient *AClient)
 		:
 		m_Client(AClient),
-		m_RefCount(0)
+		m_refCount(0)
 	{
 	}
 
 	virtual ULONG _stdcall AddRef() {
-		return ++m_RefCount;
+		return ++m_refCount;
 	}
 
 	virtual ULONG _stdcall Release() {
-		if (--m_RefCount == 0) {
+		if (--m_refCount == 0) {
 			delete this;
 			return 0;
 		}
-		return m_RefCount;
+		return m_refCount;
 	}
 
 	virtual HRESULT STDMETHODCALLTYPE QueryInterface(
@@ -97,7 +97,7 @@ public:
 
 		if (iid == IID_IActiveScriptSiteWindow) {
 			*ppvObject = static_cast<IActiveScriptSiteWindow*>(this);
-			++m_RefCount;
+			++m_refCount;
 			return S_OK;
 		}
 

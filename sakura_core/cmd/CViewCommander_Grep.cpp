@@ -55,15 +55,15 @@ void ViewCommander::Command_GREP_DIALOG(void)
 */
 void ViewCommander::Command_GREP(void)
 {
-	NativeW cmWork1;
-	CNativeT cmWork2;
-	CNativeT cmWork3;
-	NativeW		cmWork4;
+	NativeW mWork1;
+	NativeT mWork2;
+	NativeT mWork3;
+	NativeW	mWork4;
 
 	auto& dlgGrep = GetEditWindow()->m_dlgGrep;
-	cmWork1.SetString(dlgGrep.m_strText.c_str());
-	cmWork2.SetString(dlgGrep.m_szFile);
-	cmWork3.SetString(dlgGrep.m_szFolder);
+	mWork1.SetString(dlgGrep.m_strText.c_str());
+	mWork2.SetString(dlgGrep.m_szFile);
+	mWork3.SetString(dlgGrep.m_szFolder);
 
 	auto& grepAgent = *EditApp::getInstance()->m_pGrepAgent;
 	auto& doc = *GetDocument();
@@ -95,10 +95,10 @@ void ViewCommander::Command_GREP(void)
 		grepAgent.DoGrep(
 			m_pCommanderView,
 			false,
-			&cmWork1,
-			&cmWork4,
-			&cmWork2,
-			&cmWork3,
+			&mWork1,
+			&mWork4,
+			&mWork2,
+			&mWork3,
 			false,
 			dlgGrep.m_bSubFolder,
 			false,
@@ -170,8 +170,8 @@ void ViewCommander::Command_GREP_REPLACE_DLG( void )
 void ViewCommander::Command_GREP_REPLACE(void)
 {
 	NativeW cmWork1;
-	CNativeT cmWork2;
-	CNativeT cmWork3;
+	NativeT cmWork2;
+	NativeT cmWork3;
 	NativeW cmWork4;
 
 	DlgGrepReplace& dlgGrepRep = GetEditWindow()->m_dlgGrepReplace;
@@ -226,19 +226,19 @@ void ViewCommander::Command_GREP_REPLACE(void)
 		cmWork4.Replace( L"\"", L"\"\"" );
 
 		// -GREPMODE -GKEY="1" -GREPR="2" -GFILE="*.*;*.c;*.h" -GFOLDER="c:\" -GCODE=0 -GOPT=S
-		CNativeT cCmdLine;
+		NativeT cmdLine;
 		TCHAR szTemp[20];
-		cCmdLine.AppendString(_T("-GREPMODE -GKEY=\""));
-		cCmdLine.AppendStringW(cmWork1.GetStringPtr());
-		cCmdLine.AppendString(_T("\" -GREPR=\""));
-		cCmdLine.AppendStringW(cmWork4.GetStringPtr());
-		cCmdLine.AppendString(_T("\" -GFILE=\""));
-		cCmdLine.AppendString(cmWork2.GetStringPtr());
-		cCmdLine.AppendString(_T("\" -GFOLDER=\""));
-		cCmdLine.AppendString(cmWork3.GetStringPtr());
-		cCmdLine.AppendString(_T("\" -GCODE="));
+		cmdLine.AppendString(_T("-GREPMODE -GKEY=\""));
+		cmdLine.AppendStringW(cmWork1.GetStringPtr());
+		cmdLine.AppendString(_T("\" -GREPR=\""));
+		cmdLine.AppendStringW(cmWork4.GetStringPtr());
+		cmdLine.AppendString(_T("\" -GFILE=\""));
+		cmdLine.AppendString(cmWork2.GetStringPtr());
+		cmdLine.AppendString(_T("\" -GFOLDER=\""));
+		cmdLine.AppendString(cmWork3.GetStringPtr());
+		cmdLine.AppendString(_T("\" -GCODE="));
 		auto_sprintf( szTemp, _T("%d"), dlgGrepRep.m_nGrepCharSet );
-		cCmdLine.AppendString(szTemp);
+		cmdLine.AppendString(szTemp);
 
 		//GOPTオプション
 		TCHAR	pOpt[64];
@@ -258,8 +258,8 @@ void ViewCommander::Command_GREP_REPLACE(void)
 		if (dlgGrepRep.m_bPaste					) _tcscat( pOpt, _T("C") );	// クリップボードから貼り付け
 		if (dlgGrepRep.m_bBackup					) _tcscat( pOpt, _T("O") );	// バックアップ作成
 		if (0 < _tcslen( pOpt )) {
-			cCmdLine.AppendString( _T(" -GOPT=") );
-			cCmdLine.AppendString( pOpt );
+			cmdLine.AppendString( _T(" -GOPT=") );
+			cmdLine.AppendString( pOpt );
 		}
 
 		LoadInfo loadInfo;
@@ -270,7 +270,7 @@ void ViewCommander::Command_GREP_REPLACE(void)
 			G_AppInstance(),
 			m_pCommanderView->GetHwnd(),
 			loadInfo,
-			cCmdLine.GetStringPtr(),
+			cmdLine.GetStringPtr(),
 			false,
 			NULL,
 			GetDllShareData().m_common.m_tabBar.m_bNewWindow

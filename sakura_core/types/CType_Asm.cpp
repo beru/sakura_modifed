@@ -40,7 +40,7 @@ void CType_Asm::InitTypeConfigImp(TypeConfig* pType)
 	_tcscpy(pType->m_szTypeExts, _T("asm"));
 
 	// 設定
-	pType->m_cLineComment.CopyTo(0, L";", -1);				// 行コメントデリミタ
+	pType->m_lineComment.CopyTo(0, L";", -1);				// 行コメントデリミタ
 	pType->m_eDefaultOutline = OUTLINE_ASM;					// アウトライン解析方法
 	pType->m_colorInfoArr[COLORIDX_DIGIT].m_bDisp = true;
 }

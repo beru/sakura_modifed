@@ -35,7 +35,7 @@ public:
 
 private:
 	HBITMAP	m_hCenterImg;
-	EditView*	m_cView;
+	EditView*	m_pView;
 protected:
 	// âºëzä÷êî
 

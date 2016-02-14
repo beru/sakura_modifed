@@ -1077,13 +1077,13 @@ bool Macro::HandleCommand(
 			//	常に外部ウィンドウに。
 			// ======= Grepの実行 =============
 			// Grep結果ウィンドウの表示
-			NativeW cmWork1;	cmWork1.SetString( arguments[0] );	cmWork1.Replace( L"\"", L"\"\"" );	//	検索文字列
-			NativeW cmWork4;
+			NativeW mWork1;	mWork1.SetString( arguments[0] );	mWork1.Replace( L"\"", L"\"\"" );	//	検索文字列
+			NativeW mWork4;
 			if (bGrepReplace) {
-				cmWork4.SetString( arguments[1] );	cmWork4.Replace( L"\"", L"\"\"" );	//	置換後
+				mWork4.SetString( arguments[1] );	mWork4.Replace( L"\"", L"\"\"" );	//	置換後
 			}
-			CNativeT cmWork2;	cmWork2.SetStringW( arguments[ArgIndex+1] );	cmWork2.Replace( _T("\""), _T("\"\"") );	//	ファイル名
-			CNativeT cmWork3;	cmWork3.SetStringW( arguments[ArgIndex+2] );	cmWork3.Replace( _T("\""), _T("\"\"") );	//	フォルダ名
+			NativeT mWork2;	mWork2.SetStringW( arguments[ArgIndex+1] );	mWork2.Replace( _T("\""), _T("\"\"") );	//	ファイル名
+			NativeT mWork3;	mWork3.SetStringW( arguments[ArgIndex+2] );	mWork3.Replace( _T("\""), _T("\"\"") );	//	フォルダ名
 
 			LPARAM lFlag = wtoi_def(arguments[ArgIndex+3], 5);
 
@@ -1105,19 +1105,19 @@ bool Macro::HandleCommand(
 			}
 
 			// -GREPMODE -GKEY="1" -GFILE="*.*;*.c;*.h" -GFOLDER="c:\" -GCODE=0 -GOPT=S
-			CNativeT cmdLine;
+			NativeT cmdLine;
 			TCHAR	szTemp[20];
 			TCHAR	pOpt[64];
 			cmdLine.AppendString(_T("-GREPMODE -GKEY=\""));
-			cmdLine.AppendStringW(cmWork1.GetStringPtr());
+			cmdLine.AppendStringW(mWork1.GetStringPtr());
 			if (bGrepReplace) {
 				cmdLine.AppendString(_T("\" -GREPR=\""));
-				cmdLine.AppendStringW(cmWork4.GetStringPtr());
+				cmdLine.AppendStringW(mWork4.GetStringPtr());
 			}
 			cmdLine.AppendString(_T("\" -GFILE=\""));
-			cmdLine.AppendString(cmWork2.GetStringPtr());
+			cmdLine.AppendString(mWork2.GetStringPtr());
 			cmdLine.AppendString(_T("\" -GFOLDER=\""));
-			cmdLine.AppendString(cmWork3.GetStringPtr());
+			cmdLine.AppendString(mWork3.GetStringPtr());
 			cmdLine.AppendString(_T("\" -GCODE="));
 			auto_sprintf( szTemp, _T("%d"), nCharSet );
 			cmdLine.AppendString(szTemp);

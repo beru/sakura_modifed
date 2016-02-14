@@ -613,10 +613,10 @@ void PropTypesColor::SetData(HWND hwndDlg)
 	// May 21, 2001 genta 桁位置を1から数えるように
 	for (int i=0; i<COMMENT_DELIMITER_NUM; ++i) {
 		// テキスト
-		::DlgItem_SetText(hwndDlg, cLineComment[i].nEditID, m_types.m_cLineComment.getLineComment(i));	
+		::DlgItem_SetText(hwndDlg, cLineComment[i].nEditID, m_types.m_lineComment.getLineComment(i));	
 
 		// 桁数チェックと、数値
-		int nPos = m_types.m_cLineComment.getLineCommentPos(i);
+		int nPos = m_types.m_lineComment.getLineCommentPos(i);
 		if (nPos >= 0) {
 			::CheckDlgButton(hwndDlg, cLineComment[i].nCheckBoxID, TRUE);
 			::SetDlgItemInt(hwndDlg, cLineComment[i].nTextID, nPos + 1, FALSE);
@@ -647,9 +647,9 @@ void PropTypesColor::SetData(HWND hwndDlg)
 	// 一行目は空白
 	Combo_AddString(hwndWork, L" ");
 	//	Mar. 31, 2003 genta KeyWordSetMgrをポインタに
-	if (0 < m_pCKeyWordSetMgr->m_nKeyWordSetNum) {
-		for (int i=0; i<m_pCKeyWordSetMgr->m_nKeyWordSetNum; ++i) {
-			Combo_AddString(hwndWork, m_pCKeyWordSetMgr->GetTypeName(i));
+	if (0 < m_pKeyWordSetMgr->m_nKeyWordSetNum) {
+		for (int i=0; i<m_pKeyWordSetMgr->m_nKeyWordSetNum; ++i) {
+			Combo_AddString(hwndWork, m_pKeyWordSetMgr->GetTypeName(i));
 		}
 		if (m_types.m_nKeyWordSetIdx[0] == -1) {
 			// セット名コンボボックスのデフォルト選択
@@ -749,7 +749,7 @@ int PropTypesColor::GetData(HWND hwndDlg)
 		//	無効のときは1の補数で格納
 
 		::DlgItem_GetText(hwndDlg, cLineComment[i].nEditID		, buffer	, COMMENT_DELIMITER_BUFFERSIZE);		// 行コメントデリミタ
-		m_types.m_cLineComment.CopyTo(i, buffer, en ? pos : ~pos);
+		m_types.m_lineComment.CopyTo(i, buffer, en ? pos : ~pos);
 	}
 
 	wchar_t szFromBuffer[BLOCKCOMMENT_BUFFERSIZE];	//@@@ 2002.09.22 YAZAKI

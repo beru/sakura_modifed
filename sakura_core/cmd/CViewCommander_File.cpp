@@ -656,13 +656,13 @@ bool ViewCommander::Command_PUTFILE(
 				pConvBuffer = &cMem;
 			}
 
-			// 書き込み時のコード変換 -> cDst
-			Memory cDst;
-			pcSaveCode->UnicodeToCode(*pConvBuffer, &cDst);
+			// 書き込み時のコード変換 -> dst
+			Memory dst;
+			pcSaveCode->UnicodeToCode(*pConvBuffer, &dst);
 
 			// 書込
-			if (0 < cDst.GetRawLength())
-				out.Write(cDst.GetRawPtr(), cDst.GetRawLength());
+			if (0 < dst.GetRawLength())
+				out.Write(dst.GetRawPtr(), dst.GetRawLength());
 		}catch (Error_FileOpen) {
 			WarningMessage(
 				NULL,

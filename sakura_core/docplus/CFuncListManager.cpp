@@ -57,7 +57,7 @@ bool FuncListManager::SearchFuncListMark(
 	if (bPrevOrNext == SearchDirection::Backward) {
 		// 後方検索(↑)
 		--nLinePos;
-		const DocLine*	pDocLine = pDocLineMgr->GetLine( nLinePos );
+		const DocLine* pDocLine = pDocLineMgr->GetLine( nLinePos );
 		while (pDocLine) {
 			if (GetLineFuncList(pDocLine)) {
 				*pnLineNum = nLinePos;				// マッチ行
@@ -69,7 +69,7 @@ bool FuncListManager::SearchFuncListMark(
 	}else {
 		// 前方検索(↓)
 		++nLinePos;
-		const DocLine*	pDocLine = pDocLineMgr->GetLine( nLinePos );
+		const DocLine* pDocLine = pDocLineMgr->GetLine( nLinePos );
 		while (pDocLine) {
 			if (GetLineFuncList(pDocLine)) {
 				*pnLineNum = nLinePos;				// マッチ行

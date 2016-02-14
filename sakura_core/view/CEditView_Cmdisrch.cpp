@@ -174,7 +174,7 @@ void EditView::ISearchEnter(int mode, SearchDirection direction)
 			//SendStatusMessage(_T("I-Search: "));
 			break;
 		case 2: // 正規表現インクリメンタルサーチ
-			if (!m_CurRegexp.IsAvailable()) {
+			if (!m_curRegexp.IsAvailable()) {
 				WarningBeep();
 				SendStatusMessage(LS(STR_EDITVWISRCH_REGEX));
 				return;
@@ -184,7 +184,7 @@ void EditView::ISearchEnter(int mode, SearchDirection direction)
 			//SendStatusMessage(_T("[RegExp] I-Search: "));
 			break;
 		case 3: // MIGEMOインクリメンタルサーチ
-			if (!m_CurRegexp.IsAvailable()) {
+			if (!m_curRegexp.IsAvailable()) {
 				WarningBeep();
 				SendStatusMessage(LS(STR_EDITVWISRCH_REGEX));
 				return;
@@ -225,11 +225,11 @@ void EditView::ISearchEnter(int mode, SearchDirection direction)
 		m_nISearchMode = mode;
 		
 		m_nISearchHistoryCount = 0;
-		m_sISearchHistory[m_nISearchHistoryCount].Set(GetCaret().GetCaretLayoutPos());
+		m_searchHistory[m_nISearchHistoryCount].Set(GetCaret().GetCaretLayoutPos());
 
 		Redraw();
 		
-		CNativeT msg;
+		NativeT msg;
 		ISearchSetStatusMsg(&msg);
 		SendStatusMessage(msg.GetStringPtr());
 		
@@ -342,7 +342,7 @@ void EditView::ISearchExec(bool bNext)
 
 	if ((m_strCurSearchKey.size() == 0) || (m_nISearchMode == 0)) {
 		// ステータスの表示
-		CNativeT msg;
+		NativeT msg;
 		ISearchSetStatusMsg(&msg);
 		SendStatusMessage(msg.GetStringPtr());
 		return ;
@@ -400,25 +400,25 @@ void EditView::ISearchExec(bool bNext)
 
 	m_nISearchHistoryCount ++ ;
 
-	CNativeT msg;
+	NativeT msg;
 	ISearchSetStatusMsg(&msg);
 
 	if (m_nISearchHistoryCount >= 256) {
 		m_nISearchHistoryCount = 156;
 		for (int i=100; i<=255; ++i) {
 			m_bISearchFlagHistory[i-100] = m_bISearchFlagHistory[i];
-			m_sISearchHistory[i-100] = m_sISearchHistory[i];
+			m_searchHistory[i-100] = m_searchHistory[i];
 		}
 	}
 	m_bISearchFlagHistory[m_nISearchHistoryCount] = bNext;
 
-	LayoutRange sMatchRange;
+	LayoutRange matchRange;
 
 	int nSearchResult = m_pEditDoc->m_layoutMgr.SearchWord(
 		nLine,						// 検索開始レイアウト行
 		nIdx,						// 検索開始データ位置
 		m_nISearchDirection,		// 0==前方検索 1==後方検索
-		&sMatchRange,				// マッチレイアウト範囲
+		&matchRange,				// マッチレイアウト範囲
 		m_searchPattern
 	);
 	if (nSearchResult == 0) {
@@ -428,20 +428,20 @@ void EditView::ISearchExec(bool bNext)
 		
 		if (bNext) 	m_bISearchWrap = true;
 		if (GetSelectionInfo().IsTextSelected()) {
-			m_sISearchHistory[m_nISearchHistoryCount] = GetSelectionInfo().m_select;
+			m_searchHistory[m_nISearchHistoryCount] = GetSelectionInfo().m_select;
 		}else {
-			m_sISearchHistory[m_nISearchHistoryCount].Set(GetCaret().GetCaretLayoutPos());
+			m_searchHistory[m_nISearchHistoryCount].Set(GetCaret().GetCaretLayoutPos());
 		}
 	}else {
 		// 検索結果あり
 		// キャレット移動
-		GetCaret().MoveCursor(sMatchRange.GetFrom(), true, _CARETMARGINRATE / 3);
+		GetCaret().MoveCursor(matchRange.GetFrom(), true, _CARETMARGINRATE / 3);
 		
 		//	2005.06.24 Moca
-		GetSelectionInfo().SetSelectArea(sMatchRange);
+		GetSelectionInfo().SetSelectArea(matchRange);
 
 		m_bISearchWrap = false;
-		m_sISearchHistory[m_nISearchHistoryCount] = sMatchRange;
+		m_searchHistory[m_nISearchHistoryCount] = matchRange;
 	}
 
 	m_bCurSrchKeyMark = true;
@@ -479,7 +479,7 @@ void EditView::ISearchBack(void) {
 	}
 	m_nISearchHistoryCount --;
 
-	LayoutRange sRange = m_sISearchHistory[m_nISearchHistoryCount];
+	LayoutRange sRange = m_searchHistory[m_nISearchHistoryCount];
 
 	if (m_nISearchHistoryCount == 0) {
 		GetSelectionInfo().DisableSelectArea(true);
@@ -495,7 +495,7 @@ void EditView::ISearchBack(void) {
 	Redraw();
 
 	// ステータス表示
-	CNativeT msg;
+	NativeT msg;
 	ISearchSetStatusMsg(&msg);
 	SendStatusMessage(msg.GetStringPtr());
 	
@@ -507,7 +507,7 @@ void EditView::ISearchWordMake(void)
 	switch (m_nISearchMode) {
 	case 1: // 通常インクリメンタルサーチ
 	case 2: // 正規表現インクリメンタルサーチ
-		m_searchPattern.SetPattern(this->GetHwnd(), m_strCurSearchKey.c_str(), m_strCurSearchKey.size(), m_curSearchOption, &m_CurRegexp);
+		m_searchPattern.SetPattern(this->GetHwnd(), m_strCurSearchKey.c_str(), m_strCurSearchKey.size(), m_curSearchOption, &m_curRegexp);
 		break;
 	case 3: // MIGEMOインクリメンタルサーチ
 		{
@@ -516,7 +516,7 @@ void EditView::ISearchWordMake(void)
 			
 			// 検索パターンのコンパイル
 			const wchar_t* p = strMigemoWord.c_str();
-			m_searchPattern.SetPattern(this->GetHwnd(), p, (int)strMigemoWord.size(), m_curSearchOption, &m_CurRegexp);
+			m_searchPattern.SetPattern(this->GetHwnd(), p, (int)strMigemoWord.size(), m_curSearchOption, &m_curRegexp);
 
 		}
 		break;
@@ -534,7 +534,7 @@ void EditView::ISearchWordMake(void)
 	@date 2004/10/13
 	@date 2005.01.13 genta 文字列修正
 */
-void EditView::ISearchSetStatusMsg(CNativeT* msg) const
+void EditView::ISearchSetStatusMsg(NativeT* msg) const
 {
 
 	switch (m_nISearchMode) {

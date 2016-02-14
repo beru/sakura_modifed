@@ -172,8 +172,8 @@ bool Profile::ReadProfileRes(
 	char*		pn;
 	size_t		lnsz;
 	wstring		line;
-	Memory cmLine;
-	NativeW cmLineW;
+	Memory mLine;
+	NativeW mLineW;
 	m_strProfileName = _T("-Res-");
 
 	if (1
@@ -207,9 +207,9 @@ bool Profile::ReadProfileRes(
 			}
 			
 			// UTF-8 -> UNICODE
-			cmLine.SetRawDataHoldBuffer( sLine, lnsz );
-			Utf8::UTF8ToUnicode( cmLine, &cmLineW );
-			line = cmLineW.GetStringPtr();
+			mLine.SetRawDataHoldBuffer( sLine, lnsz );
+			Utf8::UTF8ToUnicode( mLine, &mLineW );
+			line = mLineW.GetStringPtr();
 
 			if (pData) {
 				pData->push_back(line);

@@ -389,7 +389,7 @@ void ViewCommander::Command_UNDO(void)
 					// データ置換 削除&挿入にも使える
 					bDrawAll |= m_pCommanderView->ReplaceData_CEditView3(
 						selInfo.m_select,				// 削除範囲
-						&pInsertOpe->m_cOpeLineData,	// 削除されたデータのコピー(NULL可能)
+						&pInsertOpe->m_opeLineData,	// 削除されたデータのコピー(NULL可能)
 						NULL,
 						bDraw,						// 再描画するか否か
 						NULL,
@@ -409,16 +409,16 @@ void ViewCommander::Command_UNDO(void)
 					DeleteOpe* pDeleteOpe = static_cast<DeleteOpe*>(pOpe);
 
 					// 2007.10.17 kobake メモリリークしてました。修正。
-					if (0 < pDeleteOpe->m_cOpeLineData.size()) {
+					if (0 < pDeleteOpe->m_opeLineData.size()) {
 						// データ置換 削除&挿入にも使える
-						LayoutRange sRange;
-						sRange.Set(ptCaretPos_Before);
+						LayoutRange range;
+						range.Set(ptCaretPos_Before);
 						LogicRange cSelectLogic;
 						cSelectLogic.Set(pOpe->m_ptCaretPos_PHY_Before);
 						bDrawAll |= m_pCommanderView->ReplaceData_CEditView3(
-							sRange,
+							range,
 							NULL,										// 削除されたデータのコピー(NULL可能)
-							&pDeleteOpe->m_cOpeLineData,
+							&pDeleteOpe->m_opeLineData,
 							bDraw,										// 再描画するか否か
 							NULL,
 							0,
@@ -427,25 +427,25 @@ void ViewCommander::Command_UNDO(void)
 							&cSelectLogic
 						);
 					}
-					pDeleteOpe->m_cOpeLineData.clear();
+					pDeleteOpe->m_opeLineData.clear();
 				}
 				break;
 			case OpeCode::Replace:
 				{
 					ReplaceOpe* pReplaceOpe = static_cast<ReplaceOpe*>(pOpe);
 
-					LayoutRange sRange;
-					sRange.SetFrom(ptCaretPos_Before);
-					sRange.SetTo(ptCaretPos_After);
+					LayoutRange range;
+					range.SetFrom(ptCaretPos_Before);
+					range.SetTo(ptCaretPos_After);
 					LogicRange cSelectLogic;
 					cSelectLogic.SetFrom(pOpe->m_ptCaretPos_PHY_Before);
 					cSelectLogic.SetTo(pOpe->m_ptCaretPos_PHY_After);
 
 					// データ置換 削除&挿入にも使える
 					bDrawAll |= m_pCommanderView->ReplaceData_CEditView3(
-						sRange,				// 削除範囲
-						&pReplaceOpe->m_pcmemDataIns,	// 削除されたデータのコピー(NULL可能)
-						&pReplaceOpe->m_pcmemDataDel,	// 挿入するデータ
+						range,				// 削除範囲
+						&pReplaceOpe->m_pMemDataIns,	// 削除されたデータのコピー(NULL可能)
+						&pReplaceOpe->m_pMemDataDel,	// 挿入するデータ
 						bDraw,						// 再描画するか否か
 						NULL,
 						pReplaceOpe->m_nOrgInsSeq,
@@ -453,7 +453,7 @@ void ViewCommander::Command_UNDO(void)
 						bFastMode,
 						&cSelectLogic
 					);
-					pReplaceOpe->m_pcmemDataDel.clear();
+					pReplaceOpe->m_pMemDataDel.clear();
 				}
 				break;
 			case OpeCode::MoveCaret:
@@ -628,16 +628,16 @@ void ViewCommander::Command_REDO(void)
 					InsertOpe* pInsertOpe = static_cast<InsertOpe*>(pOpe);
 
 					// 2007.10.17 kobake メモリリークしてました。修正。
-					if (0 < pInsertOpe->m_cOpeLineData.size()) {
+					if (0 < pInsertOpe->m_opeLineData.size()) {
 						// データ置換 削除&挿入にも使える
-						LayoutRange sRange;
-						sRange.Set(ptCaretPos_Before);
+						LayoutRange range;
+						range.Set(ptCaretPos_Before);
 						LogicRange cSelectLogic;
 						cSelectLogic.Set(pOpe->m_ptCaretPos_PHY_Before);
 						bDrawAll |= m_pCommanderView->ReplaceData_CEditView3(
-							sRange,
+							range,
 							NULL,										// 削除されたデータのコピー(NULL可能)
-							&pInsertOpe->m_cOpeLineData,				// 挿入するデータ
+							&pInsertOpe->m_opeLineData,				// 挿入するデータ
 							bDraw,										// 再描画するか否か
 							NULL,
 							0,
@@ -647,7 +647,7 @@ void ViewCommander::Command_REDO(void)
 						);
 
 					}
-					pInsertOpe->m_cOpeLineData.clear();
+					pInsertOpe->m_opeLineData.clear();
 				}
 				break;
 			case OpeCode::Delete:
@@ -668,7 +668,7 @@ void ViewCommander::Command_REDO(void)
 					// データ置換 削除&挿入にも使える
 					bDrawAll |= m_pCommanderView->ReplaceData_CEditView3(
 						LayoutRange(ptCaretPos_Before, ptCaretPos_To),
-						&pDeleteOpe->m_cOpeLineData,	// 削除されたデータのコピー(NULL可能)
+						&pDeleteOpe->m_opeLineData,	// 削除されたデータのコピー(NULL可能)
 						NULL,
 						bDraw,
 						NULL,
@@ -697,8 +697,8 @@ void ViewCommander::Command_REDO(void)
 					// データ置換 削除&挿入にも使える
 					bDrawAll |= m_pCommanderView->ReplaceData_CEditView3(
 						LayoutRange(ptCaretPos_Before, ptCaretPos_To),
-						&pReplaceOpe->m_pcmemDataDel,	// 削除されたデータのコピー(NULL可能)
-						&pReplaceOpe->m_pcmemDataIns,	// 挿入するデータ
+						&pReplaceOpe->m_pMemDataDel,	// 削除されたデータのコピー(NULL可能)
+						&pReplaceOpe->m_pMemDataIns,	// 挿入するデータ
 						bDraw,
 						NULL,
 						pReplaceOpe->m_nOrgDelSeq,
@@ -706,7 +706,7 @@ void ViewCommander::Command_REDO(void)
 						bFastMode,
 						&cSelectLogic
 					);
-					pReplaceOpe->m_pcmemDataIns.clear();
+					pReplaceOpe->m_pMemDataIns.clear();
 				}
 				break;
 			case OpeCode::MoveCaret:

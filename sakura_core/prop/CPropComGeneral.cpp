@@ -152,8 +152,8 @@ INT_PTR PropGeneral::DispatchEvent(
 //@@@ 2001.12.26 YAZAKI OPENFOLDERリストは、MRUFolderにすべて依頼する
 //				m_pShareData->m_sHistory.m_nOPENFOLDERArrNum = 0;
 				{
-					MRUFolder cMRUFolder;	//	MRUリストの初期化。ラベル内だと問題あり？
-					cMRUFolder.ClearAll();
+					MRUFolder mruFolder;	//	MRUリストの初期化。ラベル内だと問題あり？
+					mruFolder.ClearAll();
 				}
 				InfoMessage(hwndDlg, LS(STR_PROPCOMGEN_DIR2));
 				return TRUE;

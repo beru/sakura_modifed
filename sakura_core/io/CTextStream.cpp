@@ -105,10 +105,10 @@ TextOutputStream::TextOutputStream(
 	m_pCodeBase = CodeFactory::CreateCodeBase(eCodeType, 0);
 	if (Good() && bBom) {
 		// BOM付加
-		Memory cmemBom;
-		m_pCodeBase->GetBom(&cmemBom);
-		if (cmemBom.GetRawLength() > 0) {
-			fwrite(cmemBom.GetRawPtr(), cmemBom.GetRawLength(), 1, GetFp());
+		Memory memBom;
+		m_pCodeBase->GetBom(&memBom);
+		if (memBom.GetRawLength() > 0) {
+			fwrite(memBom.GetRawPtr(), memBom.GetRawLength(), 1, GetFp());
 		}
 	}
 }
@@ -146,24 +146,24 @@ void TextOutputStream::WriteString(
 		const wchar_t* lf = (q < pEnd) ? q : NULL;
 		if (lf) {
 			// \nの前まで(p～lf)出力
-			NativeW cSrc(p, lf-p);
-			Memory cDst;
-			m_pCodeBase->UnicodeToCode(cSrc, &cDst); // コード変換
-			fwrite(cDst.GetRawPtr(), 1, cDst.GetRawLength(), GetFp());
+			NativeW src(p, lf-p);
+			Memory dst;
+			m_pCodeBase->UnicodeToCode(src, &dst); // コード変換
+			fwrite(dst.GetRawPtr(), 1, dst.GetRawLength(), GetFp());
 
 			// \r\nを出力
-			cSrc.SetString(L"\r\n");
-			m_pCodeBase->UnicodeToCode(cSrc, &cDst);
-			fwrite(cDst.GetRawPtr(), 1, cDst.GetRawLength(), GetFp());
+			src.SetString(L"\r\n");
+			m_pCodeBase->UnicodeToCode(src, &dst);
+			fwrite(dst.GetRawPtr(), 1, dst.GetRawLength(), GetFp());
 
 			// 次へ
 			p = lf + 1;
 		}else {
 			// 残りぜんぶ出力
-			NativeW cSrc(p, pEnd - p);
-			Memory cDst;
-			m_pCodeBase->UnicodeToCode(cSrc, &cDst); // コード変換
-			fwrite(cDst.GetRawPtr(), 1, cDst.GetRawLength(), GetFp());
+			NativeW src(p, pEnd - p);
+			Memory dst;
+			m_pCodeBase->UnicodeToCode(src, &dst); // コード変換
+			fwrite(dst.GetRawPtr(), 1, dst.GetRawLength(), GetFp());
 			break;
 		}
 	}

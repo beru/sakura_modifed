@@ -30,8 +30,8 @@ class Memory;
 struct GrepInfo {
 	NativeW			mGrepKey;				// 検索キー
 	NativeW			mGrepRep;				// 置換キー
-	CNativeT		mGrepFile;				// 検索対象ファイル
-	CNativeT		mGrepFolder;			// 検索対象フォルダ
+	NativeT		mGrepFile;				// 検索対象ファイル
+	NativeT		mGrepFolder;			// 検索対象フォルダ
 	SearchOption	grepSearchOption;		// 検索オプション
 	bool			bGrepCurFolder;			// カレントディレクトリを維持
 	bool			bGrepStdout;			// 標準出力モード
@@ -86,13 +86,13 @@ public:
 	bool GetEditInfo(EditInfo* fi) const { *fi = m_fi; return true; }
 	bool GetGrepInfo(GrepInfo* gi) const { *gi = m_gi; return true; }
 	int GetGroupId() const {return m_nGroup;}	// 2007.06.26 ryoji
-	LPCWSTR GetMacro() const { return m_cmMacro.GetStringPtr(); }
-	LPCWSTR GetMacroType() const { return m_cmMacroType.GetStringPtr(); }
-	LPCWSTR GetProfileName() const{ return m_cmProfile.GetStringPtr(); }
+	LPCWSTR GetMacro() const { return m_mMacro.GetStringPtr(); }
+	LPCWSTR GetMacroType() const { return m_mMacroType.GetStringPtr(); }
+	LPCWSTR GetProfileName() const{ return m_mProfile.GetStringPtr(); }
 	bool IsSetProfile() const{ return m_bSetProfile; }
 	void SetProfileName(LPCWSTR s){
 		m_bSetProfile = true;
-		m_cmProfile.SetString(s);
+		m_mProfile.SetString(s);
 	}
 	bool IsProfileMgr() { return m_bProfileMgr; }
 	int GetFileNum(void) { return m_fileNames.size(); }
@@ -113,9 +113,9 @@ private:
 	GrepInfo	m_gi;				//
 	bool		m_bViewMode;		// [out] TRUE: Read Only
 	int			m_nGroup;			// グループID	// 2007.06.26 ryoji
-	NativeW	m_cmMacro;				// [out] マクロファイル名／マクロ文
-	NativeW	m_cmMacroType;			// [out] マクロ種別
-	NativeW	m_cmProfile;			// プロファイル名
+	NativeW	m_mMacro;				// [out] マクロファイル名／マクロ文
+	NativeW	m_mMacroType;			// [out] マクロ種別
+	NativeW	m_mProfile;			// プロファイル名
 	std::vector<std::tstring> m_fileNames;	//!< ファイル名(複数)
 };
 

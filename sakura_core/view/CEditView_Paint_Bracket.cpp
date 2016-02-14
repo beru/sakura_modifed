@@ -425,7 +425,7 @@ bool EditView::SearchBracketForward(
 	const wchar_t* cPos = cline + ptPos.x;
 
 //	auto typeData = *m_pTypeData;
-//	auto lineComment = typeData.m_cLineComment;
+//	auto lineComment = typeData.m_lineComment;
 
 	do {
 		while (cPos < lineend) {

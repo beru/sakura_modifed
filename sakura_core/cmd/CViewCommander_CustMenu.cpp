@@ -36,7 +36,7 @@ void ViewCommander::Command_MENU_RBUTTON(void)
 	case IDM_COPYDICINFO:
 		{
 			int nLength;
-			const TCHAR* pszStr = m_pCommanderView->m_tipWnd.m_cInfo.GetStringPtr(&nLength);
+			const TCHAR* pszStr = m_pCommanderView->m_tipWnd.m_info.GetStringPtr(&nLength);
 			std::vector<TCHAR> szWork(nLength + 1);
 			TCHAR* pszWork = &szWork[0];
 			auto_memcpy(pszWork, pszStr, nLength);

@@ -992,9 +992,9 @@ void EditDoc::SetCurDirNotitle()
 	TCHAR szSelDir[_MAX_PATH];
 	const TCHAR* pszDir = NULL;
 	if (eOpenDialogDir == OPENDIALOGDIR_MRU) {
-		const MRUFolder cMRU;
-		std::vector<LPCTSTR> vMRU = cMRU.GetPathList();
-		int nCount = cMRU.Length();
+		const MRUFolder mru;
+		std::vector<LPCTSTR> vMRU = mru.GetPathList();
+		int nCount = mru.Length();
 		for (int i=0; i<nCount ; ++i) {
 			DWORD attr = ::GetFileAttributes( vMRU[i] );
 			if ((attr != -1) && (attr & FILE_ATTRIBUTE_DIRECTORY) != 0) {

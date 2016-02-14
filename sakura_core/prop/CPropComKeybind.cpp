@@ -295,7 +295,7 @@ INT_PTR PropKeybind::DispatchEvent(
 				nIndex3 = List_GetCurSel(hwndFuncList);
 				nFuncCode = m_lookup.Pos2FuncCode(nIndex2, nIndex3);	// Oct. 2, 2001 genta
 				// 機能に対応するキー名の取得(複数)
-				CNativeT**	ppcAssignedKeyList;
+				NativeT**	ppcAssignedKeyList;
 				nAssignedKeyNum = KeyBind::GetKeyStrList(	// 機能に対応するキー名の取得(複数)
 					G_AppInstance(), csKeybind.m_nKeyNameArrNum, (KEYDATA*)csKeybind.m_pKeyNameArr,
 					&ppcAssignedKeyList, nFuncCode,

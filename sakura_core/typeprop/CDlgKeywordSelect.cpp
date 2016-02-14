@@ -68,7 +68,7 @@ static const int keyword_select_target_combo[KEYWORD_SELECT_NUM] = {
 
 DlgKeywordSelect::DlgKeywordSelect()
 {
-	m_pCKeyWordSetMgr = &(m_pShareData->m_common.m_specialKeyword.m_CKeyWordSetMgr);
+	m_pKeyWordSetMgr = &(m_pShareData->m_common.m_specialKeyword.m_keyWordSetMgr);
 
 	return;
 }
@@ -128,9 +128,9 @@ void DlgKeywordSelect::SetData(void)
 		// ˆês–Ú‚Í‹ó”’
 		Combo_AddString(hwndCombo, L" ");
 
-		if (m_pCKeyWordSetMgr->m_nKeyWordSetNum > 0) {
-			for (int i=0; i<m_pCKeyWordSetMgr->m_nKeyWordSetNum; ++i) {
-				Combo_AddString(hwndCombo, m_pCKeyWordSetMgr->GetTypeName(i));
+		if (m_pKeyWordSetMgr->m_nKeyWordSetNum > 0) {
+			for (int i=0; i<m_pKeyWordSetMgr->m_nKeyWordSetNum; ++i) {
+				Combo_AddString(hwndCombo, m_pKeyWordSetMgr->GetTypeName(i));
 			}
 
 			if (m_nSet[index] == -1) {

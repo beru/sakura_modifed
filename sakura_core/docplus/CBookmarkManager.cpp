@@ -119,7 +119,9 @@ void BookmarkManager::SetBookMarks(wchar_t* pMarkLines)
 	}else {
 		// ‹ŒŒ`Ž® s”Ô†,‹æØ‚è
 		while (wcstok(p, delim)) {
-			while (wcschr(delim, *p)) ++p;
+			while (wcschr(delim, *p)) {
+				++p;
+			}
 			pDocLine = m_pDocLineMgr->GetLine(LogicInt(_wtol(p)));
 			if (pDocLine) {
 				BookmarkSetter(pDocLine).SetBookmark(true);
@@ -184,7 +186,9 @@ LPCWSTR BookmarkManager::GetBookMarks()
 				szBuff2[nColumn] = L'\0';
 			}
 			int nBuff2Len = wcslen(szBuff2);
-			if (nBuff2Len + nTextLen > MAX_MARKLINES_LEN) break;	//2002.01.17
+			if (nBuff2Len + nTextLen > MAX_MARKLINES_LEN) {
+				break;	//2002.01.17
+			}
 			wcscpy(szText + nTextLen, szBuff2);
 			nTextLen += nBuff2Len;
 		}

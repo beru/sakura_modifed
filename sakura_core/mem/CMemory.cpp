@@ -365,8 +365,8 @@ void Memory::AppendRawData(
 void Memory::AppendRawData(const Memory* pMemData)
 {
 	if (this == pMemData) {
-		Memory cm = *pMemData;
-		AppendRawData(&cm);
+		Memory mem = *pMemData;
+		AppendRawData(&mem);
 	}
 	int	nDataLen;
 	const void*	pData = pMemData->GetRawPtr(&nDataLen);

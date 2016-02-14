@@ -38,8 +38,8 @@ void CType_Cobol::InitTypeConfigImp(TypeConfig* pType)
 	_tcscpy(pType->m_szTypeExts, _T("cbl,cpy,pco,cob"));	// Jun. 04, 2001 JEPRO KENCH氏の助言に従い追加
 
 	// 設定
-	pType->m_cLineComment.CopyTo(0, L"*", 6);			// Jun. 02, 2001 JEPRO 修正
-	pType->m_cLineComment.CopyTo(1, L"D", 6);			// Jun. 04, 2001 JEPRO 追加
+	pType->m_lineComment.CopyTo(0, L"*", 6);			// Jun. 02, 2001 JEPRO 修正
+	pType->m_lineComment.CopyTo(1, L"D", 6);			// Jun. 04, 2001 JEPRO 追加
 	pType->m_nStringType = StringLiteralType::PLSQL;		// 文字列区切り記号エスケープ方法  0=[\"][\'] 1=[""]['']
 	wcscpy_s(pType->m_szIndentChars, L"*");				// その他のインデント対象文字
 	pType->m_nKeyWordSetIdx[0] = 3;						// キーワードセット		// Jul. 10, 2001 JEPRO

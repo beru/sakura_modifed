@@ -12,7 +12,7 @@ bool Color_LineComment::BeginColor(const StringRef& str, int nPos)
 	if (!str.IsValid()) return false;
 
 	// sƒRƒƒ“ƒg
-	return m_pTypeData->m_cLineComment.Match(nPos, str);	//@@@ 2002.09.22 YAZAKI
+	return m_pTypeData->m_lineComment.Match(nPos, str);	//@@@ 2002.09.22 YAZAKI
 }
 
 bool Color_LineComment::EndColor(const StringRef& str, int nPos)

@@ -14,21 +14,21 @@ void CodeBase::GetBom(Memory* pMemBom) { pMemBom->Clear(); }					// BOMƒf[ƒ^Žæ“
 
 // •\Ž¦—p16•\Ž¦	UNICODE ¨ Hex •ÏŠ·	2008/6/9 Uchi
 CodeConvertResult CodeBase::UnicodeToHex(
-	const wchar_t* cSrc,
+	const wchar_t* pSrc,
 	const int iSLen,
 	TCHAR* pDst,
 	const CommonSetting_StatusBar* psStatusbar
 	)
 {
-	if (IsUTF16High(cSrc[0]) && iSLen >= 2 && IsUTF16Low(cSrc[1])) {
+	if (IsUTF16High(pSrc[0]) && iSLen >= 2 && IsUTF16Low(pSrc[1])) {
 		// ƒTƒƒQ[ƒgƒyƒA
 		if (psStatusbar->m_bDispSPCodepoint) {
-			auto_sprintf(pDst, _T("U+%05X"), 0x10000 + ((cSrc[0] & 0x3FF)<<10) + (cSrc[1] & 0x3FF));
+			auto_sprintf(pDst, _T("U+%05X"), 0x10000 + ((pSrc[0] & 0x3FF)<<10) + (pSrc[1] & 0x3FF));
 		}else {
-			auto_sprintf(pDst, _T("%04X%04X"), cSrc[0], cSrc[1]);
+			auto_sprintf(pDst, _T("%04X%04X"), pSrc[0], pSrc[1]);
 		}
 	}else {
-		auto_sprintf(pDst, _T("U+%04X"), cSrc[0]);
+		auto_sprintf(pDst, _T("U+%04X"), pSrc[0]);
 	}
 
 	return CodeConvertResult::Complete;
@@ -58,7 +58,7 @@ bool CodeBase::MIMEHeaderDecode(
 		return false;
 	}
 
-	Memory cmembuf;
+	Memory membuf;
 	int i = 0;
 	int j = 0;
 	while (i < nSrcLen) {
@@ -68,7 +68,7 @@ bool CodeBase::MIMEHeaderDecode(
 			++j;
 			continue;
 		}
-		nskip_bytes = _DecodeMimeHeader(&pSrc[i], nSrcLen - i, &cmembuf, &ecodetype);
+		nskip_bytes = _DecodeMimeHeader(&pSrc[i], nSrcLen - i, &membuf, &ecodetype);
 		if (nskip_bytes < 1) {
 			pdst[j] = pSrc[i];
 			++i;
@@ -77,9 +77,9 @@ bool CodeBase::MIMEHeaderDecode(
 			if (ecodetype == codetype) {
 				// eChartype ‚ª ecodetype ‚Æˆê’v‚µ‚Ä‚¢‚éê‡‚É‚¾‚¯A
 				// •ÏŠ·Œ‹‰Ê‚ðƒRƒs[
-				memcpy(&pdst[j], cmembuf.GetRawPtr(), cmembuf.GetRawLength());
+				memcpy(&pdst[j], membuf.GetRawPtr(), membuf.GetRawLength());
 				i += nskip_bytes;
-				j += cmembuf.GetRawLength();
+				j += membuf.GetRawLength();
 			}else {
 				memcpy(&pdst[j], &pSrc[i], nskip_bytes);
 				i += nskip_bytes;

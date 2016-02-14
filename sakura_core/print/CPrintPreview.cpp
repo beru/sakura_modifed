@@ -804,9 +804,9 @@ void PrintPreview::OnChangePrintSetting(void)
 	ref.m_nTabSpace =		m_pParentWnd->GetDocument()->m_layoutMgr.GetTabSpace();
 
 	//@@@ 2002.09.22 YAZAKI
-	ref.m_cLineComment.CopyTo(0, L"", -1);	// 行コメントデリミタ
-	ref.m_cLineComment.CopyTo(1, L"", -1);	// 行コメントデリミタ2
-	ref.m_cLineComment.CopyTo(2, L"", -1);	// 行コメントデリミタ3	// Jun. 01, 2001 JEPRO 追加
+	ref.m_lineComment.CopyTo(0, L"", -1);	// 行コメントデリミタ
+	ref.m_lineComment.CopyTo(1, L"", -1);	// 行コメントデリミタ2
+	ref.m_lineComment.CopyTo(2, L"", -1);	// 行コメントデリミタ3	// Jun. 01, 2001 JEPRO 追加
 	ref.m_blockComments[0].SetBlockCommentRule(L"", L"");	// ブロックコメントデリミタ
 	ref.m_blockComments[1].SetBlockCommentRule(L"", L"");	// ブロックコメントデリミタ2
 

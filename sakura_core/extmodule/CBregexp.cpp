@@ -143,9 +143,9 @@ wchar_t* Bregexp::MakePatternSub(
 	const wchar_t*	szPattern2,	// 置換パターン(NULLなら検索)
 	const wchar_t*	szAdd2,		// 置換パターンの後ろに付け加えるパターン($1など) 
 	int				nOption		// 検索オプション
-) 
+	)
 {
-	static const wchar_t DELIMITER = WCODE::BREGEXP_DELIMITER;	// デリミタ
+	static const wchar_t delimiter = WCODE::BREGEXP_DELIMITER;	// デリミタ
 
 	// 検索パターン作成
 	wchar_t* szNPattern;		// ライブラリ渡し用の検索パターン文字列
@@ -166,15 +166,15 @@ wchar_t* Bregexp::MakePatternSub(
 		pPat = szNPattern;
 		*pPat++ = L's';
 	}
-	*pPat++ = DELIMITER;
+	*pPat++ = delimiter;
 	while (*szPattern != L'\0') {
 		*pPat++ = *szPattern++;
 	}
-	*pPat++ = DELIMITER;
+	*pPat++ = delimiter;
 	if (szPattern2) {
 		while (*szPattern2 != L'\0') { *pPat++ = *szPattern2++; }
 		while (*szAdd2 != L'\0') { *pPat++ = *szAdd2++; }
-		*pPat++ = DELIMITER;
+		*pPat++ = delimiter;
 	}
 	*pPat++ = L'k';			// 漢字対応
 	*pPat++ = L'm';			// 複数行対応(但し、呼び出し側が複数行対応でない)
@@ -597,7 +597,7 @@ bool InitRegexp(
 	HWND		hWnd,			// [in] ダイアログボックスのウィンドウハンドル。バージョン番号の設定が不要であればNULL。
 	Bregexp&	rRegexp,		// [in] チェックに利用するBregexpクラスへの参照
 	bool		bShowMessage	// [in] 初期化失敗時にエラーメッセージを出すフラグ
-)
+	)
 {
 	// From Here 2007.08.12 genta
 	DLLSHAREDATA* pShareData = &GetDllShareData();
@@ -635,7 +635,7 @@ bool CheckRegexpVersion(
 	HWND	hWnd,			// [in] ダイアログボックスのウィンドウハンドル。バージョン番号の設定が不要であればNULL。
 	int		nCmpId,			// [in] バージョン文字列を設定するコンポーネントID
 	bool	bShowMessage	// [in] 初期化失敗時にエラーメッセージを出すフラグ
-)
+	)
 {
 	Bregexp regexp;
 
@@ -667,7 +667,8 @@ bool CheckRegexpSyntax(
 	HWND			hWnd,
 	bool			bShowMessage,
 	int				nOption,
-	bool			bKakomi)
+	bool			bKakomi
+	)
 {
 	Bregexp regexp;
 

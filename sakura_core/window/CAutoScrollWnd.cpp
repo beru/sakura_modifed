@@ -45,7 +45,7 @@ HWND AutoScrollWnd::Create(HINSTANCE hInstance, HWND hwndParent, bool bVertical,
 {
 	LPCTSTR pszClassName;
 
-	m_cView = view;
+	m_pView = view;
 	int idb, idc;
 	if (bVertical) {
 		if (bHorizontal) {
@@ -104,24 +104,24 @@ void AutoScrollWnd::Close()
 
 LRESULT AutoScrollWnd::OnLButtonDown(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
 {
-	if (m_cView->m_nAutoScrollMode) {
-		m_cView->AutoScrollExit();
+	if (m_pView->m_nAutoScrollMode) {
+		m_pView->AutoScrollExit();
 	}
 	return 0;
 }
 
 LRESULT AutoScrollWnd::OnRButtonDown(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
 {
-	if (m_cView->m_nAutoScrollMode) {
-		m_cView->AutoScrollExit();
+	if (m_pView->m_nAutoScrollMode) {
+		m_pView->AutoScrollExit();
 	}
 	return 0;
 }
 
 LRESULT AutoScrollWnd::OnMButtonDown(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
 {
-	if (m_cView->m_nAutoScrollMode) {
-		m_cView->AutoScrollExit();
+	if (m_pView->m_nAutoScrollMode) {
+		m_pView->AutoScrollExit();
 	}
 	return 0;
 }

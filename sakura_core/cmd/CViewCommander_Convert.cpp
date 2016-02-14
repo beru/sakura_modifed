@@ -245,8 +245,8 @@ void ViewCommander::Command_BASE64DECODE(void)
 	}
 
 	// Base64デコード
-	Memory cmemBuf;
-	bool bret = Decode_Base64Decode().CallDecode(ctextBuf, &cmemBuf);
+	Memory memBuf;
+	bool bret = Decode_Base64Decode().CallDecode(ctextBuf, &memBuf);
 	if (!bret) {
 		return;
 	}
@@ -260,7 +260,7 @@ void ViewCommander::Command_BASE64DECODE(void)
 
 	// データ
 	int nDataLen;
-	const void* pData = cmemBuf.GetRawPtr(&nDataLen);
+	const void* pData = memBuf.GetRawPtr(&nDataLen);
 
 	// カキコ
 	BinaryOutputStream out(szPath);
@@ -284,7 +284,7 @@ void ViewCommander::Command_UUDECODE(void)
 		return;
 	}
 
-	// 選択範囲のデータを取得 -> cmemBuf
+	// 選択範囲のデータを取得 -> memBuf
 	// 正常時はTRUE,範囲未選択の場合はFALSEを返す
 	NativeW ctextBuf;
 	if (!m_pCommanderView->GetSelectedDataSimple(ctextBuf)) {
@@ -292,11 +292,11 @@ void ViewCommander::Command_UUDECODE(void)
 		return;
 	}
 
-	// uudecode(デコード)  ctextBuf -> cmemBin, szPath
-	Memory cmemBin;
+	// uudecode(デコード)  ctextBuf -> memBin, szPath
+	Memory memBin;
 	TCHAR szPath[_MAX_PATH] = _T("");
 	Decode_UuDecode decoder;
-	if (!decoder.CallDecode(ctextBuf, &cmemBin)) {
+	if (!decoder.CallDecode(ctextBuf, &memBin)) {
 		return;
 	}
 	decoder.CopyFilename(szPath);
@@ -309,7 +309,7 @@ void ViewCommander::Command_UUDECODE(void)
 
 	// データ
 	int nDataLen;
-	const void* pData = cmemBin.GetRawPtr(&nDataLen);
+	const void* pData = memBin.GetRawPtr(&nDataLen);
 
 	// カキコ
 	BinaryOutputStream out(szPath);

@@ -120,9 +120,9 @@ INT_PTR PropEdit::DispatchEvent(
 					::DlgItem_GetText(hwndDlg, IDC_EDIT_FILEOPENDIR, szMetaPath, _countof(szMetaPath));
 					FileNameManager::ExpandMetaToFolder(szMetaPath, szPath, _countof(szPath));
 					if (SelectDir(hwndDlg, LS(STR_PROPEDIT_SELECT_DIR), szPath, szPath)) {
-						CNativeT cmem(szPath);
-						cmem.Replace(_T("%"), _T("%%"));
-						::DlgItem_SetText(hwndDlg, IDC_EDIT_FILEOPENDIR, cmem.GetStringPtr());
+						NativeT mem(szPath);
+						mem.Replace(_T("%"), _T("%%"));
+						::DlgItem_SetText(hwndDlg, IDC_EDIT_FILEOPENDIR, mem.GetStringPtr());
 					}
 				}
 				return TRUE;

@@ -262,10 +262,10 @@ bool KeyBind::GetKeyStrSub(
 	int			nKeyNameArrEnd,
 	KEYDATA*	pKeyNameArr,
 	int			nShiftState,
-	CNativeT&	memList,
+	NativeT&	memList,
 	int			nFuncId,
 	bool		bGetDefFuncCode // = true
-)
+	)
 {
 	static const TCHAR*	pszSHIFT = _T("Shift+");
 	static const TCHAR*	pszCTRL  = _T("Ctrl+");
@@ -303,7 +303,7 @@ int KeyBind::GetKeyStr(
 	HINSTANCE	hInstance,
 	int			nKeyNameArrNum,
 	KEYDATA*	pKeyNameArr,
-	CNativeT&	memList,
+	NativeT&	memList,
 	int			nFuncId,
 	bool		bGetDefFuncCode // = true
 	)
@@ -339,10 +339,10 @@ int KeyBind::GetKeyStrList(
 	HINSTANCE	hInstance,
 	int			nKeyNameArrNum,
 	KEYDATA*	pKeyNameArr,
-	CNativeT***	pppcMemList,
+	NativeT***	pppcMemList,
 	int			nFuncId,
 	bool		bGetDefFuncCode // = true
-)
+	)
 {
 	int nAssignedKeysNum = 0;
 	if (nFuncId == 0) {
@@ -358,10 +358,10 @@ int KeyBind::GetKeyStrList(
 	if (nAssignedKeysNum == 0) {
 		return 0;
 	}
-	(*pppcMemList) = new CNativeT*[nAssignedKeysNum + 1];
+	(*pppcMemList) = new NativeT*[nAssignedKeysNum + 1];
 	int i;
 	for (i=0; i<nAssignedKeysNum; ++i) {
-		(*pppcMemList)[i] = new CNativeT;
+		(*pppcMemList)[i] = new NativeT;
 	}
 	(*pppcMemList)[i] = NULL;
 	
@@ -464,15 +464,15 @@ TCHAR* KeyBind::GetMenuLabel(
 
 	// 機能に対応するキー名を追加するか
 	if (bKeyStr) {
-		CNativeT cMemAccessKey;
+		NativeT memAccessKey;
 		// 2010.07.11 Moca メニューラベルの「\t」の付加条件変更
 		// [ファイル/フォルダ/ウィンドウ一覧以外]から[アクセスキーがあるときのみ]に付加するように変更
 		// 機能に対応するキー名の取得
-		if (GetKeyStr(hInstance, nKeyNameArrNum, pKeyNameArr, cMemAccessKey, nFuncId, bGetDefFuncCode)) {
+		if (GetKeyStr(hInstance, nKeyNameArrNum, pKeyNameArr, memAccessKey, nFuncId, bGetDefFuncCode)) {
 			// バッファが足りないときは入れない
-			if (_tcslen(pszLabel) + cMemAccessKey.GetStringLength() + 1 < LABEL_MAX) {
+			if (_tcslen(pszLabel) + memAccessKey.GetStringLength() + 1 < LABEL_MAX) {
 				_tcscat(pszLabel, _T("\t"));
-				_tcscat(pszLabel, cMemAccessKey.GetStringPtr());
+				_tcscat(pszLabel, memAccessKey.GetStringPtr());
 			}
 		}
 	}

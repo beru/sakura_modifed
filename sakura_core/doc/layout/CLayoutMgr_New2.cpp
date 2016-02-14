@@ -60,16 +60,16 @@ void LayoutMgr::ReplaceData_CLayoutMgr(
 	  Fromを含む位置からToの直前を含むデータを削除する
 	  Fromの位置へテキストを挿入する
 	*/
-	DocLineReplaceArg DLRArg;
-	DLRArg.delRange.SetFrom(ptFrom);	// 削除範囲from
-	DLRArg.delRange.SetTo(ptTo);		// 削除範囲to
-	DLRArg.pMemDeleted = pArg->pMemDeleted;	// 削除されたデータを保存
-	DLRArg.pInsData = pArg->pInsData;			// 挿入するデータ
-	DLRArg.nDelSeq = pArg->nDelSeq;
+	DocLineReplaceArg dlra;
+	dlra.delRange.SetFrom(ptFrom);	// 削除範囲from
+	dlra.delRange.SetTo(ptTo);		// 削除範囲to
+	dlra.pMemDeleted = pArg->pMemDeleted;	// 削除されたデータを保存
+	dlra.pInsData = pArg->pInsData;			// 挿入するデータ
+	dlra.nDelSeq = pArg->nDelSeq;
 	SearchAgent(m_pDocLineMgr).ReplaceData(
-		&DLRArg
+		&dlra
 	);
-	pArg->nInsSeq = DLRArg.nInsSeq;
+	pArg->nInsSeq = dlra.nInsSeq;
 
 	// --- 変更された行のレイアウト情報を再生成 ---
 	// 論理行の指定範囲に該当するレイアウト情報を削除して
@@ -77,7 +77,7 @@ void LayoutMgr::ReplaceData_CLayoutMgr(
 
 	LayoutInt	nModifyLayoutLinesOld = LayoutInt(0);
 	Layout* pLayoutPrev;
-	LogicInt nWork = t_max(DLRArg.nDeletedLineNum, DLRArg.nInsLineNum);
+	LogicInt nWork = t_max(dlra.nDeletedLineNum, dlra.nInsLineNum);
 
 	if (pLayoutWork) {
 		pLayoutPrev = DeleteLayoutAsLogical(
@@ -92,10 +92,10 @@ void LayoutMgr::ReplaceData_CLayoutMgr(
 		// 指定行より後の行のレイアウト情報について、論理行番号を指定行数だけシフトする
 		// 論理行が削除された場合は０より小さい行数
 		// 論理行が挿入された場合は０より大きい行数
-		if (DLRArg.nInsLineNum - DLRArg.nDeletedLineNum != 0) {
+		if (dlra.nInsLineNum - dlra.nDeletedLineNum != 0) {
 			ShiftLogicalLineNum(
 				pLayoutPrev,
-				DLRArg.nInsLineNum - DLRArg.nDeletedLineNum
+				dlra.nInsLineNum - dlra.nDeletedLineNum
 			);
 		}
 	}else {
@@ -149,6 +149,6 @@ void LayoutMgr::ReplaceData_CLayoutMgr(
 	pArg->nModLineTo += (pArg->nModLineFrom - LayoutInt(1)) ;	// 再描画ヒント 変更されたレイアウト行To
 
 	// 2007.10.18 kobake LayoutReplaceArg::ptLayoutNewはここで算出するのが正しい
-	LogicToLayout(DLRArg.ptNewPos, &pArg->ptLayoutNew); // 挿入された部分の次の位置
+	LogicToLayout(dlra.ptNewPos, &pArg->ptLayoutNew); // 挿入された部分の次の位置
 }
 

@@ -100,9 +100,9 @@ void TipWnd::AfterCreateWindow(void)
 void TipWnd::Show(int nX, int nY, const TCHAR* szText, RECT* pRect)
 {
 	if (szText) {
-		m_cInfo.SetString(szText);
+		m_info.SetString(szText);
 	}
-	const TCHAR* pszInfo = m_cInfo.GetStringPtr();
+	const TCHAR* pszInfo = m_info.GetStringPtr();
 	HDC hdc = ::GetDC(GetHwnd());
 
 	// サイズを計算済み	2001/06/19 asa-o
@@ -145,7 +145,7 @@ void TipWnd::ComputeWindowSize(
 	int nBgn = 0;
 	for (int i=0; i<=nTextLength; ++i) {
 		// 2005-09-02 D.S.Koba GetSizeOfChar
-		int nCharChars = CNativeT::GetSizeOfChar(pszText, nTextLength, i);
+		int nCharChars = NativeT::GetSizeOfChar(pszText, nTextLength, i);
 		if ((nCharChars == 1 && _T('\\') == pszText[i] && _T('n') == pszText[i + 1]) || _T('\0') == pszText[i]) {
 			if (0 < i - nBgn) {
 				std::vector<TCHAR> szWork(i - nBgn + 1);
@@ -207,7 +207,7 @@ void TipWnd::DrawTipText(
 	for (int i=0; i<=nTextLength; ++i) {
 //		int nCharChars = &pszText[i] - CMemory::MemCharPrev(pszText, nTextLength, &pszText[i]);
 		// 2005-09-02 D.S.Koba GetSizeOfChar
-		int nCharChars = CNativeT::GetSizeOfChar(pszText, nTextLength, i);
+		int nCharChars = NativeT::GetSizeOfChar(pszText, nTextLength, i);
 		if ((nCharChars == 1 && _T('\\') == pszText[i] && _T('n') == pszText[i + 1]) || _T('\0') == pszText[i]) {
 			if (0 < i - nBgn) {
 				std::vector<TCHAR> szWork(i - nBgn + 1);
@@ -267,7 +267,7 @@ LRESULT TipWnd::OnPaint(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l_Param)
 	::GetClientRect(hwnd, &rc);
 
 	// ウィンドウのテキストを表示
-	DrawTipText(hdc, m_hFont, m_cInfo.GetStringPtr());
+	DrawTipText(hdc, m_hFont, m_info.GetStringPtr());
 
 	::EndPaint(	hwnd, &ps);
 	return 0L;
@@ -278,7 +278,7 @@ LRESULT TipWnd::OnPaint(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l_Param)
 void TipWnd::GetWindowSize(LPRECT pRect)
 {
 	HDC hdc = ::GetDC(GetHwnd());
-	const TCHAR* pszText = m_cInfo.GetStringPtr();
+	const TCHAR* pszText = m_info.GetStringPtr();
 	// ウィンドウのサイズを得る
 	ComputeWindowSize(hdc, m_hFont, pszText , pRect);
 	ReleaseDC(GetHwnd(), hdc); // 2007.10.10 kobake ReleaseDCが抜けていたのを修正

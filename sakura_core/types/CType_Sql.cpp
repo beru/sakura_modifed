@@ -37,7 +37,7 @@ void CType_Sql::InitTypeConfigImp(TypeConfig* pType)
 	_tcscpy(pType->m_szTypeExts, _T("sql,plsql"));
 
 	// 設定
-	pType->m_cLineComment.CopyTo(0, L"--", -1);					// 行コメントデリミタ
+	pType->m_lineComment.CopyTo(0, L"--", -1);					// 行コメントデリミタ
 	pType->m_blockComments[0].SetBlockCommentRule(L"/*", L"*/");	// ブロックコメントデリミタ
 	pType->m_nStringType = StringLiteralType::PLSQL;					// 文字列区切り記号エスケープ方法  0=[\"][\'] 1=[""]['']
 	wcscpy_s(pType->m_szIndentChars, L"|★");						// その他のインデント対象文字

@@ -252,7 +252,7 @@ void CommandLine::ParseCommandLine(LPCTSTR pszCmdLineSrc, bool bResponse)
 		nPos = 0;
 	}
 
-	CNativeT mResponseFile = _T("");
+	NativeT mResponseFile = _T("");
 	assert(lstrlen(pszCmdLineSrc) + 1 != 0);
 	std::vector<TCHAR> szCmdLineWork(lstrlen(pszCmdLineSrc) + 1);
 	LPTSTR pszCmdLineWork = &szCmdLineWork[0];
@@ -265,7 +265,7 @@ void CommandLine::ParseCommandLine(LPCTSTR pszCmdLineSrc, bool bResponse)
 		// 2007.09.09 genta オプション判定ルール変更．オプション解析停止と""で囲まれたオプションを考慮
 		if (bParseOptDisabled || !(pszToken[0] == '-' || pszToken[0] == '"' && pszToken[1] == '-' )) {
 			if (pszToken[0] == _T('\"')) {
-				CNativeT cmWork;
+				NativeT work;
 				// Nov. 3, 2005 genta
 				// 末尾のクォーテーションが無い場合を考慮して，
 				// 最後がダブルクォートの場合のみ取り除く
@@ -277,9 +277,9 @@ void CommandLine::ParseCommandLine(LPCTSTR pszCmdLineSrc, bool bResponse)
 				// ファイル名の後ろにあるOptionを解析するため，ループは継続
 				int len = lstrlen(pszToken + 1);
 				if (len > 0) {
-					cmWork.SetString(&pszToken[1], len - (pszToken[len] == _T('"') ? 1 : 0));
-					cmWork.Replace(_T("\"\""), _T("\""));
-					_tcscpy_s(szPath, cmWork.GetStringPtr());	// ファイル名
+					work.SetString(&pszToken[1], len - (pszToken[len] == _T('"') ? 1 : 0));
+					work.Replace(_T("\"\""), _T("\""));
+					_tcscpy_s(szPath, work.GetStringPtr());	// ファイル名
 				}else {
 					szPath[0] = _T('\0');
 				}
@@ -306,7 +306,7 @@ void CommandLine::ParseCommandLine(LPCTSTR pszCmdLineSrc, bool bResponse)
 					szPath[0] = _T('\0');
 					break;
 				}
-				int nChars = t_max(1, int(CNativeT::GetCharNext(szPath, len, szPath + i) - (szPath + i)));
+				int nChars = t_max(1, int(NativeT::GetCharNext(szPath, len, szPath + i) - (szPath + i)));
 				i += nChars;
 			}
 
@@ -480,14 +480,14 @@ void CommandLine::ParseCommandLine(LPCTSTR pszCmdLineSrc, bool bResponse)
 				bParseOptDisabled = true;
 				break;
 			case CMDLINEOPT_M:			// 2009.06.14 syat 追加
-				m_cmMacro.SetStringT(arg);
-				m_cmMacro.Replace(L"\"\"", L"\"");
+				m_mMacro.SetStringT(arg);
+				m_mMacro.Replace(L"\"\"", L"\"");
 				break;
 			case CMDLINEOPT_MTYPE:		// 2009.06.14 syat 追加
-				m_cmMacroType.SetStringT(arg);
+				m_mMacroType.SetStringT(arg);
 				break;
 			case CMDLINEOPT_PROF:		// 2013.12.20 Moca 追加
-				m_cmProfile.SetStringT( arg );
+				m_mProfile.SetStringT( arg );
 				m_bSetProfile = true;
 				break;
 			case CMDLINEOPT_PROFMGR:
@@ -549,6 +549,6 @@ CommandLine::CommandLine()
 	m_gi.bGrepBackup		= false;
 	m_bViewMode				= false;
 	m_nGroup				= -1;		// 2007.06.26 ryoji
-	m_cmProfile.SetString(L"");
+	m_mProfile.SetString(L"");
 }
 

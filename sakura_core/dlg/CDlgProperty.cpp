@@ -95,7 +95,7 @@ BOOL DlgProperty::OnBnClicked(int wID)
 void DlgProperty::SetData(void)
 {
 	EditDoc* pEditDoc = (EditDoc*)m_lParam;
-	CNativeT memProp;
+	NativeT memProp;
 	TCHAR szWork[500];
 
 	HANDLE nFind;
@@ -240,7 +240,7 @@ void DlgProperty::SetData(void)
 
 #ifdef _DEBUG/////////////////////////////////////////////////////
 	// メモリ確保 & ファイル読み込み
-	CNativeT text;
+	NativeT text;
 	BinaryInputStream in(pEditDoc->m_docFile.GetFilePath());
 	if (!in) {
 		goto end_of_CodeTest;

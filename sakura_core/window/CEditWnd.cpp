@@ -1185,10 +1185,10 @@ LRESULT EditWnd::DispatchEvent(
 		uItem = (UINT) LOWORD(wParam);		// menu item or submenu index
 		{
 			// メニュー機能のテキストをセット
-			CNativeT memWork;
+			NativeT memWork;
 
 			// 機能に対応するキー名の取得(複数)
-			CNativeT** ppcAssignedKeyList;
+			NativeT** ppcAssignedKeyList;
 			auto& csKeyBind = m_pShareData->m_common.m_keyBind;
 			int nAssignedKeyNum = KeyBind::GetKeyStrList(
 				G_AppInstance(),
@@ -2953,7 +2953,7 @@ void EditWnd::PrintPreviewModeONOFF(void)
 		m_pPrintPreview = new PrintPreview(this);
 		// 現在の印刷設定
 		m_pPrintPreview->SetPrintSetting(
-			&m_pShareData->m_PrintSettingArr[
+			&m_pShareData->m_printSettingArr[
 				GetDocument()->m_docType.GetDocumentAttribute().m_nCurrentPrintSetting]
 		);
 
@@ -3544,7 +3544,7 @@ BOOL EditWnd::OnPrintPageSetting(void)
 //@@@ 2002.01.14 YAZAKI 印刷プレビューをPrintPreviewに独立させたことによる変更
 		GetHwnd(),
 		&nCurrentPrintSetting, // 現在選択している印刷設定
-		m_pShareData->m_PrintSettingArr, // 現在の設定はダイアログ側で保持する 2013.5.1 aroka
+		m_pShareData->m_printSettingArr, // 現在の設定はダイアログ側で保持する 2013.5.1 aroka
 		nLineNumberColumns // 行番号表示用に桁数を渡す 2013.5.10 aroka
 	);
 
@@ -3574,7 +3574,7 @@ BOOL EditWnd::OnPrintPageSetting(void)
 			// 現在の印刷設定
 			// 2013.08.27 印刷設定番号が変更された時に対応できていなかった
 			if (bChangePrintSettingNo) {
-				m_pPrintPreview->SetPrintSetting(&m_pShareData->m_PrintSettingArr[GetDocument()->m_docType.GetDocumentAttribute().m_nCurrentPrintSetting]);
+				m_pPrintPreview->SetPrintSetting(&m_pShareData->m_printSettingArr[GetDocument()->m_docType.GetDocumentAttribute().m_nCurrentPrintSetting]);
 			}
 
 			// 印刷プレビュー スクロールバー初期化
@@ -3695,9 +3695,9 @@ int	EditWnd::CreateFileDropDownMenu(HWND hwnd)
 	}
 
 	// 最近使ったフォルダのメニューを作成
-	const MRUFolder cMRUFolder;
-	hMenuPopUp = cMRUFolder.CreateMenu(&m_menuDrawer);
-	if (cMRUFolder.MenuLength() > 0) {
+	const MRUFolder mruFolder;
+	hMenuPopUp = mruFolder.CreateMenu(&m_menuDrawer);
+	if (mruFolder.MenuLength() > 0) {
 		// アクティブ
 		m_menuDrawer.MyAppendMenu(
 			hMenu,
@@ -4143,7 +4143,7 @@ void EditWnd::GetTooltipText(TCHAR* wszBuf, size_t nBufCount, int nID) const
 
 	// 機能に対応するキー名の取得(複数)
 	auto& csKeyBind = m_pShareData->m_common.m_keyBind;
-	CNativeT** ppcAssignedKeyList;
+	NativeT** ppcAssignedKeyList;
 	int nAssignedKeyNum = KeyBind::GetKeyStrList(
 		G_AppInstance(),
 		csKeyBind.m_nKeyNameArrNum,

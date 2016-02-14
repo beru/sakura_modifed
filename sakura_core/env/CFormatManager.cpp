@@ -56,7 +56,7 @@ const TCHAR* FormatManager::MyGetDateFormat(
 	int					nDestLen,
 	int					nDateFormatType,
 	const TCHAR*		szDateFormat
-)
+	)
 {
 	const TCHAR* pszForm;
 	DWORD dwFlags;
@@ -91,7 +91,7 @@ const TCHAR* FormatManager::MyGetTimeFormat(
 	int					nDestLen,
 	int					nTimeFormatType,
 	const TCHAR*		szTimeFormat
-)
+	)
 {
 	const TCHAR* pszForm;
 	DWORD dwFlags;

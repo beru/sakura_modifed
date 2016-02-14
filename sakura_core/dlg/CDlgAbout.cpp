@@ -166,7 +166,7 @@ BOOL DlgAbout::OnInitDialog(
 	//      Compile Info: V 1400  WR WIN600/I601/C000/N600
 	//      Last Modified: 1999/9/9 00:00:00
 	//      (‚ ‚ê‚ÎSKR_PATCH_INFO‚Ì•¶Žš—ñ‚ª‚»‚Ì‚Ü‚Ü•\Ž¦)
-	CNativeT memMsg;
+	NativeT memMsg;
 	memMsg.AppendString(LS(STR_DLGABOUT_APPNAME));
 	memMsg.AppendString(_T("   "));
 

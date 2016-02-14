@@ -258,14 +258,14 @@ CodeConvertResult Jis::JISToUnicode(const Memory& src, NativeW* pDstMem, bool ba
 	// ソースバッファポインタとソースの長さ
 	const char* psrc = pSrc;
 	int nsrclen = nSrcLen;
-	Memory cmem;
+	Memory mem;
 
 	if (base64decode) {
 		// ISO-2202-J 用の MIME ヘッダーをデコード
-		bool bret = MIMEHeaderDecode(pSrc, nSrcLen, &cmem, CODE_JIS);
+		bool bret = MIMEHeaderDecode(pSrc, nSrcLen, &mem, CODE_JIS);
 		if (bret) {
-			psrc = reinterpret_cast<const char*>(cmem.GetRawPtr());
-			nsrclen = cmem.GetRawLength();
+			psrc = reinterpret_cast<const char*>(mem.GetRawPtr());
+			nsrclen = mem.GetRawLength();
 		}
 	}
 

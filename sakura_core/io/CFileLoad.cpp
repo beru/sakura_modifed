@@ -226,7 +226,7 @@ ECodeType FileLoad::FileOpen(
 
 	m_nReadOffset2 = 0;
 	m_nTempResult = CodeConvertResult::Failure;
-	m_cLineTemp.SetString(L"");
+	m_lineTemp.SetString(L"");
 	return m_CharCode;
 }
 
@@ -266,9 +266,9 @@ CodeConvertResult FileLoad::ReadLine(
 	if (m_CharCode != CODE_UTF7 && m_CharCode != CP_UTF7) {
 		return ReadLine_core( pUnicodeBuffer, pEol );
 	}
-	if (m_nReadOffset2 == m_cLineTemp.GetStringLength()) {
+	if (m_nReadOffset2 == m_lineTemp.GetStringLength()) {
 		Eol eol;
-		CodeConvertResult e = ReadLine_core(&m_cLineTemp, &eol);
+		CodeConvertResult e = ReadLine_core(&m_lineTemp, &eol);
 		if (e == CodeConvertResult::Failure) {
 			pUnicodeBuffer->_GetMemory()->SetRawDataHoldBuffer( L"", 0 );
 			*pEol = eol;
@@ -280,18 +280,18 @@ CodeConvertResult FileLoad::ReadLine(
 	int nOffsetTemp = m_nReadOffset2;
 	int nRetLineLen;
 	Eol cEolTemp;
-	const wchar_t* pRet = GetNextLineW( m_cLineTemp.GetStringPtr(),
-										m_cLineTemp.GetStringLength(),
+	const wchar_t* pRet = GetNextLineW( m_lineTemp.GetStringPtr(),
+										m_lineTemp.GetStringLength(),
 										&nRetLineLen,
 										&m_nReadOffset2,
 										&cEolTemp,
 										GetDllShareData().m_common.m_edit.m_bEnableExtEol
 									  );
-	if (m_cLineTemp.GetStringLength() == m_nReadOffset2 && nOffsetTemp == 0) {
+	if (m_lineTemp.GetStringLength() == m_nReadOffset2 && nOffsetTemp == 0) {
 		// 途中に改行がない限りは、swapを使って中身のコピーを省略する
-		pUnicodeBuffer->swap(m_cLineTemp);
-		if (0 < m_cLineTemp.GetStringLength()) {
-			m_cLineTemp._GetMemory()->SetRawDataHoldBuffer(L"", 0);
+		pUnicodeBuffer->swap(m_lineTemp);
+		if (0 < m_lineTemp.GetStringLength()) {
+			m_lineTemp._GetMemory()->SetRawDataHoldBuffer(L"", 0);
 		}
 		m_nReadOffset2 = 0;
 	}else {
@@ -325,7 +325,7 @@ CodeConvertResult FileLoad::ReadLine_core(
 	}
 #endif
 	//行データバッファ (文字コード変換無しの生のデータ)
-	m_cLineBuffer.SetRawDataHoldBuffer("", 0);
+	m_lineBuffer.SetRawDataHoldBuffer("", 0);
 
 	// 1行取り出し ReadBuf -> m_memLine
 	// Oct. 19, 2002 genta while条件を整理
@@ -349,12 +349,12 @@ CodeConvertResult FileLoad::ReadLine_core(
 		// ReadBufから1行を取得するとき、改行コードが欠ける可能性があるため
 		if (m_nReadDataLen <= m_nReadBufOffSet && FileLoadMode::Ready == m_eMode) {// From Here Jun. 13, 2003 Moca
 			int n = 128;
-			int nMinAllocSize = m_cLineBuffer.GetRawLength() + nEolLen - nBufferNext + 100;
+			int nMinAllocSize = m_lineBuffer.GetRawLength() + nEolLen - nBufferNext + 100;
 			while (n < nMinAllocSize) {
 				n *= 2;
 			}
-			m_cLineBuffer.AllocBuffer( n );
-			m_cLineBuffer.AppendRawData( pLine, nBufLineLen + nEolLen - nBufferNext );
+			m_lineBuffer.AllocBuffer( n );
+			m_lineBuffer.AppendRawData( pLine, nBufLineLen + nEolLen - nBufferNext );
 			m_nReadBufOffSet -= nBufferNext;
 			// バッファロード   File -> ReadBuf
 			Buffering();
@@ -363,14 +363,14 @@ CodeConvertResult FileLoad::ReadLine_core(
 				break;
 			}
 		}else {
-			m_cLineBuffer.AppendRawData(pLine, nBufLineLen + nEolLen);
+			m_lineBuffer.AppendRawData(pLine, nBufLineLen + nEolLen);
 			break;
 		}
 	}
-	m_nReadLength += m_cLineBuffer.GetRawLength();
+	m_nReadLength += m_lineBuffer.GetRawLength();
 
 	// 文字コード変換 cLineBuffer -> pUnicodeBuffer
-	CodeConvertResult eConvertResult = IoBridge::FileToImpl(m_cLineBuffer, pUnicodeBuffer, m_pCodeBase, m_nFlag);
+	CodeConvertResult eConvertResult = IoBridge::FileToImpl(m_lineBuffer, pUnicodeBuffer, m_pCodeBase, m_nFlag);
 	if (eConvertResult == CodeConvertResult::LoseSome) {
 		eRet = CodeConvertResult::LoseSome;
 	}

@@ -75,6 +75,6 @@ public:
 	void ReloadAutoSaveParam();	// İ’è‚ğSharedArea‚©‚ç“Ç‚İo‚·
 
 private:
-	PassiveTimer m_cPassiveTimer;
+	PassiveTimer m_passiveTimer;
 };
 

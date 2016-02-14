@@ -27,9 +27,9 @@ class NativeW;
 class NativeA;
 
 #ifdef _UNICODE
-typedef NativeW CNativeT;
+typedef NativeW NativeT;
 #else
-typedef NativeA CNativeT;
+typedef NativeA NativeT;
 #endif
 
 

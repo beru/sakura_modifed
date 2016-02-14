@@ -72,7 +72,7 @@ bool LayoutMgr::IsKinsokuPosHead(
 	LayoutInt nRest,		// [in] 行の残り文字数
 	LayoutInt nCharKetas,	// [in] 現在位置の文字サイズ
 	LayoutInt nCharKetas2	// [in] 現在位置の次の文字サイズ
-)
+	)
 {
 	switch ((Int)nRest) {
 	//    321012  ↓マジックナンバー
@@ -112,7 +112,7 @@ bool LayoutMgr::IsKinsokuPosTail(
 	LayoutInt nRest,		// [in] 行の残り文字数
 	LayoutInt nCharKetas,	// [in] 現在位置の文字サイズ
 	LayoutInt nCharKetas2	// [in] 現在位置の次の文字サイズ
-)
+	)
 {
 	switch ((Int)nRest) {
 	case 3:	// 3文字前

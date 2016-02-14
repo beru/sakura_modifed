@@ -350,7 +350,7 @@ bool ImpExpType::Import(const wstring& sFileName, wstring& sErrMsg)
 	CommonSetting& common = m_pShareData->m_common;
 
 	// 強調キーワード
-	KeyWordSetMgr&	keyWordSetMgr = common.m_specialKeyword.m_CKeyWordSetMgr;
+	KeyWordSetMgr&	keyWordSetMgr = common.m_specialKeyword.m_keyWordSetMgr;
 	for (int i=0; i<MAX_KEYWORDSET_PER_TYPE; ++i) {
 		//types.m_nKeyWordSetIdx[i] = -1;
 		auto_sprintf_s(szKeyName, szKeyKeywordTemp, i + 1);
@@ -452,7 +452,7 @@ bool ImpExpType::Export(const wstring& sFileName, wstring& sErrMsg)
 	CommonSetting& common = m_pShareData->m_common;
 
 	// 強調キーワード
-	auto& keyWordSetMgr = common.m_specialKeyword.m_CKeyWordSetMgr;
+	auto& keyWordSetMgr = common.m_specialKeyword.m_keyWordSetMgr;
 	for (int i=0; i<MAX_KEYWORDSET_PER_TYPE; ++i) {
 		if (m_types.m_nKeyWordSetIdx[i] >= 0) {
 			int nIdx = m_types.m_nKeyWordSetIdx[i];
@@ -1145,7 +1145,7 @@ bool ImpExpKeyWord::Import(const wstring& sFileName, wstring& sErrMsg)
 		// 解析
 		if (0 < szLine.length()) {
 			// ｎ番目のセットにキーワードを追加
-			int nRetValue = m_common.m_specialKeyword.m_CKeyWordSetMgr.AddKeyWord(m_nIdx, szLine.c_str());
+			int nRetValue = m_common.m_specialKeyword.m_keyWordSetMgr.AddKeyWord(m_nIdx, szLine.c_str());
 			if (nRetValue == 2) {
 				bAddError = true;
 				break;
@@ -1155,7 +1155,7 @@ bool ImpExpKeyWord::Import(const wstring& sFileName, wstring& sErrMsg)
 	in.Close();
 
 	// 大文字小文字区別
-	m_common.m_specialKeyword.m_CKeyWordSetMgr.SetKeyWordCase(m_nIdx, m_bCase);
+	m_common.m_specialKeyword.m_keyWordSetMgr.SetKeyWordCase(m_nIdx, m_bCase);
 
 	if (bAddError) {
 		sErrMsg = LSW(STR_IMPEXP_KEYWORD);
@@ -1176,21 +1176,21 @@ bool ImpExpKeyWord::Export(const wstring& sFileName, wstring& sErrMsg)
 	}
 	out.WriteF(L"// ");
 	// 2012.03.10 syat キーワードに「%」を含む場合にエクスポート結果が不正
-	out.WriteString(m_common.m_specialKeyword.m_CKeyWordSetMgr.GetTypeName(m_nIdx));
+	out.WriteString(m_common.m_specialKeyword.m_keyWordSetMgr.GetTypeName(m_nIdx));
 	out.WriteF(WSTR_KEYWORD_HEAD);
 
 	out.WriteF(WSTR_KEYWORD_CASE);
 	out.WriteF(m_bCase ? L"True" : L"False");
 	out.WriteF(L"\n\n");
 
-	m_common.m_specialKeyword.m_CKeyWordSetMgr.SortKeyWord(m_nIdx);	// MIK 2000.12.01 sort keyword
+	m_common.m_specialKeyword.m_keyWordSetMgr.SortKeyWord(m_nIdx);	// MIK 2000.12.01 sort keyword
 
 	// ｎ番目のセットのキーワードの数を返す
-	nKeyWordNum = m_common.m_specialKeyword.m_CKeyWordSetMgr.GetKeyWordNum(m_nIdx);
+	nKeyWordNum = m_common.m_specialKeyword.m_keyWordSetMgr.GetKeyWordNum(m_nIdx);
 	for (int i=0; i<nKeyWordNum; ++i) {
 		// ｎ番目のセットのｍ番目のキーワードを返す
 		// 2012.03.10 syat キーワードに「%」を含む場合にエクスポート結果が不正
-		out.WriteString(m_common.m_specialKeyword.m_CKeyWordSetMgr.GetKeyWord(m_nIdx, i));
+		out.WriteString(m_common.m_specialKeyword.m_keyWordSetMgr.GetKeyWord(m_nIdx, i));
 		out.WriteF(L"\n");
 	}
 	out.Close();

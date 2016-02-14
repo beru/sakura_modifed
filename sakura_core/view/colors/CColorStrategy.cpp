@@ -249,29 +249,29 @@ void ColorStrategyPool::NotifyOnStartScanLogic()
 
 // 2005.11.20 Mocaコメントの色分けがON/OFF関係なく行われていたバグを修正
 void ColorStrategyPool::CheckColorMODE(
-	ColorStrategy**	ppcColorStrategy,	// [in/out]
+	ColorStrategy**	ppColorStrategy,	// [in/out]
 	int					nPos,
 	const StringRef&	lineStr
-)
+	)
 {
 	// 色終了
-	if (*ppcColorStrategy) {
-		if ((*ppcColorStrategy)->EndColor(lineStr, nPos)) {
-			*ppcColorStrategy = NULL;
+	if (*ppColorStrategy) {
+		if ((*ppColorStrategy)->EndColor(lineStr, nPos)) {
+			*ppColorStrategy = NULL;
 		}
 	}
 
 	// 色開始
-	if (!*ppcColorStrategy) {
+	if (!*ppColorStrategy) {
 		// CheckColorMODE はレイアウト処理全体のボトルネックになるくらい頻繁に呼び出される
 		// 基本クラスからの動的仮想関数呼び出しを使用すると無視できないほどのオーバヘッドになる模様
 		// ここはエレガントさよりも性能優先で個々の派生クラスから BeginColor() を呼び出す
-		if (m_pcHeredoc && m_pcHeredoc->BeginColor(lineStr, nPos)) { *ppcColorStrategy = m_pcHeredoc; return; }
-		if (m_pcBlockComment1 && m_pcBlockComment1->BeginColor(lineStr, nPos)) { *ppcColorStrategy = m_pcBlockComment1; return; }
-		if (m_pcBlockComment2 && m_pcBlockComment2->BeginColor(lineStr, nPos)) { *ppcColorStrategy = m_pcBlockComment2; return; }
-		if (m_pcLineComment && m_pcLineComment->BeginColor(lineStr, nPos)) { *ppcColorStrategy = m_pcLineComment; return; }
-		if (m_pcSingleQuote && m_pcSingleQuote->BeginColor(lineStr, nPos)) { *ppcColorStrategy = m_pcSingleQuote; return; }
-		if (m_pcDoubleQuote && m_pcDoubleQuote->BeginColor(lineStr, nPos)) { *ppcColorStrategy = m_pcDoubleQuote; return; }
+		if (m_pcHeredoc && m_pcHeredoc->BeginColor(lineStr, nPos)) { *ppColorStrategy = m_pcHeredoc; return; }
+		if (m_pcBlockComment1 && m_pcBlockComment1->BeginColor(lineStr, nPos)) { *ppColorStrategy = m_pcBlockComment1; return; }
+		if (m_pcBlockComment2 && m_pcBlockComment2->BeginColor(lineStr, nPos)) { *ppColorStrategy = m_pcBlockComment2; return; }
+		if (m_pcLineComment && m_pcLineComment->BeginColor(lineStr, nPos)) { *ppColorStrategy = m_pcLineComment; return; }
+		if (m_pcSingleQuote && m_pcSingleQuote->BeginColor(lineStr, nPos)) { *ppColorStrategy = m_pcSingleQuote; return; }
+		if (m_pcDoubleQuote && m_pcDoubleQuote->BeginColor(lineStr, nPos)) { *ppColorStrategy = m_pcDoubleQuote; return; }
 	}
 }
 

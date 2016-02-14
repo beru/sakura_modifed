@@ -569,9 +569,9 @@ BOOL DlgFileTree::OnBnClicked(int wID)
 					std::vector<LPCTSTR>(), std::vector<LPCTSTR>() );
 				TCHAR szFile[_MAX_PATH];
 				if (dlg.DoModal_GetOpenFileName(szFile)) {
-					CNativeT cmemFile = szFile;
-					cmemFile.ReplaceT(_T("%"), _T("%%"));
-					SetItemText(IDC_EDIT_PATH, cmemFile.GetStringPtr() );
+					NativeT memFile = szFile;
+					memFile.ReplaceT(_T("%"), _T("%%"));
+					SetItemText(IDC_EDIT_PATH, memFile.GetStringPtr() );
 				}
 			}
 		}
@@ -770,11 +770,11 @@ BOOL DlgFileTree::OnBnClicked(int wID)
 					}
 					HTREEITEM htiItemFirst = NULL;
 					for (int i=0; i<(int)aFileNames.size(); ++i) {
-						CNativeT cmemFile = aFileNames[i].c_str();
-						cmemFile.ReplaceT(_T("%"), _T("%%"));
+						NativeT memFile = aFileNames[i].c_str();
+						memFile.ReplaceT(_T("%"), _T("%%"));
 						FileTreeItem item;
 						item.m_eFileTreeItemType = FileTreeItemType::File;
-						item.m_szTargetPath = cmemFile.GetStringPtr();
+						item.m_szTargetPath = memFile.GetStringPtr();
 						item.m_szLabelName = GetFileTitlePointer(aFileNames[i].c_str());
 						htiInsert = InsertTreeItem(item, htiParent, htiInsert);
 						if (!htiItemFirst) {
@@ -805,7 +805,7 @@ BOOL DlgFileTree::OnBnClicked(int wID)
 					int nItemsCount = (int)m_fileTreeSetting.m_aItems.size();
 					for (int i=0; i<nItemsCount; ++i) {
 						FileTreeItem& item =  m_fileTreeSetting.m_aItems[i];
-						CNativeT str(item.m_szTargetPath);
+						NativeT str(item.m_szTargetPath);
 						str.Replace(szPathFrom, szPathTo);
 						if (str.GetStringLength() < (int)item.m_szTargetPath.GetBufferCount()) {
 							item.m_szTargetPath = str.GetStringPtr();

@@ -18,7 +18,7 @@ bool _GetKeywordLength(
 	LogicInt*			p_nWordBgn,		// [out]
 	LogicInt*			p_nWordLen,		// [out]
 	LayoutInt*			p_nWordKetas	// [out]
-)
+	)
 {
 	// キーワード長をカウントする
 	LogicInt nWordBgn = nPos;
@@ -345,8 +345,8 @@ void LayoutMgr::_DoLayout()
 
 	nAllLineNum = m_pDocLineMgr->GetLineCount();
 
-	LayoutWork	_sWork;
-	LayoutWork* pWork = &_sWork;
+	LayoutWork	work;
+	LayoutWork* pWork = &work;
 	pWork->pDocLine		= m_pDocLineMgr->GetDocLineTop(); // 2002/2/10 aroka CDocLineMgr変更
 	pWork->pLayout			= NULL;
 	pWork->pColorStrategy	= NULL;

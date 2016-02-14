@@ -125,12 +125,12 @@ void GrepAgent::AddTail( EditView* pEditView, const NativeW& mem, bool bAddStdou
 	if (bAddStdout) {
 		HANDLE out = ::GetStdHandle(STD_OUTPUT_HANDLE);
 		if (out && out != INVALID_HANDLE_VALUE) {
-			Memory cmemOut;
+			Memory memOut;
 			std::unique_ptr<CodeBase> pcCodeBase( CodeFactory::CreateCodeBase(
 					pEditView->GetDocument()->GetDocumentEncoding(), 0) );
-			pcCodeBase->UnicodeToCode( mem, &cmemOut );
+			pcCodeBase->UnicodeToCode( mem, &memOut );
 			DWORD dwWrite = 0;
-			::WriteFile(out, cmemOut.GetRawPtr(), cmemOut.GetRawLength(), &dwWrite, NULL);
+			::WriteFile(out, memOut.GetRawPtr(), memOut.GetRawLength(), &dwWrite, NULL);
 		}
 	}else {
 		pEditView->GetCommander().Command_ADDTAIL( mem.GetStringPtr(), mem.GetStringLength() );
@@ -152,8 +152,8 @@ DWORD GrepAgent::DoGrep(
 	bool					bGrepReplace,
 	const NativeW*			pmGrepKey,
 	const NativeW*			pmGrepReplace,
-	const CNativeT*			pmGrepFile,
-	const CNativeT*			pmGrepFolder,
+	const NativeT*			pmGrepFile,
+	const NativeT*			pmGrepFolder,
 	bool					bGrepCurFolder,
 	bool					bGrepSubFolder,
 	bool					bGrepStdout,
@@ -258,7 +258,7 @@ DWORD GrepAgent::DoGrep(
 												pViewDst->m_strCurSearchKey.c_str(),
 												pViewDst->m_strCurSearchKey.size(),
 												pViewDst->m_curSearchOption,
-												&pViewDst->m_CurRegexp)
+												&pViewDst->m_curRegexp)
 	) {
 		this->m_bGrepRunning = false;
 		pViewDst->m_bDoing_UndoRedo = false;
@@ -1524,9 +1524,9 @@ public:
 				throw Error_WriteFileOpen();
 			}
 			if (bBom) {
-				Memory cBom;
-				pcCodeBase->GetBom(&cBom);
-				out->Write(cBom.GetRawPtr(), cBom.GetRawLength());
+				Memory bom;
+				pcCodeBase->GetBom(&bom);
+				out->Write(bom.GetRawPtr(), bom.GetRawLength());
 			}
 			for (size_t i=0; i<buffer.size(); ++i) {
 				Output(buffer[i]);

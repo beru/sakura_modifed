@@ -676,23 +676,23 @@ void Caret::ShowCaretPosInfo()
 
 	// -- -- -- -- 文字コード情報 -> pszCodeName -- -- -- -- //
 	const TCHAR* pszCodeName;
-	CNativeT cmemCodeName;
+	NativeT memCodeName;
 	if (hwndStatusBar) {
 		TCHAR szCodeName[100];
 		CodePage::GetNameNormal(szCodeName, m_pEditDoc->GetDocumentEncoding());
-		cmemCodeName.AppendString(szCodeName);
+		memCodeName.AppendString(szCodeName);
 		if (m_pEditDoc->GetDocumentBomExist()) {
-			cmemCodeName.AppendString(LS(STR_CARET_WITHBOM));
+			memCodeName.AppendString(LS(STR_CARET_WITHBOM));
 		}
 	}else {
 		TCHAR szCodeName[100];
 		CodePage::GetNameShort(szCodeName, m_pEditDoc->GetDocumentEncoding());
-		cmemCodeName.AppendString(szCodeName);
+		memCodeName.AppendString(szCodeName);
 		if (m_pEditDoc->GetDocumentBomExist()) {
-			cmemCodeName.AppendString(_T("#"));		// BOM付(メニューバーなので小さく)	// 2013/4/17 Uchi
+			memCodeName.AppendString(_T("#"));		// BOM付(メニューバーなので小さく)	// 2013/4/17 Uchi
 		}
 	}
-	pszCodeName = cmemCodeName.GetStringPtr();
+	pszCodeName = memCodeName.GetStringPtr();
 
 
 	// -- -- -- -- 改行モード -> szEolMode -- -- -- -- //

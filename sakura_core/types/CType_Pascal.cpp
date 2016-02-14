@@ -35,7 +35,7 @@ void CType_Pascal::InitTypeConfigImp(TypeConfig* pType)
 	_tcscpy(pType->m_szTypeExts, _T("dpr,pas"));
 
 	// 設定
-	pType->m_cLineComment.CopyTo(0, L"//", -1);						// 行コメントデリミタ			//Nov. 5, 2000 JEPRO 追加
+	pType->m_lineComment.CopyTo(0, L"//", -1);						// 行コメントデリミタ			//Nov. 5, 2000 JEPRO 追加
 	pType->m_blockComments[0].SetBlockCommentRule(L"{", L"}");		// ブロックコメントデリミタ 	//Nov. 5, 2000 JEPRO 追加
 	pType->m_blockComments[1].SetBlockCommentRule(L"(*", L"*)");	// ブロックコメントデリミタ2 	//@@@ 2001.03.10 by MIK
 	pType->m_nStringType = StringLiteralType::PLSQL;				// 文字列区切り記号エスケープ方法  0=[\"][\'] 1=[""][''] //Nov. 5, 2000 JEPRO 追加

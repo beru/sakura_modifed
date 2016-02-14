@@ -216,7 +216,7 @@ public:
 
 #ifdef _DEBUG
 public:
-	static void GetDebugInfo(const char*, const int, CNativeT*);
+	static void GetDebugInfo(const char*, const int, NativeT*);
 #endif
 };
 

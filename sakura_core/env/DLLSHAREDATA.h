@@ -157,7 +157,7 @@ struct DLLSHAREDATA {
 	int							m_nTypesCount;							// タイプ別設定数
 	TypeConfig					m_TypeBasis;							// タイプ別設定: 共通
 	TypeConfigMini				m_TypeMini[MAX_TYPES];					// タイプ別設定(mini)
-	PRINTSETTING				m_PrintSettingArr[MAX_PRINTSETTINGARR];	// 印刷ページ設定
+	PRINTSETTING				m_printSettingArr[MAX_PRINTSETTINGARR];	// 印刷ページ設定
 	int							m_nLockCount;							//!< ロックカウント
 	
 	// その他

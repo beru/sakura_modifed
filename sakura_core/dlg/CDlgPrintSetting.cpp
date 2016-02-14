@@ -123,7 +123,7 @@ int DlgPrintSetting::DoModal(
 {
 	m_nCurrentPrintSetting = *pnCurrentPrintSetting;
 	for (int i=0; i<MAX_PRINTSETTINGARR; ++i) {
-		m_PrintSettingArr[i] = pPrintSettingArr[i];
+		m_printSettingArr[i] = pPrintSettingArr[i];
 	}
 	m_nLineNumberColumns = nLineNumberColumns;
 
@@ -131,7 +131,7 @@ int DlgPrintSetting::DoModal(
 	if (nRet != FALSE) {
 		*pnCurrentPrintSetting = m_nCurrentPrintSetting;
 		for (int i=0; i<MAX_PRINTSETTINGARR; ++i) {
-			pPrintSettingArr[i] = m_PrintSettingArr[i];
+			pPrintSettingArr[i] = m_printSettingArr[i];
 		}
 	}
 	return nRet;
@@ -237,7 +237,7 @@ BOOL DlgPrintSetting::OnBnClicked(int wID)
 	TCHAR szWork[256];
 	DlgInput1 dlgInput1;
 	HWND hwndComboSettingName;
-	auto& curPS = m_PrintSettingArr[m_nCurrentPrintSetting];
+	auto& curPS = m_printSettingArr[m_nCurrentPrintSetting];
 
 	switch (wID) {
 	case IDC_BUTTON_HELP:
@@ -261,7 +261,7 @@ BOOL DlgPrintSetting::OnBnClicked(int wID)
 			}
 		}
 		if (szWork[0] != _T('\0')) {
-			int		size = _countof(m_PrintSettingArr[0].m_szPrintSettingName) - 1;
+			int		size = _countof(m_printSettingArr[0].m_szPrintSettingName) - 1;
 			_tcsncpy(curPS.m_szPrintSettingName, szWork, size);
 			curPS.m_szPrintSettingName[size] = _T('\0');
 			// 印刷設定名一覧
@@ -271,7 +271,7 @@ BOOL DlgPrintSetting::OnBnClicked(int wID)
 			for (int i=0; i<MAX_PRINTSETTINGARR; ++i) {
 				int nItemIdx = Combo_AddString(
 					hwndComboSettingName,
-					m_PrintSettingArr[i].m_szPrintSettingName
+					m_printSettingArr[i].m_szPrintSettingName
 				);
 				Combo_SetItemData(hwndComboSettingName, nItemIdx, i);
 				if (i == m_nCurrentPrintSetting) {
@@ -466,7 +466,7 @@ void DlgPrintSetting::SetData(void)
 	Combo_ResetContent(hwndComboSettingName);
 	int nSelectIdx = 0;
 	for (int i=0; i<MAX_PRINTSETTINGARR; ++i) {
-		int nItemIdx = Combo_AddString(hwndComboSettingName, m_PrintSettingArr[i].m_szPrintSettingName);
+		int nItemIdx = Combo_AddString(hwndComboSettingName, m_printSettingArr[i].m_szPrintSettingName);
 		Combo_SetItemData(hwndComboSettingName, nItemIdx, i);
 		if (i == m_nCurrentPrintSetting) {
 			nSelectIdx = nItemIdx;
@@ -487,7 +487,7 @@ int DlgPrintSetting::GetData(void)
 {
 	HWND hwndCtrl;
 	int nIdx1;
-	auto& curPS = m_PrintSettingArr[m_nCurrentPrintSetting];
+	auto& curPS = m_printSettingArr[m_nCurrentPrintSetting];
 	// フォント一覧
 	hwndCtrl = GetItemHwnd(IDC_COMBO_FONT_HAN);
 	nIdx1 = Combo_GetCurSel(hwndCtrl);
@@ -622,7 +622,7 @@ void DlgPrintSetting::OnChangeSettingType(BOOL bGetData)
 	HWND	hwndCtrl;
 	int		nIdx1;
 	int		nItemNum;
-	auto& curPS = m_PrintSettingArr[m_nCurrentPrintSetting];
+	auto& curPS = m_printSettingArr[m_nCurrentPrintSetting];
 
 	HWND hwndComboSettingName = GetItemHwnd(IDC_COMBO_SETTINGNAME);
 	nIdx1 = Combo_GetCurSel(hwndComboSettingName);
@@ -799,7 +799,7 @@ BOOL DlgPrintSetting::CalcPrintableLineAndColumn()
 
 	// ダイアログデータの取得
 	GetData();
-	PRINTSETTING* pPS = &m_PrintSettingArr[m_nCurrentPrintSetting];
+	PRINTSETTING* pPS = &m_printSettingArr[m_nCurrentPrintSetting];
 
 	dmDummy.dmFields = DM_PAPERSIZE | DMORIENT_LANDSCAPE;
 	dmDummy.dmPaperSize = pPS->m_nPrintPaperSize;
