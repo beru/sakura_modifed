@@ -97,24 +97,24 @@ inline int PointCompare(const POINT_T& pt1, const POINT_T& pt2)
 // 2“_‚ğ‘ÎŠp‚Æ‚·‚é‹éŒ`‚ğ‹‚ß‚é
 template <class POINT_T>
 inline void TwoPointToRect(
-	RECT*	prcRect,
+	RECT*	pRect,
 	POINT_T	pt1,
 	POINT_T	pt2
 )
 {
 	if (pt1.y < pt2.y) {
-		prcRect->top	= (Int)pt1.y;
-		prcRect->bottom	= (Int)pt2.y;
+		pRect->top	= (Int)pt1.y;
+		pRect->bottom	= (Int)pt2.y;
 	}else {
-		prcRect->top	= (Int)pt2.y;
-		prcRect->bottom	= (Int)pt1.y;
+		pRect->top	= (Int)pt2.y;
+		pRect->bottom	= (Int)pt1.y;
 	}
 	if (pt1.x < pt2.x) {
-		prcRect->left	= (Int)pt1.x;
-		prcRect->right	= (Int)pt2.x;
+		pRect->left	= (Int)pt1.x;
+		pRect->right	= (Int)pt2.x;
 	}else {
-		prcRect->left	= (Int)pt2.x;
-		prcRect->right	= (Int)pt1.x;
+		pRect->left	= (Int)pt2.x;
+		pRect->right	= (Int)pt1.x;
 	}
 }
 

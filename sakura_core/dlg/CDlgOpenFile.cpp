@@ -1018,7 +1018,7 @@ bool DlgOpenFile::DoModalSaveDlg(
 
 	// From Here Feb. 9, 2001 genta
 	if (!bSimpleMode) {
-		pData->m_eol = pSaveInfo->cEol;	//	初期値は「改行コードを保存」に固定 // 2013.05.27 初期値を指定
+		pData->m_eol = pSaveInfo->eol;	//	初期値は「改行コードを保存」に固定 // 2013.05.27 初期値を指定
 		pData->m_bUseEol = true;
 	}else {
 		pData->m_bUseEol = false;
@@ -1045,7 +1045,7 @@ bool DlgOpenFile::DoModalSaveDlg(
 
 		// Feb. 9, 2001 genta
 		if (pData->m_bUseEol) {
-			pSaveInfo->cEol = pData->m_eol;
+			pSaveInfo->eol = pData->m_eol;
 		}
 		// Jul. 26, 2003 ryoji BOM設定
 		if (pData->m_bUseBom) {

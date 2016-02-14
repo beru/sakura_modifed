@@ -480,7 +480,7 @@ void EditDoc::GetSaveInfo(SaveInfo* pSaveInfo) const
 	pSaveInfo->eCharCode   = m_docFile.GetCodeSet();
 	pSaveInfo->bBomExist   = m_docFile.IsBomExist();
 	pSaveInfo->bChgCodeSet = m_docFile.IsChgCodeSet();
-	pSaveInfo->cEol        = m_docEditor.m_newLineCode; // 編集時改行コードを保存時改行コードとして設定
+	pSaveInfo->eol        = m_docEditor.m_newLineCode; // 編集時改行コードを保存時改行コードとして設定
 }
 
 

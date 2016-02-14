@@ -75,13 +75,13 @@ bool ShareData_IO::ShareData_IO_2(bool bRead)
 	//MY_RUNNINGTIMER(cRunningTimer, "ShareData_IO::ShareData_IO_2");
 	ShareData* pShare = ShareData::getInstance();
 
-	DataProfile	cProfile;
+	DataProfile	profile;
 
 	// Feb. 12, 2006 D.S.Koba
 	if (bRead) {
-		cProfile.SetReadingMode();
+		profile.SetReadingMode();
 	}else {
-		cProfile.SetWritingMode();
+		profile.SetWritingMode();
 	}
 
 	std::tstring strProfileName = to_tchar(CommandLine::getInstance()->GetProfileName());
@@ -91,7 +91,7 @@ bool ShareData_IO::ShareData_IO_2(bool bRead)
 //	MYTRACE(_T("Iniファイル処理-1 所要時間(ミリ秒) = %d\n"), cRunningTimer.Read());
 
 	if (bRead) {
-		if (!cProfile.ReadProfile(szIniFileName)) {
+		if (!profile.ReadProfile(szIniFileName)) {
 			// 設定ファイルが存在しない
 			return false;
 		}
@@ -100,7 +100,7 @@ bool ShareData_IO::ShareData_IO_2(bool bRead)
 		TCHAR iniVer[256];
 		DWORD mH, mL, lH, lL;
 		mH = mL = lH = lL = 0;	// ※ 古～い ini だと "szVersion" は無い
-		if (cProfile.IOProfileData(LTEXT("Other"), LTEXT("szVersion"), MakeStringBufferT(iniVer)))
+		if (profile.IOProfileData(LTEXT("Other"), LTEXT("szVersion"), MakeStringBufferT(iniVer)))
 			_stscanf(iniVer, _T("%u.%u.%u.%u"), &mH, &mL, &lH, &lL);
 		DWORD dwMS = (DWORD)MAKELONG(mL, mH);
 		DWORD dwLS = (DWORD)MAKELONG(lL, lH);
@@ -124,37 +124,37 @@ bool ShareData_IO::ShareData_IO_2(bool bRead)
 
 	if (bRead) {
 		DLLSHAREDATA* pShareData = &GetDllShareData();
-		cProfile.IOProfileData(L"Common", L"szLanguageDll", MakeStringBufferT(pShareData->m_common.m_window.m_szLanguageDll));
+		profile.IOProfileData(L"Common", L"szLanguageDll", MakeStringBufferT(pShareData->m_common.m_window.m_szLanguageDll));
 		SelectLang::ChangeLang(pShareData->m_common.m_window.m_szLanguageDll);
 		pShare->RefreshString();
 	}
 
 	// Feb. 12, 2006 D.S.Koba
-	ShareData_IO_Mru(cProfile);
-	ShareData_IO_Keys(cProfile);
-	ShareData_IO_Grep(cProfile);
-	ShareData_IO_Folders(cProfile);
-	ShareData_IO_Cmd(cProfile);
-	ShareData_IO_Nickname(cProfile);
-	ShareData_IO_Common(cProfile);
-	ShareData_IO_Plugin(cProfile, pMenuDrawer);		// Move here	2010/6/24 Uchi
-	ShareData_IO_Toolbar(cProfile, pMenuDrawer);
-	ShareData_IO_CustMenu(cProfile);
-	ShareData_IO_Font(cProfile);
-	ShareData_IO_KeyBind(cProfile);
-	ShareData_IO_Print(cProfile);
-	ShareData_IO_Types(cProfile);
-	ShareData_IO_KeyWords(cProfile);
-	ShareData_IO_Macro(cProfile);
-	ShareData_IO_Statusbar(cProfile);		// 2008/6/21 Uchi
-	ShareData_IO_MainMenu(cProfile);		// 2010/5/15 Uchi
-	ShareData_IO_Other(cProfile);
+	ShareData_IO_Mru(profile);
+	ShareData_IO_Keys(profile);
+	ShareData_IO_Grep(profile);
+	ShareData_IO_Folders(profile);
+	ShareData_IO_Cmd(profile);
+	ShareData_IO_Nickname(profile);
+	ShareData_IO_Common(profile);
+	ShareData_IO_Plugin(profile, pMenuDrawer);		// Move here	2010/6/24 Uchi
+	ShareData_IO_Toolbar(profile, pMenuDrawer);
+	ShareData_IO_CustMenu(profile);
+	ShareData_IO_Font(profile);
+	ShareData_IO_KeyBind(profile);
+	ShareData_IO_Print(profile);
+	ShareData_IO_Types(profile);
+	ShareData_IO_KeyWords(profile);
+	ShareData_IO_Macro(profile);
+	ShareData_IO_Statusbar(profile);		// 2008/6/21 Uchi
+	ShareData_IO_MainMenu(profile);		// 2010/5/15 Uchi
+	ShareData_IO_Other(profile);
 
 	delete pMenuDrawer;					// 2010/7/4 Uchi
 	pMenuDrawer = NULL;
 
 	if (!bRead) {
-		cProfile.WriteProfile( szIniFileName, LTEXT(" sakura.ini テキストエディタ設定ファイル") );
+		profile.WriteProfile( szIniFileName, LTEXT(" sakura.ini テキストエディタ設定ファイル") );
 	}
 
 //	MYTRACE(_T("Iniファイル処理 8 所要時間(ミリ秒) = %d\n"), cRunningTimer.Read());
@@ -957,10 +957,10 @@ void ShareData_IO::ShareData_IO_Font(DataProfile& profile)
 /*!
 	@brief 共有データのKeyBindセクションの入出力
 */
-void ShareData_IO::ShareData_IO_KeyBind(DataProfile& cProfile)
+void ShareData_IO::ShareData_IO_KeyBind(DataProfile& profile)
 {
 	DLLSHAREDATA* pShare = &GetDllShareData();
-	IO_KeyBind(cProfile, pShare->m_common.m_keyBind, false);	// add Parameter 2008/5/24
+	IO_KeyBind(profile, pShare->m_common.m_keyBind, false);	// add Parameter 2008/5/24
 }
 
 /*!
@@ -1953,7 +1953,7 @@ void ShareData_IO::ShareData_IO_MainMenu(DataProfile& profile)
 			MainMenu* pMenuTbl = mainmenu.m_mainMenuTbl;
 			int k = 0;
 			for (; k<mainmenu.m_nMainMenuNum; ++k) {
-				if (pMenuTbl[k].m_nFunc == item.m_nAddFuncCode) {
+				if (pMenuTbl[k].nFunc == item.m_nAddFuncCode) {
 					break;
 				}
 			}
@@ -1967,7 +1967,7 @@ void ShareData_IO::ShareData_IO_MainMenu(DataProfile& profile)
 			if (k == mainmenu.m_nMainMenuNum && mainmenu.m_nMainMenuNum + nAddSep < _countof(mainmenu.m_mainMenuTbl)) {
 				// メニュー内にまだ追加されていないので追加する
 				for (int r=0; r<mainmenu.m_nMainMenuNum; ++r) {
-					if (pMenuTbl[r].m_nFunc == item.m_nPrevFuncCode && 0 < pMenuTbl[r].m_nLevel) {
+					if (pMenuTbl[r].nFunc == item.m_nPrevFuncCode && 0 < pMenuTbl[r].m_nLevel) {
 						// 追加分後ろにずらす
 						for (int n=mainmenu.m_nMainMenuNum-1; r<n; --n) {
 							pMenuTbl[n + 1 + nAddSep] = pMenuTbl[n];
@@ -1981,7 +1981,7 @@ void ShareData_IO::ShareData_IO_MainMenu(DataProfile& profile)
 						const int nLevel = pMenuTbl[r].m_nLevel;
 						if (item.m_bAddPrevSeparete) {
 							pMenu->m_nType    = MainMenuType::Separator;
-							pMenu->m_nFunc    = F_SEPARATOR;
+							pMenu->nFunc    = F_SEPARATOR;
 							pMenu->m_nLevel   = nLevel;
 							pMenu->m_sName[0] = L'\0';
 							pMenu->m_sKey[0]  = L'\0';
@@ -1990,7 +1990,7 @@ void ShareData_IO::ShareData_IO_MainMenu(DataProfile& profile)
 							mainmenu.m_nMainMenuNum++;
 						}
 						pMenu->m_nType    = MainMenuType::Leaf;
-						pMenu->m_nFunc    = item.m_nAddFuncCode;
+						pMenu->nFunc    = item.m_nAddFuncCode;
 						pMenu->m_nLevel   = nLevel;
 						pMenu->m_sName[0] = L'\0';
 						pMenu->m_sKey[0]  = L'\0';
@@ -1999,7 +1999,7 @@ void ShareData_IO::ShareData_IO_MainMenu(DataProfile& profile)
 						if (item.m_bAddNextSeparete) {
 							++pMenu;
 							pMenu->m_nType    = MainMenuType::Separator;
-							pMenu->m_nFunc    = F_SEPARATOR;
+							pMenu->nFunc    = F_SEPARATOR;
 							pMenu->m_nLevel   = nLevel;
 							pMenu->m_sName[0] = L'\0';
 							pMenu->m_sKey[0]  = L'\0';
@@ -2077,7 +2077,7 @@ void ShareData_IO::IO_MainMenu(
 		if (profile.IsReadingMode()) {
 			// 読み込み時初期化
 			pMenu->m_nType    = MainMenuType::Node;
-			pMenu->m_nFunc    = F_INVALID;
+			pMenu->nFunc    = F_INVALID;
 			pMenu->m_nLevel   = 0;
 			pMenu->m_sName[0] = L'\0';
 			pMenu->m_sKey[0]  = L'\0';
@@ -2124,7 +2124,7 @@ void ShareData_IO::IO_MainMenu(
 			if (n == F_INVALID) {
 				n = F_DEFAULT;
 			}
-			pMenu->m_nFunc = n;
+			pMenu->nFunc = n;
 			if (!pn) {
 				continue;
 			}
@@ -2148,20 +2148,20 @@ void ShareData_IO::IO_MainMenu(
 			++p;
 			auto_strcpy_s(pMenu->m_sName, MAX_MAIN_MENU_NAME_LEN + 1, p);
 		}else {
-			if (GetPlugCmdInfoByFuncCode(pMenu->m_nFunc, szFuncName)) {
+			if (GetPlugCmdInfoByFuncCode(pMenu->nFunc, szFuncName)) {
 				// Plugin
 			}else {
 				if (bOutCmdName) {
 					// マクロ名対応
 					p = SMacroMgr::GetFuncInfoByID(
 						G_AppInstance(),
-						pMenu->m_nFunc,
+						pMenu->nFunc,
 						szFuncName,
 						NULL
 					);
 				}
 				if (!bOutCmdName || !p) {
-					auto_sprintf(szFuncName, L"%d", pMenu->m_nFunc);
+					auto_sprintf(szFuncName, L"%d", pMenu->nFunc);
 				}
 			}
 			// 書き込み
@@ -2171,7 +2171,7 @@ void ShareData_IO::IO_MainMenu(
 				pMenu->m_nType, 
 				szFuncName, 
 				pMenu->m_sKey, 
-				pMenu->m_nFunc == F_NODE ? pMenu->m_sName : L"");
+				pMenu->nFunc == F_NODE ? pMenu->m_sName : L"");
 			profile.IOProfileData(pszSecName, szKeyName, MakeStringBufferW(szLine));
 		}
 

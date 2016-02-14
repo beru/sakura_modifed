@@ -83,7 +83,7 @@ public:
 	// Constructor
 	ImpExpType(int nIdx, TypeConfig& types, HWND hwndList)
 		: m_nIdx(nIdx)
-		, m_Types(types)
+		, m_types(types)
 		, m_hwndList(hwndList)
 	{
 		// 共有データ構造体のアドレスを返す
@@ -104,7 +104,7 @@ public:
 private:
 	// インターフェース用
 	int 			m_nIdx;
-	TypeConfig&	m_Types;
+	TypeConfig&		m_types;
 	HWND			m_hwndList;
 
 	// 内部使用
@@ -112,7 +112,7 @@ private:
 	int				m_nColorType;
 	wstring 		m_sColorFile;
 	bool			m_bAddType;
-	DataProfile	m_cProfile;
+	DataProfile		m_profile;
 };
 
 
@@ -150,7 +150,7 @@ public:
 	// Constructor
 	ImpExpRegex(TypeConfig& types)
 		:
-		m_Types(types)
+		m_types(types)
 	{
 	}
 
@@ -164,7 +164,7 @@ public:
 	const wchar_t* GetOriginExtension()	{ return L"rkw"; }
 
 private:
-	TypeConfig&	m_Types;
+	TypeConfig&	m_types;
 };
 
 
@@ -176,7 +176,7 @@ public:
 	// Constructor
 	ImpExpKeyHelp(TypeConfig& types)
 		:
-		m_Types(types)
+		m_types(types)
 	{
 	}
 
@@ -190,7 +190,7 @@ public:
 	const wchar_t* GetOriginExtension()	{ return L"txt"; }
 
 private:
-	TypeConfig&	m_Types;
+	TypeConfig&	m_types;
 };
 
 

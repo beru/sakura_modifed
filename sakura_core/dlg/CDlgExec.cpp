@@ -234,19 +234,19 @@ BOOL DlgExec::OnBnClicked(int wID)
 	// From Here Mar. 28, 2001 JEPRO
 	case IDC_BUTTON_REFERENCE:	// ファイル名の「参照...」ボタン
 		{
-			DlgOpenFile	cDlgOpenFile;
+			DlgOpenFile	dlgOpenFile;
 			TCHAR			szPath[_MAX_PATH + 1];
 			int				size = _countof(szPath) - 1;
 			_tcsncpy(szPath, m_szCommand, size);
 			szPath[size] = _T('\0');
 			// ファイルオープンダイアログの初期化
-			cDlgOpenFile.Create(
+			dlgOpenFile.Create(
 				m_hInstance,
 				GetHwnd(),
 				_T("*.com;*.exe;*.bat;*.cmd"),
 				m_szCommand
 			);
-			if (cDlgOpenFile.DoModal_GetOpenFileName(szPath)) {
+			if (dlgOpenFile.DoModal_GetOpenFileName(szPath)) {
 				_tcscpy(m_szCommand, szPath);
 				SetItemText(IDC_COMBO_m_szCommand, m_szCommand);
 			}

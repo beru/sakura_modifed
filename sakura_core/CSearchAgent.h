@@ -96,7 +96,7 @@ public:
 		const wchar_t*	pLine,
 		int				nLineLen,
 		int				nIdxPos,
-		const std::vector<std::pair<const wchar_t*, LogicInt> >& searchWords,
+		const std::vector<std::pair<const wchar_t*, LogicInt>>& searchWords,
 		bool	bLoHiCase,
 		int*	pnMatchLen
 	);
@@ -111,7 +111,7 @@ public:
 	
 	static
 	void CreateWordList(
-		std::vector<std::pair<const wchar_t*, LogicInt> >&	searchWords,
+		std::vector<std::pair<const wchar_t*, LogicInt>>&	searchWords,
 		const wchar_t*	pszPattern,
 		int	nPatternLen
 	);

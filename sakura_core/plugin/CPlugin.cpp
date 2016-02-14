@@ -60,20 +60,20 @@ Plugin::~Plugin(void)
 
 // プラグイン定義ファイルのCommonセクションを読み込む
 bool Plugin::ReadPluginDefCommon(
-	DataProfile *cProfile,
-	DataProfile *cProfileMlang
+	DataProfile* profile,
+	DataProfile* profileMlang
 	)
 {
-	cProfile->IOProfileData(PII_PLUGIN, PII_PLUGIN_ID, m_sId);
-	cProfile->IOProfileData(PII_PLUGIN, PII_PLUGIN_NAME, m_sName);
-	cProfile->IOProfileData(PII_PLUGIN, PII_PLUGIN_DESCRIPTION, m_sDescription);
-	cProfile->IOProfileData(PII_PLUGIN, PII_PLUGIN_AUTHOR, m_sAuthor);
-	cProfile->IOProfileData(PII_PLUGIN, PII_PLUGIN_VERSION, m_sVersion);
-	cProfile->IOProfileData(PII_PLUGIN, PII_PLUGIN_URL, m_sUrl);
-	if (cProfileMlang) {
-		cProfileMlang->IOProfileData(PII_PLUGIN, PII_PLUGIN_NAME, m_sName);
-		cProfileMlang->IOProfileData(PII_PLUGIN, PII_PLUGIN_DESCRIPTION, m_sDescription);
-		cProfileMlang->IOProfileData(PII_PLUGIN, PII_PLUGIN_URL, m_sUrl);
+	profile->IOProfileData(PII_PLUGIN, PII_PLUGIN_ID, m_sId);
+	profile->IOProfileData(PII_PLUGIN, PII_PLUGIN_NAME, m_sName);
+	profile->IOProfileData(PII_PLUGIN, PII_PLUGIN_DESCRIPTION, m_sDescription);
+	profile->IOProfileData(PII_PLUGIN, PII_PLUGIN_AUTHOR, m_sAuthor);
+	profile->IOProfileData(PII_PLUGIN, PII_PLUGIN_VERSION, m_sVersion);
+	profile->IOProfileData(PII_PLUGIN, PII_PLUGIN_URL, m_sUrl);
+	if (profileMlang) {
+		profileMlang->IOProfileData(PII_PLUGIN, PII_PLUGIN_NAME, m_sName);
+		profileMlang->IOProfileData(PII_PLUGIN, PII_PLUGIN_DESCRIPTION, m_sDescription);
+		profileMlang->IOProfileData(PII_PLUGIN, PII_PLUGIN_URL, m_sUrl);
 	}
 
 #ifdef _UNICODE
@@ -90,8 +90,8 @@ bool Plugin::ReadPluginDefCommon(
 // プラグイン定義ファイルのPlugセクションを読み込む
 // @date 2011.08.20 syat Plugセクションも複数定義可能とする
 bool Plugin::ReadPluginDefPlug(
-	DataProfile *cProfile,
-	DataProfile *cProfileMlang
+	DataProfile* profile,
+	DataProfile* profileMlang
 	)
 {
 	std::vector<JackDef> jacks = JackManager::getInstance()->GetJackDef();
@@ -106,13 +106,13 @@ bool Plugin::ReadPluginDefPlug(
 				swprintf(szIndex, L"[%d]", nCount);
 			}
 			wstring sHandler;
-			if (cProfile->IOProfileData(PII_PLUG, (sKey + szIndex).c_str(), sHandler)) {
+			if (profile->IOProfileData(PII_PLUG, (sKey + szIndex).c_str(), sHandler)) {
 				// ラベルの取得
 				wstring sKeyLabel = sKey + szIndex + L".Label";
 				wstring sLabel;
-				cProfile->IOProfileData(PII_PLUG, sKeyLabel.c_str(), sLabel);
-				if (cProfileMlang) {
-					cProfileMlang->IOProfileData(PII_PLUG, sKeyLabel.c_str(), sLabel);
+				profile->IOProfileData(PII_PLUG, sKeyLabel.c_str(), sLabel);
+				if (profileMlang) {
+					profileMlang->IOProfileData(PII_PLUG, sKeyLabel.c_str(), sLabel);
 				}
 				if (sLabel == L"") {
 					sLabel = sHandler;		// Labelが無ければハンドラ名で代用
@@ -131,8 +131,8 @@ bool Plugin::ReadPluginDefPlug(
 
 // プラグイン定義ファイルのCommandセクションを読み込む
 bool Plugin::ReadPluginDefCommand(
-	DataProfile *cProfile,
-	DataProfile *cProfileMlang
+	DataProfile* profile,
+	DataProfile* profileMlang
 	)
 {
 	wstring sHandler;
@@ -140,24 +140,24 @@ bool Plugin::ReadPluginDefCommand(
 
 	for (int nCount=1; nCount<MAX_PLUG_CMD; ++nCount) {	// 添え字は１から始める
 		swprintf(bufKey, L"C[%d]", nCount);
-		if (cProfile->IOProfileData(PII_COMMAND, bufKey, sHandler)) {
+		if (profile->IOProfileData(PII_COMMAND, bufKey, sHandler)) {
 			wstring sLabel;
 			wstring sIcon;
 
 			// ラベルの取得
 			swprintf(bufKey, L"C[%d].Label", nCount);
-			cProfile->IOProfileData(PII_COMMAND, bufKey, sLabel);
-			if (cProfileMlang) {
-				cProfileMlang->IOProfileData(PII_COMMAND, bufKey, sLabel);
+			profile->IOProfileData(PII_COMMAND, bufKey, sLabel);
+			if (profileMlang) {
+				profileMlang->IOProfileData(PII_COMMAND, bufKey, sLabel);
 			}
 			if (sLabel == L"") {
 				sLabel = sHandler;		// Labelが無ければハンドラ名で代用
 			}
 			// アイコンの取得
 			swprintf(bufKey, L"C[%d].Icon", nCount);
-			cProfile->IOProfileData(PII_COMMAND, bufKey, sIcon);
-			if (cProfileMlang) {
-				cProfileMlang->IOProfileData(PII_COMMAND, bufKey, sIcon);
+			profile->IOProfileData(PII_COMMAND, bufKey, sIcon);
+			if (profileMlang) {
+				profileMlang->IOProfileData(PII_COMMAND, bufKey, sIcon);
 			}
 
 			AddCommand(sHandler.c_str(), sLabel.c_str(), sIcon.c_str(), false);
@@ -171,8 +171,8 @@ bool Plugin::ReadPluginDefCommand(
 
 // プラグイン定義ファイルのOptionセクションを読み込む	// 2010/3/24 Uchi
 bool Plugin::ReadPluginDefOption(
-	DataProfile *cProfile,
-	DataProfile *cProfileMlang
+	DataProfile* profile,
+	DataProfile* profileMlang
 	)
 {
 	wstring sLabel;
@@ -189,31 +189,31 @@ bool Plugin::ReadPluginDefOption(
 		sKey = sLabel = sType = sDefaultVal= L"";
 		// Keyの取得
 		swprintf(bufKey, L"O[%d].Key", nCount);
-		if (cProfile->IOProfileData(PII_OPTION, bufKey, sKey)) {
+		if (profile->IOProfileData(PII_OPTION, bufKey, sKey)) {
 			// Sectionの取得
 			swprintf(bufKey, L"O[%d].Section", nCount);
-			cProfile->IOProfileData(PII_OPTION, bufKey, sSection_wk);
+			profile->IOProfileData(PII_OPTION, bufKey, sSection_wk);
 			if (!sSection_wk.empty()) {		// 指定が無ければ前を引き継ぐ
 				sSection = sSection_wk;
 			}
 			// ラベルの取得
 			swprintf(bufKey, L"O[%d].Label", nCount);
-			cProfile->IOProfileData(PII_OPTION, bufKey, sLabel);
-			if (cProfileMlang) {
-				cProfileMlang->IOProfileData(PII_OPTION, bufKey, sLabel);
+			profile->IOProfileData(PII_OPTION, bufKey, sLabel);
+			if (profileMlang) {
+				profileMlang->IOProfileData(PII_OPTION, bufKey, sLabel);
 			}
 			// Typeの取得
 			swprintf(bufKey, L"O[%d].Type", nCount);
-			cProfile->IOProfileData(PII_OPTION, bufKey, sType);
+			profile->IOProfileData(PII_OPTION, bufKey, sType);
 			// 項目選択候補
 			swprintf(bufKey, L"O[%d].Select", nCount);
-			cProfile->IOProfileData(PII_OPTION, bufKey, sSelect);
-			if (cProfileMlang) {
-				cProfileMlang->IOProfileData(PII_OPTION, bufKey, sSelect);
+			profile->IOProfileData(PII_OPTION, bufKey, sSelect);
+			if (profileMlang) {
+				profileMlang->IOProfileData(PII_OPTION, bufKey, sSelect);
 			}
 			// デフォルト値
 			swprintf(bufKey, L"O[%d].Default", nCount);
-			cProfile->IOProfileData(PII_OPTION, bufKey, sDefaultVal);
+			profile->IOProfileData(PII_OPTION, bufKey, sDefaultVal);
 
 			if (sSection.empty() || sKey.empty()) {
 				// 設定が無かったら無視
@@ -291,8 +291,8 @@ std::vector<std::wstring> wstring_split(
 
 //!	プラグイン定義ファイルのStringセクションを読み込む
 bool Plugin::ReadPluginDefString(
-	DataProfile* cProfile,
-	DataProfile* cProfileMlang
+	DataProfile* profile,
+	DataProfile* profileMlang
 	)
 {
 	WCHAR bufKey[64];
@@ -301,9 +301,9 @@ bool Plugin::ReadPluginDefString(
 	for (int nCount=1; nCount<MAX_PLUG_STRING; ++nCount) {	// 添え字は１から始める
 		wstring sVal = L"";
 		swprintf(bufKey, L"S[%d]", nCount);
-		if (cProfile->IOProfileData(PII_STRING, bufKey, sVal)) {
-			if (cProfileMlang) {
-				cProfileMlang->IOProfileData(PII_STRING, bufKey, sVal);
+		if (profile->IOProfileData(PII_STRING, bufKey, sVal)) {
+			if (profileMlang) {
+				profileMlang->IOProfileData(PII_STRING, bufKey, sVal);
 			}
 		}
 		m_aStrings.push_back(sVal);

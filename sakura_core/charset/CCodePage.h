@@ -66,7 +66,7 @@ public:
 	static CodeConvertResult CPToUnicode(const Memory& src, NativeW* pDst, int codepageEx);		// CodePage  → Unicodeコード変換 
 	static CodeConvertResult UnicodeToCP(const NativeW& src, Memory* pDst, int codepageEx);		// Unicode   → CodePageコード変換
 
-	typedef std::vector<std::pair<int, std::wstring> > CodePageList;
+	typedef std::vector<std::pair<int, std::wstring>> CodePageList;
 	
 	//GUI用補助関数
 	static CodePage::CodePageList& GetCodePageList();

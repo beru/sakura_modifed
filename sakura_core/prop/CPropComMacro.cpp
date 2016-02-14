@@ -217,7 +217,7 @@ INT_PTR PropMacro::DispatchEvent(
 void PropMacro::SetData(HWND hwndDlg)
 {
 	int index;
-	LVITEM sItem;
+	LVITEM lvItem;
 
 	// マクロデータ
 	HWND hListView = ::GetDlgItem(hwndDlg, IDC_MACROLIST);
@@ -225,26 +225,26 @@ void PropMacro::SetData(HWND hwndDlg)
 	
 	for (index=0; index<MAX_CUSTMACRO; ++index) {
 		auto& macroRec = csMacro.m_macroTable[index];
-		memset_raw(&sItem, 0, sizeof(sItem));
-		sItem.iItem = index;
-		sItem.mask = LVIF_TEXT;
-		sItem.iSubItem = 1;
-		sItem.pszText = macroRec.m_szName;
-		ListView_SetItem(hListView, &sItem);
+		memset_raw(&lvItem, 0, sizeof(lvItem));
+		lvItem.iItem = index;
+		lvItem.mask = LVIF_TEXT;
+		lvItem.iSubItem = 1;
+		lvItem.pszText = macroRec.m_szName;
+		ListView_SetItem(hListView, &lvItem);
 
-		memset_raw(&sItem, 0, sizeof(sItem));
-		sItem.iItem = index;
-		sItem.mask = LVIF_TEXT;
-		sItem.iSubItem = 2;
-		sItem.pszText = macroRec.m_szFile;
-		ListView_SetItem(hListView, &sItem);
+		memset_raw(&lvItem, 0, sizeof(lvItem));
+		lvItem.iItem = index;
+		lvItem.mask = LVIF_TEXT;
+		lvItem.iSubItem = 2;
+		lvItem.pszText = macroRec.m_szFile;
+		ListView_SetItem(hListView, &lvItem);
 
-		memset_raw(&sItem, 0, sizeof(sItem));
-		sItem.iItem = index;
-		sItem.mask = LVIF_TEXT;
-		sItem.iSubItem = 3;
-		sItem.pszText = const_cast<TCHAR*>(macroRec.m_bReloadWhenExecute ? _T("on") : _T("off"));
-		ListView_SetItem(hListView, &sItem);
+		memset_raw(&lvItem, 0, sizeof(lvItem));
+		lvItem.iItem = index;
+		lvItem.mask = LVIF_TEXT;
+		lvItem.iSubItem = 3;
+		lvItem.pszText = const_cast<TCHAR*>(macroRec.m_bReloadWhenExecute ? _T("on") : _T("off"));
+		ListView_SetItem(hListView, &lvItem);
 
 		// 自動実行マクロ	// 2006.09.01 ryoji
 		TCHAR szText[8];
@@ -258,12 +258,12 @@ void PropMacro::SetData(HWND hwndDlg)
 		if (index == csMacro.m_nMacroOnSave) {
 			::lstrcat(szText, _T("S"));
 		}
-		memset_raw(&sItem, 0, sizeof(sItem));
-		sItem.iItem = index;
-		sItem.mask = LVIF_TEXT;
-		sItem.iSubItem = 4;
-		sItem.pszText = szText;
-		ListView_SetItem(hListView, &sItem);
+		memset_raw(&lvItem, 0, sizeof(lvItem));
+		lvItem.iItem = index;
+		lvItem.mask = LVIF_TEXT;
+		lvItem.iSubItem = 4;
+		lvItem.pszText = szText;
+		ListView_SetItem(hListView, &lvItem);
 	}
 	
 	//	マクロディレクトリ
@@ -295,7 +295,7 @@ void PropMacro::SetData(HWND hwndDlg)
 int PropMacro::GetData(HWND hwndDlg)
 {
 	int index;
-	LVITEM sItem;
+	LVITEM lvItem;
 
 	auto& csMacro = m_common.m_macro;
 
@@ -308,32 +308,32 @@ int PropMacro::GetData(HWND hwndDlg)
 	HWND hListView = ::GetDlgItem(hwndDlg, IDC_MACROLIST);
 
 	for (index=0; index<MAX_CUSTMACRO; ++index) {
-		memset_raw(&sItem, 0, sizeof(sItem));
-		sItem.iItem = index;
-		sItem.mask = LVIF_TEXT;
-		sItem.iSubItem = 1;
-		sItem.cchTextMax = MACRONAME_MAX - 1;
+		memset_raw(&lvItem, 0, sizeof(lvItem));
+		lvItem.iItem = index;
+		lvItem.mask = LVIF_TEXT;
+		lvItem.iSubItem = 1;
+		lvItem.cchTextMax = MACRONAME_MAX - 1;
 //@@@ 2002.01.03 YAZAKI 共通設定『マクロ』がタブを切り替えるだけで設定が保存されないように。
-		sItem.pszText = /*m_pShareData->*/csMacro.m_macroTable[index].m_szName;
-		ListView_GetItem(hListView, &sItem);
+		lvItem.pszText = /*m_pShareData->*/csMacro.m_macroTable[index].m_szName;
+		ListView_GetItem(hListView, &lvItem);
 
-		memset_raw(&sItem, 0, sizeof(sItem));
-		sItem.iItem = index;
-		sItem.mask = LVIF_TEXT;
-		sItem.iSubItem = 2;
-		sItem.cchTextMax = _MAX_PATH;
+		memset_raw(&lvItem, 0, sizeof(lvItem));
+		lvItem.iItem = index;
+		lvItem.mask = LVIF_TEXT;
+		lvItem.iSubItem = 2;
+		lvItem.cchTextMax = _MAX_PATH;
 //@@@ 2002.01.03 YAZAKI 共通設定『マクロ』がタブを切り替えるだけで設定が保存されないように。
-		sItem.pszText = /*m_pShareData->*/csMacro.m_macroTable[index].m_szFile;
-		ListView_GetItem(hListView, &sItem);
+		lvItem.pszText = /*m_pShareData->*/csMacro.m_macroTable[index].m_szFile;
+		ListView_GetItem(hListView, &lvItem);
 
-		memset_raw(&sItem, 0, sizeof(sItem));
-		sItem.iItem = index;
-		sItem.mask = LVIF_TEXT;
-		sItem.iSubItem = 3;
+		memset_raw(&lvItem, 0, sizeof(lvItem));
+		lvItem.iItem = index;
+		lvItem.mask = LVIF_TEXT;
+		lvItem.iSubItem = 3;
 		TCHAR buf[MAX_PATH];
-		sItem.pszText = buf;
-		sItem.cchTextMax = MAX_PATH;
-		ListView_GetItem(hListView, &sItem);
+		lvItem.pszText = buf;
+		lvItem.cchTextMax = MAX_PATH;
+		ListView_GetItem(hListView, &lvItem);
 		if (_tcscmp(buf, _T("on")) == 0) {
 			csMacro.m_macroTable[index].m_bReloadWhenExecute = true;
 		}else {
@@ -341,14 +341,14 @@ int PropMacro::GetData(HWND hwndDlg)
 		}
 
 		// 自動実行マクロ	// 2006.09.01 ryoji
-		memset_raw(&sItem, 0, sizeof(sItem));
-		sItem.iItem = index;
-		sItem.mask = LVIF_TEXT;
-		sItem.iSubItem = 4;
+		memset_raw(&lvItem, 0, sizeof(lvItem));
+		lvItem.iItem = index;
+		lvItem.mask = LVIF_TEXT;
+		lvItem.iSubItem = 4;
 		TCHAR szText[8];
-		sItem.pszText = szText;
-		sItem.cchTextMax = _countof(szText);
-		ListView_GetItem(hListView, &sItem);
+		lvItem.pszText = szText;
+		lvItem.cchTextMax = _countof(szText);
+		ListView_GetItem(hListView, &lvItem);
 		int nLen = ::lstrlen(szText);
 		for (int i=0; i<nLen; ++i) {
 			if (szText[i] == _T('O')) {
@@ -426,16 +426,16 @@ void PropMacro::InitDialog(HWND hwndDlg)
 
 	//	Index部分の登録
 	for (pos=0; pos<MAX_CUSTMACRO; ++pos) {
-		LVITEM sItem;
+		LVITEM lvItem;
 		TCHAR buf[4];
-		memset_raw(&sItem, 0, sizeof(sItem));
-		sItem.mask = LVIF_TEXT | LVIF_PARAM;
-		sItem.iItem = pos;
-		sItem.iSubItem = 0;
+		memset_raw(&lvItem, 0, sizeof(lvItem));
+		lvItem.mask = LVIF_TEXT | LVIF_PARAM;
+		lvItem.iItem = pos;
+		lvItem.iSubItem = 0;
 		_itot(pos, buf, 10);
-		sItem.pszText = buf;
-		sItem.lParam = pos;
-		ListView_InsertItem(hListView, &sItem);
+		lvItem.pszText = buf;
+		lvItem.lParam = pos;
+		ListView_InsertItem(hListView, &lvItem);
 	}
 	
 	// 登録先指定 ComboBoxの初期化
@@ -458,7 +458,7 @@ void PropMacro::InitDialog(HWND hwndDlg)
 void PropMacro::SetMacro2List_Macro(HWND hwndDlg)
 {
 	int index;
-	LVITEM sItem;
+	LVITEM lvItem;
 	
 	HWND hListView = ::GetDlgItem(hwndDlg, IDC_MACROLIST);
 	HWND hNum = ::GetDlgItem(hwndDlg, IDC_COMBO_MACROID);
@@ -471,33 +471,33 @@ void PropMacro::SetMacro2List_Macro(HWND hwndDlg)
 	}
 
 	// マクロ名
-	memset_raw(&sItem, 0, sizeof(sItem));
-	sItem.iItem = index;
-	sItem.mask = LVIF_TEXT;
-	sItem.iSubItem = 1;
+	memset_raw(&lvItem, 0, sizeof(lvItem));
+	lvItem.iItem = index;
+	lvItem.mask = LVIF_TEXT;
+	lvItem.iSubItem = 1;
 	
 	TCHAR buf[256];
 	::DlgItem_GetText(hwndDlg, IDC_MACRONAME, buf, MACRONAME_MAX);
-	sItem.pszText = buf;
-	ListView_SetItem(hListView, &sItem);
+	lvItem.pszText = buf;
+	ListView_SetItem(hListView, &lvItem);
 
 	// ファイル名
-	memset_raw(&sItem, 0, sizeof(sItem));
-	sItem.iItem = index;
-	sItem.mask = LVIF_TEXT;
-	sItem.iSubItem = 2;
+	memset_raw(&lvItem, 0, sizeof(lvItem));
+	lvItem.iItem = index;
+	lvItem.mask = LVIF_TEXT;
+	lvItem.iSubItem = 2;
 
 	::DlgItem_GetText(hwndDlg, IDC_MACROPATH, buf, _MAX_PATH);
-	sItem.pszText = buf;
-	ListView_SetItem(hListView, &sItem);
+	lvItem.pszText = buf;
+	ListView_SetItem(hListView, &lvItem);
 
 	// チェック
-	memset_raw(&sItem, 0, sizeof(sItem));
-	sItem.iItem = index;
-	sItem.mask = LVIF_TEXT;
-	sItem.iSubItem = 3;
-	sItem.pszText = const_cast<TCHAR*>(IsDlgButtonChecked(hwndDlg, IDC_CHECK_RELOADWHENEXECUTE) ? _T("on") : _T("off"));
-	ListView_SetItem(hListView, &sItem);
+	memset_raw(&lvItem, 0, sizeof(lvItem));
+	lvItem.iItem = index;
+	lvItem.mask = LVIF_TEXT;
+	lvItem.iSubItem = 3;
+	lvItem.pszText = const_cast<TCHAR*>(IsDlgButtonChecked(hwndDlg, IDC_CHECK_RELOADWHENEXECUTE) ? _T("on") : _T("off"));
+	ListView_SetItem(hListView, &lvItem);
 
 	// 自動実行マクロ	// 2006.09.01 ryoji
 	int nMacroOnOpened = -1;
@@ -506,13 +506,13 @@ void PropMacro::SetMacro2List_Macro(HWND hwndDlg)
 	TCHAR szText[8];
 	int iItem;
 	for (iItem=0; iItem<MAX_CUSTMACRO; ++iItem) {
-		memset_raw(&sItem, 0, sizeof(sItem));
-		sItem.iItem = iItem;
-		sItem.mask = LVIF_TEXT;
-		sItem.iSubItem = 4;
-		sItem.pszText = szText;
-		sItem.cchTextMax = _countof(szText);
-		ListView_GetItem(hListView, &sItem);
+		memset_raw(&lvItem, 0, sizeof(lvItem));
+		lvItem.iItem = iItem;
+		lvItem.mask = LVIF_TEXT;
+		lvItem.iSubItem = 4;
+		lvItem.pszText = szText;
+		lvItem.cchTextMax = _countof(szText);
+		ListView_GetItem(hListView, &lvItem);
 		int nLen = ::lstrlen(szText);
 		for (int i=0; i<nLen; ++i) {
 			if (szText[i] == _T('O')) {
@@ -552,12 +552,12 @@ void PropMacro::SetMacro2List_Macro(HWND hwndDlg)
 		if (iItem == nMacroOnSave) {
 			::lstrcat(szText, _T("S"));
 		}
-		memset_raw(&sItem, 0, sizeof(sItem));
-		sItem.iItem = iItem;
-		sItem.mask = LVIF_TEXT;
-		sItem.iSubItem = 4;
-		sItem.pszText = szText;
-		ListView_SetItem(hListView, &sItem);
+		memset_raw(&lvItem, 0, sizeof(lvItem));
+		lvItem.iItem = iItem;
+		lvItem.mask = LVIF_TEXT;
+		lvItem.iSubItem = 4;
+		lvItem.pszText = szText;
+		ListView_SetItem(hListView, &lvItem);
 	}
 }
 
@@ -656,33 +656,33 @@ void PropMacro::CheckListPosition_Macro(HWND hwndDlg)
 	Combo_SetCurSel(hNum, nLastPos_Macro);
 	
 	TCHAR buf[MAX_PATH + MACRONAME_MAX];	// MAX_PATHとMACRONAME_MAXの両方より大きい値
-	LVITEM sItem = {0};
-	sItem.iItem = current;
-	sItem.mask = LVIF_TEXT;
-	sItem.iSubItem = 1;
-	sItem.pszText = buf;
-	sItem.cchTextMax = MACRONAME_MAX;
+	LVITEM lvItem = {0};
+	lvItem.iItem = current;
+	lvItem.mask = LVIF_TEXT;
+	lvItem.iSubItem = 1;
+	lvItem.pszText = buf;
+	lvItem.cchTextMax = MACRONAME_MAX;
 
-	ListView_GetItem(hListView, &sItem);
+	ListView_GetItem(hListView, &lvItem);
 	::DlgItem_SetText(hwndDlg, IDC_MACRONAME, buf);
 
-	memset_raw(&sItem, 0, sizeof(sItem));
-	sItem.iItem = current;
-	sItem.mask = LVIF_TEXT;
-	sItem.iSubItem = 2;
-	sItem.pszText = buf;
-	sItem.cchTextMax = MAX_PATH;
+	memset_raw(&lvItem, 0, sizeof(lvItem));
+	lvItem.iItem = current;
+	lvItem.mask = LVIF_TEXT;
+	lvItem.iSubItem = 2;
+	lvItem.pszText = buf;
+	lvItem.cchTextMax = MAX_PATH;
 
-	ListView_GetItem(hListView, &sItem);
+	ListView_GetItem(hListView, &lvItem);
 	::DlgItem_SetText(hwndDlg, IDC_MACROPATH, buf);
 
-	memset_raw(&sItem, 0, sizeof(sItem));
-	sItem.iItem = current;
-	sItem.mask = LVIF_TEXT;
-	sItem.iSubItem = 3;
-	sItem.pszText = buf;
-	sItem.cchTextMax = MAX_PATH;
-	ListView_GetItem(hListView, &sItem);
+	memset_raw(&lvItem, 0, sizeof(lvItem));
+	lvItem.iItem = current;
+	lvItem.mask = LVIF_TEXT;
+	lvItem.iSubItem = 3;
+	lvItem.pszText = buf;
+	lvItem.cchTextMax = MAX_PATH;
+	ListView_GetItem(hListView, &lvItem);
 	if (_tcscmp(buf, _T("on")) == 0) {
 		::CheckDlgButton(hwndDlg, IDC_CHECK_RELOADWHENEXECUTE, true);
 	}else {
@@ -690,14 +690,14 @@ void PropMacro::CheckListPosition_Macro(HWND hwndDlg)
 	}
 
 	// 自動実行マクロ	// 2006.09.01 ryoji
-	memset_raw(&sItem, 0, sizeof(sItem));
-	sItem.iItem = current;
-	sItem.mask = LVIF_TEXT;
-	sItem.iSubItem = 4;
+	memset_raw(&lvItem, 0, sizeof(lvItem));
+	lvItem.iItem = current;
+	lvItem.mask = LVIF_TEXT;
+	lvItem.iSubItem = 4;
 	TCHAR szText[8];
-	sItem.pszText = szText;
-	sItem.cchTextMax = _countof(szText);
-	ListView_GetItem(hListView, &sItem);
+	lvItem.pszText = szText;
+	lvItem.cchTextMax = _countof(szText);
+	ListView_GetItem(hListView, &lvItem);
 	::CheckDlgButton(hwndDlg, IDC_CHECK_MacroOnOpened, false);
 	::CheckDlgButton(hwndDlg, IDC_CHECK_MacroOnTypeChanged, false);
 	::CheckDlgButton(hwndDlg, IDC_CHECK_MacroOnSave, false);

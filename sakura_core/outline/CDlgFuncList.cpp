@@ -2193,9 +2193,9 @@ BOOL DlgFuncList::OnNotify(WPARAM wParam, LPARAM lParam)
 					break;
 				case CDDS_ITEMPREPAINT:
 					{	// 選択アイテムを反転表示にする
-						const TypeConfig* TypeDataPtr = &(pEditView->m_pEditDoc->m_docType.GetDocumentAttribute());
-						COLORREF clrText = TypeDataPtr->m_colorInfoArr[COLORIDX_TEXT].m_colorAttr.m_cTEXT;
-						COLORREF clrTextBk = TypeDataPtr->m_colorInfoArr[COLORIDX_TEXT].m_colorAttr.m_cBACK;
+						const TypeConfig* typeDataPtr = &(pEditView->m_pEditDoc->m_docType.GetDocumentAttribute());
+						COLORREF clrText = typeDataPtr->m_colorInfoArr[COLORIDX_TEXT].m_colorAttr.m_cTEXT;
+						COLORREF clrTextBk = typeDataPtr->m_colorInfoArr[COLORIDX_TEXT].m_colorAttr.m_cBACK;
 						if (hwndList == pnmh->hwndFrom) {
 							//if (lpnmcd->uItemState & CDIS_SELECTED) {	// 非選択のアイテムもすべて CDIS_SELECTED で来る？
 							if (ListView_GetItemState(hwndList, lpnmcd->dwItemSpec, LVIS_SELECTED)) {
@@ -2384,7 +2384,7 @@ BOOL DlgFuncList::OnDestroy(void)
 
 	// アウトライン ■位置とサイズを記憶する	// 20060201 aroka
 	// 前提条件：m_lParam が Dialog::OnDestroy でクリアされないこと
-	EditView* pEditView=(EditView*)m_lParam;
+	EditView* pEditView = (EditView*)m_lParam;
 	HWND hwndEdit = pEditView->m_pEditWnd->GetHwnd();
 	if (!IsDocking() && m_pShareData->m_common.m_outline.m_bRememberOutlineWindowPos) {
 		// 親のウィンドウ位置・サイズを記憶
@@ -2958,10 +2958,10 @@ INT_PTR DlgFuncList::OnNcMouseMove(
 
 		// ツールチップ更新
 		TOOLINFO ti = {0};
-		ti.cbSize       = CCSIZEOF_STRUCT(TOOLINFO, lpszText);
-		ti.hwnd         = GetHwnd();
-		ti.hinst        = m_hInstance;
-		ti.uId          = (UINT_PTR)GetHwnd();
+		ti.cbSize	= CCSIZEOF_STRUCT(TOOLINFO, lpszText);
+		ti.hwnd		= GetHwnd();
+		ti.hinst	= m_hInstance;
+		ti.uId		= (UINT_PTR)GetHwnd();
 		switch (m_nHilightedBtn) {
 		case 0: ti.lpszText = const_cast<TCHAR*>(LS(STR_DLGFNCLST_TIP_CLOSE)); break;
 		case 1: ti.lpszText = const_cast<TCHAR*>(LS(STR_DLGFNCLST_TIP_WIN)); break;
@@ -3216,7 +3216,9 @@ INT_PTR DlgFuncList::OnNcPaint(
 	BOOL bThemeActive = UxTheme::getInstance()->IsThemeActive();
 	BOOL bGradient = FALSE;
 	::SystemParametersInfo(SPI_GETGRADIENTCAPTIONS, 0, &bGradient, 0);
-	if (!bThemeActive) bGradient = FALSE;	// 適当に調整
+	if (!bThemeActive) {
+		bGradient = FALSE;	// 適当に調整
+	}
 	HWND hwndFocus = ::GetFocus();
 	BOOL bActive = (GetHwnd() == hwndFocus || ::IsChild(GetHwnd(), hwndFocus));
 	RECT rcCaption;
@@ -3803,7 +3805,7 @@ BOOL DlgFuncList::Track(POINT ptDrag)
 	struct LockWindowUpdate {
 		LockWindowUpdate() { ::LockWindowUpdate(::GetDesktopWindow()); }
 		~LockWindowUpdate() { ::LockWindowUpdate(NULL); }
-	} sLockWindowUpdate;
+	} lockWindowUpdate;
 
 	const SIZE sizeFull = {8, 8};	// フローティング配置用の枠線の太さ
 	const SIZE sizeHalf = {4, 4};	// ドッキング配置用の枠線の太さ
@@ -3961,13 +3963,13 @@ void DlgFuncList::LoadFileTreeSetting(
 		auto_strcat( szPath, _T("\\") );
 		int maxDir = DlgTagJumpList::CalcMaxUpDirectory( szPath );
 		for (int i=0; i<=maxDir; ++i) {
-			DataProfile cProfile;
-			cProfile.SetReadingMode();
+			DataProfile profile;
+			profile.SetReadingMode();
 			std::tstring strIniFileName;
 			strIniFileName += szPath;
 			strIniFileName += CommonSet().m_fileTreeDefIniName;
-			if (cProfile.ReadProfile(strIniFileName.c_str())) {
-				ImpExpFileTree::IO_FileTreeIni(cProfile, data.m_aItems);
+			if (profile.ReadProfile(strIniFileName.c_str())) {
+				ImpExpFileTree::IO_FileTreeIni(profile, data.m_aItems);
 				data.m_eFileTreeSettingLoadType = FileTreeSettingFromType::File;
 				iniDirPath = szPath;
 				CutLastYenFromDirectoryPath( iniDirPath );
@@ -3981,8 +3983,8 @@ void DlgFuncList::LoadFileTreeSetting(
 		// デフォルトプロジェクトファイル読み込み
 		bool bReadIni = false;
 		if (pFileTree->m_szProjectIni[0] != _T('\0')) {
-			DataProfile cProfile;
-			cProfile.SetReadingMode();
+			DataProfile profile;
+			profile.SetReadingMode();
 			const TCHAR* pszIniFileName;
 			TCHAR szDir[_MAX_PATH * 2];
 			if (_IS_REL_PATH( pFileTree->m_szProjectIni )) {
@@ -3992,8 +3994,8 @@ void DlgFuncList::LoadFileTreeSetting(
 			}else {
 				pszIniFileName = pFileTree->m_szProjectIni;
 			}
-			if (cProfile.ReadProfile(pszIniFileName)) {
-				ImpExpFileTree::IO_FileTreeIni(cProfile, data.m_aItems);
+			if (profile.ReadProfile(pszIniFileName)) {
+				ImpExpFileTree::IO_FileTreeIni(profile, data.m_aItems);
 				data.m_szLoadProjectIni = pszIniFileName;
 				bReadIni = true;
 			}

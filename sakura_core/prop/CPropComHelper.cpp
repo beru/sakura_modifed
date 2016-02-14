@@ -126,8 +126,8 @@ INT_PTR PropHelper::DispatchEvent(
 			switch (wID) {
 			case IDC_BUTTON_OPENHELP1:	// 外部ヘルプ１の「参照...」ボタン
 				{
-					DlgOpenFile	cDlgOpenFile;
-					TCHAR			szPath[_MAX_PATH];
+					DlgOpenFile	dlgOpenFile;
+					TCHAR		szPath[_MAX_PATH];
 					// 2003.06.23 Moca 相対パスは実行ファイルからのパス
 					// 2007.05.21 ryoji 相対パスは設定ファイルからのパスを優先
 					if (_IS_REL_PATH(csHelper.m_szExtHelp)) {
@@ -136,13 +136,13 @@ INT_PTR PropHelper::DispatchEvent(
 						_tcscpy(szPath, csHelper.m_szExtHelp);
 					}
 					// ファイルオープンダイアログの初期化
-					cDlgOpenFile.Create(
+					dlgOpenFile.Create(
 						G_AppInstance(),
 						hwndDlg,
 						_T("*.hlp;*.chm;*.col"),
 						szPath
 					);
-					if (cDlgOpenFile.DoModal_GetOpenFileName(szPath)) {
+					if (dlgOpenFile.DoModal_GetOpenFileName(szPath)) {
 						_tcscpy(csHelper.m_szExtHelp, szPath);
 						::DlgItem_SetText(hwndDlg, IDC_EDIT_EXTHELP1, csHelper.m_szExtHelp);
 					}
@@ -150,8 +150,8 @@ INT_PTR PropHelper::DispatchEvent(
 				return TRUE;
 			case IDC_BUTTON_OPENEXTHTMLHELP:	// 外部HTMLヘルプの「参照...」ボタン
 				{
-					DlgOpenFile	cDlgOpenFile;
-					TCHAR			szPath[_MAX_PATH];
+					DlgOpenFile	dlgOpenFile;
+					TCHAR		szPath[_MAX_PATH];
 					// 2003.06.23 Moca 相対パスは実行ファイルからのパス
 					// 2007.05.21 ryoji 相対パスは設定ファイルからのパスを優先
 					if (_IS_REL_PATH(csHelper.m_szExtHtmlHelp)) {
@@ -160,13 +160,13 @@ INT_PTR PropHelper::DispatchEvent(
 						_tcscpy(szPath, csHelper.m_szExtHtmlHelp);
 					}
 					// ファイルオープンダイアログの初期化
-					cDlgOpenFile.Create(
+					dlgOpenFile.Create(
 						G_AppInstance(),
 						hwndDlg,
 						_T("*.chm;*.col"),
 						szPath
 					);
-					if (cDlgOpenFile.DoModal_GetOpenFileName(szPath)) {
+					if (dlgOpenFile.DoModal_GetOpenFileName(szPath)) {
 						_tcscpy(csHelper.m_szExtHtmlHelp, szPath);
 						::DlgItem_SetText(hwndDlg, IDC_EDIT_EXTHTMLHELP, csHelper.m_szExtHtmlHelp);
 					}
@@ -193,8 +193,8 @@ INT_PTR PropHelper::DispatchEvent(
 			// ai 02/05/21 Add E
 			case IDC_BUTTON_OPENMDLL:	// MIGEMODLL場所指定「参照...」ボタン
 				{
-					DlgOpenFile	cDlgOpenFile;
-					TCHAR			szPath[_MAX_PATH];
+					DlgOpenFile	dlgOpenFile;
+					TCHAR		szPath[_MAX_PATH];
 					// 2003.06.23 Moca 相対パスは実行ファイルからのパス
 					// 2007.05.21 ryoji 相対パスは設定ファイルからのパスを優先
 					if (_IS_REL_PATH(csHelper.m_szMigemoDll)) {
@@ -203,13 +203,13 @@ INT_PTR PropHelper::DispatchEvent(
 						_tcscpy(szPath, csHelper.m_szMigemoDll);
 					}
 					// ファイルオープンダイアログの初期化
-					cDlgOpenFile.Create(
+					dlgOpenFile.Create(
 						G_AppInstance(),
 						hwndDlg,
 						_T("*.dll"),
 						szPath
 					);
-					if (cDlgOpenFile.DoModal_GetOpenFileName(szPath)) {
+					if (dlgOpenFile.DoModal_GetOpenFileName(szPath)) {
 						_tcscpy(csHelper.m_szMigemoDll, szPath);
 						::DlgItem_SetText(hwndDlg, IDC_EDIT_MIGEMO_DLL, csHelper.m_szMigemoDll);
 					}

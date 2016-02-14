@@ -45,9 +45,9 @@
 // スクリプトに渡されるオブジェクトの型情報
 class IfObjTypeInfo: public ImplementsIUnknown<ITypeInfo> {
 private:
-	const IfObj::CMethodInfoList& m_MethodsRef;
+	const IfObj::CMethodInfoList& m_methodsRef;
 	const std::wstring& m_sName;
-	TYPEATTR m_TypeAttr;
+	TYPEATTR m_typeAttr;
 public:
 	IfObjTypeInfo(const IfObj::CMethodInfoList& methods, const std::wstring& sName);
 
@@ -57,7 +57,7 @@ public:
 #ifdef TEST
 		DEBUG_TRACE(_T("GetTypeAttr\n"));
 #endif
-		*ppTypeAttr = &m_TypeAttr;
+		*ppTypeAttr = &m_typeAttr;
 		return S_OK;
 	}
         
@@ -135,9 +135,9 @@ public:
 			if (pBstrName) {
 				*pBstrName = SysAllocString( m_sName.c_str() );
 			}
-		}else if (0 <= memid && memid < (int)m_MethodsRef.size()) {
+		}else if (0 <= memid && memid < (int)m_methodsRef.size()) {
 			if (pBstrName) {
-				*pBstrName = SysAllocString( m_MethodsRef[memid].Name );
+				*pBstrName = SysAllocString( m_methodsRef[memid].Name );
 			}
 		}else {
 			return TYPE_E_ELEMENTNOTFOUND;
@@ -221,12 +221,12 @@ IfObjTypeInfo::IfObjTypeInfo(const IfObj::CMethodInfoList& methods,
 							   const std::wstring& sName)
 	:
 	ImplementsIUnknown<ITypeInfo>(),
-	m_MethodsRef(methods),
+	m_methodsRef(methods),
 	m_sName(sName)
 { 
-	ZeroMemory(&m_TypeAttr, sizeof(m_TypeAttr));
-	m_TypeAttr.cImplTypes = 0; // 親クラスのITypeInfoの数
-	m_TypeAttr.cFuncs = (WORD)m_MethodsRef.size();
+	ZeroMemory(&m_typeAttr, sizeof(m_typeAttr));
+	m_typeAttr.cImplTypes = 0; // 親クラスのITypeInfoの数
+	m_typeAttr.cFuncs = (WORD)m_methodsRef.size();
 }
 
 HRESULT STDMETHODCALLTYPE IfObjTypeInfo::GetFuncDesc(
@@ -236,7 +236,7 @@ HRESULT STDMETHODCALLTYPE IfObjTypeInfo::GetFuncDesc(
 #ifdef TEST
 	DEBUG_TRACE(_T("GetFuncDesc\n"));
 #endif
-	*ppFuncDesc = const_cast<FUNCDESC __RPC_FAR *>(&(m_MethodsRef[index].Desc));
+	*ppFuncDesc = const_cast<FUNCDESC __RPC_FAR *>(&(m_methodsRef[index].Desc));
 	return S_OK;
 }
 
@@ -251,7 +251,7 @@ HRESULT STDMETHODCALLTYPE IfObjTypeInfo::GetNames(
 #endif
 	*pcNames = 1;
 	if (cMaxNames > 0)
-		*rgBstrNames = SysAllocString(m_MethodsRef[memid].Name);
+		*rgBstrNames = SysAllocString(m_methodsRef[memid].Name);
 	return S_OK;
 }
 
@@ -266,16 +266,16 @@ IfObj::IfObj(const wchar_t* name, bool isGlobal)
 	m_sName(name),
 	m_isGlobal(isGlobal),
 	m_Owner(0),
-	m_Methods(),
-	m_TypeInfo(NULL)
+	m_methods(),
+	m_typeInfo(NULL)
 { 
 };
 
 // デストラクタ
 IfObj::~IfObj()
 {
-	if (m_TypeInfo) {
-		m_TypeInfo->Release();
+	if (m_typeInfo) {
+		m_typeInfo->Release();
 	}
 }
 	
@@ -305,9 +305,9 @@ HRESULT STDMETHODCALLTYPE IfObj::Invoke(
 	UINT FAR* puArgErr
 	)
 {
-	if ((unsigned)dispidMember < m_Methods.size()) {
-		return (this->* (m_Methods[dispidMember].Method))(
-			m_Methods[dispidMember].ID,
+	if ((unsigned)dispidMember < m_methods.size()) {
+		return (this->* (m_methods[dispidMember].Method))(
+			m_methods[dispidMember].ID,
 			pdispparams,
 			pvarResult,
 			m_Owner->GetData()
@@ -322,11 +322,11 @@ HRESULT STDMETHODCALLTYPE IfObj::GetTypeInfo(
 	/* [in] */ LCID lcid,
 	/* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo)
 {
-	if (!m_TypeInfo) {
-		m_TypeInfo = new IfObjTypeInfo(this->m_Methods, this->m_sName);
-		m_TypeInfo->AddRef();
+	if (!m_typeInfo) {
+		m_typeInfo = new IfObjTypeInfo(this->m_methods, this->m_sName);
+		m_typeInfo->AddRef();
 	}
-	(*ppTInfo) = m_TypeInfo;
+	(*ppTInfo) = m_typeInfo;
 	(*ppTInfo)->AddRef();
 	return S_OK;
 }
@@ -353,10 +353,10 @@ HRESULT STDMETHODCALLTYPE IfObj::GetIDsOfNames(
 		// 大量にメッセージが出るので注意。
 		//DEBUG_TRACE(_T("GetIDsOfNames: %ls\n"), rgszNames[i]);
 #endif
-		size_t nSize = m_Methods.size();
+		size_t nSize = m_methods.size();
 		for (size_t j=0; j<nSize; ++j) {
 			// Nov. 10, 2003 FILE Win9Xでは、[lstrcmpiW]が無効のため、[_wcsicmp]に修正
-			if (_wcsicmp(rgszNames[i], m_Methods[j].Name) == 0) {
+			if (_wcsicmp(rgszNames[i], m_methods[j].Name) == 0) {
 				rgdispid[i] = j;
 				goto Found;
 			}
@@ -378,9 +378,9 @@ void IfObj::AddMethod(
 	CIfObjMethod	Method
 )
 {
-	// this->m_TypeInfoが NULLでなければ AddMethod()は反映されない。
-	m_Methods.push_back(MethodInfo());
-	MethodInfo* info = &m_Methods[m_Methods.size() - 1];
+	// this->m_typeInfoが NULLでなければ AddMethod()は反映されない。
+	m_methods.push_back(MethodInfo());
+	MethodInfo* info = &m_methods[m_methods.size() - 1];
 	ZeroMemory(info, sizeof(MethodInfo));
 	info->Desc.invkind = INVOKE_FUNC;
 	info->Desc.cParams = (SHORT)ArgumentCount + 1; // 戻り値の分

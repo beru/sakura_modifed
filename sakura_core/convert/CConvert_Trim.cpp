@@ -24,17 +24,17 @@ bool Converter_Trim::DoConvert(NativeW* pData)
 	int			nBgn;
 	int			i, j;
 	int			nPosDes;
-	Eol		cEol;
+	Eol		eol;
 	int			nCharChars;
 
 	nBgn = 0;
 	nPosDes = 0;
 	// 変換後に必要なバイト数を調べる
-	while ((pLine = GetNextLineW(pData->GetStringPtr(), pData->GetStringLength(), &nLineLen, &nBgn, &cEol, m_bExtEol))) { // 2002/2/10 aroka CMemory変更
+	while ((pLine = GetNextLineW(pData->GetStringPtr(), pData->GetStringLength(), &nLineLen, &nBgn, &eol, m_bExtEol))) { // 2002/2/10 aroka CMemory変更
 		if (0 < nLineLen) {
 			nPosDes += nLineLen;
 		}
-		nPosDes += cEol.GetLen();
+		nPosDes += eol.GetLen();
 	}
 	if (0 >= nPosDes) {
 		return true;
@@ -45,7 +45,7 @@ bool Converter_Trim::DoConvert(NativeW* pData)
 	nPosDes = 0;
 	// LTRIM
 	if (m_bLeft) {
-		while ((pLine = GetNextLineW(pData->GetStringPtr(), pData->GetStringLength(), &nLineLen, &nBgn, &cEol, m_bExtEol))) { // 2002/2/10 aroka CMemory変更
+		while ((pLine = GetNextLineW(pData->GetStringPtr(), pData->GetStringLength(), &nLineLen, &nBgn, &eol, m_bExtEol))) { // 2002/2/10 aroka CMemory変更
 			if (0 < nLineLen) {
 				for (i=0; i<=nLineLen; ++i) {
 					if (WCODE::IsBlank(pLine[i])) {
@@ -59,12 +59,12 @@ bool Converter_Trim::DoConvert(NativeW* pData)
 					nPosDes += nLineLen - i;
 				}
 			}
-			wmemcpy(&pDes[nPosDes], cEol.GetValue2(), cEol.GetLen());
-			nPosDes += cEol.GetLen();
+			wmemcpy(&pDes[nPosDes], eol.GetValue2(), eol.GetLen());
+			nPosDes += eol.GetLen();
 		}
 	}else {
 		// RTRIM
-		while ((pLine = GetNextLineW(pData->GetStringPtr(), pData->GetStringLength(), &nLineLen, &nBgn, &cEol, m_bExtEol))) { // 2002/2/10 aroka CMemory変更
+		while ((pLine = GetNextLineW(pData->GetStringPtr(), pData->GetStringLength(), &nLineLen, &nBgn, &eol, m_bExtEol))) { // 2002/2/10 aroka CMemory変更
 			if (0 < nLineLen) {
 				// 2005.10.11 ryoji 右から遡るのではなく左から探すように修正（"ａ@" の右２バイトが全角空白と判定される問題の対処）
 				i = j = 0;
@@ -80,8 +80,8 @@ bool Converter_Trim::DoConvert(NativeW* pData)
 					nPosDes += j;
 				}
 			}
-			wmemcpy(&pDes[nPosDes], cEol.GetValue2(), cEol.GetLen());
-			nPosDes += cEol.GetLen();
+			wmemcpy(&pDes[nPosDes], eol.GetValue2(), eol.GetLen());
+			nPosDes += eol.GetLen();
 		}
 	}
 	pDes[nPosDes] = L'\0';

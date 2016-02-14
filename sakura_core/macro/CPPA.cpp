@@ -181,20 +181,20 @@ bool PPA::InitDllImp()
 	// Jun. 16, 2003 genta 一時作業エリア
 	char buf[1024];
 	// コマンドに置き換えられない関数 ＝ PPA無しでは使えない。。。
-	for (int i=0; SMacroMgr::m_MacroFuncInfoArr[i].m_pszFuncName; ++i) {
+	for (int i=0; SMacroMgr::m_macroFuncInfoArr[i].m_pszFuncName; ++i) {
 		// 2003.06.08 Moca メモリーリークの修正
 		// 2003.06.16 genta バッファを外から与えるように
 		// 関数登録用文字列を作成する
-		GetDeclarations(SMacroMgr::m_MacroFuncInfoArr[i], buf);
+		GetDeclarations(SMacroMgr::m_macroFuncInfoArr[i], buf);
 		SetDefProc(buf);
 	}
 
 	// コマンドに置き換えられる関数 ＝ PPA無しでも使える。
-	for (int i=0; SMacroMgr::m_MacroFuncInfoCommandArr[i].m_pszFuncName; ++i) {
+	for (int i=0; SMacroMgr::m_macroFuncInfoCommandArr[i].m_pszFuncName; ++i) {
 		// 2003.06.08 Moca メモリーリークの修正
 		// 2003.06.16 genta バッファを外から与えるように
 		// 関数登録用文字列を作成する
-		GetDeclarations(SMacroMgr::m_MacroFuncInfoCommandArr[i], buf);
+		GetDeclarations(SMacroMgr::m_macroFuncInfoCommandArr[i], buf);
 		SetDefProc(buf);
 	}
 	return true; 
@@ -340,16 +340,16 @@ void __stdcall PPA::stdError(int Err_CD, const char* Err_Mes)
 		FuncID = Err_CD - 1;
 		char szFuncDec[1024];
 		szFuncDec[0] = '\0';
-		for (i=0; SMacroMgr::m_MacroFuncInfoCommandArr[i].m_nFuncID!=-1; ++i) {
-			if (SMacroMgr::m_MacroFuncInfoCommandArr[i].m_nFuncID == FuncID) {
-				GetDeclarations(SMacroMgr::m_MacroFuncInfoCommandArr[i], szFuncDec);
+		for (i=0; SMacroMgr::m_macroFuncInfoCommandArr[i].m_nFuncID!=-1; ++i) {
+			if (SMacroMgr::m_macroFuncInfoCommandArr[i].m_nFuncID == FuncID) {
+				GetDeclarations(SMacroMgr::m_macroFuncInfoCommandArr[i], szFuncDec);
 				break;
 			}
 		}
-		if (SMacroMgr::m_MacroFuncInfoArr[i].m_nFuncID != -1) {
-			for (i=0; SMacroMgr::m_MacroFuncInfoArr[i].m_nFuncID!=-1; ++i) {
-				if (SMacroMgr::m_MacroFuncInfoArr[i].m_nFuncID == FuncID) {
-					GetDeclarations(SMacroMgr::m_MacroFuncInfoArr[i], szFuncDec);
+		if (SMacroMgr::m_macroFuncInfoArr[i].m_nFuncID != -1) {
+			for (i=0; SMacroMgr::m_macroFuncInfoArr[i].m_nFuncID!=-1; ++i) {
+				if (SMacroMgr::m_macroFuncInfoArr[i].m_nFuncID == FuncID) {
+					GetDeclarations(SMacroMgr::m_macroFuncInfoArr[i], szFuncDec);
 					break;
 				}
 			}

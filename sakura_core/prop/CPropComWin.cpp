@@ -215,13 +215,13 @@ INT_PTR PropWin::DispatchEvent(
 			case IDC_BUTTON_WINSIZE:
 				{
 					auto& csWindow = m_common.m_window;
-					DlgWinSize cDlgWinSize;
+					DlgWinSize dlgWinSize;
 					RECT rc;
 					rc.right  = csWindow.m_nWinSizeCX;
 					rc.bottom = csWindow.m_nWinSizeCY;
 					rc.top    = csWindow.m_nWinPosX;
 					rc.left   = csWindow.m_nWinPosY;
-					cDlgWinSize.DoModal(
+					dlgWinSize.DoModal(
 						::GetModuleHandle(NULL),
 						hwndDlg,
 						csWindow.m_eSaveWindowSize,

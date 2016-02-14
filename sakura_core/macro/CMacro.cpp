@@ -226,7 +226,7 @@ void Macro::AddLParam(
 		{
 			DlgGrep* pDlgGrep;
 			DlgGrepReplace* pDlgGrepRep;
-			if (F_GREP == m_nFuncID) {
+			if (m_nFuncID == F_GREP) {
 				pDlgGrep = &pEditView->m_pEditWnd->m_dlgGrep;
 				pDlgGrepRep = NULL;
 				AddStringParam( pDlgGrep->m_strText.c_str() );
@@ -273,7 +273,7 @@ void Macro::AddLParam(
 		{
 			// EOLタイプ値をマクロ引数値に変換する	// 2009.08.18 ryoji
 			int nFlag;
-			switch ((int)lParam) {
+			switch ((EolType)lParam) {
 			case EolType::CRLF:	nFlag = 1; break;
 //			case EOL_LFCR:	nFlag = 2; break;
 			case EolType::LF:	nFlag = 3; break;
@@ -1799,8 +1799,8 @@ bool Macro::HandleFunction(
 			std::vector<TCHAR> buffer(nMaxLen + 1);
 			TCHAR* pBuffer = &buffer[0];
 			_tcscpy( pBuffer, sDefaultValue.c_str() );
-			DlgInput1 cDlgInput1;
-			if (cDlgInput1.DoModal(G_AppInstance(), view->GetHwnd(), _T("sakura macro"), sMessage.c_str(), nMaxLen, pBuffer)) {
+			DlgInput1 dlgInput1;
+			if (dlgInput1.DoModal(G_AppInstance(), view->GetHwnd(), _T("sakura macro"), sMessage.c_str(), nMaxLen, pBuffer)) {
 				SysString S(pBuffer, _tcslen(pBuffer));
 				Wrap(&result)->Receive(S);
 			}else {
@@ -1928,8 +1928,8 @@ bool Macro::HandleFunction(
 				delete[] source;
 			}
 
-			DlgOpenFile cDlgOpenFile;
-			cDlgOpenFile.Create(
+			DlgOpenFile dlgOpenFile;
+			dlgOpenFile.Create(
 				G_AppInstance(), view->GetHwnd(),
 				sFilter.c_str(),
 				sDefault.c_str()
@@ -1938,9 +1938,9 @@ bool Macro::HandleFunction(
 			TCHAR szPath[_MAX_PATH];
 			_tcscpy( szPath, sDefault.c_str() );
 			if (LOWORD(id) == F_FILEOPENDIALOG) {
-				bRet = cDlgOpenFile.DoModal_GetOpenFileName(szPath);
+				bRet = dlgOpenFile.DoModal_GetOpenFileName(szPath);
 			}else {
-				bRet = cDlgOpenFile.DoModal_GetSaveFileName(szPath);
+				bRet = dlgOpenFile.DoModal_GetSaveFileName(szPath);
 			}
 			if (bRet) {
 				SysString S(szPath, _tcslen(szPath));
@@ -2306,8 +2306,8 @@ bool Macro::HandleFunction(
 				}
 				Clipboard clipboard(view->GetHwnd());
 				NativeW mem;
-				Eol cEol = view->m_pEditDoc->m_docEditor.GetNewLineCode();
-				clipboard.GetClipboradByFormat(mem, varCopy.data.bstrVal, varCopy2.data.lVal, varCopy3.data.lVal, cEol);
+				Eol eol = view->m_pEditDoc->m_docEditor.GetNewLineCode();
+				clipboard.GetClipboradByFormat(mem, varCopy.data.bstrVal, varCopy2.data.lVal, varCopy3.data.lVal, eol);
 				SysString ret = SysString(mem.GetStringPtr(), mem.GetStringLength());
 				Wrap(&result)->Receive(ret);
 				return true;

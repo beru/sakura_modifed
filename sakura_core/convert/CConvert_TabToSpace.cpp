@@ -15,11 +15,11 @@ bool Converter_TabToSpace::DoConvert(NativeW* pData)
 	int	nPosDes;
 	int	nPosX;
 	int	nWork;
-	Eol cEol;
+	Eol eol;
 	nBgn = 0;
 	nPosDes = 0;
 	// CRLFで区切られる「行」を返す。CRLFは行長に加えない
-	while ((pLine = GetNextLineW(pData->GetStringPtr(), pData->GetStringLength(), &nLineLen, &nBgn, &cEol, m_bExtEol))) {
+	while ((pLine = GetNextLineW(pData->GetStringPtr(), pData->GetStringLength(), &nLineLen, &nBgn, &eol, m_bExtEol))) {
 		if (0 < nLineLen) {
 			// 先頭行については開始桁位置を考慮する（さらに折り返し関連の対策が必要？）
 			nPosX = (pData->GetStringPtr() == pLine)? m_nStartColumn: 0;
@@ -35,7 +35,7 @@ bool Converter_TabToSpace::DoConvert(NativeW* pData)
 				}
 			}
 		}
-		nPosDes += cEol.GetLen();
+		nPosDes += eol.GetLen();
 	}
 	if (0 >= nPosDes) {
 		return false;
@@ -45,7 +45,7 @@ bool Converter_TabToSpace::DoConvert(NativeW* pData)
 	nBgn = 0;
 	nPosDes = 0;
 	// CRLFで区切られる「行」を返す。CRLFは行長に加えない
-	while ((pLine = GetNextLineW(pData->GetStringPtr(), pData->GetStringLength(), &nLineLen, &nBgn, &cEol, m_bExtEol))) {
+	while ((pLine = GetNextLineW(pData->GetStringPtr(), pData->GetStringLength(), &nLineLen, &nBgn, &eol, m_bExtEol))) {
 		if (0 < nLineLen) {
 			// 先頭行については開始桁位置を考慮する（さらに折り返し関連の対策が必要？）
 			nPosX = (pData->GetStringPtr() == pLine)? m_nStartColumn: 0;
@@ -63,8 +63,8 @@ bool Converter_TabToSpace::DoConvert(NativeW* pData)
 				}
 			}
 		}
-		auto_memcpy(&pDes[nPosDes], cEol.GetValue2(), cEol.GetLen());
-		nPosDes += cEol.GetLen();
+		auto_memcpy(&pDes[nPosDes], eol.GetValue2(), eol.GetLen());
+		nPosDes += eol.GetLen();
 	}
 	pDes[nPosDes] = L'\0';
 

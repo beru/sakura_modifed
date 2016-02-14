@@ -78,8 +78,8 @@ public:
 	INT_PTR DoPropertySheet(int);		// プロパティシートの作成
 
 	// インターフェース	
-	void SetTypeData(const TypeConfig& t) { m_Types = t; }	// タイプ別設定データの設定  Jan. 23, 2005 genta
-	void GetTypeData(TypeConfig& t) const { t = m_Types; }	// タイプ別設定データの取得  Jan. 23, 2005 genta
+	void SetTypeData(const TypeConfig& t) { m_types = t; }	// タイプ別設定データの設定  Jan. 23, 2005 genta
+	void GetTypeData(TypeConfig& t) const { t = m_types; }	// タイプ別設定データの取得  Jan. 23, 2005 genta
 	HWND GetHwndParent()const { return m_hwndParent; }
 	int GetPageNum() { return m_nPageNum; }
 	bool GetChangeKeyWordSet() const { return m_bChangeKeyWordSet; }
@@ -97,11 +97,11 @@ protected:
 	// ダイアログデータ
 	PropTypeSheetOrder	m_nPageNum;
 	DLLSHAREDATA*		m_pShareData;
-	TypeConfig			m_Types;
+	TypeConfig			m_types;
 
 	// スクリーン用データ	2010/5/10 CPropTypes_P1_Screen.cppから移動
-	static std::vector<TYPE_NAME_ID2<EOutlineType> > m_OlmArr;			// アウトライン解析ルール配列
-	static std::vector<TYPE_NAME_ID2<SmartIndentType> > m_SIndentArr;	// スマートインデントルール配列
+	static std::vector<TYPE_NAME_ID2<EOutlineType>> m_OlmArr;			// アウトライン解析ルール配列
+	static std::vector<TYPE_NAME_ID2<SmartIndentType>> m_SIndentArr;	// スマートインデントルール配列
 
 	// カラー用データ
 	DWORD			m_dwCustColors[16];						// フォントDialogカスタムパレット
@@ -239,7 +239,7 @@ protected:
 };
 
 template <typename T>
-void InitTypeNameId2(std::vector<TYPE_NAME_ID2<T> >& vec, TYPE_NAME_ID<T>* arr, size_t size)
+void InitTypeNameId2(std::vector<TYPE_NAME_ID2<T>>& vec, TYPE_NAME_ID<T>* arr, size_t size)
 {
 	for (size_t i=0; i<size; ++i) {
 		TYPE_NAME_ID2<T> item = {arr[i].nMethod, arr[i].nNameId, NULL};

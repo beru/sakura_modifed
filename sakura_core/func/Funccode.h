@@ -154,7 +154,7 @@
 ˆø”‚Ìˆµ‚¢‚Í
   CEditView::HandleCommand
   CMacro::HandleFunction
-  MacroFuncInfo CSMacroMgr::m_MacroFuncInfoArr[]
+  MacroFuncInfo CSMacroMgr::m_macroFuncInfoArr[]
 ‚ğQÆ
 */
 

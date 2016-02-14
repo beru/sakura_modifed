@@ -68,10 +68,10 @@ static const DWORD p_helpids[] = {
 // 機能格納(Work)
 struct MainMenuWork {
 	wstring			m_sName;		// 名前
-	EFunctionCode	m_nFunc;		// Function
+	EFunctionCode	nFunc;		// Function
 	WCHAR			m_sKey[2];		// アクセスキー
 	bool			m_bDupErr;		// アクセスキー重複エラー
-	bool			m_bIsNode;		// ノードか否か（ノードでもm_nFuncがF_NODE(0)でないものがあるため）
+	bool			m_bIsNode;		// ノードか否か（ノードでもnFuncがF_NODE(0)でないものがあるため）
 };
 
 static	std::map<int, MainMenuWork>	msMenu;	// 一時データ
@@ -85,11 +85,11 @@ static const TCHAR* MakeDispLabel(MainMenuWork*);
 
 // 特別機能
 struct SpecialFunc	{
-	EFunctionCode	m_nFunc;		// Function
-	int			 	m_nNameId;		// 名前
+	EFunctionCode	nFunc;		// Function
+	int			 	nNameId;		// 名前
 };
 
-extern const	SpecialFunc	sSpecialFuncs[] = {
+extern const	SpecialFunc	gSpecialFuncs[] = {
 	{F_WINDOW_LIST,				STR_SPECIAL_FUNC_WINDOW },
 	{F_FILE_USED_RECENTLY,		STR_SPECIAL_FUNC_RECENT_FILE },
 	{F_FOLDER_USED_RECENTLY,	STR_SPECIAL_FUNC_RECENT_FOLDER },
@@ -97,7 +97,7 @@ extern const	SpecialFunc	sSpecialFuncs[] = {
 	{F_USERMACRO_LIST,			STR_SPECIAL_FUNC_MACRO },
 	{F_PLUGIN_LIST,				STR_SPECIAL_FUNC_PLUGIN_CMD },
 };
-extern const int nSpecialFuncsCount = (int)_countof(sSpecialFuncs);
+extern const int gSpecialFuncsCount = (int)_countof(gSpecialFuncs);
 
 static	int 	nSpecialFuncsNum;		// 特別機能のコンボボックス内での番号
 
@@ -161,7 +161,7 @@ static LRESULT CALLBACK TreeViewProc(
 				break;
 			}
 			pFuncWk = &msMenu[tvi.lParam];
-			if (pFuncWk->m_nFunc == F_SEPARATOR) {
+			if (pFuncWk->nFunc == F_SEPARATOR) {
 				return 0;
 			}
 			pFuncWk->m_sKey[0] = cKey;
@@ -197,7 +197,7 @@ static LRESULT CALLBACK WindowProcEdit(
 	UINT	uMsg,		// message
 	WPARAM	wParam,		// first message parameter
 	LPARAM	lParam 		// second message parameter
-)
+	)
 {
 	switch (uMsg) {
 	case WM_GETDLGCODE:
@@ -239,7 +239,7 @@ INT_PTR PropMainMenu::DispatchEvent(
 	HTREEITEM		htiTemp2;
 	TV_DISPINFO*	ptdi;
 
-	DlgInput1		cDlgInput1;
+	DlgInput1		dlgInput1;
 
 	static	bool	bInMove;
 	bool			bIsNode;
@@ -325,7 +325,7 @@ INT_PTR PropMainMenu::DispatchEvent(
 				}
 				if (strNameOld != pFuncWk->m_sName) {
 					// ラベルを編集したらリソースからの文字列取得をやめる 2012.10.14 syat 各国語対応
-					pFuncWk->m_nFunc = F_NODE;
+					pFuncWk->nFunc = F_NODE;
 				}
 				ptdi->item.pszText = const_cast<TCHAR*>(MakeDispLabel(pFuncWk));
 				TreeView_SetItem(hwndTreeRes , &ptdi->item);	//	編集結果を反映
@@ -362,10 +362,10 @@ INT_PTR PropMainMenu::DispatchEvent(
 					break;
 				}
 				pFuncWk = &msMenu[tvi.lParam];
-				if (pFuncWk->m_nFunc != F_SEPARATOR) {
+				if (pFuncWk->nFunc != F_SEPARATOR) {
 					auto_sprintf_s(szKey, _T("%ls"), pFuncWk->m_sKey);
 
-					if (!cDlgInput1.DoModal(
+					if (!dlgInput1.DoModal(
 							G_AppInstance(),
 							hwndDlg,
 							LS(STR_PROPCOMMAINMENU_ACCKEY1),
@@ -400,8 +400,8 @@ INT_PTR PropMainMenu::DispatchEvent(
 				if (nIdxFIdx == nSpecialFuncsNum) {
 					// 機能一覧に特殊機能をセット
 					List_ResetContent(hwndListFunk);
-					for (int i=0; i<_countof(sSpecialFuncs); ++i) {
-						List_AddString(hwndListFunk, LSW(sSpecialFuncs[i].m_nNameId));
+					for (int i=0; i<_countof(gSpecialFuncs); ++i) {
+						List_AddString(hwndListFunk, LSW(gSpecialFuncs[i].nNameId));
 					}
 				}else {
 					// 機能一覧に文字列をセット（リストボックス）
@@ -444,11 +444,11 @@ INT_PTR PropMainMenu::DispatchEvent(
 					}
 					// 初期状態に戻す
 					{
-						DataProfile	cProfile;
-						cProfile.SetReadingMode();
-						cProfile.ReadProfileRes(MAKEINTRESOURCE(IDR_MENU1), MAKEINTRESOURCE(ID_RC_TYPE_INI));
+						DataProfile	profile;
+						profile.SetReadingMode();
+						profile.ReadProfileRes(MAKEINTRESOURCE(IDR_MENU1), MAKEINTRESOURCE(ID_RC_TYPE_INI));
 
-						ShareData_IO::IO_MainMenu(cProfile, m_common.m_mainMenu, false);
+						ShareData_IO::IO_MainMenu(profile, m_common.m_mainMenu, false);
 						
 						SetData(hwndDlg); 
 					}
@@ -505,8 +505,8 @@ INT_PTR PropMainMenu::DispatchEvent(
 						}
 						if (nIdxFIdx == nSpecialFuncsNum) {
 							// 特殊機能
-							auto_strcpy(szLabel, LSW(sSpecialFuncs[nIdxFunc].m_nNameId));
-							eFuncCode = sSpecialFuncs[nIdxFunc].m_nFunc;
+							auto_strcpy(szLabel, LSW(gSpecialFuncs[nIdxFunc].nNameId));
+							eFuncCode = gSpecialFuncs[nIdxFunc].nFunc;
 						}else if (m_lookup.Pos2FuncCode(nIdxFIdx, nIdxFunc) != 0) {
 							List_GetText(hwndListFunk, nIdxFunc, szLabel);
 							eFuncCode = m_lookup.Pos2FuncCode(nIdxFIdx, nIdxFunc);
@@ -597,7 +597,7 @@ INT_PTR PropMainMenu::DispatchEvent(
 
 					// TreeViewに挿入
 					pFuncWk = &msMenu[nMenuCnt];
-					pFuncWk->m_nFunc = (EFunctionCode)eFuncCode;
+					pFuncWk->nFunc = (EFunctionCode)eFuncCode;
 					pFuncWk->m_sName = szLabel;
 					pFuncWk->m_bDupErr = false;
 					pFuncWk->m_bIsNode = bIsNode;
@@ -912,11 +912,11 @@ void PropMainMenu::SetData(HWND hwndDlg)
 
 		// 内部データを作成
 		pFuncWk = &msMenu[nMenuCnt];
-		pFuncWk->m_nFunc = pFunc->m_nFunc;
+		pFuncWk->nFunc = pFunc->nFunc;
 		pFuncWk->m_bIsNode = false;
 		switch (pFunc->m_nType) {
 		case MainMenuType::Leaf:
-			m_lookup.Funccode2Name(pFunc->m_nFunc, szLabel, MAX_MAIN_MENU_NAME_LEN);
+			m_lookup.Funccode2Name(pFunc->nFunc, szLabel, MAX_MAIN_MENU_NAME_LEN);
 			pFuncWk->m_sName = szLabel;
 			break;
 		case MainMenuType::Separator:
@@ -925,9 +925,9 @@ void PropMainMenu::SetData(HWND hwndDlg)
 		case MainMenuType::Special:
 			pFuncWk->m_sName = pFunc->m_sName;
 			if (pFuncWk->m_sName.empty()) {
-				for (int j=0; j<_countof(sSpecialFuncs); ++j) {
-					if (pFunc->m_nFunc == sSpecialFuncs[j].m_nFunc) {
-						pFuncWk->m_sName = RemoveAmpersand(LSW(sSpecialFuncs[j].m_nNameId));
+				for (int j=0; j<_countof(gSpecialFuncs); ++j) {
+					if (pFunc->nFunc == gSpecialFuncs[j].nFunc) {
+						pFuncWk->m_sName = RemoveAmpersand(LSW(gSpecialFuncs[j].nNameId));
 						break;
 					}
 				}
@@ -936,10 +936,10 @@ void PropMainMenu::SetData(HWND hwndDlg)
 		case MainMenuType::Node:
 			pFuncWk->m_bIsNode = true;
 			// ラベル編集後のノードはiniから、それ以外はリソースからラベルを取得 2012.10.14 syat 各国語対応
-			if (pFuncWk->m_nFunc == F_NODE) {
+			if (pFuncWk->nFunc == F_NODE) {
 				pFuncWk->m_sName = RemoveAmpersand(pFunc->m_sName);
 			}else {
-				pFuncWk->m_sName = LSW(pFuncWk->m_nFunc);
+				pFuncWk->m_sName = LSW(pFuncWk->nFunc);
 			}
 			break;
 		}
@@ -1022,7 +1022,7 @@ bool PropMainMenu::GetDataTree(
 		}
 		pFunc = &pMenuTbl[m_common.m_mainMenu.m_nMainMenuNum++];
 
-		switch (pFuncWk->m_nFunc) {
+		switch (pFuncWk->nFunc) {
 		case F_NODE:
 			pFunc->m_nType = MainMenuType::Node;
 			auto_strcpy_s(pFunc->m_sName, MAX_MAIN_MENU_NAME_LEN + 1, SupplementAmpersand(pFuncWk->m_sName).c_str());
@@ -1038,12 +1038,12 @@ bool PropMainMenu::GetDataTree(
 				pFunc->m_sName[0] = L'\0';	// 名前は、リソースから取得するため空白に設定
 				break;
 			}
-			if (pFuncWk->m_nFunc >= F_SPECIAL_FIRST && pFuncWk->m_nFunc <= F_SPECIAL_LAST) {
+			if (pFuncWk->nFunc >= F_SPECIAL_FIRST && pFuncWk->nFunc <= F_SPECIAL_LAST) {
 				pFunc->m_nType = MainMenuType::Special;
 				// 2014.05.04 nLevel == 0 のときも"名前なし"にする
 					pFunc->m_sName[0] = L'\0';
 			}else {
-				if (pFuncWk->m_nFunc == F_OPTION) {
+				if (pFuncWk->nFunc == F_OPTION) {
 					bOptionOk = true;
 				}
 				pFunc->m_nType = MainMenuType::Leaf;
@@ -1051,7 +1051,7 @@ bool PropMainMenu::GetDataTree(
 			}
 			break;
 		}
-		pFunc->m_nFunc = pFuncWk->m_nFunc;
+		pFunc->nFunc = pFuncWk->nFunc;
 		auto_strcpy(pFunc->m_sKey, pFuncWk->m_sKey);
 		pFunc->m_nLevel = nLevel;
 
@@ -1072,7 +1072,7 @@ bool PropMainMenu::GetDataTree(
 			// Top Levelの追加（ダミー）
 			pFunc = &pMenuTbl[m_common.m_mainMenu.m_nMainMenuNum++];
 			pFunc->m_nType = MainMenuType::Node;
-			pFunc->m_nFunc = F_NODE;
+			pFunc->nFunc = F_NODE;
 			auto_strcpy(pFunc->m_sName, L"auto_add");
 			pFunc->m_sKey[0] = L'\0';
 			pFunc->m_nLevel = nLevel++;
@@ -1084,7 +1084,7 @@ bool PropMainMenu::GetDataTree(
 			// 共通設定
 			pFunc = &pMenuTbl[m_common.m_mainMenu.m_nMainMenuNum++];
 			pFunc->m_nType = MainMenuType::Leaf;
-			pFunc->m_nFunc = F_OPTION;
+			pFunc->nFunc = F_OPTION;
 			pFunc->m_sName[0] = L'\0';
 			pFunc->m_sKey[0] = L'\0';
 			pFunc->m_nLevel = nLevel;
@@ -1099,10 +1099,10 @@ bool PropMainMenu::GetDataTree(
 // メインメニュー設定をインポートする
 void PropMainMenu::Import(HWND hwndDlg)
 {
-	ImpExpMainMenu	cImpExp(m_common);
+	ImpExpMainMenu	impExp(m_common);
 
 	// インポート
-	if (!cImpExp.ImportUI(G_AppInstance(), hwndDlg)) {
+	if (!impExp.ImportUI(G_AppInstance(), hwndDlg)) {
 		// インポートをしていない
 		return;
 	}
@@ -1112,11 +1112,11 @@ void PropMainMenu::Import(HWND hwndDlg)
 // メインメニュー設定をエクスポートする
 void PropMainMenu::Export(HWND hwndDlg)
 {
-	ImpExpMainMenu	cImpExp(m_common);
+	ImpExpMainMenu	impExp(m_common);
 	GetData(hwndDlg);
 
 	// エクスポート
-	if (!cImpExp.ExportUI(G_AppInstance(), hwndDlg)) {
+	if (!impExp.ExportUI(G_AppInstance(), hwndDlg)) {
 		// エクスポートをしていない
 		return;
 	}
@@ -1241,7 +1241,7 @@ static void TreeView_ExpandAll(HWND hwndTree, bool bExpand)
 // 表示用データの作成（アクセスキー付加）
 static const TCHAR* MakeDispLabel(MainMenuWork* pFunc)
 {
-	static	WCHAR	szLabel[MAX_MAIN_MENU_NAME_LEN + 10];
+	static WCHAR szLabel[MAX_MAIN_MENU_NAME_LEN + 10];
 
 	if (pFunc->m_sKey[0]) {
 		auto_sprintf_s(szLabel, MAX_MAIN_MENU_NAME_LEN + 10, L"%ls%ls(%ls)",
@@ -1317,7 +1317,7 @@ bool PropMainMenu::Check_MainMenu_Sub(
 			return false;
 		}
 		pFuncWk = &msMenu[tvi.lParam];
-		switch (pFuncWk->m_nFunc) {
+		switch (pFuncWk->nFunc) {
 		case F_NODE:
 			nType = MainMenuType::Node;
 			break;
@@ -1325,12 +1325,12 @@ bool PropMainMenu::Check_MainMenu_Sub(
 			nType = MainMenuType::Separator;
 			break;
 		default:
-			if (pFuncWk->m_nFunc >= F_SPECIAL_FIRST && pFuncWk->m_nFunc <= F_SPECIAL_LAST) {
+			if (pFuncWk->nFunc >= F_SPECIAL_FIRST && pFuncWk->nFunc <= F_SPECIAL_LAST) {
 				nType = MainMenuType::Special;
 			}else if (pFuncWk->m_bIsNode) {
 				nType = MainMenuType::Node;
 			}else {
-				if (pFuncWk->m_nFunc == F_OPTION) {
+				if (pFuncWk->nFunc == F_OPTION) {
 					bOptionOk = true;
 				}
 				nType = MainMenuType::Leaf;

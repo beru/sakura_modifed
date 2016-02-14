@@ -30,11 +30,11 @@ using namespace std;
 
 // 特別機能
 struct SpecialFunc	{
-	EFunctionCode	m_nFunc;		// Function
-	int			 	m_nNameId;		// 名前
+	EFunctionCode	nFunc;		// Function
+	int			 	nNameId;		// 名前
 };
-extern const	SpecialFunc	sSpecialFuncs[];
-extern const int nSpecialFuncsCount;
+extern const	SpecialFunc	gSpecialFuncs[];
+extern const int gSpecialFuncsCount;
 
 static	int 	nSpecialFuncsNum;		// 特別機能のコンボボックス内での番号
 
@@ -69,9 +69,9 @@ static
 bool SetSpecialFuncName(EFunctionCode code, wchar_t* ptr)
 {
 	if (F_SPECIAL_FIRST <= code && code <= F_SPECIAL_LAST) {
-		for (int k=0; k<nSpecialFuncsCount; ++k) {
-			if (sSpecialFuncs[k].m_nFunc == code) {
-				auto_strcpy(ptr, LSW(sSpecialFuncs[k].m_nNameId));
+		for (int k=0; k<gSpecialFuncsCount; ++k) {
+			if (gSpecialFuncs[k].nFunc == code) {
+				auto_strcpy(ptr, LSW(gSpecialFuncs[k].nNameId));
 				return true;
 			}
 		}
@@ -99,7 +99,7 @@ INT_PTR PropCustmenu::DispatchEvent(
 	UINT	uMsg,		// message
 	WPARAM	wParam,		// first message parameter
 	LPARAM	lParam 		// second message parameter
-)
+	)
 {
 	WORD		wNotifyCode;
 	WORD		wID;
@@ -312,8 +312,8 @@ INT_PTR PropCustmenu::DispatchEvent(
 				if (nIdx3 == nSpecialFuncsNum) {
 					// 機能一覧に特殊機能をセット
 					List_ResetContent(hwndLIST_FUNC);
-					for (i=0; i<nSpecialFuncsCount; ++i) {
-						List_AddString(hwndLIST_FUNC, LS(sSpecialFuncs[i].m_nNameId));
+					for (i=0; i<gSpecialFuncsCount; ++i) {
+						List_AddString(hwndLIST_FUNC, LS(gSpecialFuncs[i].nNameId));
 					}
 				}else {
 					// Oct. 3, 2001 genta
@@ -424,7 +424,7 @@ INT_PTR PropCustmenu::DispatchEvent(
 					//	Oct. 3, 2001 genta
 					if (nIdx3 == nSpecialFuncsNum) {
 						// 特殊機能
-						eFuncCode = sSpecialFuncs[nIdx4].m_nFunc;
+						eFuncCode = gSpecialFuncs[nIdx4].nFunc;
 					}else {
 						eFuncCode = m_lookup.Pos2FuncCode(nIdx3, nIdx4);
 					}
@@ -470,8 +470,8 @@ INT_PTR PropCustmenu::DispatchEvent(
 					eFuncCode = F_DISABLE;
 					if (nIdx3 == nSpecialFuncsNum) {
 						// 特殊機能
-						if (0 <= nIdx4 && nIdx4 < nSpecialFuncsCount) {
-							eFuncCode = sSpecialFuncs[nIdx4].m_nFunc;
+						if (0 <= nIdx4 && nIdx4 < gSpecialFuncsCount) {
+							eFuncCode = gSpecialFuncs[nIdx4].nFunc;
 						}
 					}else {
 						eFuncCode = m_lookup.Pos2FuncCode(nIdx3, nIdx4);
@@ -603,7 +603,7 @@ INT_PTR PropCustmenu::DispatchEvent(
 		}
 		if (CB_ERR != nIdx3 && LB_ERR != nIdx4 &&
 		 	m_lookup.Pos2FuncCode(nIdx3, nIdx4) == 0 &&
-			!(nIdx3 == nSpecialFuncsNum && 0 <= nIdx4 && nIdx4 < nSpecialFuncsCount)
+			!(nIdx3 == nSpecialFuncsNum && 0 <= nIdx4 && nIdx4 < gSpecialFuncsCount)
 		) {
 			::EnableWindow(::GetDlgItem(hwndDlg, IDC_BUTTON_INSERT), FALSE);
 			::EnableWindow(::GetDlgItem(hwndDlg, IDC_BUTTON_ADD), FALSE);
@@ -684,7 +684,7 @@ void PropCustmenu::SetDataMenuList(HWND hwndDlg, int nIdx)
 			}
 		}
 		// キー 
-		if ('\0' == csCustomMenu.m_nCustMenuItemKeyArr[nIdx][i]) {
+		if (csCustomMenu.m_nCustMenuItemKeyArr[nIdx][i] == '\0') {
 			auto_strcpy(szLabel2, szLabel);
 		}else {
 			auto_sprintf_s(szLabel2, LTEXT("%ls(%hc)"),
@@ -713,9 +713,9 @@ int PropCustmenu::GetData(HWND hwndDlg)
 // カスタムメニュー設定をインポートする
 void PropCustmenu::Import(HWND hwndDlg)
 {
-	ImpExpCustMenu	cImpExpCustMenu(m_common);
+	ImpExpCustMenu	impExpCustMenu(m_common);
 	// インポート
-	if (!cImpExpCustMenu.ImportUI(G_AppInstance(), hwndDlg)) {
+	if (!impExpCustMenu.ImportUI(G_AppInstance(), hwndDlg)) {
 		// インポートをしていない
 		return;
 	}
@@ -727,9 +727,9 @@ void PropCustmenu::Import(HWND hwndDlg)
 // カスタムメニュー設定をエクスポートする
 void PropCustmenu::Export(HWND hwndDlg)
 {
-	ImpExpCustMenu	cImpExpCustMenu(m_common);
+	ImpExpCustMenu	impExpCustMenu(m_common);
 	// エクスポート
-	if (!cImpExpCustMenu.ExportUI(G_AppInstance(), hwndDlg)) {
+	if (!impExpCustMenu.ExportUI(G_AppInstance(), hwndDlg)) {
 		// エクスポートをしていない
 		return;
 	}

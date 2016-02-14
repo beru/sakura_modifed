@@ -53,26 +53,26 @@ Plug* DllPlugin::CreatePlug(
 
 // プラグイン定義ファイルの読み込み
 bool DllPlugin::ReadPluginDef(
-	DataProfile* cProfile,
-	DataProfile* cProfileMlang
+	DataProfile* profile,
+	DataProfile* profileMlang
 	)
 {
-	ReadPluginDefCommon(cProfile, cProfileMlang);
+	ReadPluginDefCommon(profile, profileMlang);
 
 	// DLL名の読み込み
-	cProfile->IOProfileData(PII_DLL, PII_DLL_NAME, m_sDllName);
+	profile->IOProfileData(PII_DLL, PII_DLL_NAME, m_sDllName);
 
 	// プラグの読み込み
-	ReadPluginDefPlug(cProfile, cProfileMlang);
+	ReadPluginDefPlug(profile, profileMlang);
 
 	// コマンドの読み込み
-	ReadPluginDefCommand(cProfile, cProfileMlang);
+	ReadPluginDefCommand(profile, profileMlang);
 
 	// オプション定義の読み込み	// 2010/3/24 Uchi
-	ReadPluginDefOption(cProfile, cProfileMlang);
+	ReadPluginDefOption(profile, profileMlang);
 
 	// 文字列定義の読み込み
-	ReadPluginDefString(cProfile, cProfileMlang);
+	ReadPluginDefString(profile, profileMlang);
 
 	return true;
 }

@@ -73,11 +73,11 @@ public:
 public:
 	// コマンド情報を取得する
 	MacroFuncInfoArray GetMacroCommandInfo() const {
-		return m_MacroFuncInfoCommandArr;
+		return m_macroFuncInfoCommandArr;
 	}
 	// 関数情報を取得する
 	MacroFuncInfoArray GetMacroFuncInfo() const {
-		return m_MacroFuncInfoArr;
+		return m_macroFuncInfoArr;
 	}
 	// 関数を処理する
 	bool HandleFunction(EditView* View, EFunctionCode ID, const VARIANT* Arguments, const int ArgSize, VARIANT& Result) {
@@ -93,7 +93,7 @@ public:
 		case F_PL_GETDEF:				// 設定ファイルから値を読む
 		case F_PL_GETOPTION:			// オプションファイルから値を読む
 			{
-				DataProfile cProfile;
+				DataProfile profile;
 				wstring sSection;
 				wstring sKey;
 				wstring sValue;
@@ -104,13 +104,13 @@ public:
 					return false;
 				}
 
-				cProfile.SetReadingMode();
+				profile.SetReadingMode();
 				if (LOWORD(ID) == F_PL_GETDEF) {
-					cProfile.ReadProfile(m_plugin.GetPluginDefPath().c_str());
+					profile.ReadProfile(m_plugin.GetPluginDefPath().c_str());
 				}else {
-					cProfile.ReadProfile(m_plugin.GetOptionPath().c_str());
+					profile.ReadProfile(m_plugin.GetOptionPath().c_str());
 				}
-				if (!cProfile.IOProfileData(sSection.c_str(), sKey.c_str(), sValue)
+				if (!profile.IOProfileData(sSection.c_str(), sKey.c_str(), sValue)
 					&& LOWORD(ID) == F_PL_GETOPTION
 				) {
 					// 設定されていなければデフォルトを取得 
@@ -163,13 +163,13 @@ public:
 				if (!Arguments[0]) return false;
 				if (!Arguments[1]) return false;
 				if (!Arguments[2]) return false;
-				DataProfile cProfile;
+				DataProfile profile;
 
-				cProfile.ReadProfile(m_plugin.GetOptionPath().c_str());
-				cProfile.SetWritingMode();
+				profile.ReadProfile(m_plugin.GetOptionPath().c_str());
+				profile.SetWritingMode();
 				wstring tmp(Arguments[2]);
-				cProfile.IOProfileData(Arguments[0], Arguments[1], tmp);
-				cProfile.WriteProfile(m_plugin.GetOptionPath().c_str(), (m_plugin.m_sName + L" プラグイン設定ファイル").c_str());
+				profile.IOProfileData(Arguments[0], Arguments[1], tmp);
+				profile.WriteProfile(m_plugin.GetOptionPath().c_str(), (m_plugin.m_sName + L" プラグイン設定ファイル").c_str());
 			}
 			break;
 		case F_PL_ADDCOMMAND:			// コマンドを追加する
@@ -186,8 +186,8 @@ public:
 public:
 private:
 	Plugin& m_plugin;
-	static MacroFuncInfo m_MacroFuncInfoCommandArr[];	// コマンド情報(戻り値なし)
-	static MacroFuncInfo m_MacroFuncInfoArr[];	// 関数情報(戻り値あり)
+	static MacroFuncInfo m_macroFuncInfoCommandArr[];	// コマンド情報(戻り値なし)
+	static MacroFuncInfo m_macroFuncInfoArr[];	// 関数情報(戻り値あり)
 	int m_nPlugIndex;	// 実行中プラグの番号
 };
 

@@ -36,7 +36,6 @@
 // コンストラクタ
 PluginManager::PluginManager()
 {
-
 	// pluginsフォルダの場所を取得
 	TCHAR szPluginPath[_MAX_PATH];
 	GetInidir(szPluginPath, _T("plugins\\"));	// iniと同じ階層のpluginsフォルダを検索
@@ -80,8 +79,7 @@ bool PluginManager::SearchNewPlugin(
 #endif
 
 	HANDLE hFind;
-	ZipFile	cZipFile;
-
+	ZipFile	zipFile;
 
 	// プラグインフォルダの配下を検索
 	WIN32_FIND_DATA wf;
@@ -101,7 +99,7 @@ bool PluginManager::SearchNewPlugin(
 	if (!bCancel && m_sBaseDir != m_sExePluginDir) {
 		bFindNewDir |= SearchNewPluginDir(common, hWndOwner, m_sExePluginDir, bCancel);
 	}
-	if (!bCancel && cZipFile.IsOk()) {
+	if (!bCancel && zipFile.IsOk()) {
 		bFindNewDir |= SearchNewPluginZip(common, hWndOwner, m_sBaseDir, bCancel);
 		if (!bCancel && m_sBaseDir != m_sExePluginDir) {
 			bFindNewDir |= SearchNewPluginZip(common, hWndOwner, m_sExePluginDir, bCancel);
@@ -130,7 +128,7 @@ bool PluginManager::SearchNewPluginDir(
 	DEBUG_TRACE(_T("Enter SearchNewPluginDir\n"));
 #endif
 
-	PluginRec* plugin_table = common.m_plugin.m_pluginTable;
+	PluginRec* pluginTable = common.m_plugin.m_pluginTable;
 	HANDLE hFind;
 
 	WIN32_FIND_DATA wf;
@@ -151,7 +149,7 @@ bool PluginManager::SearchNewPluginDir(
 			// 2010.08.04 大文字小文字同一視にする
 			bool isNotInstalled = true;
 			for (int iNo=0; iNo<MAX_PLUGIN; ++iNo) {
-				if (auto_stricmp(wf.cFileName, to_tchar(plugin_table[iNo].m_szName)) == 0) {
+				if (auto_stricmp(wf.cFileName, to_tchar(pluginTable[iNo].m_szName)) == 0) {
 					isNotInstalled = false;
 					break;
 				}
@@ -200,14 +198,14 @@ bool PluginManager::SearchNewPluginZip(
 	HANDLE hFind;
 
 	WIN32_FIND_DATA wf;
-	bool		bNewPlugin = false;
-	bool		bFound;
-	ZipFile	cZipFile;
+	bool	bNewPlugin = false;
+	bool	bFound;
+	ZipFile	zipFile;
 
 	hFind = INVALID_HANDLE_VALUE;
 
 	// Zip File 検索解凍
-	if (cZipFile.IsOk()) {
+	if (zipFile.IsOk()) {
 		hFind = FindFirstFile((sSearchDir + _T("*.zip")).c_str(), &wf);
 
 		for (bFound = (hFind != INVALID_HANDLE_VALUE); bFound; bFound = (FindNextFile(hFind, &wf) != 0)) {
@@ -237,11 +235,11 @@ bool PluginManager::InstZipPlugin(
 	DEBUG_TRACE(_T("Entry InstZipPlugin\n"));
 #endif
 
-	ZipFile	cZipFile;
-	TCHAR		msg[512];
+	ZipFile	zipFile;
+	TCHAR	msg[512];
 
 	// ZIPファイルが扱えるか
-	if (!cZipFile.IsOk()) {
+	if (!zipFile.IsOk()) {
 		auto_snprintf_s(msg, _countof(msg), LS(STR_PLGMGR_ERR_ZIP));
 		InfoMessage(hWndOwner, _T("%ts"), msg);
 		return false;
@@ -280,8 +278,8 @@ bool PluginManager::InstZipPluginSub(
 	bool& bCancel
 	)
 {
-	PluginRec*		plugin_table = common.m_plugin.m_pluginTable;
-	ZipFile		cZipFile;
+	PluginRec*		pluginTable = common.m_plugin.m_pluginTable;
+	ZipFile			zipFile;
 	std::tstring	sFolderName;
 	TCHAR			msg[512];
 	std::wstring	errMsg;
@@ -290,14 +288,14 @@ bool PluginManager::InstZipPluginSub(
 	bool			bNewPlugin = false;
 
 	// Plugin フォルダ名の取得,定義ファイルの確認
-	if (bOk && !cZipFile.SetZip(sZipFile)) {
+	if (bOk && !zipFile.SetZip(sZipFile)) {
 		auto_snprintf_s(msg, _countof(msg), LS(STR_PLGMGR_INST_ZIP_ACCESS), sDispName.c_str());
 		bOk = false;
 		bSkip = bInSearch;
 	}
 
 	// Plgin フォルダ名の取得,定義ファイルの確認
-	if (bOk && !cZipFile.ChkPluginDef(PII_FILENAME, sFolderName)) {
+	if (bOk && !zipFile.ChkPluginDef(PII_FILENAME, sFolderName)) {
 		auto_snprintf_s(msg, _countof(msg), LS(STR_PLGMGR_INST_ZIP_DEF), sDispName.c_str());
 		bOk = false;
 		bSkip = bInSearch;
@@ -310,7 +308,7 @@ bool PluginManager::InstZipPluginSub(
 		int		iNo;
 		if (bOk) {
 			for (iNo=0; iNo<MAX_PLUGIN; ++iNo) {
-				if (auto_stricmp(to_wchar(sFolderName.c_str()), to_wchar(plugin_table[iNo].m_szName)) == 0) {
+				if (auto_stricmp(to_wchar(sFolderName.c_str()), to_wchar(pluginTable[iNo].m_szName)) == 0) {
 					isNotInstalled = false;
 					break;
 				}
@@ -357,7 +355,7 @@ bool PluginManager::InstZipPluginSub(
 	}
 
 	// Zip解凍
-	if (bOk && !cZipFile.Unzip(m_sBaseDir)) {
+	if (bOk && !zipFile.Unzip(m_sBaseDir)) {
 		auto_snprintf_s(msg, _countof(msg), LS(STR_PLGMGR_INST_ZIP_UNZIP), sDispName.c_str());
 		bOk = false;
 	}
@@ -391,19 +389,19 @@ int PluginManager::InstallPlugin(
 	bool bUpdate
 	)
 {
-	DataProfile cProfDef;				// プラグイン定義ファイル
+	DataProfile profDef;				// プラグイン定義ファイル
 
 	// プラグイン定義ファイルを読み込む
-	cProfDef.SetReadingMode();
-	if (!cProfDef.ReadProfile((m_sBaseDir + pszPluginName + _T("\\") + PII_FILENAME).c_str())
-		&& !cProfDef.ReadProfile((m_sExePluginDir + pszPluginName + _T("\\") + PII_FILENAME).c_str()) 
+	profDef.SetReadingMode();
+	if (!profDef.ReadProfile((m_sBaseDir + pszPluginName + _T("\\") + PII_FILENAME).c_str())
+		&& !profDef.ReadProfile((m_sExePluginDir + pszPluginName + _T("\\") + PII_FILENAME).c_str()) 
 	) {
 		errorMsg = LSW(STR_PLGMGR_INST_DEF);
 		return -1;
 	}
 
 	std::wstring sId;
-	cProfDef.IOProfileData(PII_PLUGIN, PII_PLUGIN_ID, sId);
+	profDef.IOProfileData(PII_PLUGIN, PII_PLUGIN_ID, sId);
 	if (sId.length() == 0) {
 		errorMsg = LSW(STR_PLGMGR_INST_ID);
 		return -1;
@@ -423,27 +421,27 @@ int PluginManager::InstallPlugin(
 	}
 
 	// ID重複・テーブル空きチェック
-	PluginRec* plugin_table = common.m_plugin.m_pluginTable;
+	PluginRec* pluginTable = common.m_plugin.m_pluginTable;
 	int nEmpty = -1;
 	bool isDuplicate = false;
 	for (int iNo=0; iNo<MAX_PLUGIN; ++iNo) {
-		if (nEmpty == -1 && plugin_table[iNo].m_state == PLS_NONE) {
+		if (nEmpty == -1 && pluginTable[iNo].m_state == PLS_NONE) {
 			nEmpty = iNo;
 			// break してはいけない。後ろで同一IDがあるかも
 		}
-		if (wcscmp(sId.c_str(), plugin_table[iNo].m_szId) == 0) {	// ID一致
+		if (wcscmp(sId.c_str(), pluginTable[iNo].m_szId) == 0) {	// ID一致
 			if (!bUpdate) {
 				const TCHAR* msg = LS(STR_PLGMGR_INST_NAME);
 				// 2010.08.04 削除中のIDは元の位置へ追加(復活させる)
-				if (plugin_table[iNo].m_state != PLS_DELETED &&
-					ConfirmMessage(hWndOwner, msg, static_cast<const TCHAR*>(pszPluginName), static_cast<const WCHAR*>(plugin_table[iNo].m_szName)) != IDYES
+				if (pluginTable[iNo].m_state != PLS_DELETED &&
+					ConfirmMessage(hWndOwner, msg, static_cast<const TCHAR*>(pszPluginName), static_cast<const WCHAR*>(pluginTable[iNo].m_szName)) != IDYES
 				) {
 					errorMsg = LSW(STR_PLGMGR_INST_USERCANCEL);
 					return -1;
 				}
 			}
 			nEmpty = iNo;
-			isDuplicate = plugin_table[iNo].m_state != PLS_DELETED;
+			isDuplicate = pluginTable[iNo].m_state != PLS_DELETED;
 			break;
 		}
 	}
@@ -453,26 +451,26 @@ int PluginManager::InstallPlugin(
 		return -1;
 	}
 
-	wcsncpy(plugin_table[nEmpty].m_szName, to_wchar(pszPluginName), MAX_PLUGIN_NAME);
-	plugin_table[nEmpty].m_szName[MAX_PLUGIN_NAME-1] = '\0';
-	wcsncpy(plugin_table[nEmpty].m_szId, sId.c_str(), MAX_PLUGIN_ID);
-	plugin_table[nEmpty].m_szId[MAX_PLUGIN_ID-1] = '\0';
-	plugin_table[nEmpty].m_state = isDuplicate ? PLS_UPDATED : PLS_INSTALLED;
+	wcsncpy(pluginTable[nEmpty].m_szName, to_wchar(pszPluginName), MAX_PLUGIN_NAME);
+	pluginTable[nEmpty].m_szName[MAX_PLUGIN_NAME-1] = '\0';
+	wcsncpy(pluginTable[nEmpty].m_szId, sId.c_str(), MAX_PLUGIN_ID);
+	pluginTable[nEmpty].m_szId[MAX_PLUGIN_ID-1] = '\0';
+	pluginTable[nEmpty].m_state = isDuplicate ? PLS_UPDATED : PLS_INSTALLED;
 
 	// コマンド数の設定	2010/7/11 Uchi
 	int			i;
 	WCHAR		szPlugKey[10];
 	wstring		sPlugCmd;
 
-	plugin_table[nEmpty].m_nCmdNum = 0;
+	pluginTable[nEmpty].m_nCmdNum = 0;
 	for (i=1; i<MAX_PLUG_CMD; ++i) {
 		auto_sprintf_s(szPlugKey, L"C[%d]", i);
 		sPlugCmd.clear();
-		cProfDef.IOProfileData(PII_COMMAND, szPlugKey, sPlugCmd);
+		profDef.IOProfileData(PII_COMMAND, szPlugKey, sPlugCmd);
 		if (sPlugCmd == L"") {
 			break;
 		}
-		plugin_table[nEmpty].m_nCmdNum = i;
+		pluginTable[nEmpty].m_nCmdNum = i;
 	}
 
 	return nEmpty;
@@ -511,31 +509,31 @@ bool PluginManager::LoadAllPlugin(CommonSetting* common)
 	}
 
 	// プラグインテーブルに登録されたプラグインを読み込む
-	PluginRec* plugin_table = pluginSetting.m_pluginTable;
+	PluginRec* pluginTable = pluginSetting.m_pluginTable;
 	for (int iNo=0; iNo<MAX_PLUGIN; ++iNo) {
-		if (plugin_table[iNo].m_szName[0] == '\0') {
+		if (pluginTable[iNo].m_szName[0] == '\0') {
 			continue;
 		}
 		// 2010.08.04 削除状態を見る(今のところ保険)
-		if (plugin_table[iNo].m_state == PLS_DELETED) {
+		if (pluginTable[iNo].m_state == PLS_DELETED) {
 			continue;
 		}
 		if (GetPlugin(iNo)) {
 			continue; // 2013.05.31 読み込み済み
 		}
-		std::tstring name = to_tchar(plugin_table[iNo].m_szName);
+		std::tstring name = to_tchar(pluginTable[iNo].m_szName);
 		Plugin* plugin = LoadPlugin(m_sBaseDir.c_str(), name.c_str(), szLangName.c_str());
 		if (!plugin) {
 			plugin = LoadPlugin(m_sExePluginDir.c_str(), name.c_str(), szLangName.c_str());
 		}
 		if (plugin) {
 			// 要検討：plugin.defのidとsakuraw.iniのidの不一致処理
-			assert_warning(auto_strcmp(plugin_table[iNo].m_szId, plugin->m_sId.c_str()) == 0);
+			assert_warning(auto_strcmp(pluginTable[iNo].m_szId, plugin->m_sId.c_str()) == 0);
 			plugin->m_id = iNo;		// プラグインテーブルの行番号をIDとする
 			m_plugins.push_back(plugin);
-			plugin_table[iNo].m_state = PLS_LOADED;
+			pluginTable[iNo].m_state = PLS_LOADED;
 			// コマンド数設定
-			plugin_table[iNo].m_nCmdNum = plugin->GetCommandCount();
+			pluginTable[iNo].m_nCmdNum = plugin->GetCommandCount();
 			RegisterPlugin(plugin);
 		}
 	}
@@ -660,13 +658,13 @@ Plugin* PluginManager::GetPlugin(int id)
 // プラグインを削除する
 void PluginManager::UninstallPlugin(CommonSetting& common, int id)
 {
-	PluginRec* plugin_table = common.m_plugin.m_pluginTable;
+	PluginRec* pluginTable = common.m_plugin.m_pluginTable;
 
 	// 2010.08.04 ここではIDを保持する。後で再度追加するときに同じ位置に追加
 	// PLS_DELETEDのm_szId/m_szNameはiniを保存すると削除されます
-//	plugin_table[id].m_szId[0] = '\0';
-	plugin_table[id].m_szName[0] = '\0';
-	plugin_table[id].m_state = PLS_DELETED;
-	plugin_table[id].m_nCmdNum = 0;
+//	pluginTable[id].m_szId[0] = '\0';
+	pluginTable[id].m_szName[0] = '\0';
+	pluginTable[id].m_state = PLS_DELETED;
+	pluginTable[id].m_nCmdNum = 0;
 }
 

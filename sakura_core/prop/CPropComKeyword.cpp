@@ -95,7 +95,7 @@ INT_PTR PropKeyword::DispatchEvent(
 	static HWND			hwndCOMBO_SET;
 	static HWND			hwndLIST_KEYWORD;
 	RECT				rc;
-	DlgInput1			cDlgInput1;
+	DlgInput1			dlgInput1;
 	wchar_t				szKeyWord[MAX_KEYWORDLEN + 1];
 	LONG_PTR			lStyle;
 	LV_DISPINFO*		plvdi;
@@ -269,7 +269,7 @@ INT_PTR PropKeyword::DispatchEvent(
 					// モードレスダイアログの表示
 					szKeyWord[0] = 0;
 					//	Oct. 5, 2002 genta 長さ制限の設定を修正．バッファオーバーランしていた．
-					if (!cDlgInput1.DoModal(
+					if (!dlgInput1.DoModal(
 						G_AppInstance(),
 						hwndDlg,
 						LS(STR_PROPCOMKEYWORD_SETNAME1),
@@ -348,7 +348,7 @@ INT_PTR PropKeyword::DispatchEvent(
 					// モードレスダイアログの表示
 					wcscpy_s(szKeyWord, csSpecialKeyword.m_CKeyWordSetMgr.GetTypeName(csSpecialKeyword.m_CKeyWordSetMgr.m_nCurrentKeyWordSetIdx));
 					{
-						BOOL bDlgInputResult = cDlgInput1.DoModal(
+						BOOL bDlgInputResult = dlgInput1.DoModal(
 							G_AppInstance(),
 							hwndDlg,
 							LS(STR_PROPCOMKEYWORD_RENAME1),
@@ -381,7 +381,7 @@ INT_PTR PropKeyword::DispatchEvent(
 					}
 					// モードレスダイアログの表示
 					szKeyWord[0] = 0;
-					if (!cDlgInput1.DoModal(G_AppInstance(), hwndDlg, LS(STR_PROPCOMKEYWORD_KEYADD1), LS(STR_PROPCOMKEYWORD_KEYADD2), MAX_KEYWORDLEN, szKeyWord)) {
+					if (!dlgInput1.DoModal(G_AppInstance(), hwndDlg, LS(STR_PROPCOMKEYWORD_KEYADD1), LS(STR_PROPCOMKEYWORD_KEYADD2), MAX_KEYWORDLEN, szKeyWord)) {
 						return TRUE;
 					}
 					if (szKeyWord[0] != L'\0') {
@@ -469,7 +469,7 @@ void PropKeyword::Edit_List_KeyWord(HWND hwndDlg, HWND hwndLIST_KEYWORD)
 	int			nIndex1;
 	LV_ITEM		lvi;
 	wchar_t		szKeyWord[MAX_KEYWORDLEN + 1];
-	DlgInput1	cDlgInput1;
+	DlgInput1	dlgInput1;
 
 	nIndex1 = ListView_GetNextItem(hwndLIST_KEYWORD, -1, LVNI_ALL | LVNI_SELECTED);
 	if (nIndex1 == -1) {
@@ -486,7 +486,7 @@ void PropKeyword::Edit_List_KeyWord(HWND hwndDlg, HWND hwndLIST_KEYWORD)
 	wcscpy_s(szKeyWord, keywordSetMgr.GetKeyWord(keywordSetMgr.m_nCurrentKeyWordSetIdx, lvi.lParam));
 
 	// モードレスダイアログの表示
-	if (!cDlgInput1.DoModal(G_AppInstance(), hwndDlg, LS(STR_PROPCOMKEYWORD_KEYEDIT1), LS(STR_PROPCOMKEYWORD_KEYEDIT2), MAX_KEYWORDLEN, szKeyWord)) {
+	if (!dlgInput1.DoModal(G_AppInstance(), hwndDlg, LS(STR_PROPCOMKEYWORD_KEYEDIT1), LS(STR_PROPCOMKEYWORD_KEYEDIT2), MAX_KEYWORDLEN, szKeyWord)) {
 		return;
 	}
 	if (szKeyWord[0] != L'\0') {
@@ -581,8 +581,9 @@ void PropKeyword::Export_List_KeyWord(HWND hwndDlg, HWND hwndLIST_KEYWORD)
 // キーワードを整頓する
 void PropKeyword::Clean_List_KeyWord(HWND hwndDlg, HWND hwndLIST_KEYWORD)
 {
-	if (IDYES == ::MessageBox(hwndDlg, LS(STR_PROPCOMKEYWORD_DEL),
-			GSTR_APPNAME, MB_YESNO | MB_ICONQUESTION)
+	if (::MessageBox(hwndDlg, LS(STR_PROPCOMKEYWORD_DEL),
+			GSTR_APPNAME, MB_YESNO | MB_ICONQUESTION
+		) == IDYES
 	) {	// 2009.03.26 ryoji MB_ICONSTOP->MB_ICONQUESTION
 		auto& keywordSetMgr = m_common.m_specialKeyword.m_CKeyWordSetMgr;
 

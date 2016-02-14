@@ -252,7 +252,7 @@ LPCTSTR ResourceString::LoadStringSt(UINT uid)
 	@note ただし、変数を準備する必要があるのが不便。
 	@note 使用例）
 	@note   LoadString cStr[2];
-	@note   cDlgInput1.DoModal(m_hInstance, m_hWnd,
+	@note   dlgInput1.DoModal(m_hInstance, m_hWnd,
 	@note       cStr[0].LoadString(STR_ERR_DLGPRNST1),
 	@note       cStr[1].LoadString(STR_ERR_DLGPRNST2),
 	@note       sizeof(m_PrintSettingArr[m_nCurrentPrintSetting].m_szPrintSettingName) - 1, szWork) )

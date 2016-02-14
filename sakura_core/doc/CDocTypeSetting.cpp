@@ -34,7 +34,7 @@
 
 // êFê›íË(ï€ë∂óp)
 struct ColorInfoIni {
-	int				m_nNameId;			// çÄñ⁄ñº
+	int				nNameId;			// çÄñ⁄ñº
 	ColorInfoBase	m_sColorInfo;		// êFê›íË
 };
 
@@ -112,7 +112,7 @@ void GetDefaultColorInfo(ColorInfo* pColorInfo, int nIndex)
 void GetDefaultColorInfoName(ColorInfo* pColorInfo, int nIndex)
 {
 	assert(nIndex < _countof(ColorInfo_DEFAULT));
-	_tcscpy(pColorInfo->m_szName, LS(ColorInfo_DEFAULT[nIndex].m_nNameId));
+	_tcscpy(pColorInfo->m_szName, LS(ColorInfo_DEFAULT[nIndex].nNameId));
 }
 
 int GetDefaultColorInfoCount()

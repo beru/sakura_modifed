@@ -15,7 +15,7 @@ bool Converter_SpaceToTab::DoConvert(NativeW* pData)
 	int		i;
 	int		nPosDes;
 	int		nPosX;
-	Eol	cEol;
+	Eol	eol;
 
 	bool	bSpace = false;	// スペースの処理中かどうか
 	int		j;
@@ -24,11 +24,11 @@ bool Converter_SpaceToTab::DoConvert(NativeW* pData)
 	nBgn = 0;
 	nPosDes = 0;
 	// 変換後に必要なバイト数を調べる
-	while ((pLine = GetNextLineW(pData->GetStringPtr(), pData->GetStringLength(), &nLineLen, &nBgn, &cEol, m_bExtEol))) {
+	while ((pLine = GetNextLineW(pData->GetStringPtr(), pData->GetStringLength(), &nLineLen, &nBgn, &eol, m_bExtEol))) {
 		if (0 < nLineLen) {
 			nPosDes += nLineLen;
 		}
-		nPosDes += cEol.GetLen();
+		nPosDes += eol.GetLen();
 	}
 	if (0 >= nPosDes) {
 		return false;
@@ -38,7 +38,7 @@ bool Converter_SpaceToTab::DoConvert(NativeW* pData)
 	nBgn = 0;
 	nPosDes = 0;
 	// CRLFで区切られる「行」を返す。CRLFは行長に加えない
-	while ((pLine = GetNextLineW(pData->GetStringPtr(), pData->GetStringLength(), &nLineLen, &nBgn, &cEol, m_bExtEol))) {
+	while ((pLine = GetNextLineW(pData->GetStringPtr(), pData->GetStringLength(), &nLineLen, &nBgn, &eol, m_bExtEol))) {
 		if (0 < nLineLen) {
 			// 先頭行については開始桁位置を考慮する（さらに折り返し関連の対策が必要？）
 			nPosX = (pData->GetStringPtr() == pLine)? m_nStartColumn: 0;	// 処理中のiに対応する表示桁位置
@@ -109,8 +109,8 @@ bool Converter_SpaceToTab::DoConvert(NativeW* pData)
 		}
 
 		// 行末の処理
-		auto_memcpy(&pDes[nPosDes], cEol.GetValue2(), cEol.GetLen());
-		nPosDes += cEol.GetLen();
+		auto_memcpy(&pDes[nPosDes], eol.GetValue2(), eol.GetLen());
+		nPosDes += eol.GetLen();
 	}
 	pDes[nPosDes] = L'\0';
 

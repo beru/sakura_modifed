@@ -338,7 +338,6 @@ int PropFileName::GetData(HWND hwndDlg)
 	m_common.m_fileName.m_bTransformShortPath = ::IsDlgButtonCheckedBool( hwndDlg, IDC_CHECK_SHORTPATH );
 	m_common.m_fileName.m_nTransformShortMaxWidth = ::GetDlgItemInt( hwndDlg, IDC_EDIT_SHORTMAXWIDTH, NULL, FALSE );
 
-
 	// ファイル名置換リスト
 	HWND hListView = ::GetDlgItem(hwndDlg, IDC_LIST_FNAME);
 	csFileName.m_nTransformFileNameArrNum = ListView_GetItemCount(hListView);
@@ -384,23 +383,23 @@ int PropFileName::SetListViewItem_FILENAME(
 		return -1;
 	}
 
-	LV_ITEM	Item = {0};
-	Item.mask     = LVIF_TEXT;
-	Item.iItem    = nIndex;
-	Item.iSubItem = 0;
-	Item.pszText  = szFrom;
+	LV_ITEM	item = {0};
+	item.mask     = LVIF_TEXT;
+	item.iItem    = nIndex;
+	item.iSubItem = 0;
+	item.pszText  = szFrom;
 	if (bInsMode) {
-		ListView_InsertItem(hListView, &Item);
+		ListView_InsertItem(hListView, &item);
 	}else {
-		ListView_SetItem(hListView, &Item);
+		ListView_SetItem(hListView, &item);
 	}
 
-	::ZeroMemory(&Item, sizeof_raw(Item));
-	Item.mask     = LVIF_TEXT;
-	Item.iItem    = nIndex;
-	Item.iSubItem = 1;
-	Item.pszText  = szTo;
-	ListView_SetItem(hListView, &Item);
+	::ZeroMemory(&item, sizeof_raw(item));
+	item.mask     = LVIF_TEXT;
+	item.iItem    = nIndex;
+	item.iSubItem = 1;
+	item.pszText  = szTo;
+	ListView_SetItem(hListView, &item);
 
 	ListView_SetItemState(hListView, nIndex, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED);
 	return nIndex;

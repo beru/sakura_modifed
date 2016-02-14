@@ -987,8 +987,8 @@ LRESULT ControlTray::DispatchEvent(
 					NetConnect(mruFolder.GetPath(nId - IDM_SELOPENFOLDER));
 
 					// ファイルオープンダイアログの初期化
-					DlgOpenFile	cDlgOpenFile;
-					cDlgOpenFile.Create(
+					DlgOpenFile	dlgOpenFile;
+					dlgOpenFile.Create(
 						m_hInstance,
 						NULL,
 						_T("*.*"),
@@ -998,7 +998,7 @@ LRESULT ControlTray::DispatchEvent(
 					);
 					LoadInfo loadInfo(_T(""), CODE_AUTODETECT, false);
 					std::vector<std::tstring> files;
-					if (!cDlgOpenFile.DoModalOpenDlg(&loadInfo, &files)) {
+					if (!dlgOpenFile.DoModalOpenDlg(&loadInfo, &files)) {
 						break;
 					}
 					if (!GetTrayHwnd()) {

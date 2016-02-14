@@ -188,7 +188,7 @@ BOOL DlgPrintSetting::OnDestroy(void)
 
 BOOL DlgPrintSetting::OnNotify(WPARAM wParam, LPARAM lParam)
 {
-	DlgInput1 cDlgInput1;
+	DlgInput1 dlgInput1;
 	BOOL bSpinDown;
 	int idCtrl = (int)wParam;
 	NM_UPDOWN* pMNUD = (NM_UPDOWN*)lParam;
@@ -235,7 +235,7 @@ BOOL DlgPrintSetting::OnCbnSelChange(HWND hwndCtl, int wID)
 BOOL DlgPrintSetting::OnBnClicked(int wID)
 {
 	TCHAR szWork[256];
-	DlgInput1 cDlgInput1;
+	DlgInput1 dlgInput1;
 	HWND hwndComboSettingName;
 	auto& curPS = m_PrintSettingArr[m_nCurrentPrintSetting];
 
@@ -248,7 +248,7 @@ BOOL DlgPrintSetting::OnBnClicked(int wID)
 	case IDC_BUTTON_EDITSETTINGNAME:
 		_tcscpy(szWork, curPS.m_szPrintSettingName);
 		{
-			BOOL bDlgInputResult = cDlgInput1.DoModal(
+			BOOL bDlgInputResult = dlgInput1.DoModal(
 				m_hInstance,
 				GetHwnd(),
 				LS(STR_DLGPRNST1),

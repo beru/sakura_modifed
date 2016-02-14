@@ -181,17 +181,17 @@ INT_PTR PropPlugin::DispatchEvent(
 			case IDC_PLUGIN_INST_ZIP:		// ZIPプラグインを追加
 				{
 					static std::tstring	sTrgDir;
-					DlgOpenFile	cDlgOpenFile;
-					TCHAR			szPath[_MAX_PATH + 1];
+					DlgOpenFile	dlgOpenFile;
+					TCHAR		szPath[_MAX_PATH + 1];
 					_tcscpy_s(szPath, (sTrgDir.empty() ? PluginManager::getInstance()->GetBaseDir().c_str() : sTrgDir.c_str()));
 					// ファイルオープンダイアログの初期化
-					cDlgOpenFile.Create(
+					dlgOpenFile.Create(
 						G_AppInstance(),
 						hwndDlg,
 						_T("*.zip"),
 						szPath
 					);
-					if (cDlgOpenFile.DoModal_GetOpenFileName(szPath)) {
+					if (dlgOpenFile.DoModal_GetOpenFileName(szPath)) {
 						GetData(hwndDlg);
 						PluginManager::getInstance()->InstZipPlugin(m_common, hwndDlg, szPath);
 						if (m_bTrayProc) {
@@ -230,8 +230,8 @@ INT_PTR PropPlugin::DispatchEvent(
 						Plugin* plugin = PluginManager::getInstance()->GetPlugin(sel);
 						wstring sDirName = to_wchar(plugin->GetFolderName().c_str());
 						if (plugin && auto_stricmp(sDirName.c_str(), pluginTable[sel].m_szName) == 0) {
-							DlgPluginOption cDlgPluginOption;
-							cDlgPluginOption.DoModal(::GetModuleHandle(NULL), hwndDlg, this, sel);
+							DlgPluginOption dlgPluginOption;
+							dlgPluginOption.DoModal(::GetModuleHandle(NULL), hwndDlg, this, sel);
 						}else {
 							WarningMessage(hwndDlg, LS(STR_PROPCOMPLG_ERR1));
 						}
@@ -341,7 +341,7 @@ void PropPlugin::SetData(HWND hwndDlg)
 void PropPlugin::SetData_LIST(HWND hwndDlg)
 {
 	int index;
-	LVITEM sItem;
+	LVITEM lvItem;
 	PluginRec* pluginTable = m_common.m_plugin.m_pluginTable;
 
 	::EnableWindow(::GetDlgItem(hwndDlg, IDC_PLUGIN_Remove), FALSE);
@@ -360,59 +360,59 @@ void PropPlugin::SetData_LIST(HWND hwndDlg)
 
 		// 番号
 		TCHAR buf[4];
-		memset_raw(&sItem, 0, sizeof(sItem));
-		sItem.mask = LVIF_TEXT | LVIF_PARAM;
-		sItem.iItem = index;
-		sItem.iSubItem = 0;
+		memset_raw(&lvItem, 0, sizeof(lvItem));
+		lvItem.mask = LVIF_TEXT | LVIF_PARAM;
+		lvItem.iItem = index;
+		lvItem.iSubItem = 0;
 		_itot(index, buf, 10);
-		sItem.pszText = buf;
-		sItem.lParam = index;
-		ListView_InsertItem(hListView, &sItem);
+		lvItem.pszText = buf;
+		lvItem.lParam = index;
+		ListView_InsertItem(hListView, &lvItem);
 
 		// 名前
-		memset_raw(&sItem, 0, sizeof(sItem));
-		sItem.iItem = index;
-		sItem.mask = LVIF_TEXT;
-		sItem.iSubItem = 1;
+		memset_raw(&lvItem, 0, sizeof(lvItem));
+		lvItem.iItem = index;
+		lvItem.mask = LVIF_TEXT;
+		lvItem.iSubItem = 1;
 		if (plugin) {
-			sItem.pszText = const_cast<LPTSTR>(to_tchar(plugin->m_sName.c_str()));
+			lvItem.pszText = const_cast<LPTSTR>(to_tchar(plugin->m_sName.c_str()));
 		}else {
-			sItem.pszText = const_cast<TCHAR*>(_T("-"));
+			lvItem.pszText = const_cast<TCHAR*>(_T("-"));
 		}
-		ListView_SetItem(hListView, &sItem);
+		ListView_SetItem(hListView, &lvItem);
 
 		// 状態
-		memset_raw(&sItem, 0, sizeof(sItem));
-		sItem.iItem = index;
-		sItem.mask = LVIF_TEXT;
-		sItem.iSubItem = 2;
+		memset_raw(&lvItem, 0, sizeof(lvItem));
+		lvItem.iItem = index;
+		lvItem.mask = LVIF_TEXT;
+		lvItem.iSubItem = 2;
 		switch (pluginTable[index].m_state) {
-		case PLS_INSTALLED: sItem.pszText = const_cast<TCHAR*>(LS(STR_PROPCOMPLG_STATE1)); break;
-		case PLS_UPDATED:   sItem.pszText = const_cast<TCHAR*>(LS(STR_PROPCOMPLG_STATE2)); break;
-		case PLS_STOPPED:   sItem.pszText = const_cast<TCHAR*>(LS(STR_PROPCOMPLG_STATE3)); break;
-		case PLS_LOADED:    sItem.pszText = const_cast<TCHAR*>(LS(STR_PROPCOMPLG_STATE4)); break;
-		case PLS_DELETED:   sItem.pszText = const_cast<TCHAR*>(LS(STR_PROPCOMPLG_STATE5)); break;
-		case PLS_NONE:      sItem.pszText = const_cast<TCHAR*>(_T("")); break;
-		default:            sItem.pszText = const_cast<TCHAR*>(LS(STR_PROPCOMPLG_STATE6)); break;
+		case PLS_INSTALLED: lvItem.pszText = const_cast<TCHAR*>(LS(STR_PROPCOMPLG_STATE1)); break;
+		case PLS_UPDATED:   lvItem.pszText = const_cast<TCHAR*>(LS(STR_PROPCOMPLG_STATE2)); break;
+		case PLS_STOPPED:   lvItem.pszText = const_cast<TCHAR*>(LS(STR_PROPCOMPLG_STATE3)); break;
+		case PLS_LOADED:    lvItem.pszText = const_cast<TCHAR*>(LS(STR_PROPCOMPLG_STATE4)); break;
+		case PLS_DELETED:   lvItem.pszText = const_cast<TCHAR*>(LS(STR_PROPCOMPLG_STATE5)); break;
+		case PLS_NONE:      lvItem.pszText = const_cast<TCHAR*>(_T("")); break;
+		default:            lvItem.pszText = const_cast<TCHAR*>(LS(STR_PROPCOMPLG_STATE6)); break;
 		}
-		ListView_SetItem(hListView, &sItem);
+		ListView_SetItem(hListView, &lvItem);
 		
 		// 読込
-		sItem.iItem = index;
-		sItem.mask = LVIF_TEXT;
-		sItem.iSubItem = 3;
+		lvItem.iItem = index;
+		lvItem.mask = LVIF_TEXT;
+		lvItem.iSubItem = 3;
 		if (pluginTable[index].m_state != PLS_NONE) {
-			sItem.pszText = const_cast<TCHAR*>(plugin ? LS(STR_PROPCOMPLG_LOAD) : _T(""));
+			lvItem.pszText = const_cast<TCHAR*>(plugin ? LS(STR_PROPCOMPLG_LOAD) : _T(""));
 		}else {
-			sItem.pszText = const_cast<TCHAR*>(_T(""));
+			lvItem.pszText = const_cast<TCHAR*>(_T(""));
 		}
-		ListView_SetItem(hListView, &sItem);
+		ListView_SetItem(hListView, &lvItem);
 
 		// フォルダ
-		memset_raw(&sItem, 0, sizeof(sItem));
-		sItem.iItem = index;
-		sItem.mask = LVIF_TEXT;
-		sItem.iSubItem = 4;
+		memset_raw(&lvItem, 0, sizeof(lvItem));
+		lvItem.iItem = index;
+		lvItem.mask = LVIF_TEXT;
+		lvItem.iSubItem = 4;
 		switch (pluginTable[index].m_state) {
 		case PLS_INSTALLED:
 		case PLS_UPDATED:
@@ -420,15 +420,15 @@ void PropPlugin::SetData_LIST(HWND hwndDlg)
 		case PLS_LOADED:
 			if (plugin) {
 				sDirName = plugin->GetFolderName();
-				sItem.pszText = const_cast<LPTSTR>(sDirName.c_str());
+				lvItem.pszText = const_cast<LPTSTR>(sDirName.c_str());
 			}else {
-				sItem.pszText = const_cast<LPTSTR>(to_tchar(pluginTable[index].m_szName));
+				lvItem.pszText = const_cast<LPTSTR>(to_tchar(pluginTable[index].m_szName));
 			}
 			break;
 		default:
-			sItem.pszText = const_cast<TCHAR*>(_T(""));
+			lvItem.pszText = const_cast<TCHAR*>(_T(""));
 		}
-		ListView_SetItem(hListView, &sItem);
+		ListView_SetItem(hListView, &lvItem);
 	}
 	
 	//	リストビューの行選択を可能にする．
@@ -516,8 +516,8 @@ void PropPlugin::EnablePluginPropInput(HWND hwndDlg)
 		::EnableWindow(::GetDlgItem(hwndDlg, IDC_PLUGIN_INST_ZIP         ), FALSE);
 	}else {
 		::EnableWindow(::GetDlgItem(hwndDlg, IDC_PLUGIN_SearchNew        ), TRUE);
-		ZipFile	cZipFile;
-		::EnableWindow(::GetDlgItem(hwndDlg, IDC_PLUGIN_INST_ZIP         ), cZipFile.IsOk());
+		ZipFile	zipFile;
+		::EnableWindow(::GetDlgItem(hwndDlg, IDC_PLUGIN_INST_ZIP         ), zipFile.IsOk());
 	}
 }
 

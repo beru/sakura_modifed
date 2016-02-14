@@ -13,7 +13,7 @@ bool Decode_UuDecode::DoDecode(const NativeW& pSrc, Memory* pDst)
 	int nsrclen;
 	char *pw, *pw_base;
 	int nlinelen, ncuridx;
-	Eol ceol;
+	Eol eol;
 	bool bsuccess = false;
 
 	pDst->Clear();
@@ -36,15 +36,15 @@ bool Decode_UuDecode::DoDecode(const NativeW& pSrc, Memory* pDst)
 	}
 
 	// ヘッダーを解析
-	pline = GetNextLineW( psrc, nsrclen, &nlinelen, &ncuridx, &ceol, false );
+	pline = GetNextLineW( psrc, nsrclen, &nlinelen, &ncuridx, &eol, false );
 	if (!CheckUUHeader(pline, nlinelen, m_aFilename)) {
 		pDst->_AppendSz("");
 		return false;
 	}
 
 	// ボディーを処理
-	while ((pline = GetNextLineW(psrc, nsrclen, &nlinelen, &ncuridx, &ceol, false))) {
-		if (ceol.GetType() != EolType::CRLF) {
+	while ((pline = GetNextLineW(psrc, nsrclen, &nlinelen, &ncuridx, &eol, false))) {
+		if (eol.GetType() != EolType::CRLF) {
 			pDst->_AppendSz("");
 			return false;
 		}

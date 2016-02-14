@@ -280,7 +280,7 @@ BOOL Print::GetDefaultPrinter(MYDEVMODE* pMYDEVMODE)
 HDC Print::CreateDC(
 	MYDEVMODE*	pMYDEVMODE,
 	TCHAR*		pszErrMsg		// エラーメッセージ格納場所
-)
+	)
 {
 	// プリンタが選択されていなければ、NULLを返す
 	if (!m_hDevMode) {

@@ -247,11 +247,11 @@ LRESULT PrintPreview::OnPaint(
 
 	::SetTextColor(hdc, RGB(0, 0, 0));
 
-	RECT cRect;	// 紙の大きさをあらわすRECT
-	cRect.left   = m_nPreview_ViewMarginLeft +                             m_pPrintSetting->m_nPrintMarginLX + 5;
-	cRect.right  = m_nPreview_ViewMarginLeft + m_nPreview_PaperAllWidth - (m_pPrintSetting->m_nPrintMarginRX + 5);
-	cRect.top    = nDirectY * (m_nPreview_ViewMarginTop +                              m_pPrintSetting->m_nPrintMarginTY + 5);
-	cRect.bottom = nDirectY * (m_nPreview_ViewMarginTop + m_nPreview_PaperAllHeight - (m_pPrintSetting->m_nPrintMarginBY + 5));
+	RECT rect;	// 紙の大きさをあらわすRECT
+	rect.left   = m_nPreview_ViewMarginLeft +                             m_pPrintSetting->m_nPrintMarginLX + 5;
+	rect.right  = m_nPreview_ViewMarginLeft + m_nPreview_PaperAllWidth - (m_pPrintSetting->m_nPrintMarginRX + 5);
+	rect.top    = nDirectY * (m_nPreview_ViewMarginTop +                              m_pPrintSetting->m_nPrintMarginTY + 5);
+	rect.bottom = nDirectY * (m_nPreview_ViewMarginTop + m_nPreview_PaperAllHeight - (m_pPrintSetting->m_nPrintMarginBY + 5));
 	
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                         テキスト                            //
@@ -261,7 +261,7 @@ LRESULT PrintPreview::OnPaint(
 
 	// ヘッダ
 	if (nHeaderHeight) {
-		DrawHeaderFooter(hdc, cRect, true);
+		DrawHeaderFooter(hdc, rect, true);
 	}
 
 	ColorStrategy* pStrategyStart = DrawPageTextFirst(m_nCurPageNum);
@@ -278,7 +278,7 @@ LRESULT PrintPreview::OnPaint(
 
 	// フッタ
 	if (Print::CalcFooterHeight(m_pPrintSetting)) {
-		DrawHeaderFooter(hdc, cRect, false);
+		DrawHeaderFooter(hdc, rect, false);
 	}
 	
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -1105,11 +1105,11 @@ void PrintPreview::OnPrint(void)
 
 	// 紙の大きさをあらわすRECTを設定
 	int nDirectY = -1;
-	RECT cRect;
-	cRect.left   =                             m_pPrintSetting->m_nPrintMarginLX - m_nPreview_PaperOffsetLeft + 5;
-	cRect.right  = m_nPreview_PaperAllWidth - (m_pPrintSetting->m_nPrintMarginRX + m_nPreview_PaperOffsetLeft + 5);
-	cRect.top    = nDirectY * (                             m_pPrintSetting->m_nPrintMarginTY - m_nPreview_PaperOffsetTop + 5);
-	cRect.bottom = nDirectY * (m_nPreview_PaperAllHeight - (m_pPrintSetting->m_nPrintMarginBY + m_nPreview_PaperOffsetTop + 5));
+	RECT rect;
+	rect.left   =                             m_pPrintSetting->m_nPrintMarginLX - m_nPreview_PaperOffsetLeft + 5;
+	rect.right  = m_nPreview_PaperAllWidth - (m_pPrintSetting->m_nPrintMarginRX + m_nPreview_PaperOffsetLeft + 5);
+	rect.top    = nDirectY * (                             m_pPrintSetting->m_nPrintMarginTY - m_nPreview_PaperOffsetTop + 5);
+	rect.bottom = nDirectY * (m_nPreview_PaperAllHeight - (m_pPrintSetting->m_nPrintMarginBY + m_nPreview_PaperOffsetTop + 5));
 
 	// ヘッダ・フッタの$pを展開するために、m_nCurPageNumを保持
 	WORD nCurPageNumOld = m_nCurPageNum;
@@ -1144,7 +1144,7 @@ void PrintPreview::OnPrint(void)
 
 		// ヘッダ印刷
 		if (nHeaderHeight) {
-			DrawHeaderFooter(hdc, cRect, true);
+			DrawHeaderFooter(hdc, rect, true);
 		}
 
 		const LayoutInt	nPageTopLineNum = LayoutInt(((nFrom + i) * m_pPrintSetting->m_nPrintDansuu) * m_bPreview_EnableLines);
@@ -1172,7 +1172,7 @@ void PrintPreview::OnPrint(void)
 
 		// フッタ印刷
 		if (Print::CalcFooterHeight(m_pPrintSetting)) {
-			DrawHeaderFooter(hdc, cRect, false);
+			DrawHeaderFooter(hdc, rect, false);
 		}
 
 		// 印刷 ページ終了

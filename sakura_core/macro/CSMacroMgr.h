@@ -73,7 +73,7 @@ typedef MacroFuncInfo* MacroFuncInfoArray;
 -----------------------------------------------------------------------*/
 class SMacroMgr {
 	// データの型宣言
-	MacroManagerBase* m_cSavedKeyMacro[MAX_CUSTMACRO];	// キーマクロをカスタムメニューの数だけ管理
+	MacroManagerBase* m_savedKeyMacros[MAX_CUSTMACRO];	// キーマクロをカスタムメニューの数だけ管理
 	// Jun. 16, 2002 genta
 	// キーマクロに標準マクロ以外のマクロを読み込めるように
 	MacroManagerBase* m_pKeyMacro;	// 標準の（保存ができる）キーマクロも管理
@@ -148,16 +148,16 @@ public:
 
 	// Sep. 15, 2005 FILE	実行中マクロのインデックス番号操作 (INVALID_MACRO_IDX:無効)
 	int GetCurrentIdx(void) const {
-		return m_CurrentIdx;
+		return m_currentIdx;
 	}
 	int SetCurrentIdx(int idx) {
-		int oldIdx = m_CurrentIdx;
-		m_CurrentIdx = idx;
+		int oldIdx = m_currentIdx;
+		m_currentIdx = idx;
 		return oldIdx;
 	}
 
 	// Oct. 22, 2008 syat 一時マクロ導入
-	MacroManagerBase* SetTempMacro(MacroManagerBase *newMacro);
+	MacroManagerBase* SetTempMacro(MacroManagerBase* newMacro);
 
 private:
 	DLLSHAREDATA*	m_pShareData;
@@ -166,13 +166,13 @@ private:
 	/*!	実行中マクロのインデックス番号 (INVALID_MACRO_IDX:無効)
 		@date Sep. 15, 2005 FILE
 	*/
-	int m_CurrentIdx;
+	int m_currentIdx;
 
 	std::tstring	m_sMacroPath;	// Loadしたマクロ名
 
 public:
-	static MacroFuncInfo	m_MacroFuncInfoCommandArr[];	// コマンド情報(戻り値なし)
-	static MacroFuncInfo	m_MacroFuncInfoArr[];		// 関数情報(戻り値あり)
+	static MacroFuncInfo	m_macroFuncInfoCommandArr[];	// コマンド情報(戻り値なし)
+	static MacroFuncInfo	m_macroFuncInfoArr[];		// 関数情報(戻り値あり)
 
 private:
 	DISALLOW_COPY_AND_ASSIGN(SMacroMgr);

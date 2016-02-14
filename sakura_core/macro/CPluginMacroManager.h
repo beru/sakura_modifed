@@ -50,7 +50,7 @@ public:
 	static void declare(void);
 
 protected:
-	std::wstring	m_Source;	// マクロスクリプト
+	std::wstring	m_source;	// マクロスクリプト
 	std::wstring	m_Ext;		// 拡張子
 	Plug*			m_Plug;		// プラグイン
 };

@@ -94,8 +94,8 @@ bool DocFileOperation::OpenFileDialog(
 	ActivateFrameWindow(hwndParent);
 
 	// ファイルオープンダイアログを表示
-	DlgOpenFile cDlgOpenFile;
-	cDlgOpenFile.Create(
+	DlgOpenFile dlgOpenFile;
+	dlgOpenFile.Create(
 		G_AppInstance(),
 		hwndParent,
 		_T("*.*"),
@@ -103,7 +103,7 @@ bool DocFileOperation::OpenFileDialog(
 		MRUFile().GetPathList(),														// MRUリストのファイルのリスト
 		MRUFolder().GetPathList()														// OPENFOLDERリストのファイルのリスト
 	);
-	return cDlgOpenFile.DoModalOpenDlg( pLoadInfo, &files );
+	return dlgOpenFile.DoModalOpenDlg( pLoadInfo, &files );
 }
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -308,8 +308,8 @@ bool DocFileOperation::SaveFileDialog(
 	}
 
 	// ダイアログを表示
-	DlgOpenFile cDlgOpenFile;
-	cDlgOpenFile.Create(
+	DlgOpenFile dlgOpenFile;
+	dlgOpenFile.Create(
 		G_AppInstance(),
 		EditWnd::getInstance()->GetHwnd(),
 		szDefaultWildCard,
@@ -317,7 +317,7 @@ bool DocFileOperation::SaveFileDialog(
 		MRUFile().GetPathList(),	// 最近のファイル
 		MRUFolder().GetPathList()	// 最近のフォルダ
 	);
-	return cDlgOpenFile.DoModalSaveDlg( pSaveInfo, pSaveInfo->eCharCode == CODE_CODEMAX );
+	return dlgOpenFile.DoModalSaveDlg( pSaveInfo, pSaveInfo->eCharCode == CODE_CODEMAX );
 }
 
 //「ファイル名を付けて保存」ダイアログ
@@ -350,7 +350,7 @@ bool DocFileOperation::DoSaveFlow(SaveInfo* pSaveInfo)
 			if (pSaveInfo->bOverwriteMode) {
 				// 無変更の場合は警告音を出し、終了
 				if (!m_pDocRef->m_docEditor.IsModified() &&
-					pSaveInfo->cEol == EolType::None &&	// ※改行コード指定保存がリクエストされた場合は、「変更があったもの」とみなす
+					pSaveInfo->eol == EolType::None &&	// ※改行コード指定保存がリクエストされた場合は、「変更があったもの」とみなす
 					!pSaveInfo->bChgCodeSet
 				) {		// 文字コードセットの変更が有った場合は、「変更があったもの」とみなす
 					EditApp::getInstance()->m_soundSet.NeedlessToSaveBeep();
@@ -436,7 +436,7 @@ bool DocFileOperation::FileSave()
 	// セーブ情報
 	SaveInfo saveInfo;
 	m_pDocRef->GetSaveInfo(&saveInfo);
-	saveInfo.cEol = EolType::None;			// 改行コード無変換
+	saveInfo.eol = EolType::None;			// 改行コード無変換
 	saveInfo.bOverwriteMode = true;	// 上書き要求
 
 	// 上書き処理
@@ -458,12 +458,12 @@ bool DocFileOperation::FileSaveAs(
 	// セーブ情報
 	SaveInfo saveInfo;
 	m_pDocRef->GetSaveInfo(&saveInfo);
-	saveInfo.cEol = EolType::None; // 初期値は変換しない
+	saveInfo.eol = EolType::None; // 初期値は変換しない
 	if (filename) {
 		// ダイアログなし保存、またはマクロの引数あり
 		saveInfo.filePath = to_tchar(filename);
 		if (EolType::None <= eEolType && eEolType < EolType::CodeMax) {
-			saveInfo.cEol = eEolType;
+			saveInfo.eol = eEolType;
 		}
 		if (IsValidCodeType(eCodeType) && eCodeType != saveInfo.eCharCode) {
 			saveInfo.eCharCode = eCodeType;

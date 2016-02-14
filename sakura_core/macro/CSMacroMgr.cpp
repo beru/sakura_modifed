@@ -40,7 +40,7 @@ VARTYPE s_MacroArgEx_s[] = {VT_BSTR};
 MacroFuncInfoEx s_MacroInfoEx_s = {5, 5, s_MacroArgEx_s};
 #endif
 
-MacroFuncInfo SMacroMgr::m_MacroFuncInfoCommandArr[] = 
+MacroFuncInfo SMacroMgr::m_macroFuncInfoCommandArr[] = 
 {
 //	機能番号			関数名			引数				作業用バッファ
 
@@ -417,7 +417,7 @@ MacroFuncInfo SMacroMgr::m_MacroFuncInfoCommandArr[] =
 	{F_INVALID,	NULL, {VT_EMPTY, VT_EMPTY, VT_EMPTY, VT_EMPTY},	VT_EMPTY,	NULL}
 };
 
-MacroFuncInfo SMacroMgr::m_MacroFuncInfoArr[] = 
+MacroFuncInfo SMacroMgr::m_macroFuncInfoArr[] = 
 {
 	//ID					関数名							引数										戻り値の型	m_pszData
 	{F_GETFILENAME,			LTEXT("GetFilename"),			{VT_EMPTY, VT_EMPTY, VT_EMPTY, VT_EMPTY},	VT_BSTR,	NULL }, // ファイル名を返す
@@ -503,7 +503,7 @@ SMacroMgr::SMacroMgr()
 	WSHMacroManager::declare();
 	
 	for (int i=0; i<MAX_CUSTMACRO; ++i) {
-		m_cSavedKeyMacro[i] = NULL;
+		m_savedKeyMacros[i] = NULL;
 	}
 	// Jun. 16, 2002 genta
 	m_pKeyMacro = NULL;
@@ -527,8 +527,8 @@ void SMacroMgr::ClearAll(void)
 {
 	for (int i=0; i<MAX_CUSTMACRO; ++i) {
 		// Apr. 29, 2002 genta
-		delete m_cSavedKeyMacro[i];
-		m_cSavedKeyMacro[i] = NULL;
+		delete m_savedKeyMacros[i];
+		m_savedKeyMacros[i] = NULL;
 	}
 	// Jun. 16, 2002 genta
 	delete m_pKeyMacro;
@@ -615,7 +615,7 @@ BOOL SMacroMgr::Exec(
 
 	// 読み込み前か、毎回読み込む設定の場合は、ファイルを読み込みなおす
 	// Apr. 29, 2002 genta
-	if (!m_cSavedKeyMacro[idx] || ShareData::getInstance()->BeReloadWhenExecuteMacro(idx)) {
+	if (!m_savedKeyMacros[idx] || ShareData::getInstance()->BeReloadWhenExecuteMacro(idx)) {
 		// ShareDataから、マクロファイル名を取得
 		// Jun. 08, 2003 Moca 呼び出し側でパス名を用意
 		// Jun. 16, 2003 genta 書式をちょっと変更
@@ -634,7 +634,7 @@ BOOL SMacroMgr::Exec(
 	// Jul. 01, 2007 マクロの多重実行時に備えて直前のマクロ番号を退避
 	int prevmacro = SetCurrentIdx(idx);
 	SetCurrentIdx(idx);
-	m_cSavedKeyMacro[idx]->ExecKeyMacro2(pEditView, flags);
+	m_savedKeyMacros[idx]->ExecKeyMacro2(pEditView, flags);
 	SetCurrentIdx(prevmacro);
 
 	return TRUE;
@@ -724,8 +724,8 @@ bool SMacroMgr::Load(
 void SMacroMgr::UnloadAll(void)
 {
 	for (int idx=0; idx<MAX_CUSTMACRO; ++idx) {
-		delete m_cSavedKeyMacro[idx];
-		m_cSavedKeyMacro[idx] = NULL;
+		delete m_savedKeyMacros[idx];
+		m_savedKeyMacros[idx] = NULL;
 	}
 
 }
@@ -758,7 +758,7 @@ bool SMacroMgr::Save(
 
 	}
 //	else if (0 <= idx && idx < MAX_CUSTMACRO) {
-//		return m_cSavedKeyMacro[idx]->SaveKeyMacro(hInstance, pszPath);
+//		return m_savedKeyMacros[idx]->SaveKeyMacro(hInstance, pszPath);
 //	}
 	return false;
 }
@@ -788,20 +788,20 @@ void SMacroMgr::Clear(int idx)
 	@return 構造体へのポインタ．見つからなければNULL
 	
 	@date 2002.06.16 genta
-	@date 2003.02.24 m_MacroFuncInfoArrも検索対象にする
+	@date 2003.02.24 m_macroFuncInfoArrも検索対象にする
 */
 const MacroFuncInfo* SMacroMgr::GetFuncInfoByID(int nFuncID)
 {
 	// Jun. 27, 2002 genta
 	// 番人をコード0として拾ってしまうので，配列サイズによる判定をやめた．
-	for (int i=0; m_MacroFuncInfoCommandArr[i].m_pszFuncName; ++i) {
-		if (m_MacroFuncInfoCommandArr[i].m_nFuncID == nFuncID) {
-			return &m_MacroFuncInfoCommandArr[i];
+	for (int i=0; m_macroFuncInfoCommandArr[i].m_pszFuncName; ++i) {
+		if (m_macroFuncInfoCommandArr[i].m_nFuncID == nFuncID) {
+			return &m_macroFuncInfoCommandArr[i];
 		}
 	}
-	for (int i=0; m_MacroFuncInfoArr[i].m_pszFuncName; ++i) {
-		if (m_MacroFuncInfoArr[i].m_nFuncID == nFuncID) {
-			return &m_MacroFuncInfoArr[i];
+	for (int i=0; m_macroFuncInfoArr[i].m_pszFuncName; ++i) {
+		if (m_macroFuncInfoArr[i].m_nFuncID == nFuncID) {
+			return &m_macroFuncInfoArr[i];
 		}
 	}
 	return NULL;
@@ -881,9 +881,9 @@ EFunctionCode SMacroMgr::GetFuncInfoByName(
 	}
 
 	// コマンド関数を検索
-	for (int i=0; m_MacroFuncInfoCommandArr[i].m_pszFuncName; ++i) {
-		if (auto_strcmp(normalizedFuncName, m_MacroFuncInfoCommandArr[i].m_pszFuncName) == 0) {
-			EFunctionCode nFuncID = EFunctionCode(m_MacroFuncInfoCommandArr[i].m_nFuncID);
+	for (int i=0; m_macroFuncInfoCommandArr[i].m_pszFuncName; ++i) {
+		if (auto_strcmp(normalizedFuncName, m_macroFuncInfoCommandArr[i].m_pszFuncName) == 0) {
+			EFunctionCode nFuncID = EFunctionCode(m_macroFuncInfoCommandArr[i].m_nFuncID);
 			if (pszFuncNameJapanese) {
 				wcsncpy(pszFuncNameJapanese, LSW(nFuncID), 255);
 				pszFuncNameJapanese[255] = L'\0';
@@ -892,9 +892,9 @@ EFunctionCode SMacroMgr::GetFuncInfoByName(
 		}
 	}
 	// 非コマンド関数を検索
-	for (int i=0; m_MacroFuncInfoArr[i].m_pszFuncName; ++i) {
-		if (auto_strcmp(normalizedFuncName, m_MacroFuncInfoArr[i].m_pszFuncName) == 0) {
-			EFunctionCode nFuncID = EFunctionCode(m_MacroFuncInfoArr[i].m_nFuncID);
+	for (int i=0; m_macroFuncInfoArr[i].m_pszFuncName; ++i) {
+		if (auto_strcmp(normalizedFuncName, m_macroFuncInfoArr[i].m_pszFuncName) == 0) {
+			EFunctionCode nFuncID = EFunctionCode(m_macroFuncInfoArr[i].m_nFuncID);
 			if (pszFuncNameJapanese) {
 				wcsncpy(pszFuncNameJapanese, LSW(nFuncID), 255);
 				pszFuncNameJapanese[255] = L'\0';
@@ -1250,7 +1250,7 @@ MacroManagerBase** SMacroMgr::Idx2Ptr(int idx)
 	}else if (idx == TEMP_KEYMACRO) {
 		return &m_pTempMacro;
 	}else if (0 <= idx && idx < MAX_CUSTMACRO) {
-		return &m_cSavedKeyMacro[idx];
+		return &m_savedKeyMacros[idx];
 	}
 
 	DEBUG_TRACE(_T("SMacroMgr::Idx2Ptr() Out of range: idx=%d\n"), idx);

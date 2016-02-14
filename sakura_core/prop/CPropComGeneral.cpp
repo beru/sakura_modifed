@@ -137,8 +137,8 @@ INT_PTR PropGeneral::DispatchEvent(
 //@@@ 2001.12.26 YAZAKI MRUƒŠƒXƒg‚ÍACMRU‚ÉˆË—Š‚·‚é
 //				m_pShareData->m_sHistory.m_nMRUArrNum = 0;
 				{
-					MRUFile cMRU;
-					cMRU.ClearAll();
+					MRUFile mru;
+					mru.ClearAll();
 				}
 				InfoMessage(hwndDlg, LS(STR_PROPCOMGEN_FILE2));
 				return TRUE;

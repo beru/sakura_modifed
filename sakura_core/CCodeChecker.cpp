@@ -17,19 +17,19 @@
 //! DocLineMgrが保持するデータに異なる改行コードが混在しているかどうか判定する
 static bool _CheckSavingEolcode(
 	const DocLineMgr& pcDocLineMgr,
-	Eol cEolType
+	Eol eolType
 	)
 {
 	bool bMix = false;
-	if (cEolType == EolType::None) {	// 改行コード変換なし
-		Eol cEolCheck;	// 比較対象EOL
+	if (eolType == EolType::None) {	// 改行コード変換なし
+		Eol eolCheck;	// 比較対象EOL
 		const DocLine* pDocLine = pcDocLineMgr.GetDocLineTop();
 		if (pDocLine) {
-			cEolCheck = pDocLine->GetEol();
+			eolCheck = pDocLine->GetEol();
 		}
 		while (pDocLine) {
 			Eol eol = pDocLine->GetEol();
-			if (eol != cEolCheck && eol != EolType::None) {
+			if (eol != eolCheck && eol != EolType::None) {
 				bMix = true;
 				break;
 			}
@@ -139,7 +139,7 @@ CallbackResultType CodeChecker::OnCheckSave(SaveInfo* pSaveInfo)
 	bool bTmpResult = false;
 	if (pDoc->m_docType.GetDocumentAttribute().m_bChkEnterAtEnd) {
 		bTmpResult = _CheckSavingEolcode(
-			pDoc->m_docLineMgr, pSaveInfo->cEol
+			pDoc->m_docLineMgr, pSaveInfo->eol
 		);
 	}
 
@@ -153,7 +153,7 @@ CallbackResultType CodeChecker::OnCheckSave(SaveInfo* pSaveInfo)
 			pDoc->m_docEditor.GetNewLineCode().GetName()
 		);
 		switch (nDlgResult) {
-		case IDYES:		pSaveInfo->cEol = pDoc->m_docEditor.GetNewLineCode(); break; // 統一
+		case IDYES:		pSaveInfo->eol = pDoc->m_docEditor.GetNewLineCode(); break; // 統一
 		case IDNO:		break; // 続行
 		case IDCANCEL:	return CallbackResultType::Interrupt; // 中断
 		}

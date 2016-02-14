@@ -866,8 +866,8 @@ void EditWnd::LayoutMainMenu()
 		switch (mainMenu->m_nType) {
 		case MainMenuType::Node:
 			// ラベル未設定かつFunctionコードがありならストリングテーブルから取得 2012/10/18 syat 各国語対応
-			pszName = (mainMenu->m_sName[0] == L'\0' && mainMenu->m_nFunc != F_NODE)
-								? LS(mainMenu->m_nFunc) : to_tchar(mainMenu->m_sName);
+			pszName = (mainMenu->m_sName[0] == L'\0' && mainMenu->nFunc != F_NODE)
+								? LS(mainMenu->nFunc) : to_tchar(mainMenu->m_sName);
 			::AppendMenu(hMenu, MF_POPUP | MF_STRING | (nCount <= 1 ? MF_GRAYED : 0), (UINT_PTR)CreatePopupMenu(), 
 				KeyBind::MakeMenuLabel(pszName, to_tchar(mainMenu->m_sKey)));
 			break;
@@ -876,7 +876,7 @@ void EditWnd::LayoutMainMenu()
 			// 2014.05.04 Moca プラグイン/マクロ等を置けるようにFunccode2Nameを使うように
 			{
 				WCHAR szLabelW[256];
-				GetDocument()->m_funcLookup.Funccode2Name(mainMenu->m_nFunc, szLabelW, 256);
+				GetDocument()->m_funcLookup.Funccode2Name(mainMenu->nFunc, szLabelW, 256);
 				auto_strncpy(szLabel, to_tchar(szLabelW), _countof(szLabel) - 1);
 				szLabel[_countof(szLabel) - 1] = _T('\0');
 			}
@@ -885,7 +885,7 @@ void EditWnd::LayoutMainMenu()
 				G_AppInstance(),
 				csKeyBind.m_nKeyNameArrNum,
 				csKeyBind.m_pKeyNameArr,
-				mainMenu->m_nFunc,
+				mainMenu->nFunc,
 				szLabel,
 				to_tchar(mainMenu->m_sKey),
 				FALSE,
@@ -894,14 +894,14 @@ void EditWnd::LayoutMainMenu()
 			) {
 				auto_strcpy(szLabel, _T("?"));
 			}
-			::AppendMenu(hMenu, MF_STRING, mainMenu->m_nFunc, szLabel);
+			::AppendMenu(hMenu, MF_STRING, mainMenu->nFunc, szLabel);
 			break;
 		case MainMenuType::Separator:
 			::AppendMenu(hMenu, MF_SEPARATOR, 0, NULL);
 			break;
 		case MainMenuType::Special:
 			nCount = 0;
-			switch (mainMenu->m_nFunc) {
+			switch (mainMenu->nFunc) {
 			case F_WINDOW_LIST:				// ウィンドウリスト
 				EditNode*	pEditNodeArr;
 				nCount = AppNodeManager::getInstance()->GetOpenedWindowArr(&pEditNodeArr, TRUE);
@@ -952,7 +952,7 @@ void EditWnd::LayoutMainMenu()
 				break;
 			}
 			::AppendMenu(hMenu, MF_POPUP | MF_STRING | (nCount <= 0 ? MF_GRAYED : 0), (UINT_PTR)CreatePopupMenu(), 
-				KeyBind::MakeMenuLabel(LS(mainMenu->m_nFunc), to_tchar(mainMenu->m_sKey)));
+				KeyBind::MakeMenuLabel(LS(mainMenu->nFunc), to_tchar(mainMenu->m_sKey)));
 			break;
 		}
 	}
@@ -2185,9 +2185,9 @@ void EditWnd::OnCommand(WORD wNotifyCode, WORD wID , HWND hwndCtl)
 		// 最近使ったファイル
 		else if (wID - IDM_SELMRU >= 0 && wID - IDM_SELMRU < 999) {
 			// 指定ファイルが開かれているか調べる
-			const MRUFile cMRU;
+			const MRUFile mru;
 			EditInfo checkEditInfo;
-			cMRU.GetEditInfo(wID - IDM_SELMRU, &checkEditInfo);
+			mru.GetEditInfo(wID - IDM_SELMRU, &checkEditInfo);
 			LoadInfo loadInfo(checkEditInfo.m_szPath, checkEditInfo.m_nCharCode, false);
 			GetDocument()->m_docFileOperation.FileLoad(&loadInfo);	//	Oct.  9, 2004 genta 共通関数化
 		}
@@ -2312,9 +2312,9 @@ void EditWnd::InitMenu(HMENU hMenu, UINT uPos, BOOL fSystemMenu)
 			switch (pMainMenu->m_nType) {
 			case MainMenuType::Node:
 				hMenuPopUp = ::CreatePopupMenu();
-				if (pMainMenu->m_nFunc != 0 && pMainMenu->m_sName[0] == L'\0') {
+				if (pMainMenu->nFunc != 0 && pMainMenu->m_sName[0] == L'\0') {
 					// ストリングテーブルから読み込み
-					tmpMenuName = LSW(pMainMenu->m_nFunc);
+					tmpMenuName = LSW(pMainMenu->nFunc);
 					if (MAX_MAIN_MENU_NAME_LEN < tmpMenuName.length()) {
 						tmpMenuName = tmpMenuName.substr(0, MAX_MAIN_MENU_NAME_LEN);
 					}
@@ -2331,14 +2331,14 @@ void EditWnd::InitMenu(HMENU hMenu, UINT uPos, BOOL fSystemMenu)
 				}
 				break;
 			case MainMenuType::Leaf:
-				InitMenu_Function(hMenu, pMainMenu->m_nFunc, pMainMenu->m_sName, pMainMenu->m_sKey);
+				InitMenu_Function(hMenu, pMainMenu->nFunc, pMainMenu->m_sName, pMainMenu->m_sKey);
 				break;
 			case MainMenuType::Separator:
 				m_menuDrawer.MyAppendMenuSep(hMenu, MF_BYPOSITION | MF_SEPARATOR, 0, NULL);
 				break;
 			case MainMenuType::Special:
 				bool	bInList;		// リストが1個以上ある
-				bInList = InitMenu_Special(hMenu, pMainMenu->m_nFunc);
+				bInList = InitMenu_Special(hMenu, pMainMenu->nFunc);
 				// リストが無い場合の処理
 				if (!bInList) {
 					// 分割線に囲まれ、かつリストなし ならば 次の分割線をスキップ
@@ -2771,8 +2771,8 @@ void EditWnd::OnDropFiles(HDROP hDrop)
 			// アクティブにする
 			ActivateFrameWindow(hWndOwner);
 			// MRUリストへの登録
-			MRUFile cMRU;
-			cMRU.Add(pfi);
+			MRUFile mru;
+			mru.Add(pfi);
 		}else {
 			// 変更フラグがオフで、ファイルを読み込んでいない場合
 			//	2005.06.24 Moca

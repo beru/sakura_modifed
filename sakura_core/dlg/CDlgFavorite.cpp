@@ -912,11 +912,11 @@ void DlgFavorite::AddItem()
 	int max_size = _MAX_PATH;
 	szAddText[0] = 0;
 
-	DlgInput1	cDlgInput1;
+	DlgInput1	dlgInput1;
 	std::tstring strTitle = LS(STR_DLGFAV_ADD);
 	std::tstring strMessage = LS(STR_DLGFAV_ADD_PROMPT);
 	if (
-		!cDlgInput1.DoModal(
+		!dlgInput1.DoModal(
 			G_AppInstance(),
 			GetHwnd(),
 			strTitle.c_str(),
@@ -952,11 +952,11 @@ void DlgFavorite::EditItem()
 			TCHAR szText[_MAX_PATH];
 			int max_size = _MAX_PATH;
 			_tcsncpy_s(szText, max_size, recent.GetItemText(nRecIndex), _TRUNCATE);
-			DlgInput1	cDlgInput1;
+			DlgInput1	dlgInput1;
 			std::tstring strTitle = LS(STR_DLGFAV_EDIT);
 			std::tstring strMessage = LS(STR_DLGFAV_EDIT_PROMPT);
 			if (
-				!cDlgInput1.DoModal(
+				!dlgInput1.DoModal(
 					G_AppInstance(),
 					GetHwnd(),
 					strTitle.c_str(),

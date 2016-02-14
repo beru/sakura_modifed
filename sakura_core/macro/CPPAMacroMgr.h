@@ -45,6 +45,6 @@ public:
 	static void declare(void);
 
 protected:
-	NativeW m_cBuffer;
+	NativeW m_buffer;
 };
 

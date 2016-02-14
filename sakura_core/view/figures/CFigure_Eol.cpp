@@ -43,7 +43,7 @@ void _DispWrap(Graphics& gr, DispPos* pDispPos, const EditView* pView);
 
 // â¸çsãLçÜï`âÊ
 // 2007.08.30 kobake í«â¡
-void _DispEOL(Graphics& gr, DispPos* pDispPos, Eol cEol, const EditView* pView, bool bTrans);
+void _DispEOL(Graphics& gr, DispPos* pDispPos, Eol eol, const EditView* pView, bool bTrans);
 
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //

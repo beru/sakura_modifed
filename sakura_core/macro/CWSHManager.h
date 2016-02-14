@@ -45,11 +45,11 @@ public:
 
 	void AddParam(WSHIfObj* param);				// インタフェースオブジェクトを追加する
 	void AddParam(WSHIfObj::List& params);		// インタフェースオブジェクト達を追加する
-	void ClearParam();								// インタフェースオブジェクトを削除する
+	void ClearParam();							// インタフェースオブジェクトを削除する
 protected:
-	std::wstring m_Source;
-	std::wstring m_EngineName;
-	WSHIfObj::List m_Params;
+	std::wstring m_source;
+	std::wstring m_engineName;
+	WSHIfObj::List m_params;
 	// 2009.10.29 syat WSHIfObjへ移動
 	////	2007.07.20 genta : flags追加
 	//static void ReadyCommands(CIfObj *Object, MacroFuncInfo *Info, int flags);

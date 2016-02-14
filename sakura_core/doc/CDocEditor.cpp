@@ -167,7 +167,7 @@ void DocEditor::SetImeMode(int mode)
 
 	@param pData    [in] 追加する文字列へのポインタ
 	@param nDataLen [in] 文字列の長さ。文字単位。
-	@param cEol     [in] 行末コード
+	@param eol     [in] 行末コード
 
 */
 void DocEditAgent::AddLineStrX(const wchar_t* pData, int nDataLen)

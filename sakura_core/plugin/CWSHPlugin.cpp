@@ -40,33 +40,33 @@ WSHPlugin::~WSHPlugin(void)
 
 // プラグイン定義ファイルを読み込む
 bool WSHPlugin::ReadPluginDef(
-	DataProfile* cProfile,
-	DataProfile* cProfileMlang
+	DataProfile* profile,
+	DataProfile* profileMlang
 	)
 {
-	ReadPluginDefCommon(cProfile, cProfileMlang);
+	ReadPluginDefCommon(profile, profileMlang);
 
 	// WSHセクションの読み込み
-	cProfile->IOProfileData<bool>(PII_WSH, PII_WSH_USECACHE, m_bUseCache);
+	profile->IOProfileData<bool>(PII_WSH, PII_WSH_USECACHE, m_bUseCache);
 
 	// プラグの読み込み
-	ReadPluginDefPlug(cProfile, cProfileMlang);
+	ReadPluginDefPlug(profile, profileMlang);
 
 	// コマンドの読み込み
-	ReadPluginDefCommand(cProfile, cProfileMlang);
+	ReadPluginDefCommand(profile, profileMlang);
 
 	// オプション定義の読み込み	// 2010/3/24 Uchi
-	ReadPluginDefOption(cProfile, cProfileMlang);
+	ReadPluginDefOption(profile, profileMlang);
 
 	// 文字列定義の読み込み
-	ReadPluginDefString(cProfile, cProfileMlang);
+	ReadPluginDefString(profile, profileMlang);
 
 	return true;
 }
 
 // オプションファイルを読み込む
 bool WSHPlugin::ReadPluginOption(
-	DataProfile* cProfile
+	DataProfile* profile
 	)
 {
 	return true;

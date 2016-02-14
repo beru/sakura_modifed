@@ -333,13 +333,13 @@ static bool IsProfileDuplicate(
 
 void DlgProfileMgr::CreateProf()
 {
-	DlgInput1 cDlgInput1;
+	DlgInput1 dlgInput1;
 	int max_size = _MAX_PATH;
 	TCHAR szText[_MAX_PATH];
 	std::tstring strTitle = LS(STR_DLGPROFILE_NEW_PROF_TITLE);
 	std::tstring strMessage = LS(STR_DLGPROFILE_NEW_PROF_MSG);
 	szText[0] = _T('\0');
-	if (!cDlgInput1.DoModal(G_AppInstance(), GetHwnd(), strTitle.c_str(), strMessage.c_str(), max_size, szText)) {
+	if (!dlgInput1.DoModal(G_AppInstance(), GetHwnd(), strTitle.c_str(), strMessage.c_str(), max_size, szText)) {
 		return;
 	}
 	if (szText[0] == _T('\0')) {
@@ -391,7 +391,7 @@ void DlgProfileMgr::DeleteProf()
 void DlgProfileMgr::RenameProf()
 {
 	HWND hwndList = GetItemHwnd(IDC_LIST_PROFILE);
-	DlgInput1 cDlgInput1;
+	DlgInput1 dlgInput1;
 	int nCurIndex = List_GetCurSel(hwndList);
 	TCHAR szText[_MAX_PATH];
 	bool bDefault = MyList_GetText(hwndList, nCurIndex, szText);
@@ -400,7 +400,7 @@ void DlgProfileMgr::RenameProf()
 	std::tstring strTitle = LS(STR_DLGPROFILE_RENAME_TITLE);
 	std::tstring strMessage = LS(STR_DLGPROFILE_RENAME_MSG);
 	int max_size = _MAX_PATH;
-	if (!cDlgInput1.DoModal(G_AppInstance(), GetHwnd(), strTitle.c_str(), strMessage.c_str(), max_size, szText)) {
+	if (!dlgInput1.DoModal(G_AppInstance(), GetHwnd(), strTitle.c_str(), strMessage.c_str(), max_size, szText)) {
 		return;
 	}
 	if (szText[0] == _T('\0')) {

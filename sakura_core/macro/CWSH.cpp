@@ -67,7 +67,7 @@ class WSHSite :
 {
 private:
 	WSHClient *m_Client;
-	ITypeInfo *m_TypeInfo;
+	ITypeInfo *m_typeInfo;
 	ULONG m_RefCount;
 public:
 	WSHSite(WSHClient *AClient)

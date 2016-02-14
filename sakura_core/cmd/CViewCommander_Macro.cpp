@@ -104,14 +104,14 @@ void ViewCommander::Command_SAVEKEYMACRO(void)
 		_tcscpy(szInitDir, macroFolder);	// マクロ用フォルダ
 	}
 	// ファイルオープンダイアログの初期化
-	DlgOpenFile	cDlgOpenFile;
-	cDlgOpenFile.Create(
+	DlgOpenFile	dlgOpenFile;
+	dlgOpenFile.Create(
 		G_AppInstance(),
 		m_pCommanderView->GetHwnd(),
 		_T("*.mac"),
 		szInitDir
 	);
-	if (!cDlgOpenFile.DoModal_GetSaveFileName(szPath)) {
+	if (!dlgOpenFile.DoModal_GetSaveFileName(szPath)) {
 		return;
 	}
 	// ファイルのフルパスを、フォルダとファイル名に分割
@@ -151,8 +151,8 @@ void ViewCommander::Command_LOADKEYMACRO(void)
 		_tcscpy_s(szInitDir, pszFolder);	// マクロ用フォルダ
 	}
 	// ファイルオープンダイアログの初期化
-	DlgOpenFile cDlgOpenFile;
-	cDlgOpenFile.Create(
+	DlgOpenFile dlgOpenFile;
+	dlgOpenFile.Create(
 		G_AppInstance(),
 		m_pCommanderView->GetHwnd(),
 // 2005/02/20 novice デフォルトの拡張子変更
@@ -160,7 +160,7 @@ void ViewCommander::Command_LOADKEYMACRO(void)
 		_T("*.*"),
 		szInitDir
 	);
-	if (!cDlgOpenFile.DoModal_GetOpenFileName(szPath)) {
+	if (!dlgOpenFile.DoModal_GetOpenFileName(szPath)) {
 		return;
 	}
 
@@ -239,14 +239,14 @@ void ViewCommander::Command_EXECEXTMACRO(const WCHAR* pszPathW, const WCHAR* psz
 			_tcscpy_s(szInitDir, pszFolder);	// マクロ用フォルダ
 		}
 		// ファイルオープンダイアログの初期化
-		DlgOpenFile cDlgOpenFile;
-		cDlgOpenFile.Create(
+		DlgOpenFile dlgOpenFile;
+		dlgOpenFile.Create(
 			G_AppInstance(),
 			m_pCommanderView->GetHwnd(),
 			_T("*.*"),
 			szInitDir
 		);
-		if (!cDlgOpenFile.DoModal_GetOpenFileName(szPath)) {
+		if (!dlgOpenFile.DoModal_GetOpenFileName(szPath)) {
 			return;
 		}
 		pszPath = szPath;

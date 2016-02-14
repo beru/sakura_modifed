@@ -1191,7 +1191,7 @@ int GrepAgent::DoGrepFile(
 		// 検索条件が長さゼロの場合はファイル名だけ返す
 		// 2002/08/29 ファイルオープンの手前へ移動
 		
-		std::vector<std::pair<const wchar_t*, LogicInt> > searchWords;
+		std::vector<std::pair<const wchar_t*, LogicInt>> searchWords;
 		if (searchOption.bWordOnly) {
 			SearchAgent::CreateWordList(searchWords, pszKey, nKeyLen);
 		}
@@ -1686,7 +1686,7 @@ int GrepAgent::DoGrepReplaceFile(
 		}
 		int nOutputHitCount = 0;
 	
-		std::vector<std::pair<const wchar_t*, LogicInt> > searchWords;
+		std::vector<std::pair<const wchar_t*, LogicInt>> searchWords;
 		if (searchOption.bWordOnly) {
 			SearchAgent::CreateWordList( searchWords, pszKey, nKeyLen );
 		}

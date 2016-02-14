@@ -279,10 +279,10 @@ int DlgFileTree::GetData()
 	}
 	if (!bSaveShareData) {
 		// Œ³‚Ìini‚É•Û‘¶
-		ImpExpFileTree cImpExp(items);
+		ImpExpFileTree impExp(items);
 		std::wstring strIni = to_wchar(m_fileTreeSetting.m_szLoadProjectIni);
 		std::wstring strError;
-		if (!cImpExp.Export(strIni, strError)) {
+		if (!impExp.Export(strIni, strError)) {
 			ErrorMessage(hwndDlg, _T("%ls"), strError.c_str());
 		}
 	}
@@ -507,8 +507,8 @@ BOOL DlgFileTree::OnBnClicked(int wID)
 		{
 			GetItemText(IDC_EDIT_DEFINI, m_fileTreeSetting.m_szDefaultProjectIni, m_fileTreeSetting.m_szDefaultProjectIni.GetBufferCount() );
 			if (m_fileTreeSetting.m_szDefaultProjectIni[0] != _T('\0')) {
-				DataProfile cProfile;
-				cProfile.SetReadingMode();
+				DataProfile profile;
+				profile.SetReadingMode();
 				const TCHAR* pszIniFileName;
 				TCHAR szDir[_MAX_PATH * 2];
 				if (_IS_REL_PATH(m_fileTreeSetting.m_szDefaultProjectIni)) {
@@ -518,8 +518,8 @@ BOOL DlgFileTree::OnBnClicked(int wID)
 				}else {
 					pszIniFileName = m_fileTreeSetting.m_szDefaultProjectIni;
 				}
-				if (cProfile.ReadProfile(pszIniFileName)) {
-					ImpExpFileTree::IO_FileTreeIni(cProfile, m_fileTreeSetting.m_aItems);
+				if (profile.ReadProfile(pszIniFileName)) {
+					ImpExpFileTree::IO_FileTreeIni(profile, m_fileTreeSetting.m_aItems);
 					m_fileTreeSetting.m_szLoadProjectIni = pszIniFileName;
 				}
 			}
@@ -927,8 +927,8 @@ BOOL DlgFileTree::OnBnClicked(int wID)
 		return TRUE;
 	case IDC_BUTTON_IMPORT:
 		{
-			ImpExpFileTree cImpExp(m_fileTreeSetting.m_aItems);
-			cImpExp.ImportUI(G_AppInstance(), GetHwnd());
+			ImpExpFileTree impExp(m_fileTreeSetting.m_aItems);
+			impExp.ImportUI(G_AppInstance(), GetHwnd());
 			SetData();
 		}
 		return TRUE;
@@ -936,8 +936,8 @@ BOOL DlgFileTree::OnBnClicked(int wID)
 		{
 			std::vector<FileTreeItem> items;
 			GetDataTree(items, TreeView_GetRoot(GetItemHwnd(IDC_TREE_FL)), 0, 0);
-			ImpExpFileTree cImpExp(items);
-			cImpExp.ExportUI(G_AppInstance(), GetHwnd());
+			ImpExpFileTree impExp(items);
+			impExp.ExportUI(G_AppInstance(), GetHwnd());
 		}
 		return TRUE;
 

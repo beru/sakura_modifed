@@ -123,8 +123,8 @@ static wchar_t* MakeExportFileName(wchar_t* res, const wchar_t* trg, const wchar
 bool ImpExpManager::ImportUI(HINSTANCE hInstance, HWND hwndParent)
 {
 	// ファイルオープンダイアログの初期化
-	DlgOpenFile cDlgOpenFile;
-	cDlgOpenFile.Create(
+	DlgOpenFile dlgOpenFile;
+	dlgOpenFile.Create(
 		hInstance,
 		hwndParent,
 		GetDefaultExtension(),
@@ -135,7 +135,7 @@ bool ImpExpManager::ImportUI(HINSTANCE hInstance, HWND hwndParent)
 	if (!GetFileName().empty()) {
 		auto_strcpy(szPath, to_tchar(GetFullPath().c_str()));
 	}
-	if (!cDlgOpenFile.DoModal_GetOpenFileName(szPath)) {
+	if (!dlgOpenFile.DoModal_GetOpenFileName(szPath)) {
 		return false;
 	}
 
@@ -170,8 +170,8 @@ bool ImpExpManager::ImportUI(HINSTANCE hInstance, HWND hwndParent)
 bool ImpExpManager::ExportUI(HINSTANCE hInstance, HWND hwndParent)
 {
 	// ファイルオープンダイアログの初期化
-	DlgOpenFile cDlgOpenFile;
-	cDlgOpenFile.Create(
+	DlgOpenFile dlgOpenFile;
+	dlgOpenFile.Create(
 		hInstance,
 		hwndParent,
 		GetDefaultExtension(),
@@ -182,7 +182,7 @@ bool ImpExpManager::ExportUI(HINSTANCE hInstance, HWND hwndParent)
 	if (!GetFileName().empty()) {
 		auto_strcpy(szPath, to_tchar(GetFullPath().c_str()));
 	}
-	if (!cDlgOpenFile.DoModal_GetSaveFileName(szPath)) {
+	if (!dlgOpenFile.DoModal_GetSaveFileName(szPath)) {
 		return false;
 	}
 
@@ -237,9 +237,9 @@ void ImpExpManager::SetBaseName(const wstring& sBase)
 bool ImpExpType::ImportAscertain(HINSTANCE hInstance, HWND hwndParent, const wstring& sFileName, wstring& sErrMsg)
 {
 	const tstring sPath = to_tchar(sFileName.c_str());
-	m_cProfile.SetReadingMode();
+	m_profile.SetReadingMode();
 
-	if (!m_cProfile.ReadProfile(sPath.c_str())) {
+	if (!m_profile.ReadProfile(sPath.c_str())) {
 		// 設定ファイルが存在しない
 		sErrMsg = std::wstring(LSW(STR_IMPEXP_ERR_FILEOPEN)) + sFileName;
 		return false;
@@ -248,13 +248,13 @@ bool ImpExpType::ImportAscertain(HINSTANCE hInstance, HWND hwndParent, const wst
 	// Check Version
 	int nStructureVersion = 0;
 	wchar_t	szKeyVersion[64];
-	if (!m_cProfile.IOProfileData(szSecInfo, szKeyStructureVersion, nStructureVersion)) {
+	if (!m_profile.IOProfileData(szSecInfo, szKeyStructureVersion, nStructureVersion)) {
 		sErrMsg = LSW(STR_IMPEXP_ERR_TYPE);
 		return false;
 	}
 	if ((unsigned int)nStructureVersion != m_pShareData->m_vStructureVersion) {
 		auto_strcpy(szKeyVersion, L"?");
-		m_cProfile.IOProfileData(szSecInfo, szKeyVersion, MakeStringBufferW(szKeyVersion));
+		m_profile.IOProfileData(szSecInfo, szKeyVersion, MakeStringBufferW(szKeyVersion));
 		int nRet = ConfirmMessage(hwndParent,
 			LS(STR_IMPEXP_VER), 
 			_APP_NAME_(LTEXT), szKeyVersion, nStructureVersion);
@@ -274,7 +274,7 @@ bool ImpExpType::ImportAscertain(HINSTANCE hInstance, HWND hwndParent, const wst
 	List_GetText(m_hwndList, m_nIdx, wszLabel);
 	sAscertainInfo.sTypeNameTo = wszLabel;
 	wszLabel[0] = L'\0';
-	m_cProfile.IOProfileData(szSecTypes, L"szTypeName", MakeStringBufferW(wszLabel));
+	m_profile.IOProfileData(szSecTypes, L"szTypeName", MakeStringBufferW(wszLabel));
 	sAscertainInfo.sTypeNameFile = wszLabel;
 
 	// 確認
@@ -294,7 +294,7 @@ bool ImpExpType::Import(const wstring& sFileName, wstring& sErrMsg)
 {
 	wstring	files = L"";
 	wstring TmpMsg;
-	ColorInfo colorInfoArr[_countof(m_Types.m_colorInfoArr)];				// 色設定配列(バックアップ)
+	ColorInfo colorInfoArr[_countof(m_types.m_colorInfoArr)];				// 色設定配列(バックアップ)
 	
 	// 色の変更
 	if (m_nColorType >= MAX_TYPES) {
@@ -315,25 +315,25 @@ bool ImpExpType::Import(const wstring& sFileName, wstring& sErrMsg)
 	}
 
 	// 読み込み
-	ShareData_IO::ShareData_IO_Type_One(m_cProfile, m_Types, szSecTypes);
+	ShareData_IO::ShareData_IO_Type_One(m_profile, m_types, szSecTypes);
 
-	m_Types.m_nIdx = m_nIdx;
+	m_types.m_nIdx = m_nIdx;
 	if (m_nIdx == 0) {
 		// 基本の場合の名前と拡張子を初期化
-		_tcscpy_s(m_Types.m_szTypeName, LS(STR_TYPE_NAME_BASIS));
-		m_Types.m_szTypeExts[0] = 0;
-		m_Types.m_id = 0;
+		_tcscpy_s(m_types.m_szTypeName, LS(STR_TYPE_NAME_BASIS));
+		m_types.m_szTypeExts[0] = 0;
+		m_types.m_id = 0;
 	}else {
-		m_Types.m_id = (::GetTickCount() & 0x3fffffff) + m_nIdx * 0x10000;
+		m_types.m_id = (::GetTickCount() & 0x3fffffff) + m_nIdx * 0x10000;
 	}
 
 	// 色の設定
 	if (m_nColorType >= 0) {
 		// 色指定あり
 		for (int i=0; i<_countof(colorInfoArr); ++i) {
-			bool bDisp = m_Types.m_colorInfoArr[i].m_bDisp;
-			m_Types.m_colorInfoArr[i] = colorInfoArr[i];
-			m_Types.m_colorInfoArr[i].m_bDisp = bDisp;		// 表示フラグはファイルのものを使用する
+			bool bDisp = m_types.m_colorInfoArr[i].m_bDisp;
+			m_types.m_colorInfoArr[i] = colorInfoArr[i];
+			m_types.m_colorInfoArr[i].m_bDisp = bDisp;		// 表示フラグはファイルのものを使用する
 		}
 	}
 
@@ -354,7 +354,7 @@ bool ImpExpType::Import(const wstring& sFileName, wstring& sErrMsg)
 	for (int i=0; i<MAX_KEYWORDSET_PER_TYPE; ++i) {
 		//types.m_nKeyWordSetIdx[i] = -1;
 		auto_sprintf_s(szKeyName, szKeyKeywordTemp, i + 1);
-		if (m_cProfile.IOProfileData(szSecTypeEx, szKeyName, MakeStringBufferW(szKeyData))) {
+		if (m_profile.IOProfileData(szSecTypeEx, szKeyName, MakeStringBufferW(szKeyData))) {
 			nIdx = keyWordSetMgr.SearchKeyWordSet(szKeyData);
 			if (nIdx < 0) {
 				// エントリ作成
@@ -364,14 +364,14 @@ bool ImpExpType::Import(const wstring& sFileName, wstring& sErrMsg)
 			if (nIdx >= 0) {
 				auto_sprintf_s(szKeyName, szKeyKeywordCaseTemp, i + 1);
 				bCase = false;		// 大文字小文字区別しない (Defaule)
-				m_cProfile.IOProfileData(szSecTypeEx, szKeyName, bCase);
+				m_profile.IOProfileData(szSecTypeEx, szKeyName, bCase);
 
 				// キーワード定義ファイル入力
 				ImpExpKeyWord	cImpExpKeyWord(common, nIdx, bCase);
 
 				auto_sprintf_s(szKeyName, szKeyKeywordFileTemp, i + 1);
 				szFileName[0] = L'\0';
-				if (m_cProfile.IOProfileData(szSecTypeEx, szKeyName, MakeStringBufferW(szFileName))) {
+				if (m_profile.IOProfileData(szSecTypeEx, szKeyName, MakeStringBufferW(szFileName))) {
 					if (cImpExpKeyWord.Import(cImpExpKeyWord.MakeFullPath(szFileName), TmpMsg)) {
 						files += wstring(L"\n") + szFileName;
 					}else {
@@ -379,14 +379,14 @@ bool ImpExpType::Import(const wstring& sFileName, wstring& sErrMsg)
 					}
 				}
 			}
-			m_Types.m_nKeyWordSetIdx[i] = nIdx;
+			m_types.m_nKeyWordSetIdx[i] = nIdx;
 		}
 	}
 
 	// Plugin
 	//  アウトライン解析方法
 	CommonSetting_Plugin& plugin = common.m_plugin;
-	if (m_cProfile.IOProfileData(szSecTypeEx, szKeyPluginOutlineId, MakeStringBufferW(szKeyData))) {
+	if (m_profile.IOProfileData(szSecTypeEx, szKeyPluginOutlineId, MakeStringBufferW(szKeyData))) {
 		nDataLen = wcslen(szKeyData);
 		pSlashPos = wcschr(szKeyData, L'/');
 		nIdx = -1;
@@ -403,11 +403,11 @@ bool ImpExpType::Import(const wstring& sFileName, wstring& sErrMsg)
 		}
 		// 2010.08.21 0が範囲から漏れていた
 		if (nIdx >= 0) {
-			m_Types.m_eDefaultOutline = Plug::GetOutlineType(Plug::GetPluginFunctionCode(nIdx, nPlug));
+			m_types.m_eDefaultOutline = Plug::GetOutlineType(Plug::GetPluginFunctionCode(nIdx, nPlug));
 		}
 	}
 	// スマートインデント
-	if (m_cProfile.IOProfileData(szSecTypeEx, szKeyPluginSmartIndentId, MakeStringBufferW(szKeyData))) {
+	if (m_profile.IOProfileData(szSecTypeEx, szKeyPluginSmartIndentId, MakeStringBufferW(szKeyData))) {
 		nDataLen = wcslen(szKeyData);
 		pSlashPos = wcschr(szKeyData, L'/');
 		nIdx = -1;
@@ -424,7 +424,7 @@ bool ImpExpType::Import(const wstring& sFileName, wstring& sErrMsg)
 		}
 		// 2010.08.21 0が範囲から漏れていた
 		if (nIdx >= 0) {
-			m_Types.m_eSmartIndent = Plug::GetSmartIndentType(Plug::GetPluginFunctionCode(nIdx, nPlug));
+			m_types.m_eSmartIndent = Plug::GetSmartIndentType(Plug::GetPluginFunctionCode(nIdx, nPlug));
 		}
 	}
 
@@ -437,11 +437,11 @@ bool ImpExpType::Import(const wstring& sFileName, wstring& sErrMsg)
 // エクスポート
 bool ImpExpType::Export(const wstring& sFileName, wstring& sErrMsg)
 {
-	DataProfile cProfile;
+	DataProfile profile;
 
-	cProfile.SetWritingMode();
+	profile.SetWritingMode();
 
-	ShareData_IO::ShareData_IO_Type_One(cProfile , m_Types, szSecTypes);
+	ShareData_IO::ShareData_IO_Type_One(profile , m_types, szSecTypes);
 
 	// 共通設定との連結部
 	wchar_t	szKeyName[64];
@@ -454,29 +454,29 @@ bool ImpExpType::Export(const wstring& sFileName, wstring& sErrMsg)
 	// 強調キーワード
 	auto& keyWordSetMgr = common.m_specialKeyword.m_CKeyWordSetMgr;
 	for (int i=0; i<MAX_KEYWORDSET_PER_TYPE; ++i) {
-		if (m_Types.m_nKeyWordSetIdx[i] >= 0) {
-			int nIdx = m_Types.m_nKeyWordSetIdx[i];
+		if (m_types.m_nKeyWordSetIdx[i] >= 0) {
+			int nIdx = m_types.m_nKeyWordSetIdx[i];
 			auto_sprintf_s(szKeyName, szKeyKeywordTemp, i + 1);
 			auto_strcpy(buff, keyWordSetMgr.GetTypeName(nIdx));
-			cProfile.IOProfileData(szSecTypeEx, szKeyName, MakeStringBufferW(buff));
+			profile.IOProfileData(szSecTypeEx, szKeyName, MakeStringBufferW(buff));
 
 			// 大文字小文字区別
 			bool bCase = keyWordSetMgr.GetKeyWordCase(nIdx);
 
 			// キーワード定義ファイル出力
-			ImpExpKeyWord	cImpExpKeyWord(common, m_Types.m_nKeyWordSetIdx[i], bCase);
+			ImpExpKeyWord	cImpExpKeyWord(common, m_types.m_nKeyWordSetIdx[i], bCase);
 			cImpExpKeyWord.SetBaseName(keyWordSetMgr.GetTypeName(nIdx));
 
 			if (cImpExpKeyWord.Export(cImpExpKeyWord.GetFullPath(), sTmpMsg)) {
 				auto_strcpy(szFileName, cImpExpKeyWord.GetFileName().c_str());
 				auto_sprintf_s(szKeyName, szKeyKeywordFileTemp, i + 1);
-				if (cProfile.IOProfileData(szSecTypeEx, szKeyName, MakeStringBufferW(szFileName))) {
+				if (profile.IOProfileData(szSecTypeEx, szKeyName, MakeStringBufferW(szFileName))) {
 					files += wstring(L"\n") + cImpExpKeyWord.GetFileName();
 				}
 			}
 
 			auto_sprintf_s(szKeyName, szKeyKeywordCaseTemp, i + 1);
-			cProfile.IOProfileData(szSecTypeEx, szKeyName, bCase);
+			profile.IOProfileData(szSecTypeEx, szKeyName, bCase);
 		}
 	}
 
@@ -486,26 +486,26 @@ bool ImpExpType::Export(const wstring& sFileName, wstring& sErrMsg)
 	int nPIdx;
 	int nPlug;
 	wchar_t szId[MAX_PLUGIN_ID + 1 + 2];
-	if ((nPIdx = Plug::GetPluginId(static_cast<EFunctionCode>(m_Types.m_eDefaultOutline))) >= 0) {
-		cProfile.IOProfileData(szSecTypeEx, szKeyPluginOutlineName, MakeStringBufferW(plugin.m_pluginTable[nPIdx].m_szName));
+	if ((nPIdx = Plug::GetPluginId(static_cast<EFunctionCode>(m_types.m_eDefaultOutline))) >= 0) {
+		profile.IOProfileData(szSecTypeEx, szKeyPluginOutlineName, MakeStringBufferW(plugin.m_pluginTable[nPIdx].m_szName));
 		wcscpyn(szId, plugin.m_pluginTable[nPIdx].m_szId, _countof(szId));
-		if ((nPlug = Plug::GetPlugId(static_cast<EFunctionCode>(m_Types.m_eDefaultOutline))) != 0) {
+		if ((nPlug = Plug::GetPlugId(static_cast<EFunctionCode>(m_types.m_eDefaultOutline))) != 0) {
 			wchar_t szPlug[8];
 			swprintf(szPlug, L"/%d", nPlug);
 			wcscat(szId, szPlug);
 		}
-		cProfile.IOProfileData(szSecTypeEx, szKeyPluginOutlineId,   MakeStringBufferW(szId));
+		profile.IOProfileData(szSecTypeEx, szKeyPluginOutlineId,   MakeStringBufferW(szId));
 	}
 	// スマートインデント
-	if ((nPIdx = Plug::GetPluginId(static_cast<EFunctionCode>(m_Types.m_eSmartIndent))) >= 0) {
-		cProfile.IOProfileData(szSecTypeEx, szKeyPluginSmartIndentName, MakeStringBufferW(plugin.m_pluginTable[nPIdx].m_szName));
+	if ((nPIdx = Plug::GetPluginId(static_cast<EFunctionCode>(m_types.m_eSmartIndent))) >= 0) {
+		profile.IOProfileData(szSecTypeEx, szKeyPluginSmartIndentName, MakeStringBufferW(plugin.m_pluginTable[nPIdx].m_szName));
 		wcscpyn(szId, plugin.m_pluginTable[nPIdx].m_szId, _countof(szId));
-		if ((nPlug = Plug::GetPlugId(static_cast<EFunctionCode>(m_Types.m_eSmartIndent))) != 0) {
+		if ((nPlug = Plug::GetPlugId(static_cast<EFunctionCode>(m_types.m_eSmartIndent))) != 0) {
 			wchar_t szPlug[8];
 			swprintf(szPlug, L"/%d", nPlug);
 			wcscat(szId, szPlug);
 		}
-		cProfile.IOProfileData(szSecTypeEx, szKeyPluginSmartIndentId,   MakeStringBufferW(szId));
+		profile.IOProfileData(szSecTypeEx, szKeyPluginSmartIndentId,   MakeStringBufferW(szId));
 	}
 
 	// Version
@@ -517,12 +517,12 @@ bool ImpExpType::Export(const wstring& sFileName, wstring& sErrMsg)
 				LOWORD(pShare->m_version.m_dwProductVersionMS),
 				HIWORD(pShare->m_version.m_dwProductVersionLS),
 				LOWORD(pShare->m_version.m_dwProductVersionLS));
-	cProfile.IOProfileData(szSecInfo, szKeyVersion, MakeStringBufferW(wbuff));
+	profile.IOProfileData(szSecInfo, szKeyVersion, MakeStringBufferW(wbuff));
 	nStructureVersion = int(pShare->m_vStructureVersion);
-	cProfile.IOProfileData(szSecInfo, szKeyStructureVersion, nStructureVersion);
+	profile.IOProfileData(szSecInfo, szKeyStructureVersion, nStructureVersion);
 
 	// 書き込み
-	if (!cProfile.WriteProfile(to_tchar(sFileName.c_str()), WSTR_TYPE_HEAD)) {
+	if (!profile.WriteProfile(to_tchar(sFileName.c_str()), WSTR_TYPE_HEAD)) {
 		sErrMsg = std::wstring(LSW(STR_IMPEXP_ERR_EXPORT)) + sFileName;
 		return false;
 	}
@@ -564,16 +564,16 @@ bool ImpExpColors::Import(const wstring& sFileName, wstring& sErrMsg)
 	}
 	in.Close();
 
-	DataProfile cProfile;
-	cProfile.SetReadingMode();
+	DataProfile profile;
+	profile.SetReadingMode();
 
 	// 色設定Ver3
-	if (!cProfile.ReadProfile(strPath.c_str())) {
+	if (!profile.ReadProfile(strPath.c_str())) {
 		return false;
 	}
 
 	// 色設定 I/O
-	ShareData_IO::IO_ColorSet(&cProfile, szSecColor, m_colorInfoArr);
+	ShareData_IO::IO_ColorSet(&profile, szSecColor, m_colorInfoArr);
 
 	return true;
 }
@@ -582,10 +582,10 @@ bool ImpExpColors::Import(const wstring& sFileName, wstring& sErrMsg)
 bool ImpExpColors::Export(const wstring& sFileName, wstring& sErrMsg)
 {
 	// 色設定 I/O
-	DataProfile cProfile;
-	cProfile.SetWritingMode();
-	ShareData_IO::IO_ColorSet(&cProfile, szSecColor, m_colorInfoArr);
-	if (!cProfile.WriteProfile(to_tchar(sFileName.c_str()), WSTR_COLORDATA_HEAD3)) { // Jan. 15, 2001 Stonee
+	DataProfile profile;
+	profile.SetWritingMode();
+	ShareData_IO::IO_ColorSet(&profile, szSecColor, m_colorInfoArr);
+	if (!profile.WriteProfile(to_tchar(sFileName.c_str()), WSTR_COLORDATA_HEAD3)) { // Jan. 15, 2001 Stonee
 		sErrMsg = std::wstring(LSW(STR_IMPEXP_ERR_EXPORT)) + sFileName;
 		return false;
 	}
@@ -642,7 +642,7 @@ bool ImpExpRegex::Import(const wstring& sFileName, wstring& sErrMsg)
 				if (k == -1) {
 					// 日本語名からインデックス番号に変換する
 					for (int m=0; m<COLORIDX_LAST; ++m) {
-						if (auto_strcmp(m_Types.m_colorInfoArr[m].m_szName, &buff[11]) == 0) {
+						if (auto_strcmp(m_types.m_colorInfoArr[m].m_szName, &buff[11]) == 0) {
 							k = m;
 							break;
 						}
@@ -668,10 +668,10 @@ bool ImpExpRegex::Import(const wstring& sFileName, wstring& sErrMsg)
 	in.Close();
 
 	for (int i=0; i<count; ++i) {
-		m_Types.m_RegexKeywordArr[i] = regexKeyArr[i];
+		m_types.m_RegexKeywordArr[i] = regexKeyArr[i];
 	}
 	for (int i=0; i<=keywordPos; ++i) {
-		m_Types.m_RegexKeywordList[i] = pKeyword[i];
+		m_types.m_RegexKeywordList[i] = pKeyword[i];
 	}
 
 	return true;
@@ -688,13 +688,13 @@ bool ImpExpRegex::Export(const wstring& sFileName, wstring& sErrMsg)
 
 	out.WriteF(WSTR_REGEXKW_HEAD);
 
-	const wchar_t* regex = m_Types.m_RegexKeywordList;
+	const wchar_t* regex = m_types.m_RegexKeywordList;
 	for (int i=0; i<MAX_REGEX_KEYWORD; ++i) {
 		if (regex[0] == L'\0') {
 			break;
 		}
 		
-		const TCHAR* name  = GetColorNameByIndex(m_Types.m_RegexKeywordArr[i].m_nColorIndex);
+		const TCHAR* name  = GetColorNameByIndex(m_types.m_RegexKeywordArr[i].m_nColorIndex);
 		out.WriteF(L"RxKey[%03d]=%ts,%ls\n", i, name, regex);
 
 		for (; *regex!='\0'; ++regex) {}
@@ -711,7 +711,7 @@ bool ImpExpRegex::Export(const wstring& sFileName, wstring& sErrMsg)
 //                     キーワードヘルプ                        //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 /*! インポート
-	@date 2010.07.14 Moca ListViewへの設定からm_Typesへの設定に変更
+	@date 2010.07.14 Moca ListViewへの設定からm_typesへの設定に変更
 */
 bool ImpExpKeyHelp::Import(const wstring& sFileName, wstring& sErrMsg)
 {
@@ -797,20 +797,20 @@ bool ImpExpKeyHelp::Import(const wstring& sFileName, wstring& sErrMsg)
 		}
 
 		// 良さそうなら
-		m_Types.m_KeyHelpArr[i].m_bUse = (b_enable_flag != 0);	// 2007.02.03 genta
-		_tcscpy_s(m_Types.m_KeyHelpArr[i].m_szAbout, to_tchar(p4));
-		_tcscpy(m_Types.m_KeyHelpArr[i].m_szPath,  to_tchar(p3));
+		m_types.m_KeyHelpArr[i].m_bUse = (b_enable_flag != 0);	// 2007.02.03 genta
+		_tcscpy_s(m_types.m_KeyHelpArr[i].m_szAbout, to_tchar(p4));
+		_tcscpy(m_types.m_KeyHelpArr[i].m_szPath,  to_tchar(p3));
 		++i;
 	}
 	in.Close();
 
 	// 空きがあるなら番兵を設定
-	if (i < _countof(m_Types.m_KeyHelpArr)) {
-		m_Types.m_KeyHelpArr[i].m_bUse = false;
-		m_Types.m_KeyHelpArr[i].m_szAbout[0] = _T('\0');
-		m_Types.m_KeyHelpArr[i].m_szPath[0]  = _T('\0');
+	if (i < _countof(m_types.m_KeyHelpArr)) {
+		m_types.m_KeyHelpArr[i].m_bUse = false;
+		m_types.m_KeyHelpArr[i].m_szAbout[0] = _T('\0');
+		m_types.m_KeyHelpArr[i].m_szPath[0]  = _T('\0');
 	}
-	m_Types.m_nKeyHelpNum = i;
+	m_types.m_nKeyHelpNum = i;
 
 	// 2007.02.03 genta 失敗したら警告する
 	if (invalid_record > 0) {
@@ -822,7 +822,7 @@ bool ImpExpKeyHelp::Import(const wstring& sFileName, wstring& sErrMsg)
 }
 
 /*! エクスポート
-	@date 2010.07.14 Moca ListViewからm_Typesからのエクスポートに変更
+	@date 2010.07.14 Moca ListViewからm_typesからのエクスポートに変更
 */
 bool ImpExpKeyHelp::Export(const wstring& sFileName, wstring& sErrMsg)
 {
@@ -833,13 +833,13 @@ bool ImpExpKeyHelp::Export(const wstring& sFileName, wstring& sErrMsg)
 	}
 
 	out.WriteF(WSTR_KEYHELP_HEAD);
-	for (int i=0; i<m_Types.m_nKeyHelpNum; ++i) {
+	for (int i=0; i<m_types.m_nKeyHelpNum; ++i) {
 		out.WriteF(
 			L"KDct[%02d]=%d,%ts,%ts\n",
 			i,
-			m_Types.m_KeyHelpArr[i].m_bUse ? 1 : 0,
-			m_Types.m_KeyHelpArr[i].m_szAbout,
-			m_Types.m_KeyHelpArr[i].m_szPath.c_str()
+			m_types.m_KeyHelpArr[i].m_bUse ? 1 : 0,
+			m_types.m_KeyHelpArr[i].m_szAbout,
+			m_types.m_KeyHelpArr[i].m_szPath.c_str()
 		);
 	}
 	out.Close();
@@ -1018,21 +1018,21 @@ bool ImpExpKeybind::Export(const wstring& sFileName, wstring& sErrMsg)
 	out.Close();
 
 	// キー割り当て情報
-	DataProfile cProfile;
+	DataProfile profile;
 
 	// 書き込みモード設定
-	cProfile.SetWritingMode();
+	profile.SetWritingMode();
 
 	// ヘッダ
 	StaticString<wchar_t, 256> szKeydataHead = WSTR_KEYBIND_HEAD4;
-	cProfile.IOProfileData(szSecInfo, L"KEYBIND_VERSION", szKeydataHead);
-	cProfile.IOProfileData_WrapInt(szSecInfo, L"KEYBIND_COUNT", m_common.m_keyBind.m_nKeyNameArrNum);
+	profile.IOProfileData(szSecInfo, L"KEYBIND_VERSION", szKeydataHead);
+	profile.IOProfileData_WrapInt(szSecInfo, L"KEYBIND_COUNT", m_common.m_keyBind.m_nKeyNameArrNum);
 
 	// 内容
-	ShareData_IO::IO_KeyBind(cProfile, m_common.m_keyBind, true);
+	ShareData_IO::IO_KeyBind(profile, m_common.m_keyBind, true);
 
 	// 書き込み
-	if (!cProfile.WriteProfile(strPath.c_str(), WSTR_KEYBIND_HEAD4)) {
+	if (!profile.WriteProfile(strPath.c_str(), WSTR_KEYBIND_HEAD4)) {
 		sErrMsg = std::wstring(LSW(STR_IMPEXP_ERR_EXPORT)) + sFileName;
 		return false;
 	}
@@ -1056,19 +1056,19 @@ bool ImpExpCustMenu::Import(const wstring& sFileName, wstring& sErrMsg)
 		return false;
 	}
 
-	DataProfile cProfile;
-	cProfile.SetReadingMode();
-	cProfile.ReadProfile(strPath.c_str());
+	DataProfile profile;
+	profile.SetReadingMode();
+	profile.ReadProfile(strPath.c_str());
 
 	// バージョン確認
 	WCHAR szHeader[256];
-	cProfile.IOProfileData(szSecInfo, L"MENU_VERSION", MakeStringBufferW(szHeader));
+	profile.IOProfileData(szSecInfo, L"MENU_VERSION", MakeStringBufferW(szHeader));
 	if (wcscmp(szHeader, WSTR_CUSTMENU_HEAD_V2) != 0) {
 		sErrMsg = wstring(LSW(STR_IMPEXP_CUSTMENU_FORMAT)) + sFileName;
 		return false;
 	}
 
-	ShareData_IO::IO_CustMenu(cProfile, m_common.m_customMenu, true);			// 2008/5/24 Uchi
+	ShareData_IO::IO_CustMenu(profile, m_common.m_customMenu, true);			// 2008/5/24 Uchi
 
 	return true;
 }
@@ -1089,22 +1089,22 @@ bool ImpExpCustMenu::Export(const wstring& sFileName, wstring& sErrMsg)
 
 	// カスタムメニュー情報
 	// ヘッダ
-	DataProfile	cProfile;
+	DataProfile	profile;
 	CommonSetting_CustomMenu* menu=&m_common.m_customMenu;
 
 	// 書き込みモード設定
-	cProfile.SetWritingMode();
+	profile.SetWritingMode();
 
 	// ヘッダ
-	cProfile.IOProfileData(szSecInfo, L"MENU_VERSION", MakeStringBufferW(WSTR_CUSTMENU_HEAD_V2));
+	profile.IOProfileData(szSecInfo, L"MENU_VERSION", MakeStringBufferW(WSTR_CUSTMENU_HEAD_V2));
 	int iWork = MAX_CUSTOM_MENU;
-	cProfile.IOProfileData_WrapInt(szSecInfo, L"MAX_CUSTOM_MENU", iWork);
+	profile.IOProfileData_WrapInt(szSecInfo, L"MAX_CUSTOM_MENU", iWork);
 	
 	// 内容
-	ShareData_IO::IO_CustMenu(cProfile, *menu, true);
+	ShareData_IO::IO_CustMenu(profile, *menu, true);
 
 	// 書き込み
-	if (!cProfile.WriteProfile(strPath.c_str(), WSTR_CUSTMENU_HEAD_V2)) {
+	if (!profile.WriteProfile(strPath.c_str(), WSTR_CUSTMENU_HEAD_V2)) {
 		sErrMsg = std::wstring(LSW(STR_IMPEXP_ERR_EXPORT)) + sFileName;
 		return false;
 	}
@@ -1215,19 +1215,19 @@ bool ImpExpMainMenu::Import(const wstring& sFileName, wstring& sErrMsg)
 		return false;
 	}
 
-	DataProfile cProfile;
-	cProfile.SetReadingMode();
-	cProfile.ReadProfile(strPath.c_str());
+	DataProfile profile;
+	profile.SetReadingMode();
+	profile.ReadProfile(strPath.c_str());
 
 	// バージョン確認
 	WCHAR szHeader[256];
-	cProfile.IOProfileData(szSecInfo, L"MENU_VERSION", MakeStringBufferW(szHeader));
+	profile.IOProfileData(szSecInfo, L"MENU_VERSION", MakeStringBufferW(szHeader));
 	if (wcscmp(szHeader, WSTR_MAINMENU_HEAD_V1) != 0) {
 		sErrMsg = wstring(LSW(STR_IMPEXP_MEINMENU)) + sFileName;
 		return false;
 	}
 
-	ShareData_IO::IO_MainMenu(cProfile, m_common.m_mainMenu, true);
+	ShareData_IO::IO_MainMenu(profile, m_common.m_mainMenu, true);
 
 	return true;
 }
@@ -1247,20 +1247,20 @@ bool ImpExpMainMenu::Export(const wstring& sFileName, wstring& sErrMsg)
 	out.Close();
 
 	// ヘッダ
-	DataProfile	cProfile;
+	DataProfile	profile;
 	CommonSetting_MainMenu* menu=&m_common.m_mainMenu;
 
 	// 書き込みモード設定
-	cProfile.SetWritingMode();
+	profile.SetWritingMode();
 
 	// ヘッダ
-	cProfile.IOProfileData(szSecInfo, L"MENU_VERSION", MakeStringBufferW(WSTR_MAINMENU_HEAD_V1));
+	profile.IOProfileData(szSecInfo, L"MENU_VERSION", MakeStringBufferW(WSTR_MAINMENU_HEAD_V1));
 	
 	// 内容
-	ShareData_IO::IO_MainMenu(cProfile, *menu, true);
+	ShareData_IO::IO_MainMenu(profile, *menu, true);
 
 	// 書き込み
-	if (!cProfile.WriteProfile(strPath.c_str(), WSTR_MAINMENU_HEAD_V1)) {
+	if (!profile.WriteProfile(strPath.c_str(), WSTR_MAINMENU_HEAD_V1)) {
 		sErrMsg = std::wstring(LSW(STR_IMPEXP_ERR_EXPORT)) + sFileName;
 		return false;
 	}
@@ -1278,11 +1278,11 @@ bool ImpExpFileTree::Import(const wstring& sFileName, wstring& sErrMsg)
 {
 	const tstring strPath = to_tchar(sFileName.c_str());
 
-	DataProfile cProfile;
-	cProfile.SetReadingMode();
-	cProfile.ReadProfile(strPath.c_str());
+	DataProfile profile;
+	profile.SetReadingMode();
+	profile.ReadProfile(strPath.c_str());
 
-	IO_FileTreeIni(cProfile, m_aFileTreeItems);
+	IO_FileTreeIni(profile, m_aFileTreeItems);
 
 	return true;
 }
@@ -1292,15 +1292,15 @@ bool ImpExpFileTree::Export(const wstring& sFileName, wstring& sErrMsg)
 {
 	const tstring strPath = to_tchar(sFileName.c_str());
 
-	DataProfile cProfile;
+	DataProfile profile;
 
 	// 書き込みモード設定
-	cProfile.SetWritingMode();
+	profile.SetWritingMode();
 
-	IO_FileTreeIni(cProfile, m_aFileTreeItems);
+	IO_FileTreeIni(profile, m_aFileTreeItems);
 
 	// 書き込み
-	if (!cProfile.WriteProfile(strPath.c_str(), WSTR_FILETREE_HEAD_V1)) {
+	if (!profile.WriteProfile(strPath.c_str(), WSTR_FILETREE_HEAD_V1)) {
 		sErrMsg = std::wstring(LSW(STR_IMPEXP_ERR_EXPORT)) + sFileName;
 		return false;
 	}

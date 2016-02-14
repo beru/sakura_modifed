@@ -237,7 +237,7 @@ void MruListener::_HoldBookmarks_And_AddToMRU()
 	wcscpy_s(fi.m_szMarkLines, BookmarkManager(&pDoc->m_docLineMgr).GetBookMarks());
 
 	// MRUƒŠƒXƒg‚É“o˜^
-	MRUFile cMRU;
-	cMRU.Add(&fi);
+	MRUFile mru;
+	mru.Add(&fi);
 }
 

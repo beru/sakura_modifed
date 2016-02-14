@@ -45,7 +45,7 @@ public:
 	template <class T>
 	T* GetBuffer(
 		size_t* nCount // [out] 領域の要素数を受け取る。T単位。
-	)
+		)
 	{
 		if (nCount) {
 			*nCount = BLOCK_SIZE / sizeof(T);

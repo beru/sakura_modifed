@@ -187,8 +187,8 @@ static EolType GetEOLTypeUniBE(const wchar_t* pszData, int nDataLen)
 
 	// 改行コードの長さを調べる
 	for (int i=1; i<EOL_TYPE_NUM; ++i) {
-		Eol cEol((EolType)i);
-		if (cEol.GetLen() <= nDataLen && auto_memcmp(pszData, aEolTable[i], cEol.GetLen()) == 0) {
+		Eol eol((EolType)i);
+		if (eol.GetLen() <= nDataLen && auto_memcmp(pszData, aEolTable[i], eol.GetLen()) == 0) {
 			return gm_pnEolTypeArr[i];
 		}
 	}

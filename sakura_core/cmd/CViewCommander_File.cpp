@@ -196,7 +196,7 @@ bool ViewCommander::Command_FILESAVE(bool warnbeep, bool askname)
 	// セーブ情報
 	SaveInfo saveInfo;
 	pDoc->GetSaveInfo(&saveInfo);
-	saveInfo.cEol = EolType::None; // 改行コード無変換
+	saveInfo.eol = EolType::None; // 改行コード無変換
 	saveInfo.bOverwriteMode = true; // 上書き要求
 
 	// 上書き処理
@@ -731,8 +731,8 @@ bool ViewCommander::Command_INSFILE(
 	int nFlgOpt
 	)
 {
-	FileLoad	cfl(m_pCommanderView->m_pTypeData->m_encoding);
-	Eol cEol;
+	FileLoad	fl(m_pCommanderView->m_pTypeData->m_encoding);
+	Eol eol;
 	int			nLineNum = 0;
 
 	DlgCancel*	pDlgCancel = NULL;
@@ -759,8 +759,8 @@ bool ViewCommander::Command_INSFILE(
 	ECodeType	nSaveCharCode = nCharCode;
 	if (nSaveCharCode == CODE_AUTODETECT) {
 		EditInfo    fi;
-		const MRUFile  cMRU;
-		if (cMRU.GetEditInfo(to_tchar(filename), &fi)) {
+		const MRUFile  mru;
+		if (mru.GetEditInfo(to_tchar(filename), &fi)) {
 				nSaveCharCode = fi.m_nCharCode;
 		}else {
 			nSaveCharCode = GetDocument()->GetDocumentEncoding();
@@ -778,10 +778,10 @@ bool ViewCommander::Command_INSFILE(
 		bBigFile = false;
 #endif
 		// ファイルを開く
-		cfl.FileOpen( to_tchar(filename), bBigFile, nSaveCharCode, 0 );
+		fl.FileOpen( to_tchar(filename), bBigFile, nSaveCharCode, 0 );
 
 		// ファイルサイズが65KBを越えたら進捗ダイアログ表示
-		if (0x10000 < cfl.GetFileSize()) {
+		if (0x10000 < fl.GetFileSize()) {
 			pDlgCancel = new DlgCancel;
 			if ((hwndCancel = pDlgCancel->DoModeless(::GetModuleHandle(NULL), NULL, IDD_OPERATIONRUNNING))) {
 				hwndProgress = ::GetDlgItem(hwndCancel, IDC_PROGRESS);
@@ -792,11 +792,11 @@ bool ViewCommander::Command_INSFILE(
 
 		// ReadLineはファイルから 文字コード変換された1行を読み出します
 		// エラー時はthrow Error_FileRead を投げます
-		NativeW cBuf;
-		while (CodeConvertResult::Failure != cfl.ReadLine(&cBuf, &cEol)) {
+		NativeW buf;
+		while (CodeConvertResult::Failure != fl.ReadLine(&buf, &eol)) {
 
-			const wchar_t*	pLine = cBuf.GetStringPtr();
-			int			nLineLen = cBuf.GetStringLength();
+			const wchar_t*	pLine = buf.GetStringPtr();
+			int			nLineLen = buf.GetStringLength();
 
 			++nLineNum;
 			Command_INSTEXT(false, pLine, LogicInt(nLineLen), true);
@@ -814,16 +814,16 @@ bool ViewCommander::Command_INSFILE(
 				break;
 			}
 			if ((nLineNum & 0xFF) == 0) {
-				if (nOldPercent != cfl.GetPercent()) {
-					Progress_SetPos(hwndProgress, cfl.GetPercent() + 1);
-					Progress_SetPos(hwndProgress, cfl.GetPercent());
-					nOldPercent = cfl.GetPercent();
+				if (nOldPercent != fl.GetPercent()) {
+					Progress_SetPos(hwndProgress, fl.GetPercent() + 1);
+					Progress_SetPos(hwndProgress, fl.GetPercent());
+					nOldPercent = fl.GetPercent();
 				}
 				m_pCommanderView->Redraw();
 			}
 		}
 		// ファイルを明示的に閉じるが、ここで閉じないときはデストラクタで閉じている
-		cfl.FileClose();
+		fl.FileClose();
 	}catch (Error_FileOpen) {
 		WarningMessage(NULL, LS(STR_GREP_ERR_FILEOPEN), to_tchar(filename));
 		bResult = false;

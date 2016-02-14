@@ -37,7 +37,7 @@ PPAMacroMgr::~PPAMacroMgr()
 */
 bool PPAMacroMgr::ExecKeyMacro(EditView* pEditView, int flags) const
 {
-	m_cPPA.SetSource(to_achar(m_cBuffer.GetStringPtr()));
+	m_cPPA.SetSource(to_achar(m_buffer.GetStringPtr()));
 	return m_cPPA.Execute(pEditView, flags);
 }
 
@@ -62,7 +62,7 @@ bool PPAMacroMgr::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
 	}
 	in.Close();
 
-	m_cBuffer.SetNativeData(memWork);	// m_cBufferにコピー
+	m_buffer.SetNativeData(memWork);	// m_bufferにコピー
 
 	m_nReady = true;
 	return true;
@@ -73,7 +73,7 @@ bool PPAMacroMgr::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
 */
 bool PPAMacroMgr::LoadKeyMacroStr(HINSTANCE hInstance, const TCHAR* pszCode)
 {
-	m_cBuffer.SetNativeData(to_wchar(pszCode));	// m_cBufferにコピー
+	m_buffer.SetNativeData(to_wchar(pszCode));	// m_bufferにコピー
 
 	m_nReady = true;
 	return true;

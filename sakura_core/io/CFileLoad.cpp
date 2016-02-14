@@ -267,11 +267,11 @@ CodeConvertResult FileLoad::ReadLine(
 		return ReadLine_core( pUnicodeBuffer, pEol );
 	}
 	if (m_nReadOffset2 == m_cLineTemp.GetStringLength()) {
-		Eol cEol;
-		CodeConvertResult e = ReadLine_core(&m_cLineTemp, &cEol);
+		Eol eol;
+		CodeConvertResult e = ReadLine_core(&m_cLineTemp, &eol);
 		if (e == CodeConvertResult::Failure) {
 			pUnicodeBuffer->_GetMemory()->SetRawDataHoldBuffer( L"", 0 );
-			*pEol = cEol;
+			*pEol = eol;
 			return CodeConvertResult::Failure;
 		}
 		m_nReadOffset2 = 0;

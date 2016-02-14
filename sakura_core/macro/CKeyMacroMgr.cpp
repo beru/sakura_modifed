@@ -70,7 +70,7 @@ void KeyMacroMgr::Append(
 	EFunctionCode	nFuncID,
 	const LPARAM*	lParams,
 	EditView*		pEditView
-)
+	)
 {
 	auto macro = new Macro(nFuncID);
 	macro->AddLParam(lParams, pEditView);

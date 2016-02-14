@@ -98,7 +98,7 @@ public:
 	void AddMethod(const wchar_t* Name, int ID, VARTYPE *ArgumentTypes,
 		int ArgumentCount, VARTYPE ResultType, CIfObjMethod Method);
 	void ReserveMethods(int Count) {
-		m_Methods.reserve(Count);
+		m_methods.reserve(Count);
 	}
 
 	// 実装
@@ -127,7 +127,7 @@ public:
 
 private:
 	// メンバ変数
-	CMethodInfoList m_Methods;			// メソッド情報リスト
-	ITypeInfo* m_TypeInfo;
+	CMethodInfoList m_methods;			// メソッド情報リスト
+	ITypeInfo* m_typeInfo;
 };
 

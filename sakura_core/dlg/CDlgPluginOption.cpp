@@ -126,9 +126,9 @@ void DlgPluginOption::SetData(void)
 	ListView_DeleteAllItems(hwndList);	// リストを空にする
 	m_Line = -1;							// 行非選択
 
-	auto cProfile = std::make_unique<DataProfile>();
-	cProfile->SetReadingMode();
-	cProfile->ReadProfile(m_plugin->GetOptionPath().c_str());
+	auto profile = std::make_unique<DataProfile>();
+	profile->SetReadingMode();
+	profile->ReadProfile(m_plugin->GetOptionPath().c_str());
 
 	PluginOption* cOpt;
 	PluginOption::ArrayIter it;
@@ -152,14 +152,14 @@ void DlgPluginOption::SetData(void)
 		if (sSection.empty() || sKey.empty()) {
 			sValue = L"";
 		}else {
-			if (!cProfile->IOProfileData(sSection.c_str(), sKey.c_str(), sValue)) {
+			if (!profile->IOProfileData(sSection.c_str(), sKey.c_str(), sValue)) {
 				// Optionが見つからなかったらDefault値を設定
 				sValue = cOpt->GetDefaultVal();
 				if (sValue != wstring(L"")) {
 					bLoadDefault = true;
-					cProfile->SetWritingMode();
-					cProfile->IOProfileData(sSection.c_str(), sKey.c_str(), sValue);
-					cProfile->SetReadingMode();
+					profile->SetWritingMode();
+					profile->IOProfileData(sSection.c_str(), sKey.c_str(), sValue);
+					profile->SetReadingMode();
 				}
 			}
 		}
@@ -196,8 +196,8 @@ void DlgPluginOption::SetData(void)
 	}
 
 	if (bLoadDefault) {
-		cProfile->SetWritingMode();
-		cProfile->WriteProfile(m_plugin->GetOptionPath().c_str(), (m_plugin->m_sName + LSW(STR_DLGPLUGINOPT_INIHEAD)).c_str());
+		profile->SetWritingMode();
+		profile->WriteProfile(m_plugin->GetOptionPath().c_str(), (m_plugin->m_sName + LSW(STR_DLGPLUGINOPT_INIHEAD)).c_str());
 	}
 
 	if (i == 0) {
@@ -224,10 +224,10 @@ int DlgPluginOption::GetData(void)
 	// リスト
 	HWND hwndList = GetItemHwnd(IDC_LIST_PLUGIN_OPTIONS);
 
-	auto cProfile = std::make_unique<DataProfile>();
-	cProfile->SetReadingMode();
-	cProfile->ReadProfile(m_plugin->GetOptionPath().c_str());
-	cProfile->SetWritingMode();
+	auto profile = std::make_unique<DataProfile>();
+	profile->SetReadingMode();
+	profile->ReadProfile(m_plugin->GetOptionPath().c_str());
+	profile->SetWritingMode();
 
 	PluginOption* cOpt;
 	TCHAR	buf[MAX_LENGTH_VALUE + 1];
@@ -278,10 +278,10 @@ int DlgPluginOption::GetData(void)
 
 		sValue = to_wchar(buf);
 
-		cProfile->IOProfileData(sSection.c_str(), sKey.c_str(), sValue);
+		profile->IOProfileData(sSection.c_str(), sKey.c_str(), sValue);
 	}
 
-	cProfile->WriteProfile(
+	profile->WriteProfile(
 		m_plugin->GetOptionPath().c_str(),
 		(m_plugin->m_sName + LSW(STR_DLGPLUGINOPT_INIHEAD)).c_str()
 		);

@@ -35,7 +35,7 @@ JackManager::JackManager()
 {
 	// ジャック定義一覧
 	// 添え字がEJackの値と同じであること。
-	struct tagJackEntry {
+	struct JackEntry {
 		EJack id;
 		const WCHAR* name;
 	} jackNames[] = {

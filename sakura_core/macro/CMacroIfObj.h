@@ -60,7 +60,7 @@ public:
 		m_Ext = Ext;
 		m_nFlags = flags | FA_FROMMACRO;
 		m_nIsMatch = 0;
-		m_Source = Source;
+		m_source = Source;
 		m_nIndex = INVALID_MACRO_IDX;
 		if (nMode == MACRO_MODE_EXEC) {
 			// ŒÄ‚Ño‚µ‚Ì’¼‘O‚ÅÝ’è‚³‚ê‚Ä‚¢‚é”Ô†‚ð•Û‘¶‚·‚é
@@ -129,7 +129,7 @@ public:
 			return true;
 		case F_MA_GET_SOURCE:
 			{
-				SysString S(m_Source.c_str(), m_Source.length());
+				SysString S(m_source.c_str(), m_source.length());
 				Wrap(&Result)->Receive(S);
 			}
 			return true;
@@ -177,7 +177,7 @@ public:
 	int m_nIsMatch;
 	int m_nFlags;
 	std::wstring m_Ext;
-	std::wstring m_Source;
+	std::wstring m_source;
 	int m_nIndex;
 };
 

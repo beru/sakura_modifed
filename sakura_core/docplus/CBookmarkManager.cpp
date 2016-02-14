@@ -29,7 +29,7 @@ void BookmarkManager::ResetAllBookMark(void)
 */
 bool BookmarkManager::SearchBookMark(
 	LogicInt			nLineNum,		// 検索開始行
-	SearchDirection	bPrevOrNext,	// 0==前方検索 1==後方検索
+	SearchDirection		bPrevOrNext,	// 0==前方検索 1==後方検索
 	LogicInt*			pnLineNum 		// マッチ行
 	)
 {
@@ -225,7 +225,7 @@ void BookmarkManager::MarkSearchWord(
 		const wchar_t* pszPattern = pattern.GetKey();
 		const int nPatternLen = pattern.GetLen();
 		// 検索語を単語に分割して searchWordsに格納する。
-		std::vector<std::pair<const wchar_t*, LogicInt> > searchWords; // 単語の開始位置と長さの配列。
+		std::vector<std::pair<const wchar_t*, LogicInt>> searchWords; // 単語の開始位置と長さの配列。
 		SearchAgent::CreateWordList(searchWords, pszPattern, nPatternLen);
 		DocLine* pDocLine = m_pDocLineMgr->GetLine(LogicInt(0));
 		while (pDocLine) {

@@ -132,9 +132,9 @@ INT_PTR PropGrep::DispatchEvent(
 	return FALSE;
 }
 
-struct tagTagJumpMode{
-	DWORD	m_nMethod;
-	DWORD	m_nNameID;
+struct TagJumpMode {
+	DWORD nMethod;
+	DWORD nNameID;
 };
 
 // ダイアログデータの設定
@@ -164,7 +164,7 @@ void PropGrep::SetData(HWND hwndDlg)
 	::DlgItem_SetText(hwndDlg, IDC_EDIT_REGEXPLIB, csSearch.m_szRegexpLib);
 	SetRegexpVersion(hwndDlg);
 
-	struct tagTagJumpMode TagJumpMode1Arr[] ={
+	TagJumpMode tagJumpMode1Arr[] ={
 		{ 0, STR_TAGJUMP_0 },
 		{ 1, STR_TAGJUMP_1 },
 		//{ 2, STR_TAGJUMP_2 },
@@ -173,16 +173,16 @@ void PropGrep::SetData(HWND hwndDlg)
 	HWND hwndCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_TAGJUMP);
 	Combo_ResetContent(hwndCombo);
 	int nSelPos = 0;
-	for (int i=0; i<_countof(TagJumpMode1Arr); ++i) {
-		Combo_InsertString(hwndCombo, i, LS(TagJumpMode1Arr[i].m_nNameID));
-		Combo_SetItemData(hwndCombo, i, TagJumpMode1Arr[i].m_nMethod);
-		if (TagJumpMode1Arr[i].m_nMethod == m_common.m_search.m_nTagJumpMode) {
+	for (int i=0; i<_countof(tagJumpMode1Arr); ++i) {
+		Combo_InsertString(hwndCombo, i, LS(tagJumpMode1Arr[i].nNameID));
+		Combo_SetItemData(hwndCombo, i, tagJumpMode1Arr[i].nMethod);
+		if (tagJumpMode1Arr[i].nMethod == m_common.m_search.m_nTagJumpMode) {
 			nSelPos = i;
 		}
 	}
 	Combo_SetCurSel(hwndCombo, nSelPos);
 
-	struct tagTagJumpMode TagJumpMode2Arr[] ={
+	TagJumpMode tagJumpMode2Arr[] ={
 		{ 0, STR_TAGJUMP_0 },
 		{ 1, STR_TAGJUMP_1 },
 		{ 2, STR_TAGJUMP_2 },
@@ -191,10 +191,10 @@ void PropGrep::SetData(HWND hwndDlg)
 	hwndCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_KEYWORD_TAGJUMP);
 	Combo_ResetContent(hwndCombo);
 	nSelPos = 0;
-	for (int i=0; i<_countof(TagJumpMode2Arr); ++i) {
-		Combo_InsertString(hwndCombo, i, LS(TagJumpMode2Arr[i].m_nNameID));
-		Combo_SetItemData(hwndCombo, i, TagJumpMode2Arr[i].m_nMethod);
-		if (TagJumpMode2Arr[i].m_nMethod == m_common.m_search.m_nTagJumpModeKeyword) {
+	for (int i=0; i<_countof(tagJumpMode2Arr); ++i) {
+		Combo_InsertString(hwndCombo, i, LS(tagJumpMode2Arr[i].nNameID));
+		Combo_SetItemData(hwndCombo, i, tagJumpMode2Arr[i].nMethod);
+		if (tagJumpMode2Arr[i].nMethod == m_common.m_search.m_nTagJumpModeKeyword) {
 			nSelPos = i;
 		}
 	}

@@ -51,7 +51,7 @@ bool PluginMacroManager::ExecKeyMacro(EditView* EditView, int flags) const
 {
 	bool result = false;
 	WSHIfObj::List params;
-	MacroIfObj* objMacro = new MacroIfObj(MacroIfObj::MACRO_MODE_EXEC, m_Ext.c_str(), flags, m_Source.c_str());
+	MacroIfObj* objMacro = new MacroIfObj(MacroIfObj::MACRO_MODE_EXEC, m_Ext.c_str(), flags, m_source.c_str());
 	if (objMacro) {
 		objMacro->AddRef();
 		params.push_back(objMacro);
@@ -69,11 +69,11 @@ bool PluginMacroManager::ExecKeyMacro(EditView* EditView, int flags) const
 //	ファイルからマクロを読み込む
 bool PluginMacroManager::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* Path)
 {
-	m_Source = L"";
+	m_source = L"";
 	TextInputStream in(Path);
 	if (in) {
 		while (in) {
-			m_Source += in.ReadLineW() + L"\r\n";
+			m_source += in.ReadLineW() + L"\r\n";
 		}
 		return true;
 	}
@@ -84,7 +84,7 @@ bool PluginMacroManager::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* Path)
 // 文字列からマクロを読み込む
 bool PluginMacroManager::LoadKeyMacroStr(HINSTANCE hInstance, const TCHAR* Code)
 {
-	m_Source = to_wchar(Code);
+	m_source = to_wchar(Code);
 	return true;
 }
 

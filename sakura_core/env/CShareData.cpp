@@ -176,8 +176,8 @@ bool ShareData::InitShareData()
 		}
 
 //@@@ 2001.12.26 YAZAKI MRUリストは、CMRUに依頼する
-		MRUFile cMRU;
-		cMRU.ClearAll();
+		MRUFile mru;
+		mru.ClearAll();
 //@@@ 2001.12.26 YAZAKI OPENFOLDERリストは、MRUFolderにすべて依頼する
 		MRUFolder cMRUFolder;
 		cMRUFolder.ClearAll();
@@ -647,12 +647,12 @@ bool ShareData::InitShareData()
 
 		// [メインメニュー]タブ
 		{
-			DataProfile	cProfile;
+			DataProfile	profile;
 			std::vector<std::wstring> data;
-			cProfile.SetReadingMode();
-			cProfile.ReadProfileRes( MAKEINTRESOURCE(IDR_MENU1), MAKEINTRESOURCE(ID_RC_TYPE_INI), &data );
+			profile.SetReadingMode();
+			profile.ReadProfileRes( MAKEINTRESOURCE(IDR_MENU1), MAKEINTRESOURCE(ID_RC_TYPE_INI), &data );
 
-			ShareData_IO::IO_MainMenu( cProfile, &data, m_pShareData->m_common.m_mainMenu, false );
+			ShareData_IO::IO_MainMenu( profile, &data, m_pShareData->m_common.m_mainMenu, false );
 		}
 
 		{

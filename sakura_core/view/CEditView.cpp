@@ -2325,8 +2325,8 @@ bool EditView::MyGetClipboardData(NativeW& memBuf, bool* pbColumnSelect, bool* p
 	if (!cClipboard)
 		return false;
 
-	Eol cEol = m_pEditDoc->m_docEditor.GetNewLineCode();
-	if (!cClipboard.GetText(&memBuf, pbColumnSelect, pbLineSelect, cEol)) {
+	Eol eol = m_pEditDoc->m_docEditor.GetNewLineCode();
+	if (!cClipboard.GetText(&memBuf, pbColumnSelect, pbLineSelect, eol)) {
 		return false;
 	}
 

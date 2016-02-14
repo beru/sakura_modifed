@@ -130,24 +130,24 @@ inline void TwoPointToRange(
 // 2“_‚ğ‘ÎŠp‚Æ‚·‚é‹éŒ`‚ğ‹‚ß‚é
 template <class T, class INT_TYPE>
 inline void TwoPointToRect(
-	StrictRect<INT_TYPE, StrictPoint<T, INT_TYPE> >*	prcRect,
+	StrictRect<INT_TYPE, StrictPoint<T, INT_TYPE>>*	pRect,
 	StrictPoint<T, INT_TYPE>							pt1,
 	StrictPoint<T, INT_TYPE>							pt2
 	)
 {
 	if (pt1.y < pt2.y) {
-		prcRect->top	= pt1.GetY2();
-		prcRect->bottom	= pt2.GetY2();
+		pRect->top	= pt1.GetY2();
+		pRect->bottom	= pt2.GetY2();
 	}else {
-		prcRect->top	= pt2.GetY2();
-		prcRect->bottom	= pt1.GetY2();
+		pRect->top	= pt2.GetY2();
+		pRect->bottom	= pt1.GetY2();
 	}
 	if (pt1.x < pt2.x) {
-		prcRect->left	= pt1.GetX2();
-		prcRect->right	= pt2.GetX2();
+		pRect->left	= pt1.GetX2();
+		pRect->right	= pt2.GetX2();
 	}else {
-		prcRect->left	= pt2.GetX2();
-		prcRect->right	= pt1.GetX2();
+		pRect->left	= pt2.GetX2();
+		pRect->right	= pt1.GetX2();
 	}
 }
 

@@ -120,17 +120,17 @@ BOOL DlgDiff::OnBnClicked(int wID)
 
 	case IDC_BUTTON_DIFF_DST:	// 参照
 		{
-			DlgOpenFile cDlgOpenFile;
+			DlgOpenFile dlgOpenFile;
 			TCHAR szPath[_MAX_PATH];
 			_tcscpy(szPath, m_szFile2);
 			// ファイルオープンダイアログの初期化
-			cDlgOpenFile.Create(
+			dlgOpenFile.Create(
 				m_hInstance,
 				GetHwnd(),
 				_T("*.*"),
 				m_szFile1 //m_szFile2
 			);
-			if (cDlgOpenFile.DoModal_GetOpenFileName(szPath)) {
+			if (dlgOpenFile.DoModal_GetOpenFileName(szPath)) {
 				_tcscpy(m_szFile2, szPath);
 				SetItemText(IDC_EDIT_DIFF_DST, m_szFile2);
 				// 外部ファイルを選択状態に

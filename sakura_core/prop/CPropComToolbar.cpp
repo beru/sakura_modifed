@@ -339,7 +339,7 @@ INT_PTR PropToolbar::DispatchEvent(
 				case IDC_BUTTON_ADD:
 					nIndex1 = List_GetCount(hwndResList);
 					nIndex2 = List_GetCurSel(hwndFuncList);
-					if (LB_ERR == nIndex2) {
+					if (nIndex2 == LB_ERR) {
 						break;
 					}
 					i = List_GetItemData(hwndFuncList, nIndex2);
@@ -356,7 +356,7 @@ INT_PTR PropToolbar::DispatchEvent(
 
 				case IDC_BUTTON_UP:
 					nIndex1 = List_GetCurSel(hwndResList);
-					if (LB_ERR == nIndex1 || 0 >= nIndex1) {
+					if (nIndex1 == LB_ERR || 0 >= nIndex1) {
 						break;
 					}
 					i = List_GetItemData(hwndResList, nIndex1);
@@ -378,7 +378,7 @@ INT_PTR PropToolbar::DispatchEvent(
 				case IDC_BUTTON_DOWN:
 					i = List_GetCount(hwndResList);
 					nIndex1 = List_GetCurSel(hwndResList);
-					if (LB_ERR == nIndex1 || nIndex1 + 1 >= i) {
+					if (nIndex1 == LB_ERR || nIndex1 + 1 >= i) {
 						break;
 					}
 					i = List_GetItemData(hwndResList, nIndex1);
@@ -406,7 +406,7 @@ INT_PTR PropToolbar::DispatchEvent(
 		nIndex1 = List_GetCurSel(hwndResList);
 		nIndex2 = List_GetCurSel(hwndFuncList);
 		i = List_GetCount(hwndResList);
-		if (LB_ERR == nIndex1) {
+		if (nIndex1 == LB_ERR) {
 			::EnableWindow(::GetDlgItem(hwndDlg, IDC_BUTTON_DELETE), FALSE);
 			::EnableWindow(::GetDlgItem(hwndDlg, IDC_BUTTON_UP), FALSE);
 			::EnableWindow(::GetDlgItem(hwndDlg, IDC_BUTTON_DOWN), FALSE);
@@ -423,12 +423,12 @@ INT_PTR PropToolbar::DispatchEvent(
 				::EnableWindow(::GetDlgItem(hwndDlg, IDC_BUTTON_DOWN), TRUE);
 			}
 		}
-		if (LB_ERR == nIndex1 || LB_ERR == nIndex2) {
+		if (nIndex1 == LB_ERR || nIndex2 == LB_ERR) {
 			::EnableWindow(::GetDlgItem(hwndDlg, IDC_BUTTON_INSERT), FALSE);
 		}else {
 			::EnableWindow(::GetDlgItem(hwndDlg, IDC_BUTTON_INSERT), TRUE);
 		}
-		if (LB_ERR == nIndex2) {
+		if (nIndex2 == LB_ERR) {
 			::EnableWindow(::GetDlgItem(hwndDlg, IDC_BUTTON_ADD), FALSE);
 		}else {
 			::EnableWindow(::GetDlgItem(hwndDlg, IDC_BUTTON_ADD), TRUE);

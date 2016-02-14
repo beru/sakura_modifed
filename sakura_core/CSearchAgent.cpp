@@ -590,7 +590,7 @@ int SearchAgent::SearchWord(
 		// 検索語を単語に分割して searchWordsに格納する。
 		const wchar_t* pszPattern = pattern.GetKey();
 		const int	nPatternLen = pattern.GetLen();
-		std::vector<std::pair<const wchar_t*, LogicInt> > searchWords; // 単語の開始位置と長さの配列。
+		std::vector<std::pair<const wchar_t*, LogicInt>> searchWords; // 単語の開始位置と長さの配列。
 		CreateWordList(searchWords, pszPattern, nPatternLen);
 		/*
 			2001/06/23 Norio Nakatani

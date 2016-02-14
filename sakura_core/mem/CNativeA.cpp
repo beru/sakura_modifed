@@ -428,11 +428,11 @@ void NativeA::TABToSPACE(int nTabSpace	/* TABの文字数 */)
 	const char*	pLine;
 	int nLineLen;
 //	BOOL		bEOL;
-	Eol cEol;
+	Eol eol;
 	int nBgn = 0;
 	int nPosDes = 0;
 	// CRLFで区切られる「行」を返す。CRLFは行長に加えない
-	while ((pLine = GetNextLine(GetStringPtr(), GetStringLength(), &nLineLen, &nBgn, &cEol))) {
+	while ((pLine = GetNextLine(GetStringPtr(), GetStringLength(), &nLineLen, &nBgn, &eol))) {
 		if (0 < nLineLen) {
 			int nPosX = 0;
 			for (int i=0; i<nLineLen; ++i) {
@@ -446,7 +446,7 @@ void NativeA::TABToSPACE(int nTabSpace	/* TABの文字数 */)
 				}
 			}
 		}
-		nPosDes += cEol.GetLen();
+		nPosDes += eol.GetLen();
 	}
 	if (0 >= nPosDes) {
 		return;
@@ -456,7 +456,7 @@ void NativeA::TABToSPACE(int nTabSpace	/* TABの文字数 */)
 	nBgn = 0;
 	nPosDes = 0;
 	// CRLFで区切られる「行」を返す。CRLFは行長に加えない
-	while ((pLine = GetNextLine(GetStringPtr(), GetStringLength(), &nLineLen, &nBgn, &cEol))) {
+	while ((pLine = GetNextLine(GetStringPtr(), GetStringLength(), &nLineLen, &nBgn, &eol))) {
 		if (0 < nLineLen) {
 			int nPosX = 0;
 			for (int i=0; i<nLineLen; ++i) {
@@ -472,7 +472,7 @@ void NativeA::TABToSPACE(int nTabSpace	/* TABの文字数 */)
 				}
 			}
 		}
-		Memory cEolMem; ShiftJis::S_GetEol(&cEolMem, cEol.GetType());
+		Memory cEolMem; ShiftJis::S_GetEol(&cEolMem, eol.GetType());
 		auto_memcpy(&pDes[nPosDes], (const char*)cEolMem.GetRawPtr(), cEolMem.GetRawLength());
 		nPosDes += cEolMem.GetRawLength();
 	}
@@ -500,7 +500,7 @@ void NativeA::SPACEToTAB(int nTabSpace)
 	int			nBgn;
 	int			nPosDes;
 	int			nPosX;
-	Eol		cEol;
+	Eol		eol;
 
 	bool bSpace = false;	// スペースの処理中かどうか
 	int nStartPos;
@@ -508,11 +508,11 @@ void NativeA::SPACEToTAB(int nTabSpace)
 	nBgn = 0;
 	nPosDes = 0;
 	// 変換後に必要なバイト数を調べる
-	while ((pLine = GetNextLine(GetStringPtr(), GetStringLength(), &nLineLen, &nBgn, &cEol))) {
+	while ((pLine = GetNextLine(GetStringPtr(), GetStringLength(), &nLineLen, &nBgn, &eol))) {
 		if (0 < nLineLen) {
 			nPosDes += nLineLen;
 		}
-		nPosDes += cEol.GetLen();
+		nPosDes += eol.GetLen();
 	}
 	if (0 >= nPosDes) {
 		return;
@@ -522,7 +522,7 @@ void NativeA::SPACEToTAB(int nTabSpace)
 	nBgn = 0;
 	nPosDes = 0;
 	// CRLFで区切られる「行」を返す。CRLFは行長に加えない
-	while ((pLine = GetNextLine(GetStringPtr(), GetStringLength(), &nLineLen, &nBgn, &cEol))) {
+	while ((pLine = GetNextLine(GetStringPtr(), GetStringLength(), &nLineLen, &nBgn, &eol))) {
 		if (0 < nLineLen) {
 			nPosX = 0;	// 処理中のiに対応する表示桁位置
 			bSpace = false;	// 直前がスペースか
@@ -594,7 +594,7 @@ void NativeA::SPACEToTAB(int nTabSpace)
 		}
 
 		// 行末の処理
-		Memory cEolMem; ShiftJis::S_GetEol(&cEolMem, cEol.GetType());
+		Memory cEolMem; ShiftJis::S_GetEol(&cEolMem, eol.GetType());
 		auto_memcpy(&pDes[nPosDes], (const char*)cEolMem.GetRawPtr(), cEolMem.GetRawLength());
 		nPosDes += cEolMem.GetRawLength();
 	}

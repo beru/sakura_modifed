@@ -107,7 +107,7 @@ void SaveAgent::OnBeforeSave(const SaveInfo& saveInfo)
 	EditDoc* pDoc = GetListeningDoc();
 
 	// 改行コード統一
-	DocVisitor(pDoc).SetAllEol(saveInfo.cEol);
+	DocVisitor(pDoc).SetAllEol(saveInfo.eol);
 }
 
 void SaveAgent::OnSave(const SaveInfo& saveInfo)
@@ -125,8 +125,8 @@ void SaveAgent::OnSave(const SaveInfo& saveInfo)
 	// セーブ情報の確定
 	pDoc->SetFilePathAndIcon(saveInfo.filePath);
 	pDoc->m_docFile.SetCodeSet(saveInfo.eCharCode, saveInfo.bBomExist);
-	if (saveInfo.cEol.IsValid()) {
-		pDoc->m_docEditor.SetNewLineCode(saveInfo.cEol);
+	if (saveInfo.eol.IsValid()) {
+		pDoc->m_docEditor.SetNewLineCode(saveInfo.eol);
 	}
 }
 

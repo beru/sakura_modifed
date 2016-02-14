@@ -118,7 +118,7 @@ struct SaveInfo {
 	ECodeType	eCharCode;	// 保存文字コードセット
 	bool		bBomExist;	// 保存時BOM付加
 	bool		bChgCodeSet;// 文字コードセット変更	2013/5/19 Uchi
-	Eol		cEol;		// 保存改行コード
+	Eol		eol;		// 保存改行コード
 
 	// モード
 	bool		bOverwriteMode;	// 上書き要求
@@ -129,7 +129,7 @@ struct SaveInfo {
 		eCharCode(CODE_AUTODETECT),
 		bBomExist(false),
 		bChgCodeSet(false),
-		cEol(EolType::None),
+		eol(EolType::None),
 		bOverwriteMode(false)
 	{
 	}
@@ -145,7 +145,7 @@ struct SaveInfo {
 		eCharCode(_eCodeType),
 		bBomExist(_bBomExist),
 		bChgCodeSet(false),
-		cEol(_cEol),
+		eol(_cEol),
 		bOverwriteMode(false)
 	{
 	}
