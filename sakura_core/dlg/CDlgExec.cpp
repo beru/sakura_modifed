@@ -22,7 +22,7 @@
 #include "func/Funccode.h"		// Stonee, 2001/03/12  コメントアウトされてたのを有効にした
 #include "util/shell.h"
 #include "util/window.h"
-#include "_main/CAppMode.h"
+#include "_main/AppMode.h"
 #include "doc/CEditDoc.h"
 #include "sakura_rc.h"
 #include "sakura.hh"

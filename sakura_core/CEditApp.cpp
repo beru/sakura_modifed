@@ -33,8 +33,8 @@
 #include "macro/CSMacroMgr.h"
 #include "CPropertyManager.h"
 #include "CGrepAgent.h"
-#include "_main/CAppMode.h"
-#include "_main/CCommandLine.h"
+#include "_main/AppMode.h"
+#include "_main/CommandLine.h"
 #include "util/module.h"
 #include "util/shell.h"
 

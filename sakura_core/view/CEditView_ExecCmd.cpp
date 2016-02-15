@@ -22,8 +22,8 @@
 
 #include "StdAfx.h"
 #include "CEditView.h"
-#include "_main/CAppMode.h"
-#include "_os/COsVersionInfo.h"
+#include "_main/AppMode.h"
+#include "_os/OsVersionInfo.h"
 #include "env/CShareData.h"
 #include "env/DLLSHAREDATA.h"
 #include "env/CFormatManager.h"

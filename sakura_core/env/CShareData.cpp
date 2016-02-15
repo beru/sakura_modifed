@@ -29,9 +29,9 @@
 #include "env/CShareData_IO.h"
 #include "env/CSakuraEnvironment.h"
 #include "doc/CDocListener.h" // LoadInfo
-#include "_main/CControlTray.h"
-#include "_main/CCommandLine.h"
-#include "_main/CMutex.h"
+#include "_main/ControlTray.h"
+#include "_main/CommandLine.h"
+#include "_main/Mutex.h"
 #include "charset/CCodePage.h"
 #include "debug/CRunningTimer.h"
 #include "recent/CMRUFile.h"

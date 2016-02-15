@@ -16,10 +16,10 @@
 
 
 #include "StdAfx.h"
-#include "CControlProcess.h"
-#include "CControlTray.h"
+#include "ControlProcess.h"
+#include "ControlTray.h"
 #include "env/DLLSHAREDATA.h"
-#include "CCommandLine.h"
+#include "CommandLine.h"
 #include "env/CShareData_IO.h"
 #include "debug/CRunningTimer.h"
 #include "sakura_rc.h" /// IDD_EXITTING 2002/2/10 aroka ÉwÉbÉ_êÆóù

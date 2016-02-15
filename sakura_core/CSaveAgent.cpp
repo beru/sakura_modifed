@@ -32,7 +32,7 @@
 #include "CWriteManager.h"
 #include "io/CBinaryStream.h"
 #include "CEditApp.h"
-#include "_main/CAppMode.h"
+#include "_main/AppMode.h"
 #include "env/CShareData.h"
 
 SaveAgent::SaveAgent()

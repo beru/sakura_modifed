@@ -919,40 +919,40 @@
     <ClInclude Include="..\sakura_core\debug\Debug3.h">
       <Filter>Cpp Source Files\debug</Filter>
     </ClInclude>
-    <ClInclude Include="..\sakura_core\_main\CAppMode.h">
+    <ClInclude Include="..\sakura_core\_main\AppMode.h">
       <Filter>Cpp Source Files\_main</Filter>
     </ClInclude>
-    <ClInclude Include="..\sakura_core\_main\CCommandLine.h">
+    <ClInclude Include="..\sakura_core\_main\CommandLine.h">
       <Filter>Cpp Source Files\_main</Filter>
     </ClInclude>
-    <ClInclude Include="..\sakura_core\_main\CControlProcess.h">
+    <ClInclude Include="..\sakura_core\_main\ControlProcess.h">
       <Filter>Cpp Source Files\_main</Filter>
     </ClInclude>
-    <ClInclude Include="..\sakura_core\_main\CControlTray.h">
+    <ClInclude Include="..\sakura_core\_main\ControlTray.h">
       <Filter>Cpp Source Files\_main</Filter>
     </ClInclude>
-    <ClInclude Include="..\sakura_core\_main\CMutex.h">
+    <ClInclude Include="..\sakura_core\_main\Mutex.h">
       <Filter>Cpp Source Files\_main</Filter>
     </ClInclude>
-    <ClInclude Include="..\sakura_core\_main\CNormalProcess.h">
+    <ClInclude Include="..\sakura_core\_main\NormalProcess.h">
       <Filter>Cpp Source Files\_main</Filter>
     </ClInclude>
-    <ClInclude Include="..\sakura_core\_main\CProcess.h">
+    <ClInclude Include="..\sakura_core\_main\Process.h">
       <Filter>Cpp Source Files\_main</Filter>
     </ClInclude>
-    <ClInclude Include="..\sakura_core\_main\CProcessFactory.h">
+    <ClInclude Include="..\sakura_core\_main\ProcessFactory.h">
       <Filter>Cpp Source Files\_main</Filter>
     </ClInclude>
     <ClInclude Include="..\sakura_core\_main\global.h">
       <Filter>Cpp Source Files\_main</Filter>
     </ClInclude>
-    <ClInclude Include="..\sakura_core\_os\CClipboard.h">
+    <ClInclude Include="..\sakura_core\_os\Clipboard.h">
       <Filter>Cpp Source Files\_os</Filter>
     </ClInclude>
-    <ClInclude Include="..\sakura_core\_os\CDropTarget.h">
+    <ClInclude Include="..\sakura_core\_os\DropTarget.h">
       <Filter>Cpp Source Files\_os</Filter>
     </ClInclude>
-    <ClInclude Include="..\sakura_core\_os\COsVersionInfo.h">
+    <ClInclude Include="..\sakura_core\_os\OsVersionInfo.h">
       <Filter>Cpp Source Files\_os</Filter>
     </ClInclude>
     <ClInclude Include="..\sakura_core\_os\OleTypes.h">
@@ -2044,25 +2044,25 @@
     <ClCompile Include="..\sakura_core\debug\Debug3.cpp">
       <Filter>Cpp Source Files\debug</Filter>
     </ClCompile>
-    <ClCompile Include="..\sakura_core\_main\CAppMode.cpp">
+    <ClCompile Include="..\sakura_core\_main\AppMode.cpp">
       <Filter>Cpp Source Files\_main</Filter>
     </ClCompile>
-    <ClCompile Include="..\sakura_core\_main\CCommandLine.cpp">
+    <ClCompile Include="..\sakura_core\_main\CommandLine.cpp">
       <Filter>Cpp Source Files\_main</Filter>
     </ClCompile>
-    <ClCompile Include="..\sakura_core\_main\CControlProcess.cpp">
+    <ClCompile Include="..\sakura_core\_main\ControlProcess.cpp">
       <Filter>Cpp Source Files\_main</Filter>
     </ClCompile>
-    <ClCompile Include="..\sakura_core\_main\CControlTray.cpp">
+    <ClCompile Include="..\sakura_core\_main\ControlTray.cpp">
       <Filter>Cpp Source Files\_main</Filter>
     </ClCompile>
-    <ClCompile Include="..\sakura_core\_main\CNormalProcess.cpp">
+    <ClCompile Include="..\sakura_core\_main\NormalProcess.cpp">
       <Filter>Cpp Source Files\_main</Filter>
     </ClCompile>
-    <ClCompile Include="..\sakura_core\_main\CProcess.cpp">
+    <ClCompile Include="..\sakura_core\_main\Process.cpp">
       <Filter>Cpp Source Files\_main</Filter>
     </ClCompile>
-    <ClCompile Include="..\sakura_core\_main\CProcessFactory.cpp">
+    <ClCompile Include="..\sakura_core\_main\ProcessFactory.cpp">
       <Filter>Cpp Source Files\_main</Filter>
     </ClCompile>
     <ClCompile Include="..\sakura_core\_main\global.cpp">
@@ -2071,13 +2071,13 @@
     <ClCompile Include="..\sakura_core\_main\WinMain.cpp">
       <Filter>Cpp Source Files\_main</Filter>
     </ClCompile>
-    <ClCompile Include="..\sakura_core\_os\CClipboard.cpp">
+    <ClCompile Include="..\sakura_core\_os\Clipboard.cpp">
       <Filter>Cpp Source Files\_os</Filter>
     </ClCompile>
-    <ClCompile Include="..\sakura_core\_os\CDropTarget.cpp">
+    <ClCompile Include="..\sakura_core\_os\DropTarget.cpp">
       <Filter>Cpp Source Files\_os</Filter>
     </ClCompile>
-    <ClCompile Include="..\sakura_core\_os\COsVersionInfo.cpp">
+    <ClCompile Include="..\sakura_core\_os\OsVersionInfo.cpp">
       <Filter>Cpp Source Files\_os</Filter>
     </ClCompile>
     <ClCompile Include="..\sakura_core\outline\CDlgFuncList.cpp">

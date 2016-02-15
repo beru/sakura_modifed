@@ -29,7 +29,7 @@
 #include "env/CShareData.h"
 #include "util/window.h"
 #include "util/os.h"
-#include "_main/CMutex.h"
+#include "_main/Mutex.h"
 
 
 /*!

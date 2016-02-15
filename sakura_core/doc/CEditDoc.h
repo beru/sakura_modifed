@@ -40,7 +40,7 @@
 #pragma once
 
 #include "_main/global.h"
-#include "_main/CAppMode.h"
+#include "_main/AppMode.h"
 #include "CDocEditor.h"
 #include "CDocFile.h"
 #include "CDocFileOperation.h"

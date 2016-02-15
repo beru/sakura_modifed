@@ -24,7 +24,7 @@
 #pragma once
 
 #include "doc/CDocListener.h"
-#include "_os/CClipboard.h"
+#include "_os/Clipboard.h"
 #include "COpeBuf.h"
 
 class EditDoc;

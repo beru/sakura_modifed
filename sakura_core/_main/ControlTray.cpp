@@ -29,7 +29,7 @@
 #define ID_HOTKEY_TRAYMENU	0x1234
 
 #include <HtmlHelp.h>
-#include "CControlTray.h"
+#include "ControlTray.h"
 #include "CPropertyManager.h"
 #include "typeprop/CDlgTypeList.h"
 #include "debug/CRunningTimer.h"
@@ -49,7 +49,7 @@
 #include "doc/CDocListener.h" // LoadInfo,EditInfo
 #include "recent/CMRUFile.h"
 #include "recent/CMRUFolder.h"
-#include "_main/CCommandLine.h"
+#include "_main/CommandLine.h"
 #include "sakura_rc.h"
 
 #define IDT_EDITCHECK 2

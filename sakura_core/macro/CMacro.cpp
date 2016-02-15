@@ -41,7 +41,7 @@
 #include "StdAfx.h"
 #include "func/Funccode.h"
 #include "CMacro.h"
-#include "_main/CControlTray.h"
+#include "_main/ControlTray.h"
 #include "cmd/CViewCommander_inline.h"
 #include "view/CEditView.h"		// 2002/2/10 aroka
 #include "macro/CSMacroMgr.h"	// 2002/2/10 aroka

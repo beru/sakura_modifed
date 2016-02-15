@@ -15,7 +15,7 @@
 #include "CViewCommander.h"
 #include "CViewCommander_inline.h"
 
-#include "_main/CControlTray.h"
+#include "_main/ControlTray.h"
 #include "CEditApp.h"
 #include "CGrepAgent.h"
 #include "plugin/CPlugin.h"

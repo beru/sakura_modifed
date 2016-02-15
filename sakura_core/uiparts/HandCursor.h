@@ -30,7 +30,7 @@
 
 #pragma once
 
-#include "_os/COsVersionInfo.h"
+#include "_os/OsVersionInfo.h"
 #include "sakura_rc.h"
 
 #ifndef IDC_HAND

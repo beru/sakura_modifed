@@ -36,7 +36,7 @@
 #include "doc/CEditDoc.h"
 #include "func/Funccode.h"		// Stonee, 2001/03/12
 #include "_main/global.h"		// Moca, 2002/05/26
-#include "_main/CAppMode.h"
+#include "_main/AppMode.h"
 #include "env/CShareData.h"
 #include "env/DLLSHAREDATA.h"
 #include "charset/charcode.h"	// rastiv, 2006/06/28

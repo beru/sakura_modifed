@@ -26,7 +26,7 @@
 */
 
 #include "StdAfx.h"
-#include "_os/COsVersionInfo.h"
+#include "_os/OsVersionInfo.h"
 #include "util/RegKey.h"
 #include "util/window.h"
 

@@ -41,7 +41,7 @@
 #include "CTabWnd.h"
 #include "window/CEditWnd.h"
 #include "_main/global.h"
-#include "_os/COSVersionInfo.h"
+#include "_os/OSVersionInfo.h"
 #include "charset/charcode.h"
 #include "extmodule/CUxTheme.h"
 #include "env/CShareData.h"

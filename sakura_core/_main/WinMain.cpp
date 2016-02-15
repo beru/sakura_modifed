@@ -21,8 +21,8 @@
 
 #include "StdAfx.h"
 #include <Ole2.h>
-#include "CProcessFactory.h"
-#include "CProcess.h"
+#include "ProcessFactory.h"
+#include "Process.h"
 #include "util/os.h"
 #include "util/module.h"
 #include "debug/CRunningTimer.h"

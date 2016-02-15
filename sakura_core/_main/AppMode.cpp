@@ -1,5 +1,5 @@
 #include "StdAfx.h"
-#include "CAppMode.h"
+#include "AppMode.h"
 #include "window/CEditWnd.h"
 #include "env/CSakuraEnvironment.h"
 

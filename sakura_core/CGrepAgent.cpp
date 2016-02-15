@@ -5,7 +5,7 @@
 #include "CGrepEnumFilterFolders.h"
 #include "CSearchAgent.h"
 #include "dlg/CDlgCancel.h"
-#include "_main/CAppMode.h"
+#include "_main/AppMode.h"
 #include "COpeBlk.h"
 #include "window/CEditWnd.h"
 #include "charset/CCodeMediator.h"

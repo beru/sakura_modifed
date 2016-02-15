@@ -38,7 +38,7 @@
 #include "CViewCommander.h"
 #include "CViewCommander_inline.h"
 
-#include "_main/CControlTray.h"
+#include "_main/ControlTray.h"
 #include "uiparts/CWaitCursor.h"
 #include "dlg/CDlgProperty.h"
 #include "dlg/CDlgCancel.h"// 2002/2/8 hor

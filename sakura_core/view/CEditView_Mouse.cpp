@@ -24,12 +24,12 @@
 #include <process.h> // _beginthreadex
 #include <limits.h>
 #include "CEditView.h"
-#include "_main/CAppMode.h"
+#include "_main/AppMode.h"
 #include "CEditApp.h"
 #include "CGrepAgent.h" // use CEditApp.h
 #include "window/CEditWnd.h"
-#include "_os/CDropTarget.h" // DataObject
-#include "_os/CClipboard.h"
+#include "_os/DropTarget.h" // DataObject
+#include "_os/Clipboard.h"
 #include "COpeBlk.h"
 #include "doc/layout/CLayout.h"
 #include "cmd/CViewCommander_inline.h"

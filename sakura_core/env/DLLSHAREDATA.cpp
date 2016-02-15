@@ -24,7 +24,7 @@
 
 #include "StdAfx.h"
 #include "DLLSHAREDATA.h"
-#include "_main/CMutex.h"
+#include "_main/Mutex.h"
 #include "dlg/CDlgCancel.h"
 #include "uiparts/CWaitCursor.h"
 #include "util/os.h"

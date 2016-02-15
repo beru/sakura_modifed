@@ -33,7 +33,7 @@
 #include "view/colors/CColorStrategy.h"
 #include "plugin/CPlugin.h"
 #include "uiparts/CMenuDrawer.h"
-#include "_main/CCommandLine.h"
+#include "_main/CommandLine.h"
 
 void ShareData_IO_Sub_LogFont(DataProfile& profile, const WCHAR* pszSecName,
 	const WCHAR* pszKeyLf, const WCHAR* pszKeyPointSize, const WCHAR* pszKeyFaceName, LOGFONT& lf, INT& nPointSize);

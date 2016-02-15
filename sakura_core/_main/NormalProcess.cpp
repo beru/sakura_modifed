@@ -21,9 +21,9 @@
 
 
 #include "StdAfx.h"
-#include "CNormalProcess.h"
-#include "CCommandLine.h"
-#include "CControlTray.h"
+#include "NormalProcess.h"
+#include "CommandLine.h"
+#include "ControlTray.h"
 #include "window/CEditWnd.h" // 2002/2/3 aroka
 #include "CGrepAgent.h"
 #include "doc/CEditDoc.h"
@@ -33,7 +33,7 @@
 #include "util/file.h"
 #include "plugin/CPluginManager.h"
 #include "plugin/CJackManager.h"
-#include "CAppMode.h"
+#include "AppMode.h"
 #include "env/CDocTypeManager.h"
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //

@@ -29,7 +29,7 @@
 
 #include "uiparts/CWaitCursor.h"
 #include "mem/CMemoryIterator.h"	// @@@ 2002.09.28 YAZAKI
-#include "_os/COsVersionInfo.h"
+#include "_os/OsVersionInfo.h"
 
 using namespace std; // 2002/2/3 aroka to here
 

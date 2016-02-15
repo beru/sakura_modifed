@@ -15,7 +15,7 @@
 #pragma once
 
 #include "global.h"
-#include "CProcess.h"
+#include "Process.h"
 
 class ControlTray;
 

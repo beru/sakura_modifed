@@ -16,7 +16,7 @@
 
 
 #include "StdAfx.h"
-#include "CProcess.h"
+#include "Process.h"
 #include "util/module.h"
 
 /*!

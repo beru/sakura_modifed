@@ -37,8 +37,8 @@
 #include "util/string_ex2.h"
 #include "util/file.h"
 #include "util/window.h"
-#include "_main/CCommandLine.h"
-#include "_os/COsVersionInfo.h"
+#include "_main/CommandLine.h"
+#include "_os/OsVersionInfo.h"
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                      ÉtÉ@ÉCÉãñºä«óù                         //

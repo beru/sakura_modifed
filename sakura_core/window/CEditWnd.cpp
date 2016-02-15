@@ -44,11 +44,11 @@
 #include <ShlObj.h>
 
 #include "window/CEditWnd.h"
-#include "_main/CControlTray.h"
-#include "_main/CCommandLine.h"	/// 2003/1/26 aroka
-#include "_main/CAppMode.h"
-#include "_os/CDropTarget.h"
-#include "_os/COsVersionInfo.h"
+#include "_main/ControlTray.h"
+#include "_main/CommandLine.h"	/// 2003/1/26 aroka
+#include "_main/AppMode.h"
+#include "_os/DropTarget.h"
+#include "_os/OsVersionInfo.h"
 #include "dlg/CDlgAbout.h"
 #include "dlg/CDlgPrintSetting.h"
 #include "env/CShareData.h"

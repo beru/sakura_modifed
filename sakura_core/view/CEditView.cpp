@@ -49,9 +49,9 @@
 #include "window/CSplitBoxWnd.h"///
 #include "COpeBlk.h"///
 #include "cmd/CViewCommander_inline.h"
-#include "_os/CDropTarget.h"///
-#include "_os/CClipboard.h"
-#include "_os/COsVersionInfo.h"
+#include "_os/DropTarget.h"///
+#include "_os/Clipboard.h"
+#include "_os/OsVersionInfo.h"
 #include "CMarkMgr.h"///
 #include "types/CTypeSupport.h"
 #include "convert/CConvert.h"

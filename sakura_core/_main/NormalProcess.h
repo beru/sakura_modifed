@@ -14,7 +14,7 @@
 #pragma once
 
 #include "global.h"
-#include "CProcess.h"
+#include "Process.h"
 #include "extmodule/CMigemo.h"
 #include "CEditApp.h"
 #include "util/design_template.h"

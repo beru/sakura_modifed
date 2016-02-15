@@ -28,7 +28,7 @@
 #include "doc/logic/CDocLine.h"
 #include "doc/logic/CDocLineMgr.h"
 #include "env/DLLSHAREDATA.h"
-#include "_main/CAppMode.h"
+#include "_main/AppMode.h"
 #include "CEol.h"
 #include "window/CEditWnd.h"
 #include "debug/CRunningTimer.h"

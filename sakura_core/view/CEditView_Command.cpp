@@ -33,7 +33,7 @@
 #include "util/file.h"
 #include "util/module.h"
 #include "util/window.h"
-#include "_main/CControlTray.h"
+#include "_main/ControlTray.h"
 #include "charset/charcode.h"
 #include "recent/CRecent.h"
 

@@ -17,12 +17,12 @@
 */
 
 #include "StdAfx.h"
-#include "CProcessFactory.h"
-#include "CControlProcess.h"
-#include "CNormalProcess.h"
-#include "CCommandLine.h"
-#include "CControlTray.h"
-#include "_os/COsVersionInfo.h"
+#include "ProcessFactory.h"
+#include "ControlProcess.h"
+#include "NormalProcess.h"
+#include "CommandLine.h"
+#include "ControlTray.h"
+#include "_os/OsVersionInfo.h"
 #include "dlg/CDlgProfileMgr.h"
 #include "debug/CRunningTimer.h"
 #include "util/os.h"

@@ -26,7 +26,7 @@
 #include "charset/CShiftJis.h"
 #include "doc/CEditDoc.h"
 #include "env/DLLSHAREDATA.h"
-#include "_main/CAppMode.h"
+#include "_main/AppMode.h"
 #include "window/CEditWnd.h"
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //

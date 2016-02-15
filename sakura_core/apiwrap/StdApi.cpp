@@ -2,7 +2,7 @@
 #include <vector>
 #include "StdApi.h"
 #include "charset/charcode.h"
-#include "_os/COsVersionInfo.h"
+#include "_os/OsVersionInfo.h"
 
 using namespace std;
 

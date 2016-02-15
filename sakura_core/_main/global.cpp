@@ -17,7 +17,7 @@
 #include "StdAfx.h"
 #include "global.h"
 #include "window/CEditWnd.h"
-#include "CNormalProcess.h"
+#include "NormalProcess.h"
 
 // 2007.10.02 kobake EditWndのインスタンスへのポインタをここに保存しておく
 EditWnd* g_pcEditWnd = NULL;

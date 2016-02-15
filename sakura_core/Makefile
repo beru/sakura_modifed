@@ -401,18 +401,18 @@ window/CSplitterWnd.o \
 window/CTabWnd.o \
 window/CTipWnd.o \
 window/CWnd.o \
-_main/CAppMode.o \
-_main/CCommandLine.o \
-_main/CControlProcess.o \
-_main/CControlTray.o \
-_main/CNormalProcess.o \
-_main/CProcess.o \
-_main/CProcessFactory.o \
+_main/AppMode.o \
+_main/CommandLine.o \
+_main/ControlProcess.o \
+_main/ControlTray.o \
 _main/global.o \
+_main/NormalProcess.o \
+_main/Process.o \
+_main/ProcessFactory.o \
 _main/WinMain.o \
-_os/CClipboard.o \
-_os/CDropTarget.o \
-_os/COsVersionInfo.o \
+_os/Clipboard.o \
+_os/DropTarget.o \
+_os/OsVersionInfo.o \
 sakura_rc.o \
 
 RCTOOLDIR=../btool

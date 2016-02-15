@@ -19,7 +19,7 @@
 
 
 #include "StdAfx.h"
-#include "CCommandLine.h"
+#include "CommandLine.h"
 #include "mem/CMemory.h"
 #include <tchar.h>
 #include <io.h>

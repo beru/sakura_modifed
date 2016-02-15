@@ -24,7 +24,7 @@
 
 #include "StdAfx.h"
 #include <ShellAPI.h>// HDROP
-#include "CClipboard.h"
+#include "Clipboard.h"
 #include "doc/CEditDoc.h"
 #include "charset/CCodeMediator.h"
 #include "charset/CCodeFactory.h"

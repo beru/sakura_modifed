@@ -132,8 +132,8 @@
 
 #ifdef SAKURA_PCH_MODE_MAX
 #include "env/CShareData.h"
-#include "_main/CNormalProcess.h"
-#include "_main/CAppMode.h"
+#include "_main/NormalProcess.h"
+#include "_main/AppMode.h"
 #include "window/CEditWnd.h"
 #include "CEditApp.h"
 #include "doc/CDocReader.h"

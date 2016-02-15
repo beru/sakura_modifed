@@ -33,7 +33,7 @@
 #include "env/CShareData.h"
 #include "env/DLLSHAREDATA.h"
 #include "env/CFileNameManager.h"
-#include "_main/CCommandLine.h"
+#include "_main/CommandLine.h"
 
 bool fexist(LPCTSTR pszPath)
 {

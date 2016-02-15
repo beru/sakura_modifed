@@ -29,7 +29,7 @@
 #include "charset/CCodePage.h"
 #include "doc/CDocListener.h"
 #include "recent/CRecent.h"
-#include "_os/COsVersionInfo.h"
+#include "_os/OsVersionInfo.h"
 #include "dlg/CDialog.h"
 #include "util/window.h"
 #include "util/shell.h"
