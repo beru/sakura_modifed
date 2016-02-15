@@ -38,7 +38,7 @@ public:
 	SearchStringPattern(HWND, const wchar_t* pszPattern, int nPatternLen, const SearchOption& searchOption, Bregexp* pRegexp);
 	~SearchStringPattern();
 	void Reset();
-	bool SetPattern(HWND hwnd, const wchar_t* pszPattern, int nPatternLen, const SearchOption& searchOption, Bregexp* pRegexp){
+	bool SetPattern(HWND hwnd, const wchar_t* pszPattern, int nPatternLen, const SearchOption& searchOption, Bregexp* pRegexp) {
 		return SetPattern(hwnd, pszPattern, nPatternLen, NULL, searchOption, pRegexp);
 	}
 	bool SetPattern(HWND, const wchar_t* pszPattern, int nPatternLen, const wchar_t* pszPattern2, const SearchOption& searchOption, Bregexp* pRegexp);

@@ -228,21 +228,21 @@ bool Clipboard::SetHtmlText(const NativeW& memBUf)
 	NativeA memUtf8;
 	Utf8().UnicodeToCode(memBUf, memUtf8._GetMemory());
 
-	NativeA cmemHeader;
+	NativeA memHeader;
 	char szFormat[32];
 	size_t size = memUtf8.GetStringLength() + 134;
-	cmemHeader.AppendString("Version:0.9\r\n");
-	cmemHeader.AppendString("StartHTML:00000097\r\n");
+	memHeader.AppendString("Version:0.9\r\n");
+	memHeader.AppendString("StartHTML:00000097\r\n");
 	sprintf(szFormat, "EndHTML:%08d\r\n", size + 36);
-	cmemHeader.AppendString(szFormat);
-	cmemHeader.AppendString("StartFragment:00000134\r\n");
+	memHeader.AppendString(szFormat);
+	memHeader.AppendString("StartFragment:00000134\r\n");
 	sprintf(szFormat, "EndFragment:%08d\r\n", size);
-	cmemHeader.AppendString(szFormat);
-	cmemHeader.AppendString("<html><body>\r\n<!--StartFragment -->\r\n");
-	NativeA cmemFooter;
-	cmemFooter.AppendString("\r\n<!--EndFragment-->\r\n</body></html>\r\n");
+	memHeader.AppendString(szFormat);
+	memHeader.AppendString("<html><body>\r\n<!--StartFragment -->\r\n");
+	NativeA memFooter;
+	memFooter.AppendString("\r\n<!--EndFragment-->\r\n</body></html>\r\n");
 
-	size_t nLen = cmemHeader.GetStringLength() + memUtf8.GetStringLength() + cmemFooter.GetStringLength();
+	size_t nLen = memHeader.GetStringLength() + memUtf8.GetStringLength() + memFooter.GetStringLength();
 	// 領域確保
 	HGLOBAL hgClipText = ::GlobalAlloc(
 		GMEM_MOVEABLE | GMEM_DDESHARE,
@@ -254,9 +254,9 @@ bool Clipboard::SetHtmlText(const NativeW& memBUf)
 
 	// 確保した領域にデータをコピー
 	char* pszClip = GlobalLockChar(hgClipText);
-	memcpy_raw(pszClip, cmemHeader.GetStringPtr(), cmemHeader.GetStringLength());	// データ
-	memcpy_raw(pszClip + cmemHeader.GetStringLength(), memUtf8.GetStringPtr(), memUtf8.GetStringLength());	// データ
-	memcpy_raw(pszClip + cmemHeader.GetStringLength() + memUtf8.GetStringLength(), cmemFooter.GetStringPtr(), cmemFooter.GetStringLength());	// データ
+	memcpy_raw(pszClip, memHeader.GetStringPtr(), memHeader.GetStringLength());	// データ
+	memcpy_raw(pszClip + memHeader.GetStringLength(), memUtf8.GetStringPtr(), memUtf8.GetStringLength());	// データ
+	memcpy_raw(pszClip + memHeader.GetStringLength() + memUtf8.GetStringLength(), memFooter.GetStringPtr(), memFooter.GetStringLength());	// データ
 	pszClip[nLen] = '\0';				// 終端ヌル
 	::GlobalUnlock(hgClipText);
 

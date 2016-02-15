@@ -1813,7 +1813,7 @@ STDMETHODIMP EditView::Drop(LPDATAOBJECT pDataObject, DWORD dwKeyState, POINTL p
 	BOOL		bMove;
 	bool		bMoveToPrev = false;
 	RECT		rcSel;
-	NativeW	cmemBuf;
+	NativeW		memBuf;
 	bool		bBeginBoxSelect_Old = false;
 
 	LayoutRange selectBgn_Old;
@@ -1870,12 +1870,12 @@ STDMETHODIMP EditView::Drop(LPDATAOBJECT pDataObject, DWORD dwKeyState, POINTL p
 	if (cf == Clipboard::GetSakuraFormat()) {
 		if (nSize > sizeof(int)) {
 			wchar_t* pszData = (wchar_t*)((BYTE*)pData + sizeof(int));
-			cmemBuf.SetString(pszData, t_min((SIZE_T)*(int*)pData, nSize / sizeof(wchar_t)));	// 途中のNUL文字も含める
+			memBuf.SetString(pszData, t_min((SIZE_T)*(int*)pData, nSize / sizeof(wchar_t)));	// 途中のNUL文字も含める
 		}
 	}else if (cf == CF_UNICODETEXT) {
-		cmemBuf.SetString((wchar_t*)pData, wcsnlen((wchar_t*)pData, nSize / sizeof(wchar_t)));
+		memBuf.SetString((wchar_t*)pData, wcsnlen((wchar_t*)pData, nSize / sizeof(wchar_t)));
 	}else {
-		cmemBuf.SetStringOld((char*)pData, strnlen((char*)pData, nSize / sizeof(char)));
+		memBuf.SetStringOld((char*)pData, strnlen((char*)pData, nSize / sizeof(char)));
 	}
 
 	// アンドゥバッファの準備
@@ -1966,7 +1966,7 @@ STDMETHODIMP EditView::Drop(LPDATAOBJECT pDataObject, DWORD dwKeyState, POINTL p
 			}
 		}
 
-		GetCommander().Command_INSTEXT(true, cmemBuf.GetStringPtr(), cmemBuf.GetStringLength(), FALSE);
+		GetCommander().Command_INSTEXT(true, memBuf.GetStringPtr(), memBuf.GetStringLength(), FALSE);
 
 		// 挿入前のキャレット位置から挿入後のキャレット位置までを選択範囲にする
 		LayoutPoint ptSelectFrom;
@@ -1980,7 +1980,7 @@ STDMETHODIMP EditView::Drop(LPDATAOBJECT pDataObject, DWORD dwKeyState, POINTL p
 		// TRUE == bBoxSelected
 		// FALSE == GetSelectionInfo().IsBoxSelecting()
 		// 貼り付け（クリップボードから貼り付け）
-		GetCommander().Command_PASTEBOX(cmemBuf.GetStringPtr(), cmemBuf.GetStringLength());
+		GetCommander().Command_PASTEBOX(memBuf.GetStringPtr(), memBuf.GetStringLength());
 		AdjustScrollBars(); // 2007.07.22 ryoji
 		Redraw();
 	}
@@ -2156,7 +2156,7 @@ void EditView::OnMyDropFiles(HDROP hDrop)
 
 	case 100:	// パス名を貼り付ける
 	case 101:	// ファイル名を貼り付ける
-		NativeW cmemBuf;
+		NativeW memBuf;
 		UINT nFiles;
 		TCHAR szPath[_MAX_PATH];
 		TCHAR szExt[_MAX_EXT];
@@ -2174,12 +2174,12 @@ void EditView::OnMyDropFiles(HDROP hDrop)
 				::lstrcat(szPath, szExt);
 			}
 #ifdef _UNICODE
-			cmemBuf.AppendString(szPath);
+			memBuf.AppendString(szPath);
 #else
-			cmemBuf.AppendStringOld(szPath);
+			memBuf.AppendStringOld(szPath);
 #endif
 			if (nFiles > 1) {
-				cmemBuf.AppendString(m_pEditDoc->m_docEditor.GetNewLineCode().GetValue2());
+				memBuf.AppendString(m_pEditDoc->m_docEditor.GetNewLineCode().GetValue2());
 			}
 		}
 		::DragFinish(hDrop);
@@ -2207,7 +2207,7 @@ void EditView::OnMyDropFiles(HDROP hDrop)
 		}
 
 		// テキスト挿入
-		GetCommander().HandleCommand(F_INSTEXT_W, true, (LPARAM)cmemBuf.GetStringPtr(), cmemBuf.GetStringLength(), TRUE, 0);
+		GetCommander().HandleCommand(F_INSTEXT_W, true, (LPARAM)memBuf.GetStringPtr(), memBuf.GetStringLength(), TRUE, 0);
 
 		// 挿入前のキャレット位置から挿入後のキャレット位置までを選択範囲にする
 		LayoutPoint ptSelectFrom;

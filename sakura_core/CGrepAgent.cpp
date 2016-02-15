@@ -126,9 +126,9 @@ void GrepAgent::AddTail( EditView* pEditView, const NativeW& mem, bool bAddStdou
 		HANDLE out = ::GetStdHandle(STD_OUTPUT_HANDLE);
 		if (out && out != INVALID_HANDLE_VALUE) {
 			Memory memOut;
-			std::unique_ptr<CodeBase> pcCodeBase( CodeFactory::CreateCodeBase(
+			std::unique_ptr<CodeBase> pCodeBase( CodeFactory::CreateCodeBase(
 					pEditView->GetDocument()->GetDocumentEncoding(), 0) );
-			pcCodeBase->UnicodeToCode( mem, &memOut );
+			pCodeBase->UnicodeToCode( mem, &memOut );
 			DWORD dwWrite = 0;
 			::WriteFile(out, memOut.GetRawPtr(), memOut.GetRawLength(), &dwWrite, NULL);
 		}
@@ -1053,11 +1053,11 @@ int GrepAgent::DoGrepFile(
 	int		nColumn;
 	BOOL	bOutFileName;
 	bOutFileName = FALSE;
-	Eol	cEol;
+	Eol	eol;
 	int		nEolCodeLen;
 	const TypeConfigMini* type;
 	DocTypeManager().GetTypeConfigMini(DocTypeManager().GetDocumentTypeOfPath(pszFile), &type);
-	FileLoad	cfl(type->m_encoding);	// 2012/12/18 Uchi 検査するファイルのデフォルトの文字コードを取得する様に
+	FileLoad	fl(type->m_encoding);	// 2012/12/18 Uchi 検査するファイルのデフォルトの文字コードを取得する様に
 	int		nOldPercent = 0;
 
 	int	nKeyLen = wcslen(pszKey);
@@ -1080,8 +1080,8 @@ int GrepAgent::DoGrepFile(
 			// 判別エラーでもファイル数にカウントするため
 			// ファイルの日本語コードセット判別
 			// 2014.06.19 Moca ファイル名のタイプ別のm_encodingに変更
-			CodeMediator cmediator( type->m_encoding );
-			nCharCode = cmediator.CheckKanjiCodeOfFile(pszFullPath);
+			CodeMediator mediator( type->m_encoding );
+			nCharCode = mediator.CheckKanjiCodeOfFile(pszFullPath);
 			if (!IsValidCodeOrCPType(nCharCode)) {
 				pszCodeName = _T("  [(DetectError)]");
 			}else if (IsValidCodeType(nCharCode)) {
@@ -1164,7 +1164,7 @@ int GrepAgent::DoGrepFile(
 		// ファイルを開く
 		// FileCloseで明示的に閉じるが、閉じていないときはデストラクタで閉じる
 		// 2003.06.10 Moca 文字コード判定処理もFileOpenで行う
-		nCharCode = cfl.FileOpen( pszFullPath, true, grepOption.nGrepCharSet, GetDllShareData().m_common.m_file.GetAutoMIMEdecode() );
+		nCharCode = fl.FileOpen( pszFullPath, true, grepOption.nGrepCharSet, GetDllShareData().m_common.m_file.GetAutoMIMEdecode() );
 		TCHAR szCpName[100];
 		{
 			if (grepOption.nGrepCharSet == CODE_AUTODETECT) {
@@ -1197,12 +1197,12 @@ int GrepAgent::DoGrepFile(
 		}
 
 		// 注意 : fl.ReadLine が throw する可能性がある
-		NativeW cUnicodeBuffer;
-		while (CodeConvertResult::Failure != cfl.ReadLine(&cUnicodeBuffer, &cEol)) {
-			const wchar_t*	pLine = cUnicodeBuffer.GetStringPtr();
-			int		nLineLen = cUnicodeBuffer.GetStringLength();
+		NativeW unicodeBuffer;
+		while (CodeConvertResult::Failure != fl.ReadLine(&unicodeBuffer, &eol)) {
+			const wchar_t*	pLine = unicodeBuffer.GetStringPtr();
+			int		nLineLen = unicodeBuffer.GetStringLength();
 
-			nEolCodeLen = cEol.GetLen();
+			nEolCodeLen = eol.GetLen();
 			++nLine;
 			pCompareData = pLine;
 
@@ -1221,8 +1221,8 @@ int GrepAgent::DoGrepFile(
 					pDlgCancel->IsButtonChecked(IDC_CHECK_REALTIMEVIEW)
 				);
 				// 2002/08/30 Moca 進行状態を表示する(5MB以上)
-				if (5000000 < cfl.GetFileSize()) {
-					int nPercent = cfl.GetPercent();
+				if (5000000 < fl.GetFileSize()) {
+					int nPercent = fl.GetPercent();
 					if (5 <= nPercent - nOldPercent) {
 						nOldPercent = nPercent;
 						TCHAR szWork[10];
@@ -1457,7 +1457,7 @@ int GrepAgent::DoGrepFile(
 		}
 
 		// ファイルを明示的に閉じるが、ここで閉じないときはデストラクタで閉じている
-		cfl.FileClose();
+		fl.FileClose();
 	} // try
 	catch (Error_FileOpen) {
 		NativeW str(LSW(STR_GREP_ERR_FILEOPEN));
@@ -1496,7 +1496,7 @@ public:
 		bOldSave(bOldSave_),
 		bufferSize(0),
 		out(NULL),
-		pcCodeBase(CodeFactory::CreateCodeBase(code_,0)),
+		pCodeBase(CodeFactory::CreateCodeBase(code_,0)),
 		memMessage(message)
 	{
 	}
@@ -1525,7 +1525,7 @@ public:
 			}
 			if (bBom) {
 				Memory bom;
-				pcCodeBase->GetBom(&bom);
+				pCodeBase->GetBom(&bom);
 				out->Write(bom.GetRawPtr(), bom.GetRawLength());
 			}
 			for (size_t i=0; i<buffer.size(); ++i) {
@@ -1538,7 +1538,7 @@ public:
 	void Output(const NativeW& strLine)
 	{
 		Memory dest;
-		pcCodeBase->UnicodeToCode(strLine, &dest);
+		pCodeBase->UnicodeToCode(strLine, &dest);
 		// 場合によっては改行ごとではないので、JIS/UTF-7での出力が一定でない可能性あり
 		out->Write(dest.GetRawPtr(), dest.GetRawLength());
 	}
@@ -1612,7 +1612,7 @@ private:
 	size_t bufferSize;
 	std::deque<NativeW> buffer;
 	BinaryOutputStream* out;
-	std::unique_ptr<CodeBase> pcCodeBase;
+	std::unique_ptr<CodeBase> pCodeBase;
 	NativeW&	memMessage;
 };
 
@@ -1691,12 +1691,12 @@ int GrepAgent::DoGrepReplaceFile(
 			SearchAgent::CreateWordList( searchWords, pszKey, nKeyLen );
 		}
 	
-		NativeW cOutBuffer;
+		NativeW outBuffer;
 		// 注意 : fl.ReadLine が throw する可能性がある
-		NativeW cUnicodeBuffer;
-		while (fl.ReadLine(&cUnicodeBuffer, &cEol) != CodeConvertResult::Failure) {
-			const wchar_t*	pLine = cUnicodeBuffer.GetStringPtr();
-			int nLineLen = cUnicodeBuffer.GetStringLength();
+		NativeW unicodeBuffer;
+		while (fl.ReadLine(&unicodeBuffer, &cEol) != CodeConvertResult::Failure) {
+			const wchar_t*	pLine = unicodeBuffer.GetStringPtr();
+			int nLineLen = unicodeBuffer.GetStringLength();
 	
 			nEolCodeLen = cEol.GetLen();
 			++nLine;
@@ -1728,7 +1728,7 @@ int GrepAgent::DoGrepReplaceFile(
 					}
 				}
 			}
-			cOutBuffer.SetString( L"", 0 );
+			outBuffer.SetString( L"", 0 );
 			bool bOutput = true;
 			if (grepOption.bGrepOutputFileOnly && 1 <= nHitCount) {
 				bOutput = false;
@@ -1784,14 +1784,14 @@ int GrepAgent::DoGrepReplaceFile(
 						// gオプションでは行末まで一度に置換済み
 						nHitCount += nMatchNum - 1;
 						*pnHitCount += nMatchNum - 1;
-						cOutBuffer.AppendString( pRegexp->GetString(), pRegexp->GetStringLen() );
+						outBuffer.AppendString( pRegexp->GetString(), pRegexp->GetStringLen() );
 						nIndexOld = nLineLen;
 						break;
 					}
 					if (0 < nIndex - nIndexOld) {
-						cOutBuffer.AppendString( &pLine[nIndexOld], nIndex - nIndexOld );
+						outBuffer.AppendString( &pLine[nIndexOld], nIndex - nIndexOld );
 					}
-					cOutBuffer.AppendNativeData( mGrepReplace );
+					outBuffer.AppendNativeData( mGrepReplace );
 					//	探し始める位置を補正
 					//	2003.06.10 Moca マッチした文字列の後ろから次の検索を開始する
 					if (matchlen <= 0) {
@@ -1804,7 +1804,7 @@ int GrepAgent::DoGrepReplaceFile(
 					nIndexOld = nIndex;
 				}
 				if (0 < nLineLen - nIndexOld) {
-					cOutBuffer.AppendString( &pLine[nIndexOld], nLineLen - nIndexOld );
+					outBuffer.AppendString( &pLine[nIndexOld], nLineLen - nIndexOld );
 				}
 			}
 			// 単語のみ検索
@@ -1852,12 +1852,12 @@ int GrepAgent::DoGrepReplaceFile(
 						pDlgCancel->SetItemInt(IDC_STATIC_HITCOUNT, *pnHitCount, FALSE );
 					}
 					if (0 < pszRes - pLine - nOutputPos) {
-						cOutBuffer.AppendString( &pLine[nOutputPos], pszRes - pLine - nOutputPos );
+						outBuffer.AppendString( &pLine[nOutputPos], pszRes - pLine - nOutputPos );
 					}
-					cOutBuffer.AppendNativeData( mGrepReplace );
+					outBuffer.AppendNativeData( mGrepReplace );
 					nOutputPos = pszRes - pLine + nMatchLen;
 				}
-				cOutBuffer.AppendString( &pLine[nOutputPos], nLineLen - nOutputPos );
+				outBuffer.AppendString( &pLine[nOutputPos], nLineLen - nOutputPos );
 			}else {
 				// 文字列検索
 				int nColumnPrev = 0;
@@ -1899,9 +1899,9 @@ int GrepAgent::DoGrepReplaceFile(
 						pDlgCancel->SetItemInt(IDC_STATIC_HITCOUNT, *pnHitCount, FALSE );
 					}
 					if (nColumn) {
-						cOutBuffer.AppendString( pCompareData, nColumn );
+						outBuffer.AppendString( pCompareData, nColumn );
 					}
-					cOutBuffer.AppendNativeData( mGrepReplace );
+					outBuffer.AppendNativeData( mGrepReplace );
 					//	探し始める位置を補正
 					//	2003.06.10 Moca マッチした文字列の後ろから次の検索を開始する
 					//	nClom : マッチ位置
@@ -1911,9 +1911,9 @@ int GrepAgent::DoGrepReplaceFile(
 					nCompareLen -= nPosDiff;
 					nColumnPrev += nPosDiff;
 				}
-				cOutBuffer.AppendString( &pLine[nColumnPrev], nLineLen - nColumnPrev );
+				outBuffer.AppendString( &pLine[nColumnPrev], nLineLen - nColumnPrev );
 			}
-			output.AppendBuffer(cOutBuffer);
+			output.AppendBuffer(outBuffer);
 	
 			// 2014.09.23 データが多い時はバッファ出力
 			if (0 < memMessage.GetStringLength() && 2800 < nHitCount - nOutputHitCount) {

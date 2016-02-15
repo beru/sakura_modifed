@@ -206,7 +206,7 @@ ECodeType FileLoad::FileOpen(
 	
 	// To Here Jun. 13, 2003 Moca BOM‚Ìœ‹Ž
 	m_eMode = FileLoadMode::Ready;
-//	m_cmemLine.AllocBuffer(256);
+//	m_memLine.AllocBuffer(256);
 	m_pCodeBase->GetEol( &m_memEols[0], EolType::NEL );
 	m_pCodeBase->GetEol( &m_memEols[1], EolType::LS );
 	m_pCodeBase->GetEol( &m_memEols[2], EolType::PS );

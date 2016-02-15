@@ -645,10 +645,10 @@ bool ViewCommander::Command_PUTFILE(
 			NativeW cMem2;
 			const NativeW* pConvBuffer;
 			if (bBom) {
-				NativeW cmemBom;
+				NativeW memBom;
 				std::unique_ptr<CodeBase> pcUtf16(CodeFactory::CreateCodeBase(CODE_UNICODE, 0));
-				pcUtf16->GetBom(cmemBom._GetMemory());
-				cMem2.AppendNativeData(cmemBom);
+				pcUtf16->GetBom(memBom._GetMemory());
+				cMem2.AppendNativeData(memBom);
 				cMem2.AppendNativeData(cMem);
 				cMem.Clear();
 				pConvBuffer = &cMem2;

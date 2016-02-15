@@ -52,17 +52,17 @@ void ViewCommander::Command_CUT(void)
 
 	// 選択範囲のデータを取得
 	// 正常時はTRUE,範囲未選択の場合はFALSEを返す
-	NativeW cmemBuf;
-	if (!m_pCommanderView->GetSelectedData(&cmemBuf, false, NULL, false, GetDllShareData().m_common.m_edit.m_bAddCRLFWhenCopy)) {
+	NativeW memBuf;
+	if (!m_pCommanderView->GetSelectedData(&memBuf, false, NULL, false, GetDllShareData().m_common.m_edit.m_bAddCRLFWhenCopy)) {
 		ErrorBeep();
 		return;
 	}
 	// クリップボードにデータを設定
-	if (!m_pCommanderView->MySetClipboardData(cmemBuf.GetStringPtr(), cmemBuf.GetStringLength(), bBeginBoxSelect)) {
+	if (!m_pCommanderView->MySetClipboardData(memBuf.GetStringPtr(), memBuf.GetStringLength(), bBeginBoxSelect)) {
 		ErrorBeep();
 		return;
 	}
-	cmemBuf.Clear();
+	memBuf.Clear();
 
 	// カーソル位置または選択エリアを削除
 	m_pCommanderView->DeleteData(true);
@@ -80,10 +80,10 @@ void ViewCommander::Command_COPY(
 	EolType	neweol					// [in] コピーするときのEOL。
 	)
 {
-	NativeW cmemBuf;
+	NativeW memBuf;
 	auto& selInfo = m_pCommanderView->GetSelectionInfo();
 	auto& csEdit = GetDllShareData().m_common.m_edit;
-	// クリップボードに入れるべきテキストデータを、cmemBufに格納する
+	// クリップボードに入れるべきテキストデータを、memBufに格納する
 	if (!selInfo.IsTextSelected()) {
 		// 非選択時は、カーソル行をコピーする
 		if (!csEdit.m_bEnableNoSelectCopy) {	// 2007.11.18 ryoji
@@ -99,15 +99,15 @@ void ViewCommander::Command_COPY(
 		bool bBeginBoxSelect = selInfo.IsBoxSelecting();
 		// 選択範囲のデータを取得
 		// 正常時はTRUE,範囲未選択の場合はFALSEを返す
-		if (!m_pCommanderView->GetSelectedData(&cmemBuf, false, NULL, false, bAddCRLFWhenCopy, neweol)) {
+		if (!m_pCommanderView->GetSelectedData(&memBuf, false, NULL, false, bAddCRLFWhenCopy, neweol)) {
 			ErrorBeep();
 			return;
 		}
 
-		// クリップボードにデータcmemBufの内容を設定
+		// クリップボードにデータmemBufの内容を設定
 		if (!m_pCommanderView->MySetClipboardData(
-			cmemBuf.GetStringPtr(),
-			cmemBuf.GetStringLength(),
+			memBuf.GetStringPtr(),
+			memBuf.GetStringLength(),
 			bBeginBoxSelect,
 			false
 			)
@@ -116,7 +116,7 @@ void ViewCommander::Command_COPY(
 			return;
 		}
 	}
-	cmemBuf.Clear();
+	memBuf.Clear();
 
 	// 選択範囲の後片付け
 	if (!bIgnoreLockAndDisable) {
@@ -162,7 +162,7 @@ void ViewCommander::Command_PASTE(int option)
 
 	auto& commonSetting = GetDllShareData().m_common;
 	// クリップボードからデータを取得 -> memClip, bColumnSelect
-	NativeW	cmemClip;
+	NativeW	memClip;
 	bool		bColumnSelect;
 	bool		bLineSelect = false;
 	bool		bLineSelectOption = 
@@ -170,14 +170,14 @@ void ViewCommander::Command_PASTE(int option)
 		((option & 0x08) == 0x08) ? false :
 		commonSetting.m_edit.m_bEnableLineModePaste;
 
-	if (!m_pCommanderView->MyGetClipboardData(cmemClip, &bColumnSelect, bLineSelectOption ? &bLineSelect: NULL)) {
+	if (!m_pCommanderView->MyGetClipboardData(memClip, &bColumnSelect, bLineSelectOption ? &bLineSelect: NULL)) {
 		ErrorBeep();
 		return;
 	}
 
 	// クリップボードデータ取得 -> pszText, nTextLen
 	LogicInt nTextLen;
-	const wchar_t*	pszText = cmemClip.GetStringPtr(&nTextLen);
+	const wchar_t*	pszText = memClip.GetStringPtr(&nTextLen);
 
 	bool bConvertEol = 
 		((option & 0x01) == 0x01) ? true :
@@ -212,8 +212,8 @@ void ViewCommander::Command_PASTE(int option)
 	// ※レイアウト折り返しの行コピーだった場合は末尾が改行になっていない
 	if (bLineSelect) {
 		if (!WCODE::IsLineDelimiter(pszText[nTextLen-1], GetDllShareData().m_common.m_edit.m_bEnableExtEol)) {
-			cmemClip.AppendString(GetDocument()->m_docEditor.GetNewLineCode().GetValue2());
-			pszText = cmemClip.GetStringPtr(&nTextLen);
+			memClip.AppendString(GetDocument()->m_docEditor.GetNewLineCode().GetValue2());
+			pszText = memClip.GetStringPtr(&nTextLen);
 		}
 	}
 
@@ -408,14 +408,14 @@ void ViewCommander::Command_PASTEBOX(int option)
 	}
 
 	// クリップボードからデータを取得
-	NativeW cmemClip;
-	if (!m_pCommanderView->MyGetClipboardData(cmemClip, NULL)) {
+	NativeW memClip;
+	if (!m_pCommanderView->MyGetClipboardData(memClip, NULL)) {
 		ErrorBeep();
 		return;
 	}
 	// 2004.07.13 Moca \0コピー対策
 	int nstrlen;
-	const wchar_t* lptstr = cmemClip.GetStringPtr(&nstrlen);
+	const wchar_t* lptstr = memClip.GetStringPtr(&nstrlen);
 
 	Command_PASTEBOX(lptstr, nstrlen);
 	m_pCommanderView->AdjustScrollBars(); // 2007.07.22 ryoji
@@ -715,11 +715,11 @@ static bool AppendHTMLColor(
 		colorAttrLast2 = colorAttrLast;
 		fontAttrLast2  = fontAttrLast;
 	}
-	NativeW cmemBuf(pAppendStr, nLen);
-	cmemBuf.Replace(L"&", L"&amp;");
-	cmemBuf.Replace(L"<", L"&lt;");
-	cmemBuf.Replace(L">", L"&gt;");
-	memClip.AppendNativeData(cmemBuf);
+	NativeW memBuf(pAppendStr, nLen);
+	memBuf.Replace(L"&", L"&amp;");
+	memBuf.Replace(L"<", L"&lt;");
+	memBuf.Replace(L">", L"&gt;");
+	memClip.AppendNativeData(memBuf);
 	if (0 < nLen) {
 		return WCODE::IsLineDelimiter(
 			pAppendStr[nLen-1],
@@ -815,7 +815,7 @@ void ViewCommander::Command_COPY_COLOR_HTML(bool bLineNumber)
 	int nLineNumberMaxLen = 0;
 	WCHAR szLineFormat[10];
 	szLineFormat[0] = L'\0';
-	NativeW cmemNullLine;
+	NativeW memNullLine;
 	if (bLineNumber) {
 		int nLineNumberMax;
 		if (type.m_bLineNumIsCRLF) {
@@ -825,16 +825,16 @@ void ViewCommander::Command_COPY_COLOR_HTML(bool bLineNumber)
 		}
 		int nWork = 10;
 		int i;
-		cmemNullLine.AppendString(L" ");
+		memNullLine.AppendString(L" ");
 		for (i=1; i<12; ++i) {
 			if (nWork > nLineNumberMax) {
 				break;
 			}
 			nWork *= 10;
-			cmemNullLine.AppendString(L" ");
+			memNullLine.AppendString(L" ");
 		}
 		nLineNumberMaxLen = i + 1; // "%d:"
-		cmemNullLine.AppendString(L":");
+		memNullLine.AppendString(L":");
 		swprintf(szLineFormat, L"%%%dd:", i);
 	}
 	if (bLineNumLayout) {
@@ -842,14 +842,14 @@ void ViewCommander::Command_COPY_COLOR_HTML(bool bLineNumber)
 	}else {
 		nBuffSize += (Int)(nLineNumberMaxLen * (sSelectLogic.GetTo().y - sSelectLogic.GetFrom().y + 1));
 	}
-	NativeW cmemClip;
-	cmemClip.AllocStringBuffer(nBuffSize + 11);
+	NativeW memClip;
+	memClip.AllocStringBuffer(nBuffSize + 11);
 	{
 		COLORREF cBACK = type.m_colorInfoArr[COLORIDX_TEXT].m_colorAttr.m_cBACK;
 		DWORD dwBACKColor = (GetRValue(cBACK) << 16) + (GetGValue(cBACK) << 8) + GetBValue(cBACK);
 		WCHAR szBuf[50];
 		swprintf(szBuf, L"<pre style=\"background-color:#%06x\">", dwBACKColor);
-		cmemClip.AppendString(szBuf);
+		memClip.AppendString(szBuf);
 	}
 	LayoutInt nLayoutLineNum = rcSel.top;
 	const LogicInt nLineNumLast = sSelectLogic.GetTo().y;
@@ -936,16 +936,16 @@ void ViewCommander::Command_COPY_COLOR_HTML(bool bLineNumber)
 				if (type.m_bLineNumIsCRLF) {
 					if (pLayout->GetLogicOffset() != 0) {
 						if (bLineNumLayout) {
-							cmemClip.AppendNativeData(cmemNullLine);
+							memClip.AppendNativeData(memNullLine);
 						}
 					}else {
 						int ret = swprintf(szLineNum, szLineFormat, nLineNum + 1);
-						cmemClip.AppendString(szLineNum, ret);
+						memClip.AppendString(szLineNum, ret);
 					}
 				}else {
 					if (bLineNumLayout || pLayout->GetLogicOffset() == 0) {
 						int ret = swprintf(szLineNum, szLineFormat, nLayoutLineNum + 1);
-						cmemClip.AppendString(szLineNum, ret);
+						memClip.AppendString(szLineNum, ret);
 					}
 				}
 			}
@@ -978,13 +978,13 @@ void ViewCommander::Command_COPY_COLOR_HTML(bool bLineNumber)
 						)
 					) {
 						bAddCRLF = AppendHTMLColor(sColorAttrLast, sColorAttrLast2,
-							sFontAttrLast, sFontAttrLast2, pLine + nBgnLogic, iLogic - nBgnLogic, cmemClip);
+							sFontAttrLast, sFontAttrLast2, pLine + nBgnLogic, iLogic - nBgnLogic, memClip);
 						sColorAttrLast = sColorAttrNext;
 						sFontAttrLast  = sFontAttrNext;
 						nBgnLogic = iLogic;
 					}else if (nIdxTo + nLineStart == iLogic) {
 						bAddCRLF = AppendHTMLColor(sColorAttrLast, sColorAttrLast2,
-							sFontAttrLast, sFontAttrLast2, pLine + nBgnLogic, iLogic - nBgnLogic, cmemClip);
+							sFontAttrLast, sFontAttrLast2, pLine + nBgnLogic, iLogic - nBgnLogic, memClip);
 						nBgnLogic = iLogic;
 					}
 				}
@@ -993,7 +993,7 @@ void ViewCommander::Command_COPY_COLOR_HTML(bool bLineNumber)
 			}
 			if (nIdxFrom != -1 && nIdxTo + nLineStart == iLogic) {
 				bAddCRLF = AppendHTMLColor(sColorAttrLast, sColorAttrLast2,
-					sFontAttrLast, sFontAttrLast2, pLine + nBgnLogic, iLogic - nBgnLogic, cmemClip);
+					sFontAttrLast, sFontAttrLast2, pLine + nBgnLogic, iLogic - nBgnLogic, memClip);
 			}
 			if (bLineNumber) {
 				bool bAddLineNum = true;
@@ -1013,13 +1013,13 @@ void ViewCommander::Command_COPY_COLOR_HTML(bool bLineNumber)
 				}
 				if (bAddLineNum) {
 					if (sFontAttrLast2.m_bBoldFont) {
-						cmemClip.AppendString(L"</b>", 4);
+						memClip.AppendString(L"</b>", 4);
 					}
 					if (sFontAttrLast2.m_bUnderLine) {
-						cmemClip.AppendString(L"</u>", 4);
+						memClip.AppendString(L"</u>", 4);
 					}
 					if (sColorAttrLast2.m_cTEXT != (COLORREF)-1) {
-						cmemClip.AppendString(L"</span>", 7);
+						memClip.AppendString(L"</span>", 7);
 					}
 					sFontAttrLast.m_bBoldFont = sFontAttrLast2.m_bBoldFont = false;
 					sFontAttrLast.m_bUnderLine = sFontAttrLast2.m_bUnderLine = false;
@@ -1028,32 +1028,32 @@ void ViewCommander::Command_COPY_COLOR_HTML(bool bLineNumber)
 				}
 			}
 			if (bLineNumLayout && !bAddCRLF) {
-				cmemClip.AppendString(WCODE::CRLF, 2);
+				memClip.AppendString(WCODE::CRLF, 2);
 			}
 			// 2014.06.25 バッファ拡張
-			if (cmemClip.capacity() < cmemClip.GetStringLength() + 100) {
-				cmemClip.AllocStringBuffer( cmemClip.capacity() + cmemClip.capacity() / 2 );
+			if (memClip.capacity() < memClip.GetStringLength() + 100) {
+				memClip.AllocStringBuffer( memClip.capacity() + memClip.capacity() / 2 );
 			}
 		}
 	}
 	if (sFontAttrLast2.m_bBoldFont) {
-		cmemClip.AppendString(L"</b>", 4);
+		memClip.AppendString(L"</b>", 4);
 	}
 	if (sFontAttrLast2.m_bUnderLine) {
-		cmemClip.AppendString(L"</u>", 4);
+		memClip.AppendString(L"</u>", 4);
 	}
 	if (sColorAttrLast2.m_cTEXT != (COLORREF)-1) {
-		cmemClip.AppendString(L"</span>", 7);
+		memClip.AppendString(L"</span>", 7);
 	}
-	cmemClip.AppendString(L"</pre>", 6);
+	memClip.AppendString(L"</pre>", 6);
 
-	Clipboard cClipboard(GetEditWindow()->GetHwnd());
-	if (!cClipboard) {
+	Clipboard clipboard(GetEditWindow()->GetHwnd());
+	if (!clipboard) {
 		return;
 	}
-	cClipboard.Empty();
-	cClipboard.SetHtmlText(cmemClip);
-	cClipboard.SetText(cmemClip.GetStringPtr(), cmemClip.GetStringLength(), false, false);
+	clipboard.Empty();
+	clipboard.SetHtmlText(memClip);
+	clipboard.SetText(memClip.GetStringPtr(), memClip.GetStringLength(), false, false);
 }
 
 

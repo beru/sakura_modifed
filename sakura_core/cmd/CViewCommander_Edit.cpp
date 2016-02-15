@@ -52,13 +52,13 @@ void ViewCommander::Command_WCHAR(
 	auto& typeData = m_pCommanderView->m_pTypeData;
 
 	// 現在位置にデータを挿入
-	NativeW cmemDataW2;
-	cmemDataW2 = wcChar;
+	NativeW memDataW2;
+	memDataW2 = wcChar;
 	if (WCODE::IsLineDelimiter(wcChar, GetDllShareData().m_common.m_edit.m_bEnableExtEol)) { 
 		// 現在、Enterなどで挿入する改行コードの種類を取得
 		if (bConvertEOL) {
 			Eol cWork = pDoc->m_docEditor.GetNewLineCode();
-			cmemDataW2.SetString(cWork.GetValue2(), cWork.GetLen());
+			memDataW2.SetString(cWork.GetValue2(), cWork.GetLen());
 		}
 
 		// テキストが選択されているか
@@ -122,11 +122,11 @@ end_of_for:;
 					}
 
 					// インデント取得
-					//NativeW cmemIndent;
-					//cmemIndent.SetString(pLine, nPos);
+					//NativeW memIndent;
+					//memIndent.SetString(pLine, nPos);
 
 					// インデント付加
-					cmemDataW2.AppendString(pLine, nPos);
+					memDataW2.AppendString(pLine, nPos);
 				}
 			}
 		}
@@ -151,8 +151,8 @@ end_of_for:;
 	LayoutPoint ptLayoutNew;
 	m_pCommanderView->InsertData_CEditView(
 		caret.GetCaretLayoutPos(),
-		cmemDataW2.GetStringPtr(),
-		cmemDataW2.GetStringLength(),
+		memDataW2.GetStringPtr(),
+		memDataW2.GetStringLength(),
 		&ptLayoutNew,
 		true
 	);
@@ -314,7 +314,7 @@ void ViewCommander::Command_UNDO(void)
 		return;
 	}
 
-	MY_RUNNINGTIMER(cRunningTimer, "ViewCommander::Command_UNDO()");
+	MY_RUNNINGTIMER(runningTimer, "ViewCommander::Command_UNDO()");
 
 	Ope*		pOpe = NULL;
 
@@ -568,7 +568,7 @@ void ViewCommander::Command_REDO(void)
 	if (!docEditor.IsEnableRedo()) {	// Redo(やり直し)可能な状態か？
 		return;
 	}
-	MY_RUNNINGTIMER(cRunningTimer, "ViewCommander::Command_REDO()");
+	MY_RUNNINGTIMER(runningTimer, "ViewCommander::Command_REDO()");
 
 	Ope*		pOpe = NULL;
 	OpeBlk*	pOpeBlk;

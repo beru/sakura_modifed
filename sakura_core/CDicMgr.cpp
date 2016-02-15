@@ -44,14 +44,14 @@ DicMgr::~DicMgr()
 BOOL DicMgr::Search(
 	const wchar_t*		pszKey,				// 検索キーワード
 	const int			nCmpLen,			// 検索キーワードの長さ
-	NativeW**			ppcmemKey,			// 見つかったキーワード．呼び出し元の責任で解放する．
-	NativeW**			ppcmemMean,			// 見つかったキーワードに対応する辞書内容．呼び出し元の責任で解放する．
+	NativeW**			ppMemKey,			// 見つかったキーワード．呼び出し元の責任で解放する．
+	NativeW**			ppMemMean,			// 見つかったキーワードに対応する辞書内容．呼び出し元の責任で解放する．
 	const TCHAR*		pszKeyWordHelpFile,	// キーワードヘルプファイルのパス名
 	int*				pLine				// 見つかったキーワードのキーワードヘルプファイル内での行番号
 	)
 {
 #ifdef _DEBUG
-	RunningTimer cRunningTimer("DicMgr::Search");
+	RunningTimer runningTimer("DicMgr::Search");
 #endif
 	const wchar_t*	pszDelimit = L" /// ";
 	const wchar_t*	pszKeySeps = L",\0";
@@ -94,11 +94,11 @@ BOOL DicMgr::Search(
 						}
 					}
 					// キーワードのセット
-					*ppcmemKey = new NativeW;	// 2006.04.10 fon
-					(*ppcmemKey)->SetString(pszToken);
+					*ppMemKey = new NativeW;	// 2006.04.10 fon
+					(*ppMemKey)->SetString(pszToken);
 					// 意味のセット
-					*ppcmemMean = new NativeW;
-					(*ppcmemMean)->SetString(pszWork);
+					*ppMemMean = new NativeW;
+					(*ppMemMean)->SetString(pszWork);
 
 					*pLine = line;	// 2006.04.10 fon
 					return TRUE;

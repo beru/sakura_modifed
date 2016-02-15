@@ -49,7 +49,7 @@ using namespace std;
 void Profile::Init(void)
 {
 	m_strProfileName = _T("");
-	m_ProfileData.clear();
+	m_profileData.clear();
 	m_bRead = true;
 	return;
 }
@@ -82,14 +82,14 @@ void Profile::ReadOneline(
 		&& line.find(LTEXT("=")) == line.npos
 		&& line.find(LTEXT("]")) == ( line.size() - 1 )
 	) {
-		Section Buffer;
-		Buffer.strSectionName = line.substr( 1, line.size() - 1 - 1 );
-		m_ProfileData.push_back(Buffer);
+		Section buffer;
+		buffer.strSectionName = line.substr( 1, line.size() - 1 - 1 );
+		m_profileData.push_back(buffer);
 	// エントリ取得
-	}else if (!m_ProfileData.empty()) {	// 最初のセクション以前の行のエントリは無視
+	}else if (!m_profileData.empty()) {	// 最初のセクション以前の行のエントリは無視
 		wstring::size_type idx = line.find( LTEXT("=") );
 		if (line.npos != idx) {
-			m_ProfileData.back().mapEntries.insert( PAIR_STR_STR( line.substr(0,idx), line.substr(idx+1) ) );
+			m_profileData.back().mapEntries.insert( PAIR_STR_STR( line.substr(0,idx), line.substr(idx+1) ) );
 		}
 	}
 }
@@ -162,7 +162,7 @@ bool Profile::ReadProfileRes(
 	std::vector<std::wstring>* pData
 	)
 {
-	static const BYTE UTF8_BOM[] = {0xEF, 0xBB, 0xBF};
+	static const BYTE utf8_bom[] = {0xEF, 0xBB, 0xBF};
 	HRSRC		hRsrc;
 	HGLOBAL		hGlobal;
 	size_t		nSize;
@@ -183,9 +183,9 @@ bool Profile::ReadProfileRes(
 		&& (nSize = (size_t)::SizeofResource(0, hRsrc)) != 0
 	) {
 		p = psMMres;
-		if (nSize >= sizeof(UTF8_BOM) && memcmp(p, UTF8_BOM, sizeof(UTF8_BOM)) == 0) {
+		if (nSize >= sizeof(utf8_bom) && memcmp(p, utf8_bom, sizeof(utf8_bom)) == 0) {
 			// Skip BOM
-			p += sizeof(UTF8_BOM);
+			p += sizeof(utf8_bom);
 		}
 		for (; p < psMMres+nSize; p = pn) {
 			// 1行切り取り（長すぎた場合切捨て）
@@ -243,13 +243,13 @@ bool Profile::WriteProfile(
 		m_strProfileName = pszProfileName;
 	}
     
-	std::vector< wstring > vecLine;
+	std::vector<wstring> vecLine;
 	if (pszComment) {
 		vecLine.push_back(LTEXT(";") + wstring(pszComment));		// //->;	2008/5/24 Uchi
 		vecLine.push_back(LTEXT(""));
 	}
-	auto iterEnd = m_ProfileData.end();
-	for (auto iter=m_ProfileData.begin(); iter!=iterEnd; ++iter) {
+	auto iterEnd = m_profileData.end();
+	for (auto iter=m_profileData.begin(); iter!=iterEnd; ++iter) {
 		// セクション名を書き込む
 		vecLine.push_back(LTEXT("[") + iter->strSectionName + LTEXT("]"));
 		auto mapiterEnd = iter->mapEntries.end();
@@ -349,8 +349,8 @@ bool Profile::GetProfileDataImp(
 	wstring&		strEntryValue	// [out] エントリ値
 	)
 {
-	auto iterEnd = m_ProfileData.end();
-	for (auto iter = m_ProfileData.begin(); iter != iterEnd; ++iter) {
+	auto iterEnd = m_profileData.end();
+	for (auto iter = m_profileData.begin(); iter != iterEnd; ++iter) {
 		if (iter->strSectionName == strSectionName) {
 			auto mapiter = iter->mapEntries.find(strEntryKey);
 			if (iter->mapEntries.end() != mapiter) {
@@ -375,8 +375,8 @@ bool Profile::SetProfileDataImp(
 	const wstring&	strEntryValue	// [in] エントリ値
 	)
 {
-	auto iterEnd = m_ProfileData.end();
-	auto iter = m_ProfileData.begin();
+	auto iterEnd = m_profileData.end();
+	auto iter = m_profileData.begin();
 	for (; iter != iterEnd; ++iter) {
 		if (iter->strSectionName == strSectionName) {
 			// 既存のセクションの場合
@@ -394,10 +394,10 @@ bool Profile::SetProfileDataImp(
 	}
 	// 既存のセクションではない場合，セクション及びエントリを追加
 	if (iter == iterEnd) {
-		Section Buffer;
-		Buffer.strSectionName = strSectionName;
-		Buffer.mapEntries.insert(PAIR_STR_STR(strEntryKey, strEntryValue));
-		m_ProfileData.push_back(Buffer);
+		Section buffer;
+		buffer.strSectionName = strSectionName;
+		buffer.mapEntries.insert(PAIR_STR_STR(strEntryKey, strEntryValue));
+		m_profileData.push_back(buffer);
 	}
 	return true;
 }
@@ -406,10 +406,10 @@ bool Profile::SetProfileDataImp(
 void Profile::DUMP(void)
 {
 #ifdef _DEBUG
-	auto iterEnd = m_ProfileData.end();
+	auto iterEnd = m_profileData.end();
 	// 2006.02.20 ryoji: MAP_STR_STR_ITER削除時の修正漏れによるコンパイルエラー修正
 	MYTRACE(_T("\n\nCProfile::DUMP()======================"));
-	for (auto iter=m_ProfileData.begin(); iter!=iterEnd; ++iter) {
+	for (auto iter=m_profileData.begin(); iter!=iterEnd; ++iter) {
 		MYTRACE(_T("\n■strSectionName=%ls"), iter->strSectionName.c_str());
 		auto mapiterEnd = iter->mapEntries.end();
 		for (auto mapiter=iter->mapEntries.begin(); mapiter!=mapiterEnd; ++mapiter) {

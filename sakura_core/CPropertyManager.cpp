@@ -31,7 +31,7 @@
 void PropertyManager::Create(
 	HWND			hwndOwner,
 	ImageListMgr*	pImageList,
-	MenuDrawer*	pMenuDrawer
+	MenuDrawer*		pMenuDrawer
 	)
 {
 	m_hwndOwner = hwndOwner;

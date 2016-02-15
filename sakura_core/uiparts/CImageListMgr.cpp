@@ -83,7 +83,7 @@ ImageListMgr::~ImageListMgr()
 */
 bool ImageListMgr::Create(HINSTANCE hInstance)
 {
-	MY_RUNNINGTIMER(cRunningTimer, "CImageListMgr::Create");
+	MY_RUNNINGTIMER(runningTimer, "CImageListMgr::Create");
 	if (m_hIconBitmap) {	//	ä˘Ç…ç\ízçœÇ›Ç»ÇÁñ≥éãÇ∑ÇÈ
 		return true;
 	}

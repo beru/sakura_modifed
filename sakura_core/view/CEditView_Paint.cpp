@@ -581,7 +581,7 @@ void EditView::OnPaint(HDC _hdc, PAINTSTRUCT *pPs, BOOL bDrawFromComptibleBmp)
 */
 void EditView::OnPaint2(HDC _hdc, PAINTSTRUCT *pPs, BOOL bDrawFromComptibleBmp)
 {
-//	MY_RUNNINGTIMER(cRunningTimer, "EditView::OnPaint");
+//	MY_RUNNINGTIMER(runningTimer, "EditView::OnPaint");
 	Graphics gr(_hdc);
 
 	// 2004.01.28 Moca デスクトップに作画しないように
@@ -883,7 +883,7 @@ bool EditView::DrawLogicLine(
 	LayoutInt		nLineTo			// [in]     作画終了するレイアウト行番号
 )
 {
-//	MY_RUNNINGTIMER(cRunningTimer, "EditView::DrawLogicLine");
+//	MY_RUNNINGTIMER(runningTimer, "EditView::DrawLogicLine");
 	bool bDispEOF = false;
 	ColorStrategyInfo _sInfo;
 	ColorStrategyInfo* pInfo = &_sInfo;

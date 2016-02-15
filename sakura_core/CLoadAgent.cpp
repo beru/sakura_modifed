@@ -111,10 +111,10 @@ next:
 
 	// 読み取り可能チェック
 	do {
-		File cFile(pLoadInfo->filePath.c_str());
+		File file(pLoadInfo->filePath.c_str());
 
 		// ファイルが存在しない場合はチェック省略
-		if (!cFile.IsFileExist()) {
+		if (!file.IsFileExist()) {
 			break;
 		}
 
@@ -126,7 +126,7 @@ next:
 		}
 
 		// チェック
-		if (!cFile.IsFileReadable()) {
+		if (!file.IsFileReadable()) {
 			if (bLock) {
 				pDoc->m_docFileOperation.DoFileLock(false);
 			}
@@ -206,9 +206,9 @@ LoadResultType LoadAgent::OnLoad(const LoadInfo& loadInfo)
 	// ファイルが存在する場合はファイルを読む
 	if (fexist(loadInfo.filePath)) {
 		// CDocLineMgrの構成
-		ReadManager cReader;
-		ProgressSubject* pOld = EditApp::getInstance()->m_pVisualProgress->ProgressListener::Listen(&cReader);
-		CodeConvertResult eReadResult = cReader.ReadFile_To_CDocLineMgr(
+		ReadManager reader;
+		ProgressSubject* pOld = EditApp::getInstance()->m_pVisualProgress->ProgressListener::Listen(&reader);
+		CodeConvertResult eReadResult = reader.ReadFile_To_CDocLineMgr(
 			&pDoc->m_docLineMgr,
 			loadInfo,
 			&pDoc->m_docFile.m_fileInfo

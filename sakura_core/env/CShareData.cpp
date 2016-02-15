@@ -104,7 +104,7 @@ Mutex& ShareData::GetMutexShareWork(){
 */
 bool ShareData::InitShareData()
 {
-	MY_RUNNINGTIMER(cRunningTimer, "ShareData::InitShareData");
+	MY_RUNNINGTIMER(runningTimer, "ShareData::InitShareData");
 
 	m_hwndTraceOutSource = NULL;	// 2006.06.26 ryoji
 

@@ -42,7 +42,7 @@
 */
 bool ControlProcess::InitializeProcess()
 {
-	MY_RUNNINGTIMER(cRunningTimer, "ControlProcess::InitializeProcess");
+	MY_RUNNINGTIMER(runningTimer, "ControlProcess::InitializeProcess");
 
 	// アプリケーション実行検出用(インストーラで使用)
 	m_hMutex = ::CreateMutex(NULL, FALSE, GSTR_MUTEX_SAKURA);
@@ -104,12 +104,12 @@ bool ControlProcess::InitializeProcess()
 	SelectLang::ChangeLang(GetDllShareData().m_common.m_window.m_szLanguageDll);
 	RefreshString();
 
-	MY_TRACETIME(cRunningTimer, "Before new ControlTray");
+	MY_TRACETIME(runningTimer, "Before new ControlTray");
 
 	// タスクトレイにアイコン作成
 	m_pTray = new ControlTray();
 
-	MY_TRACETIME(cRunningTimer, "After new ControlTray");
+	MY_TRACETIME(runningTimer, "After new ControlTray");
 
 	HWND hwnd = m_pTray->Create(GetProcessInstance());
 	if (!hwnd) {

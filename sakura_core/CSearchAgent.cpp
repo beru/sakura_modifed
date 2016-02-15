@@ -277,7 +277,7 @@ void SearchAgent::CreateCharCharsArr(
 	const wchar_t*	pszPattern,
 	int				nSrcLen,
 	int**			ppnCharCharsArr
-)
+	)
 {
 	int* pnCharCharsArr = new int[nSrcLen];
 	for (int i=0; i<nSrcLen; /*++i*/) {
@@ -329,7 +329,7 @@ const wchar_t* SearchAgent::SearchStringWord(
 	const std::vector<std::pair<const wchar_t*, LogicInt>>& searchWords,
 	bool	 bLoHiCase,
 	int*	 pnMatchLen
-)
+	)
 {
 	LogicInt nNextWordFrom = LogicInt(nIdxPos);
 	LogicInt nNextWordFrom2;
@@ -390,7 +390,7 @@ bool SearchAgent::PrevOrNextWord(
 	LogicInt*	pnColumnNew,	//	見つかった位置
 	bool		bLEFT,			//	TRUE:前方（左）へ向かう。FALSE:後方（右）へ向かう。
 	bool		bStopsBothEnds	//	単語の両端で止まる
-)
+	)
 {
 	using namespace WCODE;
 	
@@ -470,10 +470,10 @@ bool SearchAgent::PrevOrNextWord(
 // 見つからない場合は０を返す
 int SearchAgent::SearchWord(
 	LogicPoint					ptSerachBegin,	// 検索開始位置
-	SearchDirection			eDirection,		// 検索方向
-	LogicRange*				pMatchRange,	// [out] マッチ範囲。ロジック単位。
+	SearchDirection				eDirection,		// 検索方向
+	LogicRange*					pMatchRange,	// [out] マッチ範囲。ロジック単位。
 	const SearchStringPattern&	pattern			// 検索パターン
-)
+	)
 {
 	DocLine*	pDocLine;
 	LogicInt	nLinePos;
@@ -773,7 +773,7 @@ end_of_func:;
 */
 void SearchAgent::ReplaceData(DocLineReplaceArg* pArg)
 {
-//	MY_RUNNINGTIMER(cRunningTimer, "CDocLineMgr::ReplaceData()");
+//	MY_RUNNINGTIMER(runningTimer, "CDocLineMgr::ReplaceData()");
 
 	// 挿入によって増えた行の数
 	pArg->nInsLineNum = LogicInt(0);
@@ -1212,10 +1212,10 @@ prev_line:;
 		}
 	}
 	if (bLastInsert || 0 < nextLine.GetLength()) {
-		NativeW cNull;
-		StringRef cNullStr(L"", 0);
-		NativeW& memLine = bLastInsert ? pArg->pInsData->back().memLine : cNull;
-		const StringRef& prevLine2 = ((nCount == 0) ? prevLine: cNullStr);
+		NativeW mNull;
+		StringRef nullStr(L"", 0);
+		NativeW& memLine = bLastInsert ? pArg->pInsData->back().memLine : mNull;
+		const StringRef& prevLine2 = ((nCount == 0) ? prevLine: nullStr);
 		int nSeq = pArg->pInsData->back().nSeq;
 		int nLen = memLine.GetStringLength();
 		NativeW tmp;

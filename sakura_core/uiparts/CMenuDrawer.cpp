@@ -843,7 +843,7 @@ void MenuDrawer::MyAppendMenu(
 			MyMenuItemInfo item;
 			item.m_nBitmapIdx = -1;
 			item.m_nFuncId = nFuncId;
-			item.m_cmemLabel.SetString(szLabel);
+			item.m_memLabel.SetString(szLabel);
 			// メニュー項目をオーナー描画にして、アイコンを表示する
 			// 2010.03.29 アクセスキーの分を詰めるためいつもオーナードローにする。ただしVista未満限定
 			// Vista以上ではメニューもテーマが適用されるので、オーナードローにすると見た目がXP風になってしまう。
@@ -1104,7 +1104,7 @@ void MenuDrawer::DrawItem(DRAWITEMSTRUCT* lpdis)
 #endif
 
 	const int    nItemIndex = Find((int)lpdis->itemID);
-	const TCHAR* pszItemStr = m_menuItems[nItemIndex].m_cmemLabel.GetStringPtr(&nItemStrLen);
+	const TCHAR* pszItemStr = m_menuItems[nItemIndex].m_memLabel.GetStringPtr(&nItemStrLen);
 	HFONT hFontOld = (HFONT)::SelectObject(hdc, m_hFontMenu);
 
 	nBkModeOld = ::SetBkMode(hdc, TRANSPARENT);
@@ -1556,7 +1556,7 @@ const TCHAR* MenuDrawer::GetLabel(int nFuncID)
 	if ((i = Find(nFuncID)) == -1) {
 		return NULL;
 	}
-	return m_menuItems[i].m_cmemLabel.GetStringPtr();
+	return m_menuItems[i].m_memLabel.GetStringPtr();
 }
 
 TCHAR MenuDrawer::GetAccelCharFromLabel(const TCHAR* pszLabel)

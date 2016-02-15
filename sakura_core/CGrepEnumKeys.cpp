@@ -3,8 +3,8 @@
 
 int GrepEnumKeys::SetFileKeys(LPCTSTR lpKeys)
 {
-	const TCHAR* WILDCARD_DELIMITER = _T(" ;,");	// リストの区切り
-	const TCHAR* WILDCARD_ANY = _T("*.*");			// サブフォルダ探索用
+	const TCHAR* wildcard_delimiter = _T(" ;,");	// リストの区切り
+	const TCHAR* wildcard_any = _T("*.*");			// サブフォルダ探索用
 	int nWildCardLen = _tcslen(lpKeys);
 	std::vector<TCHAR> wildCard( nWildCardLen + 1 );
 	TCHAR* pWildCard = &wildCard[0];
@@ -13,7 +13,7 @@ int GrepEnumKeys::SetFileKeys(LPCTSTR lpKeys)
 		
 	int nPos = 0;
 	TCHAR* token;
-	while ((token = my_strtok<TCHAR>(pWildCard, nWildCardLen, &nPos, WILDCARD_DELIMITER))) {	// トークン毎に繰り返す。
+	while ((token = my_strtok<TCHAR>(pWildCard, nWildCardLen, &nPos, wildcard_delimiter))) {	// トークン毎に繰り返す。
 		// フィルタを種類ごとに振り分ける
 		enum KeyFilterType {
 			FILTER_SEARCH,
@@ -71,10 +71,10 @@ int GrepEnumKeys::SetFileKeys(LPCTSTR lpKeys)
 		}
 	}
 	if (m_vecSearchFileKeys.size() == 0) {
-		push_back_unique(m_vecSearchFileKeys, WILDCARD_ANY);
+		push_back_unique(m_vecSearchFileKeys, wildcard_any);
 	}
 	if (m_vecSearchFolderKeys.size() == 0) {
-		push_back_unique(m_vecSearchFolderKeys, WILDCARD_ANY);
+		push_back_unique(m_vecSearchFolderKeys, wildcard_any);
 	}
 	return 0;
 }

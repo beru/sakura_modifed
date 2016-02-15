@@ -102,7 +102,7 @@ struct FuncMenuName {
 	int				nNameId[2];		// 選択文字列ID
 };
 
-static const FuncMenuName	sFuncMenuName[] = {
+static const FuncMenuName	gFuncMenuName[] = {
 	{F_RECKEYMACRO,			{F_RECKEYMACRO_REC,				F_RECKEYMACRO_APPE}},
 	{F_SAVEKEYMACRO,		{F_SAVEKEYMACRO_REC,			F_SAVEKEYMACRO_APPE}},
 	{F_LOADKEYMACRO,		{F_LOADKEYMACRO_REC,			F_LOADKEYMACRO_APPE}},
@@ -608,7 +608,7 @@ HWND EditWnd::Create(
 	int				nGroup		// [in] グループID
 	)
 {
-	MY_RUNNINGTIMER(cRunningTimer, "EditWnd::Create");
+	MY_RUNNINGTIMER(runningTimer, "EditWnd::Create");
 
 	// 共有データ構造体のアドレスを返す
 	m_pShareData = &GetDllShareData();
@@ -706,7 +706,7 @@ HWND EditWnd::Create(
 	hWndArr[1] = NULL;
 	m_splitterWnd.SetChildWndArr(hWndArr);
 
-	MY_TRACETIME(cRunningTimer, "View created");
+	MY_TRACETIME(runningTimer, "View created");
 
 
 	// -- -- -- -- 各種バー作成 -- -- -- -- //
@@ -1461,7 +1461,7 @@ LRESULT EditWnd::DispatchEvent(
 					m_menuDrawer.MyAppendMenu(hMenuPopUp, MF_BYPOSITION | MF_STRING, F_CHGMOD_EOL_LF,
 						LS(F_CHGMOD_EOL_LF), _T("L")); // 入力改行コード指定(LF)
 					m_menuDrawer.MyAppendMenu(hMenuPopUp, MF_BYPOSITION | MF_STRING, F_CHGMOD_EOL_CR,
-						LS(F_CHGMOD_EOL_CR), _T("R")); // 入力改行コード指定(CR)
+						LS(F_CHGMOD_EOL_CR), _T("rec")); // 入力改行コード指定(CR)
 					// 拡張EOLが有効の時だけ表示
 					if (GetDllShareData().m_common.m_edit.m_bEnableExtEol) {
 						m_menuDrawer.MyAppendMenu(hMenuPopUp, MF_BYPOSITION | MF_STRING, F_CHGMOD_EOL_NEL,
@@ -2679,9 +2679,9 @@ void EditWnd::CheckFreeSubMenuSub(HMENU hMenu, int nLv)
 void EditWnd::SetMenuFuncSel(HMENU hMenu, EFunctionCode nFunc, const WCHAR* sKey, bool flag)
 {
 	const WCHAR* sName = L"";
-	for (int i=0; i<_countof(sFuncMenuName); ++i) {
-		if (sFuncMenuName[i].eFunc == nFunc) {
-			sName = flag ? LSW(sFuncMenuName[i].nNameId[0]) : LSW(sFuncMenuName[i].nNameId[1]);
+	for (int i=0; i<_countof(gFuncMenuName); ++i) {
+		if (gFuncMenuName[i].eFunc == nFunc) {
+			sName = flag ? LSW(gFuncMenuName[i].nNameId[0]) : LSW(gFuncMenuName[i].nNameId[1]);
 		}
 	}
 	assert(auto_strlen(sName));
@@ -2872,17 +2872,17 @@ void EditWnd::OnSysMenuTimer(void) // by 鬼(2)
 		// システムメニュー表示
 		// 2006.04.21 ryoji マルチモニタ対応の修正
 		// 2007.05.13 ryoji 0x0313メッセージをポストする方式に変更（TrackPopupMenuだとメニュー項目の有効／無効状態が不正になる問題対策）
-		RECT R;
-		GetWindowRect(GetHwnd(), &R);
+		RECT rec;
+		GetWindowRect(GetHwnd(), &rec);
 		POINT pt;
-		pt.x = R.left + GetSystemMetrics(SM_CXFRAME);
-		pt.y = R.top + GetSystemMetrics(SM_CYCAPTION) + GetSystemMetrics(SM_CYFRAME);
-		GetMonitorWorkRect(pt, &R);
+		pt.x = rec.left + GetSystemMetrics(SM_CXFRAME);
+		pt.y = rec.top + GetSystemMetrics(SM_CYCAPTION) + GetSystemMetrics(SM_CYFRAME);
+		GetMonitorWorkRect(pt, &rec);
 		::PostMessage(
 			GetHwnd(),
 			0x0313, // 右クリックでシステムメニューを表示する際に送信するモノらしい
 			0,
-			MAKELPARAM((pt.x > R.left)? pt.x: R.left, (pt.y < R.bottom)? pt.y: R.bottom)
+			MAKELPARAM((pt.x > rec.left)? pt.x: rec.left, (pt.y < rec.bottom)? pt.y: rec.bottom)
 		);
 	}
 	m_iconClicked = IconClickStatus::None;
@@ -3365,18 +3365,18 @@ LRESULT EditWnd::OnMouseMove(WPARAM wParam, LPARAM lParam)
 	if (m_iconClicked != IconClickStatus::None) {
 		// by 鬼(2) 一回押された時だけ
 		if (m_iconClicked == IconClickStatus::Down) {
-			POINT P;
-			GetCursorPos(&P); // スクリーン座標
-			if (SendMessage(GetHwnd(), WM_NCHITTEST, 0, P.x | (P.y << 16)) != HTSYSMENU) {
+			POINT pt;
+			GetCursorPos(&pt); // スクリーン座標
+			if (SendMessage(GetHwnd(), WM_NCHITTEST, 0, pt.x | (pt.y << 16)) != HTSYSMENU) {
 				ReleaseCapture();
 				m_iconClicked = IconClickStatus::None;
 
 				if (GetDocument()->m_docFile.GetFilePathClass().IsValidPath()) {
 					// 2010.08.22 Moca C:\temp.txt などのtopのファイルがD&Dできないバグの修正
-					NativeW cmemTitle;
-					NativeW cmemDir;
-					cmemTitle = to_wchar(GetDocument()->m_docFile.GetFileName());
-					cmemDir   = to_wchar(GetDocument()->m_docFile.GetFilePathClass().GetDirPath().c_str());
+					NativeW memTitle;
+					NativeW memDir;
+					memTitle = to_wchar(GetDocument()->m_docFile.GetFileName());
+					memDir   = to_wchar(GetDocument()->m_docFile.GetFilePathClass().GetDirPath().c_str());
 
 					IDataObject *DataObject;
 					IMalloc *Malloc;
@@ -3385,10 +3385,10 @@ LRESULT EditWnd::OnMouseMove(WPARAM wParam, LPARAM lParam)
 					SHGetMalloc(&Malloc);
 					SHGetDesktopFolder(&Desktop);
 					DWORD Eaten, Attribs;
-					if (SUCCEEDED(Desktop->ParseDisplayName(0, NULL, cmemDir.GetStringPtr(), &Eaten, &PathID, &Attribs))) {
+					if (SUCCEEDED(Desktop->ParseDisplayName(0, NULL, memDir.GetStringPtr(), &Eaten, &PathID, &Attribs))) {
 						Desktop->BindToObject(PathID, NULL, IID_IShellFolder, (void**)&Folder);
 						Malloc->Free(PathID);
-						if (SUCCEEDED(Folder->ParseDisplayName(0, NULL, cmemTitle.GetStringPtr(), &Eaten, &ItemID, &Attribs))) {
+						if (SUCCEEDED(Folder->ParseDisplayName(0, NULL, memTitle.GetStringPtr(), &Eaten, &ItemID, &Attribs))) {
 							LPCITEMIDLIST List[1];
 							List[0] = ItemID;
 							Folder->GetUIObjectOf(0, 1, List, IID_IDataObject, NULL, (void**)&DataObject);
@@ -3397,30 +3397,30 @@ LRESULT EditWnd::OnMouseMove(WPARAM wParam, LPARAM lParam)
 #ifdef  DDASTEXT
 							// テキストでも持たせる…便利
 							{
-								FORMATETC F;
-								F.cfFormat = CF_UNICODETEXT;
-								F.ptd      = NULL;
-								F.dwAspect = DVASPECT_CONTENT;
-								F.lindex   = -1;
-								F.tymed    = TYMED_HGLOBAL;
+								FORMATETC fmt;
+								fmt.cfFormat = CF_UNICODETEXT;
+								fmt.ptd      = NULL;
+								fmt.dwAspect = DVASPECT_CONTENT;
+								fmt.lindex   = -1;
+								fmt.tymed    = TYMED_HGLOBAL;
 
-								STGMEDIUM M;
+								STGMEDIUM medium;
 								const wchar_t* pFilePath = to_wchar(GetDocument()->m_docFile.GetFilePath());
 								int Len = wcslen(pFilePath);
-								M.tymed          = TYMED_HGLOBAL;
-								M.pUnkForRelease = NULL;
-								M.hGlobal        = GlobalAlloc(GMEM_MOVEABLE, (Len + 1) * sizeof(wchar_t));
-								void* p = GlobalLock(M.hGlobal);
+								medium.tymed          = TYMED_HGLOBAL;
+								medium.pUnkForRelease = NULL;
+								medium.hGlobal        = GlobalAlloc(GMEM_MOVEABLE, (Len + 1) * sizeof(wchar_t));
+								void* p = GlobalLock(medium.hGlobal);
 								CopyMemory(p, pFilePath, (Len + 1) * sizeof(wchar_t));
-								GlobalUnlock(M.hGlobal);
+								GlobalUnlock(medium.hGlobal);
 
-								DataObject->SetData(&F, &M, TRUE);
+								DataObject->SetData(&fmt, &medium, TRUE);
 							}
 #endif
 							// 移動は禁止
-							DWORD R;
+							DWORD r;
 							DropSource drop(TRUE);
-							DoDragDrop(DataObject, &drop, DROPEFFECT_COPY | DROPEFFECT_LINK, &R);
+							DoDragDrop(DataObject, &drop, DROPEFFECT_COPY | DROPEFFECT_LINK, &r);
 							DataObject->Release();
 						}
 						Folder->Release();
@@ -3528,9 +3528,9 @@ BOOL EditWnd::OnPrintPageSetting(void)
 {
 	// 印刷設定（CANCEL押したときに破棄するための領域）
 	DlgPrintSetting	dlgPrintSetting;
-	BOOL				bRes;
-	int					nCurrentPrintSetting;
-	int					nLineNumberColumns;
+	BOOL			bRes;
+	int				nCurrentPrintSetting;
+	int				nLineNumberColumns;
 
 	nCurrentPrintSetting = GetDocument()->m_docType.GetDocumentAttribute().m_nCurrentPrintSetting;
 	if (m_pPrintPreview) {
@@ -3601,53 +3601,53 @@ BOOL EditWnd::OnPrintPageSetting(void)
 
 LRESULT EditWnd::OnNcLButtonDown(WPARAM wp, LPARAM lp)
 {
-	LRESULT Result;
+	LRESULT result;
 	if (wp == HTSYSMENU) {
 		SetCapture(GetHwnd());
 		m_iconClicked = IconClickStatus::Down;
-		Result = 0;
+		result = 0;
 	}else
-		Result = DefWindowProc(GetHwnd(), WM_NCLBUTTONDOWN, wp, lp);
+		result = DefWindowProc(GetHwnd(), WM_NCLBUTTONDOWN, wp, lp);
 
-	return Result;
+	return result;
 }
 
 LRESULT EditWnd::OnNcLButtonUp(WPARAM wp, LPARAM lp)
 {
-	LRESULT Result;
+	LRESULT result;
 	if (m_iconClicked != IconClickStatus::None) {
 		// 念のため
 		ReleaseCapture();
 		m_iconClicked = IconClickStatus::None;
-		Result = 0;
+		result = 0;
 	}else if (wp == HTSYSMENU) {
-		Result = 0;
+		result = 0;
 	}else {
 		//	2004.05.23 Moca メッセージミス修正
 		//	フレームのダブルクリック時後にウィンドウサイズ
 		//	変更モードなっていた
-		Result = DefWindowProc(GetHwnd(), WM_NCLBUTTONUP, wp, lp);
+		result = DefWindowProc(GetHwnd(), WM_NCLBUTTONUP, wp, lp);
 	}
 
-	return Result;
+	return result;
 }
 
 LRESULT EditWnd::OnLButtonDblClk(WPARAM wp, LPARAM lp) // by 鬼(2)
 {
-	LRESULT Result;
+	LRESULT result;
 	if (m_iconClicked != IconClickStatus::None) {
 		ReleaseCapture();
 		m_iconClicked = IconClickStatus::DoubleClicked;
 
 		SendMessage(GetHwnd(), WM_SYSCOMMAND, SC_CLOSE, 0);
 
-		Result = 0;
+		result = 0;
 	}else {
 		// 2004.05.23 Moca メッセージミス修正
-		Result = DefWindowProc(GetHwnd(), WM_LBUTTONDBLCLK, wp, lp);
+		result = DefWindowProc(GetHwnd(), WM_LBUTTONDBLCLK, wp, lp);
 	}
 
-	return Result;
+	return result;
 }
 
 // ドロップダウンメニュー(開く)	@@@ 2002.06.15 MIK
@@ -3720,7 +3720,7 @@ int	EditWnd::CreateFileDropDownMenu(HWND hwnd)
 	m_menuDrawer.MyAppendMenuSep(hMenu, MF_BYPOSITION | MF_SEPARATOR, 0, NULL, FALSE);
 
 	m_menuDrawer.MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING, F_FILENEW, _T(""), _T("N"), FALSE);
-	m_menuDrawer.MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING, F_FILENEW_NEWWINDOW, _T(""), _T("M"), FALSE);
+	m_menuDrawer.MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING, F_FILENEW_NEWWINDOW, _T(""), _T("medium"), FALSE);
 	m_menuDrawer.MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING, F_FILEOPEN, _T(""), _T("O"), FALSE);
 
 	nId = ::TrackPopupMenu(
@@ -4562,50 +4562,50 @@ void EditWnd::ChangeLayoutParam(bool bShowProgress, LayoutInt nTabSize, LayoutIn
 */
 LogicPointEx* EditWnd::SavePhysPosOfAllView()
 {
-	const int NUM_OF_VIEW = GetAllViewCount();
-	const int NUM_OF_POS = 6;
+	const int numOfViews = GetAllViewCount();
+	const int numOfPositions = 6;
 	
-	LogicPointEx* pptPosArray = new LogicPointEx[NUM_OF_VIEW * NUM_OF_POS];
+	LogicPointEx* pptPosArray = new LogicPointEx[numOfViews * numOfPositions];
 	
-	for (int i=0; i<NUM_OF_VIEW; ++i) {
+	for (int i=0; i<numOfViews; ++i) {
 		LayoutPoint tmp = LayoutPoint(LayoutInt(0), GetView(i).m_pTextArea->GetViewTopLine());
 		const Layout* layoutLine = GetDocument()->m_layoutMgr.SearchLineByLayoutY(tmp.GetY2());
 		if (layoutLine) {
 			LogicInt nLineCenter = layoutLine->GetLogicOffset() + layoutLine->GetLengthWithoutEOL() / 2;
-			pptPosArray[i * NUM_OF_POS + 0].x = nLineCenter;
-			pptPosArray[i * NUM_OF_POS + 0].y = layoutLine->GetLogicLineNo();
+			pptPosArray[i * numOfPositions + 0].x = nLineCenter;
+			pptPosArray[i * numOfPositions + 0].y = layoutLine->GetLogicLineNo();
 		}else {
-			pptPosArray[i * NUM_OF_POS + 0].x = LogicInt(0);
-			pptPosArray[i * NUM_OF_POS + 0].y = LogicInt(0);
+			pptPosArray[i * numOfPositions + 0].x = LogicInt(0);
+			pptPosArray[i * numOfPositions + 0].y = LogicInt(0);
 		}
-		pptPosArray[i * NUM_OF_POS + 0].ext = LayoutInt(0);
+		pptPosArray[i * numOfPositions + 0].ext = LayoutInt(0);
 		if (GetView(i).GetSelectionInfo().m_selectBgn.GetFrom().y >= 0) {
 			GetDocument()->m_layoutMgr.LayoutToLogicEx(
 				GetView(i).GetSelectionInfo().m_selectBgn.GetFrom(),
-				&pptPosArray[i * NUM_OF_POS + 1]
+				&pptPosArray[i * numOfPositions + 1]
 			);
 		}
 		if (GetView(i).GetSelectionInfo().m_selectBgn.GetTo().y >= 0) {
 			GetDocument()->m_layoutMgr.LayoutToLogicEx(
 				GetView(i).GetSelectionInfo().m_selectBgn.GetTo(),
-				&pptPosArray[i * NUM_OF_POS + 2]
+				&pptPosArray[i * numOfPositions + 2]
 			);
 		}
 		if (GetView(i).GetSelectionInfo().m_select.GetFrom().y >= 0) {
 			GetDocument()->m_layoutMgr.LayoutToLogicEx(
 				GetView(i).GetSelectionInfo().m_select.GetFrom(),
-				&pptPosArray[i * NUM_OF_POS + 3]
+				&pptPosArray[i * numOfPositions + 3]
 			);
 		}
 		if (GetView(i).GetSelectionInfo().m_select.GetTo().y >= 0) {
 			GetDocument()->m_layoutMgr.LayoutToLogicEx(
 				GetView(i).GetSelectionInfo().m_select.GetTo(),
-				&pptPosArray[i * NUM_OF_POS + 4]
+				&pptPosArray[i * numOfPositions + 4]
 			);
 		}
 		GetDocument()->m_layoutMgr.LayoutToLogicEx(
 			GetView(i).GetCaret().GetCaretLayoutPos(),
-			&pptPosArray[i * NUM_OF_POS + 5]
+			&pptPosArray[i * numOfPositions + 5]
 		);
 	}
 	return pptPosArray;
@@ -4622,44 +4622,44 @@ LogicPointEx* EditWnd::SavePhysPosOfAllView()
 */
 void EditWnd::RestorePhysPosOfAllView(LogicPointEx* pptPosArray)
 {
-	const int NUM_OF_VIEW = GetAllViewCount();
-	const int NUM_OF_POS = 6;
+	const int numOfViews = GetAllViewCount();
+	const int numOfPositions = 6;
 
-	for (int i=0; i<NUM_OF_VIEW; ++i) {
+	for (int i=0; i<numOfViews; ++i) {
 		LayoutPoint tmp;
 		GetDocument()->m_layoutMgr.LogicToLayoutEx(
-			pptPosArray[i * NUM_OF_POS + 0],
+			pptPosArray[i * numOfPositions + 0],
 			&tmp
 		);
 		GetView(i).m_pTextArea->SetViewTopLine(tmp.GetY2());
 
 		if (GetView(i).GetSelectionInfo().m_selectBgn.GetFrom().y >= 0) {
 			GetDocument()->m_layoutMgr.LogicToLayoutEx(
-				pptPosArray[i * NUM_OF_POS + 1],
+				pptPosArray[i * numOfPositions + 1],
 				GetView(i).GetSelectionInfo().m_selectBgn.GetFromPointer()
 			);
 		}
 		if (GetView(i).GetSelectionInfo().m_selectBgn.GetTo().y >= 0) {
 			GetDocument()->m_layoutMgr.LogicToLayoutEx(
-				pptPosArray[i * NUM_OF_POS + 2],
+				pptPosArray[i * numOfPositions + 2],
 				GetView(i).GetSelectionInfo().m_selectBgn.GetToPointer()
 			);
 		}
 		if (GetView(i).GetSelectionInfo().m_select.GetFrom().y >= 0) {
 			GetDocument()->m_layoutMgr.LogicToLayoutEx(
-				pptPosArray[i * NUM_OF_POS + 3],
+				pptPosArray[i * numOfPositions + 3],
 				GetView(i).GetSelectionInfo().m_select.GetFromPointer()
 			);
 		}
 		if (GetView(i).GetSelectionInfo().m_select.GetTo().y >= 0) {
 			GetDocument()->m_layoutMgr.LogicToLayoutEx(
-				pptPosArray[i * NUM_OF_POS + 4],
+				pptPosArray[i * numOfPositions + 4],
 				GetView(i).GetSelectionInfo().m_select.GetToPointer()
 			);
 		}
 		LayoutPoint ptPosXY;
 		GetDocument()->m_layoutMgr.LogicToLayoutEx(
-			pptPosArray[i * NUM_OF_POS + 5],
+			pptPosArray[i * numOfPositions + 5],
 			&ptPosXY
 		);
 		GetView(i).GetCaret().MoveCursor(ptPosXY, false); // 2013.06.05 bScrollをtrue=>falase

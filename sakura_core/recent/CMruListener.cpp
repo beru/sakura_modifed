@@ -81,8 +81,8 @@ void MruListener::OnBeforeLoad(LoadInfo* pLoadInfo)
 			// デフォルト文字コード認識のために一時的に読み込み対象ファイルのファイルタイプを適用する
 			const TypeConfigMini* type;
 			DocTypeManager().GetTypeConfigMini(pLoadInfo->nType, &type);
-			CodeMediator cmediator(type->m_encoding);
-			pLoadInfo->eCharCode = cmediator.CheckKanjiCodeOfFile(pLoadInfo->filePath);
+			CodeMediator mediator(type->m_encoding);
+			pLoadInfo->eCharCode = mediator.CheckKanjiCodeOfFile(pLoadInfo->filePath);
 		}else {
 			pLoadInfo->eCharCode = ePrevCode;
 		}

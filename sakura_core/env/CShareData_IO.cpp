@@ -72,7 +72,7 @@ void ShareData_IO::SaveShareData()
 */
 bool ShareData_IO::ShareData_IO_2(bool bRead)
 {
-	//MY_RUNNINGTIMER(cRunningTimer, "ShareData_IO::ShareData_IO_2");
+	//MY_RUNNINGTIMER(runningTimer, "ShareData_IO::ShareData_IO_2");
 	ShareData* pShare = ShareData::getInstance();
 
 	DataProfile	profile;

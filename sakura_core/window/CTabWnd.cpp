@@ -1648,7 +1648,7 @@ void TabWnd::TabWindowNotify(WPARAM wParam, LPARAM lParam)
 			Refresh();	// 続けてTWNT_ADD処理で自分以外のウィンドウを隠す
 	}
 
-	switch (wParam) {
+	switch ((TabWndNotifyType)wParam) {
 	case TabWndNotifyType::Add:	// ウィンドウ登録
 		nIndex = FindTabIndexByHWND((HWND)lParam);
 		if (nIndex == -1) {

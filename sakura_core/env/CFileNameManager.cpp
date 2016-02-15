@@ -379,21 +379,21 @@ bool FileNameManager::GetMenuFullLabel(
 	}else if (pfi->m_bIsGrep) {
 		
 		GetAccessKeyLabelByIndex(szAccKey, bEspaceAmp, index, bAccKeyZeroOrigin);
-		//pfi->m_szGrepKeyShort → cmemDes
-		NativeW cmemDes;
+		//pfi->m_szGrepKeyShort → memDes
+		NativeW memDes;
 		int nGrepKeyLen = wcslen(pfi->m_szGrepKey);
 		const int GREPKEY_LIMIT_LEN = 64;
 		// CSakuraEnvironment::ExpandParameter では 32文字制限
 		// メニューは 64文字制限
-		LimitStringLengthW(pfi->m_szGrepKey, nGrepKeyLen, GREPKEY_LIMIT_LEN, cmemDes);
+		LimitStringLengthW(pfi->m_szGrepKey, nGrepKeyLen, GREPKEY_LIMIT_LEN, memDes);
 		
 		const TCHAR* pszKey;
 		TCHAR szMenu2[GREPKEY_LIMIT_LEN * 2 * 2 + 1]; // WCHAR=>ACHARで2倍、&で2倍
 		if (bEspaceAmp) {
-			dupamp(cmemDes.GetStringT(), szMenu2);
+			dupamp(memDes.GetStringT(), szMenu2);
 			pszKey = szMenu2;
 		}else {
-			pszKey = cmemDes.GetStringT();
+			pszKey = memDes.GetStringT();
 		}
 
 		// szMenuを作る
@@ -402,7 +402,7 @@ bool FileNameManager::GetMenuFullLabel(
 		// 20100729 ExpandParameterにあわせて、・・・を...に変更
 		ret = auto_snprintf_s(pszOutput, nBuffSize, LS(STR_MENU_GREP),
 			szAccKey, pszKey,
-			(nGrepKeyLen > cmemDes.GetStringLength()) ? _T("..."):_T("")
+			(nGrepKeyLen > memDes.GetStringLength()) ? _T("..."):_T("")
 		);
 	}else if (pfi->m_bIsDebug) {
 		GetAccessKeyLabelByIndex(szAccKey, bEspaceAmp, index, bAccKeyZeroOrigin);

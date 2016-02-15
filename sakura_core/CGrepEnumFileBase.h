@@ -37,8 +37,8 @@
 #include "CGrepEnumKeys.h"
 #include "util/string_ex.h"
 
-typedef std::pair< LPTSTR, DWORD > PairGrepEnumItem;
-typedef std::vector< PairGrepEnumItem > VPGrepEnumItem;
+typedef std::pair<LPTSTR, DWORD> PairGrepEnumItem;
+typedef std::vector<PairGrepEnumItem> VPGrepEnumItem;
 
 class GrepEnumOptions {
 public:

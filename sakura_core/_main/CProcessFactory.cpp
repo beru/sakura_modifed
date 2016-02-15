@@ -225,7 +225,7 @@ bool ProcessFactory::IsExistControlProcess()
 */
 bool ProcessFactory::StartControlProcess()
 {
-	MY_RUNNINGTIMER(cRunningTimer, "StartControlProcess" );
+	MY_RUNNINGTIMER(runningTimer, "StartControlProcess" );
 
 	// プロセスの起動
 	PROCESS_INFORMATION p;

@@ -55,11 +55,11 @@ void EditView::PreprocessCommand_hokan(int nCommand)
 void EditView::PostprocessCommand_hokan(void)
 {
 	if (GetDllShareData().m_common.m_helper.m_bUseHokan && !m_bExecutingKeyMacro) { // キーボードマクロの実行中
-		NativeW cmemData;
+		NativeW memData;
 
 		// カーソル直前の単語を取得
-		if (0 < GetParser().GetLeftWord(&cmemData, 100)) {
-			ShowHokanMgr(cmemData, false);
+		if (0 < GetParser().GetLeftWord(&memData, 100)) {
+			ShowHokanMgr(memData, false);
 		}else {
 			if (m_bHokan) {
 				m_pEditWnd->m_hokanMgr.Hide();
@@ -80,7 +80,7 @@ void EditView::PostprocessCommand_hokan(void)
 void EditView::ShowHokanMgr(NativeW& memData, bool bAutoDecided)
 {
 	// 補完対象ワードリストを調べる
-	NativeW	cmemHokanWord;
+	NativeW	memHokanWord;
 	POINT		poWin;
 	/* 補完ウィンドウの表示位置を算出 */
 	LayoutXInt nX = GetCaret().GetCaretLayoutPos().GetX2() - GetTextArea().GetViewLeftCol();
@@ -111,7 +111,7 @@ void EditView::ShowHokanMgr(NativeW& memData, bool bAutoDecided)
 	*/
 	NativeW* pMemHokanWord;
 	if (bAutoDecided) {
-		pMemHokanWord = &cmemHokanWord;
+		pMemHokanWord = &memHokanWord;
 	}else {
 		pMemHokanWord = NULL;
 	}
@@ -158,7 +158,7 @@ void EditView::ShowHokanMgr(NativeW& memData, bool bAutoDecided)
 		// 2004.05.14 Moca HokanMgr::Search側で改行を削除するようにし、直接書き換えるのをやめた
 
 		GetCommander().Command_WordDeleteToStart();
-		GetCommander().Command_INSTEXT(true, cmemHokanWord.GetStringPtr(), cmemHokanWord.GetStringLength(), TRUE);
+		GetCommander().Command_INSTEXT(true, memHokanWord.GetStringPtr(), memHokanWord.GetStringLength(), TRUE);
 	}else {
 		m_bHokan = TRUE;
 	}

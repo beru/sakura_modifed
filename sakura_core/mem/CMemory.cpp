@@ -309,10 +309,10 @@ void Memory::SetRawData(
 
 
 // バッファの内容を置き換える
-void Memory::SetRawData(const Memory& pcmemData)
+void Memory::SetRawData(const Memory& pMemData)
 {
 	int nDataLen;
-	const void*	pData = pcmemData.GetRawPtr(&nDataLen);
+	const void*	pData = pMemData.GetRawPtr(&nDataLen);
 	_Empty();
 	AllocBuffer(nDataLen);
 	_AddData(pData, nDataLen);
@@ -337,13 +337,13 @@ void Memory::SetRawDataHoldBuffer(
 }
 
 //! バッファの内容を置き換える
-void Memory::SetRawDataHoldBuffer(const Memory& pcmemData)
+void Memory::SetRawDataHoldBuffer(const Memory& pMemData)
 {
-	if (this == &pcmemData) {
+	if (this == &pMemData) {
 		return;
 	}
 	int nDataLen;
-	const void*	pData = pcmemData.GetRawPtr( &nDataLen );
+	const void*	pData = pMemData.GetRawPtr( &nDataLen );
 	SetRawDataHoldBuffer( pData, nDataLen );
 }
 

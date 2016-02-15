@@ -158,7 +158,7 @@ const DocLine* DocLineMgr::GetLine(LogicInt nLine) const
 	  || m_nLines - nLine < nPrevToLineNumDiff
 	) {
 		if (!m_pCodePrevRefer) {
-			MY_RUNNINGTIMER(cRunningTimer, "DocLineMgr::GetLine() 	m_pCodePrevRefer == NULL");
+			MY_RUNNINGTIMER(runningTimer, "DocLineMgr::GetLine() 	m_pCodePrevRefer == NULL");
 		}
 
 		if (nLine < (m_nLines / 2)) {

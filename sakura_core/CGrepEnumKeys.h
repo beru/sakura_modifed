@@ -38,7 +38,7 @@
 #include "util/string_ex.h"
 #include "util/file.h"
 
-typedef std::vector< LPCTSTR > VGrepEnumKeys;
+typedef std::vector<LPCTSTR> VGrepEnumKeys;
 
 class GrepEnumKeys {
 public:

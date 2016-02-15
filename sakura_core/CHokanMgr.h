@@ -44,7 +44,7 @@ public:
 		bool			bHokanByFile,			// •ÒW’†ƒf[ƒ^‚©‚çŒó•â‚ğ’T‚·B 2003.06.23 Moca
 		int				nHokanType,
 		bool			bHokanByKeyword,
-		NativeW*		pcmemHokanWord = NULL	// •âŠ®Œó•â‚ª‚P‚Â‚Ì‚Æ‚«‚±‚ê‚ÉŠi”[ 2001/06/19 asa-o
+		NativeW*		pMemHokanWord = NULL	// •âŠ®Œó•â‚ª‚P‚Â‚Ì‚Æ‚«‚±‚ê‚ÉŠi”[ 2001/06/19 asa-o
 	);
 	void HokanSearchByKeyword(
 		const wchar_t*	pszCurWord,
@@ -80,7 +80,7 @@ public:
 
 	int				m_nCurKouhoIdx;
 
-	POINT			m_poWin;
+	POINT			m_point;
 	int				m_nWinHeight;
 	int				m_nColumnWidth;
 	int				m_bTimerFlag;

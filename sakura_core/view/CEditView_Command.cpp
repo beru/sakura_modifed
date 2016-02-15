@@ -423,25 +423,25 @@ void EditView::CopyCurLine(
 		return;
 	}
 
-	// クリップボードに入れるべきテキストデータを、cmemBufに格納する
-	NativeW cmemBuf;
-	cmemBuf.SetString(pLayout->GetPtr(), pLayout->GetLengthWithoutEOL());
+	// クリップボードに入れるべきテキストデータを、memBufに格納する
+	NativeW memBuf;
+	memBuf.SetString(pLayout->GetPtr(), pLayout->GetLengthWithoutEOL());
 	if (pLayout->GetLayoutEol().GetLen() != 0) {
-		cmemBuf.AppendString(
+		memBuf.AppendString(
 			(neweol == EolType::Unknown) ?
 				pLayout->GetLayoutEol().GetValue2() : Eol(neweol).GetValue2()
 		);
 	}else if (bAddCRLFWhenCopy) {	// 2007.10.08 ryoji bAddCRLFWhenCopy対応処理追加
-		cmemBuf.AppendString(
+		memBuf.AppendString(
 			(neweol == EolType::Unknown) ?
 				WCODE::CRLF : Eol(neweol).GetValue2()
 		);
 	}
 
-	// クリップボードにデータcmemBufの内容を設定
+	// クリップボードにデータmemBufの内容を設定
 	BOOL bSetResult = MySetClipboardData(
-		cmemBuf.GetStringPtr(),
-		cmemBuf.GetStringLength(),
+		memBuf.GetStringPtr(),
+		memBuf.GetStringLength(),
 		false,
 		bEnableLineModePaste
 	);

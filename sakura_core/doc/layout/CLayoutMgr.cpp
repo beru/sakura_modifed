@@ -118,7 +118,7 @@ void LayoutMgr::SetLayoutInfo(
 	LayoutInt			nMaxLineKetas
 	)
 {
-	MY_RUNNINGTIMER(cRunningTimer, "LayoutMgr::SetLayoutInfo");
+	MY_RUNNINGTIMER(runningTimer, "LayoutMgr::SetLayoutInfo");
 
 	assert_warning((!bDoLayout && m_nMaxLineKetas == nMaxLineKetas) || bDoLayout);
 	assert_warning((!bDoLayout && m_nTabSpace == refType.m_nTabSpace) || bDoLayout);
@@ -595,7 +595,7 @@ void LayoutMgr::ShiftLogicalLineNum(
 	LogicInt nShiftLines
 	)
 {
-	MY_RUNNINGTIMER(cRunningTimer, "LayoutMgr::ShiftLogicalLineNum");
+	MY_RUNNINGTIMER(runningTimer, "LayoutMgr::ShiftLogicalLineNum");
 
 	if (nShiftLines == 0) {
 		return;
@@ -644,7 +644,7 @@ bool LayoutMgr::WhereCurrentWord(
 		return false;
 	}
 
-	// 現在位置の単語の範囲を調べる -> ロジック単位pSelect, pcmemWord, pcmemWordLeft
+	// 現在位置の単語の範囲を調べる -> ロジック単位pSelect, pMemWord, pMemWordLeft
 	LogicInt nFromX;
 	LogicInt nToX;
 	bool nRetCode = SearchAgent(m_pDocLineMgr).WhereCurrentWord(

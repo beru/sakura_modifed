@@ -64,14 +64,14 @@ class OutputAdapterUTF8: public OutputAdapterDefault
 {
 public:
 	OutputAdapterUTF8(EditView* view, BOOL bToEditWindow) : OutputAdapterDefault(view, bToEditWindow)
-		,pcCodeBase(CodeFactory::CreateCodeBase(CODE_UTF8,0))
+		,pCodeBase(CodeFactory::CreateCodeBase(CODE_UTF8,0))
 	{}
 	~OutputAdapterUTF8(){};
 
 	bool OutputA(const ACHAR* pBuf, int size = -1);
 
 protected:
-	std::unique_ptr<CodeBase> pcCodeBase;
+	std::unique_ptr<CodeBase> pCodeBase;
 };
 
 /*!	@brief	外部コマンドの実行
@@ -660,7 +660,7 @@ bool OutputAdapterUTF8::OutputA(const ACHAR* pBuf, int size)
 	}else {
 		input.SetRawData(pBuf, size);
 	}
-	pcCodeBase->CodeToUnicode(input, &buf);
+	pCodeBase->CodeToUnicode(input, &buf);
 	OutputBuf(buf.GetStringPtr(), (int)buf.GetStringLength());
 	return true;
 }

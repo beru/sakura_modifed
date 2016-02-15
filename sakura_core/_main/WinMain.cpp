@@ -58,7 +58,7 @@ int WINAPI _tWinMain(
 	::_CrtSetDbgFlag(_CRTDBG_LEAK_CHECK_DF | _CRTDBG_ALLOC_MEM_DF);
 #endif
 
-	MY_RUNNINGTIMER(cRunningTimer, "WinMain" );
+	MY_RUNNINGTIMER(runningTimer, "WinMain" );
 	{
 		// 2010.08.28 Moca DLLインジェクション対策
 		CurrentDirectoryBackupPoint dirBack;
@@ -109,7 +109,7 @@ int WINAPI _tWinMain(
 #else
 		process = aFactory.Create(hInstance, lpCmdLine);
 #endif
-		MY_TRACETIME(cRunningTimer, "ProcessObject Created");
+		MY_TRACETIME(runningTimer, "ProcessObject Created");
 
 #ifndef _DEBUG
 	}catch (...) {

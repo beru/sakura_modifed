@@ -223,7 +223,7 @@ ControlTray::~ControlTray()
 // 作成
 HWND ControlTray::Create(HINSTANCE hInstance)
 {
-	MY_RUNNINGTIMER(cRunningTimer, "ControlTray::Create");
+	MY_RUNNINGTIMER(runningTimer, "ControlTray::Create");
 
 	// 同名同クラスのウィンドウが既に存在していたら、失敗
 	m_hInstance = hInstance;

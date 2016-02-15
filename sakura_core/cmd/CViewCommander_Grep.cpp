@@ -28,15 +28,15 @@
 */
 void ViewCommander::Command_GREP_DIALOG(void)
 {
-	NativeW cmemCurText;
+	NativeW memCurText;
 	// 2014.07.01 複数Grepウィンドウを使い分けている場合などに影響しないように、未設定のときだけHistoryを見る
 	bool bGetHistory = GetEditWindow()->m_dlgGrep.m_bSetText == false;
 
 	// 現在カーソル位置単語または選択範囲より検索等のキーを取得
-	bool bSet = m_pCommanderView->GetCurrentTextForSearchDlg(cmemCurText, bGetHistory);	// 2006.08.23 ryoji ダイアログ専用関数に変更
+	bool bSet = m_pCommanderView->GetCurrentTextForSearchDlg(memCurText, bGetHistory);	// 2006.08.23 ryoji ダイアログ専用関数に変更
 
 	if (bSet) {
-		GetEditWindow()->m_dlgGrep.m_strText = cmemCurText.GetStringPtr();
+		GetEditWindow()->m_dlgGrep.m_strText = memCurText.GetStringPtr();
 		GetEditWindow()->m_dlgGrep.m_bSetText = true;
 	}
 

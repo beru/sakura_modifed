@@ -78,7 +78,7 @@ void EditView::InsertData_CEditView(
 )
 {
 #ifdef _DEBUG
-	MY_RUNNINGTIMER(cRunningTimer, "EditView::InsertData_CEditView");
+	MY_RUNNINGTIMER(runningTimer, "EditView::InsertData_CEditView");
 #endif
 
 	// 2007.10.18 kobake COpeèàóùÇÇ±Ç±Ç…Ç‹Ç∆ÇﬂÇÈ
@@ -367,7 +367,7 @@ void EditView::DeleteData2(
 )
 {
 #ifdef _DEBUG
-	MY_RUNNINGTIMER(cRunningTimer, "EditView::DeleteData(1)");
+	MY_RUNNINGTIMER(runningTimer, "EditView::DeleteData(1)");
 #endif
 	LogicInt nLineLen;
 	const Layout* pLayout;
@@ -449,7 +449,7 @@ void EditView::DeleteData(
 )
 {
 #ifdef _DEBUG
-	MY_RUNNINGTIMER(cRunningTimer, "EditView::DeleteData(2)");
+	MY_RUNNINGTIMER(runningTimer, "EditView::DeleteData(2)");
 #endif
 	LogicInt	nLineLen;
 	LayoutInt	nLineNum;

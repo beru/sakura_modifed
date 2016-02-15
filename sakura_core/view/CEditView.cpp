@@ -1241,11 +1241,11 @@ void EditView::MoveCursorSelecting(
 */
 bool EditView::IsCurrentPositionURL(
 	const LayoutPoint&	ptCaretPos,		//!< [in]  カーソル位置
-	LogicRange*		pUrlRange,		//!< [out] URL範囲。ロジック単位。
+	LogicRange*			pUrlRange,		//!< [out] URL範囲。ロジック単位。
 	std::wstring*		pwstrURL		//!< [out] URL文字列受け取り先。NULLを指定した場合はURL文字列を受け取らない。
-)
+	)
 {
-	MY_RUNNINGTIMER(cRunningTimer, "EditView::IsCurrentPositionURL");
+	MY_RUNNINGTIMER(runningTimer, "EditView::IsCurrentPositionURL");
 
 	// URLを強調表示するかどうかチェックする	// 2009.05.27 ryoji
 	bool bDispUrl = TypeSupport(this, COLORIDX_URL).IsDisp();
@@ -1376,7 +1376,7 @@ void EditView::ConvSelectedArea(EFunctionCode nFuncCode)
 		return;
 	}
 
-	NativeW cmemBuf;
+	NativeW memBuf;
 
 	LayoutPoint sPos;
 
@@ -1386,8 +1386,8 @@ void EditView::ConvSelectedArea(EFunctionCode nFuncCode)
 	LogicInt	nDelLen;
 	LogicInt	nDelPosNext;
 	LogicInt	nDelLenNext;
-	LogicInt		nLineLen;
-	LogicInt		nLineLen2;
+	LogicInt	nLineLen;
+	LogicInt	nLineLen2;
 	WaitCursor waitCursor(GetHwnd());
 
 	LogicPoint ptFromLogic;	// 2009.07.18 ryoji Logicで記憶するように変更
@@ -1447,19 +1447,19 @@ void EditView::ConvSelectedArea(EFunctionCode nFuncCode)
 				DeleteData2(
 					sPos,
 					nDelLen,
-					&cmemBuf
+					&memBuf
 				);
 				
 				{
 					// 機能種別によるバッファの変換
-					ConvertMediator::ConvMemory(&cmemBuf, nFuncCode, (Int)m_pEditDoc->m_layoutMgr.GetTabSpace(), (Int)sPos.GetX2());
+					ConvertMediator::ConvMemory(&memBuf, nFuncCode, (Int)m_pEditDoc->m_layoutMgr.GetTabSpace(), (Int)sPos.GetX2());
 
 					// 現在位置にデータを挿入
 					LayoutPoint ptLayoutNew;	// 挿入された部分の次の位置
 					InsertData_CEditView(
 						sPos,
-						cmemBuf.GetStringPtr(),
-						cmemBuf.GetStringLength(),
+						memBuf.GetStringPtr(),
+						memBuf.GetStringLength(),
 						&ptLayoutNew,
 						false	// 2009.07.18 ryoji true -> false 各行にアンダーラインが残る問題の修正
 					);
@@ -1485,16 +1485,16 @@ void EditView::ConvSelectedArea(EFunctionCode nFuncCode)
 	}else {
 		// 選択範囲のデータを取得
 		// 正常時はTRUE,範囲未選択の場合はFALSEを返す
-		GetSelectedDataSimple(cmemBuf);
+		GetSelectedDataSimple(memBuf);
 
 		// 機能種別によるバッファの変換
-		ConvertMediator::ConvMemory(&cmemBuf, nFuncCode, (Int)m_pEditDoc->m_layoutMgr.GetTabSpace(), (Int)GetSelectionInfo().m_select.GetFrom().GetX2());
+		ConvertMediator::ConvMemory(&memBuf, nFuncCode, (Int)m_pEditDoc->m_layoutMgr.GetTabSpace(), (Int)GetSelectionInfo().m_select.GetFrom().GetX2());
 
 		// データ置換 削除&挿入にも使える
 		ReplaceData_CEditView(
 			GetSelectionInfo().m_select,
-			cmemBuf.GetStringPtr(),		// 挿入するデータ	 // 2002/2/10 aroka CMemory変更
-			cmemBuf.GetStringLength(),	// 挿入するデータの長さ // 2002/2/10 aroka CMemory変更
+			memBuf.GetStringPtr(),		// 挿入するデータ	 // 2002/2/10 aroka CMemory変更
+			memBuf.GetStringLength(),	// 挿入するデータの長さ // 2002/2/10 aroka CMemory変更
 			false,
 			m_bDoing_UndoRedo ? NULL : m_commander.GetOpeBlk()
 		);
@@ -1843,22 +1843,22 @@ void EditView::SplitBoxOnOff(bool bVert, bool bHorz, bool bSizeBox)
 /* 選択範囲のデータを取得
 	正常時はTRUE,範囲未選択の場合はFALSEを返す
 */
-bool EditView::GetSelectedDataSimple(NativeW &cmemBuf)
+bool EditView::GetSelectedDataSimple(NativeW& memBuf)
 {
-	return GetSelectedData(&cmemBuf, false, NULL, false, false, EolType::Unknown);
+	return GetSelectedData(&memBuf, false, NULL, false, false, EolType::Unknown);
 }
 
 /* 選択範囲のデータを取得
 	正常時はTRUE,範囲未選択の場合はFALSEを返す
 */
 bool EditView::GetSelectedData(
-	NativeW*		cmemBuf,
+	NativeW*		memBuf,
 	bool			bLineOnly,
 	const wchar_t*	pszQuote,			// 先頭に付ける引用符
 	bool			bWithLineNumber,	// 行番号を付与する
 	bool			bAddCRLFWhenCopy,	// 折り返し位置で改行記号を入れる
-	EolType		neweol				// コピー後の改行コード EolType::Noneはコード保存
-)
+	EolType			neweol				// コピー後の改行コード EolType::Noneはコード保存
+	)
 {
 	LogicInt		nLineLen;
 	LayoutInt		nLineNum;
@@ -1869,7 +1869,7 @@ bool EditView::GetSelectedData(
 	wchar_t*		pszLineNum = NULL;
 	const wchar_t*	pszSpaces = L"                    ";
 	const Layout*	pLayout;
-	Eol			appendEol(neweol);
+	Eol				appendEol(neweol);
 
 	// 範囲選択がされていない
 	if (!GetSelectionInfo().IsTextSelected()) {
@@ -1891,7 +1891,7 @@ bool EditView::GetSelectedData(
 			GetSelectionInfo().m_select.GetFrom(),	// 範囲選択開始
 			GetSelectionInfo().m_select.GetTo()		// 範囲選択終了
 		);
-		cmemBuf->SetString(L"");
+		memBuf->SetString(L"");
 
 		//<< 2002/04/18 Azumaiya
 		// サイズ分だけ要領をとっておく。
@@ -1919,7 +1919,7 @@ bool EditView::GetSelectedData(
 		}
 
 		// 大まかに見た容量を元にサイズをあらかじめ確保しておく。
-		cmemBuf->AllocStringBuffer(nBufSize);
+		memBuf->AllocStringBuffer(nBufSize);
 		//>> 2002/04/18 Azumaiya
 
 		bool bExtEol = GetDllShareData().m_common.m_edit.m_bEnableExtEol;
@@ -1934,20 +1934,20 @@ bool EditView::GetSelectedData(
 				// pLineがNULLのとき(矩形エリアの端がEOFのみの行を含むとき)は以下を処理しない
 				if (nIdxTo - nIdxFrom > 0) {
 					if (WCODE::IsLineDelimiter(pLine[nIdxTo - 1], bExtEol)) {
-						cmemBuf->AppendString(&pLine[nIdxFrom], nIdxTo - nIdxFrom - 1);
+						memBuf->AppendString(&pLine[nIdxFrom], nIdxTo - nIdxFrom - 1);
 					}else {
-						cmemBuf->AppendString(&pLine[nIdxFrom], nIdxTo - nIdxFrom);
+						memBuf->AppendString(&pLine[nIdxFrom], nIdxTo - nIdxFrom);
 					}
 				}
 			}
 			++nRowNum;
-			cmemBuf->AppendString(WCODE::CRLF);
+			memBuf->AppendString(WCODE::CRLF);
 			if (bLineOnly) {	// 複数行選択の場合は先頭の行のみ
 				break;
 			}
 		}
 	}else {
-		cmemBuf->SetString(L"");
+		memBuf->SetString(L"");
 
 		//<< 2002/04/18 Azumaiya
 		//  これから貼り付けに使う領域の大まかなサイズを取得する。
@@ -1990,7 +1990,7 @@ bool EditView::GetSelectedData(
 		}
 
 		// 調べた長さ分だけバッファを取っておく。
-		cmemBuf->AllocStringBuffer(nBufSize);
+		memBuf->AllocStringBuffer(nBufSize);
 		//>> 2002/04/18 Azumaiya
 
 		for (nLineNum=GetSelectionInfo().m_select.GetFrom().GetY2(); nLineNum<=GetSelectionInfo().m_select.GetTo().y; ++nLineNum) {
@@ -2015,33 +2015,33 @@ bool EditView::GetSelectedData(
 			}
 
 			if (pszQuote && pszQuote[0] != L'\0') {	// 先頭に付ける引用符
-				cmemBuf->AppendString(pszQuote);
+				memBuf->AppendString(pszQuote);
 			}
 			if (bWithLineNumber) {	// 行番号を付与する
 				auto_sprintf(pszLineNum, L" %d:" , nLineNum + 1);
-				cmemBuf->AppendString(pszSpaces, nLineNumCols - wcslen(pszLineNum));
-				cmemBuf->AppendString(pszLineNum);
+				memBuf->AppendString(pszSpaces, nLineNumCols - wcslen(pszLineNum));
+				memBuf->AppendString(pszLineNum);
 			}
 
 			if (EolType::None != pLayout->GetLayoutEol()) {
 				if (nIdxTo >= nLineLen) {
-					cmemBuf->AppendString(&pLine[nIdxFrom], nLineLen - 1 - nIdxFrom);
+					memBuf->AppendString(&pLine[nIdxFrom], nLineLen - 1 - nIdxFrom);
 					//	Jul. 25, 2000 genta
-					cmemBuf->AppendString((neweol == EolType::Unknown) ?
+					memBuf->AppendString((neweol == EolType::Unknown) ?
 						(pLayout->GetLayoutEol()).GetValue2() :	//	コード保存
 						appendEol.GetValue2());			//	新規改行コード
 				}else {
-					cmemBuf->AppendString(&pLine[nIdxFrom], nIdxTo - nIdxFrom);
+					memBuf->AppendString(&pLine[nIdxFrom], nIdxTo - nIdxFrom);
 				}
 			}else {
-				cmemBuf->AppendString(&pLine[nIdxFrom], nIdxTo - nIdxFrom);
+				memBuf->AppendString(&pLine[nIdxFrom], nIdxTo - nIdxFrom);
 				if (nIdxTo >= nLineLen) {
 					if (bAddCRLFWhenCopy ||  // 折り返し行に改行を付けてコピー
 						pszQuote || // 先頭に付ける引用符
 						bWithLineNumber 	// 行番号を付与する
 					) {
 						//	Jul. 25, 2000 genta
-						cmemBuf->AppendString((neweol == EolType::Unknown) ?
+						memBuf->AppendString((neweol == EolType::Unknown) ?
 							m_pEditDoc->m_docEditor.GetNewLineCode().GetValue2() :	//	コード保存
 							appendEol.GetValue2());		//	新規改行コード
 					}
@@ -2138,7 +2138,7 @@ bool EditView::GetSelectedDataOne(NativeW& memBuf, int nMaxLen)
 */
 int EditView::IsCurrentPositionSelected(
 	LayoutPoint	ptCaretPos		// カーソル位置
-)
+	)
 {
 	auto& selInfo = GetSelectionInfo();
 	if (!selInfo.IsTextSelected()) {	// テキストが選択されているか
@@ -2232,7 +2232,7 @@ int EditView::IsCurrentPositionSelected(
 int EditView::IsCurrentPositionSelectedTEST(
 	const LayoutPoint& ptCaretPos,      // カーソル位置
 	const LayoutRange& select //
-) const
+	) const
 {
 	if (!GetSelectionInfo().IsTextSelected()) {	// テキストが選択されているか
 		return -1;
@@ -2254,9 +2254,9 @@ int EditView::IsCurrentPositionSelectedTEST(
 void EditView::CopySelectedAllLines(
 	const wchar_t*	pszQuote,		//!< 先頭に付ける引用符
 	bool			bWithLineNumber	//!< 行番号を付与する
-)
+	)
 {
-	NativeW	cmemBuf;
+	NativeW	memBuf;
 
 	if (!GetSelectionInfo().IsTextSelected()) {	// テキストが選択されているか
 		return;
@@ -2290,7 +2290,7 @@ void EditView::CopySelectedAllLines(
 	// 選択範囲のデータを取得
 	// 正常時はTRUE,範囲未選択の場合は終了する
 	if (!GetSelectedData(
-			&cmemBuf,
+			&memBuf,
 			false,
 			pszQuote, // 引用符
 			bWithLineNumber, // 行番号を付与する
@@ -2301,7 +2301,7 @@ void EditView::CopySelectedAllLines(
 		return;
 	}
 	// クリップボードにデータを設定
-	MySetClipboardData(cmemBuf.GetStringPtr(), cmemBuf.GetStringLength(), false);
+	MySetClipboardData(memBuf.GetStringPtr(), memBuf.GetStringLength(), false);
 }
 
 
@@ -2321,12 +2321,12 @@ bool EditView::MyGetClipboardData(NativeW& memBuf, bool* pbColumnSelect, bool* p
 	if (!Clipboard::HasValidData())
 		return false;
 	
-	Clipboard cClipboard(GetHwnd());
-	if (!cClipboard)
+	Clipboard clipboard(GetHwnd());
+	if (!clipboard)
 		return false;
 
 	Eol eol = m_pEditDoc->m_docEditor.GetNewLineCode();
-	if (!cClipboard.GetText(&memBuf, pbColumnSelect, pbLineSelect, eol)) {
+	if (!clipboard.GetText(&memBuf, pbColumnSelect, pbLineSelect, eol)) {
 		return false;
 	}
 
@@ -2347,12 +2347,12 @@ bool EditView::MySetClipboardData(const ACHAR* pszText, int nTextLen, bool bColu
 bool EditView::MySetClipboardData(const WCHAR* pszText, int nTextLen, bool bColumnSelect, bool bLineSelect /*= false*/)
 {
 	// Windowsクリップボードにコピー
-	Clipboard cClipboard(GetHwnd());
-	if (!cClipboard) {
+	Clipboard clipboard(GetHwnd());
+	if (!clipboard) {
 		return false;
 	}
-	cClipboard.Empty();
-	return cClipboard.SetText(pszText, nTextLen, bColumnSelect, bLineSelect);
+	clipboard.Empty();
+	return clipboard.SetText(pszText, nTextLen, bColumnSelect, bLineSelect);
 }
 
 
@@ -2690,7 +2690,7 @@ void EditView::AddCurrentLineToHistory(void)
 //	2001/06/18 Start by asa-o: 補完ウィンドウ用のキーワードヘルプ表示
 bool  EditView::ShowKeywordHelp(POINT po, LPCWSTR pszHelp, LPRECT prcHokanWin)
 {
-	NativeW	cmemCurText;
+	NativeW	memCurText;
 	RECT		rcTipWin,
 				rcDesktop;
 
@@ -2698,16 +2698,16 @@ bool  EditView::ShowKeywordHelp(POINT po, LPCWSTR pszHelp, LPRECT prcHokanWin)
 		if (!m_bInMenuLoop			// メニュー モーダル ループに入っていない
 			&& m_dwTipTimer != 0	// 辞書Tipを表示していない
 		) {
-			cmemCurText.SetString(pszHelp);
+			memCurText.SetString(pszHelp);
 
 			// 既に検索済みか
-			if (NativeW::IsEqual(cmemCurText, m_tipWnd.m_key)) {
+			if (NativeW::IsEqual(memCurText, m_tipWnd.m_key)) {
 				// 該当するキーがなかった
 				if (!m_tipWnd.m_KeyWasHit) {
 					return false;
 				}
 			}else {
-				m_tipWnd.m_key = cmemCurText;
+				m_tipWnd.m_key = memCurText;
 				// 検索実行
 				if (!KeySearchCore(&m_tipWnd.m_key))	// 2006.04.10 fon
 					return FALSE;

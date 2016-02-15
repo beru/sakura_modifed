@@ -168,7 +168,7 @@ EditDoc::EditDoc(EditApp* pApp)
 	m_nCommandExecNum(0),				// コマンド実行回数
 	m_hBackImg(NULL)
 {
-	MY_RUNNINGTIMER(cRunningTimer, "EditDoc::EditDoc");
+	MY_RUNNINGTIMER(runningTimer, "EditDoc::EditDoc");
 	
 	// レイアウト管理情報の初期化
 	m_layoutMgr.Create(this, &m_docLineMgr);
@@ -407,7 +407,7 @@ void EditDoc::InitAllView(void)
 */
 BOOL EditDoc::Create(EditWnd* pEditWnd)
 {
-	MY_RUNNINGTIMER(cRunningTimer, "EditDoc::Create");
+	MY_RUNNINGTIMER(runningTimer, "EditDoc::Create");
 
 	m_pEditWnd = pEditWnd;
 
@@ -416,7 +416,7 @@ BOOL EditDoc::Create(EditWnd* pEditWnd)
 
 	SetBackgroundImage();
 
-	MY_TRACETIME(cRunningTimer, "End: PropSheet");
+	MY_TRACETIME(runningTimer, "End: PropSheet");
 
 	return TRUE;
 }
@@ -872,11 +872,11 @@ BOOL EditDoc::OnFileClose(bool bGrepNoConfirm)
 	if (EditApp::getInstance()->m_pGrepAgent->m_bGrepMode) {
 		LPCWSTR		pszGrepKey = AppMode::getInstance()->m_szGrepKey;
 		int			nLen = (int)wcslen(pszGrepKey);
-		NativeW	cmemDes;
-		LimitStringLengthW(pszGrepKey , nLen, 64, cmemDes);
+		NativeW	memDes;
+		LimitStringLengthW(pszGrepKey , nLen, 64, memDes);
 		auto_sprintf(szGrepTitle, LS(STR_TITLE_GREP),
-			cmemDes.GetStringPtr(),
-			(nLen > cmemDes.GetStringLength()) ? _T("...") : _T("")
+			memDes.GetStringPtr(),
+			(nLen > memDes.GetStringLength()) ? _T("...") : _T("")
 		);
 		pszTitle = szGrepTitle;
 	}

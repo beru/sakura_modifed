@@ -494,7 +494,7 @@ MacroFuncInfo SMacroMgr::m_macroFuncInfoArr[] =
 */
 SMacroMgr::SMacroMgr()
 {
-	MY_RUNNINGTIMER(cRunningTimer, "SMacroMgr::SMacroMgr");
+	MY_RUNNINGTIMER(runningTimer, "SMacroMgr::SMacroMgr");
 	
 	m_pShareData = &GetDllShareData();
 	

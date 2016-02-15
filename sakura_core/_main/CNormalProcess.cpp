@@ -70,7 +70,7 @@ NormalProcess::~NormalProcess()
 */
 bool NormalProcess::InitializeProcess()
 {
-	MY_RUNNINGTIMER(cRunningTimer, "NormalProcess::Init");
+	MY_RUNNINGTIMER(runningTimer, "NormalProcess::Init");
 
 	// プロセス初期化の目印
 	HANDLE	hMutex = _GetInitializeMutex();	// 2002/2/8 aroka 込み入っていたので分離
@@ -131,15 +131,15 @@ bool NormalProcess::InitializeProcess()
 
 
 	// プラグイン読み込み
-	MY_TRACETIME(cRunningTimer, "Before Init Jack");
+	MY_TRACETIME(runningTimer, "Before Init Jack");
 	// ジャック初期化
 	JackManager::getInstance();
-	MY_TRACETIME(cRunningTimer, "After Init Jack");
+	MY_TRACETIME(runningTimer, "After Init Jack");
 
-	MY_TRACETIME(cRunningTimer, "Before Load Plugins");
+	MY_TRACETIME(runningTimer, "Before Load Plugins");
 	// プラグイン読み込み
 	PluginManager::getInstance()->LoadAllPlugin();
-	MY_TRACETIME(cRunningTimer, "After Load Plugins");
+	MY_TRACETIME(runningTimer, "After Load Plugins");
 
 	// エディタアプリケーションを作成。2007.10.23 kobake
 	// グループIDを取得
@@ -163,7 +163,7 @@ bool NormalProcess::InitializeProcess()
 	bGrepMode  = cmdLine.IsGrepMode();
 	bGrepDlg   = cmdLine.IsGrepDlg();
 
-	MY_TRACETIME(cRunningTimer, "CheckFile");
+	MY_TRACETIME(runningTimer, "CheckFile");
 
 	// -1: SetDocumentTypeWhenCreate での強制指定なし
 	const TypeConfigNum nType = (fi.m_szDocType[0] == '\0' ? TypeConfigNum(-1) : DocTypeManager().GetDocumentTypeOfExt(fi.m_szDocType));
@@ -518,7 +518,7 @@ void NormalProcess::OnExitProcess()
 */
 HANDLE NormalProcess::_GetInitializeMutex() const
 {
-	MY_RUNNINGTIMER(cRunningTimer, "NormalProcess::_GetInitializeMutex");
+	MY_RUNNINGTIMER(runningTimer, "NormalProcess::_GetInitializeMutex");
 	HANDLE hMutex;
 	std::tstring strProfileName = to_tchar(CommandLine::getInstance()->GetProfileName());
 	std::tstring strMutexInitName = GSTR_MUTEX_SAKURA_INIT;

@@ -161,10 +161,10 @@ CallbackResultType CodeChecker::OnCheckSave(SaveInfo* pSaveInfo)
 
 	// 指定文字コードで安全に保存できるかどうか判定
 	LogicPoint point;
-	NativeW cmemChar(L"", 0);
+	NativeW memChar(L"", 0);
 	CodeConvertResult nTmpResult = _CheckSavingCharcode(
 		pDoc->m_docLineMgr, pSaveInfo->eCharCode,
-		point, cmemChar
+		point, memChar
 	);
 
 	// ユーザ問い合わせ
@@ -176,11 +176,11 @@ CallbackResultType CodeChecker::OnCheckSave(SaveInfo* pSaveInfo)
 		_tcscpy( szCharCode, _T("") );
 		_tcscpy( szLineNum, _T("") );
 		if (point.x == -1) {
-			cmemChar.SetString(LSW(STR_ERR_CSHAREDATA22));
+			memChar.SetString(LSW(STR_ERR_CSHAREDATA22));
 		}else {
 			auto_sprintf( szLineNum, _T("%d"), (int)((Int)point.x) + 1 );
 			_tcscat( szLineNum, LS(STR_DLGFNCLST_LIST_COL) );
-			Unicode().UnicodeToHex( cmemChar.GetStringPtr(), cmemChar.GetStringLength(),
+			Unicode().UnicodeToHex( memChar.GetStringPtr(), memChar.GetStringLength(),
 				szCharCode, &GetDllShareData().m_common.m_statusBar );
 		}
 		int nDlgResult = MYMESSAGEBOX(
@@ -191,7 +191,7 @@ CallbackResultType CodeChecker::OnCheckSave(SaveInfo* pSaveInfo)
 			szCpName,
 			(int)((Int)point.y + 1),
 			szLineNum,
-			cmemChar.GetStringPtr(),
+			memChar.GetStringPtr(),
 			szCharCode
 		);
 		switch (nDlgResult) {

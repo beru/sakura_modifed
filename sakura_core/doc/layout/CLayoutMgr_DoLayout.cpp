@@ -317,7 +317,7 @@ void LayoutMgr::_OnLine1(LayoutWork* pWork)
 */
 void LayoutMgr::_DoLayout()
 {
-	MY_RUNNINGTIMER(cRunningTimer, "LayoutMgr::_DoLayout");
+	MY_RUNNINGTIMER(runningTimer, "LayoutMgr::_DoLayout");
 
 	/*	表示上のX位置
 		2004.03.28 Moca nPosXはインデント幅を含むように変更(TAB位置調整のため)

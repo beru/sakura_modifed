@@ -109,7 +109,7 @@ protected:
 		LoadStrBuffer operator = ( const LoadStrBuffer& );		// 代入禁止とする
 	};
 
-	static LoadStrBuffer m_acLoadStrBufferTemp[4];		// 文字列読み込みバッファの配列（ResourceString::LoadStringSt() が使用する）
+	static LoadStrBuffer m_aLoadStrBufferTemp[4];		// 文字列読み込みバッファの配列（ResourceString::LoadStringSt() が使用する）
 	static int m_nDataTempArrayIndex;					// 最後に使用したバッファのインデックス（ResourceString::LoadStringSt() が使用する）
 	LoadStrBuffer m_loadStrBuffer;					// 文字列読み込みバッファ（ResourceString::LoadString() が使用する）
 

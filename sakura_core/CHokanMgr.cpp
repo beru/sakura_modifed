@@ -126,13 +126,13 @@ void HokanMgr::Hide(void)
 }
 
 /*!	初期化
-	pcmemHokanWord == NULLのとき、補完候補がひとつだったら、補完ウィンドウを表示しないで終了します。
+	pMemHokanWord == NULLのとき、補完候補がひとつだったら、補完ウィンドウを表示しないで終了します。
 	Search()呼び出し元で確定処理を進めてください。
 
 	@date 2002.2.17 YAZAKI CShareDataのインスタンスは、CProcessにひとつあるのみ。
 */
 int HokanMgr::Search(
-	POINT*			ppoWin,
+	POINT*			pPt,
 	int				nWinHeight,
 	int				nColumnWidth,
 	const wchar_t*	pszCurWord,
@@ -141,8 +141,8 @@ int HokanMgr::Search(
 	bool			bHokanByFile,	// 編集中データから候補を探す 2003.06.23 Moca
 	int				nHokanType,
 	bool			bHokanByKeyword,
-	NativeW*		pcmemHokanWord	// 2001/06/19 asa-o
-)
+	NativeW*		pMemHokanWord	// 2001/06/19 asa-o
+	)
 {
 	EditView* pEditView = reinterpret_cast<EditView*>(m_lParam);
 
@@ -221,17 +221,17 @@ int HokanMgr::Search(
 
 //	2001/06/19 asa-o 候補が１つの場合補完ウィンドウは表示しない(逐次補完の場合は除く)
 	if (m_vKouho.size() == 1) {
-		if (pcmemHokanWord) {
+		if (pMemHokanWord) {
 			m_nCurKouhoIdx = -1;
-			pcmemHokanWord->SetString(m_vKouho[0].c_str());
+			pMemHokanWord->SetString(m_vKouho[0].c_str());
 			return 1;
 		}
 	}
 
 
 //	m_hFont = hFont;
-	m_poWin.x = ppoWin->x;
-	m_poWin.y = ppoWin->y;
+	m_point.x = pPt->x;
+	m_point.y = pPt->y;
 	m_nWinHeight = nWinHeight;
 	m_nColumnWidth = nColumnWidth;
 //	m_memCurWord.SetData(pszCurWord, lstrlen(pszCurWord));
@@ -262,8 +262,8 @@ int HokanMgr::Search(
 	//	May 01, 2004 genta マルチモニタ対応
 	::GetMonitorWorkRect(GetHwnd(), &rcDesktop );
 
-	int nX = m_poWin.x - m_nColumnWidth;
-	int nY = m_poWin.y + m_nWinHeight + 4;
+	int nX = m_point.x - m_nColumnWidth;
+	int nY = m_point.y + m_nWinHeight + 4;
 	int nCX = m_nWidth;
 	int nCY = m_nHeight;
 
@@ -272,19 +272,19 @@ int HokanMgr::Search(
 		// 何もしない
 	}else
 	// 上に入るなら
-	if (rcDesktop.top < m_poWin.y - m_nHeight - 4) {
+	if (rcDesktop.top < m_point.y - m_nHeight - 4) {
 		// 上に出す
-		nY = m_poWin.y - m_nHeight - 4;
+		nY = m_point.y - m_nHeight - 4;
 	}else
 	// 上に出すか下に出すか(広いほうに出す)
-	if (rcDesktop.bottom - nY > m_poWin.y) {
+	if (rcDesktop.bottom - nY > m_point.y) {
 		// 下に出す
 //		m_nHeight = rcDesktop.bottom - nY;
 		nCY = rcDesktop.bottom - nY;
 	}else {
 		// 上に出す
 		nY = rcDesktop.top;
-		nCY = m_poWin.y - 4 - rcDesktop.top;
+		nCY = m_point.y - 4 - rcDesktop.top;
 	}
 
 //	2001/06/19 Start by asa-o: 表示位置補正
@@ -305,8 +305,8 @@ int HokanMgr::Search(
 //	2001/06/19 End
 
 //	2001/06/18 Start by asa-o: 補正後の位置・サイズを保存
-	m_poWin.x = nX;
-	m_poWin.y = nY;
+	m_point.x = nX;
+	m_point.y = nY;
 	m_nHeight = nCY;
 	m_nWidth = nCX;
 //	2001/06/18 End
@@ -314,7 +314,7 @@ int HokanMgr::Search(
 	// はみ出すなら小さくする
 //	if (rcDesktop.bottom < nY + nCY) {
 //		// 下にはみ出す
-//		if (m_poWin.y - 4 - nCY < 0) {
+//		if (m_point.y - 4 - nCY < 0) {
 //			// 上にはみ出す
 //			// →高さだけ調節
 //			nCY = rcDesktop.bottom - nY - 4;
@@ -395,7 +395,7 @@ BOOL HokanMgr::OnSize(WPARAM wParam, LPARAM lParam)
 	// 基底クラスメンバ
 	Dialog::OnSize(wParam, lParam);
 
-	int	Controls[] = {
+	static const int controls[] = {
 		IDC_LIST_WORDS
 	};
 	RECT	rcDlg;
@@ -404,14 +404,14 @@ BOOL HokanMgr::OnSize(WPARAM wParam, LPARAM lParam)
 	int nHeight = rcDlg.bottom - rcDlg.top; // height of client area
 
 //	2001/06/18 Start by asa-o: サイズ変更後の位置を保存
-	m_poWin.x = rcDlg.left - 4;
-	m_poWin.y = rcDlg.top - 3;
-	::ClientToScreen(GetHwnd(), &m_poWin);
+	m_point.x = rcDlg.left - 4;
+	m_point.y = rcDlg.top - 3;
+	::ClientToScreen(GetHwnd(), &m_point);
 //	2001/06/18 End
 
-	int nControls = _countof(Controls);
+	int nControls = _countof(controls);
 	for (int i=0; i<nControls; ++i) {
-		HWND hwndCtrl = GetItemHwnd(Controls[i]);
+		HWND hwndCtrl = GetItemHwnd(controls[i]);
 		RECT rc;
 		::GetWindowRect(hwndCtrl, &rc);
 		POINT po;
@@ -425,7 +425,7 @@ BOOL HokanMgr::OnSize(WPARAM wParam, LPARAM lParam)
 		::ScreenToClient(GetHwnd(), &po);
 		rc.right = po.x;
 		rc.bottom  = po.y;
-		if (Controls[i] == IDC_LIST_WORDS) {
+		if (controls[i] == IDC_LIST_WORDS) {
 			::SetWindowPos(
 				hwndCtrl,
 				NULL,
@@ -638,12 +638,12 @@ void HokanMgr::ShowTip()
 	int nTopItem = List_GetTopIndex(hwndCtrl);
 	int nItemHeight = List_GetItemHeight(hwndCtrl, 0);
 	POINT point;
-	point.x = m_poWin.x + m_nWidth;
-	point.y = m_poWin.y + 4 + (nItem - nTopItem) * nItemHeight;
+	point.x = m_point.x + m_nWidth;
+	point.y = m_point.y + 4 + (nItem - nTopItem) * nItemHeight;
 	// 2001/06/19 asa-o 選択中の単語が補完ウィンドウに表示されているなら辞書Tipを表示
-	if (point.y > m_poWin.y && point.y < m_poWin.y + m_nHeight) {
+	if (point.y > m_point.y && point.y < m_point.y + m_nHeight) {
 		RECT rcHokanWin;
-		::SetRect(&rcHokanWin , m_poWin.x, m_poWin.y, m_poWin.x + m_nWidth, m_poWin.y + m_nHeight);
+		::SetRect(&rcHokanWin , m_point.x, m_point.y, m_point.x + m_nWidth, m_point.y + m_nHeight);
 		if (!pEditView -> ShowKeywordHelp( point, &szLabel[0], &rcHokanWin )) {
 			pEditView -> m_dwTipTimer = ::GetTickCount();	// 表示するべきキーワードヘルプが無い
 		}

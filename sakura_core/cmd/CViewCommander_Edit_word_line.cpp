@@ -395,9 +395,9 @@ void ViewCommander::Command_DELETE_LINE(void)
 // 行の二重化(折り返し単位)
 void ViewCommander::Command_DUPLICATELINE(void)
 {
-	int				bCRLF;
-	int				bAddCRLF;
-	NativeW		cmemBuf;
+	int			bCRLF;
+	int			bAddCRLF;
+	NativeW		memBuf;
 
 	auto& selInfo = m_pCommanderView->GetSelectionInfo();
 	if (selInfo.IsTextSelected()) {	// テキストが選択されているか
@@ -452,19 +452,19 @@ void ViewCommander::Command_DUPLICATELINE(void)
 		}
 	}
 
-	cmemBuf.SetString(pLayout->GetPtr(), pLayout->GetLengthWithoutEOL() + pLayout->GetLayoutEol().GetLen());	// ※pLayout->GetLengthWithEOL()は、EOLの長さを必ず1にするので使えない。
+	memBuf.SetString(pLayout->GetPtr(), pLayout->GetLengthWithoutEOL() + pLayout->GetLayoutEol().GetLen());	// ※pLayout->GetLengthWithEOL()は、EOLの長さを必ず1にするので使えない。
 	if (bAddCRLF) {
 		// 現在、Enterなどで挿入する改行コードの種類を取得
 		Eol cWork = GetDocument()->m_docEditor.GetNewLineCode();
-		cmemBuf.AppendString(cWork.GetValue2(), cWork.GetLen());
+		memBuf.AppendString(cWork.GetValue2(), cWork.GetLen());
 	}
 
 	// 現在位置にデータを挿入
 	LayoutPoint ptLayoutNew;
 	m_pCommanderView->InsertData_CEditView(
 		GetCaret().GetCaretLayoutPos(),
-		cmemBuf.GetStringPtr(),
-		cmemBuf.GetStringLength(),
+		memBuf.GetStringPtr(),
+		memBuf.GetStringLength(),
 		&ptLayoutNew,
 		true
 	);

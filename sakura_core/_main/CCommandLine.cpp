@@ -190,7 +190,7 @@ int CommandLine::CheckCommandLine(
 */
 void CommandLine::ParseCommandLine(LPCTSTR pszCmdLineSrc, bool bResponse)
 {
-	MY_RUNNINGTIMER(cRunningTimer, "CommandLine::Parse");
+	MY_RUNNINGTIMER(runningTimer, "CommandLine::Parse");
 
 	// May 30, 2000 genta
 	// 実行ファイル名をもとに漢字コードを固定する．

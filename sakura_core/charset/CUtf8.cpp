@@ -100,13 +100,13 @@ CodeConvertResult Utf8::_UTF8ToUnicode( const Memory& src, NativeW* pDstMem, boo
 	const char* psrc = pSrc;
 	int nsrclen = nSrcLen;
 
-//	Memory cmem;
+//	Memory mem;
 //	// MIME ヘッダーデコード
 //	if (decodeMime) {
-//		bool bret = MIMEHeaderDecode(pSrc, nSrcLen, &cmem, CODE_UTF8);
+//		bool bret = MIMEHeaderDecode(pSrc, nSrcLen, &mem, CODE_UTF8);
 //		if (bret) {
-//			psrc = reinterpret_cast<char*>(cmem.GetRawPtr());
-//			nsrclen = cmem.GetRawLength();
+//			psrc = reinterpret_cast<char*>(mem.GetRawPtr());
+//			nsrclen = mem.GetRawLength();
 //		}
 //	}
 

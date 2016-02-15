@@ -116,7 +116,7 @@ HINSTANCE SelectLang::InitializeLanguageEnvironment(void)
 	}
 
 	// カレントディレクトリを保存。関数から抜けるときに自動でカレントディレクトリは復元される。
-	CurrentDirectoryBackupPoint cCurDirBackup;
+	CurrentDirectoryBackupPoint curDirBackup;
 	ChangeCurrentDirectoryToExeDir();
 // ★iniまたはexeフォルダとなるように改造が必要
 
@@ -207,7 +207,7 @@ HINSTANCE SelectLang::LoadLangRsrcLibrary(SelLangInfo& lang)
 
 
 // 文字列リソース読み込み用グローバル
-ResourceString::LoadStrBuffer ResourceString::m_acLoadStrBufferTemp[];	// 文字列読み込みバッファの配列（LoadString::LoadStringSt() が使用する）
+ResourceString::LoadStrBuffer ResourceString::m_aLoadStrBufferTemp[];	// 文字列読み込みバッファの配列（LoadString::LoadStringSt() が使用する）
 int ResourceString::m_nDataTempArrayIndex = 0;							// 最後に使用したバッファのインデックス（LoadString::LoadStringSt() が使用する）
 
 
@@ -218,7 +218,7 @@ int ResourceString::m_nDataTempArrayIndex = 0;							// 最後に使用したバッファの
 
 	@retval 読み込んだ文字列（文字列無しの時 "" が返る）
 
-	@note 静的バッファ（m_acLoadStrBufferTemp[?]）に文字列リソースを読み込む。
+	@note 静的バッファ（m_aLoadStrBufferTemp[?]）に文字列リソースを読み込む。
 	@note バッファは複数準備しているが、呼び出す毎に更新するのでバッファ個数を
 	@note 超えて呼び出すと順次内容が失われていく。
 	@note 呼び出し直後での使用や関数の引数などでの使用を想定しており、前回値を
@@ -233,11 +233,11 @@ int ResourceString::m_nDataTempArrayIndex = 0;							// 最後に使用したバッファの
 LPCTSTR ResourceString::LoadStringSt(UINT uid)
 {
 	// 使用するバッファの現在位置を進める
-	m_nDataTempArrayIndex = (m_nDataTempArrayIndex + 1) % _countof(m_acLoadStrBufferTemp);
+	m_nDataTempArrayIndex = (m_nDataTempArrayIndex + 1) % _countof(m_aLoadStrBufferTemp);
 
-	m_acLoadStrBufferTemp[m_nDataTempArrayIndex].Load(uid);
+	m_aLoadStrBufferTemp[m_nDataTempArrayIndex].Load(uid);
 
-	return /* LoadString:: */ m_acLoadStrBufferTemp[m_nDataTempArrayIndex].GetStringPtr();
+	return /* LoadString:: */ m_aLoadStrBufferTemp[m_nDataTempArrayIndex].GetStringPtr();
 }
 
 /*!

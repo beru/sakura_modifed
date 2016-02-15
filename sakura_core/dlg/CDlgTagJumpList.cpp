@@ -1111,9 +1111,9 @@ int DlgTagJumpList::find_key_core(
 	assert_warning(!(bTagJumpAnyWhere && bTagJumpExactMatch));
 
 	// to_acharは一時バッファで破壊される可能性があるのでコピー
-	NativeA cmemKeyA = NativeA(to_achar(keyword));
-	const ACHAR* paszKeyword = cmemKeyA.GetStringPtr();
-	int	length = cmemKeyA.GetStringLength();
+	NativeA memKeyA = NativeA(to_achar(keyword));
+	const ACHAR* paszKeyword = memKeyA.GetStringPtr();
+	int	length = memKeyA.GetStringLength();
 
 	Empty();
 

@@ -315,10 +315,10 @@ void SakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszBu
 			break;
 		case L'C':	// 現在選択中のテキスト
 			{
-				NativeW cmemCurText;
-				GetMainWindow()->GetActiveView().GetCurrentTextForSearch(cmemCurText);
+				NativeW memCurText;
+				GetMainWindow()->GetActiveView().GetCurrentTextForSearch(memCurText);
 
-				q = wcs_pushW(q, q_max - q, cmemCurText.GetStringPtr(), cmemCurText.GetStringLength());
+				q = wcs_pushW(q, q_max - q, memCurText.GetStringPtr(), memCurText.GetStringLength());
 				++p;
 			}
 		// To Here Jan. 15, 2002 hor
@@ -440,13 +440,13 @@ void SakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszBu
 			// Grep Key文字列 MAX 32文字
 			// 中身はSetParentCaption()より移植
 			{
-				NativeW cmemDes;
-				// m_szGrepKey → cmemDes
-				LimitStringLengthW(AppMode::getInstance()->m_szGrepKey, wcslen(AppMode::getInstance()->m_szGrepKey), (q_max - q > 32 ? 32 : q_max - q - 3), cmemDes);
-				if ((int)wcslen(AppMode::getInstance()->m_szGrepKey) > cmemDes.GetStringLength()) {
-					cmemDes.AppendString(L"...");
+				NativeW memDes;
+				// m_szGrepKey → memDes
+				LimitStringLengthW(AppMode::getInstance()->m_szGrepKey, wcslen(AppMode::getInstance()->m_szGrepKey), (q_max - q > 32 ? 32 : q_max - q - 3), memDes);
+				if ((int)wcslen(AppMode::getInstance()->m_szGrepKey) > memDes.GetStringLength()) {
+					memDes.AppendString(L"...");
 				}
-				q = wcs_pushW(q, q_max - q, cmemDes.GetStringPtr(), cmemDes.GetStringLength());
+				q = wcs_pushW(q, q_max - q, memDes.GetStringPtr(), memDes.GetStringLength());
 				++p;
 			}
 			break;

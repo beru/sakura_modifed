@@ -285,8 +285,8 @@ LRESULT EditView::SetReconvertStruct(PRECONVERTSTRING pReconv, bool bUnicode, bo
 	DWORD       dwCompStrOffset;    // byte
 	DWORD       dwCompStrLen;       // CHARs
 	DWORD       dwInsByteCount = 0; // byte
-	NativeW    cmemBuf1;
-	NativeA    cmemBuf2;
+	NativeW    memBuf1;
+	NativeA    memBuf2;
 	const void* pszReconv; 
 	const void* pszInsBuffer;
 
@@ -312,9 +312,9 @@ LRESULT EditView::SetReconvertStruct(PRECONVERTSTRING pReconv, bool bUnicode, bo
 
 		// 考慮文字列の開始から対象文字列の開始まで -> dwCompStrOffset
 		if (ptSelect.x - nReconvIndex > 0) {
-			cmemBuf1.SetString(pszReconvSrc, ptSelect.x - nReconvIndex);
-			ShiftJis::UnicodeToSJIS(cmemBuf1, cmemBuf2._GetMemory());
-			dwCompStrOffset = cmemBuf2._GetMemory()->GetRawLength();				//compオフセット。バイト単位。
+			memBuf1.SetString(pszReconvSrc, ptSelect.x - nReconvIndex);
+			ShiftJis::UnicodeToSJIS(memBuf1, memBuf2._GetMemory());
+			dwCompStrOffset = memBuf2._GetMemory()->GetRawLength();				//compオフセット。バイト単位。
 		}else {
 			dwCompStrOffset = 0;
 		}
@@ -322,9 +322,9 @@ LRESULT EditView::SetReconvertStruct(PRECONVERTSTRING pReconv, bool bUnicode, bo
 		pszInsBuffer = "";
 		// 対象文字列の開始から対象文字列の終了まで -> dwCompStrLen
 		if (nSelectedLen > 0) {
-			cmemBuf1.SetString(pszReconvSrc + ptSelect.x, nSelectedLen);  
-			ShiftJis::UnicodeToSJIS(cmemBuf1, cmemBuf2._GetMemory());
-			dwCompStrLen = cmemBuf2._GetMemory()->GetRawLength();					// comp文字列長。文字単位。
+			memBuf1.SetString(pszReconvSrc + ptSelect.x, nSelectedLen);  
+			ShiftJis::UnicodeToSJIS(memBuf1, memBuf2._GetMemory());
+			dwCompStrLen = memBuf2._GetMemory()->GetRawLength();					// comp文字列長。文字単位。
 		}else if (nInsertCompLen > 0) {
 			// nSelectedLen と nInsertCompLen が両方指定されることはないはず
 			const ACHAR* pComp = to_achar(m_szComposition);
@@ -336,14 +336,14 @@ LRESULT EditView::SetReconvertStruct(PRECONVERTSTRING pReconv, bool bUnicode, bo
 		}
 		
 		// 考慮文字列すべて
-		cmemBuf1.SetString(pszReconvSrc , nReconvLen);
-		ShiftJis::UnicodeToSJIS(cmemBuf1, cmemBuf2._GetMemory());
+		memBuf1.SetString(pszReconvSrc , nReconvLen);
+		ShiftJis::UnicodeToSJIS(memBuf1, memBuf2._GetMemory());
 		
-		dwReconvTextLen    = cmemBuf2._GetMemory()->GetRawLength();				// reconv文字列長。文字単位。
+		dwReconvTextLen    = memBuf2._GetMemory()->GetRawLength();				// reconv文字列長。文字単位。
 		dwReconvTextInsLen = dwReconvTextLen + dwInsByteCount;						// reconv文字列長。文字単位。
-		cbReconvLenWithNull = cmemBuf2._GetMemory()->GetRawLength() + dwInsByteCount + sizeof(char);		// reconvデータ長。バイト単位。
+		cbReconvLenWithNull = memBuf2._GetMemory()->GetRawLength() + dwInsByteCount + sizeof(char);		// reconvデータ長。バイト単位。
 		
-		pszReconv = reinterpret_cast<const void*>(cmemBuf2._GetMemory()->GetRawPtr());	// reconv文字列へのポインタ
+		pszReconv = reinterpret_cast<const void*>(memBuf2._GetMemory()->GetRawPtr());	// reconv文字列へのポインタ
 	}
 	
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -447,7 +447,7 @@ LRESULT EditView::SetSelectionFromReonvert(const PRECONVERTSTRING pReconv, bool 
 		dwLen    = pReconv->dwCompStrLen;					// 0または文字列長。文字単位。
 	}else {
 	// ANSI→UNICODE
-		NativeW	cmemBuf;
+		NativeW	memBuf;
 
 		// 考慮文字列の開始から対象文字列の開始まで
 		if (pReconv->dwCompStrOffset > 0) {
@@ -456,9 +456,9 @@ LRESULT EditView::SetSelectionFromReonvert(const PRECONVERTSTRING pReconv, bool 
 			}
 			// 2010.03.17 sizeof(pReconv)+1ではなくdwStrOffsetを利用するように
 			const char* p = ((const char*)(pReconv)) + pReconv->dwStrOffset;
-			cmemBuf._GetMemory()->SetRawData(p, pReconv->dwCompStrOffset );
-			ShiftJis::SJISToUnicode(*(cmemBuf._GetMemory()), &cmemBuf);
-			dwOffset = cmemBuf.GetStringLength();
+			memBuf._GetMemory()->SetRawData(p, pReconv->dwCompStrOffset );
+			ShiftJis::SJISToUnicode(*(memBuf._GetMemory()), &memBuf);
+			dwOffset = memBuf.GetStringLength();
 		}else {
 			dwOffset = 0;
 		}
@@ -472,9 +472,9 @@ LRESULT EditView::SetSelectionFromReonvert(const PRECONVERTSTRING pReconv, bool 
 			}
 			// 2010.03.17 sizeof(pReconv)+1ではなくdwStrOffsetを利用するように
 			const char* p= ((const char*)pReconv) + pReconv->dwStrOffset;
-			cmemBuf._GetMemory()->SetRawData(p + pReconv->dwCompStrOffset, pReconv->dwCompStrLen);
-			ShiftJis::SJISToUnicode(*(cmemBuf._GetMemory()), &cmemBuf);
-			dwLen = cmemBuf.GetStringLength();
+			memBuf._GetMemory()->SetRawData(p + pReconv->dwCompStrOffset, pReconv->dwCompStrLen);
+			ShiftJis::SJISToUnicode(*(memBuf._GetMemory()), &memBuf);
+			dwLen = memBuf.GetStringLength();
 		}else {
 			dwLen = 0;
 		}

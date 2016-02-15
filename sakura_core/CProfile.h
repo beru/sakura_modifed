@@ -71,7 +71,7 @@ public:
 
 protected:
 	void ReadOneline( const wstring& line );
-	bool _WriteFile(const tstring& strFilename, const std::vector< wstring >& vecLine);
+	bool _WriteFile(const tstring& strFilename, const std::vector<wstring>& vecLine);
 
 
 	bool GetProfileDataImp(const wstring& strSectionName, const wstring& strEntryKey, wstring& strEntryValue);
@@ -80,7 +80,7 @@ protected:
 protected:
 	// メンバ変数
 	tstring					m_strProfileName;	// 最後に読み書きしたファイル名
-	std::vector< Section >	m_ProfileData;
+	std::vector<Section>	m_profileData;
 	bool					m_bRead;			// モード(true=読み込み/false=書き出し)
 };
 

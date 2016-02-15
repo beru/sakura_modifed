@@ -142,7 +142,7 @@ public:
 private:
 	// キーワード格納領域
 	wchar_t	m_szKeyWordArr[MAX_KEYWORDNUM][MAX_KEYWORDLEN + 1];	
-	char	m_IsSorted[MAX_SETNUM];	// ソートしたかどうかのフラグ(INI未保存)	 //MIK
+	char	m_isSorted[MAX_SETNUM];	// ソートしたかどうかのフラグ(INI未保存)	 //MIK
 
 protected:
 	// 2004.07.29 Moca 可変長記憶

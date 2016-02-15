@@ -242,7 +242,7 @@ bool EditView::MiniMapCursorLineTip(POINT* po, RECT* rc, bool* pbHide)
 			pLayout = GetDocument()->m_layoutMgr.SearchLineByLayoutY( nCurLine );
 		}
 		if (pLayout) {
-			NativeW cmemCurLine;
+			NativeW memCurLine;
 			{
 				LogicInt nLineLen = pLayout->GetLengthWithoutEOL();
 				const wchar_t* pszData = pLayout->GetPtr();
@@ -258,8 +258,8 @@ bool EditView::MiniMapCursorLineTip(POINT* po, RECT* rc, bool* pbHide)
 				while (i + charSize <= (Int)nLineLen && k + charWidth <= nLimitLength) {
 					if (pszData[i] == L'\t' || pszData[i] == L' ') {
 						if (charType == 0) {
-							cmemCurLine.AppendString( pszData + pre , i - pre );
-							cmemCurLine.AppendString( L" " );
+							memCurLine.AppendString( pszData + pre , i - pre );
+							memCurLine.AppendString( L" " );
 							charType = 1;
 						}
 						pre = i + charSize;
@@ -272,13 +272,13 @@ bool EditView::MiniMapCursorLineTip(POINT* po, RECT* rc, bool* pbHide)
 					charSize = NativeW::GetSizeOfChar( pszData, nLineLen, i );
 					charWidth = t_max(1, (int)(Int)NativeW::GetKetaOfChar( pszData, nLineLen, i ));
 				}
-				cmemCurLine.AppendString( pszData + pre , i - pre );
+				memCurLine.AppendString( pszData + pre , i - pre );
 			}
 			if (nTipBeginLine != nCurLine) {
 				memCurText.AppendString( L"\n" );
 			}
-			cmemCurLine.Replace( L"\\", L"\\\\" );
-			memCurText.AppendNativeData( cmemCurLine );
+			memCurLine.Replace( L"\\", L"\\\\" );
+			memCurText.AppendNativeData( memCurLine );
 		}
 	}
 	if (memCurText.GetStringLength() <= 0) {
@@ -295,7 +295,7 @@ bool EditView::MiniMapCursorLineTip(POINT* po, RECT* rc, bool* pbHide)
 // 現在カーソル位置単語または選択範囲より検索等のキーを取得
 void EditView::GetCurrentTextForSearch(NativeW& memCurText, bool bStripMaxPath /* = true */, bool bTrimSpaceTab /* = false */)
 {
-	NativeW cmemTopic = L"";
+	NativeW memTopic = L"";
 
 	memCurText.SetString(L"");
 	if (GetSelectionInfo().IsTextSelected()) {	// テキストが選択されているか
@@ -303,9 +303,9 @@ void EditView::GetCurrentTextForSearch(NativeW& memCurText, bool bStripMaxPath /
 		if (GetSelectedDataOne(memCurText, INT_MAX)) {
 			// 検索文字列を現在位置の単語で初期化
 			if (bStripMaxPath) {
-				LimitStringLengthW(memCurText.GetStringPtr(), memCurText.GetStringLength(), _MAX_PATH - 1, cmemTopic);
+				LimitStringLengthW(memCurText.GetStringPtr(), memCurText.GetStringLength(), _MAX_PATH - 1, memTopic);
 			}else {
-				cmemTopic = memCurText;
+				memTopic = memCurText;
 			}
 		}
 	}else {
@@ -334,9 +334,9 @@ void EditView::GetCurrentTextForSearch(NativeW& memCurText, bool bStripMaxPath /
 				if (GetSelectedDataOne(memCurText, INT_MAX)) {
 					// 検索文字列を現在位置の単語で初期化
 					if (bStripMaxPath) {
-						LimitStringLengthW(memCurText.GetStringPtr(), memCurText.GetStringLength(), _MAX_PATH - 1, cmemTopic);
+						LimitStringLengthW(memCurText.GetStringPtr(), memCurText.GetStringLength(), _MAX_PATH - 1, memTopic);
 					}else {
-						cmemTopic = memCurText;
+						memTopic = memCurText;
 					}
 				}
 				// 現在の選択範囲を非選択状態に戻す
@@ -345,7 +345,7 @@ void EditView::GetCurrentTextForSearch(NativeW& memCurText, bool bStripMaxPath /
 		}
 	}
 
-	wchar_t* pTopic2 = cmemTopic.GetStringPtr();
+	wchar_t* pTopic2 = memTopic.GetStringPtr();
 	if (bTrimSpaceTab) {
 		// 前のスペース・タブを取り除く
 		while (L'\0' != *pTopic2 && (' ' == *pTopic2 || '\t' == *pTopic2)) {
