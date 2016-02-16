@@ -2,7 +2,7 @@
 #include <mbstring.h>
 #include "charset/codeutil.h"
 #include "charset/charcode.h"
-#include "charset/codechecker.h"
+#include "charset/codecheck.h"
 
 #if 0
 /*!

@@ -25,7 +25,7 @@
 
 #include "basis/SakuraBasis.h"
 #include "config/maxdata.h"
-#include "types/CType.h"
+#include "types/Type.h"
 
 
 /*! ƒtƒ@ƒCƒ‹î•ñ

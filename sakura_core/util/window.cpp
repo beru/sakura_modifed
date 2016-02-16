@@ -1,7 +1,7 @@
 #include "StdAfx.h"
-#include "env/CShareData.h"
+#include "env/ShareData.h"
 #include "env/DLLSHAREDATA.h"
-#include "env/CSakuraEnvironment.h"
+#include "env/SakuraEnvironment.h"
 #include <limits.h>
 #include "window.h"
 

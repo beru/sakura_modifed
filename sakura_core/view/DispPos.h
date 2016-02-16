@@ -23,9 +23,9 @@
 */
 #pragma once
 
-#include "doc/CEditDoc.h"
-#include "doc/layout/CLayoutMgr.h"
-#include "doc/layout/CLayout.h"
+#include "doc/EditDoc.h"
+#include "doc/layout/LayoutMgr.h"
+#include "doc/layout/Layout.h"
 
 struct DispPos {
 public:

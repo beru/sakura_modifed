@@ -66,16 +66,16 @@ void SetDllShareData(DLLSHAREDATA* pShareData)
 
 #include "config/maxdata.h"
 
-#include "env/CAppNodeManager.h"	// Share_Nodes
-// 2007.09.28 kobake Common\‘¢‘Ì‚ğCShareData.h‚©‚ç•ª—£
+#include "env/AppNodeManager.h"	// Share_Nodes
+// 2007.09.28 kobake Common\‘¢‘Ì‚ğShareData.h‚©‚ç•ª—£
 #include "env/CommonSetting.h"
-#include "env/CSearchKeywordManager.h"	// Share_SearchKeywords
-#include "env/CTagJumpManager.h"		// Share_TagJump
-#include "env/CFileNameManager.h"		// Share_FileNameManagement
+#include "env/SearchKeywordManager.h"	// Share_SearchKeywords
+#include "env/TagJumpManager.h"		// Share_TagJump
+#include "env/FileNameManager.h"		// Share_FileNameManagement
 
 #include "EditInfo.h"
-#include "types/CType.h" // TypeConfig
-#include "print/CPrint.h" // PRINTSETTING
+#include "types/Type.h" // TypeConfig
+#include "print/Print.h" // PRINTSETTING
 #include "recent/SShare_History.h"	// SShare_History
 
 

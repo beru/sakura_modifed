@@ -1,7 +1,7 @@
 #include "StdAfx.h"
 #include "string_ex2.h"
 #include "charset/charcode.h"
-#include "CEol.h"
+#include "Eol.h"
 
 wchar_t* wcs_pushW(wchar_t* dst, size_t dst_count, const wchar_t* src, size_t src_count)
 {

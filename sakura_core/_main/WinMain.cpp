@@ -25,7 +25,7 @@
 #include "Process.h"
 #include "util/os.h"
 #include "util/module.h"
-#include "debug/CRunningTimer.h"
+#include "debug/RunningTimer.h"
 
 /*!
 	Windows Entry point

@@ -20,16 +20,16 @@
 
 #include "StdAfx.h"
 #include "CommandLine.h"
-#include "mem/CMemory.h"
+#include "mem/Memory.h"
 #include <tchar.h>
 #include <io.h>
 #include <string.h>
-#include "debug/CRunningTimer.h"
+#include "debug/RunningTimer.h"
 #include "charset/charcode.h"  // 2006.06.28 rastiv
-#include "io/CTextStream.h"
+#include "io/TextStream.h"
 #include "util/shell.h"
-#include "util/file.h"
-#include "env/CSakuraEnvironment.h"
+#include "util/fileUtil.h"
+#include "env/SakuraEnvironment.h"
 
 // コマンドラインオプション用定数
 #define CMDLINEOPT_R			1002

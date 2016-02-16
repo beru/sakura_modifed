@@ -84,7 +84,7 @@ typedef char KEYCODE;
 
 // intå›ä∑
 #ifdef USE_STRICT_INT
-	#include "CLaxInteger.h"
+	#include "LaxInteger.h"
 	typedef LaxInteger Int;
 #else
 	typedef int Int;

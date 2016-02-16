@@ -25,12 +25,12 @@
 #include "StdAfx.h"
 #include <ShellAPI.h>// HDROP
 #include "Clipboard.h"
-#include "doc/CEditDoc.h"
-#include "charset/CCodeMediator.h"
-#include "charset/CCodeFactory.h"
-#include "charset/CShiftJis.h"
-#include "charset/CUtf8.h"
-#include "CEol.h"
+#include "doc/EditDoc.h"
+#include "charset/CodeMediator.h"
+#include "charset/CodeFactory.h"
+#include "charset/ShiftJis.h"
+#include "charset/Utf8.h"
+#include "Eol.h"
 
 // MinGW<=4.5.0のコンパイルエラー対策
 #ifndef CF_DIBV5

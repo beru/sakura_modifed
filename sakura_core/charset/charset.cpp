@@ -35,7 +35,7 @@
 */
 #include "StdAfx.h"
 #include "charset.h"
-#include "CCodePage.h"
+#include "CodePage.h"
 #include <vector>
 #include <map>
 

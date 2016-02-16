@@ -1,7 +1,7 @@
 #include "StdAfx.h"
 #include "AppMode.h"
-#include "window/CEditWnd.h"
-#include "env/CSakuraEnvironment.h"
+#include "window/EditWnd.h"
+#include "env/SakuraEnvironment.h"
 
 void AppMode::OnAfterSave(const SaveInfo& saveInfo)
 {

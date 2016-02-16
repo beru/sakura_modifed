@@ -86,22 +86,22 @@
 #include "util/std_macro.h"
 
 //MFC互換
-#include "basis/CMyString.h"
-#include "basis/CMyRect.h"
-#include "basis/CMyPoint.h"
-#include "basis/CMySize.h"
+#include "basis/MyString.h"
+#include "basis/MyRect.h"
+#include "basis/MyPoint.h"
+#include "basis/MySize.h"
 
 //サクラエディタ固有型
 #include "basis/SakuraBasis.h"
 
 //よく使うヘッダ
-#include "mem/CNativeW.h"
-#include "mem/CNativeA.h"
-#include "mem/CNativeT.h"
+#include "mem/NativeW.h"
+#include "mem/NativeA.h"
+#include "mem/NativeT.h"
 
 #include "util/string_ex.h"
 #include "util/MessageBoxF.h"
-#include "CSelectLang.h"
+#include "SelectLang.h"
 #include "String_define.h"
 
 //その他
@@ -119,7 +119,7 @@
 //TCHARユーティリティ
 #include "util/tchar_convert.h"
 #include "charset/charcode.h"
-#include "charset/codechecker.h"
+#include "charset/codecheck.h"
 
 // 2010.04.19 Moca includeの大規模整理
 #ifndef SAKURA_PCH_MODE_MIN
@@ -131,20 +131,20 @@
 #endif
 
 #ifdef SAKURA_PCH_MODE_MAX
-#include "env/CShareData.h"
+#include "env/ShareData.h"
 #include "_main/NormalProcess.h"
 #include "_main/AppMode.h"
-#include "window/CEditWnd.h"
-#include "CEditApp.h"
-#include "doc/CDocReader.h"
-#include "docplus/CModifyManager.h"
-#include "docplus/CDiffManager.h"
-#include "docplus/CBookmarkManager.h"
-#include "CReadManager.h"
-#include "CWriteManager.h"
-#include "CSearchAgent.h"
+#include "window/EditWnd.h"
+#include "EditApp.h"
+#include "doc/DocReader.h"
+#include "docplus/ModifyManager.h"
+#include "docplus/DiffManager.h"
+#include "docplus/BookmarkManager.h"
+#include "ReadManager.h"
+#include "WriteManager.h"
+#include "SearchAgent.h"
 //###########超仮
-#include "uiparts/CGraphics.h"
+#include "uiparts/Graphics.h"
 #endif // SAKURA_PCH_MODE_MAX
 
 //{{AFX_INSERT_LOCATION}}

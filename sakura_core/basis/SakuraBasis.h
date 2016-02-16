@@ -32,7 +32,7 @@
 #ifdef USE_STRICT_INT
 	// -- -- 厳格なintで単位型を定義 -- -- //
 
-	#include "CStrictInteger.h"
+	#include "StrictInteger.h"
 
 	// ロジック単位
 	typedef StrictInteger <
@@ -85,9 +85,9 @@ typedef LayoutXInt KetaXInt;
 //                      ２次元型の定義                         //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //
-#include "CStrictRange.h"
-#include "CStrictPoint.h"
-#include "CStrictRect.h"
+#include "StrictRange.h"
+#include "StrictPoint.h"
+#include "StrictRect.h"
 
 // ロジック単位
 struct LogicIntXY { LogicInt x; LogicInt y; }; // 基底構造体
@@ -102,7 +102,7 @@ typedef RangeBase<LayoutPoint>				LayoutRange;
 typedef StrictRect<LayoutInt, LayoutPoint>	LayoutRect;
 
 // ゆるい単位
-#include "CMyPoint.h"
+#include "MyPoint.h"
 typedef RangeBase<Point>     SelectionRange;
 
 
@@ -110,7 +110,7 @@ typedef RangeBase<Point>     SelectionRange;
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                          ツール                             //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-#include "CMyRect.h"
+#include "MyRect.h"
 
 // 変換関数
 template <class POINT_T>

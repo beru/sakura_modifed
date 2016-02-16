@@ -25,9 +25,9 @@
 #pragma once
 
 #include <Windows.h>
-#include "uiparts/CMenuDrawer.h"
-#include "uiparts/CImageListMgr.h" // 2002/2/10 aroka
-#include "dlg/CDlgGrep.h" // 2002/2/10 aroka
+#include "uiparts/MenuDrawer.h"
+#include "uiparts/ImageListMgr.h" // 2002/2/10 aroka
+#include "dlg/DlgGrep.h" // 2002/2/10 aroka
 
 struct LoadInfo;
 struct EditInfo;

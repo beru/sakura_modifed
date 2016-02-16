@@ -46,16 +46,16 @@
 #include "StdAfx.h"
 #include "func/Funccode.h"
 #include "config/maxdata.h" // MAX_MRU
-#include "env/CShareData.h"
+#include "env/ShareData.h"
 #include "env/DLLSHAREDATA.h"
-#include "doc/CEditDoc.h"
+#include "doc/EditDoc.h"
 #include "_main/AppMode.h"
-#include "CEditApp.h"
-#include "CGrepAgent.h"
-#include "macro/CSMacroMgr.h"
-#include "window/CEditWnd.h"
-#include "docplus/CDiffManager.h"
-#include "CMarkMgr.h"	// CAutoMarkMgr
+#include "EditApp.h"
+#include "GrepAgent.h"
+#include "macro/SMacroMgr.h"
+#include "window/EditWnd.h"
+#include "docplus/DiffManager.h"
+#include "MarkMgr.h"	// CAutoMarkMgr
 #include "sakura.hh"
 
 //using namespace nsFuncCode;

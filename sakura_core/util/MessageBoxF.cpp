@@ -35,7 +35,7 @@
 #include <stdarg.h>
 #include <tchar.h>
 #include "MessageBoxF.h"
-#include "window/CEditWnd.h"
+#include "window/EditWnd.h"
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                 メッセージボックス：実装                    //

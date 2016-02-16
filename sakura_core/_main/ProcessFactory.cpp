@@ -23,8 +23,8 @@
 #include "CommandLine.h"
 #include "ControlTray.h"
 #include "_os/OsVersionInfo.h"
-#include "dlg/CDlgProfileMgr.h"
-#include "debug/CRunningTimer.h"
+#include "dlg/DlgProfileMgr.h"
+#include "debug/RunningTimer.h"
 #include "util/os.h"
 #include <io.h>
 #include <tchar.h>

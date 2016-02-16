@@ -25,7 +25,7 @@
 #include "StdAfx.h"
 #include "module.h"
 #include "util/os.h"
-#include "util/file.h"
+#include "util/fileUtil.h"
 #include <Shlwapi.h>	// 2006.06.17 ryoji
 
 /*! 

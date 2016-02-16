@@ -1,6 +1,6 @@
 #include "StdAfx.h"
 #include "DispPos.h"
-#include "doc/layout/CLayout.h"
+#include "doc/layout/Layout.h"
 
 // $$$çÇë¨âª
 void DispPos::ForwardLayoutLineRef(int nOffsetLine)

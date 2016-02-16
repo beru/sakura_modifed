@@ -29,8 +29,8 @@
 */
 #pragma once
 
-#include "parse/CWordParse.h"
-#include "mem/CMemory.h"
+#include "parse/WordParse.h"
+#include "mem/Memory.h"
 
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

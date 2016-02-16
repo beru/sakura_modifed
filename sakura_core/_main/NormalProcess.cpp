@@ -24,17 +24,17 @@
 #include "NormalProcess.h"
 #include "CommandLine.h"
 #include "ControlTray.h"
-#include "window/CEditWnd.h" // 2002/2/3 aroka
-#include "CGrepAgent.h"
-#include "doc/CEditDoc.h"
-#include "doc/logic/CDocLine.h" // 2003/03/28 MIK
-#include "debug/CRunningTimer.h"
+#include "window/EditWnd.h" // 2002/2/3 aroka
+#include "GrepAgent.h"
+#include "doc/EditDoc.h"
+#include "doc/logic/DocLine.h" // 2003/03/28 MIK
+#include "debug/RunningTimer.h"
 #include "util/window.h"
-#include "util/file.h"
-#include "plugin/CPluginManager.h"
-#include "plugin/CJackManager.h"
+#include "util/fileUtil.h"
+#include "plugin/PluginManager.h"
+#include "plugin/JackManager.h"
 #include "AppMode.h"
-#include "env/CDocTypeManager.h"
+#include "env/DocTypeManager.h"
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //               コンストラクタ・デストラクタ                  //

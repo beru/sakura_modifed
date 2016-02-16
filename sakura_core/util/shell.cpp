@@ -29,13 +29,13 @@
 #include <CdErr.h> // Nov. 3, 2005 genta	// CDERR_FINDRESFAILURE“™
 #include "util/shell.h"
 #include "util/string_ex2.h"
-#include "util/file.h"
+#include "util/fileUtil.h"
 #include "util/os.h"
 #include "util/module.h"
 #include "_os/OsVersionInfo.h"
-#include "env/CShareData.h"
+#include "env/ShareData.h"
 #include "env/DLLSHAREDATA.h"
-#include "extmodule/CHtmlHelp.h"
+#include "extmodule/HtmlHelp.h"
 
 int CALLBACK MYBrowseCallbackProc(
 	HWND hwnd,

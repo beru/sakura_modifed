@@ -30,25 +30,25 @@
 
 #include <HtmlHelp.h>
 #include "ControlTray.h"
-#include "CPropertyManager.h"
-#include "typeprop/CDlgTypeList.h"
-#include "debug/CRunningTimer.h"
-#include "dlg/CDlgOpenFile.h"
-#include "dlg/CDlgAbout.h"		// Nov. 21, 2000 JEPROtest
-#include "plugin/CPluginManager.h"
-#include "plugin/CJackManager.h"
-#include "io/CTextStream.h"
+#include "PropertyManager.h"
+#include "typeprop/DlgTypeList.h"
+#include "debug/RunningTimer.h"
+#include "dlg/DlgOpenFile.h"
+#include "dlg/DlgAbout.h"		// Nov. 21, 2000 JEPROtest
+#include "plugin/PluginManager.h"
+#include "plugin/JackManager.h"
+#include "io/TextStream.h"
 #include "util/module.h"
 #include "util/shell.h"
 #include "util/window.h"
 #include "util/string_ex2.h"
-#include "env/CShareData.h"
-#include "env/CShareData_IO.h"
-#include "env/CSakuraEnvironment.h"
-#include "env/CHelpManager.h"
-#include "doc/CDocListener.h" // LoadInfo,EditInfo
-#include "recent/CMRUFile.h"
-#include "recent/CMRUFolder.h"
+#include "env/ShareData.h"
+#include "env/ShareData_IO.h"
+#include "env/SakuraEnvironment.h"
+#include "env/HelpManager.h"
+#include "doc/DocListener.h" // LoadInfo,EditInfo
+#include "recent/MRUFile.h"
+#include "recent/MRUFolder.h"
 #include "_main/CommandLine.h"
 #include "sakura_rc.h"
 

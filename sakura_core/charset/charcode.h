@@ -24,7 +24,7 @@
 #pragma once
 
 // 2007.09.13 kobake ì¬
-#include "parse/CWordParse.h"
+#include "parse/WordParse.h"
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                         ”»’èŠÖ”                            //

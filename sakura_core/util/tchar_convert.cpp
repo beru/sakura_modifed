@@ -1,6 +1,6 @@
 #include "StdAfx.h"
 #include "util/tchar_convert.h"
-#include "mem/CRecycledBuffer.h"
+#include "mem/RecycledBuffer.h"
 
 static RecycledBuffer        g_bufSmall;
 static RecycledBufferDynamic g_bufBig;

@@ -397,178 +397,178 @@
 		<Filter
 			Name="Cpp Source Files">
 			<File
-				RelativePath="..\sakura_core\CAutoReloadAgent.cpp">
+				RelativePath="..\sakura_core\AutoReloadAgent.cpp">
 			</File>
 			<File
-				RelativePath="..\sakura_core\CAutoReloadAgent.h">
+				RelativePath="..\sakura_core\AutoReloadAgent.h">
 			</File>
 			<File
-				RelativePath="..\sakura_core\CAutoSaveAgent.cpp">
+				RelativePath="..\sakura_core\AutoSaveAgent.cpp">
 			</File>
 			<File
-				RelativePath="..\sakura_core\CAutoSaveAgent.h">
+				RelativePath="..\sakura_core\AutoSaveAgent.h">
 			</File>
 			<File
-				RelativePath="..\sakura_core\CBackupAgent.cpp">
+				RelativePath="..\sakura_core\BackupAgent.cpp">
 			</File>
 			<File
-				RelativePath="..\sakura_core\CBackupAgent.h">
+				RelativePath="..\sakura_core\BackupAgent.h">
 			</File>
 			<File
-				RelativePath="..\sakura_core\CCodeChecker.cpp">
+				RelativePath="..\sakura_core\CodeChecker.cpp">
 			</File>
 			<File
-				RelativePath="..\sakura_core\CCodeChecker.h">
+				RelativePath="..\sakura_core\CodeChecker.h">
 			</File>
 			<File
-				RelativePath="..\sakura_core\CDataProfile.cpp">
+				RelativePath="..\sakura_core\DataProfile.cpp">
 			</File>
 			<File
-				RelativePath="..\sakura_core\CDataProfile.h">
+				RelativePath="..\sakura_core\DataProfile.h">
 			</File>
 			<File
-				RelativePath="..\sakura_core\CDicMgr.cpp">
+				RelativePath="..\sakura_core\DicMgr.cpp">
 			</File>
 			<File
-				RelativePath="..\sakura_core\CDicMgr.h">
+				RelativePath="..\sakura_core\DicMgr.h">
 			</File>
 			<File
-				RelativePath="..\sakura_core\CEditApp.cpp">
+				RelativePath="..\sakura_core\EditApp.cpp">
 			</File>
 			<File
-				RelativePath="..\sakura_core\CEditApp.h">
+				RelativePath="..\sakura_core\EditApp.h">
 			</File>
 			<File
-				RelativePath="..\sakura_core\CEol.cpp">
+				RelativePath="..\sakura_core\Eol.cpp">
 			</File>
 			<File
-				RelativePath="..\sakura_core\CEol.h">
+				RelativePath="..\sakura_core\Eol.h">
 			</File>
 			<File
-				RelativePath="..\sakura_core\CFileExt.cpp">
+				RelativePath="..\sakura_core\FileExt.cpp">
 			</File>
 			<File
-				RelativePath="..\sakura_core\CFileExt.h">
+				RelativePath="..\sakura_core\FileExt.h">
 			</File>
 			<File
-				RelativePath="..\sakura_core\CGrepAgent.cpp">
+				RelativePath="..\sakura_core\GrepAgent.cpp">
 			</File>
 			<File
-				RelativePath="..\sakura_core\CGrepAgent.h">
+				RelativePath="..\sakura_core\GrepAgent.h">
 			</File>
 			<File
-				RelativePath="..\sakura_core\CGrepEnumFileBase.h">
+				RelativePath="..\sakura_core\GrepEnumFileBase.h">
 			</File>
 			<File
-				RelativePath="..\sakura_core\CGrepEnumFiles.h">
+				RelativePath="..\sakura_core\GrepEnumFiles.h">
 			</File>
 			<File
-				RelativePath="..\sakura_core\CGrepEnumFilterFiles.h">
+				RelativePath="..\sakura_core\GrepEnumFilterFiles.h">
 			</File>
 			<File
-				RelativePath="..\sakura_core\CGrepEnumFilterFolders.h">
+				RelativePath="..\sakura_core\GrepEnumFilterFolders.h">
 			</File>
 			<File
-				RelativePath="..\sakura_core\CGrepEnumFolders.h">
+				RelativePath="..\sakura_core\GrepEnumFolders.h">
 			</File>
 			<File
-				RelativePath="..\sakura_core\CGrepEnumKeys.h">
+				RelativePath="..\sakura_core\GrepEnumKeys.h">
 			</File>
 			<File
-				RelativePath="..\sakura_core\CHokanMgr.cpp">
+				RelativePath="..\sakura_core\HokanMgr.cpp">
 			</File>
 			<File
-				RelativePath="..\sakura_core\CHokanMgr.h">
+				RelativePath="..\sakura_core\HokanMgr.h">
 			</File>
 			<File
-				RelativePath="..\sakura_core\CKeyWordSetMgr.cpp">
+				RelativePath="..\sakura_core\KeyWordSetMgr.cpp">
 			</File>
 			<File
-				RelativePath="..\sakura_core\CKeyWordSetMgr.h">
+				RelativePath="..\sakura_core\KeyWordSetMgr.h">
 			</File>
 			<File
-				RelativePath="..\sakura_core\CLoadAgent.cpp">
+				RelativePath="..\sakura_core\LoadAgent.cpp">
 			</File>
 			<File
-				RelativePath="..\sakura_core\CLoadAgent.h">
+				RelativePath="..\sakura_core\LoadAgent.h">
 			</File>
 			<File
-				RelativePath="..\sakura_core\CMarkMgr.cpp">
+				RelativePath="..\sakura_core\MarkMgr.cpp">
 			</File>
 			<File
-				RelativePath="..\sakura_core\CMarkMgr.h">
+				RelativePath="..\sakura_core\MarkMgr.h">
 			</File>
 			<File
-				RelativePath="..\sakura_core\COpe.cpp">
+				RelativePath="..\sakura_core\Ope.cpp">
 			</File>
 			<File
-				RelativePath="..\sakura_core\COpe.h">
+				RelativePath="..\sakura_core\Ope.h">
 			</File>
 			<File
-				RelativePath="..\sakura_core\COpeBlk.cpp">
+				RelativePath="..\sakura_core\OpeBlk.cpp">
 			</File>
 			<File
-				RelativePath="..\sakura_core\COpeBlk.h">
+				RelativePath="..\sakura_core\OpeBlk.h">
 			</File>
 			<File
-				RelativePath="..\sakura_core\COpeBuf.cpp">
+				RelativePath="..\sakura_core\OpeBuf.cpp">
 			</File>
 			<File
-				RelativePath="..\sakura_core\COpeBuf.h">
+				RelativePath="..\sakura_core\OpeBuf.h">
 			</File>
 			<File
-				RelativePath="..\sakura_core\CProfile.cpp">
+				RelativePath="..\sakura_core\Profile.cpp">
 			</File>
 			<File
-				RelativePath="..\sakura_core\CProfile.h">
+				RelativePath="..\sakura_core\Profile.h">
 			</File>
 			<File
-				RelativePath="..\sakura_core\CPropertyManager.cpp">
+				RelativePath="..\sakura_core\PropertyManager.cpp">
 			</File>
 			<File
-				RelativePath="..\sakura_core\CPropertyManager.h">
+				RelativePath="..\sakura_core\PropertyManager.h">
 			</File>
 			<File
-				RelativePath="..\sakura_core\CReadManager.cpp">
+				RelativePath="..\sakura_core\ReadManager.cpp">
 			</File>
 			<File
-				RelativePath="..\sakura_core\CReadManager.h">
+				RelativePath="..\sakura_core\ReadManager.h">
 			</File>
 			<File
-				RelativePath="..\sakura_core\CRegexKeyword.cpp">
+				RelativePath="..\sakura_core\RegexKeyword.cpp">
 			</File>
 			<File
-				RelativePath="..\sakura_core\CRegexKeyword.h">
+				RelativePath="..\sakura_core\RegexKeyword.h">
 			</File>
 			<File
-				RelativePath="..\sakura_core\CSaveAgent.cpp">
+				RelativePath="..\sakura_core\SaveAgent.cpp">
 			</File>
 			<File
-				RelativePath="..\sakura_core\CSaveAgent.h">
+				RelativePath="..\sakura_core\SaveAgent.h">
 			</File>
 			<File
-				RelativePath="..\sakura_core\CSearchAgent.cpp">
+				RelativePath="..\sakura_core\SearchAgent.cpp">
 			</File>
 			<File
-				RelativePath="..\sakura_core\CSearchAgent.h">
+				RelativePath="..\sakura_core\SearchAgent.h">
 			</File>
 			<File
-				RelativePath="..\sakura_core\CSelectLang.cpp">
+				RelativePath="..\sakura_core\SelectLang.cpp">
 			</File>
 			<File
-				RelativePath="..\sakura_core\CSelectLang.h">
+				RelativePath="..\sakura_core\SelectLang.h">
 			</File>
 			<File
-				RelativePath="..\sakura_core\CSortedTagJumpList.cpp">
+				RelativePath="..\sakura_core\SortedTagJumpList.cpp">
 			</File>
 			<File
-				RelativePath="..\sakura_core\CSortedTagJumpList.h">
+				RelativePath="..\sakura_core\SortedTagJumpList.h">
 			</File>
 			<File
-				RelativePath="..\sakura_core\CWriteManager.cpp">
+				RelativePath="..\sakura_core\WriteManager.cpp">
 			</File>
 			<File
-				RelativePath="..\sakura_core\CWriteManager.h">
+				RelativePath="..\sakura_core\WriteManager.h">
 			</File>
 			<File
 				RelativePath="..\sakura_core\EditInfo.h">
@@ -576,7 +576,7 @@
 			<Filter
 				Name="apiwrap">
 				<File
-					RelativePath="..\sakura_core\apiwrap\CommonControl.h">
+					RelativePath="..\sakura_core\apiwrap\ommonControl.h">
 				</File>
 				<File
 					RelativePath="..\sakura_core\apiwrap\StdApi.cpp">
@@ -594,46 +594,46 @@
 			<Filter
 				Name="charset">
 				<File
-					RelativePath="..\sakura_core\charset\CCesu8.cpp">
+					RelativePath="..\sakura_core\charset\Cesu8.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\charset\CCesu8.h">
+					RelativePath="..\sakura_core\charset\Cesu8.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\charset\CCodeBase.cpp">
+					RelativePath="..\sakura_core\charset\CodeBase.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\charset\CCodeBase.h">
+					RelativePath="..\sakura_core\charset\CodeBase.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\charset\CCodeFactory.cpp">
+					RelativePath="..\sakura_core\charset\CodeFactory.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\charset\CCodeFactory.h">
+					RelativePath="..\sakura_core\charset\CodeFactory.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\charset\CCodeMediator.cpp">
+					RelativePath="..\sakura_core\charset\CodeMediator.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\charset\CCodeMediator.h">
+					RelativePath="..\sakura_core\charset\CodeMediator.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\charset\CCodePage.cpp">
+					RelativePath="..\sakura_core\charset\CodePage.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\charset\CCodePage.h">
+					RelativePath="..\sakura_core\charset\CodePage.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\charset\CESI.cpp">
+					RelativePath="..\sakura_core\charset\ESI.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\charset\CESI.h">
+					RelativePath="..\sakura_core\charset\ESI.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\charset\CEuc.cpp">
+					RelativePath="..\sakura_core\charset\Euc.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\charset\CEuc.h">
+					RelativePath="..\sakura_core\charset\Euc.h">
 				</File>
 				<File
 					RelativePath="..\sakura_core\charset\charcode.cpp">
@@ -642,7 +642,7 @@
 					RelativePath="..\sakura_core\charset\charcode.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\charset\CharPointer.h">
+					RelativePath="..\sakura_core\charset\harPointer.h">
 				</File>
 				<File
 					RelativePath="..\sakura_core\charset\charset.cpp">
@@ -651,22 +651,22 @@
 					RelativePath="..\sakura_core\charset\charset.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\charset\CJis.cpp">
+					RelativePath="..\sakura_core\charset\Jis.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\charset\CJis.h">
+					RelativePath="..\sakura_core\charset\Jis.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\charset\CLatin1.cpp">
+					RelativePath="..\sakura_core\charset\Latin1.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\charset\CLatin1.h">
+					RelativePath="..\sakura_core\charset\Latin1.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\charset\codechecker.cpp">
+					RelativePath="..\sakura_core\charset\codecheck.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\charset\codechecker.h">
+					RelativePath="..\sakura_core\charset\codecheck.h">
 				</File>
 				<File
 					RelativePath="..\sakura_core\charset\codeutil.cpp">
@@ -675,34 +675,34 @@
 					RelativePath="..\sakura_core\charset\codeutil.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\charset\CShiftJis.cpp">
+					RelativePath="..\sakura_core\charset\ShiftJis.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\charset\CShiftJis.h">
+					RelativePath="..\sakura_core\charset\ShiftJis.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\charset\CUnicode.cpp">
+					RelativePath="..\sakura_core\charset\Unicode.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\charset\CUnicode.h">
+					RelativePath="..\sakura_core\charset\Unicode.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\charset\CUnicodeBe.cpp">
+					RelativePath="..\sakura_core\charset\UnicodeBe.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\charset\CUnicodeBe.h">
+					RelativePath="..\sakura_core\charset\UnicodeBe.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\charset\CUtf7.cpp">
+					RelativePath="..\sakura_core\charset\Utf7.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\charset\CUtf7.h">
+					RelativePath="..\sakura_core\charset\Utf7.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\charset\CUtf8.cpp">
+					RelativePath="..\sakura_core\charset\Utf8.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\charset\CUtf8.h">
+					RelativePath="..\sakura_core\charset\Utf8.h">
 				</File>
 			</Filter>
 			<Filter
@@ -723,103 +723,103 @@
 			<Filter
 				Name="convert">
 				<File
-					RelativePath="..\sakura_core\convert\CConvert.cpp">
+					RelativePath="..\sakura_core\convert\Convert.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\convert\CConvert.h">
+					RelativePath="..\sakura_core\convert\Convert.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\convert\CConvert_HaneisuToZeneisu.cpp">
+					RelativePath="..\sakura_core\convert\Convert_HaneisuToZeneisu.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\convert\CConvert_HaneisuToZeneisu.h">
+					RelativePath="..\sakura_core\convert\Convert_HaneisuToZeneisu.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\convert\CConvert_HankataToZenhira.cpp">
+					RelativePath="..\sakura_core\convert\Convert_HankataToZenhira.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\convert\CConvert_HankataToZenhira.h">
+					RelativePath="..\sakura_core\convert\Convert_HankataToZenhira.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\convert\CConvert_HankataToZenkata.cpp">
+					RelativePath="..\sakura_core\convert\Convert_HankataToZenkata.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\convert\CConvert_HankataToZenkata.h">
+					RelativePath="..\sakura_core\convert\Convert_HankataToZenkata.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\convert\CConvert_SpaceToTab.cpp">
+					RelativePath="..\sakura_core\convert\Convert_SpaceToTab.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\convert\CConvert_SpaceToTab.h">
+					RelativePath="..\sakura_core\convert\Convert_SpaceToTab.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\convert\CConvert_TabToSpace.cpp">
+					RelativePath="..\sakura_core\convert\Convert_TabToSpace.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\convert\CConvert_TabToSpace.h">
+					RelativePath="..\sakura_core\convert\Convert_TabToSpace.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\convert\CConvert_ToHankaku.cpp">
+					RelativePath="..\sakura_core\convert\Convert_ToHankaku.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\convert\CConvert_ToHankaku.h">
+					RelativePath="..\sakura_core\convert\Convert_ToHankaku.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\convert\CConvert_ToLower.cpp">
+					RelativePath="..\sakura_core\convert\Convert_ToLower.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\convert\CConvert_ToLower.h">
+					RelativePath="..\sakura_core\convert\Convert_ToLower.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\convert\CConvert_ToUpper.cpp">
+					RelativePath="..\sakura_core\convert\Convert_ToUpper.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\convert\CConvert_ToUpper.h">
+					RelativePath="..\sakura_core\convert\Convert_ToUpper.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\convert\CConvert_ToZenhira.cpp">
+					RelativePath="..\sakura_core\convert\Convert_ToZenhira.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\convert\CConvert_ToZenhira.h">
+					RelativePath="..\sakura_core\convert\Convert_ToZenhira.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\convert\CConvert_ToZenkata.cpp">
+					RelativePath="..\sakura_core\convert\Convert_ToZenkata.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\convert\CConvert_ToZenkata.h">
+					RelativePath="..\sakura_core\convert\Convert_ToZenkata.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\convert\CConvert_Trim.cpp">
+					RelativePath="..\sakura_core\convert\Convert_Trim.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\convert\CConvert_Trim.h">
+					RelativePath="..\sakura_core\convert\Convert_Trim.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\convert\CConvert_ZeneisuToHaneisu.cpp">
+					RelativePath="..\sakura_core\convert\Convert_ZeneisuToHaneisu.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\convert\CConvert_ZeneisuToHaneisu.h">
+					RelativePath="..\sakura_core\convert\Convert_ZeneisuToHaneisu.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\convert\CConvert_ZenkataToHankata.cpp">
+					RelativePath="..\sakura_core\convert\Convert_ZenkataToHankata.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\convert\CConvert_ZenkataToHankata.h">
+					RelativePath="..\sakura_core\convert\Convert_ZenkataToHankata.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\convert\CDecode.h">
+					RelativePath="..\sakura_core\convert\Decode.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\convert\CDecode_Base64Decode.cpp">
+					RelativePath="..\sakura_core\convert\Decode_Base64Decode.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\convert\CDecode_Base64Decode.h">
+					RelativePath="..\sakura_core\convert\Decode_Base64Decode.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\convert\CDecode_UuDecode.cpp">
+					RelativePath="..\sakura_core\convert\Decode_UuDecode.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\convert\CDecode_UuDecode.h">
+					RelativePath="..\sakura_core\convert\Decode_UuDecode.h">
 				</File>
 				<File
 					RelativePath="..\sakura_core\convert\convert_util.cpp">
@@ -837,127 +837,127 @@
 			<Filter
 				Name="io">
 				<File
-					RelativePath="..\sakura_core\io\CBinaryStream.cpp">
+					RelativePath="..\sakura_core\io\BinaryStream.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\io\CBinaryStream.h">
+					RelativePath="..\sakura_core\io\BinaryStream.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\io\CFile.cpp">
+					RelativePath="..\sakura_core\io\File.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\io\CFile.h">
+					RelativePath="..\sakura_core\io\File.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\io\CFileLoad.cpp">
+					RelativePath="..\sakura_core\io\FileLoad.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\io\CFileLoad.h">
+					RelativePath="..\sakura_core\io\FileLoad.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\io\CIoBridge.cpp">
+					RelativePath="..\sakura_core\io\IoBridge.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\io\CIoBridge.h">
+					RelativePath="..\sakura_core\io\IoBridge.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\io\CStream.cpp">
+					RelativePath="..\sakura_core\io\Stream.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\io\CStream.h">
+					RelativePath="..\sakura_core\io\Stream.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\io\CTextStream.cpp">
+					RelativePath="..\sakura_core\io\TextStream.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\io\CTextStream.h">
+					RelativePath="..\sakura_core\io\TextStream.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\io\CZipFile.cpp">
+					RelativePath="..\sakura_core\io\ZipFile.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\io\CZipFile.h">
+					RelativePath="..\sakura_core\io\ZipFile.h">
 				</File>
 			</Filter>
 			<Filter
 				Name="mem">
 				<File
-					RelativePath="..\sakura_core\mem\CMemory.cpp">
+					RelativePath="..\sakura_core\mem\Memory.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\mem\CMemory.h">
+					RelativePath="..\sakura_core\mem\Memory.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\mem\CMemoryIterator.h">
+					RelativePath="..\sakura_core\mem\MemoryIterator.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\mem\CNative.cpp">
+					RelativePath="..\sakura_core\mem\Native.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\mem\CNative.h">
+					RelativePath="..\sakura_core\mem\Native.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\mem\CNativeA.cpp">
+					RelativePath="..\sakura_core\mem\NativeA.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\mem\CNativeA.h">
+					RelativePath="..\sakura_core\mem\NativeA.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\mem\CNativeT.h">
+					RelativePath="..\sakura_core\mem\NativeT.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\mem\CNativeW.cpp">
+					RelativePath="..\sakura_core\mem\NativeW.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\mem\CNativeW.h">
+					RelativePath="..\sakura_core\mem\NativeW.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\mem\CRecycledBuffer.cpp">
+					RelativePath="..\sakura_core\mem\RecycledBuffer.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\mem\CRecycledBuffer.h">
+					RelativePath="..\sakura_core\mem\RecycledBuffer.h">
 				</File>
 			</Filter>
 			<Filter
 				Name="parse">
 				<File
-					RelativePath="..\sakura_core\parse\CWordParse.cpp">
+					RelativePath="..\sakura_core\parse\WordParse.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\parse\CWordParse.h">
+					RelativePath="..\sakura_core\parse\WordParse.h">
 				</File>
 			</Filter>
 			<Filter
 				Name="env">
 				<File
-					RelativePath="..\sakura_core\env\CAppNodeManager.cpp">
+					RelativePath="..\sakura_core\env\AppNodeManager.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\env\CAppNodeManager.h">
+					RelativePath="..\sakura_core\env\AppNodeManager.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\env\CDocTypeManager.cpp">
+					RelativePath="..\sakura_core\env\DocTypeManager.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\env\CDocTypeManager.h">
+					RelativePath="..\sakura_core\env\DocTypeManager.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\env\CFileNameManager.cpp">
+					RelativePath="..\sakura_core\env\FileNameManager.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\env\CFileNameManager.h">
+					RelativePath="..\sakura_core\env\FileNameManager.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\env\CFormatManager.cpp">
+					RelativePath="..\sakura_core\env\FormatManager.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\env\CFormatManager.h">
+					RelativePath="..\sakura_core\env\FormatManager.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\env\CHelpManager.cpp">
+					RelativePath="..\sakura_core\env\HelpManager.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\env\CHelpManager.h">
+					RelativePath="..\sakura_core\env\HelpManager.h">
 				</File>
 				<File
 					RelativePath="..\sakura_core\env\CommonSetting.cpp">
@@ -966,34 +966,34 @@
 					RelativePath="..\sakura_core\env\CommonSetting.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\env\CSakuraEnvironment.cpp">
+					RelativePath="..\sakura_core\env\SakuraEnvironment.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\env\CSakuraEnvironment.h">
+					RelativePath="..\sakura_core\env\SakuraEnvironment.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\env\CSearchKeywordManager.cpp">
+					RelativePath="..\sakura_core\env\SearchKeywordManager.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\env\CSearchKeywordManager.h">
+					RelativePath="..\sakura_core\env\SearchKeywordManager.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\env\CShareData.cpp">
+					RelativePath="..\sakura_core\env\ShareData.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\env\CShareData.h">
+					RelativePath="..\sakura_core\env\ShareData.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\env\CShareData_IO.cpp">
+					RelativePath="..\sakura_core\env\ShareData_IO.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\env\CShareData_IO.h">
+					RelativePath="..\sakura_core\env\ShareData_IO.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\env\CTagJumpManager.cpp">
+					RelativePath="..\sakura_core\env\TagJumpManager.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\env\CTagJumpManager.h">
+					RelativePath="..\sakura_core\env\TagJumpManager.h">
 				</File>
 				<File
 					RelativePath="..\sakura_core\env\DLLSHAREDATA.cpp">
@@ -1011,10 +1011,10 @@
 					RelativePath="..\sakura_core\util\design_template.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\util\file.cpp">
+					RelativePath="..\sakura_core\util\fileUtil.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\util\file.h">
+					RelativePath="..\sakura_core\util\fileUtil.h">
 				</File>
 				<File
 					RelativePath="..\sakura_core\util\format.cpp">
@@ -1128,58 +1128,58 @@
 			<Filter
 				Name="basis">
 				<File
-					RelativePath="..\sakura_core\basis\CLaxInteger.cpp">
+					RelativePath="..\sakura_core\basis\LaxInteger.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\basis\CLaxInteger.h">
+					RelativePath="..\sakura_core\basis\LaxInteger.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\basis\CMyPoint.cpp">
+					RelativePath="..\sakura_core\basis\MyPoint.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\basis\CMyPoint.h">
+					RelativePath="..\sakura_core\basis\MyPoint.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\basis\CMyRect.cpp">
+					RelativePath="..\sakura_core\basis\MyRect.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\basis\CMyRect.h">
+					RelativePath="..\sakura_core\basis\MyRect.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\basis\CMySize.cpp">
+					RelativePath="..\sakura_core\basis\MySize.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\basis\CMySize.h">
+					RelativePath="..\sakura_core\basis\MySize.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\basis\CMyString.cpp">
+					RelativePath="..\sakura_core\basis\MyString.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\basis\CMyString.h">
+					RelativePath="..\sakura_core\basis\MyString.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\basis\CStrictInteger.cpp">
+					RelativePath="..\sakura_core\basis\StrictInteger.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\basis\CStrictInteger.h">
+					RelativePath="..\sakura_core\basis\StrictInteger.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\basis\CStrictPoint.cpp">
+					RelativePath="..\sakura_core\basis\StrictPoint.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\basis\CStrictPoint.h">
+					RelativePath="..\sakura_core\basis\StrictPoint.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\basis\CStrictRange.cpp">
+					RelativePath="..\sakura_core\basis\StrictRange.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\basis\CStrictRange.h">
+					RelativePath="..\sakura_core\basis\StrictRange.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\basis\CStrictRect.cpp">
+					RelativePath="..\sakura_core\basis\StrictRect.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\basis\CStrictRect.h">
+					RelativePath="..\sakura_core\basis\StrictRect.h">
 				</File>
 				<File
 					RelativePath="..\sakura_core\basis\primitive.h">
@@ -1194,238 +1194,238 @@
 			<Filter
 				Name="typeprop">
 				<File
-					RelativePath="..\sakura_core\typeprop\CDlgKeywordSelect.cpp">
+					RelativePath="..\sakura_core\typeprop\DlgKeywordSelect.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\typeprop\CDlgKeywordSelect.h">
+					RelativePath="..\sakura_core\typeprop\DlgKeywordSelect.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\typeprop\CDlgSameColor.cpp">
+					RelativePath="..\sakura_core\typeprop\DlgSameColor.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\typeprop\CDlgSameColor.h">
+					RelativePath="..\sakura_core\typeprop\DlgSameColor.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\typeprop\CDlgTypeAscertain.cpp">
+					RelativePath="..\sakura_core\typeprop\DlgTypeAscertain.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\typeprop\CDlgTypeAscertain.h">
+					RelativePath="..\sakura_core\typeprop\DlgTypeAscertain.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\typeprop\CDlgTypeList.cpp">
+					RelativePath="..\sakura_core\typeprop\DlgTypeList.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\typeprop\CDlgTypeList.h">
+					RelativePath="..\sakura_core\typeprop\DlgTypeList.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\typeprop\CImpExpManager.cpp">
+					RelativePath="..\sakura_core\typeprop\ImpExpManager.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\typeprop\CImpExpManager.h">
+					RelativePath="..\sakura_core\typeprop\ImpExpManager.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\typeprop\CPropTypes.cpp">
+					RelativePath="..\sakura_core\typeprop\PropTypes.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\typeprop\CPropTypes.h">
+					RelativePath="..\sakura_core\typeprop\PropTypes.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\typeprop\CPropTypesColor.cpp">
+					RelativePath="..\sakura_core\typeprop\PropTypesColor.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\typeprop\CPropTypesKeyHelp.cpp">
+					RelativePath="..\sakura_core\typeprop\PropTypesKeyHelp.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\typeprop\CPropTypesRegex.cpp">
+					RelativePath="..\sakura_core\typeprop\PropTypesRegex.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\typeprop\CPropTypesScreen.cpp">
+					RelativePath="..\sakura_core\typeprop\PropTypesScreen.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\typeprop\CPropTypesSupport.cpp">
+					RelativePath="..\sakura_core\typeprop\PropTypesSupport.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\typeprop\CPropTypesWindow.cpp">
+					RelativePath="..\sakura_core\typeprop\PropTypesWindow.cpp">
 				</File>
 			</Filter>
 			<Filter
 				Name="types">
 				<File
-					RelativePath="..\sakura_core\types\CType.cpp">
+					RelativePath="..\sakura_core\types\Type.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\types\CType.h">
+					RelativePath="..\sakura_core\types\Type.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\types\CType_Asm.cpp">
+					RelativePath="..\sakura_core\types\Type_Asm.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\types\CType_Awk.cpp">
+					RelativePath="..\sakura_core\types\Type_Awk.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\types\CType_Basis.cpp">
+					RelativePath="..\sakura_core\types\Type_Basis.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\types\CType_Cobol.cpp">
+					RelativePath="..\sakura_core\types\Type_Cobol.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\types\CType_CorbaIdl.cpp">
+					RelativePath="..\sakura_core\types\Type_CorbaIdl.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\types\CType_Cpp.cpp">
+					RelativePath="..\sakura_core\types\Type_Cpp.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\types\CType_Dos.cpp">
+					RelativePath="..\sakura_core\types\Type_Dos.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\types\CType_Erlang.cpp">
+					RelativePath="..\sakura_core\types\Type_Erlang.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\types\CType_Html.cpp">
+					RelativePath="..\sakura_core\types\Type_Html.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\types\CType_Ini.cpp">
+					RelativePath="..\sakura_core\types\Type_Ini.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\types\CType_Java.cpp">
+					RelativePath="..\sakura_core\types\Type_Java.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\types\CType_Others.cpp">
+					RelativePath="..\sakura_core\types\Type_Others.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\types\CType_Pascal.cpp">
+					RelativePath="..\sakura_core\types\Type_Pascal.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\types\CType_Perl.cpp">
+					RelativePath="..\sakura_core\types\Type_Perl.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\types\CType_Python.cpp">
+					RelativePath="..\sakura_core\types\Type_Python.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\types\CType_Rich.cpp">
+					RelativePath="..\sakura_core\types\Type_Rich.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\types\CType_Sql.cpp">
+					RelativePath="..\sakura_core\types\Type_Sql.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\types\CType_Tex.cpp">
+					RelativePath="..\sakura_core\types\Type_Tex.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\types\CType_Text.cpp">
+					RelativePath="..\sakura_core\types\Type_Text.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\types\CType_Vb.cpp">
+					RelativePath="..\sakura_core\types\Type_Vb.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\types\CTypeSupport.cpp">
+					RelativePath="..\sakura_core\types\TypeSupport.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\types\CTypeSupport.h">
+					RelativePath="..\sakura_core\types\TypeSupport.h">
 				</File>
 			</Filter>
 			<Filter
 				Name="view">
 				<File
-					RelativePath="..\sakura_core\view\CCaret.cpp">
+					RelativePath="..\sakura_core\view\Caret.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\view\CCaret.h">
+					RelativePath="..\sakura_core\view\Caret.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\view\CEditView.cpp">
+					RelativePath="..\sakura_core\view\EditView.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\view\CEditView.h">
+					RelativePath="..\sakura_core\view\EditView.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\view\CEditView_Cmdgrep.cpp">
+					RelativePath="..\sakura_core\view\EditView_Cmdgrep.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\view\CEditView_CmdHokan.cpp">
+					RelativePath="..\sakura_core\view\EditView_CmdHokan.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\view\CEditView_Cmdisrch.cpp">
+					RelativePath="..\sakura_core\view\EditView_Cmdisrch.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\view\CEditView_Command.cpp">
+					RelativePath="..\sakura_core\view\EditView_Command.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\view\CEditView_Command_New.cpp">
+					RelativePath="..\sakura_core\view\EditView_Command_New.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\view\CEditView_Diff.cpp">
+					RelativePath="..\sakura_core\view\EditView_Diff.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\view\CEditView_ExecCmd.cpp">
+					RelativePath="..\sakura_core\view\EditView_ExecCmd.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\view\CEditView_Ime.cpp">
+					RelativePath="..\sakura_core\view\EditView_Ime.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\view\CEditView_Mouse.cpp">
+					RelativePath="..\sakura_core\view\EditView_Mouse.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\view\CEditView_Paint.cpp">
+					RelativePath="..\sakura_core\view\EditView_Paint.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\view\CEditView_Paint.h">
+					RelativePath="..\sakura_core\view\EditView_Paint.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\view\CEditView_Paint_Bracket.cpp">
+					RelativePath="..\sakura_core\view\EditView_Paint_Bracket.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\view\CEditView_Scroll.cpp">
+					RelativePath="..\sakura_core\view\EditView_Scroll.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\view\CEditView_Search.cpp">
+					RelativePath="..\sakura_core\view\EditView_Search.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\view\CRuler.cpp">
+					RelativePath="..\sakura_core\view\Ruler.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\view\CRuler.h">
+					RelativePath="..\sakura_core\view\Ruler.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\view\CTextArea.cpp">
+					RelativePath="..\sakura_core\view\TextArea.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\view\CTextArea.h">
+					RelativePath="..\sakura_core\view\TextArea.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\view\CTextDrawer.cpp">
+					RelativePath="..\sakura_core\view\TextDrawer.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\view\CTextDrawer.h">
+					RelativePath="..\sakura_core\view\TextDrawer.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\view\CTextMetrics.cpp">
+					RelativePath="..\sakura_core\view\TextMetrics.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\view\CTextMetrics.h">
+					RelativePath="..\sakura_core\view\TextMetrics.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\view\CViewCalc.cpp">
+					RelativePath="..\sakura_core\view\ViewCalc.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\view\CViewCalc.h">
+					RelativePath="..\sakura_core\view\ViewCalc.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\view\CViewFont.cpp">
+					RelativePath="..\sakura_core\view\ViewFont.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\view\CViewFont.h">
+					RelativePath="..\sakura_core\view\ViewFont.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\view\CViewParser.cpp">
+					RelativePath="..\sakura_core\view\ViewParser.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\view\CViewParser.h">
+					RelativePath="..\sakura_core\view\ViewParser.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\view\CViewSelect.cpp">
+					RelativePath="..\sakura_core\view\ViewSelect.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\view\CViewSelect.h">
+					RelativePath="..\sakura_core\view\ViewSelect.h">
 				</File>
 				<File
 					RelativePath="..\sakura_core\view\DispPos.cpp">
@@ -1436,713 +1436,713 @@
 				<Filter
 					Name="colors">
 					<File
-						RelativePath="..\sakura_core\view\colors\CColor_Comment.cpp">
+						RelativePath="..\sakura_core\view\colors\Color_Comment.cpp">
 					</File>
 					<File
-						RelativePath="..\sakura_core\view\colors\CColor_Comment.h">
+						RelativePath="..\sakura_core\view\colors\Color_Comment.h">
 					</File>
 					<File
-						RelativePath="..\sakura_core\view\colors\CColor_Found.cpp">
+						RelativePath="..\sakura_core\view\colors\Color_Found.cpp">
 					</File>
 					<File
-						RelativePath="..\sakura_core\view\colors\CColor_Found.h">
+						RelativePath="..\sakura_core\view\colors\Color_Found.h">
 					</File>
 					<File
-						RelativePath="..\sakura_core\view\colors\CColor_Heredoc.cpp">
+						RelativePath="..\sakura_core\view\colors\Color_Heredoc.cpp">
 					</File>
 					<File
-						RelativePath="..\sakura_core\view\colors\CColor_Heredoc.h">
+						RelativePath="..\sakura_core\view\colors\Color_Heredoc.h">
 					</File>
 					<File
-						RelativePath="..\sakura_core\view\colors\CColor_KeywordSet.cpp">
+						RelativePath="..\sakura_core\view\colors\Color_KeywordSet.cpp">
 					</File>
 					<File
-						RelativePath="..\sakura_core\view\colors\CColor_KeywordSet.h">
+						RelativePath="..\sakura_core\view\colors\Color_KeywordSet.h">
 					</File>
 					<File
-						RelativePath="..\sakura_core\view\colors\CColor_Numeric.cpp">
+						RelativePath="..\sakura_core\view\colors\Color_Numeric.cpp">
 					</File>
 					<File
-						RelativePath="..\sakura_core\view\colors\CColor_Numeric.h">
+						RelativePath="..\sakura_core\view\colors\Color_Numeric.h">
 					</File>
 					<File
-						RelativePath="..\sakura_core\view\colors\CColor_Quote.cpp">
+						RelativePath="..\sakura_core\view\colors\Color_Quote.cpp">
 					</File>
 					<File
-						RelativePath="..\sakura_core\view\colors\CColor_Quote.h">
+						RelativePath="..\sakura_core\view\colors\Color_Quote.h">
 					</File>
 					<File
-						RelativePath="..\sakura_core\view\colors\CColor_RegexKeyword.cpp">
+						RelativePath="..\sakura_core\view\colors\Color_RegexKeyword.cpp">
 					</File>
 					<File
-						RelativePath="..\sakura_core\view\colors\CColor_RegexKeyword.h">
+						RelativePath="..\sakura_core\view\colors\Color_RegexKeyword.h">
 					</File>
 					<File
-						RelativePath="..\sakura_core\view\colors\CColor_Url.cpp">
+						RelativePath="..\sakura_core\view\colors\Color_Url.cpp">
 					</File>
 					<File
-						RelativePath="..\sakura_core\view\colors\CColor_Url.h">
+						RelativePath="..\sakura_core\view\colors\Color_Url.h">
 					</File>
 					<File
-						RelativePath="..\sakura_core\view\colors\CColorStrategy.cpp">
+						RelativePath="..\sakura_core\view\colors\ColorStrategy.cpp">
 					</File>
 					<File
-						RelativePath="..\sakura_core\view\colors\CColorStrategy.h">
+						RelativePath="..\sakura_core\view\colors\ColorStrategy.h">
 					</File>
 					<File
-						RelativePath="..\sakura_core\view\colors\EColorIndexType.h">
+						RelativePath="..\sakura_core\view\colors\EolorIndexType.h">
 					</File>
 				</Filter>
 				<Filter
 					Name="figures">
 					<File
-						RelativePath="..\sakura_core\view\figures\CFigure_CtrlCode.cpp">
+						RelativePath="..\sakura_core\view\figures\Figure_CtrlCode.cpp">
 					</File>
 					<File
-						RelativePath="..\sakura_core\view\figures\CFigure_CtrlCode.h">
+						RelativePath="..\sakura_core\view\figures\Figure_CtrlCode.h">
 					</File>
 					<File
-						RelativePath="..\sakura_core\view\figures\CFigure_Eol.cpp">
+						RelativePath="..\sakura_core\view\figures\Figure_Eol.cpp">
 					</File>
 					<File
-						RelativePath="..\sakura_core\view\figures\CFigure_Eol.h">
+						RelativePath="..\sakura_core\view\figures\Figure_Eol.h">
 					</File>
 					<File
-						RelativePath="..\sakura_core\view\figures\CFigure_HanSpace.cpp">
+						RelativePath="..\sakura_core\view\figures\Figure_HanSpace.cpp">
 					</File>
 					<File
-						RelativePath="..\sakura_core\view\figures\CFigure_HanSpace.h">
+						RelativePath="..\sakura_core\view\figures\Figure_HanSpace.h">
 					</File>
 					<File
-						RelativePath="..\sakura_core\view\figures\CFigure_Tab.cpp">
+						RelativePath="..\sakura_core\view\figures\Figure_Tab.cpp">
 					</File>
 					<File
-						RelativePath="..\sakura_core\view\figures\CFigure_Tab.h">
+						RelativePath="..\sakura_core\view\figures\Figure_Tab.h">
 					</File>
 					<File
-						RelativePath="..\sakura_core\view\figures\CFigure_ZenSpace.cpp">
+						RelativePath="..\sakura_core\view\figures\Figure_ZenSpace.cpp">
 					</File>
 					<File
-						RelativePath="..\sakura_core\view\figures\CFigure_ZenSpace.h">
+						RelativePath="..\sakura_core\view\figures\Figure_ZenSpace.h">
 					</File>
 					<File
-						RelativePath="..\sakura_core\view\figures\CFigureManager.cpp">
+						RelativePath="..\sakura_core\view\figures\FigureManager.cpp">
 					</File>
 					<File
-						RelativePath="..\sakura_core\view\figures\CFigureManager.h">
+						RelativePath="..\sakura_core\view\figures\FigureManager.h">
 					</File>
 					<File
-						RelativePath="..\sakura_core\view\figures\CFigureStrategy.cpp">
+						RelativePath="..\sakura_core\view\figures\FigureStrategy.cpp">
 					</File>
 					<File
-						RelativePath="..\sakura_core\view\figures\CFigureStrategy.h">
+						RelativePath="..\sakura_core\view\figures\FigureStrategy.h">
 					</File>
 				</Filter>
 			</Filter>
 			<Filter
 				Name="prop">
 				<File
-					RelativePath="..\sakura_core\prop\CPropComBackup.cpp">
+					RelativePath="..\sakura_core\prop\PropComBackup.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\prop\CPropComCustmenu.cpp">
+					RelativePath="..\sakura_core\prop\PropComCustmenu.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\prop\CPropComEdit.cpp">
+					RelativePath="..\sakura_core\prop\PropComEdit.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\prop\CPropComFile.cpp">
+					RelativePath="..\sakura_core\prop\PropComFile.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\prop\CPropComFileName.cpp">
+					RelativePath="..\sakura_core\prop\PropComFileName.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\prop\CPropComFormat.cpp">
+					RelativePath="..\sakura_core\prop\PropComFormat.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\prop\CPropComGeneral.cpp">
+					RelativePath="..\sakura_core\prop\PropComGeneral.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\prop\CPropComGrep.cpp">
+					RelativePath="..\sakura_core\prop\PropComGrep.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\prop\CPropComHelper.cpp">
+					RelativePath="..\sakura_core\prop\PropComHelper.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\prop\CPropComKeybind.cpp">
+					RelativePath="..\sakura_core\prop\PropComKeybind.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\prop\CPropComKeyword.cpp">
+					RelativePath="..\sakura_core\prop\PropComKeyword.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\prop\CPropComMacro.cpp">
+					RelativePath="..\sakura_core\prop\PropComMacro.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\prop\CPropComMainMenu.cpp">
+					RelativePath="..\sakura_core\prop\PropComMainMenu.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\prop\CPropCommon.cpp">
+					RelativePath="..\sakura_core\prop\PropCommon.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\prop\CPropCommon.h">
+					RelativePath="..\sakura_core\prop\PropCommon.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\prop\CPropComPlugin.cpp">
+					RelativePath="..\sakura_core\prop\PropComPlugin.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\prop\CPropComStatusbar.cpp">
+					RelativePath="..\sakura_core\prop\PropComStatusbar.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\prop\CPropComTab.cpp">
+					RelativePath="..\sakura_core\prop\PropComTab.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\prop\CPropComToolbar.cpp">
+					RelativePath="..\sakura_core\prop\PropComToolbar.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\prop\CPropComWin.cpp">
+					RelativePath="..\sakura_core\prop\PropComWin.cpp">
 				</File>
 			</Filter>
 			<Filter
 				Name="recent">
 				<File
-					RelativePath="..\sakura_core\recent\CMRUFile.cpp">
+					RelativePath="..\sakura_core\recent\MRUFile.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\recent\CMRUFile.h">
+					RelativePath="..\sakura_core\recent\MRUFile.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\recent\CMRUFolder.cpp">
+					RelativePath="..\sakura_core\recent\MRUFolder.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\recent\CMRUFolder.h">
+					RelativePath="..\sakura_core\recent\MRUFolder.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\recent\CMruListener.cpp">
+					RelativePath="..\sakura_core\recent\MruListener.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\recent\CMruListener.h">
+					RelativePath="..\sakura_core\recent\MruListener.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\recent\CRecent.cpp">
+					RelativePath="..\sakura_core\recent\Recent.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\recent\CRecent.h">
+					RelativePath="..\sakura_core\recent\Recent.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\recent\CRecentCmd.cpp">
+					RelativePath="..\sakura_core\recent\RecentCmd.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\recent\CRecentCmd.h">
+					RelativePath="..\sakura_core\recent\RecentCmd.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\recent\CRecentCurDir.cpp">
+					RelativePath="..\sakura_core\recent\RecentCurDir.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\recent\CRecentCurDir.h">
+					RelativePath="..\sakura_core\recent\RecentCurDir.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\recent\CRecentEditNode.cpp">
+					RelativePath="..\sakura_core\recent\RecentEditNode.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\recent\CRecentEditNode.h">
+					RelativePath="..\sakura_core\recent\RecentEditNode.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\recent\CRecentExceptMru.cpp">
+					RelativePath="..\sakura_core\recent\RecentExceptMru.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\recent\CRecentExceptMru.h">
+					RelativePath="..\sakura_core\recent\RecentExceptMru.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\recent\CRecentFile.cpp">
+					RelativePath="..\sakura_core\recent\RecentFile.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\recent\CRecentFile.h">
+					RelativePath="..\sakura_core\recent\RecentFile.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\recent\CRecentFolder.cpp">
+					RelativePath="..\sakura_core\recent\RecentFolder.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\recent\CRecentFolder.h">
+					RelativePath="..\sakura_core\recent\RecentFolder.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\recent\CRecentGrepFile.cpp">
+					RelativePath="..\sakura_core\recent\RecentGrepFile.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\recent\CRecentGrepFile.h">
+					RelativePath="..\sakura_core\recent\RecentGrepFile.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\recent\CRecentGrepFolder.cpp">
+					RelativePath="..\sakura_core\recent\RecentGrepFolder.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\recent\CRecentGrepFolder.h">
+					RelativePath="..\sakura_core\recent\RecentGrepFolder.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\recent\CRecentImp.cpp">
+					RelativePath="..\sakura_core\recent\RecentImp.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\recent\CRecentImp.h">
+					RelativePath="..\sakura_core\recent\RecentImp.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\recent\CRecentReplace.cpp">
+					RelativePath="..\sakura_core\recent\RecentReplace.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\recent\CRecentReplace.h">
+					RelativePath="..\sakura_core\recent\RecentReplace.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\recent\CRecentSearch.cpp">
+					RelativePath="..\sakura_core\recent\RecentSearch.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\recent\CRecentSearch.h">
+					RelativePath="..\sakura_core\recent\RecentSearch.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\recent\CRecentTagjumpKeyword.cpp">
+					RelativePath="..\sakura_core\recent\RecentTagjumpKeyword.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\recent\CRecentTagjumpKeyword.h">
+					RelativePath="..\sakura_core\recent\RecentTagjumpKeyword.h">
 				</File>
 			</Filter>
 			<Filter
 				Name="doc">
 				<File
-					RelativePath="..\sakura_core\doc\CBlockComment.cpp">
+					RelativePath="..\sakura_core\doc\BlockComment.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\doc\CBlockComment.h">
+					RelativePath="..\sakura_core\doc\BlockComment.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\doc\CDocEditor.cpp">
+					RelativePath="..\sakura_core\doc\DocEditor.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\doc\CDocEditor.h">
+					RelativePath="..\sakura_core\doc\DocEditor.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\doc\CDocFile.cpp">
+					RelativePath="..\sakura_core\doc\DocFile.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\doc\CDocFile.h">
+					RelativePath="..\sakura_core\doc\DocFile.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\doc\CDocFileOperation.cpp">
+					RelativePath="..\sakura_core\doc\DocFileOperation.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\doc\CDocFileOperation.h">
+					RelativePath="..\sakura_core\doc\DocFileOperation.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\doc\CDocListener.cpp">
+					RelativePath="..\sakura_core\doc\DocListener.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\doc\CDocListener.h">
+					RelativePath="..\sakura_core\doc\DocListener.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\doc\CDocLocker.cpp">
+					RelativePath="..\sakura_core\doc\DocLocker.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\doc\CDocLocker.h">
+					RelativePath="..\sakura_core\doc\DocLocker.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\doc\CDocOutline.cpp">
+					RelativePath="..\sakura_core\doc\DocOutline.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\doc\CDocOutline.h">
+					RelativePath="..\sakura_core\doc\DocOutline.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\doc\CDocReader.cpp">
+					RelativePath="..\sakura_core\doc\DocReader.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\doc\CDocReader.h">
+					RelativePath="..\sakura_core\doc\DocReader.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\doc\CDocType.cpp">
+					RelativePath="..\sakura_core\doc\DocType.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\doc\CDocType.h">
+					RelativePath="..\sakura_core\doc\DocType.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\doc\CDocTypeSetting.cpp">
+					RelativePath="..\sakura_core\doc\DocTypeSetting.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\doc\CDocTypeSetting.h">
+					RelativePath="..\sakura_core\doc\DocTypeSetting.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\doc\CDocVisitor.cpp">
+					RelativePath="..\sakura_core\doc\DocVisitor.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\doc\CDocVisitor.h">
+					RelativePath="..\sakura_core\doc\DocVisitor.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\doc\CEditDoc.cpp">
+					RelativePath="..\sakura_core\doc\EditDoc.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\doc\CEditDoc.h">
+					RelativePath="..\sakura_core\doc\EditDoc.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\doc\CLineComment.cpp">
+					RelativePath="..\sakura_core\doc\LineComment.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\doc\CLineComment.h">
+					RelativePath="..\sakura_core\doc\LineComment.h">
 				</File>
 				<Filter
 					Name="layout">
 					<File
-						RelativePath="..\sakura_core\doc\layout\CLayout.cpp">
+						RelativePath="..\sakura_core\doc\layout\Layout.cpp">
 					</File>
 					<File
-						RelativePath="..\sakura_core\doc\layout\CLayout.h">
+						RelativePath="..\sakura_core\doc\layout\Layout.h">
 					</File>
 					<File
-						RelativePath="..\sakura_core\doc\layout\CLayoutExInfo.h">
+						RelativePath="..\sakura_core\doc\layout\LayoutExInfo.h">
  					</File>
 					<File
-						RelativePath="..\sakura_core\doc\layout\CLayoutMgr.cpp">
+						RelativePath="..\sakura_core\doc\layout\LayoutMgr.cpp">
 					</File>
 					<File
-						RelativePath="..\sakura_core\doc\layout\CLayoutMgr.h">
+						RelativePath="..\sakura_core\doc\layout\LayoutMgr.h">
 					</File>
 					<File
-						RelativePath="..\sakura_core\doc\layout\CLayoutMgr_DoLayout.cpp">
+						RelativePath="..\sakura_core\doc\layout\LayoutMgr_DoLayout.cpp">
 					</File>
 					<File
-						RelativePath="..\sakura_core\doc\layout\CLayoutMgr_New.cpp">
+						RelativePath="..\sakura_core\doc\layout\LayoutMgr_New.cpp">
 					</File>
 					<File
-						RelativePath="..\sakura_core\doc\layout\CLayoutMgr_New2.cpp">
+						RelativePath="..\sakura_core\doc\layout\LayoutMgr_New2.cpp">
 					</File>
 				</Filter>
 				<Filter
 					Name="logic">
 					<File
-						RelativePath="..\sakura_core\doc\logic\CDocLine.cpp">
+						RelativePath="..\sakura_core\doc\logic\DocLine.cpp">
 					</File>
 					<File
-						RelativePath="..\sakura_core\doc\logic\CDocLine.h">
+						RelativePath="..\sakura_core\doc\logic\DocLine.h">
 					</File>
 					<File
-						RelativePath="..\sakura_core\doc\logic\CDocLineMgr.cpp">
+						RelativePath="..\sakura_core\doc\logic\DocLineMgr.cpp">
 					</File>
 					<File
-						RelativePath="..\sakura_core\doc\logic\CDocLineMgr.h">
+						RelativePath="..\sakura_core\doc\logic\DocLineMgr.h">
 					</File>
 				</Filter>
 			</Filter>
 			<Filter
 				Name="macro">
 				<File
-					RelativePath="..\sakura_core\macro\CCookieManager.cpp">
+					RelativePath="..\sakura_core\macro\CookieManager.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\macro\CCookieManager.h">
+					RelativePath="..\sakura_core\macro\CookieManager.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\macro\CEditorIfObj.cpp">
+					RelativePath="..\sakura_core\macro\EditorIfObj.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\macro\CEditorIfObj.h">
+					RelativePath="..\sakura_core\macro\EditorIfObj.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\macro\CIfObj.cpp">
+					RelativePath="..\sakura_core\macro\IfObj.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\macro\CIfObj.h">
+					RelativePath="..\sakura_core\macro\IfObj.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\macro\CKeyMacroMgr.cpp">
+					RelativePath="..\sakura_core\macro\KeyMacroMgr.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\macro\CKeyMacroMgr.h">
+					RelativePath="..\sakura_core\macro\KeyMacroMgr.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\macro\CMacro.cpp">
+					RelativePath="..\sakura_core\macro\Macro.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\macro\CMacro.h">
+					RelativePath="..\sakura_core\macro\Macro.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\macro\CMacroFactory.cpp">
+					RelativePath="..\sakura_core\macro\MacroFactory.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\macro\CMacroFactory.h">
+					RelativePath="..\sakura_core\macro\MacroFactory.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\macro\CMacroManagerBase.cpp">
+					RelativePath="..\sakura_core\macro\MacroManagerBase.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\macro\CMacroManagerBase.h">
+					RelativePath="..\sakura_core\macro\MacroManagerBase.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\macro\CPPA.cpp">
+					RelativePath="..\sakura_core\macro\PPA.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\macro\CPPA.h">
+					RelativePath="..\sakura_core\macro\PPA.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\macro\CPPAMacroMgr.cpp">
+					RelativePath="..\sakura_core\macro\PPAMacroMgr.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\macro\CPPAMacroMgr.h">
+					RelativePath="..\sakura_core\macro\PPAMacroMgr.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\macro\CSMacroMgr.cpp">
+					RelativePath="..\sakura_core\macro\SMacroMgr.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\macro\CSMacroMgr.h">
+					RelativePath="..\sakura_core\macro\SMacroMgr.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\macro\CWSH.cpp">
+					RelativePath="..\sakura_core\macro\WSH.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\macro\CWSH.h">
+					RelativePath="..\sakura_core\macro\WSH.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\macro\CWSHIfObj.cpp">
+					RelativePath="..\sakura_core\macro\WSHIfObj.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\macro\CWSHIfObj.h">
+					RelativePath="..\sakura_core\macro\WSHIfObj.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\macro\CWSHManager.cpp">
+					RelativePath="..\sakura_core\macro\WSHManager.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\macro\CWSHManager.h">
+					RelativePath="..\sakura_core\macro\WSHManager.h">
 				</File>
 			</Filter>
 			<Filter
 				Name="dlg">
 				<File
-					RelativePath="..\sakura_core\dlg\CDialog.cpp">
+					RelativePath="..\sakura_core\dlg\Dialog.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\dlg\CDialog.h">
+					RelativePath="..\sakura_core\dlg\Dialog.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\dlg\CDlgAbout.cpp">
+					RelativePath="..\sakura_core\dlg\DlgAbout.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\dlg\CDlgAbout.h">
+					RelativePath="..\sakura_core\dlg\DlgAbout.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\dlg\CDlgCancel.cpp">
+					RelativePath="..\sakura_core\dlg\DlgCancel.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\dlg\CDlgCancel.h">
+					RelativePath="..\sakura_core\dlg\DlgCancel.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\dlg\CDlgCompare.cpp">
+					RelativePath="..\sakura_core\dlg\DlgCompare.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\dlg\CDlgCompare.h">
+					RelativePath="..\sakura_core\dlg\DlgCompare.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\dlg\CDlgCtrlCode.cpp">
+					RelativePath="..\sakura_core\dlg\DlgCtrlCode.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\dlg\CDlgCtrlCode.h">
+					RelativePath="..\sakura_core\dlg\DlgCtrlCode.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\dlg\CDlgDiff.cpp">
+					RelativePath="..\sakura_core\dlg\DlgDiff.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\dlg\CDlgDiff.h">
+					RelativePath="..\sakura_core\dlg\DlgDiff.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\dlg\CDlgExec.cpp">
+					RelativePath="..\sakura_core\dlg\DlgExec.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\dlg\CDlgExec.h">
+					RelativePath="..\sakura_core\dlg\DlgExec.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\dlg\CDlgFavorite.cpp">
+					RelativePath="..\sakura_core\dlg\DlgFavorite.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\dlg\CDlgFavorite.h">
+					RelativePath="..\sakura_core\dlg\DlgFavorite.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\dlg\CDlgFileUpdateQuery.cpp">
+					RelativePath="..\sakura_core\dlg\DlgFileUpdateQuery.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\dlg\CDlgFileUpdateQuery.h">
+					RelativePath="..\sakura_core\dlg\DlgFileUpdateQuery.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\dlg\CDlgFind.cpp">
+					RelativePath="..\sakura_core\dlg\DlgFind.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\dlg\CDlgFind.h">
+					RelativePath="..\sakura_core\dlg\DlgFind.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\dlg\CDlgGrep.cpp">
+					RelativePath="..\sakura_core\dlg\DlgGrep.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\dlg\CDlgGrep.h">
+					RelativePath="..\sakura_core\dlg\DlgGrep.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\dlg\CDlgGrepReplace.cpp">
+					RelativePath="..\sakura_core\dlg\DlgGrepReplace.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\dlg\CDlgGrepReplace.h">
+					RelativePath="..\sakura_core\dlg\DlgGrepReplace.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\dlg\CDlgInput1.cpp">
+					RelativePath="..\sakura_core\dlg\DlgInput1.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\dlg\CDlgInput1.h">
+					RelativePath="..\sakura_core\dlg\DlgInput1.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\dlg\CDlgJump.cpp">
+					RelativePath="..\sakura_core\dlg\DlgJump.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\dlg\CDlgJump.h">
+					RelativePath="..\sakura_core\dlg\DlgJump.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\dlg\CDlgOpenFile.cpp">
+					RelativePath="..\sakura_core\dlg\DlgOpenFile.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\dlg\CDlgOpenFile.h">
+					RelativePath="..\sakura_core\dlg\DlgOpenFile.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\dlg\CDlgPluginOption.cpp">
+					RelativePath="..\sakura_core\dlg\DlgPluginOption.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\dlg\CDlgPluginOption.h">
+					RelativePath="..\sakura_core\dlg\DlgPluginOption.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\dlg\CDlgPrintSetting.cpp">
+					RelativePath="..\sakura_core\dlg\DlgPrintSetting.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\dlg\CDlgPrintSetting.h">
+					RelativePath="..\sakura_core\dlg\DlgPrintSetting.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\dlg\CDlgProfileMgr.cpp">
+					RelativePath="..\sakura_core\dlg\DlgProfileMgr.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\dlg\CDlgProfileMgr.h">
+					RelativePath="..\sakura_core\dlg\DlgProfileMgr.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\dlg\CDlgProperty.cpp">
+					RelativePath="..\sakura_core\dlg\DlgProperty.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\dlg\CDlgProperty.h">
+					RelativePath="..\sakura_core\dlg\DlgProperty.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\dlg\CDlgReplace.cpp">
+					RelativePath="..\sakura_core\dlg\DlgReplace.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\dlg\CDlgReplace.h">
+					RelativePath="..\sakura_core\dlg\DlgReplace.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\dlg\CDlgSetCharSet.cpp">
+					RelativePath="..\sakura_core\dlg\DlgSetCharSet.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\dlg\CDlgSetCharSet.h">
+					RelativePath="..\sakura_core\dlg\DlgSetCharSet.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\dlg\CDlgTagJumpList.cpp">
+					RelativePath="..\sakura_core\dlg\DlgTagJumpList.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\dlg\CDlgTagJumpList.h">
+					RelativePath="..\sakura_core\dlg\DlgTagJumpList.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\dlg\CDlgTagsMake.cpp">
+					RelativePath="..\sakura_core\dlg\DlgTagsMake.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\dlg\CDlgTagsMake.h">
+					RelativePath="..\sakura_core\dlg\DlgTagsMake.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\dlg\CDlgWinSize.cpp">
+					RelativePath="..\sakura_core\dlg\DlgWinSize.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\dlg\CDlgWinSize.h">
+					RelativePath="..\sakura_core\dlg\DlgWinSize.h">
 				</File>
 			</Filter>
 			<Filter
 				Name="window">
 				<File
-					RelativePath="..\sakura_core\window\CAutoScrollWnd.cpp">
+					RelativePath="..\sakura_core\window\AutoScrollWnd.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\window\CAutoScrollWnd.h">
+					RelativePath="..\sakura_core\window\AutoScrollWnd.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\window\CEditWnd.cpp">
+					RelativePath="..\sakura_core\window\EditWnd.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\window\CEditWnd.h">
+					RelativePath="..\sakura_core\window\EditWnd.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\window\CMainStatusBar.cpp">
+					RelativePath="..\sakura_core\window\MainStatusBar.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\window\CMainStatusBar.h">
+					RelativePath="..\sakura_core\window\MainStatusBar.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\window\CMainToolBar.cpp">
+					RelativePath="..\sakura_core\window\MainToolBar.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\window\CMainToolBar.h">
+					RelativePath="..\sakura_core\window\MainToolBar.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\window\CSplitBoxWnd.cpp">
+					RelativePath="..\sakura_core\window\SplitBoxWnd.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\window\CSplitBoxWnd.h">
+					RelativePath="..\sakura_core\window\SplitBoxWnd.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\window\CSplitterWnd.cpp">
+					RelativePath="..\sakura_core\window\SplitterWnd.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\window\CSplitterWnd.h">
+					RelativePath="..\sakura_core\window\SplitterWnd.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\window\CTabWnd.cpp">
+					RelativePath="..\sakura_core\window\TabWnd.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\window\CTabWnd.h">
+					RelativePath="..\sakura_core\window\TabWnd.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\window\CTipWnd.cpp">
+					RelativePath="..\sakura_core\window\TipWnd.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\window\CTipWnd.h">
+					RelativePath="..\sakura_core\window\TipWnd.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\window\CWnd.cpp">
+					RelativePath="..\sakura_core\window\Wnd.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\window\CWnd.h">
+					RelativePath="..\sakura_core\window\Wnd.h">
 				</File>
 			</Filter>
 			<Filter
 				Name="docplus">
 				<File
-					RelativePath="..\sakura_core\docplus\CBookmarkManager.cpp">
+					RelativePath="..\sakura_core\docplus\BookmarkManager.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\docplus\CBookmarkManager.h">
+					RelativePath="..\sakura_core\docplus\BookmarkManager.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\docplus\CDiffManager.cpp">
+					RelativePath="..\sakura_core\docplus\DiffManager.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\docplus\CDiffManager.h">
+					RelativePath="..\sakura_core\docplus\DiffManager.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\docplus\CFuncListManager.cpp">
+					RelativePath="..\sakura_core\docplus\FuncListManager.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\docplus\CFuncListManager.h">
+					RelativePath="..\sakura_core\docplus\FuncListManager.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\docplus\CModifyManager.cpp">
+					RelativePath="..\sakura_core\docplus\ModifyManager.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\docplus\CModifyManager.h">
+					RelativePath="..\sakura_core\docplus\ModifyManager.h">
 				</File>
 			</Filter>
 			<Filter
 				Name="debug">
 				<File
-					RelativePath="..\sakura_core\debug\CRunningTimer.cpp">
+					RelativePath="..\sakura_core\debug\RunningTimer.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\debug\CRunningTimer.h">
+					RelativePath="..\sakura_core\debug\RunningTimer.h">
 				</File>
 				<File
 					RelativePath="..\sakura_core\debug\Debug1.cpp">
@@ -2166,49 +2166,49 @@
 			<Filter
 				Name="_main">
 				<File
-					RelativePath="..\sakura_core\_main\CAppMode.cpp">
+					RelativePath="..\sakura_core\_main\AppMode.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\_main\CAppMode.h">
+					RelativePath="..\sakura_core\_main\AppMode.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\_main\CCommandLine.cpp">
+					RelativePath="..\sakura_core\_main\CommandLine.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\_main\CCommandLine.h">
+					RelativePath="..\sakura_core\_main\CommandLine.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\_main\CControlProcess.cpp">
+					RelativePath="..\sakura_core\_main\ControlProcess.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\_main\CControlProcess.h">
+					RelativePath="..\sakura_core\_main\ControlProcess.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\_main\CControlTray.cpp">
+					RelativePath="..\sakura_core\_main\ControlTray.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\_main\CControlTray.h">
+					RelativePath="..\sakura_core\_main\ControlTray.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\_main\CMutex.h">
+					RelativePath="..\sakura_core\_main\Mutex.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\_main\CNormalProcess.cpp">
+					RelativePath="..\sakura_core\_main\NormalProcess.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\_main\CNormalProcess.h">
+					RelativePath="..\sakura_core\_main\NormalProcess.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\_main\CProcess.cpp">
+					RelativePath="..\sakura_core\_main\Process.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\_main\CProcess.h">
+					RelativePath="..\sakura_core\_main\Process.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\_main\CProcessFactory.cpp">
+					RelativePath="..\sakura_core\_main\ProcessFactory.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\_main\CProcessFactory.h">
+					RelativePath="..\sakura_core\_main\ProcessFactory.h">
 				</File>
 				<File
 					RelativePath="..\sakura_core\_main\global.cpp">
@@ -2223,22 +2223,22 @@
 			<Filter
 				Name="_os">
 				<File
-					RelativePath="..\sakura_core\_os\CClipboard.cpp">
+					RelativePath="..\sakura_core\_os\Clipboard.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\_os\CClipboard.h">
+					RelativePath="..\sakura_core\_os\Clipboard.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\_os\CDropTarget.cpp">
+					RelativePath="..\sakura_core\_os\DropTarget.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\_os\CDropTarget.h">
+					RelativePath="..\sakura_core\_os\DropTarget.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\_os\COsVersionInfo.cpp">
+					RelativePath="..\sakura_core\_os\OsVersionInfo.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\_os\COsVersionInfo.h">
+					RelativePath="..\sakura_core\_os\OsVersionInfo.h">
 				</File>
 				<File
 					RelativePath="..\sakura_core\_os\OleTypes.h">
@@ -2247,51 +2247,51 @@
 			<Filter
 				Name="outline">
 				<File
-					RelativePath="..\sakura_core\outline\CDlgFileTree.cpp"
+					RelativePath="..\sakura_core\outline\DlgFileTree.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\sakura_core\outline\CDlgFileTree.h"
+					RelativePath="..\sakura_core\outline\DlgFileTree.h"
 					>
 				</File>
 				<File
-					RelativePath="..\sakura_core\outline\CDlgFuncList.cpp">
+					RelativePath="..\sakura_core\outline\DlgFuncList.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\outline\CDlgFuncList.h">
+					RelativePath="..\sakura_core\outline\DlgFuncList.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\outline\CFuncInfo.cpp">
+					RelativePath="..\sakura_core\outline\FuncInfo.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\outline\CFuncInfo.h">
+					RelativePath="..\sakura_core\outline\FuncInfo.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\outline\CFuncInfoArr.cpp">
+					RelativePath="..\sakura_core\outline\FuncInfoArr.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\outline\CFuncInfoArr.h">
+					RelativePath="..\sakura_core\outline\FuncInfoArr.h">
 				</File>
 			</Filter>
 			<Filter
 				Name="func">
 				<File
-					RelativePath="..\sakura_core\func\CFuncKeyWnd.cpp">
+					RelativePath="..\sakura_core\func\FuncKeyWnd.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\func\CFuncKeyWnd.h">
+					RelativePath="..\sakura_core\func\FuncKeyWnd.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\func\CFuncLookup.cpp">
+					RelativePath="..\sakura_core\func\FuncLookup.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\func\CFuncLookup.h">
+					RelativePath="..\sakura_core\func\FuncLookup.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\func\CKeyBind.cpp">
+					RelativePath="..\sakura_core\func\KeyBind.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\func\CKeyBind.h">
+					RelativePath="..\sakura_core\func\KeyBind.h">
 				</File>
 				<File
 					RelativePath="..\sakura_core\func\Funccode.cpp">
@@ -2303,226 +2303,226 @@
 			<Filter
 				Name="plugin">
 				<File
-					RelativePath="..\sakura_core\plugin\CComplementIfObj.h">
+					RelativePath="..\sakura_core\plugin\ComplementIfObj.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\plugin\CDllPlugin.cpp">
+					RelativePath="..\sakura_core\plugin\DllPlugin.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\plugin\CDllPlugin.h">
+					RelativePath="..\sakura_core\plugin\DllPlugin.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\plugin\CJackManager.cpp">
+					RelativePath="..\sakura_core\plugin\JackManager.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\plugin\CJackManager.h">
+					RelativePath="..\sakura_core\plugin\JackManager.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\plugin\COutlineIfObj.h">
+					RelativePath="..\sakura_core\plugin\OutlineIfObj.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\plugin\CPlugin.cpp">
+					RelativePath="..\sakura_core\plugin\Plugin.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\plugin\CPlugin.h">
+					RelativePath="..\sakura_core\plugin\Plugin.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\plugin\CPluginIfObj.h">
+					RelativePath="..\sakura_core\plugin\PluginIfObj.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\plugin\CPluginManager.cpp">
+					RelativePath="..\sakura_core\plugin\PluginManager.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\plugin\CPluginManager.h">
+					RelativePath="..\sakura_core\plugin\PluginManager.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\plugin\CSmartIndentIfObj.h">
+					RelativePath="..\sakura_core\plugin\SmartIndentIfObj.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\plugin\CWSHPlugin.cpp">
+					RelativePath="..\sakura_core\plugin\WSHPlugin.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\plugin\CWSHPlugin.h">
+					RelativePath="..\sakura_core\plugin\WSHPlugin.h">
 				</File>
 			</Filter>
 			<Filter
 				Name="mfclike">
 				<File
-					RelativePath="..\sakura_core\mfclike\CMyWnd.cpp">
+					RelativePath="..\sakura_core\mfclike\MyWnd.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\mfclike\CMyWnd.h">
+					RelativePath="..\sakura_core\mfclike\MyWnd.h">
 				</File>
 			</Filter>
 			<Filter
 				Name="cmd">
 				<File
-					RelativePath="..\sakura_core\cmd\CViewCommander.cpp">
+					RelativePath="..\sakura_core\cmd\ViewCommander.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\cmd\CViewCommander.h">
+					RelativePath="..\sakura_core\cmd\ViewCommander.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\cmd\CViewCommander_Bookmark.cpp">
+					RelativePath="..\sakura_core\cmd\ViewCommander_Bookmark.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\cmd\CViewCommander_Clipboard.cpp">
+					RelativePath="..\sakura_core\cmd\ViewCommander_Clipboard.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\cmd\CViewCommander_Convert.cpp">
+					RelativePath="..\sakura_core\cmd\ViewCommander_Convert.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\cmd\CViewCommander_Cursor.cpp">
+					RelativePath="..\sakura_core\cmd\ViewCommander_Cursor.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\cmd\CViewCommander_CustMenu.cpp">
+					RelativePath="..\sakura_core\cmd\ViewCommander_CustMenu.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\cmd\CViewCommander_Diff.cpp">
+					RelativePath="..\sakura_core\cmd\ViewCommander_Diff.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\cmd\CViewCommander_Edit.cpp">
+					RelativePath="..\sakura_core\cmd\ViewCommander_Edit.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\cmd\CViewCommander_Edit_advanced.cpp">
+					RelativePath="..\sakura_core\cmd\ViewCommander_Edit_advanced.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\cmd\CViewCommander_Edit_word_line.cpp">
+					RelativePath="..\sakura_core\cmd\ViewCommander_Edit_word_line.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\cmd\CViewCommander_File.cpp">
+					RelativePath="..\sakura_core\cmd\ViewCommander_File.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\cmd\CViewCommander_Grep.cpp">
+					RelativePath="..\sakura_core\cmd\ViewCommander_Grep.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\cmd\CViewCommander_inline.h">
+					RelativePath="..\sakura_core\cmd\ViewCommander_inline.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\cmd\CViewCommander_Insert.cpp">
+					RelativePath="..\sakura_core\cmd\ViewCommander_Insert.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\cmd\CViewCommander_Macro.cpp">
+					RelativePath="..\sakura_core\cmd\ViewCommander_Macro.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\cmd\CViewCommander_ModeChange.cpp">
+					RelativePath="..\sakura_core\cmd\ViewCommander_ModeChange.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\cmd\CViewCommander_Outline.cpp">
+					RelativePath="..\sakura_core\cmd\ViewCommander_Outline.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\cmd\CViewCommander_Search.cpp">
+					RelativePath="..\sakura_core\cmd\ViewCommander_Search.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\cmd\CViewCommander_Select.cpp">
+					RelativePath="..\sakura_core\cmd\ViewCommander_Select.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\cmd\CViewCommander_Settings.cpp">
+					RelativePath="..\sakura_core\cmd\ViewCommander_Settings.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\cmd\CViewCommander_Support.cpp">
+					RelativePath="..\sakura_core\cmd\ViewCommander_Support.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\cmd\CViewCommander_TagJump.cpp">
+					RelativePath="..\sakura_core\cmd\ViewCommander_TagJump.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\cmd\CViewCommander_Window.cpp">
+					RelativePath="..\sakura_core\cmd\ViewCommander_Window.cpp">
 				</File>
 			</Filter>
 			<Filter
 				Name="extmodule">
 				<File
-					RelativePath="..\sakura_core\extmodule\CBregexp.cpp">
+					RelativePath="..\sakura_core\extmodule\Bregexp.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\extmodule\CBregexp.h">
+					RelativePath="..\sakura_core\extmodule\Bregexp.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\extmodule\CBregexpDll2.cpp">
+					RelativePath="..\sakura_core\extmodule\BregexpDll2.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\extmodule\CBregexpDll2.h">
+					RelativePath="..\sakura_core\extmodule\BregexpDll2.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\extmodule\CDllHandler.cpp">
+					RelativePath="..\sakura_core\extmodule\DllHandler.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\extmodule\CDllHandler.h">
+					RelativePath="..\sakura_core\extmodule\DllHandler.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\extmodule\CHtmlHelp.cpp">
+					RelativePath="..\sakura_core\extmodule\HtmlHelp.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\extmodule\CHtmlHelp.h">
+					RelativePath="..\sakura_core\extmodule\HtmlHelp.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\extmodule\CMigemo.cpp">
+					RelativePath="..\sakura_core\extmodule\Migemo.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\extmodule\CMigemo.h">
+					RelativePath="..\sakura_core\extmodule\Migemo.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\extmodule\CUxTheme.cpp">
+					RelativePath="..\sakura_core\extmodule\UxTheme.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\extmodule\CUxTheme.h">
+					RelativePath="..\sakura_core\extmodule\UxTheme.h">
 				</File>
 			</Filter>
 			<Filter
 				Name="print">
 				<File
-					RelativePath="..\sakura_core\print\CPrint.cpp">
+					RelativePath="..\sakura_core\print\Print.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\print\CPrint.h">
+					RelativePath="..\sakura_core\print\Print.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\print\CPrintPreview.cpp">
+					RelativePath="..\sakura_core\print\PrintPreview.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\print\CPrintPreview.h">
+					RelativePath="..\sakura_core\print\PrintPreview.h">
 				</File>
 			</Filter>
 			<Filter
 				Name="uiparts">
 				<File
-					RelativePath="..\sakura_core\uiparts\CGraphics.cpp">
+					RelativePath="..\sakura_core\uiparts\Graphics.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\uiparts\CGraphics.h">
+					RelativePath="..\sakura_core\uiparts\Graphics.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\uiparts\CImageListMgr.cpp">
+					RelativePath="..\sakura_core\uiparts\ImageListMgr.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\uiparts\CImageListMgr.h">
+					RelativePath="..\sakura_core\uiparts\ImageListMgr.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\uiparts\CMenuDrawer.cpp">
+					RelativePath="..\sakura_core\uiparts\MenuDrawer.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\uiparts\CMenuDrawer.h">
+					RelativePath="..\sakura_core\uiparts\MenuDrawer.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\uiparts\CSoundSet.cpp">
+					RelativePath="..\sakura_core\uiparts\SoundSet.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\uiparts\CSoundSet.h">
+					RelativePath="..\sakura_core\uiparts\SoundSet.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\uiparts\CVisualProgress.cpp">
+					RelativePath="..\sakura_core\uiparts\VisualProgress.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\uiparts\CVisualProgress.h">
+					RelativePath="..\sakura_core\uiparts\VisualProgress.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\uiparts\CWaitCursor.cpp">
+					RelativePath="..\sakura_core\uiparts\WaitCursor.cpp">
 				</File>
 				<File
-					RelativePath="..\sakura_core\uiparts\CWaitCursor.h">
+					RelativePath="..\sakura_core\uiparts\WaitCursor.h">
 				</File>
 				<File
-					RelativePath="..\sakura_core\uiparts\HandCursor.h">
+					RelativePath="..\sakura_core\uiparts\Handursor.h">
 				</File>
 			</Filter>
 		</Filter>

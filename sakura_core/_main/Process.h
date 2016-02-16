@@ -15,7 +15,7 @@
 #pragma once
 
 #include "global.h"
-#include "env/CShareData.h"
+#include "env/ShareData.h"
 #include "env/DLLSHAREDATA.h"
 
 //#define USE_CRASHDUMP

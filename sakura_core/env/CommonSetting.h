@@ -24,10 +24,10 @@
 */
 #pragma once
 
-#include "CKeyWordSetMgr.h"
-#include "func/CKeyBind.h"
-#include "func/CFuncLookup.h" // MacroRec
-#include "io/CFile.h" // EShareMode
+#include "KeyWordSetMgr.h"
+#include "func/KeyBind.h"
+#include "func/FuncLookup.h" // MacroRec
+#include "io/File.h" // EShareMode
 
 // Apr. 05, 2003 genta WindowCaption用領域（変換前）の長さ
 static const int MAX_CAPTION_CONF_LEN = 256;

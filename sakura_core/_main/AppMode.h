@@ -24,7 +24,7 @@
 #pragma once
 
 #include "util/design_template.h"
-#include "doc/CDocListener.h"
+#include "doc/DocListener.h"
 
 class AppMode
 	:

@@ -20,8 +20,8 @@
 #include "ControlTray.h"
 #include "env/DLLSHAREDATA.h"
 #include "CommandLine.h"
-#include "env/CShareData_IO.h"
-#include "debug/CRunningTimer.h"
+#include "env/ShareData_IO.h"
+#include "debug/RunningTimer.h"
 #include "sakura_rc.h" /// IDD_EXITTING 2002/2/10 aroka ƒwƒbƒ_®—
 
 
