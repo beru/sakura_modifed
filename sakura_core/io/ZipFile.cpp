@@ -100,7 +100,7 @@ bool ZipFile::ChkPluginDef(
 	std::tstring& sFolderName
 	)
 {
-	VARIANT			vari;
+	VARIANT			var;
 	FolderItems*	pZipFileItems;
 	long			lCount;
 	bool			bFoundDef = false;
@@ -116,14 +116,14 @@ bool ZipFile::ChkPluginDef(
 
 	// ŒŸ¸
 	hr = pZipFileItems->get_Count(&lCount);
-	VariantInit(&vari);
-	vari.vt = VT_I4;
-	for (vari.lVal=0; vari.lVal<lCount; vari.lVal++) {
+	VariantInit(&var);
+	var.vt = VT_I4;
+	for (var.lVal=0; var.lVal<lCount; var.lVal++) {
 		BSTR			bps;
 		VARIANT_BOOL	vFolder;
 		FolderItem*		pFileItem;
 
-		hr = pZipFileItems->Item(vari, &pFileItem);
+		hr = pZipFileItems->Item(var, &pFileItem);
 		if (hr != S_OK) { continue; }
 		hr = pFileItem->get_Name(&bps);
 		if (hr != S_OK) { continue; }
@@ -166,7 +166,7 @@ bool ZipFile::ChkPluginDef(
 			}
 		}
 	}
-	VariantClear(&vari);
+	VariantClear(&var);
 	pZipFileItems->Release();
 
 	return bFoundDef;

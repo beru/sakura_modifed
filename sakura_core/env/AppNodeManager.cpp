@@ -255,12 +255,13 @@ BOOL AppNodeGroupHandle::RequestCloseEditor(EditNode* pWndArr, int nArrCnt, bool
 
 	if (bCheckConfirm && GetDllShareData().m_common.m_general.m_bCloseAllConfirm) {	// [すべて閉じる]で他に編集用のウィンドウがあれば確認する
 		if (1 < nCloseCount) {
-			if (IDYES != ::MYMESSAGEBOX(
+			if (::MYMESSAGEBOX(
 				hWndFrom,
 				MB_YESNO | MB_APPLMODAL | MB_ICONQUESTION,
 				GSTR_APPNAME,
 				LS(STR_ERR_CSHAREDATA19)
-			)) {
+				) != IDYES
+			) {
 				return FALSE;
 			}
 		}
@@ -550,13 +551,15 @@ int AppNodeManager::_GetOpenedWindowArrCore(EditNode** ppEditNode, BOOL bSort, B
 
 	// 編集ウィンドウ数を取得する。
 	*ppEditNode = nullptr;
-	if (nodes.m_nEditArrNum <= 0)
+	if (nodes.m_nEditArrNum <= 0) {
 		return 0;
+	}
 
 	// 編集ウィンドウリスト格納領域を作成する。
 	*ppEditNode = new EditNode[nodes.m_nEditArrNum];
-	if (!(*ppEditNode))
+	if (!(*ppEditNode)) {
 		return 0;
+	}
 
 	// 拡張リストを作成する
 	// ソート処理用の拡張リスト

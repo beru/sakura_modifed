@@ -67,7 +67,7 @@ public:
 	static int TextToBin(const unsigned short);
 
 	// MIME Header デコーダ
-	static bool MIMEHeaderDecode(const char*, const int, Memory*, const ECodeType);
+	static bool MIMEHeaderDecode(const char*, const int, Memory*, const EncodingType);
 
 	// CShiftJisより移動 2010/6/13 Uchi
 	static void S_GetEol(Memory* pMemEol, EolType eEolType);	// 改行データ取得

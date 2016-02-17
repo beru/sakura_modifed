@@ -436,7 +436,7 @@ bool MakeDiffTmpFile_core(TextOutputStream& out, HWND hwnd, EditView& view, bool
 BOOL EditView::MakeDiffTmpFile(
 	TCHAR* filename,
 	HWND hWnd,
-	ECodeType code,
+	EncodingType code,
 	bool bBom
 	)
 {
@@ -495,8 +495,8 @@ BOOL EditView::MakeDiffTmpFile(
 BOOL EditView::MakeDiffTmpFile2(
 	TCHAR* tmpName,
 	const TCHAR* orgName,
-	ECodeType code,
-	ECodeType saveCode
+	EncodingType code,
+	EncodingType saveCode
 	)
 {
 	//ˆêŽž

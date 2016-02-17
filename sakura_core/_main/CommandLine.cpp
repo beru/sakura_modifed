@@ -211,7 +211,7 @@ void CommandLine::ParseCommandLine(LPCTSTR pszCmdLineSrc, bool bResponse)
 					++k;
 				}
 				if (WCODE::Is09(wexename[k])) {
-					ECodeType n = (ECodeType)_wtoi(&wexename[k]);
+					EncodingType n = (EncodingType)_wtoi(&wexename[k]);
 					if (IsValidCodeOrCPType(n)) {
 						m_fi.m_nCharCode = n;
 					}
@@ -369,7 +369,7 @@ void CommandLine::ParseCommandLine(LPCTSTR pszCmdLineSrc, bool bResponse)
 				}
 				break;
 			case CMDLINEOPT_CODE:	// CODE
-				m_fi.m_nCharCode = (ECodeType)AtoiOptionInt(arg);
+				m_fi.m_nCharCode = (EncodingType)AtoiOptionInt(arg);
 				break;
 			case CMDLINEOPT_R:	// R
 				m_bViewMode = true;
@@ -465,7 +465,7 @@ void CommandLine::ParseCommandLine(LPCTSTR pszCmdLineSrc, bool bResponse)
 				break;
 			// 2002/09/21 Moca Grepでの文字コードセット 追加
 			case CMDLINEOPT_GCODE:
-				m_gi.nGrepCharSet = (ECodeType)AtoiOptionInt(arg);	break;
+				m_gi.nGrepCharSet = (EncodingType)AtoiOptionInt(arg);	break;
 			case CMDLINEOPT_GROUP:	// GROUP	// 2007.06.26 ryoji
 				m_nGroup = AtoiOptionInt(arg);
 				break;

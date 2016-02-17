@@ -55,7 +55,7 @@ private:
 class TextOutputStream : public OutputStream {
 public:
 	// コンストラクタ・デストラクタ
-	TextOutputStream(const TCHAR* tszPath, ECodeType eCodeType = CODE_UTF8, bool bExceptionMode = false, bool bBom = true);
+	TextOutputStream(const TCHAR* tszPath, EncodingType eCodeType = CODE_UTF8, bool bExceptionMode = false, bool bBom = true);
 	virtual ~TextOutputStream();
 
 	// 文字列書込。改行を入れたい場合は、文字列内に'\n'を含めること。(クラス側で適切な改行コードに変換して出力します)

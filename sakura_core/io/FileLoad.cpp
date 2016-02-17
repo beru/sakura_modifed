@@ -73,7 +73,7 @@ FileLoad::FileLoad(const EncodingConfig& encode)
 	m_bBomExist		= false;	// Jun. 08, 2003 Moca
 	m_nFlag 		= 0;
 	m_nReadLength	= 0;
-	m_eMode			= FileLoadMode::Close;	// Jun. 08, 2003 Moca
+	m_mode			= FileLoadMode::Close;	// Jun. 08, 2003 Moca
 
 	m_nLineIndex	= -1;
 
@@ -107,10 +107,10 @@ FileLoad::~FileLoad(void)
 	@date 2003.06.08 Moca CODE_AUTODETECTを指定できるように変更
 	@date 2003.07.26 ryoji BOM引数追加
 */
-ECodeType FileLoad::FileOpen(
+EncodingType FileLoad::FileOpen(
 	LPCTSTR pFileName,
 	bool bBigFile,
-	ECodeType charCode,
+	EncodingType charCode,
 	int nFlag,
 	bool* pbBomExist
 	)
@@ -156,13 +156,13 @@ ECodeType FileLoad::FileOpen(
 	}
 	m_nFileSize = fileSize.QuadPart;
 
-//	m_eMode = FLMODE_OPEN;
+//	m_mode = FLMODE_OPEN;
 
 	// From Here Jun. 08, 2003 Moca 文字コード判定
 	// データ読み込み
 	Buffering();
 
-	ECodeType nBomCode = CodeMediator::DetectUnicodeBom(m_pReadBuf, m_nReadDataLen);
+	EncodingType nBomCode = CodeMediator::DetectUnicodeBom(m_pReadBuf, m_nReadDataLen);
 	if (charCode == CODE_AUTODETECT) {
 		if (nBomCode != CODE_NONE) {
 			charCode = nBomCode;
@@ -205,7 +205,7 @@ ECodeType FileLoad::FileOpen(
 	}
 	
 	// To Here Jun. 13, 2003 Moca BOMの除去
-	m_eMode = FileLoadMode::Ready;
+	m_mode = FileLoadMode::Ready;
 //	m_memLine.AllocBuffer(256);
 	m_pCodeBase->GetEol( &m_memEols[0], EolType::NEL );
 	m_pCodeBase->GetEol( &m_memEols[1], EolType::LS );
@@ -251,7 +251,7 @@ void FileLoad::FileClose(void)
 	m_bBomExist		= false; // From Here Jun. 08, 2003
 	m_nFlag 		=  0;
 	m_nReadLength	=  0;
-	m_eMode			= FileLoadMode::Close;
+	m_mode			= FileLoadMode::Close;
 	m_nLineIndex	= -1;
 }
 
@@ -319,8 +319,8 @@ CodeConvertResult FileLoad::ReadLine_core(
 	CodeConvertResult eRet = CodeConvertResult::Complete;
 
 #ifdef _DEBUG
-	if (m_eMode < FileLoadMode::Ready) {
-		MYTRACE(_T("FileLoad::ReadLine(): m_eMode = %d\n"), m_eMode);
+	if (m_mode < FileLoadMode::Ready) {
+		MYTRACE(_T("FileLoad::ReadLine(): m_mode = %d\n"), m_mode);
 		return CodeConvertResult::Failure;
 	}
 #endif
@@ -347,7 +347,7 @@ CodeConvertResult FileLoad::ReadLine_core(
 		}
 
 		// ReadBufから1行を取得するとき、改行コードが欠ける可能性があるため
-		if (m_nReadDataLen <= m_nReadBufOffSet && FileLoadMode::Ready == m_eMode) {// From Here Jun. 13, 2003 Moca
+		if (m_nReadDataLen <= m_nReadBufOffSet && FileLoadMode::Ready == m_mode) {// From Here Jun. 13, 2003 Moca
 			int n = 128;
 			int nMinAllocSize = m_lineBuffer.GetRawLength() + nEolLen - nBufferNext + 100;
 			while (n < nMinAllocSize) {
@@ -427,7 +427,7 @@ void FileLoad::Buffering(void)
 	// ファイルの読み込み
 	DWORD readSize = Read(&m_pReadBuf[m_nReadDataLen], m_nReadBufSize - m_nReadDataLen);
 	if (readSize == 0) {
-		m_eMode = FileLoadMode::ReadBufEnd;	// ファイルなどの終わりに達したらしい
+		m_mode = FileLoadMode::ReadBufEnd;	// ファイルなどの終わりに達したらしい
 	}
 	m_nReadDataLen += readSize;
 }

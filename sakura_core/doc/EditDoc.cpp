@@ -452,7 +452,7 @@ void EditDoc::SetFilePathAndIcon(const TCHAR* szFile)
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 // ドキュメントの文字コードを取得
-ECodeType EditDoc::GetDocumentEncoding() const
+EncodingType EditDoc::GetDocumentEncoding() const
 {
 	return m_docFile.GetCodeSet();
 }
@@ -464,7 +464,7 @@ bool EditDoc::GetDocumentBomExist() const
 }
 
 // ドキュメントの文字コードを設定
-void EditDoc::SetDocumentEncoding(ECodeType eCharCode, bool bBom)
+void EditDoc::SetDocumentEncoding(EncodingType eCharCode, bool bBom)
 {
 	if (!IsValidCodeType(eCharCode)) {
 		return; // 無効な範囲を受け付けない
@@ -476,18 +476,18 @@ void EditDoc::SetDocumentEncoding(ECodeType eCharCode, bool bBom)
 
 void EditDoc::GetSaveInfo(SaveInfo* pSaveInfo) const
 {
-	pSaveInfo->filePath   = m_docFile.GetFilePath();
-	pSaveInfo->eCharCode   = m_docFile.GetCodeSet();
-	pSaveInfo->bBomExist   = m_docFile.IsBomExist();
-	pSaveInfo->bChgCodeSet = m_docFile.IsChgCodeSet();
-	pSaveInfo->eol        = m_docEditor.m_newLineCode; // 編集時改行コードを保存時改行コードとして設定
+	pSaveInfo->filePath		= m_docFile.GetFilePath();
+	pSaveInfo->eCharCode	= m_docFile.GetCodeSet();
+	pSaveInfo->bBomExist	= m_docFile.IsBomExist();
+	pSaveInfo->bChgCodeSet	= m_docFile.IsChgCodeSet();
+	pSaveInfo->eol			= m_docEditor.m_newLineCode; // 編集時改行コードを保存時改行コードとして設定
 }
 
 
 // 編集ファイル情報を格納
 void EditDoc::GetEditInfo(
 	EditInfo* pfi	// [out]
-) const
+	) const
 {
 	// ファイルパス
 	_tcscpy(pfi->m_szPath, m_docFile.GetFilePath());
@@ -655,7 +655,7 @@ void EditDoc::OnChangeType()
 */
 void EditDoc::OnChangeSetting(
 	bool bDoLayout
-)
+	)
 {
 	HWND hwndProgress = NULL;
 	EditWnd* pEditWnd = m_pEditWnd;	// Sep. 10, 2002 genta

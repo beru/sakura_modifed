@@ -900,7 +900,6 @@ LRESULT CALLBACK SubComboBoxProc(
 	return CallWindowProc(data->pComboBoxWndProc, hwnd, uMsg, wParam, lParam);
 }
 
-
 void Dialog::SetComboBoxDeleter(HWND hwndCtl, ComboBoxItemDeleter* data)
 {
 	if (!data->pRecent) {

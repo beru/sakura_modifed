@@ -44,7 +44,7 @@ static void StringToOpeLineData(const wchar_t* pLineData, int nLineDataLen, OpeL
 	bool bExtEol = GetDllShareData().m_common.m_edit.m_bEnableExtEol;
 	for (i=0; i<nLineDataLen; ++i) {
 		if (WCODE::IsLineDelimiter(pLineData[i], bExtEol)) {
-			if (i + 1 < nLineDataLen && WCODE::CR == pLineData[i] && WCODE::LF == pLineData[i + 1]) {
+			if (i + 1 < nLineDataLen && pLineData[i] == WCODE::CR && pLineData[i+1] == WCODE::LF) {
 				++i;
 			}
 			LineData tmp;
@@ -125,7 +125,7 @@ void EditView::InsertData_CEditView(
 	LayoutInt	nLineAllColLen;
 	LogicInt	nIdxFrom = LogicInt(0);
 	LayoutInt	nColumnFrom = ptInsertPos.GetX2();
-	NativeW	cMem(L"");
+	NativeW	mem(L"");
 	OpeLineData insData;
 	if (pLine) {
 		// 更新が前行からになる可能性を調べる	// 2009.02.17 ryoji
@@ -146,23 +146,23 @@ void EditView::InsertData_CEditView(
 			// 行終端が何らかの改行コードか?
 			if (EolType::None != pLayout->GetLayoutEol()) {
 				nIdxFrom = nLineLen - LogicInt(1);
-				cMem.AllocStringBuffer((Int)(ptInsertPos.GetX2() - nLineAllColLen + 1) + nDataLen);
+				mem.AllocStringBuffer((Int)(ptInsertPos.GetX2() - nLineAllColLen + 1) + nDataLen);
 				for (int i=0; i<ptInsertPos.GetX2()-nLineAllColLen+1; ++i) {
-					cMem += L' ';
+					mem += L' ';
 				}
-				cMem.AppendString(pData, nDataLen);
+				mem.AppendString(pData, nDataLen);
 			}else {
 				nIdxFrom = nLineLen;
-				cMem.AllocStringBuffer((Int)(ptInsertPos.GetX2() - nLineAllColLen) + nDataLen);
+				mem.AllocStringBuffer((Int)(ptInsertPos.GetX2() - nLineAllColLen) + nDataLen);
 				for (int i=0; i<ptInsertPos.GetX2()-nLineAllColLen; ++i) {
-					cMem += L' ';
+					mem += L' ';
 				}
-				cMem.AppendString(pData, nDataLen);
+				mem.AppendString(pData, nDataLen);
 				// 1行多く更新する必要がある可能性がある
 				bHintNext = true;
 			}
-			StringToOpeLineData(cMem.GetStringPtr(), cMem.GetStringLength(), insData, opeSeq);
-			cMem.Clear();
+			StringToOpeLineData(mem.GetStringPtr(), mem.GetStringLength(), insData, opeSeq);
+			mem.Clear();
 			nColumnFrom = LineIndexToColumn(pLayout, nIdxFrom);
 		}else {
 			StringToOpeLineData(pData, nDataLen, insData, opeSeq);
@@ -174,13 +174,13 @@ void EditView::InsertData_CEditView(
 			bHintPrev = true;	// 更新が前行からになる可能性がある
 		}
 		if (0 < ptInsertPos.GetX2()) {
-			cMem.AllocStringBuffer((Int)ptInsertPos.GetX2() + nDataLen);
+			mem.AllocStringBuffer((Int)ptInsertPos.GetX2() + nDataLen);
 			for (LayoutInt i=LayoutInt(0); i<ptInsertPos.GetX2(); ++i) {
-				cMem += L' ';
+				mem += L' ';
 			}
-			cMem.AppendString(pData, nDataLen);
-			StringToOpeLineData(cMem.GetStringPtr(), cMem.GetStringLength(), insData, opeSeq);
-			cMem.Clear();
+			mem.AppendString(pData, nDataLen);
+			StringToOpeLineData(mem.GetStringPtr(), mem.GetStringLength(), insData, opeSeq);
+			mem.Clear();
 		}else {
 			StringToOpeLineData(pData, nDataLen, insData, opeSeq);
 		}

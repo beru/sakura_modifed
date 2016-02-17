@@ -198,7 +198,7 @@ INT_PTR PropCustmenu::DispatchEvent(
 				WCHAR buf[MAX_CUSTOM_MENU_NAME_LEN + 1];
 				//	ÉÅÉjÉÖÅ[ï∂éöóÒÇÃê›íË
 				nIdx1 = Combo_GetCurSel(hwndCOMBO_MENU);
-				if (CB_ERR == nIdx1) {
+				if (nIdx1 == CB_ERR) {
 					break;
 				}
 				::DlgItem_GetText(hwndDlg, IDC_EDIT_MENUNAME,
@@ -330,7 +330,7 @@ INT_PTR PropCustmenu::DispatchEvent(
 				switch (wID) {
 				case IDC_BUTTON_INSERTSEPARATOR:
 					nIdx1 = Combo_GetCurSel(hwndCOMBO_MENU);
-					if (CB_ERR == nIdx1) {
+					if (nIdx1 == CB_ERR) {
 						break;
 					}
 
@@ -569,7 +569,7 @@ INT_PTR PropCustmenu::DispatchEvent(
 		nIdx3 = Combo_GetCurSel(hwndCOMBO_FUNCKIND);
 		nIdx4 = List_GetCurSel(hwndLIST_FUNC);
 		i = List_GetCount(hwndLIST_RES);
-		if (LB_ERR == nIdx2) {
+		if (nIdx2 == LB_ERR) {
 			::EnableWindow(::GetDlgItem(hwndDlg, IDC_BUTTON_DELETE), FALSE);
 			::EnableWindow(::GetDlgItem(hwndDlg, IDC_BUTTON_UP), FALSE);
 			::EnableWindow(::GetDlgItem(hwndDlg, IDC_BUTTON_DOWN), FALSE);
@@ -586,12 +586,12 @@ INT_PTR PropCustmenu::DispatchEvent(
 				::EnableWindow(::GetDlgItem(hwndDlg, IDC_BUTTON_DOWN), TRUE);
 			}
 		}
-		if (LB_ERR == nIdx2 || LB_ERR == nIdx4) {
+		if (nIdx2 == LB_ERR || nIdx4 == LB_ERR) {
 			::EnableWindow(::GetDlgItem(hwndDlg, IDC_BUTTON_INSERT), FALSE);
 		}else {
 			::EnableWindow(::GetDlgItem(hwndDlg, IDC_BUTTON_INSERT), TRUE);
 		}
-		if (LB_ERR == nIdx4) {
+		if (nIdx4 == LB_ERR) {
 			::EnableWindow(::GetDlgItem(hwndDlg, IDC_BUTTON_ADD), FALSE);
 		}else {
 			::EnableWindow(::GetDlgItem(hwndDlg, IDC_BUTTON_ADD), TRUE);

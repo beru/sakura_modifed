@@ -38,11 +38,11 @@ void DocVisitor::SetAllEol(Eol eol)
 			}
 			// ‰üs‚ð’uŠ·
 			if (pDocLine->GetEol() != EolType::None && pDocLine->GetEol() != eol) {
-				LogicRange sRange;
-				sRange.SetFrom(LogicPoint(pDocLine->GetLengthWithoutEOL(), nLine));
-				sRange.SetTo(LogicPoint(pDocLine->GetLengthWithEOL(), nLine));
+				LogicRange range;
+				range.SetFrom(LogicPoint(pDocLine->GetLengthWithoutEOL(), nLine));
+				range.SetTo(LogicPoint(pDocLine->GetLengthWithEOL(), nLine));
 				pView->ReplaceData_CEditView2(
-					sRange,
+					range,
 					eol.GetValue2(),
 					eol.GetLen(),
 					false,

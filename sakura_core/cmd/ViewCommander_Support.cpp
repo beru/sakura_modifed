@@ -58,10 +58,10 @@ retry:;
 		m_pCommanderView->m_pTypeData->m_szHokanFile[0] == _T('\0')
 	) {
 		ConfirmBeep();
-		if (IDYES == ::ConfirmMessage(
+		if (::ConfirmMessage(
 				GetMainWindow(),
 				LS(STR_ERR_DLGEDITVWHOKAN1)
-			) 
+			) == IDYES
 		) {
 			// タイプ別設定 プロパティシート
 			if (!CEditApp::getInstance()->m_pPropertyManager->OpenPropertySheetTypes(2, GetDocument()->m_docType.GetDocumentType())) {
@@ -197,13 +197,13 @@ retry:;
 		ErrorBeep();
 // From Here Sept. 15, 2000 JEPRO
 //		[Esc]キーと[x]ボタンでも中止できるように変更
-		if (IDYES == ::MYMESSAGEBOX(
+		if (::MYMESSAGEBOX(
 				NULL,
 				MB_YESNOCANCEL | MB_ICONEXCLAMATION | MB_APPLMODAL | MB_TOPMOST,
 				GSTR_APPNAME,
 // To Here Sept. 15, 2000
 				LS(STR_ERR_CEDITVIEW_CMD01)
-			)
+			) == IDYES
 		) {
 			// 共通設定 プロパティシート
 			if (!EditApp::getInstance()->OpenPropertySheet(ID_PROPCOM_PAGENUM_HELPER)) {

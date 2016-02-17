@@ -21,10 +21,10 @@ TextInputStream::TextInputStream(const TCHAR* tszPath)
 
 	if (Good()) {
 		// BOM確認 -> m_bIsUtf8
-		static const BYTE UTF8_BOM[] = {0xEF, 0xBB, 0xBF};
+		static const BYTE utf8_bom[] = {0xEF, 0xBB, 0xBF};
 		BYTE buf[3];
-		if (fread(&buf, 1, sizeof(UTF8_BOM), GetFp()) == sizeof(UTF8_BOM)) {
-			m_bIsUtf8 = (memcmp(buf, UTF8_BOM, sizeof(UTF8_BOM)) == 0);
+		if (fread(&buf, 1, sizeof(utf8_bom), GetFp()) == sizeof(utf8_bom)) {
+			m_bIsUtf8 = (memcmp(buf, utf8_bom, sizeof(utf8_bom)) == 0);
 		}
 
 		// UTF-8じゃなければ、ファイルポインタを元に戻す
@@ -96,7 +96,7 @@ wstring TextInputStream::ReadLineW()
 
 TextOutputStream::TextOutputStream(
 	const TCHAR* tszPath,
-	ECodeType eCodeType,
+	EncodingType eCodeType,
 	bool bExceptionMode,
 	bool bBom
 	)

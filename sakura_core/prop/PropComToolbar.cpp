@@ -266,7 +266,7 @@ INT_PTR PropToolbar::DispatchEvent(
 				switch (wID) {
 				case IDC_BUTTON_INSERTSEPARATOR:
 					nIndex1 = List_GetCurSel(hwndResList);
-					if (LB_ERR == nIndex1) {
+					if (nIndex1 == LB_ERR) {
 //						break;
 						nIndex1 = 0;
 					}
@@ -282,7 +282,7 @@ INT_PTR PropToolbar::DispatchEvent(
 // 2005/8/9 aroka 折返ボタンが押されたら、右のリストに「ツールバー折返」を追加する。
 				case IDC_BUTTON_INSERTWRAP:
 					nIndex1 = List_GetCurSel(hwndResList);
-					if (LB_ERR == nIndex1) {
+					if (nIndex1 == LB_ERR) {
 //						break;
 						nIndex1 = 0;
 					}
@@ -298,7 +298,7 @@ INT_PTR PropToolbar::DispatchEvent(
 
 				case IDC_BUTTON_DELETE:
 					nIndex1 = List_GetCurSel(hwndResList);
-					if (LB_ERR == nIndex1) {
+					if (nIndex1 == LB_ERR) {
 						break;
 					}
 					i = List_DeleteString(hwndResList, nIndex1);
@@ -318,12 +318,12 @@ INT_PTR PropToolbar::DispatchEvent(
 
 				case IDC_BUTTON_INSERT:
 					nIndex1 = List_GetCurSel(hwndResList);
-					if (LB_ERR == nIndex1) {
+					if (nIndex1 == LB_ERR) {
 //						break;
 						nIndex1 = 0;
 					}
 					nIndex2 = List_GetCurSel(hwndFuncList);
-					if (LB_ERR == nIndex2) {
+					if (nIndex2 == LB_ERR) {
 						break;
 					}
 					i = List_GetItemData(hwndFuncList, nIndex2);

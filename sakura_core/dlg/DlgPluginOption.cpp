@@ -91,14 +91,14 @@ DlgPluginOption::~DlgPluginOption()
 int DlgPluginOption::DoModal(
 	HINSTANCE			hInstance,
 	HWND				hwndParent,
-	PropPlugin*		cPropPlugin,
+	PropPlugin*			propPlugin,
 	int 				ID
 	)
 {
 	// プラグイン番号（エディタがふる番号）
 	m_ID = ID;
 	m_plugin = PluginManager::getInstance()->GetPlugin(m_ID);
-	m_pPropPlugin = cPropPlugin;
+	m_pPropPlugin = propPlugin;
 
 	if (!m_plugin) {
 		::ErrorMessage(hwndParent, LS(STR_DLGPLUGINOPT_LOAD));
@@ -130,17 +130,17 @@ void DlgPluginOption::SetData(void)
 	profile->SetReadingMode();
 	profile->ReadProfile(m_plugin->GetOptionPath().c_str());
 
-	PluginOption* cOpt;
+	PluginOption* pOpt;
 	PluginOption::ArrayIter it;
 	for (i=0, it=m_plugin->m_options.begin(); it!=m_plugin->m_options.end(); ++i, ++it) {
-		cOpt = *it;
+		pOpt = *it;
 
-		auto_snprintf_s(buf, _countof(buf), _T("%ls"), cOpt->GetLabel().c_str());
+		auto_snprintf_s(buf, _countof(buf), _T("%ls"), pOpt->GetLabel().c_str());
 		lvi.mask     = LVIF_TEXT | LVIF_PARAM;
 		lvi.pszText  = buf;
 		lvi.iItem    = i;
 		lvi.iSubItem = 0;
-		lvi.lParam   = cOpt->GetIndex();
+		lvi.lParam   = pOpt->GetIndex();
 		ListView_InsertItem(hwndList, &lvi);
 
 		wstring sSection;
@@ -148,13 +148,13 @@ void DlgPluginOption::SetData(void)
 		wstring sValue;
 		wstring sType;
 
-		cOpt->GetKey(&sSection, &sKey);
+		pOpt->GetKey(&sSection, &sKey);
 		if (sSection.empty() || sKey.empty()) {
 			sValue = L"";
 		}else {
 			if (!profile->IOProfileData(sSection.c_str(), sKey.c_str(), sValue)) {
 				// Optionが見つからなかったらDefault値を設定
-				sValue = cOpt->GetDefaultVal();
+				sValue = pOpt->GetDefaultVal();
 				if (sValue != wstring(L"")) {
 					bLoadDefault = true;
 					profile->SetWritingMode();
@@ -164,17 +164,17 @@ void DlgPluginOption::SetData(void)
 			}
 		}
 
-		if (cOpt->GetType() == OPTION_TYPE_BOOL) {
+		if (pOpt->GetType() == OPTION_TYPE_BOOL) {
 			_tcscpy(buf, sValue == wstring(L"0") || sValue == wstring(L"") ? BOOL_DISP_FALSE : BOOL_DISP_TRUE);
-		}else if (cOpt->GetType() == OPTION_TYPE_INT) {
+		}else if (pOpt->GetType() == OPTION_TYPE_INT) {
 			// 数値へ正規化
 			auto_sprintf( buf, _T("%d"), _wtoi(sValue.c_str()));
-		}else if (cOpt->GetType() == OPTION_TYPE_SEL) {
+		}else if (pOpt->GetType() == OPTION_TYPE_SEL) {
 			// 値から表示へ
 			wstring	sView;
 			wstring	sTrg;
 			std::vector<wstring>	selects;
-			selects = cOpt->GetSelects();
+			selects = pOpt->GetSelects();
 
 			buf[0] = 0;
 			for (auto it=selects.begin(); it!=selects.end(); ++it) {
@@ -229,12 +229,12 @@ int DlgPluginOption::GetData(void)
 	profile->ReadProfile(m_plugin->GetOptionPath().c_str());
 	profile->SetWritingMode();
 
-	PluginOption* cOpt;
+	PluginOption* pOpt;
 	TCHAR	buf[MAX_LENGTH_VALUE + 1];
 	PluginOption::ArrayIter it;
 	int i;
 	for (i=0, it=m_plugin->m_options.begin(); it!=m_plugin->m_options.end(); ++i, ++it) {
-		cOpt = *it;
+		pOpt = *it;
 
 		memset_raw(&lvi, 0, sizeof(lvi));
 		lvi.mask       = LVIF_TEXT;
@@ -244,18 +244,18 @@ int DlgPluginOption::GetData(void)
 		lvi.cchTextMax = MAX_LENGTH_VALUE + 1;
 		ListView_GetItem(hwndList, &lvi);
 
-		if (cOpt->GetType() == OPTION_TYPE_BOOL) {
+		if (pOpt->GetType() == OPTION_TYPE_BOOL) {
 			if (_tcscmp(buf,  BOOL_DISP_FALSE) == 0) {
 				_tcscpy (buf, _T("0"));
 			}else {
 				_tcscpy (buf, _T("1"));
 			}
-		}else if (cOpt->GetType() == OPTION_TYPE_SEL) {
+		}else if (pOpt->GetType() == OPTION_TYPE_SEL) {
 			// 表示から値へ
 			wstring	sView;
 			wstring	sTrg;
 			std::vector<wstring>	selects;
-			selects = cOpt->GetSelects();
+			selects = pOpt->GetSelects();
 			wstring sWbuf = to_wchar(buf);
 
 			for (auto it=selects.begin(); it!=selects.end(); ++it) {
@@ -271,7 +271,7 @@ int DlgPluginOption::GetData(void)
 		wstring sKey;
 		wstring sValue;
 
-		cOpt->GetKey(&sSection, &sKey);
+		pOpt->GetKey(&sSection, &sKey);
 		if (sSection.empty() || sKey.empty()) {
 			continue;
 		}

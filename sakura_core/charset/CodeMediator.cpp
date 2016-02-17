@@ -16,7 +16,7 @@
 
 	@date 2007.08.11 charcode.cpp から移動
 */
-ECodeType CodeMediator::DetectUnicodeBom(const char* pS, const int nLen)
+EncodingType CodeMediator::DetectUnicodeBom(const char* pS, const int nLen)
 {
 	uchar_t* pBuf;
 
@@ -54,7 +54,7 @@ ECodeType CodeMediator::DetectUnicodeBom(const char* pS, const int nLen)
 
 	@note 適切な検出が行われた場合は、m_dwStatus に CESI_MB_DETECTED フラグが格納される。
 */
-ECodeType CodeMediator::DetectMBCode(ESI* pEsi)
+EncodingType CodeMediator::DetectMBCode(ESI* pEsi)
 {
 //	pEsi->m_dwStatus = ESI_NOINFORMATION;
 
@@ -85,7 +85,7 @@ ECodeType CodeMediator::DetectMBCode(ESI* pEsi)
 	@retval 0               UTF-16 LE/BE ともに検出されなかった
 
 */
-ECodeType CodeMediator::DetectUnicode(ESI* pEsi)
+EncodingType CodeMediator::DetectUnicode(ESI* pEsi)
 {
 //	pEsi->m_dwStatus = ESI_NOINFORMATION;
 
@@ -111,7 +111,7 @@ ECodeType CodeMediator::DetectUnicode(ESI* pEsi)
 /*
 	日本語コードセット判定
 */
-ECodeType CodeMediator::CheckKanjiCode(ESI* pEsi)
+EncodingType CodeMediator::CheckKanjiCode(ESI* pEsi)
 {
 	/*
 		判定状況は、
@@ -125,7 +125,7 @@ ECodeType CodeMediator::CheckKanjiCode(ESI* pEsi)
 	if (pEsi->GetMetaName() != CODE_NONE) {
 		return pEsi->GetMetaName();
 	}
-	ECodeType nret;
+	EncodingType nret;
 	nret = DetectUnicode( pEsi );
 	if (nret != CODE_NONE && pEsi->GetStatus() != ESI_NODETECTED) {
 		return nret;
@@ -143,7 +143,7 @@ ECodeType CodeMediator::CheckKanjiCode(ESI* pEsi)
 /*
 	日本語コードセット判別
 
-	戻り値】2007.08.14 kobake 戻り値をintからECodeTypeへ変更
+	戻り値】2007.08.14 kobake 戻り値をintからEncodingTypeへ変更
 	SJIS		CODE_SJIS
 	JIS			CODE_JIS
 	EUC			CODE_EUC
@@ -152,7 +152,7 @@ ECodeType CodeMediator::CheckKanjiCode(ESI* pEsi)
 	UTF-7		CODE_UTF7
 	UnicodeBE	CODE_UNICODEBE
 */
-ECodeType CodeMediator::CheckKanjiCode(const char* pBuf, int nBufLen)
+EncodingType CodeMediator::CheckKanjiCode(const char* pBuf, int nBufLen)
 {
 	ESI esi(*m_pEncodingConfig);
 
@@ -171,7 +171,7 @@ ECodeType CodeMediator::CheckKanjiCode(const char* pBuf, int nBufLen)
 /*
 || ファイルの日本語コードセット判別
 ||
-|| 【戻り値】2007.08.14 kobake 戻り値をintからECodeTypeへ変更
+|| 【戻り値】2007.08.14 kobake 戻り値をintからEncodingTypeへ変更
 ||	SJIS		CODE_SJIS
 ||	JIS			CODE_JIS
 ||	EUC			CODE_EUC
@@ -181,7 +181,7 @@ ECodeType CodeMediator::CheckKanjiCode(const char* pBuf, int nBufLen)
 ||	UnicodeBE	CODE_UNICODEBE
 ||	エラー		CODE_ERROR
 */
-ECodeType CodeMediator::CheckKanjiCodeOfFile(const TCHAR* pszFile)
+EncodingType CodeMediator::CheckKanjiCodeOfFile(const TCHAR* pszFile)
 {
 	// オープン
 	BinaryInputStream in(pszFile);
@@ -212,7 +212,7 @@ ECodeType CodeMediator::CheckKanjiCodeOfFile(const TCHAR* pszFile)
 	in.Close();
 
 	// 日本語コードセット判別
-	ECodeType nCodeType = DetectUnicodeBom(reinterpret_cast<const char*>(pBuf), nBufLen);
+	EncodingType nCodeType = DetectUnicodeBom(reinterpret_cast<const char*>(pBuf), nBufLen);
 	if (nCodeType == CODE_NONE) {
 		// Unicode BOM は検出されませんでした．
 		nCodeType = CheckKanjiCode(reinterpret_cast<const char*>(pBuf), nBufLen);

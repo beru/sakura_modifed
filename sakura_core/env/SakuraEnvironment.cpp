@@ -641,7 +641,9 @@ int SakuraEnvironment::_ExParam_Evaluate(const wchar_t* pCond)
 			return 2;
 		}
 	case L'M': // $M キーボードマクロの記録中
-		if (GetDllShareData().m_flags.m_bRecordingKeyMacro && GetDllShareData().m_flags.m_hwndRecordingKeyMacro == EditWnd::getInstance()->GetHwnd()) { /* ウィンドウ */
+		if (GetDllShareData().m_flags.m_bRecordingKeyMacro
+			&& GetDllShareData().m_flags.m_hwndRecordingKeyMacro == EditWnd::getInstance()->GetHwnd() // ウィンドウ
+		) {
 			return 0;
 		}else {
 			return 1;

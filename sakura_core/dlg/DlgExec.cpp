@@ -74,7 +74,7 @@ BOOL DlgExec::OnInitDialog(
 {
 	_SetHwnd(hwnd);
 	
-	ECodeType codes[] = { CODE_SJIS, CODE_UNICODE, CODE_UTF8 };
+	EncodingType codes[] = { CODE_SJIS, CODE_UNICODE, CODE_UTF8 };
 	HWND hwndCombo;
 	hwndCombo = GetItemHwnd(IDC_COMBO_CODE_GET);
 	for (int i=0; i<_countof(codes); ++i) {

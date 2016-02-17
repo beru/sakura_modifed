@@ -183,7 +183,7 @@ bool DocFileOperation::FileLoadWithoutAutoMacro(
 
 // 同一ファイルの再オープン
 void DocFileOperation::ReloadCurrentFile(
-	ECodeType nCharCode		// [in] 文字コード種別
+	EncodingType nCharCode		// [in] 文字コード種別
 	)
 {
 	auto& activeView = m_pDocRef->m_pEditWnd->GetActiveView();
@@ -208,8 +208,8 @@ void DocFileOperation::ReloadCurrentFile(
 
 	auto& textArea = activeView.GetTextArea();
 	// カーソル位置保存
-	LayoutInt		nViewTopLine = textArea.GetViewTopLine();	// 表示域の一番上の行(0開始)
-	LayoutInt		nViewLeftCol = textArea.GetViewLeftCol();	// 表示域の一番左の桁(0開始)
+	LayoutInt	nViewTopLine = textArea.GetViewTopLine();	// 表示域の一番上の行(0開始)
+	LayoutInt	nViewLeftCol = textArea.GetViewLeftCol();	// 表示域の一番左の桁(0開始)
 	LayoutPoint	ptCaretPosXY = caret.GetCaretLayoutPos();
 
 	// ロード
@@ -450,7 +450,7 @@ bool DocFileOperation::FileSave()
 */
 bool DocFileOperation::FileSaveAs(
 	const WCHAR* filename,
-	ECodeType eCodeType,
+	EncodingType eCodeType,
 	EolType eEolType,
 	bool bDialog
 	)

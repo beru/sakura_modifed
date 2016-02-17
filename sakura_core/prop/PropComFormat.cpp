@@ -164,11 +164,11 @@ INT_PTR PropFormat::DispatchEvent(
 		wID			= LOWORD(wParam);	// 項目ID､ コントロールID､ またはアクセラレータID
 		switch (wNotifyCode) {
 		case EN_CHANGE:
-			if (IDC_EDIT_DFORM == wID) {
+			if (wID == IDC_EDIT_DFORM) {
 				ChangeDateExample(hwndDlg);
 				return 0;
 			}
-			if (IDC_EDIT_TFORM == wID) {
+			if (wID == IDC_EDIT_TFORM) {
 				ChangeTimeExample(hwndDlg);
 				return 0;
 			}

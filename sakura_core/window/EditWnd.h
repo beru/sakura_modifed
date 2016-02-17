@@ -122,7 +122,7 @@ public:
 	);
 
 	void SetDocumentTypeWhenCreate(
-		ECodeType		nCharCode,					//!< [in] 漢字コード
+		EncodingType		nCharCode,					//!< [in] 漢字コード
 		bool			bViewMode,					//!< [in] ビューモードで開くかどうか
 		TypeConfigNum	nDocumentType = TypeConfigNum(-1)	//!< [in] 文書タイプ．-1のとき強制指定無し．
 	);

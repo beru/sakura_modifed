@@ -91,9 +91,9 @@ public:
 	void SetFilePathAndIcon(const TCHAR* szFile);	// Sep. 9, 2002 genta
 
 	// 属性
-	ECodeType	GetDocumentEncoding() const;							// ドキュメントの文字コードを取得
+	EncodingType	GetDocumentEncoding() const;							// ドキュメントの文字コードを取得
 	bool		GetDocumentBomExist() const;							// ドキュメントのBOM付加を取得
-	void		SetDocumentEncoding(ECodeType eCharCode, bool bBom);	// ドキュメントの文字コードを設定
+	void		SetDocumentEncoding(EncodingType eCharCode, bool bBom);	// ドキュメントの文字コードを設定
 	bool IsModificationForbidden(EFunctionCode nCommand) const;			// 指定コマンドによる書き換えが禁止されているかどうか	// Aug. 14, 2000 genta
 	bool IsEditable() const { return !AppMode::getInstance()->IsViewMode() && !(!m_docLocker.IsDocWritable() && GetDllShareData().m_common.m_file.m_bUneditableIfUnwritable); }	// 編集可能かどうか
 	void GetSaveInfo(SaveInfo* pSaveInfo) const;			// セーブ情報を取得

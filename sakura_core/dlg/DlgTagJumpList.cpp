@@ -746,7 +746,9 @@ bool DlgTagJumpList::GetSelectedFullPathAndLine(
 	)
 {
 	if (m_pList->GetCount() != 1) {
-		if (m_nIndex == -1 || m_nIndex >= m_pList->GetCount()) return false;
+		if (m_nIndex == -1 || m_nIndex >= m_pList->GetCount()) {
+			return false;
+		}
 	}else {
 		m_nIndex = 0;
 	}
@@ -814,7 +816,6 @@ TCHAR* DlgTagJumpList::GetNameByType(const TCHAR type, const TCHAR* name)
 {
 	const TCHAR* p;
 	TCHAR*	token;
-	int		i;
 	// 2005.03.31 MIK
 	TCHAR	tmp[MAX_TAG_STRING_LENGTH];
 
@@ -822,7 +823,7 @@ TCHAR* DlgTagJumpList::GetNameByType(const TCHAR type, const TCHAR* name)
 	if (!p) p = _T(".c");	// 見つからないときは ".c" と想定する。
 	++p;
 
-	for (i=0; p_extentions[i]; i+=2) {
+	for (int i=0; p_extentions[i]; i+=2) {
 		_tcscpy(tmp, p_extentions[i]);
 		token = _tcstok(tmp, _T(","));
 		while (token) {
@@ -868,16 +869,20 @@ void DlgTagJumpList::SetFileName(const TCHAR* pszFileName)
 */
 void DlgTagJumpList::SetKeyword(const wchar_t* pszKeyword)
 {
-	if (!pszKeyword) return;
+	if (!pszKeyword) {
+		return;
+	}
 
-	if (m_pszKeyword) free(m_pszKeyword);
+	if (m_pszKeyword) {
+		free(m_pszKeyword);
+	}
 
 	m_pszKeyword = wcsdup(pszKeyword);
 
 	return;
 }
 
-typedef struct tagTagPathInfo {
+struct TagPathInfo {
 	TCHAR	szFileNameDst[_MAX_PATH*4];
 	TCHAR	szDriveSrc[_MAX_DRIVE*2];
 	TCHAR	szDriveDst[_MAX_DRIVE*2];
@@ -895,7 +900,7 @@ typedef struct tagTagPathInfo {
 	size_t	nFileDst;
 	size_t	nExtSrc;
 	size_t	nExtDst;
-} TagPathInfo;
+};
 
 /*!
 	得られた候補から最も期待に近いと思われるものを
@@ -906,8 +911,12 @@ typedef struct tagTagPathInfo {
 */
 int DlgTagJumpList::SearchBestTag(void)
 {
-	if (m_pList->GetCount() <= 0) return -1;	// 選べません。
-	if (!m_pszFileName) return 0;
+	if (m_pList->GetCount() <= 0) {
+		return -1;	// 選べません。
+	}
+	if (!m_pszFileName) {
+		return 0;
+	}
 
 	auto lpPathInfo = std::make_unique<TagPathInfo>();
 	int nMatch1 = -1;
@@ -938,7 +947,7 @@ int DlgTagJumpList::SearchBestTag(void)
 		{
 			TCHAR szPath[_MAX_PATH];
 			GetFullPathAndLine( i, szPath, _countof(szPath), NULL, NULL );
-			if (FALSE == GetLongFileName( szPath, lpPathInfo->szFileNameDst )) {
+			if (!GetLongFileName(szPath, lpPathInfo->szFileNameDst)) {
 				_tcscpy( lpPathInfo->szFileNameDst, szPath );
 			}
 		}
@@ -1041,8 +1050,8 @@ void DlgTagJumpList::FindNext(bool bNewFind)
 	if (bNewFind) {
 		// 前回のキーワードからの絞込検索のときで、tagsをスキップできるときはスキップ
 		if (-1 < m_psFind0Match->m_nDepth
-			&& (m_bTagJumpAnyWhere == m_bOldTagJumpAnyWhere || FALSE == m_bTagJumpAnyWhere)
-			&& (m_bTagJumpICase    == m_bOldTagJumpICase    || FALSE == m_bTagJumpICase)
+			&& (m_bTagJumpAnyWhere == m_bOldTagJumpAnyWhere || !m_bTagJumpAnyWhere)
+			&& (m_bTagJumpICase    == m_bOldTagJumpICase    || !m_bTagJumpICase)
 			&& wcsncmp(m_strOldKeyword.GetStringPtr(), szKey, m_strOldKeyword.GetStringLength() == 0)
 		) {
 			// 元のキーワードで１件もヒットしないtagsがあるので飛ばす

@@ -38,7 +38,7 @@ struct EncodingConfig;
 
 
 struct tagEncodingInfo {
-	ECodeType eCodeID;  // 文字コード識別番号
+	EncodingType eCodeID;  // 文字コード識別番号
 	int nSpecific;	// 評価値1
 	int nPoints;	// 評価値2
 };
@@ -106,11 +106,11 @@ protected:
 	// **** 全般
 	// マルチバイト系とUNICODE系とでそれぞれ情報の格納先が違う。
 	// 以下の関数で吸収する
-	int GetIndexById(const ECodeType) const; //!< 文字コードID から情報格納先インデックスを生成
+	int GetIndexById(const EncodingType) const; //!< 文字コードID から情報格納先インデックスを生成
 
 	// データセッタ/ゲッター
-	void SetEvaluation(const ECodeType, const int, const int);
-	void GetEvaluation(const ECodeType, int*, int *) const;
+	void SetEvaluation(const EncodingType, const int, const int);
+	void GetEvaluation(const EncodingType, int*, int *) const;
 
 	//! 調査対象となったデータの長さ（8bit 単位）
 	int m_nTargetDataLen;
@@ -198,17 +198,17 @@ public:
 	//
 	WCCODE_INFO m_aWcInfo[ESI_WCIDX_MAX];  //!< UTF-16 LE/BE 情報
 	BOMType m_eWcBomType;          //!< m_pWcInfo から推測される BOM の種類
-	ECodeType m_eMetaName;          //!< エンコーディング名からの種類判別
+	EncodingType m_eMetaName;          //!< エンコーディング名からの種類判別
 
 	BOMType GetBOMType(void) const { return m_eWcBomType; }
-	ECodeType GetMetaName() const { return m_eMetaName; }
+	EncodingType GetMetaName() const { return m_eMetaName; }
 
 protected:
 	//! BOMの種類を推測して m_eWcBomType を設定
 	void GuessUtf16Bom(void);
-	ECodeType AutoDetectByXML( const char*, int );
-	ECodeType AutoDetectByHTML( const char*, int );
-	ECodeType AutoDetectByCoding( const char*, int );
+	EncodingType AutoDetectByXML( const char*, int );
+	EncodingType AutoDetectByHTML( const char*, int );
+	EncodingType AutoDetectByCoding( const char*, int );
 
 
 public:

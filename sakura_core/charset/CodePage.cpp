@@ -69,8 +69,8 @@ DWORD GetMultiByteFlgas(UINT codepage){
 }
 
 // 表記：
-// ECodeTypeとCP_ACPは値が衝突している。CODE_CPACP != CP_ACP
-// charcodeEx: ECodeType + CODE_CPACP + CODE_CPOEM + コードページ
+// EncodingTypeとCP_ACPは値が衝突している。CODE_CPACP != CP_ACP
+// charcodeEx: EncodingType + CODE_CPACP + CODE_CPOEM + コードページ
 // codepageEx: CODE_CPACP + CODE_CPOEM + コードページ
 // codepage: コードページ + CP_ACP, CP_OEMCP
 inline UINT CodePageExToMSCP(int codepageEx)
@@ -250,7 +250,7 @@ CodeConvertResult CodePage::UnicodeToHex(const wchar_t* cSrc, const int iSLen, T
 int CodePage::GetNameNormal(LPTSTR outName, int charcodeEx)
 {
 	if (IsValidCodeType(charcodeEx)) {
-		auto_strcpy(outName, CodeTypeName(static_cast<ECodeType>(charcodeEx)).Normal());
+		auto_strcpy(outName, CodeTypeName(static_cast<EncodingType>(charcodeEx)).Normal());
 		return 1;
 	}
 	UINT codepage = CodePageExToMSCP(charcodeEx);
@@ -267,7 +267,7 @@ int CodePage::GetNameNormal(LPTSTR outName, int charcodeEx)
 int CodePage::GetNameShort(LPTSTR outName, int charcodeEx)
 {
 	if (IsValidCodeType(charcodeEx)) {
-		auto_strcpy(outName, CodeTypeName(static_cast<ECodeType>(charcodeEx)).Short());
+		auto_strcpy(outName, CodeTypeName(static_cast<EncodingType>(charcodeEx)).Short());
 		return 1;
 	}
 	UINT codepage = CodePageExToMSCP(charcodeEx);
@@ -284,7 +284,7 @@ int CodePage::GetNameShort(LPTSTR outName, int charcodeEx)
 int CodePage::GetNameLong(LPTSTR outName, int charcodeEx)
 {
 	if (IsValidCodeType(charcodeEx)) {
-		auto_strcpy(outName, CodeTypeName(static_cast<ECodeType>(charcodeEx)).Normal());
+		auto_strcpy(outName, CodeTypeName(static_cast<EncodingType>(charcodeEx)).Normal());
 		return 1;
 	}
 	UINT codepage = CodePageExToMSCP(charcodeEx);
@@ -315,7 +315,7 @@ int CodePage::GetNameLong(LPTSTR outName, int charcodeEx)
 int CodePage::GetNameBracket(LPTSTR outName, int charcodeEx)
 {
 	if (IsValidCodeType(charcodeEx)) {
-		auto_strcpy(outName, CodeTypeName(static_cast<ECodeType>(charcodeEx)).Bracket());
+		auto_strcpy(outName, CodeTypeName(static_cast<EncodingType>(charcodeEx)).Bracket());
 		return 1;
 	}
 	UINT codepage = CodePageExToMSCP(charcodeEx);

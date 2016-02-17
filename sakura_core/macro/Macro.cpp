@@ -248,15 +248,15 @@ void Macro::AddLParam(
 			lFlag |= GetDllShareData().m_common.m_search.m_nGrepOutputLineType == 2	? 0x400000 : 0x00;	// 2014.09.23 否ヒット行
 			lFlag |= (GetDllShareData().m_common.m_search.m_nGrepOutputStyle == 2)		? 0x40 : 0x00;	// CShareDataに入れなくていいの？
 			lFlag |= (GetDllShareData().m_common.m_search.m_nGrepOutputStyle == 3)		? 0x80 : 0x00;
-			ECodeType code = GetDllShareData().m_common.m_search.m_nGrepCharSet;
-			if (IsValidCodeType(code) || CODE_AUTODETECT == code) {
+			EncodingType code = GetDllShareData().m_common.m_search.m_nGrepCharSet;
+			if (IsValidCodeType(code) || code == CODE_AUTODETECT) {
 				lFlag |= code << 8;
 			}
 			lFlag |= pDlgGrep->m_searchOption.bWordOnly								? 0x10000 : 0x00;
 			lFlag |= GetDllShareData().m_common.m_search.m_bGrepOutputFileOnly			? 0x20000 : 0x00;
 			lFlag |= GetDllShareData().m_common.m_search.m_bGrepOutputBaseFolder		? 0x40000 : 0x00;
 			lFlag |= GetDllShareData().m_common.m_search.m_bGrepSeparateFolder			? 0x80000 : 0x00;
-			if (F_GREP_REPLACE == m_nFuncID) {
+			if (m_nFuncID == F_GREP_REPLACE) {
 				lFlag |= pDlgGrepRep->m_bPaste											? 0x100000 : 0x00;
 				lFlag |= GetDllShareData().m_common.m_search.m_bGrepBackup				? 0x200000 : 0x00;
 			}
@@ -1088,19 +1088,19 @@ bool Macro::HandleCommand(
 			LPARAM lFlag = wtoi_def(arguments[ArgIndex+3], 5);
 
 			// 2002/09/21 Moca 文字コードセット
-			ECodeType	nCharSet;
+			EncodingType	nCharSet;
 			{
 				nCharSet = CODE_SJIS;
 				if (lFlag & 0x10) {	// 文字コード自動判別(下位互換用)
 					nCharSet = CODE_AUTODETECT;
 				}
 				int nCode = (lFlag >> 8) & 0xff; // 下から 7-15 ビット目(0開始)を使う
-				if (IsValidCodeTypeExceptSJIS(nCode) || CODE_AUTODETECT == nCode) {
-					nCharSet = (ECodeType)nCode;
+				if (IsValidCodeTypeExceptSJIS(nCode) || nCode == CODE_AUTODETECT) {
+					nCharSet = (EncodingType)nCode;
 				}
 				// 2013.06.11 5番目の引き数を文字コードにする
 				if (ArgIndex + 5 <= argSize) {
-					nCharSet = (ECodeType)_wtoi(arguments[ArgIndex + 4]);
+					nCharSet = (EncodingType)_wtoi(arguments[ArgIndex + 4]);
 				}
 			}
 
@@ -1186,9 +1186,9 @@ bool Macro::HandleCommand(
 		{
 			// 文字コードセット
 			// Sep. 11, 2004 genta 文字コード設定の範囲チェック
-			ECodeType nCharCode = CODE_NONE;	// デフォルト値
+			EncodingType nCharCode = CODE_NONE;	// デフォルト値
 			if (arguments[1]) {
-				nCharCode = (ECodeType)_wtoi(arguments[1]);
+				nCharCode = (EncodingType)_wtoi(arguments[1]);
 			}
 			if (LOWORD(Index) == F_FILESAVEAS && IsValidCodeOrCPType(nCharCode) && nCharCode != pEditView->m_pEditDoc->GetDocumentEncoding()) {
 				// From Here Jul. 26, 2003 ryoji BOM状態を初期化
@@ -1272,7 +1272,7 @@ bool Macro::HandleCommand(
 			Wrap(&vArg[0])->Receive(S);
 			int nArgSize = 1;
 			// 2つ目の引数が数値。
-			if (F_MESSAGEBOX == LOWORD(Index)) {
+			if (LOWORD(Index) == F_MESSAGEBOX) {
 				vArg[1].vt = VT_I4;
 				vArg[1].intVal = (arguments[1] ? _wtoi(arguments[1]) : 0);
 				nArgSize = 2;
@@ -1502,9 +1502,9 @@ bool Macro::HandleFunction(
 	case F_GETSELECTED:
 		{
 			if (view->GetSelectionInfo().IsTextSelected()) {
-				NativeW cMem;
-				if (!view->GetSelectedDataSimple(cMem)) return false;
-				SysString S(cMem.GetStringPtr(), cMem.GetStringLength());
+				NativeW mem;
+				if (!view->GetSelectedDataSimple(mem)) return false;
+				SysString S(mem.GetStringPtr(), mem.GetStringLength());
 				Wrap(&result)->Receive(S);
 			}else {
 				result.vt = VT_BSTR;

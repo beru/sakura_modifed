@@ -554,14 +554,14 @@ BOOL DlgFileTree::OnBnClicked(int wID)
 		{
 			HWND hwndDlg = GetHwnd();
 			if (IsButtonChecked(IDC_RADIO_GREP)) {
-				// RADIO_GREP == folder
+				// folder == RADIO_GREP
 				TCHAR szDir[MAX_PATH];
 				GetItemText(IDC_EDIT_PATH, szDir, _countof(szDir) );
 				if (SelectDir(hwndDlg, LS(STR_DLGGREP1), szDir, szDir)) {
 					SetItemText(IDC_EDIT_PATH, szDir);
 				}
 			}else {
-				// RADIO_FILE == file
+				// file == RADIO_FILE
 				DlgOpenFile dlg;
 				TCHAR szDir[_MAX_PATH];
 				GetInidir(szDir);
@@ -622,8 +622,8 @@ BOOL DlgFileTree::OnBnClicked(int wID)
 			HTREEITEM htiItem = TreeView_GetSelection(hwndTree);
 			if (htiItem) {
 				if (TreeView_GetChild(hwndTree, htiItem)
-					&& IDCANCEL == ::MYMESSAGEBOX(GetHwnd(), MB_OKCANCEL | MB_ICONQUESTION, GSTR_APPNAME,
-					LS(STR_PROPCOMMAINMENU_DEL))
+					&& ::MYMESSAGEBOX(GetHwnd(), MB_OKCANCEL | MB_ICONQUESTION, GSTR_APPNAME,
+					LS(STR_PROPCOMMAINMENU_DEL)) == IDCANCEL
 				) {
 					return TRUE;
 				}

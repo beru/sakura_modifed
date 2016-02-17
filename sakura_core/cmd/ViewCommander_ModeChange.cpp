@@ -69,7 +69,7 @@ void ViewCommander::Command_CHGMOD_EOL(EolType e)
 
 // 文字コードセット指定
 void ViewCommander::Command_CHG_CHARSET(
-	ECodeType	eCharSet,	// [in] 設定する文字コードセット
+	EncodingType	eCharSet,	// [in] 設定する文字コードセット
 	bool		bBom		// [in] 設定するBOM(Unicode系以外は無視)
 	)
 {

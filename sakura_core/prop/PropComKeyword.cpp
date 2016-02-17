@@ -291,7 +291,7 @@ INT_PTR PropKeyword::DispatchEvent(
 					return TRUE;
 				case IDC_BUTTON_DELSET:	// セット削除
 					nIndex1 = Combo_GetCurSel(hwndCOMBO_SET);
-					if (CB_ERR == nIndex1) {
+					if (nIndex1 == CB_ERR) {
 						return TRUE;
 					}
 					// 削除対象のセットを使用しているファイルタイプを列挙
@@ -320,11 +320,11 @@ INT_PTR PropKeyword::DispatchEvent(
 							_tcscat(pszLabel, _T("\n"));
 						}
 					}
-					if (IDCANCEL == ::MYMESSAGEBOX(	hwndDlg, MB_OKCANCEL | MB_ICONQUESTION, GSTR_APPNAME,
+					if (::MYMESSAGEBOX(	hwndDlg, MB_OKCANCEL | MB_ICONQUESTION, GSTR_APPNAME,
 						LS(STR_PROPCOMKEYWORD_SETDEL),
 						csSpecialKeyword.m_keyWordSetMgr.GetTypeName(nIndex1),
 						pszLabel
-						)
+						) == IDCANCEL
 					) {
 						return TRUE;
 					}

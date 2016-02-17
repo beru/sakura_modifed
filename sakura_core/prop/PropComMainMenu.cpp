@@ -424,8 +424,8 @@ INT_PTR PropMainMenu::DispatchEvent(
 					return TRUE;
 
 				case IDC_BUTTON_CLEAR:
-					if (IDCANCEL == ::MYMESSAGEBOX(hwndDlg, MB_OKCANCEL | MB_ICONQUESTION, GSTR_APPNAME,
-						LS(STR_PROPCOMMAINMENU_CLEAR))
+					if (::MYMESSAGEBOX(hwndDlg, MB_OKCANCEL | MB_ICONQUESTION, GSTR_APPNAME,
+						LS(STR_PROPCOMMAINMENU_CLEAR)) == IDCANCEL
 					) {
 						return TRUE;
 					}
@@ -437,8 +437,8 @@ INT_PTR PropMainMenu::DispatchEvent(
 					return TRUE;
 
 				case IDC_BUTTON_INITIALIZE:
-					if (IDCANCEL == ::MYMESSAGEBOX(hwndDlg, MB_OKCANCEL | MB_ICONQUESTION, GSTR_APPNAME,
-						LS(STR_PROPCOMMAINMENU_INIT))
+					if (::MYMESSAGEBOX(hwndDlg, MB_OKCANCEL | MB_ICONQUESTION, GSTR_APPNAME,
+						LS(STR_PROPCOMMAINMENU_INIT)) == IDCANCEL
 					) {
 						return TRUE;
 					}
@@ -458,8 +458,8 @@ INT_PTR PropMainMenu::DispatchEvent(
 					htiItem = TreeView_GetSelection(hwndTreeRes);
 					if (htiItem) {
 						if (TreeView_GetChild(hwndTreeRes, htiItem)
-						  && IDCANCEL == ::MYMESSAGEBOX(hwndDlg, MB_OKCANCEL | MB_ICONQUESTION, GSTR_APPNAME,
-							LS(STR_PROPCOMMAINMENU_DEL))
+						  && ::MYMESSAGEBOX(hwndDlg, MB_OKCANCEL | MB_ICONQUESTION, GSTR_APPNAME,
+							LS(STR_PROPCOMMAINMENU_DEL)) == IDCANCEL
 						) {
 							return TRUE;
 						}
@@ -497,10 +497,10 @@ INT_PTR PropMainMenu::DispatchEvent(
 					case IDC_BUTTON_INSERT_A:			// 挿入
 					case IDC_BUTTON_ADD:				// 追加
 						// Function 取得
-						if (CB_ERR == (nIdxFIdx = Combo_GetCurSel(hwndComboFunkKind))) {
+						if ((nIdxFIdx = Combo_GetCurSel(hwndComboFunkKind)) == CB_ERR) {
 							return FALSE;
 						}
-						if (LB_ERR == (nIdxFunc = List_GetCurSel(hwndListFunk))) {
+						if ((nIdxFunc = List_GetCurSel(hwndListFunk)) == LB_ERR) {
 							return FALSE;
 						}
 						if (nIdxFIdx == nSpecialFuncsNum) {
@@ -914,7 +914,7 @@ void PropMainMenu::SetData(HWND hwndDlg)
 		pFuncWk = &msMenu[nMenuCnt];
 		pFuncWk->nFunc = pFunc->nFunc;
 		pFuncWk->m_bIsNode = false;
-		switch (pFunc->m_nType) {
+		switch (pFunc->m_type) {
 		case MainMenuType::Leaf:
 			m_lookup.Funccode2Name(pFunc->nFunc, szLabel, MAX_MAIN_MENU_NAME_LEN);
 			pFuncWk->m_sName = szLabel;
@@ -951,7 +951,7 @@ void PropMainMenu::SetData(HWND hwndDlg)
 		tvis.hInsertAfter = TVI_LAST;
 		tvis.item.pszText = const_cast<TCHAR*>(MakeDispLabel(pFuncWk));
 		tvis.item.lParam = nMenuCnt++;								// 内部データインデックスのインクリメント
-		tvis.item.cChildren = (pFunc->m_nType == MainMenuType::Node);
+		tvis.item.cChildren = (pFunc->m_type == MainMenuType::Node);
 		htiItem = TreeView_InsertItem(hwndTreeRes, &tvis);
 	}
 }
@@ -1024,29 +1024,29 @@ bool PropMainMenu::GetDataTree(
 
 		switch (pFuncWk->nFunc) {
 		case F_NODE:
-			pFunc->m_nType = MainMenuType::Node;
+			pFunc->m_type = MainMenuType::Node;
 			auto_strcpy_s(pFunc->m_sName, MAX_MAIN_MENU_NAME_LEN + 1, SupplementAmpersand(pFuncWk->m_sName).c_str());
 			break;
 		case F_SEPARATOR:
-			pFunc->m_nType = MainMenuType::Separator;
+			pFunc->m_type = MainMenuType::Separator;
 			pFunc->m_sName[0] = L'\0';
 			break;
 		default:
 			if (pFuncWk->m_bIsNode) {
 				// コマンド定義外のIDの場合、ノードとして扱う 2012.10.14 syat 各国語対応
-				pFunc->m_nType = MainMenuType::Node;
+				pFunc->m_type = MainMenuType::Node;
 				pFunc->m_sName[0] = L'\0';	// 名前は、リソースから取得するため空白に設定
 				break;
 			}
 			if (pFuncWk->nFunc >= F_SPECIAL_FIRST && pFuncWk->nFunc <= F_SPECIAL_LAST) {
-				pFunc->m_nType = MainMenuType::Special;
+				pFunc->m_type = MainMenuType::Special;
 				// 2014.05.04 nLevel == 0 のときも"名前なし"にする
 					pFunc->m_sName[0] = L'\0';
 			}else {
 				if (pFuncWk->nFunc == F_OPTION) {
 					bOptionOk = true;
 				}
-				pFunc->m_nType = MainMenuType::Leaf;
+				pFunc->m_type = MainMenuType::Leaf;
 				pFunc->m_sName[0] = L'\0';
 			}
 			break;
@@ -1071,7 +1071,7 @@ bool PropMainMenu::GetDataTree(
 			m_common.m_mainMenu.m_nMenuTopIdx[nTopCount++] = m_common.m_mainMenu.m_nMainMenuNum;
 			// Top Levelの追加（ダミー）
 			pFunc = &pMenuTbl[m_common.m_mainMenu.m_nMainMenuNum++];
-			pFunc->m_nType = MainMenuType::Node;
+			pFunc->m_type = MainMenuType::Node;
 			pFunc->nFunc = F_NODE;
 			auto_strcpy(pFunc->m_sName, L"auto_add");
 			pFunc->m_sKey[0] = L'\0';
@@ -1083,7 +1083,7 @@ bool PropMainMenu::GetDataTree(
 		if (m_common.m_mainMenu.m_nMainMenuNum < MAX_MAINMENU) {
 			// 共通設定
 			pFunc = &pMenuTbl[m_common.m_mainMenu.m_nMainMenuNum++];
-			pFunc->m_nType = MainMenuType::Leaf;
+			pFunc->m_type = MainMenuType::Leaf;
 			pFunc->nFunc = F_OPTION;
 			pFunc->m_sName[0] = L'\0';
 			pFunc->m_sKey[0] = L'\0';

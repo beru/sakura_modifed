@@ -479,17 +479,17 @@ void EditView::ISearchBack(void) {
 	}
 	m_nISearchHistoryCount --;
 
-	LayoutRange sRange = m_searchHistory[m_nISearchHistoryCount];
+	LayoutRange range = m_searchHistory[m_nISearchHistoryCount];
 
 	if (m_nISearchHistoryCount == 0) {
 		GetSelectionInfo().DisableSelectArea(true);
-		sRange.SetToX(sRange.GetFrom().x);
+		range.SetToX(range.GetFrom().x);
 	}
 
-	GetCaret().MoveCursor(sRange.GetFrom(), true, _CARETMARGINRATE / 3);
+	GetCaret().MoveCursor(range.GetFrom(), true, _CARETMARGINRATE / 3);
 	if (m_nISearchHistoryCount != 0) {
 		//	2005.06.24 Moca
-		GetSelectionInfo().SetSelectArea(sRange);
+		GetSelectionInfo().SetSelectArea(range);
 	}
 
 	Redraw();

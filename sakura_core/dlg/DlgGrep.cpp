@@ -466,12 +466,12 @@ void DlgGrep::SetData(void)
 	// 文字コードセット
 	{
 		int	nIdx, nCurIdx = -1;
-		ECodeType nCharSet;
+		EncodingType nCharSet;
 		HWND hWndCombo = GetItemHwnd(IDC_COMBO_CHARSET);
 		nCurIdx = Combo_GetCurSel(hWndCombo);
-		CodeTypesForCombobox cCodeTypes;
-		for (nIdx=0; nIdx<cCodeTypes.GetCount(); ++nIdx) {
-			nCharSet = (ECodeType)Combo_GetItemData(hWndCombo, nIdx);
+		CodeTypesForCombobox codeTypes;
+		for (nIdx=0; nIdx<codeTypes.GetCount(); ++nIdx) {
+			nCharSet = (EncodingType)Combo_GetItemData(hWndCombo, nIdx);
 			if (nCharSet == m_nGrepCharSet) {
 				nCurIdx = nIdx;
 			}
@@ -603,7 +603,7 @@ int DlgGrep::GetData(void)
 		int		nIdx;
 		HWND	hWndCombo = GetItemHwnd(IDC_COMBO_CHARSET);
 		nIdx = Combo_GetCurSel(hWndCombo);
-		m_nGrepCharSet = (ECodeType)Combo_GetItemData(hWndCombo, nIdx);
+		m_nGrepCharSet = (EncodingType)Combo_GetItemData(hWndCombo, nIdx);
 	}
 
 	// 行を出力/該当部分/否マッチ行 を出力

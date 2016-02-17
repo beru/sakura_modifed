@@ -49,7 +49,7 @@ public:
 
 	bool OutputW(const WCHAR* pBuf, int size = -1);
 	bool OutputA(const ACHAR* pBuf, int size = -1);
-	bool IsActiveDebugWindow(){ return FALSE == m_bWindow; }
+	bool IsActiveDebugWindow(){ return !m_bWindow; }
 
 protected:
 	void OutputBuf(const WCHAR* pBuf, int size);
@@ -122,7 +122,7 @@ bool EditView::ExecCmd( const TCHAR* pszCmd, int nFlgOpt, const TCHAR* pszCurDir
 	BOOL	bSendStdin		= nFlgOpt & 0x04 ? TRUE : FALSE;	//	編集中ファイルを子プロセスSTDINに渡す
 	// BOOL	bIOUnicodeGet	= nFlgOpt & 0x08 ? TRUE : FALSE;	//	標準出力をUnicodeで行う	2008/6/17 Uchi
 	// BOOL	bIOUnicodeSend	= nFlgOpt & 0x10 ? TRUE : FALSE;	//	標準入力をUnicodeで行う	2008/6/20 Uchi
-	ECodeType outputEncoding;
+	EncodingType outputEncoding;
 	if (nFlgOpt & 0x08) {
 		outputEncoding = CODE_UNICODE;
 	}else if (nFlgOpt & 0x80) {
@@ -130,7 +130,7 @@ bool EditView::ExecCmd( const TCHAR* pszCmd, int nFlgOpt, const TCHAR* pszCurDir
 	}else {
 		outputEncoding = CODE_SJIS;
 	}
-	ECodeType sendEncoding;
+	EncodingType sendEncoding;
 	if (nFlgOpt & 0x10) {
 		sendEncoding = CODE_UNICODE;
 	}else if (nFlgOpt & 0x100) {

@@ -44,10 +44,10 @@ bool CodeBase::MIMEHeaderDecode(
 	const char* pSrc,
 	const int nSrcLen,
 	Memory* pMem,
-	const ECodeType codetype
+	const EncodingType codetype
 	)
 {
-	ECodeType ecodetype;
+	EncodingType ecodetype;
 	int nskip_bytes;
 
 	// ƒ\[ƒX‚ğæ“¾

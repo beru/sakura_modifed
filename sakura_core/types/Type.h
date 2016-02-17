@@ -28,7 +28,7 @@
 #include "doc/DocTypeSetting.h"
 #include "doc/LineComment.h"
 #include "doc/BlockComment.h"
-#include "charset/charset.h"	// ECodeType
+#include "charset/charset.h"	// EncodingType
 #include "RegexKeyword.h"		// RegexKeywordInfo
 
 
@@ -98,7 +98,7 @@ enum EBackgroundImagePos {
 //! エンコードオプション
 struct EncodingConfig {
 	bool				m_bPriorCesu8;					//!< 自動判別時に CESU-8 を優先するかどうか
-	ECodeType			m_eDefaultCodetype;				//!< デフォルト文字コード
+	EncodingType			m_eDefaultCodetype;				//!< デフォルト文字コード
 	EolType			m_eDefaultEoltype;				//!< デフォルト改行コード	// 2011.01.24 ryoji
 	bool				m_bDefaultBom;					//!< デフォルトBOM			// 2011.01.24 ryoji
 };
@@ -266,24 +266,24 @@ public:
 	{
 #ifdef _DEBUG
 		// 元がintだったので、未初期化で使うと問題が発生するように、あえて、変な値を入れておく。
-		m_nType = 1234;
+		m_type = 1234;
 #else
 		// リリース時は、未初期化でも問題が起こりにくいように、ゼロクリアしておく
-		m_nType = 0;
+		m_type = 0;
 #endif
 	}
 	
 	explicit TypeConfigNum(int n) {
-		m_nType = n;
+		m_type = n;
 	}
-	bool IsValidType() const { return m_nType >= 0 && m_nType < MAX_TYPES; }
-	int GetIndex() const { /*assert(IsValid());*/ return m_nType; }
+	bool IsValidType() const { return m_type >= 0 && m_type < MAX_TYPES; }
+	int GetIndex() const { /*assert(IsValid());*/ return m_type; }
 
 	// 共有データへの簡易アクセサ
 //	TypeConfig* operator->() { return GetTypeConfig(); }
 //	TypeConfig* GetTypeConfig();
 private:
-	int m_nType;
+	int m_type;
 };
 
 

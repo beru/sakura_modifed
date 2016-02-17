@@ -507,7 +507,7 @@ void __stdcall PPA::stdStrFunc(
 	::VariantInit(&Ret);
 	*Err_CD = 0;
 	if (false != CallHandleFunction(Index, Argument, ArgSize, &Ret)) {
-		if (VT_BSTR == Ret.vt) {
+		if (Ret.vt == VT_BSTR) {
 			int len;
 			char* buf;
 			Wrap(&Ret.bstrVal)->Get(&buf, &len);
@@ -555,7 +555,7 @@ bool PPA::CallHandleFunction(
 				type = mfi->m_pData->m_pVarArgEx[i - 4];
 			}
 		}
-		if (VT_EMPTY == type) {
+		if (type == VT_EMPTY) {
 			break;
 		}
 		switch (type) {

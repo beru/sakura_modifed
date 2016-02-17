@@ -24,7 +24,7 @@ bool Converter_Trim::DoConvert(NativeW* pData)
 	int			nBgn;
 	int			i, j;
 	int			nPosDes;
-	Eol		eol;
+	Eol			eol;
 	int			nCharChars;
 
 	nBgn = 0;

@@ -788,10 +788,11 @@ LRESULT ControlTray::DispatchEvent(
 					}else {
 						ErrorBeep();
 					}
-				}while (IDYES == ::MYMESSAGEBOX(
+				}while (::MYMESSAGEBOX(
 						NULL, MB_YESNOCANCEL | MB_ICONEXCLAMATION | MB_APPLMODAL | MB_TOPMOST,
 						GSTR_APPNAME,
-						LS(STR_TRAY_EXTHELP1))
+						LS(STR_TRAY_EXTHELP1)
+					) == IDYES
 				);// do-while
 
 				break;

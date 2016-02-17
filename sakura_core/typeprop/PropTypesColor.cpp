@@ -218,7 +218,7 @@ LRESULT APIENTRY ColorList_SubclassProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPA
 			}else {
 				pColorInfo->m_bDisp = true;
 			}
-			if (COLORIDX_GYOU == nIndex) {
+			if (nIndex == COLORIDX_GYOU) {
 				pColorInfo = (ColorInfo*)List_GetItemData(hwnd, nIndex);
 			}
 

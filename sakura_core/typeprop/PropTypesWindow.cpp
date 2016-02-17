@@ -448,7 +448,7 @@ int PropTypesWindow::GetData(HWND hwndDlg)
 		HWND hCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_DEFAULT_CODETYPE);
 		int i = Combo_GetCurSel(hCombo);
 		if (CB_ERR != i) {
-			m_types.m_encoding.m_eDefaultCodetype = ECodeType(Combo_GetItemData(hCombo, i));
+			m_types.m_encoding.m_eDefaultCodetype = EncodingType(Combo_GetItemData(hCombo, i));
 		}
 
 		// m_types.m_bDefaultBom Çê›íË

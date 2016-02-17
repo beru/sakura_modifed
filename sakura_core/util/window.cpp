@@ -218,7 +218,7 @@ bool TextWidthCalc::SetWidthIfMax(int width)
 
 bool TextWidthCalc::SetWidthIfMax(int width, int extCx)
 {
-	if (INT_MIN == extCx) {
+	if (extCx == INT_MIN) {
 		extCx = nExt;
 	}
 	if (nCx < width + extCx) {

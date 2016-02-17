@@ -141,7 +141,7 @@ int CALLBACK DlgFuncList::CompareFunc_Asc(
 			return 1;
 		}
 	}
-	if (FL_COL_COL == pDlgFuncList->m_nSortCol) {	// 桁でソート
+	if (pDlgFuncList->m_nSortCol == FL_COL_COL) {	// 桁でソート
 		if (pFuncInfo1->m_nFuncColCRLF < pFuncInfo2->m_nFuncColCRLF) {
 			return -1;
 		}else
@@ -152,7 +152,7 @@ int CALLBACK DlgFuncList::CompareFunc_Asc(
 		}
 	}
 	// From Here 2001.12.07 hor
-	if (FL_COL_REMARK == pDlgFuncList->m_nSortCol) {	// 備考でソート
+	if (pDlgFuncList->m_nSortCol == FL_COL_REMARK) {	// 備考でソート
 		if (pFuncInfo1->m_nInfo < pFuncInfo2->m_nInfo) {
 			return -1;
 		}else
@@ -737,7 +737,7 @@ void DlgFuncList::SetData()
 
 	// 2002.02.08 hor
 	//（IDC_LIST_FLもIDC_TREE_FLも常に存在していて、m_nViewTypeによって、どちらを表示するかを選んでいる）
-	HWND hwndShow = (VIEWTYPE_LIST == m_nViewType)? hwndList: hwndTree;
+	HWND hwndShow = (m_nViewType == VIEWTYPE_LIST)? hwndList: hwndTree;
 	::ShowWindow(hwndShow, SW_SHOW);
 	if (::GetForegroundWindow() == MyGetAncestor(GetHwnd(), GA_ROOT) && IsChild(GetHwnd(), GetFocus())) {
 		::SetFocus(hwndShow);
@@ -745,7 +745,7 @@ void DlgFuncList::SetData()
 
 	// 2002.02.08 hor
 	// 空行をどう扱うかのチェックボックスはブックマーク一覧のときだけ表示する
-	if (OUTLINE_BOOKMARK == m_nListType) {
+	if (m_nListType == OUTLINE_BOOKMARK) {
 		EnableItem(IDC_CHECK_bMarkUpBlankLineEnable, true);
 		if (!IsDocking()) {
 			::ShowWindow(GetItemHwnd(IDC_CHECK_bMarkUpBlankLineEnable), SW_SHOW);
@@ -1138,7 +1138,7 @@ void DlgFuncList::SetTreeJava(
 		m_memClipText.AppendString(szText);		// クリップボードコピー用テキスト
 		// "%ts%ls\r\n"
 		m_memClipText.AppendNativeDataT(pFuncInfo->m_memFuncName);
-		m_memClipText.AppendString(FL_OBJ_DECLARE == pFuncInfo->m_nInfo ? m_pFuncInfoArr->GetAppendText(FL_OBJ_DECLARE).c_str() : L""); 	//	Jan. 04, 2001 genta C++で使用
+		m_memClipText.AppendString(pFuncInfo->m_nInfo == FL_OBJ_DECLARE ? m_pFuncInfoArr->GetAppendText(FL_OBJ_DECLARE).c_str() : L""); 	//	Jan. 04, 2001 genta C++で使用
 		m_memClipText.AppendString(L"\r\n");
 
 		// 現在カーソル位置のメソッドかどうか調べる
@@ -2259,7 +2259,7 @@ void DlgFuncList::SortListView(
 		col.mask = LVCF_TEXT;
 	// From Here 2001.12.03 hor
 	//	col.pszText = _T("関数名 *");
-		if (OUTLINE_BOOKMARK == m_nListType) {
+		if (m_nListType == OUTLINE_BOOKMARK) {
 			col.pszText = const_cast<TCHAR*>(sortcol == col_no ? LS(STR_DLGFNCLST_LIST_TEXT_M) : LS(STR_DLGFNCLST_LIST_TEXT));
 		}else {
 			col.pszText = const_cast<TCHAR*>(sortcol == col_no ? LS(STR_DLGFNCLST_LIST_FUNC_M) : LS(STR_DLGFNCLST_LIST_FUNC));
@@ -3308,7 +3308,7 @@ void DlgFuncList::DoMenu(POINT pt, HWND hwndFrom)
 		// （ツリーなら「すべて展開」／「すべて縮小」とか、そういうの）
 		::InsertMenu(hMenu, iPos++, MF_BYPOSITION | MF_STRING, 450, LS(STR_DLGFNCLST_MENU_UPDATE));
 		int flag = 0;
-		if (FALSE == ::IsWindowEnabled( GetItemHwnd(IDC_BUTTON_COPY) )) {
+		if (!::IsWindowEnabled( GetItemHwnd(IDC_BUTTON_COPY) )) {
 			flag |= MF_GRAYED;
 		}
 		::InsertMenu(hMenu, iPos++, MF_BYPOSITION | MF_STRING | flag, 451, LS(STR_DLGFNCLST_MENU_COPY));
@@ -3504,8 +3504,12 @@ bool DlgFuncList::ChangeLayout(int nId)
 	if (!GetHwnd()) {	// 現在は非表示
 		if (bDockDisp) {	// 新設定は表示
 			if (eDockSideNew <= DockSideType::Float) {
-				if (nId == OUTLINE_LAYOUT_BACKGROUND) return false;	// 裏ではフローティングは開かない（従来互換）※無理に開くとタブモード時は画面が切り替わってしまう
-				if (nId == OUTLINE_LAYOUT_FILECHANGED) return false;	// ファイル切替ではフローティングは開かない（従来互換）
+				if (nId == OUTLINE_LAYOUT_BACKGROUND) {
+					return false;	// 裏ではフローティングは開かない（従来互換）※無理に開くとタブモード時は画面が切り替わってしまう
+				}
+				if (nId == OUTLINE_LAYOUT_FILECHANGED) {
+					return false;	// ファイル切替ではフローティングは開かない（従来互換）
+				}
 			}
 			// ※ 裏では一時的に Disable 化しておいて開く（タブモードでの不正な画面切り替え抑止）
 			EditView* pEditView = &pDoc->m_pEditWnd->GetActiveView();
@@ -3534,8 +3538,12 @@ bool DlgFuncList::ChangeLayout(int nId)
 		EditView* pEditView = (EditView*)m_lParam;
 		if (!bDockDisp) {	// 新設定は非表示
 			if (eDockSideOld <= DockSideType::Float) {	// 現在はフローティング
-				if (nId == OUTLINE_LAYOUT_BACKGROUND) return false;	// 裏ではフローティングは閉じない（従来互換）
-				if (nId == OUTLINE_LAYOUT_FILECHANGED && eDockSideNew <= DockSideType::Float) return false;	// ファイル切替では新設定もフローティングなら再利用（従来互換）
+				if (nId == OUTLINE_LAYOUT_BACKGROUND) {
+					return false;	// 裏ではフローティングは閉じない（従来互換）
+				}
+				if (nId == OUTLINE_LAYOUT_FILECHANGED && eDockSideNew <= DockSideType::Float) {
+					return false;	// ファイル切替では新設定もフローティングなら再利用（従来互換）
+				}
 			}
 			::DestroyWindow(GetHwnd());	// 閉じる
 			return false;
@@ -3546,8 +3554,12 @@ bool DlgFuncList::ChangeLayout(int nId)
 			::DestroyWindow(GetHwnd());	// 閉じる
 			if (eDockSideNew <= DockSideType::Float) {	// 新設定はフローティング
 				m_xPos = m_yPos = -1;	// 画面位置を初期化する
-				if (nId == OUTLINE_LAYOUT_BACKGROUND) return false;	// 裏ではフローティングは開かない（従来互換）※無理に開くとタブモード時は画面が切り替わってしまう
-				if (nId == OUTLINE_LAYOUT_FILECHANGED) return false;	// ファイル切替ではフローティングは開かない（従来互換）
+				if (nId == OUTLINE_LAYOUT_BACKGROUND) {
+					return false;	// 裏ではフローティングは開かない（従来互換）※無理に開くとタブモード時は画面が切り替わってしまう
+				}
+				if (nId == OUTLINE_LAYOUT_FILECHANGED) {
+					return false;	// ファイル切替ではフローティングは開かない（従来互換）
+				}
 			}
 			// ※ 裏では一時的に Disable 化しておいて開く（タブモードでの不正な画面切り替え抑止）
 			if (nId == OUTLINE_LAYOUT_BACKGROUND) {

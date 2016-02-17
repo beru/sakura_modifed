@@ -56,7 +56,7 @@ public:
 	~FileLoad(void);
 
 	// Jul. 26, 2003 ryoji BOM引数追加
-	ECodeType FileOpen( LPCTSTR, bool bBigFile, ECodeType, int, bool* pbBomExist = NULL );		// 指定文字コードでファイルをオープンする
+	EncodingType FileOpen( LPCTSTR, bool bBigFile, EncodingType, int, bool* pbBomExist = NULL );		// 指定文字コードでファイルをオープンする
 	void FileClose(void);					// 明示的にファイルをクローズする
 
 	//! 1行データをロードする 順アクセス用
@@ -108,7 +108,7 @@ protected:
 	LONGLONG	m_nFileDataLen;	// ファイルデータ長からBOM長を引いたバイト数
 	LONGLONG	m_nReadLength;	// 現在までにロードしたデータの合計バイト数(BOM長を含まない)
 	int		m_nLineIndex;	// 現在ロードしている論理行(0開始)
-	ECodeType	m_CharCode;		// 文字コード
+	EncodingType	m_CharCode;		// 文字コード
 	CodeBase*	m_pCodeBase;	////
 	EEncodingTrait	m_encodingTrait;
 	Memory			m_memEols[3];
@@ -124,7 +124,7 @@ protected:
 		Ready,		//!< 順アクセスOK
 		ReadBufEnd	//!<ファイルの終端までバッファに入れた
 	};
-	FileLoadMode	m_eMode;	// 現在の読み込み状態
+	FileLoadMode	m_mode;	// 現在の読み込み状態
 
 	// 読み込みバッファ系
 	char*	m_pReadBuf;			// 読み込みバッファへのポインタ
@@ -160,7 +160,7 @@ inline int FileLoad::Read(void* pBuf, size_t nSize) {
 // protected
 inline DWORD FileLoad::FilePointer(DWORD offset, DWORD origin) {
 	DWORD fp;
-	if (INVALID_SET_FILE_POINTER == (fp = ::SetFilePointer(m_hFile, offset, NULL, FILE_BEGIN))) {
+	if ((fp = ::SetFilePointer(m_hFile, offset, NULL, FILE_BEGIN)) == INVALID_SET_FILE_POINTER) {
 		throw Error_FileRead();
 	}
 	return fp;

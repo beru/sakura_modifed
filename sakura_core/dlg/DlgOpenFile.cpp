@@ -99,7 +99,7 @@ public:
 	int				m_nHelpTopicID;
 	bool			m_bViewMode;		// ビューモードか
 	bool			m_bIsSaveDialog;	// 保存のダイアログか
-	ECodeType		m_nCharCode;		// 文字コード
+	EncodingType		m_nCharCode;		// 文字コード
 
 	Eol				m_eol;
 	bool			m_bUseCharCode;
@@ -371,7 +371,6 @@ UINT_PTR CALLBACK OFNHookProc(
 		}
 		break;
 
-
 	case WM_DESTROY:
 		// フック解除
 		{
@@ -459,7 +458,7 @@ UINT_PTR CALLBACK OFNHookProc(
 				// 文字コード選択コンボボックス 値を取得
 				nIdx = Combo_GetCurSel(pData->m_hwndComboCODES);
 				lRes = Combo_GetItemData(pData->m_hwndComboCODES, nIdx);
-				pData->m_nCharCode = (ECodeType)lRes;	// 文字コード
+				pData->m_nCharCode = (EncodingType)lRes;	// 文字コード
 				// Feb. 9, 2001 genta
 				if (pData->m_bUseEol) {
 					nIdx = Combo_GetCurSel(pData->m_hwndComboEOL);
@@ -479,7 +478,7 @@ UINT_PTR CALLBACK OFNHookProc(
 			}
 			break;	// CDN_FILEOK
 
-		case CDN_FOLDERCHANGE  :
+		case CDN_FOLDERCHANGE:
 //			MYTRACE(_T("pofn->hdr.code=CDN_FOLDERCHANGE  \n"));
 			{
 				wchar_t szFolder[_MAX_PATH];
@@ -489,7 +488,7 @@ UINT_PTR CALLBACK OFNHookProc(
 //			MYTRACE(_T("\tlRes=%d\tszFolder=[%ls]\n"), lRes, szFolder);
 
 			break;
-		case CDN_SELCHANGE :
+		case CDN_SELCHANGE:
 			{
 				DlgOpenFileData* pData = (DlgOpenFileData*)::GetWindowLongPtr(hdlg, DWLP_USER);
 				// OFNの再設定はNT系ではUnicode版APIのみ有効
@@ -525,7 +524,7 @@ UINT_PTR CALLBACK OFNHookProc(
 	case WM_COMMAND:
 		wNotifyCode = HIWORD(wParam);	// notification code
 		wID = LOWORD(wParam);			// item, control, or accelerator identifier
-		hwndCtl = (HWND) lParam;		// handle of control
+		hwndCtl = (HWND)lParam;		// handle of control
 		switch (wNotifyCode) {
 		case CBN_SELCHANGE:
 			switch ((int) LOWORD(wParam)) {
@@ -566,7 +565,7 @@ UINT_PTR CALLBACK OFNHookProc(
 							hwndFilebox = ::GetDlgItem( pData->m_hwndOpenDlg, edt1 );	// ファイル名エディット（レガシータイプ）
 						if (::IsWindow(hwndFilebox)) {
 							::SetWindowText(hwndFilebox, szWork);
-							if (IDC_COMBO_OPENFOLDER == wID)
+							if (wID == IDC_COMBO_OPENFOLDER)
 								::PostMessage(hwndFilebox, WM_KEYDOWN, VK_RETURN, (LPARAM)0);
 						}
 					}
@@ -1162,11 +1161,11 @@ void DlgOpenFile::InitLayout(
 	while (hwndCtrl) {
 		if (::GetDlgCtrlID(hwndCtrl) != stc32) {
 			::GetWindowRect(hwndCtrl, &rc);
-			POINT po;
-			po.x = (rc.right < rcBase.left)? nLeft: rc.left + nShift;
-			po.y = rc.top;
-			::ScreenToClient(hwndDlg, &po);
-			::SetWindowPos(hwndCtrl, 0, po.x, po.y, 0, 0, SWP_NOSIZE | SWP_NOOWNERZORDER | SWP_NOZORDER);
+			POINT pt;
+			pt.x = (rc.right < rcBase.left)? nLeft: rc.left + nShift;
+			pt.y = rc.top;
+			::ScreenToClient(hwndDlg, &pt);
+			::SetWindowPos(hwndCtrl, 0, pt.x, pt.y, 0, 0, SWP_NOSIZE | SWP_NOOWNERZORDER | SWP_NOZORDER);
 		}
 		hwndCtrl = ::GetWindow(hwndCtrl, GW_HWNDNEXT);
 	}
@@ -1200,7 +1199,7 @@ bool DlgOpenFile::_GetOpenFileNameRecover(OPENFILENAMEZ* ofn)
 {
 	BOOL bRet = ::GetOpenFileName(ofn);
 	if (!bRet) {
-		if (FNERR_INVALIDFILENAME == ::CommDlgExtendedError()) {
+		if (::CommDlgExtendedError() == FNERR_INVALIDFILENAME) {
 			_tcscpy(ofn->lpstrFile, _T(""));
 			ofn->lpstrInitialDir = _T("");
 			bRet = ::GetOpenFileName(ofn);
@@ -1217,7 +1216,7 @@ bool DlgOpenFile::GetSaveFileNameRecover(OPENFILENAMEZ* ofn)
 {
 	BOOL bRet = ::GetSaveFileName(ofn);
 	if (!bRet) {
-		if (FNERR_INVALIDFILENAME == ::CommDlgExtendedError()) {
+		if (::CommDlgExtendedError() == FNERR_INVALIDFILENAME) {
 			_tcscpy(ofn->lpstrFile, _T(""));
 			ofn->lpstrInitialDir = _T("");
 			bRet = ::GetSaveFileName(ofn);

@@ -40,7 +40,7 @@
 #include <map>
 
 struct CodeSet {
-	ECodeType		m_eCodeSet;
+	EncodingType		m_eCodeSet;
 	const WCHAR*	m_sNormal;
 	const WCHAR*	m_sShort;
 	const WCHAR*	m_sLong;		// for Combo
@@ -67,7 +67,7 @@ static CodeSet ASCodeSet[] = {
 typedef	std::map<int, CodeSet>	MSCodeSet;
 static MSCodeSet				msCodeSet;
 // ï\é¶èá
-static std::vector<ECodeType>	vDispIdx;
+static std::vector<EncodingType>	vDispIdx;
 
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -178,7 +178,7 @@ int CodeTypesForCombobox::GetCount() const
 	return vDispIdx.size();
 }
 
-ECodeType CodeTypesForCombobox::GetCode(int nIndex) const
+EncodingType CodeTypesForCombobox::GetCode(int nIndex) const
 {
 	return vDispIdx[nIndex];
 }

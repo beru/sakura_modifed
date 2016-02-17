@@ -25,10 +25,10 @@ public:
 	/*
 	||  Attributes & Operations
 	*/
-	int DoModal(HINSTANCE, HWND, ECodeType*, bool*);	// モーダルダイアログの表示
+	int DoModal(HINSTANCE, HWND, EncodingType*, bool*);	// モーダルダイアログの表示
 
 
-	ECodeType*	m_pnCharSet;			// 文字コードセット
+	EncodingType*	m_pnCharSet;			// 文字コードセット
 	bool*		m_pbBom;				// BOM
 	bool		m_bCP;
 

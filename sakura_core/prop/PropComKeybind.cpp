@@ -297,7 +297,7 @@ INT_PTR PropKeybind::DispatchEvent(
 				// 機能に対応するキー名の取得(複数)
 				NativeT**	ppcAssignedKeyList;
 				nAssignedKeyNum = KeyBind::GetKeyStrList(	// 機能に対応するキー名の取得(複数)
-					G_AppInstance(), csKeybind.m_nKeyNameArrNum, (KEYDATA*)csKeybind.m_pKeyNameArr,
+					G_AppInstance(), csKeybind.m_nKeyNameArrNum, (KeyData*)csKeybind.m_pKeyNameArr,
 					&ppcAssignedKeyList, nFuncCode,
 					FALSE	// 2007.02.22 ryoji デフォルト機能は取得しない
 				);	
@@ -385,8 +385,8 @@ INT_PTR PropKeybind::DispatchEvent(
 		nIndex = List_GetCurSel(hwndKeyList);
 		nIndex2 = Combo_GetCurSel(hwndCombo);
 		nIndex3 = List_GetCurSel(hwndFuncList);
-		::EnableWindow(::GetDlgItem(hwndDlg, IDC_BUTTON_ASSIGN), !(LB_ERR == nIndex || nIndex2 == CB_ERR || nIndex3 == LB_ERR));
-		::EnableWindow(::GetDlgItem(hwndDlg, IDC_BUTTON_RELEASE), !(LB_ERR == nIndex));
+		::EnableWindow(::GetDlgItem(hwndDlg, IDC_BUTTON_ASSIGN), !(nIndex == LB_ERR || nIndex2 == CB_ERR || nIndex3 == LB_ERR));
+		::EnableWindow(::GetDlgItem(hwndDlg, IDC_BUTTON_RELEASE), !(nIndex == LB_ERR));
 		break;
 
 	case WM_DESTROY:

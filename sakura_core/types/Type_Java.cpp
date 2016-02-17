@@ -104,21 +104,21 @@ void DocOutline::MakeFuncList_Java(FuncInfoArr* pFuncInfoArr)
 			if (L'\\' == pLine[i]) {
 				++i;
 			/* シングルクォーテーション文字列読み込み中 */
-			}else if (FL_JAVA_MODE_SINGLE_QUOTE == nMode) {
+			}else if (nMode == FL_JAVA_MODE_SINGLE_QUOTE) {
 				if (L'\'' == pLine[i]) {
 					nMode = FL_JAVA_MODE_NORMAL;
 					continue;
 				}else {
 				}
 			/* ダブルクォーテーション文字列読み込み中 */
-			}else if (FL_JAVA_MODE_DOUBLE_QUOTE == nMode) {
+			}else if (nMode == FL_JAVA_MODE_DOUBLE_QUOTE) {
 				if (L'"' == pLine[i]) {
 					nMode = FL_JAVA_MODE_NORMAL;
 					continue;
 				}else {
 				}
 			/* コメント読み込み中 */
-			}else if (FL_JAVA_MODE_COMMENT == nMode) {
+			}else if (nMode == FL_JAVA_MODE_COMMENT) {
 				if (i < nLineLen - 1 && L'*' == pLine[i] &&  L'/' == pLine[i + 1]) {
 					++i;
 					nMode = FL_JAVA_MODE_NORMAL;
@@ -126,7 +126,7 @@ void DocOutline::MakeFuncList_Java(FuncInfoArr* pFuncInfoArr)
 				}else {
 				}
 			/* 単語読み込み中 */
-			}else if (FL_JAVA_MODE_WORD == nMode) {
+			}else if (nMode == FL_JAVA_MODE_WORD) {
 				// 2011.09.16 syat アウトライン解析で日本語が含まれている部分が表示されない
 				if (! WCODE::IsBlank(pLine[i]) &&
 					! WCODE::IsLineDelimiter(pLine[i], bExtEol) &&
@@ -180,7 +180,7 @@ void DocOutline::MakeFuncList_Java(FuncInfoArr* pFuncInfoArr)
 					continue;
 				}
 			/* 記号列読み込み中 */
-			}else if (FL_JAVA_MODE_SYMBOL == nMode) {
+			}else if (nMode == FL_JAVA_MODE_SYMBOL) {
 				if (L'_' == pLine[i] ||
 					L':' == pLine[i] ||
 					L'~' == pLine[i] ||
@@ -206,7 +206,7 @@ void DocOutline::MakeFuncList_Java(FuncInfoArr* pFuncInfoArr)
 				}else {
 				}
 			/* 長過ぎる単語無視中 */
-			}else if (FL_JAVA_MODE_TOO_LONG_WORD == nMode) {
+			}else if (nMode == FL_JAVA_MODE_TOO_LONG_WORD) {
 				/* 空白やタブ記号等を飛ばす */
 				if (L'\t' == pLine[i] ||
 					L' ' == pLine[i] ||
@@ -216,7 +216,7 @@ void DocOutline::MakeFuncList_Java(FuncInfoArr* pFuncInfoArr)
 					continue;
 				}
 			/* ノーマルモード */
-			}else if (FL_JAVA_MODE_NORMAL == nMode) {
+			}else if (nMode == FL_JAVA_MODE_NORMAL) {
 				/* 空白やタブ記号等を飛ばす */
 				if (L'\t' == pLine[i] ||
 					L' ' == pLine[i] ||

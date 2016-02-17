@@ -17,7 +17,7 @@
 
 // codeTypeに適合する CodeBaseインスタンス を生成
 CodeBase* CodeFactory::CreateCodeBase(
-	ECodeType	codeType,		// 文字コード
+	EncodingType	codeType,		// 文字コード
 	int			nFlag			// bit 0: MIME Encodeされたヘッダをdecodeするかどうか
 )
 {

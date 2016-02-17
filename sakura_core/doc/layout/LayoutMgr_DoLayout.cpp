@@ -67,7 +67,7 @@ Layout* LayoutMgr::LayoutWork::_CreateLayout(LayoutMgr* mgr)
 
 bool LayoutMgr::_DoKinsokuSkip(LayoutWork* pWork, PF_OnLine pfOnLine)
 {
-	if (KinsokuType::None != pWork->eKinsokuType) {
+	if (pWork->eKinsokuType != KinsokuType::None) {
 		// 禁則処理の最後尾に達したら禁則処理中を解除する
 		if (pWork->nPos >= pWork->nWordBgn + pWork->nWordLen) {
 			if (1
@@ -454,7 +454,7 @@ void LayoutMgr::_OnLine2(LayoutWork* pWork)
 		代わりに最終行のコメントモードを終了間際に確認している．
 */
 LayoutInt LayoutMgr::DoLayout_Range(
-	Layout*			pLayoutPrev,
+	Layout*				pLayoutPrev,
 	LogicInt			nLineNum,
 	LogicPoint			_ptDelLogicalFrom,
 	EColorIndexType		nCurrentLineType,
@@ -472,8 +472,8 @@ LayoutInt LayoutMgr::DoLayout_Range(
 	m_nEOFColumn = LayoutInt(-1);
 	m_nEOFLine = LayoutInt(-1);
 
-	LayoutWork _sWork;
-	LayoutWork* pWork = &_sWork;
+	LayoutWork work;
+	LayoutWork* pWork = &work;
 	pWork->pLayout					= pLayoutPrev;
 	pWork->pColorStrategy			= ColorStrategyPool::getInstance()->GetStrategyByColor(nCurrentLineType);
 	pWork->colorPrev				= nCurrentLineType;

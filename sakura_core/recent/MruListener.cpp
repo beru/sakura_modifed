@@ -58,7 +58,7 @@ void MruListener::OnBeforeLoad(LoadInfo* pLoadInfo)
 
 	// 前回のコード -> ePrevCode
 	EditInfo	fi;
-	ECodeType ePrevCode = CODE_NONE;
+	EncodingType ePrevCode = CODE_NONE;
 	int nPrevTypeId = -1;
 	if (MRUFile().GetEditInfo(pLoadInfo->filePath, &fi)) {
 		ePrevCode = fi.m_nCharCode;
@@ -76,7 +76,7 @@ void MruListener::OnBeforeLoad(LoadInfo* pLoadInfo)
 	}
 
 	// 指定のコード -> pLoadInfo->eCharCode
-	if (CODE_AUTODETECT == pLoadInfo->eCharCode) {
+	if (pLoadInfo->eCharCode == CODE_AUTODETECT) {
 		if (fexist(pLoadInfo->filePath)) {
 			// デフォルト文字コード認識のために一時的に読み込み対象ファイルのファイルタイプを適用する
 			const TypeConfigMini* type;
@@ -86,10 +86,10 @@ void MruListener::OnBeforeLoad(LoadInfo* pLoadInfo)
 		}else {
 			pLoadInfo->eCharCode = ePrevCode;
 		}
-	}else if (CODE_NONE == pLoadInfo->eCharCode) {
+	}else if (pLoadInfo->eCharCode == CODE_NONE) {
 		pLoadInfo->eCharCode = ePrevCode;
 	}
-	if (CODE_NONE == pLoadInfo->eCharCode) {
+	if (pLoadInfo->eCharCode == CODE_NONE) {
 		const TypeConfigMini* type;
 		if (DocTypeManager().GetTypeConfigMini(pLoadInfo->nType, &type)) {
 			pLoadInfo->eCharCode = type->m_encoding.m_eDefaultCodetype;	// 無効値の回避	// 2011.01.24 ryoji CODE_DEFAULT -> m_eDefaultCodetype
@@ -118,7 +118,7 @@ void MruListener::OnBeforeLoad(LoadInfo* pLoadInfo)
 				szCpNameOld,
 				szCpNameNew
 			);
-			if (IDYES == nRet) {
+			if (nRet == IDYES) {
 				// 前回の文字コードを採用する
 				pLoadInfo->eCharCode = ePrevCode;
 			}else {

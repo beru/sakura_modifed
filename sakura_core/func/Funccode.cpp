@@ -1214,17 +1214,17 @@ bool IsFuncChecked(const EditDoc* pEditDoc, const DLLSHAREDATA* pShareData, EFun
 	// Modified by KEITA for WIN64 2003.9.6
 	pEditWnd = (EditWnd*)::GetWindowLongPtr(EditWnd::getInstance()->GetHwnd(), GWLP_USERDATA);
 //@@@ 2002.01.14 YAZAKI 印刷プレビューをCPrintPreviewに独立させたことにより、プレビュー判定削除
-	ECodeType eDocCode = pEditDoc->GetDocumentEncoding();
+	EncodingType eDocCode = pEditDoc->GetDocumentEncoding();
 	switch (nId) {
-	case F_FILE_REOPEN_SJIS:		return CODE_SJIS == eDocCode;
-	case F_FILE_REOPEN_JIS:			return CODE_JIS == eDocCode;
-	case F_FILE_REOPEN_EUC:			return CODE_EUC == eDocCode;
-	case F_FILE_REOPEN_LATIN1:		return CODE_LATIN1 == eDocCode;		// 2010/3/20 Uchi
-	case F_FILE_REOPEN_UNICODE:		return CODE_UNICODE == eDocCode;
-	case F_FILE_REOPEN_UNICODEBE:	return CODE_UNICODEBE == eDocCode;
-	case F_FILE_REOPEN_UTF8:		return CODE_UTF8 == eDocCode;
-	case F_FILE_REOPEN_CESU8:		return CODE_CESU8 == eDocCode;
-	case F_FILE_REOPEN_UTF7:		return CODE_UTF7 == eDocCode;
+	case F_FILE_REOPEN_SJIS:		return eDocCode == CODE_SJIS;
+	case F_FILE_REOPEN_JIS:			return eDocCode == CODE_JIS;
+	case F_FILE_REOPEN_EUC:			return eDocCode == CODE_EUC;
+	case F_FILE_REOPEN_LATIN1:		return eDocCode == CODE_LATIN1;		// 2010/3/20 Uchi
+	case F_FILE_REOPEN_UNICODE:		return eDocCode == CODE_UNICODE;
+	case F_FILE_REOPEN_UNICODEBE:	return eDocCode == CODE_UNICODEBE;
+	case F_FILE_REOPEN_UTF8:		return eDocCode == CODE_UTF8;
+	case F_FILE_REOPEN_CESU8:		return eDocCode == CODE_CESU8;
+	case F_FILE_REOPEN_UTF7:		return eDocCode == CODE_UTF7;
 	case F_RECKEYMACRO:	// キーマクロの記録開始／終了
 		if (pShareData->m_flags.m_bRecordingKeyMacro) {	// キーボードマクロの記録中
 			return (pShareData->m_flags.m_hwndRecordingKeyMacro == EditWnd::getInstance()->GetHwnd());	// キーボードマクロを記録中のウィンドウ
@@ -1246,9 +1246,9 @@ bool IsFuncChecked(const EditDoc* pEditDoc, const DLLSHAREDATA* pShareData, EFun
 	// Mar. 6, 2002 genta
 	case F_VIEWMODE:			return AppMode::getInstance()->IsViewMode(); // ビューモード
 	// From Here 2003.06.23 Moca
-	case F_CHGMOD_EOL_CRLF:		return EolType::CRLF == pEditDoc->m_docEditor.GetNewLineCode();
-	case F_CHGMOD_EOL_LF:		return EolType::LF == pEditDoc->m_docEditor.GetNewLineCode();
-	case F_CHGMOD_EOL_CR:		return EolType::CR == pEditDoc->m_docEditor.GetNewLineCode();
+	case F_CHGMOD_EOL_CRLF:		return pEditDoc->m_docEditor.GetNewLineCode() == EolType::CRLF;
+	case F_CHGMOD_EOL_LF:		return pEditDoc->m_docEditor.GetNewLineCode() == EolType::LF;
+	case F_CHGMOD_EOL_CR:		return pEditDoc->m_docEditor.GetNewLineCode() == EolType::CR;
 	// To Here 2003.06.23 Moca
 	// 2003.07.21 genta
 	case F_CHGMOD_INS:			return pEditDoc->m_docEditor.IsInsMode();	// Oct. 2, 2005 genta 挿入モードはドキュメント毎に補完するように変更した

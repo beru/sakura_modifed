@@ -388,7 +388,7 @@ struct CommonSetting_Search {
 	int				m_nGrepOutputLineType;			// Grep: 行を出力/該当部分/否マッチ行 を出力
 	int				m_nGrepOutputStyle;			// Grep: 出力形式
 	bool			m_bGrepDefaultFolder;		// Grep: フォルダの初期値をカレントフォルダにする
-	ECodeType		m_nGrepCharSet;				// Grep: 文字コードセット // 2002/09/20 Moca Add
+	EncodingType		m_nGrepCharSet;				// Grep: 文字コードセット // 2002/09/20 Moca Add
 	bool			m_bGrepOutputFileOnly;		// Grep: ファイル毎最初のみ検索
 	bool			m_bGrepOutputBaseFolder;	// Grep: ベースフォルダ表示
 	bool			m_bGrepSeparateFolder;		// Grep: フォルダ毎に表示
@@ -423,7 +423,7 @@ struct CommonSetting_Search {
 struct CommonSetting_KeyBind {
 	// キー割り当て
 	int					m_nKeyNameArrNum;				// キー割り当て表の有効データ数
-	KEYDATA				m_pKeyNameArr[100 + 1];			// キー割り当て表 未割り当てキーコード用にダミーを追加
+	KeyData				m_pKeyNameArr[100 + 1];			// キー割り当て表 未割り当てキーコード用にダミーを追加
 	BYTE				m_VKeyToKeyNameArr[256 + 10];	// キーコード→割り当て表インデックス // 2012.11.25 aroka
 };
 
@@ -672,7 +672,7 @@ enum class MainMenuType {
 
 class MainMenu {
 public:
-	MainMenuType	m_nType;		// 種類
+	MainMenuType	m_type;		// 種類
 	EFunctionCode	nFunc;		// Function
 	WCHAR			m_sKey[2];		// アクセスキー
 	WCHAR			m_sName[MAX_MAIN_MENU_NAME_LEN + 1];	// 名前

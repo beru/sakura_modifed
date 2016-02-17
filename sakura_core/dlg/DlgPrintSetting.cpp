@@ -626,7 +626,7 @@ void DlgPrintSetting::OnChangeSettingType(BOOL bGetData)
 
 	HWND hwndComboSettingName = GetItemHwnd(IDC_COMBO_SETTINGNAME);
 	nIdx1 = Combo_GetCurSel(hwndComboSettingName);
-	if (CB_ERR == nIdx1) {
+	if (nIdx1 == CB_ERR) {
 		return;
 	}
 	m_nCurrentPrintSetting = Combo_GetItemData(hwndComboSettingName, nIdx1);
@@ -715,7 +715,7 @@ const struct {
 	int ctrlid;
 	int minval;
 	int maxval;
-} sDataRange[] = {
+} gDataRange[] = {
 	{ IDC_EDIT_FONTHEIGHT,	7,	200},	// 1/10mm
 	{ IDC_EDIT_LINESPACE,	0,	150},	// %
 	{ IDC_EDIT_DANSUU,		1,	4  },
@@ -744,7 +744,7 @@ void DlgPrintSetting::OnSpin(int nCtrlId, BOOL bDown)
 	case IDC_SPIN_MARGINRX:		nIdx = 7;				break;
 	}
 	if (nIdx >= 0) {
-		nCtrlIdEDIT = sDataRange[nIdx].ctrlid;
+		nCtrlIdEDIT = gDataRange[nIdx].ctrlid;
  		nData = GetItemInt(nCtrlIdEDIT, NULL, FALSE);
  		if (bDown) {
 			nData -= nDiff;
@@ -773,11 +773,11 @@ int DlgPrintSetting::DataCheckAndCorrect(int nCtrlId, int nData)
 	case IDC_EDIT_MARGINRX:		nIdx = 7;	break;
 	}
 	if (nIdx >= 0) {
-		if (nData <= sDataRange[nIdx].minval) {
-			nData = sDataRange[nIdx].minval;
+		if (nData <= gDataRange[nIdx].minval) {
+			nData = gDataRange[nIdx].minval;
  		}
-		if (nData > sDataRange[nIdx].maxval) {
-			nData = sDataRange[nIdx].maxval;
+		if (nData > gDataRange[nIdx].maxval) {
+			nData = gDataRange[nIdx].maxval;
  		}
 	}
 	return nData;

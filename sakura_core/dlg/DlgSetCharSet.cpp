@@ -43,7 +43,7 @@ DlgSetCharSet::DlgSetCharSet()
 int DlgSetCharSet::DoModal(
 	HINSTANCE hInstance,
 	HWND hwndParent,
-	ECodeType* pnCharSet,
+	EncodingType* pnCharSet,
 	bool* pbBom
 	)
 {
@@ -180,7 +180,7 @@ void DlgSetCharSet::SetData(void)
 	int nIdxOld = Combo_GetCurSel(m_hwndCharSet);
 	int nCurIdx = -1;
 	for (int nIdx=0; nIdx<Combo_GetCount(m_hwndCharSet); ++nIdx) {
-		ECodeType nCharSet = (ECodeType)Combo_GetItemData( m_hwndCharSet, nIdx );
+		EncodingType nCharSet = (EncodingType)Combo_GetItemData( m_hwndCharSet, nIdx );
 		if (nCharSet == *m_pnCharSet) {
 			nCurIdx = nIdx;
 		}
@@ -207,7 +207,7 @@ int DlgSetCharSet::GetData(void)
 {
 	// 文字コードセット
 	int nIdx = Combo_GetCurSel(m_hwndCharSet);
-	*m_pnCharSet = (ECodeType)Combo_GetItemData(m_hwndCharSet, nIdx);
+	*m_pnCharSet = (EncodingType)Combo_GetItemData(m_hwndCharSet, nIdx);
 
 	// BOM
 	*m_pbBom = (BtnCtl_GetCheck(m_hwndCheckBOM) == BST_CHECKED);

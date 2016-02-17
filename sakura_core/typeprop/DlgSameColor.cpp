@@ -306,7 +306,7 @@ BOOL DlgSameColor::OnDrawItem(WPARAM wParam, LPARAM lParam)
 	rc.left += 2;
 	rc.right = rc.left + (rc.bottom - rc.top);
 	UINT uState =  DFCS_BUTTONCHECK | DFCS_FLAT;
-	if (TRUE == (BOOL)pDis->itemData) {
+	if ((BOOL)pDis->itemData) {
 		uState |= DFCS_CHECKED;		// チェック状態
 	}
 	::DrawFrameControl(gr, &rc, DFC_BUTTON, uState);
@@ -467,7 +467,7 @@ LRESULT CALLBACK DlgSameColor::ColorList_SubclassProc(HWND hwnd, UINT uMsg, WPAR
 
 	case WM_KEYUP:
 		// フォーカス項目の選択／選択解除をトグルする
-		if (VK_SPACE == wParam) {
+		if (wParam == VK_SPACE) {
 			int i = List_GetCaretIndex(hwnd);
 			if (i != LB_ERR) {
 				BOOL bCheck = !(BOOL)List_GetItemData(hwnd, i);

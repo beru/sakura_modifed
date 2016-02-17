@@ -954,7 +954,7 @@ void PrintPreview::OnPreviewZoom(BOOL bZoomUp)
 	}
 	
 	//	縮小ボタンのON/OFF
-	if (MIN_PREVIEW_ZOOM == m_nPreview_Zoom) {
+	if (m_nPreview_Zoom == MIN_PREVIEW_ZOOM) {
 		// 2013.05.30 FocusがDisableなウィンドウだとマウススクロールできない対策
 		HWND focus = ::GetFocus();
 		if (focus == GetDlgItem(m_hwndPrintPreviewBar, IDC_BUTTON_ZOOMDOWN)) {
@@ -965,7 +965,7 @@ void PrintPreview::OnPreviewZoom(BOOL bZoomUp)
 		::EnableWindow(::GetDlgItem(m_hwndPrintPreviewBar, IDC_BUTTON_ZOOMDOWN), TRUE);
 	}
 	//	拡大ボタンのON/OFF
-	if (MAX_PREVIEW_ZOOM == m_nPreview_Zoom) {
+	if (m_nPreview_Zoom == MAX_PREVIEW_ZOOM) {
 		// 2013.05.30 FocusがDisableなウィンドウだとマウススクロールできない対策
 		HWND focus = ::GetFocus();
 		if (focus == GetDlgItem(m_hwndPrintPreviewBar, IDC_BUTTON_ZOOMUP)) {

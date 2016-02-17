@@ -29,7 +29,7 @@
 
 // 文字コードセット種別
 // 2007.08.14 kobake CODE_ERROR, CODE_DEFAULT 追加
-enum ECodeType {
+enum EncodingType {
 	CODE_SJIS,						//!< SJIS				(MS-CP932(Windows-31J), シフトJIS(Shift_JIS))
 	CODE_JIS,						//!< JIS				(MS-CP5022x(ISO-2022-JP-MS)ではない)
 	CODE_EUC,						//!< EUC				(MS-CP51932, eucJP-ms(eucJP-open)ではない)
@@ -81,14 +81,14 @@ inline bool IsValidCodeTypeExceptSJIS(int code)
 
 // 2010/6/21 Uchi 削除
 // 2007.08.14 kobake 追加
-//!ECodeType型で表せる値ならtrue
-//inline bool IsInECodeType(int code)
+//!EncodingType型で表せる値ならtrue
+//inline bool IsInEncodingType(int code)
 //{
 //	return (code >= 0 && code < CODE_CODEMAX) || code == CODE_ERROR || code == CODE_AUTODETECT;
 //}
 
 // 2010/6/21 Uchi 削除
-//inline bool IsConcreteCodeType(ECodeType eCodeType)
+//inline bool IsConcreteCodeType(EncodingType eCodeType)
 //{
 //	return IsValidCodeType(eCodeType) && eCodeType != CODE_AUTODETECT;
 //}
@@ -102,11 +102,11 @@ inline bool IsValidCodePageEx(int code)
 void InitCodeSet();
 inline bool IsValidCodeOrCPType(int code)
 {
-	return IsValidCodeType(code) || CODE_CPACP == code || CODE_CPOEM == code || (CODE_CODEMAX <= code && IsValidCodePageEx(code));
+	return IsValidCodeType(code) || code == CODE_CPACP || code == CODE_CPOEM || (CODE_CODEMAX <= code && IsValidCodePageEx(code));
 }
 inline bool IsValidCodeOrCPTypeExceptSJIS(int code)
 {
-	return IsValidCodeTypeExceptSJIS(code) || CODE_CPACP == code || CODE_CPOEM == code || (CODE_CODEMAX <= code && IsValidCodePageEx(code));
+	return IsValidCodeTypeExceptSJIS(code) || code == CODE_CPACP || code == CODE_CPOEM || (CODE_CODEMAX <= code && IsValidCodePageEx(code));
 }
 
 
@@ -116,9 +116,9 @@ inline bool IsValidCodeOrCPTypeExceptSJIS(int code)
 
 class CodeTypeName {
 public:
-	CodeTypeName(ECodeType eCodeType) : m_eCodeType(eCodeType) { InitCodeSet(); }
-	CodeTypeName(int eCodeType) : m_eCodeType((ECodeType)eCodeType) { InitCodeSet(); }
-	ECodeType GetCode() const { return m_eCodeType; }
+	CodeTypeName(EncodingType eCodeType) : m_eCodeType(eCodeType) { InitCodeSet(); }
+	CodeTypeName(int eCodeType) : m_eCodeType((EncodingType)eCodeType) { InitCodeSet(); }
+	EncodingType GetCode() const { return m_eCodeType; }
 	LPCTSTR	Normal() const;
 	LPCTSTR	Short() const;
 	LPCTSTR	Bracket() const;
@@ -126,7 +126,7 @@ public:
 	bool	CanDefault();
 	bool	IsBomDefOn();
 private:
-	ECodeType m_eCodeType;
+	EncodingType m_eCodeType;
 };
 
 
@@ -138,7 +138,7 @@ class CodeTypesForCombobox {
 public:
 	CodeTypesForCombobox() { InitCodeSet(); }
 	int			GetCount() const;
-	ECodeType	GetCode(int nIndex) const;
+	EncodingType	GetCode(int nIndex) const;
 	LPCTSTR		GetName(int nIndex) const;
 };
 

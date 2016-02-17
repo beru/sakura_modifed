@@ -162,7 +162,7 @@ void ViewCommander::Command_SEARCH_NEXT(
 	}
 	if (!pSelectLogic) {
 		nLineNum = caret.GetCaretLayoutPos().GetY2();
-		LogicInt nLineLen = LogicInt(0); // 2004.03.17 Moca NULL == pLineのとき、nLineLenが未設定になり落ちるバグ対策
+		LogicInt nLineLen = LogicInt(0); // 2004.03.17 Moca pLine == NULL のとき、nLineLenが未設定になり落ちるバグ対策
 		const Layout*	pLayout;
 		const wchar_t*	pLine = layoutMgr.GetLineStr(nLineNum, &nLineLen, &pLayout);
 
@@ -210,12 +210,12 @@ re_do:;
 	if (nSearchResult) {
 		// 指定された行のデータ内の位置に対応する桁の位置を調べる
 		if (bFlag1 && rangeA.GetFrom() == caret.GetCaretLayoutPos()) {
-			LogicRange sRange_Logic;
-			layoutMgr.LayoutToLogic(rangeA, &sRange_Logic);
+			LogicRange logicRange;
+			layoutMgr.LayoutToLogic(rangeA, &logicRange);
 
 			nLineNum = rangeA.GetTo().GetY2();
-			nIdx     = sRange_Logic.GetTo().GetX2();
-			if (sRange_Logic.GetFrom() == sRange_Logic.GetTo()) { // 幅0マッチでの無限ループ対策。
+			nIdx     = logicRange.GetTo().GetX2();
+			if (logicRange.GetFrom() == logicRange.GetTo()) { // 幅0マッチでの無限ループ対策。
 				nIdx += 1; // wchar_t一個分進めるだけでは足りないかもしれないが。
 			}
 			goto re_do;

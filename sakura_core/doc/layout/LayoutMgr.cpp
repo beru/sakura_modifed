@@ -714,7 +714,7 @@ int LayoutMgr::PrevOrNextWord(
 int LayoutMgr::SearchWord(
 	LayoutInt				nLine,				// [in] 検索開始レイアウト行
 	LogicInt				nIdx,				// [in] 検索開始データ位置
-	SearchDirection		searchDirection,	// [in] 検索方向
+	SearchDirection			searchDirection,	// [in] 検索方向
 	LayoutRange*			pMatchRange,		// [out] マッチレイアウト範囲
 	const SearchStringPattern&	pattern
 	)
@@ -724,20 +724,20 @@ int LayoutMgr::SearchWord(
 		return FALSE;
 	}
 
-	// 単語検索 -> cLogicRange (データ位置)
-	LogicRange cLogicRange;
+	// 単語検索 -> logicRange (データ位置)
+	LogicRange logicRange;
 	int nRetCode = SearchAgent(m_pDocLineMgr).SearchWord(
 		LogicPoint(pLayout->GetLogicOffset() + nIdx, pLayout->GetLogicLineNo()),
 		searchDirection,
-		&cLogicRange, //pMatchRange,
+		&logicRange, //pMatchRange,
 		pattern
 	);
 
 	// 論理位置→レイアウト位置変換
-	// cLogicRange -> pMatchRange
+	// logicRange -> pMatchRange
 	if (nRetCode) {
 		LogicToLayout(
-			cLogicRange,
+			logicRange,
 			pMatchRange
 		);
 	}

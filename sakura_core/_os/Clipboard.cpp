@@ -502,7 +502,7 @@ bool Clipboard::SetClipboradByFormat(
 		}
 		nTextByteLen = len;
  	}else {
-		ECodeType eMode = (ECodeType)nMode;
+		EncodingType eMode = (EncodingType)nMode;
 		if (!IsValidCodeType(eMode)) {
 			return false;
 		}
@@ -628,10 +628,10 @@ bool Clipboard::GetClipboradByFormat(
 				pBuf[i] = (unsigned char)pData[i];
 			}
 		}else {
-			ECodeType eMode = (ECodeType)nMode;
+			EncodingType eMode = (EncodingType)nMode;
 			if (!IsValidCodeType(eMode)) {
 				// コード不明と99は自動判別
-				ECodeType nBomCode = CodeMediator::DetectUnicodeBom((const char*)pData, nLength);
+				EncodingType nBomCode = CodeMediator::DetectUnicodeBom((const char*)pData, nLength);
 				if (nBomCode != CODE_NONE) {
 					eMode = nBomCode;
 				}else {

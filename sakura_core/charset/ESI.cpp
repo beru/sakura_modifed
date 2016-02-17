@@ -95,7 +95,7 @@ void ESI::SetInformation(const char* pS, const int nLen)
 	　nCodeType が CODE_UNICODE, CODE_UNICODEBE の場合は m_pWcInfo 用の添え字が，
 	それ以外の場合は m_pMbInfo 用の添え字が返却される。
 */
-int ESI::GetIndexById(const ECodeType eCodeType) const
+int ESI::GetIndexById(const EncodingType eCodeType) const
 {
 	int nret;
 	if (eCodeType == CODE_UNICODE) {
@@ -115,7 +115,7 @@ int ESI::GetIndexById(const ECodeType eCodeType) const
 	　nCodeType が CODE_UNICODE, CODE_UNICODEBE の場合は m_pWcInfo へ，
 	それ以外の場合は m_pMbInfo へ値が格納されることに注意。
 */
-void ESI::SetEvaluation(const ECodeType eCodeId, const int v1, const int v2)
+void ESI::SetEvaluation(const EncodingType eCodeId, const int v1, const int v2)
 {
 	struct tagEncodingInfo* pEI;
 
@@ -140,7 +140,7 @@ void ESI::SetEvaluation(const ECodeType eCodeId, const int v1, const int v2)
 	　nCodeType が CODE_UNICODE, CODE_UNICODEBE の場合は m_pWcInfo から，
 	それ以外の場合は m_pMbInfo から値が取得されることに注意。
 */
-void ESI::GetEvaluation(const ECodeType eCodeId, int* pv1, int* pv2) const
+void ESI::GetEvaluation(const EncodingType eCodeId, int* pv1, int* pv2) const
 {
 	const struct tagEncodingInfo* pEI;
 
@@ -502,7 +502,7 @@ void ESI::GetEncodingInfo_latin1(const char* pS, const int nLen)
 void ESI::GetEncodingInfo_meta( const char* pS, const int nLen )
 {
 	// XML宣言は先頭にあるので、最初にチェック
-	ECodeType encoding = AutoDetectByXML( pS, nLen );
+	EncodingType encoding = AutoDetectByXML( pS, nLen );
 	if (encoding == CODE_NONE) {
 		// スクリプト等Coding中にHTMLがあるのでCodingを優先
 		encoding = AutoDetectByCoding( pS, nLen );
@@ -896,7 +896,7 @@ static bool IsXMLWhiteSpace( int c )
 /*!	ファイル中のエンコーディング指定を利用した文字コード自動選択
  *	@return	決定した文字コード。 未決定は-1を返す
 */
-ECodeType ESI::AutoDetectByXML( const char* pBuf, int nSize )
+EncodingType ESI::AutoDetectByXML( const char* pBuf, int nSize )
 {
 
 	// ASCII comportible encoding XML
@@ -937,7 +937,7 @@ ECodeType ESI::AutoDetectByXML( const char* pBuf, int nSize )
 						&& pBuf[i+nLen] == quoteChar
 						&& memicmp(encodingNameToCode[k].name, pBuf + i, nLen) == 0
 					) {
-						return static_cast<ECodeType>(encodingNameToCode[k].nCode);
+						return static_cast<EncodingType>(encodingNameToCode[k].nCode);
 					}
 				}
 			}else {
@@ -977,14 +977,14 @@ ECodeType ESI::AutoDetectByXML( const char* pBuf, int nSize )
 
 
 
-ECodeType ESI::AutoDetectByHTML( const char* pBuf, int nSize )
+EncodingType ESI::AutoDetectByHTML( const char* pBuf, int nSize )
 {
 	for (int i=0; i+14<nSize; ++i) {
 		// 「<meta http-equiv="Content-Type" content="text/html; Charset=Shift_JIS">」
 		// 「<meta charset="utf-8">」
 		if (memicmp(pBuf + i, "<meta", 5) == 0 && IsXMLWhiteSpace(pBuf[i+5])) {
 			i += 5;
-			ECodeType encoding = CODE_NONE;
+			EncodingType encoding = CODE_NONE;
 			bool bContentType = false;
 			while (i < nSize) {
 				if (IsXMLWhiteSpace(pBuf[i]) && i+1<nSize && !IsXMLWhiteSpace(pBuf[i+1])) {
@@ -1074,9 +1074,9 @@ ECodeType ESI::AutoDetectByHTML( const char* pBuf, int nSize )
 									&& memicmp(encodingNameToCode[k].name, pBuf + nCharsetBegin, nLen) == 0
 								) {
 									if (bContentType) {
-										return static_cast<ECodeType>(encodingNameToCode[k].nCode);
+										return static_cast<EncodingType>(encodingNameToCode[k].nCode);
 									}else {
-										encoding = static_cast<ECodeType>(encodingNameToCode[k].nCode);
+										encoding = static_cast<EncodingType>(encodingNameToCode[k].nCode);
 										break;
 									}
 								}
@@ -1089,7 +1089,7 @@ ECodeType ESI::AutoDetectByHTML( const char* pBuf, int nSize )
 							if (nEndAttVal-nBeginAttVal == nLen
 								&& memicmp(encodingNameToCode[k].name, pBuf + nBeginAttVal, nLen) == 0
 							) {
-								return static_cast<ECodeType>(encodingNameToCode[k].nCode);
+								return static_cast<EncodingType>(encodingNameToCode[k].nCode);
 							}
 						}
 					}
@@ -1123,7 +1123,7 @@ static bool IsEncodingNameChar( int c )
 /* コーディング文字列の識別
 「# coding: utf-8」等を取得する
 */
-ECodeType ESI::AutoDetectByCoding( const char* pBuf, int nSize )
+EncodingType ESI::AutoDetectByCoding( const char* pBuf, int nSize )
 {
 	bool bComment = false;
 	int nLineNum = 1;
@@ -1147,7 +1147,7 @@ ECodeType ESI::AutoDetectByCoding( const char* pBuf, int nSize )
 				if (i-nBegin == nLen
 					&& memicmp(encodingNameToCode[k].name, pBuf + nBegin, nLen) == 0
 				) {
-					return static_cast<ECodeType>(encodingNameToCode[k].nCode);
+					return static_cast<EncodingType>(encodingNameToCode[k].nCode);
 				}
 			}
 		}else if (pBuf[i] == '\r' || pBuf[i] == '\n') {
@@ -1185,7 +1185,7 @@ void ESI::GetDebugInfo(const char* pS, const int nLen, NativeT* pcmtxtOut)
 
 	// テスト実行
 	esi.SetInformation(pS, nLen/*, CODE_SJIS*/);
-	ECodeType ecode_result = CodeMediator::CheckKanjiCode(&esi);
+	EncodingType ecode_result = CodeMediator::CheckKanjiCode(&esi);
 
 	//
 	// 判別結果を分析

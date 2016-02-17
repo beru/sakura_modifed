@@ -45,14 +45,14 @@ bool Converter_SpaceToTab::DoConvert(NativeW* pData)
 			bSpace = false;	// 直前がスペースか
 			nStartPos = 0;	// スペースの先頭
 			for (i=0; i<nLineLen; ++i) {
-				if (SPACE == pLine[i] || TAB == pLine[i]) {
+				if (pLine[i] == SPACE || pLine[i] == TAB) {
 					if (!bSpace) {
 						nStartPos = nPosX;
 					}
 					bSpace = true;
-					if (SPACE == pLine[i]) {
+					if (pLine[i] == SPACE) {
 						++nPosX;
-					}else if (TAB == pLine[i]) {
+					}else if (pLine[i] == TAB) {
 						nPosX += m_nTabWidth - (nPosX % m_nTabWidth);
 					}
 				}else {

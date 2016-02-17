@@ -954,7 +954,7 @@ bool ShareData::IsPathOpened(const TCHAR* pszPath, HWND* phwndOwner)
 
 	@date 2007.03.12 maru V‹Kì¬
 */
-bool ShareData::ActiveAlreadyOpenedWindow(const TCHAR* pszPath, HWND* phwndOwner, ECodeType nCharCode)
+bool ShareData::ActiveAlreadyOpenedWindow(const TCHAR* pszPath, HWND* phwndOwner, EncodingType nCharCode)
 {
 	if (IsPathOpened(pszPath, phwndOwner)) {
 		
@@ -980,9 +980,9 @@ bool ShareData::ActiveAlreadyOpenedWindow(const TCHAR* pszPath, HWND* phwndOwner
 					LS(STR_ERR_CSHAREDATA21),
 					pszPath,
 					pfi->m_nCharCode,
-					NULL == szCpNameCur[0] ? LS(STR_ERR_CSHAREDATA22) : szCpNameCur,
+					szCpNameCur[0] == NULL ? LS(STR_ERR_CSHAREDATA22) : szCpNameCur,
 					nCharCode,
-					NULL == szCpNameNew[0] ? LS(STR_ERR_CSHAREDATA22) : szCpNameNew
+					szCpNameNew[0] == NULL ? LS(STR_ERR_CSHAREDATA22) : szCpNameNew
 				);
 			}
 		}

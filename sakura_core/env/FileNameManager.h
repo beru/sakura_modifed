@@ -75,15 +75,15 @@ public:
 	bool GetMenuFullLabel_WinListNoEscape(TCHAR* pszOutput, int nBuffSize, const EditInfo* editInfo, int id, int index, HDC hDC){
 		return GetMenuFullLabel(pszOutput, nBuffSize, false, editInfo, id, false, index, false, hDC);
 	}
-	bool GetMenuFullLabel_File(TCHAR* pszOutput, int nBuffSize, const TCHAR* pszFile, int id, HDC hDC, bool bModified = false, ECodeType nCharCode = CODE_NONE){
+	bool GetMenuFullLabel_File(TCHAR* pszOutput, int nBuffSize, const TCHAR* pszFile, int id, HDC hDC, bool bModified = false, EncodingType nCharCode = CODE_NONE){
 		return GetMenuFullLabel(pszOutput, nBuffSize, true, pszFile, id, false, nCharCode, false, -1, false, hDC);
 	}
-	bool GetMenuFullLabel_FileNoEscape(TCHAR* pszOutput, int nBuffSize, const TCHAR* pszFile, int id, HDC hDC, bool bModified = false, ECodeType nCharCode = CODE_NONE){
+	bool GetMenuFullLabel_FileNoEscape(TCHAR* pszOutput, int nBuffSize, const TCHAR* pszFile, int id, HDC hDC, bool bModified = false, EncodingType nCharCode = CODE_NONE){
 		return GetMenuFullLabel(pszOutput, nBuffSize, false, pszFile, id, false, nCharCode, false, -1, false, hDC);
 	}
 
 	bool GetMenuFullLabel(TCHAR* pszOutput, int nBuffSize, bool bEspaceAmp, const EditInfo* editInfo, int id, bool bFavorite, int index, bool bAccKeyZeroOrigin, HDC hDC);
-	bool GetMenuFullLabel(TCHAR* pszOutput, int nBuffSize, bool bEspaceAmp, const TCHAR* pszFile, int id, bool bModified, ECodeType nCharCode, bool bFavorite, int index, bool bAccKeyZeroOrigin, HDC hDC);
+	bool GetMenuFullLabel(TCHAR* pszOutput, int nBuffSize, bool bEspaceAmp, const TCHAR* pszFile, int id, bool bModified, EncodingType nCharCode, bool bFavorite, int index, bool bAccKeyZeroOrigin, HDC hDC);
 	
 	static TCHAR GetAccessKeyByIndex(int index, bool bZeroOrigin);
 

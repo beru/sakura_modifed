@@ -69,7 +69,7 @@ enum class CallbackResultType {
 struct LoadInfo {
 	// 入力
 	FilePath	filePath;
-	ECodeType	eCharCode;
+	EncodingType	eCharCode;
 	bool		bViewMode;
 	bool		bWritableNoMsg; //<! 書き込み禁止メッセージを表示しない
 	TypeConfigNum	nType;
@@ -94,7 +94,7 @@ struct LoadInfo {
 
 	LoadInfo(
 		const FilePath&	_cFilePath,
-		ECodeType			_eCodeType,
+		EncodingType			_eCodeType,
 		bool				_bReadOnly,
 		TypeConfigNum		_nType = TypeConfigNum(-1)
 	)
@@ -115,7 +115,7 @@ struct LoadInfo {
 
 struct SaveInfo {
 	FilePath	filePath;	// 保存ファイル名
-	ECodeType	eCharCode;	// 保存文字コードセット
+	EncodingType	eCharCode;	// 保存文字コードセット
 	bool		bBomExist;	// 保存時BOM付加
 	bool		bChgCodeSet;// 文字コードセット変更	2013/5/19 Uchi
 	Eol		eol;		// 保存改行コード
@@ -136,7 +136,7 @@ struct SaveInfo {
 
 	SaveInfo(
 		const FilePath& _cFilePath,
-		ECodeType _eCodeType,
+		EncodingType _eCodeType,
 		const Eol& _cEol,
 		bool _bBomExist
 	)

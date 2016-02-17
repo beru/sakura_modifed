@@ -20,7 +20,7 @@
 class FuncLookup;
 
 // キー情報を保持する
-struct KEYDATA {
+struct KeyData {
 	// キーコード
 	short			m_nKeyCode;
 	
@@ -72,16 +72,16 @@ public:
 	/*
 	||  参照系メンバ関数
 	*/
-	static HACCEL CreateAccerelator(int, KEYDATA*);
-	static EFunctionCode GetFuncCode(WORD nAccelCmd, int nKeyNameArrNum, KEYDATA* pKeyNameArr, bool bGetDefFuncCode = true);
-	static EFunctionCode GetFuncCodeAt(KEYDATA& KeyData, int nState, bool bGetDefFuncCode = true);	// 特定のキー情報から機能コードを取得する	// 2007.02.24 ryoji
+	static HACCEL CreateAccerelator(int, KeyData*);
+	static EFunctionCode GetFuncCode(WORD nAccelCmd, int nKeyNameArrNum, KeyData* pKeyNameArr, bool bGetDefFuncCode = true);
+	static EFunctionCode GetFuncCodeAt(KeyData& KeyData, int nState, bool bGetDefFuncCode = true);	// 特定のキー情報から機能コードを取得する	// 2007.02.24 ryoji
 	static EFunctionCode GetDefFuncCode(int nKeyCode, int nState);	// キーのデフォルト機能を取得する	// 2007.02.22 ryoji
 
 	// キー割り当て一覧を作成する
-	static int CreateKeyBindList(HINSTANCE hInstance, int nKeyNameArrNum, KEYDATA* pKeyNameArr, NativeW& cMemList, FuncLookup* pFuncLookup, bool bGetDefFuncCode = true);
-	static int GetKeyStr(HINSTANCE hInstance, int nKeyNameArrNum, KEYDATA* pKeyNameArr, NativeT& cMemList, int nFuncId, bool bGetDefFuncCode = true);	// 機能に対応するキー名の取得
-	static int GetKeyStrList(HINSTANCE	hInstance, int nKeyNameArrNum,KEYDATA* pKeyNameArr, NativeT*** pppcMemList, int nFuncId, bool bGetDefFuncCode = true);	// 機能に対応するキー名の取得(複数)
-	static TCHAR* GetMenuLabel(HINSTANCE hInstance, int nKeyNameArrNum, KEYDATA* pKeyNameArr, int nFuncId, TCHAR* pszLabel, const TCHAR* pszKey, BOOL bKeyStr, int nLabelSize, bool bGetDefFuncCode = true);	// メニューラベルの作成	// add pszKey	2010/5/17 Uchi
+	static int CreateKeyBindList(HINSTANCE hInstance, int nKeyNameArrNum, KeyData* pKeyNameArr, NativeW& memList, FuncLookup* pFuncLookup, bool bGetDefFuncCode = true);
+	static int GetKeyStr(HINSTANCE hInstance, int nKeyNameArrNum, KeyData* pKeyNameArr, NativeT& memList, int nFuncId, bool bGetDefFuncCode = true);	// 機能に対応するキー名の取得
+	static int GetKeyStrList(HINSTANCE	hInstance, int nKeyNameArrNum,KeyData* pKeyNameArr, NativeT*** pppMemList, int nFuncId, bool bGetDefFuncCode = true);	// 機能に対応するキー名の取得(複数)
+	static TCHAR* GetMenuLabel(HINSTANCE hInstance, int nKeyNameArrNum, KeyData* pKeyNameArr, int nFuncId, TCHAR* pszLabel, const TCHAR* pszKey, BOOL bKeyStr, int nLabelSize, bool bGetDefFuncCode = true);	// メニューラベルの作成	// add pszKey	2010/5/17 Uchi
 
 	static TCHAR* MakeMenuLabel(const TCHAR* sName, const TCHAR* sKey);
 
@@ -89,7 +89,7 @@ protected:
 	/*
 	||  実装ヘルパ関数
 	*/
-	static bool GetKeyStrSub(int& nKeyNameArrBegin, int nKeyNameArrEnd, KEYDATA* pKeyNameArr,
-			int nShiftState, NativeT& cMemList, int nFuncId, bool bGetDefFuncCode);
+	static bool GetKeyStrSub(int& nKeyNameArrBegin, int nKeyNameArrEnd, KeyData* pKeyNameArr,
+			int nShiftState, NativeT& memList, int nFuncId, bool bGetDefFuncCode);
 };
 

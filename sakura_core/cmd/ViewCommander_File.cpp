@@ -110,7 +110,7 @@ void ViewCommander::Command_FILENEW_NEWWINDOW(void)
 */
 void ViewCommander::Command_FILEOPEN(
 	const WCHAR* filename,
-	ECodeType nCharCode,
+	EncodingType nCharCode,
 	bool bViewMode,
 	const WCHAR* defaultName
 	)
@@ -211,7 +211,7 @@ bool ViewCommander::Command_FILESAVE(bool warnbeep, bool askname)
 // 名前を付けて保存ダイアログ
 bool ViewCommander::Command_FILESAVEAS_DIALOG(
 	const WCHAR* fileNameDef,
-	ECodeType eCodeType,
+	EncodingType eCodeType,
 	EolType eEolType
 	)
 {
@@ -266,7 +266,7 @@ void ViewCommander::Command_FILECLOSE(void)
 */
 void ViewCommander::Command_FILECLOSE_OPEN(
 	LPCWSTR filename,
-	ECodeType nCharCode,
+	EncodingType nCharCode,
 	bool bViewMode
 	)
 {
@@ -284,7 +284,7 @@ void ViewCommander::Command_FILECLOSE_OPEN(
 
 // ファイルの再オープン
 void ViewCommander::Command_FILE_REOPEN(
-	ECodeType	nCharCode,	// [in] 開き直す際の文字コード
+	EncodingType	nCharCode,	// [in] 開き直す際の文字コード
 	bool		bNoConfirm	// [in] ファイルが更新された場合に確認を行わ「ない」かどうか。true:確認しない false:確認する
 	)
 {
@@ -606,7 +606,7 @@ void ViewCommander::Command_EXITALL(void)
 */
 bool ViewCommander::Command_PUTFILE(
 	LPCWSTR		filename,	// [in] filename 出力ファイル名
-	ECodeType	nCharCode,	// [in] nCharCode 文字コード指定
+	EncodingType	nCharCode,	// [in] nCharCode 文字コード指定
 							//  @li CODE_xxxxxxxxxx:各種文字コード
 							//  @li CODE_AUTODETECT:現在の文字コードを維持
 	int			nFlgOpt		// [in] nFlgOpt 動作オプション
@@ -614,7 +614,7 @@ bool ViewCommander::Command_PUTFILE(
 )
 {
 	bool bResult = true;
-	ECodeType nSaveCharCode = nCharCode;
+	EncodingType nSaveCharCode = nCharCode;
 	if (filename[0] == L'\0') {
 		return false;
 	}
@@ -637,23 +637,23 @@ bool ViewCommander::Command_PUTFILE(
 		try {
 			BinaryOutputStream out(to_tchar(filename), true);
 
-			// 選択範囲の取得 -> cMem
-			NativeW cMem;
-			m_pCommanderView->GetSelectedDataSimple(cMem);
+			// 選択範囲の取得 -> mem
+			NativeW mem;
+			m_pCommanderView->GetSelectedDataSimple(mem);
 
 			// BOM追加
-			NativeW cMem2;
+			NativeW mem2;
 			const NativeW* pConvBuffer;
 			if (bBom) {
 				NativeW memBom;
 				std::unique_ptr<CodeBase> pcUtf16(CodeFactory::CreateCodeBase(CODE_UNICODE, 0));
 				pcUtf16->GetBom(memBom._GetMemory());
-				cMem2.AppendNativeData(memBom);
-				cMem2.AppendNativeData(cMem);
-				cMem.Clear();
-				pConvBuffer = &cMem2;
+				mem2.AppendNativeData(memBom);
+				mem2.AppendNativeData(mem);
+				mem.Clear();
+				pConvBuffer = &mem2;
 			}else {
-				pConvBuffer = &cMem;
+				pConvBuffer = &mem;
 			}
 
 			// 書き込み時のコード変換 -> dst
@@ -727,7 +727,7 @@ bool ViewCommander::Command_PUTFILE(
 */
 bool ViewCommander::Command_INSFILE(
 	LPCWSTR filename,
-	ECodeType nCharCode,
+	EncodingType nCharCode,
 	int nFlgOpt
 	)
 {
@@ -756,7 +756,7 @@ bool ViewCommander::Command_INSFILE(
 	}
 
 
-	ECodeType	nSaveCharCode = nCharCode;
+	EncodingType	nSaveCharCode = nCharCode;
 	if (nSaveCharCode == CODE_AUTODETECT) {
 		EditInfo    fi;
 		const MRUFile  mru;

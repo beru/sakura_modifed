@@ -83,23 +83,23 @@ public:
 	// Mar. 30, 2003 genta 引数追加
 	void Command_FILEOPEN(
 		const WCHAR*	filename	= NULL,
-		ECodeType		nCharCode	= CODE_AUTODETECT,
+		EncodingType		nCharCode	= CODE_AUTODETECT,
 		bool			bViewMode	= false,
 		const WCHAR*	defaultName	= NULL
 	);
 
 	// 上書き保存 // Feb. 28, 2004 genta 引数追加, Jan. 24, 2005 genta 引数追加
 	bool Command_FILESAVE(bool warnbeep = true, bool askname = true);
-	bool Command_FILESAVEAS_DIALOG(const WCHAR*, ECodeType, EolType);		// 名前を付けて保存
+	bool Command_FILESAVEAS_DIALOG(const WCHAR*, EncodingType, EolType);		// 名前を付けて保存
 	bool Command_FILESAVEAS(const WCHAR* filename, EolType eEolType);		// 名前を付けて保存
 	bool Command_FILESAVEALL(void);				// 全て上書き保存 // Jan. 23, 2005 genta
 	void Command_FILECLOSE(void);				// 開じて(無題)	// Oct. 17, 2000 jepro 「ファイルを閉じる」というキャプションを変更
 	// 閉じて開く
 	// Mar. 30, 2003 genta 引数追加
 	void Command_FILECLOSE_OPEN(LPCWSTR filename = NULL,
-		ECodeType nCharCode = CODE_AUTODETECT, bool bViewMode = false);
+		EncodingType nCharCode = CODE_AUTODETECT, bool bViewMode = false);
 
-	void Command_FILE_REOPEN(ECodeType nCharCode, bool bNoConfirm);		// 再オープン	// Dec. 4, 2002 genta 引数追加
+	void Command_FILE_REOPEN(EncodingType nCharCode, bool bNoConfirm);		// 再オープン	// Dec. 4, 2002 genta 引数追加
 
 	void Command_PRINT(void);					// 印刷
 	void Command_PRINT_PREVIEW(void);			// 印刷プレビュー
@@ -115,8 +115,8 @@ public:
 	void Command_PROFILEMGR( void );			// プロファイルマネージャ
 	void Command_EXITALLEDITORS(void);			// 編集の全終了	// 2007.02.13 ryoji 追加
 	void Command_EXITALL(void);					// サクラエディタの全終了	// Dec. 27, 2000 JEPRO 追加
-	bool Command_PUTFILE(LPCWSTR, ECodeType, int);	// 作業中ファイルの一時出力 maru 2006.12.10
-	bool Command_INSFILE(LPCWSTR, ECodeType, int);	// キャレット位置にファイル挿入 maru 2006.12.10
+	bool Command_PUTFILE(LPCWSTR, EncodingType, int);	// 作業中ファイルの一時出力 maru 2006.12.10
+	bool Command_INSFILE(LPCWSTR, EncodingType, int);	// キャレット位置にファイル挿入 maru 2006.12.10
 
 	// 編集系
 	void Command_WCHAR(wchar_t, bool bConvertEOL = true);			// 文字入力 // 2007.09.02 kobake Command_CHAR(char)→Command_WCHAR(wchar_t)に変更
@@ -310,7 +310,7 @@ public:
 
 	// モード切り替え系
 	void Command_CHGMOD_INS(void);						// 挿入／上書きモード切り替え
-	void Command_CHG_CHARSET(ECodeType, bool);			// 文字コードセット指定	// 2010/6/15 Uchi
+	void Command_CHG_CHARSET(EncodingType, bool);			// 文字コードセット指定	// 2010/6/15 Uchi
 	void Command_CHGMOD_EOL(EolType);					// 入力する改行コードを設定 2003.06.23 moca
 	void Command_CANCEL_MODE(int whereCursorIs = 0);	// 各種モードの取り消し
 

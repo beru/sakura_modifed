@@ -534,9 +534,9 @@ void NativeA::SPACEToTAB(int nTabSpace)
 						nStartPos = nPosX;
 					}
 					bSpace = true;
-					if (SPACE == pLine[i]) {
+					if (pLine[i] == SPACE) {
 						++nPosX;
-					}else if (TAB == pLine[i]) {
+					}else if (pLine[i] == TAB) {
 						nPosX += nTabSpace - (nPosX % nTabSpace);
 					}
 				}else {

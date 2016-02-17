@@ -606,9 +606,9 @@ enum EEncodingMethod {
 	@return  Memory ‚Æ’u‚«Š·‚¦‚ç‚ê‚é“ü—Í•¶Žš—ñ’· (nSkipLen)
 */
 template <class CHAR_TYPE>
-int _DecodeMimeHeader(const CHAR_TYPE* pSrc, const int nSrcLen, Memory* pMem_alt, ECodeType* peCodetype)
+int _DecodeMimeHeader(const CHAR_TYPE* pSrc, const int nSrcLen, Memory* pMem_alt, EncodingType* peCodetype)
 {
-	ECodeType ecode = CODE_NONE;
+	EncodingType ecode = CODE_NONE;
 	EEncodingMethod emethod = EM_NONE;
 	int nLen_part1, nLen_part2, nskipped_len;
 	int ncmpresult1, ncmpresult2, ncmpresult;

@@ -50,7 +50,7 @@ CodeConvertResult ReadManager::ReadFile_To_CDocLineMgr(
 	// •¶ŽšƒR[ƒhŽí•Ê
 	const TypeConfigMini* type;
 	DocTypeManager().GetTypeConfigMini( loadInfo.nType, &type );
-	ECodeType eCharCode = loadInfo.eCharCode;
+	EncodingType eCharCode = loadInfo.eCharCode;
 	if (eCharCode == CODE_AUTODETECT) {
 		CodeMediator mediator( type->m_encoding );
 		eCharCode = mediator.CheckKanjiCodeOfFile( pszPath );

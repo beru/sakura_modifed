@@ -61,7 +61,7 @@ void ConvertMediator::ConvMemory(
 	case F_CODECNV_SJIS2UTF7:		Utf7::UnicodeToUTF7(*pMemory, pMemory->_GetMemory());		break;
 	}
 
-	ECodeType ecode = CODE_NONE;
+	EncodingType ecode = CODE_NONE;
 	if (nFuncCode == F_CODECNV_AUTO2SJIS) {
 		CodeMediator ccode(EditWnd::getInstance()->GetDocument()->m_docType.GetDocumentAttribute().m_encoding);
 		ecode = ccode.CheckKanjiCode(

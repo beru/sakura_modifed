@@ -104,7 +104,7 @@ int DlgDiff::DoModal(
 	HWND				hwndParent,
 	LPARAM				lParam,
 	const TCHAR*		pszPath		// 自ファイル
-)
+	)
 {
 	_tcscpy(m_szFile1, pszPath);
 	return (int)Dialog::DoModal(hInstance, hwndParent, IDD_DIFF, lParam);
@@ -232,7 +232,7 @@ void DlgDiff::SetData(void)
 		WIN_CHAR	szName[_MAX_PATH];
 		int			count = 0;
 		int			selIndex = 0;
-		ECodeType	code;
+		EncodingType	code;
 		int			selCode = CODE_NONE;
 
 		// 自分の文字コードを取得

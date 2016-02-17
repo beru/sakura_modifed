@@ -1219,8 +1219,8 @@ void EditView::SmartIndent_CPP(wchar_t wcChar)
 	LogicInt j;
 
 	// 調整によって置換される箇所
-	LogicRange sRangeA;
-	sRangeA.Clear(-1);
+	LogicRange rangeA;
+	rangeA.Clear(-1);
 
 	wchar_t*	pszData = NULL;
 	LogicInt	nDataLen;
@@ -1255,7 +1255,7 @@ void EditView::SmartIndent_CPP(wchar_t wcChar)
 				return;
 			}
 			// 調整によって置換される箇所
-			sRangeA.Set(LogicPoint(0, GetCaret().GetCaretLogicPos().y));
+			rangeA.Set(LogicPoint(0, GetCaret().GetCaretLogicPos().y));
 		}else {
 			//	nWorkに処理の基準桁位置を設定する
 			if (wcChar != WCODE::CR) {
@@ -1306,8 +1306,8 @@ void EditView::SmartIndent_CPP(wchar_t wcChar)
 				}
 			}
 			// 調整によって置換される箇所
-			sRangeA.SetFrom(LogicPoint(0, GetCaret().GetCaretLogicPos().GetY2()));
-			sRangeA.SetTo(LogicPoint(i, GetCaret().GetCaretLogicPos().GetY2()));
+			rangeA.SetFrom(LogicPoint(0, GetCaret().GetCaretLogicPos().GetY2()));
+			rangeA.SetTo(LogicPoint(i, GetCaret().GetCaretLogicPos().GetY2()));
 		}
 		
 		// 対応する括弧をさがす
@@ -1436,7 +1436,7 @@ void EditView::SmartIndent_CPP(wchar_t wcChar)
 		}
 		if (j < 0) {
 			// 対応する括弧が見つからなかった
-			if (WCODE::CR == wcChar) {
+			if (wcChar == WCODE::CR) {
 				return;
 			}else {
 				nDataLen = LogicInt(0);
@@ -1446,10 +1446,10 @@ void EditView::SmartIndent_CPP(wchar_t wcChar)
 		}
 
 		// 調整後のカーソル位置を計算しておく
-		ptCP.x = nCaretPosX_PHY - sRangeA.GetTo().x + nDataLen;
+		ptCP.x = nCaretPosX_PHY - rangeA.GetTo().x + nDataLen;
 		ptCP.y = GetCaret().GetCaretLogicPos().y;
 
-		nSrcLen = sRangeA.GetTo().x - sRangeA.GetFrom().x;
+		nSrcLen = rangeA.GetTo().x - rangeA.GetFrom().x;
 		if (nSrcLen >= _countof(pszSrc) - 1) {
 			//	Sep. 18, 2002 genta メモリリーク対策
 			delete [] pszData;
@@ -1458,13 +1458,13 @@ void EditView::SmartIndent_CPP(wchar_t wcChar)
 		if (!pLine) {
 			pszSrc[0] = L'\0';
 		}else {
-			wmemcpy(pszSrc, &pLine[sRangeA.GetFrom().x], nSrcLen);
+			wmemcpy(pszSrc, &pLine[rangeA.GetFrom().x], nSrcLen);
 			pszSrc[nSrcLen] = L'\0';
 		}
 		
 		// 調整によって置換される箇所
 		LayoutRange rangeLayout;
-		m_pEditDoc->m_layoutMgr.LogicToLayout(sRangeA, &rangeLayout);
+		m_pEditDoc->m_layoutMgr.LogicToLayout(rangeA, &rangeLayout);
 
 		if (0
 			|| (nDataLen == 0 && rangeLayout.IsOne())

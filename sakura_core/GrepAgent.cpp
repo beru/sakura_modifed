@@ -159,7 +159,7 @@ DWORD GrepAgent::DoGrep(
 	bool					bGrepStdout,
 	bool					bGrepHeader,
 	const SearchOption&		searchOption,
-	ECodeType				nGrepCharSet,	// 2002/09/21 Moca 文字コードセット選択
+	EncodingType				nGrepCharSet,	// 2002/09/21 Moca 文字コードセット選択
 	int						nGrepOutputLineType,
 	int						nGrepOutputStyle,
 	bool					bGrepOutputFileOnly,
@@ -1048,7 +1048,7 @@ int GrepAgent::DoGrepFile(
 	int		nHitCount;
 	LONGLONG	nLine;
 	const wchar_t*	pszRes; // 2002/08/29 const付加
-	ECodeType	nCharCode;
+	EncodingType	nCharCode;
 	const wchar_t*	pCompareData; // 2002/08/29 const付加
 	int		nColumn;
 	BOOL	bOutFileName;
@@ -1484,7 +1484,7 @@ class WriteData {
 public:
 	WriteData(int& hit,
 				LPCTSTR name,
-				ECodeType code_,
+				EncodingType code_,
 				bool bBom_,
 				bool bOldSave_,
 				NativeW& message)
@@ -1606,7 +1606,7 @@ public:
 private:
 	int& nHitCount;
 	LPCTSTR fileName;
-	ECodeType code;
+	EncodingType code;
 	bool bBom;
 	bool bOldSave;
 	size_t bufferSize;
@@ -1642,7 +1642,7 @@ int GrepAgent::DoGrepReplaceFile(
 {
 	LONGLONG	nLine = 0;
 	int			nHitCount = 0;
-	ECodeType	nCharCode;
+	EncodingType	nCharCode;
 	BOOL		bOutFileName = FALSE;
 	Eol		cEol;
 	int		nEolCodeLen;

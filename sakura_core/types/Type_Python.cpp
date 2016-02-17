@@ -102,7 +102,7 @@ struct OutlinePython {
 	int EnterString(const wchar_t* data, int linelen, int start_offset);
 	void DoScanLine(const wchar_t* data, int linelen, int start_offset);
 	
-	bool IsLogicalLineTop(void) const { return STATE_NORMAL == m_state; }
+	bool IsLogicalLineTop(void) const { return m_state == STATE_NORMAL; }
 };
 
 /*!コンストラクタ: 初期化
@@ -345,9 +345,9 @@ void OutlinePython::DoScanLine(const wchar_t* data, int linelen, int start_offse
 {
 	int col = start_offset;
 	while (col < linelen) {
-		if (STATE_NORMAL == m_state || STATE_CONTINUE == m_state) {
+		if (m_state == STATE_NORMAL || m_state == STATE_CONTINUE) {
 			col = ScanNormal(data, linelen, col);
-		}else if (STATE_STRING == m_state) {
+		}else if (m_state == STATE_STRING) {
 			col = ScanString(data, linelen, col);
 		}else {
 			//	ありえないエラー

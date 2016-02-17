@@ -42,7 +42,7 @@ static bool _CheckSavingEolcode(
 //! DocLineMgrが保持するデータを指定文字コードで安全に保存できるかどうか判定する
 static CodeConvertResult _CheckSavingCharcode(
 	const DocLineMgr& pcDocLineMgr,
-	ECodeType eCodeType,
+	EncodingType eCodeType,
 	LogicPoint& point,
 	NativeW& wc
 	)

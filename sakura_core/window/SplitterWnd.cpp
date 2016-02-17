@@ -290,7 +290,7 @@ void SplitterWnd::DoSplit(int nHorizontal, int nVertical)
 	WINDOWPLACEMENT	wp;
 	wp.length = sizeof(wp);
 	::GetWindowPlacement(GetParentHwnd(), &wp);
-	if (SW_SHOWMAXIMIZED == wp.showCmd) {
+	if (wp.showCmd == SW_SHOWMAXIMIZED) {
 		bSizeBox = false;
 	}
 

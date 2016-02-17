@@ -35,11 +35,11 @@
 */
 struct EditInfo {
 	// ファイル
-	TCHAR		m_szPath[_MAX_PATH];					//!< ファイル名
-	ECodeType	m_nCharCode;							//!< 文字コード種別
-	bool		m_bBom;									//!< BOM(GetFileInfo)
-	TCHAR		m_szDocType[MAX_DOCTYPE_LEN + 1];		//!< 文書タイプ
-	int 		m_nTypeId;								//!< 文書タイプ(MRU)
+	TCHAR			m_szPath[_MAX_PATH];					//!< ファイル名
+	EncodingType	m_nCharCode;							//!< 文字コード種別
+	bool			m_bBom;									//!< BOM(GetFileInfo)
+	TCHAR			m_szDocType[MAX_DOCTYPE_LEN + 1];		//!< 文書タイプ
+	int 			m_nTypeId;								//!< 文書タイプ(MRU)
 
 	// 表示域
 	LayoutInt	m_nViewTopLine;							//!< 表示域の一番上の行(0開始)

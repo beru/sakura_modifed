@@ -187,10 +187,10 @@ bool ViewCommander::HandleCommand(
 	case F_FILENEW_NEWWINDOW:	Command_FILENEW_NEWWINDOW(); break;
 	// Oct. 2, 2001 genta マクロ用機能拡張
 	case F_FILEOPEN:			Command_FILEOPEN((const WCHAR*)lparam1); break;			// ファイルを開く
-	case F_FILEOPEN2:			Command_FILEOPEN((const WCHAR*)lparam1, (ECodeType)lparam2, lparam3 != 0, (const WCHAR*)lparam4); break;	// ファイルを開く2
+	case F_FILEOPEN2:			Command_FILEOPEN((const WCHAR*)lparam1, (EncodingType)lparam2, lparam3 != 0, (const WCHAR*)lparam4); break;	// ファイルを開く2
 	case F_FILEOPEN_DROPDOWN:	Command_FILEOPEN((const WCHAR*)lparam1); break;			// ファイルを開く(ドロップダウン)	//@@@ 2002.06.15 MIK
 	case F_FILESAVE:			bRet = Command_FILESAVE(); break;	// 上書き保存
-	case F_FILESAVEAS_DIALOG:	bRet = Command_FILESAVEAS_DIALOG((const WCHAR*)lparam1, (ECodeType)lparam2, (EolType)lparam3); break;	// 名前を付けて保存
+	case F_FILESAVEAS_DIALOG:	bRet = Command_FILESAVEAS_DIALOG((const WCHAR*)lparam1, (EncodingType)lparam2, (EolType)lparam3); break;	// 名前を付けて保存
 	case F_FILESAVEAS:			bRet = Command_FILESAVEAS((const WCHAR*)lparam1, (EolType)lparam3); break;	// 名前を付けて保存
 	case F_FILESAVEALL:			bRet = Command_FILESAVEALL(); break;	// 全ての編集ウィンドウで上書き保存 // Jan. 23, 2005 genta
 	case F_FILESAVE_QUIET:		bRet = Command_FILESAVE(false, false); break;	// 静かに上書き保存 // Jan. 24, 2005 genta
@@ -239,8 +239,8 @@ bool ViewCommander::HandleCommand(
 	case F_PROFILEMGR:			Command_PROFILEMGR(); break;		// プロファイルマネージャ
 	case F_EXITALLEDITORS:		Command_EXITALLEDITORS(); break;	// 編集の全終了	// 2007.02.13 ryoji 追加
 	case F_EXITALL:				Command_EXITALL(); break;			// サクラエディタの全終了	// Dec. 26, 2000 JEPRO 追加
-	case F_PUTFILE:				Command_PUTFILE((LPCWSTR)lparam1, (ECodeType)lparam2, (int)lparam3); break;	// 作業中ファイルの一時出力 // maru 2006.12.10
-	case F_INSFILE:				Command_INSFILE((LPCWSTR)lparam1, (ECodeType)lparam2, (int)lparam3); break;	// キャレット位置にファイル挿入 //maru 2006.12.10
+	case F_PUTFILE:				Command_PUTFILE((LPCWSTR)lparam1, (EncodingType)lparam2, (int)lparam3); break;	// 作業中ファイルの一時出力 // maru 2006.12.10
+	case F_INSFILE:				Command_INSFILE((LPCWSTR)lparam1, (EncodingType)lparam2, (int)lparam3); break;	// キャレット位置にファイル挿入 //maru 2006.12.10
 
 	// 編集系
 	case F_UNDO:				Command_UNDO(); break;				// 元に戻す(Undo)
@@ -472,7 +472,7 @@ bool ViewCommander::HandleCommand(
 
 	// モード切り替え系
 	case F_CHGMOD_INS:		Command_CHGMOD_INS(); break;		// 挿入／上書きモード切り替え
-	case F_CHG_CHARSET:		Command_CHG_CHARSET((ECodeType)lparam1, lparam2 != 0); break;	// 文字コードセット指定	2010/6/14 Uchi
+	case F_CHG_CHARSET:		Command_CHG_CHARSET((EncodingType)lparam1, lparam2 != 0); break;	// 文字コードセット指定	2010/6/14 Uchi
 	// From Here 2003.06.23 Moca
 	// F_CHGMOD_EOL_xxx はマクロに記録されないが、F_CHGMOD_EOLはマクロに記録されるので、マクロ関数を統合できるという手はず
 	case F_CHGMOD_EOL_CRLF:	HandleCommand(F_CHGMOD_EOL, bRedraw, (int)EolType::CRLF, 0, 0, 0); break;	// 入力する改行コードをCRLFに設定

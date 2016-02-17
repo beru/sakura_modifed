@@ -129,8 +129,8 @@ INT_PTR PropGeneral::DispatchEvent(
 
 			case IDC_BUTTON_CLEAR_MRU_FILE:
 				// ファイルの履歴をクリア
-				if (IDCANCEL == ::MYMESSAGEBOX(hwndDlg, MB_OKCANCEL | MB_ICONQUESTION, GSTR_APPNAME,
-					LS(STR_PROPCOMGEN_FILE1))
+				if (::MYMESSAGEBOX(hwndDlg, MB_OKCANCEL | MB_ICONQUESTION, GSTR_APPNAME,
+					LS(STR_PROPCOMGEN_FILE1)) == IDCANCEL
 				) {
 					return TRUE;
 				}
@@ -144,8 +144,8 @@ INT_PTR PropGeneral::DispatchEvent(
 				return TRUE;
 			case IDC_BUTTON_CLEAR_MRU_FOLDER:
 				// フォルダの履歴をクリア
-				if (IDCANCEL == ::MYMESSAGEBOX(hwndDlg, MB_OKCANCEL | MB_ICONQUESTION, GSTR_APPNAME,
-					LS(STR_PROPCOMGEN_DIR1))
+				if (::MYMESSAGEBOX(hwndDlg, MB_OKCANCEL | MB_ICONQUESTION, GSTR_APPNAME,
+					LS(STR_PROPCOMGEN_DIR1)) == IDCANCEL
 				) {
 					return TRUE;
 				}

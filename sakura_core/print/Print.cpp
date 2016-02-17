@@ -445,7 +445,7 @@ BOOL Print::GetPaperSize(
 		pDEVMODE->dmFields |= DM_PAPERWIDTH;
 	}
 	// —pŽ†‚Ì•ûŒü
-	if (DMORIENT_LANDSCAPE == pDEVMODE->dmOrientation) {
+	if (pDEVMODE->dmOrientation == DMORIENT_LANDSCAPE) {
 		nWork = *pnPaperAllWidth;
 		*pnPaperAllWidth = *pnPaperAllHeight;
 		*pnPaperAllHeight = nWork;

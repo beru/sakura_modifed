@@ -32,9 +32,9 @@ class EditDoc;
 struct FileInfo {
 	friend class DocFile;
 protected:
-	ECodeType	eCharCode;
+	EncodingType	eCharCode;
 	bool		bBomExist;
-	ECodeType	eCharCodeLoad;
+	EncodingType	eCharCodeLoad;
 	bool		bBomExistLoad;
 	FileTime	fileTime;
 
@@ -44,7 +44,7 @@ public:
 		bBomExist = bBomExistLoad = false;
 		fileTime.ClearFILETIME();
 	}
-	void	SetCodeSet(ECodeType eSet, bool bBom)	{ eCharCode = eCharCodeLoad = eSet; bBomExist = bBomExistLoad = bBom; }	// 文字コードセットを設定
+	void	SetCodeSet(EncodingType eSet, bool bBom)	{ eCharCode = eCharCodeLoad = eSet; bBomExist = bBomExistLoad = bBom; }	// 文字コードセットを設定
 	void	SetBomExist(bool bBom)					{ bBomExist = bBomExistLoad = bBom; }	// BOM付加を設定
 	void	SetFileTime(FILETIME& Time)			{ fileTime.SetFILETIME(Time); }
 };
@@ -53,9 +53,9 @@ class DocFile : public File {
 public:
 	DocFile(EditDoc* pDoc) : m_pDocRef(pDoc) {}
 
-	void			SetCodeSet(ECodeType eCodeSet, bool bBomExist)		{ m_fileInfo.SetCodeSet(eCodeSet, bBomExist); }	// 文字コードセットを設定
-	void			SetCodeSetChg(ECodeType eCodeSet, bool bBomExist)	{ m_fileInfo.eCharCode = eCodeSet; m_fileInfo.bBomExist = bBomExist; }	// 文字コードセットを設定(文字コード指定用)
-	ECodeType		GetCodeSet() const			{ return m_fileInfo.eCharCode; }		// 文字コードセットを取得
+	void			SetCodeSet(EncodingType eCodeSet, bool bBomExist)		{ m_fileInfo.SetCodeSet(eCodeSet, bBomExist); }	// 文字コードセットを設定
+	void			SetCodeSetChg(EncodingType eCodeSet, bool bBomExist)	{ m_fileInfo.eCharCode = eCodeSet; m_fileInfo.bBomExist = bBomExist; }	// 文字コードセットを設定(文字コード指定用)
+	EncodingType		GetCodeSet() const			{ return m_fileInfo.eCharCode; }		// 文字コードセットを取得
 	void			SetBomDefoult()				{ m_fileInfo.bBomExist= CodeTypeName(m_fileInfo.eCharCode).IsBomDefOn(); }	// BOM付加のデフォルト値を設定する
 	void			CancelChgCodeSet()			{ m_fileInfo.eCharCode = m_fileInfo.eCharCodeLoad; m_fileInfo.bBomExist = m_fileInfo.bBomExistLoad; }		// 文字コードセット1の変更をキャンセルする
 	bool			IsBomExist() const			{ return m_fileInfo.bBomExist; }		// 保存時にBOMを付加するかどうかを取得

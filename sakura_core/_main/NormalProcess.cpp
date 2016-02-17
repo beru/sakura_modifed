@@ -531,7 +531,7 @@ HANDLE NormalProcess::_GetInitializeMutex() const
 	}
 	if (::GetLastError() == ERROR_ALREADY_EXISTS) {
 		DWORD dwRet = ::WaitForSingleObject(hMutex, 15000);	// 2002/2/8 aroka 少し長くした
-		if (WAIT_TIMEOUT == dwRet) { // 別の誰かが起動中
+		if (dwRet == WAIT_TIMEOUT) { // 別の誰かが起動中
 			TopErrorMessage(NULL, _T("エディタまたはシステムがビジー状態です。\nしばらく待って開きなおしてください。"));
 			::CloseHandle(hMutex);
 			return NULL;

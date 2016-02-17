@@ -483,21 +483,21 @@ static bool IOProfSettings(
 	bool bWrite
 	)
 {
-	DataProfile cProf;
+	DataProfile profile;
 	if (bWrite) {
-		cProf.SetWritingMode();
+		profile.SetWritingMode();
 	}else {
-		cProf.SetReadingMode();
+		profile.SetReadingMode();
 	}
 	std::tstring strIniName = GetProfileMgrFileName();
 	if (!bWrite) {
-		if (!cProf.ReadProfile(strIniName.c_str())) {
+		if (!profile.ReadProfile(strIniName.c_str())) {
 			return false;
 		}
 	}
 	int nCount = (int)settings.m_vProfList.size();
 	const wchar_t* const pSection = L"Profile";
-	cProf.IOProfileData(pSection , L"nCount", nCount );
+	profile.IOProfileData(pSection , L"nCount", nCount );
 	for (int i=0; i<nCount; ++i) {
 		wchar_t szKey[64];
 		std::tstring strProfName;
@@ -505,26 +505,26 @@ static bool IOProfSettings(
 		if (bWrite) {
 			strProfName = settings.m_vProfList[i];
 			std::wstring wstrProfName = to_wchar(strProfName.c_str());
-			cProf.IOProfileData(pSection, szKey, wstrProfName);
+			profile.IOProfileData(pSection, szKey, wstrProfName);
 		}else {
 			std::wstring wstrProfName;
-			cProf.IOProfileData(pSection, szKey, wstrProfName);
+			profile.IOProfileData(pSection, szKey, wstrProfName);
 			strProfName = to_tchar(wstrProfName.c_str());
 			settings.m_vProfList.push_back(strProfName);
 		}
 	}
-	cProf.IOProfileData(pSection, L"nDefaultIndex", settings.m_nDefaultIndex);
+	profile.IOProfileData(pSection, L"nDefaultIndex", settings.m_nDefaultIndex);
 	if (nCount < settings.m_nDefaultIndex) {
 		settings.m_nDefaultIndex = -1;
 	}
 	if (settings.m_nDefaultIndex < -1) {
 		settings.m_nDefaultIndex = -1;
 	}
-	cProf.IOProfileData(pSection, L"szDllLanguage", StringBufferT(settings.m_szDllLanguage, _countof(settings.m_szDllLanguage)));
-	cProf.IOProfileData(pSection, L"bDefaultSelect", settings.m_bDefaultSelect);
+	profile.IOProfileData(pSection, L"szDllLanguage", StringBufferT(settings.m_szDllLanguage, _countof(settings.m_szDllLanguage)));
+	profile.IOProfileData(pSection, L"bDefaultSelect", settings.m_bDefaultSelect);
 
 	if (bWrite) {
-		if (!cProf.WriteProfile(strIniName.c_str(), L"Sakura Profile ini")) {
+		if (!profile.WriteProfile(strIniName.c_str(), L"Sakura Profile ini")) {
 			return false;
 		}
 	}

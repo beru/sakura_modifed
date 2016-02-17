@@ -41,7 +41,7 @@ public:
 
 	SearchOption	m_searchOption;	//!< 検索オプション
 
-	ECodeType	m_nGrepCharSet;				//!< 文字コードセット
+	EncodingType	m_nGrepCharSet;				//!< 文字コードセット
 	int			m_nGrepOutputStyle;			//!< Grep: 出力形式
 	int			m_nGrepOutputLineType;		//!< 結果出力：行を出力/該当部分/否マッチ行
 	bool		m_bGrepOutputFileOnly;		//!< ファイル毎最初のみ検索

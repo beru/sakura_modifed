@@ -21,7 +21,7 @@
 #include "env/ShareData.h"
 #include "macro/SMacroMgr.h"// 2002/2/10 aroka
 
-// KEYDATAとほぼ同じ
+// KeyDataとほぼ同じ
 struct KEYDATAINIT {
 	short m_nKeyCode;			// Key Code (0 for non-keybord button)
 	union {
@@ -40,7 +40,7 @@ struct KEYDATAINIT {
 };
 
 // 実装補助
-// KEYDATA配列にデータをセット
+// KeyData配列にデータをセット
 static void SetKeyNameArrVal(
 	DLLSHAREDATA*		pShareData,
 	int					nIdx,
@@ -63,7 +63,7 @@ KeyBind::~KeyBind()
 */
 HACCEL KeyBind::CreateAccerelator(
 	int			nKeyNameArrNum,
-	KEYDATA*	pKeyNameArr
+	KeyData*	pKeyNameArr
 	)
 {
 	// 機能が割り当てられているキーの数をカウント -> nAccelArrNum
@@ -117,7 +117,7 @@ HACCEL KeyBind::CreateAccerelator(
 EFunctionCode KeyBind::GetFuncCode(
 	WORD		nAccelCmd,
 	int			nKeyNameArrNum,
-	KEYDATA*	pKeyNameArr,
+	KeyData*	pKeyNameArr,
 	bool		bGetDefFuncCode // = true
 	)
 {
@@ -148,7 +148,7 @@ EFunctionCode KeyBind::GetFuncCode(
 int KeyBind::CreateKeyBindList(
 	HINSTANCE		hInstance,		// [in] インスタンスハンドル
 	int				nKeyNameArrNum,	// [in]
-	KEYDATA*		pKeyNameArr,	// [out]
+	KeyData*		pKeyNameArr,	// [out]
 	NativeW&		memList,		//
 	FuncLookup*		pFuncLookup,	// [in] 機能番号→名前の対応を取る
 	bool			bGetDefFuncCode // [in] ON:デフォルト機能割り当てを使う/OFF:使わない デフォルト:true
@@ -260,7 +260,7 @@ int KeyBind::CreateKeyBindList(
 bool KeyBind::GetKeyStrSub(
 	int&		nKeyNameArrBegin,
 	int			nKeyNameArrEnd,
-	KEYDATA*	pKeyNameArr,
+	KeyData*	pKeyNameArr,
 	int			nShiftState,
 	NativeT&	memList,
 	int			nFuncId,
@@ -302,7 +302,7 @@ bool KeyBind::GetKeyStrSub(
 int KeyBind::GetKeyStr(
 	HINSTANCE	hInstance,
 	int			nKeyNameArrNum,
-	KEYDATA*	pKeyNameArr,
+	KeyData*	pKeyNameArr,
 	NativeT&	memList,
 	int			nFuncId,
 	bool		bGetDefFuncCode // = true
@@ -338,8 +338,8 @@ int KeyBind::GetKeyStr(
 int KeyBind::GetKeyStrList(
 	HINSTANCE	hInstance,
 	int			nKeyNameArrNum,
-	KEYDATA*	pKeyNameArr,
-	NativeT***	pppcMemList,
+	KeyData*	pKeyNameArr,
+	NativeT***	pppMemList,
 	int			nFuncId,
 	bool		bGetDefFuncCode // = true
 	)
@@ -358,12 +358,12 @@ int KeyBind::GetKeyStrList(
 	if (nAssignedKeysNum == 0) {
 		return 0;
 	}
-	(*pppcMemList) = new NativeT*[nAssignedKeysNum + 1];
+	(*pppMemList) = new NativeT*[nAssignedKeysNum + 1];
 	int i;
 	for (i=0; i<nAssignedKeysNum; ++i) {
-		(*pppcMemList)[i] = new NativeT;
+		(*pppMemList)[i] = new NativeT;
 	}
-	(*pppcMemList)[i] = NULL;
+	(*pppMemList)[i] = NULL;
 	
 	nAssignedKeysNum = 0;
 	for (int j=0; j<8; ++j) {
@@ -374,7 +374,7 @@ int KeyBind::GetKeyStrList(
 				nKeyNameArrNum,
 				pKeyNameArr,
 				j,
-				*((*pppcMemList)[nAssignedKeysNum]),
+				*((*pppMemList)[nAssignedKeysNum]),
 				nFuncId,
 				bGetDefFuncCode
 				)
@@ -442,7 +442,7 @@ TCHAR* KeyBind::MakeMenuLabel(const TCHAR* sName, const TCHAR* sKey)
 TCHAR* KeyBind::GetMenuLabel(
 	HINSTANCE		hInstance,
 	int				nKeyNameArrNum,
-	KEYDATA*		pKeyNameArr,
+	KeyData*		pKeyNameArr,
 	int				nFuncId,
 	TCHAR*      	pszLabel,   // [in,out] バッファは256以上と仮定
 	const TCHAR*	pszKey,
@@ -526,7 +526,7 @@ EFunctionCode KeyBind::GetDefFuncCode(int nKeyCode, int nState)
 
 	@date 2007.03.07 ryoji インライン関数から通常の関数に変更（BCCの最適化バグ対策）
 */
-EFunctionCode KeyBind::GetFuncCodeAt(KEYDATA& KeyData, int nState, bool bGetDefFuncCode)
+EFunctionCode KeyBind::GetFuncCodeAt(KeyData& KeyData, int nState, bool bGetDefFuncCode)
 {
 	if (KeyData.m_nFuncCodeArr[nState] != 0) {
 		return KeyData.m_nFuncCodeArr[nState];
@@ -843,7 +843,7 @@ void ShareData::RefreshKeyAssignString(DLLSHAREDATA* pShareData)
 {
 	const int nKeyDataInitNum = _countof(KeyDataInit);
 	for (int i=0; i<nKeyDataInitNum; ++i) {
-		KEYDATA* pKeydata = &pShareData->m_common.m_keyBind.m_pKeyNameArr[i];
+		KeyData* pKeydata = &pShareData->m_common.m_keyBind.m_pKeyNameArr[i];
 		if (KeyDataInit[i].m_nKeyNameId <= 0xFFFF) {
 			_tcscpy(pKeydata->m_szKeyName, LS(KeyDataInit[i].m_nKeyNameId));
 		}
@@ -854,14 +854,14 @@ void ShareData::RefreshKeyAssignString(DLLSHAREDATA* pShareData)
 //                         実装補助                            //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-// KEYDATA配列にデータをセット
+// KeyData配列にデータをセット
 static void SetKeyNameArrVal(
 	DLLSHAREDATA*		pShareData,
 	int					nIdx,
 	const KEYDATAINIT*	pKeydataInit
 	)
 {
-	KEYDATA* pKeydata = &pShareData->m_common.m_keyBind.m_pKeyNameArr[nIdx];
+	KeyData* pKeydata = &pShareData->m_common.m_keyBind.m_pKeyNameArr[nIdx];
 	pKeydata->m_nKeyCode = pKeydataInit->m_nKeyCode;
 	if (0xFFFF < pKeydataInit->m_nKeyNameId) {
 		_tcscpy(pKeydata->m_szKeyName, pKeydataInit->m_pszKeyName);

@@ -224,7 +224,7 @@ void ViewCommander::Command_COMPARE(void)
 
 
 static
-ECodeType GetFileCharCode( LPCTSTR pszFile )
+EncodingType GetFileCharCode( LPCTSTR pszFile )
 {
 	const TypeConfigMini* typeMini;
 	DocTypeManager().GetTypeConfigMini( DocTypeManager().GetDocumentTypeOfPath( pszFile ), &typeMini );
@@ -233,7 +233,7 @@ ECodeType GetFileCharCode( LPCTSTR pszFile )
 
 
 static
-ECodeType GetDiffCreateTempFileCode(ECodeType code)
+EncodingType GetDiffCreateTempFileCode(EncodingType code)
 {
 	EEncodingTrait e = CodePage::GetEncodingTrait(code);
 	if (e != ENCODING_TRAIT_ASCII) {
@@ -263,10 +263,10 @@ void ViewCommander::Command_Diff(const WCHAR* _szDiffFile2, int nFlgOpt)
 
 	// 自ファイル
 	// 2013.06.21 Unicodeのときは、いつもファイル出力
-	ECodeType code = GetDocument()->GetDocumentEncoding();
-	ECodeType saveCode = GetDiffCreateTempFileCode(code);
-	ECodeType code2 = GetFileCharCode(szDiffFile2);
-	ECodeType saveCode2 = GetDiffCreateTempFileCode(code2);
+	EncodingType code = GetDocument()->GetDocumentEncoding();
+	EncodingType saveCode = GetDiffCreateTempFileCode(code);
+	EncodingType code2 = GetFileCharCode(szDiffFile2);
+	EncodingType saveCode2 = GetDiffCreateTempFileCode(code2);
 	// 2014.10.24 コードが違うときは必ずUTF-8ファイル出力
 	if (saveCode != saveCode2) {
 		saveCode = CODE_UTF8;
@@ -340,16 +340,16 @@ void ViewCommander::Command_Diff_Dialog(void)
 	
 	// 自ファイル
 	TCHAR szTmpFile1[_MAX_PATH * 2];
-	ECodeType code = GetDocument()->GetDocumentEncoding();
-	ECodeType saveCode = GetDiffCreateTempFileCode(code);
-	ECodeType code2 = cDlgDiff.m_nCodeTypeDst;
+	EncodingType code = GetDocument()->GetDocumentEncoding();
+	EncodingType saveCode = GetDiffCreateTempFileCode(code);
+	EncodingType code2 = cDlgDiff.m_nCodeTypeDst;
 	if (code2 == CODE_ERROR) {
 		if (cDlgDiff.m_szFile2[0] != _T('\0')) {
 			// ファイル名指定
 			code2 = GetFileCharCode(cDlgDiff.m_szFile2);
 		}
 	}
-	ECodeType saveCode2 = GetDiffCreateTempFileCode(code2);
+	EncodingType saveCode2 = GetDiffCreateTempFileCode(code2);
 	// 2014.10.24 コードが違うときは必ずUTF-8ファイル出力
 	if (saveCode != saveCode2) {
 		saveCode = CODE_UTF8;

@@ -156,7 +156,7 @@ void EditView::OnLBUTTONDOWN(WPARAM fwKeys, int _xPos , int _yPos)
 					m_pEditWnd->SetDragSourceView(NULL);
 					if (m_pEditDoc->m_docEditor.m_opeBuf.GetCurrentPointer() == nOpe) {	// ドキュメント変更なしか？	// 2007.12.09 ryoji
 						m_pEditWnd->SetActivePane(m_nMyIndex);
-						if (DROPEFFECT_MOVE == (dwEffectsSrc & dwEffects)) {
+						if ((dwEffectsSrc & dwEffects) == DROPEFFECT_MOVE) {
 							// 移動範囲を削除する
 							// ドロップ先が移動を処理したが自ドキュメントにここまで変更が無い
 							// →ドロップ先は外部のウィンドウである
@@ -1977,8 +1977,8 @@ STDMETHODIMP EditView::Drop(LPDATAOBJECT pDataObject, DWORD dwKeyState, POINTL p
 		GetSelectionInfo().SetSelectArea(LayoutRange(ptSelectFrom, GetCaret().GetCaretLayoutPos()));	// 2009.07.25 ryoji
 	}else {
 		// 2004.07.12 Moca クリップボードを書き換えないように
-		// TRUE == bBoxSelected
-		// FALSE == GetSelectionInfo().IsBoxSelecting()
+		// bBoxSelected == TRUE
+		// GetSelectionInfo().IsBoxSelecting() == FALSE
 		// 貼り付け（クリップボードから貼り付け）
 		GetCommander().Command_PASTEBOX(memBuf.GetStringPtr(), memBuf.GetStringLength());
 		AdjustScrollBars(); // 2007.07.22 ryoji

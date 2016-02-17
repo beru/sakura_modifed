@@ -41,9 +41,9 @@
 /*!
 	認識する文字コード種別
 */
-//enum ECodeType;     charset/charset.h に定義されている
+//enum EncodingType;     charset/charset.h に定義されている
 #if 0
-enum ECodeType {
+enum EncodingType {
 	CODE_SJIS,				// MS-CP932(Windows-31J), シフトJIS(Shift_JIS)
 	CODE_JIS,				// MS-CP5022x(ISO-2022-JP-MS)
 	CODE_EUC,				// MS-CP51932, eucJP-ms(eucJP-open)

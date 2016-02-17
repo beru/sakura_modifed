@@ -1172,13 +1172,13 @@ void ViewCommander::Command_COPYTAG(void)
 // Dec. 26, 2000 JEPRO // Jan. 24, 2001 JEPRO debug version (directed by genta)
 void ViewCommander::Command_CREATEKEYBINDLIST(void)
 {
-	NativeW cMemKeyList;
+	NativeW memKeyList;
 	auto& csKeyBind = GetDllShareData().m_common.m_keyBind;
 	KeyBind::CreateKeyBindList(
 		G_AppInstance(),
 		csKeyBind.m_nKeyNameArrNum,
 		csKeyBind.m_pKeyNameArr,
-		cMemKeyList,
+		memKeyList,
 		&GetDocument()->m_funcLookup,	// Oct. 31, 2001 genta ’Ç‰Á
 		FALSE	// 2007.02.22 ryoji ’Ç‰Á
 	);
@@ -1187,8 +1187,8 @@ void ViewCommander::Command_CREATEKEYBINDLIST(void)
 	// 2004.02.17 Moca ŠÖ”‰»
 	SetClipboardText(
 		EditWnd::getInstance()->m_splitterWnd.GetHwnd(),
-		cMemKeyList.GetStringPtr(),
-		cMemKeyList.GetStringLength()
+		memKeyList.GetStringPtr(),
+		memKeyList.GetStringLength()
 	);
 }
 

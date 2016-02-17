@@ -380,7 +380,7 @@ bool IsURL(
 	const wchar_t*	pszLine,	// [in]  •¶Žš—ñ
 	int				nLineLen,	// [in]  •¶Žš—ñ‚Ì’·‚³
 	int*			pnMatchLen	// [out] URL‚Ì’·‚³
-)
+	)
 {
 	struct _url_table_t {
 		wchar_t	name[12];

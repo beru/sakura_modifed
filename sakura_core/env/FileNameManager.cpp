@@ -104,7 +104,7 @@ int FileNameManager::TransformFileName_MakeCache(void) {
 	int nCount = 0;
 	auto& csFileName = m_pShareData->m_common.m_fileName;
 	for (int i=0; i<csFileName.m_nTransformFileNameArrNum; ++i) {
-		if (L'\0' != csFileName.m_szTransformFileNameFrom[i][0]) {
+		if (csFileName.m_szTransformFileNameFrom[i][0] != L'\0') {
 			if (ExpandMetaToFolder(
 				csFileName.m_szTransformFileNameFrom[i],
 				m_szTransformFileNameFromExp[nCount],
@@ -188,7 +188,7 @@ bool FileNameManager::ExpandMetaToFolder(LPCTSTR pszSrc, LPTSTR pszDes, int nDes
 	LPCTSTR ps;
 	LPTSTR pd;
 	LPTSTR pd_end = pszDes + (nDesLen - 1);
-	for (ps=pszSrc, pd=pszDes; _T('\0')!=*ps; ++ps) {
+	for (ps=pszSrc, pd=pszDes; *ps!=_T('\0'); ++ps) {
 		if (pd_end <= pd) {
 			if (pd_end == pd) {
 				*pd = _T('\0');
@@ -196,21 +196,21 @@ bool FileNameManager::ExpandMetaToFolder(LPCTSTR pszSrc, LPTSTR pszDes, int nDes
 			return false;
 		}
 
-		if (_T('%') != *ps) {
+		if (*ps != _T('%')) {
 			*pd = *ps;
 			++pd;
 			continue;
 		}
 
 		// %% は %
-		if (_T('%') == ps[1]) {
+		if (ps[1] == _T('%')) {
 			*pd = _T('%');
 			++pd;
 			++ps;
 			continue;
 		}
 
-		if (_T('\0') != ps[1]) {
+		if (ps[1] != _T('\0')) {
 			TCHAR szMeta[_MAX_PATH];
 			TCHAR szPath[_MAX_PATH + 1];
 			int   nMetaLen;
@@ -260,7 +260,7 @@ bool FileNameManager::ExpandMetaToFolder(LPCTSTR pszSrc, LPTSTR pszDes, int nDes
 						_T("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders"),
 						szMeta, szPath, _countof(szPath));
 				}
-				if (!bFolderPath || _T('\0') == szPath[0]) {
+				if (!bFolderPath || szPath[0] == _T('\0')) {
 					pStr = _tgetenv(szMeta);
 					// 環境変数
 					if (pStr) {
@@ -304,7 +304,7 @@ bool FileNameManager::ExpandMetaToFolder(LPCTSTR pszSrc, LPTSTR pszDes, int nDes
 			// 最後のフォルダ区切り記号を削除する
 			// [A:\]などのルートであっても削除
 			for (nPathLen=0; pStr2[nPathLen]!=_T('\0'); ++nPathLen) {
-				if (_T('\\') == pStr2[nPathLen] && _T('\0') == pStr2[nPathLen + 1]) {
+				if (pStr2[nPathLen] == _T('\\') && pStr2[nPathLen + 1] == _T('\0')) {
 					pStr2[nPathLen] = _T('\0');
 					break;
 				}
@@ -416,7 +416,7 @@ bool FileNameManager::GetMenuFullLabel(
 
 bool FileNameManager::GetMenuFullLabel(
 	TCHAR* pszOutput, int nBuffSize, bool bEspaceAmp,
-	const TCHAR* pszFile, int nId, bool bModified, ECodeType nCharCode, bool bFavorite,
+	const TCHAR* pszFile, int nId, bool bModified, EncodingType nCharCode, bool bFavorite,
 	int index, bool bAccKeyZeroOrigin, HDC hDC
 ) {
 	TCHAR szAccKey[4];

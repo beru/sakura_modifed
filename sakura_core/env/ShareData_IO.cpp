@@ -996,12 +996,12 @@ void ShareData_IO::IO_KeyBind(DataProfile& profile, CommonSetting_KeyBind& keyBi
 
 	for (int i=0; i<keyBind.m_nKeyNameArrNum; ++i) {
 		// 2005.04.07 D.S.Koba
-		//KEYDATA& keydata = m_pShareData->m_pKeyNameArr[i];
-		//KEYDATA& keydata = keyBind.ppKeyNameArr[i];
+		//KeyData& keydata = m_pShareData->m_pKeyNameArr[i];
+		//KeyData& keydata = keyBind.ppKeyNameArr[i];
 		
 		if (profile.IsReadingMode()) {
 			if (bOldVer) {
-				KEYDATA& keydata = keyBind.m_pKeyNameArr[i];
+				KeyData& keydata = keyBind.m_pKeyNameArr[i];
 				_tcstowcs(szKeyName, keydata.m_szKeyName, _countof(szKeyName));
 				if (profile.IOProfileData(szSecName, szKeyName, MakeStringBufferW(szKeyData))) {
 					int buf[8];
@@ -1016,7 +1016,7 @@ void ShareData_IO::IO_KeyBind(DataProfile& profile, CommonSetting_KeyBind& keyBi
 					keydata.m_nFuncCodeArr[7]	= (EFunctionCode)buf[7];
 				}
 			}else {		// 新バージョン(キー割り当てのImport,export の合わせた)	2008/5/25 Uchi
-				KEYDATA tmpKeydata;
+				KeyData tmpKeydata;
 				auto_sprintf(szKeyName, L"KeyBind[%03d]", i);
 				if (profile.IOProfileData(szSecName, szKeyName, MakeStringBufferW(szKeyData))) {
 					wchar_t	*p;
@@ -1099,7 +1099,7 @@ void ShareData_IO::IO_KeyBind(DataProfile& profile, CommonSetting_KeyBind& keyBi
 		//	profile.IOProfileData(pszSecName, szKeyName, MakeStringBufferW(szKeyData));
 
 // start 新バージョン	2008/5/25 Uchi
-			KEYDATA& keydata = keyBind.m_pKeyNameArr[i];
+			KeyData& keydata = keyBind.m_pKeyNameArr[i];
 			auto_sprintf(szKeyName, L"KeyBind[%03d]", i);
 			auto_sprintf(szKeyData, L"%04x", keydata.m_nKeyCode);
 			for (int j=0; j<8; ++j) {
@@ -1980,7 +1980,7 @@ void ShareData_IO::ShareData_IO_MainMenu(DataProfile& profile)
 						MainMenu* pMenu = &pMenuTbl[r+1];
 						const int nLevel = pMenuTbl[r].m_nLevel;
 						if (item.m_bAddPrevSeparete) {
-							pMenu->m_nType    = MainMenuType::Separator;
+							pMenu->m_type    = MainMenuType::Separator;
 							pMenu->nFunc    = F_SEPARATOR;
 							pMenu->m_nLevel   = nLevel;
 							pMenu->m_sName[0] = L'\0';
@@ -1989,7 +1989,7 @@ void ShareData_IO::ShareData_IO_MainMenu(DataProfile& profile)
 							++pMenu;
 							mainmenu.m_nMainMenuNum++;
 						}
-						pMenu->m_nType    = MainMenuType::Leaf;
+						pMenu->m_type    = MainMenuType::Leaf;
 						pMenu->nFunc    = item.m_nAddFuncCode;
 						pMenu->m_nLevel   = nLevel;
 						pMenu->m_sName[0] = L'\0';
@@ -1998,7 +1998,7 @@ void ShareData_IO::ShareData_IO_MainMenu(DataProfile& profile)
 						mainmenu.m_nMainMenuNum++;
 						if (item.m_bAddNextSeparete) {
 							++pMenu;
-							pMenu->m_nType    = MainMenuType::Separator;
+							pMenu->m_type    = MainMenuType::Separator;
 							pMenu->nFunc    = F_SEPARATOR;
 							pMenu->m_nLevel   = nLevel;
 							pMenu->m_sName[0] = L'\0';
@@ -2076,7 +2076,7 @@ void ShareData_IO::IO_MainMenu(
 		auto_sprintf(szKeyName, LTEXT("MM[%03d]"), i);
 		if (profile.IsReadingMode()) {
 			// 読み込み時初期化
-			pMenu->m_nType    = MainMenuType::Node;
+			pMenu->m_type    = MainMenuType::Node;
 			pMenu->nFunc    = F_INVALID;
 			pMenu->m_nLevel   = 0;
 			pMenu->m_sName[0] = L'\0';
@@ -2103,7 +2103,7 @@ void ShareData_IO::IO_MainMenu(
 			p = pn;
 			pn = wcschr(p, L',');
 			if (pn) *pn++ = L'\0';
-			pMenu->m_nType = (MainMenuType)auto_atol(p);
+			pMenu->m_type = (MainMenuType)auto_atol(p);
 			if (!pn) {
 				continue;
 			}
@@ -2168,7 +2168,7 @@ void ShareData_IO::IO_MainMenu(
 			// ラベル編集後のノードはノード名を出力する 2012.10.14 syat 各国語対応
 			auto_sprintf(szLine, L"%d,%d,%ls,%ls,%ls", 
 				pMenu->m_nLevel, 
-				pMenu->m_nType, 
+				pMenu->m_type, 
 				szFuncName, 
 				pMenu->m_sKey, 
 				pMenu->nFunc == F_NODE ? pMenu->m_sName : L"");
@@ -2275,7 +2275,7 @@ void ShareData_IO::IO_ColorSet(DataProfile* pProfile, const WCHAR* pszSecName, C
 				// 2006.12.07 ryoji
 				// sakura Ver1.5.13.1 以前のiniファイルを読んだときにキャレットがテキスト背景色と同じになると
 				// ちょっと困るのでキャレット色が読めないときはキャレット色をテキスト色と同じにする
-				if (COLORIDX_CARET == j)
+				if (j == COLORIDX_CARET)
 					pColorInfoArr[j].m_colorAttr.m_cTEXT = pColorInfoArr[COLORIDX_TEXT].m_colorAttr.m_cTEXT;
 			}
 			// 2006.12.18 ryoji

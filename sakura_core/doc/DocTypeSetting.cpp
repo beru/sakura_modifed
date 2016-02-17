@@ -34,8 +34,8 @@
 
 // 色設定(保存用)
 struct ColorInfoIni {
-	int				nNameId;			// 項目名
-	ColorInfoBase	m_sColorInfo;		// 色設定
+	int				nNameId;		// 項目名
+	ColorInfoBase	colorInfo;		// 色設定
 };
 
 static ColorInfoIni ColorInfo_DEFAULT[] = {
@@ -104,7 +104,7 @@ void GetDefaultColorInfo(ColorInfo* pColorInfo, int nIndex)
 	assert(nIndex < _countof(ColorInfo_DEFAULT));
 
 	ColorInfoBase* p = pColorInfo;
-	*p = ColorInfo_DEFAULT[nIndex].m_sColorInfo; // ColorInfoBase
+	*p = ColorInfo_DEFAULT[nIndex].colorInfo; // ColorInfoBase
 	GetDefaultColorInfoName(pColorInfo, nIndex);
 	pColorInfo->m_nColorIdx = nIndex;
 }
