@@ -32,7 +32,7 @@
 #include "StdAfx.h"
 #include "DlgKeywordSelect.h"
 #include "env/DLLSHAREDATA.h"
-#include "KeyWordSetMgr.h"
+#include "KeywordSetMgr.h"
 #include "sakura_rc.h"
 #include "sakura.hh"
 
@@ -68,7 +68,7 @@ static const int keyword_select_target_combo[KEYWORD_SELECT_NUM] = {
 
 DlgKeywordSelect::DlgKeywordSelect()
 {
-	m_pKeyWordSetMgr = &(m_pShareData->m_common.m_specialKeyword.m_keyWordSetMgr);
+	m_pKeywordSetMgr = &(m_pShareData->m_common.m_specialKeyword.m_keywordSetMgr);
 
 	return;
 }
@@ -128,9 +128,9 @@ void DlgKeywordSelect::SetData(void)
 		// ˆês–Ú‚Í‹ó”’
 		Combo_AddString(hwndCombo, L" ");
 
-		if (m_pKeyWordSetMgr->m_nKeyWordSetNum > 0) {
-			for (int i=0; i<m_pKeyWordSetMgr->m_nKeyWordSetNum; ++i) {
-				Combo_AddString(hwndCombo, m_pKeyWordSetMgr->GetTypeName(i));
+		if (m_pKeywordSetMgr->m_nKeywordSetNum > 0) {
+			for (int i=0; i<m_pKeywordSetMgr->m_nKeywordSetNum; ++i) {
+				Combo_AddString(hwndCombo, m_pKeywordSetMgr->GetTypeName(i));
 			}
 
 			if (m_nSet[index] == -1) {

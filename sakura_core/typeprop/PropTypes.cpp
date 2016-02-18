@@ -95,7 +95,7 @@ PropTypes::PropTypes()
 	m_pShareData = &GetDllShareData();
 
 	// Mar. 31, 2003 genta メモリ削減のためポインタに変更
-	m_pKeyWordSetMgr = &m_pShareData->m_common.m_specialKeyword.m_keyWordSetMgr;
+	m_pKeywordSetMgr = &m_pShareData->m_common.m_specialKeyword.m_keywordSetMgr;
 
 	m_hInstance = NULL;		// アプリケーションインスタンスのハンドル
 	m_hwndParent = NULL;	// オーナーウィンドウのハンドル
@@ -149,7 +149,7 @@ INT_PTR PropTypes::DoPropertySheet(int nPageNum)
 	m_dwCustColors[1] = m_types.m_colorInfoArr[COLORIDX_TEXT].m_colorAttr.m_cBACK;
 
 	std::tstring sTabname[_countof(TypePropSheetInfoList)];
-	m_bChangeKeyWordSet = false;
+	m_bChangeKeywordSet = false;
 	PROPSHEETPAGE psp[_countof(TypePropSheetInfoList)];
 	for (nIdx=0; nIdx<_countof(TypePropSheetInfoList); ++nIdx) {
 		sTabname[nIdx] = LS(TypePropSheetInfoList[nIdx].m_nTabNameId);

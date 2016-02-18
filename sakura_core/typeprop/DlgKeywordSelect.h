@@ -33,7 +33,7 @@
 #include "dlg/Dialog.h"
 #include "config/maxdata.h" // MAX_KEYWORDSET_PER_TYPE
  
-class KeyWordSetMgr;
+class KeywordSetMgr;
 
 /*
 	強調キーワード選択可能数
@@ -59,6 +59,6 @@ protected:
 	LPVOID GetHelpIdTable(void);
 
 	int m_nSet[ KEYWORD_SELECT_NUM ];
-	KeyWordSetMgr*	m_pKeyWordSetMgr;
+	KeywordSetMgr*	m_pKeywordSetMgr;
 };
 

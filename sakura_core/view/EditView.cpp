@@ -390,8 +390,8 @@ BOOL EditView::Create(
 		m_bHideMouse = true;
 	}
 
-	TypeSupport cTextType(this, COLORIDX_TEXT);
-	m_crBack = cTextType.GetBackColor();
+	TypeSupport textType(this, COLORIDX_TEXT);
+	m_crBack = textType.GetBackColor();
 
 	return TRUE;
 }
@@ -1350,7 +1350,7 @@ VOID EditView::OnTimer(
 				}
 			}
 		}else {
-			if (KeyWordHelpSearchDict(LID_SKH_ONTIMER, &po, &rc)) {	// 2006.04.10 fon
+			if (KeywordHelpSearchDict(LID_SKH_ONTIMER, &po, &rc)) {	// 2006.04.10 fon
 				// 辞書Tipを表示
 				m_tipWnd.Show( po.x, po.y + GetTextMetrics().GetHankakuHeight(), NULL );
 			}
@@ -1545,7 +1545,7 @@ int	EditView::CreatePopUpMenu_R(void)
 	if (!GetSelectionInfo().IsMouseSelecting()) {
 		POINT po;
 		RECT rc;
-		if (KeyWordHelpSearchDict(LID_SKH_POPUPMENU_R, &po, &rc)) {	// 2006.04.10 fon
+		if (KeywordHelpSearchDict(LID_SKH_POPUPMENU_R, &po, &rc)) {	// 2006.04.10 fon
 			menuDrawer.MyAppendMenu(hMenu, 0, IDM_COPYDICINFO, LS(STR_MENU_KEYWORDINFO), _T("K"));	// 2006.04.10 fon ToolTip内容を直接表示するのをやめた
 			menuDrawer.MyAppendMenu(hMenu, 0, IDM_JUMPDICT, LS(STR_MENU_OPENKEYWORDDIC), _T("L"));	// 2006.04.10 fon
 			menuDrawer.MyAppendMenuSep(hMenu, MF_SEPARATOR, F_0, _T(""));
@@ -1735,8 +1735,8 @@ void EditView::OnChangeSetting()
 	if (!m_pEditWnd->m_pPrintPreview) {
 		::InvalidateRect(GetHwnd(), NULL, TRUE);
 	}
-	TypeSupport cTextType(this, COLORIDX_TEXT);
-	m_crBack = cTextType.GetBackColor();
+	TypeSupport textType(this, COLORIDX_TEXT);
+	m_crBack = textType.GetBackColor();
 }
 
 
@@ -2694,7 +2694,7 @@ bool  EditView::ShowKeywordHelp(POINT po, LPCWSTR pszHelp, LPRECT prcHokanWin)
 	RECT		rcTipWin,
 				rcDesktop;
 
-	if (m_pTypeData->m_bUseKeyWordHelp) { // キーワードヘルプを使用する
+	if (m_pTypeData->m_bUseKeywordHelp) { // キーワードヘルプを使用する
 		if (!m_bInMenuLoop			// メニュー モーダル ループに入っていない
 			&& m_dwTipTimer != 0	// 辞書Tipを表示していない
 		) {

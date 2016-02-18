@@ -1252,7 +1252,7 @@ bool IsFuncChecked(const EditDoc* pEditDoc, const DLLSHAREDATA* pShareData, EFun
 	// To Here 2003.06.23 Moca
 	// 2003.07.21 genta
 	case F_CHGMOD_INS:			return pEditDoc->m_docEditor.IsInsMode();	// Oct. 2, 2005 genta 挿入モードはドキュメント毎に補完するように変更した
-	case F_TOGGLE_KEY_SEARCH:	return pShareData->m_common.m_search.m_bUseCaretKeyWord != FALSE;	// 2007.02.03 genta キーワードポップアップのON/OFF状態を反映する
+	case F_TOGGLE_KEY_SEARCH:	return pShareData->m_common.m_search.m_bUseCaretKeyword != FALSE;	// 2007.02.03 genta キーワードポップアップのON/OFF状態を反映する
 	case F_BIND_WINDOW:			return ((pShareData->m_common.m_tabBar.m_bDispTabWnd) && !(pShareData->m_common.m_tabBar.m_bDispTabWndMultiWin));	//2004.07.14 Kazika 追加
 	case F_TOPMOST:				return ((DWORD)::GetWindowLongPtr(pEditWnd->GetHwnd(), GWL_EXSTYLE) & WS_EX_TOPMOST) != 0;	// 2004.09.21 Moca
 	// Jan. 10, 2004 genta インクリメンタルサーチ

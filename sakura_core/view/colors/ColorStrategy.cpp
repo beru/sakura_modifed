@@ -331,7 +331,7 @@ void ColorStrategyPool::OnChangeSetting(void)
 		if (COLORIDX_KEYWORD1 <= bSkipColorTypeTable[n]
 			&& bSkipColorTypeTable[n] <= COLORIDX_KEYWORD10
 		) {
-			if (type.m_nKeyWordSetIdx[n - nKeyword1] == -1) {
+			if (type.m_nKeywordSetIdx[n - nKeyword1] == -1) {
 				bUnuseKeyword = true; // -1ˆÈ~‚Í–³Œø
 			}
 			if (!bUnuseKeyword && type.m_colorInfoArr[bSkipColorTypeTable[n]].m_bDisp) {

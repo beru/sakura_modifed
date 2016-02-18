@@ -115,15 +115,15 @@ void ShareData::InitTypeConfigs(
 void ShareData::InitKeyword(DLLSHAREDATA* pShareData)
 {
 	// 強調キーワードのテストデータ
-	pShareData->m_common.m_specialKeyword.m_keyWordSetMgr.m_nCurrentKeyWordSetIdx = 0;
+	pShareData->m_common.m_specialKeyword.m_keywordSetMgr.m_nCurrentKeywordSetIdx = 0;
 
 	int nSetCount = -1;
 
 #define PopulateKeyword(name, case_sensitive, aryname) \
 	extern const wchar_t* g_ppszKeywords##aryname[]; \
 	extern int g_nKeywords##aryname; \
-	pShareData->m_common.m_specialKeyword.m_keyWordSetMgr.AddKeyWordSet((name), (case_sensitive));	\
-	pShareData->m_common.m_specialKeyword.m_keyWordSetMgr.SetKeyWordArr(++nSetCount, g_nKeywords##aryname, g_ppszKeywords##aryname);
+	pShareData->m_common.m_specialKeyword.m_keywordSetMgr.AddKeywordSet((name), (case_sensitive));	\
+	pShareData->m_common.m_specialKeyword.m_keywordSetMgr.SetKeywordArr(++nSetCount, g_nKeywords##aryname, g_ppszKeywords##aryname);
 	
 	PopulateKeyword(L"C/C++",			true,	CPP);			// セット 0の追加
 	PopulateKeyword(L"HTML",			false,	HTML);			// セット 1の追加
@@ -163,7 +163,7 @@ void _DefaultConfig(TypeConfig* pType)
 	pType->m_nLineSpace = 1;							// 行間のすきま
 	pType->m_nTabSpace = LayoutInt(4);					// TABの文字数
 	for (int i=0; i<MAX_KEYWORDSET_PER_TYPE; ++i) {
-		pType->m_nKeyWordSetIdx[i] = -1;
+		pType->m_nKeywordSetIdx[i] = -1;
 	}
 	wcscpy_s(pType->m_szTabViewString, _EDITL("^       "));	// TAB表示文字列
 	pType->m_bTabArrow = TabArrowType::String;	// タブ矢印表示	// 2001.12.03 hor	// default on 2013/4/11 Uchi
@@ -274,7 +274,7 @@ void _DefaultConfig(TypeConfig* pType)
 		attr.m_szAbout[0] = _T('\0');
 		attr.m_szPath[0] = _T('\0');
 	}
-	pType->m_bUseKeyWordHelp = false;		// 辞書選択機能の使用可否
+	pType->m_bUseKeywordHelp = false;		// 辞書選択機能の使用可否
 	pType->m_nKeyHelpNum = 0;				// 登録辞書数
 	pType->m_bUseKeyHelpAllSearch = false;	// ヒットした次の辞書も検索(&A)
 	pType->m_bUseKeyHelpKeyDisp = false;	// 1行目にキーワードも表示する(&W)

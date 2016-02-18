@@ -37,7 +37,7 @@ void CType_Rich::InitTypeConfigImp(TypeConfig* pType)
 
 	// 設定
 	pType->m_eDefaultOutline = OUTLINE_TEXT;					// アウトライン解析方法
-	pType->m_nKeyWordSetIdx[0]  = 15;							// キーワードセット
+	pType->m_nKeywordSetIdx[0]  = 15;							// キーワードセット
 	pType->m_colorInfoArr[COLORIDX_DIGIT].m_bDisp = true;		// 半角数値を色分け表示
 	pType->m_colorInfoArr[COLORIDX_SSTRING].m_bDisp = false;	// シングルクォーテーション文字列を色分け表示しない
 	pType->m_colorInfoArr[COLORIDX_WSTRING].m_bDisp = false;	// ダブルクォーテーション文字列を色分け表示しない

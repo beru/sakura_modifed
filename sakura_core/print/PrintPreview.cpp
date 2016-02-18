@@ -1475,7 +1475,7 @@ ColorStrategy* PrintPreview::DrawPageText(
 				}
 
 				// s”Ô†‹æØ‚è  0=‚È‚µ 1=cü 2=”CˆÓ
-				if (2 == m_pParentWnd->GetDocument()->m_docType.GetDocumentAttribute().m_nLineTermType) {
+				if (m_pParentWnd->GetDocument()->m_docType.GetDocumentAttribute().m_nLineTermType == 2) {
 					wchar_t szLineTerm[2];
 					szLineTerm[0] = m_pParentWnd->GetDocument()->m_docType.GetDocumentAttribute().m_cLineTermChar;	// s”Ô†‹æØ‚è•¶š
 					szLineTerm[1] = L'\0';

@@ -44,7 +44,7 @@ void CType_Html::InitTypeConfigImp(TypeConfig* pType)
 	pType->m_blockComments[0].SetBlockCommentRule(L"<!--", L"-->");	// ブロックコメントデリミタ
 	pType->m_nStringType = StringLiteralType::HTML;							// 文字列区切り記号エスケープ方法
 	pType->m_bStringLineOnly = true;									// 文字列は行内のみ
-	pType->m_nKeyWordSetIdx[0] = 1;										// キーワードセット
+	pType->m_nKeywordSetIdx[0] = 1;										// キーワードセット
 	pType->m_eDefaultOutline = OUTLINE_HTML;							// アウトライン解析方法
 	pType->m_colorInfoArr[COLORIDX_SSTRING].m_bDisp = true;				// シングルクォートの色分けOFF
 }

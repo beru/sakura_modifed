@@ -431,14 +431,14 @@ public:
 	bool KeySearchCore(const NativeW* pMemCurText);	// 2006.04.10 fon
 	bool MiniMapCursorLineTip(POINT* po, RECT* rc, bool* pbHide);
 
-	/*!	EditView::KeyWordHelpSearchDictのコール元指定用ローカルID
+	/*!	EditView::KeywordHelpSearchDictのコール元指定用ローカルID
 		@date 2006.04.10 fon 新規作成
 	*/
 	enum LID_SKH {
 		LID_SKH_ONTIMER		= 1,	//!< EditView::OnTimer
 		LID_SKH_POPUPMENU_R = 2,	//!< EditView::CreatePopUpMenu_R
 	};
-	BOOL KeyWordHelpSearchDict(LID_SKH nID, POINT* po, RECT* rc);	// 2006.04.10 fon
+	BOOL KeywordHelpSearchDict(LID_SKH nID, POINT* po, RECT* rc);	// 2006.04.10 fon
 
 	int IsSearchString(const StringRef& str, LogicInt, LogicInt*, LogicInt*) const;	// 現在位置が検索文字列に該当するか	// 2002.02.08 hor 引数追加
 

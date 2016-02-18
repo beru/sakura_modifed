@@ -39,11 +39,11 @@ const int STRNCMP_MAX = 100;	// MAXキーワード長：strnicmp文字列比較最大値(EditVi
 
 	@date 2006.04.10 fon OnTimer, CreatePopUpMenu_Rから分離
 */
-BOOL EditView::KeyWordHelpSearchDict(LID_SKH nID, POINT* po, RECT* rc)
+BOOL EditView::KeywordHelpSearchDict(LID_SKH nID, POINT* po, RECT* rc)
 {
 	NativeW memCurText;
 	// キーワードヘルプを使用するか？
-	if (!m_pTypeData->m_bUseKeyWordHelp)	// キーワードヘルプ機能を使用する	// 2006.04.10 fon
+	if (!m_pTypeData->m_bUseKeywordHelp)	// キーワードヘルプ機能を使用する	// 2006.04.10 fon
 		goto end_of_search;
 	// フォーカスがあるか？
 	if (!GetCaret().ExistCaretFocus()) 
@@ -74,12 +74,12 @@ BOOL EditView::KeyWordHelpSearchDict(LID_SKH nID, POINT* po, RECT* rc)
 			goto end_of_search;
 		break;
 	default:
-		PleaseReportToAuthor(NULL, _T("EditView::KeyWordHelpSearchDict\nnID=%d"), (int)nID);
+		PleaseReportToAuthor(NULL, _T("EditView::KeywordHelpSearchDict\nnID=%d"), (int)nID);
 	}
 	// 選択範囲のデータを取得(複数行選択の場合は先頭の行のみ)
 	if (GetSelectedDataOne(memCurText, STRNCMP_MAX + 1)) {
 	// キャレット位置の単語を取得する処理		2006.03.24 fon
-	}else if (GetDllShareData().m_common.m_search.m_bUseCaretKeyWord) {
+	}else if (GetDllShareData().m_common.m_search.m_bUseCaretKeyword) {
 		if (!GetParser().GetCurrentWord(&memCurText))
 			goto end_of_search;
 	}else
@@ -107,7 +107,7 @@ end_of_search:
 
 /*! キーワード辞書検索処理メイン
 
-	@date 2006.04.10 fon KeyWordHelpSearchDictから分離
+	@date 2006.04.10 fon KeywordHelpSearchDictから分離
 */
 bool EditView::KeySearchCore(const NativeW* pMemCurText)
 {

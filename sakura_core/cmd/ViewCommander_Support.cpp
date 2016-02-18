@@ -90,7 +90,7 @@ retry:;
 */
 void ViewCommander::Command_ToggleKeySearch(int option)
 {	// 共通設定ダイアログの設定をキー割り当てでも切り替えられるように
-	auto& bUseCaretKeyword = GetDllShareData().m_common.m_search.m_bUseCaretKeyWord;
+	auto& bUseCaretKeyword = GetDllShareData().m_common.m_search.m_bUseCaretKeyword;
 	if (option == 0) {
 		bUseCaretKeyword = !bUseCaretKeyword;
 	}else if (option == 1) {

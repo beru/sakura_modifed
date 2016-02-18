@@ -350,16 +350,16 @@ bool ImpExpType::Import(const wstring& sFileName, wstring& sErrMsg)
 	CommonSetting& common = m_pShareData->m_common;
 
 	// 強調キーワード
-	KeyWordSetMgr&	keyWordSetMgr = common.m_specialKeyword.m_keyWordSetMgr;
+	KeywordSetMgr&	keywordSetMgr = common.m_specialKeyword.m_keywordSetMgr;
 	for (int i=0; i<MAX_KEYWORDSET_PER_TYPE; ++i) {
-		//types.m_nKeyWordSetIdx[i] = -1;
+		//types.m_nKeywordSetIdx[i] = -1;
 		auto_sprintf_s(szKeyName, szKeyKeywordTemp, i + 1);
 		if (m_profile.IOProfileData(szSecTypeEx, szKeyName, MakeStringBufferW(szKeyData))) {
-			nIdx = keyWordSetMgr.SearchKeyWordSet(szKeyData);
+			nIdx = keywordSetMgr.SearchKeywordSet(szKeyData);
 			if (nIdx < 0) {
 				// エントリ作成
-				keyWordSetMgr.AddKeyWordSet(szKeyData, false);
-				nIdx = keyWordSetMgr.SearchKeyWordSet(szKeyData);
+				keywordSetMgr.AddKeywordSet(szKeyData, false);
+				nIdx = keywordSetMgr.SearchKeywordSet(szKeyData);
 			}
 			if (nIdx >= 0) {
 				auto_sprintf_s(szKeyName, szKeyKeywordCaseTemp, i + 1);
@@ -367,19 +367,19 @@ bool ImpExpType::Import(const wstring& sFileName, wstring& sErrMsg)
 				m_profile.IOProfileData(szSecTypeEx, szKeyName, bCase);
 
 				// キーワード定義ファイル入力
-				ImpExpKeyWord	cImpExpKeyWord(common, nIdx, bCase);
+				ImpExpKeyword	impExpKeyword(common, nIdx, bCase);
 
 				auto_sprintf_s(szKeyName, szKeyKeywordFileTemp, i + 1);
 				szFileName[0] = L'\0';
 				if (m_profile.IOProfileData(szSecTypeEx, szKeyName, MakeStringBufferW(szFileName))) {
-					if (cImpExpKeyWord.Import(cImpExpKeyWord.MakeFullPath(szFileName), TmpMsg)) {
+					if (impExpKeyword.Import(impExpKeyword.MakeFullPath(szFileName), TmpMsg)) {
 						files += wstring(L"\n") + szFileName;
 					}else {
 						files += wstring(L"\n× ") + szFileName;	// 失敗
 					}
 				}
 			}
-			m_types.m_nKeyWordSetIdx[i] = nIdx;
+			m_types.m_nKeywordSetIdx[i] = nIdx;
 		}
 	}
 
@@ -452,26 +452,26 @@ bool ImpExpType::Export(const wstring& sFileName, wstring& sErrMsg)
 	CommonSetting& common = m_pShareData->m_common;
 
 	// 強調キーワード
-	auto& keyWordSetMgr = common.m_specialKeyword.m_keyWordSetMgr;
+	auto& keywordSetMgr = common.m_specialKeyword.m_keywordSetMgr;
 	for (int i=0; i<MAX_KEYWORDSET_PER_TYPE; ++i) {
-		if (m_types.m_nKeyWordSetIdx[i] >= 0) {
-			int nIdx = m_types.m_nKeyWordSetIdx[i];
+		if (m_types.m_nKeywordSetIdx[i] >= 0) {
+			int nIdx = m_types.m_nKeywordSetIdx[i];
 			auto_sprintf_s(szKeyName, szKeyKeywordTemp, i + 1);
-			auto_strcpy(buff, keyWordSetMgr.GetTypeName(nIdx));
+			auto_strcpy(buff, keywordSetMgr.GetTypeName(nIdx));
 			profile.IOProfileData(szSecTypeEx, szKeyName, MakeStringBufferW(buff));
 
 			// 大文字小文字区別
-			bool bCase = keyWordSetMgr.GetKeyWordCase(nIdx);
+			bool bCase = keywordSetMgr.GetKeywordCase(nIdx);
 
 			// キーワード定義ファイル出力
-			ImpExpKeyWord	cImpExpKeyWord(common, m_types.m_nKeyWordSetIdx[i], bCase);
-			cImpExpKeyWord.SetBaseName(keyWordSetMgr.GetTypeName(nIdx));
+			ImpExpKeyword	impExpKeyword(common, m_types.m_nKeywordSetIdx[i], bCase);
+			impExpKeyword.SetBaseName(keywordSetMgr.GetTypeName(nIdx));
 
-			if (cImpExpKeyWord.Export(cImpExpKeyWord.GetFullPath(), sTmpMsg)) {
-				auto_strcpy(szFileName, cImpExpKeyWord.GetFileName().c_str());
+			if (impExpKeyword.Export(impExpKeyword.GetFullPath(), sTmpMsg)) {
+				auto_strcpy(szFileName, impExpKeyword.GetFileName().c_str());
 				auto_sprintf_s(szKeyName, szKeyKeywordFileTemp, i + 1);
 				if (profile.IOProfileData(szSecTypeEx, szKeyName, MakeStringBufferW(szFileName))) {
-					files += wstring(L"\n") + cImpExpKeyWord.GetFileName();
+					files += wstring(L"\n") + impExpKeyword.GetFileName();
 				}
 			}
 
@@ -607,8 +607,8 @@ bool ImpExpRegex::Import(const wstring& sFileName, wstring& sErrMsg)
 	}
 
 	RegexKeywordInfo regexKeyArr[MAX_REGEX_KEYWORD];
-	auto_array_ptr<wchar_t> szKeyWordList(new wchar_t [MAX_REGEX_KEYWORDLISTLEN]);
-	wchar_t* pKeyword = &szKeyWordList[0];
+	auto_array_ptr<wchar_t> szKeywordList(new wchar_t [MAX_REGEX_KEYWORDLISTLEN]);
+	wchar_t* pKeyword = &szKeywordList[0];
 	int	keywordPos = 0;
 	TCHAR buff[MAX_REGEX_KEYWORDLEN + 20];
 	int count = 0;
@@ -1117,7 +1117,7 @@ bool ImpExpCustMenu::Export(const wstring& sFileName, wstring& sErrMsg)
 //                     強調キーワード                          //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 // インポート
-bool ImpExpKeyWord::Import(const wstring& sFileName, wstring& sErrMsg)
+bool ImpExpKeyword::Import(const wstring& sFileName, wstring& sErrMsg)
 {
 	bool bAddError = false;
 
@@ -1145,7 +1145,7 @@ bool ImpExpKeyWord::Import(const wstring& sFileName, wstring& sErrMsg)
 		// 解析
 		if (0 < szLine.length()) {
 			// ｎ番目のセットにキーワードを追加
-			int nRetValue = m_common.m_specialKeyword.m_keyWordSetMgr.AddKeyWord(m_nIdx, szLine.c_str());
+			int nRetValue = m_common.m_specialKeyword.m_keywordSetMgr.AddKeyword(m_nIdx, szLine.c_str());
 			if (nRetValue == 2) {
 				bAddError = true;
 				break;
@@ -1155,7 +1155,7 @@ bool ImpExpKeyWord::Import(const wstring& sFileName, wstring& sErrMsg)
 	in.Close();
 
 	// 大文字小文字区別
-	m_common.m_specialKeyword.m_keyWordSetMgr.SetKeyWordCase(m_nIdx, m_bCase);
+	m_common.m_specialKeyword.m_keywordSetMgr.SetKeywordCase(m_nIdx, m_bCase);
 
 	if (bAddError) {
 		sErrMsg = LSW(STR_IMPEXP_KEYWORD);
@@ -1165,9 +1165,9 @@ bool ImpExpKeyWord::Import(const wstring& sFileName, wstring& sErrMsg)
 }
 
 // エクスポート
-bool ImpExpKeyWord::Export(const wstring& sFileName, wstring& sErrMsg)
+bool ImpExpKeyword::Export(const wstring& sFileName, wstring& sErrMsg)
 {
-	int nKeyWordNum;
+	int nKeywordNum;
 
 	TextOutputStream out(to_tchar(sFileName.c_str()));
 	if (!out) {
@@ -1176,21 +1176,21 @@ bool ImpExpKeyWord::Export(const wstring& sFileName, wstring& sErrMsg)
 	}
 	out.WriteF(L"// ");
 	// 2012.03.10 syat キーワードに「%」を含む場合にエクスポート結果が不正
-	out.WriteString(m_common.m_specialKeyword.m_keyWordSetMgr.GetTypeName(m_nIdx));
+	out.WriteString(m_common.m_specialKeyword.m_keywordSetMgr.GetTypeName(m_nIdx));
 	out.WriteF(WSTR_KEYWORD_HEAD);
 
 	out.WriteF(WSTR_KEYWORD_CASE);
 	out.WriteF(m_bCase ? L"True" : L"False");
 	out.WriteF(L"\n\n");
 
-	m_common.m_specialKeyword.m_keyWordSetMgr.SortKeyWord(m_nIdx);	// MIK 2000.12.01 sort keyword
+	m_common.m_specialKeyword.m_keywordSetMgr.SortKeyword(m_nIdx);	// MIK 2000.12.01 sort keyword
 
 	// ｎ番目のセットのキーワードの数を返す
-	nKeyWordNum = m_common.m_specialKeyword.m_keyWordSetMgr.GetKeyWordNum(m_nIdx);
-	for (int i=0; i<nKeyWordNum; ++i) {
+	nKeywordNum = m_common.m_specialKeyword.m_keywordSetMgr.GetKeywordNum(m_nIdx);
+	for (int i=0; i<nKeywordNum; ++i) {
 		// ｎ番目のセットのｍ番目のキーワードを返す
 		// 2012.03.10 syat キーワードに「%」を含む場合にエクスポート結果が不正
-		out.WriteString(m_common.m_specialKeyword.m_keyWordSetMgr.GetKeyWord(m_nIdx, i));
+		out.WriteString(m_common.m_specialKeyword.m_keywordSetMgr.GetKeyword(m_nIdx, i));
 		out.WriteF(L"\n");
 	}
 	out.Close();

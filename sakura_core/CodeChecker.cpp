@@ -47,7 +47,7 @@ static CodeConvertResult _CheckSavingCharcode(
 	NativeW& wc
 	)
 {
-	const DocLine*	pDocLine = pcDocLineMgr.GetDocLineTop();
+	const DocLine* pDocLine = pcDocLineMgr.GetDocLineTop();
 	const bool bCodePageMode = IsValidCodeOrCPType(eCodeType) && !IsValidCodeType(eCodeType);
 	CodeBase* pCodeBase = CodeFactory::CreateCodeBase(eCodeType, 0);
 	Memory memTmp;	// バッファを再利用

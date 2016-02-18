@@ -24,7 +24,7 @@
 */
 #pragma once
 
-#include "KeyWordSetMgr.h"
+#include "KeywordSetMgr.h"
 #include "func/KeyBind.h"
 #include "func/FuncLookup.h" // MacroRec
 #include "io/File.h" // EShareMode
@@ -414,7 +414,7 @@ struct CommonSetting_Search {
 	int				m_nTagJumpModeKeyword;		//!< タグジャンプモード(0-3)
 
 	// INI内設定のみ
-	bool			m_bUseCaretKeyWord;			// キャレット位置の単語を辞書検索		// 2006.03.24 fon
+	bool			m_bUseCaretKeyword;			// キャレット位置の単語を辞書検索		// 2006.03.24 fon
 };
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -454,8 +454,8 @@ struct CommonSetting_ToolBar {
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 struct CommonSetting_SpecialKeyword {
 	// 強調キーワード設定
-	KeyWordSetMgr		m_keyWordSetMgr;					// 強調キーワード
-	char				m_szKeyWordSetDir[MAX_PATH];		// 強調キーワードファイルのディレクトリ
+	KeywordSetMgr		m_keywordSetMgr;					// 強調キーワード
+	char				m_szKeywordSetDir[MAX_PATH];		// 強調キーワードファイルのディレクトリ
 };
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //

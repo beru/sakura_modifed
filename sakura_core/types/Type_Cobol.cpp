@@ -42,7 +42,7 @@ void CType_Cobol::InitTypeConfigImp(TypeConfig* pType)
 	pType->m_lineComment.CopyTo(1, L"D", 6);			// Jun. 04, 2001 JEPRO 追加
 	pType->m_nStringType = StringLiteralType::PLSQL;		// 文字列区切り記号エスケープ方法  0=[\"][\'] 1=[""]['']
 	wcscpy_s(pType->m_szIndentChars, L"*");				// その他のインデント対象文字
-	pType->m_nKeyWordSetIdx[0] = 3;						// キーワードセット		// Jul. 10, 2001 JEPRO
+	pType->m_nKeywordSetIdx[0] = 3;						// キーワードセット		// Jul. 10, 2001 JEPRO
 	pType->m_eDefaultOutline = OUTLINE_COBOL;			// アウトライン解析方法
 	// 指定桁縦線	// 2005.11.08 Moca
 	pType->m_colorInfoArr[COLORIDX_VERTLINE].m_bDisp = true;
@@ -62,8 +62,8 @@ void DocOutline::MakeTopicList_cobol(FuncInfoArr* pFuncInfoArr)
 	int				k;
 	wchar_t			szDivision[1024];
 	wchar_t			szLabel[1024];
-	const wchar_t*	pszKeyWord;
-	int				nKeyWordLen;
+	const wchar_t*	pszKeyword;
+	int				nKeywordLen;
 	BOOL			bDivision;
 	bool			bExtEol = GetDllShareData().m_common.m_edit.m_bEnableExtEol;
 
@@ -104,13 +104,13 @@ void DocOutline::MakeTopicList_cobol(FuncInfoArr* pFuncInfoArr)
 			szLabel[k] = L'\0';
 //			MYTRACE(_T("szLabel=[%ls]\n"), szLabel);
 
-			pszKeyWord = L"division";
-			nKeyWordLen = wcslen(pszKeyWord);
+			pszKeyword = L"division";
+			nKeywordLen = wcslen(pszKeyword);
 			bDivision = FALSE;
-			int nLen = (int)wcslen(szLabel) - nKeyWordLen;
+			int nLen = (int)wcslen(szLabel) - nKeywordLen;
 			for (i=0; i<=nLen ; ++i) {
-				if (auto_memicmp(&szLabel[i], pszKeyWord, nKeyWordLen) == 0) {
-					szLabel[i + nKeyWordLen] = L'\0';
+				if (auto_memicmp(&szLabel[i], pszKeyword, nKeywordLen) == 0) {
+					szLabel[i + nKeywordLen] = L'\0';
 					wcscpy_s(szDivision, szLabel);
 					bDivision = TRUE;
 					break;

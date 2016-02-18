@@ -144,7 +144,7 @@ bool ShareData_IO::ShareData_IO_2(bool bRead)
 	ShareData_IO_KeyBind(profile);
 	ShareData_IO_Print(profile);
 	ShareData_IO_Types(profile);
-	ShareData_IO_KeyWords(profile);
+	ShareData_IO_Keywords(profile);
 	ShareData_IO_Macro(profile);
 	ShareData_IO_Statusbar(profile);		// 2008/6/21 Uchi
 	ShareData_IO_MainMenu(profile);		// 2010/5/15 Uchi
@@ -1354,8 +1354,8 @@ void ShareData_IO::ShareData_IO_Type_One(DataProfile& profile, TypeConfig& types
 			types.m_nMaxLineKetas			= buf[1];
 			types.m_nColumnSpace			= buf[2];
 			types.m_nTabSpace				= buf[3];
-			types.m_nKeyWordSetIdx[0]		= buf[4];
-			types.m_nKeyWordSetIdx[1]		= buf[5];
+			types.m_nKeywordSetIdx[0]		= buf[4];
+			types.m_nKeywordSetIdx[1]		= buf[5];
 			types.m_nStringType				= (StringLiteralType)buf[6];
 			types.m_bLineNumIsCRLF			= (buf[7] != 0);
 			types.m_nLineTermType			= buf[8];
@@ -1372,8 +1372,8 @@ void ShareData_IO::ShareData_IO_Type_One(DataProfile& profile, TypeConfig& types
 			types.m_nMaxLineKetas,
 			types.m_nColumnSpace,
 			types.m_nTabSpace,
-			types.m_nKeyWordSetIdx[0],
-			types.m_nKeyWordSetIdx[1],
+			types.m_nKeywordSetIdx[0],
+			types.m_nKeywordSetIdx[1],
 			types.m_nStringType,
 			types.m_bLineNumIsCRLF ? 1 : 0,
 			types.m_nLineTermType,
@@ -1383,14 +1383,14 @@ void ShareData_IO::ShareData_IO_Type_One(DataProfile& profile, TypeConfig& types
 		profile.IOProfileData(pszSecName, szKeyName, MakeStringBufferW(szKeyData));
 	}
 	// 2005.01.13 MIK Keywordset 3-10
-	profile.IOProfileData(pszSecName, LTEXT("nKeywordSelect3"),  types.m_nKeyWordSetIdx[2]);
-	profile.IOProfileData(pszSecName, LTEXT("nKeywordSelect4"),  types.m_nKeyWordSetIdx[3]);
-	profile.IOProfileData(pszSecName, LTEXT("nKeywordSelect5"),  types.m_nKeyWordSetIdx[4]);
-	profile.IOProfileData(pszSecName, LTEXT("nKeywordSelect6"),  types.m_nKeyWordSetIdx[5]);
-	profile.IOProfileData(pszSecName, LTEXT("nKeywordSelect7"),  types.m_nKeyWordSetIdx[6]);
-	profile.IOProfileData(pszSecName, LTEXT("nKeywordSelect8"),  types.m_nKeyWordSetIdx[7]);
-	profile.IOProfileData(pszSecName, LTEXT("nKeywordSelect9"),  types.m_nKeyWordSetIdx[8]);
-	profile.IOProfileData(pszSecName, LTEXT("nKeywordSelect10"), types.m_nKeyWordSetIdx[9]);
+	profile.IOProfileData(pszSecName, LTEXT("nKeywordSelect3"),  types.m_nKeywordSetIdx[2]);
+	profile.IOProfileData(pszSecName, LTEXT("nKeywordSelect4"),  types.m_nKeywordSetIdx[3]);
+	profile.IOProfileData(pszSecName, LTEXT("nKeywordSelect5"),  types.m_nKeywordSetIdx[4]);
+	profile.IOProfileData(pszSecName, LTEXT("nKeywordSelect6"),  types.m_nKeywordSetIdx[5]);
+	profile.IOProfileData(pszSecName, LTEXT("nKeywordSelect7"),  types.m_nKeywordSetIdx[6]);
+	profile.IOProfileData(pszSecName, LTEXT("nKeywordSelect8"),  types.m_nKeywordSetIdx[7]);
+	profile.IOProfileData(pszSecName, LTEXT("nKeywordSelect9"),  types.m_nKeywordSetIdx[8]);
+	profile.IOProfileData(pszSecName, LTEXT("nKeywordSelect10"), types.m_nKeywordSetIdx[9]);
 
 	// 行間のすきま
 	profile.IOProfileData(pszSecName, LTEXT("nLineSpace"), types.m_nLineSpace);
@@ -1657,7 +1657,7 @@ void ShareData_IO::ShareData_IO_Type_One(DataProfile& profile, TypeConfig& types
 //@@@ 2006.04.10 fon ADD-start
 	{	// キーワード辞書
 		WCHAR	*pH, *pT;	// <pH>keyword<pT>
-		profile.IOProfileData(pszSecName, LTEXT("bUseKeyWordHelp"), types.m_bUseKeyWordHelp);			// キーワード辞書選択を使用するか？
+		profile.IOProfileData(pszSecName, LTEXT("bUseKeywordHelp"), types.m_bUseKeywordHelp);			// キーワード辞書選択を使用するか？
 //		profile.IOProfileData(pszSecName, LTEXT("nKeyHelpNum"), types.m_nKeyHelpNum);					// 登録辞書数
 		profile.IOProfileData(pszSecName, LTEXT("bUseKeyHelpAllSearch"), types.m_bUseKeyHelpAllSearch);	// ヒットした次の辞書も検索(&A)
 		profile.IOProfileData(pszSecName, LTEXT("bUseKeyHelpKeyDisp"), types.m_bUseKeyHelpKeyDisp);		// 1行目にキーワードも表示する(&W)
@@ -1701,7 +1701,7 @@ void ShareData_IO::ShareData_IO_Type_One(DataProfile& profile, TypeConfig& types
 		// 旧バージョンiniファイルの読み出しサポート
 		if (profile.IsReadingMode()) {
 			SFilePath tmp;
-			if (profile.IOProfileData(pszSecName, LTEXT("szKeyWordHelpFile"), tmp)) {
+			if (profile.IOProfileData(pszSecName, LTEXT("szKeywordHelpFile"), tmp)) {
 				types.m_KeyHelpArr[0].m_szPath = tmp;
 			}
 		}
@@ -1719,63 +1719,63 @@ void ShareData_IO::ShareData_IO_Type_One(DataProfile& profile, TypeConfig& types
 }
 
 /*!
-	@brief 共有データのKeyWordsセクションの入出力
+	@brief 共有データのKeywordsセクションの入出力
 	@param[in]		bRead		true: 読み込み / false: 書き込み
 	@param[in,out]	profile	INIファイル入出力クラス
 
 	@date 2005-04-07 D.S.Koba ShareData_IO_2から分離。
 */
-void ShareData_IO::ShareData_IO_KeyWords(DataProfile& profile)
+void ShareData_IO::ShareData_IO_Keywords(DataProfile& profile)
 {
 	DLLSHAREDATA* pShare = &GetDllShareData();
 
-	static const WCHAR* pszSecName = LTEXT("KeyWords");
+	static const WCHAR* pszSecName = LTEXT("Keywords");
 	WCHAR			szKeyName[64];
 	WCHAR			szKeyData[1024];
-	KeyWordSetMgr*	pKeyWordSetMgr = &pShare->m_common.m_specialKeyword.m_keyWordSetMgr;
-	int				nKeyWordSetNum = pKeyWordSetMgr->m_nKeyWordSetNum;
+	KeywordSetMgr*	pKeywordSetMgr = &pShare->m_common.m_specialKeyword.m_keywordSetMgr;
+	int				nKeywordSetNum = pKeywordSetMgr->m_nKeywordSetNum;
 
-	profile.IOProfileData(pszSecName, LTEXT("nCurrentKeyWordSetIdx")	, pKeyWordSetMgr->m_nCurrentKeyWordSetIdx);
-	bool bIOSuccess = profile.IOProfileData(pszSecName, LTEXT("nKeyWordSetNum"), nKeyWordSetNum);
+	profile.IOProfileData(pszSecName, LTEXT("nCurrentKeywordSetIdx")	, pKeywordSetMgr->m_nCurrentKeywordSetIdx);
+	bool bIOSuccess = profile.IOProfileData(pszSecName, LTEXT("nKeywordSetNum"), nKeywordSetNum);
 	if (profile.IsReadingMode()) {
-		// nKeyWordSetNum が読み込めていれば、すべての情報がそろっていると仮定して処理を進める
+		// nKeywordSetNum が読み込めていれば、すべての情報がそろっていると仮定して処理を進める
 		if (bIOSuccess) {
 			// 2004.11.25 Moca キーワードセットの情報は、直接書き換えないで関数を利用する
 			// 初期設定されているため、先に削除しないと固定メモリの確保に失敗する可能性がある
-			pKeyWordSetMgr->ResetAllKeyWordSet();
-			for (int i=0; i<nKeyWordSetNum; ++i) {
-				bool bKEYWORDCASE = false;
-				int nKeyWordNum = 0;
+			pKeywordSetMgr->ResetAllKeywordSet();
+			for (int i=0; i<nKeywordSetNum; ++i) {
+				bool bKeywordCase = false;
+				int nKeywordNum = 0;
 				// 値の取得
 				auto_sprintf(szKeyName, LTEXT("szSN[%02d]"), i);
 				profile.IOProfileData(pszSecName, szKeyName, MakeStringBufferW(szKeyData));
 				auto_sprintf(szKeyName, LTEXT("nCASE[%02d]"), i);
-				profile.IOProfileData(pszSecName, szKeyName, bKEYWORDCASE);
+				profile.IOProfileData(pszSecName, szKeyName, bKeywordCase);
 				auto_sprintf(szKeyName, LTEXT("nKWN[%02d]"), i);
-				profile.IOProfileData(pszSecName, szKeyName, nKeyWordNum);
+				profile.IOProfileData(pszSecName, szKeyName, nKeywordNum);
 
 				// 追加
-				pKeyWordSetMgr->AddKeyWordSet(szKeyData, bKEYWORDCASE, nKeyWordNum);
+				pKeywordSetMgr->AddKeywordSet(szKeyData, bKeywordCase, nKeywordNum);
 				auto_sprintf(szKeyName, LTEXT("szKW[%02d]"), i);
 				std::wstring sValue;	// wstring のまま受ける（古い ini ファイルのキーワードは中身が NULL 文字区切りなので StringBufferW では NG だった）
 				if (profile.IOProfileData(pszSecName, szKeyName, sValue)) {
-					pKeyWordSetMgr->SetKeyWordArr(i, nKeyWordNum, sValue.c_str());
+					pKeywordSetMgr->SetKeywordArr(i, nKeywordNum, sValue.c_str());
 				}
 			}
 		}
 	}else {
-		int nSize = pKeyWordSetMgr->m_nKeyWordSetNum;
+		int nSize = pKeywordSetMgr->m_nKeywordSetNum;
 		for (int i=0; i<nSize; ++i) {
 			auto_sprintf(szKeyName, LTEXT("szSN[%02d]"), i);
-			profile.IOProfileData(pszSecName, szKeyName, MakeStringBufferW(pKeyWordSetMgr->m_szSetNameArr[i]));
+			profile.IOProfileData(pszSecName, szKeyName, MakeStringBufferW(pKeywordSetMgr->m_szSetNameArr[i]));
 			auto_sprintf(szKeyName, LTEXT("nCASE[%02d]"), i);
-			profile.IOProfileData(pszSecName, szKeyName, pKeyWordSetMgr->m_bKEYWORDCASEArr[i]);
+			profile.IOProfileData(pszSecName, szKeyName, pKeywordSetMgr->m_bKeywordCaseArr[i]);
 			auto_sprintf(szKeyName, LTEXT("nKWN[%02d]"), i);
-			profile.IOProfileData(pszSecName, szKeyName, pKeyWordSetMgr->m_nKeyWordNumArr[i]);
+			profile.IOProfileData(pszSecName, szKeyName, pKeywordSetMgr->m_nKeywordNumArr[i]);
 			
 			int nMemLen = 0;
-			for (int j=0; j<pKeyWordSetMgr->m_nKeyWordNumArr[i]; ++j) {
-				nMemLen += wcslen(pKeyWordSetMgr->GetKeyWord(i, j));
+			for (int j=0; j<pKeywordSetMgr->m_nKeywordNumArr[i]; ++j) {
+				nMemLen += wcslen(pKeywordSetMgr->GetKeyword(i, j));
 				nMemLen ++;
 			}
 			nMemLen ++;
@@ -1784,10 +1784,10 @@ void ShareData_IO::ShareData_IO_KeyWords(DataProfile& profile)
 			std::vector<wchar_t> szMem(nMemLen + 1); // May 25, 2003 genta 区切りをTABに変更したので，最後の\0の分を追加
 			wchar_t* pszMem = &szMem[0];
 			wchar_t* pMem = pszMem;
-			for (int j=0; j<pKeyWordSetMgr->m_nKeyWordNumArr[i]; ++j) {
+			for (int j=0; j<pKeywordSetMgr->m_nKeywordNumArr[i]; ++j) {
 				// May 25, 2003 genta 区切りをTABに変更
-				int kwlen = wcslen(pKeyWordSetMgr->GetKeyWord(i, j));
-				auto_memcpy(pMem, pKeyWordSetMgr->GetKeyWord(i, j), kwlen);
+				int kwlen = wcslen(pKeywordSetMgr->GetKeyword(i, j));
+				auto_memcpy(pMem, pKeywordSetMgr->GetKeyword(i, j), kwlen);
 				pMem += kwlen;
 				*pMem++ = L'\t';
 			}

@@ -55,7 +55,7 @@ void ViewCommander::Command_MENU_RBUTTON(void)
 		break;
 	case IDM_JUMPDICT:
 		// キーワード辞書ファイルを開く
-		if (m_pCommanderView->m_pTypeData->m_bUseKeyWordHelp) {		// キーワード辞書セレクトを使用する	// 2006.04.10 fon
+		if (m_pCommanderView->m_pTypeData->m_bUseKeywordHelp) {		// キーワード辞書セレクトを使用する	// 2006.04.10 fon
 			// Feb. 17, 2007 genta 相対パスを実行ファイル基準で開くように
 			m_pCommanderView->TagJumpSub(
 				m_pCommanderView->m_pTypeData->m_KeyHelpArr[m_pCommanderView->m_tipWnd.m_nSearchDict].m_szPath,

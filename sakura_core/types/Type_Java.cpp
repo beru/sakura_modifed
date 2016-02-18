@@ -40,7 +40,7 @@ void CType_Java::InitTypeConfigImp(TypeConfig* pType)
 	// 設定
 	pType->m_lineComment.CopyTo(0, L"//", -1);						// 行コメントデリミタ
 	pType->m_blockComments[0].SetBlockCommentRule(L"/*", L"*/");	// ブロックコメントデリミタ
-	pType->m_nKeyWordSetIdx[0] = 4;									// キーワードセット
+	pType->m_nKeywordSetIdx[0] = 4;									// キーワードセット
 	pType->m_eDefaultOutline = OUTLINE_JAVA;						// アウトライン解析方法
 	pType->m_eSmartIndent = SmartIndentType::Cpp;						// スマートインデント種別
 	pType->m_colorInfoArr[COLORIDX_DIGIT].m_bDisp = true;			// 半角数値を色分け表示			// Mar. 10, 2001 JEPRO

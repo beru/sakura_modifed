@@ -57,7 +57,7 @@ protected:
 	static void ShareData_IO_KeyBind(DataProfile&);
 	static void ShareData_IO_Print(DataProfile&);
 	static void ShareData_IO_Types(DataProfile&);
-	static void ShareData_IO_KeyWords(DataProfile&);
+	static void ShareData_IO_Keywords(DataProfile&);
 	static void ShareData_IO_Macro(DataProfile&);
 	static void ShareData_IO_Statusbar(DataProfile&);				// 2008/6/21 Uchi
 	static void ShareData_IO_Plugin(DataProfile&, MenuDrawer*);	// 2009/11/30 syat

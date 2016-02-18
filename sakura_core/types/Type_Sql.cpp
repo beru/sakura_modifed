@@ -41,7 +41,7 @@ void CType_Sql::InitTypeConfigImp(TypeConfig* pType)
 	pType->m_blockComments[0].SetBlockCommentRule(L"/*", L"*/");	// ブロックコメントデリミタ
 	pType->m_nStringType = StringLiteralType::PLSQL;					// 文字列区切り記号エスケープ方法  0=[\"][\'] 1=[""]['']
 	wcscpy_s(pType->m_szIndentChars, L"|★");						// その他のインデント対象文字
-	pType->m_nKeyWordSetIdx[0] = 2;									// キーワードセット
+	pType->m_nKeywordSetIdx[0] = 2;									// キーワードセット
 	pType->m_eDefaultOutline = OUTLINE_PLSQL;						// アウトライン解析方法
 }
 
@@ -153,7 +153,7 @@ void DocOutline::MakeFuncList_PLSQL(FuncInfoArr* pFuncInfoArr)
 							++nParseCnt;
 							wcscpy_s(szFuncName, szWord);
 //						}else
-//						if (3 == nFuncOrProc) {
+//						if (nFuncOrProc == 3) {
 
 						}
 					}else if (nParseCnt == 2) {

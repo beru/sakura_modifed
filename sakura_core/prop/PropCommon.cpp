@@ -320,9 +320,9 @@ void PropCommon::InitData(void)
 		DocTypeManager().GetTypeConfig(TypeConfigNum(i), type);
 		indexs.typeId = type.m_id;
 		for (int j=0; j<MAX_KEYWORDSET_PER_TYPE; ++j) {
-			indexs.index[j] = type.m_nKeyWordSetIdx[j];
+			indexs.index[j] = type.m_nKeywordSetIdx[j];
 		}
-		m_Types_nKeyWordSetIdx.push_back(indexs);
+		m_Types_nKeywordSetIdx.push_back(indexs);
 	}
 }
 
@@ -334,16 +334,16 @@ void PropCommon::ApplyData(void)
 {
 	m_pShareData->m_common = m_common;
 
-	const int nSize = (int)m_Types_nKeyWordSetIdx.size();
+	const int nSize = (int)m_Types_nKeywordSetIdx.size();
 	for (int i=0; i<nSize; ++i) {
-		TypeConfigNum configIdx = DocTypeManager().GetDocumentTypeOfId(m_Types_nKeyWordSetIdx[i].typeId);
+		TypeConfigNum configIdx = DocTypeManager().GetDocumentTypeOfId(m_Types_nKeywordSetIdx[i].typeId);
 		if (configIdx.IsValidType()) {
 			TypeConfig type;
 			DocTypeManager().GetTypeConfig(configIdx, type);
 			// 2002/04/25 YAZAKI TypeConfig全体を保持する必要はない。
 			// 変更された設定値のコピー
 			for (int j = 0; j < MAX_KEYWORDSET_PER_TYPE; ++j) {
-				type.m_nKeyWordSetIdx[j] = m_Types_nKeyWordSetIdx[i].index[j];
+				type.m_nKeywordSetIdx[j] = m_Types_nKeywordSetIdx[i].index[j];
 			}
 			DocTypeManager().SetTypeConfig(configIdx, type);
 		}

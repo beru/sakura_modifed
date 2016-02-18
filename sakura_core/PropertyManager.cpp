@@ -149,7 +149,7 @@ bool PropertyManager::OpenPropertySheetTypes(
 			(LPARAM)PM_CHANGESETTING_TYPE,
 			hWnd
 		);
-		if (pcPropTypes->GetChangeKeyWordSet()) {
+		if (pcPropTypes->GetChangeKeywordSet()) {
 			AppNodeGroupHandle(0).SendMessageToAllEditors(
 				WM_COMMAND,
 				(WPARAM)MAKELONG(F_REDRAW, 0),

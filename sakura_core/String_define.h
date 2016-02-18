@@ -641,7 +641,7 @@
 #define STR_ERR_DLGKEYMACMGR8			34480
 
 
-// CKeyWordSetMgr.cpp
+// CKeywordSetMgr.cpp
 
 
 // CLayout.cpp

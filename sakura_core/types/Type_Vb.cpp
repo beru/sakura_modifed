@@ -42,8 +42,8 @@ void CType_Vb::InitTypeConfigImp(TypeConfig* pType)
 	// 設定
 	pType->m_lineComment.CopyTo(0, L"'", -1);					// 行コメントデリミタ
 	pType->m_eDefaultOutline = OUTLINE_VB;						// アウトライン解析方法
-	pType->m_nKeyWordSetIdx[0]  = 13;							// キーワードセット
-	pType->m_nKeyWordSetIdx[1] = 14;							// キーワードセット2
+	pType->m_nKeywordSetIdx[0]  = 13;							// キーワードセット
+	pType->m_nKeywordSetIdx[1] = 14;							// キーワードセット2
 	pType->m_colorInfoArr[COLORIDX_DIGIT].m_bDisp = true;		// 半角数値を色分け表示
 	pType->m_nStringType = StringLiteralType::PLSQL;				// 文字列区切り記号エスケープ方法  0=[\"][\'] 1=[""]['']
 	pType->m_colorInfoArr[COLORIDX_SSTRING].m_bDisp = false;	// シングルクォーテーション文字列を色分け表示しない

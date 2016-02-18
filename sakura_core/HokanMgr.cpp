@@ -115,14 +115,11 @@ void HokanMgr::ChangeView(LPARAM pcEditView)
 
 void HokanMgr::Hide(void)
 {
-
 	::ShowWindow(GetHwnd(), SW_HIDE);
 	m_nCurKouhoIdx = -1;
 	// 入力フォーカスを受け取ったときの処理
 	EditView* pEditView = reinterpret_cast<EditView*>(m_lParam);
 	pEditView->OnSetFocus();
-	return;
-
 }
 
 /*!	初期化
@@ -236,8 +233,6 @@ int HokanMgr::Search(
 	m_nColumnWidth = nColumnWidth;
 //	m_memCurWord.SetData(pszCurWord, lstrlen(pszCurWord));
 	m_memCurWord.SetString(pszCurWord);
-
-
 	m_nCurKouhoIdx = 0;
 //	SetCurKouhoStr();
 
@@ -254,9 +249,7 @@ int HokanMgr::Search(
 	}
 	List_SetCurSel(hwndList, 0);
 
-
 //@@	::EnableWindow(::GetParent(::GetParent(m_hwndParent)), FALSE);
-
 
 	RECT rcDesktop;
 	//	May 01, 2004 genta マルチモニタ対応
@@ -347,16 +340,16 @@ void HokanMgr::HokanSearchByKeyword(
 ) {
 	const EditView* pEditView = reinterpret_cast<const EditView*>(m_lParam);
 	const TypeConfig& type = pEditView->GetDocument()->m_docType.GetDocumentAttribute();
-	KeyWordSetMgr& keywordMgr = m_pShareData->m_common.m_specialKeyword.m_keyWordSetMgr;
+	KeywordSetMgr& keywordMgr = m_pShareData->m_common.m_specialKeyword.m_keywordSetMgr;
 	const int nKeyLen = wcslen(pszCurWord);
 	for (int n=0; n<MAX_KEYWORDSET_PER_TYPE; ++n) {
-		int kwdset = type.m_nKeyWordSetIdx[n];
+		int kwdset = type.m_nKeywordSetIdx[n];
 		if (kwdset == -1) {
 			continue;
 		}
-		const int keyCount = keywordMgr.GetKeyWordNum(kwdset);
+		const int keyCount = keywordMgr.GetKeywordNum(kwdset);
 		for (int i=0; i<keyCount; ++i) {
-			const wchar_t* word = keywordMgr.GetKeyWord(kwdset, i);
+			const wchar_t* word = keywordMgr.GetKeyword(kwdset, i);
 			int nRet;
 			if (bHokanLoHiCase) {
 				nRet = auto_memicmp(pszCurWord, word, nKeyLen );

@@ -180,7 +180,7 @@ void ViewCommander::Command_INDENT(
 		*/
 		bool alignFullWidthChar = (eIndent == IndentType::Tab) && ((rcSel.GetFrom().x % this->GetDocument()->m_layoutMgr.GetTabSpace()) == 0);
 #if 1	// ↓ここを残せば選択幅1のSPACEインデントで全角文字を揃える機能(2)が追加される。
-		alignFullWidthChar = alignFullWidthChar || (eIndent == IndentType::Space && 1 == rcSel.GetTo().x - rcSel.GetFrom().x);
+		alignFullWidthChar = alignFullWidthChar || (eIndent == IndentType::Space && rcSel.GetTo().x - rcSel.GetFrom().x == 1);
 #endif
 		WaitCursor waitCursor(m_pCommanderView->GetHwnd(), 1000 < rcSel.GetTo().y - rcSel.GetFrom().y);
 		HWND hwndProgress = NULL;

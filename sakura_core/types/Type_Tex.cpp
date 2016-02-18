@@ -42,8 +42,8 @@ void CType_Tex::InitTypeConfigImp(TypeConfig* pType)
 	// 設定
 	pType->m_lineComment.CopyTo(0, L"%", -1);					// 行コメントデリミタ
 	pType->m_eDefaultOutline = OUTLINE_TEX;						// アウトライン解析方法
-	pType->m_nKeyWordSetIdx[0] = 9;								// キーワードセット
-	pType->m_nKeyWordSetIdx[1] = 10;							// キーワードセット2 	// Jan. 19, 2001 JEPRO
+	pType->m_nKeywordSetIdx[0] = 9;								// キーワードセット
+	pType->m_nKeywordSetIdx[1] = 10;							// キーワードセット2 	// Jan. 19, 2001 JEPRO
 	pType->m_colorInfoArr[COLORIDX_SSTRING].m_bDisp = false;	// シングルクォーテーション文字列を色分け表示しない
 	pType->m_colorInfoArr[COLORIDX_WSTRING].m_bDisp = false;	// ダブルクォーテーション文字列を色分け表示しない
 }

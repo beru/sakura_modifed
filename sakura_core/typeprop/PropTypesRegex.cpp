@@ -97,7 +97,7 @@ INT_PTR PropTypesRegex::DispatchEvent(
 	HWND hwndList = GetDlgItem(hwndDlg, IDC_LIST_REGEX);
 
 	// ANSIビルドではCP932だと2倍程度必要
-	const int nKeyWordSize = MAX_REGEX_KEYWORDLEN;
+	const int nKeywordSize = MAX_REGEX_KEYWORDLEN;
 	TCHAR szColorIndex[256];
 
 	switch (uMsg) {
@@ -171,10 +171,10 @@ INT_PTR PropTypesRegex::DispatchEvent(
 			case IDC_BUTTON_REGEX_INS:	// 挿入
 			{
 				// 挿入するキー情報を取得する。
-				auto_array_ptr<TCHAR> szKeyWord(new TCHAR [nKeyWordSize]);
-				szKeyWord[0] = _T('\0');
-				::DlgItem_GetText(hwndDlg, IDC_EDIT_REGEX, &szKeyWord[0], nKeyWordSize);
-				if (szKeyWord[0] == _T('\0')) {
+				auto_array_ptr<TCHAR> szKeyword(new TCHAR [nKeywordSize]);
+				szKeyword[0] = _T('\0');
+				::DlgItem_GetText(hwndDlg, IDC_EDIT_REGEX, &szKeyword[0], nKeywordSize);
+				if (szKeyword[0] == _T('\0')) {
 					return FALSE;
 				}
 				// 同じキーがないか調べる。
@@ -189,7 +189,7 @@ INT_PTR PropTypesRegex::DispatchEvent(
 					// 選択中でなければ最後にする。
 					nIndex = nIndex2;
 				}
-				if (!CheckKeywordList(hwndDlg, &szKeyWord[0], -1)) {
+				if (!CheckKeywordList(hwndDlg, &szKeyword[0], -1)) {
 					return FALSE;
 				}
 				
@@ -198,7 +198,7 @@ INT_PTR PropTypesRegex::DispatchEvent(
 				::DlgItem_GetText(hwndDlg, IDC_COMBO_REGEX_COLOR, szColorIndex, _countof(szColorIndex));
 				// キー情報を挿入する。
 				lvi.mask     = LVIF_TEXT | LVIF_PARAM;
-				lvi.pszText  = &szKeyWord[0];
+				lvi.pszText  = &szKeyword[0];
 				lvi.iItem    = nIndex;
 				lvi.iSubItem = 0;
 				lvi.lParam   = 0;
@@ -216,13 +216,13 @@ INT_PTR PropTypesRegex::DispatchEvent(
 
 			case IDC_BUTTON_REGEX_ADD:	// 追加
 			{
-				auto_array_ptr<TCHAR> szKeyWord(new TCHAR [nKeyWordSize]);
+				auto_array_ptr<TCHAR> szKeyword(new TCHAR [nKeywordSize]);
 				// 最後のキー番号を取得する。
 				nIndex = ListView_GetItemCount(hwndList);
 				// 追加するキー情報を取得する。
-				szKeyWord[0] = _T('\0');
-				::DlgItem_GetText(hwndDlg, IDC_EDIT_REGEX, &szKeyWord[0], nKeyWordSize);
-				if (szKeyWord[0] == L'\0') {
+				szKeyword[0] = _T('\0');
+				::DlgItem_GetText(hwndDlg, IDC_EDIT_REGEX, &szKeyword[0], nKeywordSize);
+				if (szKeyword[0] == L'\0') {
 					return FALSE;
 				}
 				nIndex2 = ListView_GetItemCount(hwndList);
@@ -230,7 +230,7 @@ INT_PTR PropTypesRegex::DispatchEvent(
 					ErrorMessage(hwndDlg, LS(STR_PROPTYPEREGEX_NOREG));
 					return FALSE;
 				}
-				if (!CheckKeywordList(hwndDlg, &szKeyWord[0], -1)) {
+				if (!CheckKeywordList(hwndDlg, &szKeyword[0], -1)) {
 					return FALSE;
 				}
 				// 追加するキー情報を取得する。
@@ -238,7 +238,7 @@ INT_PTR PropTypesRegex::DispatchEvent(
 				::DlgItem_GetText(hwndDlg, IDC_COMBO_REGEX_COLOR, szColorIndex, _countof(szColorIndex));
 				// キーを追加する。
 				lvi.mask     = LVIF_TEXT | LVIF_PARAM;
-				lvi.pszText  = &szKeyWord[0];
+				lvi.pszText  = &szKeyword[0];
 				lvi.iItem    = nIndex;
 				lvi.iSubItem = 0;
 				lvi.lParam   = 0;
@@ -256,7 +256,7 @@ INT_PTR PropTypesRegex::DispatchEvent(
 
 			case IDC_BUTTON_REGEX_UPD:	// 更新
 			{
-				auto_array_ptr<TCHAR> szKeyWord(new TCHAR [nKeyWordSize]);
+				auto_array_ptr<TCHAR> szKeyword(new TCHAR [nKeywordSize]);
 				// 選択中のキーを探す。
 				nIndex = ListView_GetNextItem(hwndList, -1, LVNI_ALL | LVNI_SELECTED);
 				if (nIndex == -1) {
@@ -264,12 +264,12 @@ INT_PTR PropTypesRegex::DispatchEvent(
 					return FALSE;
 				}
 				// 更新するキー情報を取得する。
-				szKeyWord[0] = _T('\0');
-				::DlgItem_GetText(hwndDlg, IDC_EDIT_REGEX, &szKeyWord[0], nKeyWordSize);
-				if (&szKeyWord[0] == L'\0') {
+				szKeyword[0] = _T('\0');
+				::DlgItem_GetText(hwndDlg, IDC_EDIT_REGEX, &szKeyword[0], nKeywordSize);
+				if (&szKeyword[0] == L'\0') {
 					return FALSE;
 				}
-				if (!CheckKeywordList(hwndDlg, &szKeyWord[0], nIndex)) {
+				if (!CheckKeywordList(hwndDlg, &szKeyword[0], nIndex)) {
 					return FALSE;
 				}
 				// 追加するキー情報を取得する。
@@ -277,7 +277,7 @@ INT_PTR PropTypesRegex::DispatchEvent(
 				::DlgItem_GetText(hwndDlg, IDC_COMBO_REGEX_COLOR, szColorIndex, _countof(szColorIndex));
 				// キーを更新する。
 				lvi.mask     = LVIF_TEXT | LVIF_PARAM;
-				lvi.pszText  = &szKeyWord[0];
+				lvi.pszText  = &szKeyword[0];
 				lvi.iItem    = nIndex;
 				lvi.iSubItem = 0;
 				lvi.lParam   = 0;
@@ -310,8 +310,8 @@ INT_PTR PropTypesRegex::DispatchEvent(
 
 			case IDC_BUTTON_REGEX_TOP:	// 先頭
 			{
-				auto_array_ptr<TCHAR> szKeyWord(new TCHAR [nKeyWordSize]);
-				szKeyWord[0] = _T('\0');
+				auto_array_ptr<TCHAR> szKeyword(new TCHAR [nKeywordSize]);
+				szKeyword[0] = _T('\0');
 				// 選択中のキーを探す。
 				nIndex = ListView_GetNextItem(hwndList, -1, LVNI_ALL | LVNI_SELECTED);
 				if (nIndex == -1) {
@@ -321,12 +321,12 @@ INT_PTR PropTypesRegex::DispatchEvent(
 					return TRUE;	// すでに先頭にある。
 				}
 				nIndex2 = 0;
-				ListView_GetItemText(hwndList, nIndex, 0, &szKeyWord[0], nKeyWordSize);
+				ListView_GetItemText(hwndList, nIndex, 0, &szKeyword[0], nKeywordSize);
 				ListView_GetItemText(hwndList, nIndex, 1, szColorIndex, _countof(szColorIndex));
 				ListView_DeleteItem(hwndList, nIndex);	// 古いキーを削除
 				// キーを追加する。
 				lvi.mask     = LVIF_TEXT | LVIF_PARAM;
-				lvi.pszText  = &szKeyWord[0];
+				lvi.pszText  = &szKeyword[0];
 				lvi.iItem    = nIndex2;
 				lvi.iSubItem = 0;
 				lvi.lParam   = 0;
@@ -344,8 +344,8 @@ INT_PTR PropTypesRegex::DispatchEvent(
 
 			case IDC_BUTTON_REGEX_LAST:	// 最終
 			{
-				auto_array_ptr<TCHAR> szKeyWord(new TCHAR [nKeyWordSize]);
-				szKeyWord[0] = _T('\0');
+				auto_array_ptr<TCHAR> szKeyword(new TCHAR [nKeywordSize]);
+				szKeyword[0] = _T('\0');
 				nIndex = ListView_GetNextItem(hwndList, -1, LVNI_ALL | LVNI_SELECTED);
 				if (nIndex == -1) {
 					return FALSE;
@@ -354,11 +354,11 @@ INT_PTR PropTypesRegex::DispatchEvent(
 				if (nIndex2 - 1 == nIndex) {
 					return TRUE;	// すでに最終にある。
 				}
-				ListView_GetItemText(hwndList, nIndex, 0, &szKeyWord[0], nKeyWordSize);
+				ListView_GetItemText(hwndList, nIndex, 0, &szKeyword[0], nKeywordSize);
 				ListView_GetItemText(hwndList, nIndex, 1, szColorIndex, _countof(szColorIndex));
 				// キーを追加する。
 				lvi.mask     = LVIF_TEXT | LVIF_PARAM;
-				lvi.pszText  = &szKeyWord[0];
+				lvi.pszText  = &szKeyword[0];
 				lvi.iItem    = nIndex2;
 				lvi.iSubItem = 0;
 				lvi.lParam   = 0;
@@ -377,8 +377,8 @@ INT_PTR PropTypesRegex::DispatchEvent(
 
 			case IDC_BUTTON_REGEX_UP:	// 上へ
 			{
-				auto_array_ptr<TCHAR> szKeyWord(new TCHAR [nKeyWordSize]);
-				szKeyWord[0] = _T('\0');
+				auto_array_ptr<TCHAR> szKeyword(new TCHAR [nKeywordSize]);
+				szKeyword[0] = _T('\0');
 				nIndex = ListView_GetNextItem(hwndList, -1, LVNI_ALL | LVNI_SELECTED);
 				if (nIndex == -1) {
 					return FALSE;
@@ -391,12 +391,12 @@ INT_PTR PropTypesRegex::DispatchEvent(
 					return TRUE;
 				}
 				nIndex2 = nIndex - 1;
-				ListView_GetItemText(hwndList, nIndex, 0, &szKeyWord[0], nKeyWordSize);
+				ListView_GetItemText(hwndList, nIndex, 0, &szKeyword[0], nKeywordSize);
 				ListView_GetItemText(hwndList, nIndex, 1, szColorIndex, _countof(szColorIndex));
 				ListView_DeleteItem(hwndList, nIndex);	// 古いキーを削除
 				// キーを追加する。
 				lvi.mask     = LVIF_TEXT | LVIF_PARAM;
-				lvi.pszText  = &szKeyWord[0];
+				lvi.pszText  = &szKeyword[0];
 				lvi.iItem    = nIndex2;
 				lvi.iSubItem = 0;
 				lvi.lParam   = 0;
@@ -414,8 +414,8 @@ INT_PTR PropTypesRegex::DispatchEvent(
 
 			case IDC_BUTTON_REGEX_DOWN:	// 下へ
 			{
-				auto_array_ptr<TCHAR> szKeyWord(new TCHAR [nKeyWordSize]);
-				szKeyWord[0] = _T('\0');
+				auto_array_ptr<TCHAR> szKeyword(new TCHAR [nKeywordSize]);
+				szKeyword[0] = _T('\0');
 				nIndex = ListView_GetNextItem(hwndList, -1, LVNI_ALL | LVNI_SELECTED);
 				if (nIndex == -1) {
 					return FALSE;
@@ -428,11 +428,11 @@ INT_PTR PropTypesRegex::DispatchEvent(
 					return TRUE;
 				}
 				nIndex2 = nIndex + 2;
-				ListView_GetItemText(hwndList, nIndex, 0, &szKeyWord[0], nKeyWordSize);
+				ListView_GetItemText(hwndList, nIndex, 0, &szKeyword[0], nKeywordSize);
 				ListView_GetItemText(hwndList, nIndex, 1, szColorIndex, _countof(szColorIndex));
 				// キーを追加する。
 				lvi.mask     = LVIF_TEXT | LVIF_PARAM;
-				lvi.pszText  = &szKeyWord[0];
+				lvi.pszText  = &szKeyword[0];
 				lvi.iItem    = nIndex2;
 				lvi.iSubItem = 0;
 				lvi.lParam   = 0;
@@ -502,11 +502,11 @@ INT_PTR PropTypesRegex::DispatchEvent(
 				}
 				if (nPrevIndex != nIndex) {	//@@@ 2003.03.26 MIK
 					// 更新時にListViewのSubItemを正しく取得できないので、その対策
-					auto_array_ptr<TCHAR> szKeyWord(new TCHAR [nKeyWordSize]);
-					szKeyWord[0] = _T('\0');
-					ListView_GetItemText(hwndList, nIndex, 0, &szKeyWord[0], nKeyWordSize);
+					auto_array_ptr<TCHAR> szKeyword(new TCHAR [nKeywordSize]);
+					szKeyword[0] = _T('\0');
+					ListView_GetItemText(hwndList, nIndex, 0, &szKeyword[0], nKeywordSize);
 					ListView_GetItemText(hwndList, nIndex, 1, szColorIndex, _countof(szColorIndex));
-					::DlgItem_SetText(hwndDlg, IDC_EDIT_REGEX, &szKeyWord[0]);	// 正規表現
+					::DlgItem_SetText(hwndDlg, IDC_EDIT_REGEX, &szKeyword[0]);	// 正規表現
 					hwndCombo = GetDlgItem(hwndDlg, IDC_COMBO_REGEX_COLOR);
 					for (i=0, j=0; i<COLORIDX_LAST; ++i) {
 						if ((g_ColorAttributeArr[i].fAttribute & COLOR_ATTRIB_NO_TEXT) == 0 &&
@@ -624,8 +624,8 @@ int PropTypesRegex::GetData(HWND hwndDlg)
 {
 	HWND	hwndList;
 	int	nIndex, i, j;
-	const int szKeyWordSize = _countof(m_types.m_RegexKeywordList) * 2 + 1;
-	auto_array_ptr<TCHAR> szKeyWord(new TCHAR [szKeyWordSize]);
+	const int szKeywordSize = _countof(m_types.m_RegexKeywordList) * 2 + 1;
+	auto_array_ptr<TCHAR> szKeyword(new TCHAR [szKeywordSize]);
 	TCHAR	szColorIndex[256];
 
 	// 使用する・使用しない
@@ -643,12 +643,12 @@ int PropTypesRegex::GetData(HWND hwndDlg)
 	// key1\0key2\0\0 の形式
 	for (i=0; i<MAX_REGEX_KEYWORD; ++i) {
 		if (i < nIndex) {
-			szKeyWord[0]    = _T('\0');
+			szKeyword[0]    = _T('\0');
 			szColorIndex[0] = _T('\0');
-			ListView_GetItemText(hwndList, i, 0, &szKeyWord[0], szKeyWordSize);
+			ListView_GetItemText(hwndList, i, 0, &szKeyword[0], szKeywordSize);
 			ListView_GetItemText(hwndList, i, 1, szColorIndex, _countof(szColorIndex));
 			if (pKeyword < pKeywordLast - 1) {
-				_tcstowcs(pKeyword, &szKeyWord[0], pKeywordLast - pKeyword);
+				_tcstowcs(pKeyword, &szKeyword[0], pKeywordLast - pKeyword);
 			}
 			// 色指定文字列を番号に変換する
 			m_types.m_RegexKeywordArr[i].m_nColorIndex = COLORIDX_REGEX1;
@@ -686,13 +686,13 @@ BOOL PropTypesRegex::RegexKakomiCheck(const wchar_t* s)
 
 bool PropTypesRegex::CheckKeywordList(
 	HWND hwndDlg,
-	const TCHAR* szNewKeyWord,
+	const TCHAR* szNewKeyword,
 	int nUpdateItem
 	)
 {
 	int nRet;
 	// 書式をチェックする。
-	if (!RegexKakomiCheck(to_wchar(szNewKeyWord))) {	// 囲みをチェックする。
+	if (!RegexKakomiCheck(to_wchar(szNewKeyword))) {	// 囲みをチェックする。
 		nRet = ::MYMESSAGEBOX(
 				hwndDlg,
 				MB_OK | MB_ICONSTOP | MB_TOPMOST | MB_DEFBUTTON2,
@@ -700,7 +700,7 @@ bool PropTypesRegex::CheckKeywordList(
 				LS(STR_PROPTYPEREGEX_KAKOMI));
 		return false;
 	}
-	if (!CheckRegexpSyntax(to_wchar(szNewKeyWord), hwndDlg, false, -1, true)) {
+	if (!CheckRegexpSyntax(to_wchar(szNewKeyword), hwndDlg, false, -1, true)) {
 		nRet = ::MYMESSAGEBOX(
 				hwndDlg,
 				MB_YESNO | MB_ICONQUESTION | MB_TOPMOST | MB_DEFBUTTON2,
@@ -711,21 +711,21 @@ bool PropTypesRegex::CheckKeywordList(
 		}
 	}
 	// 重複確認・文字列長制限チェック
-	const int nKeyWordSize = MAX_REGEX_KEYWORDLEN;
+	const int nKeywordSize = MAX_REGEX_KEYWORDLEN;
 	HWND hwndList = GetDlgItem(hwndDlg, IDC_LIST_REGEX);
 	int  nIndex  = ListView_GetItemCount(hwndList);
-	auto_array_ptr<TCHAR> szKeyWord(new TCHAR [nKeyWordSize]);
-	int nKeywordLen = auto_strlen(to_wchar(szNewKeyWord)) + 1;
+	auto_array_ptr<TCHAR> szKeyword(new TCHAR [nKeywordSize]);
+	int nKeywordLen = auto_strlen(to_wchar(szNewKeyword)) + 1;
 	for (int i=0; i<nIndex; ++i) {
 		if (i != nUpdateItem) {
-			szKeyWord[0] = _T('\0');
-			ListView_GetItemText(hwndList, i, 0, &szKeyWord[0], nKeyWordSize);
-			if (_tcscmp(szNewKeyWord, &szKeyWord[0]) == 0) {
+			szKeyword[0] = _T('\0');
+			ListView_GetItemText(hwndList, i, 0, &szKeyword[0], nKeywordSize);
+			if (_tcscmp(szNewKeyword, &szKeyword[0]) == 0) {
 				ErrorMessage(hwndDlg, LS(STR_PROPTYPEREGEX_ALREADY));
 				return false;
 			}
 			// 長さには\0も含む
-			nKeywordLen += auto_strlen(to_wchar(&szKeyWord[0])) + 1;
+			nKeywordLen += auto_strlen(to_wchar(&szKeyword[0])) + 1;
 			if (_countof(m_types.m_RegexKeywordList) - 1 < nKeywordLen) {
 				ErrorMessage(hwndDlg, LS(STR_PROPTYPEREGEX_FULL));
 				return false;

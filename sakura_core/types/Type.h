@@ -132,7 +132,7 @@ struct TypeConfig {
 	EDIT_CHAR			m_szTabViewString[8 + 1];		//!< TAB表示文字列	// 2003.1.26 aroka サイズ拡張	// 2009.02.11 ryoji サイズ戻し(17->8+1)
 	bool				m_bInsSpace;					//!< スペースの挿入	// 2001.12.03 hor
 	// 2005.01.13 MIK 配列化
-	int					m_nKeyWordSetIdx[MAX_KEYWORDSET_PER_TYPE];	//!< キーワードセット
+	int					m_nKeywordSetIdx[MAX_KEYWORDSET_PER_TYPE];	//!< キーワードセット
 
 	LineComment			m_lineComment;					//!< 行コメントデリミタ				//@@@ 2002.09.22 YAZAKI
 	BlockComment		m_blockComments[2];				//!< ブロックコメントデリミタ		//@@@ 2002.09.22 YAZAKI
@@ -216,7 +216,7 @@ struct TypeConfig {
 //@@@ 2001.11.17 add end MIK
 
 //@@@ 2006.04.10 fon ADD-start
-	bool				m_bUseKeyWordHelp;				//!< キーワード辞書セレクト機能を使うか
+	bool				m_bUseKeywordHelp;				//!< キーワード辞書セレクト機能を使うか
 	int					m_nKeyHelpNum;					//!< キーワード辞書の冊数
 	KeyHelpInfo			m_KeyHelpArr[MAX_KEYHELP_FILE];	//!< キーワード辞書ファイル
 	bool				m_bUseKeyHelpAllSearch;			//!< ヒットした次の辞書も検索(&A)

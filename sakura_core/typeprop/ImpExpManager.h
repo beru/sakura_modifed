@@ -249,13 +249,13 @@ private:
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                     強調キーワード                          //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-class ImpExpKeyWord : public ImpExpManager {
+class ImpExpKeyword : public ImpExpManager {
 public:
 	// Constructor
-	ImpExpKeyWord(CommonSetting& common, int nKeyWordSetIdx, bool& bCase)
+	ImpExpKeyword(CommonSetting& common, int nKeywordSetIdx, bool& bCase)
 		:
 		m_common(common),
-		m_nIdx(nKeyWordSetIdx),
+		m_nIdx(nKeywordSetIdx),
 		m_bCase(bCase)
 	{
 	}

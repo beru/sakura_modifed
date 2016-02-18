@@ -106,7 +106,7 @@ int BackupAgent::MakeBackUp(
 
 	const CommonSetting_Backup& bup_setting = GetDllShareData().m_common.m_backup;
 
-	TCHAR	szPath[_MAX_PATH]; // バックアップ先パス名
+	TCHAR szPath[_MAX_PATH]; // バックアップ先パス名
 	if (!FormatBackUpPath(szPath, _countof(szPath), target_file)) {
 		int nMsgResult = ::TopConfirmMessage(
 			EditWnd::getInstance()->GetHwnd(),

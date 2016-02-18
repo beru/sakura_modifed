@@ -558,7 +558,7 @@ void PropTypesKeyHelp::SetData(HWND hwndDlg)
 	EditCtl_LimitText(::GetDlgItem(hwndDlg, IDC_EDIT_KEYHELP), _countof2(m_types.m_KeyHelpArr[0].m_szPath) - 1);
 
 	// 使用する・使用しない
-	CheckDlgButtonBOOL(hwndDlg, IDC_CHECK_KEYHELP, m_types.m_bUseKeyWordHelp);
+	CheckDlgButtonBOOL(hwndDlg, IDC_CHECK_KEYHELP, m_types.m_bUseKeywordHelp);
 	CheckDlgButtonBOOL(hwndDlg, IDC_CHECK_KEYHELP_ALLSEARCH, m_types.m_bUseKeyHelpAllSearch);
 	CheckDlgButtonBOOL(hwndDlg, IDC_CHECK_KEYHELP_KEYDISP, m_types.m_bUseKeyHelpKeyDisp);
 	CheckDlgButtonBOOL(hwndDlg, IDC_CHECK_KEYHELP_PREFIX, m_types.m_bUseKeyHelpPrefix);
@@ -615,7 +615,7 @@ int PropTypesKeyHelp::GetData(HWND hwndDlg)
 	TCHAR	szPath[_MAX_PATH];			// ファイルパス
 
 	// 使用する・使用しない
-	m_types.m_bUseKeyWordHelp      = (IsDlgButtonChecked(hwndDlg, IDC_CHECK_KEYHELP) == BST_CHECKED);
+	m_types.m_bUseKeywordHelp      = (IsDlgButtonChecked(hwndDlg, IDC_CHECK_KEYHELP) == BST_CHECKED);
 	m_types.m_bUseKeyHelpAllSearch = (IsDlgButtonChecked(hwndDlg, IDC_CHECK_KEYHELP_ALLSEARCH) == BST_CHECKED);
 	m_types.m_bUseKeyHelpKeyDisp   = (IsDlgButtonChecked(hwndDlg, IDC_CHECK_KEYHELP_KEYDISP) == BST_CHECKED);
 	m_types.m_bUseKeyHelpPrefix    = (IsDlgButtonChecked(hwndDlg, IDC_CHECK_KEYHELP_PREFIX) == BST_CHECKED);

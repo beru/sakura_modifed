@@ -134,7 +134,7 @@ public:
 		int typeId;
 		int index[MAX_KEYWORDSET_PER_TYPE];
 	};
-	std::vector<KeywordSetIndex>	m_Types_nKeyWordSetIdx;
+	std::vector<KeywordSetIndex>	m_Types_nKeywordSetIdx;
 	bool			m_bTrayProc;
 	HFONT			m_hKeywordHelpFont;		// キーワードヘルプ フォント ハンドル
 	HFONT			m_hTabFont;				// タブ フォント ハンドル
@@ -271,15 +271,15 @@ protected:
 	int  GetData( HWND );	// ダイアログデータの取得
 
 private:
-	void SetKeyWordSet( HWND , int );	// 指定キーワードセットの設定
-	void GetKeyWordSet( HWND , int );	// 指定キーワードセットの取得
+	void SetKeywordSet( HWND , int );	// 指定キーワードセットの設定
+	void GetKeywordSet( HWND , int );	// 指定キーワードセットの取得
 	void DispKeywordCount( HWND hwndDlg );
 
-	void Edit_List_KeyWord( HWND, HWND );		//<! リスト中で選択されているキーワードを編集する
-	void Delete_List_KeyWord( HWND , HWND );	//<! リスト中で選択されているキーワードを削除する
-	void Import_List_KeyWord( HWND , HWND );	//<! リスト中のキーワードをインポートする
-	void Export_List_KeyWord( HWND , HWND );	//<! リスト中のキーワードをエクスポートする
-	void Clean_List_KeyWord( HWND , HWND );		//<! リスト中のキーワードを整理する 2005.01.26 Moca
+	void Edit_List_Keyword( HWND, HWND );		//<! リスト中で選択されているキーワードを編集する
+	void Delete_List_Keyword( HWND , HWND );	//<! リスト中で選択されているキーワードを削除する
+	void Import_List_Keyword( HWND , HWND );	//<! リスト中のキーワードをインポートする
+	void Export_List_Keyword( HWND , HWND );	//<! リスト中のキーワードをエクスポートする
+	void Clean_List_Keyword( HWND , HWND );		//<! リスト中のキーワードを整理する 2005.01.26 Moca
 };
 
 //==============================================================

@@ -450,7 +450,7 @@ INT_PTR PropTypesColor::DispatchEvent(
 						ShareDataLockCounter::WaitLock(pCommon->m_hwndParent);
 						pCommon->ApplyData();
 						SetData(hwndDlg);
-						m_bChangeKeyWordSet = true;
+						m_bChangeKeywordSet = true;
 					}
 					return TRUE;
 				}
@@ -646,23 +646,23 @@ void PropTypesColor::SetData(HWND hwndDlg)
 	Combo_ResetContent(hwndWork);  // コンボボックスを空にする
 	// 一行目は空白
 	Combo_AddString(hwndWork, L" ");
-	//	Mar. 31, 2003 genta KeyWordSetMgrをポインタに
-	if (0 < m_pKeyWordSetMgr->m_nKeyWordSetNum) {
-		for (int i=0; i<m_pKeyWordSetMgr->m_nKeyWordSetNum; ++i) {
-			Combo_AddString(hwndWork, m_pKeyWordSetMgr->GetTypeName(i));
+	//	Mar. 31, 2003 genta KeywordSetMgrをポインタに
+	if (0 < m_pKeywordSetMgr->m_nKeywordSetNum) {
+		for (int i=0; i<m_pKeywordSetMgr->m_nKeywordSetNum; ++i) {
+			Combo_AddString(hwndWork, m_pKeywordSetMgr->GetTypeName(i));
 		}
-		if (m_types.m_nKeyWordSetIdx[0] == -1) {
+		if (m_types.m_nKeywordSetIdx[0] == -1) {
 			// セット名コンボボックスのデフォルト選択
 			Combo_SetCurSel(hwndWork, 0);
 		}else {
 			// セット名コンボボックスのデフォルト選択
-			Combo_SetCurSel(hwndWork, m_types.m_nKeyWordSetIdx[0] + 1);
+			Combo_SetCurSel(hwndWork, m_types.m_nKeywordSetIdx[0] + 1);
 		}
 	}
 
 	// 強調キーワード1～10の設定
 	for (int i=0; i<MAX_KEYWORDSET_PER_TYPE; ++i) {
-		m_nSet[i] = m_types.m_nKeyWordSetIdx[i];
+		m_nSet[i] = m_types.m_nKeywordSetIdx[i];
 	}
 
 	// 色をつける文字種類のリスト
@@ -778,14 +778,14 @@ int PropTypesColor::GetData(HWND hwndDlg)
 	if (nIdx == CB_ERR ||
 		nIdx == 0
 	) {
-		m_types.m_nKeyWordSetIdx[0] = -1;
+		m_types.m_nKeywordSetIdx[0] = -1;
 	}else {
-		m_types.m_nKeyWordSetIdx[0] = nIdx - 1;
+		m_types.m_nKeywordSetIdx[0] = nIdx - 1;
 	}
 
 	// 強調キーワード2～10の取得(1は別)
 	for (nIdx=1; nIdx<MAX_KEYWORDSET_PER_TYPE; ++nIdx) {
-		m_types.m_nKeyWordSetIdx[nIdx] = m_nSet[nIdx];
+		m_types.m_nKeywordSetIdx[nIdx] = m_nSet[nIdx];
 	}
 
 	// from here 2005.11.30 Moca 指定位置縦線の設定

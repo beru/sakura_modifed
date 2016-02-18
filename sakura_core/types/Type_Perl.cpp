@@ -42,8 +42,8 @@ void CType_Perl::InitTypeConfigImp(TypeConfig* pType)
 	// 設定
 	pType->m_lineComment.CopyTo(0, L"#", -1);						// 行コメントデリミタ
 	pType->m_eDefaultOutline = OUTLINE_PERL;						// アウトライン解析方法
-	pType->m_nKeyWordSetIdx[0]  = 11;								// キーワードセット
-	pType->m_nKeyWordSetIdx[1] = 12;								// キーワードセット2
+	pType->m_nKeywordSetIdx[0]  = 11;								// キーワードセット
+	pType->m_nKeywordSetIdx[1] = 12;								// キーワードセット2
 	pType->m_colorInfoArr[COLORIDX_DIGIT].m_bDisp = true;			// 半角数値を色分け表示
 	pType->m_colorInfoArr[COLORIDX_BRACKET_PAIR].m_bDisp = true;	// 対括弧の強調をデフォルトON	//Sep. 21, 2002 genta
 	pType->m_bStringLineOnly = true; // 文字列は行内のみ

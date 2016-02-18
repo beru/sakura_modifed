@@ -4120,7 +4120,7 @@ BEGIN
 	STR_ERR_DLGKEYMACMGR7		"Line %d: Column %d: Syntax Error\n"
 	STR_ERR_DLGKEYMACMGR8		"Line %d: %lsÇÕë∂ç›ÇµÇ»Ç¢ä÷êîÇ≈Ç∑ÅD\n"
 
-	// CKeyWordSetMgr.cpp
+	// CKeywordSetMgr.cpp
 
 	// CLayout.cpp
 

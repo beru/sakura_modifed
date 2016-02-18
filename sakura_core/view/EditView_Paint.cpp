@@ -57,7 +57,7 @@ void _DispWrap(Graphics& gr, DispPos* pDispPos, const EditView* pView, LayoutYIn
 void EditView_Paint::Call_OnPaint(
 	int nPaintFlag,   // 描画する領域を選択する
 	bool bUseMemoryDC // メモリDCを使用する
-)
+	)
 {
 	EditView* pView = GetEditView();
 
@@ -74,8 +74,9 @@ void EditView_Paint::Call_OnPaint(
 	if (rcs.size() == 0) return;
 	Rect rc = rcs[0];
 	int nSize = (int)rcs.size();
-	for (int i=1; i<nSize; ++i)
+	for (int i=1; i<nSize; ++i) {
 		rc = MergeRect(rc, rcs[i]);
+	}
 
 	// 描画
 	PAINTSTRUCT	ps;
@@ -131,15 +132,10 @@ void EditView::Redraw()
 		return;
 	}
 
-	HDC			hdc;
+	HDC hdc = ::GetDC(GetHwnd());
 	PAINTSTRUCT	ps;
-
-	hdc = ::GetDC(GetHwnd());
-
 	::GetClientRect(GetHwnd(), &ps.rcPaint);
-
 	OnPaint(hdc, &ps, FALSE);
-
 	::ReleaseDC(GetHwnd(), hdc);
 }
 // 2001/06/21 End
@@ -159,18 +155,13 @@ void EditView::RedrawLines(LayoutYInt top, LayoutYInt bottom)
 	if (GetTextArea().GetBottomLine() <= top) {
 		return;
 	}
-	HDC			hdc;
+	HDC hdc = GetDC();
 	PAINTSTRUCT	ps;
-
-	hdc = GetDC();
-
 	ps.rcPaint.left = 0;
 	ps.rcPaint.right = GetTextArea().GetAreaRight();
 	ps.rcPaint.top = GetTextArea().GenerateYPx(top);
 	ps.rcPaint.bottom = GetTextArea().GenerateYPx(bottom);
-
 	OnPaint(hdc, &ps, FALSE);
-
 	ReleaseDC(hdc);
 }
 
@@ -194,8 +185,8 @@ void EditView::DrawBackImage(HDC hdc, RECT& rcPaint, HDC hdcBgImg)
 	::SetBkColor(hdc, colorOld);
 	++testColorIndex;
 #else
-	TypeSupport cTextType(this, COLORIDX_TEXT);
-	COLORREF colorOld = ::SetBkColor(hdc, cTextType.GetBackColor());
+	TypeSupport textType(this, COLORIDX_TEXT);
+	COLORREF colorOld = ::SetBkColor(hdc, textType.GetBackColor());
 	const TextArea& area = GetTextArea();
 	const EditDoc& doc  = *m_pEditDoc;
 	const TypeConfig& typeConfig = doc.m_docType.GetDocumentAttribute();
@@ -643,7 +634,7 @@ void EditView::OnPaint2(HDC _hdc, PAINTSTRUCT *pPs, BOOL bDrawFromComptibleBmp)
 	int				nCharDx = GetTextMetrics().GetHankakuDx();
 
 	// サポート
-	TypeSupport cTextType(this, COLORIDX_TEXT);
+	TypeSupport textType(this, COLORIDX_TEXT);
 
 //@@@ 2001.11.17 add start MIK
 	// 変更があればタイプ設定を行う。
@@ -699,7 +690,7 @@ void EditView::OnPaint2(HDC _hdc, PAINTSTRUCT *pPs, BOOL bDrawFromComptibleBmp)
 			rc.top    = GetTextArea().GetRulerHeight();
 			rc.right  = GetTextArea().GetAreaRight();
 			rc.bottom = GetTextArea().GetAreaTop();
-			cTextType.FillBack(gr, rc);
+			textType.FillBack(gr, rc);
 		}
 	}
 
@@ -707,7 +698,7 @@ void EditView::OnPaint2(HDC _hdc, PAINTSTRUCT *pPs, BOOL bDrawFromComptibleBmp)
 	//	From Here Sep. 7, 2001 genta
 	//	Sep. 23, 2002 genta 行番号非表示でも行番号色の帯があるので隙間を埋める
 	if (GetTextArea().GetTopYohaku()) {
-		if (bTransText && m_pTypeData->m_colorInfoArr[COLORIDX_GYOU].m_colorAttr.m_cBACK == cTextType.GetBackColor()) {
+		if (bTransText && m_pTypeData->m_colorInfoArr[COLORIDX_GYOU].m_colorAttr.m_cBACK == textType.GetBackColor()) {
 		}else {
 			rc.left   = 0;
 			rc.top    = GetTextArea().GetRulerHeight();
@@ -721,7 +712,7 @@ void EditView::OnPaint2(HDC _hdc, PAINTSTRUCT *pPs, BOOL bDrawFromComptibleBmp)
 
 	::SetBkMode(gr, TRANSPARENT);
 
-	cTextType.SetGraphicsState_WhileThisObj(gr);
+	textType.SetGraphicsState_WhileThisObj(gr);
 
 
 	int nTop = pPs->rcPaint.top;
@@ -806,7 +797,7 @@ void EditView::OnPaint2(HDC _hdc, PAINTSTRUCT *pPs, BOOL bDrawFromComptibleBmp)
 		rcBack.top    = pos.GetDrawPos().y;
 		rcBack.bottom = pPs->rcPaint.bottom;
 
-		cTextType.FillBack(gr, rcBack);
+		textType.FillBack(gr, rcBack);
 	}
 	
 	{
@@ -818,7 +809,7 @@ void EditView::OnPaint2(HDC _hdc, PAINTSTRUCT *pPs, BOOL bDrawFromComptibleBmp)
 		GetTextDrawer().DispWrapLine(gr, pos.GetDrawPos().y, pPs->rcPaint.bottom);	// 2009.10.24 ryoji
 	}
 
-	cTextType.RewindGraphicsState(gr);
+	textType.RewindGraphicsState(gr);
 
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -972,7 +963,7 @@ bool EditView::DrawLogicLine(
 bool EditView::DrawLayoutLine(ColorStrategyInfo* pInfo)
 {
 	bool bDispEOF = false;
-	TypeSupport cTextType(this, COLORIDX_TEXT);
+	TypeSupport textType(this, COLORIDX_TEXT);
 
 	const Layout* pLayout = pInfo->m_pDispPos->GetLayoutRef(); //m_pEditDoc->m_layoutMgr.SearchLineByLayoutY(pInfo->pDispPos->GetLayoutLineRef());
 
@@ -1027,10 +1018,10 @@ bool EditView::DrawLayoutLine(ColorStrategyInfo* pInfo)
 					&& activeView.GetTextArea().GetViewTopLine() <= pInfo->m_pDispPos->GetLayoutLineRef()
 					&& pInfo->m_pDispPos->GetLayoutLineRef() < activeView.GetTextArea().GetBottomLine())
 						? pageViewBg
-						: cTextType);
+						: textType);
 	bool bTransText = IsBkBitmap();
 	if (bTransText) {
-		bTransText = backType.GetBackColor() == cTextType.GetBackColor();
+		bTransText = backType.GetBackColor() == textType.GetBackColor();
 	}
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //

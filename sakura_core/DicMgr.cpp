@@ -42,12 +42,12 @@ DicMgr::~DicMgr()
 	@date 2006.04.10 fon 検索ヒット行を返す引数pLineを追加
 */
 BOOL DicMgr::Search(
-	const wchar_t*		pszKey,				// 検索キーワード
-	const int			nCmpLen,			// 検索キーワードの長さ
-	NativeW**			ppMemKey,			// 見つかったキーワード．呼び出し元の責任で解放する．
-	NativeW**			ppMemMean,			// 見つかったキーワードに対応する辞書内容．呼び出し元の責任で解放する．
-	const TCHAR*		pszKeyWordHelpFile,	// キーワードヘルプファイルのパス名
-	int*				pLine				// 見つかったキーワードのキーワードヘルプファイル内での行番号
+	const wchar_t*	pszKey,				// 検索キーワード
+	const int		nCmpLen,			// 検索キーワードの長さ
+	NativeW**		ppMemKey,			// 見つかったキーワード．呼び出し元の責任で解放する．
+	NativeW**		ppMemMean,			// 見つかったキーワードに対応する辞書内容．呼び出し元の責任で解放する．
+	const TCHAR*	pszKeywordHelpFile,	// キーワードヘルプファイルのパス名
+	int*			pLine				// 見つかったキーワードのキーワードヘルプファイル内での行番号
 	)
 {
 #ifdef _DEBUG
@@ -57,12 +57,12 @@ BOOL DicMgr::Search(
 	const wchar_t*	pszKeySeps = L",\0";
 
 	// 辞書ファイル
-	if (pszKeyWordHelpFile[0] == _T('\0')) {
+	if (pszKeywordHelpFile[0] == _T('\0')) {
 		return FALSE;
 	}
 	// 2003.06.23 Moca 相対パスは実行ファイルからのパスとして開く
 	// 2007.05.19 ryoji 相対パスは設定ファイルからのパスを優先
-	TextInputStream_AbsIni in(pszKeyWordHelpFile);
+	TextInputStream_AbsIni in(pszKeywordHelpFile);
 	if (!in) {
 		return FALSE;
 	}
@@ -123,14 +123,14 @@ int DicMgr::HokanSearch(
 	bool			bHokanLoHiCase,	// 英大文字小文字を同一視する
 	vector_ex<std::wstring>&		vKouho,	// [out] 候補リスト
 	int				nMaxKouho,		// Max候補数(0==無制限)
-	const TCHAR*	pszKeyWordFile
+	const TCHAR*	pszKeywordFile
 	)
 {
-	if (pszKeyWordFile[0] == _T('\0')) {
+	if (pszKeywordFile[0] == _T('\0')) {
 		return 0;
 	}
 
-	TextInputStream_AbsIni in(pszKeyWordFile);
+	TextInputStream_AbsIni in(pszKeywordFile);
 	if (!in) {
 		return 0;
 	}
