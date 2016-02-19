@@ -340,7 +340,7 @@ void HokanMgr::HokanSearchByKeyword(
 ) {
 	const EditView* pEditView = reinterpret_cast<const EditView*>(m_lParam);
 	const TypeConfig& type = pEditView->GetDocument()->m_docType.GetDocumentAttribute();
-	KeywordSetMgr& keywordMgr = m_pShareData->m_common.m_specialKeyword.m_keywordSetMgr;
+	KeywordSetMgr& keywordMgr = m_pShareData->m_common.specialKeyword.m_keywordSetMgr;
 	const int nKeyLen = wcslen(pszCurWord);
 	for (int n=0; n<MAX_KEYWORDSET_PER_TYPE; ++n) {
 		int kwdset = type.m_nKeywordSetIdx[n];
@@ -501,7 +501,7 @@ BOOL HokanMgr::DoHokan(int nVKey)
 	DEBUG_TRACE(_T("HokanMgr::DoHokan(nVKey==%xh)\n"), nVKey);
 
 	// 補完候補決定キー
-	auto& csHelper = m_pShareData->m_common.m_helper;
+	auto& csHelper = m_pShareData->m_common.helper;
 	if (nVKey == VK_RETURN	&& !csHelper.m_bHokanKey_RETURN)	return FALSE; // VK_RETURN 補完決定キーが有効/無効
 	if (nVKey == VK_TAB		&& !csHelper.m_bHokanKey_TAB)		return FALSE; // VK_TAB    補完決定キーが有効/無効
 	if (nVKey == VK_RIGHT	&& !csHelper.m_bHokanKey_RIGHT)		return FALSE; // VK_RIGHT  補完決定キーが有効/無効
@@ -525,7 +525,7 @@ BOOL HokanMgr::DoHokan(int nVKey)
 //	pEditView->GetCommander().HandleCommand(F_INSTEXT_W, true, (LPARAM)(wszLabel + m_memCurWord.GetLength()), TRUE, 0, 0);
 	Hide();
 
-	m_pShareData->m_common.m_helper.m_bUseHokan = FALSE;	//	補完したら
+	m_pShareData->m_common.helper.m_bUseHokan = FALSE;	//	補完したら
 	return TRUE;
 }
 
@@ -600,7 +600,7 @@ int HokanMgr::KeyProc(WPARAM wParam, LPARAM lParam)
 		}
 	case VK_ESCAPE:
 	case VK_LEFT:
-		m_pShareData->m_common.m_helper.m_bUseHokan = FALSE;
+		m_pShareData->m_common.helper.m_bUseHokan = FALSE;
 		return -2;
 	}
 	return -2;

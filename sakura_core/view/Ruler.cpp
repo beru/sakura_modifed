@@ -91,7 +91,7 @@ void Ruler::DrawRulerBg(Graphics& gr)
 
 	// フォント設定 (ルーラー上の数字用)
 	LOGFONT	lf = {0};
-	lf.lfHeight			= 1 - pCommon->m_window.m_nRulerHeight;	//	2002/05/13 ai
+	lf.lfHeight			= 1 - pCommon->window.m_nRulerHeight;	//	2002/05/13 ai
 	lf.lfWidth			= 5;
 	lf.lfEscapement		= 0;
 	lf.lfOrientation	= 0;

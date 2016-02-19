@@ -61,7 +61,7 @@ LPTSTR FileNameManager::GetTransformFileNameFast( LPCTSTR pszSrc, LPTSTR pszDest
 	}
 
 	int nPxWidth = -1;
-	auto& csFileName = m_pShareData->m_common.m_fileName;
+	auto& csFileName = m_pShareData->m_common.fileName;
 	if (csFileName.m_bTransformShortPath && cchMaxWidth != -1) {
 		if (cchMaxWidth == 0) {
 			cchMaxWidth = csFileName.m_nTransformShortMaxWidth;
@@ -102,7 +102,7 @@ LPTSTR FileNameManager::GetTransformFileNameFast( LPCTSTR pszSrc, LPTSTR pszDest
 */
 int FileNameManager::TransformFileName_MakeCache(void) {
 	int nCount = 0;
-	auto& csFileName = m_pShareData->m_common.m_fileName;
+	auto& csFileName = m_pShareData->m_common.fileName;
 	for (int i=0; i<csFileName.m_nTransformFileNameArrNum; ++i) {
 		if (csFileName.m_szTransformFileNameFrom[i][0] != L'\0') {
 			if (ExpandMetaToFolder(

@@ -250,11 +250,11 @@ INT_PTR PropTypesScreen::DispatchEvent(
 					if (m_types.m_bUseTypeFont) {
 						lf = m_types.m_lf;
 					}else {
-						lf = m_pShareData->m_common.m_view.m_lf;
+						lf = m_pShareData->m_common.view.m_lf;
 					}
 
 					bool bFixedFont = true;
-					if (m_pShareData->m_common.m_view.m_lf.lfPitchAndFamily & FIXED_PITCH) {
+					if (m_pShareData->m_common.view.m_lf.lfPitchAndFamily & FIXED_PITCH) {
 					}else {
 						bool bFixedFont = false;
 					}
@@ -715,7 +715,7 @@ int PropTypesScreen::GetData(HWND hwndDlg)
 		if (m_types.m_bUseTypeFont) {
 			lf = m_types.m_lf;
 		}else {
-			lf = m_pShareData->m_common.m_view.m_lf;
+			lf = m_pShareData->m_common.view.m_lf;
 		}
 	}
 

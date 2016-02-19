@@ -277,12 +277,12 @@ void ViewSelect::DrawSelectArea2(HDC hdc) const
 	EditView const * const pView = GetEditView();
 
 	// 2006.10.01 Moca 重複コード統合
-	HBRUSH      hBrush = ::CreateSolidBrush(SELECTEDAREA_RGB);
-	HBRUSH      hBrushOld = (HBRUSH)::SelectObject(hdc, hBrush);
-	int         nROP_Old = ::SetROP2(hdc, SELECTEDAREA_ROP2);
+	HBRUSH	hBrush = ::CreateSolidBrush(SELECTEDAREA_RGB);
+	HBRUSH	hBrushOld = (HBRUSH)::SelectObject(hdc, hBrush);
+	int		nROP_Old = ::SetROP2(hdc, SELECTEDAREA_ROP2);
 	// From Here 2007.09.09 Moca 互換BMPによる画面バッファ
-	HBRUSH		hBrushCompatOld = 0;
-	int			nROPCompatOld = 0;
+	HBRUSH	hBrushCompatOld = 0;
+	int		nROPCompatOld = 0;
 	bool bCompatBMP = pView->m_hbmpCompatBMP && hdc != pView->m_hdcCompatDC;
 	if (bCompatBMP) {
 		hBrushCompatOld = (HBRUSH)::SelectObject(pView->m_hdcCompatDC, hBrush);
@@ -291,6 +291,7 @@ void ViewSelect::DrawSelectArea2(HDC hdc) const
 	// To Here 2007.09.09 Moca
 
 //	MYTRACE(_T("DrawSelectArea()  m_bBeginBoxSelect=%hs\n", m_bBeginBoxSelect?"true":"false"));
+	auto& textArea = pView->GetTextArea();
 	if (IsBoxSelecting()) {		// 矩形範囲選択中
 		// 2001.12.21 hor 矩形エリアにEOFがある場合、RGN_XORで結合すると
 		// EOF以降のエリアも反転してしまうので、この場合はRedrawを使う
@@ -312,18 +313,18 @@ void ViewSelect::DrawSelectArea2(HDC hdc) const
 			m_selectOld.GetFrom(),	// 範囲選択開始
 			m_selectOld.GetTo()	// 範囲選択終了
 		);
-		rcOld.left   = t_max(rcOld.left  , pView->GetTextArea().GetViewLeftCol() );
-		rcOld.right  = t_max(rcOld.right , pView->GetTextArea().GetViewLeftCol() );
-		rcOld.right  = t_min(rcOld.right , pView->GetTextArea().GetRightCol() + 1);
-		rcOld.top    = t_max(rcOld.top   , pView->GetTextArea().GetViewTopLine() );
-		rcOld.bottom = t_max(rcOld.bottom, pView->GetTextArea().GetViewTopLine() - 1);	// 2010.11.02 ryoji 追加（画面上端よりも上にある矩形選択を解除するとルーラーが反転表示になる問題の修正）
-		rcOld.bottom = t_min(rcOld.bottom, pView->GetTextArea().GetBottomLine()  );
+		rcOld.left   = t_max(rcOld.left  , textArea.GetViewLeftCol() );
+		rcOld.right  = t_max(rcOld.right , textArea.GetViewLeftCol() );
+		rcOld.right  = t_min(rcOld.right , textArea.GetRightCol() + 1);
+		rcOld.top    = t_max(rcOld.top   , textArea.GetViewTopLine() );
+		rcOld.bottom = t_max(rcOld.bottom, textArea.GetViewTopLine() - 1);	// 2010.11.02 ryoji 追加（画面上端よりも上にある矩形選択を解除するとルーラーが反転表示になる問題の修正）
+		rcOld.bottom = t_min(rcOld.bottom, textArea.GetBottomLine()  );
 
 		RECT rcOld2;
-		rcOld2.left		= (pView->GetTextArea().GetAreaLeft() - (Int)pView->GetTextArea().GetViewLeftCol() * nCharWidth) + (Int)rcOld.left  * nCharWidth;
-		rcOld2.right	= (pView->GetTextArea().GetAreaLeft() - (Int)pView->GetTextArea().GetViewLeftCol() * nCharWidth) + (Int)rcOld.right * nCharWidth;
-		rcOld2.top		= pView->GetTextArea().GenerateYPx(rcOld.top);
-		rcOld2.bottom	= pView->GetTextArea().GenerateYPx(rcOld.bottom + 1);
+		rcOld2.left		= (textArea.GetAreaLeft() - (Int)textArea.GetViewLeftCol() * nCharWidth) + (Int)rcOld.left  * nCharWidth;
+		rcOld2.right	= (textArea.GetAreaLeft() - (Int)textArea.GetViewLeftCol() * nCharWidth) + (Int)rcOld.right * nCharWidth;
+		rcOld2.top		= textArea.GenerateYPx(rcOld.top);
+		rcOld2.bottom	= textArea.GenerateYPx(rcOld.bottom + 1);
 		HRGN hrgnOld = ::CreateRectRgnIndirect(&rcOld2);
 
 		// 2点を対角とする矩形を求める
@@ -333,18 +334,18 @@ void ViewSelect::DrawSelectArea2(HDC hdc) const
 			m_select.GetFrom(),	// 範囲選択開始
 			m_select.GetTo()		// 範囲選択終了
 		);
-		rcNew.left   = t_max(rcNew.left  , pView->GetTextArea().GetViewLeftCol());
-		rcNew.right  = t_max(rcNew.right , pView->GetTextArea().GetViewLeftCol());
-		rcNew.right  = t_min(rcNew.right , pView->GetTextArea().GetRightCol() + 1);
-		rcNew.top    = t_max(rcNew.top   , pView->GetTextArea().GetViewTopLine());
-		rcNew.bottom = t_max(rcNew.bottom, pView->GetTextArea().GetViewTopLine() - 1);	// 2010.11.02 ryoji 追加（画面上端よりも上にある矩形選択を解除するとルーラーが反転表示になる問題の修正）
-		rcNew.bottom = t_min(rcNew.bottom, pView->GetTextArea().GetBottomLine() );
+		rcNew.left   = t_max(rcNew.left  , textArea.GetViewLeftCol());
+		rcNew.right  = t_max(rcNew.right , textArea.GetViewLeftCol());
+		rcNew.right  = t_min(rcNew.right , textArea.GetRightCol() + 1);
+		rcNew.top    = t_max(rcNew.top   , textArea.GetViewTopLine());
+		rcNew.bottom = t_max(rcNew.bottom, textArea.GetViewTopLine() - 1);	// 2010.11.02 ryoji 追加（画面上端よりも上にある矩形選択を解除するとルーラーが反転表示になる問題の修正）
+		rcNew.bottom = t_min(rcNew.bottom, textArea.GetBottomLine() );
 
 		RECT rcNew2;
-		rcNew2.left		= (pView->GetTextArea().GetAreaLeft() - (Int)pView->GetTextArea().GetViewLeftCol() * nCharWidth) + (Int)rcNew.left  * nCharWidth;
-		rcNew2.right	= (pView->GetTextArea().GetAreaLeft() - (Int)pView->GetTextArea().GetViewLeftCol() * nCharWidth) + (Int)rcNew.right * nCharWidth;
-		rcNew2.top		= pView->GetTextArea().GenerateYPx(rcNew.top);
-		rcNew2.bottom	= pView->GetTextArea().GenerateYPx(rcNew.bottom + 1);
+		rcNew2.left		= (textArea.GetAreaLeft() - (Int)textArea.GetViewLeftCol() * nCharWidth) + (Int)rcNew.left  * nCharWidth;
+		rcNew2.right	= (textArea.GetAreaLeft() - (Int)textArea.GetViewLeftCol() * nCharWidth) + (Int)rcNew.right * nCharWidth;
+		rcNew2.top		= textArea.GenerateYPx(rcNew.top);
+		rcNew2.bottom	= textArea.GenerateYPx(rcNew.bottom + 1);
 
 		HRGN hrgnNew = ::CreateRectRgnIndirect(&rcNew2);
 
@@ -380,9 +381,9 @@ void ViewSelect::DrawSelectArea2(HDC hdc) const
 					//	最終行にTABが入っていると反転範囲が不足する．
 					//	2006.10.01 Moca GetEndLayoutPosで処理するためColumnToIndexは不要に。
 					RECT rcNew;
-					rcNew.left   = pView->GetTextArea().GetAreaLeft() + (Int)(pView->GetTextArea().GetViewLeftCol() + ptLast.x) * nCharWidth;
-					rcNew.right  = pView->GetTextArea().GetAreaRight();
-					rcNew.top    = pView->GetTextArea().GenerateYPx(ptLast.y);
+					rcNew.left   = textArea.GetAreaLeft() + (Int)(textArea.GetViewLeftCol() + ptLast.x) * nCharWidth;
+					rcNew.right  = textArea.GetAreaRight();
+					rcNew.top    = textArea.GenerateYPx(ptLast.y);
 					rcNew.bottom = rcNew.top + nCharHeight;
 					
 					// 2006.10.01 Moca GDI(リージョン)リソースリーク修正
@@ -428,7 +429,7 @@ void ViewSelect::DrawSelectArea2(HDC hdc) const
 				rangeA.SetTo  (m_selectOld.GetTo());
 			}
 			for (nLineNum=rangeA.GetFrom().GetY2(); nLineNum<=rangeA.GetTo().GetY2(); ++nLineNum) {
-				if (nLineNum >= pView->GetTextArea().GetViewTopLine() && nLineNum <= pView->GetTextArea().GetBottomLine() + 1) {
+				if (nLineNum >= textArea.GetViewTopLine() && nLineNum <= textArea.GetBottomLine() + 1) {
 					DrawSelectAreaLine(	hdc, nLineNum, rangeA);
 				}
 			}
@@ -442,20 +443,20 @@ void ViewSelect::DrawSelectArea2(HDC hdc) const
 				rangeA.SetTo  (m_select.GetFrom());
 			}
 			for (nLineNum=rangeA.GetFrom().GetY2(); nLineNum<=rangeA.GetTo().GetY2(); ++nLineNum) {
-				if (nLineNum >= pView->GetTextArea().GetViewTopLine() && nLineNum <= pView->GetTextArea().GetBottomLine() + 1) {
+				if (nLineNum >= textArea.GetViewTopLine() && nLineNum <= textArea.GetBottomLine() + 1) {
 					DrawSelectAreaLine(hdc, nLineNum, rangeA);
 				}
 			}
 		}else {
 			rangeA = m_selectOld;
 			for (nLineNum=rangeA.GetFrom().GetY2(); nLineNum<=rangeA.GetTo().GetY2(); ++nLineNum) {
-				if (nLineNum >= pView->GetTextArea().GetViewTopLine() && nLineNum <= pView->GetTextArea().GetBottomLine() + 1) {
+				if (nLineNum >= textArea.GetViewTopLine() && nLineNum <= textArea.GetBottomLine() + 1) {
 					DrawSelectAreaLine(hdc, nLineNum, rangeA);
 				}
 			}
 			rangeA = m_select;
 			for (nLineNum=rangeA.GetFrom().GetY2(); nLineNum<=rangeA.GetTo().GetY2(); ++nLineNum) {
-				if (nLineNum >= pView->GetTextArea().GetViewTopLine() && nLineNum <= pView->GetTextArea().GetBottomLine() + 1) {
+				if (nLineNum >= textArea.GetViewTopLine() && nLineNum <= textArea.GetBottomLine() + 1) {
 					DrawSelectAreaLine(hdc, nLineNum, rangeA);
 				}
 			}
@@ -498,6 +499,7 @@ void ViewSelect::DrawSelectAreaLine(
 	GetSelectAreaLineFromRange(lineArea, nLineNum, pLayout, range);
 	LayoutInt nSelectFrom = lineArea.GetFrom().GetX2();
 	LayoutInt nSelectTo = lineArea.GetTo().GetX2();
+	auto& textArea = pView->GetTextArea();
 	if (nSelectFrom == INT_MAX || nSelectTo == INT_MAX) {
 		LayoutInt nPosX = LayoutInt(0);
 		MemoryIterator it = MemoryIterator(pLayout, layoutMgr.GetTabSpace());
@@ -509,7 +511,7 @@ void ViewSelect::DrawSelectAreaLine(
 				break;
 			}
 			// 2006.03.28 Moca 画面外まで求めたら打ち切る
-			if (it.getColumn() > pView->GetTextArea().GetRightCol()) {
+			if (it.getColumn() > textArea.GetRightCol()) {
 				break;
 			}
 			it.addDelta();
@@ -525,18 +527,18 @@ void ViewSelect::DrawSelectAreaLine(
 	}
 	
 	// 2006.03.28 Moca ウィンドウ幅が大きいと正しく反転しない問題を修正
-	if (nSelectFrom < pView->GetTextArea().GetViewLeftCol()) {
-		nSelectFrom = pView->GetTextArea().GetViewLeftCol();
+	if (nSelectFrom < textArea.GetViewLeftCol()) {
+		nSelectFrom = textArea.GetViewLeftCol();
 	}
 	int		nLineHeight = pView->GetTextMetrics().GetHankakuDy();
 	int		nCharWidth = pView->GetTextMetrics().GetHankakuDx();
 	Rect	rcClip; // px
-	rcClip.left		= (pView->GetTextArea().GetAreaLeft() - (Int)pView->GetTextArea().GetViewLeftCol() * nCharWidth) + (Int)nSelectFrom * nCharWidth;
-	rcClip.right	= (pView->GetTextArea().GetAreaLeft() - (Int)pView->GetTextArea().GetViewLeftCol() * nCharWidth) + (Int)nSelectTo   * nCharWidth;
-	rcClip.top		= pView->GetTextArea().GenerateYPx(nLineNum);
+	rcClip.left		= (textArea.GetAreaLeft() - (Int)textArea.GetViewLeftCol() * nCharWidth) + (Int)nSelectFrom * nCharWidth;
+	rcClip.right	= (textArea.GetAreaLeft() - (Int)textArea.GetViewLeftCol() * nCharWidth) + (Int)nSelectTo   * nCharWidth;
+	rcClip.top		= textArea.GenerateYPx(nLineNum);
 	rcClip.bottom	= rcClip.top + nLineHeight;
-	if (rcClip.right > pView->GetTextArea().GetAreaRight()) {
-		rcClip.right = pView->GetTextArea().GetAreaRight();
+	if (rcClip.right > textArea.GetAreaRight()) {
+		rcClip.right = textArea.GetAreaRight();
 	}
 	//	必要なときだけ。
 	if (rcClip.right != rcClip.left) {
@@ -546,7 +548,7 @@ void ViewSelect::DrawSelectAreaLine(
 		*(const_cast<LayoutRange*>(&m_select)) = selectOld;
 		
 		// 2006.03.28 Moca 表示域内のみ処理する
-		if (nSelectFrom <= pView->GetTextArea().GetRightCol() && pView->GetTextArea().GetViewLeftCol() < nSelectTo) {
+		if (nSelectFrom <= textArea.GetRightCol() && textArea.GetViewLeftCol() < nSelectTo) {
 			HRGN hrgnDraw = ::CreateRectRgn(rcClip.left, rcClip.top, rcClip.right, rcClip.bottom);
 			::PaintRgn(hdc, hrgnDraw);
 			// From Here 2007.09.09 Moca 互換BMPによる画面バッファ
@@ -670,7 +672,7 @@ void ViewSelect::PrintSelectionInfoMsg() const
 		ViewSelect* thiz = const_cast<ViewSelect*>(this);	// const外しthis
 
 		// 共通設定・選択文字数を文字単位ではなくバイト単位で表示する
-		bool bCountByByteCommon = GetDllShareData().m_common.m_statusBar.m_bDispSelCountByByte;
+		bool bCountByByteCommon = GetDllShareData().m_common.statusBar.m_bDispSelCountByByte;
 		bool bCountByByte = (pView->m_pEditWnd->m_nSelectCountMode == SelectCountMode::Toggle ?
 								bCountByByteCommon :
 								pView->m_pEditWnd->m_nSelectCountMode == SelectCountMode::ByByte);

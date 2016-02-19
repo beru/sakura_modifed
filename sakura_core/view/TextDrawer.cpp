@@ -191,7 +191,7 @@ void TextDrawer::DispVerticalLines(
 	if (nRightCol < 0) {
 		nRightCol = nWrapKetas;
 	}
-	const int nPosXOffset = GetDllShareData().m_common.m_window.m_nVertLineOffset + pView->GetTextArea().GetAreaLeft();
+	const int nPosXOffset = GetDllShareData().m_common.window.m_nVertLineOffset + pView->GetTextArea().GetAreaLeft();
 	const int nPosXLeft   = t_max(pView->GetTextArea().GetAreaLeft() + (Int)(nLeftCol  - pView->GetTextArea().GetViewLeftCol()) * nCharDx, pView->GetTextArea().GetAreaLeft());
 	const int nPosXRight  = t_min(pView->GetTextArea().GetAreaLeft() + (Int)(nRightCol - pView->GetTextArea().GetViewLeftCol()) * nCharDx, pView->GetTextArea().GetAreaRight());
 	const int nLineHeight = pView->GetTextMetrics().GetHankakuDy();
@@ -369,7 +369,7 @@ void TextDrawer::DispLineNumber(
 	int				nCharWidth = pView->GetTextMetrics().GetHankakuDx();
 	// s”Ô†•\Ž¦•”•ªX•	Sep. 23, 2002 genta ‹¤’ÊŽ®‚Ì‚­‚­‚è‚¾‚µ
 	//int				nLineNumAreaWidth = pView->GetTextArea().m_nViewAlignLeftCols * nCharWidth;
-	int				nLineNumAreaWidth = pView->GetTextArea().GetAreaLeft() - GetDllShareData().m_common.m_window.m_nLineNumRightSpace;	// 2009.03.26 ryoji
+	int				nLineNumAreaWidth = pView->GetTextArea().GetAreaLeft() - GetDllShareData().m_common.window.m_nLineNumRightSpace;	// 2009.03.26 ryoji
 
 	TypeSupport textType(pView, COLORIDX_TEXT);
 	TypeSupport caretLineBg(pView, COLORIDX_CARETLINEBG);

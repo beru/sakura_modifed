@@ -448,7 +448,7 @@ INT_PTR PropMainMenu::DispatchEvent(
 						profile.SetReadingMode();
 						profile.ReadProfileRes(MAKEINTRESOURCE(IDR_MENU1), MAKEINTRESOURCE(ID_RC_TYPE_INI));
 
-						ShareData_IO::IO_MainMenu(profile, m_common.m_mainMenu, false);
+						ShareData_IO::IO_MainMenu(profile, m_common.mainMenu, false);
 						
 						SetData(hwndDlg); 
 					}
@@ -853,7 +853,7 @@ wstring RemoveAmpersand(wstring sLavel)
 // ダイアログデータの設定 MainMenu
 void PropMainMenu::SetData(HWND hwndDlg)
 {
-	MainMenu*	pMenuTBL = m_common.m_mainMenu.m_mainMenuTbl;
+	MainMenu*	pMenuTBL = m_common.mainMenu.m_mainMenuTbl;
 	MainMenu*	pFunc;
 	HWND		hwndCombo;
 	HWND		hwndCheck;
@@ -885,13 +885,13 @@ void PropMainMenu::SetData(HWND hwndDlg)
 
 	// アクセスキーを()付で表示
 	hwndCheck = ::GetDlgItem(hwndDlg, IDC_CHECK_KEY_PARENTHESES);
-	BtnCtl_SetCheck(hwndCheck, m_common.m_mainMenu.m_bMainMenuKeyParentheses);
+	BtnCtl_SetCheck(hwndCheck, m_common.mainMenu.m_bMainMenuKeyParentheses);
 
 	// メニュー項目一覧と内部データをセット（TreeView）
 	nCurLevel = 0;
 	htiParent = TVI_ROOT;
 	htiItem = TreeView_GetRoot(hwndTreeRes);
-	for (int i=0; i<m_common.m_mainMenu.m_nMainMenuNum; ++i) {
+	for (int i=0; i<m_common.mainMenu.m_nMainMenuNum; ++i) {
 		pFunc = &pMenuTBL[i];
 		if (pFunc->m_nLevel < nCurLevel) {
 			// Level Up
@@ -965,11 +965,11 @@ int PropMainMenu::GetData(HWND hwndDlg)
 
 	// アクセスキーを()付で表示
 	hwndCheck = ::GetDlgItem(hwndDlg, IDC_CHECK_KEY_PARENTHESES);
-	m_common.m_mainMenu.m_bMainMenuKeyParentheses = (BtnCtl_GetCheck(hwndCheck) != 0);
+	m_common.mainMenu.m_bMainMenuKeyParentheses = (BtnCtl_GetCheck(hwndCheck) != 0);
 
 	// メニュートップ項目をセット
-	m_common.m_mainMenu.m_nMainMenuNum = 0;
-	memset(m_common.m_mainMenu.m_nMenuTopIdx, -1, sizeof(m_common.m_mainMenu.m_nMenuTopIdx));
+	m_common.mainMenu.m_nMainMenuNum = 0;
+	memset(m_common.mainMenu.m_nMenuTopIdx, -1, sizeof(m_common.mainMenu.m_nMenuTopIdx));
 
 	hwndTreeRes = ::GetDlgItem(hwndDlg, IDC_TREE_RES);
 
@@ -987,7 +987,7 @@ bool PropMainMenu::GetDataTree(
 	)
 {
 	static	bool	bOptionOk;
-	MainMenu*		pMenuTbl = m_common.m_mainMenu.m_mainMenuTbl;
+	MainMenu*		pMenuTbl = m_common.mainMenu.m_mainMenuTbl;
 	MainMenu*		pFunc;
 	HTREEITEM		s;
 	HTREEITEM		ts;
@@ -1001,7 +1001,7 @@ bool PropMainMenu::GetDataTree(
 	}
 
 	for (s=htiTrg; s; s=TreeView_GetNextSibling(hwndTree, s)) {
-		if (m_common.m_mainMenu.m_nMainMenuNum >= MAX_MAINMENU) {
+		if (m_common.mainMenu.m_nMainMenuNum >= MAX_MAINMENU) {
 			// 登録数 over
 			return false;
 		}
@@ -1018,9 +1018,9 @@ bool PropMainMenu::GetDataTree(
 				continue;
 			}
 			// Top Levelの記録
-			m_common.m_mainMenu.m_nMenuTopIdx[nTopCount++] = m_common.m_mainMenu.m_nMainMenuNum;
+			m_common.mainMenu.m_nMenuTopIdx[nTopCount++] = m_common.mainMenu.m_nMainMenuNum;
 		}
-		pFunc = &pMenuTbl[m_common.m_mainMenu.m_nMainMenuNum++];
+		pFunc = &pMenuTbl[m_common.mainMenu.m_nMainMenuNum++];
 
 		switch (pFuncWk->nFunc) {
 		case F_NODE:
@@ -1066,11 +1066,11 @@ bool PropMainMenu::GetDataTree(
 	}
 	if (nLevel == 0 && !bOptionOk) {
 		// 共通設定が無い
-		if (nTopCount < MAX_MAINMENU_TOP && m_common.m_mainMenu.m_nMainMenuNum + 1 < MAX_MAINMENU) {
+		if (nTopCount < MAX_MAINMENU_TOP && m_common.mainMenu.m_nMainMenuNum + 1 < MAX_MAINMENU) {
 			// Top Levelの記録
-			m_common.m_mainMenu.m_nMenuTopIdx[nTopCount++] = m_common.m_mainMenu.m_nMainMenuNum;
+			m_common.mainMenu.m_nMenuTopIdx[nTopCount++] = m_common.mainMenu.m_nMainMenuNum;
 			// Top Levelの追加（ダミー）
-			pFunc = &pMenuTbl[m_common.m_mainMenu.m_nMainMenuNum++];
+			pFunc = &pMenuTbl[m_common.mainMenu.m_nMainMenuNum++];
 			pFunc->m_type = MainMenuType::Node;
 			pFunc->nFunc = F_NODE;
 			auto_strcpy(pFunc->m_sName, L"auto_add");
@@ -1080,9 +1080,9 @@ bool PropMainMenu::GetDataTree(
 			// 末尾に追加を指定
 			nLevel = 1;
 		}
-		if (m_common.m_mainMenu.m_nMainMenuNum < MAX_MAINMENU) {
+		if (m_common.mainMenu.m_nMainMenuNum < MAX_MAINMENU) {
 			// 共通設定
-			pFunc = &pMenuTbl[m_common.m_mainMenu.m_nMainMenuNum++];
+			pFunc = &pMenuTbl[m_common.mainMenu.m_nMainMenuNum++];
 			pFunc->m_type = MainMenuType::Leaf;
 			pFunc->nFunc = F_OPTION;
 			pFunc->m_sName[0] = L'\0';

@@ -680,7 +680,7 @@ HFONT Dialog::SetMainFont(HWND hTarget)
 	LONG nfHeight = lf.lfHeight;
 
 	// LOGFONT�̍쐬
-	lf = m_pShareData->m_common.m_view.m_lf;
+	lf = m_pShareData->m_common.view.m_lf;
 	lf.lfHeight			= nfHeight;
 	lf.lfWidth			= 0;
 	lf.lfEscapement		= 0;

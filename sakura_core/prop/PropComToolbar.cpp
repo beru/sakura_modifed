@@ -484,7 +484,7 @@ void PropToolbar::SetData(HWND hwndDlg)
 	}
 //	nListItemHeight+=2;
 
-	auto& csToolBar = m_common.m_toolBar;
+	auto& csToolBar = m_common.toolBar;
 	// ツールバーボタンの情報をセット(リストボックス)
 	for (int i=0; i<csToolBar.m_nToolBarButtonNum; ++i) {
 		//	From Here Apr. 13, 2002 genta
@@ -508,7 +508,7 @@ void PropToolbar::SetData(HWND hwndDlg)
 int PropToolbar::GetData(HWND hwndDlg)
 {
 	HWND hwndResList = ::GetDlgItem(hwndDlg, IDC_LIST_RES);
-	auto& csToolBar = m_common.m_toolBar;
+	auto& csToolBar = m_common.toolBar;
 
 	// ツールバーボタンの数
 	csToolBar.m_nToolBarButtonNum = List_GetCount(hwndResList);

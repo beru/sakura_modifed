@@ -121,7 +121,7 @@ INT_PTR PropCustmenu::DispatchEvent(
 	WCHAR		szLabel2[300];
 
 	DlgInput1	dlgInput1;
-	auto& csCustomMenu = m_common.m_customMenu;
+	auto& csCustomMenu = m_common.customMenu;
 
 	switch (uMsg) {
 	case WM_INITDIALOG:
@@ -667,7 +667,7 @@ void PropCustmenu::SetDataMenuList(HWND hwndDlg, int nIdx)
 {
 	WCHAR szLabel[300];
 	WCHAR szLabel2[300];
-	auto& csCustomMenu = m_common.m_customMenu;
+	auto& csCustomMenu = m_common.customMenu;
 
 	// メニュー項目一覧に文字列をセット（リストボックス）
 	HWND hwndLIST_RES = ::GetDlgItem(hwndDlg, IDC_LIST_RES);

@@ -94,7 +94,7 @@ CallbackResultType LoadAgent::OnCheckLoad(LoadInfo* pLoadInfo)
 	}
 
 next:
-	auto& csFile = GetDllShareData().m_common.m_file;
+	auto& csFile = GetDllShareData().m_common.file;
 	// オプション：開こうとしたファイルが存在しないとき警告する
 	if (csFile.GetAlertIfFileNotExist()) {
 		if (!fexist(pLoadInfo->filePath)) {

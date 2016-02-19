@@ -93,7 +93,7 @@ void DocOutline::MakeTopicList_txt(FuncInfoArr* pFuncInfoArr)
 	using namespace WCODE;
 
 	// 見出し記号
-	const wchar_t*	pszStarts = GetDllShareData().m_common.m_format.m_szMidashiKigou;
+	const wchar_t*	pszStarts = GetDllShareData().m_common.format.m_szMidashiKigou;
 	int				nStartsLen = wcslen(pszStarts);
 
 	/*	ネストの深さは、nMaxStackレベルまで、ひとつのヘッダは、最長32文字まで区別
@@ -189,7 +189,7 @@ void DocOutline::MakeTopicList_txt(FuncInfoArr* pFuncInfoArr)
 		wchar_t* pszText = &szText[0];
 		wmemcpy(pszText, &pLine[i], nLineLen);
 		pszText[nLineLen] = L'\0';
-		bool bExtEol = GetDllShareData().m_common.m_edit.m_bEnableExtEol;
+		bool bExtEol = GetDllShareData().m_common.edit.m_bEnableExtEol;
 		for (i=0; i<nLineLen; ++i) {
 			if (WCODE::IsLineDelimiter(pszText[i], bExtEol)) {
 				pszText[i] = L'\0';
@@ -257,7 +257,7 @@ void DocOutline::MakeTopicList_txt(FuncInfoArr* pFuncInfoArr)
 void DocOutline::MakeTopicList_wztxt(FuncInfoArr* pFuncInfoArr)
 {
 	int levelPrev = 0;
-	bool bExtEol = GetDllShareData().m_common.m_edit.m_bEnableExtEol;
+	bool bExtEol = GetDllShareData().m_common.edit.m_bEnableExtEol;
 
 	for (LogicInt nLineCount=LogicInt(0); nLineCount<m_pDocRef->m_docLineMgr.GetLineCount(); ++nLineCount) {
 		const wchar_t*	pLine;

@@ -129,7 +129,7 @@ bool C_IsLineEsc(const wchar_t* s, int len)
 		len > 0
 		&& WCODE::IsLineDelimiter(
 			s[len-1],
-			GetDllShareData().m_common.m_edit.m_bEnableExtEol
+			GetDllShareData().m_common.edit.m_bEnableExtEol
 		)
 	) {
 		--len;
@@ -243,7 +243,7 @@ LogicInt CppPreprocessMng::ScanLine(
 
 	const wchar_t* lastptr = str + length;	//	処理文字列末尾
 	const wchar_t* p;	//	処理中の位置
-	bool bExtEol = GetDllShareData().m_common.m_edit.m_bEnableExtEol;
+	bool bExtEol = GetDllShareData().m_common.edit.m_bEnableExtEol;
 
 	//	skip whitespace
 	for (p=str; C_IsSpace(*p, bExtEol) && p<lastptr; ++p)
@@ -464,7 +464,7 @@ void DocOutline::MakeFuncList_C(
 	
 	//	Aug. 10, 2004 genta プリプロセス処理クラス
 	CppPreprocessMng cppPMng;
-	bool bExtEol = GetDllShareData().m_common.m_edit.m_bEnableExtEol;
+	bool bExtEol = GetDllShareData().m_common.edit.m_bEnableExtEol;
 	
 	LogicInt nLineCount;
 	for (nLineCount=LogicInt(0); nLineCount<m_pDocRef->m_docLineMgr.GetLineCount(); ++nLineCount) {

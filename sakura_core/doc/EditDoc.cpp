@@ -206,7 +206,7 @@ EditDoc::EditDoc(EditApp* pApp)
 	m_docEditor.m_newLineCode = ref.m_encoding.m_eDefaultEoltype;
 
 	// 排他制御オプションを初期化
-	m_docFile.SetShareMode(GetDllShareData().m_common.m_file.m_nFileShareMode);
+	m_docFile.SetShareMode(GetDllShareData().m_common.file.m_nFileShareMode);
 
 #ifdef _DEBUG
 	{
@@ -298,7 +298,7 @@ void EditDoc::InitDoc()
 	m_docEditor.m_newLineCode = ref.m_encoding.m_eDefaultEoltype;
 
 	// Oct. 2, 2005 genta 挿入モード
-	m_docEditor.SetInsMode(GetDllShareData().m_common.m_general.m_bIsINSMode);
+	m_docEditor.SetInsMode(GetDllShareData().m_common.general.m_bIsINSMode);
 
 	m_cookie.DeleteAll(L"document");
 }
@@ -412,7 +412,7 @@ BOOL EditDoc::Create(EditWnd* pEditWnd)
 	m_pEditWnd = pEditWnd;
 
 	// Oct. 2, 2001 genta
-	m_funcLookup.Init(GetDllShareData().m_common.m_macro.m_macroTable, &GetDllShareData().m_common);
+	m_funcLookup.Init(GetDllShareData().m_common.macro.m_macroTable, &GetDllShareData().m_common);
 
 	SetBackgroundImage();
 
@@ -643,7 +643,7 @@ void EditDoc::OnChangeType()
 	}
 
 	// 2006.09.01 ryoji タイプ変更後自動実行マクロを実行する
-	RunAutoMacro(GetDllShareData().m_common.m_macro.m_nMacroOnTypeChanged);
+	RunAutoMacro(GetDllShareData().m_common.macro.m_nMacroOnTypeChanged);
 }
 
 /*! ビューに設定変更を反映させる
@@ -670,8 +670,8 @@ void EditDoc::OnChangeSetting(
 	}
 
 	// ファイルの排他モード変更
-	if (m_docFile.GetShareMode() != GetDllShareData().m_common.m_file.m_nFileShareMode) {
-		m_docFile.SetShareMode(GetDllShareData().m_common.m_file.m_nFileShareMode);
+	if (m_docFile.GetShareMode() != GetDllShareData().m_common.file.m_nFileShareMode) {
+		m_docFile.SetShareMode(GetDllShareData().m_common.file.m_nFileShareMode);
 
 		// ファイルの排他ロック解除
 		m_docFileOperation.DoFileUnlock();
@@ -856,7 +856,7 @@ BOOL EditDoc::OnFileClose(bool bGrepNoConfirm)
 		if (bGrepNoConfirm) { // Grepで保存確認しないモード
 			return TRUE;
 		}
-		if (!GetDllShareData().m_common.m_search.m_bGrepExitConfirm) {
+		if (!GetDllShareData().m_common.search.m_bGrepExitConfirm) {
 			return TRUE;
 		}
 	}else {
@@ -988,7 +988,7 @@ void EditDoc::SetCurDirNotitle()
 	if (m_docFile.GetFilePathClass().IsValidPath()) {
 		return; // ファイルがあるときは何もしない
 	}
-	EOpenDialogDir eOpenDialogDir = GetDllShareData().m_common.m_edit.m_eOpenDialogDir;
+	EOpenDialogDir eOpenDialogDir = GetDllShareData().m_common.edit.m_eOpenDialogDir;
 	TCHAR szSelDir[_MAX_PATH];
 	const TCHAR* pszDir = NULL;
 	if (eOpenDialogDir == OPENDIALOGDIR_MRU) {
@@ -1003,7 +1003,7 @@ void EditDoc::SetCurDirNotitle()
 			}
 		}
 	}else if (eOpenDialogDir == OPENDIALOGDIR_SEL) {
-		FileNameManager::ExpandMetaToFolder( GetDllShareData().m_common.m_edit.m_OpenDialogSelDir, szSelDir, _countof(szSelDir) );
+		FileNameManager::ExpandMetaToFolder( GetDllShareData().m_common.edit.m_OpenDialogSelDir, szSelDir, _countof(szSelDir) );
 		pszDir = szSelDir;
 	}
 	if (pszDir) {

@@ -366,7 +366,7 @@ bool WSHClient::Execute(const wchar_t* AScript)
 				// マクロ停止スレッドの起動
 				AbortMacroParam sThreadParam;
 				sThreadParam.pEngine = m_Engine;
-				sThreadParam.nCancelTimer = GetDllShareData().m_common.m_macro.m_nMacroCancelTimer;
+				sThreadParam.nCancelTimer = GetDllShareData().m_common.macro.m_nMacroCancelTimer;
 				sThreadParam.view = (EditView*)m_Data;
 
 				HANDLE hThread = NULL;

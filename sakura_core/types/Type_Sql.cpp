@@ -63,7 +63,7 @@ void DocOutline::MakeFuncList_PLSQL(FuncInfoArr* pFuncInfoArr)
 	int			nFuncNum;
 	int			nFuncOrProc = 0;
 	int			nParseCnt = 0;
-	bool bExtEol = GetDllShareData().m_common.m_edit.m_bEnableExtEol;
+	bool bExtEol = GetDllShareData().m_common.edit.m_bEnableExtEol;
 
 	szWordPrev[0] = L'\0';
 	szWord[nWordIdx] = L'\0';

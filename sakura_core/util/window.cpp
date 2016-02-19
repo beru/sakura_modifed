@@ -102,7 +102,7 @@ void ActivateFrameWindow(HWND hwnd)
 {
 	// 編集ウィンドウでタブまとめ表示の場合は表示位置を復元する
 	DllSharedData* pShareData = &GetDllShareData();
-	if (pShareData->m_common.m_tabBar.m_bDispTabWnd && !pShareData->m_common.m_tabBar.m_bDispTabWndMultiWin) {
+	if (pShareData->m_common.tabBar.m_bDispTabWnd && !pShareData->m_common.tabBar.m_bDispTabWndMultiWin) {
 		if (IsSakuraMainWindow(hwnd)) {
 			if (pShareData->m_flags.m_bEditWndChanging)
 				return;	// 切替の最中(busy)は要求を無視する

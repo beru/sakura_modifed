@@ -175,7 +175,7 @@ INT_PTR PropEdit::DispatchEvent(
 // ダイアログデータの設定
 void PropEdit::SetData(HWND hwndDlg)
 {
-	auto& csEdit = m_common.m_edit;
+	auto& csEdit = m_common.edit;
 	// ドラッグ & ドロップ編集
 	::CheckDlgButton(hwndDlg, IDC_CHECK_DRAGDROP, csEdit.m_bUseOLE_DragDrop);
 	if (DlgButton_IsChecked(hwndDlg, IDC_CHECK_DRAGDROP)) {
@@ -238,7 +238,7 @@ void PropEdit::SetData(HWND hwndDlg)
 // ダイアログデータの取得
 int PropEdit::GetData(HWND hwndDlg)
 {
-	auto& csEdit = m_common.m_edit;
+	auto& csEdit = m_common.edit;
 	
 	// ドラッグ & ドロップ編集
 	csEdit.m_bUseOLE_DragDrop = DlgButton_IsChecked(hwndDlg, IDC_CHECK_DRAGDROP);

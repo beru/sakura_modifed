@@ -382,7 +382,7 @@ void ViewCommander::Command_WINTOPMOST(LPARAM lparam)
 void ViewCommander::Command_BIND_WINDOW(void)
 {
 	// タブモードであるならば
-	auto& csTabBar = GetDllShareData().m_common.m_tabBar;
+	auto& csTabBar = GetDllShareData().m_common.tabBar;
 	if (csTabBar.m_bDispTabWnd) {
 		// タブウィンドウの設定を変更
 		csTabBar.m_bDispTabWndMultiWin = !csTabBar.m_bDispTabWndMultiWin;
@@ -411,7 +411,7 @@ void ViewCommander::Command_BIND_WINDOW(void)
 // グループを閉じる		// 2007.06.20 ryoji 追加
 void ViewCommander::Command_GROUPCLOSE(void)
 {
-	auto& csTabBar = GetDllShareData().m_common.m_tabBar;
+	auto& csTabBar = GetDllShareData().m_common.tabBar;
 	if (
 		csTabBar.m_bDispTabWnd
 		&& !csTabBar.m_bDispTabWndMultiWin
@@ -496,7 +496,7 @@ void ViewCommander::Command_TAB_JOINTPREV(void)
 // 左をすべて閉じる		// 2008.11.22 syat
 void ViewCommander::Command_TAB_CLOSELEFT(void)
 {
-	if (GetDllShareData().m_common.m_tabBar.m_bDispTabWnd) {
+	if (GetDllShareData().m_common.tabBar.m_bDispTabWnd) {
 		int nGroup = 0;
 
 		// ウィンドウ一覧を取得する
@@ -526,7 +526,7 @@ void ViewCommander::Command_TAB_CLOSELEFT(void)
 // 右をすべて閉じる		// 2008.11.22 syat
 void ViewCommander::Command_TAB_CLOSERIGHT(void)
 {
-	if (GetDllShareData().m_common.m_tabBar.m_bDispTabWnd) {
+	if (GetDllShareData().m_common.tabBar.m_bDispTabWnd) {
 		int nGroup = 0;
 
 		// ウィンドウ一覧を取得する

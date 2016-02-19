@@ -101,7 +101,7 @@ HWND DlgReplace::DoModeless(
 	bool bSelected
 	)
 {
-	auto& csSearch = m_pShareData->m_common.m_search;
+	auto& csSearch = m_pShareData->m_common.search;
 	m_searchOption = csSearch.m_searchOption;		// 検索オプション
 	m_bConsecutiveAll = csSearch.m_bConsecutiveAll;	//「すべて置換」は置換の繰返し	// 2007.01.16 ryoji
 	m_bSelectedArea = csSearch.m_bSelectedArea;		// 選択範囲内置換
@@ -123,7 +123,7 @@ void DlgReplace::ChangeView(LPARAM pcEditView)
 // ダイアログデータの設定
 void DlgReplace::SetData(void)
 {
-	auto& csSearch = m_pShareData->m_common.m_search;
+	auto& csSearch = m_pShareData->m_common.search;
 
 	// 検索文字列/置換後文字列リストの設定(関数化)	2010/5/26 Uchi
 	SetCombosList();
@@ -224,7 +224,7 @@ void DlgReplace::SetCombosList(void)
 // 0==条件未入力  0より大きい==正常   0より小さい==入力エラー
 int DlgReplace::GetData(void)
 {
-	auto& csSearch = m_pShareData->m_common.m_search;
+	auto& csSearch = m_pShareData->m_common.search;
 
 	// 英大文字と英小文字を区別する
 	m_searchOption.bLoHiCase = IsButtonChecked(IDC_CHK_LOHICASE);
@@ -295,14 +295,14 @@ int DlgReplace::GetData(void)
 			pEditView->m_curSearchOption = m_searchOption;
 			pEditView->m_bCurSearchUpdate = true;
 		}
-		pEditView->m_nCurSearchKeySequence = GetDllShareData().m_common.m_search.m_nSearchKeySequence;
+		pEditView->m_nCurSearchKeySequence = GetDllShareData().m_common.search.m_nSearchKeySequence;
 
 		// 置換後文字列
 		//@@@ 2002.2.2 YAZAKI CShareData.AddToReplaceKeys()追加に伴う変更
 		if (m_strText2.size() < _MAX_PATH) {
 			SearchKeywordManager().AddToReplaceKeys(m_strText2.c_str());
 		}
-		m_nReplaceKeySequence = GetDllShareData().m_common.m_search.m_nReplaceKeySequence;
+		m_nReplaceKeySequence = GetDllShareData().m_common.search.m_nReplaceKeySequence;
 
 		// From Here 2001.12.03 hor
 		// クリップボードから貼り付ける？
@@ -600,7 +600,7 @@ BOOL DlgReplace::OnBnClicked(int wID)
 					::EndDialog(GetHwnd(), 0);
 				}else {
 					// 置換 ダイアログを自動的に閉じる
-					if (m_pShareData->m_common.m_search.m_bAutoCloseDlgReplace) {
+					if (m_pShareData->m_common.search.m_bAutoCloseDlgReplace) {
 						::DestroyWindow(GetHwnd());
 					}
 				}

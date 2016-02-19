@@ -65,7 +65,7 @@ void DocOutline::MakeTopicList_cobol(FuncInfoArr* pFuncInfoArr)
 	const wchar_t*	pszKeyword;
 	int				nKeywordLen;
 	BOOL			bDivision;
-	bool			bExtEol = GetDllShareData().m_common.m_edit.m_bEnableExtEol;
+	bool			bExtEol = GetDllShareData().m_common.edit.m_bEnableExtEol;
 
 	szDivision[0] = L'\0';
 	szLabel[0] =  L'\0';

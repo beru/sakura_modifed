@@ -79,7 +79,7 @@ int DlgGrepReplace::DoModal(
 	LPARAM lParam
 	)
 {
-	auto& csSearch = m_pShareData->m_common.m_search;
+	auto& csSearch = m_pShareData->m_common.search;
 	m_bSubFolder = csSearch.m_bGrepSubFolder;				// Grep: サブフォルダも検索
 	m_searchOption = csSearch.m_searchOption;				// 検索オプション
 	m_nGrepCharSet = csSearch.m_nGrepCharSet;				// 文字コードセット
@@ -192,7 +192,7 @@ int DlgGrepReplace::GetData(void)
 	}
 
 	m_bBackup = IsButtonChecked(IDC_CHK_BACKUP);
-	m_pShareData->m_common.m_search.m_bGrepBackup = m_bBackup;
+	m_pShareData->m_common.search.m_bGrepBackup = m_bBackup;
 
 	if (!DlgGrep::GetData()) {
 		return FALSE;
@@ -201,7 +201,7 @@ int DlgGrepReplace::GetData(void)
 	if (m_strText2.size() < _MAX_PATH) {
 		SearchKeywordManager().AddToReplaceKeys( m_strText2.c_str() );
 	}
-	m_nReplaceKeySequence = GetDllShareData().m_common.m_search.m_nReplaceKeySequence;
+	m_nReplaceKeySequence = GetDllShareData().m_common.search.m_nReplaceKeySequence;
 
 	return TRUE;
 }

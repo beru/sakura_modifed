@@ -98,7 +98,7 @@ INT_PTR PropMacro::DispatchEvent(
 	WORD		wNotifyCode;
 	WORD		wID;
 
-	auto& csMacro = m_common.m_macro;
+	auto& csMacro = m_common.macro;
 
 	switch (uMsg) {
 	case WM_INITDIALOG:
@@ -221,7 +221,7 @@ void PropMacro::SetData(HWND hwndDlg)
 
 	// マクロデータ
 	HWND hListView = ::GetDlgItem(hwndDlg, IDC_MACROLIST);
-	auto& csMacro = m_pShareData->m_common.m_macro;
+	auto& csMacro = m_pShareData->m_common.macro;
 	
 	for (index=0; index<MAX_CUSTMACRO; ++index) {
 		auto& macroRec = csMacro.m_macroTable[index];
@@ -267,7 +267,7 @@ void PropMacro::SetData(HWND hwndDlg)
 	}
 	
 	//	マクロディレクトリ
-	::DlgItem_SetText(hwndDlg, IDC_MACRODIR, /*m_pShareData->*/m_common.m_macro.m_szMACROFOLDER);
+	::DlgItem_SetText(hwndDlg, IDC_MACRODIR, /*m_pShareData->*/m_common.macro.m_szMACROFOLDER);
 
 	nLastPos_Macro = -1;
 	
@@ -281,7 +281,7 @@ void PropMacro::SetData(HWND hwndDlg)
 	
 	//	マクロ停止ダイアログ表示待ち時間
 	TCHAR szCancelTimer[16] = {0};
-	::DlgItem_SetText(hwndDlg, IDC_MACROCANCELTIMER, _itot(m_common.m_macro.m_nMacroCancelTimer, szCancelTimer, 10));
+	::DlgItem_SetText(hwndDlg, IDC_MACROCANCELTIMER, _itot(m_common.macro.m_nMacroCancelTimer, szCancelTimer, 10));
 
 	return;
 }
@@ -297,7 +297,7 @@ int PropMacro::GetData(HWND hwndDlg)
 	int index;
 	LVITEM lvItem;
 
-	auto& csMacro = m_common.m_macro;
+	auto& csMacro = m_common.macro;
 
 	// 自動実行マクロ変数初期化	// 2006.09.01 ryoji
 	csMacro.m_nMacroOnOpened = -1;

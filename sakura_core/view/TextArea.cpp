@@ -27,8 +27,8 @@ TextArea::TextArea(EditView* pEditView)
 	m_nViewRowNum = LayoutInt(0);			// 表示域の行数
 	m_nViewTopLine = LayoutInt(0);			// 表示域の一番上の行
 	m_nViewLeftCol = LayoutInt(0);			// 表示域の一番左の桁
-	SetTopYohaku(pShareData->m_common.m_window.m_nRulerBottomSpace); 	// ルーラーとテキストの隙間
-	SetLeftYohaku(pShareData->m_common.m_window.m_nLineNumRightSpace);
+	SetTopYohaku(pShareData->m_common.window.m_nRulerBottomSpace); 	// ルーラーとテキストの隙間
+	SetLeftYohaku(pShareData->m_common.window.m_nLineNumRightSpace);
 	m_nViewAlignTop = GetTopYohaku();		// 表示域の上端座標
 }
 
@@ -173,7 +173,7 @@ bool TextArea::DetectWidthOfLineNumberArea(bool bRedraw)
 	}
 
 	//	Sep 18, 2002 genta
-	nViewAlignLeftNew += GetDllShareData().m_common.m_window.m_nLineNumRightSpace;
+	nViewAlignLeftNew += GetDllShareData().m_common.window.m_nLineNumRightSpace;
 	if (nViewAlignLeftNew != GetAreaLeft()) {
 		Rect			rc;
 		SetAreaLeft(nViewAlignLeftNew);

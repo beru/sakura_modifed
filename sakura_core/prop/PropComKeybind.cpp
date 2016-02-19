@@ -124,7 +124,7 @@ INT_PTR PropKeybind::DispatchEvent(
 	int			j;
 	EFunctionCode	nFuncCode;
 	static WCHAR szLabel[256];
-	auto& csKeybind = m_common.m_keyBind;
+	auto& csKeybind = m_common.keyBind;
 
 	switch (uMsg) {
 	case WM_INITDIALOG:
@@ -428,7 +428,7 @@ void PropKeybind::SetData(HWND hwndDlg)
 
 	// キー一覧に文字列をセット（リストボックス）
 	HWND hwndKeyList = ::GetDlgItem(hwndDlg, IDC_LIST_KEY);
-	auto& csKeybind = m_common.m_keyBind;
+	auto& csKeybind = m_common.keyBind;
 	for (int i=0; i<csKeybind.m_nKeyNameArrNum; ++i) {
 		::List_AddString(hwndKeyList, csKeybind.m_pKeyNameArr[i].m_szKeyName);
 	}
@@ -470,7 +470,7 @@ void PropKeybind::ChangeKeyList(HWND hwndDlg) {
 	}
 	// キー一覧に文字列をセット（リストボックス）
 	List_ResetContent(hwndKeyList);
-	auto& csKeybind = m_common.m_keyBind;
+	auto& csKeybind = m_common.keyBind;
 	for (i=0; i<csKeybind.m_nKeyNameArrNum; ++i) {
 		TCHAR	szLabel[256];
 		auto_sprintf(szLabel, _T("%ls%ts"), szKeyState, csKeybind.m_pKeyNameArr[i].m_szKeyName);

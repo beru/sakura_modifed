@@ -101,7 +101,7 @@ INT_PTR PropKeyword::DispatchEvent(
 	LV_DISPINFO*		plvdi;
 	LV_KEYDOWN*			pnkd;
 
-	auto& csSpecialKeyword = m_common.m_specialKeyword;
+	auto& csSpecialKeyword = m_common.specialKeyword;
 
 	switch (uMsg) {
 	case WM_INITDIALOG:
@@ -480,7 +480,7 @@ void PropKeyword::Edit_List_Keyword(HWND hwndDlg, HWND hwndLIST_KEYWORD)
 	lvi.iSubItem = 0;
 	ListView_GetItem(hwndLIST_KEYWORD, &lvi);
 
-	auto& keywordSetMgr = m_common.m_specialKeyword.m_keywordSetMgr;
+	auto& keywordSetMgr = m_common.specialKeyword.m_keywordSetMgr;
 
 	// ｎ番目のセットのｍ番目のキーワードを返す
 	wcscpy_s(szKeyword, keywordSetMgr.GetKeyword(keywordSetMgr.m_nCurrentKeywordSetIdx, lvi.lParam));
@@ -523,7 +523,7 @@ void PropKeyword::Delete_List_Keyword(HWND hwndDlg, HWND hwndLIST_KEYWORD)
 	lvi.iSubItem = 0;
 	ListView_GetItem(hwndLIST_KEYWORD, &lvi);
 
-	auto& keywordSetMgr = m_common.m_specialKeyword.m_keywordSetMgr;
+	auto& keywordSetMgr = m_common.specialKeyword.m_keywordSetMgr;
 	
 	// ｎ番目のセットのｍ番目のキーワードを削除
 	keywordSetMgr.DelKeyword(keywordSetMgr.m_nCurrentKeywordSetIdx, lvi.lParam);
@@ -541,7 +541,7 @@ void PropKeyword::Delete_List_Keyword(HWND hwndDlg, HWND hwndLIST_KEYWORD)
 // リスト中のキーワードをインポートする
 void PropKeyword::Import_List_Keyword(HWND hwndDlg, HWND hwndLIST_KEYWORD)
 {
-	auto& keywordSetMgr = m_common.m_specialKeyword.m_keywordSetMgr;
+	auto& keywordSetMgr = m_common.specialKeyword.m_keywordSetMgr;
 	
 	bool bCase = false;
 	int nIdx = keywordSetMgr.m_nCurrentKeywordSetIdx;
@@ -562,7 +562,7 @@ void PropKeyword::Import_List_Keyword(HWND hwndDlg, HWND hwndLIST_KEYWORD)
 // リスト中のキーワードをエクスポートする
 void PropKeyword::Export_List_Keyword(HWND hwndDlg, HWND hwndLIST_KEYWORD)
 {
-	auto& keywordSetMgr = m_common.m_specialKeyword.m_keywordSetMgr;
+	auto& keywordSetMgr = m_common.specialKeyword.m_keywordSetMgr;
 
 	// ダイアログデータの設定 Keyword 指定キーワードセットの設定
 	SetKeywordSet(hwndDlg, keywordSetMgr.m_nCurrentKeywordSetIdx);
@@ -585,7 +585,7 @@ void PropKeyword::Clean_List_Keyword(HWND hwndDlg, HWND hwndLIST_KEYWORD)
 			GSTR_APPNAME, MB_YESNO | MB_ICONQUESTION
 		) == IDYES
 	) {	// 2009.03.26 ryoji MB_ICONSTOP->MB_ICONQUESTION
-		auto& keywordSetMgr = m_common.m_specialKeyword.m_keywordSetMgr;
+		auto& keywordSetMgr = m_common.specialKeyword.m_keywordSetMgr;
 
 		if (keywordSetMgr.CleanKeywords(keywordSetMgr.m_nCurrentKeywordSetIdx)) {
 		}
@@ -599,7 +599,7 @@ void PropKeyword::SetData(HWND hwndDlg)
 	// セット名コンボボックスの値セット
 	HWND hwndWork = ::GetDlgItem(hwndDlg, IDC_COMBO_SET);
 	Combo_ResetContent(hwndWork);  // コンボボックスを空にする
-	auto& keywordSetMgr = m_common.m_specialKeyword.m_keywordSetMgr;
+	auto& keywordSetMgr = m_common.specialKeyword.m_keywordSetMgr;
 	if (0 < keywordSetMgr.m_nKeywordSetNum) {
 		for (int i=0; i<keywordSetMgr.m_nKeywordSetNum; ++i) {
 			Combo_AddString(hwndWork, keywordSetMgr.GetTypeName(i));
@@ -652,7 +652,7 @@ void PropKeyword::SetKeywordSet(HWND hwndDlg, int nIdx)
 		return;
 	}
 
-	auto& keywordSetMgr = m_common.m_specialKeyword.m_keywordSetMgr;
+	auto& keywordSetMgr = m_common.specialKeyword.m_keywordSetMgr;
 	// キーワードの英大文字小文字区別
 	// MIK 2000.12.01 case sense
 	::CheckDlgButton(hwndDlg, IDC_CHECK_KEYWORDCASE, keywordSetMgr.GetKeywordCase(nIdx));
@@ -706,7 +706,7 @@ void PropKeyword::DispKeywordCount(HWND hwndDlg)
 		n = 0;
 	}
 
-	auto& keywordSetMgr = m_common.m_specialKeyword.m_keywordSetMgr;
+	auto& keywordSetMgr = m_common.specialKeyword.m_keywordSetMgr;
 
 	int nAlloc
 		= keywordSetMgr.GetAllocSize(keywordSetMgr.m_nCurrentKeywordSetIdx)

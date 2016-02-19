@@ -181,7 +181,7 @@ CallbackResultType CodeChecker::OnCheckSave(SaveInfo* pSaveInfo)
 			auto_sprintf( szLineNum, _T("%d"), (int)((Int)point.x) + 1 );
 			_tcscat( szLineNum, LS(STR_DLGFNCLST_LIST_COL) );
 			Unicode().UnicodeToHex( memChar.GetStringPtr(), memChar.GetStringLength(),
-				szCharCode, &GetDllShareData().m_common.m_statusBar );
+				szCharCode, &GetDllShareData().m_common.statusBar );
 		}
 		int nDlgResult = MYMESSAGEBOX(
 			EditWnd::getInstance()->GetHwnd(),

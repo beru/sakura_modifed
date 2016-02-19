@@ -720,20 +720,20 @@ void DlgFuncList::SetData()
 		}
 	}
 	// アウトライン ダイアログを自動的に閉じる
-	CheckButton(IDC_CHECK_bAutoCloseDlgFuncList, m_pShareData->m_common.m_outline.m_bAutoCloseDlgFuncList);
+	CheckButton(IDC_CHECK_bAutoCloseDlgFuncList, m_pShareData->m_common.outline.m_bAutoCloseDlgFuncList);
 	// アウトライン ブックマーク一覧で空行を無視する
-	CheckButton(IDC_CHECK_bMarkUpBlankLineEnable, m_pShareData->m_common.m_outline.m_bMarkUpBlankLineEnable);
+	CheckButton(IDC_CHECK_bMarkUpBlankLineEnable, m_pShareData->m_common.outline.m_bMarkUpBlankLineEnable);
 	// アウトライン ジャンプしたらフォーカスを移す
-	CheckButton(IDC_CHECK_bFunclistSetFocusOnJump, m_pShareData->m_common.m_outline.m_bFunclistSetFocusOnJump);
+	CheckButton(IDC_CHECK_bFunclistSetFocusOnJump, m_pShareData->m_common.outline.m_bFunclistSetFocusOnJump);
 
 	// アウトライン ■位置とサイズを記憶する // 20060201 aroka
-	CheckButton(IDC_BUTTON_WINSIZE, m_pShareData->m_common.m_outline.m_bRememberOutlineWindowPos);
+	CheckButton(IDC_BUTTON_WINSIZE, m_pShareData->m_common.outline.m_bRememberOutlineWindowPos);
 	// ボタンが押されているかはっきりさせる 2008/6/5 Uchi
 	SetItemText(IDC_BUTTON_WINSIZE, 
-		m_pShareData->m_common.m_outline.m_bRememberOutlineWindowPos ? _T("■") : _T("□"));
+		m_pShareData->m_common.outline.m_bRememberOutlineWindowPos ? _T("■") : _T("□"));
 
 	// ダイアログを自動的に閉じるならフォーカス移動オプションは関係ない
-	EnableItem(IDC_CHECK_bFunclistSetFocusOnJump, !m_pShareData->m_common.m_outline.m_bAutoCloseDlgFuncList);
+	EnableItem(IDC_CHECK_bFunclistSetFocusOnJump, !m_pShareData->m_common.outline.m_bAutoCloseDlgFuncList);
 
 	// 2002.02.08 hor
 	//（IDC_LIST_FLもIDC_TREE_FLも常に存在していて、m_nViewTypeによって、どちらを表示するかを選んでいる）
@@ -1856,15 +1856,15 @@ BOOL DlgFuncList::OnInitDialog(
 	// アウトライン位置とサイズを初期化する // 20060201 aroka
 	EditView* pEditView = (EditView*)m_lParam;
 	if (pEditView) {
-		if (!IsDocking() && m_pShareData->m_common.m_outline.m_bRememberOutlineWindowPos) {
+		if (!IsDocking() && m_pShareData->m_common.outline.m_bRememberOutlineWindowPos) {
 			WINDOWPLACEMENT windowPlacement;
 			windowPlacement.length = sizeof(windowPlacement);
 			if (::GetWindowPlacement(pEditView->m_pEditWnd->GetHwnd(), &windowPlacement)) {
 				// ウィンドウ位置・サイズを-1以外の値にしておくと、Dialogで使用される．
-				m_xPos = m_pShareData->m_common.m_outline.m_xOutlineWindowPos + windowPlacement.rcNormalPosition.left;
-				m_yPos = m_pShareData->m_common.m_outline.m_yOutlineWindowPos + windowPlacement.rcNormalPosition.top;
-				m_nWidth =  m_pShareData->m_common.m_outline.m_widthOutlineWindow;
-				m_nHeight = m_pShareData->m_common.m_outline.m_heightOutlineWindow;
+				m_xPos = m_pShareData->m_common.outline.m_xOutlineWindowPos + windowPlacement.rcNormalPosition.left;
+				m_yPos = m_pShareData->m_common.outline.m_yOutlineWindowPos + windowPlacement.rcNormalPosition.top;
+				m_nWidth =  m_pShareData->m_common.outline.m_widthOutlineWindow;
+				m_nHeight = m_pShareData->m_common.outline.m_heightOutlineWindow;
 			}
 		}else if (IsDocking()) {
 			m_xPos = 0;
@@ -2042,20 +2042,20 @@ BOOL DlgFuncList::OnBnClicked(int wID)
 		return TRUE;
 	case IDC_BUTTON_WINSIZE:
 		{// ウィンドウの位置とサイズを記憶 // 20060201 aroka
-			m_pShareData->m_common.m_outline.m_bRememberOutlineWindowPos = IsButtonChecked(IDC_BUTTON_WINSIZE);
+			m_pShareData->m_common.outline.m_bRememberOutlineWindowPos = IsButtonChecked(IDC_BUTTON_WINSIZE);
 		}
 		// ボタンが押されているかはっきりさせる 2008/6/5 Uchi
 		SetItemText(IDC_BUTTON_WINSIZE,
-			m_pShareData->m_common.m_outline.m_bRememberOutlineWindowPos ? _T("■") : _T("□"));
+			m_pShareData->m_common.outline.m_bRememberOutlineWindowPos ? _T("■") : _T("□"));
 		return TRUE;
 	// 2002.02.08 オプション切替後List/Treeにフォーカス移動
 	case IDC_CHECK_bAutoCloseDlgFuncList:
 	case IDC_CHECK_bMarkUpBlankLineEnable:
 	case IDC_CHECK_bFunclistSetFocusOnJump:
-		m_pShareData->m_common.m_outline.m_bAutoCloseDlgFuncList = IsButtonChecked(IDC_CHECK_bAutoCloseDlgFuncList);
-		m_pShareData->m_common.m_outline.m_bMarkUpBlankLineEnable = IsButtonChecked(IDC_CHECK_bMarkUpBlankLineEnable);
-		m_pShareData->m_common.m_outline.m_bFunclistSetFocusOnJump = IsButtonChecked(IDC_CHECK_bFunclistSetFocusOnJump);
-		EnableItem(IDC_CHECK_bFunclistSetFocusOnJump, !m_pShareData->m_common.m_outline.m_bAutoCloseDlgFuncList);
+		m_pShareData->m_common.outline.m_bAutoCloseDlgFuncList = IsButtonChecked(IDC_CHECK_bAutoCloseDlgFuncList);
+		m_pShareData->m_common.outline.m_bMarkUpBlankLineEnable = IsButtonChecked(IDC_CHECK_bMarkUpBlankLineEnable);
+		m_pShareData->m_common.outline.m_bFunclistSetFocusOnJump = IsButtonChecked(IDC_CHECK_bFunclistSetFocusOnJump);
+		EnableItem(IDC_CHECK_bFunclistSetFocusOnJump, !m_pShareData->m_common.outline.m_bAutoCloseDlgFuncList);
 		if (wID == IDC_CHECK_bMarkUpBlankLineEnable&&m_nListType == OUTLINE_BOOKMARK) {
 			EditView* pEditView = (EditView*)m_lParam;
 			pEditView->GetCommander().HandleCommand(F_BOOKMARK_VIEW, true, TRUE, 0, 0, 0);
@@ -2136,7 +2136,7 @@ BOOL DlgFuncList::OnNotify(WPARAM wParam, LPARAM lParam)
 		case NM_KILLFOCUS:
 			// 2002.02.16 hor Treeのダブルクリックでフォーカス移動できるように 4/4
 			if (m_bWaitTreeProcess) {
-				if (m_pShareData->m_common.m_outline.m_bFunclistSetFocusOnJump) {
+				if (m_pShareData->m_common.outline.m_bFunclistSetFocusOnJump) {
 					::SetFocus(pEditView->GetHwnd());
 				}
 				m_bWaitTreeProcess=false;
@@ -2386,16 +2386,16 @@ BOOL DlgFuncList::OnDestroy(void)
 	// 前提条件：m_lParam が Dialog::OnDestroy でクリアされないこと
 	EditView* pEditView = (EditView*)m_lParam;
 	HWND hwndEdit = pEditView->m_pEditWnd->GetHwnd();
-	if (!IsDocking() && m_pShareData->m_common.m_outline.m_bRememberOutlineWindowPos) {
+	if (!IsDocking() && m_pShareData->m_common.outline.m_bRememberOutlineWindowPos) {
 		// 親のウィンドウ位置・サイズを記憶
 		WINDOWPLACEMENT windowPlacement;
 		windowPlacement.length = sizeof(windowPlacement);
 		if (::GetWindowPlacement(hwndEdit, &windowPlacement)) {
 			// ウィンドウ位置・サイズを記憶
-			m_pShareData->m_common.m_outline.m_xOutlineWindowPos = m_xPos - windowPlacement.rcNormalPosition.left;
-			m_pShareData->m_common.m_outline.m_yOutlineWindowPos = m_yPos - windowPlacement.rcNormalPosition.top;
-			m_pShareData->m_common.m_outline.m_widthOutlineWindow = m_nWidth;
-			m_pShareData->m_common.m_outline.m_heightOutlineWindow = m_nHeight;
+			m_pShareData->m_common.outline.m_xOutlineWindowPos = m_xPos - windowPlacement.rcNormalPosition.left;
+			m_pShareData->m_common.outline.m_yOutlineWindowPos = m_yPos - windowPlacement.rcNormalPosition.top;
+			m_pShareData->m_common.outline.m_widthOutlineWindow = m_nWidth;
+			m_pShareData->m_common.outline.m_heightOutlineWindow = m_nHeight;
 		}
 	}
 
@@ -2555,9 +2555,9 @@ BOOL DlgFuncList::OnJump(
 				// アウトライン ダイアログを自動的に閉じる
 				if (IsDocking()) {
 					::PostMessage( ((EditView*)m_lParam)->GetHwnd(), MYWM_SETACTIVEPANE, 0, 0 );
-				}else if (m_pShareData->m_common.m_outline.m_bAutoCloseDlgFuncList) {
+				}else if (m_pShareData->m_common.outline.m_bAutoCloseDlgFuncList) {
 					::DestroyWindow( GetHwnd() );
-				}else if (m_pShareData->m_common.m_outline.m_bFunclistSetFocusOnJump) {
+				}else if (m_pShareData->m_common.outline.m_bFunclistSetFocusOnJump) {
 					::SetFocus( ((EditView*)m_lParam)->GetHwnd() );
 				}
 			}
@@ -2582,7 +2582,7 @@ void DlgFuncList::Key2Command(WORD KeyCode)
 // novice 2004/10/10
 	// Shift,Ctrl,Altキーが押されていたか
 	int nIdx = GetCtrlKeyState();
-	auto& csKeyBind = m_pShareData->m_common.m_keyBind;
+	auto& csKeyBind = m_pShareData->m_common.keyBind;
 	EFunctionCode nFuncCode = KeyBind::GetFuncCode(
 		((WORD)(((BYTE)(KeyCode)) | ((WORD)((BYTE)(nIdx))) << 8)),
 		csKeyBind.m_nKeyNameArrNum,
@@ -2888,9 +2888,9 @@ INT_PTR DlgFuncList::OnTimer(
 					if (bSelf) {
 						::PostMessage( pView->GetHwnd(), MYWM_SETACTIVEPANE, 0, 0 );
 					}
-				}else if (m_pShareData->m_common.m_outline.m_bAutoCloseDlgFuncList) {
+				}else if (m_pShareData->m_common.outline.m_bAutoCloseDlgFuncList) {
 					::DestroyWindow( GetHwnd() );
-				}else if (m_pShareData->m_common.m_outline.m_bFunclistSetFocusOnJump) {
+				}else if (m_pShareData->m_common.outline.m_bFunclistSetFocusOnJump) {
 					if (bSelf) {
 						::SetFocus( pView->GetHwnd() );
 					}
@@ -3765,13 +3765,13 @@ DockSideType DlgFuncList::GetDropRect(
 		RECT rcFloat;
 		rcFloat.left = 0;
 		rcFloat.top = 0;
-		if (m_pShareData->m_common.m_outline.m_bRememberOutlineWindowPos
-				&& m_pShareData->m_common.m_outline.m_widthOutlineWindow	// 初期値だと 0 になっている
-				&& m_pShareData->m_common.m_outline.m_heightOutlineWindow	// 初期値だと 0 になっている
+		if (m_pShareData->m_common.outline.m_bRememberOutlineWindowPos
+				&& m_pShareData->m_common.outline.m_widthOutlineWindow	// 初期値だと 0 になっている
+				&& m_pShareData->m_common.outline.m_heightOutlineWindow	// 初期値だと 0 になっている
 		) {
 			// 記憶しているサイズ
-			rcFloat.right = m_pShareData->m_common.m_outline.m_widthOutlineWindow;
-			rcFloat.bottom = m_pShareData->m_common.m_outline.m_heightOutlineWindow;
+			rcFloat.right = m_pShareData->m_common.outline.m_widthOutlineWindow;
+			rcFloat.bottom = m_pShareData->m_common.outline.m_heightOutlineWindow;
 			cx = ::GetSystemMetrics(SM_CXMIN);
 			cy = ::GetSystemMetrics(SM_CYMIN);
 			if (rcFloat.right < cx) rcFloat.right = cx;

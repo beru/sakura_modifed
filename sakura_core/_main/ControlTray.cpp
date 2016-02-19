@@ -73,7 +73,7 @@ void ControlTray::DoGrep()
 	}
 
 	auto& searchKeywords = m_pShareData->m_searchKeywords;
-	auto& csSearch = m_pShareData->m_common.m_search;
+	auto& csSearch = m_pShareData->m_common.search;
 	if (0 < searchKeywords.searchKeys.size()
 		&& m_nCurSearchKeySequence < csSearch.m_nSearchKeySequence
 	) {
@@ -155,7 +155,7 @@ void ControlTray::DoGrepCreateWindow(HINSTANCE hinst, HWND msgParent, DlgGrep& d
 		cmdLine.GetStringPtr(),
 		false,
 		NULL,
-		GetDllShareData().m_common.m_tabBar.m_bNewWindow
+		GetDllShareData().m_common.tabBar.m_bNewWindow
 	);
 }
 
@@ -292,7 +292,7 @@ HWND ControlTray::Create(HINSTANCE hInstance)
 	m_pPropertyManager = new PropertyManager();
 	m_pPropertyManager->Create(GetTrayHwnd(), &m_hIcons, &m_menuDrawer);
 
-	auto_strcpy(m_szLanguageDll, m_pShareData->m_common.m_window.m_szLanguageDll);
+	auto_strcpy(m_szLanguageDll, m_pShareData->m_common.window.m_szLanguageDll);
 
 	return GetTrayHwnd();
 }
@@ -301,7 +301,7 @@ HWND ControlTray::Create(HINSTANCE hInstance)
 bool ControlTray::CreateTrayIcon(HWND hWnd)
 {
 	// タスクトレイのアイコンを作る
-	if (m_pShareData->m_common.m_general.m_bUseTaskTray) {	// タスクトレイのアイコンを使う
+	if (m_pShareData->m_common.general.m_bUseTaskTray) {	// タスクトレイのアイコンを使う
 		// Dec. 02, 2002 genta
 		HICON hIcon = GetAppIcon(m_hInstance, ICON_DEFAULT_APP, FN_APP_ICON, true);
 // From Here Jan. 12, 2001 JEPRO トレイアイコンにポイントするとバージョンno.が表示されるように修正
@@ -542,7 +542,7 @@ LRESULT ControlTray::DispatchEvent(
 	// 編集ウィンドウオブジェクトからのオブジェクト削除要求
 	case MYWM_DELETE_ME:
 		{
-			auto& csGeneral = m_pShareData->m_common.m_general;
+			auto& csGeneral = m_pShareData->m_common.general;
 			// タスクトレイのアイコンを常駐しない、または、トレイにアイコンを作っていない
 			if (!(csGeneral.m_bStayTaskTray && csGeneral.m_bUseTaskTray) || !m_bCreatedTrayIcon) {
 				// 現在開いている編集窓のリスト
@@ -560,7 +560,7 @@ LRESULT ControlTray::DispatchEvent(
 
 	case WM_CREATE:
 		{
-			auto& csGeneral = m_pShareData->m_common.m_general;
+			auto& csGeneral = m_pShareData->m_common.general;
 			m_hWnd = hwnd;
 			hwndHtmlHelp = NULL;
 			// Modified by KEITA for WIN64 2003.9.6
@@ -620,7 +620,7 @@ LRESULT ControlTray::DispatchEvent(
 	case MYWM_CHANGESETTING:
 		if ((e_PM_CHANGESETTING_SELECT)lParam == PM_CHANGESETTING_ALL) {
 			{
-				auto& csWindow = GetDllShareData().m_common.m_window;
+				auto& csWindow = GetDllShareData().m_common.window;
 				bool bChangeLang = auto_strcmp(csWindow.m_szLanguageDll, m_szLanguageDll) != 0;
 				auto_strcpy(m_szLanguageDll, csWindow.m_szLanguageDll);
 				std::vector<std::wstring> values;
@@ -637,7 +637,7 @@ LRESULT ControlTray::DispatchEvent(
 			::UnregisterHotKey(GetTrayHwnd(), ID_HOTKEY_TRAYMENU);
 			// タスクトレイ左クリックメニューへのショートカットキー登録
 			wHotKeyMods = 0;
-			auto& csGeneral = m_pShareData->m_common.m_general;
+			auto& csGeneral = m_pShareData->m_common.general;
 			if (csGeneral.m_wTrayMenuHotKeyMods & HOTKEYF_SHIFT) {
 				wHotKeyMods |= MOD_SHIFT;
 			}
@@ -828,7 +828,7 @@ LRESULT ControlTray::DispatchEvent(
 							const Plug* plug = *it;
 							if (!plug->m_sIcon.empty()) {
 								iBitmap = m_menuDrawer.m_pIcons->Add(
-									to_tchar(plug->m_plugin.GetFilePath(to_tchar(plug->m_sIcon.c_str())).c_str()) );
+									to_tchar(plug->plugin.GetFilePath(to_tchar(plug->m_sIcon.c_str())).c_str()) );
 							}
 							m_menuDrawer.AddToolButton( iBitmap, plug->GetFunctionCode() );
 						}
@@ -912,7 +912,7 @@ LRESULT ControlTray::DispatchEvent(
 							NULL,
 							true,
 							NULL,
-							m_pShareData->m_common.m_tabBar.m_bNewWindow
+							m_pShareData->m_common.tabBar.m_bNewWindow
 						);
 					}
 				}
@@ -953,7 +953,7 @@ LRESULT ControlTray::DispatchEvent(
 					EditInfo openEditInfo;
 					mru.GetEditInfo(nId - IDM_SELMRU, &openEditInfo);
 
-					if (m_pShareData->m_common.m_file.GetRestoreCurPosition()) {
+					if (m_pShareData->m_common.file.GetRestoreCurPosition()) {
 						ControlTray::OpenNewEditor2(m_hInstance, GetTrayHwnd(), &openEditInfo, false);
 					}else {
 						LoadInfo loadInfo;
@@ -967,7 +967,7 @@ LRESULT ControlTray::DispatchEvent(
 							NULL,
 							false,
 							NULL,
-							m_pShareData->m_common.m_tabBar.m_bNewWindow
+							m_pShareData->m_common.tabBar.m_bNewWindow
 						);
 
 					}
@@ -1017,7 +1017,7 @@ LRESULT ControlTray::DispatchEvent(
 							NULL,
 							true,
 							NULL,
-							m_pShareData->m_common.m_tabBar.m_bNewWindow
+							m_pShareData->m_common.tabBar.m_bNewWindow
 						);
 					}
 				}
@@ -1027,7 +1027,7 @@ LRESULT ControlTray::DispatchEvent(
 		case WM_LBUTTONDBLCLK:
 			bLDClick = true;		// 03/02/20 ai
 			// 新規編集ウィンドウの追加
-			OnNewEditor(m_pShareData->m_common.m_tabBar.m_bNewWindow != FALSE);
+			OnNewEditor(m_pShareData->m_common.tabBar.m_bNewWindow != FALSE);
 			// Apr. 1, 2003 genta この後で表示されたメニューは閉じる
 			::PostMessage(GetTrayHwnd(), WM_CANCELMODE, 0, 0);
 			return 0L;
@@ -1109,7 +1109,7 @@ void ControlTray::OnCommand(WORD wNotifyCode, WORD wID , HWND hwndCtl)
 void ControlTray::OnNewEditor(bool bNewWindow)
 {
 	// 新規ウィンドウで開くオプションは、タブバー＆グループ化を前提とする
-	auto& csTabBar = m_pShareData->m_common.m_tabBar;
+	auto& csTabBar = m_pShareData->m_common.tabBar;
 	bNewWindow = bNewWindow
 				 && csTabBar.m_bDispTabWnd
 				 && !csTabBar.m_bDispTabWndMultiWin;
@@ -1321,8 +1321,8 @@ bool ControlTray::OpenNewEditor(
 		}
 	}else {
 		// タブまとめ時は起動したプロセスが立ち上がるまでしばらくタイトルバーをアクティブに保つ	// 2007.02.03 ryoji
-		if (pShareData->m_common.m_tabBar.m_bDispTabWnd
-			&& !pShareData->m_common.m_tabBar.m_bDispTabWndMultiWin
+		if (pShareData->m_common.tabBar.m_bDispTabWnd
+			&& !pShareData->m_common.tabBar.m_bDispTabWndMultiWin
 		) {
 			WaitForInputIdle(p.hProcess, 3000);
 			sync = true;
@@ -1505,7 +1505,7 @@ void ControlTray::TerminateApplication(
 	DllSharedData* pShareData = &GetDllShareData();	// 共有データ構造体のアドレスを返す
 
 	// 現在の編集ウィンドウの数を調べる
-	if (pShareData->m_common.m_general.m_bExitConfirm) {	// 終了時の確認
+	if (pShareData->m_common.general.m_bExitConfirm) {	// 終了時の確認
 		if (0 < AppNodeGroupHandle(0).GetEditorWindowsNum()) {
 			if (::MYMESSAGEBOX(
 					hWndFrom,
@@ -1519,7 +1519,7 @@ void ControlTray::TerminateApplication(
 		}
 	}
 	// 「すべてのウィンドウを閉じる」要求	// Oct. 7, 2000 jepro 「編集ウィンドウの全終了」という説明を左記のように変更
-	bool bCheckConfirm = pShareData->m_common.m_general.m_bExitConfirm;	// 2006.12.25 ryoji 終了確認済みならそれ以上は確認しない
+	bool bCheckConfirm = pShareData->m_common.general.m_bExitConfirm;	// 2006.12.25 ryoji 終了確認済みならそれ以上は確認しない
 	if (CloseAllEditor(bCheckConfirm, hWndFrom, true, 0)) {	// 2006.12.25, 2007.02.13 ryoji 引数追加
 		::PostMessage(pShareData->m_handles.m_hwndTray, WM_CLOSE, 0, 0);
 	}
@@ -1751,7 +1751,7 @@ int	ControlTray::CreatePopUpMenu_R(void)
 */
 void ControlTray::CreateAccelTbl(void)
 {
-	auto& csKeyBind = m_pShareData->m_common.m_keyBind;
+	auto& csKeyBind = m_pShareData->m_common.keyBind;
 	m_pShareData->m_handles.m_hAccel = KeyBind::CreateAccerelator(
 		csKeyBind.m_nKeyNameArrNum,
 		csKeyBind.m_pKeyNameArr
@@ -1799,7 +1799,7 @@ void ControlTray::OnDestroy()
 	//
 
 	// 終了ダイアログを表示する
-	if (m_pShareData->m_common.m_general.m_bDispExitingDialog) {
+	if (m_pShareData->m_common.general.m_bDispExitingDialog) {
 		// 終了中ダイアログの表示
 		hwndExitingDlg = ::CreateDialog(
 			m_hInstance,
@@ -1814,7 +1814,7 @@ void ControlTray::OnDestroy()
 	ShareData_IO::SaveShareData();
 
 	// 終了ダイアログを表示する
-	if (m_pShareData->m_common.m_general.m_bDispExitingDialog) {
+	if (m_pShareData->m_common.general.m_bDispExitingDialog) {
 		// 終了中ダイアログの破棄
 		::DestroyWindow(hwndExitingDlg);
 	}

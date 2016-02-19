@@ -101,7 +101,7 @@ void MruListener::OnBeforeLoad(LoadInfo* pLoadInfo)
 	// 食い違う場合
 	if (IsValidCodeOrCPType(ePrevCode) && pLoadInfo->eCharCode != ePrevCode) {
 		// オプション：前回と文字コードが異なるときに問い合わせを行う
-		if (GetDllShareData().m_common.m_file.m_bQueryIfCodeChange && !pLoadInfo->bRequestReload) {
+		if (GetDllShareData().m_common.file.m_bQueryIfCodeChange && !pLoadInfo->bRequestReload) {
 			TCHAR szCpNameNew[260];
 			TCHAR szCpNameOld[260];
 			CodePage::GetNameLong(szCpNameOld, ePrevCode);
@@ -150,7 +150,7 @@ void MruListener::OnAfterLoad(const LoadInfo& loadInfo)
 	bool bIsExistInMRU = mru.GetEditInfo(pDoc->m_docFile.GetFilePath(), &eiOld);
 
 	// キャレット位置の復元
-	if (bIsExistInMRU && GetDllShareData().m_common.m_file.GetRestoreCurPosition()) {
+	if (bIsExistInMRU && GetDllShareData().m_common.file.GetRestoreCurPosition()) {
 		// キャレット位置取得
 		LayoutPoint ptCaretPos;
 		pDoc->m_layoutMgr.LogicToLayout(eiOld.m_ptCursor, &ptCaretPos);
@@ -180,7 +180,7 @@ void MruListener::OnAfterLoad(const LoadInfo& loadInfo)
 
 	// ブックマーク復元  // 2002.01.16 hor
 	if (bIsExistInMRU) {
-		if (GetDllShareData().m_common.m_file.GetRestoreBookmarks()) {
+		if (GetDllShareData().m_common.file.GetRestoreBookmarks()) {
 			BookmarkManager(&pDoc->m_docLineMgr).SetBookMarks(eiOld.m_szMarkLines);
 		}
 	}else {
@@ -192,7 +192,7 @@ void MruListener::OnAfterLoad(const LoadInfo& loadInfo)
 	pDoc->GetEditInfo(&eiNew);
 	// 2014.07.04 ブックマークの保持(エディタが落ちたときブックマークが消えるため)
 	if (bIsExistInMRU) {
-		if (GetDllShareData().m_common.m_file.GetRestoreBookmarks()) {
+		if (GetDllShareData().m_common.file.GetRestoreBookmarks()) {
 			// SetBookMarksでデータがNUL区切りに書き換わっているので再取得
 			mru.GetEditInfo(pDoc->m_docFile.GetFilePath(), &eiOld);
 			auto_strcpy(eiNew.m_szMarkLines, eiOld.m_szMarkLines);

@@ -529,7 +529,7 @@ BOOL EditView::MakeDiffTmpFile2(
 			orgName,
 			bBigFile,
 			code,
-			GetDllShareData().m_common.m_file.GetAutoMIMEdecode(),
+			GetDllShareData().m_common.file.GetAutoMIMEdecode(),
 			&bBom
 		);
 		NativeW line;

@@ -445,7 +445,7 @@ BOOL DlgTagJumpList::OnInitDialog(
 		GetItemClientRect(anchorList[i].id, m_rcItems[i]);
 	}
 
-	RECT rcDialog = GetDllShareData().m_common.m_others.m_rcTagJumpDialog;
+	RECT rcDialog = GetDllShareData().m_common.others.m_rcTagJumpDialog;
 	if (0
 		|| rcDialog.left != 0
 		|| rcDialog.bottom != 0
@@ -610,7 +610,7 @@ BOOL DlgTagJumpList::OnSize(WPARAM wParam, LPARAM lParam)
 	// 基底クラスメンバ
 	Dialog::OnSize(wParam, lParam);
 
-	GetWindowRect(&GetDllShareData().m_common.m_others.m_rcTagJumpDialog);
+	GetWindowRect(&GetDllShareData().m_common.others.m_rcTagJumpDialog);
 
 	RECT  rc;
 	POINT ptNew;
@@ -628,7 +628,7 @@ BOOL DlgTagJumpList::OnSize(WPARAM wParam, LPARAM lParam)
 
 BOOL DlgTagJumpList::OnMove(WPARAM wParam, LPARAM lParam)
 {
-	GetWindowRect(&GetDllShareData().m_common.m_others.m_rcTagJumpDialog);
+	GetWindowRect(&GetDllShareData().m_common.others.m_rcTagJumpDialog);
 
 	return Dialog::OnMove(wParam, lParam);
 }
@@ -1077,7 +1077,7 @@ int DlgTagJumpList::FindDirectTagJump()
 		true,  // 完全一致
 		false, // 大小を区別
 		true,  // 自動モード
-		m_pShareData->m_common.m_search.m_nTagJumpMode
+		m_pShareData->m_common.search.m_nTagJumpMode
 	);
 }
 
@@ -1093,7 +1093,7 @@ void DlgTagJumpList::find_key(const wchar_t* keyword)
 		FALSE != m_bTagJumpExactMatch,
 		FALSE != m_bTagJumpICase,
 		IsDirectTagJump(),
-		IsDirectTagJump() ? (m_pShareData->m_common.m_search.m_nTagJumpMode) : m_pShareData->m_common.m_search.m_nTagJumpModeKeyword
+		IsDirectTagJump() ? (m_pShareData->m_common.search.m_nTagJumpMode) : m_pShareData->m_common.search.m_nTagJumpModeKeyword
 	);
 	SetItemText(IDC_STATIC_KEYWORD, LS(STR_DLGTAGJMP_LIST1));
 	::UpdateWindow(GetItemHwnd(IDC_STATIC_KEYWORD));

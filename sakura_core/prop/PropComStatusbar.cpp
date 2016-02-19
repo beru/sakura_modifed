@@ -115,7 +115,7 @@ INT_PTR PropStatusbar::DispatchEvent(
 // ダイアログデータの設定
 void PropStatusbar::SetData(HWND hwndDlg)
 {
-	auto& csStatusbar = m_common.m_statusBar;
+	auto& csStatusbar = m_common.statusBar;
 	// 示文字コードの指定
 	// SJISで文字コード値をUnicodeで出力する
 	::CheckDlgButton(hwndDlg, IDC_CHECK_DISP_UNICODE_IN_SJIS, csStatusbar.m_bDispUniInSjis);
@@ -135,7 +135,7 @@ void PropStatusbar::SetData(HWND hwndDlg)
 // ダイアログデータの取得
 int PropStatusbar::GetData(HWND hwndDlg)
 {
-	auto& csStatusbar = m_common.m_statusBar;
+	auto& csStatusbar = m_common.statusBar;
 	// 表示文字コードの指定
 	// SJISで文字コード値をUnicodeで出力する
 	csStatusbar.m_bDispUniInSjis	= DlgButton_IsChecked(hwndDlg, IDC_CHECK_DISP_UNICODE_IN_SJIS);

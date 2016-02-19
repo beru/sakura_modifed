@@ -140,7 +140,7 @@ struct TagJumpMode {
 // ダイアログデータの設定
 void PropGrep::SetData(HWND hwndDlg)
 {
-	auto& csSearch = m_common.m_search;
+	auto& csSearch = m_common.search;
 	// 2006.08.23 ryoji カーソル位置の文字列をデフォルトの検索文字列にする
 	::CheckDlgButton(hwndDlg, IDC_CHECK_bCaretTextForSearch, csSearch.m_bCaretTextForSearch);
 
@@ -176,7 +176,7 @@ void PropGrep::SetData(HWND hwndDlg)
 	for (int i=0; i<_countof(tagJumpMode1Arr); ++i) {
 		Combo_InsertString(hwndCombo, i, LS(tagJumpMode1Arr[i].nNameID));
 		Combo_SetItemData(hwndCombo, i, tagJumpMode1Arr[i].nMethod);
-		if (tagJumpMode1Arr[i].nMethod == m_common.m_search.m_nTagJumpMode) {
+		if (tagJumpMode1Arr[i].nMethod == m_common.search.m_nTagJumpMode) {
 			nSelPos = i;
 		}
 	}
@@ -194,7 +194,7 @@ void PropGrep::SetData(HWND hwndDlg)
 	for (int i=0; i<_countof(tagJumpMode2Arr); ++i) {
 		Combo_InsertString(hwndCombo, i, LS(tagJumpMode2Arr[i].nNameID));
 		Combo_SetItemData(hwndCombo, i, tagJumpMode2Arr[i].nMethod);
-		if (tagJumpMode2Arr[i].nMethod == m_common.m_search.m_nTagJumpModeKeyword) {
+		if (tagJumpMode2Arr[i].nMethod == m_common.search.m_nTagJumpModeKeyword) {
 			nSelPos = i;
 		}
 	}
@@ -207,7 +207,7 @@ void PropGrep::SetData(HWND hwndDlg)
 // ダイアログデータの取得
 int PropGrep::GetData(HWND hwndDlg)
 {
-	auto& csSearch = m_common.m_search;
+	auto& csSearch = m_common.search;
 
 	// 2006.08.23 ryoji カーソル位置の文字列をデフォルトの検索文字列にする
 	csSearch.m_bCaretTextForSearch = DlgButton_IsChecked(hwndDlg, IDC_CHECK_bCaretTextForSearch);
@@ -231,11 +231,11 @@ int PropGrep::GetData(HWND hwndDlg)
 
 	HWND hwndCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_TAGJUMP);
 	int nSelPos = Combo_GetCurSel(hwndCombo);
-	m_common.m_search.m_nTagJumpMode = Combo_GetItemData(hwndCombo, nSelPos);
+	m_common.search.m_nTagJumpMode = Combo_GetItemData(hwndCombo, nSelPos);
 	
 	hwndCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_KEYWORD_TAGJUMP);
 	nSelPos = Combo_GetCurSel(hwndCombo);
-	m_common.m_search.m_nTagJumpModeKeyword = Combo_GetItemData(hwndCombo, nSelPos);
+	m_common.search.m_nTagJumpModeKeyword = Combo_GetItemData(hwndCombo, nSelPos);
 
 	return TRUE;
 }

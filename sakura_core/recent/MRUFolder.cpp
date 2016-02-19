@@ -80,7 +80,7 @@ HMENU MruFolder::CreateMenu(HMENU	hMenuPopUp, MenuDrawer* pMenuDrawer) const
 
 		const TCHAR* pszFolder = m_recentFolder.GetItemText(i);
 		bool bFavorite = m_recentFolder.IsFavorite(i);
-		bool bFavoriteLabel = bFavorite && !m_pShareData->m_common.m_window.m_bMenuIcon;
+		bool bFavoriteLabel = bFavorite && !m_pShareData->m_common.window.m_bMenuIcon;
 		FileNameManager::getInstance()->GetMenuFullLabel(szMenu, _countof(szMenu), true, pszFolder, -1, false, CODE_NONE, bFavoriteLabel, i, true, dcFont.GetHDC());
 
 		// ƒƒjƒ…[‚É’Ç‰Á

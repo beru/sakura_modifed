@@ -54,7 +54,7 @@ void ViewCommander::Command_WCHAR(
 	// 現在位置にデータを挿入
 	NativeW memDataW2;
 	memDataW2 = wcChar;
-	if (WCODE::IsLineDelimiter(wcChar, GetDllShareData().m_common.m_edit.m_bEnableExtEol)) { 
+	if (WCODE::IsLineDelimiter(wcChar, GetDllShareData().m_common.edit.m_bEnableExtEol)) { 
 		// 現在、Enterなどで挿入する改行コードの種類を取得
 		if (bConvertEOL) {
 			Eol cWork = pDoc->m_docEditor.GetNewLineCode();
@@ -204,7 +204,7 @@ end_of_for:;
 	// 2005.10.11 ryoji 改行時に末尾の空白を削除
 	if (WCODE::IsLineDelimiter(
 			wcChar,
-			GetDllShareData().m_common.m_edit.m_bEnableExtEol
+			GetDllShareData().m_common.edit.m_bEnableExtEol
 		)
 		&& typeData->m_bRTrimPrevLine
 	) {	// 改行時に末尾の空白を削除
@@ -901,14 +901,14 @@ void ViewCommander::DelCharForOverwrite(
 		if (nIdxTo >= pLayout->GetLengthWithoutEOL()) {
 			bEol = true;	// 現在位置は改行または折り返し以後
 			if (pLayout->GetLayoutEol() != EolType::None) {
-				if (GetDllShareData().m_common.m_edit.m_bNotOverWriteCRLF) {	// 改行は上書きしない
+				if (GetDllShareData().m_common.edit.m_bNotOverWriteCRLF) {	// 改行は上書きしない
 					// 現在位置が改行ならば削除しない
 					bDelete = false;
 				}
 			}
 		}else {
 			// 文字幅に合わせてスペースを詰める
-			if (GetDllShareData().m_common.m_edit.m_bOverWriteFixMode) {
+			if (GetDllShareData().m_common.edit.m_bOverWriteFixMode) {
 				const StringRef line = pLayout->GetDocLineRef()->GetStringRefWithEOL();
 				LogicInt nPos = GetCaret().GetCaretLogicPos().GetX();
 				if (line.At(nPos) != WCODE::TAB) {
@@ -922,7 +922,7 @@ void ViewCommander::DelCharForOverwrite(
 						if (c != WCODE::TAB
 							&& !WCODE::IsLineDelimiter(
 								c,
-								GetDllShareData().m_common.m_edit.m_bEnableExtEol
+								GetDllShareData().m_common.edit.m_bEnableExtEol
 							)
 						) {
 							nDelLen = 2;

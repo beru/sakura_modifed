@@ -496,14 +496,14 @@ void Caret::ShowEditCaret()
 	// CalcCaretDrawPosのためにCaretサイズを仮設定
 	int	nCaretWidth = 0;
 	int	nCaretHeight = 0;
-	if (pCommon->m_general.GetCaretType() == 0) {
+	if (pCommon->general.GetCaretType() == 0) {
 		nCaretHeight = GetHankakuHeight();
 		if (m_pEditView->IsInsMode()) {
 			nCaretWidth = 2;
 		}else {
 			nCaretWidth = GetHankakuDx();
 		}
-	}else if (pCommon->m_general.GetCaretType() == 1) {
+	}else if (pCommon->general.GetCaretType() == 1) {
 		if (m_pEditView->IsInsMode()) {
 			nCaretHeight = GetHankakuHeight() / 2;
 		}else {
@@ -528,7 +528,7 @@ void Caret::ShowEditCaret()
 	}
 	// キャレットの幅、高さを決定
 	// カーソルのタイプ = win
-	if (pCommon->m_general.GetCaretType() == 0) {
+	if (pCommon->general.GetCaretType() == 0) {
 		nCaretHeight = GetHankakuHeight();					// キャレットの高さ
 		if (m_pEditView->IsInsMode() /* Oct. 2, 2005 genta */) {
 			nCaretWidth = 2; // 2px
@@ -553,7 +553,7 @@ void Caret::ShowEditCaret()
 				int nIdxFrom = GetCaretLogicPos().GetX() - pLayout->GetLogicOffset();
 				if (0
 					|| nIdxFrom >= nLineLen
-					|| WCODE::IsLineDelimiter(pLine[nIdxFrom], GetDllShareData().m_common.m_edit.m_bEnableExtEol)
+					|| WCODE::IsLineDelimiter(pLine[nIdxFrom], GetDllShareData().m_common.edit.m_bEnableExtEol)
 					|| pLine[nIdxFrom] == TAB
 				) {
 					nCaretWidth = GetHankakuDx();
@@ -566,7 +566,7 @@ void Caret::ShowEditCaret()
 			}
 		}
 	// カーソルのタイプ = dos
-	}else if (pCommon->m_general.GetCaretType() == 1) {
+	}else if (pCommon->general.GetCaretType() == 1) {
 		if (m_pEditView->IsInsMode() /* Oct. 2, 2005 genta */) {
 			nCaretHeight = GetHankakuHeight() / 2;			// キャレットの高さ
 		}else {
@@ -586,7 +586,7 @@ void Caret::ShowEditCaret()
 			int nIdxFrom = m_pEditView->LineColumnToIndex(pLayout, GetCaretLayoutPos().GetX2());
 			if (0
 				|| nIdxFrom >= nLineLen
-				|| WCODE::IsLineDelimiter(pLine[nIdxFrom], GetDllShareData().m_common.m_edit.m_bEnableExtEol)
+				|| WCODE::IsLineDelimiter(pLine[nIdxFrom], GetDllShareData().m_common.edit.m_bEnableExtEol)
 				|| pLine[nIdxFrom] == TAB
 			) {
 				nCaretWidth = GetHankakuDx();
@@ -793,7 +793,7 @@ void Caret::ShowCaretPosInfo()
 				//auto_sprintf(szCaretChar, _T("%04x"),);
 				// 任意の文字コードからUnicodeへ変換する		2008/6/9 Uchi
 				CodeBase* pCode = CodeFactory::CreateCodeBase(m_pEditDoc->GetDocumentEncoding(), false);
-				CommonSetting_StatusBar* psStatusbar = &GetDllShareData().m_common.m_statusBar;
+				CommonSetting_StatusBar* psStatusbar = &GetDllShareData().m_common.statusBar;
 				CodeConvertResult ret = pCode->UnicodeToHex(&pLine[nIdx], nLineLen - nIdx, szCaretChar, psStatusbar);
 				delete pCode;
 				if (ret != CodeConvertResult::Complete) {
@@ -982,7 +982,7 @@ LayoutInt Caret::Cursor_UPDOWN(LayoutInt nMoveLines, bool bSelect)
 	}
 	if (i >= nLineLen) {
 		// フリーカーソルモードと矩形選択中は、キャレットの位置を改行や EOFの前に制限しない
-		if (pCommon->m_general.m_bIsFreeCursorMode
+		if (pCommon->general.m_bIsFreeCursorMode
 			|| selInfo.IsBoxSelecting()
 		) {
 			ptTo.x = m_nCaretPosX_Prev;
@@ -1205,7 +1205,7 @@ LayoutInt Caret::MoveCursorProperly(
 			// 2011.12.26 フリーカーソル/矩形でデータ付きEOFの右側へ移動できるように
 			// フリーカーソルモードか
 			if (0
-				|| GetDllShareData().m_common.m_general.m_bIsFreeCursorMode
+				|| GetDllShareData().m_common.general.m_bIsFreeCursorMode
 				|| (selectionInfo.IsMouseSelecting() && selectionInfo.IsBoxSelecting())	/* マウス範囲選択中 && 矩形範囲選択中 */
 				|| (m_pEditView->m_bDragMode && m_pEditView->m_bDragBoxData) /* OLE DropTarget && 矩形データ */
 			) {

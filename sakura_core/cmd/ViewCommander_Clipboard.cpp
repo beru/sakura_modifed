@@ -41,7 +41,7 @@ void ViewCommander::Command_CUT(void)
 	// 範囲選択がされていない
 	if (!selInfo.IsTextSelected()) {
 		// 非選択時は、カーソル行を切り取り
-		if (!GetDllShareData().m_common.m_edit.m_bEnableNoSelectCopy) {	// 2007.11.18 ryoji
+		if (!GetDllShareData().m_common.edit.m_bEnableNoSelectCopy) {	// 2007.11.18 ryoji
 			return;	// 何もしない（音も鳴らさない）
 		}
 		// 行切り取り(折り返し単位)
@@ -53,7 +53,7 @@ void ViewCommander::Command_CUT(void)
 	// 選択範囲のデータを取得
 	// 正常時はTRUE,範囲未選択の場合はFALSEを返す
 	NativeW memBuf;
-	if (!m_pCommanderView->GetSelectedData(&memBuf, false, NULL, false, GetDllShareData().m_common.m_edit.m_bAddCRLFWhenCopy)) {
+	if (!m_pCommanderView->GetSelectedData(&memBuf, false, NULL, false, GetDllShareData().m_common.edit.m_bAddCRLFWhenCopy)) {
 		ErrorBeep();
 		return;
 	}
@@ -82,7 +82,7 @@ void ViewCommander::Command_COPY(
 {
 	NativeW memBuf;
 	auto& selInfo = m_pCommanderView->GetSelectionInfo();
-	auto& csEdit = GetDllShareData().m_common.m_edit;
+	auto& csEdit = GetDllShareData().m_common.edit;
 	// クリップボードに入れるべきテキストデータを、memBufに格納する
 	if (!selInfo.IsTextSelected()) {
 		// 非選択時は、カーソル行をコピーする
@@ -168,7 +168,7 @@ void ViewCommander::Command_PASTE(int option)
 	bool		bLineSelectOption = 
 		((option & 0x04) == 0x04) ? true :
 		((option & 0x08) == 0x08) ? false :
-		commonSetting.m_edit.m_bEnableLineModePaste;
+		commonSetting.edit.m_bEnableLineModePaste;
 
 	if (!m_pCommanderView->MyGetClipboardData(memClip, &bColumnSelect, bLineSelectOption ? &bLineSelect: NULL)) {
 		ErrorBeep();
@@ -182,12 +182,12 @@ void ViewCommander::Command_PASTE(int option)
 	bool bConvertEol = 
 		((option & 0x01) == 0x01) ? true :
 		((option & 0x02) == 0x02) ? false :
-		commonSetting.m_edit.m_bConvertEOLPaste;
+		commonSetting.edit.m_bConvertEOLPaste;
 
 	bool bAutoColumnPaste = 
 		((option & 0x10) == 0x10) ? true :
 		((option & 0x20) == 0x20) ? false :
-		commonSetting.m_edit.m_bAutoColumnPaste != FALSE;
+		commonSetting.edit.m_bAutoColumnPaste != FALSE;
 	
 	// 矩形コピーのテキストは常に矩形貼り付け
 	if (bAutoColumnPaste) {
@@ -197,7 +197,7 @@ void ViewCommander::Command_PASTE(int option)
 				ErrorBeep();
 				return;
 			}
-			if (!commonSetting.m_view.m_bFontIs_FIXED_PITCH) {
+			if (!commonSetting.view.m_bFontIs_FIXED_PITCH) {
 				return;
 			}
 			Command_PASTEBOX(pszText, nTextLen);
@@ -211,7 +211,7 @@ void ViewCommander::Command_PASTE(int option)
 	// 行コピー（MSDEVLineSelect形式）のテキストで末尾が改行になっていなければ改行を追加する
 	// ※レイアウト折り返しの行コピーだった場合は末尾が改行になっていない
 	if (bLineSelect) {
-		if (!WCODE::IsLineDelimiter(pszText[nTextLen-1], GetDllShareData().m_common.m_edit.m_bEnableExtEol)) {
+		if (!WCODE::IsLineDelimiter(pszText[nTextLen-1], GetDllShareData().m_common.edit.m_bEnableExtEol)) {
 			memClip.AppendString(GetDocument()->m_docEditor.GetNewLineCode().GetValue2());
 			pszText = memClip.GetStringPtr(&nTextLen);
 		}
@@ -290,7 +290,7 @@ void ViewCommander::Command_PASTEBOX(
 	LayoutPoint ptCurOld = GetCaret().GetCaretLayoutPos();
 
 	LayoutInt nCount = LayoutInt(0);
-	bool bExtEol = GetDllShareData().m_common.m_edit.m_bEnableExtEol;
+	bool bExtEol = GetDllShareData().m_common.edit.m_bEnableExtEol;
 
 	// Jul. 10, 2005 genta 貼り付けデータの最後にCR/LFが無い場合の対策
 	// データの最後まで処理 i.e. nBgnがnPasteSizeを超えたら終了
@@ -403,7 +403,7 @@ void ViewCommander::Command_PASTEBOX(int option)
 		return;
 	}
 
-	if (!GetDllShareData().m_common.m_view.m_bFontIs_FIXED_PITCH) {	// 現在のフォントは固定幅フォントである
+	if (!GetDllShareData().m_common.view.m_bFontIs_FIXED_PITCH) {	// 現在のフォントは固定幅フォントである
 		return;
 	}
 
@@ -434,7 +434,7 @@ void ViewCommander::Command_INSBOXTEXT(
 		return;
 	}
 
-	if (!GetDllShareData().m_common.m_view.m_bFontIs_FIXED_PITCH) {	// 現在のフォントは固定幅フォントである
+	if (!GetDllShareData().m_common.view.m_bFontIs_FIXED_PITCH) {	// 現在のフォントは固定幅フォントである
 		return;
 	}
 
@@ -482,7 +482,7 @@ void ViewCommander::Command_INSTEXT(
 		if (selInfo.IsBoxSelecting()) {
 			// 改行までを抜き出す
 			LogicInt i;
-			bool bExtEol = GetDllShareData().m_common.m_edit.m_bEnableExtEol;
+			bool bExtEol = GetDllShareData().m_common.edit.m_bEnableExtEol;
 			for (i=LogicInt(0); i<nTextLen; ++i) {
 				if (WCODE::IsLineDelimiter(pszText[i], bExtEol)) {
 					break;
@@ -641,7 +641,7 @@ void ViewCommander::Command_COPYLINESASPASSAGE(void)
 {
 	// 選択範囲内の全行をクリップボードにコピーする
 	m_pCommanderView->CopySelectedAllLines(
-		GetDllShareData().m_common.m_format.m_szInyouKigou,	// 引用符
+		GetDllShareData().m_common.format.m_szInyouKigou,	// 引用符
 		false 									// 行番号を付与する
 	);
 	return;
@@ -723,7 +723,7 @@ static bool AppendHTMLColor(
 	if (0 < nLen) {
 		return WCODE::IsLineDelimiter(
 			pAppendStr[nLen-1],
-			GetDllShareData().m_common.m_edit.m_bEnableExtEol
+			GetDllShareData().m_common.edit.m_bEnableExtEol
 		);
 	}
 	return false;
@@ -740,7 +740,7 @@ void ViewCommander::Command_COPY_COLOR_HTML(bool bLineNumber)
 		return;
 	}
 	const TypeConfig& type = GetDocument()->m_docType.GetDocumentAttribute();
-	bool bLineNumLayout = GetDllShareData().m_common.m_edit.m_bAddCRLFWhenCopy
+	bool bLineNumLayout = GetDllShareData().m_common.edit.m_bAddCRLFWhenCopy
 		|| selInfo.IsBoxSelecting();
 	LayoutRect rcSel;
 	TwoPointToRect(
@@ -1173,7 +1173,7 @@ void ViewCommander::Command_COPYTAG(void)
 void ViewCommander::Command_CREATEKEYBINDLIST(void)
 {
 	NativeW memKeyList;
-	auto& csKeyBind = GetDllShareData().m_common.m_keyBind;
+	auto& csKeyBind = GetDllShareData().m_common.keyBind;
 	KeyBind::CreateKeyBindList(
 		G_AppInstance(),
 		csKeyBind.m_nKeyNameArrNum,

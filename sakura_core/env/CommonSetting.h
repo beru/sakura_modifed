@@ -696,31 +696,31 @@ struct CommonSetting_MainMenu {
 
 //! 共通設定
 struct CommonSetting {
-	CommonSetting_General			m_general;			// 全般
-	CommonSetting_Window			m_window;			// ウィンドウ
-	CommonSetting_TabBar			m_tabBar;			// タブバー
-	CommonSetting_Edit				m_edit;				// 編集
-	CommonSetting_File				m_file;				// ファイル
-	CommonSetting_Backup			m_backup;			// バックアップ
-	CommonSetting_Format			m_format;			// 書式
-	CommonSetting_Search			m_search;			// 検索
-	CommonSetting_KeyBind			m_keyBind;			// キー割り当て
+	CommonSetting_General			general;			// 全般
+	CommonSetting_Window			window;				// ウィンドウ
+	CommonSetting_TabBar			tabBar;				// タブバー
+	CommonSetting_Edit				edit;				// 編集
+	CommonSetting_File				file;				// ファイル
+	CommonSetting_Backup			backup;				// バックアップ
+	CommonSetting_Format			format;				// 書式
+	CommonSetting_Search			search;				// 検索
+	CommonSetting_KeyBind			keyBind;			// キー割り当て
 	//
-	CommonSetting_CustomMenu		m_customMenu;		// カスタムメニュー
-	CommonSetting_ToolBar			m_toolBar;			// ツールバー
-	CommonSetting_SpecialKeyword	m_specialKeyword;	// 強調キーワード
-	CommonSetting_Helper			m_helper;			// 支援
-	CommonSetting_Macro				m_macro;			// マクロ
-	CommonSetting_FileName			m_fileName;			// ファイル名表示
+	CommonSetting_CustomMenu		customMenu;			// カスタムメニュー
+	CommonSetting_ToolBar			toolBar;			// ツールバー
+	CommonSetting_SpecialKeyword	specialKeyword;		// 強調キーワード
+	CommonSetting_Helper			helper;				// 支援
+	CommonSetting_Macro				macro;				// マクロ
+	CommonSetting_FileName			fileName;			// ファイル名表示
 	//
-	CommonSetting_OutLine			m_outline;			// アウトライン
-	CommonSetting_Compare			m_compare;			// ファイル内容比較
-	CommonSetting_View				m_view;				// ビュー
-	CommonSetting_Others			m_others;			// その他
+	CommonSetting_OutLine			outline;			// アウトライン
+	CommonSetting_Compare			compare;			// ファイル内容比較
+	CommonSetting_View				view;				// ビュー
+	CommonSetting_Others			others;				// その他
 
 	//
-	CommonSetting_StatusBar			m_statusBar;		// ステータスバー		// 2008/6/21 Uchi
-	CommonSetting_Plugin			m_plugin;			// プラグイン 2009/11/30 syat
-	CommonSetting_MainMenu			m_mainMenu;			// メインメニュー		// 2010/5/15 Uchi
+	CommonSetting_StatusBar			statusBar;			// ステータスバー		// 2008/6/21 Uchi
+	CommonSetting_Plugin			plugin;				// プラグイン 2009/11/30 syat
+	CommonSetting_MainMenu			mainMenu;			// メインメニュー		// 2010/5/15 Uchi
 };
 

@@ -184,8 +184,8 @@ void DlgCompare::SetData(void)
 	// 左右に並べて表示
 	//@@@ 2003.06.12 MIK
 	// TAB 1ウィンドウ表示のときは並べて比較できなくする
-	if (m_pShareData->m_common.m_tabBar.m_bDispTabWnd
-		&& !m_pShareData->m_common.m_tabBar.m_bDispTabWndMultiWin
+	if (m_pShareData->m_common.tabBar.m_bDispTabWnd
+		&& !m_pShareData->m_common.tabBar.m_bDispTabWndMultiWin
 	) {
 		m_bCompareAndTileHorz = false;
 		EnableItem(IDC_CHECK_TILE_H, false);
@@ -257,7 +257,7 @@ BOOL DlgCompare::OnInitDialog(
 		GetItemClientRect(anchorList[i].id, m_rcItems[i]);
 	}
 
-	RECT rcDialog = GetDllShareData().m_common.m_others.m_rcCompareDialog;
+	RECT rcDialog = GetDllShareData().m_common.others.m_rcCompareDialog;
 	if (rcDialog.left != 0
 		|| rcDialog.bottom != 0
 	) {
@@ -275,7 +275,7 @@ BOOL DlgCompare::OnSize(WPARAM wParam, LPARAM lParam)
 	// 基底クラスメンバ
 	Dialog::OnSize(wParam, lParam);
 
-	GetWindowRect(&GetDllShareData().m_common.m_others.m_rcCompareDialog);
+	GetWindowRect(&GetDllShareData().m_common.others.m_rcCompareDialog);
 
 	RECT rc;
 	GetWindowRect(&rc);
@@ -291,7 +291,7 @@ BOOL DlgCompare::OnSize(WPARAM wParam, LPARAM lParam)
 
 BOOL DlgCompare::OnMove(WPARAM wParam, LPARAM lParam)
 {
-	GetWindowRect(&GetDllShareData().m_common.m_others.m_rcCompareDialog);
+	GetWindowRect(&GetDllShareData().m_common.others.m_rcCompareDialog);
 	return Dialog::OnMove(wParam, lParam);
 }
 

@@ -193,7 +193,7 @@ bool Color_Quote::BeginColor(const StringRef& str, int nPos)
 					0 < str.GetLength()
 					&& WCODE::IsLineDelimiter(
 						str.At(str.GetLength() - 1),
-						GetDllShareData().m_common.m_edit.m_bEnableExtEol
+						GetDllShareData().m_common.edit.m_bEnableExtEol
 					)
 				) {
 					if (1 &&
@@ -267,7 +267,7 @@ int Color_Quote::Match_Quote(
 					i < lineStr.GetLength()
 					&& WCODE::IsLineDelimiter(
 						lineStr.At(i),
-						GetDllShareData().m_common.m_edit.m_bEnableExtEol
+						GetDllShareData().m_common.edit.m_bEnableExtEol
 					)
 				) {
 					if (pbEscapeEnd) {

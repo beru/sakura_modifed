@@ -128,7 +128,7 @@ void MainToolBar::CreateToolBar(void)
 	LONG_PTR		lToolType;
 	nFlag = 0;
 
-	auto& csToolBar = GetDllShareData().m_common.m_toolBar;
+	auto& csToolBar = GetDllShareData().m_common.toolBar;
 	// 2006.06.17 ryoji
 	// Rebar ウィンドウの作成
 	if (IsVisualStyle()) {	// ビジュアルスタイル有効
@@ -487,7 +487,7 @@ void MainToolBar::UpdateToolbar(void)
 	
 	// ツールバーの状態更新
 	if (m_hwndToolBar) {
-		auto& csToolBar = GetDllShareData().m_common.m_toolBar;
+		auto& csToolBar = GetDllShareData().m_common.toolBar;
 		for (int i=0; i<csToolBar.m_nToolBarButtonNum; ++i) {
 			TBBUTTON tbb = m_pOwner->GetMenuDrawer().getButton(
 				csToolBar.m_nToolBarButtonIdxArr[i]
@@ -524,8 +524,8 @@ void MainToolBar::AcceptSharedSearchKey()
 			Combo_AddString(m_hwndSearchBox, GetDllShareData().m_searchKeywords.searchKeys[i]);
 		}
 		const wchar_t* pszText;
-		if (GetDllShareData().m_common.m_search.m_bInheritKeyOtherView
-			&& m_pOwner->GetActiveView().m_nCurSearchKeySequence < GetDllShareData().m_common.m_search.m_nSearchKeySequence
+		if (GetDllShareData().m_common.search.m_bInheritKeyOtherView
+			&& m_pOwner->GetActiveView().m_nCurSearchKeySequence < GetDllShareData().m_common.search.m_nSearchKeySequence
 			|| m_pOwner->GetActiveView().m_strCurSearchKey.size() == 0
 		) {
 			if (0 < nSize) {

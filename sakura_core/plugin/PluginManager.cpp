@@ -128,7 +128,7 @@ bool PluginManager::SearchNewPluginDir(
 	DEBUG_TRACE(_T("Enter SearchNewPluginDir\n"));
 #endif
 
-	PluginRec* pluginTable = common.m_plugin.m_pluginTable;
+	PluginRec* pluginTable = common.plugin.m_pluginTable;
 	HANDLE hFind;
 
 	WIN32_FIND_DATA wf;
@@ -278,7 +278,7 @@ bool PluginManager::InstZipPluginSub(
 	bool& bCancel
 	)
 {
-	PluginRec*		pluginTable = common.m_plugin.m_pluginTable;
+	PluginRec*		pluginTable = common.plugin.m_pluginTable;
 	ZipFile			zipFile;
 	std::tstring	sFolderName;
 	TCHAR			msg[512];
@@ -421,7 +421,7 @@ int PluginManager::InstallPlugin(
 	}
 
 	// ID重複・テーブル空きチェック
-	PluginRec* pluginTable = common.m_plugin.m_pluginTable;
+	PluginRec* pluginTable = common.plugin.m_pluginTable;
 	int nEmpty = -1;
 	bool isDuplicate = false;
 	for (int iNo=0; iNo<MAX_PLUGIN; ++iNo) {
@@ -482,7 +482,7 @@ bool PluginManager::LoadAllPlugin(CommonSetting* common)
 #ifdef _UNICODE
 	DEBUG_TRACE(_T("Enter LoadAllPlugin\n"));
 #endif
-	CommonSetting_Plugin& pluginSetting = (common ? common->m_plugin : GetDllShareData().m_common.m_plugin);
+	CommonSetting_Plugin& pluginSetting = (common ? common->plugin : GetDllShareData().m_common.plugin);
 
 	if (!pluginSetting.m_bEnablePlugin) {
 		return true;
@@ -490,7 +490,7 @@ bool PluginManager::LoadAllPlugin(CommonSetting* common)
 
 	std::tstring szLangName;
 	{
-		std::tstring szDllName = GetDllShareData().m_common.m_window.m_szLanguageDll;
+		std::tstring szDllName = GetDllShareData().m_common.window.m_szLanguageDll;
 		if (szDllName == _T("")) {
 			szLangName = _T("ja_JP");
 		}else {
@@ -658,7 +658,7 @@ Plugin* PluginManager::GetPlugin(int id)
 // プラグインを削除する
 void PluginManager::UninstallPlugin(CommonSetting& common, int id)
 {
-	PluginRec* pluginTable = common.m_plugin.m_pluginTable;
+	PluginRec* pluginTable = common.plugin.m_pluginTable;
 
 	// 2010.08.04 ここではIDを保持する。後で再度追加するときに同じ位置に追加
 	// PLS_DELETEDのm_szId/m_szNameはiniを保存すると削除されます

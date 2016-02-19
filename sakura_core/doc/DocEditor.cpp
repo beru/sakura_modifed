@@ -42,7 +42,7 @@ DocEditor::DocEditor(EditDoc* pDoc)
 	m_bIsDocModified(false)	// 変更フラグ // Jan. 22, 2002 genta 型変更
 {
 	// Oct. 2, 2005 genta 挿入モード
-	this->SetInsMode(GetDllShareData().m_common.m_general.m_bIsINSMode);
+	this->SetInsMode(GetDllShareData().m_common.general.m_bIsINSMode);
 }
 
 

@@ -253,7 +253,7 @@ BOOL AppNodeGroupHandle::RequestCloseEditor(EditNode* pWndArr, int nArrCnt, bool
 		}
 	}
 
-	if (bCheckConfirm && GetDllShareData().m_common.m_general.m_bCloseAllConfirm) {	// [すべて閉じる]で他に編集用のウィンドウがあれば確認する
+	if (bCheckConfirm && GetDllShareData().m_common.general.m_bCloseAllConfirm) {	// [すべて閉じる]で他に編集用のウィンドウがあれば確認する
 		if (1 < nCloseCount) {
 			if (::MYMESSAGEBOX(
 				hWndFrom,
@@ -272,7 +272,7 @@ BOOL AppNodeGroupHandle::RequestCloseEditor(EditNode* pWndArr, int nArrCnt, bool
 	// ・閉じられるエディタが保存確認のメッセージを表示する場合は、この制御ウィンドウにアクティブ化要求（MYWM_ALLOWACTIVATE）を出してアクティブにしてもらう
 	// ・タブグループ表示かどうかなどの条件に応じて、ちらつきを最小限にするのに都合の良いウィンドウをここで選択しておく
 	HWND hWndActive;
-	bool bTabGroup = (GetDllShareData().m_common.m_tabBar.m_bDispTabWnd && !GetDllShareData().m_common.m_tabBar.m_bDispTabWndMultiWin);
+	bool bTabGroup = (GetDllShareData().m_common.tabBar.m_bDispTabWnd && !GetDllShareData().m_common.tabBar.m_bDispTabWndMultiWin);
 	if (bTabGroup) {
 		hWndActive = hWndLast;	// 最後に閉じるウィンドウが担当
 	}else {
@@ -776,7 +776,7 @@ int AppNodeManager::GetFreeGroupId(void)
 HWND AppNodeManager::GetNextTab(HWND hWndCur)
 {
 	HWND hWnd = NULL;
-	auto& tabBar = GetDllShareData().m_common.m_tabBar;
+	auto& tabBar = GetDllShareData().m_common.tabBar;
 	if (1
 		&& tabBar.m_bDispTabWnd
 		&& !tabBar.m_bDispTabWndMultiWin

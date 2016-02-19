@@ -118,7 +118,7 @@ ERegisterPlugResult JackManager::RegisterPlug(
 		break;
 	case PP_COMPLEMENT:
 		{
-			int nMethod = Plug::GetPluginFunctionCode(plug->m_plugin.m_id, 0);
+			int nMethod = Plug::GetPluginFunctionCode(plug->plugin.m_id, 0);
 			PropTypesSupport::AddHokanMethod(nMethod, plug->m_sLabel.c_str());
 		}
 		break;
@@ -149,7 +149,7 @@ bool JackManager::UnRegisterPlug(
 		break;
 	case PP_COMPLEMENT:
 		{
-			int nMethod = Plug::GetPluginFunctionCode(plug->m_plugin.m_id, 0);
+			int nMethod = Plug::GetPluginFunctionCode(plug->plugin.m_id, 0);
 			PropTypesSupport::RemoveHokanMethod(nMethod, plug->m_sLabel.c_str());
 		}
 		break;

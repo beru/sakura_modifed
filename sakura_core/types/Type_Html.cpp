@@ -256,7 +256,7 @@ void DocOutline::MakeTopicList_html(FuncInfoArr* pFuncInfoArr)
 							}
 							if (!bEndTag) {
 								szTitle[k++] = L' ';
-								bool bExtEol = GetDllShareData().m_common.m_edit.m_bEnableExtEol;
+								bool bExtEol = GetDllShareData().m_common.edit.m_bEnableExtEol;
 								for (j-=k-1; i+j+k<nLineLen && k<_countof(szTitle)-1; ++k) {
 									if (pLine[j + k] == L'<' || WCODE::IsLineDelimiter(pLine[j + k], bExtEol)) {
 										break;

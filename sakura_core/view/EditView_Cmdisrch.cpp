@@ -165,7 +165,7 @@ void EditView::ISearchEnter(int mode, SearchDirection direction)
 		if (selInfo.IsTextSelected())	
 			selInfo.DisableSelectArea(true);
 
-		m_curSearchOption = GetDllShareData().m_common.m_search.m_searchOption;
+		m_curSearchOption = GetDllShareData().m_common.search.m_searchOption;
 		switch (mode) {
 		case 1: // 通常インクリメンタルサーチ
 			m_curSearchOption.bRegularExp = false;
@@ -252,8 +252,8 @@ void EditView::ISearchExit()
 	if (m_strCurSearchKey.size() < _MAX_PATH) {
 		SearchKeywordManager().AddToSearchKeys(m_strCurSearchKey.c_str());
 	}
-	m_nCurSearchKeySequence = GetDllShareData().m_common.m_search.m_nSearchKeySequence;
-	GetDllShareData().m_common.m_search.m_searchOption = m_curSearchOption;
+	m_nCurSearchKeySequence = GetDllShareData().m_common.search.m_nSearchKeySequence;
+	GetDllShareData().m_common.search.m_searchOption = m_curSearchOption;
 	m_pEditWnd->m_toolbar.AcceptSharedSearchKey();
 	m_nISearchDirection = SearchDirection::Backward;
 	m_nISearchMode = 0;

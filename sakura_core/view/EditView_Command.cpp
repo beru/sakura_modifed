@@ -364,14 +364,14 @@ BOOL EditView::ChangeCurRegexp(bool bRedrawIfChanged)
 {
 	bool bChangeState = false;
 
-	if (GetDllShareData().m_common.m_search.m_bInheritKeyOtherView
-			&& m_nCurSearchKeySequence < GetDllShareData().m_common.m_search.m_nSearchKeySequence
+	if (GetDllShareData().m_common.search.m_bInheritKeyOtherView
+			&& m_nCurSearchKeySequence < GetDllShareData().m_common.search.m_nSearchKeySequence
 		|| m_strCurSearchKey.size() == 0
 	) {
 		// 履歴の検索キーに更新
 		m_strCurSearchKey = GetDllShareData().m_searchKeywords.searchKeys[0];		// 検索文字列
-		m_curSearchOption = GetDllShareData().m_common.m_search.m_searchOption;// 検索／置換  オプション
-		m_nCurSearchKeySequence = GetDllShareData().m_common.m_search.m_nSearchKeySequence;
+		m_curSearchOption = GetDllShareData().m_common.search.m_searchOption;// 検索／置換  オプション
+		m_nCurSearchKeySequence = GetDllShareData().m_common.search.m_nSearchKeySequence;
 		bChangeState = true;
 	}else if (m_bCurSearchUpdate) {
 		bChangeState = true;

@@ -93,7 +93,7 @@ INT_PTR PropPlugin::DispatchEvent(
 
 	WORD	wNotifyCode;
 	WORD	wID;
-	PluginRec* pluginTable = m_common.m_plugin.m_pluginTable;
+	PluginRec* pluginTable = m_common.plugin.m_pluginTable;
 
 	switch (uMsg) {
 	case WM_INITDIALOG:
@@ -324,7 +324,7 @@ INT_PTR PropPlugin::DispatchEvent(
 void PropPlugin::SetData(HWND hwndDlg)
 {
 	// プラグインを有効にする
-	::CheckDlgButton(hwndDlg, IDC_CHECK_PluginEnable, m_common.m_plugin.m_bEnablePlugin);
+	::CheckDlgButton(hwndDlg, IDC_CHECK_PluginEnable, m_common.plugin.m_bEnablePlugin);
 
 	// プラグインリスト
 	SetData_LIST(hwndDlg);
@@ -342,7 +342,7 @@ void PropPlugin::SetData_LIST(HWND hwndDlg)
 {
 	int index;
 	LVITEM lvItem;
-	PluginRec* pluginTable = m_common.m_plugin.m_pluginTable;
+	PluginRec* pluginTable = m_common.plugin.m_pluginTable;
 
 	::EnableWindow(::GetDlgItem(hwndDlg, IDC_PLUGIN_Remove), FALSE);
 	::EnableWindow(::GetDlgItem(hwndDlg, IDC_PLUGIN_OPTION), FALSE);
@@ -450,7 +450,7 @@ void PropPlugin::SetData_LIST(HWND hwndDlg)
 int PropPlugin::GetData(HWND hwndDlg)
 {
 	// プラグインを有効にする
-	m_common.m_plugin.m_bEnablePlugin = DlgButton_IsChecked(hwndDlg, IDC_CHECK_PluginEnable);
+	m_common.plugin.m_bEnablePlugin = DlgButton_IsChecked(hwndDlg, IDC_CHECK_PluginEnable);
 
 	// プラグインリストは今のところ変更できる部分がない
 	//「新規プラグイン追加」はm_commonに直接書き込むので、この関数ですることはない
@@ -601,7 +601,7 @@ static void LoadPluginTemp(CommonSetting& common, MenuDrawer& menuDrawer)
 			const Plug* plug = *it;
 			if (!plug->m_sIcon.empty()) {
 				iBitmap = menuDrawer.m_pIcons->Add(
-					to_tchar(plug->m_plugin.GetFilePath(to_tchar(plug->m_sIcon.c_str())).c_str()));
+					to_tchar(plug->plugin.GetFilePath(to_tchar(plug->m_sIcon.c_str())).c_str()));
 			}
 			menuDrawer.AddToolButton(iBitmap, plug->GetFunctionCode());
 		}

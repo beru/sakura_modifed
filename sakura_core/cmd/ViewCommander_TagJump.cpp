@@ -316,7 +316,7 @@ bool ViewCommander::Command_TAGJUMP(bool bClose)
 		// Borland 形式のメッセージからのTAG JUMP
 		while (p < p_end) {
 			// skip space
-			for (; p < p_end && (*p == L' ' || *p == L'\t' || WCODE::IsLineDelimiter(*p, GetDllShareData().m_common.m_edit.m_bEnableExtEol)); ++p)
+			for (; p < p_end && (*p == L' ' || *p == L'\t' || WCODE::IsLineDelimiter(*p, GetDllShareData().m_common.edit.m_bEnableExtEol)); ++p)
 				;
 			if (p >= p_end)
 				break;

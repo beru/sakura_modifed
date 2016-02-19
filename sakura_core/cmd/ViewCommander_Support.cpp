@@ -34,7 +34,7 @@
 /*!	入力補完
 	Ctrl+Spaceでここに到着。
 	CEditView::m_bHokan： 現在補完ウィンドウが表示されているかを表すフラグ。
-	m_common.m_helper.m_bUseHokan：現在補完ウィンドウが表示されているべきか否かをあらわすフラグ。
+	m_common.helper.m_bUseHokan：現在補完ウィンドウが表示されているべきか否かをあらわすフラグ。
 
     @date 2001/06/19 asa-o 英大文字小文字を同一視する
                      候補が1つのときはそれに確定する
@@ -45,8 +45,8 @@
 */
 void ViewCommander::Command_HOKAN(void)
 {
-	if (!GetDllShareData().m_common.m_helper.m_bUseHokan) {
-		GetDllShareData().m_common.m_helper.m_bUseHokan = TRUE;
+	if (!GetDllShareData().m_common.helper.m_bUseHokan) {
+		GetDllShareData().m_common.helper.m_bUseHokan = TRUE;
 	}
 #if 0
 // 2011.06.24 Moca Plugin導入に従い未設定の確認をやめる
@@ -78,7 +78,7 @@ retry:;
 	}else {
 		InfoBeep(); // 2010.04.03 Error→Info
 		m_pCommanderView->SendStatusMessage(LS(STR_SUPPORT_NOT_COMPLITE)); // 2010.05.29 ステータスで表示
-		GetDllShareData().m_common.m_helper.m_bUseHokan = FALSE;	// 入力補完終了のお知らせ
+		GetDllShareData().m_common.helper.m_bUseHokan = FALSE;	// 入力補完終了のお知らせ
 	}
 	return;
 }
@@ -90,7 +90,7 @@ retry:;
 */
 void ViewCommander::Command_ToggleKeySearch(int option)
 {	// 共通設定ダイアログの設定をキー割り当てでも切り替えられるように
-	auto& bUseCaretKeyword = GetDllShareData().m_common.m_search.m_bUseCaretKeyword;
+	auto& bUseCaretKeyword = GetDllShareData().m_common.search.m_bUseCaretKeyword;
 	if (option == 0) {
 		bUseCaretKeyword = !bUseCaretKeyword;
 	}else if (option == 1) {

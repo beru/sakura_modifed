@@ -1020,7 +1020,7 @@ bool IsFuncEnable(const EditDoc* pEditDoc, const DllSharedData* pShareData, EFun
 			return (pShareData->m_flags.m_hwndRecordingKeyMacro == EditWnd::getInstance()->GetHwnd());	// キーボードマクロを記録中のウィンドウ
 		}else {
 			//@@@ 2002.1.24 YAZAKI m_szKeyMacroFileNameにファイル名がコピーされているかどうか。
-			return (pShareData->m_common.m_macro.m_szKeyMacroFileName[0] != NULL);
+			return (pShareData->m_common.macro.m_szKeyMacroFileName[0] != NULL);
 		}
 	case F_LOADKEYMACRO:	// キーマクロの読み込み
 		if (pShareData->m_flags.m_bRecordingKeyMacro) {	// キーボードマクロの記録中
@@ -1069,11 +1069,11 @@ bool IsFuncEnable(const EditDoc* pEditDoc, const DllSharedData* pShareData, EFun
 	case F_1PageDown_BOX:
 	case F_GOFILETOP_BOX:
 	case F_GOFILEEND_BOX:
-		return (pShareData->m_common.m_view.m_bFontIs_FIXED_PITCH);	// 現在のフォントは固定幅フォントである
+		return (pShareData->m_common.view.m_bFontIs_FIXED_PITCH);	// 現在のフォントは固定幅フォントである
 
 	case F_PASTEBOX:
 		// クリップボードから貼り付け可能か？
-		return (pEditDoc->m_docEditor.IsEnablePaste() && pShareData->m_common.m_view.m_bFontIs_FIXED_PITCH);
+		return (pEditDoc->m_docEditor.IsEnablePaste() && pShareData->m_common.view.m_bFontIs_FIXED_PITCH);
 		
 	case F_PASTE:
 		// クリップボードから貼り付け可能か？
@@ -1092,7 +1092,7 @@ bool IsFuncEnable(const EditDoc* pEditDoc, const DllSharedData* pShareData, EFun
 				return true;
 			}else {
 				// 無変更でも上書きするか
-				return (pShareData->m_common.m_file.m_bEnableUnmodifiedOverwrite);
+				return (pShareData->m_common.file.m_bEnableUnmodifiedOverwrite);
 			}
 		}else {
 			return false;
@@ -1192,16 +1192,16 @@ bool IsFuncEnable(const EditDoc* pEditDoc, const DllSharedData* pShareData, EFun
 	case F_TAB_8:
 	case F_TAB_9:
 		// 非タブモード時はウィンドウを結合して表示できない
-		return pShareData->m_common.m_tabBar.m_bDispTabWnd != FALSE;
+		return pShareData->m_common.tabBar.m_bDispTabWnd != FALSE;
 	case F_GROUPCLOSE:		// 2007.06.20 ryoji 追加
 	case F_NEXTGROUP:		// 2007.06.20 ryoji 追加
 	case F_PREVGROUP:		// 2007.06.20 ryoji 追加
-		return (pShareData->m_common.m_tabBar.m_bDispTabWnd && !pShareData->m_common.m_tabBar.m_bDispTabWndMultiWin);
+		return (pShareData->m_common.tabBar.m_bDispTabWnd && !pShareData->m_common.tabBar.m_bDispTabWndMultiWin);
 	case F_TAB_SEPARATE:	// 2007.06.20 ryoji 追加
 	case F_TAB_JOINTNEXT:	// 2007.06.20 ryoji 追加
 	case F_TAB_JOINTPREV:	// 2007.06.20 ryoji 追加
 	case F_FILENEW_NEWWINDOW:	// 2011.11.15 syat 追加
-		return (pShareData->m_common.m_tabBar.m_bDispTabWnd && !pShareData->m_common.m_tabBar.m_bDispTabWndMultiWin);
+		return (pShareData->m_common.tabBar.m_bDispTabWnd && !pShareData->m_common.tabBar.m_bDispTabWndMultiWin);
 	}
 	return true;
 }
@@ -1241,7 +1241,7 @@ bool IsFuncChecked(const EditDoc* pEditDoc, const DllSharedData* pShareData, EFu
 	case F_TMPWRAPWINDOW:		return (pEditDoc->m_nTextWrapMethodCur == TextWrappingMethod::WindowWidth);		// 右端で折り返す
 	// 2009.07.06 syat  文字カウント方法
 	case F_SELECT_COUNT_MODE:	return (pEditWnd->m_nSelectCountMode == SelectCountMode::Toggle ?
-											pShareData->m_common.m_statusBar.m_bDispSelCountByByte != FALSE :
+											pShareData->m_common.statusBar.m_bDispSelCountByByte != FALSE :
 											pEditWnd->m_nSelectCountMode == SelectCountMode::ByByte);
 	// Mar. 6, 2002 genta
 	case F_VIEWMODE:			return AppMode::getInstance()->IsViewMode(); // ビューモード
@@ -1252,8 +1252,8 @@ bool IsFuncChecked(const EditDoc* pEditDoc, const DllSharedData* pShareData, EFu
 	// To Here 2003.06.23 Moca
 	// 2003.07.21 genta
 	case F_CHGMOD_INS:			return pEditDoc->m_docEditor.IsInsMode();	// Oct. 2, 2005 genta 挿入モードはドキュメント毎に補完するように変更した
-	case F_TOGGLE_KEY_SEARCH:	return pShareData->m_common.m_search.m_bUseCaretKeyword != FALSE;	// 2007.02.03 genta キーワードポップアップのON/OFF状態を反映する
-	case F_BIND_WINDOW:			return ((pShareData->m_common.m_tabBar.m_bDispTabWnd) && !(pShareData->m_common.m_tabBar.m_bDispTabWndMultiWin));	//2004.07.14 Kazika 追加
+	case F_TOGGLE_KEY_SEARCH:	return pShareData->m_common.search.m_bUseCaretKeyword != FALSE;	// 2007.02.03 genta キーワードポップアップのON/OFF状態を反映する
+	case F_BIND_WINDOW:			return ((pShareData->m_common.tabBar.m_bDispTabWnd) && !(pShareData->m_common.tabBar.m_bDispTabWndMultiWin));	//2004.07.14 Kazika 追加
 	case F_TOPMOST:				return ((DWORD)::GetWindowLongPtr(pEditWnd->GetHwnd(), GWL_EXSTYLE) & WS_EX_TOPMOST) != 0;	// 2004.09.21 Moca
 	// Jan. 10, 2004 genta インクリメンタルサーチ
 	case F_ISEARCH_NEXT:

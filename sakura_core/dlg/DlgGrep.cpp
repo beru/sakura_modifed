@@ -127,7 +127,7 @@ int DlgGrep::DoModal(
 	const TCHAR* pszCurrentFilePath
 	)
 {
-	auto& csSearch = m_pShareData->m_common.m_search;
+	auto& csSearch = m_pShareData->m_common.search;
 	m_bSubFolder = csSearch.m_bGrepSubFolder;			// Grep: サブフォルダも検索
 	m_searchOption = csSearch.m_searchOption;			// 検索オプション
 	m_nGrepCharSet = csSearch.m_nGrepCharSet;			// 文字コードセット
@@ -386,7 +386,7 @@ BOOL DlgGrep::OnBnClicked(int wID)
 	case IDC_CHK_DEFAULTFOLDER:
 		// フォルダの初期値をカレントフォルダにする
 		{
-			m_pShareData->m_common.m_search.m_bGrepDefaultFolder = IsButtonChecked(IDC_CHK_DEFAULTFOLDER);
+			m_pShareData->m_common.search.m_bGrepDefaultFolder = IsButtonChecked(IDC_CHK_DEFAULTFOLDER);
 		}
 		return TRUE;
 	case IDC_RADIO_OUTPUTSTYLE3:
@@ -433,7 +433,7 @@ void DlgGrep::SetData(void)
 	SetItemText(IDC_COMBO_FOLDER, m_szFolder);
 
 	if (1
-		&& (m_szFolder[0] == _T('\0') || m_pShareData->m_common.m_search.m_bGrepDefaultFolder)
+		&& (m_szFolder[0] == _T('\0') || m_pShareData->m_common.search.m_bGrepDefaultFolder)
 		&& m_szCurrentFilePath[0] != _T('\0')
 	) {
 		TCHAR szWorkFolder[MAX_PATH];
@@ -541,7 +541,7 @@ void DlgGrep::SetData(void)
 	CheckDlgButtonBool(GetHwnd(), IDC_CHECK_SEP_FOLDER, m_bGrepSeparateFolder);
 
 	// フォルダの初期値をカレントフォルダにする
-	CheckButton(IDC_CHK_DEFAULTFOLDER, m_pShareData->m_common.m_search.m_bGrepDefaultFolder);
+	CheckButton(IDC_CHK_DEFAULTFOLDER, m_pShareData->m_common.search.m_bGrepDefaultFolder);
 
 	return;
 }
@@ -580,7 +580,7 @@ int DlgGrep::GetData(void)
 	// サブフォルダからも検索する
 	m_bSubFolder = IsButtonChecked(IDC_CHK_SUBFOLDER);
 
-	auto& csSearch = m_pShareData->m_common.m_search;
+	auto& csSearch = m_pShareData->m_common.search;
 	csSearch.m_bGrepSubFolder = m_bSubFolder;		// Grep：サブフォルダも検索
 
 	// この編集中のテキストから検索する

@@ -482,7 +482,7 @@ void SakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszBu
 					break;
 				case STAND_KEYMACRO:
 					{
-						TCHAR* pszMacroFilePath = GetDllShareData().m_common.m_macro.m_szKeyMacroFileName;
+						TCHAR* pszMacroFilePath = GetDllShareData().m_common.macro.m_szKeyMacroFileName;
 						q = wcs_pushT(q, q_max - q, pszMacroFilePath);
 					}
 					break;
@@ -701,7 +701,7 @@ std::tstring SakuraEnvironment::GetDlgInitialDir(bool bControlProcess)
 		return to_tchar(pDoc->m_docFile.GetFilePathClass().GetDirPath().c_str());
 	}
 
-	EOpenDialogDir eOpenDialogDir = GetDllShareData().m_common.m_edit.m_eOpenDialogDir;
+	EOpenDialogDir eOpenDialogDir = GetDllShareData().m_common.edit.m_eOpenDialogDir;
 	if (bControlProcess && eOpenDialogDir == OPENDIALOGDIR_CUR) {
 		eOpenDialogDir = OPENDIALOGDIR_MRU;
 	}
@@ -743,7 +743,7 @@ std::tstring SakuraEnvironment::GetDlgInitialDir(bool bControlProcess)
 	case OPENDIALOGDIR_SEL:
 		{
 			TCHAR szSelDir[_MAX_PATH];
-			FileNameManager::ExpandMetaToFolder(GetDllShareData().m_common.m_edit.m_OpenDialogSelDir, szSelDir, _countof(szSelDir));
+			FileNameManager::ExpandMetaToFolder(GetDllShareData().m_common.edit.m_OpenDialogSelDir, szSelDir, _countof(szSelDir));
 			return szSelDir;
 		}
 		break;

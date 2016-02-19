@@ -119,7 +119,7 @@ void ViewCommander::Command_COMPARE(void)
 	DlgCompare	cDlgCompare;
 	HWND		hwndMsgBox;	//@@@ 2003.06.12 MIK
 	auto& commonSetting = GetDllShareData().m_common;
-	auto& csCompare = commonSetting.m_compare;
+	auto& csCompare = commonSetting.compare;
 	// 比較後、左右に並べて表示
 	cDlgCompare.m_bCompareAndTileHorz = csCompare.m_bCompareAndTileHorz;
 	BOOL bDlgCompareResult = cDlgCompare.DoModal(
@@ -137,8 +137,8 @@ void ViewCommander::Command_COMPARE(void)
 	csCompare.m_bCompareAndTileHorz = cDlgCompare.m_bCompareAndTileHorz;
 
 	// タブウィンドウ時は禁止	//@@@ 2003.06.12 MIK
-	if (commonSetting.m_tabBar.m_bDispTabWnd
-		&& !commonSetting.m_tabBar.m_bDispTabWndMultiWin
+	if (commonSetting.tabBar.m_bDispTabWnd
+		&& !commonSetting.tabBar.m_bDispTabWndMultiWin
 	) {
 		hwndMsgBox = m_pCommanderView->GetHwnd();
 		csCompare.m_bCompareAndTileHorz = false;
@@ -173,7 +173,7 @@ void ViewCommander::Command_COMPARE(void)
 	// 比較後、左右に並べて表示
 // From Here Oct. 10, 2000 JEPRO	チェックボックスをボタン化すれば以下の行(To Here まで)は不要のはずだが
 // うまくいかなかったので元に戻してある…
-	if (GetDllShareData().m_common.m_compare.m_bCompareAndTileHorz) {
+	if (GetDllShareData().m_common.compare.m_bCompareAndTileHorz) {
 		HWND hWndArr[2];
 		hWndArr[0] = GetMainWindow();
 		hWndArr[1] = hwndCompareWnd;
@@ -438,7 +438,7 @@ re_do:;
 		GetCaret().MoveCursor(ptXY_Layout, true);
 	}
 
-	if (GetDllShareData().m_common.m_search.m_bSearchAll) {
+	if (GetDllShareData().m_common.search.m_bSearchAll) {
 		// 見つからなかった。かつ、最初の検索
 		if (!bFound	&& bRedo) {
 			ptXY.y = 0 - 1;	// 1個手前を指定
@@ -489,7 +489,7 @@ re_do:;
 		GetCaret().MoveCursor(ptXY_Layout, true);
 	}
 
-	if (GetDllShareData().m_common.m_search.m_bSearchAll) {
+	if (GetDllShareData().m_common.search.m_bSearchAll) {
 		// 見つからなかった、かつ、最初の検索
 		if (!bFound	&& bRedo) {
 			// 2011.02.02 m_layoutMgr→m_docLineMgr

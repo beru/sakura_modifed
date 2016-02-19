@@ -30,8 +30,8 @@
 void ViewFont::CreateFont(const LOGFONT *plf)
 {
 	LOGFONT	lf;
-	int miniSize = GetDllShareData().m_common.m_window.m_nMiniMapFontSize;
-	int quality = GetDllShareData().m_common.m_window.m_nMiniMapQuality;
+	int miniSize = GetDllShareData().m_common.window.m_nMiniMapFontSize;
+	int quality = GetDllShareData().m_common.window.m_nMiniMapQuality;
 	int outPrec = OUT_TT_ONLY_PRECIS;	// FixedSys等でMiniMapのフォントが小さくならない修正
 
 	// フォント作成

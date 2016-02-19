@@ -171,8 +171,8 @@ void PropCommon::Create(HWND hwndParent, ImageListMgr* pIcons, MenuDrawer* pMenu
 
 	// 2007.11.02 ryoji マクロ設定を変更したあと、画面を閉じないでカスタムメニュー、ツールバー、
 	//                  キー割り当ての画面に切り替えた時に各画面でマクロ設定の変更が反映されるよう、
-	//                  m_common.m_macro.m_macroTable（ローカルメンバ）でm_lookupを初期化する
-	m_lookup.Init(m_common.m_macro.m_macroTable, &m_common);	//	機能名・番号resolveクラス．
+	//                  m_common.macro.m_macroTable（ローカルメンバ）でm_lookupを初期化する
+	m_lookup.Init(m_common.macro.m_macroTable, &m_common);	//	機能名・番号resolveクラス．
 
 //@@@ 2002.01.03 YAZAKI m_tbMyButtonなどをCShareDataからMenuDrawerへ移動したことによる修正。
 	m_pMenuDrawer = pMenuDrawer;
