@@ -27,7 +27,7 @@
 #include "EditDoc.h"
 #include "doc/logic/DocLine.h"
 #include "doc/logic/DocLineMgr.h"
-#include "env/DLLSHAREDATA.h"
+#include "env/DllSharedData.h"
 #include "_main/AppMode.h"
 #include "Eol.h"
 #include "window/EditWnd.h"

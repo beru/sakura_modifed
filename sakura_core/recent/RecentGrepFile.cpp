@@ -25,7 +25,7 @@
 #include "StdAfx.h"
 #include "RecentGrepFile.h"
 #include <string.h>
-#include "env/DLLSHAREDATA.h"
+#include "env/DllSharedData.h"
 
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -35,8 +35,8 @@
 RecentGrepFile::RecentGrepFile()
 {
 	Create(
-		GetShareData()->m_searchKeywords.m_aGrepFiles.dataPtr(),
-		&GetShareData()->m_searchKeywords.m_aGrepFiles._GetSizeRef(),
+		GetShareData()->m_searchKeywords.grepFiles.dataPtr(),
+		&GetShareData()->m_searchKeywords.grepFiles._GetSizeRef(),
 		NULL,
 		MAX_GREPFILE,
 		NULL

@@ -37,7 +37,7 @@
 #include <WTypes.h> // VARTYPE
 
 #include "MacroManagerBase.h"
-#include "env/DLLSHAREDATA.h"
+#include "env/DllSharedData.h"
 #include "config/maxdata.h"
 #include "util/design_template.h"
 
@@ -160,7 +160,7 @@ public:
 	MacroManagerBase* SetTempMacro(MacroManagerBase* newMacro);
 
 private:
-	DLLSHAREDATA*	m_pShareData;
+	DllSharedData*	m_pShareData;
 	MacroManagerBase** Idx2Ptr(int idx);
 
 	/*!	実行中マクロのインデックス番号 (INVALID_MACRO_IDX:無効)

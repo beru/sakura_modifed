@@ -61,7 +61,7 @@ BOOL DlgFind::OnCbnDropDown(HWND hwndCtl, int wID)
 	switch (wID) {
 	case IDC_COMBO_TEXT:
 		if (::SendMessage(hwndCtl, CB_GETCOUNT, 0L, 0L) == 0) {
-			auto& keywords = m_pShareData->m_searchKeywords.m_aSearchKeys;
+			auto& keywords = m_pShareData->m_searchKeywords.searchKeys;
 			int nSize = keywords.size();
 			for (int i=0; i<nSize; ++i) {
 				Combo_AddString( hwndCtl, keywords[i] );
@@ -256,7 +256,7 @@ int DlgFind::GetData(void)
 		// ŒŸõ•¶š—ñ
 		//@@@ 2002.2.2 YAZAKI CShareData‚ÉˆÚ“®
 		if (m_strText.size() < _MAX_PATH) {
-			SearchKeywordManager().AddToSearchKeyArr(m_strText.c_str());
+			SearchKeywordManager().AddToSearchKeys(m_strText.c_str());
 			m_pShareData->m_common.m_search.m_searchOption = m_searchOption;		// ŒŸõƒIƒvƒVƒ‡ƒ“
 		}
 		EditView* pEditView = (EditView*)m_lParam;

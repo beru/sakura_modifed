@@ -235,8 +235,8 @@ void Macro::AddLParam(
 				AddStringParam( pDlgGrep->m_strText.c_str() );
 				AddStringParam( pEditView->m_pEditWnd->m_dlgGrepReplace.m_strText2.c_str() );
 			}
-			AddStringParam(GetDllShareData().m_searchKeywords.m_aGrepFiles[0]);	// lParamを追加。
-			AddStringParam(GetDllShareData().m_searchKeywords.m_aGrepFolders[0]);	// lParamを追加。
+			AddStringParam(GetDllShareData().m_searchKeywords.grepFiles[0]);	// lParamを追加。
+			AddStringParam(GetDllShareData().m_searchKeywords.grepFolders[0]);	// lParamを追加。
 
 			LPARAM lFlag = 0x00;
 			lFlag |= GetDllShareData().m_common.m_search.m_bGrepSubFolder				? 0x01 : 0x00;
@@ -780,7 +780,7 @@ bool Macro::HandleCommand(
 
 				// 検索文字列
 				if (nLen < _MAX_PATH && bAddHistory) {
-					SearchKeywordManager().AddToSearchKeyArr(arguments[0]);
+					SearchKeywordManager().AddToSearchKeys(arguments[0]);
 					GetDllShareData().m_common.m_search.m_searchOption = searchOption;
 				}
 				pEditView->m_strCurSearchKey = arguments[0];
@@ -965,7 +965,7 @@ bool Macro::HandleCommand(
 
 			// 検索文字列
 			if (wcslen(arguments[0]) < _MAX_PATH && bAddHistory) {
-				SearchKeywordManager().AddToSearchKeyArr(arguments[0]);
+				SearchKeywordManager().AddToSearchKeys(arguments[0]);
 				GetDllShareData().m_common.m_search.m_searchOption = searchOption;
 			}
 			pEditView->m_strCurSearchKey = arguments[0];
@@ -975,7 +975,7 @@ bool Macro::HandleCommand(
 
 			// 置換後文字列
 			if (wcslen(arguments[1]) < _MAX_PATH && bAddHistory) {
-				SearchKeywordManager().AddToReplaceKeyArr(arguments[1]);
+				SearchKeywordManager().AddToReplaceKeys(arguments[1]);
 			}
 			dlgReplace.m_strText2 = arguments[1];
 

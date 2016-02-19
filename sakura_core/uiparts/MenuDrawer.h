@@ -22,7 +22,7 @@
 class MenuDrawer;
 
 class ImageListMgr;// 2002/2/10 aroka
-struct DLLSHAREDATA;
+struct DllSharedData;
 
 //#define MAX_MENUPOS	10
 //	Jul. 2, 2005 genta : É}ÉNÉçÇÇΩÇ≠Ç≥ÇÒìoò^Ç∑ÇÈÇ∆è„å¿Çí¥Ç¶ÇƒÇµÇ‹Ç§ÇÃÇ≈
@@ -97,7 +97,7 @@ private:
 	int ToolbarNoToIndex(int nToolbarNo) const;
 
 private:
-	DLLSHAREDATA*	m_pShareData;
+	DllSharedData*	m_pShareData;
 
 	HINSTANCE		m_hInstance;
 	HWND			m_hWndOwner;

@@ -28,7 +28,7 @@
 #include "StdAfx.h"
 #include <ShlObj.h> // CSIDL_PROFILE“™
 
-#include "DLLSHAREDATA.h"
+#include "DllSharedData.h"
 #include "FileNameManager.h"
 #include "charset/CodePage.h"
 #include "util/module.h"

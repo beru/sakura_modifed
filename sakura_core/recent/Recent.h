@@ -36,7 +36,7 @@
 #pragma once
 
 #include "_main/global.h"
-#include "env/DLLSHAREDATA.h"
+#include "env/DllSharedData.h"
 
 class Recent {
 public:
@@ -74,7 +74,7 @@ public:
 	virtual bool	UpdateView() = 0;
 
 	// 共有メモリアクセス
-	DLLSHAREDATA*	GetShareData() {
+	DllSharedData*	GetShareData() {
 		return &GetDllShareData();
 	}
 };

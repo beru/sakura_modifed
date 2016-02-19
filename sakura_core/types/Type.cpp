@@ -27,7 +27,7 @@
 #include "view/Colors/EColorIndexType.h"
 #include "env/DocTypeManager.h"
 #include "env/ShareData.h"
-#include "env/DLLSHAREDATA.h"
+#include "env/DllSharedData.h"
 
 void _DefaultConfig(TypeConfig* pType);
 
@@ -66,7 +66,7 @@ void Type::InitTypeConfig(int nIdx, TypeConfig& type)
 	@date 2005.01.30 genta ShareData::Init()から分離．
 */
 void ShareData::InitTypeConfigs(
-	DLLSHAREDATA* pShareData,
+	DllSharedData* pShareData,
 	std::vector<TypeConfig*>& types
 	)
 {
@@ -112,7 +112,7 @@ void ShareData::InitTypeConfigs(
 	@date 2005.01.30 genta ShareData::Init()から分離．
 		キーワード定義を関数の外に出し，登録をマクロ化して簡潔に．
 */
-void ShareData::InitKeyword(DLLSHAREDATA* pShareData)
+void ShareData::InitKeyword(DllSharedData* pShareData)
 {
 	// 強調キーワードのテストデータ
 	pShareData->m_common.m_specialKeyword.m_keywordSetMgr.m_nCurrentKeywordSetIdx = 0;

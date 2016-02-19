@@ -529,7 +529,7 @@ void EditWnd::_AdjustInMonitor(const TabGroupInfo& tabGroupInfo)
 				if (ei.m_szDocType[0] != '\0') {
 					typeNew = DocTypeManager().GetDocumentTypeOfExt(ei.m_szDocType);
 				}else {
-					if (MRUFile().GetEditInfo(ei.m_szPath, &mruei) && 0 < mruei.m_nTypeId) {
+					if (MruFile().GetEditInfo(ei.m_szPath, &mruei) && 0 < mruei.m_nTypeId) {
 						typeNew = DocTypeManager().GetDocumentTypeOfId(mruei.m_nTypeId);
 					}
 					if (!typeNew.IsValidType()) {
@@ -2165,7 +2165,7 @@ void EditWnd::OnCommand(WORD wNotifyCode, WORD wID , HWND hwndCtl)
 			if (m_toolbar.GetSearchKey(strText)) {	// キー文字列がある
 				// 検索キーを登録
 				if (strText.length() < _MAX_PATH) {
-					SearchKeywordManager().AddToSearchKeyArr(strText.c_str());
+					SearchKeywordManager().AddToSearchKeys(strText.c_str());
 				}
 				GetActiveView().m_strCurSearchKey = strText;
 				GetActiveView().m_bCurSearchUpdate = true;
@@ -2187,7 +2187,7 @@ void EditWnd::OnCommand(WORD wNotifyCode, WORD wID , HWND hwndCtl)
 		// 最近使ったファイル
 		else if (wID - IDM_SELMRU >= 0 && wID - IDM_SELMRU < 999) {
 			// 指定ファイルが開かれているか調べる
-			const MRUFile mru;
+			const MruFile mru;
 			EditInfo checkEditInfo;
 			mru.GetEditInfo(wID - IDM_SELMRU, &checkEditInfo);
 			LoadInfo loadInfo(checkEditInfo.m_szPath, checkEditInfo.m_nCharCode, false);
@@ -2196,7 +2196,7 @@ void EditWnd::OnCommand(WORD wNotifyCode, WORD wID , HWND hwndCtl)
 		// 最近使ったフォルダ
 		else if (wID - IDM_SELOPENFOLDER >= 0 && wID - IDM_SELOPENFOLDER < 999) {
 			// フォルダ取得
-			const MRUFolder mruFolder;
+			const MruFolder mruFolder;
 			LPCTSTR pszFolderPath = mruFolder.GetPath(wID - IDM_SELOPENFOLDER);
 
 			// Stonee, 2001/12/21 UNCであれば接続を試みる
@@ -2570,7 +2570,7 @@ bool EditWnd::InitMenu_Special(HMENU hMenu, EFunctionCode eFunc)
 		// MRUリストのファイルのリストをメニューにする
 		{
 			//@@@ 2001.12.26 YAZAKI MRUリストは、CMRUに依頼する
-			const MRUFile mru;
+			const MruFile mru;
 			mru.CreateMenu(hMenu, &m_menuDrawer);	//	ファイルメニュー
 			bInList = (mru.MenuLength() > 0);
 		}
@@ -2578,8 +2578,8 @@ bool EditWnd::InitMenu_Special(HMENU hMenu, EFunctionCode eFunc)
 	case F_FOLDER_USED_RECENTLY:	// 最近使ったフォルダ
 		// 最近使ったフォルダのメニューを作成
 		{
-			//@@@ 2001.12.26 YAZAKI OPENFOLDERリストは、MRUFolderにすべて依頼する
-			const MRUFolder mruFolder;
+			//@@@ 2001.12.26 YAZAKI OPENFOLDERリストは、MruFolderにすべて依頼する
+			const MruFolder mruFolder;
 			mruFolder.CreateMenu(hMenu, &m_menuDrawer);
 			bInList = (mruFolder.MenuLength() > 0);
 		}
@@ -2771,7 +2771,7 @@ void EditWnd::OnDropFiles(HDROP hDrop)
 			// アクティブにする
 			ActivateFrameWindow(hWndOwner);
 			// MRUリストへの登録
-			MRUFile mru;
+			MruFile mru;
 			mru.Add(pfi);
 		}else {
 			// 変更フラグがオフで、ファイルを読み込んでいない場合
@@ -3685,7 +3685,7 @@ int	EditWnd::CreateFileDropDownMenu(HWND hwnd)
 	m_menuDrawer.ResetContents();
 
 	// MRUリストのファイルのリストをメニューにする
-	const MRUFile mru;
+	const MruFile mru;
 	hMenu = mru.CreateMenu(&m_menuDrawer);
 	if (mru.MenuLength() > 0) {
 		m_menuDrawer.MyAppendMenuSep(
@@ -3698,7 +3698,7 @@ int	EditWnd::CreateFileDropDownMenu(HWND hwnd)
 	}
 
 	// 最近使ったフォルダのメニューを作成
-	const MRUFolder mruFolder;
+	const MruFolder mruFolder;
 	hMenuPopUp = mruFolder.CreateMenu(&m_menuDrawer);
 	if (mruFolder.MenuLength() > 0) {
 		// アクティブ
@@ -4332,7 +4332,7 @@ void  EditWnd::SetActivePane(int nIndex)
 	m_pEditView = m_pEditViewArr[m_nActivePaneIndex];
 
 	// フォーカスを移動する	// 2007.10.16 ryoji
-	GetView(nOldIndex).GetCaret().m_cUnderLine.CaretUnderLineOFF(true);	//	2002/05/11 YAZAKI
+	GetView(nOldIndex).GetCaret().m_underLine.CaretUnderLineOFF(true);	//	2002/05/11 YAZAKI
 	if (::GetActiveWindow() == GetHwnd()
 		&& ::GetFocus() != GetActiveView().GetHwnd()
 	) {

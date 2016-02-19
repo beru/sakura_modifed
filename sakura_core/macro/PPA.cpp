@@ -39,7 +39,7 @@
 #include "Macro.h"
 #include "macro/SMacroMgr.h"// 2002/2/10 aroka
 #include "env/ShareData.h"
-#include "env/DLLSHAREDATA.h"
+#include "env/DllSharedData.h"
 #include "_os/OleTypes.h"
 
 #define NEVER_USED_PARAM(p) ((void)p)

@@ -125,7 +125,7 @@ void ViewCommander::Command_COPY(
 			selInfo.m_bSelectingLock = false;
 			selInfo.PrintSelectionInfoMsg();
 			if (!selInfo.IsTextSelected()) {
-				GetCaret().m_cUnderLine.CaretUnderLineON(true, false);
+				GetCaret().m_underLine.CaretUnderLineON(true, false);
 			}
 		}
 	}

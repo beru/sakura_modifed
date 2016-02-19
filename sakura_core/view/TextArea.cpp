@@ -4,7 +4,7 @@
 #include "Ruler.h"
 #include "EditView.h"
 #include "env/ShareData.h"
-#include "env/DLLSHAREDATA.h"
+#include "env/DllSharedData.h"
 #include "doc/EditDoc.h"
 
 // 2014.07.26 katze
@@ -17,7 +17,7 @@ TextArea::TextArea(EditView* pEditView)
 	:
 	m_pEditView(pEditView)
 {
-	DLLSHAREDATA* pShareData = &GetDllShareData();
+	DllSharedData* pShareData = &GetDllShareData();
 
 	m_nViewAlignLeft = 0;					// 表示域の左端座標
 	m_nViewAlignLeftCols = 0;				// 行番号域の桁数
@@ -186,11 +186,11 @@ bool TextArea::DetectWidthOfLineNumberArea(bool bRedraw)
 
 		if (bRedraw && pView2->GetDrawSwitch()) {
 			// 再描画
-			pView2->GetCaret().m_cUnderLine.Lock();
+			pView2->GetCaret().m_underLine.Lock();
 			// From Here 2007.09.09 Moca 互換BMPによる画面バッファ
 			pView2->Call_OnPaint((int)PaintAreaType::LineNumber | (int)PaintAreaType::Ruler | (int)PaintAreaType::Body, false); // メモリＤＣを使用してちらつきのない再描画
 			// To Here 2007.09.09 Moca
-			pView2->GetCaret().m_cUnderLine.UnLock();
+			pView2->GetCaret().m_underLine.UnLock();
 			pView2->GetCaret().ShowEditCaret();
 			/*
 			PAINTSTRUCT		ps;
@@ -199,9 +199,9 @@ bool TextArea::DetectWidthOfLineNumberArea(bool bRedraw)
 			ps.rcPaint.right  = GetAreaRight();
 			ps.rcPaint.top    = 0;
 			ps.rcPaint.bottom = GetAreaBottom();
-			pView2->GetCaret().m_cUnderLine.Lock();
+			pView2->GetCaret().m_underLine.Lock();
 			pView2->OnPaint(hdc, &ps, TRUE);	
-			GetCaret().m_cUnderLine.UnLock();
+			GetCaret().m_underLine.UnLock();
 			pView2->GetCaret().ShowEditCaret();
 			::ReleaseDC(m_hWnd, hdc);
 			*/

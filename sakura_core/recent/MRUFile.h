@@ -41,12 +41,12 @@
 struct EditInfo; // 2004.04.11 genta パラメータ内のstructを削除するため．doxygen対策
 class MenuDrawer;
 
-//	@date 2002.2.17 YAZAKI CShareDataのインスタンスは、CProcessにひとつあるのみ。
-class MRUFile {
+//	@date 2002.2.17 YAZAKI ShareDataのインスタンスは、Processにひとつあるのみ。
+class MruFile {
 public:
 	//	コンストラクタ
-	MRUFile();
-	~MRUFile();
+	MruFile();
+	~MruFile();
 
 	//	メニューを取得する
 	HMENU CreateMenu(MenuDrawer* pMenuDrawer) const;	//	うーん。pMenuDrawerが必要なくなるといいなぁ。
@@ -66,7 +66,7 @@ public:
 
 protected:
 	// 共有メモリアクセス用。
-	struct DLLSHAREDATA* m_pShareData;		//	共有メモリを参照するよ。
+	struct DllSharedData* m_pShareData;		//	共有メモリを参照するよ。
 	
 private:
 	RecentFile	m_recentFile;	// 履歴	//@@@ 2003.04.08 MIK

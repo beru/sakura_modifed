@@ -47,7 +47,7 @@
 #include "func/Funccode.h"
 #include "config/maxdata.h" // MAX_MRU
 #include "env/ShareData.h"
-#include "env/DLLSHAREDATA.h"
+#include "env/DllSharedData.h"
 #include "doc/EditDoc.h"
 #include "_main/AppMode.h"
 #include "EditApp.h"
@@ -993,7 +993,7 @@ int FuncID_To_HelpContextID(EFunctionCode nFuncID)
 
 
 // 機能が利用可能か調べる
-bool IsFuncEnable(const EditDoc* pEditDoc, const DLLSHAREDATA* pShareData, EFunctionCode nId)
+bool IsFuncEnable(const EditDoc* pEditDoc, const DllSharedData* pShareData, EFunctionCode nId)
 {
 	// 書き換え禁止のときを一括チェック
 	if (pEditDoc->IsModificationForbidden(nId))
@@ -1208,7 +1208,7 @@ bool IsFuncEnable(const EditDoc* pEditDoc, const DLLSHAREDATA* pShareData, EFunc
 
 
 // 機能がチェック状態か調べる
-bool IsFuncChecked(const EditDoc* pEditDoc, const DLLSHAREDATA* pShareData, EFunctionCode nId)
+bool IsFuncChecked(const EditDoc* pEditDoc, const DllSharedData* pShareData, EFunctionCode nId)
 {
 	EditWnd* pEditWnd;
 	// Modified by KEITA for WIN64 2003.9.6

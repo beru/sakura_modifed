@@ -5,7 +5,7 @@
 
 // 非依存推奨
 #include "env/ShareData.h"
-#include "env/DLLSHAREDATA.h"
+#include "env/DllSharedData.h"
 
 
 // 指定した位置の文字が何バイト文字かを返す

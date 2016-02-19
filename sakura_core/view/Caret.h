@@ -130,7 +130,7 @@ public:
 	LayoutInt MoveCursorToClientPoint(const POINT& ptClientPos, bool = false, LayoutPoint* = NULL);		// マウス等による座標指定によるカーソル移動
 	LayoutInt Cursor_UPDOWN(LayoutInt nMoveLines, bool bSelect);		// カーソル上下移動処理
 	LayoutInt MoveCursor(												// 行桁指定によるカーソル移動
-		LayoutPoint	ptWk_CaretPos,									// [in] 移動先レイアウト位置
+		LayoutPoint		ptWk_CaretPos,									// [in] 移動先レイアウト位置
 		bool			bScroll,										// [in] true: 画面位置調整有り  false: 画面位置調整無し
 		int				nCaretMarginRate	= _CARETMARGINRATE,			// [in] 縦スクロール開始位置を決める値
 		bool			bUnderlineDoNotOFF	= false,					// [in] アンダーラインを消去しない
@@ -178,9 +178,9 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 	LayoutPoint GetCaretLayoutPos() const	{ return m_ptCaretPos_Layout; }	// キャレット位置(レイアウト)を取得
-	Size GetCaretSize() const			{ return m_sizeCaret; }			// キャレットサイズを取得。※正確には高さは違うらしい (この半分のこともある？)
+	Size GetCaretSize() const				{ return m_sizeCaret; }			// キャレットサイズを取得。※正確には高さは違うらしい (この半分のこともある？)
 	bool ExistCaretFocus() const			{ return m_sizeCaret.cx>0; }	// キャレットのフォーカスがあるか。※横幅値で判定してるらしい。
-	LogicPoint GetCaretLogicPos() const	{ return m_ptCaretPos_Logic; }	// キャレット位置(ロジック)を取得
+	LogicPoint GetCaretLogicPos() const		{ return m_ptCaretPos_Logic; }	// キャレット位置(ロジック)を取得
 
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -199,7 +199,7 @@ private:
 
 	// キャレット位置
 	LayoutPoint	m_ptCaretPos_Layout;	// ビュー左上端からのカーソル位置。レイアウト単位。
-	LogicPoint		m_ptCaretPos_Logic;		// カーソル位置。ロジック単位。データ内文字単位。
+	LogicPoint	m_ptCaretPos_Logic;		// カーソル位置。ロジック単位。データ内文字単位。
 
 	// カーソル位置計算キャッシュ
 	LayoutInt m_nOffsetCache;
@@ -224,7 +224,7 @@ private:
 
 	// アンダーライン
 public:
-	mutable CaretUnderLine m_cUnderLine;
+	mutable CaretUnderLine m_underLine;
 	
 	bool			m_bClearStatus;
 };

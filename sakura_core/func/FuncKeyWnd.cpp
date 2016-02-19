@@ -20,7 +20,7 @@
 #include "_main/global.h"
 #include "func/FuncKeyWnd.h"
 #include "env/ShareData.h"
-#include "env/DLLSHAREDATA.h"
+#include "env/DllSharedData.h"
 #include "window/EditWnd.h"
 #include "doc/EditDoc.h"
 #include "util/input.h"
@@ -277,7 +277,7 @@ LRESULT FuncKeyWnd::OnTimer(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 // novice 2004/10/10
 	// Shift,Ctrl,Altキーが押されていたか
-	int nIdx = getCtrlKeyState();
+	int nIdx = GetCtrlKeyState();
 	// ALT,Shift,Ctrlキーの状態が変化したか
 	if (nIdx != m_nCurrentKeyState) {
 		m_nTimerCount = TIMER_CHECKFUNCENABLE + 1;

@@ -24,7 +24,7 @@
 
 #include "StdAfx.h"
 #include "PropertyManager.h"
-#include "env/DLLSHAREDATA.h"
+#include "env/DllSharedData.h"
 #include "env/DocTypeManager.h"
 #include <memory>
 

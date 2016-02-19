@@ -34,7 +34,7 @@
 const TCHAR* DocTypeManager::m_typeExtSeps = _T(" ;,");	// タイプ別拡張子 区切り文字
 const TCHAR* DocTypeManager::m_typeExtWildcards = _T("*?");	// タイプ別拡張子 ワイルドカード
 
-static Mutex g_cDocTypeMutex(FALSE, GSTR_MUTEX_SAKURA_DOCTYPE);
+static Mutex g_docTypeMutex(FALSE, GSTR_MUTEX_SAKURA_DOCTYPE);
 
 /*!
 	ファイル名から、ドキュメントタイプ（数値）を取得する
@@ -100,7 +100,7 @@ bool DocTypeManager::GetTypeConfig(TypeConfigNum documentType, TypeConfig& type)
 			type = m_pShareData->m_TypeBasis;
 			return true;
 		}else {
-			LockGuard<Mutex> guard(g_cDocTypeMutex);
+			LockGuard<Mutex> guard(g_docTypeMutex);
 			 if (SendMessage(m_pShareData->m_handles.m_hwndTray, MYWM_GET_TYPESETTING, (WPARAM)n, 0)) {
 				type = m_pShareData->m_workBuffer.m_TypeConfig;
 				return true;
@@ -114,7 +114,7 @@ bool DocTypeManager::SetTypeConfig(TypeConfigNum documentType, const TypeConfig&
 {
 	int n = documentType.GetIndex();
 	if (0 <= n && n < m_pShareData->m_nTypesCount) {
-		LockGuard<Mutex> guard(g_cDocTypeMutex);
+		LockGuard<Mutex> guard(g_docTypeMutex);
 		m_pShareData->m_workBuffer.m_TypeConfig = type;
 		if (SendMessage(m_pShareData->m_handles.m_hwndTray, MYWM_SET_TYPESETTING, (WPARAM)n, 0)) {
 			return true;
@@ -135,13 +135,13 @@ bool DocTypeManager::GetTypeConfigMini(TypeConfigNum documentType, const TypeCon
 
 bool DocTypeManager::AddTypeConfig(TypeConfigNum documentType)
 {
-	LockGuard<Mutex> guard(g_cDocTypeMutex);
+	LockGuard<Mutex> guard(g_docTypeMutex);
 	return FALSE != SendMessage(m_pShareData->m_handles.m_hwndTray, MYWM_ADD_TYPESETTING, (WPARAM)documentType.GetIndex(), 0);
 }
 
 bool DocTypeManager::DelTypeConfig(TypeConfigNum documentType)
 {
-	LockGuard<Mutex> guard(g_cDocTypeMutex);
+	LockGuard<Mutex> guard(g_docTypeMutex);
 	return FALSE != SendMessage(m_pShareData->m_handles.m_hwndTray, MYWM_DEL_TYPESETTING, (WPARAM)documentType.GetIndex(), 0);
 }
 

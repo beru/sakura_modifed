@@ -30,7 +30,7 @@
 #include "GrepAgent.h"
 #include "view/colors/ColorStrategy.h"
 #include "view/figures/FigureManager.h"
-#include "env/DllShareData.h"
+#include "env/DllSharedData.h"
 
 DocType::DocType(EditDoc* pDoc)
 	:

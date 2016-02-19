@@ -22,7 +22,7 @@
 #include "dlg/Dialog.h"
 #include "EditApp.h"
 #include "env/ShareData.h"
-#include "env/DLLSHAREDATA.h"
+#include "env/DllSharedData.h"
 #include "DlgOpenFile.h"
 #include "recent/Recent.h"
 #include "util/os.h"

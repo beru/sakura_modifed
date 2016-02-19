@@ -160,7 +160,7 @@ void ViewCommander::Command_BEGIN_SELECT(void)
 		si.m_bSelectingLock = true;		// 選択状態のロック
 	}
 	if (GetSelect().IsOne()) {
-		GetCaret().m_cUnderLine.CaretUnderLineOFF(true);
+		GetCaret().m_underLine.CaretUnderLineOFF(true);
 	}
 	si.PrintSelectionInfoMsg();
 	return;
@@ -188,7 +188,7 @@ void ViewCommander::Command_BEGIN_BOXSELECT(bool bSelectingLock)
 	si.SetBoxSelect(true);	// 矩形範囲選択中
 
 	si.PrintSelectionInfoMsg();
-	GetCaret().m_cUnderLine.CaretUnderLineOFF(true);
+	GetCaret().m_underLine.CaretUnderLineOFF(true);
 	return;
 }
 

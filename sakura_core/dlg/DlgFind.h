@@ -47,7 +47,7 @@ public:
 
 protected:
 //@@@ 2002.2.2 YAZAKI CShareDataに移動
-//	void AddToSearchKeyArr(const char*);
+//	void AddToSearchKeys(const char*);
 	// オーバーライド?
 	BOOL OnCbnDropDown( HWND hwndCtl, int wID );
 	int GetData(void);		// ダイアログデータの取得

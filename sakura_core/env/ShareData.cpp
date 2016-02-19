@@ -25,7 +25,7 @@
 
 #include "StdAfx.h"
 #include "env/ShareData.h"
-#include "env/DLLSHAREDATA.h"
+#include "env/DllSharedData.h"
 #include "env/ShareData_IO.h"
 #include "env/SakuraEnvironment.h"
 #include "doc/DocListener.h" // LoadInfo
@@ -118,7 +118,7 @@ bool ShareData::InitShareData()
 			NULL,
 			PAGE_READWRITE | SEC_COMMIT,
 			0,
-			sizeof(DLLSHAREDATA),
+			sizeof(DllSharedData),
 			strShareDataName.c_str()
 		);
 	}
@@ -135,7 +135,7 @@ bool ShareData::InitShareData()
 	if (GetLastError() != ERROR_ALREADY_EXISTS) {
 		// オブジェクトが存在していなかった場合
 		// ファイルのビューを､ 呼び出し側プロセスのアドレス空間にマップします
-		m_pShareData = (DLLSHAREDATA*)::MapViewOfFile(
+		m_pShareData = (DllSharedData*)::MapViewOfFile(
 			m_hFileMap,
 			FILE_MAP_ALL_ACCESS,
 			0,
@@ -176,10 +176,10 @@ bool ShareData::InitShareData()
 		}
 
 //@@@ 2001.12.26 YAZAKI MRUリストは、CMRUに依頼する
-		MRUFile mru;
+		MruFile mru;
 		mru.ClearAll();
-//@@@ 2001.12.26 YAZAKI OPENFOLDERリストは、MRUFolderにすべて依頼する
-		MRUFolder mruFolder;
+//@@@ 2001.12.26 YAZAKI OPENFOLDERリストは、MruFolderにすべて依頼する
+		MruFolder mruFolder;
 		mruFolder.ClearAll();
 
 // From Here Sept. 19, 2000 JEPRO コメントアウトになっていた初めのブロックを復活しその下をコメントアウト
@@ -680,11 +680,11 @@ bool ShareData::InitShareData()
 		}
 
 		{
-			m_pShareData->m_searchKeywords.m_aSearchKeys.clear();
-			m_pShareData->m_searchKeywords.m_aReplaceKeys.clear();
-			m_pShareData->m_searchKeywords.m_aGrepFiles.clear();
-			m_pShareData->m_searchKeywords.m_aGrepFiles.push_back(_T("*.*"));
-			m_pShareData->m_searchKeywords.m_aGrepFolders.clear();
+			m_pShareData->m_searchKeywords.searchKeys.clear();
+			m_pShareData->m_searchKeywords.replaceKeys.clear();
+			m_pShareData->m_searchKeywords.grepFiles.clear();
+			m_pShareData->m_searchKeywords.grepFiles.push_back(_T("*.*"));
+			m_pShareData->m_searchKeywords.grepFolders.clear();
 
 			// 2004/06/21 novice タグジャンプ機能追加
 			m_pShareData->m_tagJump.m_TagJumpNum = 0;
@@ -715,7 +715,7 @@ bool ShareData::InitShareData()
 	}else {
 		// オブジェクトがすでに存在する場合
 		// ファイルのビューを､ 呼び出し側プロセスのアドレス空間にマップします
-		m_pShareData = (DLLSHAREDATA*)::MapViewOfFile(
+		m_pShareData = (DllSharedData*)::MapViewOfFile(
 			m_hFileMap,
 			FILE_MAP_ALL_ACCESS,
 			0,
@@ -822,7 +822,7 @@ void ConvertLangValueImpl(
 */
 void ShareData::ConvertLangValues(std::vector<std::wstring>& values, bool bSetValues)
 {
-	DLLSHAREDATA& shareData = *m_pShareData;
+	DllSharedData& shareData = *m_pShareData;
 	int index = 0;
 	int indexBackup;
 	CommonSetting& common = shareData.m_common;
@@ -991,7 +991,7 @@ bool ShareData::ActiveAlreadyOpenedWindow(const TCHAR* pszPath, HWND* phwndOwner
 		ActivateFrameWindow(*phwndOwner);
 
 		// MRUリストへの登録
-		MRUFile().Add(pfi);
+		MruFile().Add(pfi);
 		return true;
 	}else {
 		return false;
@@ -1247,7 +1247,7 @@ bool ShareData::BeReloadWhenExecuteMacro(int idx)
 	@date 2005.01.30 genta ShareData::Init()から分離．
 		一つずつ設定しないで一気にデータ転送するように．
 */
-void ShareData::InitToolButtons(DLLSHAREDATA* pShareData)
+void ShareData::InitToolButtons(DllSharedData* pShareData)
 {
 	// ツールバーボタン構造体
 	// Sept. 16, 2000 JEPRO
@@ -1308,7 +1308,7 @@ void ShareData::InitToolButtons(DLLSHAREDATA* pShareData)
 
 	@date 2005.01.30 genta ShareData::Init()から分離．
 */
-void ShareData::InitPopupMenu(DLLSHAREDATA* pShareData)
+void ShareData::InitPopupMenu(DllSharedData* pShareData)
 {
 	// カスタムメニュー 規定値
 	

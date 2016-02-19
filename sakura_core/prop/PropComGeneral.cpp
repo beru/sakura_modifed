@@ -137,7 +137,7 @@ INT_PTR PropGeneral::DispatchEvent(
 //@@@ 2001.12.26 YAZAKI MRUリストは、CMRUに依頼する
 //				m_pShareData->m_sHistory.m_nMRUArrNum = 0;
 				{
-					MRUFile mru;
+					MruFile mru;
 					mru.ClearAll();
 				}
 				InfoMessage(hwndDlg, LS(STR_PROPCOMGEN_FILE2));
@@ -149,10 +149,10 @@ INT_PTR PropGeneral::DispatchEvent(
 				) {
 					return TRUE;
 				}
-//@@@ 2001.12.26 YAZAKI OPENFOLDERリストは、MRUFolderにすべて依頼する
+//@@@ 2001.12.26 YAZAKI OPENFOLDERリストは、MruFolderにすべて依頼する
 //				m_pShareData->m_sHistory.m_nOPENFOLDERArrNum = 0;
 				{
-					MRUFolder mruFolder;	//	MRUリストの初期化。ラベル内だと問題あり？
+					MruFolder mruFolder;	//	MRUリストの初期化。ラベル内だと問題あり？
 					mruFolder.ClearAll();
 				}
 				InfoMessage(hwndDlg, LS(STR_PROPCOMGEN_DIR2));

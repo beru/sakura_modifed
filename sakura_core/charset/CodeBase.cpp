@@ -8,7 +8,7 @@
 
 // ”ñˆË‘¶„§
 #include "env/ShareData.h"
-#include "env/DLLSHAREDATA.h"
+#include "env/DllSharedData.h"
 
 void CodeBase::GetBom(Memory* pMemBom) { pMemBom->Clear(); }					// BOMƒf[ƒ^æ“¾
 

@@ -491,9 +491,9 @@ void ViewCommander::Command_REPLACE_DIALOG(void)
 	if (0 < memCurText.GetStringLength()) {
 		dlgReplace.m_strText = memCurText.GetStringPtr();
 	}
-	if (0 < GetDllShareData().m_searchKeywords.m_aReplaceKeys.size()) {
+	if (0 < GetDllShareData().m_searchKeywords.replaceKeys.size()) {
 		if (dlgReplace.m_nReplaceKeySequence < GetDllShareData().m_common.m_search.m_nReplaceKeySequence) {
-			dlgReplace.m_strText2 = GetDllShareData().m_searchKeywords.m_aReplaceKeys[0];	// 2006.08.23 ryoji 前回の置換後文字列を引き継ぐ
+			dlgReplace.m_strText2 = GetDllShareData().m_searchKeywords.replaceKeys[0];	// 2006.08.23 ryoji 前回の置換後文字列を引き継ぐ
 		}
 	}
 	
@@ -572,7 +572,7 @@ void ViewCommander::Command_REPLACE(HWND hwndParent)
 	// 現在の選択範囲を非選択状態に戻す
 	m_pCommanderView->GetSelectionInfo().DisableSelectArea(true);
 
-	// 2004.06.01 Moca 検索中に、他のプロセスによってm_aReplaceKeysが書き換えられても大丈夫なように
+	// 2004.06.01 Moca 検索中に、他のプロセスによってreplaceKeysが書き換えられても大丈夫なように
 	const NativeW memRepKey(dlgReplace.m_strText2.c_str());
 
 	// 次を検索
@@ -1458,7 +1458,7 @@ void ViewCommander::Command_SEARCH_CLEARMARK(void)
 
 		// 共有データへ登録
 		if (memCurText.GetStringLength() < _MAX_PATH) {
-			SearchKeywordManager().AddToSearchKeyArr(memCurText.GetStringPtr());
+			SearchKeywordManager().AddToSearchKeys(memCurText.GetStringPtr());
 			csSearch.m_searchOption = m_pCommanderView->m_curSearchOption;
 		}
 		m_pCommanderView->m_nCurSearchKeySequence = csSearch.m_nSearchKeySequence;

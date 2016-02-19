@@ -26,7 +26,7 @@
 class EditView;
 enum EFunctionCode;
 class EditDoc;
-struct DLLSHAREDATA;
+struct DllSharedData;
 class OpeBlk;
 class Caret;
 class EditWnd;

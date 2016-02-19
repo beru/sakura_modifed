@@ -2,7 +2,7 @@
 #include "view/EditView.h" // SColorStrategyInfo
 #include "Figure_Tab.h"
 #include "env/ShareData.h"
-#include "env/DLLSHAREDATA.h"
+#include "env/DllSharedData.h"
 #include "types/TypeSupport.h"
 
 // 2007.08.28 kobake ’Ç‰Á

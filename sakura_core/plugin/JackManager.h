@@ -97,7 +97,7 @@ public:
 
 	// メンバ変数
 private:
-	DLLSHAREDATA* m_pShareData;
+	DllSharedData* m_pShareData;
 	std::vector<JackDef> m_Jacks;	// ジャック定義の一覧
 };
 

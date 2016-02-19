@@ -31,7 +31,7 @@
 
 #include "StdAfx.h"
 #include "dlg/DlgTagsMake.h"
-#include "env/DLLSHAREDATA.h"
+#include "env/DllSharedData.h"
 #include "func/Funccode.h"
 #include "util/shell.h"
 #include "sakura_rc.h"

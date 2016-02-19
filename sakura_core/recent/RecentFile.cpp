@@ -25,7 +25,7 @@
 #include "StdAfx.h"
 #include "recent/RecentFile.h"
 #include <string.h>
-#include "env/DLLSHAREDATA.h"
+#include "env/DllSharedData.h"
 
 
 /*

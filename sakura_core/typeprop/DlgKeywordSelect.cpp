@@ -31,7 +31,7 @@
 
 #include "StdAfx.h"
 #include "DlgKeywordSelect.h"
-#include "env/DLLSHAREDATA.h"
+#include "env/DllSharedData.h"
 #include "KeywordSetMgr.h"
 #include "sakura_rc.h"
 #include "sakura.hh"

@@ -41,7 +41,7 @@
 
 class Graphics;
 struct EditNode;
-struct DLLSHAREDATA;
+struct DllSharedData;
 
 //! タブバーウィンドウ
 class TabWnd : public Wnd {
@@ -173,7 +173,7 @@ protected:
 	|| メンバ変数
 	*/
 public:
-	DLLSHAREDATA*	m_pShareData;		// 共有データ
+	DllSharedData*	m_pShareData;		// 共有データ
 	HFONT			m_hFont;			// 表示用フォント
 	HWND			m_hwndTab;			// タブコントロール
 	HWND			m_hwndToolTip;		// ツールチップ（ボタン用）

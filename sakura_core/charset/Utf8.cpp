@@ -6,7 +6,7 @@
 
 // ”ñˆË‘¶„§
 #include "env/ShareData.h"
-#include "env/DLLSHAREDATA.h"
+#include "env/DllSharedData.h"
 
 //! BOMƒf[ƒ^æ“¾
 void Utf8::GetBom(Memory* pMemBom)

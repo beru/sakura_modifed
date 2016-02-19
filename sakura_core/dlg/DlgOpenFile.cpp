@@ -82,7 +82,7 @@ public:
 	HINSTANCE		m_hInstance;	// アプリケーションインスタンスのハンドル
 	HWND			m_hwndParent;	// オーナーウィンドウのハンドル
 
-	DLLSHAREDATA*	m_pShareData;
+	DllSharedData*	m_pShareData;
 
 	SFilePath		m_szDefaultWildCard;	// 「開く」での最初のワイルドカード（保存時の拡張子補完でも使用される）
 	SFilePath		m_szInitialDir;			// 「開く」での初期ディレクトリ
@@ -150,7 +150,7 @@ LRESULT APIENTRY OFNHookProcMain(
 	DlgOpenFileData* pData = (DlgOpenFileData*)::GetProp(hwnd, s_pszOpenFileDataName);
 	WORD wNotifyCode;
 	WORD wID;
-	static DLLSHAREDATA* pShareData;
+	static DllSharedData* pShareData;
 	switch (uMsg) {
 	case WM_MOVE:
 		//「開く」ダイアログのサイズと位置

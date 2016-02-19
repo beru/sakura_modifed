@@ -59,7 +59,7 @@ void MainToolBar::ProcSearchBox(MSG *msg)
 			if (0 < GetSearchKey(strText)) {	// ƒL[•¶Žš—ñ‚ª‚ ‚é
 				if (strText.size() < _MAX_PATH) {
 					// ŒŸõƒL[‚ð“o˜^
-					SearchKeywordManager().AddToSearchKeyArr(strText.c_str());
+					SearchKeywordManager().AddToSearchKeys(strText.c_str());
 				}
 				m_pOwner->GetActiveView().m_strCurSearchKey = strText;
 				m_pOwner->GetActiveView().m_bCurSearchUpdate = true;
@@ -519,9 +519,9 @@ void MainToolBar::AcceptSharedSearchKey()
 		while (Combo_GetCount(m_hwndSearchBox) > 0) {
 			Combo_DeleteString(m_hwndSearchBox, 0);
 		}
-		int nSize = GetDllShareData().m_searchKeywords.m_aSearchKeys.size();
+		int nSize = GetDllShareData().m_searchKeywords.searchKeys.size();
 		for (i=0; i<nSize; ++i) {
-			Combo_AddString(m_hwndSearchBox, GetDllShareData().m_searchKeywords.m_aSearchKeys[i]);
+			Combo_AddString(m_hwndSearchBox, GetDllShareData().m_searchKeywords.searchKeys[i]);
 		}
 		const wchar_t* pszText;
 		if (GetDllShareData().m_common.m_search.m_bInheritKeyOtherView
@@ -529,7 +529,7 @@ void MainToolBar::AcceptSharedSearchKey()
 			|| m_pOwner->GetActiveView().m_strCurSearchKey.size() == 0
 		) {
 			if (0 < nSize) {
-				pszText = GetDllShareData().m_searchKeywords.m_aSearchKeys[0];
+				pszText = GetDllShareData().m_searchKeywords.searchKeys[0];
 			}else {
 				pszText = L"";
 			}

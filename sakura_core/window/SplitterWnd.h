@@ -15,7 +15,7 @@
 
 #include "Wnd.h"
 
-struct DLLSHAREDATA;
+struct DllSharedData;
 
 /*-----------------------------------------------------------------------
 ƒNƒ‰ƒX‚ÌéŒ¾
@@ -41,7 +41,7 @@ private: // 2002/2/3 aroka
 	/*
 	||  Attributes & Operations
 	*/
-	DLLSHAREDATA*	m_pShareData;
+	DllSharedData*	m_pShareData;
 	void*			m_pEditWnd;
 	int				m_nAllSplitRows;		// •ªŠ„s”
 	int				m_nAllSplitCols;		// •ªŠ„Œ…”

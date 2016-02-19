@@ -258,7 +258,7 @@ void EditView::DrawBracketPair(bool bDraw)
 						|| (ptColLine.y - 1 == GetCaret().GetCaretLayoutPos().GetY())
 					) 
 				) {	// 03/02/27 ai 行の間隔が"0"の時にアンダーラインが欠ける事がある為修正
-					GetCaret().m_cUnderLine.CaretUnderLineON(true, false);
+					GetCaret().m_underLine.CaretUnderLineON(true, false);
 				}
 			}
 		}

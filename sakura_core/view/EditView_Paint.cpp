@@ -611,7 +611,7 @@ void EditView::OnPaint2(HDC _hdc, PAINTSTRUCT *pPs, BOOL bDrawFromComptibleBmp)
 		);
 		if (m_pEditWnd->GetActivePane() == m_nMyIndex) {
 			// アクティブペインは、アンダーライン描画
-			GetCaret().m_cUnderLine.CaretUnderLineON(true, false);
+			GetCaret().m_underLine.CaretUnderLineON(true, false);
 		}
 		return;
 	}
@@ -845,7 +845,7 @@ void EditView::OnPaint2(HDC _hdc, PAINTSTRUCT *pPs, BOOL bDrawFromComptibleBmp)
 	//     アンダーライン描画をメモリDCからのコピー前処理から後に移動
 	if (m_pEditWnd->GetActivePane() == m_nMyIndex) {
 		// アクティブペインは、アンダーライン描画
-		GetCaret().m_cUnderLine.CaretUnderLineON(true, false);
+		GetCaret().m_underLine.CaretUnderLineON(true, false);
 	}
 	// To Here 2007.09.09 Moca
 

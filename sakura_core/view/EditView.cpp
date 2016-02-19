@@ -2400,7 +2400,7 @@ void EditView::CaretUnderLineON(bool bDraw, bool bDrawPaint, bool DisalbeUnderLi
 		m_nOldUnderLineYBg = m_nOldUnderLineY;
 		m_nOldUnderLineYHeight = GetTextMetrics().GetHankakuDy();
 		if (bDrawPaint) {
-			GetCaret().m_cUnderLine.Lock();
+			GetCaret().m_underLine.Lock();
 			PAINTSTRUCT ps;
 			ps.rcPaint.left = 0;
 			ps.rcPaint.right = GetTextArea().GetAreaRight();
@@ -2412,7 +2412,7 @@ void EditView::CaretUnderLineON(bool bDraw, bool bDrawPaint, bool DisalbeUnderLi
 			OnPaint(hdc, &ps, FALSE);
 			this->ReleaseDC(hdc);
 
-			GetCaret().m_cUnderLine.UnLock();
+			GetCaret().m_underLine.UnLock();
 		}
 	}
 	
@@ -2516,7 +2516,7 @@ void EditView::CaretUnderLineOFF(bool bDraw, bool bDrawPaint, bool bResetFlag, b
 			&& GetDrawSwitch()
 			&& m_nOldUnderLineY >= GetTextArea().GetViewTopLine()
 			&& !m_bDoing_UndoRedo	// アンドゥ・リドゥの実行中か
-			&& !GetCaret().m_cUnderLine.GetUnderLineDoNotOFF()	// アンダーラインを消去するか
+			&& !GetCaret().m_underLine.GetUnderLineDoNotOFF()	// アンダーラインを消去するか
 		) {
 			// -- -- カーソル行アンダーラインの消去（無理やり） -- -- //
 			int nUnderLineY; // client px
@@ -2529,7 +2529,7 @@ void EditView::CaretUnderLineOFF(bool bDraw, bool bDrawPaint, bool bResetFlag, b
 				nUnderLineY = GetTextArea().GetAreaTop() + (Int)(nY) * GetTextMetrics().GetHankakuDy();
 			}
 			
-			GetCaret().m_cUnderLine.Lock();
+			GetCaret().m_underLine.Lock();
 
 			PAINTSTRUCT ps;
 			ps.rcPaint.left = 0;
@@ -2559,7 +2559,7 @@ void EditView::CaretUnderLineOFF(bool bDraw, bool bDrawPaint, bool bResetFlag, b
 
 
 			//	選択情報を復元
-			GetCaret().m_cUnderLine.UnLock();
+			GetCaret().m_underLine.UnLock();
 			
 			if (bDrawPaint) {
 				m_nOldUnderLineYBg = -1;
@@ -2579,7 +2579,7 @@ void EditView::CaretUnderLineOFF(bool bDraw, bool bDrawPaint, bool bResetFlag, b
 			&& GetDrawSwitch()
 			&& IsDrawCursorVLinePos(m_nOldCursorLineX)
 			&& !m_bDoing_UndoRedo
-			&& !GetCaret().m_cUnderLine.GetVertLineDoNotOFF()	// カーソル位置縦線を消去するか
+			&& !GetCaret().m_underLine.GetVertLineDoNotOFF()	// カーソル位置縦線を消去するか
 			&& !DisalbeUnderLine
 		) {
 			PAINTSTRUCT ps;
@@ -2588,7 +2588,7 @@ void EditView::CaretUnderLineOFF(bool bDraw, bool bDrawPaint, bool bResetFlag, b
 			ps.rcPaint.top = GetTextArea().GetAreaTop();
 			ps.rcPaint.bottom = GetTextArea().GetAreaBottom();
 			HDC hdc = ::GetDC(GetHwnd());
-			GetCaret().m_cUnderLine.Lock();
+			GetCaret().m_underLine.Lock();
 			//	不本意ながら選択情報をバックアップ。
 			LayoutRange sSelectBackup = this->GetSelectionInfo().m_select;
 			this->GetSelectionInfo().m_select.Clear(-1);
@@ -2596,7 +2596,7 @@ void EditView::CaretUnderLineOFF(bool bDraw, bool bDrawPaint, bool bResetFlag, b
 			OnPaint(hdc, &ps, TRUE);
 			//	選択情報を復元
 			this->GetSelectionInfo().m_select = sSelectBackup;
-			GetCaret().m_cUnderLine.UnLock();
+			GetCaret().m_underLine.UnLock();
 			ReleaseDC(hdc);
 		}
 		m_nOldCursorLineX = -1;

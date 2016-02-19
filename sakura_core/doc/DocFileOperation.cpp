@@ -35,7 +35,7 @@
 #include "window/EditWnd.h"
 #include "uiparts/WaitCursor.h"
 #include "util/window.h"
-#include "env/DLLSHAREDATA.h"
+#include "env/DllSharedData.h"
 #include "env/SakuraEnvironment.h"
 #include "plugin/Plugin.h"
 #include "plugin/JackManager.h"
@@ -100,8 +100,8 @@ bool DocFileOperation::OpenFileDialog(
 		hwndParent,
 		_T("*.*"),
 		pszOpenFolder ? pszOpenFolder : SakuraEnvironment::GetDlgInitialDir().c_str(),	// 初期フォルダ
-		MRUFile().GetPathList(),														// MRUリストのファイルのリスト
-		MRUFolder().GetPathList()														// OPENFOLDERリストのファイルのリスト
+		MruFile().GetPathList(),														// MRUリストのファイルのリスト
+		MruFolder().GetPathList()														// OPENFOLDERリストのファイルのリスト
 	);
 	return dlgOpenFile.DoModalOpenDlg( pLoadInfo, &files );
 }
@@ -314,8 +314,8 @@ bool DocFileOperation::SaveFileDialog(
 		EditWnd::getInstance()->GetHwnd(),
 		szDefaultWildCard,
 		SakuraEnvironment::GetDlgInitialDir().c_str(),	// 初期フォルダ
-		MRUFile().GetPathList(),	// 最近のファイル
-		MRUFolder().GetPathList()	// 最近のフォルダ
+		MruFile().GetPathList(),	// 最近のファイル
+		MruFolder().GetPathList()	// 最近のフォルダ
 	);
 	return dlgOpenFile.DoModalSaveDlg( pSaveInfo, pSaveInfo->eCharCode == CODE_CODEMAX );
 }

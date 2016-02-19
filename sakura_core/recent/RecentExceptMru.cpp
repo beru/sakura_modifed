@@ -25,7 +25,7 @@
 #include "stdafx.h"
 #include "RecentExceptMRU.h"
 #include <string.h>
-#include "env/DLLSHAREDATA.h"
+#include "env/DllSharedData.h"
 
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //

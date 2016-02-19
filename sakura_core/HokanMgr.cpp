@@ -49,7 +49,7 @@ LRESULT APIENTRY HokanList_SubclassProc(
 		if (nVKey == VK_SPACE) {	//	Space
 // novice 2004/10/10
 			// Shift,Ctrl,AltƒL[‚ª‰Ÿ‚³‚ê‚Ä‚¢‚½‚©
-			int nIdx = getCtrlKeyState();
+			int nIdx = GetCtrlKeyState();
 			if (nIdx == _SHIFT) {
 				//	Shift + Space‚Åª‚ğ‹U‘¢
 				wParam = VK_UP;

@@ -18,7 +18,7 @@
 #include "StdAfx.h"
 #include "prop/PropCommon.h"
 #include "util/shell.h"
-#include "env/DLLSHAREDATA.h" // FormatManager.hより前に必要
+#include "env/DllSharedData.h" // FormatManager.hより前に必要
 #include "env/FormatManager.h"
 #include "sakura_rc.h"
 #include "sakura.hh"

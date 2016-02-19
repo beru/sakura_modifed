@@ -27,7 +27,7 @@
 #include "Figure_Eol.h"
 #include "types/TypeSupport.h"
 #include "env/ShareData.h"
-#include "env/DLLSHAREDATA.h"
+#include "env/DllSharedData.h"
 #include "window/EditWnd.h"
 
 // ê‹ÇËï‘Çµï`âÊ

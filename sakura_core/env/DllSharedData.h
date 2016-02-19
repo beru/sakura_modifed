@@ -28,20 +28,20 @@
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 //! どこからでもアクセスできる、共有データアクセサ。2007.10.30 kobake
-struct DLLSHAREDATA;
+struct DllSharedData;
 
-// DLLSHAREDATAへの簡易アクセサ
-inline DLLSHAREDATA& GetDllShareData()
+// DllSharedDataへの簡易アクセサ
+inline DllSharedData& GetDllShareData()
 {
-	extern DLLSHAREDATA* g_theDLLSHAREDATA;
+	extern DllSharedData* g_theDLLSHAREDATA;
 
 	assert(g_theDLLSHAREDATA);
 	return *g_theDLLSHAREDATA;
 }
 
-inline DLLSHAREDATA& GetDllShareData(bool bNullCheck)
+inline DllSharedData& GetDllShareData(bool bNullCheck)
 {
-	extern DLLSHAREDATA* g_theDLLSHAREDATA;
+	extern DllSharedData* g_theDLLSHAREDATA;
 
 	if (bNullCheck) {
 		assert(g_theDLLSHAREDATA);
@@ -49,11 +49,11 @@ inline DLLSHAREDATA& GetDllShareData(bool bNullCheck)
 	return *g_theDLLSHAREDATA;
 }
 
-// DLLSHAREDATAを確保したら、まずこれを呼ぶ。破棄する前にも呼ぶ。
+// DllSharedDataを確保したら、まずこれを呼ぶ。破棄する前にも呼ぶ。
 inline
-void SetDllShareData(DLLSHAREDATA* pShareData)
+void SetDllShareData(DllSharedData* pShareData)
 {
-	extern DLLSHAREDATA* g_theDLLSHAREDATA;
+	extern DllSharedData* g_theDLLSHAREDATA;
 
 	g_theDLLSHAREDATA = pShareData;
 }
@@ -62,7 +62,7 @@ void SetDllShareData(DLLSHAREDATA* pShareData)
 //                    共有メモリ構成要素                       //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-// 2010.04.19 Moca CShareDataからDLLSHAREDATAメンバのincludeをDLLSHAREDATA.hに移動
+// 2010.04.19 Moca CShareDataからDllSharedDataメンバのincludeをDllSharedData.hに移動
 
 #include "config/maxdata.h"
 
@@ -127,7 +127,7 @@ struct Share_Version {
 //                   共有メモリ構造体本体                      //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-struct DLLSHAREDATA {
+struct DllSharedData {
 	// -- -- バージョン -- -- //
 	/*!
 		データ構造 Version	// Oct. 27, 2000 genta

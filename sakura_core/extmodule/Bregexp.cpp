@@ -46,7 +46,7 @@
 #include "Bregexp.h"
 #include "charset/charcode.h"
 #include "env/ShareData.h"
-#include "env/DLLSHAREDATA.h"
+#include "env/DllSharedData.h"
 
 
 // Compile時、行頭置換(len=0)の時にダミー文字列(１つに統一) by かろと
@@ -600,7 +600,7 @@ bool InitRegexp(
 	)
 {
 	// From Here 2007.08.12 genta
-	DLLSHAREDATA* pShareData = &GetDllShareData();
+	DllSharedData* pShareData = &GetDllShareData();
 
 	LPCTSTR RegexpDll = pShareData->m_common.m_search.m_szRegexpLib;
 	// To Here 2007.08.12 genta

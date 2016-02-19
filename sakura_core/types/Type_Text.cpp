@@ -27,7 +27,7 @@
 #include "doc/EditDoc.h"
 #include "doc/DocOutline.h"
 #include "doc/logic/DocLine.h"
-#include "env/DLLSHAREDATA.h"
+#include "env/DllSharedData.h"
 #include "outline/FuncInfo.h"
 #include "outline/FuncInfoArr.h"
 #include "view/colors/EColorIndexType.h"

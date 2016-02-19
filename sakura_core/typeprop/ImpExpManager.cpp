@@ -509,7 +509,7 @@ bool ImpExpType::Export(const wstring& sFileName, wstring& sErrMsg)
 	}
 
 	// Version
-	DLLSHAREDATA* pShare = &GetDllShareData();
+	DllSharedData* pShare = &GetDllShareData();
 	int nStructureVersion;
 	wchar_t	wbuff[_MAX_PATH + 1];
 	auto_sprintf_s(wbuff, L"%d.%d.%d.%d", 

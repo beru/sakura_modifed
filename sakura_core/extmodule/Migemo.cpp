@@ -19,7 +19,7 @@
 #include <io.h>
 #include "Migemo.h"
 #include "env/ShareData.h"
-#include "env/DLLSHAREDATA.h"
+#include "env/DllSharedData.h"
 #include "charset/Utf8.h"
 #include "util/module.h"
 #include "util/fileUtil.h"

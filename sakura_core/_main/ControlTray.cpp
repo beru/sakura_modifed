@@ -74,16 +74,16 @@ void ControlTray::DoGrep()
 
 	auto& searchKeywords = m_pShareData->m_searchKeywords;
 	auto& csSearch = m_pShareData->m_common.m_search;
-	if (0 < searchKeywords.m_aSearchKeys.size()
+	if (0 < searchKeywords.searchKeys.size()
 		&& m_nCurSearchKeySequence < csSearch.m_nSearchKeySequence
 	) {
-		m_dlgGrep.m_strText = searchKeywords.m_aSearchKeys[0];
+		m_dlgGrep.m_strText = searchKeywords.searchKeys[0];
 	}
-	if (0 < searchKeywords.m_aGrepFiles.size()) {
-		_tcscpy(m_dlgGrep.m_szFile, searchKeywords.m_aGrepFiles[0]);		// 検索ファイル
+	if (0 < searchKeywords.grepFiles.size()) {
+		_tcscpy(m_dlgGrep.m_szFile, searchKeywords.grepFiles[0]);		// 検索ファイル
 	}
-	if (0 < searchKeywords.m_aGrepFolders.size()) {
-		_tcscpy(m_dlgGrep.m_szFolder, searchKeywords.m_aGrepFolders[0]);	// 検索フォルダ
+	if (0 < searchKeywords.grepFolders.size()) {
+		_tcscpy(m_dlgGrep.m_szFolder, searchKeywords.grepFolders[0]);	// 検索フォルダ
 	}
 
 	// Grepダイアログの表示
@@ -890,8 +890,8 @@ LRESULT ControlTray::DispatchEvent(
 						NULL,
 						_T("*.*"),
 						SakuraEnvironment::GetDlgInitialDir(true).c_str(),
-						MRUFile().GetPathList(),
-						MRUFolder().GetPathList()	// OPENFOLDERリストのファイルのリスト
+						MruFile().GetPathList(),
+						MruFolder().GetPathList()	// OPENFOLDERリストのファイルのリスト
 					);
 					std::vector<std::tstring> files;
 					if (!dlgOpenFile.DoModalOpenDlg(&loadInfo, &files)) {
@@ -949,7 +949,7 @@ LRESULT ControlTray::DispatchEvent(
 
 					// 新しい編集ウィンドウを開く
 					// From Here Oct. 27, 2000 genta	カーソル位置を復元しない機能
-					const MRUFile mru;
+					const MruFile mru;
 					EditInfo openEditInfo;
 					mru.GetEditInfo(nId - IDM_SELMRU, &openEditInfo);
 
@@ -977,11 +977,11 @@ LRESULT ControlTray::DispatchEvent(
 					&& nId - IDM_SELOPENFOLDER  < 999
 				) {
 					// MRUリストのファイルのリスト
-					const MRUFile mru;
+					const MruFile mru;
 					std::vector<LPCTSTR> vMRU = mru.GetPathList();
 
 					// OPENFOLDERリストのファイルのリスト
-					const MRUFolder mruFolder;
+					const MruFolder mruFolder;
 					std::vector<LPCTSTR> vOPENFOLDER = mruFolder.GetPathList();
 
 					// Stonee, 2001/12/21 UNCであれば接続を試みる
@@ -1152,7 +1152,7 @@ bool ControlTray::OpenNewEditor(
 	)
 {
 	// 共有データ構造体のアドレスを返す
-	DLLSHAREDATA* pShareData = &GetDllShareData();
+	DllSharedData* pShareData = &GetDllShareData();
 
 	// 編集ウィンドウの上限チェック
 	if (pShareData->m_nodes.m_nEditArrNum >= MAX_EDITWINDOWS) {	// 最大値修正	//@@@ 2003.05.31 MIK
@@ -1377,7 +1377,7 @@ bool ControlTray::OpenNewEditor2(
 {
 
 	// 共有データ構造体のアドレスを返す
-	DLLSHAREDATA* pShareData = &GetDllShareData();
+	DllSharedData* pShareData = &GetDllShareData();
 
 	// 編集ウィンドウの上限チェック
 	if (pShareData->m_nodes.m_nEditArrNum >= MAX_EDITWINDOWS) {	// 最大値修正	//@@@ 2003.05.31 MIK
@@ -1502,7 +1502,7 @@ void ControlTray::TerminateApplication(
 	HWND hWndFrom	//!< [in] 呼び出し元のウィンドウハンドル
 	)
 {
-	DLLSHAREDATA* pShareData = &GetDllShareData();	// 共有データ構造体のアドレスを返す
+	DllSharedData* pShareData = &GetDllShareData();	// 共有データ構造体のアドレスを返す
 
 	// 現在の編集ウィンドウの数を調べる
 	if (pShareData->m_common.m_general.m_bExitConfirm) {	// 終了時の確認
@@ -1580,14 +1580,14 @@ int	ControlTray::CreatePopUpMenu_L(void)
 
 	// MRUリストのファイルのリストをメニューにする
 //@@@ 2001.12.26 YAZAKI MRUリストは、CMRUに依頼する
-	const MRUFile mru;
+	const MruFile mru;
 	HMENU hMenuPopUp = mru.CreateMenu(&m_menuDrawer);	// ファイルメニュー
 	int nEnable = (mru.MenuLength() > 0 ? 0 : MF_GRAYED);
 	m_menuDrawer.MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING | MF_POPUP | nEnable, (UINT_PTR)hMenuPopUp , LS(F_FILE_RCNTFILE_SUBMENU), _T("F"));
 
 	// 最近使ったフォルダのメニューを作成
-//@@@ 2001.12.26 YAZAKI OPENFOLDERリストは、MRUFolderにすべて依頼する
-	const MRUFolder mruFolder;
+//@@@ 2001.12.26 YAZAKI OPENFOLDERリストは、MruFolderにすべて依頼する
+	const MruFolder mruFolder;
 	hMenuPopUp = mruFolder.CreateMenu(&m_menuDrawer);
 	nEnable = (mruFolder.MenuLength() > 0 ? 0 : MF_GRAYED);
 	m_menuDrawer.MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING | MF_POPUP| nEnable, (UINT_PTR)hMenuPopUp, LS(F_FILE_RCNTFLDR_SUBMENU), _T("D"));

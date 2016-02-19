@@ -37,7 +37,7 @@
 #include "dlg/DlgTagJumpList.h"
 #include "SortedTagJumpList.h"
 #include "func/Funccode.h"
-#include "env/DLLSHAREDATA.h"
+#include "env/DllSharedData.h"
 #include "util/container.h"
 #include "util/shell.h"
 #include "util/fileUtil.h"
@@ -266,7 +266,7 @@ void DlgTagJumpList::SetData(void)
 		CheckButton(IDC_CHECK_ANYWHERE, m_bTagJumpAnyWhere);
 		m_bTagJumpExactMatch = FALSE;
 		Combo_LimitText(hwndKey, _MAX_PATH-1);
-		RecentTagjumpKeyword cRecentTagJump;
+		RecentTagJumpKeyword cRecentTagJump;
 		for (int i=0; i<cRecentTagJump.GetItemCount(); ++i) {
 			Combo_AddString(hwndKey, cRecentTagJump.GetItemText(i));
 		}
@@ -405,7 +405,7 @@ int DlgTagJumpList::GetData(void)
 		SetKeyword(tmp);
 
 		// Ý’è‚ð•Û‘¶
-		RecentTagjumpKeyword cRecentTagJumpKeyword;
+		RecentTagJumpKeyword cRecentTagJumpKeyword;
 		cRecentTagJumpKeyword.AppendItem(m_pszKeyword);
 		cRecentTagJumpKeyword.Terminate();
 	}

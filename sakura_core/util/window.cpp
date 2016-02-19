@@ -1,6 +1,6 @@
 #include "StdAfx.h"
 #include "env/ShareData.h"
-#include "env/DLLSHAREDATA.h"
+#include "env/DllSharedData.h"
 #include "env/SakuraEnvironment.h"
 #include <limits.h>
 #include "window.h"
@@ -101,7 +101,7 @@ BOOL BlockingHook(HWND hwndDlgCancel)
 void ActivateFrameWindow(HWND hwnd)
 {
 	// 編集ウィンドウでタブまとめ表示の場合は表示位置を復元する
-	DLLSHAREDATA* pShareData = &GetDllShareData();
+	DllSharedData* pShareData = &GetDllShareData();
 	if (pShareData->m_common.m_tabBar.m_bDispTabWnd && !pShareData->m_common.m_tabBar.m_bDispTabWndMultiWin) {
 		if (IsSakuraMainWindow(hwnd)) {
 			if (pShareData->m_flags.m_bEditWndChanging)

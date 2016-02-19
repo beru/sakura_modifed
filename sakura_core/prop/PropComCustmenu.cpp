@@ -30,7 +30,7 @@ using namespace std;
 
 // “Á•Ê‹@”\
 struct SpecialFunc	{
-	EFunctionCode	nFunc;		// Function
+	EFunctionCode	nFunc;			// Function
 	int			 	nNameId;		// –¼‘O
 };
 extern const	SpecialFunc	gSpecialFuncs[];

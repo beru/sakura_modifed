@@ -26,7 +26,7 @@
 */
 
 #include "StdAfx.h"
-#include "DLLSHAREDATA.h"
+#include "DllSharedData.h"
 
 #include "SearchKeywordManager.h"
 #include "recent/Recent.h"
@@ -35,7 +35,7 @@
 /*!	m_aSearchKeysÇ…pszSearchKeyÇí«â¡Ç∑ÇÈÅB
 	YAZAKI
 */
-void SearchKeywordManager::AddToSearchKeyArr(const wchar_t* pszSearchKey)
+void SearchKeywordManager::AddToSearchKeys(const wchar_t* pszSearchKey)
 {
 	RecentSearch recentSearchKey;
 	recentSearchKey.AppendItem(pszSearchKey);
@@ -46,7 +46,7 @@ void SearchKeywordManager::AddToSearchKeyArr(const wchar_t* pszSearchKey)
 /*!	m_aReplaceKeysÇ…pszReplaceKeyÇí«â¡Ç∑ÇÈ
 	YAZAKI
 */
-void SearchKeywordManager::AddToReplaceKeyArr(const wchar_t* pszReplaceKey)
+void SearchKeywordManager::AddToReplaceKeys(const wchar_t* pszReplaceKey)
 {
 	RecentReplace recentReplaceKey;
 	recentReplaceKey.AppendItem(pszReplaceKey);
@@ -59,17 +59,17 @@ void SearchKeywordManager::AddToReplaceKeyArr(const wchar_t* pszReplaceKey)
 /*!	m_aGrepFilesÇ…pszGrepFileÇí«â¡Ç∑ÇÈ
 	YAZAKI
 */
-void SearchKeywordManager::AddToGrepFileArr(const TCHAR* pszGrepFile)
+void SearchKeywordManager::AddToGrepFiles(const TCHAR* pszGrepFile)
 {
 	RecentGrepFile recentGrepFile;
 	recentGrepFile.AppendItem(pszGrepFile);
 	recentGrepFile.Terminate();
 }
 
-/*!	m_aGrepFolders.size()Ç…pszGrepFolderÇí«â¡Ç∑ÇÈ
+/*!	grepFolders.size()Ç…pszGrepFolderÇí«â¡Ç∑ÇÈ
 	YAZAKI
 */
-void SearchKeywordManager::AddToGrepFolderArr(const TCHAR* pszGrepFolder)
+void SearchKeywordManager::AddToGrepFolders(const TCHAR* pszGrepFolder)
 {
 	RecentGrepFolder recentGrepFolder;
 	recentGrepFolder.AppendItem(pszGrepFolder);

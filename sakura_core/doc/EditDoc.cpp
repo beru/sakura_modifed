@@ -64,7 +64,7 @@
 #include "debug/RunningTimer.h"
 #include "env/SakuraEnvironment.h"
 #include "env/ShareData.h"
-#include "env/DLLSHAREDATA.h"
+#include "env/DllSharedData.h"
 #include "func/Funccode.h"
 #include "mem/MemoryIterator.h"	// 2007.08.22 ryoji ’Ç‰Á
 #include "outline/FuncInfoArr.h" /// 2002/2/3 aroka
@@ -992,7 +992,7 @@ void EditDoc::SetCurDirNotitle()
 	TCHAR szSelDir[_MAX_PATH];
 	const TCHAR* pszDir = NULL;
 	if (eOpenDialogDir == OPENDIALOGDIR_MRU) {
-		const MRUFolder mru;
+		const MruFolder mru;
 		std::vector<LPCTSTR> vMRU = mru.GetPathList();
 		int nCount = mru.Length();
 		for (int i=0; i<nCount ; ++i) {

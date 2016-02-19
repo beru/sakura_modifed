@@ -26,7 +26,7 @@ protected:
 	std::vector<HGDIOBJ> m_vObjects;
 };
 
-static GDIStock s_cGDIStock;	// 唯一の GDIStock オブジェクト
+static GDIStock s_gdiStock;	// 唯一の GDIStock オブジェクト
 
 void Graphics::Init(HDC hdc)
 {
@@ -397,7 +397,7 @@ HBRUSH GetDropRectBrush()
 		if (hBitmap) {
 			s_hBrush = ::CreatePatternBrush(hBitmap);
 			::DeleteObject(hBitmap);
-			s_cGDIStock.Register(s_hBrush);	// 終了時破棄用にストックしておく
+			s_gdiStock.Register(s_hBrush);	// 終了時破棄用にストックしておく
 		}
 	}
 	return s_hBrush;

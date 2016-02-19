@@ -19,7 +19,7 @@
 #include "window/SplitBoxWnd.h"
 #include "window/EditWnd.h"
 #include "view/EditView.h"
-#include "env/DLLSHAREDATA.h"
+#include "env/DllSharedData.h"
 
 
 //	@date 2002.2.17 YAZAKI CShareDataのインスタンスは、CProcessにひとつあるのみ。

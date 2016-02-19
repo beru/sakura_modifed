@@ -38,7 +38,7 @@
 #include "_main/global.h"		// Moca, 2002/05/26
 #include "_main/AppMode.h"
 #include "env/ShareData.h"
-#include "env/DLLSHAREDATA.h"
+#include "env/DllSharedData.h"
 #include "charset/charcode.h"	// rastiv, 2006/06/28
 #include "charset/CodePage.h"
 #include "charset/ESI.h"

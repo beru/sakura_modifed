@@ -27,7 +27,7 @@
 #pragma once
 
 // 要先行定義
-// #define DLLSHAREDATA.h
+// #define DllSharedData.h
 
 
 // 2004/06/21 novice タグジャンプ機能追加
@@ -67,6 +67,6 @@ public:
 	void PushTagJump(const TagJump*);		// タグジャンプ情報の保存
 	bool PopTagJump(TagJump*);				// タグジャンプ情報の参照
 private:
-	DLLSHAREDATA* m_pShareData;
+	DllSharedData* m_pShareData;
 };
 

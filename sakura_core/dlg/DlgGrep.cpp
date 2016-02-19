@@ -26,7 +26,7 @@
 #include "util/shell.h"
 #include "util/os.h"
 #include "util/window.h"
-#include "env/DLLSHAREDATA.h"
+#include "env/DllSharedData.h"
 #include "env/SakuraEnvironment.h"
 #include "sakura_rc.h"
 #include "sakura.hh"
@@ -94,25 +94,25 @@ BOOL DlgGrep::OnCbnDropDown(HWND hwndCtl, int wID)
 	switch (wID) {
 	case IDC_COMBO_TEXT:
 		if (::SendMessage(hwndCtl, CB_GETCOUNT, 0L, 0L) == 0) {
-			int nSize = searchKeywords.m_aSearchKeys.size();
+			int nSize = searchKeywords.searchKeys.size();
 			for (int i=0; i<nSize; ++i) {
-				Combo_AddString( hwndCtl, searchKeywords.m_aSearchKeys[i] );
+				Combo_AddString( hwndCtl, searchKeywords.searchKeys[i] );
 			}
 		}
 		break;
 	case IDC_COMBO_FILE:
 		if (::SendMessage(hwndCtl, CB_GETCOUNT, 0L, 0L) == 0) {
-			int nSize = searchKeywords.m_aGrepFiles.size();
+			int nSize = searchKeywords.grepFiles.size();
 			for (int i=0; i<nSize; ++i) {
-				Combo_AddString( hwndCtl, searchKeywords.m_aGrepFiles[i] );
+				Combo_AddString( hwndCtl, searchKeywords.grepFiles[i] );
 			}
 		}
 		break;
 	case IDC_COMBO_FOLDER:
 		if (::SendMessage(hwndCtl, CB_GETCOUNT, 0L, 0L) == 0) {
-			int nSize = searchKeywords.m_aGrepFolders.size();
+			int nSize = searchKeywords.grepFolders.size();
 			for (int i=0; i<nSize; ++i) {
-				Combo_AddString( hwndCtl, searchKeywords.m_aGrepFolders[i] );
+				Combo_AddString( hwndCtl, searchKeywords.grepFolders[i] );
 			}
 		}
 		break;
@@ -140,11 +140,11 @@ int DlgGrep::DoModal(
 	// 2013.05.21 コンストラクタからDoModalに移動
 	// m_strText は呼び出し元で設定済み
 	auto& searchKeywords = m_pShareData->m_searchKeywords;
-	if (m_szFile[0] == _T('\0') && searchKeywords.m_aGrepFiles.size()) {
-		_tcscpy(m_szFile, searchKeywords.m_aGrepFiles[0]);		// 検索ファイル
+	if (m_szFile[0] == _T('\0') && searchKeywords.grepFiles.size()) {
+		_tcscpy(m_szFile, searchKeywords.grepFiles[0]);		// 検索ファイル
 	}
-	if (m_szFolder[0] == _T('\0') && searchKeywords.m_aGrepFolders.size()) {
-		_tcscpy(m_szFolder, searchKeywords.m_aGrepFolders[0]);	// 検索フォルダ
+	if (m_szFolder[0] == _T('\0') && searchKeywords.grepFolders.size()) {
+		_tcscpy(m_szFolder, searchKeywords.grepFolders[0]);	// 検索フォルダ
 	}
 
 	if (pszCurrentFilePath) {	// 2010.01.10 ryoji
@@ -715,7 +715,7 @@ int DlgGrep::GetData(void)
 		auto_strcpy(m_szFolder, szFolder);
 	}
 
-//@@@ 2002.2.2 YAZAKI CShareData.AddToSearchKeyArr()追加に伴う変更
+//@@@ 2002.2.2 YAZAKI CShareData.AddToSearchKeys()追加に伴う変更
 	// 検索文字列
 	if (0 < m_strText.size()) {
 		// From Here Jun. 26, 2001 genta
@@ -727,21 +727,21 @@ int DlgGrep::GetData(void)
 		}
 		// To Here Jun. 26, 2001 genta 正規表現ライブラリ差し替え
 		if (m_strText.size() < _MAX_PATH) {
-			SearchKeywordManager().AddToSearchKeyArr(m_strText.c_str());
+			SearchKeywordManager().AddToSearchKeys(m_strText.c_str());
 			csSearch.m_searchOption = m_searchOption;		// 検索オプション
 		}
 	}else {
 		// 2014.07.01 空キーも登録する
-		SearchKeywordManager().AddToSearchKeyArr( L"" );
+		SearchKeywordManager().AddToSearchKeys( L"" );
 	}
 
 	// この編集中のテキストから検索する場合、履歴に残さない	Uchi 2008/5/23
 	if (!m_bFromThisText) {
 		// 検索ファイル
-		SearchKeywordManager().AddToGrepFileArr(m_szFile);
+		SearchKeywordManager().AddToGrepFiles(m_szFile);
 
 		// 検索フォルダ
-		SearchKeywordManager().AddToGrepFolderArr(m_szFolder);
+		SearchKeywordManager().AddToGrepFolders(m_szFolder);
 	}
 
 	return TRUE;

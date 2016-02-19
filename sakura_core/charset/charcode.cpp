@@ -25,7 +25,7 @@
 #include "StdAfx.h"
 #include "charset/charcode.h"
 
-#include "env/DLLSHAREDATA.h"
+#include "env/DllSharedData.h"
 
 // キーワードキャラクタ
 const unsigned char gm_keyword_char[128] = {

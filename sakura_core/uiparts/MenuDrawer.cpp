@@ -21,7 +21,7 @@
 #include "StdAfx.h"
 #include "MenuDrawer.h"
 #include "env/ShareData.h"
-#include "env/DLLSHAREDATA.h"
+#include "env/DllSharedData.h"
 #include "window/SplitBoxWnd.h"
 #include "ImageListMgr.h"
 #include "func/KeyBind.h"

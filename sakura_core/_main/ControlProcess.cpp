@@ -18,7 +18,7 @@
 #include "StdAfx.h"
 #include "ControlProcess.h"
 #include "ControlTray.h"
-#include "env/DLLSHAREDATA.h"
+#include "env/DllSharedData.h"
 #include "CommandLine.h"
 #include "env/ShareData_IO.h"
 #include "debug/RunningTimer.h"

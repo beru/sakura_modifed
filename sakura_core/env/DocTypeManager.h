@@ -26,7 +26,7 @@
 */
 #pragma once
 
-#include "DLLSHAREDATA.h"
+#include "DllSharedData.h"
 
 // ドキュメントタイプ管理
 class DocTypeManager {
@@ -52,6 +52,6 @@ public:
 	static const TCHAR* m_typeExtWildcards;		// タイプ別拡張子のワイルドカード
 
 private:
-	DLLSHAREDATA* m_pShareData;
+	DllSharedData* m_pShareData;
 };
 

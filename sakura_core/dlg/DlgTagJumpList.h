@@ -154,7 +154,7 @@ private:
 	bool	m_bOldTagJumpAnyWhere;	// 前回の文字列の途中にマッチ
 
 	ComboBoxItemDeleter	m_comboDel;
-	RecentTagjumpKeyword	m_recentKeyword;
+	RecentTagJumpKeyword	m_recentKeyword;
 	
 	POINT	m_ptDefaultSize;
 	RECT	m_rcItems[11];

@@ -759,7 +759,7 @@ bool ViewCommander::Command_INSFILE(
 	EncodingType	nSaveCharCode = nCharCode;
 	if (nSaveCharCode == CODE_AUTODETECT) {
 		EditInfo    fi;
-		const MRUFile  mru;
+		const MruFile  mru;
 		if (mru.GetEditInfo(to_tchar(filename), &fi)) {
 				nSaveCharCode = fi.m_nCharCode;
 		}else {

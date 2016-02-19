@@ -231,14 +231,14 @@ bool NormalProcess::InitializeProcess()
 			
 			//-GREPDLGでダイアログを出す。　引数も反映（2002/03/24 YAZAKI）
 			if (gi.mGrepKey.GetStringLength() < _MAX_PATH) {
-				SearchKeywordManager().AddToSearchKeyArr(gi.mGrepKey.GetStringPtr());
+				SearchKeywordManager().AddToSearchKeys(gi.mGrepKey.GetStringPtr());
 			}
 			if (gi.mGrepFile.GetStringLength() < _MAX_PATH) {
-				SearchKeywordManager().AddToGrepFileArr(gi.mGrepFile.GetStringPtr());
+				SearchKeywordManager().AddToGrepFiles(gi.mGrepFile.GetStringPtr());
 			}
 			NativeT memGrepFolder = gi.mGrepFolder;
 			if (gi.mGrepFolder.GetStringLength() < _MAX_PATH) {
-				SearchKeywordManager().AddToGrepFolderArr(gi.mGrepFolder.GetStringPtr());
+				SearchKeywordManager().AddToGrepFolders(gi.mGrepFolder.GetStringPtr());
 				// 2013.05.21 指定なしの場合はカレントフォルダにする
 				if (memGrepFolder.GetStringLength() == 0) {
 					TCHAR szCurDir[_MAX_PATH];

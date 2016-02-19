@@ -186,9 +186,9 @@ namespace nsFuncCode {
 int FuncID_To_HelpContextID(EFunctionCode nFuncID);	//Stonee, 2001/02/23
 
 class EditDoc;
-struct DLLSHAREDATA;
+struct DllSharedData;
 
 // 2007.10.30 kobake 機能チェックをCEditWndからここへ移動
-bool IsFuncEnable(const EditDoc*, const DLLSHAREDATA*, EFunctionCode);	// 機能が利用可能か調べる
-bool IsFuncChecked(const EditDoc*, const DLLSHAREDATA*, EFunctionCode);	// 機能がチェック状態か調べる
+bool IsFuncEnable(const EditDoc*, const DllSharedData*, EFunctionCode);	// 機能が利用可能か調べる
+bool IsFuncChecked(const EditDoc*, const DllSharedData*, EFunctionCode);	// 機能がチェック状態か調べる
 

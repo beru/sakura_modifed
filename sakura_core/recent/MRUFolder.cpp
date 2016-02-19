@@ -17,7 +17,7 @@
 #include "StdAfx.h"
 #include "MRUFolder.h"
 #include "env/ShareData.h"
-#include "env/DLLSHAREDATA.h"
+#include "env/DllSharedData.h"
 #include "uiparts/MenuDrawer.h"	//	これでいいのか？
 #include "util/string_ex2.h"
 #include "util/window.h"
@@ -26,14 +26,14 @@
 
 	@date 2002.2.17 YAZAKI CShareDataのインスタンスは、CProcessにひとつあるのみ。
 */
-MRUFolder::MRUFolder()
+MruFolder::MruFolder()
 {
 	// 初期化。
 	m_pShareData = &GetDllShareData();
 }
 
 // デストラクタ
-MRUFolder::~MRUFolder()
+MruFolder::~MruFolder()
 {
 	m_recentFolder.Terminate();
 }
@@ -47,7 +47,7 @@ MRUFolder::~MRUFolder()
 
 	2010/5/21 Uchi 組み直し
 */
-HMENU MRUFolder::CreateMenu(MenuDrawer* pMenuDrawer) const
+HMENU MruFolder::CreateMenu(MenuDrawer* pMenuDrawer) const
 {
 	HMENU hMenuPopUp = ::CreatePopupMenu();	// Jan. 29, 2002 genta
 	return CreateMenu(hMenuPopUp, pMenuDrawer);
@@ -62,7 +62,7 @@ HMENU MRUFolder::CreateMenu(MenuDrawer* pMenuDrawer) const
 	@author Norio Nakantani
 	@return メニューのハンドル
 */
-HMENU MRUFolder::CreateMenu(HMENU	hMenuPopUp, MenuDrawer* pMenuDrawer) const
+HMENU MruFolder::CreateMenu(HMENU	hMenuPopUp, MenuDrawer* pMenuDrawer) const
 {
 	TCHAR szMenu[_MAX_PATH * 2 + 10];				//	メニューキャプション
 
@@ -97,7 +97,7 @@ HMENU MRUFolder::CreateMenu(HMENU	hMenuPopUp, MenuDrawer* pMenuDrawer) const
 	return hMenuPopUp;
 }
 
-std::vector<LPCTSTR> MRUFolder::GetPathList() const
+std::vector<LPCTSTR> MruFolder::GetPathList() const
 {
 	std::vector<LPCTSTR> ret;
 	for (int i=0; i<m_recentFolder.GetItemCount(); ++i) {
@@ -110,12 +110,12 @@ std::vector<LPCTSTR> MRUFolder::GetPathList() const
 	return ret;
 }
 
-int MRUFolder::Length() const
+int MruFolder::Length() const
 {
 	return m_recentFolder.GetItemCount();
 }
 
-void MRUFolder::ClearAll()
+void MruFolder::ClearAll()
 {
 	m_recentFolder.DeleteAllItem();
 }
@@ -124,7 +124,7 @@ void MRUFolder::ClearAll()
 
 	@date 2001.12.26  CShareData::AddOPENFOLDERListから移動した。（YAZAKI）
 */
-void MRUFolder::Add(const TCHAR* pszFolder)
+void MruFolder::Add(const TCHAR* pszFolder)
 {
 	if (!pszFolder
 	 || pszFolder[0] == _T('\0')
@@ -147,7 +147,7 @@ void MRUFolder::Add(const TCHAR* pszFolder)
 	m_recentFolder.AppendItem(pszFolder);
 }
 
-const TCHAR* MRUFolder::GetPath(int num) const
+const TCHAR* MruFolder::GetPath(int num) const
 {
 	return m_recentFolder.GetItemText(num);
 }

@@ -18,7 +18,7 @@
 #include "StdAfx.h"
 #include "TipWnd.h"
 #include "env/ShareData.h"
-#include "env/DLLSHAREDATA.h"
+#include "env/DllSharedData.h"
 
 
 // TipWndクラス デストラクタ

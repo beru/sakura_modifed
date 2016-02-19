@@ -3,7 +3,7 @@
 
 // ”ñˆË‘¶„§
 #include "env/ShareData.h"
-#include "env/DLLSHAREDATA.h"
+#include "env/DllSharedData.h"
 
 /*!
 	EUCJP ¨ Unicode •ÏŠ·ŠÖ”

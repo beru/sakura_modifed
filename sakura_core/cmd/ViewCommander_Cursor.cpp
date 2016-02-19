@@ -984,9 +984,9 @@ void ViewCommander::Command_WndScrollDown(void)
 		}
 	}
 	if (bCaretOff) {
-		caret.m_cUnderLine.CaretUnderLineOFF(true);
+		caret.m_underLine.CaretUnderLineOFF(true);
 	}
-	caret.m_cUnderLine.CaretUnderLineON(true, true);
+	caret.m_underLine.CaretUnderLineON(true, true);
 }
 
 
@@ -1023,9 +1023,9 @@ void ViewCommander::Command_WndScrollUp(void)
 		}
 	}
 	if (bCaretOff) {
-		GetCaret().m_cUnderLine.CaretUnderLineOFF(true);
+		GetCaret().m_underLine.CaretUnderLineOFF(true);
 	}
-	GetCaret().m_cUnderLine.CaretUnderLineON(true, true);
+	GetCaret().m_underLine.CaretUnderLineON(true, true);
 }
 
 // 2001/06/20 End

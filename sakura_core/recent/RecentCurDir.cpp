@@ -25,7 +25,7 @@
 #include "StdAfx.h"
 #include "RecentCurDir.h"
 #include "config/maxdata.h"
-#include "env/DLLSHAREDATA.h"
+#include "env/DllSharedData.h"
 #include <string.h>
 
 

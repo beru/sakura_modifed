@@ -106,7 +106,7 @@ Caret::Caret(EditView* pEditView, const EditDoc* pEditDoc)
 	m_ptCaretPos_Layout(0, 0),
 	m_ptCaretPos_Logic(0, 0),			// カーソル位置 (改行単位行先頭からのバイト数(0開始), 改行単位行の行番号(0開始))
 	m_sizeCaret(0, 0),					// キャレットのサイズ
-	m_cUnderLine(pEditView)
+	m_underLine(pEditView)
 {
 	m_nCaretPosX_Prev = LayoutInt(0);	// ビュー左端からのカーソル桁直前の位置(０オリジン)
 
@@ -194,11 +194,11 @@ LayoutInt Caret::MoveCursor(
 
 	// カーソル行アンダーラインのOFF
 	bool bDrawPaint = ptWk_CaretPos.GetY2() != m_pEditView->m_nOldUnderLineYBg;
-	m_cUnderLine.SetUnderLineDoNotOFF(bUnderLineDoNotOFF);
-	m_cUnderLine.SetVertLineDoNotOFF(bVertLineDoNotOFF);
-	m_cUnderLine.CaretUnderLineOFF(bScroll, bDrawPaint);	//	YAZAKI
-	m_cUnderLine.SetUnderLineDoNotOFF(false);
-	m_cUnderLine.SetVertLineDoNotOFF(false);
+	m_underLine.SetUnderLineDoNotOFF(bUnderLineDoNotOFF);
+	m_underLine.SetVertLineDoNotOFF(bVertLineDoNotOFF);
+	m_underLine.CaretUnderLineOFF(bScroll, bDrawPaint);	//	YAZAKI
+	m_underLine.SetUnderLineDoNotOFF(false);
+	m_underLine.SetVertLineDoNotOFF(false);
 	
 	// 水平スクロール量（文字数）の算出
 	nScrollColNum = LayoutInt(0);
@@ -358,7 +358,7 @@ LayoutInt Caret::MoveCursor(
 		m_pEditView->ReleaseDC(hdc);
 
 		// アンダーラインの再描画
-		m_cUnderLine.CaretUnderLineON(true, bDrawPaint);
+		m_underLine.CaretUnderLineON(true, bDrawPaint);
 
 		// キャレットの行桁位置を表示する
 		ShowCaretPosInfo();

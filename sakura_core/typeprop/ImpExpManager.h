@@ -31,7 +31,7 @@
 #pragma once
 
 #include "DataProfile.h"
-#include "env/DLLSHAREDATA.h"
+#include "env/DllSharedData.h"
 
 using std::wstring;
 
@@ -108,7 +108,7 @@ private:
 	HWND			m_hwndList;
 
 	// “à•”Žg—p
-	DLLSHAREDATA*	m_pShareData;
+	DllSharedData*	m_pShareData;
 	int				m_nColorType;
 	wstring 		m_sColorFile;
 	bool			m_bAddType;

@@ -28,7 +28,7 @@
 #include "doc/layout/Layout.h"
 #include "window/EditWnd.h"
 #include "env/ShareData.h"
-#include "env/DLLSHAREDATA.h"
+#include "env/DllSharedData.h"
 #include "env/TagJumpManager.h"
 #include "util/fileUtil.h"
 #include "util/module.h"
@@ -369,7 +369,7 @@ BOOL EditView::ChangeCurRegexp(bool bRedrawIfChanged)
 		|| m_strCurSearchKey.size() == 0
 	) {
 		// 履歴の検索キーに更新
-		m_strCurSearchKey = GetDllShareData().m_searchKeywords.m_aSearchKeys[0];		// 検索文字列
+		m_strCurSearchKey = GetDllShareData().m_searchKeywords.searchKeys[0];		// 検索文字列
 		m_curSearchOption = GetDllShareData().m_common.m_search.m_searchOption;// 検索／置換  オプション
 		m_nCurSearchKeySequence = GetDllShareData().m_common.m_search.m_nSearchKeySequence;
 		bChangeState = true;
@@ -453,7 +453,7 @@ void EditView::CopyCurLine(
 void EditView::DrawBracketCursorLine(bool bDraw)
 {
 	if (bDraw) {
-		GetCaret().m_cUnderLine.CaretUnderLineON(true, true);
+		GetCaret().m_underLine.CaretUnderLineON(true, true);
 		DrawBracketPair(false);
 		SetBracketPairPos(true);
 		DrawBracketPair(true);

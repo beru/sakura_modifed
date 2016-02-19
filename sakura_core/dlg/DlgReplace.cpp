@@ -75,17 +75,17 @@ BOOL DlgReplace::OnCbnDropDown(HWND hwndCtl, int wID)
 	switch (wID) {
 	case IDC_COMBO_TEXT:
 		if (::SendMessage(hwndCtl, CB_GETCOUNT, 0L, 0L) == 0) {
-			int nSize = m_pShareData->m_searchKeywords.m_aSearchKeys.size();
+			int nSize = m_pShareData->m_searchKeywords.searchKeys.size();
 			for (int i=0; i<nSize; ++i) {
-				Combo_AddString( hwndCtl, m_pShareData->m_searchKeywords.m_aSearchKeys[i] );
+				Combo_AddString( hwndCtl, m_pShareData->m_searchKeywords.searchKeys[i] );
 			}
 		}
 		break;
 	case IDC_COMBO_TEXT2:
 		if (::SendMessage(hwndCtl, CB_GETCOUNT, 0L, 0L) == 0) {
-			int nSize = m_pShareData->m_searchKeywords.m_aReplaceKeys.size();
+			int nSize = m_pShareData->m_searchKeywords.replaceKeys.size();
 			for (int i=0; i<nSize; ++i) {
-				Combo_AddString( hwndCtl, m_pShareData->m_searchKeywords.m_aReplaceKeys[i] );
+				Combo_AddString( hwndCtl, m_pShareData->m_searchKeywords.replaceKeys[i] );
 			}
 		}
 		break;
@@ -282,9 +282,9 @@ int DlgReplace::GetData(void)
 		// To Here Jun. 26, 2001 genta 正規表現ライブラリ差し替え
 
 		// 検索文字列
-		//@@@ 2002.2.2 YAZAKI CShareData.AddToSearchKeyArr()追加に伴う変更
+		//@@@ 2002.2.2 YAZAKI CShareData.AddToSearchKeys()追加に伴う変更
 		if (m_strText.size() < _MAX_PATH) {
-			SearchKeywordManager().AddToSearchKeyArr(m_strText.c_str());
+			SearchKeywordManager().AddToSearchKeys(m_strText.c_str());
 			csSearch.m_searchOption = m_searchOption;		// 検索オプション
 		}
 		// 2011.12.18 viewに直接設定
@@ -298,9 +298,9 @@ int DlgReplace::GetData(void)
 		pEditView->m_nCurSearchKeySequence = GetDllShareData().m_common.m_search.m_nSearchKeySequence;
 
 		// 置換後文字列
-		//@@@ 2002.2.2 YAZAKI CShareData.AddToReplaceKeyArr()追加に伴う変更
+		//@@@ 2002.2.2 YAZAKI CShareData.AddToReplaceKeys()追加に伴う変更
 		if (m_strText2.size() < _MAX_PATH) {
-			SearchKeywordManager().AddToReplaceKeyArr(m_strText2.c_str());
+			SearchKeywordManager().AddToReplaceKeys(m_strText2.c_str());
 		}
 		m_nReplaceKeySequence = GetDllShareData().m_common.m_search.m_nReplaceKeySequence;
 

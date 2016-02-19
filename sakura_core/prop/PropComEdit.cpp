@@ -18,7 +18,7 @@
 
 #include "StdAfx.h"
 #include "prop/PropCommon.h"
-#include "env/DLLSHAREDATA.h"
+#include "env/DllSharedData.h"
 #include "env/FileNameManager.h"
 #include "util/shell.h"
 #include "util/window.h"

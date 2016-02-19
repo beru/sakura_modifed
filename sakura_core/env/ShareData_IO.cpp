@@ -104,7 +104,7 @@ bool ShareData_IO::ShareData_IO_2(bool bRead)
 			_stscanf(iniVer, _T("%u.%u.%u.%u"), &mH, &mL, &lH, &lL);
 		DWORD dwMS = (DWORD)MAKELONG(mL, mH);
 		DWORD dwLS = (DWORD)MAKELONG(lL, lH);
-		DLLSHAREDATA* pShareData = &GetDllShareData();
+		DllSharedData* pShareData = &GetDllShareData();
 		if (0
 			|| pShareData->m_version.m_dwProductVersionMS > dwMS
 			|| (0
@@ -123,7 +123,7 @@ bool ShareData_IO::ShareData_IO_2(bool bRead)
 	MenuDrawer* pMenuDrawer = new MenuDrawer; // 2010/7/4 Uchi
 
 	if (bRead) {
-		DLLSHAREDATA* pShareData = &GetDllShareData();
+		DllSharedData* pShareData = &GetDllShareData();
 		profile.IOProfileData(L"Common", L"szLanguageDll", MakeStringBufferT(pShareData->m_common.m_window.m_szLanguageDll));
 		SelectLang::ChangeLang(pShareData->m_common.m_window.m_szLanguageDll);
 		pShare->RefreshString();
@@ -171,7 +171,7 @@ bool ShareData_IO::ShareData_IO_2(bool bRead)
 */
 void ShareData_IO::ShareData_IO_Mru(DataProfile& profile)
 {
-	DLLSHAREDATA* pShare = &GetDllShareData();
+	DllSharedData* pShare = &GetDllShareData();
 
 	const WCHAR* pszSecName = LTEXT("MRU");
 	int			i;
@@ -264,25 +264,25 @@ void ShareData_IO::ShareData_IO_Mru(DataProfile& profile)
 */
 void ShareData_IO::ShareData_IO_Keys(DataProfile& profile)
 {
-	DLLSHAREDATA* pShare = &GetDllShareData();
+	DllSharedData* pShare = &GetDllShareData();
 
 	static const WCHAR* pszSecName = LTEXT("Keys");
 	WCHAR szKeyName[64];
 
-	profile.IOProfileData(pszSecName, LTEXT("_SEARCHKEY_Counts"), pShare->m_searchKeywords.m_aSearchKeys._GetSizeRef());
-	pShare->m_searchKeywords.m_aSearchKeys.SetSizeLimit();
-	int nSize = pShare->m_searchKeywords.m_aSearchKeys.size();
+	profile.IOProfileData(pszSecName, LTEXT("_SEARCHKEY_Counts"), pShare->m_searchKeywords.searchKeys._GetSizeRef());
+	pShare->m_searchKeywords.searchKeys.SetSizeLimit();
+	int nSize = pShare->m_searchKeywords.searchKeys.size();
 	for (int i=0; i<nSize; ++i) {
 		auto_sprintf(szKeyName, LTEXT("SEARCHKEY[%02d]"), i);
-		profile.IOProfileData(pszSecName, szKeyName, pShare->m_searchKeywords.m_aSearchKeys[i]);
+		profile.IOProfileData(pszSecName, szKeyName, pShare->m_searchKeywords.searchKeys[i]);
 	}
 
-	profile.IOProfileData(pszSecName, LTEXT("_REPLACEKEY_Counts"), pShare->m_searchKeywords.m_aReplaceKeys._GetSizeRef());
-	pShare->m_searchKeywords.m_aReplaceKeys.SetSizeLimit();
-	nSize = pShare->m_searchKeywords.m_aReplaceKeys.size();
+	profile.IOProfileData(pszSecName, LTEXT("_REPLACEKEY_Counts"), pShare->m_searchKeywords.replaceKeys._GetSizeRef());
+	pShare->m_searchKeywords.replaceKeys.SetSizeLimit();
+	nSize = pShare->m_searchKeywords.replaceKeys.size();
 	for (int i=0; i<nSize; ++i) {
 		auto_sprintf(szKeyName, LTEXT("REPLACEKEY[%02d]"), i);
-		profile.IOProfileData(pszSecName, szKeyName, pShare->m_searchKeywords.m_aReplaceKeys[i]);
+		profile.IOProfileData(pszSecName, szKeyName, pShare->m_searchKeywords.replaceKeys[i]);
 	}
 }
 
@@ -294,26 +294,26 @@ void ShareData_IO::ShareData_IO_Keys(DataProfile& profile)
 */
 void ShareData_IO::ShareData_IO_Grep(DataProfile& profile)
 {
-	DLLSHAREDATA* pShare = &GetDllShareData();
+	DllSharedData* pShare = &GetDllShareData();
 
 	static const WCHAR* pszSecName = LTEXT("Grep");
 	int		nSize;
 	WCHAR	szKeyName[64];
 
-	profile.IOProfileData(pszSecName, LTEXT("_GREPFILE_Counts"), pShare->m_searchKeywords.m_aGrepFiles._GetSizeRef());
-	pShare->m_searchKeywords.m_aGrepFiles.SetSizeLimit();
-	nSize = pShare->m_searchKeywords.m_aGrepFiles.size();
+	profile.IOProfileData(pszSecName, LTEXT("_GREPFILE_Counts"), pShare->m_searchKeywords.grepFiles._GetSizeRef());
+	pShare->m_searchKeywords.grepFiles.SetSizeLimit();
+	nSize = pShare->m_searchKeywords.grepFiles.size();
 	for (int i=0; i<nSize; ++i) {
 		auto_sprintf(szKeyName, LTEXT("GREPFILE[%02d]"), i);
-		profile.IOProfileData(pszSecName, szKeyName, pShare->m_searchKeywords.m_aGrepFiles[i]);
+		profile.IOProfileData(pszSecName, szKeyName, pShare->m_searchKeywords.grepFiles[i]);
 	}
 
-	profile.IOProfileData(pszSecName, LTEXT("_GREPFOLDER_Counts"), pShare->m_searchKeywords.m_aGrepFolders._GetSizeRef());
-	pShare->m_searchKeywords.m_aGrepFolders.SetSizeLimit();
-	nSize = pShare->m_searchKeywords.m_aGrepFolders.size();
+	profile.IOProfileData(pszSecName, LTEXT("_GREPFOLDER_Counts"), pShare->m_searchKeywords.grepFolders._GetSizeRef());
+	pShare->m_searchKeywords.grepFolders.SetSizeLimit();
+	nSize = pShare->m_searchKeywords.grepFolders.size();
 	for (int i=0; i<nSize; ++i) {
 		auto_sprintf(szKeyName, LTEXT("GREPFOLDER[%02d]"), i);
-		profile.IOProfileData(pszSecName, szKeyName, pShare->m_searchKeywords.m_aGrepFolders[i]);
+		profile.IOProfileData(pszSecName, szKeyName, pShare->m_searchKeywords.grepFolders[i]);
 	}
 }
 
@@ -325,7 +325,7 @@ void ShareData_IO::ShareData_IO_Grep(DataProfile& profile)
 */
 void ShareData_IO::ShareData_IO_Folders(DataProfile& profile)
 {
-	DLLSHAREDATA* pShare = &GetDllShareData();
+	DllSharedData* pShare = &GetDllShareData();
 
 	static const WCHAR* pszSecName = LTEXT("Folders");
 	// マクロ用フォルダ
@@ -342,7 +342,7 @@ void ShareData_IO::ShareData_IO_Folders(DataProfile& profile)
 */
 void ShareData_IO::ShareData_IO_Cmd(DataProfile& profile)
 {
-	DLLSHAREDATA* pShare = &GetDllShareData();
+	DllSharedData* pShare = &GetDllShareData();
 
 	static const WCHAR* pszSecName = LTEXT("Cmd");
 	WCHAR szKeyName[64];
@@ -372,7 +372,7 @@ void ShareData_IO::ShareData_IO_Cmd(DataProfile& profile)
 */
 void ShareData_IO::ShareData_IO_Nickname(DataProfile& profile)
 {
-	DLLSHAREDATA* pShare = &GetDllShareData();
+	DllSharedData* pShare = &GetDllShareData();
 
 	static const WCHAR* pszSecName = LTEXT("Nickname");
 	int i;
@@ -435,7 +435,7 @@ static bool ShareData_IO_RECT(DataProfile& profile, const WCHAR* pszSecName, con
 */
 void ShareData_IO::ShareData_IO_Common(DataProfile& profile)
 {
-	DLLSHAREDATA* pShare = &GetDllShareData();
+	DllSharedData* pShare = &GetDllShareData();
 
 	static const WCHAR* pszSecName = LTEXT("Common");
 	// 2005.04.07 D.S.Koba
@@ -793,7 +793,7 @@ bool GetPlugCmdInfoByFuncCode(
 */
 void ShareData_IO::ShareData_IO_Toolbar(DataProfile& profile, MenuDrawer* pMenuDrawer)
 {
-	DLLSHAREDATA* pShare = &GetDllShareData();
+	DllSharedData* pShare = &GetDllShareData();
 
 	static const WCHAR* pszSecName = LTEXT("Toolbar");
 	int		i;
@@ -944,7 +944,7 @@ void ShareData_IO::IO_CustMenu(DataProfile& profile, CommonSetting_CustomMenu& m
 */
 void ShareData_IO::ShareData_IO_Font(DataProfile& profile)
 {
-	DLLSHAREDATA* pShare = &GetDllShareData();
+	DllSharedData* pShare = &GetDllShareData();
 
 	static const WCHAR* pszSecName = LTEXT("Font");
 	CommonSetting_View& view = pShare->m_common.m_view;
@@ -959,7 +959,7 @@ void ShareData_IO::ShareData_IO_Font(DataProfile& profile)
 */
 void ShareData_IO::ShareData_IO_KeyBind(DataProfile& profile)
 {
-	DLLSHAREDATA* pShare = &GetDllShareData();
+	DllSharedData* pShare = &GetDllShareData();
 	IO_KeyBind(profile, pShare->m_common.m_keyBind, false);	// add Parameter 2008/5/24
 }
 
@@ -1153,7 +1153,7 @@ void ShareData_IO::IO_KeyBind(DataProfile& profile, CommonSetting_KeyBind& keyBi
 */
 void ShareData_IO::ShareData_IO_Print(DataProfile& profile)
 {
-	DLLSHAREDATA* pShare = &GetDllShareData();
+	DllSharedData* pShare = &GetDllShareData();
 
 	static const WCHAR* pszSecName = LTEXT("Print");
 	WCHAR	szKeyName[64];
@@ -1276,7 +1276,7 @@ void ShareData_IO::ShareData_IO_Print(DataProfile& profile)
 */
 void ShareData_IO::ShareData_IO_Types(DataProfile& profile)
 {
-	DLLSHAREDATA* pShare = &GetDllShareData();
+	DllSharedData* pShare = &GetDllShareData();
 	WCHAR szKey[32];
 	
 	int nCountOld = pShare->m_nTypesCount;
@@ -1727,7 +1727,7 @@ void ShareData_IO::ShareData_IO_Type_One(DataProfile& profile, TypeConfig& types
 */
 void ShareData_IO::ShareData_IO_Keywords(DataProfile& profile)
 {
-	DLLSHAREDATA* pShare = &GetDllShareData();
+	DllSharedData* pShare = &GetDllShareData();
 
 	static const WCHAR* pszSecName = LTEXT("Keywords");
 	WCHAR			szKeyName[64];
@@ -1806,7 +1806,7 @@ void ShareData_IO::ShareData_IO_Keywords(DataProfile& profile)
 */
 void ShareData_IO::ShareData_IO_Macro(DataProfile& profile)
 {
-	DLLSHAREDATA* pShare = &GetDllShareData();
+	DllSharedData* pShare = &GetDllShareData();
 
 	static const WCHAR* pszSecName = LTEXT("Macro");
 	WCHAR szKeyName[64];
@@ -2192,7 +2192,7 @@ void ShareData_IO::IO_MainMenu(
 */
 void ShareData_IO::ShareData_IO_Other(DataProfile& profile)
 {
-	DLLSHAREDATA* pShare = &GetDllShareData();
+	DllSharedData* pShare = &GetDllShareData();
 
 	static const WCHAR* pszSecName = LTEXT("Other");	// セクションを1個作成した。2003.05.12 MIK
 	WCHAR szKeyName[64];

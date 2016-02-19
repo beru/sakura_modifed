@@ -69,7 +69,7 @@ class PrintPreview; // 2002/2/10 aroka
 class DropTarget;
 class Plug;
 class EditDoc;
-struct DLLSHAREDATA;
+struct DllSharedData;
 
 
 // メインウィンドウ内コントロールID
@@ -381,7 +381,7 @@ private:
 	const int		m_nEditViewMaxCount;	//!< ビューの最大数=4
 
 	// 共有データ
-	DLLSHAREDATA*	m_pShareData;
+	DllSharedData*	m_pShareData;
 
 	// ヘルパ
 	MenuDrawer		m_menuDrawer;

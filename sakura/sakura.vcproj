@@ -1349,11 +1349,11 @@
 					>
 				</File>
 				<File
-					RelativePath="..\sakura_core\env\DLLSHAREDATA.cpp"
+					RelativePath="..\sakura_core\env\DllSharedData.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\sakura_core\env\DLLSHAREDATA.h"
+					RelativePath="..\sakura_core\env\DllSharedData.h"
 					>
 				</File>
 			</Filter>

@@ -27,7 +27,7 @@
 #pragma once
 
 // 要先行定義
-// #include "DLLSHAREDATA.h"
+// #include "DllSharedData.h"
 
 #include "util/design_template.h"
 #include "config/maxdata.h"
@@ -91,7 +91,7 @@ public:
 	void GetIniFileName( LPTSTR pszIniFileName, LPCTSTR pszProfName, BOOL bRead = FALSE );	// iniファイル名の取得		// 2007.05.19 ryoji
 
 private:
-	DLLSHAREDATA* m_pShareData;
+	DllSharedData* m_pShareData;
 
 	// ファイル名簡易表示用キャッシュ
 	int		m_nTransformFileNameCount; // 有効数

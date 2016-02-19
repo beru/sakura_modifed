@@ -96,7 +96,7 @@ protected:
 
 	// ダイアログデータ
 	PropTypeSheetOrder	m_nPageNum;
-	DLLSHAREDATA*		m_pShareData;
+	DllSharedData*		m_pShareData;
 	TypeConfig			m_types;
 
 	// スクリーン用データ	2010/5/10 CPropTypes_P1_Screen.cppから移動

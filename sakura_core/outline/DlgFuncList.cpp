@@ -2581,7 +2581,7 @@ void DlgFuncList::Key2Command(WORD KeyCode)
 	EditView*	pEditView;
 // novice 2004/10/10
 	// Shift,Ctrl,AltƒL[‚ª‰Ÿ‚³‚ê‚Ä‚¢‚½‚©
-	int nIdx = getCtrlKeyState();
+	int nIdx = GetCtrlKeyState();
 	auto& csKeyBind = m_pShareData->m_common.m_keyBind;
 	EFunctionCode nFuncCode = KeyBind::GetFuncCode(
 		((WORD)(((BYTE)(KeyCode)) | ((WORD)((BYTE)(nIdx))) << 8)),

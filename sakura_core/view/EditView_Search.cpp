@@ -402,10 +402,10 @@ bool EditView::GetCurrentTextForSearchDlg(NativeW& memCurText, bool bGetHistory)
 		}
 		if (bGet) {
 			if (1
-				&& 0 < GetDllShareData().m_searchKeywords.m_aSearchKeys.size()
+				&& 0 < GetDllShareData().m_searchKeywords.searchKeys.size()
 				&& m_nCurSearchKeySequence < GetDllShareData().m_common.m_search.m_nSearchKeySequence
 			) {
-				memCurText.SetString(GetDllShareData().m_searchKeywords.m_aSearchKeys[0]);	// —š—ð‚©‚ç‚Æ‚Á‚Ä‚­‚é
+				memCurText.SetString(GetDllShareData().m_searchKeywords.searchKeys[0]);	// —š—ð‚©‚ç‚Æ‚Á‚Ä‚­‚é
 				return true; // ""‚Å‚àtrue	
 			}else {
 				memCurText.SetString(m_strCurSearchKey.c_str());

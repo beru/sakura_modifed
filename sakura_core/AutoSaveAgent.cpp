@@ -31,7 +31,7 @@
 #include "StdAfx.h"
 #include "AutoSaveAgent.h"
 #include "doc/EditDoc.h"
-#include "env/DLLSHAREDATA.h"
+#include "env/DllSharedData.h"
 
 
 //	From Here Aug. 21, 2000 genta

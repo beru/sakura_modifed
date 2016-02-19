@@ -20,13 +20,13 @@
 	This source code is designed for sakura editor.
 	Please contact the copyright holder to use this code for other purpose.
 */
-// 2007.09.23 kobake m_nSEARCHKEYArrNum,      m_szSEARCHKEYArr      を m_aSearchKeys      にまとめました
-// 2007.09.23 kobake m_nREPLACEKEYArrNum,     m_szREPLACEKEYArr     を m_aReplaceKeys     にまとめました
-// 2007.09.23 kobake m_nGREPFILEArrNum,       m_szGREPFILEArr       を m_aGrepFiles       にまとめました
-// 2007.09.23 kobake m_nGREPFOLDERArrNum,     m_szGREPFOLDERArr     を m_aGrepFolders     にまとめました
+// 2007.09.23 kobake m_nSEARCHKEYArrNum,      m_szSEARCHKEYArr      を searchKeys      にまとめました
+// 2007.09.23 kobake m_nREPLACEKEYArrNum,     m_szREPLACEKEYArr     を replaceKeys     にまとめました
+// 2007.09.23 kobake m_nGREPFILEArrNum,       m_szGREPFILEArr       を grepFiles       にまとめました
+// 2007.09.23 kobake m_nGREPFOLDERArrNum,     m_szGREPFOLDERArr     を grepFolders     にまとめました
 // 2007.09.23 kobake m_szCmdArr,              m_nCmdArrNum          を m_aCommands        にまとめました
 // 2007.09.23 kobake m_nTagJumpKeywordArrNum, m_szTagJumpKeywordArr を m_aTagJumpKeywords にまとめました
-// 2007.12.13 kobake DLLSHAREDATAへの簡易アクセサを用意
+// 2007.12.13 kobake DllSharedDataへの簡易アクセサを用意
 
 #pragma once
 
@@ -34,9 +34,9 @@
 
 class ShareData;
 
-// 2010.04.19 Moca DLLSHAREDATA関連はDLLSHAREDATA.h等最低限必要な場所へ移動
-// ShareData.hは、自分のInterfaceしか提供しません。別にDLLSHAREDATA.hをincludeすること。
-struct DLLSHAREDATA;
+// 2010.04.19 Moca DllSharedData関連はDllSharedData.h等最低限必要な場所へ移動
+// ShareData.hは、自分のInterfaceしか提供しません。別にDllSharedData.hをincludeすること。
+struct DllSharedData;
 struct TypeConfig;
 class Mutex;
 
@@ -97,12 +97,12 @@ protected:
 	*/
 
 	// Jan. 30, 2005 genta 初期化関数の分割
-	void InitKeyword(DLLSHAREDATA*);
-	bool InitKeyAssign(DLLSHAREDATA*); // 2007.11.04 genta 起動中止のため値を返す
-	void RefreshKeyAssignString(DLLSHAREDATA*);
-	void InitToolButtons(DLLSHAREDATA*);
-	void InitTypeConfigs(DLLSHAREDATA*, std::vector<TypeConfig*>&);
-	void InitPopupMenu(DLLSHAREDATA*);
+	void InitKeyword(DllSharedData*);
+	bool InitKeyAssign(DllSharedData*); // 2007.11.04 genta 起動中止のため値を返す
+	void RefreshKeyAssignString(DllSharedData*);
+	void InitToolButtons(DllSharedData*);
+	void InitTypeConfigs(DllSharedData*, std::vector<TypeConfig*>&);
+	void InitPopupMenu(DllSharedData*);
 
 public:
 	static void InitFileTree(FileTree*);
@@ -110,7 +110,7 @@ public:
 private:
 	SelectLang		m_selectLang;			// メッセージリソースDLL読み込み用（プロセスに1個）		// 2011.04.10 nasukoji
 	HANDLE			m_hFileMap;
-	DLLSHAREDATA*	m_pShareData;
+	DllSharedData*	m_pShareData;
 	std::vector<TypeConfig*>* 	m_pvTypeSettings;	// (コントロールプロセスのみ)
 	HWND			m_hwndTraceOutSource;	// TraceOutA()起動元ウィンドウ（いちいち起動元を指定しなくてすむように）
 

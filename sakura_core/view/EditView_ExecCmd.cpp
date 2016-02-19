@@ -25,7 +25,7 @@
 #include "_main/AppMode.h"
 #include "_os/OsVersionInfo.h"
 #include "env/ShareData.h"
-#include "env/DLLSHAREDATA.h"
+#include "env/DllSharedData.h"
 #include "env/FormatManager.h"
 #include "dlg/DlgCancel.h"
 #include "charset/CodeFactory.h"

@@ -40,7 +40,7 @@
 #include "StdAfx.h"
 #include "prop/PropCommon.h"
 #include "env/ShareData.h"
-#include "env/DLLSHAREDATA.h"
+#include "env/DllSharedData.h"
 #include "env/DocTypeManager.h"
 #include "EditApp.h"
 #include "util/shell.h"

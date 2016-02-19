@@ -23,7 +23,7 @@
 #include "util/shell.h"
 #include "util/os.h"
 #include "util/window.h"
-#include "env/DLLSHAREDATA.h"
+#include "env/DllSharedData.h"
 #include "env/SakuraEnvironment.h"
 #include "sakura_rc.h"
 #include "sakura.hh"
@@ -63,8 +63,8 @@ const DWORD p_helpids[] = {
 
 DlgGrepReplace::DlgGrepReplace()
 {
-	if (0 < m_pShareData->m_searchKeywords.m_aReplaceKeys.size()) {
-		m_strText2 = m_pShareData->m_searchKeywords.m_aReplaceKeys[0];
+	if (0 < m_pShareData->m_searchKeywords.replaceKeys.size()) {
+		m_strText2 = m_pShareData->m_searchKeywords.replaceKeys[0];
 	}
 	return;
 }
@@ -89,11 +89,11 @@ int DlgGrepReplace::DoModal(
 	m_bBackup = csSearch.m_bGrepBackup;
 
 	auto& searchKeywords = m_pShareData->m_searchKeywords;
-	if (m_szFile[0] == _T('\0') && searchKeywords.m_aGrepFiles.size()) {
-		_tcscpy(m_szFile, searchKeywords.m_aGrepFiles[0]);		// 検索ファイル
+	if (m_szFile[0] == _T('\0') && searchKeywords.grepFiles.size()) {
+		_tcscpy(m_szFile, searchKeywords.grepFiles[0]);		// 検索ファイル
 	}
-	if (m_szFolder[0] == _T('\0') && searchKeywords.m_aGrepFolders.size()) {
-		_tcscpy(m_szFolder, searchKeywords.m_aGrepFolders[0]);	// 検索フォルダ
+	if (m_szFolder[0] == _T('\0') && searchKeywords.grepFolders.size()) {
+		_tcscpy(m_szFolder, searchKeywords.grepFolders[0]);	// 検索フォルダ
 	}
 	if (pszCurrentFilePath) {	// 2010.01.10 ryoji
 		_tcscpy(m_szCurrentFilePath, pszCurrentFilePath);
@@ -164,7 +164,7 @@ void DlgGrepReplace::SetData(void)
 	// 置換後
 	SetItemText(IDC_COMBO_TEXT2, m_strText2.c_str() );
 	HWND hwndCombo = GetItemHwnd(IDC_COMBO_TEXT2);
-	auto& replaceKeys = m_pShareData->m_searchKeywords.m_aReplaceKeys;
+	auto& replaceKeys = m_pShareData->m_searchKeywords.replaceKeys;
 	for (int i=0; i<replaceKeys.size(); ++i) {
 		Combo_AddString(hwndCombo, replaceKeys[i]);
 	}
@@ -199,7 +199,7 @@ int DlgGrepReplace::GetData(void)
 	}
 
 	if (m_strText2.size() < _MAX_PATH) {
-		SearchKeywordManager().AddToReplaceKeyArr( m_strText2.c_str() );
+		SearchKeywordManager().AddToReplaceKeys( m_strText2.c_str() );
 	}
 	m_nReplaceKeySequence = GetDllShareData().m_common.m_search.m_nReplaceKeySequence;
 

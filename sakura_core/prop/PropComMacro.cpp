@@ -36,7 +36,7 @@
 
 #include "StdAfx.h"
 #include "prop/PropCommon.h"
-#include "env/DLLSHAREDATA.h"
+#include "env/DllSharedData.h"
 #include "util/shell.h"
 #include "util/string_ex2.h"
 #include "util/module.h"

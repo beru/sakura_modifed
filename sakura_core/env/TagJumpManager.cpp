@@ -26,7 +26,7 @@
 */
 
 #include "StdAfx.h"
-#include "env/DLLSHAREDATA.h"
+#include "env/DllSharedData.h"
 
 #include "TagJumpManager.h"
 

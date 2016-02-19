@@ -250,7 +250,7 @@ void EditView::ISearchExit()
 {
 	// シーケンスを上書きして現在の検索キーを維持する
 	if (m_strCurSearchKey.size() < _MAX_PATH) {
-		SearchKeywordManager().AddToSearchKeyArr(m_strCurSearchKey.c_str());
+		SearchKeywordManager().AddToSearchKeys(m_strCurSearchKey.c_str());
 	}
 	m_nCurSearchKeySequence = GetDllShareData().m_common.m_search.m_nSearchKeySequence;
 	GetDllShareData().m_common.m_search.m_searchOption = m_curSearchOption;

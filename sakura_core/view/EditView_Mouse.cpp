@@ -99,7 +99,7 @@ void EditView::OnLBUTTONDOWN(WPARAM fwKeys, int _xPos , int _yPos)
 	bool tripleClickMode = CheckTripleClick(ptMouse);
 	if (tripleClickMode) {
 		// マウス左トリプルクリックに対応する機能コードはm_common.m_pKeyNameArr[5]に入っている
-		nFuncID = GetDllShareData().m_common.m_keyBind.m_pKeyNameArr[(int)MouseFunctionType::TripleClick].m_nFuncCodeArr[getCtrlKeyState()];
+		nFuncID = GetDllShareData().m_common.m_keyBind.m_pKeyNameArr[(int)MouseFunctionType::TripleClick].m_nFuncCodeArr[GetCtrlKeyState()];
 		if (nFuncID == 0) {
 			tripleClickMode = false;	// 割り当て機能無しの時はトリプルクリック OFF
 		}
@@ -204,8 +204,8 @@ normal_action:;
 		GetCaret().HideCaret_(GetHwnd()); // 2002/07/22 novice
 		// 現在のカーソル位置から選択を開始する
 		GetSelectionInfo().BeginSelectArea();
-		GetCaret().m_cUnderLine.CaretUnderLineOFF(true);
-		GetCaret().m_cUnderLine.UnderLineLock();
+		GetCaret().m_underLine.CaretUnderLineOFF(true);
+		GetCaret().m_underLine.UnderLineLock();
 		if (ptMouse.x < GetTextArea().GetAreaLeft()) {
 			// カーソル下移動
 			GetCommander().Command_DOWN(true, false);
@@ -602,7 +602,7 @@ void EditView::OnRBUTTONUP(WPARAM fwKeys, int xPos , int yPos)
 	int		nFuncID;
 // novice 2004/10/10
 	// Shift,Ctrl,Altキーが押されていたか
-	nIdx = getCtrlKeyState();
+	nIdx = GetCtrlKeyState();
 	// マウス右クリックに対応する機能コードはm_common.m_pKeyNameArr[1]に入っている
 	nFuncID = GetDllShareData().m_common.m_keyBind.m_pKeyNameArr[(int)MouseFunctionType::RightClick].m_nFuncCodeArr[nIdx];
 	if (nFuncID != 0) {
@@ -629,7 +629,7 @@ void EditView::OnRBUTTONUP(WPARAM fwKeys, int xPos , int yPos)
 */
 void EditView::OnMBUTTONDOWN(WPARAM fwKeys, int xPos , int yPos)
 {
-	int nIdx = getCtrlKeyState();
+	int nIdx = GetCtrlKeyState();
 	if (GetDllShareData().m_common.m_keyBind.m_pKeyNameArr[(int)MouseFunctionType::CenterClick].m_nFuncCodeArr[nIdx] == F_AUTOSCROLL) {
 		if (m_nAutoScrollMode) {
 			AutoScrollExit();
@@ -674,7 +674,7 @@ void EditView::OnMBUTTONUP(WPARAM fwKeys, int xPos , int yPos)
 	}
 
 	// Shift,Ctrl,Altキーが押されていたか
-	nIdx = getCtrlKeyState();
+	nIdx = GetCtrlKeyState();
 	// マウス左サイドボタンに対応する機能コードはm_common.m_pKeyNameArr[2]に入っている
 	nFuncID = GetDllShareData().m_common.m_keyBind.m_pKeyNameArr[(int)MouseFunctionType::CenterClick].m_nFuncCodeArr[nIdx];
 	if (nFuncID == F_AUTOSCROLL) {
@@ -846,7 +846,7 @@ void EditView::OnXLBUTTONUP(WPARAM fwKeys, int xPos , int yPos)
 	}
 
 	// Shift,Ctrl,Altキーが押されていたか
-	nIdx = getCtrlKeyState();
+	nIdx = GetCtrlKeyState();
 	// マウスサイドボタン1に対応する機能コードはm_common.m_pKeyNameArr[3]に入っている
 	nFuncID = GetDllShareData().m_common.m_keyBind.m_pKeyNameArr[(int)MouseFunctionType::LeftSideClick].m_nFuncCodeArr[nIdx];
 	if (nFuncID != 0) {
@@ -910,7 +910,7 @@ void EditView::OnXRBUTTONUP(WPARAM fwKeys, int xPos , int yPos)
 	}
 
 	// Shift,Ctrl,Altキーが押されていたか
-	nIdx = getCtrlKeyState();
+	nIdx = GetCtrlKeyState();
 	// マウスサイドボタン2に対応する機能コードはm_common.m_pKeyNameArr[4]に入っている
 	nFuncID = GetDllShareData().m_common.m_keyBind.m_pKeyNameArr[(int)MouseFunctionType::RightSideClick].m_nFuncCodeArr[nIdx];
 	if (nFuncID != 0) {
@@ -1310,7 +1310,7 @@ LRESULT EditView::OnMOUSEWHEEL2(WPARAM wParam, LPARAM lParam, bool bHorizontalMs
 		}
 
 		// 2013.05.30 Moca ホイールスクロールにキー割り当て
-		int nIdx = getCtrlKeyState();
+		int nIdx = GetCtrlKeyState();
 		EFunctionCode nFuncID = nCmdFuncID;
 		if (nFuncID != F_0) {
 		}else if (bHorizontalMsg) {
@@ -1547,7 +1547,7 @@ void EditView::OnLBUTTONUP(WPARAM fwKeys, int xPos , int yPos)
 		// 20100715 Moca マウスクリック座標をリセット
 		m_mouseDownPos.Set(-INT_MAX, -INT_MAX);
 
-		GetCaret().m_cUnderLine.UnderLineUnLock();
+		GetCaret().m_underLine.UnderLineUnLock();
 		if (GetSelectionInfo().m_select.IsOne()) {
 			// 現在の選択範囲を非選択状態に戻す
 			GetSelectionInfo().DisableSelectArea(true);
@@ -1646,7 +1646,7 @@ void EditView::OnLBUTTONDBLCLK(WPARAM fwKeys, int _xPos , int _yPos)
 
 // novice 2004/10/10
 	// Shift,Ctrl,Altキーが押されていたか
-	int	nIdx = getCtrlKeyState();
+	int	nIdx = GetCtrlKeyState();
 
 	// マウス左クリックに対応する機能コードはm_common.m_pKeyNameArr[?]に入っている 2007.11.15 nasukoji
 	EFunctionCode nFuncID = GetDllShareData().m_common.m_keyBind.m_pKeyNameArr[

@@ -24,7 +24,7 @@
 
 #include "StdAfx.h"
 #include "RecentTagjumpKeyword.h"
-#include "env/DLLSHAREDATA.h"
+#include "env/DllSharedData.h"
 #include <string.h>
 
 
@@ -32,7 +32,7 @@
 //                           生成                              //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-RecentTagjumpKeyword::RecentTagjumpKeyword()
+RecentTagJumpKeyword::RecentTagJumpKeyword()
 {
 	Create(
 		GetShareData()->m_tagJump.m_aTagJumpKeywords.dataPtr(),
@@ -52,29 +52,29 @@ RecentTagjumpKeyword::RecentTagjumpKeyword()
 
 	@note	取得後のポインタはユーザ管理の構造体にキャストして参照してください。
 */
-const TCHAR* RecentTagjumpKeyword::GetItemText(int nIndex) const
+const TCHAR* RecentTagJumpKeyword::GetItemText(int nIndex) const
 {
 	return to_tchar(*GetItem(nIndex));
 }
 
-bool RecentTagjumpKeyword::DataToReceiveType(LPCWSTR* dst, const TagjumpKeywordString* src) const
+bool RecentTagJumpKeyword::DataToReceiveType(LPCWSTR* dst, const TagJumpKeywordString* src) const
 {
 	*dst = *src;
 	return true;
 }
 
-bool RecentTagjumpKeyword::TextToDataType(TagjumpKeywordString* dst, LPCTSTR pszText) const
+bool RecentTagJumpKeyword::TextToDataType(TagJumpKeywordString* dst, LPCTSTR pszText) const
 {
 	CopyItem(dst, to_wchar(pszText));
 	return true;
 }
 
-int RecentTagjumpKeyword::CompareItem(const TagjumpKeywordString* p1, LPCWSTR p2) const
+int RecentTagJumpKeyword::CompareItem(const TagJumpKeywordString* p1, LPCWSTR p2) const
 {
 	return wcscmp(*p1, p2);
 }
 
-void RecentTagjumpKeyword::CopyItem(TagjumpKeywordString* dst, LPCWSTR src) const
+void RecentTagJumpKeyword::CopyItem(TagJumpKeywordString* dst, LPCWSTR src) const
 {
 	wcscpy(*dst, src);
 }

@@ -42,7 +42,7 @@ struct KEYDATAINIT {
 // 実装補助
 // KeyData配列にデータをセット
 static void SetKeyNameArrVal(
-	DLLSHAREDATA*		pShareData,
+	DllSharedData*		pShareData,
 	int					nIdx,
 	const KEYDATAINIT*	pKeydata
 );
@@ -132,7 +132,7 @@ EFunctionCode KeyBind::GetFuncCode(
 		}
 	}else {
 		// 2012.12.10 aroka キーコード検索時のループを除去
-		DLLSHAREDATA* pShareData = &GetDllShareData();
+		DllSharedData* pShareData = &GetDllShareData();
 		return GetFuncCodeAt(pKeyNameArr[pShareData->m_common.m_keyBind.m_VKeyToKeyNameArr[nCmd]], nSts, bGetDefFuncCode);
 	}
 	return F_DEFAULT;
@@ -491,7 +491,7 @@ TCHAR* KeyBind::GetMenuLabel(
 */
 EFunctionCode KeyBind::GetDefFuncCode(int nKeyCode, int nState)
 {
-	DLLSHAREDATA* pShareData = &GetDllShareData();
+	DllSharedData* pShareData = &GetDllShareData();
 	if (!pShareData) {
 		return F_DEFAULT;
 	}
@@ -802,7 +802,7 @@ const int jpVKEXNamesLen = _countof( jpVKEXNames );
 	@date 2005.01.30 genta ShareData::Init()から分離
 	@date 2007.11.04 genta キー設定数がDLLSHAREの領域を超えたら起動できないように
 */
-bool ShareData::InitKeyAssign(DLLSHAREDATA* pShareData)
+bool ShareData::InitKeyAssign(DllSharedData* pShareData)
 {
 	/********************/
 	/* 共通設定の規定値 */
@@ -839,7 +839,7 @@ bool ShareData::InitKeyAssign(DLLSHAREDATA* pShareData)
 }
 
 //!	@brief 言語選択後の文字列更新処理
-void ShareData::RefreshKeyAssignString(DLLSHAREDATA* pShareData)
+void ShareData::RefreshKeyAssignString(DllSharedData* pShareData)
 {
 	const int nKeyDataInitNum = _countof(KeyDataInit);
 	for (int i=0; i<nKeyDataInitNum; ++i) {
@@ -856,7 +856,7 @@ void ShareData::RefreshKeyAssignString(DLLSHAREDATA* pShareData)
 
 // KeyData配列にデータをセット
 static void SetKeyNameArrVal(
-	DLLSHAREDATA*		pShareData,
+	DllSharedData*		pShareData,
 	int					nIdx,
 	const KEYDATAINIT*	pKeydataInit
 	)

@@ -26,7 +26,7 @@
 */
 
 #include "StdAfx.h"
-#include "DLLSHAREDATA.h"
+#include "DllSharedData.h"
 
 #include "FormatManager.h"
 

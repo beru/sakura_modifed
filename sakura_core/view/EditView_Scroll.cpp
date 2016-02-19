@@ -25,7 +25,7 @@
 #include "StdAfx.h"
 #include "EditView.h"
 #include "Ruler.h"
-#include "env/DLLSHAREDATA.h"
+#include "env/DllSharedData.h"
 #include "window/EditWnd.h"
 #include "types/TypeSupport.h"
 #include <limits.h>

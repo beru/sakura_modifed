@@ -33,7 +33,7 @@
 #include "StdAfx.h"
 #include "env/AppNodeManager.h"
 #include "env/ShareData.h"
-#include "env/DLLSHAREDATA.h"
+#include "env/DllSharedData.h"
 #include "env/SakuraEnvironment.h"
 #include "recent/RecentEditNode.h"
 #include "util/window.h"
@@ -65,7 +65,7 @@ static BOOL s_bGSort;	// グループ指定
 	@date 2007.07.05 ryoji 新規導入
 	@date 2007.07.07 genta CShareDataのメンバへ移動
 */
-static Mutex g_cEditArrMutex(FALSE, GSTR_MUTEX_SAKURA_EDITARR);
+static Mutex g_editArrMutex(FALSE, GSTR_MUTEX_SAKURA_EDITARR);
 
 // GetOpenedWindowArr用ソート関数
 static int __cdecl cmpGetOpenedWindowArr(const void *e1, const void *e2)
@@ -104,7 +104,7 @@ static int __cdecl cmpGetOpenedWindowArr(const void *e1, const void *e2)
 */
 EditNode* AppNodeGroupHandle::GetEditNodeAt(int nIndex)
 {
-	DLLSHAREDATA* pShare = &GetDllShareData();
+	DllSharedData* pShare = &GetDllShareData();
 
 	int iIndex = 0;
 	for (int i = 0; i < pShare->m_nodes.m_nEditArrNum; ++i) {
@@ -130,14 +130,14 @@ EditNode* AppNodeGroupHandle::GetEditNodeAt(int nIndex)
 */
 BOOL AppNodeGroupHandle::AddEditWndList(HWND hWnd)
 {
-	DLLSHAREDATA* pShare = &GetDllShareData();
+	DllSharedData* pShare = &GetDllShareData();
 
 	TabWndNotifyType subCommand = TabWndNotifyType::Add;
 	EditNode editNode = {0};
 	editNode.m_hWnd = hWnd;
 
 	{	// 2007.07.07 genta Lock領域
-		LockGuard<Mutex> guard(g_cEditArrMutex);
+		LockGuard<Mutex> guard(g_editArrMutex);
 
 		RecentEditNode	recentEditNode;
 
@@ -208,7 +208,7 @@ void AppNodeGroupHandle::DeleteEditWndList(HWND hWnd)
 {
 	// ウィンドウをリストから削除する。
 	{	// 2007.07.07 genta Lock領域
-		LockGuard<Mutex> guard(g_cEditArrMutex);
+		LockGuard<Mutex> guard(g_editArrMutex);
 
 		RecentEditNode	recentEditNode;
 		recentEditNode.DeleteItemByHwnd(hWnd);
@@ -335,7 +335,7 @@ BOOL AppNodeGroupHandle::RequestCloseEditor(EditNode* pWndArr, int nArrCnt, bool
 */
 int AppNodeGroupHandle::GetEditorWindowsNum(bool bExcludeClosing/* = true */)
 {
-	DLLSHAREDATA* pShare = &GetDllShareData();
+	DllSharedData* pShare = &GetDllShareData();
 	int cnt = 0;
 	auto appNodeMgr = AppNodeManager::getInstance();
 	for (int i=0; i<pShare->m_nodes.m_nEditArrNum; ++i) {
@@ -460,7 +460,7 @@ bool AppNodeGroupHandle::SendMessageToAllEditors(
 */
 void AppNodeManager::ResetGroupId()
 {
-	DLLSHAREDATA* pShare = &GetDllShareData();
+	DllSharedData* pShare = &GetDllShareData();
 	auto& nodes = pShare->m_nodes;
 	int nGroup = ++nodes.m_nGroupSequences;
 	for (int i=0; i<nodes.m_nEditArrNum; ++i) {
@@ -482,7 +482,7 @@ void AppNodeManager::ResetGroupId()
 */
 EditNode* AppNodeManager::GetEditNode(HWND hWnd)
 {
-	DLLSHAREDATA* pShare = &GetDllShareData();
+	DllSharedData* pShare = &GetDllShareData();
 	auto& nodes = pShare->m_nodes;
 	for (int i=0; i<nodes.m_nEditArrNum; ++i) {
 		auto& node = nodes.m_pEditArr[i];
@@ -499,7 +499,7 @@ EditNode* AppNodeManager::GetEditNode(HWND hWnd)
 // 無題番号取得
 int AppNodeManager::GetNoNameNumber(HWND hWnd)
 {
-	DLLSHAREDATA* pShare = &GetDllShareData();
+	DllSharedData* pShare = &GetDllShareData();
 	EditNode* editNode = GetEditNode(hWnd);
 	if (editNode) {
 		if (editNode->m_nId == -1) {
@@ -538,7 +538,7 @@ int AppNodeManager::GetNoNameNumber(HWND hWnd)
 */
 int AppNodeManager::GetOpenedWindowArr(EditNode** ppEditNode, BOOL bSort, BOOL bGSort/* = FALSE */)
 {
-	LockGuard<Mutex> guard(g_cEditArrMutex);
+	LockGuard<Mutex> guard(g_editArrMutex);
 	int nRet = _GetOpenedWindowArrCore(ppEditNode, bSort, bGSort);
 	return nRet;
 }
@@ -546,7 +546,7 @@ int AppNodeManager::GetOpenedWindowArr(EditNode** ppEditNode, BOOL bSort, BOOL b
 // GetOpenedWindowArr関数コア処理部
 int AppNodeManager::_GetOpenedWindowArrCore(EditNode** ppEditNode, BOOL bSort, BOOL bGSort/* = FALSE */)
 {
-	DLLSHAREDATA* pShare = &GetDllShareData();
+	DllSharedData* pShare = &GetDllShareData();
 	auto& nodes = pShare->m_nodes;
 
 	// 編集ウィンドウ数を取得する。
@@ -631,11 +631,11 @@ int AppNodeManager::_GetOpenedWindowArrCore(EditNode** ppEditNode, BOOL bSort, B
 */
 bool AppNodeManager::ReorderTab(HWND hwndSrc, HWND hwndDst)
 {
-	DLLSHAREDATA* pShare = &GetDllShareData();
+	DllSharedData* pShare = &GetDllShareData();
 	EditNode* p = NULL;
 	int nSrcTab = -1;
 	int nDstTab = -1;
-	LockGuard<Mutex> guard(g_cEditArrMutex);
+	LockGuard<Mutex> guard(g_editArrMutex);
 	int nCount = _GetOpenedWindowArrCore(&p, TRUE);	// ロックは自分でやっているので直接コア部呼び出し
 	for (int i=0; i<nCount; ++i) {
 		if (hwndSrc == p[i].m_hWnd) {
@@ -697,9 +697,9 @@ bool AppNodeManager::ReorderTab(HWND hwndSrc, HWND hwndDst)
 */
 HWND AppNodeManager::SeparateGroup(HWND hwndSrc, HWND hwndDst, bool bSrcIsTop, int notifygroups[])
 {
-	DLLSHAREDATA* pShare = &GetDllShareData();
+	DllSharedData* pShare = &GetDllShareData();
 
-	LockGuard<Mutex> guard(g_cEditArrMutex);
+	LockGuard<Mutex> guard(g_editArrMutex);
 
 	EditNode* pSrcEditNode = GetEditNode(hwndSrc);
 	EditNode* pDstEditNode = GetEditNode(hwndDst);
@@ -759,7 +759,7 @@ bool AppNodeManager::IsSameGroup(HWND hWnd1, HWND hWnd2)
 // 空いているグループ番号を取得する
 int AppNodeManager::GetFreeGroupId(void)
 {
-	DLLSHAREDATA* pShare = &GetDllShareData();
+	DllSharedData* pShare = &GetDllShareData();
 	return ++pShare->m_nodes.m_nGroupSequences;	// 新規グループ
 }
 

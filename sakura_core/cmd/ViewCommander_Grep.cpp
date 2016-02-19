@@ -152,9 +152,9 @@ void ViewCommander::Command_GREP_REPLACE_DLG( void )
 		dlgGrepRep.m_strText = memCurText.GetStringPtr();
 		dlgGrepRep.m_bSetText = true;
 	}
-	if (0 < GetDllShareData().m_searchKeywords.m_aReplaceKeys.size()) {
+	if (0 < GetDllShareData().m_searchKeywords.replaceKeys.size()) {
 		if (dlgGrepRep.m_nReplaceKeySequence < GetDllShareData().m_common.m_search.m_nReplaceKeySequence) {
-			dlgGrepRep.m_strText2 = GetDllShareData().m_searchKeywords.m_aReplaceKeys[0];
+			dlgGrepRep.m_strText2 = GetDllShareData().m_searchKeywords.replaceKeys[0];
 		}
 	}
 

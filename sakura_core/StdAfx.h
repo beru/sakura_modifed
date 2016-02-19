@@ -127,7 +127,7 @@
 #endif
 
 #if defined(SAKURA_PCH_MODE_MAX) || defined(SAKURA_PCH_MODE_DLLSHARE)
-#include "env/DLLSHAREDATA.h"
+#include "env/DllSharedData.h"
 #endif
 
 #ifdef SAKURA_PCH_MODE_MAX

@@ -25,7 +25,7 @@
 #include "StdAfx.h"
 #include "SakuraEnvironment.h"
 #include "env/ShareData.h"
-#include "env/DLLSHAREDATA.h"
+#include "env/DllSharedData.h"
 #include "env/FormatManager.h"
 #include "env/FileNameManager.h"
 #include "_main/AppMode.h"
@@ -721,7 +721,7 @@ std::tstring SakuraEnvironment::GetDlgInitialDir(bool bControlProcess)
 		break;
 	case OPENDIALOGDIR_MRU:
 		{
-			const MRUFolder mru;
+			const MruFolder mru;
 			auto& vMRU = mru.GetPathList();
 			int nCount = mru.Length();
 			for (int i=0; i<nCount ; ++i) {

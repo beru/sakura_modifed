@@ -9,7 +9,7 @@
 #include "charset/CodeBase.h"
 #include "charset/CodeFactory.h"
 #include "env/ShareData.h"
-#include "env/DLLSHAREDATA.h"
+#include "env/DllSharedData.h"
 #include "types/TypeSupport.h"
 
 ViewSelect::ViewSelect(EditView* pEditView)
@@ -229,15 +229,15 @@ void ViewSelect::DrawSelectArea(bool bDrawBracketCursorLine)
 				PAINTSTRUCT ps;
 				ps.rcPaint = rcUpdate;
 				// DrawSelectAreaLineでの下線OFFの代わり
-				view.GetCaret().m_cUnderLine.CaretUnderLineOFF(true, false);
-				view.GetCaret().m_cUnderLine.Lock();
+				view.GetCaret().m_underLine.CaretUnderLineOFF(true, false);
+				view.GetCaret().m_underLine.Lock();
 				view.OnPaint(hdc, &ps, false);
-				view.GetCaret().m_cUnderLine.UnLock();
+				view.GetCaret().m_underLine.UnLock();
 				view.ReleaseDC(hdc);
 			}
 			// 2010.10.10 0幅選択(解除)状態での、カーソル位置ライン復帰(リージョン外)
 			if (bDrawBracketCursorLine) {
-				view.GetCaret().m_cUnderLine.CaretUnderLineON(true, false);
+				view.GetCaret().m_underLine.CaretUnderLineON(true, false);
 			}
 		}
 	}else {
@@ -250,7 +250,7 @@ void ViewSelect::DrawSelectArea(bool bDrawBracketCursorLine)
 		DrawSelectArea2(hdc);
 		// 2011.12.02 選択解除状態での、カーソル位置ライン復帰
 		if (bDrawBracketCursorLine) {
-			pView->GetCaret().m_cUnderLine.CaretUnderLineON(true, false);
+			pView->GetCaret().m_underLine.CaretUnderLineON(true, false);
 		}
 		pView->ReleaseDC(hdc);
 	}
@@ -542,7 +542,7 @@ void ViewSelect::DrawSelectAreaLine(
 	if (rcClip.right != rcClip.left) {
 		LayoutRange selectOld = m_select;
 		const_cast<LayoutRange*>(&m_select)->Clear(-1);
-		pView->GetCaret().m_cUnderLine.CaretUnderLineOFF(true, false, true);
+		pView->GetCaret().m_underLine.CaretUnderLineOFF(true, false, true);
 		*(const_cast<LayoutRange*>(&m_select)) = selectOld;
 		
 		// 2006.03.28 Moca 表示域内のみ処理する
