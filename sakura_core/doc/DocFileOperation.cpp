@@ -58,7 +58,7 @@ bool DocFileOperation::_ToDoLock() const
 	}
 
 	// 排他設定
-	if (GetDllShareData().m_common.file.nFileShareMode == SHAREMODE_NOT_EXCLUSIVE) {
+	if (GetDllShareData().common.file.nFileShareMode == SHAREMODE_NOT_EXCLUSIVE) {
 		return false;
 	}
 	return true;
@@ -67,7 +67,7 @@ bool DocFileOperation::_ToDoLock() const
 void DocFileOperation::DoFileLock(bool bMsg)
 {
 	if (this->_ToDoLock()) {
-		m_pDocRef->m_docFile.FileLock(GetDllShareData().m_common.file.nFileShareMode, bMsg);
+		m_pDocRef->m_docFile.FileLock(GetDllShareData().common.file.nFileShareMode, bMsg);
 	}
 }
 
@@ -149,7 +149,7 @@ bool DocFileOperation::FileLoad(
 	bool bRet = DoLoadFlow(pLoadInfo);
 	// 2006.09.01 ryoji オープン後自動実行マクロを実行する
 	if (bRet) {
-		m_pDocRef->RunAutoMacro(GetDllShareData().m_common.macro.nMacroOnOpened);
+		m_pDocRef->RunAutoMacro(GetDllShareData().common.macro.nMacroOnOpened);
 
 		// プラグイン：DocumentOpenイベント実行
 		Plug::Array plugs;
@@ -232,7 +232,7 @@ void DocFileOperation::ReloadCurrentFile(
 
 	// 2006.09.01 ryoji オープン後自動実行マクロを実行する
 	if (bRet) {
-		m_pDocRef->RunAutoMacro(GetDllShareData().m_common.macro.nMacroOnOpened);
+		m_pDocRef->RunAutoMacro(GetDllShareData().common.macro.nMacroOnOpened);
 		// プラグイン：DocumentOpenイベント実行
 		Plug::Array plugs;
 		WSHIfObj::List params;
@@ -288,20 +288,20 @@ bool DocFileOperation::SaveFileDialog(
 
 		if (!this->m_pDocRef->m_docFile.GetFilePathClass().IsValidPath()) {
 			//「新規から保存時は全ファイル表示」オプション	// 2008/6/15 バグフィックス Uchi
-			if (GetDllShareData().m_common.file.bNoFilterSaveNew)
+			if (GetDllShareData().common.file.bNoFilterSaveNew)
 				_tcscat(szDefaultWildCard, _T(";*.*"));	// 全ファイル表示
 		}else {
 			//「新規以外から保存時は全ファイル表示」オプション
-			if (GetDllShareData().m_common.file.bNoFilterSaveFile)
+			if (GetDllShareData().common.file.bNoFilterSaveFile)
 				_tcscat(szDefaultWildCard, _T(";*.*"));	// 全ファイル表示
 		}
 	}
 	// 無題に、無題番号を付ける
 	if (pSaveInfo->filePath[0] == _T('\0')) {
 		const EditNode* node = AppNodeManager::getInstance()->GetEditNode(m_pDocRef->m_pEditWnd->GetHwnd());
-		if (0 < node->m_nId) {
+		if (0 < node->nId) {
 			TCHAR szText[16];
-			auto_sprintf(szText, _T("%d"), node->m_nId);
+			auto_sprintf(szText, _T("%d"), node->nId);
 			auto_strcpy(pSaveInfo->filePath, LS(STR_NO_TITLE2));	// 無題
 			auto_strcat(pSaveInfo->filePath, szText);
 		}
@@ -345,7 +345,7 @@ bool DocFileOperation::DoSaveFlow(SaveInfo* pSaveInfo)
 		// ### 無変更なら上書きしないで抜ける処理はどの CDocListener の OnCheckSave() よりも前に
 		// ### （保存するかどうか問い合わせたりするよりも前に）やるぺきことなので、
 		// ### スマートじゃない？かもしれないけど、とりあえずここに配置しておく
-		if (!GetDllShareData().m_common.file.bEnableUnmodifiedOverwrite) {
+		if (!GetDllShareData().common.file.bEnableUnmodifiedOverwrite) {
 			// 上書きの場合
 			if (pSaveInfo->bOverwriteMode) {
 				// 無変更の場合は警告音を出し、終了
@@ -370,7 +370,7 @@ bool DocFileOperation::DoSaveFlow(SaveInfo* pSaveInfo)
 		}
 
 		// 2006.09.01 ryoji 保存前自動実行マクロを実行する
-		m_pDocRef->RunAutoMacro(GetDllShareData().m_common.macro.nMacroOnSave, pSaveInfo->filePath);
+		m_pDocRef->RunAutoMacro(GetDllShareData().common.macro.nMacroOnSave, pSaveInfo->filePath);
 
 		// プラグイン：DocumentBeforeSaveイベント実行
 		Plug::Array plugs;
@@ -486,7 +486,7 @@ bool DocFileOperation::FileSaveAs(
 		// オープン後自動実行マクロを実行する（ANSI版ではここで再ロード実行→自動実行マクロが実行される）
 		// 提案時の Patches#1550557 に、「名前を付けて保存」でオープン後自動実行マクロが実行されることの是非について議論の経緯あり
 		//   →”ファイル名に応じて表示を変化させるマクロとかを想定すると、これはこれでいいように思います。”
-		m_pDocRef->RunAutoMacro(GetDllShareData().m_common.macro.nMacroOnOpened);
+		m_pDocRef->RunAutoMacro(GetDllShareData().common.macro.nMacroOnOpened);
 
 		// プラグイン：DocumentOpenイベント実行
 		Plug::Array plugs;
@@ -543,7 +543,7 @@ bool DocFileOperation::FileClose()
 	m_pDocRef->m_pEditWnd->UpdateCaption();
 
 	// 2006.09.01 ryoji オープン後自動実行マクロを実行する
-	m_pDocRef->RunAutoMacro(GetDllShareData().m_common.macro.nMacroOnOpened);
+	m_pDocRef->RunAutoMacro(GetDllShareData().common.macro.nMacroOnOpened);
 
 	return true;
 }
@@ -613,7 +613,7 @@ void DocFileOperation::FileCloseOpen(const LoadInfo& argLoadInfo)
 
 	// オープン後自動実行マクロを実行する
 	// ※ロードしてなくても(無題)には変更済み
-	m_pDocRef->RunAutoMacro(GetDllShareData().m_common.macro.nMacroOnOpened);
+	m_pDocRef->RunAutoMacro(GetDllShareData().common.macro.nMacroOnOpened);
 
 	// プラグイン：DocumentOpenイベント実行
 	plugs.clear();

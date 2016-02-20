@@ -386,8 +386,8 @@ bool Clipboard::GetText(NativeW* pMemBuf, bool* pbColumnSelect, bool* pbLineSele
 
 
 struct SystemClipFormatNames {
-	CLIPFORMAT m_nClipFormat;
-	const wchar_t* m_pszName;
+	CLIPFORMAT nClipFormat;
+	const wchar_t* pszName;
 };
 
 static const SystemClipFormatNames sClipFormatNames[] = {
@@ -417,8 +417,8 @@ static CLIPFORMAT GetClipFormat(const wchar_t* pFormatName)
 		return uFormat;
 	}
 	for (int i=0; i<_countof(sClipFormatNames); ++i) {
-		if (wcsicmp(pFormatName, sClipFormatNames[i].m_pszName) == 0) {
-			uFormat = sClipFormatNames[i].m_nClipFormat;
+		if (wcsicmp(pFormatName, sClipFormatNames[i].pszName) == 0) {
+			uFormat = sClipFormatNames[i].nClipFormat;
 		}
 	}
 	if (uFormat == (CLIPFORMAT)-1) {
@@ -510,7 +510,7 @@ bool Clipboard::SetClipboradByFormat(
 			pBuf = (char*)str.GetPtr();
 			nTextByteLen = str.GetLength() * sizeof(wchar_t);
 		}else {
-			CodeBase* pCode = CodeFactory::CreateCodeBase(eMode, GetDllShareData().m_common.file.GetAutoMIMEdecode());
+			CodeBase* pCode = CodeFactory::CreateCodeBase(eMode, GetDllShareData().common.file.GetAutoMIMEdecode());
 			if (pCode->UnicodeToCode(str, &memBuf) == CodeConvertResult::Failure) {
 				return false;
 			}
@@ -653,7 +653,7 @@ bool Clipboard::GetClipboradByFormat(
 				Memory tmpMem;
 				tmpMem.SetRawData(pData, nLength);
 				if (tmpMem.GetRawPtr()) {
-					CodeBase* pCode = CodeFactory::CreateCodeBase(eMode, GetDllShareData().m_common.file.GetAutoMIMEdecode());
+					CodeBase* pCode = CodeFactory::CreateCodeBase(eMode, GetDllShareData().common.file.GetAutoMIMEdecode());
 					if (pCode->CodeToUnicode(tmpMem, &mem) == CodeConvertResult::Failure) {
 						mem.SetString(L"");
 						retVal = false;

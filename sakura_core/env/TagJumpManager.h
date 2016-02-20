@@ -49,12 +49,12 @@ struct Share_TagJump {
 	> ATagJumpKeywords;
 
 	// データ
-	int					m_TagJumpNum;					// タグジャンプ情報の有効データ数
-	int					m_TagJumpTop;					// スタックの一番上の位置
-	TagJump				m_TagJump[MAX_TAGJUMPNUM];		// タグジャンプ情報
-	ATagJumpKeywords	m_aTagJumpKeywords;
-	bool				m_bTagJumpICase;				// 大文字小文字を同一視
-	bool				m_bTagJumpAnyWhere;				// 文字列の途中にマッチ
+	int					tagJumpNum;					// タグジャンプ情報の有効データ数
+	int					tagJumpTop;					// スタックの一番上の位置
+	TagJump				tagJumps[MAX_TAGJUMPNUM];	// タグジャンプ情報
+	ATagJumpKeywords	aTagJumpKeywords;
+	bool				bTagJumpICase;				// 大文字小文字を同一視
+	bool				bTagJumpAnyWhere;			// 文字列の途中にマッチ
 };
 
 

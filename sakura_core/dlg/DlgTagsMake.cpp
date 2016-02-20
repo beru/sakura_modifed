@@ -141,15 +141,15 @@ void DlgTagsMake::SetData(void)
 	SetItemText(IDC_EDIT_TAG_MAKE_FOLDER, m_szPath);
 
 	// オプション
-	m_nTagsOpt = m_pShareData->m_nTagsOpt;
+	m_nTagsOpt = m_pShareData->nTagsOpt;
 	if (m_nTagsOpt & 0x0001) {
 		CheckButton(IDC_CHECK_TAG_MAKE_RECURSE, true);
 	}
 
 	// コマンドライン
-	Combo_LimitText(GetItemHwnd(IDC_EDIT_TAG_MAKE_CMDLINE), _countof(m_pShareData->m_szTagsCmdLine));
-	_tcscpy(m_szTagsCmdLine, m_pShareData->m_szTagsCmdLine);
-	SetItemText(IDC_EDIT_TAG_MAKE_CMDLINE, m_pShareData->m_szTagsCmdLine);
+	Combo_LimitText(GetItemHwnd(IDC_EDIT_TAG_MAKE_CMDLINE), _countof(m_pShareData->szTagsCmdLine));
+	_tcscpy(m_szTagsCmdLine, m_pShareData->szTagsCmdLine);
+	SetItemText(IDC_EDIT_TAG_MAKE_CMDLINE, m_pShareData->szTagsCmdLine);
 
 	return;
 }
@@ -170,11 +170,11 @@ int DlgTagsMake::GetData(void)
 	if (IsButtonChecked(IDC_CHECK_TAG_MAKE_RECURSE)) {
 		m_nTagsOpt |= 0x0001;
 	}
-	m_pShareData->m_nTagsOpt = m_nTagsOpt;
+	m_pShareData->nTagsOpt = m_nTagsOpt;
 
 	// コマンドライン
 	GetItemText(IDC_EDIT_TAG_MAKE_CMDLINE, m_szTagsCmdLine, _countof(m_szTagsCmdLine));
-	_tcscpy(m_pShareData->m_szTagsCmdLine, m_szTagsCmdLine);
+	_tcscpy(m_pShareData->szTagsCmdLine, m_szTagsCmdLine);
 
 	return TRUE;
 }

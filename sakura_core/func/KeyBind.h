@@ -22,17 +22,17 @@ class FuncLookup;
 // キー情報を保持する
 struct KeyData {
 	// キーコード
-	short			m_nKeyCode;
+	short			nKeyCode;
 	
 	//	キーの名前
-	TCHAR			m_szKeyName[30];
+	TCHAR			szKeyName[30];
 	
 	/*!	対応する機能番号
 
 		SHIFT, CTRL, ALTの３つのシフト状態のそれぞれに対して
 		機能を割り当てるため、配列になっている。
 	*/
-	EFunctionCode	m_nFuncCodeArr[8];
+	EFunctionCode	nFuncCodeArr[8];
 };
 
 // 仮想キーコード独自拡張

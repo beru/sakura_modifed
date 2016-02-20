@@ -76,7 +76,7 @@ void ConvertMediator::ConvMemory(
 		case CODE_UTF7:			nFuncCode = F_CODECNV_UTF72SJIS;		break;
 		}
 	}
-	bool bExtEol = GetDllShareData().m_common.edit.bEnableExtEol;
+	bool bExtEol = GetDllShareData().common.edit.bEnableExtEol;
 
 	switch (nFuncCode) {
 	// •¶ší•ÏŠ·A®Œ`

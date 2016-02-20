@@ -194,7 +194,7 @@ int OutlinePython::EnterString(const wchar_t* data, int linelen, int start_offse
 int OutlinePython::ScanNormal(const wchar_t* data, int linelen, int start_offset)
 {
 	assert(state == STATE_NORMAL || state == STATE_CONTINUE);
-	bool bExtEol = GetDllShareData().m_common.edit.bEnableExtEol;
+	bool bExtEol = GetDllShareData().common.edit.bEnableExtEol;
 
 	for (int col=start_offset; col<linelen; ++col) {
 		int nCharChars = NativeW::GetSizeOfChar(data, linelen, col);
@@ -262,7 +262,7 @@ int OutlinePython::ScanNormal(const wchar_t* data, int linelen, int start_offset
 int OutlinePython::ScanString(const wchar_t* data, int linelen, int start_offset)
 {
 	assert(state == STATE_STRING);
-	bool bExtEol = GetDllShareData().m_common.edit.bEnableExtEol;
+	bool bExtEol = GetDllShareData().common.edit.bEnableExtEol;
 
 	int quote_char = m_quote_char;
 	for (int col=start_offset; col<linelen; ++col) {
@@ -392,7 +392,7 @@ void DocOutline::MakeFuncList_python(FuncInfoArr* pFuncInfoArr)
 	OutlinePython python_analyze_state;
 
 	const int MAX_DEPTH = 10;
-	bool bExtEol = GetDllShareData().m_common.edit.bEnableExtEol;
+	bool bExtEol = GetDllShareData().common.edit.bEnableExtEol;
 
 	int indent_level[MAX_DEPTH]; // 各レベルのインデント桁位置()
 	indent_level[0] = 0;	// do as python does.

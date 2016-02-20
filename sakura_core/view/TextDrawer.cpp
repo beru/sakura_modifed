@@ -191,7 +191,7 @@ void TextDrawer::DispVerticalLines(
 	if (nRightCol < 0) {
 		nRightCol = nWrapKetas;
 	}
-	const int nPosXOffset = GetDllShareData().m_common.window.nVertLineOffset + pView->GetTextArea().GetAreaLeft();
+	const int nPosXOffset = GetDllShareData().common.window.nVertLineOffset + pView->GetTextArea().GetAreaLeft();
 	const int nPosXLeft   = t_max(pView->GetTextArea().GetAreaLeft() + (Int)(nLeftCol  - pView->GetTextArea().GetViewLeftCol()) * nCharDx, pView->GetTextArea().GetAreaLeft());
 	const int nPosXRight  = t_min(pView->GetTextArea().GetAreaLeft() + (Int)(nRightCol - pView->GetTextArea().GetViewLeftCol()) * nCharDx, pView->GetTextArea().GetAreaRight());
 	const int nLineHeight = pView->GetTextMetrics().GetHankakuDy();
@@ -369,7 +369,7 @@ void TextDrawer::DispLineNumber(
 	int				nCharWidth = pView->GetTextMetrics().GetHankakuDx();
 	// 行番号表示部分X幅	Sep. 23, 2002 genta 共通式のくくりだし
 	//int				nLineNumAreaWidth = pView->GetTextArea().m_nViewAlignLeftCols * nCharWidth;
-	int				nLineNumAreaWidth = pView->GetTextArea().GetAreaLeft() - GetDllShareData().m_common.window.nLineNumRightSpace;	// 2009.03.26 ryoji
+	int				nLineNumAreaWidth = pView->GetTextArea().GetAreaLeft() - GetDllShareData().common.window.nLineNumRightSpace;	// 2009.03.26 ryoji
 
 	TypeSupport textType(pView, COLORIDX_TEXT);
 	TypeSupport caretLineBg(pView, COLORIDX_CARETLINEBG);
@@ -469,15 +469,15 @@ void TextDrawer::DispLineNumber(
 		if (bGyouMod && nColorIndex != COLORIDX_GYOU_MOD) {
 			bool bChange = true;
 			if (gyouType.IsBoldFont() == colorType.IsBoldFont()) {
-		 		font.m_fontAttr.bBoldFont = gyouModType.IsBoldFont();
+		 		font.fontAttr.bBoldFont = gyouModType.IsBoldFont();
 				bChange = true;
 			}
 			if (gyouType.HasUnderLine() == colorType.HasUnderLine()) {
-				font.m_fontAttr.bUnderLine = gyouModType.HasUnderLine();
+				font.fontAttr.bUnderLine = gyouModType.HasUnderLine();
 				bChange = true;
 			}
 			if (bChange) {
-				font.m_hFont = pView->GetFontset().ChooseFontHandle(font.m_fontAttr);
+				font.hFont = pView->GetFontset().ChooseFontHandle(font.fontAttr);
 			}
 		}
 		gr.PushTextForeColor(fgcolor);	// テキスト：行番号の色

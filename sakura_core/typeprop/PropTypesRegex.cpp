@@ -602,12 +602,12 @@ void PropTypesRegex::SetDataKeywordList(HWND hwndDlg)
 		lvi.pszText  = const_cast<TCHAR*>(to_tchar(pKeyword));
 		lvi.iItem    = i;
 		lvi.iSubItem = 0;
-		lvi.lParam   = 0; //m_types.regexKeywordArr[i].m_nColorIndex;
+		lvi.lParam   = 0; //m_types.regexKeywordArr[i].nColorIndex;
 		ListView_InsertItem(hwndWork, &lvi);
 		lvi.mask     = LVIF_TEXT;
 		lvi.iItem    = i;
 		lvi.iSubItem = 1;
-		lvi.pszText  = m_types.colorInfoArr[m_types.regexKeywordArr[i].m_nColorIndex].szName;
+		lvi.pszText  = m_types.colorInfoArr[m_types.regexKeywordArr[i].nColorIndex].szName;
 		ListView_SetItem(hwndWork, &lvi);
 		for (; *pKeyword!='\0'; ++pKeyword) {
 			;
@@ -651,10 +651,10 @@ int PropTypesRegex::GetData(HWND hwndDlg)
 				_tcstowcs(pKeyword, &szKeyword[0], pKeywordLast - pKeyword);
 			}
 			// 色指定文字列を番号に変換する
-			m_types.regexKeywordArr[i].m_nColorIndex = COLORIDX_REGEX1;
+			m_types.regexKeywordArr[i].nColorIndex = COLORIDX_REGEX1;
 			for (j=0; j<COLORIDX_LAST; ++j) {
 				if (_tcscmp(m_types.colorInfoArr[j].szName, szColorIndex) == 0) {
-					m_types.regexKeywordArr[i].m_nColorIndex = j;
+					m_types.regexKeywordArr[i].nColorIndex = j;
 					break;
 				}
 			}
@@ -663,7 +663,7 @@ int PropTypesRegex::GetData(HWND hwndDlg)
 				++pKeyword;
 			}
 		}else { // 未登録部分はクリアする
-			m_types.regexKeywordArr[i].m_nColorIndex = COLORIDX_REGEX1;
+			m_types.regexKeywordArr[i].nColorIndex = COLORIDX_REGEX1;
 		}
 	}
 	*pKeyword = L'\0'; // 番兵

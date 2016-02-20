@@ -68,7 +68,7 @@ void MainToolBar::ProcSearchBox(MSG *msg)
 				// 検索ボックスを更新	// 2010/6/6 Uchi
 				AcceptSharedSearchKey();
 
-				//::SetFocus(m_hWnd);	//先にフォーカスを移動しておかないとキャレットが消える
+				//::SetFocus(hWnd);	//先にフォーカスを移動しておかないとキャレットが消える
 				m_pOwner->GetActiveView().SetFocus();
 
 				// 検索開始時のカーソル位置登録条件を変更 02/07/28 ai start
@@ -128,7 +128,7 @@ void MainToolBar::CreateToolBar(void)
 	LONG_PTR		lToolType;
 	nFlag = 0;
 
-	auto& csToolBar = GetDllShareData().m_common.toolBar;
+	auto& csToolBar = GetDllShareData().common.toolBar;
 	// 2006.06.17 ryoji
 	// Rebar ウィンドウの作成
 	if (IsVisualStyle()) {	// ビジュアルスタイル有効
@@ -294,12 +294,12 @@ void MainToolBar::CreateToolBar(void)
 							lf.lfItalic			= FALSE;
 							lf.lfUnderline		= FALSE;
 							lf.lfStrikeOut		= FALSE;
-							//lf.lfCharSet		= GetDllShareData().m_common.m_sView.lf.lfCharSet;
+							//lf.lfCharSet		= GetDllShareData().common.m_sView.lf.lfCharSet;
 							lf.lfOutPrecision	= OUT_TT_ONLY_PRECIS;		// Raster Font を使わないように
-							//lf.lfClipPrecision	= GetDllShareData().m_common.m_sView.lf.lfClipPrecision;
-							//lf.lfQuality		= GetDllShareData().m_common.m_sView.lf.lfQuality;
-							//lf.lfPitchAndFamily	= GetDllShareData().m_common.m_sView.lf.lfPitchAndFamily;
-							//_tcsncpy(lf.lfFaceName, GetDllShareData().m_common.m_sView.lf.lfFaceName, _countof(lf.lfFaceName));	// 画面のフォントに設定	2012/11/27 Uchi
+							//lf.lfClipPrecision	= GetDllShareData().common.m_sView.lf.lfClipPrecision;
+							//lf.lfQuality		= GetDllShareData().common.m_sView.lf.lfQuality;
+							//lf.lfPitchAndFamily	= GetDllShareData().common.m_sView.lf.lfPitchAndFamily;
+							//_tcsncpy(lf.lfFaceName, GetDllShareData().common.m_sView.lf.lfFaceName, _countof(lf.lfFaceName));	// 画面のフォントに設定	2012/11/27 Uchi
 							m_hFontSearchBox = ::CreateFontIndirect(&lf);
 							if (m_hFontSearchBox) {
 								::SendMessage(m_hwndSearchBox, WM_SETFONT, (WPARAM)m_hFontSearchBox, MAKELONG (TRUE, 0));
@@ -487,7 +487,7 @@ void MainToolBar::UpdateToolbar(void)
 	
 	// ツールバーの状態更新
 	if (m_hwndToolBar) {
-		auto& csToolBar = GetDllShareData().m_common.toolBar;
+		auto& csToolBar = GetDllShareData().common.toolBar;
 		for (int i=0; i<csToolBar.nToolBarButtonNum; ++i) {
 			TBBUTTON tbb = m_pOwner->GetMenuDrawer().getButton(
 				csToolBar.nToolBarButtonIdxArr[i]
@@ -519,17 +519,17 @@ void MainToolBar::AcceptSharedSearchKey()
 		while (Combo_GetCount(m_hwndSearchBox) > 0) {
 			Combo_DeleteString(m_hwndSearchBox, 0);
 		}
-		int nSize = GetDllShareData().m_searchKeywords.searchKeys.size();
+		int nSize = GetDllShareData().searchKeywords.searchKeys.size();
 		for (i=0; i<nSize; ++i) {
-			Combo_AddString(m_hwndSearchBox, GetDllShareData().m_searchKeywords.searchKeys[i]);
+			Combo_AddString(m_hwndSearchBox, GetDllShareData().searchKeywords.searchKeys[i]);
 		}
 		const wchar_t* pszText;
-		if (GetDllShareData().m_common.search.bInheritKeyOtherView
-			&& m_pOwner->GetActiveView().m_nCurSearchKeySequence < GetDllShareData().m_common.search.nSearchKeySequence
+		if (GetDllShareData().common.search.bInheritKeyOtherView
+			&& m_pOwner->GetActiveView().m_nCurSearchKeySequence < GetDllShareData().common.search.nSearchKeySequence
 			|| m_pOwner->GetActiveView().m_strCurSearchKey.size() == 0
 		) {
 			if (0 < nSize) {
-				pszText = GetDllShareData().m_searchKeywords.searchKeys[0];
+				pszText = GetDllShareData().searchKeywords.searchKeys[0];
 			}else {
 				pszText = L"";
 			}

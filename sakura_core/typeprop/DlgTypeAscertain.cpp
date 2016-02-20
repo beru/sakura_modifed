@@ -120,7 +120,7 @@ void DlgTypeAscertain::SetData(void)
 	Combo_AddString(hwndCombo, LSW(STR_DLGTYPEASC_IMPORT));
 
 	// エディタ内の設定
-	for (int nIdx=0; nIdx<GetDllShareData().m_nTypesCount; ++nIdx) {
+	for (int nIdx=0; nIdx<GetDllShareData().nTypesCount; ++nIdx) {
 		const TypeConfigMini* type;
 		DocTypeManager().GetTypeConfigMini(TypeConfigNum(nIdx), &type);
 		if (type->szTypeExts[0] != _T('\0')) {		// タイプ属性：拡張子リスト

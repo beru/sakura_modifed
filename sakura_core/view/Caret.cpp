@@ -467,7 +467,7 @@ void Caret::ShowEditCaret()
 	}
 	// 必要なインターフェース
 	const LayoutMgr* pLayoutMgr = &m_pEditDoc->m_layoutMgr;
-	CommonSetting* pCommon = &GetDllShareData().m_common;
+	CommonSetting* pCommon = &GetDllShareData().common;
 	const TypeConfig* pTypes = &m_pEditDoc->m_docType.GetDocumentAttribute();
 
 	using namespace WCODE;
@@ -553,7 +553,7 @@ void Caret::ShowEditCaret()
 				int nIdxFrom = GetCaretLogicPos().GetX() - pLayout->GetLogicOffset();
 				if (0
 					|| nIdxFrom >= nLineLen
-					|| WCODE::IsLineDelimiter(pLine[nIdxFrom], GetDllShareData().m_common.edit.bEnableExtEol)
+					|| WCODE::IsLineDelimiter(pLine[nIdxFrom], GetDllShareData().common.edit.bEnableExtEol)
 					|| pLine[nIdxFrom] == TAB
 				) {
 					nCaretWidth = GetHankakuDx();
@@ -586,7 +586,7 @@ void Caret::ShowEditCaret()
 			int nIdxFrom = m_pEditView->LineColumnToIndex(pLayout, GetCaretLayoutPos().GetX2());
 			if (0
 				|| nIdxFrom >= nLineLen
-				|| WCODE::IsLineDelimiter(pLine[nIdxFrom], GetDllShareData().m_common.edit.bEnableExtEol)
+				|| WCODE::IsLineDelimiter(pLine[nIdxFrom], GetDllShareData().common.edit.bEnableExtEol)
 				|| pLine[nIdxFrom] == TAB
 			) {
 				nCaretWidth = GetHankakuDx();
@@ -793,7 +793,7 @@ void Caret::ShowCaretPosInfo()
 				//auto_sprintf(szCaretChar, _T("%04x"),);
 				// 任意の文字コードからUnicodeへ変換する		2008/6/9 Uchi
 				CodeBase* pCode = CodeFactory::CreateCodeBase(m_pEditDoc->GetDocumentEncoding(), false);
-				CommonSetting_StatusBar* psStatusbar = &GetDllShareData().m_common.statusBar;
+				CommonSetting_StatusBar* psStatusbar = &GetDllShareData().common.statusBar;
 				CodeConvertResult ret = pCode->UnicodeToHex(&pLine[nIdx], nLineLen - nIdx, szCaretChar, psStatusbar);
 				delete pCode;
 				if (ret != CodeConvertResult::Complete) {
@@ -909,7 +909,7 @@ LayoutInt Caret::Cursor_UPDOWN(LayoutInt nMoveLines, bool bSelect)
 {
 	// 必要なインターフェース
 	const LayoutMgr* const pLayoutMgr = &m_pEditDoc->m_layoutMgr;
-	const CommonSetting* const pCommon = &GetDllShareData().m_common;
+	const CommonSetting* const pCommon = &GetDllShareData().common;
 
 	const LayoutPoint ptCaret = GetCaretLayoutPos();
 
@@ -1205,7 +1205,7 @@ LayoutInt Caret::MoveCursorProperly(
 			// 2011.12.26 フリーカーソル/矩形でデータ付きEOFの右側へ移動できるように
 			// フリーカーソルモードか
 			if (0
-				|| GetDllShareData().m_common.general.bIsFreeCursorMode
+				|| GetDllShareData().common.general.bIsFreeCursorMode
 				|| (selectionInfo.IsMouseSelecting() && selectionInfo.IsBoxSelecting())	/* マウス範囲選択中 && 矩形範囲選択中 */
 				|| (m_pEditView->m_bDragMode && m_pEditView->m_bDragBoxData) /* OLE DropTarget && 矩形データ */
 			) {

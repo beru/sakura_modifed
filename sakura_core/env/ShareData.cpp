@@ -147,32 +147,32 @@ bool ShareData::InitShareData()
 
 		// 2007.05.19 ryoji 実行ファイルフォルダ->設定ファイルフォルダに変更
 		TCHAR szIniFolder[_MAX_PATH];
-		m_pShareData->m_fileNameManagement.m_IniFolder.m_bInit = false;
+		m_pShareData->fileNameManagement.iniFolder.bInit = false;
 		GetInidir(szIniFolder);
 		AddLastChar(szIniFolder, _MAX_PATH, _T('\\'));
 
-		m_pShareData->m_vStructureVersion = uShareDataVersion;
-		m_pShareData->m_nSize = sizeof(*m_pShareData);
+		m_pShareData->vStructureVersion = uShareDataVersion;
+		m_pShareData->nSize = sizeof(*m_pShareData);
 
 		// 2004.05.13 Moca リソースから製品バージョンの取得
 		GetAppVersionInfo(NULL, VS_VERSION_INFO,
-			&m_pShareData->m_version.m_dwProductVersionMS, &m_pShareData->m_version.m_dwProductVersionLS);
+			&m_pShareData->version.dwProductVersionMS, &m_pShareData->version.dwProductVersionLS);
 
-		m_pShareData->m_flags.m_bEditWndChanging = FALSE;		// 編集ウィンドウ切替中	// 2007.04.03 ryoji
-		m_pShareData->m_flags.m_bRecordingKeyMacro = FALSE;	// キーボードマクロの記録中
-		m_pShareData->m_flags.m_hwndRecordingKeyMacro = NULL;	// キーボードマクロを記録中のウィンドウ
+		m_pShareData->flags.bEditWndChanging = FALSE;		// 編集ウィンドウ切替中	// 2007.04.03 ryoji
+		m_pShareData->flags.bRecordingKeyMacro = FALSE;	// キーボードマクロの記録中
+		m_pShareData->flags.hwndRecordingKeyMacro = NULL;	// キーボードマクロを記録中のウィンドウ
 
-		m_pShareData->m_nodes.m_nSequences = 0;				// ウィンドウ連番
-		m_pShareData->m_nodes.m_nNonameSequences = 0;
-		m_pShareData->m_nodes.m_nGroupSequences = 0;			// タブグループ連番		// 2007.06.20 ryoji
-		m_pShareData->m_nodes.m_nEditArrNum = 0;
+		m_pShareData->nodes.nSequences = 0;				// ウィンドウ連番
+		m_pShareData->nodes.nNonameSequences = 0;
+		m_pShareData->nodes.nGroupSequences = 0;			// タブグループ連番		// 2007.06.20 ryoji
+		m_pShareData->nodes.nEditArrNum = 0;
 
-		m_pShareData->m_handles.m_hwndTray = NULL;
-		m_pShareData->m_handles.m_hAccel = NULL;
-		m_pShareData->m_handles.m_hwndDebug = NULL;
+		m_pShareData->handles.hwndTray = NULL;
+		m_pShareData->handles.hAccel = NULL;
+		m_pShareData->handles.hwndDebug = NULL;
 
-		for (int i=0; i<_countof(m_pShareData->m_dwCustColors); ++i) {
-			m_pShareData->m_dwCustColors[i] = RGB( 255, 255, 255 );
+		for (int i=0; i<_countof(m_pShareData->dwCustColors); ++i) {
+			m_pShareData->dwCustColors[i] = RGB( 255, 255, 255 );
 		}
 
 //@@@ 2001.12.26 YAZAKI MRUリストは、CMRUに依頼する
@@ -218,7 +218,7 @@ bool ShareData::InitShareData()
 
 		// [全般]タブ
 		{
-			CommonSetting_General& general = m_pShareData->m_common.general;
+			CommonSetting_General& general = m_pShareData->common.general;
 
 			general.nMRUArrNum_MAX = 15;			// ファイルの履歴MAX	//Oct. 14, 2000 JEPRO 少し増やした(10→15)
 			general.nOPENFOLDERArrNum_MAX = 15;		// フォルダの履歴MAX	//Oct. 14, 2000 JEPRO 少し増やした(10→15)
@@ -253,7 +253,7 @@ bool ShareData::InitShareData()
 
 		// [ウィンドウ]タブ
 		{
-			CommonSetting_Window& window = m_pShareData->m_common.window;
+			CommonSetting_Window& window = m_pShareData->common.window;
 
 			window.bDispToolBar = true;				// 次回ウィンドウを開いたときツールバーを表示する
 			window.bDispStatusBar = true;			// 次回ウィンドウを開いたときステータスバーを表示する
@@ -302,7 +302,7 @@ bool ShareData::InitShareData()
 		
 		// [タブバー]タブ
 		{
-			CommonSetting_TabBar& tabBar = m_pShareData->m_common.tabBar;
+			CommonSetting_TabBar& tabBar = m_pShareData->common.tabBar;
 
 			tabBar.bDispTabWnd = false;				// タブウィンドウ表示	//@@@ 2003.05.31 MIK
 			tabBar.bDispTabWndMultiWin = false;		// タブウィンドウ表示	//@@@ 2003.05.31 MIK
@@ -331,7 +331,7 @@ bool ShareData::InitShareData()
 
 		// [編集]タブ
 		{
-			CommonSetting_Edit& edit = m_pShareData->m_common.edit;
+			CommonSetting_Edit& edit = m_pShareData->common.edit;
 
 			edit.bAddCRLFWhenCopy = false;			// 折り返し行に改行を付けてコピー
 
@@ -356,7 +356,7 @@ bool ShareData::InitShareData()
 
 		// [ファイル]タブ
 		{
-			CommonSetting_File& file = m_pShareData->m_common.file;
+			CommonSetting_File& file = m_pShareData->common.file;
 
 			// ファイルの排他制御
 			file.nFileShareMode = SHAREMODE_DENY_WRITE;	// ファイルの排他制御モード
@@ -385,7 +385,7 @@ bool ShareData::InitShareData()
 
 		// [バックアップ]タブ
 		{
-			CommonSetting_Backup& backup = m_pShareData->m_common.backup;
+			CommonSetting_Backup& backup = m_pShareData->common.backup;
 
 			backup.bBackUp = false;										// バックアップの作成
 			backup.bBackUpDialog = true;									// バックアップの作成前に確認
@@ -405,7 +405,7 @@ bool ShareData::InitShareData()
 
 		// [書式]タブ
 		{
-			CommonSetting_Format& format = m_pShareData->m_common.format;
+			CommonSetting_Format& format = m_pShareData->common.format;
 
 			// 見出し記号
 			wcscpy( format.szMidashiKigou, L"１２３４５６７８９０（(［[「『【■□▲△▼▽◆◇○◎●§・※☆★第①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳ⅠⅡⅢⅣⅤⅥⅦⅧⅨⅩ一二三四五六七八九十壱弐参伍" );
@@ -424,7 +424,7 @@ bool ShareData::InitShareData()
 
 		// [検索]タブ
 		{
-			CommonSetting_Search& search = m_pShareData->m_common.search;
+			CommonSetting_Search& search = m_pShareData->common.search;
 
 			search.searchOption.Reset();			// 検索オプション
 			search.bConsecutiveAll = 0;				// 「すべて置換」は置換の繰返し	// 2007.01.16 ryoji
@@ -469,7 +469,7 @@ bool ShareData::InitShareData()
 
 		// [カスタムメニュー]タブ
 		{
-			CommonSetting_CustomMenu& customMenu = m_pShareData->m_common.customMenu;
+			CommonSetting_CustomMenu& customMenu = m_pShareData->common.customMenu;
 
 			for (int i=0; i<MAX_CUSTOM_MENU; ++i) {
 				customMenu.szCustMenuNameArr[i][0] = '\0';
@@ -498,7 +498,7 @@ bool ShareData::InitShareData()
 
 		// [支援]タブ
 		{
-			CommonSetting_Helper& helper = m_pShareData->m_common.helper;
+			CommonSetting_Helper& helper = m_pShareData->common.helper;
 
 			helper.lf = lfIconTitle;
 			helper.nPointSize = nIconPointSize;	// フォントサイズ（1/10ポイント単位） ※古いバージョンからの移行を考慮して無効値で初期化	// 2009.10.01 ryoji
@@ -521,7 +521,7 @@ bool ShareData::InitShareData()
 
 		// [アウトライン]タブ
 		{
-			CommonSetting_OutLine& outline = m_pShareData->m_common.outline;
+			CommonSetting_OutLine& outline = m_pShareData->common.outline;
 
 			outline.nOutlineDockSet = 0;					// アウトライン解析のドッキング位置継承方法
 			outline.bOutlineDockSync = true;				// アウトライン解析のドッキング位置を同期する
@@ -542,14 +542,14 @@ bool ShareData::InitShareData()
 
 		// [ファイル内容比較]タブ
 		{
-			CommonSetting_Compare& compare = m_pShareData->m_common.compare;
+			CommonSetting_Compare& compare = m_pShareData->common.compare;
 
 			compare.bCompareAndTileHorz = true;		// 文書比較後、左右に並べて表示
 		}
 
 		// [ビュー]タブ
 		{
-			CommonSetting_View& view = m_pShareData->m_common.view;
+			CommonSetting_View& view = m_pShareData->common.view;
 
 			view.lf = lf;
 			view.nPointSize = 0;	// フォントサイズ（1/10ポイント単位） ※古いバージョンからの移行を考慮して無効値で初期化	// 2009.10.01 ryoji
@@ -559,7 +559,7 @@ bool ShareData::InitShareData()
 
 		// [マクロ]タブ
 		{
-			CommonSetting_Macro& macro = m_pShareData->m_common.macro;
+			CommonSetting_Macro& macro = m_pShareData->common.macro;
 
 			macro.szKeyMacroFileName[0] = _T('\0');	// キーワードマクロのファイル名 //@@@ 2002.1.24 YAZAKI
 
@@ -583,7 +583,7 @@ bool ShareData::InitShareData()
 
 		// [ファイル名表示]タブ
 		{
-			CommonSetting_FileName& fileName = m_pShareData->m_common.fileName;
+			CommonSetting_FileName& fileName = m_pShareData->common.fileName;
 
 			fileName.bTransformShortPath = true;
 			fileName.nTransformShortMaxWidth = 100; // 100'x'幅
@@ -611,7 +611,7 @@ bool ShareData::InitShareData()
 
 		// [その他]タブ
 		{
-			CommonSetting_Others& others = m_pShareData->m_common.others;
+			CommonSetting_Others& others = m_pShareData->common.others;
 
 			::SetRect( &others.rcOpenDialog, 0, 0, 0, 0 );		// 「開く」ダイアログのサイズと位置
 			::SetRect( &others.rcCompareDialog, 0, 0, 0, 0 );
@@ -622,7 +622,7 @@ bool ShareData::InitShareData()
 
 		// [ステータスバー]タブ
 		{
-			CommonSetting_StatusBar& statusbar = m_pShareData->m_common.statusBar;
+			CommonSetting_StatusBar& statusbar = m_pShareData->common.statusBar;
 
 			// 表示文字コードの指定		2008/6/21	Uchi
 			statusbar.bDispUniInSjis		= FALSE;	// SJISで文字コード値をUnicodeで表示する
@@ -635,7 +635,7 @@ bool ShareData::InitShareData()
 
 		// [プラグイン]タブ
 		{
-			CommonSetting_Plugin& plugin = m_pShareData->m_common.plugin;
+			CommonSetting_Plugin& plugin = m_pShareData->common.plugin;
 
 			plugin.bEnablePlugin			= FALSE;	// プラグインを使用する
 			for (int nPlugin=0; nPlugin<MAX_PLUGIN; ++nPlugin) {
@@ -652,7 +652,7 @@ bool ShareData::InitShareData()
 			profile.SetReadingMode();
 			profile.ReadProfileRes( MAKEINTRESOURCE(IDR_MENU1), MAKEINTRESOURCE(ID_RC_TYPE_INI), &data );
 
-			ShareData_IO::IO_MainMenu( profile, &data, m_pShareData->m_common.mainMenu, false );
+			ShareData_IO::IO_MainMenu( profile, &data, m_pShareData->common.mainMenu, false );
 		}
 
 		{
@@ -660,57 +660,57 @@ bool ShareData::InitShareData()
 		}
 
 		{
-			/* m_printSettingArr[0]を設定して、残りの1～7にコピーする。
+			/* printSettingArr[0]を設定して、残りの1～7にコピーする。
 				必要になるまで遅らせるために、Printに、ShareDataを操作する権限を与える。
 				YAZAKI.
 			*/
 			{
 				/*
-					2006.08.16 Moca 初期化単位を PRINTSETTINGに変更。ShareDataには依存しない。
+					2006.08.16 Moca 初期化単位を PrintSettingに変更。ShareDataには依存しない。
 				*/
 				TCHAR szSettingName[64];
 				int i = 0;
 				auto_sprintf( szSettingName, _T("印刷設定 %d"), i + 1 );
-				Print::SettingInitialize( m_pShareData->m_printSettingArr[0], szSettingName );	//	初期化命令。
+				Print::SettingInitialize( m_pShareData->printSettingArr[0], szSettingName );	//	初期化命令。
 			}
-			for (int i=1; i<MAX_PRINTSETTINGARR; ++i) {
-				m_pShareData->m_printSettingArr[i] = m_pShareData->m_printSettingArr[0];
-				auto_sprintf( m_pShareData->m_printSettingArr[i].m_szPrintSettingName, _T("印刷設定 %d"), i + 1 );	// 印刷設定の名前
+			for (int i=1; i<MAX_PrintSettingARR; ++i) {
+				m_pShareData->printSettingArr[i] = m_pShareData->printSettingArr[0];
+				auto_sprintf( m_pShareData->printSettingArr[i].szPrintSettingName, _T("印刷設定 %d"), i + 1 );	// 印刷設定の名前
 			}
 		}
 
 		{
-			m_pShareData->m_searchKeywords.searchKeys.clear();
-			m_pShareData->m_searchKeywords.replaceKeys.clear();
-			m_pShareData->m_searchKeywords.grepFiles.clear();
-			m_pShareData->m_searchKeywords.grepFiles.push_back(_T("*.*"));
-			m_pShareData->m_searchKeywords.grepFolders.clear();
+			m_pShareData->searchKeywords.searchKeys.clear();
+			m_pShareData->searchKeywords.replaceKeys.clear();
+			m_pShareData->searchKeywords.grepFiles.clear();
+			m_pShareData->searchKeywords.grepFiles.push_back(_T("*.*"));
+			m_pShareData->searchKeywords.grepFolders.clear();
 
 			// 2004/06/21 novice タグジャンプ機能追加
-			m_pShareData->m_tagJump.m_TagJumpNum = 0;
+			m_pShareData->tagJump.tagJumpNum = 0;
 			// 2004.06.22 Moca タグジャンプの先頭
-			m_pShareData->m_tagJump.m_TagJumpTop = 0;
+			m_pShareData->tagJump.tagJumpTop = 0;
 			// From Here 2005.04.03 MIK キーワード指定タグジャンプのHistory保管
-			m_pShareData->m_tagJump.m_aTagJumpKeywords.clear();
-			m_pShareData->m_tagJump.m_bTagJumpICase = FALSE;
-			m_pShareData->m_tagJump.m_bTagJumpAnyWhere = FALSE;
+			m_pShareData->tagJump.aTagJumpKeywords.clear();
+			m_pShareData->tagJump.bTagJumpICase = FALSE;
+			m_pShareData->tagJump.bTagJumpAnyWhere = FALSE;
 			// To Here 2005.04.03 MIK 
 
-			m_pShareData->m_history.m_aExceptMRU.clear();
+			m_pShareData->history.m_aExceptMRU.clear();
 
-			_tcscpy( m_pShareData->m_history.m_szIMPORTFOLDER, szIniFolder );	// 設定インポート用フォルダ
+			_tcscpy( m_pShareData->history.m_szIMPORTFOLDER, szIniFolder );	// 設定インポート用フォルダ
 
-			m_pShareData->m_history.m_aCommands.clear();
-			m_pShareData->m_history.m_aCurDirs.clear();
+			m_pShareData->history.m_aCommands.clear();
+			m_pShareData->history.m_aCurDirs.clear();
 
-			m_pShareData->m_nExecFlgOpt = 1;	// 外部コマンド実行の「標準出力を得る」	// 2006.12.03 maru オプションの拡張のため
+			m_pShareData->nExecFlgOpt = 1;	// 外部コマンド実行の「標準出力を得る」	// 2006.12.03 maru オプションの拡張のため
 
-			m_pShareData->m_nDiffFlgOpt = 0;	// DIFF差分表示	//@@@ 2002.05.27 MIK
+			m_pShareData->nDiffFlgOpt = 0;	// DIFF差分表示	//@@@ 2002.05.27 MIK
 
-			m_pShareData->m_szTagsCmdLine[0] = _T('\0');	// CTAGS	//@@@ 2003.05.12 MIK
-			m_pShareData->m_nTagsOpt = 0;	/* CTAGS */	//@@@ 2003.05.12 MIK
+			m_pShareData->szTagsCmdLine[0] = _T('\0');	// CTAGS	//@@@ 2003.05.12 MIK
+			m_pShareData->nTagsOpt = 0;	/* CTAGS */	//@@@ 2003.05.12 MIK
 
-			m_pShareData->m_bLineNumIsCRLF_ForJump = true;	// 指定行へジャンプの「改行単位の行番号」か「折り返し単位の行番号」か
+			m_pShareData->bLineNumIsCRLF_ForJump = true;	// 指定行へジャンプの「改行単位の行番号」か「折り返し単位の行番号」か
 		}
 	}else {
 		// オブジェクトがすでに存在する場合
@@ -725,12 +725,12 @@ bool ShareData::InitShareData()
 		SetDllShareData(m_pShareData);
 
 		SelectCharWidthCache(CharWidthFontMode::Edit, CharWidthCacheMode::Share);
-		InitCharWidthCache(m_pShareData->m_common.view.lf);	// 2008/5/15 Uchi
+		InitCharWidthCache(m_pShareData->common.view.lf);	// 2008/5/15 Uchi
 
 		// From Here Oct. 27, 2000 genta
 		//	2014.01.08 Moca サイズチェック追加
-		if (m_pShareData->m_vStructureVersion != uShareDataVersion
-			|| m_pShareData->m_nSize != sizeof(*m_pShareData)
+		if (m_pShareData->vStructureVersion != uShareDataVersion
+			|| m_pShareData->nSize != sizeof(*m_pShareData)
 		) {
 			// この共有データ領域は使えない．
 			// ハンドルを解放する
@@ -825,7 +825,7 @@ void ShareData::ConvertLangValues(std::vector<std::wstring>& values, bool bSetVa
 	DllSharedData& shareData = *m_pShareData;
 	int index = 0;
 	int indexBackup;
-	CommonSetting& common = shareData.m_common;
+	CommonSetting& common = shareData.common;
 	ConvertLangValue(common.tabBar.szTabWndCaption, STR_TAB_CAPTION_OUTPUT);
 	ConvertLangValue(common.tabBar.szTabWndCaption, STR_TAB_CAPTION_GREP);
 	indexBackup = index;
@@ -863,16 +863,16 @@ void ShareData::ConvertLangValues(std::vector<std::wstring>& values, bool bSetVa
 		}
 	}
 	indexBackup = index;
-	for (int i=0; i<MAX_PRINTSETTINGARR; ++i) {
+	for (int i=0; i<MAX_PrintSettingARR; ++i) {
 		index = indexBackup;
-		ConvertLangValue(shareData.m_printSettingArr[i].m_szPrintSettingName, STR_PRINT_SET_NAME);
+		ConvertLangValue(shareData.printSettingArr[i].szPrintSettingName, STR_PRINT_SET_NAME);
 		if (bSetValues) {
 			break;
 		}
 	}
 	assert(m_pvTypeSettings);
 	indexBackup = index;
-	ConvertLangValue(shareData.m_TypeBasis.szTypeName, STR_TYPE_NAME_BASIS);
+	ConvertLangValue(shareData.typeBasis.szTypeName, STR_TYPE_NAME_BASIS);
 	for (int i=0; i<(int)GetTypeSettings().size(); ++i) {
 		index = indexBackup;
 		TypeConfig& type = *(GetTypeSettings()[i]);
@@ -883,12 +883,12 @@ void ShareData::ConvertLangValues(std::vector<std::wstring>& values, bool bSetVa
 		ConvertLangValue(type.szTypeName, STR_TYPE_NAME_ASM);
 		ConvertLangValue(type.szTypeName, STR_TYPE_NAME_INI);
 		index = indexBackup;
-		ConvertLangValue2(shareData.m_TypeMini[i].szTypeName, STR_TYPE_NAME_BASIS);
-		ConvertLangValue2(shareData.m_TypeMini[i].szTypeName, STR_TYPE_NAME_RICHTEXT);
-		ConvertLangValue2(shareData.m_TypeMini[i].szTypeName, STR_TYPE_NAME_TEXT);
-		ConvertLangValue2(shareData.m_TypeMini[i].szTypeName, STR_TYPE_NAME_DOS);
-		ConvertLangValue2(shareData.m_TypeMini[i].szTypeName, STR_TYPE_NAME_ASM);
-		ConvertLangValue2(shareData.m_TypeMini[i].szTypeName, STR_TYPE_NAME_INI);
+		ConvertLangValue2(shareData.typesMini[i].szTypeName, STR_TYPE_NAME_BASIS);
+		ConvertLangValue2(shareData.typesMini[i].szTypeName, STR_TYPE_NAME_RICHTEXT);
+		ConvertLangValue2(shareData.typesMini[i].szTypeName, STR_TYPE_NAME_TEXT);
+		ConvertLangValue2(shareData.typesMini[i].szTypeName, STR_TYPE_NAME_DOS);
+		ConvertLangValue2(shareData.typesMini[i].szTypeName, STR_TYPE_NAME_ASM);
+		ConvertLangValue2(shareData.typesMini[i].szTypeName, STR_TYPE_NAME_INI);
 		if (bSetValues) {
 			break;
 		}
@@ -920,15 +920,15 @@ bool ShareData::IsPathOpened(const TCHAR* pszPath, HWND* phwndOwner)
 		return false;
 	}
 	
-	for (int i=0; i<m_pShareData->m_nodes.m_nEditArrNum; ++i) {
-		if (IsSakuraMainWindow(m_pShareData->m_nodes.m_pEditArr[i].m_hWnd)) {
+	for (int i=0; i<m_pShareData->nodes.nEditArrNum; ++i) {
+		if (IsSakuraMainWindow(m_pShareData->nodes.pEditArr[i].hWnd)) {
 			// トレイからエディタへの編集ファイル名要求通知
-			::SendMessage(m_pShareData->m_nodes.m_pEditArr[i].m_hWnd, MYWM_GETFILEINFO, 1, 0);
-			EditInfo* pfi = (EditInfo*)&m_pShareData->m_workBuffer.m_EditInfo_MYWM_GETFILEINFO;
+			::SendMessage(m_pShareData->nodes.pEditArr[i].hWnd, MYWM_GETFILEINFO, 1, 0);
+			EditInfo* pfi = (EditInfo*)&m_pShareData->workBuffer.editInfo_MYWM_GETFILEINFO;
 
 			// 同一パスのファイルが既に開かれているか
-			if (_tcsicmp(pfi->m_szPath, pszPath) == 0) {
-				*phwndOwner = m_pShareData->m_nodes.m_pEditArr[i].m_hWnd;
+			if (_tcsicmp(pfi->szPath, pszPath) == 0) {
+				*phwndOwner = m_pShareData->nodes.pEditArr[i].hWnd;
 				return true;
 			}
 		}
@@ -960,14 +960,14 @@ bool ShareData::ActiveAlreadyOpenedWindow(const TCHAR* pszPath, HWND* phwndOwner
 		
 		// 文字コードの一致確認
 		::SendMessage(*phwndOwner, MYWM_GETFILEINFO, 0, 0);
-		EditInfo* pfi = (EditInfo*)&m_pShareData->m_workBuffer.m_EditInfo_MYWM_GETFILEINFO;
+		EditInfo* pfi = (EditInfo*)&m_pShareData->workBuffer.editInfo_MYWM_GETFILEINFO;
 		if (nCharCode != CODE_AUTODETECT) {
 			TCHAR szCpNameCur[100];
-			CodePage::GetNameLong(szCpNameCur, pfi->m_nCharCode);
+			CodePage::GetNameLong(szCpNameCur, pfi->nCharCode);
 			TCHAR szCpNameNew[100];
-			CodePage::GetNameLong(szCpNameNew, pfi->m_nCharCode);
+			CodePage::GetNameLong(szCpNameNew, pfi->nCharCode);
 			if (szCpNameCur[0] && szCpNameNew[0]) {
-				if (nCharCode != pfi->m_nCharCode) {
+				if (nCharCode != pfi->nCharCode) {
 					TopWarningMessage(*phwndOwner,
 						LS(STR_ERR_CSHAREDATA20),
 						pszPath,
@@ -979,7 +979,7 @@ bool ShareData::ActiveAlreadyOpenedWindow(const TCHAR* pszPath, HWND* phwndOwner
 				TopWarningMessage(*phwndOwner,
 					LS(STR_ERR_CSHAREDATA21),
 					pszPath,
-					pfi->m_nCharCode,
+					pfi->nCharCode,
 					szCpNameCur[0] == NULL ? LS(STR_ERR_CSHAREDATA22) : szCpNameCur,
 					nCharCode,
 					szCpNameNew[0] == NULL ? LS(STR_ERR_CSHAREDATA22) : szCpNameNew
@@ -1015,19 +1015,19 @@ void ShareData::TraceOut(LPCTSTR lpFmt, ...)
 	
 	va_list argList;
 	va_start(argList, lpFmt);
-	int ret = tchar_vsnprintf_s(m_pShareData->m_workBuffer.GetWorkBuffer<WCHAR>(), 
-		m_pShareData->m_workBuffer.GetWorkBufferCount<WCHAR>(),
+	int ret = tchar_vsnprintf_s(m_pShareData->workBuffer.GetWorkBuffer<WCHAR>(), 
+		m_pShareData->workBuffer.GetWorkBufferCount<WCHAR>(),
 		to_wchar(lpFmt), argList);
 	va_end(argList);
 	if (ret == -1) {
 		// 切り詰められた
-		ret = auto_strlen(m_pShareData->m_workBuffer.GetWorkBuffer<WCHAR>());
+		ret = auto_strlen(m_pShareData->workBuffer.GetWorkBuffer<WCHAR>());
 	}else if (ret < 0) {
 		// 保護コード:受け側はwParam→size_tで符号なしのため
 		ret = 0;
 	}
 	DWORD_PTR dwMsgResult;
-	::SendMessageTimeout(m_pShareData->m_handles.m_hwndDebug, MYWM_ADDSTRINGLEN_W, ret, 0,
+	::SendMessageTimeout(m_pShareData->handles.hwndDebug, MYWM_ADDSTRINGLEN_W, ret, 0,
 		SMTO_NORMAL, 10000, &dwMsgResult);
 }
 
@@ -1048,16 +1048,16 @@ void ShareData::TraceOutString(const wchar_t* pStr, int len)
 	if (len == -1) {
 		len = wcslen(pStr);
 	}
-	// m_workBufferぎりぎりでも問題ないけれど、念のため\0終端にするために余裕をとる
+	// workBufferぎりぎりでも問題ないけれど、念のため\0終端にするために余裕をとる
 	// -1 より 8,4バイト境界のほうがコピーが早いはずなので、-4にする
-	const int buffLen = (int)m_pShareData->m_workBuffer.GetWorkBufferCount<WCHAR>() - 4;
-	wchar_t*  pOutBuffer = m_pShareData->m_workBuffer.GetWorkBuffer<WCHAR>();
+	const int buffLen = (int)m_pShareData->workBuffer.GetWorkBufferCount<WCHAR>() - 4;
+	wchar_t*  pOutBuffer = m_pShareData->workBuffer.GetWorkBuffer<WCHAR>();
 	int outPos = 0;
 	if (len == 0) {
 		// 0のときは何も追加しないが、カーソル移動が発生する
 		LockGuard<Mutex> guard( ShareData::GetMutexShareWork() );
 		pOutBuffer[0] = L'\0';
-		::SendMessage(m_pShareData->m_handles.m_hwndDebug, MYWM_ADDSTRINGLEN_W, 0, 0);
+		::SendMessage(m_pShareData->handles.hwndDebug, MYWM_ADDSTRINGLEN_W, 0, 0);
 	}else {
 		while (outPos < len) {
 			int outLen = buffLen;
@@ -1078,7 +1078,7 @@ void ShareData::TraceOutString(const wchar_t* pStr, int len)
 			wmemcpy(pOutBuffer, pStr + outPos, outLen);
 			pOutBuffer[outLen] = L'\0';
 			DWORD_PTR dwMsgResult;
-			if (::SendMessageTimeout(m_pShareData->m_handles.m_hwndDebug, MYWM_ADDSTRINGLEN_W, outLen, 0,
+			if (::SendMessageTimeout(m_pShareData->handles.hwndDebug, MYWM_ADDSTRINGLEN_W, outLen, 0,
 				SMTO_NORMAL, 10000, &dwMsgResult) == 0
 			) {
 				// エラーかタイムアウト
@@ -1099,8 +1099,8 @@ void ShareData::TraceOutString(const wchar_t* pStr, int len)
 bool ShareData::OpenDebugWindow(HWND hwnd, bool bAllwaysActive)
 {
 	bool ret = true;
-	if (!m_pShareData->m_handles.m_hwndDebug
-		|| !IsSakuraMainWindow(m_pShareData->m_handles.m_hwndDebug)
+	if (!m_pShareData->handles.hwndDebug
+		|| !IsSakuraMainWindow(m_pShareData->handles.hwndDebug)
 	) {
 		// 2007.06.26 ryoji
 		// アウトプットウィンドウを作成元と同じグループに作成するために m_hwndTraceOutSource を使っています
@@ -1127,14 +1127,14 @@ bool ShareData::OpenDebugWindow(HWND hwnd, bool bAllwaysActive)
 	}
 	// 開いているウィンドウをアクティブにする
 	if (ret && bAllwaysActive) {
-		ActivateFrameWindow(m_pShareData->m_handles.m_hwndDebug);
+		ActivateFrameWindow(m_pShareData->handles.hwndDebug);
 	}
 	return ret;
 }
 
 // iniファイルの保存先がユーザ別設定フォルダかどうか	// 2007.05.25 ryoji
 bool ShareData::IsPrivateSettings(void) {
-	return m_pShareData->m_fileNameManagement.m_IniFolder.m_bWritePrivate;
+	return m_pShareData->fileNameManagement.iniFolder.bWritePrivate;
 }
 
 
@@ -1167,7 +1167,7 @@ bool ShareData::IsPrivateSettings(void) {
 */
 int ShareData::GetMacroFilename(int idx, TCHAR* pszPath, int nBufLen)
 {
-	if (idx != -1 && !m_pShareData->m_common.macro.macroTable[idx].IsEnabled()) {
+	if (idx != -1 && !m_pShareData->common.macro.macroTable[idx].IsEnabled()) {
 		return 0;
 	}
 	const TCHAR* pszFile;
@@ -1175,7 +1175,7 @@ int ShareData::GetMacroFilename(int idx, TCHAR* pszPath, int nBufLen)
 	if (idx == -1) {
 		pszFile = _T("RecKey.mac");
 	}else {
-		pszFile = m_pShareData->m_common.macro.macroTable[idx].szFile;
+		pszFile = m_pShareData->common.macro.macroTable[idx].szFile;
 	}
 	if (pszFile[0] == _T('\0')) {	// ファイル名が無い
 		if (pszPath) {
@@ -1187,7 +1187,7 @@ int ShareData::GetMacroFilename(int idx, TCHAR* pszPath, int nBufLen)
 	int nLen = _tcslen(ptr); // Jul. 21, 2003 genta wcslen対象が誤っていたためマクロ実行ができない
 
 	if (!_IS_REL_PATH(pszFile)	// 絶対パス
-		|| m_pShareData->m_common.macro.szMACROFOLDER[0] == _T('\0')	// フォルダ指定なし
+		|| m_pShareData->common.macro.szMACROFOLDER[0] == _T('\0')	// フォルダ指定なし
 	) {
 		if (!pszPath || nBufLen <= nLen) {
 			return -nLen;
@@ -1196,17 +1196,17 @@ int ShareData::GetMacroFilename(int idx, TCHAR* pszPath, int nBufLen)
 		return nLen;
 	}else {	// フォルダ指定あり
 		// 相対パス→絶対パス
-		int nFolderSep = AddLastChar(m_pShareData->m_common.macro.szMACROFOLDER, _countof2(m_pShareData->m_common.macro.szMACROFOLDER), _T('\\'));
+		int nFolderSep = AddLastChar(m_pShareData->common.macro.szMACROFOLDER, _countof2(m_pShareData->common.macro.szMACROFOLDER), _T('\\'));
 		TCHAR* pszDir;
 
 		// 2003.06.24 Moca フォルダも相対パスなら実行ファイルからのパス
 		// 2007.05.19 ryoji 相対パスは設定ファイルからのパスを優先
-		if (_IS_REL_PATH(m_pShareData->m_common.macro.szMACROFOLDER)) {
-			TCHAR szDir[_MAX_PATH + _countof2(m_pShareData->m_common.macro.szMACROFOLDER)];
-			GetInidirOrExedir(szDir, m_pShareData->m_common.macro.szMACROFOLDER);
+		if (_IS_REL_PATH(m_pShareData->common.macro.szMACROFOLDER)) {
+			TCHAR szDir[_MAX_PATH + _countof2(m_pShareData->common.macro.szMACROFOLDER)];
+			GetInidirOrExedir(szDir, m_pShareData->common.macro.szMACROFOLDER);
 			pszDir = szDir;
 		}else {
-			pszDir = m_pShareData->m_common.macro.szMACROFOLDER;
+			pszDir = m_pShareData->common.macro.szMACROFOLDER;
 		}
 
 		int nDirLen = _tcslen(pszDir);
@@ -1232,10 +1232,10 @@ int ShareData::GetMacroFilename(int idx, TCHAR* pszPath, int nBufLen)
 */
 bool ShareData::BeReloadWhenExecuteMacro(int idx)
 {
-	if (!m_pShareData->m_common.macro.macroTable[idx].IsEnabled()) {
+	if (!m_pShareData->common.macro.macroTable[idx].IsEnabled()) {
 		return false;
 	}
-	return m_pShareData->m_common.macro.macroTable[idx].bReloadWhenExecute;
+	return m_pShareData->common.macro.macroTable[idx].bReloadWhenExecute;
 }
 
 
@@ -1290,14 +1290,14 @@ void ShareData::InitToolButtons(DllSharedData* pShareData)
 	dummy[0] = 0;
 
 	memcpy_raw(
-		pShareData->m_common.toolBar.nToolBarButtonIdxArr,
+		pShareData->common.toolBar.nToolBarButtonIdxArr,
 		DEFAULT_TOOL_BUTTONS,
 		sizeof(DEFAULT_TOOL_BUTTONS)
 	);
 
 	// ツールバーボタンの数
-	pShareData->m_common.toolBar.nToolBarButtonNum = _countof(DEFAULT_TOOL_BUTTONS);
-	pShareData->m_common.toolBar.bToolBarIsFlat = !IsVisualStyle();			// フラットツールバーにする／しない	// 2006.06.23 ryoji ビジュアルスタイルでは初期値をノーマルにする
+	pShareData->common.toolBar.nToolBarButtonNum = _countof(DEFAULT_TOOL_BUTTONS);
+	pShareData->common.toolBar.bToolBarIsFlat = !IsVisualStyle();			// フラットツールバーにする／しない	// 2006.06.23 ryoji ビジュアルスタイルでは初期値をノーマルにする
 	
 }
 
@@ -1312,7 +1312,7 @@ void ShareData::InitPopupMenu(DllSharedData* pShareData)
 {
 	// カスタムメニュー 規定値
 	
-	CommonSetting_CustomMenu& menu = m_pShareData->m_common.customMenu;
+	CommonSetting_CustomMenu& menu = m_pShareData->common.customMenu;
 
 	// 右クリックメニュー
 	int n = 0;

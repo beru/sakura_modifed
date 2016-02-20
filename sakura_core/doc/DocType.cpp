@@ -36,7 +36,7 @@ DocType::DocType(EditDoc* pDoc)
 	:
 	m_pDocRef(pDoc),
 	m_nSettingType(0),			// Sep. 11, 2002 genta
-	m_typeConfig(GetDllShareData().m_TypeBasis),
+	m_typeConfig(GetDllShareData().typeBasis),
 	m_nSettingTypeLocked(false)	// 設定値変更可能フラグ
 {
 }

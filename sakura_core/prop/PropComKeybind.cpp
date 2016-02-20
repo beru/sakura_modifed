@@ -224,7 +224,7 @@ INT_PTR PropKeybind::DispatchEvent(
 				if (IsDlgButtonChecked(hwndDlg, IDC_CHECK_ALT)) {
 					i |= _ALT;
 				}
-				csKeybind.pKeyNameArr[nIndex].m_nFuncCodeArr[i] = nFuncCode;
+				csKeybind.pKeyNameArr[nIndex].nFuncCodeArr[i] = nFuncCode;
 				::SendMessage(hwndDlg, WM_COMMAND, MAKELONG(IDC_LIST_KEY, LBN_SELCHANGE), (LPARAM)hwndKeyList);
 				::SendMessage(hwndDlg, WM_COMMAND, MAKELONG(IDC_LIST_FUNC, LBN_SELCHANGE), (LPARAM)hwndFuncList);
 				return TRUE;
@@ -244,7 +244,7 @@ INT_PTR PropKeybind::DispatchEvent(
 				if (IsDlgButtonChecked(hwndDlg, IDC_CHECK_ALT)) {
 					i |= _ALT;
 				}
-				csKeybind.pKeyNameArr[nIndex].m_nFuncCodeArr[i] = nFuncCode;
+				csKeybind.pKeyNameArr[nIndex].nFuncCodeArr[i] = nFuncCode;
 				::SendMessage(hwndDlg, WM_COMMAND, MAKELONG(IDC_LIST_KEY, LBN_SELCHANGE), (LPARAM)hwndKeyList);
 				::SendMessage(hwndDlg, WM_COMMAND, MAKELONG(IDC_LIST_FUNC, LBN_SELCHANGE), (LPARAM)hwndFuncList);
 				return TRUE;
@@ -275,7 +275,7 @@ INT_PTR PropKeybind::DispatchEvent(
 				if (IsDlgButtonChecked(hwndDlg, IDC_CHECK_ALT)) {
 					i |= _ALT;
 				}
-				nFuncCode = csKeybind.pKeyNameArr[nIndex].m_nFuncCodeArr[i];
+				nFuncCode = csKeybind.pKeyNameArr[nIndex].nFuncCodeArr[i];
 				// Oct. 2, 2001 genta
 				// 2007.11.02 ryoji F_DISABLEなら未割付
 				if (nFuncCode == F_DISABLE) {
@@ -356,7 +356,7 @@ INT_PTR PropKeybind::DispatchEvent(
 							i |= _ALT;
 						}
 						for (j=0; j<csKeybind.nKeyNameArrNum; ++j) {
-							if (_tcscmp(csKeybind.pKeyNameArr[j].m_szKeyName, p) == 0) {
+							if (_tcscmp(csKeybind.pKeyNameArr[j].szKeyName, p) == 0) {
 								List_SetCurSel(hwndKeyList, j);
 								if (i & _SHIFT) ::CheckDlgButton(hwndDlg, IDC_CHECK_SHIFT, BST_CHECKED);	// チェック
 								else            ::CheckDlgButton(hwndDlg, IDC_CHECK_SHIFT, BST_UNCHECKED);	// チェックをはずす
@@ -430,7 +430,7 @@ void PropKeybind::SetData(HWND hwndDlg)
 	HWND hwndKeyList = ::GetDlgItem(hwndDlg, IDC_LIST_KEY);
 	auto& csKeybind = m_common.keyBind;
 	for (int i=0; i<csKeybind.nKeyNameArrNum; ++i) {
-		::List_AddString(hwndKeyList, csKeybind.pKeyNameArr[i].m_szKeyName);
+		::List_AddString(hwndKeyList, csKeybind.pKeyNameArr[i].szKeyName);
 	}
 
 	return;
@@ -473,7 +473,7 @@ void PropKeybind::ChangeKeyList(HWND hwndDlg) {
 	auto& csKeybind = m_common.keyBind;
 	for (i=0; i<csKeybind.nKeyNameArrNum; ++i) {
 		TCHAR	szLabel[256];
-		auto_sprintf(szLabel, _T("%ls%ts"), szKeyState, csKeybind.pKeyNameArr[i].m_szKeyName);
+		auto_sprintf(szLabel, _T("%ls%ts"), szKeyState, csKeybind.pKeyNameArr[i].szKeyName);
 		::List_AddString(hwndKeyList, szLabel);
 	}
 	List_SetCurSel(hwndKeyList, nIndex);

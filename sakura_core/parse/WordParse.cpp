@@ -33,7 +33,7 @@ bool WordParse::WhereCurrentWord_2(
 	}
 
 	// Œ»İˆÊ’u‚Ì•¶š‚Ìí—Ş‚É‚æ‚Á‚Ä‚Í‘I‘ğ•s‰Â
-	if (WCODE::IsLineDelimiter(pLine[nIdx], GetDllShareData().m_common.edit.bEnableExtEol)) {
+	if (WCODE::IsLineDelimiter(pLine[nIdx], GetDllShareData().common.edit.bEnableExtEol)) {
 		return false;
 	}
 

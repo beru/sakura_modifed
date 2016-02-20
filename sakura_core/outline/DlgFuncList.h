@@ -68,7 +68,7 @@ public:
 protected:
 	INT_PTR DispatchEvent(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM lParam);	// 2007.11.07 ryoji 標準以外のメッセージを捕捉する
 
-	CommonSetting_OutLine& CommonSet(void) { return m_pShareData->m_common.outline; }
+	CommonSetting_OutLine& CommonSet(void) { return m_pShareData->common.outline; }
 	TypeConfig& TypeSet(void) { return type; }
 	int& ProfDockSet() { return CommonSet().nOutlineDockSet; }
 	bool& ProfDockSync() { return CommonSet().bOutlineDockSync; }

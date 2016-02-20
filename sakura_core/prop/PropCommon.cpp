@@ -171,7 +171,7 @@ void PropCommon::Create(HWND hwndParent, ImageListMgr* pIcons, MenuDrawer* pMenu
 
 	// 2007.11.02 ryoji マクロ設定を変更したあと、画面を閉じないでカスタムメニュー、ツールバー、
 	//                  キー割り当ての画面に切り替えた時に各画面でマクロ設定の変更が反映されるよう、
-	//                  m_common.macro.macroTable（ローカルメンバ）でm_lookupを初期化する
+	//                  common.macro.macroTable（ローカルメンバ）でm_lookupを初期化する
 	m_lookup.Init(m_common.macro.macroTable, &m_common);	//	機能名・番号resolveクラス．
 
 //@@@ 2002.01.03 YAZAKI m_tbMyButtonなどをCShareDataからMenuDrawerへ移動したことによる修正。
@@ -187,7 +187,7 @@ void PropCommon::Create(HWND hwndParent, ImageListMgr* pIcons, MenuDrawer* pMenu
 	保持する構造体
 */
 struct ComPropSheetInfo {
-	int m_nTabNameId;										// TABの表示名
+	int nTabNameId;											// TABの表示名
 	unsigned int resId;										// Property sheetに対応するDialog resource
 	INT_PTR (CALLBACK *DProc)(HWND, UINT, WPARAM, LPARAM);	// Dialog Procedure
 };
@@ -233,7 +233,7 @@ INT_PTR PropCommon::DoPropertySheet(int nPageNum, bool bTrayProc)
 	std::tstring		sTabname[_countof(ComPropSheetInfoList)];
 	PROPSHEETPAGE		psp[_countof(ComPropSheetInfoList)];
 	for (nIdx=0; nIdx<_countof(ComPropSheetInfoList); ++nIdx) {
-		sTabname[nIdx] = LS(ComPropSheetInfoList[nIdx].m_nTabNameId);
+		sTabname[nIdx] = LS(ComPropSheetInfoList[nIdx].nTabNameId);
 
 		PROPSHEETPAGE* p = &psp[nIdx];
 		memset_raw(p, 0, sizeof_raw(*p));
@@ -311,10 +311,10 @@ INT_PTR PropCommon::DoPropertySheet(int nPageNum, bool bTrayProc)
 */
 void PropCommon::InitData(void)
 {
-	m_common = m_pShareData->m_common;
+	m_common = m_pShareData->common;
 
 	// 2002/04/25 YAZAKI TypeConfig全体を保持する必要はない。	;
-	for (int i=0; i<GetDllShareData().m_nTypesCount; ++i) {
+	for (int i=0; i<GetDllShareData().nTypesCount; ++i) {
 		KeywordSetIndex indexs;
 		TypeConfig type;
 		DocTypeManager().GetTypeConfig(TypeConfigNum(i), type);
@@ -332,7 +332,7 @@ void PropCommon::InitData(void)
 */
 void PropCommon::ApplyData(void)
 {
-	m_pShareData->m_common = m_common;
+	m_pShareData->common = m_common;
 
 	const int nSize = (int)m_Types_nKeywordSetIdx.size();
 	for (int i=0; i<nSize; ++i) {

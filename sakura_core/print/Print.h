@@ -35,10 +35,10 @@
 #include <CommDlg.h> // PRINTDLG
 
 struct MYDEVMODE {
-	BOOL	m_bPrinterNotFound;	// プリンタがなかったフラグ
-	TCHAR	m_szPrinterDriverName[_MAX_PATH + 1];	// プリンタドライバ名
-	TCHAR	m_szPrinterDeviceName[_MAX_PATH + 1];	// プリンタデバイス名
-	TCHAR	m_szPrinterOutputName[_MAX_PATH + 1];	// プリンタポート名
+	BOOL	bPrinterNotFound;	// プリンタがなかったフラグ
+	TCHAR	szPrinterDriverName[_MAX_PATH + 1];	// プリンタドライバ名
+	TCHAR	szPrinterDeviceName[_MAX_PATH + 1];	// プリンタデバイス名
+	TCHAR	szPrinterOutputName[_MAX_PATH + 1];	// プリンタポート名
 	DWORD	dmFields;
 	short	dmOrientation;
 	short	dmPaperSize;
@@ -62,16 +62,16 @@ struct MYDEVMODE {
 	DWORD	dmDisplayFrequency;
 };
 
-// 2006.08.14 Moca 用紙情報の統合 PAPER_INFO新設
+// 2006.08.14 Moca 用紙情報の統合 PaperInfo新設
 // 用紙情報
-struct PAPER_INFO {
-	int				m_nId;			// 用紙ID
-	short			m_nAllWidth;	// 幅 (0.1mm単位)
-	short			m_nAllHeight;	// 高さ (0.1mm単位)
-	const TCHAR*	m_pszName;		// 用紙名称
+struct PaperInfo {
+	int				nId;			// 用紙ID
+	short			nAllWidth;		// 幅 (0.1mm単位)
+	short			nAllHeight;		// 高さ (0.1mm単位)
+	const TCHAR*	pszName;		// 用紙名称
 };
 
-struct PRINTSETTING;
+struct PrintSetting;
 
 // 印刷設定
 #define POS_LEFT	0
@@ -79,40 +79,40 @@ struct PRINTSETTING;
 #define POS_RIGHT	2
 #define HEADER_MAX	100
 #define FOOTER_MAX	HEADER_MAX
-struct PRINTSETTING {
-	TCHAR			m_szPrintSettingName[32 + 1];		// 印刷設定の名前
-	TCHAR			m_szPrintFontFaceHan[LF_FACESIZE];	// 印刷フォント
-	TCHAR			m_szPrintFontFaceZen[LF_FACESIZE];	// 印刷フォント
-	int				m_nPrintFontWidth;					// 印刷フォント幅(1/10mm単位単位)
-	int				m_nPrintFontHeight;					// 印刷フォント高さ(1/10mm単位単位)
-	int				m_nPrintDansuu;						// 段組の段数
-	int				m_nPrintDanSpace;					// 段と段の隙間(1/10mm単位)
-	int				m_nPrintLineSpacing;				// 印刷フォント行間 文字の高さに対する割合(%)
-	int				m_nPrintMarginTY;					// 印刷用紙マージン 上(mm単位)
-	int				m_nPrintMarginBY;					// 印刷用紙マージン 下(mm単位)
-	int				m_nPrintMarginLX;					// 印刷用紙マージン 左(mm単位)
-	int				m_nPrintMarginRX;					// 印刷用紙マージン 右(mm単位)
-	short			m_nPrintPaperOrientation;			// 用紙方向 DMORIENT_PORTRAIT (1) または DMORIENT_LANDSCAPE (2)
-	short			m_nPrintPaperSize;					// 用紙サイズ
-	bool			m_bColorPrint;						// カラー印刷			// 2013/4/26 Uchi
-	bool			m_bPrintWordWrap;					// 英文ワードラップする
-	bool			m_bPrintKinsokuHead;				// 行頭禁則する		//@@@ 2002.04.09 MIK
-	bool			m_bPrintKinsokuTail;				// 行末禁則する		//@@@ 2002.04.09 MIK
-	bool			m_bPrintKinsokuRet;					// 改行文字のぶら下げ	//@@@ 2002.04.13 MIK
-	bool			m_bPrintKinsokuKuto;				// 句読点のぶらさげ	//@@@ 2002.04.17 MIK
-	bool			m_bPrintLineNumber;					// 行番号を印刷する
+struct PrintSetting {
+	TCHAR		szPrintSettingName[32 + 1];			// 印刷設定の名前
+	TCHAR		szPrintFontFaceHan[LF_FACESIZE];	// 印刷フォント
+	TCHAR		szPrintFontFaceZen[LF_FACESIZE];	// 印刷フォント
+	int			nPrintFontWidth;					// 印刷フォント幅(1/10mm単位単位)
+	int			nPrintFontHeight;					// 印刷フォント高さ(1/10mm単位単位)
+	int			nPrintDansuu;						// 段組の段数
+	int			nPrintDanSpace;						// 段と段の隙間(1/10mm単位)
+	int			nPrintLineSpacing;					// 印刷フォント行間 文字の高さに対する割合(%)
+	int			nPrintMarginTY;						// 印刷用紙マージン 上(mm単位)
+	int			nPrintMarginBY;						// 印刷用紙マージン 下(mm単位)
+	int			nPrintMarginLX;						// 印刷用紙マージン 左(mm単位)
+	int			nPrintMarginRX;						// 印刷用紙マージン 右(mm単位)
+	short		nPrintPaperOrientation;				// 用紙方向 DMORIENT_PORTRAIT (1) または DMORIENT_LANDSCAPE (2)
+	short		nPrintPaperSize;					// 用紙サイズ
+	bool		bColorPrint;						// カラー印刷			// 2013/4/26 Uchi
+	bool		bPrintWordWrap;						// 英文ワードラップする
+	bool		bPrintKinsokuHead;					// 行頭禁則する		//@@@ 2002.04.09 MIK
+	bool		bPrintKinsokuTail;					// 行末禁則する		//@@@ 2002.04.09 MIK
+	bool		bPrintKinsokuRet;					// 改行文字のぶら下げ	//@@@ 2002.04.13 MIK
+	bool		bPrintKinsokuKuto;					// 句読点のぶらさげ	//@@@ 2002.04.17 MIK
+	bool		bPrintLineNumber;					// 行番号を印刷する
 
-	MYDEVMODE		m_mdmDevMode;						// プリンタ設定 DEVMODE用
-	BOOL			m_bHeaderUse[3];					// ヘッダが使われているか？
-	EDIT_CHAR		m_szHeaderForm[3][HEADER_MAX];		// 0:左寄せヘッダ。1:中央寄せヘッダ。2:右寄せヘッダ。
-	BOOL			m_bFooterUse[3];					// フッタが使われているか？
-	EDIT_CHAR		m_szFooterForm[3][FOOTER_MAX];		// 0:左寄せフッタ。1:中央寄せフッタ。2:右寄せフッタ。
+	MYDEVMODE	mdmDevMode;							// プリンタ設定 DEVMODE用
+	BOOL		bHeaderUse[3];						// ヘッダが使われているか？
+	EDIT_CHAR	szHeaderForm[3][HEADER_MAX];		// 0:左寄せヘッダ。1:中央寄せヘッダ。2:右寄せヘッダ。
+	BOOL		bFooterUse[3];						// フッタが使われているか？
+	EDIT_CHAR	szFooterForm[3][FOOTER_MAX];		// 0:左寄せフッタ。1:中央寄せフッタ。2:右寄せフッタ。
 
 	// ヘッダ/フッタのフォント(lfFaceNameが設定されていなければ半角/全角フォントを使用)
-	LOGFONT			m_lfHeader;							// ヘッダフォント用LOGFONT構造体
-	int 			m_nHeaderPointSize;					// ヘッダフォントポイントサイズ
-	LOGFONT			m_lfFooter;							// フッタフォント用LOGFONT構造体
-	int 			m_nFooterPointSize;					// フッタフォントポイントサイズ
+	LOGFONT		lfHeader;							// ヘッダフォント用LOGFONT構造体
+	int 		nHeaderPointSize;					// ヘッダフォントポイントサイズ
+	LOGFONT		lfFooter;							// フッタフォント用LOGFONT構造体
+	int 		nFooterPointSize;					// フッタフォントポイントサイズ
 };
 
 
@@ -126,13 +126,13 @@ struct PRINTSETTING {
 */
 class Print {
 public:
-	static const PAPER_INFO m_paperInfoArr[];	// 用紙情報一覧
+	static const PaperInfo m_paperInfoArr[];	// 用紙情報一覧
 	static const int m_nPaperInfoArrNum; // 用紙情報一覧の要素数
 
 	/*
 	||	static関数群
 	*/
-	static void SettingInitialize(PRINTSETTING&, const TCHAR* settingName);
+	static void SettingInitialize(PrintSetting&, const TCHAR* settingName);
 
 	static TCHAR* GetPaperName(int , TCHAR*);	// 用紙の名前を取得
 	// 用紙の幅、高さ
@@ -142,12 +142,12 @@ public:
 		MYDEVMODE*	pDEVMODE
 	);
 	// 印字可能桁・行の計算
-	static int CalculatePrintableColumns(PRINTSETTING*, int width, int nLineNumberColumns);
-	static int CalculatePrintableLines(PRINTSETTING*, int height);
+	static int CalculatePrintableColumns(PrintSetting*, int width, int nLineNumberColumns);
+	static int CalculatePrintableLines(PrintSetting*, int height);
 
 	// ヘッダ・フッタの高さ計算
-	static int CalcHeaderHeight(PRINTSETTING*);
-	static int CalcFooterHeight(PRINTSETTING*);
+	static int CalcHeaderHeight(PrintSetting*);
+	static int CalcFooterHeight(PrintSetting*);
 public:
 	/*
 	||  Constructors
@@ -190,7 +190,7 @@ protected:
 	// DC作成する(処理をまとめた) 2003.05.02 かろと
 	HDC CreateDC(MYDEVMODE* pMYDEVMODE, TCHAR* pszErrMsg);
 	
-	static const PAPER_INFO* FindPaperInfo(int id);
+	static const PaperInfo* FindPaperInfo(int id);
 private:
 	/*
 	||  メンバ変数

@@ -63,7 +63,7 @@ BOOL EditView::CreateScrollBar()
 
 	// スクロールバーの作成
 	m_hwndHScrollBar = NULL;
-	if (GetDllShareData().m_common.window.bScrollBarHorz) {	// 水平スクロールバーを使う
+	if (GetDllShareData().common.window.bScrollBarHorz) {	// 水平スクロールバーを使う
 		m_hwndHScrollBar = ::CreateWindowEx(
 			0L,									// no extended styles
 			_T("SCROLLBAR"),					// scroll bar control class
@@ -90,7 +90,7 @@ BOOL EditView::CreateScrollBar()
 	}
 
 	// サイズボックス
-	if (GetDllShareData().m_common.window.nFuncKeyWnd_Place == 0) {	// ファンクションキー表示位置／0:上 1:下
+	if (GetDllShareData().common.window.nFuncKeyWnd_Place == 0) {	// ファンクションキー表示位置／0:上 1:下
 		m_hwndSizeBox = ::CreateWindowEx(
 			WS_EX_CONTROLPARENT/*0L*/, 			// no extended styles
 			_T("SCROLLBAR"),					// scroll bar control class
@@ -177,13 +177,13 @@ LayoutInt EditView::OnVScroll(int nScrollCode, int nPos)
 //		for (i=0; i<4; ++i) {
 //			ScrollAtV(GetTextArea().GetViewTopLine() + 1);
 //		}
-		nScrollVal = ScrollAtV(GetTextArea().GetViewTopLine() + GetDllShareData().m_common.general.nRepeatedScrollLineNum);
+		nScrollVal = ScrollAtV(GetTextArea().GetViewTopLine() + GetDllShareData().common.general.nRepeatedScrollLineNum);
 		break;
 	case SB_LINEUP:
 //		for (i=0; i<4; ++i) {
 //			ScrollAtV(GetTextArea().GetViewTopLine() - 1);
 //		}
-		nScrollVal = ScrollAtV(GetTextArea().GetViewTopLine() - GetDllShareData().m_common.general.nRepeatedScrollLineNum);
+		nScrollVal = ScrollAtV(GetTextArea().GetViewTopLine() - GetDllShareData().common.general.nRepeatedScrollLineNum);
 		break;
 	case SB_PAGEDOWN:
 		nScrollVal = ScrollAtV(GetTextArea().GetBottomLine());
@@ -678,7 +678,7 @@ void EditView::MiniMapRedraw(bool bUpdateAll)
 */
 void EditView::SyncScrollV(LayoutInt line)
 {
-	if (GetDllShareData().m_common.window.bSplitterWndVScroll && line != 0 
+	if (GetDllShareData().common.window.bSplitterWndVScroll && line != 0 
 		&& m_pEditWnd->IsEnablePane(m_nMyIndex^0x01) 
 		&& 0 <= m_nMyIndex
 	) {
@@ -706,7 +706,7 @@ void EditView::SyncScrollV(LayoutInt line)
 */
 void EditView::SyncScrollH(LayoutInt col)
 {
-	if (GetDllShareData().m_common.window.bSplitterWndHScroll && col != 0
+	if (GetDllShareData().common.window.bSplitterWndHScroll && col != 0
 		&& m_pEditWnd->IsEnablePane(m_nMyIndex^0x02)
 		&& 0 <= m_nMyIndex
 	) {
@@ -801,7 +801,7 @@ LayoutInt EditView::GetRightEdgeForScrollBar(void)
 		}
 
 		// フリーカーソルモード かつ キャレット位置がテキストの幅より右側
-		if (GetDllShareData().m_common.general.bIsFreeCursorMode && nRightEdge < GetCaret().GetCaretLayoutPos().GetX2())
+		if (GetDllShareData().common.general.bIsFreeCursorMode && nRightEdge < GetCaret().GetCaretLayoutPos().GetX2())
 			nRightEdge = GetCaret().GetCaretLayoutPos().GetX2();
 
 		// 右マージン分（3桁）を考慮しつつnWidthを超えないようにする

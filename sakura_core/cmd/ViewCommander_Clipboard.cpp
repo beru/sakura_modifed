@@ -41,7 +41,7 @@ void ViewCommander::Command_CUT(void)
 	// 範囲選択がされていない
 	if (!selInfo.IsTextSelected()) {
 		// 非選択時は、カーソル行を切り取り
-		if (!GetDllShareData().m_common.edit.bEnableNoSelectCopy) {	// 2007.11.18 ryoji
+		if (!GetDllShareData().common.edit.bEnableNoSelectCopy) {	// 2007.11.18 ryoji
 			return;	// 何もしない（音も鳴らさない）
 		}
 		// 行切り取り(折り返し単位)
@@ -53,7 +53,7 @@ void ViewCommander::Command_CUT(void)
 	// 選択範囲のデータを取得
 	// 正常時はTRUE,範囲未選択の場合はFALSEを返す
 	NativeW memBuf;
-	if (!m_pCommanderView->GetSelectedData(&memBuf, false, NULL, false, GetDllShareData().m_common.edit.bAddCRLFWhenCopy)) {
+	if (!m_pCommanderView->GetSelectedData(&memBuf, false, NULL, false, GetDllShareData().common.edit.bAddCRLFWhenCopy)) {
 		ErrorBeep();
 		return;
 	}
@@ -82,7 +82,7 @@ void ViewCommander::Command_COPY(
 {
 	NativeW memBuf;
 	auto& selInfo = m_pCommanderView->GetSelectionInfo();
-	auto& csEdit = GetDllShareData().m_common.edit;
+	auto& csEdit = GetDllShareData().common.edit;
 	// クリップボードに入れるべきテキストデータを、memBufに格納する
 	if (!selInfo.IsTextSelected()) {
 		// 非選択時は、カーソル行をコピーする
@@ -160,7 +160,7 @@ void ViewCommander::Command_PASTE(int option)
 		return;
 	}
 
-	auto& commonSetting = GetDllShareData().m_common;
+	auto& commonSetting = GetDllShareData().common;
 	// クリップボードからデータを取得 -> memClip, bColumnSelect
 	NativeW	memClip;
 	bool		bColumnSelect;
@@ -211,7 +211,7 @@ void ViewCommander::Command_PASTE(int option)
 	// 行コピー（MSDEVLineSelect形式）のテキストで末尾が改行になっていなければ改行を追加する
 	// ※レイアウト折り返しの行コピーだった場合は末尾が改行になっていない
 	if (bLineSelect) {
-		if (!WCODE::IsLineDelimiter(pszText[nTextLen-1], GetDllShareData().m_common.edit.bEnableExtEol)) {
+		if (!WCODE::IsLineDelimiter(pszText[nTextLen-1], GetDllShareData().common.edit.bEnableExtEol)) {
 			memClip.AppendString(GetDocument()->m_docEditor.GetNewLineCode().GetValue2());
 			pszText = memClip.GetStringPtr(&nTextLen);
 		}
@@ -264,7 +264,7 @@ void ViewCommander::Command_PASTEBOX(
 		ErrorBeep();
 		return;
 	}
-	if (!GetDllShareData().m_common.bFontIs_FixedPitch)	// 現在のフォントは固定幅フォントである
+	if (!GetDllShareData().common.bFontIs_FixedPitch)	// 現在のフォントは固定幅フォントである
 	{
 		return;
 	}
@@ -290,7 +290,7 @@ void ViewCommander::Command_PASTEBOX(
 	LayoutPoint ptCurOld = GetCaret().GetCaretLayoutPos();
 
 	LayoutInt nCount = LayoutInt(0);
-	bool bExtEol = GetDllShareData().m_common.edit.bEnableExtEol;
+	bool bExtEol = GetDllShareData().common.edit.bEnableExtEol;
 
 	// Jul. 10, 2005 genta 貼り付けデータの最後にCR/LFが無い場合の対策
 	// データの最後まで処理 i.e. nBgnがnPasteSizeを超えたら終了
@@ -403,7 +403,7 @@ void ViewCommander::Command_PASTEBOX(int option)
 		return;
 	}
 
-	if (!GetDllShareData().m_common.view.bFontIs_FixedPitch) {	// 現在のフォントは固定幅フォントである
+	if (!GetDllShareData().common.view.bFontIs_FixedPitch) {	// 現在のフォントは固定幅フォントである
 		return;
 	}
 
@@ -434,7 +434,7 @@ void ViewCommander::Command_INSBOXTEXT(
 		return;
 	}
 
-	if (!GetDllShareData().m_common.view.bFontIs_FixedPitch) {	// 現在のフォントは固定幅フォントである
+	if (!GetDllShareData().common.view.bFontIs_FixedPitch) {	// 現在のフォントは固定幅フォントである
 		return;
 	}
 
@@ -482,7 +482,7 @@ void ViewCommander::Command_INSTEXT(
 		if (selInfo.IsBoxSelecting()) {
 			// 改行までを抜き出す
 			LogicInt i;
-			bool bExtEol = GetDllShareData().m_common.edit.bEnableExtEol;
+			bool bExtEol = GetDllShareData().common.edit.bEnableExtEol;
 			for (i=LogicInt(0); i<nTextLen; ++i) {
 				if (WCODE::IsLineDelimiter(pszText[i], bExtEol)) {
 					break;
@@ -641,7 +641,7 @@ void ViewCommander::Command_COPYLINESASPASSAGE(void)
 {
 	// 選択範囲内の全行をクリップボードにコピーする
 	m_pCommanderView->CopySelectedAllLines(
-		GetDllShareData().m_common.format.szInyouKigou,	// 引用符
+		GetDllShareData().common.format.szInyouKigou,	// 引用符
 		false 									// 行番号を付与する
 	);
 	return;
@@ -723,7 +723,7 @@ static bool AppendHTMLColor(
 	if (0 < nLen) {
 		return WCODE::IsLineDelimiter(
 			pAppendStr[nLen-1],
-			GetDllShareData().m_common.edit.bEnableExtEol
+			GetDllShareData().common.edit.bEnableExtEol
 		);
 	}
 	return false;
@@ -740,7 +740,7 @@ void ViewCommander::Command_COPY_COLOR_HTML(bool bLineNumber)
 		return;
 	}
 	const TypeConfig& type = GetDocument()->m_docType.GetDocumentAttribute();
-	bool bLineNumLayout = GetDllShareData().m_common.edit.bAddCRLFWhenCopy
+	bool bLineNumLayout = GetDllShareData().common.edit.bAddCRLFWhenCopy
 		|| selInfo.IsBoxSelecting();
 	LayoutRect rcSel;
 	TwoPointToRect(
@@ -858,14 +858,14 @@ void ViewCommander::Command_COPY_COLOR_HTML(bool bLineNumber)
 	while (pLayout && pLayout->GetLogicOffset()) {
 		pLayout = pLayout->GetPrevLayout();
 	}
-	ColorAttr sColorAttr = { (COLORREF)-1, (COLORREF)-1 };
-	ColorAttr sColorAttrNext = { (COLORREF)-1, (COLORREF)-1 };
-	ColorAttr sColorAttrLast = { (COLORREF)-1, (COLORREF)-1 };
-	ColorAttr sColorAttrLast2 = { (COLORREF)-1, (COLORREF)-1 };
-	FontAttr sFontAttr = { false, false };
-	FontAttr sFontAttrNext = { false, false };
-	FontAttr sFontAttrLast = { false, false };
-	FontAttr sFontAttrLast2 = { false, false };
+	ColorAttr colorAttr = { (COLORREF)-1, (COLORREF)-1 };
+	ColorAttr colorAttrNext = { (COLORREF)-1, (COLORREF)-1 };
+	ColorAttr colorAttrLast = { (COLORREF)-1, (COLORREF)-1 };
+	ColorAttr colorAttrLast2 = { (COLORREF)-1, (COLORREF)-1 };
+	FontAttr fontAttr = { false, false };
+	FontAttr fontAttrNext = { false, false };
+	FontAttr fontAttrLast = { false, false };
+	FontAttr fontAttrLast2 = { false, false };
 	ColorStrategyPool* pool = ColorStrategyPool::getInstance();
 	pool->SetCurrentView(m_pCommanderView);
 	for (auto nLineNum = sSelectLogic.GetFrom().y;
@@ -889,8 +889,8 @@ void ViewCommander::Command_COPY_COLOR_HTML(bool bLineNumber)
 			int nColorIdx = ToColorInfoArrIndex(pLayout->GetColorTypePrev());
 			if (nColorIdx != -1) {
 				const ColorInfo& info = type.colorInfoArr[nColorIdx];
-				sFontAttr = info.fontAttr;
-				sColorAttr = info.colorAttr;
+				fontAttr = info.fontAttr;
+				colorAttr = info.colorAttr;
 			}
 		}
 		const WCHAR* pLine = pDocLine->GetPtr();
@@ -960,40 +960,40 @@ void ViewCommander::Command_COPY_COLOR_HTML(bool bLineNumber)
 					int nColorIdx = ToColorInfoArrIndex(pStrategy ? pStrategy->GetStrategyColor() : COLORIDX_TEXT);
 					if (nColorIdx != -1) {
 						const ColorInfo& info = type.colorInfoArr[nColorIdx];
-						sColorAttrNext = info.colorAttr;
-						sFontAttrNext  = info.fontAttr;
+						colorAttrNext = info.colorAttr;
+						fontAttrNext  = info.fontAttr;
 					}
 				}
 				if (nIdxFrom != -1 && nIdxFrom + nLineStart <= iLogic && iLogic <= nIdxTo + nLineStart) {
 					if (nIdxFrom + nLineStart == iLogic) {
-						sColorAttrLast = sColorAttrNext;
-						sFontAttrLast  = sFontAttrNext;
+						colorAttrLast = colorAttrNext;
+						fontAttrLast  = fontAttrNext;
 					}else if (
 						nIdxFrom + nLineStart < iLogic
 						&& (
-							sFontAttr.bBoldFont != sFontAttrNext.bBoldFont
-						  	|| sFontAttr.bUnderLine != sFontAttrNext.bUnderLine
-							|| sColorAttr.cTEXT != sColorAttrNext.cTEXT
-						  	|| sColorAttr.cBACK != sColorAttrNext.cBACK
+							fontAttr.bBoldFont != fontAttrNext.bBoldFont
+						  	|| fontAttr.bUnderLine != fontAttrNext.bUnderLine
+							|| colorAttr.cTEXT != colorAttrNext.cTEXT
+						  	|| colorAttr.cBACK != colorAttrNext.cBACK
 						)
 					) {
-						bAddCRLF = AppendHTMLColor(sColorAttrLast, sColorAttrLast2,
-							sFontAttrLast, sFontAttrLast2, pLine + nBgnLogic, iLogic - nBgnLogic, memClip);
-						sColorAttrLast = sColorAttrNext;
-						sFontAttrLast  = sFontAttrNext;
+						bAddCRLF = AppendHTMLColor(colorAttrLast, colorAttrLast2,
+							fontAttrLast, fontAttrLast2, pLine + nBgnLogic, iLogic - nBgnLogic, memClip);
+						colorAttrLast = colorAttrNext;
+						fontAttrLast  = fontAttrNext;
 						nBgnLogic = iLogic;
 					}else if (nIdxTo + nLineStart == iLogic) {
-						bAddCRLF = AppendHTMLColor(sColorAttrLast, sColorAttrLast2,
-							sFontAttrLast, sFontAttrLast2, pLine + nBgnLogic, iLogic - nBgnLogic, memClip);
+						bAddCRLF = AppendHTMLColor(colorAttrLast, colorAttrLast2,
+							fontAttrLast, fontAttrLast2, pLine + nBgnLogic, iLogic - nBgnLogic, memClip);
 						nBgnLogic = iLogic;
 					}
 				}
-				sColorAttr = sColorAttrNext;
-				sFontAttr = sFontAttrNext;
+				colorAttr = colorAttrNext;
+				fontAttr = fontAttrNext;
 			}
 			if (nIdxFrom != -1 && nIdxTo + nLineStart == iLogic) {
-				bAddCRLF = AppendHTMLColor(sColorAttrLast, sColorAttrLast2,
-					sFontAttrLast, sFontAttrLast2, pLine + nBgnLogic, iLogic - nBgnLogic, memClip);
+				bAddCRLF = AppendHTMLColor(colorAttrLast, colorAttrLast2,
+					fontAttrLast, fontAttrLast2, pLine + nBgnLogic, iLogic - nBgnLogic, memClip);
 			}
 			if (bLineNumber) {
 				bool bAddLineNum = true;
@@ -1012,19 +1012,19 @@ void ViewCommander::Command_COPY_COLOR_HTML(bool bLineNumber)
 					}
 				}
 				if (bAddLineNum) {
-					if (sFontAttrLast2.bBoldFont) {
+					if (fontAttrLast2.bBoldFont) {
 						memClip.AppendString(L"</b>", 4);
 					}
-					if (sFontAttrLast2.bUnderLine) {
+					if (fontAttrLast2.bUnderLine) {
 						memClip.AppendString(L"</u>", 4);
 					}
-					if (sColorAttrLast2.cTEXT != (COLORREF)-1) {
+					if (colorAttrLast2.cTEXT != (COLORREF)-1) {
 						memClip.AppendString(L"</span>", 7);
 					}
-					sFontAttrLast.bBoldFont = sFontAttrLast2.bBoldFont = false;
-					sFontAttrLast.bUnderLine = sFontAttrLast2.bUnderLine = false;
-					sColorAttrLast.cTEXT = sColorAttrLast2.cTEXT = (COLORREF)-1;
-					sColorAttrLast.cBACK = sColorAttrLast2.cBACK = (COLORREF)-1;
+					fontAttrLast.bBoldFont = fontAttrLast2.bBoldFont = false;
+					fontAttrLast.bUnderLine = fontAttrLast2.bUnderLine = false;
+					colorAttrLast.cTEXT = colorAttrLast2.cTEXT = (COLORREF)-1;
+					colorAttrLast.cBACK = colorAttrLast2.cBACK = (COLORREF)-1;
 				}
 			}
 			if (bLineNumLayout && !bAddCRLF) {
@@ -1036,13 +1036,13 @@ void ViewCommander::Command_COPY_COLOR_HTML(bool bLineNumber)
 			}
 		}
 	}
-	if (sFontAttrLast2.bBoldFont) {
+	if (fontAttrLast2.bBoldFont) {
 		memClip.AppendString(L"</b>", 4);
 	}
-	if (sFontAttrLast2.bUnderLine) {
+	if (fontAttrLast2.bUnderLine) {
 		memClip.AppendString(L"</u>", 4);
 	}
-	if (sColorAttrLast2.cTEXT != (COLORREF)-1) {
+	if (colorAttrLast2.cTEXT != (COLORREF)-1) {
 		memClip.AppendString(L"</span>", 7);
 	}
 	memClip.AppendString(L"</pre>", 6);
@@ -1173,7 +1173,7 @@ void ViewCommander::Command_COPYTAG(void)
 void ViewCommander::Command_CREATEKEYBINDLIST(void)
 {
 	NativeW memKeyList;
-	auto& csKeyBind = GetDllShareData().m_common.keyBind;
+	auto& csKeyBind = GetDllShareData().common.keyBind;
 	KeyBind::CreateKeyBindList(
 		G_AppInstance(),
 		csKeyBind.nKeyNameArrNum,

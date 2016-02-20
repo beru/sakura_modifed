@@ -38,20 +38,20 @@ static Mutex g_keywordMutex(FALSE, GSTR_MUTEX_SAKURA_KEYWORD);
 
 ShareDataLockCounter::ShareDataLockCounter() {
 	LockGuard<Mutex> guard(g_keywordMutex);
-	assert_warning(0 <= GetDllShareData().m_nLockCount);
-	GetDllShareData().m_nLockCount++;
+	assert_warning(0 <= GetDllShareData().nLockCount);
+	GetDllShareData().nLockCount++;
 }
 
 ShareDataLockCounter::~ShareDataLockCounter() {
 	LockGuard<Mutex> guard(g_keywordMutex);
-	GetDllShareData().m_nLockCount--;
-	assert_warning(0 <= GetDllShareData().m_nLockCount);
+	GetDllShareData().nLockCount--;
+	assert_warning(0 <= GetDllShareData().nLockCount);
 }
 
 int ShareDataLockCounter::GetLockCounter() {
 	LockGuard<Mutex> guard(g_keywordMutex);
-	assert_warning(0 <= GetDllShareData().m_nLockCount);
-	return GetDllShareData().m_nLockCount;
+	assert_warning(0 <= GetDllShareData().nLockCount);
+	return GetDllShareData().nLockCount;
 }
 
 class LockCancel: public DlgCancel {
@@ -92,7 +92,7 @@ static
 int GetCountIf0Lock(ShareDataLockCounter** ppLock)
 {
 	LockGuard<Mutex> guard(g_keywordMutex);
-	int count = GetDllShareData().m_nLockCount;
+	int count = GetDllShareData().nLockCount;
 	if (count <= 0) {
 		if (ppLock) {
 			*ppLock = new ShareDataLockCounter();

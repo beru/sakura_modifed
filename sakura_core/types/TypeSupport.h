@@ -99,10 +99,10 @@ public:
 	//                           Ý’è                              //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	Font GetTypeFont() {
-		Font sFont;
-		sFont.m_fontAttr = m_pColorInfoArr->fontAttr;
-		sFont.m_hFont = m_pFontset->ChooseFontHandle( m_pColorInfoArr->fontAttr );
-		return sFont;
+		Font font;
+		font.fontAttr = m_pColorInfoArr->fontAttr;
+		font.hFont = m_pFontset->ChooseFontHandle( m_pColorInfoArr->fontAttr );
+		return font;
 	}
 	
 	void SetGraphicsState_WhileThisObj(Graphics& gr) {

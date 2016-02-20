@@ -97,7 +97,7 @@ bool ProcessFactory::ProfileSelect(
 
 	DlgProfileMgr::ReadProfSettings( settings );
 	SelectLang::InitializeLanguageEnvironment();
-	SelectLang::ChangeLang( settings.m_szDllLanguage );
+	SelectLang::ChangeLang( settings.szDllLanguage );
 
 	CommandLine::getInstance()->ParseCommandLine(lpCmdLine);
 
@@ -106,13 +106,13 @@ bool ProcessFactory::ProfileSelect(
 		bDialog = true;
 	}else if (CommandLine::getInstance()->IsSetProfile()) {
 		bDialog = false;
-	}else if (settings.m_nDefaultIndex == -1) {
+	}else if (settings.nDefaultIndex == -1) {
 		bDialog = true;
 	}else {
-		assert( 0 <= settings.m_nDefaultIndex );
-		if (0 < settings.m_nDefaultIndex) {
+		assert( 0 <= settings.nDefaultIndex );
+		if (0 < settings.nDefaultIndex) {
 			CommandLine::getInstance()->SetProfileName( to_wchar(
-					settings.m_vProfList[settings.m_nDefaultIndex - 1].c_str()) );
+					settings.profList[settings.nDefaultIndex - 1].c_str()) );
 		}else {
 			CommandLine::getInstance()->SetProfileName( L"" );
 		}

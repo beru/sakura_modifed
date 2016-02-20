@@ -98,7 +98,7 @@ LPCTSTR Migemo::GetDllNameImp(int nIndex)
 	if (nIndex == 0) {
 		TCHAR* szDll;
 		static TCHAR szDllName[_MAX_PATH];
-		szDll = GetDllShareData().m_common.helper.szMigemoDll;
+		szDll = GetDllShareData().common.helper.szMigemoDll;
 
 		if (szDll[0] == _T('\0')) {
 			GetInidir(szDllName, _T("migemo.dll"));
@@ -283,7 +283,7 @@ int Migemo::migemo_load_all()
 {
 	if (!migemo_is_enable()) {
 		
-		TCHAR* szDict = GetDllShareData().m_common.helper.szMigemoDict;
+		TCHAR* szDict = GetDllShareData().common.helper.szMigemoDict;
 		TCHAR path[MAX_PATH];
 		//char path2[MAX_PATH];
 		TCHAR* ppath;

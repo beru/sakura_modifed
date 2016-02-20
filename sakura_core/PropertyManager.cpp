@@ -67,7 +67,7 @@ bool PropertyManager::OpenPropertySheet(
 		// 2002.12.11 Moca この部分で行われていたデータのコピーをPropCommonに移動・関数化
 		// ShareData に 設定を適用・コピーする
 		// 2007.06.20 ryoji グループ化に変更があったときはグループIDをリセットする
-		auto& csTabBar = GetDllShareData().m_common.tabBar;
+		auto& csTabBar = GetDllShareData().common.tabBar;
 		bool bGroup = (csTabBar.bDispTabWnd && !csTabBar.bDispTabWndMultiWin);
 
 		// 印刷中にキーワードを上書きしないように
@@ -84,7 +84,7 @@ bool PropertyManager::OpenPropertySheet(
 		}
 
 		// アクセラレータテーブルの再作成
-		::SendMessage(GetDllShareData().m_handles.m_hwndTray, MYWM_CHANGESETTING,  (WPARAM)0, (LPARAM)PM_CHANGESETTING_ALL);
+		::SendMessage(GetDllShareData().handles.hwndTray, MYWM_CHANGESETTING,  (WPARAM)0, (LPARAM)PM_CHANGESETTING_ALL);
 
 		// 設定変更を反映させる
 		// 全編集ウィンドウへメッセージをポストする

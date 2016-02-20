@@ -155,7 +155,7 @@ LRESULT APIENTRY OFNHookProcMain(
 	case WM_MOVE:
 		//「開く」ダイアログのサイズと位置
 		pShareData = &GetDllShareData();
-		::GetWindowRect(hwnd, &pShareData->m_common.others.rcOpenDialog);
+		::GetWindowRect(hwnd, &pShareData->common.others.rcOpenDialog);
 //		MYTRACE(_T("WM_MOVE 1\n"));
 		break;
 	case WM_COMMAND:
@@ -246,7 +246,7 @@ UINT_PTR CALLBACK OFNHookProc(
 			//「開く」ダイアログのサイズと位置
 			DlgOpenFileData* pData = (DlgOpenFileData*)::GetWindowLongPtr(hdlg, DWLP_USER);
 			HWND hwndFrame = ::GetParent(hdlg);
-			::GetWindowRect(hwndFrame, &pData->m_pDlgOpenFile->m_mem->m_pShareData->m_common.others.rcOpenDialog);
+			::GetWindowRect(hwndFrame, &pData->m_pDlgOpenFile->m_mem->m_pShareData->common.others.rcOpenDialog);
 			// 2005.10.29 ryoji 最近のファイル／フォルダ コンボの右端を子ダイアログの右端に合わせる
 			::GetWindowRect(pData->m_hwndComboMRU, &rc);
 			po.x = rc.left;
@@ -880,7 +880,7 @@ bool DlgOpenFile::DoModalOpenDlg(
 	FileExt fileExt;
 	fileExt.AppendExtRaw(LS(STR_DLGOPNFL_EXTNAME3), _T("*.*"));
 	fileExt.AppendExtRaw(LS(STR_DLGOPNFL_EXTNAME2), _T("*.txt"));
-	for (int i=0; i<GetDllShareData().m_nTypesCount; ++i) {
+	for (int i=0; i<GetDllShareData().nTypesCount; ++i) {
 		const TypeConfigMini* type;
 		DocTypeManager().GetTypeConfigMini(TypeConfigNum(i), &type);
 		fileExt.AppendExt(type->szTypeName, type->szTypeExts);

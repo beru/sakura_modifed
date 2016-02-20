@@ -38,7 +38,7 @@ void ViewCommander::Command_SHOWTOOLBAR(void)
 {
 	EditWnd* pEditWnd = GetEditWindow();	// Sep. 10, 2002 genta
 
-	GetDllShareData().m_common.window.bDispToolBar = ((!pEditWnd->m_toolbar.GetToolbarHwnd())? TRUE: FALSE);	// ツールバー表示
+	GetDllShareData().common.window.bDispToolBar = ((!pEditWnd->m_toolbar.GetToolbarHwnd())? TRUE: FALSE);	// ツールバー表示
 	pEditWnd->LayoutToolBar();
 	pEditWnd->EndLayoutBars();
 
@@ -60,7 +60,7 @@ void ViewCommander::Command_SHOWFUNCKEY(void)
 {
 	EditWnd* pEditWnd = GetEditWindow();	// Sep. 10, 2002 genta
 
-	GetDllShareData().m_common.window.bDispFuncKeyWnd = ((!pEditWnd->m_funcKeyWnd.GetHwnd())? TRUE: FALSE);	// ファンクションキー表示
+	GetDllShareData().common.window.bDispFuncKeyWnd = ((!pEditWnd->m_funcKeyWnd.GetHwnd())? TRUE: FALSE);	// ファンクションキー表示
 	pEditWnd->LayoutFuncKey();
 	pEditWnd->EndLayoutBars();
 
@@ -85,13 +85,13 @@ void ViewCommander::Command_SHOWTAB(void)
 {
 	EditWnd* pEditWnd = GetEditWindow();	// Sep. 10, 2002 genta
 
-	GetDllShareData().m_common.tabBar.bDispTabWnd = !pEditWnd->m_tabWnd.GetHwnd();	// タブバー表示
+	GetDllShareData().common.tabBar.bDispTabWnd = !pEditWnd->m_tabWnd.GetHwnd();	// タブバー表示
 	pEditWnd->LayoutTabBar();
 	pEditWnd->EndLayoutBars();
 
 	// まとめるときは WS_EX_TOPMOST 状態を同期する	// 2007.05.18 ryoji
-	if (GetDllShareData().m_common.tabBar.bDispTabWnd
-		&& !GetDllShareData().m_common.tabBar.bDispTabWndMultiWin
+	if (GetDllShareData().common.tabBar.bDispTabWnd
+		&& !GetDllShareData().common.tabBar.bDispTabWndMultiWin
 	) {
 		GetEditWindow()->WindowTopMost(
 			((DWORD)::GetWindowLongPtr(GetEditWindow()->GetHwnd(), GWL_EXSTYLE) & WS_EX_TOPMOST)? 1: 2
@@ -117,7 +117,7 @@ void ViewCommander::Command_SHOWSTATUSBAR(void)
 {
 	EditWnd* pEditWnd = GetEditWindow();	// Sep. 10, 2002 genta
 
-	GetDllShareData().m_common.window.bDispStatusBar = ((!pEditWnd->m_statusBar.GetStatusHwnd())? TRUE: FALSE);	// ステータスバー表示
+	GetDllShareData().common.window.bDispStatusBar = ((!pEditWnd->m_statusBar.GetStatusHwnd())? TRUE: FALSE);	// ステータスバー表示
 	pEditWnd->LayoutStatusBar();
 	pEditWnd->EndLayoutBars();
 
@@ -138,7 +138,7 @@ void ViewCommander::Command_SHOWMINIMAP(void)
 {
 	EditWnd*	pEditWnd = GetEditWindow();	//	Sep. 10, 2002 genta
 
-	GetDllShareData().m_common.window.bDispMiniMap = (pEditWnd->GetMiniMap().GetHwnd() == NULL);
+	GetDllShareData().common.window.bDispMiniMap = (pEditWnd->GetMiniMap().GetHwnd() == NULL);
 	pEditWnd->LayoutMiniMap();
 	pEditWnd->EndLayoutBars();
 
@@ -180,7 +180,7 @@ void ViewCommander::Command_CHANGETYPE(int nTypePlusOne)
 	if (nTypePlusOne == 0) {
 		type = GetDocument()->m_docType.GetDocumentType();
 	}
-	if (type.IsValidType() && type.GetIndex() < GetDllShareData().m_nTypesCount) {
+	if (type.IsValidType() && type.GetIndex() < GetDllShareData().nTypesCount) {
 		const TypeConfigMini* pConfig;
 		DocTypeManager().GetTypeConfigMini(type, &pConfig);
 		GetDocument()->m_docType.SetDocumentTypeIdx(pConfig->id, true);
@@ -211,7 +211,7 @@ void ViewCommander::Command_FONT(void)
 	HWND hwndFrame = GetMainWindow();
 
 	// フォント設定ダイアログ
-	auto& csView = GetDllShareData().m_common.view;
+	auto& csView = GetDllShareData().common.view;
 	LOGFONT lf = csView.lf;
 	INT nPointSize;
 #ifdef USE_UNFIXED_FONT
@@ -263,7 +263,7 @@ void ViewCommander::Command_SETFONTSIZE(int fontSize, int shift, int mode)
 {
 	// The point sizes recommended by "The Windows Interface: An Application Design Guide", 1/10ポイント単位
 	static const INT sizeTable[] = { 8*10, 9*10, 10*10, (INT)(10.5*10), 11*10, 12*10, 14*10, 16*10, 18*10, 20*10, 22*10, 24*10, 26*10, 28*10, 36*10, 48*10, 72*10 };
-	auto& csView = GetDllShareData().m_common.view;
+	auto& csView = GetDllShareData().common.view;
 	const LOGFONT& lf = (mode == 0 ? csView.lf
 		: GetEditWindow()->GetLogfont(mode == 2));
 	INT nPointSize;
@@ -468,14 +468,14 @@ void ViewCommander::Command_TEXTWRAPMETHOD(TextWrappingMethod nWrapMethod)
 void ViewCommander::Command_SELECT_COUNT_MODE(int nMode)
 {
 	// 設定には保存せず、View毎に持つフラグを設定
-	//BOOL* pbDispSelCountByByte = &GetDllShareData().m_common.statusBar.bDispSelCountByByte;
+	//BOOL* pbDispSelCountByByte = &GetDllShareData().common.statusBar.bDispSelCountByByte;
 	SelectCountMode* pnSelectCountMode = &GetEditWindow()->m_nSelectCountMode;
 
 	if (nMode == (int)SelectCountMode::Toggle) {
 		// 文字数⇔バイト数トグル
 		SelectCountMode nCurrentMode;
 		if (*pnSelectCountMode == SelectCountMode::Toggle) {
-			nCurrentMode = (GetDllShareData().m_common.statusBar.bDispSelCountByByte ?
+			nCurrentMode = (GetDllShareData().common.statusBar.bDispSelCountByByte ?
 								SelectCountMode::ByByte :
 								SelectCountMode::ByChar);
 		}else {
@@ -498,9 +498,9 @@ void ViewCommander::Command_SET_QUOTESTRING(const wchar_t* quotestr)
 	if (!quotestr)
 		return;
 
-	wcsncpy(GetDllShareData().m_common.format.szInyouKigou, quotestr,
-		_countof(GetDllShareData().m_common.format.szInyouKigou));
+	wcsncpy(GetDllShareData().common.format.szInyouKigou, quotestr,
+		_countof(GetDllShareData().common.format.szInyouKigou));
 	
-	GetDllShareData().m_common.format.szInyouKigou[_countof(GetDllShareData().m_common.format.szInyouKigou) - 1] = L'\0';
+	GetDllShareData().common.format.szInyouKigou[_countof(GetDllShareData().common.format.szInyouKigou) - 1] = L'\0';
 }
 

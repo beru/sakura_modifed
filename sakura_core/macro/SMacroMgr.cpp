@@ -794,13 +794,13 @@ const MacroFuncInfo* SMacroMgr::GetFuncInfoByID(int nFuncID)
 {
 	// Jun. 27, 2002 genta
 	// 番人をコード0として拾ってしまうので，配列サイズによる判定をやめた．
-	for (int i=0; m_macroFuncInfoCommandArr[i].m_pszFuncName; ++i) {
-		if (m_macroFuncInfoCommandArr[i].m_nFuncID == nFuncID) {
+	for (int i=0; m_macroFuncInfoCommandArr[i].pszFuncName; ++i) {
+		if (m_macroFuncInfoCommandArr[i].nFuncID == nFuncID) {
 			return &m_macroFuncInfoCommandArr[i];
 		}
 	}
-	for (int i=0; m_macroFuncInfoArr[i].m_pszFuncName; ++i) {
-		if (m_macroFuncInfoArr[i].m_nFuncID == nFuncID) {
+	for (int i=0; m_macroFuncInfoArr[i].pszFuncName; ++i) {
+		if (m_macroFuncInfoArr[i].nFuncID == nFuncID) {
 			return &m_macroFuncInfoArr[i];
 		}
 	}
@@ -831,7 +831,7 @@ WCHAR* SMacroMgr::GetFuncInfoByID(
 	const MacroFuncInfo* MacroInfo = GetFuncInfoByID(nFuncID);
 	if (MacroInfo) {
 		if (pszFuncName) {
-			auto_strcpy(pszFuncName, MacroInfo->m_pszFuncName);
+			auto_strcpy(pszFuncName, MacroInfo->pszFuncName);
 			WCHAR* p = pszFuncName;
 			while (*p) {
 				if (*p == LTEXT('(')) {
@@ -881,9 +881,9 @@ EFunctionCode SMacroMgr::GetFuncInfoByName(
 	}
 
 	// コマンド関数を検索
-	for (int i=0; m_macroFuncInfoCommandArr[i].m_pszFuncName; ++i) {
-		if (auto_strcmp(normalizedFuncName, m_macroFuncInfoCommandArr[i].m_pszFuncName) == 0) {
-			EFunctionCode nFuncID = EFunctionCode(m_macroFuncInfoCommandArr[i].m_nFuncID);
+	for (int i=0; m_macroFuncInfoCommandArr[i].pszFuncName; ++i) {
+		if (auto_strcmp(normalizedFuncName, m_macroFuncInfoCommandArr[i].pszFuncName) == 0) {
+			EFunctionCode nFuncID = EFunctionCode(m_macroFuncInfoCommandArr[i].nFuncID);
 			if (pszFuncNameJapanese) {
 				wcsncpy(pszFuncNameJapanese, LSW(nFuncID), 255);
 				pszFuncNameJapanese[255] = L'\0';
@@ -892,9 +892,9 @@ EFunctionCode SMacroMgr::GetFuncInfoByName(
 		}
 	}
 	// 非コマンド関数を検索
-	for (int i=0; m_macroFuncInfoArr[i].m_pszFuncName; ++i) {
-		if (auto_strcmp(normalizedFuncName, m_macroFuncInfoArr[i].m_pszFuncName) == 0) {
-			EFunctionCode nFuncID = EFunctionCode(m_macroFuncInfoArr[i].m_nFuncID);
+	for (int i=0; m_macroFuncInfoArr[i].pszFuncName; ++i) {
+		if (auto_strcmp(normalizedFuncName, m_macroFuncInfoArr[i].pszFuncName) == 0) {
+			EFunctionCode nFuncID = EFunctionCode(m_macroFuncInfoArr[i].nFuncID);
 			if (pszFuncNameJapanese) {
 				wcsncpy(pszFuncNameJapanese, LSW(nFuncID), 255);
 				pszFuncNameJapanese[255] = L'\0';

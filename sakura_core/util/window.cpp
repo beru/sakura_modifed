@@ -102,11 +102,11 @@ void ActivateFrameWindow(HWND hwnd)
 {
 	// 編集ウィンドウでタブまとめ表示の場合は表示位置を復元する
 	DllSharedData* pShareData = &GetDllShareData();
-	if (pShareData->m_common.tabBar.bDispTabWnd && !pShareData->m_common.tabBar.bDispTabWndMultiWin) {
+	if (pShareData->common.tabBar.bDispTabWnd && !pShareData->common.tabBar.bDispTabWndMultiWin) {
 		if (IsSakuraMainWindow(hwnd)) {
-			if (pShareData->m_flags.m_bEditWndChanging)
+			if (pShareData->flags.bEditWndChanging)
 				return;	// 切替の最中(busy)は要求を無視する
-			pShareData->m_flags.m_bEditWndChanging = TRUE;	// 編集ウィンドウ切替中ON	2007.04.03 ryoji
+			pShareData->flags.bEditWndChanging = TRUE;	// 編集ウィンドウ切替中ON	2007.04.03 ryoji
 
 			// 対象ウィンドウのスレッドに位置合わせを依頼する	// 2007.04.03 ryoji
 			DWORD_PTR dwResult;
@@ -135,7 +135,7 @@ void ActivateFrameWindow(HWND hwnd)
 	::BringWindowToTop(hwndActivate);
 
 	if (pShareData)
-		pShareData->m_flags.m_bEditWndChanging = FALSE;	// 編集ウィンドウ切替中OFF	2007.04.03 ryoji
+		pShareData->flags.bEditWndChanging = FALSE;	// 編集ウィンドウ切替中OFF	2007.04.03 ryoji
 
 	return;
 }
@@ -300,10 +300,10 @@ void FontAutoDeleter::ReleaseOnDestroy()
 #if 0
 void FontAutoDeleter::Release()
 {
-	if (m_hwnd && m_hFont) {
+	if (m_hwnd && hFont) {
 		::SendMessage(m_hwnd, WM_SETFONT, (WPARAM)m_hFontOld, FALSE);
-		::DeleteObject(m_hFont);
-		m_hFont = NULL;
+		::DeleteObject(hFont);
+		hFont = NULL;
 		m_hwnd = NULL;
 	}
 }

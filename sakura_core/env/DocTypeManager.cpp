@@ -53,7 +53,7 @@ TypeConfigNum DocTypeManager::GetDocumentTypeOfPath(const TCHAR* pszFilePath)
 		pszFileName = pszSep + 1;
 	}
 
-	for (int i=0; i<m_pShareData->m_nTypesCount; ++i) {
+	for (int i=0; i<m_pShareData->nTypesCount; ++i) {
 		const TypeConfigMini* mini;
 		GetTypeConfigMini(TypeConfigNum(i), &mini);
 		if (IsFileNameMatch(mini->szTypeExts, pszFileName)) {
@@ -82,7 +82,7 @@ TypeConfigNum DocTypeManager::GetDocumentTypeOfExt(const TCHAR* pszExt)
 
 TypeConfigNum DocTypeManager::GetDocumentTypeOfId(int id)
 {
-	for (int i=0; i<m_pShareData->m_nTypesCount; ++i) {
+	for (int i=0; i<m_pShareData->nTypesCount; ++i) {
 		const TypeConfigMini* mini;
 		GetTypeConfigMini(TypeConfigNum(i), &mini);
 		if (mini->id == id) {
@@ -95,14 +95,14 @@ TypeConfigNum DocTypeManager::GetDocumentTypeOfId(int id)
 bool DocTypeManager::GetTypeConfig(TypeConfigNum documentType, TypeConfig& type)
 {
 	int n = documentType.GetIndex();
-	if (0 <= n && n < m_pShareData->m_nTypesCount) {
+	if (0 <= n && n < m_pShareData->nTypesCount) {
 		if (n == 0) {
-			type = m_pShareData->m_TypeBasis;
+			type = m_pShareData->typeBasis;
 			return true;
 		}else {
 			LockGuard<Mutex> guard(g_docTypeMutex);
-			 if (SendMessage(m_pShareData->m_handles.m_hwndTray, MYWM_GET_TYPESETTING, (WPARAM)n, 0)) {
-				type = m_pShareData->m_workBuffer.m_TypeConfig;
+			 if (SendMessage(m_pShareData->handles.hwndTray, MYWM_GET_TYPESETTING, (WPARAM)n, 0)) {
+				type = m_pShareData->workBuffer.typeConfig;
 				return true;
 			}
 		}
@@ -113,10 +113,10 @@ bool DocTypeManager::GetTypeConfig(TypeConfigNum documentType, TypeConfig& type)
 bool DocTypeManager::SetTypeConfig(TypeConfigNum documentType, const TypeConfig& type)
 {
 	int n = documentType.GetIndex();
-	if (0 <= n && n < m_pShareData->m_nTypesCount) {
+	if (0 <= n && n < m_pShareData->nTypesCount) {
 		LockGuard<Mutex> guard(g_docTypeMutex);
-		m_pShareData->m_workBuffer.m_TypeConfig = type;
-		if (SendMessage(m_pShareData->m_handles.m_hwndTray, MYWM_SET_TYPESETTING, (WPARAM)n, 0)) {
+		m_pShareData->workBuffer.typeConfig = type;
+		if (SendMessage(m_pShareData->handles.hwndTray, MYWM_SET_TYPESETTING, (WPARAM)n, 0)) {
 			return true;
 		}
 	}
@@ -126,8 +126,8 @@ bool DocTypeManager::SetTypeConfig(TypeConfigNum documentType, const TypeConfig&
 bool DocTypeManager::GetTypeConfigMini(TypeConfigNum documentType, const TypeConfigMini** type)
 {
 	int n = documentType.GetIndex();
-	if (0 <= n && n < m_pShareData->m_nTypesCount) {
-		*type = &m_pShareData->m_TypeMini[n];
+	if (0 <= n && n < m_pShareData->nTypesCount) {
+		*type = &m_pShareData->typesMini[n];
 		return true;
 	}
 	return false;
@@ -136,13 +136,13 @@ bool DocTypeManager::GetTypeConfigMini(TypeConfigNum documentType, const TypeCon
 bool DocTypeManager::AddTypeConfig(TypeConfigNum documentType)
 {
 	LockGuard<Mutex> guard(g_docTypeMutex);
-	return FALSE != SendMessage(m_pShareData->m_handles.m_hwndTray, MYWM_ADD_TYPESETTING, (WPARAM)documentType.GetIndex(), 0);
+	return FALSE != SendMessage(m_pShareData->handles.hwndTray, MYWM_ADD_TYPESETTING, (WPARAM)documentType.GetIndex(), 0);
 }
 
 bool DocTypeManager::DelTypeConfig(TypeConfigNum documentType)
 {
 	LockGuard<Mutex> guard(g_docTypeMutex);
-	return FALSE != SendMessage(m_pShareData->m_handles.m_hwndTray, MYWM_DEL_TYPESETTING, (WPARAM)documentType.GetIndex(), 0);
+	return FALSE != SendMessage(m_pShareData->handles.hwndTray, MYWM_DEL_TYPESETTING, (WPARAM)documentType.GetIndex(), 0);
 }
 
 /*!

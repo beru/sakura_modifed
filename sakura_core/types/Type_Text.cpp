@@ -66,12 +66,12 @@ void CType_Text::InitTypeConfigImp(TypeConfig* pType)
 	int keywordPos = 0;
 	wchar_t* pKeyword = pType->regexKeywordList;
 	pType->bUseRegexKeyword = true;							// 正規表現キーワードを使うか
-	pType->regexKeywordArr[0].m_nColorIndex = COLORIDX_URL;	// 色指定番号
+	pType->regexKeywordArr[0].nColorIndex = COLORIDX_URL;	// 色指定番号
 	wcscpyn(&pKeyword[keywordPos],			// 正規表現キーワード
 		L"/(?<=\")(\\b[a-zA-Z]:|\\B\\\\\\\\)[^\"\\r\\n]*/k",			//   ""で挟まれた C:\～, \\～ にマッチするパターン
 		_countof(pType->regexKeywordList) - 1);
 	keywordPos += auto_strlen(&pKeyword[keywordPos]) + 1;
-	pType->regexKeywordArr[1].m_nColorIndex = COLORIDX_URL;	// 色指定番号
+	pType->regexKeywordArr[1].nColorIndex = COLORIDX_URL;	// 色指定番号
 	wcscpyn(&pKeyword[keywordPos],			// 正規表現キーワード
 		L"/(\\b[a-zA-Z]:\\\\|\\B\\\\\\\\)[\\w\\-_.\\\\\\/$%~]*/k",		//   C:\～, \\～ にマッチするパターン
 		_countof(pType->regexKeywordList) - keywordPos - 1);
@@ -93,7 +93,7 @@ void DocOutline::MakeTopicList_txt(FuncInfoArr* pFuncInfoArr)
 	using namespace WCODE;
 
 	// 見出し記号
-	const wchar_t*	pszStarts = GetDllShareData().m_common.format.szMidashiKigou;
+	const wchar_t*	pszStarts = GetDllShareData().common.format.szMidashiKigou;
 	int				nStartsLen = wcslen(pszStarts);
 
 	/*	ネストの深さは、nMaxStackレベルまで、ひとつのヘッダは、最長32文字まで区別
@@ -189,7 +189,7 @@ void DocOutline::MakeTopicList_txt(FuncInfoArr* pFuncInfoArr)
 		wchar_t* pszText = &szText[0];
 		wmemcpy(pszText, &pLine[i], nLineLen);
 		pszText[nLineLen] = L'\0';
-		bool bExtEol = GetDllShareData().m_common.edit.bEnableExtEol;
+		bool bExtEol = GetDllShareData().common.edit.bEnableExtEol;
 		for (i=0; i<nLineLen; ++i) {
 			if (WCODE::IsLineDelimiter(pszText[i], bExtEol)) {
 				pszText[i] = L'\0';
@@ -257,7 +257,7 @@ void DocOutline::MakeTopicList_txt(FuncInfoArr* pFuncInfoArr)
 void DocOutline::MakeTopicList_wztxt(FuncInfoArr* pFuncInfoArr)
 {
 	int levelPrev = 0;
-	bool bExtEol = GetDllShareData().m_common.edit.bEnableExtEol;
+	bool bExtEol = GetDllShareData().common.edit.bEnableExtEol;
 
 	for (LogicInt nLineCount=LogicInt(0); nLineCount<m_pDocRef->m_docLineMgr.GetLineCount(); ++nLineCount) {
 		const wchar_t*	pLine;

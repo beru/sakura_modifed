@@ -35,8 +35,8 @@
 RecentGrepFile::RecentGrepFile()
 {
 	Create(
-		GetShareData()->m_searchKeywords.grepFiles.dataPtr(),
-		&GetShareData()->m_searchKeywords.grepFiles._GetSizeRef(),
+		GetShareData()->searchKeywords.grepFiles.dataPtr(),
+		&GetShareData()->searchKeywords.grepFiles._GetSizeRef(),
 		NULL,
 		MAX_GREPFILE,
 		NULL

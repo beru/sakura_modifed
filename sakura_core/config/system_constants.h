@@ -91,15 +91,15 @@
 	STypeConfigに、m_szOutlineRuleFilenameを追加 2002.04.01 YAZAKI 
 	
 	Version 28:
-	PRINTSETTINGに、m_bPrintKinsokuHead、m_bPrintKinsokuTailを追加 2002.04.09 MIK
+	PrintSettingに、m_bPrintKinsokuHead、m_bPrintKinsokuTailを追加 2002.04.09 MIK
 	STypeConfigに、m_bKinsokuHead、m_bKinsokuTail、m_szKinsokuHead、m_szKinsokuTailを追加 2002.04.09 MIK
 
 	Version 29:
-	PRINTSETTINGに、m_bPrintKinsokuRetを追加 2002.04.13 MIK
+	PrintSettingに、m_bPrintKinsokuRetを追加 2002.04.13 MIK
 	STypeConfigに、m_bKinsokuRetを追加 2002.04.13 MIK
 
 	Version 30:
-	PRINTSETTINGに、m_bPrintKinsokuKutoを追加 2002.04.17 MIK
+	PrintSettingに、m_bPrintKinsokuKutoを追加 2002.04.17 MIK
 	STypeConfigに、m_bKinsokuKutoを追加 2002.04.17 MIK
 
 	Version 31:
@@ -138,7 +138,7 @@
 
 	Version 41:
 	STypeConfigのm_szTabViewStringサイズ拡張
-	m_nWindowSizeX/Y m_nWindowOriginX/Y追加 2003.01.26 aroka
+	nWindowSizeX/Y nWindowOriginX/Y追加 2003.01.26 aroka
 
 	Version 42:
 	STypeConfigに独自TABマークフラグ追加 2003.03.28 MIK
@@ -150,7 +150,7 @@
 	Window Caption文字列領域をCommonに追加 2003.04.05 genta
 
 	Version 45:
-	タグファイル作成用コマンドオプション保存領域(m_nTagsOpt,m_szTagsCmdLine)を追加 2003.05.12 MIK
+	タグファイル作成用コマンドオプション保存領域(nTagsOpt,szTagsCmdLine)を追加 2003.05.12 MIK
 
 	Version 46:
 	編集ウィンドウ数修正、タブウインドウ用情報追加
@@ -577,7 +577,7 @@ enum e_PM_CHANGESETTING_SELECT {
 	PM_CHANGESETTING_FONTSIZE	= 2, //!< フォントサイズ変更(WPARAM タイプ別番号。-1で共通設定変更)
 	PM_CHANGESETTING_TYPE		= 3, //!< タイプ別設定
 	PM_CHANGESETTING_TYPE2		= 4, //!< タイプ別設定(再読み込みなし)
-	PM_PRINTSETTING				= 5, //!< プリント設定
+	PM_PrintSetting				= 5, //!< プリント設定
 };
 //!座標位置情報の保存
 #define MYWM_SAVEEDITSTATE  (WM_APP+1521)

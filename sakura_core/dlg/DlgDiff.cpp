@@ -197,7 +197,7 @@ BOOL DlgDiff::OnBnClicked(int wID)
 void DlgDiff::SetData(void)
 {
 	// オプション
-	m_nDiffFlgOpt = m_pShareData->m_nDiffFlgOpt;
+	m_nDiffFlgOpt = m_pShareData->nDiffFlgOpt;
 	if (m_nDiffFlgOpt & 0x0001) CheckButton(IDC_CHECK_DIFF_OPT_CASE,   true);
 	if (m_nDiffFlgOpt & 0x0002) CheckButton(IDC_CHECK_DIFF_OPT_SPACE,  true);
 	if (m_nDiffFlgOpt & 0x0004) CheckButton(IDC_CHECK_DIFF_OPT_SPCCHG, true);
@@ -220,10 +220,10 @@ void DlgDiff::SetData(void)
 	if (m_nDiffFlgOpt & 0x0040) CheckButton(IDC_CHECK_DIFF_EXEC_STATE, true);
 
 	// 見つからないときメッセージを表示
-	CheckButton(IDC_CHECK_NOTIFYNOTFOUND, m_pShareData->m_common.search.bNotifyNotFound);
+	CheckButton(IDC_CHECK_NOTIFYNOTFOUND, m_pShareData->common.search.bNotifyNotFound);
 	
 	// 先頭（末尾）から再検索
-	CheckButton(IDC_CHECK_SEARCHALL, m_pShareData->m_common.search.bSearchAll);
+	CheckButton(IDC_CHECK_SEARCHALL, m_pShareData->common.search.bSearchAll);
 
 	// 編集中のファイル一覧を作成する
 	{
@@ -237,8 +237,8 @@ void DlgDiff::SetData(void)
 
 		// 自分の文字コードを取得
 		::SendMessage(EditWnd::getInstance()->GetHwnd(), MYWM_GETFILEINFO, 0, 0);
-		EditInfo* pFileInfo = &m_pShareData->m_workBuffer.m_EditInfo_MYWM_GETFILEINFO;
-		code = pFileInfo->m_nCharCode;
+		EditInfo* pFileInfo = &m_pShareData->workBuffer.editInfo_MYWM_GETFILEINFO;
+		code = pFileInfo->nCharCode;
 
 		// リストのハンドル取得
 		HWND hwndList = GetItemHwnd(IDC_LIST_DIFF_FILES);
@@ -254,18 +254,18 @@ void DlgDiff::SetData(void)
 			for (int i=0; i<nRowNum; ++i) {
 				// トレイからエディタへの編集ファイル名要求通知
 				::SendMessage(pEditNode[i].GetHwnd(), MYWM_GETFILEINFO, 0, 0);
-				pFileInfo = (EditInfo*)&m_pShareData->m_workBuffer.m_EditInfo_MYWM_GETFILEINFO;
+				pFileInfo = (EditInfo*)&m_pShareData->workBuffer.editInfo_MYWM_GETFILEINFO;
 
 				// 自分ならスキップ
 				if (pEditNode[i].GetHwnd() == EditWnd::getInstance()->GetHwnd()) {
 					// 同じ形式にしておく。ただしアクセスキー番号はなし
-					FileNameManager::getInstance()->GetMenuFullLabel_WinListNoEscape( szName, _countof(szName), pFileInfo, pEditNode[i].m_nId, -1, calc.GetDC() );
+					FileNameManager::getInstance()->GetMenuFullLabel_WinListNoEscape( szName, _countof(szName), pFileInfo, pEditNode[i].nId, -1, calc.GetDC() );
 					SetItemText(IDC_STATIC_DIFF_SRC, szName);
 					continue;
 				}
 
 				// 番号はウィンドウ一覧と同じ番号を使う
-				FileNameManager::getInstance()->GetMenuFullLabel_WinListNoEscape( szName, _countof(szName), pFileInfo, pEditNode[i].m_nId, i, calc.GetDC() );
+				FileNameManager::getInstance()->GetMenuFullLabel_WinListNoEscape( szName, _countof(szName), pFileInfo, pEditNode[i].nId, i, calc.GetDC() );
 
 
 				// リストに登録する
@@ -278,15 +278,15 @@ void DlgDiff::SetData(void)
 
 				// ファイル名一致のスコアを計算する
 				TCHAR szFile2[_MAX_PATH];
-				SplitPath_FolderAndFile(pFileInfo->m_szPath, NULL, szFile2);
+				SplitPath_FolderAndFile(pFileInfo->szPath, NULL, szFile2);
 				int scoreTemp = FileMatchScoreSepExt(szFile1, szFile2);
 				if (score < scoreTemp
-					|| (selCode != code && code == pFileInfo->m_nCharCode && score == scoreTemp) 
+					|| (selCode != code && code == pFileInfo->nCharCode && score == scoreTemp) 
 				) {
 					// スコアのいいものを選択. 同じなら文字コードが同じものを選択
 					score = scoreTemp;
 					selIndex = nItem;
-					selCode = pFileInfo->m_nCharCode;
+					selCode = pFileInfo->nCharCode;
 				}
 			}
 
@@ -342,7 +342,7 @@ int DlgDiff::GetData(void)
 	if (IsButtonChecked(IDC_RADIO_DIFF_FILE2)) m_nDiffFlgOpt |= 0x0020;
 	// DIFF差分が見つからないときにメッセージを表示 2003.05.12 MIK
 	if (IsButtonChecked(IDC_CHECK_DIFF_EXEC_STATE)) m_nDiffFlgOpt |= 0x0040;
-	m_pShareData->m_nDiffFlgOpt = m_nDiffFlgOpt;
+	m_pShareData->nDiffFlgOpt = m_nDiffFlgOpt;
 
 	// 相手ファイル名
 	m_szFile2[0] = 0;
@@ -363,11 +363,11 @@ int DlgDiff::GetData(void)
 
 			// トレイからエディタへの編集ファイル名要求通知
 			::SendMessage(m_hWnd_Dst, MYWM_GETFILEINFO, 0, 0);
-			EditInfo* pFileInfo = (EditInfo*)&m_pShareData->m_workBuffer.m_EditInfo_MYWM_GETFILEINFO;
-			_tcscpy(m_szFile2, pFileInfo->m_szPath);
-			m_bIsModifiedDst = pFileInfo->m_bIsModified;
-			m_nCodeTypeDst = pFileInfo->m_nCharCode;
-			m_bBomDst = pFileInfo->m_bBom;
+			EditInfo* pFileInfo = (EditInfo*)&m_pShareData->workBuffer.editInfo_MYWM_GETFILEINFO;
+			_tcscpy(m_szFile2, pFileInfo->szPath);
+			m_bIsModifiedDst = pFileInfo->bIsModified;
+			m_nCodeTypeDst = pFileInfo->nCharCode;
+			m_bBomDst = pFileInfo->bBom;
 		}else {
 			ret = FALSE;
 		}
@@ -376,10 +376,10 @@ int DlgDiff::GetData(void)
 	}
 
 	// 見つからないときメッセージを表示
-	m_pShareData->m_common.search.bNotifyNotFound = IsButtonChecked(IDC_CHECK_NOTIFYNOTFOUND);
+	m_pShareData->common.search.bNotifyNotFound = IsButtonChecked(IDC_CHECK_NOTIFYNOTFOUND);
 
 	// 先頭（末尾）から再検索
-	m_pShareData->m_common.search.bSearchAll = IsButtonChecked(IDC_CHECK_SEARCHALL);
+	m_pShareData->common.search.bSearchAll = IsButtonChecked(IDC_CHECK_SEARCHALL);
 
 	// 相手ファイルが指定されてなければキャンセル
 	// 2004.02.21 MIK 相手が無題だと比較できないので判定削除
@@ -463,7 +463,7 @@ BOOL DlgDiff::OnInitDialog(
 		GetItemClientRect(anchorList[i].id, m_rcItems[i]);
 	}
 
-	RECT rcDialog = GetDllShareData().m_common.others.rcDiffDialog;
+	RECT rcDialog = GetDllShareData().common.others.rcDiffDialog;
 	if (rcDialog.left != 0
 		|| rcDialog.bottom != 0
 	) {
@@ -481,7 +481,7 @@ BOOL DlgDiff::OnSize(WPARAM wParam, LPARAM lParam)
 	// 基底クラスメンバ
 	Dialog::OnSize(wParam, lParam);
 
-	GetWindowRect(&GetDllShareData().m_common.others.rcDiffDialog);
+	GetWindowRect(&GetDllShareData().common.others.rcDiffDialog);
 
 	RECT  rc;
 	POINT ptNew;
@@ -498,7 +498,7 @@ BOOL DlgDiff::OnSize(WPARAM wParam, LPARAM lParam)
 
 BOOL DlgDiff::OnMove(WPARAM wParam, LPARAM lParam)
 {
-	GetWindowRect(&GetDllShareData().m_common.others.rcDiffDialog);
+	GetWindowRect(&GetDllShareData().common.others.rcDiffDialog);
 	
 	return Dialog::OnMove(wParam, lParam);
 }

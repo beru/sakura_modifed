@@ -75,17 +75,17 @@ BOOL DlgReplace::OnCbnDropDown(HWND hwndCtl, int wID)
 	switch (wID) {
 	case IDC_COMBO_TEXT:
 		if (::SendMessage(hwndCtl, CB_GETCOUNT, 0L, 0L) == 0) {
-			int nSize = m_pShareData->m_searchKeywords.searchKeys.size();
+			int nSize = m_pShareData->searchKeywords.searchKeys.size();
 			for (int i=0; i<nSize; ++i) {
-				Combo_AddString( hwndCtl, m_pShareData->m_searchKeywords.searchKeys[i] );
+				Combo_AddString( hwndCtl, m_pShareData->searchKeywords.searchKeys[i] );
 			}
 		}
 		break;
 	case IDC_COMBO_TEXT2:
 		if (::SendMessage(hwndCtl, CB_GETCOUNT, 0L, 0L) == 0) {
-			int nSize = m_pShareData->m_searchKeywords.replaceKeys.size();
+			int nSize = m_pShareData->searchKeywords.replaceKeys.size();
 			for (int i=0; i<nSize; ++i) {
-				Combo_AddString( hwndCtl, m_pShareData->m_searchKeywords.replaceKeys[i] );
+				Combo_AddString( hwndCtl, m_pShareData->searchKeywords.replaceKeys[i] );
 			}
 		}
 		break;
@@ -101,7 +101,7 @@ HWND DlgReplace::DoModeless(
 	bool bSelected
 	)
 {
-	auto& csSearch = m_pShareData->m_common.search;
+	auto& csSearch = m_pShareData->common.search;
 	searchOption = csSearch.searchOption;		// 検索オプション
 	bConsecutiveAll = csSearch.bConsecutiveAll;	//「すべて置換」は置換の繰返し	// 2007.01.16 ryoji
 	bSelectedArea = csSearch.bSelectedArea;		// 選択範囲内置換
@@ -123,7 +123,7 @@ void DlgReplace::ChangeView(LPARAM pcEditView)
 // ダイアログデータの設定
 void DlgReplace::SetData(void)
 {
-	auto& csSearch = m_pShareData->m_common.search;
+	auto& csSearch = m_pShareData->common.search;
 
 	// 検索文字列/置換後文字列リストの設定(関数化)	2010/5/26 Uchi
 	SetCombosList();
@@ -224,7 +224,7 @@ void DlgReplace::SetCombosList(void)
 // 0==条件未入力  0より大きい==正常   0より小さい==入力エラー
 int DlgReplace::GetData(void)
 {
-	auto& csSearch = m_pShareData->m_common.search;
+	auto& csSearch = m_pShareData->common.search;
 
 	// 英大文字と英小文字を区別する
 	searchOption.bLoHiCase = IsButtonChecked(IDC_CHK_LOHICASE);
@@ -295,14 +295,14 @@ int DlgReplace::GetData(void)
 			pEditView->m_curSearchOption = searchOption;
 			pEditView->m_bCurSearchUpdate = true;
 		}
-		pEditView->m_nCurSearchKeySequence = GetDllShareData().m_common.search.nSearchKeySequence;
+		pEditView->m_nCurSearchKeySequence = GetDllShareData().common.search.nSearchKeySequence;
 
 		// 置換後文字列
 		//@@@ 2002.2.2 YAZAKI CShareData.AddToReplaceKeys()追加に伴う変更
 		if (m_strText2.size() < _MAX_PATH) {
 			SearchKeywordManager().AddToReplaceKeys(m_strText2.c_str());
 		}
-		nReplaceKeySequence = GetDllShareData().m_common.search.nReplaceKeySequence;
+		nReplaceKeySequence = GetDllShareData().common.search.nReplaceKeySequence;
 
 		// From Here 2001.12.03 hor
 		// クリップボードから貼り付ける？
@@ -600,7 +600,7 @@ BOOL DlgReplace::OnBnClicked(int wID)
 					::EndDialog(GetHwnd(), 0);
 				}else {
 					// 置換 ダイアログを自動的に閉じる
-					if (m_pShareData->m_common.search.bAutoCloseDlgReplace) {
+					if (m_pShareData->common.search.bAutoCloseDlgReplace) {
 						::DestroyWindow(GetHwnd());
 					}
 				}

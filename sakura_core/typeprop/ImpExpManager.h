@@ -46,11 +46,11 @@ public:
 	void SetBaseName(const wstring&);
 	// フルパス名を取得
 	inline wstring GetFullPath() {
-		return to_wchar(GetDllShareData().m_history.m_szIMPORTFOLDER) + m_sOriginName;
+		return to_wchar(GetDllShareData().history.m_szIMPORTFOLDER) + m_sOriginName;
 	}
 	// フルパス名を取得
 	inline wstring MakeFullPath(wstring sFileName) {
-		return to_wchar(GetDllShareData().m_history.m_szIMPORTFOLDER) + sFileName;
+		return to_wchar(GetDllShareData().history.m_szIMPORTFOLDER) + sFileName;
 	}
 	// ファイル名を取得
 	inline wstring GetFileName()	{ return m_sOriginName; }
@@ -60,8 +60,8 @@ protected:
 	inline void SetImportFolder(const TCHAR* szPath) {
 		// ファイルのフルパスをフォルダとファイル名に分割
 		// [c:\work\test\aaa.txt] → [c:\work\test] + [aaa.txt]
-		::SplitPath_FolderAndFile(szPath, GetDllShareData().m_history.m_szIMPORTFOLDER, NULL);
-		_tcscat(GetDllShareData().m_history.m_szIMPORTFOLDER, _T("\\"));
+		::SplitPath_FolderAndFile(szPath, GetDllShareData().history.m_szIMPORTFOLDER, NULL);
+		_tcscat(GetDllShareData().history.m_szIMPORTFOLDER, _T("\\"));
 	}
 
 	// デフォルト拡張子の取得(「*.txt」形式)

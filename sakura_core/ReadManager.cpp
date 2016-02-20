@@ -88,7 +88,7 @@ CodeConvertResult ReadManager::ReadFile_To_CDocLineMgr(
 		// ファイルを開く
 		// ファイルを閉じるにはFileCloseメンバ又はデストラクタのどちらかで処理できます
 		//	Jul. 28, 2003 ryoji BOMパラメータ追加
-		fl.FileOpen( pszPath, bBigFile, eCharCode, GetDllShareData().m_common.file.GetAutoMIMEdecode(), &bBom );
+		fl.FileOpen( pszPath, bBigFile, eCharCode, GetDllShareData().common.file.GetAutoMIMEdecode(), &bBom );
 		pFileInfo->SetBomExist( bBom );
 
 		// ファイル時刻の取得

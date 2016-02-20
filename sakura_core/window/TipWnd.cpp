@@ -81,7 +81,7 @@ void TipWnd::Create(HINSTANCE hInstance, HWND hwndParent)
 		m_hFont = NULL;
 	}
 
-	m_hFont = ::CreateFontIndirect(&(GetDllShareData().m_common.helper.lf));
+	m_hFont = ::CreateFontIndirect(&(GetDllShareData().common.helper.lf));
 	return;
 }
 

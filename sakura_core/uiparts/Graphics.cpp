@@ -190,12 +190,12 @@ void Graphics::RestoreTextColors()
 void Graphics::PushMyFont(const Font& font)
 {
 	// Ý’è
-	HFONT hFontOld = (HFONT)SelectObject(m_hdc, font.m_hFont);
+	HFONT hFontOld = (HFONT)SelectObject(m_hdc, font.hFont);
 
 	// ‹L˜^
 	if (m_vFonts.empty()) {
-		Font sFontOld = { { false, false }, hFontOld };
-		m_vFonts.push_back(sFontOld);
+		Font fontOld = { { false, false }, hFontOld };
+		m_vFonts.push_back(fontOld);
 	}
 	m_vFonts.push_back(font);
 }
@@ -205,14 +205,14 @@ void Graphics::PopMyFont()
 	// –ß‚·
 	if (m_vFonts.size() >= 2) {
 		m_vFonts.pop_back();
-		SelectObject(m_hdc, m_vFonts.back().m_hFont);
+		SelectObject(m_hdc, m_vFonts.back().hFont);
 	}
 }
 
 void Graphics::ClearMyFont()
 {
 	if (!m_vFonts.empty()) {
-		SelectObject(m_hdc, m_vFonts[0].m_hFont);
+		SelectObject(m_hdc, m_vFonts[0].hFont);
 		m_vFonts.clear();
 	}
 }

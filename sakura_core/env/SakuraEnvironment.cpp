@@ -61,7 +61,7 @@ enum EExpParamName
 struct ExpParamName
 {
 	const wchar_t* szName;
-	int m_nLen;
+	int nLen;
 };
 static ExpParamName SExpParamNameTable[] = {
 	{L"profile", 7},
@@ -221,8 +221,8 @@ void SakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszBu
 				}else {
 					WCHAR szText[10];
 					const EditNode* node = AppNodeManager::getInstance()->GetEditNode(GetMainWindow()->GetHwnd());
-					if (0 < node->m_nId) {
-						swprintf(szText, L"%d", node->m_nId);
+					if (0 < node->nId) {
+						swprintf(szText, L"%d", node->nId);
 						q = wcs_pushW(q, q_max - q, szText);
 					}
 				}
@@ -307,9 +307,9 @@ void SakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszBu
 			break;
 		case L'Q':	// 印刷ページ設定の名前			2013/03/28 Uchi
 			{
-				PRINTSETTING* ps = &GetDllShareData().m_printSettingArr[
+				PrintSetting* ps = &GetDllShareData().printSettingArr[
 					 pDoc->m_docType.GetDocumentAttribute().nCurrentPrintSetting];
-				q = wcs_pushT(q, q_max - q, ps->m_szPrintSettingName);
+				q = wcs_pushT(q, q_max - q, ps->szPrintSettingName);
 				++p;
 			}
 			break;
@@ -441,7 +441,7 @@ void SakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszBu
 			// 中身はSetParentCaption()より移植
 			{
 				NativeW memDes;
-				// m_szGrepKey → memDes
+				// szGrepKey → memDes
 				LimitStringLengthW(AppMode::getInstance()->m_szGrepKey, wcslen(AppMode::getInstance()->m_szGrepKey), (q_max - q > 32 ? 32 : q_max - q - 3), memDes);
 				if ((int)wcslen(AppMode::getInstance()->m_szGrepKey) > memDes.GetStringLength()) {
 					memDes.AppendString(L"...");
@@ -482,7 +482,7 @@ void SakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszBu
 					break;
 				case STAND_KEYMACRO:
 					{
-						TCHAR* pszMacroFilePath = GetDllShareData().m_common.macro.szKeyMacroFileName;
+						TCHAR* pszMacroFilePath = GetDllShareData().common.macro.szKeyMacroFileName;
 						q = wcs_pushT(q, q_max - q, pszMacroFilePath);
 					}
 					break;
@@ -534,7 +534,7 @@ void SakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszBu
 				}
 				int nParamNameIdx = EExpParamName_begin;
 				for (; nParamNameIdx!=EExpParamName_end; ++nParamNameIdx) {
-					if (SExpParamNameTable[nParamNameIdx].m_nLen == (p - pBegin)
+					if (SExpParamNameTable[nParamNameIdx].nLen == (p - pBegin)
 						&& auto_strnicmp(SExpParamNameTable[nParamNameIdx].szName, pBegin, p - pBegin) == 0
 					) {
 						q = ExParam_LongName( q, q_max, static_cast<EExpParamName>(nParamNameIdx) );
@@ -641,8 +641,8 @@ int SakuraEnvironment::_ExParam_Evaluate(const wchar_t* pCond)
 			return 2;
 		}
 	case L'M': // $M キーボードマクロの記録中
-		if (GetDllShareData().m_flags.m_bRecordingKeyMacro
-			&& GetDllShareData().m_flags.m_hwndRecordingKeyMacro == EditWnd::getInstance()->GetHwnd() // ウィンドウ
+		if (GetDllShareData().flags.bRecordingKeyMacro
+			&& GetDllShareData().flags.hwndRecordingKeyMacro == EditWnd::getInstance()->GetHwnd() // ウィンドウ
 		) {
 			return 0;
 		}else {
@@ -701,7 +701,7 @@ std::tstring SakuraEnvironment::GetDlgInitialDir(bool bControlProcess)
 		return to_tchar(pDoc->m_docFile.GetFilePathClass().GetDirPath().c_str());
 	}
 
-	EOpenDialogDir eOpenDialogDir = GetDllShareData().m_common.edit.eOpenDialogDir;
+	EOpenDialogDir eOpenDialogDir = GetDllShareData().common.edit.eOpenDialogDir;
 	if (bControlProcess && eOpenDialogDir == OPENDIALOGDIR_CUR) {
 		eOpenDialogDir = OPENDIALOGDIR_MRU;
 	}
@@ -743,7 +743,7 @@ std::tstring SakuraEnvironment::GetDlgInitialDir(bool bControlProcess)
 	case OPENDIALOGDIR_SEL:
 		{
 			TCHAR szSelDir[_MAX_PATH];
-			FileNameManager::ExpandMetaToFolder(GetDllShareData().m_common.edit.openDialogSelDir, szSelDir, _countof(szSelDir));
+			FileNameManager::ExpandMetaToFolder(GetDllShareData().common.edit.openDialogSelDir, szSelDir, _countof(szSelDir));
 			return szSelDir;
 		}
 		break;

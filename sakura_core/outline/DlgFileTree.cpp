@@ -140,7 +140,7 @@ void DlgFileTree::SetData()
 	TreeView_DeleteAllItems(hwndTree);
 	bool bSaveShareData = (m_fileTreeSetting.m_szLoadProjectIni[0] == _T('\0'));
 	for (int i=0; i<(int)m_fileTreeSetting.items.size(); ++i) {
-		int nMaxCount = _countof(GetDllShareData().m_common.outline.fileTree.items);
+		int nMaxCount = _countof(GetDllShareData().common.outline.fileTree.items);
 		if (bSaveShareData && nMaxCount < i + 1) {
 			::InfoMessage(GetHwnd(), LS(STR_FILETREE_MAXCOUNT), nMaxCount);
 		}
@@ -230,7 +230,7 @@ void DlgFileTree::ChangeEnableAddInsert()
 	if (bSaveShareData) {
 		int nCount = TreeView_GetCount(GetItemHwnd(IDC_TREE_FL));
 		bool bEnable = true;
-		int nMaxCount = _countof(GetDllShareData().m_common.outline.fileTree.items);
+		int nMaxCount = _countof(GetDllShareData().common.outline.fileTree.items);
 		if (nMaxCount < nCount) {
 			bEnable = false;
 		}
@@ -249,7 +249,7 @@ int DlgFileTree::GetData()
 	TypeConfig type;
 	bool bTypeError = false;
 	if (m_fileTreeSetting.m_eFileTreeSettingOrgType == FileTreeSettingFromType::Common) {
-		pFileTree = &GetDllShareData().m_common.outline.fileTree;
+		pFileTree = &GetDllShareData().common.outline.fileTree;
 	}else {
 		if (!DocTypeManager().GetTypeConfig(TypeConfigNum(m_nDocType), type)) {
 			bTypeError = true;

@@ -61,7 +61,7 @@ BOOL DlgFind::OnCbnDropDown(HWND hwndCtl, int wID)
 	switch (wID) {
 	case IDC_COMBO_TEXT:
 		if (::SendMessage(hwndCtl, CB_GETCOUNT, 0L, 0L) == 0) {
-			auto& keywords = m_pShareData->m_searchKeywords.searchKeys;
+			auto& keywords = m_pShareData->searchKeywords.searchKeys;
 			int nSize = keywords.size();
 			for (int i=0; i<nSize; ++i) {
 				Combo_AddString( hwndCtl, keywords[i] );
@@ -80,7 +80,7 @@ HWND DlgFind::DoModeless(
 	LPARAM lParam
 	)
 {
-	auto& csSearch = m_pShareData->m_common.search;
+	auto& csSearch = m_pShareData->common.search;
 	searchOption = csSearch.searchOption;		// 検索オプション
 	bNotifyNotFound = csSearch.bNotifyNotFound;	// 検索／置換  見つからないときメッセージを表示
 	m_ptEscCaretPos_PHY = ((EditView*)lParam)->GetCaret().GetCaretLogicPos();	// 検索開始時のカーソル位置退避
@@ -180,10 +180,10 @@ void DlgFind::SetData(void)
 	// To Here Jun. 29, 2001 genta
 
 	// 検索ダイアログを自動的に閉じる
-	CheckButton(IDC_CHECK_bAutoCloseDlgFind, m_pShareData->m_common.search.bAutoCloseDlgFind);
+	CheckButton(IDC_CHECK_bAutoCloseDlgFind, m_pShareData->common.search.bAutoCloseDlgFind);
 
 	// 先頭（末尾）から再検索 2002.01.26 hor
-	CheckButton(IDC_CHECK_SEARCHALL, m_pShareData->m_common.search.bSearchAll);
+	CheckButton(IDC_CHECK_SEARCHALL, m_pShareData->common.search.bSearchAll);
 
 	return;
 }
@@ -226,7 +226,7 @@ int DlgFind::GetData(void)
 	// 検索／置換  見つからないときメッセージを表示
 	bNotifyNotFound = IsButtonChecked(IDC_CHECK_NOTIFYNOTFOUND);
 
-	m_pShareData->m_common.search.bNotifyNotFound = bNotifyNotFound;	// 検索／置換  見つからないときメッセージを表示
+	m_pShareData->common.search.bNotifyNotFound = bNotifyNotFound;	// 検索／置換  見つからないときメッセージを表示
 
 	// 検索文字列
 	int nBufferSize = ::GetWindowTextLength(GetItemHwnd(IDC_COMBO_TEXT)) + 1;
@@ -235,10 +235,10 @@ int DlgFind::GetData(void)
 	m_strText = to_wchar(&vText[0]);
 
 	// 検索ダイアログを自動的に閉じる
-	m_pShareData->m_common.search.bAutoCloseDlgFind = IsButtonChecked(IDC_CHECK_bAutoCloseDlgFind);
+	m_pShareData->common.search.bAutoCloseDlgFind = IsButtonChecked(IDC_CHECK_bAutoCloseDlgFind);
 
 	// 先頭（末尾）から再検索 2002.01.26 hor
-	m_pShareData->m_common.search.bSearchAll = IsButtonChecked(IDC_CHECK_SEARCHALL);
+	m_pShareData->common.search.bSearchAll = IsButtonChecked(IDC_CHECK_SEARCHALL);
 
 	if (0 < m_strText.length()) {
 		// 正規表現？
@@ -257,7 +257,7 @@ int DlgFind::GetData(void)
 		//@@@ 2002.2.2 YAZAKI CShareDataに移動
 		if (m_strText.size() < _MAX_PATH) {
 			SearchKeywordManager().AddToSearchKeys(m_strText.c_str());
-			m_pShareData->m_common.search.searchOption = searchOption;		// 検索オプション
+			m_pShareData->common.search.searchOption = searchOption;		// 検索オプション
 		}
 		EditView* pEditView = (EditView*)m_lParam;
 		if (1
@@ -269,7 +269,7 @@ int DlgFind::GetData(void)
 			pEditView->m_curSearchOption = searchOption;
 			pEditView->m_bCurSearchUpdate = true;
 		}
-		pEditView->m_nCurSearchKeySequence = GetDllShareData().m_common.search.nSearchKeySequence;
+		pEditView->m_nCurSearchKeySequence = GetDllShareData().common.search.nSearchKeySequence;
 		if (!m_bModal) {
 			// ダイアログデータの設定
 			//SetData();
@@ -347,7 +347,7 @@ BOOL DlgFind::OnBnClicked(int wID)
 				}//  02/06/26 ai End
 
 				// 検索ダイアログを自動的に閉じる
-				if (m_pShareData->m_common.search.bAutoCloseDlgFind) {
+				if (m_pShareData->common.search.bAutoCloseDlgFind) {
 					CloseDialog(0);
 				}
 			}
@@ -376,7 +376,7 @@ BOOL DlgFind::OnBnClicked(int wID)
 				}
 
 				// 検索ダイアログを自動的に閉じる
-				if (m_pShareData->m_common.search.bAutoCloseDlgFind) {
+				if (m_pShareData->common.search.bAutoCloseDlgFind) {
 					CloseDialog(0);
 				}
 			}
@@ -391,7 +391,7 @@ BOOL DlgFind::OnBnClicked(int wID)
 			}else {
 				pEditView->GetCommander().HandleCommand(F_BOOKMARK_PATTERN, false, 0, 0, 0, 0);
 				// 検索ダイアログを自動的に閉じる
-				if (m_pShareData->m_common.search.bAutoCloseDlgFind) {
+				if (m_pShareData->common.search.bAutoCloseDlgFind) {
 					CloseDialog(0);
 				}else {
 					::SendMessage(GetHwnd(), WM_NEXTDLGCTL, (WPARAM)GetItemHwnd(IDC_COMBO_TEXT), TRUE);

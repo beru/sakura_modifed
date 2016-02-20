@@ -316,7 +316,7 @@ bool ViewCommander::Command_TAGJUMP(bool bClose)
 		// Borland 形式のメッセージからのTAG JUMP
 		while (p < p_end) {
 			// skip space
-			for (; p < p_end && (*p == L' ' || *p == L'\t' || WCODE::IsLineDelimiter(*p, GetDllShareData().m_common.edit.bEnableExtEol)); ++p)
+			for (; p < p_end && (*p == L' ' || *p == L'\t' || WCODE::IsLineDelimiter(*p, GetDllShareData().common.edit.bEnableExtEol)); ++p)
 				;
 			if (p >= p_end)
 				break;
@@ -365,8 +365,8 @@ void ViewCommander::Command_TAGJUMPBACK(void)
 	// タグジャンプ情報の参照
 	if (!TagJumpManager().PopTagJump(&tagJump) || !IsSakuraMainWindow(tagJump.hwndReferer)) {
 		m_pCommanderView->SendStatusMessage(LS(STR_ERR_TAGJMPBK1));
-		// 2004.07.10 Moca m_TagJumpNumを0にしなくてもいいと思う
-		// GetDllShareData().m_TagJumpNum = 0;
+		// 2004.07.10 Moca tagJumpNumを0にしなくてもいいと思う
+		// GetDllShareData().tagJumpNum = 0;
 		return;
 	}
 
@@ -374,7 +374,7 @@ void ViewCommander::Command_TAGJUMPBACK(void)
 	ActivateFrameWindow(tagJump.hwndReferer);
 
 	// カーソルを移動させる
-	memcpy_raw(GetDllShareData().m_workBuffer.GetWorkBuffer<void>(), &(tagJump.point), sizeof(tagJump.point));
+	memcpy_raw(GetDllShareData().workBuffer.GetWorkBuffer<void>(), &(tagJump.point), sizeof(tagJump.point));
 	::SendMessage(tagJump.hwndReferer, MYWM_SETCARETPOS, 0, 0);
 
 	return;

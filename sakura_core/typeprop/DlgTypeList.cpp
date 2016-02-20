@@ -192,7 +192,7 @@ INT_PTR DlgTypeList::DispatchEvent(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM l
 			case LBN_SELCHANGE:
 				EnableItem(IDC_BUTTON_INITIALIZE, nIdx != 0);
 				EnableItem(IDC_BUTTON_UP_TYPE, 1 < nIdx);
-				EnableItem(IDC_BUTTON_DOWN_TYPE, nIdx != 0 && nIdx < GetDllShareData().m_nTypesCount - 1);
+				EnableItem(IDC_BUTTON_DOWN_TYPE, nIdx != 0 && nIdx < GetDllShareData().nTypesCount - 1);
 				EnableItem(IDC_BUTTON_DEL_TYPE, nIdx != 0);
 				if (type->szTypeExts[0] == '\0') {
 					::EnableWindow(hwndRMenu, FALSE);
@@ -315,11 +315,11 @@ void DlgTypeList::SetData(int selIdx)
 			selIdx = 0;
 		}
 	}
-	if (GetDllShareData().m_nTypesCount <= selIdx) {
-		selIdx = GetDllShareData().m_nTypesCount - 1;
+	if (GetDllShareData().nTypesCount <= selIdx) {
+		selIdx = GetDllShareData().nTypesCount - 1;
 	}
 	List_ResetContent(hwndList);	// リストを空にする
-	for (nIdx=0; nIdx<GetDllShareData().m_nTypesCount; ++nIdx) {
+	for (nIdx=0; nIdx<GetDllShareData().nTypesCount; ++nIdx) {
 		const TypeConfigMini* type;
 		DocTypeManager().GetTypeConfigMini(TypeConfigNum(nIdx), &type);
 		if (type->szTypeExts[0] != _T('\0')) {		// タイプ属性：拡張子リスト
@@ -350,15 +350,15 @@ void DlgTypeList::SetData(int selIdx)
 	::SelectObject(hDC, hFontOld);
 	::ReleaseDC(hwndList, hDC);
 	List_SetHorizontalExtent(hwndList, nExtent + 8);
-	if (GetDllShareData().m_nTypesCount <= selIdx) {
-		selIdx = GetDllShareData().m_nTypesCount - 1;
+	if (GetDllShareData().nTypesCount <= selIdx) {
+		selIdx = GetDllShareData().nTypesCount - 1;
 	}
 	List_SetCurSel(hwndList, selIdx);
 
 	::SendMessage(GetHwnd(), WM_COMMAND, MAKEWPARAM(IDC_LIST_TYPES, LBN_SELCHANGE), 0);
 	EnableItem(IDC_BUTTON_TEMPCHANGE, m_bEnableTempChange);
-	EnableItem(IDC_BUTTON_COPY_TYPE, GetDllShareData().m_nTypesCount < MAX_TYPES);
-	EnableItem(IDC_BUTTON_ADD_TYPE, GetDllShareData().m_nTypesCount < MAX_TYPES);
+	EnableItem(IDC_BUTTON_COPY_TYPE, GetDllShareData().nTypesCount < MAX_TYPES);
+	EnableItem(IDC_BUTTON_ADD_TYPE, GetDllShareData().nTypesCount < MAX_TYPES);
 	return;
 }
 
@@ -423,7 +423,7 @@ bool DlgTypeList::Import()
 	bool bAdd = cImpExpType.IsAddType();
 	if (bAdd) {
 		AddType();
-		nIdx = GetDllShareData().m_nTypesCount - 1;
+		nIdx = GetDllShareData().nTypesCount - 1;
 		type.nIdx = nIdx;
 	}else {
 		// UIを表示している間にずれているかもしれないのでindex再取得
@@ -504,7 +504,7 @@ bool DlgTypeList::InitializeType(void)
 	// 同じ名前にならないように数字をつける
 	int nNameNum = iDocType + 1;
 	bool bUpdate = true;
-	for (int i=1; i<GetDllShareData().m_nTypesCount; ++i) {
+	for (int i=1; i<GetDllShareData().nTypesCount; ++i) {
 		if (bUpdate) {
 			auto_sprintf_s(type.szTypeName, LS(STR_DLGTYPELIST_SETNAME), nNameNum);
 			++nNameNum;
@@ -539,7 +539,7 @@ bool DlgTypeList::InitializeType(void)
 
 bool DlgTypeList::CopyType()
 {
-	int nNewTypeIndex = GetDllShareData().m_nTypesCount;
+	int nNewTypeIndex = GetDllShareData().nTypesCount;
 	HWND hwndDlg = GetHwnd();
 	HWND hwndList = GetDlgItem(hwndDlg, IDC_LIST_TYPES);
 	int iDocType = List_GetCurSel(hwndList);
@@ -621,7 +621,7 @@ bool DlgTypeList::DownType()
 {
 	HWND hwndList = GetItemHwnd(IDC_LIST_TYPES);
 	int iDocType = List_GetCurSel(hwndList);
-	if (iDocType == 0 || GetDllShareData().m_nTypesCount <= iDocType + 1) {
+	if (iDocType == 0 || GetDllShareData().nTypesCount <= iDocType + 1) {
 		// 基本、最後の場合には何もしない
 		return true;
 	}
@@ -641,7 +641,7 @@ bool DlgTypeList::DownType()
 
 bool DlgTypeList::AddType()
 {
-	int nNewTypeIndex = GetDllShareData().m_nTypesCount;
+	int nNewTypeIndex = GetDllShareData().nTypesCount;
 	if (!DocTypeManager().AddTypeConfig(TypeConfigNum(nNewTypeIndex))) {
 		return false;
 	}
@@ -676,8 +676,8 @@ bool DlgTypeList::DelType()
 	}
 	iDocType = config.GetIndex();
 	DocTypeManager().DelTypeConfig(config);
-	if (GetDllShareData().m_nTypesCount <= iDocType) {
-		iDocType = GetDllShareData().m_nTypesCount - 1;
+	if (GetDllShareData().nTypesCount <= iDocType) {
+		iDocType = GetDllShareData().nTypesCount - 1;
 	}
 	SetData(iDocType);
 	SendChangeSetting();

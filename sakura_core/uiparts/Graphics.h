@@ -62,8 +62,8 @@ private:
 
 // フォント情報管理
 struct Font {
-	FontAttr	m_fontAttr;
-	HFONT		m_hFont;      // フォントハンドル
+	FontAttr	fontAttr;
+	HFONT		hFont;      // フォントハンドル
 };
 
 // 描画管理
@@ -130,8 +130,8 @@ public:
 	// フォント
 public:
 	void PushMyFont(HFONT hFont) {
-		Font sFont = { { false, false }, hFont };
-		PushMyFont(sFont);
+		Font font = { { false, false }, hFont };
+		PushMyFont(font);
 	}
 	void PushMyFont(const Font& font);
 	void PopMyFont();
@@ -143,7 +143,7 @@ public:
 	}
 	bool GetCurrentMyFontBold() {
 		assert(!m_vFonts.empty());
-		return  m_vFonts.back().m_fontAttr.bBoldFont;
+		return  m_vFonts.back().fontAttr.bBoldFont;
 	}
 
 	// ペン

@@ -72,7 +72,7 @@ HMENU MruFile::CreateMenu(MenuDrawer* pMenuDrawer) const
 HMENU MruFile::CreateMenu(HMENU hMenuPopUp, MenuDrawer* pMenuDrawer) const
 {
 	TCHAR szMenu[_MAX_PATH * 2 + 10];				//	メニューキャプション
-	const BOOL bMenuIcon = m_pShareData->m_common.window.bMenuIcon;
+	const BOOL bMenuIcon = m_pShareData->common.window.bMenuIcon;
 	FileNameManager::getInstance()->TransformFileName_MakeCache();
 
 	NONCLIENTMETRICS met;
@@ -202,29 +202,29 @@ bool MruFile::GetEditInfo(const TCHAR* pszPath, EditInfo* pfi) const
 void MruFile::Add(EditInfo* pEditInfo)
 {
 	//	ファイル名が無ければ無視
-	if (!pEditInfo || pEditInfo->m_szPath[0] == L'\0') {
+	if (!pEditInfo || pEditInfo->szPath[0] == L'\0') {
 		return;
 	}
 	
 	// すでに登録されている場合は、除外指定を無視する
-	if (m_recentFile.FindItemByPath(pEditInfo->m_szPath) == -1) {
-		int nSize = m_pShareData->m_history.m_aExceptMRU.size();
+	if (m_recentFile.FindItemByPath(pEditInfo->szPath) == -1) {
+		int nSize = m_pShareData->history.m_aExceptMRU.size();
 		for (int i=0; i<nSize; ++i) {
 			TCHAR szExceptMRU[_MAX_PATH];
-			FileNameManager::ExpandMetaToFolder(m_pShareData->m_history.m_aExceptMRU[i], szExceptMRU, _countof(szExceptMRU));
-			if (_tcsistr(pEditInfo->m_szPath,  szExceptMRU)) {
+			FileNameManager::ExpandMetaToFolder(m_pShareData->history.m_aExceptMRU[i], szExceptMRU, _countof(szExceptMRU));
+			if (_tcsistr(pEditInfo->szPath,  szExceptMRU)) {
 				return;
 			}
 		}
 	}
 	EditInfo tmpEditInfo = *pEditInfo;
-	tmpEditInfo.m_bIsModified = FALSE; // 変更フラグを無効に
+	tmpEditInfo.bIsModified = FALSE; // 変更フラグを無効に
 
 	TCHAR szDrive[_MAX_DRIVE];
 	TCHAR szDir[_MAX_DIR];
 	TCHAR szFolder[_MAX_PATH + 1];	//	ドライブ＋フォルダ
 	
-	_tsplitpath(pEditInfo->m_szPath, szDrive, szDir, NULL, NULL);	//	ドライブとフォルダを取り出す。
+	_tsplitpath(pEditInfo->szPath, szDrive, szDir, NULL, NULL);	//	ドライブとフォルダを取り出す。
 
 	//	Jan.  10, 2006 genta USBメモリはRemovable mediaと認識されるようなので，
 	//	一応無効化する．
@@ -243,7 +243,7 @@ void MruFile::Add(EditInfo* pEditInfo)
 
 	m_recentFile.AppendItem(&tmpEditInfo);
 	
-	::SHAddToRecentDocs(SHARD_PATH, to_wchar(pEditInfo->m_szPath));
+	::SHAddToRecentDocs(SHARD_PATH, to_wchar(pEditInfo->szPath));
 }
 
 // EOF

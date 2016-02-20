@@ -68,7 +68,7 @@ static const int keyword_select_target_combo[KEYWORD_SELECT_NUM] = {
 
 DlgKeywordSelect::DlgKeywordSelect()
 {
-	m_pKeywordSetMgr = &(m_pShareData->m_common.specialKeyword.keywordSetMgr);
+	m_pKeywordSetMgr = &(m_pShareData->common.specialKeyword.keywordSetMgr);
 
 	return;
 }

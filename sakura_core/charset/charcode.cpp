@@ -255,7 +255,7 @@ namespace WCODE
 
 			m_pCache = &m_localCache[(int)fMode];
 			if (cmode == CharWidthCacheMode::Share) {
-				m_pCache->SelectCache(&(GetDllShareData().m_sCharWidth));
+				m_pCache->SelectCache(&(GetDllShareData().charWidth));
 			}else {
 				if (m_parCache[(int)fMode] == 0) {
 					m_parCache[(int)fMode] = new CharWidthCache;

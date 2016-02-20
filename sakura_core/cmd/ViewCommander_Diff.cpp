@@ -47,17 +47,17 @@ static bool Commander_COMPARE_core(
 	LogicInt		nLineLenSrc;
 	const wchar_t*	pLineDes;
 	int nLineLenDes;
-	int max_size = (int)GetDllShareData().m_workBuffer.GetWorkBufferCount<EDIT_CHAR>();
+	int max_size = (int)GetDllShareData().workBuffer.GetWorkBufferCount<EDIT_CHAR>();
 	const DocLineMgr& docMgr = commander.GetDocument()->m_docLineMgr;
 
 	bDifferent = true;
 	{
-		pLineDes = GetDllShareData().m_workBuffer.GetWorkBuffer<const EDIT_CHAR>();
+		pLineDes = GetDllShareData().workBuffer.GetWorkBuffer<const EDIT_CHAR>();
 		int nLineOffset = 0;
 		for (;;) {
 			pLineSrc = docMgr.GetLine(poSrc.y)->GetDocLineStrWithEOL(&nLineLenSrc);
 			do {
-				// m_workBuffer#m_Workの排他制御。外部コマンド出力/TraceOut/Diffが対象
+				// workBuffer#m_Workの排他制御。外部コマンド出力/TraceOut/Diffが対象
 				LockGuard<Mutex> guard( ShareData::GetMutexShareWork() );
 				// 行(改行単位)データの要求
 				nLineLenDes = ::SendMessage( hwnd, MYWM_GETLINEDATA, poDes.y, nLineOffset );
@@ -118,7 +118,7 @@ void ViewCommander::Command_COMPARE(void)
 	TCHAR		szPath[_MAX_PATH + 1];
 	DlgCompare	cDlgCompare;
 	HWND		hwndMsgBox;	//@@@ 2003.06.12 MIK
-	auto& commonSetting = GetDllShareData().m_common;
+	auto& commonSetting = GetDllShareData().common;
 	auto& csCompare = commonSetting.compare;
 	// 比較後、左右に並べて表示
 	cDlgCompare.bCompareAndTileHorz = csCompare.bCompareAndTileHorz;
@@ -162,7 +162,7 @@ void ViewCommander::Command_COMPARE(void)
 	LogicPoint	poDes;
 	{
 		::SendMessage(hwndCompareWnd, MYWM_GETCARETPOS, 0, 0);
-		LogicPoint* ppoCaretDes = &(GetDllShareData().m_workBuffer.m_LogicPoint);
+		LogicPoint* ppoCaretDes = &(GetDllShareData().workBuffer.logicPoint);
 		poDes.x = ppoCaretDes->x;
 		poDes.y = ppoCaretDes->y;
 	}
@@ -173,7 +173,7 @@ void ViewCommander::Command_COMPARE(void)
 	// 比較後、左右に並べて表示
 // From Here Oct. 10, 2000 JEPRO	チェックボックスをボタン化すれば以下の行(To Here まで)は不要のはずだが
 // うまくいかなかったので元に戻してある…
-	if (GetDllShareData().m_common.compare.bCompareAndTileHorz) {
+	if (GetDllShareData().common.compare.bCompareAndTileHorz) {
 		HWND hWndArr[2];
 		hWndArr[0] = GetMainWindow();
 		hWndArr[1] = hwndCompareWnd;
@@ -207,11 +207,11 @@ void ViewCommander::Command_COMPARE(void)
 		/* カーソルを移動させる
 			比較相手は、別プロセスなのでメッセージを飛ばす。
 		*/
-		GetDllShareData().m_workBuffer.m_LogicPoint = poDes;
+		GetDllShareData().workBuffer.logicPoint = poDes;
 		::SendMessage(hwndCompareWnd, MYWM_SETCARETPOS, 0, 0);
 
 		// カーソルを移動させる
-		GetDllShareData().m_workBuffer.m_LogicPoint = poSrc;
+		GetDllShareData().workBuffer.logicPoint = poSrc;
 		::PostMessage(GetMainWindow(), MYWM_SETCARETPOS, 0, 0);
 		TopWarningMessage(hwndMsgBox, LS(STR_ERR_CEDITVIEW_CMD23));	// 位置を変更してからメッセージ	2008/4/27 Uchi
 	}
@@ -438,7 +438,7 @@ re_do:;
 		GetCaret().MoveCursor(ptXY_Layout, true);
 	}
 
-	if (GetDllShareData().m_common.search.bSearchAll) {
+	if (GetDllShareData().common.search.bSearchAll) {
 		// 見つからなかった。かつ、最初の検索
 		if (!bFound	&& bRedo) {
 			ptXY.y = 0 - 1;	// 1個手前を指定
@@ -489,7 +489,7 @@ re_do:;
 		GetCaret().MoveCursor(ptXY_Layout, true);
 	}
 
-	if (GetDllShareData().m_common.search.bSearchAll) {
+	if (GetDllShareData().common.search.bSearchAll) {
 		// 見つからなかった、かつ、最初の検索
 		if (!bFound	&& bRedo) {
 			// 2011.02.02 m_layoutMgr→m_docLineMgr

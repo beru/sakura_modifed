@@ -61,8 +61,8 @@ void MruListener::OnBeforeLoad(LoadInfo* pLoadInfo)
 	EncodingType ePrevCode = CODE_NONE;
 	int nPrevTypeId = -1;
 	if (MruFile().GetEditInfo(pLoadInfo->filePath, &fi)) {
-		ePrevCode = fi.m_nCharCode;
-		nPrevTypeId = fi.m_nTypeId;
+		ePrevCode = fi.nCharCode;
+		nPrevTypeId = fi.nTypeId;
 	}
 
 	// タイプ別設定
@@ -94,14 +94,14 @@ void MruListener::OnBeforeLoad(LoadInfo* pLoadInfo)
 		if (DocTypeManager().GetTypeConfigMini(pLoadInfo->nType, &type)) {
 			pLoadInfo->eCharCode = type->encoding.eDefaultCodetype;	// 無効値の回避	// 2011.01.24 ryoji CODE_DEFAULT -> eDefaultCodetype
 		}else {
-			pLoadInfo->eCharCode = GetDllShareData().m_TypeBasis.encoding.eDefaultCodetype;
+			pLoadInfo->eCharCode = GetDllShareData().typeBasis.encoding.eDefaultCodetype;
 		}
 	}
 
 	// 食い違う場合
 	if (IsValidCodeOrCPType(ePrevCode) && pLoadInfo->eCharCode != ePrevCode) {
 		// オプション：前回と文字コードが異なるときに問い合わせを行う
-		if (GetDllShareData().m_common.file.bQueryIfCodeChange && !pLoadInfo->bRequestReload) {
+		if (GetDllShareData().common.file.bQueryIfCodeChange && !pLoadInfo->bRequestReload) {
 			TCHAR szCpNameNew[260];
 			TCHAR szCpNameOld[260];
 			CodePage::GetNameLong(szCpNameOld, ePrevCode);
@@ -150,10 +150,10 @@ void MruListener::OnAfterLoad(const LoadInfo& loadInfo)
 	bool bIsExistInMRU = mru.GetEditInfo(pDoc->m_docFile.GetFilePath(), &eiOld);
 
 	// キャレット位置の復元
-	if (bIsExistInMRU && GetDllShareData().m_common.file.GetRestoreCurPosition()) {
+	if (bIsExistInMRU && GetDllShareData().common.file.GetRestoreCurPosition()) {
 		// キャレット位置取得
 		LayoutPoint ptCaretPos;
-		pDoc->m_layoutMgr.LogicToLayout(eiOld.m_ptCursor, &ptCaretPos);
+		pDoc->m_layoutMgr.LogicToLayout(eiOld.ptCursor, &ptCaretPos);
 
 		// ビュー取得
 		EditView& view = pDoc->m_pEditWnd->GetActiveView();
@@ -162,13 +162,13 @@ void MruListener::OnAfterLoad(const LoadInfo& loadInfo)
 			// ファイルの最後に移動
 			view.GetCommander().HandleCommand(F_GOFILEEND, false, 0, 0, 0, 0);
 		}else {
-			view.GetTextArea().SetViewTopLine(eiOld.m_nViewTopLine); // 2001/10/20 novice
-			view.GetTextArea().SetViewLeftCol(eiOld.m_nViewLeftCol); // 2001/10/20 novice
+			view.GetTextArea().SetViewTopLine(eiOld.nViewTopLine); // 2001/10/20 novice
+			view.GetTextArea().SetViewLeftCol(eiOld.nViewLeftCol); // 2001/10/20 novice
 			// From Here Mar. 28, 2003 MIK
 			// 改行の真ん中にカーソルが来ないように。
-			const DocLine *pTmpDocLine = pDoc->m_docLineMgr.GetLine(eiOld.m_ptCursor.GetY2());	// 2008.08.22 ryoji 改行単位の行番号を渡すように修正
+			const DocLine *pTmpDocLine = pDoc->m_docLineMgr.GetLine(eiOld.ptCursor.GetY2());	// 2008.08.22 ryoji 改行単位の行番号を渡すように修正
 			if (pTmpDocLine) {
-				if (pTmpDocLine->GetLengthWithoutEOL() < eiOld.m_ptCursor.x) {
+				if (pTmpDocLine->GetLengthWithoutEOL() < eiOld.ptCursor.x) {
 					ptCaretPos.x--;
 				}
 			}
@@ -180,11 +180,11 @@ void MruListener::OnAfterLoad(const LoadInfo& loadInfo)
 
 	// ブックマーク復元  // 2002.01.16 hor
 	if (bIsExistInMRU) {
-		if (GetDllShareData().m_common.file.GetRestoreBookmarks()) {
-			BookmarkManager(&pDoc->m_docLineMgr).SetBookMarks(eiOld.m_szMarkLines);
+		if (GetDllShareData().common.file.GetRestoreBookmarks()) {
+			BookmarkManager(&pDoc->m_docLineMgr).SetBookMarks(eiOld.szMarkLines);
 		}
 	}else {
-		eiOld.m_szMarkLines[0] = 0;
+		eiOld.szMarkLines[0] = 0;
 	}
 
 	// MRUリストへの登録
@@ -192,10 +192,10 @@ void MruListener::OnAfterLoad(const LoadInfo& loadInfo)
 	pDoc->GetEditInfo(&eiNew);
 	// 2014.07.04 ブックマークの保持(エディタが落ちたときブックマークが消えるため)
 	if (bIsExistInMRU) {
-		if (GetDllShareData().m_common.file.GetRestoreBookmarks()) {
+		if (GetDllShareData().common.file.GetRestoreBookmarks()) {
 			// SetBookMarksでデータがNUL区切りに書き換わっているので再取得
 			mru.GetEditInfo(pDoc->m_docFile.GetFilePath(), &eiOld);
-			auto_strcpy(eiNew.m_szMarkLines, eiOld.m_szMarkLines);
+			auto_strcpy(eiNew.szMarkLines, eiOld.szMarkLines);
 		}
 	}
 	mru.Add(&eiNew);
@@ -234,7 +234,7 @@ void MruListener::_HoldBookmarks_And_AddToMRU()
 	pDoc->GetEditInfo(&fi);
 
 	// ブックマーク情報の保存
-	wcscpy_s(fi.m_szMarkLines, BookmarkManager(&pDoc->m_docLineMgr).GetBookMarks());
+	wcscpy_s(fi.szMarkLines, BookmarkManager(&pDoc->m_docLineMgr).GetBookMarks());
 
 	// MRUリストに登録
 	MruFile mru;

@@ -29,7 +29,7 @@ struct TypeConfig;
 
 //@@@ 2001.11.17 add start MIK
 struct RegexKeywordInfo {
-	int	m_nColorIndex;		// 色指定番号
+	int	nColorIndex;		// 色指定番号
 };
 //@@@ 2001.11.17 add end MIK
 

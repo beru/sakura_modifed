@@ -80,7 +80,7 @@ void AutoReloadAgent::OnAfterLoad(const LoadInfo& loadInfo)
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 bool AutoReloadAgent::_ToDoChecking() const
 {
-	const CommonSetting_File& setting = GetDllShareData().m_common.file;
+	const CommonSetting_File& setting = GetDllShareData().common.file;
 	HWND hwndActive = ::GetActiveWindow();
 	if (0
 		|| IsPausing()
@@ -121,7 +121,7 @@ void AutoReloadAgent::CheckFileTimeStamp()
 {
 	// ñ¢ï“èWÇ≈çƒÉçÅ[ÉhéûÇÃíxâÑ
 	if (m_eWatchUpdate == WU_AUTOLOAD) {
-		if (++m_nDelayCount < GetDllShareData().m_common.file.nAutoloadDelay) {
+		if (++m_nDelayCount < GetDllShareData().common.file.nAutoloadDelay) {
 			return;
 		}
 		m_nDelayCount = 0;

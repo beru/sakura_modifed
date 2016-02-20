@@ -63,10 +63,10 @@ bool Figure_Eol::Match(const wchar_t* pText, int nTextLen) const
 //$$ 高速化可能。
 bool Figure_Eol::DrawImp(ColorStrategyInfo* pInfo)
 {
-	EditView* pView = pInfo->m_pView;
+	EditView* pView = pInfo->pView;
 
 	// 改行取得
-	const Layout* pLayout = pInfo->m_pDispPos->GetLayoutRef();
+	const Layout* pLayout = pInfo->pDispPos->GetLayoutRef();
 	Eol eol = pLayout->GetLayoutEol();
 	if (eol.GetLen()) {
 		// CFigureSpace::DrawImp_StyleSelectもどき。選択・検索色を優先する
@@ -103,24 +103,24 @@ bool Figure_Eol::DrawImp(ColorStrategyInfo* pInfo)
 			crText = pcText->GetTextColor();
 			crBack = pcBack->GetBackColor();
 		}
-		pInfo->m_gr.PushTextForeColor(crText);
-		pInfo->m_gr.PushTextBackColor(crBack);
+		pInfo->gr.PushTextForeColor(crText);
+		pInfo->gr.PushTextBackColor(crBack);
 		bool bTrans = pView->IsBkBitmap() && textType.GetBackColor() == crBack;
 		Font font;
-		font.m_fontAttr.bBoldFont = spaceType.IsBoldFont() || currentStyle.IsBoldFont();
-		font.m_fontAttr.bUnderLine = spaceType.HasUnderLine();
-		font.m_hFont = pInfo->m_pView->GetFontset().ChooseFontHandle(font.m_fontAttr);
-		pInfo->m_gr.PushMyFont(font);
+		font.fontAttr.bBoldFont = spaceType.IsBoldFont() || currentStyle.IsBoldFont();
+		font.fontAttr.bUnderLine = spaceType.HasUnderLine();
+		font.hFont = pInfo->pView->GetFontset().ChooseFontHandle(font.fontAttr);
+		pInfo->gr.PushMyFont(font);
 
-		DispPos pos(*pInfo->m_pDispPos);	// 現在位置を覚えておく
-		_DispEOL(pInfo->m_gr, pInfo->m_pDispPos, eol, pView, bTrans);
+		DispPos pos(*pInfo->pDispPos);	// 現在位置を覚えておく
+		_DispEOL(pInfo->gr, pInfo->pDispPos, eol, pView, bTrans);
 		DrawImp_StylePop(pInfo);
 		DrawImp_DrawUnderline(pInfo, pos);
 
-		pInfo->m_nPosInLogic += eol.GetLen();
+		pInfo->nPosInLogic += eol.GetLen();
 	}else {
 		// 無限ループ対策
-		pInfo->m_nPosInLogic += 1;
+		pInfo->nPosInLogic += 1;
 		assert_warning( 1 );
 	}
 

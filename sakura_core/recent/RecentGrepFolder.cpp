@@ -35,8 +35,8 @@
 RecentGrepFolder::RecentGrepFolder()
 {
 	Create(
-		GetShareData()->m_searchKeywords.grepFolders.dataPtr(),
-		&GetShareData()->m_searchKeywords.grepFolders._GetSizeRef(),
+		GetShareData()->searchKeywords.grepFolders.dataPtr(),
+		&GetShareData()->searchKeywords.grepFolders._GetSizeRef(),
 		NULL,
 		MAX_GREPFOLDER,
 		NULL

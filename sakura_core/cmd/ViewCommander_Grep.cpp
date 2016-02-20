@@ -123,7 +123,7 @@ void ViewCommander::Command_GREP(void)
 		}
 	}else {
 		// 編集ウィンドウの上限チェック
-		if (GetDllShareData().m_nodes.m_nEditArrNum >= MAX_EDITWINDOWS) {	// 最大値修正	//@@@ 2003.05.31 MIK
+		if (GetDllShareData().nodes.nEditArrNum >= MAX_EDITWINDOWS) {	// 最大値修正	//@@@ 2003.05.31 MIK
 			OkMessage(m_pCommanderView->GetHwnd(), LS(STR_MAXWINDOW), MAX_EDITWINDOWS);
 			return;
 		}
@@ -152,9 +152,9 @@ void ViewCommander::Command_GREP_REPLACE_DLG( void )
 		dlgGrepRep.m_strText = memCurText.GetStringPtr();
 		dlgGrepRep.m_bSetText = true;
 	}
-	if (0 < GetDllShareData().m_searchKeywords.replaceKeys.size()) {
-		if (dlgGrepRep.nReplaceKeySequence < GetDllShareData().m_common.search.nReplaceKeySequence) {
-			dlgGrepRep.m_strText2 = GetDllShareData().m_searchKeywords.replaceKeys[0];
+	if (0 < GetDllShareData().searchKeywords.replaceKeys.size()) {
+		if (dlgGrepRep.nReplaceKeySequence < GetDllShareData().common.search.nReplaceKeySequence) {
+			dlgGrepRep.m_strText2 = GetDllShareData().searchKeywords.replaceKeys[0];
 		}
 	}
 
@@ -214,7 +214,7 @@ void ViewCommander::Command_GREP_REPLACE(void)
 		);
 	}else {
 		// 編集ウィンドウの上限チェック
-		if (GetDllShareData().m_nodes.m_nEditArrNum >= MAX_EDITWINDOWS ){	//最大値修正	//@@@ 2003.05.31 MIK
+		if (GetDllShareData().nodes.nEditArrNum >= MAX_EDITWINDOWS ){	//最大値修正	//@@@ 2003.05.31 MIK
 			OkMessage( m_pCommanderView->GetHwnd(), _T("編集ウィンドウ数の上限は%dです。\nこれ以上は同時に開けません。"), MAX_EDITWINDOWS );
 			return;
 		}
@@ -273,7 +273,7 @@ void ViewCommander::Command_GREP_REPLACE(void)
 			cmdLine.GetStringPtr(),
 			false,
 			NULL,
-			GetDllShareData().m_common.tabBar.bNewWindow
+			GetDllShareData().common.tabBar.bNewWindow
 		);
 	}
 	return;

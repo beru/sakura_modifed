@@ -61,39 +61,39 @@ void WSHIfObj::ReadyCommands(
 	int flags
 	)
 {
-	while (Info->m_nFuncID != -1) {	// Aug. 29, 2002 genta 番人の値が変更されたのでここも変更
+	while (Info->nFuncID != -1) {	// Aug. 29, 2002 genta 番人の値が変更されたのでここも変更
 		wchar_t FuncName[256];
-		wcscpy(FuncName, Info->m_pszFuncName);
+		wcscpy(FuncName, Info->pszFuncName);
 
 		int ArgCount = 0;
-		if (Info->m_pData) {
-			ArgCount = Info->m_pData->m_nArgMinSize;
+		if (Info->pData) {
+			ArgCount = Info->pData->nArgMinSize;
 		}else {
 			for (int i=0; i<4; ++i) {
-				if (Info->m_varArguments[i] != VT_EMPTY) {
+				if (Info->varArguments[i] != VT_EMPTY) {
 					++ArgCount;
 				}
 			}
 		}
 		VARTYPE* varArgTmp = NULL;
-		VARTYPE* varArg = Info->m_varArguments;
+		VARTYPE* varArg = Info->varArguments;
 		if (4 < ArgCount) {
 			varArgTmp = varArg = new VARTYPE[ArgCount];
 			for (int i=0; i<ArgCount; ++i) {
 				if (i < 4) {
-					varArg[i] = Info->m_varArguments[i];
+					varArg[i] = Info->varArguments[i];
 				}else {
-					varArg[i] = Info->m_pData->m_pVarArgEx[i-4];
+					varArg[i] = Info->pData->pVarArgEx[i-4];
 				}
 			}
 		}
 		// 2007.07.21 genta : flagを加えた値を登録する
 		this->AddMethod(
 			FuncName,
-			(Info->m_nFuncID | flags),
+			(Info->nFuncID | flags),
 			varArg,
 			ArgCount,
-			Info->m_varResult,
+			Info->varResult,
 			reinterpret_cast<CIfObjMethod>(&WSHIfObj::MacroCommand)
 			/* WSHIfObjを継承したサブクラスからReadyCommandsを呼び出した場合、
 			 * サブクラスのMacroCommandが呼び出される。 */

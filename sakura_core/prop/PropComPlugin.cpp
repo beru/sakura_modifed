@@ -453,7 +453,7 @@ int PropPlugin::GetData(HWND hwndDlg)
 	m_common.plugin.bEnablePlugin = DlgButton_IsChecked(hwndDlg, IDC_CHECK_PluginEnable);
 
 	// プラグインリストは今のところ変更できる部分がない
-	//「新規プラグイン追加」はm_commonに直接書き込むので、この関数ですることはない
+	//「新規プラグイン追加」はcommonに直接書き込むので、この関数ですることはない
 
 	return TRUE;
 }
@@ -572,7 +572,7 @@ bool PropPlugin::BrowseReadMe(const std::tstring& sReadMeName)
 	cmdLineBuf.AppendF(_T(" -R -CODE=99"));
 
 	// グループID
-	int nGroup = GetDllShareData().m_nodes.m_nGroupSequences;
+	int nGroup = GetDllShareData().nodes.nGroupSequences;
 	if (nGroup > 0) {
 		cmdLineBuf.AppendF(_T(" -GROUP=%d"), nGroup + 1);
 	}

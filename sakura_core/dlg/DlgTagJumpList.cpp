@@ -260,9 +260,9 @@ void DlgTagJumpList::SetData(void)
 		HWND hwndKey;
 		hwndKey = GetItemHwnd(IDC_KEYWORD);
 
-		m_bTagJumpICase = m_pShareData->m_tagJump.m_bTagJumpICase;
+		m_bTagJumpICase = m_pShareData->tagJump.bTagJumpICase;
 		CheckButton(IDC_CHECK_ICASE, m_bTagJumpICase);
-		m_bTagJumpAnyWhere = m_pShareData->m_tagJump.m_bTagJumpAnyWhere;
+		m_bTagJumpAnyWhere = m_pShareData->tagJump.bTagJumpAnyWhere;
 		CheckButton(IDC_CHECK_ANYWHERE, m_bTagJumpAnyWhere);
 		m_bTagJumpExactMatch = FALSE;
 		Combo_LimitText(hwndKey, _MAX_PATH-1);
@@ -393,8 +393,8 @@ int DlgTagJumpList::GetData(void)
 
 	// From Here 2005.04.03 MIK 設定値の保存
 	if (!IsDirectTagJump()) {
-		m_pShareData->m_tagJump.m_bTagJumpICase = m_bTagJumpICase;
-		m_pShareData->m_tagJump.m_bTagJumpAnyWhere = m_bTagJumpAnyWhere;
+		m_pShareData->tagJump.bTagJumpICase = m_bTagJumpICase;
+		m_pShareData->tagJump.bTagJumpAnyWhere = m_bTagJumpAnyWhere;
 		// 2010.07.22 候補が空でもジャンプで閉じたときは、オプションを保存する
 		if (m_nIndex == -1 || m_nIndex >= m_pList->GetCapacity()) {
 			return FALSE;
@@ -445,7 +445,7 @@ BOOL DlgTagJumpList::OnInitDialog(
 		GetItemClientRect(anchorList[i].id, m_rcItems[i]);
 	}
 
-	RECT rcDialog = GetDllShareData().m_common.others.rcTagJumpDialog;
+	RECT rcDialog = GetDllShareData().common.others.rcTagJumpDialog;
 	if (0
 		|| rcDialog.left != 0
 		|| rcDialog.bottom != 0
@@ -610,7 +610,7 @@ BOOL DlgTagJumpList::OnSize(WPARAM wParam, LPARAM lParam)
 	// 基底クラスメンバ
 	Dialog::OnSize(wParam, lParam);
 
-	GetWindowRect(&GetDllShareData().m_common.others.rcTagJumpDialog);
+	GetWindowRect(&GetDllShareData().common.others.rcTagJumpDialog);
 
 	RECT  rc;
 	POINT ptNew;
@@ -628,7 +628,7 @@ BOOL DlgTagJumpList::OnSize(WPARAM wParam, LPARAM lParam)
 
 BOOL DlgTagJumpList::OnMove(WPARAM wParam, LPARAM lParam)
 {
-	GetWindowRect(&GetDllShareData().m_common.others.rcTagJumpDialog);
+	GetWindowRect(&GetDllShareData().common.others.rcTagJumpDialog);
 
 	return Dialog::OnMove(wParam, lParam);
 }
@@ -728,7 +728,7 @@ bool DlgTagJumpList::AddParamA(
 	int fileBase
 	)
 {
-	if (m_nIndex == -1) m_nIndex = 0;	// 規定値
+	if (nIndex == -1) nIndex = 0;	// 規定値
 
 	ClearPrevFindInfo();
 	m_bNextItem = false;
@@ -1077,7 +1077,7 @@ int DlgTagJumpList::FindDirectTagJump()
 		true,  // 完全一致
 		false, // 大小を区別
 		true,  // 自動モード
-		m_pShareData->m_common.search.nTagJumpMode
+		m_pShareData->common.search.nTagJumpMode
 	);
 }
 
@@ -1093,7 +1093,7 @@ void DlgTagJumpList::find_key(const wchar_t* keyword)
 		FALSE != m_bTagJumpExactMatch,
 		FALSE != m_bTagJumpICase,
 		IsDirectTagJump(),
-		IsDirectTagJump() ? (m_pShareData->m_common.search.nTagJumpMode) : m_pShareData->m_common.search.nTagJumpModeKeyword
+		IsDirectTagJump() ? (m_pShareData->common.search.nTagJumpMode) : m_pShareData->common.search.nTagJumpModeKeyword
 	);
 	SetItemText(IDC_STATIC_KEYWORD, LS(STR_DLGTAGJMP_LIST1));
 	::UpdateWindow(GetItemHwnd(IDC_STATIC_KEYWORD));

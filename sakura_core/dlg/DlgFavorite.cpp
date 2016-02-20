@@ -383,7 +383,7 @@ BOOL DlgFavorite::OnInitDialog(
 	CreateSizeBox();
 	Dialog::OnSize();
 
-	RECT rcDialog = GetDllShareData().m_common.others.rcFavoriteDialog;
+	RECT rcDialog = GetDllShareData().common.others.rcFavoriteDialog;
 	if (0
 		|| rcDialog.left != 0
 		|| rcDialog.bottom != 0
@@ -1205,7 +1205,7 @@ BOOL DlgFavorite::OnSize(WPARAM wParam, LPARAM lParam)
 	// äÓíÍÉNÉâÉXÉÅÉìÉo
 	Dialog::OnSize(wParam, lParam);
 
-	GetWindowRect(&GetDllShareData().m_common.others.rcFavoriteDialog);
+	GetWindowRect(&GetDllShareData().common.others.rcFavoriteDialog);
 
 	RECT rc;
 	POINT ptNew;
@@ -1227,7 +1227,7 @@ BOOL DlgFavorite::OnSize(WPARAM wParam, LPARAM lParam)
 
 BOOL DlgFavorite::OnMove(WPARAM wParam, LPARAM lParam)
 {
-	GetWindowRect(&GetDllShareData().m_common.others.rcFavoriteDialog);
+	GetWindowRect(&GetDllShareData().common.others.rcFavoriteDialog);
 	
 	return Dialog::OnMove(wParam, lParam);
 }

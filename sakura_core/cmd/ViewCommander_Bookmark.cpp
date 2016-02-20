@@ -78,7 +78,7 @@ void ViewCommander::Command_JUMP(void)
 
 	if (!dlgJump.m_bPLSQL) {	// PL/SQLソースの有効行か
 		// 行番号の表示 false=折り返し単位／true=改行単位
-		if (GetDllShareData().m_bLineNumIsCRLF_ForJump) {
+		if (GetDllShareData().bLineNumIsCRLF_ForJump) {
 			if (LogicInt(0) >= nLineNum) {
 				nLineNum = LogicInt(1);
 			}
@@ -200,7 +200,7 @@ void ViewCommander::Command_JUMP(void)
 				if (0
 					|| let == L'\t'
 					|| let == L' '
-					|| WCODE::IsLineDelimiter(pLine[i], GetDllShareData().m_common.edit.bEnableExtEol)
+					|| WCODE::IsLineDelimiter(pLine[i], GetDllShareData().common.edit.bEnableExtEol)
 				) {
 					continue;
 				}else
@@ -232,7 +232,7 @@ void ViewCommander::Command_JUMP(void)
 				bValidLine = TRUE;
 			}
 			// コメントブロック内の改行だけの行
-			if (WCODE::IsLineDelimiter(pLine[nBgn], GetDllShareData().m_common.edit.bEnableExtEol)) {
+			if (WCODE::IsLineDelimiter(pLine[nBgn], GetDllShareData().common.edit.bEnableExtEol)) {
 				bValidLine = FALSE;
 			}
 		}
@@ -322,7 +322,7 @@ re_do:;								// hor
 		m_pCommanderView->MoveCursorSelecting(ptLayout, m_pCommanderView->GetSelectionInfo().m_bSelectingLock);
 	}
     // 2002.01.26 hor
-	if (GetDllShareData().m_common.search.bSearchAll) {
+	if (GetDllShareData().common.search.bSearchAll) {
 		if (!bFound	&&		// 見つからなかった
 			bRedo			// 最初の検索
 		) {
@@ -366,7 +366,7 @@ re_do:;								// hor
 		m_pCommanderView->MoveCursorSelecting(ptLayout, m_pCommanderView->GetSelectionInfo().m_bSelectingLock);
 	}
     // 2002.01.26 hor
-	if (GetDllShareData().m_common.search.bSearchAll) {
+	if (GetDllShareData().common.search.bSearchAll) {
 		if (!bFound	&&	// 見つからなかった
 			bRedo		// 最初の検索
 		) {
@@ -434,7 +434,7 @@ void ViewCommander::Command_FUNCLIST_NEXT(void)
 			}
 			return;
 		}
-		if (!GetDllShareData().m_common.search.bSearchAll) {
+		if (!GetDllShareData().common.search.bSearchAll) {
 			break;
 		}
 		ptXY.y = -1;
@@ -472,7 +472,7 @@ void ViewCommander::Command_FUNCLIST_PREV(void)
 			}
 			return;
 		}
-		if (!GetDllShareData().m_common.search.bSearchAll) {
+		if (!GetDllShareData().common.search.bSearchAll) {
 			break;
 		}
 		ptXY.y= GetDocument()->m_docLineMgr.GetLineCount();

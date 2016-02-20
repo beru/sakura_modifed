@@ -145,9 +145,9 @@ void DlgProperty::SetData(void)
 
 	if ((nFind = ::FindFirstFile(pEditDoc->m_docFile.GetFilePath(), &wfd)) != INVALID_HANDLE_VALUE) {
 		if (pEditDoc->m_docFile.IsFileLocking()) {
-			if (m_pShareData->m_common.file.nFileShareMode == SHAREMODE_DENY_WRITE) {
+			if (m_pShareData->common.file.nFileShareMode == SHAREMODE_DENY_WRITE) {
 				auto_sprintf(szWork, LS(STR_DLGFLPROP_W_LOCK));
-			}else if (m_pShareData->m_common.file.nFileShareMode == SHAREMODE_DENY_READWRITE) {
+			}else if (m_pShareData->common.file.nFileShareMode == SHAREMODE_DENY_READWRITE) {
 				auto_sprintf(szWork, LS(STR_DLGFLPROP_RW_LOCK));
 			}else {
 				auto_sprintf(szWork, LS(STR_DLGFLPROP_LOCK));

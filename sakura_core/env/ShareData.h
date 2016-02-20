@@ -25,7 +25,7 @@
 // 2007.09.23 kobake m_nGREPFILEArrNum,       m_szGREPFILEArr       を grepFiles       にまとめました
 // 2007.09.23 kobake m_nGREPFOLDERArrNum,     m_szGREPFOLDERArr     を grepFolders     にまとめました
 // 2007.09.23 kobake m_szCmdArr,              m_nCmdArrNum          を m_aCommands        にまとめました
-// 2007.09.23 kobake m_nTagJumpKeywordArrNum, m_szTagJumpKeywordArr を m_aTagJumpKeywords にまとめました
+// 2007.09.23 kobake m_nTagJumpKeywordArrNum, m_szTagJumpKeywordArr を aTagJumpKeywords にまとめました
 // 2007.12.13 kobake DllSharedDataへの簡易アクセサを用意
 
 #pragma once

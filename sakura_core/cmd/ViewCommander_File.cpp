@@ -596,7 +596,7 @@ void ViewCommander::Command_EXITALL(void)
 /*!	@brief 編集中の内容を別名保存
 
 	主に編集中の一時ファイル出力などの目的に使用する．
-	現在開いているファイル(m_szFilePath)には影響しない．
+	現在開いているファイル(szFilePath)には影響しない．
 
 	@retval	TRUE 正常終了
 	@retval	FALSE ファイル作成に失敗
@@ -761,7 +761,7 @@ bool ViewCommander::Command_INSFILE(
 		EditInfo    fi;
 		const MruFile  mru;
 		if (mru.GetEditInfo(to_tchar(filename), &fi)) {
-				nSaveCharCode = fi.m_nCharCode;
+				nSaveCharCode = fi.nCharCode;
 		}else {
 			nSaveCharCode = GetDocument()->GetDocumentEncoding();
 		}

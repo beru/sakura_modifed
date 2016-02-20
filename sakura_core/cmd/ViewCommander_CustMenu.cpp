@@ -87,7 +87,7 @@ int ViewCommander::Command_CUSTMENU(int nMenuIdx)
 	if (nMenuIdx < 0 || MAX_CUSTOM_MENU <= nMenuIdx) {
 		return 0;
 	}
-	if (GetDllShareData().m_common.customMenu.nCustMenuItemNumArr[nMenuIdx] == 0) {
+	if (GetDllShareData().common.customMenu.nCustMenuItemNumArr[nMenuIdx] == 0) {
 		return 0;
 	}
 	HMENU hMenu = ::CreatePopupMenu();

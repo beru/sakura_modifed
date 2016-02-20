@@ -942,7 +942,7 @@ void LayoutMgr::LayoutToLogicEx(
 				return;
 			}else {
 				pData = GetLineStr(ptLayout.GetY2() - LayoutInt(1), &nDataLen);
-				if (WCODE::IsLineDelimiter(pData[nDataLen - 1], GetDllShareData().m_common.edit.bEnableExtEol)) {
+				if (WCODE::IsLineDelimiter(pData[nDataLen - 1], GetDllShareData().common.edit.bEnableExtEol)) {
 					pptLogic->Set(LogicInt(0), m_pDocLineMgr->GetLineCount());
 					return;
 				}else {

@@ -110,7 +110,7 @@ bool Color_Heredoc::BeginColor(const StringRef& str, int nPos)
 			i < length
 			&& WCODE::IsLineDelimiter(
 				str.At(i),
-				GetDllShareData().m_common.edit.bEnableExtEol
+				GetDllShareData().common.edit.bEnableExtEol
 			)
 		) {
 			m_id = std::wstring(str.GetPtr() + nPosIdStart, k - nPosIdStart);
@@ -141,7 +141,7 @@ bool Color_Heredoc::EndColor(const StringRef& str, int nPos)
 					&& str.At(i) == L';'
 					&& WCODE::IsLineDelimiter(
 						str.At(i+1),
-						GetDllShareData().m_common.edit.bEnableExtEol
+						GetDllShareData().common.edit.bEnableExtEol
 					)
 				) {
 					// ID;
@@ -151,7 +151,7 @@ bool Color_Heredoc::EndColor(const StringRef& str, int nPos)
 					m_nSize < str.GetLength()
 					&& WCODE::IsLineDelimiter(
 						str.At(m_nSize),
-						GetDllShareData().m_common.edit.bEnableExtEol
+						GetDllShareData().common.edit.bEnableExtEol
 					)
 				) {
 					// ID

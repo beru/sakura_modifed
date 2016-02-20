@@ -35,7 +35,7 @@
 */
 const TCHAR* RecentFile::GetItemText(int nIndex) const
 {
-	return GetItem(nIndex)->m_szPath;
+	return GetItem(nIndex)->szPath;
 }
 
 
@@ -46,11 +46,11 @@ const TCHAR* RecentFile::GetItemText(int nIndex) const
 RecentFile::RecentFile()
 {
 	Create(
-		GetShareData()->m_history.m_fiMRUArr,
-		&GetShareData()->m_history.m_nMRUArrNum,
-		GetShareData()->m_history.m_bMRUArrFavorite,
+		GetShareData()->history.m_fiMRUArr,
+		&GetShareData()->history.m_nMRUArrNum,
+		GetShareData()->history.m_bMRUArrFavorite,
 		MAX_MRU,
-		&(GetShareData()->m_common.general.nMRUArrNum_MAX)
+		&(GetShareData()->common.general.nMRUArrNum_MAX)
 	);
 }
 
@@ -62,16 +62,16 @@ bool RecentFile::DataToReceiveType(const EditInfo** dst, const EditInfo* src) co
 
 bool RecentFile::TextToDataType(EditInfo* dst, LPCTSTR pszText) const
 {
-	if (_countof(dst->m_szPath) < auto_strlen(pszText) + 1) {
+	if (_countof(dst->szPath) < auto_strlen(pszText) + 1) {
 		return false;
 	}
-	_tcscpy_s(dst->m_szPath, pszText);
+	_tcscpy_s(dst->szPath, pszText);
 	return true;
 }
 
 int RecentFile::CompareItem(const EditInfo* p1, const EditInfo* p2) const
 {
-	return _tcsicmp(p1->m_szPath, p2->m_szPath);
+	return _tcsicmp(p1->szPath, p2->szPath);
 }
 
 void RecentFile::CopyItem(EditInfo* dst, const EditInfo* src) const
@@ -87,7 +87,7 @@ int RecentFile::FindItemByPath(const TCHAR* pszPath) const
 {
 	int n = GetItemCount();
 	for (int i=0; i<n; ++i) {
-		if (_tcsicmp(GetItem(i)->m_szPath, pszPath) == 0) {
+		if (_tcsicmp(GetItem(i)->szPath, pszPath) == 0) {
 			return i;
 		}
 	}

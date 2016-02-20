@@ -54,7 +54,7 @@ void EditView::PreprocessCommand_hokan(int nCommand)
 */
 void EditView::PostprocessCommand_hokan(void)
 {
-	if (GetDllShareData().m_common.helper.bUseHokan && !m_bExecutingKeyMacro) { // キーボードマクロの実行中
+	if (GetDllShareData().common.helper.bUseHokan && !m_bExecutingKeyMacro) { // キーボードマクロの実行中
 		NativeW memData;
 
 		// カーソル直前の単語を取得
@@ -165,7 +165,7 @@ void EditView::ShowHokanMgr(NativeW& memData, bool bAutoDecided)
 	
 	//	補完終了。
 	if (!m_bHokan) {
-		GetDllShareData().m_common.helper.bUseHokan = FALSE;	//	入力補完終了の知らせ
+		GetDllShareData().common.helper.bUseHokan = FALSE;	//	入力補完終了の知らせ
 	}
 }
 

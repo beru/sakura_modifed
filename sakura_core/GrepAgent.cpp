@@ -213,7 +213,7 @@ DWORD GrepAgent::DoGrep(
 	pViewDst->m_bCurSrchKeyMark = true;								// 検索文字列のマーク
 	pViewDst->m_strCurSearchKey = pmGrepKey->GetStringPtr();			// 検索文字列
 	pViewDst->m_curSearchOption = searchOption;						// 検索オプション
-	pViewDst->m_nCurSearchKeySequence = GetDllShareData().m_common.search.nSearchKeySequence;
+	pViewDst->m_nCurSearchKeySequence = GetDllShareData().common.search.nSearchKeySequence;
 
 	// 置換後文字列の準備
 	NativeW memReplace;
@@ -222,7 +222,7 @@ DWORD GrepAgent::DoGrep(
 			// 矩形・ラインモード貼り付けは未サポート
 			bool bColmnSelect;
 			bool bLineSelect;
-			if (!pViewDst->MyGetClipboardData( memReplace, &bColmnSelect, GetDllShareData().m_common.edit.bEnableLineModePaste? &bLineSelect: NULL )) {
+			if (!pViewDst->MyGetClipboardData( memReplace, &bColmnSelect, GetDllShareData().common.edit.bEnableLineModePaste? &bLineSelect: NULL )) {
 				this->m_bGrepRunning = false;
 				pViewDst->m_bDoing_UndoRedo = false;
 				ErrorMessage( pViewDst->m_hwndParent, LS(STR_DLGREPLC_CLIPBOARD) );
@@ -234,7 +234,7 @@ DWORD GrepAgent::DoGrep(
 					memReplace.AppendString(pViewDst->GetDocument()->m_docEditor.GetNewLineCode().GetValue2());
 				}
 			}
-			if (GetDllShareData().m_common.edit.bConvertEOLPaste) {
+			if (GetDllShareData().common.edit.bConvertEOLPaste) {
 				LogicInt len = memReplace.GetStringLength();
 				std::vector<wchar_t> convertedText(len * 2); // 全文字\n→\r\n変換で最大の２倍になる
 				wchar_t* pszConvertedText = &convertedText[0];
@@ -278,7 +278,7 @@ DWORD GrepAgent::DoGrep(
 
 	::SetDlgItemInt(hwndCancel, IDC_STATIC_HITCOUNT, 0, FALSE);
 	::DlgItem_SetText(hwndCancel, IDC_STATIC_CURFILE, _T(" "));	// 2002/09/09 Moca add
-	::CheckDlgButton(hwndCancel, IDC_CHECK_REALTIMEVIEW, GetDllShareData().m_common.search.bGrepRealTimeView);	// 2003.06.23 Moca
+	::CheckDlgButton(hwndCancel, IDC_CHECK_REALTIMEVIEW, GetDllShareData().common.search.bGrepRealTimeView);	// 2003.06.23 Moca
 
 	//	2008.12.13 genta パターンが長すぎる場合は登録しない
 	//	(正規表現が途中で途切れると困るので)
@@ -542,7 +542,7 @@ DWORD GrepAgent::DoGrep(
 	if (!EditWnd::getInstance()->UpdateTextWrap()) {	// 折り返し方法関連の更新
 		EditWnd::getInstance()->RedrawAllViews(pViewDst);	//	他のペインの表示を更新
 	}
-	const bool bDrawSwitchOld = pViewDst->SetDrawSwitch(GetDllShareData().m_common.search.bGrepRealTimeView != 0);
+	const bool bDrawSwitchOld = pViewDst->SetDrawSwitch(GetDllShareData().common.search.bGrepRealTimeView != 0);
 
 	GrepEnumOptions grepEnumOptions;
 	GrepEnumFiles grepExceptAbsFiles;
@@ -940,7 +940,7 @@ void GrepAgent::SetGrepResult(
 		}
 		// 該当部分に改行を含む場合はその改行コードをそのまま利用する(次の行に空行を作らない)
 		// 2003.06.10 Moca k==0のときにバッファアンダーランしないように
-		if (0 < k && WCODE::IsLineDelimiter(pMatchData[ k - 1 ], GetDllShareData().m_common.edit.bEnableExtEol)) {
+		if (0 < k && WCODE::IsLineDelimiter(pMatchData[ k - 1 ], GetDllShareData().common.edit.bEnableExtEol)) {
 			bEOL = false;
 		}
 	}
@@ -1164,7 +1164,7 @@ int GrepAgent::DoGrepFile(
 		// ファイルを開く
 		// FileCloseで明示的に閉じるが、閉じていないときはデストラクタで閉じる
 		// 2003.06.10 Moca 文字コード判定処理もFileOpenで行う
-		nCharCode = fl.FileOpen( pszFullPath, true, grepOption.nGrepCharSet, GetDllShareData().m_common.file.GetAutoMIMEdecode() );
+		nCharCode = fl.FileOpen( pszFullPath, true, grepOption.nGrepCharSet, GetDllShareData().common.file.GetAutoMIMEdecode() );
 		TCHAR szCpName[100];
 		{
 			if (grepOption.nGrepCharSet == CODE_AUTODETECT) {
@@ -1662,7 +1662,7 @@ int GrepAgent::DoGrepReplaceFile(
 		// ファイルを開く
 		// FileCloseで明示的に閉じるが、閉じていないときはデストラクタで閉じる
 		// 2003.06.10 Moca 文字コード判定処理もFileOpenで行う
-		nCharCode = fl.FileOpen( pszFullPath, true, grepOption.nGrepCharSet, GetDllShareData().m_common.file.GetAutoMIMEdecode(), &bBom );
+		nCharCode = fl.FileOpen( pszFullPath, true, grepOption.nGrepCharSet, GetDllShareData().common.file.GetAutoMIMEdecode(), &bBom );
 		WriteData output(nHitCount, pszFullPath, nCharCode, bBom, grepOption.bGrepBackup, memMessage );
 		TCHAR szCpName[100];
 		{

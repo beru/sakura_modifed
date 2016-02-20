@@ -33,7 +33,7 @@ enum maxdata{
 	MAX_GREPFOLDER				=  30,
 	MAX_TYPES					=  60,	// Jul. 12, 2001 JEPRO ƒ^ƒCƒv•Êİ’è‚ÌÅ‘åİ’è”‚ğ16‚©‚ç‘‚â‚µ‚½
 	MAX_TYPES_EXTS				=  64,
-	MAX_PRINTSETTINGARR			=   8,
+	MAX_PrintSettingARR			=   8,
 
 	// From Here Sep. 14, 2001 genta
 	MACRONAME_MAX				= 64,

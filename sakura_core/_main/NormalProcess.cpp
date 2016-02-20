@@ -84,7 +84,7 @@ bool NormalProcess::InitializeProcess()
 	}
 
 	// 言語を選択する
-	SelectLang::ChangeLang(GetDllShareData().m_common.window.szLanguageDll);
+	SelectLang::ChangeLang(GetDllShareData().common.window.szLanguageDll);
 
 	// コマンドラインオプション
 	bool		bViewMode = false;
@@ -98,7 +98,7 @@ bool NormalProcess::InitializeProcess()
 	// コマンドラインで受け取ったファイルが開かれている場合は
 	// その編集ウィンドウをアクティブにする
 	cmdLine.GetEditInfo(&fi); // 2002/2/8 aroka ここに移動
-	if (fi.m_szPath[0] != _T('\0')) {
+	if (fi.szPath[0] != _T('\0')) {
 		// Oct. 27, 2000 genta
 		// MRUからカーソル位置を復元する操作はCEditDoc::FileLoadで
 		// 行われるのでここでは必要なし．
@@ -106,18 +106,18 @@ bool NormalProcess::InitializeProcess()
 		// 指定ファイルが開かれているか調べる
 		// 2007.03.13 maru 文字コードが異なるときはワーニングを出すように
 		HWND hwndOwner;
-		if (GetShareData().ActiveAlreadyOpenedWindow(fi.m_szPath, &hwndOwner, fi.m_nCharCode)) {
+		if (GetShareData().ActiveAlreadyOpenedWindow(fi.szPath, &hwndOwner, fi.nCharCode)) {
 			// From Here Oct. 19, 2001 genta
 			// カーソル位置が引数に指定されていたら指定位置にジャンプ
-			if (fi.m_ptCursor.y >= 0) {	// 行の指定があるか
-				LogicPoint& pt = GetDllShareData().m_workBuffer.m_LogicPoint;
-				if (fi.m_ptCursor.x < 0) {
+			if (fi.ptCursor.y >= 0) {	// 行の指定があるか
+				LogicPoint& pt = GetDllShareData().workBuffer.logicPoint;
+				if (fi.ptCursor.x < 0) {
 					// 桁の指定が無い場合
 					::SendMessage(hwndOwner, MYWM_GETCARETPOS, 0, 0);
 				}else {
-					pt.x = fi.m_ptCursor.x;
+					pt.x = fi.ptCursor.x;
 				}
-				pt.y = fi.m_ptCursor.y;
+				pt.y = fi.ptCursor.y;
 				::SendMessage(hwndOwner, MYWM_SETCARETPOS, 0, 0);
 			}
 			// To Here Oct. 19, 2001 genta
@@ -144,7 +144,7 @@ bool NormalProcess::InitializeProcess()
 	// エディタアプリケーションを作成。2007.10.23 kobake
 	// グループIDを取得
 	int nGroupId = cmdLine.GetGroupId();
-	if (GetDllShareData().m_common.tabBar.bNewWindow && nGroupId == -1) {
+	if (GetDllShareData().common.tabBar.bNewWindow && nGroupId == -1) {
 		nGroupId = AppNodeManager::getInstance()->GetFreeGroupId();
 	}
 	// CEditAppを作成
@@ -166,7 +166,7 @@ bool NormalProcess::InitializeProcess()
 	MY_TRACETIME(runningTimer, "CheckFile");
 
 	// -1: SetDocumentTypeWhenCreate での強制指定なし
-	const TypeConfigNum nType = (fi.m_szDocType[0] == '\0' ? TypeConfigNum(-1) : DocTypeManager().GetDocumentTypeOfExt(fi.m_szDocType));
+	const TypeConfigNum nType = (fi.szDocType[0] == '\0' ? TypeConfigNum(-1) : DocTypeManager().GetDocumentTypeOfExt(fi.szDocType));
 
 	if (bDebugMode) {
 		// デバッグモニタモードに設定
@@ -180,12 +180,12 @@ bool NormalProcess::InitializeProcess()
 		// 2004.09.20 naoh アウトプット用タイプ別設定
 		// 文字コードを有効とする Uchi 2008/6/8
 		// 2010.06.16 Moca アウトプットは CCommnadLineで -TYPE=output 扱いとする
-		pEditWnd->SetDocumentTypeWhenCreate(fi.m_nCharCode, false, nType);
+		pEditWnd->SetDocumentTypeWhenCreate(fi.nCharCode, false, nType);
 		pEditWnd->m_dlgFuncList.Refresh();	// アウトラインを表示する
 	}else if (bGrepMode) {
 		// GREP
 		// 2010.06.16 Moca Grepでもオプション指定を適用
-		pEditWnd->SetDocumentTypeWhenCreate(fi.m_nCharCode, false, nType);
+		pEditWnd->SetDocumentTypeWhenCreate(fi.nCharCode, false, nType);
 		pEditWnd->m_dlgFuncList.Refresh();	// アウトラインを予め表示しておく
 		HWND hEditWnd = pEditWnd->GetHwnd();
 		if (!::IsIconic(hEditWnd) && pEditWnd->m_dlgFuncList.GetHwnd()) {
@@ -246,7 +246,7 @@ bool NormalProcess::InitializeProcess()
 					memGrepFolder.SetString(szCurDir);
 				}
 			}
-			auto& csSearch = GetDllShareData().m_common.search;
+			auto& csSearch = GetDllShareData().common.search;
 			csSearch.bGrepSubFolder = gi.bGrepSubFolder;
 			csSearch.searchOption = gi.grepSearchOption;
 			csSearch.nGrepCharSet = gi.nGrepCharSet;
@@ -308,25 +308,25 @@ bool NormalProcess::InitializeProcess()
 		// 2004.05.13 Moca さらにif分の中から前に移動
 		// ファイル名が与えられなくてもReadOnly指定を有効にするため．
 		bViewMode = cmdLine.IsViewMode(); // 2002/2/8 aroka ここに移動
-		if (fi.m_szPath[0] != _T('\0')) {
+		if (fi.szPath[0] != _T('\0')) {
 			// Mar. 9, 2002 genta 文書タイプ指定
 			pEditWnd->OpenDocumentWhenStart(
 				LoadInfo(
-					fi.m_szPath,
-					fi.m_nCharCode,
+					fi.szPath,
+					fi.nCharCode,
 					bViewMode,
 					nType
 				)
 			);
 			// 読み込み中断して「(無題)」になった時（他プロセスからのロックなど）もオプション指定を有効にする
-			// Note. fi.m_nCharCode で文字コードが明示指定されていても、読み込み中断しない場合は別の文字コードが選択されることがある。
+			// Note. fi.nCharCode で文字コードが明示指定されていても、読み込み中断しない場合は別の文字コードが選択されることがある。
 			//       以前は「(無題)」にならない場合でも無条件に SetDocumentTypeWhenCreate() を呼んでいたが、
 			//       「前回と異なる文字コード」の問い合わせで前回の文字コードが選択された場合におかしくなっていた。
 			if (!pEditWnd->GetDocument()->m_docFile.GetFilePathClass().IsValidPath()) {
 				// 読み込み中断して「(無題)」になった
 				// ---> 無効になったオプション指定を有効にする
 				pEditWnd->SetDocumentTypeWhenCreate(
-					fi.m_nCharCode,
+					fi.nCharCode,
 					bViewMode,
 					nType
 				);
@@ -338,17 +338,17 @@ bool NormalProcess::InitializeProcess()
 			// 未設定＝-1になるようにしたので，安全のため両者が指定されたときだけ
 			// 移動するようにする． || → &&
 			if (
-				(LayoutInt(0) <= fi.m_nViewTopLine && LayoutInt(0) <= fi.m_nViewLeftCol)
-				&& fi.m_nViewTopLine < pEditWnd->GetDocument()->m_layoutMgr.GetLineCount()
+				(LayoutInt(0) <= fi.nViewTopLine && LayoutInt(0) <= fi.nViewLeftCol)
+				&& fi.nViewTopLine < pEditWnd->GetDocument()->m_layoutMgr.GetLineCount()
 			) {
-				activeView.GetTextArea().SetViewTopLine(fi.m_nViewTopLine);
-				activeView.GetTextArea().SetViewLeftCol(fi.m_nViewLeftCol);
+				activeView.GetTextArea().SetViewTopLine(fi.nViewTopLine);
+				activeView.GetTextArea().SetViewLeftCol(fi.nViewLeftCol);
 			}
 
 			// オプション指定がないときはカーソル位置設定を行わないようにする
 			// Oct. 19, 2001 genta
 			// 0も位置としては有効な値なので判定に含めなくてはならない
-			if (0 <= fi.m_ptCursor.x || 0 <= fi.m_ptCursor.y) {
+			if (0 <= fi.ptCursor.x || 0 <= fi.ptCursor.y) {
 				/*
 				  カーソル位置変換
 				  物理位置(行頭からのバイト数、折り返し無し行位置)
@@ -357,16 +357,16 @@ bool NormalProcess::InitializeProcess()
 				*/
 				LayoutPoint ptPos;
 				pEditWnd->GetDocument()->m_layoutMgr.LogicToLayout(
-					fi.m_ptCursor,
+					fi.ptCursor,
 					&ptPos
 				);
 
 				// From Here Mar. 28, 2003 MIK
 				// 改行の真ん中にカーソルが来ないように。
 				// 2008.08.20 ryoji 改行単位の行番号を渡すように修正
-				const DocLine* pTmpDocLine = pEditWnd->GetDocument()->m_docLineMgr.GetLine(fi.m_ptCursor.GetY2());
+				const DocLine* pTmpDocLine = pEditWnd->GetDocument()->m_docLineMgr.GetLine(fi.ptCursor.GetY2());
 				if (pTmpDocLine) {
-					if (pTmpDocLine->GetLengthWithoutEOL() < fi.m_ptCursor.x) {
+					if (pTmpDocLine->GetLengthWithoutEOL() < fi.ptCursor.x) {
 						ptPos.x--;
 					}
 				}
@@ -381,7 +381,7 @@ bool NormalProcess::InitializeProcess()
 			pEditWnd->GetDocument()->SetCurDirNotitle();	// (無題)ウィンドウ
 			// 2004.05.13 Moca ファイル名が与えられなくてもReadOnlyとタイプ指定を有効にする
 			pEditWnd->SetDocumentTypeWhenCreate(
-				fi.m_nCharCode,
+				fi.nCharCode,
 				bViewMode,	// ビューモードか
 				nType
 			);
@@ -430,7 +430,7 @@ bool NormalProcess::InitializeProcess()
 
 	// 2006.09.03 ryoji オープン後自動実行マクロを実行する
 	if (!(bDebugMode || bGrepMode)) {
-		pEditWnd->GetDocument()->RunAutoMacro(GetDllShareData().m_common.macro.nMacroOnOpened);
+		pEditWnd->GetDocument()->RunAutoMacro(GetDllShareData().common.macro.nMacroOnOpened);
 	}
 
 	// 起動時マクロオプション
@@ -446,7 +446,7 @@ bool NormalProcess::InitializeProcess()
 	// 複数ファイル読み込み
 	int fileNum = cmdLine.GetFileNum();
 	if (fileNum > 0) {
-		int nDropFileNumMax = GetDllShareData().m_common.file.nDropFileNumMax - 1;
+		int nDropFileNumMax = GetDllShareData().common.file.nDropFileNumMax - 1;
 		// ファイルドロップ数の上限に合わせる
 		if (fileNum > nDropFileNumMax) {
 			fileNum = nDropFileNumMax;
@@ -454,7 +454,7 @@ bool NormalProcess::InitializeProcess()
 		EditInfo openFileInfo = fi;
 		for (int i=0; i<fileNum; ++i) {
 			// ファイル名差し替え
-			_tcscpy_s(openFileInfo.m_szPath, cmdLine.GetFileName(i));
+			_tcscpy_s(openFileInfo.szPath, cmdLine.GetFileName(i));
 			bool ret = ControlTray::OpenNewEditor2(GetProcessInstance(), pEditWnd->GetHwnd(), &openFileInfo, bViewMode);
 			if (!ret) {
 				break;

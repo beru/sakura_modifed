@@ -45,7 +45,7 @@ public:
 
 //	HINSTANCE	m_hInstance;	// アプリケーションインスタンスのハンドル
 //	HWND		m_hwndParent;	// オーナーウィンドウのハンドル
-//	HWND		m_hWnd;			// このダイアログのハンドル
+//	HWND		hWnd;			// このダイアログのハンドル
 	bool		m_bCANCEL;		// IDCANCELボタンが押された
 	bool		m_bAutoCleanup;	// 自動後処理型	// 2008.05.28 ryoji
 

@@ -297,7 +297,7 @@ INT_PTR PropKeyword::DispatchEvent(
 					// 削除対象のセットを使用しているファイルタイプを列挙
 					static TCHAR		pszLabel[1024];
 					pszLabel[0] = 0;
-					for (i=0; i<GetDllShareData().m_nTypesCount; ++i) {
+					for (i=0; i<GetDllShareData().nTypesCount; ++i) {
 						auto type = std::make_unique<TypeConfig>();
 						DocTypeManager().GetTypeConfig(TypeConfigNum(i), *type);
 						// 2002/04/25 YAZAKI TypeConfig全体を保持する必要はないし、m_pShareDataを直接見ても問題ない。
@@ -329,7 +329,7 @@ INT_PTR PropKeyword::DispatchEvent(
 						return TRUE;
 					}
 					// 削除対象のセットを使用しているファイルタイプのセットをクリア
-					for (i=0; i<GetDllShareData().m_nTypesCount; ++i) {
+					for (i=0; i<GetDllShareData().nTypesCount; ++i) {
 						// 2002/04/25 YAZAKI TypeConfig全体を保持する必要はない。
 						for (int j=0; j<MAX_KEYWORDSET_PER_TYPE; ++j) {
 							if (nIndex1 == m_Types_nKeywordSetIdx[i].index[j]) {

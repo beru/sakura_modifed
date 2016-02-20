@@ -745,7 +745,7 @@ void ViewCommander::Command_SORT(BOOL bAsc)	// bAsc:TRUE=¸‡,FALSE=~‡
 		pStrLast = sta[sta.size() - 1]->pMemLine->GetStringPtr();
 		int nlen = sta[sta.size() - 1]->pMemLine->GetStringLength();
 		if (0 < nlen) {
-			if (WCODE::IsLineDelimiter(pStrLast[nlen - 1], GetDllShareData().m_common.edit.bEnableExtEol)) {
+			if (WCODE::IsLineDelimiter(pStrLast[nlen - 1], GetDllShareData().common.edit.bEnableExtEol)) {
 				pStrLast = NULL;
 			}
 		}
@@ -774,7 +774,7 @@ void ViewCommander::Command_SORT(BOOL bAsc)	// bAsc:TRUE=¸‡,FALSE=~‡
 		// ÅIs‚Ì‰üs‚ðíœ
 		LineData& lastData = repData[repData.size() - 1];
 		int nLen = lastData.memLine.GetStringLength();
-		bool bExtEol = GetDllShareData().m_common.edit.bEnableExtEol;
+		bool bExtEol = GetDllShareData().common.edit.bEnableExtEol;
 		while (0 <nLen && WCODE::IsLineDelimiter(lastData.memLine[nLen-1], bExtEol)) {
 			--nLen;
 		}

@@ -90,7 +90,7 @@ const DWORD p_helpids[] = {	//12500
 	0, 0
 };	//@@@ 2002.01.07 add end MIK
 
-#define IDT_PRINTSETTING 1467
+#define IDT_PrintSetting 1467
 
 int CALLBACK SetData_EnumFontFamProc(
 	ENUMLOGFONT*	pelf,	// pointer to logical-font data
@@ -117,20 +117,20 @@ int DlgPrintSetting::DoModal(
 	HINSTANCE		hInstance,
 	HWND			hwndParent,
 	int*			pnCurrentPrintSetting,
-	PRINTSETTING*	pPrintSettingArr,
+	PrintSetting*	pPrintSettingArr,
 	int				nLineNumberColumns
 	)
 {
 	m_nCurrentPrintSetting = *pnCurrentPrintSetting;
-	for (int i=0; i<MAX_PRINTSETTINGARR; ++i) {
+	for (int i=0; i<MAX_PrintSettingARR; ++i) {
 		m_printSettingArr[i] = pPrintSettingArr[i];
 	}
 	m_nLineNumberColumns = nLineNumberColumns;
 
-	int nRet = (int)Dialog::DoModal(hInstance, hwndParent, IDD_PRINTSETTING, (LPARAM)NULL);
+	int nRet = (int)Dialog::DoModal(hInstance, hwndParent, IDD_PrintSetting, (LPARAM)NULL);
 	if (nRet != FALSE) {
 		*pnCurrentPrintSetting = m_nCurrentPrintSetting;
-		for (int i=0; i<MAX_PRINTSETTINGARR; ++i) {
+		for (int i=0; i<MAX_PrintSettingARR; ++i) {
 			pPrintSettingArr[i] = m_printSettingArr[i];
 		}
 	}
@@ -153,7 +153,7 @@ BOOL DlgPrintSetting::OnInitDialog(
 
 	// タイマーでの更新をやめて、能動的に更新要求する 2013.5.5 aroka
 	// Dialog::OnInitDialogの奥でOnChangeSettingTypeが呼ばれるのでここでは更新要求しない
-	//	::SetTimer(GetHwnd(), IDT_PRINTSETTING, 500, NULL);
+	//	::SetTimer(GetHwnd(), IDT_PrintSetting, 500, NULL);
 	// UpdatePrintableLineAndColumn();
 
 	// ダイアログのフォントの取得
@@ -168,7 +168,7 @@ BOOL DlgPrintSetting::OnInitDialog(
 
 BOOL DlgPrintSetting::OnDestroy(void)
 {
-	::KillTimer(GetHwnd(), IDT_PRINTSETTING);
+	::KillTimer(GetHwnd(), IDT_PrintSetting);
 
 	// フォントの破棄
 	HFONT hFontOld;
@@ -246,14 +246,14 @@ BOOL DlgPrintSetting::OnBnClicked(int wID)
 		MyWinHelp(GetHwnd(), HELP_CONTEXT, ::FuncID_To_HelpContextID(F_PRINT_PAGESETUP));	// 2006.10.10 ryoji MyWinHelpに変更に変更
 		return TRUE;
 	case IDC_BUTTON_EDITSETTINGNAME:
-		_tcscpy(szWork, curPS.m_szPrintSettingName);
+		_tcscpy(szWork, curPS.szPrintSettingName);
 		{
 			BOOL bDlgInputResult = dlgInput1.DoModal(
 				m_hInstance,
 				GetHwnd(),
 				LS(STR_DLGPRNST1),
 				LS(STR_DLGPRNST2),
-				_countof(curPS.m_szPrintSettingName) - 1,
+				_countof(curPS.szPrintSettingName) - 1,
 				szWork
 			);
 			if (!bDlgInputResult) {
@@ -261,17 +261,17 @@ BOOL DlgPrintSetting::OnBnClicked(int wID)
 			}
 		}
 		if (szWork[0] != _T('\0')) {
-			int		size = _countof(m_printSettingArr[0].m_szPrintSettingName) - 1;
-			_tcsncpy(curPS.m_szPrintSettingName, szWork, size);
-			curPS.m_szPrintSettingName[size] = _T('\0');
+			int		size = _countof(m_printSettingArr[0].szPrintSettingName) - 1;
+			_tcsncpy(curPS.szPrintSettingName, szWork, size);
+			curPS.szPrintSettingName[size] = _T('\0');
 			// 印刷設定名一覧
 			hwndComboSettingName = GetItemHwnd(IDC_COMBO_SETTINGNAME);
 			Combo_ResetContent(hwndComboSettingName);
 			int nSelectIdx = 0;
-			for (int i=0; i<MAX_PRINTSETTINGARR; ++i) {
+			for (int i=0; i<MAX_PrintSettingARR; ++i) {
 				int nItemIdx = Combo_AddString(
 					hwndComboSettingName,
-					m_printSettingArr[i].m_szPrintSettingName
+					m_printSettingArr[i].szPrintSettingName
 				);
 				Combo_SetItemData(hwndComboSettingName, nItemIdx, i);
 				if (i == m_nCurrentPrintSetting) {
@@ -283,67 +283,67 @@ BOOL DlgPrintSetting::OnBnClicked(int wID)
 		return TRUE;
 	case IDC_BUTTON_FONT_HEAD:
 		{
-			LOGFONT	lf = curPS.m_lfHeader;
+			LOGFONT	lf = curPS.lfHeader;
 			INT		nPointSize;
 
 			if (lf.lfFaceName[0] == _T('\0')) {
 				// 半角フォントを設定
-				auto_strcpy(lf.lfFaceName, curPS.m_szPrintFontFaceHan);
+				auto_strcpy(lf.lfFaceName, curPS.szPrintFontFaceHan);
 				// 1/10mm→画面ドット数
-				lf.lfHeight = -(curPS.m_nPrintFontHeight * 
+				lf.lfHeight = -(curPS.nPrintFontHeight * 
 					::GetDeviceCaps (::GetDC(m_hwndParent), LOGPIXELSY) / 254);
 			}
 
 			if (MySelectFont(&lf, &nPointSize, GetHwnd(), false)) {
-				curPS.m_lfHeader = lf;
-				curPS.m_nHeaderPointSize = nPointSize;
+				curPS.lfHeader = lf;
+				curPS.nHeaderPointSize = nPointSize;
 				SetFontName(IDC_STATIC_FONT_HEAD, IDC_CHECK_USE_FONT_HEAD,
-					curPS.m_lfHeader,
-					curPS.m_nHeaderPointSize);
+					curPS.lfHeader,
+					curPS.nHeaderPointSize);
 				UpdatePrintableLineAndColumn();
 			}
 		}
 		return TRUE;
 	case IDC_BUTTON_FONT_FOOT:
 		{
-			LOGFONT	lf = curPS.m_lfFooter;
+			LOGFONT	lf = curPS.lfFooter;
 			INT		nPointSize;
 
 			if (lf.lfFaceName[0] == _T('\0')) {
 				// 半角フォントを設定
-				auto_strcpy(lf.lfFaceName, curPS.m_szPrintFontFaceHan);
+				auto_strcpy(lf.lfFaceName, curPS.szPrintFontFaceHan);
 				// 1/10mm→画面ドット数
-				lf.lfHeight = -(curPS.m_nPrintFontHeight * 
+				lf.lfHeight = -(curPS.nPrintFontHeight * 
 					::GetDeviceCaps (::GetDC(m_hwndParent), LOGPIXELSY) / 254);
 			}
 
 			if (MySelectFont(&lf, &nPointSize, GetHwnd(), false)) {
-				curPS.m_lfFooter = lf;
-				curPS.m_nFooterPointSize = nPointSize;
+				curPS.lfFooter = lf;
+				curPS.nFooterPointSize = nPointSize;
 				SetFontName(IDC_STATIC_FONT_FOOT, IDC_CHECK_USE_FONT_FOOT,
-					curPS.m_lfFooter,
-					curPS.m_nFooterPointSize);
+					curPS.lfFooter,
+					curPS.nFooterPointSize);
 				UpdatePrintableLineAndColumn();
 			}
 		}
 		return TRUE;
 	case IDC_CHECK_USE_FONT_HEAD:
-		if (curPS.m_lfHeader.lfFaceName[0] != _T('\0')) {
-			memset(&curPS.m_lfHeader, 0, sizeof(LOGFONT));
-			curPS.m_nHeaderPointSize = 0;
+		if (curPS.lfHeader.lfFaceName[0] != _T('\0')) {
+			memset(&curPS.lfHeader, 0, sizeof(LOGFONT));
+			curPS.nHeaderPointSize = 0;
 			SetFontName(IDC_STATIC_FONT_HEAD, IDC_CHECK_USE_FONT_HEAD,
-				curPS.m_lfHeader,
-				curPS.m_nHeaderPointSize);
+				curPS.lfHeader,
+				curPS.nHeaderPointSize);
 		}
 		UpdatePrintableLineAndColumn();
 		return TRUE;
 	case IDC_CHECK_USE_FONT_FOOT:
-		if (curPS.m_lfFooter.lfFaceName[0] != _T('\0')) {
-			memset(&curPS.m_lfFooter, 0, sizeof(LOGFONT));
-			curPS.m_nFooterPointSize = 0;
+		if (curPS.lfFooter.lfFaceName[0] != _T('\0')) {
+			memset(&curPS.lfFooter, 0, sizeof(LOGFONT));
+			curPS.nFooterPointSize = 0;
 			SetFontName(IDC_STATIC_FONT_FOOT, IDC_CHECK_USE_FONT_FOOT,
-				curPS.m_lfFooter,
-				curPS.m_nFooterPointSize);
+				curPS.lfFooter,
+				curPS.nFooterPointSize);
 		}
 		UpdatePrintableLineAndColumn();
 		return TRUE;
@@ -457,16 +457,16 @@ void DlgPrintSetting::SetData(void)
 	Combo_ResetContent(hwndComboPaper);
 	// 2006.08.14 Moca 用紙名一覧の重複削除
 	for (int i=0; i<Print::m_nPaperInfoArrNum; ++i) {
-		int nItemIdx = Combo_AddString(hwndComboPaper, Print::m_paperInfoArr[i].m_pszName);
-		Combo_SetItemData(hwndComboPaper, nItemIdx, Print::m_paperInfoArr[i].m_nId);
+		int nItemIdx = Combo_AddString(hwndComboPaper, Print::m_paperInfoArr[i].pszName);
+		Combo_SetItemData(hwndComboPaper, nItemIdx, Print::m_paperInfoArr[i].nId);
 	}
 
 	// 印刷設定名一覧
 	HWND hwndComboSettingName = GetItemHwnd(IDC_COMBO_SETTINGNAME);
 	Combo_ResetContent(hwndComboSettingName);
 	int nSelectIdx = 0;
-	for (int i=0; i<MAX_PRINTSETTINGARR; ++i) {
-		int nItemIdx = Combo_AddString(hwndComboSettingName, m_printSettingArr[i].m_szPrintSettingName);
+	for (int i=0; i<MAX_PrintSettingARR; ++i) {
+		int nItemIdx = Combo_AddString(hwndComboSettingName, m_printSettingArr[i].szPrintSettingName);
 		Combo_SetItemData(hwndComboSettingName, nItemIdx, i);
 		if (i == m_nCurrentPrintSetting) {
 			nSelectIdx = nItemIdx;
@@ -492,121 +492,121 @@ int DlgPrintSetting::GetData(void)
 	hwndCtrl = GetItemHwnd(IDC_COMBO_FONT_HAN);
 	nIdx1 = Combo_GetCurSel(hwndCtrl);
 	Combo_GetLBText(hwndCtrl, nIdx1,
-		curPS.m_szPrintFontFaceHan
+		curPS.szPrintFontFaceHan
 	);
 	// フォント一覧
 	hwndCtrl = GetItemHwnd(IDC_COMBO_FONT_ZEN);
 	nIdx1 = Combo_GetCurSel(hwndCtrl);
 	Combo_GetLBText(hwndCtrl, nIdx1,
-		curPS.m_szPrintFontFaceZen
+		curPS.szPrintFontFaceZen
 	);
 
-	curPS.m_nPrintFontHeight = GetItemInt(IDC_EDIT_FONTHEIGHT, NULL, FALSE);
-	curPS.m_nPrintLineSpacing = GetItemInt(IDC_EDIT_LINESPACE, NULL, FALSE);
-	curPS.m_nPrintDansuu = GetItemInt(IDC_EDIT_DANSUU, NULL, FALSE);
-	curPS.m_nPrintDanSpace = GetItemInt(IDC_EDIT_DANSPACE, NULL, FALSE) * 10;
+	curPS.nPrintFontHeight = GetItemInt(IDC_EDIT_FONTHEIGHT, NULL, FALSE);
+	curPS.nPrintLineSpacing = GetItemInt(IDC_EDIT_LINESPACE, NULL, FALSE);
+	curPS.nPrintDansuu = GetItemInt(IDC_EDIT_DANSUU, NULL, FALSE);
+	curPS.nPrintDanSpace = GetItemInt(IDC_EDIT_DANSPACE, NULL, FALSE) * 10;
 
 	// 入力値(数値)のエラーチェックをして正しい値を返す
 	int nWork;
-	nWork = DataCheckAndCorrect(IDC_EDIT_FONTHEIGHT, curPS.m_nPrintFontHeight);
-	if (nWork != curPS.m_nPrintFontHeight) {
-		curPS.m_nPrintFontHeight = nWork;
-		SetItemInt(IDC_EDIT_FONTHEIGHT, curPS.m_nPrintFontHeight, FALSE);
+	nWork = DataCheckAndCorrect(IDC_EDIT_FONTHEIGHT, curPS.nPrintFontHeight);
+	if (nWork != curPS.nPrintFontHeight) {
+		curPS.nPrintFontHeight = nWork;
+		SetItemInt(IDC_EDIT_FONTHEIGHT, curPS.nPrintFontHeight, FALSE);
 	}
-	curPS.m_nPrintFontWidth = (curPS.m_nPrintFontHeight + 1) / 2;
+	curPS.nPrintFontWidth = (curPS.nPrintFontHeight + 1) / 2;
 
-	nWork = DataCheckAndCorrect(IDC_EDIT_LINESPACE, curPS.m_nPrintLineSpacing);
-	if (nWork != curPS.m_nPrintLineSpacing) {
-		curPS.m_nPrintLineSpacing = nWork;
-		SetItemInt(IDC_EDIT_LINESPACE, curPS.m_nPrintLineSpacing, FALSE);
+	nWork = DataCheckAndCorrect(IDC_EDIT_LINESPACE, curPS.nPrintLineSpacing);
+	if (nWork != curPS.nPrintLineSpacing) {
+		curPS.nPrintLineSpacing = nWork;
+		SetItemInt(IDC_EDIT_LINESPACE, curPS.nPrintLineSpacing, FALSE);
 	}
-	nWork = DataCheckAndCorrect(IDC_EDIT_DANSUU, curPS.m_nPrintDansuu);
-	if (nWork != curPS.m_nPrintDansuu) {
-		curPS.m_nPrintDansuu = nWork;
-		SetItemInt(IDC_EDIT_DANSUU, curPS.m_nPrintDansuu, FALSE);
+	nWork = DataCheckAndCorrect(IDC_EDIT_DANSUU, curPS.nPrintDansuu);
+	if (nWork != curPS.nPrintDansuu) {
+		curPS.nPrintDansuu = nWork;
+		SetItemInt(IDC_EDIT_DANSUU, curPS.nPrintDansuu, FALSE);
 	}
-	nWork = DataCheckAndCorrect(IDC_EDIT_DANSPACE, curPS.m_nPrintDanSpace / 10);
-	if (nWork != curPS.m_nPrintDanSpace / 10) {
-		curPS.m_nPrintDanSpace = nWork * 10;
-		SetItemInt(IDC_EDIT_DANSPACE, curPS.m_nPrintDanSpace / 10, FALSE);
+	nWork = DataCheckAndCorrect(IDC_EDIT_DANSPACE, curPS.nPrintDanSpace / 10);
+	if (nWork != curPS.nPrintDanSpace / 10) {
+		curPS.nPrintDanSpace = nWork * 10;
+		SetItemInt(IDC_EDIT_DANSPACE, curPS.nPrintDanSpace / 10, FALSE);
 	}
 
 	// 用紙サイズ一覧
 	hwndCtrl = GetItemHwnd(IDC_COMBO_PAPER);
 	nIdx1 = Combo_GetCurSel(hwndCtrl);
-	curPS.m_nPrintPaperSize =
+	curPS.nPrintPaperSize =
 		(short)Combo_GetItemData(hwndCtrl, nIdx1);
 
 	// 用紙の向き
 	// 2006.08.14 Moca 用紙方向コンボボックスを廃止し、ボタンを有効化
 	if (IsButtonChecked(IDC_RADIO_PORTRAIT)) {
-		curPS.m_nPrintPaperOrientation = DMORIENT_PORTRAIT;
+		curPS.nPrintPaperOrientation = DMORIENT_PORTRAIT;
 	}else {
-		curPS.m_nPrintPaperOrientation = DMORIENT_LANDSCAPE;
+		curPS.nPrintPaperOrientation = DMORIENT_LANDSCAPE;
 	}
 
-	curPS.m_nPrintMarginTY = GetItemInt(IDC_EDIT_MARGINTY, NULL, FALSE) * 10;
-	curPS.m_nPrintMarginBY = GetItemInt(IDC_EDIT_MARGINBY, NULL, FALSE) * 10;
-	curPS.m_nPrintMarginLX = GetItemInt(IDC_EDIT_MARGINLX, NULL, FALSE) * 10;
-	curPS.m_nPrintMarginRX = GetItemInt(IDC_EDIT_MARGINRX, NULL, FALSE) * 10;
+	curPS.nPrintMarginTY = GetItemInt(IDC_EDIT_MARGINTY, NULL, FALSE) * 10;
+	curPS.nPrintMarginBY = GetItemInt(IDC_EDIT_MARGINBY, NULL, FALSE) * 10;
+	curPS.nPrintMarginLX = GetItemInt(IDC_EDIT_MARGINLX, NULL, FALSE) * 10;
+	curPS.nPrintMarginRX = GetItemInt(IDC_EDIT_MARGINRX, NULL, FALSE) * 10;
 
 	// 入力値(数値)のエラーチェックをして正しい値を返す
-	nWork = DataCheckAndCorrect(IDC_EDIT_MARGINTY, curPS.m_nPrintMarginTY / 10);
-	if (nWork != curPS.m_nPrintMarginTY / 10) {
-		curPS.m_nPrintMarginTY = nWork * 10;
-		SetItemInt(IDC_EDIT_MARGINTY, curPS.m_nPrintMarginTY / 10, FALSE);
+	nWork = DataCheckAndCorrect(IDC_EDIT_MARGINTY, curPS.nPrintMarginTY / 10);
+	if (nWork != curPS.nPrintMarginTY / 10) {
+		curPS.nPrintMarginTY = nWork * 10;
+		SetItemInt(IDC_EDIT_MARGINTY, curPS.nPrintMarginTY / 10, FALSE);
 	}
-	nWork = DataCheckAndCorrect(IDC_EDIT_MARGINBY, curPS.m_nPrintMarginBY / 10);
-	if (nWork != curPS.m_nPrintMarginBY / 10) {
-		curPS.m_nPrintMarginBY = nWork * 10;
-		SetItemInt(IDC_EDIT_MARGINBY, curPS.m_nPrintMarginBY / 10, FALSE);
+	nWork = DataCheckAndCorrect(IDC_EDIT_MARGINBY, curPS.nPrintMarginBY / 10);
+	if (nWork != curPS.nPrintMarginBY / 10) {
+		curPS.nPrintMarginBY = nWork * 10;
+		SetItemInt(IDC_EDIT_MARGINBY, curPS.nPrintMarginBY / 10, FALSE);
 	}
-	nWork = DataCheckAndCorrect(IDC_EDIT_MARGINLX, curPS.m_nPrintMarginLX / 10);
-	if (nWork != curPS.m_nPrintMarginLX / 10) {
-		curPS.m_nPrintMarginLX = nWork * 10;
-		SetItemInt(IDC_EDIT_MARGINLX, curPS.m_nPrintMarginLX / 10, FALSE);
+	nWork = DataCheckAndCorrect(IDC_EDIT_MARGINLX, curPS.nPrintMarginLX / 10);
+	if (nWork != curPS.nPrintMarginLX / 10) {
+		curPS.nPrintMarginLX = nWork * 10;
+		SetItemInt(IDC_EDIT_MARGINLX, curPS.nPrintMarginLX / 10, FALSE);
 	}
-	nWork = DataCheckAndCorrect(IDC_EDIT_MARGINRX, curPS.m_nPrintMarginRX / 10);
-	if (nWork != curPS.m_nPrintMarginRX / 10) {
-		curPS.m_nPrintMarginRX = nWork * 10;
-		SetItemInt(IDC_EDIT_MARGINRX, curPS.m_nPrintMarginRX / 10, FALSE);
+	nWork = DataCheckAndCorrect(IDC_EDIT_MARGINRX, curPS.nPrintMarginRX / 10);
+	if (nWork != curPS.nPrintMarginRX / 10) {
+		curPS.nPrintMarginRX = nWork * 10;
+		SetItemInt(IDC_EDIT_MARGINRX, curPS.nPrintMarginRX / 10, FALSE);
 	}
 
 	// 行番号を印刷
-	curPS.m_bPrintLineNumber = IsButtonChecked(IDC_CHECK_LINENUMBER);
+	curPS.bPrintLineNumber = IsButtonChecked(IDC_CHECK_LINENUMBER);
 	// 英文ワードラップ
-	curPS.m_bPrintWordWrap = IsButtonChecked(IDC_CHECK_WORDWRAP);
+	curPS.bPrintWordWrap = IsButtonChecked(IDC_CHECK_WORDWRAP);
 
 	// 行頭禁則	//@@@ 2002.04.09 MIK
-	curPS.m_bPrintKinsokuHead = IsButtonChecked(IDC_CHECK_PS_KINSOKUHEAD);
+	curPS.bPrintKinsokuHead = IsButtonChecked(IDC_CHECK_PS_KINSOKUHEAD);
 	// 行末禁則	//@@@ 2002.04.09 MIK
-	curPS.m_bPrintKinsokuTail = IsButtonChecked(IDC_CHECK_PS_KINSOKUTAIL);
+	curPS.bPrintKinsokuTail = IsButtonChecked(IDC_CHECK_PS_KINSOKUTAIL);
 	// 改行文字をぶら下げる	//@@@ 2002.04.13 MIK
-	curPS.m_bPrintKinsokuRet = IsButtonChecked(IDC_CHECK_PS_KINSOKURET);
+	curPS.bPrintKinsokuRet = IsButtonChecked(IDC_CHECK_PS_KINSOKURET);
 	// 句読点をぶら下げる	//@@@ 2002.04.17 MIK
-	curPS.m_bPrintKinsokuKuto = IsButtonChecked(IDC_CHECK_PS_KINSOKUKUTO);
+	curPS.bPrintKinsokuKuto = IsButtonChecked(IDC_CHECK_PS_KINSOKUKUTO);
 
 	// カラー印刷
-	curPS.m_bColorPrint = IsButtonChecked(IDC_CHECK_COLORPRINT);
+	curPS.bColorPrint = IsButtonChecked(IDC_CHECK_COLORPRINT);
 
 	//@@@ 2002.2.4 YAZAKI
 	// ヘッダー
-	GetItemText(IDC_EDIT_HEAD1, curPS.m_szHeaderForm[0], HEADER_MAX);	// 100文字で制限しないと。。。
-	GetItemText(IDC_EDIT_HEAD2, curPS.m_szHeaderForm[1], HEADER_MAX);	// 100文字で制限しないと。。。
-	GetItemText(IDC_EDIT_HEAD3, curPS.m_szHeaderForm[2], HEADER_MAX);	// 100文字で制限しないと。。。
+	GetItemText(IDC_EDIT_HEAD1, curPS.szHeaderForm[0], HEADER_MAX);	// 100文字で制限しないと。。。
+	GetItemText(IDC_EDIT_HEAD2, curPS.szHeaderForm[1], HEADER_MAX);	// 100文字で制限しないと。。。
+	GetItemText(IDC_EDIT_HEAD3, curPS.szHeaderForm[2], HEADER_MAX);	// 100文字で制限しないと。。。
 
 	// フッター
-	GetItemText(IDC_EDIT_FOOT1, curPS.m_szFooterForm[0], HEADER_MAX);	// 100文字で制限しないと。。。
-	GetItemText(IDC_EDIT_FOOT2, curPS.m_szFooterForm[1], HEADER_MAX);	// 100文字で制限しないと。。。
-	GetItemText(IDC_EDIT_FOOT3, curPS.m_szFooterForm[2], HEADER_MAX);	// 100文字で制限しないと。。。
+	GetItemText(IDC_EDIT_FOOT1, curPS.szFooterForm[0], HEADER_MAX);	// 100文字で制限しないと。。。
+	GetItemText(IDC_EDIT_FOOT2, curPS.szFooterForm[1], HEADER_MAX);	// 100文字で制限しないと。。。
+	GetItemText(IDC_EDIT_FOOT3, curPS.szFooterForm[2], HEADER_MAX);	// 100文字で制限しないと。。。
 
 	// ヘッダフォント
 	if (!IsButtonChecked(IDC_CHECK_USE_FONT_HEAD)) {
-		memset(&curPS.m_lfHeader, 0, sizeof(LOGFONT));
+		memset(&curPS.lfHeader, 0, sizeof(LOGFONT));
 	}
 	// フッタフォント
 	if (!IsButtonChecked(IDC_CHECK_USE_FONT_FOOT)) {
-		memset(&curPS.m_lfFooter, 0, sizeof(LOGFONT));
+		memset(&curPS.lfFooter, 0, sizeof(LOGFONT));
 	}
 
 	return TRUE;
@@ -633,25 +633,25 @@ void DlgPrintSetting::OnChangeSettingType(BOOL bGetData)
 
 	// フォント一覧
 	hwndCtrl = GetItemHwnd(IDC_COMBO_FONT_HAN);
-	nIdx1 = Combo_FindStringExact(hwndCtrl, 0, curPS.m_szPrintFontFaceHan);
+	nIdx1 = Combo_FindStringExact(hwndCtrl, 0, curPS.szPrintFontFaceHan);
 	Combo_SetCurSel(hwndCtrl, nIdx1);
 
 	// フォント一覧
 	hwndCtrl = GetItemHwnd(IDC_COMBO_FONT_ZEN);
-	nIdx1 = Combo_FindStringExact(hwndCtrl, 0, curPS.m_szPrintFontFaceZen);
+	nIdx1 = Combo_FindStringExact(hwndCtrl, 0, curPS.szPrintFontFaceZen);
 	Combo_SetCurSel(hwndCtrl, nIdx1);
 
-	SetItemInt(IDC_EDIT_FONTHEIGHT, curPS.m_nPrintFontHeight, FALSE);
-	SetItemInt(IDC_EDIT_LINESPACE, curPS.m_nPrintLineSpacing, FALSE);
-	SetItemInt(IDC_EDIT_DANSUU, curPS.m_nPrintDansuu, FALSE);
-	SetItemInt(IDC_EDIT_DANSPACE, curPS.m_nPrintDanSpace / 10, FALSE);
+	SetItemInt(IDC_EDIT_FONTHEIGHT, curPS.nPrintFontHeight, FALSE);
+	SetItemInt(IDC_EDIT_LINESPACE, curPS.nPrintLineSpacing, FALSE);
+	SetItemInt(IDC_EDIT_DANSUU, curPS.nPrintDansuu, FALSE);
+	SetItemInt(IDC_EDIT_DANSPACE, curPS.nPrintDanSpace / 10, FALSE);
 
 	// 用紙サイズ一覧
 	hwndCtrl = GetItemHwnd(IDC_COMBO_PAPER);
 	nItemNum = Combo_GetCount(hwndCtrl);
 	for (int i=0; i<nItemNum; ++i) {
 		int nItemData = Combo_GetItemData(hwndCtrl, i);
-		if (curPS.m_nPrintPaperSize == nItemData) {
+		if (curPS.nPrintPaperSize == nItemData) {
 			Combo_SetCurSel(hwndCtrl, i);
 			break;
 		}
@@ -659,52 +659,52 @@ void DlgPrintSetting::OnChangeSettingType(BOOL bGetData)
 
 	// 用紙の向き
 	// 2006.08.14 Moca 用紙方向コンボボックスを廃止し、ボタンを有効化
-	bool bIsPortrait = (curPS.m_nPrintPaperOrientation == DMORIENT_PORTRAIT);
+	bool bIsPortrait = (curPS.nPrintPaperOrientation == DMORIENT_PORTRAIT);
 	CheckDlgButtonBool(GetHwnd(), IDC_RADIO_PORTRAIT, bIsPortrait);
 	CheckDlgButtonBool(GetHwnd(), IDC_RADIO_LANDSCAPE, !bIsPortrait);
 
 	// 余白
-	SetItemInt(IDC_EDIT_MARGINTY, curPS.m_nPrintMarginTY / 10, FALSE);
-	SetItemInt(IDC_EDIT_MARGINBY, curPS.m_nPrintMarginBY / 10, FALSE);
-	SetItemInt(IDC_EDIT_MARGINLX, curPS.m_nPrintMarginLX / 10, FALSE);
-	SetItemInt(IDC_EDIT_MARGINRX, curPS.m_nPrintMarginRX / 10, FALSE);
+	SetItemInt(IDC_EDIT_MARGINTY, curPS.nPrintMarginTY / 10, FALSE);
+	SetItemInt(IDC_EDIT_MARGINBY, curPS.nPrintMarginBY / 10, FALSE);
+	SetItemInt(IDC_EDIT_MARGINLX, curPS.nPrintMarginLX / 10, FALSE);
+	SetItemInt(IDC_EDIT_MARGINRX, curPS.nPrintMarginRX / 10, FALSE);
 
 	// 行番号を印刷
-	CheckDlgButtonBool(GetHwnd(), IDC_CHECK_LINENUMBER, curPS.m_bPrintLineNumber);
+	CheckDlgButtonBool(GetHwnd(), IDC_CHECK_LINENUMBER, curPS.bPrintLineNumber);
 	// 英文ワードラップ
-	CheckDlgButtonBool(GetHwnd(), IDC_CHECK_WORDWRAP, curPS.m_bPrintWordWrap);
+	CheckDlgButtonBool(GetHwnd(), IDC_CHECK_WORDWRAP, curPS.bPrintWordWrap);
 
 	// 行頭禁則	//@@@ 2002.04.09 MIK
-	CheckDlgButtonBool(GetHwnd(), IDC_CHECK_PS_KINSOKUHEAD, curPS.m_bPrintKinsokuHead);
+	CheckDlgButtonBool(GetHwnd(), IDC_CHECK_PS_KINSOKUHEAD, curPS.bPrintKinsokuHead);
 	// 行末禁則	//@@@ 2002.04.09 MIK
-	CheckDlgButtonBool(GetHwnd(), IDC_CHECK_PS_KINSOKUTAIL, curPS.m_bPrintKinsokuTail);
+	CheckDlgButtonBool(GetHwnd(), IDC_CHECK_PS_KINSOKUTAIL, curPS.bPrintKinsokuTail);
 
 	// 改行文字をぶら下げる	//@@@ 2002.04.13 MIK
-	CheckDlgButtonBool(GetHwnd(), IDC_CHECK_PS_KINSOKURET, curPS.m_bPrintKinsokuRet);
+	CheckDlgButtonBool(GetHwnd(), IDC_CHECK_PS_KINSOKURET, curPS.bPrintKinsokuRet);
 	// 句読点をぶら下げる	//@@@ 2002.04.17 MIK
-	CheckDlgButtonBool(GetHwnd(), IDC_CHECK_PS_KINSOKUKUTO, curPS.m_bPrintKinsokuKuto);
+	CheckDlgButtonBool(GetHwnd(), IDC_CHECK_PS_KINSOKUKUTO, curPS.bPrintKinsokuKuto);
 
 	// カラー印刷
-	CheckButton(IDC_CHECK_COLORPRINT, curPS.m_bColorPrint);
+	CheckButton(IDC_CHECK_COLORPRINT, curPS.bColorPrint);
 
 	// ヘッダー
-	SetItemText(IDC_EDIT_HEAD1, curPS.m_szHeaderForm[POS_LEFT]);	// 100文字で制限しないと。。。
-	SetItemText(IDC_EDIT_HEAD2, curPS.m_szHeaderForm[POS_CENTER]);	// 100文字で制限しないと。。。
-	SetItemText(IDC_EDIT_HEAD3, curPS.m_szHeaderForm[POS_RIGHT]);	// 100文字で制限しないと。。。
+	SetItemText(IDC_EDIT_HEAD1, curPS.szHeaderForm[POS_LEFT]);	// 100文字で制限しないと。。。
+	SetItemText(IDC_EDIT_HEAD2, curPS.szHeaderForm[POS_CENTER]);	// 100文字で制限しないと。。。
+	SetItemText(IDC_EDIT_HEAD3, curPS.szHeaderForm[POS_RIGHT]);	// 100文字で制限しないと。。。
 
 	// フッター
-	SetItemText(IDC_EDIT_FOOT1, curPS.m_szFooterForm[POS_LEFT]);	// 100文字で制限しないと。。。
-	SetItemText(IDC_EDIT_FOOT2, curPS.m_szFooterForm[POS_CENTER]);	// 100文字で制限しないと。。。
-	SetItemText(IDC_EDIT_FOOT3, curPS.m_szFooterForm[POS_RIGHT]);	// 100文字で制限しないと。。。
+	SetItemText(IDC_EDIT_FOOT1, curPS.szFooterForm[POS_LEFT]);	// 100文字で制限しないと。。。
+	SetItemText(IDC_EDIT_FOOT2, curPS.szFooterForm[POS_CENTER]);	// 100文字で制限しないと。。。
+	SetItemText(IDC_EDIT_FOOT3, curPS.szFooterForm[POS_RIGHT]);	// 100文字で制限しないと。。。
 
 	// ヘッダフォント
 	SetFontName(IDC_STATIC_FONT_HEAD, IDC_CHECK_USE_FONT_HEAD,
-		curPS.m_lfHeader,
-		curPS.m_nHeaderPointSize);
+		curPS.lfHeader,
+		curPS.nHeaderPointSize);
 	// フッタフォント
 	SetFontName(IDC_STATIC_FONT_FOOT, IDC_CHECK_USE_FONT_FOOT,
-		curPS.m_lfFooter,
-		curPS.m_nFooterPointSize);
+		curPS.lfFooter,
+		curPS.nFooterPointSize);
 
 	UpdatePrintableLineAndColumn();
 	return;
@@ -799,11 +799,11 @@ BOOL DlgPrintSetting::CalcPrintableLineAndColumn()
 
 	// ダイアログデータの取得
 	GetData();
-	PRINTSETTING* pPS = &m_printSettingArr[m_nCurrentPrintSetting];
+	PrintSetting* pPS = &m_printSettingArr[m_nCurrentPrintSetting];
 
 	dmDummy.dmFields = DM_PAPERSIZE | DMORIENT_LANDSCAPE;
-	dmDummy.dmPaperSize = pPS->m_nPrintPaperSize;
-	dmDummy.dmOrientation = pPS->m_nPrintPaperOrientation;
+	dmDummy.dmPaperSize = pPS->nPrintPaperSize;
+	dmDummy.dmOrientation = pPS->nPrintPaperOrientation;
 	// 用紙の幅、高さ
 	if (!Print::GetPaperSize(
 			&nPaperAllWidth,
@@ -817,7 +817,7 @@ BOOL DlgPrintSetting::CalcPrintableLineAndColumn()
 		return FALSE;
 	}
 	// 行あたりの文字数(行番号込み)
-	nEnableColumns = Print::CalculatePrintableColumns(pPS, nPaperAllWidth, pPS->m_bPrintLineNumber ? m_nLineNumberColumns : 0);	// 印字可能桁数/ページ
+	nEnableColumns = Print::CalculatePrintableColumns(pPS, nPaperAllWidth, pPS->bPrintLineNumber ? m_nLineNumberColumns : 0);	// 印字可能桁数/ページ
 	// 縦方向の行数
 	nEnableLines = Print::CalculatePrintableLines(pPS, nPaperAllHeight);			// 印字可能行数/ページ
 
@@ -826,7 +826,7 @@ BOOL DlgPrintSetting::CalcPrintableLineAndColumn()
 
 	// フォントのポイント数	2013/5/9 Uchi
 	// 1pt = 1/72in = 25.4/72mm
-	int nFontPoints = pPS->m_nPrintFontHeight * 720 / 254;
+	int nFontPoints = pPS->nPrintFontHeight * 720 / 254;
 	TCHAR szFontPoints[20];
 	auto_sprintf_s(szFontPoints, _countof(szFontPoints), _T("%d.%dpt"), nFontPoints/10, nFontPoints%10);
 	SetItemText(IDC_STATIC_FONTSIZE, szFontPoints);

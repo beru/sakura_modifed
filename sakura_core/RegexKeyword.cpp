@@ -272,11 +272,11 @@ bool RegexKeyword::RegexKeyCompile(void)
 					m_info[i].nHead = 0;
 				}
 
-				if (COLORIDX_REGEX1  <= rp->m_nColorIndex
-				 && COLORIDX_REGEX10 >= rp->m_nColorIndex
+				if (COLORIDX_REGEX1  <= rp->nColorIndex
+				 && COLORIDX_REGEX10 >= rp->nColorIndex
 				) {
 					// 色指定でチェックが入ってなければ検索しなくてもよい
-					if (m_pTypes->colorInfoArr[rp->m_nColorIndex].bDisp) {
+					if (m_pTypes->colorInfoArr[rp->nColorIndex].bDisp) {
 						m_info[i].nFlag = RK_EMPTY;
 					}else {
 						// 正規表現では色指定のチェックを見る。
@@ -383,7 +383,7 @@ bool RegexKeyword::RegexIsKeyword(
 			if (m_info[i].nOffset == nPos) {  // 以前検索した結果に一致する
 				*nMatchLen   = m_info[i].nLength;
 #ifdef USE_PARENT
-				*nMatchColor = m_pTypes->regexKeywordArr[i].m_nColorIndex;
+				*nMatchColor = m_pTypes->regexKeywordArr[i].nColorIndex;
 #else
 				*nMatchColor = m_info[i].sRegexKey.m_nColorIndex;
 #endif
@@ -411,7 +411,7 @@ bool RegexKeyword::RegexIsKeyword(
 						if (m_info[i].nHead != 1 || nPos == 0) {
 							*nMatchLen   = m_info[i].nLength;
 #ifdef USE_PARENT
-							*nMatchColor = m_pTypes->regexKeywordArr[i].m_nColorIndex;
+							*nMatchColor = m_pTypes->regexKeywordArr[i].nColorIndex;
 #else
 							*nMatchColor = m_info[i].sRegexKey.m_nColorIndex;
 #endif

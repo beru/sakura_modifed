@@ -63,8 +63,8 @@ const DWORD p_helpids[] = {
 
 DlgGrepReplace::DlgGrepReplace()
 {
-	if (0 < m_pShareData->m_searchKeywords.replaceKeys.size()) {
-		m_strText2 = m_pShareData->m_searchKeywords.replaceKeys[0];
+	if (0 < m_pShareData->searchKeywords.replaceKeys.size()) {
+		m_strText2 = m_pShareData->searchKeywords.replaceKeys[0];
 	}
 	return;
 }
@@ -79,7 +79,7 @@ int DlgGrepReplace::DoModal(
 	LPARAM lParam
 	)
 {
-	auto& csSearch = m_pShareData->m_common.search;
+	auto& csSearch = m_pShareData->common.search;
 	m_bSubFolder = csSearch.bGrepSubFolder;				// Grep: サブフォルダも検索
 	searchOption = csSearch.searchOption;				// 検索オプション
 	nGrepCharSet = csSearch.nGrepCharSet;				// 文字コードセット
@@ -88,7 +88,7 @@ int DlgGrepReplace::DoModal(
 	m_bPaste = false;
 	m_bBackup = csSearch.bGrepBackup;
 
-	auto& searchKeywords = m_pShareData->m_searchKeywords;
+	auto& searchKeywords = m_pShareData->searchKeywords;
 	if (m_szFile[0] == _T('\0') && searchKeywords.grepFiles.size()) {
 		_tcscpy(m_szFile, searchKeywords.grepFiles[0]);		// 検索ファイル
 	}
@@ -164,7 +164,7 @@ void DlgGrepReplace::SetData(void)
 	// 置換後
 	SetItemText(IDC_COMBO_TEXT2, m_strText2.c_str() );
 	HWND hwndCombo = GetItemHwnd(IDC_COMBO_TEXT2);
-	auto& replaceKeys = m_pShareData->m_searchKeywords.replaceKeys;
+	auto& replaceKeys = m_pShareData->searchKeywords.replaceKeys;
 	for (int i=0; i<replaceKeys.size(); ++i) {
 		Combo_AddString(hwndCombo, replaceKeys[i]);
 	}
@@ -192,7 +192,7 @@ int DlgGrepReplace::GetData(void)
 	}
 
 	m_bBackup = IsButtonChecked(IDC_CHK_BACKUP);
-	m_pShareData->m_common.search.bGrepBackup = m_bBackup;
+	m_pShareData->common.search.bGrepBackup = m_bBackup;
 
 	if (!DlgGrep::GetData()) {
 		return FALSE;
@@ -201,7 +201,7 @@ int DlgGrepReplace::GetData(void)
 	if (m_strText2.size() < _MAX_PATH) {
 		SearchKeywordManager().AddToReplaceKeys( m_strText2.c_str() );
 	}
-	nReplaceKeySequence = GetDllShareData().m_common.search.nReplaceKeySequence;
+	nReplaceKeySequence = GetDllShareData().common.search.nReplaceKeySequence;
 
 	return TRUE;
 }

@@ -36,7 +36,7 @@
 */
 bool HelpManager::ExtWinHelpIsSet(const TypeConfig* type)
 {
-	if (m_pShareData->m_common.helper.szExtHelp[0] != L'\0') {
+	if (m_pShareData->common.helper.szExtHelp[0] != L'\0') {
 		return true;	// 共通設定に設定されている
 	}
 	if (type && type->szExtHelp[0] != L'\0') {
@@ -55,14 +55,14 @@ const TCHAR* HelpManager::GetExtWinHelp(const TypeConfig* type)
 		return type->szExtHelp;
 	}
 	
-	return m_pShareData->m_common.helper.szExtHelp;
+	return m_pShareData->common.helper.szExtHelp;
 }
 
 /*!	外部HTMLヘルプが設定されているか確認。
 */
 bool HelpManager::ExtHTMLHelpIsSet(const TypeConfig* type)
 {
-	if (m_pShareData->m_common.helper.szExtHtmlHelp[0] != L'\0') {
+	if (m_pShareData->common.helper.szExtHtmlHelp[0] != L'\0') {
 		return true;	// 共通設定に設定されている
 	}
 	if (type && type->szExtHtmlHelp[0] != L'\0') {
@@ -81,7 +81,7 @@ const TCHAR* HelpManager::GetExtHTMLHelp(const TypeConfig* type)
 		return type->szExtHtmlHelp;
 	}
 	
-	return m_pShareData->m_common.helper.szExtHtmlHelp;
+	return m_pShareData->common.helper.szExtHtmlHelp;
 }
 
 /*!	ビューアを複数起動しないがONかを返す。
@@ -92,6 +92,6 @@ bool HelpManager::HTMLHelpIsSingle(const TypeConfig* type)
 		return type->bHtmlHelpIsSingle;
 	}
 
-	return m_pShareData->m_common.helper.bHtmlHelpIsSingle;
+	return m_pShareData->common.helper.bHtmlHelpIsSingle;
 }
 

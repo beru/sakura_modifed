@@ -35,59 +35,59 @@
 */
 struct EditInfo {
 	// ファイル
-	TCHAR			m_szPath[_MAX_PATH];					//!< ファイル名
-	EncodingType	m_nCharCode;							//!< 文字コード種別
-	bool			m_bBom;									//!< BOM(GetFileInfo)
-	TCHAR			m_szDocType[MAX_DOCTYPE_LEN + 1];		//!< 文書タイプ
-	int 			m_nTypeId;								//!< 文書タイプ(MRU)
+	TCHAR			szPath[_MAX_PATH];					//!< ファイル名
+	EncodingType	nCharCode;							//!< 文字コード種別
+	bool			bBom;								//!< BOM(GetFileInfo)
+	TCHAR			szDocType[MAX_DOCTYPE_LEN + 1];		//!< 文書タイプ
+	int 			nTypeId;							//!< 文書タイプ(MRU)
 
 	// 表示域
-	LayoutInt	m_nViewTopLine;							//!< 表示域の一番上の行(0開始)
-	LayoutInt	m_nViewLeftCol;							//!< 表示域の一番左の桁(0開始)
+	LayoutInt	nViewTopLine;							//!< 表示域の一番上の行(0開始)
+	LayoutInt	nViewLeftCol;							//!< 表示域の一番左の桁(0開始)
 
 	// キャレット
-	LogicPoint m_ptCursor;								//!< キャレット位置
+	LogicPoint ptCursor;								//!< キャレット位置
 
 	// 各種状態
-	bool		m_bIsModified;							//!< 変更フラグ
+	bool		bIsModified;							//!< 変更フラグ
 
 	// GREPモード
-	bool		m_bIsGrep;								//!< Grepのウィンドウか
-	wchar_t		m_szGrepKey[1024];
+	bool		bIsGrep;								//!< Grepのウィンドウか
+	wchar_t		szGrepKey[1024];
 
 	// デバッグモニタ (アウトプットウィンドウ) モード
-	bool		m_bIsDebug;								//!< デバッグモニタモード (アウトプットウィンドウ) か
+	bool		bIsDebug;								//!< デバッグモニタモード (アウトプットウィンドウ) か
 
 	// ブックマーク情報
-	wchar_t		m_szMarkLines[MAX_MARKLINES_LEN + 1];	//!< ブックマークの物理行リスト
+	wchar_t		szMarkLines[MAX_MARKLINES_LEN + 1];		//!< ブックマークの物理行リスト
 
 	// ウィンドウ
-	int			m_nWindowSizeX;							//!< ウィンドウ  幅(ピクセル数)
-	int			m_nWindowSizeY;							//!< ウィンドウ  高さ(ピクセル数)
-	int			m_nWindowOriginX;						//!< ウィンドウ  物理位置(ピクセル数・マイナス値も有効)
-	int			m_nWindowOriginY;						//!< ウィンドウ  物理位置(ピクセル数・マイナス値も有効)
+	int			nWindowSizeX;							//!< ウィンドウ  幅(ピクセル数)
+	int			nWindowSizeY;							//!< ウィンドウ  高さ(ピクセル数)
+	int			nWindowOriginX;							//!< ウィンドウ  物理位置(ピクセル数・マイナス値も有効)
+	int			nWindowOriginY;							//!< ウィンドウ  物理位置(ピクセル数・マイナス値も有効)
 	
 	// Mar. 7, 2002 genta
 	// Constructor 確実に初期化するため
 	EditInfo()
 		:
-		m_nCharCode(CODE_AUTODETECT),
-		m_bBom(false),
-		m_nTypeId(-1),
-		m_nViewTopLine(-1),
-		m_nViewLeftCol(-1),
-		m_ptCursor(LogicInt(-1), LogicInt(-1)),
-		m_bIsModified(false),
-		m_bIsGrep(false),
-		m_bIsDebug(false),
-		m_nWindowSizeX(-1),
-		m_nWindowSizeY(-1),
-		m_nWindowOriginX(CW_USEDEFAULT),	//	2004.05.13 Moca “指定無し”を-1からCW_USEDEFAULTに変更
-		m_nWindowOriginY(CW_USEDEFAULT)
+		nCharCode(CODE_AUTODETECT),
+		bBom(false),
+		nTypeId(-1),
+		nViewTopLine(-1),
+		nViewLeftCol(-1),
+		ptCursor(LogicInt(-1), LogicInt(-1)),
+		bIsModified(false),
+		bIsGrep(false),
+		bIsDebug(false),
+		nWindowSizeX(-1),
+		nWindowSizeY(-1),
+		nWindowOriginX(CW_USEDEFAULT),	//	2004.05.13 Moca “指定無し”を-1からCW_USEDEFAULTに変更
+		nWindowOriginY(CW_USEDEFAULT)
 	{
-		m_szPath[0] = '\0';
-		m_szMarkLines[0] = L'\0';
-		m_szDocType[0] = '\0';
+		szPath[0] = '\0';
+		szMarkLines[0] = L'\0';
+		szDocType[0] = '\0';
 	}
 };
 

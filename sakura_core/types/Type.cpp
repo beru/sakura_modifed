@@ -94,15 +94,15 @@ void ShareData::InitTypeConfigs(
 		TypeConfig* type = new TypeConfig;
 		types.push_back(type);
 		table[i]->InitTypeConfig(i, *type);
-		auto& typeMini = pShareData->m_TypeMini[i];
+		auto& typeMini = pShareData->typesMini[i];
 		auto_strcpy(typeMini.szTypeExts, type->szTypeExts);
 		auto_strcpy(typeMini.szTypeName, type->szTypeName);
 		typeMini.encoding = type->encoding;
 		typeMini.id = type->id;
 		SAFE_DELETE(table[i]);
 	}
-	pShareData->m_TypeBasis = *types[0];
-	pShareData->m_nTypesCount = (int)types.size();
+	pShareData->typeBasis = *types[0];
+	pShareData->nTypesCount = (int)types.size();
 }
 
 /*!	@brief 共有メモリ初期化/強調キーワード
@@ -115,15 +115,15 @@ void ShareData::InitTypeConfigs(
 void ShareData::InitKeyword(DllSharedData* pShareData)
 {
 	// 強調キーワードのテストデータ
-	pShareData->m_common.specialKeyword.keywordSetMgr.m_nCurrentKeywordSetIdx = 0;
+	pShareData->common.specialKeyword.keywordSetMgr.m_nCurrentKeywordSetIdx = 0;
 
 	int nSetCount = -1;
 
 #define PopulateKeyword(name, case_sensitive, aryname) \
 	extern const wchar_t* g_ppszKeywords##aryname[]; \
 	extern int g_nKeywords##aryname; \
-	pShareData->m_common.specialKeyword.keywordSetMgr.AddKeywordSet((name), (case_sensitive));	\
-	pShareData->m_common.specialKeyword.keywordSetMgr.SetKeywordArr(++nSetCount, g_nKeywords##aryname, g_ppszKeywords##aryname);
+	pShareData->common.specialKeyword.keywordSetMgr.AddKeywordSet((name), (case_sensitive));	\
+	pShareData->common.specialKeyword.keywordSetMgr.SetKeywordArr(++nSetCount, g_nKeywords##aryname, g_ppszKeywords##aryname);
 	
 	PopulateKeyword(L"C/C++",			true,	CPP);			// セット 0の追加
 	PopulateKeyword(L"HTML",			false,	HTML);			// セット 1の追加
@@ -260,7 +260,7 @@ void _DefaultConfig(TypeConfig* pType)
 
 //@@@ 2001.11.17 add start MIK
 	for (int i=0; i<_countof(pType->regexKeywordArr); ++i) {
-		pType->regexKeywordArr[i].m_nColorIndex = COLORIDX_REGEX1;
+		pType->regexKeywordArr[i].nColorIndex = COLORIDX_REGEX1;
 	}
 	pType->regexKeywordList[0] = L'\0';
 	pType->bUseRegexKeyword = false;

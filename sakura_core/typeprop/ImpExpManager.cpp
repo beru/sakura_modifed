@@ -128,7 +128,7 @@ bool ImpExpManager::ImportUI(HINSTANCE hInstance, HWND hwndParent)
 		hInstance,
 		hwndParent,
 		GetDefaultExtension(),
-		GetDllShareData().m_history.m_szIMPORTFOLDER // インポート用フォルダ
+		GetDllShareData().history.m_szIMPORTFOLDER // インポート用フォルダ
 	);
 	TCHAR szPath[_MAX_PATH + 1];
 	szPath[0] = _T('\0');
@@ -175,7 +175,7 @@ bool ImpExpManager::ExportUI(HINSTANCE hInstance, HWND hwndParent)
 		hInstance,
 		hwndParent,
 		GetDefaultExtension(),
-		GetDllShareData().m_history.m_szIMPORTFOLDER // インポート用フォルダ
+		GetDllShareData().history.m_szIMPORTFOLDER // インポート用フォルダ
 	);
 	TCHAR szPath[_MAX_PATH + 1];
 	szPath[0] = _T('\0');
@@ -252,7 +252,7 @@ bool ImpExpType::ImportAscertain(HINSTANCE hInstance, HWND hwndParent, const wst
 		sErrMsg = LSW(STR_IMPEXP_ERR_TYPE);
 		return false;
 	}
-	if ((unsigned int)nStructureVersion != m_pShareData->m_vStructureVersion) {
+	if ((unsigned int)nStructureVersion != m_pShareData->vStructureVersion) {
 		auto_strcpy(szKeyVersion, L"?");
 		m_profile.IOProfileData(szSecInfo, szKeyVersion, MakeStringBufferW(szKeyVersion));
 		int nRet = ConfirmMessage(hwndParent,
@@ -304,7 +304,7 @@ bool ImpExpType::Import(const wstring& sFileName, wstring& sErrMsg)
 			files += wstring(L"\n") + m_sColorFile;
 		}else {
 			// 失敗したら基本をコピー(メッセージは出さない)
-			memcpy(&colorInfoArr, GetDllShareData().m_TypeBasis.colorInfoArr, sizeof(colorInfoArr));
+			memcpy(&colorInfoArr, GetDllShareData().typeBasis.colorInfoArr, sizeof(colorInfoArr));
 			files += wstring(L"\n× ") + m_sColorFile;	// 失敗
 		}
 	}else if (m_nColorType >= 0) {
@@ -347,7 +347,7 @@ bool ImpExpType::Import(const wstring& sFileName, wstring& sErrMsg)
 	wchar_t	szFileName[_MAX_PATH + 1];
 	bool	bCase;
 	wstring	sErrMag;
-	CommonSetting& common = m_pShareData->m_common;
+	CommonSetting& common = m_pShareData->common;
 
 	// 強調キーワード
 	KeywordSetMgr&	keywordSetMgr = common.specialKeyword.keywordSetMgr;
@@ -449,7 +449,7 @@ bool ImpExpType::Export(const wstring& sFileName, wstring& sErrMsg)
 	wchar_t	szFileName[_MAX_PATH + 1];
 	wstring	files = L"";
 	wstring	sTmpMsg;
-	CommonSetting& common = m_pShareData->m_common;
+	CommonSetting& common = m_pShareData->common;
 
 	// 強調キーワード
 	auto& keywordSetMgr = common.specialKeyword.keywordSetMgr;
@@ -513,12 +513,12 @@ bool ImpExpType::Export(const wstring& sFileName, wstring& sErrMsg)
 	int nStructureVersion;
 	wchar_t	wbuff[_MAX_PATH + 1];
 	auto_sprintf_s(wbuff, L"%d.%d.%d.%d", 
-				HIWORD(pShare->m_version.m_dwProductVersionMS),
-				LOWORD(pShare->m_version.m_dwProductVersionMS),
-				HIWORD(pShare->m_version.m_dwProductVersionLS),
-				LOWORD(pShare->m_version.m_dwProductVersionLS));
+				HIWORD(pShare->version.dwProductVersionMS),
+				LOWORD(pShare->version.dwProductVersionMS),
+				HIWORD(pShare->version.dwProductVersionLS),
+				LOWORD(pShare->version.dwProductVersionLS));
 	profile.IOProfileData(szSecInfo, szKeyVersion, MakeStringBufferW(wbuff));
-	nStructureVersion = int(pShare->m_vStructureVersion);
+	nStructureVersion = int(pShare->vStructureVersion);
 	profile.IOProfileData(szSecInfo, szKeyStructureVersion, nStructureVersion);
 
 	// 書き込み
@@ -650,7 +650,7 @@ bool ImpExpRegex::Import(const wstring& sFileName, wstring& sErrMsg)
 				}
 				if (k != -1) {	// 3文字カラー名からインデックス番号に変換
 					if (0 < MAX_REGEX_KEYWORDLISTLEN - keywordPos - 1) {
-						regexKeyArr[count].m_nColorIndex = k;
+						regexKeyArr[count].nColorIndex = k;
 						_tcstowcs(&pKeyword[keywordPos], p, t_min<int>(MAX_REGEX_KEYWORDLEN, MAX_REGEX_KEYWORDLISTLEN - keywordPos - 1));
 						++count;
 						keywordPos += auto_strlen(&pKeyword[keywordPos]) + 1;
@@ -694,7 +694,7 @@ bool ImpExpRegex::Export(const wstring& sFileName, wstring& sErrMsg)
 			break;
 		}
 		
-		const TCHAR* name  = GetColorNameByIndex(m_types.regexKeywordArr[i].m_nColorIndex);
+		const TCHAR* name  = GetColorNameByIndex(m_types.regexKeywordArr[i].nColorIndex);
 		out.WriteF(L"RxKey[%03d]=%ts,%ls\n", i, name, regex);
 
 		for (; *regex!='\0'; ++regex) {}
@@ -932,7 +932,7 @@ bool ImpExpKeybind::Import(const wstring& sFileName, wstring& sErrMsg)
 				if (i != n) {
 					break;
 				}
-				sKeyBind.pKeyNameArr[i].m_nKeyCode = (short)kc;
+				sKeyBind.pKeyNameArr[i].nKeyCode = (short)kc;
 				wchar_t* p = szData + nc;
 
 				// 後に続くトークン
@@ -954,12 +954,12 @@ bool ImpExpKeybind::Import(const wstring& sFileName, wstring& sErrMsg)
 							n = F_DEFAULT;
 						}
 					}
-					sKeyBind.pKeyNameArr[i].m_nFuncCodeArr[j] = n;
+					sKeyBind.pKeyNameArr[i].nFuncCodeArr[j] = n;
 					p = q + 1;
 				}
 
-				auto_strncpy(sKeyBind.pKeyNameArr[i].m_szKeyName, to_tchar(p), _countof(sKeyBind.pKeyNameArr[i].m_szKeyName) - 1);
-				sKeyBind.pKeyNameArr[i].m_szKeyName[_countof(sKeyBind.pKeyNameArr[i].m_szKeyName) - 1] = '\0';
+				auto_strncpy(sKeyBind.pKeyNameArr[i].szKeyName, to_tchar(p), _countof(sKeyBind.pKeyNameArr[i].szKeyName) - 1);
+				sKeyBind.pKeyNameArr[i].szKeyName[_countof(sKeyBind.pKeyNameArr[i].szKeyName) - 1] = '\0';
 			}
 		}
 	}
@@ -969,19 +969,19 @@ bool ImpExpKeybind::Import(const wstring& sFileName, wstring& sErrMsg)
 	}
 
 	// データのコピー 	// マウスコードの固定と重複排除 2012.11.19 aroka
-	//m_common.keyBind.nKeyNameArrNum = nKeyNameArrNum;
-	//memcpy_raw(m_common.keyBind.pKeyNameArr, pKeyNameArr, sizeof_raw(pKeyNameArr));
+	//common.keyBind.nKeyNameArrNum = nKeyNameArrNum;
+	//memcpy_raw(common.keyBind.pKeyNameArr, pKeyNameArr, sizeof_raw(pKeyNameArr));
 	int nKeyNameArrUsed = m_common.keyBind.nKeyNameArrNum; // 使用済み領域
 	for (int j=sKeyBind.nKeyNameArrNum-1; j>=0; --j) {
-		if ((bVer2 || bVer3) && sKeyBind.pKeyNameArr[j].m_nKeyCode <= 0) { // マウスコードは先頭に固定されている KeyCodeが同じなのでKeyNameで判別
+		if ((bVer2 || bVer3) && sKeyBind.pKeyNameArr[j].nKeyCode <= 0) { // マウスコードは先頭に固定されている KeyCodeが同じなのでKeyNameで判別
 			for (int im=0; im<(int)MouseFunctionType::KeyBegin; ++im) {
-				if (_tcscmp(sKeyBind.pKeyNameArr[j].m_szKeyName, m_common.keyBind.pKeyNameArr[im].m_szKeyName) == 0) {
+				if (_tcscmp(sKeyBind.pKeyNameArr[j].szKeyName, m_common.keyBind.pKeyNameArr[im].szKeyName) == 0) {
 					m_common.keyBind.pKeyNameArr[im] = sKeyBind.pKeyNameArr[j];
 				}
 			}
 		}else {
 			// 割り当て済みキーコードは上書き
-			int idx = sKeyBind.keyToKeyNameArr[sKeyBind.pKeyNameArr[j].m_nKeyCode];
+			int idx = sKeyBind.keyToKeyNameArr[sKeyBind.pKeyNameArr[j].nKeyCode];
 			if (idx != KEYNAME_SIZE) {
 				m_common.keyBind.pKeyNameArr[idx] = sKeyBind.pKeyNameArr[j];
 			}
@@ -989,13 +989,13 @@ bool ImpExpKeybind::Import(const wstring& sFileName, wstring& sErrMsg)
 	}
 	// 未割り当てのキーコードは空き領域が一杯になるまで追加
 	for (int j2=0; j2<sKeyBind.nKeyNameArrNum; ++j2) {
-		int idx = sKeyBind.keyToKeyNameArr[sKeyBind.pKeyNameArr[j2].m_nKeyCode];
+		int idx = sKeyBind.keyToKeyNameArr[sKeyBind.pKeyNameArr[j2].nKeyCode];
 		if (idx == KEYNAME_SIZE) { // not assigned
 			if (nKeyNameArrUsed >= KEYNAME_SIZE) {
 				continue;
 			}
 			m_common.keyBind.pKeyNameArr[nKeyNameArrUsed] = sKeyBind.pKeyNameArr[j2];
-			sKeyBind.keyToKeyNameArr[sKeyBind.pKeyNameArr[j2].m_nKeyCode] = (BYTE)nKeyNameArrUsed++;
+			sKeyBind.keyToKeyNameArr[sKeyBind.pKeyNameArr[j2].nKeyCode] = (BYTE)nKeyNameArrUsed++;
 		}
 	}
 	m_common.keyBind.nKeyNameArrNum = nKeyNameArrUsed;

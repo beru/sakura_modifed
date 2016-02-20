@@ -40,7 +40,7 @@ void SearchKeywordManager::AddToSearchKeys(const wchar_t* pszSearchKey)
 	RecentSearch recentSearchKey;
 	recentSearchKey.AppendItem(pszSearchKey);
 	recentSearchKey.Terminate();
-	GetDllShareData().m_common.search.nSearchKeySequence++;
+	GetDllShareData().common.search.nSearchKeySequence++;
 }
 
 /*!	m_aReplaceKeys‚ÉpszReplaceKey‚ð’Ç‰Á‚·‚é
@@ -51,7 +51,7 @@ void SearchKeywordManager::AddToReplaceKeys(const wchar_t* pszReplaceKey)
 	RecentReplace recentReplaceKey;
 	recentReplaceKey.AppendItem(pszReplaceKey);
 	recentReplaceKey.Terminate();
-	GetDllShareData().m_common.search.nReplaceKeySequence++;
+	GetDllShareData().common.search.nReplaceKeySequence++;
 
 	return;
 }

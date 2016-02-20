@@ -45,7 +45,7 @@ CallbackResultType BackupAgent::OnPreBeforeSave(SaveInfo* pSaveInfo)
 	}
 
 	// 共通設定：保存時にバックアップを作成する
-	if (GetDllShareData().m_common.backup.bBackUp) {
+	if (GetDllShareData().common.backup.bBackUp) {
 		//	Jun.  5, 2004 genta ファイル名を与えるように．戻り値に応じた処理を追加．
 		// ファイル保存前にバックアップ処理
 		int nBackupResult = 0;
@@ -104,7 +104,7 @@ int BackupAgent::MakeBackUp(
 		return 0;
 	}
 
-	const CommonSetting_Backup& bup_setting = GetDllShareData().m_common.backup;
+	const CommonSetting_Backup& bup_setting = GetDllShareData().common.backup;
 
 	TCHAR szPath[_MAX_PATH]; // バックアップ先パス名
 	if (!FormatBackUpPath(szPath, _countof(szPath), target_file)) {
@@ -310,7 +310,7 @@ bool BackupAgent::FormatBackUpPath(
 	TCHAR	szExt[_MAX_EXT];
 	TCHAR*	psNext;
 
-	const CommonSetting_Backup& bup_setting = GetDllShareData().m_common.backup;
+	const CommonSetting_Backup& bup_setting = GetDllShareData().common.backup;
 
 	// パスの分解
 	_tsplitpath(target_file, szDrive, szDir, szFname, szExt);

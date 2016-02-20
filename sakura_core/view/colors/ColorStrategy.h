@@ -90,54 +90,54 @@ struct Color3Setting {
 struct ColorStrategyInfo {
 	ColorStrategyInfo()
 		:
-		m_dispPosBegin(0, 0),
-		m_pStrategy(NULL),
-		m_pStrategyFound(NULL),
-		m_pStrategySelect(NULL),
-		m_colorIdxBackLine(COLORIDX_TEXT)
+		dispPosBegin(0, 0),
+		pStrategy(NULL),
+		pStrategyFound(NULL),
+		pStrategySelect(NULL),
+		colorIdxBackLine(COLORIDX_TEXT)
 	{
-		m_cIndex.eColorIndex = COLORIDX_TEXT;
-		m_cIndex.eColorIndex2 = COLORIDX_TEXT;
-		m_cIndex.eColorIndexBg = COLORIDX_TEXT;
+		index.eColorIndex = COLORIDX_TEXT;
+		index.eColorIndex2 = COLORIDX_TEXT;
+		index.eColorIndexBg = COLORIDX_TEXT;
 	}
 
 	// 参照
-	EditView*	m_pView;
-	Graphics	m_gr;	// (SColorInfoでは未使用)
+	EditView*	pView;
+	Graphics	gr;	// (SColorInfoでは未使用)
 
 	// スキャン位置
-	LPCWSTR			m_pLineOfLogic;
-	LogicInt		m_nPosInLogic;
+	LPCWSTR			pLineOfLogic;
+	LogicInt		nPosInLogic;
 
 	// 描画位置
-	DispPos*		m_pDispPos;
-	DispPos			m_dispPosBegin;
+	DispPos*		pDispPos;
+	DispPos			dispPosBegin;
 
 	// 色変え
-	ColorStrategy*		m_pStrategy;
-	Color_Found*		m_pStrategyFound;
-	Color_Select*		m_pStrategySelect;
-	EColorIndexType		m_colorIdxBackLine;
-	Color3Setting		m_cIndex;
+	ColorStrategy*		pStrategy;
+	Color_Found*		pStrategyFound;
+	Color_Select*		pStrategySelect;
+	EColorIndexType		colorIdxBackLine;
+	Color3Setting		index;
 
 	// 色の切り替え
 	bool CheckChangeColor(const StringRef& lineStr);
 	void DoChangeColor(Color3Setting *pcColor);
-	EColorIndexType GetCurrentColor() const { return m_cIndex.eColorIndex; }
-	EColorIndexType GetCurrentColor2() const { return m_cIndex.eColorIndex2; }
-	EColorIndexType GetCurrentColorBg() const { return m_cIndex.eColorIndexBg; }
+	EColorIndexType GetCurrentColor() const { return index.eColorIndex; }
+	EColorIndexType GetCurrentColor2() const { return index.eColorIndex2; }
+	EColorIndexType GetCurrentColorBg() const { return index.eColorIndexBg; }
 
 	// 現在のスキャン位置
 	LogicInt GetPosInLogic() const {
-		return m_nPosInLogic;
+		return nPosInLogic;
 	}
 	
 	const DocLine* GetDocLine() const {
-		return m_pDispPos->GetLayoutRef()->GetDocLineRef();
+		return pDispPos->GetLayoutRef()->GetDocLineRef();
 	}
 	
 	const Layout* GetLayout() const {
-		return m_pDispPos->GetLayoutRef();
+		return pDispPos->GetLayoutRef();
 	}
 	
 };
