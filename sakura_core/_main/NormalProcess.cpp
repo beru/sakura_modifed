@@ -84,7 +84,7 @@ bool NormalProcess::InitializeProcess()
 	}
 
 	// 言語を選択する
-	SelectLang::ChangeLang(GetDllShareData().m_common.window.m_szLanguageDll);
+	SelectLang::ChangeLang(GetDllShareData().m_common.window.szLanguageDll);
 
 	// コマンドラインオプション
 	bool		bViewMode = false;
@@ -144,7 +144,7 @@ bool NormalProcess::InitializeProcess()
 	// エディタアプリケーションを作成。2007.10.23 kobake
 	// グループIDを取得
 	int nGroupId = cmdLine.GetGroupId();
-	if (GetDllShareData().m_common.tabBar.m_bNewWindow && nGroupId == -1) {
+	if (GetDllShareData().m_common.tabBar.bNewWindow && nGroupId == -1) {
 		nGroupId = AppNodeManager::getInstance()->GetFreeGroupId();
 	}
 	// CEditAppを作成
@@ -247,11 +247,11 @@ bool NormalProcess::InitializeProcess()
 				}
 			}
 			auto& csSearch = GetDllShareData().m_common.search;
-			csSearch.m_bGrepSubFolder = gi.bGrepSubFolder;
-			csSearch.m_searchOption = gi.grepSearchOption;
-			csSearch.m_nGrepCharSet = gi.nGrepCharSet;
-			csSearch.m_nGrepOutputLineType = gi.nGrepOutputLineType;
-			csSearch.m_nGrepOutputStyle = gi.nGrepOutputStyle;
+			csSearch.bGrepSubFolder = gi.bGrepSubFolder;
+			csSearch.searchOption = gi.grepSearchOption;
+			csSearch.nGrepCharSet = gi.nGrepCharSet;
+			csSearch.nGrepOutputLineType = gi.nGrepOutputLineType;
+			csSearch.nGrepOutputStyle = gi.nGrepOutputStyle;
 			// 2003.06.23 Moca GREPダイアログ表示前にMutexを開放
 			// こうしないとGrepが終わるまで新しいウィンドウを開けない
 			SetMainWindow(pEditWnd->GetHwnd());
@@ -430,7 +430,7 @@ bool NormalProcess::InitializeProcess()
 
 	// 2006.09.03 ryoji オープン後自動実行マクロを実行する
 	if (!(bDebugMode || bGrepMode)) {
-		pEditWnd->GetDocument()->RunAutoMacro(GetDllShareData().m_common.macro.m_nMacroOnOpened);
+		pEditWnd->GetDocument()->RunAutoMacro(GetDllShareData().m_common.macro.nMacroOnOpened);
 	}
 
 	// 起動時マクロオプション
@@ -446,7 +446,7 @@ bool NormalProcess::InitializeProcess()
 	// 複数ファイル読み込み
 	int fileNum = cmdLine.GetFileNum();
 	if (fileNum > 0) {
-		int nDropFileNumMax = GetDllShareData().m_common.file.m_nDropFileNumMax - 1;
+		int nDropFileNumMax = GetDllShareData().m_common.file.nDropFileNumMax - 1;
 		// ファイルドロップ数の上限に合わせる
 		if (fileNum > nDropFileNumMax) {
 			fileNum = nDropFileNumMax;

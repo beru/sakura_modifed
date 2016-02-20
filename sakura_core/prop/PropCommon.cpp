@@ -171,8 +171,8 @@ void PropCommon::Create(HWND hwndParent, ImageListMgr* pIcons, MenuDrawer* pMenu
 
 	// 2007.11.02 ryoji マクロ設定を変更したあと、画面を閉じないでカスタムメニュー、ツールバー、
 	//                  キー割り当ての画面に切り替えた時に各画面でマクロ設定の変更が反映されるよう、
-	//                  m_common.macro.m_macroTable（ローカルメンバ）でm_lookupを初期化する
-	m_lookup.Init(m_common.macro.m_macroTable, &m_common);	//	機能名・番号resolveクラス．
+	//                  m_common.macro.macroTable（ローカルメンバ）でm_lookupを初期化する
+	m_lookup.Init(m_common.macro.macroTable, &m_common);	//	機能名・番号resolveクラス．
 
 //@@@ 2002.01.03 YAZAKI m_tbMyButtonなどをCShareDataからMenuDrawerへ移動したことによる修正。
 	m_pMenuDrawer = pMenuDrawer;
@@ -318,9 +318,9 @@ void PropCommon::InitData(void)
 		KeywordSetIndex indexs;
 		TypeConfig type;
 		DocTypeManager().GetTypeConfig(TypeConfigNum(i), type);
-		indexs.typeId = type.m_id;
+		indexs.typeId = type.id;
 		for (int j=0; j<MAX_KEYWORDSET_PER_TYPE; ++j) {
-			indexs.index[j] = type.m_nKeywordSetIdx[j];
+			indexs.index[j] = type.nKeywordSetIdx[j];
 		}
 		m_Types_nKeywordSetIdx.push_back(indexs);
 	}
@@ -343,7 +343,7 @@ void PropCommon::ApplyData(void)
 			// 2002/04/25 YAZAKI TypeConfig全体を保持する必要はない。
 			// 変更された設定値のコピー
 			for (int j = 0; j < MAX_KEYWORDSET_PER_TYPE; ++j) {
-				type.m_nKeywordSetIdx[j] = m_Types_nKeywordSetIdx[i].index[j];
+				type.nKeywordSetIdx[j] = m_Types_nKeywordSetIdx[i].index[j];
 			}
 			DocTypeManager().SetTypeConfig(configIdx, type);
 		}

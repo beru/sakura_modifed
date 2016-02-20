@@ -37,7 +37,7 @@ public:
 	bool		m_bBackup;
 
 	std::wstring	m_strText2;				//!< 置換後
-	int				m_nReplaceKeySequence;	//!< 置換後シーケンス
+	int				nReplaceKeySequence;	//!< 置換後シーケンス
 
 protected:
 	FontAutoDeleter		m_fontText2;

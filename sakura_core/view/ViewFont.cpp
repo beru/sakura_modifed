@@ -30,8 +30,8 @@
 void ViewFont::CreateFont(const LOGFONT *plf)
 {
 	LOGFONT	lf;
-	int miniSize = GetDllShareData().m_common.window.m_nMiniMapFontSize;
-	int quality = GetDllShareData().m_common.window.m_nMiniMapQuality;
+	int miniSize = GetDllShareData().m_common.window.nMiniMapFontSize;
+	int quality = GetDllShareData().m_common.window.nMiniMapQuality;
 	int outPrec = OUT_TT_ONLY_PRECIS;	// FixedSys等でMiniMapのフォントが小さくならない修正
 
 	// フォント作成
@@ -98,14 +98,14 @@ void ViewFont::DeleteFont()
 */
 HFONT ViewFont::ChooseFontHandle(FontAttr sFontAttr) const
 {
-	if (sFontAttr.m_bBoldFont) {		// 太字か
-		if (sFontAttr.m_bUnderLine) {	// 下線か
+	if (sFontAttr.bBoldFont) {		// 太字か
+		if (sFontAttr.bUnderLine) {	// 下線か
 			return m_hFont_HAN_BOLD_UL;
 		}else {
 			return m_hFont_HAN_BOLD;
 		}
 	}else {
-		if (sFontAttr.m_bUnderLine) {	// 下線か
+		if (sFontAttr.bUnderLine) {	// 下線か
 			return m_hFont_HAN_UL;
 		}else {
 			return m_hFont_HAN;

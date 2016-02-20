@@ -170,7 +170,7 @@ void ViewCommander::Command_BEGIN_SELECT(void)
 // 矩形範囲選択開始
 void ViewCommander::Command_BEGIN_BOXSELECT(bool bSelectingLock)
 {
-	if (!GetDllShareData().m_common.view.m_bFontIs_FIXED_PITCH) {	// 現在のフォントは固定幅フォントである
+	if (!GetDllShareData().m_common.view.bFontIs_FixedPitch) {	// 現在のフォントは固定幅フォントである
 		return;
 	}
 

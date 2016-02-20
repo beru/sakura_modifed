@@ -178,7 +178,7 @@ public:
 	HWND			m_hwndTab;			// タブコントロール
 	HWND			m_hwndToolTip;		// ツールチップ（ボタン用）
 	TCHAR			m_szTextTip[1024];	// ツールチップのテキスト（タブ用）
-	TabPosition	m_eTabPosition;		// タブ表示位置
+	TabPosition	eTabPosition;		// タブ表示位置
 
 private:
 	DragState	m_eDragState;			// ドラッグ状態
@@ -202,7 +202,7 @@ private:
 	CaptureSrc	m_eCaptureSrc;			// キャプチャー元
 	bool		m_bTabSwapped;			// ドラッグ中にタブの入れ替えがあったかどうか
 	LONG*		m_nTabBorderArray;		// ドラッグ前のタブ境界位置配列
-	LOGFONT		m_lf;					// 表示フォントの特性情報
+	LOGFONT		lf;					// 表示フォントの特性情報
 	bool		m_bMultiLine;			// 複数行
 
 	// タブ内の閉じるボタン用変数

@@ -143,7 +143,7 @@ public:
 	}
 	bool GetCurrentMyFontBold() {
 		assert(!m_vFonts.empty());
-		return  m_vFonts.back().m_fontAttr.m_bBoldFont;
+		return  m_vFonts.back().m_fontAttr.bBoldFont;
 	}
 
 	// ƒyƒ“

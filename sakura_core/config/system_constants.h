@@ -109,15 +109,15 @@
 	CommonからSTypeConfigへ、m_bAutoIndent、m_bAutoIndent_ZENSPACEを移動 2002/04/30 YAZAKI
 
 	Version 33:
-	Commonに、m_lf_kh(後にCommonSetting_Helper::m_lf)を追加 2002/05/21 ai
+	Commonに、m_lf_kh(後にCommonSetting_Helper::lf)を追加 2002/05/21 ai
 	m_nDiffFlgOptを追加 2002.05.27 MIK
 	STypeConfig-ColorにCOLORIDX_DIFF_APPEND,COLORIDX_DIFF_CHANGE,COLORIDX_DIFF_DELETEを追加
 
 	Version 34:
-	STypeConfigにm_bUseDocumentIcon 追加． 2002.09.10 genta
+	STypeConfigにbUseDocumentIcon 追加． 2002.09.10 genta
 	
 	Version 35:
-	Commonにm_nLineNumRightSpace 追加．2002.09.18 genta
+	CommonにnLineNumRightSpace 追加．2002.09.18 genta
 
 	Version 36:
 	Commonのm_bGrepKanjiCode_AutoDetectを削除、m_nGrepCharSetを追加 2002/09/21 Moca

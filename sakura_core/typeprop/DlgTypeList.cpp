@@ -194,14 +194,14 @@ INT_PTR DlgTypeList::DispatchEvent(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM l
 				EnableItem(IDC_BUTTON_UP_TYPE, 1 < nIdx);
 				EnableItem(IDC_BUTTON_DOWN_TYPE, nIdx != 0 && nIdx < GetDllShareData().m_nTypesCount - 1);
 				EnableItem(IDC_BUTTON_DEL_TYPE, nIdx != 0);
-				if (type->m_szTypeExts[0] == '\0') {
+				if (type->szTypeExts[0] == '\0') {
 					::EnableWindow(hwndRMenu, FALSE);
 					::EnableWindow(hwndDblClick, FALSE);
 				}else {
 					EnableItem(IDC_CHECK_EXT_RMENU, true);
 					if (!m_bRegistryChecked[nIdx]) {
-						TCHAR exts[_countof(type->m_szTypeExts)] = {0};
-						_tcscpy(exts, type->m_szTypeExts);
+						TCHAR exts[_countof(type->szTypeExts)] = {0};
+						_tcscpy(exts, type->szTypeExts);
 						TCHAR *ext = _tcstok( exts, DocTypeManager::m_typeExtSeps );
 
 						m_bExtRMenu[nIdx] = true;
@@ -230,8 +230,8 @@ INT_PTR DlgTypeList::DispatchEvent(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM l
 				BtnCtl_SetCheck(hwndRMenu, !checked);
 				return result;
 			}
-			TCHAR exts[_countof(type->m_szTypeExts)] = {0};
-			_tcscpy(exts, type->m_szTypeExts);
+			TCHAR exts[_countof(type->szTypeExts)] = {0};
+			_tcscpy(exts, type->szTypeExts);
 			TCHAR *ext = _tcstok( exts, DocTypeManager::m_typeExtSeps );
 			int nRet;
 			while (ext) {
@@ -269,8 +269,8 @@ INT_PTR DlgTypeList::DispatchEvent(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM l
 				BtnCtl_SetCheck(hwndDblClick, !checked);
 				return result;
 			}
-			TCHAR exts[_countof(type->m_szTypeExts)] = {0};
-			_tcscpy(exts, type->m_szTypeExts);
+			TCHAR exts[_countof(type->szTypeExts)] = {0};
+			_tcscpy(exts, type->szTypeExts);
 			TCHAR *ext = _tcstok( exts, DocTypeManager::m_typeExtSeps );
 			int nRet;
 			while (ext) {
@@ -322,14 +322,14 @@ void DlgTypeList::SetData(int selIdx)
 	for (nIdx=0; nIdx<GetDllShareData().m_nTypesCount; ++nIdx) {
 		const TypeConfigMini* type;
 		DocTypeManager().GetTypeConfigMini(TypeConfigNum(nIdx), &type);
-		if (type->m_szTypeExts[0] != _T('\0')) {		// タイプ属性：拡張子リスト
+		if (type->szTypeExts[0] != _T('\0')) {		// タイプ属性：拡張子リスト
 			auto_sprintf_s(szText, _T("%ts (%ts)"),
-				type->m_szTypeName,	// タイプ属性：名称
-				type->m_szTypeExts	// タイプ属性：拡張子リスト
+				type->szTypeName,	// タイプ属性：名称
+				type->szTypeExts	// タイプ属性：拡張子リスト
 			);
 		}else {
 			auto_sprintf_s(szText, _T("%ts"),
-				type->m_szTypeName	// タイプ属性：拡称
+				type->szTypeName	// タイプ属性：拡称
 			);
 		}
 		::List_AddString(hwndList, szText);
@@ -412,10 +412,10 @@ bool DlgTypeList::Import()
 	ImpExpType	cImpExpType(nIdx, type, hwndList);
 	const TypeConfigMini* typeMini;
 	DocTypeManager().GetTypeConfigMini(TypeConfigNum(nIdx), &typeMini);
-	int id = typeMini->m_id;
+	int id = typeMini->id;
 
 	// インポート
-	cImpExpType.SetBaseName(to_wchar(type.m_szTypeName));
+	cImpExpType.SetBaseName(to_wchar(type.szTypeName));
 	if (!cImpExpType.ImportUI(G_AppInstance(), GetHwnd())) {
 		// インポートをしていない
 		return false;
@@ -424,16 +424,16 @@ bool DlgTypeList::Import()
 	if (bAdd) {
 		AddType();
 		nIdx = GetDllShareData().m_nTypesCount - 1;
-		type.m_nIdx = nIdx;
+		type.nIdx = nIdx;
 	}else {
 		// UIを表示している間にずれているかもしれないのでindex再取得
 		nIdx = DocTypeManager().GetDocumentTypeOfId(id).GetIndex();
 		if (nIdx == -1) {
 			return false;
 		}
-		type.m_nIdx = nIdx;
+		type.nIdx = nIdx;
 	}
-	type.m_nRegexKeyMagicNumber = RegexKeyword::GetNewMagicNumber();
+	type.nRegexKeyMagicNumber = RegexKeyword::GetNewMagicNumber();
 	// 適用
 	DocTypeManager().SetTypeConfig(TypeConfigNum(nIdx), type);
 	if (!bAdd) {
@@ -458,7 +458,7 @@ bool DlgTypeList::Export()
 	ImpExpType	cImpExpType(nIdx, types, hwndList);
 
 	// エクスポート
-	cImpExpType.SetBaseName(to_wchar(types.m_szTypeName));
+	cImpExpType.SetBaseName(to_wchar(types.szTypeName));
 	if (!cImpExpType.ExportUI(G_AppInstance(), GetHwnd())) {
 		// エクスポートをしていない
 		return false;
@@ -481,19 +481,19 @@ bool DlgTypeList::InitializeType(void)
 	const TypeConfigMini* typeMini;
 	DocTypeManager().GetTypeConfigMini(TypeConfigNum(iDocType), &typeMini);
 	int nRet;
-	if (typeMini->m_szTypeExts[0] != _T('\0')) { 
+	if (typeMini->szTypeExts[0] != _T('\0')) { 
 		nRet = ::MYMESSAGEBOX(
 			GetHwnd(),
 			MB_YESNO | MB_ICONQUESTION,
 			GSTR_APPNAME,
 			LS(STR_DLGTYPELIST_INIT1),
-			typeMini->m_szTypeName);
+			typeMini->szTypeName);
 		if (nRet != IDYES) {
 			return false;
 		}
 	}
 
-	iDocType = DocTypeManager().GetDocumentTypeOfId(typeMini->m_id).GetIndex();
+	iDocType = DocTypeManager().GetDocumentTypeOfId(typeMini->id).GetIndex();
 	if (iDocType == -1) {
 		return false;
 	}
@@ -506,7 +506,7 @@ bool DlgTypeList::InitializeType(void)
 	bool bUpdate = true;
 	for (int i=1; i<GetDllShareData().m_nTypesCount; ++i) {
 		if (bUpdate) {
-			auto_sprintf_s(type.m_szTypeName, LS(STR_DLGTYPELIST_SETNAME), nNameNum);
+			auto_sprintf_s(type.szTypeName, LS(STR_DLGTYPELIST_SETNAME), nNameNum);
 			++nNameNum;
 			bUpdate = false;
 		}
@@ -515,15 +515,15 @@ bool DlgTypeList::InitializeType(void)
 		}
 		const TypeConfigMini* typeMini2;
 		DocTypeManager().GetTypeConfigMini(TypeConfigNum(i), &typeMini2);
-		if (auto_strcmp(typeMini2->m_szTypeName, type.m_szTypeName) == 0) {
+		if (auto_strcmp(typeMini2->szTypeName, type.szTypeName) == 0) {
 			i = 0;
 			bUpdate = true;
 		}
 	}
-	type.m_szTypeExts[0] = 0;
-	type.m_nIdx = iDocType;
-	type.m_id = (::GetTickCount() & 0x3fffffff) + iDocType * 0x10000;
-	type.m_nRegexKeyMagicNumber = RegexKeyword::GetNewMagicNumber();
+	type.szTypeExts[0] = 0;
+	type.nIdx = iDocType;
+	type.id = (::GetTickCount() & 0x3fffffff) + iDocType * 0x10000;
+	type.nRegexKeyMagicNumber = RegexKeyword::GetNewMagicNumber();
 
 	DocTypeManager().SetTypeConfig(TypeConfigNum(iDocType), type);
 
@@ -532,7 +532,7 @@ bool DlgTypeList::InitializeType(void)
 	// リスト再初期化
 	SetData(iDocType);
 
-	InfoMessage(hwndDlg, LS(STR_DLGTYPELIST_INIT2), type.m_szTypeName);
+	InfoMessage(hwndDlg, LS(STR_DLGTYPELIST_INIT2), type.szTypeName);
 
 	return true;
 }
@@ -551,9 +551,9 @@ bool DlgTypeList::CopyType()
 	for (int i=0; i<nNewTypeIndex; ++i) {
 		if (bUpdate) {
 			TCHAR* p = NULL;
-			for (int k=(int)auto_strlen(type.m_szTypeName)-1; 0<=k; --k) {
-				if (WCODE::Is09(type.m_szTypeName[k])) {
-					p = &type.m_szTypeName[k];
+			for (int k=(int)auto_strlen(type.szTypeName)-1; 0<=k; --k) {
+				if (WCODE::Is09(type.szTypeName[k])) {
+					p = &type.szTypeName[k];
 				}else {
 					break;
 				}
@@ -567,19 +567,19 @@ bool DlgTypeList::CopyType()
 			TCHAR szNum[12];
 			auto_sprintf( szNum, _T("%d"), n );
 			int nLen = auto_strlen( szNum );
-			TCHAR szTemp[_countof(type.m_szTypeName) + 12];
-			auto_strcpy( szTemp, type.m_szTypeName );
+			TCHAR szTemp[_countof(type.szTypeName) + 12];
+			auto_strcpy( szTemp, type.szTypeName );
 			int nTempLen = auto_strlen( szTemp );
 			NativeT mem;
 			// バッファをはみ出さないように
-			LimitStringLengthT( szTemp, nTempLen, _countof(type.m_szTypeName) - nLen - 1, mem );
-			auto_strcpy( type.m_szTypeName, mem.GetStringPtr() );
-			auto_strcat(type.m_szTypeName, szNum);
+			LimitStringLengthT( szTemp, nTempLen, _countof(type.szTypeName) - nLen - 1, mem );
+			auto_strcpy( type.szTypeName, mem.GetStringPtr() );
+			auto_strcat(type.szTypeName, szNum);
 			bUpdate = false;
 		}
 		const TypeConfigMini* typeMini;
 		DocTypeManager().GetTypeConfigMini(TypeConfigNum(i), &typeMini);
-		if (auto_strcmp(typeMini->m_szTypeName, type.m_szTypeName) == 0) {
+		if (auto_strcmp(typeMini->szTypeName, type.szTypeName) == 0) {
 			i = -1;
 			bUpdate = true;
 		}
@@ -587,9 +587,9 @@ bool DlgTypeList::CopyType()
 	if (!DocTypeManager().AddTypeConfig(TypeConfigNum(nNewTypeIndex))) {
 		return false;
 	}
-	type.m_id = (::GetTickCount() & 0x3fffffff) + nNewTypeIndex * 0x10000;
-	type.m_nIdx = nNewTypeIndex;
-	type.m_nRegexKeyMagicNumber = RegexKeyword::GetNewMagicNumber();
+	type.id = (::GetTickCount() & 0x3fffffff) + nNewTypeIndex * 0x10000;
+	type.nIdx = nNewTypeIndex;
+	type.nRegexKeyMagicNumber = RegexKeyword::GetNewMagicNumber();
 	DocTypeManager().SetTypeConfig(TypeConfigNum(nNewTypeIndex), type);
 	SetData(nNewTypeIndex);
 	return true;
@@ -607,8 +607,8 @@ bool DlgTypeList::UpType()
 	auto type2 = std::make_unique<TypeConfig>();
 	DocTypeManager().GetTypeConfig(TypeConfigNum(iDocType), *type1);
 	DocTypeManager().GetTypeConfig(TypeConfigNum(iDocType - 1), *type2);
-	--(type1->m_nIdx);
-	++(type2->m_nIdx);
+	--(type1->nIdx);
+	++(type2->nIdx);
 	DocTypeManager().SetTypeConfig(TypeConfigNum(iDocType), *type2);
 	DocTypeManager().SetTypeConfig(TypeConfigNum(iDocType - 1), *type1);
 	SendChangeSettingType2(iDocType);
@@ -629,8 +629,8 @@ bool DlgTypeList::DownType()
 	auto type2 = std::make_unique<TypeConfig>();
 	DocTypeManager().GetTypeConfig(TypeConfigNum(iDocType), *type1);
 	DocTypeManager().GetTypeConfig(TypeConfigNum(iDocType + 1), *type2);
-	++(type1->m_nIdx);
-	--(type2->m_nIdx);
+	++(type1->nIdx);
+	--(type2->nIdx);
 	DocTypeManager().SetTypeConfig(TypeConfigNum(iDocType), *type2);
 	DocTypeManager().SetTypeConfig(TypeConfigNum(iDocType + 1), *type1);
 	SendChangeSettingType2(iDocType);
@@ -665,12 +665,12 @@ bool DlgTypeList::DelType()
 	}
 	const TypeConfigMini type = *typeMini; // ダイアログを出している間に変更されるかもしれないのでコピーする
 	int nRet = ConfirmMessage(hwndDlg,
-		LS(STR_DLGTYPELIST_DEL), type.m_szTypeName);
+		LS(STR_DLGTYPELIST_DEL), type.szTypeName);
 	if (nRet != IDYES) {
 		return false;
 	}
 	// ダイアログを出している間にタイプ別リストが更新されたかもしれないのでidから再検索
-	TypeConfigNum config = DocTypeManager().GetDocumentTypeOfId(type.m_id);
+	TypeConfigNum config = DocTypeManager().GetDocumentTypeOfId(type.id);
 	if (!config.IsValidType()) {
 		return false;
 	}

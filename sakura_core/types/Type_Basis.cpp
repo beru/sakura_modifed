@@ -30,13 +30,13 @@
 void CType_Basis::InitTypeConfigImp(TypeConfig* pType)
 {
 	// 名前と拡張子
-	_tcscpy(pType->m_szTypeName, _T("基本"));
-	_tcscpy(pType->m_szTypeExts, _T(""));
+	_tcscpy(pType->szTypeName, _T("基本"));
+	_tcscpy(pType->szTypeExts, _T(""));
 
 	// 設定
-	pType->m_nMaxLineKetas = LayoutInt(MAXLINEKETAS);			// 折り返し桁数
-	pType->m_eDefaultOutline = OUTLINE_TEXT;					// アウトライン解析方法
-	pType->m_colorInfoArr[COLORIDX_SSTRING].m_bDisp = false;	// シングルクォーテーション文字列を色分け表示しない	// Oct. 17, 2000 JEPRO
-	pType->m_colorInfoArr[COLORIDX_WSTRING].m_bDisp = false;	// ダブルクォーテーション文字列を色分け表示しない	// Sept. 4, 2000 JEPRO
+	pType->nMaxLineKetas = LayoutInt(MAXLINEKETAS);			// 折り返し桁数
+	pType->eDefaultOutline = OUTLINE_TEXT;					// アウトライン解析方法
+	pType->colorInfoArr[COLORIDX_SSTRING].bDisp = false;	// シングルクォーテーション文字列を色分け表示しない	// Oct. 17, 2000 JEPRO
+	pType->colorInfoArr[COLORIDX_WSTRING].bDisp = false;	// ダブルクォーテーション文字列を色分け表示しない	// Sept. 4, 2000 JEPRO
 }
 

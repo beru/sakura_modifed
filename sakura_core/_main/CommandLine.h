@@ -30,14 +30,14 @@ class Memory;
 struct GrepInfo {
 	NativeW			mGrepKey;				// 検索キー
 	NativeW			mGrepRep;				// 置換キー
-	NativeT		mGrepFile;				// 検索対象ファイル
-	NativeT		mGrepFolder;			// 検索対象フォルダ
+	NativeT			mGrepFile;				// 検索対象ファイル
+	NativeT			mGrepFolder;			// 検索対象フォルダ
 	SearchOption	grepSearchOption;		// 検索オプション
 	bool			bGrepCurFolder;			// カレントディレクトリを維持
 	bool			bGrepStdout;			// 標準出力モード
 	bool			bGrepHeader;			// ヘッダ情報表示
 	bool			bGrepSubFolder;			// サブフォルダを検索する
-	EncodingType		nGrepCharSet;			// 文字コードセット
+	EncodingType	nGrepCharSet;			// 文字コードセット
 	int				nGrepOutputStyle;		// 結果出力形式
 	int				nGrepOutputLineType;	// 結果出力：行を出力/該当部分/否マッチ行
 	bool			bGrepOutputFileOnly;	// ファイル毎最初のみ検索

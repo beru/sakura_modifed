@@ -72,7 +72,7 @@ void Color_Found::OnStartScanLogic()
 
 	this->validColorNum = 0;
 	for (int color=COLORIDX_SEARCH; color<=COLORIDX_SEARCHTAIL; ++color) {
-		if (m_pTypeData->m_colorInfoArr[color].m_bDisp) {
+		if (m_pTypeData->colorInfoArr[color].bDisp) {
 			this->highlightColors[this->validColorNum++] = EColorIndexType(color);
 		}
 	}

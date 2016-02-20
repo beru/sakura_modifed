@@ -54,7 +54,7 @@ void ViewCommander::Command_WCHAR(
 	// 現在位置にデータを挿入
 	NativeW memDataW2;
 	memDataW2 = wcChar;
-	if (WCODE::IsLineDelimiter(wcChar, GetDllShareData().m_common.edit.m_bEnableExtEol)) { 
+	if (WCODE::IsLineDelimiter(wcChar, GetDllShareData().m_common.edit.bEnableExtEol)) { 
 		// 現在、Enterなどで挿入する改行コードの種類を取得
 		if (bConvertEOL) {
 			Eol cWork = pDoc->m_docEditor.GetNewLineCode();
@@ -65,7 +65,7 @@ void ViewCommander::Command_WCHAR(
 		if (selInfo.IsTextSelected()) {
 			m_pCommanderView->DeleteData(true);
 		}
-		if (typeData->m_bAutoIndent) {	// オートインデント
+		if (typeData->bAutoIndent) {	// オートインデント
 			const Layout* pLayout;
 			LogicInt nLineLen;
 			auto& layoutMgr = pDoc->m_layoutMgr;
@@ -94,14 +94,14 @@ void ViewCommander::Command_WCHAR(
 						// その他のインデント文字
 						if (0 < nCharChars
 						 && pLine[nPos] != L'\0'	// その他のインデント文字に L'\0' は含まれない	// 2009.02.04 ryoji L'\0'がインデントされてしまう問題修正
-						 && typeData->m_szIndentChars[0] != L'\0'
+						 && typeData->szIndentChars[0] != L'\0'
 						) {
 							wchar_t szCurrent[10];
 							wmemcpy(szCurrent, &pLine[nPos], nCharChars);
 							szCurrent[nCharChars] = L'\0';
 							// その他のインデント対象文字
 							if (wcsstr(
-									typeData->m_szIndentChars,
+									typeData->szIndentChars,
 									szCurrent
 								)
 							) {
@@ -110,7 +110,7 @@ void ViewCommander::Command_WCHAR(
 						}
 						
 						{
-							bool bZenSpace = typeData->m_bAutoIndent_ZENSPACE;
+							bool bZenSpace = typeData->bAutoIndent_ZENSPACE;
 							if (nCharChars == 1 && WCODE::IsIndentChar(pLine[nPos], bZenSpace)) {
 								// 下へ進む
 							}
@@ -162,7 +162,7 @@ end_of_for:;
 	caret.m_nCaretPosX_Prev = caret.GetCaretLayoutPos().GetX2();
 
 	// スマートインデント
-	SmartIndentType nSIndentType = typeData->m_eSmartIndent;
+	SmartIndentType nSIndentType = typeData->eSmartIndent;
 	switch (nSIndentType) {	// スマートインデント種別
 	case SmartIndentType::None:
 		break;
@@ -204,9 +204,9 @@ end_of_for:;
 	// 2005.10.11 ryoji 改行時に末尾の空白を削除
 	if (WCODE::IsLineDelimiter(
 			wcChar,
-			GetDllShareData().m_common.edit.m_bEnableExtEol
+			GetDllShareData().m_common.edit.bEnableExtEol
 		)
-		&& typeData->m_bRTrimPrevLine
+		&& typeData->bRTrimPrevLine
 	) {	// 改行時に末尾の空白を削除
 		// 前の行にある末尾の空白を削除する
 		m_pCommanderView->RTrimPrevLine();
@@ -901,14 +901,14 @@ void ViewCommander::DelCharForOverwrite(
 		if (nIdxTo >= pLayout->GetLengthWithoutEOL()) {
 			bEol = true;	// 現在位置は改行または折り返し以後
 			if (pLayout->GetLayoutEol() != EolType::None) {
-				if (GetDllShareData().m_common.edit.m_bNotOverWriteCRLF) {	// 改行は上書きしない
+				if (GetDllShareData().m_common.edit.bNotOverWriteCRLF) {	// 改行は上書きしない
 					// 現在位置が改行ならば削除しない
 					bDelete = false;
 				}
 			}
 		}else {
 			// 文字幅に合わせてスペースを詰める
-			if (GetDllShareData().m_common.edit.m_bOverWriteFixMode) {
+			if (GetDllShareData().m_common.edit.bOverWriteFixMode) {
 				const StringRef line = pLayout->GetDocLineRef()->GetStringRefWithEOL();
 				LogicInt nPos = GetCaret().GetCaretLogicPos().GetX();
 				if (line.At(nPos) != WCODE::TAB) {
@@ -922,7 +922,7 @@ void ViewCommander::DelCharForOverwrite(
 						if (c != WCODE::TAB
 							&& !WCODE::IsLineDelimiter(
 								c,
-								GetDllShareData().m_common.edit.m_bEnableExtEol
+								GetDllShareData().m_common.edit.bEnableExtEol
 							)
 						) {
 							nDelLen = 2;

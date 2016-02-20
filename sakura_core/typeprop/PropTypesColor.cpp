@@ -103,9 +103,9 @@ bool PropTypesColor::Import(HWND hwndDlg)
 	ImpExpColors cImpExpColors(colorInfoArr);
 
 	// 色設定 I/O
-	for (int i=0; i<m_types.m_nColorInfoArrNum; ++i) {
-		colorInfoArr[i] = m_types.m_colorInfoArr[i];
-		_tcscpy(colorInfoArr[i].m_szName, m_types.m_colorInfoArr[i].m_szName);
+	for (int i=0; i<m_types.nColorInfoArrNum; ++i) {
+		colorInfoArr[i] = m_types.colorInfoArr[i];
+		_tcscpy(colorInfoArr[i].szName, m_types.colorInfoArr[i].szName);
 	}
 
 	// インポート
@@ -115,10 +115,10 @@ bool PropTypesColor::Import(HWND hwndDlg)
 	}
 
 	// データのコピー
-	m_types.m_nColorInfoArrNum = COLORIDX_LAST;
-	for (int i=0; i<m_types.m_nColorInfoArrNum; ++i) {
-		m_types.m_colorInfoArr[i] = colorInfoArr[i];
-		_tcscpy(m_types.m_colorInfoArr[i].m_szName, colorInfoArr[i].m_szName);
+	m_types.nColorInfoArrNum = COLORIDX_LAST;
+	for (int i=0; i<m_types.nColorInfoArrNum; ++i) {
+		m_types.colorInfoArr[i] = colorInfoArr[i];
+		_tcscpy(m_types.colorInfoArr[i].szName, colorInfoArr[i].szName);
 	}
 	// ダイアログデータの設定 color
 	SetData(hwndDlg);
@@ -131,7 +131,7 @@ bool PropTypesColor::Import(HWND hwndDlg)
 // 2010/4/23 Uchi Exportの外出し
 bool PropTypesColor::Export(HWND hwndDlg)
 {
-	ImpExpColors	cImpExpColors(m_types.m_colorInfoArr);
+	ImpExpColors	cImpExpColors(m_types.colorInfoArr);
 
 	// エクスポート
 	return cImpExpColors.ExportUI(m_hInstance, hwndDlg);
@@ -183,8 +183,8 @@ LRESULT APIENTRY ColorList_SubclassProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPA
 			pColorInfo = (ColorInfo*)List_GetItemData(hwnd, nIndex);
 			// 下線
 			if ((g_ColorAttributeArr[nIndex].fAttribute & COLOR_ATTRIB_NO_UNDERLINE) == 0) {	// 2006.12.18 ryoji フラグ利用で簡素化
-				pColorInfo->m_fontAttr.m_bUnderLine = !pColorInfo->m_fontAttr.m_bUnderLine; // toggle true/false
-				::CheckDlgButtonBool(::GetParent(hwnd), IDC_CHECK_UNDERLINE, pColorInfo->m_fontAttr.m_bUnderLine);
+				pColorInfo->fontAttr.bUnderLine = !pColorInfo->fontAttr.bUnderLine; // toggle true/false
+				::CheckDlgButtonBool(::GetParent(hwnd), IDC_CHECK_UNDERLINE, pColorInfo->fontAttr.bUnderLine);
 				::InvalidateRect(hwnd, &rcItem, TRUE);
 			}
 		}
@@ -198,8 +198,8 @@ LRESULT APIENTRY ColorList_SubclassProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPA
 			pColorInfo = (ColorInfo*)List_GetItemData(hwnd, nIndex);
 			// 太字で表示
 			if ((g_ColorAttributeArr[nIndex].fAttribute & COLOR_ATTRIB_NO_BOLD) == 0) {	// 2006.12.18 ryoji フラグ利用で簡素化
-				pColorInfo->m_fontAttr.m_bBoldFont = !pColorInfo->m_fontAttr.m_bBoldFont; // toggle true/false
-				::CheckDlgButtonBool(::GetParent(hwnd), IDC_CHECK_BOLD, pColorInfo->m_fontAttr.m_bBoldFont);
+				pColorInfo->fontAttr.bBoldFont = !pColorInfo->fontAttr.bBoldFont; // toggle true/false
+				::CheckDlgButtonBool(::GetParent(hwnd), IDC_CHECK_BOLD, pColorInfo->fontAttr.bBoldFont);
 				::InvalidateRect(hwnd, &rcItem, TRUE);
 			}
 		}
@@ -213,10 +213,10 @@ LRESULT APIENTRY ColorList_SubclassProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPA
 		if (2 <= xPos && xPos <= 16
 			&& ((g_ColorAttributeArr[nIndex].fAttribute & COLOR_ATTRIB_FORCE_DISP) == 0)	// 2006.12.18 ryoji フラグ利用で簡素化
 		) {
-			if (pColorInfo->m_bDisp) {	// 色分け/表示する
-				pColorInfo->m_bDisp = false;
+			if (pColorInfo->bDisp) {	// 色分け/表示する
+				pColorInfo->bDisp = false;
 			}else {
-				pColorInfo->m_bDisp = true;
+				pColorInfo->bDisp = true;
 			}
 			if (nIndex == COLORIDX_GYOU) {
 				pColorInfo = (ColorInfo*)List_GetItemData(hwnd, nIndex);
@@ -231,7 +231,7 @@ LRESULT APIENTRY ColorList_SubclassProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPA
 			// 色選択ダイアログ
 			// 2005.11.30 Moca カスタム色保持
 			DWORD* pColors = (DWORD*)::GetProp(hwnd, _T("ptrCustomColors"));
-			if (PropTypesColor::SelectColor(hwnd, &pColorInfo->m_colorAttr.m_cTEXT, pColors)) {
+			if (PropTypesColor::SelectColor(hwnd, &pColorInfo->colorAttr.cTEXT, pColors)) {
 				::InvalidateRect(hwnd, &rcItem, TRUE);
 				::InvalidateRect(::GetDlgItem(::GetParent(hwnd), IDC_BUTTON_TEXTCOLOR), NULL, TRUE);
 			}
@@ -243,7 +243,7 @@ LRESULT APIENTRY ColorList_SubclassProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPA
 			// 色選択ダイアログ
 			// 2005.11.30 Moca カスタム色保持
 			DWORD* pColors = (DWORD*)::GetProp(hwnd, _T("ptrCustomColors"));
-			if (PropTypesColor::SelectColor(hwnd, &pColorInfo->m_colorAttr.m_cBACK, pColors)) {
+			if (PropTypesColor::SelectColor(hwnd, &pColorInfo->colorAttr.cBACK, pColors)) {
 				::InvalidateRect(hwnd, &rcItem, TRUE);
 				::InvalidateRect(::GetDlgItem(::GetParent(hwnd), IDC_BUTTON_BACKCOLOR), NULL, TRUE);
 			}
@@ -322,11 +322,11 @@ INT_PTR PropTypesColor::DispatchEvent(
 				}
 
 				// 色分け/表示 をする
-				::CheckDlgButtonBool(hwndDlg, IDC_CHECK_DISP, m_types.m_colorInfoArr[m_nCurrentColorType].m_bDisp);
+				::CheckDlgButtonBool(hwndDlg, IDC_CHECK_DISP, m_types.colorInfoArr[m_nCurrentColorType].bDisp);
 				// 太字で表示
-				::CheckDlgButtonBool(hwndDlg, IDC_CHECK_BOLD, m_types.m_colorInfoArr[m_nCurrentColorType].m_fontAttr.m_bBoldFont);
+				::CheckDlgButtonBool(hwndDlg, IDC_CHECK_BOLD, m_types.colorInfoArr[m_nCurrentColorType].fontAttr.bBoldFont);
 				// 下線を表示
-				::CheckDlgButtonBool(hwndDlg, IDC_CHECK_UNDERLINE, m_types.m_colorInfoArr[m_nCurrentColorType].m_fontAttr.m_bUnderLine);
+				::CheckDlgButtonBool(hwndDlg, IDC_CHECK_UNDERLINE, m_types.colorInfoArr[m_nCurrentColorType].fontAttr.bUnderLine);
 
 				::InvalidateRect(::GetDlgItem(hwndDlg, IDC_BUTTON_TEXTCOLOR), NULL, TRUE);
 				::InvalidateRect(::GetDlgItem(hwndDlg, IDC_BUTTON_BACKCOLOR), NULL, TRUE);
@@ -341,7 +341,7 @@ INT_PTR PropTypesColor::DispatchEvent(
 				{
 					// 2006.04.26 ryoji 文字色／背景色統一ダイアログを使う
 					DlgSameColor cDlgSameColor;
-					COLORREF cr = m_types.m_colorInfoArr[m_nCurrentColorType].m_colorAttr.m_cTEXT;
+					COLORREF cr = m_types.colorInfoArr[m_nCurrentColorType].colorAttr.cTEXT;
 					cDlgSameColor.DoModal(::GetModuleHandle(NULL), hwndDlg, wID, &m_types, cr);
 				}
 				::InvalidateRect(hwndListColor, NULL, TRUE);
@@ -351,7 +351,7 @@ INT_PTR PropTypesColor::DispatchEvent(
 				{
 					// 2006.04.26 ryoji 文字色／背景色統一ダイアログを使う
 					DlgSameColor cDlgSameColor;
-					COLORREF cr = m_types.m_colorInfoArr[m_nCurrentColorType].m_colorAttr.m_cBACK;
+					COLORREF cr = m_types.colorInfoArr[m_nCurrentColorType].colorAttr.cBACK;
 					cDlgSameColor.DoModal(::GetModuleHandle(NULL), hwndDlg, wID, &m_types, cr);
 				}
 				::InvalidateRect(hwndListColor, NULL, TRUE);
@@ -359,7 +359,7 @@ INT_PTR PropTypesColor::DispatchEvent(
 
 			case IDC_BUTTON_TEXTCOLOR:	// テキスト色
 				// 色選択ダイアログ
-				if (SelectColor(hwndDlg, &m_types.m_colorInfoArr[m_nCurrentColorType].m_colorAttr.m_cTEXT, m_dwCustColors)) {
+				if (SelectColor(hwndDlg, &m_types.colorInfoArr[m_nCurrentColorType].colorAttr.cTEXT, m_dwCustColors)) {
 					::InvalidateRect(::GetDlgItem(hwndDlg, IDC_BUTTON_TEXTCOLOR), NULL, TRUE);
 				}
 				// 現在選択されている色タイプ
@@ -367,32 +367,32 @@ INT_PTR PropTypesColor::DispatchEvent(
 				return TRUE;
 			case IDC_BUTTON_BACKCOLOR:	// 背景色
 				// 色選択ダイアログ
-				if (SelectColor(hwndDlg, &m_types.m_colorInfoArr[m_nCurrentColorType].m_colorAttr.m_cBACK, m_dwCustColors)) {
+				if (SelectColor(hwndDlg, &m_types.colorInfoArr[m_nCurrentColorType].colorAttr.cBACK, m_dwCustColors)) {
 					::InvalidateRect(::GetDlgItem(hwndDlg, IDC_BUTTON_BACKCOLOR), NULL, TRUE);
 				}
 				// 現在選択されている色タイプ
 				List_SetCurSel(hwndListColor, m_nCurrentColorType);
 				return TRUE;
 			case IDC_CHECK_DISP:	// 色分け/表示 をする
-				m_types.m_colorInfoArr[m_nCurrentColorType].m_bDisp = ::IsDlgButtonCheckedBool(hwndDlg, IDC_CHECK_DISP);
+				m_types.colorInfoArr[m_nCurrentColorType].bDisp = ::IsDlgButtonCheckedBool(hwndDlg, IDC_CHECK_DISP);
 				// 現在選択されている色タイプ
 				List_SetCurSel(hwndListColor, m_nCurrentColorType);
-				m_types.m_nRegexKeyMagicNumber = RegexKeyword::GetNewMagicNumber();	// Need Compile	//@@@ 2001.11.17 add MIK 正規表現キーワードのため
+				m_types.nRegexKeyMagicNumber = RegexKeyword::GetNewMagicNumber();	// Need Compile	//@@@ 2001.11.17 add MIK 正規表現キーワードのため
 				return TRUE;
 			case IDC_CHECK_BOLD:	// 太字か
-				m_types.m_colorInfoArr[m_nCurrentColorType].m_fontAttr.m_bBoldFont = ::IsDlgButtonCheckedBool(hwndDlg, IDC_CHECK_BOLD);
+				m_types.colorInfoArr[m_nCurrentColorType].fontAttr.bBoldFont = ::IsDlgButtonCheckedBool(hwndDlg, IDC_CHECK_BOLD);
 				// 現在選択されている色タイプ
 				List_SetCurSel(hwndListColor, m_nCurrentColorType);
 				return TRUE;
 			case IDC_CHECK_UNDERLINE:	// 下線を表示
-				m_types.m_colorInfoArr[m_nCurrentColorType].m_fontAttr.m_bUnderLine = ::IsDlgButtonCheckedBool(hwndDlg, IDC_CHECK_UNDERLINE);
+				m_types.colorInfoArr[m_nCurrentColorType].fontAttr.bUnderLine = ::IsDlgButtonCheckedBool(hwndDlg, IDC_CHECK_UNDERLINE);
 				// 現在選択されている色タイプ
 				List_SetCurSel(hwndListColor, m_nCurrentColorType);
 				return TRUE;
 
 			case IDC_BUTTON_IMPORT:	// 色の設定をインポート
 				Import(hwndDlg);
-				m_types.m_nRegexKeyMagicNumber = RegexKeyword::GetNewMagicNumber();	// Need Compile	//@@@ 2001.11.17 add MIK 正規表現キーワードのため
+				m_types.nRegexKeyMagicNumber = RegexKeyword::GetNewMagicNumber();	// Need Compile	//@@@ 2001.11.17 add MIK 正規表現キーワードのため
 				return TRUE;
 
 			case IDC_BUTTON_EXPORT:	// 色の設定をエクスポート
@@ -550,10 +550,10 @@ INT_PTR PropTypesColor::DispatchEvent(
 		pDis = (LPDRAWITEMSTRUCT) lParam;	// 項目描画情報
 		switch (idCtrl) {
 		case IDC_BUTTON_TEXTCOLOR:	// テキスト色
-			DrawColorButton(pDis, m_types.m_colorInfoArr[m_nCurrentColorType].m_colorAttr.m_cTEXT);
+			DrawColorButton(pDis, m_types.colorInfoArr[m_nCurrentColorType].colorAttr.cTEXT);
 			return TRUE;
 		case IDC_BUTTON_BACKCOLOR:	// 背景色
-			DrawColorButton(pDis, m_types.m_colorInfoArr[m_nCurrentColorType].m_colorAttr.m_cBACK);
+			DrawColorButton(pDis, m_types.colorInfoArr[m_nCurrentColorType].colorAttr.cBACK);
 			return TRUE;
 		case IDC_LIST_COLORS:		// 色種別リスト
 			DrawColorListItem(pDis);
@@ -602,10 +602,10 @@ void PropTypesColor::SetData(HWND hwndDlg)
 	EditCtl_LimitText(::GetDlgItem(hwndDlg, IDC_EDIT_BLOCKCOMMENT_FROM2), BLOCKCOMMENT_BUFFERSIZE - 1);
 	EditCtl_LimitText(::GetDlgItem(hwndDlg, IDC_EDIT_BLOCKCOMMENT_TO2)	, BLOCKCOMMENT_BUFFERSIZE - 1);
 
-	::DlgItem_SetText(hwndDlg, IDC_EDIT_BLOCKCOMMENT_FROM	, m_types.m_blockComments[0].getBlockCommentFrom());	// ブロックコメントデリミタ(From)
-	::DlgItem_SetText(hwndDlg, IDC_EDIT_BLOCKCOMMENT_TO		, m_types.m_blockComments[0].getBlockCommentTo());		// ブロックコメントデリミタ(To)
-	::DlgItem_SetText(hwndDlg, IDC_EDIT_BLOCKCOMMENT_FROM2	, m_types.m_blockComments[1].getBlockCommentFrom());	// ブロックコメントデリミタ2(From)
-	::DlgItem_SetText(hwndDlg, IDC_EDIT_BLOCKCOMMENT_TO2	, m_types.m_blockComments[1].getBlockCommentTo());		// ブロックコメントデリミタ2(To)
+	::DlgItem_SetText(hwndDlg, IDC_EDIT_BLOCKCOMMENT_FROM	, m_types.blockComments[0].getBlockCommentFrom());	// ブロックコメントデリミタ(From)
+	::DlgItem_SetText(hwndDlg, IDC_EDIT_BLOCKCOMMENT_TO		, m_types.blockComments[0].getBlockCommentTo());		// ブロックコメントデリミタ(To)
+	::DlgItem_SetText(hwndDlg, IDC_EDIT_BLOCKCOMMENT_FROM2	, m_types.blockComments[1].getBlockCommentFrom());	// ブロックコメントデリミタ2(From)
+	::DlgItem_SetText(hwndDlg, IDC_EDIT_BLOCKCOMMENT_TO2	, m_types.blockComments[1].getBlockCommentTo());		// ブロックコメントデリミタ2(To)
 
 	// 行コメントデリミタ @@@ 2002.09.22 YAZAKI
 	// From Here May 12, 2001 genta
@@ -613,10 +613,10 @@ void PropTypesColor::SetData(HWND hwndDlg)
 	// May 21, 2001 genta 桁位置を1から数えるように
 	for (int i=0; i<COMMENT_DELIMITER_NUM; ++i) {
 		// テキスト
-		::DlgItem_SetText(hwndDlg, cLineComment[i].nEditID, m_types.m_lineComment.getLineComment(i));	
+		::DlgItem_SetText(hwndDlg, cLineComment[i].nEditID, m_types.lineComment.getLineComment(i));	
 
 		// 桁数チェックと、数値
-		int nPos = m_types.m_lineComment.getLineCommentPos(i);
+		int nPos = m_types.lineComment.getLineCommentPos(i);
 		if (nPos >= 0) {
 			::CheckDlgButton(hwndDlg, cLineComment[i].nCheckBoxID, TRUE);
 			::SetDlgItemInt(hwndDlg, cLineComment[i].nTextID, nPos + 1, FALSE);
@@ -631,13 +631,13 @@ void PropTypesColor::SetData(HWND hwndDlg)
 	int		nSelPos = 0;
 	for (int i=0; i<_countof(StringLitteralArr); ++i) {
 		Combo_InsertString(hwndCombo, i, LS(StringLitteralArr[i].nNameId));
-		if (StringLitteralArr[i].nMethod == m_types.m_nStringType) {		// テキストの折り返し方法
+		if (StringLitteralArr[i].nMethod == m_types.stringType) {		// テキストの折り返し方法
 			nSelPos = i;
 		}
 	}
 	Combo_SetCurSel(hwndCombo, nSelPos);
-	CheckDlgButtonBool(hwndDlg, IDC_CHECK_STRINGLINEONLY, m_types.m_bStringLineOnly);
-	CheckDlgButtonBool(hwndDlg, IDC_CHECK_STRINGENDLINE, m_types.m_bStringEndLine);
+	CheckDlgButtonBool(hwndDlg, IDC_CHECK_STRINGLINEONLY, m_types.bStringLineOnly);
+	CheckDlgButtonBool(hwndDlg, IDC_CHECK_STRINGENDLINE, m_types.bStringEndLine);
 	::EnableWindow(::GetDlgItem(hwndDlg, IDC_CHECK_STRINGENDLINE),
 		::IsDlgButtonCheckedBool(hwndDlg, IDC_CHECK_STRINGLINEONLY));
 
@@ -651,18 +651,18 @@ void PropTypesColor::SetData(HWND hwndDlg)
 		for (int i=0; i<m_pKeywordSetMgr->m_nKeywordSetNum; ++i) {
 			Combo_AddString(hwndWork, m_pKeywordSetMgr->GetTypeName(i));
 		}
-		if (m_types.m_nKeywordSetIdx[0] == -1) {
+		if (m_types.nKeywordSetIdx[0] == -1) {
 			// セット名コンボボックスのデフォルト選択
 			Combo_SetCurSel(hwndWork, 0);
 		}else {
 			// セット名コンボボックスのデフォルト選択
-			Combo_SetCurSel(hwndWork, m_types.m_nKeywordSetIdx[0] + 1);
+			Combo_SetCurSel(hwndWork, m_types.nKeywordSetIdx[0] + 1);
 		}
 	}
 
 	// 強調キーワード1～10の設定
 	for (int i=0; i<MAX_KEYWORDSET_PER_TYPE; ++i) {
-		m_nSet[i] = m_types.m_nKeywordSetIdx[i];
+		m_nSet[i] = m_types.nKeywordSetIdx[i];
 	}
 
 	// 色をつける文字種類のリスト
@@ -672,9 +672,9 @@ void PropTypesColor::SetData(HWND hwndDlg)
 	int nItemHeight = TextWidthCalc(hwndWork).GetTextHeight();
 	List_SetItemHeight(hwndWork, 0, nItemHeight + 4);
 	for (int i=0; i<COLORIDX_LAST; ++i) {
-		GetDefaultColorInfoName(&m_types.m_colorInfoArr[i], i);
-		nItem = ::List_AddString(hwndWork, m_types.m_colorInfoArr[i].m_szName);
-		List_SetItemData(hwndWork, nItem, &m_types.m_colorInfoArr[i]);
+		GetDefaultColorInfoName(&m_types.colorInfoArr[i], i);
+		nItem = ::List_AddString(hwndWork, m_types.colorInfoArr[i].szName);
+		List_SetItemData(hwndWork, nItem, &m_types.colorInfoArr[i]);
 	}
 	// 現在選択されている色タイプ
 	List_SetCurSel(hwndWork, m_nCurrentColorType);
@@ -683,15 +683,15 @@ void PropTypesColor::SetData(HWND hwndDlg)
 	// from here 2005.11.30 Moca 指定位置縦線の設定
 	WCHAR szVertLine[MAX_VERTLINES * 15] = L"";
 	int offset = 0;
-	for (int i=0; i<MAX_VERTLINES && m_types.m_nVertLineIdx[i]!=0; ++i) {
-		LayoutInt nXCol = m_types.m_nVertLineIdx[i];
+	for (int i=0; i<MAX_VERTLINES && m_types.nVertLineIdx[i]!=0; ++i) {
+		LayoutInt nXCol = m_types.nVertLineIdx[i];
 		LayoutInt nXColEnd = nXCol;
 		LayoutInt nXColAdd = LayoutInt(1);
 		if (nXCol < 0) {
 			if (i < MAX_VERTLINES - 2) {
 				nXCol = -nXCol;
-				nXColEnd = m_types.m_nVertLineIdx[++i];
-				nXColAdd = m_types.m_nVertLineIdx[++i];
+				nXColEnd = m_types.nVertLineIdx[++i];
+				nXColAdd = m_types.nVertLineIdx[++i];
 				if (nXColEnd < nXCol || nXColAdd <= 0) {
 					continue;
 				}
@@ -749,7 +749,7 @@ int PropTypesColor::GetData(HWND hwndDlg)
 		//	無効のときは1の補数で格納
 
 		::DlgItem_GetText(hwndDlg, cLineComment[i].nEditID		, buffer	, COMMENT_DELIMITER_BUFFERSIZE);		// 行コメントデリミタ
-		m_types.m_lineComment.CopyTo(i, buffer, en ? pos : ~pos);
+		m_types.lineComment.CopyTo(i, buffer, en ? pos : ~pos);
 	}
 
 	wchar_t szFromBuffer[BLOCKCOMMENT_BUFFERSIZE];	//@@@ 2002.09.22 YAZAKI
@@ -757,19 +757,19 @@ int PropTypesColor::GetData(HWND hwndDlg)
 
 	::DlgItem_GetText(hwndDlg, IDC_EDIT_BLOCKCOMMENT_FROM	, szFromBuffer	, BLOCKCOMMENT_BUFFERSIZE);		// ブロックコメントデリミタ(From)
 	::DlgItem_GetText(hwndDlg, IDC_EDIT_BLOCKCOMMENT_TO		, szToBuffer	, BLOCKCOMMENT_BUFFERSIZE);	// ブロックコメントデリミタ(To)
-	m_types.m_blockComments[0].SetBlockCommentRule(szFromBuffer, szToBuffer);
+	m_types.blockComments[0].SetBlockCommentRule(szFromBuffer, szToBuffer);
 
 	::DlgItem_GetText(hwndDlg, IDC_EDIT_BLOCKCOMMENT_FROM2	, szFromBuffer	, BLOCKCOMMENT_BUFFERSIZE);	// ブロックコメントデリミタ(From)
 	::DlgItem_GetText(hwndDlg, IDC_EDIT_BLOCKCOMMENT_TO2	, szToBuffer	, BLOCKCOMMENT_BUFFERSIZE);	// ブロックコメントデリミタ(To)
-	m_types.m_blockComments[1].SetBlockCommentRule(szFromBuffer, szToBuffer);
+	m_types.blockComments[1].SetBlockCommentRule(szFromBuffer, szToBuffer);
 
 	// 文字列区切り記号エスケープ方法
 	int		nSelPos = Combo_GetCurSel(GetDlgItem(hwndDlg, IDC_COMBO_STRINGLITERAL));
 	if (nSelPos >= 0) {
-		m_types.m_nStringType = StringLitteralArr[nSelPos].nMethod;
+		m_types.stringType = StringLitteralArr[nSelPos].nMethod;
 	}
-	m_types.m_bStringLineOnly = IsDlgButtonCheckedBool(hwndDlg, IDC_CHECK_STRINGLINEONLY);
-	m_types.m_bStringEndLine = IsDlgButtonCheckedBool(hwndDlg, IDC_CHECK_STRINGENDLINE);
+	m_types.bStringLineOnly = IsDlgButtonCheckedBool(hwndDlg, IDC_CHECK_STRINGLINEONLY);
+	m_types.bStringEndLine = IsDlgButtonCheckedBool(hwndDlg, IDC_CHECK_STRINGENDLINE);
 	
 
 	// セット名コンボボックスの値セット
@@ -778,14 +778,14 @@ int PropTypesColor::GetData(HWND hwndDlg)
 	if (nIdx == CB_ERR ||
 		nIdx == 0
 	) {
-		m_types.m_nKeywordSetIdx[0] = -1;
+		m_types.nKeywordSetIdx[0] = -1;
 	}else {
-		m_types.m_nKeywordSetIdx[0] = nIdx - 1;
+		m_types.nKeywordSetIdx[0] = nIdx - 1;
 	}
 
 	// 強調キーワード2～10の取得(1は別)
 	for (nIdx=1; nIdx<MAX_KEYWORDSET_PER_TYPE; ++nIdx) {
-		m_types.m_nKeywordSetIdx[nIdx] = m_nSet[nIdx];
+		m_types.nKeywordSetIdx[nIdx] = m_nSet[nIdx];
 	}
 
 	// from here 2005.11.30 Moca 指定位置縦線の設定
@@ -828,14 +828,14 @@ int PropTypesColor::GetData(HWND hwndDlg)
 			}
 			++offset;
 			if (i + 2 < MAX_VERTLINES) {
-				m_types.m_nVertLineIdx[i++] = LayoutInt(-valueBegin);
-				m_types.m_nVertLineIdx[i++] = LayoutInt(valueEnd);
-				m_types.m_nVertLineIdx[i++] = LayoutInt(value);
+				m_types.nVertLineIdx[i++] = LayoutInt(-valueBegin);
+				m_types.nVertLineIdx[i++] = LayoutInt(valueEnd);
+				m_types.nVertLineIdx[i++] = LayoutInt(value);
 			}else {
 				break;
 			}
 		}else {
-			m_types.m_nVertLineIdx[i++] = LayoutInt(value);
+			m_types.nVertLineIdx[i++] = LayoutInt(value);
 		}
 		if (szVertLine[offset] != ',') {
 			break;
@@ -843,7 +843,7 @@ int PropTypesColor::GetData(HWND hwndDlg)
 		++offset;
 	}
 	if (i < MAX_VERTLINES) {
-		m_types.m_nVertLineIdx[i] = LayoutInt(0);
+		m_types.nVertLineIdx[i] = LayoutInt(0);
 	}
 	// to here 2005.11.30 Moca 指定位置縦線の設定
 	return TRUE;
@@ -989,7 +989,7 @@ void PropTypesColor::EnableTypesPropInput(HWND hwndDlg)
 	指定された全てのキーワードセットが有効になるようにする．
 	その際，色分けの設定も同時に移動する．
 
-	m_nSet, m_types.m_colorInfoArr[]が変更される．
+	m_nSet, m_types.colorInfoArr[]が変更される．
 
 	@param hwndDlg [in] ダイアログボックスのウィンドウハンドル
 
@@ -1014,12 +1014,12 @@ void PropTypesColor::RearrangeKeywordSet(HWND hwndDlg)
 
 				// 色設定を入れ替える
 				// 構造体ごと入れ替えると名前が変わってしまうので注意
-				ColorInfo &col1 = m_types.m_colorInfoArr[COLORIDX_KEYWORD1 + i];
-				ColorInfo &col2   = m_types.m_colorInfoArr[COLORIDX_KEYWORD1 + j];
+				ColorInfo &col1 = m_types.colorInfoArr[COLORIDX_KEYWORD1 + i];
+				ColorInfo &col2   = m_types.colorInfoArr[COLORIDX_KEYWORD1 + j];
 
-				std::swap(col1.m_bDisp, col2.m_bDisp);
-				std::swap(col1.m_fontAttr, col2.m_fontAttr);
-				std::swap(col1.m_colorAttr, col2.m_colorAttr);
+				std::swap(col1.bDisp, col2.bDisp);
+				std::swap(col1.fontAttr, col2.fontAttr);
+				std::swap(col1.colorAttr, col2.colorAttr);
 
 				break;
 			}
@@ -1080,13 +1080,13 @@ void PropTypesColor::DrawColorListItem(DRAWITEMSTRUCT* pDis)
 	gr.FillMyRect(rc1);
 	// テキスト
 	::SetBkMode(gr, TRANSPARENT);
-	::TextOut(gr, rc1.left, rc1.top, pColorInfo->m_szName, _tcslen(pColorInfo->m_szName));
-	if (pColorInfo->m_fontAttr.m_bBoldFont) {	// 太字か
-		::TextOut(gr, rc1.left + 1, rc1.top, pColorInfo->m_szName, _tcslen(pColorInfo->m_szName));
+	::TextOut(gr, rc1.left, rc1.top, pColorInfo->szName, _tcslen(pColorInfo->szName));
+	if (pColorInfo->fontAttr.bBoldFont) {	// 太字か
+		::TextOut(gr, rc1.left + 1, rc1.top, pColorInfo->szName, _tcslen(pColorInfo->szName));
 	}
-	if (pColorInfo->m_fontAttr.m_bUnderLine) {	// 下線か
+	if (pColorInfo->fontAttr.bUnderLine) {	// 下線か
 		SIZE	sz;
-		::GetTextExtentPoint32(gr, pColorInfo->m_szName, _tcslen(pColorInfo->m_szName), &sz);
+		::GetTextExtentPoint32(gr, pColorInfo->szName, _tcslen(pColorInfo->szName), &sz);
 		::MoveToEx(gr, rc1.left,		rc1.bottom - 2, NULL);
 		::LineTo(gr, rc1.left + sz.cx,	rc1.bottom - 2);
 		::MoveToEx(gr, rc1.left,		rc1.bottom - 1, NULL);
@@ -1104,7 +1104,7 @@ void PropTypesColor::DrawColorListItem(DRAWITEMSTRUCT* pDis)
 	rc1.top += 3;
 	rc1.right = rc1.left + 12;
 	rc1.bottom = rc1.top + 12;
-	if (pColorInfo->m_bDisp) {	// 色分け/表示する
+	if (pColorInfo->bDisp) {	// 色分け/表示する
 		// 2006.04.26 ryoji テキスト色を使う（「ハイコントラスト黒」のような設定でも見えるように）
 		gr.SetPen(::GetSysColor(COLOR_WINDOWTEXT));
 
@@ -1126,8 +1126,8 @@ void PropTypesColor::DrawColorListItem(DRAWITEMSTRUCT* pDis)
 
 
 	// 2002/11/02 Moca 比較方法変更
-//	if (strcmp("カーソル行アンダーライン", pColorInfo->m_szName) != 0)
-	if ((g_ColorAttributeArr[pColorInfo->m_nColorIdx].fAttribute & COLOR_ATTRIB_NO_BACK) == 0) {	// 2006.12.18 ryoji フラグ利用で簡素化
+//	if (strcmp("カーソル行アンダーライン", pColorInfo->szName) != 0)
+	if ((g_ColorAttributeArr[pColorInfo->nColorIdx].fAttribute & COLOR_ATTRIB_NO_BACK) == 0) {	// 2006.12.18 ryoji フラグ利用で簡素化
 		// 背景色 見本矩形
 		rc1 = pDis->rcItem;
 		rc1.left = rc1.right - 13;
@@ -1135,19 +1135,19 @@ void PropTypesColor::DrawColorListItem(DRAWITEMSTRUCT* pDis)
 		rc1.right = rc1.left + 12;
 		rc1.bottom -= 2;
 
-		gr.SetBrushColor(pColorInfo->m_colorAttr.m_cBACK);
+		gr.SetBrushColor(pColorInfo->colorAttr.cBACK);
 		gr.SetPen(cRim);
 		::RoundRect(pDis->hDC, rc1.left, rc1.top, rc1.right, rc1.bottom , 3, 3);
 	}
 
-	if ((g_ColorAttributeArr[pColorInfo->m_nColorIdx].fAttribute & COLOR_ATTRIB_NO_TEXT) == 0) {
+	if ((g_ColorAttributeArr[pColorInfo->nColorIdx].fAttribute & COLOR_ATTRIB_NO_TEXT) == 0) {
 		// 前景色 見本矩形
 		rc1 = pDis->rcItem;
 		rc1.left = rc1.right - 27;
 		rc1.top += 2;
 		rc1.right = rc1.left + 12;
 		rc1.bottom -= 2;
-		gr.SetBrushColor(pColorInfo->m_colorAttr.m_cTEXT);
+		gr.SetBrushColor(pColorInfo->colorAttr.cTEXT);
 		gr.SetPen(cRim);
 		::RoundRect(pDis->hDC, rc1.left, rc1.top, rc1.right, rc1.bottom , 3, 3);
 	}

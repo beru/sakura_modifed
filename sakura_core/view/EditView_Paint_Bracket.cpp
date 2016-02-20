@@ -43,7 +43,7 @@ void EditView::SetBracketPairPos(bool flag)
 		return;
 	}
 
-	if (!m_pTypeData->m_colorInfoArr[COLORIDX_BRACKET_PAIR].m_bDisp) {
+	if (!m_pTypeData->colorInfoArr[COLORIDX_BRACKET_PAIR].bDisp) {
 		return;
 	}
 
@@ -108,7 +108,7 @@ void EditView::DrawBracketPair(bool bDraw)
 		return;
 	}
 
-	if (!m_pTypeData->m_colorInfoArr[COLORIDX_BRACKET_PAIR].m_bDisp) {
+	if (!m_pTypeData->colorInfoArr[COLORIDX_BRACKET_PAIR].bDisp) {
 		return;
 	}
 

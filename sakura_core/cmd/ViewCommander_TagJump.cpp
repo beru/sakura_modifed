@@ -316,7 +316,7 @@ bool ViewCommander::Command_TAGJUMP(bool bClose)
 		// Borland 形式のメッセージからのTAG JUMP
 		while (p < p_end) {
 			// skip space
-			for (; p < p_end && (*p == L' ' || *p == L'\t' || WCODE::IsLineDelimiter(*p, GetDllShareData().m_common.edit.m_bEnableExtEol)); ++p)
+			for (; p < p_end && (*p == L' ' || *p == L'\t' || WCODE::IsLineDelimiter(*p, GetDllShareData().m_common.edit.bEnableExtEol)); ++p)
 				;
 			if (p >= p_end)
 				break;
@@ -720,7 +720,7 @@ bool ViewCommander::Sub_PreProcTagJumpByTagsFile(TCHAR* szCurrentPath, int count
 		// (無題)でもファイル名を要求してくるのでダミーをつける
 		// 現在のタイプ別の1番目の拡張子を拝借
 		TCHAR szExts[MAX_TYPES_EXTS];
-		DocTypeManager::GetFirstExt(m_pCommanderView->m_pTypeData->m_szTypeExts, szExts, _countof(szExts));
+		DocTypeManager::GetFirstExt(m_pCommanderView->m_pTypeData->szTypeExts, szExts, _countof(szExts));
 		int nExtLen = auto_strlen( szExts );
 		_tcscat(szCurrentPath, _T("\\dmy"));
 		if (nExtLen) {

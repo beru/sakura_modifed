@@ -56,7 +56,7 @@ TypeConfigNum DocTypeManager::GetDocumentTypeOfPath(const TCHAR* pszFilePath)
 	for (int i=0; i<m_pShareData->m_nTypesCount; ++i) {
 		const TypeConfigMini* mini;
 		GetTypeConfigMini(TypeConfigNum(i), &mini);
-		if (IsFileNameMatch(mini->m_szTypeExts, pszFileName)) {
+		if (IsFileNameMatch(mini->szTypeExts, pszFileName)) {
 			return TypeConfigNum(i);	//	î‘çÜ
 		}
 	}
@@ -85,7 +85,7 @@ TypeConfigNum DocTypeManager::GetDocumentTypeOfId(int id)
 	for (int i=0; i<m_pShareData->m_nTypesCount; ++i) {
 		const TypeConfigMini* mini;
 		GetTypeConfigMini(TypeConfigNum(i), &mini);
-		if (mini->m_id == id) {
+		if (mini->id == id) {
 			return TypeConfigNum(i);
 		}
 	}

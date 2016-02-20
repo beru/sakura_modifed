@@ -12,7 +12,7 @@ bool Color_LineComment::BeginColor(const StringRef& str, int nPos)
 	if (!str.IsValid()) return false;
 
 	// 行コメント
-	return m_pTypeData->m_lineComment.Match(nPos, str);	//@@@ 2002.09.22 YAZAKI
+	return m_pTypeData->lineComment.Match(nPos, str);	//@@@ 2002.09.22 YAZAKI
 }
 
 bool Color_LineComment::EndColor(const StringRef& str, int nPos)
@@ -23,7 +23,7 @@ bool Color_LineComment::EndColor(const StringRef& str, int nPos)
 	}
 
 	// 改行
-	if (WCODE::IsLineDelimiter(str.At(nPos), GetDllShareData().m_common.edit.m_bEnableExtEol)) {
+	if (WCODE::IsLineDelimiter(str.At(nPos), GetDllShareData().m_common.edit.bEnableExtEol)) {
 		return true;
 	}
 

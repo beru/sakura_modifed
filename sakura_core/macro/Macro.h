@@ -47,30 +47,30 @@ enum class MacroParamType {
 };
 
 struct MacroParam {
-	WCHAR*			m_pData;
-	MacroParam*		m_pNext;
-	int				m_nDataLen;
-	MacroParamType m_type;
+	WCHAR*			pData;
+	MacroParam*		pNext;
+	int				nDataLen;
+	MacroParamType type;
 
-	MacroParam():m_pData(NULL), m_pNext(NULL), m_nDataLen(0), m_type(MacroParamType::Null){}
+	MacroParam():pData(NULL), pNext(NULL), nDataLen(0), type(MacroParamType::Null){}
 	MacroParam( const MacroParam& obj ){
-		if (obj.m_pData) {
-			m_pData = new WCHAR[obj.m_nDataLen + 1];
+		if (obj.pData) {
+			pData = new WCHAR[obj.nDataLen + 1];
 		}else {
-			m_pData = NULL;
+			pData = NULL;
 		}
-		m_pNext = NULL;
-		m_nDataLen = obj.m_nDataLen;
-		m_type = obj.m_type;
+		pNext = NULL;
+		nDataLen = obj.nDataLen;
+		type = obj.type;
 	}
 	~MacroParam(){
 		Clear();
 	}
 	void Clear(){
-		delete[] m_pData;
-		m_pData = NULL;
-		m_nDataLen = 0;
-		m_type = MacroParamType::Null;
+		delete[] pData;
+		pData = NULL;
+		nDataLen = 0;
+		type = MacroParamType::Null;
 	}
 	void SetStringParam( const WCHAR* szParam, int nLength = -1 );
 	void SetStringParam( const ACHAR* lParam ){ SetStringParam(to_wchar(lParam)); }

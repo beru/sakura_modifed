@@ -222,7 +222,7 @@ BOOL EditView::Create(
 
 	auto& textArea = GetTextArea();
 	// ルーラー表示
-	textArea.SetAreaTop(textArea.GetAreaTop() + GetDllShareData().m_common.window.m_nRulerHeight);	// ルーラー高さ
+	textArea.SetAreaTop(textArea.GetAreaTop() + GetDllShareData().m_common.window.nRulerHeight);	// ルーラー高さ
 	GetRuler().SetRedrawFlag();	// ルーラー全体を描き直す時=true   2002.02.25 Add By KK
 	m_hdcCompatDC = NULL;		// 再描画用コンパチブルＤＣ
 	m_hbmpCompatBMP = NULL;		// 再描画用メモリＢＭＰ
@@ -239,7 +239,7 @@ BOOL EditView::Create(
 
 	//	Jun. 27, 2001 genta	正規表現ライブラリの差し替え
 	//	2007.08.12 genta 初期化にShareDataの値が必要になった
-	m_curRegexp.InitDll(GetDllShareData().m_common.search.m_szRegexpLib);
+	m_curRegexp.InitDll(GetDllShareData().m_common.search.szRegexpLib);
 
 	// 2004.02.08 m_hFont_ZENは未使用により削除
 	m_dwTipTimer = ::GetTickCount();	// 辞書Tip起動タイマー
@@ -294,14 +294,14 @@ BOOL EditView::Create(
 	m_nMyIndex = nMyIndex;
 
 	//	2007.08.18 genta 初期化にShareDataの値が必要になった
-	m_pRegexKeyword = new RegexKeyword(GetDllShareData().m_common.search.m_szRegexpLib);	//@@@ 2001.11.17 add MIK
+	m_pRegexKeyword = new RegexKeyword(GetDllShareData().m_common.search.szRegexpLib);	//@@@ 2001.11.17 add MIK
 	m_pRegexKeyword->RegexKeySetTypes(m_pTypeData);	//@@@ 2001.11.17 add MIK
 
-	textArea.SetTopYohaku(GetDllShareData().m_common.window.m_nRulerBottomSpace); 	// ルーラーとテキストの隙間
+	textArea.SetTopYohaku(GetDllShareData().m_common.window.nRulerBottomSpace); 	// ルーラーとテキストの隙間
 	textArea.SetAreaTop(textArea.GetTopYohaku());								// 表示域の上端座標
 	// ルーラー表示
-	if (m_pTypeData->m_colorInfoArr[COLORIDX_RULER].m_bDisp) {
-		textArea.SetAreaTop(textArea.GetAreaTop() + GetDllShareData().m_common.window.m_nRulerHeight);	// ルーラー高さ
+	if (m_pTypeData->colorInfoArr[COLORIDX_RULER].bDisp) {
+		textArea.SetAreaTop(textArea.GetAreaTop() + GetDllShareData().m_common.window.nRulerHeight);	// ルーラー高さ
 	}
 
 	// ウィンドウクラスの登録
@@ -354,7 +354,7 @@ BOOL EditView::Create(
 	// 再描画用コンパチブルＤＣ
 	// 2007.09.09 Moca 互換BMPによる画面バッファ
 	// 2007.09.30 genta 関数化
-	UseCompatibleDC(GetDllShareData().m_common.window.m_bUseCompatibleBMP);
+	UseCompatibleDC(GetDllShareData().m_common.window.bUseCompatibleBMP);
 
 	// 垂直分割ボックス
 	m_pcsbwVSplitBox = new SplitBoxWnd;
@@ -855,7 +855,7 @@ LRESULT EditView::DispatchEvent(
 		// マウスクリックによりバックグラウンドウィンドウがアクティベートされた
 		//	2007.10.08 genta オプション追加
 		if (1
-			&& GetDllShareData().m_common.general.m_bNoCaretMoveByActivation
+			&& GetDllShareData().m_common.general.bNoCaretMoveByActivation
 			&& !m_pEditWnd->IsActiveApp()
 		) {
 			m_bActivateByMouse = TRUE;		// マウスによるアクティベート
@@ -1024,7 +1024,7 @@ void EditView::OnSize(int cx, int cy)
 	GetCaret().ShowEditCaret();
 
 	if (IsBkBitmap()) {
-		EBackgroundImagePos imgPos = m_pTypeData->m_backImgPos;
+		EBackgroundImagePos imgPos = m_pTypeData->backImgPos;
 		if (imgPos != BGIMAGE_TOP_LEFT) {
 			bool bUpdateWidth = false;
 			bool bUpdateHeight = false;
@@ -1250,12 +1250,12 @@ bool EditView::IsCurrentPositionURL(
 	// URLを強調表示するかどうかチェックする	// 2009.05.27 ryoji
 	bool bDispUrl = TypeSupport(this, COLORIDX_URL).IsDisp();
 	bool bUseRegexKeyword = false;
-	if (m_pTypeData->m_bUseRegexKeyword) {
-		const wchar_t* pKeyword = m_pTypeData->m_RegexKeywordList;
+	if (m_pTypeData->bUseRegexKeyword) {
+		const wchar_t* pKeyword = m_pTypeData->regexKeywordList;
 		for (int i=0; i<MAX_REGEX_KEYWORD; ++i) {
 			if (*pKeyword == L'\0')
 				break;
-			if (m_pTypeData->m_RegexKeywordArr[i].m_nColorIndex == COLORIDX_URL) {
+			if (m_pTypeData->regexKeywordArr[i].m_nColorIndex == COLORIDX_URL) {
 				bUseRegexKeyword = true;	// URL色指定の正規表現キーワードがある
 				break;
 			}
@@ -1330,7 +1330,7 @@ VOID EditView::OnTimer(
 	DWORD dwTime 	// current system time
 	)
 {
-	if (GetDllShareData().m_common.edit.m_bUseOLE_DragDrop) {	// OLEによるドラッグ & ドロップを使う
+	if (GetDllShareData().m_common.edit.bUseOLE_DragDrop) {	// OLEによるドラッグ & ドロップを使う
 		if (IsDragSource()) {
 			return;
 		}
@@ -1422,7 +1422,7 @@ void EditView::ConvSelectedArea(EFunctionCode nFuncCode)
 				nIdxFrom	= LineColumnToIndex(pLayout, rcSelLayout.left);
 				nIdxTo		= LineColumnToIndex(pLayout, rcSelLayout.right);
 
-				bool bExtEol = GetDllShareData().m_common.edit.m_bEnableExtEol;
+				bool bExtEol = GetDllShareData().m_common.edit.bEnableExtEol;
 				for (LogicInt i=nIdxFrom; i<=nIdxTo; ++i) {
 					if (WCODE::IsLineDelimiter(pLine[i], bExtEol)) {
 						nIdxTo = i;
@@ -1587,8 +1587,8 @@ int	EditView::CreatePopUpMenuSub(HMENU hMenu, int nMenuIdx, int* pParentMenus)
 		pNextParam[nParamIndex] = nThisCode;
 	}
 	auto& csCustomMenu = GetDllShareData().m_common.customMenu;
-	for (int i=0; i<csCustomMenu.m_nCustMenuItemNumArr[nMenuIdx]; ++i) {
-		EFunctionCode code = csCustomMenu.m_nCustMenuItemFuncArr[nMenuIdx][i];
+	for (int i=0; i<csCustomMenu.nCustMenuItemNumArr[nMenuIdx]; ++i) {
+		EFunctionCode code = csCustomMenu.nCustMenuItemFuncArr[nMenuIdx][i];
 		bool bAppend = false;
 		if (code == F_0) {
 			// 2010.07.24 メニュー配列に入れる
@@ -1601,7 +1601,7 @@ int	EditView::CreatePopUpMenuSub(HMENU hMenu, int nMenuIdx, int* pParentMenus)
 			}else {
 				nCustIdx = code - F_CUSTMENU_1 + 1;
 			}
-			bool bMenuLoop = !csCustomMenu.m_bCustMenuPopupArr[nCustIdx];
+			bool bMenuLoop = !csCustomMenu.bCustMenuPopupArr[nCustIdx];
 			if (!bMenuLoop) {
 				for (int k=0; pNextParam[k]!=0; ++k) {
 					if (pNextParam[k] == code) {
@@ -1614,7 +1614,7 @@ int	EditView::CreatePopUpMenuSub(HMENU hMenu, int nMenuIdx, int* pParentMenus)
 				WCHAR buf[MAX_CUSTOM_MENU_NAME_LEN + 1];
 				LPCWSTR p = GetDocument()->m_funcLookup.Custmenu2Name(nCustIdx, buf, _countof(buf));
 				wchar_t keys[2];
-				keys[0] = csCustomMenu.m_nCustMenuItemKeyArr[nMenuIdx][i];
+				keys[0] = csCustomMenu.nCustMenuItemKeyArr[nMenuIdx][i];
 				keys[1] = 0;
 				HMENU hMenuPopUp = ::CreatePopupMenu();
 				menuDrawer.MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING | MF_POPUP, (UINT_PTR)hMenuPopUp , p, keys);
@@ -1632,7 +1632,7 @@ int	EditView::CreatePopUpMenuSub(HMENU hMenu, int nMenuIdx, int* pParentMenus)
 				m_pEditWnd->InitMenu_Special(hMenu, code);
 			}else {
 				wchar_t keys[2];
-				keys[0] = csCustomMenu.m_nCustMenuItemKeyArr[nMenuIdx][i];
+				keys[0] = csCustomMenu.nCustMenuItemKeyArr[nMenuIdx][i];
 				keys[1] = 0;
 				m_pEditWnd->InitMenu_Function(hMenu, code, szLabel, keys);
 			}
@@ -1698,17 +1698,17 @@ void EditView::OnChangeSetting()
 		return;
 	}
 	auto& csWindow = GetDllShareData().m_common.window;
-	GetTextArea().SetTopYohaku(csWindow.m_nRulerBottomSpace); 	// ルーラーとテキストの隙間
+	GetTextArea().SetTopYohaku(csWindow.nRulerBottomSpace); 	// ルーラーとテキストの隙間
 	GetTextArea().SetAreaTop(GetTextArea().GetTopYohaku());									// 表示域の上端座標
 
 	// 文書種別更新
 	m_pTypeData = &m_pEditDoc->m_docType.GetDocumentAttribute();
 
 	// ルーラー表示
-	if (m_pTypeData->m_colorInfoArr[COLORIDX_RULER].m_bDisp && !m_bMiniMap) {
-		GetTextArea().SetAreaTop(GetTextArea().GetAreaTop() + csWindow.m_nRulerHeight);	// ルーラー高さ
+	if (m_pTypeData->colorInfoArr[COLORIDX_RULER].bDisp && !m_bMiniMap) {
+		GetTextArea().SetAreaTop(GetTextArea().GetAreaTop() + csWindow.nRulerHeight);	// ルーラー高さ
 	}
-	GetTextArea().SetLeftYohaku(csWindow.m_nLineNumRightSpace);
+	GetTextArea().SetLeftYohaku(csWindow.nLineNumRightSpace);
 
 	// フォントの変更
 	SetFont();
@@ -1721,7 +1721,7 @@ void EditView::OnChangeSetting()
 	// AdjustScrollBars();
 
 	//	2007.09.30 genta 画面キャッシュ用CompatibleDCを用意する
-	UseCompatibleDC(csWindow.m_bUseCompatibleBMP);
+	UseCompatibleDC(csWindow.bUseCompatibleBMP);
 
 	// ウィンドウサイズの変更処理
 	RECT rc;
@@ -1729,7 +1729,7 @@ void EditView::OnChangeSetting()
 	OnSize(rc.right, rc.bottom);
 
 	// フォントが変わった
-	m_tipWnd.ChangeFont(&(GetDllShareData().m_common.helper.m_lf));
+	m_tipWnd.ChangeFont(&(GetDllShareData().m_common.helper.lf));
 	
 	// 再描画
 	if (!m_pEditWnd->m_pPrintPreview) {
@@ -1922,7 +1922,7 @@ bool EditView::GetSelectedData(
 		memBuf->AllocStringBuffer(nBufSize);
 		//>> 2002/04/18 Azumaiya
 
-		bool bExtEol = GetDllShareData().m_common.edit.m_bEnableExtEol;
+		bool bExtEol = GetDllShareData().m_common.edit.bEnableExtEol;
 		nRowNum = 0;
 		for (nLineNum=rcSel.top; nLineNum<=rcSel.bottom; ++nLineNum) {
 			const wchar_t* pLine = m_pEditDoc->m_layoutMgr.GetLineStr(nLineNum, &nLineLen, &pLayout);
@@ -2294,7 +2294,7 @@ void EditView::CopySelectedAllLines(
 			false,
 			pszQuote, // 引用符
 			bWithLineNumber, // 行番号を付与する
-			GetDllShareData().m_common.edit.m_bAddCRLFWhenCopy // 折り返し位置に改行記号を入れる
+			GetDllShareData().m_common.edit.bAddCRLFWhenCopy // 折り返し位置に改行記号を入れる
 		)
 	) {
 		ErrorBeep();
@@ -2365,16 +2365,16 @@ bool EditView::MySetClipboardData(const WCHAR* pszText, int nTextLen, bool bColu
 inline bool EditView::IsDrawCursorVLinePos(int posX)
 {
 	return posX >= GetTextArea().GetAreaLeft() - 2	// 2010.08.10 ryoji テキストと行番号の隙間が半角文字幅より大きいと隙間位置にあるカーソルの縦線が描画される問題修正
-		&& posX >  GetTextArea().GetAreaLeft() - GetDllShareData().m_common.window.m_nLineNumRightSpace // 隙間(+1)がないときは線を引かない判定
+		&& posX >  GetTextArea().GetAreaLeft() - GetDllShareData().m_common.window.nLineNumRightSpace // 隙間(+1)がないときは線を引かない判定
 		&& posX <= GetTextArea().GetAreaRight();
 }
 
 // カーソル行アンダーラインのON
 void EditView::CaretUnderLineON(bool bDraw, bool bDrawPaint, bool DisalbeUnderLine)
 {
-	bool bUnderLine = m_pTypeData->m_colorInfoArr[COLORIDX_UNDERLINE].m_bDisp;
-	bool bCursorVLine = m_pTypeData->m_colorInfoArr[COLORIDX_CURSORVLINE].m_bDisp;
-	bool bCursorLineBg = m_pTypeData->m_colorInfoArr[COLORIDX_CARETLINEBG].m_bDisp;
+	bool bUnderLine = m_pTypeData->colorInfoArr[COLORIDX_UNDERLINE].bDisp;
+	bool bCursorVLine = m_pTypeData->colorInfoArr[COLORIDX_CURSORVLINE].bDisp;
+	bool bCursorLineBg = m_pTypeData->colorInfoArr[COLORIDX_CARETLINEBG].bDisp;
 	if (!bUnderLine && !bCursorVLine && !bCursorLineBg) {
 		return;
 	}
@@ -2421,7 +2421,7 @@ void EditView::CaretUnderLineON(bool bDraw, bool bDrawPaint, bool DisalbeUnderLi
 	if (bCursorVLine) {
 		// カーソル位置縦線。-1してキャレットの左に来るように。
 		nCursorVLineX = GetTextArea().GetAreaLeft() + (Int)(GetCaret().GetCaretLayoutPos().GetX2() - GetTextArea().GetViewLeftCol())
-			* (m_pTypeData->m_nColumnSpace + GetTextMetrics().GetHankakuWidth()) - 1;
+			* (m_pTypeData->nColumnSpace + GetTextMetrics().GetHankakuWidth()) - 1;
 	}
 
 	if (1
@@ -2438,13 +2438,13 @@ void EditView::CaretUnderLineON(bool bDraw, bool bDrawPaint, bool DisalbeUnderLi
 		HDC hdc = ::GetDC(GetHwnd());
 		{
 			Graphics gr(hdc);
-			gr.SetPen(m_pTypeData->m_colorInfoArr[COLORIDX_CURSORVLINE].m_colorAttr.m_cTEXT);
+			gr.SetPen(m_pTypeData->colorInfoArr[COLORIDX_CURSORVLINE].colorAttr.cTEXT);
 			::MoveToEx(gr, m_nOldCursorLineX, GetTextArea().GetAreaTop(), NULL);
 			::LineTo(  gr, m_nOldCursorLineX, GetTextArea().GetAreaBottom());
 			int nBoldX = m_nOldCursorLineX - 1;
 			// 「太字」のときは2dotの線にする。その際カーソルに掛からないように左側を太くする
 			if (1
-				&& m_pTypeData->m_colorInfoArr[COLORIDX_CURSORVLINE].m_fontAttr.m_bBoldFont
+				&& m_pTypeData->colorInfoArr[COLORIDX_CURSORVLINE].fontAttr.bBoldFont
 				&& IsDrawCursorVLinePos(nBoldX)
 			) {
 				::MoveToEx(gr, nBoldX, GetTextArea().GetAreaTop(), NULL);
@@ -2483,7 +2483,7 @@ void EditView::CaretUnderLineON(bool bDraw, bool bDrawPaint, bool DisalbeUnderLi
 		HDC		hdc = ::GetDC(GetHwnd());
 		{
 			Graphics gr(hdc);
-			gr.SetPen(m_pTypeData->m_colorInfoArr[COLORIDX_UNDERLINE].m_colorAttr.m_cTEXT);
+			gr.SetPen(m_pTypeData->colorInfoArr[COLORIDX_UNDERLINE].colorAttr.cTEXT);
 			::MoveToEx(
 				gr,
 				GetTextArea().GetAreaLeft(),
@@ -2504,9 +2504,9 @@ void EditView::CaretUnderLineON(bool bDraw, bool bDrawPaint, bool DisalbeUnderLi
 void EditView::CaretUnderLineOFF(bool bDraw, bool bDrawPaint, bool bResetFlag, bool DisalbeUnderLine)
 {
 	if (1
-		&& !m_pTypeData->m_colorInfoArr[COLORIDX_UNDERLINE].m_bDisp
-		&& !m_pTypeData->m_colorInfoArr[COLORIDX_CURSORVLINE].m_bDisp
-		&& !m_pTypeData->m_colorInfoArr[COLORIDX_CARETLINEBG].m_bDisp
+		&& !m_pTypeData->colorInfoArr[COLORIDX_UNDERLINE].bDisp
+		&& !m_pTypeData->colorInfoArr[COLORIDX_CURSORVLINE].bDisp
+		&& !m_pTypeData->colorInfoArr[COLORIDX_CARETLINEBG].bDisp
 	) {
 		return;
 	}
@@ -2694,7 +2694,7 @@ bool  EditView::ShowKeywordHelp(POINT po, LPCWSTR pszHelp, LPRECT prcHokanWin)
 	RECT		rcTipWin,
 				rcDesktop;
 
-	if (m_pTypeData->m_bUseKeywordHelp) { // キーワードヘルプを使用する
+	if (m_pTypeData->bUseKeywordHelp) { // キーワードヘルプを使用する
 		if (!m_bInMenuLoop			// メニュー モーダル ループに入っていない
 			&& m_dwTipTimer != 0	// 辞書Tipを表示していない
 		) {

@@ -45,7 +45,7 @@ public:
 	{
 		assert(0 <= m_nColorIdx);
 		m_pTypes = &pEditView->m_pEditDoc->m_docType.GetDocumentAttribute();
-		m_pColorInfoArr = &m_pTypes->m_colorInfoArr[m_nColorIdx];
+		m_pColorInfoArr = &m_pTypes->colorInfoArr[m_nColorIdx];
 
 		m_gr = NULL;
 	}
@@ -61,27 +61,27 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	// ‘OŒiF(•¶šF)
 	COLORREF GetTextColor() const {
-		return m_pColorInfoArr->m_colorAttr.m_cTEXT;
+		return m_pColorInfoArr->colorAttr.cTEXT;
 	}
 
 	// ”wŒiF
 	COLORREF GetBackColor() const {
-		return m_pColorInfoArr->m_colorAttr.m_cBACK;
+		return m_pColorInfoArr->colorAttr.cBACK;
 	}
 
 	// •\¦‚·‚é‚©‚Ç‚¤‚©
 	bool IsDisp() const {
-		return m_pColorInfoArr->m_bDisp;
+		return m_pColorInfoArr->bDisp;
 	}
 
 	// ‘¾š‚©‚Ç‚¤‚©
 	bool IsBoldFont() const {
-		return m_pColorInfoArr->m_fontAttr.m_bBoldFont;
+		return m_pColorInfoArr->fontAttr.bBoldFont;
 	}
 
 	// ‰ºü‚ğ‚Â‚©‚Ç‚¤‚©
 	bool HasUnderLine() const {
-		return m_pColorInfoArr->m_fontAttr.m_bUnderLine;
+		return m_pColorInfoArr->fontAttr.bUnderLine;
 	}
 
 	const ColorInfo& GetColorInfo() const {
@@ -92,7 +92,7 @@ public:
 	//                           •`‰æ                              //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	void FillBack(Graphics& gr, const RECT& rc) {
-		gr.FillSolidMyRect(rc, m_pColorInfoArr->m_colorAttr.m_cBACK);
+		gr.FillSolidMyRect(rc, m_pColorInfoArr->colorAttr.cBACK);
 	}
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -100,8 +100,8 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	Font GetTypeFont() {
 		Font sFont;
-		sFont.m_fontAttr = m_pColorInfoArr->m_fontAttr;
-		sFont.m_hFont = m_pFontset->ChooseFontHandle( m_pColorInfoArr->m_fontAttr );
+		sFont.m_fontAttr = m_pColorInfoArr->fontAttr;
+		sFont.m_hFont = m_pFontset->ChooseFontHandle( m_pColorInfoArr->fontAttr );
 		return sFont;
 	}
 	

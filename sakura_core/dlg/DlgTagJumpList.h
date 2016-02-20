@@ -122,7 +122,7 @@ public:
 private:
 
 	struct TagFindState {
-		int   m_nDepth;
+		int   nDepth;
 		int   m_nMatchAll;
 		int   m_nNextMode;
 		int   m_nLoop;

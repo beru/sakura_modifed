@@ -383,12 +383,12 @@ void ViewCommander::Command_BIND_WINDOW(void)
 {
 	// タブモードであるならば
 	auto& csTabBar = GetDllShareData().m_common.tabBar;
-	if (csTabBar.m_bDispTabWnd) {
+	if (csTabBar.bDispTabWnd) {
 		// タブウィンドウの設定を変更
-		csTabBar.m_bDispTabWndMultiWin = !csTabBar.m_bDispTabWndMultiWin;
+		csTabBar.bDispTabWndMultiWin = !csTabBar.bDispTabWndMultiWin;
 
 		// まとめるときは WS_EX_TOPMOST 状態を同期する	// 2007.05.18 ryoji
-		if (!csTabBar.m_bDispTabWndMultiWin) {
+		if (!csTabBar.bDispTabWndMultiWin) {
 			GetEditWindow()->WindowTopMost(
 				((DWORD)::GetWindowLongPtr(GetEditWindow()->GetHwnd(), GWL_EXSTYLE) & WS_EX_TOPMOST)? 1: 2
 			);
@@ -399,7 +399,7 @@ void ViewCommander::Command_BIND_WINDOW(void)
 		AppNodeManager::getInstance()->ResetGroupId();
 		AppNodeGroupHandle(0).PostMessageToAllEditors(
 			MYWM_TAB_WINDOW_NOTIFY,						// タブウィンドウイベント
-			(WPARAM)((csTabBar.m_bDispTabWndMultiWin) ? TabWndNotifyType::Disable : TabWndNotifyType::Enable), // タブモード有効/無効化イベント
+			(WPARAM)((csTabBar.bDispTabWndMultiWin) ? TabWndNotifyType::Disable : TabWndNotifyType::Enable), // タブモード有効/無効化イベント
 			(LPARAM)GetEditWindow()->GetHwnd(),	// EditWndのウィンドウハンドル
 			m_pCommanderView->GetHwnd());									// 自分自身
 		// End 2004.08.27 Kazika
@@ -413,8 +413,8 @@ void ViewCommander::Command_GROUPCLOSE(void)
 {
 	auto& csTabBar = GetDllShareData().m_common.tabBar;
 	if (
-		csTabBar.m_bDispTabWnd
-		&& !csTabBar.m_bDispTabWndMultiWin
+		csTabBar.bDispTabWnd
+		&& !csTabBar.bDispTabWndMultiWin
 	) {
 		int nGroup = AppNodeManager::getInstance()->GetEditNode(GetMainWindow())->GetGroup();
 		ControlTray::CloseAllEditor(TRUE, GetMainWindow(), TRUE, nGroup);
@@ -496,7 +496,7 @@ void ViewCommander::Command_TAB_JOINTPREV(void)
 // 左をすべて閉じる		// 2008.11.22 syat
 void ViewCommander::Command_TAB_CLOSELEFT(void)
 {
-	if (GetDllShareData().m_common.tabBar.m_bDispTabWnd) {
+	if (GetDllShareData().m_common.tabBar.bDispTabWnd) {
 		int nGroup = 0;
 
 		// ウィンドウ一覧を取得する
@@ -526,7 +526,7 @@ void ViewCommander::Command_TAB_CLOSELEFT(void)
 // 右をすべて閉じる		// 2008.11.22 syat
 void ViewCommander::Command_TAB_CLOSERIGHT(void)
 {
-	if (GetDllShareData().m_common.tabBar.m_bDispTabWnd) {
+	if (GetDllShareData().m_common.tabBar.bDispTabWnd) {
 		int nGroup = 0;
 
 		// ウィンドウ一覧を取得する

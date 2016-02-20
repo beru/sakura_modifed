@@ -118,7 +118,7 @@ void DlgPluginOption::SetData(void)
 	bool bLoadDefault = false;
 
 	// タイトル
-	auto_sprintf(buf, LS(STR_DLGPLUGINOPT_TITLE), plugin->m_sName.c_str());
+	auto_sprintf(buf, LS(STR_DLGPLUGINOPT_TITLE), plugin->sName.c_str());
 	::SetWindowText(GetHwnd(), buf);
 
 	// リスト
@@ -197,7 +197,7 @@ void DlgPluginOption::SetData(void)
 
 	if (bLoadDefault) {
 		profile->SetWritingMode();
-		profile->WriteProfile(plugin->GetOptionPath().c_str(), (plugin->m_sName + LSW(STR_DLGPLUGINOPT_INIHEAD)).c_str());
+		profile->WriteProfile(plugin->GetOptionPath().c_str(), (plugin->sName + LSW(STR_DLGPLUGINOPT_INIHEAD)).c_str());
 	}
 
 	if (i == 0) {
@@ -209,7 +209,7 @@ void DlgPluginOption::SetData(void)
 	}
 
 	// ReadMe Button
-	m_sReadMeName = m_pPropPlugin->GetReadMeFile(to_tchar(m_pShareData->m_common.plugin.m_pluginTable[m_ID].m_szName));
+	m_sReadMeName = m_pPropPlugin->GetReadMeFile(to_tchar(m_pShareData->m_common.plugin.pluginTable[m_ID].szName));
 	EnableItem(IDC_PLUGIN_README, !m_sReadMeName.empty());
 	return;
 }
@@ -283,7 +283,7 @@ int DlgPluginOption::GetData(void)
 
 	profile->WriteProfile(
 		plugin->GetOptionPath().c_str(),
-		(plugin->m_sName + LSW(STR_DLGPLUGINOPT_INIHEAD)).c_str()
+		(plugin->sName + LSW(STR_DLGPLUGINOPT_INIHEAD)).c_str()
 		);
 
 	return TRUE;

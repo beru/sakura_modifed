@@ -101,19 +101,19 @@ public:
 	//	実行可能か？CShareDataに問い合わせ
 	bool IsEnabled(int idx) const {
 		return (0 <= idx && idx < MAX_CUSTMACRO) ?
-		m_pShareData->m_common.macro.m_macroTable[idx].IsEnabled() : false;
+		m_pShareData->m_common.macro.macroTable[idx].IsEnabled() : false;
 	}
 	
 	//	表示する名前の取得
 	const TCHAR* GetTitle(int idx) const {
 		return (0 <= idx && idx < MAX_CUSTMACRO) ?
-		m_pShareData->m_common.macro.m_macroTable[idx].GetTitle() : NULL;	// 2007.11.02 ryoji
+		m_pShareData->m_common.macro.macroTable[idx].GetTitle() : NULL;	// 2007.11.02 ryoji
 	}
 	
 	//	表示名の取得
 	const TCHAR* GetName(int idx) const {
 		return (0 <= idx && idx < MAX_CUSTMACRO) ?
-		m_pShareData->m_common.macro.m_macroTable[idx].m_szName : NULL;
+		m_pShareData->m_common.macro.macroTable[idx].szName : NULL;
 	}
 	
 	/*!	@brief ファイル名の取得
@@ -121,7 +121,7 @@ public:
 	*/
 	const TCHAR* GetFile(int idx) const {
 		return (0 <= idx && idx < MAX_CUSTMACRO) ?
-		m_pShareData->m_common.macro.m_macroTable[idx].m_szFile : 
+		m_pShareData->m_common.macro.macroTable[idx].szFile : 
 		((idx == STAND_KEYMACRO || idx == TEMP_KEYMACRO) && m_sMacroPath != _T("")) ?
 		m_sMacroPath.c_str() : NULL;
 	}

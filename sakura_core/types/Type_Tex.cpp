@@ -36,16 +36,16 @@
 void CType_Tex::InitTypeConfigImp(TypeConfig* pType)
 {
 	// 名前と拡張子
-	_tcscpy(pType->m_szTypeName, _T("TeX"));
-	_tcscpy(pType->m_szTypeExts, _T("tex,ltx,sty,bib,log,blg,aux,bbl,toc,lof,lot,idx,ind,glo"));
+	_tcscpy(pType->szTypeName, _T("TeX"));
+	_tcscpy(pType->szTypeExts, _T("tex,ltx,sty,bib,log,blg,aux,bbl,toc,lof,lot,idx,ind,glo"));
 
 	// 設定
-	pType->m_lineComment.CopyTo(0, L"%", -1);					// 行コメントデリミタ
-	pType->m_eDefaultOutline = OUTLINE_TEX;						// アウトライン解析方法
-	pType->m_nKeywordSetIdx[0] = 9;								// キーワードセット
-	pType->m_nKeywordSetIdx[1] = 10;							// キーワードセット2 	// Jan. 19, 2001 JEPRO
-	pType->m_colorInfoArr[COLORIDX_SSTRING].m_bDisp = false;	// シングルクォーテーション文字列を色分け表示しない
-	pType->m_colorInfoArr[COLORIDX_WSTRING].m_bDisp = false;	// ダブルクォーテーション文字列を色分け表示しない
+	pType->lineComment.CopyTo(0, L"%", -1);					// 行コメントデリミタ
+	pType->eDefaultOutline = OUTLINE_TEX;						// アウトライン解析方法
+	pType->nKeywordSetIdx[0] = 9;								// キーワードセット
+	pType->nKeywordSetIdx[1] = 10;							// キーワードセット2 	// Jan. 19, 2001 JEPRO
+	pType->colorInfoArr[COLORIDX_SSTRING].bDisp = false;	// シングルクォーテーション文字列を色分け表示しない
+	pType->colorInfoArr[COLORIDX_WSTRING].bDisp = false;	// ダブルクォーテーション文字列を色分け表示しない
 }
 
 

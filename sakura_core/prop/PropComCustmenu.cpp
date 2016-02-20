@@ -202,7 +202,7 @@ INT_PTR PropCustmenu::DispatchEvent(
 					break;
 				}
 				::DlgItem_GetText(hwndDlg, IDC_EDIT_MENUNAME,
-					csCustomMenu.m_szCustMenuNameArr[nIdx1], MAX_CUSTOM_MENU_NAME_LEN);
+					csCustomMenu.szCustMenuNameArr[nIdx1], MAX_CUSTOM_MENU_NAME_LEN);
 				//	Combo Boxも変更 削除＆再登録
 				Combo_DeleteString(hwndCOMBO_MENU, nIdx1);
 				Combo_InsertString(hwndCOMBO_MENU, nIdx1,
@@ -237,14 +237,14 @@ INT_PTR PropCustmenu::DispatchEvent(
 					break;
 				}
 
-				if (csCustomMenu.m_nCustMenuItemFuncArr[nIdx1][nIdx2] == 0) {
+				if (csCustomMenu.nCustMenuItemFuncArr[nIdx1][nIdx2] == 0) {
 					break;
 				}
 
 //			idListBox = (int) LOWORD(wParam);	// identifier of list box
 //			hwndListBox = (HWND) lParam;		// handle of list box
 				TCHAR szKey[2];
-				auto_sprintf_s(szKey, _T("%hc"), csCustomMenu.m_nCustMenuItemKeyArr[nIdx1][nIdx2]);
+				auto_sprintf_s(szKey, _T("%hc"), csCustomMenu.nCustMenuItemKeyArr[nIdx1][nIdx2]);
 				{
 					BOOL bDlgInputResult = dlgInput1.DoModal(
 						G_AppInstance(),
@@ -259,19 +259,19 @@ INT_PTR PropCustmenu::DispatchEvent(
 					}
 				}
 				//	Oct. 3, 2001 genta
-				if (!m_lookup.Funccode2Name(csCustomMenu.m_nCustMenuItemFuncArr[nIdx1][nIdx2], szLabel, 255)) {
-					SetSpecialFuncName(csCustomMenu.m_nCustMenuItemFuncArr[nIdx1][nIdx2], szLabel);
+				if (!m_lookup.Funccode2Name(csCustomMenu.nCustMenuItemFuncArr[nIdx1][nIdx2], szLabel, 255)) {
+					SetSpecialFuncName(csCustomMenu.nCustMenuItemFuncArr[nIdx1][nIdx2], szLabel);
 				}
 
 				{
 					KEYCODE keycode[3]={0}; _tctomb(szKey, keycode);
-					csCustomMenu.m_nCustMenuItemKeyArr[nIdx1][nIdx2] = keycode[0];
+					csCustomMenu.nCustMenuItemKeyArr[nIdx1][nIdx2] = keycode[0];
 				}
 //@@@ 2002.01.08 YAZAKI カスタムメニューでアクセスキーを消した時、左カッコ (がメニュー項目に一回残るバグ修正
-				if (csCustomMenu.m_nCustMenuItemKeyArr[nIdx1][nIdx2]) {
+				if (csCustomMenu.nCustMenuItemKeyArr[nIdx1][nIdx2]) {
 					auto_sprintf_s(szLabel2, LTEXT("%ts(%hc)"),
 						szLabel,
-						csCustomMenu.m_nCustMenuItemKeyArr[nIdx1][nIdx2]
+						csCustomMenu.nCustMenuItemKeyArr[nIdx1][nIdx2]
 					);
 				}else {
 					auto_sprintf_s(szLabel2, LTEXT("%ls"), szLabel);
@@ -287,7 +287,7 @@ INT_PTR PropCustmenu::DispatchEvent(
 					break;
 				}
 
-				if (csCustomMenu.m_nCustMenuItemNumArr[nIdx1] >= MAX_CUSTOM_MENU_ITEMS) {
+				if (csCustomMenu.nCustMenuItemNumArr[nIdx1] >= MAX_CUSTOM_MENU_ITEMS) {
 					break;
 				}
 
@@ -297,8 +297,8 @@ INT_PTR PropCustmenu::DispatchEvent(
 				}
 
 				// キー
-				if ('\0' == csCustomMenu.m_nCustMenuItemKeyArr[nIdx1][nIdx2] ||
-					' '  == csCustomMenu.m_nCustMenuItemKeyArr[nIdx1][nIdx2]
+				if ('\0' == csCustomMenu.nCustMenuItemKeyArr[nIdx1][nIdx2] ||
+					' '  == csCustomMenu.nCustMenuItemKeyArr[nIdx1][nIdx2]
 				) {
 				}else {
 				}
@@ -334,7 +334,7 @@ INT_PTR PropCustmenu::DispatchEvent(
 						break;
 					}
 
-					if (MAX_CUSTOM_MENU_ITEMS <= csCustomMenu.m_nCustMenuItemNumArr[nIdx1]) {
+					if (MAX_CUSTOM_MENU_ITEMS <= csCustomMenu.nCustMenuItemNumArr[nIdx1]) {
 						break;
 					}
 
@@ -348,13 +348,13 @@ INT_PTR PropCustmenu::DispatchEvent(
 					}
 					List_SetCurSel(hwndLIST_RES, nIdx2);
 
-					for (i=csCustomMenu.m_nCustMenuItemNumArr[nIdx1]; i>nIdx2; --i) {
-						csCustomMenu.m_nCustMenuItemFuncArr[nIdx1][i] = csCustomMenu.m_nCustMenuItemFuncArr[nIdx1][i - 1];
-						csCustomMenu.m_nCustMenuItemKeyArr[nIdx1][i] = csCustomMenu.m_nCustMenuItemKeyArr[nIdx1][i - 1];
+					for (i=csCustomMenu.nCustMenuItemNumArr[nIdx1]; i>nIdx2; --i) {
+						csCustomMenu.nCustMenuItemFuncArr[nIdx1][i] = csCustomMenu.nCustMenuItemFuncArr[nIdx1][i - 1];
+						csCustomMenu.nCustMenuItemKeyArr[nIdx1][i] = csCustomMenu.nCustMenuItemKeyArr[nIdx1][i - 1];
 					}
-					csCustomMenu.m_nCustMenuItemFuncArr[nIdx1][nIdx2] = F_0;
-					csCustomMenu.m_nCustMenuItemKeyArr[nIdx1][nIdx2] = '\0';
-					csCustomMenu.m_nCustMenuItemNumArr[nIdx1]++;
+					csCustomMenu.nCustMenuItemFuncArr[nIdx1][nIdx2] = F_0;
+					csCustomMenu.nCustMenuItemKeyArr[nIdx1][nIdx2] = '\0';
+					csCustomMenu.nCustMenuItemNumArr[nIdx1]++;
 
 //					::SetWindowText(hwndEDIT_KEY, L"");
 					break;
@@ -364,7 +364,7 @@ INT_PTR PropCustmenu::DispatchEvent(
 						break;
 					}
 
-					if (csCustomMenu.m_nCustMenuItemNumArr[nIdx1] == 0) {
+					if (csCustomMenu.nCustMenuItemNumArr[nIdx1] == 0) {
 						break;
 					}
 
@@ -377,11 +377,11 @@ INT_PTR PropCustmenu::DispatchEvent(
 						break;
 					}
 
-					for (i=nIdx2; i<csCustomMenu.m_nCustMenuItemNumArr[nIdx1]; ++i) {
-						csCustomMenu.m_nCustMenuItemFuncArr[nIdx1][i] = csCustomMenu.m_nCustMenuItemFuncArr[nIdx1][i + 1];
-						csCustomMenu.m_nCustMenuItemKeyArr[nIdx1][i] = csCustomMenu.m_nCustMenuItemKeyArr[nIdx1][i + 1];
+					for (i=nIdx2; i<csCustomMenu.nCustMenuItemNumArr[nIdx1]; ++i) {
+						csCustomMenu.nCustMenuItemFuncArr[nIdx1][i] = csCustomMenu.nCustMenuItemFuncArr[nIdx1][i + 1];
+						csCustomMenu.nCustMenuItemKeyArr[nIdx1][i] = csCustomMenu.nCustMenuItemKeyArr[nIdx1][i + 1];
 					}
-					csCustomMenu.m_nCustMenuItemNumArr[nIdx1]--;
+					csCustomMenu.nCustMenuItemNumArr[nIdx1]--;
 
 					if (nNum2 > 0) {
 						if (nNum2 <= nIdx2) {
@@ -399,7 +399,7 @@ INT_PTR PropCustmenu::DispatchEvent(
 						break;
 					}
 
-					if (MAX_CUSTOM_MENU_ITEMS <= csCustomMenu.m_nCustMenuItemNumArr[nIdx1]) {
+					if (MAX_CUSTOM_MENU_ITEMS <= csCustomMenu.nCustMenuItemNumArr[nIdx1]) {
 						break;
 					}
 
@@ -417,9 +417,9 @@ INT_PTR PropCustmenu::DispatchEvent(
 					}
 					List_GetText(hwndLIST_FUNC, nIdx4, szLabel);
 
-					for (i=csCustomMenu.m_nCustMenuItemNumArr[nIdx1]; i>nIdx2; --i) {
-						csCustomMenu.m_nCustMenuItemFuncArr[nIdx1][i] = csCustomMenu.m_nCustMenuItemFuncArr[nIdx1][i - 1];
-						csCustomMenu.m_nCustMenuItemKeyArr[nIdx1][i] = csCustomMenu.m_nCustMenuItemKeyArr[nIdx1][i - 1];
+					for (i=csCustomMenu.nCustMenuItemNumArr[nIdx1]; i>nIdx2; --i) {
+						csCustomMenu.nCustMenuItemFuncArr[nIdx1][i] = csCustomMenu.nCustMenuItemFuncArr[nIdx1][i - 1];
+						csCustomMenu.nCustMenuItemKeyArr[nIdx1][i] = csCustomMenu.nCustMenuItemKeyArr[nIdx1][i - 1];
 					}
 					//	Oct. 3, 2001 genta
 					if (nIdx3 == nSpecialFuncsNum) {
@@ -428,9 +428,9 @@ INT_PTR PropCustmenu::DispatchEvent(
 					}else {
 						eFuncCode = m_lookup.Pos2FuncCode(nIdx3, nIdx4);
 					}
-					csCustomMenu.m_nCustMenuItemFuncArr[nIdx1][nIdx2] = eFuncCode;
-					csCustomMenu.m_nCustMenuItemKeyArr[nIdx1][nIdx2] = '\0';
-					csCustomMenu.m_nCustMenuItemNumArr[nIdx1]++;
+					csCustomMenu.nCustMenuItemFuncArr[nIdx1][nIdx2] = eFuncCode;
+					csCustomMenu.nCustMenuItemKeyArr[nIdx1][nIdx2] = '\0';
+					csCustomMenu.nCustMenuItemNumArr[nIdx1]++;
 
 					nIdx2 = List_InsertString(hwndLIST_RES, nIdx2, szLabel);
 					if (nIdx2 == LB_ERR || nIdx2 == LB_ERRSPACE) {
@@ -445,7 +445,7 @@ INT_PTR PropCustmenu::DispatchEvent(
 						break;
 					}
 
-					if (MAX_CUSTOM_MENU_ITEMS <= csCustomMenu.m_nCustMenuItemNumArr[nIdx1]) {
+					if (MAX_CUSTOM_MENU_ITEMS <= csCustomMenu.nCustMenuItemNumArr[nIdx1]) {
 						break;
 					}
 
@@ -480,9 +480,9 @@ INT_PTR PropCustmenu::DispatchEvent(
 					if (eFuncCode == F_DISABLE) {
 						break;
 					}
-					csCustomMenu.m_nCustMenuItemFuncArr[nIdx1][nNum2] = eFuncCode;
-					csCustomMenu.m_nCustMenuItemKeyArr[nIdx1][nNum2] = '\0';
-					csCustomMenu.m_nCustMenuItemNumArr[nIdx1]++;
+					csCustomMenu.nCustMenuItemFuncArr[nIdx1][nNum2] = eFuncCode;
+					csCustomMenu.nCustMenuItemKeyArr[nIdx1][nNum2] = '\0';
+					csCustomMenu.nCustMenuItemNumArr[nIdx1]++;
 
 					nIdx2 = List_AddString(hwndLIST_RES, szLabel);
 					if (nIdx2 == LB_ERR || nIdx2 == LB_ERRSPACE) {
@@ -506,12 +506,12 @@ INT_PTR PropCustmenu::DispatchEvent(
 					}
 
 					{
-						EFunctionCode nFunc = csCustomMenu.m_nCustMenuItemFuncArr[nIdx1][nIdx2 - 1];
-						KEYCODE key = csCustomMenu.m_nCustMenuItemKeyArr[nIdx1][nIdx2 - 1];
-						csCustomMenu.m_nCustMenuItemFuncArr[nIdx1][nIdx2 - 1] = csCustomMenu.m_nCustMenuItemFuncArr[nIdx1][nIdx2];
-						csCustomMenu.m_nCustMenuItemKeyArr[nIdx1][nIdx2 - 1]  = csCustomMenu.m_nCustMenuItemKeyArr[nIdx1][nIdx2];
-						csCustomMenu.m_nCustMenuItemFuncArr[nIdx1][nIdx2] =	nFunc;
-						csCustomMenu.m_nCustMenuItemKeyArr[nIdx1][nIdx2]  = key;
+						EFunctionCode nFunc = csCustomMenu.nCustMenuItemFuncArr[nIdx1][nIdx2 - 1];
+						KEYCODE key = csCustomMenu.nCustMenuItemKeyArr[nIdx1][nIdx2 - 1];
+						csCustomMenu.nCustMenuItemFuncArr[nIdx1][nIdx2 - 1] = csCustomMenu.nCustMenuItemFuncArr[nIdx1][nIdx2];
+						csCustomMenu.nCustMenuItemKeyArr[nIdx1][nIdx2 - 1]  = csCustomMenu.nCustMenuItemKeyArr[nIdx1][nIdx2];
+						csCustomMenu.nCustMenuItemFuncArr[nIdx1][nIdx2] =	nFunc;
+						csCustomMenu.nCustMenuItemKeyArr[nIdx1][nIdx2]  = key;
 					}
 
 					List_GetText(hwndLIST_RES, nIdx2, szLabel);
@@ -538,12 +538,12 @@ INT_PTR PropCustmenu::DispatchEvent(
 					}
 
 					{
-						EFunctionCode nFunc = csCustomMenu.m_nCustMenuItemFuncArr[nIdx1][nIdx2 + 1];
-						KEYCODE key = csCustomMenu.m_nCustMenuItemKeyArr[nIdx1][nIdx2 + 1];
-						csCustomMenu.m_nCustMenuItemFuncArr[nIdx1][nIdx2 + 1] = csCustomMenu.m_nCustMenuItemFuncArr[nIdx1][nIdx2];
-						csCustomMenu.m_nCustMenuItemKeyArr[nIdx1][nIdx2 + 1]  = csCustomMenu.m_nCustMenuItemKeyArr[nIdx1][nIdx2];
-						csCustomMenu.m_nCustMenuItemFuncArr[nIdx1][nIdx2] =	nFunc;
-						csCustomMenu.m_nCustMenuItemKeyArr[nIdx1][nIdx2]  = key;
+						EFunctionCode nFunc = csCustomMenu.nCustMenuItemFuncArr[nIdx1][nIdx2 + 1];
+						KEYCODE key = csCustomMenu.nCustMenuItemKeyArr[nIdx1][nIdx2 + 1];
+						csCustomMenu.nCustMenuItemFuncArr[nIdx1][nIdx2 + 1] = csCustomMenu.nCustMenuItemFuncArr[nIdx1][nIdx2];
+						csCustomMenu.nCustMenuItemKeyArr[nIdx1][nIdx2 + 1]  = csCustomMenu.nCustMenuItemKeyArr[nIdx1][nIdx2];
+						csCustomMenu.nCustMenuItemFuncArr[nIdx1][nIdx2] =	nFunc;
+						csCustomMenu.nCustMenuItemKeyArr[nIdx1][nIdx2]  = key;
 					}
 					List_GetText(hwndLIST_RES, nIdx2, szLabel);
 					List_DeleteString(hwndLIST_RES, nIdx2);
@@ -555,7 +555,7 @@ INT_PTR PropCustmenu::DispatchEvent(
 					if (nIdx1 == CB_ERR) {
 						break;
 					}
-					csCustomMenu.m_bCustMenuPopupArr[nIdx1] = IsDlgButtonCheckedBool(hwndDlg, IDC_CHECK_SUBMENU);
+					csCustomMenu.bCustMenuPopupArr[nIdx1] = IsDlgButtonCheckedBool(hwndDlg, IDC_CHECK_SUBMENU);
 					break;
 				}
 				break;
@@ -596,7 +596,7 @@ INT_PTR PropCustmenu::DispatchEvent(
 		}else {
 			::EnableWindow(::GetDlgItem(hwndDlg, IDC_BUTTON_ADD), TRUE);
 		}
-		if (MAX_CUSTOM_MENU_ITEMS <= csCustomMenu.m_nCustMenuItemNumArr[nIdx1]) {
+		if (MAX_CUSTOM_MENU_ITEMS <= csCustomMenu.nCustMenuItemNumArr[nIdx1]) {
 			::EnableWindow(::GetDlgItem(hwndDlg, IDC_BUTTON_INSERTSEPARATOR), FALSE);
 			::EnableWindow(::GetDlgItem(hwndDlg, IDC_BUTTON_INSERT), FALSE);
 			::EnableWindow(::GetDlgItem(hwndDlg, IDC_BUTTON_ADD), FALSE);
@@ -673,32 +673,32 @@ void PropCustmenu::SetDataMenuList(HWND hwndDlg, int nIdx)
 	HWND hwndLIST_RES = ::GetDlgItem(hwndDlg, IDC_LIST_RES);
 //	hwndEDIT_KEY = ::GetDlgItem(hwndDlg, IDC_EDIT_KEY);
 	List_ResetContent(hwndLIST_RES);
-	for (int i=0; i<csCustomMenu.m_nCustMenuItemNumArr[nIdx]; ++i) {
-		if (csCustomMenu.m_nCustMenuItemFuncArr[nIdx][i] == 0) {
+	for (int i=0; i<csCustomMenu.nCustMenuItemNumArr[nIdx]; ++i) {
+		if (csCustomMenu.nCustMenuItemFuncArr[nIdx][i] == 0) {
 			auto_strcpy(szLabel, LSW(STR_PROPCOMCUSTMENU_SEP));	// Oct. 18, 2000 JEPRO 「ツールバー」タブで使っているセパレータと同じ線種に統一した
 		}else {
-			EFunctionCode code = csCustomMenu.m_nCustMenuItemFuncArr[nIdx][i];
+			EFunctionCode code = csCustomMenu.nCustMenuItemFuncArr[nIdx][i];
 			//	Oct. 3, 2001 genta
 			if (!m_lookup.Funccode2Name(code, szLabel, 256)) {
 				SetSpecialFuncName(code, szLabel);
 			}
 		}
 		// キー 
-		if (csCustomMenu.m_nCustMenuItemKeyArr[nIdx][i] == '\0') {
+		if (csCustomMenu.nCustMenuItemKeyArr[nIdx][i] == '\0') {
 			auto_strcpy(szLabel2, szLabel);
 		}else {
 			auto_sprintf_s(szLabel2, LTEXT("%ls(%hc)"),
 				szLabel,
-				csCustomMenu.m_nCustMenuItemKeyArr[nIdx][i]
+				csCustomMenu.nCustMenuItemKeyArr[nIdx][i]
 			);
 		}
 		::List_AddString(hwndLIST_RES, szLabel2);
 	}
 	
 	//	Oct. 15, 2001 genta メニュー名を設定
-	::DlgItem_SetText(hwndDlg, IDC_EDIT_MENUNAME, csCustomMenu.m_szCustMenuNameArr[nIdx]);
+	::DlgItem_SetText(hwndDlg, IDC_EDIT_MENUNAME, csCustomMenu.szCustMenuNameArr[nIdx]);
 
-	CheckDlgButtonBool(hwndDlg, IDC_CHECK_SUBMENU, csCustomMenu.m_bCustMenuPopupArr[nIdx]);
+	CheckDlgButtonBool(hwndDlg, IDC_CHECK_SUBMENU, csCustomMenu.bCustMenuPopupArr[nIdx]);
 	return;
 }
 

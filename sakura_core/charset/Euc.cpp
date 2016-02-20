@@ -185,7 +185,7 @@ CodeConvertResult Euc::UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR*
 {
 	NativeW charBuffer;
 	// 2008/6/21 Uchi
-	if (psStatusbar->m_bDispUniInEuc) {
+	if (psStatusbar->bDispUniInEuc) {
 		// Unicode‚Å•\Ž¦
 		return CodeBase::UnicodeToHex(cSrc, iSLen, pDst, psStatusbar);
 	}

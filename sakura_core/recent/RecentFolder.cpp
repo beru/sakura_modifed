@@ -39,7 +39,7 @@ RecentFolder::RecentFolder()
 		&GetShareData()->m_history.m_nOPENFOLDERArrNum,
 		GetShareData()->m_history.m_bOPENFOLDERArrFavorite,
 		MAX_OPENFOLDER,
-		&(GetShareData()->m_common.general.m_nOPENFOLDERArrNum_MAX)
+		&(GetShareData()->m_common.general.nOPENFOLDERArrNum_MAX)
 	);
 }
 

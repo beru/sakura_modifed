@@ -126,7 +126,7 @@ public:
 		const WSHClient::List& objects = m_Client->GetInterfaceObjects();
 		for (auto it=objects.begin(); it!=objects.end(); ++it) {
 			// Nov. 10, 2003 FILE Win9Xでは、[lstrcmpiW]が無効のため、[_wcsicmp]に修正
-			if (_wcsicmp(pstrName, (*it)->m_sName.c_str()) == 0) {
+			if (_wcsicmp(pstrName, (*it)->sName.c_str()) == 0) {
 				if (dwReturnMask & SCRIPTINFO_IUNKNOWN) {
 					(*ppiunkItem) = *it;
 					(*ppiunkItem)->AddRef();
@@ -366,7 +366,7 @@ bool WSHClient::Execute(const wchar_t* AScript)
 				// マクロ停止スレッドの起動
 				AbortMacroParam sThreadParam;
 				sThreadParam.pEngine = m_Engine;
-				sThreadParam.nCancelTimer = GetDllShareData().m_common.macro.m_nMacroCancelTimer;
+				sThreadParam.nCancelTimer = GetDllShareData().m_common.macro.nMacroCancelTimer;
 				sThreadParam.view = (EditView*)m_Data;
 
 				HANDLE hThread = NULL;

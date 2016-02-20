@@ -69,7 +69,7 @@ bool Color_Heredoc::BeginColor(const StringRef& str, int nPos)
 	// ...
 	// HEREDOC_ID
 	if (1
-		&& m_pTypeData->m_nHeredocType == HereDocType::PHP
+		&& m_pTypeData->nHeredocType == HereDocType::PHP
 		&& str.At(nPos) == '<' && nPos + 3 < str.GetLength()
 		&& wmemcmp(str.GetPtr() + nPos + 1, L"<<", 2) == 0
 	) {
@@ -110,7 +110,7 @@ bool Color_Heredoc::BeginColor(const StringRef& str, int nPos)
 			i < length
 			&& WCODE::IsLineDelimiter(
 				str.At(i),
-				GetDllShareData().m_common.edit.m_bEnableExtEol
+				GetDllShareData().m_common.edit.bEnableExtEol
 			)
 		) {
 			m_id = std::wstring(str.GetPtr() + nPosIdStart, k - nPosIdStart);
@@ -127,7 +127,7 @@ bool Color_Heredoc::EndColor(const StringRef& str, int nPos)
 {
 	if (this->m_nCOMMENTEND == 0) {
 		if (1
-			&& m_pTypeData->m_nHeredocType == HereDocType::PHP
+			&& m_pTypeData->nHeredocType == HereDocType::PHP
 			&& nPos == 0 && m_nSize <= str.GetLength()
 			&& wmemcmp(str.GetPtr(), m_pszId, m_nSize) == 0
 		) {
@@ -141,7 +141,7 @@ bool Color_Heredoc::EndColor(const StringRef& str, int nPos)
 					&& str.At(i) == L';'
 					&& WCODE::IsLineDelimiter(
 						str.At(i+1),
-						GetDllShareData().m_common.edit.m_bEnableExtEol
+						GetDllShareData().m_common.edit.bEnableExtEol
 					)
 				) {
 					// ID;
@@ -151,7 +151,7 @@ bool Color_Heredoc::EndColor(const StringRef& str, int nPos)
 					m_nSize < str.GetLength()
 					&& WCODE::IsLineDelimiter(
 						str.At(m_nSize),
-						GetDllShareData().m_common.edit.m_bEnableExtEol
+						GetDllShareData().m_common.edit.bEnableExtEol
 					)
 				) {
 					// ID

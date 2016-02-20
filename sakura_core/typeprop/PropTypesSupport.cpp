@@ -103,10 +103,10 @@ INT_PTR PropTypesSupport::DispatchEvent(
 					TCHAR			szPath[_MAX_PATH + 1];
 					// 2003.06.23 Moca 相対パスは実行ファイルからのパスとして開く
 					// 2007.05.19 ryoji 相対パスは設定ファイルからのパスを優先
-					if (_IS_REL_PATH(m_types.m_szHokanFile)) {
-						GetInidirOrExedir(szPath, m_types.m_szHokanFile);
+					if (_IS_REL_PATH(m_types.szHokanFile)) {
+						GetInidirOrExedir(szPath, m_types.szHokanFile);
 					}else {
-						_tcscpy(szPath, m_types.m_szHokanFile);
+						_tcscpy(szPath, m_types.szHokanFile);
 					}
 					// ファイルオープンダイアログの初期化
 					dlgOpenFile.Create(
@@ -116,8 +116,8 @@ INT_PTR PropTypesSupport::DispatchEvent(
 						szPath
 					);
 					if (dlgOpenFile.DoModal_GetOpenFileName(szPath)) {
-						_tcscpy(m_types.m_szHokanFile, szPath);
-						::DlgItem_SetText(hwndDlg, IDC_EDIT_HOKANFILE, m_types.m_szHokanFile);
+						_tcscpy(m_types.szHokanFile, szPath);
+						::DlgItem_SetText(hwndDlg, IDC_EDIT_HOKANFILE, m_types.szHokanFile);
 					}
 				}
 				return TRUE;
@@ -127,10 +127,10 @@ INT_PTR PropTypesSupport::DispatchEvent(
 					TCHAR			szPath[_MAX_PATH + 1];
 					// 2003.06.23 Moca 相対パスは実行ファイルからのパスとして開く
 					// 2007.05.21 ryoji 相対パスは設定ファイルからのパスを優先
-					if (_IS_REL_PATH(m_types.m_szExtHelp)) {
-						GetInidirOrExedir(szPath, m_types.m_szExtHelp, true);
+					if (_IS_REL_PATH(m_types.szExtHelp)) {
+						GetInidirOrExedir(szPath, m_types.szExtHelp, true);
 					}else {
-						_tcscpy(szPath, m_types.m_szExtHelp);
+						_tcscpy(szPath, m_types.szExtHelp);
 					}
 					// ファイルオープンダイアログの初期化
 					dlgOpenFile.Create(
@@ -140,8 +140,8 @@ INT_PTR PropTypesSupport::DispatchEvent(
 						szPath
 					);
 					if (dlgOpenFile.DoModal_GetOpenFileName(szPath)) {
-						_tcscpy(m_types.m_szExtHelp, szPath);
-						::DlgItem_SetText(hwndDlg, IDC_EDIT_TYPEEXTHELP, m_types.m_szExtHelp);
+						_tcscpy(m_types.szExtHelp, szPath);
+						::DlgItem_SetText(hwndDlg, IDC_EDIT_TYPEEXTHELP, m_types.szExtHelp);
 					}
 				}
 				return TRUE;
@@ -151,10 +151,10 @@ INT_PTR PropTypesSupport::DispatchEvent(
 					TCHAR			szPath[_MAX_PATH + 1];
 					// 2003.06.23 Moca 相対パスは実行ファイルからのパスとして開く
 					// 2007.05.21 ryoji 相対パスは設定ファイルからのパスを優先
-					if (_IS_REL_PATH(m_types.m_szExtHtmlHelp)) {
-						GetInidirOrExedir(szPath, m_types.m_szExtHtmlHelp, true);
+					if (_IS_REL_PATH(m_types.szExtHtmlHelp)) {
+						GetInidirOrExedir(szPath, m_types.szExtHtmlHelp, true);
 					}else {
-						_tcscpy(szPath, m_types.m_szExtHtmlHelp);
+						_tcscpy(szPath, m_types.szExtHtmlHelp);
 					}
 					// ファイルオープンダイアログの初期化
 					dlgOpenFile.Create(
@@ -164,8 +164,8 @@ INT_PTR PropTypesSupport::DispatchEvent(
 						szPath
 					);
 					if (dlgOpenFile.DoModal_GetOpenFileName(szPath)) {
-						_tcscpy(m_types.m_szExtHtmlHelp, szPath);
-						::DlgItem_SetText(hwndDlg, IDC_EDIT_TYPEEXTHTMLHELP, m_types.m_szExtHtmlHelp);
+						_tcscpy(m_types.szExtHtmlHelp, szPath);
+						::DlgItem_SetText(hwndDlg, IDC_EDIT_TYPEEXTHTMLHELP, m_types.szExtHtmlHelp);
 					}
 				}
 				return TRUE;
@@ -218,7 +218,7 @@ INT_PTR PropTypesSupport::DispatchEvent(
 void PropTypesSupport::SetData(HWND hwndDlg)
 {
 	// 入力補完 単語ファイル
-	::DlgItem_SetText(hwndDlg, IDC_EDIT_HOKANFILE, m_types.m_szHokanFile);
+	::DlgItem_SetText(hwndDlg, IDC_EDIT_HOKANFILE, m_types.szHokanFile);
 
 	{
 		HWND hCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_HOKAN_TYPE);
@@ -228,7 +228,7 @@ void PropTypesSupport::SetData(HWND hwndDlg)
 		size_t nSize = pMedothList->size();
 		for (size_t i=0; i<nSize; ++i) {
 			ApiWrap::Combo_AddString(hCombo, (*pMedothList)[i].name.c_str());
-			if (m_types.m_nHokanType == (*pMedothList)[i].nMethod) {
+			if (m_types.nHokanType == (*pMedothList)[i].nMethod) {
 				Combo_SetCurSel(hCombo, i + 1);
 			}
 		}
@@ -236,19 +236,19 @@ void PropTypesSupport::SetData(HWND hwndDlg)
 
 //	2001/06/19 asa-o
 	// 入力補完機能：英大文字小文字を同一視する
-	::CheckDlgButton(hwndDlg, IDC_CHECK_HOKANLOHICASE, m_types.m_bHokanLoHiCase ? BST_CHECKED : BST_UNCHECKED);
+	::CheckDlgButton(hwndDlg, IDC_CHECK_HOKANLOHICASE, m_types.bHokanLoHiCase ? BST_CHECKED : BST_UNCHECKED);
 
 	// 2003.06.25 Moca ファイルからの補完機能
-	::CheckDlgButton(hwndDlg, IDC_CHECK_HOKANBYFILE, m_types.m_bUseHokanByFile ? BST_CHECKED : BST_UNCHECKED);
-	CheckDlgButtonBool(hwndDlg, IDC_CHECK_HOKANBYKEYWORD, m_types.m_bUseHokanByKeyword);
+	::CheckDlgButton(hwndDlg, IDC_CHECK_HOKANBYFILE, m_types.bUseHokanByFile ? BST_CHECKED : BST_UNCHECKED);
+	CheckDlgButtonBool(hwndDlg, IDC_CHECK_HOKANBYKEYWORD, m_types.bUseHokanByKeyword);
 
 	//@@@ 2002.2.2 YAZAKI
-	::DlgItem_SetText(hwndDlg, IDC_EDIT_TYPEEXTHELP, m_types.m_szExtHelp);
-	::DlgItem_SetText(hwndDlg, IDC_EDIT_TYPEEXTHTMLHELP, m_types.m_szExtHtmlHelp);
-	::CheckDlgButton(hwndDlg, IDC_CHECK_TYPEHTMLHELPISSINGLE, m_types.m_bHtmlHelpIsSingle ? BST_CHECKED : BST_UNCHECKED);
+	::DlgItem_SetText(hwndDlg, IDC_EDIT_TYPEEXTHELP, m_types.szExtHelp);
+	::DlgItem_SetText(hwndDlg, IDC_EDIT_TYPEEXTHTMLHELP, m_types.szExtHtmlHelp);
+	::CheckDlgButton(hwndDlg, IDC_CHECK_TYPEHTMLHELPISSINGLE, m_types.bHtmlHelpIsSingle ? BST_CHECKED : BST_UNCHECKED);
 
 	// 保存時に改行コードの混在を警告する	2013/4/14 Uchi
-	::CheckDlgButton(hwndDlg, IDC_CHECK_CHKENTERATEND, m_types.m_bChkEnterAtEnd ? BST_CHECKED : BST_UNCHECKED);
+	::CheckDlgButton(hwndDlg, IDC_CHECK_CHKENTERATEND, m_types.bChkEnterAtEnd ? BST_CHECKED : BST_UNCHECKED);
 }
 
 // ダイアログデータの取得
@@ -256,32 +256,32 @@ int PropTypesSupport::GetData(HWND hwndDlg)
 {
 //	2001/06/19	asa-o
 	// 入力補完機能：英大文字小文字を同一視する
-	m_types.m_bHokanLoHiCase = DlgButton_IsChecked(hwndDlg, IDC_CHECK_HOKANLOHICASE);
+	m_types.bHokanLoHiCase = DlgButton_IsChecked(hwndDlg, IDC_CHECK_HOKANLOHICASE);
 
-	m_types.m_bUseHokanByFile = DlgButton_IsChecked(hwndDlg, IDC_CHECK_HOKANBYFILE);
-	m_types.m_bUseHokanByKeyword = DlgButton_IsChecked(hwndDlg, IDC_CHECK_HOKANBYKEYWORD);
+	m_types.bUseHokanByFile = DlgButton_IsChecked(hwndDlg, IDC_CHECK_HOKANBYFILE);
+	m_types.bUseHokanByKeyword = DlgButton_IsChecked(hwndDlg, IDC_CHECK_HOKANBYKEYWORD);
 
 	// 入力補完 単語ファイル
-	::DlgItem_GetText(hwndDlg, IDC_EDIT_HOKANFILE, m_types.m_szHokanFile, _countof2(m_types.m_szHokanFile));
+	::DlgItem_GetText(hwndDlg, IDC_EDIT_HOKANFILE, m_types.szHokanFile, _countof2(m_types.szHokanFile));
 
 	// 入力補完種別
 	{
 		HWND hCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_HOKAN_TYPE);
 		int i = Combo_GetCurSel(hCombo);
 		if (i == 0) {
-			m_types.m_nHokanType = 0;
+			m_types.nHokanType = 0;
 		}else if (CB_ERR != i) {
-			m_types.m_nHokanType = (*GetHokanMethodList())[i - 1].nMethod;
+			m_types.nHokanType = (*GetHokanMethodList())[i - 1].nMethod;
 		}
 	}
 
 	//@@@ 2002.2.2 YAZAKI
-	::DlgItem_GetText(hwndDlg, IDC_EDIT_TYPEEXTHELP, m_types.m_szExtHelp, _countof2(m_types.m_szExtHelp));
-	::DlgItem_GetText(hwndDlg, IDC_EDIT_TYPEEXTHTMLHELP, m_types.m_szExtHtmlHelp, _countof2(m_types.m_szExtHtmlHelp));
-	m_types.m_bHtmlHelpIsSingle = DlgButton_IsChecked(hwndDlg, IDC_CHECK_TYPEHTMLHELPISSINGLE);
+	::DlgItem_GetText(hwndDlg, IDC_EDIT_TYPEEXTHELP, m_types.szExtHelp, _countof2(m_types.szExtHelp));
+	::DlgItem_GetText(hwndDlg, IDC_EDIT_TYPEEXTHTMLHELP, m_types.szExtHtmlHelp, _countof2(m_types.szExtHtmlHelp));
+	m_types.bHtmlHelpIsSingle = DlgButton_IsChecked(hwndDlg, IDC_CHECK_TYPEHTMLHELPISSINGLE);
 
 	// 保存時に改行コードの混在を警告する	2013/4/14 Uchi
-	m_types.m_bChkEnterAtEnd = DlgButton_IsChecked(hwndDlg, IDC_CHECK_CHKENTERATEND);
+	m_types.bChkEnterAtEnd = DlgButton_IsChecked(hwndDlg, IDC_CHECK_CHKENTERATEND);
 
 	return TRUE;
 }

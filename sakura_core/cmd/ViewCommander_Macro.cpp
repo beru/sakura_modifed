@@ -50,16 +50,16 @@ void ViewCommander::Command_RECKEYMACRO(void)
 			ErrorMessage(m_pCommanderView->GetHwnd(), LS(STR_ERR_CEDITVIEW_CMD24), nRet);
 			return;
 		}else {
-			_tcscpy(csMacro.m_szKeyMacroFileName, szInitDir);
+			_tcscpy(csMacro.szKeyMacroFileName, szInitDir);
 		}
 		//@@@ 2002.2.2 YAZAKI マクロをCSMacroMgrに統一
 		int nSaveResult = m_pSMacroMgr->Save(
 			STAND_KEYMACRO,
 			G_AppInstance(),
-			csMacro.m_szKeyMacroFileName
+			csMacro.szKeyMacroFileName
 		);
 		if (!nSaveResult) {
-			ErrorMessage(	m_pCommanderView->GetHwnd(), LS(STR_ERR_CEDITVIEW_CMD25), csMacro.m_szKeyMacroFileName);
+			ErrorMessage(	m_pCommanderView->GetHwnd(), LS(STR_ERR_CEDITVIEW_CMD25), csMacro.szKeyMacroFileName);
 		}
 	}else {
 		flags.m_bRecordingKeyMacro = TRUE;
@@ -97,7 +97,7 @@ void ViewCommander::Command_SAVEKEYMACRO(void)
 	szPath[0] = 0;
 	// 2003.06.23 Moca 相対パスは実行ファイルからのパス
 	// 2007.05.19 ryoji 相対パスは設定ファイルからのパスを優先
-	auto& macroFolder = GetDllShareData().m_common.macro.m_szMACROFOLDER;
+	auto& macroFolder = GetDllShareData().m_common.macro.szMACROFOLDER;
 	if (_IS_REL_PATH(macroFolder)) {
 		GetInidirOrExedir(szInitDir, macroFolder);
 	}else {
@@ -140,7 +140,7 @@ void ViewCommander::Command_LOADKEYMACRO(void)
 
 	TCHAR szPath[_MAX_PATH + 1];
 	TCHAR szInitDir[_MAX_PATH + 1];
-	const TCHAR* pszFolder = GetDllShareData().m_common.macro.m_szMACROFOLDER;
+	const TCHAR* pszFolder = GetDllShareData().m_common.macro.szMACROFOLDER;
 	szPath[0] = 0;
 	
 	// 2003.06.23 Moca 相対パスは実行ファイルからのパス
@@ -166,7 +166,7 @@ void ViewCommander::Command_LOADKEYMACRO(void)
 
 	// キーボードマクロの読み込み
 	//@@@ 2002.1.24 YAZAKI 読み込みといいつつも、ファイル名をコピーするだけ。実行直前に読み込む
-	_tcscpy(GetDllShareData().m_common.macro.m_szKeyMacroFileName, szPath);
+	_tcscpy(GetDllShareData().m_common.macro.szKeyMacroFileName, szPath);
 //	GetDllShareData().m_CKeyMacroMgr.LoadKeyMacro(G_AppInstance(), m_pCommanderView->GetHwnd(), szPath);
 	return;
 }
@@ -186,17 +186,17 @@ void ViewCommander::Command_EXECKEYMACRO(void)
 	// キーボードマクロの実行
 	//@@@ 2002.1.24 YAZAKI
 	auto& csMacro = GetDllShareData().m_common.macro;
-	if (csMacro.m_szKeyMacroFileName[0]) {
+	if (csMacro.szKeyMacroFileName[0]) {
 		// ファイルが保存されていたら
 		//@@@ 2002.2.2 YAZAKI マクロをCSMacroMgrに統一
 		BOOL bLoadResult = m_pSMacroMgr->Load(
 			STAND_KEYMACRO,
 			G_AppInstance(),
-			csMacro.m_szKeyMacroFileName,
+			csMacro.szKeyMacroFileName,
 			NULL
 		);
 		if (!bLoadResult) {
-			ErrorMessage(m_pCommanderView->GetHwnd(), LS(STR_ERR_CEDITVIEW_CMD28), csMacro.m_szKeyMacroFileName);
+			ErrorMessage(m_pCommanderView->GetHwnd(), LS(STR_ERR_CEDITVIEW_CMD28), csMacro.szKeyMacroFileName);
 		}else {
 			// 2007.07.20 genta : flagsオプション追加
 			m_pSMacroMgr->Exec(STAND_KEYMACRO, G_AppInstance(), m_pCommanderView, 0);
@@ -229,7 +229,7 @@ void ViewCommander::Command_EXECEXTMACRO(const WCHAR* pszPathW, const WCHAR* psz
 		// ファイルが指定されていない場合、ダイアログを表示する
 		szPath[0] = 0;
 		// マクロフォルダ
-		const TCHAR* pszFolder = GetDllShareData().m_common.macro.m_szMACROFOLDER;
+		const TCHAR* pszFolder = GetDllShareData().m_common.macro.szMACROFOLDER;
 
 		// ファイル選択ダイアログの初期フォルダ
 		TCHAR szInitDir[_MAX_PATH + 1];

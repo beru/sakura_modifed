@@ -324,20 +324,20 @@ EditView::TOGGLE_WRAP_ACTION EditView::GetWrapMode(LayoutInt* _newKetas)
 			// 4)
 			newKetas = LayoutInt(MAXLINEKETAS);
 			return TGWRAP_FULL;
-		}else if (m_pTypeData->m_nMaxLineKetas == MAXLINEKETAS) { // 5)
+		}else if (m_pTypeData->nMaxLineKetas == MAXLINEKETAS) { // 5)
 			// 6)
 			return TGWRAP_NONE;
 		}else { // 7)
-			newKetas = LayoutInt(m_pTypeData->m_nMaxLineKetas);
+			newKetas = LayoutInt(m_pTypeData->nMaxLineKetas);
 			return TGWRAP_PROP;
 		}
 	}else { // 8)
 		if (1
 			&& layoutMgr.GetMaxLineKetas() == MAXLINEKETAS // 9)
-			&& m_pTypeData->m_nMaxLineKetas != MAXLINEKETAS
+			&& m_pTypeData->nMaxLineKetas != MAXLINEKETAS
 		) {
 			// a)
-			newKetas = LayoutInt(m_pTypeData->m_nMaxLineKetas);
+			newKetas = LayoutInt(m_pTypeData->nMaxLineKetas);
 			return TGWRAP_PROP;
 			
 		}else {	// b) c)
@@ -364,14 +364,14 @@ BOOL EditView::ChangeCurRegexp(bool bRedrawIfChanged)
 {
 	bool bChangeState = false;
 
-	if (GetDllShareData().m_common.search.m_bInheritKeyOtherView
-			&& m_nCurSearchKeySequence < GetDllShareData().m_common.search.m_nSearchKeySequence
+	if (GetDllShareData().m_common.search.bInheritKeyOtherView
+			&& m_nCurSearchKeySequence < GetDllShareData().m_common.search.nSearchKeySequence
 		|| m_strCurSearchKey.size() == 0
 	) {
 		// 履歴の検索キーに更新
 		m_strCurSearchKey = GetDllShareData().m_searchKeywords.searchKeys[0];		// 検索文字列
-		m_curSearchOption = GetDllShareData().m_common.search.m_searchOption;// 検索／置換  オプション
-		m_nCurSearchKeySequence = GetDllShareData().m_common.search.m_nSearchKeySequence;
+		m_curSearchOption = GetDllShareData().m_common.search.searchOption;// 検索／置換  オプション
+		m_nCurSearchKeySequence = GetDllShareData().m_common.search.nSearchKeySequence;
 		bChangeState = true;
 	}else if (m_bCurSearchUpdate) {
 		bChangeState = true;

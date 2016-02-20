@@ -79,7 +79,7 @@ bool LayoutMgr::_DoKinsokuSkip(LayoutWork* pWork, PF_OnLine pfOnLine)
 				// 改行文字をぶら下げる		//@@@ 2002.04.14 MIK
 				if (
 					!(1
-						&& m_pTypeConfig->m_bKinsokuRet
+						&& m_pTypeConfig->bKinsokuRet
 						&& (pWork->nPos == pWork->lineStr.GetLength() - nEol)
 						&& nEol
 					)
@@ -236,22 +236,22 @@ void LayoutMgr::_MakeOneLine(LayoutWork* pWork, PF_OnLine pfOnLine)
 		if (_DoKinsokuSkip(pWork, pfOnLine)) {
 		}else {
 			// 英文ワードラップをする
-			if (m_pTypeConfig->m_bWordWrap) {
+			if (m_pTypeConfig->bWordWrap) {
 				_DoWordWrap(pWork, pfOnLine);
 			}
 
 			// 句読点のぶらさげ
-			if (m_pTypeConfig->m_bKinsokuKuto) {
+			if (m_pTypeConfig->bKinsokuKuto) {
 				_DoKutoBurasage(pWork);
 			}
 
 			// 行頭禁則
-			if (m_pTypeConfig->m_bKinsokuHead) {
+			if (m_pTypeConfig->bKinsokuHead) {
 				_DoGyotoKinsoku(pWork, pfOnLine);
 			}
 
 			// 行末禁則
-			if (m_pTypeConfig->m_bKinsokuTail) {
+			if (m_pTypeConfig->bKinsokuTail) {
 				_DoGyomatsuKinsoku(pWork, pfOnLine);
 			}
 		}
@@ -277,7 +277,7 @@ void LayoutMgr::_MakeOneLine(LayoutWork* pWork, PF_OnLine pfOnLine)
 				if (pWork->eKinsokuType != KinsokuType::Kuto) {
 					// 改行文字をぶら下げる		//@@@ 2002.04.14 MIK
 					if (!(1
-						&& m_pTypeConfig->m_bKinsokuRet
+						&& m_pTypeConfig->bKinsokuRet
 						&& (pWork->nPos == pWork->lineStr.GetLength() - nEol)
 						&& nEol
 						)

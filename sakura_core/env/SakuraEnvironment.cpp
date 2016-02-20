@@ -60,7 +60,7 @@ enum EExpParamName
 
 struct ExpParamName
 {
-	const wchar_t* m_szName;
+	const wchar_t* szName;
 	int m_nLen;
 };
 static ExpParamName SExpParamNameTable[] = {
@@ -283,8 +283,8 @@ void SakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszBu
 		case L'B':	// タイプ別設定の名前			2013/03/28 Uchi
 			{
 				const TypeConfig& typeCongig = pDoc->m_docType.GetDocumentAttribute();
-				if (typeCongig.m_nIdx > 0) {	// 基本は表示しない
-					q = wcs_pushT(q, q_max - q, typeCongig.m_szTypeName);
+				if (typeCongig.nIdx > 0) {	// 基本は表示しない
+					q = wcs_pushT(q, q_max - q, typeCongig.szTypeName);
 				}
 				++p;
 			}
@@ -308,7 +308,7 @@ void SakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszBu
 		case L'Q':	// 印刷ページ設定の名前			2013/03/28 Uchi
 			{
 				PRINTSETTING* ps = &GetDllShareData().m_printSettingArr[
-					 pDoc->m_docType.GetDocumentAttribute().m_nCurrentPrintSetting];
+					 pDoc->m_docType.GetDocumentAttribute().nCurrentPrintSetting];
 				q = wcs_pushT(q, q_max - q, ps->m_szPrintSettingName);
 				++p;
 			}
@@ -482,7 +482,7 @@ void SakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszBu
 					break;
 				case STAND_KEYMACRO:
 					{
-						TCHAR* pszMacroFilePath = GetDllShareData().m_common.macro.m_szKeyMacroFileName;
+						TCHAR* pszMacroFilePath = GetDllShareData().m_common.macro.szKeyMacroFileName;
 						q = wcs_pushT(q, q_max - q, pszMacroFilePath);
 					}
 					break;
@@ -535,7 +535,7 @@ void SakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszBu
 				int nParamNameIdx = EExpParamName_begin;
 				for (; nParamNameIdx!=EExpParamName_end; ++nParamNameIdx) {
 					if (SExpParamNameTable[nParamNameIdx].m_nLen == (p - pBegin)
-						&& auto_strnicmp(SExpParamNameTable[nParamNameIdx].m_szName, pBegin, p - pBegin) == 0
+						&& auto_strnicmp(SExpParamNameTable[nParamNameIdx].szName, pBegin, p - pBegin) == 0
 					) {
 						q = ExParam_LongName( q, q_max, static_cast<EExpParamName>(nParamNameIdx) );
 						break;
@@ -701,7 +701,7 @@ std::tstring SakuraEnvironment::GetDlgInitialDir(bool bControlProcess)
 		return to_tchar(pDoc->m_docFile.GetFilePathClass().GetDirPath().c_str());
 	}
 
-	EOpenDialogDir eOpenDialogDir = GetDllShareData().m_common.edit.m_eOpenDialogDir;
+	EOpenDialogDir eOpenDialogDir = GetDllShareData().m_common.edit.eOpenDialogDir;
 	if (bControlProcess && eOpenDialogDir == OPENDIALOGDIR_CUR) {
 		eOpenDialogDir = OPENDIALOGDIR_MRU;
 	}
@@ -743,7 +743,7 @@ std::tstring SakuraEnvironment::GetDlgInitialDir(bool bControlProcess)
 	case OPENDIALOGDIR_SEL:
 		{
 			TCHAR szSelDir[_MAX_PATH];
-			FileNameManager::ExpandMetaToFolder(GetDllShareData().m_common.edit.m_OpenDialogSelDir, szSelDir, _countof(szSelDir));
+			FileNameManager::ExpandMetaToFolder(GetDllShareData().m_common.edit.openDialogSelDir, szSelDir, _countof(szSelDir));
 			return szSelDir;
 		}
 		break;

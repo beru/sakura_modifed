@@ -118,17 +118,17 @@ void PropStatusbar::SetData(HWND hwndDlg)
 	auto& csStatusbar = m_common.statusBar;
 	// 示文字コードの指定
 	// SJISで文字コード値をUnicodeで出力する
-	::CheckDlgButton(hwndDlg, IDC_CHECK_DISP_UNICODE_IN_SJIS, csStatusbar.m_bDispUniInSjis);
+	::CheckDlgButton(hwndDlg, IDC_CHECK_DISP_UNICODE_IN_SJIS, csStatusbar.bDispUniInSjis);
 	// JISで文字コード値をUnicodeで出力する
-	::CheckDlgButton(hwndDlg, IDC_CHECK_DISP_UNICODE_IN_JIS,  csStatusbar.m_bDispUniInJis);
+	::CheckDlgButton(hwndDlg, IDC_CHECK_DISP_UNICODE_IN_JIS,  csStatusbar.bDispUniInJis);
 	// EUCで文字コード値をUnicodeで出力する
-	::CheckDlgButton(hwndDlg, IDC_CHECK_DISP_UNICODE_IN_EUC,  csStatusbar.m_bDispUniInEuc);
+	::CheckDlgButton(hwndDlg, IDC_CHECK_DISP_UNICODE_IN_EUC,  csStatusbar.bDispUniInEuc);
 	// UTF-8で表示をバイトコードで行う
-	::CheckDlgButton(hwndDlg, IDC_CHECK_DISP_UTF8_CODEPOINT,  csStatusbar.m_bDispUtf8Codepoint);
+	::CheckDlgButton(hwndDlg, IDC_CHECK_DISP_UTF8_CODEPOINT,  csStatusbar.bDispUtf8Codepoint);
 	// サロゲートペアをコードポイントで表示
-	::CheckDlgButton(hwndDlg, IDC_CHECK_DISP_SP_CODEPOINT,    csStatusbar.m_bDispSPCodepoint);
+	::CheckDlgButton(hwndDlg, IDC_CHECK_DISP_SP_CODEPOINT,    csStatusbar.bDispSPCodepoint);
 	// 選択文字数を文字単位ではなくバイト単位で表示する
-	::CheckDlgButton(hwndDlg, IDC_CHECK_DISP_SELCOUNT_BY_BYTE,csStatusbar.m_bDispSelCountByByte);
+	::CheckDlgButton(hwndDlg, IDC_CHECK_DISP_SELCOUNT_BY_BYTE,csStatusbar.bDispSelCountByByte);
 	return;
 }
 
@@ -138,17 +138,17 @@ int PropStatusbar::GetData(HWND hwndDlg)
 	auto& csStatusbar = m_common.statusBar;
 	// 表示文字コードの指定
 	// SJISで文字コード値をUnicodeで出力する
-	csStatusbar.m_bDispUniInSjis	= DlgButton_IsChecked(hwndDlg, IDC_CHECK_DISP_UNICODE_IN_SJIS);
+	csStatusbar.bDispUniInSjis	= DlgButton_IsChecked(hwndDlg, IDC_CHECK_DISP_UNICODE_IN_SJIS);
 	// JISで文字コード値をUnicodeで出力する
-	csStatusbar.m_bDispUniInJis		= DlgButton_IsChecked(hwndDlg, IDC_CHECK_DISP_UNICODE_IN_JIS);
+	csStatusbar.bDispUniInJis		= DlgButton_IsChecked(hwndDlg, IDC_CHECK_DISP_UNICODE_IN_JIS);
 	// EUCで文字コード値をUnicodeで出力する
-	csStatusbar.m_bDispUniInEuc		= DlgButton_IsChecked(hwndDlg, IDC_CHECK_DISP_UNICODE_IN_EUC);
+	csStatusbar.bDispUniInEuc		= DlgButton_IsChecked(hwndDlg, IDC_CHECK_DISP_UNICODE_IN_EUC);
 	// UTF-8で表示をバイトコードで行う
-	csStatusbar.m_bDispUtf8Codepoint	= DlgButton_IsChecked(hwndDlg, IDC_CHECK_DISP_UTF8_CODEPOINT);
+	csStatusbar.bDispUtf8Codepoint	= DlgButton_IsChecked(hwndDlg, IDC_CHECK_DISP_UTF8_CODEPOINT);
 	// サロゲートペアをコードポイントで表示
-	csStatusbar.m_bDispSPCodepoint	= DlgButton_IsChecked(hwndDlg, IDC_CHECK_DISP_SP_CODEPOINT);
+	csStatusbar.bDispSPCodepoint	= DlgButton_IsChecked(hwndDlg, IDC_CHECK_DISP_SP_CODEPOINT);
 	// 選択文字数を文字単位ではなくバイト単位で表示する
-	csStatusbar.m_bDispSelCountByByte	= DlgButton_IsChecked(hwndDlg, IDC_CHECK_DISP_SELCOUNT_BY_BYTE);
+	csStatusbar.bDispSelCountByByte	= DlgButton_IsChecked(hwndDlg, IDC_CHECK_DISP_SELCOUNT_BY_BYTE);
 
 	return TRUE;
 }

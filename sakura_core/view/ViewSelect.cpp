@@ -672,7 +672,7 @@ void ViewSelect::PrintSelectionInfoMsg() const
 		ViewSelect* thiz = const_cast<ViewSelect*>(this);	// const外しthis
 
 		// 共通設定・選択文字数を文字単位ではなくバイト単位で表示する
-		bool bCountByByteCommon = GetDllShareData().m_common.statusBar.m_bDispSelCountByByte;
+		bool bCountByByteCommon = GetDllShareData().m_common.statusBar.bDispSelCountByByte;
 		bool bCountByByte = (pView->m_pEditWnd->m_nSelectCountMode == SelectCountMode::Toggle ?
 								bCountByByteCommon :
 								pView->m_pEditWnd->m_nSelectCountMode == SelectCountMode::ByByte);

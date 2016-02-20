@@ -151,14 +151,14 @@ INT_PTR PropTab::DispatchEvent(
 					break;
 				case IDC_BUTTON_TABFONT:
 					auto& csTabBar = m_common.tabBar;
-					LOGFONT   lf = csTabBar.m_lf;
-					INT nPointSize = csTabBar.m_nPointSize;
+					LOGFONT   lf = csTabBar.lf;
+					INT nPointSize = csTabBar.nPointSize;
 
 					if (MySelectFont(&lf, &nPointSize, hwndDlg, false)) {
-						csTabBar.m_lf = lf;
-						csTabBar.m_nPointSize = nPointSize;
+						csTabBar.lf = lf;
+						csTabBar.nPointSize = nPointSize;
 						// タブ フォント表示	// 2013/4/24 Uchi
-						HFONT hFont = SetFontLabel(hwndDlg, IDC_STATIC_TABFONT, csTabBar.m_lf, csTabBar.m_nPointSize);
+						HFONT hFont = SetFontLabel(hwndDlg, IDC_STATIC_TABFONT, csTabBar.lf, csTabBar.nPointSize);
 						if (m_hTabFont) {
 							::DeleteObject(m_hTabFont);
 						}
@@ -205,21 +205,21 @@ void PropTab::SetData(HWND hwndDlg)
 	auto& csTabBar = m_common.tabBar;
 
 	//	Feb. 11, 2007 genta「ウィンドウ」シートより移動
-	CheckDlgButtonBool(hwndDlg, IDC_CHECK_DispTabWnd, csTabBar.m_bDispTabWnd);	//@@@ 2003.05.31 MIK
-	CheckDlgButtonBool(hwndDlg, IDC_CHECK_SameTabWidth, csTabBar.m_bSameTabWidth);	//@@@ 2006.01.28 ryoji
-	CheckDlgButtonBool(hwndDlg, IDC_CHECK_DispTabIcon, csTabBar.m_bDispTabIcon);	//@@@ 2006.01.28 ryoji
-	CheckDlgButtonBool(hwndDlg, IDC_CHECK_SortTabList, csTabBar.m_bSortTabList);			//@@@ 2006.03.23 fon
-	CheckDlgButtonBool(hwndDlg, IDC_CHECK_TAB_MULTILINE, csTabBar.m_bTabMultiLine );
-	CheckDlgButtonBool(hwndDlg, IDC_CHECK_GroupMultiTabWnd, !csTabBar.m_bDispTabWndMultiWin); //@@@ 2003.05.31 MIK
-	EditCtl_LimitText(::GetDlgItem(hwndDlg, IDC_TABWND_CAPTION), _countof(csTabBar.m_szTabWndCaption) - 1);
-	::DlgItem_SetText(hwndDlg, IDC_TABWND_CAPTION, csTabBar.m_szTabWndCaption);
+	CheckDlgButtonBool(hwndDlg, IDC_CHECK_DispTabWnd, csTabBar.bDispTabWnd);	//@@@ 2003.05.31 MIK
+	CheckDlgButtonBool(hwndDlg, IDC_CHECK_SameTabWidth, csTabBar.bSameTabWidth);	//@@@ 2006.01.28 ryoji
+	CheckDlgButtonBool(hwndDlg, IDC_CHECK_DispTabIcon, csTabBar.bDispTabIcon);	//@@@ 2006.01.28 ryoji
+	CheckDlgButtonBool(hwndDlg, IDC_CHECK_SortTabList, csTabBar.bSortTabList);			//@@@ 2006.03.23 fon
+	CheckDlgButtonBool(hwndDlg, IDC_CHECK_TAB_MULTILINE, csTabBar.bTabMultiLine );
+	CheckDlgButtonBool(hwndDlg, IDC_CHECK_GroupMultiTabWnd, !csTabBar.bDispTabWndMultiWin); //@@@ 2003.05.31 MIK
+	EditCtl_LimitText(::GetDlgItem(hwndDlg, IDC_TABWND_CAPTION), _countof(csTabBar.szTabWndCaption) - 1);
+	::DlgItem_SetText(hwndDlg, IDC_TABWND_CAPTION, csTabBar.szTabWndCaption);
 
 	HWND hwndCombo = ::GetDlgItem(hwndDlg, IDC_CHECK_DispTabClose);
 	Combo_ResetContent(hwndCombo);
 	int nSelPos = 0;
 	for (int i=0; i<_countof(DispTabCloseArr); ++i) {
 		Combo_InsertString(hwndCombo, i, LS(DispTabCloseArr[i].nNameId));
-		if (DispTabCloseArr[i].nMethod == m_common.tabBar.m_dispTabClose) {
+		if (DispTabCloseArr[i].nMethod == m_common.tabBar.dispTabClose) {
 			nSelPos = i;
 		}
 	}
@@ -230,20 +230,20 @@ void PropTab::SetData(HWND hwndDlg)
 	nSelPos = 0;
 	for (int i=0; i<_countof(TabPosArr); ++i) {
 		Combo_InsertString(hwndCombo, i, LS(TabPosArr[i].nNameId));
-		if (TabPosArr[i].nMethod == m_common.tabBar.m_eTabPosition) {
+		if (TabPosArr[i].nMethod == m_common.tabBar.eTabPosition) {
 			nSelPos = i;
 		}
 	}
 	Combo_SetCurSel(hwndCombo, nSelPos);
 
 	//	Feb. 11, 2007 genta 新規作成
-	CheckDlgButtonBool(hwndDlg, IDC_CHECK_RetainEmptyWindow, csTabBar.m_bTab_RetainEmptyWin);
-	CheckDlgButtonBool(hwndDlg, IDC_CHECK_CloseOneWin, csTabBar.m_bTab_CloseOneWin);
-	CheckDlgButtonBool(hwndDlg, IDC_CHECK_ChgWndByWheel, csTabBar.m_bChgWndByWheel);	// 2007.04.03 ryoji
-	CheckDlgButtonBool(hwndDlg, IDC_CHECK_OpenNewWin, csTabBar.m_bNewWindow); // 2009.06.17
+	CheckDlgButtonBool(hwndDlg, IDC_CHECK_RetainEmptyWindow, csTabBar.bTab_RetainEmptyWin);
+	CheckDlgButtonBool(hwndDlg, IDC_CHECK_CloseOneWin, csTabBar.bTab_CloseOneWin);
+	CheckDlgButtonBool(hwndDlg, IDC_CHECK_ChgWndByWheel, csTabBar.bChgWndByWheel);	// 2007.04.03 ryoji
+	CheckDlgButtonBool(hwndDlg, IDC_CHECK_OpenNewWin, csTabBar.bNewWindow); // 2009.06.17
 
 	// タブ フォント	// 2013/4/24 Uchi
-	m_hTabFont = SetFontLabel(hwndDlg, IDC_STATIC_TABFONT, csTabBar.m_lf, csTabBar.m_nPointSize);
+	m_hTabFont = SetFontLabel(hwndDlg, IDC_STATIC_TABFONT, csTabBar.lf, csTabBar.nPointSize);
 
 	EnableTabPropInput(hwndDlg);
 }
@@ -253,26 +253,26 @@ int PropTab::GetData(HWND hwndDlg)
 {
 	auto& csTabBar = m_common.tabBar;
 	//	Feb. 11, 2007 genta「ウィンドウ」シートより移動
-	csTabBar.m_bDispTabWnd = DlgButton_IsChecked(hwndDlg, IDC_CHECK_DispTabWnd);
-	csTabBar.m_bSameTabWidth = DlgButton_IsChecked(hwndDlg, IDC_CHECK_SameTabWidth);		// 2006.01.28 ryoji
-	csTabBar.m_bDispTabIcon = DlgButton_IsChecked(hwndDlg, IDC_CHECK_DispTabIcon);		// 2006.01.28 ryoji
-	csTabBar.m_bSortTabList = DlgButton_IsChecked(hwndDlg, IDC_CHECK_SortTabList);		// 2006.03.23 fon
-	csTabBar.m_bDispTabWndMultiWin = !DlgButton_IsChecked(hwndDlg, IDC_CHECK_GroupMultiTabWnd);
-	::DlgItem_GetText(hwndDlg, IDC_TABWND_CAPTION, csTabBar.m_szTabWndCaption, _countof(csTabBar.m_szTabWndCaption));
+	csTabBar.bDispTabWnd = DlgButton_IsChecked(hwndDlg, IDC_CHECK_DispTabWnd);
+	csTabBar.bSameTabWidth = DlgButton_IsChecked(hwndDlg, IDC_CHECK_SameTabWidth);		// 2006.01.28 ryoji
+	csTabBar.bDispTabIcon = DlgButton_IsChecked(hwndDlg, IDC_CHECK_DispTabIcon);		// 2006.01.28 ryoji
+	csTabBar.bSortTabList = DlgButton_IsChecked(hwndDlg, IDC_CHECK_SortTabList);		// 2006.03.23 fon
+	csTabBar.bDispTabWndMultiWin = !DlgButton_IsChecked(hwndDlg, IDC_CHECK_GroupMultiTabWnd);
+	::DlgItem_GetText(hwndDlg, IDC_TABWND_CAPTION, csTabBar.szTabWndCaption, _countof(csTabBar.szTabWndCaption));
 
 	HWND hwndCombo = ::GetDlgItem(hwndDlg, IDC_CHECK_DispTabClose);
 	int nSelPos = Combo_GetCurSel(hwndCombo);
-	csTabBar.m_dispTabClose = DispTabCloseArr[nSelPos].nMethod;
+	csTabBar.dispTabClose = DispTabCloseArr[nSelPos].nMethod;
 
 	hwndCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_TAB_POSITION);
 	nSelPos = Combo_GetCurSel(hwndCombo);
-	csTabBar.m_eTabPosition = TabPosArr[nSelPos].nMethod;
+	csTabBar.eTabPosition = TabPosArr[nSelPos].nMethod;
 
 	//	Feb. 11, 2007 genta 新規作成
-	csTabBar.m_bTab_RetainEmptyWin = DlgButton_IsChecked(hwndDlg, IDC_CHECK_RetainEmptyWindow);
-	csTabBar.m_bTab_CloseOneWin = DlgButton_IsChecked(hwndDlg, IDC_CHECK_CloseOneWin);
-	csTabBar.m_bChgWndByWheel = DlgButton_IsChecked(hwndDlg, IDC_CHECK_ChgWndByWheel);	// 2007.04.03 ryoji
-	csTabBar.m_bNewWindow = DlgButton_IsChecked(hwndDlg, IDC_CHECK_OpenNewWin);  // 2009.06.17
+	csTabBar.bTab_RetainEmptyWin = DlgButton_IsChecked(hwndDlg, IDC_CHECK_RetainEmptyWindow);
+	csTabBar.bTab_CloseOneWin = DlgButton_IsChecked(hwndDlg, IDC_CHECK_CloseOneWin);
+	csTabBar.bChgWndByWheel = DlgButton_IsChecked(hwndDlg, IDC_CHECK_ChgWndByWheel);	// 2007.04.03 ryoji
+	csTabBar.bNewWindow = DlgButton_IsChecked(hwndDlg, IDC_CHECK_OpenNewWin);  // 2009.06.17
 
 	return TRUE;
 }

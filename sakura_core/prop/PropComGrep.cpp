@@ -142,26 +142,26 @@ void PropGrep::SetData(HWND hwndDlg)
 {
 	auto& csSearch = m_common.search;
 	// 2006.08.23 ryoji カーソル位置の文字列をデフォルトの検索文字列にする
-	::CheckDlgButton(hwndDlg, IDC_CHECK_bCaretTextForSearch, csSearch.m_bCaretTextForSearch);
+	::CheckDlgButton(hwndDlg, IDC_CHECK_bCaretTextForSearch, csSearch.bCaretTextForSearch);
 
-	CheckDlgButtonBool(hwndDlg, IDC_CHECK_INHERIT_KEY_OTHER_VIEW, csSearch.m_bInheritKeyOtherView);
+	CheckDlgButtonBool(hwndDlg, IDC_CHECK_INHERIT_KEY_OTHER_VIEW, csSearch.bInheritKeyOtherView);
 
 	// Grepモードで保存確認するか
-	::CheckDlgButton(hwndDlg, IDC_CHECK_bGrepExitConfirm, csSearch.m_bGrepExitConfirm);
+	::CheckDlgButton(hwndDlg, IDC_CHECK_bGrepExitConfirm, csSearch.bGrepExitConfirm);
 
 	// Grep結果のリアルタイム表示
-	::CheckDlgButton(hwndDlg, IDC_CHECK_GREPREALTIME, csSearch.m_bGrepRealTimeView);	// 2006.08.08 ryoji ID修正
+	::CheckDlgButton(hwndDlg, IDC_CHECK_GREPREALTIME, csSearch.bGrepRealTimeView);	// 2006.08.08 ryoji ID修正
 
 
 	// Grepモード: エンターキーでタグジャンプ
-	::CheckDlgButton(hwndDlg, IDC_CHECK_GTJW_RETURN, csSearch.m_bGTJW_RETURN);
+	::CheckDlgButton(hwndDlg, IDC_CHECK_GTJW_RETURN, csSearch.bGTJW_Return);
 
 	// Grepモード: ダブルクリックでタグジャンプ
-	::CheckDlgButton(hwndDlg, IDC_CHECK_GTJW_LDBLCLK, csSearch.m_bGTJW_LDBLCLK);
+	::CheckDlgButton(hwndDlg, IDC_CHECK_GTJW_LDBLCLK, csSearch.bGTJW_DoubleClick);
 
 	//	2007.08.12 genta 正規表現DLL
-	EditCtl_LimitText(::GetDlgItem(hwndDlg, IDC_EDIT_REGEXPLIB), _countof(csSearch.m_szRegexpLib) - 1);
-	::DlgItem_SetText(hwndDlg, IDC_EDIT_REGEXPLIB, csSearch.m_szRegexpLib);
+	EditCtl_LimitText(::GetDlgItem(hwndDlg, IDC_EDIT_REGEXPLIB), _countof(csSearch.szRegexpLib) - 1);
+	::DlgItem_SetText(hwndDlg, IDC_EDIT_REGEXPLIB, csSearch.szRegexpLib);
 	SetRegexpVersion(hwndDlg);
 
 	TagJumpMode tagJumpMode1Arr[] ={
@@ -176,7 +176,7 @@ void PropGrep::SetData(HWND hwndDlg)
 	for (int i=0; i<_countof(tagJumpMode1Arr); ++i) {
 		Combo_InsertString(hwndCombo, i, LS(tagJumpMode1Arr[i].nNameID));
 		Combo_SetItemData(hwndCombo, i, tagJumpMode1Arr[i].nMethod);
-		if (tagJumpMode1Arr[i].nMethod == m_common.search.m_nTagJumpMode) {
+		if (tagJumpMode1Arr[i].nMethod == m_common.search.nTagJumpMode) {
 			nSelPos = i;
 		}
 	}
@@ -194,7 +194,7 @@ void PropGrep::SetData(HWND hwndDlg)
 	for (int i=0; i<_countof(tagJumpMode2Arr); ++i) {
 		Combo_InsertString(hwndCombo, i, LS(tagJumpMode2Arr[i].nNameID));
 		Combo_SetItemData(hwndCombo, i, tagJumpMode2Arr[i].nMethod);
-		if (tagJumpMode2Arr[i].nMethod == m_common.search.m_nTagJumpModeKeyword) {
+		if (tagJumpMode2Arr[i].nMethod == m_common.search.nTagJumpModeKeyword) {
 			nSelPos = i;
 		}
 	}
@@ -210,32 +210,32 @@ int PropGrep::GetData(HWND hwndDlg)
 	auto& csSearch = m_common.search;
 
 	// 2006.08.23 ryoji カーソル位置の文字列をデフォルトの検索文字列にする
-	csSearch.m_bCaretTextForSearch = DlgButton_IsChecked(hwndDlg, IDC_CHECK_bCaretTextForSearch);
+	csSearch.bCaretTextForSearch = DlgButton_IsChecked(hwndDlg, IDC_CHECK_bCaretTextForSearch);
 
-	csSearch.m_bInheritKeyOtherView = DlgButton_IsChecked(hwndDlg, IDC_CHECK_INHERIT_KEY_OTHER_VIEW);
+	csSearch.bInheritKeyOtherView = DlgButton_IsChecked(hwndDlg, IDC_CHECK_INHERIT_KEY_OTHER_VIEW);
 
 	// Grepモードで保存確認するか
-	csSearch.m_bGrepExitConfirm = DlgButton_IsChecked(hwndDlg, IDC_CHECK_bGrepExitConfirm);
+	csSearch.bGrepExitConfirm = DlgButton_IsChecked(hwndDlg, IDC_CHECK_bGrepExitConfirm);
 
 	// Grep結果のリアルタイム表示
-	csSearch.m_bGrepRealTimeView = DlgButton_IsChecked(hwndDlg, IDC_CHECK_GREPREALTIME);	// 2006.08.08 ryoji ID修正
+	csSearch.bGrepRealTimeView = DlgButton_IsChecked(hwndDlg, IDC_CHECK_GREPREALTIME);	// 2006.08.08 ryoji ID修正
 
 	// Grepモード: エンターキーでタグジャンプ
-	csSearch.m_bGTJW_RETURN = DlgButton_IsChecked(hwndDlg, IDC_CHECK_GTJW_RETURN);
+	csSearch.bGTJW_Return = DlgButton_IsChecked(hwndDlg, IDC_CHECK_GTJW_RETURN);
 
 	// Grepモード: ダブルクリックでタグジャンプ
-	csSearch.m_bGTJW_LDBLCLK = DlgButton_IsChecked(hwndDlg, IDC_CHECK_GTJW_LDBLCLK);
+	csSearch.bGTJW_DoubleClick = DlgButton_IsChecked(hwndDlg, IDC_CHECK_GTJW_LDBLCLK);
 
 	//	2007.08.12 genta 正規表現DLL
-	::DlgItem_GetText(hwndDlg, IDC_EDIT_REGEXPLIB, csSearch.m_szRegexpLib, _countof(csSearch.m_szRegexpLib));
+	::DlgItem_GetText(hwndDlg, IDC_EDIT_REGEXPLIB, csSearch.szRegexpLib, _countof(csSearch.szRegexpLib));
 
 	HWND hwndCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_TAGJUMP);
 	int nSelPos = Combo_GetCurSel(hwndCombo);
-	m_common.search.m_nTagJumpMode = Combo_GetItemData(hwndCombo, nSelPos);
+	m_common.search.nTagJumpMode = Combo_GetItemData(hwndCombo, nSelPos);
 	
 	hwndCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_KEYWORD_TAGJUMP);
 	nSelPos = Combo_GetCurSel(hwndCombo);
-	m_common.search.m_nTagJumpModeKeyword = Combo_GetItemData(hwndCombo, nSelPos);
+	m_common.search.nTagJumpModeKeyword = Combo_GetItemData(hwndCombo, nSelPos);
 
 	return TRUE;
 }

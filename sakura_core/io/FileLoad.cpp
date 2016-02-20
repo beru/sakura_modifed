@@ -220,7 +220,7 @@ EncodingType FileLoad::FileOpen(
 	}
 	m_bEolEx = bEolEx;
 	m_nMaxEolLen = nMaxEolLen;
-	if (!GetDllShareData().m_common.edit.m_bEnableExtEol) {
+	if (!GetDllShareData().m_common.edit.bEnableExtEol) {
 		m_bEolEx = false;
 	}
 
@@ -285,7 +285,7 @@ CodeConvertResult FileLoad::ReadLine(
 										&nRetLineLen,
 										&m_nReadOffset2,
 										&cEolTemp,
-										GetDllShareData().m_common.edit.m_bEnableExtEol
+										GetDllShareData().m_common.edit.bEnableExtEol
 									  );
 	if (m_lineTemp.GetStringLength() == m_nReadOffset2 && nOffsetTemp == 0) {
 		// 途中に改行がない限りは、swapを使って中身のコピーを省略する
@@ -485,7 +485,7 @@ const char* FileLoad::GetNextLineCharCode(
 		return NULL;
 	}
 	const unsigned char* pUData = (const unsigned char*)pData; // signedだと符号拡張でNELがおかしくなるので
-	bool bExtEol = GetDllShareData().m_common.edit.m_bEnableExtEol;
+	bool bExtEol = GetDllShareData().m_common.edit.bEnableExtEol;
 	int nLen = nDataLen;
 	int neollen = 0;
 	switch (m_encodingTrait) {

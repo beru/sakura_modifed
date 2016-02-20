@@ -35,8 +35,8 @@ public:
 
 	void ChangeView(LPARAM);
 
-	SearchOption m_searchOption;	// 検索オプション
-	bool	m_bNOTIFYNOTFOUND;	// 検索／置換  見つからないときメッセージを表示
+	SearchOption searchOption;	// 検索オプション
+	bool	bNotifyNotFound;	// 検索／置換  見つからないときメッセージを表示
 	std::wstring	m_strText;	// 検索文字列
 
 	LogicPoint	m_ptEscCaretPos_PHY;	// 検索開始時のカーソル位置退避エリア

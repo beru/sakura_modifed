@@ -41,8 +41,8 @@ enum class FileTreeSettingFromType {
 
 class FileTreeSetting {
 public:
-	std::vector<FileTreeItem>	m_aItems;		//!< ツリーアイテム
-	bool		m_bProject;				//!< プロジェクトファイルモード
+	std::vector<FileTreeItem>	items;		//!< ツリーアイテム
+	bool		bProject;				//!< プロジェクトファイルモード
 	SFilePath	m_szDefaultProjectIni;	//!< デフォルトiniファイル名
 	SFilePath	m_szLoadProjectIni;		//!< 現在読み込んでいるiniファイル名
 	FileTreeSettingFromType	m_eFileTreeSettingOrgType;
@@ -69,15 +69,15 @@ protected:
 	INT_PTR DispatchEvent(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM lParam);	// 2007.11.07 ryoji 標準以外のメッセージを捕捉する
 
 	CommonSetting_OutLine& CommonSet(void) { return m_pShareData->m_common.outline; }
-	TypeConfig& TypeSet(void) { return m_type; }
-	int& ProfDockSet() { return CommonSet().m_nOutlineDockSet; }
-	bool& ProfDockSync() { return CommonSet().m_bOutlineDockSync; }
-	bool& ProfDockDisp() { return (ProfDockSet() == 0)? CommonSet().m_bOutlineDockDisp: TypeSet().m_bOutlineDockDisp; }
-	DockSideType& ProfDockSide() { return (ProfDockSet() == 0)? CommonSet().m_eOutlineDockSide: TypeSet().m_eOutlineDockSide; }
-	int& ProfDockLeft() { return (ProfDockSet() == 0)? CommonSet().m_cxOutlineDockLeft: TypeSet().m_cxOutlineDockLeft; }
-	int& ProfDockTop() { return (ProfDockSet() == 0)? CommonSet().m_cyOutlineDockTop: TypeSet().m_cyOutlineDockTop; }
-	int& ProfDockRight() { return (ProfDockSet() == 0)? CommonSet().m_cxOutlineDockRight: TypeSet().m_cxOutlineDockRight; }
-	int& ProfDockBottom() { return (ProfDockSet() == 0)? CommonSet().m_cyOutlineDockBottom: TypeSet().m_cyOutlineDockBottom; }
+	TypeConfig& TypeSet(void) { return type; }
+	int& ProfDockSet() { return CommonSet().nOutlineDockSet; }
+	bool& ProfDockSync() { return CommonSet().bOutlineDockSync; }
+	bool& ProfDockDisp() { return (ProfDockSet() == 0)? CommonSet().bOutlineDockDisp: TypeSet().bOutlineDockDisp; }
+	DockSideType& ProfDockSide() { return (ProfDockSet() == 0)? CommonSet().eOutlineDockSide: TypeSet().eOutlineDockSide; }
+	int& ProfDockLeft() { return (ProfDockSet() == 0)? CommonSet().cxOutlineDockLeft: TypeSet().cxOutlineDockLeft; }
+	int& ProfDockTop() { return (ProfDockSet() == 0)? CommonSet().cyOutlineDockTop: TypeSet().cyOutlineDockTop; }
+	int& ProfDockRight() { return (ProfDockSet() == 0)? CommonSet().cxOutlineDockRight: TypeSet().cxOutlineDockRight; }
+	int& ProfDockBottom() { return (ProfDockSet() == 0)? CommonSet().cyOutlineDockBottom: TypeSet().cyOutlineDockBottom; }
 	void SetTypeConfig(TypeConfigNum, const TypeConfig&);
 
 public:
@@ -205,7 +205,7 @@ private:
 	int			m_nHilightedBtn;
 	int			m_nCapturingBtn;
 	
-	TypeConfig m_type;
+	TypeConfig type;
 	FileTreeSetting	m_fileTreeSetting;
 
 	static LPDLGTEMPLATE m_pDlgTemplate;

@@ -189,8 +189,8 @@ public:
 		int index
 		)
 	{
-		m_parent		= parent;
-		m_sLabel		= sLabel;
+		m_parent	= parent;
+		m_sLabel	= sLabel;
 		m_sSection	= sSection;
 		m_sKey		= sKey;
 		// 小文字変換
@@ -220,7 +220,7 @@ public:
 	wstring	GetDefaultVal() { return m_sDefaultVal; }
 
 protected:
-	Plugin*	m_parent;
+	Plugin*		m_parent;
 	wstring		m_sLabel;
 	wstring		m_sSection;
 	wstring		m_sKey;
@@ -282,7 +282,7 @@ public:
 public:
 	PluginId m_id;				// プラグイン番号（エディタがふる0～MAX_PLUGIN-1の番号）
 	wstring m_sId;				// プラグインID
-	wstring m_sName;			// プラグイン和名
+	wstring sName;			// プラグイン和名
 	wstring m_sDescription;		// プラグインについての簡単な記述
 	wstring m_sAuthor;			// 作者
 	wstring m_sVersion;			// バージョン

@@ -121,7 +121,7 @@ void LayoutMgr::SetLayoutInfo(
 	MY_RUNNINGTIMER(runningTimer, "LayoutMgr::SetLayoutInfo");
 
 	assert_warning((!bDoLayout && m_nMaxLineKetas == nMaxLineKetas) || bDoLayout);
-	assert_warning((!bDoLayout && m_nTabSpace == refType.m_nTabSpace) || bDoLayout);
+	assert_warning((!bDoLayout && m_nTabSpace == refType.nTabSpace) || bDoLayout);
 
 	// タイプ別設定
 	m_pTypeConfig = &refType;
@@ -130,7 +130,7 @@ void LayoutMgr::SetLayoutInfo(
 
 	// Oct. 1, 2002 genta タイプによって処理関数を変更する
 	// 数が増えてきたらテーブルにすべき
-	switch (refType.m_nIndentLayout) {	// 折り返しは2行目以降を字下げ表示	//@@@ 2002.09.29 YAZAKI
+	switch (refType.nIndentLayout) {	// 折り返しは2行目以降を字下げ表示	//@@@ 2002.09.29 YAZAKI
 	case 1:
 		// Nov. 16, 2002 メンバー関数ポインタにはクラス名が必要
 		m_getIndentOffset = &LayoutMgr::getIndentOffset_Tx2x;
@@ -144,18 +144,18 @@ void LayoutMgr::SetLayoutInfo(
 	}
 
 	// 句読点ぶら下げ文字	// 2009.08.07 ryoji
-	// refType.m_szKinsokuKuto → m_pszKinsokuKuto_1
+	// refType.szKinsokuKuto → m_pszKinsokuKuto_1
 	m_pszKinsokuKuto_1.clear();
-	if (refType.m_bKinsokuKuto) {	// 2009.08.06 ryoji m_bKinsokuKutoで振り分ける(Fix)
-		for (const wchar_t* p=refType.m_szKinsokuKuto; *p; ++p) {
+	if (refType.bKinsokuKuto) {	// 2009.08.06 ryoji bKinsokuKutoで振り分ける(Fix)
+		for (const wchar_t* p=refType.szKinsokuKuto; *p; ++p) {
 			m_pszKinsokuKuto_1.push_back_unique(*p);
 		}
 	}
 
 	// 行頭禁則文字
-	// refType.m_szKinsokuHead → (句読点以外) m_pszKinsokuHead_1
+	// refType.szKinsokuHead → (句読点以外) m_pszKinsokuHead_1
 	m_pszKinsokuHead_1.clear();
-	for (const wchar_t* p=refType.m_szKinsokuHead; *p; ++p) {
+	for (const wchar_t* p=refType.szKinsokuHead; *p; ++p) {
 		if (m_pszKinsokuKuto_1.exist(*p)) {
 			continue;
 		}else {
@@ -164,9 +164,9 @@ void LayoutMgr::SetLayoutInfo(
 	}
 
 	// 行末禁則文字
-	// refType.m_szKinsokuTail → m_pszKinsokuTail_1
+	// refType.szKinsokuTail → m_pszKinsokuTail_1
 	m_pszKinsokuTail_1.clear();
-	for (const wchar_t* p=refType.m_szKinsokuTail; *p; ++p) {
+	for (const wchar_t* p=refType.szKinsokuTail; *p; ++p) {
 		m_pszKinsokuTail_1.push_back_unique(*p);
 	}
 
@@ -942,7 +942,7 @@ void LayoutMgr::LayoutToLogicEx(
 				return;
 			}else {
 				pData = GetLineStr(ptLayout.GetY2() - LayoutInt(1), &nDataLen);
-				if (WCODE::IsLineDelimiter(pData[nDataLen - 1], GetDllShareData().m_common.edit.m_bEnableExtEol)) {
+				if (WCODE::IsLineDelimiter(pData[nDataLen - 1], GetDllShareData().m_common.edit.bEnableExtEol)) {
 					pptLogic->Set(LogicInt(0), m_pDocLineMgr->GetLineCount());
 					return;
 				}else {
@@ -1030,9 +1030,9 @@ void LayoutMgr::DUMP()
 	MYTRACE(_T("m_nLines=%d\n"), m_nLines);
 	MYTRACE(_T("m_pLayoutTop=%08lxh\n"), m_pLayoutTop);
 	MYTRACE(_T("m_pLayoutBot=%08lxh\n"), m_pLayoutBot);
-	MYTRACE(_T("m_nMaxLineKetas=%d\n"), m_nMaxLineKetas);
+	MYTRACE(_T("nMaxLineKetas=%d\n"), m_nMaxLineKetas);
 
-	MYTRACE(_T("m_nTabSpace=%d\n"), m_nTabSpace);
+	MYTRACE(_T("nTabSpace=%d\n"), m_nTabSpace);
 	Layout* pLayout = m_pLayoutTop;
 	while (pLayout) {
 		Layout* pLayoutNext = pLayout->GetNextLayout();

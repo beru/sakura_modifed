@@ -50,7 +50,7 @@ RecentFile::RecentFile()
 		&GetShareData()->m_history.m_nMRUArrNum,
 		GetShareData()->m_history.m_bMRUArrFavorite,
 		MAX_MRU,
-		&(GetShareData()->m_common.general.m_nMRUArrNum_MAX)
+		&(GetShareData()->m_common.general.nMRUArrNum_MAX)
 	);
 }
 

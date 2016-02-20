@@ -32,7 +32,7 @@ public:
 	virtual void InitStrategyStatus() { m_nCOMMENTEND = 0; }
 	virtual bool BeginColor(const StringRef& str, int nPos);
 	virtual bool EndColor(const StringRef& str, int nPos);
-	virtual bool Disp() const { return m_pTypeData->m_colorInfoArr[COLORIDX_DIGIT].m_bDisp; }
+	virtual bool Disp() const { return m_pTypeData->colorInfoArr[COLORIDX_DIGIT].bDisp; }
 private:
 	int m_nCOMMENTEND;
 };

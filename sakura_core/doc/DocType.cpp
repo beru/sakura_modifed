@@ -61,7 +61,7 @@ void DocType::SetDocumentType(
 		UnlockDocumentType();
 	}else {
 		// データは更新しておく
-		TypeConfigNum temp = DocTypeManager().GetDocumentTypeOfId(m_typeConfig.m_id);
+		TypeConfigNum temp = DocTypeManager().GetDocumentTypeOfId(m_typeConfig.id);
 		if (temp.IsValidType()) {
 			m_nSettingType = temp;
 			DocTypeManager().GetTypeConfig(m_nSettingType, m_typeConfig);
@@ -86,7 +86,7 @@ void DocType::SetDocumentType(
 
 void DocType::SetDocumentTypeIdx(int id, bool force)
 {
-	int setId = m_typeConfig.m_id;
+	int setId = m_typeConfig.id;
 	if (!m_nSettingTypeLocked || force) {
 		if (id != -1) {
 			setId = id;
@@ -95,8 +95,8 @@ void DocType::SetDocumentTypeIdx(int id, bool force)
 	TypeConfigNum temp = DocTypeManager().GetDocumentTypeOfId(setId);
 	if (temp.IsValidType()) {
 		m_nSettingType = temp;
-		m_typeConfig.m_nIdx = temp.GetIndex();
-		m_typeConfig.m_id = setId;
+		m_typeConfig.nIdx = temp.GetIndex();
+		m_typeConfig.id = setId;
 	}
 }
 
@@ -117,7 +117,7 @@ void DocType::SetDocumentIcon()
 	}
 	
 	HICON hIconBig, hIconSmall;
-	if (this->GetDocumentAttribute().m_bUseDocumentIcon) {
+	if (this->GetDocumentAttribute().bUseDocumentIcon) {
 		m_pDocRef->m_pEditWnd->GetRelatedIcon(m_pDocRef->m_docFile.GetFilePath(), &hIconBig, &hIconSmall);
 	}else {
 		m_pDocRef->m_pEditWnd->GetDefaultIcon(&hIconBig, &hIconSmall);

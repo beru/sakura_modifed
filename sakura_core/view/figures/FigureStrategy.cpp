@@ -125,8 +125,8 @@ bool FigureSpace::DrawImp_StyleSelect(ColorStrategyInfo* pInfo)
 	pInfo->m_gr.PushTextBackColor(crBack);
 	// Figureが下線指定ならこちらで下線を指定。元の色のほうが下線指定なら、DrawImp_DrawUnderlineで下線だけ指定
 	Font sFont;
-	sFont.m_fontAttr.m_bBoldFont = spaceType.IsBoldFont() || bBold;
-	sFont.m_fontAttr.m_bUnderLine = spaceType.HasUnderLine();
+	sFont.m_fontAttr.bBoldFont = spaceType.IsBoldFont() || bBold;
+	sFont.m_fontAttr.bUnderLine = spaceType.HasUnderLine();
 	sFont.m_hFont = pInfo->m_pView->GetFontset().ChooseFontHandle(sFont.m_fontAttr);
 	pInfo->m_gr.PushMyFont(sFont);
 	bool bTrans = pView->IsBkBitmap() && textType.GetBackColor() == crBack;
@@ -153,8 +153,8 @@ void FigureSpace::DrawImp_DrawUnderline(ColorStrategyInfo* pInfo, DispPos& pos)
 	if (!cSpaceType.HasUnderLine() && colorStyle.HasUnderLine()) {
 		// 下線を周辺の前景色で描画する
 		Font sFont;
-		sFont.m_fontAttr.m_bBoldFont = false;
-		sFont.m_fontAttr.m_bUnderLine = true;
+		sFont.m_fontAttr.bBoldFont = false;
+		sFont.m_fontAttr.bUnderLine = true;
 		sFont.m_hFont = pInfo->m_pView->GetFontset().ChooseFontHandle(sFont.m_fontAttr);
 		pInfo->m_gr.PushMyFont(sFont);
 

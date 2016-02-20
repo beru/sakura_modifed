@@ -84,9 +84,9 @@ bool AutoReloadAgent::_ToDoChecking() const
 	HWND hwndActive = ::GetActiveWindow();
 	if (0
 		|| IsPausing()
-		|| !setting.m_bCheckFileTimeStamp	// 更新の監視設定
+		|| !setting.bCheckFileTimeStamp	// 更新の監視設定
 		|| m_eWatchUpdate == WU_NONE
-		|| setting.m_nFileShareMode != SHAREMODE_NOT_EXCLUSIVE	 // ファイルの排他制御モード
+		|| setting.nFileShareMode != SHAREMODE_NOT_EXCLUSIVE	 // ファイルの排他制御モード
 		|| !hwndActive		// アクティブ？
 		|| hwndActive != EditWnd::getInstance()->GetHwnd()
 		|| !GetListeningDoc()->m_docFile.GetFilePathClass().IsValidPath()
@@ -121,7 +121,7 @@ void AutoReloadAgent::CheckFileTimeStamp()
 {
 	// 未編集で再ロード時の遅延
 	if (m_eWatchUpdate == WU_AUTOLOAD) {
-		if (++m_nDelayCount < GetDllShareData().m_common.file.m_nAutoloadDelay) {
+		if (++m_nDelayCount < GetDllShareData().m_common.file.nAutoloadDelay) {
 			return;
 		}
 		m_nDelayCount = 0;

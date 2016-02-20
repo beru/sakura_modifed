@@ -25,7 +25,7 @@ void Color_Quote::Update(void)
 {
 	const EditDoc* pEditDoc = EditDoc::GetInstance(0);
 	m_pTypeData = &pEditDoc->m_docType.GetDocumentAttribute();
-	m_nStringType = m_pTypeData->m_nStringType;
+	m_nStringType = m_pTypeData->stringType;
 	StringLiteralType nEspaceTypeList[] = {
 		StringLiteralType::CPP,
 		StringLiteralType::PLSQL,
@@ -115,7 +115,7 @@ bool Color_Quote::BeginColor(const StringRef& str, int nPos)
 
 	if (str.At(nPos) == m_cQuote) {
 		m_nCOMMENTEND = -1;
-		StringLiteralType nStringType = m_pTypeData->m_nStringType;
+		StringLiteralType nStringType = m_pTypeData->stringType;
 		bool bPreString = true;
 		// クォーテーション文字列の終端があるか
 		switch (nStringType) {
@@ -182,18 +182,18 @@ bool Color_Quote::BeginColor(const StringRef& str, int nPos)
 
 		// 「文字列は行内のみ」(C++ Raw String、Pythonのlong string、@""は特別)
 		if (
-			m_pTypeData->m_bStringLineOnly
+			m_pTypeData->bStringLineOnly
 			&& !m_bEscapeEnd
 			&& m_nCOMMENTEND == str.GetLength()
 		) {
 			// 終了文字列がない場合は行末までを色分け
-			if (m_pTypeData->m_bStringEndLine) {
+			if (m_pTypeData->bStringEndLine) {
 				// 改行コードを除く
 				if (
 					0 < str.GetLength()
 					&& WCODE::IsLineDelimiter(
 						str.At(str.GetLength() - 1),
-						GetDllShareData().m_common.edit.m_bEnableExtEol
+						GetDllShareData().m_common.edit.bEnableExtEol
 					)
 				) {
 					if (1 &&
@@ -267,7 +267,7 @@ int Color_Quote::Match_Quote(
 					i < lineStr.GetLength()
 					&& WCODE::IsLineDelimiter(
 						lineStr.At(i),
-						GetDllShareData().m_common.edit.m_bEnableExtEol
+						GetDllShareData().m_common.edit.bEnableExtEol
 					)
 				) {
 					if (pbEscapeEnd) {

@@ -54,7 +54,7 @@ DlgCompare::DlgCompare()
 	// サイズ変更時に位置を制御するコントロール数
 	assert(_countof(anchorList) == _countof(m_rcItems));
 
-	m_bCompareAndTileHorz = true;	// 左右に並べて表示
+	bCompareAndTileHorz = true;	// 左右に並べて表示
 
 	m_ptDefaultSize.x = -1;
 	m_ptDefaultSize.y = -1;
@@ -184,13 +184,13 @@ void DlgCompare::SetData(void)
 	// 左右に並べて表示
 	//@@@ 2003.06.12 MIK
 	// TAB 1ウィンドウ表示のときは並べて比較できなくする
-	if (m_pShareData->m_common.tabBar.m_bDispTabWnd
-		&& !m_pShareData->m_common.tabBar.m_bDispTabWndMultiWin
+	if (m_pShareData->m_common.tabBar.bDispTabWnd
+		&& !m_pShareData->m_common.tabBar.bDispTabWndMultiWin
 	) {
-		m_bCompareAndTileHorz = false;
+		bCompareAndTileHorz = false;
 		EnableItem(IDC_CHECK_TILE_H, false);
 	}
-	CheckButton(IDC_CHECK_TILE_H, m_bCompareAndTileHorz);
+	CheckButton(IDC_CHECK_TILE_H, bCompareAndTileHorz);
 	return;
 }
 
@@ -215,7 +215,7 @@ int DlgCompare::GetData(void)
 		FileNameManager::getInstance()->GetMenuFullLabel_WinListNoEscape( m_pszCompareLabel, _MAX_PATH/*長さ不明*/, pfi, nId, -1, calc.GetDC() );
 
 		// 左右に並べて表示
-		m_bCompareAndTileHorz = IsButtonChecked(IDC_CHECK_TILE_H);
+		bCompareAndTileHorz = IsButtonChecked(IDC_CHECK_TILE_H);
 
 		return TRUE;
 	}
@@ -257,7 +257,7 @@ BOOL DlgCompare::OnInitDialog(
 		GetItemClientRect(anchorList[i].id, m_rcItems[i]);
 	}
 
-	RECT rcDialog = GetDllShareData().m_common.others.m_rcCompareDialog;
+	RECT rcDialog = GetDllShareData().m_common.others.rcCompareDialog;
 	if (rcDialog.left != 0
 		|| rcDialog.bottom != 0
 	) {
@@ -275,7 +275,7 @@ BOOL DlgCompare::OnSize(WPARAM wParam, LPARAM lParam)
 	// 基底クラスメンバ
 	Dialog::OnSize(wParam, lParam);
 
-	GetWindowRect(&GetDllShareData().m_common.others.m_rcCompareDialog);
+	GetWindowRect(&GetDllShareData().m_common.others.rcCompareDialog);
 
 	RECT rc;
 	GetWindowRect(&rc);
@@ -291,7 +291,7 @@ BOOL DlgCompare::OnSize(WPARAM wParam, LPARAM lParam)
 
 BOOL DlgCompare::OnMove(WPARAM wParam, LPARAM lParam)
 {
-	GetWindowRect(&GetDllShareData().m_common.others.m_rcCompareDialog);
+	GetWindowRect(&GetDllShareData().m_common.others.rcCompareDialog);
 	return Dialog::OnMove(wParam, lParam);
 }
 

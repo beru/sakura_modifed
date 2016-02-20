@@ -362,18 +362,18 @@ HWND DlgFuncList::DoModeless(
 	m_nListType = nListType;			// 一覧の種類
 	m_bLineNumIsCRLF = bLineNumIsCRLF;	// 行番号の表示 false=折り返し単位／true=改行単位
 	m_nDocType = pEditView->GetDocument()->m_docType.GetDocumentType().GetIndex();
-	DocTypeManager().GetTypeConfig(TypeConfigNum(m_nDocType), m_type);
-	m_nSortCol = m_type.m_nOutlineSortCol;
+	DocTypeManager().GetTypeConfig(TypeConfigNum(m_nDocType), type);
+	m_nSortCol = type.nOutlineSortCol;
 	m_nSortColOld = m_nSortCol;
-	m_bSortDesc = m_type.m_bOutlineSortDesc;
-	m_nSortType = m_type.m_nOutlineSortType;
+	m_bSortDesc = type.bOutlineSortDesc;
+	m_nSortType = type.nOutlineSortType;
 
 	bool bType = (ProfDockSet() != 0);
 	if (bType) {
-		m_type.m_nDockOutline = m_nOutlineType;
-		SetTypeConfig(TypeConfigNum(m_nDocType), m_type);
+		type.nDockOutline = m_nOutlineType;
+		SetTypeConfig(TypeConfigNum(m_nDocType), type);
 	}else {
-		CommonSet().m_nDockOutline = m_nOutlineType;
+		CommonSet().nDockOutline = m_nOutlineType;
 	}
 
 	// 2007.04.18 genta : 「フォーカスを移す」と「自動的に閉じる」がチェックされている場合に
@@ -720,20 +720,20 @@ void DlgFuncList::SetData()
 		}
 	}
 	// アウトライン ダイアログを自動的に閉じる
-	CheckButton(IDC_CHECK_bAutoCloseDlgFuncList, m_pShareData->m_common.outline.m_bAutoCloseDlgFuncList);
+	CheckButton(IDC_CHECK_bAutoCloseDlgFuncList, m_pShareData->m_common.outline.bAutoCloseDlgFuncList);
 	// アウトライン ブックマーク一覧で空行を無視する
-	CheckButton(IDC_CHECK_bMarkUpBlankLineEnable, m_pShareData->m_common.outline.m_bMarkUpBlankLineEnable);
+	CheckButton(IDC_CHECK_bMarkUpBlankLineEnable, m_pShareData->m_common.outline.bMarkUpBlankLineEnable);
 	// アウトライン ジャンプしたらフォーカスを移す
-	CheckButton(IDC_CHECK_bFunclistSetFocusOnJump, m_pShareData->m_common.outline.m_bFunclistSetFocusOnJump);
+	CheckButton(IDC_CHECK_bFunclistSetFocusOnJump, m_pShareData->m_common.outline.bFunclistSetFocusOnJump);
 
 	// アウトライン ■位置とサイズを記憶する // 20060201 aroka
-	CheckButton(IDC_BUTTON_WINSIZE, m_pShareData->m_common.outline.m_bRememberOutlineWindowPos);
+	CheckButton(IDC_BUTTON_WINSIZE, m_pShareData->m_common.outline.bRememberOutlineWindowPos);
 	// ボタンが押されているかはっきりさせる 2008/6/5 Uchi
 	SetItemText(IDC_BUTTON_WINSIZE, 
-		m_pShareData->m_common.outline.m_bRememberOutlineWindowPos ? _T("■") : _T("□"));
+		m_pShareData->m_common.outline.bRememberOutlineWindowPos ? _T("■") : _T("□"));
 
 	// ダイアログを自動的に閉じるならフォーカス移動オプションは関係ない
-	EnableItem(IDC_CHECK_bFunclistSetFocusOnJump, !m_pShareData->m_common.outline.m_bAutoCloseDlgFuncList);
+	EnableItem(IDC_CHECK_bFunclistSetFocusOnJump, !m_pShareData->m_common.outline.bAutoCloseDlgFuncList);
 
 	// 2002.02.08 hor
 	//（IDC_LIST_FLもIDC_TREE_FLも常に存在していて、m_nViewTypeによって、どちらを表示するかを選んでいる）
@@ -761,10 +761,10 @@ void DlgFuncList::SetData()
 	if (nDocType != m_nDocType) {
 		// 以前とはドキュメントタイプが変わったので初期化する
 		m_nDocType = nDocType;
-		m_nSortCol = m_type.m_nOutlineSortCol;
+		m_nSortCol = type.nOutlineSortCol;
 		m_nSortColOld = m_nSortCol;
-		m_bSortDesc = m_type.m_bOutlineSortDesc;
-		m_nSortType = m_type.m_nOutlineSortType;
+		m_bSortDesc = type.bOutlineSortDesc;
+		m_nSortType = type.nOutlineSortType;
 	}
 	if (m_nViewType == VIEWTYPE_TREE && m_nListType != OUTLINE_FILETREE) {
 		HWND hWnd_Combo_Sort = GetItemHwnd(IDC_COMBO_nSortType);
@@ -1431,7 +1431,7 @@ void DlgFuncList::SetListVB(void)
 	return;
 }
 
-/*! 汎用ツリーコントロールの初期化：FuncInfo::m_nDepthを利用して親子を設定
+/*! 汎用ツリーコントロールの初期化：FuncInfo::nDepthを利用して親子を設定
 
 	@param[in] tagjump タグジャンプ形式で出力する
 
@@ -1470,7 +1470,7 @@ void DlgFuncList::SetTree(bool tagjump, bool nolabel)
 		for (int i=0; i<nFuncInfoArrNum; ++i) {
 			const FuncInfo* pFuncInfo = m_pFuncInfoArr->GetAt(i);
 			if (pFuncInfo->IsAddClipText()) {
-				nBuffLen += pFuncInfo->m_memFuncName.GetStringLength() + pFuncInfo->m_nDepth * 2;
+				nBuffLen += pFuncInfo->m_memFuncName.GetStringLength() + pFuncInfo->nDepth * 2;
 				++nCount;
 			}
 		}
@@ -1492,14 +1492,14 @@ void DlgFuncList::SetTree(bool tagjump, bool nolabel)
 		cTVInsertStruct.item.lParam = i;	//	あとでこの数値（＝m_pcFuncInfoArrの何番目のアイテムか）を見て、目的地にジャンプするぜ!!。
 
 		// 親子関係をチェック
-		if (nStackPointer != pFuncInfo->m_nDepth) {
+		if (nStackPointer != pFuncInfo->nDepth) {
 			//	レベルが変わりました!!
 			//	※が、2段階深くなることは考慮していないので注意。
 			//	　もちろん、2段階以上浅くなることは考慮済み。
 
 			// 2002.11.10 Moca 追加 確保したサイズでは足りなくなった。再確保
-			if (nStackDepth <= pFuncInfo->m_nDepth + 1) {
-				nStackDepth = pFuncInfo->m_nDepth + 4; // 多めに確保しておく
+			if (nStackDepth <= pFuncInfo->nDepth + 1) {
+				nStackDepth = pFuncInfo->nDepth + 4; // 多めに確保しておく
 				HTREEITEM* phTi;
 				phTi = (HTREEITEM*)realloc(phParentStack, nStackDepth * sizeof(HTREEITEM));
 				if (phTi) {
@@ -1508,7 +1508,7 @@ void DlgFuncList::SetTree(bool tagjump, bool nolabel)
 					goto end_of_func;
 				}
 			}
-			nStackPointer = pFuncInfo->m_nDepth;
+			nStackPointer = pFuncInfo->nDepth;
 			cTVInsertStruct.hParent = phParentStack[nStackPointer];
 		}
 		hItem = TreeView_InsertItem(hwndTree, &cTVInsertStruct);
@@ -1640,12 +1640,12 @@ void DlgFuncList::SetTreeFile()
 	int nFuncInfo = 0;
 	std::vector<HTREEITEM> hParentTree;
 	hParentTree.push_back(TVI_ROOT);
-	for (int i=0; i<(int)m_fileTreeSetting.m_aItems.size(); ++i) {
+	for (int i=0; i<(int)m_fileTreeSetting.items.size(); ++i) {
 		TCHAR szPath[_MAX_PATH];
 		TCHAR szPath2[_MAX_PATH];
-		const FileTreeItem& item = m_fileTreeSetting.m_aItems[i];
-		// item.m_szTargetPath => szPath メタ文字の展開
-		if (!FileNameManager::ExpandMetaToFolder(item.m_szTargetPath, szPath, _countof(szPath))) {
+		const FileTreeItem& item = m_fileTreeSetting.items[i];
+		// item.szTargetPath => szPath メタ文字の展開
+		if (!FileNameManager::ExpandMetaToFolder(item.szTargetPath, szPath, _countof(szPath))) {
 			auto_strcpy_s(szPath, _countof(szPath), _T("<Error:Long Path>"));
 		}
 		// szPath => szPath2 <iniroot>展開
@@ -1667,12 +1667,12 @@ void DlgFuncList::SetTreeFile()
 		}else {
 			auto_strcpy(szPath, pszFrom);
 		}
-		while (item.m_nDepth < (int)hParentTree.size() - 1) {
+		while (item.nDepth < (int)hParentTree.size() - 1) {
 			hParentTree.resize(hParentTree.size() - 1);
 		}
 		const TCHAR* pszLabel = szPath;
-		if (item.m_szLabelName[0] != _T('\0')) {
-			pszLabel = item.m_szLabelName;
+		if (item.szLabelName[0] != _T('\0')) {
+			pszLabel = item.szLabelName;
 		}
 		// lvis.item.lParam
 		// 0 以下(nFuncInfo): m_pFuncInfoArr->At(nFuncInfo)にファイル名
@@ -1683,21 +1683,21 @@ void DlgFuncList::SetTreeFile()
 		TVINSERTSTRUCT tvis;
 		tvis.hParent = hParentTree.back();
 		tvis.item.mask = TVIF_TEXT | TVIF_PARAM;
-		if (item.m_eFileTreeItemType == FileTreeItemType::Grep) {
+		if (item.eFileTreeItemType == FileTreeItemType::Grep) {
 			m_pFuncInfoArr->AppendData( LogicInt(-1), LogicInt(-1), LayoutInt(-1), LayoutInt(-1), _T(""), szPath, 0, 0 );
 			tvis.item.pszText = const_cast<TCHAR*>(pszLabel);
 			tvis.item.lParam  = -(nFuncInfo * 10 + 3);
 			HTREEITEM hParent = TreeView_InsertItem(hwndTree, &tvis);
 			++nFuncInfo;
 			SetTreeFileSub( hParent, NULL );
-		}else if (item.m_eFileTreeItemType == FileTreeItemType::File) {
+		}else if (item.eFileTreeItemType == FileTreeItemType::File) {
 			m_pFuncInfoArr->AppendData( LogicInt(-1), LogicInt(-1), LayoutInt(-1), LayoutInt(-1), _T(""), szPath, 0, 0 );
 			tvis.item.pszText = const_cast<TCHAR*>(pszLabel);
 			tvis.item.lParam  = nFuncInfo;
 			TreeView_InsertItem(hwndTree, &tvis);
 			++nFuncInfo;
-		}else if (item.m_eFileTreeItemType == FileTreeItemType::Folder) {
-			pszLabel = item.m_szLabelName;
+		}else if (item.eFileTreeItemType == FileTreeItemType::Folder) {
+			pszLabel = item.szLabelName;
 			if (pszLabel[0] == _T('\0')) {
 				pszLabel = _T("Folder");
 			}
@@ -1731,7 +1731,7 @@ void DlgFuncList::SetTreeFileSub(
 
 	int count = 0;
 	GrepEnumKeys grepEnumKeys;
-	int errNo = grepEnumKeys.SetFileKeys( m_fileTreeSetting.m_aItems[nItem].m_szTargetFile );
+	int errNo = grepEnumKeys.SetFileKeys( m_fileTreeSetting.items[nItem].szTargetFile );
 	if (errNo != 0) {
 		TVINSERTSTRUCT tvis;
 		tvis.hParent      = hParent;
@@ -1742,9 +1742,9 @@ void DlgFuncList::SetTreeFileSub(
 		return;
 	}
 	GrepEnumOptions grepEnumOptions;
-	grepEnumOptions.m_bIgnoreHidden   = m_fileTreeSetting.m_aItems[nItem].m_bIgnoreHidden;
-	grepEnumOptions.m_bIgnoreReadOnly = m_fileTreeSetting.m_aItems[nItem].m_bIgnoreReadOnly;
-	grepEnumOptions.m_bIgnoreSystem   = m_fileTreeSetting.m_aItems[nItem].m_bIgnoreSystem;
+	grepEnumOptions.bIgnoreHidden   = m_fileTreeSetting.items[nItem].bIgnoreHidden;
+	grepEnumOptions.bIgnoreReadOnly = m_fileTreeSetting.items[nItem].bIgnoreReadOnly;
+	grepEnumOptions.bIgnoreSystem   = m_fileTreeSetting.items[nItem].bIgnoreSystem;
 	GrepEnumFiles grepExceptAbsFiles;
 	grepExceptAbsFiles.Enumerates(_T(""), grepEnumKeys.m_vecExceptAbsFileKeys, grepEnumOptions);
 	GrepEnumFolders grepExceptAbsFolders;
@@ -1856,15 +1856,15 @@ BOOL DlgFuncList::OnInitDialog(
 	// アウトライン位置とサイズを初期化する // 20060201 aroka
 	EditView* pEditView = (EditView*)m_lParam;
 	if (pEditView) {
-		if (!IsDocking() && m_pShareData->m_common.outline.m_bRememberOutlineWindowPos) {
+		if (!IsDocking() && m_pShareData->m_common.outline.bRememberOutlineWindowPos) {
 			WINDOWPLACEMENT windowPlacement;
 			windowPlacement.length = sizeof(windowPlacement);
 			if (::GetWindowPlacement(pEditView->m_pEditWnd->GetHwnd(), &windowPlacement)) {
 				// ウィンドウ位置・サイズを-1以外の値にしておくと、Dialogで使用される．
-				m_xPos = m_pShareData->m_common.outline.m_xOutlineWindowPos + windowPlacement.rcNormalPosition.left;
-				m_yPos = m_pShareData->m_common.outline.m_yOutlineWindowPos + windowPlacement.rcNormalPosition.top;
-				m_nWidth =  m_pShareData->m_common.outline.m_widthOutlineWindow;
-				m_nHeight = m_pShareData->m_common.outline.m_heightOutlineWindow;
+				m_xPos = m_pShareData->m_common.outline.xOutlineWindowPos + windowPlacement.rcNormalPosition.left;
+				m_yPos = m_pShareData->m_common.outline.yOutlineWindowPos + windowPlacement.rcNormalPosition.top;
+				m_nWidth =  m_pShareData->m_common.outline.widthOutlineWindow;
+				m_nHeight = m_pShareData->m_common.outline.heightOutlineWindow;
 			}
 		}else if (IsDocking()) {
 			m_xPos = 0;
@@ -1905,11 +1905,11 @@ BOOL DlgFuncList::OnInitDialog(
 	if (!m_bInChangeLayout) {	// ChangeLayout() 処理中は設定変更しない
 		bool bType = (ProfDockSet() != 0);
 		if (bType) {
-			DocTypeManager().GetTypeConfig(TypeConfigNum(m_nDocType), m_type);
+			DocTypeManager().GetTypeConfig(TypeConfigNum(m_nDocType), type);
 		}
 		ProfDockDisp() = TRUE;
 		if (bType) {
-			SetTypeConfig(TypeConfigNum(m_nDocType), m_type);
+			SetTypeConfig(TypeConfigNum(m_nDocType), type);
 
 		}
 		// 他ウィンドウに変更を通知する
@@ -2042,25 +2042,25 @@ BOOL DlgFuncList::OnBnClicked(int wID)
 		return TRUE;
 	case IDC_BUTTON_WINSIZE:
 		{// ウィンドウの位置とサイズを記憶 // 20060201 aroka
-			m_pShareData->m_common.outline.m_bRememberOutlineWindowPos = IsButtonChecked(IDC_BUTTON_WINSIZE);
+			m_pShareData->m_common.outline.bRememberOutlineWindowPos = IsButtonChecked(IDC_BUTTON_WINSIZE);
 		}
 		// ボタンが押されているかはっきりさせる 2008/6/5 Uchi
 		SetItemText(IDC_BUTTON_WINSIZE,
-			m_pShareData->m_common.outline.m_bRememberOutlineWindowPos ? _T("■") : _T("□"));
+			m_pShareData->m_common.outline.bRememberOutlineWindowPos ? _T("■") : _T("□"));
 		return TRUE;
 	// 2002.02.08 オプション切替後List/Treeにフォーカス移動
 	case IDC_CHECK_bAutoCloseDlgFuncList:
 	case IDC_CHECK_bMarkUpBlankLineEnable:
 	case IDC_CHECK_bFunclistSetFocusOnJump:
-		m_pShareData->m_common.outline.m_bAutoCloseDlgFuncList = IsButtonChecked(IDC_CHECK_bAutoCloseDlgFuncList);
-		m_pShareData->m_common.outline.m_bMarkUpBlankLineEnable = IsButtonChecked(IDC_CHECK_bMarkUpBlankLineEnable);
-		m_pShareData->m_common.outline.m_bFunclistSetFocusOnJump = IsButtonChecked(IDC_CHECK_bFunclistSetFocusOnJump);
-		EnableItem(IDC_CHECK_bFunclistSetFocusOnJump, !m_pShareData->m_common.outline.m_bAutoCloseDlgFuncList);
+		m_pShareData->m_common.outline.bAutoCloseDlgFuncList = IsButtonChecked(IDC_CHECK_bAutoCloseDlgFuncList);
+		m_pShareData->m_common.outline.bMarkUpBlankLineEnable = IsButtonChecked(IDC_CHECK_bMarkUpBlankLineEnable);
+		m_pShareData->m_common.outline.bFunclistSetFocusOnJump = IsButtonChecked(IDC_CHECK_bFunclistSetFocusOnJump);
+		EnableItem(IDC_CHECK_bFunclistSetFocusOnJump, !m_pShareData->m_common.outline.bAutoCloseDlgFuncList);
 		if (wID == IDC_CHECK_bMarkUpBlankLineEnable&&m_nListType == OUTLINE_BOOKMARK) {
 			EditView* pEditView = (EditView*)m_lParam;
 			pEditView->GetCommander().HandleCommand(F_BOOKMARK_VIEW, true, TRUE, 0, 0, 0);
 			m_nCurLine=pEditView->GetCaret().GetCaretLayoutPos().GetY2() + LayoutInt(1);
-			DocTypeManager().GetTypeConfig(pEditView->GetDocument()->m_docType.GetDocumentType(), m_type);
+			DocTypeManager().GetTypeConfig(pEditView->GetDocument()->m_docType.GetDocumentType(), type);
 			SetData();
 		}else
 		if (m_nViewType == VIEWTYPE_TREE) {
@@ -2136,7 +2136,7 @@ BOOL DlgFuncList::OnNotify(WPARAM wParam, LPARAM lParam)
 		case NM_KILLFOCUS:
 			// 2002.02.16 hor Treeのダブルクリックでフォーカス移動できるように 4/4
 			if (m_bWaitTreeProcess) {
-				if (m_pShareData->m_common.outline.m_bFunclistSetFocusOnJump) {
+				if (m_pShareData->m_common.outline.bFunclistSetFocusOnJump) {
 					::SetFocus(pEditView->GetHwnd());
 				}
 				m_bWaitTreeProcess=false;
@@ -2156,8 +2156,8 @@ BOOL DlgFuncList::OnNotify(WPARAM wParam, LPARAM lParam)
 			{
 				auto type = std::make_unique<TypeConfig>();
 				DocTypeManager().GetTypeConfig(TypeConfigNum(m_nDocType), *type);
-				type->m_nOutlineSortCol = m_nSortCol;
-				type->m_bOutlineSortDesc = m_bSortDesc;
+				type->nOutlineSortCol = m_nSortCol;
+				type->bOutlineSortDesc = m_bSortDesc;
 				SetTypeConfig(TypeConfigNum(m_nDocType), *type);
 			}
 			//	Apr. 23, 2005 genta 関数として独立させた
@@ -2194,8 +2194,8 @@ BOOL DlgFuncList::OnNotify(WPARAM wParam, LPARAM lParam)
 				case CDDS_ITEMPREPAINT:
 					{	// 選択アイテムを反転表示にする
 						const TypeConfig* typeDataPtr = &(pEditView->m_pEditDoc->m_docType.GetDocumentAttribute());
-						COLORREF clrText = typeDataPtr->m_colorInfoArr[COLORIDX_TEXT].m_colorAttr.m_cTEXT;
-						COLORREF clrTextBk = typeDataPtr->m_colorInfoArr[COLORIDX_TEXT].m_colorAttr.m_cBACK;
+						COLORREF clrText = typeDataPtr->colorInfoArr[COLORIDX_TEXT].colorAttr.cTEXT;
+						COLORREF clrTextBk = typeDataPtr->colorInfoArr[COLORIDX_TEXT].colorAttr.cBACK;
 						if (hwndList == pnmh->hwndFrom) {
 							//if (lpnmcd->uItemState & CDIS_SELECTED) {	// 非選択のアイテムもすべて CDIS_SELECTED で来る？
 							if (ListView_GetItemState(hwndList, lpnmcd->dwItemSpec, LVIS_SELECTED)) {
@@ -2386,16 +2386,16 @@ BOOL DlgFuncList::OnDestroy(void)
 	// 前提条件：m_lParam が Dialog::OnDestroy でクリアされないこと
 	EditView* pEditView = (EditView*)m_lParam;
 	HWND hwndEdit = pEditView->m_pEditWnd->GetHwnd();
-	if (!IsDocking() && m_pShareData->m_common.outline.m_bRememberOutlineWindowPos) {
+	if (!IsDocking() && m_pShareData->m_common.outline.bRememberOutlineWindowPos) {
 		// 親のウィンドウ位置・サイズを記憶
 		WINDOWPLACEMENT windowPlacement;
 		windowPlacement.length = sizeof(windowPlacement);
 		if (::GetWindowPlacement(hwndEdit, &windowPlacement)) {
 			// ウィンドウ位置・サイズを記憶
-			m_pShareData->m_common.outline.m_xOutlineWindowPos = m_xPos - windowPlacement.rcNormalPosition.left;
-			m_pShareData->m_common.outline.m_yOutlineWindowPos = m_yPos - windowPlacement.rcNormalPosition.top;
-			m_pShareData->m_common.outline.m_widthOutlineWindow = m_nWidth;
-			m_pShareData->m_common.outline.m_heightOutlineWindow = m_nHeight;
+			m_pShareData->m_common.outline.xOutlineWindowPos = m_xPos - windowPlacement.rcNormalPosition.left;
+			m_pShareData->m_common.outline.yOutlineWindowPos = m_yPos - windowPlacement.rcNormalPosition.top;
+			m_pShareData->m_common.outline.widthOutlineWindow = m_nWidth;
+			m_pShareData->m_common.outline.heightOutlineWindow = m_nHeight;
 		}
 	}
 
@@ -2410,11 +2410,11 @@ BOOL DlgFuncList::OnDestroy(void)
 	if (hwndEdit && ::IsWindowVisible(hwndEdit) && !m_bInChangeLayout) {	// ChangeLayout() 処理中は設定変更しない
 		bool bType = (ProfDockSet() != 0);
 		if (bType) {
-			DocTypeManager().GetTypeConfig(TypeConfigNum(m_nDocType), m_type);
+			DocTypeManager().GetTypeConfig(TypeConfigNum(m_nDocType), type);
 		}
 		ProfDockDisp() = FALSE;
 		if (bType) {
-			SetTypeConfig(TypeConfigNum(m_nDocType), m_type);
+			SetTypeConfig(TypeConfigNum(m_nDocType), type);
 		}
 		// 他ウィンドウに変更を通知する
 		if (ProfDockSync()) {
@@ -2441,7 +2441,7 @@ BOOL DlgFuncList::OnCbnSelChange(HWND hwndCtl, int wID)
 			m_nSortType = nSelect;
 			auto type = std::make_unique<TypeConfig>();
 			DocTypeManager().GetTypeConfig(TypeConfigNum(m_nDocType), *type);
-			type->m_nOutlineSortType = m_nSortType;
+			type->nOutlineSortType = m_nSortType;
 			SetTypeConfig(TypeConfigNum(m_nDocType), *type);
 			SortTree(GetItemHwnd(IDC_TREE_FL), TVI_ROOT);
 		}
@@ -2555,9 +2555,9 @@ BOOL DlgFuncList::OnJump(
 				// アウトライン ダイアログを自動的に閉じる
 				if (IsDocking()) {
 					::PostMessage( ((EditView*)m_lParam)->GetHwnd(), MYWM_SETACTIVEPANE, 0, 0 );
-				}else if (m_pShareData->m_common.outline.m_bAutoCloseDlgFuncList) {
+				}else if (m_pShareData->m_common.outline.bAutoCloseDlgFuncList) {
 					::DestroyWindow( GetHwnd() );
-				}else if (m_pShareData->m_common.outline.m_bFunclistSetFocusOnJump) {
+				}else if (m_pShareData->m_common.outline.bFunclistSetFocusOnJump) {
 					::SetFocus( ((EditView*)m_lParam)->GetHwnd() );
 				}
 			}
@@ -2585,8 +2585,8 @@ void DlgFuncList::Key2Command(WORD KeyCode)
 	auto& csKeyBind = m_pShareData->m_common.keyBind;
 	EFunctionCode nFuncCode = KeyBind::GetFuncCode(
 		((WORD)(((BYTE)(KeyCode)) | ((WORD)((BYTE)(nIdx))) << 8)),
-		csKeyBind.m_nKeyNameArrNum,
-		csKeyBind.m_pKeyNameArr
+		csKeyBind.nKeyNameArrNum,
+		csKeyBind.pKeyNameArr
 	);
 	switch (nFuncCode) {
 	case F_REDRAW:
@@ -2626,7 +2626,7 @@ void DlgFuncList::Redraw(
 {
 	EditView* pEditView = (EditView*)m_lParam;
 	m_nDocType = pEditView->GetDocument()->m_docType.GetDocumentType().GetIndex();
-	DocTypeManager().GetTypeConfig(TypeConfigNum(m_nDocType), m_type);
+	DocTypeManager().GetTypeConfig(TypeConfigNum(m_nDocType), type);
 	SyncColor();
 
 	m_nOutlineType = nOutLineType;
@@ -2637,10 +2637,10 @@ void DlgFuncList::Redraw(
 
 	bool bType = (ProfDockSet() != 0);
 	if (bType) {
-		m_type.m_nDockOutline = m_nOutlineType;
-		SetTypeConfig( TypeConfigNum(m_nDocType), m_type );
+		type.nDockOutline = m_nOutlineType;
+		SetTypeConfig( TypeConfigNum(m_nDocType), type );
 	}else {
-		CommonSet().m_nDockOutline = m_nOutlineType;
+		CommonSet().nDockOutline = m_nOutlineType;
 	}
 
 	SetData();
@@ -2664,8 +2664,8 @@ void DlgFuncList::SyncColor(void)
 	// テキスト色・背景色をビューと同色にする
 	EditView* pEditView = (EditView*)m_lParam;
 	const TypeConfig* pTypeData = &(pEditView->m_pEditDoc->m_docType.GetDocumentAttribute());
-	COLORREF clrText = pTypeData->m_colorInfoArr[COLORIDX_TEXT].m_colorAttr.m_cTEXT;
-	COLORREF clrBack = pTypeData->m_colorInfoArr[COLORIDX_TEXT].m_colorAttr.m_cBACK;
+	COLORREF clrText = pTypeData->colorInfoArr[COLORIDX_TEXT].colorAttr.cTEXT;
+	COLORREF clrBack = pTypeData->colorInfoArr[COLORIDX_TEXT].colorAttr.cBACK;
 
 	HWND hwndTree = GetItemHwnd(IDC_TREE_FL);
 	TreeView_SetTextColor(hwndTree, clrText);
@@ -2888,9 +2888,9 @@ INT_PTR DlgFuncList::OnTimer(
 					if (bSelf) {
 						::PostMessage( pView->GetHwnd(), MYWM_SETACTIVEPANE, 0, 0 );
 					}
-				}else if (m_pShareData->m_common.outline.m_bAutoCloseDlgFuncList) {
+				}else if (m_pShareData->m_common.outline.bAutoCloseDlgFuncList) {
 					::DestroyWindow( GetHwnd() );
-				}else if (m_pShareData->m_common.outline.m_bFunclistSetFocusOnJump) {
+				}else if (m_pShareData->m_common.outline.bFunclistSetFocusOnJump) {
 					if (bSelf) {
 						::SetFocus( pView->GetHwnd() );
 					}
@@ -3050,7 +3050,7 @@ INT_PTR DlgFuncList::OnMouseMove(
 		GetWindowRect(&rc);
 		bool bType = (ProfDockSet() != 0);
 		if (bType) {
-			DocTypeManager().GetTypeConfig(TypeConfigNum(m_nDocType), m_type);
+			DocTypeManager().GetTypeConfig(TypeConfigNum(m_nDocType), type);
 		}
 		switch (GetDockSide()) {
 		case DockSideType::Left:	ProfDockLeft() = rc.right - rc.left;	break;
@@ -3059,7 +3059,7 @@ INT_PTR DlgFuncList::OnMouseMove(
 		case DockSideType::Bottom:	ProfDockBottom() = rc.bottom - rc.top;	break;
 		}
 		if (bType) {
-			SetTypeConfig(TypeConfigNum(m_nDocType), m_type);
+			SetTypeConfig(TypeConfigNum(m_nDocType), type);
 		}
 		return 1L;
 	}
@@ -3293,7 +3293,7 @@ void DlgFuncList::DoMenu(POINT pt, HWND hwndFrom)
 {
 	// メニューを作成する
 	EditView* pEditView = &EditDoc::GetInstance(0)->m_pEditWnd->GetActiveView();
-	DocTypeManager().GetTypeConfig(TypeConfigNum(m_nDocType), m_type);
+	DocTypeManager().GetTypeConfig(TypeConfigNum(m_nDocType), type);
 	DockSideType dockSideType = ProfDockSide();	// 設定上の配置
 	UINT uFlags = MF_BYPOSITION | MF_STRING;
 	HMENU hMenu = ::CreatePopupMenu();
@@ -3378,27 +3378,27 @@ void DlgFuncList::DoMenu(POINT pt, HWND hwndFrom)
 				LS(STR_DLGFNCLST_UNIFY)
 			) == IDOK
 		) {
-			CommonSet().m_bOutlineDockDisp = GetHwnd()? TRUE: FALSE;
-			CommonSet().m_eOutlineDockSide = GetDockSide();
+			CommonSet().bOutlineDockDisp = GetHwnd()? TRUE: FALSE;
+			CommonSet().eOutlineDockSide = GetDockSide();
 			if (GetHwnd()) {
 				RECT rc;
 				GetWindowRect(&rc);
 				switch (GetDockSide()) {	// 現在のドッキングモード
-				case DockSideType::Left:	CommonSet().m_cxOutlineDockLeft = rc.right - rc.left;	break;
-				case DockSideType::Top:		CommonSet().m_cyOutlineDockTop = rc.bottom - rc.top;	break;
-				case DockSideType::Right:	CommonSet().m_cxOutlineDockRight = rc.right - rc.left;	break;
-				case DockSideType::Bottom:	CommonSet().m_cyOutlineDockBottom = rc.bottom - rc.top;	break;
+				case DockSideType::Left:	CommonSet().cxOutlineDockLeft = rc.right - rc.left;	break;
+				case DockSideType::Top:		CommonSet().cyOutlineDockTop = rc.bottom - rc.top;	break;
+				case DockSideType::Right:	CommonSet().cxOutlineDockRight = rc.right - rc.left;	break;
+				case DockSideType::Bottom:	CommonSet().cyOutlineDockBottom = rc.bottom - rc.top;	break;
 				}
 			}
 			auto type = std::make_unique<TypeConfig>();
 			for (int i=0; i<GetDllShareData().m_nTypesCount; ++i) {
 				DocTypeManager().GetTypeConfig(TypeConfigNum(i), *type);
-				type->m_bOutlineDockDisp = CommonSet().m_bOutlineDockDisp;
-				type->m_eOutlineDockSide = CommonSet().m_eOutlineDockSide;
-				type->m_cxOutlineDockLeft = CommonSet().m_cxOutlineDockLeft;
-				type->m_cyOutlineDockTop = CommonSet().m_cyOutlineDockTop;
-				type->m_cxOutlineDockRight = CommonSet().m_cxOutlineDockRight;
-				type->m_cyOutlineDockBottom = CommonSet().m_cyOutlineDockBottom;
+				type->bOutlineDockDisp = CommonSet().bOutlineDockDisp;
+				type->eOutlineDockSide = CommonSet().eOutlineDockSide;
+				type->cxOutlineDockLeft = CommonSet().cxOutlineDockLeft;
+				type->cyOutlineDockTop = CommonSet().cyOutlineDockTop;
+				type->cxOutlineDockRight = CommonSet().cxOutlineDockRight;
+				type->cyOutlineDockBottom = CommonSet().cyOutlineDockBottom;
 				DocTypeManager().SetTypeConfig(TypeConfigNum(i), *type);
 			}
 			ChangeLayout(OUTLINE_LAYOUT_FOREGROUND);	// 自分自身への強制変更
@@ -3418,7 +3418,7 @@ void DlgFuncList::DoMenu(POINT pt, HWND hwndFrom)
 		dockSideType = DockSideType(nId - 100);	// 新しいドッキングモード
 		bool bType = (ProfDockSet() != 0);
 		if (bType) {
-			DocTypeManager().GetTypeConfig(TypeConfigNum(m_nDocType), m_type);
+			DocTypeManager().GetTypeConfig(TypeConfigNum(m_nDocType), type);
 		}
 		if (dockSideType > DockSideType::Float) {
 			switch (dockSideType) {
@@ -3454,7 +3454,7 @@ void DlgFuncList::DoMenu(POINT pt, HWND hwndFrom)
 		ProfDockDisp() = GetHwnd()? TRUE: FALSE;
 		ProfDockSide() = dockSideType;	// 新しいドッキングモードを適用
 		if (bType) {
-			SetTypeConfig(TypeConfigNum(m_nDocType), m_type);
+			SetTypeConfig(TypeConfigNum(m_nDocType), type);
 		}
 		ChangeLayout(OUTLINE_LAYOUT_FOREGROUND);	// 自分自身への強制変更
 		if (ProfDockSync()) {
@@ -3496,7 +3496,7 @@ bool DlgFuncList::ChangeLayout(int nId)
 
 	EditDoc* pDoc = EditDoc::GetInstance(0);	// 今は非表示かもしれないので (EditView*)m_lParam は使えない
 	m_nDocType = pDoc->m_docType.GetDocumentType().GetIndex();
-	DocTypeManager().GetTypeConfig(TypeConfigNum(m_nDocType), m_type);
+	DocTypeManager().GetTypeConfig(TypeConfigNum(m_nDocType), type);
 
 	BOOL bDockDisp = ProfDockDisp();
 	DockSideType eDockSideNew = ProfDockSide();
@@ -3519,10 +3519,10 @@ bool DlgFuncList::ChangeLayout(int nId)
 			if (m_nOutlineType == OUTLINE_DEFAULT) {
 				bool bType = (ProfDockSet() != 0);
 				if (bType) {
-					m_nOutlineType = m_type.m_nDockOutline;
-					SetTypeConfig(TypeConfigNum(m_nDocType), m_type);
+					m_nOutlineType = type.nDockOutline;
+					SetTypeConfig(TypeConfigNum(m_nDocType), type);
 				}else {
-					m_nOutlineType = CommonSet().m_nDockOutline;
+					m_nOutlineType = CommonSet().nDockOutline;
 				}
 			}
 			int nOutlineType = GetOutlineTypeRedraw(m_nOutlineType);	// ブックマークかアウトライン解析かは最後に開いていた時の状態を引き継ぐ（初期状態はアウトライン解析）
@@ -3568,10 +3568,10 @@ bool DlgFuncList::ChangeLayout(int nId)
 			if (m_nOutlineType == OUTLINE_DEFAULT) {
 				bool bType = (ProfDockSet() != 0);
 				if (bType) {
-					m_nOutlineType = m_type.m_nDockOutline;
-					SetTypeConfig(TypeConfigNum(m_nDocType), m_type);
+					m_nOutlineType = type.nDockOutline;
+					SetTypeConfig(TypeConfigNum(m_nDocType), type);
 				}else {
-					m_nOutlineType = CommonSet().m_nDockOutline;
+					m_nOutlineType = CommonSet().nDockOutline;
 				}
 			}
 			int nOutlineType = GetOutlineTypeRedraw(m_nOutlineType);
@@ -3765,13 +3765,13 @@ DockSideType DlgFuncList::GetDropRect(
 		RECT rcFloat;
 		rcFloat.left = 0;
 		rcFloat.top = 0;
-		if (m_pShareData->m_common.outline.m_bRememberOutlineWindowPos
-				&& m_pShareData->m_common.outline.m_widthOutlineWindow	// 初期値だと 0 になっている
-				&& m_pShareData->m_common.outline.m_heightOutlineWindow	// 初期値だと 0 になっている
+		if (m_pShareData->m_common.outline.bRememberOutlineWindowPos
+				&& m_pShareData->m_common.outline.widthOutlineWindow	// 初期値だと 0 になっている
+				&& m_pShareData->m_common.outline.heightOutlineWindow	// 初期値だと 0 になっている
 		) {
 			// 記憶しているサイズ
-			rcFloat.right = m_pShareData->m_common.outline.m_widthOutlineWindow;
-			rcFloat.bottom = m_pShareData->m_common.outline.m_heightOutlineWindow;
+			rcFloat.right = m_pShareData->m_common.outline.widthOutlineWindow;
+			rcFloat.bottom = m_pShareData->m_common.outline.heightOutlineWindow;
 			cx = ::GetSystemMetrics(SM_CXMIN);
 			cy = ::GetSystemMetrics(SM_CYMIN);
 			if (rcFloat.right < cx) rcFloat.right = cx;
@@ -3873,7 +3873,7 @@ BOOL DlgFuncList::Track(POINT ptDrag)
 
 				bool bType = (ProfDockSet() != 0);
 				if (bType) {
-					DocTypeManager().GetTypeConfig(TypeConfigNum(m_nDocType), m_type);
+					DocTypeManager().GetTypeConfig(TypeConfigNum(m_nDocType), type);
 				}
 				ProfDockDisp() = GetHwnd()? TRUE: FALSE;
 				ProfDockSide() = dockSideType;	// 新しいドッキングモードを適用
@@ -3884,7 +3884,7 @@ BOOL DlgFuncList::Track(POINT ptDrag)
 				case DockSideType::Bottom:	ProfDockBottom() = rc.bottom - rc.top;	break;
 				}
 				if (bType) {
-					SetTypeConfig(TypeConfigNum(m_nDocType), m_type);
+					SetTypeConfig(TypeConfigNum(m_nDocType), type);
 				}
 				ChangeLayout(OUTLINE_LAYOUT_FOREGROUND);	// 自分自身への強制変更
 				if (!IsDocking()) {
@@ -3957,18 +3957,18 @@ void DlgFuncList::LoadFileTreeSetting(
 {
 	const FileTree* pFileTree;
 	if (ProfDockSet() == 0) {
-		pFileTree = &(CommonSet().m_fileTree);
+		pFileTree = &(CommonSet().fileTree);
 		data.m_eFileTreeSettingOrgType = FileTreeSettingFromType::Common;
 	}else {
-		DocTypeManager().GetTypeConfig(TypeConfigNum(m_nDocType), m_type);
-		pFileTree = &(TypeSet().m_fileTree);
+		DocTypeManager().GetTypeConfig(TypeConfigNum(m_nDocType), type);
+		pFileTree = &(TypeSet().fileTree);
 		data.m_eFileTreeSettingOrgType = FileTreeSettingFromType::Type;
 	}
 	data.m_eFileTreeSettingLoadType = data.m_eFileTreeSettingOrgType;
-	data.m_bProject = pFileTree->m_bProject;
-	data.m_szDefaultProjectIni = pFileTree->m_szProjectIni;
+	data.bProject = pFileTree->bProject;
+	data.m_szDefaultProjectIni = pFileTree->szProjectIni;
 	data.m_szLoadProjectIni = _T("");
-	if (data.m_bProject) {
+	if (data.bProject) {
 		// 各フォルダのプロジェクトファイル読み込み
 		TCHAR szPath[_MAX_PATH];
 		::GetLongFileName( _T("."), szPath );
@@ -3979,9 +3979,9 @@ void DlgFuncList::LoadFileTreeSetting(
 			profile.SetReadingMode();
 			std::tstring strIniFileName;
 			strIniFileName += szPath;
-			strIniFileName += CommonSet().m_fileTreeDefIniName;
+			strIniFileName += CommonSet().fileTreeDefIniName;
 			if (profile.ReadProfile(strIniFileName.c_str())) {
-				ImpExpFileTree::IO_FileTreeIni(profile, data.m_aItems);
+				ImpExpFileTree::IO_FileTreeIni(profile, data.items);
 				data.m_eFileTreeSettingLoadType = FileTreeSettingFromType::File;
 				iniDirPath = szPath;
 				CutLastYenFromDirectoryPath( iniDirPath );
@@ -3994,20 +3994,20 @@ void DlgFuncList::LoadFileTreeSetting(
 	if (data.m_szLoadProjectIni[0] == _T('\0')) {
 		// デフォルトプロジェクトファイル読み込み
 		bool bReadIni = false;
-		if (pFileTree->m_szProjectIni[0] != _T('\0')) {
+		if (pFileTree->szProjectIni[0] != _T('\0')) {
 			DataProfile profile;
 			profile.SetReadingMode();
 			const TCHAR* pszIniFileName;
 			TCHAR szDir[_MAX_PATH * 2];
-			if (_IS_REL_PATH( pFileTree->m_szProjectIni )) {
+			if (_IS_REL_PATH( pFileTree->szProjectIni )) {
 				// sakura.iniからの相対パス
-				GetInidirOrExedir( szDir, pFileTree->m_szProjectIni );
+				GetInidirOrExedir( szDir, pFileTree->szProjectIni );
 				pszIniFileName = szDir;
 			}else {
-				pszIniFileName = pFileTree->m_szProjectIni;
+				pszIniFileName = pFileTree->szProjectIni;
 			}
 			if (profile.ReadProfile(pszIniFileName)) {
-				ImpExpFileTree::IO_FileTreeIni(profile, data.m_aItems);
+				ImpExpFileTree::IO_FileTreeIni(profile, data.items);
 				data.m_szLoadProjectIni = pszIniFileName;
 				bReadIni = true;
 			}
@@ -4015,9 +4015,9 @@ void DlgFuncList::LoadFileTreeSetting(
 		if (!bReadIni) {
 			// 共通設定orタイプ別設定から読み込み
 			//m_fileTreeSetting = *pFileTree;
-			data.m_aItems.resize( pFileTree->m_nItemCount );
-			for (int i=0; i<pFileTree->m_nItemCount; ++i) {
-				data.m_aItems[i] = pFileTree->m_aItems[i];
+			data.items.resize( pFileTree->nItemCount );
+			for (int i=0; i<pFileTree->nItemCount; ++i) {
+				data.items[i] = pFileTree->items[i];
 			}
 		}
 	}

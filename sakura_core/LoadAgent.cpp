@@ -143,7 +143,7 @@ next:
 	}while (false);	//	1回しか通らない. breakでここまで飛ぶ
 
 	// ファイルサイズチェック
-	if (csFile.m_bAlertIfLargeFile) {
+	if (csFile.bAlertIfLargeFile) {
 		WIN32_FIND_DATA wfd;
 		HANDLE nFind = ::FindFirstFile( pLoadInfo->filePath.c_str(), &wfd );
 		if (nFind != INVALID_HANDLE_VALUE) {
@@ -152,12 +152,12 @@ next:
 			nFileSize.HighPart = wfd.nFileSizeHigh;
 			nFileSize.LowPart = wfd.nFileSizeLow;
 			// csFile.m_nAlertFileSize はMB単位
-			if ((nFileSize.QuadPart>>20) >= (csFile.m_nAlertFileSize)) {
+			if ((nFileSize.QuadPart>>20) >= (csFile.nAlertFileSize)) {
 				int nRet = MYMESSAGEBOX( EditWnd::getInstance()->GetHwnd(),
 					MB_ICONQUESTION | MB_YESNO | MB_TOPMOST,
 					GSTR_APPNAME,
 					LS(STR_LOADAGENT_BIG_FILE),
-					csFile.m_nAlertFileSize );
+					csFile.nAlertFileSize );
 				if (nRet != IDYES) {
 					return CallbackResultType::Interrupt;
 				}
@@ -221,8 +221,8 @@ LoadResultType LoadAgent::OnLoad(const LoadInfo& loadInfo)
 		// 存在しないときもドキュメントに文字コードを反映する
 		const TypeConfig& types = pDoc->m_docType.GetDocumentAttribute();
 		pDoc->m_docFile.SetCodeSet( loadInfo.eCharCode, 
-			( loadInfo.eCharCode == types.m_encoding.m_eDefaultCodetype ) ?
-				types.m_encoding.m_bDefaultBom : CodeTypeName( loadInfo.eCharCode ).IsBomDefOn() );
+			( loadInfo.eCharCode == types.encoding.eDefaultCodetype ) ?
+				types.encoding.bDefaultBom : CodeTypeName( loadInfo.eCharCode ).IsBomDefOn() );
 	}
 
 	// レイアウト情報の変更
@@ -230,13 +230,13 @@ LoadResultType LoadAgent::OnLoad(const LoadInfo& loadInfo)
 	// 「指定桁で折り返す」以外の時は折り返し幅をMAXLINEKETASで初期化する
 	// 「右端で折り返す」は、この後のOnSize()で再設定される
 	const TypeConfig& ref = pDoc->m_docType.GetDocumentAttribute();
-	LayoutInt nMaxLineKetas = ref.m_nMaxLineKetas;
-	if (ref.m_nTextWrapMethod != TextWrappingMethod::SettingWidth) {
+	LayoutInt nMaxLineKetas = ref.nMaxLineKetas;
+	if (ref.nTextWrapMethod != TextWrappingMethod::SettingWidth) {
 		nMaxLineKetas = MAXLINEKETAS;
 	}
 
 	ProgressSubject* pOld = EditApp::getInstance()->m_pVisualProgress->ProgressListener::Listen(&pDoc->m_layoutMgr);
-	pDoc->m_layoutMgr.SetLayoutInfo( true, ref, ref.m_nTabSpace, nMaxLineKetas );
+	pDoc->m_layoutMgr.SetLayoutInfo( true, ref, ref.nTabSpace, nMaxLineKetas );
 	pDoc->m_pEditWnd->ClearViewCaretPosInfo();
 	
 	EditApp::getInstance()->m_pVisualProgress->ProgressListener::Listen(pOld);
@@ -256,7 +256,7 @@ void LoadAgent::OnAfterLoad(const LoadInfo& loadInfo)
 	pDoc->m_nCommandExecNum = 0;
 
 	// テキストの折り返し方法を初期化
-	pDoc->m_nTextWrapMethodCur = pDoc->m_docType.GetDocumentAttribute().m_nTextWrapMethod;	// 折り返し方法
+	pDoc->m_nTextWrapMethodCur = pDoc->m_docType.GetDocumentAttribute().nTextWrapMethod;	// 折り返し方法
 	pDoc->m_bTextWrapMethodCurTemp = false;													// 一時設定適用中を解除
 	pDoc->m_blfCurTemp = false;
 	pDoc->m_bTabSpaceCurTemp = false;

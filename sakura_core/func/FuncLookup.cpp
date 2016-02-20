@@ -260,9 +260,9 @@ const WCHAR* FuncLookup::Custmenu2Name(int index, WCHAR buf[], int bufSize) cons
 		return NULL;
 	}
 	// 共通設定で名称を設定していればそれを返す
-	if (m_pCommon->customMenu.m_szCustMenuNameArr[index][0] != '\0') {
-		wcscpyn(buf, m_pCommon->customMenu.m_szCustMenuNameArr[index], bufSize);
-		return m_pCommon->customMenu.m_szCustMenuNameArr[index];
+	if (m_pCommon->customMenu.szCustMenuNameArr[index][0] != '\0') {
+		wcscpyn(buf, m_pCommon->customMenu.szCustMenuNameArr[index], bufSize);
+		return m_pCommon->customMenu.szCustMenuNameArr[index];
 	}
 
 	// 共通設定で未設定の場合、リソースのデフォルト名を返す

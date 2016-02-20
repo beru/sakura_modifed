@@ -798,27 +798,27 @@ void PrintPreview::OnChangePrintSetting(void)
 	m_typePrint = m_pParentWnd->GetDocument()->m_docType.GetDocumentAttribute();
 	TypeConfig& ref = m_typePrint;
 
-	ref.m_nMaxLineKetas = 	m_bPreview_EnableColumns;
-	ref.m_bWordWrap =		m_pPrintSetting->m_bPrintWordWrap;	// 英文ワードラップをする
+	ref.nMaxLineKetas = 	m_bPreview_EnableColumns;
+	ref.bWordWrap =		m_pPrintSetting->m_bPrintWordWrap;	// 英文ワードラップをする
 	//	Sep. 23, 2002 genta LayoutMgrの値を使う
-	ref.m_nTabSpace =		m_pParentWnd->GetDocument()->m_layoutMgr.GetTabSpace();
+	ref.nTabSpace =		m_pParentWnd->GetDocument()->m_layoutMgr.GetTabSpace();
 
 	//@@@ 2002.09.22 YAZAKI
-	ref.m_lineComment.CopyTo(0, L"", -1);	// 行コメントデリミタ
-	ref.m_lineComment.CopyTo(1, L"", -1);	// 行コメントデリミタ2
-	ref.m_lineComment.CopyTo(2, L"", -1);	// 行コメントデリミタ3	// Jun. 01, 2001 JEPRO 追加
-	ref.m_blockComments[0].SetBlockCommentRule(L"", L"");	// ブロックコメントデリミタ
-	ref.m_blockComments[1].SetBlockCommentRule(L"", L"");	// ブロックコメントデリミタ2
+	ref.lineComment.CopyTo(0, L"", -1);	// 行コメントデリミタ
+	ref.lineComment.CopyTo(1, L"", -1);	// 行コメントデリミタ2
+	ref.lineComment.CopyTo(2, L"", -1);	// 行コメントデリミタ3	// Jun. 01, 2001 JEPRO 追加
+	ref.blockComments[0].SetBlockCommentRule(L"", L"");	// ブロックコメントデリミタ
+	ref.blockComments[1].SetBlockCommentRule(L"", L"");	// ブロックコメントデリミタ2
 
-	ref.m_nStringType = StringLiteralType::CPP;		// 文字列区切り記号エスケープ方法  0=[\"][\'] 1=[""]['']
-	ref.m_colorInfoArr[COLORIDX_COMMENT].m_bDisp = false;
-	ref.m_colorInfoArr[COLORIDX_SSTRING].m_bDisp = false;
-	ref.m_colorInfoArr[COLORIDX_WSTRING].m_bDisp = false;
-	ref.m_bKinsokuHead = m_pPrintSetting->m_bPrintKinsokuHead,	// 行頭禁則する	//@@@ 2002.04.08 MIK
-	ref.m_bKinsokuTail = m_pPrintSetting->m_bPrintKinsokuTail,	// 行末禁則する	//@@@ 2002.04.08 MIK
-	ref.m_bKinsokuRet = m_pPrintSetting->m_bPrintKinsokuRet,	// 改行文字をぶら下げる	//@@@ 2002.04.13 MIK
-	ref.m_bKinsokuKuto = m_pPrintSetting->m_bPrintKinsokuKuto,	// 句読点をぶら下げる	//@@@ 2002.04.17 MIK
-	m_pLayoutMgr_Print->SetLayoutInfo(true, ref, ref.m_nTabSpace, ref.m_nMaxLineKetas);
+	ref.stringType = StringLiteralType::CPP;		// 文字列区切り記号エスケープ方法  0=[\"][\'] 1=[""]['']
+	ref.colorInfoArr[COLORIDX_COMMENT].bDisp = false;
+	ref.colorInfoArr[COLORIDX_SSTRING].bDisp = false;
+	ref.colorInfoArr[COLORIDX_WSTRING].bDisp = false;
+	ref.bKinsokuHead = m_pPrintSetting->m_bPrintKinsokuHead,	// 行頭禁則する	//@@@ 2002.04.08 MIK
+	ref.bKinsokuTail = m_pPrintSetting->m_bPrintKinsokuTail,	// 行末禁則する	//@@@ 2002.04.08 MIK
+	ref.bKinsokuRet = m_pPrintSetting->m_bPrintKinsokuRet,	// 改行文字をぶら下げる	//@@@ 2002.04.13 MIK
+	ref.bKinsokuKuto = m_pPrintSetting->m_bPrintKinsokuKuto,	// 句読点をぶら下げる	//@@@ 2002.04.17 MIK
+	m_pLayoutMgr_Print->SetLayoutInfo(true, ref, ref.nTabSpace, ref.nMaxLineKetas);
 	m_nAllPageNum = (WORD)((Int)m_pLayoutMgr_Print->GetLineCount() / (m_bPreview_EnableLines * m_pPrintSetting->m_nPrintDansuu));		// 全ページ数
 	if (0 < m_pLayoutMgr_Print->GetLineCount() % (m_bPreview_EnableLines * m_pPrintSetting->m_nPrintDansuu)) {
 		++m_nAllPageNum;
@@ -1462,7 +1462,7 @@ ColorStrategy* PrintPreview::DrawPageText(
 			if (m_pPrintSetting->m_bPrintLineNumber) {
 				wchar_t szLineNum[64];	//	行番号を入れる。
 				// 行番号の表示 false=折り返し単位／true=改行単位
-				if (m_pParentWnd->GetDocument()->m_docType.GetDocumentAttribute().m_bLineNumIsCRLF) {
+				if (m_pParentWnd->GetDocument()->m_docType.GetDocumentAttribute().bLineNumIsCRLF) {
 					// 論理行番号表示モード
 					if (pLayout->GetLogicOffset() != 0) { // 折り返しレイアウト行
 						wcscpy_s(szLineNum, L" ");
@@ -1475,9 +1475,9 @@ ColorStrategy* PrintPreview::DrawPageText(
 				}
 
 				// 行番号区切り  0=なし 1=縦線 2=任意
-				if (m_pParentWnd->GetDocument()->m_docType.GetDocumentAttribute().m_nLineTermType == 2) {
+				if (m_pParentWnd->GetDocument()->m_docType.GetDocumentAttribute().nLineTermType == 2) {
 					wchar_t szLineTerm[2];
-					szLineTerm[0] = m_pParentWnd->GetDocument()->m_docType.GetDocumentAttribute().m_cLineTermChar;	// 行番号区切り文字
+					szLineTerm[0] = m_pParentWnd->GetDocument()->m_docType.GetDocumentAttribute().cLineTermChar;	// 行番号区切り文字
 					szLineTerm[1] = L'\0';
 					wcscat(szLineNum, szLineTerm);
 				}else {
@@ -1539,7 +1539,7 @@ ColorStrategy* PrintPreview::DrawPageText(
 
 		// 2006.08.14 Moca 行番号が縦線の場合は1度に引く
 		if (m_pPrintSetting->m_bPrintLineNumber
-			&& m_pParentWnd->GetDocument()->m_docType.GetDocumentAttribute().m_nLineTermType == 1
+			&& m_pParentWnd->GetDocument()->m_docType.GetDocumentAttribute().nLineTermType == 1
 		) {
 			// 縦線は本文と行番号の隙間1桁の中心に作画する(画面作画では、右詰め)
 			::MoveToEx(hdc,
@@ -1753,8 +1753,8 @@ ColorStrategy* PrintPreview::Print_DrawLine(
 	if (pLayout) {
 		int nColorIdx = ToColorInfoArrIndex(COLORIDX_TEXT);
 		if (nColorIdx != -1) {
-			const ColorInfo& info = m_pParentWnd->GetDocument()->m_docType.GetDocumentAttribute().m_colorInfoArr[nColorIdx];
-			::SetTextColor(hdc, info.m_colorAttr.m_cTEXT);
+			const ColorInfo& info = m_pParentWnd->GetDocument()->m_docType.GetDocumentAttribute().colorInfoArr[nColorIdx];
+			::SetTextColor(hdc, info.colorAttr.cTEXT);
 //			::SetBkColor(hdc, info.m_colBACK);
 		}
 	}
@@ -1789,24 +1789,24 @@ void PrintPreview::Print_DrawBlock(
 	// 色設定
 	if (pLayout) {
 		if (nColorIdx != -1) {
-			const ColorInfo& info = m_pParentWnd->GetDocument()->m_docType.GetDocumentAttribute().m_colorInfoArr[nColorIdx];
-			if (nKind == 2 && !info.m_fontAttr.m_bUnderLine) {
+			const ColorInfo& info = m_pParentWnd->GetDocument()->m_docType.GetDocumentAttribute().colorInfoArr[nColorIdx];
+			if (nKind == 2 && !info.fontAttr.bUnderLine) {
 				// TABは下線が無ければ印字不要
 				return;
 			}
-			if (info.m_fontAttr.m_bBoldFont) {
-				if (info.m_fontAttr.m_bUnderLine) {
+			if (info.fontAttr.bBoldFont) {
+				if (info.fontAttr.bUnderLine) {
 					hFont = (nKind == 1 ? m_hFontZen_bu: m_hFontHan_bu);	// 太字、下線
 				}else {
 					hFont = (nKind == 1 ? m_hFontZen_b : m_hFontHan_b);		// 太字
 				}
 			}else {
-				if (info.m_fontAttr.m_bUnderLine) {
+				if (info.fontAttr.bUnderLine) {
 					hFont = (nKind == 1 ? m_hFontZen_u : m_hFontHan_u);		// 下線
 				}
 			}
 			//	else					hFont = (nKind == 1 ? m_hFontZen   : m_hFontHan);		// 標準
-			::SetTextColor(hdc, info.m_colorAttr.m_cTEXT);
+			::SetTextColor(hdc, info.colorAttr.cTEXT);
 //			::SetBkColor(hdc, info.m_colBACK);
 		}
 	}

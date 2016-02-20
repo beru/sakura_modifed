@@ -107,8 +107,8 @@ bool Figure_Eol::DrawImp(ColorStrategyInfo* pInfo)
 		pInfo->m_gr.PushTextBackColor(crBack);
 		bool bTrans = pView->IsBkBitmap() && textType.GetBackColor() == crBack;
 		Font font;
-		font.m_fontAttr.m_bBoldFont = spaceType.IsBoldFont() || currentStyle.IsBoldFont();
-		font.m_fontAttr.m_bUnderLine = spaceType.HasUnderLine();
+		font.m_fontAttr.bBoldFont = spaceType.IsBoldFont() || currentStyle.IsBoldFont();
+		font.m_fontAttr.bUnderLine = spaceType.HasUnderLine();
 		font.m_hFont = pInfo->m_pView->GetFontset().ChooseFontHandle(font.m_fontAttr);
 		pInfo->m_gr.PushMyFont(font);
 

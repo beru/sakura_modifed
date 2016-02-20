@@ -72,7 +72,7 @@ HMENU MruFile::CreateMenu(MenuDrawer* pMenuDrawer) const
 HMENU MruFile::CreateMenu(HMENU hMenuPopUp, MenuDrawer* pMenuDrawer) const
 {
 	TCHAR szMenu[_MAX_PATH * 2 + 10];				//	メニューキャプション
-	const BOOL bMenuIcon = m_pShareData->m_common.window.m_bMenuIcon;
+	const BOOL bMenuIcon = m_pShareData->m_common.window.bMenuIcon;
 	FileNameManager::getInstance()->TransformFileName_MakeCache();
 
 	NONCLIENTMETRICS met;

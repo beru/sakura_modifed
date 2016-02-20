@@ -192,7 +192,7 @@ void EditView::DrawBackImage(HDC hdc, RECT& rcPaint, HDC hdcBgImg)
 	const TypeConfig& typeConfig = doc.m_docType.GetDocumentAttribute();
 
 	Rect rcImagePos;
-	switch (typeConfig.m_backImgPos) {
+	switch (typeConfig.backImgPos) {
 	case BGIMAGE_TOP_LEFT:
 	case BGIMAGE_BOTTOM_LEFT:
 	case BGIMAGE_CENTER_LEFT:
@@ -209,10 +209,10 @@ void EditView::DrawBackImage(HDC hdc, RECT& rcPaint, HDC hdcBgImg)
 		rcImagePos.left = area.GetAreaLeft() + area.GetAreaWidth()/2 - doc.m_nBackImgWidth/2;
 		break;
 	default:
-		assert_warning(typeConfig.m_backImgPos != 0);
+		assert_warning(typeConfig.backImgPos != 0);
 		break;
 	}
-	switch (typeConfig.m_backImgPos) {
+	switch (typeConfig.backImgPos) {
 	case BGIMAGE_TOP_LEFT:
 	case BGIMAGE_TOP_RIGHT:
 	case BGIMAGE_TOP_CENTER:
@@ -229,29 +229,29 @@ void EditView::DrawBackImage(HDC hdc, RECT& rcPaint, HDC hdcBgImg)
 		rcImagePos.top  = area.GetAreaTop() + area.GetAreaHeight()/2 - doc.m_nBackImgHeight/2;
 		break;
 	default:
-		assert_warning(typeConfig.m_backImgPos != 0);
+		assert_warning(typeConfig.backImgPos != 0);
 		break;
 	}
-	rcImagePos.left += typeConfig.m_backImgPosOffset.x;
-	rcImagePos.top  += typeConfig.m_backImgPosOffset.y;
+	rcImagePos.left += typeConfig.backImgPosOffset.x;
+	rcImagePos.top  += typeConfig.backImgPosOffset.y;
 	// スクロール時の画面の端を作画するときの位置あたりへ移動
-	if (typeConfig.m_backImgScrollX) {
-		int tile = typeConfig.m_backImgRepeatX ? doc.m_nBackImgWidth : INT_MAX;
+	if (typeConfig.backImgScrollX) {
+		int tile = typeConfig.backImgRepeatX ? doc.m_nBackImgWidth : INT_MAX;
 		Int posX = (area.GetViewLeftCol() % tile) * GetTextMetrics().GetHankakuDx();
 		rcImagePos.left -= posX % tile;
 	}
-	if (typeConfig.m_backImgScrollY) {
-		int tile = typeConfig.m_backImgRepeatY ? doc.m_nBackImgHeight : INT_MAX;
+	if (typeConfig.backImgScrollY) {
+		int tile = typeConfig.backImgRepeatY ? doc.m_nBackImgHeight : INT_MAX;
 		Int posY = (area.GetViewTopLine() % tile) * GetTextMetrics().GetHankakuDy();
 		rcImagePos.top -= posY % tile;
 	}
-	if (typeConfig.m_backImgRepeatX) {
+	if (typeConfig.backImgRepeatX) {
 		if (0 < rcImagePos.left) {
 			// rcImagePos.left = rcImagePos.left - (rcImagePos.left / doc.m_nBackImgWidth + 1) * doc.m_nBackImgWidth;
 			rcImagePos.left = rcImagePos.left % doc.m_nBackImgWidth - doc.m_nBackImgWidth;
 		}
 	}
-	if (typeConfig.m_backImgRepeatY) {
+	if (typeConfig.backImgRepeatY) {
 		if (0 < rcImagePos.top) {
 			// rcImagePos.top = rcImagePos.top - (rcImagePos.top / doc.m_nBackImgHeight + 1) * doc.m_nBackImgHeight;
 			rcImagePos.top = rcImagePos.top % doc.m_nBackImgHeight - doc.m_nBackImgHeight;
@@ -289,7 +289,7 @@ void EditView::DrawBackImage(HDC hdc, RECT& rcPaint, HDC hdcBgImg)
 			}
 			rcImagePos.left  += doc.m_nBackImgWidth;
 			rcImagePos.right += doc.m_nBackImgWidth;
-			if (!typeConfig.m_backImgRepeatX) {
+			if (!typeConfig.backImgRepeatX) {
 				break;
 			}
 		}
@@ -297,7 +297,7 @@ void EditView::DrawBackImage(HDC hdc, RECT& rcPaint, HDC hdcBgImg)
 		rcImagePos.right = rcImagePosOrg.right;
 		rcImagePos.top    += doc.m_nBackImgHeight;
 		rcImagePos.bottom += doc.m_nBackImgHeight;
-		if (!typeConfig.m_backImgRepeatY) {
+		if (!typeConfig.backImgRepeatY) {
 			break;
 		}
 	}
@@ -469,17 +469,17 @@ void EditView::SetCurrentColor(
 	int nColorIdxBg = ToColorInfoArrIndex(eColorIndexBg);
 
 	// 実際に色を設定
-	const ColorInfo& info  = m_pTypeData->m_colorInfoArr[nColorIdx];
-	const ColorInfo& info2 = m_pTypeData->m_colorInfoArr[nColorIdx2];
-	const ColorInfo& infoBg = m_pTypeData->m_colorInfoArr[nColorIdxBg];
+	const ColorInfo& info  = m_pTypeData->colorInfoArr[nColorIdx];
+	const ColorInfo& info2 = m_pTypeData->colorInfoArr[nColorIdx2];
+	const ColorInfo& infoBg = m_pTypeData->colorInfoArr[nColorIdxBg];
 	COLORREF fgcolor = GetTextColorByColorInfo2(info, info2);
 	gr.SetTextForeColor(fgcolor);
 	// 2012.11.21 背景色がテキストとおなじなら背景色はカーソル行背景
-	const ColorInfo& info3 = (info2.m_colorAttr.m_cBACK == m_crBack ? infoBg : info2);
-	COLORREF bkcolor = (nColorIdx == nColorIdx2) ? info3.m_colorAttr.m_cBACK : GetBackColorByColorInfo2(info, info3);
+	const ColorInfo& info3 = (info2.colorAttr.cBACK == m_crBack ? infoBg : info2);
+	COLORREF bkcolor = (nColorIdx == nColorIdx2) ? info3.colorAttr.cBACK : GetBackColorByColorInfo2(info, info3);
 	gr.SetTextBackColor(bkcolor);
 	Font sFont;
-	sFont.m_fontAttr = (info.m_colorAttr.m_cTEXT != info.m_colorAttr.m_cBACK) ? info.m_fontAttr : info2.m_fontAttr;
+	sFont.m_fontAttr = (info.colorAttr.cTEXT != info.colorAttr.cBACK) ? info.fontAttr : info2.fontAttr;
 	sFont.m_hFont = GetFontset().ChooseFontHandle(sFont.m_fontAttr);
 	gr.SetMyFont(sFont);
 }
@@ -520,28 +520,28 @@ inline COLORREF MakeColor2(COLORREF a, COLORREF b, int alpha)
 
 COLORREF EditView::GetTextColorByColorInfo2(const ColorInfo& info, const ColorInfo& info2)
 {
-	if (info.m_colorAttr.m_cTEXT != info.m_colorAttr.m_cBACK) {
-		return info.m_colorAttr.m_cTEXT;
+	if (info.colorAttr.cTEXT != info.colorAttr.cBACK) {
+		return info.colorAttr.cTEXT;
 	}
 	// 反転表示
-	if (info.m_colorAttr.m_cBACK == m_crBack) {
-		return  info2.m_colorAttr.m_cTEXT ^ 0x00FFFFFF;
+	if (info.colorAttr.cBACK == m_crBack) {
+		return  info2.colorAttr.cTEXT ^ 0x00FFFFFF;
 	}
 	int alpha = 255*30/100; // 30%
-	return MakeColor2(info.m_colorAttr.m_cTEXT, info2.m_colorAttr.m_cTEXT, alpha);
+	return MakeColor2(info.colorAttr.cTEXT, info2.colorAttr.cTEXT, alpha);
 }
 
 COLORREF EditView::GetBackColorByColorInfo2(const ColorInfo& info, const ColorInfo& info2)
 {
-	if (info.m_colorAttr.m_cTEXT != info.m_colorAttr.m_cBACK) {
-		return info.m_colorAttr.m_cBACK;
+	if (info.colorAttr.cTEXT != info.colorAttr.cBACK) {
+		return info.colorAttr.cBACK;
 	}
 	// 反転表示
-	if (info.m_colorAttr.m_cBACK == m_crBack) {
-		return  info2.m_colorAttr.m_cBACK ^ 0x00FFFFFF;
+	if (info.colorAttr.cBACK == m_crBack) {
+		return  info2.colorAttr.cBACK ^ 0x00FFFFFF;
 	}
 	int alpha = 255*30/100; // 30%
-	return MakeColor2(info.m_colorAttr.m_cBACK, info2.m_colorAttr.m_cBACK, alpha);
+	return MakeColor2(info.colorAttr.cBACK, info2.colorAttr.cBACK, alpha);
 }
 
 
@@ -638,7 +638,7 @@ void EditView::OnPaint2(HDC _hdc, PAINTSTRUCT *pPs, BOOL bDrawFromComptibleBmp)
 
 //@@@ 2001.11.17 add start MIK
 	// 変更があればタイプ設定を行う。
-	if (m_pTypeData->m_bUseRegexKeyword || m_pRegexKeyword->m_bUseRegexKeyword) { // OFFなのに前回のデータが残ってる
+	if (m_pTypeData->bUseRegexKeyword || m_pRegexKeyword->m_bUseRegexKeyword) { // OFFなのに前回のデータが残ってる
 		// タイプ別設定をする。設定済みかどうかは呼び先でチェックする。
 		m_pRegexKeyword->RegexKeySetTypes(m_pTypeData);
 	}
@@ -698,13 +698,13 @@ void EditView::OnPaint2(HDC _hdc, PAINTSTRUCT *pPs, BOOL bDrawFromComptibleBmp)
 	//	From Here Sep. 7, 2001 genta
 	//	Sep. 23, 2002 genta 行番号非表示でも行番号色の帯があるので隙間を埋める
 	if (GetTextArea().GetTopYohaku()) {
-		if (bTransText && m_pTypeData->m_colorInfoArr[COLORIDX_GYOU].m_colorAttr.m_cBACK == textType.GetBackColor()) {
+		if (bTransText && m_pTypeData->colorInfoArr[COLORIDX_GYOU].colorAttr.cBACK == textType.GetBackColor()) {
 		}else {
 			rc.left   = 0;
 			rc.top    = GetTextArea().GetRulerHeight();
 			rc.right  = GetTextArea().GetLineNumberWidth(); //	Sep. 23 ,2002 genta 余白はテキスト色のまま残す
 			rc.bottom = GetTextArea().GetAreaTop();
-			gr.SetTextBackColor(m_pTypeData->m_colorInfoArr[COLORIDX_GYOU].m_colorAttr.m_cBACK);
+			gr.SetTextBackColor(m_pTypeData->colorInfoArr[COLORIDX_GYOU].colorAttr.cBACK);
 			gr.FillMyRectTextBackColor(rc);
 		}
 	}

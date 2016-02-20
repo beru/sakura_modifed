@@ -36,13 +36,13 @@
 void CType_Asm::InitTypeConfigImp(TypeConfig* pType)
 {
 	// 名前と拡張子
-	_tcscpy(pType->m_szTypeName, _T("アセンブラ"));
-	_tcscpy(pType->m_szTypeExts, _T("asm"));
+	_tcscpy(pType->szTypeName, _T("アセンブラ"));
+	_tcscpy(pType->szTypeExts, _T("asm"));
 
 	// 設定
-	pType->m_lineComment.CopyTo(0, L";", -1);				// 行コメントデリミタ
-	pType->m_eDefaultOutline = OUTLINE_ASM;					// アウトライン解析方法
-	pType->m_colorInfoArr[COLORIDX_DIGIT].m_bDisp = true;
+	pType->lineComment.CopyTo(0, L";", -1);				// 行コメントデリミタ
+	pType->eDefaultOutline = OUTLINE_ASM;					// アウトライン解析方法
+	pType->colorInfoArr[COLORIDX_DIGIT].bDisp = true;
 }
 
 

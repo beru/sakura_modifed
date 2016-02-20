@@ -98,7 +98,7 @@ void FuncInfoArr::AppendData(
 									  pszFuncName,
 									  pszFileName,
 									  nInfo);
-	pFuncInfo->m_nDepth = nDepth;
+	pFuncInfo->nDepth = nDepth;
 	AppendData(pFuncInfo);
 	return;
 }

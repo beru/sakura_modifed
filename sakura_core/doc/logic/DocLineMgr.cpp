@@ -339,7 +339,7 @@ void DocLineMgr::DUMP()
 		MYTRACE(_T("error: m_pDocLineTop->m_pPrev != NULL\n"));
 	}
 	if (m_pDocLineBot->m_pNext) {
-		MYTRACE(_T("error: m_pDocLineBot->m_pNext != NULL\n"));
+		MYTRACE(_T("error: m_pDocLineBot->pNext != NULL\n"));
 	}
 	DocLine* pDocLine = m_pDocLineTop;
 	while (pDocLine) {
@@ -355,7 +355,7 @@ void DocLineMgr::DUMP()
 				break;
 			}
 			if (pDocLine->m_pNext->m_pPrev != pDocLine) {
-				MYTRACE(_T("error: pDocLine->m_pNext->m_pPrev != pDocLine.\n"));
+				MYTRACE(_T("error: pDocLine->pNext->m_pPrev != pDocLine.\n"));
 				break;
 			}
 		}else {

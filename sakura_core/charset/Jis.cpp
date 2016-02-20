@@ -479,7 +479,7 @@ CodeConvertResult Jis::UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR*
 {
 
 	// 2008/6/21 Uchi
-	if (psStatusbar->m_bDispUniInJis) {
+	if (psStatusbar->bDispUniInJis) {
 		// Unicode‚Å•\Ž¦
 		return CodeBase::UnicodeToHex(cSrc, iSLen, pDst, psStatusbar);
 	}

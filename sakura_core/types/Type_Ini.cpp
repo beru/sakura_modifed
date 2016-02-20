@@ -31,14 +31,14 @@
 void CType_Ini::InitTypeConfigImp(TypeConfig* pType)
 {
 	// 名前と拡張子
-	_tcscpy(pType->m_szTypeName, _T("設定ファイル"));
-	_tcscpy(pType->m_szTypeExts, _T("ini,inf,cnf,kwd,col"));
+	_tcscpy(pType->szTypeName, _T("設定ファイル"));
+	_tcscpy(pType->szTypeExts, _T("ini,inf,cnf,kwd,col"));
 	
 	// 設定
-	pType->m_lineComment.CopyTo(0, L"//", -1);					// 行コメントデリミタ
-	pType->m_lineComment.CopyTo(1, L";", -1);					// 行コメントデリミタ2
-	pType->m_eDefaultOutline = OUTLINE_TEXT;					// アウトライン解析方法
-	pType->m_colorInfoArr[COLORIDX_SSTRING].m_bDisp = false;	// シングルクォーテーション文字列を色分け表示しない
-	pType->m_colorInfoArr[COLORIDX_WSTRING].m_bDisp = false;	// ダブルクォーテーション文字列を色分け表示しない
+	pType->lineComment.CopyTo(0, L"//", -1);					// 行コメントデリミタ
+	pType->lineComment.CopyTo(1, L";", -1);					// 行コメントデリミタ2
+	pType->eDefaultOutline = OUTLINE_TEXT;					// アウトライン解析方法
+	pType->colorInfoArr[COLORIDX_SSTRING].bDisp = false;	// シングルクォーテーション文字列を色分け表示しない
+	pType->colorInfoArr[COLORIDX_WSTRING].bDisp = false;	// ダブルクォーテーション文字列を色分け表示しない
 }
 

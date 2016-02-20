@@ -76,12 +76,12 @@ int DlgWinSize::DoModal(
 {
 	m_eSaveWinSize = eSaveWinSize;
 	m_eSaveWinPos  = eSaveWinPos;
-	m_nWinSizeType = nWinSizeType;
+	nWinSizeType = nWinSizeType;
 	m_rc = rc;
 	(void)Dialog::DoModal(hInstance, hwndParent, IDD_WINPOSSIZE, (LPARAM)NULL);
 	eSaveWinSize = m_eSaveWinSize;
 	eSaveWinPos  = m_eSaveWinPos;
-	nWinSizeType = m_nWinSizeType;
+	nWinSizeType = nWinSizeType;
 	rc = m_rc;
 	return TRUE;
 }
@@ -154,7 +154,7 @@ void DlgWinSize::SetData(void)
 	}
 
 	int nCurIdx = 0;
-	switch (m_nWinSizeType) {
+	switch (nWinSizeType) {
 	case SIZE_MINIMIZED:
 		nCurIdx = 2;
 		break;
@@ -197,13 +197,13 @@ int DlgWinSize::GetData(void)
 	nCurIdx = Combo_GetCurSel(GetItemHwnd(IDC_COMBO_WINTYPE));
 	switch (nCurIdx) {
 	case 2:
-		m_nWinSizeType = SIZE_MINIMIZED;
+		nWinSizeType = SIZE_MINIMIZED;
 		break;
 	case 1:
-		m_nWinSizeType = SIZE_MAXIMIZED;
+		nWinSizeType = SIZE_MAXIMIZED;
 		break;
 	default:
-		m_nWinSizeType = SIZE_RESTORED;
+		nWinSizeType = SIZE_RESTORED;
 	}
 	m_rc.right  = GetItemInt(IDC_EDIT_SX, NULL, TRUE);
 	m_rc.bottom = GetItemInt(IDC_EDIT_SY, NULL, TRUE);

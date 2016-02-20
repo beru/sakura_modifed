@@ -87,7 +87,7 @@ void ViewCommander::Command_GREP(void)
 			TypeConfigNum cTypeGrep = DocTypeManager().GetDocumentTypeOfExt(_T("grepout"));
 			const TypeConfigMini* pConfig;
 			DocTypeManager().GetTypeConfigMini(cTypeGrep, &pConfig);
-			doc.m_docType.SetDocumentTypeIdx(pConfig->m_id);
+			doc.m_docType.SetDocumentTypeIdx(pConfig->id);
 			doc.m_docType.LockDocumentType();
 			doc.OnChangeType();
 		}
@@ -103,13 +103,13 @@ void ViewCommander::Command_GREP(void)
 			dlgGrep.m_bSubFolder,
 			false,
 			true, // Header
-			dlgGrep.m_searchOption,
-			dlgGrep.m_nGrepCharSet,
-			dlgGrep.m_nGrepOutputLineType,
-			dlgGrep.m_nGrepOutputStyle,
-			dlgGrep.m_bGrepOutputFileOnly,
-			dlgGrep.m_bGrepOutputBaseFolder,
-			dlgGrep.m_bGrepSeparateFolder,
+			dlgGrep.searchOption,
+			dlgGrep.nGrepCharSet,
+			dlgGrep.nGrepOutputLineType,
+			dlgGrep.nGrepOutputStyle,
+			dlgGrep.bGrepOutputFileOnly,
+			dlgGrep.bGrepOutputBaseFolder,
+			dlgGrep.bGrepSeparateFolder,
 			false,
 			false
 		);
@@ -153,7 +153,7 @@ void ViewCommander::Command_GREP_REPLACE_DLG( void )
 		dlgGrepRep.m_bSetText = true;
 	}
 	if (0 < GetDllShareData().m_searchKeywords.replaceKeys.size()) {
-		if (dlgGrepRep.m_nReplaceKeySequence < GetDllShareData().m_common.search.m_nReplaceKeySequence) {
+		if (dlgGrepRep.nReplaceKeySequence < GetDllShareData().m_common.search.nReplaceKeySequence) {
 			dlgGrepRep.m_strText2 = GetDllShareData().m_searchKeywords.replaceKeys[0];
 		}
 	}
@@ -202,13 +202,13 @@ void ViewCommander::Command_GREP_REPLACE(void)
 			dlgGrepRep.m_bSubFolder,
 			false, // Stdout
 			true, // Header
-			dlgGrepRep.m_searchOption,
-			dlgGrepRep.m_nGrepCharSet,
-			dlgGrepRep.m_nGrepOutputLineType,
-			dlgGrepRep.m_nGrepOutputStyle,
-			dlgGrepRep.m_bGrepOutputFileOnly,
-			dlgGrepRep.m_bGrepOutputBaseFolder,
-			dlgGrepRep.m_bGrepSeparateFolder,
+			dlgGrepRep.searchOption,
+			dlgGrepRep.nGrepCharSet,
+			dlgGrepRep.nGrepOutputLineType,
+			dlgGrepRep.nGrepOutputStyle,
+			dlgGrepRep.bGrepOutputFileOnly,
+			dlgGrepRep.bGrepOutputBaseFolder,
+			dlgGrepRep.bGrepSeparateFolder,
 			dlgGrepRep.m_bPaste,
 			dlgGrepRep.m_bBackup
 		);
@@ -237,24 +237,24 @@ void ViewCommander::Command_GREP_REPLACE(void)
 		cmdLine.AppendString(_T("\" -GFOLDER=\""));
 		cmdLine.AppendString(cmWork3.GetStringPtr());
 		cmdLine.AppendString(_T("\" -GCODE="));
-		auto_sprintf( szTemp, _T("%d"), dlgGrepRep.m_nGrepCharSet );
+		auto_sprintf( szTemp, _T("%d"), dlgGrepRep.nGrepCharSet );
 		cmdLine.AppendString(szTemp);
 
 		//GOPTオプション
 		TCHAR	pOpt[64];
 		pOpt[0] = _T('\0');
 		if (dlgGrepRep.m_bSubFolder				) _tcscat( pOpt, _T("S") );	// サブフォルダからも検索する
-		if (dlgGrepRep.m_searchOption.bWordOnly	) _tcscat( pOpt, _T("W") );	// 単語単位で探す
-		if (dlgGrepRep.m_searchOption.bLoHiCase	) _tcscat( pOpt, _T("L") );	// 英大文字と英小文字を区別する
-		if (dlgGrepRep.m_searchOption.bRegularExp	) _tcscat( pOpt, _T("R") );	// 正規表現
-		if (dlgGrepRep.m_nGrepOutputLineType == 1	) _tcscat( pOpt, _T("P") );	// 行を出力する
-		// if (dlgGrepRep.m_nGrepOutputLineType == 2) _tcscat( pOpt, _T("N") );	// 否ヒット行を出力する 2014.09.23
-		if (dlgGrepRep.m_nGrepOutputStyle == 1		) _tcscat( pOpt, _T("1") );	// Grep: 出力形式
-		if (dlgGrepRep.m_nGrepOutputStyle == 2		) _tcscat( pOpt, _T("2") );	// Grep: 出力形式
-		if (dlgGrepRep.m_nGrepOutputStyle == 3		) _tcscat( pOpt, _T("3") );
-		if (dlgGrepRep.m_bGrepOutputFileOnly		) _tcscat( pOpt, _T("F") );
-		if (dlgGrepRep.m_bGrepOutputBaseFolder		) _tcscat( pOpt, _T("B") );
-		if (dlgGrepRep.m_bGrepSeparateFolder		) _tcscat( pOpt, _T("D") );
+		if (dlgGrepRep.searchOption.bWordOnly	) _tcscat( pOpt, _T("W") );	// 単語単位で探す
+		if (dlgGrepRep.searchOption.bLoHiCase	) _tcscat( pOpt, _T("L") );	// 英大文字と英小文字を区別する
+		if (dlgGrepRep.searchOption.bRegularExp	) _tcscat( pOpt, _T("R") );	// 正規表現
+		if (dlgGrepRep.nGrepOutputLineType == 1	) _tcscat( pOpt, _T("P") );	// 行を出力する
+		// if (dlgGrepRep.nGrepOutputLineType == 2) _tcscat( pOpt, _T("N") );	// 否ヒット行を出力する 2014.09.23
+		if (dlgGrepRep.nGrepOutputStyle == 1		) _tcscat( pOpt, _T("1") );	// Grep: 出力形式
+		if (dlgGrepRep.nGrepOutputStyle == 2		) _tcscat( pOpt, _T("2") );	// Grep: 出力形式
+		if (dlgGrepRep.nGrepOutputStyle == 3		) _tcscat( pOpt, _T("3") );
+		if (dlgGrepRep.bGrepOutputFileOnly		) _tcscat( pOpt, _T("F") );
+		if (dlgGrepRep.bGrepOutputBaseFolder		) _tcscat( pOpt, _T("B") );
+		if (dlgGrepRep.bGrepSeparateFolder		) _tcscat( pOpt, _T("D") );
 		if (dlgGrepRep.m_bPaste					) _tcscat( pOpt, _T("C") );	// クリップボードから貼り付け
 		if (dlgGrepRep.m_bBackup					) _tcscat( pOpt, _T("O") );	// バックアップ作成
 		if (0 < _tcslen( pOpt )) {
@@ -273,7 +273,7 @@ void ViewCommander::Command_GREP_REPLACE(void)
 			cmdLine.GetStringPtr(),
 			false,
 			NULL,
-			GetDllShareData().m_common.tabBar.m_bNewWindow
+			GetDllShareData().m_common.tabBar.bNewWindow
 		);
 	}
 	return;

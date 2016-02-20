@@ -93,7 +93,7 @@ INT_PTR PropPlugin::DispatchEvent(
 
 	WORD	wNotifyCode;
 	WORD	wID;
-	PluginRec* pluginTable = m_common.plugin.m_pluginTable;
+	PluginRec* pluginTable = m_common.plugin.pluginTable;
 
 	switch (uMsg) {
 	case WM_INITDIALOG:
@@ -126,13 +126,13 @@ INT_PTR PropPlugin::DispatchEvent(
 							::SetWindowText(::GetDlgItem(hwndDlg, IDC_LABEL_PLUGIN_Version), _T(""));
 						}
 						// 2010.08.21 明らかに使えないときはDisableにする
-						EPluginState state = pluginTable[sel].m_state;
+						EPluginState state = pluginTable[sel].state;
 						BOOL bEdit = (state != PLS_DELETED && state != PLS_NONE);
 						::EnableWindow(::GetDlgItem(hwndDlg, IDC_PLUGIN_Remove), bEdit);
 						::EnableWindow(::GetDlgItem(hwndDlg, IDC_PLUGIN_OPTION), state == PLS_LOADED && plugin && plugin->m_options.size() > 0);
 						::EnableWindow(::GetDlgItem(hwndDlg, IDC_PLUGIN_README), 
 							(state == PLS_INSTALLED || state == PLS_UPDATED || state == PLS_LOADED || state == PLS_DELETED)
-							&& !GetReadMeFile(to_tchar(pluginTable[sel].m_szName)).empty());
+							&& !GetReadMeFile(to_tchar(pluginTable[sel].szName)).empty());
 						::EnableWindow(::GetDlgItem(hwndDlg, IDC_PLUGIN_URL), state == PLS_LOADED && plugin && plugin->m_sUrl.size() > 0);
 					}
 				}
@@ -214,7 +214,7 @@ INT_PTR PropPlugin::DispatchEvent(
 					HWND hListView = ::GetDlgItem(hwndDlg, IDC_PLUGINLIST);
 					int sel = ListView_GetNextItem(hListView, -1, LVNI_SELECTED);
 					if (sel >= 0) {
-						if (MYMESSAGEBOX(hwndDlg, MB_YESNO, GSTR_APPNAME, LS(STR_PROPCOMPLG_DELETE), pluginTable[sel].m_szName) == IDYES) {
+						if (MYMESSAGEBOX(hwndDlg, MB_YESNO, GSTR_APPNAME, LS(STR_PROPCOMPLG_DELETE), pluginTable[sel].szName) == IDYES) {
 							PluginManager::getInstance()->UninstallPlugin(m_common, sel);
 							SetData_LIST(hwndDlg);
 						}
@@ -225,11 +225,11 @@ INT_PTR PropPlugin::DispatchEvent(
 				{
 					HWND hListView = ::GetDlgItem(hwndDlg, IDC_PLUGINLIST);
 					int sel = ListView_GetNextItem(hListView, -1, LVNI_SELECTED);
-					if (sel >= 0 && pluginTable[sel].m_state == PLS_LOADED) {
+					if (sel >= 0 && pluginTable[sel].state == PLS_LOADED) {
 						// 2010.08.21 プラグイン名(フォルダ名)の同一性の確認
 						Plugin* plugin = PluginManager::getInstance()->GetPlugin(sel);
 						wstring sDirName = to_wchar(plugin->GetFolderName().c_str());
-						if (plugin && auto_stricmp(sDirName.c_str(), pluginTable[sel].m_szName) == 0) {
+						if (plugin && auto_stricmp(sDirName.c_str(), pluginTable[sel].szName) == 0) {
 							DlgPluginOption dlgPluginOption;
 							dlgPluginOption.DoModal(::GetModuleHandle(NULL), hwndDlg, this, sel);
 						}else {
@@ -253,7 +253,7 @@ INT_PTR PropPlugin::DispatchEvent(
 				{
 					HWND hListView = ::GetDlgItem(hwndDlg, IDC_PLUGINLIST);
 					int sel = ListView_GetNextItem(hListView, -1, LVNI_SELECTED);
-					std::tstring sName = to_tchar(pluginTable[sel].m_szName);	// 個別フォルダ名
+					std::tstring sName = to_tchar(pluginTable[sel].szName);	// 個別フォルダ名
 					std::tstring sReadMeName = GetReadMeFile(sName);
 					if (!sReadMeName.empty()) {
 						if (!BrowseReadMe(sReadMeName)) {
@@ -324,7 +324,7 @@ INT_PTR PropPlugin::DispatchEvent(
 void PropPlugin::SetData(HWND hwndDlg)
 {
 	// プラグインを有効にする
-	::CheckDlgButton(hwndDlg, IDC_CHECK_PluginEnable, m_common.plugin.m_bEnablePlugin);
+	::CheckDlgButton(hwndDlg, IDC_CHECK_PluginEnable, m_common.plugin.bEnablePlugin);
 
 	// プラグインリスト
 	SetData_LIST(hwndDlg);
@@ -342,7 +342,7 @@ void PropPlugin::SetData_LIST(HWND hwndDlg)
 {
 	int index;
 	LVITEM lvItem;
-	PluginRec* pluginTable = m_common.plugin.m_pluginTable;
+	PluginRec* pluginTable = m_common.plugin.pluginTable;
 
 	::EnableWindow(::GetDlgItem(hwndDlg, IDC_PLUGIN_Remove), FALSE);
 	::EnableWindow(::GetDlgItem(hwndDlg, IDC_PLUGIN_OPTION), FALSE);
@@ -375,7 +375,7 @@ void PropPlugin::SetData_LIST(HWND hwndDlg)
 		lvItem.mask = LVIF_TEXT;
 		lvItem.iSubItem = 1;
 		if (plugin) {
-			lvItem.pszText = const_cast<LPTSTR>(to_tchar(plugin->m_sName.c_str()));
+			lvItem.pszText = const_cast<LPTSTR>(to_tchar(plugin->sName.c_str()));
 		}else {
 			lvItem.pszText = const_cast<TCHAR*>(_T("-"));
 		}
@@ -386,7 +386,7 @@ void PropPlugin::SetData_LIST(HWND hwndDlg)
 		lvItem.iItem = index;
 		lvItem.mask = LVIF_TEXT;
 		lvItem.iSubItem = 2;
-		switch (pluginTable[index].m_state) {
+		switch (pluginTable[index].state) {
 		case PLS_INSTALLED: lvItem.pszText = const_cast<TCHAR*>(LS(STR_PROPCOMPLG_STATE1)); break;
 		case PLS_UPDATED:   lvItem.pszText = const_cast<TCHAR*>(LS(STR_PROPCOMPLG_STATE2)); break;
 		case PLS_STOPPED:   lvItem.pszText = const_cast<TCHAR*>(LS(STR_PROPCOMPLG_STATE3)); break;
@@ -401,7 +401,7 @@ void PropPlugin::SetData_LIST(HWND hwndDlg)
 		lvItem.iItem = index;
 		lvItem.mask = LVIF_TEXT;
 		lvItem.iSubItem = 3;
-		if (pluginTable[index].m_state != PLS_NONE) {
+		if (pluginTable[index].state != PLS_NONE) {
 			lvItem.pszText = const_cast<TCHAR*>(plugin ? LS(STR_PROPCOMPLG_LOAD) : _T(""));
 		}else {
 			lvItem.pszText = const_cast<TCHAR*>(_T(""));
@@ -413,7 +413,7 @@ void PropPlugin::SetData_LIST(HWND hwndDlg)
 		lvItem.iItem = index;
 		lvItem.mask = LVIF_TEXT;
 		lvItem.iSubItem = 4;
-		switch (pluginTable[index].m_state) {
+		switch (pluginTable[index].state) {
 		case PLS_INSTALLED:
 		case PLS_UPDATED:
 		case PLS_STOPPED:
@@ -422,7 +422,7 @@ void PropPlugin::SetData_LIST(HWND hwndDlg)
 				sDirName = plugin->GetFolderName();
 				lvItem.pszText = const_cast<LPTSTR>(sDirName.c_str());
 			}else {
-				lvItem.pszText = const_cast<LPTSTR>(to_tchar(pluginTable[index].m_szName));
+				lvItem.pszText = const_cast<LPTSTR>(to_tchar(pluginTable[index].szName));
 			}
 			break;
 		default:
@@ -450,7 +450,7 @@ void PropPlugin::SetData_LIST(HWND hwndDlg)
 int PropPlugin::GetData(HWND hwndDlg)
 {
 	// プラグインを有効にする
-	m_common.plugin.m_bEnablePlugin = DlgButton_IsChecked(hwndDlg, IDC_CHECK_PluginEnable);
+	m_common.plugin.bEnablePlugin = DlgButton_IsChecked(hwndDlg, IDC_CHECK_PluginEnable);
 
 	// プラグインリストは今のところ変更できる部分がない
 	//「新規プラグイン追加」はm_commonに直接書き込むので、この関数ですることはない

@@ -81,7 +81,7 @@ void MruListener::OnBeforeLoad(LoadInfo* pLoadInfo)
 			// デフォルト文字コード認識のために一時的に読み込み対象ファイルのファイルタイプを適用する
 			const TypeConfigMini* type;
 			DocTypeManager().GetTypeConfigMini(pLoadInfo->nType, &type);
-			CodeMediator mediator(type->m_encoding);
+			CodeMediator mediator(type->encoding);
 			pLoadInfo->eCharCode = mediator.CheckKanjiCodeOfFile(pLoadInfo->filePath);
 		}else {
 			pLoadInfo->eCharCode = ePrevCode;
@@ -92,16 +92,16 @@ void MruListener::OnBeforeLoad(LoadInfo* pLoadInfo)
 	if (pLoadInfo->eCharCode == CODE_NONE) {
 		const TypeConfigMini* type;
 		if (DocTypeManager().GetTypeConfigMini(pLoadInfo->nType, &type)) {
-			pLoadInfo->eCharCode = type->m_encoding.m_eDefaultCodetype;	// 無効値の回避	// 2011.01.24 ryoji CODE_DEFAULT -> m_eDefaultCodetype
+			pLoadInfo->eCharCode = type->encoding.eDefaultCodetype;	// 無効値の回避	// 2011.01.24 ryoji CODE_DEFAULT -> eDefaultCodetype
 		}else {
-			pLoadInfo->eCharCode = GetDllShareData().m_TypeBasis.m_encoding.m_eDefaultCodetype;
+			pLoadInfo->eCharCode = GetDllShareData().m_TypeBasis.encoding.eDefaultCodetype;
 		}
 	}
 
 	// 食い違う場合
 	if (IsValidCodeOrCPType(ePrevCode) && pLoadInfo->eCharCode != ePrevCode) {
 		// オプション：前回と文字コードが異なるときに問い合わせを行う
-		if (GetDllShareData().m_common.file.m_bQueryIfCodeChange && !pLoadInfo->bRequestReload) {
+		if (GetDllShareData().m_common.file.bQueryIfCodeChange && !pLoadInfo->bRequestReload) {
 			TCHAR szCpNameNew[260];
 			TCHAR szCpNameOld[260];
 			CodePage::GetNameLong(szCpNameOld, ePrevCode);

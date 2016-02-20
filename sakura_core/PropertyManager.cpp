@@ -68,7 +68,7 @@ bool PropertyManager::OpenPropertySheet(
 		// ShareData に 設定を適用・コピーする
 		// 2007.06.20 ryoji グループ化に変更があったときはグループIDをリセットする
 		auto& csTabBar = GetDllShareData().m_common.tabBar;
-		bool bGroup = (csTabBar.m_bDispTabWnd && !csTabBar.m_bDispTabWndMultiWin);
+		bool bGroup = (csTabBar.bDispTabWnd && !csTabBar.bDispTabWndMultiWin);
 
 		// 印刷中にキーワードを上書きしないように
 		ShareDataLockCounter* pLock = NULL;
@@ -79,7 +79,7 @@ bool PropertyManager::OpenPropertySheet(
 		// 自ウィンドウには最後に通知されます。大抵は、OnChangeSetting にあります。
 		// ここでしか適用しないと、ほかのウィンドウが変更されません。
 
-		if (bGroup != (csTabBar.m_bDispTabWnd && !csTabBar.m_bDispTabWndMultiWin )) {
+		if (bGroup != (csTabBar.bDispTabWnd && !csTabBar.bDispTabWndMultiWin )) {
 			AppNodeManager::getInstance()->ResetGroupId();
 		}
 

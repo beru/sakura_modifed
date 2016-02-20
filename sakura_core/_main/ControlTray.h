@@ -125,6 +125,6 @@ private:
 
 	UINT				m_uCreateTaskBarMsg;	// RegisterMessage‚Å“¾‚ç‚ê‚éMessage ID‚Ì•ÛŠÇêŠBApr. 24, 2001 genta
 
-	TCHAR				m_szLanguageDll[MAX_PATH];
+	TCHAR				szLanguageDll[MAX_PATH];
 };
 

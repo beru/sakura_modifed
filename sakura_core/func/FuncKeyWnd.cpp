@@ -117,7 +117,7 @@ HWND FuncKeyWnd::Open(
 	m_nCurrentKeyState = -1;
 
 	// 2002.11.04 Moca •ÏX‚Å‚«‚é‚æ‚¤‚É
-	m_nButtonGroupNum = m_pShareData->m_common.window.m_nFUNCKEYWND_GroupNum;
+	m_nButtonGroupNum = m_pShareData->m_common.window.nFuncKeyWnd_GroupNum;
 	if (m_nButtonGroupNum < 1 || 12 < m_nButtonGroupNum) {
 		m_nButtonGroupNum = 4;
 	}
@@ -288,8 +288,8 @@ LRESULT FuncKeyWnd::OnTimer(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			// 2007.02.22 ryoji KeyBind::GetFuncCode()‚ðŽg‚¤
 			EFunctionCode nFuncCode = KeyBind::GetFuncCode(
 				(WORD)(((VK_F1 + i) | ((WORD)((BYTE)(nIdx))) << 8)),
-				csKeyBind.m_nKeyNameArrNum,
-				csKeyBind.m_pKeyNameArr
+				csKeyBind.nKeyNameArrNum,
+				csKeyBind.pKeyNameArr
 			);
 			if (nFuncCode != m_nFuncCodeArr[i]) {
 				m_nFuncCodeArr[i] = nFuncCode;

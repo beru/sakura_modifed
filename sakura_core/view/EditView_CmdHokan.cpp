@@ -54,7 +54,7 @@ void EditView::PreprocessCommand_hokan(int nCommand)
 */
 void EditView::PostprocessCommand_hokan(void)
 {
-	if (GetDllShareData().m_common.helper.m_bUseHokan && !m_bExecutingKeyMacro) { // キーボードマクロの実行中
+	if (GetDllShareData().m_common.helper.bUseHokan && !m_bExecutingKeyMacro) { // キーボードマクロの実行中
 		NativeW memData;
 
 		// カーソル直前の単語を取得
@@ -135,11 +135,11 @@ void EditView::ShowHokanMgr(NativeW& memData, bool bAutoDecided)
 		GetTextMetrics().GetHankakuHeight(),
 		GetTextMetrics().GetHankakuDx(),
 		memData.GetStringPtr(),
-		m_pTypeData->m_szHokanFile,
-		m_pTypeData->m_bHokanLoHiCase,
-		m_pTypeData->m_bUseHokanByFile, // 2003.06.22 Moca
-		m_pTypeData->m_nHokanType,
-		m_pTypeData->m_bUseHokanByKeyword,
+		m_pTypeData->szHokanFile,
+		m_pTypeData->bHokanLoHiCase,
+		m_pTypeData->bUseHokanByFile, // 2003.06.22 Moca
+		m_pTypeData->nHokanType,
+		m_pTypeData->bUseHokanByKeyword,
 		pMemHokanWord
 	);
 	// 補完候補の数によって動作を変える
@@ -165,7 +165,7 @@ void EditView::ShowHokanMgr(NativeW& memData, bool bAutoDecided)
 	
 	//	補完終了。
 	if (!m_bHokan) {
-		GetDllShareData().m_common.helper.m_bUseHokan = FALSE;	//	入力補完終了の知らせ
+		GetDllShareData().m_common.helper.bUseHokan = FALSE;	//	入力補完終了の知らせ
 	}
 }
 

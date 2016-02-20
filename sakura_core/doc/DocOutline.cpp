@@ -226,7 +226,7 @@ void DocOutline::MakeFuncList_RuleFile(
 	auto_array_ptr<OneRule> test(new OneRule[1024]);	// 1024個許可。 2007.11.29 kobake スタック使いすぎなので、ヒープに確保するように修正。
 	bool bRegex;
 	std::wstring title;
-	int nCount = ReadRuleFile(m_pDocRef->m_docType.GetDocumentAttribute().m_szOutlineRuleFilename, test.get(), 1024, bRegex, title);
+	int nCount = ReadRuleFile(m_pDocRef->m_docType.GetDocumentAttribute().szOutlineRuleFilename, test.get(), 1024, bRegex, title);
 	if (nCount < 1) {
 		return;
 	}
@@ -364,7 +364,7 @@ void DocOutline::MakeFuncList_RuleFile(
 			pszText = new wchar_t[nLineLen + 1];
 			wmemcpy(pszText, &pLine[i], nLineLen);
 			pszText[nLineLen] = L'\0';
-			bool bExtEol = GetDllShareData().m_common.edit.m_bEnableExtEol;
+			bool bExtEol = GetDllShareData().m_common.edit.bEnableExtEol;
 			for (i=0; pszText[i]!=L'\0'; ++i) {
 				if (WCODE::IsLineDelimiter(pszText[i], bExtEol)) {
 					pszText[i] = L'\0';
@@ -441,7 +441,7 @@ void DocOutline::MakeFuncList_RuleFile(
 void DocOutline::MakeFuncList_BookMark(FuncInfoArr* pFuncInfoArr)
 {
 	LogicInt nLineLen;
-	BOOL bMarkUpBlankLineEnable = GetDllShareData().m_common.outline.m_bMarkUpBlankLineEnable;	// 空行をマーク対象にするフラグ 20020119 aroka
+	BOOL bMarkUpBlankLineEnable = GetDllShareData().m_common.outline.bMarkUpBlankLineEnable;	// 空行をマーク対象にするフラグ 20020119 aroka
 	int nNewLineLen	= m_pDocRef->m_docEditor.m_newLineCode.GetLen();
 	LogicInt nLineLast	= m_pDocRef->m_docLineMgr.GetLineCount();
 	int nCharChars;
@@ -477,7 +477,7 @@ void DocOutline::MakeFuncList_BookMark(FuncInfoArr* pFuncInfoArr)
 		int	k;
 		int pos_wo_space;
 		k = pos_wo_space = leftspace;
-		bool bExtEol = GetDllShareData().m_common.edit.m_bEnableExtEol;
+		bool bExtEol = GetDllShareData().m_common.edit.bEnableExtEol;
 		while (k < nLineLen) {
 			nCharChars = NativeW::GetSizeOfChar(pLine, nLineLen, k);
 			if (nCharChars == 1) {

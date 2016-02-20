@@ -220,10 +220,10 @@ void DlgDiff::SetData(void)
 	if (m_nDiffFlgOpt & 0x0040) CheckButton(IDC_CHECK_DIFF_EXEC_STATE, true);
 
 	// 見つからないときメッセージを表示
-	CheckButton(IDC_CHECK_NOTIFYNOTFOUND, m_pShareData->m_common.search.m_bNOTIFYNOTFOUND);
+	CheckButton(IDC_CHECK_NOTIFYNOTFOUND, m_pShareData->m_common.search.bNotifyNotFound);
 	
 	// 先頭（末尾）から再検索
-	CheckButton(IDC_CHECK_SEARCHALL, m_pShareData->m_common.search.m_bSearchAll);
+	CheckButton(IDC_CHECK_SEARCHALL, m_pShareData->m_common.search.bSearchAll);
 
 	// 編集中のファイル一覧を作成する
 	{
@@ -376,10 +376,10 @@ int DlgDiff::GetData(void)
 	}
 
 	// 見つからないときメッセージを表示
-	m_pShareData->m_common.search.m_bNOTIFYNOTFOUND = IsButtonChecked(IDC_CHECK_NOTIFYNOTFOUND);
+	m_pShareData->m_common.search.bNotifyNotFound = IsButtonChecked(IDC_CHECK_NOTIFYNOTFOUND);
 
 	// 先頭（末尾）から再検索
-	m_pShareData->m_common.search.m_bSearchAll = IsButtonChecked(IDC_CHECK_SEARCHALL);
+	m_pShareData->m_common.search.bSearchAll = IsButtonChecked(IDC_CHECK_SEARCHALL);
 
 	// 相手ファイルが指定されてなければキャンセル
 	// 2004.02.21 MIK 相手が無題だと比較できないので判定削除
@@ -463,7 +463,7 @@ BOOL DlgDiff::OnInitDialog(
 		GetItemClientRect(anchorList[i].id, m_rcItems[i]);
 	}
 
-	RECT rcDialog = GetDllShareData().m_common.others.m_rcDiffDialog;
+	RECT rcDialog = GetDllShareData().m_common.others.rcDiffDialog;
 	if (rcDialog.left != 0
 		|| rcDialog.bottom != 0
 	) {
@@ -481,7 +481,7 @@ BOOL DlgDiff::OnSize(WPARAM wParam, LPARAM lParam)
 	// 基底クラスメンバ
 	Dialog::OnSize(wParam, lParam);
 
-	GetWindowRect(&GetDllShareData().m_common.others.m_rcDiffDialog);
+	GetWindowRect(&GetDllShareData().m_common.others.rcDiffDialog);
 
 	RECT  rc;
 	POINT ptNew;
@@ -498,7 +498,7 @@ BOOL DlgDiff::OnSize(WPARAM wParam, LPARAM lParam)
 
 BOOL DlgDiff::OnMove(WPARAM wParam, LPARAM lParam)
 {
-	GetWindowRect(&GetDllShareData().m_common.others.m_rcDiffDialog);
+	GetWindowRect(&GetDllShareData().m_common.others.rcDiffDialog);
 	
 	return Dialog::OnMove(wParam, lParam);
 }

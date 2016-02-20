@@ -38,7 +38,7 @@ struct CommonValueInfo {
 	void* m_pValue;     // 値へのポインタ
 	int   m_nValueSize; // 値のサイズ。バイト単位。
 	char  m_szEntryKey[32];
-	Type m_type;
+	Type type;
 
 	CommonValueInfo(
 		void* pValue,
@@ -49,7 +49,7 @@ struct CommonValueInfo {
 		:
 		m_pValue(pValue),
 		m_nValueSize(nValueSize),
-		m_type(type)
+		type(type)
 	{
 		strcpy_s(m_szEntryKey, _countof(m_szEntryKey), szEntryKey);
 	}

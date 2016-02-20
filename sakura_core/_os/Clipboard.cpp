@@ -636,7 +636,7 @@ bool Clipboard::GetClipboradByFormat(
 					eMode = nBomCode;
 				}else {
 					const TypeConfig& type = EditDoc::GetInstance(0)->m_docType.GetDocumentAttribute();
-					CodeMediator mediator(type.m_encoding);
+					CodeMediator mediator(type.encoding);
 					eMode = mediator.CheckKanjiCode((const char*)pData, nLength);
 				}
 				if (!IsValidCodeType(eMode)) {

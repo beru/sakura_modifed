@@ -62,9 +62,9 @@ LPTSTR FileNameManager::GetTransformFileNameFast( LPCTSTR pszSrc, LPTSTR pszDest
 
 	int nPxWidth = -1;
 	auto& csFileName = m_pShareData->m_common.fileName;
-	if (csFileName.m_bTransformShortPath && cchMaxWidth != -1) {
+	if (csFileName.bTransformShortPath && cchMaxWidth != -1) {
 		if (cchMaxWidth == 0) {
-			cchMaxWidth = csFileName.m_nTransformShortMaxWidth;
+			cchMaxWidth = csFileName.nTransformShortMaxWidth;
 		}
 		TextWidthCalc calc(hDC);
 		nPxWidth = calc.GetTextWidth(_T("x")) * cchMaxWidth;
@@ -73,13 +73,13 @@ LPTSTR FileNameManager::GetTransformFileNameFast( LPCTSTR pszSrc, LPTSTR pszDest
 	if (0 < m_nTransformFileNameCount) {
 		GetFilePathFormat(pszSrc, pszDest, nDestLen,
 			m_szTransformFileNameFromExp[0],
-			csFileName.m_szTransformFileNameTo[m_nTransformFileNameOrgId[0]]
+			csFileName.szTransformFileNameTo[m_nTransformFileNameOrgId[0]]
 		);
 		for (int i=1; i<m_nTransformFileNameCount; ++i) {
 			_tcscpy(szBuf, pszDest);
 			GetFilePathFormat(szBuf, pszDest, nDestLen,
 				m_szTransformFileNameFromExp[i],
-				csFileName.m_szTransformFileNameTo[m_nTransformFileNameOrgId[i]]);
+				csFileName.szTransformFileNameTo[m_nTransformFileNameOrgId[i]]);
 		}
 		if (nPxWidth != -1) {
 			_tcscpy( szBuf, pszDest );
@@ -103,15 +103,15 @@ LPTSTR FileNameManager::GetTransformFileNameFast( LPCTSTR pszSrc, LPTSTR pszDest
 int FileNameManager::TransformFileName_MakeCache(void) {
 	int nCount = 0;
 	auto& csFileName = m_pShareData->m_common.fileName;
-	for (int i=0; i<csFileName.m_nTransformFileNameArrNum; ++i) {
-		if (csFileName.m_szTransformFileNameFrom[i][0] != L'\0') {
+	for (int i=0; i<csFileName.nTransformFileNameArrNum; ++i) {
+		if (csFileName.szTransformFileNameFrom[i][0] != L'\0') {
 			if (ExpandMetaToFolder(
-				csFileName.m_szTransformFileNameFrom[i],
+				csFileName.szTransformFileNameFrom[i],
 				m_szTransformFileNameFromExp[nCount],
 				_MAX_PATH
 				)
 			) {
-				// m_szTransformFileNameTo‚Æm_szTransformFileNameFromExp‚Ì”Ô†‚ª‚¸‚ê‚é‚±‚Æ‚ª‚ ‚é‚Ì‚Å‹L˜^‚µ‚Ä‚¨‚­
+				// szTransformFileNameTo‚Æm_szTransformFileNameFromExp‚Ì”Ô†‚ª‚¸‚ê‚é‚±‚Æ‚ª‚ ‚é‚Ì‚Å‹L˜^‚µ‚Ä‚¨‚­
 				m_nTransformFileNameOrgId[nCount] = i;
 				++nCount;
 			}

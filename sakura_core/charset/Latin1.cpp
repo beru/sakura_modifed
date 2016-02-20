@@ -228,7 +228,7 @@ CodeConvertResult Latin1::UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCH
 {
 
 	// 2008/6/21 Uchi
-	if (psStatusbar->m_bDispUniInSjis) {
+	if (psStatusbar->bDispUniInSjis) {
 		// Unicode‚Å•\Ž¦
 		return CodeBase::UnicodeToHex(cSrc, iSLen, pDst, psStatusbar);
 	}

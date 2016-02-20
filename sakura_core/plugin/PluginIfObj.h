@@ -169,7 +169,7 @@ public:
 				profile.SetWritingMode();
 				wstring tmp(Arguments[2]);
 				profile.IOProfileData(Arguments[0], Arguments[1], tmp);
-				profile.WriteProfile(plugin.GetOptionPath().c_str(), (plugin.m_sName + L" プラグイン設定ファイル").c_str());
+				profile.WriteProfile(plugin.GetOptionPath().c_str(), (plugin.sName + L" プラグイン設定ファイル").c_str());
 			}
 			break;
 		case F_PL_ADDCOMMAND:			// コマンドを追加する

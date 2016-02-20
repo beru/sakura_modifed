@@ -731,7 +731,7 @@ bool ViewCommander::Command_INSFILE(
 	int nFlgOpt
 	)
 {
-	FileLoad	fl(m_pCommanderView->m_pTypeData->m_encoding);
+	FileLoad	fl(m_pCommanderView->m_pTypeData->encoding);
 	Eol eol;
 	int			nLineNum = 0;
 

@@ -22,7 +22,7 @@ CodeConvertResult CodeBase::UnicodeToHex(
 {
 	if (IsUTF16High(pSrc[0]) && iSLen >= 2 && IsUTF16Low(pSrc[1])) {
 		// サロゲートペア
-		if (psStatusbar->m_bDispSPCodepoint) {
+		if (psStatusbar->bDispSPCodepoint) {
 			auto_sprintf(pDst, _T("U+%05X"), 0x10000 + ((pSrc[0] & 0x3FF)<<10) + (pSrc[1] & 0x3FF));
 		}else {
 			auto_sprintf(pDst, _T("%04X%04X"), pSrc[0], pSrc[1]);

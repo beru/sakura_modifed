@@ -214,7 +214,7 @@ CodeConvertResult Utf8::_UnicodeToHex(const wchar_t* src, const int iSLen, TCHAR
 	unsigned char*	ps;
 	bool			bbinary=false;
 
-	if (psStatusbar->m_bDispUtf8Codepoint) {
+	if (psStatusbar->bDispUtf8Codepoint) {
 		// Unicode‚Å•\Ž¦
 		return CodeBase::UnicodeToHex(src, iSLen, pDst, psStatusbar);
 	}

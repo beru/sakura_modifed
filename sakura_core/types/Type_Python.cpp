@@ -84,7 +84,7 @@ struct OutlinePython {
 		STATE_NORMAL,	// 通常行 : 行頭を含む
 		STATE_STRING,	// 文字列中
 		STATE_CONTINUE,	// 継続行 : 前の行からの続きなので行頭とはみなされない
-	} m_state;
+	} state;
 	
 	int m_quote_char;	// 引用符記号
 	bool m_raw_string;	// エスケープ記号無視ならtrue
@@ -102,7 +102,7 @@ struct OutlinePython {
 	int EnterString(const wchar_t* data, int linelen, int start_offset);
 	void DoScanLine(const wchar_t* data, int linelen, int start_offset);
 	
-	bool IsLogicalLineTop(void) const { return m_state == STATE_NORMAL; }
+	bool IsLogicalLineTop(void) const { return state == STATE_NORMAL; }
 };
 
 /*!コンストラクタ: 初期化
@@ -110,7 +110,7 @@ struct OutlinePython {
 	初期状態をSTATE_NORMALに設定する．
 */
 OutlinePython::OutlinePython()
-	: m_state(STATE_NORMAL),
+	: state(STATE_NORMAL),
 	m_raw_string(false),
 	m_long_string(false)
 {
@@ -132,20 +132,20 @@ OutlinePython::OutlinePython()
 	@return 調査後の位置
 
 	@invariant
-		m_state != STATE_STRING
+		state != STATE_STRING
 
 	@note 引用符の位置で呼びだせば，抜けた後は必ずSTATE_STRINGになっているはず．
 		引用符以外の位置で呼びだした場合は何もしないで抜ける．
 */
 int OutlinePython::EnterString(const wchar_t* data, int linelen, int start_offset)
 {
-	assert(m_state != STATE_STRING);
+	assert(state != STATE_STRING);
 
 	int col = start_offset;
 	//	文字列開始チェック
 	if (data[col] == '\"' || data[col] == '\'') {
 		int quote_char = data[col];
-		m_state = STATE_STRING;
+		state = STATE_STRING;
 		m_quote_char = quote_char;
 		//	文字列の開始
 		if (col >= 1 &&
@@ -187,14 +187,14 @@ int OutlinePython::EnterString(const wchar_t* data, int linelen, int start_offse
 	@param[in] start_offset 調査開始位置
 	
 	@invaliant
-		m_state == STATE_NORMAL || m_state == STATE_CONTINUE
+		state == STATE_NORMAL || state == STATE_CONTINUE
 	
 	@return 調査後の位置
 */
 int OutlinePython::ScanNormal(const wchar_t* data, int linelen, int start_offset)
 {
-	assert(m_state == STATE_NORMAL || m_state == STATE_CONTINUE);
-	bool bExtEol = GetDllShareData().m_common.edit.m_bEnableExtEol;
+	assert(state == STATE_NORMAL || state == STATE_CONTINUE);
+	bool bExtEol = GetDllShareData().m_common.edit.bEnableExtEol;
 
 	for (int col=start_offset; col<linelen; ++col) {
 		int nCharChars = NativeW::GetSizeOfChar(data, linelen, col);
@@ -207,7 +207,7 @@ int OutlinePython::ScanNormal(const wchar_t* data, int linelen, int start_offset
 			//	コメントは行末と同じ扱いなので
 			//	わざわざ独立して扱う必要性が薄い
 			//	ここで片を付けてしまおう
-			m_state = STATE_NORMAL;
+			state = STATE_NORMAL;
 			break;
 		//	文字列
 		}else if (data[col] == '\"' || data[col] == '\'') {
@@ -225,7 +225,7 @@ int OutlinePython::ScanNormal(const wchar_t* data, int linelen, int start_offset
 					&& (WCODE::IsLineDelimiter(data[col + 1], bExtEol))
 				)
 			) {
-				m_state = STATE_CONTINUE;
+				state = STATE_CONTINUE;
 				break;
 			}
 		}
@@ -240,7 +240,7 @@ int OutlinePython::ScanNormal(const wchar_t* data, int linelen, int start_offset
 	最終的な状態を決定する．
 	
 	文字列の開始判定はEnterString()関数で処理済みであり，その結果が
-	m_state, m_raw_string, m_long_string, m_quote_charに与えられている．
+	state, m_raw_string, m_long_string, m_quote_charに与えられている．
 	
 	m_raw_stringがtrueならbackslashによるエスケープ処理を行わない
 	m_long_stringならm_quote_charが3つ続くまで文字列となる．
@@ -252,7 +252,7 @@ int OutlinePython::ScanNormal(const wchar_t* data, int linelen, int start_offset
 	@return 調査後の位置
 	
 	@invariant
-		m_state==STATE_STRING
+		state==STATE_STRING
 
 	@author genta
 	@date 2007.02.12 新規作成
@@ -261,8 +261,8 @@ int OutlinePython::ScanNormal(const wchar_t* data, int linelen, int start_offset
 */
 int OutlinePython::ScanString(const wchar_t* data, int linelen, int start_offset)
 {
-	assert(m_state == STATE_STRING);
-	bool bExtEol = GetDllShareData().m_common.edit.m_bEnableExtEol;
+	assert(state == STATE_STRING);
+	bool bExtEol = GetDllShareData().m_common.edit.bEnableExtEol;
 
 	int quote_char = m_quote_char;
 	for (int col=start_offset; col<linelen; ++col) {
@@ -302,14 +302,14 @@ int OutlinePython::ScanString(const wchar_t* data, int linelen, int start_offset
 			// あとで
 			if (!m_long_string) {
 				//	文字列の末尾を発見した
-				m_state = STATE_NORMAL;
+				state = STATE_NORMAL;
 				return col + 1;
 			}
 		//	引用符が見つかったら終了チェック
 		}else if (data[col] == quote_char) {
 			if (!m_long_string) {
 				//	文字列の末尾を発見した
-				m_state = STATE_NORMAL;
+				state = STATE_NORMAL;
 				return col + 1;
 			}
 			//	long stringの場合
@@ -317,7 +317,7 @@ int OutlinePython::ScanString(const wchar_t* data, int linelen, int start_offset
 				data[col + 1] == quote_char &&
 				data[col + 2] == quote_char
 			) {
-				m_state = STATE_NORMAL;
+				state = STATE_NORMAL;
 				return col + 3;
 			}
 		}
@@ -327,8 +327,8 @@ int OutlinePython::ScanString(const wchar_t* data, int linelen, int start_offset
 
 /*!	Python文字列を行末までスキャンして次の行の状態を決定する
 
-	m_stateに設定された現在の状態から開始してdataをstart_offsetからlinelenに達するまで
-	走査し，行末における状態をm_stateに格納する．
+	stateに設定された現在の状態から開始してdataをstart_offsetからlinelenに達するまで
+	走査し，行末における状態をstateに格納する．
 
 	現在の状態に応じてサブルーチンに解析処理を依頼する．
 	サブルーチンScan**では文字列dataのstart_offsetから状態遷移が発生するまで処理を
@@ -345,9 +345,9 @@ void OutlinePython::DoScanLine(const wchar_t* data, int linelen, int start_offse
 {
 	int col = start_offset;
 	while (col < linelen) {
-		if (m_state == STATE_NORMAL || m_state == STATE_CONTINUE) {
+		if (state == STATE_NORMAL || state == STATE_CONTINUE) {
 			col = ScanNormal(data, linelen, col);
-		}else if (m_state == STATE_STRING) {
+		}else if (state == STATE_STRING) {
 			col = ScanString(data, linelen, col);
 		}else {
 			//	ありえないエラー
@@ -392,7 +392,7 @@ void DocOutline::MakeFuncList_python(FuncInfoArr* pFuncInfoArr)
 	OutlinePython python_analyze_state;
 
 	const int MAX_DEPTH = 10;
-	bool bExtEol = GetDllShareData().m_common.edit.m_bEnableExtEol;
+	bool bExtEol = GetDllShareData().m_common.edit.bEnableExtEol;
 
 	int indent_level[MAX_DEPTH]; // 各レベルのインデント桁位置()
 	indent_level[0] = 0;	// do as python does.

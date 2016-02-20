@@ -63,7 +63,7 @@ BOOL EditView::CreateScrollBar()
 
 	// スクロールバーの作成
 	m_hwndHScrollBar = NULL;
-	if (GetDllShareData().m_common.window.m_bScrollBarHorz) {	// 水平スクロールバーを使う
+	if (GetDllShareData().m_common.window.bScrollBarHorz) {	// 水平スクロールバーを使う
 		m_hwndHScrollBar = ::CreateWindowEx(
 			0L,									// no extended styles
 			_T("SCROLLBAR"),					// scroll bar control class
@@ -90,7 +90,7 @@ BOOL EditView::CreateScrollBar()
 	}
 
 	// サイズボックス
-	if (GetDllShareData().m_common.window.m_nFUNCKEYWND_Place == 0) {	// ファンクションキー表示位置／0:上 1:下
+	if (GetDllShareData().m_common.window.nFuncKeyWnd_Place == 0) {	// ファンクションキー表示位置／0:上 1:下
 		m_hwndSizeBox = ::CreateWindowEx(
 			WS_EX_CONTROLPARENT/*0L*/, 			// no extended styles
 			_T("SCROLLBAR"),					// scroll bar control class
@@ -177,13 +177,13 @@ LayoutInt EditView::OnVScroll(int nScrollCode, int nPos)
 //		for (i=0; i<4; ++i) {
 //			ScrollAtV(GetTextArea().GetViewTopLine() + 1);
 //		}
-		nScrollVal = ScrollAtV(GetTextArea().GetViewTopLine() + GetDllShareData().m_common.general.m_nRepeatedScrollLineNum);
+		nScrollVal = ScrollAtV(GetTextArea().GetViewTopLine() + GetDllShareData().m_common.general.nRepeatedScrollLineNum);
 		break;
 	case SB_LINEUP:
 //		for (i=0; i<4; ++i) {
 //			ScrollAtV(GetTextArea().GetViewTopLine() - 1);
 //		}
-		nScrollVal = ScrollAtV(GetTextArea().GetViewTopLine() - GetDllShareData().m_common.general.m_nRepeatedScrollLineNum);
+		nScrollVal = ScrollAtV(GetTextArea().GetViewTopLine() - GetDllShareData().m_common.general.nRepeatedScrollLineNum);
 		break;
 	case SB_PAGEDOWN:
 		nScrollVal = ScrollAtV(GetTextArea().GetBottomLine());
@@ -507,8 +507,8 @@ void EditView::ScrollDraw(LayoutInt nScrollRowNum, LayoutInt nScrollColNum, cons
 
 	// 背景は画面に対して固定か
 	bool bBackImgFixed = IsBkBitmap() &&
-		(nScrollRowNum != 0 && !m_pTypeData->m_backImgScrollY ||
-		 nScrollColNum != 0 && !m_pTypeData->m_backImgScrollX);
+		(nScrollRowNum != 0 && !m_pTypeData->backImgScrollY ||
+		 nScrollColNum != 0 && !m_pTypeData->backImgScrollX);
 	if (bBackImgFixed) {
 		Rect rcBody = area.GetAreaRect();
 		rcBody.left = 0; // 行番号も移動
@@ -537,7 +537,7 @@ void EditView::ScrollDraw(LayoutInt nScrollRowNum, LayoutInt nScrollColNum, cons
 		if (1
 			&& 0 < area.GetTopYohaku()
 			&& IsBkBitmap()
-			&& (nScrollRowNum != 0 && m_pTypeData->m_backImgScrollY || nScrollColNum != 0 && m_pTypeData->m_backImgScrollX)
+			&& (nScrollRowNum != 0 && m_pTypeData->backImgScrollY || nScrollColNum != 0 && m_pTypeData->backImgScrollX)
 		) {
 			// Scrollのときにルーラー余白更新
 			Rect rcTopYohaku;
@@ -561,7 +561,7 @@ void EditView::ScrollDraw(LayoutInt nScrollRowNum, LayoutInt nScrollColNum, cons
 		}
 		if (IsBkBitmap()
 			&& nScrollColNum != 0
-			&& m_pTypeData->m_backImgScrollX
+			&& m_pTypeData->backImgScrollX
 		) {
 			// 行番号背景のために更新
 			Rect rcLineNum;
@@ -678,7 +678,7 @@ void EditView::MiniMapRedraw(bool bUpdateAll)
 */
 void EditView::SyncScrollV(LayoutInt line)
 {
-	if (GetDllShareData().m_common.window.m_bSplitterWndVScroll && line != 0 
+	if (GetDllShareData().m_common.window.bSplitterWndVScroll && line != 0 
 		&& m_pEditWnd->IsEnablePane(m_nMyIndex^0x01) 
 		&& 0 <= m_nMyIndex
 	) {
@@ -706,7 +706,7 @@ void EditView::SyncScrollV(LayoutInt line)
 */
 void EditView::SyncScrollH(LayoutInt col)
 {
-	if (GetDllShareData().m_common.window.m_bSplitterWndHScroll && col != 0
+	if (GetDllShareData().m_common.window.bSplitterWndHScroll && col != 0
 		&& m_pEditWnd->IsEnablePane(m_nMyIndex^0x02)
 		&& 0 <= m_nMyIndex
 	) {
@@ -731,10 +731,10 @@ void EditView::SyncScrollH(LayoutInt col)
 LayoutInt EditView::GetWrapOverhang(void) const
 {
 	int nMargin = 1;	// 折り返し記号
-	if (!m_pTypeData->m_bKinsokuHide) {	// ぶら下げを隠す時はスキップ	2012/11/30 Uchi
-		if (m_pTypeData->m_bKinsokuRet)
+	if (!m_pTypeData->bKinsokuHide) {	// ぶら下げを隠す時はスキップ	2012/11/30 Uchi
+		if (m_pTypeData->bKinsokuRet)
 			nMargin += 1;	// 改行ぶら下げ
-		if (m_pTypeData->m_bKinsokuKuto)
+		if (m_pTypeData->bKinsokuKuto)
 			nMargin += 2;	// 句読点ぶら下げ
 	}
 	return LayoutInt(nMargin);
@@ -801,7 +801,7 @@ LayoutInt EditView::GetRightEdgeForScrollBar(void)
 		}
 
 		// フリーカーソルモード かつ キャレット位置がテキストの幅より右側
-		if (GetDllShareData().m_common.general.m_bIsFreeCursorMode && nRightEdge < GetCaret().GetCaretLayoutPos().GetX2())
+		if (GetDllShareData().m_common.general.bIsFreeCursorMode && nRightEdge < GetCaret().GetCaretLayoutPos().GetX2())
 			nRightEdge = GetCaret().GetCaretLayoutPos().GetX2();
 
 		// 右マージン分（3桁）を考慮しつつnWidthを超えないようにする
