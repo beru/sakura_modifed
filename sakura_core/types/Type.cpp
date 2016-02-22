@@ -220,7 +220,7 @@ void _DefaultConfig(TypeConfig* pType)
 		GetDefaultColorInfo(&pType->colorInfoArr[i], i);
 	}
 	pType->szBackImgPath[0] = '\0';
-	pType->backImgPos = BGIMAGE_TOP_LEFT;
+	pType->backImgPos = BackgroundImagePosType::TopLeft;
 	pType->backImgRepeatX = true;
 	pType->backImgRepeatY = true;
 	pType->backImgScrollX = true;

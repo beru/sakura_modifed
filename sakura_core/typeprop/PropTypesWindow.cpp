@@ -374,7 +374,7 @@ void PropTypesWindow::SetData(HWND hwndDlg)
 		};
 		// BGIMAGE_TOP_LEFT ..
 		int nCount = _countof(posNameId);
-		SetCombobox(::GetDlgItem(hwndDlg, IDC_COMBO_BACKIMG_POS), posNameId, nCount, m_types.backImgPos);
+		SetCombobox(::GetDlgItem(hwndDlg, IDC_COMBO_BACKIMG_POS), posNameId, nCount, (int)m_types.backImgPos);
 	}
 	CheckDlgButtonBool(hwndDlg, IDC_CHECK_BACKIMG_REP_X, m_types.backImgRepeatX);
 	CheckDlgButtonBool(hwndDlg, IDC_CHECK_BACKIMG_REP_Y, m_types.backImgRepeatY);
@@ -466,7 +466,7 @@ int PropTypesWindow::GetData(HWND hwndDlg)
 	m_types.bLineNumIsCRLF = !DlgButton_IsChecked(hwndDlg, IDC_RADIO_LINENUM_LAYOUT);
 
 	DlgItem_GetText(hwndDlg, IDC_EDIT_BACKIMG_PATH, m_types.szBackImgPath, _countof2(m_types.szBackImgPath));
-	m_types.backImgPos = static_cast<EBackgroundImagePos>(Combo_GetCurSel(GetDlgItem(hwndDlg, IDC_COMBO_BACKIMG_POS)));
+	m_types.backImgPos = static_cast<BackgroundImagePosType>(Combo_GetCurSel(GetDlgItem(hwndDlg, IDC_COMBO_BACKIMG_POS)));
 	m_types.backImgRepeatX = DlgButton_IsChecked(hwndDlg, IDC_CHECK_BACKIMG_REP_X);
 	m_types.backImgRepeatY = DlgButton_IsChecked(hwndDlg, IDC_CHECK_BACKIMG_REP_Y);
 	m_types.backImgScrollX = DlgButton_IsChecked(hwndDlg, IDC_CHECK_BACKIMG_SCR_X);

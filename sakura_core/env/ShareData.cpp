@@ -359,7 +359,7 @@ bool ShareData::InitShareData()
 			CommonSetting_File& file = m_pShareData->common.file;
 
 			// ファイルの排他制御
-			file.nFileShareMode = SHAREMODE_DENY_WRITE;	// ファイルの排他制御モード
+			file.nFileShareMode = FileShareMode::DenyWrite;	// ファイルの排他制御モード
 			file.bCheckFileTimeStamp = true;			// 更新の監視
 			file.nAutoloadDelay = 0;					// 自動読込時遅延
 			file.bUneditableIfUnwritable = true;		// 上書き禁止検出時は編集禁止にする

@@ -27,7 +27,7 @@
 #include "KeywordSetMgr.h"
 #include "func/KeyBind.h"
 #include "func/FuncLookup.h" // MacroRec
-#include "io/File.h" // EShareMode
+#include "io/File.h" // ShareMode
 
 // Apr. 05, 2003 genta WindowCaption用領域（変換前）の長さ
 static const int MAX_CAPTION_CONF_LEN = 256;
@@ -260,7 +260,7 @@ public:
 
 public:
 	// ファイルの排他制御モード
-	EShareMode	nFileShareMode;				// ファイルの排他制御モード
+	FileShareMode	nFileShareMode;				// ファイルの排他制御モード
 	bool		bCheckFileTimeStamp;		// 更新の監視
 	int 		nAutoloadDelay;				// 自動読込時遅延
 	bool		bUneditableIfUnwritable;	// 上書き禁止検出時は編集禁止にする

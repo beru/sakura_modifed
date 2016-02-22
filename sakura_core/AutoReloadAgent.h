@@ -26,11 +26,11 @@
 #include "doc/DocListener.h"
 
 // ファイルが更新された場合に再読込を行うかどうかのフラグ
-enum WatchUpdate {
-	WU_QUERY,		// 再読込を行うかどうかダイアログボックスで問い合わせる
-	WU_NOTIFY,		// 更新されたことをステータスバーで通知
-	WU_NONE,		// 更新監視を行わない
-	WU_AUTOLOAD,	// 更新され未編集の場合に再ロード
+enum class WatchUpdateType {
+	Query,		// 再読込を行うかどうかダイアログボックスで問い合わせる
+	Notify,		// 更新されたことをステータスバーで通知
+	None,		// 更新監視を行わない
+	AutoLoad,	// 更新され未編集の場合に再ロード
 };
 
 class AutoReloadAgent : public DocListenerEx {
@@ -51,7 +51,7 @@ public://#####仮
 	void CheckFileTimeStamp();	// ファイルのタイムスタンプのチェック処理
 	
 public:
-	WatchUpdate		m_eWatchUpdate;	// 更新監視方法
+	WatchUpdateType	m_watchUpdateType;	// 更新監視方法
 	
 private:
 	int m_nPauseCount;	// これが1以上の場合は監視をしない

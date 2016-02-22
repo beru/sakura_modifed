@@ -48,10 +48,10 @@ static const DWORD p_helpids[] = {	//01310
 	0, 0
 };
 
-TYPE_NAME_ID<EShareMode> ShareModeArr[] = {
-	{ SHAREMODE_NOT_EXCLUSIVE,	STR_EXCLU_NO_EXCLUSIVE },	// _T("ÇµÇ»Ç¢") },
-	{ SHAREMODE_DENY_WRITE,		STR_EXCLU_DENY_READWRITE },	// _T("è„èëÇ´Çã÷é~Ç∑ÇÈ") },
-	{ SHAREMODE_DENY_READWRITE,	STR_EXCLU_DENY_WRITE },		// _T("ì«Ç›èëÇ´Çã÷é~Ç∑ÇÈ") },
+TYPE_NAME_ID<FileShareMode> ShareModeArr[] = {
+	{ FileShareMode::NonExclusive,	STR_EXCLU_NO_EXCLUSIVE },	// _T("ÇµÇ»Ç¢") },
+	{ FileShareMode::DenyWrite,		STR_EXCLU_DENY_READWRITE },	// _T("è„èëÇ´Çã÷é~Ç∑ÇÈ") },
+	{ FileShareMode::DenyReadWrite,	STR_EXCLU_DENY_WRITE },		// _T("ì«Ç›èëÇ´Çã÷é~Ç∑ÇÈ") },
 };
 
 //	From Here Jun. 2, 2001 genta
@@ -450,7 +450,7 @@ void PropFile::EnableFilePropInput(HWND hwndDlg)
 
 	//	îrëºÇ∑ÇÈÇ©Ç«Ç§Ç©
 	int nSelPos = Combo_GetCurSel(::GetDlgItem(hwndDlg, IDC_COMBO_FILESHAREMODE));
-	if (ShareModeArr[nSelPos].nMethod == SHAREMODE_NOT_EXCLUSIVE) {
+	if (ShareModeArr[nSelPos].nMethod == FileShareMode::NonExclusive) {
 		::EnableWindow(::GetDlgItem(hwndDlg, IDC_CHECK_bCheckFileTimeStamp), TRUE);
 		if (DlgButton_IsChecked(hwndDlg, IDC_CHECK_bCheckFileTimeStamp)) {
 			::EnableWindow(::GetDlgItem(hwndDlg, IDC_LABEL_AUTOLOAD_DELAY), TRUE);

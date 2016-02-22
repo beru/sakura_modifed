@@ -605,13 +605,13 @@ bool InitRegexp(
 	LPCTSTR RegexpDll = pShareData->common.search.szRegexpLib;
 	// To Here 2007.08.12 genta
 
-	EDllResult eDllResult = rRegexp.InitDll(RegexpDll);
-	if (eDllResult != DLL_SUCCESS) {
+	InitDllResultType dllResult = rRegexp.InitDll(RegexpDll);
+	if (dllResult != InitDllResultType::Success) {
 		if (bShowMessage) {
 			LPCTSTR pszMsg = _T("");
-			if (eDllResult == DLL_LOADFAILURE) {
+			if (dllResult == InitDllResultType::LoadFailure) {
 				pszMsg = LS(STR_BREGONIG_LOAD);
-			}else if (eDllResult == DLL_INITFAILURE) {
+			}else if (dllResult == InitDllResultType::InitFailure) {
 				pszMsg = LS(STR_BREGONIG_INIT);
 			}else {
 				pszMsg = LS(STR_BREGONIG_ERROR);

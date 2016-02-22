@@ -85,8 +85,8 @@ bool DllPlugin::InvokePlug(
 	)
 {
 	tstring dllPath = GetFilePath(to_tchar(m_sDllName.c_str()));
-	EDllResult resInit = InitDll(to_tchar(dllPath.c_str()));
-	if (resInit != DLL_SUCCESS) {
+	InitDllResultType resInit = InitDll(to_tchar(dllPath.c_str()));
+	if (resInit != InitDllResultType::Success) {
 		::MYMESSAGEBOX(view->m_hwndParent, MB_OK, LS(STR_DLLPLG_TITLE), LS(STR_DLLPLG_INIT_ERR1), dllPath.c_str(), sName.c_str());
 		return false;
 	}

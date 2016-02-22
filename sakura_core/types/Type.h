@@ -83,16 +83,16 @@ enum class HereDocType {
 };
 
 //! ”wŒi‰æ‘œ•\Ž¦ˆÊ’u
-enum EBackgroundImagePos {
-	BGIMAGE_TOP_LEFT,		//!< ¶ã
-	BGIMAGE_TOP_RIGHT,		//!< ‰Eã
-	BGIMAGE_BOTTOM_LEFT,	//!< ¶‰º
-	BGIMAGE_BOTTOM_RIGHT,	//!< ‰E‰º
-	BGIMAGE_CENTER,			//!< ’†‰›
-	BGIMAGE_TOP_CENTER,		//!< ’†‰›ã
-	BGIMAGE_BOTTOM_CENTER,	//!< ’†‰›‰º
-	BGIMAGE_CENTER_LEFT,	//!< ’†‰›¶
-	BGIMAGE_CENTER_RIGHT	//!< ’†‰›‰E
+enum class BackgroundImagePosType {
+	TopLeft,		//!< ¶ã
+	TopRight,		//!< ‰Eã
+	BottomLeft,		//!< ¶‰º
+	BottomRight,	//!< ‰E‰º
+	Center,			//!< ’†‰›
+	TopCenter,		//!< ’†‰›ã
+	BottomCenter,	//!< ’†‰›‰º
+	CenterLeft,		//!< ’†‰›¶
+	CenterRight	,	//!< ’†‰›‰E
 };
 
 //! ƒGƒ“ƒR[ƒhƒIƒvƒVƒ‡ƒ“
@@ -147,7 +147,7 @@ struct TypeConfig {
 	ColorInfo			colorInfoArr[64];				//!< FÝ’è”z—ñ
 
 	SFilePath			szBackImgPath;					//!< ”wŒi‰æ‘œ
-	EBackgroundImagePos backImgPos;						//!< ”wŒi‰æ‘œ•\Ž¦ˆÊ’u
+	BackgroundImagePosType backImgPos;						//!< ”wŒi‰æ‘œ•\Ž¦ˆÊ’u
 	bool				backImgRepeatX;					//!< ”wŒi‰æ‘œ•\Ž¦‰¡•ûŒüŒJ‚è•Ô‚µ
 	bool				backImgRepeatY;					//!< ”wŒi‰æ‘œ•\Ž¦c•ûŒüŒJ‚è•Ô‚µ
 	bool				backImgScrollX;					//!< ”wŒi‰æ‘œ•\Ž¦‰¡•ûŒüƒXƒNƒ[ƒ‹

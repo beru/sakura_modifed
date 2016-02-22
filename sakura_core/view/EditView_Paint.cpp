@@ -193,43 +193,43 @@ void EditView::DrawBackImage(HDC hdc, RECT& rcPaint, HDC hdcBgImg)
 
 	Rect rcImagePos;
 	switch (typeConfig.backImgPos) {
-	case BGIMAGE_TOP_LEFT:
-	case BGIMAGE_BOTTOM_LEFT:
-	case BGIMAGE_CENTER_LEFT:
+	case BackgroundImagePosType::TopLeft:
+	case BackgroundImagePosType::BottomLeft:
+	case BackgroundImagePosType::CenterLeft:
 		rcImagePos.left = area.GetAreaLeft();
 		break;
-	case BGIMAGE_TOP_RIGHT:
-	case BGIMAGE_BOTTOM_RIGHT:
-	case BGIMAGE_CENTER_RIGHT:
+	case BackgroundImagePosType::TopRight:
+	case BackgroundImagePosType::BottomRight:
+	case BackgroundImagePosType::CenterRight:
 		rcImagePos.left = area.GetAreaRight() - doc.m_nBackImgWidth;
 		break;
-	case BGIMAGE_TOP_CENTER:
-	case BGIMAGE_BOTTOM_CENTER:
-	case BGIMAGE_CENTER:
+	case BackgroundImagePosType::TopCenter:
+	case BackgroundImagePosType::BottomCenter:
+	case BackgroundImagePosType::Center:
 		rcImagePos.left = area.GetAreaLeft() + area.GetAreaWidth()/2 - doc.m_nBackImgWidth/2;
 		break;
 	default:
-		assert_warning(typeConfig.backImgPos != 0);
+		assert_warning(false);
 		break;
 	}
 	switch (typeConfig.backImgPos) {
-	case BGIMAGE_TOP_LEFT:
-	case BGIMAGE_TOP_RIGHT:
-	case BGIMAGE_TOP_CENTER:
+	case BackgroundImagePosType::TopLeft:
+	case BackgroundImagePosType::TopRight:
+	case BackgroundImagePosType::TopCenter:
 		rcImagePos.top  = area.GetAreaTop();
 		break;
-	case BGIMAGE_BOTTOM_LEFT:
-	case BGIMAGE_BOTTOM_RIGHT:
-	case BGIMAGE_BOTTOM_CENTER:
+	case BackgroundImagePosType::BottomLeft:
+	case BackgroundImagePosType::BottomRight:
+	case BackgroundImagePosType::BottomCenter:
 		rcImagePos.top  = area.GetAreaBottom() - doc.m_nBackImgHeight;
 		break;
-	case BGIMAGE_CENTER_LEFT:
-	case BGIMAGE_CENTER_RIGHT:
-	case BGIMAGE_CENTER:
+	case BackgroundImagePosType::CenterLeft:
+	case BackgroundImagePosType::CenterRight:
+	case BackgroundImagePosType::Center:
 		rcImagePos.top  = area.GetAreaTop() + area.GetAreaHeight()/2 - doc.m_nBackImgHeight/2;
 		break;
 	default:
-		assert_warning(typeConfig.backImgPos != 0);
+		assert_warning(false);
 		break;
 	}
 	rcImagePos.left += typeConfig.backImgPosOffset.x;

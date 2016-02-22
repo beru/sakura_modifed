@@ -142,28 +142,27 @@ void PropGrep::SetData(HWND hwndDlg)
 {
 	auto& csSearch = m_common.search;
 	// 2006.08.23 ryoji カーソル位置の文字列をデフォルトの検索文字列にする
-	::CheckDlgButton(hwndDlg, IDC_CHECK_bCaretTextForSearch, csSearch.bCaretTextForSearch);
-
+	CheckDlgButtonBool(hwndDlg, IDC_CHECK_bCaretTextForSearch, csSearch.bCaretTextForSearch);
 	CheckDlgButtonBool(hwndDlg, IDC_CHECK_INHERIT_KEY_OTHER_VIEW, csSearch.bInheritKeyOtherView);
 
 	// Grepモードで保存確認するか
-	::CheckDlgButton(hwndDlg, IDC_CHECK_bGrepExitConfirm, csSearch.bGrepExitConfirm);
+	CheckDlgButtonBool(hwndDlg, IDC_CHECK_bGrepExitConfirm, csSearch.bGrepExitConfirm);
 
 	// Grep結果のリアルタイム表示
-	::CheckDlgButton(hwndDlg, IDC_CHECK_GREPREALTIME, csSearch.bGrepRealTimeView);	// 2006.08.08 ryoji ID修正
+	CheckDlgButtonBool(hwndDlg, IDC_CHECK_GREPREALTIME, csSearch.bGrepRealTimeView);	// 2006.08.08 ryoji ID修正
 
-
+	
 	// Grepモード: エンターキーでタグジャンプ
-	::CheckDlgButton(hwndDlg, IDC_CHECK_GTJW_RETURN, csSearch.bGTJW_Return);
+	CheckDlgButtonBool(hwndDlg, IDC_CHECK_GTJW_RETURN, csSearch.bGTJW_Return);
 
 	// Grepモード: ダブルクリックでタグジャンプ
-	::CheckDlgButton(hwndDlg, IDC_CHECK_GTJW_LDBLCLK, csSearch.bGTJW_DoubleClick);
+	CheckDlgButtonBool(hwndDlg, IDC_CHECK_GTJW_LDBLCLK, csSearch.bGTJW_DoubleClick);
 
 	//	2007.08.12 genta 正規表現DLL
 	EditCtl_LimitText(::GetDlgItem(hwndDlg, IDC_EDIT_REGEXPLIB), _countof(csSearch.szRegexpLib) - 1);
 	::DlgItem_SetText(hwndDlg, IDC_EDIT_REGEXPLIB, csSearch.szRegexpLib);
 	SetRegexpVersion(hwndDlg);
-
+	
 	TagJumpMode tagJumpMode1Arr[] ={
 		{ 0, STR_TAGJUMP_0 },
 		{ 1, STR_TAGJUMP_1 },
@@ -211,7 +210,6 @@ int PropGrep::GetData(HWND hwndDlg)
 
 	// 2006.08.23 ryoji カーソル位置の文字列をデフォルトの検索文字列にする
 	csSearch.bCaretTextForSearch = DlgButton_IsChecked(hwndDlg, IDC_CHECK_bCaretTextForSearch);
-
 	csSearch.bInheritKeyOtherView = DlgButton_IsChecked(hwndDlg, IDC_CHECK_INHERIT_KEY_OTHER_VIEW);
 
 	// Grepモードで保存確認するか
@@ -246,7 +244,7 @@ void PropGrep::SetRegexpVersion(HWND hwndDlg)
 	
 	::DlgItem_GetText(hwndDlg, IDC_EDIT_REGEXPLIB, regexp_dll, _countof(regexp_dll));
 	Bregexp breg;
-	if (DLL_SUCCESS != breg.InitDll(regexp_dll)) {
+	if (breg.InitDll(regexp_dll) != InitDllResultType::Success) {
 		::DlgItem_SetText(hwndDlg, IDC_LABEL_REGEXP_VER, LS(STR_PROPCOMGREP_DLL));
 		return;
 	}

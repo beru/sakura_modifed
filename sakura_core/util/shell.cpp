@@ -379,7 +379,7 @@ HWND OpenHtmlHelp(
 	bool		msgflag	// [in] エラーメッセージを表示するか。省略時はtrue。
 	)
 {
-	if (g_htmlHelp.InitDll() == DLL_SUCCESS) {
+	if (g_htmlHelp.InitDll() == InitDllResultType::Success) {
 		return g_htmlHelp.HtmlHelp(hWnd, szFile, uCmd, data);
 	}
 	if (msgflag) {

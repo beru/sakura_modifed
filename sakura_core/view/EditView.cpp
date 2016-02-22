@@ -1024,27 +1024,27 @@ void EditView::OnSize(int cx, int cy)
 	GetCaret().ShowEditCaret();
 
 	if (IsBkBitmap()) {
-		EBackgroundImagePos imgPos = m_pTypeData->backImgPos;
-		if (imgPos != BGIMAGE_TOP_LEFT) {
+		BackgroundImagePosType imgPos = m_pTypeData->backImgPos;
+		if (imgPos != BackgroundImagePosType::TopLeft) {
 			bool bUpdateWidth = false;
 			bool bUpdateHeight = false;
 			switch (imgPos) {
-			case BGIMAGE_TOP_RIGHT:
-			case BGIMAGE_BOTTOM_RIGHT:
-			case BGIMAGE_CENTER_RIGHT:
-			case BGIMAGE_TOP_CENTER:
-			case BGIMAGE_BOTTOM_CENTER:
-			case BGIMAGE_CENTER:
+			case BackgroundImagePosType::TopRight:
+			case BackgroundImagePosType::BottomRight:
+			case BackgroundImagePosType::CenterRight:
+			case BackgroundImagePosType::TopCenter:
+			case BackgroundImagePosType::BottomCenter:
+			case BackgroundImagePosType::Center:
 				bUpdateWidth = true;
 				break;
 			}
 			switch (imgPos) {
-			case BGIMAGE_BOTTOM_CENTER:
-			case BGIMAGE_BOTTOM_LEFT:
-			case BGIMAGE_BOTTOM_RIGHT:
-			case BGIMAGE_CENTER:
-			case BGIMAGE_CENTER_LEFT:
-			case BGIMAGE_CENTER_RIGHT:
+			case BackgroundImagePosType::BottomCenter:
+			case BackgroundImagePosType::BottomLeft:
+			case BackgroundImagePosType::BottomRight:
+			case BackgroundImagePosType::Center:
+			case BackgroundImagePosType::CenterLeft:
+			case BackgroundImagePosType::CenterRight:
 				bUpdateHeight = true;
 				break;
 			}

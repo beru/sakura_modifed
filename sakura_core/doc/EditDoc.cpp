@@ -276,7 +276,7 @@ void EditDoc::InitDoc()
 	AppMode::getInstance()->m_szGrepKey[0] = 0;	//$$
 
 	EditApp::getInstance()->m_pGrepAgent->m_bGrepMode = false;	// Grepモード	//$$同上
-	m_autoReloadAgent.m_eWatchUpdate = WU_QUERY; // Dec. 4, 2002 genta 更新監視方法 $$
+	m_autoReloadAgent.m_watchUpdateType = WatchUpdateType::Query; // Dec. 4, 2002 genta 更新監視方法 $$
 
 	// 2005.06.24 Moca バグ修正
 	// アウトプットウィンドウで「閉じて(無題)」を行ってもアウトプットウィンドウのまま

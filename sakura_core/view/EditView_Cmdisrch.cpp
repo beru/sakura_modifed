@@ -196,7 +196,7 @@ void EditView::ISearchEnter(int mode, SearchDirection direction)
 			// migemo dll チェック
 			//	Jan. 10, 2005 genta 設定変更で使えるようになっている
 			//	可能性があるので，使用可能でなければ一応初期化を試みる
-			if (!m_pMigemo->IsAvailable() && DLL_SUCCESS != m_pMigemo->InitDll()) {
+			if (!m_pMigemo->IsAvailable() && m_pMigemo->InitDll() != InitDllResultType::Success) {
 				WarningBeep();
 				SendStatusMessage(LS(STR_EDITVWISRCH_MIGEGO1));
 				return;

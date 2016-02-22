@@ -10,7 +10,7 @@
 File::File(LPCTSTR pszPath)
 	:
 	m_hLockedFile(INVALID_HANDLE_VALUE),
-	m_nFileShareModeOld(SHAREMODE_NOT_EXCLUSIVE)
+	m_nFileShareModeOld(FileShareMode::NonExclusive)
 {
 	if (pszPath) {
 		SetFilePath(pszPath);
@@ -92,7 +92,7 @@ void File::FileUnlock()
 }
 
 // ファイルの排他ロック
-bool File::FileLock(EShareMode eShareMode, bool bMsg)
+bool File::FileLock(FileShareMode eShareMode, bool bMsg)
 {
 	// ロック解除
 	FileUnlock();
@@ -103,16 +103,16 @@ bool File::FileLock(EShareMode eShareMode, bool bMsg)
 	}
 
 	// モード設定
-	if (eShareMode == SHAREMODE_NOT_EXCLUSIVE) {
+	if (eShareMode == FileShareMode::NonExclusive) {
 		return true;
 	}
 	// フラグ
 	DWORD dwShareMode = 0;
 	switch (eShareMode) {
-	case SHAREMODE_NOT_EXCLUSIVE:	return true;										break; // 排他制御無し
-	case SHAREMODE_DENY_READWRITE:	dwShareMode = 0;									break; // 読み書き禁止→共有無し
-	case SHAREMODE_DENY_WRITE:		dwShareMode = FILE_SHARE_READ;						break; // 書き込み禁止→読み込みのみ認める
-	default:						dwShareMode = FILE_SHARE_READ | FILE_SHARE_WRITE;	break; // 禁止事項なし→読み書き共に認める
+	case FileShareMode::NonExclusive:	return true;										break; // 排他制御無し
+	case FileShareMode::DenyReadWrite:	dwShareMode = 0;									break; // 読み書き禁止→共有無し
+	case FileShareMode::DenyWrite:		dwShareMode = FILE_SHARE_READ;						break; // 書き込み禁止→読み込みのみ認める
+	default:							dwShareMode = FILE_SHARE_READ | FILE_SHARE_WRITE;	break; // 禁止事項なし→読み書き共に認める
 	}
 
 	// オープン
@@ -130,9 +130,9 @@ bool File::FileLock(EShareMode eShareMode, bool bMsg)
 	if (m_hLockedFile == INVALID_HANDLE_VALUE && bMsg) {
 		const TCHAR* pszMode;
 		switch (eShareMode) {
-		case SHAREMODE_DENY_READWRITE:	pszMode = LS(STR_EXCLU_DENY_READWRITE); break;
-		case SHAREMODE_DENY_WRITE:		pszMode = LS(STR_EXCLU_DENY_WRITE); break;
-		default:						pszMode = LS(STR_EXCLU_UNDEFINED); break;
+		case FileShareMode::DenyReadWrite:	pszMode = LS(STR_EXCLU_DENY_READWRITE); break;
+		case FileShareMode::DenyWrite:		pszMode = LS(STR_EXCLU_DENY_WRITE); break;
+		default:							pszMode = LS(STR_EXCLU_UNDEFINED); break;
 		}
 		TopWarningMessage(
 			EditWnd::getInstance()->GetHwnd(),

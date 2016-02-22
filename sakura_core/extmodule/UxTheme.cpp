@@ -58,7 +58,7 @@ bool UxTheme::InitThemeDll(TCHAR* str)
 		return IsAvailable();
 	}
 	m_bInitialized = true;
-	return DllImp::InitDll(str) == DLL_SUCCESS;
+	return DllImp::InitDll(str) == InitDllResultType::Success;
 }
 
 /*!

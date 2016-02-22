@@ -56,11 +56,11 @@ DllImp::~DllImp()
 //                         DLLロード                           //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-EDllResult DllImp::InitDll(LPCTSTR pszSpecifiedDllName)
+InitDllResultType DllImp::InitDll(LPCTSTR pszSpecifiedDllName)
 {
 	if (IsAvailable()) {
 		// 既に利用可能で有れば何もしない．
-		return DLL_SUCCESS;
+		return InitDllResultType::Success;
 	}
 
 	// 名前候補を順次検証し、有効なものを採用する
@@ -111,13 +111,13 @@ EDllResult DllImp::InitDll(LPCTSTR pszSpecifiedDllName)
 
 	// ロードと初期処理に成功なら
 	if (IsAvailable()) {
-		return DLL_SUCCESS;
+		return InitDllResultType::Success;
 	// 初期処理に失敗したことがあったら
 	}else if (bInitImpFailure) {
-		return DLL_INITFAILURE; // DLLロードはできたけど、その初期処理に失敗
+		return InitDllResultType::InitFailure; // DLLロードはできたけど、その初期処理に失敗
 	// それ以外
 	}else {
-		return DLL_LOADFAILURE; // DLLロード自体に失敗
+		return InitDllResultType::LoadFailure; // DLLロード自体に失敗
 	}
 }
 

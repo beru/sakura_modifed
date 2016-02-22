@@ -58,7 +58,7 @@ bool DocFileOperation::_ToDoLock() const
 	}
 
 	// îrëºê›íË
-	if (GetDllShareData().common.file.nFileShareMode == SHAREMODE_NOT_EXCLUSIVE) {
+	if (GetDllShareData().common.file.nFileShareMode == FileShareMode::NonExclusive) {
 		return false;
 	}
 	return true;
