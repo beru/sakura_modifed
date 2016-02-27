@@ -47,7 +47,7 @@ void CType_Text::InitTypeConfigImp(TypeConfig* pType)
 
 	// 設定
 	pType->nMaxLineKetas = LayoutInt(120);					// 折り返し桁数
-	pType->eDefaultOutline = OUTLINE_TEXT;					// アウトライン解析方法
+	pType->eDefaultOutline = OutlineType::Text;				// アウトライン解析方法
 	pType->colorInfoArr[COLORIDX_SSTRING].bDisp = false;	// Oct. 17, 2000 JEPRO	シングルクォーテーション文字列を色分け表示しない
 	pType->colorInfoArr[COLORIDX_WSTRING].bDisp = false;	// Sept. 4, 2000 JEPRO	ダブルクォーテーション文字列を色分け表示しない
 	pType->bKinsokuHead = false;								// 行頭禁則				//@@@ 2002.04.08 MIK

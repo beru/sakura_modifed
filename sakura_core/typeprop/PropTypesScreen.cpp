@@ -77,21 +77,21 @@ static const DWORD p_helpids1[] = {	//11300
 
 
 // アウトライン解析方法・標準ルール
-TYPE_NAME_ID<EOutlineType> OlmArr[] = {
-//	{ OUTLINE_C,		_T("C") },
-	{ OUTLINE_CPP,		STR_OUTLINE_CPP },
-	{ OUTLINE_PLSQL,	STR_OUTLINE_PLSQL },
-	{ OUTLINE_JAVA,		STR_OUTLINE_JAVA },
-	{ OUTLINE_COBOL,	STR_OUTLINE_COBOL },
-	{ OUTLINE_PERL,		STR_OUTLINE_PERL },			// Sep. 8, 2000 genta
-	{ OUTLINE_ASM,		STR_OUTLINE_ASM },
-	{ OUTLINE_VB,		STR_OUTLINE_VB },			// 2001/06/23 N.Nakatani
-	{ OUTLINE_PYTHON,	STR_OUTLINE_PYTHON },		// 2007.02.08 genta
-	{ OUTLINE_ERLANG,	STR_OUTLINE_ERLANG },		// 2009.08.10 genta
-	{ OUTLINE_WZTXT,	STR_OUTLINE_WZ },			// 2003.05.20 zenryaku, 2003.06.23 Moca 名称変更
-	{ OUTLINE_HTML,		STR_OUTLINE_HTML },			// 2003.05.20 zenryaku
-	{ OUTLINE_TEX,		STR_OUTLINE_TEX },			// 2003.07.20 naoh
-	{ OUTLINE_TEXT,		STR_OUTLINE_TEXT }			// Jul. 08, 2001 JEPRO 常に最後尾におく
+TYPE_NAME_ID<OutlineType> OlmArr[] = {
+//	{ OutlineType::C,		_T("C") },
+	{ OutlineType::CPP,		STR_OUTLINE_CPP },
+	{ OutlineType::PLSQL,	STR_OUTLINE_PLSQL },
+	{ OutlineType::Java,	STR_OUTLINE_JAVA },
+	{ OutlineType::Cobol,	STR_OUTLINE_COBOL },
+	{ OutlineType::Perl,	STR_OUTLINE_PERL },			// Sep. 8, 2000 genta
+	{ OutlineType::Asm,		STR_OUTLINE_ASM },
+	{ OutlineType::VisualBasic,		STR_OUTLINE_VB },			// 2001/06/23 N.Nakatani
+	{ OutlineType::Python,	STR_OUTLINE_PYTHON },		// 2007.02.08 genta
+	{ OutlineType::Erlang,	STR_OUTLINE_ERLANG },		// 2009.08.10 genta
+	{ OutlineType::WZText,	STR_OUTLINE_WZ },			// 2003.05.20 zenryaku, 2003.06.23 Moca 名称変更
+	{ OutlineType::HTML,	STR_OUTLINE_HTML },			// 2003.05.20 zenryaku
+	{ OutlineType::TeX,		STR_OUTLINE_TEX },			// 2003.07.20 naoh
+	{ OutlineType::Text,	STR_OUTLINE_TEXT }			// Jul. 08, 2001 JEPRO 常に最後尾におく
 };
 
 TYPE_NAME_ID<TabArrowType> TabArrowArr[] = {
@@ -124,7 +124,7 @@ TYPE_NAME_ID<TextWrappingMethod> WrapMethodArr[] = {
 };
 
 // 静的メンバ
-std::vector<TYPE_NAME_ID2<EOutlineType>> PropTypes::m_OlmArr;	// アウトライン解析ルール配列
+std::vector<TYPE_NAME_ID2<OutlineType>> PropTypes::m_OlmArr;	// アウトライン解析ルール配列
 std::vector<TYPE_NAME_ID2<SmartIndentType>> PropTypes::m_SIndentArr;	// スマートインデントルール配列
 
 // スクリーンタブの初期化
@@ -543,7 +543,7 @@ void PropTypesScreen::SetData(HWND hwndDlg)
 		::DlgItem_SetText(hwndDlg, IDC_EDIT_OUTLINERULEFILE, m_types.szOutlineRuleFilename);
 
 		// 標準ルール
-		if (m_types.eDefaultOutline != OUTLINE_FILE) {
+		if (m_types.eDefaultOutline != OutlineType::RuleFile) {
 			::CheckDlgButton(hwndDlg, IDC_RADIO_OUTLINEDEFAULT, TRUE);
 			::CheckDlgButton(hwndDlg, IDC_RADIO_OUTLINERULEFILE, FALSE);
 
@@ -701,7 +701,7 @@ int PropTypesScreen::GetData(HWND hwndDlg)
 			}
 		// ルールファイル
 		}else {
-			m_types.eDefaultOutline = OUTLINE_FILE;
+			m_types.eDefaultOutline = OutlineType::RuleFile;
 		}
 
 		// ルールファイル	// 2003.06.23 Moca ルールを使っていなくてもファイル名を保持
@@ -742,13 +742,13 @@ int PropTypesScreen::GetData(HWND hwndDlg)
 }
 
 // アウトライン解析ルールの追加
-void PropTypesScreen::AddOutlineMethod(int nMethod, const WCHAR* szName)
+void PropTypesScreen::AddOutlineMethod(OutlineType nMethod, const WCHAR* szName)
 {
 	if (m_OlmArr.empty()) {
 		InitTypeNameId2(m_OlmArr, OlmArr, _countof(OlmArr));	// アウトライン解析ルール
 	}
-	TYPE_NAME_ID2<EOutlineType> method;
-	method.nMethod = (EOutlineType)nMethod;
+	TYPE_NAME_ID2<OutlineType> method;
+	method.nMethod = (OutlineType)nMethod;
 	method.nNameId = 0;
 	const TCHAR* tszName = to_tchar(szName);
 	TCHAR* pszName = new TCHAR[_tcslen(tszName) + 1];
@@ -757,11 +757,11 @@ void PropTypesScreen::AddOutlineMethod(int nMethod, const WCHAR* szName)
 	m_OlmArr.push_back(method);
 }
 
-void PropTypesScreen::RemoveOutlineMethod(int nMethod, const WCHAR* szName)
+void PropTypesScreen::RemoveOutlineMethod(OutlineType nMethod, const WCHAR* szName)
 {
 	int nSize = (int)m_OlmArr.size();
 	for (int i=0; i<nSize; ++i) {
-		if (m_OlmArr[i].nMethod == (EOutlineType)nMethod) {
+		if (m_OlmArr[i].nMethod == nMethod) {
 			delete [] m_OlmArr[i].pszName;
 			m_OlmArr.erase(m_OlmArr.begin() + i);
 			break;

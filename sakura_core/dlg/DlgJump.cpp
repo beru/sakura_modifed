@@ -204,7 +204,7 @@ void DlgJump::SetData(void)
 	// PL/SQL関数リスト作成
 	HWND hwndCtrl = GetItemHwnd(IDC_COMBO_PLSQLBLOCKS);
 	// タイプ別に設定されたアウトライン解析方法
-	if (pEditDoc->m_docType.GetDocumentAttribute().eDefaultOutline == OUTLINE_PLSQL) {
+	if (pEditDoc->m_docType.GetDocumentAttribute().eDefaultOutline == OutlineType::PLSQL) {
 		pEditDoc->m_docOutline.MakeFuncList_PLSQL(&funcInfoArr);
 	}
 	//$$ 条件により、レイアウト・ロジックの単位が混在するため、ミスの原因になりやすい

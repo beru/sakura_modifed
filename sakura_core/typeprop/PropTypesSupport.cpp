@@ -299,7 +299,7 @@ void PropTypesSupport::RemoveHokanMethod(int nMethod, const WCHAR* szName)
 {
 	int nSize = GetHokanMethodList()->size();
 	for (int i=0; i<nSize; ++i) {
-		if ((*GetHokanMethodList())[i].nMethod == (EOutlineType)nMethod) {
+		if ((*GetHokanMethodList())[i].nMethod == nMethod) {
 			GetHokanMethodList()->erase(GetHokanMethodList()->begin() + i);
 			break;
 		}

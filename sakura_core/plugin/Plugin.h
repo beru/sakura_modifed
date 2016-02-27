@@ -147,8 +147,8 @@ public:
 	 *   +------------+------------+----+------------+
 	 *   ‚à‚µ‘«‚è‚È‚¯‚ê‚ÎA22000`23999‚ğ•¥‚¢o‚µ‚ÄH‚¢‚Â‚Ô‚·
 	 *************************************************************************/
-	static EOutlineType GetOutlineType(EFunctionCode nFunctionCode) {
-		return static_cast<EOutlineType>(nFunctionCode);
+	static OutlineType GetOutlineType(EFunctionCode nFunctionCode) {
+		return static_cast<OutlineType>(nFunctionCode);
 	}
 
 	static SmartIndentType GetSmartIndentType(EFunctionCode nFunctionCode) {

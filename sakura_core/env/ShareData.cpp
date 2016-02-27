@@ -531,7 +531,7 @@ bool ShareData::InitShareData()
 			outline.cyOutlineDockTop			=	0;		// アウトラインの上ドッキング高
 			outline.cxOutlineDockRight		=	0;		// アウトラインの右ドッキング幅
 			outline.cyOutlineDockBottom		=	0;		// アウトラインの下ドッキング高
-			outline.nDockOutline = OUTLINE_TEXT;
+			outline.nDockOutline = OutlineType::Text;
 			outline.bAutoCloseDlgFuncList = FALSE;		// アウトライン ダイアログを自動的に閉じる					//Nov. 18, 2000 JEPRO TRUE→FALSE に変更
 			outline.bMarkUpBlankLineEnable	=	FALSE;	// アウトラインダイアログでブックマークの空行を無視			2002.02.08 aroka,hor
 			outline.bFunclistSetFocusOnJump	=	FALSE;	// アウトラインダイアログでジャンプしたらフォーカスを移す	2002.02.08 hor

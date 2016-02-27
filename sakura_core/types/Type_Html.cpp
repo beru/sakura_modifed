@@ -42,10 +42,10 @@ void CType_Html::InitTypeConfigImp(TypeConfig* pType)
 
 	// 設定
 	pType->blockComments[0].SetBlockCommentRule(L"<!--", L"-->");	// ブロックコメントデリミタ
-	pType->stringType = StringLiteralType::HTML;							// 文字列区切り記号エスケープ方法
+	pType->stringType = StringLiteralType::HTML;					// 文字列区切り記号エスケープ方法
 	pType->bStringLineOnly = true;									// 文字列は行内のみ
-	pType->nKeywordSetIdx[0] = 1;										// キーワードセット
-	pType->eDefaultOutline = OUTLINE_HTML;							// アウトライン解析方法
+	pType->nKeywordSetIdx[0] = 1;									// キーワードセット
+	pType->eDefaultOutline = OutlineType::HTML;						// アウトライン解析方法
 	pType->colorInfoArr[COLORIDX_SSTRING].bDisp = true;				// シングルクォートの色分けOFF
 }
 

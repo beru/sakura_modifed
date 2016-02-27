@@ -171,25 +171,25 @@ int CALLBACK DlgFuncList::CompareFunc_Desc(LPARAM lParam1, LPARAM lParam2, LPARA
 	return -1 * CompareFunc_Asc(lParam1, lParam2, lParamSort);
 }
 
-EFunctionCode DlgFuncList::GetFuncCodeRedraw(int outlineType)
+EFunctionCode DlgFuncList::GetFuncCodeRedraw(OutlineType outlineType)
 {
-	if (outlineType == OUTLINE_BOOKMARK) {
+	if (outlineType == OutlineType::BookMark) {
 		return F_BOOKMARK_VIEW;
-	}else if (outlineType == OUTLINE_FILETREE) {
+	}else if (outlineType == OutlineType::FileTree) {
 		return F_FILETREE;
 	}
 	return F_OUTLINE;
 }
 
 static
-int GetOutlineTypeRedraw(int outlineType)
+OutlineType GetOutlineTypeRedraw(OutlineType outlineType)
 {
-	if (outlineType == OUTLINE_BOOKMARK) {
-		return OUTLINE_BOOKMARK;
-	}else if (outlineType == OUTLINE_FILETREE) {
-		return OUTLINE_FILETREE;
+	if (outlineType == OutlineType::BookMark) {
+		return OutlineType::BookMark;
+	}else if (outlineType == OutlineType::FileTree) {
+		return OutlineType::FileTree;
 	}
-	return OUTLINE_DEFAULT;
+	return OutlineType::Default;
 }
 
 LPDLGTEMPLATE DlgFuncList::m_pDlgTemplate = NULL;
@@ -203,8 +203,8 @@ DlgFuncList::DlgFuncList() : Dialog(true)
 
 	m_pFuncInfoArr = NULL;		// 関数情報配列
 	m_nCurLine = LayoutInt(0);				// 現在行
-	m_nOutlineType = OUTLINE_DEFAULT;
-	m_nListType = OUTLINE_DEFAULT;
+	m_nOutlineType = OutlineType::Default;
+	m_nListType = OutlineType::Default;
 	//	Apr. 23, 2005 genta 行番号を左端へ
 	m_nSortCol = 0;				// ソートする列番号 2004.04.06 zenryaku 標準は行番号(1列目)
 	m_nSortColOld = -1;
@@ -321,7 +321,7 @@ INT_PTR DlgFuncList::DispatchEvent(
 			if (pNMHDR->code == TVN_ITEMEXPANDING) {
 				NMTREEVIEW* pNMTREEVIEW = (NMTREEVIEW*)lParam;
 				TVITEM* pItem = &(pNMTREEVIEW->itemNew);
-				if (m_nListType == OUTLINE_FILETREE) {
+				if (m_nListType == OutlineType::FileTree) {
 					SetTreeFileSub( pItem->hItem, NULL );
 				}
 			}
@@ -346,8 +346,8 @@ HWND DlgFuncList::DoModeless(
 	FuncInfoArr*	pFuncInfoArr,
 	LayoutInt		nCurLine,
 	LayoutInt		nCurCol,
-	int				nOutlineType,		
-	int				nListType,
+	OutlineType		nOutlineType,		
+	OutlineType		nListType,
 	bool			bLineNumIsCRLF		// 行番号の表示 false=折り返し単位／true=改行単位
 	)
 {
@@ -362,16 +362,16 @@ HWND DlgFuncList::DoModeless(
 	m_nListType = nListType;			// 一覧の種類
 	m_bLineNumIsCRLF = bLineNumIsCRLF;	// 行番号の表示 false=折り返し単位／true=改行単位
 	m_nDocType = pEditView->GetDocument()->m_docType.GetDocumentType().GetIndex();
-	DocTypeManager().GetTypeConfig(TypeConfigNum(m_nDocType), type);
-	m_nSortCol = type.nOutlineSortCol;
+	DocTypeManager().GetTypeConfig(TypeConfigNum(m_nDocType), m_type);
+	m_nSortCol = m_type.nOutlineSortCol;
 	m_nSortColOld = m_nSortCol;
-	m_bSortDesc = type.bOutlineSortDesc;
-	m_nSortType = type.nOutlineSortType;
+	m_bSortDesc = m_type.bOutlineSortDesc;
+	m_nSortType = m_type.nOutlineSortType;
 
 	bool bType = (ProfDockSet() != 0);
 	if (bType) {
-		type.nDockOutline = m_nOutlineType;
-		SetTypeConfig(TypeConfigNum(m_nDocType), type);
+		m_type.nDockOutline = m_nOutlineType;
+		SetTypeConfig(TypeConfigNum(m_nDocType), m_type);
 	}else {
 		CommonSet().nDockOutline = m_nOutlineType;
 	}
@@ -438,73 +438,73 @@ void DlgFuncList::SetData()
 	SetDocLineFuncList();
 	
 	switch (m_nListType) {
-	case OUTLINE_CPP:	// C++メソッドリスト
+	case OutlineType::CPP:	// C++メソッドリスト
 		m_nViewType = VIEWTYPE_TREE;
 		SetTreeJava(GetHwnd(), true);	// Jan. 04, 2002 genta Java Method Treeに統合
 		::SetWindowText(GetHwnd(), LS(STR_DLGFNCLST_TITLE_CPP));
 		break;
-	case OUTLINE_FILE:	//@@@ 2002.04.01 YAZAKI アウトライン解析にルールファイル導入
+	case OutlineType::RuleFile:	//@@@ 2002.04.01 YAZAKI アウトライン解析にルールファイル導入
 		m_nViewType = VIEWTYPE_TREE;
 		SetTree();
 		::SetWindowText(GetHwnd(), LS(STR_DLGFNCLST_TITLE_RULE));
 		break;
-	case OUTLINE_WZTXT: //@@@ 2003.05.20 zenryaku 階層付テキストアウトライン解析
+	case OutlineType::WZText: //@@@ 2003.05.20 zenryaku 階層付テキストアウトライン解析
 		m_nViewType = VIEWTYPE_TREE;
 		SetTree();
 		::SetWindowText(GetHwnd(), LS(STR_DLGFNCLST_TITLE_WZ)); //	2003.06.22 Moca 名前変更
 		break;
-	case OUTLINE_HTML: //@@@ 2003.05.20 zenryaku HTMLアウトライン解析
+	case OutlineType::HTML: //@@@ 2003.05.20 zenryaku HTMLアウトライン解析
 		m_nViewType = VIEWTYPE_TREE;
 		SetTree();
 		::SetWindowText(GetHwnd(), _T("HTML"));
 		break;
-	case OUTLINE_TEX: //@@@ 2003.07.20 naoh TeXアウトライン解析
+	case OutlineType::TeX: //@@@ 2003.07.20 naoh TeXアウトライン解析
 		m_nViewType = VIEWTYPE_TREE;
 		SetTree();
 		::SetWindowText(GetHwnd(), _T("TeX"));
 		break;
-	case OUTLINE_TEXT: // テキスト・トピックリスト
+	case OutlineType::Text: // テキスト・トピックリスト
 		m_nViewType = VIEWTYPE_TREE;
 		SetTree();	//@@@ 2002.04.01 YAZAKI テキストトピックツリーも、汎用SetTreeを呼ぶように変更。
 		::SetWindowText(GetHwnd(), LS(STR_DLGFNCLST_TITLE_TEXT));
 		break;
-	case OUTLINE_JAVA: // Javaメソッドツリー
+	case OutlineType::Java: // Javaメソッドツリー
 		m_nViewType = VIEWTYPE_TREE;
 		SetTreeJava(GetHwnd(), true);
 		::SetWindowText(GetHwnd(), LS(STR_DLGFNCLST_TITLE_JAVA));
 		break;
 	//	2007.02.08 genta Python追加
-	case OUTLINE_PYTHON: // Python メソッドツリー
+	case OutlineType::Python: // Python メソッドツリー
 		m_nViewType = VIEWTYPE_TREE;
 		SetTree(true);
 		::SetWindowText(GetHwnd(), LS(STR_DLGFNCLST_TITLE_PYTHON));
 		break;
-	case OUTLINE_COBOL: // COBOL アウトライン
+	case OutlineType::Cobol: // COBOL アウトライン
 		m_nViewType = VIEWTYPE_TREE;
 		SetTreeJava(GetHwnd(), false);
 		::SetWindowText(GetHwnd(), LS(STR_DLGFNCLST_TITLE_COBOL));
 		break;
-	case OUTLINE_VB:	// VisualBasic アウトライン
+	case OutlineType::VisualBasic:	// VisualBasic アウトライン
 		m_nViewType = VIEWTYPE_LIST;
 		SetListVB();
 		::SetWindowText(GetHwnd(), LS(STR_DLGFNCLST_TITLE_VB));
 		break;
-	case OUTLINE_FILETREE:
+	case OutlineType::FileTree:
 		m_nViewType = VIEWTYPE_TREE;
 		SetTreeFile();
 		::SetWindowText( GetHwnd(), LS(F_FILETREE) );	// ファイルツリー
 		break;
-	case OUTLINE_TREE: // 汎用ツリー
+	case OutlineType::Tree: // 汎用ツリー
 		m_nViewType = VIEWTYPE_TREE;
 		SetTree();
 		::SetWindowText(GetHwnd(), _T(""));
 		break;
-	case OUTLINE_TREE_TAGJUMP: // 汎用ツリー(タグジャンプ付き)
+	case OutlineType::TreeTagJump: // 汎用ツリー(タグジャンプ付き)
 		m_nViewType = VIEWTYPE_TREE;
 		SetTree(true);
 		::SetWindowText(GetHwnd(), _T(""));
 		break;
-	case OUTLINE_CLSTREE: // 汎用クラスツリー
+	case OutlineType::ClassTree: // 汎用クラスツリー
 		m_nViewType = VIEWTYPE_TREE;
 		SetTreeJava(GetHwnd(), true);
 		::SetWindowText(GetHwnd(), _T(""));
@@ -512,27 +512,27 @@ void DlgFuncList::SetData()
 	default:
 		m_nViewType = VIEWTYPE_LIST;
 		switch (m_nListType) {
-		case OUTLINE_C:
+		case OutlineType::C:
 			::SetWindowText(GetHwnd(), LS(STR_DLGFNCLST_TITLE_C));
 			break;
-		case OUTLINE_PLSQL:
+		case OutlineType::PLSQL:
 			::SetWindowText(GetHwnd(), LS(STR_DLGFNCLST_TITLE_PLSQL));
 			break;
-		case OUTLINE_ASM:
+		case OutlineType::Asm:
 			::SetWindowText(GetHwnd(), LS(STR_DLGFNCLST_TITLE_ASM));
 			break;
-		case OUTLINE_PERL:	//	Sep. 8, 2000 genta
+		case OutlineType::Perl:	//	Sep. 8, 2000 genta
 			::SetWindowText(GetHwnd(), LS(STR_DLGFNCLST_TITLE_PERL));
 			break;
 // Jul 10, 2003  little YOSHI  上に移動しました--->>
-//		case OUTLINE_VB:	// 2001/06/23 N.Nakatani for Visual Basic
+//		case OutlineType::VisualBasic:	// 2001/06/23 N.Nakatani for Visual Basic
 //			::SetWindowText(GetHwnd(), "Visual Basic アウトライン");
 //			break;
 // <<---ここまで
-		case OUTLINE_ERLANG:	//	2009.08.10 genta
+		case OutlineType::Erlang:	//	2009.08.10 genta
 			::SetWindowText(GetHwnd(), LS(STR_DLGFNCLST_TITLE_ERLANG));
 			break;
-		case OUTLINE_BOOKMARK:
+		case OutlineType::BookMark:
 			LV_COLUMN col;
 			col.mask = LVCF_TEXT;
 			col.pszText = const_cast<TCHAR*>(LS(STR_DLGFNCLST_LIST_TEXT));
@@ -541,7 +541,7 @@ void DlgFuncList::SetData()
 			ListView_SetColumn(hwndList, FL_COL_NAME, &col);
 			::SetWindowText(GetHwnd(), LS(STR_DLGFNCLST_TITLE_BOOK));
 			break;
-		case OUTLINE_LIST:	// 汎用リスト 2010.03.28 syat
+		case OutlineType::List:	// 汎用リスト 2010.03.28 syat
 			::SetWindowText(GetHwnd(), _T(""));
 			break;
 		}
@@ -745,7 +745,7 @@ void DlgFuncList::SetData()
 
 	// 2002.02.08 hor
 	// 空行をどう扱うかのチェックボックスはブックマーク一覧のときだけ表示する
-	if (m_nListType == OUTLINE_BOOKMARK) {
+	if (m_nListType == OutlineType::BookMark) {
 		EnableItem(IDC_CHECK_bMarkUpBlankLineEnable, true);
 		if (!IsDocking()) {
 			::ShowWindow(GetItemHwnd(IDC_CHECK_bMarkUpBlankLineEnable), SW_SHOW);
@@ -761,14 +761,14 @@ void DlgFuncList::SetData()
 	if (nDocType != m_nDocType) {
 		// 以前とはドキュメントタイプが変わったので初期化する
 		m_nDocType = nDocType;
-		m_nSortCol = type.nOutlineSortCol;
+		m_nSortCol = m_type.nOutlineSortCol;
 		m_nSortColOld = m_nSortCol;
-		m_bSortDesc = type.bOutlineSortDesc;
-		m_nSortType = type.nOutlineSortType;
+		m_bSortDesc = m_type.bOutlineSortDesc;
+		m_nSortType = m_type.nOutlineSortType;
 	}
-	if (m_nViewType == VIEWTYPE_TREE && m_nListType != OUTLINE_FILETREE) {
+	if (m_nViewType == VIEWTYPE_TREE && m_nListType != OutlineType::FileTree) {
 		HWND hWnd_Combo_Sort = GetItemHwnd(IDC_COMBO_nSortType);
-		if (m_nListType == OUTLINE_FILETREE) {
+		if (m_nListType == OutlineType::FileTree) {
 			::EnableWindow(hWnd_Combo_Sort, FALSE);
 		}else {
 			::EnableWindow(hWnd_Combo_Sort, TRUE);
@@ -783,7 +783,7 @@ void DlgFuncList::SetData()
 		if (m_nSortType == 1) {
 			SortTree(::GetDlgItem(GetHwnd() , IDC_TREE_FL), TVI_ROOT);
 		}
-	}else if (m_nListType == OUTLINE_FILETREE) {
+	}else if (m_nListType == OutlineType::FileTree) {
 		::ShowWindow(GetItemHwnd(IDC_COMBO_nSortType), SW_HIDE);
 		::ShowWindow(GetItemHwnd(IDC_STATIC_nSortType), SW_HIDE);
 		::ShowWindow(GetItemHwnd(IDC_BUTTON_SETTING), SW_SHOW);
@@ -867,7 +867,7 @@ int DlgFuncList::GetData(void)
 				if (0 <= tvi.lParam) {
 					m_funcInfo = m_pFuncInfoArr->GetAt(tvi.lParam);
 				}else {
-					if (m_nListType == OUTLINE_FILETREE) {
+					if (m_nListType == OutlineType::FileTree) {
 						if (tvi.lParam == -1) {
 							int nItem;
 							if (!GetTreeFileFullName(hwndTree, htiItem, &m_sJumpFile, &nItem)) {
@@ -1603,10 +1603,10 @@ end_of_func:;
 
 void DlgFuncList::SetDocLineFuncList()
 {
-	if (m_nOutlineType == OUTLINE_BOOKMARK) {
+	if (m_nOutlineType == OutlineType::BookMark) {
 		return;
 	}
-	if (m_nOutlineType == OUTLINE_FILETREE) {
+	if (m_nOutlineType == OutlineType::FileTree) {
 		return;
 	}
 	EditView* pEditView = (EditView*)m_lParam;
@@ -1905,11 +1905,11 @@ BOOL DlgFuncList::OnInitDialog(
 	if (!m_bInChangeLayout) {	// ChangeLayout() 処理中は設定変更しない
 		bool bType = (ProfDockSet() != 0);
 		if (bType) {
-			DocTypeManager().GetTypeConfig(TypeConfigNum(m_nDocType), type);
+			DocTypeManager().GetTypeConfig(TypeConfigNum(m_nDocType), m_type);
 		}
 		ProfDockDisp() = TRUE;
 		if (bType) {
-			SetTypeConfig(TypeConfigNum(m_nDocType), type);
+			SetTypeConfig(TypeConfigNum(m_nDocType), m_type);
 
 		}
 		// 他ウィンドウに変更を通知する
@@ -2056,11 +2056,11 @@ BOOL DlgFuncList::OnBnClicked(int wID)
 		m_pShareData->common.outline.bMarkUpBlankLineEnable = IsButtonChecked(IDC_CHECK_bMarkUpBlankLineEnable);
 		m_pShareData->common.outline.bFunclistSetFocusOnJump = IsButtonChecked(IDC_CHECK_bFunclistSetFocusOnJump);
 		EnableItem(IDC_CHECK_bFunclistSetFocusOnJump, !m_pShareData->common.outline.bAutoCloseDlgFuncList);
-		if (wID == IDC_CHECK_bMarkUpBlankLineEnable&&m_nListType == OUTLINE_BOOKMARK) {
+		if (wID == IDC_CHECK_bMarkUpBlankLineEnable&&m_nListType == OutlineType::BookMark) {
 			EditView* pEditView = (EditView*)m_lParam;
 			pEditView->GetCommander().HandleCommand(F_BOOKMARK_VIEW, true, TRUE, 0, 0, 0);
 			m_nCurLine=pEditView->GetCaret().GetCaretLayoutPos().GetY2() + LayoutInt(1);
-			DocTypeManager().GetTypeConfig(pEditView->GetDocument()->m_docType.GetDocumentType(), type);
+			DocTypeManager().GetTypeConfig(pEditView->GetDocument()->m_docType.GetDocumentType(), m_type);
 			SetData();
 		}else
 		if (m_nViewType == VIEWTYPE_TREE) {
@@ -2259,7 +2259,7 @@ void DlgFuncList::SortListView(
 		col.mask = LVCF_TEXT;
 	// From Here 2001.12.03 hor
 	//	col.pszText = _T("関数名 *");
-		if (m_nListType == OUTLINE_BOOKMARK) {
+		if (m_nListType == OutlineType::BookMark) {
 			col.pszText = const_cast<TCHAR*>(sortcol == col_no ? LS(STR_DLGFNCLST_LIST_TEXT_M) : LS(STR_DLGFNCLST_LIST_TEXT));
 		}else {
 			col.pszText = const_cast<TCHAR*>(sortcol == col_no ? LS(STR_DLGFNCLST_LIST_FUNC_M) : LS(STR_DLGFNCLST_LIST_FUNC));
@@ -2410,11 +2410,11 @@ BOOL DlgFuncList::OnDestroy(void)
 	if (hwndEdit && ::IsWindowVisible(hwndEdit) && !m_bInChangeLayout) {	// ChangeLayout() 処理中は設定変更しない
 		bool bType = (ProfDockSet() != 0);
 		if (bType) {
-			DocTypeManager().GetTypeConfig(TypeConfigNum(m_nDocType), type);
+			DocTypeManager().GetTypeConfig(TypeConfigNum(m_nDocType), m_type);
 		}
 		ProfDockDisp() = FALSE;
 		if (bType) {
-			SetTypeConfig(TypeConfigNum(m_nDocType), type);
+			SetTypeConfig(TypeConfigNum(m_nDocType), m_type);
 		}
 		// 他ウィンドウに変更を通知する
 		if (ProfDockSync()) {
@@ -2617,8 +2617,8 @@ void DlgFuncList::Key2Command(WORD KeyCode)
 	@date 2002.10.05 genta
 */
 void DlgFuncList::Redraw(
-	int nOutLineType,
-	int nListType,
+	OutlineType nOutLineType,
+	OutlineType nListType,
 	FuncInfoArr* pFuncInfoArr,
 	LayoutInt nCurLine,
 	LayoutInt nCurCol
@@ -2626,7 +2626,7 @@ void DlgFuncList::Redraw(
 {
 	EditView* pEditView = (EditView*)m_lParam;
 	m_nDocType = pEditView->GetDocument()->m_docType.GetDocumentType().GetIndex();
-	DocTypeManager().GetTypeConfig(TypeConfigNum(m_nDocType), type);
+	DocTypeManager().GetTypeConfig(TypeConfigNum(m_nDocType), m_type);
 	SyncColor();
 
 	m_nOutlineType = nOutLineType;
@@ -2637,8 +2637,8 @@ void DlgFuncList::Redraw(
 
 	bool bType = (ProfDockSet() != 0);
 	if (bType) {
-		type.nDockOutline = m_nOutlineType;
-		SetTypeConfig( TypeConfigNum(m_nDocType), type );
+		m_type.nDockOutline = m_nOutlineType;
+		SetTypeConfig( TypeConfigNum(m_nDocType), m_type );
 	}else {
 		CommonSet().nDockOutline = m_nOutlineType;
 	}
@@ -3050,7 +3050,7 @@ INT_PTR DlgFuncList::OnMouseMove(
 		GetWindowRect(&rc);
 		bool bType = (ProfDockSet() != 0);
 		if (bType) {
-			DocTypeManager().GetTypeConfig(TypeConfigNum(m_nDocType), type);
+			DocTypeManager().GetTypeConfig(TypeConfigNum(m_nDocType), m_type);
 		}
 		switch (GetDockSide()) {
 		case DockSideType::Left:	ProfDockLeft() = rc.right - rc.left;	break;
@@ -3059,7 +3059,7 @@ INT_PTR DlgFuncList::OnMouseMove(
 		case DockSideType::Bottom:	ProfDockBottom() = rc.bottom - rc.top;	break;
 		}
 		if (bType) {
-			SetTypeConfig(TypeConfigNum(m_nDocType), type);
+			SetTypeConfig(TypeConfigNum(m_nDocType), m_type);
 		}
 		return 1L;
 	}
@@ -3293,7 +3293,7 @@ void DlgFuncList::DoMenu(POINT pt, HWND hwndFrom)
 {
 	// メニューを作成する
 	EditView* pEditView = &EditDoc::GetInstance(0)->m_pEditWnd->GetActiveView();
-	DocTypeManager().GetTypeConfig(TypeConfigNum(m_nDocType), type);
+	DocTypeManager().GetTypeConfig(TypeConfigNum(m_nDocType), m_type);
 	DockSideType dockSideType = ProfDockSide();	// 設定上の配置
 	UINT uFlags = MF_BYPOSITION | MF_STRING;
 	HMENU hMenu = ::CreatePopupMenu();
@@ -3418,7 +3418,7 @@ void DlgFuncList::DoMenu(POINT pt, HWND hwndFrom)
 		dockSideType = DockSideType(nId - 100);	// 新しいドッキングモード
 		bool bType = (ProfDockSet() != 0);
 		if (bType) {
-			DocTypeManager().GetTypeConfig(TypeConfigNum(m_nDocType), type);
+			DocTypeManager().GetTypeConfig(TypeConfigNum(m_nDocType), m_type);
 		}
 		if (dockSideType > DockSideType::Float) {
 			switch (dockSideType) {
@@ -3454,7 +3454,7 @@ void DlgFuncList::DoMenu(POINT pt, HWND hwndFrom)
 		ProfDockDisp() = GetHwnd()? TRUE: FALSE;
 		ProfDockSide() = dockSideType;	// 新しいドッキングモードを適用
 		if (bType) {
-			SetTypeConfig(TypeConfigNum(m_nDocType), type);
+			SetTypeConfig(TypeConfigNum(m_nDocType), m_type);
 		}
 		ChangeLayout(OUTLINE_LAYOUT_FOREGROUND);	// 自分自身への強制変更
 		if (ProfDockSync()) {
@@ -3471,7 +3471,7 @@ void DlgFuncList::Refresh(void)
 	EditWnd* pEditWnd = EditDoc::GetInstance(0)->m_pEditWnd;
 	BOOL bReloaded = ChangeLayout(OUTLINE_LAYOUT_FILECHANGED);	// 現在設定に従ってアウトライン画面を再配置する
 	if (!bReloaded && pEditWnd->m_dlgFuncList.GetHwnd()) {
-		int nOutlineType = GetOutlineTypeRedraw(m_nOutlineType);
+		OutlineType nOutlineType = GetOutlineTypeRedraw(m_nOutlineType);
 		pEditWnd->GetActiveView().GetCommander().Command_FUNCLIST(ShowDialogType::Reload, nOutlineType);	// 開く	※ HandleCommand(F_OUTLINE,...) だと印刷プレビュー状態で実行されないので Command_FUNCLIST()
 	}
 	if (MyGetAncestor(::GetForegroundWindow(), GA_ROOTOWNER2) == pEditWnd->GetHwnd()) {
@@ -3496,7 +3496,7 @@ bool DlgFuncList::ChangeLayout(int nId)
 
 	EditDoc* pDoc = EditDoc::GetInstance(0);	// 今は非表示かもしれないので (EditView*)m_lParam は使えない
 	m_nDocType = pDoc->m_docType.GetDocumentType().GetIndex();
-	DocTypeManager().GetTypeConfig(TypeConfigNum(m_nDocType), type);
+	DocTypeManager().GetTypeConfig(TypeConfigNum(m_nDocType), m_type);
 
 	BOOL bDockDisp = ProfDockDisp();
 	DockSideType eDockSideNew = ProfDockSide();
@@ -3516,16 +3516,16 @@ bool DlgFuncList::ChangeLayout(int nId)
 			if (nId == OUTLINE_LAYOUT_BACKGROUND) {
 				::EnableWindow(pEditView->m_pEditWnd->GetHwnd(), FALSE);
 			}
-			if (m_nOutlineType == OUTLINE_DEFAULT) {
+			if (m_nOutlineType == OutlineType::Default) {
 				bool bType = (ProfDockSet() != 0);
 				if (bType) {
-					m_nOutlineType = type.nDockOutline;
-					SetTypeConfig(TypeConfigNum(m_nDocType), type);
+					m_nOutlineType = m_type.nDockOutline;
+					SetTypeConfig(TypeConfigNum(m_nDocType), m_type);
 				}else {
 					m_nOutlineType = CommonSet().nDockOutline;
 				}
 			}
-			int nOutlineType = GetOutlineTypeRedraw(m_nOutlineType);	// ブックマークかアウトライン解析かは最後に開いていた時の状態を引き継ぐ（初期状態はアウトライン解析）
+			OutlineType nOutlineType = GetOutlineTypeRedraw(m_nOutlineType);	// ブックマークかアウトライン解析かは最後に開いていた時の状態を引き継ぐ（初期状態はアウトライン解析）
 			pEditView->GetCommander().Command_FUNCLIST(ShowDialogType::Normal, nOutlineType);	// 開く	※ HandleCommand(F_OUTLINE,...) だと印刷プレビュー状態で実行されないので Command_FUNCLIST()
 			if (nId == OUTLINE_LAYOUT_BACKGROUND) {
 				::EnableWindow(pEditView->m_pEditWnd->GetHwnd(), TRUE);
@@ -3565,16 +3565,16 @@ bool DlgFuncList::ChangeLayout(int nId)
 			if (nId == OUTLINE_LAYOUT_BACKGROUND) {
 				::EnableWindow(pEditView->m_pEditWnd->GetHwnd(), FALSE);
 			}
-			if (m_nOutlineType == OUTLINE_DEFAULT) {
+			if (m_nOutlineType == OutlineType::Default) {
 				bool bType = (ProfDockSet() != 0);
 				if (bType) {
-					m_nOutlineType = type.nDockOutline;
-					SetTypeConfig(TypeConfigNum(m_nDocType), type);
+					m_nOutlineType = m_type.nDockOutline;
+					SetTypeConfig(TypeConfigNum(m_nDocType), m_type);
 				}else {
 					m_nOutlineType = CommonSet().nDockOutline;
 				}
 			}
-			int nOutlineType = GetOutlineTypeRedraw(m_nOutlineType);
+			OutlineType nOutlineType = GetOutlineTypeRedraw(m_nOutlineType);
 			pEditView->GetCommander().Command_FUNCLIST(ShowDialogType::Normal, nOutlineType);	// 開く	※ HandleCommand(F_OUTLINE,...) だと印刷プレビュー状態で実行されないので Command_FUNCLIST()
 			if (nId == OUTLINE_LAYOUT_BACKGROUND) {
 				::EnableWindow(pEditView->m_pEditWnd->GetHwnd(), TRUE);
@@ -3873,7 +3873,7 @@ BOOL DlgFuncList::Track(POINT ptDrag)
 
 				bool bType = (ProfDockSet() != 0);
 				if (bType) {
-					DocTypeManager().GetTypeConfig(TypeConfigNum(m_nDocType), type);
+					DocTypeManager().GetTypeConfig(TypeConfigNum(m_nDocType), m_type);
 				}
 				ProfDockDisp() = GetHwnd()? TRUE: FALSE;
 				ProfDockSide() = dockSideType;	// 新しいドッキングモードを適用
@@ -3884,7 +3884,7 @@ BOOL DlgFuncList::Track(POINT ptDrag)
 				case DockSideType::Bottom:	ProfDockBottom() = rc.bottom - rc.top;	break;
 				}
 				if (bType) {
-					SetTypeConfig(TypeConfigNum(m_nDocType), type);
+					SetTypeConfig(TypeConfigNum(m_nDocType), m_type);
 				}
 				ChangeLayout(OUTLINE_LAYOUT_FOREGROUND);	// 自分自身への強制変更
 				if (!IsDocking()) {
@@ -3960,7 +3960,7 @@ void DlgFuncList::LoadFileTreeSetting(
 		pFileTree = &(CommonSet().fileTree);
 		data.m_eFileTreeSettingOrgType = FileTreeSettingFromType::Common;
 	}else {
-		DocTypeManager().GetTypeConfig(TypeConfigNum(m_nDocType), type);
+		DocTypeManager().GetTypeConfig(TypeConfigNum(m_nDocType), m_type);
 		pFileTree = &(TypeSet().fileTree);
 		data.m_eFileTreeSettingOrgType = FileTreeSettingFromType::Type;
 	}

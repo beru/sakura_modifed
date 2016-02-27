@@ -51,7 +51,7 @@ public:
 	OutlineIfObj(FuncInfoArr& cFuncInfoArr)
 		:
 		WSHIfObj(L"Outline", false),
-		m_nListType(OUTLINE_PLUGIN),
+		m_nListType(OutlineType::PlugIn),
 		m_cFuncInfoArr(cFuncInfoArr)
 	{
 	}
@@ -149,7 +149,7 @@ public:
 			break;
 		case F_OL_SETLISTTYPE:			// アウトラインリスト種別を指定
 			if (!Arguments[0]) return false;
-			m_nListType = (EOutlineType)_wtol(Arguments[0]);
+			m_nListType = (OutlineType)_wtol(Arguments[0]);
 			break;
 		case F_OL_SETLABEL:				// ラベル文字列を指定
 			if (!Arguments[0] || !Arguments[1]) {
@@ -169,7 +169,7 @@ public:
 	// メンバ変数
 public:
 	tstring m_sOutlineTitle;
-	EOutlineType m_nListType;
+	OutlineType m_nListType;
 private:
 	FuncInfoArr& m_cFuncInfoArr;
 	static MacroFuncInfo m_macroFuncInfoCommandArr[];	// コマンド情報(戻り値なし)

@@ -59,9 +59,9 @@ void CType_Cpp::InitTypeConfigImp(TypeConfig* pType)
 	pType->lineComment.CopyTo(0, L"//", -1);							// 行コメントデリミタ
 	pType->blockComments[0].SetBlockCommentRule(L"/*", L"*/");			// ブロックコメントデリミタ
 	pType->blockComments[1].SetBlockCommentRule(L"#if 0", L"#endif");	// ブロックコメントデリミタ2		Jul. 11, 2001 JEPRO
-	pType->nKeywordSetIdx[0] = 0;											// キーワードセット
-	pType->eDefaultOutline = OUTLINE_CPP;									// アウトライン解析方法
-	pType->eSmartIndent = SmartIndentType::Cpp;								// スマートインデント種別
+	pType->nKeywordSetIdx[0] = 0;										// キーワードセット
+	pType->eDefaultOutline = OutlineType::CPP;							// アウトライン解析方法
+	pType->eSmartIndent = SmartIndentType::Cpp;							// スマートインデント種別
 	pType->colorInfoArr[COLORIDX_DIGIT].bDisp = true;					// 半角数値を色分け表示				Mar. 10, 2001 JEPRO
 	pType->colorInfoArr[COLORIDX_BRACKET_PAIR].bDisp = true;			// 対括弧の強調をデフォルトONに		Sep. 21, 2002 genta 
 	pType->bUseHokanByFile = true;										// 入力補完 開いているファイル内から候補を探す

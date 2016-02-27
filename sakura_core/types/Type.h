@@ -30,7 +30,9 @@
 #include "doc/BlockComment.h"
 #include "charset/charset.h"	// EncodingType
 #include "RegexKeyword.h"		// RegexKeywordInfo
+#include "env/CommonSetting.h"
 
+enum class DockSideType;
 
 //! タブ表示方法
 enum class TabArrowType {
@@ -40,33 +42,33 @@ enum class TabArrowType {
 };
 
 //! アウトライン解析の種類
-enum EOutlineType {
-	OUTLINE_C,
-	OUTLINE_CPP,
-	OUTLINE_PLSQL,
-	OUTLINE_TEXT,
-	OUTLINE_JAVA,
-	OUTLINE_COBOL,
-	OUTLINE_ASM,
-	OUTLINE_PERL,		// Sep. 8, 2000 genta
-	OUTLINE_VB,			// June 23, 2001 N.Nakatani
-	OUTLINE_WZTXT,		// 2003.05.20 zenryaku 階層付テキストアウトライン解析
-	OUTLINE_HTML,		// 2003.05.20 zenryaku HTMLアウトライン解析
-	OUTLINE_TEX,		// 2003.07.20 naoh TeXアウトライン解析
-	OUTLINE_FILE,		// 2002.04.01 YAZAKI ルールファイル用
-	OUTLINE_PYTHON,		// 2007.02.08 genta Pythonアウトライン解析
-	OUTLINE_ERLANG,		// 2009.08.10 genta Erlangアウトライン解析
+enum class OutlineType {
+	C,
+	CPP,
+	PLSQL,
+	Text,
+	Java,
+	Cobol,
+	Asm,
+	Perl,				// Sep. 8, 2000 genta
+	VisualBasic,		// June 23, 2001 N.Nakatani
+	WZText,				// 2003.05.20 zenryaku 階層付テキストアウトライン解析
+	HTML,				// 2003.05.20 zenryaku HTMLアウトライン解析
+	TeX,				// 2003.07.20 naoh TeXアウトライン解析
+	RuleFile,			// 2002.04.01 YAZAKI ルールファイル用
+	Python,				// 2007.02.08 genta Pythonアウトライン解析
+	Erlang,				// 2009.08.10 genta Erlangアウトライン解析
 	//	新しいアウトライン解析は必ずこの直前へ挿入
-	OUTLINE_CODEMAX,
-	OUTLINE_BOOKMARK,	// 2001.12.03 hor
-	OUTLINE_PLUGIN,		// 2009.10.29 syat プラグインによるアウトライン解析
-	OUTLINE_FILETREE,	//	2012.06.20 Moca ファイルツリー
-	OUTLINE_DEFAULT =-1,// 2001.12.03 hor
-	OUTLINE_UNKNOWN	= 99,
-	OUTLINE_TREE = 100,			// 汎用ツリー 2010.03.28 syat
-	OUTLINE_TREE_TAGJUMP = 101,	// 汎用ツリー(タグジャンプ付き) 2013.05.01 Moca
-	OUTLINE_CLSTREE = 200,		// 汎用ツリー(クラス) 2010.03.28 syat
-	OUTLINE_LIST = 300,			// 汎用リスト 2010.03.28 syat
+	CodeMax,
+	BookMark,			// 2001.12.03 hor
+	PlugIn,				// 2009.10.29 syat プラグインによるアウトライン解析
+	FileTree,			//	2012.06.20 Moca ファイルツリー
+	Default = -1,		// 2001.12.03 hor
+	UnknownOutlineType	= 99,
+	Tree = 100,			// 汎用ツリー 2010.03.28 syat
+	TreeTagJump = 101,	// 汎用ツリー(タグジャンプ付き) 2013.05.01 Moca
+	ClassTree = 200,	// 汎用ツリー(クラス) 2010.03.28 syat
+	List = 300,			// 汎用リスト 2010.03.28 syat
 };
 
 //! スマートインデント種別
@@ -178,8 +180,8 @@ struct TypeConfig {
 	int					cyOutlineDockTop;				//!< アウトラインの上ドッキング高
 	int					cxOutlineDockRight;				//!< アウトラインの右ドッキング幅
 	int					cyOutlineDockBottom;			//!< アウトラインの下ドッキング高
-	int					nDockOutline;					//!< ドッキング時のアウトライン/ブックマーク
-	EOutlineType		eDefaultOutline;				//!< アウトライン解析方法
+	OutlineType			nDockOutline;					//!< ドッキング時のアウトライン/ブックマーク
+	OutlineType			eDefaultOutline;				//!< アウトライン解析方法
 	SFilePath			szOutlineRuleFilename;			//!< アウトライン解析ルールファイル
 	int					nOutlineSortCol;				//!< アウトライン解析ソート列番号
 	bool				bOutlineSortDesc;				//!< アウトライン解析ソート降順

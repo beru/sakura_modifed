@@ -35,9 +35,9 @@ void CType_Ini::InitTypeConfigImp(TypeConfig* pType)
 	_tcscpy(pType->szTypeExts, _T("ini,inf,cnf,kwd,col"));
 	
 	// 設定
-	pType->lineComment.CopyTo(0, L"//", -1);					// 行コメントデリミタ
+	pType->lineComment.CopyTo(0, L"//", -1);				// 行コメントデリミタ
 	pType->lineComment.CopyTo(1, L";", -1);					// 行コメントデリミタ2
-	pType->eDefaultOutline = OUTLINE_TEXT;					// アウトライン解析方法
+	pType->eDefaultOutline = OutlineType::Text;				// アウトライン解析方法
 	pType->colorInfoArr[COLORIDX_SSTRING].bDisp = false;	// シングルクォーテーション文字列を色分け表示しない
 	pType->colorInfoArr[COLORIDX_WSTRING].bDisp = false;	// ダブルクォーテーション文字列を色分け表示しない
 }

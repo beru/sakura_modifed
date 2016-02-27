@@ -41,11 +41,11 @@ void CType_Vb::InitTypeConfigImp(TypeConfig* pType)
 
 	// 設定
 	pType->lineComment.CopyTo(0, L"'", -1);					// 行コメントデリミタ
-	pType->eDefaultOutline = OUTLINE_VB;						// アウトライン解析方法
+	pType->eDefaultOutline = OutlineType::VisualBasic;		// アウトライン解析方法
 	pType->nKeywordSetIdx[0]  = 13;							// キーワードセット
 	pType->nKeywordSetIdx[1] = 14;							// キーワードセット2
 	pType->colorInfoArr[COLORIDX_DIGIT].bDisp = true;		// 半角数値を色分け表示
-	pType->stringType = StringLiteralType::PLSQL;				// 文字列区切り記号エスケープ方法  0=[\"][\'] 1=[""]['']
+	pType->stringType = StringLiteralType::PLSQL;			// 文字列区切り記号エスケープ方法  0=[\"][\'] 1=[""]['']
 	pType->colorInfoArr[COLORIDX_SSTRING].bDisp = false;	// シングルクォーテーション文字列を色分け表示しない
 	pType->bStringLineOnly = true; // 文字列は行内のみ
 }
@@ -66,7 +66,7 @@ void CType_Vb::InitTypeConfigImp(TypeConfig* pType)
 void DocOutline::MakeFuncList_VisualBasic(FuncInfoArr* pFuncInfoArr)
 {
 	const int	nMaxWordLeng = 255;	// Aug 7, 2003 little YOSHI  VBの名前付け規則より255文字に拡張
-	LogicInt		nLineLen = LogicInt(0);//: 2002/2/3 aroka 警告対策：初期化
+	LogicInt	nLineLen = LogicInt(0);//: 2002/2/3 aroka 警告対策：初期化
 	int			nCharChars;
 	wchar_t		szWordPrev[256];	// Aug 7, 2003 little YOSHI  VBの名前付け規則より255文字に拡張
 	wchar_t		szWord[256];		// Aug 7, 2003 little YOSHI  VBの名前付け規則より255文字に拡張

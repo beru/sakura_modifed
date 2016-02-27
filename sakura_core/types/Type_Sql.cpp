@@ -39,10 +39,10 @@ void CType_Sql::InitTypeConfigImp(TypeConfig* pType)
 	// 設定
 	pType->lineComment.CopyTo(0, L"--", -1);					// 行コメントデリミタ
 	pType->blockComments[0].SetBlockCommentRule(L"/*", L"*/");	// ブロックコメントデリミタ
-	pType->stringType = StringLiteralType::PLSQL;					// 文字列区切り記号エスケープ方法  0=[\"][\'] 1=[""]['']
+	pType->stringType = StringLiteralType::PLSQL;				// 文字列区切り記号エスケープ方法  0=[\"][\'] 1=[""]['']
 	wcscpy_s(pType->szIndentChars, L"|★");						// その他のインデント対象文字
-	pType->nKeywordSetIdx[0] = 2;									// キーワードセット
-	pType->eDefaultOutline = OUTLINE_PLSQL;						// アウトライン解析方法
+	pType->nKeywordSetIdx[0] = 2;								// キーワードセット
+	pType->eDefaultOutline = OutlineType::PLSQL;				// アウトライン解析方法
 }
 
 

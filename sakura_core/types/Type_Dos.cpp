@@ -33,8 +33,8 @@ void CType_Dos::InitTypeConfigImp(TypeConfig* pType)
 	_tcscpy(pType->szTypeExts, _T("bat"));
 
 	// 設定
-	pType->lineComment.CopyTo(0, L"REM ", -1);	// 行コメントデリミタ
-	pType->eDefaultOutline = OUTLINE_TEXT;		// アウトライン解析方法
+	pType->lineComment.CopyTo(0, L"REM ", -1);		// 行コメントデリミタ
+	pType->eDefaultOutline = OutlineType::Text;		// アウトライン解析方法
 	pType->nKeywordSetIdx[0] = 7;					// キーワードセット
 }
 

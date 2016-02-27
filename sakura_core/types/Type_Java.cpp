@@ -41,7 +41,7 @@ void CType_Java::InitTypeConfigImp(TypeConfig* pType)
 	pType->lineComment.CopyTo(0, L"//", -1);						// 行コメントデリミタ
 	pType->blockComments[0].SetBlockCommentRule(L"/*", L"*/");	// ブロックコメントデリミタ
 	pType->nKeywordSetIdx[0] = 4;									// キーワードセット
-	pType->eDefaultOutline = OUTLINE_JAVA;						// アウトライン解析方法
+	pType->eDefaultOutline = OutlineType::Java;						// アウトライン解析方法
 	pType->eSmartIndent = SmartIndentType::Cpp;						// スマートインデント種別
 	pType->colorInfoArr[COLORIDX_DIGIT].bDisp = true;			// 半角数値を色分け表示			// Mar. 10, 2001 JEPRO
 	pType->colorInfoArr[COLORIDX_BRACKET_PAIR].bDisp = true;	// 対括弧の強調をデフォルトONに	// Sep. 21, 2002 genta
@@ -50,14 +50,14 @@ void CType_Java::InitTypeConfigImp(TypeConfig* pType)
 
 
 /* Java解析モード */
-enum EFuncListJavaMode {
-	FL_JAVA_MODE_NORMAL = 0,
-	FL_JAVA_MODE_WORD = 1,
-	FL_JAVA_MODE_SYMBOL = 2,
-	FL_JAVA_MODE_COMMENT = 8,
-	FL_JAVA_MODE_SINGLE_QUOTE = 20,
-	FL_JAVA_MODE_DOUBLE_QUOTE = 21,
-	FL_JAVA_MODE_TOO_LONG_WORD = 999
+enum class FuncListJavaMode {
+	Normal = 0,
+	Word = 1,
+	Symbol = 2,
+	Comment = 8,
+	SingleQuote = 20,
+	DoubleQuote = 21,
+	TooLongWord = 999
 };
 
 /* Java関数リスト作成 */
@@ -72,7 +72,7 @@ void DocOutline::MakeFuncList_Java(FuncInfoArr* pFuncInfoArr)
 	wchar_t		szWord[100];
 	int			nWordIdx = 0;
 	int			nMaxWordLeng = 70;
-	EFuncListJavaMode	nMode;
+	FuncListJavaMode	mode;
 	wchar_t		szFuncName[100];
 	LogicInt	nFuncLine = LogicInt(0);
 	int			nFuncId;
@@ -86,7 +86,7 @@ void DocOutline::MakeFuncList_Java(FuncInfoArr* pFuncInfoArr)
 	nNestLevel = 0;
 	szWordPrev[0] = L'\0';
 	szWord[nWordIdx] = L'\0';
-	nMode = FL_JAVA_MODE_NORMAL;
+	mode = FuncListJavaMode::Normal;
 	//nNestLevel2Arr[0] = 0;
 	nFuncNum = 0;
 	szClass[0] = L'\0';
@@ -104,29 +104,29 @@ void DocOutline::MakeFuncList_Java(FuncInfoArr* pFuncInfoArr)
 			if (L'\\' == pLine[i]) {
 				++i;
 			/* シングルクォーテーション文字列読み込み中 */
-			}else if (nMode == FL_JAVA_MODE_SINGLE_QUOTE) {
+			}else if (mode == FuncListJavaMode::SingleQuote) {
 				if (L'\'' == pLine[i]) {
-					nMode = FL_JAVA_MODE_NORMAL;
+					mode = FuncListJavaMode::Normal;
 					continue;
 				}else {
 				}
 			/* ダブルクォーテーション文字列読み込み中 */
-			}else if (nMode == FL_JAVA_MODE_DOUBLE_QUOTE) {
+			}else if (mode == FuncListJavaMode::DoubleQuote) {
 				if (L'"' == pLine[i]) {
-					nMode = FL_JAVA_MODE_NORMAL;
+					mode = FuncListJavaMode::Normal;
 					continue;
 				}else {
 				}
 			/* コメント読み込み中 */
-			}else if (nMode == FL_JAVA_MODE_COMMENT) {
+			}else if (mode == FuncListJavaMode::Comment) {
 				if (i < nLineLen - 1 && L'*' == pLine[i] &&  L'/' == pLine[i + 1]) {
 					++i;
-					nMode = FL_JAVA_MODE_NORMAL;
+					mode = FuncListJavaMode::Normal;
 					continue;
 				}else {
 				}
 			/* 単語読み込み中 */
-			}else if (nMode == FL_JAVA_MODE_WORD) {
+			}else if (mode == FuncListJavaMode::Word) {
 				// 2011.09.16 syat アウトライン解析で日本語が含まれている部分が表示されない
 				if (! WCODE::IsBlank(pLine[i]) &&
 					! WCODE::IsLineDelimiter(pLine[i], bExtEol) &&
@@ -134,7 +134,7 @@ void DocOutline::MakeFuncList_Java(FuncInfoArr* pFuncInfoArr)
 					! wcschr(szJavaKigou, pLine[i])
 				) {
 					if (nWordIdx + nCharChars >= nMaxWordLeng) {
-						nMode = FL_JAVA_MODE_TOO_LONG_WORD;
+						mode = FuncListJavaMode::TooLongWord;
 						continue;
 					}else {
 						memcpy(&szWord[nWordIdx], &pLine[i], sizeof(wchar_t)*nCharChars);
@@ -175,12 +175,12 @@ void DocOutline::MakeFuncList_Java(FuncInfoArr* pFuncInfoArr)
 						}
 					}
 
-					nMode = FL_JAVA_MODE_NORMAL;
+					mode = FuncListJavaMode::Normal;
 					--i;
 					continue;
 				}
 			/* 記号列読み込み中 */
-			}else if (nMode == FL_JAVA_MODE_SYMBOL) {
+			}else if (mode == FuncListJavaMode::Symbol) {
 				if (L'_' == pLine[i] ||
 					L':' == pLine[i] ||
 					L'~' == pLine[i] ||
@@ -200,23 +200,23 @@ void DocOutline::MakeFuncList_Java(FuncInfoArr* pFuncInfoArr)
 					L'/' == pLine[i] ||
 					L'.' == pLine[i]
 				) {
-					nMode = FL_JAVA_MODE_NORMAL;
+					mode = FuncListJavaMode::Normal;
 					--i;
 					continue;
 				}else {
 				}
 			/* 長過ぎる単語無視中 */
-			}else if (nMode == FL_JAVA_MODE_TOO_LONG_WORD) {
+			}else if (mode == FuncListJavaMode::TooLongWord) {
 				/* 空白やタブ記号等を飛ばす */
 				if (L'\t' == pLine[i] ||
 					L' ' == pLine[i] ||
 					WCODE::IsLineDelimiter(pLine[i], bExtEol)
 				) {
-					nMode = FL_JAVA_MODE_NORMAL;
+					mode = FuncListJavaMode::Normal;
 					continue;
 				}
 			/* ノーマルモード */
-			}else if (nMode == FL_JAVA_MODE_NORMAL) {
+			}else if (mode == FuncListJavaMode::Normal) {
 				/* 空白やタブ記号等を飛ばす */
 				if (L'\t' == pLine[i] ||
 					L' ' == pLine[i] ||
@@ -227,13 +227,13 @@ void DocOutline::MakeFuncList_Java(FuncInfoArr* pFuncInfoArr)
 					break;
 				}else if (i < nLineLen - 1 && L'/' == pLine[i] &&  L'*' == pLine[i + 1]) {
 					++i;
-					nMode = FL_JAVA_MODE_COMMENT;
+					mode = FuncListJavaMode::Comment;
 					continue;
 				}else if (L'\'' == pLine[i]) {
-					nMode = FL_JAVA_MODE_SINGLE_QUOTE;
+					mode = FuncListJavaMode::SingleQuote;
 					continue;
 				}else if (L'"' == pLine[i]) {
-					nMode = FL_JAVA_MODE_DOUBLE_QUOTE;
+					mode = FuncListJavaMode::DoubleQuote;
 					continue;
 				}else if (L'{' == pLine[i]) {
 					if (0 < nClassNestArrNum && nNestLevel2Arr[nClassNestArrNum - 1] == 2) {
@@ -273,7 +273,7 @@ void DocOutline::MakeFuncList_Java(FuncInfoArr* pFuncInfoArr)
 						nNestLevel2Arr[nClassNestArrNum - 1] = 0;
 					}
 					++nNestLevel;
-					nMode = FL_JAVA_MODE_NORMAL;
+					mode = FuncListJavaMode::Normal;
 					continue;
 				}else if (L'}' == pLine[i]) {
 					if (0 < nClassNestArrNum) {
@@ -297,7 +297,7 @@ void DocOutline::MakeFuncList_Java(FuncInfoArr* pFuncInfoArr)
 						}
 						szClass[k] = L'\0';
 					}
-					nMode = FL_JAVA_MODE_NORMAL;
+					mode = FuncListJavaMode::Normal;
 					continue;
 				}else if (L'(' == pLine[i]) {
 					if (0 < nClassNestArrNum /*nNestLevel == 1*/ &&
@@ -309,7 +309,7 @@ void DocOutline::MakeFuncList_Java(FuncInfoArr* pFuncInfoArr)
 							nNestLevel2Arr[nClassNestArrNum - 1] = 1;
 						}
 					}
-					nMode = FL_JAVA_MODE_NORMAL;
+					mode = FuncListJavaMode::Normal;
 					continue;
 				}else if (L')' == pLine[i]) {
 					int			k;
@@ -370,7 +370,7 @@ void DocOutline::MakeFuncList_Java(FuncInfoArr* pFuncInfoArr)
 							}
 						}
 					}
-					nMode = FL_JAVA_MODE_NORMAL;
+					mode = FuncListJavaMode::Normal;
 					continue;
 				}else if (L';' == pLine[i]) {
 					if (0 < nClassNestArrNum && nNestLevel2Arr[nClassNestArrNum - 1] == 2) {
@@ -409,7 +409,7 @@ void DocOutline::MakeFuncList_Java(FuncInfoArr* pFuncInfoArr)
 					if (0 < nClassNestArrNum) {
 						nNestLevel2Arr[nClassNestArrNum - 1] = 0;
 					}
-					nMode = FL_JAVA_MODE_NORMAL;
+					mode = FuncListJavaMode::Normal;
 					continue;
 				}else {
 					if (! WCODE::IsBlank(pLine[i]) &&
@@ -422,9 +422,9 @@ void DocOutline::MakeFuncList_Java(FuncInfoArr* pFuncInfoArr)
 						memcpy(&szWord[nWordIdx], &pLine[i], sizeof(wchar_t)*nCharChars);
 						szWord[nWordIdx + nCharChars] = L'\0';
 						nWordIdx += nCharChars;
-						nMode = FL_JAVA_MODE_WORD;
+						mode = FuncListJavaMode::Word;
 					}else {
-						nMode = FL_JAVA_MODE_NORMAL;
+						mode = FuncListJavaMode::Normal;
 					}
 				}
 			}

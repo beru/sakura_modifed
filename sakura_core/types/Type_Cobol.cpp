@@ -38,12 +38,12 @@ void CType_Cobol::InitTypeConfigImp(TypeConfig* pType)
 	_tcscpy(pType->szTypeExts, _T("cbl,cpy,pco,cob"));	// Jun. 04, 2001 JEPRO KENCH氏の助言に従い追加
 
 	// 設定
-	pType->lineComment.CopyTo(0, L"*", 6);			// Jun. 02, 2001 JEPRO 修正
-	pType->lineComment.CopyTo(1, L"D", 6);			// Jun. 04, 2001 JEPRO 追加
+	pType->lineComment.CopyTo(0, L"*", 6);				// Jun. 02, 2001 JEPRO 修正
+	pType->lineComment.CopyTo(1, L"D", 6);				// Jun. 04, 2001 JEPRO 追加
 	pType->stringType = StringLiteralType::PLSQL;		// 文字列区切り記号エスケープ方法  0=[\"][\'] 1=[""]['']
 	wcscpy_s(pType->szIndentChars, L"*");				// その他のインデント対象文字
 	pType->nKeywordSetIdx[0] = 3;						// キーワードセット		// Jul. 10, 2001 JEPRO
-	pType->eDefaultOutline = OUTLINE_COBOL;			// アウトライン解析方法
+	pType->eDefaultOutline = OutlineType::Cobol;		// アウトライン解析方法
 	// 指定桁縦線	// 2005.11.08 Moca
 	pType->colorInfoArr[COLORIDX_VERTLINE].bDisp = true;
 	pType->nVertLineIdx[0] = LayoutInt(7);

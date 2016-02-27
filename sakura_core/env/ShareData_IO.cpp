@@ -719,7 +719,7 @@ void ShareData_IO::ShareData_IO_Common(DataProfile& profile)
 			profile.IOProfileData(pszSecName, pszKeyName, MakeStringBufferW(szKeyData));
 		}
 	}
-	profile.IOProfileData(pszSecName, LTEXT("nDockOutline"), common.outline.nDockOutline);
+	profile.IOProfileData(pszSecName, LTEXT("nDockOutline"), (int&)common.outline.nDockOutline);
 	ShareData_IO_FileTree( profile, common.outline.fileTree, pszSecName );
 	profile.IOProfileData( pszSecName, LTEXT("szFileTreeDefIniName"), common.outline.fileTreeDefIniName );
 }

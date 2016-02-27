@@ -41,7 +41,7 @@ void CType_Perl::InitTypeConfigImp(TypeConfig* pType)
 
 	// 設定
 	pType->lineComment.CopyTo(0, L"#", -1);						// 行コメントデリミタ
-	pType->eDefaultOutline = OUTLINE_PERL;						// アウトライン解析方法
+	pType->eDefaultOutline = OutlineType::Perl;					// アウトライン解析方法
 	pType->nKeywordSetIdx[0]  = 11;								// キーワードセット
 	pType->nKeywordSetIdx[1] = 12;								// キーワードセット2
 	pType->colorInfoArr[COLORIDX_DIGIT].bDisp = true;			// 半角数値を色分け表示

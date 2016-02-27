@@ -36,7 +36,7 @@ void CType_Rich::InitTypeConfigImp(TypeConfig* pType)
 	_tcscpy(pType->szTypeExts, _T("rtf"));
 
 	// 設定
-	pType->eDefaultOutline = OUTLINE_TEXT;					// アウトライン解析方法
+	pType->eDefaultOutline = OutlineType::Text;				// アウトライン解析方法
 	pType->nKeywordSetIdx[0]  = 15;							// キーワードセット
 	pType->colorInfoArr[COLORIDX_DIGIT].bDisp = true;		// 半角数値を色分け表示
 	pType->colorInfoArr[COLORIDX_SSTRING].bDisp = false;	// シングルクォーテーション文字列を色分け表示しない
