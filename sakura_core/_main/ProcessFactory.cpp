@@ -109,18 +109,20 @@ bool ProcessFactory::ProfileSelect(
 	}else if (settings.m_nDefaultIndex == -1) {
 		bDialog = true;
 	}else {
-		assert( 0 <= settings.m_nDefaultIndex );
+		assert(0 <= settings.m_nDefaultIndex);
 		if (0 < settings.m_nDefaultIndex) {
-			CommandLine::getInstance()->SetProfileName( to_wchar(
-					settings.m_vProfList[settings.m_nDefaultIndex - 1].c_str()) );
+			CommandLine::getInstance()->SetProfileName(
+				settings.m_vProfList[settings.m_nDefaultIndex - 1].c_str()
+			);
 		}else {
-			CommandLine::getInstance()->SetProfileName( L"" );
+			CommandLine::getInstance()->SetProfileName(L"");
 		}
 		bDialog = false;
 	}
 	if (bDialog) {
+		DlgProfileMgr dlgProf;
 		if (dlgProf.DoModal(hInstance, NULL, 0)) {
-			CommandLine::getInstance()->SetProfileName( to_wchar(dlgProf.m_strProfileName.c_str()) );
+			CommandLine::getInstance()->SetProfileName(dlgProf.m_strProfileName.c_str());
 		}else {
 			return false; // プロファイルマネージャで「閉じる」を選んだ。プロセス終了
 		}

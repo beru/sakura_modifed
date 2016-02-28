@@ -223,6 +223,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\sakura_core\charset\CodePage.h" />
+    <ClInclude Include="..\sakura_core\debug\trace.h" />
     <ClInclude Include="..\sakura_core\dlg\DlgGrepReplace.h" />
     <ClInclude Include="..\sakura_core\dlg\DlgProfileMgr.h" />
     <ClInclude Include="..\sakura_core\docplus\FuncListManager.h" />
@@ -572,6 +573,7 @@
     <ResourceCompile Include="..\sakura_core\sakura_rc.rc" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\sakura_core\debug\trace.cpp" />
     <ClCompile Include="..\sakura_core\GrepEnumKeys.cpp" />
     <ClCompile Include="..\sakura_core\charset\CodePage.cpp" />
     <ClCompile Include="..\sakura_core\dlg\DlgGrepReplace.cpp" />

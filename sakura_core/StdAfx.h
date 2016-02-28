@@ -39,17 +39,17 @@
 #undef MINGW_HAS_SECURE_API
 #endif  // MINGW_HAS_SECURE_API
 #endif  // __MINGW32__
-//グローバル
+// グローバル
 #include "_main/global.h"
 
-//ビルドオプション的なヘッダ
+// ビルドオプション的なヘッダ
 #include "config/build_config.h"
 
-//定数(プリコンパイル日付に依存)
+// 定数(プリコンパイル日付に依存)
 #include "config/system_constants.h"	//システム定数
 #include "config/app_constants.h"		//アプリケーション定数
 
-//高頻度API等
+// 高頻度API等
 // #include <CommDlg.h> // WIN32_LEAN_AND_MEANでは必要。OpenFileDialg系
 #include <CommCtrl.h> // コモンコントロール
 #include <stdlib.h>  // _MAX_PATH
@@ -76,25 +76,26 @@
 #define BUILD_OPT_NEW_HEADERS
 #endif
 
-//デバッグ
+// デバッグ
 #include "debug/Debug1.h"
 #include "debug/Debug2.h"
 #include "debug/Debug3.h"
+#include "debug/trace.h"
 
-//シンプルでよく使うもの
+// シンプルでよく使うもの
 #include "basis/primitive.h"
 #include "util/std_macro.h"
 
-//MFC互換
+// MFC互換
 #include "basis/MyString.h"
 #include "basis/MyRect.h"
 #include "basis/MyPoint.h"
 #include "basis/MySize.h"
 
-//サクラエディタ固有型
+// サクラエディタ固有型
 #include "basis/SakuraBasis.h"
 
-//よく使うヘッダ
+// よく使うヘッダ
 #include "mem/NativeW.h"
 #include "mem/NativeA.h"
 #include "mem/NativeT.h"
@@ -104,19 +105,19 @@
 #include "SelectLang.h"
 #include "String_define.h"
 
-//その他
+// その他
 #define malloc_char (char*)malloc
 #define GlobalLockChar  (char*)::GlobalLock
 #define GlobalLockUChar (unsigned char*)::GlobalLock
 #define GlobalLockWChar (wchar_t*)::GlobalLock
 #define GlobalLockBYTE  (BYTE*)::GlobalLock
 
-//APIラップ
+// APIラップ
 #include "apiwrap/StdControl.h"
 #include "apiwrap/CommonControl.h"
 #include "apiwrap/StdApi.h"
 
-//TCHARユーティリティ
+// TCHARユーティリティ
 #include "util/tchar_convert.h"
 #include "charset/charcode.h"
 #include "charset/codecheck.h"

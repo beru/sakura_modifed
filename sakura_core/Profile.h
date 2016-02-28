@@ -49,11 +49,11 @@ class Profile {
 	typedef std::wstring wstring;
 	typedef std::string string;
 
-	typedef std::pair< wstring, wstring > PAIR_STR_STR;
-	typedef std::map< wstring, wstring > MAP_STR_STR;
+	typedef std::pair<wstring, wstring> pair_str_str;
+	typedef std::map<wstring, wstring> map_str_str;
 	struct Section {
 		wstring     strSectionName;
-		MAP_STR_STR mapEntries;
+		map_str_str mapEntries;
 	};
 
 public:
@@ -67,12 +67,12 @@ public:
 	bool ReadProfileRes( const TCHAR*, const TCHAR*, std::vector<std::wstring>* = NULL );				// 200/5/19 Uchi
 	bool WriteProfile(const TCHAR*, const WCHAR* pszComment);
 
-	void DUMP(void);
+	void Dump(void);
 
 protected:
 	void ReadOneline( const wstring& line );
+	void ReadOneline(const wchar_t* line, size_t length);
 	bool _WriteFile(const tstring& strFilename, const std::vector<wstring>& vecLine);
-
 
 	bool GetProfileDataImp(const wstring& strSectionName, const wstring& strEntryKey, wstring& strEntryValue);
 	bool SetProfileDataImp(const wstring& strSectionName, const wstring& strEntryKey, const wstring& strEntryValue);

@@ -27,32 +27,25 @@
 #include "Profile.h"
 
 // 文字列バッファの型
-struct StringBufferW_ {
-	WCHAR*    pData;
-	const int nDataCount;
+template <typename T>
+struct StringBuffer {
+	T*	pData;
+	const size_t nDataCount;
 
-//	StringBufferW_() : pData(L""), nDataCount(0) { }
-	StringBufferW_(WCHAR* _pData, int _nDataCount) : pData(_pData), nDataCount(_nDataCount) { }
+	StringBuffer(T* pData, size_t nDataCount)
+		:
+		pData(pData),
+		nDataCount(nDataCount)
+	{ }
 
-	StringBufferW_& operator = (const StringBufferW_& rhs) {
+	StringBuffer& operator = (const StringBuffer& rhs) {
 		auto_strcpy_s(pData, nDataCount, rhs.pData);
 		return *this;
 	}
 };
-struct StringBufferA_ {
-	ACHAR* pData;
-	int    nDataCount;
 
-//	StringBufferA_() : pData(""), nDataCount(0) { }
-	StringBufferA_(ACHAR* _pData, int _nDataCount) : pData(_pData), nDataCount(_nDataCount) { }
-
-	StringBufferA_& operator = (const StringBufferA_& rhs) {
-		auto_strcpy_s(pData, nDataCount, rhs.pData);
-		return *this;
-	}
-};
-typedef const StringBufferA_ StringBufferA;
-typedef const StringBufferW_ StringBufferW;
+typedef const StringBuffer<ACHAR> StringBufferA;
+typedef const StringBuffer<WCHAR> StringBufferW;
 #ifdef _UNICODE
 	typedef StringBufferW StringBufferT;
 #else

@@ -1084,6 +1084,9 @@
     <ClInclude Include="..\sakura_core\docplus\FuncListManager.h">
       <Filter>Cpp Source Files\docplus</Filter>
     </ClInclude>
+    <ClInclude Include="..\sakura_core\debug\trace.h">
+      <Filter>Cpp Source Files\debug</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\sakura_core\Funccode_x.hsrc">
@@ -2250,6 +2253,9 @@
     </ClCompile>
     <ClCompile Include="..\sakura_core\GrepEnumKeys.cpp">
       <Filter>Cpp Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sakura_core\debug\trace.cpp">
+      <Filter>Cpp Source Files\debug</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

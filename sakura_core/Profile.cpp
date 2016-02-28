@@ -39,6 +39,8 @@
 #include "charset/Utf8.h"		// Resource読み込みに使用
 #include "Eol.h"
 #include "util/fileUtil.h"
+#include "timer.h"
+#include "debug/trace.h"
 
 using namespace std;
 
@@ -82,16 +84,128 @@ void Profile::ReadOneline(
 		&& line.find(LTEXT("=")) == line.npos
 		&& line.find(LTEXT("]")) == ( line.size() - 1 )
 	) {
-		Section buffer;
-		buffer.strSectionName = line.substr( 1, line.size() - 1 - 1 );
-		m_profileData.push_back(buffer);
+		Section sec;
+		sec.strSectionName = line.substr( 1, line.size() - 1 - 1 );
+		m_profileData.push_back(sec);
 	// エントリ取得
 	}else if (!m_profileData.empty()) {	// 最初のセクション以前の行のエントリは無視
 		wstring::size_type idx = line.find( LTEXT("=") );
-		if (line.npos != idx) {
-			m_profileData.back().mapEntries.insert( PAIR_STR_STR( line.substr(0,idx), line.substr(idx+1) ) );
+		if (idx != line.npos) {
+			m_profileData.back().mapEntries.insert( pair_str_str( line.substr(0,idx), line.substr(idx+1) ) );
 		}
 	}
+}
+
+/*!
+sakura.iniの1行を処理する．
+
+1行の読み込みが完了するごとに呼ばれる．
+
+@param line [in] 読み込んだ行
+*/
+void Profile::ReadOneline(
+	const wchar_t* line,
+	size_t len
+	)
+{
+	// 空行を読み飛ばす
+	if (len == 0) {
+		return;
+	}
+
+	wchar_t fl = line[0];
+	// コメント行を読みとばす
+	if (fl == ';') {
+		return;
+	}
+	if (len >= 2 && fl == '/' && line[1] == '/') {
+		return;
+	}
+
+	// セクション取得
+	//	Jan. 29, 2004 genta compare使用
+	const wchar_t* lineEnd = line + len;
+	const wchar_t* eqPos = std::find(line, lineEnd, '=');
+
+	if (fl == '['
+		&& eqPos == lineEnd
+		&& line[len - 1] == ']'
+	) {
+		Section sec;
+		sec.strSectionName = std::wstring(line + 1, len - 1 - 1);
+		m_profileData.push_back(sec);
+		// エントリ取得
+	}else if (!m_profileData.empty()) {	// 最初のセクション以前の行のエントリは無視
+		if (eqPos != lineEnd) {
+			m_profileData.back().mapEntries.emplace(
+				std::wstring(line, eqPos - line),
+				std::wstring(eqPos + 1, len - (eqPos - line) - 1)
+			);
+		}
+	}
+}
+
+static inline
+size_t getFileSize(FILE* file)
+{
+	fseek(file, 0, SEEK_END);
+	int length = ftell(file);
+	fseek(file, 0, SEEK_SET);
+	return length;
+}
+
+static inline
+bool readFile(const wchar_t* path, std::vector<char>& buff)
+{
+	FILE* f = _wfopen(path, L"rb");
+	if (!f) {
+		return false;
+	}
+	size_t sz = getFileSize(f);
+	buff.resize(sz);
+	fread(&buff[0], 1, sz, f);
+	fclose(f);
+	// TODO: to check read failure
+	return true;
+}
+
+static
+bool findLine(
+	const wchar_t* pData,
+	size_t remainLen,
+	size_t& lineLen,
+	size_t& lineLenWithoutCrLf
+	)
+{
+	if (remainLen == 0) {
+		lineLen = 0;
+		lineLenWithoutCrLf = 0;
+		return false;
+	}
+	for (size_t i=0; i<remainLen; ++i) {
+		wchar_t c = pData[i];
+		if (c == L'\n') {
+			lineLen = i + 1;
+			lineLenWithoutCrLf = i;
+			return true;
+		}else if (c == L'\r') {
+			lineLenWithoutCrLf = i;
+			if (i + i >= remainLen) {
+				lineLen = i + 1;
+			}else {
+				c = pData[i + 1];
+				if (c == L'\n') {
+					lineLen = i + 2;
+				}else {
+					lineLen = i + 1;
+				}
+			}
+			return true;
+		}
+	}
+	lineLen = remainLen;
+	lineLenWithoutCrLf = remainLen;
+	return true;
 }
 
 /*! Profileをファイルから読み出す
@@ -109,10 +223,50 @@ void Profile::ReadOneline(
 */
 bool Profile::ReadProfile(const TCHAR* pszProfileName)
 {
+	Timer t;
+
 	m_strProfileName = pszProfileName;
 
-//	LARGE_INTEGER start;
-//	QueryPerformanceCounter(&start);
+#if 1
+	std::vector<char> buff;
+	if (!readFile(pszProfileName, buff) || buff.size() < 3) {
+		return false;
+	}
+
+	const char* pBuff = &buff[0];
+	size_t buffSize = buff.size();
+	static const uint8_t utf8_bom[] = { 0xEF, 0xBB, 0xBF };
+	bool isUtf8 = (memcmp(utf8_bom, pBuff, 3) == 0);
+	if (isUtf8) {
+		pBuff += 3;
+		buffSize -= 3;
+	}
+	static const UINT cp_sjis = 932;
+	UINT codePage = isUtf8 ? CP_UTF8 : cp_sjis;
+
+	std::vector<wchar_t> wbuff(buffSize);
+	wchar_t* pWBuff = &wbuff[0];
+	int ret = MultiByteToWideChar(codePage, 0, pBuff, buffSize, pWBuff, buffSize);
+	if (ret <= 0) {
+		return false;
+	}
+	size_t remainLen = ret;
+	size_t lineLen;
+	size_t lineLenWithoutCrLf;
+	size_t lineCount = 0;
+	for (;;) {
+		// 1行読込
+		if (!findLine(pWBuff, remainLen, lineLen, lineLenWithoutCrLf)) {
+			break;
+		}
+		++lineCount;
+		// 解析
+		ReadOneline(pWBuff, lineLenWithoutCrLf);
+
+		pWBuff += lineLen;
+		remainLen -= lineLen;
+	}
+#else
 
 	TextInputStream in(m_strProfileName.c_str());
 	if (!in) {
@@ -122,23 +276,16 @@ bool Profile::ReadProfile(const TCHAR* pszProfileName)
 	try {
 		while (in) {
 			// 1行読込
-			wstring line=in.ReadLineW();
-
+			wstring line = in.ReadLineW();
 			// 解析
 			ReadOneline(line);
 		}
 	}catch (...) {
 		return false;
 	}
+#endif
 
-//	LARGE_INTEGER now;
-//	QueryPerformanceCounter(&now);
-//	LARGE_INTEGER freq;
-//	QueryPerformanceFrequency(&freq);
-//	LONGLONG diff = now.QuadPart - start.QuadPart;
-//	TCHAR buff[32];
-//	swprintf(buff, L"load time %f", diff / (double)freq.QuadPart);
-//	OutputDebugString(buff);
+	TRACE(L"ReadProfile time %f\n", t.ElapsedSecond());
 
 	return true;
 }
@@ -239,6 +386,8 @@ bool Profile::WriteProfile(
 	const WCHAR* pszComment
 	)
 {
+	Timer t;
+
 	if (pszProfileName) {
 		m_strProfileName = pszProfileName;
 	}
@@ -298,6 +447,7 @@ bool Profile::WriteProfile(
 		}
 	}
 
+	TRACE(L"WriteProfile time %f\n", t.ElapsedSecond());
 	return true;
 }
 
@@ -387,7 +537,7 @@ bool Profile::SetProfileDataImp(
 				break;
 			}else {
 				// 既存のエントリが見つからない場合は追加
-				iter->mapEntries.insert(PAIR_STR_STR(strEntryKey, strEntryValue));
+				iter->mapEntries.insert(pair_str_str(strEntryKey, strEntryValue));
 				break;
 			}
 		}
@@ -396,18 +546,18 @@ bool Profile::SetProfileDataImp(
 	if (iter == iterEnd) {
 		Section buffer;
 		buffer.strSectionName = strSectionName;
-		buffer.mapEntries.insert(PAIR_STR_STR(strEntryKey, strEntryValue));
+		buffer.mapEntries.insert(pair_str_str(strEntryKey, strEntryValue));
 		m_profileData.push_back(buffer);
 	}
 	return true;
 }
 
 
-void Profile::DUMP(void)
+void Profile::Dump(void)
 {
 #ifdef _DEBUG
 	auto iterEnd = m_profileData.end();
-	// 2006.02.20 ryoji: MAP_STR_STR_ITER削除時の修正漏れによるコンパイルエラー修正
+	// 2006.02.20 ryoji: map_str_str_iter削除時の修正漏れによるコンパイルエラー修正
 	MYTRACE(_T("\n\nCProfile::DUMP()======================"));
 	for (auto iter=m_profileData.begin(); iter!=iterEnd; ++iter) {
 		MYTRACE(_T("\n■strSectionName=%ls"), iter->strSectionName.c_str());

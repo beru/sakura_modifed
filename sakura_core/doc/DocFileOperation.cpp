@@ -39,6 +39,7 @@
 #include "env/SakuraEnvironment.h"
 #include "plugin/Plugin.h"
 #include "plugin/JackManager.h"
+#include "timer.h"
 
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -143,8 +144,7 @@ bool DocFileOperation::FileLoad(
 	LoadInfo* pLoadInfo		// [in/out]
 	)
 {
-	LARGE_INTEGER start;
-	QueryPerformanceCounter(&start);
+	Timer t;
 
 	bool bRet = DoLoadFlow(pLoadInfo);
 	// 2006.09.01 ryoji オープン後自動実行マクロを実行する
@@ -160,14 +160,7 @@ bool DocFileOperation::FileLoad(
 		}
 	}
 
-	LARGE_INTEGER now;
-	QueryPerformanceCounter(&now);
-	LARGE_INTEGER freq;
-	QueryPerformanceFrequency(&freq);
-	LONGLONG diff = now.QuadPart - start.QuadPart;
-	TCHAR buff[32];
-	swprintf(buff, L"load time %f\n", diff / (double)freq.QuadPart);
-	OutputDebugString(buff);
+	TRACE(L"FileLoad time %f\n", t.ElapsedSecond());
 
 	return bRet;
 }

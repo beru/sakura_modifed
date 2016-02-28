@@ -241,7 +241,7 @@ INT_PTR PropTypesKeyHelp::DispatchEvent(
 						return FALSE;
 					}
 					// ŠJ‚¯‚½‚È‚ç1s–Ú‚ðŽæ“¾‚µ‚Ä‚©‚ç•Â‚¶‚é -> szAbout
-					std::wstring line=in.ReadLineW();
+					std::wstring line = in.ReadLineW();
 					_wcstotcs(szAbout, line.c_str(), _countof(szAbout));
 					in.Close();
 				}

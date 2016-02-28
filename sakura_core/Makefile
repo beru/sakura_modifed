@@ -150,6 +150,7 @@ debug/Debug1.o \
 debug/Debug2.o \
 debug/Debug3.o \
 debug/RunningTimer.o \
+debug/trace.o \
 dlg/Dialog.o \
 dlg/DlgAbout.o \
 dlg/DlgCancel.o \

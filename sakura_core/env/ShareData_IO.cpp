@@ -34,6 +34,7 @@
 #include "plugin/Plugin.h"
 #include "uiparts/MenuDrawer.h"
 #include "_main/CommandLine.h"
+#include "debug/RunningTimer.h"
 
 void ShareData_IO_Sub_LogFont(DataProfile& profile, const WCHAR* pszSecName,
 	const WCHAR* pszKeyLf, const WCHAR* pszKeyPointSize, const WCHAR* pszKeyFaceName, LOGFONT& lf, INT& nPointSize);
@@ -72,7 +73,7 @@ void ShareData_IO::SaveShareData()
 */
 bool ShareData_IO::ShareData_IO_2(bool bRead)
 {
-	//MY_RUNNINGTIMER(runningTimer, "ShareData_IO::ShareData_IO_2");
+//	MY_RUNNINGTIMER(runningTimer, "ShareData_IO::ShareData_IO_2");
 	ShareData* pShare = ShareData::getInstance();
 
 	DataProfile	profile;
@@ -88,7 +89,7 @@ bool ShareData_IO::ShareData_IO_2(bool bRead)
 	TCHAR szIniFileName[_MAX_PATH + 1];
 	FileNameManager::getInstance()->GetIniFileName( szIniFileName, strProfileName.c_str(), bRead );	// 2007.05.19 ryoji iniファイル名を取得する
 
-//	MYTRACE(_T("Iniファイル処理-1 所要時間(ミリ秒) = %d\n"), cRunningTimer.Read());
+//	MYTRACE(_T("Iniファイル処理-1 所要時間(ミリ秒) = %d\n"), runningTimer.Read());
 
 	if (bRead) {
 		if (!profile.ReadProfile(szIniFileName)) {
@@ -118,7 +119,7 @@ bool ShareData_IO::ShareData_IO_2(bool bRead)
 			::CopyFile(szIniFileName, szBkFileName, FALSE);
 		}
 	}
-//	MYTRACE(_T("Iniファイル処理 0 所要時間(ミリ秒) = %d\n"), cRunningTimer.Read());
+//	MYTRACE(_T("Iniファイル処理 0 所要時間(ミリ秒) = %d\n"), runningTimer.Read());
 
 	MenuDrawer* pMenuDrawer = new MenuDrawer; // 2010/7/4 Uchi
 
@@ -157,8 +158,7 @@ bool ShareData_IO::ShareData_IO_2(bool bRead)
 		profile.WriteProfile( szIniFileName, LTEXT(" sakura.ini テキストエディタ設定ファイル") );
 	}
 
-//	MYTRACE(_T("Iniファイル処理 8 所要時間(ミリ秒) = %d\n"), cRunningTimer.Read());
-//	MYTRACE(_T("Iniファイル処理 所要時間(ミリ秒) = %d\n"), cRunningTimerStart.Read());
+//	MYTRACE(_T("Iniファイル処理 8 所要時間(ミリ秒) = %d\n"), runningTimer.Read());
 
 	return true;
 }

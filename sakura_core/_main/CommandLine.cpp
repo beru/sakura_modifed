@@ -504,11 +504,11 @@ void CommandLine::ParseCommandLine(LPCTSTR pszCmdLineSrc, bool bResponse)
 		if (!input.Good()) {
 			return;
 		}
-		std::tstring responseData;
+		std::wstring responseData;
 		while (input) {
-			responseData += to_tchar(input.ReadLineW().c_str());
+			responseData += input.ReadLineW();
 		}
-		ParseCommandLine(responseData.c_str(), false);
+		ParseCommandLine(to_tchar(responseData.c_str()), false);
 	}
 
 	return;
