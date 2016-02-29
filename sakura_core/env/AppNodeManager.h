@@ -30,20 +30,20 @@ class AppNodeGroupHandle;
 
 // 編集ウィンドウノード
 struct EditNode {
-	int				m_nIndex;
-	int				m_nGroup;					// グループID								//@@@ 2007.06.20 ryoji
-	HWND			m_hWnd;
-	int				m_nId;						// 無題Id
-	WIN_CHAR		m_szTabCaption[_MAX_PATH];	// タブウィンドウ用：キャプション名		//@@@ 2003.05.31 MIK
-	SFilePath		m_szFilePath;				// タブウィンドウ用：ファイル名			//@@@ 2006.01.28 ryoji
-	bool			m_bIsGrep;					// Grepのウィンドウか						//@@@ 2006.01.28 ryoji
-	UINT			m_showCmdRestore;			// 元のサイズに戻すときのサイズ種別		//@@@ 2007.06.20 ryoji
-	BOOL			m_bClosing;					// 終了中か（「最後のファイルを閉じても(無題)を残す」用）	//@@@ 2007.06.20 ryoji
+	int				nIndex;
+	int				nGroup;						// グループID							//@@@ 2007.06.20 ryoji
+	HWND			hWnd;
+	int				nId;						// 無題Id
+	WIN_CHAR		szTabCaption[_MAX_PATH];	// タブウィンドウ用：キャプション名		//@@@ 2003.05.31 MIK
+	SFilePath		szFilePath;					// タブウィンドウ用：ファイル名			//@@@ 2006.01.28 ryoji
+	bool			bIsGrep;					// Grepのウィンドウか					//@@@ 2006.01.28 ryoji
+	UINT			showCmdRestore;				// 元のサイズに戻すときのサイズ種別		//@@@ 2007.06.20 ryoji
+	BOOL			bClosing;					// 終了中か（「最後のファイルを閉じても(無題)を残す」用）	//@@@ 2007.06.20 ryoji
 
 	HWND GetHwnd() const { return GetSafeHwnd(); }
-	HWND GetSafeHwnd() const { if (this) return m_hWnd; else return NULL; }
+	HWND GetSafeHwnd() const { if (this) return hWnd; else return NULL; }
 	int GetId() const { return GetSafeId(); }
-	int GetSafeId() const { if (this) return m_nId; else return 0; }
+	int GetSafeId() const { if (this) return nId; else return 0; }
 	AppNodeGroupHandle GetGroup() const;
 	bool IsTopInGroup() const;
 };
@@ -57,11 +57,11 @@ struct EditNodeEx {
 
 // 共有メモリ内構造体
 struct Share_Nodes {
-	int					m_nEditArrNum;	// short->intに修正	//@@@ 2003.05.31 MIK
-	EditNode			m_pEditArr[MAX_EDITWINDOWS];	// 最大値修正	@@@ 2003.05.31 MIK
-	LONG				m_nSequences;	// ウィンドウ連番
-	LONG				m_nNonameSequences;	// 無題連番
-	LONG				m_nGroupSequences;	// タブグループ連番	// 2007.06.20 ryoji
+	int			nEditArrNum;		// short->intに修正	//@@@ 2003.05.31 MIK
+	EditNode	pEditArr[MAX_EDITWINDOWS];	// 最大値修正	@@@ 2003.05.31 MIK
+	LONG		nSequences;			// ウィンドウ連番
+	LONG		nNonameSequences;	// 無題連番
+	LONG		nGroupSequences;	// タブグループ連番	// 2007.06.20 ryoji
 };
 
 
@@ -69,16 +69,16 @@ struct Share_Nodes {
 class AppNodeHandle {
 public:
 	AppNodeHandle(HWND hwnd);
-	EditNode* operator->() { return m_pNodeRef; }
+	EditNode* operator->() { return pNodeRef; }
 private:
-	EditNode* m_pNodeRef;
+	EditNode* pNodeRef;
 };
 
 // グループアクセサ
 class AppNodeGroupHandle {
 public:
-	AppNodeGroupHandle(int nGroupId) : m_nGroup(nGroupId) { }
-	AppNodeGroupHandle(HWND hwnd) { m_nGroup = AppNodeHandle(hwnd)->GetGroup(); }
+	AppNodeGroupHandle(int nGroupId) : nGroup(nGroupId) { }
+	AppNodeGroupHandle(HWND hwnd) { nGroup = AppNodeHandle(hwnd)->GetGroup(); }
 
 	EditNode* GetTopEditNode() { return GetEditNodeAt(0); }	//
 	EditNode* GetEditNodeAt(int nIndex);					// 指定位置の編集ウィンドウ情報を取得する
@@ -94,12 +94,12 @@ public:
 	bool SendMessageToAllEditors(UINT uMsg, WPARAM wParam, LPARAM lParam, HWND hWndLast);	// 全編集ウィンドウへメッセージを送る		// 2007.06.20 ryoji nGroup引数追加
 
 public:
-	bool operator == (const AppNodeGroupHandle& rhs) const { return m_nGroup == rhs.m_nGroup; }
-	bool IsValidGroup() const { return m_nGroup >= 0; }
-	operator int() const { return m_nGroup; }
+	bool operator == (const AppNodeGroupHandle& rhs) const { return nGroup == rhs.nGroup; }
+	bool IsValidGroup() const { return nGroup >= 0; }
+	operator int() const { return nGroup; }
 
 private:
-	int m_nGroup;
+	int nGroup;
 };
 
 
@@ -132,12 +132,12 @@ public:
 };
 
 
-inline AppNodeGroupHandle EditNode::GetGroup() const { if (this) return m_nGroup; else return 0; }
+inline AppNodeGroupHandle EditNode::GetGroup() const { if (this) return nGroup; else return 0; }
 
-inline bool EditNode::IsTopInGroup() const { return this && (AppNodeGroupHandle(m_nGroup).GetEditNodeAt(0) == this); }
+inline bool EditNode::IsTopInGroup() const { return this && (AppNodeGroupHandle(nGroup).GetEditNodeAt(0) == this); }
 
 inline AppNodeHandle::AppNodeHandle(HWND hwnd)
 {
-	m_pNodeRef = AppNodeManager::getInstance()->GetEditNode(hwnd);
+	pNodeRef = AppNodeManager::getInstance()->GetEditNode(hwnd);
 }
 

@@ -36,10 +36,10 @@
 
 struct ProfileSettings
 {
-	TCHAR m_szDllLanguage[_MAX_PATH];
-	int	m_nDefaultIndex;
-	std::vector<std::tstring> m_vProfList;
-	bool m_bDefaultSelect;
+	TCHAR szDllLanguage[_MAX_PATH];
+	int	nDefaultIndex;
+	std::vector<std::tstring> profList;
+	bool bDefaultSelect;
 };
 
 class DlgProfileMgr : public Dialog

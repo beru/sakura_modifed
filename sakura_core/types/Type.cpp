@@ -27,7 +27,7 @@
 #include "view/Colors/EColorIndexType.h"
 #include "env/DocTypeManager.h"
 #include "env/ShareData.h"
-#include "env/DLLSHAREDATA.h"
+#include "env/DllSharedData.h"
 
 void _DefaultConfig(TypeConfig* pType);
 
@@ -47,8 +47,8 @@ void Type::InitTypeConfig(int nIdx, TypeConfig& type)
 	type = sDefault;
 	
 	// インデックスを設定
-	type.m_nIdx = nIdx;
-	type.m_id = nIdx;
+	type.nIdx = nIdx;
+	type.id = nIdx;
 	
 	// 個別設定
 	InitTypeConfigImp(&type);
@@ -66,7 +66,7 @@ void Type::InitTypeConfig(int nIdx, TypeConfig& type)
 	@date 2005.01.30 genta ShareData::Init()から分離．
 */
 void ShareData::InitTypeConfigs(
-	DLLSHAREDATA* pShareData,
+	DllSharedData* pShareData,
 	std::vector<TypeConfig*>& types
 	)
 {
@@ -94,15 +94,15 @@ void ShareData::InitTypeConfigs(
 		TypeConfig* type = new TypeConfig;
 		types.push_back(type);
 		table[i]->InitTypeConfig(i, *type);
-		auto& typeMini = pShareData->m_TypeMini[i];
-		auto_strcpy(typeMini.m_szTypeExts, type->m_szTypeExts);
-		auto_strcpy(typeMini.m_szTypeName, type->m_szTypeName);
-		typeMini.m_encoding = type->m_encoding;
-		typeMini.m_id = type->m_id;
+		auto& typeMini = pShareData->typesMini[i];
+		auto_strcpy(typeMini.szTypeExts, type->szTypeExts);
+		auto_strcpy(typeMini.szTypeName, type->szTypeName);
+		typeMini.encoding = type->encoding;
+		typeMini.id = type->id;
 		SAFE_DELETE(table[i]);
 	}
-	pShareData->m_TypeBasis = *types[0];
-	pShareData->m_nTypesCount = (int)types.size();
+	pShareData->typeBasis = *types[0];
+	pShareData->nTypesCount = (int)types.size();
 }
 
 /*!	@brief 共有メモリ初期化/強調キーワード
@@ -112,18 +112,18 @@ void ShareData::InitTypeConfigs(
 	@date 2005.01.30 genta ShareData::Init()から分離．
 		キーワード定義を関数の外に出し，登録をマクロ化して簡潔に．
 */
-void ShareData::InitKeyword(DLLSHAREDATA* pShareData)
+void ShareData::InitKeyword(DllSharedData* pShareData)
 {
 	// 強調キーワードのテストデータ
-	pShareData->m_common.m_specialKeyword.m_keywordSetMgr.m_nCurrentKeywordSetIdx = 0;
+	pShareData->common.specialKeyword.keywordSetMgr.m_nCurrentKeywordSetIdx = 0;
 
 	int nSetCount = -1;
 
 #define PopulateKeyword(name, case_sensitive, aryname) \
 	extern const wchar_t* g_ppszKeywords##aryname[]; \
 	extern int g_nKeywords##aryname; \
-	pShareData->m_common.m_specialKeyword.m_keywordSetMgr.AddKeywordSet((name), (case_sensitive));	\
-	pShareData->m_common.m_specialKeyword.m_keywordSetMgr.SetKeywordArr(++nSetCount, g_nKeywords##aryname, g_ppszKeywords##aryname);
+	pShareData->common.specialKeyword.keywordSetMgr.AddKeywordSet((name), (case_sensitive));	\
+	pShareData->common.specialKeyword.keywordSetMgr.SetKeywordArr(++nSetCount, g_nKeywords##aryname, g_ppszKeywords##aryname);
 	
 	PopulateKeyword(L"C/C++",			true,	CPP);			// セット 0の追加
 	PopulateKeyword(L"HTML",			false,	HTML);			// セット 1の追加
@@ -157,141 +157,141 @@ void _DefaultConfig(TypeConfig* pType)
 /* タイプ別設定の規定値 */
 /************************/
 
-	pType->m_nTextWrapMethod = TextWrappingMethod::SettingWidth;		// テキストの折り返し方法		// 2008.05.30 nasukoji
-	pType->m_nMaxLineKetas = LayoutInt(MAXLINEKETAS);	// 折り返し桁数
-	pType->m_nColumnSpace = 0;							// 文字と文字の隙間
-	pType->m_nLineSpace = 1;							// 行間のすきま
-	pType->m_nTabSpace = LayoutInt(4);					// TABの文字数
+	pType->nTextWrapMethod = TextWrappingMethod::SettingWidth;		// テキストの折り返し方法		// 2008.05.30 nasukoji
+	pType->nMaxLineKetas = LayoutInt(MAXLINEKETAS);	// 折り返し桁数
+	pType->nColumnSpace = 0;							// 文字と文字の隙間
+	pType->nLineSpace = 1;							// 行間のすきま
+	pType->nTabSpace = LayoutInt(4);					// TABの文字数
 	for (int i=0; i<MAX_KEYWORDSET_PER_TYPE; ++i) {
-		pType->m_nKeywordSetIdx[i] = -1;
+		pType->nKeywordSetIdx[i] = -1;
 	}
-	wcscpy_s(pType->m_szTabViewString, _EDITL("^       "));	// TAB表示文字列
-	pType->m_bTabArrow = TabArrowType::String;	// タブ矢印表示	// 2001.12.03 hor	// default on 2013/4/11 Uchi
-	pType->m_bInsSpace = false;				// スペースの挿入	// 2001.12.03 hor
+	wcscpy_s(pType->szTabViewString, _EDITL("^       "));	// TAB表示文字列
+	pType->bTabArrow = TabArrowType::String;	// タブ矢印表示	// 2001.12.03 hor	// default on 2013/4/11 Uchi
+	pType->bInsSpace = false;				// スペースの挿入	// 2001.12.03 hor
 	
-	//@@@ 2002.09.22 YAZAKI 以下、m_lineCommentとm_blockCommentsを使うように修正
-	pType->m_lineComment.CopyTo(0, L"", -1);	// 行コメントデリミタ
-	pType->m_lineComment.CopyTo(1, L"", -1);	// 行コメントデリミタ2
-	pType->m_lineComment.CopyTo(2, L"", -1);	// 行コメントデリミタ3	//Jun. 01, 2001 JEPRO 追加
-	pType->m_blockComments[0].SetBlockCommentRule(L"", L"");	// ブロックコメントデリミタ
-	pType->m_blockComments[1].SetBlockCommentRule(L"", L"");	// ブロックコメントデリミタ2
+	//@@@ 2002.09.22 YAZAKI 以下、lineCommentとblockCommentsを使うように修正
+	pType->lineComment.CopyTo(0, L"", -1);	// 行コメントデリミタ
+	pType->lineComment.CopyTo(1, L"", -1);	// 行コメントデリミタ2
+	pType->lineComment.CopyTo(2, L"", -1);	// 行コメントデリミタ3	//Jun. 01, 2001 JEPRO 追加
+	pType->blockComments[0].SetBlockCommentRule(L"", L"");	// ブロックコメントデリミタ
+	pType->blockComments[1].SetBlockCommentRule(L"", L"");	// ブロックコメントデリミタ2
 
-	pType->m_nStringType = StringLiteralType::CPP;					// 文字列区切り記号エスケープ方法 0=[\"][\'] 1=[""]['']
-	pType->m_bStringLineOnly = false;
-	pType->m_bStringEndLine  = false;
-	pType->m_nHeredocType = HereDocType::PHP;
-	pType->m_szIndentChars[0] = 0;		// その他のインデント対象文字
+	pType->stringType = StringLiteralType::CPP;					// 文字列区切り記号エスケープ方法 0=[\"][\'] 1=[""]['']
+	pType->bStringLineOnly = false;
+	pType->bStringEndLine  = false;
+	pType->nHeredocType = HereDocType::PHP;
+	pType->szIndentChars[0] = 0;		// その他のインデント対象文字
 
-	pType->m_nColorInfoArrNum = COLORIDX_LAST;
+	pType->nColorInfoArrNum = COLORIDX_LAST;
 
 	// 2001/06/14 Start by asa-o
-	pType->m_szHokanFile[0] = 0;		// 入力補完 単語ファイル
+	pType->szHokanFile[0] = 0;		// 入力補完 単語ファイル
 	// 2001/06/14 End
 
-	pType->m_nHokanType = 0;
+	pType->nHokanType = 0;
 
 	// 2001/06/19 asa-o
-	pType->m_bHokanLoHiCase = false;			// 入力補完機能：英大文字小文字を同一視する
+	pType->bHokanLoHiCase = false;			// 入力補完機能：英大文字小文字を同一視する
 
 	//	2003.06.23 Moca ファイル内からの入力補完機能
-	pType->m_bUseHokanByFile = true;			//! 入力補完 開いているファイル内から候補を探す
-	pType->m_bUseHokanByKeyword = false;		// 強調キーワードから入力補完
+	pType->bUseHokanByFile = true;			//! 入力補完 開いているファイル内から候補を探す
+	pType->bUseHokanByKeyword = false;		// 強調キーワードから入力補完
 
 	// 文字コード設定
-	auto& encoding = pType->m_encoding;
-	encoding.m_bPriorCesu8 = false;
-	encoding.m_eDefaultCodetype = CODE_SJIS;
-	encoding.m_eDefaultEoltype = EolType::CRLF;
-	encoding.m_bDefaultBom = false;
+	auto& encoding = pType->encoding;
+	encoding.bPriorCesu8 = false;
+	encoding.eDefaultCodetype = CODE_SJIS;
+	encoding.eDefaultEoltype = EolType::CRLF;
+	encoding.bDefaultBom = false;
 
 	//@@@2002.2.4 YAZAKI
-	pType->m_szExtHelp[0] = L'\0';
-	pType->m_szExtHtmlHelp[0] = L'\0';
-	pType->m_bHtmlHelpIsSingle = true;
+	pType->szExtHelp[0] = L'\0';
+	pType->szExtHtmlHelp[0] = L'\0';
+	pType->bHtmlHelpIsSingle = true;
 
-	pType->m_bAutoIndent = true;			// オートインデント
-	pType->m_bAutoIndent_ZENSPACE = true;	// 日本語空白もインデント
-	pType->m_bRTrimPrevLine = false;		// 2005.10.11 ryoji 改行時に末尾の空白を削除
+	pType->bAutoIndent = true;			// オートインデント
+	pType->bAutoIndent_ZENSPACE = true;	// 日本語空白もインデント
+	pType->bRTrimPrevLine = false;		// 2005.10.11 ryoji 改行時に末尾の空白を削除
 
-	pType->m_nIndentLayout = 0;	// 折り返しは2行目以降を字下げ表示
+	pType->nIndentLayout = 0;	// 折り返しは2行目以降を字下げ表示
 
-	assert(COLORIDX_LAST <= _countof(pType->m_colorInfoArr));
+	assert(COLORIDX_LAST <= _countof(pType->colorInfoArr));
 	for (int i=0; i<COLORIDX_LAST; ++i) {
-		GetDefaultColorInfo(&pType->m_colorInfoArr[i], i);
+		GetDefaultColorInfo(&pType->colorInfoArr[i], i);
 	}
-	pType->m_szBackImgPath[0] = '\0';
-	pType->m_backImgPos = BGIMAGE_TOP_LEFT;
-	pType->m_backImgRepeatX = true;
-	pType->m_backImgRepeatY = true;
-	pType->m_backImgScrollX = true;
-	pType->m_backImgScrollY = true;
+	pType->szBackImgPath[0] = '\0';
+	pType->backImgPos = BackgroundImagePosType::TopLeft;
+	pType->backImgRepeatX = true;
+	pType->backImgRepeatY = true;
+	pType->backImgScrollX = true;
+	pType->backImgScrollY = true;
 	{
 		POINT pt ={0, 0};
-		pType->m_backImgPosOffset = pt;
+		pType->backImgPosOffset = pt;
 	}
-	pType->m_bLineNumIsCRLF = true;					// 行番号の表示 false=折り返し単位／true=改行単位
-	pType->m_nLineTermType = 1;						// 行番号区切り 0=なし 1=縦線 2=任意
-	pType->m_cLineTermChar = L':';					// 行番号区切り文字
-	pType->m_bWordWrap = false;						// 英文ワードラップをする
-	pType->m_nCurrentPrintSetting = 0;				// 現在選択している印刷設定
-	pType->m_bOutlineDockDisp = false;				// アウトライン解析表示の有無
-	pType->m_eOutlineDockSide = DockSideType::Float;		// アウトライン解析ドッキング配置
-	pType->m_cxOutlineDockLeft = 0;					// アウトラインの左ドッキング幅
-	pType->m_cyOutlineDockTop = 0;					// アウトラインの上ドッキング高
-	pType->m_cxOutlineDockRight = 0;				// アウトラインの右ドッキング幅
-	pType->m_cyOutlineDockBottom = 0;				// アウトラインの下ドッキング高
-	pType->m_eDefaultOutline = OUTLINE_TEXT;		// アウトライン解析方法
-	pType->m_nOutlineSortCol = 0;					// アウトライン解析ソート列番号
-	pType->m_bOutlineSortDesc = false;				// アウトライン解析ソート降順
-	pType->m_nOutlineSortType = 0;					// アウトライン解析ソート基準
-	pType->m_eSmartIndent = SmartIndentType::None;		// スマートインデント種別
-	pType->m_nImeState = IME_CMODE_NOCONVERSION;	// IME入力
+	pType->bLineNumIsCRLF = true;					// 行番号の表示 false=折り返し単位／true=改行単位
+	pType->nLineTermType = 1;						// 行番号区切り 0=なし 1=縦線 2=任意
+	pType->cLineTermChar = L':';					// 行番号区切り文字
+	pType->bWordWrap = false;						// 英文ワードラップをする
+	pType->nCurrentPrintSetting = 0;				// 現在選択している印刷設定
+	pType->bOutlineDockDisp = false;				// アウトライン解析表示の有無
+	pType->eOutlineDockSide = DockSideType::Float;	// アウトライン解析ドッキング配置
+	pType->cxOutlineDockLeft = 0;					// アウトラインの左ドッキング幅
+	pType->cyOutlineDockTop = 0;					// アウトラインの上ドッキング高
+	pType->cxOutlineDockRight = 0;					// アウトラインの右ドッキング幅
+	pType->cyOutlineDockBottom = 0;					// アウトラインの下ドッキング高
+	pType->eDefaultOutline = OutlineType::Text;		// アウトライン解析方法
+	pType->nOutlineSortCol = 0;						// アウトライン解析ソート列番号
+	pType->bOutlineSortDesc = false;				// アウトライン解析ソート降順
+	pType->nOutlineSortType = 0;					// アウトライン解析ソート基準
+	pType->eSmartIndent = SmartIndentType::None;		// スマートインデント種別
+	pType->nImeState = IME_CMODE_NOCONVERSION;	// IME入力
 
-	pType->m_szOutlineRuleFilename[0] = L'\0';		//Dec. 4, 2000 MIK
-	pType->m_bKinsokuHead = false;					// 行頭禁則				//@@@ 2002.04.08 MIK
-	pType->m_bKinsokuTail = false;					// 行末禁則				//@@@ 2002.04.08 MIK
-	pType->m_bKinsokuRet  = false;					// 改行文字をぶら下げる	//@@@ 2002.04.13 MIK
-	pType->m_bKinsokuKuto = false;					// 句読点をぶら下げる	//@@@ 2002.04.17 MIK
-	pType->m_szKinsokuHead[0] = 0;					// 行頭禁則				//@@@ 2002.04.08 MIK
-	pType->m_szKinsokuTail[0] = 0;					// 行末禁則				//@@@ 2002.04.08 MIK
-	wcscpy_s(pType->m_szKinsokuKuto, L"、。，．､｡,.");	// 句読点ぶら下げ文字	// 2009.08.07 ryoji
+	pType->szOutlineRuleFilename[0] = L'\0';		//Dec. 4, 2000 MIK
+	pType->bKinsokuHead = false;					// 行頭禁則				//@@@ 2002.04.08 MIK
+	pType->bKinsokuTail = false;					// 行末禁則				//@@@ 2002.04.08 MIK
+	pType->bKinsokuRet  = false;					// 改行文字をぶら下げる	//@@@ 2002.04.13 MIK
+	pType->bKinsokuKuto = false;					// 句読点をぶら下げる	//@@@ 2002.04.17 MIK
+	pType->szKinsokuHead[0] = 0;					// 行頭禁則				//@@@ 2002.04.08 MIK
+	pType->szKinsokuTail[0] = 0;					// 行末禁則				//@@@ 2002.04.08 MIK
+	wcscpy_s(pType->szKinsokuKuto, L"、。，．､｡,.");	// 句読点ぶら下げ文字	// 2009.08.07 ryoji
 
-	pType->m_bUseDocumentIcon = false;				// 文書に関連づけられたアイコンを使う
+	pType->bUseDocumentIcon = false;				// 文書に関連づけられたアイコンを使う
 
 //@@@ 2001.11.17 add start MIK
-	for (int i=0; i<_countof(pType->m_RegexKeywordArr); ++i) {
-		pType->m_RegexKeywordArr[i].m_nColorIndex = COLORIDX_REGEX1;
+	for (int i=0; i<_countof(pType->regexKeywordArr); ++i) {
+		pType->regexKeywordArr[i].nColorIndex = COLORIDX_REGEX1;
 	}
-	pType->m_RegexKeywordList[0] = L'\0';
-	pType->m_bUseRegexKeyword = false;
+	pType->regexKeywordList[0] = L'\0';
+	pType->bUseRegexKeyword = false;
 //@@@ 2001.11.17 add end MIK
-	pType->m_nRegexKeyMagicNumber = 0;
+	pType->nRegexKeyMagicNumber = 0;
 
 //@@@ 2006.04.10 fon ADD-start
 	for (int i=0; i<MAX_KEYHELP_FILE; ++i) {
-		auto& attr = pType->m_KeyHelpArr[i];
-		attr.m_bUse = false;
-		attr.m_szAbout[0] = _T('\0');
-		attr.m_szPath[0] = _T('\0');
+		auto& attr = pType->keyHelpArr[i];
+		attr.bUse = false;
+		attr.szAbout[0] = _T('\0');
+		attr.szPath[0] = _T('\0');
 	}
-	pType->m_bUseKeywordHelp = false;		// 辞書選択機能の使用可否
-	pType->m_nKeyHelpNum = 0;				// 登録辞書数
-	pType->m_bUseKeyHelpAllSearch = false;	// ヒットした次の辞書も検索(&A)
-	pType->m_bUseKeyHelpKeyDisp = false;	// 1行目にキーワードも表示する(&W)
-	pType->m_bUseKeyHelpPrefix = false;		// 選択範囲で前方一致検索(&P)
+	pType->bUseKeywordHelp = false;		// 辞書選択機能の使用可否
+	pType->nKeyHelpNum = 0;				// 登録辞書数
+	pType->bUseKeyHelpAllSearch = false;	// ヒットした次の辞書も検索(&A)
+	pType->bUseKeyHelpKeyDisp = false;	// 1行目にキーワードも表示する(&W)
+	pType->bUseKeyHelpPrefix = false;		// 選択範囲で前方一致検索(&P)
 //@@@ 2006.04.10 fon ADD-end
 
 	// 2005.11.08 Moca 指定位置縦線の設定
 	for (int i=0; i<MAX_VERTLINES; ++i) {
-		pType->m_nVertLineIdx[i] = LayoutInt(0);
+		pType->nVertLineIdx[i] = LayoutInt(0);
 	}
-	pType->m_nNoteLineOffset = 0;
+	pType->nNoteLineOffset = 0;
 
 	//  保存時に改行コードの混在を警告する	2013/4/14 Uchi
-	pType->m_bChkEnterAtEnd = true;
+	pType->bChkEnterAtEnd = true;
 
-	pType->m_bUseTypeFont = false;			//!< タイプ別フォントの使用
+	pType->bUseTypeFont = false;			//!< タイプ別フォントの使用
 
-	pType->m_nLineNumWidth = LINENUMWIDTH_MIN;	//!< 行番号最小桁数 2014.08.02 katze
+	pType->nLineNumWidth = LINENUMWIDTH_MIN;	//!< 行番号最小桁数 2014.08.02 katze
 }
 

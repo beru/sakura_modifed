@@ -17,7 +17,7 @@
 #define IDD_INPUT1                      119
 #define IDD_COMPARE                     120
 #define IDD_PRINTPREVIEWBAR             121
-#define IDD_PRINTSETTING                122
+#define IDD_PrintSetting                122
 #define IDD_EXITING                     123
 //#define IDD_DEBUG                       124
 #define IDD_EXEC                        125
@@ -268,7 +268,7 @@
 #define IDC_CHECK_HOKANLOHICASE         1201
 #define IDC_BUTTON_NEXTPAGE             1202
 #define IDC_BUTTON_ZOOMDOWN             1203
-#define IDC_BUTTON_PRINTSETTING         1204
+#define IDC_BUTTON_PrintSetting         1204
 #define IDC_EDIT_LINECOMMENTPOS         1205
 #define IDC_BUTTON_PREVPAGE             1206
 #define IDC_EDIT_LINECOMMENTPOS2        1207

@@ -46,7 +46,7 @@
 #include "Bregexp.h"
 #include "charset/charcode.h"
 #include "env/ShareData.h"
-#include "env/DLLSHAREDATA.h"
+#include "env/DllSharedData.h"
 
 
 // Compile時、行頭置換(len=0)の時にダミー文字列(１つに統一) by かろと
@@ -600,18 +600,18 @@ bool InitRegexp(
 	)
 {
 	// From Here 2007.08.12 genta
-	DLLSHAREDATA* pShareData = &GetDllShareData();
+	DllSharedData* pShareData = &GetDllShareData();
 
-	LPCTSTR RegexpDll = pShareData->m_common.m_search.m_szRegexpLib;
+	LPCTSTR RegexpDll = pShareData->common.search.szRegexpLib;
 	// To Here 2007.08.12 genta
 
-	EDllResult eDllResult = rRegexp.InitDll(RegexpDll);
-	if (eDllResult != DLL_SUCCESS) {
+	InitDllResultType dllResult = rRegexp.InitDll(RegexpDll);
+	if (dllResult != InitDllResultType::Success) {
 		if (bShowMessage) {
 			LPCTSTR pszMsg = _T("");
-			if (eDllResult == DLL_LOADFAILURE) {
+			if (dllResult == InitDllResultType::LoadFailure) {
 				pszMsg = LS(STR_BREGONIG_LOAD);
-			}else if (eDllResult == DLL_INITFAILURE) {
+			}else if (dllResult == InitDllResultType::InitFailure) {
 				pszMsg = LS(STR_BREGONIG_INIT);
 			}else {
 				pszMsg = LS(STR_BREGONIG_ERROR);

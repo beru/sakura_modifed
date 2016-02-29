@@ -190,7 +190,7 @@ LayoutInt LayoutMgr::getIndentOffset_Tx2x(Layout* pLayoutPrev)
 		}
 		it.addDelta();
 	}
-	// 2010.07.06 Moca TAB=8などの場合に折り返すと無限ループする不具合の修正. 6固定を m_nTabSpace + 2に変更
+	// 2010.07.06 Moca TAB=8などの場合に折り返すと無限ループする不具合の修正. 6固定を nTabSpace + 2に変更
 	if (GetMaxLineKetas() - nIpos < GetTabSpace() + 2) {
 		nIpos = t_max(LayoutInt(0), GetMaxLineKetas() - (GetTabSpace() + 2)); // 2013.05.12 Chg:0だったのを最大幅に変更
 	}
@@ -227,8 +227,8 @@ LayoutInt LayoutMgr::getIndentOffset_LeftSpace(Layout* pLayoutPrev)
 	MemoryIterator it(pLayoutPrev, GetTabSpace());
 
 	// Jul. 20, 2003 genta 自動インデントに準じた動作にする
-	bool bZenSpace = m_pTypeConfig->m_bAutoIndent_ZENSPACE;
-	const wchar_t* szSpecialIndentChar = m_pTypeConfig->m_szIndentChars;
+	bool bZenSpace = m_pTypeConfig->bAutoIndent_ZENSPACE;
+	const wchar_t* szSpecialIndentChar = m_pTypeConfig->szIndentChars;
 	while (!it.end()) {
 		it.scanNext();
 		if (it.getIndexDelta() == 1 && WCODE::IsIndentChar(it.getCurrentChar(), bZenSpace)) {
@@ -253,7 +253,7 @@ LayoutInt LayoutMgr::getIndentOffset_LeftSpace(Layout* pLayoutPrev)
 	if (it.end()) {
 		nIpos = it.getColumn();	// 終了
 	}
-	// 2010.07.06 Moca TAB=8などの場合に折り返すと無限ループする不具合の修正. 6固定を m_nTabSpace + 2に変更
+	// 2010.07.06 Moca TAB=8などの場合に折り返すと無限ループする不具合の修正. 6固定を nTabSpace + 2に変更
 	if (GetMaxLineKetas() - nIpos < GetTabSpace() + 2) {
 		nIpos = t_max(LayoutInt(0), GetMaxLineKetas() - (GetTabSpace() + 2)); // 2013.05.12 Chg:0だったのを最大幅に変更
 	}

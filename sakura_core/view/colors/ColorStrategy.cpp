@@ -51,56 +51,56 @@ bool _IsPosKeywordHead(const StringRef& str, int nPos)
 bool ColorStrategyInfo::CheckChangeColor(const StringRef& lineStr)
 {
 	ColorStrategyPool* pool = ColorStrategyPool::getInstance();
-	pool->SetCurrentView(m_pView);
+	pool->SetCurrentView(pView);
 	Color_Found*  pFound  = pool->GetFoundStrategy();
 	Color_Select* pSelect = pool->GetSelectStrategy();
 	bool bChange = false;
 
 	// 選択範囲色終了
-	if (m_pStrategySelect) {
-		if (m_pStrategySelect->EndColor(lineStr, this->GetPosInLogic())) {
-			m_pStrategySelect = NULL;
+	if (pStrategySelect) {
+		if (pStrategySelect->EndColor(lineStr, this->GetPosInLogic())) {
+			pStrategySelect = NULL;
 			bChange = true;
 		}
 	}
 	// 選択範囲色開始
-	if (!m_pStrategySelect) {
-		if (pSelect->BeginColorEx(lineStr, this->GetPosInLogic(), m_pDispPos->GetLayoutLineRef(), this->GetLayout())) {
-			m_pStrategySelect = pSelect;
+	if (!pStrategySelect) {
+		if (pSelect->BeginColorEx(lineStr, this->GetPosInLogic(), pDispPos->GetLayoutLineRef(), this->GetLayout())) {
+			pStrategySelect = pSelect;
 			bChange = true;
 		}
 	}
 
 	// 検索色終了
-	if (m_pStrategyFound) {
-		if (m_pStrategyFound->EndColor(lineStr, this->GetPosInLogic())) {
-			m_pStrategyFound = NULL;
+	if (pStrategyFound) {
+		if (pStrategyFound->EndColor(lineStr, this->GetPosInLogic())) {
+			pStrategyFound = NULL;
 			bChange = true;
 		}
 	}
 
 	// 検索色開始
-	if (!m_pStrategyFound) {
+	if (!pStrategyFound) {
 		if (pFound->BeginColor(lineStr, this->GetPosInLogic())) {
-			m_pStrategyFound = pFound;
+			pStrategyFound = pFound;
 			bChange = true;
 		}
 	}
 
 	// 色終了
-	if (m_pStrategy) {
-		if (m_pStrategy->EndColor(lineStr, this->GetPosInLogic())) {
-			m_pStrategy = NULL;
+	if (pStrategy) {
+		if (pStrategy->EndColor(lineStr, this->GetPosInLogic())) {
+			pStrategy = NULL;
 			bChange = true;
 		}
 	}
 
 	// 色開始
-	if (!m_pStrategy) {
+	if (!pStrategy) {
 		int size = pool->GetStrategyCount();
 		for (int i=0; i<size; ++i) {
 			if (pool->GetStrategy(i)->BeginColor(lineStr, this->GetPosInLogic())) {
-				m_pStrategy = pool->GetStrategy(i);
+				pStrategy = pool->GetStrategy(i);
 				bChange = true;
 				break;
 			}
@@ -108,49 +108,49 @@ bool ColorStrategyInfo::CheckChangeColor(const StringRef& lineStr)
 	}
 
 	// カーソル行背景色
-	TypeSupport caretLineBg(m_pView, COLORIDX_CARETLINEBG);
-	if (caretLineBg.IsDisp() && !m_pView->m_bMiniMap) {
-		if (m_colorIdxBackLine == COLORIDX_CARETLINEBG) {
-			if (m_pDispPos->GetLayoutLineRef() != m_pView->GetCaret().GetCaretLayoutPos().GetY2()) {
-				m_colorIdxBackLine = COLORIDX_TEXT;
+	TypeSupport caretLineBg(pView, COLORIDX_CARETLINEBG);
+	if (caretLineBg.IsDisp() && !pView->m_bMiniMap) {
+		if (colorIdxBackLine == COLORIDX_CARETLINEBG) {
+			if (pDispPos->GetLayoutLineRef() != pView->GetCaret().GetCaretLayoutPos().GetY2()) {
+				colorIdxBackLine = COLORIDX_TEXT;
 				bChange = true;
 			}
 		}else {
-			if (m_pDispPos->GetLayoutLineRef() == m_pView->GetCaret().GetCaretLayoutPos().GetY2()) {
-				m_colorIdxBackLine = COLORIDX_CARETLINEBG;
+			if (pDispPos->GetLayoutLineRef() == pView->GetCaret().GetCaretLayoutPos().GetY2()) {
+				colorIdxBackLine = COLORIDX_CARETLINEBG;
 				bChange = true;
 			}
 		}
 	}
 	// 偶数行の背景色
-	TypeSupport cEvenLineBg(m_pView, COLORIDX_EVENLINEBG);
-	if (cEvenLineBg.IsDisp() && !m_pView->m_bMiniMap && m_colorIdxBackLine != COLORIDX_CARETLINEBG) {
-		if (m_colorIdxBackLine == COLORIDX_EVENLINEBG) {
-			if (m_pDispPos->GetLayoutLineRef() % 2 == 0) {
-				m_colorIdxBackLine = COLORIDX_TEXT;
+	TypeSupport cEvenLineBg(pView, COLORIDX_EVENLINEBG);
+	if (cEvenLineBg.IsDisp() && !pView->m_bMiniMap && colorIdxBackLine != COLORIDX_CARETLINEBG) {
+		if (colorIdxBackLine == COLORIDX_EVENLINEBG) {
+			if (pDispPos->GetLayoutLineRef() % 2 == 0) {
+				colorIdxBackLine = COLORIDX_TEXT;
 				bChange = true;
 			}
 		}else {
-			if (m_pDispPos->GetLayoutLineRef() % 2 == 1) {
-				m_colorIdxBackLine = COLORIDX_EVENLINEBG;
+			if (pDispPos->GetLayoutLineRef() % 2 == 1) {
+				colorIdxBackLine = COLORIDX_EVENLINEBG;
 				bChange = true;
 			}
 		}
 	}
-	if (m_pView->m_bMiniMap) {
-		TypeSupport cPageViewBg(m_pView, COLORIDX_PAGEVIEW);
+	if (pView->m_bMiniMap) {
+		TypeSupport cPageViewBg(pView, COLORIDX_PAGEVIEW);
 		if (cPageViewBg.IsDisp()) {
-			EditView& activeView = m_pView->m_pEditWnd->GetActiveView();
-			LayoutInt curLine = m_pDispPos->GetLayoutLineRef();
-			if (m_colorIdxBackLine == COLORIDX_PAGEVIEW) {
+			EditView& activeView = pView->m_pEditWnd->GetActiveView();
+			LayoutInt curLine = pDispPos->GetLayoutLineRef();
+			if (colorIdxBackLine == COLORIDX_PAGEVIEW) {
 				if (activeView.GetTextArea().GetViewTopLine() <= curLine && curLine < activeView.GetTextArea().GetBottomLine()) {
 				}else {
-					m_colorIdxBackLine = COLORIDX_TEXT;
+					colorIdxBackLine = COLORIDX_TEXT;
 					bChange = true;
 				}
-			}else if (m_colorIdxBackLine == COLORIDX_TEXT) {
+			}else if (colorIdxBackLine == COLORIDX_TEXT) {
 				if (activeView.GetTextArea().GetViewTopLine() <= curLine && curLine < activeView.GetTextArea().GetBottomLine()) {
-					m_colorIdxBackLine = COLORIDX_PAGEVIEW;
+					colorIdxBackLine = COLORIDX_PAGEVIEW;
 					bChange = true;
 				}
 			}
@@ -166,23 +166,23 @@ bool ColorStrategyInfo::CheckChangeColor(const StringRef& lineStr)
 */
 void ColorStrategyInfo::DoChangeColor(Color3Setting *pcColor)
 {
-	if (m_pStrategySelect) {
-		m_cIndex.eColorIndex = m_pStrategySelect->GetStrategyColor();
-	}else if (m_pStrategyFound) {
-		m_cIndex.eColorIndex = m_pStrategyFound->GetStrategyColor();
+	if (pStrategySelect) {
+		index.eColorIndex = pStrategySelect->GetStrategyColor();
+	}else if (pStrategyFound) {
+		index.eColorIndex = pStrategyFound->GetStrategyColor();
 	}else {
-		m_cIndex.eColorIndex = m_pStrategy->GetStrategyColorSafe();
+		index.eColorIndex = pStrategy->GetStrategyColorSafe();
 	}
 
-	if (m_pStrategyFound) {
-		m_cIndex.eColorIndex2 = m_pStrategyFound->GetStrategyColor();
+	if (pStrategyFound) {
+		index.eColorIndex2 = pStrategyFound->GetStrategyColor();
 	}else {
-		m_cIndex.eColorIndex2 = m_pStrategy->GetStrategyColorSafe();
+		index.eColorIndex2 = pStrategy->GetStrategyColorSafe();
 	}
 
-	m_cIndex.eColorIndexBg = m_colorIdxBackLine;
+	index.eColorIndexBg = colorIdxBackLine;
 
-	*pcColor = m_cIndex;
+	*pcColor = index;
 }
 
 
@@ -331,26 +331,26 @@ void ColorStrategyPool::OnChangeSetting(void)
 		if (COLORIDX_KEYWORD1 <= bSkipColorTypeTable[n]
 			&& bSkipColorTypeTable[n] <= COLORIDX_KEYWORD10
 		) {
-			if (type.m_nKeywordSetIdx[n - nKeyword1] == -1) {
+			if (type.nKeywordSetIdx[n - nKeyword1] == -1) {
 				bUnuseKeyword = true; // -1以降は無効
 			}
-			if (!bUnuseKeyword && type.m_colorInfoArr[bSkipColorTypeTable[n]].m_bDisp) {
+			if (!bUnuseKeyword && type.colorInfoArr[bSkipColorTypeTable[n]].bDisp) {
 				m_bSkipBeforeLayoutGeneral = false;
 				break;
 			}
-		}else if (type.m_colorInfoArr[bSkipColorTypeTable[n]].m_bDisp) {
+		}else if (type.colorInfoArr[bSkipColorTypeTable[n]].bDisp) {
 			m_bSkipBeforeLayoutGeneral = false;
 			break;
 		}
 	}
 	if (m_bSkipBeforeLayoutGeneral) {
-		if (type.m_bUseRegexKeyword) {
+		if (type.bUseRegexKeyword) {
 			m_bSkipBeforeLayoutGeneral = false;
 		}
 	}
 	m_bSkipBeforeLayoutFound = true;
 	for (int n=COLORIDX_SEARCH; n<=COLORIDX_SEARCHTAIL; ++n) {
-		if (type.m_colorInfoArr[n].m_bDisp) {
+		if (type.colorInfoArr[n].bDisp) {
 			m_bSkipBeforeLayoutFound = false;
 			break;
 		}

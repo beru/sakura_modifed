@@ -28,8 +28,8 @@
 void CType_Other::InitTypeConfigImp(TypeConfig* pType)
 {
 	// –¼‘O‚ÆŠg’£Žq
-	auto_sprintf_s(pType->m_szTypeName, _T("Ý’è%d"), pType->m_nIdx + 1);
-	pType->m_szTypeExts[0] = 0;
+	auto_sprintf_s(pType->szTypeName, _T("Ý’è%d"), pType->nIdx + 1);
+	pType->szTypeExts[0] = 0;
 
 }
 

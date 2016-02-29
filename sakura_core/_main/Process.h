@@ -16,7 +16,7 @@
 
 #include "global.h"
 #include "env/ShareData.h"
-#include "env/DLLSHAREDATA.h"
+#include "env/DllSharedData.h"
 
 //#define USE_CRASHDUMP
 

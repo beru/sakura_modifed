@@ -213,7 +213,7 @@ void CommandLine::ParseCommandLine(LPCTSTR pszCmdLineSrc, bool bResponse)
 				if (WCODE::Is09(wexename[k])) {
 					EncodingType n = (EncodingType)_wtoi(&wexename[k]);
 					if (IsValidCodeOrCPType(n)) {
-						m_fi.m_nCharCode = n;
+						m_fi.nCharCode = n;
 					}
 				}
 				break;
@@ -245,10 +245,10 @@ void CommandLine::ParseCommandLine(LPCTSTR pszCmdLineSrc, bool bResponse)
 	}
 	if (bFind) {
 		SakuraEnvironment::ResolvePath(szPath);
-		_tcscpy(m_fi.m_szPath, szPath);	// ファイル名
+		_tcscpy(m_fi.szPath, szPath);	// ファイル名
 		nPos = i + 1;
 	}else {
-		m_fi.m_szPath[0] = _T('\0');
+		m_fi.szPath[0] = _T('\0');
 		nPos = 0;
 	}
 
@@ -312,8 +312,8 @@ void CommandLine::ParseCommandLine(LPCTSTR pszCmdLineSrc, bool bResponse)
 
 			if (szPath[0] != _T('\0')) {
 				SakuraEnvironment::ResolvePath(szPath);
-				if (m_fi.m_szPath[0] == _T('\0')) {
-					_tcscpy(m_fi.m_szPath, szPath );
+				if (m_fi.szPath[0] == _T('\0')) {
+					_tcscpy(m_fi.szPath, szPath );
 				}else {
 					m_fileNames.push_back(szPath);
 				}
@@ -335,41 +335,41 @@ void CommandLine::ParseCommandLine(LPCTSTR pszCmdLineSrc, bool bResponse)
 				break;
 			case CMDLINEOPT_X: // X
 				// 行桁指定を1開始にした
-				m_fi.m_ptCursor.x = AtoiOptionInt(arg) - 1;
+				m_fi.ptCursor.x = AtoiOptionInt(arg) - 1;
 				break;
 			case CMDLINEOPT_Y:	// Y
-				m_fi.m_ptCursor.y = AtoiOptionInt(arg) - 1;
+				m_fi.ptCursor.y = AtoiOptionInt(arg) - 1;
 				break;
 			case CMDLINEOPT_VX:	// VX
 				// 行桁指定を1開始にした
-				m_fi.m_nViewLeftCol = LayoutInt(AtoiOptionInt(arg) - 1);
+				m_fi.nViewLeftCol = LayoutInt(AtoiOptionInt(arg) - 1);
 				break;
 			case CMDLINEOPT_VY:	// VY
 				// 行桁指定を1開始にした
-				m_fi.m_nViewTopLine = LayoutInt(AtoiOptionInt(arg) - 1);
+				m_fi.nViewTopLine = LayoutInt(AtoiOptionInt(arg) - 1);
 				break;
 			case CMDLINEOPT_SX: // SX
-				m_fi.m_nWindowSizeX = AtoiOptionInt(arg) - 1;
+				m_fi.nWindowSizeX = AtoiOptionInt(arg) - 1;
 				break;
 			case CMDLINEOPT_SY:	// SY
-				m_fi.m_nWindowSizeY = AtoiOptionInt(arg) - 1;
+				m_fi.nWindowSizeY = AtoiOptionInt(arg) - 1;
 				break;
 			case CMDLINEOPT_WX: // WX
-				m_fi.m_nWindowOriginX = AtoiOptionInt(arg);
+				m_fi.nWindowOriginX = AtoiOptionInt(arg);
 				break;
 			case CMDLINEOPT_WY:	// WY
-				m_fi.m_nWindowOriginY = AtoiOptionInt(arg);
+				m_fi.nWindowOriginY = AtoiOptionInt(arg);
 				break;
 			case CMDLINEOPT_TYPE:	// TYPE
 				// Mar. 7, 2002 genta
 				// ファイルタイプの強制指定
 				{
-					_tcsncpy(m_fi.m_szDocType, arg, MAX_DOCTYPE_LEN);
-					m_fi.m_szDocType[nArgLen < MAX_DOCTYPE_LEN ? nArgLen : MAX_DOCTYPE_LEN] = L'\0';
+					_tcsncpy(m_fi.szDocType, arg, MAX_DOCTYPE_LEN);
+					m_fi.szDocType[nArgLen < MAX_DOCTYPE_LEN ? nArgLen : MAX_DOCTYPE_LEN] = L'\0';
 				}
 				break;
 			case CMDLINEOPT_CODE:	// CODE
-				m_fi.m_nCharCode = (EncodingType)AtoiOptionInt(arg);
+				m_fi.nCharCode = (EncodingType)AtoiOptionInt(arg);
 				break;
 			case CMDLINEOPT_R:	// R
 				m_bViewMode = true;
@@ -383,8 +383,8 @@ void CommandLine::ParseCommandLine(LPCTSTR pszCmdLineSrc, bool bResponse)
 				break;
 			case CMDLINEOPT_GREPMODE:	// GREPMODE
 				m_bGrepMode = true;
-				if (m_fi.m_szDocType[0] == _T('\0')) {
-					auto_strcpy(m_fi.m_szDocType , _T("grepout"));
+				if (m_fi.szDocType[0] == _T('\0')) {
+					auto_strcpy(m_fi.szDocType , _T("grepout"));
 				}
 				break;
 			case CMDLINEOPT_GREPDLG:	// GREPDLG
@@ -472,8 +472,8 @@ void CommandLine::ParseCommandLine(LPCTSTR pszCmdLineSrc, bool bResponse)
 			case CMDLINEOPT_DEBUGMODE:
 				m_bDebugMode = true;
 				// 2010.06.16 Moca -TYPE=output 扱いとする
-				if (m_fi.m_szDocType[0] == _T('\0')) {
-					auto_strcpy(m_fi.m_szDocType , _T("output"));
+				if (m_fi.szDocType[0] == _T('\0')) {
+					auto_strcpy(m_fi.szDocType , _T("output"));
 				}
 				break;
 			case CMDLINEOPT_NOMOREOPT:	// 2007.09.09 genta これ以降引数無効

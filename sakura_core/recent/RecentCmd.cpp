@@ -25,7 +25,7 @@
 #include "StdAfx.h"
 #include "RecentCmd.h"
 #include "config/maxdata.h"
-#include "env/DLLSHAREDATA.h"
+#include "env/DllSharedData.h"
 #include <string.h>
 
 
@@ -36,8 +36,8 @@
 RecentCmd::RecentCmd()
 {
 	Create(
-		GetShareData()->m_history.m_aCommands.dataPtr(),
-		&GetShareData()->m_history.m_aCommands._GetSizeRef(),
+		GetShareData()->history.m_aCommands.dataPtr(),
+		&GetShareData()->history.m_aCommands._GetSizeRef(),
 		NULL,
 		MAX_CMDARR,
 		NULL

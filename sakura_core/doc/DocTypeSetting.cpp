@@ -106,13 +106,13 @@ void GetDefaultColorInfo(ColorInfo* pColorInfo, int nIndex)
 	ColorInfoBase* p = pColorInfo;
 	*p = ColorInfo_DEFAULT[nIndex].colorInfo; // ColorInfoBase
 	GetDefaultColorInfoName(pColorInfo, nIndex);
-	pColorInfo->m_nColorIdx = nIndex;
+	pColorInfo->nColorIdx = nIndex;
 }
 
 void GetDefaultColorInfoName(ColorInfo* pColorInfo, int nIndex)
 {
 	assert(nIndex < _countof(ColorInfo_DEFAULT));
-	_tcscpy(pColorInfo->m_szName, LS(ColorInfo_DEFAULT[nIndex].nNameId));
+	_tcscpy(pColorInfo->szName, LS(ColorInfo_DEFAULT[nIndex].nNameId));
 }
 
 int GetDefaultColorInfoCount()

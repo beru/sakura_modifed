@@ -52,15 +52,15 @@ CodeConvertResult ReadManager::ReadFile_To_CDocLineMgr(
 	DocTypeManager().GetTypeConfigMini( loadInfo.nType, &type );
 	EncodingType eCharCode = loadInfo.eCharCode;
 	if (eCharCode == CODE_AUTODETECT) {
-		CodeMediator mediator( type->m_encoding );
+		CodeMediator mediator( type->encoding );
 		eCharCode = mediator.CheckKanjiCodeOfFile( pszPath );
 	}
 	if (!IsValidCodeOrCPType(eCharCode)) {
-		eCharCode = type->m_encoding.m_eDefaultCodetype;	// 2011.01.24 ryoji デフォルト文字コード
+		eCharCode = type->encoding.eDefaultCodetype;	// 2011.01.24 ryoji デフォルト文字コード
 	}
 	bool bBom;
-	if (eCharCode == type->m_encoding.m_eDefaultCodetype) {
-		bBom = type->m_encoding.m_bDefaultBom;	// 2011.01.24 ryoji デフォルトBOM
+	if (eCharCode == type->encoding.eDefaultCodetype) {
+		bBom = type->encoding.bDefaultBom;	// 2011.01.24 ryoji デフォルトBOM
 	}else {
 		bBom = CodeTypeName( eCharCode ).IsBomDefOn();
 	}
@@ -77,7 +77,7 @@ CodeConvertResult ReadManager::ReadFile_To_CDocLineMgr(
 	CodeConvertResult eRet = CodeConvertResult::Complete;
 
 	try {
-		FileLoad fl(type->m_encoding);
+		FileLoad fl(type->encoding);
 
 		bool bBigFile;
 #ifdef _WIN64
@@ -88,7 +88,7 @@ CodeConvertResult ReadManager::ReadFile_To_CDocLineMgr(
 		// ファイルを開く
 		// ファイルを閉じるにはFileCloseメンバ又はデストラクタのどちらかで処理できます
 		//	Jul. 28, 2003 ryoji BOMパラメータ追加
-		fl.FileOpen( pszPath, bBigFile, eCharCode, GetDllShareData().m_common.m_file.GetAutoMIMEdecode(), &bBom );
+		fl.FileOpen( pszPath, bBigFile, eCharCode, GetDllShareData().common.file.GetAutoMIMEdecode(), &bBom );
 		pFileInfo->SetBomExist( bBom );
 
 		// ファイル時刻の取得

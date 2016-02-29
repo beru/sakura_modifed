@@ -52,20 +52,20 @@ bool IsHeadCppKeyword(const wchar_t* pData)
 void CType_Cpp::InitTypeConfigImp(TypeConfig* pType)
 {
 	// 名前と拡張子
-	_tcscpy(pType->m_szTypeName, _T("C/C++"));
-	_tcscpy(pType->m_szTypeExts, _T("c,cpp,cxx,cc,cp,c++,h,hpp,hxx,hh,hp,h++,rc,hm"));
+	_tcscpy(pType->szTypeName, _T("C/C++"));
+	_tcscpy(pType->szTypeExts, _T("c,cpp,cxx,cc,cp,c++,h,hpp,hxx,hh,hp,h++,rc,hm"));
 
 	// 設定
-	pType->m_lineComment.CopyTo(0, L"//", -1);							// 行コメントデリミタ
-	pType->m_blockComments[0].SetBlockCommentRule(L"/*", L"*/");			// ブロックコメントデリミタ
-	pType->m_blockComments[1].SetBlockCommentRule(L"#if 0", L"#endif");	// ブロックコメントデリミタ2		Jul. 11, 2001 JEPRO
-	pType->m_nKeywordSetIdx[0] = 0;											// キーワードセット
-	pType->m_eDefaultOutline = OUTLINE_CPP;									// アウトライン解析方法
-	pType->m_eSmartIndent = SmartIndentType::Cpp;								// スマートインデント種別
-	pType->m_colorInfoArr[COLORIDX_DIGIT].m_bDisp = true;					// 半角数値を色分け表示				Mar. 10, 2001 JEPRO
-	pType->m_colorInfoArr[COLORIDX_BRACKET_PAIR].m_bDisp = true;			// 対括弧の強調をデフォルトONに		Sep. 21, 2002 genta 
-	pType->m_bUseHokanByFile = true;										// 入力補完 開いているファイル内から候補を探す
-	pType->m_bStringLineOnly = true; // 文字列は行内のみ
+	pType->lineComment.CopyTo(0, L"//", -1);							// 行コメントデリミタ
+	pType->blockComments[0].SetBlockCommentRule(L"/*", L"*/");			// ブロックコメントデリミタ
+	pType->blockComments[1].SetBlockCommentRule(L"#if 0", L"#endif");	// ブロックコメントデリミタ2		Jul. 11, 2001 JEPRO
+	pType->nKeywordSetIdx[0] = 0;										// キーワードセット
+	pType->eDefaultOutline = OutlineType::CPP;							// アウトライン解析方法
+	pType->eSmartIndent = SmartIndentType::Cpp;							// スマートインデント種別
+	pType->colorInfoArr[COLORIDX_DIGIT].bDisp = true;					// 半角数値を色分け表示				Mar. 10, 2001 JEPRO
+	pType->colorInfoArr[COLORIDX_BRACKET_PAIR].bDisp = true;			// 対括弧の強調をデフォルトONに		Sep. 21, 2002 genta 
+	pType->bUseHokanByFile = true;										// 入力補完 開いているファイル内から候補を探す
+	pType->bStringLineOnly = true; // 文字列は行内のみ
 }
 
 //	Mar. 15, 2000 genta
@@ -129,7 +129,7 @@ bool C_IsLineEsc(const wchar_t* s, int len)
 		len > 0
 		&& WCODE::IsLineDelimiter(
 			s[len-1],
-			GetDllShareData().m_common.m_edit.m_bEnableExtEol
+			GetDllShareData().common.edit.bEnableExtEol
 		)
 	) {
 		--len;
@@ -243,7 +243,7 @@ LogicInt CppPreprocessMng::ScanLine(
 
 	const wchar_t* lastptr = str + length;	//	処理文字列末尾
 	const wchar_t* p;	//	処理中の位置
-	bool bExtEol = GetDllShareData().m_common.m_edit.m_bEnableExtEol;
+	bool bExtEol = GetDllShareData().common.edit.bEnableExtEol;
 
 	//	skip whitespace
 	for (p=str; C_IsSpace(*p, bExtEol) && p<lastptr; ++p)
@@ -464,7 +464,7 @@ void DocOutline::MakeFuncList_C(
 	
 	//	Aug. 10, 2004 genta プリプロセス処理クラス
 	CppPreprocessMng cppPMng;
-	bool bExtEol = GetDllShareData().m_common.m_edit.m_bEnableExtEol;
+	bool bExtEol = GetDllShareData().common.edit.bEnableExtEol;
 	
 	LogicInt nLineCount;
 	for (nLineCount=LogicInt(0); nLineCount<m_pDocRef->m_docLineMgr.GetLineCount(); ++nLineCount) {
@@ -1400,13 +1400,13 @@ void EditView::SmartIndent_CPP(wchar_t wcChar)
 			}
 
 			nDataLen = LogicInt(m);
-			nCharChars = (m_pEditDoc->m_docType.GetDocumentAttribute().m_bInsSpace)? (Int)m_pEditDoc->m_layoutMgr.GetTabSpace(): 1;
+			nCharChars = (m_pEditDoc->m_docType.GetDocumentAttribute().bInsSpace)? (Int)m_pEditDoc->m_layoutMgr.GetTabSpace(): 1;
 			pszData = new wchar_t[nDataLen + nCharChars + 1];
 			wmemcpy(pszData, pLine2, nDataLen);
 			if (wcChar == WCODE::CR || wcChar == L'{' || wcChar == L'(') {
 				// 2005.10.11 ryoji TABキーがSPACE挿入の設定なら追加インデントもSPACEにする
 				//	既存文字列の右端の表示位置を求めた上で挿入するスペースの数を決定する
-				if (m_pEditDoc->m_docType.GetDocumentAttribute().m_bInsSpace) {	// SPACE挿入設定
+				if (m_pEditDoc->m_docType.GetDocumentAttribute().bInsSpace) {	// SPACE挿入設定
 					int i;
 					i = m = 0;
 					while (i < nDataLen) {

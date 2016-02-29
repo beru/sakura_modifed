@@ -69,7 +69,7 @@ class PrintPreview; // 2002/2/10 aroka
 class DropTarget;
 class Plug;
 class EditDoc;
-struct DLLSHAREDATA;
+struct DllSharedData;
 
 
 // メインウィンドウ内コントロールID
@@ -381,7 +381,7 @@ private:
 	const int		m_nEditViewMaxCount;	//!< ビューの最大数=4
 
 	// 共有データ
-	DLLSHAREDATA*	m_pShareData;
+	DllSharedData*	m_pShareData;
 
 	// ヘルパ
 	MenuDrawer		m_menuDrawer;
@@ -399,7 +399,7 @@ public:
 	LogicPointEx*	m_posSaveAry;
 private:
 	int				m_nCurrentFocus;	//!< 現在のフォーカス情報
-	int				m_nWinSizeType;		//!< サイズ変更のタイプ。SIZE_MAXIMIZED, SIZE_MINIMIZED 等。
+	int				nWinSizeType;		//!< サイズ変更のタイプ。SIZE_MAXIMIZED, SIZE_MINIMIZED 等。
 	BOOL			m_bPageScrollByWheel;		//!< ホイール操作によるページスクロールあり	// 2009.01.17 nasukoji
 	BOOL			m_bHorizontalScrollByWheel;	//!< ホイール操作による横スクロールあり		// 2009.01.17 nasukoji
 	HACCEL			m_hAccelWine;		//!< ウィンドウ毎のアクセラレータテーブルのハンドル(Wine用)	// 2009.08.15 nasukoji

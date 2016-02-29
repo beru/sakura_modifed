@@ -41,7 +41,7 @@
 #include "func/FuncLookup.h"
 #include "env/CommonSetting.h"
 
-struct DLLSHAREDATA;
+struct DllSharedData;
 class ImageListMgr;
 class SMacroMgr;
 class MenuDrawer;// 2002/2/10 aroka to here
@@ -99,8 +99,8 @@ public:
 	INT_PTR DoPropertySheet( int, bool );	// プロパティシートの作成
 
 	// 2002.12.11 Moca 追加
-	void InitData( void );		// DLLSHAREDATAから一時データ領域に設定を複製する
-	void ApplyData( void );		// 一時データ領域からにDLLSHAREDATA設定をコピーする
+	void InitData( void );		// DllSharedDataから一時データ領域に設定を複製する
+	void ApplyData( void );		// 一時データ領域からにDllSharedData設定をコピーする
 	int GetPageNum() { return m_nPageNum; }
 
 	//
@@ -113,7 +113,7 @@ public:
 	HWND				m_hwndParent;	// オーナーウィンドウのハンドル
 	HWND				m_hwndThis;		// このダイアログのハンドル
 	PropComSheetOrder	m_nPageNum;
-	DLLSHAREDATA*		m_pShareData;
+	DllSharedData*		m_pShareData;
 	int					m_nKeywordSet1;
 	//	Oct. 16, 2000 genta
 	ImageListMgr*	m_pIcons;	//	Image List

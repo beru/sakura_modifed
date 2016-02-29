@@ -63,7 +63,7 @@ void ConvertMediator::ConvMemory(
 
 	EncodingType ecode = CODE_NONE;
 	if (nFuncCode == F_CODECNV_AUTO2SJIS) {
-		CodeMediator ccode(EditWnd::getInstance()->GetDocument()->m_docType.GetDocumentAttribute().m_encoding);
+		CodeMediator ccode(EditWnd::getInstance()->GetDocument()->m_docType.GetDocumentAttribute().encoding);
 		ecode = ccode.CheckKanjiCode(
 			reinterpret_cast<const char*>(pMemory->_GetMemory()->GetRawPtr()),
 			pMemory->_GetMemory()->GetRawLength());
@@ -76,7 +76,7 @@ void ConvertMediator::ConvMemory(
 		case CODE_UTF7:			nFuncCode = F_CODECNV_UTF72SJIS;		break;
 		}
 	}
-	bool bExtEol = GetDllShareData().m_common.m_edit.m_bEnableExtEol;
+	bool bExtEol = GetDllShareData().common.edit.bEnableExtEol;
 
 	switch (nFuncCode) {
 	// ï∂éöéÌïœä∑ÅAêÆå`

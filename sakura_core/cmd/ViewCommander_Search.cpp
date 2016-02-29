@@ -277,7 +277,7 @@ re_do:;
 
 end_of_func:;
 // From Here 2002.01.26 hor 先頭（末尾）から再検索
-	if (GetDllShareData().m_common.m_search.m_bSearchAll) {
+	if (GetDllShareData().common.search.bSearchAll) {
 		if (!bFound	&&		// 見つからなかった
 			bRedo	&&		// 最初の検索
 			!bReplaceAll	// 全て置換の実行中じゃない
@@ -441,7 +441,7 @@ re_do:;							// hor
 	}
 end_of_func:;
 // From Here 2002.01.26 hor 先頭（末尾）から再検索
-	if (GetDllShareData().m_common.m_search.m_bSearchAll) {
+	if (GetDllShareData().common.search.bSearchAll) {
 		if (!bFound	&&	// 見つからなかった
 			bRedo		// 最初の検索
 		) {
@@ -491,9 +491,9 @@ void ViewCommander::Command_REPLACE_DIALOG(void)
 	if (0 < memCurText.GetStringLength()) {
 		dlgReplace.m_strText = memCurText.GetStringPtr();
 	}
-	if (0 < GetDllShareData().m_searchKeywords.m_aReplaceKeys.size()) {
-		if (dlgReplace.m_nReplaceKeySequence < GetDllShareData().m_common.m_search.m_nReplaceKeySequence) {
-			dlgReplace.m_strText2 = GetDllShareData().m_searchKeywords.m_aReplaceKeys[0];	// 2006.08.23 ryoji 前回の置換後文字列を引き継ぐ
+	if (0 < GetDllShareData().searchKeywords.replaceKeys.size()) {
+		if (dlgReplace.nReplaceKeySequence < GetDllShareData().common.search.nReplaceKeySequence) {
+			dlgReplace.m_strText2 = GetDllShareData().searchKeywords.replaceKeys[0];	// 2006.08.23 ryoji 前回の置換後文字列を引き継ぐ
 		}
 	}
 	
@@ -572,7 +572,7 @@ void ViewCommander::Command_REPLACE(HWND hwndParent)
 	// 現在の選択範囲を非選択状態に戻す
 	m_pCommanderView->GetSelectionInfo().DisableSelectArea(true);
 
-	// 2004.06.01 Moca 検索中に、他のプロセスによってm_aReplaceKeysが書き換えられても大丈夫なように
+	// 2004.06.01 Moca 検索中に、他のプロセスによってreplaceKeysが書き換えられても大丈夫なように
 	const NativeW memRepKey(dlgReplace.m_strText2.c_str());
 
 	// 次を検索
@@ -726,8 +726,8 @@ void ViewCommander::Command_REPLACE_ALL()
 	BOOL nPaste			= dlgReplace.m_bPaste;
 	BOOL nReplaceTarget	= dlgReplace.m_nReplaceTarget;
 	bool bRegularExp	= m_pCommanderView->m_curSearchOption.bRegularExp;
-	bool bSelectedArea	= dlgReplace.m_bSelectedArea;
-	bool bConsecutiveAll = dlgReplace.m_bConsecutiveAll;	// 「すべて置換」は置換の繰返し	// 2007.01.16 ryoji
+	bool bSelectedArea	= dlgReplace.bSelectedArea;
+	bool bConsecutiveAll = dlgReplace.bConsecutiveAll;	// 「すべて置換」は置換の繰返し	// 2007.01.16 ryoji
 	if (nPaste && nReplaceTarget == 3) {
 		// 置換対象：行削除のときは、クリップボードから貼り付けを無効にする
 		nPaste = FALSE;
@@ -855,7 +855,7 @@ void ViewCommander::Command_REPLACE_ALL()
 	// クリップボードからのデータ貼り付けかどうか。
 	if (nPaste != 0) {
 		// クリップボードからデータを取得。
-		if (!m_pCommanderView->MyGetClipboardData(memClip, &bColumnSelect, GetDllShareData().m_common.m_edit.m_bEnableLineModePaste ? &bLineSelect : NULL)) {
+		if (!m_pCommanderView->MyGetClipboardData(memClip, &bColumnSelect, GetDllShareData().common.edit.bEnableLineModePaste ? &bLineSelect : NULL)) {
 			ErrorBeep();
 			m_pCommanderView->SetDrawSwitch(bDrawSwitchOld);
 
@@ -866,7 +866,7 @@ void ViewCommander::Command_REPLACE_ALL()
 		}
 
 		// 矩形貼り付けが許可されていて、クリップボードのデータが矩形選択のとき。
-		if (GetDllShareData().m_common.m_edit.m_bAutoColumnPaste && bColumnSelect) {
+		if (GetDllShareData().common.edit.bAutoColumnPaste && bColumnSelect) {
 			// マウスによる範囲選択中
 			if (m_pCommanderView->GetSelectionInfo().IsMouseSelecting()) {
 				ErrorBeep();
@@ -878,7 +878,7 @@ void ViewCommander::Command_REPLACE_ALL()
 			}
 
 			// 現在のフォントは固定幅フォントである
-			if (!GetDllShareData().m_common.m_view.m_bFontIs_FIXED_PITCH) {
+			if (!GetDllShareData().common.view.bFontIs_FixedPitch) {
 				m_pCommanderView->SetDrawSwitch(bDrawSwitchOld);
 				::EnableWindow(m_pCommanderView->GetHwnd(), TRUE);
 				::EnableWindow(::GetParent(m_pCommanderView->GetHwnd()), TRUE);
@@ -899,13 +899,13 @@ void ViewCommander::Command_REPLACE_ALL()
 	// 行コピー（MSDEVLineSelect形式）のテキストで末尾が改行になっていなければ改行を追加する
 	// ※レイアウト折り返しの行コピーだった場合は末尾が改行になっていない
 	if (bLineSelect) {
-		if (!WCODE::IsLineDelimiter(szREPLACEKEY[nReplaceKey - 1], GetDllShareData().m_common.m_edit.m_bEnableExtEol)) {
+		if (!WCODE::IsLineDelimiter(szREPLACEKEY[nReplaceKey - 1], GetDllShareData().common.edit.bEnableExtEol)) {
 			memClip.AppendString(GetDocument()->m_docEditor.GetNewLineCode().GetValue2());
 			szREPLACEKEY = memClip.GetStringPtr(&nReplaceKey);
 		}
 	}
 
-	if (GetDllShareData().m_common.m_edit.m_bConvertEOLPaste) {
+	if (GetDllShareData().common.edit.bConvertEOLPaste) {
 		LogicInt nConvertedTextLen = ConvertEol(szREPLACEKEY, nReplaceKey, NULL);
 		std::vector<wchar_t> szConvertedText(nConvertedTextLen);
 		wchar_t* pszConvertedText = &szConvertedText[0];
@@ -1447,21 +1447,21 @@ void ViewCommander::Command_SEARCH_CLEARMARK(void)
 		// 検索文字列取得
 		NativeW	memCurText;
 		m_pCommanderView->GetCurrentTextForSearch(memCurText, false);
-		auto& csSearch = GetDllShareData().m_common.m_search;
+		auto& csSearch = GetDllShareData().common.search;
 
 		m_pCommanderView->m_strCurSearchKey = memCurText.GetStringPtr();
-		if (m_pCommanderView->m_nCurSearchKeySequence < csSearch.m_nSearchKeySequence) {
-			m_pCommanderView->m_curSearchOption = csSearch.m_searchOption;
+		if (m_pCommanderView->m_nCurSearchKeySequence < csSearch.nSearchKeySequence) {
+			m_pCommanderView->m_curSearchOption = csSearch.searchOption;
 		}
 		m_pCommanderView->m_curSearchOption.bRegularExp = false;	// 正規表現使わない
 		m_pCommanderView->m_curSearchOption.bWordOnly = false;		// 単語で検索しない
 
 		// 共有データへ登録
 		if (memCurText.GetStringLength() < _MAX_PATH) {
-			SearchKeywordManager().AddToSearchKeyArr(memCurText.GetStringPtr());
-			csSearch.m_searchOption = m_pCommanderView->m_curSearchOption;
+			SearchKeywordManager().AddToSearchKeys(memCurText.GetStringPtr());
+			csSearch.searchOption = m_pCommanderView->m_curSearchOption;
 		}
-		m_pCommanderView->m_nCurSearchKeySequence = csSearch.m_nSearchKeySequence;
+		m_pCommanderView->m_nCurSearchKeySequence = csSearch.nSearchKeySequence;
 		m_pCommanderView->m_bCurSearchUpdate = true;
 
 		m_pCommanderView->ChangeCurRegexp(false); // 2002.11.11 Moca 正規表現で検索した後，色分けができていなかった

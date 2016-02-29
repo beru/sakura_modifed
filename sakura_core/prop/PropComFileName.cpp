@@ -280,18 +280,18 @@ INT_PTR PropFileName::DispatchEvent(
 */
 void PropFileName::SetData(HWND hwndDlg)
 {
-	::CheckDlgButtonBool( hwndDlg, IDC_CHECK_SHORTPATH, m_common.m_fileName.m_bTransformShortPath );
-	::SetDlgItemInt( hwndDlg, IDC_EDIT_SHORTMAXWIDTH, m_common.m_fileName.m_nTransformShortMaxWidth, FALSE );
+	::CheckDlgButtonBool( hwndDlg, IDC_CHECK_SHORTPATH, m_common.fileName.bTransformShortPath );
+	::SetDlgItemInt( hwndDlg, IDC_EDIT_SHORTMAXWIDTH, m_common.fileName.nTransformShortMaxWidth, FALSE );
 
 	// ファイル名置換リスト
 	HWND hListView = ::GetDlgItem(hwndDlg, IDC_LIST_FNAME);
 	ListView_DeleteAllItems(hListView); // リストを空にする
 
-	auto& csFileName = m_common.m_fileName;
+	auto& csFileName = m_common.fileName;
 	// リストにデータをセット
 	int nIndex = 0;
-	for (int i=0; i<csFileName.m_nTransformFileNameArrNum; ++i) {
-		if ('\0' == csFileName.m_szTransformFileNameFrom[i][0]) {
+	for (int i=0; i<csFileName.nTransformFileNameArrNum; ++i) {
+		if ('\0' == csFileName.szTransformFileNameFrom[i][0]) {
 			continue;
 		}
 
@@ -299,14 +299,14 @@ void PropFileName::SetData(HWND hwndDlg)
 		lvItem.mask     = LVIF_TEXT;
 		lvItem.iItem    = nIndex;
 		lvItem.iSubItem = 0;
-		lvItem.pszText  = csFileName.m_szTransformFileNameFrom[i];
+		lvItem.pszText  = csFileName.szTransformFileNameFrom[i];
 		ListView_InsertItem(hListView, &lvItem);
 
 		::ZeroMemory(&lvItem, sizeof_raw(lvItem));
 		lvItem.mask     = LVIF_TEXT;
 		lvItem.iItem    = nIndex;
 		lvItem.iSubItem = 1;
-		lvItem.pszText  = csFileName.m_szTransformFileNameTo[i];
+		lvItem.pszText  = csFileName.szTransformFileNameTo[i];
 		ListView_SetItem(hListView, &lvItem);
 
 		++nIndex;
@@ -333,29 +333,29 @@ void PropFileName::SetData(HWND hwndDlg)
 
 int PropFileName::GetData(HWND hwndDlg)
 {
-	auto& csFileName = m_common.m_fileName;
+	auto& csFileName = m_common.fileName;
 
-	m_common.m_fileName.m_bTransformShortPath = ::IsDlgButtonCheckedBool( hwndDlg, IDC_CHECK_SHORTPATH );
-	m_common.m_fileName.m_nTransformShortMaxWidth = ::GetDlgItemInt( hwndDlg, IDC_EDIT_SHORTMAXWIDTH, NULL, FALSE );
+	m_common.fileName.bTransformShortPath = ::IsDlgButtonCheckedBool( hwndDlg, IDC_CHECK_SHORTPATH );
+	m_common.fileName.nTransformShortMaxWidth = ::GetDlgItemInt( hwndDlg, IDC_EDIT_SHORTMAXWIDTH, NULL, FALSE );
 
 	// ファイル名置換リスト
 	HWND hListView = ::GetDlgItem(hwndDlg, IDC_LIST_FNAME);
-	csFileName.m_nTransformFileNameArrNum = ListView_GetItemCount(hListView);
+	csFileName.nTransformFileNameArrNum = ListView_GetItemCount(hListView);
 
 	for (int nIndex=0, nCount=0; nIndex<MAX_TRANSFORM_FILENAME; ++nIndex) {
-		if (nIndex < csFileName.m_nTransformFileNameArrNum) {
-			ListView_GetItemText(hListView, nIndex, 0, csFileName.m_szTransformFileNameFrom[nCount], _MAX_PATH);
+		if (nIndex < csFileName.nTransformFileNameArrNum) {
+			ListView_GetItemText(hListView, nIndex, 0, csFileName.szTransformFileNameFrom[nCount], _MAX_PATH);
 
 			// 置換前文字列がNULLだったら捨てる
-			if (L'\0' == csFileName.m_szTransformFileNameFrom[nCount][0]) {
-				csFileName.m_szTransformFileNameTo[nIndex][0] = L'\0';
+			if (L'\0' == csFileName.szTransformFileNameFrom[nCount][0]) {
+				csFileName.szTransformFileNameTo[nIndex][0] = L'\0';
 			}else {
-				ListView_GetItemText(hListView, nIndex, 1, csFileName.m_szTransformFileNameTo[nCount], _MAX_PATH);
+				ListView_GetItemText(hListView, nIndex, 1, csFileName.szTransformFileNameTo[nCount], _MAX_PATH);
 				++nCount;
 			}
 		}else {
-			csFileName.m_szTransformFileNameFrom[nIndex][0] = L'\0';
-			csFileName.m_szTransformFileNameTo[nIndex][0] = L'\0';
+			csFileName.szTransformFileNameFrom[nIndex][0] = L'\0';
+			csFileName.szTransformFileNameTo[nIndex][0] = L'\0';
 		}
 	}
 

@@ -123,16 +123,16 @@ void DlgProfileMgr::SetData( int nSelIndex )
 	ProfileSettings settings;
 	ReadProfSettings(settings);
 	std::tstring strdef = _T("(default)");
-	if (settings.m_nDefaultIndex == 0) {
+	if (settings.nDefaultIndex == 0) {
 		strdef += _T("*");
 	}
 	List_AddString(hwndList, strdef.c_str());
 	TextWidthCalc calc(hwndList);
 	calc.SetDefaultExtend(TextWidthCalc::WIDTH_MARGIN_SCROLLBER);
-	int count = (int)settings.m_vProfList.size();
+	int count = (int)settings.profList.size();
 	for (int i=0; i<count; ++i) {
-		std::tstring str = settings.m_vProfList[i];
-		if (settings.m_nDefaultIndex == i + 1) {
+		std::tstring str = settings.profList[i];
+		if (settings.nDefaultIndex == i + 1) {
 			str += _T("*");
 		}
 		List_AddString(hwndList, str.c_str());
@@ -140,15 +140,15 @@ void DlgProfileMgr::SetData( int nSelIndex )
 	}
 	List_SetHorizontalExtent(hwndList, calc.GetCx());
 	if (nSelIndex == -1) {
-		nSelIndex = settings.m_nDefaultIndex;
+		nSelIndex = settings.nDefaultIndex;
 	}
 	if (nSelIndex < 0) {
 		nSelIndex = 0;
 	}
 	List_SetCurSel(hwndList, nSelIndex);
 
-	DlgItem_Enable(GetHwnd(), IDC_BUTTON_PROF_DEFCLEAR, settings.m_nDefaultIndex != -1);
-	CheckDlgButtonBool(GetHwnd(), IDC_CHECK_PROF_DEFSTART, settings.m_bDefaultSelect);
+	DlgItem_Enable(GetHwnd(), IDC_BUTTON_PROF_DEFCLEAR, settings.nDefaultIndex != -1);
+	CheckDlgButtonBool(GetHwnd(), IDC_CHECK_PROF_DEFSTART, settings.bDefaultSelect);
 }
 
 
@@ -188,7 +188,7 @@ int DlgProfileMgr::GetData(bool bStart)
 	ProfileSettings settings;
 	ReadProfSettings(settings);
 	bool bWrite = false;
-	if (settings.m_bDefaultSelect != bDefaultSelect) {
+	if (settings.bDefaultSelect != bDefaultSelect) {
 		bWrite = true;
 	}
 	if (bDefaultSelect && bStart) {
@@ -291,19 +291,19 @@ void DlgProfileMgr::UpdateIni()
 	ProfileSettings settings;
 	ReadProfSettings(settings);
 	int nCount = List_GetCount(hwndList);
-	settings.m_vProfList.clear();
-	settings.m_nDefaultIndex = -1;
+	settings.profList.clear();
+	settings.nDefaultIndex = -1;
 	for (int i=0; i<nCount; ++i) {
 		TCHAR szProfileName[_MAX_PATH];
 		if (MyList_GetText(hwndList, i, szProfileName)) {
-			settings.m_nDefaultIndex = i;
+			settings.nDefaultIndex = i;
 		}
 		if (0 < i) {
 			std::tstring str = szProfileName;
-			settings.m_vProfList.push_back(str);
+			settings.profList.push_back(str);
 		}
 	}
-	settings.m_bDefaultSelect = IsButtonChecked(IDC_CHECK_PROF_DEFSTART);
+	settings.bDefaultSelect = IsButtonChecked(IDC_CHECK_PROF_DEFSTART);
 
 	if (!WriteProfSettings(settings)) {
 		ErrorMessage(GetHwnd(), LS(STR_DLGPROFILE_ERR_WRITE));
@@ -495,7 +495,7 @@ static bool IOProfSettings(
 			return false;
 		}
 	}
-	int nCount = (int)settings.m_vProfList.size();
+	int nCount = (int)settings.profList.size();
 	const wchar_t* const pSection = L"Profile";
 	profile.IOProfileData(pSection , L"nCount", nCount );
 	for (int i=0; i<nCount; ++i) {
@@ -503,25 +503,25 @@ static bool IOProfSettings(
 		std::tstring strProfName;
 		swprintf(szKey, L"P[%d]", i + 1); // 1ŠJŽn
 		if (bWrite) {
-			strProfName = settings.m_vProfList[i];
+			strProfName = settings.profList[i];
 			std::wstring wstrProfName = to_wchar(strProfName.c_str());
 			profile.IOProfileData(pSection, szKey, wstrProfName);
 		}else {
 			std::wstring wstrProfName;
 			profile.IOProfileData(pSection, szKey, wstrProfName);
 			strProfName = to_tchar(wstrProfName.c_str());
-			settings.m_vProfList.push_back(strProfName);
+			settings.profList.push_back(strProfName);
 		}
 	}
-	profile.IOProfileData(pSection, L"nDefaultIndex", settings.m_nDefaultIndex);
-	if (nCount < settings.m_nDefaultIndex) {
-		settings.m_nDefaultIndex = -1;
+	profile.IOProfileData(pSection, L"nDefaultIndex", settings.nDefaultIndex);
+	if (nCount < settings.nDefaultIndex) {
+		settings.nDefaultIndex = -1;
 	}
-	if (settings.m_nDefaultIndex < -1) {
-		settings.m_nDefaultIndex = -1;
+	if (settings.nDefaultIndex < -1) {
+		settings.nDefaultIndex = -1;
 	}
-	profile.IOProfileData(pSection, L"szDllLanguage", StringBufferT(settings.m_szDllLanguage, _countof(settings.m_szDllLanguage)));
-	profile.IOProfileData(pSection, L"bDefaultSelect", settings.m_bDefaultSelect);
+	profile.IOProfileData(pSection, L"szDllLanguage", StringBufferT(settings.szDllLanguage, _countof(settings.szDllLanguage)));
+	profile.IOProfileData(pSection, L"bDefaultSelect", settings.bDefaultSelect);
 
 	if (bWrite) {
 		if (!profile.WriteProfile(strIniName.c_str(), L"Sakura Profile ini")) {
@@ -534,10 +534,10 @@ static bool IOProfSettings(
 
 bool DlgProfileMgr::ReadProfSettings(ProfileSettings& settings)
 {
-	auto_strcpy(settings.m_szDllLanguage, _T(""));
-	settings.m_nDefaultIndex = 0;
-	settings.m_vProfList.clear();
-	settings.m_bDefaultSelect = false;
+	auto_strcpy(settings.szDllLanguage, _T(""));
+	settings.nDefaultIndex = 0;
+	settings.profList.clear();
+	settings.bDefaultSelect = false;
 
 	return IOProfSettings( settings, false );
 }

@@ -168,12 +168,12 @@ public:
 	/*
 	||	アクセサ
 	*/
-	void SetPrintSetting(PRINTSETTING* pPrintSetting) {
+	void SetPrintSetting(PrintSetting* pPrintSetting) {
 		m_sPrintSetting = *pPrintSetting;
 		m_pPrintSetting = &m_sPrintSetting;
 		m_pPrintSettingOrg = pPrintSetting;
 	}
-	BOOL GetDefaultPrinterInfo() { return m_cPrint.GetDefaultPrinter(&m_pPrintSetting->m_mdmDevMode); }
+	BOOL GetDefaultPrinterInfo() { return m_cPrint.GetDefaultPrinter(&m_pPrintSetting->mdmDevMode); }
 	int  GetCurPageNum() { return m_nCurPageNum; }	// 現在のページ
 	int  GetAllPageNum() { return m_nAllPageNum; }	// 現在のページ
 
@@ -235,9 +235,9 @@ protected:
 	WORD			m_nAllPageNum;				// 全ページ数
 	WORD			m_nCurPageNum;				// 現在のページ
 
-	PRINTSETTING*	m_pPrintSetting;			// 現在の印刷設定(キャッシュへのポインタ)
-	PRINTSETTING*	m_pPrintSettingOrg;			// 現在の印刷設定(共有データ)
-	PRINTSETTING	m_sPrintSetting;			// 現在の印刷設定(キャッシュ)
+	PrintSetting*	m_pPrintSetting;			// 現在の印刷設定(キャッシュへのポインタ)
+	PrintSetting*	m_pPrintSettingOrg;			// 現在の印刷設定(共有データ)
+	PrintSetting	m_sPrintSetting;			// 現在の印刷設定(キャッシュ)
 	LOGFONT			m_lfPreviewHan;				// プレビュー用フォント
 	LOGFONT			m_lfPreviewZen;				// プレビュー用フォント
 

@@ -29,27 +29,27 @@
 
 // フォント属性
 struct FontAttr {
-	bool		m_bBoldFont;		// 太字
-	bool		m_bUnderLine;		// 下線
+	bool		bBoldFont;		// 太字
+	bool		bUnderLine;		// 下線
 };
 
 // 色属性
 struct ColorAttr {
-	COLORREF	m_cTEXT;			// 文字色
-	COLORREF	m_cBACK;			// 背景色
+	COLORREF	cTEXT;			// 文字色
+	COLORREF	cBACK;			// 背景色
 };
 
 // 色設定
 struct ColorInfoBase {
-	bool		m_bDisp;			// 表示
-	FontAttr	m_fontAttr;			// フォント属性
-	ColorAttr	m_colorAttr;		// 色属性
+	bool		bDisp;			// 表示
+	FontAttr	fontAttr;		// フォント属性
+	ColorAttr	colorAttr;		// 色属性
 };
 
 // 名前とインデックス付き色設定
 struct ColorInfo : public ColorInfoBase {
-	int			m_nColorIdx;		// インデックス
-	TCHAR		m_szName[64];		// 名前
+	int			nColorIdx;		// インデックス
+	TCHAR		szName[64];		// 名前
 };
 
 
@@ -65,9 +65,9 @@ int GetDefaultColorInfoCount();
 //@@@ 2006.04.10 fon ADD-start
 const int DICT_ABOUT_LEN = 50; // 辞書の説明の最大長 -1
 struct KeyHelpInfo {
-	bool		m_bUse;						// 辞書を 使用する/しない
-	TCHAR		m_szAbout[DICT_ABOUT_LEN];	// 辞書の説明(辞書ファイルの1行目から生成)
-	SFilePath	m_szPath;					// ファイルパス
+	bool		bUse;						// 辞書を 使用する/しない
+	TCHAR		szAbout[DICT_ABOUT_LEN];	// 辞書の説明(辞書ファイルの1行目から生成)
+	SFilePath	szPath;					// ファイルパス
 };
 //@@@ 2006.04.10 fon ADD-end
 

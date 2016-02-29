@@ -56,9 +56,9 @@ const DWORD p_helpids[] = {	//11900
 
 DlgReplace::DlgReplace()
 {
-	m_searchOption.Reset();	// 検索オプション
-	m_bConsecutiveAll = false;	//「すべて置換」は置換の繰返し	// 2007.01.16 ryoji
-	m_bSelectedArea = false;	// 選択範囲内置換
+	searchOption.Reset();	// 検索オプション
+	bConsecutiveAll = false;	//「すべて置換」は置換の繰返し	// 2007.01.16 ryoji
+	bSelectedArea = false;	// 選択範囲内置換
 	m_nReplaceTarget = 0;		// 置換対象		// 2001.12.03 hor
 	m_bPaste = false;			// 貼り付ける？	// 2001.12.03 hor
 	m_nReplaceCnt = 0;			// すべて置換の実行結果		// 2002.02.08 hor
@@ -75,17 +75,17 @@ BOOL DlgReplace::OnCbnDropDown(HWND hwndCtl, int wID)
 	switch (wID) {
 	case IDC_COMBO_TEXT:
 		if (::SendMessage(hwndCtl, CB_GETCOUNT, 0L, 0L) == 0) {
-			int nSize = m_pShareData->m_searchKeywords.m_aSearchKeys.size();
+			int nSize = m_pShareData->searchKeywords.searchKeys.size();
 			for (int i=0; i<nSize; ++i) {
-				Combo_AddString( hwndCtl, m_pShareData->m_searchKeywords.m_aSearchKeys[i] );
+				Combo_AddString( hwndCtl, m_pShareData->searchKeywords.searchKeys[i] );
 			}
 		}
 		break;
 	case IDC_COMBO_TEXT2:
 		if (::SendMessage(hwndCtl, CB_GETCOUNT, 0L, 0L) == 0) {
-			int nSize = m_pShareData->m_searchKeywords.m_aReplaceKeys.size();
+			int nSize = m_pShareData->searchKeywords.replaceKeys.size();
 			for (int i=0; i<nSize; ++i) {
-				Combo_AddString( hwndCtl, m_pShareData->m_searchKeywords.m_aReplaceKeys[i] );
+				Combo_AddString( hwndCtl, m_pShareData->searchKeywords.replaceKeys[i] );
 			}
 		}
 		break;
@@ -101,11 +101,11 @@ HWND DlgReplace::DoModeless(
 	bool bSelected
 	)
 {
-	auto& csSearch = m_pShareData->m_common.m_search;
-	m_searchOption = csSearch.m_searchOption;		// 検索オプション
-	m_bConsecutiveAll = csSearch.m_bConsecutiveAll;	//「すべて置換」は置換の繰返し	// 2007.01.16 ryoji
-	m_bSelectedArea = csSearch.m_bSelectedArea;		// 選択範囲内置換
-	m_bNOTIFYNOTFOUND = csSearch.m_bNOTIFYNOTFOUND;	// 検索／置換  見つからないときメッセージを表示
+	auto& csSearch = m_pShareData->common.search;
+	searchOption = csSearch.searchOption;		// 検索オプション
+	bConsecutiveAll = csSearch.bConsecutiveAll;	//「すべて置換」は置換の繰返し	// 2007.01.16 ryoji
+	bSelectedArea = csSearch.bSelectedArea;		// 選択範囲内置換
+	bNotifyNotFound = csSearch.bNotifyNotFound;	// 検索／置換  見つからないときメッセージを表示
 	m_bSelected = bSelected;
 	m_ptEscCaretPos_PHY = ((EditView*)lParam)->GetCaret().GetCaretLogicPos();	// 検索/置換開始時のカーソル位置退避
 	((EditView*)lParam)->m_bSearch = true;			// 検索/置換開始位置の登録有無			02/07/28 ai
@@ -123,27 +123,27 @@ void DlgReplace::ChangeView(LPARAM pcEditView)
 // ダイアログデータの設定
 void DlgReplace::SetData(void)
 {
-	auto& csSearch = m_pShareData->m_common.m_search;
+	auto& csSearch = m_pShareData->common.search;
 
 	// 検索文字列/置換後文字列リストの設定(関数化)	2010/5/26 Uchi
 	SetCombosList();
 
 	// 英大文字と英小文字を区別する
-	CheckButton(IDC_CHK_LOHICASE, m_searchOption.bLoHiCase);
+	CheckButton(IDC_CHK_LOHICASE, searchOption.bLoHiCase);
 
 	// 2001/06/23 N.Nakatani
 	// 単語単位で探す
-	CheckButton(IDC_CHK_WORD, m_searchOption.bWordOnly);
+	CheckButton(IDC_CHK_WORD, searchOption.bWordOnly);
 
 	//「すべて置換」は置換の繰返し  2007.01.16 ryoji
-	CheckButton(IDC_CHECK_CONSECUTIVEALL, m_bConsecutiveAll);
+	CheckButton(IDC_CHECK_CONSECUTIVEALL, bConsecutiveAll);
 
 	// From Here Jun. 29, 2001 genta
 	// 正規表現ライブラリの差し替えに伴う処理の見直し
 	// 処理フロー及び判定条件の見直し。必ず正規表現のチェックと
 	// 無関係にCheckRegexpVersionを通過するようにした。
 	if (CheckRegexpVersion(GetHwnd(), IDC_STATIC_JRE32VER, false)
-		&& m_searchOption.bRegularExp
+		&& searchOption.bRegularExp
 	) {
 		// 英大文字と英小文字を区別する
 		CheckButton(IDC_CHK_REGULAREXP, true);
@@ -160,13 +160,13 @@ void DlgReplace::SetData(void)
 	// To Here Jun. 29, 2001 genta
 
 	// 検索／置換  見つからないときメッセージを表示
-	CheckButton(IDC_CHECK_NOTIFYNOTFOUND, m_bNOTIFYNOTFOUND);
+	CheckButton(IDC_CHECK_NOTIFYNOTFOUND, bNotifyNotFound);
 
 	// 置換 ダイアログを自動的に閉じる
-	CheckButton(IDC_CHECK_bAutoCloseDlgReplace, csSearch.m_bAutoCloseDlgReplace);
+	CheckButton(IDC_CHECK_bAutoCloseDlgReplace, csSearch.bAutoCloseDlgReplace);
 
 	// 先頭（末尾）から再検索 2002.01.26 hor
-	CheckButton(IDC_CHECK_SEARCHALL, csSearch.m_bSearchAll);
+	CheckButton(IDC_CHECK_SEARCHALL, csSearch.bSearchAll);
 
 	// From Here 2001.12.03 hor
 	// クリップボードから貼り付ける？
@@ -224,28 +224,28 @@ void DlgReplace::SetCombosList(void)
 // 0==条件未入力  0より大きい==正常   0より小さい==入力エラー
 int DlgReplace::GetData(void)
 {
-	auto& csSearch = m_pShareData->m_common.m_search;
+	auto& csSearch = m_pShareData->common.search;
 
 	// 英大文字と英小文字を区別する
-	m_searchOption.bLoHiCase = IsButtonChecked(IDC_CHK_LOHICASE);
+	searchOption.bLoHiCase = IsButtonChecked(IDC_CHK_LOHICASE);
 
 	// 2001/06/23 N.Nakatani
 	// 単語単位で探す
-	m_searchOption.bWordOnly = IsButtonChecked(IDC_CHK_WORD);
+	searchOption.bWordOnly = IsButtonChecked(IDC_CHK_WORD);
 
 	//「すべて置換」は置換の繰返し  2007.01.16 ryoji
-	m_bConsecutiveAll = IsButtonChecked(IDC_CHECK_CONSECUTIVEALL);
+	bConsecutiveAll = IsButtonChecked(IDC_CHECK_CONSECUTIVEALL);
 
 	// 正規表現
-	m_searchOption.bRegularExp = IsButtonChecked(IDC_CHK_REGULAREXP);
+	searchOption.bRegularExp = IsButtonChecked(IDC_CHK_REGULAREXP);
 	// 選択範囲内置換
-	m_bSelectedArea = IsButtonChecked(IDC_RADIO_SELECTEDAREA);
+	bSelectedArea = IsButtonChecked(IDC_RADIO_SELECTEDAREA);
 	// 検索／置換  見つからないときメッセージを表示
-	m_bNOTIFYNOTFOUND = IsButtonChecked(IDC_CHECK_NOTIFYNOTFOUND);
+	bNotifyNotFound = IsButtonChecked(IDC_CHECK_NOTIFYNOTFOUND);
 
-	csSearch.m_bConsecutiveAll = m_bConsecutiveAll;	// 1==「すべて置換」は置換の繰返し	// 2007.01.16 ryoji
-	csSearch.m_bSelectedArea = m_bSelectedArea;		// 選択範囲内置換
-	csSearch.m_bNOTIFYNOTFOUND = m_bNOTIFYNOTFOUND;	// 検索／置換  見つからないときメッセージを表示
+	csSearch.bConsecutiveAll = bConsecutiveAll;	// 1==「すべて置換」は置換の繰返し	// 2007.01.16 ryoji
+	csSearch.bSelectedArea = bSelectedArea;		// 選択範囲内置換
+	csSearch.bNotifyNotFound = bNotifyNotFound;	// 検索／置換  見つからないときメッセージを表示
 
 	// 検索文字列
 	int nBufferSize = ::GetWindowTextLength(GetItemHwnd(IDC_COMBO_TEXT)) + 1;
@@ -263,18 +263,18 @@ int DlgReplace::GetData(void)
 	}
 
 	// 置換 ダイアログを自動的に閉じる
-	csSearch.m_bAutoCloseDlgReplace = IsButtonChecked(IDC_CHECK_bAutoCloseDlgReplace);
+	csSearch.bAutoCloseDlgReplace = IsButtonChecked(IDC_CHECK_bAutoCloseDlgReplace);
 
 	// 先頭（末尾）から再検索 2002.01.26 hor
-	csSearch.m_bSearchAll = IsButtonChecked(IDC_CHECK_SEARCHALL);
+	csSearch.bSearchAll = IsButtonChecked(IDC_CHECK_SEARCHALL);
 
 	if (0 < m_strText.size()) {
 		// 正規表現？
 		// From Here Jun. 26, 2001 genta
 		// 正規表現ライブラリの差し替えに伴う処理の見直し
 		int nFlag = 0x00;
-		nFlag |= m_searchOption.bLoHiCase ? 0x01 : 0x00;
-		if (m_searchOption.bRegularExp
+		nFlag |= searchOption.bLoHiCase ? 0x01 : 0x00;
+		if (searchOption.bRegularExp
 			&& !CheckRegexpSyntax(m_strText.c_str(), GetHwnd(), true, nFlag)
 		) {
 			return -1;
@@ -282,27 +282,27 @@ int DlgReplace::GetData(void)
 		// To Here Jun. 26, 2001 genta 正規表現ライブラリ差し替え
 
 		// 検索文字列
-		//@@@ 2002.2.2 YAZAKI CShareData.AddToSearchKeyArr()追加に伴う変更
+		//@@@ 2002.2.2 YAZAKI CShareData.AddToSearchKeys()追加に伴う変更
 		if (m_strText.size() < _MAX_PATH) {
-			SearchKeywordManager().AddToSearchKeyArr(m_strText.c_str());
-			csSearch.m_searchOption = m_searchOption;		// 検索オプション
+			SearchKeywordManager().AddToSearchKeys(m_strText.c_str());
+			csSearch.searchOption = searchOption;		// 検索オプション
 		}
 		// 2011.12.18 viewに直接設定
 		EditView* pEditView = (EditView*)m_lParam;
-		if (pEditView->m_strCurSearchKey == m_strText && pEditView->m_curSearchOption == m_searchOption) {
+		if (pEditView->m_strCurSearchKey == m_strText && pEditView->m_curSearchOption == searchOption) {
 		}else {
 			pEditView->m_strCurSearchKey = m_strText;
-			pEditView->m_curSearchOption = m_searchOption;
+			pEditView->m_curSearchOption = searchOption;
 			pEditView->m_bCurSearchUpdate = true;
 		}
-		pEditView->m_nCurSearchKeySequence = GetDllShareData().m_common.m_search.m_nSearchKeySequence;
+		pEditView->m_nCurSearchKeySequence = GetDllShareData().common.search.nSearchKeySequence;
 
 		// 置換後文字列
-		//@@@ 2002.2.2 YAZAKI CShareData.AddToReplaceKeyArr()追加に伴う変更
+		//@@@ 2002.2.2 YAZAKI CShareData.AddToReplaceKeys()追加に伴う変更
 		if (m_strText2.size() < _MAX_PATH) {
-			SearchKeywordManager().AddToReplaceKeyArr(m_strText2.c_str());
+			SearchKeywordManager().AddToReplaceKeys(m_strText2.c_str());
 		}
-		m_nReplaceKeySequence = GetDllShareData().m_common.m_search.m_nReplaceKeySequence;
+		nReplaceKeySequence = GetDllShareData().common.search.nReplaceKeySequence;
 
 		// From Here 2001.12.03 hor
 		// クリップボードから貼り付ける？
@@ -600,7 +600,7 @@ BOOL DlgReplace::OnBnClicked(int wID)
 					::EndDialog(GetHwnd(), 0);
 				}else {
 					// 置換 ダイアログを自動的に閉じる
-					if (m_pShareData->m_common.m_search.m_bAutoCloseDlgReplace) {
+					if (m_pShareData->common.search.bAutoCloseDlgReplace) {
 						::DestroyWindow(GetHwnd());
 					}
 				}

@@ -327,7 +327,7 @@ public:
 
 protected:
 	// 2002.10.07 YAZAKI add m_nLineTypeBot
-	// 2007.09.07 kobake 変数名変更: m_nMaxLineSize→m_nMaxLineKetas
+	// 2007.09.07 kobake 変数名変更: m_nMaxLineSize→nMaxLineKetas
 	// 2007.10.08 kobake 変数名変更: getIndentOffset→m_getIndentOffset
 
 	// 参照

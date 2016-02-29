@@ -26,7 +26,7 @@
 */
 
 #include "StdAfx.h"
-#include "env/DLLSHAREDATA.h"
+#include "env/DllSharedData.h"
 
 #include "TagJumpManager.h"
 
@@ -45,15 +45,15 @@
 */
 void TagJumpManager::PushTagJump(const TagJump* pTagJump)
 {
-	int i = m_pShareData->m_tagJump.m_TagJumpTop + 1;
+	int i = m_pShareData->tagJump.tagJumpTop + 1;
 	if (MAX_TAGJUMPNUM <= i) {
 		i = 0;
 	}
-	if (m_pShareData->m_tagJump.m_TagJumpNum < MAX_TAGJUMPNUM) {
-		m_pShareData->m_tagJump.m_TagJumpNum++;
+	if (m_pShareData->tagJump.tagJumpNum < MAX_TAGJUMPNUM) {
+		m_pShareData->tagJump.tagJumpNum++;
 	}
-	m_pShareData->m_tagJump.m_TagJump[i] = *pTagJump;
-	m_pShareData->m_tagJump.m_TagJumpTop = i;
+	m_pShareData->tagJump.tagJumps[i] = *pTagJump;
+	m_pShareData->tagJump.tagJumpTop = i;
 }
 
 
@@ -71,12 +71,12 @@ void TagJumpManager::PushTagJump(const TagJump* pTagJump)
 */
 bool TagJumpManager::PopTagJump(TagJump *pTagJump)
 {
-	if (0 < m_pShareData->m_tagJump.m_TagJumpNum) {
-		*pTagJump = m_pShareData->m_tagJump.m_TagJump[m_pShareData->m_tagJump.m_TagJumpTop--];
-		if (m_pShareData->m_tagJump.m_TagJumpTop < 0) {
-			m_pShareData->m_tagJump.m_TagJumpTop = MAX_TAGJUMPNUM - 1;
+	if (0 < m_pShareData->tagJump.tagJumpNum) {
+		*pTagJump = m_pShareData->tagJump.tagJumps[m_pShareData->tagJump.tagJumpTop--];
+		if (m_pShareData->tagJump.tagJumpTop < 0) {
+			m_pShareData->tagJump.tagJumpTop = MAX_TAGJUMPNUM - 1;
 		}
-		m_pShareData->m_tagJump.m_TagJumpNum--;
+		m_pShareData->tagJump.tagJumpNum--;
 		return true;
 	}
 	return false;

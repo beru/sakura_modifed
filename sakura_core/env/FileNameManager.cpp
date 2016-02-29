@@ -28,7 +28,7 @@
 #include "StdAfx.h"
 #include <ShlObj.h> // CSIDL_PROFILE等
 
-#include "DLLSHAREDATA.h"
+#include "DllSharedData.h"
 #include "FileNameManager.h"
 #include "charset/CodePage.h"
 #include "util/module.h"
@@ -61,10 +61,10 @@ LPTSTR FileNameManager::GetTransformFileNameFast( LPCTSTR pszSrc, LPTSTR pszDest
 	}
 
 	int nPxWidth = -1;
-	auto& csFileName = m_pShareData->m_common.m_fileName;
-	if (csFileName.m_bTransformShortPath && cchMaxWidth != -1) {
+	auto& csFileName = m_pShareData->common.fileName;
+	if (csFileName.bTransformShortPath && cchMaxWidth != -1) {
 		if (cchMaxWidth == 0) {
-			cchMaxWidth = csFileName.m_nTransformShortMaxWidth;
+			cchMaxWidth = csFileName.nTransformShortMaxWidth;
 		}
 		TextWidthCalc calc(hDC);
 		nPxWidth = calc.GetTextWidth(_T("x")) * cchMaxWidth;
@@ -73,13 +73,13 @@ LPTSTR FileNameManager::GetTransformFileNameFast( LPCTSTR pszSrc, LPTSTR pszDest
 	if (0 < m_nTransformFileNameCount) {
 		GetFilePathFormat(pszSrc, pszDest, nDestLen,
 			m_szTransformFileNameFromExp[0],
-			csFileName.m_szTransformFileNameTo[m_nTransformFileNameOrgId[0]]
+			csFileName.szTransformFileNameTo[m_nTransformFileNameOrgId[0]]
 		);
 		for (int i=1; i<m_nTransformFileNameCount; ++i) {
 			_tcscpy(szBuf, pszDest);
 			GetFilePathFormat(szBuf, pszDest, nDestLen,
 				m_szTransformFileNameFromExp[i],
-				csFileName.m_szTransformFileNameTo[m_nTransformFileNameOrgId[i]]);
+				csFileName.szTransformFileNameTo[m_nTransformFileNameOrgId[i]]);
 		}
 		if (nPxWidth != -1) {
 			_tcscpy( szBuf, pszDest );
@@ -102,16 +102,16 @@ LPTSTR FileNameManager::GetTransformFileNameFast( LPCTSTR pszSrc, LPTSTR pszDest
 */
 int FileNameManager::TransformFileName_MakeCache(void) {
 	int nCount = 0;
-	auto& csFileName = m_pShareData->m_common.m_fileName;
-	for (int i=0; i<csFileName.m_nTransformFileNameArrNum; ++i) {
-		if (csFileName.m_szTransformFileNameFrom[i][0] != L'\0') {
+	auto& csFileName = m_pShareData->common.fileName;
+	for (int i=0; i<csFileName.nTransformFileNameArrNum; ++i) {
+		if (csFileName.szTransformFileNameFrom[i][0] != L'\0') {
 			if (ExpandMetaToFolder(
-				csFileName.m_szTransformFileNameFrom[i],
+				csFileName.szTransformFileNameFrom[i],
 				m_szTransformFileNameFromExp[nCount],
 				_MAX_PATH
 				)
 			) {
-				// m_szTransformFileNameToとm_szTransformFileNameFromExpの番号がずれることがあるので記録しておく
+				// szTransformFileNameToとm_szTransformFileNameFromExpの番号がずれることがあるので記録しておく
 				m_nTransformFileNameOrgId[nCount] = i;
 				++nCount;
 			}
@@ -376,16 +376,16 @@ bool FileNameManager::GetMenuFullLabel(
 		GetAccessKeyLabelByIndex(szAccKey, bEspaceAmp, index, bAccKeyZeroOrigin);
 		ret = auto_snprintf_s(pszOutput, nBuffSize, LS(STR_MENU_UNKOWN), szAccKey);
 		return 0 < ret;
-	}else if (pfi->m_bIsGrep) {
+	}else if (pfi->bIsGrep) {
 		
 		GetAccessKeyLabelByIndex(szAccKey, bEspaceAmp, index, bAccKeyZeroOrigin);
 		//pfi->m_szGrepKeyShort → memDes
 		NativeW memDes;
-		int nGrepKeyLen = wcslen(pfi->m_szGrepKey);
+		int nGrepKeyLen = wcslen(pfi->szGrepKey);
 		const int GREPKEY_LIMIT_LEN = 64;
 		// CSakuraEnvironment::ExpandParameter では 32文字制限
 		// メニューは 64文字制限
-		LimitStringLengthW(pfi->m_szGrepKey, nGrepKeyLen, GREPKEY_LIMIT_LEN, memDes);
+		LimitStringLengthW(pfi->szGrepKey, nGrepKeyLen, GREPKEY_LIMIT_LEN, memDes);
 		
 		const TCHAR* pszKey;
 		TCHAR szMenu2[GREPKEY_LIMIT_LEN * 2 * 2 + 1]; // WCHAR=>ACHARで2倍、&で2倍
@@ -404,11 +404,11 @@ bool FileNameManager::GetMenuFullLabel(
 			szAccKey, pszKey,
 			(nGrepKeyLen > memDes.GetStringLength()) ? _T("..."):_T("")
 		);
-	}else if (pfi->m_bIsDebug) {
+	}else if (pfi->bIsDebug) {
 		GetAccessKeyLabelByIndex(szAccKey, bEspaceAmp, index, bAccKeyZeroOrigin);
 		ret = auto_snprintf_s(pszOutput, nBuffSize, LS(STR_MENU_OUTPUT), szAccKey);
 	}else {
-		return GetMenuFullLabel(pszOutput, nBuffSize, bEspaceAmp, pfi->m_szPath, nId, pfi->m_bIsModified, pfi->m_nCharCode, bFavorite,
+		return GetMenuFullLabel(pszOutput, nBuffSize, bEspaceAmp, pfi->szPath, nId, pfi->bIsModified, pfi->nCharCode, bFavorite,
 			 index, bAccKeyZeroOrigin, hDC);
 	}
 	return 0 < ret;
@@ -545,25 +545,25 @@ void FileNameManager::GetIniFileNameDirect( LPTSTR pszPrivateIniFile, LPTSTR psz
 */
 void FileNameManager::GetIniFileName( LPTSTR pszIniFileName, LPCTSTR pszProfName, BOOL bRead/*=FALSE*/ )
 {
-	auto& iniFolder = m_pShareData->m_fileNameManagement.m_IniFolder;
-	if (!iniFolder.m_bInit) {
-		iniFolder.m_bInit = true;			// 初期化済フラグ
-		iniFolder.m_bReadPrivate = false;	// マルチユーザ用iniからの読み出しフラグ
-		iniFolder.m_bWritePrivate = false;	// マルチユーザ用iniへの書き込みフラグ
+	auto& iniFolder = m_pShareData->fileNameManagement.iniFolder;
+	if (!iniFolder.bInit) {
+		iniFolder.bInit = true;			// 初期化済フラグ
+		iniFolder.bReadPrivate = false;	// マルチユーザ用iniからの読み出しフラグ
+		iniFolder.bWritePrivate = false;	// マルチユーザ用iniへの書き込みフラグ
 
-		GetIniFileNameDirect(iniFolder.m_szPrivateIniFile, iniFolder.m_szIniFile, pszProfName);
-		if (iniFolder.m_szPrivateIniFile[0] != _T('\0')) {
-			iniFolder.m_bReadPrivate = true;
-			iniFolder.m_bWritePrivate = true;
+		GetIniFileNameDirect(iniFolder.szPrivateIniFile, iniFolder.szIniFile, pszProfName);
+		if (iniFolder.szPrivateIniFile[0] != _T('\0')) {
+			iniFolder.bReadPrivate = true;
+			iniFolder.bWritePrivate = true;
 			if (CommandLine::getInstance()->IsNoWindow() && CommandLine::getInstance()->IsWriteQuit())
-				iniFolder.m_bWritePrivate = false;
+				iniFolder.bWritePrivate = false;
 
 			// マルチユーザ用のiniフォルダを作成しておく
-			if (iniFolder.m_bWritePrivate) {
+			if (iniFolder.bWritePrivate) {
 				TCHAR szPath[_MAX_PATH];
 				TCHAR szDrive[_MAX_DRIVE];
 				TCHAR szDir[_MAX_DIR];
-				_tsplitpath( iniFolder.m_szPrivateIniFile, szDrive, szDir, NULL, NULL );
+				_tsplitpath( iniFolder.szPrivateIniFile, szDrive, szDir, NULL, NULL );
 				auto_snprintf_s( szPath, _MAX_PATH - 1, _T("%ts\\%ts"), szDrive, szDir );
 				MakeSureDirectoryPathExistsT( szPath );
 			}
@@ -572,14 +572,14 @@ void FileNameManager::GetIniFileName( LPTSTR pszIniFileName, LPCTSTR pszProfName
 				TCHAR szPath[_MAX_PATH];
 				TCHAR szDrive[_MAX_DRIVE];
 				TCHAR szDir[_MAX_DIR];
-				_tsplitpath( iniFolder.m_szIniFile, szDrive, szDir, NULL, NULL );
+				_tsplitpath( iniFolder.szIniFile, szDrive, szDir, NULL, NULL );
 				auto_snprintf_s(szPath, _MAX_PATH - 1, _T("%ts\\%ts"), szDrive, szDir);
 				MakeSureDirectoryPathExistsT(szPath);
 			}
 		}
 	}
 
-	bool bPrivate = bRead ? iniFolder.m_bReadPrivate : iniFolder.m_bWritePrivate;
-	::lstrcpy( pszIniFileName, bPrivate? iniFolder.m_szPrivateIniFile: iniFolder.m_szIniFile );
+	bool bPrivate = bRead ? iniFolder.bReadPrivate : iniFolder.bWritePrivate;
+	::lstrcpy( pszIniFileName, bPrivate? iniFolder.szPrivateIniFile: iniFolder.szIniFile );
 }
 

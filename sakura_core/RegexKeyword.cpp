@@ -162,7 +162,7 @@ bool RegexKeyword::RegexKeySetTypes(const TypeConfig *pTypesPtr)
 		return false;
 	}
 
-	if (!pTypesPtr->m_bUseRegexKeyword) {
+	if (!pTypesPtr->bUseRegexKeyword) {
 		// OFFになったのにまだONならOFFにする。
 		if (m_bUseRegexKeyword) {
 			m_pTypes = NULL;
@@ -171,8 +171,8 @@ bool RegexKeyword::RegexKeySetTypes(const TypeConfig *pTypesPtr)
 		return false;
 	}
 
-	if (m_nTypeId == pTypesPtr->m_id
-		&& m_nCompiledMagicNumber == pTypesPtr->m_nRegexKeyMagicNumber
+	if (m_nTypeId == pTypesPtr->id
+		&& m_nCompiledMagicNumber == pTypesPtr->nRegexKeyMagicNumber
 		&& m_pTypes  // 2014.07.02 条件追加
 	) {
 		return true;
@@ -213,7 +213,7 @@ bool RegexKeyword::RegexKeyCompile(void)
 
 	// コンパイルパターンを内部変数に移す。
 	m_nRegexKeyCount = 0;
-	const wchar_t* pKeyword = &m_pTypes->m_RegexKeywordList[0];
+	const wchar_t* pKeyword = &m_pTypes->regexKeywordList[0];
 #ifdef USE_PARENT
 #else
 	wmemcpy(m_keywordList,  m_pTypes->m_RegexKeywordList, _countof(m_RegexKeywordList));
@@ -231,10 +231,10 @@ bool RegexKeyword::RegexKeyCompile(void)
 		++pKeyword;
 	}
 
-	m_nTypeIndex = m_pTypes->m_nIdx;
-	m_nTypeId = m_pTypes->m_id;
+	m_nTypeIndex = m_pTypes->nIdx;
+	m_nTypeId = m_pTypes->id;
 	m_nCompiledMagicNumber = 1;	// Not Compiled.
-	m_bUseRegexKeyword = m_pTypes->m_bUseRegexKeyword;
+	m_bUseRegexKeyword = m_pTypes->bUseRegexKeyword;
 	if (!m_bUseRegexKeyword) {
 		return false;
 	}
@@ -245,14 +245,14 @@ bool RegexKeyword::RegexKeyCompile(void)
 	}
 
 #ifdef USE_PARENT
-	pKeyword = &m_pTypes->m_RegexKeywordList[0];
+	pKeyword = &m_pTypes->regexKeywordList[0];
 #else
 	pKeyword = &m_keywordList[0];
 #endif
 	// パターンをコンパイルする。
 	for (int i=0; i<m_nRegexKeyCount; ++i) {
 #ifdef USE_PARENT
-		rp = &m_pTypes->m_RegexKeywordArr[i];
+		rp = &m_pTypes->regexKeywordArr[i];
 #else
 		rp = &m_info[i].sRegexKey;
 #endif
@@ -272,11 +272,11 @@ bool RegexKeyword::RegexKeyCompile(void)
 					m_info[i].nHead = 0;
 				}
 
-				if (COLORIDX_REGEX1  <= rp->m_nColorIndex
-				 && COLORIDX_REGEX10 >= rp->m_nColorIndex
+				if (COLORIDX_REGEX1  <= rp->nColorIndex
+				 && COLORIDX_REGEX10 >= rp->nColorIndex
 				) {
 					// 色指定でチェックが入ってなければ検索しなくてもよい
-					if (m_pTypes->m_colorInfoArr[rp->m_nColorIndex].m_bDisp) {
+					if (m_pTypes->colorInfoArr[rp->nColorIndex].bDisp) {
 						m_info[i].nFlag = RK_EMPTY;
 					}else {
 						// 正規表現では色指定のチェックを見る。
@@ -299,7 +299,7 @@ bool RegexKeyword::RegexKeyCompile(void)
 		++pKeyword;
 	}
 
-	m_nCompiledMagicNumber = m_pTypes->m_nRegexKeyMagicNumber;	// Compiled.
+	m_nCompiledMagicNumber = m_pTypes->nRegexKeyMagicNumber;	// Compiled.
 
 	return true;
 }
@@ -383,7 +383,7 @@ bool RegexKeyword::RegexIsKeyword(
 			if (m_info[i].nOffset == nPos) {  // 以前検索した結果に一致する
 				*nMatchLen   = m_info[i].nLength;
 #ifdef USE_PARENT
-				*nMatchColor = m_pTypes->m_RegexKeywordArr[i].m_nColorIndex;
+				*nMatchColor = m_pTypes->regexKeywordArr[i].nColorIndex;
 #else
 				*nMatchColor = m_info[i].sRegexKey.m_nColorIndex;
 #endif
@@ -411,7 +411,7 @@ bool RegexKeyword::RegexIsKeyword(
 						if (m_info[i].nHead != 1 || nPos == 0) {
 							*nMatchLen   = m_info[i].nLength;
 #ifdef USE_PARENT
-							*nMatchColor = m_pTypes->m_RegexKeywordArr[i].m_nColorIndex;
+							*nMatchColor = m_pTypes->regexKeywordArr[i].nColorIndex;
 #else
 							*nMatchColor = m_info[i].sRegexKey.m_nColorIndex;
 #endif

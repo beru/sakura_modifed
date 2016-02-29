@@ -191,7 +191,7 @@ void TextDrawer::DispVerticalLines(
 	if (nRightCol < 0) {
 		nRightCol = nWrapKetas;
 	}
-	const int nPosXOffset = GetDllShareData().m_common.m_window.m_nVertLineOffset + pView->GetTextArea().GetAreaLeft();
+	const int nPosXOffset = GetDllShareData().common.window.nVertLineOffset + pView->GetTextArea().GetAreaLeft();
 	const int nPosXLeft   = t_max(pView->GetTextArea().GetAreaLeft() + (Int)(nLeftCol  - pView->GetTextArea().GetViewLeftCol()) * nCharDx, pView->GetTextArea().GetAreaLeft());
 	const int nPosXRight  = t_min(pView->GetTextArea().GetAreaLeft() + (Int)(nRightCol - pView->GetTextArea().GetViewLeftCol()) * nCharDx, pView->GetTextArea().GetAreaRight());
 	const int nLineHeight = pView->GetTextMetrics().GetHankakuDy();
@@ -210,17 +210,17 @@ void TextDrawer::DispVerticalLines(
 		gr.SetPen(vertType.GetTextColor());
 	}
 
-	for (int k=0; k<MAX_VERTLINES && typeData.m_nVertLineIdx[k]!=0; ++k) {
+	for (int k=0; k<MAX_VERTLINES && typeData.nVertLineIdx[k]!=0; ++k) {
 		// nXColは1開始。GetTextArea().GetViewLeftCol()は0開始なので注意。
-		LayoutInt nXCol = typeData.m_nVertLineIdx[k];
+		LayoutInt nXCol = typeData.nVertLineIdx[k];
 		LayoutInt nXColEnd = nXCol;
 		LayoutInt nXColAdd = LayoutInt(1);
 		// nXColがマイナスだと繰り返し。k+1を終了値、k+2をステップ幅として利用する
 		if (nXCol < 0) {
 			if (k < MAX_VERTLINES - 2) {
 				nXCol = -nXCol;
-				nXColEnd = typeData.m_nVertLineIdx[++k];
-				nXColAdd = typeData.m_nVertLineIdx[++k];
+				nXColEnd = typeData.nVertLineIdx[++k];
+				nXColAdd = typeData.nVertLineIdx[++k];
 				if (nXColEnd < nXCol || nXColAdd <= 0) {
 					continue;
 				}
@@ -299,7 +299,7 @@ void TextDrawer::DispNoteLine(
 		const int nLineHeight = pView->GetTextMetrics().GetHankakuDy();
 		const int left = nLeft;
 		const int right = nRight;
-		int userOffset = pView->m_pTypeData->m_nNoteLineOffset;
+		int userOffset = pView->m_pTypeData->nNoteLineOffset;
 		int offset = pView->GetTextArea().GetAreaTop() + userOffset - 1;
 		while (offset < 0) {
 			offset += nLineHeight;
@@ -369,7 +369,7 @@ void TextDrawer::DispLineNumber(
 	int				nCharWidth = pView->GetTextMetrics().GetHankakuDx();
 	// 行番号表示部分X幅	Sep. 23, 2002 genta 共通式のくくりだし
 	//int				nLineNumAreaWidth = pView->GetTextArea().m_nViewAlignLeftCols * nCharWidth;
-	int				nLineNumAreaWidth = pView->GetTextArea().GetAreaLeft() - GetDllShareData().m_common.m_window.m_nLineNumRightSpace;	// 2009.03.26 ryoji
+	int				nLineNumAreaWidth = pView->GetTextArea().GetAreaLeft() - GetDllShareData().common.window.nLineNumRightSpace;	// 2009.03.26 ryoji
 
 	TypeSupport textType(pView, COLORIDX_TEXT);
 	TypeSupport caretLineBg(pView, COLORIDX_CARETLINEBG);
@@ -469,15 +469,15 @@ void TextDrawer::DispLineNumber(
 		if (bGyouMod && nColorIndex != COLORIDX_GYOU_MOD) {
 			bool bChange = true;
 			if (gyouType.IsBoldFont() == colorType.IsBoldFont()) {
-		 		font.m_fontAttr.m_bBoldFont = gyouModType.IsBoldFont();
+		 		font.fontAttr.bBoldFont = gyouModType.IsBoldFont();
 				bChange = true;
 			}
 			if (gyouType.HasUnderLine() == colorType.HasUnderLine()) {
-				font.m_fontAttr.m_bUnderLine = gyouModType.HasUnderLine();
+				font.fontAttr.bUnderLine = gyouModType.HasUnderLine();
 				bChange = true;
 			}
 			if (bChange) {
-				font.m_hFont = pView->GetFontset().ChooseFontHandle(font.m_fontAttr);
+				font.hFont = pView->GetFontset().ChooseFontHandle(font.fontAttr);
 			}
 		}
 		gr.PushTextForeColor(fgcolor);	// テキスト：行番号の色
@@ -490,7 +490,7 @@ void TextDrawer::DispLineNumber(
 		int nLineNumCols;
 		{
 			// 行番号の表示 false=折り返し単位／true=改行単位
-			if (pTypes->m_bLineNumIsCRLF) {
+			if (pTypes->bLineNumIsCRLF) {
 				// 論理行番号表示モード
 				if (!pLayout || pLayout->GetLogicOffset() != 0) { // 折り返しレイアウト行
 					wcscpy(szLineNum, L" ");
@@ -507,9 +507,9 @@ void TextDrawer::DispLineNumber(
 			nLineNumCols = nLineCols; // 2010.08.17 Moca 位置決定に行番号区切りは含めない
 
 			// 行番号区切り 0=なし 1=縦線 2=任意
-			if (pTypes->m_nLineTermType == 2) {
+			if (pTypes->nLineTermType == 2) {
 				//	Sep. 22, 2002 genta
-				szLineNum[nLineCols] = pTypes->m_cLineTermChar;
+				szLineNum[nLineCols] = pTypes->cLineTermChar;
 				szLineNum[++nLineCols] = '\0';
 			}
 		}
@@ -527,7 +527,7 @@ void TextDrawer::DispLineNumber(
 		);
 
 		// 行番号区切り 0=なし 1=縦線 2=任意
-		if (pTypes->m_nLineTermType == 1) {
+		if (pTypes->nLineTermType == 1) {
 			RECT rc;
 			rc.left = nLineNumAreaWidth - 2;
 			rc.top = y;

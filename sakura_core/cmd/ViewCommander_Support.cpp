@@ -34,7 +34,7 @@
 /*!	入力補完
 	Ctrl+Spaceでここに到着。
 	CEditView::m_bHokan： 現在補完ウィンドウが表示されているかを表すフラグ。
-	m_common.m_helper.m_bUseHokan：現在補完ウィンドウが表示されているべきか否かをあらわすフラグ。
+	common.helper.bUseHokan：現在補完ウィンドウが表示されているべきか否かをあらわすフラグ。
 
     @date 2001/06/19 asa-o 英大文字小文字を同一視する
                      候補が1つのときはそれに確定する
@@ -45,17 +45,17 @@
 */
 void ViewCommander::Command_HOKAN(void)
 {
-	if (!GetDllShareData().m_common.m_helper.m_bUseHokan) {
-		GetDllShareData().m_common.m_helper.m_bUseHokan = TRUE;
+	if (!GetDllShareData().common.helper.bUseHokan) {
+		GetDllShareData().common.helper.bUseHokan = TRUE;
 	}
 #if 0
 // 2011.06.24 Moca Plugin導入に従い未設定の確認をやめる
 retry:;
 	// 補完候補一覧ファイルが設定されていないときは、設定するように促す。
 	// 2003.06.22 Moca ファイル内から検索する場合には補完ファイルの設定は必須ではない
-	if (!m_pCommanderView->m_pTypeData->m_bUseHokanByFile &&
-		!m_pCommanderView->m_pTypeData->m_bUseHokanByKeyword &&
-		m_pCommanderView->m_pTypeData->m_szHokanFile[0] == _T('\0')
+	if (!m_pCommanderView->m_pTypeData->bUseHokanByFile &&
+		!m_pCommanderView->m_pTypeData->bUseHokanByKeyword &&
+		m_pCommanderView->m_pTypeData->szHokanFile[0] == _T('\0')
 	) {
 		ConfirmBeep();
 		if (::ConfirmMessage(
@@ -78,7 +78,7 @@ retry:;
 	}else {
 		InfoBeep(); // 2010.04.03 Error→Info
 		m_pCommanderView->SendStatusMessage(LS(STR_SUPPORT_NOT_COMPLITE)); // 2010.05.29 ステータスで表示
-		GetDllShareData().m_common.m_helper.m_bUseHokan = FALSE;	// 入力補完終了のお知らせ
+		GetDllShareData().common.helper.bUseHokan = FALSE;	// 入力補完終了のお知らせ
 	}
 	return;
 }
@@ -90,7 +90,7 @@ retry:;
 */
 void ViewCommander::Command_ToggleKeySearch(int option)
 {	// 共通設定ダイアログの設定をキー割り当てでも切り替えられるように
-	auto& bUseCaretKeyword = GetDllShareData().m_common.m_search.m_bUseCaretKeyword;
+	auto& bUseCaretKeyword = GetDllShareData().common.search.bUseCaretKeyword;
 	if (option == 0) {
 		bUseCaretKeyword = !bUseCaretKeyword;
 	}else if (option == 1) {
@@ -193,7 +193,7 @@ void ViewCommander::Command_EXTHELP1(void)
 {
 retry:;
 	if (!HelpManager().ExtWinHelpIsSet(&(GetDocument()->m_docType.GetDocumentAttribute()))) {
-//	if (wcslen(GetDllShareData().m_common.m_szExtHelp1) == 0) {
+//	if (wcslen(GetDllShareData().common.m_szExtHelp1) == 0) {
 		ErrorBeep();
 // From Here Sept. 15, 2000 JEPRO
 //		[Esc]キーと[x]ボタンでも中止できるように変更
@@ -303,7 +303,7 @@ void ViewCommander::Command_EXTHTMLHELP(const WCHAR* _helpfile, const WCHAR* kwd
 		// タスクトレイのプロセスにHtmlHelpを起動させる
 		// 2003.06.23 Moca 相対パスは実行ファイルからのパス
 		// 2007.05.21 ryoji 相対パスは設定ファイルからのパスを優先
-		TCHAR* pWork = GetDllShareData().m_workBuffer.GetWorkBuffer<TCHAR>();
+		TCHAR* pWork = GetDllShareData().workBuffer.GetWorkBuffer<TCHAR>();
 		if (_IS_REL_PATH(filename)) {
 			GetInidirOrExedir(pWork, filename);
 		}else {
@@ -312,7 +312,7 @@ void ViewCommander::Command_EXTHTMLHELP(const WCHAR* _helpfile, const WCHAR* kwd
 		int nLen = _tcslen(pWork);
 		_tcscpy(&pWork[nLen + 1], memCurText.GetStringT());
 		hwndHtmlHelp = (HWND)::SendMessage(
-			GetDllShareData().m_handles.m_hwndTray,
+			GetDllShareData().handles.hwndTray,
 			MYWM_HTMLHELP,
 			(WPARAM)GetMainWindow(),
 			0
@@ -336,7 +336,7 @@ void ViewCommander::Command_EXTHTMLHELP(const WCHAR* _helpfile, const WCHAR* kwd
 			GetInidirOrExedir(path, filename);
 			// Jul. 6, 2001 genta HtmlHelpの呼び出し方法変更
 			hwndHtmlHelp = OpenHtmlHelp(
-				NULL/*GetDllShareData().m_handles.m_hwndTray*/,
+				NULL/*GetDllShareData().handles.hwndTray*/,
 				path, // Jul. 5, 2002 genta
 				HH_KEYWORD_LOOKUP,
 				(DWORD_PTR)&link
@@ -344,7 +344,7 @@ void ViewCommander::Command_EXTHTMLHELP(const WCHAR* _helpfile, const WCHAR* kwd
 		}else {
 			// Jul. 6, 2001 genta HtmlHelpの呼び出し方法変更
 			hwndHtmlHelp = OpenHtmlHelp(
-				NULL/*GetDllShareData().m_handles.m_hwndTray*/,
+				NULL/*GetDllShareData().handles.hwndTray*/,
 				filename, // Jul. 5, 2002 genta
 				HH_KEYWORD_LOOKUP,
 				(DWORD_PTR)&link

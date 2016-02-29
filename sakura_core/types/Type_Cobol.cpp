@@ -34,22 +34,22 @@
 void CType_Cobol::InitTypeConfigImp(TypeConfig* pType)
 {
 	// 名前と拡張子
-	_tcscpy(pType->m_szTypeName, _T("COBOL"));
-	_tcscpy(pType->m_szTypeExts, _T("cbl,cpy,pco,cob"));	// Jun. 04, 2001 JEPRO KENCH氏の助言に従い追加
+	_tcscpy(pType->szTypeName, _T("COBOL"));
+	_tcscpy(pType->szTypeExts, _T("cbl,cpy,pco,cob"));	// Jun. 04, 2001 JEPRO KENCH氏の助言に従い追加
 
 	// 設定
-	pType->m_lineComment.CopyTo(0, L"*", 6);			// Jun. 02, 2001 JEPRO 修正
-	pType->m_lineComment.CopyTo(1, L"D", 6);			// Jun. 04, 2001 JEPRO 追加
-	pType->m_nStringType = StringLiteralType::PLSQL;		// 文字列区切り記号エスケープ方法  0=[\"][\'] 1=[""]['']
-	wcscpy_s(pType->m_szIndentChars, L"*");				// その他のインデント対象文字
-	pType->m_nKeywordSetIdx[0] = 3;						// キーワードセット		// Jul. 10, 2001 JEPRO
-	pType->m_eDefaultOutline = OUTLINE_COBOL;			// アウトライン解析方法
+	pType->lineComment.CopyTo(0, L"*", 6);				// Jun. 02, 2001 JEPRO 修正
+	pType->lineComment.CopyTo(1, L"D", 6);				// Jun. 04, 2001 JEPRO 追加
+	pType->stringType = StringLiteralType::PLSQL;		// 文字列区切り記号エスケープ方法  0=[\"][\'] 1=[""]['']
+	wcscpy_s(pType->szIndentChars, L"*");				// その他のインデント対象文字
+	pType->nKeywordSetIdx[0] = 3;						// キーワードセット		// Jul. 10, 2001 JEPRO
+	pType->eDefaultOutline = OutlineType::Cobol;		// アウトライン解析方法
 	// 指定桁縦線	// 2005.11.08 Moca
-	pType->m_colorInfoArr[COLORIDX_VERTLINE].m_bDisp = true;
-	pType->m_nVertLineIdx[0] = LayoutInt(7);
-	pType->m_nVertLineIdx[1] = LayoutInt(8);
-	pType->m_nVertLineIdx[2] = LayoutInt(12);
-	pType->m_nVertLineIdx[3] = LayoutInt(73);
+	pType->colorInfoArr[COLORIDX_VERTLINE].bDisp = true;
+	pType->nVertLineIdx[0] = LayoutInt(7);
+	pType->nVertLineIdx[1] = LayoutInt(8);
+	pType->nVertLineIdx[2] = LayoutInt(12);
+	pType->nVertLineIdx[3] = LayoutInt(73);
 }
 
 
@@ -65,7 +65,7 @@ void DocOutline::MakeTopicList_cobol(FuncInfoArr* pFuncInfoArr)
 	const wchar_t*	pszKeyword;
 	int				nKeywordLen;
 	BOOL			bDivision;
-	bool			bExtEol = GetDllShareData().m_common.m_edit.m_bEnableExtEol;
+	bool			bExtEol = GetDllShareData().common.edit.bEnableExtEol;
 
 	szDivision[0] = L'\0';
 	szLabel[0] =  L'\0';

@@ -54,7 +54,7 @@ DlgCompare::DlgCompare()
 	// サイズ変更時に位置を制御するコントロール数
 	assert(_countof(anchorList) == _countof(m_rcItems));
 
-	m_bCompareAndTileHorz = true;	// 左右に並べて表示
+	bCompareAndTileHorz = true;	// 左右に並べて表示
 
 	m_ptDefaultSize.x = -1;
 	m_ptDefaultSize.y = -1;
@@ -147,17 +147,17 @@ void DlgCompare::SetData(void)
 		for (int i=0; i<nRowNum; ++i) {
 			// トレイからエディタへの編集ファイル名要求通知
 			::SendMessage(pEditNodeArr[i].GetHwnd(), MYWM_GETFILEINFO, 0, 0);
-			EditInfo* pfi = (EditInfo*)&m_pShareData->m_workBuffer.m_EditInfo_MYWM_GETFILEINFO;
+			EditInfo* pfi = (EditInfo*)&m_pShareData->workBuffer.editInfo_MYWM_GETFILEINFO;
 
 //@@@ 2001.12.26 YAZAKI ファイル名で比較すると(無題)だったときに問題同士の比較ができない
 			if (pEditNodeArr[i].GetHwnd() == EditWnd::getInstance()->GetHwnd()) {
 				// 2010.07.30 自分の名前もここから設定する
-				FileNameManager::getInstance()->GetMenuFullLabel_WinListNoEscape( szMenu, _countof(szMenu), pfi, pEditNodeArr[i].m_nId, -1, calc.GetDC() );
+				FileNameManager::getInstance()->GetMenuFullLabel_WinListNoEscape( szMenu, _countof(szMenu), pfi, pEditNodeArr[i].nId, -1, calc.GetDC() );
 				SetItemText(IDC_STATIC_COMPARESRC, szMenu);
 				continue;
 			}
 			// 番号は ウィンドウリストと同じになるようにする
-			FileNameManager::getInstance()->GetMenuFullLabel_WinListNoEscape( szMenu, _countof(szMenu), pfi, pEditNodeArr[i].m_nId, i, calc.GetDC() );
+			FileNameManager::getInstance()->GetMenuFullLabel_WinListNoEscape( szMenu, _countof(szMenu), pfi, pEditNodeArr[i].nId, i, calc.GetDC() );
 
 			int nItem = ::List_AddString(hwndList, szMenu);
 			List_SetItemData(hwndList, nItem, pEditNodeArr[i].GetHwnd());
@@ -167,7 +167,7 @@ void DlgCompare::SetData(void)
 
 			// ファイル名一致のスコアを計算する
 			TCHAR szFile2[_MAX_PATH];
-			SplitPath_FolderAndFile(pfi->m_szPath, NULL, szFile2);
+			SplitPath_FolderAndFile(pfi->szPath, NULL, szFile2);
 			int scoreTemp = FileMatchScoreSepExt(szFile1, szFile2);
 			if (score < scoreTemp) {
 				// スコアのいいものを選択
@@ -184,13 +184,13 @@ void DlgCompare::SetData(void)
 	// 左右に並べて表示
 	//@@@ 2003.06.12 MIK
 	// TAB 1ウィンドウ表示のときは並べて比較できなくする
-	if (m_pShareData->m_common.m_tabBar.m_bDispTabWnd
-		&& !m_pShareData->m_common.m_tabBar.m_bDispTabWndMultiWin
+	if (m_pShareData->common.tabBar.bDispTabWnd
+		&& !m_pShareData->common.tabBar.bDispTabWndMultiWin
 	) {
-		m_bCompareAndTileHorz = false;
+		bCompareAndTileHorz = false;
 		EnableItem(IDC_CHECK_TILE_H, false);
 	}
-	CheckButton(IDC_CHECK_TILE_H, m_bCompareAndTileHorz);
+	CheckButton(IDC_CHECK_TILE_H, bCompareAndTileHorz);
 	return;
 }
 
@@ -207,7 +207,7 @@ int DlgCompare::GetData(void)
 		*m_phwndCompareWnd = (HWND)List_GetItemData(hwndList, nItem);
 		// トレイからエディタへの編集ファイル名要求通知
 		::SendMessage(*m_phwndCompareWnd, MYWM_GETFILEINFO, 0, 0);
-		EditInfo* pfi = (EditInfo*)&m_pShareData->m_workBuffer.m_EditInfo_MYWM_GETFILEINFO;
+		EditInfo* pfi = (EditInfo*)&m_pShareData->workBuffer.editInfo_MYWM_GETFILEINFO;
 
 		// 2010.07.30 パス名はやめて表示名に変更
 		int nId = AppNodeManager::getInstance()->GetEditNode(*m_phwndCompareWnd)->GetId();
@@ -215,7 +215,7 @@ int DlgCompare::GetData(void)
 		FileNameManager::getInstance()->GetMenuFullLabel_WinListNoEscape( m_pszCompareLabel, _MAX_PATH/*長さ不明*/, pfi, nId, -1, calc.GetDC() );
 
 		// 左右に並べて表示
-		m_bCompareAndTileHorz = IsButtonChecked(IDC_CHECK_TILE_H);
+		bCompareAndTileHorz = IsButtonChecked(IDC_CHECK_TILE_H);
 
 		return TRUE;
 	}
@@ -257,7 +257,7 @@ BOOL DlgCompare::OnInitDialog(
 		GetItemClientRect(anchorList[i].id, m_rcItems[i]);
 	}
 
-	RECT rcDialog = GetDllShareData().m_common.m_others.m_rcCompareDialog;
+	RECT rcDialog = GetDllShareData().common.others.rcCompareDialog;
 	if (rcDialog.left != 0
 		|| rcDialog.bottom != 0
 	) {
@@ -275,7 +275,7 @@ BOOL DlgCompare::OnSize(WPARAM wParam, LPARAM lParam)
 	// 基底クラスメンバ
 	Dialog::OnSize(wParam, lParam);
 
-	GetWindowRect(&GetDllShareData().m_common.m_others.m_rcCompareDialog);
+	GetWindowRect(&GetDllShareData().common.others.rcCompareDialog);
 
 	RECT rc;
 	GetWindowRect(&rc);
@@ -291,7 +291,7 @@ BOOL DlgCompare::OnSize(WPARAM wParam, LPARAM lParam)
 
 BOOL DlgCompare::OnMove(WPARAM wParam, LPARAM lParam)
 {
-	GetWindowRect(&GetDllShareData().m_common.m_others.m_rcCompareDialog);
+	GetWindowRect(&GetDllShareData().common.others.rcCompareDialog);
 	return Dialog::OnMove(wParam, lParam);
 }
 

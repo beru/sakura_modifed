@@ -44,12 +44,12 @@ struct CommonSetting;// 2002/2/10 aroka
 
 // マクロ情報
 struct MacroRec {
-	TCHAR	m_szName[MACRONAME_MAX];	// 表示名
-	TCHAR	m_szFile[_MAX_PATH + 1];	// ファイル名(ディレクトリを含まない)
-	bool	m_bReloadWhenExecute;		// 実行時に読み込みなおすか（デフォルトon）
+	TCHAR	szName[MACRONAME_MAX];	// 表示名
+	TCHAR	szFile[_MAX_PATH + 1];	// ファイル名(ディレクトリを含まない)
+	bool	bReloadWhenExecute;		// 実行時に読み込みなおすか（デフォルトon）
 	
-	bool IsEnabled() const { return m_szFile[0] != _T('\0'); }
-	const TCHAR* GetTitle() const { return m_szName[0] == _T('\0') ? m_szFile: m_szName; }	// 2007.11.02 ryoji 追加
+	bool IsEnabled() const { return szFile[0] != _T('\0'); }
+	const TCHAR* GetTitle() const { return szName[0] == _T('\0') ? szFile: szName; }	// 2007.11.02 ryoji 追加
 };
 
 /*!

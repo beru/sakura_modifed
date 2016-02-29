@@ -25,7 +25,7 @@
 #include "stdafx.h"
 #include "RecentExceptMRU.h"
 #include <string.h>
-#include "env/DLLSHAREDATA.h"
+#include "env/DllSharedData.h"
 
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -34,7 +34,7 @@
 
 RecentExceptMRU::RecentExceptMRU()
 {
-	auto& exceptMRU = GetShareData()->m_history.m_aExceptMRU;
+	auto& exceptMRU = GetShareData()->history.m_aExceptMRU;
 	Create(
 		exceptMRU.dataPtr(),
 		&exceptMRU._GetSizeRef(),

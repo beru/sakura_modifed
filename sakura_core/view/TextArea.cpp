@@ -4,7 +4,7 @@
 #include "Ruler.h"
 #include "EditView.h"
 #include "env/ShareData.h"
-#include "env/DLLSHAREDATA.h"
+#include "env/DllSharedData.h"
 #include "doc/EditDoc.h"
 
 // 2014.07.26 katze
@@ -17,7 +17,7 @@ TextArea::TextArea(EditView* pEditView)
 	:
 	m_pEditView(pEditView)
 {
-	DLLSHAREDATA* pShareData = &GetDllShareData();
+	DllSharedData* pShareData = &GetDllShareData();
 
 	m_nViewAlignLeft = 0;					// 表示域の左端座標
 	m_nViewAlignLeftCols = 0;				// 行番号域の桁数
@@ -27,8 +27,8 @@ TextArea::TextArea(EditView* pEditView)
 	m_nViewRowNum = LayoutInt(0);			// 表示域の行数
 	m_nViewTopLine = LayoutInt(0);			// 表示域の一番上の行
 	m_nViewLeftCol = LayoutInt(0);			// 表示域の一番左の桁
-	SetTopYohaku(pShareData->m_common.m_window.m_nRulerBottomSpace); 	// ルーラーとテキストの隙間
-	SetLeftYohaku(pShareData->m_common.m_window.m_nLineNumRightSpace);
+	SetTopYohaku(pShareData->common.window.nRulerBottomSpace); 	// ルーラーとテキストの隙間
+	SetLeftYohaku(pShareData->common.window.nLineNumRightSpace);
 	m_nViewAlignTop = GetTopYohaku();		// 表示域の上端座標
 }
 
@@ -72,10 +72,10 @@ void TextArea::UpdateAreaMetrics(HDC hdc)
 		pView->GetTextMetrics().SetHankakuDy(pView->GetTextMetrics().GetHankakuHeight());
 	}else {
 		// 文字間隔
-		pView->GetTextMetrics().SetHankakuDx(pView->GetTextMetrics().GetHankakuWidth() + pView->m_pTypeData->m_nColumnSpace);
+		pView->GetTextMetrics().SetHankakuDx(pView->GetTextMetrics().GetHankakuWidth() + pView->m_pTypeData->nColumnSpace);
 	
 		// 行間隔
-		pView->GetTextMetrics().SetHankakuDy(pView->GetTextMetrics().GetHankakuHeight() + pView->m_pTypeData->m_nLineSpace);
+		pView->GetTextMetrics().SetHankakuDy(pView->GetTextMetrics().GetHankakuHeight() + pView->m_pTypeData->nLineSpace);
 	}
 
 	// 表示域の再計算
@@ -159,7 +159,7 @@ bool TextArea::DetectWidthOfLineNumberArea(bool bRedraw)
 
 	int nViewAlignLeftNew;
 
-	if (pView->m_pTypeData->m_colorInfoArr[COLORIDX_GYOU].m_bDisp && !pView->m_bMiniMap) {
+	if (pView->m_pTypeData->colorInfoArr[COLORIDX_GYOU].bDisp && !pView->m_bMiniMap) {
 		// 行番号表示に必要な桁数を計算
 		int i = DetectWidthOfLineNumberArea_calculate(&pView->m_pEditDoc->m_layoutMgr);
 		nViewAlignLeftNew = pView->GetTextMetrics().GetHankakuDx() * (i + 1);	// 表示域の左端座標
@@ -173,7 +173,7 @@ bool TextArea::DetectWidthOfLineNumberArea(bool bRedraw)
 	}
 
 	//	Sep 18, 2002 genta
-	nViewAlignLeftNew += GetDllShareData().m_common.m_window.m_nLineNumRightSpace;
+	nViewAlignLeftNew += GetDllShareData().common.window.nLineNumRightSpace;
 	if (nViewAlignLeftNew != GetAreaLeft()) {
 		Rect			rc;
 		SetAreaLeft(nViewAlignLeftNew);
@@ -186,11 +186,11 @@ bool TextArea::DetectWidthOfLineNumberArea(bool bRedraw)
 
 		if (bRedraw && pView2->GetDrawSwitch()) {
 			// 再描画
-			pView2->GetCaret().m_cUnderLine.Lock();
+			pView2->GetCaret().m_underLine.Lock();
 			// From Here 2007.09.09 Moca 互換BMPによる画面バッファ
 			pView2->Call_OnPaint((int)PaintAreaType::LineNumber | (int)PaintAreaType::Ruler | (int)PaintAreaType::Body, false); // メモリＤＣを使用してちらつきのない再描画
 			// To Here 2007.09.09 Moca
-			pView2->GetCaret().m_cUnderLine.UnLock();
+			pView2->GetCaret().m_underLine.UnLock();
 			pView2->GetCaret().ShowEditCaret();
 			/*
 			PAINTSTRUCT		ps;
@@ -199,9 +199,9 @@ bool TextArea::DetectWidthOfLineNumberArea(bool bRedraw)
 			ps.rcPaint.right  = GetAreaRight();
 			ps.rcPaint.top    = 0;
 			ps.rcPaint.bottom = GetAreaBottom();
-			pView2->GetCaret().m_cUnderLine.Lock();
+			pView2->GetCaret().m_underLine.Lock();
 			pView2->OnPaint(hdc, &ps, TRUE);	
-			GetCaret().m_cUnderLine.UnLock();
+			GetCaret().m_underLine.UnLock();
 			pView2->GetCaret().ShowEditCaret();
 			::ReleaseDC(m_hWnd, hdc);
 			*/
@@ -222,7 +222,7 @@ int TextArea::DetectWidthOfLineNumberArea_calculate(const LayoutMgr* pLayoutMgr,
 	int nAllLines; //$$ 単位混在
 
 	// 行番号の表示 false=折り返し単位／true=改行単位
-	if (pView->m_pTypeData->m_bLineNumIsCRLF && !bLayout) {
+	if (pView->m_pTypeData->bLineNumIsCRLF && !bLayout) {
 		nAllLines = pView->m_pEditDoc->m_docLineMgr.GetLineCount();
 	}else {
 		nAllLines = (Int)pLayoutMgr->GetLineCount();
@@ -245,11 +245,11 @@ int TextArea::DetectWidthOfLineNumberArea_calculate(const LayoutMgr* pLayoutMgr,
 #else
 		// 設定から行数を求める
 		nWork = 10;
-		for (i=1; i<pView->m_pTypeData->m_nLineNumWidth; ++i) {
+		for (i=1; i<pView->m_pTypeData->nLineNumWidth; ++i) {
 			nWork *= 10;
 		}
 		// 表示している行数と比較し、大きい方の値を取る
-		for (i=pView->m_pTypeData->m_nLineNumWidth; i<LINENUMWIDTH_MAX; ++i) {
+		for (i=pView->m_pTypeData->nLineNumWidth; i<LINENUMWIDTH_MAX; ++i) {
 			if (nWork > nAllLines) {	// Oct. 18, 2003 genta 式を整理
 				break;
 			}
@@ -261,7 +261,7 @@ int TextArea::DetectWidthOfLineNumberArea_calculate(const LayoutMgr* pLayoutMgr,
 	}else {
 		//	2003.09.11 wmlhq 行番号が1桁のときと幅を合わせる
 		// 最小桁数を可変に変更 2014.07.26 katze	// 先頭の空白分を加算する 2014.07.31 katze
-		return pView->m_pTypeData->m_nLineNumWidth +1;
+		return pView->m_pTypeData->nLineNumWidth +1;
 	}
 }
 

@@ -36,7 +36,7 @@
 #include <algorithm>
 #include "DlgFavorite.h"
 #include "dlg/DlgInput1.h"
-#include "env/DLLSHAREDATA.h"
+#include "env/DllSharedData.h"
 #include "func/Funccode.h"
 #include "util/shell.h"
 #include "util/window.h"
@@ -102,11 +102,11 @@ struct CompareListViewLParam {
 };
 
 /*
-	Recentの各実装クラスは DLLSHAREDATA へ直接アクセスしている。
+	Recentの各実装クラスは DllSharedData へ直接アクセスしている。
 	履歴はほかのウィンドウが書き換える可能性があるため、
 	ダイアログがアクティブになった際に変更を確認し再取得するようになっている。
-	編集中は変更を確認していないので、裏でDLLSHAREDATAを変更されるとListViewと
-	DLLSHAREDATAが一致しない可能性もある。
+	編集中は変更を確認していないので、裏でDllSharedDataを変更されるとListViewと
+	DllSharedDataが一致しない可能性もある。
 */
 
 
@@ -383,7 +383,7 @@ BOOL DlgFavorite::OnInitDialog(
 	CreateSizeBox();
 	Dialog::OnSize();
 
-	RECT rcDialog = GetDllShareData().m_common.m_others.m_rcFavoriteDialog;
+	RECT rcDialog = GetDllShareData().common.others.rcFavoriteDialog;
 	if (0
 		|| rcDialog.left != 0
 		|| rcDialog.bottom != 0
@@ -638,7 +638,7 @@ BOOL DlgFavorite::OnNotify(WPARAM wParam, LPARAM lParam)
 					}
 					return TRUE;
 				}
-				int nIdx = getCtrlKeyState();
+				int nIdx = GetCtrlKeyState();
 				WORD wKey = ((NMLVKEYDOWN*)lParam)->wVKey;
 				if ((wKey == VK_NEXT && nIdx == _CTRL)) {
 					int next = m_nCurrentTab + 1;
@@ -1205,7 +1205,7 @@ BOOL DlgFavorite::OnSize(WPARAM wParam, LPARAM lParam)
 	// 基底クラスメンバ
 	Dialog::OnSize(wParam, lParam);
 
-	GetWindowRect(&GetDllShareData().m_common.m_others.m_rcFavoriteDialog);
+	GetWindowRect(&GetDllShareData().common.others.rcFavoriteDialog);
 
 	RECT rc;
 	POINT ptNew;
@@ -1227,7 +1227,7 @@ BOOL DlgFavorite::OnSize(WPARAM wParam, LPARAM lParam)
 
 BOOL DlgFavorite::OnMove(WPARAM wParam, LPARAM lParam)
 {
-	GetWindowRect(&GetDllShareData().m_common.m_others.m_rcFavoriteDialog);
+	GetWindowRect(&GetDllShareData().common.others.rcFavoriteDialog);
 	
 	return Dialog::OnMove(wParam, lParam);
 }

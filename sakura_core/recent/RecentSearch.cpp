@@ -25,7 +25,7 @@
 #include "StdAfx.h"
 #include "RecentSearch.h"
 #include "config/maxdata.h"
-#include "env/DLLSHAREDATA.h"
+#include "env/DllSharedData.h"
 #include <string.h>
 
 
@@ -36,8 +36,8 @@
 RecentSearch::RecentSearch()
 {
 	Create(
-		GetShareData()->m_searchKeywords.m_aSearchKeys.dataPtr(),
-		&GetShareData()->m_searchKeywords.m_aSearchKeys._GetSizeRef(),
+		GetShareData()->searchKeywords.searchKeys.dataPtr(),
+		&GetShareData()->searchKeywords.searchKeys._GetSizeRef(),
 		NULL,
 		MAX_SEARCHKEY,
 		NULL

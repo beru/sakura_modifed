@@ -34,7 +34,7 @@
 #include "util/module.h"
 #include "_os/OsVersionInfo.h"
 #include "env/ShareData.h"
-#include "env/DLLSHAREDATA.h"
+#include "env/DllSharedData.h"
 #include "extmodule/HtmlHelp.h"
 
 int CALLBACK MYBrowseCallbackProc(
@@ -238,9 +238,9 @@ LRESULT CALLBACK PropSheetWndProc(
 					LS(STR_SHELL_IMPEXPDIR)
 				);
 				if (nMsgResult == IDOK) {
-					DLLSHAREDATA *pShareData = &GetDllShareData();
-					GetInidir(pShareData->m_history.m_szIMPORTFOLDER);
-					AddLastChar(pShareData->m_history.m_szIMPORTFOLDER, _countof2(pShareData->m_history.m_szIMPORTFOLDER), _T('\\'));
+					DllSharedData *pShareData = &GetDllShareData();
+					GetInidir(pShareData->history.m_szIMPORTFOLDER);
+					AddLastChar(pShareData->history.m_szIMPORTFOLDER, _countof2(pShareData->history.m_szIMPORTFOLDER), _T('\\'));
 				}
 				break;
 			}
@@ -362,7 +362,7 @@ DWORD NetConnect (const TCHAR strNetWorkPass[])
 	直接のアクセスはOpenHtmlHelp()関数のみから行う。
 	他のファイルからはHtmlHelpクラスは隠されている。
 */
-HtmlHelpDll g_cHtmlHelp;
+static HtmlHelpDll g_htmlHelp;
 
 /*!
 	HTML Helpを開く
@@ -379,8 +379,8 @@ HWND OpenHtmlHelp(
 	bool		msgflag	// [in] エラーメッセージを表示するか。省略時はtrue。
 	)
 {
-	if (g_cHtmlHelp.InitDll() == DLL_SUCCESS) {
-		return g_cHtmlHelp.HtmlHelp(hWnd, szFile, uCmd, data);
+	if (g_htmlHelp.InitDll() == InitDllResultType::Success) {
+		return g_htmlHelp.HtmlHelp(hWnd, szFile, uCmd, data);
 	}
 	if (msgflag) {
 		::MessageBox(

@@ -25,7 +25,7 @@
 #include "StdAfx.h"
 #include <string.h>
 #include "RecentGrepFolder.h"
-#include "env/DLLSHAREDATA.h"
+#include "env/DllSharedData.h"
 
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -35,8 +35,8 @@
 RecentGrepFolder::RecentGrepFolder()
 {
 	Create(
-		GetShareData()->m_searchKeywords.m_aGrepFolders.dataPtr(),
-		&GetShareData()->m_searchKeywords.m_aGrepFolders._GetSizeRef(),
+		GetShareData()->searchKeywords.grepFolders.dataPtr(),
+		&GetShareData()->searchKeywords.grepFolders._GetSizeRef(),
 		NULL,
 		MAX_GREPFOLDER,
 		NULL

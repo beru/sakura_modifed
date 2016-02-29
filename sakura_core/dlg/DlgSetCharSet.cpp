@@ -14,7 +14,7 @@
 #include "dlg/DlgSetCharSet.h"
 #include "func/Funccode.h"
 #include "util/shell.h"
-#include "env/DLLSHAREDATA.h"
+#include "env/DllSharedData.h"
 #include "charset/CodePage.h"
 #include "sakura_rc.h"
 #include "sakura.hh"

@@ -25,7 +25,7 @@
 #include <algorithm>
 #include "charset/ShiftJis.h"
 #include "doc/EditDoc.h"
-#include "env/DLLSHAREDATA.h"
+#include "env/DllSharedData.h"
 #include "_main/AppMode.h"
 #include "window/EditWnd.h"
 

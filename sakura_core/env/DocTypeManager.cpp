@@ -34,7 +34,7 @@
 const TCHAR* DocTypeManager::m_typeExtSeps = _T(" ;,");	// タイプ別拡張子 区切り文字
 const TCHAR* DocTypeManager::m_typeExtWildcards = _T("*?");	// タイプ別拡張子 ワイルドカード
 
-static Mutex g_cDocTypeMutex(FALSE, GSTR_MUTEX_SAKURA_DOCTYPE);
+static Mutex g_docTypeMutex(FALSE, GSTR_MUTEX_SAKURA_DOCTYPE);
 
 /*!
 	ファイル名から、ドキュメントタイプ（数値）を取得する
@@ -53,10 +53,10 @@ TypeConfigNum DocTypeManager::GetDocumentTypeOfPath(const TCHAR* pszFilePath)
 		pszFileName = pszSep + 1;
 	}
 
-	for (int i=0; i<m_pShareData->m_nTypesCount; ++i) {
+	for (int i=0; i<m_pShareData->nTypesCount; ++i) {
 		const TypeConfigMini* mini;
 		GetTypeConfigMini(TypeConfigNum(i), &mini);
-		if (IsFileNameMatch(mini->m_szTypeExts, pszFileName)) {
+		if (IsFileNameMatch(mini->szTypeExts, pszFileName)) {
 			return TypeConfigNum(i);	//	番号
 		}
 	}
@@ -82,10 +82,10 @@ TypeConfigNum DocTypeManager::GetDocumentTypeOfExt(const TCHAR* pszExt)
 
 TypeConfigNum DocTypeManager::GetDocumentTypeOfId(int id)
 {
-	for (int i=0; i<m_pShareData->m_nTypesCount; ++i) {
+	for (int i=0; i<m_pShareData->nTypesCount; ++i) {
 		const TypeConfigMini* mini;
 		GetTypeConfigMini(TypeConfigNum(i), &mini);
-		if (mini->m_id == id) {
+		if (mini->id == id) {
 			return TypeConfigNum(i);
 		}
 	}
@@ -95,14 +95,14 @@ TypeConfigNum DocTypeManager::GetDocumentTypeOfId(int id)
 bool DocTypeManager::GetTypeConfig(TypeConfigNum documentType, TypeConfig& type)
 {
 	int n = documentType.GetIndex();
-	if (0 <= n && n < m_pShareData->m_nTypesCount) {
+	if (0 <= n && n < m_pShareData->nTypesCount) {
 		if (n == 0) {
-			type = m_pShareData->m_TypeBasis;
+			type = m_pShareData->typeBasis;
 			return true;
 		}else {
-			LockGuard<Mutex> guard(g_cDocTypeMutex);
-			 if (SendMessage(m_pShareData->m_handles.m_hwndTray, MYWM_GET_TYPESETTING, (WPARAM)n, 0)) {
-				type = m_pShareData->m_workBuffer.m_TypeConfig;
+			LockGuard<Mutex> guard(g_docTypeMutex);
+			 if (SendMessage(m_pShareData->handles.hwndTray, MYWM_GET_TYPESETTING, (WPARAM)n, 0)) {
+				type = m_pShareData->workBuffer.typeConfig;
 				return true;
 			}
 		}
@@ -113,10 +113,10 @@ bool DocTypeManager::GetTypeConfig(TypeConfigNum documentType, TypeConfig& type)
 bool DocTypeManager::SetTypeConfig(TypeConfigNum documentType, const TypeConfig& type)
 {
 	int n = documentType.GetIndex();
-	if (0 <= n && n < m_pShareData->m_nTypesCount) {
-		LockGuard<Mutex> guard(g_cDocTypeMutex);
-		m_pShareData->m_workBuffer.m_TypeConfig = type;
-		if (SendMessage(m_pShareData->m_handles.m_hwndTray, MYWM_SET_TYPESETTING, (WPARAM)n, 0)) {
+	if (0 <= n && n < m_pShareData->nTypesCount) {
+		LockGuard<Mutex> guard(g_docTypeMutex);
+		m_pShareData->workBuffer.typeConfig = type;
+		if (SendMessage(m_pShareData->handles.hwndTray, MYWM_SET_TYPESETTING, (WPARAM)n, 0)) {
 			return true;
 		}
 	}
@@ -126,8 +126,8 @@ bool DocTypeManager::SetTypeConfig(TypeConfigNum documentType, const TypeConfig&
 bool DocTypeManager::GetTypeConfigMini(TypeConfigNum documentType, const TypeConfigMini** type)
 {
 	int n = documentType.GetIndex();
-	if (0 <= n && n < m_pShareData->m_nTypesCount) {
-		*type = &m_pShareData->m_TypeMini[n];
+	if (0 <= n && n < m_pShareData->nTypesCount) {
+		*type = &m_pShareData->typesMini[n];
 		return true;
 	}
 	return false;
@@ -135,14 +135,14 @@ bool DocTypeManager::GetTypeConfigMini(TypeConfigNum documentType, const TypeCon
 
 bool DocTypeManager::AddTypeConfig(TypeConfigNum documentType)
 {
-	LockGuard<Mutex> guard(g_cDocTypeMutex);
-	return FALSE != SendMessage(m_pShareData->m_handles.m_hwndTray, MYWM_ADD_TYPESETTING, (WPARAM)documentType.GetIndex(), 0);
+	LockGuard<Mutex> guard(g_docTypeMutex);
+	return FALSE != SendMessage(m_pShareData->handles.hwndTray, MYWM_ADD_TYPESETTING, (WPARAM)documentType.GetIndex(), 0);
 }
 
 bool DocTypeManager::DelTypeConfig(TypeConfigNum documentType)
 {
-	LockGuard<Mutex> guard(g_cDocTypeMutex);
-	return FALSE != SendMessage(m_pShareData->m_handles.m_hwndTray, MYWM_DEL_TYPESETTING, (WPARAM)documentType.GetIndex(), 0);
+	LockGuard<Mutex> guard(g_docTypeMutex);
+	return FALSE != SendMessage(m_pShareData->handles.hwndTray, MYWM_DEL_TYPESETTING, (WPARAM)documentType.GetIndex(), 0);
 }
 
 /*!

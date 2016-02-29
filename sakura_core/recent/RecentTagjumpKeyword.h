@@ -26,19 +26,19 @@
 #include "RecentImp.h"
 #include "util/StaticType.h"
 
-typedef StaticString<WCHAR, _MAX_PATH> TagjumpKeywordString;
+typedef StaticString<WCHAR, _MAX_PATH> TagJumpKeywordString;
 
 // タグジャンプキーワードの履歴を管理 (RECENT_FOR_TAGJUMP_KEYWORD)
-class RecentTagjumpKeyword : public RecentImp<TagjumpKeywordString, LPCWSTR> {
+class RecentTagJumpKeyword : public RecentImp<TagJumpKeywordString, LPCWSTR> {
 public:
 	// 生成
-	RecentTagjumpKeyword();
+	RecentTagJumpKeyword();
 
 	// オーバーライド
-	int				CompareItem(const TagjumpKeywordString* p1, LPCWSTR p2) const;
-	void			CopyItem(TagjumpKeywordString* dst, LPCWSTR src) const;
+	int				CompareItem(const TagJumpKeywordString* p1, LPCWSTR p2) const;
+	void			CopyItem(TagJumpKeywordString* dst, LPCWSTR src) const;
 	const TCHAR*	GetItemText(int nIndex) const;
-	bool			DataToReceiveType(LPCWSTR* dst, const TagjumpKeywordString* src) const;
-	bool			TextToDataType(TagjumpKeywordString* dst, LPCTSTR pszText) const;
+	bool			DataToReceiveType(LPCWSTR* dst, const TagJumpKeywordString* src) const;
+	bool			TextToDataType(TagJumpKeywordString* dst, LPCTSTR pszText) const;
 };
 

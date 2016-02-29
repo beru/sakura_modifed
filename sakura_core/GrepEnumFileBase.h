@@ -43,13 +43,13 @@ typedef std::vector<PairGrepEnumItem> VPGrepEnumItem;
 class GrepEnumOptions {
 public:
 	GrepEnumOptions()
-		:m_bIgnoreHidden(false)
-		,m_bIgnoreReadOnly(false)
-		,m_bIgnoreSystem(false)
+		:bIgnoreHidden(false)
+		,bIgnoreReadOnly(false)
+		,bIgnoreSystem(false)
 	{}
-	bool	m_bIgnoreHidden;
-	bool	m_bIgnoreReadOnly;
-	bool	m_bIgnoreSystem;
+	bool	bIgnoreHidden;
+	bool	bIgnoreReadOnly;
+	bool	bIgnoreSystem;
 };
 
 class GrepEnumFileBase {
@@ -142,13 +142,13 @@ public:
 			HANDLE handle = ::FindFirstFile(lpPath, &w32fd);
 			if (handle != INVALID_HANDLE_VALUE) {
 				do {
-					if (option.m_bIgnoreHidden && (w32fd.dwFileAttributes & FILE_ATTRIBUTE_HIDDEN)) {
+					if (option.bIgnoreHidden && (w32fd.dwFileAttributes & FILE_ATTRIBUTE_HIDDEN)) {
 						continue;
 					}
-					if (option.m_bIgnoreReadOnly && (w32fd.dwFileAttributes & FILE_ATTRIBUTE_READONLY)) {
+					if (option.bIgnoreReadOnly && (w32fd.dwFileAttributes & FILE_ATTRIBUTE_READONLY)) {
 						continue;
 					}
-					if (option.m_bIgnoreSystem && (w32fd.dwFileAttributes & FILE_ATTRIBUTE_SYSTEM)) {
+					if (option.bIgnoreSystem && (w32fd.dwFileAttributes & FILE_ATTRIBUTE_SYSTEM)) {
 						continue;
 					}
 					std::vector<TCHAR> name( nKeyDirLen + _tcslen(w32fd.cFileName) + 1 );

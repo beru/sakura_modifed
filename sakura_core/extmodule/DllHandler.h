@@ -65,10 +65,10 @@ private:
 
 
 // 結果定数
-enum EDllResult {
-	DLL_SUCCESS,		// 成功
-	DLL_LOADFAILURE,	// DLLロード失敗
-	DLL_INITFAILURE,	// 初期処理に失敗
+enum class InitDllResultType {
+	Success,		// 成功
+	LoadFailure,	// DLLロード失敗
+	InitFailure,	// 初期処理に失敗
 };
 
 // DLLの動的なLoad/Unloadを行うためのクラス
@@ -114,7 +114,7 @@ public:
 	virtual bool IsAvailable() const { return m_hInstance != NULL; }
 
 	// DLLロードと初期処理
-	EDllResult InitDll(
+	InitDllResultType InitDll(
 		LPCTSTR pszSpecifiedDllName = NULL	// [in] クラスが定義しているDLL名以外のDLLを読み込みたいときに、そのDLL名を指定。
 	);
 

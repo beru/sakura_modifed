@@ -6,7 +6,7 @@
 
 // 非依存推奨
 #include "env/ShareData.h"
-#include "env/DLLSHAREDATA.h"
+#include "env/DllSharedData.h"
 
 //! BOMデータ取得
 void Utf8::GetBom(Memory* pMemBom)
@@ -214,7 +214,7 @@ CodeConvertResult Utf8::_UnicodeToHex(const wchar_t* src, const int iSLen, TCHAR
 	unsigned char*	ps;
 	bool			bbinary=false;
 
-	if (psStatusbar->m_bDispUtf8Codepoint) {
+	if (psStatusbar->bDispUtf8Codepoint) {
 		// Unicodeで表示
 		return CodeBase::UnicodeToHex(src, iSLen, pDst, psStatusbar);
 	}

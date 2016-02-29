@@ -37,16 +37,16 @@
 // 2012.01.03 シングルクォートの色分けをする
 void CType_Html::InitTypeConfigImp(TypeConfig* pType)
 {
-	_tcscpy(pType->m_szTypeName, _T("HTML"));
-	_tcscpy(pType->m_szTypeExts, _T("html,htm,shtml,plg"));
+	_tcscpy(pType->szTypeName, _T("HTML"));
+	_tcscpy(pType->szTypeExts, _T("html,htm,shtml,plg"));
 
 	// 設定
-	pType->m_blockComments[0].SetBlockCommentRule(L"<!--", L"-->");	// ブロックコメントデリミタ
-	pType->m_nStringType = StringLiteralType::HTML;							// 文字列区切り記号エスケープ方法
-	pType->m_bStringLineOnly = true;									// 文字列は行内のみ
-	pType->m_nKeywordSetIdx[0] = 1;										// キーワードセット
-	pType->m_eDefaultOutline = OUTLINE_HTML;							// アウトライン解析方法
-	pType->m_colorInfoArr[COLORIDX_SSTRING].m_bDisp = true;				// シングルクォートの色分けOFF
+	pType->blockComments[0].SetBlockCommentRule(L"<!--", L"-->");	// ブロックコメントデリミタ
+	pType->stringType = StringLiteralType::HTML;					// 文字列区切り記号エスケープ方法
+	pType->bStringLineOnly = true;									// 文字列は行内のみ
+	pType->nKeywordSetIdx[0] = 1;									// キーワードセット
+	pType->eDefaultOutline = OutlineType::HTML;						// アウトライン解析方法
+	pType->colorInfoArr[COLORIDX_SSTRING].bDisp = true;				// シングルクォートの色分けOFF
 }
 
 
@@ -256,7 +256,7 @@ void DocOutline::MakeTopicList_html(FuncInfoArr* pFuncInfoArr)
 							}
 							if (!bEndTag) {
 								szTitle[k++] = L' ';
-								bool bExtEol = GetDllShareData().m_common.m_edit.m_bEnableExtEol;
+								bool bExtEol = GetDllShareData().common.edit.bEnableExtEol;
 								for (j-=k-1; i+j+k<nLineLen && k<_countof(szTitle)-1; ++k) {
 									if (pLine[j + k] == L'<' || WCODE::IsLineDelimiter(pLine[j + k], bExtEol)) {
 										break;

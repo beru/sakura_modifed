@@ -43,7 +43,7 @@ BOOL EditView::KeywordHelpSearchDict(LID_SKH nID, POINT* po, RECT* rc)
 {
 	NativeW memCurText;
 	// キーワードヘルプを使用するか？
-	if (!m_pTypeData->m_bUseKeywordHelp)	// キーワードヘルプ機能を使用する	// 2006.04.10 fon
+	if (!m_pTypeData->bUseKeywordHelp)	// キーワードヘルプ機能を使用する	// 2006.04.10 fon
 		goto end_of_search;
 	// フォーカスがあるか？
 	if (!GetCaret().ExistCaretFocus()) 
@@ -79,7 +79,7 @@ BOOL EditView::KeywordHelpSearchDict(LID_SKH nID, POINT* po, RECT* rc)
 	// 選択範囲のデータを取得(複数行選択の場合は先頭の行のみ)
 	if (GetSelectedDataOne(memCurText, STRNCMP_MAX + 1)) {
 	// キャレット位置の単語を取得する処理		2006.03.24 fon
-	}else if (GetDllShareData().m_common.m_search.m_bUseCaretKeyword) {
+	}else if (GetDllShareData().common.search.bUseCaretKeyword) {
 		if (!GetParser().GetCurrentWord(&memCurText))
 			goto end_of_search;
 	}else
@@ -117,18 +117,18 @@ bool EditView::KeySearchCore(const NativeW* pMemCurText)
 	
 	m_tipWnd.m_info.SetString(_T(""));	// tooltipバッファ初期化
 	// 1行目にキーワード表示の場合
-	if (m_pTypeData->m_bUseKeyHelpKeyDisp) {	// キーワードも表示する	// 2006.04.10 fon
+	if (m_pTypeData->bUseKeyHelpKeyDisp) {	// キーワードも表示する	// 2006.04.10 fon
 		m_tipWnd.m_info.AppendString(_T("["));
 		m_tipWnd.m_info.AppendString(pMemCurText->GetStringT());
 		m_tipWnd.m_info.AppendString(_T("]"));
 	}
 	// 途中まで一致を使う場合
-	if (m_pTypeData->m_bUseKeyHelpPrefix)
+	if (m_pTypeData->bUseKeyHelpPrefix)
 		nCmpLen = wcslen(pMemCurText->GetStringPtr());	// 2006.04.10 fon
 	m_tipWnd.m_KeyWasHit = false;
-	for (int i=0; i<m_pTypeData->m_nKeyHelpNum; ++i) {	// 最大数：MAX_KEYHELP_FILE
-		auto& keyHelpInfo = m_pTypeData->m_KeyHelpArr[i];
-		if (keyHelpInfo.m_bUse) {
+	for (int i=0; i<m_pTypeData->nKeyHelpNum; ++i) {	// 最大数：MAX_KEYHELP_FILE
+		auto& keyHelpInfo = m_pTypeData->keyHelpArr[i];
+		if (keyHelpInfo.bUse) {
 			// 2006.04.10 fon (nCmpLen, pMemRefKey,nSearchLine)引数を追加
 			NativeW* pMemRefText;
 			int nSearchResult = m_dicMgr.DicMgr::Search(
@@ -136,14 +136,14 @@ bool EditView::KeySearchCore(const NativeW* pMemCurText)
 				nCmpLen,
 				&pMemRefKey,
 				&pMemRefText,
-				keyHelpInfo.m_szPath,
+				keyHelpInfo.szPath,
 				&nLine
 			);
 			if (nSearchResult) {
 				// 該当するキーがある
 				LPWSTR pszWork = pMemRefText->GetStringPtr();
 				// 有効になっている辞書を全部なめて、ヒットの都度説明の継ぎ増し
-				if (m_pTypeData->m_bUseKeyHelpAllSearch) {	// ヒットした次の辞書も検索	// 2006.04.10 fon
+				if (m_pTypeData->bUseKeyHelpAllSearch) {	// ヒットした次の辞書も検索	// 2006.04.10 fon
 					// バッファに前のデータが詰まっていたらseparator挿入
 					if (m_tipWnd.m_info.GetStringLength() != 0)
 						m_tipWnd.m_info.AppendString(LS(STR_ERR_DLGEDITVW5));
@@ -153,12 +153,12 @@ bool EditView::KeySearchCore(const NativeW* pMemCurText)
 					{
 						TCHAR szFile[MAX_PATH];
 						// 2013.05.08 表示するのはファイル名(拡張子なし)のみにする
-						_tsplitpath(keyHelpInfo.m_szPath, NULL, NULL, szFile, NULL);
+						_tsplitpath(keyHelpInfo.szPath, NULL, NULL, szFile, NULL);
 						m_tipWnd.m_info.AppendString(szFile);
 					}
 					m_tipWnd.m_info.AppendString(_T("\n"));
 					// 前方一致でヒットした単語を挿入
-					if (m_pTypeData->m_bUseKeyHelpPrefix) {	// 選択範囲で前方一致検索
+					if (m_pTypeData->bUseKeyHelpPrefix) {	// 選択範囲で前方一致検索
 						m_tipWnd.m_info.AppendString(pMemRefKey->GetStringT());
 						m_tipWnd.m_info.AppendString(_T(" >>\n"));
 					}// 調査した「意味」を挿入
@@ -177,7 +177,7 @@ bool EditView::KeySearchCore(const NativeW* pMemCurText)
 						m_tipWnd.m_info.AppendString(_T("\n--------------------\n"));
 					
 					// 前方一致でヒットした単語を挿入
-					if (m_pTypeData->m_bUseKeyHelpPrefix) {	// 選択範囲で前方一致検索
+					if (m_pTypeData->bUseKeyHelpPrefix) {	// 選択範囲で前方一致検索
 						m_tipWnd.m_info.AppendString(pMemRefKey->GetStringT());
 						m_tipWnd.m_info.AppendString(_T(" >>\n"));
 					}
@@ -354,7 +354,7 @@ void EditView::GetCurrentTextForSearch(NativeW& memCurText, bool bStripMaxPath /
 	}
 	int nTopic2Len = (int)wcslen(pTopic2);
 	// 検索文字列は改行まで
-	bool bExtEol = GetDllShareData().m_common.m_edit.m_bEnableExtEol;
+	bool bExtEol = GetDllShareData().common.edit.bEnableExtEol;
 	int i;
 	for (i=0; i<nTopic2Len; ++i) {
 		if (WCODE::IsLineDelimiter(pTopic2[i], bExtEol)) {
@@ -392,7 +392,7 @@ bool EditView::GetCurrentTextForSearchDlg(NativeW& memCurText, bool bGetHistory)
 		GetCurrentTextForSearch(memCurText, bStripMaxPath);
 	}else {	// テキストが選択されていない
 		bool bGet = false;
-		if (GetDllShareData().m_common.m_search.m_bCaretTextForSearch) {
+		if (GetDllShareData().common.search.bCaretTextForSearch) {
 			GetCurrentTextForSearch(memCurText, bStripMaxPath);	// カーソル位置単語を取得
 			if (memCurText.GetStringLength() == 0 && bGetHistory) {
 				bGet = true;
@@ -402,10 +402,10 @@ bool EditView::GetCurrentTextForSearchDlg(NativeW& memCurText, bool bGetHistory)
 		}
 		if (bGet) {
 			if (1
-				&& 0 < GetDllShareData().m_searchKeywords.m_aSearchKeys.size()
-				&& m_nCurSearchKeySequence < GetDllShareData().m_common.m_search.m_nSearchKeySequence
+				&& 0 < GetDllShareData().searchKeywords.searchKeys.size()
+				&& m_nCurSearchKeySequence < GetDllShareData().common.search.nSearchKeySequence
 			) {
-				memCurText.SetString(GetDllShareData().m_searchKeywords.m_aSearchKeys[0]);	// 履歴からとってくる
+				memCurText.SetString(GetDllShareData().searchKeywords.searchKeys[0]);	// 履歴からとってくる
 				return true; // ""でもtrue	
 			}else {
 				memCurText.SetString(m_strCurSearchKey.c_str());

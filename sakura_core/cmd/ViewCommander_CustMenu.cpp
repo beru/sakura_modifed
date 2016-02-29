@@ -55,10 +55,10 @@ void ViewCommander::Command_MENU_RBUTTON(void)
 		break;
 	case IDM_JUMPDICT:
 		// キーワード辞書ファイルを開く
-		if (m_pCommanderView->m_pTypeData->m_bUseKeywordHelp) {		// キーワード辞書セレクトを使用する	// 2006.04.10 fon
+		if (m_pCommanderView->m_pTypeData->bUseKeywordHelp) {		// キーワード辞書セレクトを使用する	// 2006.04.10 fon
 			// Feb. 17, 2007 genta 相対パスを実行ファイル基準で開くように
 			m_pCommanderView->TagJumpSub(
-				m_pCommanderView->m_pTypeData->m_KeyHelpArr[m_pCommanderView->m_tipWnd.m_nSearchDict].m_szPath,
+				m_pCommanderView->m_pTypeData->keyHelpArr[m_pCommanderView->m_tipWnd.m_nSearchDict].szPath,
 				Point(1, m_pCommanderView->m_tipWnd.m_nSearchLine),
 				0,
 				true
@@ -87,7 +87,7 @@ int ViewCommander::Command_CUSTMENU(int nMenuIdx)
 	if (nMenuIdx < 0 || MAX_CUSTOM_MENU <= nMenuIdx) {
 		return 0;
 	}
-	if (GetDllShareData().m_common.m_customMenu.m_nCustMenuItemNumArr[nMenuIdx] == 0) {
+	if (GetDllShareData().common.customMenu.nCustMenuItemNumArr[nMenuIdx] == 0) {
 		return 0;
 	}
 	HMENU hMenu = ::CreatePopupMenu();

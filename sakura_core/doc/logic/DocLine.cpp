@@ -51,7 +51,7 @@ void DocLine::SetEol()
 	int nLength = m_line.GetStringLength();
 	// 改行コード設定
 	const wchar_t* p = &pData[nLength] - 1;
-	while (p >= pData && WCODE::IsLineDelimiter(*p, GetDllShareData().m_common.m_edit.m_bEnableExtEol)) --p;
+	while (p >= pData && WCODE::IsLineDelimiter(*p, GetDllShareData().common.edit.bEnableExtEol)) --p;
 	++p;
 	if (p >= pData) {
 		m_eol.SetTypeByString(p, &pData[nLength] - p);

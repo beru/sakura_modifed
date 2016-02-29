@@ -18,7 +18,7 @@
 #include "StdAfx.h"
 #include "ControlProcess.h"
 #include "ControlTray.h"
-#include "env/DLLSHAREDATA.h"
+#include "env/DllSharedData.h"
 #include "CommandLine.h"
 #include "env/ShareData_IO.h"
 #include "debug/RunningTimer.h"
@@ -101,7 +101,7 @@ bool ControlProcess::InitializeProcess()
 	}
 
 	// 言語を選択する
-	SelectLang::ChangeLang(GetDllShareData().m_common.m_window.m_szLanguageDll);
+	SelectLang::ChangeLang(GetDllShareData().common.window.szLanguageDll);
 	RefreshString();
 
 	MY_TRACETIME(runningTimer, "Before new ControlTray");
@@ -118,7 +118,7 @@ bool ControlProcess::InitializeProcess()
 		return false;
 	}
 	SetMainWindow(hwnd);
-	GetDllShareData().m_handles.m_hwndTray = hwnd;
+	GetDllShareData().handles.hwndTray = hwnd;
 
 	// 初期化完了イベントをシグナル状態にする
 	if (!::SetEvent(m_hEventCPInitialized)) {
@@ -153,7 +153,7 @@ bool ControlProcess::MainLoop()
 */
 void ControlProcess::OnExitProcess()
 {
-	GetDllShareData().m_handles.m_hwndTray = NULL;
+	GetDllShareData().handles.hwndTray = NULL;
 }
 
 ControlProcess::~ControlProcess()

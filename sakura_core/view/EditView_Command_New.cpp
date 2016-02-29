@@ -41,7 +41,7 @@ static void StringToOpeLineData(const wchar_t* pLineData, int nLineDataLen, OpeL
 {
 	int nBegin = 0;
 	int i;
-	bool bExtEol = GetDllShareData().m_common.m_edit.m_bEnableExtEol;
+	bool bExtEol = GetDllShareData().common.edit.bEnableExtEol;
 	for (i=0; i<nLineDataLen; ++i) {
 		if (WCODE::IsLineDelimiter(pLineData[i], bExtEol)) {
 			if (i + 1 < nLineDataLen && pLineData[i] == WCODE::CR && pLineData[i+1] == WCODE::LF) {
@@ -116,11 +116,11 @@ void EditView::InsertData_CEditView(
 	// 禁則の有無
 	// 禁則がある場合は1行前から再描画を行う	@@@ 2002.04.19 MIK
 	bool bKinsoku = 0
-			|| (m_pTypeData->m_bWordWrap
-			|| m_pTypeData->m_bKinsokuHead	//@@@ 2002.04.19 MIK
-			|| m_pTypeData->m_bKinsokuTail	//@@@ 2002.04.19 MIK
-			|| m_pTypeData->m_bKinsokuRet	//@@@ 2002.04.19 MIK
-			|| m_pTypeData->m_bKinsokuKuto);	//@@@ 2002.04.19 MIK
+			|| (m_pTypeData->bWordWrap
+			|| m_pTypeData->bKinsokuHead	//@@@ 2002.04.19 MIK
+			|| m_pTypeData->bKinsokuTail	//@@@ 2002.04.19 MIK
+			|| m_pTypeData->bKinsokuRet		//@@@ 2002.04.19 MIK
+			|| m_pTypeData->bKinsokuKuto);	//@@@ 2002.04.19 MIK
 
 	LayoutInt	nLineAllColLen;
 	LogicInt	nIdxFrom = LogicInt(0);
@@ -222,8 +222,8 @@ void EditView::InsertData_CEditView(
 
 	//	Aug. 14, 2005 genta 折り返し幅をLayoutMgrから取得するように
 	if (pptNewPos->x >= m_pEditDoc->m_layoutMgr.GetMaxLineKetas()) {
-		if (m_pTypeData->m_bKinsokuRet
-		 || m_pTypeData->m_bKinsokuKuto
+		if (m_pTypeData->bKinsokuRet
+		 || m_pTypeData->bKinsokuKuto
 		) {	//@@@ 2002.04.16 MIK
 			if (m_pEditDoc->m_layoutMgr.IsEndOfLine(*pptNewPos)) {	//@@@ 2002.04.18
 				pptNewPos->x = 0;
@@ -524,7 +524,7 @@ void EditView::DeleteData(
 					nIdxFrom = LineColumnToIndex(pLayout, rcSel.left);
 					nIdxTo	 = LineColumnToIndex(pLayout, rcSel.right);
 
-					bool bExtEol = GetDllShareData().m_common.m_edit.m_bEnableExtEol;
+					bool bExtEol = GetDllShareData().common.edit.bEnableExtEol;
 					for (LogicInt i=nIdxFrom; i<=nIdxTo; ++i) {
 						if (WCODE::IsLineDelimiter(pLine[i], bExtEol)) {
 							nIdxTo = i;
@@ -613,7 +613,7 @@ void EditView::DeleteData(
 		// 指定された桁の文字のバイト数を調べる
 		LogicInt	nNxtIdx;
 		LayoutInt	nNxtPos;
-		bool bExtEol = GetDllShareData().m_common.m_edit.m_bEnableExtEol;
+		bool bExtEol = GetDllShareData().common.edit.bEnableExtEol;
 		if (WCODE::IsLineDelimiter(pLine[nCurIdx], bExtEol)) {
 			// 改行
 			nNxtIdx = nCurIdx + pLayout->GetLayoutEol().GetLen();

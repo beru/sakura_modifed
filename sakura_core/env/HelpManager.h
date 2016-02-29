@@ -27,7 +27,7 @@
 #pragma once
 
 // 要先行定義
-// #include "DLLSHAREDATA.h"
+// #include "DllSharedData.h"
 
 
 // ヘルプ管理
@@ -43,6 +43,6 @@ public:
 	const TCHAR*	GetExtHTMLHelp(const TypeConfig* pType = NULL);	// タイプがnTypeのときの、外部HTMLヘルプファイル名を取得。
 	bool			HTMLHelpIsSingle(const TypeConfig* pType = NULL);	// タイプがnTypeのときの、外部HTMLヘルプ「ビューアを複数起動しない」がONかを取得。
 private:
-	DLLSHAREDATA* m_pShareData;
+	DllSharedData* m_pShareData;
 };
 

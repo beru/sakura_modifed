@@ -27,7 +27,7 @@
 #include "EditDoc.h"
 #include "doc/logic/DocLine.h"
 #include "doc/logic/DocLineMgr.h"
-#include "env/DLLSHAREDATA.h"
+#include "env/DllSharedData.h"
 #include "_main/AppMode.h"
 #include "Eol.h"
 #include "window/EditWnd.h"
@@ -42,7 +42,7 @@ DocEditor::DocEditor(EditDoc* pDoc)
 	m_bIsDocModified(false)	// 変更フラグ // Jan. 22, 2002 genta 型変更
 {
 	// Oct. 2, 2005 genta 挿入モード
-	this->SetInsMode(GetDllShareData().m_common.m_general.m_bIsINSMode);
+	this->SetInsMode(GetDllShareData().common.general.bIsINSMode);
 }
 
 
@@ -78,8 +78,8 @@ void DocEditor::OnAfterLoad(const LoadInfo& loadInfo)
 	// 編集用改行コードの設定
 	{
 		const TypeConfig& type = pDoc->m_docType.GetDocumentAttribute();
-		if (pDoc->m_docFile.GetCodeSet() == type.m_encoding.m_eDefaultCodetype) {
-			SetNewLineCode(type.m_encoding.m_eDefaultEoltype);	// 2011.01.24 ryoji デフォルトEOL
+		if (pDoc->m_docFile.GetCodeSet() == type.encoding.eDefaultCodetype) {
+			SetNewLineCode(type.encoding.eDefaultEoltype);	// 2011.01.24 ryoji デフォルトEOL
 		}else {
 			SetNewLineCode(EolType::CRLF);
 		}
@@ -94,7 +94,7 @@ void DocEditor::OnAfterLoad(const LoadInfo& loadInfo)
 
 	// Nov. 20, 2000 genta
 	// IME状態の設定
-	this->SetImeMode(pDoc->m_docType.GetDocumentAttribute().m_nImeState);
+	this->SetImeMode(pDoc->m_docType.GetDocumentAttribute().nImeState);
 
 	// カレントディレクトリの変更
 	::SetCurrentDirectory(pDoc->m_docFile.GetFilePathClass().GetDirPath().c_str());

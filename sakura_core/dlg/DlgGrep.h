@@ -39,14 +39,14 @@ public:
 	bool		m_bSubFolder;		//!< サブフォルダからも検索する
 	bool		m_bFromThisText;	//!< この編集中のテキストから検索する
 
-	SearchOption	m_searchOption;	//!< 検索オプション
+	SearchOption	searchOption;	//!< 検索オプション
 
-	EncodingType	m_nGrepCharSet;				//!< 文字コードセット
-	int			m_nGrepOutputStyle;			//!< Grep: 出力形式
-	int			m_nGrepOutputLineType;		//!< 結果出力：行を出力/該当部分/否マッチ行
-	bool		m_bGrepOutputFileOnly;		//!< ファイル毎最初のみ検索
-	bool		m_bGrepOutputBaseFolder;	//!< ベースフォルダ表示
-	bool		m_bGrepSeparateFolder;		//!< フォルダ毎に表示
+	EncodingType	nGrepCharSet;				//!< 文字コードセット
+	int			nGrepOutputStyle;			//!< Grep: 出力形式
+	int			nGrepOutputLineType;		//!< 結果出力：行を出力/該当部分/否マッチ行
+	bool		bGrepOutputFileOnly;		//!< ファイル毎最初のみ検索
+	bool		bGrepOutputBaseFolder;	//!< ベースフォルダ表示
+	bool		bGrepSeparateFolder;		//!< フォルダ毎に表示
 
 
 	std::wstring	m_strText;				//!< 検索文字列

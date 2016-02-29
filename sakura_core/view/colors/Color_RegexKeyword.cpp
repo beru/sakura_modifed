@@ -56,7 +56,7 @@ bool Color_RegexKeyword::EndColor(const StringRef& str, int nPos)
 void Color_RegexKeyword::OnStartScanLogic()
 {
 	EditView* pView = ColorStrategyPool::getInstance()->GetCurrentView();
-	if (m_pTypeData->m_bUseRegexKeyword) {
+	if (m_pTypeData->bUseRegexKeyword) {
 		pView->m_pRegexKeyword->RegexKeyLineStart();
 	}
 }

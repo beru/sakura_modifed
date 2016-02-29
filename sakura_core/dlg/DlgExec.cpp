@@ -112,7 +112,7 @@ void DlgExec::SetData(void)
 	{	// From Here 2007.01.02 maru 引数を拡張のため
 		// マクロからの呼び出しではShareDataに保存させないように，ShareDataとの受け渡しはExecCmdの外で
 		int nExecFlgOpt;
-		nExecFlgOpt = m_pShareData->m_nExecFlgOpt;
+		nExecFlgOpt = m_pShareData->nExecFlgOpt;
 		
 		// ビューモードや上書き禁止のときは編集中ウィンドウへは出力しない	// 2009.02.21 ryoji
 		if (!m_bEditable) {
@@ -136,28 +136,28 @@ void DlgExec::SetData(void)
 	/*****************************
 	*         データ設定         *
 	*****************************/
-	_tcscpy(m_szCommand, m_pShareData->m_history.m_aCommands[0]);
+	_tcscpy(m_szCommand, m_pShareData->history.m_aCommands[0]);
 	HWND hwndCombo = GetItemHwnd(IDC_COMBO_m_szCommand);
 	Combo_ResetContent(hwndCombo);
 	SetItemText(IDC_COMBO_TEXT, m_szCommand);
-	int nSize = m_pShareData->m_history.m_aCommands.size();
+	int nSize = m_pShareData->history.m_aCommands.size();
 	for (int i=0; i<nSize; ++i) {
-		Combo_AddString(hwndCombo, m_pShareData->m_history.m_aCommands[i]);
+		Combo_AddString(hwndCombo, m_pShareData->history.m_aCommands[i]);
 	}
 	Combo_SetCurSel(hwndCombo, 0);
 
-	_tcscpy(m_szCurDir, m_pShareData->m_history.m_aCurDirs[0]);
+	_tcscpy(m_szCurDir, m_pShareData->history.m_aCurDirs[0]);
 	hwndCombo = GetItemHwnd(IDC_COMBO_CUR_DIR);
 	Combo_ResetContent(hwndCombo);
 	SetItemText(IDC_COMBO_TEXT, m_szCurDir);
-	for (int i=0; i<m_pShareData->m_history.m_aCurDirs.size(); ++i) {
-		Combo_AddString(hwndCombo, m_pShareData->m_history.m_aCurDirs[i]);
+	for (int i=0; i<m_pShareData->history.m_aCurDirs.size(); ++i) {
+		Combo_AddString(hwndCombo, m_pShareData->history.m_aCurDirs[i]);
 	}
 	Combo_SetCurSel(hwndCombo, 0);
 	
 	int nOpt;
 	hwndCombo = GetItemHwnd(IDC_COMBO_CODE_GET);
-	nOpt = m_pShareData->m_nExecFlgOpt & 0x88;
+	nOpt = m_pShareData->nExecFlgOpt & 0x88;
 	for (int i=0; _countof(codeTable1); ++i) {
 		if (codeTable1[i] == nOpt) {
 			Combo_SetCurSel(hwndCombo, i);
@@ -165,7 +165,7 @@ void DlgExec::SetData(void)
 		}
 	}
 	hwndCombo = GetItemHwnd(IDC_COMBO_CODE_SEND);
-	nOpt = m_pShareData->m_nExecFlgOpt & 0x110;
+	nOpt = m_pShareData->nExecFlgOpt & 0x110;
 	for (int i=0; _countof(codeTable2); ++i) {
 		if (codeTable2[i] == nOpt) {
 			Combo_SetCurSel(hwndCombo, i);
@@ -198,7 +198,7 @@ int DlgExec::GetData(void)
 		nFlgOpt |= codeTable1[sel];
 		sel = Combo_GetCurSel(GetItemHwnd(IDC_COMBO_CODE_SEND));
 		nFlgOpt |= codeTable2[sel];
-		m_pShareData->m_nExecFlgOpt = nFlgOpt;
+		m_pShareData->nExecFlgOpt = nFlgOpt;
 	}	// To Here 2007.01.02 maru 引数を拡張のため
 	return 1;
 }

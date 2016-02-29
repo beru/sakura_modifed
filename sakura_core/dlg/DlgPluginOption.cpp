@@ -97,10 +97,10 @@ int DlgPluginOption::DoModal(
 {
 	// プラグイン番号（エディタがふる番号）
 	m_ID = ID;
-	m_plugin = PluginManager::getInstance()->GetPlugin(m_ID);
+	plugin = PluginManager::getInstance()->GetPlugin(m_ID);
 	m_pPropPlugin = propPlugin;
 
-	if (!m_plugin) {
+	if (!plugin) {
 		::ErrorMessage(hwndParent, LS(STR_DLGPLUGINOPT_LOAD));
 		return 0;
 	}
@@ -118,7 +118,7 @@ void DlgPluginOption::SetData(void)
 	bool bLoadDefault = false;
 
 	// タイトル
-	auto_sprintf(buf, LS(STR_DLGPLUGINOPT_TITLE), m_plugin->m_sName.c_str());
+	auto_sprintf(buf, LS(STR_DLGPLUGINOPT_TITLE), plugin->sName.c_str());
 	::SetWindowText(GetHwnd(), buf);
 
 	// リスト
@@ -128,11 +128,11 @@ void DlgPluginOption::SetData(void)
 
 	auto profile = std::make_unique<DataProfile>();
 	profile->SetReadingMode();
-	profile->ReadProfile(m_plugin->GetOptionPath().c_str());
+	profile->ReadProfile(plugin->GetOptionPath().c_str());
 
 	PluginOption* pOpt;
 	PluginOption::ArrayIter it;
-	for (i=0, it=m_plugin->m_options.begin(); it!=m_plugin->m_options.end(); ++i, ++it) {
+	for (i=0, it=plugin->m_options.begin(); it!=plugin->m_options.end(); ++i, ++it) {
 		pOpt = *it;
 
 		auto_snprintf_s(buf, _countof(buf), _T("%ls"), pOpt->GetLabel().c_str());
@@ -197,7 +197,7 @@ void DlgPluginOption::SetData(void)
 
 	if (bLoadDefault) {
 		profile->SetWritingMode();
-		profile->WriteProfile(m_plugin->GetOptionPath().c_str(), (m_plugin->m_sName + LSW(STR_DLGPLUGINOPT_INIHEAD)).c_str());
+		profile->WriteProfile(plugin->GetOptionPath().c_str(), (plugin->sName + LSW(STR_DLGPLUGINOPT_INIHEAD)).c_str());
 	}
 
 	if (i == 0) {
@@ -209,7 +209,7 @@ void DlgPluginOption::SetData(void)
 	}
 
 	// ReadMe Button
-	m_sReadMeName = m_pPropPlugin->GetReadMeFile(to_tchar(m_pShareData->m_common.m_plugin.m_pluginTable[m_ID].m_szName));
+	m_sReadMeName = m_pPropPlugin->GetReadMeFile(to_tchar(m_pShareData->common.plugin.pluginTable[m_ID].szName));
 	EnableItem(IDC_PLUGIN_README, !m_sReadMeName.empty());
 	return;
 }
@@ -226,14 +226,14 @@ int DlgPluginOption::GetData(void)
 
 	auto profile = std::make_unique<DataProfile>();
 	profile->SetReadingMode();
-	profile->ReadProfile(m_plugin->GetOptionPath().c_str());
+	profile->ReadProfile(plugin->GetOptionPath().c_str());
 	profile->SetWritingMode();
 
 	PluginOption* pOpt;
 	TCHAR	buf[MAX_LENGTH_VALUE + 1];
 	PluginOption::ArrayIter it;
 	int i;
-	for (i=0, it=m_plugin->m_options.begin(); it!=m_plugin->m_options.end(); ++i, ++it) {
+	for (i=0, it=plugin->m_options.begin(); it!=plugin->m_options.end(); ++i, ++it) {
 		pOpt = *it;
 
 		memset_raw(&lvi, 0, sizeof(lvi));
@@ -282,8 +282,8 @@ int DlgPluginOption::GetData(void)
 	}
 
 	profile->WriteProfile(
-		m_plugin->GetOptionPath().c_str(),
-		(m_plugin->m_sName + LSW(STR_DLGPLUGINOPT_INIHEAD)).c_str()
+		plugin->GetOptionPath().c_str(),
+		(plugin->sName + LSW(STR_DLGPLUGINOPT_INIHEAD)).c_str()
 		);
 
 	return TRUE;
@@ -527,7 +527,7 @@ void DlgPluginOption::MoveFocusToEdit(void)
 
 	if (iLine >= 0) {
 		// Focusの切り替え
-		sType = m_plugin->m_options[iLine]->GetType();
+		sType = plugin->m_options[iLine]->GetType();
 		transform(sType.begin(), sType.end(), sType.begin(), my_towlower2);
 		if (sType == OPTION_TYPE_BOOL) {
 			hwndCtrl = GetItemHwnd(IDC_CHECK_PLUGIN_OPTION);
@@ -564,11 +564,11 @@ void DlgPluginOption::SetToEdit(int iLine)
 		lvi.cchTextMax = MAX_LENGTH_VALUE + 1;
 		ListView_GetItem(hwndList, &lvi);
 
-		sType = m_plugin->m_options[iLine]->GetType();
+		sType = plugin->m_options[iLine]->GetType();
 		transform(sType.begin(), sType.end(), sType.begin(), my_towlower2);
 		if (sType == OPTION_TYPE_BOOL) {
 			::CheckDlgButtonBool(GetHwnd(), IDC_CHECK_PLUGIN_OPTION, _tcscmp(buf,  BOOL_DISP_FALSE) != 0);
-			SetItemText(IDC_CHECK_PLUGIN_OPTION, m_plugin->m_options[iLine]->GetLabel().c_str());
+			SetItemText(IDC_CHECK_PLUGIN_OPTION, plugin->m_options[iLine]->GetLabel().c_str());
 
 			// 編集領域の切り替え
 			SelectEdit(IDC_CHECK_PLUGIN_OPTION);
@@ -580,7 +580,7 @@ void DlgPluginOption::SetToEdit(int iLine)
 		}else if (sType == OPTION_TYPE_SEL) {
 			// CONBO 設定
 			std::vector<wstring> selects;
-			selects = m_plugin->m_options[iLine]->GetSelects();
+			selects = plugin->m_options[iLine]->GetSelects();
 
 			HWND hwndCombo = GetItemHwnd(IDC_COMBO_PLUGIN_OPTION);
 			Combo_ResetContent(hwndCombo);
@@ -642,7 +642,7 @@ void DlgPluginOption::SetFromEdit(int iLine)
 	wstring	sType;
 
 	if (iLine >= 0) {
-		sType = m_plugin->m_options[iLine]->GetType();
+		sType = plugin->m_options[iLine]->GetType();
 		transform(sType.begin (), sType.end (), sType.begin (), my_towlower2);
 		if (sType == OPTION_TYPE_BOOL) {
 			if (IsButtonChecked(IDC_CHECK_PLUGIN_OPTION)) {

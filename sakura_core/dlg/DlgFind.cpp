@@ -46,7 +46,7 @@ const DWORD p_helpids[] = {	//11800
 
 DlgFind::DlgFind()
 {
-	m_searchOption.Reset();
+	searchOption.Reset();
 	return;
 }
 
@@ -61,7 +61,7 @@ BOOL DlgFind::OnCbnDropDown(HWND hwndCtl, int wID)
 	switch (wID) {
 	case IDC_COMBO_TEXT:
 		if (::SendMessage(hwndCtl, CB_GETCOUNT, 0L, 0L) == 0) {
-			auto& keywords = m_pShareData->m_searchKeywords.m_aSearchKeys;
+			auto& keywords = m_pShareData->searchKeywords.searchKeys;
 			int nSize = keywords.size();
 			for (int i=0; i<nSize; ++i) {
 				Combo_AddString( hwndCtl, keywords[i] );
@@ -80,9 +80,9 @@ HWND DlgFind::DoModeless(
 	LPARAM lParam
 	)
 {
-	auto& csSearch = m_pShareData->m_common.m_search;
-	m_searchOption = csSearch.m_searchOption;		// 検索オプション
-	m_bNOTIFYNOTFOUND = csSearch.m_bNOTIFYNOTFOUND;	// 検索／置換  見つからないときメッセージを表示
+	auto& csSearch = m_pShareData->common.search;
+	searchOption = csSearch.searchOption;		// 検索オプション
+	bNotifyNotFound = csSearch.bNotifyNotFound;	// 検索／置換  見つからないときメッセージを表示
 	m_ptEscCaretPos_PHY = ((EditView*)lParam)->GetCaret().GetCaretLogicPos();	// 検索開始時のカーソル位置退避
 	((EditView*)lParam)->m_bSearch = TRUE;							// 検索開始位置の登録有無		02/07/28 ai
 	return Dialog::DoModeless(hInstance, hwndParent, IDD_FIND, lParam, SW_SHOW);
@@ -148,14 +148,14 @@ void DlgFind::SetData(void)
 	SetCombosList();
 
 	// 英大文字と英小文字を区別する
-	CheckButton(IDC_CHK_LOHICASE, m_searchOption.bLoHiCase);
+	CheckButton(IDC_CHK_LOHICASE, searchOption.bLoHiCase);
 
 	// 2001/06/23 Norio Nakatani
 	// 単語単位で検索
-	CheckButton(IDC_CHK_WORD, m_searchOption.bWordOnly);
+	CheckButton(IDC_CHK_WORD, searchOption.bWordOnly);
 
 	// 検索／置換  見つからないときメッセージを表示
-	CheckButton(IDC_CHECK_NOTIFYNOTFOUND, m_bNOTIFYNOTFOUND);
+	CheckButton(IDC_CHECK_NOTIFYNOTFOUND, bNotifyNotFound);
 
 	// From Here Jun. 29, 2001 genta
 	// 正規表現ライブラリの差し替えに伴う処理の見直し
@@ -163,7 +163,7 @@ void DlgFind::SetData(void)
 	// 無関係にCheckRegexpVersionを通過するようにした。
 	if (1
 		&& CheckRegexpVersion(GetHwnd(), IDC_STATIC_JRE32VER, false)
-		&& m_searchOption.bRegularExp
+		&& searchOption.bRegularExp
 	) {
 		// 英大文字と英小文字を区別する
 		CheckButton(IDC_CHK_REGULAREXP, true);
@@ -180,10 +180,10 @@ void DlgFind::SetData(void)
 	// To Here Jun. 29, 2001 genta
 
 	// 検索ダイアログを自動的に閉じる
-	CheckButton(IDC_CHECK_bAutoCloseDlgFind, m_pShareData->m_common.m_search.m_bAutoCloseDlgFind);
+	CheckButton(IDC_CHECK_bAutoCloseDlgFind, m_pShareData->common.search.bAutoCloseDlgFind);
 
 	// 先頭（末尾）から再検索 2002.01.26 hor
-	CheckButton(IDC_CHECK_SEARCHALL, m_pShareData->m_common.m_search.m_bSearchAll);
+	CheckButton(IDC_CHECK_SEARCHALL, m_pShareData->common.search.bSearchAll);
 
 	return;
 }
@@ -213,20 +213,20 @@ int DlgFind::GetData(void)
 //	MYTRACE(_T("DlgFind::GetData()"));
 
 	// 英大文字と英小文字を区別する
-	m_searchOption.bLoHiCase = IsButtonChecked(IDC_CHK_LOHICASE);
+	searchOption.bLoHiCase = IsButtonChecked(IDC_CHK_LOHICASE);
 
 	// 2001/06/23 Norio Nakatani
 	// 単語単位で検索
-	m_searchOption.bWordOnly = IsButtonChecked(IDC_CHK_WORD);
+	searchOption.bWordOnly = IsButtonChecked(IDC_CHK_WORD);
 
 	// 一致する単語のみ検索する
 	// 正規表現
-	m_searchOption.bRegularExp = IsButtonChecked(IDC_CHK_REGULAREXP);
+	searchOption.bRegularExp = IsButtonChecked(IDC_CHK_REGULAREXP);
 
 	// 検索／置換  見つからないときメッセージを表示
-	m_bNOTIFYNOTFOUND = IsButtonChecked(IDC_CHECK_NOTIFYNOTFOUND);
+	bNotifyNotFound = IsButtonChecked(IDC_CHECK_NOTIFYNOTFOUND);
 
-	m_pShareData->m_common.m_search.m_bNOTIFYNOTFOUND = m_bNOTIFYNOTFOUND;	// 検索／置換  見つからないときメッセージを表示
+	m_pShareData->common.search.bNotifyNotFound = bNotifyNotFound;	// 検索／置換  見つからないときメッセージを表示
 
 	// 検索文字列
 	int nBufferSize = ::GetWindowTextLength(GetItemHwnd(IDC_COMBO_TEXT)) + 1;
@@ -235,18 +235,18 @@ int DlgFind::GetData(void)
 	m_strText = to_wchar(&vText[0]);
 
 	// 検索ダイアログを自動的に閉じる
-	m_pShareData->m_common.m_search.m_bAutoCloseDlgFind = IsButtonChecked(IDC_CHECK_bAutoCloseDlgFind);
+	m_pShareData->common.search.bAutoCloseDlgFind = IsButtonChecked(IDC_CHECK_bAutoCloseDlgFind);
 
 	// 先頭（末尾）から再検索 2002.01.26 hor
-	m_pShareData->m_common.m_search.m_bSearchAll = IsButtonChecked(IDC_CHECK_SEARCHALL);
+	m_pShareData->common.search.bSearchAll = IsButtonChecked(IDC_CHECK_SEARCHALL);
 
 	if (0 < m_strText.length()) {
 		// 正規表現？
 		// From Here Jun. 26, 2001 genta
 		// 正規表現ライブラリの差し替えに伴う処理の見直し
 		int nFlag = 0x00;
-		nFlag |= m_searchOption.bLoHiCase ? 0x01 : 0x00;
-		if (m_searchOption.bRegularExp
+		nFlag |= searchOption.bLoHiCase ? 0x01 : 0x00;
+		if (searchOption.bRegularExp
 			&& !CheckRegexpSyntax(m_strText.c_str(), GetHwnd(), true, nFlag)
 		) {
 			return -1;
@@ -256,20 +256,20 @@ int DlgFind::GetData(void)
 		// 検索文字列
 		//@@@ 2002.2.2 YAZAKI CShareDataに移動
 		if (m_strText.size() < _MAX_PATH) {
-			SearchKeywordManager().AddToSearchKeyArr(m_strText.c_str());
-			m_pShareData->m_common.m_search.m_searchOption = m_searchOption;		// 検索オプション
+			SearchKeywordManager().AddToSearchKeys(m_strText.c_str());
+			m_pShareData->common.search.searchOption = searchOption;		// 検索オプション
 		}
 		EditView* pEditView = (EditView*)m_lParam;
 		if (1
 			&& pEditView->m_strCurSearchKey == m_strText
-			&& pEditView->m_curSearchOption == m_searchOption
+			&& pEditView->m_curSearchOption == searchOption
 		) {
 		}else {
 			pEditView->m_strCurSearchKey = m_strText;
-			pEditView->m_curSearchOption = m_searchOption;
+			pEditView->m_curSearchOption = searchOption;
 			pEditView->m_bCurSearchUpdate = true;
 		}
-		pEditView->m_nCurSearchKeySequence = GetDllShareData().m_common.m_search.m_nSearchKeySequence;
+		pEditView->m_nCurSearchKeySequence = GetDllShareData().common.search.nSearchKeySequence;
 		if (!m_bModal) {
 			// ダイアログデータの設定
 			//SetData();
@@ -347,7 +347,7 @@ BOOL DlgFind::OnBnClicked(int wID)
 				}//  02/06/26 ai End
 
 				// 検索ダイアログを自動的に閉じる
-				if (m_pShareData->m_common.m_search.m_bAutoCloseDlgFind) {
+				if (m_pShareData->common.search.bAutoCloseDlgFind) {
 					CloseDialog(0);
 				}
 			}
@@ -376,7 +376,7 @@ BOOL DlgFind::OnBnClicked(int wID)
 				}
 
 				// 検索ダイアログを自動的に閉じる
-				if (m_pShareData->m_common.m_search.m_bAutoCloseDlgFind) {
+				if (m_pShareData->common.search.bAutoCloseDlgFind) {
 					CloseDialog(0);
 				}
 			}
@@ -391,7 +391,7 @@ BOOL DlgFind::OnBnClicked(int wID)
 			}else {
 				pEditView->GetCommander().HandleCommand(F_BOOKMARK_PATTERN, false, 0, 0, 0, 0);
 				// 検索ダイアログを自動的に閉じる
-				if (m_pShareData->m_common.m_search.m_bAutoCloseDlgFind) {
+				if (m_pShareData->common.search.bAutoCloseDlgFind) {
 					CloseDialog(0);
 				}else {
 					::SendMessage(GetHwnd(), WM_NEXTDLGCTL, (WPARAM)GetItemHwnd(IDC_COMBO_TEXT), TRUE);

@@ -23,7 +23,7 @@
 #include "util/shell.h"
 #include "util/os.h"
 #include "util/window.h"
-#include "env/DLLSHAREDATA.h"
+#include "env/DllSharedData.h"
 #include "env/SakuraEnvironment.h"
 #include "sakura_rc.h"
 #include "sakura.hh"
@@ -63,8 +63,8 @@ const DWORD p_helpids[] = {
 
 DlgGrepReplace::DlgGrepReplace()
 {
-	if (0 < m_pShareData->m_searchKeywords.m_aReplaceKeys.size()) {
-		m_strText2 = m_pShareData->m_searchKeywords.m_aReplaceKeys[0];
+	if (0 < m_pShareData->searchKeywords.replaceKeys.size()) {
+		m_strText2 = m_pShareData->searchKeywords.replaceKeys[0];
 	}
 	return;
 }
@@ -79,21 +79,21 @@ int DlgGrepReplace::DoModal(
 	LPARAM lParam
 	)
 {
-	auto& csSearch = m_pShareData->m_common.m_search;
-	m_bSubFolder = csSearch.m_bGrepSubFolder;				// Grep: サブフォルダも検索
-	m_searchOption = csSearch.m_searchOption;				// 検索オプション
-	m_nGrepCharSet = csSearch.m_nGrepCharSet;				// 文字コードセット
-	m_nGrepOutputLineType = csSearch.m_nGrepOutputLineType;	// 行を出力するか該当部分だけ出力するか
-	m_nGrepOutputStyle = csSearch.m_nGrepOutputStyle;		// Grep: 出力形式
+	auto& csSearch = m_pShareData->common.search;
+	m_bSubFolder = csSearch.bGrepSubFolder;				// Grep: サブフォルダも検索
+	searchOption = csSearch.searchOption;				// 検索オプション
+	nGrepCharSet = csSearch.nGrepCharSet;				// 文字コードセット
+	nGrepOutputLineType = csSearch.nGrepOutputLineType;	// 行を出力するか該当部分だけ出力するか
+	nGrepOutputStyle = csSearch.nGrepOutputStyle;		// Grep: 出力形式
 	m_bPaste = false;
-	m_bBackup = csSearch.m_bGrepBackup;
+	m_bBackup = csSearch.bGrepBackup;
 
-	auto& searchKeywords = m_pShareData->m_searchKeywords;
-	if (m_szFile[0] == _T('\0') && searchKeywords.m_aGrepFiles.size()) {
-		_tcscpy(m_szFile, searchKeywords.m_aGrepFiles[0]);		// 検索ファイル
+	auto& searchKeywords = m_pShareData->searchKeywords;
+	if (m_szFile[0] == _T('\0') && searchKeywords.grepFiles.size()) {
+		_tcscpy(m_szFile, searchKeywords.grepFiles[0]);		// 検索ファイル
 	}
-	if (m_szFolder[0] == _T('\0') && searchKeywords.m_aGrepFolders.size()) {
-		_tcscpy(m_szFolder, searchKeywords.m_aGrepFolders[0]);	// 検索フォルダ
+	if (m_szFolder[0] == _T('\0') && searchKeywords.grepFolders.size()) {
+		_tcscpy(m_szFolder, searchKeywords.grepFolders[0]);	// 検索フォルダ
 	}
 	if (pszCurrentFilePath) {	// 2010.01.10 ryoji
 		_tcscpy(m_szCurrentFilePath, pszCurrentFilePath);
@@ -164,7 +164,7 @@ void DlgGrepReplace::SetData(void)
 	// 置換後
 	SetItemText(IDC_COMBO_TEXT2, m_strText2.c_str() );
 	HWND hwndCombo = GetItemHwnd(IDC_COMBO_TEXT2);
-	auto& replaceKeys = m_pShareData->m_searchKeywords.m_aReplaceKeys;
+	auto& replaceKeys = m_pShareData->searchKeywords.replaceKeys;
 	for (int i=0; i<replaceKeys.size(); ++i) {
 		Combo_AddString(hwndCombo, replaceKeys[i]);
 	}
@@ -192,16 +192,16 @@ int DlgGrepReplace::GetData(void)
 	}
 
 	m_bBackup = IsButtonChecked(IDC_CHK_BACKUP);
-	m_pShareData->m_common.m_search.m_bGrepBackup = m_bBackup;
+	m_pShareData->common.search.bGrepBackup = m_bBackup;
 
 	if (!DlgGrep::GetData()) {
 		return FALSE;
 	}
 
 	if (m_strText2.size() < _MAX_PATH) {
-		SearchKeywordManager().AddToReplaceKeyArr( m_strText2.c_str() );
+		SearchKeywordManager().AddToReplaceKeys( m_strText2.c_str() );
 	}
-	m_nReplaceKeySequence = GetDllShareData().m_common.m_search.m_nReplaceKeySequence;
+	nReplaceKeySequence = GetDllShareData().common.search.nReplaceKeySequence;
 
 	return TRUE;
 }

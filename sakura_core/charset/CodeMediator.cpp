@@ -136,7 +136,7 @@ EncodingType CodeMediator::CheckKanjiCode(ESI* pEsi)
 	}
 
 	// デフォルト文字コードを返す
-	return pEsi->m_pEncodingConfig->m_eDefaultCodetype;
+	return pEsi->m_pEncodingConfig->eDefaultCodetype;
 }
 
 
@@ -197,7 +197,7 @@ EncodingType CodeMediator::CheckKanjiCodeOfFile(const TCHAR* pszFile)
 
 	// 0バイトならタイプ別のデフォルト設定
 	if (nBufLen == 0) {
-		return m_pEncodingConfig->m_eDefaultCodetype;
+		return m_pEncodingConfig->eDefaultCodetype;
 	}
 
 	// データ確保

@@ -28,19 +28,19 @@
 
 //StaticVector< StaticString<TCHAR, _MAX_PATH>, MAX_GREPFOLDER, const TCHAR*>
 
-typedef StaticString<TCHAR, _MAX_PATH> CPathString;
+typedef StaticString<TCHAR, _MAX_PATH> PathString;
 
 // フォルダの履歴を管理 (RECENT_FOR_FOLDER)
-class RecentFolder : public RecentImp<CPathString, LPCTSTR> {
+class RecentFolder : public RecentImp<PathString, LPCTSTR> {
 public:
 	// 生成
 	RecentFolder();
 
 	// オーバーライド
-	int				CompareItem(const CPathString* p1, LPCTSTR p2) const;
-	void			CopyItem(CPathString* dst, LPCTSTR src) const;
+	int				CompareItem(const PathString* p1, LPCTSTR p2) const;
+	void			CopyItem(PathString* dst, LPCTSTR src) const;
 	const TCHAR*	GetItemText(int nIndex) const;
-	bool			DataToReceiveType(LPCTSTR* dst, const CPathString* src) const;
-	bool			TextToDataType(CPathString* dst, LPCTSTR pszText) const;
+	bool			DataToReceiveType(LPCTSTR* dst, const PathString* src) const;
+	bool			TextToDataType(PathString* dst, LPCTSTR pszText) const;
 };
 

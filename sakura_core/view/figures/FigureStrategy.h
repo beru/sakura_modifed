@@ -71,14 +71,14 @@ protected:
 	// F•ª‚¯•\Ž¦‘ÎÛ”»’è
 	virtual bool Disp(void) const {
 		EColorIndexType nColorIndex = GetColorIdx();
-		return m_pTypeData->m_colorInfoArr[nColorIndex].m_bDisp;
+		return m_pTypeData->colorInfoArr[nColorIndex].bDisp;
 	}
 
 	virtual void Update(void) {
 		Figure::Update();
 
 		EColorIndexType nColorIndex = GetColorIdx();
-		if (m_pTypeData->m_colorInfoArr[nColorIndex].m_bDisp) {
+		if (m_pTypeData->colorInfoArr[nColorIndex].bDisp) {
 			m_nDispColorIndex = nColorIndex;
 		}else {
 			m_nDispColorIndex = COLORIDX_TEXT;

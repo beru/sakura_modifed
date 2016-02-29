@@ -25,7 +25,7 @@
 #include "StdAfx.h"
 #include "RecentReplace.h"
 #include <string.h>
-#include "env/DLLSHAREDATA.h"
+#include "env/DllSharedData.h"
 
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -35,8 +35,8 @@
 RecentReplace::RecentReplace()
 {
 	Create(
-		GetShareData()->m_searchKeywords.m_aReplaceKeys.dataPtr(),
-		&GetShareData()->m_searchKeywords.m_aReplaceKeys._GetSizeRef(),
+		GetShareData()->searchKeywords.replaceKeys.dataPtr(),
+		&GetShareData()->searchKeywords.replaceKeys._GetSizeRef(),
 		NULL,
 		MAX_REPLACEKEY,
 		NULL

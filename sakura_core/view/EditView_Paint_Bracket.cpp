@@ -43,7 +43,7 @@ void EditView::SetBracketPairPos(bool flag)
 		return;
 	}
 
-	if (!m_pTypeData->m_colorInfoArr[COLORIDX_BRACKET_PAIR].m_bDisp) {
+	if (!m_pTypeData->colorInfoArr[COLORIDX_BRACKET_PAIR].bDisp) {
 		return;
 	}
 
@@ -108,7 +108,7 @@ void EditView::DrawBracketPair(bool bDraw)
 		return;
 	}
 
-	if (!m_pTypeData->m_colorInfoArr[COLORIDX_BRACKET_PAIR].m_bDisp) {
+	if (!m_pTypeData->colorInfoArr[COLORIDX_BRACKET_PAIR].bDisp) {
 		return;
 	}
 
@@ -178,8 +178,8 @@ void EditView::DrawBracketPair(bool bDraw)
 						DispPos pos(0, 0); // 注意：この値はダミー。CheckChangeColorでの参照位置は不正確
 						ColorStrategyInfo csInfo;
 						ColorStrategyInfo* pInfo = &csInfo;
-						pInfo->m_pDispPos = &pos;
-						pInfo->m_pView = this;
+						pInfo->pDispPos = &pos;
+						pInfo->pView = this;
 
 						// 03/10/24 ai 折り返し行のColorIndexが正しく取得できない問題に対応
 						// 2009.02.07 ryoji GetColorIndex に渡すインデックスの仕様変更（元はこっちの仕様だった模様）
@@ -258,7 +258,7 @@ void EditView::DrawBracketPair(bool bDraw)
 						|| (ptColLine.y - 1 == GetCaret().GetCaretLayoutPos().GetY())
 					) 
 				) {	// 03/02/27 ai 行の間隔が"0"の時にアンダーラインが欠ける事がある為修正
-					GetCaret().m_cUnderLine.CaretUnderLineON(true, false);
+					GetCaret().m_underLine.CaretUnderLineON(true, false);
 				}
 			}
 		}

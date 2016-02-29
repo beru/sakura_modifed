@@ -20,7 +20,7 @@
 
 class Dialog;
 
-struct DLLSHAREDATA;
+struct DllSharedData;
 class Recent;
 
 enum class AnchorStyle {
@@ -158,7 +158,7 @@ public:
 	int				m_xPos;
 	int				m_yPos;
 //	void*			m_pcEditView;
-	DLLSHAREDATA*	m_pShareData;
+	DllSharedData*	m_pShareData;
 	bool			m_bInited;
 	HINSTANCE		m_hLangRsrcInstance;		// メッセージリソースDLLのインスタンスハンドル	// 2011.04.10 nasukoji
 

@@ -46,7 +46,7 @@
 class IfObjTypeInfo: public ImplementsIUnknown<ITypeInfo> {
 private:
 	const IfObj::CMethodInfoList& m_methodsRef;
-	const std::wstring& m_sName;
+	const std::wstring& sName;
 	TYPEATTR m_typeAttr;
 public:
 	IfObjTypeInfo(const IfObj::CMethodInfoList& methods, const std::wstring& sName);
@@ -133,7 +133,7 @@ public:
 		//	2014.02.12 各パラメータを設定するように
 		if (memid == -1) {
 			if (pBstrName) {
-				*pBstrName = SysAllocString( m_sName.c_str() );
+				*pBstrName = SysAllocString( sName.c_str() );
 			}
 		}else if (0 <= memid && memid < (int)m_methodsRef.size()) {
 			if (pBstrName) {
@@ -222,7 +222,7 @@ IfObjTypeInfo::IfObjTypeInfo(const IfObj::CMethodInfoList& methods,
 	:
 	ImplementsIUnknown<ITypeInfo>(),
 	m_methodsRef(methods),
-	m_sName(sName)
+	sName(sName)
 { 
 	ZeroMemory(&m_typeAttr, sizeof(m_typeAttr));
 	m_typeAttr.cImplTypes = 0; // 親クラスのITypeInfoの数
@@ -263,7 +263,7 @@ HRESULT STDMETHODCALLTYPE IfObjTypeInfo::GetNames(
 IfObj::IfObj(const wchar_t* name, bool isGlobal)
 	:
 	ImplementsIUnknown<IDispatch>(),
-	m_sName(name),
+	sName(name),
 	m_isGlobal(isGlobal),
 	m_Owner(0),
 	m_methods(),
@@ -323,7 +323,7 @@ HRESULT STDMETHODCALLTYPE IfObj::GetTypeInfo(
 	/* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo)
 {
 	if (!m_typeInfo) {
-		m_typeInfo = new IfObjTypeInfo(this->m_methods, this->m_sName);
+		m_typeInfo = new IfObjTypeInfo(this->m_methods, this->sName);
 		m_typeInfo->AddRef();
 	}
 	(*ppTInfo) = m_typeInfo;

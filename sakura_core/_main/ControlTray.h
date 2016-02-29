@@ -31,7 +31,7 @@
 
 struct LoadInfo;
 struct EditInfo;
-struct DLLSHAREDATA;
+struct DllSharedData;
 class PropertyManager;
 
 // 常駐部の管理
@@ -117,7 +117,7 @@ private:
 	HWND				m_hWnd;
 	bool				m_bCreatedTrayIcon;		// トレイにアイコンを作った
 
-	DLLSHAREDATA*		m_pShareData;
+	DllSharedData*		m_pShareData;
 	DlgGrep				m_dlgGrep;				// Jul. 2, 2001 genta
 	int					m_nCurSearchKeySequence;
 
@@ -125,6 +125,6 @@ private:
 
 	UINT				m_uCreateTaskBarMsg;	// RegisterMessageで得られるMessage IDの保管場所。Apr. 24, 2001 genta
 
-	TCHAR				m_szLanguageDll[MAX_PATH];
+	TCHAR				szLanguageDll[MAX_PATH];
 };
 

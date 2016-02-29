@@ -137,7 +137,7 @@ CallbackResultType CodeChecker::OnCheckSave(SaveInfo* pSaveInfo)
 
 	// 改行コードが混在しているかどうか判定
 	bool bTmpResult = false;
-	if (pDoc->m_docType.GetDocumentAttribute().m_bChkEnterAtEnd) {
+	if (pDoc->m_docType.GetDocumentAttribute().bChkEnterAtEnd) {
 		bTmpResult = _CheckSavingEolcode(
 			pDoc->m_docLineMgr, pSaveInfo->eol
 		);
@@ -181,7 +181,7 @@ CallbackResultType CodeChecker::OnCheckSave(SaveInfo* pSaveInfo)
 			auto_sprintf( szLineNum, _T("%d"), (int)((Int)point.x) + 1 );
 			_tcscat( szLineNum, LS(STR_DLGFNCLST_LIST_COL) );
 			Unicode().UnicodeToHex( memChar.GetStringPtr(), memChar.GetStringLength(),
-				szCharCode, &GetDllShareData().m_common.m_statusBar );
+				szCharCode, &GetDllShareData().common.statusBar );
 		}
 		int nDlgResult = MYMESSAGEBOX(
 			EditWnd::getInstance()->GetHwnd(),

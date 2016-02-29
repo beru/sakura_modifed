@@ -39,11 +39,11 @@
 class MenuDrawer;
 
 // @date 2002.2.17 YAZAKI CShareDataのインスタンスは、CProcessにひとつあるのみ。
-class MRUFolder {
+class MruFolder {
 public:
 	// コンストラクタ
-	MRUFolder();
-	~MRUFolder();
+	MruFolder();
+	~MruFolder();
 
 	// メニューを取得する
 	HMENU CreateMenu(MenuDrawer* pMenuDrawer) const;	// うーん。pMenuDrawerが必要なくなるといいなぁ。
@@ -62,7 +62,7 @@ public:
 
 protected:
 	// 共有メモリアクセス用。
-	struct DLLSHAREDATA* m_pShareData;			// 共有メモリを参照するよ。
+	struct DllSharedData* m_pShareData;			// 共有メモリを参照するよ。
 
 private:
 	RecentFolder m_recentFolder;	// 履歴	//@@@ 2003.04.08 MIK

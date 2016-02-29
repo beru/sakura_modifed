@@ -26,7 +26,7 @@
 */
 
 #include "StdAfx.h"
-#include "DLLSHAREDATA.h"
+#include "DllSharedData.h"
 
 #include "FormatManager.h"
 
@@ -45,8 +45,8 @@ const TCHAR* FormatManager::MyGetDateFormat(const SYSTEMTIME& systime, TCHAR* ps
 		systime,
 		pszDest,
 		nDestLen,
-		m_pShareData->m_common.m_format.m_nDateFormatType,
-		m_pShareData->m_common.m_format.m_szDateFormat
+		m_pShareData->common.format.nDateFormatType,
+		m_pShareData->common.format.szDateFormat
 	);
 }
 
@@ -79,8 +79,8 @@ const TCHAR* FormatManager::MyGetTimeFormat(const SYSTEMTIME& systime, TCHAR* ps
 		systime,
 		pszDest,
 		nDestLen,
-		m_pShareData->m_common.m_format.m_nTimeFormatType,
-		m_pShareData->m_common.m_format.m_szTimeFormat
+		m_pShareData->common.format.nTimeFormatType,
+		m_pShareData->common.format.szTimeFormat
 	);
 }
 

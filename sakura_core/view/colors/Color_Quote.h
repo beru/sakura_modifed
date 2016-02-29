@@ -45,7 +45,7 @@ public:
 	virtual void SetStrategyColorInfo(const LayoutColorInfo*);
 	virtual bool BeginColor(const StringRef& str, int nPos);
 	virtual bool EndColor(const StringRef& str, int nPos);
-	virtual bool Disp() const { return m_pTypeData->m_colorInfoArr[this->GetStrategyColor()].m_bDisp; }
+	virtual bool Disp() const { return m_pTypeData->colorInfoArr[this->GetStrategyColor()].bDisp; }
 	
 	static bool IsCppRawString(const StringRef& str, int nPos);
 	static int Match_Quote(wchar_t wcQuote, int nPos, const StringRef& lineStr, StringLiteralType escapeType, bool* pbEscapeEnd = NULL);

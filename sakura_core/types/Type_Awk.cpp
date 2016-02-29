@@ -29,13 +29,13 @@
 void CType_Awk::InitTypeConfigImp(TypeConfig* pType)
 {
 	// 名前と拡張子
-	_tcscpy(pType->m_szTypeName, _T("AWK"));
-	_tcscpy(pType->m_szTypeExts, _T("awk"));
+	_tcscpy(pType->szTypeName, _T("AWK"));
+	_tcscpy(pType->szTypeExts, _T("awk"));
 
 	// 設定
-	pType->m_lineComment.CopyTo(0, L"#", -1);			// 行コメントデリミタ
-	pType->m_eDefaultOutline = OUTLINE_TEXT;			// アウトライン解析方法
-	pType->m_nKeywordSetIdx[0] = 6;						// キーワードセット
+	pType->lineComment.CopyTo(0, L"#", -1);				// 行コメントデリミタ
+	pType->eDefaultOutline = OutlineType::Text;			// アウトライン解析方法
+	pType->nKeywordSetIdx[0] = 6;						// キーワードセット
 }
 
 const wchar_t* g_ppszKeywordsAWK[] = {

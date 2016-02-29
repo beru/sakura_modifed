@@ -84,14 +84,14 @@ void Ruler::DrawRulerCaret(Graphics& gr)
 void Ruler::DrawRulerBg(Graphics& gr)
 {
 	// 必要なインターフェース
-	CommonSetting* pCommon = &GetDllShareData().m_common;
+	CommonSetting* pCommon = &GetDllShareData().common;
 
 	// サポート
 	TypeSupport cRulerType(m_pEditView, COLORIDX_RULER);
 
 	// フォント設定 (ルーラー上の数字用)
 	LOGFONT	lf = {0};
-	lf.lfHeight			= 1 - pCommon->m_window.m_nRulerHeight;	//	2002/05/13 ai
+	lf.lfHeight			= 1 - pCommon->window.nRulerHeight;	//	2002/05/13 ai
 	lf.lfWidth			= 5;
 	lf.lfEscapement		= 0;
 	lf.lfOrientation	= 0;

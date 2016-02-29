@@ -21,7 +21,7 @@
 #include "StdAfx.h"
 #include "MenuDrawer.h"
 #include "env/ShareData.h"
-#include "env/DLLSHAREDATA.h"
+#include "env/DllSharedData.h"
 #include "window/SplitBoxWnd.h"
 #include "ImageListMgr.h"
 #include "func/KeyBind.h"
@@ -785,7 +785,7 @@ void MenuDrawer::ResetContents(void)
 		}
 	}
 	m_nMenuHeight = m_nMenuFontHeight + 4; // margin
-	if (m_pShareData->m_common.m_window.m_bMenuIcon) {
+	if (m_pShareData->common.window.bMenuIcon) {
 		// 最低アイコン分の高さを確保
 		if (20 > m_nMenuHeight) {
 			m_nMenuHeight = 20;
@@ -826,11 +826,11 @@ void MenuDrawer::MyAppendMenu(
 	auto_strcpy(szKey, pszKey); 
 	if (nFuncId != 0) {
 		// メニューラベルの作成
-		auto& csKeyBind = m_pShareData->m_common.m_keyBind;
+		auto& csKeyBind = m_pShareData->common.keyBind;
 		KeyBind::GetMenuLabel(
 			m_hInstance,
-			csKeyBind.m_nKeyNameArrNum,
-			csKeyBind.m_pKeyNameArr,
+			csKeyBind.nKeyNameArrNum,
+			csKeyBind.pKeyNameArr,
 			nFuncId,
 			szLabel,
 			szKey,
@@ -847,7 +847,7 @@ void MenuDrawer::MyAppendMenu(
 			// メニュー項目をオーナー描画にして、アイコンを表示する
 			// 2010.03.29 アクセスキーの分を詰めるためいつもオーナードローにする。ただしVista未満限定
 			// Vista以上ではメニューもテーマが適用されるので、オーナードローにすると見た目がXP風になってしまう。
-			if (m_pShareData->m_common.m_window.m_bMenuIcon || !IsWinVista_or_later()) {
+			if (m_pShareData->common.window.bMenuIcon || !IsWinVista_or_later()) {
 				nFlagAdd = MF_OWNERDRAW;
 			}
 			// 機能のビットマップの情報を覚えておく
@@ -858,7 +858,7 @@ void MenuDrawer::MyAppendMenu(
 #ifdef DRAW_MENU_ICON_BACKGROUND_3DFACE
 		// セパレータかサブメニュー
 		if (nFlag & (MF_SEPARATOR | MF_POPUP)) {
-			if (m_pShareData->m_common.m_window.m_bMenuIcon || !IsWinVista_or_later()) {
+			if (m_pShareData->common.window.bMenuIcon || !IsWinVista_or_later()) {
 					nFlagAdd = MF_OWNERDRAW;
 			}
 		}
@@ -958,7 +958,7 @@ int MenuDrawer::MeasureItem(int nFuncID, int* pnItemHeight)
 	//@@@ 2002.2.2 YAZAKI Windowsの設定でメニューのフォントを大きくすると表示が崩れる問題に対処
 
 	int nMenuWidth = rc.Width() + 3;
-	if (m_pShareData->m_common.m_window.m_bMenuIcon) {
+	if (m_pShareData->common.window.bMenuIcon) {
 		nMenuWidth += 28+ DpiScaleX(8); // アイコンと枠 + アクセスキー隙間
 	}else {
 		// WM_MEASUREITEMで報告するメニュー幅より実際の幅は1文字分相当位広いので、その分は加えない
@@ -985,7 +985,7 @@ void MenuDrawer::DrawItem(DRAWITEMSTRUCT* lpdis)
 	int			nBkModeOld;
 	int			nTxSysColor;
 
-	const bool bMenuIconDraw = !!m_pShareData->m_common.m_window.m_bMenuIcon;
+	const bool bMenuIconDraw = !!m_pShareData->common.window.bMenuIcon;
 	const int nCxCheck = ::GetSystemMetrics(SM_CXMENUCHECK);
 	const int nCyCheck = ::GetSystemMetrics(SM_CYMENUCHECK);
 
@@ -1693,12 +1693,12 @@ void MenuDrawer::AddToolButton(int iBitmap, int iCommand)
 	int 	iCmdNo;
 	int 	i;
 	
-	if (m_pShareData->m_maxTBNum < m_nMyButtonNum) {
-		m_pShareData->m_maxTBNum = m_nMyButtonNum;
+	if (m_pShareData->maxToolBarButtonNum < m_nMyButtonNum) {
+		m_pShareData->maxToolBarButtonNum = m_nMyButtonNum;
 	}
 
 	if (iCommand >= F_PLUGCOMMAND_FIRST && iCommand <= F_PLUGCOMMAND_LAST) {
-		auto& cmdIcons = m_pShareData->m_PlugCmdIcon;
+		auto& cmdIcons = m_pShareData->plugCmdIcons;
 		iCmdNo = iCommand - F_PLUGCOMMAND_FIRST;
 		if (cmdIcons[iCmdNo] != 0) {
 			if (m_tbMyButton.size() <= (size_t)(int)cmdIcons[iCmdNo]) {
@@ -1722,10 +1722,10 @@ void MenuDrawer::AddToolButton(int iBitmap, int iCommand)
 			}
 		}else {
 			// 全体で未登録
-			if (m_tbMyButton.size() < (size_t)m_pShareData->m_maxTBNum) {
+			if (m_tbMyButton.size() < (size_t)m_pShareData->maxToolBarButtonNum) {
 				// 空きを詰め込む
 				SetTBBUTTONVal(&tbb, TOOLBAR_ICON_PLUGCOMMAND_DEFAULT-1, 0, 0, TBSTYLE_BUTTON, 0, 0);
-				for (i=m_tbMyButton.size(); i<m_pShareData->m_maxTBNum; ++i) {
+				for (i=m_tbMyButton.size(); i<m_pShareData->maxToolBarButtonNum; ++i) {
 					m_tbMyButton.push_back(tbb);
 					++m_nMyButtonNum;
 				}
@@ -1740,8 +1740,8 @@ void MenuDrawer::AddToolButton(int iBitmap, int iCommand)
 			++m_nMyButtonNum;
 		}
 	}
-	if (m_pShareData->m_maxTBNum < m_nMyButtonNum) {
-		m_pShareData->m_maxTBNum = m_nMyButtonNum;
+	if (m_pShareData->maxToolBarButtonNum < m_nMyButtonNum) {
+		m_pShareData->maxToolBarButtonNum = m_nMyButtonNum;
 	}
 }
 

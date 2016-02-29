@@ -106,7 +106,7 @@ ERegisterPlugResult JackManager::RegisterPlug(
 	switch (ppId) {
 	case PP_OUTLINE:					// アウトライン解析方法を追加
 		{
-			int nMethod = Plug::GetOutlineType(plug->GetFunctionCode());	// 2011/8/20 syat プラグ複数化のためGetOutlineType仕様変更// 2010/5/1 Uchi 関数化
+			OutlineType nMethod = Plug::GetOutlineType(plug->GetFunctionCode());	// 2011/8/20 syat プラグ複数化のためGetOutlineType仕様変更// 2010/5/1 Uchi 関数化
 			PropTypesScreen::AddOutlineMethod(nMethod, plug->m_sLabel.c_str());
 		}
 		break;
@@ -118,7 +118,7 @@ ERegisterPlugResult JackManager::RegisterPlug(
 		break;
 	case PP_COMPLEMENT:
 		{
-			int nMethod = Plug::GetPluginFunctionCode(plug->m_plugin.m_id, 0);
+			int nMethod = Plug::GetPluginFunctionCode(plug->plugin.m_id, 0);
 			PropTypesSupport::AddHokanMethod(nMethod, plug->m_sLabel.c_str());
 		}
 		break;
@@ -137,7 +137,7 @@ bool JackManager::UnRegisterPlug(
 	switch (ppId) {
 	case PP_OUTLINE:					// アウトライン解析方法を追加
 		{
-			int nMethod = Plug::GetOutlineType(plug->GetFunctionCode());
+			OutlineType nMethod = Plug::GetOutlineType(plug->GetFunctionCode());
 			PropTypesScreen::RemoveOutlineMethod(nMethod, plug->m_sLabel.c_str());
 		}
 		break;
@@ -149,7 +149,7 @@ bool JackManager::UnRegisterPlug(
 		break;
 	case PP_COMPLEMENT:
 		{
-			int nMethod = Plug::GetPluginFunctionCode(plug->m_plugin.m_id, 0);
+			int nMethod = Plug::GetPluginFunctionCode(plug->plugin.m_id, 0);
 			PropTypesSupport::RemoveHokanMethod(nMethod, plug->m_sLabel.c_str());
 		}
 		break;

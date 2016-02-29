@@ -26,7 +26,7 @@ protected:
 	std::vector<HGDIOBJ> m_vObjects;
 };
 
-static GDIStock s_cGDIStock;	// 唯一の GDIStock オブジェクト
+static GDIStock s_gdiStock;	// 唯一の GDIStock オブジェクト
 
 void Graphics::Init(HDC hdc)
 {
@@ -190,12 +190,12 @@ void Graphics::RestoreTextColors()
 void Graphics::PushMyFont(const Font& font)
 {
 	// 設定
-	HFONT hFontOld = (HFONT)SelectObject(m_hdc, font.m_hFont);
+	HFONT hFontOld = (HFONT)SelectObject(m_hdc, font.hFont);
 
 	// 記録
 	if (m_vFonts.empty()) {
-		Font sFontOld = { { false, false }, hFontOld };
-		m_vFonts.push_back(sFontOld);
+		Font fontOld = { { false, false }, hFontOld };
+		m_vFonts.push_back(fontOld);
 	}
 	m_vFonts.push_back(font);
 }
@@ -205,14 +205,14 @@ void Graphics::PopMyFont()
 	// 戻す
 	if (m_vFonts.size() >= 2) {
 		m_vFonts.pop_back();
-		SelectObject(m_hdc, m_vFonts.back().m_hFont);
+		SelectObject(m_hdc, m_vFonts.back().hFont);
 	}
 }
 
 void Graphics::ClearMyFont()
 {
 	if (!m_vFonts.empty()) {
-		SelectObject(m_hdc, m_vFonts[0].m_hFont);
+		SelectObject(m_hdc, m_vFonts[0].hFont);
 		m_vFonts.clear();
 	}
 }
@@ -397,7 +397,7 @@ HBRUSH GetDropRectBrush()
 		if (hBitmap) {
 			s_hBrush = ::CreatePatternBrush(hBitmap);
 			::DeleteObject(hBitmap);
-			s_cGDIStock.Register(s_hBrush);	// 終了時破棄用にストックしておく
+			s_gdiStock.Register(s_hBrush);	// 終了時破棄用にストックしておく
 		}
 	}
 	return s_hBrush;

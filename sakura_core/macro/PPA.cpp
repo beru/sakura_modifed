@@ -39,7 +39,7 @@
 #include "Macro.h"
 #include "macro/SMacroMgr.h"// 2002/2/10 aroka
 #include "env/ShareData.h"
-#include "env/DLLSHAREDATA.h"
+#include "env/DllSharedData.h"
 #include "_os/OleTypes.h"
 
 #define NEVER_USED_PARAM(p) ((void)p)
@@ -181,7 +181,7 @@ bool PPA::InitDllImp()
 	// Jun. 16, 2003 genta 一時作業エリア
 	char buf[1024];
 	// コマンドに置き換えられない関数 ＝ PPA無しでは使えない。。。
-	for (int i=0; SMacroMgr::m_macroFuncInfoArr[i].m_pszFuncName; ++i) {
+	for (int i=0; SMacroMgr::m_macroFuncInfoArr[i].pszFuncName; ++i) {
 		// 2003.06.08 Moca メモリーリークの修正
 		// 2003.06.16 genta バッファを外から与えるように
 		// 関数登録用文字列を作成する
@@ -190,7 +190,7 @@ bool PPA::InitDllImp()
 	}
 
 	// コマンドに置き換えられる関数 ＝ PPA無しでも使える。
-	for (int i=0; SMacroMgr::m_macroFuncInfoCommandArr[i].m_pszFuncName; ++i) {
+	for (int i=0; SMacroMgr::m_macroFuncInfoCommandArr[i].pszFuncName; ++i) {
 		// 2003.06.08 Moca メモリーリークの修正
 		// 2003.06.16 genta バッファを外から与えるように
 		// 関数登録用文字列を作成する
@@ -217,14 +217,14 @@ char* PPA::GetDeclarations( const MacroFuncInfo& macroFuncInfo, char* szBuffer )
 {
 	char szType[20];	// procedure/function用バッファ
 	char szReturn[20];	// 戻り値型用バッファ
-	if (macroFuncInfo.m_varResult == VT_EMPTY) {
+	if (macroFuncInfo.varResult == VT_EMPTY) {
 		strcpy(szType, "procedure");
 		szReturn[0] = '\0';
 	}else {
 		strcpy(szType, "function");
-		if (macroFuncInfo.m_varResult == VT_BSTR) {
+		if (macroFuncInfo.varResult == VT_BSTR) {
 			strcpy(szReturn, ": string");
-		}else if (macroFuncInfo.m_varResult == VT_I4) {
+		}else if (macroFuncInfo.varResult == VT_I4) {
 			strcpy(szReturn, ": Integer");
 		}else {
 			szReturn[0] = '\0';
@@ -236,10 +236,10 @@ char* PPA::GetDeclarations( const MacroFuncInfo& macroFuncInfo, char* szBuffer )
 	for (i=0; i<8; ++i) {
 		VARTYPE type = VT_EMPTY;
 		if (i < 4) {
-			type = macroFuncInfo.m_varArguments[i];
+			type = macroFuncInfo.varArguments[i];
 		}else {
-			if (macroFuncInfo.m_pData && i < macroFuncInfo.m_pData->m_nArgMinSize) {
-				type = macroFuncInfo.m_pData->m_pVarArgEx[i - 4];
+			if (macroFuncInfo.pData && i < macroFuncInfo.pData->nArgMinSize) {
+				type = macroFuncInfo.pData->pVarArgEx[i - 4];
 			}
 		}
 		if (type == VT_EMPTY) {
@@ -265,17 +265,17 @@ char* PPA::GetDeclarations( const MacroFuncInfo& macroFuncInfo, char* szBuffer )
 		}
 		auto_sprintf( szBuffer, "%hs S_%ls(%hs)%hs; index %d;",
 			szType,
-			macroFuncInfo.m_pszFuncName,
+			macroFuncInfo.pszFuncName,
 			szArgument,
 			szReturn,
-			macroFuncInfo.m_nFuncID
+			macroFuncInfo.nFuncID
 		);
 	}else {
 		auto_sprintf( szBuffer, "%hs S_%ls%hs; index %d;",
 			szType,
-			macroFuncInfo.m_pszFuncName,
+			macroFuncInfo.pszFuncName,
 			szReturn,
-			macroFuncInfo.m_nFuncID
+			macroFuncInfo.nFuncID
 		);
 	}
 	// Jun. 01, 2003 Moca / Jun. 16, 2003 genta
@@ -340,15 +340,15 @@ void __stdcall PPA::stdError(int Err_CD, const char* Err_Mes)
 		FuncID = Err_CD - 1;
 		char szFuncDec[1024];
 		szFuncDec[0] = '\0';
-		for (i=0; SMacroMgr::m_macroFuncInfoCommandArr[i].m_nFuncID!=-1; ++i) {
-			if (SMacroMgr::m_macroFuncInfoCommandArr[i].m_nFuncID == FuncID) {
+		for (i=0; SMacroMgr::m_macroFuncInfoCommandArr[i].nFuncID!=-1; ++i) {
+			if (SMacroMgr::m_macroFuncInfoCommandArr[i].nFuncID == FuncID) {
 				GetDeclarations(SMacroMgr::m_macroFuncInfoCommandArr[i], szFuncDec);
 				break;
 			}
 		}
-		if (SMacroMgr::m_macroFuncInfoArr[i].m_nFuncID != -1) {
-			for (i=0; SMacroMgr::m_macroFuncInfoArr[i].m_nFuncID!=-1; ++i) {
-				if (SMacroMgr::m_macroFuncInfoArr[i].m_nFuncID == FuncID) {
+		if (SMacroMgr::m_macroFuncInfoArr[i].nFuncID != -1) {
+			for (i=0; SMacroMgr::m_macroFuncInfoArr[i].nFuncID!=-1; ++i) {
+				if (SMacroMgr::m_macroFuncInfoArr[i].nFuncID == FuncID) {
 					GetDeclarations(SMacroMgr::m_macroFuncInfoArr[i], szFuncDec);
 					break;
 				}
@@ -549,10 +549,10 @@ bool PPA::CallHandleFunction(
 	for (int i=0, ArgCnt=0; i<maxArgSize && i<ArgSize; ++i) {
 		VARTYPE type = VT_EMPTY;
 		if (i < 4) {
-			type = mfi->m_varArguments[i];
+			type = mfi->varArguments[i];
 		}else {
-			if (mfi->m_pData && i < mfi->m_pData->m_nArgMinSize) {
-				type = mfi->m_pData->m_pVarArgEx[i - 4];
+			if (mfi->pData && i < mfi->pData->nArgMinSize) {
+				type = mfi->pData->pVarArgEx[i - 4];
 			}
 		}
 		if (type == VT_EMPTY) {

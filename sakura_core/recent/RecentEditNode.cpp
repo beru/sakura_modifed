@@ -25,7 +25,7 @@
 #include "StdAfx.h"
 #include "RecentEditNode.h"
 #include <string.h>
-#include "env/DLLSHAREDATA.h"
+#include "env/DllSharedData.h"
 
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -35,8 +35,8 @@
 RecentEditNode::RecentEditNode()
 {
 	Create(
-		GetShareData()->m_nodes.m_pEditArr,
-		&GetShareData()->m_nodes.m_nEditArrNum,
+		GetShareData()->nodes.pEditArr,
+		&GetShareData()->nodes.nEditArrNum,
 		NULL,
 		MAX_EDITWINDOWS,
 		NULL
@@ -70,7 +70,7 @@ bool RecentEditNode::TextToDataType(EditNode* dst, LPCTSTR pszText) const
 
 int RecentEditNode::CompareItem(const EditNode* p1, const EditNode* p2) const
 {
-	return p1->m_hWnd - p2->m_hWnd;
+	return p1->hWnd - p2->hWnd;
 }
 
 void RecentEditNode::CopyItem(EditNode* dst, const EditNode* src) const
@@ -86,7 +86,7 @@ int RecentEditNode::FindItemByHwnd(HWND hwnd) const
 {
 	int n = GetItemCount();
 	for (int i=0; i<n; ++i) {
-		if (GetItem(i)->m_hWnd == hwnd) {
+		if (GetItem(i)->hWnd == hwnd) {
 			return i;
 		}
 	}

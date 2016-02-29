@@ -38,7 +38,7 @@
 #include "_main/global.h"		// Moca, 2002/05/26
 #include "_main/AppMode.h"
 #include "env/ShareData.h"
-#include "env/DLLSHAREDATA.h"
+#include "env/DllSharedData.h"
 #include "charset/charcode.h"	// rastiv, 2006/06/28
 #include "charset/CodePage.h"
 #include "charset/ESI.h"
@@ -106,7 +106,7 @@ void DlgProperty::SetData(void)
 	memProp.AppendString(_T("\r\n"));
 
 	memProp.AppendString(LS(STR_DLGFLPROP_FILETYPE));
-	memProp.AppendString(pEditDoc->m_docType.GetDocumentAttribute().m_szTypeName);
+	memProp.AppendString(pEditDoc->m_docType.GetDocumentAttribute().szTypeName);
 	memProp.AppendString(_T("\r\n"));
 
 	memProp.AppendString(LS(STR_DLGFLPROP_ENCODING));
@@ -145,9 +145,9 @@ void DlgProperty::SetData(void)
 
 	if ((nFind = ::FindFirstFile(pEditDoc->m_docFile.GetFilePath(), &wfd)) != INVALID_HANDLE_VALUE) {
 		if (pEditDoc->m_docFile.IsFileLocking()) {
-			if (m_pShareData->m_common.m_file.m_nFileShareMode == SHAREMODE_DENY_WRITE) {
+			if (m_pShareData->common.file.nFileShareMode == FileShareMode::DenyWrite) {
 				auto_sprintf(szWork, LS(STR_DLGFLPROP_W_LOCK));
-			}else if (m_pShareData->m_common.m_file.m_nFileShareMode == SHAREMODE_DENY_READWRITE) {
+			}else if (m_pShareData->common.file.nFileShareMode == FileShareMode::DenyReadWrite) {
 				auto_sprintf(szWork, LS(STR_DLGFLPROP_RW_LOCK));
 			}else {
 				auto_sprintf(szWork, LS(STR_DLGFLPROP_LOCK));

@@ -214,9 +214,9 @@ bool KeyMacroMgr::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
 			// Jun. 16, 2002 genta プロトタイプチェック用に追加
 			int nArgs;
 			const MacroFuncInfo* mInfo= SMacroMgr::GetFuncInfoByID(nFuncID);
-			int nArgSizeMax = _countof(mInfo->m_varArguments);
-			if (mInfo->m_pData) {
-				nArgSizeMax = mInfo->m_pData->m_nArgMaxSize;
+			int nArgSizeMax = _countof(mInfo->varArguments);
+			if (mInfo->pData) {
+				nArgSizeMax = mInfo->pData->nArgMaxSize;
 			}
 			for (nArgs=0; szLine[i]; ++nArgs) {
 				// Jun. 16, 2002 genta プロトタイプチェック
@@ -233,10 +233,10 @@ bool KeyMacroMgr::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
 				}
 				VARTYPE type = VT_EMPTY;
 				if (nArgs < 4) {
-					type = mInfo->m_varArguments[nArgs];
+					type = mInfo->varArguments[nArgs];
 				}else {
-					if (mInfo->m_pData && nArgs < mInfo->m_pData->m_nArgMinSize){
-						type = mInfo->m_pData->m_pVarArgEx[nArgs - 4];
+					if (mInfo->pData && nArgs < mInfo->pData->nArgMinSize){
+						type = mInfo->pData->pVarArgEx[nArgs - 4];
 					}
 				}
 

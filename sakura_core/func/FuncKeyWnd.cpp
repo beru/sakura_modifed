@@ -20,7 +20,7 @@
 #include "_main/global.h"
 #include "func/FuncKeyWnd.h"
 #include "env/ShareData.h"
-#include "env/DLLSHAREDATA.h"
+#include "env/DllSharedData.h"
 #include "window/EditWnd.h"
 #include "doc/EditDoc.h"
 #include "util/input.h"
@@ -117,7 +117,7 @@ HWND FuncKeyWnd::Open(
 	m_nCurrentKeyState = -1;
 
 	// 2002.11.04 Moca 変更できるように
-	m_nButtonGroupNum = m_pShareData->m_common.m_window.m_nFUNCKEYWND_GroupNum;
+	m_nButtonGroupNum = m_pShareData->common.window.nFuncKeyWnd_GroupNum;
 	if (m_nButtonGroupNum < 1 || 12 < m_nButtonGroupNum) {
 		m_nButtonGroupNum = 4;
 	}
@@ -277,19 +277,19 @@ LRESULT FuncKeyWnd::OnTimer(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 // novice 2004/10/10
 	// Shift,Ctrl,Altキーが押されていたか
-	int nIdx = getCtrlKeyState();
+	int nIdx = GetCtrlKeyState();
 	// ALT,Shift,Ctrlキーの状態が変化したか
 	if (nIdx != m_nCurrentKeyState) {
 		m_nTimerCount = TIMER_CHECKFUNCENABLE + 1;
 
 		// ファンクションキーの機能名を取得
-		auto& csKeyBind = m_pShareData->m_common.m_keyBind;
+		auto& csKeyBind = m_pShareData->common.keyBind;
 		for (int i=0; i<_countof(m_szFuncNameArr); ++i) {
 			// 2007.02.22 ryoji KeyBind::GetFuncCode()を使う
 			EFunctionCode nFuncCode = KeyBind::GetFuncCode(
 				(WORD)(((VK_F1 + i) | ((WORD)((BYTE)(nIdx))) << 8)),
-				csKeyBind.m_nKeyNameArrNum,
-				csKeyBind.m_pKeyNameArr
+				csKeyBind.nKeyNameArrNum,
+				csKeyBind.pKeyNameArr
 			);
 			if (nFuncCode != m_nFuncCodeArr[i]) {
 				m_nFuncCodeArr[i] = nFuncCode;

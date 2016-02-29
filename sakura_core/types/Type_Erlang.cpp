@@ -46,7 +46,7 @@ struct OutlineErlang {
 		STATE_FUNC_ARGS,			// 2つめ以降の引数確認中
 		STATE_FUNC_ARGS_FIN,		// 関数の解析を完了
 		STATE_FUNC_FOUND,			// 関数を発見．データの取得が可能
-	} m_state;
+	} state;
 
 	wchar_t m_func[64];			// 関数名(Arity含む) = 表示名
 	LogicInt m_lnum;			// 関数の行番号
@@ -92,7 +92,7 @@ private:
 };
 
 OutlineErlang::OutlineErlang() :
-	m_state(STATE_NORMAL), m_lnum(0), m_argcount(0)
+	state(STATE_NORMAL), m_lnum(0), m_argcount(0)
 {
 }
 
@@ -107,7 +107,7 @@ OutlineErlang::OutlineErlang() :
 */
 const wchar_t* OutlineErlang::ScanFuncName(const wchar_t* buf, const wchar_t* end, const wchar_t* p)
 {
-	assert(m_state == STATE_NORMAL);
+	assert(state == STATE_NORMAL);
 
 	if (p > buf || ! (IS_ATOM_HEAD(*p) || *p == L'\'')) {
 		return end;
@@ -138,7 +138,7 @@ const wchar_t* OutlineErlang::ScanFuncName(const wchar_t* buf, const wchar_t* en
 	len = len < buf_len - 1 ? len : buf_len - 1;
 	wcsncpy(m_func, buf, len);
 	m_func[len] = L'\0';
-	m_state = STATE_FUNC_CANDIDATE_FIN;
+	state = STATE_FUNC_CANDIDATE_FIN;
 	return p;
 }
 
@@ -151,7 +151,7 @@ const wchar_t* OutlineErlang::ScanFuncName(const wchar_t* buf, const wchar_t* en
 */
 const wchar_t* OutlineErlang::EnterArgs(const wchar_t* end, const wchar_t* p)
 {
-	assert(m_state == STATE_FUNC_CANDIDATE_FIN);
+	assert(state == STATE_FUNC_CANDIDATE_FIN);
 
 	while (IS_SPACE(*p) && p < end)
 		++p;
@@ -162,7 +162,7 @@ const wchar_t* OutlineErlang::EnterArgs(const wchar_t* end, const wchar_t* p)
 	if (IS_COMMENT(*p)) {
 		return end;
 	}else if (*p == L'(') { //)
-		m_state = STATE_FUNC_ARGS1;
+		state = STATE_FUNC_ARGS1;
 		m_argcount = 0;
 		m_parenthesis_ptr = 1;
 		m_parenthesis[0] = *p;
@@ -170,7 +170,7 @@ const wchar_t* OutlineErlang::EnterArgs(const wchar_t* end, const wchar_t* p)
 		return p;
 	}
 	// not a function
-	m_state = STATE_NORMAL;
+	state = STATE_NORMAL;
 	return end;
 }
 
@@ -183,7 +183,7 @@ const wchar_t* OutlineErlang::EnterArgs(const wchar_t* end, const wchar_t* p)
 */
 const wchar_t* OutlineErlang::ScanArgs1(const wchar_t* end, const wchar_t* p)
 {
-	assert(m_state == STATE_FUNC_ARGS1);
+	assert(state == STATE_FUNC_ARGS1);
 	
 	while (IS_SPACE(*p) && p < end)
 		++p;
@@ -193,13 +193,13 @@ const wchar_t* OutlineErlang::ScanArgs1(const wchar_t* end, const wchar_t* p)
 
 	if (*p == /* (*/ L')') {
 		// no argument
-		m_state = STATE_FUNC_ARGS_FIN;
+		state = STATE_FUNC_ARGS_FIN;
 		++p;
 	}else if (IS_COMMENT(*p)) {
 		return end;
 	}else {
 		// argument found
-		m_state = STATE_FUNC_ARGS;
+		state = STATE_FUNC_ARGS;
 		++m_argcount;
 	}
 	return p;
@@ -216,7 +216,7 @@ const wchar_t* OutlineErlang::ScanArgs1(const wchar_t* end, const wchar_t* p)
 */
 const wchar_t* OutlineErlang::ScanArgs(const wchar_t* end, const wchar_t* p)
 {
-	assert(m_state == STATE_FUNC_ARGS);
+	assert(state == STATE_FUNC_ARGS);
 
 	const int parptr_max = _countof(m_parenthesis);
 	wchar_t quote = L'\0'; // 先頭位置を保存
@@ -255,7 +255,7 @@ const wchar_t* OutlineErlang::ScanArgs(const wchar_t* end, const wchar_t* p)
 				
 				// check level
 				if (m_parenthesis_ptr == 0) {
-					m_state = STATE_FUNC_ARGS_FIN;
+					state = STATE_FUNC_ARGS_FIN;
 					++p;
 					return p;
 				}
@@ -265,7 +265,7 @@ const wchar_t* OutlineErlang::ScanArgs(const wchar_t* end, const wchar_t* p)
 				//	セミコロンは複数の文の区切り．
 				//	パラメータ中には現れないので，解析が失敗している
 				//	括弧の閉じ忘れが考えられるので，仕切り直し
-				m_state = STATE_NORMAL;
+				state = STATE_NORMAL;
 				return end;
 			}else if (*p == L'.') {
 				//	ピリオドは式の末尾か，小数点として使われる．
@@ -274,7 +274,7 @@ const wchar_t* OutlineErlang::ScanArgs(const wchar_t* end, const wchar_t* p)
 				}else {
 					//	引数の途中で文末が現れたのは解析が失敗している
 					//	括弧の閉じ忘れが考えられるので，仕切り直し
-					m_state = STATE_NORMAL;
+					state = STATE_NORMAL;
 					return end;
 				}
 			}else if (*p == L'"') {
@@ -308,14 +308,14 @@ const wchar_t* OutlineErlang::EnterCond(const wchar_t* end, const wchar_t* p)
 
 	if (p + 1 < end && wcsncmp(p, L"->", 2) == 0) {
 		p += 2;
-		m_state = STATE_FUNC_FOUND;
+		state = STATE_FUNC_FOUND;
 	}else if (p + 3 < end && wcsncmp(p, L"when", 4) == 0) {
-		m_state = STATE_FUNC_FOUND;
+		state = STATE_FUNC_FOUND;
 		p += 4;
 	}else if (IS_COMMENT(*p)) {
 		return end;
 	}else {
-		m_state = STATE_NORMAL;
+		state = STATE_NORMAL;
 	}
 	return end;
 }
@@ -330,17 +330,17 @@ bool OutlineErlang::parse(const wchar_t* buf, int linelen, LogicInt linenum)
 {
 	const wchar_t* pos = buf;
 	const wchar_t* const end = buf + linelen;
-	if (m_state == STATE_FUNC_FOUND) {
-		m_state = STATE_NORMAL;
+	if (state == STATE_FUNC_FOUND) {
+		state = STATE_NORMAL;
 	}
-	if (m_state == STATE_NORMAL) {
+	if (state == STATE_NORMAL) {
 		pos = ScanFuncName(buf, end, pos);
-		if (m_state != STATE_NORMAL) {
+		if (state != STATE_NORMAL) {
 			m_lnum = linenum;
 		}
 	}
 	while (pos < end) {
-		switch (m_state) {
+		switch (state) {
 		case STATE_FUNC_CANDIDATE_FIN:
 			pos = EnterArgs(end, pos); break;
 		case STATE_FUNC_ARGS1:
@@ -350,15 +350,15 @@ bool OutlineErlang::parse(const wchar_t* buf, int linelen, LogicInt linenum)
 		case STATE_FUNC_ARGS_FIN:
 			pos = EnterCond(end, pos); break;
 		default:
-			PleaseReportToAuthor(NULL, _T("OutlineErlang::parse Unknown State: %d"), m_state);
+			PleaseReportToAuthor(NULL, _T("OutlineErlang::parse Unknown State: %d"), state);
 			break;
 		}
-		if (m_state == STATE_FUNC_FOUND) {
+		if (state == STATE_FUNC_FOUND) {
 			build_arity(m_argcount);
 			break;
 		}
 	}
-	return m_state == STATE_FUNC_FOUND;
+	return state == STATE_FUNC_FOUND;
 }
 
 /** 関数名の後ろに Arity (引数の数)を付加する

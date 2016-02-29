@@ -36,18 +36,18 @@
 void CType_Vb::InitTypeConfigImp(TypeConfig* pType)
 {
 	// 名前と拡張子
-	_tcscpy(pType->m_szTypeName, _T("Visual Basic"));
-	_tcscpy(pType->m_szTypeExts, _T("bas,frm,cls,ctl,pag,dob,dsr,vb"));
+	_tcscpy(pType->szTypeName, _T("Visual Basic"));
+	_tcscpy(pType->szTypeExts, _T("bas,frm,cls,ctl,pag,dob,dsr,vb"));
 
 	// 設定
-	pType->m_lineComment.CopyTo(0, L"'", -1);					// 行コメントデリミタ
-	pType->m_eDefaultOutline = OUTLINE_VB;						// アウトライン解析方法
-	pType->m_nKeywordSetIdx[0]  = 13;							// キーワードセット
-	pType->m_nKeywordSetIdx[1] = 14;							// キーワードセット2
-	pType->m_colorInfoArr[COLORIDX_DIGIT].m_bDisp = true;		// 半角数値を色分け表示
-	pType->m_nStringType = StringLiteralType::PLSQL;				// 文字列区切り記号エスケープ方法  0=[\"][\'] 1=[""]['']
-	pType->m_colorInfoArr[COLORIDX_SSTRING].m_bDisp = false;	// シングルクォーテーション文字列を色分け表示しない
-	pType->m_bStringLineOnly = true; // 文字列は行内のみ
+	pType->lineComment.CopyTo(0, L"'", -1);					// 行コメントデリミタ
+	pType->eDefaultOutline = OutlineType::VisualBasic;		// アウトライン解析方法
+	pType->nKeywordSetIdx[0]  = 13;							// キーワードセット
+	pType->nKeywordSetIdx[1] = 14;							// キーワードセット2
+	pType->colorInfoArr[COLORIDX_DIGIT].bDisp = true;		// 半角数値を色分け表示
+	pType->stringType = StringLiteralType::PLSQL;			// 文字列区切り記号エスケープ方法  0=[\"][\'] 1=[""]['']
+	pType->colorInfoArr[COLORIDX_SSTRING].bDisp = false;	// シングルクォーテーション文字列を色分け表示しない
+	pType->bStringLineOnly = true; // 文字列は行内のみ
 }
 
 // From Here June 23, 2001 N.Nakatani
@@ -66,7 +66,7 @@ void CType_Vb::InitTypeConfigImp(TypeConfig* pType)
 void DocOutline::MakeFuncList_VisualBasic(FuncInfoArr* pFuncInfoArr)
 {
 	const int	nMaxWordLeng = 255;	// Aug 7, 2003 little YOSHI  VBの名前付け規則より255文字に拡張
-	LogicInt		nLineLen = LogicInt(0);//: 2002/2/3 aroka 警告対策：初期化
+	LogicInt	nLineLen = LogicInt(0);//: 2002/2/3 aroka 警告対策：初期化
 	int			nCharChars;
 	wchar_t		szWordPrev[256];	// Aug 7, 2003 little YOSHI  VBの名前付け規則より255文字に拡張
 	wchar_t		szWord[256];		// Aug 7, 2003 little YOSHI  VBの名前付け規則より255文字に拡張
@@ -78,7 +78,7 @@ void DocOutline::MakeFuncList_VisualBasic(FuncInfoArr* pFuncInfoArr)
 	int			nParseCnt = 0;
 	bool		bClass;			// クラスモジュールフラグ
 	bool		bDQuote;		// ダブルクォーテーションフラグ（ダブルクォーテーションがきたらTrue）
-	bool bExtEol = GetDllShareData().m_common.m_edit.m_bEnableExtEol;
+	bool bExtEol = GetDllShareData().common.edit.bEnableExtEol;
 	
 	// 調べるファイルがクラスモジュールのときはType、Constの挙動が異なるのでフラグを立てる
 	bClass = false;

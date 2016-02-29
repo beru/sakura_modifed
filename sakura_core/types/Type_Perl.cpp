@@ -36,17 +36,17 @@
 void CType_Perl::InitTypeConfigImp(TypeConfig* pType)
 {
 	// 名前と拡張子
-	_tcscpy(pType->m_szTypeName, _T("Perl"));
-	_tcscpy(pType->m_szTypeExts, _T("cgi,pl,pm"));
+	_tcscpy(pType->szTypeName, _T("Perl"));
+	_tcscpy(pType->szTypeExts, _T("cgi,pl,pm"));
 
 	// 設定
-	pType->m_lineComment.CopyTo(0, L"#", -1);						// 行コメントデリミタ
-	pType->m_eDefaultOutline = OUTLINE_PERL;						// アウトライン解析方法
-	pType->m_nKeywordSetIdx[0]  = 11;								// キーワードセット
-	pType->m_nKeywordSetIdx[1] = 12;								// キーワードセット2
-	pType->m_colorInfoArr[COLORIDX_DIGIT].m_bDisp = true;			// 半角数値を色分け表示
-	pType->m_colorInfoArr[COLORIDX_BRACKET_PAIR].m_bDisp = true;	// 対括弧の強調をデフォルトON	//Sep. 21, 2002 genta
-	pType->m_bStringLineOnly = true; // 文字列は行内のみ
+	pType->lineComment.CopyTo(0, L"#", -1);						// 行コメントデリミタ
+	pType->eDefaultOutline = OutlineType::Perl;					// アウトライン解析方法
+	pType->nKeywordSetIdx[0]  = 11;								// キーワードセット
+	pType->nKeywordSetIdx[1] = 12;								// キーワードセット2
+	pType->colorInfoArr[COLORIDX_DIGIT].bDisp = true;			// 半角数値を色分け表示
+	pType->colorInfoArr[COLORIDX_BRACKET_PAIR].bDisp = true;	// 対括弧の強調をデフォルトON	//Sep. 21, 2002 genta
+	pType->bStringLineOnly = true; // 文字列は行内のみ
 }
 
 
@@ -75,7 +75,7 @@ void DocOutline::MakeFuncList_Perl(FuncInfoArr* pFuncInfoArr)
 	int			nWordIdx = 0;
 	int			nMaxWordLeng = 70;
 	int			nMode;
-	bool bExtEol = GetDllShareData().m_common.m_edit.m_bEnableExtEol;
+	bool bExtEol = GetDllShareData().common.edit.bEnableExtEol;
 
 	LogicInt	nLineCount;
 	for (nLineCount=LogicInt(0); nLineCount<m_pDocRef->m_docLineMgr.GetLineCount(); ++nLineCount) {

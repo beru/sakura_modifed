@@ -31,7 +31,7 @@
 #include "StdAfx.h"
 #include "AutoSaveAgent.h"
 #include "doc/EditDoc.h"
-#include "env/DLLSHAREDATA.h"
+#include "env/DllSharedData.h"
 
 
 //	From Here Aug. 21, 2000 genta
@@ -66,7 +66,7 @@ void AutoSaveAgent::CheckAutoSave()
 //
 void AutoSaveAgent::ReloadAutoSaveParam()
 {
-	auto& csBackup = GetDllShareData().m_common.m_backup;
+	auto& csBackup = GetDllShareData().common.backup;
 	m_passiveTimer.SetInterval(csBackup.GetAutoBackupInterval());
 	m_passiveTimer.Enable(csBackup.IsAutoBackupEnabled());
 }

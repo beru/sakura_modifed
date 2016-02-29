@@ -23,7 +23,7 @@
 */
 
 #include "StdAfx.h"
-#include "DLLSHAREDATA.h"
+#include "DllSharedData.h"
 #include "_main/Mutex.h"
 #include "dlg/DlgCancel.h"
 #include "uiparts/WaitCursor.h"
@@ -32,26 +32,26 @@
 #include "sakura_rc.h"
 
 // GetDllShareData用グローバル変数
-DLLSHAREDATA* g_theDLLSHAREDATA = NULL;
+DllSharedData* g_theDLLSHAREDATA = NULL;
 
-static Mutex g_cKeywordMutex(FALSE, GSTR_MUTEX_SAKURA_KEYWORD);
+static Mutex g_keywordMutex(FALSE, GSTR_MUTEX_SAKURA_KEYWORD);
 
 ShareDataLockCounter::ShareDataLockCounter() {
-	LockGuard<Mutex> guard(g_cKeywordMutex);
-	assert_warning(0 <= GetDllShareData().m_nLockCount);
-	GetDllShareData().m_nLockCount++;
+	LockGuard<Mutex> guard(g_keywordMutex);
+	assert_warning(0 <= GetDllShareData().nLockCount);
+	GetDllShareData().nLockCount++;
 }
 
 ShareDataLockCounter::~ShareDataLockCounter() {
-	LockGuard<Mutex> guard(g_cKeywordMutex);
-	GetDllShareData().m_nLockCount--;
-	assert_warning(0 <= GetDllShareData().m_nLockCount);
+	LockGuard<Mutex> guard(g_keywordMutex);
+	GetDllShareData().nLockCount--;
+	assert_warning(0 <= GetDllShareData().nLockCount);
 }
 
 int ShareDataLockCounter::GetLockCounter() {
-	LockGuard<Mutex> guard(g_cKeywordMutex);
-	assert_warning(0 <= GetDllShareData().m_nLockCount);
-	return GetDllShareData().m_nLockCount;
+	LockGuard<Mutex> guard(g_keywordMutex);
+	assert_warning(0 <= GetDllShareData().nLockCount);
+	return GetDllShareData().nLockCount;
 }
 
 class LockCancel: public DlgCancel {
@@ -91,8 +91,8 @@ public:
 static
 int GetCountIf0Lock(ShareDataLockCounter** ppLock)
 {
-	LockGuard<Mutex> guard(g_cKeywordMutex);
-	int count = GetDllShareData().m_nLockCount;
+	LockGuard<Mutex> guard(g_keywordMutex);
+	int count = GetDllShareData().nLockCount;
 	if (count <= 0) {
 		if (ppLock) {
 			*ppLock = new ShareDataLockCounter();

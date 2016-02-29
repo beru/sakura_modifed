@@ -546,13 +546,13 @@ bool RecentImp<T, S>::UpdateView()
 template class RecentImp<CmdString, LPCTSTR>;
 template class RecentImp<EditNode>;
 template class RecentImp<EditInfo>;
-template class RecentImp<CPathString, LPCTSTR>;
+template class RecentImp<PathString, LPCTSTR>;
 #ifndef __MINGW32__
 template class RecentImp<MetaPath, LPCTSTR>;
 template class RecentImp<GrepFileString, LPCTSTR>;
 template class RecentImp<GrepFolderString, LPCTSTR>;
 template class RecentImp<SearchString, LPCWSTR>;
-template class RecentImp<TagjumpKeywordString, LPCWSTR>;
+template class RecentImp<TagJumpKeywordString, LPCWSTR>;
 template class RecentImp<CurDirString, LPCTSTR>;
 #endif
 #if !defined(__MINGW32__) || (defined(__MINGW32__) && !defined(UNICODE))

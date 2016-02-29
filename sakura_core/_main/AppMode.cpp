@@ -16,12 +16,12 @@ void AppMode::OnAfterSave(const SaveInfo& saveInfo)
 void AppMode::SetDebugModeON()
 {
 	auto& shared = GetDllShareData();
-	if (shared.m_handles.m_hwndDebug) {
-		if (IsSakuraMainWindow(shared.m_handles.m_hwndDebug)) {
+	if (shared.handles.hwndDebug) {
+		if (IsSakuraMainWindow(shared.handles.hwndDebug)) {
 			return;
 		}
 	}
-	shared.m_handles.m_hwndDebug = EditWnd::getInstance()->GetHwnd();
+	shared.handles.hwndDebug = EditWnd::getInstance()->GetHwnd();
 	this->_SetDebugMode(true);
 	this->SetViewMode(false);	// ビューモード	// 2001/06/23 N.Nakatani アウトプット窓への出力テキストの追加F_ADDTAIL_Wが抑止されるのでとりあえずビューモードは辞めました
 	EditWnd::getInstance()->UpdateCaption();
@@ -32,8 +32,8 @@ void AppMode::SetDebugModeON()
 void AppMode::SetDebugModeOFF()
 {
 	auto& shared = GetDllShareData();
-	if (shared.m_handles.m_hwndDebug == EditWnd::getInstance()->GetHwnd()) {
-		shared.m_handles.m_hwndDebug = NULL;
+	if (shared.handles.hwndDebug == EditWnd::getInstance()->GetHwnd()) {
+		shared.handles.hwndDebug = NULL;
 		this->_SetDebugMode(false);
 		EditWnd::getInstance()->UpdateCaption();
 	}

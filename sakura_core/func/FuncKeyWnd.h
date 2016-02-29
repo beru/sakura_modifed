@@ -15,9 +15,9 @@
 #pragma once
 
 #include "window/Wnd.h"
-#include "env/DLLSHAREDATA.h"
+#include "env/DllSharedData.h"
 
-struct DLLSHAREDATA;
+struct DllSharedData;
 class EditDoc; // 2002/2/10 aroka
 
 //! ファンクションキーウィンドウ
@@ -42,7 +42,7 @@ public:
 private:
 	// 20060126 aroka すべてPrivateにして、初期化順序に合わせて並べ替え
 	EditDoc*		m_pEditDoc;
-	DLLSHAREDATA*	m_pShareData;
+	DllSharedData*	m_pShareData;
 	int				m_nCurrentKeyState;
 	WCHAR			m_szFuncNameArr[12][256];
 	HWND			m_hwndButtonArr[12];

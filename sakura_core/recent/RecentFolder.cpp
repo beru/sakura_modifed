@@ -25,7 +25,7 @@
 #include "StdAfx.h"
 #include "RecentFolder.h"
 #include <string.h>
-#include "env/DLLSHAREDATA.h"
+#include "env/DllSharedData.h"
 
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -35,11 +35,11 @@
 RecentFolder::RecentFolder()
 {
 	Create(
-		&GetShareData()->m_history.m_szOPENFOLDERArr[0],
-		&GetShareData()->m_history.m_nOPENFOLDERArrNum,
-		GetShareData()->m_history.m_bOPENFOLDERArrFavorite,
+		&GetShareData()->history.m_szOPENFOLDERArr[0],
+		&GetShareData()->history.m_nOPENFOLDERArrNum,
+		GetShareData()->history.m_bOPENFOLDERArrFavorite,
 		MAX_OPENFOLDER,
-		&(GetShareData()->m_common.m_general.m_nOPENFOLDERArrNum_MAX)
+		&(GetShareData()->common.general.nOPENFOLDERArrNum_MAX)
 	);
 }
 
@@ -57,24 +57,24 @@ const TCHAR* RecentFolder::GetItemText(int nIndex) const
 	return *GetItem(nIndex);
 }
 
-bool RecentFolder::DataToReceiveType(LPCTSTR* dst, const CPathString* src) const
+bool RecentFolder::DataToReceiveType(LPCTSTR* dst, const PathString* src) const
 {
 	*dst = *src;
 	return true;
 }
 
-bool RecentFolder::TextToDataType(CPathString* dst, LPCTSTR pszText) const
+bool RecentFolder::TextToDataType(PathString* dst, LPCTSTR pszText) const
 {
 	CopyItem(dst, pszText);
 	return true;
 }
 
-int RecentFolder::CompareItem(const CPathString* p1, LPCTSTR p2) const
+int RecentFolder::CompareItem(const PathString* p1, LPCTSTR p2) const
 {
 	return _tcsicmp(*p1, p2);
 }
 
-void RecentFolder::CopyItem(CPathString* dst, LPCTSTR src) const
+void RecentFolder::CopyItem(PathString* dst, LPCTSTR src) const
 {
 	_tcscpy(*dst, src);
 }

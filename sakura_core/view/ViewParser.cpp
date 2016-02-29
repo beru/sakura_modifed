@@ -36,7 +36,7 @@ int ViewParser::GetLeftWord(NativeW* pMemWord, int nMaxWordLen) const
 		if (!pLine) {
 			return 0;
 		}
-		bool bExtEol = GetDllShareData().m_common.m_edit.m_bEnableExtEol;
+		bool bExtEol = GetDllShareData().common.edit.bEnableExtEol;
 		if (WCODE::IsLineDelimiter(pLine[nLineLen - 1], bExtEol)) {
 			return 0;
 		}

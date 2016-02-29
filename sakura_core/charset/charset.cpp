@@ -40,13 +40,13 @@
 #include <map>
 
 struct CodeSet {
-	EncodingType		m_eCodeSet;
-	const WCHAR*	m_sNormal;
-	const WCHAR*	m_sShort;
-	const WCHAR*	m_sLong;		// for Combo
-	bool			m_bUseBom;		// BOMが使えるか
-	bool			m_bIsBomDefOn;	// BOMのデフォルトがOnか
-	bool			m_bCanDefault;	// デフォルト文字コードになれるか
+	EncodingType	eCodeSet;
+	const WCHAR*	sNormal;
+	const WCHAR*	sShort;
+	const WCHAR*	sLong;			// for Combo
+	bool			bUseBom;		// BOMが使えるか
+	bool			bIsBomDefOn;	// BOMのデフォルトがOnか
+	bool			bCanDefault;	// デフォルト文字コードになれるか
 };
 
 // 文字コードセット(初期データ)
@@ -78,9 +78,9 @@ void InitCodeSet()
 {
 	if (msCodeSet.empty()) {
 		for (int i=0; i<_countof(ASCodeSet); ++i) {
-			vDispIdx.push_back(ASCodeSet[i].m_eCodeSet);
+			vDispIdx.push_back(ASCodeSet[i].eCodeSet);
 			if (i > 0) {
-				msCodeSet[ASCodeSet[i].m_eCodeSet] = ASCodeSet[i];
+				msCodeSet[ASCodeSet[i].eCodeSet] = ASCodeSet[i];
 			}
 		}
 	}
@@ -107,7 +107,7 @@ LPCTSTR CodeTypeName::Normal() const
 	if (msCodeSet.find(m_eCodeType) == msCodeSet.end()) {
 		return NULL;
 	}
-	return to_tchar(msCodeSet[m_eCodeType].m_sNormal);
+	return to_tchar(msCodeSet[m_eCodeType].sNormal);
 }
 
 LPCTSTR CodeTypeName::Short() const
@@ -115,7 +115,7 @@ LPCTSTR CodeTypeName::Short() const
 	if (msCodeSet.find(m_eCodeType) == msCodeSet.end()) {
 		return NULL;
 	}
-	return to_tchar(msCodeSet[m_eCodeType].m_sShort);
+	return to_tchar(msCodeSet[m_eCodeType].sShort);
 }
 
 LPCTSTR CodeTypeName::Bracket() const
@@ -124,9 +124,9 @@ LPCTSTR CodeTypeName::Bracket() const
 		return NULL;
 	}
 
-//	static	std::wstring	sWork = L"  [" + msCodeSet[m_eCodeType].m_sShort + L"]";
+//	static	std::wstring	sWork = L"  [" + msCodeSet[m_eCodeType].sShort + L"]";
 	static	std::wstring	sWork;
-	sWork = std::wstring(L"  [") + msCodeSet[m_eCodeType].m_sShort + L"]";	// 変数の定義と値の設定を一緒にやるとバグる様なので分離	// 2013/4/20 Uchi
+	sWork = std::wstring(L"  [") + msCodeSet[m_eCodeType].sShort + L"]";	// 変数の定義と値の設定を一緒にやるとバグる様なので分離	// 2013/4/20 Uchi
 
 	return to_tchar(sWork.c_str());
 }
@@ -144,7 +144,7 @@ bool CodeTypeName::UseBom()
 		return false;
 	}
 
-	return msCodeSet[m_eCodeType].m_bUseBom;
+	return msCodeSet[m_eCodeType].bUseBom;
 }
 
 bool CodeTypeName::IsBomDefOn()
@@ -153,7 +153,7 @@ bool CodeTypeName::IsBomDefOn()
 		return false;
 	}
 
-	return msCodeSet[m_eCodeType].m_bIsBomDefOn;
+	return msCodeSet[m_eCodeType].bIsBomDefOn;
 }
 
 bool CodeTypeName::CanDefault()
@@ -165,7 +165,7 @@ bool CodeTypeName::CanDefault()
 		return false;
 	}
 
-	return msCodeSet[m_eCodeType].m_bCanDefault;
+	return msCodeSet[m_eCodeType].bCanDefault;
 }
 
 
@@ -188,5 +188,5 @@ LPCTSTR CodeTypesForCombobox::GetName(int nIndex) const
 	if (nIndex == 0) {
 		return LS(STR_ERR_GLOBAL01);
 	}
-	return to_tchar(msCodeSet[vDispIdx[nIndex]].m_sLong);
+	return to_tchar(msCodeSet[vDispIdx[nIndex]].sLong);
 }

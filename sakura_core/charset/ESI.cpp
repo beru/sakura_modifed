@@ -740,7 +740,7 @@ void ESI::GuessEucOrSjis(void)
 void ESI::GuessUtf8OrCesu8(void)
 {
 	if (IsAmbiguousUtf8AndCesu8()
-	 && m_pEncodingConfig->m_bPriorCesu8) {
+	 && m_pEncodingConfig->bPriorCesu8) {
 		int i;
 		for (i=0; i<2; ++i) {
 			if (m_apMbcInfo[i]->eCodeID == CODE_CESU8) {
@@ -1181,7 +1181,7 @@ void ESI::GetDebugInfo(const char* pS, const int nLen, NativeT* pcmtxtOut)
 	int v1, v2, v3, v4;
 
 	EditDoc& doc = *EditWnd::getInstance()->GetDocument();
-	ESI esi(doc.m_docType.GetDocumentAttribute().m_encoding);
+	ESI esi(doc.m_docType.GetDocumentAttribute().encoding);
 
 	// テスト実行
 	esi.SetInformation(pS, nLen/*, CODE_SJIS*/);
@@ -1206,13 +1206,13 @@ void ESI::GetDebugInfo(const char* pS, const int nLen, NativeT* pcmtxtOut)
 
 	pcmtxtOut->AppendString(LS(STR_ESI_DOC_TYPE));	// "文書種別\r\n"
 
-	auto_sprintf( szWork, _T("\t%s\r\n"), doc.m_docType.GetDocumentAttribute().m_szTypeName );
+	auto_sprintf( szWork, _T("\t%s\r\n"), doc.m_docType.GetDocumentAttribute().szTypeName );
 	pcmtxtOut->AppendString(szWork);
 
 	pcmtxtOut->AppendString(LS(STR_ESI_DEFAULT_CHARCODE));	// "デフォルト文字コード\r\n"
 
 	TCHAR szCpName[100];
-	CodePage::GetNameNormal(szCpName, doc.m_docType.GetDocumentAttribute().m_encoding.m_eDefaultCodetype);
+	CodePage::GetNameNormal(szCpName, doc.m_docType.GetDocumentAttribute().encoding.eDefaultCodetype);
 	auto_sprintf(szWork, _T("\t%ts\r\n"), szCpName);
 	pcmtxtOut->AppendString(szWork);
 	pcmtxtOut->AppendString(LS(STR_ESI_SAMPLE_LEN));	// "サンプルデータ長\r\n"

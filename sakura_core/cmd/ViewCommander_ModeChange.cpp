@@ -134,7 +134,7 @@ void ViewCommander::Command_CANCEL_MODE(int whereCursorIs)
 			// ファイルの最後に移動
 			Command_GOFILEEND(false);
 		}else {
-			if (!GetDllShareData().m_common.m_general.m_bIsFreeCursorMode && bBoxSelect) {
+			if (!GetDllShareData().common.general.bIsFreeCursorMode && bBoxSelect) {
 				// 2013.04.22 Moca 矩形選択のとき左上固定をやめたので代わりにEOLより右だった場合にEOLに補正する
 				const Layout*	pLayout = layoutMgr.SearchLineByLayoutY(ptTo.y);
 				if (pLayout) {
@@ -151,7 +151,7 @@ void ViewCommander::Command_CANCEL_MODE(int whereCursorIs)
 			|| selInfo.IsBoxSelecting()
 		) {
 			selInfo.DisableSelectArea(true);
-			caret.m_cUnderLine.CaretUnderLineON(true, false);
+			caret.m_underLine.CaretUnderLineON(true, false);
 			selInfo.PrintSelectionInfoMsg();
 		}
 	}

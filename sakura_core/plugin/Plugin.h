@@ -87,7 +87,7 @@ public:
 		m_sJack(sJack),
 		m_sHandler(sHandler),
 		m_sLabel(sLabel),
-		m_plugin(plugin)
+		plugin(plugin)
 	{
 	}
 	// デストラクタ
@@ -147,8 +147,8 @@ public:
 	 *   +------------+------------+----+------------+
 	 *   もし足りなければ、22000～23999を払い出して食いつぶす
 	 *************************************************************************/
-	static EOutlineType GetOutlineType(EFunctionCode nFunctionCode) {
-		return static_cast<EOutlineType>(nFunctionCode);
+	static OutlineType GetOutlineType(EFunctionCode nFunctionCode) {
+		return static_cast<OutlineType>(nFunctionCode);
 	}
 
 	static SmartIndentType GetSmartIndentType(EFunctionCode nFunctionCode) {
@@ -162,7 +162,7 @@ public:
 	const wstring m_sHandler;			// ハンドラ文字列（関数名）
 	const wstring m_sLabel;				// ラベル文字列
 	wstring m_sIcon;					// アイコンのファイルパス
-	Plugin& m_plugin;					// 親プラグイン
+	Plugin& plugin;					// 親プラグイン
 };
 
 // オプション定義	// 2010/3/24 Uchi
@@ -189,8 +189,8 @@ public:
 		int index
 		)
 	{
-		m_parent		= parent;
-		m_sLabel		= sLabel;
+		m_parent	= parent;
+		m_sLabel	= sLabel;
 		m_sSection	= sSection;
 		m_sKey		= sKey;
 		// 小文字変換
@@ -220,7 +220,7 @@ public:
 	wstring	GetDefaultVal() { return m_sDefaultVal; }
 
 protected:
-	Plugin*	m_parent;
+	Plugin*		m_parent;
 	wstring		m_sLabel;
 	wstring		m_sSection;
 	wstring		m_sKey;
@@ -282,7 +282,7 @@ public:
 public:
 	PluginId m_id;				// プラグイン番号（エディタがふる0～MAX_PLUGIN-1の番号）
 	wstring m_sId;				// プラグインID
-	wstring m_sName;			// プラグイン和名
+	wstring sName;			// プラグイン和名
 	wstring m_sDescription;		// プラグインについての簡単な記述
 	wstring m_sAuthor;			// 作者
 	wstring m_sVersion;			// バージョン

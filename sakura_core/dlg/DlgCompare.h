@@ -34,7 +34,7 @@ public:
 	const TCHAR*	m_pszPath;
 	TCHAR*			m_pszCompareLabel;
 	HWND*			m_phwndCompareWnd;
-	bool			m_bCompareAndTileHorz;	// 左右に並べて表示
+	bool			bCompareAndTileHorz;	// 左右に並べて表示
 	
 protected:
 	/*

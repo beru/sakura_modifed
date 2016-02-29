@@ -33,11 +33,11 @@
 /////////////////////////////////////////////
 // Plug ƒƒ“ƒoŠÖ”
 bool Plug::Invoke(EditView* view, WSHIfObj::List& params) {
-	return m_plugin.InvokePlug(view, *this, params);
+	return plugin.InvokePlug(view, *this, params);
 }
 
 EFunctionCode Plug::GetFunctionCode() const {
-	return GetPluginFunctionCode(m_plugin.m_id, m_id);
+	return GetPluginFunctionCode(plugin.m_id, m_id);
 }
 
 /////////////////////////////////////////////
@@ -65,19 +65,19 @@ bool Plugin::ReadPluginDefCommon(
 	)
 {
 	profile->IOProfileData(PII_PLUGIN, PII_PLUGIN_ID, m_sId);
-	profile->IOProfileData(PII_PLUGIN, PII_PLUGIN_NAME, m_sName);
+	profile->IOProfileData(PII_PLUGIN, PII_PLUGIN_NAME, sName);
 	profile->IOProfileData(PII_PLUGIN, PII_PLUGIN_DESCRIPTION, m_sDescription);
 	profile->IOProfileData(PII_PLUGIN, PII_PLUGIN_AUTHOR, m_sAuthor);
 	profile->IOProfileData(PII_PLUGIN, PII_PLUGIN_VERSION, m_sVersion);
 	profile->IOProfileData(PII_PLUGIN, PII_PLUGIN_URL, m_sUrl);
 	if (profileMlang) {
-		profileMlang->IOProfileData(PII_PLUGIN, PII_PLUGIN_NAME, m_sName);
+		profileMlang->IOProfileData(PII_PLUGIN, PII_PLUGIN_NAME, sName);
 		profileMlang->IOProfileData(PII_PLUGIN, PII_PLUGIN_DESCRIPTION, m_sDescription);
 		profileMlang->IOProfileData(PII_PLUGIN, PII_PLUGIN_URL, m_sUrl);
 	}
 
 #ifdef _UNICODE
-	DEBUG_TRACE(_T("    Name:%ls\n"), m_sName.c_str());
+	DEBUG_TRACE(_T("    Name:%ls\n"), sName.c_str());
 	DEBUG_TRACE(_T("    Description:%ls\n"), m_sDescription.c_str());
 	DEBUG_TRACE(_T("    Author:%ls\n"), m_sAuthor.c_str());
 	DEBUG_TRACE(_T("    Version:%ls\n"), m_sVersion.c_str());

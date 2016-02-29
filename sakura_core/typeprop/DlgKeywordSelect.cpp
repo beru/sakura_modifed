@@ -31,7 +31,7 @@
 
 #include "StdAfx.h"
 #include "DlgKeywordSelect.h"
-#include "env/DLLSHAREDATA.h"
+#include "env/DllSharedData.h"
 #include "KeywordSetMgr.h"
 #include "sakura_rc.h"
 #include "sakura.hh"
@@ -68,7 +68,7 @@ static const int keyword_select_target_combo[KEYWORD_SELECT_NUM] = {
 
 DlgKeywordSelect::DlgKeywordSelect()
 {
-	m_pKeywordSetMgr = &(m_pShareData->m_common.m_specialKeyword.m_keywordSetMgr);
+	m_pKeywordSetMgr = &(m_pShareData->common.specialKeyword.keywordSetMgr);
 
 	return;
 }

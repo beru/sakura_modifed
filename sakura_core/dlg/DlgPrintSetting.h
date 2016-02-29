@@ -30,8 +30,8 @@
 #pragma once
 
 #include "dlg/Dialog.h"
-#include "config/maxdata.h"	// MAX_PRINTSETTINGARR
-#include "print/Print.h"	// PRINTSETTING
+#include "config/maxdata.h"	// MAX_PrintSettingARR
+#include "print/Print.h"	// PrintSetting
 
 /*!	印刷設定ダイアログ
 
@@ -46,11 +46,11 @@ public:
 	/*
 	||  Attributes & Operations
 	*/
-	int DoModal(HINSTANCE, HWND, int*, PRINTSETTING*, int);	// モーダルダイアログの表示
+	int DoModal(HINSTANCE, HWND, int*, PrintSetting*, int);	// モーダルダイアログの表示
 
 private:
 	int				m_nCurrentPrintSetting;
-	PRINTSETTING	m_printSettingArr[MAX_PRINTSETTINGARR];
+	PrintSetting	m_printSettingArr[MAX_PrintSettingARR];
 	int				m_nLineNumberColumns;					// 行番号表示する場合の桁数
 	bool			m_bPrintableLinesAndColumnInvalid;
 	HFONT			m_hFontDlg;								// ダイアログのフォントハンドル

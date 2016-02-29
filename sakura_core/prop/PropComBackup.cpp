@@ -94,7 +94,7 @@ INT_PTR PropBackup::DispatchEvent(
 //	int			nDummy;
 //	int			nCharChars;
 
-	auto& csBackup = m_common.m_backup;
+	auto& csBackup = m_common.backup;
 
 	switch (uMsg) {
 	case WM_INITDIALOG:
@@ -106,9 +106,9 @@ INT_PTR PropBackup::DispatchEvent(
 		// ƒ†[ƒU[‚ªƒGƒfƒBƒbƒg ƒRƒ“ƒgƒ[ƒ‹‚É“ü—Í‚Å‚«‚éƒeƒLƒXƒg‚Ì’·‚³‚ğ§ŒÀ‚·‚é
 		//	Oct. 5, 2002 genta ƒoƒbƒNƒAƒbƒvƒtƒHƒ‹ƒ_–¼‚Ì“ü—ÍƒTƒCƒY‚ğw’è
 		//	Oct. 8, 2002 genta ÅŒã‚É•t‰Á‚³‚ê‚é\‚Ì—Ìˆæ‚ğc‚·‚½‚ßƒoƒbƒtƒ@ƒTƒCƒY-1‚µ‚©“ü—Í‚³‚¹‚È‚¢
-		EditCtl_LimitText(::GetDlgItem(hwndDlg, IDC_EDIT_BACKUPFOLDER), _countof2(csBackup.m_szBackUpFolder) - 1 - 1);
+		EditCtl_LimitText(::GetDlgItem(hwndDlg, IDC_EDIT_BACKUPFOLDER), _countof2(csBackup.szBackUpFolder) - 1 - 1);
 		// 20051107 aroka
-		EditCtl_LimitText(::GetDlgItem(hwndDlg, IDC_EDIT_BACKUPFILE), _countof2(csBackup.m_szBackUpPathAdvanced) - 1 - 1);
+		EditCtl_LimitText(::GetDlgItem(hwndDlg, IDC_EDIT_BACKUPFILE), _countof2(csBackup.szBackUpPathAdvanced) - 1 - 1);
 		return TRUE;
 
 	case WM_NOTIFY:
@@ -185,8 +185,8 @@ INT_PTR PropBackup::DispatchEvent(
 					::DlgItem_GetText(hwndDlg, IDC_EDIT_BACKUPFOLDER, szFolder, _countof(szFolder));
 
 					if (SelectDir(hwndDlg, LS(STR_PROPCOMBK_SEL_FOLDER), szFolder, szFolder)) {
-						_tcscpy(csBackup.m_szBackUpFolder, szFolder);
-						::DlgItem_SetText(hwndDlg, IDC_EDIT_BACKUPFOLDER, csBackup.m_szBackUpFolder);
+						_tcscpy(csBackup.szBackUpFolder, szFolder);
+						::DlgItem_SetText(hwndDlg, IDC_EDIT_BACKUPFOLDER, csBackup.szBackUpFolder);
 					}
 					UpdateBackupFile(hwndDlg);
 				}
@@ -200,7 +200,7 @@ INT_PTR PropBackup::DispatchEvent(
 			switch (wID) {
 			case IDC_EDIT_BACKUPFOLDER:
 				// 2009.02.21 ryoji Œã‚ë‚É\‚ª’Ç‰Á‚³‚ê‚é‚Ì‚ÅC1•¶š—]—T‚ğ‚İ‚é•K—v‚ª‚ ‚éD
-				::DlgItem_GetText(hwndDlg, IDC_EDIT_BACKUPFOLDER, csBackup.m_szBackUpFolder, _countof2(csBackup.m_szBackUpFolder) - 1);
+				::DlgItem_GetText(hwndDlg, IDC_EDIT_BACKUPFOLDER, csBackup.szBackUpFolder, _countof2(csBackup.szBackUpFolder) - 1);
 				UpdateBackupFile(hwndDlg);
 				break;
 			}
@@ -241,16 +241,16 @@ void PropBackup::SetData(HWND hwndDlg)
 {
 //	BOOL	bRet;
 
-//	BOOL	m_bGrepExitConfirm;	// Grepƒ‚[ƒh‚Å•Û‘¶Šm”F‚·‚é‚©
+//	BOOL	bGrepExitConfirm;	// Grepƒ‚[ƒh‚Å•Û‘¶Šm”F‚·‚é‚©
 
-	auto& csBackup = m_common.m_backup;
+	auto& csBackup = m_common.backup;
 
 	// ƒoƒbƒNƒAƒbƒv‚Ìì¬
-	::CheckDlgButtonBool(hwndDlg, IDC_CHECK_BACKUP, csBackup.m_bBackUp);
+	::CheckDlgButtonBool(hwndDlg, IDC_CHECK_BACKUP, csBackup.bBackUp);
 	// ƒoƒbƒNƒAƒbƒv‚Ìì¬‘O‚ÉŠm”F
-	::CheckDlgButtonBool(hwndDlg, IDC_CHECK_BACKUPDIALOG, csBackup.m_bBackUpDialog);
+	::CheckDlgButtonBool(hwndDlg, IDC_CHECK_BACKUPDIALOG, csBackup.bBackUpDialog);
 //	// w’èƒtƒHƒ‹ƒ_‚ÉƒoƒbƒNƒAƒbƒv‚ğì¬‚·‚é //	20051107 aroka uƒoƒbƒNƒAƒbƒv‚Ìì¬v‚É˜A“®‚³‚¹‚é
-//	::CheckDlgButton(hwndDlg, IDC_CHECK_BACKUPFOLDER, .m_backup.m_bBackUpFolder);
+//	::CheckDlgButton(hwndDlg, IDC_CHECK_BACKUPFOLDER, .backup.bBackUpFolder);
 
 	// ƒoƒbƒNƒAƒbƒvƒtƒ@ƒCƒ‹–¼‚Ìƒ^ƒCƒv 1=(.bak) 2=*_“ú•t.*
 	//	Jun.  5, 2004 genta Œ³‚ÌŠg’£q‚ğc‚·İ’è(5,6)‚ğ’Ç‰ÁD
@@ -291,20 +291,20 @@ void PropBackup::SetData(HWND hwndDlg)
 	::CheckDlgButtonBool(hwndDlg, IDC_CHECK_BACKUP_SEC, csBackup.GetBackupOpt(BKUP_SEC));
 
 	// w’èƒtƒHƒ‹ƒ_‚ÉƒoƒbƒNƒAƒbƒv‚ğì¬‚·‚é // 20051107 aroka ˆÚ“®F˜A“®‘ÎÛ‚É‚·‚éB
-	::CheckDlgButtonBool(hwndDlg, IDC_CHECK_BACKUPFOLDER, csBackup.m_bBackUpFolder);
-	::CheckDlgButtonBool(hwndDlg, IDC_CHECK_BACKUP_FOLDER_RM, csBackup.m_bBackUpFolderRM);	// 2010/5/27 Uchi
+	::CheckDlgButtonBool(hwndDlg, IDC_CHECK_BACKUPFOLDER, csBackup.bBackUpFolder);
+	::CheckDlgButtonBool(hwndDlg, IDC_CHECK_BACKUP_FOLDER_RM, csBackup.bBackUpFolderRM);	// 2010/5/27 Uchi
 
 	// ƒoƒbƒNƒAƒbƒv‚ğì¬‚·‚éƒtƒHƒ‹ƒ_
-	::DlgItem_SetText(hwndDlg, IDC_EDIT_BACKUPFOLDER, csBackup.m_szBackUpFolder);
+	::DlgItem_SetText(hwndDlg, IDC_EDIT_BACKUPFOLDER, csBackup.szBackUpFolder);
 
 	// ƒoƒbƒNƒAƒbƒvƒtƒ@ƒCƒ‹‚ğ‚²‚İ” ‚É•ú‚è‚Ş	//@@@ 2001.12.11 add MIK
-	::CheckDlgButton(hwndDlg, IDC_CHECK_BACKUP_DUSTBOX, csBackup.m_bBackUpDustBox ? BST_CHECKED : BST_UNCHECKED);	//@@@ 2001.12.11 add MIK
+	::CheckDlgButton(hwndDlg, IDC_CHECK_BACKUP_DUSTBOX, csBackup.bBackUpDustBox ? BST_CHECKED : BST_UNCHECKED);	//@@@ 2001.12.11 add MIK
 
 	// ƒoƒbƒNƒAƒbƒvæƒtƒHƒ‹ƒ_‚ğÚ×İ’è‚·‚é // 20051107 aroka
-	::CheckDlgButton(hwndDlg, IDC_CHECK_BACKUP_ADVANCED, csBackup.m_bBackUpPathAdvanced ? BST_CHECKED : BST_UNCHECKED);
+	::CheckDlgButton(hwndDlg, IDC_CHECK_BACKUP_ADVANCED, csBackup.bBackUpPathAdvanced ? BST_CHECKED : BST_UNCHECKED);
 
 	// ƒoƒbƒNƒAƒbƒv‚ğì¬‚·‚éƒtƒHƒ‹ƒ_‚ÌÚ×İ’è // 20051107 aroka
-	::DlgItem_SetText(hwndDlg, IDC_EDIT_BACKUPFILE, csBackup.m_szBackUpPathAdvanced);
+	::DlgItem_SetText(hwndDlg, IDC_EDIT_BACKUPFILE, csBackup.szBackUpPathAdvanced);
 
 	// ƒoƒbƒNƒAƒbƒv‚ğì¬‚·‚éƒtƒHƒ‹ƒ_‚ÌÚ×İ’è // 20051128 aroka
 	switch (csBackup.GetBackupTypeAdv()) {
@@ -337,14 +337,14 @@ void PropBackup::SetData(HWND hwndDlg)
 // ƒ_ƒCƒAƒƒOƒf[ƒ^‚Ìæ“¾
 int PropBackup::GetData(HWND hwndDlg)
 {
-	auto& csBackup = m_common.m_backup;
+	auto& csBackup = m_common.backup;
 
 	// ƒoƒbƒNƒAƒbƒv‚Ìì¬
-	csBackup.m_bBackUp = DlgButton_IsChecked(hwndDlg, IDC_CHECK_BACKUP);
+	csBackup.bBackUp = DlgButton_IsChecked(hwndDlg, IDC_CHECK_BACKUP);
 	// ƒoƒbƒNƒAƒbƒv‚Ìì¬‘O‚ÉŠm”F
-	csBackup.m_bBackUpDialog = DlgButton_IsChecked(hwndDlg, IDC_CHECK_BACKUPDIALOG);
+	csBackup.bBackUpDialog = DlgButton_IsChecked(hwndDlg, IDC_CHECK_BACKUPDIALOG);
 //	// w’èƒtƒHƒ‹ƒ_‚ÉƒoƒbƒNƒAƒbƒv‚ğì¬‚·‚é // 20051107 aroka uƒoƒbƒNƒAƒbƒv‚Ìì¬v‚É˜A“®‚³‚¹‚é
-//	csBackup.m_bBackUpFolder = DlgButton_IsChecked(hwndDlg, IDC_CHECK_BACKUPFOLDER);
+//	csBackup.bBackUpFolder = DlgButton_IsChecked(hwndDlg, IDC_CHECK_BACKUPFOLDER);
 
 	// ƒoƒbƒNƒAƒbƒvƒtƒ@ƒCƒ‹–¼‚Ìƒ^ƒCƒv 1=(.bak) 2=*_“ú•t.*
 	if (DlgButton_IsChecked(hwndDlg, IDC_RADIO_BACKUP_TYPE1)) {
@@ -390,21 +390,21 @@ int PropBackup::GetData(HWND hwndDlg)
 	csBackup.SetBackupOpt(BKUP_SEC, DlgButton_IsChecked(hwndDlg, IDC_CHECK_BACKUP_SEC));
 
 	// w’èƒtƒHƒ‹ƒ_‚ÉƒoƒbƒNƒAƒbƒv‚ğì¬‚·‚é // 20051107 aroka ˆÚ“®
-	csBackup.m_bBackUpFolder = DlgButton_IsChecked(hwndDlg, IDC_CHECK_BACKUPFOLDER);
-	csBackup.m_bBackUpFolderRM = DlgButton_IsChecked(hwndDlg, IDC_CHECK_BACKUP_FOLDER_RM);	// 2010/5/27 Uchi
+	csBackup.bBackUpFolder = DlgButton_IsChecked(hwndDlg, IDC_CHECK_BACKUPFOLDER);
+	csBackup.bBackUpFolderRM = DlgButton_IsChecked(hwndDlg, IDC_CHECK_BACKUP_FOLDER_RM);	// 2010/5/27 Uchi
 
 	// ƒoƒbƒNƒAƒbƒv‚ğì¬‚·‚éƒtƒHƒ‹ƒ_
 	//	Oct. 5, 2002 genta ƒTƒCƒY‚ğsizeof()‚Åw’è
 	//	Oct. 8, 2002 genta Œã‚ë‚É\‚ª’Ç‰Á‚³‚ê‚é‚Ì‚ÅC1•¶š—]—T‚ğŒ©‚é•K—v‚ª‚ ‚éD
-	::DlgItem_GetText(hwndDlg, IDC_EDIT_BACKUPFOLDER, csBackup.m_szBackUpFolder, _countof2(csBackup.m_szBackUpFolder) - 1);
+	::DlgItem_GetText(hwndDlg, IDC_EDIT_BACKUPFOLDER, csBackup.szBackUpFolder, _countof2(csBackup.szBackUpFolder) - 1);
 
 	// ƒoƒbƒNƒAƒbƒvƒtƒ@ƒCƒ‹‚ğ‚²‚İ” ‚É•ú‚è‚Ş	//@@@ 2001.12.11 add MIK
-	csBackup.m_bBackUpDustBox = DlgButton_IsChecked(hwndDlg, IDC_CHECK_BACKUP_DUSTBOX);	//@@@ 2001.12.11 add MIK
+	csBackup.bBackUpDustBox = DlgButton_IsChecked(hwndDlg, IDC_CHECK_BACKUP_DUSTBOX);	//@@@ 2001.12.11 add MIK
 
 	// w’èƒtƒHƒ‹ƒ_‚ÉƒoƒbƒNƒAƒbƒv‚ğì¬‚·‚éÚ×İ’è // 20051107 aroka
-	csBackup.m_bBackUpPathAdvanced = DlgButton_IsChecked(hwndDlg, IDC_CHECK_BACKUP_ADVANCED);
+	csBackup.bBackUpPathAdvanced = DlgButton_IsChecked(hwndDlg, IDC_CHECK_BACKUP_ADVANCED);
 	// ƒoƒbƒNƒAƒbƒv‚ğì¬‚·‚éƒtƒHƒ‹ƒ_ // 20051107 aroka
-	::DlgItem_GetText(hwndDlg, IDC_EDIT_BACKUPFILE, csBackup.m_szBackUpPathAdvanced, _countof2(csBackup.m_szBackUpPathAdvanced) - 1);
+	::DlgItem_GetText(hwndDlg, IDC_EDIT_BACKUPFILE, csBackup.szBackUpPathAdvanced, _countof2(csBackup.szBackUpPathAdvanced) - 1);
 
 	// 20051128 aroka Ú×İ’è‚Ì“ú•t‚Ìƒ^ƒCƒv
 	if (DlgButton_IsChecked(hwndDlg, IDC_RADIO_BACKUP_DATETYPE1A)) {
@@ -516,19 +516,19 @@ void PropBackup::EnableBackupInput(HWND hwndDlg)
 	@date 2005.11.07 aroka V‹K’Ç‰Á
 
 	@note Ú×İ’èØ‚è‘Ö‚¦‚ÌƒfƒtƒHƒ‹ƒg‚ğƒIƒvƒVƒ‡ƒ“‚É‡‚í‚¹‚é‚½‚ßA
-		m_szBackUpPathAdvanced ‚ğXV‚·‚é
+		szBackUpPathAdvanced ‚ğXV‚·‚é
 */
 void PropBackup::UpdateBackupFile(HWND hwndDlg)	//	ƒoƒbƒNƒAƒbƒvƒtƒ@ƒCƒ‹‚ÌÚ×İ’è
 {
 	wchar_t temp[MAX_PATH];
-	auto& csBackup = m_common.m_backup;
+	auto& csBackup = m_common.backup;
 	// ƒoƒbƒNƒAƒbƒv‚ğì¬‚·‚éƒtƒ@ƒCƒ‹ // 20051107 aroka
-	if (!csBackup.m_bBackUp) {
+	if (!csBackup.bBackUp) {
 		temp[0] = 0;
 	}else {
-		if (csBackup.m_bBackUpFolder) {
+		if (csBackup.bBackUpFolder) {
 			temp[0] = 0;
-		}else if (csBackup.m_bBackUpDustBox) {
+		}else if (csBackup.bBackUpDustBox) {
 			auto_sprintf_s(temp, LTEXT("%ls\\"), LSW(STR_PROPCOMBK_DUSTBOX));
 		}else {
 			auto_sprintf_s(temp, LTEXT(".\\"));
@@ -576,9 +576,9 @@ void PropBackup::UpdateBackupFile(HWND hwndDlg)	//	ƒoƒbƒNƒAƒbƒvƒtƒ@ƒCƒ‹‚ÌÚ×İ’
 			break;
 		}
 	}
-	if (!csBackup.m_bBackUpPathAdvanced) {	// Ú×İ’èƒ‚[ƒh‚Å‚È‚¢‚Æ‚«‚¾‚¯©“®XV‚·‚é
-		auto_sprintf(csBackup.m_szBackUpPathAdvanced, _T("%ls"), temp);
-		::DlgItem_SetText(hwndDlg, IDC_EDIT_BACKUPFILE, csBackup.m_szBackUpPathAdvanced);
+	if (!csBackup.bBackUpPathAdvanced) {	// Ú×İ’èƒ‚[ƒh‚Å‚È‚¢‚Æ‚«‚¾‚¯©“®XV‚·‚é
+		auto_sprintf(csBackup.szBackUpPathAdvanced, _T("%ls"), temp);
+		::DlgItem_SetText(hwndDlg, IDC_EDIT_BACKUPFILE, csBackup.szBackUpPathAdvanced);
 	}
 	return;
 }

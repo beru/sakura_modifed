@@ -41,8 +41,8 @@ enum class FileTreeSettingFromType {
 
 class FileTreeSetting {
 public:
-	std::vector<FileTreeItem>	m_aItems;		//!< ツリーアイテム
-	bool		m_bProject;				//!< プロジェクトファイルモード
+	std::vector<FileTreeItem>	items;		//!< ツリーアイテム
+	bool		bProject;				//!< プロジェクトファイルモード
 	SFilePath	m_szDefaultProjectIni;	//!< デフォルトiniファイル名
 	SFilePath	m_szLoadProjectIni;		//!< 現在読み込んでいるiniファイル名
 	FileTreeSettingFromType	m_eFileTreeSettingOrgType;
@@ -60,7 +60,7 @@ public:
 	/*
 	||  Attributes & Operations
 	*/
-	HWND DoModeless(HINSTANCE, HWND, LPARAM, FuncInfoArr*, LayoutInt, LayoutInt, int, int, bool); // モードレスダイアログの表示
+	HWND DoModeless(HINSTANCE, HWND, LPARAM, FuncInfoArr*, LayoutInt, LayoutInt, OutlineType, OutlineType, bool); // モードレスダイアログの表示
 	void ChangeView(LPARAM);	// モードレス時：検索対象となるビューの変更
 	bool IsDocking() { return m_eDockSide > DockSideType::Float; }
 	DockSideType GetDockSide() { return m_eDockSide; }
@@ -68,28 +68,28 @@ public:
 protected:
 	INT_PTR DispatchEvent(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM lParam);	// 2007.11.07 ryoji 標準以外のメッセージを捕捉する
 
-	CommonSetting_OutLine& CommonSet(void) { return m_pShareData->m_common.m_outline; }
+	CommonSetting_OutLine& CommonSet(void) { return m_pShareData->common.outline; }
 	TypeConfig& TypeSet(void) { return m_type; }
-	int& ProfDockSet() { return CommonSet().m_nOutlineDockSet; }
-	bool& ProfDockSync() { return CommonSet().m_bOutlineDockSync; }
-	bool& ProfDockDisp() { return (ProfDockSet() == 0)? CommonSet().m_bOutlineDockDisp: TypeSet().m_bOutlineDockDisp; }
-	DockSideType& ProfDockSide() { return (ProfDockSet() == 0)? CommonSet().m_eOutlineDockSide: TypeSet().m_eOutlineDockSide; }
-	int& ProfDockLeft() { return (ProfDockSet() == 0)? CommonSet().m_cxOutlineDockLeft: TypeSet().m_cxOutlineDockLeft; }
-	int& ProfDockTop() { return (ProfDockSet() == 0)? CommonSet().m_cyOutlineDockTop: TypeSet().m_cyOutlineDockTop; }
-	int& ProfDockRight() { return (ProfDockSet() == 0)? CommonSet().m_cxOutlineDockRight: TypeSet().m_cxOutlineDockRight; }
-	int& ProfDockBottom() { return (ProfDockSet() == 0)? CommonSet().m_cyOutlineDockBottom: TypeSet().m_cyOutlineDockBottom; }
+	int& ProfDockSet() { return CommonSet().nOutlineDockSet; }
+	bool& ProfDockSync() { return CommonSet().bOutlineDockSync; }
+	bool& ProfDockDisp() { return (ProfDockSet() == 0)? CommonSet().bOutlineDockDisp: TypeSet().bOutlineDockDisp; }
+	DockSideType& ProfDockSide() { return (ProfDockSet() == 0)? CommonSet().eOutlineDockSide: TypeSet().eOutlineDockSide; }
+	int& ProfDockLeft() { return (ProfDockSet() == 0)? CommonSet().cxOutlineDockLeft: TypeSet().cxOutlineDockLeft; }
+	int& ProfDockTop() { return (ProfDockSet() == 0)? CommonSet().cyOutlineDockTop: TypeSet().cyOutlineDockTop; }
+	int& ProfDockRight() { return (ProfDockSet() == 0)? CommonSet().cxOutlineDockRight: TypeSet().cxOutlineDockRight; }
+	int& ProfDockBottom() { return (ProfDockSet() == 0)? CommonSet().cyOutlineDockBottom: TypeSet().cyOutlineDockBottom; }
 	void SetTypeConfig(TypeConfigNum, const TypeConfig&);
 
 public:
 	//! 現在の種別と同じなら
-	bool CheckListType(int nOutLineType) const { return nOutLineType == m_nOutlineType; }
-	void Redraw(int nOutLineType, int nListType, FuncInfoArr*, LayoutInt nCurLine, LayoutInt nCurCol);
+	bool CheckListType(OutlineType nOutLineType) const { return nOutLineType == m_nOutlineType; }
+	void Redraw(OutlineType nOutLineType, OutlineType nListType, FuncInfoArr*, LayoutInt nCurLine, LayoutInt nCurCol);
 	void Refresh(void);
 	bool ChangeLayout(int nId);
 	void OnOutlineNotify(WPARAM wParam, LPARAM lParam);
 	void SyncColor(void);
 	void SetWindowText(const TCHAR* szTitle);		// ダイアログタイトルの設定
-	EFunctionCode GetFuncCodeRedraw(int outlineType);
+	EFunctionCode GetFuncCodeRedraw(OutlineType outlineType);
 	void LoadFileTreeSetting( FileTreeSetting&, SFilePath& );
 	static void ReadFileTreeIni( DataProfile&, FileTreeSetting& );
 
@@ -104,10 +104,10 @@ protected:
 	bool			m_bSortDesc;		//!< 降順
 	NativeW			m_memClipText;		// クリップボードコピー用テキスト
 	bool			m_bLineNumIsCRLF;	// 行番号の表示 false=折り返し単位／true=改行単位
-	int				m_nListType;		// 一覧の種類
+	OutlineType		m_nListType;		// 一覧の種類
 public:
 	int				m_nDocType;			// ドキュメントの種類
-	int				m_nOutlineType;		// アウトライン解析の種別
+	OutlineType		m_nOutlineType;		// アウトライン解析の種別
 	bool			m_bEditWndReady;	// エディタ画面の準備完了
 protected:
 	BOOL OnInitDialog(HWND, WPARAM, LPARAM);

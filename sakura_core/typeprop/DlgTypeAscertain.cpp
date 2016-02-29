@@ -120,17 +120,17 @@ void DlgTypeAscertain::SetData(void)
 	Combo_AddString(hwndCombo, LSW(STR_DLGTYPEASC_IMPORT));
 
 	// エディタ内の設定
-	for (int nIdx=0; nIdx<GetDllShareData().m_nTypesCount; ++nIdx) {
+	for (int nIdx=0; nIdx<GetDllShareData().nTypesCount; ++nIdx) {
 		const TypeConfigMini* type;
 		DocTypeManager().GetTypeConfigMini(TypeConfigNum(nIdx), &type);
-		if (type->m_szTypeExts[0] != _T('\0')) {		// タイプ属性：拡張子リスト
+		if (type->szTypeExts[0] != _T('\0')) {		// タイプ属性：拡張子リスト
 			auto_sprintf_s(szText, _T("%ts (%ts)"),
-				type->m_szTypeName,	// タイプ属性：名称
-				type->m_szTypeExts	// タイプ属性：拡張子リスト
+				type->szTypeName,	// タイプ属性：名称
+				type->szTypeExts	// タイプ属性：拡張子リスト
 			);
 		}else {
 			auto_sprintf_s(szText, _T("%ts"),
-				type->m_szTypeName	// タイプ属性：拡称
+				type->szTypeName	// タイプ属性：拡称
 			);
 		}
 		::Combo_AddString(hwndCombo, szText);

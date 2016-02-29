@@ -25,7 +25,7 @@
 #include "StdAfx.h"
 #include "charset/charcode.h"
 
-#include "env/DLLSHAREDATA.h"
+#include "env/DllSharedData.h"
 
 // キーワードキャラクタ
 const unsigned char gm_keyword_char[128] = {
@@ -180,20 +180,20 @@ namespace WCODE
 		{
 			assert(m_pCache != 0);
 			// キャッシュのクリア
-			memcpy(m_pCache->m_lfFaceName, m_lf.lfFaceName, sizeof(m_lf.lfFaceName));
-			memset(m_pCache->m_bCharWidthCache, 0, sizeof(m_pCache->m_bCharWidthCache));
-			m_pCache->m_nCharWidthCacheTest = 0x12345678;
+			memcpy(m_pCache->lfFaceName, m_lf.lfFaceName, sizeof(m_lf.lfFaceName));
+			memset(m_pCache->bCharWidthCache, 0, sizeof(m_pCache->bCharWidthCache));
+			m_pCache->nCharWidthCacheTest = 0x12345678;
 		}
 		bool IsSameFontFace(const LOGFONT& lf)
 		{
 			assert(m_pCache != 0);
-			return (memcmp(m_pCache->m_lfFaceName, lf.lfFaceName, sizeof(lf.lfFaceName)) == 0);
+			return (memcmp(m_pCache->lfFaceName, lf.lfFaceName, sizeof(lf.lfFaceName)) == 0);
 		}
 		void SetCache(wchar_t c, bool cache_value)
 		{
 			int v = cache_value ? 0x1 : 0x2;
-			m_pCache->m_bCharWidthCache[c/4] &= ~(0x3<< ((c%4)*2)); // 該当箇所クリア
-			m_pCache->m_bCharWidthCache[c/4] |=  (v  << ((c%4)*2)); // 該当箇所セット
+			m_pCache->bCharWidthCache[c/4] &= ~(0x3<< ((c%4)*2)); // 該当箇所クリア
+			m_pCache->bCharWidthCache[c/4] |=  (v  << ((c%4)*2)); // 該当箇所セット
 		}
 		bool GetCache(wchar_t c) const
 		{
@@ -201,7 +201,7 @@ namespace WCODE
 		}
 		bool ExistCache(wchar_t c) const
 		{
-			assert(m_pCache->m_nCharWidthCacheTest == 0x12345678);
+			assert(m_pCache->nCharWidthCacheTest == 0x12345678);
 			return _GetRaw(c) != 0x0;
 		}
 		bool CalcHankakuByFont(wchar_t c)
@@ -213,7 +213,7 @@ namespace WCODE
 	protected:
 		int _GetRaw(wchar_t c) const
 		{
-			return (m_pCache->m_bCharWidthCache[c/4]>>((c%4)*2))&0x3;
+			return (m_pCache->bCharWidthCache[c/4]>>((c%4)*2))&0x3;
 		}
 	private:
 		HDC					m_hdc;
@@ -255,7 +255,7 @@ namespace WCODE
 
 			m_pCache = &m_localCache[(int)fMode];
 			if (cmode == CharWidthCacheMode::Share) {
-				m_pCache->SelectCache(&(GetDllShareData().m_sCharWidth));
+				m_pCache->SelectCache(&(GetDllShareData().charWidth));
 			}else {
 				if (m_parCache[(int)fMode] == 0) {
 					m_parCache[(int)fMode] = new CharWidthCache;

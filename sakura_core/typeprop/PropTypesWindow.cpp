@@ -248,7 +248,7 @@ void PropTypesWindow::SetData(HWND hwndDlg)
 {
 	{
 		// 文書アイコンを使う	// Sep. 10, 2002 genta
-		::CheckDlgButtonBool(hwndDlg, IDC_CHECK_DOCICON, m_types.m_bUseDocumentIcon);
+		::CheckDlgButtonBool(hwndDlg, IDC_CHECK_DOCICON, m_types.bUseDocumentIcon);
 	}
 
 	// 起動時のIME(日本語入力変換)	// Nov. 20, 2000 genta
@@ -257,7 +257,7 @@ void PropTypesWindow::SetData(HWND hwndDlg)
 		// ON/OFF状態
 		HWND	hwndCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_IMESWITCH);
 		Combo_ResetContent(hwndCombo);
-		ime = m_types.m_nImeState & 3;
+		ime = m_types.nImeState & 3;
 		int		nSelPos = 0;
 		for (int i=0; i<_countof(ImeSwitchArr); ++i) {
 			Combo_InsertString(hwndCombo, i, LS(ImeSwitchArr[i].nNameId));
@@ -270,7 +270,7 @@ void PropTypesWindow::SetData(HWND hwndDlg)
 		// 入力モード
 		hwndCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_IMESTATE);
 		Combo_ResetContent(hwndCombo);
-		ime = m_types.m_nImeState >> 2;
+		ime = m_types.nImeState >> 2;
 		nSelPos = 0;
 		for (int i=0; i<_countof(ImeStateArr); ++i) {
 			Combo_InsertString(hwndCombo, i, LS(ImeStateArr[i].nNameId));
@@ -285,8 +285,8 @@ void PropTypesWindow::SetData(HWND hwndDlg)
 	{
 		HWND hCombo;
 
-		// 「自動認識時にCESU-8を優先」m_types.m_encoding.m_bPriorCesu8 をチェック
-		::CheckDlgButton(hwndDlg, IDC_CHECK_PRIOR_CESU8, m_types.m_encoding.m_bPriorCesu8);
+		// 「自動認識時にCESU-8を優先」m_types.encoding.bPriorCesu8 をチェック
+		::CheckDlgButton(hwndDlg, IDC_CHECK_PRIOR_CESU8, m_types.encoding.bPriorCesu8);
 
 		// デフォルトコードタイプのコンボボックス設定
 		int		nSel= 0;
@@ -297,7 +297,7 @@ void PropTypesWindow::SetData(HWND hwndDlg)
 			if (CodeTypeName(codeTypes.GetCode(i)).CanDefault()) {
 				int idx = Combo_AddString(hCombo, codeTypes.GetName(i));
 				Combo_SetItemData(hCombo, idx, codeTypes.GetCode(i));
-				if (m_types.m_encoding.m_eDefaultCodetype == codeTypes.GetCode(i)) {
+				if (m_types.encoding.eDefaultCodetype == codeTypes.GetCode(i)) {
 					nSel = j;
 				}
 				++j;
@@ -306,7 +306,7 @@ void PropTypesWindow::SetData(HWND hwndDlg)
 		if (nSel == -1) {
 			::CheckDlgButton(hwndDlg, IDC_CHECK_CP, TRUE);
 			::EnableWindow(GetDlgItem(hwndDlg, IDC_CHECK_CP), FALSE);
-			int nIdx = CodePage::AddComboCodePages(hwndDlg, hCombo, m_types.m_encoding.m_eDefaultCodetype);
+			int nIdx = CodePage::AddComboCodePages(hwndDlg, hCombo, m_types.encoding.eDefaultCodetype);
 			if (nIdx == -1) {
 				nSel = 0;
 			}else {
@@ -316,11 +316,11 @@ void PropTypesWindow::SetData(HWND hwndDlg)
 		Combo_SetCurSel(hCombo, nSel);
 
 		// BOM チェックボックス設定
-		CodeTypeName	cCodeTypeName(m_types.m_encoding.m_eDefaultCodetype);
+		CodeTypeName	cCodeTypeName(m_types.encoding.eDefaultCodetype);
 		if (!cCodeTypeName.UseBom()) {
-			m_types.m_encoding.m_bDefaultBom = false;
+			m_types.encoding.bDefaultBom = false;
 		}
-		::CheckDlgButton(hwndDlg, IDC_CHECK_DEFAULT_BOM, (m_types.m_encoding.m_bDefaultBom ? BST_CHECKED : BST_UNCHECKED));
+		::CheckDlgButton(hwndDlg, IDC_CHECK_DEFAULT_BOM, (m_types.encoding.bDefaultBom ? BST_CHECKED : BST_UNCHECKED));
 		::EnableWindow(::GetDlgItem(hwndDlg, IDC_CHECK_DEFAULT_BOM), (int)cCodeTypeName.UseBom());
 
 		// デフォルト改行タイプのコンボボックス設定
@@ -330,7 +330,7 @@ void PropTypesWindow::SetData(HWND hwndDlg)
 		}
 		int i;
 		for (i=0; i<_countof(aeEolType); ++i) {
-			if (m_types.m_encoding.m_eDefaultEoltype == aeEolType[i]) {
+			if (m_types.encoding.eDefaultEoltype == aeEolType[i]) {
 				break;
 			}
 		}
@@ -341,7 +341,7 @@ void PropTypesWindow::SetData(HWND hwndDlg)
 	}
 
 	// 行番号の表示 false=折り返し単位／true=改行単位
-	if (!m_types.m_bLineNumIsCRLF) {
+	if (!m_types.bLineNumIsCRLF) {
 		::CheckDlgButton(hwndDlg, IDC_RADIO_LINENUM_LAYOUT, TRUE);
 		::CheckDlgButton(hwndDlg, IDC_RADIO_LINENUM_CRLF, FALSE);
 	}else {
@@ -351,15 +351,15 @@ void PropTypesWindow::SetData(HWND hwndDlg)
 
 	{
 		// 行番号の最小桁数	// 追加 2014.08.02 katze
-		::SetDlgItemInt(hwndDlg, IDC_EDIT_LINENUMWIDTH, (Int)m_types.m_nLineNumWidth, FALSE);
+		::SetDlgItemInt(hwndDlg, IDC_EDIT_LINENUMWIDTH, (Int)m_types.nLineNumWidth, FALSE);
 	}
 
 	// 背景画像
-	EditCtl_LimitText(GetDlgItem(hwndDlg, IDC_EDIT_BACKIMG_PATH), _countof2(m_types.m_szBackImgPath));
+	EditCtl_LimitText(GetDlgItem(hwndDlg, IDC_EDIT_BACKIMG_PATH), _countof2(m_types.szBackImgPath));
 	EditCtl_LimitText(GetDlgItem(hwndDlg, IDC_EDIT_BACKIMG_OFFSET_X), 5);
 	EditCtl_LimitText(GetDlgItem(hwndDlg, IDC_EDIT_BACKIMG_OFFSET_Y), 5);
 
-	DlgItem_SetText(hwndDlg, IDC_EDIT_BACKIMG_PATH, m_types.m_szBackImgPath);
+	DlgItem_SetText(hwndDlg, IDC_EDIT_BACKIMG_PATH, m_types.szBackImgPath);
 	{
 		static const int posNameId[] ={
 			STR_IMAGE_POS1,
@@ -374,27 +374,27 @@ void PropTypesWindow::SetData(HWND hwndDlg)
 		};
 		// BGIMAGE_TOP_LEFT ..
 		int nCount = _countof(posNameId);
-		SetCombobox(::GetDlgItem(hwndDlg, IDC_COMBO_BACKIMG_POS), posNameId, nCount, m_types.m_backImgPos);
+		SetCombobox(::GetDlgItem(hwndDlg, IDC_COMBO_BACKIMG_POS), posNameId, nCount, (int)m_types.backImgPos);
 	}
-	CheckDlgButtonBool(hwndDlg, IDC_CHECK_BACKIMG_REP_X, m_types.m_backImgRepeatX);
-	CheckDlgButtonBool(hwndDlg, IDC_CHECK_BACKIMG_REP_Y, m_types.m_backImgRepeatY);
-	CheckDlgButtonBool(hwndDlg, IDC_CHECK_BACKIMG_SCR_X, m_types.m_backImgScrollX);
-	CheckDlgButtonBool(hwndDlg, IDC_CHECK_BACKIMG_SCR_Y, m_types.m_backImgScrollY);
-	SetDlgItemInt(hwndDlg, IDC_EDIT_BACKIMG_OFFSET_X, m_types.m_backImgPosOffset.x, TRUE);
-	SetDlgItemInt(hwndDlg, IDC_EDIT_BACKIMG_OFFSET_Y, m_types.m_backImgPosOffset.y, TRUE);
+	CheckDlgButtonBool(hwndDlg, IDC_CHECK_BACKIMG_REP_X, m_types.backImgRepeatX);
+	CheckDlgButtonBool(hwndDlg, IDC_CHECK_BACKIMG_REP_Y, m_types.backImgRepeatY);
+	CheckDlgButtonBool(hwndDlg, IDC_CHECK_BACKIMG_SCR_X, m_types.backImgScrollX);
+	CheckDlgButtonBool(hwndDlg, IDC_CHECK_BACKIMG_SCR_Y, m_types.backImgScrollY);
+	SetDlgItemInt(hwndDlg, IDC_EDIT_BACKIMG_OFFSET_X, m_types.backImgPosOffset.x, TRUE);
+	SetDlgItemInt(hwndDlg, IDC_EDIT_BACKIMG_OFFSET_Y, m_types.backImgPosOffset.y, TRUE);
 
 	// 行番号区切り  0=なし 1=縦線 2=任意
-	if (m_types.m_nLineTermType == 0) {
+	if (m_types.nLineTermType == 0) {
 		::CheckDlgButton(hwndDlg, IDC_RADIO_LINETERMTYPE0, TRUE);
 		::CheckDlgButton(hwndDlg, IDC_RADIO_LINETERMTYPE1, FALSE);
 		::CheckDlgButton(hwndDlg, IDC_RADIO_LINETERMTYPE2, FALSE);
 	}else
-	if (m_types.m_nLineTermType == 1) {
+	if (m_types.nLineTermType == 1) {
 		::CheckDlgButton(hwndDlg, IDC_RADIO_LINETERMTYPE0, FALSE);
 		::CheckDlgButton(hwndDlg, IDC_RADIO_LINETERMTYPE1, TRUE);
 		::CheckDlgButton(hwndDlg, IDC_RADIO_LINETERMTYPE2, FALSE);
 	}else
-	if (m_types.m_nLineTermType == 2) {
+	if (m_types.nLineTermType == 2) {
 		::CheckDlgButton(hwndDlg, IDC_RADIO_LINETERMTYPE0, FALSE);
 		::CheckDlgButton(hwndDlg, IDC_RADIO_LINETERMTYPE1, FALSE);
 		::CheckDlgButton(hwndDlg, IDC_RADIO_LINETERMTYPE2, TRUE);
@@ -402,7 +402,7 @@ void PropTypesWindow::SetData(HWND hwndDlg)
 
 	// 行番号区切り文字
 	wchar_t	szLineTermChar[2];
-	auto_sprintf_s(szLineTermChar, L"%lc", m_types.m_cLineTermChar);
+	auto_sprintf_s(szLineTermChar, L"%lc", m_types.cLineTermChar);
 	::DlgItem_SetText(hwndDlg, IDC_EDIT_LINETERMCHAR, szLineTermChar);
 
 	//	From Here Sept. 10, 2000 JEPRO
@@ -423,7 +423,7 @@ int PropTypesWindow::GetData(HWND hwndDlg)
 {
 	{
 		// 文書アイコンを使う	// Sep. 10, 2002 genta
-		m_types.m_bUseDocumentIcon = DlgButton_IsChecked(hwndDlg, IDC_CHECK_DOCICON);
+		m_types.bUseDocumentIcon = DlgButton_IsChecked(hwndDlg, IDC_CHECK_DOCICON);
 	}
 
 	// 起動時のIME(日本語入力変換)	Nov. 20, 2000 genta
@@ -431,72 +431,72 @@ int PropTypesWindow::GetData(HWND hwndDlg)
 		// 入力モード
 		HWND	hwndCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_IMESTATE);
 		int		nSelPos = Combo_GetCurSel(hwndCombo);
-		m_types.m_nImeState = ImeStateArr[nSelPos].nMethod << 2;	//	IME入力モード
+		m_types.nImeState = ImeStateArr[nSelPos].nMethod << 2;	//	IME入力モード
 
 		// ON/OFF状態
 		hwndCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_IMESWITCH);
 		nSelPos = Combo_GetCurSel(hwndCombo);
-		m_types.m_nImeState |= ImeSwitchArr[nSelPos].nMethod;	//	IME ON/OFF
+		m_types.nImeState |= ImeSwitchArr[nSelPos].nMethod;	//	IME ON/OFF
 	}
 
 	// 「文字コード」グループの設定
 	{
-		// m_types.m_bPriorCesu8 を設定
-		m_types.m_encoding.m_bPriorCesu8 = DlgButton_IsChecked(hwndDlg, IDC_CHECK_PRIOR_CESU8);
+		// m_types.bPriorCesu8 を設定
+		m_types.encoding.bPriorCesu8 = DlgButton_IsChecked(hwndDlg, IDC_CHECK_PRIOR_CESU8);
 
 		// m_types.eDefaultCodetype を設定
 		HWND hCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_DEFAULT_CODETYPE);
 		int i = Combo_GetCurSel(hCombo);
 		if (CB_ERR != i) {
-			m_types.m_encoding.m_eDefaultCodetype = EncodingType(Combo_GetItemData(hCombo, i));
+			m_types.encoding.eDefaultCodetype = EncodingType(Combo_GetItemData(hCombo, i));
 		}
 
-		// m_types.m_bDefaultBom を設定
-		m_types.m_encoding.m_bDefaultBom = DlgButton_IsChecked(hwndDlg, IDC_CHECK_DEFAULT_BOM);
+		// m_types.bDefaultBom を設定
+		m_types.encoding.bDefaultBom = DlgButton_IsChecked(hwndDlg, IDC_CHECK_DEFAULT_BOM);
 
 		// m_types.eDefaultEoltype を設定
 		hCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_DEFAULT_EOLTYPE);
 		i = Combo_GetCurSel(hCombo);
 		if (CB_ERR != i) {
-			m_types.m_encoding.m_eDefaultEoltype = aeEolType[i];
+			m_types.encoding.eDefaultEoltype = aeEolType[i];
 		}
 	}
 
 	// 行番号の表示 false=折り返し単位／true=改行単位
-	m_types.m_bLineNumIsCRLF = !DlgButton_IsChecked(hwndDlg, IDC_RADIO_LINENUM_LAYOUT);
+	m_types.bLineNumIsCRLF = !DlgButton_IsChecked(hwndDlg, IDC_RADIO_LINENUM_LAYOUT);
 
-	DlgItem_GetText(hwndDlg, IDC_EDIT_BACKIMG_PATH, m_types.m_szBackImgPath, _countof2(m_types.m_szBackImgPath));
-	m_types.m_backImgPos = static_cast<EBackgroundImagePos>(Combo_GetCurSel(GetDlgItem(hwndDlg, IDC_COMBO_BACKIMG_POS)));
-	m_types.m_backImgRepeatX = DlgButton_IsChecked(hwndDlg, IDC_CHECK_BACKIMG_REP_X);
-	m_types.m_backImgRepeatY = DlgButton_IsChecked(hwndDlg, IDC_CHECK_BACKIMG_REP_Y);
-	m_types.m_backImgScrollX = DlgButton_IsChecked(hwndDlg, IDC_CHECK_BACKIMG_SCR_X);
-	m_types.m_backImgScrollY = DlgButton_IsChecked(hwndDlg, IDC_CHECK_BACKIMG_SCR_Y);
-	m_types.m_backImgPosOffset.x = GetDlgItemInt(hwndDlg, IDC_EDIT_BACKIMG_OFFSET_X, NULL, TRUE);
-	m_types.m_backImgPosOffset.y = GetDlgItemInt(hwndDlg, IDC_EDIT_BACKIMG_OFFSET_Y, NULL, TRUE);
+	DlgItem_GetText(hwndDlg, IDC_EDIT_BACKIMG_PATH, m_types.szBackImgPath, _countof2(m_types.szBackImgPath));
+	m_types.backImgPos = static_cast<BackgroundImagePosType>(Combo_GetCurSel(GetDlgItem(hwndDlg, IDC_COMBO_BACKIMG_POS)));
+	m_types.backImgRepeatX = DlgButton_IsChecked(hwndDlg, IDC_CHECK_BACKIMG_REP_X);
+	m_types.backImgRepeatY = DlgButton_IsChecked(hwndDlg, IDC_CHECK_BACKIMG_REP_Y);
+	m_types.backImgScrollX = DlgButton_IsChecked(hwndDlg, IDC_CHECK_BACKIMG_SCR_X);
+	m_types.backImgScrollY = DlgButton_IsChecked(hwndDlg, IDC_CHECK_BACKIMG_SCR_Y);
+	m_types.backImgPosOffset.x = GetDlgItemInt(hwndDlg, IDC_EDIT_BACKIMG_OFFSET_X, NULL, TRUE);
+	m_types.backImgPosOffset.y = GetDlgItemInt(hwndDlg, IDC_EDIT_BACKIMG_OFFSET_Y, NULL, TRUE);
 
 	// 行番号区切り  0=なし 1=縦線 2=任意
 	if (DlgButton_IsChecked(hwndDlg, IDC_RADIO_LINETERMTYPE0)) {
-		m_types.m_nLineTermType = 0;
+		m_types.nLineTermType = 0;
 	}else
 	if (DlgButton_IsChecked(hwndDlg, IDC_RADIO_LINETERMTYPE1)) {
-		m_types.m_nLineTermType = 1;
+		m_types.nLineTermType = 1;
 	}else
 	if (DlgButton_IsChecked(hwndDlg, IDC_RADIO_LINETERMTYPE2)) {
-		m_types.m_nLineTermType = 2;
+		m_types.nLineTermType = 2;
 	}
 	
 	// 行番号区切り文字
 	wchar_t	szLineTermChar[2];
 	::DlgItem_GetText(hwndDlg, IDC_EDIT_LINETERMCHAR, szLineTermChar, 2);
-	m_types.m_cLineTermChar = szLineTermChar[0];
+	m_types.cLineTermChar = szLineTermChar[0];
 
 	// 行番号の最小桁数		// 追加 2014.08.02 katze
-	m_types.m_nLineNumWidth = ::GetDlgItemInt(hwndDlg, IDC_EDIT_LINENUMWIDTH, NULL, FALSE);
-	if (m_types.m_nLineNumWidth < LINENUMWIDTH_MIN) {
-		m_types.m_nLineNumWidth = LINENUMWIDTH_MIN;
+	m_types.nLineNumWidth = ::GetDlgItemInt(hwndDlg, IDC_EDIT_LINENUMWIDTH, NULL, FALSE);
+	if (m_types.nLineNumWidth < LINENUMWIDTH_MIN) {
+		m_types.nLineNumWidth = LINENUMWIDTH_MIN;
 	}
-	if (m_types.m_nLineNumWidth > LINENUMWIDTH_MAX) {
-		m_types.m_nLineNumWidth = LINENUMWIDTH_MAX;
+	if (m_types.nLineNumWidth > LINENUMWIDTH_MAX) {
+		m_types.nLineNumWidth = LINENUMWIDTH_MAX;
 	}
 
 	return TRUE;

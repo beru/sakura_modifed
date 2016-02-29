@@ -28,20 +28,20 @@
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 //! どこからでもアクセスできる、共有データアクセサ。2007.10.30 kobake
-struct DLLSHAREDATA;
+struct DllSharedData;
 
-// DLLSHAREDATAへの簡易アクセサ
-inline DLLSHAREDATA& GetDllShareData()
+// DllSharedDataへの簡易アクセサ
+inline DllSharedData& GetDllShareData()
 {
-	extern DLLSHAREDATA* g_theDLLSHAREDATA;
+	extern DllSharedData* g_theDLLSHAREDATA;
 
 	assert(g_theDLLSHAREDATA);
 	return *g_theDLLSHAREDATA;
 }
 
-inline DLLSHAREDATA& GetDllShareData(bool bNullCheck)
+inline DllSharedData& GetDllShareData(bool bNullCheck)
 {
-	extern DLLSHAREDATA* g_theDLLSHAREDATA;
+	extern DllSharedData* g_theDLLSHAREDATA;
 
 	if (bNullCheck) {
 		assert(g_theDLLSHAREDATA);
@@ -49,11 +49,11 @@ inline DLLSHAREDATA& GetDllShareData(bool bNullCheck)
 	return *g_theDLLSHAREDATA;
 }
 
-// DLLSHAREDATAを確保したら、まずこれを呼ぶ。破棄する前にも呼ぶ。
+// DllSharedDataを確保したら、まずこれを呼ぶ。破棄する前にも呼ぶ。
 inline
-void SetDllShareData(DLLSHAREDATA* pShareData)
+void SetDllShareData(DllSharedData* pShareData)
 {
-	extern DLLSHAREDATA* g_theDLLSHAREDATA;
+	extern DllSharedData* g_theDLLSHAREDATA;
 
 	g_theDLLSHAREDATA = pShareData;
 }
@@ -62,7 +62,7 @@ void SetDllShareData(DLLSHAREDATA* pShareData)
 //                    共有メモリ構成要素                       //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-// 2010.04.19 Moca CShareDataからDLLSHAREDATAメンバのincludeをDLLSHAREDATA.hに移動
+// 2010.04.19 Moca CShareDataからDllSharedDataメンバのincludeをDllSharedData.hに移動
 
 #include "config/maxdata.h"
 
@@ -75,19 +75,19 @@ void SetDllShareData(DLLSHAREDATA* pShareData)
 
 #include "EditInfo.h"
 #include "types/Type.h" // TypeConfig
-#include "print/Print.h" // PRINTSETTING
+#include "print/Print.h" // PrintSetting
 #include "recent/SShare_History.h"	// SShare_History
 
 
 // 共有フラグ
 struct Share_Flags {
-	BOOL				m_bEditWndChanging;				// 編集ウィンドウ切替中	// 2007.04.03 ryoji
+	BOOL				bEditWndChanging;		// 編集ウィンドウ切替中	// 2007.04.03 ryoji
 	/*	@@@ 2002.1.24 YAZAKI
 		キーボードマクロは、記録終了した時点でファイル「m_szKeyMacroFileName」に書き出すことにする。
-		m_bRecordingKeyMacroがTRUEのときは、キーボードマクロの記録中なので、m_szKeyMacroFileNameにアクセスしてはならない。
+		bRecordingKeyMacroがTRUEのときは、キーボードマクロの記録中なので、m_szKeyMacroFileNameにアクセスしてはならない。
 	*/
-	BOOL				m_bRecordingKeyMacro;		// キーボードマクロの記録中
-	HWND				m_hwndRecordingKeyMacro;	// キーボードマクロを記録中のウィンドウ
+	BOOL				bRecordingKeyMacro;		// キーボードマクロの記録中
+	HWND				hwndRecordingKeyMacro;	// キーボードマクロを記録中のウィンドウ
 };
 
 // 共有ワークバッファ
@@ -104,22 +104,22 @@ public:
 	size_t GetWorkBufferCount() { return sizeof(m_pWork)/sizeof(T); }
 
 public:
-	EditInfo	m_EditInfo_MYWM_GETFILEINFO;	// MYWM_GETFILEINFOデータ受け渡し用	####美しくない
-	LogicPoint	m_LogicPoint;
-	TypeConfig	m_TypeConfig;
+	EditInfo	editInfo_MYWM_GETFILEINFO;	// MYWM_GETFILEINFOデータ受け渡し用	####美しくない
+	LogicPoint	logicPoint;
+	TypeConfig	typeConfig;
 };
 
 // 共有ハンドル
 struct Share_Handles {
-	HWND	m_hwndTray;
-	HWND	m_hwndDebug;
-	HACCEL	m_hAccel;
+	HWND	hwndTray;
+	HWND	hwndDebug;
+	HACCEL	hAccel;
 };
 
 // EXE情報
 struct Share_Version {
-	DWORD	m_dwProductVersionMS;
-	DWORD	m_dwProductVersionLS;
+	DWORD	dwProductVersionMS;
+	DWORD	dwProductVersionLS;
 };
 
 
@@ -127,56 +127,56 @@ struct Share_Version {
 //                   共有メモリ構造体本体                      //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-struct DLLSHAREDATA {
+struct DllSharedData {
 	// -- -- バージョン -- -- //
 	/*!
 		データ構造 Version	// Oct. 27, 2000 genta
 		データ構造の異なるバージョンの同時起動を防ぐため
 		必ず先頭になくてはならない．
 	*/
-	unsigned int				m_vStructureVersion;
-	unsigned int				m_nSize;
+	unsigned int				vStructureVersion;
+	unsigned int				nSize;
 
 	// -- -- 非保存対象 -- -- //
-	Share_Version				m_version;		// ※読込は行わないが、書込は行う
-	Share_WorkBuffer			m_workBuffer;
-	Share_Flags					m_flags;
-	Share_Nodes					m_nodes;
-	Share_Handles				m_handles;
+	Share_Version				version;		// ※読込は行わないが、書込は行う
+	Share_WorkBuffer			workBuffer;
+	Share_Flags					flags;
+	Share_Nodes					nodes;
+	Share_Handles				handles;
 
-	CharWidthCache				m_sCharWidth;							//!< 文字半角全角キャッシュ
-	DWORD						m_dwCustColors[16];						//!< フォントDialogカスタムパレット
+	CharWidthCache				charWidth;								//!< 文字半角全角キャッシュ
+	DWORD						dwCustColors[16];						//!< フォントDialogカスタムパレット
 
 	// プラグイン
-	short						m_PlugCmdIcon[MAX_PLUGIN*MAX_PLUG_CMD];	//!< プラグイン コマンド ICON 番号	// 2010/7/3 Uchi
-	int							m_maxTBNum;								//!< ツールバーボタン 最大値		// 2010/7/5 Uchi
+	short						plugCmdIcons[MAX_PLUGIN*MAX_PLUG_CMD];	//!< プラグイン コマンド ICON 番号	// 2010/7/3 Uchi
+	int							maxToolBarButtonNum;								//!< ツールバーボタン 最大値		// 2010/7/5 Uchi
 
 	// -- -- 保存対象 -- -- //
 	// 設定
-	CommonSetting				m_common;								// 共通設定
-	int							m_nTypesCount;							// タイプ別設定数
-	TypeConfig					m_TypeBasis;							// タイプ別設定: 共通
-	TypeConfigMini				m_TypeMini[MAX_TYPES];					// タイプ別設定(mini)
-	PRINTSETTING				m_printSettingArr[MAX_PRINTSETTINGARR];	// 印刷ページ設定
-	int							m_nLockCount;							//!< ロックカウント
+	CommonSetting				common;									// 共通設定
+	int							nTypesCount;							// タイプ別設定数
+	TypeConfig					typeBasis;								// タイプ別設定: 共通
+	TypeConfigMini				typesMini[MAX_TYPES];					// タイプ別設定(mini)
+	PrintSetting				printSettingArr[MAX_PrintSettingARR];	// 印刷ページ設定
+	int							nLockCount;								// ロックカウント
 	
 	// その他
-	Share_SearchKeywords		m_searchKeywords;
-	Share_TagJump				m_tagJump;
-	Share_FileNameManagement	m_fileNameManagement;
-	SShare_History				m_history;
+	Share_SearchKeywords		searchKeywords;
+	Share_TagJump				tagJump;
+	Share_FileNameManagement	fileNameManagement;
+	SShare_History				history;
 
 	// 外部コマンド実行ダイアログのオプション
-	int							m_nExecFlgOpt;				// 外部コマンド実行オプション	// 2006.12.03 maru オプションの拡張のため
+	int							nExecFlgOpt;				// 外部コマンド実行オプション	// 2006.12.03 maru オプションの拡張のため
 	// DIFF差分表示ダイアログのオプション
-	int							m_nDiffFlgOpt;				// DIFF差分表示	//@@@ 2002.05.27 MIK
+	int							nDiffFlgOpt;				// DIFF差分表示	//@@@ 2002.05.27 MIK
 	// タグファイルの作成ダイアログのオプション
-	TCHAR						m_szTagsCmdLine[_MAX_PATH];	// TAGSコマンドラインオプション	//@@@ 2003.05.12 MIK
-	int							m_nTagsOpt;					// TAGSオプション(チェック)	//@@@ 2003.05.12 MIK
+	TCHAR						szTagsCmdLine[_MAX_PATH];	// TAGSコマンドラインオプション	//@@@ 2003.05.12 MIK
+	int							nTagsOpt;					// TAGSオプション(チェック)	//@@@ 2003.05.12 MIK
 
 	// -- -- テンポラリ -- -- //
 	// 指定行へジャンプダイアログのオプション
-	bool						m_bLineNumIsCRLF_ForJump;	// 指定行へジャンプの「改行単位の行番号」か「折り返し単位の行番号」か
+	bool						bLineNumIsCRLF_ForJump;		// 指定行へジャンプの「改行単位の行番号」か「折り返し単位の行番号」か
 };
 
 class ShareDataLockCounter {

@@ -87,10 +87,10 @@ public:
 	virtual ~IfObj();
 
 	// フィールド・アクセサ
-	const std::wstring::value_type* Name() const { return this->m_sName.c_str(); } // インタフェースオブジェクト名
+	const std::wstring::value_type* Name() const { return this->sName.c_str(); } // インタフェースオブジェクト名
 	bool IsGlobal() const { return this->m_isGlobal; } // オブジェクト名の省略可否
 	IWSHClient* Owner() const { return this->m_Owner; } // オーナーIWSHClient
-	std::wstring m_sName;
+	std::wstring sName;
 	bool m_isGlobal;
 	IWSHClient *m_Owner;
 

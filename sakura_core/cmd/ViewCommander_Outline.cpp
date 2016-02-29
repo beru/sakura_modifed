@@ -35,7 +35,7 @@
 // トグル用のフラグに変更 20060201 aroka
 bool ViewCommander::Command_FUNCLIST(
 	ShowDialogType nAction,
-	int _nOutlineType = OUTLINE_DEFAULT
+	OutlineType _nOutlineType = OutlineType::Default
 	)
 {
 	static bool bIsProcessing = false;	// アウトライン解析処理中フラグ
@@ -51,7 +51,7 @@ bool ViewCommander::Command_FUNCLIST(
 	::GetWindowThreadProcessId(::GetForegroundWindow(), &dwPid2);
 	bool bForeground = (dwPid1 == dwPid2);
 
-	EOutlineType nOutlineType = (EOutlineType)_nOutlineType; // 2007.11.29 kobake
+	OutlineType nOutlineType = _nOutlineType; // 2007.11.29 kobake
 
 //	if (bCheckOnly) {
 //		return TRUE;
@@ -63,12 +63,12 @@ bool ViewCommander::Command_FUNCLIST(
 	std::tstring titleOverride;				// プラグインによるダイアログタイトル上書き
 
 	// 2001.12.03 hor & 2002.3.13 YAZAKI
-	if (nOutlineType == OUTLINE_DEFAULT) {
+	if (nOutlineType == OutlineType::Default) {
 		// タイプ別に設定されたアウトライン解析方法
-		nOutlineType = m_pCommanderView->m_pTypeData->m_eDefaultOutline;
-		if (nOutlineType == OUTLINE_CPP) {
+		nOutlineType = m_pCommanderView->m_pTypeData->eDefaultOutline;
+		if (nOutlineType == OutlineType::CPP) {
 			if (CheckEXT(GetDocument()->m_docFile.GetFilePath(), _T("c"))) {
-				nOutlineType = OUTLINE_C;	// これでC関数一覧リストビューになる
+				nOutlineType = OutlineType::C;	// これでC関数一覧リストビューになる
 			}
 		}
 	}
@@ -105,35 +105,35 @@ bool ViewCommander::Command_FUNCLIST(
 
 	// 解析結果データを空にする
 	funcInfoArr.Empty();
-	int nListType = nOutlineType;			// 2011.06.25 syat
+	OutlineType nListType = nOutlineType;			// 2011.06.25 syat
 
 	auto& docOutline = GetDocument()->m_docOutline;
 	switch (nOutlineType) {
-	case OUTLINE_C:			// C/C++ は MakeFuncList_C
-	case OUTLINE_CPP:		docOutline.MakeFuncList_C(&funcInfoArr);break;
-	case OUTLINE_PLSQL:		docOutline.MakeFuncList_PLSQL(&funcInfoArr);break;
-	case OUTLINE_JAVA:		docOutline.MakeFuncList_Java(&funcInfoArr);break;
-	case OUTLINE_COBOL:		docOutline.MakeTopicList_cobol(&funcInfoArr);break;
-	case OUTLINE_ASM:		docOutline.MakeTopicList_asm(&funcInfoArr);break;
-	case OUTLINE_PERL:		docOutline.MakeFuncList_Perl(&funcInfoArr);break;	// Sep. 8, 2000 genta
-	case OUTLINE_VB:		docOutline.MakeFuncList_VisualBasic(&funcInfoArr);break;	// June 23, 2001 N.Nakatani
-	case OUTLINE_WZTXT:		docOutline.MakeTopicList_wztxt(&funcInfoArr);break;		// 2003.05.20 zenryaku 階層付テキスト アウトライン解析
-	case OUTLINE_HTML:		docOutline.MakeTopicList_html(&funcInfoArr);break;		// 2003.05.20 zenryaku HTML アウトライン解析
-	case OUTLINE_TEX:		docOutline.MakeTopicList_tex(&funcInfoArr);break;		// 2003.07.20 naoh TeX アウトライン解析
-	case OUTLINE_BOOKMARK:	docOutline.MakeFuncList_BookMark(&funcInfoArr);break;	// 2001.12.03 hor
-	case OUTLINE_FILE:		docOutline.MakeFuncList_RuleFile(&funcInfoArr, titleOverride);break;	// 2002.04.01 YAZAKI アウトライン解析にルールファイルを導入
+	case OutlineType::C:			// C/C++ は MakeFuncList_C
+	case OutlineType::CPP:			docOutline.MakeFuncList_C(&funcInfoArr);break;
+	case OutlineType::PLSQL:		docOutline.MakeFuncList_PLSQL(&funcInfoArr);break;
+	case OutlineType::Java:			docOutline.MakeFuncList_Java(&funcInfoArr);break;
+	case OutlineType::Cobol:		docOutline.MakeTopicList_cobol(&funcInfoArr);break;
+	case OutlineType::Asm:			docOutline.MakeTopicList_asm(&funcInfoArr);break;
+	case OutlineType::Perl:			docOutline.MakeFuncList_Perl(&funcInfoArr);break;	// Sep. 8, 2000 genta
+	case OutlineType::VisualBasic:	docOutline.MakeFuncList_VisualBasic(&funcInfoArr);break;	// June 23, 2001 N.Nakatani
+	case OutlineType::WZText:		docOutline.MakeTopicList_wztxt(&funcInfoArr);break;		// 2003.05.20 zenryaku 階層付テキスト アウトライン解析
+	case OutlineType::HTML:			docOutline.MakeTopicList_html(&funcInfoArr);break;		// 2003.05.20 zenryaku HTML アウトライン解析
+	case OutlineType::TeX:			docOutline.MakeTopicList_tex(&funcInfoArr);break;		// 2003.07.20 naoh TeX アウトライン解析
+	case OutlineType::BookMark:		docOutline.MakeFuncList_BookMark(&funcInfoArr);break;	// 2001.12.03 hor
+	case OutlineType::RuleFile:		docOutline.MakeFuncList_RuleFile(&funcInfoArr, titleOverride);break;	// 2002.04.01 YAZAKI アウトライン解析にルールファイルを導入
 //	case OUTLINE_UNKNOWN:	// Jul. 08, 2001 JEPRO 使わないように変更
-	case OUTLINE_PYTHON:	docOutline.MakeFuncList_python(&funcInfoArr);break;		// 2007.02.08 genta
-	case OUTLINE_ERLANG:	docOutline.MakeFuncList_Erlang(&funcInfoArr);break;		// 2009.08.10 genta
-	case OUTLINE_FILETREE:	/* 特に何もしない*/ ;break;	// 2013.12.08 Moca
-	case OUTLINE_TEXT:
+	case OutlineType::Python:		docOutline.MakeFuncList_python(&funcInfoArr);break;		// 2007.02.08 genta
+	case OutlineType::Erlang:		docOutline.MakeFuncList_Erlang(&funcInfoArr);break;		// 2009.08.10 genta
+	case OutlineType::FileTree:	/* 特に何もしない*/ ;break;	// 2013.12.08 Moca
+	case OutlineType::Text:
 		// fall though
 		// ここには何も入れてはいけない 2007.02.28 genta 注意書き
 	default:
 		// プラグインから検索する
 		{
 			Plug::Array plugs;
-			JackManager::getInstance()->GetUsablePlug(PP_OUTLINE, nOutlineType, &plugs);
+			JackManager::getInstance()->GetUsablePlug(PP_OUTLINE, (PlugId)nOutlineType, &plugs);
 
 			if (plugs.size() > 0) {
 				assert_warning(plugs.size() == 1);
@@ -173,7 +173,7 @@ bool ViewCommander::Command_FUNCLIST(
 			poCaret.GetX2() + LayoutInt(1),
 			nOutlineType,
 			nListType,
-			m_pCommanderView->m_pTypeData->m_bLineNumIsCRLF	// 行番号の表示 false=折り返し単位／true=改行単位
+			m_pCommanderView->m_pTypeData->bLineNumIsCRLF	// 行番号の表示 false=折り返し単位／true=改行単位
 		);
 	}else {
 		// アクティブにする

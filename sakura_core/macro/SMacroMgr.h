@@ -37,7 +37,7 @@
 #include <WTypes.h> // VARTYPE
 
 #include "MacroManagerBase.h"
-#include "env/DLLSHAREDATA.h"
+#include "env/DllSharedData.h"
 #include "config/maxdata.h"
 #include "util/design_template.h"
 
@@ -49,19 +49,19 @@ const int TEMP_KEYMACRO		= -2;	// 一時マクロ(名前を指定してマクロ実行)
 const int INVALID_MACRO_IDX	= -3;	// 無効なマクロのインデックス番号 @date Sep. 15, 2005 FILE
 
 struct MacroFuncInfoEx {
-	int			m_nArgMinSize;
-	int			m_nArgMaxSize;
-	VARTYPE*	m_pVarArgEx;
+	int			nArgMinSize;
+	int			nArgMaxSize;
+	VARTYPE*	pVarArgEx;
 };
 
 // マクロ関数情報構造体
 // 関数名はSMacroMgrが持つ
 struct MacroFuncInfo {
-	int				m_nFuncID;
-	const WCHAR*	m_pszFuncName;
-	VARTYPE			m_varArguments[4];	// 引数の型の配列
-	VARTYPE			m_varResult;		// 戻り値の型 VT_EMPTYならprocedureということで
-	MacroFuncInfoEx*	m_pData;
+	int				nFuncID;
+	const WCHAR*	pszFuncName;
+	VARTYPE			varArguments[4];	// 引数の型の配列
+	VARTYPE			varResult;		// 戻り値の型 VT_EMPTYならprocedureということで
+	MacroFuncInfoEx*	pData;
 };
 // マクロ関数情報構造体配列
 typedef MacroFuncInfo* MacroFuncInfoArray;
@@ -101,19 +101,19 @@ public:
 	//	実行可能か？CShareDataに問い合わせ
 	bool IsEnabled(int idx) const {
 		return (0 <= idx && idx < MAX_CUSTMACRO) ?
-		m_pShareData->m_common.m_macro.m_macroTable[idx].IsEnabled() : false;
+		m_pShareData->common.macro.macroTable[idx].IsEnabled() : false;
 	}
 	
 	//	表示する名前の取得
 	const TCHAR* GetTitle(int idx) const {
 		return (0 <= idx && idx < MAX_CUSTMACRO) ?
-		m_pShareData->m_common.m_macro.m_macroTable[idx].GetTitle() : NULL;	// 2007.11.02 ryoji
+		m_pShareData->common.macro.macroTable[idx].GetTitle() : NULL;	// 2007.11.02 ryoji
 	}
 	
 	//	表示名の取得
 	const TCHAR* GetName(int idx) const {
 		return (0 <= idx && idx < MAX_CUSTMACRO) ?
-		m_pShareData->m_common.m_macro.m_macroTable[idx].m_szName : NULL;
+		m_pShareData->common.macro.macroTable[idx].szName : NULL;
 	}
 	
 	/*!	@brief ファイル名の取得
@@ -121,7 +121,7 @@ public:
 	*/
 	const TCHAR* GetFile(int idx) const {
 		return (0 <= idx && idx < MAX_CUSTMACRO) ?
-		m_pShareData->m_common.m_macro.m_macroTable[idx].m_szFile : 
+		m_pShareData->common.macro.macroTable[idx].szFile : 
 		((idx == STAND_KEYMACRO || idx == TEMP_KEYMACRO) && m_sMacroPath != _T("")) ?
 		m_sMacroPath.c_str() : NULL;
 	}
@@ -160,7 +160,7 @@ public:
 	MacroManagerBase* SetTempMacro(MacroManagerBase* newMacro);
 
 private:
-	DLLSHAREDATA*	m_pShareData;
+	DllSharedData*	m_pShareData;
 	MacroManagerBase** Idx2Ptr(int idx);
 
 	/*!	実行中マクロのインデックス番号 (INVALID_MACRO_IDX:無効)

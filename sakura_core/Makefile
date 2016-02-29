@@ -201,7 +201,7 @@ docplus/FuncListManager.o \
 docplus/ModifyManager.o \
 env/AppNodeManager.o \
 env/CommonSetting.o \
-env/DLLSHAREDATA.o \
+env/DllSharedData.o \
 env/DocTypeManager.o \
 env/FileNameManager.o \
 env/FormatManager.o \

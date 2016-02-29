@@ -18,7 +18,7 @@
 #include "StdAfx.h"
 #include "TipWnd.h"
 #include "env/ShareData.h"
-#include "env/DLLSHAREDATA.h"
+#include "env/DllSharedData.h"
 
 
 // TipWndクラス デストラクタ
@@ -81,7 +81,7 @@ void TipWnd::Create(HINSTANCE hInstance, HWND hwndParent)
 		m_hFont = NULL;
 	}
 
-	m_hFont = ::CreateFontIndirect(&(GetDllShareData().m_common.m_helper.m_lf));
+	m_hFont = ::CreateFontIndirect(&(GetDllShareData().common.helper.lf));
 	return;
 }
 

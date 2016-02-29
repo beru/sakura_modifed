@@ -48,17 +48,17 @@ bool Color_KeywordSet::BeginColor(const StringRef& str, int nPos)
 
 	const int posNextWordHead = NextWordBreak(str, nPos);
 	for (int i=0; i<MAX_KEYWORDSET_PER_TYPE; ++i) {
-		if (!m_pTypeData->m_colorInfoArr[COLORIDX_KEYWORD1 + i].m_bDisp) {
+		if (!m_pTypeData->colorInfoArr[COLORIDX_KEYWORD1 + i].bDisp) {
 			continue; // 色設定が非表示なのでスキップ。
 		}
-		const int iKwdSet = m_pTypeData->m_nKeywordSetIdx[i];
+		const int iKwdSet = m_pTypeData->nKeywordSetIdx[i];
 		if (iKwdSet == -1) {
 			continue; // キーワードセットが設定されていないのでスキップ。
 		}
 		int posWordEnd = nPos; ///< nPos...posWordEndがキーワード。
 		int posWordEndCandidate = posNextWordHead; ///< nPos...posWordEndCandidateはキーワード候補。
 		do {
-			const int ret = GetDllShareData().m_common.m_specialKeyword.m_keywordSetMgr.SearchKeyword2(iKwdSet, str.GetPtr() + nPos, posWordEndCandidate - nPos);
+			const int ret = GetDllShareData().common.specialKeyword.keywordSetMgr.SearchKeyword2(iKwdSet, str.GetPtr() + nPos, posWordEndCandidate - nPos);
 			if (0 <= ret) {
 				// 登録されたキーワードだった。
 				posWordEnd = posWordEndCandidate;

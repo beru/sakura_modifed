@@ -5,7 +5,7 @@
 
 // 非依存推奨
 #include "env/ShareData.h"
-#include "env/DLLSHAREDATA.h"
+#include "env/DllSharedData.h"
 
 
 // 指定した位置の文字が何バイト文字かを返す
@@ -244,7 +244,7 @@ CodeConvertResult ShiftJis::UnicodeToHex(const wchar_t* cSrc, const int iSLen, T
 	bool			bbinary = false;
 
 	// 2008/6/21 Uchi
-	if (psStatusbar->m_bDispUniInSjis) {
+	if (psStatusbar->bDispUniInSjis) {
 		// Unicodeで表示
 		return CodeBase::UnicodeToHex(cSrc, iSLen, pDst, psStatusbar);
 	}

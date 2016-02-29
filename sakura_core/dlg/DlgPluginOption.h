@@ -88,7 +88,7 @@ protected:
 	void	SelectDirectory(int iLine);				// ディレクトリを選択する
 
 private:
-	Plugin*		m_plugin;
+	Plugin*		plugin;
 	PropPlugin*	m_pPropPlugin;
 	int 			m_ID;			// プラグイン番号（エディタがふる番号）
 	int				m_Line;			// 現在編集中のオプション行番号

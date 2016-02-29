@@ -28,7 +28,7 @@
 #include "doc/layout/Layout.h"
 #include "window/EditWnd.h"
 #include "env/ShareData.h"
-#include "env/DLLSHAREDATA.h"
+#include "env/DllSharedData.h"
 #include "env/TagJumpManager.h"
 #include "util/fileUtil.h"
 #include "util/module.h"
@@ -112,7 +112,7 @@ bool EditView::TagJumpSub(
 			}else {
 				poCaret.x = 0;
 			}
-			GetDllShareData().m_workBuffer.m_LogicPoint.Set(LogicInt(poCaret.x), LogicInt(poCaret.y));
+			GetDllShareData().workBuffer.logicPoint.Set(LogicInt(poCaret.x), LogicInt(poCaret.y));
 			::SendMessage(hwndOwner, MYWM_SETCARETPOS, 0, 0);
 		}
 		// アクティブにする
@@ -125,11 +125,11 @@ bool EditView::TagJumpSub(
 	}else {
 		// 新しく開く
 		EditInfo inf;
-		_tcscpy(inf.m_szPath, szJumpToFile);
-		inf.m_ptCursor.Set(LogicInt(ptJumpTo.x - 1), LogicInt(ptJumpTo.y - 1));
-		inf.m_nViewLeftCol = LayoutInt(-1);
-		inf.m_nViewTopLine = LayoutInt(-1);
-		inf.m_nCharCode    = CODE_AUTODETECT;
+		_tcscpy(inf.szPath, szJumpToFile);
+		inf.ptCursor.Set(LogicInt(ptJumpTo.x - 1), LogicInt(ptJumpTo.y - 1));
+		inf.nViewLeftCol = LayoutInt(-1);
+		inf.nViewTopLine = LayoutInt(-1);
+		inf.nCharCode    = CODE_AUTODETECT;
 
 		bool bSuccess = ControlTray::OpenNewEditor2(
 			G_AppInstance(),
@@ -324,20 +324,20 @@ EditView::TOGGLE_WRAP_ACTION EditView::GetWrapMode(LayoutInt* _newKetas)
 			// 4)
 			newKetas = LayoutInt(MAXLINEKETAS);
 			return TGWRAP_FULL;
-		}else if (m_pTypeData->m_nMaxLineKetas == MAXLINEKETAS) { // 5)
+		}else if (m_pTypeData->nMaxLineKetas == MAXLINEKETAS) { // 5)
 			// 6)
 			return TGWRAP_NONE;
 		}else { // 7)
-			newKetas = LayoutInt(m_pTypeData->m_nMaxLineKetas);
+			newKetas = LayoutInt(m_pTypeData->nMaxLineKetas);
 			return TGWRAP_PROP;
 		}
 	}else { // 8)
 		if (1
 			&& layoutMgr.GetMaxLineKetas() == MAXLINEKETAS // 9)
-			&& m_pTypeData->m_nMaxLineKetas != MAXLINEKETAS
+			&& m_pTypeData->nMaxLineKetas != MAXLINEKETAS
 		) {
 			// a)
-			newKetas = LayoutInt(m_pTypeData->m_nMaxLineKetas);
+			newKetas = LayoutInt(m_pTypeData->nMaxLineKetas);
 			return TGWRAP_PROP;
 			
 		}else {	// b) c)
@@ -364,14 +364,14 @@ BOOL EditView::ChangeCurRegexp(bool bRedrawIfChanged)
 {
 	bool bChangeState = false;
 
-	if (GetDllShareData().m_common.m_search.m_bInheritKeyOtherView
-			&& m_nCurSearchKeySequence < GetDllShareData().m_common.m_search.m_nSearchKeySequence
+	if (GetDllShareData().common.search.bInheritKeyOtherView
+			&& m_nCurSearchKeySequence < GetDllShareData().common.search.nSearchKeySequence
 		|| m_strCurSearchKey.size() == 0
 	) {
 		// 履歴の検索キーに更新
-		m_strCurSearchKey = GetDllShareData().m_searchKeywords.m_aSearchKeys[0];		// 検索文字列
-		m_curSearchOption = GetDllShareData().m_common.m_search.m_searchOption;// 検索／置換  オプション
-		m_nCurSearchKeySequence = GetDllShareData().m_common.m_search.m_nSearchKeySequence;
+		m_strCurSearchKey = GetDllShareData().searchKeywords.searchKeys[0];		// 検索文字列
+		m_curSearchOption = GetDllShareData().common.search.searchOption;// 検索／置換  オプション
+		m_nCurSearchKeySequence = GetDllShareData().common.search.nSearchKeySequence;
 		bChangeState = true;
 	}else if (m_bCurSearchUpdate) {
 		bChangeState = true;
@@ -453,7 +453,7 @@ void EditView::CopyCurLine(
 void EditView::DrawBracketCursorLine(bool bDraw)
 {
 	if (bDraw) {
-		GetCaret().m_cUnderLine.CaretUnderLineON(true, true);
+		GetCaret().m_underLine.CaretUnderLineON(true, true);
 		DrawBracketPair(false);
 		SetBracketPairPos(true);
 		DrawBracketPair(true);

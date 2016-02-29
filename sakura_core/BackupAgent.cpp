@@ -45,7 +45,7 @@ CallbackResultType BackupAgent::OnPreBeforeSave(SaveInfo* pSaveInfo)
 	}
 
 	// 共通設定：保存時にバックアップを作成する
-	if (GetDllShareData().m_common.m_backup.m_bBackUp) {
+	if (GetDllShareData().common.backup.bBackUp) {
 		//	Jun.  5, 2004 genta ファイル名を与えるように．戻り値に応じた処理を追加．
 		// ファイル保存前にバックアップ処理
 		int nBackupResult = 0;
@@ -104,7 +104,7 @@ int BackupAgent::MakeBackUp(
 		return 0;
 	}
 
-	const CommonSetting_Backup& bup_setting = GetDllShareData().m_common.m_backup;
+	const CommonSetting_Backup& bup_setting = GetDllShareData().common.backup;
 
 	TCHAR szPath[_MAX_PATH]; // バックアップ先パス名
 	if (!FormatBackUpPath(szPath, _countof(szPath), target_file)) {
@@ -120,15 +120,15 @@ int BackupAgent::MakeBackUp(
 
 	//@@@ 2002.03.23 start ネットワーク・リムーバブルドライブの場合はごみ箱に放り込まない
 	bool dustflag = false;
-	if (bup_setting.m_bBackUpDustBox) {
+	if (bup_setting.bBackUpDustBox) {
 		dustflag = !IsLocalDrive(szPath);
 	}
 	//@@@ 2002.03.23 end
 
-	if (bup_setting.m_bBackUpDialog) {	// バックアップの作成前に確認
+	if (bup_setting.bBackUpDialog) {	// バックアップの作成前に確認
 		ConfirmBeep();
 		int nRet;
-		if (bup_setting.m_bBackUpDustBox && !dustflag) {	// 共通設定：バックアップファイルをごみ箱に放り込む	//@@@ 2001.12.11 add start MIK	// 2002.03.23
+		if (bup_setting.bBackUpDustBox && !dustflag) {	// 共通設定：バックアップファイルをごみ箱に放り込む	//@@@ 2001.12.11 add start MIK	// 2002.03.23
 			nRet = ::MYMESSAGEBOX(
 				EditWnd::getInstance()->GetHwnd(),
 				MB_YESNO/*CANCEL*/ | MB_ICONQUESTION | MB_TOPMOST,
@@ -251,7 +251,7 @@ int BackupAgent::MakeBackUp(
 	if (::CopyFile(target_file, szPath, FALSE)) {
 		// 正常終了
 		//@@@ 2001.12.11 start MIK
-		if (bup_setting.m_bBackUpDustBox && !dustflag) {	//@@@ 2002.03.23 ネットワーク・リムーバブルドライブでない
+		if (bup_setting.bBackUpDustBox && !dustflag) {	//@@@ 2002.03.23 ネットワーク・リムーバブルドライブでない
 			TCHAR	szDustPath[_MAX_PATH + 1];
 			_tcscpy(szDustPath, szPath);
 			szDustPath[_tcslen(szDustPath) + 1] = _T('\0');
@@ -310,16 +310,16 @@ bool BackupAgent::FormatBackUpPath(
 	TCHAR	szExt[_MAX_EXT];
 	TCHAR*	psNext;
 
-	const CommonSetting_Backup& bup_setting = GetDllShareData().m_common.m_backup;
+	const CommonSetting_Backup& bup_setting = GetDllShareData().common.backup;
 
 	// パスの分解
 	_tsplitpath(target_file, szDrive, szDir, szFname, szExt);
 
-	if (bup_setting.m_bBackUpFolder
-	  && (!bup_setting.m_bBackUpFolderRM || !IsLocalDrive(target_file))
+	if (bup_setting.bBackUpFolder
+	  && (!bup_setting.bBackUpFolderRM || !IsLocalDrive(target_file))
 	) {	// 指定フォルダにバックアップを作成する	// m_bBackUpFolderRM 追加	2010/5/27 Uchi
 		TCHAR selDir[_MAX_PATH];
-		FileNameManager::ExpandMetaToFolder(bup_setting.m_szBackUpFolder, selDir, _countof(selDir));
+		FileNameManager::ExpandMetaToFolder(bup_setting.szBackUpFolder, selDir, _countof(selDir));
 		if (GetFullPathName(selDir, _MAX_PATH, szNewPath, &psNext) == 0) {
 			// うまく取れなかった
 			_tcscpy(szNewPath, selDir);
@@ -331,7 +331,7 @@ bool BackupAgent::FormatBackUpPath(
 	}
 
 	// 相対フォルダを挿入
-	if (!bup_setting.m_bBackUpPathAdvanced) {
+	if (!bup_setting.bBackUpPathAdvanced) {
 		time_t	ltime;
 		struct	tm* today;
 		wchar_t	szTime[64];
@@ -448,7 +448,7 @@ bool BackupAgent::FormatBackUpPath(
 				// 2005.10.20 ryoji FindFirstFileを使うように変更
 				FileTime ctimeLastWrite;
 				GetLastWriteTimestamp(target_file, &ctimeLastWrite);
-				if (!GetDateTimeFormat(szFormat, _countof(szFormat), bup_setting.m_szBackUpPathAdvanced , ctimeLastWrite.GetSYSTEMTIME())) {
+				if (!GetDateTimeFormat(szFormat, _countof(szFormat), bup_setting.szBackUpPathAdvanced , ctimeLastWrite.GetSYSTEMTIME())) {
 					return false;
 				}
 			}
@@ -460,7 +460,7 @@ bool BackupAgent::FormatBackUpPath(
 				SYSTEMTIME	SystemTime;
 				::GetSystemTime(&SystemTime);			// 現在時刻を取得
 
-				if (!GetDateTimeFormat(szFormat, _countof(szFormat), bup_setting.m_szBackUpPathAdvanced , SystemTime)) {
+				if (!GetDateTimeFormat(szFormat, _countof(szFormat), bup_setting.szBackUpPathAdvanced , SystemTime)) {
 					return false;
 				}
 			}

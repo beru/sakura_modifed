@@ -31,7 +31,7 @@
 #include "util/module.h"
 #include "util/window.h"
 #include "env/ShareData.h"
-#include "env/DLLSHAREDATA.h"
+#include "env/DllSharedData.h"
 #include "env/FileNameManager.h"
 #include "_main/CommandLine.h"
 

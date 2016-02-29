@@ -27,7 +27,7 @@
 #include "doc/EditDoc.h"
 #include "doc/DocOutline.h"
 #include "doc/logic/DocLine.h"
-#include "env/DLLSHAREDATA.h"
+#include "env/DllSharedData.h"
 #include "outline/FuncInfo.h"
 #include "outline/FuncInfoArr.h"
 #include "view/colors/EColorIndexType.h"
@@ -42,20 +42,20 @@
 void CType_Text::InitTypeConfigImp(TypeConfig* pType)
 {
 	// 名前と拡張子
-	_tcscpy(pType->m_szTypeName, _T("テキスト"));
-	_tcscpy(pType->m_szTypeExts, _T("txt,log,1st,err,ps"));
+	_tcscpy(pType->szTypeName, _T("テキスト"));
+	_tcscpy(pType->szTypeExts, _T("txt,log,1st,err,ps"));
 
 	// 設定
-	pType->m_nMaxLineKetas = LayoutInt(120);					// 折り返し桁数
-	pType->m_eDefaultOutline = OUTLINE_TEXT;					// アウトライン解析方法
-	pType->m_colorInfoArr[COLORIDX_SSTRING].m_bDisp = false;	// Oct. 17, 2000 JEPRO	シングルクォーテーション文字列を色分け表示しない
-	pType->m_colorInfoArr[COLORIDX_WSTRING].m_bDisp = false;	// Sept. 4, 2000 JEPRO	ダブルクォーテーション文字列を色分け表示しない
-	pType->m_bKinsokuHead = false;								// 行頭禁則				//@@@ 2002.04.08 MIK
-	pType->m_bKinsokuTail = false;								// 行末禁則				//@@@ 2002.04.08 MIK
-	pType->m_bKinsokuRet  = false;								// 改行文字をぶら下げる	//@@@ 2002.04.13 MIK
-	pType->m_bKinsokuKuto = false;								// 句読点をぶら下げる	//@@@ 2002.04.17 MIK
-	wcscpy_s(pType->m_szKinsokuHead, L"!%),.:;?]}￠°’”‰′″℃、。々〉》」』】〕゛゜ゝゞ・ヽヾ！％），．：；？］｝｡｣､･ﾞﾟ￠");		/* 行頭禁則 */	//@@@ 2002.04.13 MIK 
-	wcscpy_s(pType->m_szKinsokuTail, L"$([{￡\\‘“〈《「『【〔＄（［｛｢￡￥");		/* 行末禁則 */	//@@@ 2002.04.08 MIK 
+	pType->nMaxLineKetas = LayoutInt(120);					// 折り返し桁数
+	pType->eDefaultOutline = OutlineType::Text;				// アウトライン解析方法
+	pType->colorInfoArr[COLORIDX_SSTRING].bDisp = false;	// Oct. 17, 2000 JEPRO	シングルクォーテーション文字列を色分け表示しない
+	pType->colorInfoArr[COLORIDX_WSTRING].bDisp = false;	// Sept. 4, 2000 JEPRO	ダブルクォーテーション文字列を色分け表示しない
+	pType->bKinsokuHead = false;								// 行頭禁則				//@@@ 2002.04.08 MIK
+	pType->bKinsokuTail = false;								// 行末禁則				//@@@ 2002.04.08 MIK
+	pType->bKinsokuRet  = false;								// 改行文字をぶら下げる	//@@@ 2002.04.13 MIK
+	pType->bKinsokuKuto = false;								// 句読点をぶら下げる	//@@@ 2002.04.17 MIK
+	wcscpy_s(pType->szKinsokuHead, L"!%),.:;?]}￠°’”‰′″℃、。々〉》」』】〕゛゜ゝゞ・ヽヾ！％），．：；？］｝｡｣､･ﾞﾟ￠");		/* 行頭禁則 */	//@@@ 2002.04.13 MIK 
+	wcscpy_s(pType->szKinsokuTail, L"$([{￡\\‘“〈《「『【〔＄（［｛｢￡￥");		/* 行末禁則 */	//@@@ 2002.04.08 MIK 
 	// pType->m_szKinsokuKuto（句読点ぶら下げ文字）はここではなく全タイプにデフォルト設定	// 2009.08.07 ryoji 
 
 	// ※小さな親切として、C:\～～ や \\～～ などのファイルパスをクリッカブルにする設定を「テキスト」に既定で仕込む
@@ -64,17 +64,17 @@ void CType_Text::InitTypeConfigImp(TypeConfig* pType)
 
 	// 正規表現キーワード
 	int keywordPos = 0;
-	wchar_t* pKeyword = pType->m_RegexKeywordList;
-	pType->m_bUseRegexKeyword = true;							// 正規表現キーワードを使うか
-	pType->m_RegexKeywordArr[0].m_nColorIndex = COLORIDX_URL;	// 色指定番号
+	wchar_t* pKeyword = pType->regexKeywordList;
+	pType->bUseRegexKeyword = true;							// 正規表現キーワードを使うか
+	pType->regexKeywordArr[0].nColorIndex = COLORIDX_URL;	// 色指定番号
 	wcscpyn(&pKeyword[keywordPos],			// 正規表現キーワード
 		L"/(?<=\")(\\b[a-zA-Z]:|\\B\\\\\\\\)[^\"\\r\\n]*/k",			//   ""で挟まれた C:\～, \\～ にマッチするパターン
-		_countof(pType->m_RegexKeywordList) - 1);
+		_countof(pType->regexKeywordList) - 1);
 	keywordPos += auto_strlen(&pKeyword[keywordPos]) + 1;
-	pType->m_RegexKeywordArr[1].m_nColorIndex = COLORIDX_URL;	// 色指定番号
+	pType->regexKeywordArr[1].nColorIndex = COLORIDX_URL;	// 色指定番号
 	wcscpyn(&pKeyword[keywordPos],			// 正規表現キーワード
 		L"/(\\b[a-zA-Z]:\\\\|\\B\\\\\\\\)[\\w\\-_.\\\\\\/$%~]*/k",		//   C:\～, \\～ にマッチするパターン
-		_countof(pType->m_RegexKeywordList) - keywordPos - 1);
+		_countof(pType->regexKeywordList) - keywordPos - 1);
 	keywordPos += auto_strlen(&pKeyword[keywordPos]) + 1;
 	pKeyword[keywordPos] = L'\0';
 }
@@ -93,7 +93,7 @@ void DocOutline::MakeTopicList_txt(FuncInfoArr* pFuncInfoArr)
 	using namespace WCODE;
 
 	// 見出し記号
-	const wchar_t*	pszStarts = GetDllShareData().m_common.m_format.m_szMidashiKigou;
+	const wchar_t*	pszStarts = GetDllShareData().common.format.szMidashiKigou;
 	int				nStartsLen = wcslen(pszStarts);
 
 	/*	ネストの深さは、nMaxStackレベルまで、ひとつのヘッダは、最長32文字まで区別
@@ -189,7 +189,7 @@ void DocOutline::MakeTopicList_txt(FuncInfoArr* pFuncInfoArr)
 		wchar_t* pszText = &szText[0];
 		wmemcpy(pszText, &pLine[i], nLineLen);
 		pszText[nLineLen] = L'\0';
-		bool bExtEol = GetDllShareData().m_common.m_edit.m_bEnableExtEol;
+		bool bExtEol = GetDllShareData().common.edit.bEnableExtEol;
 		for (i=0; i<nLineLen; ++i) {
 			if (WCODE::IsLineDelimiter(pszText[i], bExtEol)) {
 				pszText[i] = L'\0';
@@ -257,7 +257,7 @@ void DocOutline::MakeTopicList_txt(FuncInfoArr* pFuncInfoArr)
 void DocOutline::MakeTopicList_wztxt(FuncInfoArr* pFuncInfoArr)
 {
 	int levelPrev = 0;
-	bool bExtEol = GetDllShareData().m_common.m_edit.m_bEnableExtEol;
+	bool bExtEol = GetDllShareData().common.edit.bEnableExtEol;
 
 	for (LogicInt nLineCount=LogicInt(0); nLineCount<m_pDocRef->m_docLineMgr.GetLineCount(); ++nLineCount) {
 		const wchar_t*	pLine;

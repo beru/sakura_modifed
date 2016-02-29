@@ -22,7 +22,7 @@
 #include "dlg/Dialog.h"
 #include "EditApp.h"
 #include "env/ShareData.h"
-#include "env/DLLSHAREDATA.h"
+#include "env/DllSharedData.h"
 #include "DlgOpenFile.h"
 #include "recent/Recent.h"
 #include "util/os.h"
@@ -217,11 +217,11 @@ void Dialog::SetDialogPosSize()
 #if 0
 	// ダイアログのサイズ、位置の再現
 	if (m_xPos != -1 && m_yPos != -1) {
-		::SetWindowPos(m_hWnd, NULL, m_xPos, m_yPos, 0, 0, SWP_NOSIZE | SWP_NOOWNERZORDER | SWP_NOZORDER);
+		::SetWindowPos(hWnd, NULL, m_xPos, m_yPos, 0, 0, SWP_NOSIZE | SWP_NOOWNERZORDER | SWP_NOZORDER);
 		DEBUG_TRACE(_T("Dialog::OnInitDialog() m_xPos=%d m_yPos=%d\n"), m_xPos, m_yPos);
 	}
 	if (m_nWidth != -1 && m_nHeight != -1) {
-		::SetWindowPos(m_hWnd, NULL, 0, 0, m_nWidth, m_nHeight, SWP_NOMOVE | SWP_NOOWNERZORDER | SWP_NOZORDER);
+		::SetWindowPos(hWnd, NULL, 0, 0, m_nWidth, m_nHeight, SWP_NOMOVE | SWP_NOOWNERZORDER | SWP_NOZORDER);
 	}
 #endif
 
@@ -680,7 +680,7 @@ HFONT Dialog::SetMainFont(HWND hTarget)
 	LONG nfHeight = lf.lfHeight;
 
 	// LOGFONTの作成
-	lf = m_pShareData->m_common.m_view.m_lf;
+	lf = m_pShareData->common.view.lf;
 	lf.lfHeight			= nfHeight;
 	lf.lfWidth			= 0;
 	lf.lfEscapement		= 0;

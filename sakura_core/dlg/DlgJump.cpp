@@ -136,7 +136,7 @@ BOOL DlgJump::OnBnClicked(int wID)
 			EnableItem(IDC_EDIT_PLSQL_E1, true);
 			EnableItem(IDC_SPIN_PLSQL_E1, true);	// Oct. 6, 2000 JEPRO
 			EnableItem(IDC_COMBO_PLSQLBLOCKS, true);
-			m_pShareData->m_bLineNumIsCRLF_ForJump = true;
+			m_pShareData->bLineNumIsCRLF_ForJump = true;
 			EnableItem(IDC_RADIO_LINENUM_LAYOUT, false);
 			EnableItem(IDC_RADIO_LINENUM_CRLF, false);
 		}else {
@@ -150,7 +150,7 @@ BOOL DlgJump::OnBnClicked(int wID)
 			EnableItem(IDC_RADIO_LINENUM_CRLF, true);
 		}
 		// 行番号の表示 false=折り返し単位／true=改行単位
-		if (m_pShareData->m_bLineNumIsCRLF_ForJump) {
+		if (m_pShareData->bLineNumIsCRLF_ForJump) {
 			CheckButton(IDC_RADIO_LINENUM_LAYOUT, false);
 			CheckButton(IDC_RADIO_LINENUM_CRLF, true);
 		}else {
@@ -204,7 +204,7 @@ void DlgJump::SetData(void)
 	// PL/SQL関数リスト作成
 	HWND hwndCtrl = GetItemHwnd(IDC_COMBO_PLSQLBLOCKS);
 	// タイプ別に設定されたアウトライン解析方法
-	if (pEditDoc->m_docType.GetDocumentAttribute().m_eDefaultOutline == OUTLINE_PLSQL) {
+	if (pEditDoc->m_docType.GetDocumentAttribute().eDefaultOutline == OutlineType::PLSQL) {
 		pEditDoc->m_docOutline.MakeFuncList_PLSQL(&funcInfoArr);
 	}
 	//$$ 条件により、レイアウト・ロジックの単位が混在するため、ミスの原因になりやすい
@@ -216,7 +216,7 @@ void DlgJump::SetData(void)
 		if (pFI->m_nInfo == 31 || pFI->m_nInfo == 41) {
 		}
 		if (pFI->m_nInfo == 31) {
-			if (m_pShareData->m_bLineNumIsCRLF_ForJump) {	// 行番号の表示 false=折り返し単位／true=改行単位
+			if (m_pShareData->bLineNumIsCRLF_ForJump) {	// 行番号の表示 false=折り返し単位／true=改行単位
 				auto_sprintf(szText, LSW(STR_DLGJUMP_PSLQL),
 					pFI->m_nFuncLineCRLF,
 					pFI->m_memFuncName.GetStringPtr()
@@ -228,7 +228,7 @@ void DlgJump::SetData(void)
 				);
 			}
 			nIndex = Combo_AddString(hwndCtrl, szText);
-			if (m_pShareData->m_bLineNumIsCRLF_ForJump) {	// 行番号の表示 false=折り返し単位／true=改行単位
+			if (m_pShareData->bLineNumIsCRLF_ForJump) {	// 行番号の表示 false=折り返し単位／true=改行単位
 				Combo_SetItemData(hwndCtrl, nIndex, (Int)pFI->m_nFuncLineCRLF);
 			}else {
 				Combo_SetItemData(hwndCtrl, nIndex, (Int)pFI->m_nFuncLineLAYOUT);
@@ -236,7 +236,7 @@ void DlgJump::SetData(void)
 			nPLSQLBlockNum++;
 		}
 		if (pFI->m_nInfo == 41) {
-			if (m_pShareData->m_bLineNumIsCRLF_ForJump) {	// 行番号の表示 false=折り返し単位／true=改行単位
+			if (m_pShareData->bLineNumIsCRLF_ForJump) {	// 行番号の表示 false=折り返し単位／true=改行単位
 				auto_sprintf(szText, LSW(STR_DLGJUMP_PSLQL),
 					pFI->m_nFuncLineCRLF,
 					pFI->m_memFuncName.GetStringPtr()
@@ -248,7 +248,7 @@ void DlgJump::SetData(void)
 				);
 			}
 			nIndexCurSel = nIndex = Combo_AddString(hwndCtrl, szText);
-			if (m_pShareData->m_bLineNumIsCRLF_ForJump) {	// 行番号の表示 false=折り返し単位／true=改行単位
+			if (m_pShareData->bLineNumIsCRLF_ForJump) {	// 行番号の表示 false=折り返し単位／true=改行単位
 				nWorkLine = (Int)pFI->m_nFuncLineCRLF;
 				Combo_SetItemData(hwndCtrl, nIndex, (Int)pFI->m_nFuncLineCRLF);
 			}else {
@@ -277,7 +277,7 @@ void DlgJump::SetData(void)
 		EnableItem(IDC_EDIT_PLSQL_E1, true);
 		EnableItem(IDC_SPIN_PLSQL_E1, true);	// Oct. 6, 2000 JEPRO
 		EnableItem(IDC_COMBO_PLSQLBLOCKS, true);
-		m_pShareData->m_bLineNumIsCRLF_ForJump = true;
+		m_pShareData->bLineNumIsCRLF_ForJump = true;
 		EnableItem(IDC_RADIO_LINENUM_LAYOUT, false);
 		EnableItem(IDC_RADIO_LINENUM_CRLF, false);
 	}else {
@@ -291,7 +291,7 @@ void DlgJump::SetData(void)
 		EnableItem(IDC_RADIO_LINENUM_CRLF, true);
 	}
 	// 行番号の表示 false=折り返し単位／true=改行単位
-	if (m_pShareData->m_bLineNumIsCRLF_ForJump) {
+	if (m_pShareData->bLineNumIsCRLF_ForJump) {
 		CheckButton(IDC_RADIO_LINENUM_LAYOUT, false);
 		CheckButton(IDC_RADIO_LINENUM_CRLF, true);
 	}else {
@@ -309,7 +309,7 @@ int DlgJump::GetData(void)
 	BOOL pTranslated;
 
 	// 行番号の表示 false=折り返し単位／true=改行単位
-	m_pShareData->m_bLineNumIsCRLF_ForJump = !IsButtonChecked(IDC_RADIO_LINENUM_LAYOUT);
+	m_pShareData->bLineNumIsCRLF_ForJump = !IsButtonChecked(IDC_RADIO_LINENUM_LAYOUT);
 
 	// PL/SQLソースの有効行か
 	m_bPLSQL = IsButtonChecked(IDC_CHECK_PLSQL);

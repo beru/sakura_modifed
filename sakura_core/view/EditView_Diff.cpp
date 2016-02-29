@@ -390,8 +390,8 @@ bool MakeDiffTmpFile_core(TextOutputStream& out, HWND hwnd, EditView& view, bool
 			++y;
 		}
 	}else if (IsSakuraMainWindow(hwnd)) {
-		const int max_size = (int)GetDllShareData().m_workBuffer.GetWorkBufferCount<const EDIT_CHAR>();
-		pLineData = GetDllShareData().m_workBuffer.GetWorkBuffer<const EDIT_CHAR>();
+		const int max_size = (int)GetDllShareData().workBuffer.GetWorkBufferCount<const EDIT_CHAR>();
+		pLineData = GetDllShareData().workBuffer.GetWorkBuffer<const EDIT_CHAR>();
 		for (;;) {
 			int nLineOffset = 0;
 			int nLineLen = 0; //‰‰ñ—p‰¼’l
@@ -512,7 +512,7 @@ BOOL EditView::MakeDiffTmpFile2(
 	bool bBom = false;
 	const TypeConfigMini* typeMini;
 	DocTypeManager().GetTypeConfigMini(DocTypeManager().GetDocumentTypeOfPath( orgName ), &typeMini);
-	FileLoad fl(typeMini->m_encoding);
+	FileLoad fl(typeMini->encoding);
 	TextOutputStream out(tmpName, saveCode, true, false);
 	if (!out) {
 		WarningMessage(NULL, LS(STR_DIFF_FAILED_TEMP));
@@ -529,7 +529,7 @@ BOOL EditView::MakeDiffTmpFile2(
 			orgName,
 			bBigFile,
 			code,
-			GetDllShareData().m_common.m_file.GetAutoMIMEdecode(),
+			GetDllShareData().common.file.GetAutoMIMEdecode(),
 			&bBom
 		);
 		NativeW line;

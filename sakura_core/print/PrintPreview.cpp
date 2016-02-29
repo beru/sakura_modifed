@@ -162,17 +162,17 @@ LRESULT PrintPreview::OnPaint(
 	::DlgItem_SetText(
 		m_hwndPrintPreviewBar,
 		IDC_STATIC_PRNDEV,
-		m_pPrintSetting->m_mdmDevMode.m_szPrinterDeviceName
+		m_pPrintSetting->mdmDevMode.szPrinterDeviceName
 	);
 
 	// 要素情報の表示 -> IDD_PRINTPREVIEWBAR右下のSTATICへ
 	TCHAR	szPaperName[256];
-	Print::GetPaperName(m_pPrintSetting->m_mdmDevMode.dmPaperSize , szPaperName);
+	Print::GetPaperName(m_pPrintSetting->mdmDevMode.dmPaperSize , szPaperName);
 	auto_sprintf_s(
 		szText,
 		_T("%ts  %ts"),
 		szPaperName,
-		(m_pPrintSetting->m_mdmDevMode.dmOrientation & DMORIENT_LANDSCAPE) ? LS(STR_ERR_DLGPRNPRVW1) : LS(STR_ERR_DLGPRNPRVW2)
+		(m_pPrintSetting->mdmDevMode.dmOrientation & DMORIENT_LANDSCAPE) ? LS(STR_ERR_DLGPRNPRVW1) : LS(STR_ERR_DLGPRNPRVW2)
 	);
 	::DlgItem_SetText(m_hwndPrintPreviewBar, IDC_STATIC_PAPER, szText);
 
@@ -238,20 +238,20 @@ LRESULT PrintPreview::OnPaint(
 	Graphics gr(hdc);
 	gr.SetPen(RGB(128, 128, 128)); // 2006.08.14 Moca 127を128に変更
 	::Rectangle(hdc,
-		m_nPreview_ViewMarginLeft + m_pPrintSetting->m_nPrintMarginLX,
-		nDirectY * (m_nPreview_ViewMarginTop + m_pPrintSetting->m_nPrintMarginTY),
-		m_nPreview_ViewMarginLeft + m_nPreview_PaperAllWidth - m_pPrintSetting->m_nPrintMarginRX + 1,
-		nDirectY * (m_nPreview_ViewMarginTop + m_nPreview_PaperAllHeight - m_pPrintSetting->m_nPrintMarginBY)
+		m_nPreview_ViewMarginLeft + m_pPrintSetting->nPrintMarginLX,
+		nDirectY * (m_nPreview_ViewMarginTop + m_pPrintSetting->nPrintMarginTY),
+		m_nPreview_ViewMarginLeft + m_nPreview_PaperAllWidth - m_pPrintSetting->nPrintMarginRX + 1,
+		nDirectY * (m_nPreview_ViewMarginTop + m_nPreview_PaperAllHeight - m_pPrintSetting->nPrintMarginBY)
 	);
 	gr.ClearPen();
 
 	::SetTextColor(hdc, RGB(0, 0, 0));
 
 	RECT rect;	// 紙の大きさをあらわすRECT
-	rect.left   = m_nPreview_ViewMarginLeft +                             m_pPrintSetting->m_nPrintMarginLX + 5;
-	rect.right  = m_nPreview_ViewMarginLeft + m_nPreview_PaperAllWidth - (m_pPrintSetting->m_nPrintMarginRX + 5);
-	rect.top    = nDirectY * (m_nPreview_ViewMarginTop +                              m_pPrintSetting->m_nPrintMarginTY + 5);
-	rect.bottom = nDirectY * (m_nPreview_ViewMarginTop + m_nPreview_PaperAllHeight - (m_pPrintSetting->m_nPrintMarginBY + 5));
+	rect.left   = m_nPreview_ViewMarginLeft +                             m_pPrintSetting->nPrintMarginLX + 5;
+	rect.right  = m_nPreview_ViewMarginLeft + m_nPreview_PaperAllWidth - (m_pPrintSetting->nPrintMarginRX + 5);
+	rect.top    = nDirectY * (m_nPreview_ViewMarginTop +                              m_pPrintSetting->nPrintMarginTY + 5);
+	rect.bottom = nDirectY * (m_nPreview_ViewMarginTop + m_nPreview_PaperAllHeight - (m_pPrintSetting->nPrintMarginBY + 5));
 	
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                         テキスト                            //
@@ -269,8 +269,8 @@ LRESULT PrintPreview::OnPaint(
 	// 印刷/印刷プレビュー ページテキストの描画
 	DrawPageText(
 		hdc,
-		m_nPreview_ViewMarginLeft + m_pPrintSetting->m_nPrintMarginLX,
-		m_nPreview_ViewMarginTop  + m_pPrintSetting->m_nPrintMarginTY + nHeaderHeight*2,
+		m_nPreview_ViewMarginLeft + m_pPrintSetting->nPrintMarginLX,
+		m_nPreview_ViewMarginTop  + m_pPrintSetting->nPrintMarginTY + nHeaderHeight*2,
 		m_nCurPageNum,
 		NULL,
 		pStrategyStart
@@ -703,7 +703,7 @@ void PrintPreview::OnChangePrintSetting(void)
 
 	// 2009.08.08 印刷で用紙サイズ、横指定が効かない問題対応 syat
 	// DEVMODE構造体が設定されていなかったら既定のプリンタを設定
-	if (m_pPrintSetting->m_mdmDevMode.m_szPrinterDeviceName[0] == L'\0') {
+	if (m_pPrintSetting->mdmDevMode.szPrinterDeviceName[0] == L'\0') {
 		GetDefaultPrinterInfo();
 	}
 
@@ -711,23 +711,23 @@ void PrintPreview::OnChangePrintSetting(void)
 	m_nPreview_LineNumberColumns = 0;	// 行番号エリアの幅(文字数)
 
 	// 行番号を表示するか
-	if (m_pPrintSetting->m_bPrintLineNumber) {
+	if (m_pPrintSetting->bPrintLineNumber) {
 		// 行番号表示に必要な桁数を計算
 		m_nPreview_LineNumberColumns = m_pParentWnd->GetActiveView().GetTextArea().DetectWidthOfLineNumberArea_calculate(m_pLayoutMgr_Print);
 	}
 	// 現在のページ設定の、用紙サイズと用紙方向を反映させる
-	m_pPrintSetting->m_mdmDevMode.dmPaperSize = m_pPrintSetting->m_nPrintPaperSize;
-	m_pPrintSetting->m_mdmDevMode.dmOrientation = m_pPrintSetting->m_nPrintPaperOrientation;
+	m_pPrintSetting->mdmDevMode.dmPaperSize = m_pPrintSetting->nPrintPaperSize;
+	m_pPrintSetting->mdmDevMode.dmOrientation = m_pPrintSetting->nPrintPaperOrientation;
 	// 用紙サイズ、用紙方向は変更したのでビットを立てる
-	m_pPrintSetting->m_mdmDevMode.dmFields |= (DM_ORIENTATION | DM_PAPERSIZE);
+	m_pPrintSetting->mdmDevMode.dmFields |= (DM_ORIENTATION | DM_PAPERSIZE);
 	// 用紙の長さ、幅は決まっていないので、ビットを下ろす
-	m_pPrintSetting->m_mdmDevMode.dmFields &= (~DM_PAPERLENGTH);
-	m_pPrintSetting->m_mdmDevMode.dmFields &= (~DM_PAPERWIDTH);
+	m_pPrintSetting->mdmDevMode.dmFields &= (~DM_PAPERLENGTH);
+	m_pPrintSetting->mdmDevMode.dmFields &= (~DM_PAPERWIDTH);
 
 	// 印刷/プレビューに必要な情報を取得
 	TCHAR szErrMsg[1024];
 	if (!m_cPrint.GetPrintMetrics(
-		&m_pPrintSetting->m_mdmDevMode,	// プリンタ設定 DEVMODE用
+		&m_pPrintSetting->mdmDevMode,	// プリンタ設定 DEVMODE用
 		&m_nPreview_PaperAllWidth,		// 用紙幅
 		&m_nPreview_PaperAllHeight,		// 用紙高さ
 		&m_nPreview_PaperWidth,			// 用紙印刷有効幅
@@ -745,31 +745,31 @@ void PrintPreview::OnChangePrintSetting(void)
 		m_nPreview_PaperOffsetLeft = 0;			// 印刷可能位置左端
 		m_nPreview_PaperOffsetTop = 0;			// 印刷可能位置上端
 		// DEVMODE構造体もA4縦で初期化 2003.07.03 かろと
-		m_pPrintSetting->m_mdmDevMode.dmPaperSize = DMPAPER_A4;
-		m_pPrintSetting->m_mdmDevMode.dmOrientation = DMORIENT_PORTRAIT;
-		m_pPrintSetting->m_mdmDevMode.dmPaperLength = m_nPreview_PaperHeight;
-		m_pPrintSetting->m_mdmDevMode.dmPaperWidth = m_nPreview_PaperWidth;
-		m_pPrintSetting->m_mdmDevMode.dmFields |= (DM_ORIENTATION | DM_PAPERSIZE | DM_PAPERLENGTH | DM_PAPERWIDTH);
+		m_pPrintSetting->mdmDevMode.dmPaperSize = DMPAPER_A4;
+		m_pPrintSetting->mdmDevMode.dmOrientation = DMORIENT_PORTRAIT;
+		m_pPrintSetting->mdmDevMode.dmPaperLength = m_nPreview_PaperHeight;
+		m_pPrintSetting->mdmDevMode.dmPaperWidth = m_nPreview_PaperWidth;
+		m_pPrintSetting->mdmDevMode.dmFields |= (DM_ORIENTATION | DM_PAPERSIZE | DM_PAPERLENGTH | DM_PAPERWIDTH);
 	}else {
-		if (m_pPrintSetting->m_nPrintPaperSize != m_pPrintSetting->m_mdmDevMode.dmPaperSize) {
+		if (m_pPrintSetting->nPrintPaperSize != m_pPrintSetting->mdmDevMode.dmPaperSize) {
 			TCHAR szPaperNameOld[256];
 			TCHAR szPaperNameNew[256];
 			// 用紙の名前を取得
-			Print::GetPaperName(m_pPrintSetting->m_nPrintPaperSize , szPaperNameOld);
-			Print::GetPaperName(m_pPrintSetting->m_mdmDevMode.dmPaperSize , szPaperNameNew);
+			Print::GetPaperName(m_pPrintSetting->nPrintPaperSize , szPaperNameOld);
+			Print::GetPaperName(m_pPrintSetting->mdmDevMode.dmPaperSize , szPaperNameNew);
 
 			TopWarningMessage(
 				m_pParentWnd->GetHwnd(),
 				LS(STR_ERR_DLGPRNPRVW3),
-				m_pPrintSetting->m_mdmDevMode.m_szPrinterDeviceName,
+				m_pPrintSetting->mdmDevMode.szPrinterDeviceName,
 				szPaperNameOld,
 				szPaperNameNew
 			);
 		}
 	}
 	// 現在のページ設定の、用紙サイズと用紙方向を反映させる(エラーでA4縦になった場合も考慮してif文の外へ移動 2003.07.03 かろと)
-	m_pPrintSetting->m_nPrintPaperSize = m_pPrintSetting->m_mdmDevMode.dmPaperSize;
-	m_pPrintSetting->m_nPrintPaperOrientation = m_pPrintSetting->m_mdmDevMode.dmOrientation;	// 用紙方向の反映忘れを修正 2003/07/03 かろと
+	m_pPrintSetting->nPrintPaperSize = m_pPrintSetting->mdmDevMode.dmPaperSize;
+	m_pPrintSetting->nPrintPaperOrientation = m_pPrintSetting->mdmDevMode.dmOrientation;	// 用紙方向の反映忘れを修正 2003/07/03 かろと
 
 	// プリンタ設定はここで変更されるがそれぞれのウィンドウで再設定するので更新メッセージは投げない
 	*m_pPrintSettingOrg = *m_pPrintSetting;
@@ -798,29 +798,29 @@ void PrintPreview::OnChangePrintSetting(void)
 	m_typePrint = m_pParentWnd->GetDocument()->m_docType.GetDocumentAttribute();
 	TypeConfig& ref = m_typePrint;
 
-	ref.m_nMaxLineKetas = 	m_bPreview_EnableColumns;
-	ref.m_bWordWrap =		m_pPrintSetting->m_bPrintWordWrap;	// 英文ワードラップをする
+	ref.nMaxLineKetas = 	m_bPreview_EnableColumns;
+	ref.bWordWrap =		m_pPrintSetting->bPrintWordWrap;	// 英文ワードラップをする
 	//	Sep. 23, 2002 genta LayoutMgrの値を使う
-	ref.m_nTabSpace =		m_pParentWnd->GetDocument()->m_layoutMgr.GetTabSpace();
+	ref.nTabSpace =		m_pParentWnd->GetDocument()->m_layoutMgr.GetTabSpace();
 
 	//@@@ 2002.09.22 YAZAKI
-	ref.m_lineComment.CopyTo(0, L"", -1);	// 行コメントデリミタ
-	ref.m_lineComment.CopyTo(1, L"", -1);	// 行コメントデリミタ2
-	ref.m_lineComment.CopyTo(2, L"", -1);	// 行コメントデリミタ3	// Jun. 01, 2001 JEPRO 追加
-	ref.m_blockComments[0].SetBlockCommentRule(L"", L"");	// ブロックコメントデリミタ
-	ref.m_blockComments[1].SetBlockCommentRule(L"", L"");	// ブロックコメントデリミタ2
+	ref.lineComment.CopyTo(0, L"", -1);	// 行コメントデリミタ
+	ref.lineComment.CopyTo(1, L"", -1);	// 行コメントデリミタ2
+	ref.lineComment.CopyTo(2, L"", -1);	// 行コメントデリミタ3	// Jun. 01, 2001 JEPRO 追加
+	ref.blockComments[0].SetBlockCommentRule(L"", L"");	// ブロックコメントデリミタ
+	ref.blockComments[1].SetBlockCommentRule(L"", L"");	// ブロックコメントデリミタ2
 
-	ref.m_nStringType = StringLiteralType::CPP;		// 文字列区切り記号エスケープ方法  0=[\"][\'] 1=[""]['']
-	ref.m_colorInfoArr[COLORIDX_COMMENT].m_bDisp = false;
-	ref.m_colorInfoArr[COLORIDX_SSTRING].m_bDisp = false;
-	ref.m_colorInfoArr[COLORIDX_WSTRING].m_bDisp = false;
-	ref.m_bKinsokuHead = m_pPrintSetting->m_bPrintKinsokuHead,	// 行頭禁則する	//@@@ 2002.04.08 MIK
-	ref.m_bKinsokuTail = m_pPrintSetting->m_bPrintKinsokuTail,	// 行末禁則する	//@@@ 2002.04.08 MIK
-	ref.m_bKinsokuRet = m_pPrintSetting->m_bPrintKinsokuRet,	// 改行文字をぶら下げる	//@@@ 2002.04.13 MIK
-	ref.m_bKinsokuKuto = m_pPrintSetting->m_bPrintKinsokuKuto,	// 句読点をぶら下げる	//@@@ 2002.04.17 MIK
-	m_pLayoutMgr_Print->SetLayoutInfo(true, ref, ref.m_nTabSpace, ref.m_nMaxLineKetas);
-	m_nAllPageNum = (WORD)((Int)m_pLayoutMgr_Print->GetLineCount() / (m_bPreview_EnableLines * m_pPrintSetting->m_nPrintDansuu));		// 全ページ数
-	if (0 < m_pLayoutMgr_Print->GetLineCount() % (m_bPreview_EnableLines * m_pPrintSetting->m_nPrintDansuu)) {
+	ref.stringType = StringLiteralType::CPP;		// 文字列区切り記号エスケープ方法  0=[\"][\'] 1=[""]['']
+	ref.colorInfoArr[COLORIDX_COMMENT].bDisp = false;
+	ref.colorInfoArr[COLORIDX_SSTRING].bDisp = false;
+	ref.colorInfoArr[COLORIDX_WSTRING].bDisp = false;
+	ref.bKinsokuHead = m_pPrintSetting->bPrintKinsokuHead,	// 行頭禁則する	//@@@ 2002.04.08 MIK
+	ref.bKinsokuTail = m_pPrintSetting->bPrintKinsokuTail,	// 行末禁則する	//@@@ 2002.04.08 MIK
+	ref.bKinsokuRet = m_pPrintSetting->bPrintKinsokuRet,	// 改行文字をぶら下げる	//@@@ 2002.04.13 MIK
+	ref.bKinsokuKuto = m_pPrintSetting->bPrintKinsokuKuto,	// 句読点をぶら下げる	//@@@ 2002.04.17 MIK
+	m_pLayoutMgr_Print->SetLayoutInfo(true, ref, ref.nTabSpace, ref.nMaxLineKetas);
+	m_nAllPageNum = (WORD)((Int)m_pLayoutMgr_Print->GetLineCount() / (m_bPreview_EnableLines * m_pPrintSetting->nPrintDansuu));		// 全ページ数
+	if (0 < m_pLayoutMgr_Print->GetLineCount() % (m_bPreview_EnableLines * m_pPrintSetting->nPrintDansuu)) {
 		++m_nAllPageNum;
 	}
 	if (m_nAllPageNum <= m_nCurPageNum) {	// 現在のページ
@@ -837,7 +837,7 @@ void PrintPreview::OnChangePrintSetting(void)
 	m_bLockSetting = bLockOld;
 
 	// 2014.07.23 レイアウト行番号で行番号幅が合わない時は再計算
-	if (m_pPrintSetting->m_bPrintLineNumber) {
+	if (m_pPrintSetting->bPrintLineNumber) {
 		// 行番号表示に必要な桁数を計算
 		int tempLineNum = m_pParentWnd->GetActiveView().GetTextArea().DetectWidthOfLineNumberArea_calculate(m_pLayoutMgr_Print);
 		if (m_nPreview_LineNumberColumns != tempLineNum) {
@@ -1043,20 +1043,20 @@ void PrintPreview::OnPrint(void)
 
 	m_bLockSetting = true; // プリント設定でページ数がきまるのでロックする
 
-	if (!m_cPrint.PrintDlg(&pd, &m_pPrintSetting->m_mdmDevMode)) {
+	if (!m_cPrint.PrintDlg(&pd, &m_pPrintSetting->mdmDevMode)) {
 		m_bLockSetting = false;
 		if (m_bDemandUpdateSetting) {
 			OnChangePrintSetting();
 		}
 		return;
 	}
-	if (memcmp(&m_pPrintSettingOrg->m_mdmDevMode, &m_pPrintSetting->m_mdmDevMode, sizeof(m_pPrintSetting->m_mdmDevMode)) != 0) {
-		m_pPrintSettingOrg->m_mdmDevMode = m_pPrintSetting->m_mdmDevMode;
+	if (memcmp(&m_pPrintSettingOrg->mdmDevMode, &m_pPrintSetting->mdmDevMode, sizeof(m_pPrintSetting->mdmDevMode)) != 0) {
+		m_pPrintSettingOrg->mdmDevMode = m_pPrintSetting->mdmDevMode;
 		// 自分はLockで更新しない
 		AppNodeGroupHandle(0).PostMessageToAllEditors(
 			MYWM_CHANGESETTING,
 			(WPARAM)0,
-			(LPARAM)PM_PRINTSETTING,
+			(LPARAM)PM_PrintSetting,
 			EditWnd::getInstance()->GetHwnd()
 		);
 	}
@@ -1089,7 +1089,7 @@ void PrintPreview::OnPrint(void)
 	TCHAR szErrMsg[1024];
 	if (!m_cPrint.PrintOpen(
 		szJobName,
-		&m_pPrintSetting->m_mdmDevMode,	// プリンタ設定 DEVMODE用
+		&m_pPrintSetting->mdmDevMode,	// プリンタ設定 DEVMODE用
 		&hdc,
 		szErrMsg						// エラーメッセージ格納場所
 		)
@@ -1106,10 +1106,10 @@ void PrintPreview::OnPrint(void)
 	// 紙の大きさをあらわすRECTを設定
 	int nDirectY = -1;
 	RECT rect;
-	rect.left   =                             m_pPrintSetting->m_nPrintMarginLX - m_nPreview_PaperOffsetLeft + 5;
-	rect.right  = m_nPreview_PaperAllWidth - (m_pPrintSetting->m_nPrintMarginRX + m_nPreview_PaperOffsetLeft + 5);
-	rect.top    = nDirectY * (                             m_pPrintSetting->m_nPrintMarginTY - m_nPreview_PaperOffsetTop + 5);
-	rect.bottom = nDirectY * (m_nPreview_PaperAllHeight - (m_pPrintSetting->m_nPrintMarginBY + m_nPreview_PaperOffsetTop + 5));
+	rect.left   =                             m_pPrintSetting->nPrintMarginLX - m_nPreview_PaperOffsetLeft + 5;
+	rect.right  = m_nPreview_PaperAllWidth - (m_pPrintSetting->nPrintMarginRX + m_nPreview_PaperOffsetLeft + 5);
+	rect.top    = nDirectY * (                             m_pPrintSetting->nPrintMarginTY - m_nPreview_PaperOffsetTop + 5);
+	rect.bottom = nDirectY * (m_nPreview_PaperAllHeight - (m_pPrintSetting->nPrintMarginBY + m_nPreview_PaperOffsetTop + 5));
 
 	// ヘッダ・フッタの$pを展開するために、m_nCurPageNumを保持
 	WORD nCurPageNumOld = m_nCurPageNum;
@@ -1147,9 +1147,9 @@ void PrintPreview::OnPrint(void)
 			DrawHeaderFooter(hdc, rect, true);
 		}
 
-		const LayoutInt	nPageTopLineNum = LayoutInt(((nFrom + i) * m_pPrintSetting->m_nPrintDansuu) * m_bPreview_EnableLines);
+		const LayoutInt	nPageTopLineNum = LayoutInt(((nFrom + i) * m_pPrintSetting->nPrintDansuu) * m_bPreview_EnableLines);
 		const Layout*		pPageTopLayout = m_pLayoutMgr_Print->SearchLineByLayoutY(nPageTopLineNum);
-		if (m_pPrintSetting->m_bColorPrint
+		if (m_pPrintSetting->bColorPrint
 			&& !(i == 0)
 			&& pPageTopLayout->GetLogicOffset() == 0
 		) {
@@ -1163,8 +1163,8 @@ void PrintPreview::OnPrint(void)
 		// 印刷/印刷プレビュー ページテキストの描画
 		pStrategy = DrawPageText(
 			hdc,
-			m_pPrintSetting->m_nPrintMarginLX - m_nPreview_PaperOffsetLeft ,
-			m_pPrintSetting->m_nPrintMarginTY - m_nPreview_PaperOffsetTop + nHeaderHeight*2,
+			m_pPrintSetting->nPrintMarginLX - m_nPreview_PaperOffsetLeft ,
+			m_pPrintSetting->nPrintMarginTY - m_nPreview_PaperOffsetTop + nHeaderHeight*2,
 			nFrom + i,
 			&cDlgPrinting,
 			pStrategy
@@ -1220,15 +1220,15 @@ static void Tab2Space(wchar_t* pTrg)
 */
 void PrintPreview::DrawHeaderFooter(HDC hdc, const Rect& rect, bool bHeader)
 {
-	bool		bFontSetting = (bHeader ? m_pPrintSetting->m_lfHeader.lfFaceName[0] : m_pPrintSetting->m_lfFooter.lfFaceName[0]) != _T('\0');
+	bool		bFontSetting = (bHeader ? m_pPrintSetting->lfHeader.lfFaceName[0] : m_pPrintSetting->lfFooter.lfFaceName[0]) != _T('\0');
 	const int	nWorkLen = 1024;
 	wchar_t		szWork[1024 + 1];
 	int			nLen;
 
 	if (bFontSetting) {
 		// フォント作成
-		LOGFONT	lf = (bHeader ? m_pPrintSetting->m_lfHeader : m_pPrintSetting->m_lfFooter);
-		lf.lfHeight = -(bHeader ? m_pPrintSetting->m_nHeaderPointSize : m_pPrintSetting->m_nFooterPointSize) * 254 / 720;	// フォントのサイズ計算(pt->1/10mm)
+		LOGFONT	lf = (bHeader ? m_pPrintSetting->lfHeader : m_pPrintSetting->lfFooter);
+		lf.lfHeight = -(bHeader ? m_pPrintSetting->nHeaderPointSize : m_pPrintSetting->nFooterPointSize) * 254 / 720;	// フォントのサイズ計算(pt->1/10mm)
 		HFONT hFontForce = ::CreateFontIndirect(&lf);
 
 		// フォント設定
@@ -1243,7 +1243,7 @@ void PrintPreview::DrawHeaderFooter(HDC hdc, const Rect& rect, bool bHeader)
 
 		// 左寄せ
 		SakuraEnvironment::ExpandParameter(
-			bHeader ? m_pPrintSetting->m_szHeaderForm[POS_LEFT] : m_pPrintSetting->m_szFooterForm[POS_LEFT],
+			bHeader ? m_pPrintSetting->szHeaderForm[POS_LEFT] : m_pPrintSetting->szFooterForm[POS_LEFT],
 			szWork, nWorkLen);
 		Tab2Space(szWork);
 		::ExtTextOutW_AnyBuild(
@@ -1259,7 +1259,7 @@ void PrintPreview::DrawHeaderFooter(HDC hdc, const Rect& rect, bool bHeader)
 
 		// 中央寄せ
 		SakuraEnvironment::ExpandParameter(
-			bHeader ? m_pPrintSetting->m_szHeaderForm[POS_CENTER] : m_pPrintSetting->m_szFooterForm[POS_CENTER],
+			bHeader ? m_pPrintSetting->szHeaderForm[POS_CENTER] : m_pPrintSetting->szFooterForm[POS_CENTER],
 			szWork, nWorkLen);
 		Tab2Space(szWork);
 		SIZE	Size;
@@ -1278,7 +1278,7 @@ void PrintPreview::DrawHeaderFooter(HDC hdc, const Rect& rect, bool bHeader)
 
 		// 右寄せ
 		SakuraEnvironment::ExpandParameter(
-			bHeader ? m_pPrintSetting->m_szHeaderForm[POS_RIGHT] : m_pPrintSetting->m_szFooterForm[POS_RIGHT],
+			bHeader ? m_pPrintSetting->szHeaderForm[POS_RIGHT] : m_pPrintSetting->szFooterForm[POS_RIGHT],
 			szWork, nWorkLen);
 		Tab2Space(szWork);
 		nLen = wcslen(szWork);
@@ -1298,14 +1298,14 @@ void PrintPreview::DrawHeaderFooter(HDC hdc, const Rect& rect, bool bHeader)
 		::DeleteObject(hFontForce);
 	}else {
 		// 文字間隔
-		int nDx = m_pPrintSetting->m_nPrintFontWidth;
+		int nDx = m_pPrintSetting->nPrintFontWidth;
 
 		// Y座標基準
-		int nY = bHeader ? rect.top : rect.bottom + m_pPrintSetting->m_nPrintFontHeight;
+		int nY = bHeader ? rect.top : rect.bottom + m_pPrintSetting->nPrintFontHeight;
 
 		// 左寄せ
 		SakuraEnvironment::ExpandParameter(
-			bHeader ? m_pPrintSetting->m_szHeaderForm[POS_LEFT] : m_pPrintSetting->m_szFooterForm[POS_LEFT],
+			bHeader ? m_pPrintSetting->szHeaderForm[POS_LEFT] : m_pPrintSetting->szFooterForm[POS_LEFT],
 			szWork, nWorkLen);
 		nLen = wcslen(szWork);
 		Print_DrawLine(
@@ -1323,7 +1323,7 @@ void PrintPreview::DrawHeaderFooter(HDC hdc, const Rect& rect, bool bHeader)
 
 		// 中央寄せ
 		SakuraEnvironment::ExpandParameter(
-			bHeader ? m_pPrintSetting->m_szHeaderForm[POS_CENTER] : m_pPrintSetting->m_szFooterForm[POS_CENTER],
+			bHeader ? m_pPrintSetting->szHeaderForm[POS_CENTER] : m_pPrintSetting->szFooterForm[POS_CENTER],
 			szWork, nWorkLen);
 		nLen = wcslen(szWork);
 		int nTextWidth = TextMetrics::CalcTextWidth2(szWork, nLen, nDx); // テキスト幅
@@ -1342,7 +1342,7 @@ void PrintPreview::DrawHeaderFooter(HDC hdc, const Rect& rect, bool bHeader)
 
 		// 右寄せ
 		SakuraEnvironment::ExpandParameter(
-			bHeader ? m_pPrintSetting->m_szHeaderForm[POS_RIGHT] : m_pPrintSetting->m_szFooterForm[POS_RIGHT],
+			bHeader ? m_pPrintSetting->szHeaderForm[POS_RIGHT] : m_pPrintSetting->szFooterForm[POS_RIGHT],
 			szWork, nWorkLen);
 		nLen = wcslen(szWork);
 		nTextWidth = TextMetrics::CalcTextWidth2(szWork, nLen, nDx); // テキスト幅
@@ -1369,11 +1369,11 @@ ColorStrategy* PrintPreview::DrawPageTextFirst(int nPageNum)
 {
 	// ページトップの色指定を取得
 	ColorStrategy*	pStrategy = NULL;
-	if (m_pPrintSetting->m_bColorPrint) {
+	if (m_pPrintSetting->bColorPrint) {
 		m_pool = ColorStrategyPool::getInstance();
 		m_pool->SetCurrentView(&(m_pParentWnd->GetActiveView()));
 
-		const LayoutInt	nPageTopLineNum = LayoutInt((nPageNum * m_pPrintSetting->m_nPrintDansuu) * m_bPreview_EnableLines);
+		const LayoutInt	nPageTopLineNum = LayoutInt((nPageNum * m_pPrintSetting->nPrintDansuu) * m_bPreview_EnableLines);
 		const Layout*	pPageTopLayout = m_pLayoutMgr_Print->SearchLineByLayoutY(nPageTopLineNum);
 
 		if (pPageTopLayout) {
@@ -1422,11 +1422,11 @@ ColorStrategy* PrintPreview::DrawPageText(
 {
 	int				nDirectY = -1;
 
-	const int		nLineHeight = m_pPrintSetting->m_nPrintFontHeight + (m_pPrintSetting->m_nPrintFontHeight * m_pPrintSetting->m_nPrintLineSpacing / 100);
+	const int		nLineHeight = m_pPrintSetting->nPrintFontHeight + (m_pPrintSetting->nPrintFontHeight * m_pPrintSetting->nPrintLineSpacing / 100);
 	// 段と段の間隔の幅
-	const int		nDanWidth = (Int)m_bPreview_EnableColumns * m_pPrintSetting->m_nPrintFontWidth + m_pPrintSetting->m_nPrintDanSpace;
+	const int		nDanWidth = (Int)m_bPreview_EnableColumns * m_pPrintSetting->nPrintFontWidth + m_pPrintSetting->nPrintDanSpace;
 	// 行番号の幅
-	const int		nLineNumWidth = m_nPreview_LineNumberColumns * m_pPrintSetting->m_nPrintFontWidth;
+	const int		nLineNumWidth = m_nPreview_LineNumberColumns * m_pPrintSetting->nPrintFontWidth;
 
 	// 半角フォントの情報を取得＆半角フォントに設定
 
@@ -1434,7 +1434,7 @@ ColorStrategy* PrintPreview::DrawPageText(
 	ColorStrategy*	pStrategy = pStrategyStart;
 
 	// 段数ループ
-	for (int nDan=0; nDan<m_pPrintSetting->m_nPrintDansuu; ++nDan) {
+	for (int nDan=0; nDan<m_pPrintSetting->nPrintDansuu; ++nDan) {
 		// 本文1桁目の左隅の座標(行番号がある場合はこの座標より左側)
 		const int nBasePosX = nOffX + nDanWidth * nDan + nLineNumWidth * (nDan + 1);
 		
@@ -1450,19 +1450,19 @@ ColorStrategy* PrintPreview::DrawPageText(
 			/*	現在描画しようとしている行の物理行数（折り返しごとにカウントした行数）
 				関係するものは、
 				「ページ数（nPageNum）」
-				「段数（m_pPrintSetting->m_nPrintDansuu）」
+				「段数（m_pPrintSetting->nPrintDansuu）」
 				「段数が1のときに、1ページあたりに何行入るか（m_bPreview_EnableLines）」
 			*/
-			const LayoutInt nLineNum = LayoutInt((nPageNum * m_pPrintSetting->m_nPrintDansuu + nDan) * m_bPreview_EnableLines + i);
+			const LayoutInt nLineNum = LayoutInt((nPageNum * m_pPrintSetting->nPrintDansuu + nDan) * m_bPreview_EnableLines + i);
 			const Layout* pLayout = m_pLayoutMgr_Print->SearchLineByLayoutY(nLineNum);
 			if (!pLayout) {
 				break;
 			}
 			// 行番号を表示するか
-			if (m_pPrintSetting->m_bPrintLineNumber) {
+			if (m_pPrintSetting->bPrintLineNumber) {
 				wchar_t szLineNum[64];	//	行番号を入れる。
 				// 行番号の表示 false=折り返し単位／true=改行単位
-				if (m_pParentWnd->GetDocument()->m_docType.GetDocumentAttribute().m_bLineNumIsCRLF) {
+				if (m_pParentWnd->GetDocument()->m_docType.GetDocumentAttribute().bLineNumIsCRLF) {
 					// 論理行番号表示モード
 					if (pLayout->GetLogicOffset() != 0) { // 折り返しレイアウト行
 						wcscpy_s(szLineNum, L" ");
@@ -1475,9 +1475,9 @@ ColorStrategy* PrintPreview::DrawPageText(
 				}
 
 				// 行番号区切り  0=なし 1=縦線 2=任意
-				if (m_pParentWnd->GetDocument()->m_docType.GetDocumentAttribute().m_nLineTermType == 2) {
+				if (m_pParentWnd->GetDocument()->m_docType.GetDocumentAttribute().nLineTermType == 2) {
 					wchar_t szLineTerm[2];
-					szLineTerm[0] = m_pParentWnd->GetDocument()->m_docType.GetDocumentAttribute().m_cLineTermChar;	// 行番号区切り文字
+					szLineTerm[0] = m_pParentWnd->GetDocument()->m_docType.GetDocumentAttribute().cLineTermChar;	// 行番号区切り文字
 					szLineTerm[1] = L'\0';
 					wcscat(szLineNum, szLineTerm);
 				}else {
@@ -1489,12 +1489,12 @@ ColorStrategy* PrintPreview::DrawPageText(
 
 				// 文字間隔配列を生成
 				vector<int> vDxArray;
-				const int* pDxArray = TextMetrics::GenerateDxArray(&vDxArray, szLineNum, nLineCols, m_pPrintSetting->m_nPrintFontWidth);
+				const int* pDxArray = TextMetrics::GenerateDxArray(&vDxArray, szLineNum, nLineCols, m_pPrintSetting->nPrintFontWidth);
 
 				ApiWrap::ExtTextOutW_AnyBuild(
 					hdc,
-					nBasePosX - nLineCols * m_pPrintSetting->m_nPrintFontWidth,
-					nDirectY * (nOffY + nLineHeight * i + (m_pPrintSetting->m_nPrintFontHeight - m_nAscentHan)),
+					nBasePosX - nLineCols * m_pPrintSetting->nPrintFontWidth,
+					nDirectY * (nOffY + nLineHeight * i + (m_pPrintSetting->nPrintFontHeight - m_nAscentHan)),
 					0,
 					NULL,
 					szLineNum,
@@ -1509,7 +1509,7 @@ ColorStrategy* PrintPreview::DrawPageText(
 			}
 
 			// 物理行頭の色指定を取得
-			if (m_pPrintSetting->m_bColorPrint
+			if (m_pPrintSetting->bColorPrint
 				&& !(nDan == 0 && i == 0)
 				&& pLayout->GetLogicOffset() == 0
 			) {
@@ -1532,22 +1532,22 @@ ColorStrategy* PrintPreview::DrawPageText(
 				(Int)pLayout->GetLogicOffset(),
 				nLineLen,
 				pLayout->GetIndent(), // 2006.05.16 Add Moca. レイアウトインデント分ずらす。
-				m_pPrintSetting->m_bColorPrint ? pLayout : NULL,
+				m_pPrintSetting->bColorPrint ? pLayout : NULL,
 				pStrategy
 			);
 		}
 
 		// 2006.08.14 Moca 行番号が縦線の場合は1度に引く
-		if (m_pPrintSetting->m_bPrintLineNumber
-			&& m_pParentWnd->GetDocument()->m_docType.GetDocumentAttribute().m_nLineTermType == 1
+		if (m_pPrintSetting->bPrintLineNumber
+			&& m_pParentWnd->GetDocument()->m_docType.GetDocumentAttribute().nLineTermType == 1
 		) {
 			// 縦線は本文と行番号の隙間1桁の中心に作画する(画面作画では、右詰め)
 			::MoveToEx(hdc,
-				nBasePosX - (m_pPrintSetting->m_nPrintFontWidth / 2),
+				nBasePosX - (m_pPrintSetting->nPrintFontWidth / 2),
 				nDirectY * nOffY,
 				NULL);
 			::LineTo(hdc,
-				nBasePosX - (m_pPrintSetting->m_nPrintFontWidth / 2),
+				nBasePosX - (m_pPrintSetting->nPrintFontWidth / 2),
 				nDirectY * (nOffY + nLineHeight * i)
 			);
 		}
@@ -1643,7 +1643,7 @@ ColorStrategy* PrintPreview::Print_DrawLine(
 	*/
 
 	// 文字間隔
-	int nDx = m_pPrintSetting->m_nPrintFontWidth;
+	int nDx = m_pPrintSetting->nPrintFontWidth;
 
 	// タブ幅取得
 	LayoutInt nTabSpace = m_pParentWnd->GetDocument()->m_layoutMgr.GetTabSpace(); //	Sep. 23, 2002 genta LayoutMgrの値を使う
@@ -1753,8 +1753,8 @@ ColorStrategy* PrintPreview::Print_DrawLine(
 	if (pLayout) {
 		int nColorIdx = ToColorInfoArrIndex(COLORIDX_TEXT);
 		if (nColorIdx != -1) {
-			const ColorInfo& info = m_pParentWnd->GetDocument()->m_docType.GetDocumentAttribute().m_colorInfoArr[nColorIdx];
-			::SetTextColor(hdc, info.m_colorAttr.m_cTEXT);
+			const ColorInfo& info = m_pParentWnd->GetDocument()->m_docType.GetDocumentAttribute().colorInfoArr[nColorIdx];
+			::SetTextColor(hdc, info.colorAttr.cTEXT);
 //			::SetBkColor(hdc, info.m_colBACK);
 		}
 	}
@@ -1789,24 +1789,24 @@ void PrintPreview::Print_DrawBlock(
 	// 色設定
 	if (pLayout) {
 		if (nColorIdx != -1) {
-			const ColorInfo& info = m_pParentWnd->GetDocument()->m_docType.GetDocumentAttribute().m_colorInfoArr[nColorIdx];
-			if (nKind == 2 && !info.m_fontAttr.m_bUnderLine) {
+			const ColorInfo& info = m_pParentWnd->GetDocument()->m_docType.GetDocumentAttribute().colorInfoArr[nColorIdx];
+			if (nKind == 2 && !info.fontAttr.bUnderLine) {
 				// TABは下線が無ければ印字不要
 				return;
 			}
-			if (info.m_fontAttr.m_bBoldFont) {
-				if (info.m_fontAttr.m_bUnderLine) {
+			if (info.fontAttr.bBoldFont) {
+				if (info.fontAttr.bUnderLine) {
 					hFont = (nKind == 1 ? m_hFontZen_bu: m_hFontHan_bu);	// 太字、下線
 				}else {
 					hFont = (nKind == 1 ? m_hFontZen_b : m_hFontHan_b);		// 太字
 				}
 			}else {
-				if (info.m_fontAttr.m_bUnderLine) {
+				if (info.fontAttr.bUnderLine) {
 					hFont = (nKind == 1 ? m_hFontZen_u : m_hFontHan_u);		// 下線
 				}
 			}
 			//	else					hFont = (nKind == 1 ? m_hFontZen   : m_hFontHan);		// 標準
-			::SetTextColor(hdc, info.m_colorAttr.m_cTEXT);
+			::SetTextColor(hdc, info.colorAttr.cTEXT);
 //			::SetBkColor(hdc, info.m_colBACK);
 		}
 	}
@@ -1814,7 +1814,7 @@ void PrintPreview::Print_DrawBlock(
 	::ExtTextOutW_AnyBuild(
 		hdc,
 		ptDraw.x + (Int)nLayoutX * nDx,
-		ptDraw.y - (m_pPrintSetting->m_nPrintFontHeight - (nKind == 1 ? m_nAscentZen : m_nAscentHan)),
+		ptDraw.y - (m_pPrintSetting->nPrintFontHeight - (nKind == 1 ? m_nAscentZen : m_nAscentHan)),
 		0,
 		NULL,
 		&pPhysicalLine[nBgnPhysical],
@@ -1879,9 +1879,9 @@ void PrintPreview::SetPreviewFontHan(const LOGFONT* lf)
 	m_lfPreviewHan = *lf;
 
 	//	PrintSettingからコピー
-	m_lfPreviewHan.lfHeight			= m_pPrintSetting->m_nPrintFontHeight;
-	m_lfPreviewHan.lfWidth			= m_pPrintSetting->m_nPrintFontWidth;
-	_tcscpy(m_lfPreviewHan.lfFaceName, m_pPrintSetting->m_szPrintFontFaceHan);
+	m_lfPreviewHan.lfHeight			= m_pPrintSetting->nPrintFontHeight;
+	m_lfPreviewHan.lfWidth			= m_pPrintSetting->nPrintFontWidth;
+	_tcscpy(m_lfPreviewHan.lfFaceName, m_pPrintSetting->szPrintFontFaceHan);
 
 	SelectCharWidthCache(CharWidthFontMode::Print, CharWidthCacheMode::Local);
 	InitCharWidthCache(m_lfPreviewHan, CharWidthFontMode::Print);
@@ -1891,9 +1891,9 @@ void PrintPreview::SetPreviewFontZen(const LOGFONT* lf)
 {
 	m_lfPreviewZen = *lf;
 	//	PrintSettingからコピー
-	m_lfPreviewZen.lfHeight	= m_pPrintSetting->m_nPrintFontHeight;
-	m_lfPreviewZen.lfWidth	= m_pPrintSetting->m_nPrintFontWidth;
-	_tcscpy(m_lfPreviewZen.lfFaceName, m_pPrintSetting->m_szPrintFontFaceZen);
+	m_lfPreviewZen.lfHeight	= m_pPrintSetting->nPrintFontHeight;
+	m_lfPreviewZen.lfWidth	= m_pPrintSetting->nPrintFontWidth;
+	_tcscpy(m_lfPreviewZen.lfFaceName, m_pPrintSetting->szPrintFontFaceZen);
 }
 
 int CALLBACK PrintPreview::MyEnumFontFamProc(
@@ -1904,10 +1904,10 @@ int CALLBACK PrintPreview::MyEnumFontFamProc(
 	)
 {
 	PrintPreview* pPrintPreview = (PrintPreview*)lParam;
-	if (_tcscmp(pelf->elfLogFont.lfFaceName, pPrintPreview->m_pPrintSetting->m_szPrintFontFaceHan) == 0) {
+	if (_tcscmp(pelf->elfLogFont.lfFaceName, pPrintPreview->m_pPrintSetting->szPrintFontFaceHan) == 0) {
 		pPrintPreview->SetPreviewFontHan(&pelf->elfLogFont);
 	}
-	if (_tcscmp(pelf->elfLogFont.lfFaceName, pPrintPreview->m_pPrintSetting->m_szPrintFontFaceZen) == 0) {
+	if (_tcscmp(pelf->elfLogFont.lfFaceName, pPrintPreview->m_pPrintSetting->szPrintFontFaceZen) == 0) {
 		pPrintPreview->SetPreviewFontZen(&pelf->elfLogFont);
 	}
 
@@ -2107,15 +2107,15 @@ INT_PTR PrintPreview::DispatchEvent_PPB(
 					PRINTDLG pd = {0};
 					pd.Flags = PD_PRINTSETUP | PD_NONETWORKBUTTON;
 					pd.hwndOwner = m_pParentWnd->GetHwnd();
-					if (m_cPrint.PrintDlg(&pd, &m_pPrintSettingOrg->m_mdmDevMode)) {
+					if (m_cPrint.PrintDlg(&pd, &m_pPrintSettingOrg->mdmDevMode)) {
 						// 用紙サイズと用紙方向を反映させる 2003.05.03 かろと
-						m_pPrintSettingOrg->m_nPrintPaperSize = m_pPrintSettingOrg->m_mdmDevMode.dmPaperSize;
-						m_pPrintSettingOrg->m_nPrintPaperOrientation = m_pPrintSettingOrg->m_mdmDevMode.dmOrientation;
+						m_pPrintSettingOrg->nPrintPaperSize = m_pPrintSettingOrg->mdmDevMode.dmPaperSize;
+						m_pPrintSettingOrg->nPrintPaperOrientation = m_pPrintSettingOrg->mdmDevMode.dmOrientation;
 						// 印刷プレビュー スクロールバー初期化
 						AppNodeGroupHandle(0).SendMessageToAllEditors(
 							MYWM_CHANGESETTING,
 							(WPARAM)0,
-							(LPARAM)PM_PRINTSETTING,
+							(LPARAM)PM_PrintSetting,
 							EditWnd::getInstance()->GetHwnd()
 						);
 						// OnChangePrintSetting();
@@ -2124,7 +2124,7 @@ INT_PTR PrintPreview::DispatchEvent_PPB(
 				}
 				// To Here 2003.05.03 かろと
 				break;
-			case IDC_BUTTON_PRINTSETTING:
+			case IDC_BUTTON_PrintSetting:
 				m_pParentWnd->OnPrintPageSetting();
 				break;
 			case IDC_BUTTON_ZOOMUP:
@@ -2178,11 +2178,11 @@ void PrintPreview::CreateFonts(HDC hdc)
 {
 	LOGFONT	lf;
 	// 印刷用半角フォントを作成 -> m_hFontHan
-	m_lfPreviewHan.lfHeight	= m_pPrintSetting->m_nPrintFontHeight;
-	m_lfPreviewHan.lfWidth	= m_pPrintSetting->m_nPrintFontWidth;
-	_tcscpy(m_lfPreviewHan.lfFaceName, m_pPrintSetting->m_szPrintFontFaceHan);
+	m_lfPreviewHan.lfHeight	= m_pPrintSetting->nPrintFontHeight;
+	m_lfPreviewHan.lfWidth	= m_pPrintSetting->nPrintFontWidth;
+	_tcscpy(m_lfPreviewHan.lfFaceName, m_pPrintSetting->szPrintFontFaceHan);
 	m_hFontHan	= CreateFontIndirect(&m_lfPreviewHan);
-	if (m_pPrintSetting->m_bColorPrint) {
+	if (m_pPrintSetting->bColorPrint) {
 		lf = m_lfPreviewHan;	lf.lfWeight = FW_BOLD;
 		m_hFontHan_b	= CreateFontIndirect(&lf);		// 太字
 		lf = m_lfPreviewHan;							lf.lfUnderline = true;
@@ -2202,12 +2202,12 @@ void PrintPreview::CreateFonts(HDC hdc)
 	m_nAscentHan = tm.tmAscent;
 
 	// 印刷用全角フォントを作成 -> m_hFontZen
-	if (auto_strcmp(m_pPrintSetting->m_szPrintFontFaceHan, m_pPrintSetting->m_szPrintFontFaceZen)) {
-		m_lfPreviewZen.lfHeight	= m_pPrintSetting->m_nPrintFontHeight;
-		m_lfPreviewZen.lfWidth	= m_pPrintSetting->m_nPrintFontWidth;
-		_tcscpy(m_lfPreviewZen.lfFaceName, m_pPrintSetting->m_szPrintFontFaceZen);
+	if (auto_strcmp(m_pPrintSetting->szPrintFontFaceHan, m_pPrintSetting->szPrintFontFaceZen)) {
+		m_lfPreviewZen.lfHeight	= m_pPrintSetting->nPrintFontHeight;
+		m_lfPreviewZen.lfWidth	= m_pPrintSetting->nPrintFontWidth;
+		_tcscpy(m_lfPreviewZen.lfFaceName, m_pPrintSetting->szPrintFontFaceZen);
 		m_hFontZen	= CreateFontIndirect(&m_lfPreviewZen);
-		if (m_pPrintSetting->m_bColorPrint) {
+		if (m_pPrintSetting->bColorPrint) {
 			lf = m_lfPreviewZen;	lf.lfWeight = FW_BOLD;
 			m_hFontZen_b	= CreateFontIndirect(&lf);		// 太字
 			lf = m_lfPreviewZen;							lf.lfUnderline = true;

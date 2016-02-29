@@ -24,7 +24,7 @@
 
 #include "StdAfx.h"
 #include "PropertyManager.h"
-#include "env/DLLSHAREDATA.h"
+#include "env/DllSharedData.h"
 #include "env/DocTypeManager.h"
 #include <memory>
 
@@ -67,8 +67,8 @@ bool PropertyManager::OpenPropertySheet(
 		// 2002.12.11 Moca この部分で行われていたデータのコピーをPropCommonに移動・関数化
 		// ShareData に 設定を適用・コピーする
 		// 2007.06.20 ryoji グループ化に変更があったときはグループIDをリセットする
-		auto& csTabBar = GetDllShareData().m_common.m_tabBar;
-		bool bGroup = (csTabBar.m_bDispTabWnd && !csTabBar.m_bDispTabWndMultiWin);
+		auto& csTabBar = GetDllShareData().common.tabBar;
+		bool bGroup = (csTabBar.bDispTabWnd && !csTabBar.bDispTabWndMultiWin);
 
 		// 印刷中にキーワードを上書きしないように
 		ShareDataLockCounter* pLock = NULL;
@@ -79,12 +79,12 @@ bool PropertyManager::OpenPropertySheet(
 		// 自ウィンドウには最後に通知されます。大抵は、OnChangeSetting にあります。
 		// ここでしか適用しないと、ほかのウィンドウが変更されません。
 
-		if (bGroup != (csTabBar.m_bDispTabWnd && !csTabBar.m_bDispTabWndMultiWin )) {
+		if (bGroup != (csTabBar.bDispTabWnd && !csTabBar.bDispTabWndMultiWin )) {
 			AppNodeManager::getInstance()->ResetGroupId();
 		}
 
 		// アクセラレータテーブルの再作成
-		::SendMessage(GetDllShareData().m_handles.m_hwndTray, MYWM_CHANGESETTING,  (WPARAM)0, (LPARAM)PM_CHANGESETTING_ALL);
+		::SendMessage(GetDllShareData().handles.hwndTray, MYWM_CHANGESETTING,  (WPARAM)0, (LPARAM)PM_CHANGESETTING_ALL);
 
 		// 設定変更を反映させる
 		// 全編集ウィンドウへメッセージをポストする

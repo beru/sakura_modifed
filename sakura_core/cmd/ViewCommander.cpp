@@ -105,8 +105,8 @@ bool ViewCommander::HandleCommand(
 		bRepeat = true;
 	}
 	m_bPrevCommand = nCommand;
-	if (GetDllShareData().m_flags.m_bRecordingKeyMacro &&									// キーボードマクロの記録中
-		GetDllShareData().m_flags.m_hwndRecordingKeyMacro == GetMainWindow() &&	// キーボードマクロを記録中のウィンドウ
+	if (GetDllShareData().flags.bRecordingKeyMacro &&									// キーボードマクロの記録中
+		GetDllShareData().flags.hwndRecordingKeyMacro == GetMainWindow() &&	// キーボードマクロを記録中のウィンドウ
 		(nCommandFrom & FA_NONRECORD) != FA_NONRECORD	// 2007.07.07 genta 記録抑制フラグ off
 	) {
 		// キーリピート状態をなくする
@@ -198,7 +198,7 @@ bool ViewCommander::HandleCommand(
 		// Feb. 28, 2004 genta 保存＆閉じる
 		// 保存が不要なら単に閉じる
 		{	// Command_FILESAVE()とは別に保存不要をチェック	//### Command_FILESAVE() は実際に保存した場合だけ true を返すようになった（仕様変更？）
-			if (!GetDllShareData().m_common.m_file.m_bEnableUnmodifiedOverwrite && !GetDocument()->m_docEditor.IsModified()) {
+			if (!GetDllShareData().common.file.bEnableUnmodifiedOverwrite && !GetDocument()->m_docEditor.IsModified()) {
 				Command_WINCLOSE();
 				break;
 			}
@@ -365,9 +365,9 @@ bool ViewCommander::HandleCommand(
 
 	// クリップボード系
 	case F_CUT:						Command_CUT(); break;					// 切り取り(選択範囲をクリップボードにコピーして削除)
-	case F_COPY:					Command_COPY(false, GetDllShareData().m_common.m_edit.m_bAddCRLFWhenCopy); break;			// コピー(選択範囲をクリップボードにコピー)
+	case F_COPY:					Command_COPY(false, GetDllShareData().common.edit.bAddCRLFWhenCopy); break;			// コピー(選択範囲をクリップボードにコピー)
 	case F_COPY_ADDCRLF:			Command_COPY(false, true); break;		// 折り返し位置に改行をつけてコピー(選択範囲をクリップボードにコピー)
-	case F_COPY_CRLF:				Command_COPY(false, GetDllShareData().m_common.m_edit.m_bAddCRLFWhenCopy, EolType::CRLF); break;	// CRLF改行でコピー(選択範囲をクリップボードにコピー)
+	case F_COPY_CRLF:				Command_COPY(false, GetDllShareData().common.edit.bAddCRLFWhenCopy, EolType::CRLF); break;	// CRLF改行でコピー(選択範囲をクリップボードにコピー)
 	case F_PASTE:					Command_PASTE((int)lparam1); break;					// 貼り付け(クリップボードから貼り付け)
 	case F_PASTEBOX:				Command_PASTEBOX((int)lparam1); break;				// 矩形貼り付け(クリップボードから矩形貼り付け)
 	case F_INSBOXTEXT:				Command_INSBOXTEXT((const wchar_t*)lparam1, (int)lparam2); break;				// 矩形テキスト挿入
@@ -442,9 +442,9 @@ bool ViewCommander::HandleCommand(
 	case F_GREP_REPLACE:	Command_GREP_REPLACE();break;							//Grep置換
 	case F_JUMP_DIALOG:		Command_JUMP_DIALOG(); break;					// 指定行ヘジャンプダイアログの表示
 	case F_JUMP:			Command_JUMP(); break;							// 指定行ヘジャンプ
-	case F_OUTLINE:			bRet = Command_FUNCLIST((ShowDialogType)lparam1, OUTLINE_DEFAULT); break;	// アウトライン解析
-	case F_OUTLINE_TOGGLE:	bRet = Command_FUNCLIST(ShowDialogType::Toggle, OUTLINE_DEFAULT); break;	// アウトライン解析(toggle) // 20060201 aroka
-	case F_FILETREE:		bRet = Command_FUNCLIST((ShowDialogType)lparam1 ,OUTLINE_FILETREE ); break;	//ファイルツリー
+	case F_OUTLINE:			bRet = Command_FUNCLIST((ShowDialogType)lparam1, OutlineType::Default); break;	// アウトライン解析
+	case F_OUTLINE_TOGGLE:	bRet = Command_FUNCLIST(ShowDialogType::Toggle, OutlineType::Default); break;	// アウトライン解析(toggle) // 20060201 aroka
+	case F_FILETREE:		bRet = Command_FUNCLIST((ShowDialogType)lparam1 ,OutlineType::FileTree ); break;	//ファイルツリー
 	case F_TAGJUMP:			Command_TAGJUMP(lparam1 != 0); break;			// タグジャンプ機能 // Apr. 03, 2003 genta 引数追加
 	case F_TAGJUMP_CLOSE:	Command_TAGJUMP(true); break;					// タグジャンプ(元ウィンドウClose)	// Apr. 03, 2003 genta
 	case F_TAGJUMPBACK:		Command_TAGJUMPBACK(); break;					// タグジャンプバック機能
@@ -463,7 +463,7 @@ bool ViewCommander::HandleCommand(
 	case F_BOOKMARK_NEXT:	Command_BOOKMARK_NEXT(); break;					// 次のブックマークへ
 	case F_BOOKMARK_PREV:	Command_BOOKMARK_PREV(); break;					// 前のブックマークへ
 	case F_BOOKMARK_RESET:	Command_BOOKMARK_RESET(); break;				// ブックマークの全解除
-	case F_BOOKMARK_VIEW:	bRet = Command_FUNCLIST((ShowDialogType)lparam1 , OUTLINE_BOOKMARK); break;	// アウトライン解析
+	case F_BOOKMARK_VIEW:	bRet = Command_FUNCLIST((ShowDialogType)lparam1 , OutlineType::BookMark); break;	// アウトライン解析
 // To Here 2001.12.03 hor
 	case F_BOOKMARK_PATTERN:Command_BOOKMARK_PATTERN(); break;				// 2002.01.16 hor 指定パターンに一致する行をマーク
 	case F_JUMP_SRCHSTARTPOS:	Command_JUMP_SRCHSTARTPOS(); break;			// 検索開始位置へ戻る 02/06/26 ai
@@ -620,29 +620,29 @@ bool ViewCommander::HandleCommand(
 			auto sd = &GetDllShareData();
 			HWND hActiveWnd = GetActiveWindow();
 			int activeWndGroup = -1;
-			for (int i=0; i<sd->m_nodes.m_nEditArrNum; ++i) {
-				auto& editNode = sd->m_nodes.m_pEditArr[i];
+			for (int i=0; i<sd->nodes.nEditArrNum; ++i) {
+				auto& editNode = sd->nodes.pEditArr[i];
 				if (editNode.GetHwnd() == hActiveWnd) {
-					activeWndGroup = editNode.m_nGroup;
+					activeWndGroup = editNode.nGroup;
 					break;
 				}
 			}
 			if (activeWndGroup != -1) {
 				std::vector<int> indices;
-				for (int i=0; i<sd->m_nodes.m_nEditArrNum; ++i) {
-					auto& editNode = sd->m_nodes.m_pEditArr[i];
-					if (editNode.m_nGroup == activeWndGroup) {
-						indices.push_back(editNode.m_nIndex);
+				for (int i=0; i<sd->nodes.nEditArrNum; ++i) {
+					auto& editNode = sd->nodes.pEditArr[i];
+					if (editNode.nGroup == activeWndGroup) {
+						indices.push_back(editNode.nIndex);
 					}
 				}
 				std::sort(indices.begin(), indices.end());
 				int idx = nCommand - F_TAB_1;
 				if (idx < (int)indices.size()) {
 					int nodeIdx = indices[idx];
-					for (int i=0; i<sd->m_nodes.m_nEditArrNum; ++i) {
-						auto& editNode = sd->m_nodes.m_pEditArr[i];
-						if (editNode.m_nIndex == nodeIdx) {
-							ActivateFrameWindow(editNode.m_hWnd);
+					for (int i=0; i<sd->nodes.nEditArrNum; ++i) {
+						auto& editNode = sd->nodes.pEditArr[i];
+						if (editNode.nIndex == nodeIdx) {
+							ActivateFrameWindow(editNode.hWnd);
 							break;
 						}
 					}
@@ -708,7 +708,7 @@ void ViewCommander::Sub_BoxSelectLock( int flags )
 {
 	bool bSelLock;
 	if (flags == 0x00) {
-		bSelLock = GetDllShareData().m_common.m_edit.m_bBoxSelectLock;
+		bSelLock = GetDllShareData().common.edit.bBoxSelectLock;
 	}else if (flags == 0x01) {
 		bSelLock = true;
 	}else if (flags == 0x02) {
@@ -731,7 +731,7 @@ LogicInt ViewCommander::ConvertEol(
 	Eol eol = GetDocument()->m_docEditor.GetNewLineCode();
 
 	nConvertedTextLen = 0;
-	bool bExtEol = GetDllShareData().m_common.m_edit.m_bEnableExtEol;
+	bool bExtEol = GetDllShareData().common.edit.bEnableExtEol;
 	if (!pszConvertedText) {
 		for (int i=0; i<nTextLen; ++i) {
 			if (WCODE::IsLineDelimiter(pszText[i], bExtEol)) {
@@ -776,7 +776,7 @@ void ViewCommander::AlertNotFound(
 	...
 	)
 {
-	if (GetDllShareData().m_common.m_search.m_bNOTIFYNOTFOUND
+	if (GetDllShareData().common.search.bNotifyNotFound
 		&& !bReplaceAll
 	) {
 		if (!hwnd) {
