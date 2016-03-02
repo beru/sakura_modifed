@@ -42,7 +42,10 @@ int ShiftJis::GetSizeOfChar(const char* pData, int nDataLen, int nIdx)
 /*!
 	SJIS Å® Unicode ïœä∑
 */
-int ShiftJis::SjisToUni(const char* pSrc, const int nSrcLen, wchar_t* pDst, bool* pbError)
+int ShiftJis::SjisToUni(
+	const char* __restrict pSrc, const int nSrcLen,
+	wchar_t* __restrict pDst, bool* pbError
+	)
 {
 	ECharSet echarset;
 	int nclen;

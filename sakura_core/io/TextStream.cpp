@@ -78,15 +78,16 @@ wstring TextInputStream::ReadLineW()
 		line._GetMemory()->AppendRawData(&c,sizeof(char));
 	}
 
+	NativeW line2;
 	// UTF-8 Å® UNICODE
 	if (m_bIsUtf8) {
-		Utf8::UTF8ToUnicode(*(line._GetMemory()), &line);
+		Utf8::UTF8ToUnicode(*(line._GetMemory()), &line2);
 	// Shift_JIS Å® UNICODE
 	}else {
-		ShiftJis::SJISToUnicode(*(line._GetMemory()), &line);
+		ShiftJis::SJISToUnicode(*(line._GetMemory()), &line2);
 	}
 
-	return wstring().assign( line.GetStringPtr(), line.GetStringLength() );	// EOL Ç‹Ç≈ NULL ï∂éöÇ‡ä‹ÇﬂÇÈ
+	return wstring().assign( line2.GetStringPtr(), line2.GetStringLength() );	// EOL Ç‹Ç≈ NULL ï∂éöÇ‡ä‹ÇﬂÇÈ
 }
 
 
