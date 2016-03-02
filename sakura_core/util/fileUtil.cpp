@@ -1384,3 +1384,54 @@ void GetShortViewPath(
 	_tcsncpy_s(dest, nSize, strTemp.c_str(), _TRUNCATE);
 }
 
+static inline
+size_t getFileSize(FILE* file)
+{
+	fseek(file, 0, SEEK_END);
+	int length = ftell(file);
+	fseek(file, 0, SEEK_SET);
+	return length;
+}
+
+bool ReadFile(const wchar_t* path, std::vector<char>& buff)
+{
+	FILE* f = _wfopen(path, L"rb");
+	if (!f) {
+		return false;
+	}
+	size_t sz = getFileSize(f);
+	buff.resize(sz);
+	fread(&buff[0], 1, sz, f);
+	fclose(f);
+	// TODO: to check read failure
+	return true;
+}
+
+bool ReadFileAndUnicode(const wchar_t* path, std::vector<wchar_t>& buffW)
+{
+	std::vector<char> buffM;
+	if (!ReadFile(path, buffM) || buffM.size() < 3) {
+		return false;
+	}
+
+	const char* pBuffM = &buffM[0];
+	size_t buffSize = buffM.size();
+	static const uint8_t utf8_bom[] = { 0xEF, 0xBB, 0xBF };
+	bool isUtf8 = (memcmp(utf8_bom, pBuffM, 3) == 0);
+	if (isUtf8) {
+		pBuffM += 3;
+		buffSize -= 3;
+	}
+	static const UINT cp_sjis = 932;
+	UINT codePage = isUtf8 ? CP_UTF8 : cp_sjis;
+
+	buffW.resize(buffSize);
+	wchar_t* pBuffW = &buffW[0];
+	int ret = MultiByteToWideChar(codePage, 0, pBuffM, buffSize, pBuffW, buffSize);
+	if (ret <= 0) {
+		return false;
+	}
+	buffW.resize(ret);
+	return true;
+}
+

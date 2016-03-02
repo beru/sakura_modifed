@@ -145,30 +145,6 @@ void Profile::ReadOneline(
 	}
 }
 
-static inline
-size_t getFileSize(FILE* file)
-{
-	fseek(file, 0, SEEK_END);
-	int length = ftell(file);
-	fseek(file, 0, SEEK_SET);
-	return length;
-}
-
-static inline
-bool readFile(const wchar_t* path, std::vector<char>& buff)
-{
-	FILE* f = _wfopen(path, L"rb");
-	if (!f) {
-		return false;
-	}
-	size_t sz = getFileSize(f);
-	buff.resize(sz);
-	fread(&buff[0], 1, sz, f);
-	fclose(f);
-	// TODO: to check read failure
-	return true;
-}
-
 static
 bool findLine(
 	const wchar_t* pData,
@@ -229,7 +205,7 @@ bool Profile::ReadProfile(const TCHAR* pszProfileName)
 
 #if 1
 	std::vector<char> buff;
-	if (!readFile(pszProfileName, buff) || buff.size() < 3) {
+	if (!ReadFile(pszProfileName, buff) || buff.size() < 3) {
 		return false;
 	}
 

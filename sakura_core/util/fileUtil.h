@@ -110,3 +110,6 @@ int FileMatchScoreSepExt(const TCHAR* file1, const TCHAR* file2);
 void GetStrTrancateWidth(TCHAR* dest, int nSize, const TCHAR* path, HDC hDC, int nPxWidth);
 void GetShortViewPath(TCHAR* dest, int nSize, const TCHAR* path, HDC hDC, int nPxWidth, bool bFitMode);
 
+bool ReadFile(const wchar_t* path, std::vector<char>& buff);
+bool ReadFileAndUnicode(const wchar_t* path, std::vector<wchar_t>& buff);
+

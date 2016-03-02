@@ -94,14 +94,12 @@ bool WSHMacroManager::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
 	// ƒ\[ƒX“Ç‚Ýž‚Ý -> m_source
 	m_source = L"";
 	
-	TextInputStream in(pszPath);
-	if (!in) {
-		return false;
-	}
+	std::vector<wchar_t> buffW;
+	ReadFileAndUnicode(pszPath, buffW);
 
-	while (in) {
-		m_source += in.ReadLineW() + L"\r\n";
-	}
+	buffW.push_back(0);
+	m_source = &buffW[0];
+
 	return true;
 }
 
