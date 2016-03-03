@@ -37,7 +37,7 @@
 #include "GrepEnumKeys.h"
 #include "util/string_ex.h"
 
-typedef std::pair<LPTSTR, DWORD> PairGrepEnumItem;
+typedef std::pair<std::tstring, DWORD> PairGrepEnumItem;
 typedef std::vector<PairGrepEnumItem> VPGrepEnumItem;
 
 class GrepEnumOptions {
@@ -65,18 +65,13 @@ public:
 	}
 
 	void ClearItems(void) {
-		for (int i=0; i<GetCount(); ++i) {
-			LPTSTR lp = m_vpItems[ i ].first;
-			m_vpItems[ i ].first = NULL;
-			delete [] lp;
-		}
 		m_vpItems.clear();
 		return;
 	}
 
 	BOOL IsExist(LPCTSTR lpFileName) {
 		for (int i=0; i<GetCount(); ++i) {
-			if (_tcscmp(m_vpItems[i].first, lpFileName) == 0) {
+			if (m_vpItems[i].first == lpFileName) {
 				return TRUE;
 			}
 		}
@@ -98,7 +93,7 @@ public:
 		if (i < 0 || i >= GetCount()) {
 			return NULL;
 		}
-		return m_vpItems[ i ].first;
+		return m_vpItems[ i ].first.c_str();
 	}
 
 	DWORD GetFileSizeLow(int i) {
@@ -116,9 +111,12 @@ public:
 	) {
 		int found = 0;
 
+		std::vector<TCHAR> path;
+		std::vector<TCHAR> name;
+		std::vector<TCHAR> fullPath;
 		for (int i=0; i<(int)vecKeys.size(); ++i) {
 			int baseLen = _tcslen(lpBaseFolder);
-			std::vector<TCHAR> path( baseLen + _tcslen(vecKeys[ i ]) + 2 );
+			path.resize( baseLen + _tcslen(vecKeys[ i ]) + 2 );
 			LPTSTR lpPath = &path[0];
 			auto_strcpy(lpPath, lpBaseFolder);
 			auto_strcpy(lpPath + baseLen, _T("\\"));
@@ -151,11 +149,11 @@ public:
 					if (option.bIgnoreSystem && (w32fd.dwFileAttributes & FILE_ATTRIBUTE_SYSTEM)) {
 						continue;
 					}
-					std::vector<TCHAR> name( nKeyDirLen + _tcslen(w32fd.cFileName) + 1 );
+					name.resize( nKeyDirLen + _tcslen(w32fd.cFileName) + 1 );
 					LPTSTR lpName = &name[0];
 					_tcsncpy(lpName, vecKeys[ i ], nKeyDirLen);
 					_tcscpy(lpName + nKeyDirLen, w32fd.cFileName);
-					std::vector<TCHAR> fullPath( baseLen + _tcslen(lpName) + 2 );
+					fullPath.resize( baseLen + _tcslen(lpName) + 2 );
 					LPTSTR lpFullPath = &fullPath[0];
 					auto_strcpy(lpFullPath, lpBaseFolder);
 					auto_strcpy(lpFullPath + baseLen, _T("\\"));
@@ -163,11 +161,11 @@ public:
 					if (IsValid(w32fd, lpName)) {
 						if (pExceptItems && pExceptItems->IsExist(lpFullPath)) {
 						}else {
-							m_vpItems.push_back(PairGrepEnumItem(lpName, w32fd.nFileSizeLow));
+							m_vpItems.emplace_back(lpName, w32fd.nFileSizeLow);
 							++found; // 2011.11.19
 							if (pExceptItems && nKeyDirLen) {
 								// フォルダを含んだパスなら検索済みとして除外指定に追加する
-								pExceptItems->m_vpItems.push_back(PairGrepEnumItem(lpFullPath, w32fd.nFileSizeLow));
+								pExceptItems->m_vpItems.emplace_back(lpFullPath, w32fd.nFileSizeLow);
 							}
 							continue;
 						}
