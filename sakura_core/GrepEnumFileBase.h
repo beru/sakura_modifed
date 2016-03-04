@@ -104,26 +104,31 @@ public:
 	}
 
 	int Enumerates(
-		LPCTSTR				lpBaseFolder,
-		VGrepEnumKeys&		vecKeys,
-		GrepEnumOptions&	option,
+		LPCTSTR					lpBaseFolder,
+		const VGrepEnumKeys&	vecKeys,
+		const GrepEnumOptions&	option,
 		GrepEnumFileBase*	pExceptItems = NULL
 	) {
 		int found = 0;
 
-		std::vector<TCHAR> path;
+		int baseLen = _tcslen(lpBaseFolder);
+		std::vector<TCHAR> path(baseLen + 2);
+		LPTSTR lpPath = &path[0];
+		auto_strcpy(lpPath, lpBaseFolder);
+		auto_strcpy(lpPath + baseLen, _T("\\"));
+		std::vector<TCHAR> fullPath(baseLen + 2);
+		LPTSTR lpFullPath = &fullPath[0];
+		auto_strcpy(lpFullPath, lpBaseFolder);
+		auto_strcpy(lpFullPath + baseLen, _T("\\"));
 		std::vector<TCHAR> name;
-		std::vector<TCHAR> fullPath;
 		for (int i=0; i<(int)vecKeys.size(); ++i) {
-			int baseLen = _tcslen(lpBaseFolder);
-			path.resize( baseLen + _tcslen(vecKeys[ i ]) + 2 );
-			LPTSTR lpPath = &path[0];
-			auto_strcpy(lpPath, lpBaseFolder);
-			auto_strcpy(lpPath + baseLen, _T("\\"));
-			auto_strcpy(lpPath + baseLen + 1, vecKeys[ i ]);
+			LPCTSTR key = vecKeys[i];
+			path.resize( baseLen + _tcslen(key) + 2 );
+			lpPath = &path[0];
+			auto_strcpy(lpPath + baseLen + 1, key);
 			// vecKeys[ i ] ==> "subdir\*.h" 等の場合に後で(ファイル|フォルダ)名に "subdir\" を連結する
-			const TCHAR* keyDirYen = _tcsrchr(vecKeys[ i ], _T('\\'));
-			const TCHAR* keyDirSlash = _tcsrchr(vecKeys[ i ], _T('/'));
+			const TCHAR* keyDirYen = _tcsrchr(key, _T('\\'));
+			const TCHAR* keyDirSlash = _tcsrchr(key, _T('/'));
 			const TCHAR* keyDir;
 			if (!keyDirYen) {
 				keyDir = keyDirSlash;
@@ -134,7 +139,10 @@ public:
 			}else {
 				keyDir = keyDirYen;
 			}
-			int nKeyDirLen = keyDir ? keyDir - vecKeys[ i ] + 1 : 0;
+			int nKeyDirLen = keyDir ? keyDir - key + 1 : 0;
+			name.resize(nKeyDirLen + 1);
+			LPTSTR lpName = &name[0];
+			_tcsncpy(lpName, key, nKeyDirLen);
 
 			WIN32_FIND_DATA w32fd;
 			HANDLE handle = ::FindFirstFile(lpPath, &w32fd);
@@ -150,13 +158,10 @@ public:
 						continue;
 					}
 					name.resize( nKeyDirLen + _tcslen(w32fd.cFileName) + 1 );
-					LPTSTR lpName = &name[0];
-					_tcsncpy(lpName, vecKeys[ i ], nKeyDirLen);
+					lpName = &name[0];
 					_tcscpy(lpName + nKeyDirLen, w32fd.cFileName);
 					fullPath.resize( baseLen + _tcslen(lpName) + 2 );
-					LPTSTR lpFullPath = &fullPath[0];
-					auto_strcpy(lpFullPath, lpBaseFolder);
-					auto_strcpy(lpFullPath + baseLen, _T("\\"));
+					lpFullPath = &fullPath[0];
 					auto_strcpy(lpFullPath + baseLen + 1, lpName);
 					if (IsValid(w32fd, lpName)) {
 						if (pExceptItems && pExceptItems->IsExist(lpFullPath)) {
