@@ -181,8 +181,7 @@ void FuncInfoArr::SetAppendText(
 {
 	if (m_AppendTextArr.find(info) == m_AppendTextArr.end()) {
 		// ÉLÅ[Ç™ë∂ç›ÇµÇ»Ç¢èÍçáÅAí«â¡Ç∑ÇÈ
-		std::pair<int, std::wstring> pair(info, s);
-		m_AppendTextArr.insert(pair);
+		m_AppendTextArr.emplace(info, s);
 		if (m_nAppendTextLenMax < (int)s.length()) {
 			m_nAppendTextLenMax = s.length();
 		}

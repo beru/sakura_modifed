@@ -132,8 +132,8 @@ public:
 		auto_strcpy(lpFullPath, lpBaseFolder);
 		auto_strcpy(lpFullPath + baseLen, _T("\\"));
 		std::vector<TCHAR> name;
-		for (int i=0; i<(int)vecKeys.size(); ++i) {
-			LPCTSTR key = vecKeys[i];
+		for (size_t i=0; i<vecKeys.size(); ++i) {
+			LPCTSTR key = vecKeys[i].c_str();
 			path.resize(baseLen + _tcslen(key) + 2);
 			lpPath = &path[0];
 			auto_strcpy(lpPath + baseLen + 1, key);

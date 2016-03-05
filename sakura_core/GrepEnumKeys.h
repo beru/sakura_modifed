@@ -38,7 +38,7 @@
 #include "util/string_ex.h"
 #include "util/fileUtil.h"
 
-typedef std::vector<LPCTSTR> VGrepEnumKeys;
+typedef std::vector<std::tstring> VGrepEnumKeys;
 
 class GrepEnumKeys {
 public:
@@ -64,30 +64,22 @@ public:
 private:
 
 	void ClearItems(void) {
-		ClearEnumKeys(m_vecExceptFileKeys);
-		ClearEnumKeys(m_vecSearchFileKeys);
-		ClearEnumKeys(m_vecExceptFolderKeys);
-		ClearEnumKeys(m_vecSearchFolderKeys);
+		m_vecExceptFileKeys.clear();
+		m_vecSearchFileKeys.clear();
+		m_vecExceptFolderKeys.clear();
+		m_vecSearchFolderKeys.clear();
 		return;
-	}
-	void ClearEnumKeys(VGrepEnumKeys& keys) {
-		for (int i=0; i<(int)keys.size(); ++i) {
-			delete[] keys[ i ];
-		}
-		keys.clear();
 	}
 
 	void push_back_unique(VGrepEnumKeys& keys, LPCTSTR addKey) {
 		if (!IsExist(keys, addKey)) {
-			TCHAR* newKey = new TCHAR[ _tcslen(addKey) + 1 ];
-			_tcscpy(newKey, addKey);
-			keys.push_back(newKey);
+			keys.push_back(addKey);
 		}
 	}
 
 	BOOL IsExist(VGrepEnumKeys& keys, LPCTSTR addKey) {
-		for (int i=0; i<(int)keys.size(); ++i) {
-			if (_tcscmp(keys[i], addKey) == 0) {
+		for (size_t i=0; i<keys.size(); ++i) {
+			if (keys[i] == addKey) {
 				return TRUE;
 			}
 		}
@@ -102,9 +94,10 @@ private:
 		// 
 		bool wildcard = false;
 		for (int i=0; key[i]; ++i) {
-			if (!wildcard && (key[i] == _T('*') || key[i] == _T('?'))) {
+			TCHAR c = key[i];
+			if (!wildcard && (c == _T('*') || c == _T('?'))) {
 				wildcard = true;
-			}else if (wildcard && (key[i] == _T('\\') || key[i] == _T('/'))) {
+			}else if (wildcard && (c == _T('\\') || c == _T('/'))) {
 				return 1;
 			}
 		}

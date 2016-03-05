@@ -900,7 +900,7 @@ void ViewCommander::Command_MERGE(void)
 		const wchar_t* pLine = GetDocument()->m_docLineMgr.GetLine(i)->GetDocLineStrWithEOL(&nLineLen);
 		if (!pLine) continue;
 		if (!pLinew || nLineLen != nLineLenw || wmemcmp(pLine, pLinew, nLineLen)) {
-			lineArr.push_back(StringRef(pLine, nLineLen));
+			lineArr.emplace_back(pLine, nLineLen);
 		}else {
 			bMerge = true;
 		}

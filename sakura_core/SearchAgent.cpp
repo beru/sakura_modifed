@@ -310,7 +310,7 @@ void SearchAgent::CreateWordList(
 		) {
 			if (!WCODE::IsWordDelimiter(pszPattern[pos])) {
 				// pszPattern[pos]...pszPattern[pos + end] が検索語に含まれる単語。
-				searchWords.push_back(std::make_pair(pszPattern + pos, end));
+				searchWords.emplace_back(pszPattern + pos, end);
 			}
 			pos += end;
 		}else {
@@ -922,15 +922,13 @@ void SearchAgent::ReplaceData(DocLineReplaceArg* pArg)
 					// 1行以内の行末削除のときだけ、次の行のseqが保存されないので必要
 					// 2014.01.07 最後が改行の範囲を最後が改行のデータで置換した場合を変更
 					if (!bLastEOLReplace) {
-						LineData tmp;
-						pArg->pMemDeleted->push_back(tmp);
+						pArg->pMemDeleted->emplace_back();
 						LineData& delLine =  pArg->pMemDeleted->back();
 						delLine.memLine.SetString(L"");
 						delLine.nSeq = ModifyVisitor().GetLineModifiedSeq(pDocLineNext);
 					}
 				}
-				LineData tmp;
-				pArg->pMemDeleted->push_back(tmp);
+				pArg->pMemDeleted->emplace_back();
 				LineData& delLine = pArg->pMemDeleted->back();
 				delLine.memLine.SetString(&pLine[nWorkPos], nWorkLen);
 				delLine.nSeq = ModifyVisitor().GetLineModifiedSeq(pDocLine);
@@ -1007,8 +1005,7 @@ void SearchAgent::ReplaceData(DocLineReplaceArg* pArg)
 		}else {
 			// 行内だけの削除
 			if (pArg->pMemDeleted) {
-				LineData tmp;
-				pArg->pMemDeleted->push_back(tmp);
+				pArg->pMemDeleted->emplace_back();
 				LineData& delLine =  pArg->pMemDeleted->back();
 				delLine.memLine.SetString(&pLine[nWorkPos], nWorkLen);
 				delLine.nSeq = ModifyVisitor().GetLineModifiedSeq(pDocLine);

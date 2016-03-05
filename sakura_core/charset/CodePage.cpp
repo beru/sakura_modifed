@@ -436,8 +436,8 @@ CodePage::CodePageList& CodePage::GetCodePageList()
 		}
 	}
 	// “Æ©À‘••”•ª‚ğ’è‹`
-	result.push_back( CodePage::CodePageList::value_type(12000, L"12000 (UTF-32LE)") );
-	result.push_back( CodePage::CodePageList::value_type(12001, L"12001 (UTF-32BE)") );
+	result.emplace_back(12000, L"12000 (UTF-32LE)");
+	result.emplace_back(12001, L"12001 (UTF-32BE)");
 
 	std::sort(result.begin(),result.end(), sortByCodePage());
 	return result;
@@ -448,7 +448,7 @@ BOOL CALLBACK CodePage::CallBackEnumCodePages( LPCTSTR pCodePageString )
 {
 	// pCodePageString ‚Í•¶š—ñ‚ÉŠi”[‚³‚ê‚½”š
 	CodePage::CodePageList* pList = const_cast<CodePage::CodePageList*>(s_list);
-	pList->push_back(CodePage::CodePageList::value_type(_ttoi( pCodePageString ), to_wchar(pCodePageString)));
+	pList->emplace_back(_ttoi( pCodePageString ), to_wchar(pCodePageString));
 	return TRUE;
 }
 

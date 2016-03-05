@@ -297,7 +297,7 @@ bool Plugin::ReadPluginDefString(
 {
 	WCHAR bufKey[64];
 	m_aStrings.clear();
-	m_aStrings.push_back(wstring(L"")); // 0番目ダミー
+	m_aStrings.emplace_back(); // 0番目ダミー
 	for (int nCount=1; nCount<MAX_PLUG_STRING; ++nCount) {	// 添え字は１から始める
 		wstring sVal = L"";
 		swprintf(bufKey, L"S[%d]", nCount);

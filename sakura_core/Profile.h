@@ -52,6 +52,11 @@ class Profile {
 	typedef std::pair<wstring, wstring> pair_str_str;
 	typedef std::map<wstring, wstring> map_str_str;
 	struct Section {
+		Section(const wstring& name)
+			:
+			strSectionName(name)
+		{
+		}
 		wstring     strSectionName;
 		map_str_str mapEntries;
 	};

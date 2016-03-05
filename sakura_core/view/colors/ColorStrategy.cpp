@@ -195,8 +195,8 @@ ColorStrategyPool::ColorStrategyPool()
 	m_pView = &(EditWnd::getInstance()->GetView(0));
 	m_pcSelectStrategy = new Color_Select();
 	m_pcFoundStrategy = new Color_Found();
-//	m_vStrategies.push_back(new Color_Found);				// マッチ文字列
-	m_vStrategies.push_back(new Color_RegexKeyword);		// 正規表現キーワード
+//	m_vStrategies.push_back(new Color_Found);			// マッチ文字列
+	m_vStrategies.push_back(new Color_RegexKeyword);	// 正規表現キーワード
 	m_vStrategies.push_back(new Color_Heredoc);			// ヒアドキュメント
 	m_vStrategies.push_back(new Color_BlockComment(COLORIDX_BLOCK1));	// ブロックコメント
 	m_vStrategies.push_back(new Color_BlockComment(COLORIDX_BLOCK2));	// ブロックコメント2
@@ -205,7 +205,7 @@ ColorStrategyPool::ColorStrategyPool()
 	m_vStrategies.push_back(new Color_DoubleQuote);		// ダブルクォーテーション文字列
 	m_vStrategies.push_back(new Color_Url);				// URL
 	m_vStrategies.push_back(new Color_Numeric);			// 半角数字
-	m_vStrategies.push_back(new Color_KeywordSet);			// キーワードセット
+	m_vStrategies.push_back(new Color_KeywordSet);		// キーワードセット
 
 	// 設定更新
 	OnChangeSetting();
@@ -445,7 +445,9 @@ const ColorAttributeData g_ColorAttributeArr[] =
 int GetColorIndexByName(const TCHAR* name)
 {
 	for (int i=0; i<COLORIDX_LAST; ++i) {
-		if (_tcscmp(name, g_ColorAttributeArr[i].szName) == 0) return i;
+		if (_tcscmp(name, g_ColorAttributeArr[i].szName) == 0) {
+			return i;
+		}
 	}
 	return -1;
 }

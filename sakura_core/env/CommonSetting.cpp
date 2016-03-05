@@ -89,7 +89,7 @@ public:
 	}
 	void Regist(const char* szEntryKey) {
 		// CommonValueƒŠƒXƒg‚ÉŽ©•ª‚ð’Ç‰Á
-		g_commonvalues.push_back(CommonValueInfo(&m_value, sizeof(m_value), szEntryKey));
+		g_commonvalues.emplace_back(&m_value, sizeof(m_value), szEntryKey);
 	}
 	Me& operator = (const T& rhs) { m_value = rhs; return *this; }
 	operator T& () { return m_value; }

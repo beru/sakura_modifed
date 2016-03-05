@@ -379,7 +379,7 @@ void IfObj::AddMethod(
 )
 {
 	// this->m_typeInfo‚ª NULL‚Å‚È‚¯‚ê‚Î AddMethod()‚Í”½‰f‚³‚ê‚È‚¢B
-	m_methods.push_back(MethodInfo());
+	m_methods.emplace_back();
 	MethodInfo* info = &m_methods[m_methods.size() - 1];
 	ZeroMemory(info, sizeof(MethodInfo));
 	info->Desc.invkind = INVOKE_FUNC;

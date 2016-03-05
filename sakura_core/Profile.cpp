@@ -84,14 +84,15 @@ void Profile::ReadOneline(
 		&& line.find(LTEXT("=")) == line.npos
 		&& line.find(LTEXT("]")) == ( line.size() - 1 )
 	) {
-		Section sec;
-		sec.strSectionName = line.substr( 1, line.size() - 1 - 1 );
-		m_profileData.push_back(sec);
+		m_profileData.emplace_back(line.substr(1, line.size() - 1 - 1));
 	// エントリ取得
 	}else if (!m_profileData.empty()) {	// 最初のセクション以前の行のエントリは無視
 		wstring::size_type idx = line.find( LTEXT("=") );
 		if (idx != line.npos) {
-			m_profileData.back().mapEntries.insert( pair_str_str( line.substr(0,idx), line.substr(idx+1) ) );
+			m_profileData.back().mapEntries.emplace(
+				line.substr(0,idx),
+				line.substr(idx+1)
+			);
 		}
 	}
 }
@@ -131,9 +132,7 @@ void Profile::ReadOneline(
 		&& eqPos == lineEnd
 		&& line[len - 1] == ']'
 	) {
-		Section sec;
-		sec.strSectionName = std::wstring(line + 1, len - 1 - 1);
-		m_profileData.push_back(sec);
+		m_profileData.emplace_back(std::wstring(line + 1, len - 1 - 1));
 		// エントリ取得
 	}else if (!m_profileData.empty()) {	// 最初のセクション以前の行のエントリは無視
 		if (eqPos != lineEnd) {
@@ -475,17 +474,16 @@ bool Profile::SetProfileDataImp(
 				break;
 			}else {
 				// 既存のエントリが見つからない場合は追加
-				iter->mapEntries.insert(pair_str_str(strEntryKey, strEntryValue));
+				iter->mapEntries.emplace(strEntryKey, strEntryValue);
 				break;
 			}
 		}
 	}
 	// 既存のセクションではない場合，セクション及びエントリを追加
 	if (iter == iterEnd) {
-		Section buffer;
-		buffer.strSectionName = strSectionName;
-		buffer.mapEntries.insert(pair_str_str(strEntryKey, strEntryValue));
-		m_profileData.push_back(buffer);
+		m_profileData.emplace_back(strSectionName);
+		Section& section = m_profileData.back();
+		section.mapEntries.emplace(strEntryKey, strEntryValue);
 	}
 	return true;
 }

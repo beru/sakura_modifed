@@ -299,8 +299,7 @@ void DlgProfileMgr::UpdateIni()
 			settings.nDefaultIndex = i;
 		}
 		if (0 < i) {
-			std::tstring str = szProfileName;
-			settings.profList.push_back(str);
+			settings.profList.emplace_back(szProfileName);
 		}
 	}
 	settings.bDefaultSelect = IsButtonChecked(IDC_CHECK_PROF_DEFSTART);
