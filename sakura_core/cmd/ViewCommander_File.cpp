@@ -1,7 +1,7 @@
 /*!	@file
 @brief ViewCommanderクラスのコマンド(ファイル操作系)関数群
 
-	2012/12/20	CViewCommander.cppから分離
+	2012/12/20	ViewCommander.cppから分離
 */
 /*
 	Copyright (C) 1998-2001, Norio Nakatani

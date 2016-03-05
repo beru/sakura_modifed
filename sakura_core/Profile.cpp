@@ -200,69 +200,31 @@ bool findLine(
 bool Profile::ReadProfile(const TCHAR* pszProfileName)
 {
 	Timer t;
-
 	m_strProfileName = pszProfileName;
 
-#if 1
-	std::vector<char> buff;
-	if (!ReadFile(pszProfileName, buff) || buff.size() < 3) {
+	std::vector<wchar_t> buff;
+	if (!ReadFileAndUnicodify(pszProfileName, buff)) {
 		return false;
 	}
-
-	const char* pBuff = &buff[0];
-	size_t buffSize = buff.size();
-	static const uint8_t utf8_bom[] = { 0xEF, 0xBB, 0xBF };
-	bool isUtf8 = (memcmp(utf8_bom, pBuff, 3) == 0);
-	if (isUtf8) {
-		pBuff += 3;
-		buffSize -= 3;
-	}
-	static const UINT cp_sjis = 932;
-	UINT codePage = isUtf8 ? CP_UTF8 : cp_sjis;
-
-	std::vector<wchar_t> wbuff(buffSize);
-	wchar_t* pWBuff = &wbuff[0];
-	int ret = MultiByteToWideChar(codePage, 0, pBuff, buffSize, pWBuff, buffSize);
-	if (ret <= 0) {
-		return false;
-	}
-	size_t remainLen = ret;
+	wchar_t* pBuff = &buff[0];
+	size_t remainLen = buff.size();
 	size_t lineLen;
 	size_t lineLenWithoutCrLf;
 	size_t lineCount = 0;
 	for (;;) {
 		// 1s“Çž
-		if (!findLine(pWBuff, remainLen, lineLen, lineLenWithoutCrLf)) {
+		if (!findLine(pBuff, remainLen, lineLen, lineLenWithoutCrLf)) {
 			break;
 		}
 		++lineCount;
 		// ‰ðÍ
-		ReadOneline(pWBuff, lineLenWithoutCrLf);
+		ReadOneline(pBuff, lineLenWithoutCrLf);
 
-		pWBuff += lineLen;
+		pBuff += lineLen;
 		remainLen -= lineLen;
 	}
-#else
-
-	TextInputStream in(m_strProfileName.c_str());
-	if (!in) {
-		return false;
-	}
-
-	try {
-		while (in) {
-			// 1s“Çž
-			wstring line = in.ReadLineW();
-			// ‰ðÍ
-			ReadOneline(line);
-		}
-	}catch (...) {
-		return false;
-	}
-#endif
 
 	TRACE(L"ReadProfile time %f\n", t.ElapsedSecond());
-
 	return true;
 }
 

@@ -1,7 +1,7 @@
 /*!	@file
 @brief ViewCommanderクラスのコマンド(検索系 基本形)関数群
 
-	2012/12/17	CViewCommander.cpp,CViewCommander_New.cppから分離
+	2012/12/17	ViewCommander.cpp,ViewCommander_New.cppから分離
 */
 /*
 	Copyright (C) 1998-2001, Norio Nakatani

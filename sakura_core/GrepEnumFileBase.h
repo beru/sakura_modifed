@@ -111,7 +111,18 @@ public:
 	) {
 		int found = 0;
 
-		int baseLen = _tcslen(lpBaseFolder);
+		DWORD ignoreFileAttributes = 0;
+		if (option.bIgnoreHidden) {
+			ignoreFileAttributes |= FILE_ATTRIBUTE_HIDDEN;
+		}
+		if (option.bIgnoreReadOnly) {
+			ignoreFileAttributes |= FILE_ATTRIBUTE_READONLY;
+		}
+		if (option.bIgnoreSystem) {
+			ignoreFileAttributes |= FILE_ATTRIBUTE_SYSTEM;
+		}
+
+		size_t baseLen = _tcslen(lpBaseFolder);
 		std::vector<TCHAR> path(baseLen + 2);
 		LPTSTR lpPath = &path[0];
 		auto_strcpy(lpPath, lpBaseFolder);
@@ -123,7 +134,7 @@ public:
 		std::vector<TCHAR> name;
 		for (int i=0; i<(int)vecKeys.size(); ++i) {
 			LPCTSTR key = vecKeys[i];
-			path.resize( baseLen + _tcslen(key) + 2 );
+			path.resize(baseLen + _tcslen(key) + 2);
 			lpPath = &path[0];
 			auto_strcpy(lpPath + baseLen + 1, key);
 			// vecKeys[ i ] ==> "subdir\*.h" 等の場合に後で(ファイル|フォルダ)名に "subdir\" を連結する
@@ -148,19 +159,15 @@ public:
 			HANDLE handle = ::FindFirstFile(lpPath, &w32fd);
 			if (handle != INVALID_HANDLE_VALUE) {
 				do {
-					if (option.bIgnoreHidden && (w32fd.dwFileAttributes & FILE_ATTRIBUTE_HIDDEN)) {
+					if (w32fd.dwFileAttributes & ignoreFileAttributes) {
 						continue;
 					}
-					if (option.bIgnoreReadOnly && (w32fd.dwFileAttributes & FILE_ATTRIBUTE_READONLY)) {
-						continue;
-					}
-					if (option.bIgnoreSystem && (w32fd.dwFileAttributes & FILE_ATTRIBUTE_SYSTEM)) {
-						continue;
-					}
-					name.resize( nKeyDirLen + _tcslen(w32fd.cFileName) + 1 );
+					size_t fileNameLen = _tcslen(w32fd.cFileName);
+					size_t nameLen = nKeyDirLen + fileNameLen;
+					name.resize(nameLen + 1);
 					lpName = &name[0];
 					_tcscpy(lpName + nKeyDirLen, w32fd.cFileName);
-					fullPath.resize( baseLen + _tcslen(lpName) + 2 );
+					fullPath.resize(baseLen + nameLen + 2);
 					lpFullPath = &fullPath[0];
 					auto_strcpy(lpFullPath + baseLen + 1, lpName);
 					if (IsValid(w32fd, lpName)) {

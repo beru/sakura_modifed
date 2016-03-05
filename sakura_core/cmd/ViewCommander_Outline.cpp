@@ -1,7 +1,7 @@
 /*!	@file
 @brief ViewCommanderクラスのコマンド(検索系 アウトライン解析)関数群
 
-	2012/12/17	CViewCommander.cppから分離
+	2012/12/17	ViewCommander.cppから分離
 */
 /*
 	Copyright (C) 1998-2001, Norio Nakatani

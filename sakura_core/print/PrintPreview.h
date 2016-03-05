@@ -173,7 +173,7 @@ public:
 		m_pPrintSetting = &m_sPrintSetting;
 		m_pPrintSettingOrg = pPrintSetting;
 	}
-	BOOL GetDefaultPrinterInfo() { return m_cPrint.GetDefaultPrinter(&m_pPrintSetting->mdmDevMode); }
+	BOOL GetDefaultPrinterInfo() { return m_print.GetDefaultPrinter(&m_pPrintSetting->mdmDevMode); }
 	int  GetCurPageNum() { return m_nCurPageNum; }	// 現在のページ
 	int  GetAllPageNum() { return m_nAllPageNum; }	// 現在のページ
 
@@ -260,7 +260,7 @@ protected:
 	TypeConfig m_typePrint;
 
 	// プレビューから出ても現在のプリンタ情報を記憶しておけるようにstaticにする 2003.05.02 かろと 
-	static Print	m_cPrint;					// 現在のプリンタ情報
+	static Print	m_print;					// 現在のプリンタ情報
 
 	bool			m_bLockSetting;				// 設定のロック
 	bool			m_bDemandUpdateSetting;		// 設定の更新要求

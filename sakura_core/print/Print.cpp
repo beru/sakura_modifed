@@ -585,7 +585,7 @@ void Print::SettingInitialize(PrintSetting& pPrintSetting, const TCHAR* settingN
 	pPrintSetting.nPrintPaperSize = DMPAPER_A4;	// 用紙サイズ
 	// プリンタ設定 DEVMODE用
 	// プリンタ設定を取得するのはコストがかかるので、後ほど
-	//	m_cPrint.GetDefaultPrinterInfo(&(pPrintSetting.mdmDevMode));
+	//	m_print.GetDefaultPrinterInfo(&(pPrintSetting.mdmDevMode));
 	pPrintSetting.bHeaderUse[0] = TRUE;
 	pPrintSetting.bHeaderUse[1] = FALSE;
 	pPrintSetting.bHeaderUse[2] = FALSE;

@@ -1,7 +1,7 @@
 /*!	@file
 @brief ViewCommanderクラスのコマンド(挿入系)関数群
 
-	2012/12/15	CViewCommander.cpp,CViewCommander_New.cppから分離
+	2012/12/15	ViewCommander.cpp,ViewCommander_New.cppから分離
 */
 /*
 	Copyright (C) 1998-2001, Norio Nakatani
@@ -46,7 +46,7 @@ void ViewCommander::Command_INS_TIME(void)
 }
 
 
-// from CViewCommander_New.cpp
+// from ViewCommander_New.cpp
 /*!	コントロールコードの入力(ダイアログ)
 	@author	MIK
 	@date	2002/06/02

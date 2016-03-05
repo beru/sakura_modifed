@@ -25,7 +25,7 @@
 GrepAgent::GrepAgent()
 	:
 	m_bGrepMode(false),		// Grepモードか
-	m_bGrepRunning(false)		// Grep処理中
+	m_bGrepRunning(false)	// Grep処理中
 {
 }
 
@@ -159,7 +159,7 @@ DWORD GrepAgent::DoGrep(
 	bool					bGrepStdout,
 	bool					bGrepHeader,
 	const SearchOption&		searchOption,
-	EncodingType				nGrepCharSet,	// 2002/09/21 Moca 文字コードセット選択
+	EncodingType			nGrepCharSet,	// 2002/09/21 Moca 文字コードセット選択
 	int						nGrepOutputLineType,
 	int						nGrepOutputStyle,
 	bool					bGrepOutputFileOnly,
@@ -185,8 +185,8 @@ DWORD GrepAgent::DoGrep(
 	DlgCancel	dlgCancel;
 	HWND		hwndCancel;
 	//	Jun. 27, 2001 genta	正規表現ライブラリの差し替え
-	Bregexp	regexp;
-	NativeW	memMessage;
+	Bregexp		regexp;
+	NativeW		memMessage;
 	int			nWork;
 	GrepOption	grepOption;
 
@@ -211,7 +211,7 @@ DWORD GrepAgent::DoGrep(
 	pViewDst->GetDocument()->m_docEditor.m_pOpeBlk->AddRef();
 
 	pViewDst->m_bCurSrchKeyMark = true;								// 検索文字列のマーク
-	pViewDst->m_strCurSearchKey = pmGrepKey->GetStringPtr();			// 検索文字列
+	pViewDst->m_strCurSearchKey = pmGrepKey->GetStringPtr();		// 検索文字列
 	pViewDst->m_curSearchOption = searchOption;						// 検索オプション
 	pViewDst->m_nCurSearchKeySequence = GetDllShareData().common.search.nSearchKeySequence;
 
@@ -222,7 +222,7 @@ DWORD GrepAgent::DoGrep(
 			// 矩形・ラインモード貼り付けは未サポート
 			bool bColmnSelect;
 			bool bLineSelect;
-			if (!pViewDst->MyGetClipboardData( memReplace, &bColmnSelect, GetDllShareData().common.edit.bEnableLineModePaste? &bLineSelect: NULL )) {
+			if (!pViewDst->MyGetClipboardData(memReplace, &bColmnSelect, GetDllShareData().common.edit.bEnableLineModePaste? &bLineSelect: NULL)) {
 				this->m_bGrepRunning = false;
 				pViewDst->m_bDoing_UndoRedo = false;
 				ErrorMessage( pViewDst->m_hwndParent, LS(STR_DLGREPLC_CLIPBOARD) );
@@ -335,14 +335,14 @@ DWORD GrepAgent::DoGrep(
 		}
 	}
 
-// 2002.02.08 Grepアイコンも大きいアイコンと小さいアイコンを別々にする。
+	// 2002.02.08 Grepアイコンも大きいアイコンと小さいアイコンを別々にする。
 	HICON	hIconBig, hIconSmall;
-	//	Dec, 2, 2002 genta アイコン読み込み方法変更
+	// Dec, 2, 2002 genta アイコン読み込み方法変更
 	hIconBig   = GetAppIcon(G_AppInstance(), ICON_DEFAULT_GREP, FN_GREP_ICON, false);
 	hIconSmall = GetAppIcon(G_AppInstance(), ICON_DEFAULT_GREP, FN_GREP_ICON, true);
 
-	//	Sep. 10, 2002 genta
-	//	EditWndに新設した関数を使うように
+	// Sep. 10, 2002 genta
+	// EditWndに新設した関数を使うように
 	EditWnd*	pEditWnd = EditWnd::getInstance();	//	Sep. 10, 2002 genta
 	pEditWnd->SetWindowIcon(hIconSmall, ICON_SMALL);
 	pEditWnd->SetWindowIcon(hIconBig, ICON_BIG);
@@ -381,7 +381,8 @@ DWORD GrepAgent::DoGrep(
 		if (!type.colorInfoArr[COLORIDX_WSTRING].bDisp) {
 			// 2011.11.28 色指定が無効ならエスケープしない
 		}else
-		if (type.stringType == StringLiteralType::CPP || type.stringType == StringLiteralType::CSharp
+		if (type.stringType == StringLiteralType::CPP
+			|| type.stringType == StringLiteralType::CSharp
 			|| type.stringType == StringLiteralType::Python
 		) {	// 文字列区切り記号エスケープ方法
 			memWork2.Replace(L"\\", L"\\\\");
@@ -539,8 +540,8 @@ DWORD GrepAgent::DoGrep(
 	// 2003.06.23 Moca 共通設定で変更できるように
 	// 2008.06.08 ryoji 全ビューの表示ON/OFFを同期させる
 //	SetDrawSwitch(false);
-	if (!EditWnd::getInstance()->UpdateTextWrap()) {	// 折り返し方法関連の更新
-		EditWnd::getInstance()->RedrawAllViews(pViewDst);	//	他のペインの表示を更新
+	if (!EditWnd::getInstance()->UpdateTextWrap()) {		// 折り返し方法関連の更新
+		EditWnd::getInstance()->RedrawAllViews(pViewDst);	// 他のペインの表示を更新
 	}
 	const bool bDrawSwitchOld = pViewDst->SetDrawSwitch(GetDllShareData().common.search.bGrepRealTimeView != 0);
 
@@ -647,21 +648,21 @@ DWORD GrepAgent::DoGrep(
 */
 int GrepAgent::DoGrepTree(
 	EditView*				pViewDst,
-	DlgCancel*				pDlgCancel,			//!< [in] Cancelダイアログへのポインタ
-	const wchar_t*			pszKey,				//!< [in] 検索キー
+	DlgCancel*				pDlgCancel,				// [in] Cancelダイアログへのポインタ
+	const wchar_t*			pszKey,					// [in] 検索キー
 	const NativeW&			mGrepReplace,
-	GrepEnumKeys&			grepEnumKeys,		//!< [in] 検索対象ファイルパターン
-	GrepEnumFiles&			grepExceptAbsFiles,	//!< [in] 除外ファイル絶対パス
-	GrepEnumFolders&		grepExceptAbsFolders,	//!< [in] 除外フォルダ絶対パス
-	const TCHAR*			pszPath,			//!< [in] 検索対象パス
-	const TCHAR*			pszBasePath,		//!< [in] 検索対象パス(ベースフォルダ)
-	const SearchOption&		searchOption,		//!< [in] 検索オプション
-	const GrepOption&		grepOption,			//!< [in] Grepオプション
-	const SearchStringPattern& pattern,			//!< [in] 検索パターン
-	Bregexp*				pRegexp,			//!< [in] 正規表現コンパイルデータ。既にコンパイルされている必要がある
-	int						nNest,				//!< [in] ネストレベル
-	bool&					bOutputBaseFolder,	//!< [i/o] ベースフォルダ名出力
-	int*					pnHitCount			//!< [i/o] ヒット数の合計
+	const GrepEnumKeys&		grepEnumKeys,			// [in] 検索対象ファイルパターン
+	GrepEnumFiles&			grepExceptAbsFiles,		// [in] 除外ファイル絶対パス
+	GrepEnumFolders&		grepExceptAbsFolders,	// [in] 除外フォルダ絶対パス
+	const TCHAR*			pszPath,				// [in] 検索対象パス
+	const TCHAR*			pszBasePath,			// [in] 検索対象パス(ベースフォルダ)
+	const SearchOption&		searchOption,			// [in] 検索オプション
+	const GrepOption&		grepOption,				// [in] Grepオプション
+	const SearchStringPattern& pattern,				// [in] 検索パターン
+	Bregexp*				pRegexp,				// [in] 正規表現コンパイルデータ。既にコンパイルされている必要がある
+	int						nNest,					// [in] ネストレベル
+	bool&					bOutputBaseFolder,		// [i/o] ベースフォルダ名出力
+	int*					pnHitCount				// [i/o] ヒット数の合計
 	)
 {
 	pDlgCancel->SetItemText(IDC_STATIC_CURPATH, pszPath);
@@ -767,7 +768,7 @@ int GrepAgent::DoGrepTree(
 			if (0 < memMessage.GetStringLength()) {
 				AddTail( pViewDst, memMessage, grepOption.bGrepStdout );
 				pViewDst->GetCommander().Command_GOFILEEND(FALSE);
-				if (!EditWnd::getInstance()->UpdateTextWrap()) {	// 折り返し方法関連の更新	// 2008.06.10 ryoji
+				if (!EditWnd::getInstance()->UpdateTextWrap()) {		// 折り返し方法関連の更新	// 2008.06.10 ryoji
 					EditWnd::getInstance()->RedrawAllViews(pViewDst);	//	他のペインの表示を更新
 				}
 				memMessage.Clear();
@@ -784,7 +785,7 @@ int GrepAgent::DoGrepTree(
 	if (0 < memMessage.GetStringLength()) {
 		AddTail( pViewDst, memMessage, grepOption.bGrepStdout );
 		pViewDst->GetCommander().Command_GOFILEEND(false);
-		if (!EditWnd::getInstance()->UpdateTextWrap()) {	// 折り返し方法関連の更新
+		if (!EditWnd::getInstance()->UpdateTextWrap()) {		// 折り返し方法関連の更新
 			EditWnd::getInstance()->RedrawAllViews(pViewDst);	//	他のペインの表示を更新
 		}
 		memMessage.Clear();
@@ -855,7 +856,7 @@ cancel_return:;
 	if (0 < memMessage.GetStringLength()) {
 		AddTail( pViewDst, memMessage, grepOption.bGrepStdout );
 		pViewDst->GetCommander().Command_GOFILEEND(false);
-		if (!EditWnd::getInstance()->UpdateTextWrap()) {	// 折り返し方法関連の更新
+		if (!EditWnd::getInstance()->UpdateTextWrap()) {		// 折り返し方法関連の更新
 			EditWnd::getInstance()->RedrawAllViews(pViewDst);	//	他のペインの表示を更新
 		}
 		memMessage.Clear();
@@ -876,17 +877,17 @@ void GrepAgent::SetGrepResult(
 	// データ格納先
 	NativeW& memMessage,
 	// マッチしたファイルの情報
-	const TCHAR*		pszFilePath,	//!< [in] フルパス or 相対パス
-	const TCHAR*		pszCodeName,	//!< [in] 文字コード情報．" [SJIS]"とか
+	const TCHAR*	pszFilePath,		// [in] フルパス or 相対パス
+	const TCHAR*	pszCodeName,		// [in] 文字コード情報．" [SJIS]"とか
 	// マッチした行の情報
-	LONGLONG	nLine,					//!< [in] マッチした行番号(1～)
-	int			nColumn,				//!< [in] マッチした桁番号(1～)
-	const wchar_t*	pCompareData,		//!< [in] 行の文字列
-	int			nLineLen,				//!< [in] 行の文字列の長さ
-	int			nEolCodeLen,			//!< [in] EOLの長さ
+	LONGLONG	nLine,					// [in] マッチした行番号(1～)
+	int			nColumn,				// [in] マッチした桁番号(1～)
+	const wchar_t*	pCompareData,		// [in] 行の文字列
+	int			nLineLen,				// [in] 行の文字列の長さ
+	int			nEolCodeLen,			// [in] EOLの長さ
 	// マッチした文字列の情報
-	const wchar_t*	pMatchData,			//!< [in] マッチした文字列
-	int			nMatchLen,				//!< [in] マッチした文字列の長さ
+	const wchar_t*	pMatchData,			// [in] マッチした文字列
+	int			nMatchLen,				// [in] マッチした文字列の長さ
 	// オプション
 	const GrepOption&	grepOption
 	)
@@ -1027,22 +1028,22 @@ static void OutputPathInfo(
 	@date 2004/03/28 genta 不要な引数nNest, bGrepSubFolder, pszPathを削除
 */
 int GrepAgent::DoGrepFile(
-	EditView*				pViewDst,			//!< 
-	DlgCancel*				pDlgCancel,			//!< [in] Cancelダイアログへのポインタ
-	const wchar_t*			pszKey,				//!< [in] 検索パターン
-	const TCHAR*			pszFile,			//!< [in] 処理対象ファイル名(表示用)
-	const SearchOption&		searchOption,		//!< [in] 検索オプション
-	const GrepOption&		grepOption,			//!< [in] Grepオプション
-	const SearchStringPattern& pattern,			//!< [in] 検索パターン
-	Bregexp*				pRegexp,			//!< [in] 正規表現コンパイルデータ。既にコンパイルされている必要がある
-	int*					pnHitCount,			//!< [i/o] ヒット数の合計．元々の値に見つかった数を加算して返す．
-	const TCHAR*			pszFullPath,		//!< [in] 処理対象ファイルパス C:\Folder\SubFolder\File.ext
-	const TCHAR*			pszBaseFolder,		//!< [in] 検索フォルダ C:\Folder
-	const TCHAR*			pszFolder,			//!< [in] サブフォルダ SubFolder (!bGrepSeparateFolder) または C:\Folder\SubFolder (!bGrepSeparateFolder)
-	const TCHAR*			pszRelPath,			//!< [in] 相対パス File.ext(bGrepSeparateFolder) または  SubFolder\File.ext(!bGrepSeparateFolder)
-	bool&					bOutputBaseFolder,	//!< 
-	bool&					bOutputFolderName,	//!< 
-	NativeW&				memMessage			//!< 
+	EditView*				pViewDst,			// 
+	DlgCancel*				pDlgCancel,			// [in] Cancelダイアログへのポインタ
+	const wchar_t*			pszKey,				// [in] 検索パターン
+	const TCHAR*			pszFile,			// [in] 処理対象ファイル名(表示用)
+	const SearchOption&		searchOption,		// [in] 検索オプション
+	const GrepOption&		grepOption,			// [in] Grepオプション
+	const SearchStringPattern& pattern,			// [in] 検索パターン
+	Bregexp*				pRegexp,			// [in] 正規表現コンパイルデータ。既にコンパイルされている必要がある
+	int*					pnHitCount,			// [i/o] ヒット数の合計．元々の値に見つかった数を加算して返す．
+	const TCHAR*			pszFullPath,		// [in] 処理対象ファイルパス C:\Folder\SubFolder\File.ext
+	const TCHAR*			pszBaseFolder,		// [in] 検索フォルダ C:\Folder
+	const TCHAR*			pszFolder,			// [in] サブフォルダ SubFolder (!bGrepSeparateFolder) または C:\Folder\SubFolder (!bGrepSeparateFolder)
+	const TCHAR*			pszRelPath,			// [in] 相対パス File.ext(bGrepSeparateFolder) または  SubFolder\File.ext(!bGrepSeparateFolder)
+	bool&					bOutputBaseFolder,	// 
+	bool&					bOutputFolderName,	// 
+	NativeW&				memMessage			// 
 	)
 {
 	int		nHitCount;
@@ -1065,7 +1066,6 @@ int GrepAgent::DoGrepFile(
 	const TCHAR* pszDispFilePath = (grepOption.bGrepSeparateFolder || grepOption.bGrepOutputBaseFolder) ? pszRelPath : pszFullPath;
 
 	//	ここでは正規表現コンパイルデータの初期化は不要
-
 	const TCHAR*	pszCodeName; // 2002/08/29 const付加
 	pszCodeName = _T("");
 	nHitCount = 0;

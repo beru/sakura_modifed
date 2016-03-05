@@ -1407,7 +1407,7 @@ bool ReadFile(const wchar_t* path, std::vector<char>& buff)
 	return true;
 }
 
-bool ReadFileAndUnicode(const wchar_t* path, std::vector<wchar_t>& buffW)
+bool ReadFileAndUnicodify(const wchar_t* path, std::vector<wchar_t>& buffW)
 {
 	std::vector<char> buffM;
 	if (!ReadFile(path, buffM) || buffM.size() < 3) {

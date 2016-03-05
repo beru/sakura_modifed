@@ -1,7 +1,7 @@
 /*!	@file
 @brief ViewCommanderクラスのコマンド(編集系 基本形)関数群
 
-	2012/12/16	CViewCommander.cpp,CViewCommander_New.cppから分離
+	2012/12/16	ViewCommander.cpp,ViewCommander_New.cppから分離
 */
 /*
 	Copyright (C) 1998-2001, Norio Nakatani
@@ -287,7 +287,7 @@ void ViewCommander::Command_IME_CHAR(WORD wChar)
 }
 
 
-// from CViewCommander_New.cpp
+// from ViewCommander_New.cpp
 // Undo 元に戻す
 void ViewCommander::Command_UNDO(void)
 {
@@ -541,7 +541,7 @@ void ViewCommander::Command_UNDO(void)
 }
 
 
-// from CViewCommander_New.cpp
+// from ViewCommander_New.cpp
 // Redo やり直し
 void ViewCommander::Command_REDO(void)
 {

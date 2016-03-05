@@ -56,7 +56,13 @@ public:
 		return FALSE;
 	}
 
-	int Enumerates( LPCTSTR lpBaseFolder, GrepEnumKeys& grepEnumKeys, GrepEnumOptions option, GrepEnumFolders& except ){
+	int Enumerates(
+		LPCTSTR lpBaseFolder,
+		const GrepEnumKeys& grepEnumKeys,
+		const GrepEnumOptions& option,
+		GrepEnumFolders& except
+		)
+	{
 		m_grepEnumExceptFolders.Enumerates( lpBaseFolder, grepEnumKeys.m_vecExceptFolderKeys, option, NULL );
 		return GrepEnumFolders::Enumerates( lpBaseFolder, grepEnumKeys.m_vecSearchFolderKeys, option, &except );
 	}

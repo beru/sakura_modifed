@@ -1105,7 +1105,7 @@ void DlgTagJumpList::find_key(const wchar_t* keyword)
 	@date 2007.03.13 genta バッファオーバーラン暫定対処でバッファサイズ変更
 	@date 2010.04.02 Moca いろいろ変更。SJISで読む。ページング, format=1の解釈、タグファイル情報の利用
 		「全tagsの検索結果をソートして先頭からCapaticyまで」を「tagsファイル順(=depth)順、キーワード順」に変更
-	@date 2010.07.21 find_key→find_key_coreにして、CViewCommander::Command_TagJumpByTagsFileと統合
+	@date 2010.07.21 find_key→find_key_coreにして、ViewCommander::Command_TagJumpByTagsFileと統合
 */
 int DlgTagJumpList::find_key_core(
 	int nTop,

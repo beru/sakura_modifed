@@ -1,7 +1,7 @@
 /*!	@file
 @brief ViewCommanderクラスのコマンド(ジャンプ&ブックマーク)関数群
 
-	2012/12/17	CViewCommander.cpp,CViewCommander_New.cppから分離
+	2012/12/17	ViewCommander.cpp,ViewCommander_New.cppから分離
 */
 /*
 	Copyright (C) 1998-2001, Norio Nakatani
@@ -19,7 +19,7 @@
 #include "docplus/FuncListManager.h"
 
 
-// from CViewCommander_New.cpp
+// from ViewCommander_New.cpp
 /*!	検索開始位置へ戻る
 	@author	ai
 	@date	02/06/26
@@ -261,7 +261,7 @@ void ViewCommander::Command_JUMP(void)
 }
 
 
-// from CViewCommander_New.cpp
+// from ViewCommander_New.cpp
 // ブックマークの設定・解除を行う(トグル動作)
 void ViewCommander::Command_BOOKMARK_SET(void)
 {
@@ -299,7 +299,7 @@ void ViewCommander::Command_BOOKMARK_SET(void)
 }
 
 
-// from CViewCommander_New.cpp
+// from ViewCommander_New.cpp
 // 次のブックマークを探し，見つかったら移動する
 void ViewCommander::Command_BOOKMARK_NEXT(void)
 {
@@ -343,7 +343,7 @@ re_do:;								// hor
 }
 
 
-// from CViewCommander_New.cpp
+// from ViewCommander_New.cpp
 // 前のブックマークを探し，見つかったら移動する．
 void ViewCommander::Command_BOOKMARK_PREV(void)
 {
@@ -388,7 +388,7 @@ re_do:;								// hor
 }
 
 
-// from CViewCommander_New.cpp
+// from ViewCommander_New.cpp
 // ブックマークをクリアする
 void ViewCommander::Command_BOOKMARK_RESET(void)
 {
@@ -398,7 +398,7 @@ void ViewCommander::Command_BOOKMARK_RESET(void)
 }
 
 
-// from CViewCommander_New.cpp
+// from ViewCommander_New.cpp
 // 指定パターンに一致する行をマーク 2002.01.16 hor
 // キーマクロで記録できるように	2002.02.08 hor
 void ViewCommander::Command_BOOKMARK_PATTERN(void)

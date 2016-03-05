@@ -1,7 +1,7 @@
 /*!	@file
 @brief ViewCommanderクラスのコマンド(支援)関数群
 
-	2012/12/16	CViewCommander_Hokan.cppにcppCViewCommander.cppから支援関連を分離しCViewCommander_Support.cppに名称変更
+	2012/12/16	ViewCommander_Hokan.cppにcpp,ViewCommander.cppから支援関連を分離しViewCommander_Support.cppに名称変更
 */
 /*
 	Copyright (C) 1998-2001, Norio Nakatani

@@ -1,7 +1,7 @@
 /*!	@file
 @brief ViewCommanderクラスのコマンド(モード切り替え系)関数群
 
-	2012/12/15	CViewCommander.cpp,CViewCommander_New.cppから分離
+	2012/12/15	ViewCommander.cpp,ViewCommander_New.cppから分離
 */
 /*
 	Copyright (C) 1998-2001, Norio Nakatani
@@ -50,7 +50,7 @@ void ViewCommander::Command_CHGMOD_INS(void)
 }
 
 
-// from CViewCommander_New.cpp
+// from ViewCommander_New.cpp
 /*! 入力する改行コードを設定
 
 	@author moca

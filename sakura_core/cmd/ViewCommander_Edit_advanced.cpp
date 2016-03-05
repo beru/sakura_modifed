@@ -1,7 +1,7 @@
 /*!	@file
 @brief ViewCommanderクラスのコマンド(編集系 高度な操作(除単語/行操作))関数群
 
-	2012/12/17	CViewCommander.cpp,CViewCommander_New.cppから分離
+	2012/12/17	ViewCommander.cpp,ViewCommander_New.cppから分離
 */
 /*
 	Copyright (C) 1998-2001, Norio Nakatani
@@ -556,7 +556,7 @@ void ViewCommander::Command_UNINDENT(wchar_t wcChar)
 }
 
 
-// from CViewCommander_New.cpp
+// from ViewCommander_New.cpp
 /*! TRIM Step1
 	非選択時はカレント行を選択して m_pCommanderView->ConvSelectedArea → ConvMemory へ
 	@author hor
@@ -593,7 +593,7 @@ void ViewCommander::Command_TRIM(
 }
 
 
-// from CViewCommander_New.cpp
+// from ViewCommander_New.cpp
 // 物理行のソートに使う構造体
 struct SortData {
 	const NativeW* pMemLine;
@@ -822,7 +822,7 @@ void ViewCommander::Command_SORT(BOOL bAsc)	// bAsc:TRUE=昇順,FALSE=降順
 }
 
 
-// from CViewCommander_New.cpp
+// from ViewCommander_New.cpp
 /*! @brief 物理行のマージ
 
 	連続する物理行で内容が同一の物を1行にまとめます．
@@ -960,7 +960,7 @@ void ViewCommander::Command_MERGE(void)
 }
 
 
-// from CViewCommander_New.cpp
+// from ViewCommander_New.cpp
 /* メニューからの再変換対応 minfu 2002.04.09
 
 	@date 2002.04.11 YAZAKI COsVersionInfoのカプセル化を守りましょう。

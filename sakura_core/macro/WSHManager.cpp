@@ -95,7 +95,7 @@ bool WSHMacroManager::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
 	m_source = L"";
 	
 	std::vector<wchar_t> buffW;
-	ReadFileAndUnicode(pszPath, buffW);
+	ReadFileAndUnicodify(pszPath, buffW);
 
 	buffW.push_back(0);
 	m_source = &buffW[0];

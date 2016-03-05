@@ -1,7 +1,7 @@
 /*!	@file
 @brief ViewCommanderクラスのコマンド(カーソル移動系)関数群
 
-	2012/12/17	CViewCommander.cpp,CViewCommander_New.cppから分離
+	2012/12/17	ViewCommander.cpp,ViewCommander_New.cppから分離
 */
 /*
 	Copyright (C) 1998-2001, Norio Nakatani
@@ -947,7 +947,7 @@ void ViewCommander::Command_JUMPHIST_SET(void)
 
 // 2001/06/20 Start by asa-o
 
-// from CViewCommander_New.cpp
+// from ViewCommander_New.cpp
 // テキストを１行下へスクロール
 void ViewCommander::Command_WndScrollDown(void)
 {
@@ -990,7 +990,7 @@ void ViewCommander::Command_WndScrollDown(void)
 }
 
 
-// from CViewCommander_New.cpp
+// from ViewCommander_New.cpp
 // テキストを１行上へスクロール
 void ViewCommander::Command_WndScrollUp(void)
 {
@@ -1031,7 +1031,7 @@ void ViewCommander::Command_WndScrollUp(void)
 // 2001/06/20 End
 
 
-// from CViewCommander_New.cpp
+// from ViewCommander_New.cpp
 /* 次の段落へ進む
 	2002/04/26 段落の両端で止まるオプションを追加
 	2002/04/19 新規
@@ -1104,7 +1104,7 @@ void ViewCommander::Command_GONEXTPARAGRAPH(bool bSelect)
 }
 
 
-// from CViewCommander_New.cpp
+// from ViewCommander_New.cpp
 /* 前の段落へ進む
 	2002/04/26 段落の両端で止まるオプションを追加
 	2002/04/19 新規

@@ -111,5 +111,5 @@ void GetStrTrancateWidth(TCHAR* dest, int nSize, const TCHAR* path, HDC hDC, int
 void GetShortViewPath(TCHAR* dest, int nSize, const TCHAR* path, HDC hDC, int nPxWidth, bool bFitMode);
 
 bool ReadFile(const wchar_t* path, std::vector<char>& buff);
-bool ReadFileAndUnicode(const wchar_t* path, std::vector<wchar_t>& buff);
+bool ReadFileAndUnicodify(const wchar_t* path, std::vector<wchar_t>& buff);
 

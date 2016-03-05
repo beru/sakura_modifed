@@ -1,7 +1,7 @@
 /*!	@file
 @brief ViewCommanderクラスのコマンド(編集系 単語/行単位)関数群
 
-	2012/12/16	CViewCommander.cppから分離
+	2012/12/16	ViewCommander.cppから分離
 */
 /*
 	Copyright (C) 1998-2001, Norio Nakatani

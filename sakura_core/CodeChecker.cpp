@@ -170,8 +170,8 @@ CallbackResultType CodeChecker::OnCheckSave(SaveInfo* pSaveInfo)
 	// ƒ†[ƒU–â‚¢‡‚í‚¹
 	if (nTmpResult == CodeConvertResult::LoseSome) {
 		TCHAR szCpName[100];
-		TCHAR  szLineNum[60];  // 123Œ…
-		TCHAR  szCharCode[12]; // U+12ab or 1234abcd
+		TCHAR szLineNum[60];  // 123Œ…
+		TCHAR szCharCode[12]; // U+12ab or 1234abcd
 		CodePage::GetNameNormal(szCpName, pSaveInfo->eCharCode);
 		_tcscpy( szCharCode, _T("") );
 		_tcscpy( szLineNum, _T("") );

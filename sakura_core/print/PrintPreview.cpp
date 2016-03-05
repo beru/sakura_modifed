@@ -64,7 +64,7 @@ using namespace std;
 #define		COMPAT_BMP_BASE     1   // COMPAT_BMP_SCALEピクセル幅を複写する画面ピクセル幅
 #define		COMPAT_BMP_SCALE    2   // 互換BMPのCOMPAT_BMP_BASEに対する倍率(1以上の整数倍)
 
-Print PrintPreview::m_cPrint;		//!< 現在のプリンタ情報 2003.05.02 かろと
+Print PrintPreview::m_print;		// 現在のプリンタ情報 2003.05.02 かろと
 
 /*! コンストラクタ
 	印刷プレビューを表示するために必要な情報を初期化、領域確保。
@@ -74,7 +74,7 @@ PrintPreview::PrintPreview(EditWnd* pParentWnd)
 	:
 	m_pParentWnd(pParentWnd),
 	m_hdcCompatDC(NULL),			// 再描画用コンパチブルDC
-	m_hbmpCompatBMP(NULL),		// 再描画用メモリBMP
+	m_hbmpCompatBMP(NULL),			// 再描画用メモリBMP
 	m_hbmpCompatBMPOld(NULL),		// 再描画用メモリBMP(OLD)
 	m_nbmpCompatScale(COMPAT_BMP_BASE),
 	m_nPreviewVScrollPos(0),
@@ -726,7 +726,7 @@ void PrintPreview::OnChangePrintSetting(void)
 
 	// 印刷/プレビューに必要な情報を取得
 	TCHAR szErrMsg[1024];
-	if (!m_cPrint.GetPrintMetrics(
+	if (!m_print.GetPrintMetrics(
 		&m_pPrintSetting->mdmDevMode,	// プリンタ設定 DEVMODE用
 		&m_nPreview_PaperAllWidth,		// 用紙幅
 		&m_nPreview_PaperAllHeight,		// 用紙高さ
@@ -1043,7 +1043,7 @@ void PrintPreview::OnPrint(void)
 
 	m_bLockSetting = true; // プリント設定でページ数がきまるのでロックする
 
-	if (!m_cPrint.PrintDlg(&pd, &m_pPrintSetting->mdmDevMode)) {
+	if (!m_print.PrintDlg(&pd, &m_pPrintSetting->mdmDevMode)) {
 		m_bLockSetting = false;
 		if (m_bDemandUpdateSetting) {
 			OnChangePrintSetting();
@@ -1087,7 +1087,7 @@ void PrintPreview::OnPrint(void)
 	// 印刷 ジョブ開始
 	HDC hdc;
 	TCHAR szErrMsg[1024];
-	if (!m_cPrint.PrintOpen(
+	if (!m_print.PrintOpen(
 		szJobName,
 		&m_pPrintSetting->mdmDevMode,	// プリンタ設定 DEVMODE用
 		&hdc,
@@ -1124,7 +1124,7 @@ void PrintPreview::OnPrint(void)
 		cDlgPrinting.SetItemText(IDC_STATIC_PROGRESS, szProgress);
 
 		// 印刷 ページ開始
-		m_cPrint.PrintStartPage(hdc);
+		m_print.PrintStartPage(hdc);
 
 		//	From Here Jun. 26, 2003 かろと / おきた
 		//	Windows 95/98ではStartPage()関数の呼び出し時に、属性はリセットされて既定値へ戻ります．
@@ -1176,7 +1176,7 @@ void PrintPreview::OnPrint(void)
 		}
 
 		// 印刷 ページ終了
-		m_cPrint.PrintEndPage(hdc);
+		m_print.PrintEndPage(hdc);
 
 		// 中断ボタン押下チェック
 		if (cDlgPrinting.IsCanceled()) {
@@ -1187,7 +1187,7 @@ void PrintPreview::OnPrint(void)
 	::SelectObject(hdc, hFontOld);
 
 	// 印刷 ジョブ終了
-	m_cPrint.PrintClose(hdc);
+	m_print.PrintClose(hdc);
 
 	//	印刷用フォント破棄
 	DestroyFonts();
@@ -1417,7 +1417,7 @@ ColorStrategy* PrintPreview::DrawPageText(
 	int				nOffY,
 	int				nPageNum,
 	DlgCancel*		pDlgCancel,
-	ColorStrategy* pStrategyStart
+	ColorStrategy*	pStrategyStart
 	)
 {
 	int				nDirectY = -1;
@@ -2107,7 +2107,7 @@ INT_PTR PrintPreview::DispatchEvent_PPB(
 					PRINTDLG pd = {0};
 					pd.Flags = PD_PRINTSETUP | PD_NONETWORKBUTTON;
 					pd.hwndOwner = m_pParentWnd->GetHwnd();
-					if (m_cPrint.PrintDlg(&pd, &m_pPrintSettingOrg->mdmDevMode)) {
+					if (m_print.PrintDlg(&pd, &m_pPrintSettingOrg->mdmDevMode)) {
 						// 用紙サイズと用紙方向を反映させる 2003.05.03 かろと
 						m_pPrintSettingOrg->nPrintPaperSize = m_pPrintSettingOrg->mdmDevMode.dmPaperSize;
 						m_pPrintSettingOrg->nPrintPaperOrientation = m_pPrintSettingOrg->mdmDevMode.dmOrientation;

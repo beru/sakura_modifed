@@ -1,7 +1,7 @@
 /*!	@file
 @brief ViewCommanderクラスのコマンド(選択系/矩形選択系)関数群
 
-	2012/12/20	CViewCommander.cppから分離
+	2012/12/20	ViewCommander.cppから分離
 */
 /*
 	Copyright (C) 1998-2001, Norio Nakatani

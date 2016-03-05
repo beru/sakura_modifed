@@ -1,7 +1,7 @@
 /*!	@file
 @brief ViewCommanderクラスのコマンド(ウィンドウ系)関数群
 
-	2012/12/15	CViewCommander.cpp,CViewCommander_New.cppから分離
+	2012/12/15	ViewCommander.cpp,ViewCommander_New.cppから分離
 */
 /*
 	Copyright (C) 1998-2001, Norio Nakatani
@@ -360,7 +360,7 @@ void ViewCommander::Command_TILE_H(void)
 }
 
 
-// from CViewCommander_New.cpp
+// from ViewCommander_New.cpp
 /*! 常に手前に表示
 	@date 2004.09.21 Moca
 */
@@ -634,7 +634,7 @@ void ViewCommander::Command_WIN_OUTPUT(void)
 }
 
 
-// from CViewCommander_New.cpp
+// from ViewCommander_New.cpp
 /*!	@brief マクロ用アウトプットウィンドウに表示
 	@date 2006.04.26 maru 新規作成
 */

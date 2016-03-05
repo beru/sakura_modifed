@@ -1,7 +1,7 @@
 /*!	@file
 @brief ViewCommanderクラスのコマンド(設定系)関数群
 
-	2012/12/15	CViewCommander.cpp,CViewCommander_New.cppから分離
+	2012/12/15	ViewCommander.cpp,ViewCommander_New.cppから分離
 */
 /*
 	Copyright (C) 1998-2001, Norio Nakatani
@@ -380,7 +380,7 @@ void ViewCommander::Command_WRAPWINDOWWIDTH(void)	// Oct. 7, 2000 JEPRO WRAPWIND
 }
 
 
-// from CViewCommander_New.cpp
+// from ViewCommander_New.cpp
 /*!	履歴の管理(ダイアログ)
 	@author	MIK
 	@date	2003/04/07
