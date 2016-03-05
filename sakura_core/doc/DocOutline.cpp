@@ -385,7 +385,7 @@ void DocOutline::MakeFuncList_RuleFile(
 			&ptPos
 		);
 
-		// nDepthを計算
+		// m_nDepthを計算
 		int k;
 		bool bAppend = true;
 		for (k=0; k<nDepth; ++k) {
@@ -415,7 +415,7 @@ void DocOutline::MakeFuncList_RuleFile(
 			nDepth = k;
 		}else {
 			// 2002.11.03 Moca 最大値を超えるとバッファオーバーランするから規制する
-			// nDepth = nMaxStack;
+			// m_nDepth = nMaxStack;
 			bAppend = false;
 		}
 		

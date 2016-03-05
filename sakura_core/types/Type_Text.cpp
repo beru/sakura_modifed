@@ -209,7 +209,7 @@ void DocOutline::MakeTopicList_txt(FuncInfoArr* pFuncInfoArr)
 			&ptPos
 		);
 
-		// nDepthを計算
+		// m_nDepthを計算
 		int k;
 		bool bAppend = true;
 		for (k=0; k<nDepth; ++k) {
@@ -228,7 +228,7 @@ void DocOutline::MakeTopicList_txt(FuncInfoArr* pFuncInfoArr)
 			wcscpy_s(pszStack[nDepth], szTitle);
 		}else {
 			// 2002.11.03 Moca 最大値を超えるとバッファオーバーラン
-			// nDepth = nMaxStack;
+			// m_nDepth = nMaxStack;
 			bAppend = false;
 		}
 		

@@ -434,49 +434,54 @@ LayoutInt EditView::ScrollAtH(LayoutInt nPos)
 	//	Aug. 18, 2003 ryoji 変数のミスを修正
 	//	ウィンドウの幅をきわめて狭くしたときに編集領域が行番号から離れてしまうことがあった．
 	//	Aug. 14, 2005 genta 折り返し幅をLayoutMgrから取得するように
-	else if (GetRightEdgeForScrollBar() + GetWrapOverhang() - GetTextArea().m_nViewColNum  < nPos) {
-		nPos = GetRightEdgeForScrollBar() + GetWrapOverhang() - GetTextArea().m_nViewColNum ;
-		//	May 29, 2004 genta 折り返し幅よりウィンドウ幅が大きいときにWM_HSCROLLが来ると
-		//	nPosが負の値になることがあり，その場合にスクロールバーから編集領域が
-		//	離れてしまう．
-		if (nPos < 0)
-			nPos = LayoutInt(0);
+	else {
+		LayoutInt nPos2 = GetRightEdgeForScrollBar() + GetWrapOverhang() - GetTextArea().m_nViewColNum;
+		if (nPos2 < nPos) {
+			nPos = nPos2;
+			//	May 29, 2004 genta 折り返し幅よりウィンドウ幅が大きいときにWM_HSCROLLが来ると
+			//	nPosが負の値になることがあり，その場合にスクロールバーから編集領域が
+			//	離れてしまう．
+			if (nPos < 0) {
+				nPos = LayoutInt(0);
+			}
+		}
 	}
-	if (GetTextArea().GetViewLeftCol() == nPos) {
+	auto& textArea = GetTextArea();
+	if (textArea.GetViewLeftCol() == nPos) {
 		return LayoutInt(0);
 	}
 	// 水平スクロール量（文字数）の算出
-	const LayoutInt	nScrollColNum = GetTextArea().GetViewLeftCol() - nPos;
+	const LayoutInt	nScrollColNum = textArea.GetViewLeftCol() - nPos;
 
 	// スクロール
-	if (t_abs(nScrollColNum) >= GetTextArea().m_nViewColNum /*|| abs(nScrollRowNum) >= GetTextArea().m_nViewRowNum*/) {
-		GetTextArea().SetViewLeftCol(nPos);
+	if (t_abs(nScrollColNum) >= textArea.m_nViewColNum /*|| abs(nScrollRowNum) >= textArea.m_nViewRowNum*/) {
+		textArea.SetViewLeftCol(nPos);
 		::InvalidateRect(GetHwnd(), NULL, TRUE);
 	}else {
 		RECT rcClip2;
 		RECT rcScrol;
 		rcScrol.left = 0;
-		rcScrol.right = GetTextArea().GetAreaRight();
-		rcScrol.top = GetTextArea().GetAreaTop();
-		rcScrol.bottom = GetTextArea().GetAreaBottom();
+		rcScrol.right = textArea.GetAreaRight();
+		rcScrol.top = textArea.GetAreaTop();
+		rcScrol.bottom = textArea.GetAreaBottom();
 		int nScrollColPxWidth = (Int)nScrollColNum * GetTextMetrics().GetHankakuDx();
 		if (nScrollColNum > 0) {
-			rcScrol.left = GetTextArea().GetAreaLeft();
+			rcScrol.left = textArea.GetAreaLeft();
 			rcScrol.right =
-				GetTextArea().GetAreaRight() - nScrollColPxWidth;
-			rcClip2.left = GetTextArea().GetAreaLeft();
-			rcClip2.right = GetTextArea().GetAreaLeft() + nScrollColPxWidth;
-			rcClip2.top = GetTextArea().GetAreaTop();
-			rcClip2.bottom = GetTextArea().GetAreaBottom();
+				textArea.GetAreaRight() - nScrollColPxWidth;
+			rcClip2.left = textArea.GetAreaLeft();
+			rcClip2.right = textArea.GetAreaLeft() + nScrollColPxWidth;
+			rcClip2.top = textArea.GetAreaTop();
+			rcClip2.bottom = textArea.GetAreaBottom();
 		}else if (nScrollColNum < 0) {
-			rcScrol.left = GetTextArea().GetAreaLeft() - nScrollColPxWidth;
+			rcScrol.left = textArea.GetAreaLeft() - nScrollColPxWidth;
 			rcClip2.left =
-				GetTextArea().GetAreaRight() + nScrollColPxWidth;
-			rcClip2.right = GetTextArea().GetAreaRight();
-			rcClip2.top = GetTextArea().GetAreaTop();
-			rcClip2.bottom = GetTextArea().GetAreaBottom();
+				textArea.GetAreaRight() + nScrollColPxWidth;
+			rcClip2.right = textArea.GetAreaRight();
+			rcClip2.top = textArea.GetAreaTop();
+			rcClip2.bottom = textArea.GetAreaBottom();
 		}
-		GetTextArea().SetViewLeftCol(nPos);
+		textArea.SetViewLeftCol(nPos);
 		if (GetDrawSwitch()) {
 			RECT rcClip = {0, 0, 0, 0};
 			ScrollDraw(LayoutInt(0), nScrollColNum, rcScrol, rcClip, rcClip2);

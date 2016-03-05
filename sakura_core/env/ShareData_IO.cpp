@@ -125,7 +125,7 @@ bool ShareData_IO::ShareData_IO_2(bool bRead)
 
 	if (bRead) {
 		DllSharedData* pShareData = &GetDllShareData();
-		profile.IOProfileData(L"Common", L"szLanguageDll", MakeStringBufferT(pShareData->common.window.szLanguageDll));
+		profile.IOProfileData(L"Common", L"m_szLanguageDll", MakeStringBufferT(pShareData->common.window.szLanguageDll));
 		SelectLang::ChangeLang(pShareData->common.window.szLanguageDll);
 		pShare->RefreshString();
 	}
@@ -559,7 +559,7 @@ void ShareData_IO::ShareData_IO_Common(DataProfile& profile)
 	profile.IOProfileData( pszSecName, LTEXT("bDispMiniMap")			, common.window.bDispMiniMap );
 	profile.IOProfileData(pszSecName, LTEXT("nFUNCKEYWND_Place")		, common.window.nFuncKeyWnd_Place);
 	profile.IOProfileData(pszSecName, LTEXT("nFUNCKEYWND_GroupNum")	, common.window.nFuncKeyWnd_GroupNum);		// 2002/11/04 Moca ファンクションキーのグループボタン数
-	profile.IOProfileData(pszSecName, LTEXT("szLanguageDll")			, MakeStringBufferT(common.window.szLanguageDll));
+	profile.IOProfileData(pszSecName, LTEXT("m_szLanguageDll")			, MakeStringBufferT(common.window.szLanguageDll));
 	profile.IOProfileData( pszSecName, LTEXT("nMiniMapFontSize")		, common.window.nMiniMapFontSize );
 	profile.IOProfileData( pszSecName, LTEXT("nMiniMapQuality")		, common.window.nMiniMapQuality );
 	profile.IOProfileData( pszSecName, LTEXT("nMiniMapWidth")			, common.window.nMiniMapWidth );
@@ -2392,7 +2392,7 @@ void ShareData_IO::ShareData_IO_FileTreeItem(
 		auto_sprintf( szKey, L"FileTree(%d).szLabelName", i );
 		profile.IOProfileData( pszSecName, szKey, item.szLabelName );
 	}
-	auto_sprintf( szKey, L"FileTree(%d).nDepth", i );
+	auto_sprintf( szKey, L"FileTree(%d).m_nDepth", i );
 	profile.IOProfileData( pszSecName, szKey, item.nDepth );
 	if (profile.IsReadingMode()
 		|| item.eFileTreeItemType == FileTreeItemType::Grep

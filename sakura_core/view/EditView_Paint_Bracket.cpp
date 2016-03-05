@@ -190,7 +190,7 @@ void EditView::DrawBracketPair(bool bDraw)
 						break;
 					}
 				}
-				TypeSupport    curetLineBg(this, COLORIDX_CARETLINEBG);
+				TypeSupport curetLineBg(this, COLORIDX_CARETLINEBG);
 				EColorIndexType nColorIndexBg = (curetLineBg.IsDisp() && ptColLine.GetY2() == GetCaret().GetCaretLayoutPos().GetY2()
 					? COLORIDX_CARETLINEBG
 					: TypeSupport(this, COLORIDX_EVENLINEBG).IsDisp() && ptColLine.GetY2() % 2 == 1

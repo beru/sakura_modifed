@@ -1282,7 +1282,7 @@ bool ImpExpFileTree::Import(const wstring& sFileName, wstring& sErrMsg)
 	profile.SetReadingMode();
 	profile.ReadProfile(strPath.c_str());
 
-	IO_FileTreeIni(profile, m_aFileTreeItems);
+	IO_FileTreeIni(profile, m_fileTreeItems);
 
 	return true;
 }
@@ -1297,7 +1297,7 @@ bool ImpExpFileTree::Export(const wstring& sFileName, wstring& sErrMsg)
 	// èëÇ´çûÇ›ÉÇÅ[Éhê›íË
 	profile.SetWritingMode();
 
-	IO_FileTreeIni(profile, m_aFileTreeItems);
+	IO_FileTreeIni(profile, m_fileTreeItems);
 
 	// èëÇ´çûÇ›
 	if (!profile.WriteProfile(strPath.c_str(), WSTR_FILETREE_HEAD_V1)) {

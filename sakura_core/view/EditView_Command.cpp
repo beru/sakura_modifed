@@ -48,10 +48,10 @@
 */
 bool EditView::TagJumpSub(
 	const TCHAR*	pszFileName,
-	Point		ptJumpTo,		//!< ジャンプ位置(1開始)
-	bool			bClose,			//!< [in] true: 元ウィンドウを閉じる / false: 元ウィンドウを閉じない
+	Point			ptJumpTo,		// ジャンプ位置(1開始)
+	bool			bClose,			// [in] true: 元ウィンドウを閉じる / false: 元ウィンドウを閉じない
 	bool			bRelFromIni,
-	bool*			pbJumpToSelf	//!< [out] オプションNULL可。自分にジャンプしたか
+	bool*			pbJumpToSelf	// [out] オプションNULL可。自分にジャンプしたか
 	)
 {
 	// 2004/06/21 novice タグジャンプ機能追加
@@ -168,14 +168,14 @@ bool EditView::TagJumpSub(
 	@date 2008.04.09 ryoji 処理対象(file_ext)と開く対象(open_ext)の扱いが逆になっていたのを修正
 */
 bool EditView::OPEN_ExtFromtoExt(
-	bool			bCheckOnly,		//!< [in] true: チェックのみ行ってファイルは開かない
-	bool			bBeepWhenMiss,	//!< [in] true: ファイルを開けなかった場合に警告音を出す
-	const TCHAR*	file_ext[],		//!< [in] 処理対象とする拡張子
-	const TCHAR*	open_ext[],		//!< [in] 開く対象とする拡張子
-	int				file_extno,		//!< [in] 処理対象拡張子リストの要素数
-	int				open_extno,		//!< [in] 開く対象拡張子リストの要素数
-	const TCHAR*	errmes			//!< [in] ファイルを開けなかった場合に表示するエラーメッセージ
-)
+	bool			bCheckOnly,		// [in] true: チェックのみ行ってファイルは開かない
+	bool			bBeepWhenMiss,	// [in] true: ファイルを開けなかった場合に警告音を出す
+	const TCHAR*	file_ext[],		// [in] 処理対象とする拡張子
+	const TCHAR*	open_ext[],		// [in] 開く対象とする拡張子
+	int				file_extno,		// [in] 処理対象拡張子リストの要素数
+	int				open_extno,		// [in] 開く対象拡張子リストの要素数
+	const TCHAR*	errmes			// [in] ファイルを開けなかった場合に表示するエラーメッセージ
+	)
 {
 	// 編集中ファイルの拡張子を調べる
 	for (int i=0; i<file_extno; ++i) {
@@ -351,9 +351,9 @@ EditView::TOGGLE_WRAP_ACTION EditView::GetWrapMode(LayoutInt* _newKetas)
 
 void EditView::AddToCmdArr(const TCHAR* szCmd)
 {
-	RecentCmd cRecentCmd;
-	cRecentCmd.AppendItem(szCmd);
-	cRecentCmd.Terminate();
+	RecentCmd recentCmd;
+	recentCmd.AppendItem(szCmd);
+	recentCmd.Terminate();
 }
 
 /*! 正規表現の検索パターンを必要に応じて更新する(ライブラリが使用できないときはFALSEを返す)
@@ -409,10 +409,10 @@ BOOL EditView::ChangeCurRegexp(bool bRedrawIfChanged)
 	@date 2007.10.08 ryoji 新規（Command_COPY()から処理抜き出し）
 */
 void EditView::CopyCurLine(
-	bool		bAddCRLFWhenCopy,		//!< [in] 折り返し位置に改行コードを挿入するか？
-	EolType	neweol,					//!< [in] コピーするときのEOL。
-	bool		bEnableLineModePaste	//!< [in] ラインモード貼り付けを可能にする
-)
+	bool	bAddCRLFWhenCopy,		// [in] 折り返し位置に改行コードを挿入するか？
+	EolType	neweol,					// [in] コピーするときのEOL。
+	bool	bEnableLineModePaste	// [in] ラインモード貼り付けを可能にする
+	)
 {
 	if (GetSelectionInfo().IsTextSelected()) {
 		return;

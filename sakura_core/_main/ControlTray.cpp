@@ -292,7 +292,7 @@ HWND ControlTray::Create(HINSTANCE hInstance)
 	m_pPropertyManager = new PropertyManager();
 	m_pPropertyManager->Create(GetTrayHwnd(), &m_hIcons, &m_menuDrawer);
 
-	auto_strcpy(szLanguageDll, m_pShareData->common.window.szLanguageDll);
+	auto_strcpy(m_szLanguageDll, m_pShareData->common.window.szLanguageDll);
 
 	return GetTrayHwnd();
 }
@@ -621,8 +621,8 @@ LRESULT ControlTray::DispatchEvent(
 		if ((e_PM_CHANGESETTING_SELECT)lParam == PM_CHANGESETTING_ALL) {
 			{
 				auto& csWindow = GetDllShareData().common.window;
-				bool bChangeLang = auto_strcmp(csWindow.szLanguageDll, szLanguageDll) != 0;
-				auto_strcpy(szLanguageDll, csWindow.szLanguageDll);
+				bool bChangeLang = auto_strcmp(csWindow.szLanguageDll, m_szLanguageDll) != 0;
+				auto_strcpy(m_szLanguageDll, csWindow.szLanguageDll);
 				std::vector<std::wstring> values;
 				if (bChangeLang) {
 					ShareData::getInstance()->ConvertLangValues(values, true);

@@ -115,7 +115,7 @@ void EditView::ViewDiffInfo(
 	const TCHAR*	pszFile2,
 	int				nFlgOpt,
 	bool 			bUTF8
-)
+	)
 /*
 	bool	bFlgCase,		// ‘å•¶š¬•¶š“¯ˆê‹
 	bool	bFlgBlank,		// ‹ó”’–³‹

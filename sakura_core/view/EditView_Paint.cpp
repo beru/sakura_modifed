@@ -61,10 +61,11 @@ void EditView_Paint::Call_OnPaint(
 {
 	EditView* pView = GetEditView();
 
+	auto& textArea = pView->GetTextArea();
 	// 各要素
-	Rect rcLineNumber(0, pView->GetTextArea().GetAreaTop(), pView->GetTextArea().GetAreaLeft(), pView->GetTextArea().GetAreaBottom());
-	Rect rcRuler(pView->GetTextArea().GetAreaLeft(), 0, pView->GetTextArea().GetAreaRight(), pView->GetTextArea().GetAreaTop());
-	Rect rcBody(pView->GetTextArea().GetAreaLeft(), pView->GetTextArea().GetAreaTop(), pView->GetTextArea().GetAreaRight(), pView->GetTextArea().GetAreaBottom());
+	Rect rcLineNumber(0, textArea.GetAreaTop(), textArea.GetAreaLeft(), textArea.GetAreaBottom());
+	Rect rcRuler(textArea.GetAreaLeft(), 0, textArea.GetAreaRight(), textArea.GetAreaTop());
+	Rect rcBody(textArea.GetAreaLeft(), textArea.GetAreaTop(), textArea.GetAreaRight(), textArea.GetAreaBottom());
 
 	// 領域を作成 -> rc
 	std::vector<Rect> rcs;
@@ -344,7 +345,7 @@ Color3Setting EditView::GetColorIndex(
 	const Layout*			pLayout,
 	LayoutYInt				nLineNum,
 	int						nIndex,
-	ColorStrategyInfo* 	pInfo,			// 2010.03.31 ryoji 追加
+	ColorStrategyInfo*	 	pInfo,			// 2010.03.31 ryoji 追加
 	bool					bPrev			// 指定位置の色変更直前まで	2010.06.19 ryoji 追加
 	)
 {
@@ -872,7 +873,7 @@ bool EditView::DrawLogicLine(
 	HDC				_hdc,			// [in]     作画対象
 	DispPos*		_pDispPos,		// [in/out] 描画する箇所、描画元ソース
 	LayoutInt		nLineTo			// [in]     作画終了するレイアウト行番号
-)
+	)
 {
 //	MY_RUNNINGTIMER(runningTimer, "EditView::DrawLogicLine");
 	bool bDispEOF = false;

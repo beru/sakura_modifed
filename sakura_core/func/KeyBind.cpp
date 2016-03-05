@@ -388,7 +388,7 @@ int KeyBind::GetKeyStrList(
 
 
 /*! アクセスキー付きの文字列の作成
-	@param sName ラベル
+	@param m_name ラベル
 	@param sKey アクセスキー
 	@return アクセスキー付きの文字列
 	@data 2013.12.09 novice アクセスキーと文字列の比較で小文字も有効にする

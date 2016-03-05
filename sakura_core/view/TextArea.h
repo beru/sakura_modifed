@@ -57,12 +57,12 @@ public:
 		m_nViewLeftCol = nLeftCol;
 	}
 
-	//!右にはみ出した最初の列を返す
+	//! 右にはみ出した最初の列を返す
 	LayoutInt GetRightCol() const {
 		return m_nViewLeftCol + m_nViewColNum;
 	}
 
-	//!下にはみ出した最初の行を返す
+	//! 下にはみ出した最初の行を返す
 	LayoutInt GetBottomLine() const {
 		return m_nViewTopLine + m_nViewRowNum;
 	}
@@ -112,9 +112,9 @@ public:
 
 	//! クライアントサイズ更新
 	void TextArea_OnSize(
-		const Size& sizeClient, //!< ウィンドウのクライアントサイズ
-		int nCxVScroll,            //!< 垂直スクロールバーの横幅
-		int nCyHScroll             //!< 水平スクロールバーの縦幅
+		const Size& sizeClient,		//!< ウィンドウのクライアントサイズ
+		int nCxVScroll,				//!< 垂直スクロールバーの横幅
+		int nCyHScroll				//!< 水平スクロールバーの縦幅
 	);
 
 	//! 行番号表示に必要な幅を設定

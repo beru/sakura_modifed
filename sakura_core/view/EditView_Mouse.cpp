@@ -1990,17 +1990,17 @@ STDMETHODIMP EditView::Drop(LPDATAOBJECT pDataObject, DWORD dwKeyState, POINTL p
 			// 移動モード & 後ろに移動
 
 			// 現在の選択範囲を記憶する	// 2008.03.26 ryoji
-			LogicRange sSelLogic;
+			LogicRange selLogic;
 			m_pEditDoc->m_layoutMgr.LayoutToLogic(
 				GetSelectionInfo().m_select,
-				&sSelLogic
+				&selLogic
 			);
 
 			// 以前の選択範囲を記憶する	// 2008.03.26 ryoji
-			LogicRange sDelLogic;
+			LogicRange delLogic;
 			m_pEditDoc->m_layoutMgr.LayoutToLogic(
 				select_Old,
-				&sDelLogic
+				&delLogic
 			);
 
 			// 現在の行数を記憶する	// 2008.03.26 ryoji
@@ -2017,30 +2017,30 @@ STDMETHODIMP EditView::Drop(LPDATAOBJECT pDataObject, DWORD dwKeyState, POINTL p
 			// 削除前の選択範囲を復元する	// 2008.03.26 ryoji
 			if (!bBoxData) {
 				// 削除された範囲を考慮して選択範囲を調整する
-				if (sSelLogic.GetFrom().GetY2() == sDelLogic.GetTo().GetY2()) {	// 選択開始が削除末尾と同一行
-					sSelLogic.SetFromX(
-						sSelLogic.GetFrom().GetX2()
-						- (sDelLogic.GetTo().GetX2() - sDelLogic.GetFrom().GetX2())
+				if (selLogic.GetFrom().GetY2() == delLogic.GetTo().GetY2()) {	// 選択開始が削除末尾と同一行
+					selLogic.SetFromX(
+						selLogic.GetFrom().GetX2()
+						- (delLogic.GetTo().GetX2() - delLogic.GetFrom().GetX2())
 					);
 				}
-				if (sSelLogic.GetTo().GetY2() == sDelLogic.GetTo().GetY2()) {	// 選択終了が削除末尾と同一行
-					sSelLogic.SetToX(
-						sSelLogic.GetTo().GetX2()
-						- (sDelLogic.GetTo().GetX2() - sDelLogic.GetFrom().GetX2())
+				if (selLogic.GetTo().GetY2() == delLogic.GetTo().GetY2()) {	// 選択終了が削除末尾と同一行
+					selLogic.SetToX(
+						selLogic.GetTo().GetX2()
+						- (delLogic.GetTo().GetX2() - delLogic.GetFrom().GetX2())
 					);
 				}
 				// Note.
-				// (sDelLogic.GetTo().GetY2() - sDelLogic.GetFrom().GetY2()) だと実際の削除行数と同じになる
+				// (delLogic.GetTo().GetY2() - delLogic.GetFrom().GetY2()) だと実際の削除行数と同じになる
 				// こともあるが、（削除行数－１）になることもある．
 				// 例）フリーカーソルでの行番号クリック時の１行選択
 				int nLines = m_pEditDoc->m_docLineMgr.GetLineCount();
-				sSelLogic.SetFromY(sSelLogic.GetFrom().GetY2() - (nLines_Old - nLines));
-				sSelLogic.SetToY(sSelLogic.GetTo().GetY2() - (nLines_Old - nLines));
+				selLogic.SetFromY(selLogic.GetFrom().GetY2() - (nLines_Old - nLines));
+				selLogic.SetToY(selLogic.GetTo().GetY2() - (nLines_Old - nLines));
 
 				// 調整後の選択範囲を設定する
 				LayoutRange select;
 				m_pEditDoc->m_layoutMgr.LogicToLayout(
-					sSelLogic,
+					selLogic,
 					&select
 				);
 				GetSelectionInfo().SetSelectArea(select);	// 2009.07.25 ryoji
@@ -2059,7 +2059,7 @@ STDMETHODIMP EditView::Drop(LPDATAOBJECT pDataObject, DWORD dwKeyState, POINTL p
 			);
 			m_commander.GetOpeBlk()->AppendOpe(
 				new MoveCaretOpe(
-					sDelLogic.GetFrom(),
+					delLogic.GetFrom(),
 					GetCaret().GetCaretLogicPos()
 				)
 			);
@@ -2260,9 +2260,9 @@ DWORD EditView::TranslateDropEffect(CLIPFORMAT cf, DWORD dwKeyState, POINTL pt, 
 	// ※MS 製品（MS Office, Visual Studioなど）ではこちらが主流っぽい
 	if (dwEffect & DROPEFFECT_MOVE) {
 #endif
-		dwEffect &= (MK_CONTROL & dwKeyState)? DROPEFFECT_COPY: DROPEFFECT_MOVE;
+		dwEffect &= (dwKeyState & MK_CONTROL)? DROPEFFECT_COPY: DROPEFFECT_MOVE;
 	}else {
-		dwEffect &= (MK_SHIFT & dwKeyState)? DROPEFFECT_MOVE: DROPEFFECT_COPY;
+		dwEffect &= (dwKeyState & MK_SHIFT)? DROPEFFECT_MOVE: DROPEFFECT_COPY;
 	}
 	return dwEffect;
 }

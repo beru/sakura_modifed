@@ -80,19 +80,19 @@ public:
 		ELEMDESC		Arguments[9];
 		int				ID;
 	};
-	typedef std::vector<MethodInfo> CMethodInfoList;
+	typedef std::vector<MethodInfo> MethodInfoList;
 
 	// コンストラクタ・デストラクタ
 	IfObj(const wchar_t* name, bool isGlobal);
 	virtual ~IfObj();
 
 	// フィールド・アクセサ
-	const std::wstring::value_type* Name() const { return this->sName.c_str(); } // インタフェースオブジェクト名
+	const std::wstring::value_type* Name() const { return this->m_name.c_str(); } // インタフェースオブジェクト名
 	bool IsGlobal() const { return this->m_isGlobal; } // オブジェクト名の省略可否
-	IWSHClient* Owner() const { return this->m_Owner; } // オーナーIWSHClient
-	std::wstring sName;
+	IWSHClient* Owner() const { return this->m_owner; } // オーナーIWSHClient
+	std::wstring m_name;
 	bool m_isGlobal;
-	IWSHClient *m_Owner;
+	IWSHClient *m_owner;
 
 	// 操作
 	void AddMethod(const wchar_t* Name, int ID, VARTYPE *ArgumentTypes,
@@ -127,7 +127,7 @@ public:
 
 private:
 	// メンバ変数
-	CMethodInfoList m_methods;			// メソッド情報リスト
+	MethodInfoList m_methods;			// メソッド情報リスト
 	ITypeInfo* m_typeInfo;
 };
 

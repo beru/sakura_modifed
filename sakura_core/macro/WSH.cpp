@@ -126,7 +126,7 @@ public:
 		const WSHClient::List& objects = m_Client->GetInterfaceObjects();
 		for (auto it=objects.begin(); it!=objects.end(); ++it) {
 			// Nov. 10, 2003 FILE Win9X‚Å‚ÍA[lstrcmpiW]‚ª–³Œø‚Ì‚½‚ßA[_wcsicmp]‚ÉC³
-			if (_wcsicmp(pstrName, (*it)->sName.c_str()) == 0) {
+			if (_wcsicmp(pstrName, (*it)->m_name.c_str()) == 0) {
 				if (dwReturnMask & SCRIPTINFO_IUNKNOWN) {
 					(*ppiunkItem) = *it;
 					(*ppiunkItem)->AddRef();
@@ -432,7 +432,7 @@ void WSHClient::AddInterfaceObject(IfObj* obj)
 {
 	if (!obj) return;
 	m_IfObjArr.push_back(obj);
-	obj->m_Owner = this;
+	obj->m_owner = this;
 	obj->AddRef();
 }
 

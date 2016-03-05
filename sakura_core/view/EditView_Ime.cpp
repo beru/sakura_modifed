@@ -98,7 +98,7 @@ void EditView::SetIMECompFormFont(void)
 	// composition window position.
 	//
 	//
-	HIMC	hIMC = ::ImmGetContext(GetHwnd());
+	HIMC hIMC = ::ImmGetContext(GetHwnd());
 	if (hIMC) {
 		::ImmSetCompositionFont(hIMC, const_cast<LOGFONT *>(&(m_pEditWnd->GetLogfont())));
 	}
@@ -426,8 +426,8 @@ LRESULT EditView::SetReconvertStruct(PRECONVERTSTRING pReconv, bool bUnicode, bo
 }
 
 // 再変換用 エディタ上の選択範囲を変更する 2002.04.09 minfu
-LRESULT EditView::SetSelectionFromReonvert(const PRECONVERTSTRING pReconv, bool bUnicode) {
-	
+LRESULT EditView::SetSelectionFromReonvert(const PRECONVERTSTRING pReconv, bool bUnicode)
+{
 	// 再変換情報が保存されているか
 	if ((m_nLastReconvIndex < 0) || (m_nLastReconvLine < 0))
 		return 0;

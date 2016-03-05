@@ -319,8 +319,8 @@ public:
 	int IsCurrentPositionSelectedTEST(const LayoutPoint& ptCaretPos, const LayoutRange& select) const; // 指定カーソル位置が選択エリア内にあるか
 	// 2006.07.09 genta 行桁指定によるカーソル移動(選択領域を考慮)
 	void MoveCursorSelecting(LayoutPoint ptWk_CaretPos, bool bSelect, int = _CARETMARGINRATE);
-	void ConvSelectedArea(EFunctionCode);								// 選択エリアのテキストを指定方法で変換
-	//!指定位置または指定範囲がテキストの存在しないエリアかチェックする		// 2008.08.03 nasukoji
+	void ConvSelectedArea(EFunctionCode);									// 選択エリアのテキストを指定方法で変換
+	//! 指定位置または指定範囲がテキストの存在しないエリアかチェックする	// 2008.08.03 nasukoji
 	bool IsEmptyArea(LayoutPoint ptFrom, LayoutPoint ptTo = LayoutPoint(LayoutInt(-1), LayoutInt(-1)), bool bSelect = false, bool bBoxSelect = false) const;
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //

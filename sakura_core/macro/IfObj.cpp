@@ -45,11 +45,11 @@
 // スクリプトに渡されるオブジェクトの型情報
 class IfObjTypeInfo: public ImplementsIUnknown<ITypeInfo> {
 private:
-	const IfObj::CMethodInfoList& m_methodsRef;
-	const std::wstring& sName;
+	const IfObj::MethodInfoList& m_methodsRef;
+	const std::wstring& m_name;
 	TYPEATTR m_typeAttr;
 public:
-	IfObjTypeInfo(const IfObj::CMethodInfoList& methods, const std::wstring& sName);
+	IfObjTypeInfo(const IfObj::MethodInfoList& methods, const std::wstring& sName);
 
 	virtual HRESULT STDMETHODCALLTYPE GetTypeAttr(
 					/* [out] */ TYPEATTR __RPC_FAR *__RPC_FAR *ppTypeAttr)
@@ -133,7 +133,7 @@ public:
 		//	2014.02.12 各パラメータを設定するように
 		if (memid == -1) {
 			if (pBstrName) {
-				*pBstrName = SysAllocString( sName.c_str() );
+				*pBstrName = SysAllocString( m_name.c_str() );
 			}
 		}else if (0 <= memid && memid < (int)m_methodsRef.size()) {
 			if (pBstrName) {
@@ -217,12 +217,12 @@ public:
 	}
 };
 
-IfObjTypeInfo::IfObjTypeInfo(const IfObj::CMethodInfoList& methods,
+IfObjTypeInfo::IfObjTypeInfo(const IfObj::MethodInfoList& methods,
 							   const std::wstring& sName)
 	:
 	ImplementsIUnknown<ITypeInfo>(),
 	m_methodsRef(methods),
-	sName(sName)
+	m_name(sName)
 { 
 	ZeroMemory(&m_typeAttr, sizeof(m_typeAttr));
 	m_typeAttr.cImplTypes = 0; // 親クラスのITypeInfoの数
@@ -263,9 +263,9 @@ HRESULT STDMETHODCALLTYPE IfObjTypeInfo::GetNames(
 IfObj::IfObj(const wchar_t* name, bool isGlobal)
 	:
 	ImplementsIUnknown<IDispatch>(),
-	sName(name),
+	m_name(name),
 	m_isGlobal(isGlobal),
-	m_Owner(0),
+	m_owner(0),
 	m_methods(),
 	m_typeInfo(NULL)
 { 
@@ -310,7 +310,7 @@ HRESULT STDMETHODCALLTYPE IfObj::Invoke(
 			m_methods[dispidMember].ID,
 			pdispparams,
 			pvarResult,
-			m_Owner->GetData()
+			m_owner->GetData()
 		);
 	}else {
 		return E_UNEXPECTED;
@@ -323,7 +323,7 @@ HRESULT STDMETHODCALLTYPE IfObj::GetTypeInfo(
 	/* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo)
 {
 	if (!m_typeInfo) {
-		m_typeInfo = new IfObjTypeInfo(this->m_methods, this->sName);
+		m_typeInfo = new IfObjTypeInfo(this->m_methods, this->m_name);
 		m_typeInfo->AddRef();
 	}
 	(*ppTInfo) = m_typeInfo;

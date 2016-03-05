@@ -99,8 +99,8 @@ public:
 		PushTextForeColor(color);
 	}
 	COLORREF GetCurrentTextForeColor() {
-		assert(!m_vTextForeColors.empty());
-		return m_vTextForeColors.back();
+		assert(!m_textForeColors.empty());
+		return m_textForeColors.back();
 	}
 
 	// テキスト背景色
@@ -113,8 +113,8 @@ public:
 		PushTextBackColor(color);
 	}
 	COLORREF GetTextBackColor() {
-		assert(!m_vTextBackColors.empty());
-		return m_vTextBackColors.back();
+		assert(!m_textBackColors.empty());
+		return m_textBackColors.back();
 	}
 
 	// テキストモード
@@ -142,8 +142,8 @@ public:
 		PushMyFont(font);
 	}
 	bool GetCurrentMyFontBold() {
-		assert(!m_vFonts.empty());
-		return  m_vFonts.back().fontAttr.bBoldFont;
+		assert(!m_fonts.empty());
+		return  m_fonts.back().fontAttr.bBoldFont;
 	}
 
 	// ペン
@@ -170,7 +170,7 @@ public:
 		ClearBrush();
 		PushBrushColor(color);
 	}
-	HBRUSH GetCurrentBrush() const { return m_vBrushes.size() ? m_vBrushes.back() : NULL; }
+	HBRUSH GetCurrentBrush() const { return m_brushes.size() ? m_brushes.back() : NULL; }
 
 	// 描画
 public:
@@ -208,12 +208,12 @@ private:
 	HDC					m_hdc;
 
 	// クリッピング
-	std::vector<HRGN>		m_vClippingRgns;
+	std::vector<HRGN>		m_clippingRgns;
 
 	// テキスト
-	std::vector<COLORREF>	m_vTextForeColors;
-	std::vector<COLORREF>	m_vTextBackColors;
-	std::vector<Font>		m_vFonts;
+	std::vector<COLORREF>	m_textForeColors;
+	std::vector<COLORREF>	m_textBackColors;
+	std::vector<Font>		m_fonts;
 
 	// テキスト
 	OrgInt				m_nTextModeOrg;
@@ -223,7 +223,7 @@ private:
 	std::vector<HPEN>	m_vPens;
 
 	// ブラシ
-	std::vector<HBRUSH>	m_vBrushes;
+	std::vector<HBRUSH>	m_brushes;
 	HBRUSH				m_hbrOrg;
 	HBRUSH				m_hbrCurrent;
 	bool				m_bDynamicBrush;	// m_hbrCurrentを動的に作成した場合はtrue

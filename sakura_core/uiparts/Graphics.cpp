@@ -10,20 +10,20 @@ class GDIStock {
 public:
 	GDIStock() {}
 	~GDIStock() {
-		while (!m_vObjects.empty()) {
-			::DeleteObject(m_vObjects.back());
-			m_vObjects.pop_back();
+		while (!m_objects.empty()) {
+			::DeleteObject(m_objects.back());
+			m_objects.pop_back();
 		}
 	}
 	bool Register(HGDIOBJ hObject) {
 		if (hObject) {
-			m_vObjects.push_back(hObject);
+			m_objects.push_back(hObject);
 			return true;
 		}
 		return false;
 	}
 protected:
-	std::vector<HGDIOBJ> m_vObjects;
+	std::vector<HGDIOBJ> m_objects;
 };
 
 static GDIStock s_gdiStock;	// 唯一の GDIStock オブジェクト
@@ -55,7 +55,7 @@ Graphics::~Graphics()
 
 void Graphics::_InitClipping()
 {
-	if (m_vClippingRgns.empty()) {
+	if (m_clippingRgns.empty()) {
 		// 元のクリッピング領域を取得
 		RECT rcDummy = {0, 0, 1, 1};
 		HRGN hrgnOrg = ::CreateRectRgnIndirect(&rcDummy);
@@ -65,7 +65,7 @@ void Graphics::_InitClipping()
 			hrgnOrg = NULL;
 		}
 		// 保存
-		m_vClippingRgns.push_back(hrgnOrg);
+		m_clippingRgns.push_back(hrgnOrg);
 	}
 }
 
@@ -75,32 +75,32 @@ void Graphics::PushClipping(const RECT& rc)
 	// 新しく作成→HDCに設定→スタックに保存
 	HRGN hrgnNew = CreateRectRgnIndirect(&rc);
 	::SelectClipRgn(m_hdc, hrgnNew);
-	m_vClippingRgns.push_back(hrgnNew);
+	m_clippingRgns.push_back(hrgnNew);
 }
 
 void Graphics::PopClipping()
 {
-	if (m_vClippingRgns.size() >= 2) {
+	if (m_clippingRgns.size() >= 2) {
 		// 最後の要素を削除
-		::DeleteObject(m_vClippingRgns.back());
-		m_vClippingRgns.pop_back();
+		::DeleteObject(m_clippingRgns.back());
+		m_clippingRgns.pop_back();
 		// この時点の最後の要素をHDCに設定
-		::SelectClipRgn(m_hdc, m_vClippingRgns.back());
+		::SelectClipRgn(m_hdc, m_clippingRgns.back());
 	}
 }
 
 void Graphics::ClearClipping()
 {
 	// 元のクリッピングに戻す
-	if (!m_vClippingRgns.empty()) {
-		::SelectClipRgn(m_hdc, m_vClippingRgns[0]);
+	if (!m_clippingRgns.empty()) {
+		::SelectClipRgn(m_hdc, m_clippingRgns[0]);
 	}
 	// 領域をすべて削除
-	int nSize = (int)m_vClippingRgns.size();
+	int nSize = (int)m_clippingRgns.size();
 	for (int i=0; i<nSize; ++i) {
-		::DeleteObject(m_vClippingRgns[i]);
+		::DeleteObject(m_clippingRgns[i]);
 	}
-	m_vClippingRgns.clear();
+	m_clippingRgns.clear();
 }
 
 
@@ -113,26 +113,26 @@ void Graphics::PushTextForeColor(COLORREF color)
 	// 設定
 	COLORREF cOld = ::SetTextColor(m_hdc, color);
 	// 記録
-	if (m_vTextForeColors.empty()) {
-		m_vTextForeColors.push_back(cOld);
+	if (m_textForeColors.empty()) {
+		m_textForeColors.push_back(cOld);
 	}
-	m_vTextForeColors.push_back(color);
+	m_textForeColors.push_back(color);
 }
 
 void Graphics::PopTextForeColor()
 {
 	// 戻す
-	if (m_vTextForeColors.size() >= 2) {
-		m_vTextForeColors.pop_back();
-		::SetTextColor(m_hdc, m_vTextForeColors.back());
+	if (m_textForeColors.size() >= 2) {
+		m_textForeColors.pop_back();
+		::SetTextColor(m_hdc, m_textForeColors.back());
 	}
 }
 
 void Graphics::ClearTextForeColor()
 {
-	if (!m_vTextForeColors.empty()) {
-		::SetTextColor(m_hdc, m_vTextForeColors[0]);
-		m_vTextForeColors.clear();
+	if (!m_textForeColors.empty()) {
+		::SetTextColor(m_hdc, m_textForeColors[0]);
+		m_textForeColors.clear();
 	}
 }
 
@@ -146,26 +146,26 @@ void Graphics::PushTextBackColor(COLORREF color)
 	// 設定
 	COLORREF cOld = ::SetBkColor(m_hdc, color);
 	// 記録
-	if (m_vTextBackColors.empty()) {
-		m_vTextBackColors.push_back(cOld);
+	if (m_textBackColors.empty()) {
+		m_textBackColors.push_back(cOld);
 	}
-	m_vTextBackColors.push_back(color);
+	m_textBackColors.push_back(color);
 }
 
 void Graphics::PopTextBackColor()
 {
 	// 戻す
-	if (m_vTextBackColors.size() >= 2) {
-		m_vTextBackColors.pop_back();
-		::SetBkColor(m_hdc, m_vTextBackColors.back());
+	if (m_textBackColors.size() >= 2) {
+		m_textBackColors.pop_back();
+		::SetBkColor(m_hdc, m_textBackColors.back());
 	}
 }
 
 void Graphics::ClearTextBackColor()
 {
-	if (!m_vTextBackColors.empty()) {
-		::SetBkColor(m_hdc, m_vTextBackColors[0]);
-		m_vTextBackColors.clear();
+	if (!m_textBackColors.empty()) {
+		::SetBkColor(m_hdc, m_textBackColors[0]);
+		m_textBackColors.clear();
 	}
 }
 
@@ -193,27 +193,27 @@ void Graphics::PushMyFont(const Font& font)
 	HFONT hFontOld = (HFONT)SelectObject(m_hdc, font.hFont);
 
 	// 記録
-	if (m_vFonts.empty()) {
+	if (m_fonts.empty()) {
 		Font fontOld = { { false, false }, hFontOld };
-		m_vFonts.push_back(fontOld);
+		m_fonts.push_back(fontOld);
 	}
-	m_vFonts.push_back(font);
+	m_fonts.push_back(font);
 }
 
 void Graphics::PopMyFont()
 {
 	// 戻す
-	if (m_vFonts.size() >= 2) {
-		m_vFonts.pop_back();
-		SelectObject(m_hdc, m_vFonts.back().hFont);
+	if (m_fonts.size() >= 2) {
+		m_fonts.pop_back();
+		SelectObject(m_hdc, m_fonts.back().hFont);
 	}
 }
 
 void Graphics::ClearMyFont()
 {
-	if (!m_vFonts.empty()) {
-		SelectObject(m_hdc, m_vFonts[0].hFont);
-		m_vFonts.clear();
+	if (!m_fonts.empty()) {
+		SelectObject(m_hdc, m_fonts[0].hFont);
+		m_fonts.clear();
 	}
 }
 
@@ -293,12 +293,12 @@ COLORREF Graphics::GetPenColor() const
 
 void Graphics::_InitBrushColor()
 {
-	if (m_vBrushes.empty()) {
+	if (m_brushes.empty()) {
 		// 元のブラシを取得
 		HBRUSH hbrOrg = (HBRUSH)::SelectObject(m_hdc, ::GetStockObject(NULL_BRUSH));
 		::SelectObject(m_hdc, hbrOrg); // 元に戻す
 		// 保存
-		m_vBrushes.push_back(hbrOrg);
+		m_brushes.push_back(hbrOrg);
 	}
 }
 
@@ -310,32 +310,32 @@ void Graphics::PushBrushColor(COLORREF color)
 	// 新しく作成→HDCに設定→スタックに保存
 	HBRUSH hbrNew = (color != (COLORREF)-1) ? CreateSolidBrush(color) : (HBRUSH)GetStockObject(NULL_BRUSH);
 	::SelectObject(m_hdc, hbrNew);
-	m_vBrushes.push_back(hbrNew);
+	m_brushes.push_back(hbrNew);
 }
 
 void Graphics::PopBrushColor()
 {
-	if (m_vBrushes.size() >= 2) {
+	if (m_brushes.size() >= 2) {
 		// 最後から2番目の要素をHDCに設定
-		::SelectObject(m_hdc, m_vBrushes[m_vBrushes.size()-2]);
+		::SelectObject(m_hdc, m_brushes[m_brushes.size()-2]);
 		// 最後の要素を削除
-		::DeleteObject(m_vBrushes.back());
-		m_vBrushes.pop_back();
+		::DeleteObject(m_brushes.back());
+		m_brushes.pop_back();
 	}
 }
 
 void Graphics::ClearBrush()
 {
 	// 元のブラシに戻す
-	if (!m_vBrushes.empty()) {
-		::SelectObject(m_hdc, m_vBrushes[0]);
+	if (!m_brushes.empty()) {
+		::SelectObject(m_hdc, m_brushes[0]);
 	}
 	// ブラシをすべて削除 (0番要素以外)
-	int nSize = (int)m_vBrushes.size();
+	int nSize = (int)m_brushes.size();
 	for (int i=1; i<nSize; ++i) {
-		::DeleteObject(m_vBrushes[i]);
+		::DeleteObject(m_brushes[i]);
 	}
-	m_vBrushes.resize(t_min(1, (int)m_vBrushes.size()));
+	m_brushes.resize(t_min(1, (int)m_brushes.size()));
 }
 
 

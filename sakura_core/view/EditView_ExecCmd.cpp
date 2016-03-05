@@ -107,7 +107,12 @@ protected:
 
 	TODO:	標準入力・標準エラーの取込選択。カレントディレクトリ。UTF-8等への対応
 */
-bool EditView::ExecCmd( const TCHAR* pszCmd, int nFlgOpt, const TCHAR* pszCurDir, OutputAdapter* customOa )
+bool EditView::ExecCmd(
+	const TCHAR* pszCmd,
+	int nFlgOpt,
+	const TCHAR* pszCurDir,
+	OutputAdapter* customOa
+	)
 {
 	HANDLE hStdOutWrite, hStdOutRead;
 	PROCESS_INFORMATION	pi = {0};

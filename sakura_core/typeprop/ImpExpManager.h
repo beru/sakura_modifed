@@ -311,7 +311,7 @@ public:
 	// Constructor
 	ImpExpFileTree(std::vector<FileTreeItem>& items)
 		:
-		m_aFileTreeItems(items)
+		m_fileTreeItems(items)
 	{
 	}
 
@@ -326,6 +326,6 @@ public:
 	const wchar_t* GetOriginExtension()	{ return L"ini"; }
 
 private:
-	std::vector<FileTreeItem>&	m_aFileTreeItems;
+	std::vector<FileTreeItem>&	m_fileTreeItems;
 };
 

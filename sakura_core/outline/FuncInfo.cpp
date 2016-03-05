@@ -25,7 +25,7 @@ FuncInfo::FuncInfo(
 	int				nInfo				//!< •t‰Áî•ñ
 	)
 	:
-	nDepth(0) // [‚³
+	m_nDepth(0) // [‚³
 {
 	m_nFuncLineCRLF = nFuncLineCRLF;		// ŠÖ”‚Ì‚ ‚és(CRLF’PˆÊ)
 	m_nFuncColCRLF = nFuncColCRLF;			// ŠÖ”‚Ì‚ ‚éŒ…(CRLF’PˆÊ)

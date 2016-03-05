@@ -68,7 +68,7 @@ static void StringToOpeLineData(const wchar_t* pLineData, int nLineDataLen, OpeL
 	@date 2002/03/24 YAZAKI bUndo削除
 */
 void EditView::InsertData_CEditView(
-	LayoutPoint	ptInsertPos,	// [in] 挿入位置
+	LayoutPoint		ptInsertPos,	// [in] 挿入位置
 	const wchar_t*	pData,			// [in] 挿入テキスト
 	int				nDataLen,		// [in] 挿入テキスト長。文字単位。
 	LayoutPoint*	pptNewPos,		// [out] 挿入された部分の次の位置のレイアウト位置
@@ -184,7 +184,6 @@ void EditView::InsertData_CEditView(
 		}
 		nColumnFrom = 0;
 	}
-
 
 	if (!m_bDoing_UndoRedo && pOpe) {	// アンドゥ・リドゥの実行中か
 		m_pEditDoc->m_layoutMgr.LayoutToLogic(
@@ -362,7 +361,7 @@ void EditView::DeleteData2(
 	const LayoutPoint& _ptCaretPos,
 	LogicInt			nDelLen,
 	NativeW*			pMem
-)
+	)
 {
 #ifdef _DEBUG
 	MY_RUNNINGTIMER(runningTimer, "EditView::DeleteData(1)");
@@ -444,7 +443,7 @@ void EditView::DeleteData2(
 void EditView::DeleteData(
 	bool	bRedraw
 //	BOOL	bUndo	// Undo操作かどうか
-)
+	)
 {
 #ifdef _DEBUG
 	MY_RUNNINGTIMER(runningTimer, "EditView::DeleteData(2)");
@@ -626,9 +625,9 @@ void EditView::DeleteData(
 		LayoutRange delRange;
 		delRange.SetFrom(GetCaret().GetCaretLayoutPos());
 		delRange.SetTo(LayoutPoint(nNxtPos, GetCaret().GetCaretLayoutPos().GetY()));
-		LogicRange sDelRangeLogic;
-		sDelRangeLogic.SetFrom(GetCaret().GetCaretLogicPos());
-		sDelRangeLogic.SetTo(LogicPoint(nNxtIdx + pLayout->GetLogicOffset(), GetCaret().GetCaretLogicPos().GetY()));
+		LogicRange delRangeLogic;
+		delRangeLogic.SetFrom(GetCaret().GetCaretLogicPos());
+		delRangeLogic.SetTo(LogicPoint(nNxtIdx + pLayout->GetLogicOffset(), GetCaret().GetCaretLogicPos().GetY()));
 		ReplaceData_CEditView(
 			delRange,
 			L"",				// 挿入するデータ
@@ -636,7 +635,7 @@ void EditView::DeleteData(
 			bRedraw,
 			m_bDoing_UndoRedo ? NULL : m_commander.GetOpeBlk(),
 			false,
-			&sDelRangeLogic
+			&delRangeLogic
 		);
 	}
 
@@ -665,14 +664,14 @@ end_of_func:;
 
 
 void EditView::ReplaceData_CEditView(
-	const LayoutRange&	delRange,			//!< [in]  削除範囲レイアウト単位
-	const wchar_t*		pInsData,			//!< [in]  挿入するデータ
-	LogicInt			nInsDataLen,		//!< [in]  挿入するデータの長さ
+	const LayoutRange&	delRange,			// [in]  削除範囲レイアウト単位
+	const wchar_t*		pInsData,			// [in]  挿入するデータ
+	LogicInt			nInsDataLen,		// [in]  挿入するデータの長さ
 	bool				bRedraw,
 	OpeBlk*				pOpeBlk,
 	bool				bFastMode,
 	const LogicRange*	psDelRangeLogicFast
-)
+	)
 {
 	auto& opeBuf = GetDocument()->m_docEditor.m_opeBuf;
 	int opeSeq = m_bDoing_UndoRedo ? opeBuf.GetCurrentPointer() : opeBuf.GetNextSeq();
@@ -692,7 +691,7 @@ void EditView::ReplaceData_CEditView2(
 	bool				bRedraw,
 	OpeBlk*				pOpeBlk,
 	bool				bFastMode
-)
+	)
 {
 	LayoutRange sDelRangeLayout;
 	if (!bFastMode) {
@@ -706,14 +705,14 @@ void EditView::ReplaceData_CEditView2(
 // Jun 23, 2000 genta 変数名を書き換え忘れていたのを修正
 // Jun. 1, 2000 genta DeleteDataから移動した
 bool EditView::ReplaceData_CEditView3(
-	LayoutRange		delRange,			//!< [in]  削除範囲レイアウト単位
-	OpeLineData*	pMemCopyOfDeleted,	//!< [out] 削除されたデータのコピー(NULL可能)
-	OpeLineData*	pInsData,			//!< [in]  挿入するデータ
+	LayoutRange		delRange,			// [in]  削除範囲レイアウト単位
+	OpeLineData*	pMemCopyOfDeleted,	// [out] 削除されたデータのコピー(NULL可能)
+	OpeLineData*	pInsData,			// [in]  挿入するデータ
 	bool			bRedraw,
 	OpeBlk*			pOpeBlk,
 	int				nDelSeq,
 	int*			pnInsSeq,
-	bool			bFastMode,			//!< [in] CDocLineMgrを更新しない,行末チェックを省略する。bRedraw==falseの必要あり
+	bool			bFastMode,			// [in] CDocLineMgrを更新しない,行末チェックを省略する。bRedraw==falseの必要あり
 	const LogicRange*	psDelRangeLogicFast
 	)
 {
@@ -774,7 +773,7 @@ bool EditView::ReplaceData_CEditView3(
 		//	To Here
 	}
 
-	// 削除範囲ロジック単位 delRange -> sDelRangeLogic
+	// 削除範囲ロジック単位 delRange -> delRangeLogic
 	LogicRange sDelRangeLogic;
 	if (!bDelRangeUpdate && psDelRangeLogicFast) {
 		sDelRangeLogic = *psDelRangeLogicFast;
@@ -989,8 +988,8 @@ void EditView::RTrimPrevLine(void)
 				if (!(rangeA.GetFrom().x >= rangeA.GetTo().x && rangeA.GetFrom().y == rangeA.GetTo().y)) {
 					ReplaceData_CEditView(
 						rangeA,
-						NULL,		// 挿入するデータ
-						LogicInt(0),			// 挿入するデータの長さ
+						NULL,			// 挿入するデータ
+						LogicInt(0),	// 挿入するデータの長さ
 						true,
 						m_bDoing_UndoRedo ? NULL : m_commander.GetOpeBlk()
 					);

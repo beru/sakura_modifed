@@ -39,7 +39,7 @@ void EditView::TranslateCommand_isearch(
 	LPARAM&			lparam2,
 	LPARAM&			lparam3,
 	LPARAM&			lparam4
-)
+	)
 {
 	if (m_nISearchMode <= 0)
 		return;
@@ -95,7 +95,7 @@ bool EditView::ProcessCommand_isearch(
 	LPARAM	lparam2,
 	LPARAM	lparam3,
 	LPARAM	lparam4
-)
+	)
 {
 	switch (nCommand) {
 	// ŒŸõ•¶Žš—ñ‚Ì•ÏX‘€ì

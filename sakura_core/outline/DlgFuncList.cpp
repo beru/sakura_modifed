@@ -1431,7 +1431,7 @@ void DlgFuncList::SetListVB(void)
 	return;
 }
 
-/*! 汎用ツリーコントロールの初期化：FuncInfo::nDepthを利用して親子を設定
+/*! 汎用ツリーコントロールの初期化：FuncInfo::m_nDepthを利用して親子を設定
 
 	@param[in] tagjump タグジャンプ形式で出力する
 
@@ -1470,7 +1470,7 @@ void DlgFuncList::SetTree(bool tagjump, bool nolabel)
 		for (int i=0; i<nFuncInfoArrNum; ++i) {
 			const FuncInfo* pFuncInfo = m_pFuncInfoArr->GetAt(i);
 			if (pFuncInfo->IsAddClipText()) {
-				nBuffLen += pFuncInfo->m_memFuncName.GetStringLength() + pFuncInfo->nDepth * 2;
+				nBuffLen += pFuncInfo->m_memFuncName.GetStringLength() + pFuncInfo->m_nDepth * 2;
 				++nCount;
 			}
 		}
@@ -1492,14 +1492,14 @@ void DlgFuncList::SetTree(bool tagjump, bool nolabel)
 		cTVInsertStruct.item.lParam = i;	//	あとでこの数値（＝m_pcFuncInfoArrの何番目のアイテムか）を見て、目的地にジャンプするぜ!!。
 
 		// 親子関係をチェック
-		if (nStackPointer != pFuncInfo->nDepth) {
+		if (nStackPointer != pFuncInfo->m_nDepth) {
 			//	レベルが変わりました!!
 			//	※が、2段階深くなることは考慮していないので注意。
 			//	　もちろん、2段階以上浅くなることは考慮済み。
 
 			// 2002.11.10 Moca 追加 確保したサイズでは足りなくなった。再確保
-			if (nStackDepth <= pFuncInfo->nDepth + 1) {
-				nStackDepth = pFuncInfo->nDepth + 4; // 多めに確保しておく
+			if (nStackDepth <= pFuncInfo->m_nDepth + 1) {
+				nStackDepth = pFuncInfo->m_nDepth + 4; // 多めに確保しておく
 				HTREEITEM* phTi;
 				phTi = (HTREEITEM*)realloc(phParentStack, nStackDepth * sizeof(HTREEITEM));
 				if (phTi) {
@@ -1508,7 +1508,7 @@ void DlgFuncList::SetTree(bool tagjump, bool nolabel)
 					goto end_of_func;
 				}
 			}
-			nStackPointer = pFuncInfo->nDepth;
+			nStackPointer = pFuncInfo->m_nDepth;
 			cTVInsertStruct.hParent = phParentStack[nStackPointer];
 		}
 		hItem = TreeView_InsertItem(hwndTree, &cTVInsertStruct);
