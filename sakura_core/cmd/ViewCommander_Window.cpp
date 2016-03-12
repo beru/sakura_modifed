@@ -145,19 +145,20 @@ void ViewCommander::Command_CASCADE(void)
 		// -----------------------------------------
 
 		for (int i=0; i<nRowNum; ++i) {
-			if (::IsIconic(pEditNodeArr[i].GetHwnd())) {	// 最小化しているウィンドウは無視。
+			auto editNodeHWnd = pEditNodeArr[i].GetHwnd();
+			if (::IsIconic(editNodeHWnd)) {	// 最小化しているウィンドウは無視。
 				continue;
 			}
-			if (!::IsWindowVisible(pEditNodeArr[i].GetHwnd())) {	// 不可視ウィンドウは無視。
+			if (!::IsWindowVisible(editNodeHWnd)) {	// 不可視ウィンドウは無視。
 				continue;
 			}
 			// Mar. 20, 2004 genta
 			// 現在のウィンドウを末尾に持っていくためここではスキップ
-			if (pEditNodeArr[i].GetHwnd() == EditWnd::getInstance()->GetHwnd()) {
+			if (editNodeHWnd == EditWnd::getInstance()->GetHwnd()) {
 				current_win_index = i;
 				continue;
 			}
-			pWndArr[count].hWnd = pEditNodeArr[i].GetHwnd();
+			pWndArr[count].hWnd = editNodeHWnd;
 			++count;
 		}
 
@@ -273,19 +274,20 @@ void ViewCommander::Command_TILE_V(void)
 		// May 01, 2004 genta マルチモニタ対応
 		::GetMonitorWorkRect(m_pCommanderView->GetHwnd(), &rcDesktop);
 		for (int i=0; i<nRowNum; ++i) {
-			if (::IsIconic(pEditNodeArr[i].GetHwnd())) {	// 最小化しているウィンドウは無視。
+			auto editNodeHWnd = pEditNodeArr[i].GetHwnd();
+			if (::IsIconic(editNodeHWnd)) {	// 最小化しているウィンドウは無視。
 				continue;
 			}
-			if (!::IsWindowVisible(pEditNodeArr[i].GetHwnd())) {	// 不可視ウィンドウは無視。
+			if (!::IsWindowVisible(editNodeHWnd)) {	// 不可視ウィンドウは無視。
 				continue;
 			}
 			// From Here Jul. 28, 2002 genta
 			// 現在のウィンドウを先頭に持ってくる
-			if (pEditNodeArr[i].GetHwnd() == EditWnd::getInstance()->GetHwnd()) {
+			if (editNodeHWnd == EditWnd::getInstance()->GetHwnd()) {
 				phwndArr[count] = phwndArr[0];
 				phwndArr[0] = EditWnd::getInstance()->GetHwnd();
 			}else {
-				phwndArr[count] = pEditNodeArr[i].GetHwnd();
+				phwndArr[count] = editNodeHWnd;
 			}
 			// To Here Jul. 28, 2002 genta
 			++count;
@@ -325,19 +327,20 @@ void ViewCommander::Command_TILE_H(void)
 		// May 01, 2004 genta マルチモニタ対応
 		::GetMonitorWorkRect(m_pCommanderView->GetHwnd(), &rcDesktop);
 		for (int i=0; i<nRowNum; ++i) {
-			if (::IsIconic(pEditNodeArr[i].GetHwnd())) {	// 最小化しているウィンドウは無視。
+			auto editNodeHWnd = pEditNodeArr[i].GetHwnd();
+			if (::IsIconic(editNodeHWnd)) {	// 最小化しているウィンドウは無視。
 				continue;
 			}
-			if (!::IsWindowVisible(pEditNodeArr[i].GetHwnd())) {	// 不可視ウィンドウは無視。
+			if (!::IsWindowVisible(editNodeHWnd)) {	// 不可視ウィンドウは無視。
 				continue;
 			}
 			// From Here Jul. 28, 2002 genta
 			// 現在のウィンドウを先頭に持ってくる
-			if (pEditNodeArr[i].GetHwnd() == EditWnd::getInstance()->GetHwnd()) {
+			if (editNodeHWnd == EditWnd::getInstance()->GetHwnd()) {
 				phwndArr[count] = phwndArr[0];
 				phwndArr[0] = EditWnd::getInstance()->GetHwnd();
 			}else {
-				phwndArr[count] = pEditNodeArr[i].GetHwnd();
+				phwndArr[count] = editNodeHWnd;
 			}
 			// To Here Jul. 28, 2002 genta
 			++count;

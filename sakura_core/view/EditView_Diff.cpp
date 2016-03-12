@@ -80,13 +80,13 @@ public:
 	bool IsActiveDebugWindow(){ return false; }
 
 public:
-	bool	bDiffInfo;	//DIFF情報か
-	int		nDiffLen;		//DIFF情報長
-	char	szDiffData[100];	//DIFF情報
+	bool	bDiffInfo;			// DIFF情報か
+	int		nDiffLen;			// DIFF情報長
+	char	szDiffData[100];	// DIFF情報
 protected:
 	EditView* m_view;
-	bool	bLineHead;	//行頭か
-	bool	bFirst;	//先頭か？	//@@@ 2003.05.31 MIK
+	bool	bLineHead;			// 行頭か
+	bool	bFirst;				// 先頭か？	//@@@ 2003.05.31 MIK
 	int		nFlgFile12;
 };
 
@@ -366,7 +366,12 @@ void EditView::AnalyzeDiffInfo(
 }
 
 static
-bool MakeDiffTmpFile_core(TextOutputStream& out, HWND hwnd, EditView& view, bool bBom)
+bool MakeDiffTmpFile_core(
+	TextOutputStream& out,
+	HWND hwnd,
+	EditView& view,
+	bool bBom
+	)
 {
 	LogicInt y = LogicInt(0);
 	const wchar_t*	pLineData;

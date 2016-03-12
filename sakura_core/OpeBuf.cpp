@@ -1,5 +1,5 @@
 /*!	@file
-	@brief アンドゥ・リドゥバッファ
+	@brief Undo, Redoバッファ
 
 	@author Norio Nakatani
 	@date 1998/06/09 新規作成
@@ -60,7 +60,7 @@ bool OpeBuf::IsEnableRedo() const
 // 操作の追加
 bool OpeBuf::AppendOpeBlk(OpeBlk* pOpeBlk)
 {
-	// 現在位置より後ろ（アンドゥ対象）がある場合は、消去
+	// 現在位置より後ろ（Undo対象）がある場合は、消去
 	int size = (int)m_vCOpeBlkArr.size();
 	if (m_nCurrentPointer < size) {
 		for (int i=m_nCurrentPointer; i<size; ++i) {
@@ -136,7 +136,7 @@ OpeBlk* OpeBuf::DoRedo(bool* pbModified)
 //                         デバッグ                            //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-// アンドゥ・リドゥバッファのダンプ
+// Undo, Redoバッファのダンプ
 void OpeBuf::DUMP()
 {
 #ifdef _DEBUG

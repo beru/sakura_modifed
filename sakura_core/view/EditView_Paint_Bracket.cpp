@@ -334,7 +334,7 @@ bool EditView::SearchBracket(
 	const LayoutPoint&	ptLayout,
 	LayoutPoint*		pptLayoutNew,
 	int*				mode
-)
+	)
 {
 	LogicInt len;	//	s‚Ì’·‚³
 
@@ -409,7 +409,7 @@ bool EditView::SearchBracketForward(
 	const wchar_t*	upChar,
 	const wchar_t*	dnChar,
 	int				mode
-)
+	)
 {
 	int len;
 	int level = 0;
@@ -496,7 +496,7 @@ bool EditView::SearchBracketBackward(
 	const wchar_t*	dnChar,
 	const wchar_t*	upChar,
 	int				mode
-)
+	)
 {
 	int			len;
 	int			level = 1;
@@ -568,7 +568,11 @@ bool EditView::SearchBracketBackward(
 	@retval true Š‡ŒÊ
 	@retval false ”ñŠ‡ŒÊ
 */
-bool EditView::IsBracket(const wchar_t* pLine, LogicInt x, LogicInt size)
+bool EditView::IsBracket(
+	const wchar_t* pLine,
+	LogicInt x,
+	LogicInt size
+	)
 {
 	// Š‡ŒÊˆ— 2007.10.16 kobake
 	if (size == 1) {

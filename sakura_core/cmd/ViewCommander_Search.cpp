@@ -598,15 +598,16 @@ void ViewCommander::Command_REPLACE(HWND hwndParent)
 				// 位置指定ないので、何もしない
 			}
 		}
+		auto& layoutMgr = GetDocument()->m_layoutMgr;
 		// 行削除 選択範囲を行全体に拡大。カーソル位置を行頭へ(正規表現でも実行)
 		if (nReplaceTarget == 3) {
 			LogicPoint lineHome;
-			GetDocument()->m_layoutMgr.LayoutToLogic(GetSelect().GetFrom(), &lineHome);
+			layoutMgr.LayoutToLogic(GetSelect().GetFrom(), &lineHome);
 			lineHome.x = LogicXInt(0); // 行頭
 			LayoutRange selectFix;
-			GetDocument()->m_layoutMgr.LogicToLayout(lineHome, selectFix.GetFromPointer());
+			layoutMgr.LogicToLayout(lineHome, selectFix.GetFromPointer());
 			lineHome.y++; // 次行の行頭
-			GetDocument()->m_layoutMgr.LogicToLayout(lineHome, selectFix.GetToPointer());
+			layoutMgr.LogicToLayout(lineHome, selectFix.GetToPointer());
 			GetCaret().GetAdjustCursorPos(selectFix.GetToPointer());
 			m_pCommanderView->GetSelectionInfo().SetSelectArea(selectFix);
 			m_pCommanderView->GetSelectionInfo().DrawSelectArea();
@@ -630,7 +631,7 @@ void ViewCommander::Command_REPLACE(HWND hwndParent)
 			}
 
 			// 物理行、物理行長、物理行での検索マッチ位置
-			const Layout* pLayout = GetDocument()->m_layoutMgr.SearchLineByLayoutY(GetSelect().GetFrom().GetY2());
+			const Layout* pLayout = layoutMgr.SearchLineByLayoutY(GetSelect().GetFrom().GetY2());
 			const wchar_t* pLine = pLayout->GetDocLineRef()->GetPtr();
 			LogicInt nIdx = m_pCommanderView->LineColumnToIndex(pLayout, GetSelect().GetFrom().GetX2()) + pLayout->GetLogicOffset();
 			LogicInt nLen = pLayout->GetDocLineRef()->GetLengthWithEOL();
@@ -656,7 +657,6 @@ void ViewCommander::Command_REPLACE(HWND hwndParent)
 				// 物理行末までINSTEXTする方法は、キャレット位置を調整する必要があり、
 				// キャレット位置の計算が複雑になる。（置換後に改行がある場合に不具合発生）
 				// そこで、INSTEXTする文字列長を調整する方法に変更する（実はこっちの方がわかりやすい）
-				LayoutMgr& layoutMgr = GetDocument()->m_layoutMgr;
 				LogicInt matchLen = regexp.GetMatchLen();
 				LogicInt nIdxTo = nIdx + matchLen;		// 検索文字列の末尾
 				if (matchLen == 0) {
@@ -723,21 +723,21 @@ void ViewCommander::Command_REPLACE_ALL()
 
 	auto& dlgReplace = GetEditWindow()->m_dlgReplace;
 	// 2002.02.10 hor
-	BOOL nPaste			= dlgReplace.m_bPaste;
+	bool bPaste			= dlgReplace.m_bPaste;
 	BOOL nReplaceTarget	= dlgReplace.m_nReplaceTarget;
 	bool bRegularExp	= m_pCommanderView->m_curSearchOption.bRegularExp;
 	bool bSelectedArea	= dlgReplace.bSelectedArea;
 	bool bConsecutiveAll = dlgReplace.bConsecutiveAll;	// 「すべて置換」は置換の繰返し	// 2007.01.16 ryoji
-	if (nPaste && nReplaceTarget == 3) {
+	if (bPaste && nReplaceTarget == 3) {
 		// 置換対象：行削除のときは、クリップボードから貼り付けを無効にする
-		nPaste = FALSE;
+		bPaste = false;
 	}
 
 	dlgReplace.m_bCanceled = false;
 	dlgReplace.m_nReplaceCnt = 0;
 
 	// From Here 2001.12.03 hor
-	if (nPaste && !GetDocument()->m_docEditor.IsEnablePaste()) {
+	if (bPaste && !GetDocument()->m_docEditor.IsEnablePaste()) {
 		OkMessage(m_pCommanderView->GetHwnd(), LS(STR_ERR_CEDITVIEW_CMD10));
 		dlgReplace.CheckButton(IDC_CHK_PASTE, false);
 		dlgReplace.EnableItem(IDC_COMBO_TEXT2, true);
@@ -760,7 +760,7 @@ void ViewCommander::Command_REPLACE_ALL()
 	auto& layoutMgr = GetDocument()->m_layoutMgr;
 	bool bFastMode = false;
 	if (((Int)GetDocument()->m_docLineMgr.GetLineCount() * 10 < (Int)layoutMgr.GetLineCount())
-		&& !(bSelectedArea || nPaste)
+		&& !(bSelectedArea || bPaste)
 	) {
 		// 1行あたり10レイアウト行以上で、選択・ペーストでない場合
 		bFastMode = true;
@@ -853,7 +853,7 @@ void ViewCommander::Command_REPLACE_ALL()
 	NativeW	memClip;				// 置換後文字列のデータ（データを格納するだけで、ループ内ではこの形ではデータを扱いません）。
 
 	// クリップボードからのデータ貼り付けかどうか。
-	if (nPaste != 0) {
+	if (bPaste) {
 		// クリップボードからデータを取得。
 		if (!m_pCommanderView->MyGetClipboardData(memClip, &bColumnSelect, GetDllShareData().common.edit.bEnableLineModePaste ? &bLineSelect : NULL)) {
 			ErrorBeep();
@@ -924,7 +924,7 @@ void ViewCommander::Command_REPLACE_ALL()
 	// 呼ばれて遅くなるので、ここで宣言。
 	Bregexp regexp;
 	// 初期化も同様に毎ループごとにやると遅いので、最初に済ましてしまう。
-	if (bRegularExp && nPaste == 0) {
+	if (bRegularExp && !bPaste) {
 		if (!InitRegexp(m_pCommanderView->GetHwnd(), regexp, true)) {
 			m_pCommanderView->SetDrawSwitch(bDrawSwitchOld);
 			::EnableWindow(m_pCommanderView->GetHwnd(), TRUE);
@@ -1099,7 +1099,7 @@ void ViewCommander::Command_REPLACE_ALL()
 		LayoutPoint ptTmp(0, 0);
 		LogicPoint  ptTmpLogic(0, 0);
 
-		if (nPaste || !bRegularExp) {
+		if (bPaste || !bRegularExp) {
 			// 正規表現時は 後方参照($&)で実現するので、正規表現は除外
 			if (nReplaceTarget == 1) {	// 挿入位置セット
 				if (bFastMode) {
@@ -1140,12 +1140,12 @@ void ViewCommander::Command_REPLACE_ALL()
 				GetCaret().MoveCursorFastMode(selectLogic.GetFrom());
 			}else {
 				LogicPoint lineHome;
-				GetDocument()->m_layoutMgr.LayoutToLogic(GetSelect().GetFrom(), &lineHome);
+				layoutMgr.LayoutToLogic(GetSelect().GetFrom(), &lineHome);
 				lineHome.x = LogicXInt(0); // 行頭
 				LayoutRange selectFix;
-				GetDocument()->m_layoutMgr.LogicToLayout(lineHome, selectFix.GetFromPointer());
+				layoutMgr.LogicToLayout(lineHome, selectFix.GetFromPointer());
 				lineHome.y++; // 次行の行頭
-				GetDocument()->m_layoutMgr.LogicToLayout(lineHome, selectFix.GetToPointer());
+				layoutMgr.LogicToLayout(lineHome, selectFix.GetToPointer());
 				GetCaret().GetAdjustCursorPos(selectFix.GetToPointer());
 				m_pCommanderView->GetSelectionInfo().SetSelectArea(selectFix);
 				GetCaret().MoveCursor(selectFix.GetFrom(), false);
@@ -1155,7 +1155,7 @@ void ViewCommander::Command_REPLACE_ALL()
 
 		// コマンドコードによる処理振り分け
 		// テキストを貼り付け
-		if (nPaste) {
+		if (bPaste) {
 			if (!bColumnSelect) {
 				/* 本当は Command_INSTEXT を使うべきなんでしょうが、無駄な処理を避けるために直接たたく。
 				** →m_nSelectXXXが-1の時に m_pCommanderView->ReplaceData_CEditViewを直接たたくと動作不良となるため
@@ -1300,7 +1300,7 @@ void ViewCommander::Command_REPLACE_ALL()
 			}
 		}
 
-		if (!bFastMode && 50 <= nReplaceNum && !(bSelectedArea || nPaste)) {
+		if (!bFastMode && 50 <= nReplaceNum && !(bSelectedArea || bPaste)) {
 			bFastMode = true;
 			nAllLineNum = (Int)GetDocument()->m_docLineMgr.GetLineCount();
 			nAllLineNumOrg = nAllLineNumLogicOrg;

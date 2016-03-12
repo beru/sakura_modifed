@@ -335,7 +335,7 @@ public:
 	BOOL ChangeCurRegexp(bool bRedrawIfChanged = true);									// 2002.01.16 hor 正規表現の検索パターンを必要に応じて更新する(ライブラリが使用できないときはFALSEを返す)
 	void SendStatusMessage(const TCHAR* msg);					// 2002.01.26 hor 検索／置換／ブックマーク検索時の状態をステータスバーに表示する
 	LRESULT SetReconvertStruct(PRECONVERTSTRING pReconv, bool bUnicode, bool bDocumentFeed = false);	// 再変換用構造体を設定する 2002.04.09 minfu
-	LRESULT SetSelectionFromReonvert(const PRECONVERTSTRING pReconv, bool bUnicode);				// 再変換用構造体の情報を元に選択範囲を変更する 2002.04.09 minfu
+	LRESULT SetSelectionFromReonvert(const RECONVERTSTRING* pReconv, bool bUnicode);				// 再変換用構造体の情報を元に選択範囲を変更する 2002.04.09 minfu
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                           D&D                               //
@@ -650,20 +650,20 @@ public:
 	bool			m_bDrawBracketPairFlag;		// 対括弧の強調表示を行なうか						// 03/02/18 ai
 
 	// マウス
-	bool			m_bActivateByMouse;		//!< マウスによるアクティベート	// 2007.10.02 nasukoji
-	DWORD			m_dwTripleClickCheck;	//!< トリプルクリックチェック用時刻	// 2007.10.02 nasukoji
-	Point			m_mouseDownPos;		//!< クリック時のマウス座標
-	int				m_nWheelDelta;			//!< ホイール変化量
-	EFunctionCode	m_eWheelScroll; 		//!< スクロールの種類
+	bool			m_bActivateByMouse;		// マウスによるアクティベート	// 2007.10.02 nasukoji
+	DWORD			m_dwTripleClickCheck;	// トリプルクリックチェック用時刻	// 2007.10.02 nasukoji
+	Point			m_mouseDownPos;			// クリック時のマウス座標
+	int				m_nWheelDelta;			// ホイール変化量
+	EFunctionCode	m_eWheelScroll; 		// スクロールの種類
 	int				m_nMousePouse;			// マウス停止時間
 	Point			m_mousePousePos;		// マウスの停止位置
 	bool			m_bHideMouse;
 
-	int				m_nAutoScrollMode;			//!< オートスクロールモード
-	bool			m_bAutoScrollDragMode;		//!< ドラッグモード
-	Point			m_autoScrollMousePos;		//!< オートスクロールのマウス基準位置
-	bool			m_bAutoScrollVertical;		//!< 垂直スクロール可
-	bool			m_bAutoScrollHorizontal;	//!< 水平スクロール可
+	int				m_nAutoScrollMode;			// オートスクロールモード
+	bool			m_bAutoScrollDragMode;		// ドラッグモード
+	Point			m_autoScrollMousePos;		// オートスクロールのマウス基準位置
+	bool			m_bAutoScrollVertical;		// 垂直スクロール可
+	bool			m_bAutoScrollHorizontal;	// 水平スクロール可
 
 	// 検索
 	SearchStringPattern m_searchPattern;
@@ -691,7 +691,7 @@ public:
 	bool			m_bHokan;				//	補完中か？＝補完ウィンドウが表示されているか？かな？
 
 	// 編集
-	bool			m_bDoing_UndoRedo;		// アンドゥ・リドゥの実行中か
+	bool			m_bDoing_UndoRedo;		// Undo, Redoの実行中か
 
 	// 辞書Tip関連
 	DWORD			m_dwTipTimer;			// Tip起動タイマー
@@ -719,9 +719,9 @@ public:
 	FP_ATOK_RECONV	m_AT_ImmSetReconvertString;
 
 	// その他
-	AutoMarkMgr*	m_pHistory;	//	Jump履歴
+	AutoMarkMgr*	m_pHistory;			//	Jump履歴
 	RegexKeyword*	m_pRegexKeyword;	//@@@ 2001.11.17 add MIK
-	int				m_nMyIndex;	// 分割状態
+	int				m_nMyIndex;			// 分割状態
 	Migemo*			m_pMigemo;
 	bool			m_bMiniMap;
 	bool			m_bMiniMapMouseDown;

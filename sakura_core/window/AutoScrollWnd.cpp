@@ -41,7 +41,14 @@ AutoScrollWnd::~AutoScrollWnd()
 }
 
 
-HWND AutoScrollWnd::Create(HINSTANCE hInstance, HWND hwndParent, bool bVertical, bool bHorizontal, const Point& point, EditView* view)
+HWND AutoScrollWnd::Create(
+	HINSTANCE hInstance,
+	HWND hwndParent,
+	bool bVertical,
+	bool bHorizontal,
+	const Point& point,
+	EditView* view
+	)
 {
 	LPCTSTR pszClassName;
 

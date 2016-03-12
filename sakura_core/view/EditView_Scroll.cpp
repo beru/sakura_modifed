@@ -504,7 +504,13 @@ LayoutInt EditView::ScrollAtH(LayoutInt nPos)
 }
 
 
-void EditView::ScrollDraw(LayoutInt nScrollRowNum, LayoutInt nScrollColNum, const RECT& rcScroll, const RECT& rcClip, const RECT& rcClip2)
+void EditView::ScrollDraw(
+	LayoutInt nScrollRowNum,
+	LayoutInt nScrollColNum,
+	const RECT& rcScroll,
+	const RECT& rcClip,
+	const RECT& rcClip2
+	)
 {
 	const TextArea& area = GetTextArea();
 

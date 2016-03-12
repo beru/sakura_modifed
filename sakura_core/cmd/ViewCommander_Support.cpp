@@ -45,8 +45,9 @@
 */
 void ViewCommander::Command_HOKAN(void)
 {
-	if (!GetDllShareData().common.helper.bUseHokan) {
-		GetDllShareData().common.helper.bUseHokan = TRUE;
+	auto& csHelper = GetDllShareData().common.helper;
+	if (!csHelper.bUseHokan) {
+		csHelper.bUseHokan = TRUE;
 	}
 #if 0
 // 2011.06.24 Moca Plugin導入に従い未設定の確認をやめる
@@ -78,7 +79,7 @@ retry:;
 	}else {
 		InfoBeep(); // 2010.04.03 Error→Info
 		m_pCommanderView->SendStatusMessage(LS(STR_SUPPORT_NOT_COMPLITE)); // 2010.05.29 ステータスで表示
-		GetDllShareData().common.helper.bUseHokan = FALSE;	// 入力補完終了のお知らせ
+		csHelper.bUseHokan = FALSE;	// 入力補完終了のお知らせ
 	}
 	return;
 }
@@ -94,9 +95,9 @@ void ViewCommander::Command_ToggleKeySearch(int option)
 	if (option == 0) {
 		bUseCaretKeyword = !bUseCaretKeyword;
 	}else if (option == 1) {
-		bUseCaretKeyword = TRUE;
+		bUseCaretKeyword = true;
 	}else if (option == 2) {
-		bUseCaretKeyword = FALSE;
+		bUseCaretKeyword = false;
 	}
 }
 

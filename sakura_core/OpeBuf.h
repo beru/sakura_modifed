@@ -1,5 +1,5 @@
 /*!	@file
-	@brief アンドゥ・リドゥバッファ
+	@brief Undo, Redoバッファ
 
 	@author Norio Nakatani
 	@date 1998/06/09 新規作成
@@ -24,7 +24,7 @@ class OpeBlk;/// 2002/2/10 aroka
 クラスの宣言
 -----------------------------------------------------------------------*/
 /*!
-	@brief アンドゥ・リドゥバッファ
+	@brief Undo, Redoバッファ
 */
 class OpeBuf {
 public:

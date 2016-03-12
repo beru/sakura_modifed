@@ -279,7 +279,7 @@ void ViewCommander::Command_BOOKMARK_SET(void)
 			LayoutPoint(LayoutInt(0), select.GetFrom().y),
 			&ptFrom
 		);
-		GetDocument()->m_layoutMgr.LayoutToLogic(
+		layoutMgr.LayoutToLogic(
 			LayoutPoint(LayoutInt(0), select.GetTo().y),
 			&ptTo
 		);

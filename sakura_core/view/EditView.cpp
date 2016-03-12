@@ -81,7 +81,7 @@ LRESULT CALLBACK EditViewWndProc(
 	UINT		uMsg,	// message identifier
 	WPARAM		wParam,	// first message parameter
 	LPARAM		lParam 	// second message parameter
-)
+	)
 {
 //	DEBUG_TRACE(_T("EditViewWndProc(0x%08X): %ls\n"), hwnd, GetWindowsMessageName(uMsg));
 
@@ -113,11 +113,11 @@ LRESULT CALLBACK EditViewWndProc(
 ||	現在は、マウスによる領域選択時のスクロール処理のためにタイマーを使用しています。
 */
 VOID CALLBACK EditViewTimerProc(
-	HWND hwnd,		// handle of window for timer messages
-	UINT uMsg,		// WM_TIMER message
+	HWND hwnd,			// handle of window for timer messages
+	UINT uMsg,			// WM_TIMER message
 	UINT_PTR idEvent,	// timer identifier
-	DWORD dwTime 	// current system time
-)
+	DWORD dwTime		// current system time
+	)
 {
 	EditView* pEditView = (EditView*)::GetWindowLongPtr(hwnd, 0);
 	if (pEditView) {
@@ -166,7 +166,7 @@ BOOL EditView::Create(
 	int			nMyIndex,	//!< ビューのインデックス
 	BOOL		bShow,		//!< 作成時に表示するかどうか
 	bool		bMiniMap
-)
+	)
 {
 	m_bMiniMap = bMiniMap;
 	m_pTextArea = new TextArea(this);
@@ -198,7 +198,7 @@ BOOL EditView::Create(
 
 	// 共有データ構造体のアドレスを返す
 	m_bCommandRunning = FALSE;	// コマンドの実行中
-	m_bDoing_UndoRedo = FALSE;	// アンドゥ・リドゥの実行中か
+	m_bDoing_UndoRedo = FALSE;	// Undo, Redoの実行中か
 	m_pcsbwVSplitBox = NULL;	// 垂直分割ボックス
 	m_pcsbwHSplitBox = NULL;	// 水平分割ボックス
 	m_hwndVScrollBar = NULL;
@@ -459,7 +459,7 @@ LRESULT EditView::DispatchEvent(
 	UINT	uMsg,	// message identifier
 	WPARAM	wParam,	// first message parameter
 	LPARAM	lParam 	// second message parameter
-)
+	)
 {
 	HDC hdc;
 //	int nPosX;
@@ -1197,9 +1197,9 @@ void EditView::SetFont(void)
 */
 void EditView::MoveCursorSelecting(
 	LayoutPoint	ptWk_CaretPos,		//!< [in] 移動先レイアウト位置
-	bool			bSelect,			//!< true: 選択する  false: 選択解除
-	int				nCaretMarginRate	//!< 縦スクロール開始位置を決める値
-)
+	bool		bSelect,			//!< true: 選択する  false: 選択解除
+	int			nCaretMarginRate	//!< 縦スクロール開始位置を決める値
+	)
 {
 	if (bSelect) {
 		if (!GetSelectionInfo().IsTextSelected()) {	// テキストが選択されているか
@@ -1325,10 +1325,10 @@ bool EditView::IsCurrentPositionURL(
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 VOID EditView::OnTimer(
-	HWND hwnd,		// handle of window for timer messages
-	UINT uMsg,		// WM_TIMER message
+	HWND hwnd,			// handle of window for timer messages
+	UINT uMsg,			// WM_TIMER message
 	UINT_PTR idEvent,	// timer identifier
-	DWORD dwTime 	// current system time
+	DWORD dwTime		// current system time
 	)
 {
 	if (GetDllShareData().common.edit.bUseOLE_DragDrop) {	// OLEによるドラッグ & ドロップを使う
@@ -1434,7 +1434,7 @@ void EditView::ConvSelectedArea(EFunctionCode nFuncCode)
 				nIdxFrom	= LogicInt(0);
 				nIdxTo		= LogicInt(0);
 			}
-			LogicInt	nDelPos = nDelPosNext;
+			LogicInt nDelPos = nDelPosNext;
 			nDelLen	= nDelLenNext;
 			if (nLineNum < rcSelLayout.bottom && 0 < nDelLen) {
 				m_pEditDoc->m_layoutMgr.GetLineStr(nLineNum + LayoutInt(1), &nLineLen2, &pLayout);
@@ -1475,7 +1475,7 @@ void EditView::ConvSelectedArea(EFunctionCode nFuncCode)
 		GetCaret().MoveCursor(rcSelLayout.UpperLeft(), true);
 		GetCaret().m_nCaretPosX_Prev = GetCaret().GetCaretLayoutPos().GetX2();
 
-		if (!m_bDoing_UndoRedo) {	// アンドゥ・リドゥの実行中か
+		if (!m_bDoing_UndoRedo) {	// Undo, Redoの実行中か
 			// 操作の追加
 			m_commander.GetOpeBlk()->AppendOpe(
 				new MoveCaretOpe(
@@ -1511,7 +1511,7 @@ void EditView::ConvSelectedArea(EFunctionCode nFuncCode)
 		GetCaret().MoveCursor(GetSelectionInfo().m_select.GetTo(), true);
 		GetCaret().m_nCaretPosX_Prev = GetCaret().GetCaretLayoutPos().GetX2();
 
-		if (!m_bDoing_UndoRedo) {	// アンドゥ・リドゥの実行中か
+		if (!m_bDoing_UndoRedo) {	// Undo, Redoの実行中か
 			// 操作の追加
 			m_commander.GetOpeBlk()->AppendOpe(
 				new MoveCaretOpe(
@@ -2232,8 +2232,8 @@ int EditView::IsCurrentPositionSelected(
 */
 // 2007.09.01 kobake 整理
 int EditView::IsCurrentPositionSelectedTEST(
-	const LayoutPoint& ptCaretPos,      // カーソル位置
-	const LayoutRange& select //
+	const LayoutPoint& ptCaretPos,	// カーソル位置
+	const LayoutRange& select		//
 	) const
 {
 	if (!GetSelectionInfo().IsTextSelected()) {	// テキストが選択されているか
@@ -2312,20 +2312,28 @@ void EditView::CopySelectedAllLines(
 	@date 2007.10.04 ryoji MSDEVLineSelect対応処理を追加
 	@date 2008.09.10 bosagami パス貼り付け対応
 */
-bool EditView::MyGetClipboardData(NativeW& memBuf, bool* pbColumnSelect, bool* pbLineSelect /*= NULL*/)
+bool EditView::MyGetClipboardData(
+	NativeW& memBuf,
+	bool* pbColumnSelect,
+	bool* pbLineSelect /*= NULL*/
+	)
 {
-	if (pbColumnSelect)
+	if (pbColumnSelect) {
 		*pbColumnSelect = false;
+	}
 
-	if (pbLineSelect)
+	if (pbLineSelect) {
 		*pbLineSelect = false;
+	}
 
-	if (!Clipboard::HasValidData())
+	if (!Clipboard::HasValidData()) {
 		return false;
+	}
 	
 	Clipboard clipboard(GetHwnd());
-	if (!clipboard)
+	if (!clipboard) {
 		return false;
+	}
 
 	Eol eol = m_pEditDoc->m_docEditor.GetNewLineCode();
 	if (!clipboard.GetText(&memBuf, pbColumnSelect, pbLineSelect, eol)) {
@@ -2338,7 +2346,12 @@ bool EditView::MyGetClipboardData(NativeW& memBuf, bool* pbColumnSelect, bool* p
 /* クリップボードにデータを設定
 	@date 2004.02.17 Moca エラーチェックするように
  */
-bool EditView::MySetClipboardData(const ACHAR* pszText, int nTextLen, bool bColumnSelect, bool bLineSelect /*= false*/)
+bool EditView::MySetClipboardData(
+	const ACHAR* pszText,
+	int nTextLen,
+	bool bColumnSelect,
+	bool bLineSelect /*= false*/
+	)
 {
 	// WCHARに変換
 	std::vector<wchar_t> buf;
@@ -2346,7 +2359,12 @@ bool EditView::MySetClipboardData(const ACHAR* pszText, int nTextLen, bool bColu
 	return MySetClipboardData(&buf[0], buf.size()-1, bColumnSelect, bLineSelect);
 }
 
-bool EditView::MySetClipboardData(const WCHAR* pszText, int nTextLen, bool bColumnSelect, bool bLineSelect /*= false*/)
+bool EditView::MySetClipboardData(
+	const WCHAR* pszText,
+	int nTextLen,
+	bool bColumnSelect,
+	bool bLineSelect /*= false*/
+	)
 {
 	// Windowsクリップボードにコピー
 	Clipboard clipboard(GetHwnd());
@@ -2373,7 +2391,11 @@ inline bool EditView::IsDrawCursorVLinePos(int posX)
 }
 
 // カーソル行アンダーラインのON
-void EditView::CaretUnderLineON(bool bDraw, bool bDrawPaint, bool DisalbeUnderLine)
+void EditView::CaretUnderLineON(
+	bool bDraw,
+	bool bDrawPaint,
+	bool DisalbeUnderLine
+	)
 {
 	bool bUnderLine = m_pTypeData->colorInfoArr[COLORIDX_UNDERLINE].bDisp;
 	bool bCursorVLine = m_pTypeData->colorInfoArr[COLORIDX_CURSORVLINE].bDisp;
@@ -2396,7 +2418,7 @@ void EditView::CaretUnderLineON(bool bDraw, bool bDrawPaint, bool DisalbeUnderLi
 		&& bCursorLineBg
 		&& GetDrawSwitch()
 		&& GetCaret().GetCaretLayoutPos().GetY2() >= textArea.GetViewTopLine()
-		&& !m_bDoing_UndoRedo	// アンドゥ・リドゥの実行中か
+		&& !m_bDoing_UndoRedo	// Undo, Redoの実行中か
 	) {
 		bCursorLineBgDraw = true;
 
@@ -2472,7 +2494,7 @@ void EditView::CaretUnderLineON(bool bDraw, bool bDrawPaint, bool DisalbeUnderLi
 		&& bDraw
 		&& GetDrawSwitch()
 		&& nUnderLineY >= textArea.GetAreaTop()
-		&& !m_bDoing_UndoRedo	// アンドゥ・リドゥの実行中か
+		&& !m_bDoing_UndoRedo	// Undo, Redoの実行中か
 		&& !GetSelectionInfo().IsTextSelecting()
 		&& !DisalbeUnderLine
 	) {
@@ -2505,7 +2527,12 @@ void EditView::CaretUnderLineON(bool bDraw, bool bDrawPaint, bool DisalbeUnderLi
 }
 
 // カーソル行アンダーラインのOFF
-void EditView::CaretUnderLineOFF(bool bDraw, bool bDrawPaint, bool bResetFlag, bool DisalbeUnderLine)
+void EditView::CaretUnderLineOFF(
+	bool bDraw,
+	bool bDrawPaint,
+	bool bResetFlag,
+	bool DisalbeUnderLine
+	)
 {
 	if (1
 		&& !m_pTypeData->colorInfoArr[COLORIDX_UNDERLINE].bDisp
@@ -2520,7 +2547,7 @@ void EditView::CaretUnderLineOFF(bool bDraw, bool bDrawPaint, bool bResetFlag, b
 			&& bDraw
 			&& GetDrawSwitch()
 			&& m_nOldUnderLineY >= textArea.GetViewTopLine()
-			&& !m_bDoing_UndoRedo	// アンドゥ・リドゥの実行中か
+			&& !m_bDoing_UndoRedo	// Undo, Redoの実行中か
 			&& !GetCaret().m_underLine.GetUnderLineDoNotOFF()	// アンダーラインを消去するか
 		) {
 			// -- -- カーソル行アンダーラインの消去（無理やり） -- -- //
@@ -2626,7 +2653,6 @@ void EditView::SendStatusMessage(const TCHAR* msg)
 }
 
 
-
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                        編集モード                           //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -2644,7 +2670,6 @@ void EditView::SetInsMode(bool mode)
 {
 	m_pEditDoc->m_docEditor.SetInsMode(mode);
 }
-
 
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -2673,11 +2698,9 @@ void EditView::OnAfterLoad(const LoadInfo& loadInfo)
 }
 
 
-
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                          その他                             //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-
 
 
 //!	現在のカーソル行位置を履歴に登録する
@@ -2693,11 +2716,15 @@ void EditView::AddCurrentLineToHistory(void)
 
 
 //	2001/06/18 Start by asa-o: 補完ウィンドウ用のキーワードヘルプ表示
-bool  EditView::ShowKeywordHelp(POINT po, LPCWSTR pszHelp, LPRECT prcHokanWin)
+bool EditView::ShowKeywordHelp(
+	POINT po,
+	LPCWSTR pszHelp,
+	LPRECT prcHokanWin
+	)
 {
 	NativeW	memCurText;
-	RECT		rcTipWin,
-				rcDesktop;
+	RECT	rcTipWin,
+			rcDesktop;
 
 	if (m_pTypeData->bUseKeywordHelp) { // キーワードヘルプを使用する
 		if (!m_bInMenuLoop			// メニュー モーダル ループに入っていない
@@ -2764,7 +2791,12 @@ bool  EditView::ShowKeywordHelp(POINT po, LPCWSTR pszHelp, LPRECT prcHokanWin)
 
 	@date 2008.08.03 nasukoji	新規作成
 */
-bool EditView::IsEmptyArea(LayoutPoint ptFrom, LayoutPoint ptTo, bool bSelect, bool bBoxSelect) const
+bool EditView::IsEmptyArea(
+	LayoutPoint ptFrom,
+	LayoutPoint ptTo,
+	bool bSelect,
+	bool bBoxSelect
+	) const
 {
 	bool result;
 

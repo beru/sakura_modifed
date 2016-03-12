@@ -42,7 +42,7 @@ public:
 	//                         外部依存                            //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	// 領域のインスタンスを求める
-	const TextArea* GetTextArea() const;
+	const TextArea& GetTextArea() const;
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                     インターフェース                        //

@@ -189,16 +189,17 @@ int ViewCommander::Command_LEFT(bool bSelect, bool bRepeat)
 		// (これから求める)カーソルの移動先。
 		LayoutPoint ptPos(LayoutInt(0), ptCaretMove.GetY2());
 
+		auto& layoutMgr = GetDocument()->m_layoutMgr;
 		// 現在行のデータを取得
-		const Layout* pLayout = GetDocument()->m_layoutMgr.SearchLineByLayoutY( ptCaretMove.GetY2() );
+		const Layout* pLayout = layoutMgr.SearchLineByLayoutY( ptCaretMove.GetY2() );
 		// カーソルが左端にある
 		if (ptCaretMove.GetX2() == (pLayout ? pLayout->GetIndent() : LayoutInt(0))) {
 			if (0 < ptCaretMove.GetY2()
 			   && ! selInfo.IsBoxSelecting()
 			) {
 				// 前のレイアウト行の、折り返し桁一つ手前または改行文字の手前に移動する。
-				pLayout = GetDocument()->m_layoutMgr.SearchLineByLayoutY( ptCaretMove.GetY2() - LayoutInt(1) );
-				MemoryIterator it(pLayout, GetDocument()->m_layoutMgr.GetTabSpace());
+				pLayout = layoutMgr.SearchLineByLayoutY( ptCaretMove.GetY2() - LayoutInt(1) );
+				MemoryIterator it(pLayout, layoutMgr.GetTabSpace());
 				while (!it.end()) {
 					it.scanNext();
 					if (it.getIndex() + it.getIndexDelta() > pLayout->GetLengthWithoutEOL()) {
@@ -222,7 +223,7 @@ int ViewCommander::Command_LEFT(bool bSelect, bool bRepeat)
 		}
 		//  2004.03.28 Moca EOFだけの行以降の途中にカーソルがあると落ちるバグ修正
 		else if (pLayout) {
-			MemoryIterator it(pLayout, GetDocument()->m_layoutMgr.GetTabSpace());
+			MemoryIterator it(pLayout, layoutMgr.GetTabSpace());
 			while (!it.end()) {
 				it.scanNext();
 				if ( it.getColumn() + it.getColumnDelta() > ptCaretMove.GetX2() - 1 ){
@@ -299,17 +300,18 @@ void ViewCommander::Command_RIGHT(
 		LayoutPoint ptTo(0, 0);
 		const LayoutPoint ptCaret = ptCaretMove;
 
+		auto& layoutMgr = GetDocument()->m_layoutMgr;
 		// 現在行のデータを取得
-		const Layout* const pcLayout = GetDocument()->m_layoutMgr.SearchLineByLayoutY(ptCaret.y);
+		const Layout* const pcLayout = layoutMgr.SearchLineByLayoutY(ptCaret.y);
 		// 2004.04.02 EOF以降にカーソルがあったときに右を押しても何も起きなかったのを、EOFに移動するように
 		if (pcLayout) {
 			// キャレット位置のレイアウト行について。
-			const LayoutInt x_wrap = pcLayout->CalcLayoutWidth(GetDocument()->m_layoutMgr); // 改行文字、または折り返しの位置。
+			const LayoutInt x_wrap = pcLayout->CalcLayoutWidth(layoutMgr); // 改行文字、または折り返しの位置。
 			const bool wrapped = EolType::None == pcLayout->GetLayoutEol(); // 折り返しているか、改行文字で終わっているか。これにより x_wrapの意味が変わる。
 			const bool nextline_exists = pcLayout->GetNextLayout() || pcLayout->GetLayoutEol() != EolType::None; // EOFのみの行も含め、キャレットが移動可能な次行が存在するか。
 
 			// 現在のキャレットの右の位置(to_x)を求める。
-			MemoryIterator it(pcLayout, GetDocument()->m_layoutMgr.GetTabSpace());
+			MemoryIterator it(pcLayout, layoutMgr.GetTabSpace());
 			for (; !it.end(); it.scanNext(), it.addDelta()) {
 				if (ptCaret.x < it.getColumn()) {
 					break;
@@ -327,7 +329,7 @@ void ViewCommander::Command_RIGHT(
 			} on_x_max;
 
 			if (selInfo.IsBoxSelecting()) {
-				x_max = t_max(x_wrap, GetDocument()->m_layoutMgr.GetMaxLineKetas());
+				x_max = t_max(x_wrap, layoutMgr.GetMaxLineKetas());
 				on_x_max = STOP;
 			}else if (GetDllShareData().common.general.bIsFreeCursorMode) {
 				// フリーカーソルモードでは折り返し位置だけをみて、改行文字の位置はみない。
@@ -337,12 +339,12 @@ void ViewCommander::Command_RIGHT(
 						on_x_max = MOVE_NEXTLINE_IMMEDIATELY;
 					}else {
 						// データのあるEOF行は折り返しではない
-						x_max = t_max(x_wrap, GetDocument()->m_layoutMgr.GetMaxLineKetas());
+						x_max = t_max(x_wrap, layoutMgr.GetMaxLineKetas());
 						on_x_max = STOP;
 					}
 				}else {
-					if (x_wrap < GetDocument()->m_layoutMgr.GetMaxLineKetas()) {
-						x_max = GetDocument()->m_layoutMgr.GetMaxLineKetas();
+					if (x_wrap < layoutMgr.GetMaxLineKetas()) {
+						x_max = layoutMgr.GetMaxLineKetas();
 						on_x_max = MOVE_NEXTLINE_IMMEDIATELY;
 					}else { // 改行文字がぶら下がっているときは例外。
 						x_max = x_wrap;
@@ -435,8 +437,8 @@ void ViewCommander::Command_WORDLEFT(bool bSelect)
 
 	auto& caret = GetCaret();
 	auto& csGeneral = GetDllShareData().common.general;
-
-	const Layout* pLayout = GetDocument()->m_layoutMgr.SearchLineByLayoutY(caret.GetCaretLayoutPos().GetY2());
+	auto& layoutMgr = GetDocument()->m_layoutMgr;
+	const Layout* pLayout = layoutMgr.SearchLineByLayoutY(caret.GetCaretLayoutPos().GetY2());
 	if (!pLayout) {
 		bool bIsFreeCursorModeOld = csGeneral.bIsFreeCursorMode;	// フリーカーソルモードか
 		csGeneral.bIsFreeCursorMode = false;
@@ -451,7 +453,7 @@ void ViewCommander::Command_WORDLEFT(bool bSelect)
 
 	// 現在位置の左の単語の先頭位置を調べる
 	LayoutPoint ptLayoutNew;
-	int nResult = GetDocument()->m_layoutMgr.PrevWord(
+	int nResult = layoutMgr.PrevWord(
 		caret.GetCaretLayoutPos().GetY2(),
 		nIdx,
 		&ptLayoutNew,
@@ -460,7 +462,7 @@ void ViewCommander::Command_WORDLEFT(bool bSelect)
 	if (nResult) {
 		// 行が変わった
 		if (ptLayoutNew.y != caret.GetCaretLayoutPos().GetY2()) {
-			pLayout = GetDocument()->m_layoutMgr.SearchLineByLayoutY(ptLayoutNew.GetY2());
+			pLayout = layoutMgr.SearchLineByLayoutY(ptLayoutNew.GetY2());
 			if (!pLayout) {
 				return;
 			}
@@ -520,7 +522,8 @@ try_again:;
 	auto& caret = GetCaret();
 	nCurLine = caret.GetCaretLayoutPos().GetY2();
 	const Layout* pLayout;
-	pLayout = GetDocument()->m_layoutMgr.SearchLineByLayoutY(nCurLine);
+	auto& layoutMgr = GetDocument()->m_layoutMgr;
+	pLayout = layoutMgr.SearchLineByLayoutY(nCurLine);
 	if (!pLayout) {
 		return;
 	}
@@ -536,7 +539,7 @@ try_again:;
 	auto& csGeneral = GetDllShareData().common.general;	
 	// 現在位置の右の単語の先頭位置を調べる
 	LayoutPoint ptLayoutNew;
-	int nResult = GetDocument()->m_layoutMgr.NextWord(
+	int nResult = layoutMgr.NextWord(
 		nCurLine,
 		nIdx,
 		&ptLayoutNew,
@@ -545,7 +548,7 @@ try_again:;
 	if (nResult) {
 		// 行が変わった
 		if (ptLayoutNew.y != nCurLine) {
-			pLayout = GetDocument()->m_layoutMgr.SearchLineByLayoutY(ptLayoutNew.GetY2());
+			pLayout = layoutMgr.SearchLineByLayoutY(ptLayoutNew.GetY2());
 			if (!pLayout) {
 				return;
 			}
@@ -606,14 +609,15 @@ void ViewCommander::Command_GOLINETOP(
 
 	LayoutPoint ptCaretPos;
 	auto& caret = GetCaret();
+	auto& layoutMgr = GetDocument()->m_layoutMgr;
 	if (lparam & 8) {
 		// 改行単位指定の場合は、物理行頭位置から目的論理位置を求める
-		GetDocument()->m_layoutMgr.LogicToLayout(
+		layoutMgr.LogicToLayout(
 			LogicPoint(0, caret.GetCaretLogicPos().y),
 			&ptCaretPos
 		);
 	}else {
-		const Layout* pLayout = GetDocument()->m_layoutMgr.SearchLineByLayoutY(caret.GetCaretLayoutPos().GetY2());
+		const Layout* pLayout = layoutMgr.SearchLineByLayoutY(caret.GetCaretLayoutPos().GetY2());
 		ptCaretPos.x = pLayout ? pLayout->GetIndent() : LayoutInt(0);
 		ptCaretPos.y = caret.GetCaretLayoutPos().GetY2();
 	}
@@ -631,7 +635,7 @@ void ViewCommander::Command_GOLINETOP(
 		LogicInt		nLineLen;
 		do {
 			++nPosY_Layout;
-			const wchar_t*	pLine = GetDocument()->m_layoutMgr.GetLineStr(nPosY_Layout, &nLineLen, &pLayout);
+			const wchar_t*	pLine = layoutMgr.GetLineStr(nPosY_Layout, &nLineLen, &pLayout);
 			if (!pLine) {
 				return;
 			}
@@ -644,7 +648,7 @@ void ViewCommander::Command_GOLINETOP(
 				break;
 			}
 		}
-		while ((lparam & 8) && (nPosX_Logic >= nLineLen) && (GetDocument()->m_layoutMgr.GetLineCount() - 1 > nPosY_Layout));
+		while ((lparam & 8) && (nPosX_Logic >= nLineLen) && (layoutMgr.GetLineCount() - 1 > nPosY_Layout));
 		
 		if (nPosX_Logic >= nLineLen) {
 			/* 折り返し単位の行頭を探して物理行末まで到達した
@@ -698,10 +702,11 @@ void ViewCommander::Command_GOLINEEND(
 
 	// 現在行のデータから、そのレイアウト幅を取得
 	auto& caret = GetCaret();
+	auto& layoutMgr = GetDocument()->m_layoutMgr;
 	LayoutPoint nPosXY = caret.GetCaretLayoutPos();
 	if (nOption & 8) {
 		// 改行単位の行末。1行中の最終レイアウト行を探す
-		const Layout*	pLayout = GetDocument()->m_layoutMgr.SearchLineByLayoutY(nPosXY.y);
+		const Layout*	pLayout = layoutMgr.SearchLineByLayoutY(nPosXY.y);
 		const Layout*	pLayoutNext = pLayout->GetNextLayout();
 		while (pLayout && pLayoutNext && pLayoutNext->GetLogicOffset() != 0) {
 			pLayout = pLayoutNext;
@@ -710,9 +715,9 @@ void ViewCommander::Command_GOLINEEND(
 		}
 	}
 	nPosXY.x = LayoutInt(0);
-	const Layout*	pLayout = GetDocument()->m_layoutMgr.SearchLineByLayoutY(nPosXY.y);
+	const Layout*	pLayout = layoutMgr.SearchLineByLayoutY(nPosXY.y);
 	if (pLayout)
-		nPosXY.x = pLayout->CalcLayoutWidth(GetDocument()->m_layoutMgr);
+		nPosXY.x = pLayout->CalcLayoutWidth(layoutMgr);
 
 	// キャレット移動
 	caret.GetAdjustCursorPos(&nPosXY);
@@ -1385,6 +1390,7 @@ void ViewCommander::Command_MODIFYLINE_PREV( bool bSelect )
 		ptXY.y--;
 		pDocLine = pDocLine->GetPrevLine();
 	}
+	auto& layoutMgr = GetDocument()->m_layoutMgr;
 	for (int n=0; n<2; ++n) {
 		while (pDocLine) {
 			bool bModifiedTemp = ModifyVisitor().IsLineModified(pDocLine, nSaveSeq);
@@ -1392,7 +1398,7 @@ void ViewCommander::Command_MODIFYLINE_PREV( bool bSelect )
 				// 検出された位置の1行後ろ(MODIFYLINE_NEXTと同じ位置)に止まる
 				ptXY.y = nYOld2;
 				LayoutPoint ptLayout;
-				GetDocument()->m_layoutMgr.LogicToLayout(ptXY, &ptLayout);
+				layoutMgr.LogicToLayout(ptXY, &ptLayout);
 				m_pCommanderView->MoveCursorSelecting( ptLayout, bSelect );
 				if (n == 1) {
 					m_pCommanderView->SendStatusMessage(LS(STR_ERR_SRPREV1));
@@ -1411,7 +1417,7 @@ void ViewCommander::Command_MODIFYLINE_PREV( bool bSelect )
 				if (GetCaret().GetCaretLogicPos() != LogicPoint(0,0)) {
 					ptXY = LogicPoint(0,0);
 					LayoutPoint ptLayout;
-					GetDocument()->m_layoutMgr.LogicToLayout(ptXY, &ptLayout);
+					layoutMgr.LogicToLayout(ptXY, &ptLayout);
 					m_pCommanderView->MoveCursorSelecting( ptLayout, bSelect );
 					return;
 				}
@@ -1441,7 +1447,7 @@ void ViewCommander::Command_MODIFYLINE_PREV( bool bSelect )
 				if (GetCaret().GetCaretLogicPos() != pos) {
 					ptXY = pos;
 					LayoutPoint ptLayout;
-					GetDocument()->m_layoutMgr.LogicToLayout(ptXY, &ptLayout);
+					layoutMgr.LogicToLayout(ptXY, &ptLayout);
 					m_pCommanderView->MoveCursorSelecting( ptLayout, bSelect );
 					m_pCommanderView->SendStatusMessage(LS(STR_ERR_SRPREV1));
 					return;

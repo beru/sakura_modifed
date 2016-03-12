@@ -16,7 +16,10 @@ LayoutInt ViewCalc::GetTabSpace() const
 	
 	@@@ 2002.09.28 YAZAKI DocLine版
 */
-LogicInt ViewCalc::LineColumnToIndex(const DocLine* pDocLine, LayoutInt nColumn) const
+LogicInt ViewCalc::LineColumnToIndex(
+	const DocLine* pDocLine,
+	LayoutInt nColumn
+	) const
 {
 	LogicInt i2 = LogicInt(0);
 	MemoryIterator it(pDocLine, GetTabSpace());
@@ -36,7 +39,10 @@ LogicInt ViewCalc::LineColumnToIndex(const DocLine* pDocLine, LayoutInt nColumn)
 	
 	@@@ 2002.09.28 YAZAKI Layoutが必要になりました。
 */
-LogicInt ViewCalc::LineColumnToIndex(const Layout* pLayout, LayoutInt nColumn) const
+LogicInt ViewCalc::LineColumnToIndex(
+	const Layout* pLayout,
+	LayoutInt nColumn
+	) const
 {
 	LogicInt i2 = LogicInt(0);
 	MemoryIterator it(pLayout, GetTabSpace());
@@ -59,7 +65,11 @@ LogicInt ViewCalc::LineColumnToIndex(const Layout* pLayout, LayoutInt nColumn) c
   それ以外の場合はpnLineAllColLenに０をセットする
   @@@ 2002.09.28 YAZAKI Layoutが必要になりました。
 */
-LogicInt ViewCalc::LineColumnToIndex2(const Layout* pLayout, LayoutInt nColumn, LayoutInt* pnLineAllColLen) const
+LogicInt ViewCalc::LineColumnToIndex2(
+	const Layout* pLayout,
+	LayoutInt nColumn,
+	LayoutInt* pnLineAllColLen
+	) const
 {
 	*pnLineAllColLen = LayoutInt(0);
 
@@ -87,7 +97,10 @@ LogicInt ViewCalc::LineColumnToIndex2(const Layout* pLayout, LayoutInt nColumn, 
 ||
 ||	@@@ 2002.09.28 YAZAKI Layoutが必要になりました。
 */
-LayoutInt ViewCalc::LineIndexToColumn(const Layout* pLayout, LogicInt nIndex) const
+LayoutInt ViewCalc::LineIndexToColumn(
+	const Layout* pLayout,
+	LogicInt nIndex
+	) const
 {
 	//	以下、iterator版
 	LayoutInt nPosX2 = LayoutInt(0);
@@ -109,7 +122,10 @@ LayoutInt ViewCalc::LineIndexToColumn(const Layout* pLayout, LogicInt nIndex) co
 ||
 ||	@@@ 2002.09.28 YAZAKI DocLine版
 */
-LayoutInt ViewCalc::LineIndexToColumn(const DocLine* pDocLine, LogicInt nIndex) const
+LayoutInt ViewCalc::LineIndexToColumn(
+	const DocLine* pDocLine,
+	LogicInt nIndex
+	) const
 {
 	LayoutInt nPosX2 = LayoutInt(0);
 	MemoryIterator it(pDocLine, GetTabSpace());

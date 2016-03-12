@@ -17,22 +17,23 @@ int ViewParser::GetLeftWord(NativeW* pMemWord, int nMaxWordLen) const
 
 	int			nCharChars;
 	const Layout* pLayout;
-
-	LayoutInt nCurLine = m_pEditView->GetCaret().GetCaretLayoutPos().GetY2();
-	const wchar_t* pLine = m_pEditView->m_pEditDoc->m_layoutMgr.GetLineStr(nCurLine, &nLineLen, &pLayout);
+	auto& caret = m_pEditView->GetCaret();
+	auto& layoutMgr = m_pEditView->m_pEditDoc->m_layoutMgr;
+	LayoutInt nCurLine = caret.GetCaretLayoutPos().GetY2();
+	const wchar_t* pLine = layoutMgr.GetLineStr(nCurLine, &nLineLen, &pLayout);
 	if (!pLine) {
 //		return 0;
 		nIdxTo = LogicInt(0);
 	}else {
 		// 指定された桁に対応する行のデータ内の位置を調べる Ver1
-		nIdxTo = m_pEditView->LineColumnToIndex(pLayout, m_pEditView->GetCaret().GetCaretLayoutPos().GetX2());
+		nIdxTo = m_pEditView->LineColumnToIndex(pLayout, caret.GetCaretLayoutPos().GetX2());
 	}
 	if (nIdxTo == 0 || !pLine) {
 		if (nCurLine <= 0) {
 			return 0;
 		}
 		--nCurLine;
-		pLine = m_pEditView->m_pEditDoc->m_layoutMgr.GetLineStr(nCurLine, &nLineLen);
+		pLine = layoutMgr.GetLineStr(nCurLine, &nLineLen);
 		if (!pLine) {
 			return 0;
 		}
@@ -64,7 +65,7 @@ int ViewParser::GetLeftWord(NativeW* pMemWord, int nMaxWordLen) const
 	// 現在位置の単語の範囲を調べる
 	NativeW memWord;
 	LayoutRange range;
-	bool bResult = m_pEditView->m_pEditDoc->m_layoutMgr.WhereCurrentWord(
+	bool bResult = layoutMgr.WhereCurrentWord(
 		nCurLine,
 		nIdx,
 		&range,
@@ -93,18 +94,20 @@ bool ViewParser::GetCurrentWord(
 	NativeW* pMemWord
 	) const
 {
-	const Layout* pLayout = m_pEditView->m_pEditDoc->m_layoutMgr.SearchLineByLayoutY(m_pEditView->GetCaret().GetCaretLayoutPos().GetY2());
+	auto& layoutMgr = m_pEditView->m_pEditDoc->m_layoutMgr;
+	auto& caret = m_pEditView->GetCaret();
+	const Layout* pLayout = layoutMgr.SearchLineByLayoutY(caret.GetCaretLayoutPos().GetY2());
 	if (!pLayout) {
 		return false;	// 単語選択に失敗
 	}
 	
 	// 指定された桁に対応する行のデータ内の位置を調べる
-	LogicInt nIdx = m_pEditView->LineColumnToIndex(pLayout, m_pEditView->GetCaret().GetCaretLayoutPos().GetX2());
+	LogicInt nIdx = m_pEditView->LineColumnToIndex(pLayout, caret.GetCaretLayoutPos().GetX2());
 	
 	// 現在位置の単語の範囲を調べる
 	LayoutRange range;
-	bool bResult = m_pEditView->m_pEditDoc->m_layoutMgr.WhereCurrentWord(
-		m_pEditView->GetCaret().GetCaretLayoutPos().GetY2(),
+	bool bResult = layoutMgr.WhereCurrentWord(
+		caret.GetCaretLayoutPos().GetY2(),
 		nIdx,
 		&range,
 		pMemWord,

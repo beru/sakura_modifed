@@ -82,7 +82,7 @@ void EditView::InsertData_CEditView(
 	// 2007.10.18 kobake COpe処理をここにまとめる
 	InsertOpe* pOpe = NULL;
 	int opeSeq;
-	if (!m_bDoing_UndoRedo) {	// アンドゥ・リドゥの実行中か
+	if (!m_bDoing_UndoRedo) {	// Undo, Redoの実行中か
 		pOpe = new InsertOpe();
 		m_pEditDoc->m_layoutMgr.LayoutToLogic(
 			ptInsertPos,
@@ -185,7 +185,7 @@ void EditView::InsertData_CEditView(
 		nColumnFrom = 0;
 	}
 
-	if (!m_bDoing_UndoRedo && pOpe) {	// アンドゥ・リドゥの実行中か
+	if (!m_bDoing_UndoRedo && pOpe) {	// Undo, Redoの実行中か
 		m_pEditDoc->m_layoutMgr.LayoutToLogic(
 			LayoutPoint(nColumnFrom, ptInsertPos.y),
 			&pOpe->m_ptCaretPos_PHY_Before
@@ -234,7 +234,7 @@ void EditView::InsertData_CEditView(
 	}
 
 	// 状態遷移
-	if (!m_bDoing_UndoRedo) {	// アンドゥ・リドゥの実行中か
+	if (!m_bDoing_UndoRedo) {	// Undo, Redoの実行中か
 		m_pEditDoc->m_docEditor.SetModified(true, bRedraw);	//	Jan. 22, 2002 genta
 	}
 
@@ -485,7 +485,7 @@ void EditView::DeleteData(
 	// テキストが選択されているか
 	if (selInfo.IsTextSelected()) {
 		WaitCursor waitCursor(this->GetHwnd());  // 2002.02.05 hor
-		if (!m_bDoing_UndoRedo) {	// アンドゥ・リドゥの実行中か
+		if (!m_bDoing_UndoRedo) {	// Undo, Redoの実行中か
 			// 操作の追加
 			m_commander.GetOpeBlk()->AppendOpe(
 				new MoveCaretOpe(
@@ -569,7 +569,7 @@ void EditView::DeleteData(
 			}
 			GetCaret().MoveCursor(caretOld, bRedraw);
 			GetCaret().m_nCaretPosX_Prev = GetCaret().GetCaretLayoutPos().GetX();
-			if (!m_bDoing_UndoRedo) {	// アンドゥ・リドゥの実行中か
+			if (!m_bDoing_UndoRedo) {	// Undo, Redoの実行中か
 				MoveCaretOpe*		pOpe = new MoveCaretOpe();
 				m_pEditDoc->m_layoutMgr.LayoutToLogic(
 					ptCaretPosOld,
@@ -786,7 +786,7 @@ bool EditView::ReplaceData_CEditView3(
 	}
 
 	LogicPoint ptCaretPos_PHY_Old = GetCaret().GetCaretLogicPos();
-	if (pOpeBlk) {	// アンドゥ・リドゥの実行中か
+	if (pOpeBlk) {	// Undo, Redoの実行中か
 		// 操作の追加
 		if (sDelRangeLogic.GetFrom() != GetCaret().GetCaretLogicPos()) {
 			pOpeBlk->AppendOpe(
@@ -838,7 +838,7 @@ bool EditView::ReplaceData_CEditView3(
 	//	再描画の時点でファイル更新フラグが適切になっていないといけないので
 	//	関数の末尾からここへ移動
 	// 状態遷移
-	if (pOpeBlk) {	// アンドゥ・リドゥの実行中か
+	if (pOpeBlk) {	// Undo, Redoの実行中か
 		m_pEditDoc->m_docEditor.SetModified(true, bRedraw);	//	Jan. 22, 2002 genta
 	}
 
@@ -998,7 +998,7 @@ void EditView::RTrimPrevLine(void)
 					layoutMgr.LogicToLayout(ptCaretPos_PHY, &ptCP);
 					GetCaret().MoveCursor(ptCP, true);
 
-					if (!m_bDoing_UndoRedo) {	// アンドゥ・リドゥの実行中か
+					if (!m_bDoing_UndoRedo) {	// Undo, Redoの実行中か
 						// 操作の追加
 						m_commander.GetOpeBlk()->AppendOpe(
 							new MoveCaretOpe(

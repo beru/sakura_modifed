@@ -29,19 +29,20 @@
 void ViewCommander::Command_GREP_DIALOG(void)
 {
 	NativeW memCurText;
+	auto& dlgGrep = GetEditWindow()->m_dlgGrep;
 	// 2014.07.01 複数Grepウィンドウを使い分けている場合などに影響しないように、未設定のときだけHistoryを見る
-	bool bGetHistory = GetEditWindow()->m_dlgGrep.m_bSetText == false;
+	bool bGetHistory = dlgGrep.m_bSetText == false;
 
 	// 現在カーソル位置単語または選択範囲より検索等のキーを取得
 	bool bSet = m_pCommanderView->GetCurrentTextForSearchDlg(memCurText, bGetHistory);	// 2006.08.23 ryoji ダイアログ専用関数に変更
 
 	if (bSet) {
-		GetEditWindow()->m_dlgGrep.m_strText = memCurText.GetStringPtr();
-		GetEditWindow()->m_dlgGrep.m_bSetText = true;
+		dlgGrep.m_strText = memCurText.GetStringPtr();
+		dlgGrep.m_bSetText = true;
 	}
 
 	// Grepダイアログの表示
-	int nRet = GetEditWindow()->m_dlgGrep.DoModal(G_AppInstance(), m_pCommanderView->GetHwnd(), GetDocument()->m_docFile.GetFilePath());
+	int nRet = dlgGrep.DoModal(G_AppInstance(), m_pCommanderView->GetHwnd(), GetDocument()->m_docFile.GetFilePath());
 //	MYTRACE(_T("nRet=%d\n"), nRet);
 	if (!nRet) {
 		return;

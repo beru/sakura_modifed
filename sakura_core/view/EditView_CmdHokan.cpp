@@ -101,10 +101,7 @@ void EditView::ShowHokanMgr(NativeW& memData, bool bAutoDecided)
 		poWin.y = textArea.GetAreaTop() + (Int)(nY) * GetTextMetrics().GetHankakuDy();
 	}
 	this->ClientToScreen(&poWin);
-	poWin.x -= (
-		memData.GetStringLength()
-		 * GetTextMetrics().GetHankakuDx()
-	);
+	poWin.x -= memData.GetStringLength() * GetTextMetrics().GetHankakuDx();
 
 	/*	補完ウィンドウを表示
 		ただし、bAutoDecided == trueの場合は、補完候補が1つのときは、ウィンドウを表示しない。
@@ -187,10 +184,10 @@ void EditView::ShowHokanMgr(NativeW& memData, bool bAutoDecided)
 	@date 2010.06.16 Moca ひらがなで続行する場合、直前を漢字に制限
 */
 int EditView::HokanSearchByFile(
-	const wchar_t*	pszKey,				// [in]
-	bool			bHokanLoHiCase,		// [in] 英大文字小文字を同一視する
-	vector_ex<std::wstring>& 	vKouho,	// [in,out] 候補
-	int				nMaxKouho			// [in] Max候補数(0 == 無制限)
+	const wchar_t*	pszKey,					// [in]
+	bool			bHokanLoHiCase,			// [in] 英大文字小文字を同一視する
+	vector_ex<std::wstring>& candidates,	// [in,out] 候補
+	int				nMaxKouho				// [in] Max候補数(0 == 無制限)
 ) {
 	const int nKeyLen = wcslen(pszKey);
 	int nLines = m_pEditDoc->m_docLineMgr.GetLineCount();
@@ -298,13 +295,13 @@ int EditView::HokanSearchByFile(
 			// 候補を追加(重複は除く)
 			{
 				std::wstring strWord = std::wstring(word, nWordLen);
-				HokanMgr::AddKouhoUnique(vKouho, strWord);
+				HokanMgr::AddKouhoUnique(candidates, strWord);
 			}
-			if (nMaxKouho != 0 && nMaxKouho <= (int)vKouho.size()) {
-				return vKouho.size();
+			if (nMaxKouho != 0 && nMaxKouho <= (int)candidates.size()) {
+				return candidates.size();
 			}
 		}
 	}
-	return vKouho.size();
+	return candidates.size();
 }
 

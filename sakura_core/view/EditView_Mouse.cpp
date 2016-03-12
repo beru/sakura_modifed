@@ -239,7 +239,7 @@ normal_action:;
 		if (tripleClickMode) {		// 2007.11.15 nasukoji	トリプルクリックを処理する
 			// 1行選択でない場合は選択文字列を解除
 			// トリプルクリックが1行選択でなくてもクアドラプルクリックを有効とする
-			if (F_SELECTLINE != nFuncID) {
+			if (nFuncID != F_SELECTLINE) {
 				OnLBUTTONUP(fwKeys, ptMouse.x, ptMouse.y);	// ここで左ボタンアップしたことにする
 
 				if (GetSelectionInfo().IsTextSelected())		// テキストが選択されているか
@@ -247,7 +247,7 @@ normal_action:;
 			}
 
 			// 単語の途中で折り返されていると下の行が選択されてしまうことへの対処
-			if (F_SELECTLINE != nFuncID) {
+			if (nFuncID != F_SELECTLINE) {
 				GetCaret().MoveCursorToClientPoint(ptMouse);	// カーソル移動
 			}else {
 				GetCaret().MoveCursorToClientPoint(ptMouse, true, &ptNewCaret);	// カーソル移動
@@ -259,7 +259,7 @@ normal_action:;
 			::SendMessage(::GetParent(m_hwndParent), WM_COMMAND, MAKELONG(nFuncID, CMD_FROM_MOUSE), (LPARAM)NULL);
 
 			// 1行選択でない場合はここで抜ける（他の選択コマンドの時問題となるかも）
-			if (F_SELECTLINE != nFuncID)
+			if (nFuncID != F_SELECTLINE)
 				return;
 			ptNewCaret = GetCaret().GetCaretLayoutPos();
 
@@ -1269,7 +1269,12 @@ void EditView::OnMOUSEMOVE(WPARAM fwKeys, int xPos_, int yPos_)
 	2011.11.16 Moca スクロール変化量への対応
 	2013.09.10 Moca スペシャルスクロールの不具合の修正
 */
-LRESULT EditView::OnMOUSEWHEEL2(WPARAM wParam, LPARAM lParam, bool bHorizontalMsg, EFunctionCode nCmdFuncID)
+LRESULT EditView::OnMOUSEWHEEL2(
+	WPARAM wParam,
+	LPARAM lParam,
+	bool bHorizontalMsg,
+	EFunctionCode nCmdFuncID
+	)
 {
 //	WORD	fwKeys;
 	short	zDelta;
@@ -1723,7 +1728,12 @@ void EditView::OnLBUTTONDBLCLK(WPARAM fwKeys, int _xPos , int _yPos)
 //                           D&D                               //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-STDMETHODIMP EditView::DragEnter(LPDATAOBJECT pDataObject, DWORD dwKeyState, POINTL pt, LPDWORD pdwEffect)
+STDMETHODIMP EditView::DragEnter(
+	LPDATAOBJECT pDataObject,
+	DWORD dwKeyState,
+	POINTL pt,
+	LPDWORD pdwEffect
+	)
 {
 	DEBUG_TRACE(_T("EditView::DragEnter()\n"));
 	//「OLEによるドラッグ & ドロップを使う」オプションが無効の場合にはドロップを受け付けない
@@ -2052,7 +2062,7 @@ STDMETHODIMP EditView::Drop(LPDATAOBJECT pDataObject, DWORD dwKeyState, POINTL p
 			GetCaret().MoveCursor(ptCaretPos_Old, true);
 			GetCaret().m_nCaretPosX_Prev = GetCaret().GetCaretLayoutPos().GetX2();
 
-			// 削除位置から移動先へのカーソル移動をアンドゥ操作に追加する	// 2008.03.26 ryoji
+			// 削除位置から移動先へのカーソル移動をUndo操作に追加する	// 2008.03.26 ryoji
 			LogicPoint ptBefore;
 			m_pEditDoc->m_layoutMgr.LayoutToLogic(
 				GetSelectionInfo().m_select.GetFrom(),

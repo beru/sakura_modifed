@@ -324,14 +324,14 @@ bool DlgFileTree::GetDataTree(
 int DlgFileTree::GetDataItem(FileTreeItem& item)
 {
 	item = FileTreeItem(); // èâä˙âª
-	BOOL bGrepEnable = FALSE;
-	BOOL bPathEnable = FALSE;
+	bool bGrepEnable = false;
+	bool bPathEnable = false;
 	if (IsButtonChecked(IDC_RADIO_GREP)) {
-		bGrepEnable = TRUE;
-		bPathEnable = TRUE;
+		bGrepEnable = true;
+		bPathEnable = true;
 		item.eFileTreeItemType = FileTreeItemType::Grep;
 	}else if (IsButtonChecked(IDC_RADIO_FILE)) { 
-		bPathEnable = TRUE;
+		bPathEnable = true;
 		item.eFileTreeItemType = FileTreeItemType::File;
 	}else {
 		item.eFileTreeItemType = FileTreeItemType::Folder;

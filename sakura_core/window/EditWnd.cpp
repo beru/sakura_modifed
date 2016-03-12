@@ -4285,7 +4285,6 @@ void EditWnd::InitAllViews()
 
 		// 現在の選択範囲を非選択状態に戻す
 		view.GetSelectionInfo().DisableSelectArea(false);
-
 		view.OnChangeSetting();
 		view.GetCaret().MoveCursor(LayoutPoint(0, 0), true);
 		view.GetCaret().m_nCaretPosX_Prev = LayoutInt(0);
@@ -4311,8 +4310,9 @@ void EditWnd::Views_Redraw()
 {
 	// アクティブ以外を再描画してから…
 	for (int v=0; v<GetAllViewCount(); ++v) {
-		if (m_nActivePaneIndex != v)
+		if (m_nActivePaneIndex != v) {
 			GetView(v).Redraw();
+		}
 	}
 	GetMiniMap().Redraw();
 	// アクティブを再描画
@@ -4487,7 +4487,7 @@ bool EditWnd::WrapWindowWidth(int nPane)
 BOOL EditWnd::UpdateTextWrap(void)
 {
 	// この関数はコマンド実行ごとに処理の最終段階で利用する
-	// （アンドゥ登録＆全ビュー更新のタイミング）
+	// （Undo登録＆全ビュー更新のタイミング）
 	if (GetDocument()->m_nTextWrapMethodCur == TextWrappingMethod::WindowWidth) {
 		bool bWrap = WrapWindowWidth(0);	// 右端で折り返す
 		if (bWrap) {
@@ -4573,10 +4573,11 @@ LogicPointEx* EditWnd::SavePhysPosOfAllView()
 	const int numOfPositions = 6;
 	
 	LogicPointEx* pptPosArray = new LogicPointEx[numOfViews * numOfPositions];
-	
+	auto& layoutMgr = GetDocument()->m_layoutMgr;
 	for (int i=0; i<numOfViews; ++i) {
-		LayoutPoint tmp = LayoutPoint(LayoutInt(0), GetView(i).m_pTextArea->GetViewTopLine());
-		const Layout* layoutLine = GetDocument()->m_layoutMgr.SearchLineByLayoutY(tmp.GetY2());
+		auto& view = GetView(i);
+		LayoutPoint tmp = LayoutPoint(LayoutInt(0), view.m_pTextArea->GetViewTopLine());
+		const Layout* layoutLine = layoutMgr.SearchLineByLayoutY(tmp.GetY2());
 		if (layoutLine) {
 			LogicInt nLineCenter = layoutLine->GetLogicOffset() + layoutLine->GetLengthWithoutEOL() / 2;
 			pptPosArray[i * numOfPositions + 0].x = nLineCenter;
@@ -4586,32 +4587,33 @@ LogicPointEx* EditWnd::SavePhysPosOfAllView()
 			pptPosArray[i * numOfPositions + 0].y = LogicInt(0);
 		}
 		pptPosArray[i * numOfPositions + 0].ext = LayoutInt(0);
-		if (GetView(i).GetSelectionInfo().m_selectBgn.GetFrom().y >= 0) {
-			GetDocument()->m_layoutMgr.LayoutToLogicEx(
-				GetView(i).GetSelectionInfo().m_selectBgn.GetFrom(),
+		auto& selInfo = view.GetSelectionInfo();
+		if (selInfo.m_selectBgn.GetFrom().y >= 0) {
+			layoutMgr.LayoutToLogicEx(
+				selInfo.m_selectBgn.GetFrom(),
 				&pptPosArray[i * numOfPositions + 1]
 			);
 		}
-		if (GetView(i).GetSelectionInfo().m_selectBgn.GetTo().y >= 0) {
-			GetDocument()->m_layoutMgr.LayoutToLogicEx(
-				GetView(i).GetSelectionInfo().m_selectBgn.GetTo(),
+		if (selInfo.m_selectBgn.GetTo().y >= 0) {
+			layoutMgr.LayoutToLogicEx(
+				selInfo.m_selectBgn.GetTo(),
 				&pptPosArray[i * numOfPositions + 2]
 			);
 		}
-		if (GetView(i).GetSelectionInfo().m_select.GetFrom().y >= 0) {
-			GetDocument()->m_layoutMgr.LayoutToLogicEx(
-				GetView(i).GetSelectionInfo().m_select.GetFrom(),
+		if (selInfo.m_select.GetFrom().y >= 0) {
+			layoutMgr.LayoutToLogicEx(
+				selInfo.m_select.GetFrom(),
 				&pptPosArray[i * numOfPositions + 3]
 			);
 		}
-		if (GetView(i).GetSelectionInfo().m_select.GetTo().y >= 0) {
-			GetDocument()->m_layoutMgr.LayoutToLogicEx(
-				GetView(i).GetSelectionInfo().m_select.GetTo(),
+		if (selInfo.m_select.GetTo().y >= 0) {
+			layoutMgr.LayoutToLogicEx(
+				selInfo.m_select.GetTo(),
 				&pptPosArray[i * numOfPositions + 4]
 			);
 		}
-		GetDocument()->m_layoutMgr.LayoutToLogicEx(
-			GetView(i).GetCaret().GetCaretLayoutPos(),
+		layoutMgr.LayoutToLogicEx(
+			view.GetCaret().GetCaretLayoutPos(),
 			&pptPosArray[i * numOfPositions + 5]
 		);
 	}
@@ -4632,55 +4634,59 @@ void EditWnd::RestorePhysPosOfAllView(LogicPointEx* pptPosArray)
 	const int numOfViews = GetAllViewCount();
 	const int numOfPositions = 6;
 
+	auto& layoutMgr = GetDocument()->m_layoutMgr;
 	for (int i=0; i<numOfViews; ++i) {
 		LayoutPoint tmp;
-		GetDocument()->m_layoutMgr.LogicToLayoutEx(
+		layoutMgr.LogicToLayoutEx(
 			pptPosArray[i * numOfPositions + 0],
 			&tmp
 		);
-		GetView(i).m_pTextArea->SetViewTopLine(tmp.GetY2());
-
-		if (GetView(i).GetSelectionInfo().m_selectBgn.GetFrom().y >= 0) {
-			GetDocument()->m_layoutMgr.LogicToLayoutEx(
+		auto& view = GetView(i);
+		view.m_pTextArea->SetViewTopLine(tmp.GetY2());
+		auto& selInfo = view.GetSelectionInfo();
+		if (selInfo.m_selectBgn.GetFrom().y >= 0) {
+			layoutMgr.LogicToLayoutEx(
 				pptPosArray[i * numOfPositions + 1],
-				GetView(i).GetSelectionInfo().m_selectBgn.GetFromPointer()
+				selInfo.m_selectBgn.GetFromPointer()
 			);
 		}
-		if (GetView(i).GetSelectionInfo().m_selectBgn.GetTo().y >= 0) {
-			GetDocument()->m_layoutMgr.LogicToLayoutEx(
+		if (selInfo.m_selectBgn.GetTo().y >= 0) {
+			layoutMgr.LogicToLayoutEx(
 				pptPosArray[i * numOfPositions + 2],
-				GetView(i).GetSelectionInfo().m_selectBgn.GetToPointer()
+				selInfo.m_selectBgn.GetToPointer()
 			);
 		}
-		if (GetView(i).GetSelectionInfo().m_select.GetFrom().y >= 0) {
-			GetDocument()->m_layoutMgr.LogicToLayoutEx(
+		if (selInfo.m_select.GetFrom().y >= 0) {
+			layoutMgr.LogicToLayoutEx(
 				pptPosArray[i * numOfPositions + 3],
-				GetView(i).GetSelectionInfo().m_select.GetFromPointer()
+				selInfo.m_select.GetFromPointer()
 			);
 		}
-		if (GetView(i).GetSelectionInfo().m_select.GetTo().y >= 0) {
-			GetDocument()->m_layoutMgr.LogicToLayoutEx(
+		if (selInfo.m_select.GetTo().y >= 0) {
+			layoutMgr.LogicToLayoutEx(
 				pptPosArray[i * numOfPositions + 4],
-				GetView(i).GetSelectionInfo().m_select.GetToPointer()
+				selInfo.m_select.GetToPointer()
 			);
 		}
 		LayoutPoint ptPosXY;
-		GetDocument()->m_layoutMgr.LogicToLayoutEx(
+		layoutMgr.LogicToLayoutEx(
 			pptPosArray[i * numOfPositions + 5],
 			&ptPosXY
 		);
-		GetView(i).GetCaret().MoveCursor(ptPosXY, false); // 2013.06.05 bScrollをtrue=>falase
-		GetView(i).GetCaret().m_nCaretPosX_Prev = GetView(i).GetCaret().GetCaretLayoutPos().GetX2();
+		auto& caret = view.GetCaret();
+		caret.MoveCursor(ptPosXY, false); // 2013.06.05 bScrollをtrue=>falase
+		caret.m_nCaretPosX_Prev = caret.GetCaretLayoutPos().GetX2();
 
 		LayoutInt nLeft = LayoutInt(0);
-		if (GetView(i).GetTextArea().m_nViewColNum < GetView(i).GetRightEdgeForScrollBar()) {
-			nLeft = GetView(i).GetRightEdgeForScrollBar() - GetView(i).GetTextArea().m_nViewColNum;
+		auto& textArea = view.GetTextArea();
+		if (textArea.m_nViewColNum < view.GetRightEdgeForScrollBar()) {
+			nLeft = view.GetRightEdgeForScrollBar() - textArea.m_nViewColNum;
 		}
-		if (nLeft < GetView(i).GetTextArea().GetViewLeftCol()) {
-			GetView(i).GetTextArea().SetViewLeftCol(nLeft);
+		if (nLeft < textArea.GetViewLeftCol()) {
+			textArea.SetViewLeftCol(nLeft);
 		}
 
-		GetView(i).GetCaret().ShowEditCaret();
+		caret.ShowEditCaret();
 	}
 	GetActiveView().GetCaret().ShowCaretPosInfo();
 	delete[] pptPosArray;

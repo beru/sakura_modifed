@@ -63,19 +63,19 @@ void TextArea::UpdateViewColRowNums()
 void TextArea::UpdateAreaMetrics(HDC hdc)
 {
 	EditView* pView = m_pEditView;
-
+	auto& textMetrics = pView->GetTextMetrics();
 	if (pView->m_bMiniMap) {
 		// 文字間隔
-		pView->GetTextMetrics().SetHankakuDx(pView->GetTextMetrics().GetHankakuWidth());
+		textMetrics.SetHankakuDx(textMetrics.GetHankakuWidth());
 
 		// 行間隔
-		pView->GetTextMetrics().SetHankakuDy(pView->GetTextMetrics().GetHankakuHeight());
+		textMetrics.SetHankakuDy(textMetrics.GetHankakuHeight());
 	}else {
 		// 文字間隔
-		pView->GetTextMetrics().SetHankakuDx(pView->GetTextMetrics().GetHankakuWidth() + pView->m_pTypeData->nColumnSpace);
+		textMetrics.SetHankakuDx(textMetrics.GetHankakuWidth() + pView->m_pTypeData->nColumnSpace);
 	
 		// 行間隔
-		pView->GetTextMetrics().SetHankakuDy(pView->GetTextMetrics().GetHankakuHeight() + pView->m_pTypeData->nLineSpace);
+		textMetrics.SetHankakuDy(textMetrics.GetHankakuHeight() + pView->m_pTypeData->nLineSpace);
 	}
 
 	// 表示域の再計算

@@ -41,8 +41,8 @@
 bool EditView::IsImeON(void)
 {
 	bool bRet;
-	HIMC	hIme;
-	DWORD	conv, sent;
+	HIMC hIme;
+	DWORD conv, sent;
 
 	//	From here Nov. 26, 2006 genta
 	hIme = ImmGetContext(GetHwnd());
@@ -118,7 +118,11 @@ void EditView::SetIMECompFormFont(void)
 	@date 2002.04.09 minfu
 	@date 2010.03.16 Moca IMR_DOCUMENTFEED対応
 */
-LRESULT EditView::SetReconvertStruct(PRECONVERTSTRING pReconv, bool bUnicode, bool bDocumentFeed)
+LRESULT EditView::SetReconvertStruct(
+	PRECONVERTSTRING pReconv,
+	bool bUnicode,
+	bool bDocumentFeed
+	)
 {
 	if (!bDocumentFeed) {
 		m_nLastReconvIndex = -1;
@@ -426,7 +430,10 @@ LRESULT EditView::SetReconvertStruct(PRECONVERTSTRING pReconv, bool bUnicode, bo
 }
 
 // 再変換用 エディタ上の選択範囲を変更する 2002.04.09 minfu
-LRESULT EditView::SetSelectionFromReonvert(const PRECONVERTSTRING pReconv, bool bUnicode)
+LRESULT EditView::SetSelectionFromReonvert(
+	const RECONVERTSTRING* pReconv,
+	bool bUnicode
+	)
 {
 	// 再変換情報が保存されているか
 	if ((m_nLastReconvIndex < 0) || (m_nLastReconvLine < 0))

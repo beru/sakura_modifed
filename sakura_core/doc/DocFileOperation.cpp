@@ -122,9 +122,9 @@ bool DocFileOperation::DoLoadFlow(LoadInfo* pLoadInfo)
 		}
 
 		// ロード処理
-		m_pDocRef->NotifyBeforeLoad(pLoadInfo);			// 前処理
+		m_pDocRef->NotifyBeforeLoad(pLoadInfo);				// 前処理
 		eLoadResult = m_pDocRef->NotifyLoad(*pLoadInfo);	// 本処理
-		m_pDocRef->NotifyAfterLoad(*pLoadInfo);			// 後処理
+		m_pDocRef->NotifyAfterLoad(*pLoadInfo);				// 後処理
 	}catch (FlowInterruption) {
 		eLoadResult = LoadResultType::Interrupt;
 	}catch (...) {

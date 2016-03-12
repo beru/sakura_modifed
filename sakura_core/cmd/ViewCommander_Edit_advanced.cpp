@@ -81,7 +81,7 @@ void ViewCommander::Command_INDENT(
 	if (nDataLen <= 0) {
 		return;
 	}
-
+	auto& layoutMgr = GetDocument()->m_layoutMgr;
 	LayoutRange selectOld;		// 範囲選択
 	LayoutPoint ptInserted;		// 挿入後の挿入位置
 	const struct IsIndentCharSpaceTab {
@@ -103,7 +103,7 @@ void ViewCommander::Command_INDENT(
 		int Len(LayoutInt nCol) { return m_nTab - ((Int)nCol % m_nTab); }
 		wchar_t* m_szTab;
 		int m_nTab;
-	} stabData(GetDocument()->m_layoutMgr.GetTabSpace());
+	} stabData(layoutMgr.GetTabSpace());
 
 	const bool bSoftTab = (eIndent == IndentType::Tab && m_pCommanderView->m_pTypeData->bInsSpace);
 	GetDocument()->m_docEditor.SetModified(true, true);	// Jan. 22, 2002 genta
@@ -178,7 +178,7 @@ void ViewCommander::Command_INDENT(
 				出している行にだけスペースを挿入することとし、それではどの行にもスペースが挿入されない
 				とわかったときはやり直してスペースを挿入する。
 		*/
-		bool alignFullWidthChar = (eIndent == IndentType::Tab) && ((rcSel.GetFrom().x % this->GetDocument()->m_layoutMgr.GetTabSpace()) == 0);
+		bool alignFullWidthChar = (eIndent == IndentType::Tab) && ((rcSel.GetFrom().x % layoutMgr.GetTabSpace()) == 0);
 #if 1	// ↓ここを残せば選択幅1のSPACEインデントで全角文字を揃える機能(2)が追加される。
 		alignFullWidthChar = alignFullWidthChar || (eIndent == IndentType::Space && rcSel.GetTo().x - rcSel.GetFrom().x == 1);
 #endif
@@ -191,7 +191,7 @@ void ViewCommander::Command_INDENT(
 		for (bool insertionWasDone=false; ; alignFullWidthChar=false) {
 			minOffset = LayoutInt(-1);
 			for (LayoutInt nLineNum=rcSel.GetFrom().y; nLineNum<=rcSel.GetTo().y; ++nLineNum) {
-				const Layout* pLayout = GetDocument()->m_layoutMgr.SearchLineByLayoutY(nLineNum);
+				const Layout* pLayout = layoutMgr.SearchLineByLayoutY(nLineNum);
 				// Nov. 6, 2002 genta NULLチェック追加
 				// これがないとEOF行を含む矩形選択中の文字列入力で落ちる
 				LogicInt nIdxFrom, nIdxTo;
@@ -208,7 +208,7 @@ void ViewCommander::Command_INDENT(
 						{ rcSel.GetTo().x, &nIdxTo, &xLayoutTo },
 						{ LayoutInt(-1), 0, 0 }
 					};
-					MemoryIterator it(pLayout, this->GetDocument()->m_layoutMgr.GetTabSpace());
+					MemoryIterator it(pLayout, layoutMgr.GetTabSpace());
 					for (int i=0; 0<=sortedKetas[i].keta; ++i) {
 						for (; !it.end(); it.addDelta()) {
 							if (sortedKetas[i].keta == it.getColumn()) {
@@ -271,8 +271,8 @@ void ViewCommander::Command_INDENT(
 				);
 				insertionWasDone = true;
 				minOffset = t_min(
-					0 <= minOffset ? minOffset : this->GetDocument()->m_layoutMgr.GetMaxLineKetas(),
-					ptInsert.x <= ptInserted.x ? ptInserted.x - ptInsert.x : t_max(LayoutInt(0), this->GetDocument()->m_layoutMgr.GetMaxLineKetas() - ptInsert.x)
+					0 <= minOffset ? minOffset : layoutMgr.GetMaxLineKetas(),
+					ptInsert.x <= ptInserted.x ? ptInserted.x - ptInsert.x : t_max(LayoutInt(0), layoutMgr.GetMaxLineKetas() - ptInsert.x)
 				);
 
 				caret.MoveCursor(ptInserted, false);
@@ -298,15 +298,15 @@ void ViewCommander::Command_INDENT(
 
 		// 挿入された文字の分だけ選択範囲を後ろにずらし、rcSelにセットする。
 		if (0 < minOffset) {
-			rcSel.GetFromPointer()->x = t_min(rcSel.GetFrom().x + minOffset, this->GetDocument()->m_layoutMgr.GetMaxLineKetas());
-			rcSel.GetToPointer()->x = t_min(rcSel.GetTo().x + minOffset, this->GetDocument()->m_layoutMgr.GetMaxLineKetas());
+			rcSel.GetFromPointer()->x = t_min(rcSel.GetFrom().x + minOffset, layoutMgr.GetMaxLineKetas());
+			rcSel.GetToPointer()->x = t_min(rcSel.GetTo().x + minOffset, layoutMgr.GetMaxLineKetas());
 		}
 
 		// カーソルを移動
 		caret.MoveCursor(rcSel.GetFrom(), true);
 		caret.m_nCaretPosX_Prev = caret.GetCaretLayoutPos().GetX2();
 
-		if (!m_pCommanderView->m_bDoing_UndoRedo) {	// アンドゥ・リドゥの実行中か
+		if (!m_pCommanderView->m_bDoing_UndoRedo) {	// Undo, Redoの実行中か
 			// 操作の追加
 			GetOpeBlk()->AppendOpe(
 				new MoveCaretOpe(
@@ -356,8 +356,8 @@ void ViewCommander::Command_INDENT(
 		}
 
 		for (LayoutInt i=selectOld.GetFrom().GetY2(); i<selectOld.GetTo().GetY2(); ++i) {
-			LayoutInt nLineCountPrev = GetDocument()->m_layoutMgr.GetLineCount();
-			const Layout* pLayout = GetDocument()->m_layoutMgr.SearchLineByLayoutY(i);
+			LayoutInt nLineCountPrev = layoutMgr.GetLineCount();
+			const Layout* pLayout = layoutMgr.SearchLineByLayoutY(i);
 			if (!pLayout ||						// テキストが無いEOLの行は無視
 				pLayout->GetLogicOffset() > 0 ||				// 折り返し行は無視
 				pLayout->GetLengthWithoutEOL() == 0
@@ -381,9 +381,9 @@ void ViewCommander::Command_INDENT(
 			caret.MoveCursor(ptInserted, false);
 			caret.m_nCaretPosX_Prev = caret.GetCaretLayoutPos().GetX2();
 
-			if (nLineCountPrev != GetDocument()->m_layoutMgr.GetLineCount()) {
+			if (nLineCountPrev != layoutMgr.GetLineCount()) {
 				// 行数が変化した!!
-				selectOld.GetToPointer()->y += GetDocument()->m_layoutMgr.GetLineCount() - nLineCountPrev;
+				selectOld.GetToPointer()->y += layoutMgr.GetLineCount() - nLineCountPrev;
 			}
 			if (hwndProgress) {
 				int newPos = ::MulDiv((Int)i, 100, (Int)selectOld.GetTo().GetY());
@@ -404,7 +404,7 @@ void ViewCommander::Command_INDENT(
 		// From Here 2001.12.03 hor
 		caret.MoveCursor(GetSelect().GetTo(), true);
 		caret.m_nCaretPosX_Prev = caret.GetCaretLayoutPos().GetX2();
-		if (!m_pCommanderView->m_bDoing_UndoRedo) {	// アンドゥ・リドゥの実行中か
+		if (!m_pCommanderView->m_bDoing_UndoRedo) {	// Undo, Redoの実行中か
 			GetOpeBlk()->AppendOpe(
 				new MoveCaretOpe(
 					caret.GetCaretLogicPos()	// 操作前後のキャレット位置
@@ -471,13 +471,14 @@ void ViewCommander::Command_UNINDENT(wchar_t wcChar)
 		}
 
 		auto& caret = GetCaret();
+		auto& layoutMgr = GetDocument()->m_layoutMgr;
 		LogicInt nDelLen;
 		for (LayoutInt i = selectOld.GetFrom().GetY2(); i < selectOld.GetTo().GetY2(); ++i) {
-			LayoutInt nLineCountPrev = GetDocument()->m_layoutMgr.GetLineCount();
+			LayoutInt nLineCountPrev = layoutMgr.GetLineCount();
 
 			const Layout*	pLayout;
 			LogicInt		nLineLen;
-			const wchar_t*	pLine = GetDocument()->m_layoutMgr.GetLineStr(i, &nLineLen, &pLayout);
+			const wchar_t*	pLine = layoutMgr.GetLineStr(i, &nLineLen, &pLayout);
 			if (!pLayout || pLayout->GetLogicOffset() > 0) { // 折り返し以降の行はインデント処理を行わない
 				continue;
 			}
@@ -488,7 +489,7 @@ void ViewCommander::Command_UNINDENT(wchar_t wcChar)
 				}else {
 					// 削り取る半角スペース数 (1～タブ幅分) -> nDelLen
 					LogicInt i;
-					LogicInt nTabSpaces = LogicInt((Int)GetDocument()->m_layoutMgr.GetTabSpace());
+					LogicInt nTabSpaces = LogicInt((Int)layoutMgr.GetTabSpace());
 					for (i=LogicInt(0); i<nLineLen; ++i) {
 						if (pLine[i] != WCODE::SPACE) {
 							break;
@@ -520,9 +521,9 @@ void ViewCommander::Command_UNINDENT(wchar_t wcChar)
 				nDelLen,	// 2001.12.03 hor
 				NULL
 			);
-			if (nLineCountPrev != GetDocument()->m_layoutMgr.GetLineCount()) {
+			if (nLineCountPrev != layoutMgr.GetLineCount()) {
 				// 行数が変化した!!
-				selectOld.GetToPointer()->y += GetDocument()->m_layoutMgr.GetLineCount() - nLineCountPrev;
+				selectOld.GetToPointer()->y += layoutMgr.GetLineCount() - nLineCountPrev;
 			}
 			if (hwndProgress) {
 				int newPos = ::MulDiv((Int)i, 100, (Int)selectOld.GetTo().GetY());
@@ -541,7 +542,7 @@ void ViewCommander::Command_UNINDENT(wchar_t wcChar)
 		// From Here 2001.12.03 hor
 		caret.MoveCursor(GetSelect().GetTo(), true);
 		caret.m_nCaretPosX_Prev = caret.GetCaretLayoutPos().GetX2();
-		if (!m_pCommanderView->m_bDoing_UndoRedo) {	// アンドゥ・リドゥの実行中か
+		if (!m_pCommanderView->m_bDoing_UndoRedo) {	// Undo, Redoの実行中か
 			GetOpeBlk()->AppendOpe(
 				new MoveCaretOpe(
 					caret.GetCaretLogicPos()	// 操作前後のキャレット位置
@@ -671,12 +672,12 @@ void ViewCommander::Command_SORT(BOOL bAsc)	// bAsc:TRUE=昇順,FALSE=降順
 	if (!selInfo.IsTextSelected()) {			// テキストが選択されているか
 		return;
 	}
-
+	auto& layoutMgr = GetDocument()->m_layoutMgr;
 	if (selInfo.IsBoxSelecting()) {
 		rangeA = selInfo.m_select;
 		if (selInfo.m_select.GetFrom().x == selInfo.m_select.GetTo().x) {
 			// Aug. 14, 2005 genta 折り返し幅をLayoutMgrから取得するように
-			selInfo.m_select.SetToX(GetDocument()->m_layoutMgr.GetMaxLineKetas());
+			selInfo.m_select.SetToX(layoutMgr.GetMaxLineKetas());
 		}
 		if (selInfo.m_select.GetFrom().x<selInfo.m_select.GetTo().x) {
 			nCF = selInfo.m_select.GetFrom().GetX2();
@@ -688,7 +689,7 @@ void ViewCommander::Command_SORT(BOOL bAsc)	// bAsc:TRUE=昇順,FALSE=降順
 	}
 	bBeginBoxSelectOld = selInfo.IsBoxSelecting();
 	nCaretPosYOLD = GetCaret().GetCaretLayoutPos().GetY();
-	GetDocument()->m_layoutMgr.LayoutToLogic(
+	layoutMgr.LayoutToLogic(
 		selInfo.m_select,
 		&selectOld
 	);
@@ -787,7 +788,7 @@ void ViewCommander::Command_SORT(BOOL bAsc)	// bAsc:TRUE=昇順,FALSE=降順
 	}
 
 	LayoutRange selectOld_Layout;
-	GetDocument()->m_layoutMgr.LogicToLayout(selectOld, &selectOld_Layout);
+	layoutMgr.LogicToLayout(selectOld, &selectOld_Layout);
 	m_pCommanderView->ReplaceData_CEditView3(
 		selectOld_Layout,
 		NULL,
@@ -811,7 +812,7 @@ void ViewCommander::Command_SORT(BOOL bAsc)	// bAsc:TRUE=昇順,FALSE=降順
 		GetCaret().MoveCursor(selInfo.m_select.GetTo(), true);
 	}
 	GetCaret().m_nCaretPosX_Prev = GetCaret().GetCaretLayoutPos().GetX();
-	if (!m_pCommanderView->m_bDoing_UndoRedo) {	// アンドゥ・リドゥの実行中か
+	if (!m_pCommanderView->m_bDoing_UndoRedo) {	// Undo, Redoの実行中か
 		GetOpeBlk()->AppendOpe(
 			new MoveCaretOpe(
 				GetCaret().GetCaretLogicPos()	// 操作前後のキャレット位置
@@ -849,10 +850,10 @@ void ViewCommander::Command_MERGE(void)
 	if (selInfo.IsBoxSelecting()) {
 		return;
 	}
-
+	auto& layoutMgr = GetDocument()->m_layoutMgr;
 	nCaretPosYOLD = GetCaret().GetCaretLayoutPos().GetY();
 	LogicRange sSelectOld; // 範囲選択
-	GetDocument()->m_layoutMgr.LayoutToLogic(
+	layoutMgr.LayoutToLogic(
 		selInfo.m_select,
 		&sSelectOld
 	);
@@ -862,7 +863,7 @@ void ViewCommander::Command_MERGE(void)
 	// その行も選択範囲に加える
 	if (sSelectOld.GetTo().x > 0) {
 #if 0
-		const Layout* pLayout = GetDocument()->m_layoutMgr.SearchLineByLayoutY(selInfo.m_select.GetTo().GetY2()); // 2007.10.09 kobake 単位混在バグ修正
+		const Layout* pLayout = layoutMgr.SearchLineByLayoutY(selInfo.m_select.GetTo().GetY2()); // 2007.10.09 kobake 単位混在バグ修正
 		if (pLayout && EolType::None != pLayout->GetLayoutEol()) {
 			selectOld.GetToPointer()->y++;
 			//selectOld.GetTo().y++;
@@ -885,10 +886,10 @@ void ViewCommander::Command_MERGE(void)
 	}
 
 	int j = GetDocument()->m_docLineMgr.GetLineCount();
-	nMergeLayoutLines = GetDocument()->m_layoutMgr.GetLineCount();
+	nMergeLayoutLines = layoutMgr.GetLineCount();
 
 	LayoutRange selectOld_Layout;
-	GetDocument()->m_layoutMgr.LogicToLayout(sSelectOld, &selectOld_Layout);
+	layoutMgr.LogicToLayout(sSelectOld, &selectOld_Layout);
 
 	// 2010.08.22 NUL対応修正
 	std::vector<StringRef> lineArr;
@@ -930,7 +931,7 @@ void ViewCommander::Command_MERGE(void)
 	}
 
 	j -= GetDocument()->m_docLineMgr.GetLineCount();
-	nMergeLayoutLines -= GetDocument()->m_layoutMgr.GetLineCount();
+	nMergeLayoutLines -= layoutMgr.GetLineCount();
 
 	// 選択エリアの復元
 	selInfo.m_select = selectOld_Layout;
@@ -943,7 +944,7 @@ void ViewCommander::Command_MERGE(void)
 		GetCaret().MoveCursor(selInfo.m_select.GetTo(), true);
 	}
 	GetCaret().m_nCaretPosX_Prev = GetCaret().GetCaretLayoutPos().GetX();
-	if (!m_pCommanderView->m_bDoing_UndoRedo) {	// アンドゥ・リドゥの実行中か
+	if (!m_pCommanderView->m_bDoing_UndoRedo) {	// Undo, Redoの実行中か
 		GetOpeBlk()->AppendOpe(
 			new MoveCaretOpe(
 				GetCaret().GetCaretLogicPos()	// 操作前後のキャレット位置

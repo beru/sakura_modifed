@@ -312,8 +312,8 @@ CodeConvertResult FileLoad::ReadLine(
 			NULL		データがなかった
 */
 CodeConvertResult FileLoad::ReadLine_core(
-	NativeW*	pUnicodeBuffer,	//!< [out] UNICODEデータ受け取りバッファ。改行も含めて読み取る。
-	Eol*		pEol			//!< [i/o]
+	NativeW*	pUnicodeBuffer,	// [out] UNICODEデータ受け取りバッファ。改行も含めて読み取る。
+	Eol*		pEol			// [i/o]
 	)
 {
 	CodeConvertResult eRet = CodeConvertResult::Complete;
@@ -464,13 +464,13 @@ int FileLoad::GetPercent(void) {
 	GetNextLineの汎用文字コード版
 */
 const char* FileLoad::GetNextLineCharCode(
-	const char*	pData,			//!< [in]	検索文字列
-	int			nDataLen,		//!< [in]	検索文字列のバイト数
-	int*		pnLineLen,		//!< [out]	1行のバイト数を返すただしEOLは含まない
-	int*		pnBgn,			//!< [i/o]	検索文字列のバイト単位のオフセット位置
-	Eol*		pEol,			//!< [i/o]	EOL
-	int*		pnEolLen,		//!< [out]	EOLのバイト数 (Unicodeで困らないように)
-	int*		pnBufferNext	//!< [out]	次回持越しバッファ長(EOLの断片)
+	const char*	pData,			// [in]		検索文字列
+	int			nDataLen,		// [in]		検索文字列のバイト数
+	int*		pnLineLen,		// [out]	1行のバイト数を返すただしEOLは含まない
+	int*		pnBgn,			// [i/o]	検索文字列のバイト単位のオフセット位置
+	Eol*		pEol,			// [i/o]	EOL
+	int*		pnEolLen,		// [out]	EOLのバイト数 (Unicodeで困らないように)
+	int*		pnBufferNext	// [out]	次回持越しバッファ長(EOLの断片)
 	)
 {
 	int nbgn = *pnBgn;

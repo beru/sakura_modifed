@@ -35,9 +35,9 @@
 #include "charset/charcode.h"
 #include "doc/layout/Layout.h"
 
-const TextArea* TextDrawer::GetTextArea() const
+const TextArea& TextDrawer::GetTextArea() const
 {
-	return &m_pEditView->GetTextArea();
+	return m_pEditView->GetTextArea();
 }
 
 using namespace std;
@@ -48,7 +48,13 @@ using namespace std;
 @@@ 2002.09.22 YAZAKI    const unsigned char* pDataを、const char* pDataに変更
 @@@ 2007.08.25 kobake 戻り値を void に変更。引数 x, y を DispPos に変更
 */
-void TextDrawer::DispText(HDC hdc, DispPos* pDispPos, const wchar_t* pData, int nLength, bool bTransparent) const
+void TextDrawer::DispText(
+	HDC			hdc,
+	DispPos*	pDispPos,
+	const wchar_t* pData,
+	int			nLength,
+	bool		bTransparent
+	) const
 {
 	if (0 >= nLength) {
 		return;
@@ -58,7 +64,7 @@ void TextDrawer::DispText(HDC hdc, DispPos* pDispPos, const wchar_t* pData, int 
 
 	// 必要なインターフェースを取得
 	const TextMetrics* pMetrics = &m_pEditView->GetTextMetrics();
-	const TextArea* pArea = GetTextArea();
+	const TextArea& textArea = GetTextArea();
 
 	// 文字間隔配列を生成
 	static vector<int> vDxArray(1);
@@ -73,18 +79,18 @@ void TextDrawer::DispText(HDC hdc, DispPos* pDispPos, const wchar_t* pData, int 
 	rcClip.right  = x + nTextWidth;
 	rcClip.top    = y;
 	rcClip.bottom = y + m_pEditView->GetTextMetrics().GetHankakuDy();
-	if (rcClip.left < pArea->GetAreaLeft()) {
-		rcClip.left = pArea->GetAreaLeft();
+	if (rcClip.left < textArea.GetAreaLeft()) {
+		rcClip.left = textArea.GetAreaLeft();
 	}
 
 	// 文字間隔
 	int nDx = m_pEditView->GetTextMetrics().GetHankakuDx();
 
-	if (pArea->IsRectIntersected(rcClip) && rcClip.top >= pArea->GetAreaTop()) {
+	if (textArea.IsRectIntersected(rcClip) && rcClip.top >= textArea.GetAreaTop()) {
 
 		//@@@	From Here 2002.01.30 YAZAKI ExtTextOutW_AnyBuildの制限回避
-		if (rcClip.Width() > pArea->GetAreaWidth()) {
-			rcClip.right = rcClip.left + pArea->GetAreaWidth();
+		if (rcClip.Width() > textArea.GetAreaWidth()) {
+			rcClip.right = rcClip.left + textArea.GetAreaWidth();
 		}
 
 		// ウィンドウの左にあふれた文字数 -> nBefore
@@ -285,11 +291,11 @@ void TextDrawer::DispVerticalLines(
 }
 
 void TextDrawer::DispNoteLine(
-	Graphics&	gr,			//!< 作画するウィンドウのDC
-	int			nTop,		//!< 線を引く上端のクライアント座標y
-	int			nBottom,	//!< 線を引く下端のクライアント座標y
-	int			nLeft,		//!< 線を引く左端
-	int			nRight		//!< 線を引く右端
+	Graphics&	gr,			// 作画するウィンドウのDC
+	int			nTop,		// 線を引く上端のクライアント座標y
+	int			nBottom,	// 線を引く下端のクライアント座標y
+	int			nLeft,		// 線を引く左端
+	int			nRight		// 線を引く右端
 	) const
 {
 	const EditView* pView = m_pEditView;
@@ -333,12 +339,12 @@ void TextDrawer::DispWrapLine(
 	TypeSupport wrapType(pView, COLORIDX_WRAP);
 	if (!wrapType.IsDisp()) return;
 
-	const TextArea& rArea = *GetTextArea();
+	const TextArea& textArea = GetTextArea();
 	const LayoutInt nWrapKetas = pView->m_pEditDoc->m_layoutMgr.GetMaxLineKetas();
 	const int nCharDx = pView->GetTextMetrics().GetHankakuDx();
-	int nXPos = rArea.GetAreaLeft() + (Int)(nWrapKetas - rArea.GetViewLeftCol()) * nCharDx;
+	int nXPos = textArea.GetAreaLeft() + (Int)(nWrapKetas - textArea.GetViewLeftCol()) * nCharDx;
 	//	2005.11.08 Moca 作画条件変更
-	if (rArea.GetAreaLeft() < nXPos && nXPos < rArea.GetAreaRight()) {
+	if (textArea.GetAreaLeft() < nXPos && nXPos < textArea.GetAreaRight()) {
 		/// 折り返し記号の色のペンを設定
 		gr.PushPen(wrapType.GetTextColor(), 0);
 
@@ -364,7 +370,7 @@ void TextDrawer::DispLineNumber(
 	const Layout*	pLayout = EditDoc::GetInstance(0)->m_layoutMgr.SearchLineByLayoutY(nLineNum);
 
 	const EditView* pView = m_pEditView;
-	const TypeConfig* pTypes = &pView->m_pEditDoc->m_docType.GetDocumentAttribute();
+	const TypeConfig& typeConfig = pView->m_pEditDoc->m_docType.GetDocumentAttribute();
 
 	int				nLineHeight = pView->GetTextMetrics().GetHankakuDy();
 	int				nCharWidth = pView->GetTextMetrics().GetHankakuDx();
@@ -491,7 +497,7 @@ void TextDrawer::DispLineNumber(
 		int nLineNumCols;
 		{
 			// 行番号の表示 false=折り返し単位／true=改行単位
-			if (pTypes->bLineNumIsCRLF) {
+			if (typeConfig.bLineNumIsCRLF) {
 				// 論理行番号表示モード
 				if (!pLayout || pLayout->GetLogicOffset() != 0) { // 折り返しレイアウト行
 					wcscpy(szLineNum, L" ");
@@ -508,9 +514,9 @@ void TextDrawer::DispLineNumber(
 			nLineNumCols = nLineCols; // 2010.08.17 Moca 位置決定に行番号区切りは含めない
 
 			// 行番号区切り 0=なし 1=縦線 2=任意
-			if (pTypes->nLineTermType == 2) {
+			if (typeConfig.nLineTermType == 2) {
 				//	Sep. 22, 2002 genta
-				szLineNum[nLineCols] = pTypes->cLineTermChar;
+				szLineNum[nLineCols] = typeConfig.cLineTermChar;
 				szLineNum[++nLineCols] = '\0';
 			}
 		}
@@ -528,7 +534,7 @@ void TextDrawer::DispLineNumber(
 		);
 
 		// 行番号区切り 0=なし 1=縦線 2=任意
-		if (pTypes->nLineTermType == 1) {
+		if (typeConfig.nLineTermType == 1) {
 			RECT rc;
 			rc.left = nLineNumAreaWidth - 2;
 			rc.top = y;

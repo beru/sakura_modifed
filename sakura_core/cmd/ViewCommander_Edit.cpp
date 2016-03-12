@@ -330,7 +330,7 @@ void ViewCommander::Command_UNDO(void)
 	// 各種モードの取り消し
 	Command_CANCEL_MODE();
 
-	m_pCommanderView->m_bDoing_UndoRedo = true;	// アンドゥ・リドゥの実行中か
+	m_pCommanderView->m_bDoing_UndoRedo = true;	// Undo, Redoの実行中か
 
 	// 現在のUndo対象の操作ブロックを返す
 	auto& caret = GetCaret();
@@ -375,9 +375,9 @@ void ViewCommander::Command_UNDO(void)
 					InsertOpe* pInsertOpe = static_cast<InsertOpe*>(pOpe);
 
 					// 選択範囲の変更
-					LogicRange cSelectLogic;
-					cSelectLogic.SetFrom(pOpe->m_ptCaretPos_PHY_Before);
-					cSelectLogic.SetTo(pOpe->m_ptCaretPos_PHY_After);
+					LogicRange selectLogic;
+					selectLogic.SetFrom(pOpe->m_ptCaretPos_PHY_Before);
+					selectLogic.SetTo(pOpe->m_ptCaretPos_PHY_After);
 					if (bFastMode) {
 					}else {
 						selInfo.m_selectBgn.SetFrom(ptCaretPos_Before);
@@ -396,7 +396,7 @@ void ViewCommander::Command_UNDO(void)
 						pInsertOpe->m_nOrgSeq,
 						NULL,
 						bFastMode,
-						&cSelectLogic
+						&selectLogic
 					);
 
 					// 選択範囲の変更
@@ -506,7 +506,7 @@ void ViewCommander::Command_UNDO(void)
 		// Undo後の変更フラグ
 		docEditor.SetModified(bIsModified, true);	// Jan. 22, 2002 genta
 
-		m_pCommanderView->m_bDoing_UndoRedo = false;	// アンドゥ・リドゥの実行中か
+		m_pCommanderView->m_bDoing_UndoRedo = false;	// Undo, Redoの実行中か
 
 		m_pCommanderView->SetBracketPairPos(true);	// 03/03/07 ai
 
@@ -535,7 +535,7 @@ void ViewCommander::Command_UNDO(void)
 	}
 
 	caret.m_nCaretPosX_Prev = GetCaret().GetCaretLayoutPos().x;	// 2007.10.11 ryoji 追加
-	m_pCommanderView->m_bDoing_UndoRedo = false;	// アンドゥ・リドゥの実行中か
+	m_pCommanderView->m_bDoing_UndoRedo = false;	// Undo, Redoの実行中か
 
 	return;
 }
@@ -584,7 +584,7 @@ void ViewCommander::Command_REDO(void)
 	// 各種モードの取り消し
 	Command_CANCEL_MODE();
 
-	m_pCommanderView->m_bDoing_UndoRedo = true;	// アンドゥ・リドゥの実行中か
+	m_pCommanderView->m_bDoing_UndoRedo = true;	// Undo, Redoの実行中か
 
 	// 現在のRedo対象の操作ブロックを返す
 	auto& caret = GetCaret();
@@ -747,7 +747,7 @@ void ViewCommander::Command_REDO(void)
 		// Redo後の変更フラグ
 		docEditor.SetModified(bIsModified, true);	// Jan. 22, 2002 genta
 
-		m_pCommanderView->m_bDoing_UndoRedo = false;	// アンドゥ・リドゥの実行中か
+		m_pCommanderView->m_bDoing_UndoRedo = false;	// Undo, Redoの実行中か
 
 		m_pCommanderView->SetBracketPairPos(true);	// 03/03/07 ai
 
@@ -779,7 +779,7 @@ void ViewCommander::Command_REDO(void)
 	}
 
 	caret.m_nCaretPosX_Prev = GetCaret().GetCaretLayoutPos().x;	// 2007.10.11 ryoji 追加
-	m_pCommanderView->m_bDoing_UndoRedo = FALSE;	// アンドゥ・リドゥの実行中か
+	m_pCommanderView->m_bDoing_UndoRedo = FALSE;	// Undo, Redoの実行中か
 
 	return;
 }
@@ -864,7 +864,7 @@ void ViewCommander::Command_DELETE_BACK(void)
 					// 右からの移動では折り返し末尾文字は削除するが改行は削除しない
 					// 下から（下の行の行頭から）の移動では改行も削除する
 					if (nIdx < pLayout->GetLengthWithoutEOL() || caret.GetCaretLayoutPos().GetY2() < ptLayoutPos_Old.GetY2()) {
-						if (!m_pCommanderView->m_bDoing_UndoRedo) {	// アンドゥ・リドゥの実行中か
+						if (!m_pCommanderView->m_bDoing_UndoRedo) {	// Undo, Redoの実行中か
 							// 操作の追加
 							GetOpeBlk()->AppendOpe(
 								new MoveCaretOpe(

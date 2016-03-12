@@ -60,7 +60,7 @@ void ViewCommander::Command_SHOWFUNCKEY(void)
 {
 	EditWnd* pEditWnd = GetEditWindow();	// Sep. 10, 2002 genta
 
-	GetDllShareData().common.window.bDispFuncKeyWnd = ((!pEditWnd->m_funcKeyWnd.GetHwnd())? TRUE: FALSE);	// ファンクションキー表示
+	GetDllShareData().common.window.bDispFuncKeyWnd = !pEditWnd->m_funcKeyWnd.GetHwnd();	// ファンクションキー表示
 	pEditWnd->LayoutFuncKey();
 	pEditWnd->EndLayoutBars();
 
@@ -117,7 +117,7 @@ void ViewCommander::Command_SHOWSTATUSBAR(void)
 {
 	EditWnd* pEditWnd = GetEditWindow();	// Sep. 10, 2002 genta
 
-	GetDllShareData().common.window.bDispStatusBar = ((!pEditWnd->m_statusBar.GetStatusHwnd())? TRUE: FALSE);	// ステータスバー表示
+	GetDllShareData().common.window.bDispStatusBar = !pEditWnd->m_statusBar.GetStatusHwnd();	// ステータスバー表示
 	pEditWnd->LayoutStatusBar();
 	pEditWnd->EndLayoutBars();
 
@@ -361,7 +361,7 @@ void ViewCommander::Command_WRAPWINDOWWIDTH(void)	// Oct. 7, 2000 JEPRO WRAPWIND
 	
 	nWrapMode = m_pCommanderView->GetWrapMode(&newKetas);
 	GetDocument()->m_nTextWrapMethodCur = TextWrappingMethod::SettingWidth;
-	GetDocument()->m_bTextWrapMethodCurTemp = !(GetDocument()->m_nTextWrapMethodCur == m_pCommanderView->m_pTypeData->nTextWrapMethod);
+	GetDocument()->m_bTextWrapMethodCurTemp = (GetDocument()->m_nTextWrapMethodCur != m_pCommanderView->m_pTypeData->nTextWrapMethod);
 	if (nWrapMode == EditView::TGWRAP_NONE) {
 		return;	// 折り返し桁は元のまま
 	}
@@ -442,7 +442,7 @@ void ViewCommander::Command_TEXTWRAPMETHOD(TextWrappingMethod nWrapMethod)
 	pDoc->m_nTextWrapMethodCur = nWrapMethod;	// 設定を記憶
 
 	// 折り返し方法の一時設定適用／一時設定適用解除	// 2008.06.08 ryoji
-	pDoc->m_bTextWrapMethodCurTemp = !(pDoc->m_docType.GetDocumentAttribute().nTextWrapMethod == nWrapMethod);
+	pDoc->m_bTextWrapMethodCurTemp = (pDoc->m_docType.GetDocumentAttribute().nTextWrapMethod != nWrapMethod);
 
 	// 折り返し位置を変更
 	GetEditWindow()->ChangeLayoutParam(false, pDoc->m_layoutMgr.GetTabSpace(), (LayoutInt)nWidth);
@@ -469,23 +469,23 @@ void ViewCommander::Command_SELECT_COUNT_MODE(int nMode)
 {
 	// 設定には保存せず、View毎に持つフラグを設定
 	//BOOL* pbDispSelCountByByte = &GetDllShareData().common.statusBar.bDispSelCountByByte;
-	SelectCountMode* pnSelectCountMode = &GetEditWindow()->m_nSelectCountMode;
+	auto& selectCountMode = GetEditWindow()->m_nSelectCountMode;
 
 	if (nMode == (int)SelectCountMode::Toggle) {
 		// 文字数⇔バイト数トグル
 		SelectCountMode nCurrentMode;
-		if (*pnSelectCountMode == SelectCountMode::Toggle) {
+		if (selectCountMode == SelectCountMode::Toggle) {
 			nCurrentMode = (GetDllShareData().common.statusBar.bDispSelCountByByte ?
 								SelectCountMode::ByByte :
 								SelectCountMode::ByChar);
 		}else {
-			nCurrentMode = *pnSelectCountMode;
+			nCurrentMode = selectCountMode;
 		}
-		*pnSelectCountMode = (nCurrentMode == SelectCountMode::ByByte ?
+		selectCountMode = (nCurrentMode == SelectCountMode::ByByte ?
 								SelectCountMode::ByChar :
 								SelectCountMode::ByByte);
 	}else if (nMode == (int)SelectCountMode::ByByte || nMode == (int)SelectCountMode::ByChar) {
-		*pnSelectCountMode = (SelectCountMode)nMode;
+		selectCountMode = (SelectCountMode)nMode;
 	}
 }
 
@@ -495,12 +495,12 @@ void ViewCommander::Command_SELECT_COUNT_MODE(int nMode)
 */
 void ViewCommander::Command_SET_QUOTESTRING(const wchar_t* quotestr)
 {
-	if (!quotestr)
+	if (!quotestr) {
 		return;
+	}
 
-	wcsncpy(GetDllShareData().common.format.szInyouKigou, quotestr,
-		_countof(GetDllShareData().common.format.szInyouKigou));
-	
-	GetDllShareData().common.format.szInyouKigou[_countof(GetDllShareData().common.format.szInyouKigou) - 1] = L'\0';
+	auto& csFormat = GetDllShareData().common.format;
+	wcsncpy(csFormat.szInyouKigou, quotestr, _countof(csFormat.szInyouKigou));
+	csFormat.szInyouKigou[_countof(csFormat.szInyouKigou) - 1] = L'\0';
 }
 

@@ -1492,7 +1492,7 @@ void EditView::SmartIndent_CPP(wchar_t wcChar)
 		GetCaret().MoveCursor(ptCP_Layout, true);
 		GetCaret().m_nCaretPosX_Prev = GetCaret().GetCaretLayoutPos().GetX();
 
-		if (bChange && !m_bDoing_UndoRedo) {	// アンドゥ・リドゥの実行中か
+		if (bChange && !m_bDoing_UndoRedo) {	// Undo, Redoの実行中か
 			// 操作の追加
 			m_commander.GetOpeBlk()->AppendOpe(
 				new MoveCaretOpe(

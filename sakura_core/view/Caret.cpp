@@ -156,18 +156,18 @@ Caret::~Caret()
 */
 LayoutInt Caret::MoveCursor(
 	LayoutPoint	ptWk_CaretPos,		// [in] 移動先レイアウト位置
-	bool			bScroll,			// [in] true: 画面位置調整有り  false: 画面位置調整無し
-	int				nCaretMarginRate,	// [in] 縦スクロール開始位置を決める値
-	bool			bUnderLineDoNotOFF,	// [in] アンダーラインを消去しない
-	bool			bVertLineDoNotOFF	// [in] カーソル位置縦線を消去しない
-)
+	bool		bScroll,			// [in] true: 画面位置調整有り  false: 画面位置調整無し
+	int			nCaretMarginRate,	// [in] 縦スクロール開始位置を決める値
+	bool		bUnderLineDoNotOFF,	// [in] アンダーラインを消去しない
+	bool		bVertLineDoNotOFF	// [in] カーソル位置縦線を消去しない
+	)
 {
 	// スクロール処理
 	LayoutInt	nScrollRowNum = LayoutInt(0);
 	LayoutInt	nScrollColNum = LayoutInt(0);
-	int		nCaretMarginY;
-	LayoutInt		nScrollMarginRight;
-	LayoutInt		nScrollMarginLeft;
+	int			nCaretMarginY;
+	LayoutInt	nScrollMarginRight;
+	LayoutInt	nScrollMarginLeft;
 
 	auto& textArea = m_pEditView->GetTextArea();
 	if (0 >= textArea.m_nViewColNum) {
@@ -382,8 +382,8 @@ LayoutInt Caret::MoveCursor(
 
 
 LayoutInt Caret::MoveCursorFastMode(
-	const LogicPoint&		ptWk_CaretPosLogic	// [in] 移動先ロジック位置
-)
+	const LogicPoint& ptWk_CaretPosLogic	// [in] 移動先ロジック位置
+	)
 {
 	// fastMode
 	SetCaretLogicPos(ptWk_CaretPosLogic);
@@ -395,7 +395,11 @@ LayoutInt Caret::MoveCursorFastMode(
 || 垂直スクロールをした場合はその行数を返す(正／負)
 */
 // 2007.09.11 kobake 関数名変更: MoveCursorToPoint→MoveCursorToClientPoint
-LayoutInt Caret::MoveCursorToClientPoint(const POINT& ptClientPos, bool test, LayoutPoint* pCaretPosNew)
+LayoutInt Caret::MoveCursorToClientPoint(
+	const POINT& ptClientPos,
+	bool test,
+	LayoutPoint* pCaretPosNew
+	)
 {
 	LayoutPoint	ptLayoutPos;
 	m_pEditView->GetTextArea().ClientToLayout(ptClientPos, &ptLayoutPos);
@@ -466,8 +470,8 @@ void Caret::ShowEditCaret()
 		return;
 	}
 	// 必要なインターフェース
-	const LayoutMgr* pLayoutMgr = &m_pEditDoc->m_layoutMgr;
-	CommonSetting* pCommon = &GetDllShareData().common;
+	auto& layoutMgr = m_pEditDoc->m_layoutMgr;
+	auto& csGeneral = GetDllShareData().common.general;
 	const TypeConfig* pTypes = &m_pEditDoc->m_docType.GetDocumentAttribute();
 
 	using namespace WCODE;
@@ -496,14 +500,14 @@ void Caret::ShowEditCaret()
 	// CalcCaretDrawPosのためにCaretサイズを仮設定
 	int	nCaretWidth = 0;
 	int	nCaretHeight = 0;
-	if (pCommon->general.GetCaretType() == 0) {
+	if (csGeneral.GetCaretType() == 0) {
 		nCaretHeight = GetHankakuHeight();
 		if (m_pEditView->IsInsMode()) {
 			nCaretWidth = 2;
 		}else {
 			nCaretWidth = GetHankakuDx();
 		}
-	}else if (pCommon->general.GetCaretType() == 1) {
+	}else if (csGeneral.GetCaretType() == 1) {
 		if (m_pEditView->IsInsMode()) {
 			nCaretHeight = GetHankakuHeight() / 2;
 		}else {
@@ -528,7 +532,7 @@ void Caret::ShowEditCaret()
 	}
 	// キャレットの幅、高さを決定
 	// カーソルのタイプ = win
-	if (pCommon->general.GetCaretType() == 0) {
+	if (csGeneral.GetCaretType() == 0) {
 		nCaretHeight = GetHankakuHeight();					// キャレットの高さ
 		if (m_pEditView->IsInsMode() /* Oct. 2, 2005 genta */) {
 			nCaretWidth = 2; // 2px
@@ -545,7 +549,7 @@ void Caret::ShowEditCaret()
 			const Layout*	pLayout = NULL;
 			if (bShowCaret) {
 				// 画面外のときはGetLineStrを呼ばない
-				pLine = pLayoutMgr->GetLineStr(GetCaretLayoutPos().GetY2(), &nLineLen, &pLayout);
+				pLine = layoutMgr.GetLineStr(GetCaretLayoutPos().GetY2(), &nLineLen, &pLayout);
 			}
 
 			if (pLine) {
@@ -566,7 +570,7 @@ void Caret::ShowEditCaret()
 			}
 		}
 	// カーソルのタイプ = dos
-	}else if (pCommon->general.GetCaretType() == 1) {
+	}else if (csGeneral.GetCaretType() == 1) {
 		if (m_pEditView->IsInsMode() /* Oct. 2, 2005 genta */) {
 			nCaretHeight = GetHankakuHeight() / 2;			// キャレットの高さ
 		}else {
@@ -578,7 +582,7 @@ void Caret::ShowEditCaret()
 		LogicInt		nLineLen = LogicInt(0);
 		const Layout*	pLayout = NULL;
 		if (bShowCaret) {
-			pLine= pLayoutMgr->GetLineStr(GetCaretLayoutPos().GetY2(), &nLineLen, &pLayout);
+			pLine= layoutMgr.GetLineStr(GetCaretLayoutPos().GetY2(), &nLineLen, &pLayout);
 		}
 
 		if (pLine) {
@@ -600,10 +604,10 @@ void Caret::ShowEditCaret()
 	}
 
 	//	キャレット色の取得
-	const ColorInfo* ColorInfoArr = pTypes->colorInfoArr;
-	int nCaretColor = (ColorInfoArr[COLORIDX_CARET_IME].bDisp && m_pEditView->IsImeON())? COLORIDX_CARET_IME: COLORIDX_CARET;
-	COLORREF crCaret = ColorInfoArr[nCaretColor].colorAttr.cTEXT;
-	COLORREF crBack = ColorInfoArr[COLORIDX_TEXT].colorAttr.cBACK;
+	const ColorInfo* colorInfoArr = pTypes->colorInfoArr;
+	int nCaretColor = (colorInfoArr[COLORIDX_CARET_IME].bDisp && m_pEditView->IsImeON())? COLORIDX_CARET_IME: COLORIDX_CARET;
+	COLORREF crCaret = colorInfoArr[nCaretColor].colorAttr.cTEXT;
+	COLORREF crBack = colorInfoArr[COLORIDX_TEXT].colorAttr.cBACK;
 
 	if (!ExistCaretFocus()) {
 		// キャレットがなかった場合
@@ -659,7 +663,7 @@ void Caret::ShowEditCaret()
 void Caret::ShowCaretPosInfo()
 {
 	// 必要なインターフェース
-	const LayoutMgr* pLayoutMgr = &m_pEditDoc->m_layoutMgr;
+	auto& layoutMgr = m_pEditDoc->m_layoutMgr;
 	const TypeConfig* pTypes = &m_pEditDoc->m_docType.GetDocumentAttribute();
 
 	if (!m_pEditView->GetDrawSwitch()) {
@@ -672,7 +676,7 @@ void Caret::ShowCaretPosInfo()
 	// カーソル位置の文字列を取得
 	const Layout*	pLayout;
 	LogicInt		nLineLen;
-	const wchar_t*	pLine = pLayoutMgr->GetLineStr(GetCaretLayoutPos().GetY2(), &nLineLen, &pLayout);
+	const wchar_t*	pLine = layoutMgr.GetLineStr(GetCaretLayoutPos().GetY2(), &nLineLen, &pLayout);
 
 	// -- -- -- -- 文字コード情報 -> pszCodeName -- -- -- -- //
 	const TCHAR* pszCodeName;
@@ -723,7 +727,7 @@ void Caret::ShowCaretPosInfo()
 				&& m_nLineLogicModCache == ModifyVisitor().GetLineModifiedSeq( pLayout->GetDocLineRef() )
 			) {
 				// 下移動
-				offset = pLayout->CalcLayoutOffset(*pLayoutMgr, m_nLogicOffsetCache, m_nOffsetCache);
+				offset = pLayout->CalcLayoutOffset(layoutMgr, m_nLogicOffsetCache, m_nOffsetCache);
 				m_nOffsetCache = offset;
 				m_nLogicOffsetCache = pLayout->GetLogicOffset();
 				m_nLineNoCache = GetCaretLayoutPos().GetY2();
@@ -733,7 +737,7 @@ void Caret::ShowCaretPosInfo()
 				&& m_nLineLogicModCache == ModifyVisitor().GetLineModifiedSeq( pLayout->GetDocLineRef() )
 			) {
 				// 上移動
-				offset = pLayout->CalcLayoutOffset(*pLayoutMgr, m_nLogicOffset50Cache, m_nOffset50Cache);
+				offset = pLayout->CalcLayoutOffset(layoutMgr, m_nLogicOffset50Cache, m_nOffset50Cache);
 				m_nOffsetCache = offset;
 				m_nLogicOffsetCache = pLayout->GetLogicOffset();
 				m_nLineNoCache = GetCaretLayoutPos().GetY2();
@@ -751,11 +755,11 @@ void Caret::ShowCaretPosInfo()
 					pLayout50 = pLayout50->GetPrevLayout();
 					--nLineNum;
 				}
-				m_nOffset50Cache = pLayout50->CalcLayoutOffset(*pLayoutMgr);
+				m_nOffset50Cache = pLayout50->CalcLayoutOffset(layoutMgr);
 				m_nLogicOffset50Cache = pLayout50->GetLogicOffset();
 				m_nLineNo50Cache = nLineNum;
 				
-				offset = pLayout->CalcLayoutOffset(*pLayoutMgr, m_nLogicOffset50Cache, m_nOffset50Cache);
+				offset = pLayout->CalcLayoutOffset(layoutMgr, m_nLogicOffset50Cache, m_nOffset50Cache);
 				m_nOffsetCache = offset;
 				m_nLogicOffsetCache = pLayout->GetLogicOffset();
 				m_nLineLogicNoCache = pLayout->GetLogicLineNo();
@@ -908,8 +912,8 @@ void Caret::ClearCaretPosInfoCache()
 LayoutInt Caret::Cursor_UPDOWN(LayoutInt nMoveLines, bool bSelect)
 {
 	// 必要なインターフェース
-	const LayoutMgr* const pLayoutMgr = &m_pEditDoc->m_layoutMgr;
-	const CommonSetting* const pCommon = &GetDllShareData().common;
+	auto& layoutMgr = m_pEditDoc->m_layoutMgr;
+	auto& csGeneral = GetDllShareData().common.general;
 
 	const LayoutPoint ptCaret = GetCaretLayoutPos();
 
@@ -922,9 +926,9 @@ LayoutInt Caret::Cursor_UPDOWN(LayoutInt nMoveLines, bool bSelect)
 
 	// 現在のキャレットY座標 + nMoveLinesが正しいレイアウト行の範囲内に収まるように nMoveLinesを調整する。
 	if (nMoveLines > 0) { // 下移動。
-		const bool existsEOFOnlyLine = pLayoutMgr->GetBottomLayout() && pLayoutMgr->GetBottomLayout()->GetLayoutEol() != EolType::None
-			|| pLayoutMgr->GetLineCount() == 0;
-		const LayoutInt maxLayoutLine = pLayoutMgr->GetLineCount() + (existsEOFOnlyLine ? 1 : 0) - 1;
+		const bool existsEOFOnlyLine = layoutMgr.GetBottomLayout() && layoutMgr.GetBottomLayout()->GetLayoutEol() != EolType::None
+			|| layoutMgr.GetLineCount() == 0;
+		const LayoutInt maxLayoutLine = layoutMgr.GetLineCount() + (existsEOFOnlyLine ? 1 : 0) - 1;
 		// 移動先が EOFのみの行を含めたレイアウト行数未満になるように移動量を規正する。
 		nMoveLines = t_min(nMoveLines,  maxLayoutLine - ptCaret.y);
 		if (1
@@ -958,11 +962,11 @@ LayoutInt Caret::Cursor_UPDOWN(LayoutInt nMoveLines, bool bSelect)
 	LayoutPoint ptTo(LayoutInt(0), ptCaret.y + nMoveLines);
 
 	// 移動先の行のデータを取得
-	const Layout* const pLayout = pLayoutMgr->SearchLineByLayoutY(ptTo.y);
+	const Layout* const pLayout = layoutMgr.SearchLineByLayoutY(ptTo.y);
 	const LogicInt nLineLen = pLayout ? pLayout->GetLengthWithEOL() : LogicInt(0);
 	int i = 0; ///< 何？
 	if (pLayout) {
-		MemoryIterator it(pLayout, pLayoutMgr->GetTabSpace());
+		MemoryIterator it(pLayout, layoutMgr.GetTabSpace());
 		while (!it.end()) {
 			it.scanNext();
 			if (it.getIndex() + it.getIndexDelta() > pLayout->GetLengthWithoutEOL()) {
@@ -982,7 +986,7 @@ LayoutInt Caret::Cursor_UPDOWN(LayoutInt nMoveLines, bool bSelect)
 	}
 	if (i >= nLineLen) {
 		// フリーカーソルモードと矩形選択中は、キャレットの位置を改行や EOFの前に制限しない
-		if (pCommon->general.bIsFreeCursorMode
+		if (csGeneral.bIsFreeCursorMode
 			|| selInfo.IsBoxSelecting()
 		) {
 			ptTo.x = m_nCaretPosX_Prev;
@@ -1048,8 +1052,9 @@ void Caret::CreateEditCaret(COLORREF crCaret, COLORREF crBack, int nWidth, int n
 	m_pEditView->ReleaseDC(hdc);
 
 	// 以前のビットマップを破棄する
-	if (m_hbmpCaret)
+	if (m_hbmpCaret) {
 		::DeleteObject(m_hbmpCaret);
+	}
 	m_hbmpCaret = hbmpCaret;
 
 	// キャレットを作成する
@@ -1096,9 +1101,7 @@ void Caret::CopyCaretStatus(Caret* pCaret) const
 POINT Caret::CalcCaretDrawPos(const LayoutPoint& ptCaretPos) const
 {
 	auto& textArea = m_pEditView->GetTextArea();
-	int nPosX = textArea.GetAreaLeft()
-		+ (Int)(ptCaretPos.x - textArea.GetViewLeftCol()) * GetHankakuDx();
-
+	int nPosX = textArea.GetAreaLeft() + (Int)(ptCaretPos.x - textArea.GetViewLeftCol()) * GetHankakuDx();
 	LayoutYInt nY = ptCaretPos.y - textArea.GetViewTopLine();
 	int nPosY;
 	if (nY < 0) {
@@ -1108,7 +1111,7 @@ POINT Caret::CalcCaretDrawPos(const LayoutPoint& ptCaretPos) const
 	}else {
 		nPosY = textArea.GetAreaTop()
 			+ (Int)(nY) * m_pEditView->GetTextMetrics().GetHankakuDy()
-		+ m_pEditView->GetTextMetrics().GetHankakuHeight() - GetCaretSize().cy; // 下寄せ
+			+ m_pEditView->GetTextMetrics().GetHankakuHeight() - GetCaretSize().cy; // 下寄せ
 	}
 
 	return Point(nPosX, nPosY);
@@ -1128,13 +1131,13 @@ POINT Caret::CalcCaretDrawPos(const LayoutPoint& ptCaretPos) const
 	@date 2009.02.17 ryoji レイアウト行末以後のカラム位置指定なら末尾文字の前ではなく末尾文字の後に移動する
 */
 LayoutInt Caret::MoveCursorProperly(
-	LayoutPoint	ptNewXY,			// [in] カーソルのレイアウト座標X
+	LayoutPoint		ptNewXY,			// [in] カーソルのレイアウト座標X
 	bool			bScroll,			// [in] true: 画面位置調整有り/ false: 画面位置調整有り無し
 	bool			test,				// [in] true: カーソル移動はしない
 	LayoutPoint*	ptNewXYNew,			// [out] 新しいレイアウト座標
 	int				nCaretMarginRate,	// [in] 縦スクロール開始位置を決める値
 	int				dx					// [in] ptNewXY.xとマウスカーソル位置との誤差(カラム幅未満のドット数)
-)
+	)
 {
 	LogicInt		nLineLen;
 	const Layout*	pLayout;

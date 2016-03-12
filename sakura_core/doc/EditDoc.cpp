@@ -238,7 +238,7 @@ void EditDoc::Clear()
 	// 書込み禁止のクリア
 	m_docLocker.Clear();
 
-	// アンドゥ・リドゥバッファのクリア
+	// Undo, Redoバッファのクリア
 	m_docEditor.m_opeBuf.ClearAll();
 
 	// テキストデータのクリア

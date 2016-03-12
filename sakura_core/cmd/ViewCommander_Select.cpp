@@ -28,7 +28,8 @@ bool ViewCommander::Command_SELECTWORD(LayoutPoint* pptCaretPos)
 		si.DisableSelectArea(true);
 	}
 	LayoutPoint ptCaretPos = ((!pptCaretPos) ? GetCaret().GetCaretLayoutPos() : *pptCaretPos);
-	const Layout* pLayout = GetDocument()->m_layoutMgr.SearchLineByLayoutY(ptCaretPos.GetY2());
+	auto& layoutMgr = GetDocument()->m_layoutMgr;
+	const Layout* pLayout = layoutMgr.SearchLineByLayoutY(ptCaretPos.GetY2());
 	if (!pLayout) {
 		return false;	// 単語選択に失敗
 	}
@@ -37,14 +38,14 @@ bool ViewCommander::Command_SELECTWORD(LayoutPoint* pptCaretPos)
 
 	// 現在位置の単語の範囲を調べる
 	LayoutRange range;
-	if (GetDocument()->m_layoutMgr.WhereCurrentWord(	ptCaretPos.GetY2(), nIdx, &range, NULL, NULL)) {
+	if (layoutMgr.WhereCurrentWord(ptCaretPos.GetY2(), nIdx, &range, NULL, NULL)) {
 
 		// 指定された行のデータ内の位置に対応する桁の位置を調べる
 		// 2007.10.15 kobake 既にレイアウト単位なので変換は不要
 		/*
-		pLayout = GetDocument()->m_layoutMgr.SearchLineByLayoutY(range.GetFrom().GetY2());
+		pLayout = layoutMgr.SearchLineByLayoutY(range.GetFrom().GetY2());
 		range.SetFromX(m_pCommanderView->LineIndexToColumn(pLayout, range.GetFrom().x));
-		pLayout = GetDocument()->m_layoutMgr.SearchLineByLayoutY(range.GetTo().GetY2());
+		pLayout = layoutMgr.SearchLineByLayoutY(range.GetTo().GetY2());
 		range.SetToX(m_pCommanderView->LineIndexToColumn(pLayout, range.GetTo().x));
 		*/
 
@@ -110,10 +111,11 @@ void ViewCommander::Command_SELECTLINE(int lparam)
 
 	LayoutPoint ptCaret;
 
+	auto& layoutMgr = GetDocument()->m_layoutMgr;
 	// 最下行（物理行）でない
 	if (GetCaret().GetCaretLogicPos().y < GetDocument()->m_docLineMgr.GetLineCount()) {
 		// 1行先の物理行からレイアウト行を求める
-		GetDocument()->m_layoutMgr.LogicToLayout(LogicPoint(0, GetCaret().GetCaretLogicPos().y + 1), &ptCaret);
+		layoutMgr.LogicToLayout(LogicPoint(0, GetCaret().GetCaretLogicPos().y + 1), &ptCaret);
 
 		// カーソルを次の物理行頭へ移動する
 		m_pCommanderView->MoveCursorSelecting(ptCaret, TRUE);
@@ -122,7 +124,7 @@ void ViewCommander::Command_SELECTLINE(int lparam)
 		ptCaret = GetCaret().GetCaretLayoutPos().Get();
 	}else {
 		// カーソルを最下行（レイアウト行）へ移動する
-		m_pCommanderView->MoveCursorSelecting(LayoutPoint(LayoutInt(0), GetDocument()->m_layoutMgr.GetLineCount()), TRUE);
+		m_pCommanderView->MoveCursorSelecting(LayoutPoint(LayoutInt(0), layoutMgr.GetLineCount()), TRUE);
 		Command_GOLINEEND(true, 0, 0);	// 行末に移動
 
 		// 選択するものが無い（[EOF]のみの行）時は選択状態としない

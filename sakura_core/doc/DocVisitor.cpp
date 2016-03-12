@@ -12,7 +12,7 @@ void DocVisitor::SetAllEol(Eol eol)
 {
 	EditView* pView = &EditWnd::getInstance()->GetActiveView();
 
-	// アンドゥ記録開始
+	// Undo記録開始
 	if (!pView->m_bDoing_UndoRedo) {
 		if (!pView->m_commander.GetOpeBlk()) {
 			pView->m_commander.SetOpeBlk(new OpeBlk());
@@ -66,7 +66,7 @@ void DocVisitor::SetAllEol(Eol eol)
 			m_pDocRef->m_layoutMgr.ClearLayoutLineWidth();
 		}
 	}
-	// アンドゥ記録
+	// Undo記録
 	if (pView->m_commander.GetOpeBlk()) {
 		if (pView->m_commander.GetOpeBlk()->GetNum()>0) {
 			// カーソル位置復元

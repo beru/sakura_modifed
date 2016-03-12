@@ -376,7 +376,7 @@ void ViewCommander::Command_PASTEBOX(
 	GetCaret().MoveCursor(ptCurOld, true);
 	GetCaret().m_nCaretPosX_Prev = GetCaret().GetCaretLayoutPos().GetX2();
 
-	if (!m_pCommanderView->m_bDoing_UndoRedo) {	// アンドゥ・リドゥの実行中か
+	if (!m_pCommanderView->m_bDoing_UndoRedo) {	// Undo, Redoの実行中か
 		// 操作の追加
 		GetOpeBlk()->AppendOpe(
 			new MoveCaretOpe(
@@ -450,12 +450,12 @@ void ViewCommander::Command_INSBOXTEXT(
 	@date 2013.05.10 Moca 高速モード
 */
 void ViewCommander::Command_INSTEXT(
-	bool			bRedraw,		// 
-	const wchar_t*	pszText,		// [in] 貼り付ける文字列。
-	LogicInt		nTextLen,		// [in] pszTextの長さ。-1を指定すると、pszTextをNUL終端文字列とみなして長さを自動計算する
-	bool			bNoWaitCursor,	// 
-	bool			bLinePaste,		// [in] ラインモード貼り付け
-	bool			bFastMode,		// [in] 高速モード(レイアウト座標は無視する)
+	bool				bRedraw,		// 
+	const wchar_t*		pszText,		// [in] 貼り付ける文字列。
+	LogicInt			nTextLen,		// [in] pszTextの長さ。-1を指定すると、pszTextをNUL終端文字列とみなして長さを自動計算する
+	bool				bNoWaitCursor,	// 
+	bool				bLinePaste,		// [in] ラインモード貼り付け
+	bool				bFastMode,		// [in] 高速モード(レイアウト座標は無視する)
 	const LogicRange*	pSelectLogic	// [in] オプション。高速モードのときの削除範囲ロジック単位
 	)
 {

@@ -314,10 +314,8 @@ void EditView::ISearchExec(LPCWSTR pszText)
 {
 	// 一文字ずつ分解して実行
 
-	const WCHAR* p;
+	const WCHAR* p = pszText;
 	DWORD c;
-	p = pszText;
-	
 	while (*p != L'\0') {
 		if (IsUtf16SurrogHi(*p) && IsUtf16SurrogLow(*(p + 1))) {
 			c = (((WORD)*p) << 16) | ((WORD)*(p + 1));
@@ -452,8 +450,11 @@ void EditView::ISearchExec(bool bNext)
 }
 
 // バックスペースを押されたときの処理
-void EditView::ISearchBack(void) {
-	if (m_nISearchHistoryCount == 0) return;
+void EditView::ISearchBack(void)
+{
+	if (m_nISearchHistoryCount == 0) {
+		return;
+	}
 	
 	if (m_nISearchHistoryCount == 1) {
 		m_bCurSrchKeyMark = false;

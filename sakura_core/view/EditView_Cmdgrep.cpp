@@ -33,7 +33,7 @@ void EditView::TranslateCommand_grep(
 	LPARAM&			lparam2,
 	LPARAM&			lparam3,
 	LPARAM&			lparam4
-)
+	)
 {
 	if (!EditApp::getInstance()->m_pGrepAgent->m_bGrepMode)
 		return;

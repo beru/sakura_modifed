@@ -181,7 +181,7 @@ int TextMetrics::CalcTextWidth(
 	const wchar_t* pText, // •¶š—ñ
 	int nLength,          // •¶š—ñ’·
 	const int* pnDx       // •¶šŠÔŠu‚Ì“ü‚Á‚½”z—ñ
-)
+	)
 {
 	// ANSI‘ã‚Ì“®ì ¦pnDx‚É‚Í‚·‚×‚Ä“¯‚¶’l‚ª“ü‚Á‚Ä‚¢‚½
 	// return pnDx[0] * nLength;
@@ -199,7 +199,7 @@ int TextMetrics::CalcTextWidth2(
 	const wchar_t* pText, // •¶š—ñ
 	int nLength,          // •¶š—ñ’·
 	int nHankakuDx        // ”¼Šp•¶š‚Ì•¶šŠÔŠu
-)
+	)
 {
 	// •¶šŠÔŠu”z—ñ‚ğ¶¬
 	vector<int> vDxArray;

@@ -394,9 +394,10 @@ bool ViewCommander::Command_TagsMake(void)
 #define	CTAGS_COMMAND	_T("ctags.exe")
 
 	TCHAR	szTargetPath[1024 /*_MAX_PATH+1*/];
-	if (GetDocument()->m_docFile.GetFilePathClass().IsValidPath()) {
-		_tcscpy_s(szTargetPath, GetDocument()->m_docFile.GetFilePath());
-		szTargetPath[_tcslen(szTargetPath) - _tcslen(GetDocument()->m_docFile.GetFileName())] = _T('\0');
+	auto& docFile = GetDocument()->m_docFile;
+	if (docFile.GetFilePathClass().IsValidPath()) {
+		_tcscpy_s(szTargetPath, docFile.GetFilePath());
+		szTargetPath[_tcslen(szTargetPath) - _tcslen(docFile.GetFileName())] = _T('\0');
 	}else {
 		// 20100722 Moca サクラのフォルダからカレントディレクトリに変更
 		::GetCurrentDirectory(_countof(szTargetPath), szTargetPath);
@@ -404,7 +405,9 @@ bool ViewCommander::Command_TagsMake(void)
 
 	// ダイアログを表示する
 	DlgTagsMake	dlgTagsMake;
-	if (!dlgTagsMake.DoModal(G_AppInstance(), m_pCommanderView->GetHwnd(), 0, szTargetPath)) return false;
+	if (!dlgTagsMake.DoModal(G_AppInstance(), m_pCommanderView->GetHwnd(), 0, szTargetPath)) {
+		return false;
+	}
 
 	TCHAR	cmdline[1024];
 	// exeのあるフォルダ
@@ -669,7 +672,7 @@ bool ViewCommander::Command_TagJumpByTagsFileKeyword(const wchar_t* keyword)
 		return false;
 	}
 
-	DlgTagJumpList	dlgTagJumpList(false);
+	DlgTagJumpList dlgTagJumpList(false);
 	dlgTagJumpList.SetFileName(szCurrentPath);
 	dlgTagJumpList.SetKeyword(keyword);
 
@@ -699,7 +702,8 @@ bool ViewCommander::Sub_PreProcTagJumpByTagsFile(TCHAR* szCurrentPath, int count
 	}
 
 	// 実行可能確認
-	if (! GetDocument()->m_docFile.GetFilePathClass().IsValidPath()) {
+	auto& docFile = GetDocument()->m_docFile;
+	if (! docFile.GetFilePathClass().IsValidPath()) {
 		// 2010.04.02 (無題)でもタグジャンプできるように
 		// Grep、アウトプットは行番号タグジャンプがあるので無効にする(要検討)
 		if (
@@ -711,8 +715,8 @@ bool ViewCommander::Sub_PreProcTagJumpByTagsFile(TCHAR* szCurrentPath, int count
 	}
 	
 	// 基準ファイル名の設定
-	if (GetDocument()->m_docFile.GetFilePathClass().IsValidPath()) {
-		auto_strcpy(szCurrentPath, GetDocument()->m_docFile.GetFilePath());
+	if (docFile.GetFilePathClass().IsValidPath()) {
+		auto_strcpy(szCurrentPath, docFile.GetFilePath());
 	}else {
 		if (::GetCurrentDirectory(count - _countof(_T("\\dmy")) - MAX_TYPES_EXTS, szCurrentPath) == 0) {
 			return false;

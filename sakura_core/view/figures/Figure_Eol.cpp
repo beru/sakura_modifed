@@ -132,7 +132,12 @@ bool Figure_Eol::DrawImp(ColorStrategyInfo* pInfo)
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 // Ü‚è•Ô‚µ•`‰æ
-void _DispWrap(Graphics& gr, DispPos* pDispPos, const EditView* pView, LayoutYInt nLineNum)
+void _DispWrap(
+	Graphics&		gr,
+	DispPos*		pDispPos,
+	const EditView*	pView,
+	LayoutYInt		nLineNum
+	)
 {
 	RECT rcClip2;
 	if (pView->GetTextArea().GenerateClipRect(&rcClip2, *pDispPos, 1)) {
