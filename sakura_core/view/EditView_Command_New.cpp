@@ -266,6 +266,7 @@ void EditView::InsertData_CEditView(
 			}
 			LayoutYInt nLayoutTop;
 			LayoutYInt nLayoutBottom;
+			auto& textArea = GetTextArea();
 			if (nInsLineNum != 0) {
 				// スクロールバーの状態を更新する
 				AdjustScrollBars();
@@ -276,9 +277,9 @@ void EditView::InsertData_CEditView(
 				}
 
 				ps.rcPaint.left = 0;
-				ps.rcPaint.right = GetTextArea().GetAreaRight();
-				ps.rcPaint.top = GetTextArea().GenerateYPx(nStartLine);
-				ps.rcPaint.bottom = GetTextArea().GetAreaBottom();
+				ps.rcPaint.right = textArea.GetAreaRight();
+				ps.rcPaint.top = textArea.GenerateYPx(nStartLine);
+				ps.rcPaint.bottom = textArea.GetAreaBottom();
 				nLayoutTop = nStartLine;
 				nLayoutBottom = LayoutYInt(-1);
 			}else {
@@ -291,14 +292,14 @@ void EditView::InsertData_CEditView(
 					++nModifyLayoutLinesOld;
 				}
 
-	//			ps.rcPaint.left = GetTextArea().GetAreaLeft();
+	//			ps.rcPaint.left = textArea.GetAreaLeft();
 				ps.rcPaint.left = 0;
-				ps.rcPaint.right = GetTextArea().GetAreaRight();
+				ps.rcPaint.right = textArea.GetAreaRight();
 
-				// 2002.02.25 Mod By KK 次行 (ptInsertPos.y - GetTextArea().GetViewTopLine() - 1); => (ptInsertPos.y - GetTextArea().GetViewTopLine());
-				//ps.rcPaint.top = GetTextArea().GetAreaTop() + GetTextMetrics().GetHankakuDy() * (ptInsertPos.y - GetTextArea().GetViewTopLine() - 1);
-				ps.rcPaint.top = GetTextArea().GenerateYPx(nStartLine);
-				ps.rcPaint.bottom = GetTextArea().GenerateYPx(nStartLine + nModifyLayoutLinesOld);
+				// 2002.02.25 Mod By KK 次行 (ptInsertPos.y - textArea.GetViewTopLine() - 1); => (ptInsertPos.y - textArea.GetViewTopLine());
+				//ps.rcPaint.top = textArea.GetAreaTop() + GetTextMetrics().GetHankakuDy() * (ptInsertPos.y - textArea.GetViewTopLine() - 1);
+				ps.rcPaint.top = textArea.GenerateYPx(nStartLine);
+				ps.rcPaint.bottom = textArea.GenerateYPx(nStartLine + nModifyLayoutLinesOld);
 				nLayoutTop = nStartLine;
 				nLayoutBottom = nStartLine + nModifyLayoutLinesOld;
 			}

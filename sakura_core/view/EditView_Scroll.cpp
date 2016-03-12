@@ -467,16 +467,14 @@ LayoutInt EditView::ScrollAtH(LayoutInt nPos)
 		int nScrollColPxWidth = (Int)nScrollColNum * GetTextMetrics().GetHankakuDx();
 		if (nScrollColNum > 0) {
 			rcScrol.left = textArea.GetAreaLeft();
-			rcScrol.right =
-				textArea.GetAreaRight() - nScrollColPxWidth;
+			rcScrol.right = textArea.GetAreaRight() - nScrollColPxWidth;
 			rcClip2.left = textArea.GetAreaLeft();
 			rcClip2.right = textArea.GetAreaLeft() + nScrollColPxWidth;
 			rcClip2.top = textArea.GetAreaTop();
 			rcClip2.bottom = textArea.GetAreaBottom();
 		}else if (nScrollColNum < 0) {
 			rcScrol.left = textArea.GetAreaLeft() - nScrollColPxWidth;
-			rcClip2.left =
-				textArea.GetAreaRight() + nScrollColPxWidth;
+			rcClip2.left = textArea.GetAreaRight() + nScrollColPxWidth;
 			rcClip2.right = textArea.GetAreaRight();
 			rcClip2.top = textArea.GetAreaTop();
 			rcClip2.bottom = textArea.GetAreaBottom();

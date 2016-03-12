@@ -142,14 +142,16 @@ bool ColorStrategyInfo::CheckChangeColor(const StringRef& lineStr)
 		if (cPageViewBg.IsDisp()) {
 			EditView& activeView = pView->m_pEditWnd->GetActiveView();
 			LayoutInt curLine = pDispPos->GetLayoutLineRef();
+			auto viewTopLine = activeView.GetTextArea().GetViewTopLine();
+			auto bottomLine = activeView.GetTextArea().GetBottomLine();
 			if (colorIdxBackLine == COLORIDX_PAGEVIEW) {
-				if (activeView.GetTextArea().GetViewTopLine() <= curLine && curLine < activeView.GetTextArea().GetBottomLine()) {
+				if (viewTopLine <= curLine && curLine < bottomLine) {
 				}else {
 					colorIdxBackLine = COLORIDX_TEXT;
 					bChange = true;
 				}
 			}else if (colorIdxBackLine == COLORIDX_TEXT) {
-				if (activeView.GetTextArea().GetViewTopLine() <= curLine && curLine < activeView.GetTextArea().GetBottomLine()) {
+				if (viewTopLine <= curLine && curLine < bottomLine) {
 					colorIdxBackLine = COLORIDX_PAGEVIEW;
 					bChange = true;
 				}

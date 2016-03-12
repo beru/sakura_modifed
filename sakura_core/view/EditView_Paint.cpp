@@ -150,18 +150,19 @@ void EditView::RedrawLines(LayoutYInt top, LayoutYInt bottom)
 		return;
 	}
 
-	if (bottom < GetTextArea().GetViewTopLine()) {
+	auto& textArea = GetTextArea();
+	if (bottom < textArea.GetViewTopLine()) {
 		return;
 	}
-	if (GetTextArea().GetBottomLine() <= top) {
+	if (textArea.GetBottomLine() <= top) {
 		return;
 	}
 	HDC hdc = GetDC();
 	PAINTSTRUCT	ps;
 	ps.rcPaint.left = 0;
-	ps.rcPaint.right = GetTextArea().GetAreaRight();
-	ps.rcPaint.top = GetTextArea().GenerateYPx(top);
-	ps.rcPaint.bottom = GetTextArea().GenerateYPx(bottom);
+	ps.rcPaint.right = textArea.GetAreaRight();
+	ps.rcPaint.top = textArea.GenerateYPx(top);
+	ps.rcPaint.bottom = textArea.GenerateYPx(bottom);
 	OnPaint(hdc, &ps, FALSE);
 	ReleaseDC(hdc);
 }
@@ -188,7 +189,7 @@ void EditView::DrawBackImage(HDC hdc, RECT& rcPaint, HDC hdcBgImg)
 #else
 	TypeSupport textType(this, COLORIDX_TEXT);
 	COLORREF colorOld = ::SetBkColor(hdc, textType.GetBackColor());
-	const TextArea& area = GetTextArea();
+	const TextArea& textArea = GetTextArea();
 	const EditDoc& doc  = *m_pEditDoc;
 	const TypeConfig& typeConfig = doc.m_docType.GetDocumentAttribute();
 
@@ -197,17 +198,17 @@ void EditView::DrawBackImage(HDC hdc, RECT& rcPaint, HDC hdcBgImg)
 	case BackgroundImagePosType::TopLeft:
 	case BackgroundImagePosType::BottomLeft:
 	case BackgroundImagePosType::CenterLeft:
-		rcImagePos.left = area.GetAreaLeft();
+		rcImagePos.left = textArea.GetAreaLeft();
 		break;
 	case BackgroundImagePosType::TopRight:
 	case BackgroundImagePosType::BottomRight:
 	case BackgroundImagePosType::CenterRight:
-		rcImagePos.left = area.GetAreaRight() - doc.m_nBackImgWidth;
+		rcImagePos.left = textArea.GetAreaRight() - doc.m_nBackImgWidth;
 		break;
 	case BackgroundImagePosType::TopCenter:
 	case BackgroundImagePosType::BottomCenter:
 	case BackgroundImagePosType::Center:
-		rcImagePos.left = area.GetAreaLeft() + area.GetAreaWidth()/2 - doc.m_nBackImgWidth/2;
+		rcImagePos.left = textArea.GetAreaLeft() + textArea.GetAreaWidth()/2 - doc.m_nBackImgWidth/2;
 		break;
 	default:
 		assert_warning(false);
@@ -217,17 +218,17 @@ void EditView::DrawBackImage(HDC hdc, RECT& rcPaint, HDC hdcBgImg)
 	case BackgroundImagePosType::TopLeft:
 	case BackgroundImagePosType::TopRight:
 	case BackgroundImagePosType::TopCenter:
-		rcImagePos.top  = area.GetAreaTop();
+		rcImagePos.top  = textArea.GetAreaTop();
 		break;
 	case BackgroundImagePosType::BottomLeft:
 	case BackgroundImagePosType::BottomRight:
 	case BackgroundImagePosType::BottomCenter:
-		rcImagePos.top  = area.GetAreaBottom() - doc.m_nBackImgHeight;
+		rcImagePos.top  = textArea.GetAreaBottom() - doc.m_nBackImgHeight;
 		break;
 	case BackgroundImagePosType::CenterLeft:
 	case BackgroundImagePosType::CenterRight:
 	case BackgroundImagePosType::Center:
-		rcImagePos.top  = area.GetAreaTop() + area.GetAreaHeight()/2 - doc.m_nBackImgHeight/2;
+		rcImagePos.top  = textArea.GetAreaTop() + textArea.GetAreaHeight()/2 - doc.m_nBackImgHeight/2;
 		break;
 	default:
 		assert_warning(false);
@@ -238,12 +239,12 @@ void EditView::DrawBackImage(HDC hdc, RECT& rcPaint, HDC hdcBgImg)
 	// スクロール時の画面の端を作画するときの位置あたりへ移動
 	if (typeConfig.backImgScrollX) {
 		int tile = typeConfig.backImgRepeatX ? doc.m_nBackImgWidth : INT_MAX;
-		Int posX = (area.GetViewLeftCol() % tile) * GetTextMetrics().GetHankakuDx();
+		Int posX = (textArea.GetViewLeftCol() % tile) * GetTextMetrics().GetHankakuDx();
 		rcImagePos.left -= posX % tile;
 	}
 	if (typeConfig.backImgScrollY) {
 		int tile = typeConfig.backImgRepeatY ? doc.m_nBackImgHeight : INT_MAX;
-		Int posY = (area.GetViewTopLine() % tile) * GetTextMetrics().GetHankakuDy();
+		Int posY = (textArea.GetViewTopLine() % tile) * GetTextMetrics().GetHankakuDy();
 		rcImagePos.top -= posY % tile;
 	}
 	if (typeConfig.backImgRepeatX) {
@@ -261,10 +262,10 @@ void EditView::DrawBackImage(HDC hdc, RECT& rcPaint, HDC hdcBgImg)
 	rcImagePos.SetSize(doc.m_nBackImgWidth, doc.m_nBackImgHeight);
 	
 	RECT rc = rcPaint;
-	// rc.left = t_max((int)rc.left, area.GetAreaLeft());
-	rc.top  = t_max((int)rc.top,  area.GetRulerHeight()); // ルーラーを除外
-	const int nXEnd = area.GetAreaRight();
-	const int nYEnd = area.GetAreaBottom();
+	// rc.left = t_max((int)rc.left, textArea.GetAreaLeft());
+	rc.top  = t_max((int)rc.top,  textArea.GetRulerHeight()); // ルーラーを除外
+	const int nXEnd = textArea.GetAreaRight();
+	const int nYEnd = textArea.GetAreaBottom();
 	Rect rcBltAll;
 	rcBltAll.SetLTRB(INT_MAX, INT_MAX, -INT_MAX, -INT_MAX);
 	Rect rcImagePosOrg = rcImagePos;
@@ -980,7 +981,8 @@ bool EditView::DrawLayoutLine(ColorStrategyInfo* pInfo)
 	StringRef lineStr = pDocLine->GetStringRefWithEOL();
 
 	// 描画範囲外の場合は色切替だけで抜ける
-	if (pInfo->pDispPos->GetDrawPos().y < GetTextArea().GetAreaTop()) {
+	TextArea& textArea = GetTextArea();
+	if (pInfo->pDispPos->GetDrawPos().y < textArea.GetAreaTop()) {
 		if (pLayout) {
 			bool bChange = false;
 			int nPosTo = pLayout->GetLogicOffset() + pLayout->GetLengthWithEOL();
@@ -1044,7 +1046,7 @@ bool EditView::DrawLayoutLine(ColorStrategyInfo* pInfo)
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	if (pLayout && pLayout->GetIndent() != 0) {
 		RECT rcClip;
-		if (!bTransText && GetTextArea().GenerateClipRect(&rcClip, *pInfo->pDispPos,(Int)pLayout->GetIndent())) {
+		if (!bTransText && textArea.GenerateClipRect(&rcClip, *pInfo->pDispPos,(Int)pLayout->GetIndent())) {
 			backType.FillBack(pInfo->gr, rcClip);
 		}
 		// 描画位置進める
@@ -1084,7 +1086,7 @@ bool EditView::DrawLayoutLine(ColorStrategyInfo* pInfo)
 
 			// 1文字描画
 			figure.DrawImp(pInfo);
-			if (bSkipRight && GetTextArea().GetAreaRight() < pInfo->pDispPos->GetDrawPos().x) {
+			if (bSkipRight && textArea.GetAreaRight() < pInfo->pDispPos->GetDrawPos().x) {
 				pInfo->nPosInLogic = nPosTo;
 				break;
 			}
@@ -1113,7 +1115,7 @@ bool EditView::DrawLayoutLine(ColorStrategyInfo* pInfo)
 
 	// 行末背景描画
 	RECT rcClip;
-	bool rcClipRet = GetTextArea().GenerateClipRectRight(&rcClip, *pInfo->pDispPos);
+	bool rcClipRet = textArea.GenerateClipRectRight(&rcClip, *pInfo->pDispPos);
 	if (rcClipRet) {
 		if (!bTransText) {
 			backType.FillBack(pInfo->gr, rcClip);
@@ -1123,14 +1125,14 @@ bool EditView::DrawLayoutLine(ColorStrategyInfo* pInfo)
 			// 選択範囲の指定色：必要ならテキストのない部分の矩形選択を作画
 			LayoutRange selectArea = GetSelectionInfo().GetSelectAreaLine(pInfo->pDispPos->GetLayoutLineRef(), pLayout);
 			// 2010.10.04 スクロール分の足し忘れ
-			int nSelectFromPx = GetTextMetrics().GetHankakuDx() * (Int)(selectArea.GetFrom().x - GetTextArea().GetViewLeftCol());
-			int nSelectToPx   = GetTextMetrics().GetHankakuDx() * (Int)(selectArea.GetTo().x - GetTextArea().GetViewLeftCol());
+			int nSelectFromPx = GetTextMetrics().GetHankakuDx() * (Int)(selectArea.GetFrom().x - textArea.GetViewLeftCol());
+			int nSelectToPx   = GetTextMetrics().GetHankakuDx() * (Int)(selectArea.GetTo().x - textArea.GetViewLeftCol());
 			if (nSelectFromPx < nSelectToPx && selectArea.GetTo().x != INT_MAX) {
 				RECT rcSelect; // Pixel
 				rcSelect.top    = pInfo->pDispPos->GetDrawPos().y;
 				rcSelect.bottom = pInfo->pDispPos->GetDrawPos().y + GetTextMetrics().GetHankakuDy();
-				rcSelect.left   = GetTextArea().GetAreaLeft() + nSelectFromPx;
-				rcSelect.right  = GetTextArea().GetAreaLeft() + nSelectToPx;
+				rcSelect.left   = textArea.GetAreaLeft() + nSelectFromPx;
+				rcSelect.right  = textArea.GetAreaLeft() + nSelectToPx;
 				RECT rcDraw;
 				if (::IntersectRect(&rcDraw, &rcClip, &rcSelect)) {
 					COLORREF color = GetBackColorByColorInfo2(selectType.GetColorInfo(), backType.GetColorInfo());
@@ -1148,8 +1150,8 @@ bool EditView::DrawLayoutLine(ColorStrategyInfo* pInfo)
 			pInfo->gr,
 			pInfo->pDispPos->GetDrawPos().y,
 			pInfo->pDispPos->GetDrawPos().y + nLineHeight,
-			GetTextArea().GetAreaLeft(),
-			GetTextArea().GetAreaRight()
+			textArea.GetAreaLeft(),
+			textArea.GetAreaRight()
 		);
 	}
 

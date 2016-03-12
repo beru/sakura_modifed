@@ -990,11 +990,12 @@ void EditView::OnSize(int cx, int cy)
 	if (m_hwndSizeBox) {
 		::MoveWindow(m_hwndSizeBox, cx - nCxVScroll, cy - nCyHScroll, nCxHScroll, nCyVScroll, TRUE);
 	}
-	int nAreaWidthOld  = GetTextArea().GetAreaWidth();
-	int nAreaHeightOld = GetTextArea().GetAreaHeight();
+	auto& textArea = GetTextArea();
+	int nAreaWidthOld  = textArea.GetAreaWidth();
+	int nAreaHeightOld = textArea.GetAreaHeight();
 
 	// エリア情報更新
-	GetTextArea().TextArea_OnSize(
+	textArea.TextArea_OnSize(
 		Size(cx, cy),
 		nCxVScroll,
 		m_hwndHScrollBar ? nCyHScroll : 0
@@ -1048,8 +1049,8 @@ void EditView::OnSize(int cx, int cy)
 				bUpdateHeight = true;
 				break;
 			}
-			if (bUpdateWidth  && nAreaWidthOld  != GetTextArea().GetAreaWidth() ||
-			    bUpdateHeight && nAreaHeightOld != GetTextArea().GetAreaHeight()
+			if (bUpdateWidth  && nAreaWidthOld  != textArea.GetAreaWidth() ||
+			    bUpdateHeight && nAreaHeightOld != textArea.GetAreaHeight()
 			) {
 				InvalidateRect(NULL, FALSE);
 			}
@@ -1061,8 +1062,8 @@ void EditView::OnSize(int cx, int cy)
 
 	if (m_pEditWnd->GetMiniMap().GetHwnd()) {
 		EditView& miniMap = m_pEditWnd->GetMiniMap();
-		if (miniMap.m_nPageViewTop != GetTextArea().GetViewTopLine()
-			|| miniMap.m_nPageViewBottom != GetTextArea().GetBottomLine()
+		if (miniMap.m_nPageViewTop != textArea.GetViewTopLine()
+			|| miniMap.m_nPageViewBottom != textArea.GetBottomLine()
 		) {
 			MiniMapRedraw(true);
 		}
@@ -1698,17 +1699,18 @@ void EditView::OnChangeSetting()
 		return;
 	}
 	auto& csWindow = GetDllShareData().common.window;
-	GetTextArea().SetTopYohaku(csWindow.nRulerBottomSpace); 	// ルーラーとテキストの隙間
-	GetTextArea().SetAreaTop(GetTextArea().GetTopYohaku());									// 表示域の上端座標
+	auto& textArea = GetTextArea();
+	textArea.SetTopYohaku(csWindow.nRulerBottomSpace); 	// ルーラーとテキストの隙間
+	textArea.SetAreaTop(textArea.GetTopYohaku());									// 表示域の上端座標
 
 	// 文書種別更新
 	m_pTypeData = &m_pEditDoc->m_docType.GetDocumentAttribute();
 
 	// ルーラー表示
 	if (m_pTypeData->colorInfoArr[COLORIDX_RULER].bDisp && !m_bMiniMap) {
-		GetTextArea().SetAreaTop(GetTextArea().GetAreaTop() + csWindow.nRulerHeight);	// ルーラー高さ
+		textArea.SetAreaTop(textArea.GetAreaTop() + csWindow.nRulerHeight);	// ルーラー高さ
 	}
-	GetTextArea().SetLeftYohaku(csWindow.nLineNumRightSpace);
+	textArea.SetLeftYohaku(csWindow.nLineNumRightSpace);
 
 	// フォントの変更
 	SetFont();
@@ -2364,9 +2366,10 @@ bool EditView::MySetClipboardData(const WCHAR* pszText, int nTextLen, bool bColu
 */
 inline bool EditView::IsDrawCursorVLinePos(int posX)
 {
-	return posX >= GetTextArea().GetAreaLeft() - 2	// 2010.08.10 ryoji テキストと行番号の隙間が半角文字幅より大きいと隙間位置にあるカーソルの縦線が描画される問題修正
-		&& posX >  GetTextArea().GetAreaLeft() - GetDllShareData().common.window.nLineNumRightSpace // 隙間(+1)がないときは線を引かない判定
-		&& posX <= GetTextArea().GetAreaRight();
+	auto& textArea = GetTextArea();
+	return posX >= textArea.GetAreaLeft() - 2	// 2010.08.10 ryoji テキストと行番号の隙間が半角文字幅より大きいと隙間位置にあるカーソルの縦線が描画される問題修正
+		&& posX >  textArea.GetAreaLeft() - GetDllShareData().common.window.nLineNumRightSpace // 隙間(+1)がないときは線を引かない判定
+		&& posX <= textArea.GetAreaRight();
 }
 
 // カーソル行アンダーラインのON
@@ -2385,13 +2388,14 @@ void EditView::CaretUnderLineON(bool bDraw, bool bDrawPaint, bool DisalbeUnderLi
 //	m_nOldUnderLineY  = -1;
 	// 2011.12.06 Moca IsTextSelected → IsTextSelecting に変更。ロック中も下線を表示しない
 	int bCursorLineBgDraw = false;
+	auto& textArea = GetTextArea();
 	
 	// カーソル行の描画
 	if (1
 		&& bDraw
 		&& bCursorLineBg
 		&& GetDrawSwitch()
-		&& GetCaret().GetCaretLayoutPos().GetY2() >= GetTextArea().GetViewTopLine()
+		&& GetCaret().GetCaretLayoutPos().GetY2() >= textArea.GetViewTopLine()
 		&& !m_bDoing_UndoRedo	// アンドゥ・リドゥの実行中か
 	) {
 		bCursorLineBgDraw = true;
@@ -2403,8 +2407,8 @@ void EditView::CaretUnderLineON(bool bDraw, bool bDrawPaint, bool DisalbeUnderLi
 			GetCaret().m_underLine.Lock();
 			PAINTSTRUCT ps;
 			ps.rcPaint.left = 0;
-			ps.rcPaint.right = GetTextArea().GetAreaRight();
-			ps.rcPaint.top = GetTextArea().GenerateYPx(m_nOldUnderLineY);
+			ps.rcPaint.right = textArea.GetAreaRight();
+			ps.rcPaint.top = textArea.GenerateYPx(m_nOldUnderLineY);
 			ps.rcPaint.bottom = ps.rcPaint.top + m_nOldUnderLineYHeight;
 
 			// 描画
@@ -2420,7 +2424,7 @@ void EditView::CaretUnderLineON(bool bDraw, bool bDrawPaint, bool DisalbeUnderLi
 	// From Here 2007.09.09 Moca 互換BMPによる画面バッファ
 	if (bCursorVLine) {
 		// カーソル位置縦線。-1してキャレットの左に来るように。
-		nCursorVLineX = GetTextArea().GetAreaLeft() + (Int)(GetCaret().GetCaretLayoutPos().GetX2() - GetTextArea().GetViewLeftCol())
+		nCursorVLineX = textArea.GetAreaLeft() + (Int)(GetCaret().GetCaretLayoutPos().GetX2() - textArea.GetViewLeftCol())
 			* (m_pTypeData->nColumnSpace + GetTextMetrics().GetHankakuWidth()) - 1;
 	}
 
@@ -2439,16 +2443,16 @@ void EditView::CaretUnderLineON(bool bDraw, bool bDrawPaint, bool DisalbeUnderLi
 		{
 			Graphics gr(hdc);
 			gr.SetPen(m_pTypeData->colorInfoArr[COLORIDX_CURSORVLINE].colorAttr.cTEXT);
-			::MoveToEx(gr, m_nOldCursorLineX, GetTextArea().GetAreaTop(), NULL);
-			::LineTo(  gr, m_nOldCursorLineX, GetTextArea().GetAreaBottom());
+			::MoveToEx(gr, m_nOldCursorLineX, textArea.GetAreaTop(), NULL);
+			::LineTo(  gr, m_nOldCursorLineX, textArea.GetAreaBottom());
 			int nBoldX = m_nOldCursorLineX - 1;
 			// 「太字」のときは2dotの線にする。その際カーソルに掛からないように左側を太くする
 			if (1
 				&& m_pTypeData->colorInfoArr[COLORIDX_CURSORVLINE].fontAttr.bBoldFont
 				&& IsDrawCursorVLinePos(nBoldX)
 			) {
-				::MoveToEx(gr, nBoldX, GetTextArea().GetAreaTop(), NULL);
-				::LineTo(  gr, nBoldX, GetTextArea().GetAreaBottom());
+				::MoveToEx(gr, nBoldX, textArea.GetAreaTop(), NULL);
+				::LineTo(  gr, nBoldX, textArea.GetAreaBottom());
 				m_nOldCursorVLineWidth = 2;
 			}else {
 				m_nOldCursorVLineWidth = 1;
@@ -2459,7 +2463,7 @@ void EditView::CaretUnderLineON(bool bDraw, bool bDrawPaint, bool DisalbeUnderLi
 	
 	int nUnderLineY = -1;
 	if (bUnderLine) {
-		nUnderLineY = GetTextArea().GetAreaTop() + (Int)(GetCaret().GetCaretLayoutPos().GetY2() - GetTextArea().GetViewTopLine())
+		nUnderLineY = textArea.GetAreaTop() + (Int)(GetCaret().GetCaretLayoutPos().GetY2() - textArea.GetViewTopLine())
 			 * GetTextMetrics().GetHankakuDy() + GetTextMetrics().GetHankakuHeight();
 	}
 	// To Here 2007.09.09 Moca
@@ -2467,7 +2471,7 @@ void EditView::CaretUnderLineON(bool bDraw, bool bDrawPaint, bool DisalbeUnderLi
 	if (1
 		&& bDraw
 		&& GetDrawSwitch()
-		&& nUnderLineY >= GetTextArea().GetAreaTop()
+		&& nUnderLineY >= textArea.GetAreaTop()
 		&& !m_bDoing_UndoRedo	// アンドゥ・リドゥの実行中か
 		&& !GetSelectionInfo().IsTextSelecting()
 		&& !DisalbeUnderLine
@@ -2486,13 +2490,13 @@ void EditView::CaretUnderLineON(bool bDraw, bool bDrawPaint, bool DisalbeUnderLi
 			gr.SetPen(m_pTypeData->colorInfoArr[COLORIDX_UNDERLINE].colorAttr.cTEXT);
 			::MoveToEx(
 				gr,
-				GetTextArea().GetAreaLeft(),
+				textArea.GetAreaLeft(),
 				nUnderLineY,
 				NULL
 			);
 			::LineTo(
 				gr,
-				GetTextArea().GetAreaRight(),
+				textArea.GetAreaRight(),
 				nUnderLineY
 			);
 		}	// ReleaseDC の前に gr デストラクト
@@ -2510,30 +2514,31 @@ void EditView::CaretUnderLineOFF(bool bDraw, bool bDrawPaint, bool bResetFlag, b
 	) {
 		return;
 	}
+	auto& textArea = GetTextArea();
 	if (m_nOldUnderLineY != -1) {
 		if (1
 			&& bDraw
 			&& GetDrawSwitch()
-			&& m_nOldUnderLineY >= GetTextArea().GetViewTopLine()
+			&& m_nOldUnderLineY >= textArea.GetViewTopLine()
 			&& !m_bDoing_UndoRedo	// アンドゥ・リドゥの実行中か
 			&& !GetCaret().m_underLine.GetUnderLineDoNotOFF()	// アンダーラインを消去するか
 		) {
 			// -- -- カーソル行アンダーラインの消去（無理やり） -- -- //
 			int nUnderLineY; // client px
-			LayoutYInt nY = m_nOldUnderLineY - GetTextArea().GetViewTopLine();
+			LayoutYInt nY = m_nOldUnderLineY - textArea.GetViewTopLine();
 			if (nY < 0) {
 				nUnderLineY = -1;
-			}else if (GetTextArea().m_nViewRowNum < nY) {
-				nUnderLineY = GetTextArea().GetAreaBottom() + 1;
+			}else if (textArea.m_nViewRowNum < nY) {
+				nUnderLineY = textArea.GetAreaBottom() + 1;
 			}else {
-				nUnderLineY = GetTextArea().GetAreaTop() + (Int)(nY) * GetTextMetrics().GetHankakuDy();
+				nUnderLineY = textArea.GetAreaTop() + (Int)(nY) * GetTextMetrics().GetHankakuDy();
 			}
 			
 			GetCaret().m_underLine.Lock();
 
 			PAINTSTRUCT ps;
 			ps.rcPaint.left = 0;
-			ps.rcPaint.right = GetTextArea().GetAreaRight();
+			ps.rcPaint.right = textArea.GetAreaRight();
 			int height;
 			if (bDrawPaint && m_nOldUnderLineYHeight != 0) {
 				ps.rcPaint.top = nUnderLineY;
@@ -2585,8 +2590,8 @@ void EditView::CaretUnderLineOFF(bool bDraw, bool bDrawPaint, bool bResetFlag, b
 			PAINTSTRUCT ps;
 			ps.rcPaint.left = m_nOldCursorLineX - (m_nOldCursorVLineWidth - 1);
 			ps.rcPaint.right = m_nOldCursorLineX + 1;
-			ps.rcPaint.top = GetTextArea().GetAreaTop();
-			ps.rcPaint.bottom = GetTextArea().GetAreaBottom();
+			ps.rcPaint.top = textArea.GetAreaTop();
+			ps.rcPaint.bottom = textArea.GetAreaBottom();
 			HDC hdc = ::GetDC(GetHwnd());
 			GetCaret().m_underLine.Lock();
 			//	不本意ながら選択情報をバックアップ。

@@ -82,22 +82,23 @@ void EditView::ShowHokanMgr(NativeW& memData, bool bAutoDecided)
 	// 補完対象ワードリストを調べる
 	NativeW	memHokanWord;
 	POINT		poWin;
-	/* 補完ウィンドウの表示位置を算出 */
-	LayoutXInt nX = GetCaret().GetCaretLayoutPos().GetX2() - GetTextArea().GetViewLeftCol();
+	// 補完ウィンドウの表示位置を算出
+	auto& textArea = GetTextArea();
+	LayoutXInt nX = GetCaret().GetCaretLayoutPos().GetX2() - textArea.GetViewLeftCol();
 	if (nX < 0) {
 		poWin.x = 0;
-	}else if (GetTextArea().m_nViewColNum < nX) {
-		poWin.x = GetTextArea().GetAreaRight();
+	}else if (textArea.m_nViewColNum < nX) {
+		poWin.x = textArea.GetAreaRight();
 	}else {
-		poWin.x = GetTextArea().GetAreaLeft() + (Int)(nX) * GetTextMetrics().GetHankakuDx();
+		poWin.x = textArea.GetAreaLeft() + (Int)(nX) * GetTextMetrics().GetHankakuDx();
 	}
-	LayoutYInt nY = GetCaret().GetCaretLayoutPos().GetY2() - GetTextArea().GetViewTopLine();
+	LayoutYInt nY = GetCaret().GetCaretLayoutPos().GetY2() - textArea.GetViewTopLine();
 	if (nY < 0) {
 		poWin.y = 0;
-	}else if (GetTextArea().m_nViewRowNum < nY) {
-		poWin.y = GetTextArea().GetAreaBottom();
+	}else if (textArea.m_nViewRowNum < nY) {
+		poWin.y = textArea.GetAreaBottom();
 	}else {
-		poWin.y = GetTextArea().GetAreaTop() + (Int)(nY) * GetTextMetrics().GetHankakuDy();
+		poWin.y = textArea.GetAreaTop() + (Int)(nY) * GetTextMetrics().GetHankakuDy();
 	}
 	this->ClientToScreen(&poWin);
 	poWin.x -= (

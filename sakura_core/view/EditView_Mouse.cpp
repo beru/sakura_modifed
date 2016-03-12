@@ -109,7 +109,8 @@ void EditView::OnLBUTTONDOWN(WPARAM fwKeys, int _xPos , int _yPos)
 
 	// 現在のマウスカーソル位置→レイアウト位置
 	LayoutPoint ptNew;
-	GetTextArea().ClientToLayout(ptMouse, &ptNew);
+	auto& textArea = GetTextArea();
+	textArea.ClientToLayout(ptMouse, &ptNew);
 
 	// 2010.07.15 Moca マウスダウン時の座標を覚えて利用する
 	m_mouseDownPos = ptMouse;
@@ -119,7 +120,7 @@ void EditView::OnLBUTTONDOWN(WPARAM fwKeys, int _xPos , int _yPos)
 	if (!tripleClickMode && GetDllShareData().common.edit.bUseOLE_DragDrop) {
 		if (GetDllShareData().common.edit.bUseOLE_DropSource) {		// OLEによるドラッグ元にするか
 			// 行選択エリアをドラッグした
-			if (ptMouse.x < GetTextArea().GetAreaLeft() - GetTextMetrics().GetHankakuDx()) {
+			if (ptMouse.x < textArea.GetAreaLeft() - GetTextMetrics().GetHankakuDx()) {
 				goto normal_action;
 			}
 			// 指定カーソル位置が選択エリア内にあるか
@@ -134,12 +135,12 @@ void EditView::OnLBUTTONDOWN(WPARAM fwKeys, int _xPos , int _yPos)
 					}
 //@@@ 2002.01.08 YAZAKI フリーカーソルOFFで複数行選択し、行の後ろをクリックするとそこにキャレットが置かれてしまうバグ修正
 					// カーソル移動。
-					if (ptMouse.y >= GetTextArea().GetAreaTop() && ptMouse.y < GetTextArea().GetAreaBottom()) {
-						if (ptMouse.x >= GetTextArea().GetAreaLeft() && ptMouse.x < GetTextArea().GetAreaRight()
+					if (ptMouse.y >= textArea.GetAreaTop() && ptMouse.y < textArea.GetAreaBottom()) {
+						if (ptMouse.x >= textArea.GetAreaLeft() && ptMouse.x < textArea.GetAreaRight()
 						) {
 							GetCaret().MoveCursorToClientPoint(ptMouse);
-						}else if (ptMouse.x < GetTextArea().GetAreaLeft()) {
-							GetCaret().MoveCursorToClientPoint(Point(GetTextArea().GetDocumentLeftClientPointX(), ptMouse.y));
+						}else if (ptMouse.x < textArea.GetAreaLeft()) {
+							GetCaret().MoveCursorToClientPoint(Point(textArea.GetDocumentLeftClientPointX(), ptMouse.y));
 						}
 					}
 					return;
@@ -186,11 +187,11 @@ normal_action:;
 			// 現在の選択範囲を非選択状態に戻す
 			GetSelectionInfo().DisableSelectArea(true);
 		}
-		if (ptMouse.y >= GetTextArea().GetAreaTop()  && ptMouse.y < GetTextArea().GetAreaBottom()) {
-			if (ptMouse.x >= GetTextArea().GetAreaLeft() && ptMouse.x < GetTextArea().GetAreaRight()) {
+		if (ptMouse.y >= textArea.GetAreaTop()  && ptMouse.y < textArea.GetAreaBottom()) {
+			if (ptMouse.x >= textArea.GetAreaLeft() && ptMouse.x < textArea.GetAreaRight()) {
 				GetCaret().MoveCursorToClientPoint(ptMouse);
-			}else if (ptMouse.x < GetTextArea().GetAreaLeft()) {
-				GetCaret().MoveCursorToClientPoint(Point(GetTextArea().GetDocumentLeftClientPointX(), ptMouse.y));
+			}else if (ptMouse.x < textArea.GetAreaLeft()) {
+				GetCaret().MoveCursorToClientPoint(Point(textArea.GetDocumentLeftClientPointX(), ptMouse.y));
 			}else {
 				return;
 			}
@@ -206,19 +207,19 @@ normal_action:;
 		GetSelectionInfo().BeginSelectArea();
 		GetCaret().m_underLine.CaretUnderLineOFF(true);
 		GetCaret().m_underLine.UnderLineLock();
-		if (ptMouse.x < GetTextArea().GetAreaLeft()) {
+		if (ptMouse.x < textArea.GetAreaLeft()) {
 			// カーソル下移動
 			GetCommander().Command_DOWN(true, false);
 		}
 	}else {
 		// カーソル移動
-		if (ptMouse.y >= GetTextArea().GetAreaTop() && ptMouse.y < GetTextArea().GetAreaBottom()) {
-			if (ptMouse.x >= GetTextArea().GetAreaLeft() && ptMouse.x < GetTextArea().GetAreaRight()) {
-			}else if (ptMouse.x < GetTextArea().GetAreaLeft()) {
+		if (ptMouse.y >= textArea.GetAreaTop() && ptMouse.y < textArea.GetAreaBottom()) {
+			if (ptMouse.x >= textArea.GetAreaLeft() && ptMouse.x < textArea.GetAreaRight()) {
+			}else if (ptMouse.x < textArea.GetAreaLeft()) {
 			}else {
 				return;
 			}
-		}else if (ptMouse.y < GetTextArea().GetAreaTop()) {
+		}else if (ptMouse.y < textArea.GetAreaTop()) {
 			//	ルーラクリック
 			return;
 		}else {
@@ -288,11 +289,11 @@ normal_action:;
 			}
 
 			// カーソル移動
-			if (ptMouse.y >= GetTextArea().GetAreaTop() && ptMouse.y < GetTextArea().GetAreaBottom()) {
-				if (ptMouse.x >= GetTextArea().GetAreaLeft() && ptMouse.x < GetTextArea().GetAreaRight()) {
+			if (ptMouse.y >= textArea.GetAreaTop() && ptMouse.y < textArea.GetAreaBottom()) {
+				if (ptMouse.x >= textArea.GetAreaLeft() && ptMouse.x < textArea.GetAreaRight()) {
 					GetCaret().MoveCursorToClientPoint(ptMouse, true, &ptNewCaret);
-				}else if (ptMouse.x < GetTextArea().GetAreaLeft()) {
-					GetCaret().MoveCursorToClientPoint(Point(GetTextArea().GetDocumentLeftClientPointX(), ptMouse.y), true, &ptNewCaret);
+				}else if (ptMouse.x < textArea.GetAreaLeft()) {
+					GetCaret().MoveCursorToClientPoint(Point(textArea.GetDocumentLeftClientPointX(), ptMouse.y), true, &ptNewCaret);
 				}
 				bSetPtNewCaret = true;
 			}
@@ -302,11 +303,11 @@ normal_action:;
 				GetSelectionInfo().DisableSelectArea(true);
 			}
 			// カーソル移動
-			if (ptMouse.y >= GetTextArea().GetAreaTop() && ptMouse.y < GetTextArea().GetAreaBottom()) {
-				if (ptMouse.x >= GetTextArea().GetAreaLeft() && ptMouse.x < GetTextArea().GetAreaRight()) {
+			if (ptMouse.y >= textArea.GetAreaTop() && ptMouse.y < textArea.GetAreaBottom()) {
+				if (ptMouse.x >= textArea.GetAreaLeft() && ptMouse.x < textArea.GetAreaRight()) {
 					GetCaret().MoveCursorToClientPoint(ptMouse, true, &ptNewCaret);
-				}else if (ptMouse.x < GetTextArea().GetAreaLeft()) {
-					GetCaret().MoveCursorToClientPoint(Point(GetTextArea().GetDocumentLeftClientPointX(), ptMouse.y), true, &ptNewCaret);
+				}else if (ptMouse.x < textArea.GetAreaLeft()) {
+					GetCaret().MoveCursorToClientPoint(Point(textArea.GetDocumentLeftClientPointX(), ptMouse.y), true, &ptNewCaret);
 				}
 				bSetPtNewCaret = true;
 			}
@@ -421,7 +422,7 @@ normal_action:;
 		}
 		// 行番号エリアをクリックした
 		// 2008.05.22 nasukoji	シフトキーを押している場合は行頭クリックとして扱う
-		if (ptMouse.x < GetTextArea().GetAreaLeft() && !GetKeyState_Shift()) {
+		if (ptMouse.x < textArea.GetAreaLeft() && !GetKeyState_Shift()) {
 			// 現在のカーソル位置から選択を開始する
 			GetSelectionInfo().m_bBeginLineSelect = true;
 
@@ -950,6 +951,7 @@ void EditView::OnMOUSEMOVE(WPARAM fwKeys, int xPos_, int yPos_)
 		return;
 	}
 
+	TextArea& textArea = GetTextArea();
 	if (m_bMiniMap) {
 		POINT po;
 		::GetCursorPos(&po);
@@ -964,30 +966,29 @@ void EditView::OnMOUSEMOVE(WPARAM fwKeys, int xPos_, int yPos_)
 		}
 		if (m_bMiniMapMouseDown) {
 			LayoutPoint ptNew;
-			TextArea& area = GetTextArea();
-			area.ClientToLayout( ptMouse, &ptNew );
+			textArea.ClientToLayout( ptMouse, &ptNew );
 			// ミニマップの上下スクロール
 			if (ptNew.y < 0) {
 				ptNew.y = LayoutYInt(0);
 			}
 			LayoutYInt nScrollRow = LayoutYInt(0);
 			LayoutYInt nScrollMargin = LayoutYInt(15);
-			nScrollMargin  = t_min(nScrollMargin,  (GetTextArea().m_nViewRowNum) / 2);
-			if (m_pEditDoc->m_layoutMgr.GetLineCount() > area.m_nViewRowNum
-				&& ptNew.y > area.GetViewTopLine() + area.m_nViewRowNum - nScrollMargin
+			nScrollMargin  = t_min(nScrollMargin,  (textArea.m_nViewRowNum) / 2);
+			if (m_pEditDoc->m_layoutMgr.GetLineCount() > textArea.m_nViewRowNum
+				&& ptNew.y > textArea.GetViewTopLine() + textArea.m_nViewRowNum - nScrollMargin
 			) {
-				nScrollRow = (area.GetViewTopLine() + area.m_nViewRowNum - nScrollMargin) - ptNew.y;
-			}else if (0 < area.GetViewTopLine() && ptNew.y < area.GetViewTopLine() + nScrollMargin) {
-				nScrollRow = area.GetViewTopLine() + nScrollMargin - ptNew.y;
-				if (0 > area.GetViewTopLine() - nScrollRow) {
-					nScrollRow = area.GetViewTopLine();
+				nScrollRow = (textArea.GetViewTopLine() + textArea.m_nViewRowNum - nScrollMargin) - ptNew.y;
+			}else if (0 < textArea.GetViewTopLine() && ptNew.y < textArea.GetViewTopLine() + nScrollMargin) {
+				nScrollRow = textArea.GetViewTopLine() + nScrollMargin - ptNew.y;
+				if (0 > textArea.GetViewTopLine() - nScrollRow) {
+					nScrollRow = textArea.GetViewTopLine();
 				}
 			}
 			if (nScrollRow != 0) {
-				ScrollAtV( area.GetViewTopLine() - nScrollRow );
+				ScrollAtV( textArea.GetViewTopLine() - nScrollRow );
 			}
 
-			GetTextArea().ClientToLayout( ptMouse, &ptNew );
+			textArea.ClientToLayout( ptMouse, &ptNew );
 			if (ptNew.y < 0) {
 				ptNew.y = LayoutYInt(0);
 			}
@@ -1039,7 +1040,7 @@ void EditView::OnMOUSEMOVE(WPARAM fwKeys, int xPos_, int yPos_)
 		}
 		// 現在のマウスカーソル位置→レイアウト位置
 		LayoutPoint ptNew;
-		GetTextArea().ClientToLayout(ptMouse, &ptNew);
+		textArea.ClientToLayout(ptMouse, &ptNew);
 
 		LogicRange	cUrlRange;	// URL範囲
 
@@ -1051,9 +1052,9 @@ void EditView::OnMOUSEMOVE(WPARAM fwKeys, int xPos_, int yPos_)
 			}
 		}else {
 			// 行選択エリア?
-			if (ptMouse.x < GetTextArea().GetAreaLeft() || ptMouse.y < GetTextArea().GetAreaTop()) {	//	2002/2/10 aroka
+			if (ptMouse.x < textArea.GetAreaLeft() || ptMouse.y < textArea.GetAreaTop()) {	//	2002/2/10 aroka
 				// 矢印カーソル
-				if (ptMouse.y >= GetTextArea().GetAreaTop())
+				if (ptMouse.y >= textArea.GetAreaTop())
 					::SetCursor(::LoadCursor(G_AppInstance(), MAKEINTRESOURCE(IDC_CURSOR_RVARROW)));
 				else
 					::SetCursor(::LoadCursor(NULL, IDC_ARROW));
@@ -1115,7 +1116,7 @@ void EditView::OnMOUSEMOVE(WPARAM fwKeys, int xPos_, int yPos_)
 		GetSelectionInfo().m_ptMouseRollPosOld = ptMouse; // マウス範囲選択前回位置(XY座標)
 	}else {
 		// 座標指定によるカーソル移動
-		if ((ptMouse.x < GetTextArea().GetAreaLeft() || m_dwTripleClickCheck)&& GetSelectionInfo().m_bBeginLineSelect) {	// 行単位選択中
+		if ((ptMouse.x < textArea.GetAreaLeft() || m_dwTripleClickCheck)&& GetSelectionInfo().m_bBeginLineSelect) {	// 行単位選択中
 			// 2007.11.15 nasukoji	上方向の行選択時もマウスカーソルの位置の行が選択されるようにする
 			Point nNewPos(0, ptMouse.y);
 
@@ -1123,11 +1124,11 @@ void EditView::OnMOUSEMOVE(WPARAM fwKeys, int xPos_, int yPos_)
 			int nLineHeight = GetTextMetrics().GetHankakuHeight() + m_pTypeData->nLineSpace;
 
 			// 選択開始行以下へのドラッグ時は1行下にカーソルを移動する
-			if (GetTextArea().GetViewTopLine() + (ptMouse.y - GetTextArea().GetAreaTop()) / nLineHeight >= GetSelectionInfo().m_selectBgn.GetTo().y)
+			if (textArea.GetViewTopLine() + (ptMouse.y - textArea.GetAreaTop()) / nLineHeight >= GetSelectionInfo().m_selectBgn.GetTo().y)
 				nNewPos.y += nLineHeight;
 
 			// カーソルを移動
-			nNewPos.x = GetTextArea().GetAreaLeft() - Int(GetTextArea().GetViewLeftCol()) * (GetTextMetrics().GetHankakuWidth() + m_pTypeData->nColumnSpace);
+			nNewPos.x = textArea.GetAreaLeft() - Int(textArea.GetViewLeftCol()) * (GetTextMetrics().GetHankakuWidth() + m_pTypeData->nColumnSpace);
 			GetCaret().MoveCursorToClientPoint(nNewPos, false, &ptNewCursor);
 
 			// 2.5クリックによる行単位のドラッグ

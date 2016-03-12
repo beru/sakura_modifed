@@ -184,18 +184,19 @@ void TextDrawer::DispVerticalLines(
 		return;
 	}
 	
-	nLeftCol = t_max(pView->GetTextArea().GetViewLeftCol(), nLeftCol);
+	auto& textArea = pView->GetTextArea();
+	nLeftCol = t_max(textArea.GetViewLeftCol(), nLeftCol);
 	
 	const LayoutInt nWrapKetas  = pView->m_pEditDoc->m_layoutMgr.GetMaxLineKetas();
 	const int nCharDx  = pView->GetTextMetrics().GetHankakuDx();
 	if (nRightCol < 0) {
 		nRightCol = nWrapKetas;
 	}
-	const int nPosXOffset = GetDllShareData().common.window.nVertLineOffset + pView->GetTextArea().GetAreaLeft();
-	const int nPosXLeft   = t_max(pView->GetTextArea().GetAreaLeft() + (Int)(nLeftCol  - pView->GetTextArea().GetViewLeftCol()) * nCharDx, pView->GetTextArea().GetAreaLeft());
-	const int nPosXRight  = t_min(pView->GetTextArea().GetAreaLeft() + (Int)(nRightCol - pView->GetTextArea().GetViewLeftCol()) * nCharDx, pView->GetTextArea().GetAreaRight());
+	const int nPosXOffset = GetDllShareData().common.window.nVertLineOffset + textArea.GetAreaLeft();
+	const int nPosXLeft   = t_max(textArea.GetAreaLeft() + (Int)(nLeftCol  - textArea.GetViewLeftCol()) * nCharDx, textArea.GetAreaLeft());
+	const int nPosXRight  = t_min(textArea.GetAreaLeft() + (Int)(nRightCol - textArea.GetViewLeftCol()) * nCharDx, textArea.GetAreaRight());
 	const int nLineHeight = pView->GetTextMetrics().GetHankakuDy();
-	bool bOddLine = ((((nLineHeight % 2) ? (Int)pView->GetTextArea().GetViewTopLine() : 0) + pView->GetTextArea().GetAreaTop() + nTop) % 2 == 1);
+	bool bOddLine = ((((nLineHeight % 2) ? (Int)textArea.GetViewTopLine() : 0) + textArea.GetAreaTop() + nTop) % 2 == 1);
 
 	// 太線
 	const bool bBold = vertType.IsBoldFont();
@@ -225,8 +226,8 @@ void TextDrawer::DispVerticalLines(
 					continue;
 				}
 				// 作画範囲の始めまでスキップ
-				if (nXCol < pView->GetTextArea().GetViewLeftCol()) {
-					nXCol = pView->GetTextArea().GetViewLeftCol() + nXColAdd - (pView->GetTextArea().GetViewLeftCol() - nXCol) % nXColAdd;
+				if (nXCol < textArea.GetViewLeftCol()) {
+					nXCol = textArea.GetViewLeftCol() + nXColAdd - (textArea.GetViewLeftCol() - nXCol) % nXColAdd;
 				}
 			}else {
 				k += 2;
@@ -237,7 +238,7 @@ void TextDrawer::DispVerticalLines(
 			if (nWrapKetas < nXCol) {
 				break;
 			}
-			int nPosX = nPosXOffset + (Int)(nXCol - 1 - pView->GetTextArea().GetViewLeftCol()) * nCharDx;
+			int nPosX = nPosXOffset + (Int)(nXCol - 1 - textArea.GetViewLeftCol()) * nCharDx;
 			// 2006.04.30 Moca 線の引く範囲・方法を変更
 			// 太線の場合、半分だけ作画する可能性がある。
 			int nPosXBold = nPosX;
