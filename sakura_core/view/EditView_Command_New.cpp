@@ -827,10 +827,10 @@ bool EditView::ReplaceData_CEditView3(
 		// DLRArg.ptNewPos;
 		SearchAgent(&GetDocument()->m_docLineMgr).ReplaceData(&DLRArg);
 	}else {
-		LRArg.delRange    = delRange;		//!< 削除範囲レイアウト
-		LRArg.pMemDeleted = pMemDeleted;	//!< [out] 削除されたデータ
-		LRArg.pInsData     = pInsData;		//!< 挿入するデータ
-		LRArg.nDelSeq      = nDelSeq;	//!< 挿入するデータの長さ
+		LRArg.delRange    = delRange;		// 削除範囲レイアウト
+		LRArg.pMemDeleted = pMemDeleted;	// [out] 削除されたデータ
+		LRArg.pInsData     = pInsData;		// 挿入するデータ
+		LRArg.nDelSeq      = nDelSeq;		// 挿入するデータの長さ
 		layoutMgr.ReplaceData_CLayoutMgr(&LRArg);
 	}
 

@@ -72,7 +72,7 @@ bool ViewCommander::HandleCommand(
 	nCommand = (EFunctionCode)LOWORD(nCommand);
 
 
-	if (m_pCommanderView->m_nAutoScrollMode && F_AUTOSCROLL != nCommand) {
+	if (m_pCommanderView->m_nAutoScrollMode && nCommand != F_AUTOSCROLL) {
 		m_pCommanderView->AutoScrollExit();
 	}
 	m_pCommanderView->GetCaret().m_bClearStatus = true;
@@ -96,7 +96,7 @@ bool ViewCommander::HandleCommand(
 //	}
 	// 印刷プレビューモードか
 //@@@ 2002.01.14 YAZAKI 印刷プレビューをCPrintPreviewに独立させたことによる変更
-	if (GetEditWindow()->m_pPrintPreview && F_PRINT_PREVIEW != nCommand) {
+	if (GetEditWindow()->m_pPrintPreview && nCommand != F_PRINT_PREVIEW) {
 		ErrorBeep();
 		return true;
 	}
@@ -616,6 +616,7 @@ bool ViewCommander::HandleCommand(
 	case F_TAB_7:
 	case F_TAB_8:
 	case F_TAB_9:
+		// TODO: refactoring...
 		{
 			auto sd = &GetDllShareData();
 			HWND hActiveWnd = GetActiveWindow();

@@ -112,9 +112,9 @@ public:
 
 	//! クライアントサイズ更新
 	void TextArea_OnSize(
-		const Size& sizeClient,		//!< ウィンドウのクライアントサイズ
-		int nCxVScroll,				//!< 垂直スクロールバーの横幅
-		int nCyHScroll				//!< 水平スクロールバーの縦幅
+		const Size& sizeClient,		// ウィンドウのクライアントサイズ
+		int nCxVScroll,				// 垂直スクロールバーの横幅
+		int nCyHScroll				// 水平スクロールバーの縦幅
 	);
 
 	//! 行番号表示に必要な幅を設定
@@ -179,8 +179,8 @@ public:
 	void GenerateCharRect(RECT* rc, const DispPos& pos, int nHankakuNum) const;
 	bool TrimRectByArea(RECT* rc) const;
 	bool GenerateClipRect(RECT* rc, const DispPos& pos, int nHankakuNum) const;
-	bool GenerateClipRectRight(RECT* rc, const DispPos& pos) const; //!< 右端まで全部
-	bool GenerateClipRectLine(RECT* rc, const DispPos& pos) const;  //!< 行全部
+	bool GenerateClipRectRight(RECT* rc, const DispPos& pos) const; // 右端まで全部
+	bool GenerateClipRectLine(RECT* rc, const DispPos& pos) const;  // 行全部
 
 	void GenerateTopRect   (RECT* rc, LayoutInt nLineCount) const;
 	void GenerateBottomRect(RECT* rc, LayoutInt nLineCount) const;

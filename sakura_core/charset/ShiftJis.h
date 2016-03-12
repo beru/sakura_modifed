@@ -32,10 +32,10 @@ class ShiftJis : public CodeBase {
 
 public:
 	// CodeBaseインターフェース
-	CodeConvertResult CodeToUnicode(const Memory& src, NativeW* pDst){ return SJISToUnicode(src, pDst); }	//!< 特定コード → UNICODE    変換
-	CodeConvertResult UnicodeToCode(const NativeW& src, Memory* pDst){ return UnicodeToSJIS(src, pDst); }	//!< UNICODE    → 特定コード 変換
+	CodeConvertResult CodeToUnicode(const Memory& src, NativeW* pDst){ return SJISToUnicode(src, pDst); }	// 特定コード → UNICODE    変換
+	CodeConvertResult UnicodeToCode(const NativeW& src, Memory* pDst){ return UnicodeToSJIS(src, pDst); }	// UNICODE    → 特定コード 変換
 // GetEolはCodeBaseに移動	2010/6/13 Uchi
-	CodeConvertResult UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR* pDst, const CommonSetting_StatusBar* psStatusbar);			//!< UNICODE → Hex 変換
+	CodeConvertResult UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR* pDst, const CommonSetting_StatusBar* psStatusbar);	// UNICODE → Hex 変換
 
 public:
 	// 実装
@@ -44,7 +44,7 @@ public:
 // S_GetEolはCodeBaseに移動	2010/6/13 Uchi
 	// 2005-09-02 D.S.Koba
 	// 2007.08.14 kobake MemoryからShiftJisへ移動
-	static int GetSizeOfChar(const char* pData, int nDataLen, int nIdx); //!< 指定した位置の文字が何バイト文字かを返す
+	static int GetSizeOfChar(const char* pData, int nDataLen, int nIdx); // 指定した位置の文字が何バイト文字かを返す
 
 protected:
 	// 実装

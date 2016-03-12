@@ -29,14 +29,14 @@ class DocLine; // 2002/2/10 aroka
 class Bregexp; // 2002/2/10 aroka
 
 struct DocLineReplaceArg {
-	LogicRange		delRange;			//!< [in] 削除範囲。ロジック単位。
-	OpeLineData*	pMemDeleted;		//!< [out] 削除されたデータを保存
-	OpeLineData*	pInsData;			//!< [in/out] 挿入するデータ(中身が移動する)
-	LogicInt		nDeletedLineNum;	//!< [out] 削除した行の総数
-	LogicInt		nInsLineNum;		//!< [out] 挿入によって増えた行の数
-	LogicPoint		ptNewPos;			//!< [out] 挿入された部分の次の位置
-	int				nDelSeq;			//!< [in] 削除行のOpeシーケンス
-	int				nInsSeq;			//!< [out] 挿入行の元のシーケンス
+	LogicRange		delRange;			// [in] 削除範囲。ロジック単位。
+	OpeLineData*	pMemDeleted;		// [out] 削除されたデータを保存
+	OpeLineData*	pInsData;			// [in/out] 挿入するデータ(中身が移動する)
+	LogicInt		nDeletedLineNum;	// [out] 削除した行の総数
+	LogicInt		nInsLineNum;		// [out] 挿入によって増えた行の数
+	LogicPoint		ptNewPos;			// [out] 挿入された部分の次の位置
+	int				nDelSeq;			// [in] 削除行のOpeシーケンス
+	int				nInsSeq;			// [out] 挿入行の元のシーケンス
 };
 
 /*-----------------------------------------------------------------------
@@ -50,23 +50,23 @@ public:
 	~DocLineMgr();
 	
 	// 状態
-	LogicInt GetLineCount() const { return m_nLines; }	//!< 全行数を返す
+	LogicInt GetLineCount() const { return m_nLines; }	// 全行数を返す
 	
 	// 行データへのアクセス
-	const DocLine* GetLine(LogicInt nLine) const;						//!< 指定行を取得
+	const DocLine* GetLine(LogicInt nLine) const;		// 指定行を取得
 	DocLine* GetLine(LogicInt nLine) {
 		return const_cast<DocLine*>(const_cast<DocLine*>(static_cast<const DocLineMgr*>(this)->GetLine( nLine )));
 	}
-	const DocLine* GetDocLineTop() const { return m_pDocLineTop; }		//!< 先頭行を取得
-	DocLine* GetDocLineTop() { return m_pDocLineTop; }		//!< 先頭行を取得
-	const DocLine* GetDocLineBottom() const { return m_pDocLineBot; }	//!< 最終行を取得
-	DocLine* GetDocLineBottom() { return m_pDocLineBot; }	//!< 最終行を取得
+	const DocLine* GetDocLineTop() const { return m_pDocLineTop; }		// 先頭行を取得
+	DocLine* GetDocLineTop() { return m_pDocLineTop; }					// 先頭行を取得
+	const DocLine* GetDocLineBottom() const { return m_pDocLineBot; }	// 最終行を取得
+	DocLine* GetDocLineBottom() { return m_pDocLineBot; }				// 最終行を取得
 	
 	// 行データの管理
-	DocLine* InsertNewLine(DocLine* pPos);	//!< pPosの直前に新しい行を挿入
-	DocLine* AddNewLine();						//!< 最下部に新しい行を挿入
-	void DeleteAllLine();						//!< 全ての行を削除する
-	void DeleteLine(DocLine*);				//!< 行の削除
+	DocLine* InsertNewLine(DocLine* pPos);		// pPosの直前に新しい行を挿入
+	DocLine* AddNewLine();						// 最下部に新しい行を挿入
+	void DeleteAllLine();						// 全ての行を削除する
+	void DeleteLine(DocLine*);					// 行の削除
 	
 	// デバッグ
 	void DUMP();
@@ -77,21 +77,21 @@ public:
 protected:
 	void _Init();
 	// -- -- チェーン関数 -- -- // 2007.10.11 kobake 作成
-	void _PushBottom(DocLine* pDocLineNew);						//!< 最下部に挿入
-	void _InsertBeforePos(DocLine* pDocLineNew, DocLine* pPos);	//!< pPosの直前に挿入
-	void _InsertAfterPos(DocLine* pDocLineNew, DocLine* pPos);	//!< pPosの直後に挿入
+	void _PushBottom(DocLine* pDocLineNew);						// 最下部に挿入
+	void _InsertBeforePos(DocLine* pDocLineNew, DocLine* pPos);	// pPosの直前に挿入
+	void _InsertAfterPos(DocLine* pDocLineNew, DocLine* pPos);	// pPosの直後に挿入
 	
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                        メンバ変数                           //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 private:
-	DocLine*	m_pDocLineTop;		//!< 最初の行
-	DocLine*	m_pDocLineBot;		//!< 最後の行(※1行しかない場合はm_pDocLineTopと等しくなる)
-	LogicInt	m_nLines;			//!< 全行数
+	DocLine*	m_pDocLineTop;		// 最初の行
+	DocLine*	m_pDocLineBot;		// 最後の行(※1行しかない場合はm_pDocLineTopと等しくなる)
+	LogicInt	m_nLines;			// 全行数
 	
 public:
 	//$$ kobake注: 以下、絶対に切り離したい（最低切り離せなくても、変数の意味をコメントで明確に記すべき）変数群
-	mutable DocLine*	m_pDocLineCurrent;	//!< 順アクセス時の現在位置
+	mutable DocLine*	m_pDocLineCurrent;	// 順アクセス時の現在位置
 	mutable LogicInt	m_nPrevReferLine;
 	mutable DocLine*	m_pCodePrevRefer;
 

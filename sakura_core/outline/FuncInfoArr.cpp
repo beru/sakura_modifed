@@ -81,14 +81,14 @@ void FuncInfoArr::AppendData(FuncInfo* pFuncInfo)
 	@date 2002.04.01 YAZAKI 深さ導入
 */
 void FuncInfoArr::AppendData(
-	LogicInt		nFuncLineCRLF,		//!< 関数のある行(CRLF単位)
-	LogicInt		nFuncColCRLF,		//!< 関数のある桁(CRLF単位)
-	LayoutInt		nFuncLineLAYOUT,	//!< 関数のある行(折り返し単位)
-	LayoutInt		nFuncColLAYOUT,		//!< 関数のある桁(折り返し単位)
-	const TCHAR*	pszFuncName,		//!< 関数名
-	const TCHAR*	pszFileName,		//!< ファイル名
-	int				nInfo,				//!< 付加情報
-	int				nDepth				//!< 深さ
+	LogicInt		nFuncLineCRLF,		// 関数のある行(CRLF単位)
+	LogicInt		nFuncColCRLF,		// 関数のある桁(CRLF単位)
+	LayoutInt		nFuncLineLAYOUT,	// 関数のある行(折り返し単位)
+	LayoutInt		nFuncColLAYOUT,		// 関数のある桁(折り返し単位)
+	const TCHAR*	pszFuncName,		// 関数名
+	const TCHAR*	pszFileName,		// ファイル名
+	int				nInfo,				// 付加情報
+	int				nDepth				// 深さ
 	)
 {
 	FuncInfo* pFuncInfo = new FuncInfo(nFuncLineCRLF,
@@ -104,14 +104,14 @@ void FuncInfoArr::AppendData(
 }
 
 void FuncInfoArr::AppendData(
-	LogicInt			nFuncLineCRLF,		//!< 関数のある行(CRLF単位)
-	LogicInt			nFuncColCRLF,		//!< 関数のある桁(CRLF単位)
-	LayoutInt			nFuncLineLAYOUT,	//!< 関数のある行(折り返し単位)
-	LayoutInt			nFuncColLAYOUT,		//!< 関数のある桁(折り返し単位)
-	const NOT_TCHAR*	pszFuncName,		//!< 関数名
-	const NOT_TCHAR*	pszFileName,		//!< ファイル名
-	int					nInfo,				//!< 付加情報
-	int					nDepth				//!< 深さ
+	LogicInt			nFuncLineCRLF,		// 関数のある行(CRLF単位)
+	LogicInt			nFuncColCRLF,		// 関数のある桁(CRLF単位)
+	LayoutInt			nFuncLineLAYOUT,	// 関数のある行(折り返し単位)
+	LayoutInt			nFuncColLAYOUT,		// 関数のある桁(折り返し単位)
+	const NOT_TCHAR*	pszFuncName,		// 関数名
+	const NOT_TCHAR*	pszFileName,		// ファイル名
+	int					nInfo,				// 付加情報
+	int					nDepth				// 深さ
 	)
 {
 	AppendData(nFuncLineCRLF,
@@ -126,11 +126,11 @@ void FuncInfoArr::AppendData(
 
 
 void FuncInfoArr::AppendData(
-	LogicInt		nFuncLineCRLF,		//!< 関数のある行(CRLF単位)
-	LayoutInt		nFuncLineLAYOUT,	//!< 関数のある行(折り返し単位)
-	const TCHAR*	pszFuncName,		//!< 関数名
-	int				nInfo,				//!< 付加情報
-	int				nDepth				//!< 深さ
+	LogicInt		nFuncLineCRLF,		// 関数のある行(CRLF単位)
+	LayoutInt		nFuncLineLAYOUT,	// 関数のある行(折り返し単位)
+	const TCHAR*	pszFuncName,		// 関数名
+	int				nInfo,				// 付加情報
+	int				nDepth				// 深さ
 	)
 {
 	AppendData(nFuncLineCRLF,
@@ -145,11 +145,11 @@ void FuncInfoArr::AppendData(
 }
 
 void FuncInfoArr::AppendData(
-	LogicInt			nFuncLineCRLF,		//!< 関数のある行(CRLF単位)
-	LayoutInt			nFuncLineLAYOUT,	//!< 関数のある行(折り返し単位)
-	const NOT_TCHAR*	pszFuncName,		//!< 関数名
-	int					nInfo,				//!< 付加情報
-	int					nDepth				//!< 深さ
+	LogicInt			nFuncLineCRLF,		// 関数のある行(CRLF単位)
+	LayoutInt			nFuncLineLAYOUT,	// 関数のある行(折り返し単位)
+	const NOT_TCHAR*	pszFuncName,		// 関数名
+	int					nInfo,				// 付加情報
+	int					nDepth				// 深さ
 	)
 {
 	AppendData(nFuncLineCRLF, nFuncLineLAYOUT, to_tchar(pszFuncName), nInfo, nDepth);

@@ -55,8 +55,8 @@ public:
 	/*
 	|| メンバ関数
 	*/
-	HWND Open(HINSTANCE, HWND);	//!< ウィンドウ オープン
-	void Close(void);				//!< ウィンドウ クローズ
+	HWND Open(HINSTANCE, HWND);		// ウィンドウ オープン
+	void Close(void);				// ウィンドウ クローズ
 	void TabWindowNotify(WPARAM wParam, LPARAM lParam);
 	void Refresh(bool bEnsureVisible = true, bool bRebuild = false);			// 2006.02.06 ryoji 引数削除
 	void NextGroup(void);			// 次のグループ			// 2007.06.20 ryoji
@@ -68,7 +68,7 @@ public:
 	void JoinPrev(void);			// 前のグループに移動	// 2007.06.20 ryoji
 
 	LRESULT TabWndDispatchEvent(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
-	LRESULT TabListMenu(POINT pt, bool bSel = true, bool bFull = false, bool bOtherGroup = true);	//!< タブ一覧メニュー作成処理	// 2006.03.23 fon
+	LRESULT TabListMenu(POINT pt, bool bSel = true, bool bFull = false, bool bOtherGroup = true);	// タブ一覧メニュー作成処理	// 2006.03.23 fon
 
 	void SizeBox_ONOFF(bool bSizeBox);
 	HWND GetHwndSizeBox() {
@@ -125,10 +125,10 @@ protected:
 	LRESULT OnTabNotify(WPARAM wParam, LPARAM lParam);				// タブ部 WM_NOTIFY 処理
 
 	// 実装補助インターフェース
-	void BreakDrag(void) { if (::GetCapture() == m_hwndTab) ::ReleaseCapture(); m_eDragState = DRAG_NONE; m_nTabCloseCapture = -1; }	//!< ドラッグ状態解除処理
+	void BreakDrag(void) { if (::GetCapture() == m_hwndTab) ::ReleaseCapture(); m_eDragState = DRAG_NONE; m_nTabCloseCapture = -1; }	// ドラッグ状態解除処理
 	bool ReorderTab(int nSrcTab, int nDstTab);			// タブ順序変更処理
 	void BroadcastRefreshToGroup(void);
-	BOOL SeparateGroup(HWND hwndSrc, HWND hwndDst, POINT ptDrag, POINT ptDrop);	//!< タブ分離処理	// 2007.06.20 ryoji
+	BOOL SeparateGroup(HWND hwndSrc, HWND hwndDst, POINT ptDrag, POINT ptDrop);	// タブ分離処理	// 2007.06.20 ryoji
 	LRESULT ExecTabCommand(int nId, POINTS pts);		// タブ部 コマンド実行処理
 	void LayoutTab(void);								// タブのレイアウト調整処理
 
@@ -144,7 +144,7 @@ protected:
 	void DrawTabCloseBtn(Graphics& gr, const LPRECT lprcClient, bool selected, bool bHover);	// タブを閉じるボタン描画処理		// 2012.04.14 syat
 	void GetListBtnRect(const LPRECT lprcClient, LPRECT lprc);	// 一覧ボタンの矩形取得処理
 	void GetCloseBtnRect(const LPRECT lprcClient, LPRECT lprc);	// 閉じるボタンの矩形取得処理	// 2006.10.21 ryoji
-	void GetTabCloseBtnRect(const LPRECT lprcClient, LPRECT lprc, bool selected);	//!< タブを閉じるボタンの矩形取得処理	// 2012.04.14 syat
+	void GetTabCloseBtnRect(const LPRECT lprcClient, LPRECT lprc, bool selected);	// タブを閉じるボタンの矩形取得処理	// 2012.04.14 syat
 
 	HFONT CreateMenuFont(void)
 	{

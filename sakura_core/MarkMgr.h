@@ -84,14 +84,14 @@ public:
 	MarkMgr() : m_nCurpos(0), m_nMaxitem(10) {}
 	// MarkMgr(const CDocLineMgr *p) : doc(p) {}
 
-	int Count(void) const { return (int)m_markChain.size(); }	//!<	€–Ú”‚ð•Ô‚·
-	int GetMax(void) const { return m_nMaxitem; }	//!<	Å‘å€–Ú”‚ð•Ô‚·
-	void SetMax(int max);	//!<	Å‘å€–Ú”‚ðÝ’è
+	int Count(void) const { return (int)m_markChain.size(); }	//	€–Ú”‚ð•Ô‚·
+	int GetMax(void) const { return m_nMaxitem; }	//	Å‘å€–Ú”‚ð•Ô‚·
+	void SetMax(int max);	//	Å‘å€–Ú”‚ðÝ’è
 
-	virtual void Add(const Mark& m) = 0;	//!<	—v‘f‚Ì’Ç‰Á
+	virtual void Add(const Mark& m) = 0;	//	—v‘f‚Ì’Ç‰Á
 
 	//	Apr. 1, 2001 genta
-	virtual void Flush(void);	//!<	—v‘f‚Ì‘SÁ‹Ž
+	virtual void Flush(void);	//	—v‘f‚Ì‘SÁ‹Ž
 
 	//!	—v‘f‚ÌŽæ“¾
 	const Mark& GetCurrent(void) const { return m_markChain[m_nCurpos]; }

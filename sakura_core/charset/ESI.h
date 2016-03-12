@@ -106,7 +106,7 @@ protected:
 	// **** 全般
 	// マルチバイト系とUNICODE系とでそれぞれ情報の格納先が違う。
 	// 以下の関数で吸収する
-	int GetIndexById(const EncodingType) const; //!< 文字コードID から情報格納先インデックスを生成
+	int GetIndexById(const EncodingType) const; // 文字コードID から情報格納先インデックスを生成
 
 	// データセッタ/ゲッター
 	void SetEvaluation(const EncodingType, const int, const int);
@@ -156,11 +156,11 @@ public:
 	// **** マルチバイト判定関係の変数その他
 	//
 	static const int NUM_OF_MBCODE = (CODE_CODEMAX - 2);
-	MBCODE_INFO m_aMbcInfo[NUM_OF_MBCODE];   //!< SJIS, JIS, EUCJP, UTF8, UTF7 情報（優先度に従って格納される）
-	MBCODE_INFO* m_apMbcInfo[NUM_OF_MBCODE]; //!< 評価順にソートされた SJIS, JIS, EUCJP, UTF8, UTF7, CESU8 の情報
-	int m_nMbcSjisHankata;                   //!< SJIS 半角カタカナのバイト数
-	int m_nMbcEucZenHirakata;                //!< EUC 全角ひらがなカタカナのバイト数
-	int m_nMbcEucZen;                        //!< EUC 全角のバイト数
+	MBCODE_INFO m_aMbcInfo[NUM_OF_MBCODE];   // SJIS, JIS, EUCJP, UTF8, UTF7 情報（優先度に従って格納される）
+	MBCODE_INFO* m_apMbcInfo[NUM_OF_MBCODE]; // 評価順にソートされた SJIS, JIS, EUCJP, UTF8, UTF7, CESU8 の情報
+	int m_nMbcSjisHankata;                   // SJIS 半角カタカナのバイト数
+	int m_nMbcEucZenHirakata;                // EUC 全角ひらがなカタカナのバイト数
+	int m_nMbcEucZen;                        // EUC 全角のバイト数
 
 	//! マルチバイト系の捜査結果を、ポイントが大きい順にソート。 ソートした結果は、m_apMbcInfo に格納
 	void SortMBCInfo(void);
@@ -190,15 +190,15 @@ public:
 	}
 
 protected:
-	void GuessEucOrSjis(void);	//!< EUC か SJIS かを判定
-	void GuessUtf8OrCesu8(void);	//!< UTF-8 か CESU-8 かを判定
+	void GuessEucOrSjis(void);		// EUC か SJIS かを判定
+	void GuessUtf8OrCesu8(void);	// UTF-8 か CESU-8 かを判定
 public:
 	//
 	// 	**** UTF-16 判定関係の変数その他
 	//
-	WCCODE_INFO m_aWcInfo[ESI_WCIDX_MAX];  //!< UTF-16 LE/BE 情報
-	BOMType m_eWcBomType;          //!< m_pWcInfo から推測される BOM の種類
-	EncodingType m_eMetaName;          //!< エンコーディング名からの種類判別
+	WCCODE_INFO m_aWcInfo[ESI_WCIDX_MAX];	// UTF-16 LE/BE 情報
+	BOMType m_eWcBomType;					// m_pWcInfo から推測される BOM の種類
+	EncodingType m_eMetaName;				// エンコーディング名からの種類判別
 
 	BOMType GetBOMType(void) const { return m_eWcBomType; }
 	EncodingType GetMetaName() const { return m_eMetaName; }

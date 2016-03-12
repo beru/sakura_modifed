@@ -61,8 +61,8 @@ public:
 
 	//! 1行データをロードする 順アクセス用
 	CodeConvertResult ReadLine(
-		NativeW*	pUnicodeBuffer,	//!< [out] UNICODEデータ受け取りバッファ
-		Eol*		pEol			//!< [i/o]
+		NativeW*	pUnicodeBuffer,	// [out] UNICODEデータ受け取りバッファ
+		Eol*		pEol			// [i/o]
 	);
 
 // 未実装関数郡
@@ -107,22 +107,22 @@ protected:
 	LONGLONG	m_nFileSize;	// ファイルサイズ(64bit)
 	LONGLONG	m_nFileDataLen;	// ファイルデータ長からBOM長を引いたバイト数
 	LONGLONG	m_nReadLength;	// 現在までにロードしたデータの合計バイト数(BOM長を含まない)
-	int		m_nLineIndex;	// 現在ロードしている論理行(0開始)
-	EncodingType	m_CharCode;		// 文字コード
+	int		m_nLineIndex;		// 現在ロードしている論理行(0開始)
+	EncodingType	m_CharCode;	// 文字コード
 	CodeBase*	m_pCodeBase;	////
 	EEncodingTrait	m_encodingTrait;
 	Memory			m_memEols[3];
-	bool	m_bEolEx;		//!< CR/LF以外のEOLが有効か
-	int		m_nMaxEolLen;	//!< EOLの長さ
+	bool	m_bEolEx;		// CR/LF以外のEOLが有効か
+	int		m_nMaxEolLen;	// EOLの長さ
 	bool	m_bBomExist;	// ファイルのBOMが付いているか Jun. 08, 2003 Moca 
 	int		m_nFlag;		// 文字コードの変換オプション
 	// Jun. 13, 2003 Moca
 	// 状態をenumとしてわかりやすく．
 	enum class FileLoadMode {
-		Close,		//!< 初期状態
-		Open,		//!< ファイルオープンのみ
-		Ready,		//!< 順アクセスOK
-		ReadBufEnd	//!<ファイルの終端までバッファに入れた
+		Close,		// 初期状態
+		Open,		// ファイルオープンのみ
+		Ready,		// 順アクセスOK
+		ReadBufEnd	// ファイルの終端までバッファに入れた
 	};
 	FileLoadMode	m_mode;	// 現在の読み込み状態
 

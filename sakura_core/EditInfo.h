@@ -35,37 +35,37 @@
 */
 struct EditInfo {
 	// ファイル
-	TCHAR			szPath[_MAX_PATH];					//!< ファイル名
-	EncodingType	nCharCode;							//!< 文字コード種別
-	bool			bBom;								//!< BOM(GetFileInfo)
-	TCHAR			szDocType[MAX_DOCTYPE_LEN + 1];		//!< 文書タイプ
-	int 			nTypeId;							//!< 文書タイプ(MRU)
+	TCHAR			szPath[_MAX_PATH];					// ファイル名
+	EncodingType	nCharCode;							// 文字コード種別
+	bool			bBom;								// BOM(GetFileInfo)
+	TCHAR			szDocType[MAX_DOCTYPE_LEN + 1];		// 文書タイプ
+	int 			nTypeId;							// 文書タイプ(MRU)
 
 	// 表示域
-	LayoutInt	nViewTopLine;							//!< 表示域の一番上の行(0開始)
-	LayoutInt	nViewLeftCol;							//!< 表示域の一番左の桁(0開始)
+	LayoutInt	nViewTopLine;							// 表示域の一番上の行(0開始)
+	LayoutInt	nViewLeftCol;							// 表示域の一番左の桁(0開始)
 
 	// キャレット
-	LogicPoint ptCursor;								//!< キャレット位置
+	LogicPoint ptCursor;								// キャレット位置
 
 	// 各種状態
-	bool		bIsModified;							//!< 変更フラグ
+	bool		bIsModified;							// 変更フラグ
 
 	// GREPモード
-	bool		bIsGrep;								//!< Grepのウィンドウか
+	bool		bIsGrep;								// Grepのウィンドウか
 	wchar_t		szGrepKey[1024];
 
 	// デバッグモニタ (アウトプットウィンドウ) モード
-	bool		bIsDebug;								//!< デバッグモニタモード (アウトプットウィンドウ) か
+	bool		bIsDebug;								// デバッグモニタモード (アウトプットウィンドウ) か
 
 	// ブックマーク情報
-	wchar_t		szMarkLines[MAX_MARKLINES_LEN + 1];		//!< ブックマークの物理行リスト
+	wchar_t		szMarkLines[MAX_MARKLINES_LEN + 1];		// ブックマークの物理行リスト
 
 	// ウィンドウ
-	int			nWindowSizeX;							//!< ウィンドウ  幅(ピクセル数)
-	int			nWindowSizeY;							//!< ウィンドウ  高さ(ピクセル数)
-	int			nWindowOriginX;							//!< ウィンドウ  物理位置(ピクセル数・マイナス値も有効)
-	int			nWindowOriginY;							//!< ウィンドウ  物理位置(ピクセル数・マイナス値も有効)
+	int			nWindowSizeX;							// ウィンドウ  幅(ピクセル数)
+	int			nWindowSizeY;							// ウィンドウ  高さ(ピクセル数)
+	int			nWindowOriginX;							// ウィンドウ  物理位置(ピクセル数・マイナス値も有効)
+	int			nWindowOriginY;							// ウィンドウ  物理位置(ピクセル数・マイナス値も有効)
 	
 	// Mar. 7, 2002 genta
 	// Constructor 確実に初期化するため

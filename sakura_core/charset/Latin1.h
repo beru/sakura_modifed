@@ -35,15 +35,15 @@ class Latin1 : public CodeBase {
 
 public:
 	// CodeBaseインターフェース
-	CodeConvertResult CodeToUnicode(const Memory& src, NativeW* pDst){ return Latin1ToUnicode(src, pDst); }	//!< 特定コード → UNICODE    変換
-	CodeConvertResult UnicodeToCode(const NativeW& src, Memory* pDst){ return UnicodeToLatin1(src, pDst); }	//!< UNICODE    → 特定コード 変換
-	CodeConvertResult UnicodeToHex(const wchar_t* pSrc, const int iSLen, TCHAR* pDst, const CommonSetting_StatusBar* psStatusbar);			//!< UNICODE → Hex 変換
+	CodeConvertResult CodeToUnicode(const Memory& src, NativeW* pDst){ return Latin1ToUnicode(src, pDst); }	// 特定コード → UNICODE    変換
+	CodeConvertResult UnicodeToCode(const NativeW& src, Memory* pDst){ return UnicodeToLatin1(src, pDst); }	// UNICODE    → 特定コード 変換
+	CodeConvertResult UnicodeToHex(const wchar_t* pSrc, const int iSLen, TCHAR* pDst, const CommonSetting_StatusBar* psStatusbar);	// UNICODE → Hex 変換
 
 public:
 	// 実装
 	static CodeConvertResult Latin1ToUnicode(const Memory& src, NativeW* pDstMem);		// Latin1   → Unicodeコード変換
 	static CodeConvertResult UnicodeToLatin1(const NativeW& src, Memory* pDstMem);		// Unicode  → Latin1コード変換
-	static int GetSizeOfChar(const char* pData, int nDataLen, int nIdx); //!< 指定した位置の文字が何バイト文字かを返す
+	static int GetSizeOfChar(const char* pData, int nDataLen, int nIdx); // 指定した位置の文字が何バイト文字かを返す
 
 protected:
 	// 実装

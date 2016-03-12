@@ -144,12 +144,12 @@ struct DllSharedData {
 	Share_Nodes					nodes;
 	Share_Handles				handles;
 
-	CharWidthCache				charWidth;								//!< 文字半角全角キャッシュ
-	DWORD						dwCustColors[16];						//!< フォントDialogカスタムパレット
+	CharWidthCache				charWidth;								// 文字半角全角キャッシュ
+	DWORD						dwCustColors[16];						// フォントDialogカスタムパレット
 
 	// プラグイン
-	short						plugCmdIcons[MAX_PLUGIN*MAX_PLUG_CMD];	//!< プラグイン コマンド ICON 番号	// 2010/7/3 Uchi
-	int							maxToolBarButtonNum;								//!< ツールバーボタン 最大値		// 2010/7/5 Uchi
+	short						plugCmdIcons[MAX_PLUGIN*MAX_PLUG_CMD];	// プラグイン コマンド ICON 番号	// 2010/7/3 Uchi
+	int							maxToolBarButtonNum;					// ツールバーボタン 最大値			// 2010/7/5 Uchi
 
 	// -- -- 保存対象 -- -- //
 	// 設定

@@ -66,7 +66,7 @@ void ViewCommander::Command_JUMP(void)
 	}
 
 	int nMode;
-	int bValidLine;
+	bool bValidLine;
 	int nCurrentLine;
 	int nCommentBegin = 0;
 
@@ -141,7 +141,7 @@ void ViewCommander::Command_JUMP(void)
 	for (; nLineCount<lineMgr.GetLineCount(); ++nLineCount) {
 		LogicInt nLineLen;
 		const wchar_t* pLine = lineMgr.GetLine(LogicInt(nLineCount))->GetDocLineStrWithEOL(&nLineLen);
-		bValidLine = FALSE;
+		bValidLine = false;
 		LogicInt i;
 		for (i=LogicInt(0); i<nLineLen; ++i) {
 			wchar_t let = pLine[i];
@@ -160,9 +160,9 @@ void ViewCommander::Command_JUMP(void)
 			prevLet = let;
 			let = pLine[i];
 			if (nMode == 20) {
-				bValidLine = TRUE;
+				bValidLine = true;
 				if (let == L'\'') {
-					if (i > 0 && L'\\' == prevLet) {
+					if (i > 0 && prevLet == L'\\') {
 					}else {
 						nMode = 0;
 						continue;
@@ -172,9 +172,9 @@ void ViewCommander::Command_JUMP(void)
 			}else
 			// ダブルクォーテーション文字列読み込み中
 			if (nMode == 21) {
-				bValidLine = TRUE;
+				bValidLine = true;
 				if (let == L'"') {
-					if (i > 0 && L'\\' == prevLet) {
+					if (i > 0 && prevLet == L'\\') {
 					}else {
 						nMode = 0;
 						continue;
@@ -184,9 +184,9 @@ void ViewCommander::Command_JUMP(void)
 			}else
 			// コメント読み込み中
 			if (nMode == 8) {
-				if (i < nLineLen - 1 && let == L'*' &&  L'/' == pLine[i + 1]) {
+				if (i < nLineLen - 1 && let == L'*' &&  pLine[i + 1] == L'/') {
 					if (/*nCommentBegin != nLineCount &&*/ nCommentBegin != 0) {
-						bValidLine = TRUE;
+						bValidLine = true;
 					}
 					++i;
 					nMode = 0;
@@ -204,11 +204,11 @@ void ViewCommander::Command_JUMP(void)
 				) {
 					continue;
 				}else
-				if (i < nLineLen - 1 && let == L'-' &&  L'-' == pLine[i + 1]) {
-					bValidLine = TRUE;
+				if (i < nLineLen - 1 && let == L'-' &&  pLine[i + 1] == L'-') {
+					bValidLine = true;
 					break;
 				}else
-				if (i < nLineLen - 1 && let == L'/' &&  L'*' == pLine[i + 1]) {
+				if (i < nLineLen - 1 && let == L'/' &&  pLine[i + 1] == L'*') {
 					++i;
 					nMode = 8;
 					nCommentBegin = nLineCount;
@@ -222,18 +222,18 @@ void ViewCommander::Command_JUMP(void)
 					nMode = 21;
 					continue;
 				}else {
-					bValidLine = TRUE;
+					bValidLine = true;
 				}
 			}
 		}
 		// コメント読み込み中
 		if (nMode == 8) {
 			if (nCommentBegin != 0) {
-				bValidLine = TRUE;
+				bValidLine = true;
 			}
 			// コメントブロック内の改行だけの行
 			if (WCODE::IsLineDelimiter(pLine[nBgn], GetDllShareData().common.edit.bEnableExtEol)) {
-				bValidLine = FALSE;
+				bValidLine = false;
 			}
 		}
 		if (bValidLine) {
@@ -285,13 +285,17 @@ void ViewCommander::Command_BOOKMARK_SET(void)
 		);
 		for (LogicInt nY=ptFrom.GetY2(); nY<=ptTo.y; ++nY) {
 			pDocLine = lineMgr.GetLine(nY);
-			BookmarkSetter cBookmark(pDocLine);
-			if (pDocLine) cBookmark.SetBookmark(!cBookmark.IsBookmarked());
+			if (pDocLine) {
+				BookmarkSetter bookmark(pDocLine);
+				bookmark.SetBookmark(!bookmark.IsBookmarked());
+			}
 		}
 	}else {
 		pDocLine = lineMgr.GetLine(GetCaret().GetCaretLogicPos().GetY2());
-		BookmarkSetter cBookmark(pDocLine);
-		if (pDocLine) cBookmark.SetBookmark(!cBookmark.IsBookmarked());
+		if (pDocLine) {
+			BookmarkSetter bookmark(pDocLine);
+			bookmark.SetBookmark(!bookmark.IsBookmarked());
+		}
 	}
 
 	// 2002.01.16 hor 分割したビューも更新
@@ -304,8 +308,8 @@ void ViewCommander::Command_BOOKMARK_SET(void)
 void ViewCommander::Command_BOOKMARK_NEXT(void)
 {
 	int		nYOld;				// hor
-	BOOL	bFound	=	FALSE;	// hor
-	BOOL	bRedo	=	TRUE;	// hor
+	bool	bFound	=	false;	// hor
+	bool	bRedo	=	true;	// hor
 
 	LogicPoint	ptXY(0, GetCaret().GetCaretLogicPos().y);
 	LogicInt tmp_y;
@@ -315,7 +319,7 @@ void ViewCommander::Command_BOOKMARK_NEXT(void)
 re_do:;								// hor
 	if (BookmarkManager(&GetDocument()->m_docLineMgr).SearchBookMark(ptXY.GetY2(), SearchDirection::Forward, &tmp_y)) {
 		ptXY.y = tmp_y;
-		bFound = TRUE;
+		bFound = true;
 		LayoutPoint ptLayout;
 		GetDocument()->m_layoutMgr.LogicToLayout(ptXY, &ptLayout);
 		// 2006.07.09 genta 新規関数にまとめた
@@ -323,11 +327,11 @@ re_do:;								// hor
 	}
     // 2002.01.26 hor
 	if (GetDllShareData().common.search.bSearchAll) {
-		if (!bFound	&&		// 見つからなかった
-			bRedo			// 最初の検索
+		if (!bFound		// 見つからなかった
+			&& bRedo	// 最初の検索
 		) {
 			ptXY.y = -1;	// 2002/06/01 MIK
-			bRedo = FALSE;
+			bRedo = false;
 			goto re_do;		// 先頭から再検索
 		}
 	}
@@ -348,8 +352,8 @@ re_do:;								// hor
 void ViewCommander::Command_BOOKMARK_PREV(void)
 {
 	int		nYOld;				// hor
-	BOOL	bFound	=	FALSE;	// hor
-	BOOL	bRedo	=	TRUE;	// hor
+	bool	bFound	=	false;	// hor
+	bool	bRedo	=	true;	// hor
 
 	LogicPoint	ptXY(0, GetCaret().GetCaretLogicPos().y);
 	LogicInt tmp_y;
@@ -357,9 +361,10 @@ void ViewCommander::Command_BOOKMARK_PREV(void)
 	nYOld = ptXY.y;						// hor
 
 re_do:;								// hor
-	if (BookmarkManager(&GetDocument()->m_docLineMgr).SearchBookMark(ptXY.GetY2(), SearchDirection::Backward, &tmp_y)) {
+	auto& docLineMgr = GetDocument()->m_docLineMgr;
+	if (BookmarkManager(&docLineMgr).SearchBookMark(ptXY.GetY2(), SearchDirection::Backward, &tmp_y)) {
 		ptXY.y = tmp_y;
-		bFound = TRUE;				// hor
+		bFound = true;				// hor
 		LayoutPoint ptLayout;
 		GetDocument()->m_layoutMgr.LogicToLayout(ptXY, &ptLayout);
 		// 2006.07.09 genta 新規関数にまとめた
@@ -367,12 +372,12 @@ re_do:;								// hor
 	}
     // 2002.01.26 hor
 	if (GetDllShareData().common.search.bSearchAll) {
-		if (!bFound	&&	// 見つからなかった
-			bRedo		// 最初の検索
+		if (!bFound		// 見つからなかった
+			&& bRedo	// 最初の検索
 		) {
 			// 2011.02.02 m_layoutMgr→m_docLineMgr
-			ptXY.y = GetDocument()->m_docLineMgr.GetLineCount();	// 2002/06/01 MIK
-			bRedo = FALSE;
+			ptXY.y = docLineMgr.GetLineCount();	// 2002/06/01 MIK
+			bRedo = false;
 			goto re_do;	// 末尾から再検索
 		}
 	}

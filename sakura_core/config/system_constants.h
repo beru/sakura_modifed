@@ -542,7 +542,7 @@
 //                      ÉpÉtÉHÅ[É}ÉìÉX                         //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 // ÉoÉbÉtÉ@ÉTÉCÉY
-const int LINEREADBUFSIZE	= 10240;	//!< ÉtÉ@ÉCÉãÇ©ÇÁ1çsï™ÉfÅ[É^Çì«Ç›çûÇﬁÇ∆Ç´ÇÃÉoÉbÉtÉ@ÉTÉCÉY
+const int LINEREADBUFSIZE	= 10240;	// ÉtÉ@ÉCÉãÇ©ÇÁ1çsï™ÉfÅ[É^Çì«Ç›çûÇﬁÇ∆Ç´ÇÃÉoÉbÉtÉ@ÉTÉCÉY
 
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -572,12 +572,12 @@ const int LINEREADBUFSIZE	= 10240;	//!< ÉtÉ@ÉCÉãÇ©ÇÁ1çsï™ÉfÅ[É^Çì«Ç›çûÇﬁÇ∆Ç´ÇÃÉ
 #define MYWM_CHANGESETTING  (WM_APP+1520)
 //! MYWM_CHANGESETTINGÉÅÉbÉZÅ[ÉWÇÃlParam
 enum e_PM_CHANGESETTING_SELECT {
-	PM_CHANGESETTING_ALL		= 0, //!< ëSïî
-	PM_CHANGESETTING_FONT		= 1, //!< ÉtÉHÉìÉgïœçX
-	PM_CHANGESETTING_FONTSIZE	= 2, //!< ÉtÉHÉìÉgÉTÉCÉYïœçX(WPARAM É^ÉCÉvï î‘çÜÅB-1Ç≈ã§í ê›íËïœçX)
-	PM_CHANGESETTING_TYPE		= 3, //!< É^ÉCÉvï ê›íË
-	PM_CHANGESETTING_TYPE2		= 4, //!< É^ÉCÉvï ê›íË(çƒì«Ç›çûÇ›Ç»Çµ)
-	PM_PrintSetting				= 5, //!< ÉvÉäÉìÉgê›íË
+	PM_CHANGESETTING_ALL		= 0, // ëSïî
+	PM_CHANGESETTING_FONT		= 1, // ÉtÉHÉìÉgïœçX
+	PM_CHANGESETTING_FONTSIZE	= 2, // ÉtÉHÉìÉgÉTÉCÉYïœçX(WPARAM É^ÉCÉvï î‘çÜÅB-1Ç≈ã§í ê›íËïœçX)
+	PM_CHANGESETTING_TYPE		= 3, // É^ÉCÉvï ê›íË
+	PM_CHANGESETTING_TYPE2		= 4, // É^ÉCÉvï ê›íË(çƒì«Ç›çûÇ›Ç»Çµ)
+	PM_PrintSetting				= 5, // ÉvÉäÉìÉgê›íË
 };
 //!ç¿ïWà íuèÓïÒÇÃï€ë∂
 #define MYWM_SAVEEDITSTATE  (WM_APP+1521)
@@ -590,8 +590,8 @@ enum e_PM_CHANGESETTING_SELECT {
 //! ÉgÉåÉCÇ©ÇÁÉGÉfÉBÉ^Ç÷ÇÃèIóπóvãÅ
 #define	MYWM_CLOSE			(WM_APP+200)
 enum e_PM_CLOSE_WPARAM {
-	PM_CLOSE_EXIT				= 1, //!< ëSèIóπ
-	PM_CLOSE_GREPNOCONFIRM		= 2, //!< GrepÇ≈èIóπämîFÇµÇ»Ç¢
+	PM_CLOSE_EXIT				= 1, // ëSèIóπ
+	PM_CLOSE_GREPNOCONFIRM		= 2, // GrepÇ≈èIóπämîFÇµÇ»Ç¢
 };
 #define	MYWM_ALLOWACTIVATE	(WM_APP+201)
 
@@ -602,9 +602,9 @@ enum e_PM_CLOSE_WPARAM {
 #define	MYWM_SETCARETPOS	(WM_APP+204)
 //! MYWM_SETCARETPOSÉÅÉbÉZÅ[ÉWÇÃlParam
 enum e_PM_SETCARETPOS_SELECTSTATE {
-	PM_SETCARETPOS_NOSELECT		= 0, //!< ëIëâèú
-	PM_SETCARETPOS_SELECT		= 1, //!< ëIëäJénÅEïœçX
-	PM_SETCARETPOS_KEEPSELECT	= 2, //!< åªç›ÇÃëIëèÛë‘Çï€Ç¡Çƒà⁄ìÆ
+	PM_SETCARETPOS_NOSELECT		= 0, // ëIëâèú
+	PM_SETCARETPOS_SELECT		= 1, // ëIëäJénÅEïœçX
+	PM_SETCARETPOS_KEEPSELECT	= 2, // åªç›ÇÃëIëèÛë‘Çï€Ç¡Çƒà⁄ìÆ
 };
 
 //! ÉJÅ[É\Éãà íuéÊìæóvãÅ

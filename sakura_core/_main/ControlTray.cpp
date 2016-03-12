@@ -1142,13 +1142,13 @@ void ControlTray::OnNewEditor(bool bNewWindow)
 	@date 2008.05.05 novice GetModuleHandle(NULL)→NULLに変更
 */
 bool ControlTray::OpenNewEditor(
-	HINSTANCE			hInstance,			//!< [in] インスタンスID (実は未使用)
-	HWND				hWndParent,			//!< [in] 親ウィンドウハンドル．エラーメッセージ表示用
-	const LoadInfo&		loadInfo,			//!< [in]
-	const TCHAR*		szCmdLineOption,	//!< [in] 追加のコマンドラインオプション
-	bool				sync,				//!< [in] trueなら新規エディタの起動まで待機する
-	const TCHAR*		pszCurDir,			//!< [in] 新規エディタのカレントディレクトリ(NULL可)
-	bool				bNewWindow			//!< [in] 新規エディタを新しいウィンドウで開く
+	HINSTANCE			hInstance,			// [in] インスタンスID (実は未使用)
+	HWND				hWndParent,			// [in] 親ウィンドウハンドル．エラーメッセージ表示用
+	const LoadInfo&		loadInfo,			// [in]
+	const TCHAR*		szCmdLineOption,	// [in] 追加のコマンドラインオプション
+	bool				sync,				// [in] trueなら新規エディタの起動まで待機する
+	const TCHAR*		pszCurDir,			// [in] 新規エディタのカレントディレクトリ(NULL可)
+	bool				bNewWindow			// [in] 新規エディタを新しいウィンドウで開く
 	)
 {
 	// 共有データ構造体のアドレスを返す
@@ -1372,7 +1372,7 @@ bool ControlTray::OpenNewEditor2(
 	const EditInfo*	pfi,
 	bool			bViewMode,
 	bool			sync,
-	bool			bNewWindow			//!< [in] 新規エディタを新しいウィンドウで開く
+	bool			bNewWindow			// [in] 新規エディタを新しいウィンドウで開く
 	)
 {
 
@@ -1499,7 +1499,7 @@ void ControlTray::ActivePrevWindow(HWND hwndParent)
 	@date 2006.12.25 ryoji 複数の編集ウィンドウを閉じるときの確認（引数追加）
 */
 void ControlTray::TerminateApplication(
-	HWND hWndFrom	//!< [in] 呼び出し元のウィンドウハンドル
+	HWND hWndFrom	// [in] 呼び出し元のウィンドウハンドル
 	)
 {
 	DllSharedData* pShareData = &GetDllShareData();	// 共有データ構造体のアドレスを返す
@@ -1536,10 +1536,10 @@ void ControlTray::TerminateApplication(
 	@date 2007.06.20 ryoji nGroup引数を追加
 */
 BOOL ControlTray::CloseAllEditor(
-	bool	bCheckConfirm,	//!< [in] [すべて閉じる]確認オプションに従って問い合わせをするかどうか
-	HWND	hWndFrom,		//!< [in] 呼び出し元のウィンドウハンドル
-	bool	bExit,			//!< [in] true: 編集の全終了 / false: すべて閉じる
-	int		nGroup			//!< [in] グループID
+	bool	bCheckConfirm,	// [in] [すべて閉じる]確認オプションに従って問い合わせをするかどうか
+	HWND	hWndFrom,		// [in] 呼び出し元のウィンドウハンドル
+	bool	bExit,			// [in] true: 編集の全終了 / false: すべて閉じる
+	int		nGroup			// [in] グループID
 	)
 {
 	EditNode* pWndArr;

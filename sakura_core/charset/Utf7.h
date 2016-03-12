@@ -28,9 +28,9 @@
 class Utf7 : public CodeBase {
 public:
 	// CodeBaseインターフェース
-	CodeConvertResult CodeToUnicode(const Memory& src, NativeW* pDst){ return UTF7ToUnicode(src, pDst); }	//!< 特定コード → UNICODE    変換
-	CodeConvertResult UnicodeToCode(const NativeW& src, Memory* pDst){ return UnicodeToUTF7(src, pDst); }	//!< UNICODE    → 特定コード 変換
-	void GetBom(Memory* pMemBom);	//!< BOMデータ取得
+	CodeConvertResult CodeToUnicode(const Memory& src, NativeW* pDst){ return UTF7ToUnicode(src, pDst); }	// 特定コード → UNICODE    変換
+	CodeConvertResult UnicodeToCode(const NativeW& src, Memory* pDst){ return UnicodeToUTF7(src, pDst); }	// UNICODE    → 特定コード 変換
+	void GetBom(Memory* pMemBom);	// BOMデータ取得
 	void GetEol(Memory* pMemEol, EolType eolType);
 
 public:

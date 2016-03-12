@@ -120,8 +120,8 @@ TextOutputStream::~TextOutputStream()
 }
 
 void TextOutputStream::WriteString(
-	const wchar_t*	szData,	//!< ‘‚«ž‚Þ•¶Žš—ñ
-	int				nLen	//!< ‘‚«ž‚Þ•¶Žš—ñ’·B-1‚ð“n‚·‚ÆŽ©“®ŒvŽZB
+	const wchar_t*	szData,	// ‘‚«ž‚Þ•¶Žš—ñ
+	int				nLen	// ‘‚«ž‚Þ•¶Žš—ñ’·B-1‚ð“n‚·‚ÆŽ©“®ŒvŽZB
 	)
 {
 	//$$ƒƒ‚: •¶Žš•ÏŠ·Žž‚É‚¢‚¿‚¢‚¿ƒRƒs[‚ðì‚Á‚Ä‚é‚Ì‚ÅŒø—¦‚ªˆ«‚¢BŒãXŒø—¦‰ü‘P—\’èB

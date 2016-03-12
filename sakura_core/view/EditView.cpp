@@ -142,7 +142,7 @@ EditView::EditView(EditWnd* pEditWnd)
 	m_viewSelect(this),			// warning C4355: 'this' : ベース メンバー初期化子リストで使用されました。
 	m_parser(this),				// warning C4355: 'this' : ベース メンバー初期化子リストで使用されました。
 	m_textDrawer(this),			// warning C4355: 'this' : ベース メンバー初期化子リストで使用されました。
-	m_commander(this),				// warning C4355: 'this' : ベース メンバー初期化子リストで使用されました。
+	m_commander(this),			// warning C4355: 'this' : ベース メンバー初期化子リストで使用されました。
 	m_hwndVScrollBar(NULL),
 	m_hwndHScrollBar(NULL),
 	m_pDropTarget(NULL),
@@ -161,10 +161,10 @@ EditView::EditView(EditWnd* pEditWnd)
 
 // 2007.10.23 kobake コンストラクタ内の処理をすべてCreateに移しました。(初期化処理が不必要に分散していたため)
 BOOL EditView::Create(
-	HWND		hwndParent,	//!< 親
-	EditDoc*	pEditDoc,	//!< 参照するドキュメント
-	int			nMyIndex,	//!< ビューのインデックス
-	BOOL		bShow,		//!< 作成時に表示するかどうか
+	HWND		hwndParent,	// 親
+	EditDoc*	pEditDoc,	// 参照するドキュメント
+	int			nMyIndex,	// ビューのインデックス
+	BOOL		bShow,		// 作成時に表示するかどうか
 	bool		bMiniMap
 	)
 {
@@ -1196,9 +1196,9 @@ void EditView::SetFont(void)
 	@date 2006.07.09 genta 新規作成
 */
 void EditView::MoveCursorSelecting(
-	LayoutPoint	ptWk_CaretPos,		//!< [in] 移動先レイアウト位置
-	bool		bSelect,			//!< true: 選択する  false: 選択解除
-	int			nCaretMarginRate	//!< 縦スクロール開始位置を決める値
+	LayoutPoint	ptWk_CaretPos,		// [in] 移動先レイアウト位置
+	bool		bSelect,			// true: 選択する  false: 選択解除
+	int			nCaretMarginRate	// 縦スクロール開始位置を決める値
 	)
 {
 	if (bSelect) {
@@ -1241,9 +1241,9 @@ void EditView::MoveCursorSelecting(
 	                 URLの強調表示OFFのチェックはこの関数内で行うように変更
 */
 bool EditView::IsCurrentPositionURL(
-	const LayoutPoint&	ptCaretPos,		//!< [in]  カーソル位置
-	LogicRange*			pUrlRange,		//!< [out] URL範囲。ロジック単位。
-	std::wstring*		pwstrURL		//!< [out] URL文字列受け取り先。NULLを指定した場合はURL文字列を受け取らない。
+	const LayoutPoint&	ptCaretPos,		// [in]  カーソル位置
+	LogicRange*			pUrlRange,		// [out] URL範囲。ロジック単位。
+	std::wstring*		pwstrURL		// [out] URL文字列受け取り先。NULLを指定した場合はURL文字列を受け取らない。
 	)
 {
 	MY_RUNNINGTIMER(runningTimer, "EditView::IsCurrentPositionURL");
@@ -2254,8 +2254,8 @@ int EditView::IsCurrentPositionSelectedTEST(
 
 // 選択範囲内の全行をクリップボードにコピーする
 void EditView::CopySelectedAllLines(
-	const wchar_t*	pszQuote,		//!< 先頭に付ける引用符
-	bool			bWithLineNumber	//!< 行番号を付与する
+	const wchar_t*	pszQuote,		// 先頭に付ける引用符
+	bool			bWithLineNumber	// 行番号を付与する
 	)
 {
 	NativeW	memBuf;

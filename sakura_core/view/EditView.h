@@ -148,10 +148,10 @@ public:
 	void Close();
 	// 初期化系メンバ関数
 	BOOL Create(
-		HWND		hwndParent,	//!< 親
-		EditDoc*	pEditDoc,	//!< 参照するドキュメント
-		int			nMyIndex,	//!< ビューのインデックス
-		BOOL		bShow,		//!< 作成時に表示するかどうか
+		HWND		hwndParent,	// 親
+		EditDoc*	pEditDoc,	// 参照するドキュメント
+		int			nMyIndex,	// ビューのインデックス
+		BOOL		bShow,		// 作成時に表示するかどうか
 		bool		bMiniMap
 	);
 	void CopyViewStatus(EditView*) const;					// 自分の表示状態を他のビューにコピー
@@ -208,9 +208,9 @@ public:
 	void OnXLBUTTONUP(WPARAM, int, int);			// マウスサイドボタン1開放		// 2009.01.17 nasukoji
 	void OnXRBUTTONDOWN(WPARAM, int, int);			// マウスサイドボタン2押下
 	void OnXRBUTTONUP(WPARAM, int, int);			// マウスサイドボタン2開放		// 2009.01.17 nasukoji
-	LRESULT OnMOUSEWHEEL(WPARAM, LPARAM);			//!< 垂直マウスホイールのメッセージ処理
-	LRESULT OnMOUSEHWHEEL(WPARAM, LPARAM);			//!< 水平マウスホイールのメッセージ処理
-	LRESULT OnMOUSEWHEEL2(WPARAM, LPARAM, bool, EFunctionCode);		//!< マウスホイールのメッセージ処理
+	LRESULT OnMOUSEWHEEL(WPARAM, LPARAM);			// 垂直マウスホイールのメッセージ処理
+	LRESULT OnMOUSEHWHEEL(WPARAM, LPARAM);			// 水平マウスホイールのメッセージ処理
+	LRESULT OnMOUSEWHEEL2(WPARAM, LPARAM, bool, EFunctionCode);		// マウスホイールのメッセージ処理
 	bool IsSpecialScrollMode(int);					// キー・マウスボタン状態よりスクロールモードを判定する		// 2009.01.17 nasukoji
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -221,9 +221,9 @@ public:
 protected:
 	//! ロジック行を1行描画
 	bool DrawLogicLine(
-		HDC				hdc,			//!< [in]     作画対象
-		DispPos*		pDispPos,		//!< [in/out] 描画する箇所、描画元ソース
-		LayoutInt		nLineTo			//!< [in]     作画終了するレイアウト行番号
+		HDC				hdc,			// [in]     作画対象
+		DispPos*		pDispPos,		// [in/out] 描画する箇所、描画元ソース
+		LayoutInt		nLineTo			// [in]     作画終了するレイアウト行番号
 	);
 
 	//! レイアウト行を1行描画
@@ -238,10 +238,10 @@ public:
 
 	// 画面バッファ
 protected:
-	bool CreateOrUpdateCompatibleBitmap(int cx, int cy);	//!< メモリBMPを作成または更新
+	bool CreateOrUpdateCompatibleBitmap(int cx, int cy);	// メモリBMPを作成または更新
 	void UseCompatibleDC(BOOL fCache);
 public:
-	void DeleteCompatibleBitmap();							//!< メモリBMPを削除
+	void DeleteCompatibleBitmap();							// メモリBMPを削除
 
 public:
 	void DispTextSelected(HDC hdc, LayoutInt nLineNum, const Point& ptXY, LayoutInt nX_Layout);	// テキスト反転
@@ -269,7 +269,7 @@ public:
 	BOOL CreateScrollBar();												// スクロールバー作成	// 2006.12.19 ryoji
 	void DestroyScrollBar();											// スクロールバー破棄	// 2006.12.19 ryoji
 	LayoutInt GetWrapOverhang(void) const;								// 折り返し桁以後のぶら下げ余白計算	// 2008.06.08 ryoji
-	LayoutInt ViewColNumToWrapColNum(LayoutInt nViewColNum) const;	//「右端で折り返す」用にビューの桁数から折り返し桁数を計算する	// 2008.06.08 ryoji
+	LayoutInt ViewColNumToWrapColNum(LayoutInt nViewColNum) const;		//「右端で折り返す」用にビューの桁数から折り返し桁数を計算する	// 2008.06.08 ryoji
 	LayoutInt GetRightEdgeForScrollBar(void);							// スクロールバー制御用に右端座標を取得する		// 2009.08.28 nasukoji
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -305,7 +305,7 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 public:
 	void SetIMECompFormPos(void);								// IME編集エリアの位置を変更
-	void SetIMECompFormFont(void);							// IME編集エリアの表示フォントを変更
+	void SetIMECompFormFont(void);								// IME編集エリアの表示フォントを変更
 	
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                       テキスト選択                          //
@@ -435,8 +435,8 @@ public:
 		@date 2006.04.10 fon 新規作成
 	*/
 	enum LID_SKH {
-		LID_SKH_ONTIMER		= 1,	//!< EditView::OnTimer
-		LID_SKH_POPUPMENU_R = 2,	//!< EditView::CreatePopUpMenu_R
+		LID_SKH_ONTIMER		= 1,	// EditView::OnTimer
+		LID_SKH_POPUPMENU_R = 2,	// EditView::CreatePopUpMenu_R
 	};
 	BOOL KeywordHelpSearchDict(LID_SKH nID, POINT* po, RECT* rc);	// 2006.04.10 fon
 
@@ -582,8 +582,8 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 public:
 	// 参照
-	EditWnd*			m_pEditWnd;	//!< ウィンドウ
-	EditDoc*			m_pEditDoc;	//!< ドキュメント
+	EditWnd*			m_pEditWnd;	// ウィンドウ
+	EditDoc*			m_pEditDoc;	// ドキュメント
 	const TypeConfig*	m_pTypeData;
 
 	// 主要構成部品
@@ -612,7 +612,7 @@ public:
 	HWND			m_hwndSizeBox;		// サイズボックスウィンドウハンドル
 	SplitBoxWnd*	m_pcsbwVSplitBox;	// 垂直分割ボックス
 	SplitBoxWnd*	m_pcsbwHSplitBox;	// 水平分割ボックス
-	AutoScrollWnd	m_autoScrollWnd;	//!< オートスクロール
+	AutoScrollWnd	m_autoScrollWnd;	// オートスクロール
 
 public:
 	// 描画

@@ -16,11 +16,11 @@
 
 // アンドゥバッファ用 操作コード
 enum class OpeCode {
-	Unknown,	//!< 不明(未使用)
-	Insert,		//!< 挿入
-	Delete,		//!< 削除
-	Replace,	//!< 置換
-	MoveCaret,	//!< キャレット移動
+	Unknown,	// 不明(未使用)
+	Insert,		// 挿入
+	Delete,		// 削除
+	Replace,	// 置換
+	MoveCaret,	// キャレット移動
 };
 
 class LineData {
@@ -59,11 +59,11 @@ public:
 	OpeCode GetCode() const { return m_nOpe; }
 
 private:
-	OpeCode m_nOpe;						//!< 操作種別
+	OpeCode m_nOpe;						// 操作種別
 
 public:
-	LogicPoint	m_ptCaretPos_PHY_Before;	//!< キャレット位置。文字単位。			[共通]
-	LogicPoint	m_ptCaretPos_PHY_After;		//!< キャレット位置。文字単位。			[共通]
+	LogicPoint	m_ptCaretPos_PHY_Before;	// キャレット位置。文字単位。			[共通]
+	LogicPoint	m_ptCaretPos_PHY_After;		// キャレット位置。文字単位。			[共通]
 };
 
 //! 削除
@@ -74,8 +74,8 @@ public:
 	}
 	virtual void DUMP(void);	// 編集操作要素のダンプ
 public:
-	LogicPoint	m_ptCaretPos_PHY_To;		//!< 操作前のキャレット位置。文字単位。	[DELETE]
-	OpeLineData	m_opeLineData;			//!< 操作に関連するデータ				[DELETE/INSERT]
+	LogicPoint	m_ptCaretPos_PHY_To;	// 操作前のキャレット位置。文字単位。	[DELETE]
+	OpeLineData	m_opeLineData;			// 操作に関連するデータ				[DELETE/INSERT]
 	int				m_nOrgSeq;
 };
 
@@ -85,7 +85,7 @@ public:
 	InsertOpe() : Ope(OpeCode::Insert) { }
 	virtual void DUMP(void);	// 編集操作要素のダンプ
 public:
-	OpeLineData	m_opeLineData;			//!< 操作に関連するデータ				[DELETE/INSERT]
+	OpeLineData	m_opeLineData;	// 操作に関連するデータ				[DELETE/INSERT]
 	int				m_nOrgSeq;
 };
 
@@ -99,9 +99,9 @@ public:
 		m_ptCaretPos_PHY_To.Set(LogicInt(0), LogicInt(0));
 	}
 public:
-	LogicPoint	m_ptCaretPos_PHY_To;		//!< 操作前のキャレット位置。文字単位。	[DELETE]
-	OpeLineData	m_pMemDataIns;			//!< 操作に関連するデータ				[INSERT]
-	OpeLineData	m_pMemDataDel;			//!< 操作に関連するデータ				[DELETE]
+	LogicPoint	m_ptCaretPos_PHY_To;	// 操作前のキャレット位置。文字単位。	[DELETE]
+	OpeLineData	m_pMemDataIns;			// 操作に関連するデータ				[INSERT]
+	OpeLineData	m_pMemDataDel;			// 操作に関連するデータ				[DELETE]
 	int				m_nOrgInsSeq;
 	int				m_nOrgDelSeq;
 };

@@ -60,33 +60,33 @@ public:
 	// コンストラクタ・デストラクタ
 	NativeW();
 	NativeW(const NativeW&);
-	NativeW(const wchar_t* pData, int nDataLen); //!< nDataLenは文字単位。
+	NativeW(const wchar_t* pData, int nDataLen); // nDataLenは文字単位。
 	NativeW(const wchar_t* pData);
 
 	// 管理
-	void AllocStringBuffer(int nDataLen);                    //!< (重要：nDataLenは文字単位) バッファサイズの調整。必要に応じて拡大する。
+	void AllocStringBuffer(int nDataLen);                    // (重要：nDataLenは文字単位) バッファサイズの調整。必要に応じて拡大する。
 
 	// WCHAR
-	void SetString(const wchar_t* pData, int nDataLen);      //!< バッファの内容を置き換える。nDataLenは文字単位。
-	void SetString(const wchar_t* pszData);                  //!< バッファの内容を置き換える
+	void SetString(const wchar_t* pData, int nDataLen);      // バッファの内容を置き換える。nDataLenは文字単位。
+	void SetString(const wchar_t* pszData);                  // バッファの内容を置き換える
 	void SetStringHoldBuffer( const wchar_t* pData, int nDataLen );
-	void AppendString(const wchar_t* pszData);               //!< バッファの最後にデータを追加する
-	void AppendString(const wchar_t* pszData, int nLength);  //!< バッファの最後にデータを追加する。nLengthは文字単位。成功すればtrue。メモリ確保に失敗したらfalseを返す。
+	void AppendString(const wchar_t* pszData);               // バッファの最後にデータを追加する
+	void AppendString(const wchar_t* pszData, int nLength);  // バッファの最後にデータを追加する。nLengthは文字単位。成功すればtrue。メモリ確保に失敗したらfalseを返す。
 
 	// NativeW
-	void SetNativeData(const NativeW& pcNative);            //!< バッファの内容を置き換える
-	void AppendNativeData(const NativeW&);                  //!< バッファの最後にデータを追加する
+	void SetNativeData(const NativeW& pcNative);            // バッファの内容を置き換える
+	void AppendNativeData(const NativeW&);                  // バッファの最後にデータを追加する
 
 	// 演算子
-	const NativeW& operator += (wchar_t wch)				{ AppendString(&wch, 1);   return *this; }
+	const NativeW& operator += (wchar_t wch)			{ AppendString(&wch, 1);   return *this; }
 	const NativeW& operator = (wchar_t wch)				{ SetString(&wch, 1);      return *this; }
 	const NativeW& operator += (const NativeW& rhs)		{ AppendNativeData(rhs); return *this; }
 	const NativeW& operator = (const NativeW& rhs)		{ SetNativeData(rhs);    return *this; }
-	NativeW operator + (const NativeW& rhs) const			{ NativeW tmp = *this; return tmp += rhs; }
+	NativeW operator + (const NativeW& rhs) const		{ NativeW tmp = *this; return tmp += rhs; }
 
 	// ネイティブ取得インターフェース
-	wchar_t operator [] (int nIndex) const;					//!< 任意位置の文字取得。nIndexは文字単位。
-	LogicInt GetStringLength() const {						//!< 文字列長を返す。文字単位。
+	wchar_t operator [] (int nIndex) const;					// 任意位置の文字取得。nIndexは文字単位。
+	LogicInt GetStringLength() const {						// 文字列長を返す。文字単位。
 		return LogicInt(Native::GetRawLength() / sizeof(wchar_t));
 	}
 	const wchar_t* GetStringPtr() const {
@@ -139,11 +139,11 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                           変換                              //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-	void Replace(const wchar_t* pszFrom, const wchar_t* pszTo);   //!< 文字列置換
+	void Replace(const wchar_t* pszFrom, const wchar_t* pszTo);   // 文字列置換
 	void ReplaceT( const wchar_t* pszFrom, const wchar_t* pszTo ){
 		Replace( pszFrom, pszTo );
 	}
-	void Replace( const wchar_t* pszFrom, int nFromLen, const wchar_t* pszTo, int nToLen );   //!< 文字列置換
+	void Replace( const wchar_t* pszFrom, int nFromLen, const wchar_t* pszTo, int nToLen );   // 文字列置換
 
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -154,10 +154,10 @@ public:
 	// ひとつは変換によるデータ喪失を抑える意味で。
 
 	// ACHAR
-	void SetStringOld(const char* pData, int nDataLen);    //!< バッファの内容を置き換える。pDataはSJIS。nDataLenは文字単位。
-	void SetStringOld(const char* pszData);                //!< バッファの内容を置き換える。pszDataはSJIS。
-	void AppendStringOld(const char* pData, int nDataLen); //!< バッファの最後にデータを追加する。pszDataはSJIS。
-	void AppendStringOld(const char* pszData);             //!< バッファの最後にデータを追加する。pszDataはSJIS。
+	void SetStringOld(const char* pData, int nDataLen);    // バッファの内容を置き換える。pDataはSJIS。nDataLenは文字単位。
+	void SetStringOld(const char* pszData);                // バッファの内容を置き換える。pszDataはSJIS。
+	void AppendStringOld(const char* pData, int nDataLen); // バッファの最後にデータを追加する。pszDataはSJIS。
+	void AppendStringOld(const char* pszData);             // バッファの最後にデータを追加する。pszDataはSJIS。
 	const char* GetStringPtrOld() const; // ShiftJISに変換して返す
 
 	// WCHAR
@@ -192,12 +192,12 @@ private:
 
 public:
 	// -- -- staticインターフェース -- -- //
-	static LogicInt GetSizeOfChar(const wchar_t* pData, int nDataLen, int nIdx); //!< 指定した位置の文字がwchar_t何個分かを返す
-	static LayoutInt GetKetaOfChar(const wchar_t* pData, int nDataLen, int nIdx); //!< 指定した位置の文字が半角何個分かを返す
-	static const wchar_t* GetCharNext(const wchar_t* pData, int nDataLen, const wchar_t* pDataCurrent); //!< ポインタで示した文字の次にある文字の位置を返します
-	static const wchar_t* GetCharPrev(const wchar_t* pData, int nDataLen, const wchar_t* pDataCurrent); //!< ポインタで示した文字の直前にある文字の位置を返します
+	static LogicInt GetSizeOfChar(const wchar_t* pData, int nDataLen, int nIdx);	// 指定した位置の文字がwchar_t何個分かを返す
+	static LayoutInt GetKetaOfChar(const wchar_t* pData, int nDataLen, int nIdx);	// 指定した位置の文字が半角何個分かを返す
+	static const wchar_t* GetCharNext(const wchar_t* pData, int nDataLen, const wchar_t* pDataCurrent); // ポインタで示した文字の次にある文字の位置を返します
+	static const wchar_t* GetCharPrev(const wchar_t* pData, int nDataLen, const wchar_t* pDataCurrent); // ポインタで示した文字の直前にある文字の位置を返します
 
-	static LayoutInt GetKetaOfChar(const StringRef& str, int nIdx) { //!< 指定した位置の文字が半角何個分かを返す
+	static LayoutInt GetKetaOfChar(const StringRef& str, int nIdx) { // 指定した位置の文字が半角何個分かを返す
 		return GetKetaOfChar(str.GetPtr(), str.GetLength(), nIdx);
 	}
 };

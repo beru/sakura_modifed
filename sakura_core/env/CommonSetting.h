@@ -95,9 +95,9 @@ struct CommonSetting_General {
 // 2004.05.13 Moca
 //! ウィンドウサイズ・位置の制御方法
 enum class WinSizeMode {
-	Default		= 0,	//!< 指定なし
-	Save		= 1,	//!< 継承(保存)
-	Set			= 2		//!< 直接指定(固定)
+	Default		= 0,	// 指定なし
+	Save		= 1,	// 継承(保存)
+	Set			= 2		// 直接指定(固定)
 };
 
 struct CommonSetting_Window {
@@ -154,9 +154,9 @@ struct CommonSetting_Window {
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //! 閉じるボタン
 enum class DispTabCloseType {
-	No			= 0, //!< なし
-	Always		= 1, //!< 常に表示
-	Auto		= 2  //!< 自動表示
+	No			= 0, // なし
+	Always		= 1, // 常に表示
+	Auto		= 2  // 自動表示
 };
 
 enum class TabPosition {
@@ -197,9 +197,9 @@ struct CommonSetting_TabBar {
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //! ファイルダイアログの初期位置
 enum EOpenDialogDir {
-	OPENDIALOGDIR_CUR, //!< カレントフォルダ
-	OPENDIALOGDIR_MRU, //!< 最近使ったフォルダ
-	OPENDIALOGDIR_SEL, //!< 指定フォルダ
+	OPENDIALOGDIR_CUR, // カレントフォルダ
+	OPENDIALOGDIR_MRU, // 最近使ったフォルダ
+	OPENDIALOGDIR_SEL, // 指定フォルダ
 };
 
 struct CommonSetting_Edit {
@@ -226,8 +226,8 @@ struct CommonSetting_Edit {
 	EOpenDialogDir	eOpenDialogDir;		// ファイルダイアログの初期位置
 	SFilePath	openDialogSelDir;		// 指定フォルダ
 
-	bool	bEnableExtEol;				//!< NEL,PS,LSを改行コードとして利用する
-	bool	bBoxSelectLock;				//!< (矩形選択)移動でロックする
+	bool	bEnableExtEol;				// NEL,PS,LSを改行コードとして利用する
+	bool	bBoxSelectLock;				// (矩形選択)移動でロックする
 
 	// (ダイアログ項目無し)
 	bool	bAutoColumnPaste;			// 矩形コピーのテキストは常に矩形貼り付け
@@ -410,8 +410,8 @@ struct CommonSetting_Search {
 	bool			bAutoCloseDlgReplace;		// 置換 ダイアログを自動的に閉じる
 	bool			bSearchAll;					// 先頭（末尾）から再検索 2002.01.26 hor
 
-	int				nTagJumpMode;				//!< タグジャンプモード(0-3)
-	int				nTagJumpModeKeyword;		//!< タグジャンプモード(0-3)
+	int				nTagJumpMode;				// タグジャンプモード(0-3)
+	int				nTagJumpModeKeyword;		// タグジャンプモード(0-3)
 
 	// INI内設定のみ
 	bool			bUseCaretKeyword;			// キャレット位置の単語を辞書検索		// 2006.03.24 fon
@@ -518,12 +518,12 @@ struct CommonSetting_FileName {
 
 // ドッキング配置
 enum class DockSideType {
-	Float,				//!< フローティング
-	Left,				//!< 左ドッキング
-	Top,				//!< 上ドッキング
-	Right,				//!< 右ドッキング
-	Bottom,				//!< 下ドッキング
-	Undockable = -1,	//!< ドッキング禁止
+	Float,				// フローティング
+	Left,				// 左ドッキング
+	Top,				// 上ドッキング
+	Right,				// 右ドッキング
+	Bottom,				// 下ドッキング
+	Undockable = -1,	// ドッキング禁止
 };
 
 enum class FileTreeItemType {
@@ -535,15 +535,15 @@ enum class FileTreeItemType {
 struct FileTreeItem {
 public:
 	FileTreeItemType eFileTreeItemType;
-	SFilePath	szTargetPath;	//!< フォルダorファイルパス
-	StaticString<TCHAR,_MAX_PATH> szLabelName; //!< ラベル名(""のときはファイル名を使う)
-	int  nDepth;	//!< 階層
+	SFilePath	szTargetPath;					// フォルダorファイルパス
+	StaticString<TCHAR,_MAX_PATH> szLabelName;	// ラベル名(""のときはファイル名を使う)
+	int  nDepth;	// 階層
 
 	// GrepタイプTreeItem
-	StaticString<TCHAR,_MAX_PATH>	szTargetFile;	//!< ファイル一覧
-	bool		bIgnoreHidden;		//!< 隠しファイルを除く
-	bool		bIgnoreReadOnly;	//!< 読み取り専用ファイルを除く
-	bool		bIgnoreSystem;		//!< システムファイルを除く
+	StaticString<TCHAR,_MAX_PATH>	szTargetFile;	// ファイル一覧
+	bool		bIgnoreHidden;		// 隠しファイルを除く
+	bool		bIgnoreReadOnly;	// 読み取り専用ファイルを除く
+	bool		bIgnoreSystem;		// システムファイルを除く
 
 	FileTreeItem()
 		: eFileTreeItemType(FileTreeItemType::Grep)
@@ -555,10 +555,10 @@ public:
 };
 
 struct FileTree {
-	bool		bProject;			//!< プロジェクトファイルモード
-	SFilePath	szProjectIni;		//!< デフォルトiniパス
-	int			nItemCount;			//!< ファイルパス数
-	FileTreeItem	items[20];		//!< ツリーアイテム
+	bool		bProject;			// プロジェクトファイルモード
+	SFilePath	szProjectIni;		// デフォルトiniパス
+	int			nItemCount;			// ファイルパス数
+	FileTreeItem	items[20];		// ツリーアイテム
 };
 
 
@@ -639,24 +639,24 @@ struct CommonSetting_StatusBar {
 
 // プラグイン状態
 enum EPluginState {
-	PLS_NONE,			//!< プラグインテーブルに登録がない
-	PLS_INSTALLED,		//!< 追加された
-	PLS_UPDATED,		//!< 更新された
-	PLS_STOPPED,		//!< 停止している
-	PLS_LOADED,			//!< 読み込まれた
-	PLS_DELETED			//!< 削除された
+	PLS_NONE,			// プラグインテーブルに登録がない
+	PLS_INSTALLED,		// 追加された
+	PLS_UPDATED,		// 更新された
+	PLS_STOPPED,		// 停止している
+	PLS_LOADED,			// 読み込まれた
+	PLS_DELETED			// 削除された
 };
 
 struct PluginRec {
-	WCHAR			szId[MAX_PLUGIN_ID];		//!< プラグインID
-	WCHAR			szName[MAX_PLUGIN_NAME];	//!< プラグインフォルダ/設定ファイル名
-	EPluginState	state;						//!< プラグイン状態。設定ファイルに保存せずメモリ上のみ。
-	int 			nCmdNum;					//!< プラグイン コマンドの数	// 2010/7/3 Uchi
+	WCHAR			szId[MAX_PLUGIN_ID];		// プラグインID
+	WCHAR			szName[MAX_PLUGIN_NAME];	// プラグインフォルダ/設定ファイル名
+	EPluginState	state;						// プラグイン状態。設定ファイルに保存せずメモリ上のみ。
+	int 			nCmdNum;					// プラグイン コマンドの数	// 2010/7/3 Uchi
 };
 
 struct CommonSetting_Plugin {
-	bool			bEnablePlugin;				//!< プラグインを使用するかどうか
-	PluginRec		pluginTable[MAX_PLUGIN];	//!< プラグインテーブル
+	bool			bEnablePlugin;				// プラグインを使用するかどうか
+	PluginRec		pluginTable[MAX_PLUGIN];	// プラグインテーブル
 };
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //

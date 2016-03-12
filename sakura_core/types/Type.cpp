@@ -290,8 +290,8 @@ void _DefaultConfig(TypeConfig* pType)
 	//  保存時に改行コードの混在を警告する	2013/4/14 Uchi
 	pType->bChkEnterAtEnd = true;
 
-	pType->bUseTypeFont = false;			//!< タイプ別フォントの使用
+	pType->bUseTypeFont = false;				// タイプ別フォントの使用
 
-	pType->nLineNumWidth = LINENUMWIDTH_MIN;	//!< 行番号最小桁数 2014.08.02 katze
+	pType->nLineNumWidth = LINENUMWIDTH_MIN;	// 行番号最小桁数 2014.08.02 katze
 }
 

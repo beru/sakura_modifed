@@ -47,9 +47,9 @@ void FuncListManager::SetLineFuncList(DocLine* pDocLine, bool bFlag)
 */
 bool FuncListManager::SearchFuncListMark(
 	const DocLineMgr*	pDocLineMgr,
-	LogicInt			nLineNum,		//!< 検索開始行
+	LogicInt			nLineNum,		// 検索開始行
 	SearchDirection		bPrevOrNext,
-	LogicInt*			pnLineNum 		//!< マッチ行
+	LogicInt*			pnLineNum 		// マッチ行
 	) const
 {
 	LogicInt nLinePos = nLineNum;

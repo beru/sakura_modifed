@@ -37,9 +37,9 @@ public:
 	*/
 	// 2007.08.23 kobake コンストラクタでメンバ変数を初期化するようにした
 	Layout(
-		const DocLine*	pDocLine,		//!< 実データへの参照
-		LogicPoint		ptLogicPos,		//!< 実データ参照位置
-		LogicInt		nLength,		//!< 実データ内データ長
+		const DocLine*	pDocLine,		// 実データへの参照
+		LogicPoint		ptLogicPos,		// 実データ参照位置
+		LogicInt		nLength,		// 実データ内データ長
 		EColorIndexType	nTypePrev,
 		LayoutInt		nTypeIndent,
 		LayoutColorInfo*	pColorInfo
@@ -62,7 +62,7 @@ public:
 	LogicInt GetLengthWithEOL() const { return m_nLength;	}	//	ただしEOLは常に1文字とカウント？？
 	LogicInt GetLengthWithoutEOL() const { return m_nLength - (m_eol.GetLen() ? 1 : 0);	}
 	//LogicInt GetLength() const { return m_nLength; }	// CMemoryIterator用（EOL含む）
-	LayoutInt GetIndent() const { return m_nIndent; }	//!< このレイアウト行のインデントサイズを取得。単位は半角文字。	CMemoryIterator用
+	LayoutInt GetIndent() const { return m_nIndent; }	// このレイアウト行のインデントサイズを取得。単位は半角文字。	CMemoryIterator用
 
 	// 取得インターフェース
 	LogicInt GetLogicLineNo() const { if (this) return m_ptLogicPos.GetY2(); else return LogicInt(-1); } //$$$高速化
@@ -112,16 +112,16 @@ private:
 	Layout*			m_pNext;
 
 	// データ参照範囲
-	const DocLine*		m_pDocLine;		//!< 実データへの参照
-	LogicPoint			m_ptLogicPos;		//!< 対応するロジック参照位置
-	LogicInt			m_nLength;			//!< このレイアウト行の長さ。文字単位。
+	const DocLine*		m_pDocLine;			// 実データへの参照
+	LogicPoint			m_ptLogicPos;		// 対応するロジック参照位置
+	LogicInt			m_nLength;			// このレイアウト行の長さ。文字単位。
 	
 	// その他属性
-	EColorIndexType		m_nTypePrev;		//!< タイプ 0=通常 1=行コメント 2=ブロックコメント 3=シングルクォーテーション文字列 4=ダブルクォーテーション文字列
-	LayoutInt			m_nIndent;			//!< このレイアウト行のインデント数 @@@ 2002.09.23 YAZAKI
+	EColorIndexType		m_nTypePrev;		// タイプ 0=通常 1=行コメント 2=ブロックコメント 3=シングルクォーテーション文字列 4=ダブルクォーテーション文字列
+	LayoutInt			m_nIndent;			// このレイアウト行のインデント数 @@@ 2002.09.23 YAZAKI
 	Eol					m_eol;
-	LayoutInt			m_nLayoutWidth;		//!< このレイアウト行の改行を含むレイアウト長（「折り返さない」選択時のみ）	// 2009.08.28 nasukoji
-	LayoutExInfo		m_exInfo;			//!< 色分け詳細情報
+	LayoutInt			m_nLayoutWidth;		// このレイアウト行の改行を含むレイアウト長（「折り返さない」選択時のみ）	// 2009.08.28 nasukoji
+	LayoutExInfo		m_exInfo;			// 色分け詳細情報
 
 private:
 	DISALLOW_COPY_AND_ASSIGN(Layout);

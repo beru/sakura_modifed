@@ -36,8 +36,8 @@ public:
 	bool		m_bPaste;
 	bool		m_bBackup;
 
-	std::wstring	m_strText2;				//!< 置換後
-	int				nReplaceKeySequence;	//!< 置換後シーケンス
+	std::wstring	m_strText2;				// 置換後
+	int				nReplaceKeySequence;	// 置換後シーケンス
 
 protected:
 	FontAutoDeleter		m_fontText2;

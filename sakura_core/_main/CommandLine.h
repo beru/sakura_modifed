@@ -115,7 +115,7 @@ private:
 	int			m_nGroup;			// グループID	// 2007.06.26 ryoji
 	NativeW	m_mMacro;				// [out] マクロファイル名／マクロ文
 	NativeW	m_mMacroType;			// [out] マクロ種別
-	NativeW	m_mProfile;			// プロファイル名
-	std::vector<std::tstring> m_fileNames;	//!< ファイル名(複数)
+	NativeW	m_mProfile;				// プロファイル名
+	std::vector<std::tstring> m_fileNames;	// ファイル名(複数)
 };
 

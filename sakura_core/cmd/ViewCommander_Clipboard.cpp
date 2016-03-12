@@ -163,13 +163,13 @@ void ViewCommander::Command_PASTE(int option)
 	auto& commonSetting = GetDllShareData().common;
 	// クリップボードからデータを取得 -> memClip, bColumnSelect
 	NativeW	memClip;
-	bool		bColumnSelect;
-	bool		bLineSelect = false;
-	bool		bLineSelectOption = 
+	bool	bColumnSelect;
+	bool	bLineSelect = false;
+	bool	bLineSelectOption = 
 		((option & 0x04) == 0x04) ? true :
 		((option & 0x08) == 0x08) ? false :
 		commonSetting.edit.bEnableLineModePaste;
-
+	
 	if (!m_pCommanderView->MyGetClipboardData(memClip, &bColumnSelect, bLineSelectOption ? &bLineSelect: NULL)) {
 		ErrorBeep();
 		return;

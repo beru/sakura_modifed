@@ -41,10 +41,10 @@ enum class FileTreeSettingFromType {
 
 class FileTreeSetting {
 public:
-	std::vector<FileTreeItem>	items;		//!< ツリーアイテム
-	bool		bProject;				//!< プロジェクトファイルモード
-	SFilePath	m_szDefaultProjectIni;	//!< デフォルトiniファイル名
-	SFilePath	m_szLoadProjectIni;		//!< 現在読み込んでいるiniファイル名
+	std::vector<FileTreeItem>	items;	// ツリーアイテム
+	bool		bProject;				// プロジェクトファイルモード
+	SFilePath	m_szDefaultProjectIni;	// デフォルトiniファイル名
+	SFilePath	m_szLoadProjectIni;		// 現在読み込んでいるiniファイル名
 	FileTreeSettingFromType	m_eFileTreeSettingOrgType;
 	FileTreeSettingFromType	m_eFileTreeSettingLoadType;
 };
@@ -100,8 +100,8 @@ protected:
 	LayoutInt		m_nCurLine;			// 現在行
 	LayoutInt		m_nCurCol;			// 現在桁
 	int				m_nSortCol;			// ソートする列番号
-	int				m_nSortColOld;		//!< ソートする列番号(OLD)
-	bool			m_bSortDesc;		//!< 降順
+	int				m_nSortColOld;		// ソートする列番号(OLD)
+	bool			m_bSortDesc;		// 降順
 	NativeW			m_memClipText;		// クリップボードコピー用テキスト
 	bool			m_bLineNumIsCRLF;	// 行番号の表示 false=折り返し単位／true=改行単位
 	OutlineType		m_nListType;		// 一覧の種類
@@ -134,7 +134,7 @@ protected:
 
 	void SetTreeFileSub( HTREEITEM, const TCHAR* );
 	// 2002/11/1 frozen 
-	void SortTree(HWND hWndTree, HTREEITEM htiParent);//!< ツリービューの項目をソートする（ソート基準はm_nSortTypeを使用）
+	void SortTree(HWND hWndTree, HTREEITEM htiParent);	// ツリービューの項目をソートする（ソート基準はm_nSortTypeを使用）
 #if 0
 2002.04.01 YAZAKI SetTreeTxt()、SetTreeTxtNest()は廃止。GetTreeTextNextはもともと使用されていなかった。
 	void SetTreeTxt(HWND);	// ツリーコントロールの初期化：テキストトピックツリー
@@ -199,7 +199,7 @@ private:
 	bool		m_bTimerJumpAutoClose;
 
 	DockSideType	m_eDockSide;	// 現在の画面の表示位置
-	HWND		m_hwndToolTip;	//!< ツールチップ（ボタン用）
+	HWND		m_hwndToolTip;		// ツールチップ（ボタン用）
 	bool		m_bStretching;
 	bool		m_bHovering;
 	int			m_nHilightedBtn;

@@ -1625,13 +1625,13 @@ void PrintPreview::InitPreviewScrollBar(void)
 */
 ColorStrategy* PrintPreview::Print_DrawLine(
 	HDC				hdc,
-	POINT			ptDraw, //!< 描画座標。HDC内部単位。
+	POINT			ptDraw,		// 描画座標。HDC内部単位。
 	const wchar_t*	pLine,
 	int				nDocLineLen,
 	int				nLineStart,
 	int				nLineLen,
-	LayoutInt		nIndent,  // 2006.08.14 Moca 追加
-	const Layout*	pLayout,	//!< 色付用Layout
+	LayoutInt		nIndent,	// 2006.08.14 Moca 追加
+	const Layout*	pLayout,	// 色付用Layout
 	ColorStrategy*	pStrategyStart
 	)
 {
@@ -1696,11 +1696,11 @@ ColorStrategy* PrintPreview::Print_DrawLine(
 			if (0 < iLogic - nBgnLogic) {
 				Print_DrawBlock(
 					hdc,
-					ptDraw,		//!< 描画座標。HDC内部単位。
+					ptDraw,		// 描画座標。HDC内部単位。
 					pLine + nLineStart,
 					iLogic - nBgnLogic,
 					nKindLast,
-					pLayout,	//!< 色設定用Layout
+					pLayout,	// 色設定用Layout
 					nColorIdx,
 					nBgnLogic - nLineStart,
 					nLayoutX,
@@ -1733,11 +1733,11 @@ ColorStrategy* PrintPreview::Print_DrawLine(
 	if (0 < nLineStart + nLineLen - nBgnLogic) {
 		Print_DrawBlock(
 			hdc,
-			ptDraw,		//!< 描画座標。HDC内部単位。
+			ptDraw,		// 描画座標。HDC内部単位。
 			pLine + nLineStart,
 			nLineStart + nLineLen - nBgnLogic,
 			nKindLast,
-			pLayout,	//!< 色設定用Layout
+			pLayout,	// 色設定用Layout
 			nColorIdx,
 			nBgnLogic - nLineStart,
 			nLayoutX,
@@ -1769,11 +1769,11 @@ ColorStrategy* PrintPreview::Print_DrawLine(
 */
 void PrintPreview::Print_DrawBlock(
 	HDC				hdc,
-	POINT			ptDraw,		//!< 描画座標。HDC内部単位。
+	POINT			ptDraw,		// 描画座標。HDC内部単位。
 	const wchar_t*	pPhysicalLine,
 	int				nBlockLen,	// iLogic - nBgnLogic
 	int				nKind,
-	const Layout*	pLayout,	//!< 色設定用Layout
+	const Layout*	pLayout,	// 色設定用Layout
 	int				nColorIdx,
 	int				nBgnPhysical,	// nBgnLogic - nLineStart
 	LayoutInt		nLayoutX,

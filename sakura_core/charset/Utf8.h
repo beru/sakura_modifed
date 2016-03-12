@@ -32,15 +32,15 @@ class Utf8 : public CodeBase {
 public:
 
 	// CodeBaseインターフェース
-	CodeConvertResult CodeToUnicode(const Memory& src, NativeW* pDst) {	//!< 特定コード → UNICODE    変換
+	CodeConvertResult CodeToUnicode(const Memory& src, NativeW* pDst) {	// 特定コード → UNICODE    変換
 		return UTF8ToUnicode(src, pDst);
 	}
-	CodeConvertResult UnicodeToCode(const NativeW& src, Memory* pDst) {	//!< UNICODE    → 特定コード 変換
+	CodeConvertResult UnicodeToCode(const NativeW& src, Memory* pDst) {	// UNICODE    → 特定コード 変換
 		return UnicodeToUTF8(src, pDst);
 	}
-	void GetBom(Memory* pMemBom);																			//!< BOMデータ取得
+	void GetBom(Memory* pMemBom);										// BOMデータ取得
 	void GetEol(Memory* pMemEol, EolType eolType);
-	CodeConvertResult _UnicodeToHex(const wchar_t* src, const int iSLen, TCHAR* pDst, const CommonSetting_StatusBar* psStatusbar, const bool CESU8Mode);			//!< UNICODE → Hex 変換
+	CodeConvertResult _UnicodeToHex(const wchar_t* src, const int iSLen, TCHAR* pDst, const CommonSetting_StatusBar* psStatusbar, const bool CESU8Mode);			// UNICODE → Hex 変換
 	CodeConvertResult UnicodeToHex(const wchar_t* ps, const int nsl, TCHAR* pd, const CommonSetting_StatusBar* psStatusbar){ return _UnicodeToHex(ps, nsl, pd, psStatusbar, false); }
 
 public:

@@ -113,18 +113,18 @@ public:
 		int				nGroup
 	);
 	void _GetTabGroupInfo(TabGroupInfo* pTabGroupInfo, int& nGroup);
-	void _GetWindowRectForInit(Rect* rcResult, int nGroup, const TabGroupInfo& tabGroupInfo);	//!< ウィンドウ生成用の矩形を取得
+	void _GetWindowRectForInit(Rect* rcResult, int nGroup, const TabGroupInfo& tabGroupInfo);	// ウィンドウ生成用の矩形を取得
 	HWND _CreateMainWindow(int nGroup, const TabGroupInfo& tabGroupInfo);
 	void _AdjustInMonitor(const TabGroupInfo& tabGroupInfo);
 
 	void OpenDocumentWhenStart(
-		const LoadInfo& loadInfo		//!< [in]
+		const LoadInfo& loadInfo		// [in]
 	);
 
 	void SetDocumentTypeWhenCreate(
-		EncodingType		nCharCode,					//!< [in] 漢字コード
-		bool			bViewMode,					//!< [in] ビューモードで開くかどうか
-		TypeConfigNum	nDocumentType = TypeConfigNum(-1)	//!< [in] 文書タイプ．-1のとき強制指定無し．
+		EncodingType		nCharCode,						// [in] 漢字コード
+		bool			bViewMode,							// [in] ビューモードで開くかどうか
+		TypeConfigNum	nDocumentType = TypeConfigNum(-1)	// [in] 文書タイプ．-1のとき強制指定無し．
 	);
 	void UpdateCaption();
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -174,8 +174,8 @@ public:
 	void InitMenu_Function(HMENU , EFunctionCode, const wchar_t*, const wchar_t*);
 	bool InitMenu_Special(HMENU , EFunctionCode);
 	void InitMenubarMessageFont(void);			//	メニューバーへのメッセージ表示機能をEditWndより移管	//	Dec. 4, 2002 genta
-	LRESULT WinListMenu(HMENU hMenu, EditNode* pEditNodeArr, int nRowNum, bool bFull);	//!< ウィンドウ一覧メニュー作成処理		2006.03.23 fon
-	LRESULT PopupWinList(bool bMousePos);		//!< ウィンドウ一覧ポップアップ表示処理		2006.03.23 fon	// 2007.02.28 ryoji フルパス指定のパラメータを削除
+	LRESULT WinListMenu(HMENU hMenu, EditNode* pEditNodeArr, int nRowNum, bool bFull);	// ウィンドウ一覧メニュー作成処理		2006.03.23 fon
+	LRESULT PopupWinList(bool bMousePos);		// ウィンドウ一覧ポップアップ表示処理		2006.03.23 fon	// 2007.02.28 ryoji フルパス指定のパラメータを削除
 	void RegisterPluginCommand();				// プラグインコマンドをエディタに登録する
 	void RegisterPluginCommand(int id);			// プラグインコマンドをエディタに登録する
 	void RegisterPluginCommand(Plug* id);		// プラグインコマンドをエディタに登録する
@@ -258,7 +258,7 @@ public:
 	LogicPointEx* SavePhysPosOfAllView();
 	void RestorePhysPosOfAllView(LogicPointEx* pptPosArray);
 	// 互換BMPによる画面バッファ 2007.09.09 Moca
-	void Views_DeleteCompatibleBitmap(); //!< EditViewの画面バッファを削除
+	void Views_DeleteCompatibleBitmap(); // EditViewの画面バッファを削除
 	
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                       各種アクセサ                          //
@@ -349,16 +349,16 @@ private:
 
 public:
 	// 子ウィンドウ
-	MainToolBar		m_toolbar;			//!< ツールバー
-	TabWnd			m_tabWnd;			//!< タブウィンドウ	//@@@ 2003.05.31 MIK
-	FuncKeyWnd		m_funcKeyWnd;		//!< ファンクションバー
-	MainStatusBar	m_statusBar;		//!< ステータスバー
-	PrintPreview*	m_pPrintPreview;	//!< 印刷プレビュー表示情報。必要になったときのみインスタンスを生成する。
+	MainToolBar		m_toolbar;			// ツールバー
+	TabWnd			m_tabWnd;			// タブウィンドウ	//@@@ 2003.05.31 MIK
+	FuncKeyWnd		m_funcKeyWnd;		// ファンクションバー
+	MainStatusBar	m_statusBar;		// ステータスバー
+	PrintPreview*	m_pPrintPreview;	// 印刷プレビュー表示情報。必要になったときのみインスタンスを生成する。
 
-	SplitterWnd		m_splitterWnd;		//!< 分割フレーム
-	EditView*		m_pDragSourceView;	//!< ドラッグ元のビュー
-	ViewFont*		m_pViewFont;		//!< フォント
-	ViewFont*		m_pViewFontMiniMap;		//!< フォント
+	SplitterWnd		m_splitterWnd;		// 分割フレーム
+	EditView*		m_pDragSourceView;	// ドラッグ元のビュー
+	ViewFont*		m_pViewFont;		// フォント
+	ViewFont*		m_pViewFontMiniMap;	// フォント
 
 	// ダイアログ達
 	DlgFind			m_dlgFind;			//「検索」ダイアログ
@@ -367,18 +367,18 @@ public:
 	DlgGrep			m_dlgGrep;			// Grepダイアログ
 	DlgGrepReplace	m_dlgGrepReplace;	// Grep置換ダイアログ
 	DlgFuncList		m_dlgFuncList;		// アウトライン解析結果ダイアログ
-	HokanMgr		m_hokanMgr;		// 入力補完
+	HokanMgr		m_hokanMgr;			// 入力補完
 	DlgSetCharSet	m_dlgSetCharSet;	//「文字コードセット設定」ダイアログ
 
 private:
 	// 2010.04.10 Moca  public -> private. 起動直後は[0]のみ有効 4つとは限らないので注意
 	EditDoc* 		m_pEditDoc;
-	EditView*		m_pEditViewArr[4];		//!< ビュー
-	EditView*		m_pEditView;			//!< 有効なビュー
-	EditView*		m_pEditViewMiniMap;	//!< ミニマップ
-	int				m_nActivePaneIndex;		//!< 有効なビューのindex
-	int				m_nEditViewCount;		//!< 有効なビューの数
-	const int		m_nEditViewMaxCount;	//!< ビューの最大数=4
+	EditView*		m_pEditViewArr[4];		// ビュー
+	EditView*		m_pEditView;			// 有効なビュー
+	EditView*		m_pEditViewMiniMap;		// ミニマップ
+	int				m_nActivePaneIndex;		// 有効なビューのindex
+	int				m_nEditViewCount;		// 有効なビューの数
+	const int		m_nEditViewMaxCount;	// ビューの最大数=4
 
 	// 共有データ
 	DllSharedData*	m_pShareData;
@@ -391,24 +391,24 @@ private:
 	UINT			m_uATOKReconvertMsg;
 
 	// 状態
-	bool			m_bIsActiveApp;			//!< 自アプリがアクティブかどうか	// 2007.03.08 ryoji
+	bool			m_bIsActiveApp;			// 自アプリがアクティブかどうか	// 2007.03.08 ryoji
 	LPTSTR			m_pszLastCaption;
-	LPTSTR			m_pszMenubarMessage;	//!< メニューバー右端に表示するメッセージ
+	LPTSTR			m_pszMenubarMessage;	// メニューバー右端に表示するメッセージ
 public:
-	int				m_nTimerCount;			//!< OnTimer用 2003.08.29 wmlhq
+	int				m_nTimerCount;			// OnTimer用 2003.08.29 wmlhq
 	LogicPointEx*	m_posSaveAry;
 private:
-	int				m_nCurrentFocus;	//!< 現在のフォーカス情報
-	int				nWinSizeType;		//!< サイズ変更のタイプ。SIZE_MAXIMIZED, SIZE_MINIMIZED 等。
-	BOOL			m_bPageScrollByWheel;		//!< ホイール操作によるページスクロールあり	// 2009.01.17 nasukoji
-	BOOL			m_bHorizontalScrollByWheel;	//!< ホイール操作による横スクロールあり		// 2009.01.17 nasukoji
-	HACCEL			m_hAccelWine;		//!< ウィンドウ毎のアクセラレータテーブルのハンドル(Wine用)	// 2009.08.15 nasukoji
-	HACCEL			m_hAccel;			//!< アクセラレータテーブル(共有 or ウィンドウ毎)
+	int				m_nCurrentFocus;			// 現在のフォーカス情報
+	int				nWinSizeType;				// サイズ変更のタイプ。SIZE_MAXIMIZED, SIZE_MINIMIZED 等。
+	BOOL			m_bPageScrollByWheel;		// ホイール操作によるページスクロールあり	// 2009.01.17 nasukoji
+	BOOL			m_bHorizontalScrollByWheel;	// ホイール操作による横スクロールあり		// 2009.01.17 nasukoji
+	HACCEL			m_hAccelWine;				// ウィンドウ毎のアクセラレータテーブルのハンドル(Wine用)	// 2009.08.15 nasukoji
+	HACCEL			m_hAccel;					// アクセラレータテーブル(共有 or ウィンドウ毎)
 
 	// フォント・イメージ
-	HFONT			m_hFontCaretPosInfo;		//!< キャレットの行桁位置表示用フォント
-	int				m_nCaretPosInfoCharWidth;	//!< キャレットの行桁位置表示用フォントの幅
-	int				m_nCaretPosInfoCharHeight;	//!< キャレットの行桁位置表示用フォントの高さ
+	HFONT			m_hFontCaretPosInfo;		// キャレットの行桁位置表示用フォント
+	int				m_nCaretPosInfoCharWidth;	// キャレットの行桁位置表示用フォントの幅
+	int				m_nCaretPosInfoCharHeight;	// キャレットの行桁位置表示用フォントの高さ
 
 	// D&Dフラグ
 	bool			m_bDragMode;

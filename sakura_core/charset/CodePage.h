@@ -55,11 +55,11 @@ public:
 	CodePage(int codepageEx) : m_nCodePageEx(codepageEx) { }
 	
 	//CodeBaseインターフェース
-	CodeConvertResult CodeToUnicode(const Memory& src, NativeW* pDst){ return CPToUnicode(src, pDst, m_nCodePageEx); }	//!< 特定コード → UNICODE    変換
-	CodeConvertResult UnicodeToCode(const NativeW& src, Memory* pDst){ return UnicodeToCP(src, pDst, m_nCodePageEx); }	//!< UNICODE    → 特定コード 変換
-	void GetEol(Memory* pMemEol, EolType eolType);	//!< 改行データ取得
-	void GetBom(Memory* pMemBom);	//!< BOMデータ取得
-	CodeConvertResult UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR* pDst, const CommonSetting_StatusBar* psStatusbar);			//!< UNICODE → Hex 変換
+	CodeConvertResult CodeToUnicode(const Memory& src, NativeW* pDst){ return CPToUnicode(src, pDst, m_nCodePageEx); }	// 特定コード → UNICODE    変換
+	CodeConvertResult UnicodeToCode(const NativeW& src, Memory* pDst){ return UnicodeToCP(src, pDst, m_nCodePageEx); }	// UNICODE    → 特定コード 変換
+	void GetEol(Memory* pMemEol, EolType eolType);	// 改行データ取得
+	void GetBom(Memory* pMemBom);	// BOMデータ取得
+	CodeConvertResult UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR* pDst, const CommonSetting_StatusBar* psStatusbar);			// UNICODE → Hex 変換
 
 public:
 	//実装

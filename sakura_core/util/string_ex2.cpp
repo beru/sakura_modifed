@@ -141,11 +141,11 @@ const char* GetNextLine(
 	static メンバ関数
 */
 const wchar_t* GetNextLineW(
-	const wchar_t*	pData,		//!< [in]	検索文字列
-	int				nDataLen,	//!< [in]	検索文字列の文字数
-	int*			pnLineLen,	//!< [out]	1行の文字数を返すただしEOLは含まない
-	int*			pnBgn,		//!< [i/o]	検索文字列のオフセット位置
-	Eol*			pEol,		//!< [out]	EOL
+	const wchar_t*	pData,		// [in]		検索文字列
+	int				nDataLen,	// [in]		検索文字列の文字数
+	int*			pnLineLen,	// [out]	1行の文字数を返すただしEOLは含まない
+	int*			pnBgn,		// [i/o]	検索文字列のオフセット位置
+	Eol*			pEol,		// [out]	EOL
 	bool			bExtEol
 	)
 {
@@ -201,11 +201,11 @@ static EolType GetEOLTypeUniBE(const wchar_t* pszData, int nDataLen)
 	static メンバ関数
 */
 const wchar_t* GetNextLineWB(
-	const wchar_t*	pData,	//!< [in]	検索文字列
-	int			nDataLen,	//!< [in]	検索文字列の文字数
-	int*		pnLineLen,	//!< [out]	1行の文字数を返すただしEOLは含まない
-	int*		pnBgn,		//!< [i/o]	検索文字列のオフセット位置
-	Eol*		pEol		//!< [i/o]	EOL
+	const wchar_t*	pData,	// [in]	検索文字列
+	int			nDataLen,	// [in]	検索文字列の文字数
+	int*		pnLineLen,	// [out]	1行の文字数を返すただしEOLは含まない
+	int*		pnBgn,		// [i/o]	検索文字列のオフセット位置
+	Eol*		pEol		// [i/o]	EOL
 	)
 {
 	int nBgn = *pnBgn;
@@ -271,10 +271,10 @@ const char* GetNextLimitedLengthText(
 
 //! データを指定「文字数」以内に切り詰める。戻り値は結果の文字数。
 int LimitStringLengthW(
-	const wchar_t*	pszData,		//!< [in]
-	int				nDataLength,	//!< [in]
-	int				nLimitLength,	//!< [in]
-	NativeW&		memDes			//!< [out]
+	const wchar_t*	pszData,		// [in]
+	int				nDataLength,	// [in]
+	int				nLimitLength,	// [in]
+	NativeW&		memDes			// [out]
 	)
 {
 	int n = nDataLength;
@@ -358,9 +358,9 @@ void GetLineColumn(
 		// 結果: a[0]=1, a[1]=23, a[2]=4 となる。
 */
 int scan_ints(
-	const wchar_t*	pszData,	//!< [in]
-	const wchar_t*	pszFormat,	//!< [in]
-	int*			anBuf		//!< [out]
+	const wchar_t*	pszData,	// [in]
+	const wchar_t*	pszFormat,	// [in]
+	int*			anBuf		// [out]
 	)
 {
 	// 要素数

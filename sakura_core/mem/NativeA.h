@@ -33,17 +33,17 @@ public:
 	NativeA(const char* pData, int nLength);
 
 	// ネイティブ設定
-	void SetString(const char* pszData);                  //!< バッファの内容を置き換える
-	void SetString(const char* pData, int nDataLen);      //!< バッファの内容を置き換える。nDataLenは文字単位。
-	void SetNativeData(const NativeA& pcNative);         //!< バッファの内容を置き換える
-	void AppendString(const char* pszData);               //!< バッファの最後にデータを追加する
-	void AppendString(const char* pszData, int nLength);  //!< バッファの最後にデータを追加する。nLengthは文字単位。
-	void AppendNativeData(const NativeA& pcNative);      //!< バッファの最後にデータを追加する
-	void AllocStringBuffer(int nDataLen);            //!< (重要：nDataLenは文字単位) バッファサイズの調整。必要に応じて拡大する。
+	void SetString(const char* pszData);					// バッファの内容を置き換える
+	void SetString(const char* pData, int nDataLen);		// バッファの内容を置き換える。nDataLenは文字単位。
+	void SetNativeData(const NativeA& pcNative);			// バッファの内容を置き換える
+	void AppendString(const char* pszData);					// バッファの最後にデータを追加する
+	void AppendString(const char* pszData, int nLength);	// バッファの最後にデータを追加する。nLengthは文字単位。
+	void AppendNativeData(const NativeA& pcNative);			// バッファの最後にデータを追加する
+	void AllocStringBuffer(int nDataLen);					// (重要：nDataLenは文字単位) バッファサイズの調整。必要に応じて拡大する。
 
 	// ネイティブ取得
 	int GetStringLength() const;
-	char operator[](int nIndex) const;                 //!< 任意位置の文字取得。nIndexは文字単位。
+	char operator[](int nIndex) const;						// 任意位置の文字取得。nIndexは文字単位。
 	const char* GetStringPtr() const {
 		return reinterpret_cast<const char*>(GetRawPtr());
 	}
@@ -61,8 +61,8 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 	// ネイティブ変換
-	void Replace(const char* pszFrom, const char* pszTo);   //!< 文字列置換
-	void Replace_j(const char* pszFrom, const char* pszTo); //!< 文字列置換（日本語考慮版）
+	void Replace(const char* pszFrom, const char* pszTo);   // 文字列置換
+	void Replace_j(const char* pszFrom, const char* pszTo); // 文字列置換（日本語考慮版）
 	void ReplaceT( const char* pszFrom, const char* pszTo ){
 		Replace_j( pszFrom, pszTo );
 	}
@@ -87,8 +87,8 @@ public:
 	// WCHAR
 	void SetStringNew(const wchar_t* wszData, int nDataLen);
 	void SetStringNew(const wchar_t* wszData);
-	void AppendStringNew(const wchar_t* pszData);               //!< バッファの最後にデータを追加する
-	void AppendStringNew(const wchar_t* pszData, int nDataLen); //!< バッファの最後にデータを追加する。nDataLenは文字単位。
+	void AppendStringNew(const wchar_t* pszData);               // バッファの最後にデータを追加する
+	void AppendStringNew(const wchar_t* pszData, int nDataLen); // バッファの最後にデータを追加する。nDataLenは文字単位。
 	void SetStringW(const wchar_t* pszData)					{ return SetStringNew(pszData); }
 	void SetStringW(const wchar_t* pData, int nLength)		{ return SetStringNew(pData, nLength); }
 	void AppendStringW(const wchar_t* pszData)				{ return AppendStringNew(pszData); }
@@ -106,8 +106,8 @@ public:
 
 public:
 	// -- -- staticインターフェース -- -- //
-	static int GetSizeOfChar(const char* pData, int nDataLen, int nIdx); //!< 指定した位置の文字が何バイト文字かを返す
-	static const char* GetCharNext(const char* pData, int nDataLen, const char* pDataCurrent); //!< ポインタで示した文字の次にある文字の位置を返します
-	static const char* GetCharPrev(const char* pData, int nDataLen, const char* pDataCurrent); //!< ポインタで示した文字の直前にある文字の位置を返します
+	static int GetSizeOfChar(const char* pData, int nDataLen, int nIdx); // 指定した位置の文字が何バイト文字かを返す
+	static const char* GetCharNext(const char* pData, int nDataLen, const char* pDataCurrent); // ポインタで示した文字の次にある文字の位置を返します
+	static const char* GetCharPrev(const char* pData, int nDataLen, const char* pDataCurrent); // ポインタで示した文字の直前にある文字の位置を返します
 };
 

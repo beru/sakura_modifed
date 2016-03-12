@@ -74,18 +74,18 @@
 	@date 2006.10.25 ryoji オプション文字列の大文字小文字を区別しない
 */
 int CommandLine::CheckCommandLine(
-	LPTSTR	str,		//!< [in] 検証する文字列（先頭の-は含まない）
-	TCHAR** arg,		//!< [out] 引数がある場合はその先頭へのポインタ
-	int*	arglen		//!< [out] 引数の長さ
+	LPTSTR	str,		// [in] 検証する文字列（先頭の-は含まない）
+	TCHAR** arg,		// [out] 引数がある場合はその先頭へのポインタ
+	int*	arglen		// [out] 引数の長さ
 	)
 {
 	/*!
 		コマンドラインオプション解析用構造体配列
 	*/
 	struct _CmdLineOpt {
-		LPCTSTR opt;	//!< オプション文字列
-		int len;		//!< オプションの文字列長（計算を省くため）
-		int value;		//!< 変換後の値
+		LPCTSTR opt;	// オプション文字列
+		int len;		// オプションの文字列長（計算を省くため）
+		int value;		// 変換後の値
 		bool bLen0;
 	};
 
@@ -120,7 +120,7 @@ int CommandLine::CheckCommandLine(
 		{_T("WX"),		2,			CMDLINEOPT_WX, false},
 		{_T("WY"),		2,			CMDLINEOPT_WY, false},
 		{_T("CODE"),	4,			CMDLINEOPT_CODE, false},	// 2002/09/20 Moca _COptWoAから移動
-		{_T("TYPE"),	4,			CMDLINEOPT_TYPE, false},	//!< タイプ別設定 Mar. 7, 2002 genta
+		{_T("TYPE"),	4,			CMDLINEOPT_TYPE, false},	// タイプ別設定 Mar. 7, 2002 genta
 		{_T("GKEY"),	4,			CMDLINEOPT_GKEY, false},
 		{_T("GREPR"),	5,			CMDLINEOPT_GREPR, true},
 		{_T("GFILE"),	5,			CMDLINEOPT_GFILE, false},

@@ -83,11 +83,11 @@ public:
 
 public:
 	EditDoc*		m_pDocRef;
-	Eol 			m_newLineCode;				//!< Enter押下時に挿入する改行コード種別
-	OpeBuf			m_opeBuf;					//!< アンドゥバッファ
-	OpeBlk*			m_pOpeBlk;					//!< 操作ブロック
-	int				m_nOpeBlkRedawCount;		//!< OpeBlkの再描画非対象数
-	bool			m_bInsMode;					//!< 挿入・上書きモード Oct. 2, 2005 genta
+	Eol 			m_newLineCode;				// Enter押下時に挿入する改行コード種別
+	OpeBuf			m_opeBuf;					// アンドゥバッファ
+	OpeBlk*			m_pOpeBlk;					// 操作ブロック
+	int				m_nOpeBlkRedawCount;		// OpeBlkの再描画非対象数
+	bool			m_bInsMode;					// 挿入・上書きモード Oct. 2, 2005 genta
 	bool			m_bIsDocModified;
 };
 

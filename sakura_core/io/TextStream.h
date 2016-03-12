@@ -44,10 +44,10 @@ public:
 	virtual ~TextInputStream();
 
 	// 操作
-	std::wstring ReadLineW(); //!< 1行読込。改行は削る
+	std::wstring ReadLineW(); // 1行読込。改行は削る
 
 private:
-	bool m_bIsUtf8; //!< UTF-8ならtrue
+	bool m_bIsUtf8; // UTF-8ならtrue
 };
 
 // テキスト出力ストリーム
