@@ -779,7 +779,7 @@ void ViewCommander::Command_REDO(void)
 	}
 
 	caret.m_nCaretPosX_Prev = GetCaret().GetCaretLayoutPos().x;	// 2007.10.11 ryoji ’Ç‰Á
-	m_pCommanderView->m_bDoing_UndoRedo = FALSE;	// Undo, Redo‚ÌÀs’†‚©
+	m_pCommanderView->m_bDoing_UndoRedo = false;	// Undo, Redo‚ÌÀs’†‚©
 
 	return;
 }

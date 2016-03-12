@@ -79,7 +79,7 @@ retry:;
 	}else {
 		InfoBeep(); // 2010.04.03 Error→Info
 		m_pCommanderView->SendStatusMessage(LS(STR_SUPPORT_NOT_COMPLITE)); // 2010.05.29 ステータスで表示
-		csHelper.bUseHokan = FALSE;	// 入力補完終了のお知らせ
+		csHelper.bUseHokan = false;	// 入力補完終了のお知らせ
 	}
 	return;
 }

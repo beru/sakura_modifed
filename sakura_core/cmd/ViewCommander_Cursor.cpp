@@ -89,7 +89,7 @@ int ViewCommander::Command_UP(bool bSelect, bool bRepeat, int lines)
 	auto& caret = GetCaret();
 	// From Here Oct. 24, 2001 genta
 	if (lines != 0) {
-		caret.Cursor_UPDOWN(LayoutInt(lines), FALSE);
+		caret.Cursor_UPDOWN(LayoutInt(lines), false);
 		return 1;
 	}
 	// To Here Oct. 24, 2001 genta
@@ -981,9 +981,9 @@ void ViewCommander::Command_WndScrollDown(void)
 		// カーソルが画面外に出た
 		if (caret.GetCaretLayoutPos().GetY() > textArea.m_nViewRowNum + textArea.GetViewTopLine() - nCaretMarginY) {
 			if (caret.GetCaretLayoutPos().GetY() > GetDocument()->m_layoutMgr.GetLineCount() - nCaretMarginY) {
-				caret.Cursor_UPDOWN((GetDocument()->m_layoutMgr.GetLineCount() - nCaretMarginY) - caret.GetCaretLayoutPos().GetY2(), FALSE);
+				caret.Cursor_UPDOWN((GetDocument()->m_layoutMgr.GetLineCount() - nCaretMarginY) - caret.GetCaretLayoutPos().GetY2(), false);
 			}else {
-				caret.Cursor_UPDOWN(LayoutInt(-1), FALSE);
+				caret.Cursor_UPDOWN(LayoutInt(-1), false);
 			}
 			caret.ShowCaretPosInfo();
 		}
@@ -1020,9 +1020,9 @@ void ViewCommander::Command_WndScrollUp(void)
 		// カーソルが画面外に出た
 		if (GetCaret().GetCaretLayoutPos().GetY() < textArea.GetViewTopLine() + nCaretMarginY) {
 			if (textArea.GetViewTopLine() == 1) {
-				GetCaret().Cursor_UPDOWN(nCaretMarginY + 1, FALSE);
+				GetCaret().Cursor_UPDOWN(nCaretMarginY + 1, false);
 			}else {
-				GetCaret().Cursor_UPDOWN(LayoutInt(1), FALSE);
+				GetCaret().Cursor_UPDOWN(LayoutInt(1), false);
 			}
 			GetCaret().ShowCaretPosInfo();
 		}

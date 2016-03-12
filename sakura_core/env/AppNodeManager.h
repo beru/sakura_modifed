@@ -82,7 +82,7 @@ public:
 
 	EditNode* GetTopEditNode() { return GetEditNodeAt(0); }	//
 	EditNode* GetEditNodeAt(int nIndex);					// 指定位置の編集ウィンドウ情報を取得する
-	BOOL AddEditWndList(HWND);								// 編集ウィンドウの登録	// 2007.06.26 ryoji nGroup引数追加
+	bool AddEditWndList(HWND);								// 編集ウィンドウの登録	// 2007.06.26 ryoji nGroup引数追加
 	void DeleteEditWndList(HWND);							// 編集ウィンドウリストからの削除
 	BOOL RequestCloseEditor(EditNode* pWndArr, int nArrCnt, bool bExit, bool bCheckConfirm, HWND hWndFrom);
 															// いくつかのウィンドウへ終了要求を出す	// 2007.02.13 ryoji 「編集の全終了」を示す引数(bExit)を追加	// 2007.06.20 ryoji nGroup引数追加

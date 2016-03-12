@@ -67,8 +67,8 @@ static void SetGrepFolder(HWND hwndCtrl, LPCTSTR folder);
 
 DlgGrep::DlgGrep()
 {
-	m_bSubFolder = FALSE;				// サブフォルダからも検索する
-	m_bFromThisText = FALSE;			// この編集中のテキストから検索する
+	m_bSubFolder = false;				// サブフォルダからも検索する
+	m_bFromThisText = false;			// この編集中のテキストから検索する
 	searchOption.Reset();			// 検索オプション
 	nGrepCharSet = CODE_SJIS;			// 文字コードセット
 	nGrepOutputLineType = 1;			// 行を出力/該当部分/否マッチ行 を出力

@@ -356,11 +356,11 @@ void EditView::AddToCmdArr(const TCHAR* szCmd)
 	recentCmd.Terminate();
 }
 
-/*! 正規表現の検索パターンを必要に応じて更新する(ライブラリが使用できないときはFALSEを返す)
+/*! 正規表現の検索パターンを必要に応じて更新する(ライブラリが使用できないときは false を返す)
 	@date 2002.01.16 hor 共通ロジックを関数にしただけ・・・
 	@date 2011.12.18 Moca シーケンス導入。viewの検索文字列長の撤廃。他のビューの検索条件を引き継ぐフラグを追加
 */
-BOOL EditView::ChangeCurRegexp(bool bRedrawIfChanged)
+bool EditView::ChangeCurRegexp(bool bRedrawIfChanged)
 {
 	bool bChangeState = false;
 
@@ -381,15 +381,15 @@ BOOL EditView::ChangeCurRegexp(bool bRedrawIfChanged)
 		if (!m_searchPattern.SetPattern(this->GetHwnd(), m_strCurSearchKey.c_str(), m_strCurSearchKey.size(),
 			m_curSearchOption, &m_curRegexp)
 		) {
-				m_bCurSrchKeyMark = false;
-				return FALSE;
+			m_bCurSrchKeyMark = false;
+			return false;
 		}
 		m_bCurSrchKeyMark = true;
 		if (bRedrawIfChanged) {
 			Redraw();
 		}
 		m_pEditWnd->m_toolbar.AcceptSharedSearchKey();
-		return TRUE;
+		return true;
 	}
 	if (!m_bCurSrchKeyMark) {
 		m_bCurSrchKeyMark = true;
@@ -399,7 +399,7 @@ BOOL EditView::ChangeCurRegexp(bool bRedrawIfChanged)
 		}
 	}
 
-	return TRUE;
+	return true;
 }
 
 

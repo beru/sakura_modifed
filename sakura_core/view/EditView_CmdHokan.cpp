@@ -41,7 +41,7 @@ void EditView::PreprocessCommand_hokan(int nCommand)
 			&& nCommand != F_IME_CHAR	//	漢字入力
 		) {
 			m_pEditWnd->m_hokanMgr.Hide();
-			m_bHokan = FALSE;
+			m_bHokan = false;
 		}
 	}
 }
@@ -63,7 +63,7 @@ void EditView::PostprocessCommand_hokan(void)
 		}else {
 			if (m_bHokan) {
 				m_pEditWnd->m_hokanMgr.Hide();
-				m_bHokan = FALSE;
+				m_bHokan = false;
 			}
 		}
 	}
@@ -144,26 +144,26 @@ void EditView::ShowHokanMgr(NativeW& memData, bool bAutoDecided)
 	if (nKouhoNum <= 0) {				//	候補無し
 		if (m_bHokan) {
 			hokanMgr.Hide();
-			m_bHokan = FALSE;
+			m_bHokan = false;
 			// 2003.06.25 Moca 失敗してたら、ビープ音を出して補完終了。
 			ErrorBeep();
 		}
 	}else if (bAutoDecided && nKouhoNum == 1) { //	候補1つのみ→確定。
 		if (m_bHokan) {
 			hokanMgr.Hide();
-			m_bHokan = FALSE;
+			m_bHokan = false;
 		}
 		// 2004.05.14 Moca HokanMgr::Search側で改行を削除するようにし、直接書き換えるのをやめた
 
 		GetCommander().Command_WordDeleteToStart();
-		GetCommander().Command_INSTEXT(true, memHokanWord.GetStringPtr(), memHokanWord.GetStringLength(), TRUE);
+		GetCommander().Command_INSTEXT(true, memHokanWord.GetStringPtr(), memHokanWord.GetStringLength(), true);
 	}else {
-		m_bHokan = TRUE;
+		m_bHokan = true;
 	}
 	
 	//	補完終了。
 	if (!m_bHokan) {
-		GetDllShareData().common.helper.bUseHokan = FALSE;	//	入力補完終了の知らせ
+		GetDllShareData().common.helper.bUseHokan = false;	//	入力補完終了の知らせ
 	}
 }
 

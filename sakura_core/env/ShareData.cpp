@@ -187,17 +187,17 @@ bool ShareData::InitShareData()
 //		// LOGFONTの初期化
 		LOGFONT lf = {0};
 		lf.lfHeight			= DpiPointsToPixels(-10);	// 2009.10.01 ryoji 高DPI対応（ポイント数から算出）
-		lf.lfWidth				= 0;
+		lf.lfWidth			= 0;
 		lf.lfEscapement		= 0;
-		lf.lfOrientation		= 0;
+		lf.lfOrientation	= 0;
 		lf.lfWeight			= 400;
 		lf.lfItalic			= 0x0;
-		lf.lfUnderline			= 0x0;
-		lf.lfStrikeOut			= 0x0;
-		lf.lfCharSet			= 0x80;
-		lf.lfOutPrecision		= 0x3;
-		lf.lfClipPrecision		= 0x2;
-		lf.lfQuality			= 0x1;
+		lf.lfUnderline		= 0x0;
+		lf.lfStrikeOut		= 0x0;
+		lf.lfCharSet		= 0x80;
+		lf.lfOutPrecision	= 0x3;
+		lf.lfClipPrecision	= 0x2;
+		lf.lfQuality		= 0x1;
 		lf.lfPitchAndFamily	= 0x31;
 		_tcscpy(lf.lfFaceName, _T("ＭＳ ゴシック"));
 
@@ -503,38 +503,38 @@ bool ShareData::InitShareData()
 			helper.lf = lfIconTitle;
 			helper.nPointSize = nIconPointSize;	// フォントサイズ（1/10ポイント単位） ※古いバージョンからの移行を考慮して無効値で初期化	// 2009.10.01 ryoji
 
-			helper.szExtHelp[0] = L'\0';			// 外部ヘルプ１
-			helper.szExtHtmlHelp[0] = L'\0';		// 外部HTMLヘルプ
+			helper.szExtHelp[0] = L'\0';		// 外部ヘルプ１
+			helper.szExtHtmlHelp[0] = L'\0';	// 外部HTMLヘルプ
 		
 			helper.szMigemoDll[0] = L'\0';		// migemo dll
 			helper.szMigemoDict[0] = L'\0';		// migemo dict
 
-			helper.bHtmlHelpIsSingle = true;		// HtmlHelpビューアはひとつ
+			helper.bHtmlHelpIsSingle = true;	// HtmlHelpビューアはひとつ
 
 			helper.bHokanKey_RETURN	= true;		// VK_RETURN 補完決定キーが有効/無効
-			helper.bHokanKey_TAB		= false;	// VK_TAB   補完決定キーが有効/無効
+			helper.bHokanKey_TAB	= false;	// VK_TAB   補完決定キーが有効/無効
 			helper.bHokanKey_RIGHT	= true;		// VK_RIGHT 補完決定キーが有効/無効
 			helper.bHokanKey_SPACE	= false;	// VK_SPACE 補完決定キーが有効/無効
 
-			helper.bUseHokan = FALSE;			// 入力補完機能を使用する
+			helper.bUseHokan = false;			// 入力補完機能を使用する
 		}
 
 		// [アウトライン]タブ
 		{
 			CommonSetting_OutLine& outline = m_pShareData->common.outline;
 
-			outline.nOutlineDockSet = 0;					// アウトライン解析のドッキング位置継承方法
-			outline.bOutlineDockSync = true;				// アウトライン解析のドッキング位置を同期する
-			outline.bOutlineDockDisp = FALSE;			// アウトライン解析表示の有無
+			outline.nOutlineDockSet = 0;				// アウトライン解析のドッキング位置継承方法
+			outline.bOutlineDockSync = true;			// アウトライン解析のドッキング位置を同期する
+			outline.bOutlineDockDisp = false;			// アウトライン解析表示の有無
 			outline.eOutlineDockSide = DockSideType::Float;	// アウトライン解析ドッキング配置
 			outline.cxOutlineDockLeft		=	0;		// アウトラインの左ドッキング幅
-			outline.cyOutlineDockTop			=	0;		// アウトラインの上ドッキング高
+			outline.cyOutlineDockTop		=	0;		// アウトラインの上ドッキング高
 			outline.cxOutlineDockRight		=	0;		// アウトラインの右ドッキング幅
 			outline.cyOutlineDockBottom		=	0;		// アウトラインの下ドッキング高
 			outline.nDockOutline = OutlineType::Text;
-			outline.bAutoCloseDlgFuncList = FALSE;		// アウトライン ダイアログを自動的に閉じる					//Nov. 18, 2000 JEPRO TRUE→FALSE に変更
-			outline.bMarkUpBlankLineEnable	=	FALSE;	// アウトラインダイアログでブックマークの空行を無視			2002.02.08 aroka,hor
-			outline.bFunclistSetFocusOnJump	=	FALSE;	// アウトラインダイアログでジャンプしたらフォーカスを移す	2002.02.08 hor
+			outline.bAutoCloseDlgFuncList = false;		// アウトライン ダイアログを自動的に閉じる					//Nov. 18, 2000 JEPRO TRUE→FALSE に変更
+			outline.bMarkUpBlankLineEnable	=	false;	// アウトラインダイアログでブックマークの空行を無視			2002.02.08 aroka,hor
+			outline.bFunclistSetFocusOnJump	=	false;	// アウトラインダイアログでジャンプしたらフォーカスを移す	2002.02.08 hor
 
 			InitFileTree( &outline.fileTree );
 			outline.fileTreeDefIniName = _T("_sakurafiletree.ini");
@@ -625,23 +625,23 @@ bool ShareData::InitShareData()
 			CommonSetting_StatusBar& statusbar = m_pShareData->common.statusBar;
 
 			// 表示文字コードの指定		2008/6/21	Uchi
-			statusbar.bDispUniInSjis		= FALSE;	// SJISで文字コード値をUnicodeで表示する
-			statusbar.bDispUniInJis			= FALSE;	// JISで文字コード値をUnicodeで表示する
-			statusbar.bDispUniInEuc			= FALSE;	// EUCで文字コード値をUnicodeで表示する
+			statusbar.bDispUniInSjis		= false;	// SJISで文字コード値をUnicodeで表示する
+			statusbar.bDispUniInJis			= false;	// JISで文字コード値をUnicodeで表示する
+			statusbar.bDispUniInEuc			= false;	// EUCで文字コード値をUnicodeで表示する
 			statusbar.bDispUtf8Codepoint	= true;		// UTF-8をコードポイントで表示する
 			statusbar.bDispSPCodepoint		= true;		// サロゲートペアをコードポイントで表示する
-			statusbar.bDispSelCountByByte	= FALSE;	// 選択文字数を文字単位ではなくバイト単位で表示する
+			statusbar.bDispSelCountByByte	= false;	// 選択文字数を文字単位ではなくバイト単位で表示する
 		}
 
 		// [プラグイン]タブ
 		{
 			CommonSetting_Plugin& plugin = m_pShareData->common.plugin;
 
-			plugin.bEnablePlugin			= FALSE;	// プラグインを使用する
+			plugin.bEnablePlugin			= false;	// プラグインを使用する
 			for (int nPlugin=0; nPlugin<MAX_PLUGIN; ++nPlugin) {
-				plugin.pluginTable[nPlugin].szName[0]	= L'\0';	// プラグイン名
+				plugin.pluginTable[nPlugin].szName[0] = L'\0';	// プラグイン名
 				plugin.pluginTable[nPlugin].szId[0]	= L'\0';	// プラグインID
-				plugin.pluginTable[nPlugin].state = PLS_NONE;		// プラグイン状態
+				plugin.pluginTable[nPlugin].state = PLS_NONE;	// プラグイン状態
 			}
 		}
 

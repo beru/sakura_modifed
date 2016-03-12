@@ -1712,7 +1712,7 @@ LRESULT EditWnd::DispatchEvent(
 
 			// 水平スクロールバーの表示／非表示切り替え	// 2006.12.19 ryoji
 			{
-				bool b1 = (m_pShareData->common.window.bScrollBarHorz == FALSE);
+				bool b1 = !m_pShareData->common.window.bScrollBarHorz;
 				for (int i=0; i<GetAllViewCount(); ++i) {
 					bool b2 = (GetView(i).m_hwndHScrollBar == NULL);
 					if (b1 != b2) {		// 水平スクロールバーを使う
@@ -1787,7 +1787,7 @@ LRESULT EditWnd::DispatchEvent(
 				GetDocument()->OnChangeSetting();
 
 				// アウトライン解析画面処理
-				bool bAnalyzed = FALSE;
+				bool bAnalyzed = false;
 #if 0
 				if (/* 必要なら変更条件をここに記述する（将来用） */) {
 					// アウトライン解析画面の位置を現在の設定に合わせる
@@ -3720,11 +3720,11 @@ int	EditWnd::CreateFileDropDownMenu(HWND hwnd)
 		);
 	}
 
-	m_menuDrawer.MyAppendMenuSep(hMenu, MF_BYPOSITION | MF_SEPARATOR, 0, NULL, FALSE);
+	m_menuDrawer.MyAppendMenuSep(hMenu, MF_BYPOSITION | MF_SEPARATOR, 0, NULL, false);
 
-	m_menuDrawer.MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING, F_FILENEW, _T(""), _T("N"), FALSE);
-	m_menuDrawer.MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING, F_FILENEW_NEWWINDOW, _T(""), _T("medium"), FALSE);
-	m_menuDrawer.MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING, F_FILEOPEN, _T(""), _T("O"), FALSE);
+	m_menuDrawer.MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING, F_FILENEW, _T(""), _T("N"), false);
+	m_menuDrawer.MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING, F_FILENEW_NEWWINDOW, _T(""), _T("medium"), false);
+	m_menuDrawer.MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING, F_FILEOPEN, _T(""), _T("O"), false);
 
 	nId = ::TrackPopupMenu(
 		hMenu,

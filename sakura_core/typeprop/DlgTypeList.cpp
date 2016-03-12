@@ -333,9 +333,9 @@ void DlgTypeList::SetData(int selIdx)
 			);
 		}
 		::List_AddString(hwndList, szText);
-		m_bRegistryChecked[nIdx] = FALSE;
-		m_bExtRMenu[nIdx] = FALSE;
-		m_bExtDblClick[nIdx] = FALSE;
+		m_bRegistryChecked[nIdx] = false;
+		m_bExtRMenu[nIdx] = false;
+		m_bExtDblClick[nIdx] = false;
 
 		SIZE sizeExtent;
 		if (::GetTextExtentPoint32(hDC, szText, _tcslen(szText), &sizeExtent) && sizeExtent.cx > nExtent) {
@@ -343,9 +343,9 @@ void DlgTypeList::SetData(int selIdx)
 		}
 	}
 	for (nIdx; nIdx<MAX_TYPES; ++nIdx) {
-		m_bRegistryChecked[nIdx] = FALSE;
-		m_bExtRMenu[nIdx] = FALSE;
-		m_bExtDblClick[nIdx] = FALSE;
+		m_bRegistryChecked[nIdx] = false;
+		m_bExtRMenu[nIdx] = false;
+		m_bExtDblClick[nIdx] = false;
 	}
 	::SelectObject(hDC, hFontOld);
 	::ReleaseDC(hwndList, hDC);

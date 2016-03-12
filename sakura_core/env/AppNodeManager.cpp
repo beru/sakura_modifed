@@ -128,7 +128,7 @@ EditNode* AppNodeGroupHandle::GetEditNodeAt(int nIndex)
 	@date 2003.06.28 MIK CRecent利用で書き換え
 	@date 2007.06.20 ryoji 新規ウィンドウにはグループIDを付与する
 */
-BOOL AppNodeGroupHandle::AddEditWndList(HWND hWnd)
+bool AppNodeGroupHandle::AddEditWndList(HWND hWnd)
 {
 	DllSharedData* pShare = &GetDllShareData();
 
@@ -147,7 +147,7 @@ BOOL AppNodeGroupHandle::AddEditWndList(HWND hWnd)
 			// もうこれ以上登録できないか？
 			if (recentEditNode.GetItemCount() >= recentEditNode.GetArrayCount()) {
 				recentEditNode.Terminate();
-				return FALSE;
+				return false;
 			}
 			subCommand = TabWndNotifyType::Reorder;
 
@@ -195,7 +195,7 @@ BOOL AppNodeGroupHandle::AddEditWndList(HWND hWnd)
 	// ウィンドウ登録メッセージをブロードキャストする。
 	AppNodeGroupHandle(hWnd).PostMessageToAllEditors(MYWM_TAB_WINDOW_NOTIFY, (WPARAM)subCommand, (LPARAM)hWnd, hWnd);
 
-	return TRUE;
+	return true;
 }
 
 

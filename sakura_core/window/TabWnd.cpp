@@ -548,14 +548,15 @@ LRESULT TabWnd::OnTabNotify(WPARAM wParam, LPARAM lParam)
 	@date 2007.07.07 genta ウィンドウリスト操作部をCShareData::ReorderTab()へ
 	@date 2010.07.11 Moca ブロードキャスト部分を分離
 */
-BOOL TabWnd::ReorderTab(int nSrcTab, int nDstTab)
+bool TabWnd::ReorderTab(int nSrcTab, int nDstTab)
 {
 	TCITEM		tcitem;
 	HWND		hwndSrc;	// 移動元ウィンドウ
 	HWND		hwndDst;	// 移動先ウィンドウ
 
-	if (0 > nSrcTab || 0 > nDstTab || nSrcTab == nDstTab)
-		return FALSE;
+	if (0 > nSrcTab || 0 > nDstTab || nSrcTab == nDstTab) {
+		return false;
+	}
 
 	// 移動元タブ、移動先タブのウィンドウを取得する
 	tcitem.mask   = TCIF_PARAM;
@@ -570,9 +571,9 @@ BOOL TabWnd::ReorderTab(int nSrcTab, int nDstTab)
 
 	//	2007.07.07 genta CShareData::ReorderTabとして独立
 	if (! AppNodeManager::getInstance()->ReorderTab(hwndSrc, hwndDst)) {
-		return FALSE;
+		return false;
 	}
-	return TRUE;
+	return true;
 }
 
 void TabWnd::BroadcastRefreshToGroup()
@@ -785,10 +786,10 @@ TabWnd::TabWnd()
 	Wnd(_T("::TabWnd")),
 	eTabPosition(TabPosition::None),
 	m_eDragState(DRAG_NONE),
-	m_bVisualStyle(FALSE),		// 2007.04.01 ryoji
-	m_bHovering(FALSE),			// 2006.02.01 ryoji
-	m_bListBtnHilighted(FALSE),	// 2006.02.01 ryoji
-	m_bCloseBtnHilighted(FALSE),	// 2006.10.21 ryoji
+	m_bVisualStyle(false),		// 2007.04.01 ryoji
+	m_bHovering(false),			// 2006.02.01 ryoji
+	m_bListBtnHilighted(false),	// 2006.02.01 ryoji
+	m_bCloseBtnHilighted(false),	// 2006.10.21 ryoji
 	m_eCaptureSrc(CAPT_NONE),		// 2006.11.30 ryoji
 	m_nTabBorderArray(NULL),		// 2012.04.22 syat
 	m_nTabHover(-1),
@@ -831,9 +832,9 @@ HWND TabWnd::Open(HINSTANCE hInstance, HWND hwndParent)
 	m_hwndToolTip = NULL;
 	m_bVisualStyle = ::IsVisualStyle();	// 2007.04.01 ryoji
 	m_eDragState = DRAG_NONE;	//	2005.09.29 ryoji
-	m_bHovering = FALSE;			// 2006.02.01 ryoji
-	m_bListBtnHilighted = FALSE;	// 2006.02.01 ryoji
-	m_bCloseBtnHilighted = FALSE;	// 2006.10.21 ryoji
+	m_bHovering = false;			// 2006.02.01 ryoji
+	m_bListBtnHilighted = false;	// 2006.02.01 ryoji
+	m_bCloseBtnHilighted = false;	// 2006.10.21 ryoji
 	m_eCaptureSrc = CAPT_NONE;	// 2006.11.30 ryoji
 	eTabPosition = TabPosition::None;
 
@@ -1616,7 +1617,7 @@ LRESULT TabWnd::OnNotify(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			if (TabCtrl_GetItem(m_hwndTab, pnmh->idFrom, &tcitem)) {
 				EditNode* pEditNode;
 				pEditNode = AppNodeManager::getInstance()->GetEditNode((HWND)tcitem.lParam);
-				GetTabName(pEditNode, TRUE, FALSE, m_szTextTip, _countof(m_szTextTip));
+				GetTabName(pEditNode, true, false, m_szTextTip, _countof(m_szTextTip));
 				((NMTTDISPINFO*)pnmh)->lpszText = m_szTextTip;	// NMTTDISPINFO::szText[80]では短い
 				((NMTTDISPINFO*)pnmh)->hinst = NULL;
 			}
@@ -1744,7 +1745,7 @@ void TabWnd::TabWindowNotify(WPARAM wParam, LPARAM lParam)
 			//	Jun. 19, 2004 genta
 			EditNode	*p;
 			p = AppNodeManager::getInstance()->GetEditNode((HWND)lParam);
-			GetTabName(p, FALSE, TRUE, szName, _countof(szName));
+			GetTabName(p, false, true, szName, _countof(szName));
 
 			tcitem.mask = TCIF_TEXT | TCIF_IMAGE;
 			TCHAR szNameOld[1024];
@@ -1944,7 +1945,7 @@ void TabWnd::Refresh(bool bEnsureVisible/* = true*/, bool bRebuild/* = false*/)
 			if (node.bClosing)	// このあとすぐに閉じるウィンドウなのでタブ表示しない
 				continue;
 
-			GetTabName(&node, FALSE, TRUE, szName, _countof(szName));
+			GetTabName(&node, false, true, szName, _countof(szName));
 
 			tcitem.mask    = TCIF_TEXT | TCIF_PARAM;
 			tcitem.pszText = szName;
@@ -2664,7 +2665,7 @@ void TabWnd::GetTabCloseBtnRect(const LPRECT lprcTab, LPRECT lprc, bool selected
 
 	@date 2007.06.28 ryoji 新規作成
 */
-void TabWnd::GetTabName(EditNode* pEditNode, BOOL bFull, BOOL bDupamp, LPTSTR pszName, int nLen)
+void TabWnd::GetTabName(EditNode* pEditNode, bool bFull, bool bDupamp, LPTSTR pszName, int nLen)
 {
 	std::vector<TCHAR> szText(nLen);
 	LPTSTR pszText = &szText[0];
@@ -2758,7 +2759,7 @@ LRESULT TabWnd::TabListMenu(POINT pt, bool bSel/* = true*/, bool bFull/* = false
 					continue;
 				if (node.bClosing)	// このあとすぐに閉じるウィンドウなのでタブ表示しない
 					continue;
-				GetTabName(&node, bFull, TRUE, pData[nSelfTab].szText, _countof(pData[0].szText));
+				GetTabName(&node, bFull, true, pData[nSelfTab].szText, _countof(pData[0].szText));
 				pData[nSelfTab].hwnd = node.hWnd;
 				pData[nSelfTab].iItem = i;
 				pData[nSelfTab].iImage = GetImageIndex(&node);
@@ -2777,7 +2778,7 @@ LRESULT TabWnd::TabListMenu(POINT pt, bool bSel/* = true*/, bool bFull/* = false
 				continue;
 			if (node.bClosing)	// このあとすぐに閉じるウィンドウなのでタブ表示しない
 				continue;
-			GetTabName(&node, bFull, TRUE, pData[nTab].szText, _countof(pData[0].szText));
+			GetTabName(&node, bFull, true, pData[nTab].szText, _countof(pData[0].szText));
 			pData[nTab].hwnd = node.hWnd;
 			pData[nTab].iItem = i;
 			pData[nTab].iImage = GetImageIndex(&node);

@@ -113,7 +113,9 @@ void ViewCommander::Command_SEARCH_NEXT(
 	// 2002.01.16 hor
 	// 共通部分のくくりだし
 	// 2004.05.30 Moca CEditViewの現在設定されている検索パターンを使えるように
-	if (bChangeCurRegexp && !m_pCommanderView->ChangeCurRegexp()) return;
+	if (bChangeCurRegexp && !m_pCommanderView->ChangeCurRegexp()) {
+		return;
+	}
 	if (m_pCommanderView->m_strCurSearchKey.size() == 0) {
 		goto end_of_func;
 	}

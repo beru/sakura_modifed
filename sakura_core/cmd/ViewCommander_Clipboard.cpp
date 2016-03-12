@@ -187,7 +187,7 @@ void ViewCommander::Command_PASTE(int option)
 	bool bAutoColumnPaste = 
 		((option & 0x10) == 0x10) ? true :
 		((option & 0x20) == 0x20) ? false :
-		commonSetting.edit.bAutoColumnPaste != FALSE;
+		commonSetting.edit.bAutoColumnPaste;
 	
 	// 矩形コピーのテキストは常に矩形貼り付け
 	if (bAutoColumnPaste) {
@@ -1180,7 +1180,7 @@ void ViewCommander::Command_CREATEKEYBINDLIST(void)
 		csKeyBind.pKeyNameArr,
 		memKeyList,
 		&GetDocument()->m_funcLookup,	// Oct. 31, 2001 genta 追加
-		FALSE	// 2007.02.22 ryoji 追加
+		false	// 2007.02.22 ryoji 追加
 	);
 
 	// Windowsクリップボードにコピー

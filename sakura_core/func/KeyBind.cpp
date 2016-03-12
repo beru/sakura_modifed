@@ -446,7 +446,7 @@ TCHAR* KeyBind::GetMenuLabel(
 	int				nFuncId,
 	TCHAR*      	pszLabel,   // [in,out] バッファは256以上と仮定
 	const TCHAR*	pszKey,
-	BOOL			bKeyStr,
+	bool			bKeyStr,
 	int				nLabelSize,
 	bool			bGetDefFuncCode // = true
 	)

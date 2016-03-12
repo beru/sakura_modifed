@@ -1538,7 +1538,7 @@ void ControlTray::TerminateApplication(
 BOOL ControlTray::CloseAllEditor(
 	bool	bCheckConfirm,	//!< [in] [すべて閉じる]確認オプションに従って問い合わせをするかどうか
 	HWND	hWndFrom,		//!< [in] 呼び出し元のウィンドウハンドル
-	bool	bExit,			//!< [in] TRUE: 編集の全終了 / FALSE: すべて閉じる
+	bool	bExit,			//!< [in] true: 編集の全終了 / false: すべて閉じる
 	int		nGroup			//!< [in] グループID
 	)
 {
@@ -1572,11 +1572,11 @@ int	ControlTray::CreatePopUpMenu_L(void)
 	HMENU hMenu = ::CreatePopupMenu();
 	m_menuDrawer.MyAppendMenu(hMenuTop, MF_BYPOSITION | MF_STRING | MF_POPUP, (UINT_PTR)hMenu, L"TrayL", L"");
 
-	m_menuDrawer.MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING, F_FILENEW, _T(""), _T("N"), FALSE);
-	m_menuDrawer.MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING, F_FILEOPEN, _T(""), _T("O"), FALSE);
+	m_menuDrawer.MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING, F_FILENEW, _T(""), _T("N"), false);
+	m_menuDrawer.MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING, F_FILEOPEN, _T(""), _T("O"), false);
 
-	m_menuDrawer.MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING, F_GREP_DIALOG, _T(""), _T("G"), FALSE);
-	m_menuDrawer.MyAppendMenuSep(hMenu, MF_BYPOSITION | MF_SEPARATOR, 0, NULL, FALSE);
+	m_menuDrawer.MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING, F_GREP_DIALOG, _T(""), _T("G"), false);
+	m_menuDrawer.MyAppendMenuSep(hMenu, MF_BYPOSITION | MF_SEPARATOR, 0, NULL, false);
 
 	// MRUリストのファイルのリストをメニューにする
 //@@@ 2001.12.26 YAZAKI MRUリストは、CMRUに依頼する
@@ -1592,8 +1592,8 @@ int	ControlTray::CreatePopUpMenu_L(void)
 	nEnable = (mruFolder.MenuLength() > 0 ? 0 : MF_GRAYED);
 	m_menuDrawer.MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING | MF_POPUP| nEnable, (UINT_PTR)hMenuPopUp, LS(F_FILE_RCNTFLDR_SUBMENU), _T("D"));
 
-	m_menuDrawer.MyAppendMenuSep(hMenu, MF_BYPOSITION | MF_SEPARATOR, 0, NULL, FALSE);
-	m_menuDrawer.MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING, F_FILESAVEALL, _T(""), _T("Z"), FALSE);	// Jan. 24, 2005 genta
+	m_menuDrawer.MyAppendMenuSep(hMenu, MF_BYPOSITION | MF_SEPARATOR, 0, NULL, false);
+	m_menuDrawer.MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING, F_FILESAVEALL, _T(""), _T("Z"), false);	// Jan. 24, 2005 genta
 
 	// 現在開いている編集窓のリストをメニューにする
 	int j = 0;
@@ -1604,7 +1604,7 @@ int	ControlTray::CreatePopUpMenu_L(void)
 	}
 
 	if (j > 0) {
-		m_menuDrawer.MyAppendMenuSep(hMenu, MF_BYPOSITION | MF_SEPARATOR, 0, NULL, FALSE);
+		m_menuDrawer.MyAppendMenuSep(hMenu, MF_BYPOSITION | MF_SEPARATOR, 0, NULL, false);
 
 		NONCLIENTMETRICS met;
 		met.cbSize = CCSIZEOF_STRUCT(NONCLIENTMETRICS, lfMessageFont);
@@ -1628,20 +1628,20 @@ int	ControlTray::CreatePopUpMenu_L(void)
 					i,
 					dcFont.GetHDC()
 				);
-				m_menuDrawer.MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING, IDM_SELWINDOW + i, szMenu, _T(""), FALSE);
+				m_menuDrawer.MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING, IDM_SELWINDOW + i, szMenu, _T(""), false);
 				++j;
 			}
 		}
 	}
 	m_menuDrawer.MyAppendMenuSep(hMenu, MF_BYPOSITION | MF_SEPARATOR, 0, NULL, FALSE);
-	m_menuDrawer.MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING, F_EXITALLEDITORS, _T(""), _T("Q"), FALSE);	// Oct. 17, 2000 JEPRO 名前を変更(F_FILECLOSEALL→F_WIN_CLOSEALL)	//Feb. 18, 2001 JEPRO アクセスキー変更(L→Q)	// 2006.10.21 ryoji 表示文字列変更	// 2007.02.13 ryoji →F_EXITALLEDITORS
+	m_menuDrawer.MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING, F_EXITALLEDITORS, _T(""), _T("Q"), false);	// Oct. 17, 2000 JEPRO 名前を変更(F_FILECLOSEALL→F_WIN_CLOSEALL)	//Feb. 18, 2001 JEPRO アクセスキー変更(L→Q)	// 2006.10.21 ryoji 表示文字列変更	// 2007.02.13 ryoji →F_EXITALLEDITORS
 	if (j == 0) {
 		::EnableMenuItem(hMenu, F_EXITALLEDITORS, MF_BYCOMMAND | MF_GRAYED);	// Oct. 17, 2000 JEPRO 名前を変更(F_FILECLOSEALL→F_WIN_CLOSEALL)	// 2007.02.13 ryoji →F_EXITALLEDITORS
 		::EnableMenuItem(hMenu, F_FILESAVEALL, MF_BYCOMMAND | MF_GRAYED);	// Jan. 24, 2005 genta
 	}
 
 	// Jun. 9, 2001 genta ソフトウェア名改称
-	m_menuDrawer.MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING, F_EXITALL, _T(""), _T("X"), FALSE);	// Dec. 26, 2000 JEPRO F_に変更
+	m_menuDrawer.MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING, F_EXITALL, _T(""), _T("X"), false);	// Dec. 26, 2000 JEPRO F_に変更
 
 	POINT po;
 	po.x = 0;
@@ -1699,16 +1699,16 @@ int	ControlTray::CreatePopUpMenu_R(void)
 	m_menuDrawer.MyAppendMenu(hMenuTop, MF_BYPOSITION | MF_STRING | MF_POPUP, (UINT_PTR)hMenu, L"TrayR", L"");
 
 	// トレイ右クリックの「ヘルプ」メニュー
-	m_menuDrawer.MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING, F_HELP_CONTENTS , _T(""), _T("O"), FALSE);
-	m_menuDrawer.MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING, F_HELP_SEARCH , _T(""), _T("S"), FALSE);	// Nov. 25, 2000 JEPRO 「トピックの」→「キーワード」に変更
-	m_menuDrawer.MyAppendMenuSep(hMenu, MF_BYPOSITION | MF_SEPARATOR, 0, NULL, FALSE);
-	m_menuDrawer.MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING, F_TYPE_LIST, _T(""), _T("L"), FALSE);
-	m_menuDrawer.MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING, F_OPTION, _T(""), _T("C"), FALSE);
-	m_menuDrawer.MyAppendMenuSep(hMenu, MF_BYPOSITION | MF_SEPARATOR, 0, NULL, FALSE);
-	m_menuDrawer.MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING, F_ABOUT, _T(""), _T("A"), FALSE);	// Dec. 25, 2000 JEPRO F_に変更
-	m_menuDrawer.MyAppendMenuSep(hMenu, MF_BYPOSITION | MF_SEPARATOR, 0, NULL, FALSE);
+	m_menuDrawer.MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING, F_HELP_CONTENTS , _T(""), _T("O"), false);
+	m_menuDrawer.MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING, F_HELP_SEARCH , _T(""), _T("S"), false);	// Nov. 25, 2000 JEPRO 「トピックの」→「キーワード」に変更
+	m_menuDrawer.MyAppendMenuSep(hMenu, MF_BYPOSITION | MF_SEPARATOR, 0, NULL, false);
+	m_menuDrawer.MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING, F_TYPE_LIST, _T(""), _T("L"), false);
+	m_menuDrawer.MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING, F_OPTION, _T(""), _T("C"), false);
+	m_menuDrawer.MyAppendMenuSep(hMenu, MF_BYPOSITION | MF_SEPARATOR, 0, NULL, false);
+	m_menuDrawer.MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING, F_ABOUT, _T(""), _T("A"), false);	// Dec. 25, 2000 JEPRO F_に変更
+	m_menuDrawer.MyAppendMenuSep(hMenu, MF_BYPOSITION | MF_SEPARATOR, 0, NULL, false);
 	// Jun. 18, 2001 genta ソフトウェア名改称
-	m_menuDrawer.MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING, F_EXITALL, _T(""), _T("X"), FALSE);
+	m_menuDrawer.MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING, F_EXITALL, _T(""), _T("X"), false);
 
 	POINT po;
 	po.x = 0;

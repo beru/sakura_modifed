@@ -197,8 +197,8 @@ BOOL EditView::Create(
 	//	メニューバーへのメッセージ表示機能はEditWndへ移管
 
 	// 共有データ構造体のアドレスを返す
-	m_bCommandRunning = FALSE;	// コマンドの実行中
-	m_bDoing_UndoRedo = FALSE;	// Undo, Redoの実行中か
+	m_bCommandRunning = false;	// コマンドの実行中
+	m_bDoing_UndoRedo = false;	// Undo, Redoの実行中か
 	m_pcsbwVSplitBox = NULL;	// 垂直分割ボックス
 	m_pcsbwHSplitBox = NULL;	// 水平分割ボックス
 	m_hwndVScrollBar = NULL;
@@ -207,12 +207,12 @@ BOOL EditView::Create(
 	m_hwndSizeBox = NULL;
 
 	m_ptSrchStartPos_PHY.Set(LogicInt(-1), LogicInt(-1));	// 検索/置換開始時のカーソル位置  (改行単位行先頭からのバイト数(0開始), 改行単位行の行番号(0開始))
-	m_bSearch = FALSE;					// 検索/置換開始位置を登録するか											// 02/06/26 ai
+	m_bSearch = false;					// 検索/置換開始位置を登録するか											// 02/06/26 ai
 	
 	m_ptBracketPairPos_PHY.Set(LogicInt(-1), LogicInt(-1)); // 対括弧の位置 (改行単位行先頭からのバイト数(0開始), 改行単位行の行番号(0開始))
 	m_ptBracketCaretPos_PHY.Set(LogicInt(-1), LogicInt(-1));
 
-	m_bDrawBracketPairFlag = FALSE;	// 03/02/18 ai
+	m_bDrawBracketPairFlag = false;	// 03/02/18 ai
 	GetSelectionInfo().m_bDrawSelectArea = false;	// 選択範囲を描画したか		// 02/12/13 ai
 
 	m_crBack = -1;				/* テキストの背景色 */			// 2006.12.16 ryoji
@@ -243,9 +243,9 @@ BOOL EditView::Create(
 
 	// 2004.02.08 m_hFont_ZENは未使用により削除
 	m_dwTipTimer = ::GetTickCount();	// 辞書Tip起動タイマー
-	m_bInMenuLoop = FALSE;				// メニュー モーダル ループに入っています
+	m_bInMenuLoop = false;				// メニュー モーダル ループに入っています
 //	MYTRACE(_T("EditView::EditView()おわり\n"));
-	m_bHokan = FALSE;
+	m_bHokan = false;
 
 	//	Aug. 31, 2000 genta
 	m_pHistory->SetMax(30);
@@ -642,7 +642,7 @@ LRESULT EditView::DispatchEvent(
 			// カーソルをクリック位置へ移動する
 			OnLBUTTONDOWN(wParam, (short)LOWORD(lParam), (short)HIWORD(lParam));	
 			// 2007.10.02 nasukoji
-			m_bActivateByMouse = FALSE;		// マウスによるアクティベートを示すフラグをOFF
+			m_bActivateByMouse = false;		// マウスによるアクティベートを示すフラグをOFF
 		}
 		//		MYTRACE(_T(" WM_LBUTTONDBLCLK wParam=%08xh, x=%d y=%d\n"), wParam, LOWORD(lParam), HIWORD(lParam));
 		OnLBUTTONDBLCLK(wParam, (short)LOWORD(lParam), (short)HIWORD(lParam));
@@ -661,7 +661,7 @@ LRESULT EditView::DispatchEvent(
 
 	case WM_LBUTTONDOWN:
 		// 2007.10.02 nasukoji
-		m_bActivateByMouse = FALSE;		// マウスによるアクティベートを示すフラグをOFF
+		m_bActivateByMouse = false;		// マウスによるアクティベートを示すフラグをOFF
 //		MYTRACE(_T(" WM_LBUTTONDOWN wParam=%08xh, x=%d y=%d\n"), wParam, LOWORD(lParam), HIWORD(lParam));
 		OnLBUTTONDOWN(wParam, (short)LOWORD(lParam), (short)HIWORD(lParam));
 		return 0L;
@@ -758,12 +758,12 @@ LRESULT EditView::DispatchEvent(
 		}
 		if (m_bHokan) {
 			m_pEditWnd->m_hokanMgr.Hide();
-			m_bHokan = FALSE;
+			m_bHokan = false;
 		}
 		return 0L;
 
 	case WM_EXITMENULOOP:
-		m_bInMenuLoop = FALSE;	// メニュー モーダル ループに入っています
+		m_bInMenuLoop = false;	// メニュー モーダル ループに入っています
 		return 0L;
 
 
@@ -1121,7 +1121,7 @@ void EditView::OnKillFocus(void)
 	}
 	// 03/02/18 対括弧の強調表示(消去) ai
 	DrawBracketPair(false);
-	m_bDrawBracketPairFlag = FALSE;
+	m_bDrawBracketPairFlag = false;
 
 	GetCaret().DestroyCaret();
 
@@ -1140,7 +1140,7 @@ void EditView::OnKillFocus(void)
 
 	if (m_bHokan) {
 		m_pEditWnd->m_hokanMgr.Hide();
-		m_bHokan = FALSE;
+		m_bHokan = false;
 	}
 	if (m_nAutoScrollMode) {
 		AutoScrollExit();
@@ -1851,7 +1851,7 @@ bool EditView::GetSelectedDataSimple(NativeW& memBuf)
 }
 
 /* 選択範囲のデータを取得
-	正常時はTRUE,範囲未選択の場合はFALSEを返す
+	正常時はTRUE,範囲未選択の場合は false を返す
 */
 bool EditView::GetSelectedData(
 	NativeW*		memBuf,
@@ -2742,7 +2742,7 @@ bool EditView::ShowKeywordHelp(
 				m_tipWnd.m_key = memCurText;
 				// 検索実行
 				if (!KeySearchCore(&m_tipWnd.m_key))	// 2006.04.10 fon
-					return FALSE;
+					return false;
 			}
 			m_dwTipTimer = 0;	// 辞書Tipを表示している
 

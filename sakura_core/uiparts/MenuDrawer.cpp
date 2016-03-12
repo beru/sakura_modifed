@@ -806,7 +806,7 @@ void MenuDrawer::MyAppendMenu(
 	UINT_PTR		nFuncId,
 	const TCHAR*	pszLabel,
 	const TCHAR*	pszKey,			// 2010/5/18 Uchi
-	BOOL			bAddKeyStr,
+	bool			bAddKeyStr,
 	int				nForceIconId	//‚¨‹C‚É“ü‚è	//@@@ 2003.04.08 MIK
 	)
 {

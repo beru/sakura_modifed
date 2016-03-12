@@ -246,11 +246,11 @@ int DlgTagJumpList::DoModal(
 void DlgTagJumpList::SetData(void)
 {
 	if (IsDirectTagJump()) {
-		m_bTagJumpICase = FALSE;
+		m_bTagJumpICase = false;
 		CheckButton(IDC_CHECK_ICASE, false);
-		m_bTagJumpAnyWhere = FALSE;
+		m_bTagJumpAnyWhere = false;
 		CheckButton(IDC_CHECK_ANYWHERE, false);
-		m_bTagJumpExactMatch = TRUE;
+		m_bTagJumpExactMatch = true;
 
 		if (m_pszKeyword) {
 			SetItemText(IDC_KEYWORD, m_pszKeyword);
@@ -1089,9 +1089,9 @@ void DlgTagJumpList::find_key(const wchar_t* keyword)
 	find_key_core(
 		m_nTop,
 		keyword,
-		FALSE != m_bTagJumpAnyWhere,
-		FALSE != m_bTagJumpExactMatch,
-		FALSE != m_bTagJumpICase,
+		m_bTagJumpAnyWhere,
+		m_bTagJumpExactMatch,
+		m_bTagJumpICase,
 		IsDirectTagJump(),
 		IsDirectTagJump() ? (m_pShareData->common.search.nTagJumpMode) : m_pShareData->common.search.nTagJumpModeKeyword
 	);

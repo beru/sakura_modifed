@@ -339,10 +339,10 @@ BOOL DlgFind::OnBnClicked(int wID)
 
 				// 02/06/26 ai Start
 				// 検索開始位置を登録
-				if (pEditView->m_bSearch != FALSE) {
+				if (pEditView->m_bSearch) {
 					// 検索開始時のカーソル位置登録条件変更 02/07/28 ai start
 					pEditView->m_ptSrchStartPos_PHY = m_ptEscCaretPos_PHY;
-					pEditView->m_bSearch = FALSE;
+					pEditView->m_bSearch = false;
 					// 02/07/28 ai end
 				}//  02/06/26 ai End
 
@@ -369,10 +369,10 @@ BOOL DlgFind::OnBnClicked(int wID)
 				pEditView->Redraw();	// 前回0文字幅マッチの消去にも必要
 
 				// 検索開始位置を登録
-				if (pEditView->m_bSearch != FALSE) {
+				if (pEditView->m_bSearch) {
 					// 検索開始時のカーソル位置登録条件変更 02/07/28 ai start
 					pEditView->m_ptSrchStartPos_PHY = m_ptEscCaretPos_PHY;
-					pEditView->m_bSearch = FALSE;
+					pEditView->m_bSearch = false;
 				}
 
 				// 検索ダイアログを自動的に閉じる
