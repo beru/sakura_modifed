@@ -116,7 +116,7 @@ RegexKeyword::~RegexKeyword()
 
 	 正規表現キーワードに関する変数類を初期化する。
 
-	@retval TRUE 成功
+	@retval true 成功
 */
 bool RegexKeyword::RegexKeyInit(void)
 {
@@ -148,8 +148,8 @@ bool RegexKeyword::RegexKeyInit(void)
 
 	@param pTypesPtr [in] タイプ設定構造体へのポインタ
 
-	@retval TRUE 成功
-	@retval FALSE 失敗
+	@retval true 成功
+	@retval false 失敗
 
 	@note タイプ設定が変わったら再ロードしコンパイルする。
 */
@@ -190,8 +190,8 @@ bool RegexKeyword::RegexKeySetTypes(const TypeConfig *pTypesPtr)
 
 	正規表現キーワードをコンパイルする。
 
-	@retval TRUE 成功
-	@retval FALSE 失敗
+	@retval true 成功
+	@retval false 失敗
 
 	@note すでにコンパイル済みの場合はそれを破棄する。
 	キーワードはコンパイルデータとして内部変数にコピーする。
@@ -309,8 +309,8 @@ bool RegexKeyword::RegexKeyCompile(void)
 
 	行検索を開始する。
 
-	@retval TRUE 成功
-	@retval FALSE 失敗または検索しない指定あり
+	@retval true 成功
+	@retval false 失敗または検索しない指定あり
 
 	@note それぞれの行検索の最初に実行する。
 	タイプ設定等が変更されている場合はリロードする。
@@ -350,8 +350,8 @@ bool RegexKeyword::RegexKeyLineStart(void)
 
 	正規表現キーワードを検索する。
 
-	@retval TRUE 一致
-	@retval FALSE 不一致
+	@retval true 一致
+	@retval false 不一致
 
 	@note RegexKeyLineStart関数によって初期化されていること。
 */

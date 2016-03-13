@@ -66,7 +66,7 @@ MacroFuncInfo SMacroMgr::m_macroFuncInfoCommandArr[] =
 	{F_FILE_REOPEN_UTF7,			LTEXT("FileReopenUTF7"),		{VT_I4,    VT_EMPTY, VT_EMPTY, VT_EMPTY},	VT_EMPTY,	NULL}, // UTF-7で開き直す
 	{F_PRINT,						LTEXT("Print"),					{VT_EMPTY, VT_EMPTY, VT_EMPTY, VT_EMPTY},	VT_EMPTY,	NULL}, // 印刷
 //	{F_PRINT_DIALOG,				LTEXT("PrintDialog"),			{VT_EMPTY, VT_EMPTY, VT_EMPTY, VT_EMPTY},	VT_EMPTY,	NULL}, // 印刷ダイアログ
-	{F_PRINT_PREVIEW,				LTEXT("PrintPreview"),			{VT_EMPTY, VT_EMPTY, VT_EMPTY, VT_EMPTY},	VT_EMPTY,	NULL}, // 印刷プレビュー
+	{F_PRINT_PREVIEW,				LTEXT("PrintPreview"),			{VT_EMPTY, VT_EMPTY, VT_EMPTY, VT_EMPTY},	VT_EMPTY,	NULL}, // 印刷Preview
 	{F_PRINT_PAGESETUP,				LTEXT("PrintPageSetup"),		{VT_EMPTY, VT_EMPTY, VT_EMPTY, VT_EMPTY},	VT_EMPTY,	NULL}, // 印刷ページ設定	// Sept. 14, 2000 jepro 「印刷のページレイアウトの設定」から変更
 	{F_OPEN_HfromtoC,				LTEXT("OpenHfromtoC"),			{VT_EMPTY, VT_EMPTY, VT_EMPTY, VT_EMPTY},	VT_EMPTY,	NULL}, // 同名のC/C++ヘッダ(ソース)を開く	// Feb. 7, 2001 JEPRO 追加
 //	{F_OPEN_HHPP,					LTEXT("OpenHHpp"),				{VT_EMPTY, VT_EMPTY, VT_EMPTY, VT_EMPTY},	VT_EMPTY,	NULL}, // 同名のC/C++ヘッダファイルを開く	// Feb. 9, 2001 jepro「.cまたは.cppと同名の.hを開く」から変更		del 2008/6/23 Uchi
@@ -928,7 +928,7 @@ BOOL SMacroMgr::CanFuncIsKeyMacro(int nFuncID)
 	case F_FILE_REOPEN_UTF7			:// UTF-7で開き直す
 //	case F_PRINT					:// 印刷
 //	case F_PRINT_DIALOG				:// 印刷ダイアログ
-//	case F_PRINT_PREVIEW			:// 印刷プレビュー
+//	case F_PRINT_PREVIEW			:// 印刷Preview
 //	case F_PRINT_PAGESETUP			:// 印刷ページ設定	//Sept. 14, 2000 jepro 「印刷のページレイアウトの設定」から変更
 //	case F_OPEN_HfromtoC:			:// 同名のC/C++ヘッダ(ソース)を開く	//Feb. 9, 2001 JEPRO 追加
 //	case F_OPEN_HHPP				:// 同名のC/C++ヘッダファイルを開く	//Feb. 9, 2001 jepro「.cまたは.cppと同名の.hを開く」から変更

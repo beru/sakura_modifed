@@ -158,8 +158,8 @@ bool ShareData::InitShareData()
 		GetAppVersionInfo(NULL, VS_VERSION_INFO,
 			&m_pShareData->version.dwProductVersionMS, &m_pShareData->version.dwProductVersionLS);
 
-		m_pShareData->flags.bEditWndChanging = FALSE;		// 編集ウィンドウ切替中	// 2007.04.03 ryoji
-		m_pShareData->flags.bRecordingKeyMacro = FALSE;	// キーボードマクロの記録中
+		m_pShareData->flags.bEditWndChanging = false;		// 編集ウィンドウ切替中	// 2007.04.03 ryoji
+		m_pShareData->flags.bRecordingKeyMacro = false;	// キーボードマクロの記録中
 		m_pShareData->flags.hwndRecordingKeyMacro = NULL;	// キーボードマクロを記録中のウィンドウ
 
 		m_pShareData->nodes.nSequences = 0;				// ウィンドウ連番

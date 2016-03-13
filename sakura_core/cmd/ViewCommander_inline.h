@@ -51,8 +51,9 @@ inline OpeBlk* ViewCommander::GetOpeBlk()
 
 inline void ViewCommander::SetOpeBlk(OpeBlk* p)
 {
-	GetDocument()->m_docEditor.m_pOpeBlk = p;
-	GetDocument()->m_docEditor.m_nOpeBlkRedawCount = 0;
+	auto& editor = GetDocument()->m_docEditor;
+	editor.m_pOpeBlk = p;
+	editor.m_nOpeBlkRedawCount = 0;
 }
 
 inline LayoutRange& ViewCommander::GetSelect()

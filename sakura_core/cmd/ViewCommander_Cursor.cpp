@@ -97,21 +97,21 @@ int ViewCommander::Command_UP(bool bSelect, bool bRepeat, int lines)
 
 	int nRepeat = 0;
 
-	// キーリピート時のスクロールを滑らかにするか
+	// キーリピート時のScrollを滑らかにするか
 	auto& csGeneral = GetDllShareData().common.general;
 	if (!csGeneral.nRepeatedScroll_Smooth) {
 		LayoutInt i;
 		if (!bRepeat) {
 			i = LayoutInt(-1);
 		}else {
-			i = -1 * csGeneral.nRepeatedScrollLineNum;	// キーリピート時のスクロール行数
+			i = -1 * csGeneral.nRepeatedScrollLineNum;	// キーリピート時のScroll行数
 		}
 		caret.Cursor_UPDOWN(i, bSelect);
 		nRepeat = -1 * (Int)i;
 	}else {
 		++nRepeat;
 		if (caret.Cursor_UPDOWN(LayoutInt(-1), bSelect) != 0 && bRepeat) {
-			for (int i=0; i<csGeneral.nRepeatedScrollLineNum-1; ++i) {		// キーリピート時のスクロール行数
+			for (int i=0; i<csGeneral.nRepeatedScrollLineNum-1; ++i) {		// キーリピート時のScroll行数
 				::UpdateWindow(m_pCommanderView->GetHwnd());	// YAZAKI
 				caret.Cursor_UPDOWN(LayoutInt(-1), bSelect);
 				++nRepeat;
@@ -128,20 +128,20 @@ int ViewCommander::Command_DOWN(bool bSelect, bool bRepeat)
 	auto& caret = GetCaret();
 	int nRepeat = 0;
 	auto& csGeneral = GetDllShareData().common.general;
-	// キーリピート時のスクロールを滑らかにするか
+	// キーリピート時のScrollを滑らかにするか
 	if (!csGeneral.nRepeatedScroll_Smooth) {
 		LayoutInt i;
 		if (!bRepeat) {
 			i = LayoutInt(1);
 		}else {
-			i = csGeneral.nRepeatedScrollLineNum;	// キーリピート時のスクロール行数
+			i = csGeneral.nRepeatedScrollLineNum;	// キーリピート時のScroll行数
 		}
 		caret.Cursor_UPDOWN(i, bSelect);
 		nRepeat = (Int)i;
 	}else {
 		++nRepeat;
 		if (caret.Cursor_UPDOWN(LayoutInt(1), bSelect) != 0 && bRepeat) {
-			for (int i=0; i<csGeneral.nRepeatedScrollLineNum-1; ++i) {	// キーリピート時のスクロール行数
+			for (int i=0; i<csGeneral.nRepeatedScrollLineNum-1; ++i) {	// キーリピート時のScroll行数
 				// ここで再描画。
 				::UpdateWindow(m_pCommanderView->GetHwnd());	// YAZAKI
 				caret.Cursor_UPDOWN(LayoutInt(1), bSelect);
@@ -730,7 +730,7 @@ void ViewCommander::Command_GOLINEEND(
 }
 
 
-// 半ページアップ		// Oct. 6, 2000 JEPRO added (実は従来のスクロールダウンそのもの)
+// 半ページアップ		// Oct. 6, 2000 JEPRO added (実は従来のScroll Downそのもの)
 void ViewCommander::Command_HalfPageUp(
 	bool bSelect,
 	LayoutYInt nScrollNum
@@ -744,7 +744,7 @@ void ViewCommander::Command_HalfPageUp(
 }
 
 
-// 半ページダウン		// Oct. 6, 2000 JEPRO added (実は従来のスクロールアップそのもの)
+// 半ページダウン		// Oct. 6, 2000 JEPRO added (実は従来のScroll Upそのもの)
 void ViewCommander::Command_HalfPageDown(
 	bool bSelect,
 	LayoutYInt nScrollNum
@@ -763,7 +763,7 @@ void ViewCommander::Command_HalfPageDown(
 	@date 2000.10.10 JEPRO 作成
 	@date 2001.12.13 hor 画面に対するカーソル位置はそのままで
 		１ページアップに動作変更
-	@date 2014.01.10 Moca カーソルが動かないときも画面をスクロールするように
+	@date 2014.01.10 Moca カーソルが動かないときも画面をScrollするように
 */	// Oct. 10, 2000 JEPRO added
 void ViewCommander::Command_1PageUp(
 	bool bSelect,
@@ -782,7 +782,7 @@ void ViewCommander::Command_1PageUp(
 			nScrollNum = m_pCommanderView->GetTextArea().m_nViewRowNum - 1;
 		}
 		GetCaret().Cursor_UPDOWN( -nScrollNum, bSelect );
-		// Sep. 11, 2004 genta 同期スクロール処理のため
+		// Sep. 11, 2004 genta 同期Scroll処理のため
 		// m_pCommanderView->RedrawAllではなくScrollAtを使うように
 		m_pCommanderView->SyncScrollV( m_pCommanderView->ScrollAtV( nViewTopLine - nScrollNum ));
 		m_pCommanderView->SetDrawSwitch(bDrawSwitchOld);
@@ -797,7 +797,7 @@ void ViewCommander::Command_1PageUp(
 	@date 2000.10.10 JEPRO 作成
 	@date 2001.12.13 hor 画面に対するカーソル位置はそのままで
 		１ページダウンに動作変更
-	@date 2014.01.10 Moca カーソルが動かないときも画面をスクロールするように
+	@date 2014.01.10 Moca カーソルが動かないときも画面をScrollするように
 */
 void ViewCommander::Command_1PageDown(
 	bool bSelect,
@@ -815,7 +815,7 @@ void ViewCommander::Command_1PageDown(
 			nScrollNum = m_pCommanderView->GetTextArea().m_nViewRowNum - 1;
 		}
 		GetCaret().Cursor_UPDOWN(nScrollNum, bSelect);
-		// Sep. 11, 2004 genta 同期スクロール処理のため
+		// Sep. 11, 2004 genta 同期Scroll処理のため
 		// m_pCommanderView->RedrawAllではなくScrollAtを使うように
 		m_pCommanderView->SyncScrollV(m_pCommanderView->ScrollAtV(nViewTopLine + nScrollNum));
 		m_pCommanderView->SetDrawSwitch(bDrawSwitchOld);
@@ -894,7 +894,7 @@ void ViewCommander::Command_CURLINECENTER(void)
 	m_pCommanderView->RedrawAll();
 	// sui 02/08/09
 
-	// Sep. 11, 2004 genta 同期スクロールの関数化
+	// Sep. 11, 2004 genta 同期Scrollの関数化
 	m_pCommanderView->SyncScrollV(nScrollLines);
 }
 
@@ -953,7 +953,7 @@ void ViewCommander::Command_JUMPHIST_SET(void)
 // 2001/06/20 Start by asa-o
 
 // from ViewCommander_New.cpp
-// テキストを１行下へスクロール
+// テキストを１行下へScroll
 void ViewCommander::Command_WndScrollDown(void)
 {
 	LayoutInt	nCaretMarginY;
@@ -973,7 +973,7 @@ void ViewCommander::Command_WndScrollDown(void)
 	}
 
 	// Sep. 11, 2004 genta 同期用に行数を記憶
-	// Sep. 11, 2004 genta 同期スクロールの関数化
+	// Sep. 11, 2004 genta 同期Scrollの関数化
 	m_pCommanderView->SyncScrollV(m_pCommanderView->ScrollAtV(textArea.GetViewTopLine() - LayoutInt(1)));
 
 	// テキストが選択されていない
@@ -996,7 +996,7 @@ void ViewCommander::Command_WndScrollDown(void)
 
 
 // from ViewCommander_New.cpp
-// テキストを１行上へスクロール
+// テキストを１行上へScroll
 void ViewCommander::Command_WndScrollUp(void)
 {
 	LayoutInt	nCaretMarginY;
@@ -1012,7 +1012,7 @@ void ViewCommander::Command_WndScrollUp(void)
 	}
 
 	// Sep. 11, 2004 genta 同期用に行数を記憶
-	// Sep. 11, 2004 genta 同期スクロールの関数化
+	// Sep. 11, 2004 genta 同期Scrollの関数化
 	m_pCommanderView->SyncScrollV(m_pCommanderView->ScrollAtV(textArea.GetViewTopLine() + LayoutInt(1)));
 
 	// テキストが選択されていない

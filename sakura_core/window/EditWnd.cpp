@@ -73,7 +73,7 @@
 #include "sakura_rc.h"
 
 
-//@@@ 2002.01.14 YAZAKI 印刷プレビューをPrintPreviewに独立させたので
+//@@@ 2002.01.14 YAZAKI 印刷PreviewをPrintPreviewに独立させたので
 //	定義を削除
 
 #ifndef TBSTYLE_ALTDRAG
@@ -90,7 +90,7 @@
 
 #define		YOHAKU_X		4		// ウィンドウ内の枠と紙の隙間最小値
 #define		YOHAKU_Y		4		// ウィンドウ内の枠と紙の隙間最小値
-//@@@ 2002.01.14 YAZAKI 印刷プレビューをPrintPreviewに独立させたので
+//@@@ 2002.01.14 YAZAKI 印刷PreviewをPrintPreviewに独立させたので
 //	定義を削除
 
 
@@ -208,7 +208,7 @@ EditWnd::EditWnd()
 	m_hWnd(NULL)
 	, m_toolbar(this)			// warning C4355: 'this' : ベース メンバー初期化子リストで使用されました。
 	, m_statusBar(this)		// warning C4355: 'this' : ベース メンバー初期化子リストで使用されました。
-	, m_pPrintPreview(NULL) //@@@ 2002.01.14 YAZAKI 印刷プレビューをPrintPreviewに独立させたことによる変更
+	, m_pPrintPreview(NULL) //@@@ 2002.01.14 YAZAKI 印刷PreviewをPrintPreviewに独立させたことによる変更
 	, m_pDragSourceView(NULL)
 	, m_nActivePaneIndex(0)
 	, m_nEditViewCount(1)
@@ -904,7 +904,7 @@ void EditWnd::LayoutMainMenu()
 			switch (mainMenu->nFunc) {
 			case F_WINDOW_LIST:				// ウィンドウリスト
 				EditNode*	pEditNodeArr;
-				nCount = AppNodeManager::getInstance()->GetOpenedWindowArr(&pEditNodeArr, TRUE);
+				nCount = AppNodeManager::getInstance()->GetOpenedWindowArr(&pEditNodeArr, true);
 				delete [] pEditNodeArr;
 				break;
 			case F_FILE_USED_RECENTLY:		// 最近使ったファイル
@@ -1050,7 +1050,7 @@ void EditWnd::LayoutMiniMap( void )
 
 /*! バーの配置終了処理
 	@date 2006.12.19 ryoji 新規作成
-	@date 2007.03.04 ryoji 印刷プレビュー時はバーを隠す
+	@date 2007.03.04 ryoji 印刷Preview時はバーを隠す
 	@date 2011.01.21 ryoji アウトライン画面にゴミが描画されるのを抑止する
 */
 void EditWnd::EndLayoutBars(BOOL bAdjust/* = TRUE*/)
@@ -1106,7 +1106,7 @@ void EditWnd::MessageLoop(void)
 		if (ret == -1) break; // GetMessage失敗
 
 		// ダイアログメッセージ
-		     if (MyIsDialogMessage(m_pPrintPreview->GetPrintPreviewBarHANDLE_Safe(),	&msg)) {}	// 印刷プレビュー 操作バー
+		     if (MyIsDialogMessage(m_pPrintPreview->GetPrintPreviewBarHANDLE_Safe(),	&msg)) {}	// 印刷Preview 操作バー
 		else if (MyIsDialogMessage(m_dlgFind.GetHwnd(),									&msg)) {}	//「検索」ダイアログ
 		else if (MyIsDialogMessage(m_dlgFuncList.GetHwnd(),								&msg)) {}	//「アウトライン」ダイアログ
 		else if (MyIsDialogMessage(m_dlgReplace.GetHwnd(),								&msg)) {}	//「置換」ダイアログ
@@ -1367,9 +1367,9 @@ LRESULT EditWnd::DispatchEvent(
 		//	Feb. 11, 2007 genta 動作を選べるように(MDI風と従来動作)
 		// 2007.02.22 ryoji Alt+F4 のデフォルト機能でモード毎の動作が得られるようになった
 		if (wParam == SC_CLOSE) {
-			// 印刷プレビューモードでウィンドウを閉じる操作のときはプレビューを閉じる	// 2007.03.04 ryoji
+			// 印刷Previewモードでウィンドウを閉じる操作のときはPreviewを閉じる	// 2007.03.04 ryoji
 			if (m_pPrintPreview) {
-				PrintPreviewModeONOFF();	// 印刷プレビューモードのオン/オフ
+				PrintPreviewModeONOFF();	// 印刷Previewモードのオン/オフ
 				return 0L;
 			}
 			OnCommand(0, (WORD)KeyBind::GetDefFuncCode(VK_F4, _ALT), NULL);
@@ -1421,8 +1421,8 @@ LRESULT EditWnd::DispatchEvent(
 		}
 		lRes = 0;
 
-//@@@ 2002.01.14 YAZAKI 印刷プレビューをPrintPreviewに独立させたことによる変更
-		// 印刷プレビューモードのときは、キー操作は全部PrintPreviewBarへ転送
+//@@@ 2002.01.14 YAZAKI 印刷PreviewをPrintPreviewに独立させたことによる変更
+		// 印刷Previewモードのときは、キー操作は全部PrintPreviewBarへ転送
 		if (m_pPrintPreview) {
 			m_pPrintPreview->SetFocusToPrintPreviewBar();
 		}
@@ -1565,7 +1565,7 @@ LRESULT EditWnd::DispatchEvent(
 	case WM_DESTROY:
 		if (m_pShareData->flags.bRecordingKeyMacro) {					// キーボードマクロの記録中
 			if (m_pShareData->flags.hwndRecordingKeyMacro == GetHwnd()) {	// キーボードマクロを記録中のウィンドウ
-				m_pShareData->flags.bRecordingKeyMacro = FALSE;			// キーボードマクロの記録中
+				m_pShareData->flags.bRecordingKeyMacro = false;			// キーボードマクロの記録中
 				m_pShareData->flags.hwndRecordingKeyMacro = NULL;		// キーボードマクロを記録中のウィンドウ
 			}
 		}
@@ -2102,7 +2102,7 @@ int	EditWnd::OnClose(HWND hWndActive, bool bGrepNoConfirm)
 	) {
 		int i, j;
 		EditNode* p = NULL;
-		int nCount = AppNodeManager::getInstance()->GetOpenedWindowArr(&p, FALSE);
+		int nCount = AppNodeManager::getInstance()->GetOpenedWindowArr(&p, false);
 		if (nCount > 1) {
 			for (i=0; i<nCount; ++i) {
 				if (p[i].GetHwnd() == GetHwnd())
@@ -2364,8 +2364,8 @@ void EditWnd::InitMenu(HMENU hMenu, UINT uPos, BOOL fSystemMenu)
 		CheckFreeSubMenu(GetHwnd(), hMenu, uPos);
 	}
 
-//@@@ 2002.01.14 YAZAKI 印刷プレビューをPrintPreviewに独立させたことによる変更
-//	if (m_pPrintPreview)	return;	//	印刷プレビューモードなら排除。（おそらく排除しなくてもいいと思うんだけど、念のため）
+//@@@ 2002.01.14 YAZAKI 印刷PreviewをPrintPreviewに独立させたことによる変更
+//	if (m_pPrintPreview)	return;	//	印刷Previewモードなら排除。（おそらく排除しなくてもいいと思うんだけど、念のため）
 
 	// 機能が利用可能かどうか、チェック状態かどうかを一括チェック
 	numMenuItems = ::GetMenuItemCount(hMenu);
@@ -2560,7 +2560,7 @@ bool EditWnd::InitMenu_Special(HMENU hMenu, EFunctionCode eFunc)
 	case F_WINDOW_LIST:				// ウィンドウリスト
 		{
 			EditNode* pEditNodeArr;
-			int nRowNum = AppNodeManager::getInstance()->GetOpenedWindowArr(&pEditNodeArr, TRUE);
+			int nRowNum = AppNodeManager::getInstance()->GetOpenedWindowArr(&pEditNodeArr, true);
 			WinListMenu(hMenu, pEditNodeArr, nRowNum, false);
 			bInList = (nRowNum > 0);
 			delete [] pEditNodeArr;
@@ -2704,7 +2704,7 @@ STDMETHODIMP EditWnd::DragEnter(LPDATAOBJECT pDataObject, DWORD dwKeyState, POIN
 		return E_INVALIDARG;
 	}
 
-	// 印刷プレビューでは受け付けない
+	// 印刷Previewでは受け付けない
 	if (m_pPrintPreview) {
 		*pdwEffect = DROPEFFECT_NONE;
 		return E_INVALIDARG;
@@ -2889,21 +2889,21 @@ void EditWnd::OnSysMenuTimer(void) // by 鬼(2)
 }
 
 
-//@@@ 2002.01.14 YAZAKI 印刷プレビューをPrintPreviewに独立させたことによる変更
+//@@@ 2002.01.14 YAZAKI 印刷PreviewをPrintPreviewに独立させたことによる変更
 
-// 印刷プレビューモードのオン/オフ
+// 印刷Previewモードのオン/オフ
 void EditWnd::PrintPreviewModeONOFF(void)
 {
 	// 2006.06.17 ryoji Rebar があればそれをツールバー扱いする
 	HWND hwndToolBar = m_toolbar.GetRebarHwnd() ? m_toolbar.GetRebarHwnd(): m_toolbar.GetToolbarHwnd();
 
-	// 印刷プレビューモードか
-//@@@ 2002.01.14 YAZAKI 印刷プレビューをPrintPreviewに独立させたことによる変更
+	// 印刷Previewモードか
+//@@@ 2002.01.14 YAZAKI 印刷PreviewをPrintPreviewに独立させたことによる変更
 	if (m_pPrintPreview) {
-//@@@ 2002.01.14 YAZAKI 印刷プレビューをPrintPreviewに独立させたことによる変更
-		// 印刷プレビューモードを解除します。
+//@@@ 2002.01.14 YAZAKI 印刷PreviewをPrintPreviewに独立させたことによる変更
+		// 印刷Previewモードを解除します。
 		delete m_pPrintPreview;	//	削除。
-		m_pPrintPreview = NULL;	//	NULLか否かで、プリントプレビューモードか判断するため。
+		m_pPrintPreview = NULL;	//	NULLか否かで、プリントPreviewモードか判断するため。
 
 		// 通常モードに戻す
 		::ShowWindow(this->m_splitterWnd.GetHwnd(), SW_SHOW);
@@ -2926,10 +2926,10 @@ void EditWnd::PrintPreviewModeONOFF(void)
 		//::DrawMenuBar(GetHwnd());
 		LayoutMainMenu();				// 2010/5/16 Uchi
 
-//@@@ 2002.01.14 YAZAKI 印刷プレビューをPrintPreviewに独立させたことによる変更
+//@@@ 2002.01.14 YAZAKI 印刷PreviewをPrintPreviewに独立させたことによる変更
 		::InvalidateRect(GetHwnd(), NULL, TRUE);
 	}else {
-//@@@ 2002.01.14 YAZAKI 印刷プレビューをPrintPreviewに独立させたことによる変更
+//@@@ 2002.01.14 YAZAKI 印刷PreviewをPrintPreviewに独立させたことによる変更
 		// 通常モードを隠す
 		HMENU hMenu = ::GetMenu(GetHwnd());
 		//	Jun. 18, 2001 genta Print Previewではメニューを削除
@@ -2949,7 +2949,7 @@ void EditWnd::PrintPreviewModeONOFF(void)
 		::ShowWindow(m_dlgReplace.GetHwnd(), SW_HIDE);
 		::ShowWindow(m_dlgGrep.GetHwnd(), SW_HIDE);
 
-//@@@ 2002.01.14 YAZAKI 印刷プレビューをPrintPreviewに独立させたことによる変更
+//@@@ 2002.01.14 YAZAKI 印刷PreviewをPrintPreviewに独立させたことによる変更
 		m_pPrintPreview = new PrintPreview(this);
 		// 現在の印刷設定
 		m_pPrintPreview->SetPrintSetting(
@@ -2967,7 +2967,7 @@ void EditWnd::PrintPreviewModeONOFF(void)
 		}
 
 		// 印刷設定の反映
-//@@@ 2002.01.14 YAZAKI 印刷プレビューをPrintPreviewに独立させたことによる変更
+//@@@ 2002.01.14 YAZAKI 印刷PreviewをPrintPreviewに独立させたことによる変更
 		m_pPrintPreview->OnChangePrintSetting();
 		::InvalidateRect(GetHwnd(), NULL, TRUE);
 		::UpdateWindow(GetHwnd() /* m_pPrintPreview->GetPrintPreviewBarHANDLE() */);
@@ -2987,7 +2987,7 @@ LRESULT EditWnd::OnSize(WPARAM wParam, LPARAM lParam)
 LRESULT EditWnd::OnSize2( WPARAM wParam, LPARAM lParam, bool bUpdateStatus )
 {
 	RECT rc;
-//@@@ 2002.01.14 YAZAKI 印刷プレビューをPrintPreviewに独立させたことによる
+//@@@ 2002.01.14 YAZAKI 印刷PreviewをPrintPreviewに独立させたことによる
 //	変数削除
 
 	int cx = LOWORD(lParam);
@@ -3270,8 +3270,8 @@ LRESULT EditWnd::OnSize2( WPARAM wParam, LPARAM lParam, bool bUpdateStatus )
 	);
 	//@@@ To 2003.05.31 MIK
 
-	// 印刷プレビューモードか
-//@@@ 2002.01.14 YAZAKI 印刷プレビューをPrintPreviewに独立させたことによる変更
+	// 印刷Previewモードか
+//@@@ 2002.01.14 YAZAKI 印刷PreviewをPrintPreviewに独立させたことによる変更
 	if (!m_pPrintPreview) {
 		return 0L;
 	}
@@ -3287,34 +3287,34 @@ LRESULT EditWnd::OnPaint(
 	LPARAM	lParam 	// second message parameter
 	)
 {
-//@@@ 2002.01.14 YAZAKI 印刷プレビューをPrintPreviewに独立させたことによる変更
-	// 印刷プレビューモードか
+//@@@ 2002.01.14 YAZAKI 印刷PreviewをPrintPreviewに独立させたことによる変更
+	// 印刷Previewモードか
 	if (!m_pPrintPreview) {
 		PAINTSTRUCT ps;
 		::BeginPaint(hwnd, &ps);
 		::EndPaint(hwnd, &ps);
 		return 0L;
 	}
-//@@@ 2002.01.14 YAZAKI 印刷プレビューをPrintPreviewに独立させたことによる変更
+//@@@ 2002.01.14 YAZAKI 印刷PreviewをPrintPreviewに独立させたことによる変更
 	return m_pPrintPreview->OnPaint(hwnd, uMsg, wParam, lParam);
 }
 
-// 印刷プレビュー 垂直スクロールバーメッセージ処理 WM_VSCROLL
+// 印刷Preview 垂直スクロールバーメッセージ処理 WM_VSCROLL
 LRESULT EditWnd::OnVScroll(WPARAM wParam, LPARAM lParam)
 {
-	// 印刷プレビューモードか
+	// 印刷Previewモードか
 	if (!m_pPrintPreview) {
 		return 0;
 	}
-//@@@ 2002.01.14 YAZAKI 印刷プレビューをPrintPreviewに独立させたことによる変更
+//@@@ 2002.01.14 YAZAKI 印刷PreviewをPrintPreviewに独立させたことによる変更
 	return m_pPrintPreview->OnVScroll(wParam, lParam);
 }
 
-// 印刷プレビュー 水平スクロールバーメッセージ処理
+// 印刷Preview 水平スクロールバーメッセージ処理
 LRESULT EditWnd::OnHScroll(WPARAM wParam, LPARAM lParam)
 {
-//@@@ 2002.01.14 YAZAKI 印刷プレビューをPrintPreviewに独立させたことによる変更
-	// 印刷プレビューモードか
+//@@@ 2002.01.14 YAZAKI 印刷PreviewをPrintPreviewに独立させたことによる変更
+	// 印刷Previewモードか
 	if (!m_pPrintPreview) {
 		return 0;
 	}
@@ -3432,7 +3432,7 @@ LRESULT EditWnd::OnMouseMove(WPARAM wParam, LPARAM lParam)
 		return 0;
 	}
 
-//@@@ 2002.01.14 YAZAKI 印刷プレビューをPrintPreviewに独立させたことによる変更
+//@@@ 2002.01.14 YAZAKI 印刷PreviewをPrintPreviewに独立させたことによる変更
 	if (!m_pPrintPreview) {
 		return 0;
 	}else {
@@ -3455,8 +3455,8 @@ LRESULT EditWnd::OnMouseWheel(WPARAM wParam, LPARAM lParam)
 */
 BOOL EditWnd::DoMouseWheel(WPARAM wParam, LPARAM lParam)
 {
-//@@@ 2002.01.14 YAZAKI 印刷プレビューをPrintPreviewに独立させたことによる変更
-	// 印刷プレビューモードか
+//@@@ 2002.01.14 YAZAKI 印刷PreviewをPrintPreviewに独立させたことによる変更
+	// 印刷Previewモードか
 	if (!m_pPrintPreview) {
 		// 2006.03.26 ryoji by assitance with John タブ上ならウィンドウ切り替え
 		if (m_pShareData->common.tabBar.bChgWndByWheel && m_tabWnd.m_hwndTab) {
@@ -3468,7 +3468,7 @@ BOOL EditWnd::DoMouseWheel(WPARAM wParam, LPARAM lParam)
 			if ((hwnd == m_tabWnd.m_hwndTab || hwnd == m_tabWnd.GetHwnd())) {
 				// 現在開いている編集窓のリストを得る
 				EditNode* pEditNodeArr;
-				int nRowNum = AppNodeManager::getInstance()->GetOpenedWindowArr(&pEditNodeArr, TRUE);
+				int nRowNum = AppNodeManager::getInstance()->GetOpenedWindowArr(&pEditNodeArr, true);
 				if (nRowNum > 0) {
 					// 自分のウィンドウを調べる
 					int i, j;
@@ -3522,7 +3522,7 @@ BOOL EditWnd::DoMouseWheel(WPARAM wParam, LPARAM lParam)
 }
 
 /* 印刷ページ設定
-	印刷プレビュー時にも、そうでないときでも呼ばれる可能性がある。
+	印刷Preview時にも、そうでないときでも呼ばれる可能性がある。
 */
 BOOL EditWnd::OnPrintPageSetting(void)
 {
@@ -3534,14 +3534,14 @@ BOOL EditWnd::OnPrintPageSetting(void)
 
 	nCurrentPrintSetting = GetDocument()->m_docType.GetDocumentAttribute().nCurrentPrintSetting;
 	if (m_pPrintPreview) {
-		nLineNumberColumns = GetActiveView().GetTextArea().DetectWidthOfLineNumberArea_calculate(m_pPrintPreview->m_pLayoutMgr_Print); // 印刷プレビュー時は文書の桁数 2013.5.10 aroka
+		nLineNumberColumns = GetActiveView().GetTextArea().DetectWidthOfLineNumberArea_calculate(m_pPrintPreview->m_pLayoutMgr_Print); // 印刷Preview時は文書の桁数 2013.5.10 aroka
 	}else {
 		nLineNumberColumns = 3; // ファイルメニューからの設定時は最小値 2013.5.10 aroka
 	}
 
 	bRes = dlgPrintSetting.DoModal(
 		G_AppInstance(),
-//@@@ 2002.01.14 YAZAKI 印刷プレビューをPrintPreviewに独立させたことによる変更
+//@@@ 2002.01.14 YAZAKI 印刷PreviewをPrintPreviewに独立させたことによる変更
 		GetHwnd(),
 		&nCurrentPrintSetting, // 現在選択している印刷設定
 		m_pShareData->printSettingArr, // 現在の設定はダイアログ側で保持する 2013.5.1 aroka
@@ -3568,8 +3568,8 @@ BOOL EditWnd::OnPrintPageSetting(void)
 			bChangePrintSettingNo = true;
 		}
 
-//@@@ 2002.01.14 YAZAKI 印刷プレビューをPrintPreviewに独立させたことによる変更
-		//	印刷プレビュー時のみ。
+//@@@ 2002.01.14 YAZAKI 印刷PreviewをPrintPreviewに独立させたことによる変更
+		//	印刷Preview時のみ。
 		if (m_pPrintPreview) {
 			// 現在の印刷設定
 			// 2013.08.27 印刷設定番号が変更された時に対応できていなかった
@@ -3577,7 +3577,7 @@ BOOL EditWnd::OnPrintPageSetting(void)
 				m_pPrintPreview->SetPrintSetting(&m_pShareData->printSettingArr[GetDocument()->m_docType.GetDocumentAttribute().nCurrentPrintSetting]);
 			}
 
-			// 印刷プレビュー スクロールバー初期化
+			// 印刷Preview スクロールバー初期化
 			//m_pPrintPreview->InitPreviewScrollBar();
 
 			// 印刷設定の反映
@@ -3592,7 +3592,7 @@ BOOL EditWnd::OnPrintPageSetting(void)
 			EditWnd::getInstance()->GetHwnd()
 		);
 	}
-//@@@ 2002.01.14 YAZAKI 印刷プレビューをPrintPreviewに独立させたことによる変更
+//@@@ 2002.01.14 YAZAKI 印刷PreviewをPrintPreviewに独立させたことによる変更
 	::UpdateWindow(GetHwnd() /* m_pPrintPreview->GetPrintPreviewBarHANDLE() */);
 	return bRes;
 }
@@ -4090,7 +4090,7 @@ LRESULT EditWnd::PopupWinList(bool bMousePos)
 		m_menuDrawer.ResetContents();	// 2009.06.02 ryoji 追加
 		EditNode* pEditNodeArr;
 		HMENU hMenu = ::CreatePopupMenu();	// 2006.03.23 fon
-		int nRowNum = AppNodeManager::getInstance()->GetOpenedWindowArr(&pEditNodeArr, TRUE);
+		int nRowNum = AppNodeManager::getInstance()->GetOpenedWindowArr(&pEditNodeArr, true);
 		WinListMenu(hMenu, pEditNodeArr, nRowNum, true);
 		// メニューを表示する
 		RECT rcWork;

@@ -557,13 +557,14 @@ void DocOutline::MakeFuncList_C(
 						continue;
 					}else {
 						if (pLine[i] == L':') {
-							if (pLine[i + 1] == L':' ||  0 < i && pLine[i-1] == L':') {
+							if (pLine[i + 1] == L':' ||  0 < i && pLine[i - 1] == L':') {
 								// name ::class or class :: member
 							}else {
 								// class Klass:base のように:の前にスペースがない場合
 								if (nMode2 == M2_NAMESPACE_SAVE) {
-									if (szWord[0] != '\0')
+									if (szWord[0] != '\0') {
 										wcscpy_s(szItemName, szWord);
+									}
 									nMode2 = M2_NAMESPACE_END;
 								}else if (nMode2 == M2_TEMPLATE_SAVE) {
 									wcsncat(szTemplateName, szWord, nItemNameLenMax - wcslen(szTemplateName));
@@ -634,8 +635,9 @@ void DocOutline::MakeFuncList_C(
 
 					//	To Here Mar. 31, 2001 genta
 					// 2004/03/12 zenryaku キーワードに _ と PARAMS を使わせない (GNUのコードが見にくくなるから)
-					if (!(wcscmp(L"PARAMS", szWord) == 0 || wcscmp(L"_", szWord) == 0))
+					if (!(wcscmp(L"PARAMS", szWord) == 0 || wcscmp(L"_", szWord) == 0)) {
 						wcscpy_s(szWordPrev, szWord);
+					}
 					nWordIdx = 0;
 					szWord[0] = L'\0';
 					nMode = 0;
@@ -905,11 +907,12 @@ void DocOutline::MakeFuncList_C(
 					) {
 						if (nNestLevel_fparam == 0) {
 							bool bAdd = true;
-							if (wcscmp(szWordPrev, L"__declspec") == 0
-									|| wcscmp(szWordPrev, L"alignas") == 0
-									|| wcscmp(szWordPrev, L"decltype") == 0
-									|| wcscmp(szWordPrev, L"_Alignas") == 0
-									|| wcscmp(szWordPrev, L"__attribute__") == 0
+							if (0
+								|| wcscmp(szWordPrev, L"__declspec") == 0
+								|| wcscmp(szWordPrev, L"alignas") == 0
+								|| wcscmp(szWordPrev, L"decltype") == 0
+								|| wcscmp(szWordPrev, L"_Alignas") == 0
+								|| wcscmp(szWordPrev, L"__attribute__") == 0
 							) {
 								bAdd = false;
 							}else {
@@ -1114,8 +1117,9 @@ void DocOutline::MakeFuncList_C(
 						//	To Here
 						if (pLine[i] == L':' && pLine[i + 1] != L':') {
 							if (nMode2 == M2_NAMESPACE_SAVE) {
-								if (szWord[0] != '\0')
+								if (szWord[0] != '\0') {
 									wcscpy_s(szItemName, szWord);
+								}
 								nMode2 = M2_NAMESPACE_END;
 							}else if (nMode2 == M2_TEMPLATE_SAVE) {
 								wcsncat(szTemplateName, szWord, nItemNameLenMax - wcslen(szTemplateName));
@@ -1163,8 +1167,11 @@ void DocOutline::MakeFuncList_C(
 						//	専用の判定関数を使うべし．
 						//	operatorで無ければ=は代入なのでここは宣言文ではない．
 						int nLen = (int)wcslen(szWordPrev);
-						if (pLine[i] == L'=' && nNestLevel_func == 0
-							&& nMode2 == M2_NORMAL && ! C_IsOperator(szWordPrev, nLen)
+						if (1
+							&& pLine[i] == L'='
+							&& nNestLevel_func == 0
+							&& nMode2 == M2_NORMAL
+							&& ! C_IsOperator(szWordPrev, nLen)
 						) {
 							nMode2 = M2_AFTER_EQUAL;
 						}else if (nMode2 == M2_NORMAL && C_IsOperator(szWordPrev, nLen)) {
@@ -1193,8 +1200,9 @@ void DocOutline::MakeFuncList_C(
 								nMode2 = M2_NORMAL; 
 							else
 #endif
-							if (pLine[i] == L'<')
+							if (pLine[i] == L'<') {
 								nMode2 = M2_TEMPLATE_SAVE;
+							}
 						}
 						nMode = 2;
 						--i;
@@ -1229,7 +1237,7 @@ void EditView::SmartIndent_CPP(wchar_t wcChar)
 	int			nCharChars;
 	int			nSrcLen;
 	wchar_t		pszSrc[1024];
-	BOOL		bChange;
+	bool		bChange;
 
 	int			nCaretPosX_PHY;
 
@@ -1237,7 +1245,9 @@ void EditView::SmartIndent_CPP(wchar_t wcChar)
 
 	if (wcChar == WCODE::CR || wcschr(L":{}()", wcChar) != NULL) {
 		// 次へ進む
-	}else return;
+	}else {
+		return;
+	}
 
 	switch (wcChar) {
 	case WCODE::CR:
@@ -1470,9 +1480,9 @@ void EditView::SmartIndent_CPP(wchar_t wcChar)
 			|| (nDataLen == 0 && rangeLayout.IsOne())
 			|| (nDataLen == nSrcLen && wmemcmp(pszSrc, pszData, nDataLen) == 0)
 		) {
-			bChange = FALSE;
+			bChange = false;
 		}else {
-			bChange = TRUE;
+			bChange = true;
 
 			// データ置換 削除&挿入にも使える
 			ReplaceData_CEditView(

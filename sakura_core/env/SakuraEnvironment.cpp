@@ -112,7 +112,7 @@ void SakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszBu
 	const EditDoc* pDoc = EditDoc::GetInstance(0); //###
 
 	// Apr. 03, 2003 genta 固定文字列をまとめる
-	const wstring	PRINT_PREVIEW_ONLY		= LSW(STR_PREVIEW_ONLY);	// L"(印刷プレビューでのみ使用できます)";
+	const wstring	PRINT_PREVIEW_ONLY		= LSW(STR_PREVIEW_ONLY);	// L"(印刷Previewでのみ使用できます)";
 	const int		PRINT_PREVIEW_ONLY_LEN	= PRINT_PREVIEW_ONLY.length();
 	const wstring	NO_TITLE				= LSW(STR_NO_TITLE1);	// L"(無題)";
 	const int		NO_TITLE_LEN			= NO_TITLE.length();

@@ -481,7 +481,7 @@ void MainToolBar::OnToolbarTimer(void)
 */
 void MainToolBar::UpdateToolbar(void)
 {
-	// 印刷プレビュー中なら、何もしない。
+	// 印刷Preview中なら、何もしない。
 	if (m_pOwner->IsInPreviewMode())
 		return;
 	

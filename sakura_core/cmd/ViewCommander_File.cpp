@@ -321,10 +321,10 @@ void ViewCommander::Command_PRINT(void)
 }
 
 
-// 印刷プレビュー
+// 印刷Preview
 void ViewCommander::Command_PRINT_PREVIEW(void)
 {
-	// 印刷プレビューモードのオン/オフ
+	// 印刷Previewモードのオン/オフ
 	GetEditWindow()->PrintPreviewModeONOFF();
 	return;
 }
@@ -581,7 +581,7 @@ void ViewCommander::Command_PROFILEMGR( void )
 // 編集の全終了	// 2007.02.13 ryoji 追加
 void ViewCommander::Command_EXITALLEDITORS(void)
 {
-	ControlTray::CloseAllEditor(TRUE, GetMainWindow(), TRUE, 0);
+	ControlTray::CloseAllEditor(true, GetMainWindow(), true, 0);
 	return;
 }
 
@@ -599,8 +599,8 @@ void ViewCommander::Command_EXITALL(void)
 	主に編集中の一時ファイル出力などの目的に使用する．
 	現在開いているファイル(szFilePath)には影響しない．
 
-	@retval	TRUE 正常終了
-	@retval	FALSE ファイル作成に失敗
+	@retval	true 正常終了
+	@retval	false ファイル作成に失敗
 
 	@author	maru
 	@date	2006.12.10 maru 新規作成
@@ -720,8 +720,8 @@ bool ViewCommander::Command_PUTFILE(
 		@li	CODE_AUTODETECT:前回文字コードもしくは自動判別の結果による
 	@param[in] nFlgOpt 動作オプション（現在は未定義．0を指定のこと）
 
-	@retval	TRUE 正常終了
-	@retval	FALSE ファイルオープンに失敗
+	@retval	true 正常終了
+	@retval	false ファイルオープンに失敗
 
 	@author	maru
 	@date	2006.12.10 maru 新規作成

@@ -41,8 +41,8 @@
 
 
 // GetOpenedWindowArr用静的変数／構造体
-static BOOL s_bSort;	// ソート指定
-static BOOL s_bGSort;	// グループ指定
+static bool s_bSort;	// ソート指定
+static bool s_bGSort;	// グループ指定
 
 /*! @brief CShareData::pEditArr保護用Mutex
 
@@ -370,7 +370,7 @@ bool relayMessageToAllEditors(
 	)
 {
 	EditNode* pWndArr;
-	int n = AppNodeManager::getInstance()->GetOpenedWindowArr(&pWndArr, FALSE);
+	int n = AppNodeManager::getInstance()->GetOpenedWindowArr(&pWndArr, false);
 	if (n == 0) {
 		return true;
 	}
@@ -536,7 +536,7 @@ int AppNodeManager::GetNoNameNumber(HWND hWnd)
 	@date 2003.06.28 MIK CRecent利用で書き換え
 	@date 2007.06.20 ryoji bGroup引数追加、ソート処理を自前のものからqsortに変更
 */
-int AppNodeManager::GetOpenedWindowArr(EditNode** ppEditNode, BOOL bSort, BOOL bGSort/* = FALSE */)
+int AppNodeManager::GetOpenedWindowArr(EditNode** ppEditNode, bool bSort, bool bGSort/* = false */)
 {
 	LockGuard<Mutex> guard(g_editArrMutex);
 	int nRet = _GetOpenedWindowArrCore(ppEditNode, bSort, bGSort);
@@ -544,7 +544,7 @@ int AppNodeManager::GetOpenedWindowArr(EditNode** ppEditNode, BOOL bSort, BOOL b
 }
 
 // GetOpenedWindowArr関数コア処理部
-int AppNodeManager::_GetOpenedWindowArrCore(EditNode** ppEditNode, BOOL bSort, BOOL bGSort/* = FALSE */)
+int AppNodeManager::_GetOpenedWindowArrCore(EditNode** ppEditNode, bool bSort, bool bGSort/* = false */)
 {
 	DllSharedData* pShare = &GetDllShareData();
 	auto& nodes = pShare->nodes;
@@ -636,7 +636,7 @@ bool AppNodeManager::ReorderTab(HWND hwndSrc, HWND hwndDst)
 	int nSrcTab = -1;
 	int nDstTab = -1;
 	LockGuard<Mutex> guard(g_editArrMutex);
-	int nCount = _GetOpenedWindowArrCore(&p, TRUE);	// ロックは自分でやっているので直接コア部呼び出し
+	int nCount = _GetOpenedWindowArrCore(&p, true);	// ロックは自分でやっているので直接コア部呼び出し
 	for (int i=0; i<nCount; ++i) {
 		if (hwndSrc == p[i].hWnd) {
 			nSrcTab = i;
@@ -784,7 +784,7 @@ HWND AppNodeManager::GetNextTab(HWND hWndCur)
 		int			nGroup = 0;
 		bool		bFound = false;
 		EditNode*	p = nullptr;
-		int			nCount = AppNodeManager::getInstance()->GetOpenedWindowArr(&p, FALSE, FALSE);
+		int			nCount = AppNodeManager::getInstance()->GetOpenedWindowArr(&p, false, false);
 		if (nCount > 1) {
 			// search Group No.
 			for (int i=0; i<nCount; ++i) {

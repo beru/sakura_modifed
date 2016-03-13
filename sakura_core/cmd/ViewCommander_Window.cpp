@@ -81,7 +81,7 @@ void ViewCommander::Command_TAB_CLOSEOTHER(void)
 
 	// ウィンドウ一覧を取得する
 	EditNode* pEditNode;
-	int nCount = AppNodeManager::getInstance()->GetOpenedWindowArr(&pEditNode, TRUE);
+	int nCount = AppNodeManager::getInstance()->GetOpenedWindowArr(&pEditNode, true);
 	if (0 >= nCount) return;
 
 	for (int i=0; i<nCount; ++i) {
@@ -126,7 +126,7 @@ void ViewCommander::Command_CASCADE(void)
 {
 	// 現在開いている編集窓のリストを取得する
 	EditNode* pEditNodeArr;
-	int nRowNum = AppNodeManager::getInstance()->GetOpenedWindowArr(&pEditNodeArr, TRUE/*FALSE*/, TRUE);
+	int nRowNum = AppNodeManager::getInstance()->GetOpenedWindowArr(&pEditNodeArr, true/*false*/, true);
 
 	if (nRowNum > 0) {
 		struct WNDARR {
@@ -263,7 +263,7 @@ void ViewCommander::Command_TILE_V(void)
 {
 	// 現在開いている編集窓のリストを取得する
 	EditNode* pEditNodeArr;
-	int nRowNum = AppNodeManager::getInstance()->GetOpenedWindowArr(&pEditNodeArr, TRUE/*FALSE*/, TRUE);
+	int nRowNum = AppNodeManager::getInstance()->GetOpenedWindowArr(&pEditNodeArr, true/*false*/, true);
 
 	if (nRowNum > 0) {
 		std::vector<HWND> hWnds(nRowNum);
@@ -285,7 +285,7 @@ void ViewCommander::Command_TILE_V(void)
 			// 現在のウィンドウを先頭に持ってくる
 			if (editNodeHWnd == EditWnd::getInstance()->GetHwnd()) {
 				phwndArr[count] = phwndArr[0];
-				phwndArr[0] = EditWnd::getInstance()->GetHwnd();
+				phwndArr[0] = editNodeHWnd;
 			}else {
 				phwndArr[count] = editNodeHWnd;
 			}
@@ -316,7 +316,7 @@ void ViewCommander::Command_TILE_H(void)
 {
 	// 現在開いている編集窓のリストを取得する
 	EditNode* pEditNodeArr;
-	int nRowNum = AppNodeManager::getInstance()->GetOpenedWindowArr(&pEditNodeArr, TRUE/*FALSE*/, TRUE);
+	int nRowNum = AppNodeManager::getInstance()->GetOpenedWindowArr(&pEditNodeArr, true/*false*/, true);
 
 	if (nRowNum > 0) {
 		std::vector<HWND> hWnds(nRowNum);
@@ -338,7 +338,7 @@ void ViewCommander::Command_TILE_H(void)
 			// 現在のウィンドウを先頭に持ってくる
 			if (editNodeHWnd == EditWnd::getInstance()->GetHwnd()) {
 				phwndArr[count] = phwndArr[0];
-				phwndArr[0] = EditWnd::getInstance()->GetHwnd();
+				phwndArr[0] = editNodeHWnd;
 			}else {
 				phwndArr[count] = editNodeHWnd;
 			}
@@ -504,7 +504,7 @@ void ViewCommander::Command_TAB_CLOSELEFT(void)
 
 		// ウィンドウ一覧を取得する
 		EditNode* pEditNode;
-		int nCount = AppNodeManager::getInstance()->GetOpenedWindowArr(&pEditNode, TRUE);
+		int nCount = AppNodeManager::getInstance()->GetOpenedWindowArr(&pEditNode, true);
 		BOOL bSelfFound = FALSE;
 		if (0 >= nCount) return;
 
@@ -534,7 +534,7 @@ void ViewCommander::Command_TAB_CLOSERIGHT(void)
 
 		// ウィンドウ一覧を取得する
 		EditNode* pEditNode;
-		int nCount = AppNodeManager::getInstance()->GetOpenedWindowArr(&pEditNode, TRUE);
+		int nCount = AppNodeManager::getInstance()->GetOpenedWindowArr(&pEditNode, true);
 		BOOL bSelfFound = FALSE;
 		if (0 >= nCount) return;
 

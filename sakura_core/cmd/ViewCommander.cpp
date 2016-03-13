@@ -94,8 +94,8 @@ bool ViewCommander::HandleCommand(
 		m_pCommanderView->m_tipWnd.Hide();
 		m_pCommanderView->m_dwTipTimer = ::GetTickCount();	// 辞書Tip起動タイマー
 //	}
-	// 印刷プレビューモードか
-//@@@ 2002.01.14 YAZAKI 印刷プレビューをCPrintPreviewに独立させたことによる変更
+	// 印刷Previewモードか
+//@@@ 2002.01.14 YAZAKI 印刷PreviewをPrintPreviewに独立させたことによる変更
 	if (GetEditWindow()->m_pPrintPreview && nCommand != F_PRINT_PREVIEW) {
 		ErrorBeep();
 		return true;
@@ -224,7 +224,7 @@ bool ViewCommander::HandleCommand(
 	case F_FILE_REOPEN_CESU8:		Command_FILE_REOPEN(CODE_CESU8, lparam1 != 0); break;		// CESU-8で開きなおす
 	case F_FILE_REOPEN_UTF7:		Command_FILE_REOPEN(CODE_UTF7, lparam1 != 0); break;		// UTF-7で開き直す
 	case F_PRINT:					Command_PRINT(); break;					// 印刷
-	case F_PRINT_PREVIEW:			Command_PRINT_PREVIEW(); break;			// 印刷プレビュー
+	case F_PRINT_PREVIEW:			Command_PRINT_PREVIEW(); break;			// 印刷Preview
 	case F_PRINT_PAGESETUP:			Command_PRINT_PAGESETUP(); break;		// 印刷ページ設定	// Sept. 14, 2000 jepro 「印刷のページレイアウトの設定」から変更
 	case F_OPEN_HfromtoC:			bRet = Command_OPEN_HfromtoC(lparam1 != 0); break;			// 同名のC/C++ヘッダ(ソース)を開く	// Feb. 7, 2001 JEPRO 追加
 //	case F_OPEN_HHPP:				bRet = Command_OPEN_HHPP((bool)lparam1, true); break;		// 同名のC/C++ヘッダファイルを開く	// Feb. 9, 2001 jepro「.cまたは.cppと同名の.hを開く」から変更		del 2008/6/23 Uchi
@@ -263,10 +263,10 @@ bool ViewCommander::HandleCommand(
 	case F_INDENT_SPACE:		Command_INDENT(WCODE::SPACE, IndentType::Space); break;	// SPACEインデント
 	case F_UNINDENT_SPACE:		Command_UNINDENT(WCODE::SPACE); break;			// 逆SPACEインデント
 //	case F_WORDSREFERENCE:		Command_WORDSREFERENCE(); break;		// 単語リファレンス
-	case F_LTRIM:				Command_TRIM(TRUE); break;			// 2001.12.03 hor
-	case F_RTRIM:				Command_TRIM(FALSE); break;			// 2001.12.03 hor
-	case F_SORT_ASC:			Command_SORT(TRUE); break;			// 2001.12.06 hor
-	case F_SORT_DESC:			Command_SORT(FALSE); break;			// 2001.12.06 hor
+	case F_LTRIM:				Command_TRIM(true); break;			// 2001.12.03 hor
+	case F_RTRIM:				Command_TRIM(false); break;			// 2001.12.03 hor
+	case F_SORT_ASC:			Command_SORT(true); break;			// 2001.12.06 hor
+	case F_SORT_DESC:			Command_SORT(false); break;			// 2001.12.06 hor
 	case F_MERGE:				Command_MERGE(); break;				// 2001.12.06 hor
 	case F_RECONVERT:			Command_Reconvert(); break;			// メニューからの再変換対応 minfu 2002.04.09
 
@@ -285,8 +285,8 @@ bool ViewCommander::HandleCommand(
 	// 0ct. 29, 2001 genta マクロ向け機能拡張
 	case F_GOLINETOP:			Command_GOLINETOP(m_pCommanderView->GetSelectionInfo().m_bSelectingLock, lparam1); break;		// 行頭に移動(折り返し単位/改行単位)
 	case F_GOLINEEND:			Command_GOLINEEND(m_pCommanderView->GetSelectionInfo().m_bSelectingLock, 0, lparam1); break;	// 行末に移動(折り返し単位)
-//	case F_ROLLDOWN:			Command_ROLLDOWN(m_pCommanderView->GetSelectionInfo().m_bSelectingLock); break;					// スクロールダウン
-//	case F_ROLLUP:				Command_ROLLUP(m_pCommanderView->GetSelectionInfo().m_bSelectingLock); break;					// スクロールアップ
+//	case F_ROLLDOWN:			Command_ROLLDOWN(m_pCommanderView->GetSelectionInfo().m_bSelectingLock); break;					// Scroll Down
+//	case F_ROLLUP:				Command_ROLLUP(m_pCommanderView->GetSelectionInfo().m_bSelectingLock); break;					// Scroll Up
 	case F_HalfPageUp:			Command_HalfPageUp( m_pCommanderView->GetSelectionInfo().m_bSelectingLock, LayoutYInt(lparam1) ); break;				//半ページアップ	//Oct. 6, 2000 JEPRO 名称をPC-AT互換機系に変更(ROLL→PAGE) //Oct. 10, 2000 JEPRO 名称変更
 	case F_HalfPageDown:		Command_HalfPageDown( m_pCommanderView->GetSelectionInfo().m_bSelectingLock, LayoutYInt(lparam1) ); break;			//半ページダウン	//Oct. 6, 2000 JEPRO 名称をPC-AT互換機系に変更(ROLL→PAGE) //Oct. 10, 2000 JEPRO 名称変更
 	case F_1PageUp:				Command_1PageUp( m_pCommanderView->GetSelectionInfo().m_bSelectingLock, LayoutYInt(lparam1) ); break;					//１ページアップ	//Oct. 10, 2000 JEPRO 従来のページアップを半ページアップと名称変更し１ページアップを追加
@@ -297,11 +297,11 @@ bool ViewCommander::HandleCommand(
 	case F_JUMPHIST_PREV:		Command_JUMPHIST_PREV(); break;								// 移動履歴: 前へ
 	case F_JUMPHIST_NEXT:		Command_JUMPHIST_NEXT(); break;								// 移動履歴: 次へ
 	case F_JUMPHIST_SET:		Command_JUMPHIST_SET(); break;								// 現在位置を移動履歴に登録
-	case F_WndScrollDown:		Command_WndScrollDown(); break;								// テキストを１行下へスクロール	// 2001/06/20 asa-o
-	case F_WndScrollUp:			Command_WndScrollUp(); break;								// テキストを１行上へスクロール	// 2001/06/20 asa-o
+	case F_WndScrollDown:		Command_WndScrollDown(); break;								// テキストを１行下へScroll	// 2001/06/20 asa-o
+	case F_WndScrollUp:			Command_WndScrollUp(); break;								// テキストを１行上へScroll	// 2001/06/20 asa-o
 	case F_GONEXTPARAGRAPH:		Command_GONEXTPARAGRAPH(m_pCommanderView->GetSelectionInfo().m_bSelectingLock); break;			// 次の段落へ進む
 	case F_GOPREVPARAGRAPH:		Command_GOPREVPARAGRAPH(m_pCommanderView->GetSelectionInfo().m_bSelectingLock); break;			// 前の段落へ戻る
-	case F_AUTOSCROLL:			Command_AUTOSCROLL(); break;									// オートスクロール
+	case F_AUTOSCROLL:			Command_AUTOSCROLL(); break;									// Auto Scroll
 	case F_WHEELUP:				Command_WHEELUP(lparam1); break;
 	case F_WHEELDOWN:			Command_WHEELDOWN(lparam1); break;
 	case F_WHEELLEFT:			Command_WHEELLEFT(lparam1); break;
@@ -328,8 +328,8 @@ bool ViewCommander::HandleCommand(
 	case F_WORDRIGHT_SEL:	Command_WORDRIGHT(true); break;					// (範囲選択)単語の右端に移動
 	case F_GOLINETOP_SEL:	Command_GOLINETOP(true, lparam1); break;		// (範囲選択)行頭に移動(折り返し単位/改行単位)
 	case F_GOLINEEND_SEL:	Command_GOLINEEND(true, 0, lparam1); break;		// (範囲選択)行末に移動(折り返し単位)
-//	case F_ROLLDOWN_SEL:	Command_ROLLDOWN(TRUE); break;					// (範囲選択)スクロールダウン
-//	case F_ROLLUP_SEL:		Command_ROLLUP(TRUE); break;					// (範囲選択)スクロールアップ
+//	case F_ROLLDOWN_SEL:	Command_ROLLDOWN(TRUE); break;					// (範囲選択)Scroll Down
+//	case F_ROLLUP_SEL:		Command_ROLLUP(TRUE); break;					// (範囲選択)Scroll Up
 	case F_HalfPageUp_Sel:	Command_HalfPageUp( true, LayoutYInt(lparam1) ); break;				//(範囲選択)半ページアップ
 	case F_HalfPageDown_Sel:Command_HalfPageDown( true, LayoutYInt(lparam1) ); break;			//(範囲選択)半ページダウン
 	case F_1PageUp_Sel:		Command_1PageUp( true, LayoutYInt(lparam1) ); break;					//(範囲選択)１ページアップ

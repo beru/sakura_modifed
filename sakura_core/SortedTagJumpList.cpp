@@ -104,8 +104,8 @@ int SortedTagJumpList::AddBaseDir(const TCHAR* baseDir)
 	@param[in] note		備考
 	@param[in] depth	(さかのぼる)階層
 	@param[in] baseDirId	基準フォルダID。0で空文字列指定 (AddBaseDirの戻り値)
-	@retval TRUE  追加した
-	@retval FALSE 追加失敗
+	@retval true  追加した
+	@retval false 追加失敗
 	@date 2010.07.23 Moca baseDirId 追加
 */
 bool SortedTagJumpList::AddParamA(

@@ -244,7 +244,7 @@ void DlgDiff::SetData(void)
 		HWND hwndList = GetItemHwnd(IDC_LIST_DIFF_FILES);
 
 		// 現在開いている編集窓のリストをメニューにする
-		int nRowNum = AppNodeManager::getInstance()->GetOpenedWindowArr(&pEditNode, TRUE);
+		int nRowNum = AppNodeManager::getInstance()->GetOpenedWindowArr(&pEditNode, true);
 		if (nRowNum > 0) {
 			// 水平スクロール幅は実際に表示する文字列の幅を計測して決める	// 2009.09.26 ryoji
 			TextWidthCalc calc(hwndList);

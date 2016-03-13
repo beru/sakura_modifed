@@ -514,7 +514,7 @@ void ViewCommander::Command_UNDO(void)
 		// ルーラー再描画の必要があるときは DispRuler() ではなく他の部分と同時に Call_OnPaint() で描画する	// 2010.08.20 ryoji
 		// ・DispRuler() はルーラーとテキストの隙間（左側は行番号の幅に合わせた帯）を描画してくれない
 		// ・行番号表示に必要な幅は OPE_INSERT/OPE_DELETE 処理内で更新されており変更があればルーラー再描画フラグに反映されている
-		// ・水平スクロールもルーラー再描画フラグに反映されている
+		// ・水平Scrollもルーラー再描画フラグに反映されている
 		const bool bRedrawRuler = m_pCommanderView->GetRuler().GetRedrawFlag();
 		m_pCommanderView->Call_OnPaint((int)PaintAreaType::LineNumber | (int)PaintAreaType::Body | (bRedrawRuler? (int)PaintAreaType::Ruler: 0), false);
 		if (!bRedrawRuler) {
@@ -755,7 +755,7 @@ void ViewCommander::Command_REDO(void)
 		// ルーラー再描画の必要があるときは DispRuler() ではなく他の部分と同時に Call_OnPaint() で描画する	// 2010.08.20 ryoji
 		// ・DispRuler() はルーラーとテキストの隙間（左側は行番号の幅に合わせた帯）を描画してくれない
 		// ・行番号表示に必要な幅は OPE_INSERT/OPE_DELETE 処理内で更新されており変更があればルーラー再描画フラグに反映されている
-		// ・水平スクロールもルーラー再描画フラグに反映されている
+		// ・水平Scrollもルーラー再描画フラグに反映されている
 		const bool bRedrawRuler = m_pCommanderView->GetRuler().GetRedrawFlag();
 		m_pCommanderView->Call_OnPaint(
 			(int)PaintAreaType::LineNumber | (int)PaintAreaType::Body | (bRedrawRuler? (int)PaintAreaType::Ruler: 0),

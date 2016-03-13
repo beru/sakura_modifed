@@ -388,7 +388,7 @@ bool SearchAgent::PrevOrNextWord(
 	LogicInt	nLineNum,		//	行数
 	LogicInt	nIdx,			//	桁数
 	LogicInt*	pnColumnNew,	//	見つかった位置
-	bool		bLEFT,			//	TRUE:前方（左）へ向かう。FALSE:後方（右）へ向かう。
+	bool		bLEFT,			//	true:前方（左）へ向かう。false:後方（右）へ向かう。
 	bool		bStopsBothEnds	//	単語の両端で止まる
 	)
 {
@@ -608,7 +608,7 @@ int SearchAgent::SearchWord(
 			LogicInt nWork;
 			nNextWordFrom = ptSerachBegin.GetX2();
 			while (pDocLine) {
-				if (PrevOrNextWord(nLinePos, nNextWordFrom, &nWork, TRUE, FALSE)) {
+				if (PrevOrNextWord(nLinePos, nNextWordFrom, &nWork, true, false)) {
 					nNextWordFrom = nWork;
 					if (WhereCurrentWord(nLinePos, nNextWordFrom, &nNextWordFrom2, &nNextWordTo2 , NULL, NULL)) {
 						size_t nSize = searchWords.size();

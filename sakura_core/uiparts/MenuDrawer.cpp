@@ -141,7 +141,7 @@ MenuDrawer::MenuDrawer()
 /* 11 */		F_FILE_REOPEN_UTF8			/* , TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0 */,	// UTF-8で開き直す
 /* 12 */		F_FILE_REOPEN_UTF7			/* , TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0 */,	// UTF-7で開き直す
 /* 13 */		F_PRINT						/* , TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0 */,	// 印刷
-/* 14 */		F_PRINT_PREVIEW				/* , TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0 */,	// 印刷プレビュー
+/* 14 */		F_PRINT_PREVIEW				/* , TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0 */,	// 印刷Preview
 /* 15 */		F_PRINT_PAGESETUP			/* , TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0 */,	// 印刷ページ設定	// Sept. 21, 2000 JEPRO 追加
 /* 16 */		F_OPEN_HfromtoC				/* , TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0 */,	// 同名のC/C++ヘッダ(ソース)を開く	// Feb. 7, 2001 JEPRO 追加
 /* 17 */		F_DISABLE	/*F_OPEN_HHPP*/	/* , TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0 */,	// 同名のC/C++ヘッダファイルを開く	// Feb. 9, 2001 jepro「.cまたは.cppと同名の.hを開く」から変更		del 2008/6/23 Uchi

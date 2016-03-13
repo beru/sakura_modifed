@@ -155,7 +155,7 @@ static const EFunctionCode EIsModificationForbidden[] = {
 
 	@date 2000.05.12 genta 初期化方法変更
 	@date 2002.2.17 YAZAKI CShareDataのインスタンスは、Processにひとつあるのみ。
-	@date 2002.01.14 YAZAKI 印刷プレビューをCPrintPreviewに独立させたことによる変更
+	@date 2002.01.14 YAZAKI 印刷PreviewをCPrintPreviewに独立させたことによる変更
 	@date 2004.06.21 novice タグジャンプ機能追加
 */
 EditDoc::EditDoc(EditApp* pApp)

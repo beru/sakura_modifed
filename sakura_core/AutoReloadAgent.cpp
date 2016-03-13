@@ -91,7 +91,7 @@ bool AutoReloadAgent::_ToDoChecking() const
 		|| hwndActive != EditWnd::getInstance()->GetHwnd()
 		|| !GetListeningDoc()->m_docFile.GetFilePathClass().IsValidPath()
 		|| GetListeningDoc()->m_docFile.IsFileTimeZero()	// 現在編集中のファイルのタイムスタンプ
-		|| GetListeningDoc()->m_pEditWnd->m_pPrintPreview	// 印刷プレビュー中	2013/5/8 Uchi
+		|| GetListeningDoc()->m_pEditWnd->m_pPrintPreview	// 印刷Preview中	2013/5/8 Uchi
 	) {
 		return false;
 	}

@@ -102,16 +102,16 @@ public:
 
 // member valiables
 private:
-	bool		m_bGrepMode;		// [out] TRUE: Grep Mode
+	bool		m_bGrepMode;		// [out] true: Grep Mode
 	bool		m_bGrepDlg;			// Grepダイアログ
 	bool		m_bDebugMode;		
-	bool		m_bNoWindow;		// [out] TRUE: 編集Windowを開かない
-	bool		m_bWriteQuit;		// [out] TRUE: 設定を保存して終了	// 2007.05.19 ryoji sakuext用に追加
+	bool		m_bNoWindow;		// [out] true: 編集Windowを開かない
+	bool		m_bWriteQuit;		// [out] true: 設定を保存して終了	// 2007.05.19 ryoji sakuext用に追加
 	bool		m_bProfileMgr;
 	bool		m_bSetProfile;
 	EditInfo	m_fi;				//
 	GrepInfo	m_gi;				//
-	bool		m_bViewMode;		// [out] TRUE: Read Only
+	bool		m_bViewMode;		// [out] true: Read Only
 	int			m_nGroup;			// グループID	// 2007.06.26 ryoji
 	NativeW	m_mMacro;				// [out] マクロファイル名／マクロ文
 	NativeW	m_mMacroType;			// [out] マクロ種別

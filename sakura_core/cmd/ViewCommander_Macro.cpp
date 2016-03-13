@@ -38,7 +38,7 @@ void ViewCommander::Command_RECKEYMACRO(void)
 {
 	auto& flags = GetDllShareData().flags;
 	if (flags.bRecordingKeyMacro) {									// キーボードマクロの記録中
-		flags.bRecordingKeyMacro = FALSE;
+		flags.bRecordingKeyMacro = false;
 		flags.hwndRecordingKeyMacro = NULL;							// キーボードマクロを記録中のウィンドウ
 		//@@@ 2002.1.24 YAZAKI キーマクロをマクロ用フォルダに「RecKey.mac」という名で保存
 		TCHAR szInitDir[MAX_PATH];
@@ -62,7 +62,7 @@ void ViewCommander::Command_RECKEYMACRO(void)
 			ErrorMessage(	m_pCommanderView->GetHwnd(), LS(STR_ERR_CEDITVIEW_CMD25), csMacro.szKeyMacroFileName);
 		}
 	}else {
-		flags.bRecordingKeyMacro = TRUE;
+		flags.bRecordingKeyMacro = true;
 		flags.hwndRecordingKeyMacro = GetMainWindow();	// キーボードマクロを記録中のウィンドウ
 		// キーマクロのバッファをクリアする
 		//@@@ 2002.1.24 m_CKeyMacroMgrをCEditDocへ移動
@@ -83,7 +83,7 @@ void ViewCommander::Command_RECKEYMACRO(void)
 void ViewCommander::Command_SAVEKEYMACRO(void)
 {
 	auto& flags = GetDllShareData().flags;
-	flags.bRecordingKeyMacro = FALSE;
+	flags.bRecordingKeyMacro = false;
 	flags.hwndRecordingKeyMacro = NULL;	// キーボードマクロを記録中のウィンドウ
 
 	// Jun. 16, 2002 genta
@@ -135,7 +135,7 @@ void ViewCommander::Command_SAVEKEYMACRO(void)
 void ViewCommander::Command_LOADKEYMACRO(void)
 {
 	auto& flags = GetDllShareData().flags;
-	flags.bRecordingKeyMacro = FALSE;
+	flags.bRecordingKeyMacro = false;
 	flags.hwndRecordingKeyMacro = NULL;	// キーボードマクロを記録中のウィンドウ
 
 	TCHAR szPath[_MAX_PATH + 1];
@@ -180,7 +180,7 @@ void ViewCommander::Command_EXECKEYMACRO(void)
 	if (flags.bRecordingKeyMacro) {
 		Command_RECKEYMACRO();
 	}
-	flags.bRecordingKeyMacro = FALSE;
+	flags.bRecordingKeyMacro = false;
 	flags.hwndRecordingKeyMacro = NULL;	// キーボードマクロを記録中のウィンドウ
 
 	// キーボードマクロの実行
@@ -262,7 +262,7 @@ void ViewCommander::Command_EXECEXTMACRO(const WCHAR* pszPathW, const WCHAR* psz
 		m_pSMacroMgr->Append(STAND_KEYMACRO, F_EXECEXTMACRO, lparams, m_pCommanderView);
 
 		// キーマクロの記録を一時停止する
-		flags.bRecordingKeyMacro = FALSE;
+		flags.bRecordingKeyMacro = false;
 		hwndRecordingKeyMacro = flags.hwndRecordingKeyMacro;
 		flags.hwndRecordingKeyMacro = NULL;	// キーボードマクロを記録中のウィンドウ
 	}
@@ -290,7 +290,7 @@ void ViewCommander::Command_EXECEXTMACRO(const WCHAR* pszPathW, const WCHAR* psz
 
 	// キーマクロ記録中だった場合は再開する
 	if (hwndRecordingKeyMacro) {
-		flags.bRecordingKeyMacro = TRUE;
+		flags.bRecordingKeyMacro = true;
 		flags.hwndRecordingKeyMacro = hwndRecordingKeyMacro;	// キーボードマクロを記録中のウィンドウ
 	}
 	return;

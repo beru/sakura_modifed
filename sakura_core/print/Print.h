@@ -160,7 +160,7 @@ public:
 	*/
 	BOOL GetDefaultPrinter(MYDEVMODE *pMYDEVMODE);		// デフォルトのプリンタ情報を取得
 	BOOL PrintDlg(PRINTDLG *pd, MYDEVMODE *pMYDEVMODE);	// プリンタ情報を取得
-	// 印刷/プレビューに必要な情報を取得
+	// 印刷/Previewに必要な情報を取得
 	BOOL GetPrintMetrics(
 		MYDEVMODE*	pMYDEVMODE,
 		short*		pnPaperAllWidth,	// 用紙幅

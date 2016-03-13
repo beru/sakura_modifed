@@ -149,9 +149,7 @@ bool TextArea::GenerateClipRectLine(RECT* rc, const DispPos& pos) const
 }
 
 
-/*
-行番号表示に必要な幅を設定。幅が変更された場合はTRUEを返す
-*/
+// 行番号表示に必要な幅を設定。幅が変更された場合は true を返す
 bool TextArea::DetectWidthOfLineNumberArea(bool bRedraw)
 {
 	const EditView* pView = m_pEditView;
@@ -178,8 +176,8 @@ bool TextArea::DetectWidthOfLineNumberArea(bool bRedraw)
 		Rect			rc;
 		SetAreaLeft(nViewAlignLeftNew);
 		pView->GetClientRect(&rc);
-		int nCxVScroll = ::GetSystemMetrics(SM_CXVSCROLL); // 垂直スクロールバーの横幅
-		m_nViewCx = rc.Width() - nCxVScroll - GetAreaLeft(); // 表示域の幅
+		int nCxVScroll = ::GetSystemMetrics(SM_CXVSCROLL);		// 垂直スクロールバーの横幅
+		m_nViewCx = rc.Width() - nCxVScroll - GetAreaLeft();	// 表示域の幅
 		// 2008.05.27 nasukoji	表示域の桁数も算出する（右端カーソル移動時の表示場所ずれへの対処）
 		// m_nViewColNum = LayoutInt(t_max(0, m_nViewCx - 1) / pView->GetTextMetrics().GetHankakuDx());	// 表示域の桁数
 		UpdateViewColRowNums();
@@ -266,9 +264,9 @@ int TextArea::DetectWidthOfLineNumberArea_calculate(const LayoutMgr* pLayoutMgr,
 }
 
 void TextArea::TextArea_OnSize(
-	const Size& sizeClient, // ウィンドウのクライアントサイズ
-	int nCxVScroll,            // 垂直スクロールバーの横幅
-	int nCyHScroll             // 水平スクロールバーの縦幅
+	const Size& sizeClient,		// ウィンドウのクライアントサイズ
+	int nCxVScroll,				// 垂直スクロールバーの横幅
+	int nCyHScroll				// 水平スクロールバーの縦幅
 	)
 {
 	m_nViewCx = sizeClient.cx - nCxVScroll - GetAreaLeft(); // 表示域の幅

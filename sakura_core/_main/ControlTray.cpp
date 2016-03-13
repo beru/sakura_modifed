@@ -546,7 +546,7 @@ LRESULT ControlTray::DispatchEvent(
 			// タスクトレイのアイコンを常駐しない、または、トレイにアイコンを作っていない
 			if (!(csGeneral.bStayTaskTray && csGeneral.bUseTaskTray) || !m_bCreatedTrayIcon) {
 				// 現在開いている編集窓のリスト
-				nRowNum = AppNodeManager::getInstance()->GetOpenedWindowArr(&pEditNodeArr, TRUE);
+				nRowNum = AppNodeManager::getInstance()->GetOpenedWindowArr(&pEditNodeArr, true);
 				if (0 < nRowNum) {
 					delete [] pEditNodeArr;
 				}
@@ -1415,7 +1415,7 @@ void ControlTray::ActiveNextWindow(HWND hwndParent)
 {
 	// 現在開いている編集窓のリストを得る
 	EditNode*	pEditNodeArr;
-	int			nRowNum = AppNodeManager::getInstance()->GetOpenedWindowArr(&pEditNodeArr, TRUE);
+	int			nRowNum = AppNodeManager::getInstance()->GetOpenedWindowArr(&pEditNodeArr, true);
 	if (nRowNum > 0) {
 		// 自分のウィンドウを調べる
 		int nGroup = 0;
@@ -1455,7 +1455,7 @@ void ControlTray::ActivePrevWindow(HWND hwndParent)
 {
 	// 現在開いている編集窓のリストを得る
 	EditNode* pEditNodeArr;
-	int nRowNum = AppNodeManager::getInstance()->GetOpenedWindowArr(&pEditNodeArr, TRUE);
+	int nRowNum = AppNodeManager::getInstance()->GetOpenedWindowArr(&pEditNodeArr, true);
 	if (nRowNum > 0) {
 		// 自分のウィンドウを調べる
 		int nGroup = 0;
@@ -1543,7 +1543,7 @@ BOOL ControlTray::CloseAllEditor(
 	)
 {
 	EditNode* pWndArr;
-	int n = AppNodeManager::getInstance()->GetOpenedWindowArr(&pWndArr, FALSE);
+	int n = AppNodeManager::getInstance()->GetOpenedWindowArr(&pWndArr, false);
 	if (n == 0) {
 		return TRUE;
 	}

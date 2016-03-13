@@ -564,7 +564,7 @@ void ViewCommander::Command_UNINDENT(wchar_t wcChar)
 	@date 2001.12.03 hor 新規作成
 */
 void ViewCommander::Command_TRIM(
-	BOOL bLeft	//  [in] FALSE: 右TRIM / それ以外: 左TRIM
+	bool bLeft	//  [in] FALSE: 右TRIM / それ以外: 左TRIM
 	)
 {
 	bool bBeDisableSelectArea = false;
@@ -656,7 +656,7 @@ bool SortByKeyDesc(SortData* pst1, SortData* pst2) {return CStringRef_comp(pst1-
 	@date 2010.07.27 行ソートでコピーを減らす/NULより後ろも比較対照に
 	@date 2013.06.19 Moca 矩形選択時最終行に改行がない場合は付加+ソート後の最終行の改行を削除
 */
-void ViewCommander::Command_SORT(BOOL bAsc)	// bAsc:TRUE=昇順,FALSE=降順
+void ViewCommander::Command_SORT(bool bAsc)	// bAsc:true=昇順, false=降順
 {
 	LayoutRange rangeA;
 	LogicRange selectOld;

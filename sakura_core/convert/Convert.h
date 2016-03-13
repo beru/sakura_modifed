@@ -33,7 +33,7 @@ public:
 	static void ConvMemory(NativeW* pMemory, EFunctionCode nFuncCode, int nTabWidth, int nStartColumn);
 
 protected:
-	static void Command_TRIM2(NativeW* pMemory, BOOL bLeft);
+	static void Command_TRIM2(NativeW* pMemory, bool bLeft);
 };
 
 class Converter {

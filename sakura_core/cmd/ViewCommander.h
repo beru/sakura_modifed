@@ -102,7 +102,7 @@ public:
 	void Command_FILE_REOPEN(EncodingType nCharCode, bool bNoConfirm);		// 再オープン	// Dec. 4, 2002 genta 引数追加
 
 	void Command_PRINT(void);					// 印刷
-	void Command_PRINT_PREVIEW(void);			// 印刷プレビュー
+	void Command_PRINT_PREVIEW(void);			// 印刷Preview
 	void Command_PRINT_PAGESETUP(void);			// 印刷ページ設定	// Sept. 14, 2000 jepro 「印刷のページレイアウトの設定」から変更
 	bool Command_OPEN_HfromtoC(bool);			// 同名のC/C++ヘッダ(ソース)を開く	// Feb. 7, 2001 JEPRO 追加
 	bool Command_OPEN_HHPP(bool bCheckOnly, bool bBeepWhenMiss);				// 同名のC/C++ヘッダファイルを開く	// Feb. 9, 2001 jepro「.cまたは.cppと同名の.hを開く」から変更
@@ -143,8 +143,8 @@ public:
 // To Here 2001.12.03 hor
 	void Command_UNINDENT(wchar_t wcChar);// 逆インデント
 //	void Command_WORDSREFERENCE(void);	// 単語リファレンス
-	void Command_TRIM(BOOL);				// 2001.12.03 hor
-	void Command_SORT(BOOL);				// 2001.12.06 hor
+	void Command_TRIM(bool);				// 2001.12.03 hor
+	void Command_SORT(bool);				// 2001.12.06 hor
 	void Command_MERGE(void);				// 2001.12.06 hor
 	void Command_Reconvert(void);			// メニューからの再変換対応 minfu 2002.04.09
 	void Command_CtrlCode_Dialog(void);		// コントロールコードの入力(ダイアログ)	//@@@ 2002.06.02 MIK
@@ -165,23 +165,23 @@ public:
 	// Oct. 29, 2001 genta マクロ向け機能拡張
 	void Command_GOLINETOP(bool bSelect, int lparam);	// 行頭に移動（折り返し単位）
 	void Command_GOLINEEND(bool bSelect, int , int);	// 行末に移動（折り返し単位）
-//	void Command_ROLLDOWN(int);						// スクロールダウン
-//	void Command_ROLLUP(int);						// スクロールアップ
-	void Command_HalfPageUp( bool bSelect, LayoutYInt );			//半ページアップ	//Oct. 6, 2000 JEPRO 名称をPC-AT互換機系に変更(ROLL→PAGE) //Oct. 10, 2000 JEPRO 名称変更
-	void Command_HalfPageDown( bool bSelect, LayoutYInt );		//半ページダウン	//Oct. 6, 2000 JEPRO 名称をPC-AT互換機系に変更(ROLL→PAGE) //Oct. 10, 2000 JEPRO 名称変更
-	void Command_1PageUp( bool bSelect, LayoutYInt );			//１ページアップ	//Oct. 10, 2000 JEPRO 従来のページアップを半ページアップと名称変更し１ページアップを追加
-	void Command_1PageDown( bool bSelect, LayoutYInt );			//１ページダウン	//Oct. 10, 2000 JEPRO 従来のページダウンを半ページダウンと名称変更し１ページダウンを追加
+//	void Command_ROLLDOWN(int);						// Scroll Down
+//	void Command_ROLLUP(int);						// Scroll Up
+	void Command_HalfPageUp( bool bSelect, LayoutYInt );		// 半ページアップ	//Oct. 6, 2000 JEPRO 名称をPC-AT互換機系に変更(ROLL→PAGE) //Oct. 10, 2000 JEPRO 名称変更
+	void Command_HalfPageDown( bool bSelect, LayoutYInt );		// 半ページダウン	//Oct. 6, 2000 JEPRO 名称をPC-AT互換機系に変更(ROLL→PAGE) //Oct. 10, 2000 JEPRO 名称変更
+	void Command_1PageUp( bool bSelect, LayoutYInt );			// １ページアップ	//Oct. 10, 2000 JEPRO 従来のページアップを半ページアップと名称変更し１ページアップを追加
+	void Command_1PageDown( bool bSelect, LayoutYInt );			// １ページダウン	//Oct. 10, 2000 JEPRO 従来のページダウンを半ページダウンと名称変更し１ページダウンを追加
 	void Command_GOFILETOP(bool bSelect);			// ファイルの先頭に移動
 	void Command_GOFILEEND(bool bSelect);			// ファイルの最後に移動
 	void Command_CURLINECENTER(void);				// カーソル行をウィンドウ中央へ
 	void Command_JUMPHIST_PREV(void);				// 移動履歴: 前へ
 	void Command_JUMPHIST_NEXT(void);				// 移動履歴: 次へ
 	void Command_JUMPHIST_SET(void);				// 現在位置を移動履歴に登録
-	void Command_WndScrollDown(void);				// テキストを１行下へスクロール	// 2001/06/20 asa-o
-	void Command_WndScrollUp(void);					// テキストを１行上へスクロール	// 2001/06/20 asa-o
+	void Command_WndScrollDown(void);				// テキストを１行下へScroll	// 2001/06/20 asa-o
+	void Command_WndScrollUp(void);					// テキストを１行上へScroll	// 2001/06/20 asa-o
 	void Command_GONEXTPARAGRAPH(bool bSelect);		// 次の段落へ進む
 	void Command_GOPREVPARAGRAPH(bool bSelect);		// 前の段落へ戻る
-	void Command_AUTOSCROLL();		// オートスクロール
+	void Command_AUTOSCROLL();						// Auto Scroll
 	void Command_WHEELUP(int);
 	void Command_WHEELDOWN(int);
 	void Command_WHEELLEFT(int);

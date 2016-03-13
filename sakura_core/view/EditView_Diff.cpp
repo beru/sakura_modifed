@@ -438,7 +438,7 @@ bool MakeDiffTmpFile_core(
 	@date	2008/01/26	kobake 出力形式修正
 	@date	2013/06/21 エンコードをASCII系にする(SJIS固定をやめる)
 */
-BOOL EditView::MakeDiffTmpFile(
+bool EditView::MakeDiffTmpFile(
 	TCHAR* filename,
 	HWND hWnd,
 	EncodingType code,
@@ -449,7 +449,7 @@ BOOL EditView::MakeDiffTmpFile(
 	TCHAR* pszTmpName = _ttempnam(NULL, SAKURA_DIFF_TEMP_PREFIX);
 	if (!pszTmpName) {
 		WarningMessage(NULL, LS(STR_DIFF_FAILED));
-		return FALSE;
+		return false;
 	}
 
 	_tcscpy(filename, pszTmpName);
@@ -472,7 +472,7 @@ BOOL EditView::MakeDiffTmpFile(
 	TextOutputStream out(filename, code, true, false);
 	if (!out) {
 		WarningMessage(NULL, LS(STR_DIFF_FAILED_TEMP));
-		return FALSE;
+		return false;
 	}
 
 	bool bError = false;
@@ -490,14 +490,14 @@ BOOL EditView::MakeDiffTmpFile(
 		WarningMessage( NULL, LS(STR_DIFF_FAILED_TEMP) );
 	}
 
-	return TRUE;
+	return true;
 }
 
 
 
 /*!	外部ファイルを指定でのファイルを表示
 */
-BOOL EditView::MakeDiffTmpFile2(
+bool EditView::MakeDiffTmpFile2(
 	TCHAR* tmpName,
 	const TCHAR* orgName,
 	EncodingType code,
@@ -508,7 +508,7 @@ BOOL EditView::MakeDiffTmpFile2(
 	TCHAR* pszTmpName = _ttempnam(NULL, SAKURA_DIFF_TEMP_PREFIX);
 	if (!pszTmpName) {
 		WarningMessage( NULL, LS(STR_DIFF_FAILED) );
-		return FALSE;
+		return false;
 	}
 
 	_tcscpy(tmpName, pszTmpName);
@@ -521,7 +521,7 @@ BOOL EditView::MakeDiffTmpFile2(
 	TextOutputStream out(tmpName, saveCode, true, false);
 	if (!out) {
 		WarningMessage(NULL, LS(STR_DIFF_FAILED_TEMP));
-		return FALSE;
+		return false;
 	}
 	try {
 		bool bBigFile;
@@ -563,10 +563,10 @@ BOOL EditView::MakeDiffTmpFile2(
 		out.Close();
 		_tunlink( tmpName );	// 関数の実行に失敗したとき、一時ファイルの削除は関数内で行う。
 		WarningMessage(NULL, LS(STR_DIFF_FAILED_TEMP));
-		return FALSE;
+		return false;
 	}
 
-	return TRUE;
+	return true;
 }
 
 

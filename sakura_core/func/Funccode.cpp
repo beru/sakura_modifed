@@ -108,7 +108,7 @@ const EFunctionCode pnFuncList_File[] = {	// Oct. 16, 2000 JEPRO 変数名変更(List
 	F_FILE_REOPEN_CESU8	,	// CESU-8で開き直す
 	F_FILE_REOPEN_UTF7	,	// UTF-7で開き直す
 	F_PRINT				,	// 印刷
-	F_PRINT_PREVIEW		,	// 印刷プレビュー
+	F_PRINT_PREVIEW		,	// 印刷Preview
 	F_PRINT_PAGESETUP	,	// 印刷ページ設定	//Sept. 14, 2000 jepro 「印刷のページレイアウトの設定」から変更
 	F_OPEN_HfromtoC		,	// 同名のC/C++ヘッダ(ソース)を開く	//Feb. 7, 2001 JEPRO 追加
 //	F_OPEN_HHPP			,	// 同名のC/C++ヘッダファイルを開く	//Feb. 9, 2001 jepro「.cまたは.cppと同名の.hを開く」から変更		del 2008/6/23 Uchi
@@ -610,7 +610,7 @@ int FuncID_To_HelpContextID(EFunctionCode nFuncID)
 	case F_FILE_REOPEN_CESU8:	return HLP000337;			// CESU-8で開き直す		HLP000163->	2010/5/5 Uchi
 	case F_FILE_REOPEN_UTF7:	return HLP000161;			// UTF-7で開き直す
 	case F_PRINT:				return HLP000162;			// 印刷				//Sept. 14, 2000 jepro 「印刷のページレイアウトの設定」から変更
-	case F_PRINT_PREVIEW:		return HLP000120;			// 印刷プレビュー
+	case F_PRINT_PREVIEW:		return HLP000120;			// 印刷Preview
 	case F_PRINT_PAGESETUP:		return HLP000122;			// 印刷ページ設定	//Sept. 14, 2000 jepro 「印刷のページレイアウトの設定」から変更
 	case F_OPEN_HfromtoC:		return HLP000192;			// 同名のC/C++ヘッダ(ソース)を開く	//Feb. 7, 2001 JEPRO 追加
 //	case F_OPEN_HHPP:			return HLP000024;			// 同名のC/C++ヘッダファイルを開く	//Feb. 9, 2001 jepro「.cまたは.cppと同名の.hを開く」から変更		del 2008/6/23 Uchi
@@ -1213,7 +1213,7 @@ bool IsFuncChecked(const EditDoc* pEditDoc, const DllSharedData* pShareData, EFu
 	EditWnd* pEditWnd;
 	// Modified by KEITA for WIN64 2003.9.6
 	pEditWnd = (EditWnd*)::GetWindowLongPtr(EditWnd::getInstance()->GetHwnd(), GWLP_USERDATA);
-//@@@ 2002.01.14 YAZAKI 印刷プレビューをCPrintPreviewに独立させたことにより、プレビュー判定削除
+//@@@ 2002.01.14 YAZAKI 印刷PreviewをCPrintPreviewに独立させたことにより、Preview判定削除
 	EncodingType eDocCode = pEditDoc->GetDocumentEncoding();
 	switch (nId) {
 	case F_FILE_REOPEN_SJIS:		return eDocCode == CODE_SJIS;

@@ -237,7 +237,7 @@ void ViewCommander::Command_BASE64DECODE(void)
 		return;
 	}
 	// 選択範囲のデータを取得
-	// 正常時はTRUE,範囲未選択の場合はFALSEを返す
+	// 正常時はtrue,範囲未選択の場合はfalseを返す
 	NativeW ctextBuf;
 	if (!m_pCommanderView->GetSelectedDataSimple(ctextBuf)) {
 		ErrorBeep();
@@ -285,7 +285,7 @@ void ViewCommander::Command_UUDECODE(void)
 	}
 
 	// 選択範囲のデータを取得 -> memBuf
-	// 正常時はTRUE,範囲未選択の場合はFALSEを返す
+	// 正常時はtrue,範囲未選択の場合はfalseを返す
 	NativeW ctextBuf;
 	if (!m_pCommanderView->GetSelectedDataSimple(ctextBuf)) {
 		ErrorBeep();

@@ -491,22 +491,18 @@ TCHAR* KeyBind::GetMenuLabel(
 */
 EFunctionCode KeyBind::GetDefFuncCode(int nKeyCode, int nState)
 {
-	DllSharedData* pShareData = &GetDllShareData();
-	if (!pShareData) {
-		return F_DEFAULT;
-	}
-
+	auto& csTabBar = GetDllShareData().common.tabBar;
 	EFunctionCode nDefFuncCode = F_DEFAULT;
 	if (nKeyCode == VK_F4) {
 		if (nState == _CTRL) {
 			nDefFuncCode = F_FILECLOSE;	// 閉じて(無題)
-			if (pShareData->common.tabBar.bDispTabWnd && !pShareData->common.tabBar.bDispTabWndMultiWin) {
+			if (csTabBar.bDispTabWnd && !csTabBar.bDispTabWndMultiWin) {
 				nDefFuncCode = F_WINCLOSE;	// 閉じる
 			}
 		}else if (nState == _ALT) {
 			nDefFuncCode = F_WINCLOSE;	// 閉じる
-			if (pShareData->common.tabBar.bDispTabWnd && !pShareData->common.tabBar.bDispTabWndMultiWin) {
-				if (!pShareData->common.tabBar.bTab_CloseOneWin) {
+			if (csTabBar.bDispTabWnd && !csTabBar.bDispTabWndMultiWin) {
+				if (!csTabBar.bTab_CloseOneWin) {
 					nDefFuncCode = F_GROUPCLOSE;	// グループを閉じる	// 2007.06.20 ryoji
 				}
 			}
@@ -518,7 +514,7 @@ EFunctionCode KeyBind::GetDefFuncCode(int nKeyCode, int nState)
 
 /*! 特定のキー情報から機能コードを取得する
 
-	@param KeyData [in] キー情報
+	@param keyData [in] キー情報
 	@param nState [in] Shift,Ctrl,Altキー状態
 	@param bGetDefFuncCode [in] デフォルト機能を取得するかどうか
 
@@ -526,13 +522,13 @@ EFunctionCode KeyBind::GetDefFuncCode(int nKeyCode, int nState)
 
 	@date 2007.03.07 ryoji インライン関数から通常の関数に変更（BCCの最適化バグ対策）
 */
-EFunctionCode KeyBind::GetFuncCodeAt(KeyData& KeyData, int nState, bool bGetDefFuncCode)
+EFunctionCode KeyBind::GetFuncCodeAt(KeyData& keyData, int nState, bool bGetDefFuncCode)
 {
-	if (KeyData.nFuncCodeArr[nState] != 0) {
-		return KeyData.nFuncCodeArr[nState];
+	if (keyData.nFuncCodeArr[nState] != 0) {
+		return keyData.nFuncCodeArr[nState];
 	}
 	if (bGetDefFuncCode) {
-		return GetDefFuncCode(KeyData.nKeyCode, nState);
+		return GetDefFuncCode(keyData.nKeyCode, nState);
 	}
 	return F_DEFAULT;
 }

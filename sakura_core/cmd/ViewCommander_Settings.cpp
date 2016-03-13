@@ -177,15 +177,16 @@ void ViewCommander::Command_TYPE_LIST(void)
 void ViewCommander::Command_CHANGETYPE(int nTypePlusOne)
 {
 	TypeConfigNum type = TypeConfigNum(nTypePlusOne - 1);
+	auto doc = GetDocument();
 	if (nTypePlusOne == 0) {
-		type = GetDocument()->m_docType.GetDocumentType();
+		type = doc->m_docType.GetDocumentType();
 	}
 	if (type.IsValidType() && type.GetIndex() < GetDllShareData().nTypesCount) {
 		const TypeConfigMini* pConfig;
 		DocTypeManager().GetTypeConfigMini(type, &pConfig);
-		GetDocument()->m_docType.SetDocumentTypeIdx(pConfig->id, true);
-		GetDocument()->m_docType.LockDocumentType();
-		GetDocument()->OnChangeType();
+		doc->m_docType.SetDocumentTypeIdx(pConfig->id, true);
+		doc->m_docType.LockDocumentType();
+		doc->OnChangeType();
 	}
 }
 
@@ -300,11 +301,12 @@ void ViewCommander::Command_SETFONTSIZE(int fontSize, int shift, int mode)
 	// 新しいフォントサイズ設定
 	int lfHeight = DpiPointsToPixels(-nPointSize, 10);
 	int nTypeIndex = -1;
+	auto doc = GetDocument();
 	if (mode == 0) {
 		csView.lf.lfHeight = lfHeight;
 		csView.nPointSize = nPointSize;
 	}else if (mode == 1) {
-		TypeConfigNum nDocType = GetDocument()->m_docType.GetDocumentType();
+		TypeConfigNum nDocType = doc->m_docType.GetDocumentType();
 		auto type = std::make_unique<TypeConfig>();
 		if (!DocTypeManager().GetTypeConfig(nDocType, *type)) {
 			// 謎のエラー
@@ -317,11 +319,11 @@ void ViewCommander::Command_SETFONTSIZE(int fontSize, int shift, int mode)
 		DocTypeManager().SetTypeConfig(nDocType, *type);
 		nTypeIndex = nDocType.GetIndex();
 	}else if (mode == 2) {
-		GetDocument()->m_blfCurTemp = true;
-		GetDocument()->m_lfCur = lf;
-		GetDocument()->m_lfCur.lfHeight = lfHeight;
-		GetDocument()->m_nPointSizeCur = nPointSize;
-		GetDocument()->m_nPointSizeOrg = GetEditWindow()->GetFontPointSize(false);
+		doc->m_blfCurTemp = true;
+		doc->m_lfCur = lf;
+		doc->m_lfCur.lfHeight = lfHeight;
+		doc->m_nPointSizeCur = nPointSize;
+		doc->m_nPointSizeOrg = GetEditWindow()->GetFontPointSize(false);
 	}
 
 	HWND hwndFrame = GetMainWindow();
@@ -338,7 +340,7 @@ void ViewCommander::Command_SETFONTSIZE(int fontSize, int shift, int mode)
 		);
 	}else if (mode == 2) {
 		// 自分だけ更新
-		GetDocument()->OnChangeSetting(false);
+		doc->OnChangeSetting(false);
 	}
 }
 
@@ -360,13 +362,14 @@ void ViewCommander::Command_WRAPWINDOWWIDTH(void)	// Oct. 7, 2000 JEPRO WRAPWIND
 	LayoutInt newKetas;
 	
 	nWrapMode = m_pCommanderView->GetWrapMode(&newKetas);
-	GetDocument()->m_nTextWrapMethodCur = TextWrappingMethod::SettingWidth;
-	GetDocument()->m_bTextWrapMethodCurTemp = (GetDocument()->m_nTextWrapMethodCur != m_pCommanderView->m_pTypeData->nTextWrapMethod);
+	auto doc = GetDocument();
+	doc->m_nTextWrapMethodCur = TextWrappingMethod::SettingWidth;
+	doc->m_bTextWrapMethodCurTemp = (doc->m_nTextWrapMethodCur != m_pCommanderView->m_pTypeData->nTextWrapMethod);
 	if (nWrapMode == EditView::TGWRAP_NONE) {
 		return;	// 折り返し桁は元のまま
 	}
 
-	GetEditWindow()->ChangeLayoutParam(true, GetDocument()->m_layoutMgr.GetTabSpace(), newKetas);
+	GetEditWindow()->ChangeLayoutParam(true, doc->m_layoutMgr.GetTabSpace(), newKetas);
 	
 	// Aug. 14, 2005 genta 共通設定へは反映させない
 //	m_pCommanderView->m_pTypeData->nMaxLineKetas = m_nViewColNum;
@@ -450,7 +453,7 @@ void ViewCommander::Command_TEXTWRAPMETHOD(TextWrappingMethod nWrapMethod)
 	// 2009.08.28 nasukoji	「折り返さない」ならテキスト最大幅を算出、それ以外は変数をクリア
 	if (pDoc->m_nTextWrapMethodCur == TextWrappingMethod::NoWrapping) {
 		pDoc->m_layoutMgr.CalculateTextWidth();		// テキスト最大幅を算出する
-		GetEditWindow()->RedrawAllViews(NULL);		// スクロールバーの更新が必要なので再表示を実行する
+		GetEditWindow()->RedrawAllViews(NULL);		// Scroll Barの更新が必要なので再表示を実行する
 	}else {
 		pDoc->m_layoutMgr.ClearLayoutLineWidth();		// 各行のレイアウト行長の記憶をクリアする
 	}

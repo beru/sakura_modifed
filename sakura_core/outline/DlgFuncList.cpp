@@ -3472,7 +3472,7 @@ void DlgFuncList::Refresh(void)
 	BOOL bReloaded = ChangeLayout(OUTLINE_LAYOUT_FILECHANGED);	// 現在設定に従ってアウトライン画面を再配置する
 	if (!bReloaded && pEditWnd->m_dlgFuncList.GetHwnd()) {
 		OutlineType nOutlineType = GetOutlineTypeRedraw(m_nOutlineType);
-		pEditWnd->GetActiveView().GetCommander().Command_FUNCLIST(ShowDialogType::Reload, nOutlineType);	// 開く	※ HandleCommand(F_OUTLINE,...) だと印刷プレビュー状態で実行されないので Command_FUNCLIST()
+		pEditWnd->GetActiveView().GetCommander().Command_FUNCLIST(ShowDialogType::Reload, nOutlineType);	// 開く	※ HandleCommand(F_OUTLINE,...) だと印刷Preview状態で実行されないので Command_FUNCLIST()
 	}
 	if (MyGetAncestor(::GetForegroundWindow(), GA_ROOTOWNER2) == pEditWnd->GetHwnd()) {
 		::SetFocus(pEditWnd->GetActiveView().GetHwnd());	// フォーカスを戻す
@@ -3526,7 +3526,7 @@ bool DlgFuncList::ChangeLayout(int nId)
 				}
 			}
 			OutlineType nOutlineType = GetOutlineTypeRedraw(m_nOutlineType);	// ブックマークかアウトライン解析かは最後に開いていた時の状態を引き継ぐ（初期状態はアウトライン解析）
-			pEditView->GetCommander().Command_FUNCLIST(ShowDialogType::Normal, nOutlineType);	// 開く	※ HandleCommand(F_OUTLINE,...) だと印刷プレビュー状態で実行されないので Command_FUNCLIST()
+			pEditView->GetCommander().Command_FUNCLIST(ShowDialogType::Normal, nOutlineType);	// 開く	※ HandleCommand(F_OUTLINE,...) だと印刷Preview状態で実行されないので Command_FUNCLIST()
 			if (nId == OUTLINE_LAYOUT_BACKGROUND) {
 				::EnableWindow(pEditView->m_pEditWnd->GetHwnd(), TRUE);
 			}
@@ -3575,7 +3575,7 @@ bool DlgFuncList::ChangeLayout(int nId)
 				}
 			}
 			OutlineType nOutlineType = GetOutlineTypeRedraw(m_nOutlineType);
-			pEditView->GetCommander().Command_FUNCLIST(ShowDialogType::Normal, nOutlineType);	// 開く	※ HandleCommand(F_OUTLINE,...) だと印刷プレビュー状態で実行されないので Command_FUNCLIST()
+			pEditView->GetCommander().Command_FUNCLIST(ShowDialogType::Normal, nOutlineType);	// 開く	※ HandleCommand(F_OUTLINE,...) だと印刷Preview状態で実行されないので Command_FUNCLIST()
 			if (nId == OUTLINE_LAYOUT_BACKGROUND) {
 				::EnableWindow(pEditView->m_pEditWnd->GetHwnd(), TRUE);
 			}

@@ -124,7 +124,7 @@ enum class MouseFunctionType {
 
 // 2008.05.30 nasukoji	テキストの折り返し方法
 enum class TextWrappingMethod {
-	NoWrapping,		// 折り返さない（スクロールバーをテキスト幅に合わせる）
+	NoWrapping,		// 折り返さない（ScrollBarをテキスト幅に合わせる）
 	SettingWidth,	// 指定桁で折り返す
 	WindowWidth,	// 右端で折り返す
 };

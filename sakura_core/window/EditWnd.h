@@ -64,7 +64,7 @@
 
 static const int MENUBAR_MESSAGE_MAX_LEN = 30;
 
-//@@@ 2002.01.14 YAZAKI 印刷プレビューをPrintPreviewに独立させたことによる変更
+//@@@ 2002.01.14 YAZAKI 印刷PreviewをPrintPreviewに独立させたことによる変更
 class PrintPreview; // 2002/2/10 aroka
 class DropTarget;
 class Plug;
@@ -197,7 +197,7 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                           設定                              //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-	void PrintPreviewModeONOFF(void);	// 印刷プレビューモードのオン/オフ
+	void PrintPreviewModeONOFF(void);	// 印刷Previewモードのオン/オフ
 	
 	// アイコン
 	void SetWindowIcon(HICON, int);	//	Sep. 10, 2002 genta
@@ -217,7 +217,7 @@ public:
 	//! ツールチップのテキストを取得。2007.09.08 kobake 追加
 	void GetTooltipText(TCHAR* wszBuf, size_t nBufCount, int nID) const;
 	
-	//! 印刷プレビュー中かどうか
+	//! 印刷Preview中かどうか
 	bool IsInPreviewMode() {
 		return m_pPrintPreview != NULL;
 	}
@@ -353,7 +353,7 @@ public:
 	TabWnd			m_tabWnd;			// タブウィンドウ	//@@@ 2003.05.31 MIK
 	FuncKeyWnd		m_funcKeyWnd;		// ファンクションバー
 	MainStatusBar	m_statusBar;		// ステータスバー
-	PrintPreview*	m_pPrintPreview;	// 印刷プレビュー表示情報。必要になったときのみインスタンスを生成する。
+	PrintPreview*	m_pPrintPreview;	// 印刷Preview表示情報。必要になったときのみインスタンスを生成する。
 
 	SplitterWnd		m_splitterWnd;		// 分割フレーム
 	EditView*		m_pDragSourceView;	// ドラッグ元のビュー

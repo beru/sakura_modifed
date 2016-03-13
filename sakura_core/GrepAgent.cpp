@@ -109,7 +109,7 @@ std::tstring GrepAgent::ChopYen( const std::tstring& str )
 	// [A:\]‚È‚Ç‚Ìƒ‹[ƒg‚Å‚ ‚Á‚Ä‚àíœ
 	for (size_t i=0; i<nPathLen; ++i) {
 		if (1
-			&& _T('\\') == dst[i]
+			&& dst[i] == _T('\\')
 			&& i == nPathLen - 1
 		) {
 			dst.resize( nPathLen - 1 );

@@ -27,7 +27,8 @@ bool ViewCommander::Command_SELECTWORD(LayoutPoint* pptCaretPos)
 		// 現在の選択範囲を非選択状態に戻す
 		si.DisableSelectArea(true);
 	}
-	LayoutPoint ptCaretPos = ((!pptCaretPos) ? GetCaret().GetCaretLayoutPos() : *pptCaretPos);
+	auto& caret = GetCaret();
+	LayoutPoint ptCaretPos = ((!pptCaretPos) ? caret.GetCaretLayoutPos() : *pptCaretPos);
 	auto& layoutMgr = GetDocument()->m_layoutMgr;
 	const Layout* pLayout = layoutMgr.SearchLineByLayoutY(ptCaretPos.GetY2());
 	if (!pLayout) {
@@ -56,9 +57,8 @@ bool ViewCommander::Command_SELECTWORD(LayoutPoint* pptCaretPos)
 		si.DrawSelectArea();
 
 		// 単語の先頭にカーソルを移動
-		GetCaret().MoveCursor(range.GetTo(), true);
-		GetCaret().m_nCaretPosX_Prev = GetCaret().GetCaretLayoutPos().GetX2();
-
+		caret.MoveCursor(range.GetTo(), true);
+		caret.m_nCaretPosX_Prev = caret.GetCaretLayoutPos().GetX2();
 		return true;	// 単語選択に成功。
 	}else {
 		return false;	// 単語選択に失敗
@@ -112,16 +112,17 @@ void ViewCommander::Command_SELECTLINE(int lparam)
 	LayoutPoint ptCaret;
 
 	auto& layoutMgr = GetDocument()->m_layoutMgr;
+	auto& caret = GetCaret();
 	// 最下行（物理行）でない
-	if (GetCaret().GetCaretLogicPos().y < GetDocument()->m_docLineMgr.GetLineCount()) {
+	if (caret.GetCaretLogicPos().y < GetDocument()->m_docLineMgr.GetLineCount()) {
 		// 1行先の物理行からレイアウト行を求める
-		layoutMgr.LogicToLayout(LogicPoint(0, GetCaret().GetCaretLogicPos().y + 1), &ptCaret);
+		layoutMgr.LogicToLayout(LogicPoint(0, caret.GetCaretLogicPos().y + 1), &ptCaret);
 
 		// カーソルを次の物理行頭へ移動する
 		m_pCommanderView->MoveCursorSelecting(ptCaret, TRUE);
 
 		// 移動後のカーソル位置を取得する
-		ptCaret = GetCaret().GetCaretLayoutPos().Get();
+		ptCaret = caret.GetCaretLayoutPos().Get();
 	}else {
 		// カーソルを最下行（レイアウト行）へ移動する
 		m_pCommanderView->MoveCursorSelecting(LayoutPoint(LayoutInt(0), layoutMgr.GetLineCount()), TRUE);
@@ -130,7 +131,7 @@ void ViewCommander::Command_SELECTLINE(int lparam)
 		// 選択するものが無い（[EOF]のみの行）時は選択状態としない
 		if (
 			!si.IsTextSelected()
-			&& (GetCaret().GetCaretLogicPos().y >= GetDocument()->m_docLineMgr.GetLineCount())
+			&& (caret.GetCaretLogicPos().y >= GetDocument()->m_docLineMgr.GetLineCount())
 		) {
 			// 現在の選択範囲を非選択状態に戻す
 			si.DisableSelectArea(true);

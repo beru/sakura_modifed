@@ -137,10 +137,10 @@ BOOL Print::PrintDlg(
 	//  現在のプリンタ設定の必要部分を変更
 	//
 	DEVMODE* pDEVMODE = (DEVMODE*)::GlobalLock(m_hDevMode);
-	pDEVMODE->dmOrientation			= pMYDEVMODE->dmOrientation;
-	pDEVMODE->dmPaperSize			= pMYDEVMODE->dmPaperSize;
-	pDEVMODE->dmPaperLength			= pMYDEVMODE->dmPaperLength;
-	pDEVMODE->dmPaperWidth			= pMYDEVMODE->dmPaperWidth;
+	pDEVMODE->dmOrientation		= pMYDEVMODE->dmOrientation;
+	pDEVMODE->dmPaperSize		= pMYDEVMODE->dmPaperSize;
+	pDEVMODE->dmPaperLength		= pMYDEVMODE->dmPaperLength;
+	pDEVMODE->dmPaperWidth		= pMYDEVMODE->dmPaperWidth;
 	// PrintDlg()でReAllocされる事を考えて、呼び出す前にUnlock
 	::GlobalUnlock(m_hDevMode);
 
@@ -182,10 +182,10 @@ BOOL Print::PrintDlg(
 	// →プリンタから得られた dmFieldsが1でないLength,Width情報に、間違った長さが入っているプリンタドライバでは、
 	//   縦・横が正しく印刷されない不具合となっていた(2003.07.03 かろと)
 	pMYDEVMODE->dmFields = pDEVMODE->dmFields & (DM_ORIENTATION | DM_PAPERSIZE | DM_PAPERLENGTH | DM_PAPERWIDTH);
-	pMYDEVMODE->dmOrientation		= pDEVMODE->dmOrientation;
-	pMYDEVMODE->dmPaperSize			= pDEVMODE->dmPaperSize;
-	pMYDEVMODE->dmPaperLength		= pDEVMODE->dmPaperLength;
-	pMYDEVMODE->dmPaperWidth		= pDEVMODE->dmPaperWidth;
+	pMYDEVMODE->dmOrientation	= pDEVMODE->dmOrientation;
+	pMYDEVMODE->dmPaperSize		= pDEVMODE->dmPaperSize;
+	pMYDEVMODE->dmPaperLength	= pDEVMODE->dmPaperLength;
+	pMYDEVMODE->dmPaperWidth	= pDEVMODE->dmPaperWidth;
 
 	DEBUG_TRACE(_T(" (入力/出力) デバイス ドライバ=[%ts]\n"), (TCHAR*)pDEVNAMES + pDEVNAMES->wDriverOffset);
 	DEBUG_TRACE(_T(" (入力/出力) デバイス名=[%ts]\n"),        (TCHAR*)pDEVNAMES + pDEVNAMES->wDeviceOffset);
@@ -259,10 +259,10 @@ BOOL Print::GetDefaultPrinter(MYDEVMODE* pMYDEVMODE)
 	// →プリンタから得られた dmFieldsが1でないLength,Width情報に、間違った長さが入っているプリンタドライバでは、
 	//   縦・横が正しく印刷されない不具合となっていた(2003.07.03 かろと)
 	pMYDEVMODE->dmFields = pDEVMODE->dmFields & (DM_ORIENTATION | DM_PAPERSIZE | DM_PAPERLENGTH | DM_PAPERWIDTH);
-	pMYDEVMODE->dmOrientation		= pDEVMODE->dmOrientation;
-	pMYDEVMODE->dmPaperSize			= pDEVMODE->dmPaperSize;
-	pMYDEVMODE->dmPaperLength		= pDEVMODE->dmPaperLength;
-	pMYDEVMODE->dmPaperWidth		= pDEVMODE->dmPaperWidth;
+	pMYDEVMODE->dmOrientation	= pDEVMODE->dmOrientation;
+	pMYDEVMODE->dmPaperSize		= pDEVMODE->dmPaperSize;
+	pMYDEVMODE->dmPaperLength	= pDEVMODE->dmPaperLength;
+	pMYDEVMODE->dmPaperWidth	= pDEVMODE->dmPaperWidth;
 
 	DEBUG_TRACE(_T(" (入力/出力) デバイス ドライバ=[%ts]\n"), (TCHAR*)pDEVNAMES + pDEVNAMES->wDriverOffset);
 	DEBUG_TRACE(_T(" (入力/出力) デバイス名=[%ts]\n"),        (TCHAR*)pDEVNAMES + pDEVNAMES->wDeviceOffset);
@@ -350,7 +350,7 @@ end_of_func:;
 }
 
 
-// 印刷/プレビューに必要な情報を取得
+// 印刷/Previewに必要な情報を取得
 BOOL Print::GetPrintMetrics(
 	MYDEVMODE*	pMYDEVMODE,
 	short*		pnPaperAllWidth,	// 用紙幅
@@ -565,22 +565,22 @@ void Print::SettingInitialize(PrintSetting& pPrintSetting, const TCHAR* settingN
 	_tcscpy_s(pPrintSetting.szPrintSettingName, settingName);		// 印刷設定の名前
 	_tcscpy(pPrintSetting.szPrintFontFaceHan, _T("ＭＳ 明朝"));		// 印刷フォント
 	_tcscpy(pPrintSetting.szPrintFontFaceZen, _T("ＭＳ 明朝"));		// 印刷フォント
-	pPrintSetting.bColorPrint = false;		// カラー印刷			// 2013/4/26 Uchi
-	pPrintSetting.nPrintFontWidth = 12;		// 印刷フォント幅(1/10mm単位)
+	pPrintSetting.bColorPrint = false;			// カラー印刷			// 2013/4/26 Uchi
+	pPrintSetting.nPrintFontWidth = 12;			// 印刷フォント幅(1/10mm単位)
 	pPrintSetting.nPrintFontHeight = pPrintSetting.nPrintFontWidth * 2;	// 印刷フォント高さ(1/10mm単位単位)
-	pPrintSetting.nPrintDansuu = 1;			// 段組の段数
-	pPrintSetting.nPrintDanSpace = 70; 		// 段と段の隙間(1/10mm)
+	pPrintSetting.nPrintDansuu = 1;				// 段組の段数
+	pPrintSetting.nPrintDanSpace = 70; 			// 段と段の隙間(1/10mm)
 	pPrintSetting.bPrintWordWrap = true;		// 英文ワードラップする
 	pPrintSetting.bPrintKinsokuHead = false;	// 行頭禁則する			//@@@ 2002.04.09 MIK
 	pPrintSetting.bPrintKinsokuTail = false;	// 行末禁則する			//@@@ 2002.04.09 MIK
 	pPrintSetting.bPrintKinsokuRet  = false;	// 改行文字をぶら下げる	//@@@ 2002.04.13 MIK
 	pPrintSetting.bPrintKinsokuKuto = false;	// 2006.08.14 Moca 初期化ミス
-	pPrintSetting.bPrintLineNumber = false;	// 行番号を印刷する
+	pPrintSetting.bPrintLineNumber = false;		// 行番号を印刷する
 	pPrintSetting.nPrintLineSpacing = 30;		// 印刷フォント行間 文字の高さに対する割合(%)
-	pPrintSetting.nPrintMarginTY = 100;		// 印刷用紙マージン 上(1/10mm単位)
-	pPrintSetting.nPrintMarginBY = 200;		// 印刷用紙マージン 下(1/10mm単位)
-	pPrintSetting.nPrintMarginLX = 200;		// 印刷用紙マージン 左(1/10mm単位)
-	pPrintSetting.nPrintMarginRX = 100;		// 印刷用紙マージン 右(1/10mm単位)
+	pPrintSetting.nPrintMarginTY = 100;			// 印刷用紙マージン 上(1/10mm単位)
+	pPrintSetting.nPrintMarginBY = 200;			// 印刷用紙マージン 下(1/10mm単位)
+	pPrintSetting.nPrintMarginLX = 200;			// 印刷用紙マージン 左(1/10mm単位)
+	pPrintSetting.nPrintMarginRX = 100;			// 印刷用紙マージン 右(1/10mm単位)
 	pPrintSetting.nPrintPaperOrientation = DMORIENT_PORTRAIT;	// 用紙方向 DMORIENT_PORTRAIT (1) または DMORIENT_LANDSCAPE (2)
 	pPrintSetting.nPrintPaperSize = DMPAPER_A4;	// 用紙サイズ
 	// プリンタ設定 DEVMODE用

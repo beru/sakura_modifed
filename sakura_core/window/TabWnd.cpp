@@ -1872,7 +1872,7 @@ void TabWnd::Refresh(bool bEnsureVisible/* = true*/, bool bRebuild/* = false*/)
 	}
 
 	pEditNode = NULL;
-	nCount = AppNodeManager::getInstance()->GetOpenedWindowArr(&pEditNode, TRUE);
+	nCount = AppNodeManager::getInstance()->GetOpenedWindowArr(&pEditNode, true);
 
 	// 自ウィンドウのグループ番号を調べる
 	for (i=0; i<nCount; ++i) {
@@ -2056,9 +2056,10 @@ void TabWnd::ShowHideWindow(HWND hwnd, BOOL bDisp)
 	auto& csTabBar = m_pShareData->common.tabBar;
 	if (bDisp) {
 		if (csTabBar.bDispTabWnd && !csTabBar.bDispTabWndMultiWin) {
-			if (m_pShareData->flags.bEditWndChanging)
+			if (m_pShareData->flags.bEditWndChanging) {
 				return;	// 切替の最中(busy)は要求を無視する
-			m_pShareData->flags.bEditWndChanging = TRUE;	// 編集ウィンドウ切替中ON	2007.04.03 ryoji
+			}
+			m_pShareData->flags.bEditWndChanging = true;	// 編集ウィンドウ切替中ON	2007.04.03 ryoji
 
 			// 対象ウィンドウのスレッドに位置合わせを依頼する	// 2007.04.03 ryoji
 			DWORD_PTR dwResult;
@@ -2070,7 +2071,7 @@ void TabWnd::ShowHideWindow(HWND hwnd, BOOL bDisp)
 				SMTO_ABORTIFHUNG | SMTO_BLOCK, 10000, &dwResult);
 		}
 		TabWnd_ActivateFrameWindow(hwnd);
-		m_pShareData->flags.bEditWndChanging = FALSE;	// 編集ウィンドウ切替中OFF	2007.04.03 ryoji
+		m_pShareData->flags.bEditWndChanging = false;	// 編集ウィンドウ切替中OFF	2007.04.03 ryoji
 	}else {
 		if (csTabBar.bDispTabWnd && !csTabBar.bDispTabWndMultiWin) {
 			::ShowWindow(hwnd, SW_HIDE);
@@ -2730,7 +2731,7 @@ LRESULT TabWnd::TabListMenu(POINT pt, bool bSel/* = true*/, bool bFull/* = false
 		EditNode* pEditNode;
 
 		// タブメニュー用の情報を取得する
-		int nCount = AppNodeManager::getInstance()->GetOpenedWindowArr(&pEditNode, TRUE);
+		int nCount = AppNodeManager::getInstance()->GetOpenedWindowArr(&pEditNode, true);
 		if (nCount <= 0)
 			return 0L;
 
@@ -2867,7 +2868,7 @@ HWND TabWnd::GetNextGroupWnd(void)
 	auto& csTabBar = m_pShareData->common.tabBar;
 	if (csTabBar.bDispTabWnd && !csTabBar.bDispTabWndMultiWin) {
 		EditNode* pWndArr;
-		int n = AppNodeManager::getInstance()->GetOpenedWindowArr(&pWndArr, FALSE, TRUE);	// グループ番号順ソート
+		int n = AppNodeManager::getInstance()->GetOpenedWindowArr(&pWndArr, false, true);	// グループ番号順ソート
 		if (n == 0)
 			return NULL;
 		int i;
@@ -2908,7 +2909,7 @@ HWND TabWnd::GetPrevGroupWnd(void)
 	if (csTabBar.bDispTabWnd && !csTabBar.bDispTabWndMultiWin) {
 		EditNode* pWndArr;
 		auto appNodeMgr = AppNodeManager::getInstance();
-		int n = appNodeMgr->GetOpenedWindowArr(&pWndArr, FALSE, TRUE);	// グループ番号順ソート
+		int n = appNodeMgr->GetOpenedWindowArr(&pWndArr, false, true);	// グループ番号順ソート
 		if (n == 0)
 			return NULL;
 		int i;

@@ -51,7 +51,7 @@ void ViewCommander::Command_CUT(void)
 	bool bBeginBoxSelect = selInfo.IsBoxSelecting();
 
 	// 選択範囲のデータを取得
-	// 正常時はTRUE,範囲未選択の場合はFALSEを返す
+	// 正常時は true, 範囲未選択の場合は false を返す
 	NativeW memBuf;
 	if (!m_pCommanderView->GetSelectedData(&memBuf, false, NULL, false, GetDllShareData().common.edit.bAddCRLFWhenCopy)) {
 		ErrorBeep();
@@ -98,7 +98,7 @@ void ViewCommander::Command_COPY(
 		// テキストが選択されているときは、選択範囲のデータを取得
 		bool bBeginBoxSelect = selInfo.IsBoxSelecting();
 		// 選択範囲のデータを取得
-		// 正常時はTRUE,範囲未選択の場合はFALSEを返す
+		// 正常時はtrue,範囲未選択の場合はfalseを返す
 		if (!m_pCommanderView->GetSelectedData(&memBuf, false, NULL, false, bAddCRLFWhenCopy, neweol)) {
 			ErrorBeep();
 			return;

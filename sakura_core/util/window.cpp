@@ -104,9 +104,10 @@ void ActivateFrameWindow(HWND hwnd)
 	DllSharedData* pShareData = &GetDllShareData();
 	if (pShareData->common.tabBar.bDispTabWnd && !pShareData->common.tabBar.bDispTabWndMultiWin) {
 		if (IsSakuraMainWindow(hwnd)) {
-			if (pShareData->flags.bEditWndChanging)
+			if (pShareData->flags.bEditWndChanging) {
 				return;	// 切替の最中(busy)は要求を無視する
-			pShareData->flags.bEditWndChanging = TRUE;	// 編集ウィンドウ切替中ON	2007.04.03 ryoji
+			}
+			pShareData->flags.bEditWndChanging = true;	// 編集ウィンドウ切替中ON	2007.04.03 ryoji
 
 			// 対象ウィンドウのスレッドに位置合わせを依頼する	// 2007.04.03 ryoji
 			DWORD_PTR dwResult;
@@ -134,8 +135,9 @@ void ActivateFrameWindow(HWND hwnd)
 	::SetForegroundWindow(hwndActivate);
 	::BringWindowToTop(hwndActivate);
 
-	if (pShareData)
-		pShareData->flags.bEditWndChanging = FALSE;	// 編集ウィンドウ切替中OFF	2007.04.03 ryoji
+	if (pShareData) {
+		pShareData->flags.bEditWndChanging = false;	// 編集ウィンドウ切替中OFF	2007.04.03 ryoji
+	}
 
 	return;
 }

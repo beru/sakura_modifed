@@ -402,10 +402,7 @@ void ViewCommander::Command_DELETE_LINE(void)
 // 行の二重化(折り返し単位)
 void ViewCommander::Command_DUPLICATELINE(void)
 {
-	int			bCRLF;
-	int			bAddCRLF;
 	NativeW		memBuf;
-
 	auto& selInfo = m_pCommanderView->GetSelectionInfo();
 	if (selInfo.IsTextSelected()) {	// テキストが選択されているか
 		// 現在の選択範囲を非選択状態に戻す
@@ -443,7 +440,6 @@ void ViewCommander::Command_DUPLICATELINE(void)
 		);
 	}
 
-
 	/* 二重化したい行を調べる
 	||	・改行で終わっている
 	||	・改行で終わっていない
@@ -452,12 +448,11 @@ void ViewCommander::Command_DUPLICATELINE(void)
 	||	・最終行でない
 	||	→折り返しである
 	*/
-	bCRLF = (EolType::None == pLayout->GetLayoutEol()) ? FALSE : TRUE;
-
-	bAddCRLF = FALSE;
+	bool bCRLF = (pLayout->GetLayoutEol() != EolType::None);
+	bool bAddCRLF = false;
 	if (!bCRLF) {
 		if (caret.GetCaretLayoutPos().GetY2() == layoutMgr.GetLineCount() - 1) {
-			bAddCRLF = TRUE;
+			bAddCRLF = true;
 		}
 	}
 
