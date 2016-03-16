@@ -94,7 +94,7 @@ bool Plugin::ReadPluginDefPlug(
 	DataProfile* profileMlang
 	)
 {
-	std::vector<JackDef> jacks = JackManager::getInstance()->GetJackDef();
+	std::vector<JackDef> jacks = JackManager::getInstance().GetJackDef();
 	wchar_t szIndex[8];
 
 	for (size_t i=0; i<jacks.size(); ++i) {
@@ -263,7 +263,7 @@ int Plugin::AddCommand(
 	m_plugs.push_back(newPlug);
 
 	if (doRegister) {
-		JackManager::getInstance()->RegisterPlug(PP_COMMAND_STR, newPlug);
+		JackManager::getInstance().RegisterPlug(PP_COMMAND_STR, newPlug);
 	}
 	return newPlug->GetFunctionCode();
 }

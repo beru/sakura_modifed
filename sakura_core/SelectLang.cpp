@@ -123,7 +123,7 @@ HINSTANCE SelectLang::InitializeLanguageEnvironment(void)
 	WIN32_FIND_DATA w32fd;
 	TCHAR szPath[] = _T("sakura_lang_*.dll");			// サーチするメッセージリソースDLL
 	HANDLE handle = FindFirstFile(szPath, &w32fd);
-	BOOL result = (INVALID_HANDLE_VALUE != handle) ? TRUE : FALSE;
+	BOOL result = (handle != INVALID_HANDLE_VALUE) ? TRUE : FALSE;
 
 	while (result) {
 		if (!(w32fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {		// フォルダでない

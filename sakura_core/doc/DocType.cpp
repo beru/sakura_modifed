@@ -78,8 +78,8 @@ void DocType::SetDocumentType(
 	}
 
 	// タイプ別設定更新を反映
-	ColorStrategyPool::getInstance()->OnChangeSetting();
-	FigureManager::getInstance()->OnChangeSetting();
+	ColorStrategyPool::getInstance().OnChangeSetting();
+	FigureManager::getInstance().OnChangeSetting();
 	this->SetDocumentIcon();	// Sep. 11, 2002 genta
 	m_pDocRef->SetBackgroundImage();
 }
@@ -112,7 +112,7 @@ void DocType::SetDocumentTypeIdx(int id, bool force)
 void DocType::SetDocumentIcon()
 {
 	// Grepモードの時はアイコンを変更しない
-	if (EditApp::getInstance()->m_pGrepAgent->m_bGrepMode) {
+	if (EditApp::getInstance().m_pGrepAgent->m_bGrepMode) {
 		return;
 	}
 	

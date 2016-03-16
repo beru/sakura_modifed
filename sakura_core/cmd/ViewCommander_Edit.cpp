@@ -174,7 +174,7 @@ end_of_for:;
 		// ƒvƒ‰ƒOƒCƒ“‚©‚çŒŸõ‚·‚é
 		{
 			Plug::Array plugs;
-			JackManager::getInstance()->GetUsablePlug(PP_SMARTINDENT, (PlugId)nSIndentType, &plugs);
+			JackManager::getInstance().GetUsablePlug(PP_SMARTINDENT, (PlugId)nSIndentType, &plugs);
 
 			if (plugs.size() > 0) {
 				assert_warning(plugs.size() == 1);

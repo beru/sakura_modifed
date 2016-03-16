@@ -45,9 +45,9 @@ template <class T>
 class TSingleton {
 public:
 	// 公開インターフェース
-	static T* getInstance() {
+	static T& getInstance() {
 		static T instance;
-		return &instance;
+		return instance;
 	}
 
 protected:

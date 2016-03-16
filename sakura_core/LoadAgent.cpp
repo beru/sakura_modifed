@@ -49,7 +49,7 @@ CallbackResultType LoadAgent::OnCheckLoad(LoadInfo* pLoadInfo)
 		std::vector<std::tstring> files;
 		LoadInfo loadInfo(_T(""), CODE_AUTODETECT, false);
 		bool bDlgResult = pDoc->m_docFileOperation.OpenFileDialog(
-			EditWnd::getInstance()->GetHwnd(),
+			EditWnd::getInstance().GetHwnd(),
 			pLoadInfo->filePath,	// 指定されたフォルダ
 			&loadInfo,
 			files
@@ -66,7 +66,7 @@ CallbackResultType LoadAgent::OnCheckLoad(LoadInfo* pLoadInfo)
 				filesLoadInfo.filePath = files[i].c_str();
 				ControlTray::OpenNewEditor(
 					G_AppInstance(),
-					EditWnd::getInstance()->GetHwnd(),
+					EditWnd::getInstance().GetHwnd(),
 					filesLoadInfo,
 					NULL,
 					true
@@ -78,7 +78,7 @@ CallbackResultType LoadAgent::OnCheckLoad(LoadInfo* pLoadInfo)
 
 	// 他のウィンドウで既に開かれている場合は、それをアクティブにする
 	HWND hWndOwner;
-	if (ShareData::getInstance()->ActiveAlreadyOpenedWindow(pLoadInfo->filePath, &hWndOwner, pLoadInfo->eCharCode)) {
+	if (ShareData::getInstance().ActiveAlreadyOpenedWindow(pLoadInfo->filePath, &hWndOwner, pLoadInfo->eCharCode)) {
 		pLoadInfo->bOpened = true;
 		return CallbackResultType::Interrupt;
 	}
@@ -87,7 +87,7 @@ CallbackResultType LoadAgent::OnCheckLoad(LoadInfo* pLoadInfo)
 	if (!pDoc->IsAcceptLoad()) {
 		ControlTray::OpenNewEditor(
 			G_AppInstance(),
-			EditWnd::getInstance()->GetHwnd(),
+			EditWnd::getInstance().GetHwnd(),
 			*pLoadInfo
 		);
 		return CallbackResultType::Interrupt;
@@ -102,7 +102,7 @@ next:
 			//	Feb. 15, 2003 genta Popupウィンドウを表示しないように．
 			//	ここでステータスメッセージを使っても画面に表示されない．
 			TopInfoMessage(
-				EditWnd::getInstance()->GetHwnd(),
+				EditWnd::getInstance().GetHwnd(),
 				LS(STR_NOT_EXSIST_SAVE),	// Mar. 24, 2001 jepro 若干修正
 				pLoadInfo->filePath.GetBufferPointer()
 			);
@@ -131,7 +131,7 @@ next:
 				pDoc->m_docFileOperation.DoFileLock(false);
 			}
 			ErrorMessage(
-				EditWnd::getInstance()->GetHwnd(),
+				EditWnd::getInstance().GetHwnd(),
 				LS(STR_LOADAGENT_ERR_OPEN),
 				pLoadInfo->filePath.c_str()
 			);
@@ -153,7 +153,7 @@ next:
 			nFileSize.LowPart = wfd.nFileSizeLow;
 			// csFile.m_nAlertFileSize はMB単位
 			if ((nFileSize.QuadPart>>20) >= (csFile.nAlertFileSize)) {
-				int nRet = MYMESSAGEBOX( EditWnd::getInstance()->GetHwnd(),
+				int nRet = MYMESSAGEBOX( EditWnd::getInstance().GetHwnd(),
 					MB_ICONQUESTION | MB_YESNO | MB_TOPMOST,
 					GSTR_APPNAME,
 					LS(STR_LOADAGENT_BIG_FILE),
@@ -207,7 +207,7 @@ LoadResultType LoadAgent::OnLoad(const LoadInfo& loadInfo)
 	if (fexist(loadInfo.filePath)) {
 		// CDocLineMgrの構成
 		ReadManager reader;
-		ProgressSubject* pOld = EditApp::getInstance()->m_pVisualProgress->ProgressListener::Listen(&reader);
+		ProgressSubject* pOld = EditApp::getInstance().m_pVisualProgress->ProgressListener::Listen(&reader);
 		CodeConvertResult eReadResult = reader.ReadFile_To_CDocLineMgr(
 			&pDoc->m_docLineMgr,
 			loadInfo,
@@ -216,7 +216,7 @@ LoadResultType LoadAgent::OnLoad(const LoadInfo& loadInfo)
 		if (eReadResult == CodeConvertResult::LoseSome) {
 			eRet = LoadResultType::LoseSome;
 		}
-		EditApp::getInstance()->m_pVisualProgress->ProgressListener::Listen(pOld);
+		EditApp::getInstance().m_pVisualProgress->ProgressListener::Listen(pOld);
 	}else {
 		// 存在しないときもドキュメントに文字コードを反映する
 		const TypeConfig& types = pDoc->m_docType.GetDocumentAttribute();
@@ -235,11 +235,11 @@ LoadResultType LoadAgent::OnLoad(const LoadInfo& loadInfo)
 		nMaxLineKetas = MAXLINEKETAS;
 	}
 
-	ProgressSubject* pOld = EditApp::getInstance()->m_pVisualProgress->ProgressListener::Listen(&pDoc->m_layoutMgr);
+	ProgressSubject* pOld = EditApp::getInstance().m_pVisualProgress->ProgressListener::Listen(&pDoc->m_layoutMgr);
 	pDoc->m_layoutMgr.SetLayoutInfo( true, ref, ref.nTabSpace, nMaxLineKetas );
 	pDoc->m_pEditWnd->ClearViewCaretPosInfo();
 	
-	EditApp::getInstance()->m_pVisualProgress->ProgressListener::Listen(pOld);
+	EditApp::getInstance().m_pVisualProgress->ProgressListener::Listen(pOld);
 
 	return eRet;
 }
@@ -279,18 +279,19 @@ void LoadAgent::OnFinalLoad(LoadResultType eLoadResult)
 		pDoc->m_docFile.SetBomDefoult();
 	}
 	if (eLoadResult == LoadResultType::LoseSome) {
-		AppMode::getInstance()->SetViewMode(true);
+		AppMode::getInstance().SetViewMode(true);
 	}
 
 	// 再描画 $$不足
-	// EditWnd::getInstance()->GetActiveView().SetDrawSwitch(true);
-	bool bDraw = EditWnd::getInstance()->GetActiveView().GetDrawSwitch();
+	auto& editWnd = EditWnd::getInstance();
+	// editWnd.GetActiveView().SetDrawSwitch(true);
+	bool bDraw = editWnd.GetActiveView().GetDrawSwitch();
 	if (bDraw) {
-		EditWnd::getInstance()->Views_RedrawAll(); // ビュー再描画
-		InvalidateRect( EditWnd::getInstance()->GetHwnd(), NULL, TRUE );
+		editWnd.Views_RedrawAll(); // ビュー再描画
+		InvalidateRect( editWnd.GetHwnd(), NULL, TRUE );
 	}
-	Caret& caret = EditWnd::getInstance()->GetActiveView().GetCaret();
+	Caret& caret = editWnd.GetActiveView().GetCaret();
 	caret.MoveCursor(caret.GetCaretLayoutPos(), true);
-	EditWnd::getInstance()->GetActiveView().AdjustScrollBars();
+	editWnd.GetActiveView().AdjustScrollBars();
 }
 

@@ -138,6 +138,6 @@ inline bool EditNode::IsTopInGroup() const { return this && (AppNodeGroupHandle(
 
 inline AppNodeHandle::AppNodeHandle(HWND hwnd)
 {
-	pNodeRef = AppNodeManager::getInstance()->GetEditNode(hwnd);
+	pNodeRef = AppNodeManager::getInstance().GetEditNode(hwnd);
 }
 

@@ -115,7 +115,7 @@ INT_PTR PropPlugin::DispatchEvent(
 					HWND hListView = ::GetDlgItem(hwndDlg, IDC_PLUGINLIST);
 					int sel = ListView_GetNextItem(hListView, -1, LVNI_SELECTED);
 					if (sel >= 0) {
-						Plugin* plugin = PluginManager::getInstance()->GetPlugin(sel);
+						Plugin* plugin = PluginManager::getInstance().GetPlugin(sel);
 						if (plugin) {
 							::SetWindowText(::GetDlgItem(hwndDlg, IDC_LABEL_PLUGIN_Description), to_tchar(plugin->m_sDescription.c_str()));
 							::SetWindowText(::GetDlgItem(hwndDlg, IDC_LABEL_PLUGIN_Author), to_tchar(plugin->m_sAuthor.c_str()));
@@ -172,7 +172,7 @@ INT_PTR PropPlugin::DispatchEvent(
 			switch (wID) {
 			case IDC_PLUGIN_SearchNew:		// 新規プラグインを追加
 				GetData(hwndDlg);
-				PluginManager::getInstance()->SearchNewPlugin(m_common, hwndDlg);
+				PluginManager::getInstance().SearchNewPlugin(m_common, hwndDlg);
 				if (m_bTrayProc) {
 					LoadPluginTemp(m_common, *m_pMenuDrawer);
 				}
@@ -183,7 +183,7 @@ INT_PTR PropPlugin::DispatchEvent(
 					static std::tstring	sTrgDir;
 					DlgOpenFile	dlgOpenFile;
 					TCHAR		szPath[_MAX_PATH + 1];
-					_tcscpy_s(szPath, (sTrgDir.empty() ? PluginManager::getInstance()->GetBaseDir().c_str() : sTrgDir.c_str()));
+					_tcscpy_s(szPath, (sTrgDir.empty() ? PluginManager::getInstance().GetBaseDir().c_str() : sTrgDir.c_str()));
 					// ファイルオープンダイアログの初期化
 					dlgOpenFile.Create(
 						G_AppInstance(),
@@ -193,7 +193,7 @@ INT_PTR PropPlugin::DispatchEvent(
 					);
 					if (dlgOpenFile.DoModal_GetOpenFileName(szPath)) {
 						GetData(hwndDlg);
-						PluginManager::getInstance()->InstZipPlugin(m_common, hwndDlg, szPath);
+						PluginManager::getInstance().InstZipPlugin(m_common, hwndDlg, szPath);
 						if (m_bTrayProc) {
 							LoadPluginTemp(m_common, *m_pMenuDrawer);
 						}
@@ -215,7 +215,7 @@ INT_PTR PropPlugin::DispatchEvent(
 					int sel = ListView_GetNextItem(hListView, -1, LVNI_SELECTED);
 					if (sel >= 0) {
 						if (MYMESSAGEBOX(hwndDlg, MB_YESNO, GSTR_APPNAME, LS(STR_PROPCOMPLG_DELETE), pluginTable[sel].szName) == IDYES) {
-							PluginManager::getInstance()->UninstallPlugin(m_common, sel);
+							PluginManager::getInstance().UninstallPlugin(m_common, sel);
 							SetData_LIST(hwndDlg);
 						}
 					}
@@ -227,7 +227,7 @@ INT_PTR PropPlugin::DispatchEvent(
 					int sel = ListView_GetNextItem(hListView, -1, LVNI_SELECTED);
 					if (sel >= 0 && pluginTable[sel].state == PLS_LOADED) {
 						// 2010.08.21 プラグイン名(フォルダ名)の同一性の確認
-						Plugin* plugin = PluginManager::getInstance()->GetPlugin(sel);
+						Plugin* plugin = PluginManager::getInstance().GetPlugin(sel);
 						wstring sDirName = to_wchar(plugin->GetFolderName().c_str());
 						if (plugin && auto_stricmp(sDirName.c_str(), pluginTable[sel].szName) == 0) {
 							DlgPluginOption dlgPluginOption;
@@ -240,7 +240,7 @@ INT_PTR PropPlugin::DispatchEvent(
 				break;
 			case IDC_PLUGIN_OpenFolder:			// フォルダを開く
 				{
-					std::tstring sBaseDir = PluginManager::getInstance()->GetBaseDir() + _T(".");
+					std::tstring sBaseDir = PluginManager::getInstance().GetBaseDir() + _T(".");
 					if (!IsDirectory(sBaseDir.c_str())) {
 						if (::CreateDirectory(sBaseDir.c_str(), NULL) == 0) {
 							break;
@@ -269,7 +269,7 @@ INT_PTR PropPlugin::DispatchEvent(
 					HWND hListView = ::GetDlgItem(hwndDlg, IDC_PLUGINLIST);
 					int sel = ListView_GetNextItem(hListView, -1, LVNI_SELECTED);
 					if (sel >= 0) {
-						Plugin* plugin = PluginManager::getInstance()->GetPlugin(sel);
+						Plugin* plugin = PluginManager::getInstance().GetPlugin(sel);
 						if (plugin) {
 							::ShellExecute(NULL, _T("Open"), to_tchar(plugin->m_sUrl.c_str()), NULL, NULL, SW_SHOW);
 						}
@@ -356,7 +356,7 @@ void PropPlugin::SetData_LIST(HWND hwndDlg)
 
 	for (index=0; index<MAX_PLUGIN; ++index) {
 		std::basic_string<TCHAR> sDirName;	// Plugin.GetDirName()の結果保持変数
-		Plugin* plugin = PluginManager::getInstance()->GetPlugin(index);
+		Plugin* plugin = PluginManager::getInstance().GetPlugin(index);
 
 		// 番号
 		TCHAR buf[4];
@@ -524,23 +524,23 @@ void PropPlugin::EnablePluginPropInput(HWND hwndDlg)
 //	Readme ファイルの取得	2011/11/2 Uchi
 std::tstring PropPlugin::GetReadMeFile(const std::tstring& sName)
 {
-	std::tstring sReadMeName = PluginManager::getInstance()->GetBaseDir()
+	std::tstring sReadMeName = PluginManager::getInstance().GetBaseDir()
 		+ sName + _T("\\ReadMe.txt");
 	File* fl = new File(sReadMeName.c_str());
 	if (!fl->IsFileExist()) {
-		sReadMeName = PluginManager::getInstance()->GetBaseDir()
+		sReadMeName = PluginManager::getInstance().GetBaseDir()
 			+ sName + _T("\\") + sName + _T(".txt");
 		delete fl;
 		fl = new File(sReadMeName.c_str());
 	}
 	if (!fl->IsFileExist()) {
 		// exeフォルダ配下
-		sReadMeName = PluginManager::getInstance()->GetExePluginDir()
+		sReadMeName = PluginManager::getInstance().GetExePluginDir()
 			+ sName + _T("\\ReadMe.txt");
 		delete fl;
 		fl = new File(sReadMeName.c_str());
 		if (!fl->IsFileExist()) {
-			sReadMeName = PluginManager::getInstance()->GetExePluginDir()
+			sReadMeName = PluginManager::getInstance().GetExePluginDir()
 				+ sName + _T("\\") + sName + _T(".txt");
 			delete fl;
 			fl = new File(sReadMeName.c_str());
@@ -592,9 +592,9 @@ static void LoadPluginTemp(CommonSetting& common, MenuDrawer& menuDrawer)
 {
 	{
 		// 2013.05.31 コントロールプロセスなら即時読み込み
-		PluginManager::getInstance()->LoadAllPlugin(&common);
+		PluginManager::getInstance().LoadAllPlugin(&common);
 		// ツールバーアイコンの更新
-		const Plug::Array& plugs = JackManager::getInstance()->GetPlugs(PP_COMMAND);
+		const Plug::Array& plugs = JackManager::getInstance().GetPlugs(PP_COMMAND);
 		menuDrawer.m_pIcons->ResetExtend();
 		for (auto it=plugs.begin(); it!=plugs.end(); ++it) {
 			int iBitmap = MenuDrawer::TOOLBAR_ICON_PLUGCOMMAND_DEFAULT - 1;

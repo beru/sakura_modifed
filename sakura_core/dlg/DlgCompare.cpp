@@ -137,7 +137,7 @@ void DlgCompare::SetData(void)
 //	setlocale (LC_ALL, "C");
 
 	// 現在開いている編集窓のリストをメニューにする
-	int nRowNum = AppNodeManager::getInstance()->GetOpenedWindowArr(&pEditNodeArr, true);
+	int nRowNum = AppNodeManager::getInstance().GetOpenedWindowArr(&pEditNodeArr, true);
 	if (nRowNum > 0) {
 		// 水平スクロール幅は実際に表示する文字列の幅を計測して決める	// 2009.09.26 ryoji
 		TextWidthCalc calc(hwndList);
@@ -150,14 +150,14 @@ void DlgCompare::SetData(void)
 			EditInfo* pfi = (EditInfo*)&m_pShareData->workBuffer.editInfo_MYWM_GETFILEINFO;
 
 //@@@ 2001.12.26 YAZAKI ファイル名で比較すると(無題)だったときに問題同士の比較ができない
-			if (pEditNodeArr[i].GetHwnd() == EditWnd::getInstance()->GetHwnd()) {
+			if (pEditNodeArr[i].GetHwnd() == EditWnd::getInstance().GetHwnd()) {
 				// 2010.07.30 自分の名前もここから設定する
-				FileNameManager::getInstance()->GetMenuFullLabel_WinListNoEscape( szMenu, _countof(szMenu), pfi, pEditNodeArr[i].nId, -1, calc.GetDC() );
+				FileNameManager::getInstance().GetMenuFullLabel_WinListNoEscape( szMenu, _countof(szMenu), pfi, pEditNodeArr[i].nId, -1, calc.GetDC() );
 				SetItemText(IDC_STATIC_COMPARESRC, szMenu);
 				continue;
 			}
 			// 番号は ウィンドウリストと同じになるようにする
-			FileNameManager::getInstance()->GetMenuFullLabel_WinListNoEscape( szMenu, _countof(szMenu), pfi, pEditNodeArr[i].nId, i, calc.GetDC() );
+			FileNameManager::getInstance().GetMenuFullLabel_WinListNoEscape( szMenu, _countof(szMenu), pfi, pEditNodeArr[i].nId, i, calc.GetDC() );
 
 			int nItem = ::List_AddString(hwndList, szMenu);
 			List_SetItemData(hwndList, nItem, pEditNodeArr[i].GetHwnd());
@@ -210,9 +210,9 @@ int DlgCompare::GetData(void)
 		EditInfo* pfi = (EditInfo*)&m_pShareData->workBuffer.editInfo_MYWM_GETFILEINFO;
 
 		// 2010.07.30 パス名はやめて表示名に変更
-		int nId = AppNodeManager::getInstance()->GetEditNode(*m_phwndCompareWnd)->GetId();
+		int nId = AppNodeManager::getInstance().GetEditNode(*m_phwndCompareWnd)->GetId();
 		TextWidthCalc calc(hwndList);
-		FileNameManager::getInstance()->GetMenuFullLabel_WinListNoEscape( m_pszCompareLabel, _MAX_PATH/*長さ不明*/, pfi, nId, -1, calc.GetDC() );
+		FileNameManager::getInstance().GetMenuFullLabel_WinListNoEscape( m_pszCompareLabel, _MAX_PATH/*長さ不明*/, pfi, nId, -1, calc.GetDC() );
 
 		// 左右に並べて表示
 		bCompareAndTileHorz = IsButtonChecked(IDC_CHECK_TILE_H);

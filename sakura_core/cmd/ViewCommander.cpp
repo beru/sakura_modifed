@@ -39,7 +39,7 @@ ViewCommander::ViewCommander(EditView* pEditView)
 	m_pCommanderView(pEditView)
 {
 	m_bPrevCommand = 0;
-	m_pSMacroMgr = EditApp::getInstance()->m_pSMacroMgr;
+	m_pSMacroMgr = EditApp::getInstance().m_pSMacroMgr;
 }
 
 
@@ -679,7 +679,7 @@ bool ViewCommander::HandleCommand(
 			m_pCommanderView->SetUndoBuffer(true); // 2013.05.01 ’Ç‰ÁBÄ‹A‘Î‰ž
 
 			Plug::Array plugs;
-			JackManager::getInstance()->GetUsablePlug(PP_COMMAND, nCommand, &plugs);
+			JackManager::getInstance().GetUsablePlug(PP_COMMAND, nCommand, &plugs);
 
 			if (plugs.size() > 0) {
 				assert_warning(plugs.size() == 1);

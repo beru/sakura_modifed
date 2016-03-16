@@ -128,7 +128,7 @@ void DlgProperty::SetData(void)
 	auto_sprintf(szWork, LS(STR_DLGFLPROP_LAYOUT_LINE), pEditDoc->m_layoutMgr.GetLineCount());
 	memProp.AppendString(szWork);
 
-	if (AppMode::getInstance()->IsViewMode()) {
+	if (AppMode::getInstance().IsViewMode()) {
 		memProp.AppendString(LS(STR_DLGFLPROP_VIEW_MODE));	// 2009.04.11 ryoji 「上書き禁止モード」→「ビューモード」
 	}
 	if (pEditDoc->m_docEditor.IsModified()) {

@@ -707,8 +707,8 @@ bool ViewCommander::Sub_PreProcTagJumpByTagsFile(TCHAR* szCurrentPath, int count
 		// 2010.04.02 (無題)でもタグジャンプできるように
 		// Grep、アウトプットは行番号タグジャンプがあるので無効にする(要検討)
 		if (
-			EditApp::getInstance()->m_pGrepAgent->m_bGrepMode
-		    || AppMode::getInstance()->IsDebugMode()
+			EditApp::getInstance().m_pGrepAgent->m_bGrepMode
+		    || AppMode::getInstance().IsDebugMode()
 		) {
 		    return false;
 		}

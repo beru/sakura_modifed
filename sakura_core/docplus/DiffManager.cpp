@@ -16,26 +16,26 @@ DiffMark DiffLineGetter::GetLineDiffMark() const { return (DiffMark)m_pDocLine->
 bool DiffLineGetter::GetDiffColor(EColorIndexType* pColorIndex) const
 {
 	DiffMark type = GetLineDiffMark();
-	EditView* pView = &EditWnd::getInstance()->GetActiveView();
+	EditView& view = EditWnd::getInstance().GetActiveView();
 
 	// DIFF差分マーク表示	//@@@ 2002.05.25 MIK
 	if (type != DiffMark::None) {
 		switch (type) {
 		case DiffMark::Append:	// 追加
-			if (TypeSupport(pView, COLORIDX_DIFF_APPEND).IsDisp()) {
+			if (TypeSupport(&view, COLORIDX_DIFF_APPEND).IsDisp()) {
 				*pColorIndex = COLORIDX_DIFF_APPEND;
 				return true;
 			}
 			break;
 		case DiffMark::Change:	// 変更
-			if (TypeSupport(pView, COLORIDX_DIFF_CHANGE).IsDisp()) {
+			if (TypeSupport(&view, COLORIDX_DIFF_CHANGE).IsDisp()) {
 				*pColorIndex = COLORIDX_DIFF_CHANGE;
 				return true;
 			}
 			break;
 		case DiffMark::Delete:	// 削除
 		case DiffMark::DeleteEx:	// 削除
-			if (TypeSupport(pView, COLORIDX_DIFF_DELETE).IsDisp()) {
+			if (TypeSupport(&view, COLORIDX_DIFF_DELETE).IsDisp()) {
 				*pColorIndex = COLORIDX_DIFF_DELETE;
 				return true;
 			}
@@ -128,7 +128,7 @@ void DiffLineMgr::ResetAllDiffMark()
 		pDocLine = pDocLine->GetNextLine();
 	}
 
-	DiffManager::getInstance()->SetDiffUse(false);
+	DiffManager::getInstance().SetDiffUse(false);
 }
 
 /*! 差分検索
@@ -177,7 +177,7 @@ bool DiffLineMgr::SearchDiffMark(
 */
 void DiffLineMgr::SetDiffMarkRange(DiffMark nMode, LogicInt nStartLine, LogicInt nEndLine)
 {
-	DiffManager::getInstance()->SetDiffUse(true);
+	DiffManager::getInstance().SetDiffUse(true);
 
 	if (nStartLine < LogicInt(0)) {
 		nStartLine = LogicInt(0);

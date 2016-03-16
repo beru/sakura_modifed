@@ -88,7 +88,7 @@ bool AutoReloadAgent::_ToDoChecking() const
 		|| m_watchUpdateType == WatchUpdateType::None
 		|| setting.nFileShareMode != FileShareMode::NonExclusive	 // ファイルの排他制御モード
 		|| !hwndActive		// アクティブ？
-		|| hwndActive != EditWnd::getInstance()->GetHwnd()
+		|| hwndActive != EditWnd::getInstance().GetHwnd()
 		|| !GetListeningDoc()->m_docFile.GetFilePathClass().IsValidPath()
 		|| GetListeningDoc()->m_docFile.IsFileTimeZero()	// 現在編集中のファイルのタイムスタンプ
 		|| GetListeningDoc()->m_pEditWnd->m_pPrintPreview	// 印刷Preview中	2013/5/8 Uchi
@@ -170,7 +170,7 @@ void AutoReloadAgent::CheckFileTimeStamp()
 			DlgFileUpdateQuery dlg(pDoc->m_docFile.GetFilePath(), pDoc->m_docEditor.IsModified());
 			int result = dlg.DoModal(
 				G_AppInstance(),
-				EditWnd::getInstance()->GetHwnd(),
+				EditWnd::getInstance().GetHwnd(),
 				IDD_FILEUPDATEQUERY,
 				0
 			);

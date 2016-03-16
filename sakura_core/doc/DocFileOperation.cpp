@@ -54,7 +54,7 @@ bool DocFileOperation::_ToDoLock() const
 	}
 
 	// ビューモード
-	if (AppMode::getInstance()->IsViewMode()) {
+	if (AppMode::getInstance().IsViewMode()) {
 		return false;
 	}
 
@@ -154,7 +154,7 @@ bool DocFileOperation::FileLoad(
 		// プラグイン：DocumentOpenイベント実行
 		Plug::Array plugs;
 		WSHIfObj::List params;
-		JackManager::getInstance()->GetUsablePlug(PP_DOCUMENT_OPEN, 0, &plugs);
+		JackManager::getInstance().GetUsablePlug(PP_DOCUMENT_OPEN, 0, &plugs);
 		for (auto it=plugs.begin(); it!=plugs.end(); ++it) {
 			(*it)->Invoke(&m_pDocRef->m_pEditWnd->GetActiveView(), params);
 		}
@@ -184,7 +184,7 @@ void DocFileOperation::ReloadCurrentFile(
 	// プラグイン：DocumentCloseイベント実行
 	Plug::Array plugs;
 	WSHIfObj::List params;
-	JackManager::getInstance()->GetUsablePlug(PP_DOCUMENT_CLOSE, 0, &plugs);
+	JackManager::getInstance().GetUsablePlug(PP_DOCUMENT_CLOSE, 0, &plugs);
 	for (auto it=plugs.begin(); it!=plugs.end(); ++it) {
 		(*it)->Invoke(&activeView, params);
 	}
@@ -209,7 +209,7 @@ void DocFileOperation::ReloadCurrentFile(
 	LoadInfo loadInfo;
 	loadInfo.filePath = m_pDocRef->m_docFile.GetFilePath();
 	loadInfo.eCharCode = nCharCode;
-	loadInfo.bViewMode = AppMode::getInstance()->IsViewMode(); // 2014.06.13 IsEditable->IsViewModeに戻す。かわりに bForceNoMsgを追加
+	loadInfo.bViewMode = AppMode::getInstance().IsViewMode(); // 2014.06.13 IsEditable->IsViewModeに戻す。かわりに bForceNoMsgを追加
 	loadInfo.bWritableNoMsg = !m_pDocRef->IsEditable(); // すでに編集できない状態ならファイルロックのメッセージを表示しない
 	loadInfo.bRequestReload = true;
 	bool bRet = this->DoLoadFlow(&loadInfo);
@@ -229,7 +229,7 @@ void DocFileOperation::ReloadCurrentFile(
 		// プラグイン：DocumentOpenイベント実行
 		Plug::Array plugs;
 		WSHIfObj::List params;
-		JackManager::getInstance()->GetUsablePlug(PP_DOCUMENT_OPEN, 0, &plugs);
+		JackManager::getInstance().GetUsablePlug(PP_DOCUMENT_OPEN, 0, &plugs);
 		for (auto it=plugs.begin(); it!=plugs.end(); ++it) {
 			(*it)->Invoke(&m_pDocRef->m_pEditWnd->GetActiveView(), params);
 		}
@@ -291,7 +291,7 @@ bool DocFileOperation::SaveFileDialog(
 	}
 	// 無題に、無題番号を付ける
 	if (pSaveInfo->filePath[0] == _T('\0')) {
-		const EditNode* node = AppNodeManager::getInstance()->GetEditNode(m_pDocRef->m_pEditWnd->GetHwnd());
+		const EditNode* node = AppNodeManager::getInstance().GetEditNode(m_pDocRef->m_pEditWnd->GetHwnd());
 		if (0 < node->nId) {
 			TCHAR szText[16];
 			auto_sprintf(szText, _T("%d"), node->nId);
@@ -304,7 +304,7 @@ bool DocFileOperation::SaveFileDialog(
 	DlgOpenFile dlgOpenFile;
 	dlgOpenFile.Create(
 		G_AppInstance(),
-		EditWnd::getInstance()->GetHwnd(),
+		EditWnd::getInstance().GetHwnd(),
 		szDefaultWildCard,
 		SakuraEnvironment::GetDlgInitialDir().c_str(),	// 初期フォルダ
 		MruFile().GetPathList(),	// 最近のファイル
@@ -346,7 +346,7 @@ bool DocFileOperation::DoSaveFlow(SaveInfo* pSaveInfo)
 					pSaveInfo->eol == EolType::None &&	// ※改行コード指定保存がリクエストされた場合は、「変更があったもの」とみなす
 					!pSaveInfo->bChgCodeSet
 				) {		// 文字コードセットの変更が有った場合は、「変更があったもの」とみなす
-					EditApp::getInstance()->m_soundSet.NeedlessToSaveBeep();
+					EditApp::getInstance().m_soundSet.NeedlessToSaveBeep();
 					throw FlowInterruption();
 				}
 			}
@@ -368,7 +368,7 @@ bool DocFileOperation::DoSaveFlow(SaveInfo* pSaveInfo)
 		// プラグイン：DocumentBeforeSaveイベント実行
 		Plug::Array plugs;
 		WSHIfObj::List params;
-		JackManager::getInstance()->GetUsablePlug(PP_DOCUMENT_BEFORE_SAVE, 0, &plugs);
+		JackManager::getInstance().GetUsablePlug(PP_DOCUMENT_BEFORE_SAVE, 0, &plugs);
 		for (auto it=plugs.begin(); it!=plugs.end(); ++it) {
 			(*it)->Invoke(&m_pDocRef->m_pEditWnd->GetActiveView(), params);
 		}
@@ -376,7 +376,7 @@ bool DocFileOperation::DoSaveFlow(SaveInfo* pSaveInfo)
 		if (!pSaveInfo->bOverwriteMode) {	// 上書きでなければ前文書のクローズイベントを呼ぶ
 			// プラグイン：DocumentCloseイベント実行
 			plugs.clear();
-			JackManager::getInstance()->GetUsablePlug(PP_DOCUMENT_CLOSE, 0, &plugs);
+			JackManager::getInstance().GetUsablePlug(PP_DOCUMENT_CLOSE, 0, &plugs);
 			for (auto it=plugs.begin(); it!=plugs.end(); ++it) {
 				(*it)->Invoke(&m_pDocRef->m_pEditWnd->GetActiveView(), params);
 			}
@@ -389,7 +389,7 @@ bool DocFileOperation::DoSaveFlow(SaveInfo* pSaveInfo)
 
 		// プラグイン：DocumentAfterSaveイベント実行
 		plugs.clear();
-		JackManager::getInstance()->GetUsablePlug(PP_DOCUMENT_AFTER_SAVE, 0, &plugs);
+		JackManager::getInstance().GetUsablePlug(PP_DOCUMENT_AFTER_SAVE, 0, &plugs);
 		for (auto it=plugs.begin(); it!=plugs.end(); ++it) {
 			(*it)->Invoke(&m_pDocRef->m_pEditWnd->GetActiveView(), params);
 		}
@@ -464,7 +464,7 @@ bool DocFileOperation::FileSaveAs(
 		}
 	}
 	if (bDialog) {
-		if (!filename && AppMode::getInstance()->IsViewMode()) {
+		if (!filename && AppMode::getInstance().IsViewMode()) {
 			saveInfo.filePath = _T(""); //※読み込み専用モードのときはファイル名を指定しない
 		}
 
@@ -484,7 +484,7 @@ bool DocFileOperation::FileSaveAs(
 		// プラグイン：DocumentOpenイベント実行
 		Plug::Array plugs;
 		WSHIfObj::List params;
-		JackManager::getInstance()->GetUsablePlug(PP_DOCUMENT_OPEN, 0, &plugs);
+		JackManager::getInstance().GetUsablePlug(PP_DOCUMENT_OPEN, 0, &plugs);
 		for (auto it=plugs.begin(); it!=plugs.end(); ++it) {
 			(*it)->Invoke(&m_pDocRef->m_pEditWnd->GetActiveView(), params);
 		}
@@ -516,7 +516,7 @@ bool DocFileOperation::FileClose()
 	// プラグイン：DocumentCloseイベント実行
 	Plug::Array plugs;
 	WSHIfObj::List params;
-	JackManager::getInstance()->GetUsablePlug(PP_DOCUMENT_CLOSE, 0, &plugs);
+	JackManager::getInstance().GetUsablePlug(PP_DOCUMENT_CLOSE, 0, &plugs);
 	for (auto it=plugs.begin(); it!=plugs.end(); ++it) {
 		(*it)->Invoke(&m_pDocRef->m_pEditWnd->GetActiveView(), params);
 	}
@@ -530,7 +530,7 @@ bool DocFileOperation::FileClose()
 	m_pDocRef->SetCurDirNotitle();
 
 	// 無題番号取得
-	AppNodeManager::getInstance()->GetNoNameNumber(m_pDocRef->m_pEditWnd->GetHwnd());
+	AppNodeManager::getInstance().GetNoNameNumber(m_pDocRef->m_pEditWnd->GetHwnd());
 
 	// 親ウィンドウのタイトルを更新
 	m_pDocRef->m_pEditWnd->UpdateCaption();
@@ -559,7 +559,7 @@ void DocFileOperation::FileCloseOpen(const LoadInfo& argLoadInfo)
 	// プラグイン：DocumentCloseイベント実行
 	Plug::Array plugs;
 	WSHIfObj::List params;
-	JackManager::getInstance()->GetUsablePlug(PP_DOCUMENT_CLOSE, 0, &plugs);
+	JackManager::getInstance().GetUsablePlug(PP_DOCUMENT_CLOSE, 0, &plugs);
 	for (auto it=plugs.begin(); it!=plugs.end(); ++it) {
 		(*it)->Invoke(&m_pDocRef->m_pEditWnd->GetActiveView(), params);
 	}
@@ -568,7 +568,7 @@ void DocFileOperation::FileCloseOpen(const LoadInfo& argLoadInfo)
 	LoadInfo loadInfo = argLoadInfo;
 	if (loadInfo.filePath.Length() == 0) {
 		std::vector<std::tstring> files;
-		if (!OpenFileDialog(EditWnd::getInstance()->GetHwnd(), NULL, &loadInfo, files)) {
+		if (!OpenFileDialog(EditWnd::getInstance().GetHwnd(), NULL, &loadInfo, files)) {
 			return;
 		}
 		loadInfo.filePath = files[0].c_str();
@@ -579,7 +579,7 @@ void DocFileOperation::FileCloseOpen(const LoadInfo& argLoadInfo)
 			filesLoadInfo.filePath = files[i].c_str();
 			ControlTray::OpenNewEditor(
 				G_AppInstance(),
-				EditWnd::getInstance()->GetHwnd(),
+				EditWnd::getInstance().GetHwnd(),
 				filesLoadInfo,
 				NULL,
 				true
@@ -598,7 +598,7 @@ void DocFileOperation::FileCloseOpen(const LoadInfo& argLoadInfo)
 
 	if (!m_pDocRef->m_docFile.GetFilePathClass().IsValidPath()) {
 		m_pDocRef->SetCurDirNotitle();
-		AppNodeManager::getInstance()->GetNoNameNumber(m_pDocRef->m_pEditWnd->GetHwnd());
+		AppNodeManager::getInstance().GetNoNameNumber(m_pDocRef->m_pEditWnd->GetHwnd());
 	}
 
 	// 親ウィンドウのタイトルを更新
@@ -610,7 +610,7 @@ void DocFileOperation::FileCloseOpen(const LoadInfo& argLoadInfo)
 
 	// プラグイン：DocumentOpenイベント実行
 	plugs.clear();
-	JackManager::getInstance()->GetUsablePlug(PP_DOCUMENT_OPEN, 0, &plugs);
+	JackManager::getInstance().GetUsablePlug(PP_DOCUMENT_OPEN, 0, &plugs);
 	for (auto it=plugs.begin(); it!=plugs.end(); ++it) {
 		(*it)->Invoke(&m_pDocRef->m_pEditWnd->GetActiveView(), params);
 	}

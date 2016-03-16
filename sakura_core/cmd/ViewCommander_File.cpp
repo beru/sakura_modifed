@@ -143,7 +143,7 @@ void ViewCommander::Command_FILEOPEN(
 			}
 		}
 		bool bDlgResult = GetDocument()->m_docFileOperation.OpenFileDialog(
-			EditWnd::getInstance()->GetHwnd(),	// [in]  オーナーウィンドウ
+			EditWnd::getInstance().GetHwnd(),	// [in]  オーナーウィンドウ
 			defName.length() == 0 ? NULL : defName.c_str(),	// [in]  フォルダ
 			&loadInfo,							// [out] ロード情報受け取り
 			files								// [out] ファイル名
@@ -158,7 +158,7 @@ void ViewCommander::Command_FILEOPEN(
 			filesLoadInfo.filePath = files[i].c_str();
 			ControlTray::OpenNewEditor(
 				G_AppInstance(),
-				EditWnd::getInstance()->GetHwnd(),
+				EditWnd::getInstance().GetHwnd(),
 				filesLoadInfo,
 				NULL,
 				true
@@ -200,7 +200,7 @@ bool ViewCommander::Command_FILESAVE(bool warnbeep, bool askname)
 	saveInfo.bOverwriteMode = true; // 上書き要求
 
 	// 上書き処理
-	auto& soundSet = EditApp::getInstance()->m_soundSet;
+	auto& soundSet = EditApp::getInstance().m_soundSet;
 	if (!warnbeep) soundSet.MuteOn();
 	bool bRet = pDoc->m_docFileOperation.DoSaveFlow(&saveInfo);
 	if (!warnbeep) soundSet.MuteOff();
@@ -276,7 +276,7 @@ void ViewCommander::Command_FILECLOSE_OPEN(
 	// プラグイン：DocumentOpenイベント実行
 	Plug::Array plugs;
 	WSHIfObj::List params;
-	JackManager::getInstance()->GetUsablePlug(PP_DOCUMENT_OPEN, 0, &plugs);
+	JackManager::getInstance().GetUsablePlug(PP_DOCUMENT_OPEN, 0, &plugs);
 	for (auto it=plugs.begin(); it!=plugs.end(); ++it) {
 		(*it)->Invoke(&GetEditWindow()->GetActiveView(), params);
 	}
@@ -515,12 +515,12 @@ void ViewCommander::Command_BROWSE(void)
 void ViewCommander::Command_VIEWMODE(void)
 {
 	// ビューモードを反転
-	AppMode::getInstance()->SetViewMode(!AppMode::getInstance()->IsViewMode());
+	AppMode::getInstance().SetViewMode(!AppMode::getInstance().IsViewMode());
 
 	// 排他制御の切り替え
 	// ※ビューモード ON 時は排他制御 OFF、ビューモード OFF 時は排他制御 ON の仕様（>>data:5262）を即時反映する
 	GetDocument()->m_docFileOperation.DoFileUnlock();	// ファイルの排他ロック解除
-	GetDocument()->m_docLocker.CheckWritable(!AppMode::getInstance()->IsViewMode());	// ファイル書込可能のチェック
+	GetDocument()->m_docLocker.CheckWritable(!AppMode::getInstance().IsViewMode());	// ファイル書込可能のチェック
 	if (GetDocument()->m_docLocker.IsDocWritable()) {
 		GetDocument()->m_docFileOperation.DoFileLock();	// ファイルの排他ロック
 	}

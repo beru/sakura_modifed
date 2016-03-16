@@ -216,7 +216,7 @@ public:
 	virtual HRESULT __stdcall GetWindow(
 	    /* [out] */ HWND *phwnd)
 	{
-		*phwnd = EditWnd::getInstance()->m_splitterWnd.GetHwnd();
+		*phwnd = EditWnd::getInstance().m_splitterWnd.GetHwnd();
 		return S_OK;
 	}
 

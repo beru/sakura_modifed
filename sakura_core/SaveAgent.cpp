@@ -47,20 +47,20 @@ CallbackResultType SaveAgent::OnCheckSave(SaveInfo* pSaveInfo)
 	//	Jun.  5, 2004 genta
 	//	ビューモードのチェックをEditDocから上書き保存処理に移動
 	//	同名で上書きされるのを防ぐ
-	if (AppMode::getInstance()->IsViewMode()
+	if (AppMode::getInstance().IsViewMode()
 		&& pSaveInfo->IsSamePath(pDoc->m_docFile.GetFilePath())
 	) {
 		ErrorBeep();
-		TopErrorMessage(EditWnd::getInstance()->GetHwnd(), LS(STR_SAVEAGENT_VIEW_FILE));
+		TopErrorMessage(EditWnd::getInstance().GetHwnd(), LS(STR_SAVEAGENT_VIEW_FILE));
 		return CallbackResultType::Interrupt;
 	}
 
 	// 他ウィンドウで開いているか確認する	// 2009.04.07 ryoji
 	if (!pSaveInfo->IsSamePath(pDoc->m_docFile.GetFilePath())) {
 		HWND hwndOwner;
-		if (ShareData::getInstance()->IsPathOpened(pSaveInfo->filePath, &hwndOwner)) {
+		if (ShareData::getInstance().IsPathOpened(pSaveInfo->filePath, &hwndOwner)) {
 			ErrorMessage(
-				EditWnd::getInstance()->GetHwnd(),
+				EditWnd::getInstance().GetHwnd(),
 				LS(STR_SAVEAGENT_OTHER),
 				(LPCTSTR)pSaveInfo->filePath
 			);
@@ -89,7 +89,7 @@ CallbackResultType SaveAgent::OnCheckSave(SaveInfo* pSaveInfo)
 				pDoc->m_docFileOperation.DoFileLock(false);
 			}
 			ErrorMessage(
-				EditWnd::getInstance()->GetHwnd(),
+				EditWnd::getInstance().GetHwnd(),
 				LS(STR_SAVEAGENT_OTHER_APP),
 				pSaveInfo->filePath.c_str()
 			);
@@ -116,7 +116,7 @@ void SaveAgent::OnSave(const SaveInfo& saveInfo)
 
 	// カキコ
 	WriteManager writer;
-	EditApp::getInstance()->m_pVisualProgress->ProgressListener::Listen(&writer);
+	EditApp::getInstance().m_pVisualProgress->ProgressListener::Listen(&writer);
 	writer.WriteFile_From_CDocLineMgr(
 		pDoc->m_docLineMgr,
 		saveInfo

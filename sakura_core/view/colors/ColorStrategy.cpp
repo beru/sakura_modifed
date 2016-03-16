@@ -50,10 +50,10 @@ bool _IsPosKeywordHead(const StringRef& str, int nPos)
 */
 bool ColorStrategyInfo::CheckChangeColor(const StringRef& lineStr)
 {
-	ColorStrategyPool* pool = ColorStrategyPool::getInstance();
-	pool->SetCurrentView(pView);
-	Color_Found*  pFound  = pool->GetFoundStrategy();
-	Color_Select* pSelect = pool->GetSelectStrategy();
+	auto& pool = ColorStrategyPool::getInstance();
+	pool.SetCurrentView(pView);
+	Color_Found*  pFound  = pool.GetFoundStrategy();
+	Color_Select* pSelect = pool.GetSelectStrategy();
 	bool bChange = false;
 
 	// 選択範囲色終了
@@ -97,10 +97,10 @@ bool ColorStrategyInfo::CheckChangeColor(const StringRef& lineStr)
 
 	// 色開始
 	if (!pStrategy) {
-		int size = pool->GetStrategyCount();
+		int size = pool.GetStrategyCount();
 		for (int i=0; i<size; ++i) {
-			if (pool->GetStrategy(i)->BeginColor(lineStr, this->GetPosInLogic())) {
-				pStrategy = pool->GetStrategy(i);
+			if (pool.GetStrategy(i)->BeginColor(lineStr, this->GetPosInLogic())) {
+				pStrategy = pool.GetStrategy(i);
 				bChange = true;
 				break;
 			}
@@ -194,7 +194,7 @@ void ColorStrategyInfo::DoChangeColor(Color3Setting *pcColor)
 
 ColorStrategyPool::ColorStrategyPool()
 {
-	m_pView = &(EditWnd::getInstance()->GetView(0));
+	m_pView = &(EditWnd::getInstance().GetView(0));
 	m_pcSelectStrategy = new Color_Select();
 	m_pcFoundStrategy = new Color_Found();
 //	m_vStrategies.push_back(new Color_Found);			// マッチ文字列

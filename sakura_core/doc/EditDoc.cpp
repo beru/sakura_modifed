@@ -272,16 +272,16 @@ void EditDoc::Clear()
 // 既存データのクリア
 void EditDoc::InitDoc()
 {
-	AppMode::getInstance()->SetViewMode(false);	// ビューモード $$ 今後OnClearDocを用意したい
-	AppMode::getInstance()->m_szGrepKey[0] = 0;	//$$
+	AppMode::getInstance().SetViewMode(false);	// ビューモード $$ 今後OnClearDocを用意したい
+	AppMode::getInstance().m_szGrepKey[0] = 0;	//$$
 
-	EditApp::getInstance()->m_pGrepAgent->m_bGrepMode = false;	// Grepモード	//$$同上
+	EditApp::getInstance().m_pGrepAgent->m_bGrepMode = false;	// Grepモード	//$$同上
 	m_autoReloadAgent.m_watchUpdateType = WatchUpdateType::Query; // Dec. 4, 2002 genta 更新監視方法 $$
 
 	// 2005.06.24 Moca バグ修正
 	// アウトプットウィンドウで「閉じて(無題)」を行ってもアウトプットウィンドウのまま
-	if (AppMode::getInstance()->IsDebugMode()) {
-		AppMode::getInstance()->SetDebugModeOFF();
+	if (AppMode::getInstance().IsDebugMode()) {
+		AppMode::getInstance().SetDebugModeOFF();
 	}
 
 	// Sep. 10, 2002 genta
@@ -506,11 +506,11 @@ void EditDoc::GetEditInfo(
 	pfi->nTypeId = m_docType.GetDocumentAttribute().id;
 
 	// GREPモード
-	pfi->bIsGrep = EditApp::getInstance()->m_pGrepAgent->m_bGrepMode;
-	wcscpy(pfi->szGrepKey, AppMode::getInstance()->m_szGrepKey);
+	pfi->bIsGrep = EditApp::getInstance().m_pGrepAgent->m_bGrepMode;
+	wcscpy(pfi->szGrepKey, AppMode::getInstance().m_szGrepKey);
 
 	// デバッグモニタ (アウトプットウィンドウ) モード
-	pfi->bIsDebug = AppMode::getInstance()->IsDebugMode();
+	pfi->bIsDebug = AppMode::getInstance().IsDebugMode();
 }
 
 
@@ -568,8 +568,8 @@ bool EditDoc::IsAcceptLoad() const
 	if (
 		m_docEditor.IsModified()
 		|| m_docFile.GetFilePathClass().IsValidPath()
-		|| EditApp::getInstance()->m_pGrepAgent->m_bGrepMode
-		|| AppMode::getInstance()->IsDebugMode()
+		|| EditApp::getInstance().m_pGrepAgent->m_bGrepMode
+		|| AppMode::getInstance().IsDebugMode()
 	) {
 		return false;
 	}
@@ -678,7 +678,7 @@ void EditDoc::OnChangeSetting(
 
 		// ファイル書込可能のチェック処理
 		bool bOld = m_docLocker.IsDocWritable();
-		m_docLocker.CheckWritable(bOld && !AppMode::getInstance()->IsViewMode());	// 書込可から不可に遷移したときだけメッセージを出す（出過ぎると鬱陶しいよね？）
+		m_docLocker.CheckWritable(bOld && !AppMode::getInstance().IsViewMode());	// 書込可から不可に遷移したときだけメッセージを出す（出過ぎると鬱陶しいよね？）
 		if (bOld != m_docLocker.IsDocWritable()) {
 			pEditWnd->UpdateCaption();
 		}
@@ -690,7 +690,7 @@ void EditDoc::OnChangeSetting(
 	}
 
 	// 共有データ構造体のアドレスを返す
-	FileNameManager::getInstance()->TransformFileName_MakeCache();
+	FileNameManager::getInstance().TransformFileName_MakeCache();
 
 	LogicPointEx* posSaveAry = NULL;
 	if (m_pEditWnd->m_posSaveAry) {
@@ -802,9 +802,9 @@ void EditDoc::OnChangeSetting(
 		nMaxLineKetas = m_layoutMgr.GetMaxLineKetas();	// 現在の折り返し幅
 		nTabSpace = m_layoutMgr.GetTabSpace();	// 現在のタブ幅
 	}
-	ProgressSubject* pOld = EditApp::getInstance()->m_pVisualProgress->ProgressListener::Listen(&m_layoutMgr);
+	ProgressSubject* pOld = EditApp::getInstance().m_pVisualProgress->ProgressListener::Listen(&m_layoutMgr);
 	m_layoutMgr.SetLayoutInfo(bDoLayout, ref, nTabSpace, nMaxLineKetas);
-	EditApp::getInstance()->m_pVisualProgress->ProgressListener::Listen(pOld);
+	EditApp::getInstance().m_pVisualProgress->ProgressListener::Listen(pOld);
 	m_pEditWnd->ClearViewCaretPosInfo();
 	
 	// 2009.08.28 nasukoji	「折り返さない」ならテキスト最大幅を算出、それ以外は変数をクリア
@@ -846,13 +846,13 @@ BOOL EditDoc::OnFileClose(bool bGrepNoConfirm)
 	}
 	
 	// デバッグモニタモードのときは保存確認しない
-	if (AppMode::getInstance()->IsDebugMode()) {
+	if (AppMode::getInstance().IsDebugMode()) {
 		return TRUE;
 	}
 
 	// GREPモードで、かつ、「GREPモードで保存確認するか」がOFFだったら、保存確認しない
 	// 2011.11.13 GrepモードでGrep直後は"未編集"状態になっているが保存確認が必要
-	if (EditApp::getInstance()->m_pGrepAgent->m_bGrepMode) {
+	if (EditApp::getInstance().m_pGrepAgent->m_bGrepMode) {
 		if (bGrepNoConfirm) { // Grepで保存確認しないモード
 			return TRUE;
 		}
@@ -869,8 +869,8 @@ BOOL EditDoc::OnFileClose(bool bGrepNoConfirm)
 	// -- -- 保存確認 -- -- //
 	TCHAR szGrepTitle[90];
 	LPCTSTR pszTitle = m_docFile.GetFilePathClass().IsValidPath() ? m_docFile.GetFilePath() : NULL;
-	if (EditApp::getInstance()->m_pGrepAgent->m_bGrepMode) {
-		LPCWSTR		pszGrepKey = AppMode::getInstance()->m_szGrepKey;
+	if (EditApp::getInstance().m_pGrepAgent->m_bGrepMode) {
+		LPCWSTR		pszGrepKey = AppMode::getInstance().m_szGrepKey;
 		int			nLen = (int)wcslen(pszGrepKey);
 		NativeW	memDes;
 		LimitStringLengthW(pszGrepKey , nLen, 64, memDes);
@@ -881,15 +881,15 @@ BOOL EditDoc::OnFileClose(bool bGrepNoConfirm)
 		pszTitle = szGrepTitle;
 	}
 	if (!pszTitle) {
-		const EditNode* node = AppNodeManager::getInstance()->GetEditNode(EditWnd::getInstance()->GetHwnd());
+		const EditNode* node = AppNodeManager::getInstance().GetEditNode(EditWnd::getInstance().GetHwnd());
 		auto_sprintf(szGrepTitle, _T("%s%d"), LS(STR_NO_TITLE1), node->nId);	// (無題)
 		pszTitle = szGrepTitle;
 	}
 	// ウィンドウをアクティブにする
-	HWND hwndMainFrame = EditWnd::getInstance()->GetHwnd();
+	HWND hwndMainFrame = EditWnd::getInstance().GetHwnd();
 	ActivateFrameWindow(hwndMainFrame);
 	int nBool;
-	if (AppMode::getInstance()->IsViewMode()) {	// ビューモード
+	if (AppMode::getInstance().IsViewMode()) {	// ビューモード
 		ConfirmBeep();
 		int nRet = ::MYMESSAGEBOX(
 			hwndMainFrame,
@@ -970,7 +970,7 @@ void EditDoc::RunAutoMacro(int idx, LPCTSTR pszSaveFilePath)
 		return;	// 再入り実行はしない
 	}
 	bRunning = true;
-	if (EditApp::getInstance()->m_pSMacroMgr->IsEnabled(idx)) {
+	if (EditApp::getInstance().m_pSMacroMgr->IsEnabled(idx)) {
 		if (!(::GetAsyncKeyState(VK_SHIFT) & 0x8000)) {	// Shift キーが押されていなければ実行
 			if (pszSaveFilePath)
 				m_docFile.SetSaveFilePath(pszSaveFilePath);

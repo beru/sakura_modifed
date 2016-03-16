@@ -64,7 +64,7 @@ public:
 		m_nIndex = INVALID_MACRO_IDX;
 		if (nMode == MACRO_MODE_EXEC) {
 			// ŒÄ‚Ño‚µ‚Ì’¼‘O‚ÅÝ’è‚³‚ê‚Ä‚¢‚é”Ô†‚ð•Û‘¶‚·‚é
-			m_nIndex = EditApp::getInstance()->m_pSMacroMgr->GetCurrentIdx();
+			m_nIndex = EditApp::getInstance().m_pSMacroMgr->GetCurrentIdx();
 		}
 	}
 

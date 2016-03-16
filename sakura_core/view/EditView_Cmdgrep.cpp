@@ -35,7 +35,7 @@ void EditView::TranslateCommand_grep(
 	LPARAM&			lparam4
 	)
 {
-	if (!EditApp::getInstance()->m_pGrepAgent->m_bGrepMode)
+	if (!EditApp::getInstance().m_pGrepAgent->m_bGrepMode)
 		return;
 
 	if (nCommand == F_WCHAR) {

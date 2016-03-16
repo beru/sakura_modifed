@@ -285,7 +285,7 @@ int CALLBACK PropSheetProc(
 INT_PTR MyPropertySheet(LPPROPSHEETHEADER lppsph)
 {
 	// 個人設定フォルダを使用するときは「設定フォルダ」ボタンを追加する
-	if (ShareData::getInstance()->IsPrivateSettings()) {
+	if (ShareData::getInstance().IsPrivateSettings()) {
 		lppsph->dwFlags |= PSH_USECALLBACK;
 		lppsph->pfnCallback = PropSheetProc;
 	}

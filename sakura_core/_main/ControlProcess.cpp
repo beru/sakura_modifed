@@ -52,7 +52,7 @@ bool ControlProcess::InitializeProcess()
 		return false;
 	}
 
-	std::tstring strProfileName = to_tchar(CommandLine::getInstance()->GetProfileName());
+	std::tstring strProfileName = to_tchar(CommandLine::getInstance().GetProfileName());
 
 	// 初期化完了イベントを作成する
 	std::tstring strInitEvent = GSTR_EVENT_SAKURA_CP_INITIALIZED;
@@ -91,11 +91,11 @@ bool ControlProcess::InitializeProcess()
 	// 2007.05.19 ryoji 「設定を保存して終了する」オプション処理（sakuext連携用）を追加
 	TCHAR szIniFile[_MAX_PATH];
 	ShareData_IO::LoadShareData();
-	FileNameManager::getInstance()->GetIniFileName( szIniFile, strProfileName.c_str() );	// 出力iniファイル名
-	if (!fexist(szIniFile) || CommandLine::getInstance()->IsWriteQuit()) {
+	FileNameManager::getInstance().GetIniFileName( szIniFile, strProfileName.c_str() );	// 出力iniファイル名
+	if (!fexist(szIniFile) || CommandLine::getInstance().IsWriteQuit()) {
 		// レジストリ項目 作成
 		ShareData_IO::SaveShareData();
-		if (CommandLine::getInstance()->IsWriteQuit()) {
+		if (CommandLine::getInstance().IsWriteQuit()) {
 			return false;
 		}
 	}

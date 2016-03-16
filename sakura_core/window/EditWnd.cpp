@@ -306,7 +306,11 @@ void EditWnd::UpdateCaption()
 	//@@@ From Here 2003.06.13 MIK
 	// タブウィンドウのファイル名を通知
 	SakuraEnvironment::ExpandParameter(GetDllShareData().common.tabBar.szTabWndCaption, pszCap, _countof(pszCap));
-	this->ChangeFileNameNotify(to_tchar(pszCap), GetListeningDoc()->m_docFile.GetFilePath(), EditApp::getInstance()->m_pGrepAgent->m_bGrepMode);	// 2006.01.28 ryoji ファイル名、Grepモードパラメータを追加
+	this->ChangeFileNameNotify(
+		to_tchar(pszCap),
+		GetListeningDoc()->m_docFile.GetFilePath(),
+		EditApp::getInstance().m_pGrepAgent->m_bGrepMode
+	);	// 2006.01.28 ryoji ファイル名、Grepモードパラメータを追加
 	//@@@ To Here 2003.06.13 MIK
 }
 
@@ -329,7 +333,7 @@ void EditWnd::_GetWindowRectForInit(Rect* rcResult, int nGroup, const TabGroupIn
 
 	// ウィンドウサイズ指定
 	EditInfo fi;
-	CommandLine::getInstance()->GetEditInfo(&fi);
+	CommandLine::getInstance().GetEditInfo(&fi);
 	if (fi.nWindowSizeX >= 0) {
 		nWinCX = fi.nWindowSizeX;
 	}
@@ -525,7 +529,7 @@ void EditWnd::_AdjustInMonitor(const TabGroupInfo& tabGroupInfo)
 			typeOld = GetDocument()->m_docType.GetDocumentType();	// 現在のタイプ
 			{
 				EditInfo ei, mruei;
-				CommandLine::getInstance()->GetEditInfo(&ei);
+				CommandLine::getInstance().GetEditInfo(&ei);
 				if (ei.szDocType[0] != '\0') {
 					typeNew = DocTypeManager().GetDocumentTypeOfExt(ei.szDocType);
 				}else {
@@ -761,7 +765,7 @@ HWND EditWnd::Create(
 		}
 	}
 
-	ShareData::getInstance()->SetTraceOutSource(GetHwnd());	// TraceOut()起動元ウィンドウの設定	// 2006.06.26 ryoji
+	ShareData::getInstance().SetTraceOutSource(GetHwnd());	// TraceOut()起動元ウィンドウの設定	// 2006.06.26 ryoji
 
 	// Aug. 29, 2003 wmlhq
 	m_nTimerCount = 0;
@@ -833,7 +837,7 @@ void EditWnd::SetDocumentTypeWhenCreate(
 	}
 
 	//	Jun. 4 ,2004 genta ファイル名指定が無くてもビューモード強制指定を有効にする
-	AppMode::getInstance()->SetViewMode(bViewMode);
+	AppMode::getInstance().SetViewMode(bViewMode);
 
 	if (nDocumentType.IsValidType()) {
 		// 設定変更を反映させる
@@ -904,7 +908,7 @@ void EditWnd::LayoutMainMenu()
 			switch (mainMenu->nFunc) {
 			case F_WINDOW_LIST:				// ウィンドウリスト
 				EditNode*	pEditNodeArr;
-				nCount = AppNodeManager::getInstance()->GetOpenedWindowArr(&pEditNodeArr, true);
+				nCount = AppNodeManager::getInstance().GetOpenedWindowArr(&pEditNodeArr, true);
 				delete [] pEditNodeArr;
 				break;
 			case F_FILE_USED_RECENTLY:		// 最近使ったファイル
@@ -942,9 +946,9 @@ void EditWnd::LayoutMainMenu()
 			case F_PLUGIN_LIST:				// プラグインコマンドリスト
 				// プラグインコマンドを提供するプラグインを列挙する
 				{
-					const JackManager* pJackManager = JackManager::getInstance();
+					auto& jackManager = JackManager::getInstance();
 
-					Plug::Array plugs = pJackManager->GetPlugs(PP_COMMAND);
+					Plug::Array plugs = jackManager.GetPlugs(PP_COMMAND);
 					for (auto it=plugs.begin(); it!=plugs.end(); ++it) {
 						++nCount;
 					}
@@ -1622,14 +1626,14 @@ LRESULT EditWnd::DispatchEvent(
 			// プラグイン：DocumentCloseイベント実行
 			Plug::Array plugs;
 			WSHIfObj::List params;
-			JackManager::getInstance()->GetUsablePlug(PP_DOCUMENT_CLOSE, 0, &plugs);
+			JackManager::getInstance().GetUsablePlug(PP_DOCUMENT_CLOSE, 0, &plugs);
 			for (auto it=plugs.begin(); it!=plugs.end(); ++it) {
 				(*it)->Invoke(&GetActiveView(), params);
 			}
 
 			// プラグイン：EditorEndイベント実行
 			plugs.clear();
-			JackManager::getInstance()->GetUsablePlug(PP_EDITOR_END, 0, &plugs);
+			JackManager::getInstance().GetUsablePlug(PP_EDITOR_END, 0, &plugs);
 			for (auto it=plugs.begin(); it!=plugs.end(); ++it) {
 				(*it)->Invoke(&GetActiveView(), params);
 			}
@@ -1642,9 +1646,9 @@ LRESULT EditWnd::DispatchEvent(
 					m_pShareData->common.tabBar.bTab_RetainEmptyWin
 				) {
 					// 自グループ内の残ウィンドウ数を調べる	// 2007.06.20 ryoji
-					int nGroup = AppNodeManager::getInstance()->GetEditNode(GetHwnd())->GetGroup();
+					int nGroup = AppNodeManager::getInstance().GetEditNode(GetHwnd())->GetGroup();
 					if (AppNodeGroupHandle(nGroup).GetEditorWindowsNum() == 1) {
-						EditNode* pEditNode = AppNodeManager::getInstance()->GetEditNode(GetHwnd());
+						EditNode* pEditNode = AppNodeManager::getInstance().GetEditNode(GetHwnd());
 						if (pEditNode)
 							pEditNode->bClosing = TRUE;	// 自分はタブ表示してもらわなくていい
 						LoadInfo loadInfo;
@@ -1682,7 +1686,7 @@ LRESULT EditWnd::DispatchEvent(
 		case PM_CHANGESETTING_ALL:
 			// 言語を選択する
 			SelectLang::ChangeLang(GetDllShareData().common.window.szLanguageDll);
-			ShareData::getInstance()->RefreshString();
+			ShareData::getInstance().RefreshString();
 
 			// メインメニュー	2010/5/16 Uchi
 			LayoutMainMenu();
@@ -1738,7 +1742,7 @@ LRESULT EditWnd::DispatchEvent(
 				m_tabWnd.Refresh(false);
 			}
 			if (m_pShareData->common.tabBar.bDispTabWnd && !m_pShareData->common.tabBar.bDispTabWndMultiWin) {
-				if (AppNodeManager::getInstance()->GetEditNode(GetHwnd())->IsTopInGroup()) {
+				if (AppNodeManager::getInstance().GetEditNode(GetHwnd())->IsTopInGroup()) {
 					if (!::IsWindowVisible(GetHwnd())) {
 						// ::ShowWindow(GetHwnd(), SW_SHOWNA) だと非表示から表示に切り替わるときに Z-order がおかしくなることがあるので ::SetWindowPos を使う
 						::SetWindowPos(GetHwnd(), NULL, 0, 0, 0, 0,
@@ -2436,7 +2440,7 @@ void EditWnd::InitMenu_Function(HMENU hMenu, EFunctionCode eFunc, const wchar_t*
 	// プラグインコマンド
 	else if (eFunc >= F_PLUGCOMMAND_FIRST && eFunc < F_PLUGCOMMAND_LAST) {
 		WCHAR szLabel[256];
-		if (0 < JackManager::getInstance()->GetCommandName( eFunc, szLabel, _countof(szLabel) )) {
+		if (0 < JackManager::getInstance().GetCommandName( eFunc, szLabel, _countof(szLabel) )) {
 			m_menuDrawer.MyAppendMenu(
 				hMenu, MF_BYPOSITION | MF_STRING,
 				eFunc, szLabel, pszKey,
@@ -2560,7 +2564,7 @@ bool EditWnd::InitMenu_Special(HMENU hMenu, EFunctionCode eFunc)
 	case F_WINDOW_LIST:				// ウィンドウリスト
 		{
 			EditNode* pEditNodeArr;
-			int nRowNum = AppNodeManager::getInstance()->GetOpenedWindowArr(&pEditNodeArr, true);
+			int nRowNum = AppNodeManager::getInstance().GetOpenedWindowArr(&pEditNodeArr, true);
 			WinListMenu(hMenu, pEditNodeArr, nRowNum, false);
 			bInList = (nRowNum > 0);
 			delete [] pEditNodeArr;
@@ -2617,11 +2621,11 @@ bool EditWnd::InitMenu_Special(HMENU hMenu, EFunctionCode eFunc)
 	case F_PLUGIN_LIST:				// プラグインコマンドリスト
 		// プラグインコマンドを提供するプラグインを列挙する
 		{
-			const JackManager* pJackManager = JackManager::getInstance();
+			auto& jackManager = JackManager::getInstance();
 			const Plugin* prevPlugin = NULL;
 			HMENU hMenuPlugin = 0;
 
-			Plug::Array plugs = pJackManager->GetPlugs(PP_COMMAND);
+			Plug::Array plugs = jackManager.GetPlugs(PP_COMMAND);
 			for (auto it=plugs.begin(); it!=plugs.end(); ++it) {
 				const Plugin* curPlugin = &(*it)->plugin;
 				if (curPlugin != prevPlugin) {
@@ -2765,7 +2769,7 @@ void EditWnd::OnDropFiles(HDROP hDrop)
 
 		// 指定ファイルが開かれているか調べる
 		HWND hWndOwner;
-		if (ShareData::getInstance()->IsPathOpened(szFile, &hWndOwner)) {
+		if (ShareData::getInstance().IsPathOpened(szFile, &hWndOwner)) {
 			::SendMessage(hWndOwner, MYWM_GETFILEINFO, 0, 0);
 			EditInfo* pfi = (EditInfo*)&m_pShareData->workBuffer.editInfo_MYWM_GETFILEINFO;
 			// アクティブにする
@@ -3025,7 +3029,7 @@ LRESULT EditWnd::OnSize2( WPARAM wParam, LPARAM lParam, bool bUpdateStatus )
 		}
 
 		// 元に戻すときのサイズ種別を記憶	// 2007.06.20 ryoji
-		EditNode* p = AppNodeManager::getInstance()->GetEditNode(GetHwnd());
+		EditNode* p = AppNodeManager::getInstance().GetEditNode(GetHwnd());
 		if (p) {
 			p->showCmdRestore = ::IsZoomed(p->GetHwnd())? SW_SHOWMAXIMIZED: SW_SHOWNORMAL;
 		}
@@ -3468,7 +3472,7 @@ BOOL EditWnd::DoMouseWheel(WPARAM wParam, LPARAM lParam)
 			if ((hwnd == m_tabWnd.m_hwndTab || hwnd == m_tabWnd.GetHwnd())) {
 				// 現在開いている編集窓のリストを得る
 				EditNode* pEditNodeArr;
-				int nRowNum = AppNodeManager::getInstance()->GetOpenedWindowArr(&pEditNodeArr, true);
+				int nRowNum = AppNodeManager::getInstance().GetOpenedWindowArr(&pEditNodeArr, true);
 				if (nRowNum > 0) {
 					// 自分のウィンドウを調べる
 					int i, j;
@@ -3563,7 +3567,7 @@ BOOL EditWnd::OnPrintPageSetting(void)
 				MYWM_CHANGESETTING,
 				(WPARAM)GetDocument()->m_docType.GetDocumentType().GetIndex(),
 				(LPARAM)PM_CHANGESETTING_TYPE,
-				EditWnd::getInstance()->GetHwnd()
+				EditWnd::getInstance().GetHwnd()
 			);
 			bChangePrintSettingNo = true;
 		}
@@ -3589,7 +3593,7 @@ BOOL EditWnd::OnPrintPageSetting(void)
 			MYWM_CHANGESETTING,
 			(WPARAM)0,
 			(LPARAM)PM_PrintSetting,
-			EditWnd::getInstance()->GetHwnd()
+			EditWnd::getInstance().GetHwnd()
 		);
 	}
 //@@@ 2002.01.14 YAZAKI 印刷PreviewをPrintPreviewに独立させたことによる変更
@@ -3978,7 +3982,7 @@ void EditWnd::ChangeFileNameNotify(const TCHAR* pszTabCaption, const TCHAR* _psz
 	recentEditNode.Terminate();
 
 	// ファイル名変更通知をブロードキャストする。
-	int nGroup = AppNodeManager::getInstance()->GetEditNode(GetHwnd())->GetGroup();
+	int nGroup = AppNodeManager::getInstance().GetEditNode(GetHwnd())->GetGroup();
 	AppNodeGroupHandle(nGroup).PostMessageToAllEditors(
 		MYWM_TAB_WINDOW_NOTIFY,
 		(WPARAM)TabWndNotifyType::Rename,
@@ -4090,7 +4094,7 @@ LRESULT EditWnd::PopupWinList(bool bMousePos)
 		m_menuDrawer.ResetContents();	// 2009.06.02 ryoji 追加
 		EditNode* pEditNodeArr;
 		HMENU hMenu = ::CreatePopupMenu();	// 2006.03.23 fon
-		int nRowNum = AppNodeManager::getInstance()->GetOpenedWindowArr(&pEditNodeArr, true);
+		int nRowNum = AppNodeManager::getInstance().GetOpenedWindowArr(&pEditNodeArr, true);
 		WinListMenu(hMenu, pEditNodeArr, nRowNum, true);
 		// メニューを表示する
 		RECT rcWork;
@@ -4115,7 +4119,7 @@ LRESULT EditWnd::WinListMenu(HMENU hMenu, EditNode* pEditNodeArr, int nRowNum, b
 {
 	if (nRowNum > 0) {
 		TCHAR szMenu[_MAX_PATH * 2 + 3];
-		FileNameManager::getInstance()->TransformFileName_MakeCache();
+		FileNameManager::getInstance().TransformFileName_MakeCache();
 
 		NONCLIENTMETRICS met;
 		met.cbSize = CCSIZEOF_STRUCT(NONCLIENTMETRICS, lfMessageFont);
@@ -4126,7 +4130,7 @@ LRESULT EditWnd::WinListMenu(HMENU hMenu, EditNode* pEditNodeArr, int nRowNum, b
 			::SendMessage(pEditNodeArr[i].GetHwnd(), MYWM_GETFILEINFO, 0, 0);
 ////	From Here Oct. 4, 2000 JEPRO commented out & modified	開いているファイル数がわかるように履歴とは違って1から数える
 			const EditInfo*	pfi = (EditInfo*)&m_pShareData->workBuffer.editInfo_MYWM_GETFILEINFO;
-			FileNameManager::getInstance()->GetMenuFullLabel_WinList(szMenu, _countof(szMenu), pfi, pEditNodeArr[i].nId, i, dcFont.GetHDC());
+			FileNameManager::getInstance().GetMenuFullLabel_WinList(szMenu, _countof(szMenu), pfi, pEditNodeArr[i].nId, i, dcFont.GetHDC());
 			m_menuDrawer.MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING, IDM_SELWINDOW + pEditNodeArr[i].nIndex, szMenu, _T(""));
 			if (GetHwnd() == pEditNodeArr[i].GetHwnd()) {
 				::CheckMenuItem(hMenu, IDM_SELWINDOW + pEditNodeArr[i].nIndex, MF_BYCOMMAND | MF_CHECKED);
@@ -4750,14 +4754,14 @@ void EditWnd::DeleteAccelTbl(void)
 // プラグインコマンドをエディタに登録する
 void EditWnd::RegisterPluginCommand(int idCommand)
 {
-	Plug* plug = JackManager::getInstance()->GetCommandById(idCommand);
+	Plug* plug = JackManager::getInstance().GetCommandById(idCommand);
 	RegisterPluginCommand(plug);
 }
 
 // プラグインコマンドをエディタに登録する（一括）
 void EditWnd::RegisterPluginCommand()
 {
-	const Plug::Array& plugs = JackManager::getInstance()->GetPlugs(PP_COMMAND);
+	const Plug::Array& plugs = JackManager::getInstance().GetPlugs(PP_COMMAND);
 	for (auto it=plugs.begin(); it!=plugs.end(); ++it) {
 		RegisterPluginCommand(*it);
 	}

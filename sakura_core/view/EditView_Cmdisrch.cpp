@@ -190,7 +190,7 @@ void EditView::ISearchEnter(int mode, SearchDirection direction)
 				return;
 			}
 			if (!m_pMigemo) {
-				m_pMigemo = Migemo::getInstance();
+				m_pMigemo = &Migemo::getInstance();
 				m_pMigemo->InitDll();
 			}
 			// migemo dll チェック

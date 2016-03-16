@@ -227,7 +227,7 @@ HWND ControlTray::Create(HINSTANCE hInstance)
 
 	// 同名同クラスのウィンドウが既に存在していたら、失敗
 	m_hInstance = hInstance;
-	std::tstring strProfileName = to_tchar(CommandLine::getInstance()->GetProfileName());
+	std::tstring strProfileName = to_tchar(CommandLine::getInstance().GetProfileName());
 	std::tstring strCEditAppName = GSTR_CEDITAPP;
 	strCEditAppName += strProfileName;
 	HWND hwndWork = ::FindWindow(strCEditAppName.c_str(), strCEditAppName.c_str());
@@ -319,9 +319,9 @@ bool ControlTray::CreateTrayIcon(HWND hWnd)
 		);
 
 		std::wstring profname;
-		if (CommandLine::getInstance()->GetProfileName()[0] != L'\0') {
+		if (CommandLine::getInstance().GetProfileName()[0] != L'\0') {
 			profname = L" ";
-			profname += CommandLine::getInstance()->GetProfileName();
+			profname += CommandLine::getInstance().GetProfileName();
 		}
 		auto_snprintf_s(
 			pszTips,
@@ -546,7 +546,7 @@ LRESULT ControlTray::DispatchEvent(
 			// タスクトレイのアイコンを常駐しない、または、トレイにアイコンを作っていない
 			if (!(csGeneral.bStayTaskTray && csGeneral.bUseTaskTray) || !m_bCreatedTrayIcon) {
 				// 現在開いている編集窓のリスト
-				nRowNum = AppNodeManager::getInstance()->GetOpenedWindowArr(&pEditNodeArr, true);
+				nRowNum = AppNodeManager::getInstance().GetOpenedWindowArr(&pEditNodeArr, true);
 				if (0 < nRowNum) {
 					delete [] pEditNodeArr;
 				}
@@ -625,12 +625,12 @@ LRESULT ControlTray::DispatchEvent(
 				auto_strcpy(m_szLanguageDll, csWindow.szLanguageDll);
 				std::vector<std::wstring> values;
 				if (bChangeLang) {
-					ShareData::getInstance()->ConvertLangValues(values, true);
+					ShareData::getInstance().ConvertLangValues(values, true);
 				}
 				// 言語を選択する
 				SelectLang::ChangeLang(csWindow.szLanguageDll);
 				if (bChangeLang) {
-					ShareData::getInstance()->ConvertLangValues(values, false);
+					ShareData::getInstance().ConvertLangValues(values, false);
 				}
 			}
 
@@ -675,8 +675,8 @@ LRESULT ControlTray::DispatchEvent(
 					m_pShareData->typeBasis = type;
 					m_pShareData->typeBasis.nIdx = 0;
 				}
-				*(ShareData::getInstance()->GetTypeSettings()[nIdx]) = type;
-				ShareData::getInstance()->GetTypeSettings()[nIdx]->nIdx = nIdx;
+				*(ShareData::getInstance().GetTypeSettings()[nIdx]) = type;
+				ShareData::getInstance().GetTypeSettings()[nIdx]->nIdx = nIdx;
 				auto& typeMini = m_pShareData->typesMini[nIdx];
 				auto_strcpy(typeMini.szTypeName, type.szTypeName);
 				auto_strcpy(typeMini.szTypeExts, type.szTypeExts);
@@ -691,7 +691,7 @@ LRESULT ControlTray::DispatchEvent(
 		{
 			int nIdx = (int)wParam;
 			if (0 <= nIdx && m_pShareData->nTypesCount) {
-				m_pShareData->workBuffer.typeConfig = *(ShareData::getInstance()->GetTypeSettings()[nIdx]);
+				m_pShareData->workBuffer.typeConfig = *(ShareData::getInstance().GetTypeSettings()[nIdx]);
 			}else {
 				return FALSE;
 			}
@@ -702,7 +702,7 @@ LRESULT ControlTray::DispatchEvent(
 			int nInsert = (int)wParam;
 			// "共通"の前には入れない
 			if (0 < nInsert && nInsert <= m_pShareData->nTypesCount && nInsert < MAX_TYPES) {
-				std::vector<TypeConfig*>& types = ShareData::getInstance()->GetTypeSettings();
+				std::vector<TypeConfig*>& types = ShareData::getInstance().GetTypeSettings();
 				TypeConfig* type = new TypeConfig();
 				*type = *types[0]; // 基本をコピー
 				type->nIdx = nInsert;
@@ -743,7 +743,7 @@ LRESULT ControlTray::DispatchEvent(
 			int nDelPos = (int)wParam;
 			if (0 < nDelPos && nDelPos < m_pShareData->nTypesCount && 1 < m_pShareData->nTypesCount) {
 				int nTypeSizeOld = m_pShareData->nTypesCount;
-				auto& types = ShareData::getInstance()->GetTypeSettings();
+				auto& types = ShareData::getInstance().GetTypeSettings();
 				delete types[nDelPos];
 				for (int i=nDelPos; i<nTypeSizeOld-1; ++i) {
 					types[i] = types[i + 1];
@@ -810,18 +810,18 @@ LRESULT ControlTray::DispatchEvent(
 					result.bTempChange = false;
 					if (dlgTypeList.DoModal(G_AppInstance(), GetTrayHwnd(), &result)) {
 						// タイプ別設定
-						PluginManager::getInstance()->LoadAllPlugin();
+						PluginManager::getInstance().LoadAllPlugin();
 						m_pPropertyManager->OpenPropertySheetTypes(NULL, -1, result.documentType);
-						PluginManager::getInstance()->UnloadAllPlugin();
+						PluginManager::getInstance().UnloadAllPlugin();
 					}
 				}
 				break;
 			case F_OPTION:	// 共通設定
 				{
-					PluginManager::getInstance()->LoadAllPlugin();
+					PluginManager::getInstance().LoadAllPlugin();
 					{
 						// アイコンの登録
-						const auto& plugs = JackManager::getInstance()->GetPlugs(PP_COMMAND);
+						const auto& plugs = JackManager::getInstance().GetPlugs(PP_COMMAND);
 						m_menuDrawer.m_pIcons->ResetExtend();
 						for (auto it=plugs.begin(); it!=plugs.end(); ++it) {
 							int iBitmap = MenuDrawer::TOOLBAR_ICON_PLUGCOMMAND_DEFAULT - 1;
@@ -834,7 +834,7 @@ LRESULT ControlTray::DispatchEvent(
 						}
 					}
 					m_pPropertyManager->OpenPropertySheet(NULL, -1, true);
-					PluginManager::getInstance()->UnloadAllPlugin();
+					PluginManager::getInstance().UnloadAllPlugin();
 				}
 				break;
 			case F_ABOUT:
@@ -1187,17 +1187,17 @@ bool ControlTray::OpenNewEditor(
 	if (!bNewWindow) {	// 新規エディタをウィンドウで開く
 		// グループIDを親ウィンドウから取得
 		HWND hwndAncestor = MyGetAncestor(hWndParent, GA_ROOTOWNER2);	// 2007.10.22 ryoji GA_ROOTOWNER -> GA_ROOTOWNER2
-		int nGroup = AppNodeManager::getInstance()->GetEditNode(hwndAncestor)->GetGroup();
+		int nGroup = AppNodeManager::getInstance().GetEditNode(hwndAncestor)->GetGroup();
 		if (nGroup > 0) {
 			cmdLineBuf.AppendF(_T(" -GROUP=%d"), nGroup);
 		}
 	}else {
 		// 空いているグループIDを使用する
-		cmdLineBuf.AppendF(_T(" -GROUP=%d"), AppNodeManager::getInstance()->GetFreeGroupId());
+		cmdLineBuf.AppendF(_T(" -GROUP=%d"), AppNodeManager::getInstance().GetFreeGroupId());
 	}
 
-	if (CommandLine::getInstance()->IsSetProfile()) {
-		cmdLineBuf.AppendF( _T(" -PROF=\"%ls\""), CommandLine::getInstance()->GetProfileName() );
+	if (CommandLine::getInstance().IsSetProfile()) {
+		cmdLineBuf.AppendF( _T(" -PROF=\"%ls\""), CommandLine::getInstance().GetProfileName() );
 	}
 
 	// 追加のコマンドラインオプション
@@ -1415,7 +1415,7 @@ void ControlTray::ActiveNextWindow(HWND hwndParent)
 {
 	// 現在開いている編集窓のリストを得る
 	EditNode*	pEditNodeArr;
-	int			nRowNum = AppNodeManager::getInstance()->GetOpenedWindowArr(&pEditNodeArr, true);
+	int			nRowNum = AppNodeManager::getInstance().GetOpenedWindowArr(&pEditNodeArr, true);
 	if (nRowNum > 0) {
 		// 自分のウィンドウを調べる
 		int nGroup = 0;
@@ -1455,7 +1455,7 @@ void ControlTray::ActivePrevWindow(HWND hwndParent)
 {
 	// 現在開いている編集窓のリストを得る
 	EditNode* pEditNodeArr;
-	int nRowNum = AppNodeManager::getInstance()->GetOpenedWindowArr(&pEditNodeArr, true);
+	int nRowNum = AppNodeManager::getInstance().GetOpenedWindowArr(&pEditNodeArr, true);
 	if (nRowNum > 0) {
 		// 自分のウィンドウを調べる
 		int nGroup = 0;
@@ -1543,7 +1543,7 @@ BOOL ControlTray::CloseAllEditor(
 	)
 {
 	EditNode* pWndArr;
-	int n = AppNodeManager::getInstance()->GetOpenedWindowArr(&pWndArr, false);
+	int n = AppNodeManager::getInstance().GetOpenedWindowArr(&pWndArr, false);
 	if (n == 0) {
 		return TRUE;
 	}
@@ -1565,7 +1565,7 @@ int	ControlTray::CreatePopUpMenu_L(void)
 	m_bUseTrayMenu = true;
 
 	m_menuDrawer.ResetContents();
-	FileNameManager::getInstance()->TransformFileName_MakeCache();
+	FileNameManager::getInstance().TransformFileName_MakeCache();
 
 	// リソースを使わないように
 	HMENU hMenuTop = ::CreatePopupMenu();
@@ -1620,7 +1620,7 @@ int	ControlTray::CreatePopUpMenu_L(void)
 				EditInfo* pfi = (EditInfo*)&m_pShareData->workBuffer.editInfo_MYWM_GETFILEINFO;
 
 				// メニューラベル。1からアクセスキーを振る
-				FileNameManager::getInstance()->GetMenuFullLabel_WinList(
+				FileNameManager::getInstance().GetMenuFullLabel_WinList(
 					szMenu,
 					_countof(szMenu),
 					pfi,

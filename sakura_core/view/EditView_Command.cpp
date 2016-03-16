@@ -62,7 +62,7 @@ bool EditView::TagJumpSub(
 	}
 
 	// 参照元ウィンドウ保存
-	tagJump.hwndReferer = EditWnd::getInstance()->GetHwnd();
+	tagJump.hwndReferer = EditWnd::getInstance().GetHwnd();
 
 	//	Feb. 17, 2007 genta 実行ファイルからの相対指定の場合は
 	//	予め絶対パスに変換する．(キーワードヘルプジャンプで用いる)
@@ -101,7 +101,7 @@ bool EditView::TagJumpSub(
 	// 開かれている場合は開いているウィンドウのハンドルも返す
 	// ファイルを開いているか
 	HWND hwndOwner;
-	if (ShareData::getInstance()->IsPathOpened(szJumpToFile, &hwndOwner)) {
+	if (ShareData::getInstance().IsPathOpened(szJumpToFile, &hwndOwner)) {
 		// 2004.05.13 Moca マイナス値は無効
 		if (0 < ptJumpTo.y) {
 			POINT poCaret;
@@ -145,7 +145,7 @@ bool EditView::TagJumpSub(
 		// Apr. 23, 2001 genta
 		// hwndOwnerに値が入らなくなってしまったために
 		// Tag Jump Backが動作しなくなっていたのを修正
-		if (!ShareData::getInstance()->IsPathOpened(szJumpToFile, &hwndOwner))
+		if (!ShareData::getInstance().IsPathOpened(szJumpToFile, &hwndOwner))
 			return false;
 	}
 
@@ -218,7 +218,7 @@ open_c:;
 	// 指定ファイルが開かれているか調べる
 	// 開かれている場合は開いているウィンドウのハンドルも返す
 	// ファイルを開いているか
-	if (ShareData::getInstance()->IsPathOpened(szPath, &hwndOwner)) {
+	if (ShareData::getInstance().IsPathOpened(szPath, &hwndOwner)) {
 	}else {
 		// 文字コードはこのファイルに合わせる
 		LoadInfo loadInfo;
@@ -233,7 +233,7 @@ open_c:;
 			true
 		);
 		// ファイルを開いているか
-		if (ShareData::getInstance()->IsPathOpened(szPath, &hwndOwner)) {
+		if (ShareData::getInstance().IsPathOpened(szPath, &hwndOwner)) {
 		}else {
 			// 2011.01.12 ryoji エラーは表示しないでおく
 			// ファイルサイズが大きすぎて読むかどうか問い合わせているような場合でもエラー表示になるのは変
@@ -260,7 +260,7 @@ open_c:;
 		GetCaret().GetCaretLayoutPos(),
 		&tagJump.point
 	);
-	tagJump.hwndReferer = EditWnd::getInstance()->GetHwnd();
+	tagJump.hwndReferer = EditWnd::getInstance().GetHwnd();
 	// タグジャンプ情報の保存
 	TagJumpManager().PushTagJump(&tagJump);
 	return true;

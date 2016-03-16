@@ -481,7 +481,7 @@ MacroManagerBase* KeyMacroMgr::Creator(const TCHAR* ext)
 void KeyMacroMgr::declare (void)
 {
 	// í‚ÉŽÀs
-	MacroFactory::getInstance()->RegisterCreator(Creator);
+	MacroFactory::getInstance().RegisterCreator(Creator);
 }
 // To Here Apr. 29, 2002 genta
 

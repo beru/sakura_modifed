@@ -73,7 +73,7 @@ HMENU MruFile::CreateMenu(HMENU hMenuPopUp, MenuDrawer* pMenuDrawer) const
 {
 	TCHAR szMenu[_MAX_PATH * 2 + 10];				//	メニューキャプション
 	const BOOL bMenuIcon = m_pShareData->common.window.bMenuIcon;
-	FileNameManager::getInstance()->TransformFileName_MakeCache();
+	FileNameManager::getInstance().TransformFileName_MakeCache();
 
 	NONCLIENTMETRICS met;
 	met.cbSize = CCSIZEOF_STRUCT(NONCLIENTMETRICS, lfMessageFont);
@@ -91,7 +91,7 @@ HMENU MruFile::CreateMenu(HMENU hMenuPopUp, MenuDrawer* pMenuDrawer) const
 		const EditInfo* p = m_recentFile.GetItem(i);
 		bool bFavorite = m_recentFile.IsFavorite(i);
 		bool bFavoriteLabel = bFavorite && !bMenuIcon;
-		FileNameManager::getInstance()->GetMenuFullLabel_MRU(szMenu, _countof(szMenu), p, -1, bFavoriteLabel, i, dcFont.GetHDC());
+		FileNameManager::getInstance().GetMenuFullLabel_MRU(szMenu, _countof(szMenu), p, -1, bFavoriteLabel, i, dcFont.GetHDC());
 
 		// メニューに追加。
 		pMenuDrawer->MyAppendMenu(

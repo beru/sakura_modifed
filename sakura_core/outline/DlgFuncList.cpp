@@ -2478,7 +2478,7 @@ bool DlgFuncList::TagJumpTimer(
 	// ファイルを開いていない場合は自分で開く
 	if (pView->GetDocument()->IsAcceptLoad()) {
 		std::wstring strFile = to_wchar(pFile);
-		pView->GetCommander().Command_FILEOPEN( strFile.c_str(), CODE_AUTODETECT, AppMode::getInstance()->IsViewMode(), NULL );
+		pView->GetCommander().Command_FILEOPEN( strFile.c_str(), CODE_AUTODETECT, AppMode::getInstance().IsViewMode(), NULL );
 		if (point.y != -1) {
 			if (pView->GetDocument()->m_docFile.GetFilePathClass().IsValidPath()) {
 				LogicPoint pt;
@@ -3213,7 +3213,7 @@ INT_PTR DlgFuncList::OnNcPaint(
 	::DrawEdge(gr, &rcWk, EDGE_ETCHED, BF_TOPLEFT);
 
 	// タイトルを描画する
-	BOOL bThemeActive = UxTheme::getInstance()->IsThemeActive();
+	BOOL bThemeActive = UxTheme::getInstance().IsThemeActive();
 	BOOL bGradient = FALSE;
 	::SystemParametersInfo(SPI_GETGRADIENTCAPTIONS, 0, &bGradient, 0);
 	if (!bThemeActive) {

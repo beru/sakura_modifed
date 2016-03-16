@@ -141,7 +141,7 @@ void MainToolBar::CreateToolBar(void)
 			0, 0, 0, 0,
 			m_pOwner->GetHwnd(),
 			NULL,
-			EditApp::getInstance()->GetAppInstance(),
+			EditApp::getInstance().GetAppInstance(),
 			NULL
 		);
 
@@ -177,7 +177,7 @@ void MainToolBar::CreateToolBar(void)
 		0, 0,
 		m_pOwner->GetHwnd(),
 		(HMENU)ID_TOOLBAR,
-		EditApp::getInstance()->GetAppInstance(),
+		EditApp::getInstance().GetAppInstance(),
 		NULL
 	);
 	if (!m_hwndToolBar) {
@@ -280,7 +280,7 @@ void MainToolBar::CreateToolBar(void)
 								WS_CHILD | WS_VISIBLE | WS_TABSTOP | WS_VSCROLL | CBS_DROPDOWN
 								/*| CBS_SORT*/ | CBS_AUTOHSCROLL /*| CBS_DISABLENOSCROLL*/,
 								rc.left, rc.top + 1, rc.right - rc.left, (rc.bottom - rc.top) * 10,
-								m_hwndToolBar, (HMENU)(INT_PTR)tbb.idCommand, EditApp::getInstance()->GetAppInstance(), NULL);
+								m_hwndToolBar, (HMENU)(INT_PTR)tbb.idCommand, EditApp::getInstance().GetAppInstance(), NULL);
 						if (m_hwndSearchBox) {
 							m_pOwner->SetCurrentFocus(0);
 

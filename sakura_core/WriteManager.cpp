@@ -34,7 +34,7 @@ CodeConvertResult WriteManager::WriteFile_From_CDocLineMgr(
 		if (e == CodeConvertResult::Failure) {
 			nRetVal=CodeConvertResult::Failure;
 			ErrorMessage(
-				EditWnd::getInstance()->GetHwnd(),
+				EditWnd::getInstance().GetHwnd(),
 				LS(STR_FILESAVE_CONVERT_ERROR),
 				saveInfo.filePath.c_str()
 			);
@@ -72,7 +72,7 @@ CodeConvertResult WriteManager::WriteFile_From_CDocLineMgr(
 				if (e == CodeConvertResult::Failure) {
 					nRetVal = CodeConvertResult::Failure;
 					ErrorMessage(
-						EditWnd::getInstance()->GetHwnd(),
+						EditWnd::getInstance().GetHwnd(),
 						LS(STR_FILESAVE_CONVERT_ERROR),
 						saveInfo.filePath.c_str()
 					);
@@ -112,7 +112,7 @@ CodeConvertResult WriteManager::WriteFile_From_CDocLineMgr(
 				if (e == CodeConvertResult::Failure) {
 					nRetVal = CodeConvertResult::Failure;
 					ErrorMessage(
-						EditWnd::getInstance()->GetHwnd(),
+						EditWnd::getInstance().GetHwnd(),
 						LS(STR_FILESAVE_CONVERT_ERROR),
 						saveInfo.filePath.c_str()
 					);
@@ -131,7 +131,7 @@ CodeConvertResult WriteManager::WriteFile_From_CDocLineMgr(
 		out.Close();
 	}catch (Error_FileOpen) { //########### Œ»Žž“_‚Å‚ÍA‚±‚Ì—áŠO‚ª”­¶‚µ‚½ê‡‚Í³í‚É“®ì‚Å‚«‚È‚¢
 		ErrorMessage(
-			EditWnd::getInstance()->GetHwnd(),
+			EditWnd::getInstance().GetHwnd(),
 			LS(STR_SAVEAGENT_OTHER_APP),
 			saveInfo.filePath.c_str()
 		);

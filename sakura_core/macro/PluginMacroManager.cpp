@@ -103,7 +103,7 @@ MacroManagerBase* PluginMacroManager::Creator(const TCHAR* Ext)
 	params.push_back(objMacro);
 
 	Plug::Array plugs;
-	JackManager::getInstance()->GetUsablePlug(PP_MACRO, 0, &plugs);
+	JackManager::getInstance().GetUsablePlug(PP_MACRO, 0, &plugs);
 	for (auto it=plugs.begin(); it!=plugs.end(); ++it) {
 		objMacro->SetMatch(0);	// Check macro ext mode
 		(*it)->Invoke(NULL, params);
@@ -124,6 +124,6 @@ MacroManagerBase* PluginMacroManager::Creator(const TCHAR* Ext)
 // Register plugin macro manager
 void PluginMacroManager::declare(void)
 {
-	MacroFactory::getInstance()->RegisterCreator(Creator);
+	MacroFactory::getInstance().RegisterCreator(Creator);
 }
 

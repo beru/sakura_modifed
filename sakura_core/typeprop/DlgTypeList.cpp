@@ -375,7 +375,7 @@ static void SendChangeSetting()
 		MYWM_CHANGESETTING,
 		(WPARAM)0,
 		(LPARAM)PM_CHANGESETTING_ALL,
-		EditWnd::getInstance()->GetHwnd()
+		EditWnd::getInstance().GetHwnd()
 	);
 }
 
@@ -385,7 +385,7 @@ static void SendChangeSettingType(int nType)
 		MYWM_CHANGESETTING,
 		(WPARAM)nType,
 		(LPARAM)PM_CHANGESETTING_TYPE,
-		EditWnd::getInstance()->GetHwnd()
+		EditWnd::getInstance().GetHwnd()
 	);
 }
 
@@ -395,7 +395,7 @@ static void SendChangeSettingType2(int nType)
 		MYWM_CHANGESETTING,
 		(WPARAM)nType,
 		(LPARAM)PM_CHANGESETTING_TYPE2,
-		EditWnd::getInstance()->GetHwnd()
+		EditWnd::getInstance().GetHwnd()
 	);
 }
 

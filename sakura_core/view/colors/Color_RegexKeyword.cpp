@@ -36,7 +36,7 @@ bool Color_RegexKeyword::BeginColor(const StringRef& str, int nPos)
 	int nMatchLen;
 	int nMatchColor;
 
-	const EditView* pView = ColorStrategyPool::getInstance()->GetCurrentView();
+	const EditView* pView = ColorStrategyPool::getInstance().GetCurrentView();
 
 	// 正規表現キーワード
 	if (pView->m_pRegexKeyword->RegexIsKeyword(str, nPos, &nMatchLen, &nMatchColor)) {
@@ -55,7 +55,7 @@ bool Color_RegexKeyword::EndColor(const StringRef& str, int nPos)
 
 void Color_RegexKeyword::OnStartScanLogic()
 {
-	EditView* pView = ColorStrategyPool::getInstance()->GetCurrentView();
+	EditView* pView = ColorStrategyPool::getInstance().GetCurrentView();
 	if (m_pTypeData->bUseRegexKeyword) {
 		pView->m_pRegexKeyword->RegexKeyLineStart();
 	}

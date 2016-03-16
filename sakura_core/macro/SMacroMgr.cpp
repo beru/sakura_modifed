@@ -615,12 +615,12 @@ BOOL SMacroMgr::Exec(
 
 	// 読み込み前か、毎回読み込む設定の場合は、ファイルを読み込みなおす
 	// Apr. 29, 2002 genta
-	if (!m_savedKeyMacros[idx] || ShareData::getInstance()->BeReloadWhenExecuteMacro(idx)) {
+	if (!m_savedKeyMacros[idx] || ShareData::getInstance().BeReloadWhenExecuteMacro(idx)) {
 		// ShareDataから、マクロファイル名を取得
 		// Jun. 08, 2003 Moca 呼び出し側でパス名を用意
 		// Jun. 16, 2003 genta 書式をちょっと変更
 		TCHAR ptr[_MAX_PATH * 2];
-		int n = ShareData::getInstance()->GetMacroFilename(idx, ptr, _countof(ptr));
+		int n = ShareData::getInstance().GetMacroFilename(idx, ptr, _countof(ptr));
 		if  (n <= 0) {
 			return FALSE;
 		}
@@ -688,7 +688,7 @@ bool SMacroMgr::Load(
 	}
 
 	m_sMacroPath = _T("");
-	*ppMacro = MacroFactory::getInstance()->Create(ext);
+	*ppMacro = MacroFactory::getInstance().Create(ext);
 	if (!*ppMacro) {
 		return false;
 	}

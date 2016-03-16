@@ -133,7 +133,7 @@ bool ViewCommander::Command_FUNCLIST(
 		// ƒvƒ‰ƒOƒCƒ“‚©‚çŒŸõ‚·‚é
 		{
 			Plug::Array plugs;
-			JackManager::getInstance()->GetUsablePlug(PP_OUTLINE, (PlugId)nOutlineType, &plugs);
+			JackManager::getInstance().GetUsablePlug(PP_OUTLINE, (PlugId)nOutlineType, &plugs);
 
 			if (plugs.size() > 0) {
 				assert_warning(plugs.size() == 1);

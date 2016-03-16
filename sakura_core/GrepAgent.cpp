@@ -34,9 +34,9 @@ CallbackResultType GrepAgent::OnBeforeClose()
 	// GREP処理中は終了できない
 	if (m_bGrepRunning) {
 		// アクティブにする
-		ActivateFrameWindow(EditWnd::getInstance()->GetHwnd());	//@@@ 2003.06.25 MIK
+		ActivateFrameWindow(EditWnd::getInstance().GetHwnd());	//@@@ 2003.06.25 MIK
 		TopInfoMessage(
-			EditWnd::getInstance()->GetHwnd(),
+			EditWnd::getInstance().GetHwnd(),
 			LS(STR_GREP_RUNNINNG)
 		);
 		return CallbackResultType::Interrupt;
@@ -48,7 +48,7 @@ void GrepAgent::OnAfterSave(const SaveInfo& saveInfo)
 {
 	// 名前を付けて保存から再ロードが除去された分の不足処理を追加（ANSI版との差異）	// 2009.08.12 ryoji
 	m_bGrepMode = false;	// grepウィンドウは通常ウィンドウ化
-	AppMode::getInstance()->m_szGrepKey[0] = 0;
+	AppMode::getInstance().m_szGrepKey[0] = 0;
 }
 
 /*!
@@ -283,7 +283,7 @@ DWORD GrepAgent::DoGrep(
 	//	2008.12.13 genta パターンが長すぎる場合は登録しない
 	//	(正規表現が途中で途切れると困るので)
 	//	2011.12.10 Moca 表示の際に...に切り捨てられるので登録するように
-	wcsncpy_s(AppMode::getInstance()->m_szGrepKey, _countof(AppMode::getInstance()->m_szGrepKey), pmGrepKey->GetStringPtr(), _TRUNCATE);
+	wcsncpy_s(AppMode::getInstance().m_szGrepKey, _countof(AppMode::getInstance().m_szGrepKey), pmGrepKey->GetStringPtr(), _TRUNCATE);
 	this->m_bGrepMode = true;
 
 	//	2007.07.22 genta
@@ -343,9 +343,9 @@ DWORD GrepAgent::DoGrep(
 
 	// Sep. 10, 2002 genta
 	// EditWndに新設した関数を使うように
-	EditWnd*	pEditWnd = EditWnd::getInstance();	//	Sep. 10, 2002 genta
-	pEditWnd->SetWindowIcon(hIconSmall, ICON_SMALL);
-	pEditWnd->SetWindowIcon(hIconBig, ICON_BIG);
+	auto& editWnd = EditWnd::getInstance();	//	Sep. 10, 2002 genta
+	editWnd.SetWindowIcon(hIconSmall, ICON_SMALL);
+	editWnd.SetWindowIcon(hIconBig, ICON_BIG);
 
 	GrepEnumKeys grepEnumKeys;
 	{
@@ -540,8 +540,8 @@ DWORD GrepAgent::DoGrep(
 	// 2003.06.23 Moca 共通設定で変更できるように
 	// 2008.06.08 ryoji 全ビューの表示ON/OFFを同期させる
 //	SetDrawSwitch(false);
-	if (!EditWnd::getInstance()->UpdateTextWrap()) {		// 折り返し方法関連の更新
-		EditWnd::getInstance()->RedrawAllViews(pViewDst);	// 他のペインの表示を更新
+	if (!EditWnd::getInstance().UpdateTextWrap()) {		// 折り返し方法関連の更新
+		EditWnd::getInstance().RedrawAllViews(pViewDst);	// 他のペインの表示を更新
 	}
 	const bool bDrawSwitchOld = pViewDst->SetDrawSwitch(GetDllShareData().common.search.bGrepRealTimeView != 0);
 
@@ -607,7 +607,7 @@ DWORD GrepAgent::DoGrep(
 	dlgCancel.CloseDialog(0);
 
 	// アクティブにする
-	ActivateFrameWindow(EditWnd::getInstance()->GetHwnd());
+	ActivateFrameWindow(EditWnd::getInstance().GetHwnd());
 
 	// アンドゥバッファの処理
 	pViewDst->SetUndoBuffer();
@@ -620,11 +620,11 @@ DWORD GrepAgent::DoGrep(
 	pViewDst->m_bDoing_UndoRedo = false;
 
 	// 表示処理ON/OFF
-	pEditWnd->SetDrawSwitchOfAllViews(bDrawSwitchOld);
+	editWnd.SetDrawSwitchOfAllViews(bDrawSwitchOld);
 
 	// 再描画
-	if (!pEditWnd->UpdateTextWrap()) {	// 折り返し方法関連の更新	// 2008.06.10 ryoji
-		pEditWnd->RedrawAllViews(NULL);
+	if (!editWnd.UpdateTextWrap()) {	// 折り返し方法関連の更新	// 2008.06.10 ryoji
+		editWnd.RedrawAllViews(NULL);
 	}
 
 	if (!bGrepCurFolder) {
@@ -693,7 +693,7 @@ int GrepAgent::DoGrepTree(
 		}
 
 		// 表示設定をチェック
-		EditWnd::getInstance()->SetDrawSwitchOfAllViews(
+		EditWnd::getInstance().SetDrawSwitchOfAllViews(
 			pDlgCancel->IsButtonChecked(IDC_CHECK_REALTIMEVIEW)
 		);
 
@@ -768,8 +768,8 @@ int GrepAgent::DoGrepTree(
 			if (0 < memMessage.GetStringLength()) {
 				AddTail( pViewDst, memMessage, grepOption.bGrepStdout );
 				pViewDst->GetCommander().Command_GOFILEEND(FALSE);
-				if (!EditWnd::getInstance()->UpdateTextWrap()) {		// 折り返し方法関連の更新	// 2008.06.10 ryoji
-					EditWnd::getInstance()->RedrawAllViews(pViewDst);	//	他のペインの表示を更新
+				if (!EditWnd::getInstance().UpdateTextWrap()) {		// 折り返し方法関連の更新	// 2008.06.10 ryoji
+					EditWnd::getInstance().RedrawAllViews(pViewDst);	//	他のペインの表示を更新
 				}
 				memMessage.Clear();
 			}
@@ -785,8 +785,8 @@ int GrepAgent::DoGrepTree(
 	if (0 < memMessage.GetStringLength()) {
 		AddTail( pViewDst, memMessage, grepOption.bGrepStdout );
 		pViewDst->GetCommander().Command_GOFILEEND(false);
-		if (!EditWnd::getInstance()->UpdateTextWrap()) {		// 折り返し方法関連の更新
-			EditWnd::getInstance()->RedrawAllViews(pViewDst);	//	他のペインの表示を更新
+		if (!EditWnd::getInstance().UpdateTextWrap()) {		// 折り返し方法関連の更新
+			EditWnd::getInstance().RedrawAllViews(pViewDst);	//	他のペインの表示を更新
 		}
 		memMessage.Clear();
 	}
@@ -813,7 +813,7 @@ int GrepAgent::DoGrepTree(
 				goto cancel_return;
 			}
 			// 表示設定をチェック
-			EditWnd::getInstance()->SetDrawSwitchOfAllViews(
+			EditWnd::getInstance().SetDrawSwitchOfAllViews(
 				pDlgCancel->IsButtonChecked(IDC_CHECK_REALTIMEVIEW)
 			);
 
@@ -856,8 +856,8 @@ cancel_return:;
 	if (0 < memMessage.GetStringLength()) {
 		AddTail( pViewDst, memMessage, grepOption.bGrepStdout );
 		pViewDst->GetCommander().Command_GOFILEEND(false);
-		if (!EditWnd::getInstance()->UpdateTextWrap()) {		// 折り返し方法関連の更新
-			EditWnd::getInstance()->RedrawAllViews(pViewDst);	//	他のペインの表示を更新
+		if (!EditWnd::getInstance().UpdateTextWrap()) {		// 折り返し方法関連の更新
+			EditWnd::getInstance().RedrawAllViews(pViewDst);	//	他のペインの表示を更新
 		}
 		memMessage.Clear();
 	}
@@ -1217,7 +1217,7 @@ int GrepAgent::DoGrepFile(
 					return -1;
 				}
 				//	2003.06.23 Moca 表示設定をチェック
-				EditWnd::getInstance()->SetDrawSwitchOfAllViews(
+				EditWnd::getInstance().SetDrawSwitchOfAllViews(
 					pDlgCancel->IsButtonChecked(IDC_CHECK_REALTIMEVIEW)
 				);
 				// 2002/08/30 Moca 進行状態を表示する(5MB以上)
@@ -1444,8 +1444,8 @@ int GrepAgent::DoGrepFile(
 				nOutputHitCount = nHitCount;
 				AddTail( pViewDst, memMessage, grepOption.bGrepStdout );
 				pViewDst->GetCommander().Command_GOFILEEND( FALSE );
-				if (!EditWnd::getInstance()->UpdateTextWrap()) {	// 折り返し方法関連の更新	// 2008.06.10 ryoji
-					EditWnd::getInstance()->RedrawAllViews( pViewDst );	//	他のペインの表示を更新
+				if (!EditWnd::getInstance().UpdateTextWrap()) {	// 折り返し方法関連の更新	// 2008.06.10 ryoji
+					EditWnd::getInstance().RedrawAllViews( pViewDst );	//	他のペインの表示を更新
 				}
 				memMessage._SetStringLength(0);
 			}
@@ -1712,7 +1712,7 @@ int GrepAgent::DoGrepReplaceFile(
 					return -1;
 				}
 				//	2003.06.23 Moca 表示設定をチェック
-				EditWnd::getInstance()->SetDrawSwitchOfAllViews(
+				EditWnd::getInstance().SetDrawSwitchOfAllViews(
 					pDlgCancel->IsButtonChecked(IDC_CHECK_REALTIMEVIEW)
 				);
 				// 2002/08/30 Moca 進行状態を表示する(5MB以上)
@@ -1920,8 +1920,8 @@ int GrepAgent::DoGrepReplaceFile(
 				nOutputHitCount = nHitCount;
 				AddTail( pViewDst, memMessage, grepOption.bGrepStdout );
 				pViewDst->GetCommander().Command_GOFILEEND( FALSE );
-				if (!EditWnd::getInstance()->UpdateTextWrap())	// 折り返し方法関連の更新	// 2008.06.10 ryoji
-					EditWnd::getInstance()->RedrawAllViews( pViewDst );	//	他のペインの表示を更新
+				if (!EditWnd::getInstance().UpdateTextWrap())	// 折り返し方法関連の更新	// 2008.06.10 ryoji
+					EditWnd::getInstance().RedrawAllViews( pViewDst );	//	他のペインの表示を更新
 				memMessage._SetStringLength(0);
 			}
 		}

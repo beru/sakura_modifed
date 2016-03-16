@@ -70,11 +70,11 @@ void VisualProgress::_Begin()
 {
 	// 砂時計
 	if (!m_pWaitCursor) {
-		m_pWaitCursor = new WaitCursor(EditWnd::getInstance()->GetHwnd());
+		m_pWaitCursor = new WaitCursor(EditWnd::getInstance().GetHwnd());
 	}
 
 	// プログレスバー
-	HWND hwndProgress = EditWnd::getInstance()->m_statusBar.GetProgressHwnd();
+	HWND hwndProgress = EditWnd::getInstance().m_statusBar.GetProgressHwnd();
 	if (hwndProgress) {
 		::ShowWindow(hwndProgress, SW_SHOW);
 		// 範囲設定・リセット
@@ -86,7 +86,7 @@ void VisualProgress::_Begin()
 void VisualProgress::_Doing(int nPer)
 {
 	// プログレスバー更新
-	HWND hwndProgress = EditWnd::getInstance()->m_statusBar.GetProgressHwnd();
+	HWND hwndProgress = EditWnd::getInstance().m_statusBar.GetProgressHwnd();
 	if (hwndProgress) {
 		if (nOldValue != nPer) {
 			Progress_SetPos(hwndProgress, nPer + 1); // 2013.06.10 Moca Vista/7等でプログレスバーがアニメーションで遅れる対策
@@ -99,7 +99,7 @@ void VisualProgress::_Doing(int nPer)
 void VisualProgress::_End()
 {
 	// プログレスバー
-	HWND hwndProgress = EditWnd::getInstance()->m_statusBar.GetProgressHwnd();
+	HWND hwndProgress = EditWnd::getInstance().m_statusBar.GetProgressHwnd();
 	if (hwndProgress) {
 		Progress_SetPos(hwndProgress, 0);
 		::ShowWindow(hwndProgress, SW_HIDE);

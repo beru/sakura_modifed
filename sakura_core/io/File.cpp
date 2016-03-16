@@ -135,7 +135,7 @@ bool File::FileLock(FileShareMode eShareMode, bool bMsg)
 		default:							pszMode = LS(STR_EXCLU_UNDEFINED); break;
 		}
 		TopWarningMessage(
-			EditWnd::getInstance()->GetHwnd(),
+			EditWnd::getInstance().GetHwnd(),
 			LS(STR_FILE_LOCK_ERR),
 			GetFilePathClass().IsValidPath() ? GetFilePath() : LS(STR_NO_TITLE1),
 			pszMode

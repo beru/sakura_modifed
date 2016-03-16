@@ -226,7 +226,7 @@ void LayoutMgr::_MakeOneLine(LayoutWork* pWork, PF_OnLine pfOnLine)
 	if (pWork->pColorStrategy) {
 		pWork->pColorStrategy->InitStrategyStatus();
 	}
-	ColorStrategyPool& color = *ColorStrategyPool::getInstance();
+	auto& color = ColorStrategyPool::getInstance();
 
 	// 1ロジック行を消化するまでループ
 	while (pWork->nPos < nLength) {
@@ -475,7 +475,7 @@ LayoutInt LayoutMgr::DoLayout_Range(
 	LayoutWork work;
 	LayoutWork* pWork = &work;
 	pWork->pLayout					= pLayoutPrev;
-	pWork->pColorStrategy			= ColorStrategyPool::getInstance()->GetStrategyByColor(nCurrentLineType);
+	pWork->pColorStrategy			= ColorStrategyPool::getInstance().GetStrategyByColor(nCurrentLineType);
 	pWork->colorPrev				= nCurrentLineType;
 	pWork->exInfoPrev.SetColorInfo(colorInfo);
 	pWork->bNeedChangeCOMMENTMODE	= false;

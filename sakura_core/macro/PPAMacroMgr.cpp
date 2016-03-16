@@ -106,7 +106,7 @@ MacroManagerBase* PPAMacroMgr::Creator(const TCHAR* ext)
 void PPAMacroMgr::declare (void)
 {
 	if (m_cPPA.InitDll() == InitDllResultType::Success) {
-		MacroFactory::getInstance()->RegisterCreator(Creator);
+		MacroFactory::getInstance().RegisterCreator(Creator);
 	}
 }
 // To Here Apr. 29, 2002 genta

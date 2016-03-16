@@ -94,7 +94,7 @@ bool NormalProcess::InitializeProcess()
 	GrepInfo	gi;
 	EditInfo	fi;
 	
-	auto& cmdLine = *CommandLine::getInstance();
+	auto& cmdLine = CommandLine::getInstance();
 	// コマンドラインで受け取ったファイルが開かれている場合は
 	// その編集ウィンドウをアクティブにする
 	cmdLine.GetEditInfo(&fi); // 2002/2/8 aroka ここに移動
@@ -138,17 +138,17 @@ bool NormalProcess::InitializeProcess()
 
 	MY_TRACETIME(runningTimer, "Before Load Plugins");
 	// プラグイン読み込み
-	PluginManager::getInstance()->LoadAllPlugin();
+	PluginManager::getInstance().LoadAllPlugin();
 	MY_TRACETIME(runningTimer, "After Load Plugins");
 
 	// エディタアプリケーションを作成。2007.10.23 kobake
 	// グループIDを取得
 	int nGroupId = cmdLine.GetGroupId();
 	if (GetDllShareData().common.tabBar.bNewWindow && nGroupId == -1) {
-		nGroupId = AppNodeManager::getInstance()->GetFreeGroupId();
+		nGroupId = AppNodeManager::getInstance().GetFreeGroupId();
 	}
 	// CEditAppを作成
-	m_pEditApp = EditApp::getInstance();
+	m_pEditApp = &EditApp::getInstance();
 	m_pEditApp->Create(GetProcessInstance(), nGroupId);
 	EditWnd* pEditWnd = m_pEditApp->GetEditWindow();
 	auto& activeView = pEditWnd->GetActiveView();
@@ -171,10 +171,10 @@ bool NormalProcess::InitializeProcess()
 	if (bDebugMode) {
 		// デバッグモニタモードに設定
 		pEditWnd->GetDocument()->SetCurDirNotitle();
-		AppMode::getInstance()->SetDebugModeON();
-		if (!AppMode::getInstance()->IsDebugMode()) {
+		AppMode::getInstance().SetDebugModeON();
+		if (!AppMode::getInstance().IsDebugMode()) {
 			// デバッグではなくて(無題)
-			AppNodeManager::getInstance()->GetNoNameNumber(pEditWnd->GetHwnd());
+			AppNodeManager::getInstance().GetNoNameNumber(pEditWnd->GetHwnd());
 			pEditWnd->UpdateCaption();
 		}
 		// 2004.09.20 naoh アウトプット用タイプ別設定
@@ -226,7 +226,7 @@ bool NormalProcess::InitializeProcess()
 			pEditWnd->m_dlgFuncList.Refresh();	// アウトラインを再解析する
 			//return true; // 2003.06.23 Moca
 		}else {
-			AppNodeManager::getInstance()->GetNoNameNumber(pEditWnd->GetHwnd());
+			AppNodeManager::getInstance().GetNoNameNumber(pEditWnd->GetHwnd());
 			pEditWnd->UpdateCaption();
 			
 			//-GREPDLGでダイアログを出す。　引数も反映（2002/03/24 YAZAKI）
@@ -286,14 +286,14 @@ bool NormalProcess::InitializeProcess()
 		// プラグイン：EditorStartイベント実行
 		Plug::Array plugs;
 		WSHIfObj::List params;
-		JackManager::getInstance()->GetUsablePlug(PP_EDITOR_START, 0, &plugs);
+		JackManager::getInstance().GetUsablePlug(PP_EDITOR_START, 0, &plugs);
 		for (auto it=plugs.begin(); it!=plugs.end(); ++it) {
 			(*it)->Invoke(&activeView, params);
 		}
 
 		// プラグイン：DocumentOpenイベント実行
 		plugs.clear();
-		JackManager::getInstance()->GetUsablePlug(PP_DOCUMENT_OPEN, 0, &plugs);
+		JackManager::getInstance().GetUsablePlug(PP_DOCUMENT_OPEN, 0, &plugs);
 		for (auto it=plugs.begin(); it!=plugs.end(); ++it) {
 			(*it)->Invoke(&activeView, params);
 		}
@@ -388,7 +388,7 @@ bool NormalProcess::InitializeProcess()
 		}
 		if (!pEditWnd->GetDocument()->m_docFile.GetFilePathClass().IsValidPath()) {
 			pEditWnd->GetDocument()->SetCurDirNotitle();	// (無題)ウィンドウ
-			AppNodeManager::getInstance()->GetNoNameNumber(pEditWnd->GetHwnd());
+			AppNodeManager::getInstance().GetNoNameNumber(pEditWnd->GetHwnd());
 			pEditWnd->UpdateCaption();
 		}
 	}
@@ -419,7 +419,7 @@ bool NormalProcess::InitializeProcess()
 	// プラグイン：EditorStartイベント実行
 	Plug::Array plugs;
 	WSHIfObj::List params;
-	JackManager::getInstance()->GetUsablePlug(
+	JackManager::getInstance().GetUsablePlug(
 			PP_EDITOR_START,
 			0,
 			&plugs
@@ -466,7 +466,7 @@ bool NormalProcess::InitializeProcess()
 
 	// プラグイン：DocumentOpenイベント実行
 	plugs.clear();
-	JackManager::getInstance()->GetUsablePlug(PP_DOCUMENT_OPEN, 0, &plugs);
+	JackManager::getInstance().GetUsablePlug(PP_DOCUMENT_OPEN, 0, &plugs);
 	for (auto it=plugs.begin(); it!=plugs.end(); ++it) {
 		(*it)->Invoke(&activeView, params);
 	}
@@ -499,7 +499,7 @@ bool NormalProcess::MainLoop()
 void NormalProcess::OnExitProcess()
 {
 	// プラグイン解放
-	PluginManager::getInstance()->UnloadAllPlugin();		// Mpve here	2010/7/11 Uchi
+	PluginManager::getInstance().UnloadAllPlugin();		// Mpve here	2010/7/11 Uchi
 }
 
 
@@ -520,7 +520,7 @@ HANDLE NormalProcess::_GetInitializeMutex() const
 {
 	MY_RUNNINGTIMER(runningTimer, "NormalProcess::_GetInitializeMutex");
 	HANDLE hMutex;
-	std::tstring strProfileName = to_tchar(CommandLine::getInstance()->GetProfileName());
+	std::tstring strProfileName = to_tchar(CommandLine::getInstance().GetProfileName());
 	std::tstring strMutexInitName = GSTR_MUTEX_SAKURA_INIT;
 	strMutexInitName += strProfileName;
 	hMutex = ::CreateMutex( NULL, TRUE, strMutexInitName.c_str() );

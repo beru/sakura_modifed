@@ -189,9 +189,9 @@ int HokanMgr::Search(
 		
 		Plug::Array plugs;
 		Plug::Array plugType;
-		JackManager::getInstance()->GetUsablePlug(PP_COMPLEMENTGLOBAL, 0, &plugs);
+		JackManager::getInstance().GetUsablePlug(PP_COMPLEMENTGLOBAL, 0, &plugs);
 		if (nHokanType != 0) {
-			JackManager::getInstance()->GetUsablePlug(PP_COMPLEMENT, nHokanType, &plugType);
+			JackManager::getInstance().GetUsablePlug(PP_COMPLEMENT, nHokanType, &plugType);
 			if (0 < plugType.size()) {
 				plugs.push_back(plugType[0]);
 			}

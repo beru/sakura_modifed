@@ -137,7 +137,7 @@ MacroManagerBase* WSHMacroManager::Creator(const TCHAR* FileExt)
 void WSHMacroManager::declare()
 {
 	// 暫定
-	MacroFactory::getInstance()->RegisterCreator(Creator);
+	MacroFactory::getInstance().RegisterCreator(Creator);
 }
 
 // インタフェースオブジェクトを追加する

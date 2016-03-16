@@ -21,10 +21,10 @@ void AppMode::SetDebugModeON()
 			return;
 		}
 	}
-	shared.handles.hwndDebug = EditWnd::getInstance()->GetHwnd();
+	shared.handles.hwndDebug = EditWnd::getInstance().GetHwnd();
 	this->_SetDebugMode(true);
 	this->SetViewMode(false);	// ビューモード	// 2001/06/23 N.Nakatani アウトプット窓への出力テキストの追加F_ADDTAIL_Wが抑止されるのでとりあえずビューモードは辞めました
-	EditWnd::getInstance()->UpdateCaption();
+	EditWnd::getInstance().UpdateCaption();
 }
 
 // 2005.06.24 Moca
@@ -32,10 +32,10 @@ void AppMode::SetDebugModeON()
 void AppMode::SetDebugModeOFF()
 {
 	auto& shared = GetDllShareData();
-	if (shared.handles.hwndDebug == EditWnd::getInstance()->GetHwnd()) {
+	if (shared.handles.hwndDebug == EditWnd::getInstance().GetHwnd()) {
 		shared.handles.hwndDebug = NULL;
 		this->_SetDebugMode(false);
-		EditWnd::getInstance()->UpdateCaption();
+		EditWnd::getInstance().UpdateCaption();
 	}
 }
 

@@ -98,7 +98,7 @@ void DocEditor::OnAfterLoad(const LoadInfo& loadInfo)
 
 	// カレントディレクトリの変更
 	::SetCurrentDirectory(pDoc->m_docFile.GetFilePathClass().GetDirPath().c_str());
-	AppMode::getInstance()->SetViewMode(loadInfo.bViewMode);		// ビューモード	##ここも、アリかな
+	AppMode::getInstance().SetViewMode(loadInfo.bViewMode);		// ビューモード	##ここも、アリかな
 }
 
 void DocEditor::OnAfterSave(const SaveInfo& saveInfo)

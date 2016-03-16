@@ -10,27 +10,27 @@
 // 改行コードを統一する
 void DocVisitor::SetAllEol(Eol eol)
 {
-	EditView* pView = &EditWnd::getInstance()->GetActiveView();
+	auto& view = EditWnd::getInstance().GetActiveView();
 
 	// Undo記録開始
-	if (!pView->m_bDoing_UndoRedo) {
-		if (!pView->m_commander.GetOpeBlk()) {
-			pView->m_commander.SetOpeBlk(new OpeBlk());
+	if (!view.m_bDoing_UndoRedo) {
+		if (!view.m_commander.GetOpeBlk()) {
+			view.m_commander.SetOpeBlk(new OpeBlk());
 		}
-		pView->m_commander.GetOpeBlk()->AddRef();
+		view.m_commander.GetOpeBlk()->AddRef();
 	}
 
 	// カーソル位置記憶
-	LayoutInt		nViewTopLine = pView->GetTextArea().GetViewTopLine();
-	LayoutInt		nViewLeftCol = pView->GetTextArea().GetViewLeftCol();
-	LayoutPoint		ptCaretPosXY = pView->GetCaret().GetCaretLayoutPos();
-	LayoutInt		nCaretPosX_Prev = pView->GetCaret().m_nCaretPosX_Prev;
+	LayoutInt		nViewTopLine = view.GetTextArea().GetViewTopLine();
+	LayoutInt		nViewLeftCol = view.GetTextArea().GetViewLeftCol();
+	LayoutPoint		ptCaretPosXY = view.GetCaret().GetCaretLayoutPos();
+	LayoutInt		nCaretPosX_Prev = view.GetCaret().m_nCaretPosX_Prev;
 
 	bool bReplace = false;
 	// 改行コードを統一する
 	if (eol.IsValid()) {
 		LogicInt nLine = LogicInt(0);
-		OpeBlk* pOpeBlk = pView->m_bDoing_UndoRedo ? NULL : pView->m_commander.GetOpeBlk();
+		OpeBlk* pOpeBlk = view.m_bDoing_UndoRedo ? NULL : view.m_commander.GetOpeBlk();
 		for (;;) {
 			DocLine* pDocLine = m_pDocRef->m_docLineMgr.GetLine(nLine); //#######非効率
 			if (!pDocLine) {
@@ -41,7 +41,7 @@ void DocVisitor::SetAllEol(Eol eol)
 				LogicRange range;
 				range.SetFrom(LogicPoint(pDocLine->GetLengthWithoutEOL(), nLine));
 				range.SetTo(LogicPoint(pDocLine->GetLengthWithEOL(), nLine));
-				pView->ReplaceData_CEditView2(
+				view.ReplaceData_CEditView2(
 					range,
 					eol.GetValue2(),
 					eol.GetLen(),
@@ -67,21 +67,21 @@ void DocVisitor::SetAllEol(Eol eol)
 		}
 	}
 	// Undo記録
-	if (pView->m_commander.GetOpeBlk()) {
-		if (pView->m_commander.GetOpeBlk()->GetNum()>0) {
+	if (view.m_commander.GetOpeBlk()) {
+		if (view.m_commander.GetOpeBlk()->GetNum()>0) {
 			// カーソル位置復元
-			pView->GetTextArea().SetViewTopLine(nViewTopLine);
-			pView->GetTextArea().SetViewLeftCol(nViewLeftCol);
-			pView->GetCaret().MoveCursor(ptCaretPosXY, true);
-			pView->GetCaret().m_nCaretPosX_Prev = nCaretPosX_Prev;
-			pView->m_commander.GetOpeBlk()->AppendOpe(
+			view.GetTextArea().SetViewTopLine(nViewTopLine);
+			view.GetTextArea().SetViewLeftCol(nViewLeftCol);
+			view.GetCaret().MoveCursor(ptCaretPosXY, true);
+			view.GetCaret().m_nCaretPosX_Prev = nCaretPosX_Prev;
+			view.m_commander.GetOpeBlk()->AppendOpe(
 				new MoveCaretOpe(
-					pView->GetCaret().GetCaretLogicPos()
+					view.GetCaret().GetCaretLogicPos()
 				)
 			);
 
 		}
-		pView->SetUndoBuffer();
+		view.SetUndoBuffer();
 	}
 }
 

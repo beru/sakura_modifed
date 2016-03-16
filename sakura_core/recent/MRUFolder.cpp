@@ -71,7 +71,7 @@ HMENU MruFolder::CreateMenu(HMENU	hMenuPopUp, MenuDrawer* pMenuDrawer) const
 	::SystemParametersInfo(SPI_GETNONCLIENTMETRICS, met.cbSize, &met, 0);
 	DCFont dcFont(met.lfMenuFont);
 
-	FileNameManager::getInstance()->TransformFileName_MakeCache();
+	FileNameManager::getInstance().TransformFileName_MakeCache();
 	for (int i=0; i<m_recentFolder.GetItemCount(); ++i) {
 		//	「共通設定」→「全般」→「ファイルの履歴MAX」を反映
 		if (i >= m_recentFolder.GetViewCount()) {
@@ -81,7 +81,7 @@ HMENU MruFolder::CreateMenu(HMENU	hMenuPopUp, MenuDrawer* pMenuDrawer) const
 		const TCHAR* pszFolder = m_recentFolder.GetItemText(i);
 		bool bFavorite = m_recentFolder.IsFavorite(i);
 		bool bFavoriteLabel = bFavorite && !m_pShareData->common.window.bMenuIcon;
-		FileNameManager::getInstance()->GetMenuFullLabel(szMenu, _countof(szMenu), true, pszFolder, -1, false, CODE_NONE, bFavoriteLabel, i, true, dcFont.GetHDC());
+		FileNameManager::getInstance().GetMenuFullLabel(szMenu, _countof(szMenu), true, pszFolder, -1, false, CODE_NONE, bFavoriteLabel, i, true, dcFont.GetHDC());
 
 		// メニューに追加
 		pMenuDrawer->MyAppendMenu(

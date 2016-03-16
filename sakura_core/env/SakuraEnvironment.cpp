@@ -45,7 +45,7 @@
 
 typedef std::wstring wstring;
 
-EditWnd* SakuraEnvironment::GetMainWindow()
+EditWnd& SakuraEnvironment::GetMainWindow()
 {
 	return EditWnd::getInstance();
 }
@@ -207,8 +207,8 @@ void SakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszBu
 				NONCLIENTMETRICS met;
 				met.cbSize = CCSIZEOF_STRUCT(NONCLIENTMETRICS, lfMessageFont);
 				::SystemParametersInfo(SPI_GETNONCLIENTMETRICS, met.cbSize, &met, 0);
-				DCFont dcFont(met.lfCaptionFont, GetMainWindow()->GetHwnd());
-				FileNameManager::getInstance()->GetTransformFileNameFast( pDoc->m_docFile.GetFilePath(), szText, 1023, dcFont.GetHDC(), true );
+				DCFont dcFont(met.lfCaptionFont, GetMainWindow().GetHwnd());
+				FileNameManager::getInstance().GetTransformFileNameFast( pDoc->m_docFile.GetFilePath(), szText, 1023, dcFont.GetHDC(), true );
 				q = wcs_pushT(q, q_max - q, szText);
 				++p;
 			}
@@ -216,11 +216,11 @@ void SakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszBu
 		// To Here 2003/06/21 Moca
 		case L'n':
 			if (!pDoc->m_docFile.GetFilePathClass().IsValidPath()) {
-				if (EditApp::getInstance()->m_pGrepAgent->m_bGrepMode) {
-				}else if (AppMode::getInstance()->IsDebugMode()) {
+				if (EditApp::getInstance().m_pGrepAgent->m_bGrepMode) {
+				}else if (AppMode::getInstance().IsDebugMode()) {
 				}else {
 					WCHAR szText[10];
-					const EditNode* node = AppNodeManager::getInstance()->GetEditNode(GetMainWindow()->GetHwnd());
+					const EditNode* node = AppNodeManager::getInstance().GetEditNode(GetMainWindow().GetHwnd());
 					if (0 < node->nId) {
 						swprintf(szText, L"%d", node->nId);
 						q = wcs_pushW(q, q_max - q, szText);
@@ -254,8 +254,8 @@ void SakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszBu
 				NONCLIENTMETRICS met;
 				met.cbSize = CCSIZEOF_STRUCT(NONCLIENTMETRICS, lfMessageFont);
 				::SystemParametersInfo(SPI_GETNONCLIENTMETRICS, met.cbSize, &met, 0);
-				DCFont dcFont(met.lfCaptionFont, GetMainWindow()->GetHwnd());
-				FileNameManager::getInstance()->GetTransformFileNameFast( to_tchar(buff), szText, _countof(szText)-1, dcFont.GetHDC(), true );
+				DCFont dcFont(met.lfCaptionFont, GetMainWindow().GetHwnd());
+				FileNameManager::getInstance().GetTransformFileNameFast( to_tchar(buff), szText, _countof(szText)-1, dcFont.GetHDC(), true );
 				q = wcs_pushT(q, q_max - q, szText);
 			}
 			++p;
@@ -316,7 +316,7 @@ void SakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszBu
 		case L'C':	// 現在選択中のテキスト
 			{
 				NativeW memCurText;
-				GetMainWindow()->GetActiveView().GetCurrentTextForSearch(memCurText);
+				GetMainWindow().GetActiveView().GetCurrentTextForSearch(memCurText);
 
 				q = wcs_pushW(q, q_max - q, memCurText.GetStringPtr(), memCurText.GetStringLength());
 				++p;
@@ -327,7 +327,7 @@ void SakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszBu
 		case L'x':	// 現在の物理桁位置(先頭からのバイト数1開始)
 			{
 				wchar_t szText[11];
-				_itow(GetMainWindow()->GetActiveView().GetCaret().GetCaretLogicPos().x + 1, szText, 10);
+				_itow(GetMainWindow().GetActiveView().GetCaret().GetCaretLogicPos().x + 1, szText, 10);
 				q = wcs_pushW(q, q_max - q, szText);
 				++p;
 			}
@@ -335,7 +335,7 @@ void SakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszBu
 		case L'y':	// 現在の物理行位置(1開始)
 			{
 				wchar_t szText[11];
-				_itow(GetMainWindow()->GetActiveView().GetCaret().GetCaretLogicPos().y + 1, szText, 10);
+				_itow(GetMainWindow().GetActiveView().GetCaret().GetCaretLogicPos().y + 1, szText, 10);
 				q = wcs_pushW(q, q_max - q, szText);
 				++p;
 			}
@@ -363,10 +363,10 @@ void SakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszBu
 			break;
 		case L'p':	// 現在のページ
 			{
-				EditWnd* pEditWnd = GetMainWindow();	// Sep. 10, 2002 genta
-				if (pEditWnd->m_pPrintPreview) {
+				auto& editWnd = GetMainWindow();	// Sep. 10, 2002 genta
+				if (editWnd.m_pPrintPreview) {
 					wchar_t szText[1024];
-					_itow(pEditWnd->m_pPrintPreview->GetCurPageNum() + 1, szText, 10);
+					_itow(editWnd.m_pPrintPreview->GetCurPageNum() + 1, szText, 10);
 					q = wcs_pushW(q, q_max - q, szText, wcslen(szText));
 					++p;
 				}else {
@@ -377,10 +377,10 @@ void SakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszBu
 			break;
 		case L'P':	// 総ページ
 			{
-				EditWnd* pEditWnd = GetMainWindow();	// Sep. 10, 2002 genta
-				if (pEditWnd->m_pPrintPreview) {
+				auto& editWnd = GetMainWindow();	// Sep. 10, 2002 genta
+				if (editWnd.m_pPrintPreview) {
 					wchar_t szText[1024];
-					_itow(pEditWnd->m_pPrintPreview->GetAllPageNum(), szText, 10);
+					_itow(editWnd.m_pPrintPreview->GetAllPageNum(), szText, 10);
 					q = wcs_pushW(q, q_max - q, szText);
 					++p;
 				}else {
@@ -442,8 +442,8 @@ void SakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszBu
 			{
 				NativeW memDes;
 				// szGrepKey → memDes
-				LimitStringLengthW(AppMode::getInstance()->m_szGrepKey, wcslen(AppMode::getInstance()->m_szGrepKey), (q_max - q > 32 ? 32 : q_max - q - 3), memDes);
-				if ((int)wcslen(AppMode::getInstance()->m_szGrepKey) > memDes.GetStringLength()) {
+				LimitStringLengthW(AppMode::getInstance().m_szGrepKey, wcslen(AppMode::getInstance().m_szGrepKey), (q_max - q > 32 ? 32 : q_max - q - 3), memDes);
+				if ((int)wcslen(AppMode::getInstance().m_szGrepKey) > memDes.GetStringLength()) {
 					memDes.AppendString(L"...");
 				}
 				q = wcs_pushW(q, q_max - q, memDes.GetStringPtr(), memDes.GetStringLength());
@@ -463,8 +463,8 @@ void SakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszBu
 			// iniファイルのフルパス
 			{
 				TCHAR	szPath[_MAX_PATH + 1];
-				std::tstring strProfileName = to_tchar(CommandLine::getInstance()->GetProfileName());
-				FileNameManager::getInstance()->GetIniFileName( szPath, strProfileName.c_str() );
+				std::tstring strProfileName = to_tchar(CommandLine::getInstance().GetProfileName());
+				FileNameManager::getInstance().GetIniFileName( szPath, strProfileName.c_str() );
 				q = wcs_pushT( q, q_max - q, szPath );
 				++p;
 			}
@@ -473,7 +473,7 @@ void SakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszBu
 			// 現在実行しているマクロファイルパスの取得
 			{
 				// 実行中マクロのインデックス番号 (INVALID_MACRO_IDX:無効 / STAND_KEYMACRO:標準マクロ)
-				SMacroMgr* pSMacroMgr = EditApp::getInstance()->m_pSMacroMgr;
+				SMacroMgr* pSMacroMgr = EditApp::getInstance().m_pSMacroMgr;
 				switch (pSMacroMgr->GetCurrentIdx()) {
 				case INVALID_MACRO_IDX:
 					break;
@@ -489,7 +489,7 @@ void SakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszBu
 				default:
 					{
 						TCHAR szMacroFilePath[_MAX_PATH * 2];
-						int n = ShareData::getInstance()->GetMacroFilename(pSMacroMgr->GetCurrentIdx(), szMacroFilePath, _countof(szMacroFilePath));
+						int n = ShareData::getInstance().GetMacroFilename(pSMacroMgr->GetCurrentIdx(), szMacroFilePath, _countof(szMacroFilePath));
 						if (0 < n) {
 							q = wcs_pushT(q, q_max - q, szMacroFilePath);
 						}
@@ -625,7 +625,7 @@ int SakuraEnvironment::_ExParam_Evaluate(const wchar_t* pCond)
 
 	switch (*pCond) {
 	case L'R': // $R ビューモードおよび読み取り専用属性
-		if (AppMode::getInstance()->IsViewMode()) {
+		if (AppMode::getInstance().IsViewMode()) {
 			return 0; // ビューモード
 		}else if (!EditDoc::GetInstance(0)->m_docLocker.IsDocWritable()) {
 			return 1; // 上書き禁止
@@ -633,16 +633,16 @@ int SakuraEnvironment::_ExParam_Evaluate(const wchar_t* pCond)
 			return 2; // 上記以外
 		}
 	case L'w': // $w Grepモード/Output Mode
-		if (EditApp::getInstance()->m_pGrepAgent->m_bGrepMode) {
+		if (EditApp::getInstance().m_pGrepAgent->m_bGrepMode) {
 			return 0;
-		}else if (AppMode::getInstance()->IsDebugMode()) {
+		}else if (AppMode::getInstance().IsDebugMode()) {
 			return 1;
 		}else {
 			return 2;
 		}
 	case L'M': // $M キーボードマクロの記録中
 		if (GetDllShareData().flags.bRecordingKeyMacro
-			&& GetDllShareData().flags.hwndRecordingKeyMacro == EditWnd::getInstance()->GetHwnd() // ウィンドウ
+			&& GetDllShareData().flags.hwndRecordingKeyMacro == EditWnd::getInstance().GetHwnd() // ウィンドウ
 		) {
 			return 0;
 		}else {
@@ -661,7 +661,7 @@ int SakuraEnvironment::_ExParam_Evaluate(const wchar_t* pCond)
 			return 1;
 		}
 	case L'I': // $I アイコン化されているか
-		if (::IsIconic(EditWnd::getInstance()->GetHwnd())) {
+		if (::IsIconic(EditWnd::getInstance().GetHwnd())) {
 			return 0;
 		}else {
  			return 1;
@@ -678,7 +678,7 @@ wchar_t* ExParam_LongName( wchar_t* q, wchar_t* q_max, EExpParamName eLongParam 
 	switch (eLongParam) {
 	case EExpParamName_profile:
 		{
-			LPCWSTR pszProf = CommandLine::getInstance()->GetProfileName();
+			LPCWSTR pszProf = CommandLine::getInstance().GetProfileName();
 			q = wcs_pushW( q, q_max - q, pszProf );
 		}
 		break;

@@ -77,7 +77,7 @@ EFunctionCode FuncLookup::Pos2FuncCode(int category, int position, bool bGetUnav
 		}
 	}else if (category == nsFuncCode::nFuncKindNum + LUOFFSET_PLUGIN) {
 		// プラグイン
-		return JackManager::getInstance()->GetCommandCode(position);
+		return JackManager::getInstance().GetCommandCode(position);
 	}
 	return F_DISABLE;
 }
@@ -141,7 +141,7 @@ bool FuncLookup::Funccode2Name(int funccode, WCHAR* ptr, int bufsize) const
 			return true;	// 定義されたコマンド
 		}
 	}else if (F_PLUGCOMMAND_FIRST <= funccode && funccode < F_PLUGCOMMAND_LAST) {
-		if (JackManager::getInstance()->GetCommandName(funccode, ptr, bufsize) > 0) {
+		if (JackManager::getInstance().GetCommandName(funccode, ptr, bufsize) > 0) {
 			return true;	// プラグインコマンド
 		}
 	}
@@ -243,7 +243,7 @@ int FuncLookup::GetItemCount(int category) const
 		return MAX_CUSTOM_MENU;
 	}else if (category == nsFuncCode::nFuncKindNum + LUOFFSET_PLUGIN) {
 		// プラグインコマンド
-		return JackManager::getInstance()->GetCommandCount();
+		return JackManager::getInstance().GetCommandCount();
 	}
 	return 0;
 }

@@ -85,7 +85,7 @@ void DocLocker::CheckWritable(bool bMsg)
 		// その他の原因（ファイルシステムのセキュリティ設定など）では読み取り専用と同様にメッセージを出さない
 		if (::GetLastError() == ERROR_SHARING_VIOLATION) {
 			TopWarningMessage(
-				EditWnd::getInstance()->GetHwnd(),
+				EditWnd::getInstance().GetHwnd(),
 				LS(STR_ERR_DLGEDITDOC21),	// "%ts\nは現在他のプロセスによって書込みが禁止されています。"
 				docFile.GetFilePathClass().IsValidPath() ? docFile.GetFilePath() : LS(STR_NO_TITLE1)	// "(無題)"
 			);

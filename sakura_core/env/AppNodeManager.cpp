@@ -337,13 +337,13 @@ int AppNodeGroupHandle::GetEditorWindowsNum(bool bExcludeClosing/* = true */)
 {
 	DllSharedData* pShare = &GetDllShareData();
 	int cnt = 0;
-	auto appNodeMgr = AppNodeManager::getInstance();
+	auto& appNodeMgr = AppNodeManager::getInstance();
 	for (int i=0; i<pShare->nodes.nEditArrNum; ++i) {
 		auto& node = pShare->nodes.pEditArr[i];
 		if (IsSakuraMainWindow(node.hWnd)) {
 			if (1
 				&& nGroup != 0
-				&& nGroup != appNodeMgr->GetEditNode(node.hWnd)->GetGroup()
+				&& nGroup != appNodeMgr.GetEditNode(node.hWnd)->GetGroup()
 			) {
 				continue;
 			}
@@ -370,7 +370,7 @@ bool relayMessageToAllEditors(
 	)
 {
 	EditNode* pWndArr;
-	int n = AppNodeManager::getInstance()->GetOpenedWindowArr(&pWndArr, false);
+	int n = AppNodeManager::getInstance().GetOpenedWindowArr(&pWndArr, false);
 	if (n == 0) {
 		return true;
 	}
@@ -746,9 +746,9 @@ bool AppNodeManager::IsSameGroup(HWND hWnd1, HWND hWnd2)
 	if (hWnd1 == hWnd2) {
 		return true;
 	}
-	auto* pNodeMgr = AppNodeManager::getInstance();
-	AppNodeGroupHandle group1 = pNodeMgr->GetEditNode(hWnd1)->GetGroup();
-	AppNodeGroupHandle group2 = pNodeMgr->GetEditNode(hWnd2)->GetGroup();
+	auto& nodeMgr = AppNodeManager::getInstance();
+	AppNodeGroupHandle group1 = nodeMgr.GetEditNode(hWnd1)->GetGroup();
+	AppNodeGroupHandle group2 = nodeMgr.GetEditNode(hWnd2)->GetGroup();
 	if (group1.IsValidGroup() && group1 == group2) {
 		return true;
 	}
@@ -784,7 +784,7 @@ HWND AppNodeManager::GetNextTab(HWND hWndCur)
 		int			nGroup = 0;
 		bool		bFound = false;
 		EditNode*	p = nullptr;
-		int			nCount = AppNodeManager::getInstance()->GetOpenedWindowArr(&p, false, false);
+		int			nCount = AppNodeManager::getInstance().GetOpenedWindowArr(&p, false, false);
 		if (nCount > 1) {
 			// search Group No.
 			for (int i=0; i<nCount; ++i) {

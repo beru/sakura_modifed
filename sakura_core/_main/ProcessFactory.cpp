@@ -98,30 +98,30 @@ bool ProcessFactory::ProfileSelect(
 	SelectLang::InitializeLanguageEnvironment();
 	SelectLang::ChangeLang( settings.szDllLanguage );
 
-	CommandLine::getInstance()->ParseCommandLine(lpCmdLine);
+	CommandLine::getInstance().ParseCommandLine(lpCmdLine);
 
 	bool bDialog;
-	if (CommandLine::getInstance()->IsProfileMgr()) {
+	if (CommandLine::getInstance().IsProfileMgr()) {
 		bDialog = true;
-	}else if (CommandLine::getInstance()->IsSetProfile()) {
+	}else if (CommandLine::getInstance().IsSetProfile()) {
 		bDialog = false;
 	}else if (settings.nDefaultIndex == -1) {
 		bDialog = true;
 	}else {
 		assert(0 <= settings.nDefaultIndex);
 		if (0 < settings.nDefaultIndex) {
-			CommandLine::getInstance()->SetProfileName(
+			CommandLine::getInstance().SetProfileName(
 				settings.profList[settings.nDefaultIndex - 1].c_str()
 			);
 		}else {
-			CommandLine::getInstance()->SetProfileName(L"");
+			CommandLine::getInstance().SetProfileName(L"");
 		}
 		bDialog = false;
 	}
 	if (bDialog) {
 		DlgProfileMgr dlgProf;
 		if (dlgProf.DoModal(hInstance, NULL, 0)) {
-			CommandLine::getInstance()->SetProfileName( to_wchar(dlgProf.m_strProfileName.c_str()) );
+			CommandLine::getInstance().SetProfileName( to_wchar(dlgProf.m_strProfileName.c_str()) );
 		}else {
 			return false; // プロファイルマネージャで「閉じる」を選んだ。プロセス終了
 		}
@@ -189,7 +189,7 @@ bool ProcessFactory::IsValidVersion()
 */
 bool ProcessFactory::IsStartingControlProcess()
 {
-	return CommandLine::getInstance()->IsNoWindow();
+	return CommandLine::getInstance().IsNoWindow();
 }
 
 /*!
@@ -201,7 +201,7 @@ bool ProcessFactory::IsStartingControlProcess()
 */
 bool ProcessFactory::IsExistControlProcess()
 {
-	std::tstring strProfileName = to_tchar(CommandLine::getInstance()->GetProfileName());
+	std::tstring strProfileName = to_tchar(CommandLine::getInstance().GetProfileName());
 	std::tstring strMutexSakuraCp = GSTR_MUTEX_SAKURA_CP;
 	strMutexSakuraCp += strProfileName;
  	HANDLE hMutexCP;
@@ -245,9 +245,9 @@ bool ProcessFactory::StartControlProcess()
 	TCHAR szEXE[MAX_PATH + 1];	// アプリケーションパス名
 
 	::GetModuleFileName(NULL, szEXE, _countof(szEXE));
-	if (CommandLine::getInstance()->IsSetProfile()) {
+	if (CommandLine::getInstance().IsSetProfile()) {
 		::auto_sprintf( szCmdLineBuf, _T("\"%ts\" -NOWIN -PROF=\"%ls\""),
-			szEXE, CommandLine::getInstance()->GetProfileName() );
+			szEXE, CommandLine::getInstance().GetProfileName() );
 	}else {
 		::auto_sprintf( szCmdLineBuf, _T("\"%ts\" -NOWIN"), szEXE ); // ""付加
 	}
@@ -325,7 +325,7 @@ bool ProcessFactory::WaitForInitializedControlProcess()
 		return false;
 	}
 
-	std::tstring strProfileName = to_tchar(CommandLine::getInstance()->GetProfileName());
+	std::tstring strProfileName = to_tchar(CommandLine::getInstance().GetProfileName());
 	std::tstring strInitEvent = GSTR_EVENT_SAKURA_CP_INITIALIZED;
 	strInitEvent += strProfileName;
 	HANDLE hEvent;
@@ -360,10 +360,10 @@ bool ProcessFactory::WaitForInitializedControlProcess()
 */
 bool ProcessFactory::TestWriteQuit()
 {
-	if (CommandLine::getInstance()->IsWriteQuit()) {
+	if (CommandLine::getInstance().IsWriteQuit()) {
 		TCHAR szIniFileIn[_MAX_PATH];
 		TCHAR szIniFileOut[_MAX_PATH];
-		FileNameManager::getInstance()->GetIniFileNameDirect( szIniFileIn, szIniFileOut, _T("") );
+		FileNameManager::getInstance().GetIniFileNameDirect( szIniFileIn, szIniFileOut, _T("") );
 		if (szIniFileIn[0] != _T('\0')) {	// マルチユーザ用設定か
 			// 既にマルチユーザ用のiniファイルがあればEXE基準のiniファイルに上書き更新して終了
 			if (fexist(szIniFileIn)) {

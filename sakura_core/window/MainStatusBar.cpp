@@ -38,7 +38,7 @@ void MainStatusBar::CreateStatusBar()
 		13,
 		m_hwndStatusBar,
 		NULL,
-		EditApp::getInstance()->GetAppInstance(),
+		EditApp::getInstance().GetAppInstance(),
 		0
 	);
 

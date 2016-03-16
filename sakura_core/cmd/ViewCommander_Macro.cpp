@@ -44,7 +44,7 @@ void ViewCommander::Command_RECKEYMACRO(void)
 		TCHAR szInitDir[MAX_PATH];
 		int nRet;
 		// 2003.06.23 Moca 記録用キーマクロのフルパスをShareData経由で取得
-		nRet = ShareData::getInstance()->GetMacroFilename(-1, szInitDir, MAX_PATH);
+		nRet = ShareData::getInstance().GetMacroFilename(-1, szInitDir, MAX_PATH);
 		auto& csMacro = GetDllShareData().common.macro;
 		if (nRet <= 0) {
 			ErrorMessage(m_pCommanderView->GetHwnd(), LS(STR_ERR_CEDITVIEW_CMD24), nRet);

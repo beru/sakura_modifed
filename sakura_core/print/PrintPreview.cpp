@@ -867,7 +867,7 @@ void PrintPreview::OnPreviewGoDirectPage(void)
 	auto_sprintf(szPageNum, _T("%d"), m_nCurPageNum + 1);
 
 	BOOL bDlgInputPageResult=cDlgInputPage.DoModal(
-		EditApp::getInstance()->GetAppInstance(),
+		EditApp::getInstance().GetAppInstance(),
 		m_hwndPrintPreviewBar, 
 		LS(STR_ERR_DLGPRNPRVW5),
 		szMessage,
@@ -1057,7 +1057,7 @@ void PrintPreview::OnPrint(void)
 			MYWM_CHANGESETTING,
 			(WPARAM)0,
 			(LPARAM)PM_PrintSetting,
-			EditWnd::getInstance()->GetHwnd()
+			EditWnd::getInstance().GetHwnd()
 		);
 	}
 
@@ -1073,10 +1073,10 @@ void PrintPreview::OnPrint(void)
 	}
 
 	// 印刷過程を表示して、キャンセルするためのダイアログを作成
-	DlgCancel	cDlgPrinting;
-	cDlgPrinting.DoModeless(EditApp::getInstance()->GetAppInstance(), m_pParentWnd->GetHwnd(), IDD_PRINTING);
-	cDlgPrinting.SetItemText(IDC_STATIC_JOBNAME, szJobName);
-	cDlgPrinting.SetItemText(IDC_STATIC_PROGRESS, _T(""));	// XPS対応 2013/5/8 Uchi
+	DlgCancel	dlgPrinting;
+	dlgPrinting.DoModeless(EditApp::getInstance().GetAppInstance(), m_pParentWnd->GetHwnd(), IDD_PRINTING);
+	dlgPrinting.SetItemText(IDC_STATIC_JOBNAME, szJobName);
+	dlgPrinting.SetItemText(IDC_STATIC_PROGRESS, _T(""));	// XPS対応 2013/5/8 Uchi
 
 	// 親ウィンドウを無効化
 	::EnableWindow(m_pParentWnd->GetHwnd(), FALSE);
@@ -1121,7 +1121,7 @@ void PrintPreview::OnPrint(void)
 		// 印刷過程を表示
 		//	Jun. 18, 2001 genta ページ番号表示の計算ミス修正
 		auto_sprintf_s(szProgress, _T("%d/%d"), i + 1, nNum);
-		cDlgPrinting.SetItemText(IDC_STATIC_PROGRESS, szProgress);
+		dlgPrinting.SetItemText(IDC_STATIC_PROGRESS, szProgress);
 
 		// 印刷 ページ開始
 		m_print.PrintStartPage(hdc);
@@ -1166,7 +1166,7 @@ void PrintPreview::OnPrint(void)
 			m_pPrintSetting->nPrintMarginLX - m_nPreview_PaperOffsetLeft ,
 			m_pPrintSetting->nPrintMarginTY - m_nPreview_PaperOffsetTop + nHeaderHeight*2,
 			nFrom + i,
-			&cDlgPrinting,
+			&dlgPrinting,
 			pStrategy
 		);
 
@@ -1179,7 +1179,7 @@ void PrintPreview::OnPrint(void)
 		m_print.PrintEndPage(hdc);
 
 		// 中断ボタン押下チェック
-		if (cDlgPrinting.IsCanceled()) {
+		if (dlgPrinting.IsCanceled()) {
 			break;
 		}
 	}
@@ -1193,7 +1193,7 @@ void PrintPreview::OnPrint(void)
 	DestroyFonts();
 
 	::EnableWindow(m_pParentWnd->GetHwnd(), TRUE);
-	cDlgPrinting.CloseDialog(0);
+	dlgPrinting.CloseDialog(0);
 
 	m_nCurPageNum = nCurPageNumOld;
 
@@ -1370,7 +1370,7 @@ ColorStrategy* PrintPreview::DrawPageTextFirst(int nPageNum)
 	// ページトップの色指定を取得
 	ColorStrategy*	pStrategy = NULL;
 	if (m_pPrintSetting->bColorPrint) {
-		m_pool = ColorStrategyPool::getInstance();
+		m_pool = &ColorStrategyPool::getInstance();
 		m_pool->SetCurrentView(&(m_pParentWnd->GetActiveView()));
 
 		const LayoutInt	nPageTopLineNum = LayoutInt((nPageNum * m_pPrintSetting->nPrintDansuu) * m_bPreview_EnableLines);
@@ -1940,7 +1940,7 @@ void PrintPreview::CreatePrintPreviewControls(void)
 		CW_USEDEFAULT,						// default height
 		m_pParentWnd->GetHwnd(),			// handle of main window
 		(HMENU) NULL,						// no menu for a scroll bar
-		EditApp::getInstance()->GetAppInstance(),		// instance owning this window
+		EditApp::getInstance().GetAppInstance(),		// instance owning this window
 		(LPVOID) NULL						// pointer not needed
 	);
 	SCROLLINFO si;
@@ -1966,7 +1966,7 @@ void PrintPreview::CreatePrintPreviewControls(void)
 		CW_USEDEFAULT,						// default height
 		m_pParentWnd->GetHwnd(),			// handle of main window
 		(HMENU) NULL,						// no menu for a scroll bar
-		EditApp::getInstance()->GetAppInstance(),	// instance owning this window
+		EditApp::getInstance().GetAppInstance(),	// instance owning this window
 		(LPVOID) NULL						// pointer not needed
 	);
 	si.cbSize = sizeof(si);
@@ -1991,7 +1991,7 @@ void PrintPreview::CreatePrintPreviewControls(void)
 		CW_USEDEFAULT,										// default height
 		m_pParentWnd->GetHwnd(), 							// handle of main window
 		(HMENU) NULL,										// no menu for a scroll bar
-		EditApp::getInstance()->GetAppInstance(),			// instance owning this window
+		EditApp::getInstance().GetAppInstance(),			// instance owning this window
 		(LPVOID) NULL										// pointer not needed
 	);
 	::ShowWindow(m_hwndPrintPreviewBar, SW_SHOW);
@@ -2116,7 +2116,7 @@ INT_PTR PrintPreview::DispatchEvent_PPB(
 							MYWM_CHANGESETTING,
 							(WPARAM)0,
 							(LPARAM)PM_PrintSetting,
-							EditWnd::getInstance()->GetHwnd()
+							EditWnd::getInstance().GetHwnd()
 						);
 						// OnChangePrintSetting();
 						// ::InvalidateRect(m_pParentWnd->GetHwnd(), NULL, TRUE);

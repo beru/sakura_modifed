@@ -866,8 +866,8 @@ void ViewCommander::Command_COPY_COLOR_HTML(bool bLineNumber)
 	FontAttr fontAttrNext = { false, false };
 	FontAttr fontAttrLast = { false, false };
 	FontAttr fontAttrLast2 = { false, false };
-	ColorStrategyPool* pool = ColorStrategyPool::getInstance();
-	pool->SetCurrentView(m_pCommanderView);
+	auto& pool = ColorStrategyPool::getInstance();
+	pool.SetCurrentView(m_pCommanderView);
 	for (auto nLineNum = sSelectLogic.GetFrom().y;
 		nLineNum <= nLineNumLast;
 		++nLineNum, pDocLine = pDocLine->GetNextLine()
@@ -875,13 +875,13 @@ void ViewCommander::Command_COPY_COLOR_HTML(bool bLineNumber)
 		if (!pDocLine) {
 			break;
 		}
-		pool->NotifyOnStartScanLogic();
+		pool.NotifyOnStartScanLogic();
 		ColorStrategy* pStrategyNormal = nullptr;
 		ColorStrategy* pStrategyFound = nullptr;
 		ColorStrategy* pStrategy = nullptr;
 		StringRef cStringLine(pDocLine->GetPtr(), pDocLine->GetLengthWithEOL());
 		{
-			pStrategy = pStrategyNormal = pool->GetStrategyByColor(pLayout->GetColorTypePrev());
+			pStrategy = pStrategyNormal = pool.GetStrategyByColor(pLayout->GetColorTypePrev());
 			if (pStrategy) {
 				pStrategy->InitStrategyStatus();
 				pStrategy->SetStrategyColorInfo(pLayout->GetColorInfo());
@@ -955,7 +955,7 @@ void ViewCommander::Command_COPY_COLOR_HTML(bool bLineNumber)
 			bool bAddCRLF = false;
 			for (; iLogic<nLineStart+nLineLen; ++iLogic) {
 				bool bChange = false;
-				pStrategy = GetColorStrategyHTML(cStringLine, iLogic, pool, &pStrategyNormal, &pStrategyFound, bChange);
+				pStrategy = GetColorStrategyHTML(cStringLine, iLogic, &pool, &pStrategyNormal, &pStrategyFound, bChange);
 				if (bChange) {
 					int nColorIdx = ToColorInfoArrIndex(pStrategy ? pStrategy->GetStrategyColor() : COLORIDX_TEXT);
 					if (nColorIdx != -1) {
@@ -1186,7 +1186,7 @@ void ViewCommander::Command_CREATEKEYBINDLIST(void)
 	// Windowsクリップボードにコピー
 	// 2004.02.17 Moca 関数化
 	SetClipboardText(
-		EditWnd::getInstance()->m_splitterWnd.GetHwnd(),
+		EditWnd::getInstance().m_splitterWnd.GetHwnd(),
 		memKeyList.GetStringPtr(),
 		memKeyList.GetStringLength()
 	);

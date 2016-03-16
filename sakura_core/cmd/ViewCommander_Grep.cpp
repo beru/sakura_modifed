@@ -66,7 +66,7 @@ void ViewCommander::Command_GREP(void)
 	mWork2.SetString(dlgGrep.m_szFile);
 	mWork3.SetString(dlgGrep.m_szFolder);
 
-	auto& grepAgent = *EditApp::getInstance()->m_pGrepAgent;
+	auto& grepAgent = *EditApp::getInstance().m_pGrepAgent;
 	auto& doc = *GetDocument();
 	/*	今のEditViewにGrep結果を表示する。
 		Grepモードのとき、または未編集で無題かつアウトプットでない場合。
@@ -80,7 +80,7 @@ void ViewCommander::Command_GREP(void)
 		|| (
 			!doc.m_docEditor.IsModified()
 			&& !doc.m_docFile.GetFilePathClass().IsValidPath()		// 現在編集中のファイルのパス
-			&& !AppMode::getInstance()->IsDebugMode()
+			&& !AppMode::getInstance().IsDebugMode()
 		)
 	) {
 		// 2011.01.23 Grepタイプ別適用
@@ -118,7 +118,7 @@ void ViewCommander::Command_GREP(void)
 		// プラグイン：DocumentOpenイベント実行
 		Plug::Array plugs;
 		WSHIfObj::List params;
-		JackManager::getInstance()->GetUsablePlug(PP_DOCUMENT_OPEN, 0, &plugs);
+		JackManager::getInstance().GetUsablePlug(PP_DOCUMENT_OPEN, 0, &plugs);
 		for (auto it=plugs.begin(); it!=plugs.end(); ++it) {
 			(*it)->Invoke(&GetEditWindow()->GetActiveView(), params);
 		}
@@ -185,14 +185,14 @@ void ViewCommander::Command_GREP_REPLACE(void)
 		Grepモードのとき、または未編集で無題かつアウトプットでない場合。
 		自ウィンドウがGrep実行中も、(異常終了するので)別ウィンドウにする
 	*/
-	if (( EditApp::getInstance()->m_pGrepAgent->m_bGrepMode &&
-		  !EditApp::getInstance()->m_pGrepAgent->m_bGrepRunning ) ||
+	if (( EditApp::getInstance().m_pGrepAgent->m_bGrepMode &&
+		  !EditApp::getInstance().m_pGrepAgent->m_bGrepRunning ) ||
 		( !GetDocument()->m_docEditor.IsModified() &&
 		  !GetDocument()->m_docFile.GetFilePathClass().IsValidPath() &&		// 現在編集中のファイルのパス
-		  !AppMode::getInstance()->IsDebugMode()
+		  !AppMode::getInstance().IsDebugMode()
 		)
 	) {
-		EditApp::getInstance()->m_pGrepAgent->DoGrep(
+		EditApp::getInstance().m_pGrepAgent->DoGrep(
 			m_pCommanderView,
 			true,
 			&cmWork1,

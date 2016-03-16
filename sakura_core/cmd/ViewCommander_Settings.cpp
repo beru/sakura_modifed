@@ -99,7 +99,7 @@ void ViewCommander::Command_SHOWTAB(void)
 	}
 
 	// 全ウィンドウに変更を通知する。
-	AppNodeManager::getInstance()->ResetGroupId();
+	AppNodeManager::getInstance().ResetGroupId();
 	AppNodeGroupHandle(0).PostMessageToAllEditors(
 		MYWM_BAR_CHANGE_NOTIFY,
 		(WPARAM)BarChangeNotifyType::Tab,
@@ -166,7 +166,7 @@ void ViewCommander::Command_TYPE_LIST(void)
 			HandleCommand(F_CHANGETYPE, true, (LPARAM)result.documentType.GetIndex() + 1, 0, 0, 0);
 		}else {
 			// タイプ別設定
-			EditApp::getInstance()->OpenPropertySheetTypes(-1, result.documentType);
+			EditApp::getInstance().OpenPropertySheetTypes(-1, result.documentType);
 		}
 	}
 	return;
@@ -194,7 +194,7 @@ void ViewCommander::Command_CHANGETYPE(int nTypePlusOne)
 // タイプ別設定
 void ViewCommander::Command_OPTION_TYPE(void)
 {
-	EditApp::getInstance()->OpenPropertySheetTypes(-1, GetDocument()->m_docType.GetDocumentType());
+	EditApp::getInstance().OpenPropertySheetTypes(-1, GetDocument()->m_docType.GetDocumentType());
 }
 
 
@@ -202,7 +202,7 @@ void ViewCommander::Command_OPTION_TYPE(void)
 void ViewCommander::Command_OPTION(void)
 {
 	// 設定プロパティシート テスト用
-	EditApp::getInstance()->OpenPropertySheet(-1);
+	EditApp::getInstance().OpenPropertySheet(-1);
 }
 
 
@@ -220,7 +220,7 @@ void ViewCommander::Command_FONT(void)
 #else
 	bool bFixedFont = true;
 #endif
-	if (MySelectFont(&lf, &nPointSize, EditWnd::getInstance()->m_splitterWnd.GetHwnd(), bFixedFont)) {
+	if (MySelectFont(&lf, &nPointSize, EditWnd::getInstance().m_splitterWnd.GetHwnd(), bFixedFont)) {
 		csView.lf = lf;
 		csView.nPointSize = nPointSize;
 

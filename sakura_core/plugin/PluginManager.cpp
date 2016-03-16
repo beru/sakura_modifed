@@ -621,11 +621,11 @@ Plugin* PluginManager::LoadPlugin(
 // ƒvƒ‰ƒOƒCƒ“‚ğJackManager‚É“o˜^‚·‚é
 bool PluginManager::RegisterPlugin(Plugin* plugin)
 {
-	JackManager* pJackMgr = JackManager::getInstance();
+	auto& jackMgr = JackManager::getInstance();
 	Plug::Array plugs = plugin->GetPlugs();
 
 	for (auto plug=plugs.begin(); plug!=plugs.end(); ++plug) {
-		pJackMgr->RegisterPlug((*plug)->m_sJack.c_str(), *plug);
+		jackMgr.RegisterPlug((*plug)->m_sJack.c_str(), *plug);
 	}
 
 	return true;
@@ -634,11 +634,11 @@ bool PluginManager::RegisterPlugin(Plugin* plugin)
 // ƒvƒ‰ƒOƒCƒ“‚ÌJackManager‚Ì“o˜^‚ğ‰ğœ‚·‚é
 bool PluginManager::UnRegisterPlugin(Plugin* plugin)
 {
-	JackManager* pJackMgr = JackManager::getInstance();
+	auto& jackMgr = JackManager::getInstance();
 	Plug::Array plugs = plugin->GetPlugs();
 
 	for (auto plug=plugs.begin(); plug!=plugs.end(); ++plug) {
-		pJackMgr->UnRegisterPlug((*plug)->m_sJack.c_str(), *plug);
+		jackMgr.UnRegisterPlug((*plug)->m_sJack.c_str(), *plug);
 	}
 
 	return true;

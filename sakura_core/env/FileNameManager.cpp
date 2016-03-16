@@ -555,7 +555,7 @@ void FileNameManager::GetIniFileName( LPTSTR pszIniFileName, LPCTSTR pszProfName
 		if (iniFolder.szPrivateIniFile[0] != _T('\0')) {
 			iniFolder.bReadPrivate = true;
 			iniFolder.bWritePrivate = true;
-			if (CommandLine::getInstance()->IsNoWindow() && CommandLine::getInstance()->IsWriteQuit())
+			if (CommandLine::getInstance().IsNoWindow() && CommandLine::getInstance().IsWriteQuit())
 				iniFolder.bWritePrivate = false;
 
 			// マルチユーザ用のiniフォルダを作成しておく

@@ -398,7 +398,7 @@ void DlgFileTree::SetDataInit()
 		const int xWidth = calc.GetTextWidth(_T("x"));
 		const int ctrlWidth = rc.right - rc.left;
 		int nMaxCch = ctrlWidth / xWidth;
-		FileNameManager::getInstance()->GetTransformFileNameFast(pFile, szFilePath, _countof(szFilePath), calc.GetDC(), true, nMaxCch);
+		FileNameManager::getInstance().GetTransformFileNameFast(pFile, szFilePath, _countof(szFilePath), calc.GetDC(), true, nMaxCch);
 		wsprintf(szMsg, LS(STR_FILETREE_FROM_FILE), szFilePath);
 		SetItemText(IDC_STATIC_SETTFING_FROM, szMsg);
 		bEnableDefIni = false;

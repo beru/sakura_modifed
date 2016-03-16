@@ -134,7 +134,7 @@ LRESULT EditView::SetReconvertStruct(
 		return 0;
 
 	// 2010.04.06 ビューモードでは何もしない
-	if (AppMode::getInstance()->IsViewMode()) {
+	if (AppMode::getInstance().IsViewMode()) {
 		return 0;
 	}
 	

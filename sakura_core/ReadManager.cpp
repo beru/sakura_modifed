@@ -131,20 +131,20 @@ CodeConvertResult ReadManager::ReadFile_To_CDocLineMgr(
 		if (!fexist(pszPath)) {
 			// ファイルがない
 			ErrorMessage(
-				EditWnd::getInstance()->GetHwnd(),
+				EditWnd::getInstance().GetHwnd(),
 				LS(STR_ERR_DLGDOCLM1),	// Mar. 24, 2001 jepro 若干修正
 				pszPath
 			);
 		}else if (_taccess(pszPath, 4) == -1) {
 			// 読み込みアクセス権がない
 			ErrorMessage(
-				EditWnd::getInstance()->GetHwnd(),
+				EditWnd::getInstance().GetHwnd(),
 				LS(STR_ERR_DLGDOCLM2),
 				pszPath
 			 );
 		}else {
 			ErrorMessage(
-				EditWnd::getInstance()->GetHwnd(),
+				EditWnd::getInstance().GetHwnd(),
 				LS(STR_ERR_DLGDOCLM3),
 				pszPath
 			 );
@@ -152,7 +152,7 @@ CodeConvertResult ReadManager::ReadFile_To_CDocLineMgr(
 	}catch (Error_FileRead) {
 		eRet = CodeConvertResult::Failure;
 		ErrorMessage(
-			EditWnd::getInstance()->GetHwnd(),
+			EditWnd::getInstance().GetHwnd(),
 			LS(STR_ERR_DLGDOCLM4),
 			pszPath
 		 );

@@ -31,7 +31,7 @@ bool IsVisualStyle()
 {
 	// ロードした Comctl32.dll が Ver 6 以上で画面設定がビジュアルスタイル指定になっている場合だけ
 	// ビジュアルスタイル表示になる（マニフェストで指定しないと Comctl32.dll は 6 未満になる）
-	return ((GetComctl32Version() >= PACKVERSION(6, 0)) && UxTheme::getInstance()->IsThemeActive());
+	return ((GetComctl32Version() >= PACKVERSION(6, 0)) && UxTheme::getInstance().IsThemeActive());
 }
 
 
@@ -44,7 +44,7 @@ bool IsVisualStyle()
 */
 void PreventVisualStyle(HWND hWnd)
 {
-	UxTheme::getInstance()->SetWindowTheme(hWnd, L"", L"");
+	UxTheme::getInstance().SetWindowTheme(hWnd, L"", L"");
 	return;
 }
 

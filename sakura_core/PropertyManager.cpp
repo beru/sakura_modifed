@@ -80,7 +80,7 @@ bool PropertyManager::OpenPropertySheet(
 		// ここでしか適用しないと、ほかのウィンドウが変更されません。
 
 		if (bGroup != (csTabBar.bDispTabWnd && !csTabBar.bDispTabWndMultiWin )) {
-			AppNodeManager::getInstance()->ResetGroupId();
+			AppNodeManager::getInstance().ResetGroupId();
 		}
 
 		// アクセラレータテーブルの再作成

@@ -146,7 +146,7 @@ CallbackResultType CodeChecker::OnCheckSave(SaveInfo* pSaveInfo)
 	// ユーザ問い合わせ
 	if (bTmpResult) {
 		int nDlgResult = MYMESSAGEBOX(
-			EditWnd::getInstance()->GetHwnd(),
+			EditWnd::getInstance().GetHwnd(),
 			MB_YESNOCANCEL | MB_ICONWARNING,
 			GSTR_APPNAME,
 			LS(STR_CODECHECKER_EOL_UNIFY),
@@ -184,7 +184,7 @@ CallbackResultType CodeChecker::OnCheckSave(SaveInfo* pSaveInfo)
 				szCharCode, &GetDllShareData().common.statusBar );
 		}
 		int nDlgResult = MYMESSAGEBOX(
-			EditWnd::getInstance()->GetHwnd(),
+			EditWnd::getInstance().GetHwnd(),
 			MB_YESNOCANCEL | MB_ICONWARNING,
 			GSTR_APPNAME,
 			LS(STR_CODECHECKER_CONFORM_LOSESOME),
@@ -212,7 +212,7 @@ void CodeChecker::OnFinalSave(SaveResultType eSaveResult)
 {
 	// カキコ結果
 	if (eSaveResult == SaveResultType::LoseSome) {
-		ErrorMessage(EditWnd::getInstance()->GetHwnd(), LS(STR_CODECHECKER_LOSESOME_SAVE));
+		ErrorMessage(EditWnd::getInstance().GetHwnd(), LS(STR_CODECHECKER_LOSESOME_SAVE));
 	}
 }
 
@@ -224,7 +224,7 @@ void CodeChecker::OnFinalLoad(LoadResultType eLoadResult)
 {
 	if (eLoadResult == LoadResultType::LoseSome) {
 		ErrorMessage(
-			EditWnd::getInstance()->GetHwnd(),
+			EditWnd::getInstance().GetHwnd(),
 			LS(STR_CODECHECKER_LOSESOME_ROAD)
 		);
 	}

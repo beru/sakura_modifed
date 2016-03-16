@@ -63,7 +63,7 @@ void EditApp::Create(HINSTANCE hInst, int nGroupId)
 	m_pSMacroMgr = new SMacroMgr();
 
 	// ウィンドウの作成
-	m_pEditWnd = EditWnd::getInstance();
+	m_pEditWnd = &EditWnd::getInstance();
 
 	m_pEditDoc->Create(m_pEditWnd);
 	m_pEditWnd->Create(m_pEditDoc, &m_icons, nGroupId);

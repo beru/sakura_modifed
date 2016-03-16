@@ -1002,7 +1002,7 @@ bool IsFuncEnable(const EditDoc* pEditDoc, const DllSharedData* pShareData, EFun
 	switch (nId) {
 	case F_RECKEYMACRO:	// キーマクロの記録開始／終了
 		if (pShareData->flags.bRecordingKeyMacro) {	// キーボードマクロの記録中
-			return (pShareData->flags.hwndRecordingKeyMacro == EditWnd::getInstance()->GetHwnd());	// キーボードマクロを記録中のウィンドウ
+			return (pShareData->flags.hwndRecordingKeyMacro == EditWnd::getInstance().GetHwnd());	// キーボードマクロを記録中のウィンドウ
 		}else {
 			return true;
 		}
@@ -1011,20 +1011,20 @@ bool IsFuncEnable(const EditDoc* pEditDoc, const DllSharedData* pShareData, EFun
 		// キーマクロエンジン以外のマクロを読み込んでいるときは
 		// 実行はできるが保存はできない．
 		if (pShareData->flags.bRecordingKeyMacro) {	// キーボードマクロの記録中
-			return (pShareData->flags.hwndRecordingKeyMacro == EditWnd::getInstance()->GetHwnd());	// キーボードマクロを記録中のウィンドウ
+			return (pShareData->flags.hwndRecordingKeyMacro == EditWnd::getInstance().GetHwnd());	// キーボードマクロを記録中のウィンドウ
 		}else {
-			return EditApp::getInstance()->m_pSMacroMgr->IsSaveOk();
+			return EditApp::getInstance().m_pSMacroMgr->IsSaveOk();
 		}
 	case F_EXECKEYMACRO:	// キーマクロの実行
 		if (pShareData->flags.bRecordingKeyMacro) {	// キーボードマクロの記録中
-			return (pShareData->flags.hwndRecordingKeyMacro == EditWnd::getInstance()->GetHwnd());	// キーボードマクロを記録中のウィンドウ
+			return (pShareData->flags.hwndRecordingKeyMacro == EditWnd::getInstance().GetHwnd());	// キーボードマクロを記録中のウィンドウ
 		}else {
 			//@@@ 2002.1.24 YAZAKI szKeyMacroFileNameにファイル名がコピーされているかどうか。
 			return (pShareData->common.macro.szKeyMacroFileName[0] != NULL);
 		}
 	case F_LOADKEYMACRO:	// キーマクロの読み込み
 		if (pShareData->flags.bRecordingKeyMacro) {	// キーボードマクロの記録中
-			return (pShareData->flags.hwndRecordingKeyMacro == EditWnd::getInstance()->GetHwnd());	// キーボードマクロを記録中のウィンドウ
+			return (pShareData->flags.hwndRecordingKeyMacro == EditWnd::getInstance().GetHwnd());	// キーボードマクロを記録中のウィンドウ
 		}else {
 			return true;
 		}
@@ -1045,7 +1045,7 @@ bool IsFuncEnable(const EditDoc* pEditDoc, const DllSharedData* pShareData, EFun
 	case F_DIFF_NEXT:	// 次の差分へ	//@@@ 2002.05.25 MIK
 	case F_DIFF_PREV:	// 前の差分へ	//@@@ 2002.05.25 MIK
 	case F_DIFF_RESET:	// 差分の全解除	//@@@ 2002.05.25 MIK
-		return DiffManager::getInstance()->IsDiffUse();
+		return DiffManager::getInstance().IsDiffUse();
 	case F_DIFF_DIALOG:	// DIFF差分表示	//@@@ 2002.05.25 MIK
 		//if (pEditDoc->IsModified()) return false;
 		//if (! pEditDoc->m_docFile.GetFilePathClass().IsValidPath()) return false;
@@ -1085,7 +1085,7 @@ bool IsFuncEnable(const EditDoc* pEditDoc, const DllSharedData* pShareData, EFun
 		return !(pShareData->nodes.nEditArrNum >= MAX_EDITWINDOWS);	// 最大値修正	//@@@ 2003.05.31 MIK
 
 	case F_FILESAVE:	// 上書き保存
-		if (!AppMode::getInstance()->IsViewMode()) {	// ビューモード
+		if (!AppMode::getInstance().IsViewMode()) {	// ビューモード
 			if (pEditDoc->m_docEditor.IsModified()) {	// 変更フラグ
 				return true;
 			}else if (pEditDoc->m_docFile.IsChgCodeSet()) {	// 文字コードの変更
@@ -1166,7 +1166,7 @@ bool IsFuncEnable(const EditDoc* pEditDoc, const DllSharedData* pShareData, EFun
 	case F_TAGJUMP_KEYWORD:	// キーワードを指定してダイレクトタグジャンプ	//@@@ 2005.03.31 MIK
 	// 2003.05.12 MIK タグファイル作成先を選べるようにしたので、常に作成可能とする
 //	case F_TAGS_MAKE:	// タグファイルの作成	//@@@ 2003.04.13 MIK
-		return (!EditApp::getInstance()->m_pGrepAgent->m_bGrepMode
+		return (!EditApp::getInstance().m_pGrepAgent->m_bGrepMode
 			&& pEditDoc->m_docFile.GetFilePathClass().IsValidPath()
 		);
 		
@@ -1212,7 +1212,7 @@ bool IsFuncChecked(const EditDoc* pEditDoc, const DllSharedData* pShareData, EFu
 {
 	EditWnd* pEditWnd;
 	// Modified by KEITA for WIN64 2003.9.6
-	pEditWnd = (EditWnd*)::GetWindowLongPtr(EditWnd::getInstance()->GetHwnd(), GWLP_USERDATA);
+	pEditWnd = (EditWnd*)::GetWindowLongPtr(EditWnd::getInstance().GetHwnd(), GWLP_USERDATA);
 //@@@ 2002.01.14 YAZAKI 印刷PreviewをCPrintPreviewに独立させたことにより、Preview判定削除
 	EncodingType eDocCode = pEditDoc->GetDocumentEncoding();
 	switch (nId) {
@@ -1227,7 +1227,7 @@ bool IsFuncChecked(const EditDoc* pEditDoc, const DllSharedData* pShareData, EFu
 	case F_FILE_REOPEN_UTF7:		return eDocCode == CODE_UTF7;
 	case F_RECKEYMACRO:	// キーマクロの記録開始／終了
 		if (pShareData->flags.bRecordingKeyMacro) {	// キーボードマクロの記録中
-			return (pShareData->flags.hwndRecordingKeyMacro == EditWnd::getInstance()->GetHwnd());	// キーボードマクロを記録中のウィンドウ
+			return (pShareData->flags.hwndRecordingKeyMacro == EditWnd::getInstance().GetHwnd());	// キーボードマクロを記録中のウィンドウ
 		}else {
 			return false;
 		}
@@ -1244,7 +1244,7 @@ bool IsFuncChecked(const EditDoc* pEditDoc, const DllSharedData* pShareData, EFu
 											pShareData->common.statusBar.bDispSelCountByByte != FALSE :
 											pEditWnd->m_nSelectCountMode == SelectCountMode::ByByte);
 	// Mar. 6, 2002 genta
-	case F_VIEWMODE:			return AppMode::getInstance()->IsViewMode(); // ビューモード
+	case F_VIEWMODE:			return AppMode::getInstance().IsViewMode(); // ビューモード
 	// From Here 2003.06.23 Moca
 	case F_CHGMOD_EOL_CRLF:		return pEditDoc->m_docEditor.GetNewLineCode() == EolType::CRLF;
 	case F_CHGMOD_EOL_LF:		return pEditDoc->m_docEditor.GetNewLineCode() == EolType::LF;

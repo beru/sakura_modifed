@@ -74,7 +74,7 @@ void ShareData_IO::SaveShareData()
 bool ShareData_IO::ShareData_IO_2(bool bRead)
 {
 //	MY_RUNNINGTIMER(runningTimer, "ShareData_IO::ShareData_IO_2");
-	ShareData* pShare = ShareData::getInstance();
+	auto& shareData = ShareData::getInstance();
 
 	DataProfile	profile;
 
@@ -85,9 +85,9 @@ bool ShareData_IO::ShareData_IO_2(bool bRead)
 		profile.SetWritingMode();
 	}
 
-	std::tstring strProfileName = to_tchar(CommandLine::getInstance()->GetProfileName());
+	std::tstring strProfileName = to_tchar(CommandLine::getInstance().GetProfileName());
 	TCHAR szIniFileName[_MAX_PATH + 1];
-	FileNameManager::getInstance()->GetIniFileName( szIniFileName, strProfileName.c_str(), bRead );	// 2007.05.19 ryoji iniファイル名を取得する
+	FileNameManager::getInstance().GetIniFileName( szIniFileName, strProfileName.c_str(), bRead );	// 2007.05.19 ryoji iniファイル名を取得する
 
 //	MYTRACE(_T("Iniファイル処理-1 所要時間(ミリ秒) = %d\n"), runningTimer.Read());
 
@@ -127,7 +127,7 @@ bool ShareData_IO::ShareData_IO_2(bool bRead)
 		DllSharedData* pShareData = &GetDllShareData();
 		profile.IOProfileData(L"Common", L"m_szLanguageDll", MakeStringBufferT(pShareData->common.window.szLanguageDll));
 		SelectLang::ChangeLang(pShareData->common.window.szLanguageDll);
-		pShare->RefreshString();
+		shareData.RefreshString();
 	}
 
 	// Feb. 12, 2006 D.S.Koba
@@ -1285,7 +1285,7 @@ void ShareData_IO::ShareData_IO_Types(DataProfile& profile)
 	}
 	SetValueLimit(pShare->nTypesCount, 1, MAX_TYPES);
 	// 注：コントロールプロセス専用
-	std::vector<TypeConfig*>& types = ShareData::getInstance()->GetTypeSettings();
+	std::vector<TypeConfig*>& types = ShareData::getInstance().GetTypeSettings();
 	for (int i=GetDllShareData().nTypesCount; i<nCountOld; ++i) {
 		delete types[i];
 		types[i] = NULL;

@@ -236,7 +236,7 @@ void DlgDiff::SetData(void)
 		int			selCode = CODE_NONE;
 
 		// 自分の文字コードを取得
-		::SendMessage(EditWnd::getInstance()->GetHwnd(), MYWM_GETFILEINFO, 0, 0);
+		::SendMessage(EditWnd::getInstance().GetHwnd(), MYWM_GETFILEINFO, 0, 0);
 		EditInfo* pFileInfo = &m_pShareData->workBuffer.editInfo_MYWM_GETFILEINFO;
 		code = pFileInfo->nCharCode;
 
@@ -244,7 +244,7 @@ void DlgDiff::SetData(void)
 		HWND hwndList = GetItemHwnd(IDC_LIST_DIFF_FILES);
 
 		// 現在開いている編集窓のリストをメニューにする
-		int nRowNum = AppNodeManager::getInstance()->GetOpenedWindowArr(&pEditNode, true);
+		int nRowNum = AppNodeManager::getInstance().GetOpenedWindowArr(&pEditNode, true);
 		if (nRowNum > 0) {
 			// 水平スクロール幅は実際に表示する文字列の幅を計測して決める	// 2009.09.26 ryoji
 			TextWidthCalc calc(hwndList);
@@ -257,15 +257,15 @@ void DlgDiff::SetData(void)
 				pFileInfo = (EditInfo*)&m_pShareData->workBuffer.editInfo_MYWM_GETFILEINFO;
 
 				// 自分ならスキップ
-				if (pEditNode[i].GetHwnd() == EditWnd::getInstance()->GetHwnd()) {
+				if (pEditNode[i].GetHwnd() == EditWnd::getInstance().GetHwnd()) {
 					// 同じ形式にしておく。ただしアクセスキー番号はなし
-					FileNameManager::getInstance()->GetMenuFullLabel_WinListNoEscape( szName, _countof(szName), pFileInfo, pEditNode[i].nId, -1, calc.GetDC() );
+					FileNameManager::getInstance().GetMenuFullLabel_WinListNoEscape( szName, _countof(szName), pFileInfo, pEditNode[i].nId, -1, calc.GetDC() );
 					SetItemText(IDC_STATIC_DIFF_SRC, szName);
 					continue;
 				}
 
 				// 番号はウィンドウ一覧と同じ番号を使う
-				FileNameManager::getInstance()->GetMenuFullLabel_WinListNoEscape( szName, _countof(szName), pFileInfo, pEditNode[i].nId, i, calc.GetDC() );
+				FileNameManager::getInstance().GetMenuFullLabel_WinListNoEscape( szName, _countof(szName), pFileInfo, pEditNode[i].nId, i, calc.GetDC() );
 
 
 				// リストに登録する

@@ -357,7 +357,7 @@ Color3Setting EditView::GetColorIndex(
 		return cColor;
 	}
 	// 2014.12.30 Skipモードの時もCOLORIDX_TEXT
-	if (ColorStrategyPool::getInstance()->IsSkipBeforeLayout()) {
+	if (ColorStrategyPool::getInstance().IsSkipBeforeLayout()) {
 		Color3Setting cColor = { COLORIDX_TEXT, COLORIDX_TEXT, COLORIDX_TEXT };
 		return cColor;
 	}
@@ -386,9 +386,9 @@ Color3Setting EditView::GetColorIndex(
 		pInfo->nPosInLogic = pLayoutLineFirst->GetLogicOffset();
 
 		// ColorStrategyPool初期化
-		ColorStrategyPool* pool = ColorStrategyPool::getInstance();
-		pool->SetCurrentView(this);
-		pool->NotifyOnStartScanLogic();
+		auto& pool = ColorStrategyPool::getInstance();
+		pool.SetCurrentView(this);
+		pool.NotifyOnStartScanLogic();
 
 		// 2009.02.07 ryoji この関数では pInfo->CheckChangeColor() で色を調べるだけなので以下の処理は不要
 		//
@@ -415,8 +415,8 @@ Color3Setting EditView::GetColorIndex(
 	StringRef lineStr(pDocLine->GetPtr(), pDocLine->GetLengthWithEOL());
 
 	// color strategy
-	ColorStrategyPool* pool = ColorStrategyPool::getInstance();
-	pInfo->pStrategy = pool->GetStrategyByColor(eRet);
+	ColorStrategyPool& pool = ColorStrategyPool::getInstance();
+	pInfo->pStrategy = pool.GetStrategyByColor(eRet);
 	if (pInfo->pStrategy) {
 		pInfo->pStrategy->InitStrategyStatus();
 		pInfo->pStrategy->SetStrategyColorInfo(colorInfo);
@@ -885,10 +885,10 @@ bool EditView::DrawLogicLine(
 	pInfo->pView = this;
 
 	// ColorStrategyPool初期化
-	ColorStrategyPool* pool = ColorStrategyPool::getInstance();
-	pool->SetCurrentView(this);
-	pool->NotifyOnStartScanLogic();
-	bool bSkipBeforeLayout = pool->IsSkipBeforeLayout();
+	auto& pool = ColorStrategyPool::getInstance();
+	pool.SetCurrentView(this);
+	pool.NotifyOnStartScanLogic();
+	bool bSkipBeforeLayout = pool.IsSkipBeforeLayout();
 
 	// DispPosを保存しておく
 	pInfo->dispPosBegin = *pInfo->pDispPos;
@@ -909,7 +909,7 @@ bool EditView::DrawLogicLine(
 				eRet = pLayout->GetColorTypePrev(); // COLORIDX_TEXTのはず
 				colorInfo = pLayout->GetColorInfo();
 			}
-			pInfo->pStrategy = pool->GetStrategyByColor(eRet);
+			pInfo->pStrategy = pool.GetStrategyByColor(eRet);
 			if (pInfo->pStrategy) {
 				pInfo->pStrategy->InitStrategyStatus();
 				pInfo->pStrategy->SetStrategyColorInfo(colorInfo);
@@ -1065,13 +1065,13 @@ bool EditView::DrawLayoutLine(ColorStrategyInfo* pInfo)
 			bSkipRight = true; // 次の行は別のロジック行なのでスキップ可能
 		}
 		if (!bSkipRight) {
-			bSkipRight = ColorStrategyPool::getInstance()->IsSkipBeforeLayout();
+			bSkipRight = ColorStrategyPool::getInstance().IsSkipBeforeLayout();
 		}
 	}
 	// 行終端または折り返しに達するまでループ
 	if (pLayout) {
 		int nPosTo = pLayout->GetLogicOffset() + pLayout->GetLengthWithEOL();
-		FigureManager* pFigureManager = FigureManager::getInstance();
+		auto& figureManager = FigureManager::getInstance();
 		while (pInfo->nPosInLogic < nPosTo) {
 			// 色切替
 			if (pInfo->CheckChangeColor(lineStr)) {
@@ -1081,7 +1081,7 @@ bool EditView::DrawLayoutLine(ColorStrategyInfo* pInfo)
 			}
 
 			// 1文字情報取得 $$高速化可能
-			Figure& figure = pFigureManager->GetFigure(&lineStr.GetPtr()[pInfo->GetPosInLogic()],
+			Figure& figure = figureManager.GetFigure(&lineStr.GetPtr()[pInfo->GetPosInLogic()],
 				lineStr.GetLength() - pInfo->GetPosInLogic());
 
 			// 1文字描画

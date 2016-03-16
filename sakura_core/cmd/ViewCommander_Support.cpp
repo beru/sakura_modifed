@@ -207,7 +207,7 @@ retry:;
 			) == IDYES
 		) {
 			// 共通設定 プロパティシート
-			if (!EditApp::getInstance()->OpenPropertySheet(ID_PROPCOM_PAGENUM_HELPER)) {
+			if (!EditApp::getInstance().OpenPropertySheet(ID_PROPCOM_PAGENUM_HELPER)) {
 				return;
 			}
 			goto retry;
@@ -279,7 +279,7 @@ void ViewCommander::Command_EXTHTMLHELP(const WCHAR* _helpfile, const WCHAR* kwd
 				return;
 			}
 			// 共通設定 プロパティシート
-			if (!EditApp::getInstance()->OpenPropertySheet(ID_PROPCOM_PAGENUM_HELPER)) {
+			if (!EditApp::getInstance().OpenPropertySheet(ID_PROPCOM_PAGENUM_HELPER)) {
 				return;
 			}
 		}

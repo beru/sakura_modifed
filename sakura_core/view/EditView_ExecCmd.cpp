@@ -42,7 +42,7 @@ class OutputAdapterDefault: public OutputAdapter
 public:
 	OutputAdapterDefault(EditView* view, BOOL bToEditWindow) : m_bWindow(bToEditWindow), m_view(view)
 	{
-		m_pCShareData = ShareData::getInstance();
+		m_pCShareData = &ShareData::getInstance();
 		m_pCommander  = &(view->GetCommander());
 	}
 	~OutputAdapterDefault(){};

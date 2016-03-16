@@ -97,7 +97,7 @@ int DlgPluginOption::DoModal(
 {
 	// プラグイン番号（エディタがふる番号）
 	m_ID = ID;
-	plugin = PluginManager::getInstance()->GetPlugin(m_ID);
+	plugin = PluginManager::getInstance().GetPlugin(m_ID);
 	m_pPropPlugin = propPlugin;
 
 	if (!plugin) {

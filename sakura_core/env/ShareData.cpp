@@ -110,7 +110,7 @@ bool ShareData::InitShareData()
 
 	// ファイルマッピングオブジェクト
 	{
-		std::tstring strProfileName = to_tchar(CommandLine::getInstance()->GetProfileName());
+		std::tstring strProfileName = to_tchar(CommandLine::getInstance().GetProfileName());
 		std::tstring strShareDataName = GSTR_SHAREDATA;
 		strShareDataName += strProfileName;
 		m_hFileMap = ::CreateFileMapping(

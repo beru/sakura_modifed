@@ -522,11 +522,11 @@ void GetInidir(
 	if (!pDir)
 		return;
 	
-	std::tstring strProfileName = to_tchar(CommandLine::getInstance()->GetProfileName());
+	std::tstring strProfileName = to_tchar(CommandLine::getInstance().GetProfileName());
 	TCHAR szPath[_MAX_PATH];
 
 	// sakura.ini のパスを取得
-	FileNameManager::getInstance()->GetIniFileName( szPath, strProfileName.c_str() );
+	FileNameManager::getInstance().GetIniFileName( szPath, strProfileName.c_str() );
 	if (!szFile) {
 		SplitPath_FolderAndFile( szPath, pDir, NULL );
 	}else {
@@ -567,7 +567,7 @@ void GetInidirOrExedir(
 	}
 
 	// EXE基準のフルパスが実在すればそのパスを返す
-	if (ShareData::getInstance()->IsPrivateSettings()) {	// INIとEXEでパスが異なる場合
+	if (ShareData::getInstance().IsPrivateSettings()) {	// INIとEXEでパスが異なる場合
 		TCHAR szExedir[_MAX_PATH];
 		GetExedir(szExedir, szFile);
 		if (fexist(szExedir)) {
@@ -674,7 +674,7 @@ bool GetLastWriteTimestamp(
 {
 	WIN32_FIND_DATA ffd;
 	HANDLE hFindFile = ::FindFirstFile(pszFileName, &ffd);
-	if (INVALID_HANDLE_VALUE != hFindFile) {
+	if (hFindFile != INVALID_HANDLE_VALUE) {
 		::FindClose(hFindFile);
 		pFileTime->SetFILETIME(ffd.ftLastWriteTime);
 		return true;

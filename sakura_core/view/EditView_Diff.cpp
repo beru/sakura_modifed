@@ -144,7 +144,7 @@ void EditView::ViewDiffInfo(
 	cmdline[0] = _T('\0');
 
 	// 今あるDIFF差分を消去する。
-	if (DiffManager::getInstance()->IsDiffUse())
+	if (DiffManager::getInstance().IsDiffUse())
 		GetCommander().Command_Diff_Reset();
 		//m_pEditDoc->m_docLineMgr.ResetAllDiffMark();
 
@@ -196,7 +196,7 @@ void EditView::ViewDiffInfo(
 
 	//DIFF差分が見つからなかったときにメッセージ表示
 	if (nFlgOpt & 0x0040) {
-		if (!DiffManager::getInstance()->IsDiffUse()) {
+		if (!DiffManager::getInstance().IsDiffUse()) {
 			InfoMessage( this->GetHwnd(), LS(STR_ERR_DLGEDITVWDIFF5) );
 		}
 	}

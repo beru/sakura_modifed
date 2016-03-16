@@ -59,7 +59,7 @@ void ViewCommander::Command_WINCLOSE(void)
 {
 	// 閉じる
 	::PostMessage(GetMainWindow(), MYWM_CLOSE, FALSE, 								// 2007.02.13 ryoji WM_CLOSE→MYWM_CLOSEに変更
-		(LPARAM)AppNodeManager::getInstance()->GetNextTab(GetMainWindow()));	// タブまとめ時、次のタブに移動	2013/4/10 Uchi
+		(LPARAM)AppNodeManager::getInstance().GetNextTab(GetMainWindow()));	// タブまとめ時、次のタブに移動	2013/4/10 Uchi
 	return;
 }
 
@@ -67,7 +67,7 @@ void ViewCommander::Command_WINCLOSE(void)
 // すべてのウィンドウを閉じる	// Oct. 7, 2000 jepro 「編集ウィンドウの全終了」という説明を左記のように変更
 void ViewCommander::Command_FILECLOSEALL(void)
 {
-	int nGroup = AppNodeManager::getInstance()->GetEditNode(GetMainWindow())->GetGroup();
+	int nGroup = AppNodeManager::getInstance().GetEditNode(GetMainWindow())->GetGroup();
 	ControlTray::CloseAllEditor(TRUE, GetMainWindow(), FALSE, nGroup);	// 2006.12.25, 2007.02.13 ryoji 引数追加
 	return;
 }
@@ -81,7 +81,7 @@ void ViewCommander::Command_TAB_CLOSEOTHER(void)
 
 	// ウィンドウ一覧を取得する
 	EditNode* pEditNode;
-	int nCount = AppNodeManager::getInstance()->GetOpenedWindowArr(&pEditNode, true);
+	int nCount = AppNodeManager::getInstance().GetOpenedWindowArr(&pEditNode, true);
 	if (0 >= nCount) return;
 
 	for (int i=0; i<nCount; ++i) {
@@ -126,7 +126,7 @@ void ViewCommander::Command_CASCADE(void)
 {
 	// 現在開いている編集窓のリストを取得する
 	EditNode* pEditNodeArr;
-	int nRowNum = AppNodeManager::getInstance()->GetOpenedWindowArr(&pEditNodeArr, true/*false*/, true);
+	int nRowNum = AppNodeManager::getInstance().GetOpenedWindowArr(&pEditNodeArr, true/*false*/, true);
 
 	if (nRowNum > 0) {
 		struct WNDARR {
@@ -154,7 +154,7 @@ void ViewCommander::Command_CASCADE(void)
 			}
 			// Mar. 20, 2004 genta
 			// 現在のウィンドウを末尾に持っていくためここではスキップ
-			if (editNodeHWnd == EditWnd::getInstance()->GetHwnd()) {
+			if (editNodeHWnd == EditWnd::getInstance().GetHwnd()) {
 				current_win_index = i;
 				continue;
 			}
@@ -263,7 +263,7 @@ void ViewCommander::Command_TILE_V(void)
 {
 	// 現在開いている編集窓のリストを取得する
 	EditNode* pEditNodeArr;
-	int nRowNum = AppNodeManager::getInstance()->GetOpenedWindowArr(&pEditNodeArr, true/*false*/, true);
+	int nRowNum = AppNodeManager::getInstance().GetOpenedWindowArr(&pEditNodeArr, true/*false*/, true);
 
 	if (nRowNum > 0) {
 		std::vector<HWND> hWnds(nRowNum);
@@ -283,7 +283,7 @@ void ViewCommander::Command_TILE_V(void)
 			}
 			// From Here Jul. 28, 2002 genta
 			// 現在のウィンドウを先頭に持ってくる
-			if (editNodeHWnd == EditWnd::getInstance()->GetHwnd()) {
+			if (editNodeHWnd == EditWnd::getInstance().GetHwnd()) {
 				phwndArr[count] = phwndArr[0];
 				phwndArr[0] = editNodeHWnd;
 			}else {
@@ -316,7 +316,7 @@ void ViewCommander::Command_TILE_H(void)
 {
 	// 現在開いている編集窓のリストを取得する
 	EditNode* pEditNodeArr;
-	int nRowNum = AppNodeManager::getInstance()->GetOpenedWindowArr(&pEditNodeArr, true/*false*/, true);
+	int nRowNum = AppNodeManager::getInstance().GetOpenedWindowArr(&pEditNodeArr, true/*false*/, true);
 
 	if (nRowNum > 0) {
 		std::vector<HWND> hWnds(nRowNum);
@@ -336,7 +336,7 @@ void ViewCommander::Command_TILE_H(void)
 			}
 			// From Here Jul. 28, 2002 genta
 			// 現在のウィンドウを先頭に持ってくる
-			if (editNodeHWnd == EditWnd::getInstance()->GetHwnd()) {
+			if (editNodeHWnd == EditWnd::getInstance().GetHwnd()) {
 				phwndArr[count] = phwndArr[0];
 				phwndArr[0] = editNodeHWnd;
 			}else {
@@ -399,7 +399,7 @@ void ViewCommander::Command_BIND_WINDOW(void)
 
 		// Start 2004.08.27 Kazika 変更
 		// タブウィンドウの設定を変更をブロードキャストする
-		AppNodeManager::getInstance()->ResetGroupId();
+		AppNodeManager::getInstance().ResetGroupId();
 		AppNodeGroupHandle(0).PostMessageToAllEditors(
 			MYWM_TAB_WINDOW_NOTIFY,						// タブウィンドウイベント
 			(WPARAM)((csTabBar.bDispTabWndMultiWin) ? TabWndNotifyType::Disable : TabWndNotifyType::Enable), // タブモード有効/無効化イベント
@@ -419,7 +419,7 @@ void ViewCommander::Command_GROUPCLOSE(void)
 		csTabBar.bDispTabWnd
 		&& !csTabBar.bDispTabWndMultiWin
 	) {
-		int nGroup = AppNodeManager::getInstance()->GetEditNode(GetMainWindow())->GetGroup();
+		int nGroup = AppNodeManager::getInstance().GetEditNode(GetMainWindow())->GetGroup();
 		ControlTray::CloseAllEditor(TRUE, GetMainWindow(), TRUE, nGroup);
 	}
 	return;
@@ -504,7 +504,7 @@ void ViewCommander::Command_TAB_CLOSELEFT(void)
 
 		// ウィンドウ一覧を取得する
 		EditNode* pEditNode;
-		int nCount = AppNodeManager::getInstance()->GetOpenedWindowArr(&pEditNode, true);
+		int nCount = AppNodeManager::getInstance().GetOpenedWindowArr(&pEditNode, true);
 		BOOL bSelfFound = FALSE;
 		if (0 >= nCount) return;
 
@@ -534,7 +534,7 @@ void ViewCommander::Command_TAB_CLOSERIGHT(void)
 
 		// ウィンドウ一覧を取得する
 		EditNode* pEditNode;
-		int nCount = AppNodeManager::getInstance()->GetOpenedWindowArr(&pEditNode, true);
+		int nCount = AppNodeManager::getInstance().GetOpenedWindowArr(&pEditNode, true);
 		BOOL bSelfFound = FALSE;
 		if (0 >= nCount) return;
 
@@ -632,7 +632,7 @@ void ViewCommander::Command_WIN_OUTPUT(void)
 	// 2010.05.11 Moca ShareData::OpenDebugWindow()に統合
 	// メッセージ表示ウィンドウをViewから親に変更
 	// TraceOut経由ではCODE_UNICODE,こちらではCODE_SJISだったのを無指定に変更
-	ShareData::getInstance()->OpenDebugWindow(GetMainWindow(), true);
+	ShareData::getInstance().OpenDebugWindow(GetMainWindow(), true);
 	return;
 }
 
@@ -650,13 +650,15 @@ void ViewCommander::Command_TRACEOUT(const wchar_t* outputstr, int nLen, int nFl
 	if (nFlgOpt & 0x01) {
 		wchar_t Buffer[2048];
 		SakuraEnvironment::ExpandParameter(outputstr, Buffer, 2047);
-		ShareData::getInstance()->TraceOutString(Buffer);
+		ShareData::getInstance().TraceOutString(Buffer);
 	}else {
-		ShareData::getInstance()->TraceOutString(outputstr, nLen);
+		ShareData::getInstance().TraceOutString(outputstr, nLen);
 	}
 
 	// 0x02 改行コードの有無
-	if ((nFlgOpt & 0x02) == 0) ShareData::getInstance()->TraceOutString(L"\r\n");
+	if ((nFlgOpt & 0x02) == 0) {
+		ShareData::getInstance().TraceOutString(L"\r\n");
+	}
 
 }
 
