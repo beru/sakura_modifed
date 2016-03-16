@@ -31,17 +31,17 @@
 // ŠO•”ˆË‘¶
 inline EditDoc* ViewCommander::GetDocument()
 {
-	return m_pCommanderView->m_pEditDoc;
+	return m_view.m_pEditDoc;
 }
 
 inline EditWnd* ViewCommander::GetEditWindow()
 {
-	return m_pCommanderView->m_pEditWnd;
+	return m_view.m_pEditWnd;
 }
 
 inline HWND ViewCommander::GetMainWindow()
 {
-	return ::GetParent(m_pCommanderView->m_hwndParent);
+	return ::GetParent(m_view.m_hwndParent);
 }
 
 inline OpeBlk* ViewCommander::GetOpeBlk()
@@ -58,11 +58,11 @@ inline void ViewCommander::SetOpeBlk(OpeBlk* p)
 
 inline LayoutRange& ViewCommander::GetSelect()
 {
-	return m_pCommanderView->GetSelectionInfo().m_select;
+	return m_view.GetSelectionInfo().m_select;
 }
 
 inline Caret& ViewCommander::GetCaret()
 {
-	return m_pCommanderView->GetCaret();
+	return m_view.GetCaret();
 }
 

@@ -34,7 +34,7 @@ void ViewCommander::Command_GREP_DIALOG(void)
 	bool bGetHistory = dlgGrep.m_bSetText == false;
 
 	// 現在カーソル位置単語または選択範囲より検索等のキーを取得
-	bool bSet = m_pCommanderView->GetCurrentTextForSearchDlg(memCurText, bGetHistory);	// 2006.08.23 ryoji ダイアログ専用関数に変更
+	bool bSet = m_view.GetCurrentTextForSearchDlg(memCurText, bGetHistory);	// 2006.08.23 ryoji ダイアログ専用関数に変更
 
 	if (bSet) {
 		dlgGrep.m_strText = memCurText.GetStringPtr();
@@ -42,7 +42,7 @@ void ViewCommander::Command_GREP_DIALOG(void)
 	}
 
 	// Grepダイアログの表示
-	int nRet = dlgGrep.DoModal(G_AppInstance(), m_pCommanderView->GetHwnd(), GetDocument()->m_docFile.GetFilePath());
+	int nRet = dlgGrep.DoModal(G_AppInstance(), m_view.GetHwnd(), GetDocument()->m_docFile.GetFilePath());
 //	MYTRACE(_T("nRet=%d\n"), nRet);
 	if (!nRet) {
 		return;
@@ -94,7 +94,7 @@ void ViewCommander::Command_GREP(void)
 		}
 		
 		grepAgent.DoGrep(
-			m_pCommanderView,
+			m_view,
 			false,
 			&mWork1,
 			&mWork4,
@@ -125,13 +125,13 @@ void ViewCommander::Command_GREP(void)
 	}else {
 		// 編集ウィンドウの上限チェック
 		if (GetDllShareData().nodes.nEditArrNum >= MAX_EDITWINDOWS) {	// 最大値修正	//@@@ 2003.05.31 MIK
-			OkMessage(m_pCommanderView->GetHwnd(), LS(STR_MAXWINDOW), MAX_EDITWINDOWS);
+			OkMessage(m_view.GetHwnd(), LS(STR_MAXWINDOW), MAX_EDITWINDOWS);
 			return;
 		}
 
 		//======= Grepの実行 =============
 		// Grep結果ウィンドウの表示
-		ControlTray::DoGrepCreateWindow(G_AppInstance(), m_pCommanderView->GetHwnd(), dlgGrep);
+		ControlTray::DoGrepCreateWindow(G_AppInstance(), m_view.GetHwnd(), dlgGrep);
 	}
 	return;
 }
@@ -147,7 +147,7 @@ void ViewCommander::Command_GREP_REPLACE_DLG( void )
 	// 複数Grepウィンドウを使い分けている場合などに影響しないように、未設定のときだけHistoryを見る
 	bool bGetHistory = dlgGrepRep.m_bSetText == false;
 
-	m_pCommanderView->GetCurrentTextForSearchDlg( memCurText, bGetHistory );
+	m_view.GetCurrentTextForSearchDlg( memCurText, bGetHistory );
 
 	if (0 < memCurText.GetStringLength()) {
 		dlgGrepRep.m_strText = memCurText.GetStringPtr();
@@ -159,7 +159,7 @@ void ViewCommander::Command_GREP_REPLACE_DLG( void )
 		}
 	}
 
-	int nRet = dlgGrepRep.DoModal( G_AppInstance(), m_pCommanderView->GetHwnd(), GetDocument()->m_docFile.GetFilePath(), (LPARAM)m_pCommanderView );
+	int nRet = dlgGrepRep.DoModal( G_AppInstance(), m_view.GetHwnd(), GetDocument()->m_docFile.GetFilePath(), (LPARAM)&m_view );
 	if (!nRet) {
 		return;
 	}
@@ -193,7 +193,7 @@ void ViewCommander::Command_GREP_REPLACE(void)
 		)
 	) {
 		EditApp::getInstance().m_pGrepAgent->DoGrep(
-			m_pCommanderView,
+			m_view,
 			true,
 			&cmWork1,
 			&cmWork4,
@@ -216,7 +216,7 @@ void ViewCommander::Command_GREP_REPLACE(void)
 	}else {
 		// 編集ウィンドウの上限チェック
 		if (GetDllShareData().nodes.nEditArrNum >= MAX_EDITWINDOWS ){	//最大値修正	//@@@ 2003.05.31 MIK
-			OkMessage( m_pCommanderView->GetHwnd(), _T("編集ウィンドウ数の上限は%dです。\nこれ以上は同時に開けません。"), MAX_EDITWINDOWS );
+			OkMessage( m_view.GetHwnd(), _T("編集ウィンドウ数の上限は%dです。\nこれ以上は同時に開けません。"), MAX_EDITWINDOWS );
 			return;
 		}
 		// ======= Grepの実行 =============
@@ -269,7 +269,7 @@ void ViewCommander::Command_GREP_REPLACE(void)
 		loadInfo.bViewMode = false;
 		ControlTray::OpenNewEditor(
 			G_AppInstance(),
-			m_pCommanderView->GetHwnd(),
+			m_view.GetHwnd(),
 			loadInfo,
 			cmdLine.GetStringPtr(),
 			false,

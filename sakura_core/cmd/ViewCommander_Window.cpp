@@ -172,7 +172,7 @@ void ViewCommander::Command_CASCADE(void)
 		// デスクトップサイズを得る
 		RECT rcDesktop;
 		// May 01, 2004 genta マルチモニタ対応
-		::GetMonitorWorkRect(m_pCommanderView->GetHwnd(), &rcDesktop);
+		::GetMonitorWorkRect(m_view.GetHwnd(), &rcDesktop);
 		
 		int width = (rcDesktop.right - rcDesktop.left) * 4 / 5; // Mar. 9, 2003 genta 整数演算のみにする
 		int height = (rcDesktop.bottom - rcDesktop.top) * 4 / 5;
@@ -272,7 +272,7 @@ void ViewCommander::Command_TILE_V(void)
 		// デスクトップサイズを得る
 		RECT rcDesktop;
 		// May 01, 2004 genta マルチモニタ対応
-		::GetMonitorWorkRect(m_pCommanderView->GetHwnd(), &rcDesktop);
+		::GetMonitorWorkRect(m_view.GetHwnd(), &rcDesktop);
 		for (int i=0; i<nRowNum; ++i) {
 			auto editNodeHWnd = pEditNodeArr[i].GetHwnd();
 			if (::IsIconic(editNodeHWnd)) {	// 最小化しているウィンドウは無視。
@@ -325,7 +325,7 @@ void ViewCommander::Command_TILE_H(void)
 		// デスクトップサイズを得る
 		RECT rcDesktop;
 		// May 01, 2004 genta マルチモニタ対応
-		::GetMonitorWorkRect(m_pCommanderView->GetHwnd(), &rcDesktop);
+		::GetMonitorWorkRect(m_view.GetHwnd(), &rcDesktop);
 		for (int i=0; i<nRowNum; ++i) {
 			auto editNodeHWnd = pEditNodeArr[i].GetHwnd();
 			if (::IsIconic(editNodeHWnd)) {	// 最小化しているウィンドウは無視。
@@ -404,7 +404,7 @@ void ViewCommander::Command_BIND_WINDOW(void)
 			MYWM_TAB_WINDOW_NOTIFY,						// タブウィンドウイベント
 			(WPARAM)((csTabBar.bDispTabWndMultiWin) ? TabWndNotifyType::Disable : TabWndNotifyType::Enable), // タブモード有効/無効化イベント
 			(LPARAM)GetEditWindow()->GetHwnd(),	// EditWndのウィンドウハンドル
-			m_pCommanderView->GetHwnd());									// 自分自身
+			m_view.GetHwnd());									// 自分自身
 		// End 2004.08.27 Kazika
 	}
 }
@@ -621,7 +621,7 @@ void ViewCommander::Command_MINIMIZE_ALL(void)
 void ViewCommander::Command_REDRAW(void)
 {
 	// フォーカス移動時の再描画
-	m_pCommanderView->RedrawAll();
+	m_view.RedrawAll();
 	return;
 }
 

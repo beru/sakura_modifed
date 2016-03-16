@@ -159,7 +159,7 @@ void ViewCommander::Command_TYPE_LIST(void)
 	DlgTypeList::Result result;
 	result.documentType = GetDocument()->m_docType.GetDocumentType();
 	result.bTempChange = true;
-	if (dlgTypeList.DoModal(G_AppInstance(), m_pCommanderView->GetHwnd(), &result)) {
+	if (dlgTypeList.DoModal(G_AppInstance(), m_view.GetHwnd(), &result)) {
 		// Nov. 29, 2000 genta
 		// 一時的な設定適用機能を無理矢理追加
 		if (result.bTempChange) {
@@ -357,14 +357,14 @@ void ViewCommander::Command_SETFONTSIZE(int fontSize, int shift, int mode)
 */
 void ViewCommander::Command_WRAPWINDOWWIDTH(void)	// Oct. 7, 2000 JEPRO WRAPWINDIWWIDTH を WRAPWINDOWWIDTH に変更
 {
-	// Jan. 8, 2006 genta 判定処理をm_pCommanderView->GetWrapMode()へ移動
+	// Jan. 8, 2006 genta 判定処理をm_view.GetWrapMode()へ移動
 	EditView::TOGGLE_WRAP_ACTION nWrapMode;
 	LayoutInt newKetas;
 	
-	nWrapMode = m_pCommanderView->GetWrapMode(&newKetas);
+	nWrapMode = m_view.GetWrapMode(&newKetas);
 	auto doc = GetDocument();
 	doc->m_nTextWrapMethodCur = TextWrappingMethod::SettingWidth;
-	doc->m_bTextWrapMethodCurTemp = (doc->m_nTextWrapMethodCur != m_pCommanderView->m_pTypeData->nTextWrapMethod);
+	doc->m_bTextWrapMethodCurTemp = (doc->m_nTextWrapMethodCur != m_view.m_pTypeData->nTextWrapMethod);
 	if (nWrapMode == EditView::TGWRAP_NONE) {
 		return;	// 折り返し桁は元のまま
 	}
@@ -372,13 +372,13 @@ void ViewCommander::Command_WRAPWINDOWWIDTH(void)	// Oct. 7, 2000 JEPRO WRAPWIND
 	GetEditWindow()->ChangeLayoutParam(true, doc->m_layoutMgr.GetTabSpace(), newKetas);
 	
 	// Aug. 14, 2005 genta 共通設定へは反映させない
-//	m_pCommanderView->m_pTypeData->nMaxLineKetas = m_nViewColNum;
+//	m_view.m_pTypeData->nMaxLineKetas = m_nViewColNum;
 
 // 2013.12.30 左隅に移動しないように
-//	m_pCommanderView->GetTextArea().SetViewLeftCol(LayoutInt(0));		// 表示域の一番左の桁(0開始)
+//	m_view.GetTextArea().SetViewLeftCol(LayoutInt(0));		// 表示域の一番左の桁(0開始)
 
 	// フォーカス移動時の再描画
-	m_pCommanderView->RedrawAll();
+	m_view.RedrawAll();
 	return;
 }
 
@@ -393,7 +393,7 @@ void ViewCommander::Command_Favorite(void)
 	DlgFavorite	dlgFavorite;
 
 	// ダイアログを表示する
-	if (!dlgFavorite.DoModal(G_AppInstance(), m_pCommanderView->GetHwnd(), (LPARAM)GetDocument())) {
+	if (!dlgFavorite.DoModal(G_AppInstance(), m_view.GetHwnd(), (LPARAM)GetDocument())) {
 		return;
 	}
 
@@ -435,7 +435,7 @@ void ViewCommander::Command_TEXTWRAPMETHOD(TextWrappingMethod nWrapMethod)
 
 	case TextWrappingMethod::WindowWidth:		// 右端で折り返す
 		// ウィンドウが左右に分割されている場合は左側のウィンドウ幅を使用する
-		nWidth = (Int)m_pCommanderView->ViewColNumToWrapColNum(GetEditWindow()->GetView(0).GetTextArea().m_nViewColNum);
+		nWidth = (Int)m_view.ViewColNumToWrapColNum(GetEditWindow()->GetView(0).GetTextArea().m_nViewColNum);
 		break;
 
 	default:

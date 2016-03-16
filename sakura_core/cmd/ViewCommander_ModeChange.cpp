@@ -42,7 +42,7 @@
 void ViewCommander::Command_CHGMOD_INS(void)
 {
 	// 挿入モードか？
-	m_pCommanderView->SetInsMode(!m_pCommanderView->IsInsMode());
+	m_view.SetInsMode(!m_view.IsInsMode());
 	// キャレットの表示・更新
 	GetCaret().ShowEditCaret();
 	// キャレットの行桁位置を表示する
@@ -78,7 +78,7 @@ void ViewCommander::Command_CHG_CHARSET(
 		// 文字コードの確認
 		eCharSet = GetDocument()->GetDocumentEncoding();	// 設定する文字コードセット
 		bBom     = GetDocument()->GetDocumentBomExist();	// 設定するBOM
-		int nRet = GetEditWindow()->m_dlgSetCharSet.DoModal(G_AppInstance(), m_pCommanderView->GetHwnd(), 
+		int nRet = GetEditWindow()->m_dlgSetCharSet.DoModal(G_AppInstance(), m_view.GetHwnd(), 
 						&eCharSet, &bBom);
 		if (!nRet) {
 			return;
@@ -99,7 +99,7 @@ void ViewCommander::Command_CHG_CHARSET(
 void ViewCommander::Command_CANCEL_MODE(int whereCursorIs)
 {
 	bool bBoxSelect = false;
-	auto& selInfo = m_pCommanderView->GetSelectionInfo();
+	auto& selInfo = m_view.GetSelectionInfo();
 	auto& caret = GetCaret();
 	if (selInfo.IsTextSelected()) {
 		// 選択解除後のカーソル位置を決める。

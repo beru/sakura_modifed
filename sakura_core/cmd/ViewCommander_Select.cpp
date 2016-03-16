@@ -22,7 +22,7 @@
 // 現在位置の単語選択
 bool ViewCommander::Command_SELECTWORD(LayoutPoint* pptCaretPos)
 {
-	auto& si = m_pCommanderView->GetSelectionInfo();
+	auto& si = m_view.GetSelectionInfo();
 	if (si.IsTextSelected()) {	// テキストが選択されているか
 		// 現在の選択範囲を非選択状態に戻す
 		si.DisableSelectArea(true);
@@ -35,7 +35,7 @@ bool ViewCommander::Command_SELECTWORD(LayoutPoint* pptCaretPos)
 		return false;	// 単語選択に失敗
 	}
 	// 指定された桁に対応する行のデータ内の位置を調べる
-	LogicInt nIdx = m_pCommanderView->LineColumnToIndex(pLayout, ptCaretPos.GetX2());
+	LogicInt nIdx = m_view.LineColumnToIndex(pLayout, ptCaretPos.GetX2());
 
 	// 現在位置の単語の範囲を調べる
 	LayoutRange range;
@@ -45,9 +45,9 @@ bool ViewCommander::Command_SELECTWORD(LayoutPoint* pptCaretPos)
 		// 2007.10.15 kobake 既にレイアウト単位なので変換は不要
 		/*
 		pLayout = layoutMgr.SearchLineByLayoutY(range.GetFrom().GetY2());
-		range.SetFromX(m_pCommanderView->LineIndexToColumn(pLayout, range.GetFrom().x));
+		range.SetFromX(m_view.LineIndexToColumn(pLayout, range.GetFrom().x));
 		pLayout = layoutMgr.SearchLineByLayoutY(range.GetTo().GetY2());
-		range.SetToX(m_pCommanderView->LineIndexToColumn(pLayout, range.GetTo().x));
+		range.SetToX(m_view.LineIndexToColumn(pLayout, range.GetTo().x));
 		*/
 
 		// 選択範囲の変更
@@ -69,7 +69,7 @@ bool ViewCommander::Command_SELECTWORD(LayoutPoint* pptCaretPos)
 // すべて選択
 void ViewCommander::Command_SELECTALL(void)
 {
-	auto& si = m_pCommanderView->GetSelectionInfo();
+	auto& si = m_view.GetSelectionInfo();
 	if (si.IsTextSelected()) {	// テキストが選択されているか
 		// 現在の選択範囲を非選択状態に戻す
 		si.DisableSelectArea(true);
@@ -77,7 +77,7 @@ void ViewCommander::Command_SELECTALL(void)
 
 	// 先頭へカーソルを移動
 	// Sep. 8, 2000 genta
-	m_pCommanderView->AddCurrentLineToHistory();
+	m_view.AddCurrentLineToHistory();
 	GetCaret().m_nCaretPosX_Prev = GetCaret().GetCaretLayoutPos().GetX2();
 
 	// Jul. 29, 2006 genta 選択位置の末尾を正確に取得する
@@ -106,7 +106,7 @@ void ViewCommander::Command_SELECTLINE(int lparam)
 	// 改行単位で1行選択する
 	Command_GOLINETOP(false, 0x9);	// 物理行頭に移動
 
-	auto& si = m_pCommanderView->GetSelectionInfo();
+	auto& si = m_view.GetSelectionInfo();
 	si.m_bBeginLineSelect = true;		// 行単位選択中
 
 	LayoutPoint ptCaret;
@@ -119,13 +119,13 @@ void ViewCommander::Command_SELECTLINE(int lparam)
 		layoutMgr.LogicToLayout(LogicPoint(0, caret.GetCaretLogicPos().y + 1), &ptCaret);
 
 		// カーソルを次の物理行頭へ移動する
-		m_pCommanderView->MoveCursorSelecting(ptCaret, TRUE);
+		m_view.MoveCursorSelecting(ptCaret, TRUE);
 
 		// 移動後のカーソル位置を取得する
 		ptCaret = caret.GetCaretLayoutPos().Get();
 	}else {
 		// カーソルを最下行（レイアウト行）へ移動する
-		m_pCommanderView->MoveCursorSelecting(LayoutPoint(LayoutInt(0), layoutMgr.GetLineCount()), TRUE);
+		m_view.MoveCursorSelecting(LayoutPoint(LayoutInt(0), layoutMgr.GetLineCount()), TRUE);
 		Command_GOLINEEND(true, 0, 0);	// 行末に移動
 
 		// 選択するものが無い（[EOF]のみの行）時は選択状態としない
@@ -150,7 +150,7 @@ void ViewCommander::Command_SELECTLINE(int lparam)
 // 範囲選択開始
 void ViewCommander::Command_BEGIN_SELECT(void)
 {
-	auto& si = m_pCommanderView->GetSelectionInfo();
+	auto& si = m_view.GetSelectionInfo();
 	if (!si.IsTextSelected()) {	// テキストが選択されているか
 		// 現在のカーソル位置から選択を開始する
 		si.BeginSelectArea();
@@ -177,7 +177,7 @@ void ViewCommander::Command_BEGIN_BOXSELECT(bool bSelectingLock)
 		return;
 	}
 
-	auto& si = m_pCommanderView->GetSelectionInfo();
+	auto& si = m_view.GetSelectionInfo();
 //@@@ 2002.01.03 YAZAKI 範囲選択中にShift+F6を実行すると選択範囲がクリアされない問題に対処
 	if (si.IsTextSelected()) {	// テキストが選択されているか
 		// 現在の選択範囲を非選択状態に戻す

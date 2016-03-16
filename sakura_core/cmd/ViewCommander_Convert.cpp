@@ -26,7 +26,7 @@
 void ViewCommander::Command_TOLOWER(void)
 {
 	// 選択エリアのテキストを指定方法で変換
-	m_pCommanderView->ConvSelectedArea(F_TOLOWER);
+	m_view.ConvSelectedArea(F_TOLOWER);
 	return;
 }
 
@@ -35,7 +35,7 @@ void ViewCommander::Command_TOLOWER(void)
 void ViewCommander::Command_TOUPPER(void)
 {
 	// 選択エリアのテキストを指定方法で変換
-	m_pCommanderView->ConvSelectedArea(F_TOUPPER);
+	m_view.ConvSelectedArea(F_TOUPPER);
 	return;
 }
 
@@ -44,7 +44,7 @@ void ViewCommander::Command_TOUPPER(void)
 void ViewCommander::Command_TOHANKAKU(void)
 {
 	// 選択エリアのテキストを指定方法で変換
-	m_pCommanderView->ConvSelectedArea(F_TOHANKAKU);
+	m_view.ConvSelectedArea(F_TOHANKAKU);
 	return;
 }
 
@@ -53,7 +53,7 @@ void ViewCommander::Command_TOHANKAKU(void)
 void ViewCommander::Command_TOZENKAKUKATA(void)
 {
 	// 選択エリアのテキストを指定方法で変換
-	m_pCommanderView->ConvSelectedArea(F_TOZENKAKUKATA);
+	m_view.ConvSelectedArea(F_TOZENKAKUKATA);
 	return;
 }
 
@@ -62,7 +62,7 @@ void ViewCommander::Command_TOZENKAKUKATA(void)
 void ViewCommander::Command_TOZENKAKUHIRA(void)
 {
 	// 選択エリアのテキストを指定方法で変換
-	m_pCommanderView->ConvSelectedArea(F_TOZENKAKUHIRA);
+	m_view.ConvSelectedArea(F_TOZENKAKUHIRA);
 	return;
 }
 
@@ -71,7 +71,7 @@ void ViewCommander::Command_TOZENKAKUHIRA(void)
 void ViewCommander::Command_TOZENEI(void)
 {
 	// 選択エリアのテキストを指定方法で変換
-	m_pCommanderView->ConvSelectedArea(F_TOZENEI);
+	m_view.ConvSelectedArea(F_TOZENEI);
 	return;
 }
 
@@ -80,7 +80,7 @@ void ViewCommander::Command_TOZENEI(void)
 void ViewCommander::Command_TOHANEI(void)
 {
 	// 選択エリアのテキストを指定方法で変換
-	m_pCommanderView->ConvSelectedArea(F_TOHANEI);
+	m_view.ConvSelectedArea(F_TOHANEI);
 	return;
 }
 
@@ -89,7 +89,7 @@ void ViewCommander::Command_TOHANEI(void)
 void ViewCommander::Command_TOHANKATA(void)
 {
 	// 選択エリアのテキストを指定方法で変換
-	m_pCommanderView->ConvSelectedArea(F_TOHANKATA);
+	m_view.ConvSelectedArea(F_TOHANKATA);
 	return;
 }
 
@@ -98,7 +98,7 @@ void ViewCommander::Command_TOHANKATA(void)
 void ViewCommander::Command_HANKATATOZENKAKUKATA(void)
 {
 	// 選択エリアのテキストを指定方法で変換
-	m_pCommanderView->ConvSelectedArea(F_HANKATATOZENKATA);
+	m_view.ConvSelectedArea(F_HANKATATOZENKATA);
 	return;
 }
 
@@ -107,7 +107,7 @@ void ViewCommander::Command_HANKATATOZENKAKUKATA(void)
 void ViewCommander::Command_HANKATATOZENKAKUHIRA(void)
 {
 	// 選択エリアのテキストを指定方法で変換
-	m_pCommanderView->ConvSelectedArea(F_HANKATATOZENHIRA);
+	m_view.ConvSelectedArea(F_HANKATATOZENHIRA);
 	return;
 }
 
@@ -116,7 +116,7 @@ void ViewCommander::Command_HANKATATOZENKAKUHIRA(void)
 void ViewCommander::Command_TABTOSPACE(void)
 {
 	// 選択エリアのテキストを指定方法で変換
-	m_pCommanderView->ConvSelectedArea(F_TABTOSPACE);
+	m_view.ConvSelectedArea(F_TABTOSPACE);
 	return;
 }
 
@@ -124,7 +124,7 @@ void ViewCommander::Command_TABTOSPACE(void)
 void ViewCommander::Command_SPACETOTAB(void)
 {
 	// 選択エリアのテキストを指定方法で変換
-	m_pCommanderView->ConvSelectedArea(F_SPACETOTAB);
+	m_view.ConvSelectedArea(F_SPACETOTAB);
 	return;
 }
 
@@ -133,7 +133,7 @@ void ViewCommander::Command_SPACETOTAB(void)
 void ViewCommander::Command_CODECNV_AUTO2SJIS(void)
 {
 	// 選択エリアのテキストを指定方法で変換
-	m_pCommanderView->ConvSelectedArea(F_CODECNV_AUTO2SJIS);
+	m_view.ConvSelectedArea(F_CODECNV_AUTO2SJIS);
 	return;
 }
 
@@ -142,7 +142,7 @@ void ViewCommander::Command_CODECNV_AUTO2SJIS(void)
 void ViewCommander::Command_CODECNV_EMAIL(void)
 {
 	// 選択エリアのテキストを指定方法で変換
-	m_pCommanderView->ConvSelectedArea(F_CODECNV_EMAIL);
+	m_view.ConvSelectedArea(F_CODECNV_EMAIL);
 	return;
 }
 
@@ -151,7 +151,7 @@ void ViewCommander::Command_CODECNV_EMAIL(void)
 void ViewCommander::Command_CODECNV_EUC2SJIS(void)
 {
 	// 選択エリアのテキストを指定方法で変換
-	m_pCommanderView->ConvSelectedArea(F_CODECNV_EUC2SJIS);
+	m_view.ConvSelectedArea(F_CODECNV_EUC2SJIS);
 	return;
 }
 
@@ -160,7 +160,7 @@ void ViewCommander::Command_CODECNV_EUC2SJIS(void)
 void ViewCommander::Command_CODECNV_UNICODE2SJIS(void)
 {
 	// 選択エリアのテキストを指定方法で変換
-	m_pCommanderView->ConvSelectedArea(F_CODECNV_UNICODE2SJIS);
+	m_view.ConvSelectedArea(F_CODECNV_UNICODE2SJIS);
 	return;
 }
 
@@ -169,7 +169,7 @@ void ViewCommander::Command_CODECNV_UNICODE2SJIS(void)
 void ViewCommander::Command_CODECNV_UNICODEBE2SJIS(void)
 {
 	// 選択エリアのテキストを指定方法で変換
-	m_pCommanderView->ConvSelectedArea(F_CODECNV_UNICODEBE2SJIS);
+	m_view.ConvSelectedArea(F_CODECNV_UNICODEBE2SJIS);
 	return;
 }
 
@@ -178,7 +178,7 @@ void ViewCommander::Command_CODECNV_UNICODEBE2SJIS(void)
 void ViewCommander::Command_CODECNV_UTF82SJIS(void)
 {
 	// 選択エリアのテキストを指定方法で変換
-	m_pCommanderView->ConvSelectedArea(F_CODECNV_UTF82SJIS);
+	m_view.ConvSelectedArea(F_CODECNV_UTF82SJIS);
 	return;
 }
 
@@ -187,7 +187,7 @@ void ViewCommander::Command_CODECNV_UTF82SJIS(void)
 void ViewCommander::Command_CODECNV_UTF72SJIS(void)
 {
 	// 選択エリアのテキストを指定方法で変換
-	m_pCommanderView->ConvSelectedArea(F_CODECNV_UTF72SJIS);
+	m_view.ConvSelectedArea(F_CODECNV_UTF72SJIS);
 	return;
 }
 
@@ -196,7 +196,7 @@ void ViewCommander::Command_CODECNV_UTF72SJIS(void)
 void ViewCommander::Command_CODECNV_SJIS2JIS(void)
 {
 	// 選択エリアのテキストを指定方法で変換
-	m_pCommanderView->ConvSelectedArea(F_CODECNV_SJIS2JIS);
+	m_view.ConvSelectedArea(F_CODECNV_SJIS2JIS);
 	return;
 }
 
@@ -205,7 +205,7 @@ void ViewCommander::Command_CODECNV_SJIS2JIS(void)
 void ViewCommander::Command_CODECNV_SJIS2EUC(void)
 {
 	// 選択エリアのテキストを指定方法で変換
-	m_pCommanderView->ConvSelectedArea(F_CODECNV_SJIS2EUC);
+	m_view.ConvSelectedArea(F_CODECNV_SJIS2EUC);
 	return;
 }
 
@@ -214,7 +214,7 @@ void ViewCommander::Command_CODECNV_SJIS2EUC(void)
 void ViewCommander::Command_CODECNV_SJIS2UTF8(void)
 {
 	// 選択エリアのテキストを指定方法で変換
-	m_pCommanderView->ConvSelectedArea(F_CODECNV_SJIS2UTF8);
+	m_view.ConvSelectedArea(F_CODECNV_SJIS2UTF8);
 	return;
 }
 
@@ -223,7 +223,7 @@ void ViewCommander::Command_CODECNV_SJIS2UTF8(void)
 void ViewCommander::Command_CODECNV_SJIS2UTF7(void)
 {
 	// 選択エリアのテキストを指定方法で変換
-	m_pCommanderView->ConvSelectedArea(F_CODECNV_SJIS2UTF7);
+	m_view.ConvSelectedArea(F_CODECNV_SJIS2UTF7);
 	return;
 }
 
@@ -232,14 +232,14 @@ void ViewCommander::Command_CODECNV_SJIS2UTF7(void)
 void ViewCommander::Command_BASE64DECODE(void)
 {
 	// テキストが選択されているか
-	if (!m_pCommanderView->GetSelectionInfo().IsTextSelected()) {
+	if (!m_view.GetSelectionInfo().IsTextSelected()) {
 		ErrorBeep();
 		return;
 	}
 	// 選択範囲のデータを取得
 	// 正常時はtrue,範囲未選択の場合はfalseを返す
 	NativeW ctextBuf;
-	if (!m_pCommanderView->GetSelectedDataSimple(ctextBuf)) {
+	if (!m_view.GetSelectedDataSimple(ctextBuf)) {
 		ErrorBeep();
 		return;
 	}
@@ -271,7 +271,7 @@ void ViewCommander::Command_BASE64DECODE(void)
 
 err:
 	ErrorBeep();
-	ErrorMessage(m_pCommanderView->GetHwnd(), LS(STR_ERR_CEDITVIEW_CMD14), szPath);
+	ErrorMessage(m_view.GetHwnd(), LS(STR_ERR_CEDITVIEW_CMD14), szPath);
 }
 
 
@@ -279,7 +279,7 @@ err:
 void ViewCommander::Command_UUDECODE(void)
 {
 	// テキストが選択されているか
-	if (!m_pCommanderView->GetSelectionInfo().IsTextSelected()) {
+	if (!m_view.GetSelectionInfo().IsTextSelected()) {
 		ErrorBeep();
 		return;
 	}
@@ -287,7 +287,7 @@ void ViewCommander::Command_UUDECODE(void)
 	// 選択範囲のデータを取得 -> memBuf
 	// 正常時はtrue,範囲未選択の場合はfalseを返す
 	NativeW ctextBuf;
-	if (!m_pCommanderView->GetSelectedDataSimple(ctextBuf)) {
+	if (!m_view.GetSelectedDataSimple(ctextBuf)) {
 		ErrorBeep();
 		return;
 	}
@@ -321,6 +321,6 @@ void ViewCommander::Command_UUDECODE(void)
 
 err:
 	ErrorBeep();
-	ErrorMessage(m_pCommanderView->GetHwnd(), LS(STR_ERR_CEDITVIEW_CMD16), szPath);
+	ErrorMessage(m_view.GetHwnd(), LS(STR_ERR_CEDITVIEW_CMD16), szPath);
 }
 

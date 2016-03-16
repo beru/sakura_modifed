@@ -73,11 +73,11 @@ public:
 
 	static void CreateFolders( const TCHAR* pszPath, std::vector<std::tstring>& vPaths );
 	static std::tstring ChopYen( const std::tstring& str );
-	static void AddTail( EditView* pEditView, const NativeW& mem, bool bAddStdout );
+	static void AddTail( EditView& editView, const NativeW& mem, bool bAddStdout );
 
 	// Grep実行
 	DWORD DoGrep(
-		EditView*				pViewDst,
+		EditView&				viewDst,
 		bool					bGrepReplace,
 		const NativeW*			pmGrepKey,
 		const NativeW*			pmGrepReplace,
@@ -101,7 +101,7 @@ public:
 private:
 	// Grep実行
 	int DoGrepTree(
-		EditView*				pViewDst,
+		EditView&				viewDst,
 		DlgCancel*				pDlgCancel,			// [in] Cancelダイアログへのポインタ
 		const wchar_t*			pszKey,				// [in] 検索パターン
 		const NativeW&			mGrepReplace,
@@ -121,7 +121,7 @@ private:
 
 	// Grep実行
 	int DoGrepFile(
-		EditView*				pViewDst,
+		EditView&				viewDst,
 		DlgCancel*				pDlgCancel,
 		const wchar_t*			pszKey,
 		const TCHAR*			pszFile,
@@ -140,7 +140,7 @@ private:
 	);
 
 	int DoGrepReplaceFile(
-		EditView*				pViewDst,
+		EditView&				viewDst,
 		DlgCancel*				pDlgCancel,
 		const wchar_t*			pszKey,
 		const NativeW&			mGrepReplace,

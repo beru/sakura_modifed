@@ -40,10 +40,14 @@
 class OutputAdapterDefault: public OutputAdapter
 {
 public:
-	OutputAdapterDefault(EditView* view, BOOL bToEditWindow) : m_bWindow(bToEditWindow), m_view(view)
+	OutputAdapterDefault(EditView* view, BOOL bToEditWindow)
+		:
+		m_bWindow(bToEditWindow),
+		m_view(view),
+		m_commander(view->GetCommander())
 	{
 		m_pCShareData = &ShareData::getInstance();
-		m_pCommander  = &(view->GetCommander());
+		
 	}
 	~OutputAdapterDefault(){};
 
@@ -57,7 +61,7 @@ protected:
 	BOOL			m_bWindow;
 	EditView*		m_view;
 	ShareData*		m_pCShareData;
-	ViewCommander*	m_pCommander;
+	ViewCommander&	m_commander;
 };
 
 class OutputAdapterUTF8: public OutputAdapterDefault
@@ -624,7 +628,7 @@ finish:
 void OutputAdapterDefault::OutputBuf(const WCHAR* pBuf, int size)
 {
 	if (m_bWindow) {
-		m_pCommander->Command_INSTEXT(false, pBuf, LogicInt(size), true);
+		m_commander.Command_INSTEXT(false, pBuf, LogicInt(size), true);
 	}else {
 		m_pCShareData->TraceOutString(pBuf , size);
 	}

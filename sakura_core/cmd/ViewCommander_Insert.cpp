@@ -56,7 +56,7 @@ void ViewCommander::Command_CtrlCode_Dialog(void)
 	DlgCtrlCode cDlgCtrlCode;
 
 	// コントロールコード入力ダイアログを表示する
-	if (cDlgCtrlCode.DoModal(G_AppInstance(), m_pCommanderView->GetHwnd(), (LPARAM)GetDocument())) {
+	if (cDlgCtrlCode.DoModal(G_AppInstance(), m_view.GetHwnd(), (LPARAM)GetDocument())) {
 		// コントロールコードを入力する
 		// 2013.06.11 Command_WCHAR -> HandleCommand マクロ記録対応
 		// 2013.12.12 F_WCHAR -> F_CTRL_CODE

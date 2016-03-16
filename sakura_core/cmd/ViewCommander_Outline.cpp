@@ -65,7 +65,7 @@ bool ViewCommander::Command_FUNCLIST(
 	// 2001.12.03 hor & 2002.3.13 YAZAKI
 	if (nOutlineType == OutlineType::Default) {
 		// タイプ別に設定されたアウトライン解析方法
-		nOutlineType = m_pCommanderView->m_pTypeData->eDefaultOutline;
+		nOutlineType = m_view.m_pTypeData->eDefaultOutline;
 		if (nOutlineType == OutlineType::CPP) {
 			if (CheckEXT(GetDocument()->m_docFile.GetFilePath(), _T("c"))) {
 				nOutlineType = OutlineType::C;	// これでC関数一覧リストビューになる
@@ -143,7 +143,7 @@ bool ViewCommander::Command_FUNCLIST(
 				objOutline->AddRef();
 				params.push_back(objOutline);
 				// プラグイン呼び出し
-				(*plugs.begin())->Invoke(m_pCommanderView, params);
+				(*plugs.begin())->Invoke(&m_view, params);
 
 				nListType = objOutline->m_nListType;			// ダイアログの表示方法をを上書き
 				titleOverride = objOutline->m_sOutlineTitle;	// ダイアログタイトルを上書き
@@ -166,14 +166,14 @@ bool ViewCommander::Command_FUNCLIST(
 	if (!dlgFuncList.GetHwnd()) {
 		dlgFuncList.DoModeless(
 			G_AppInstance(),
-			m_pCommanderView->GetHwnd(),
-			(LPARAM)m_pCommanderView,
+			m_view.GetHwnd(),
+			(LPARAM)&m_view,
 			&funcInfoArr,
 			poCaret.GetY2() + LayoutInt(1),
 			poCaret.GetX2() + LayoutInt(1),
 			nOutlineType,
 			nListType,
-			m_pCommanderView->m_pTypeData->bLineNumIsCRLF	// 行番号の表示 false=折り返し単位／true=改行単位
+			m_view.m_pTypeData->bLineNumIsCRLF	// 行番号の表示 false=折り返し単位／true=改行単位
 		);
 	}else {
 		// アクティブにする

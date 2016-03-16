@@ -26,15 +26,15 @@
 */
 void ViewCommander::Command_JUMP_SRCHSTARTPOS(void)
 {
-	if (m_pCommanderView->m_ptSrchStartPos_PHY.BothNatural()) {
+	if (m_view.m_ptSrchStartPos_PHY.BothNatural()) {
 		LayoutPoint pt;
 		// 範囲選択中か
 		GetDocument()->m_layoutMgr.LogicToLayout(
-			m_pCommanderView->m_ptSrchStartPos_PHY,
+			m_view.m_ptSrchStartPos_PHY,
 			&pt
 		);
 		// 2006.07.09 genta 選択状態を保つ
-		m_pCommanderView->MoveCursorSelecting(pt, m_pCommanderView->GetSelectionInfo().m_bSelectingLock);
+		m_view.MoveCursorSelecting(pt, m_view.GetSelectionInfo().m_bSelectingLock);
 	}else {
 		ErrorBeep();
 	}
@@ -48,7 +48,7 @@ void ViewCommander::Command_JUMP_SRCHSTARTPOS(void)
 void ViewCommander::Command_JUMP_DIALOG(void)
 {
 	if (!GetEditWindow()->m_dlgJump.DoModal(
-			G_AppInstance(), m_pCommanderView->GetHwnd(), (LPARAM)GetDocument()
+			G_AppInstance(), m_view.GetHwnd(), (LPARAM)GetDocument()
 		)
 	) {
 		return;
@@ -103,11 +103,11 @@ void ViewCommander::Command_JUMP(void)
 			}
 		}
 		// Sep. 8, 2000 genta
-		m_pCommanderView->AddCurrentLineToHistory();
+		m_view.AddCurrentLineToHistory();
 		// 2006.07.09 genta 選択状態を解除しないように
-		m_pCommanderView->MoveCursorSelecting(
+		m_view.MoveCursorSelecting(
 			LayoutPoint(0, nLineNum - 1),
-			m_pCommanderView->GetSelectionInfo().m_bSelectingLock,
+			m_view.GetSelectionInfo().m_bSelectingLock,
 			_CARETMARGINRATE / 3
 		);
 		return;
@@ -122,7 +122,7 @@ void ViewCommander::Command_JUMP(void)
 	nLineCount = dlgJump.m_nPLSQL_E1 - 1;
 
 	// 行番号の表示 false=折り返し単位／true=改行単位
-	if (!m_pCommanderView->m_pTypeData->bLineNumIsCRLF) { // レイアウト単位
+	if (!m_view.m_pTypeData->bLineNumIsCRLF) { // レイアウト単位
 		/*
 		  カーソル位置変換
 		  レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
@@ -255,9 +255,9 @@ void ViewCommander::Command_JUMP(void)
 		&ptPos
 	);
 	// Sep. 8, 2000 genta
-	m_pCommanderView->AddCurrentLineToHistory();
+	m_view.AddCurrentLineToHistory();
 	// 2006.07.09 genta 選択状態を解除しないように
-	m_pCommanderView->MoveCursorSelecting(ptPos, m_pCommanderView->GetSelectionInfo().m_bSelectingLock, _CARETMARGINRATE / 3);
+	m_view.MoveCursorSelecting(ptPos, m_view.GetSelectionInfo().m_bSelectingLock, _CARETMARGINRATE / 3);
 }
 
 
@@ -266,7 +266,7 @@ void ViewCommander::Command_JUMP(void)
 void ViewCommander::Command_BOOKMARK_SET(void)
 {
 	DocLine* pDocLine;
-	auto& selInfo = m_pCommanderView->GetSelectionInfo();
+	auto& selInfo = m_view.GetSelectionInfo();
 	auto& select = selInfo.m_select;
 	auto& lineMgr = GetDocument()->m_docLineMgr;
 	if (selInfo.IsTextSelected()
@@ -323,7 +323,7 @@ re_do:;								// hor
 		LayoutPoint ptLayout;
 		GetDocument()->m_layoutMgr.LogicToLayout(ptXY, &ptLayout);
 		// 2006.07.09 genta 新規関数にまとめた
-		m_pCommanderView->MoveCursorSelecting(ptLayout, m_pCommanderView->GetSelectionInfo().m_bSelectingLock);
+		m_view.MoveCursorSelecting(ptLayout, m_view.GetSelectionInfo().m_bSelectingLock);
 	}
     // 2002.01.26 hor
 	if (GetDllShareData().common.search.bSearchAll) {
@@ -337,11 +337,11 @@ re_do:;								// hor
 	}
 	if (bFound) {
 		if (nYOld >= ptXY.y) {
-			m_pCommanderView->SendStatusMessage(LS(STR_ERR_SRNEXT1));
+			m_view.SendStatusMessage(LS(STR_ERR_SRNEXT1));
 		}
 	}else {
-		m_pCommanderView->SendStatusMessage(LS(STR_ERR_SRNEXT2));
-		AlertNotFound(m_pCommanderView->GetHwnd(), false, LS(STR_BOOKMARK_NEXT_NOT_FOUND));
+		m_view.SendStatusMessage(LS(STR_ERR_SRNEXT2));
+		AlertNotFound(m_view.GetHwnd(), false, LS(STR_BOOKMARK_NEXT_NOT_FOUND));
 	}
 	return;
 }
@@ -368,7 +368,7 @@ re_do:;								// hor
 		LayoutPoint ptLayout;
 		GetDocument()->m_layoutMgr.LogicToLayout(ptXY, &ptLayout);
 		// 2006.07.09 genta 新規関数にまとめた
-		m_pCommanderView->MoveCursorSelecting(ptLayout, m_pCommanderView->GetSelectionInfo().m_bSelectingLock);
+		m_view.MoveCursorSelecting(ptLayout, m_view.GetSelectionInfo().m_bSelectingLock);
 	}
     // 2002.01.26 hor
 	if (GetDllShareData().common.search.bSearchAll) {
@@ -383,11 +383,11 @@ re_do:;								// hor
 	}
 	if (bFound) {
 		if (nYOld <= ptXY.y) {
-			m_pCommanderView->SendStatusMessage(LS(STR_ERR_SRPREV1));
+			m_view.SendStatusMessage(LS(STR_ERR_SRPREV1));
 		}
 	}else {
-		m_pCommanderView->SendStatusMessage(LS(STR_ERR_SRPREV2));
-		AlertNotFound(m_pCommanderView->GetHwnd(), false, LS(STR_BOOKMARK_PREV_NOT_FOUND));
+		m_view.SendStatusMessage(LS(STR_ERR_SRPREV2));
+		AlertNotFound(m_view.GetHwnd(), false, LS(STR_BOOKMARK_PREV_NOT_FOUND));
 	}
 	return;
 }
@@ -409,11 +409,11 @@ void ViewCommander::Command_BOOKMARK_RESET(void)
 void ViewCommander::Command_BOOKMARK_PATTERN(void)
 {
 	// 検索or置換ダイアログから呼び出された
-	if (!m_pCommanderView->ChangeCurRegexp(false)) {
+	if (!m_view.ChangeCurRegexp(false)) {
 		return;
 	}
 	BookmarkManager(&GetDocument()->m_docLineMgr).MarkSearchWord(
-		m_pCommanderView->m_searchPattern
+		m_view.m_searchPattern
 	);
 	// 2002.01.16 hor 分割したビューも更新
 	GetEditWindow()->Views_Redraw();
@@ -432,10 +432,10 @@ void ViewCommander::Command_FUNCLIST_NEXT(void)
 				ptXY.GetY2(), SearchDirection::Forward, &ptXY.y)) {
 			LayoutPoint ptLayout;
 			GetDocument()->m_layoutMgr.LogicToLayout(ptXY,&ptLayout);
-			m_pCommanderView->MoveCursorSelecting( ptLayout,
-				m_pCommanderView->GetSelectionInfo().m_bSelectingLock );
+			m_view.MoveCursorSelecting( ptLayout,
+				m_view.GetSelectionInfo().m_bSelectingLock );
 			if (nYOld >= ptXY.y) {
-				m_pCommanderView->SendStatusMessage(LS(STR_ERR_SRNEXT1));
+				m_view.SendStatusMessage(LS(STR_ERR_SRNEXT1));
 			}
 			return;
 		}
@@ -444,8 +444,8 @@ void ViewCommander::Command_FUNCLIST_NEXT(void)
 		}
 		ptXY.y = -1;
 	}
-	m_pCommanderView->SendStatusMessage(LS(STR_ERR_SRNEXT2));
-	AlertNotFound( m_pCommanderView->GetHwnd(), false, LS(STR_FUCLIST_NEXT_NOT_FOUND));
+	m_view.SendStatusMessage(LS(STR_ERR_SRNEXT2));
+	AlertNotFound( m_view.GetHwnd(), false, LS(STR_FUCLIST_NEXT_NOT_FOUND));
 	return;
 }
 
@@ -468,12 +468,12 @@ void ViewCommander::Command_FUNCLIST_PREV(void)
 		) {
 			LayoutPoint ptLayout;
 			GetDocument()->m_layoutMgr.LogicToLayout(ptXY, &ptLayout);
-			m_pCommanderView->MoveCursorSelecting(
+			m_view.MoveCursorSelecting(
 				ptLayout,
-				m_pCommanderView->GetSelectionInfo().m_bSelectingLock
+				m_view.GetSelectionInfo().m_bSelectingLock
 				);
 			if (nYOld <= ptXY.y) {
-				m_pCommanderView->SendStatusMessage(LS(STR_ERR_SRPREV1));
+				m_view.SendStatusMessage(LS(STR_ERR_SRPREV1));
 			}
 			return;
 		}
@@ -482,8 +482,8 @@ void ViewCommander::Command_FUNCLIST_PREV(void)
 		}
 		ptXY.y= GetDocument()->m_docLineMgr.GetLineCount();
 	}
-	m_pCommanderView->SendStatusMessage(LS(STR_ERR_SRPREV2));
-	AlertNotFound( m_pCommanderView->GetHwnd(), false, LS(STR_FUCLIST_PREV_NOT_FOUND) );
+	m_view.SendStatusMessage(LS(STR_ERR_SRPREV2));
+	AlertNotFound( m_view.GetHwnd(), false, LS(STR_FUCLIST_PREV_NOT_FOUND) );
 	return;
 }
 

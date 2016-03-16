@@ -70,7 +70,7 @@ void ViewCommander::Command_FILENEW(void)
 	std::tstring curDir = SakuraEnvironment::GetDlgInitialDir();
 	ControlTray::OpenNewEditor(
 		G_AppInstance(),
-		m_pCommanderView->GetHwnd(),
+		m_view.GetHwnd(),
 		loadInfo,
 		NULL,
 		false,
@@ -92,7 +92,7 @@ void ViewCommander::Command_FILENEW_NEWWINDOW(void)
 	std::tstring curDir = SakuraEnvironment::GetDlgInitialDir();
 	ControlTray::OpenNewEditor(
 		G_AppInstance(),
-		m_pCommanderView->GetHwnd(),
+		m_view.GetHwnd(),
 		loadInfo,
 		NULL,
 		false,
@@ -292,7 +292,7 @@ void ViewCommander::Command_FILE_REOPEN(
 	EditDoc* pDoc = GetDocument();
 	if (!bNoConfirm && fexist(pDoc->m_docFile.GetFilePath()) && pDoc->m_docEditor.IsModified()) {
 		int nDlgResult = MYMESSAGEBOX(
-			m_pCommanderView->GetHwnd(),
+			m_view.GetHwnd(),
 			MB_OKCANCEL | MB_ICONQUESTION | MB_TOPMOST,
 			GSTR_APPNAME,
 			LS(STR_ERR_CEDITVIEW_CMD29),
@@ -359,7 +359,7 @@ bool ViewCommander::Command_OPEN_HHPP(bool bCheckOnly, bool bBeepWhenMiss)
 	// 2003.06.28 Moca ヘッダ・ソースのコードを統合＆削除
 	static const TCHAR* source_ext[] = { _T("c"), _T("cpp"), _T("cxx"), _T("cc"), _T("cp"), _T("c++") };
 	static const TCHAR* header_ext[] = { _T("h"), _T("hpp"), _T("hxx"), _T("hh"), _T("hp"), _T("h++") };
-	return m_pCommanderView->OPEN_ExtFromtoExt(
+	return m_view.OPEN_ExtFromtoExt(
 		bCheckOnly, bBeepWhenMiss, source_ext, header_ext,
 		_countof(source_ext), _countof(header_ext),
 		LS(STR_ERR_CEDITVIEW_CMD08));
@@ -373,7 +373,7 @@ bool ViewCommander::Command_OPEN_CCPP(bool bCheckOnly, bool bBeepWhenMiss)
 	// 2003.06.28 Moca ヘッダ・ソースのコードを統合＆削除
 	static const TCHAR* source_ext[] = { _T("c"), _T("cpp"), _T("cxx"), _T("cc"), _T("cp"), _T("c++") };
 	static const TCHAR* header_ext[] = { _T("h"), _T("hpp"), _T("hxx"), _T("hh"), _T("hp"), _T("h++") };
-	return m_pCommanderView->OPEN_ExtFromtoExt(
+	return m_view.OPEN_ExtFromtoExt(
 		bCheckOnly, bBeepWhenMiss, header_ext, source_ext,
 		_countof(header_ext), _countof(source_ext),
 		LS(STR_ERR_CEDITVIEW_CMD09));
@@ -385,7 +385,7 @@ void ViewCommander::Command_ACTIVATE_SQLPLUS(void)
 {
 	HWND hwndSQLPLUS = ::FindWindow(_T("SqlplusWClass"), _T("Oracle SQL*Plus"));
 	if (!hwndSQLPLUS) {
-		ErrorMessage(m_pCommanderView->GetHwnd(), LS(STR_SQLERR_ACTV_BUT_NOT_RUN));	// "Oracle SQL*Plusをアクティブ表示します。\n\n\nOracle SQL*Plusが起動されていません。\n"
+		ErrorMessage(m_view.GetHwnd(), LS(STR_SQLERR_ACTV_BUT_NOT_RUN));	// "Oracle SQL*Plusをアクティブ表示します。\n\n\nOracle SQL*Plusが起動されていません。\n"
 		return;
 	}
 	// Oracle SQL*Plusをアクティブにする
@@ -407,13 +407,13 @@ void ViewCommander::Command_PLSQL_COMPILE_ON_SQLPLUS(void)
 
 	HWND hwndSQLPLUS = ::FindWindow(_T("SqlplusWClass"), _T("Oracle SQL*Plus"));
 	if (!hwndSQLPLUS) {
-		ErrorMessage(m_pCommanderView->GetHwnd(), LS(STR_SQLERR_EXEC_BUT_NOT_RUN));	// "Oracle SQL*Plusで実行します。\n\n\nOracle SQL*Plusが起動されていません。\n"
+		ErrorMessage(m_view.GetHwnd(), LS(STR_SQLERR_EXEC_BUT_NOT_RUN));	// "Oracle SQL*Plusで実行します。\n\n\nOracle SQL*Plusが起動されていません。\n"
 		return;
 	}
 	// テキストが変更されている場合
 	if (GetDocument()->m_docEditor.IsModified()) {
 		nRet = ::MYMESSAGEBOX(
-			m_pCommanderView->GetHwnd(),
+			m_view.GetHwnd(),
 			MB_YESNOCANCEL | MB_ICONEXCLAMATION,
 			GSTR_APPNAME,
 			LS(STR_ERR_CEDITVIEW_CMD18),
@@ -448,7 +448,7 @@ void ViewCommander::Command_PLSQL_COMPILE_ON_SQLPLUS(void)
 			auto_sprintf( szPath, _T("@%ts\r\n"), GetDocument()->m_docFile.GetFilePath() );
 		}
 		// クリップボードにデータを設定
-		m_pCommanderView->MySetClipboardData(szPath, _tcslen(szPath), false);
+		m_view.MySetClipboardData(szPath, _tcslen(szPath), false);
 
 		// Oracle SQL*Plusをアクティブにする
 		// アクティブにする
@@ -466,11 +466,11 @@ void ViewCommander::Command_PLSQL_COMPILE_ON_SQLPLUS(void)
 			&dwResult
 		);
 		if (!bResult) {
-			TopErrorMessage(m_pCommanderView->GetHwnd(), LS(STR_ERR_CEDITVIEW_CMD20));
+			TopErrorMessage(m_view.GetHwnd(), LS(STR_ERR_CEDITVIEW_CMD20));
 		}
 	}else {
 		ErrorBeep();
-		ErrorMessage(m_pCommanderView->GetHwnd(), LS(STR_ERR_CEDITVIEW_CMD21));
+		ErrorMessage(m_view.GetHwnd(), LS(STR_ERR_CEDITVIEW_CMD21));
 		return;
 	}
 	return;
@@ -550,8 +550,8 @@ void ViewCommander::Command_PROPERTY_FILE(void)
 
 
 	DlgProperty	cDlgProperty;
-//	cDlgProperty.Create(G_AppInstance(), m_pCommanderView->GetHwnd(), GetDocument());
-	cDlgProperty.DoModal(G_AppInstance(), m_pCommanderView->GetHwnd(), (LPARAM)GetDocument());
+//	cDlgProperty.Create(G_AppInstance(), m_view.GetHwnd(), GetDocument());
+	cDlgProperty.DoModal(G_AppInstance(), m_view.GetHwnd(), (LPARAM)GetDocument());
 	return;
 }
 
@@ -559,7 +559,7 @@ void ViewCommander::Command_PROPERTY_FILE(void)
 void ViewCommander::Command_PROFILEMGR( void )
 {
 	DlgProfileMgr profMgr;
-	if (profMgr.DoModal( G_AppInstance(), m_pCommanderView->GetHwnd(), 0 )) {
+	if (profMgr.DoModal( G_AppInstance(), m_view.GetHwnd(), 0 )) {
 		TCHAR szOpt[MAX_PATH+10];
 		auto_sprintf( szOpt, _T("-PROF=\"%ts\""), profMgr.m_strProfileName.c_str() );
 		LoadInfo loadInfo;
@@ -568,7 +568,7 @@ void ViewCommander::Command_PROFILEMGR( void )
 		loadInfo.bViewMode = false;
 		ControlTray::OpenNewEditor(
 			G_AppInstance(),
-			m_pCommanderView->GetHwnd(),
+			m_view.GetHwnd(),
 			loadInfo,
 			szOpt,
 			false,
@@ -625,7 +625,7 @@ bool ViewCommander::Command_PUTFILE(
 	}
 
 	// 2007.09.08 genta EditDoc::FileWrite()にならって砂時計カーソル
-	WaitCursor waitCursor(m_pCommanderView->GetHwnd());
+	WaitCursor waitCursor(m_view.GetHwnd());
 
 	std::unique_ptr<CodeBase> pcSaveCode(CodeFactory::CreateCodeBase(nSaveCharCode, 0));
 
@@ -640,7 +640,7 @@ bool ViewCommander::Command_PUTFILE(
 
 			// 選択範囲の取得 -> mem
 			NativeW mem;
-			m_pCommanderView->GetSelectedDataSimple(mem);
+			m_view.GetSelectedDataSimple(mem);
 
 			// BOM追加
 			NativeW mem2;
@@ -732,7 +732,7 @@ bool ViewCommander::Command_INSFILE(
 	int nFlgOpt
 	)
 {
-	FileLoad	fl(m_pCommanderView->m_pTypeData->encoding);
+	FileLoad	fl(m_view.m_pTypeData->encoding);
 	Eol			eol;
 	int			nLineNum = 0;
 
@@ -747,13 +747,13 @@ bool ViewCommander::Command_INSFILE(
 	}
 
 	// 2007.09.08 genta EditDoc::FileLoad()にならって砂時計カーソル
-	WaitCursor waitCursor(m_pCommanderView->GetHwnd());
+	WaitCursor waitCursor(m_view.GetHwnd());
 
 	// 範囲選択中なら挿入後も選択状態にするため	// 2007.04.29 maru
-	bool bBeforeTextSelected = m_pCommanderView->GetSelectionInfo().IsTextSelected();
+	bool bBeforeTextSelected = m_view.GetSelectionInfo().IsTextSelected();
 	LayoutPoint ptFrom;
 	if (bBeforeTextSelected) {
-		ptFrom = m_pCommanderView->GetSelectionInfo().m_select.GetFrom();
+		ptFrom = m_view.GetSelectionInfo().m_select.GetFrom();
 	}
 
 
@@ -820,7 +820,7 @@ bool ViewCommander::Command_INSFILE(
 					Progress_SetPos(hwndProgress, fl.GetPercent());
 					nOldPercent = fl.GetPercent();
 				}
-				m_pCommanderView->Redraw();
+				m_view.Redraw();
 			}
 		}
 		// ファイルを明示的に閉じるが、ここで閉じないときはデストラクタで閉じている
@@ -836,7 +836,7 @@ bool ViewCommander::Command_INSFILE(
 	delete pDlgCancel;
 
 	if (bBeforeTextSelected) {	// 挿入された部分を選択状態に
-		m_pCommanderView->GetSelectionInfo().SetSelectArea(
+		m_view.GetSelectionInfo().SetSelectArea(
 			LayoutRange(
 				ptFrom,
 				GetCaret().GetCaretLayoutPos()
@@ -845,9 +845,9 @@ bool ViewCommander::Command_INSFILE(
 				*/
 			)
 		);
-		m_pCommanderView->GetSelectionInfo().DrawSelectArea();
+		m_view.GetSelectionInfo().DrawSelectArea();
 	}
-	m_pCommanderView->Redraw();
+	m_view.Redraw();
 	return bResult;
 }
 

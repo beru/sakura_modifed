@@ -54,9 +54,9 @@ void ViewCommander::Command_HOKAN(void)
 retry:;
 	// 補完候補一覧ファイルが設定されていないときは、設定するように促す。
 	// 2003.06.22 Moca ファイル内から検索する場合には補完ファイルの設定は必須ではない
-	if (!m_pCommanderView->m_pTypeData->bUseHokanByFile &&
-		!m_pCommanderView->m_pTypeData->bUseHokanByKeyword &&
-		m_pCommanderView->m_pTypeData->szHokanFile[0] == _T('\0')
+	if (!m_view.m_pTypeData->bUseHokanByFile &&
+		!m_view.m_pTypeData->bUseHokanByKeyword &&
+		m_view.m_pTypeData->szHokanFile[0] == _T('\0')
 	) {
 		ConfirmBeep();
 		if (::ConfirmMessage(
@@ -74,11 +74,11 @@ retry:;
 #endif
 	NativeW memData;
 	// カーソル直前の単語を取得
-	if (0 < m_pCommanderView->GetParser().GetLeftWord(&memData, 100)) {
-		m_pCommanderView->ShowHokanMgr(memData, true);
+	if (0 < m_view.GetParser().GetLeftWord(&memData, 100)) {
+		m_view.ShowHokanMgr(memData, true);
 	}else {
 		InfoBeep(); // 2010.04.03 Error→Info
-		m_pCommanderView->SendStatusMessage(LS(STR_SUPPORT_NOT_COMPLITE)); // 2010.05.29 ステータスで表示
+		m_view.SendStatusMessage(LS(STR_SUPPORT_NOT_COMPLITE)); // 2010.05.29 ステータスで表示
 		csHelper.bUseHokan = false;	// 入力補完終了のお知らせ
 	}
 	return;
@@ -105,7 +105,7 @@ void ViewCommander::Command_ToggleKeySearch(int option)
 // ヘルプ目次
 void ViewCommander::Command_HELP_CONTENTS(void)
 {
-	ShowWinHelpContents(m_pCommanderView->GetHwnd());	// 目次を表示する
+	ShowWinHelpContents(m_view.GetHwnd());	// 目次を表示する
 	return;
 }
 
@@ -113,7 +113,7 @@ void ViewCommander::Command_HELP_CONTENTS(void)
 // ヘルプキーワード検索
 void ViewCommander::Command_HELP_SEARCH(void)
 {
-	MyWinHelp(m_pCommanderView->GetHwnd(), HELP_KEY, (ULONG_PTR)_T(""));	// 2006.10.10 ryoji MyWinHelpに変更に変更
+	MyWinHelp(m_view.GetHwnd(), HELP_KEY, (ULONG_PTR)_T(""));	// 2006.10.10 ryoji MyWinHelpに変更に変更
 	return;
 }
 
@@ -221,7 +221,7 @@ retry:;
 	const TCHAR* helpfile = HelpManager().GetExtWinHelp(&(GetDocument()->m_docType.GetDocumentAttribute()));
 
 	// 現在カーソル位置単語または選択範囲より検索等のキーを取得
-	m_pCommanderView->GetCurrentTextForSearch(memCurText, false);
+	m_view.GetCurrentTextForSearch(memCurText, false);
 	TCHAR path[_MAX_PATH];
 	if (_IS_REL_PATH(helpfile)) {
 		// 2003.06.23 Moca 相対パスは実行ファイルからのパス
@@ -237,7 +237,7 @@ retry:;
 		std::wstring pathw = to_wchar(path);
 		Command_EXTHTMLHELP(pathw.c_str(), memCurText.GetStringPtr());
 	}else {
-		::WinHelp(m_pCommanderView->m_hwndParent, path, HELP_KEY, (ULONG_PTR)memCurText.GetStringPtr());
+		::WinHelp(m_view.m_hwndParent, path, HELP_KEY, (ULONG_PTR)memCurText.GetStringPtr());
 	}
 	return;
 }
@@ -296,7 +296,7 @@ void ViewCommander::Command_EXTHTMLHELP(const WCHAR* _helpfile, const WCHAR* kwd
 		memCurText.SetString(kwd);
 	}else {
 		// 現在カーソル位置単語または選択範囲より検索等のキーを取得
-		m_pCommanderView->GetCurrentTextForSearch(memCurText);
+		m_view.GetCurrentTextForSearch(memCurText);
 	}
 
 	// HtmlHelpビューアはひとつ
@@ -366,7 +366,7 @@ void ViewCommander::Command_EXTHTMLHELP(const WCHAR* _helpfile, const WCHAR* kwd
 void ViewCommander::Command_ABOUT(void)
 {
 	DlgAbout dlgAbout;
-	dlgAbout.DoModal(G_AppInstance(), m_pCommanderView->GetHwnd());
+	dlgAbout.DoModal(G_AppInstance(), m_view.GetHwnd());
 	return;
 }
 

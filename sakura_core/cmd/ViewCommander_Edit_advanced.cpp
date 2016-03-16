@@ -47,7 +47,7 @@ void ViewCommander::Command_INDENT(wchar_t wcChar, IndentType eIndent)
 {
 	using namespace WCODE;
 
-	auto& selInfo = m_pCommanderView->GetSelectionInfo();
+	auto& selInfo = m_view.GetSelectionInfo();
 #if 1	// ↓ここを残せば選択幅ゼロを最大にする（従来互換挙動）。無くても Command_INDENT() ver0 が適切に動作するように変更されたので、削除しても特に不都合にはならない。
 	// From Here 2001.12.03 hor
 	// SPACEorTABインンデントで矩形選択桁がゼロの時は選択範囲を最大にする
@@ -57,7 +57,7 @@ void ViewCommander::Command_INDENT(wchar_t wcChar, IndentType eIndent)
 		&& GetSelect().GetFrom().x == GetSelect().GetTo().x
 	) {
 		GetSelect().SetToX(GetDocument()->m_layoutMgr.GetMaxLineKetas());
-		m_pCommanderView->RedrawAll();
+		m_view.RedrawAll();
 		return;
 	}
 	// To Here 2001.12.03 hor
@@ -105,11 +105,11 @@ void ViewCommander::Command_INDENT(
 		int m_nTab;
 	} stabData(layoutMgr.GetTabSpace());
 
-	const bool bSoftTab = (eIndent == IndentType::Tab && m_pCommanderView->m_pTypeData->bInsSpace);
+	const bool bSoftTab = (eIndent == IndentType::Tab && m_view.m_pTypeData->bInsSpace);
 	GetDocument()->m_docEditor.SetModified(true, true);	// Jan. 22, 2002 genta
 
 	auto& caret = GetCaret();
-	auto& selInfo = m_pCommanderView->GetSelectionInfo();
+	auto& selInfo = m_view.GetSelectionInfo();
 
 	if (!selInfo.IsTextSelected()) {			// テキストが選択されているか
 		if (eIndent != IndentType::None && !bSoftTab) {
@@ -117,10 +117,10 @@ void ViewCommander::Command_INDENT(
 			Command_WCHAR(pData[0]);	// 1文字入力
 		}else {
 			// ※矩形選択ではないのでここへ来るのは実際にはソフトタブのときだけ
-			if (bSoftTab && !m_pCommanderView->IsInsMode()) {
+			if (bSoftTab && !m_view.IsInsMode()) {
 				DelCharForOverwrite(pData, nDataLen);
 			}
-			m_pCommanderView->InsertData_CEditView(
+			m_view.InsertData_CEditView(
 				caret.GetCaretLayoutPos(),
 				!bSoftTab? pData: stabData,
 				!bSoftTab? nDataLen: stabData.Len(caret.GetCaretLayoutPos().GetX2()),
@@ -132,16 +132,16 @@ void ViewCommander::Command_INDENT(
 		}
 		return;
 	}
-	const bool bDrawSwitchOld = m_pCommanderView->SetDrawSwitch(false);	// 2002.01.25 hor
+	const bool bDrawSwitchOld = m_view.SetDrawSwitch(false);	// 2002.01.25 hor
 	// 矩形範囲選択中か
 	if (selInfo.IsBoxSelecting()) {
 // 2012.10.31 Moca 上書きモードのときの選択範囲削除をやめる
 #if 0
 		// From Here 2001.12.03 hor
 		// 上書モードのときは選択範囲削除
-		if (!m_pCommanderView->IsInsMode() /* Oct. 2, 2005 genta */) {
+		if (!m_view.IsInsMode() /* Oct. 2, 2005 genta */) {
 			selectOld = GetSelect();
-			m_pCommanderView->DeleteData(false);
+			m_view.DeleteData(false);
 			GetSelect() = selectOld;
 			selInfo.SetBoxSelect(true);
 		}
@@ -182,11 +182,11 @@ void ViewCommander::Command_INDENT(
 #if 1	// ↓ここを残せば選択幅1のSPACEインデントで全角文字を揃える機能(2)が追加される。
 		alignFullWidthChar = alignFullWidthChar || (eIndent == IndentType::Space && rcSel.GetTo().x - rcSel.GetFrom().x == 1);
 #endif
-		WaitCursor waitCursor(m_pCommanderView->GetHwnd(), 1000 < rcSel.GetTo().y - rcSel.GetFrom().y);
+		WaitCursor waitCursor(m_view.GetHwnd(), 1000 < rcSel.GetTo().y - rcSel.GetFrom().y);
 		HWND hwndProgress = NULL;
 		int nProgressPos = 0;
 		if (waitCursor.IsEnable()) {
-			hwndProgress = m_pCommanderView->StartProgress();
+			hwndProgress = m_view.StartProgress();
 		}
 		for (bool insertionWasDone=false; ; alignFullWidthChar=false) {
 			minOffset = LayoutInt(-1);
@@ -262,7 +262,7 @@ void ViewCommander::Command_INDENT(
 				}
 
 				// 現在位置にデータを挿入
-				m_pCommanderView->InsertData_CEditView(
+				m_view.InsertData_CEditView(
 					ptInsert,
 					!bSoftTab? pData: stabData,
 					!bSoftTab? nDataLen: stabData.Len(ptInsert.x),
@@ -306,7 +306,7 @@ void ViewCommander::Command_INDENT(
 		caret.MoveCursor(rcSel.GetFrom(), true);
 		caret.m_nCaretPosX_Prev = caret.GetCaretLayoutPos().GetX2();
 
-		if (!m_pCommanderView->m_bDoing_UndoRedo) {	// Undo, Redoの実行中か
+		if (!m_view.m_bDoing_UndoRedo) {	// Undo, Redoの実行中か
 			// 操作の追加
 			GetOpeBlk()->AppendOpe(
 				new MoveCaretOpe(
@@ -324,8 +324,8 @@ void ViewCommander::Command_INDENT(
 			Command_WCHAR(pData[0]);	// 1文字入力
 		}else {
 			// ※矩形選択ではないのでここへ来るのは実際にはソフトタブのときだけ
-			m_pCommanderView->DeleteData(false);
-			m_pCommanderView->InsertData_CEditView(
+			m_view.DeleteData(false);
+			m_view.InsertData_CEditView(
 				caret.GetCaretLayoutPos(),
 				!bSoftTab? pData: stabData,
 				!bSoftTab? nDataLen: stabData.Len(caret.GetCaretLayoutPos().GetX2()),
@@ -346,13 +346,13 @@ void ViewCommander::Command_INDENT(
 		selInfo.DisableSelectArea(false);
 
 		WaitCursor waitCursor(
-			m_pCommanderView->GetHwnd(),
+			m_view.GetHwnd(),
 			1000 < selectOld.GetTo().GetY2() - selectOld.GetFrom().GetY2()
 		);
 		HWND hwndProgress = NULL;
 		int nProgressPos = 0;
 		if (waitCursor.IsEnable()) {
-			hwndProgress = m_pCommanderView->StartProgress();
+			hwndProgress = m_view.StartProgress();
 		}
 
 		for (LayoutInt i=selectOld.GetFrom().GetY2(); i<selectOld.GetTo().GetY2(); ++i) {
@@ -370,7 +370,7 @@ void ViewCommander::Command_INDENT(
 			caret.m_nCaretPosX_Prev = caret.GetCaretLayoutPos().GetX2();
 
 			// 現在位置にデータを挿入
-			m_pCommanderView->InsertData_CEditView(
+			m_view.InsertData_CEditView(
 				LayoutPoint(LayoutInt(0), i),
 				!bSoftTab? pData: stabData,
 				!bSoftTab? nDataLen: stabData.Len(LayoutInt(0)),
@@ -404,7 +404,7 @@ void ViewCommander::Command_INDENT(
 		// From Here 2001.12.03 hor
 		caret.MoveCursor(GetSelect().GetTo(), true);
 		caret.m_nCaretPosX_Prev = caret.GetCaretLayoutPos().GetX2();
-		if (!m_pCommanderView->m_bDoing_UndoRedo) {	// Undo, Redoの実行中か
+		if (!m_view.m_bDoing_UndoRedo) {	// Undo, Redoの実行中か
 			GetOpeBlk()->AppendOpe(
 				new MoveCaretOpe(
 					caret.GetCaretLogicPos()	// 操作前後のキャレット位置
@@ -414,8 +414,8 @@ void ViewCommander::Command_INDENT(
 		// To Here 2001.12.03 hor
 	}
 	// 再描画
-	m_pCommanderView->SetDrawSwitch(bDrawSwitchOld);	// 2002.01.25 hor
-	m_pCommanderView->RedrawAll();			// 2002.01.25 hor	// 2009.07.25 ryoji Redraw()->RedrawAll()
+	m_view.SetDrawSwitch(bDrawSwitchOld);	// 2002.01.25 hor
+	m_view.RedrawAll();			// 2002.01.25 hor	// 2009.07.25 ryoji Redraw()->RedrawAll()
 	return;
 }
 
@@ -426,7 +426,7 @@ void ViewCommander::Command_UNINDENT(wchar_t wcChar)
 	// Aug. 9, 2003 genta
 	// 選択されていない場合に逆インデントした場合に
 	// 注意メッセージを出す
-	auto& selInfo = m_pCommanderView->GetSelectionInfo();
+	auto& selInfo = m_view.GetSelectionInfo();
 	if (!selInfo.IsTextSelected()) {	// テキストが選択されているか
 		IndentType eIndent;
 		switch (wcChar) {
@@ -440,7 +440,7 @@ void ViewCommander::Command_UNINDENT(wchar_t wcChar)
 			eIndent = IndentType::None;
 		}
 		Command_INDENT(wcChar, eIndent);
-		m_pCommanderView->SendStatusMessage(LS(STR_ERR_UNINDENT1));
+		m_view.SendStatusMessage(LS(STR_ERR_UNINDENT1));
 		return;
 	}
 
@@ -463,11 +463,11 @@ void ViewCommander::Command_UNINDENT(wchar_t wcChar)
 		// 現在の選択範囲を非選択状態に戻す
 		selInfo.DisableSelectArea(false);
 
-		WaitCursor waitCursor(m_pCommanderView->GetHwnd(), 1000 < selectOld.GetTo().GetY() - selectOld.GetFrom().GetY());
+		WaitCursor waitCursor(m_view.GetHwnd(), 1000 < selectOld.GetTo().GetY() - selectOld.GetFrom().GetY());
 		HWND hwndProgress = NULL;
 		int nProgressPos = 0;
 		if (waitCursor.IsEnable()) {
-			hwndProgress = m_pCommanderView->StartProgress();
+			hwndProgress = m_view.StartProgress();
 		}
 
 		auto& caret = GetCaret();
@@ -516,7 +516,7 @@ void ViewCommander::Command_UNINDENT(wchar_t wcChar)
 			caret.m_nCaretPosX_Prev = caret.GetCaretLayoutPos().GetX2();
 			
 			// 指定位置の指定長データ削除
-			m_pCommanderView->DeleteData2(
+			m_view.DeleteData2(
 				LayoutPoint(LayoutInt(0), i),
 				nDelLen,	// 2001.12.03 hor
 				NULL
@@ -542,7 +542,7 @@ void ViewCommander::Command_UNINDENT(wchar_t wcChar)
 		// From Here 2001.12.03 hor
 		caret.MoveCursor(GetSelect().GetTo(), true);
 		caret.m_nCaretPosX_Prev = caret.GetCaretLayoutPos().GetX2();
-		if (!m_pCommanderView->m_bDoing_UndoRedo) {	// Undo, Redoの実行中か
+		if (!m_view.m_bDoing_UndoRedo) {	// Undo, Redoの実行中か
 			GetOpeBlk()->AppendOpe(
 				new MoveCaretOpe(
 					caret.GetCaretLogicPos()	// 操作前後のキャレット位置
@@ -553,13 +553,13 @@ void ViewCommander::Command_UNINDENT(wchar_t wcChar)
 	}
 
 	// 再描画
-	m_pCommanderView->RedrawAll();	// 2002.01.25 hor	// 2009.07.25 ryoji Redraw()->RedrawAll()
+	m_view.RedrawAll();	// 2002.01.25 hor	// 2009.07.25 ryoji Redraw()->RedrawAll()
 }
 
 
 // from ViewCommander_New.cpp
 /*! TRIM Step1
-	非選択時はカレント行を選択して m_pCommanderView->ConvSelectedArea → ConvMemory へ
+	非選択時はカレント行を選択して m_view.ConvSelectedArea → ConvMemory へ
 	@author hor
 	@date 2001.12.03 hor 新規作成
 */
@@ -568,7 +568,7 @@ void ViewCommander::Command_TRIM(
 	)
 {
 	bool bBeDisableSelectArea = false;
-	ViewSelect& viewSelect = m_pCommanderView->GetSelectionInfo();
+	ViewSelect& viewSelect = m_view.GetSelectionInfo();
 
 	if (!viewSelect.IsTextSelected()) {	// 非選択時は行選択に変更
 		viewSelect.m_select.SetFrom(
@@ -586,7 +586,7 @@ void ViewCommander::Command_TRIM(
 		bBeDisableSelectArea = true;
 	}
 
-	m_pCommanderView->ConvSelectedArea(bLeft ? F_LTRIM : F_RTRIM);
+	m_view.ConvSelectedArea(bLeft ? F_LTRIM : F_RTRIM);
 
 	if (bBeDisableSelectArea) {
 		viewSelect.DisableSelectArea(true);
@@ -668,7 +668,7 @@ void ViewCommander::Command_SORT(bool bAsc)	// bAsc:true=昇順, false=降順
 	LogicInt	nLineLen;
 	std::vector<SortData*> sta;
 
-	auto& selInfo = m_pCommanderView->GetSelectionInfo();
+	auto& selInfo = m_view.GetSelectionInfo();
 	if (!selInfo.IsTextSelected()) {			// テキストが選択されているか
 		return;
 	}
@@ -726,8 +726,8 @@ void ViewCommander::Command_SORT(bool bAsc)	// bAsc:true=昇順, false=降順
 		}
 		SortData* pst = new SortData;
 		if (bBeginBoxSelectOld) {
-			nColumnFrom = m_pCommanderView->LineColumnToIndex(pDocLine, nCF);
-			nColumnTo   = m_pCommanderView->LineColumnToIndex(pDocLine, nCT);
+			nColumnFrom = m_view.LineColumnToIndex(pDocLine, nCF);
+			nColumnTo   = m_view.LineColumnToIndex(pDocLine, nCT);
 			if (nColumnTo < nLineLenWithoutEOL) {	// BOX選択範囲の右端が行内に収まっている場合
 				// 2006.03.31 genta std::string::assignを使って一時変数削除
 				pst->sKey = StringRef(&pLine[nColumnFrom], nColumnTo - nColumnFrom);
@@ -789,12 +789,12 @@ void ViewCommander::Command_SORT(bool bAsc)	// bAsc:true=昇順, false=降順
 
 	LayoutRange selectOld_Layout;
 	layoutMgr.LogicToLayout(selectOld, &selectOld_Layout);
-	m_pCommanderView->ReplaceData_CEditView3(
+	m_view.ReplaceData_CEditView3(
 		selectOld_Layout,
 		NULL,
 		&repData,
 		false,
-		m_pCommanderView->m_bDoing_UndoRedo ? NULL : GetOpeBlk(),
+		m_view.m_bDoing_UndoRedo ? NULL : GetOpeBlk(),
 		opeSeq,
 		NULL
 	);
@@ -812,14 +812,14 @@ void ViewCommander::Command_SORT(bool bAsc)	// bAsc:true=昇順, false=降順
 		GetCaret().MoveCursor(selInfo.m_select.GetTo(), true);
 	}
 	GetCaret().m_nCaretPosX_Prev = GetCaret().GetCaretLayoutPos().GetX();
-	if (!m_pCommanderView->m_bDoing_UndoRedo) {	// Undo, Redoの実行中か
+	if (!m_view.m_bDoing_UndoRedo) {	// Undo, Redoの実行中か
 		GetOpeBlk()->AppendOpe(
 			new MoveCaretOpe(
 				GetCaret().GetCaretLogicPos()	// 操作前後のキャレット位置
 			)
 		);
 	}
-	m_pCommanderView->RedrawAll();
+	m_view.RedrawAll();
 }
 
 
@@ -843,7 +843,7 @@ void ViewCommander::Command_MERGE(void)
 	LogicInt	nLineLen;
 	LayoutInt	nMergeLayoutLines;
 
-	auto& selInfo = m_pCommanderView->GetSelectionInfo();
+	auto& selInfo = m_view.GetSelectionInfo();
 	if (!selInfo.IsTextSelected()) {			// テキストが選択されているか
 		return;
 	}
@@ -917,12 +917,12 @@ void ViewCommander::Command_MERGE(void)
 			repData[idx].nSeq = opeSeq;
 			repData[idx].memLine.SetString(lineArr[idx].GetPtr(), lineArr[idx].GetLength());
 		}
-		m_pCommanderView->ReplaceData_CEditView3(
+		m_view.ReplaceData_CEditView3(
 			selectOld_Layout,
 			NULL,
 			&repData,
 			false,
-			m_pCommanderView->m_bDoing_UndoRedo ? NULL : GetOpeBlk(),
+			m_view.m_bDoing_UndoRedo ? NULL : GetOpeBlk(),
 			opeSeq,
 			NULL
 		);
@@ -944,19 +944,19 @@ void ViewCommander::Command_MERGE(void)
 		GetCaret().MoveCursor(selInfo.m_select.GetTo(), true);
 	}
 	GetCaret().m_nCaretPosX_Prev = GetCaret().GetCaretLayoutPos().GetX();
-	if (!m_pCommanderView->m_bDoing_UndoRedo) {	// Undo, Redoの実行中か
+	if (!m_view.m_bDoing_UndoRedo) {	// Undo, Redoの実行中か
 		GetOpeBlk()->AppendOpe(
 			new MoveCaretOpe(
 				GetCaret().GetCaretLogicPos()	// 操作前後のキャレット位置
 			)
 		);
 	}
-	m_pCommanderView->RedrawAll();
+	m_view.RedrawAll();
 
 	if (j) {
-		TopOkMessage(m_pCommanderView->GetHwnd(), LS(STR_ERR_DLGEDITVWCMDNW7), j);
+		TopOkMessage(m_view.GetHwnd(), LS(STR_ERR_DLGEDITVWCMDNW7), j);
 	}else {
-		InfoMessage(m_pCommanderView->GetHwnd(), LS(STR_ERR_DLGEDITVWCMDNW8));
+		InfoMessage(m_view.GetHwnd(), LS(STR_ERR_DLGEDITVWCMDNW8));
 	}
 }
 
@@ -973,7 +973,7 @@ void ViewCommander::Command_Reconvert(void)
 	const int ATRECONVERTSTRING_SET = 1;
 
 	// サイズを取得
-	int nSize = m_pCommanderView->SetReconvertStruct(NULL, UNICODE_BOOL);
+	int nSize = m_view.SetReconvertStruct(NULL, UNICODE_BOOL);
 	if (nSize == 0)  // サイズ０の時は何もしない
 		return ;
 
@@ -982,16 +982,16 @@ void ViewCommander::Command_Reconvert(void)
 	if (!OsSupportReconvert()) {
 		
 		// MSIMEかどうか
-		HWND hWnd = ImmGetDefaultIMEWnd(m_pCommanderView->GetHwnd());
-		if (SendMessage(hWnd, m_pCommanderView->m_uWM_MSIME_RECONVERTREQUEST, FID_RECONVERT_VERSION, 0)) {
-			SendMessage(hWnd, m_pCommanderView->m_uWM_MSIME_RECONVERTREQUEST, 0, (LPARAM)m_pCommanderView->GetHwnd());
+		HWND hWnd = ImmGetDefaultIMEWnd(m_view.GetHwnd());
+		if (SendMessage(hWnd, m_view.m_uWM_MSIME_RECONVERTREQUEST, FID_RECONVERT_VERSION, 0)) {
+			SendMessage(hWnd, m_view.m_uWM_MSIME_RECONVERTREQUEST, 0, (LPARAM)m_view.GetHwnd());
 			return ;
 		}
 
 		// ATOKが使えるかどうか
 		TCHAR sz[256];
 		ImmGetDescription(GetKeyboardLayout(0), sz, _countof(sz)); // 説明の取得
-		if ((_tcsncmp(sz, _T("ATOK"),4) == 0) && m_pCommanderView->m_AT_ImmSetReconvertString) {
+		if ((_tcsncmp(sz, _T("ATOK"),4) == 0) && m_view.m_AT_ImmSetReconvertString) {
 			bUseUnicodeATOK = true;
 		}else {
 			// 対応IMEなし
@@ -1008,13 +1008,13 @@ void ViewCommander::Command_Reconvert(void)
 
 	// サイズ取得し直し
 	if (!UNICODE_BOOL && bUseUnicodeATOK) {
-		nSize = m_pCommanderView->SetReconvertStruct(NULL, UNICODE_BOOL || bUseUnicodeATOK);
+		nSize = m_view.SetReconvertStruct(NULL, UNICODE_BOOL || bUseUnicodeATOK);
 		if (nSize == 0)  // サイズ０の時は何もしない
 			return;
 	}
 
 	// IMEのコンテキスト取得
-	HIMC hIMC = ::ImmGetContext(m_pCommanderView->GetHwnd());
+	HIMC hIMC = ::ImmGetContext(m_view.GetHwnd());
 	
 	// 領域確保
 	PRECONVERTSTRING pReconv = (PRECONVERTSTRING)::HeapAlloc(
@@ -1027,27 +1027,27 @@ void ViewCommander::Command_Reconvert(void)
 	// Sizeはバッファ確保側が設定
 	pReconv->dwSize = nSize;
 	pReconv->dwVersion = 0;
-	m_pCommanderView->SetReconvertStruct(pReconv, UNICODE_BOOL || bUseUnicodeATOK);
+	m_view.SetReconvertStruct(pReconv, UNICODE_BOOL || bUseUnicodeATOK);
 	
 	// 変換範囲の調整
 	if (bUseUnicodeATOK) {
-		(*m_pCommanderView->m_AT_ImmSetReconvertString)(hIMC, ATRECONVERTSTRING_SET, pReconv, pReconv->dwSize);
+		(*m_view.m_AT_ImmSetReconvertString)(hIMC, ATRECONVERTSTRING_SET, pReconv, pReconv->dwSize);
 	}else {
 		::ImmSetCompositionString(hIMC, SCS_QUERYRECONVERTSTRING, pReconv, pReconv->dwSize, NULL, 0);
 	}
 
 	// 調整した変換範囲を選択する
-	m_pCommanderView->SetSelectionFromReonvert(pReconv, UNICODE_BOOL || bUseUnicodeATOK);
+	m_view.SetSelectionFromReonvert(pReconv, UNICODE_BOOL || bUseUnicodeATOK);
 	
 	// 再変換実行
 	if (bUseUnicodeATOK) {
-		(*m_pCommanderView->m_AT_ImmSetReconvertString)(hIMC, ATRECONVERTSTRING_SET, pReconv, pReconv->dwSize);
+		(*m_view.m_AT_ImmSetReconvertString)(hIMC, ATRECONVERTSTRING_SET, pReconv, pReconv->dwSize);
 	}else {
 		::ImmSetCompositionString(hIMC, SCS_SETRECONVERTSTRING, pReconv, pReconv->dwSize, NULL, 0);
 	}
 
 	// 領域解放
 	::HeapFree(GetProcessHeap(), 0, (LPVOID)pReconv);
-	::ImmReleaseContext(m_pCommanderView->GetHwnd(), hIMC);
+	::ImmReleaseContext(m_view.GetHwnd(), hIMC);
 }
 

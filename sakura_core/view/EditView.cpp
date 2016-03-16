@@ -142,7 +142,7 @@ EditView::EditView(EditWnd* pEditWnd)
 	m_viewSelect(this),			// warning C4355: 'this' : ベース メンバー初期化子リストで使用されました。
 	m_parser(this),				// warning C4355: 'this' : ベース メンバー初期化子リストで使用されました。
 	m_textDrawer(this),			// warning C4355: 'this' : ベース メンバー初期化子リストで使用されました。
-	m_commander(this),			// warning C4355: 'this' : ベース メンバー初期化子リストで使用されました。
+	m_commander(*this),			// warning C4355: 'this' : ベース メンバー初期化子リストで使用されました。
 	m_hwndVScrollBar(NULL),
 	m_hwndHScrollBar(NULL),
 	m_pDropTarget(NULL),

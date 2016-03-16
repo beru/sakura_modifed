@@ -124,7 +124,7 @@ void ViewCommander::Command_COMPARE(void)
 	cDlgCompare.bCompareAndTileHorz = csCompare.bCompareAndTileHorz;
 	BOOL bDlgCompareResult = cDlgCompare.DoModal(
 		G_AppInstance(),
-		m_pCommanderView->GetHwnd(),
+		m_view.GetHwnd(),
 		(LPARAM)GetDocument(),
 		GetDocument()->m_docFile.GetFilePath(),
 		szPath,
@@ -140,7 +140,7 @@ void ViewCommander::Command_COMPARE(void)
 	if (commonSetting.tabBar.bDispTabWnd
 		&& !commonSetting.tabBar.bDispTabWndMultiWin
 	) {
-		hwndMsgBox = m_pCommanderView->GetHwnd();
+		hwndMsgBox = m_view.GetHwnd();
 		csCompare.bCompareAndTileHorz = false;
 	}else {
 		hwndMsgBox = hwndCompareWnd;
@@ -246,7 +246,7 @@ EncodingType GetDiffCreateTempFileCode(EncodingType code)
 /*!	差分表示
 	@note	HandleCommandからの呼び出し対応(ダイアログなし版)
 	@author	maru
-	@date	2005/10/28 これまでのCommand_Diffはm_pCommanderView->ViewDiffInfoに名称変更
+	@date	2005/10/28 これまでのCommand_Diffはm_view.ViewDiffInfoに名称変更
 */
 void ViewCommander::Command_Diff(const WCHAR* _szDiffFile2, int nFlgOpt)
 {
@@ -257,7 +257,7 @@ void ViewCommander::Command_Diff(const WCHAR* _szDiffFile2, int nFlgOpt)
 	TCHAR szTmpFile1[_MAX_PATH * 2];
 
 	if (!IsFileExists( szDiffFile2, true )) {
-		WarningMessage(m_pCommanderView->GetHwnd(), LS(STR_ERR_DLGEDITVWDIFF1));
+		WarningMessage(m_view.GetHwnd(), LS(STR_ERR_DLGEDITVWDIFF1));
 		return;
 	}
 
@@ -277,7 +277,7 @@ void ViewCommander::Command_Diff(const WCHAR* _szDiffFile2, int nFlgOpt)
 		|| saveCode != code
 		|| !GetDocument()->m_docFile.GetFilePathClass().IsValidPath() // 2014.06.25 Grep/アウトプットも対象にする
 	) {
-		if (!m_pCommanderView->MakeDiffTmpFile(szTmpFile1, NULL, saveCode, GetDocument()->GetDocumentBomExist())) {
+		if (!m_view.MakeDiffTmpFile(szTmpFile1, NULL, saveCode, GetDocument()->GetDocumentBomExist())) {
 			return;
 		}
 		bTmpFile1 = true;
@@ -290,7 +290,7 @@ void ViewCommander::Command_Diff(const WCHAR* _szDiffFile2, int nFlgOpt)
 	bool bTmpFileMode = code2 != saveCode2;
 	if (!bTmpFileMode) {
 		_tcscpy(szTmpFile2, szDiffFile2);
-	}else if (m_pCommanderView->MakeDiffTmpFile2( szTmpFile2, szDiffFile2, code2, saveCode2 )) {
+	}else if (m_view.MakeDiffTmpFile2( szTmpFile2, szDiffFile2, code2, saveCode2 )) {
 		bTmpFile2 = true;
 	}else {
 		if (bTmpFile1) _tunlink( szTmpFile1 );
@@ -303,7 +303,7 @@ void ViewCommander::Command_Diff(const WCHAR* _szDiffFile2, int nFlgOpt)
 	}
 
 	// 差分表示
-	m_pCommanderView->ViewDiffInfo(szTmpFile1, szTmpFile2, nFlgOpt, bUTF8io);
+	m_view.ViewDiffInfo(szTmpFile1, szTmpFile2, nFlgOpt, bUTF8io);
 
 	// 一時ファイルを削除する
 	if (bTmpFile1) _tunlink( szTmpFile1 );
@@ -318,7 +318,7 @@ void ViewCommander::Command_Diff(const WCHAR* _szDiffFile2, int nFlgOpt)
 	@author	MIK
 	@date	2002/05/25
 	@date	2002/11/09 編集中ファイルを許可
-	@date	2005/10/29 maru 一時ファイル作成処理をm_pCommanderView->MakeDiffTmpFileへ移動
+	@date	2005/10/29 maru 一時ファイル作成処理をm_view.MakeDiffTmpFileへ移動
 */
 void ViewCommander::Command_Diff_Dialog(void)
 {
@@ -330,7 +330,7 @@ void ViewCommander::Command_Diff_Dialog(void)
 	// DIFF差分表示ダイアログを表示する
 	int nDiffDlgResult = cDlgDiff.DoModal(
 		G_AppInstance(),
-		m_pCommanderView->GetHwnd(),
+		m_view.GetHwnd(),
 		(LPARAM)GetDocument(),
 		docFile.GetFilePath()
 	);
@@ -359,7 +359,7 @@ void ViewCommander::Command_Diff_Dialog(void)
 		|| code != saveCode
 		|| !GetDocument()->m_docFile.GetFilePathClass().IsValidPath() // 2014.06.25 Grep/アウトプットも対象にする
 	) {
-		if (!m_pCommanderView->MakeDiffTmpFile( szTmpFile1, NULL, saveCode, GetDocument()->GetDocumentBomExist() )) { return; }
+		if (!m_view.MakeDiffTmpFile( szTmpFile1, NULL, saveCode, GetDocument()->GetDocumentBomExist() )) { return; }
 		bTmpFile1 = true;
 	}else {
 		_tcscpy( szTmpFile1, GetDocument()->m_docFile.GetFilePath() );
@@ -375,7 +375,7 @@ void ViewCommander::Command_Diff_Dialog(void)
 		_tcscpy( szTmpFile2, cDlgDiff.m_szFile2 );
 	}else if (cDlgDiff.m_hWnd_Dst) {
 		// ファイル一覧から選択
-		if (m_pCommanderView->MakeDiffTmpFile( szTmpFile2, cDlgDiff.m_hWnd_Dst, saveCode2, cDlgDiff.m_bBomDst )) {
+		if (m_view.MakeDiffTmpFile( szTmpFile2, cDlgDiff.m_hWnd_Dst, saveCode2, cDlgDiff.m_bBomDst )) {
 			bTmpFile2 = true;
 		}else {
 			if (bTmpFile1) _tunlink( szTmpFile1 );
@@ -383,7 +383,7 @@ void ViewCommander::Command_Diff_Dialog(void)
 		}
 	}else {
 		// ファイル名指定で非ASCII系だった場合
-		if (m_pCommanderView->MakeDiffTmpFile2( szTmpFile2, cDlgDiff.m_szFile2, code2, saveCode2 )) {
+		if (m_view.MakeDiffTmpFile2( szTmpFile2, cDlgDiff.m_szFile2, code2, saveCode2 )) {
 			bTmpFile2 = true;
 		}else {
 			// Error
@@ -398,7 +398,7 @@ void ViewCommander::Command_Diff_Dialog(void)
 	}
 
 	//差分表示
-	m_pCommanderView->ViewDiffInfo(szTmpFile1, szTmpFile2, cDlgDiff.m_nDiffFlgOpt, bUTF8io);
+	m_view.ViewDiffInfo(szTmpFile1, szTmpFile2, cDlgDiff.m_nDiffFlgOpt, bUTF8io);
 	
 	
 	// 一時ファイルを削除する
@@ -418,7 +418,7 @@ void ViewCommander::Command_Diff_Next(void)
 	LogicPoint	ptXY(0, GetCaret().GetCaretLogicPos().y);
 	int nYOld_Logic = ptXY.y;
 	LogicInt tmp_y;
-	auto& selInfo = m_pCommanderView->GetSelectionInfo();
+	auto& selInfo = m_view.GetSelectionInfo();
 
 re_do:;	
 	if (DiffLineMgr(&GetDocument()->m_docLineMgr).SearchDiffMark(ptXY.GetY2(), SearchDirection::Forward, &tmp_y)) {
@@ -449,11 +449,11 @@ re_do:;
 
 	if (bFound) {
 		if (nYOld_Logic >= ptXY.y) {
-			m_pCommanderView->SendStatusMessage(LS(STR_ERR_SRNEXT1));
+			m_view.SendStatusMessage(LS(STR_ERR_SRNEXT1));
 		}
 	}else {
-		m_pCommanderView->SendStatusMessage(LS(STR_ERR_SRNEXT2));
-		AlertNotFound(m_pCommanderView->GetHwnd(), false, LS(STR_DIFF_NEXT_NOT_FOUND));
+		m_view.SendStatusMessage(LS(STR_ERR_SRNEXT2));
+		AlertNotFound(m_view.GetHwnd(), false, LS(STR_DIFF_NEXT_NOT_FOUND));
 	}
 
 	return;
@@ -469,7 +469,7 @@ void ViewCommander::Command_Diff_Prev(void)
 	LogicPoint	ptXY(0, GetCaret().GetCaretLogicPos().y);
 	int			nYOld_Logic = ptXY.y;
 	LogicInt tmp_y;
-	auto& selInfo = m_pCommanderView->GetSelectionInfo();
+	auto& selInfo = m_view.GetSelectionInfo();
 
 re_do:;
 	if (DiffLineMgr(&GetDocument()->m_docLineMgr).SearchDiffMark(ptXY.GetY2(), SearchDirection::Backward, &tmp_y)) {
@@ -500,10 +500,10 @@ re_do:;
 	}
 
 	if (bFound) {
-		if (nYOld_Logic <= ptXY.y) m_pCommanderView->SendStatusMessage(LS(STR_ERR_SRPREV1));
+		if (nYOld_Logic <= ptXY.y) m_view.SendStatusMessage(LS(STR_ERR_SRPREV1));
 	}else {
-		m_pCommanderView->SendStatusMessage(LS(STR_ERR_SRPREV2));
-		AlertNotFound(m_pCommanderView->GetHwnd(), false, LS(STR_DIFF_PREV_NOT_FOUND));
+		m_view.SendStatusMessage(LS(STR_ERR_SRPREV2));
+		AlertNotFound(m_view.GetHwnd(), false, LS(STR_DIFF_PREV_NOT_FOUND));
 	}
 
 	return;

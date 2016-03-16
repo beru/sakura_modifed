@@ -34,9 +34,9 @@
 #include "EditApp.h"
 #include "plugin/JackManager.h"
 
-ViewCommander::ViewCommander(EditView* pEditView)
+ViewCommander::ViewCommander(EditView& editView)
 	:
-	m_pCommanderView(pEditView)
+	m_view(editView)
 {
 	m_bPrevCommand = 0;
 	m_pSMacroMgr = EditApp::getInstance().m_pSMacroMgr;
@@ -72,16 +72,16 @@ bool ViewCommander::HandleCommand(
 	nCommand = (EFunctionCode)LOWORD(nCommand);
 
 
-	if (m_pCommanderView->m_nAutoScrollMode && nCommand != F_AUTOSCROLL) {
-		m_pCommanderView->AutoScrollExit();
+	if (m_view.m_nAutoScrollMode && nCommand != F_AUTOSCROLL) {
+		m_view.AutoScrollExit();
 	}
-	m_pCommanderView->GetCaret().m_bClearStatus = true;
+	m_view.GetCaret().m_bClearStatus = true;
 	// -------------------------------------
 	// Jan. 10, 2005 genta
 	// Call message translators
 	// -------------------------------------
-	m_pCommanderView->TranslateCommand_grep(nCommand, bRedraw, lparam1, lparam2, lparam3, lparam4);
-	m_pCommanderView->TranslateCommand_isearch(nCommand, bRedraw, lparam1, lparam2, lparam3, lparam4);
+	m_view.TranslateCommand_grep(nCommand, bRedraw, lparam1, lparam2, lparam3, lparam4);
+	m_view.TranslateCommand_isearch(nCommand, bRedraw, lparam1, lparam2, lparam3, lparam4);
 
 	// 2013.09.23 novice 機能が利用可能か調べる
 	if (!IsFuncEnable(GetDocument(), &GetDllShareData(), nCommand)) {
@@ -91,8 +91,8 @@ bool ViewCommander::HandleCommand(
 	++GetDocument()->m_nCommandExecNum;		// コマンド実行回数
 //	if (nCommand != F_COPY) {
 		// 辞書Tipを消す
-		m_pCommanderView->m_tipWnd.Hide();
-		m_pCommanderView->m_dwTipTimer = ::GetTickCount();	// 辞書Tip起動タイマー
+		m_view.m_tipWnd.Hide();
+		m_view.m_dwTipTimer = ::GetTickCount();	// 辞書Tip起動タイマー
 //	}
 	// 印刷Previewモードか
 //@@@ 2002.01.14 YAZAKI 印刷PreviewをPrintPreviewに独立させたことによる変更
@@ -120,17 +120,17 @@ bool ViewCommander::HandleCommand(
 			// キーマクロのバッファにデータ追加
 			//@@@ 2002.1.24 m_CKeyMacroMgrをCEditDocへ移動
 			LPARAM lparams[] = {lparam1, lparam2, lparam3, lparam4};
-			m_pSMacroMgr->Append(STAND_KEYMACRO, nCommand, lparams, m_pCommanderView);
+			m_pSMacroMgr->Append(STAND_KEYMACRO, nCommand, lparams, &m_view);
 		}
 	}
 
 	// 2007.07.07 genta マクロ実行中フラグの設定
 	// マクロからのコマンドかどうかはnCommandFromでわかるが
 	// nCommandFromを引数で浸透させるのが大変なので，従来のフラグにも値をコピーする
-	m_pCommanderView->m_bExecutingKeyMacro = (nCommandFrom & FA_FROMMACRO) ? true : false;
+	m_view.m_bExecutingKeyMacro = (nCommandFrom & FA_FROMMACRO) ? true : false;
 
 	// キーボードマクロの実行中
-	if (m_pCommanderView->m_bExecutingKeyMacro) {
+	if (m_view.m_bExecutingKeyMacro) {
 		// キーリピート状態をなくする
 		bRepeat = false;
 	}
@@ -138,11 +138,11 @@ bool ViewCommander::HandleCommand(
 	// From Here Sep. 29, 2001 genta マクロの実行機能追加
 	if (F_USERMACRO_0 <= nCommand && nCommand < F_USERMACRO_0 + MAX_CUSTMACRO) {
 		//@@@ 2002.2.2 YAZAKI マクロをSMacroMgrに統一（インターフェースの変更）
-		if (!m_pSMacroMgr->Exec(nCommand - F_USERMACRO_0, G_AppInstance(), m_pCommanderView,
+		if (!m_pSMacroMgr->Exec(nCommand - F_USERMACRO_0, G_AppInstance(), &m_view,
 			nCommandFrom & FA_NONRECORD)
 		) {
 			InfoMessage(
-				this->m_pCommanderView->m_hwndParent,
+				m_view.m_hwndParent,
 				LS(STR_ERR_MACRO1),
 				nCommand - F_USERMACRO_0,
 				m_pSMacroMgr->GetFile(nCommand - F_USERMACRO_0)
@@ -156,8 +156,8 @@ bool ViewCommander::HandleCommand(
 	// Jan. 10, 2005 genta
 	// Call mode basis message handler
 	// -------------------------------------
-	m_pCommanderView->PreprocessCommand_hokan(nCommand);
-	if (m_pCommanderView->ProcessCommand_isearch(nCommand, bRedraw, lparam1, lparam2, lparam3, lparam4))
+	m_view.PreprocessCommand_hokan(nCommand);
+	if (m_view.ProcessCommand_isearch(nCommand, bRedraw, lparam1, lparam2, lparam3, lparam4))
 		return true;
 
 	// -------------------------------------
@@ -274,33 +274,33 @@ bool ViewCommander::HandleCommand(
 	case F_IME_CHAR:			Command_IME_CHAR((WORD)lparam1); break;					// 全角文字入力
 	case F_MOVECURSOR:			Command_MOVECURSOR(LogicPoint(LogicInt((int)lparam2), LogicInt((int)lparam1)), (int)lparam3); break;
 	case F_MOVECURSORLAYOUT:	Command_MOVECURSORLAYOUT(LayoutPoint(LayoutInt((int)lparam2), LayoutInt((int)lparam1)), (int)lparam3); break;
-	case F_UP:					Command_UP(m_pCommanderView->GetSelectionInfo().m_bSelectingLock, bRepeat); break;				// カーソル上移動
-	case F_DOWN:				Command_DOWN(m_pCommanderView->GetSelectionInfo().m_bSelectingLock, bRepeat); break;			// カーソル下移動
-	case F_LEFT:				Command_LEFT(m_pCommanderView->GetSelectionInfo().m_bSelectingLock, bRepeat); break;			// カーソル左移動
-	case F_RIGHT:				Command_RIGHT(m_pCommanderView->GetSelectionInfo().m_bSelectingLock, false, bRepeat); break;	// カーソル右移動
-	case F_UP2:					Command_UP2(m_pCommanderView->GetSelectionInfo().m_bSelectingLock); break;						// カーソル上移動(２行づつ)
-	case F_DOWN2:				Command_DOWN2(m_pCommanderView->GetSelectionInfo().m_bSelectingLock); break;					// カーソル下移動(２行づつ)
-	case F_WORDLEFT:			Command_WORDLEFT(m_pCommanderView->GetSelectionInfo().m_bSelectingLock); break;					// 単語の左端に移動
-	case F_WORDRIGHT:			Command_WORDRIGHT(m_pCommanderView->GetSelectionInfo().m_bSelectingLock); break;				// 単語の右端に移動
+	case F_UP:					Command_UP(m_view.GetSelectionInfo().m_bSelectingLock, bRepeat); break;				// カーソル上移動
+	case F_DOWN:				Command_DOWN(m_view.GetSelectionInfo().m_bSelectingLock, bRepeat); break;			// カーソル下移動
+	case F_LEFT:				Command_LEFT(m_view.GetSelectionInfo().m_bSelectingLock, bRepeat); break;			// カーソル左移動
+	case F_RIGHT:				Command_RIGHT(m_view.GetSelectionInfo().m_bSelectingLock, false, bRepeat); break;	// カーソル右移動
+	case F_UP2:					Command_UP2(m_view.GetSelectionInfo().m_bSelectingLock); break;						// カーソル上移動(２行づつ)
+	case F_DOWN2:				Command_DOWN2(m_view.GetSelectionInfo().m_bSelectingLock); break;					// カーソル下移動(２行づつ)
+	case F_WORDLEFT:			Command_WORDLEFT(m_view.GetSelectionInfo().m_bSelectingLock); break;					// 単語の左端に移動
+	case F_WORDRIGHT:			Command_WORDRIGHT(m_view.GetSelectionInfo().m_bSelectingLock); break;				// 単語の右端に移動
 	// 0ct. 29, 2001 genta マクロ向け機能拡張
-	case F_GOLINETOP:			Command_GOLINETOP(m_pCommanderView->GetSelectionInfo().m_bSelectingLock, lparam1); break;		// 行頭に移動(折り返し単位/改行単位)
-	case F_GOLINEEND:			Command_GOLINEEND(m_pCommanderView->GetSelectionInfo().m_bSelectingLock, 0, lparam1); break;	// 行末に移動(折り返し単位)
-//	case F_ROLLDOWN:			Command_ROLLDOWN(m_pCommanderView->GetSelectionInfo().m_bSelectingLock); break;					// Scroll Down
-//	case F_ROLLUP:				Command_ROLLUP(m_pCommanderView->GetSelectionInfo().m_bSelectingLock); break;					// Scroll Up
-	case F_HalfPageUp:			Command_HalfPageUp( m_pCommanderView->GetSelectionInfo().m_bSelectingLock, LayoutYInt(lparam1) ); break;				//半ページアップ	//Oct. 6, 2000 JEPRO 名称をPC-AT互換機系に変更(ROLL→PAGE) //Oct. 10, 2000 JEPRO 名称変更
-	case F_HalfPageDown:		Command_HalfPageDown( m_pCommanderView->GetSelectionInfo().m_bSelectingLock, LayoutYInt(lparam1) ); break;			//半ページダウン	//Oct. 6, 2000 JEPRO 名称をPC-AT互換機系に変更(ROLL→PAGE) //Oct. 10, 2000 JEPRO 名称変更
-	case F_1PageUp:				Command_1PageUp( m_pCommanderView->GetSelectionInfo().m_bSelectingLock, LayoutYInt(lparam1) ); break;					//１ページアップ	//Oct. 10, 2000 JEPRO 従来のページアップを半ページアップと名称変更し１ページアップを追加
-	case F_1PageDown:			Command_1PageDown( m_pCommanderView->GetSelectionInfo().m_bSelectingLock, LayoutYInt(lparam1) ); break;				//１ページダウン	//Oct. 10, 2000 JEPRO 従来のページダウンを半ページダウンと名称変更し１ページダウンを追加
-	case F_GOFILETOP:			Command_GOFILETOP(m_pCommanderView->GetSelectionInfo().m_bSelectingLock); break;				// ファイルの先頭に移動
-	case F_GOFILEEND:			Command_GOFILEEND(m_pCommanderView->GetSelectionInfo().m_bSelectingLock); break;				// ファイルの最後に移動
+	case F_GOLINETOP:			Command_GOLINETOP(m_view.GetSelectionInfo().m_bSelectingLock, lparam1); break;		// 行頭に移動(折り返し単位/改行単位)
+	case F_GOLINEEND:			Command_GOLINEEND(m_view.GetSelectionInfo().m_bSelectingLock, 0, lparam1); break;	// 行末に移動(折り返し単位)
+//	case F_ROLLDOWN:			Command_ROLLDOWN(m_view.GetSelectionInfo().m_bSelectingLock); break;					// Scroll Down
+//	case F_ROLLUP:				Command_ROLLUP(m_view.GetSelectionInfo().m_bSelectingLock); break;					// Scroll Up
+	case F_HalfPageUp:			Command_HalfPageUp( m_view.GetSelectionInfo().m_bSelectingLock, LayoutYInt(lparam1) ); break;				//半ページアップ	//Oct. 6, 2000 JEPRO 名称をPC-AT互換機系に変更(ROLL→PAGE) //Oct. 10, 2000 JEPRO 名称変更
+	case F_HalfPageDown:		Command_HalfPageDown( m_view.GetSelectionInfo().m_bSelectingLock, LayoutYInt(lparam1) ); break;			//半ページダウン	//Oct. 6, 2000 JEPRO 名称をPC-AT互換機系に変更(ROLL→PAGE) //Oct. 10, 2000 JEPRO 名称変更
+	case F_1PageUp:				Command_1PageUp( m_view.GetSelectionInfo().m_bSelectingLock, LayoutYInt(lparam1) ); break;					//１ページアップ	//Oct. 10, 2000 JEPRO 従来のページアップを半ページアップと名称変更し１ページアップを追加
+	case F_1PageDown:			Command_1PageDown( m_view.GetSelectionInfo().m_bSelectingLock, LayoutYInt(lparam1) ); break;				//１ページダウン	//Oct. 10, 2000 JEPRO 従来のページダウンを半ページダウンと名称変更し１ページダウンを追加
+	case F_GOFILETOP:			Command_GOFILETOP(m_view.GetSelectionInfo().m_bSelectingLock); break;				// ファイルの先頭に移動
+	case F_GOFILEEND:			Command_GOFILEEND(m_view.GetSelectionInfo().m_bSelectingLock); break;				// ファイルの最後に移動
 	case F_CURLINECENTER:		Command_CURLINECENTER(); break;								// カーソル行をウィンドウ中央へ
 	case F_JUMPHIST_PREV:		Command_JUMPHIST_PREV(); break;								// 移動履歴: 前へ
 	case F_JUMPHIST_NEXT:		Command_JUMPHIST_NEXT(); break;								// 移動履歴: 次へ
 	case F_JUMPHIST_SET:		Command_JUMPHIST_SET(); break;								// 現在位置を移動履歴に登録
 	case F_WndScrollDown:		Command_WndScrollDown(); break;								// テキストを１行下へScroll	// 2001/06/20 asa-o
 	case F_WndScrollUp:			Command_WndScrollUp(); break;								// テキストを１行上へScroll	// 2001/06/20 asa-o
-	case F_GONEXTPARAGRAPH:		Command_GONEXTPARAGRAPH(m_pCommanderView->GetSelectionInfo().m_bSelectingLock); break;			// 次の段落へ進む
-	case F_GOPREVPARAGRAPH:		Command_GOPREVPARAGRAPH(m_pCommanderView->GetSelectionInfo().m_bSelectingLock); break;			// 前の段落へ戻る
+	case F_GONEXTPARAGRAPH:		Command_GONEXTPARAGRAPH(m_view.GetSelectionInfo().m_bSelectingLock); break;			// 次の段落へ進む
+	case F_GOPREVPARAGRAPH:		Command_GOPREVPARAGRAPH(m_view.GetSelectionInfo().m_bSelectingLock); break;			// 前の段落へ戻る
 	case F_AUTOSCROLL:			Command_AUTOSCROLL(); break;									// Auto Scroll
 	case F_WHEELUP:				Command_WHEELUP(lparam1); break;
 	case F_WHEELDOWN:			Command_WHEELDOWN(lparam1); break;
@@ -310,8 +310,8 @@ bool ViewCommander::HandleCommand(
 	case F_WHEELPAGEDOWN:		Command_WHEELPAGEDOWN(lparam1); break;
 	case F_WHEELPAGELEFT:		Command_WHEELPAGELEFT(lparam1); break;
 	case F_WHEELPAGERIGHT:		Command_WHEELPAGERIGHT(lparam1); break;
-	case F_MODIFYLINE_NEXT:		Command_MODIFYLINE_NEXT( m_pCommanderView->GetSelectionInfo().m_bSelectingLock ); break;	// 次の変更行へ
-	case F_MODIFYLINE_PREV:		Command_MODIFYLINE_PREV( m_pCommanderView->GetSelectionInfo().m_bSelectingLock ); break;	// 前の変更行へ
+	case F_MODIFYLINE_NEXT:		Command_MODIFYLINE_NEXT( m_view.GetSelectionInfo().m_bSelectingLock ); break;	// 次の変更行へ
+	case F_MODIFYLINE_PREV:		Command_MODIFYLINE_PREV( m_view.GetSelectionInfo().m_bSelectingLock ); break;	// 前の変更行へ
 
 	// 選択系
 	case F_SELECTWORD:		Command_SELECTWORD(); break;					// 現在位置の単語選択
@@ -430,13 +430,13 @@ bool ViewCommander::HandleCommand(
 	case F_SEARCH_CLEARMARK:	Command_SEARCH_CLEARMARK(); break;	// 検索マークのクリア
 	case F_GREP_DIALOG:	// Grepダイアログの表示
 		// 再帰処理対策
-		m_pCommanderView->SetUndoBuffer(true);
+		m_view.SetUndoBuffer(true);
 		Command_GREP_DIALOG();
 		return bRet;
 	case F_GREP:			Command_GREP(); break;							// Grep
 	case F_GREP_REPLACE_DLG:	// Grep置換ダイアログの表示
 		// 再帰処理対策
-		m_pCommanderView->SetUndoBuffer( true );
+		m_view.SetUndoBuffer( true );
 		Command_GREP_REPLACE_DLG();
 		return bRet;
 	case F_GREP_REPLACE:	Command_GREP_REPLACE();break;							//Grep置換
@@ -513,11 +513,11 @@ bool ViewCommander::HandleCommand(
 	case F_LOADKEYMACRO:	Command_LOADKEYMACRO(); break;	// キーマクロの読み込み
 	case F_EXECKEYMACRO:									// キーマクロの実行
 		// 再帰処理対策
-		m_pCommanderView->SetUndoBuffer(true);
+		m_view.SetUndoBuffer(true);
 		Command_EXECKEYMACRO(); return bRet;
 	case F_EXECEXTMACRO:
 		// 再帰処理対策
-		m_pCommanderView->SetUndoBuffer(true);
+		m_view.SetUndoBuffer(true);
 		// 名前を指定してマクロ実行
 		Command_EXECEXTMACRO((const WCHAR*)lparam1, (const WCHAR*)lparam2);
 		return bRet;
@@ -536,7 +536,7 @@ bool ViewCommander::HandleCommand(
 	// カスタムメニュー
 	case F_MENU_RBUTTON:	// 右クリックメニュー
 		// 再帰処理対策
-		m_pCommanderView->SetUndoBuffer(true);
+		m_view.SetUndoBuffer(true);
 		Command_MENU_RBUTTON();
 		return bRet;
 	case F_CUSTMENU_1:  // カスタムメニュー1
@@ -564,7 +564,7 @@ bool ViewCommander::HandleCommand(
 	case F_CUSTMENU_23: // カスタムメニュー23
 	case F_CUSTMENU_24: // カスタムメニュー24
 		// 再帰処理対策
-		m_pCommanderView->SetUndoBuffer(true);
+		m_view.SetUndoBuffer(true);
 		nFuncID = Command_CUSTMENU(nCommand - F_CUSTMENU_1 + 1);
 		if (nFuncID != 0) {
 			// コマンドコードによる処理振り分け
@@ -659,7 +659,7 @@ bool ViewCommander::HandleCommand(
 	case F_TOGGLE_KEY_SEARCH:	Command_ToggleKeySearch((int)lparam1); break;	// キャレット位置の単語を辞書検索する機能ON-OFF		// 2006.03.24 fon
 	case F_MENU_ALLFUNC:									// コマンド一覧
 		// 再帰処理対策
-		m_pCommanderView->SetUndoBuffer(true);
+		m_view.SetUndoBuffer(true);
 		Command_MENU_ALLFUNC();
 		return bRet;
 	case F_EXTHELP1:	Command_EXTHELP1(); break;		// 外部ヘルプ１
@@ -676,7 +676,7 @@ bool ViewCommander::HandleCommand(
 	default:
 		// プラグインコマンドを実行する
 		{
-			m_pCommanderView->SetUndoBuffer(true); // 2013.05.01 追加。再帰対応
+			m_view.SetUndoBuffer(true); // 2013.05.01 追加。再帰対応
 
 			Plug::Array plugs;
 			JackManager::getInstance().GetUsablePlug(PP_COMMAND, nCommand, &plugs);
@@ -686,7 +686,7 @@ bool ViewCommander::HandleCommand(
 				// インタフェースオブジェクト準備
 				WSHIfObj::List params;
 				// プラグイン呼び出し
-				(*plugs.begin())->Invoke(m_pCommanderView, params);
+				(*plugs.begin())->Invoke(&m_view, params);
 
 				return bRet;
 			}
@@ -695,7 +695,7 @@ bool ViewCommander::HandleCommand(
 	}
 
 	// アンドゥバッファの処理
-	m_pCommanderView->SetUndoBuffer(true);
+	m_view.SetUndoBuffer(true);
 
 	return bRet;
 }
@@ -715,7 +715,7 @@ void ViewCommander::Sub_BoxSelectLock( int flags )
 	}else if (flags == 0x02) {
 		bSelLock = false;
 	}
-	if (!this->m_pCommanderView->GetSelectionInfo().IsBoxSelecting()) {
+	if (!this->m_view.GetSelectionInfo().IsBoxSelecting()) {
 		this->Command_BEGIN_BOXSELECT( bSelLock );
 	}
 }
@@ -781,7 +781,7 @@ void ViewCommander::AlertNotFound(
 		&& !bReplaceAll
 	) {
 		if (!hwnd) {
-			hwnd = m_pCommanderView->GetHwnd();
+			hwnd = m_view.GetHwnd();
 		}
 		//InfoMessage(hwnd, format, __VA_ARGS__);
 		va_list p;

@@ -203,7 +203,7 @@ bool NormalProcess::InitializeProcess()
 			::ReleaseMutex(hMutex);
 			::CloseHandle(hMutex);
 			this->m_pEditApp->m_pGrepAgent->DoGrep(
-				&activeView,
+				activeView,
 				gi.bGrepReplace,
 				&gi.mGrepKey,
 				&gi.mGrepRep,

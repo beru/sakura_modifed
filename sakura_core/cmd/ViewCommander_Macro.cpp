@@ -47,7 +47,7 @@ void ViewCommander::Command_RECKEYMACRO(void)
 		nRet = ShareData::getInstance().GetMacroFilename(-1, szInitDir, MAX_PATH);
 		auto& csMacro = GetDllShareData().common.macro;
 		if (nRet <= 0) {
-			ErrorMessage(m_pCommanderView->GetHwnd(), LS(STR_ERR_CEDITVIEW_CMD24), nRet);
+			ErrorMessage(m_view.GetHwnd(), LS(STR_ERR_CEDITVIEW_CMD24), nRet);
 			return;
 		}else {
 			_tcscpy(csMacro.szKeyMacroFileName, szInitDir);
@@ -59,7 +59,7 @@ void ViewCommander::Command_RECKEYMACRO(void)
 			csMacro.szKeyMacroFileName
 		);
 		if (!nSaveResult) {
-			ErrorMessage(	m_pCommanderView->GetHwnd(), LS(STR_ERR_CEDITVIEW_CMD25), csMacro.szKeyMacroFileName);
+			ErrorMessage(	m_view.GetHwnd(), LS(STR_ERR_CEDITVIEW_CMD25), csMacro.szKeyMacroFileName);
 		}
 	}else {
 		flags.bRecordingKeyMacro = true;
@@ -89,7 +89,7 @@ void ViewCommander::Command_SAVEKEYMACRO(void)
 	// Jun. 16, 2002 genta
 	if (!m_pSMacroMgr->IsSaveOk()) {
 		// 保存不可
-		ErrorMessage(m_pCommanderView->GetHwnd(), LS(STR_ERR_CEDITVIEW_CMD26));
+		ErrorMessage(m_view.GetHwnd(), LS(STR_ERR_CEDITVIEW_CMD26));
 	}
 
 	TCHAR szPath[_MAX_PATH + 1];
@@ -107,7 +107,7 @@ void ViewCommander::Command_SAVEKEYMACRO(void)
 	DlgOpenFile	dlgOpenFile;
 	dlgOpenFile.Create(
 		G_AppInstance(),
-		m_pCommanderView->GetHwnd(),
+		m_view.GetHwnd(),
 		_T("*.mac"),
 		szInitDir
 	);
@@ -123,7 +123,7 @@ void ViewCommander::Command_SAVEKEYMACRO(void)
 	//@@@ 2002.2.2 YAZAKI マクロをCSMacroMgrに統一
 	//@@@ 2002.1.24 YAZAKI
 	if (!m_pSMacroMgr->Save(STAND_KEYMACRO, G_AppInstance(), szPath)) {
-		ErrorMessage(m_pCommanderView->GetHwnd(), LS(STR_ERR_CEDITVIEW_CMD27), szPath);
+		ErrorMessage(m_view.GetHwnd(), LS(STR_ERR_CEDITVIEW_CMD27), szPath);
 	}
 	return;
 }
@@ -154,7 +154,7 @@ void ViewCommander::Command_LOADKEYMACRO(void)
 	DlgOpenFile dlgOpenFile;
 	dlgOpenFile.Create(
 		G_AppInstance(),
-		m_pCommanderView->GetHwnd(),
+		m_view.GetHwnd(),
 // 2005/02/20 novice デフォルトの拡張子変更
 // 2005/07/13 novice 多様なマクロをサポートしているのでデフォルトは全て表示にする
 		_T("*.*"),
@@ -167,7 +167,7 @@ void ViewCommander::Command_LOADKEYMACRO(void)
 	// キーボードマクロの読み込み
 	//@@@ 2002.1.24 YAZAKI 読み込みといいつつも、ファイル名をコピーするだけ。実行直前に読み込む
 	_tcscpy(GetDllShareData().common.macro.szKeyMacroFileName, szPath);
-//	GetDllShareData().m_CKeyMacroMgr.LoadKeyMacro(G_AppInstance(), m_pCommanderView->GetHwnd(), szPath);
+//	GetDllShareData().m_CKeyMacroMgr.LoadKeyMacro(G_AppInstance(), m_view.GetHwnd(), szPath);
 	return;
 }
 
@@ -196,10 +196,10 @@ void ViewCommander::Command_EXECKEYMACRO(void)
 			NULL
 		);
 		if (!bLoadResult) {
-			ErrorMessage(m_pCommanderView->GetHwnd(), LS(STR_ERR_CEDITVIEW_CMD28), csMacro.szKeyMacroFileName);
+			ErrorMessage(m_view.GetHwnd(), LS(STR_ERR_CEDITVIEW_CMD28), csMacro.szKeyMacroFileName);
 		}else {
 			// 2007.07.20 genta : flagsオプション追加
-			m_pSMacroMgr->Exec(STAND_KEYMACRO, G_AppInstance(), m_pCommanderView, 0);
+			m_pSMacroMgr->Exec(STAND_KEYMACRO, G_AppInstance(), &m_view, 0);
 		}
 	}
 	return;
@@ -242,7 +242,7 @@ void ViewCommander::Command_EXECEXTMACRO(const WCHAR* pszPathW, const WCHAR* psz
 		DlgOpenFile dlgOpenFile;
 		dlgOpenFile.Create(
 			G_AppInstance(),
-			m_pCommanderView->GetHwnd(),
+			m_view.GetHwnd(),
 			_T("*.*"),
 			szInitDir
 		);
@@ -259,7 +259,7 @@ void ViewCommander::Command_EXECEXTMACRO(const WCHAR* pszPathW, const WCHAR* psz
 		flags.hwndRecordingKeyMacro == GetMainWindow()	// キーボードマクロを記録中のウィンドウ
 	) {
 		LPARAM lparams[] = {(LPARAM)pszPath, 0, 0, 0};
-		m_pSMacroMgr->Append(STAND_KEYMACRO, F_EXECEXTMACRO, lparams, m_pCommanderView);
+		m_pSMacroMgr->Append(STAND_KEYMACRO, F_EXECEXTMACRO, lparams, &m_view);
 
 		// キーマクロの記録を一時停止する
 		flags.bRecordingKeyMacro = false;
@@ -277,9 +277,9 @@ void ViewCommander::Command_EXECEXTMACRO(const WCHAR* pszPathW, const WCHAR* psz
 		pszType
 	);
 	if (!bLoadResult) {
-		ErrorMessage(m_pCommanderView->GetHwnd(), LS(STR_ERR_MACROERR1), pszPath);
+		ErrorMessage(m_view.GetHwnd(), LS(STR_ERR_MACROERR1), pszPath);
 	}else {
-		m_pSMacroMgr->Exec(TEMP_KEYMACRO, G_AppInstance(), m_pCommanderView, FA_NONRECORD | FA_FROMMACRO);
+		m_pSMacroMgr->Exec(TEMP_KEYMACRO, G_AppInstance(), &m_view, FA_NONRECORD | FA_FROMMACRO);
 	}
 
 	// 終わったら開放
@@ -305,11 +305,11 @@ void ViewCommander::Command_EXECCOMMAND_DIALOG(void)
 	DlgExec cDlgExec;
 
 	// モードレスダイアログの表示
-	if (!cDlgExec.DoModal(G_AppInstance(), m_pCommanderView->GetHwnd(), 0)) {
+	if (!cDlgExec.DoModal(G_AppInstance(), m_view.GetHwnd(), 0)) {
 		return;
 	}
 
-	m_pCommanderView->AddToCmdArr(cDlgExec.m_szCommand);
+	m_view.AddToCmdArr(cDlgExec.m_szCommand);
 	const WCHAR* cmd_string = to_wchar(cDlgExec.m_szCommand);
 	const WCHAR* curDir = to_wchar(cDlgExec.m_szCurDir);
 	const WCHAR* pszDir = curDir;
@@ -349,7 +349,7 @@ void ViewCommander::Command_EXECCOMMAND(
 	if (pszCurDir) {
 		buf3 = to_tchar(pszCurDir);
 	}
-	m_pCommanderView->ExecCmd(buf2.c_str(), nFlgOpt, (pszCurDir ? buf3.c_str() : NULL));
+	m_view.ExecCmd(buf2.c_str(), nFlgOpt, (pszCurDir ? buf3.c_str() : NULL));
 	// To Here Aug. 21, 2001 genta
 	return;
 }

@@ -37,7 +37,7 @@ class SMacroMgr;
 
 class ViewCommander {
 public:
-	ViewCommander(EditView* pEditView);
+	ViewCommander(EditView& editView);
 
 public:
 	// ŠO•”ˆË‘¶
@@ -50,7 +50,7 @@ public:
 	Caret& GetCaret();
 
 private:
-	EditView*		m_pCommanderView;
+	EditView&		m_view;
 	SMacroMgr*		m_pSMacroMgr;
 
 public:
