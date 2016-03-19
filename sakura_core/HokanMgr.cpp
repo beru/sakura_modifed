@@ -16,6 +16,9 @@
 	Please contact the copyright holders to use this code for other purpose.
 */
 #include "StdAfx.h"
+
+#include <memory>
+
 #include "HokanMgr.h"
 #include "env/ShareData.h"
 #include "view/EditView.h"
@@ -23,7 +26,6 @@
 #include "plugin/ComplementIfObj.h"
 #include "util/input.h"
 #include "util/os.h"
-#include "util/other_util.h"
 #include "sakura_rc.h"
 
 WNDPROC gm_wpHokanListProc;
@@ -512,7 +514,7 @@ BOOL HokanMgr::DoHokan(int nVKey)
 		return FALSE;
 	}
 	int nLabelLen = List_GetTextLen( hwndList, nItem );
-	auto_array_ptr<WCHAR> wszLabel( new WCHAR [nLabelLen + 1] );
+	std::unique_ptr<WCHAR[]> wszLabel( new WCHAR [nLabelLen + 1] );
 	List_GetText( hwndList, nItem, &wszLabel[0] );
 
  	// テキストを貼り付け
@@ -616,7 +618,7 @@ void HokanMgr::ShowTip()
 	}
 
 	int nLabelLen = List_GetTextLen( hwndCtrl, nItem );
-	auto_array_ptr<WCHAR> szLabel( new WCHAR [nLabelLen + 1] );
+	auto szLabel = std::make_unique<WCHAR[]>(nLabelLen + 1);
 	List_GetText( hwndCtrl, nItem, &szLabel[0] );	// 選択中の単語を取得
 
 	EditView* pEditView = reinterpret_cast<EditView*>(m_lParam);

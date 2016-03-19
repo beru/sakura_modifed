@@ -219,8 +219,7 @@ LayoutInt Caret::MoveCursor(
 	if (m_pEditDoc->m_layoutMgr.GetMaxLineKetas() > textArea.m_nViewColNum
 		&& ptWk_CaretPos.GetX() > textArea.GetViewLeftCol() + textArea.m_nViewColNum - nScrollMarginRight
 	) {
-		nScrollColNum =
-			(textArea.GetViewLeftCol() + textArea.m_nViewColNum - nScrollMarginRight) - ptWk_CaretPos.GetX2();
+		nScrollColNum = (textArea.GetViewLeftCol() + textArea.m_nViewColNum - nScrollMarginRight) - ptWk_CaretPos.GetX2();
 	}else if (1
 		&& 0 < textArea.GetViewLeftCol()
 		&& ptWk_CaretPos.GetX() < textArea.GetViewLeftCol() + nScrollMarginLeft
@@ -285,8 +284,7 @@ LayoutInt Caret::MoveCursor(
 			&& ii - textArea.GetViewTopLine() < textArea.m_nViewRowNum
 		) {
 		}else {
-			nScrollRowNum =
-				-(ptWk_CaretPos.y - textArea.GetViewTopLine()) + (textArea.m_nViewRowNum - nCaretMarginY - 2);
+			nScrollRowNum = -(ptWk_CaretPos.y - textArea.GetViewTopLine()) + (textArea.m_nViewRowNum - nCaretMarginY - 2);
 		}
 	}
 	//	To Here 2007.07.28 じゅうじ
@@ -377,7 +375,6 @@ LayoutInt Caret::MoveCursor(
 // 02/09/18 対括弧の強調表示 ai End		03/02/18 ai mod E
 
 	return nScrollRowNum;
-
 }
 
 
@@ -784,7 +781,6 @@ void Caret::ShowCaretPosInfo()
 	// 表示値が1から始まるように補正
 	ptCaret.x++;
 	ptCaret.y++;
-
 
 	// -- -- -- -- キャレット位置の文字情報 -> szCaretChar -- -- -- -- //
 	//

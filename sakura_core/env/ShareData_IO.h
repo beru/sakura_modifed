@@ -75,8 +75,10 @@ public:
 	static void IO_MainMenu( DataProfile& c, CommonSetting_MainMenu& s, bool b ){		// 2010/5/15 Uchi
 		IO_MainMenu(c, NULL, s, b);
 	}
-	static void IO_MainMenu( DataProfile& profile, std::vector<std::wstring>* pData,
-		CommonSetting_MainMenu& mainmenu, bool bOutCmdName);
+	static void IO_MainMenu(DataProfile& profile,
+		std::vector<std::wstring>* pData,
+		CommonSetting_MainMenu& mainmenu,
+		bool bOutCmdName);
 	static void IO_ColorSet(DataProfile*, const WCHAR*, ColorInfo*);		// êFê›íË I/O // Feb. 12, 2006 D.S.Koba
 };
 

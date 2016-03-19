@@ -17,12 +17,14 @@
 //@@@ 2001.11.17 add start MIK
 
 #include "StdAfx.h"
+
+#include <memory>
+
 #include "PropTypes.h"
 #include "env/ShareData.h"
 #include "RegexKeyword.h"
 #include "typeprop/ImpExpManager.h"	// 2010/4/23 Uchi
 #include "util/shell.h"
-#include "util/other_util.h"
 #include "view/colors/EColorIndexType.h"
 #include "sakura_rc.h"
 #include "sakura.hh"
@@ -171,7 +173,7 @@ INT_PTR PropTypesRegex::DispatchEvent(
 			case IDC_BUTTON_REGEX_INS:	// 挿入
 			{
 				// 挿入するキー情報を取得する。
-				auto_array_ptr<TCHAR> szKeyword(new TCHAR [nKeywordSize]);
+				std::unique_ptr<TCHAR[]> szKeyword(new TCHAR [nKeywordSize]);
 				szKeyword[0] = _T('\0');
 				::DlgItem_GetText(hwndDlg, IDC_EDIT_REGEX, &szKeyword[0], nKeywordSize);
 				if (szKeyword[0] == _T('\0')) {
@@ -216,7 +218,7 @@ INT_PTR PropTypesRegex::DispatchEvent(
 
 			case IDC_BUTTON_REGEX_ADD:	// 追加
 			{
-				auto_array_ptr<TCHAR> szKeyword(new TCHAR [nKeywordSize]);
+				auto szKeyword = std::make_unique<TCHAR[]>(nKeywordSize);
 				// 最後のキー番号を取得する。
 				nIndex = ListView_GetItemCount(hwndList);
 				// 追加するキー情報を取得する。
@@ -256,7 +258,7 @@ INT_PTR PropTypesRegex::DispatchEvent(
 
 			case IDC_BUTTON_REGEX_UPD:	// 更新
 			{
-				auto_array_ptr<TCHAR> szKeyword(new TCHAR [nKeywordSize]);
+				auto szKeyword = std::make_unique<TCHAR[]>(nKeywordSize);
 				// 選択中のキーを探す。
 				nIndex = ListView_GetNextItem(hwndList, -1, LVNI_ALL | LVNI_SELECTED);
 				if (nIndex == -1) {
@@ -310,7 +312,7 @@ INT_PTR PropTypesRegex::DispatchEvent(
 
 			case IDC_BUTTON_REGEX_TOP:	// 先頭
 			{
-				auto_array_ptr<TCHAR> szKeyword(new TCHAR [nKeywordSize]);
+				auto szKeyword = std::make_unique<TCHAR[]>(nKeywordSize);
 				szKeyword[0] = _T('\0');
 				// 選択中のキーを探す。
 				nIndex = ListView_GetNextItem(hwndList, -1, LVNI_ALL | LVNI_SELECTED);
@@ -344,7 +346,7 @@ INT_PTR PropTypesRegex::DispatchEvent(
 
 			case IDC_BUTTON_REGEX_LAST:	// 最終
 			{
-				auto_array_ptr<TCHAR> szKeyword(new TCHAR [nKeywordSize]);
+				auto szKeyword = std::make_unique<TCHAR[]>(nKeywordSize);
 				szKeyword[0] = _T('\0');
 				nIndex = ListView_GetNextItem(hwndList, -1, LVNI_ALL | LVNI_SELECTED);
 				if (nIndex == -1) {
@@ -377,7 +379,7 @@ INT_PTR PropTypesRegex::DispatchEvent(
 
 			case IDC_BUTTON_REGEX_UP:	// 上へ
 			{
-				auto_array_ptr<TCHAR> szKeyword(new TCHAR [nKeywordSize]);
+				auto szKeyword = std::make_unique<TCHAR[]>(nKeywordSize);
 				szKeyword[0] = _T('\0');
 				nIndex = ListView_GetNextItem(hwndList, -1, LVNI_ALL | LVNI_SELECTED);
 				if (nIndex == -1) {
@@ -414,7 +416,7 @@ INT_PTR PropTypesRegex::DispatchEvent(
 
 			case IDC_BUTTON_REGEX_DOWN:	// 下へ
 			{
-				auto_array_ptr<TCHAR> szKeyword(new TCHAR [nKeywordSize]);
+				auto szKeyword = std::make_unique<TCHAR[]>(nKeywordSize);
 				szKeyword[0] = _T('\0');
 				nIndex = ListView_GetNextItem(hwndList, -1, LVNI_ALL | LVNI_SELECTED);
 				if (nIndex == -1) {
@@ -502,7 +504,7 @@ INT_PTR PropTypesRegex::DispatchEvent(
 				}
 				if (nPrevIndex != nIndex) {	//@@@ 2003.03.26 MIK
 					// 更新時にListViewのSubItemを正しく取得できないので、その対策
-					auto_array_ptr<TCHAR> szKeyword(new TCHAR [nKeywordSize]);
+					auto szKeyword = std::make_unique<TCHAR[]>(nKeywordSize);
 					szKeyword[0] = _T('\0');
 					ListView_GetItemText(hwndList, nIndex, 0, &szKeyword[0], nKeywordSize);
 					ListView_GetItemText(hwndList, nIndex, 1, szColorIndex, _countof(szColorIndex));
@@ -625,7 +627,7 @@ int PropTypesRegex::GetData(HWND hwndDlg)
 	HWND	hwndList;
 	int	nIndex, i, j;
 	const int szKeywordSize = _countof(m_types.regexKeywordList) * 2 + 1;
-	auto_array_ptr<TCHAR> szKeyword(new TCHAR [szKeywordSize]);
+	auto szKeyword = std::make_unique<TCHAR[]>(szKeywordSize);
 	TCHAR	szColorIndex[256];
 
 	// 使用する・使用しない
@@ -714,7 +716,7 @@ bool PropTypesRegex::CheckKeywordList(
 	const int nKeywordSize = MAX_REGEX_KEYWORDLEN;
 	HWND hwndList = GetDlgItem(hwndDlg, IDC_LIST_REGEX);
 	int  nIndex  = ListView_GetItemCount(hwndList);
-	auto_array_ptr<TCHAR> szKeyword(new TCHAR [nKeywordSize]);
+	auto szKeyword = std::make_unique<TCHAR[]>(nKeywordSize);
 	int nKeywordLen = auto_strlen(to_wchar(szNewKeyword)) + 1;
 	for (int i=0; i<nIndex; ++i) {
 		if (i != nUpdateItem) {

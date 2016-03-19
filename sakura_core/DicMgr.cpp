@@ -71,7 +71,7 @@ BOOL DicMgr::Search(
 	for (int line=1; in; ++line) {	// 2006.04.10 fon
 		// 1çsì«Ç›çûÇ›
 		{
-			wstring tmp = in.ReadLineW(); //NULL != fgetws(szLine, _countof(szLine), pFile);
+			wstring tmp = in.ReadLineW(); //fgetws(szLine, _countof(szLine), pFile) != NULL;
 			wcsncpy_s(szLine, _countof(szLine), tmp.c_str(), _TRUNCATE);
 			// auto_strlcpy(szLine, tmp.c_str(), _countof(szLine));
 		}

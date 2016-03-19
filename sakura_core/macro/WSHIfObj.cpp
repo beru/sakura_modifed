@@ -32,10 +32,12 @@
 */
 
 #include "StdAfx.h"
+
+#include <memory>
+
 #include "macro/WSHIfObj.h"
 #include "macro/SMacroMgr.h" // MacroFuncInfo
 #include "Funccode_enum.h" // EFunctionCode::FA_FROMMACRO
-#include "util/other_util.h" // auto_array_ptr
 
 
 // コマンド・関数を準備する
@@ -116,7 +118,7 @@ HRESULT WSHIfObj::MacroCommand(
 	void* Data
 	)
 {
-	int ArgCount = Arguments->cArgs;
+	int argCount = Arguments->cArgs;
 
 	const EFunctionCode ID = static_cast<EFunctionCode>(IntID);
 	//	2007.07.22 genta : コマンドは下位16ビットのみ
@@ -125,34 +127,34 @@ HRESULT WSHIfObj::MacroCommand(
 		VariantInit(&ret);
 
 		// 2011.3.18 syat 引数の順序を正しい順にする
-		auto_array_ptr<VARIANTARG> rgvargParam(new VARIANTARG[ArgCount]);
-		for (int i=0; i<ArgCount; ++i) {
-			::VariantInit(&rgvargParam[ArgCount - i - 1]);
-			::VariantCopy(&rgvargParam[ArgCount - i - 1], &Arguments->rgvarg[i]);
+		auto rgvargParam = std::make_unique<VARIANTARG[]>(argCount);
+		for (int i=0; i<argCount; ++i) {
+			::VariantInit(&rgvargParam[argCount - i - 1]);
+			::VariantCopy(&rgvargParam[argCount - i - 1], &Arguments->rgvarg[i]);
 		}
 
 		// 2009.9.5 syat HandleFunctionはサブクラスでオーバーライドする
-		bool r = HandleFunction(m_pView, ID, &rgvargParam[0], ArgCount, ret);
+		bool r = HandleFunction(m_pView, ID, &rgvargParam[0], argCount, ret);
 		if (Result) {::VariantCopyInd(Result, &ret);}
 		VariantClear(&ret);
-		for (int i=0; i<ArgCount; ++i) {
+		for (int i=0; i<argCount; ++i) {
 			::VariantClear(&rgvargParam[i]);
 		}
 		return r ? S_OK : E_FAIL;
 	}else {
 		// 最低4つは確保
-		int argCountMin = t_max(4, ArgCount);
+		int argCountMin = t_max(4, argCount);
 		//	Nov. 29, 2005 FILE 引数を文字列で取得する
-		auto_array_ptr<LPWSTR> StrArgs(new LPWSTR[argCountMin]);
-		auto_array_ptr<int> strLengths(new int[argCountMin]);
-		for (int i=ArgCount; i<argCountMin; ++i) {
-			StrArgs[i] = NULL;
+		auto strArgs = std::make_unique<LPWSTR[]>(argCountMin);
+		auto strLengths = std::make_unique<int[]>(argCountMin);
+		for (int i=argCount; i<argCountMin; ++i) {
+			strArgs[i] = NULL;
 			strLengths[i] = 0;
 		}
 		WCHAR* s = NULL;							// 初期化必須
 		Variant varCopy;							// VT_BYREFだと困るのでコピー用
 		int Len;
-		for (int i=0; i<ArgCount; ++i) {
+		for (int i=0; i<argCount; ++i) {
 			if (VariantChangeType(&varCopy.data, &(Arguments->rgvarg[i]), 0, VT_BSTR) == S_OK) {
 				Wrap(&varCopy.data.bstrVal)->GetW(&s, &Len);
 			}else {
@@ -160,16 +162,16 @@ HRESULT WSHIfObj::MacroCommand(
 				s[0] = 0;
 				Len = 0;
 			}
-			StrArgs[ArgCount - i - 1] = s;			// DISPPARAMSは引数の順序が逆転しているため正しい順に直す
-			strLengths[ArgCount - i - 1] = Len;
+			strArgs[argCount - i - 1] = s;			// DISPPARAMSは引数の順序が逆転しているため正しい順に直す
+			strLengths[argCount - i - 1] = Len;
 		}
 
 		// 2009.10.29 syat HandleCommandはサブクラスでオーバーライドする
-		HandleCommand(m_pView, ID, const_cast<WCHAR const **>(&StrArgs[0]), &strLengths[0], ArgCount);
+		HandleCommand(m_pView, ID, const_cast<WCHAR const **>(&strArgs[0]), &strLengths[0], argCount);
 
 		//	Nov. 29, 2005 FILE 配列の破棄なので、[括弧]を追加
-		for (int j=0; j<ArgCount; ++j) {
-			delete [] StrArgs[j];
+		for (int j=0; j<argCount; ++j) {
+			delete [] strArgs[j];
 		}
 		return S_OK;
 	}

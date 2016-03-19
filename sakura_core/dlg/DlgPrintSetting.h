@@ -75,7 +75,7 @@ protected:
 	void OnChangeSettingType(BOOL);	// 設定のタイプが変わった
 	void OnSpin(int , BOOL);			// スピンコントロールの処理
 	int DataCheckAndCorrect(int , int);	// 入力値(数値)のエラーチェックをして正しい値を返す
-	BOOL CalcPrintableLineAndColumn();		// 行数と桁数を計算
+	bool CalcPrintableLineAndColumn();		// 行数と桁数を計算
 	void UpdatePrintableLineAndColumn();	// 行数と桁数の計算要求
 	void SetFontName(int idTxt, int idUse, LOGFONT& lf, int nPointSize);	// フォント名/使用ボタンの設定
 };

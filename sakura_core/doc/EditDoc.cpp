@@ -44,6 +44,8 @@
 #include <stdlib.h>
 #include <string.h>	// Apr. 03, 2003 genta
 #include <OleCtl.h>
+#include <memory>
+
 #include "doc/EditDoc.h"
 #include "doc/logic/DocLine.h" /// 2002/2/3 aroka
 #include "doc/layout/Layout.h"	// 2007.08.22 ryoji ’Ç‰Á
@@ -73,7 +75,6 @@
 #include "util/fileUtil.h"
 #include "util/format.h"
 #include "util/module.h"
-#include "util/other_util.h"
 #include "util/string_ex2.h"
 #include "util/window.h"
 #include "sakura_rc.h"

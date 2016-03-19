@@ -220,7 +220,7 @@ private:
 
 	// ƒyƒ“
 	HPEN				m_hpnOrg;
-	std::vector<HPEN>	m_vPens;
+	std::vector<HPEN>	m_pens;
 
 	// ƒuƒ‰ƒV
 	std::vector<HBRUSH>	m_brushes;

@@ -18,6 +18,8 @@
 
 #include "StdAfx.h"
 #include <string.h>
+#include <memory>
+
 #include "doc/DocOutline.h"
 #include "doc/EditDoc.h"
 #include "doc/logic/DocLine.h"
@@ -27,7 +29,6 @@
 #include "charset/charcode.h"
 #include "io/TextStream.h"
 #include "extmodule/Bregexp.h"
-#include "util/other_util.h"
 
 
 
@@ -223,7 +224,7 @@ void DocOutline::MakeFuncList_RuleFile(
 	)
 {
 	// ルールファイルの内容をバッファに読み込む
-	auto_array_ptr<OneRule> test(new OneRule[1024]);	// 1024個許可。 2007.11.29 kobake スタック使いすぎなので、ヒープに確保するように修正。
+	auto test = std::make_unique<OneRule[]>(1024);	// 1024個許可。 2007.11.29 kobake スタック使いすぎなので、ヒープに確保するように修正。
 	bool bRegex;
 	std::wstring title;
 	int nCount = ReadRuleFile(m_pDocRef->m_docType.GetDocumentAttribute().szOutlineRuleFilename, test.get(), 1024, bRegex, title);

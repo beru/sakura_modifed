@@ -789,7 +789,7 @@ int DlgPrintSetting::DataCheckAndCorrect(int nCtrlId, int nData)
 	@date 2013.05.05 aroka OnTimerから移動
 	@retval 印字可能領域があれば TRUE  // 2013.05.20 aroka
 */
-BOOL DlgPrintSetting::CalcPrintableLineAndColumn()
+bool DlgPrintSetting::CalcPrintableLineAndColumn()
 {
 	int			nEnableColumns;		// 行あたりの文字数
 	int			nEnableLines;		// 縦方向の行数
@@ -814,7 +814,7 @@ BOOL DlgPrintSetting::CalcPrintableLineAndColumn()
 	// 2001.12.21 hor GetPaperSize失敗時はそのまま終了
 	// nPaperAllWidth = 210 * 10;		// 用紙幅
 	// nPaperAllHeight = 297 * 10;		// 用紙高さ
-		return FALSE;
+		return false;
 	}
 	// 行あたりの文字数(行番号込み)
 	nEnableColumns = Print::CalculatePrintableColumns(pPS, nPaperAllWidth, pPS->bPrintLineNumber ? m_nLineNumberColumns : 0);	// 印字可能桁数/ページ
@@ -834,10 +834,10 @@ BOOL DlgPrintSetting::CalcPrintableLineAndColumn()
 	// 印字可能領域がない場合は OK を押せなくする 2013.5.10 aroka
 	if (nEnableColumns == 0 || nEnableLines == 0) {
 		EnableItem(IDOK, false);
-		return FALSE;
+		return false;
 	}else {
 		EnableItem(IDOK, true);
-		return TRUE;
+		return true;
 	}
 }
 

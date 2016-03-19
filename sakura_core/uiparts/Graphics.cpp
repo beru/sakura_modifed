@@ -225,7 +225,7 @@ void Graphics::PushPen(COLORREF color, int nPenWidth, int nStyle)
 {
 	HPEN hpnNew = CreatePen(nStyle, nPenWidth, color);
 	HPEN hpnOld = (HPEN)SelectObject(m_hdc, hpnNew);
-	m_vPens.push_back(hpnNew);
+	m_pens.push_back(hpnNew);
 	if (!m_hpnOrg) {
 		m_hpnOrg = hpnOld;
 	}
@@ -235,8 +235,8 @@ void Graphics::PopPen()
 {
 	// 選択する候補
 	HPEN hpnNew = NULL;
-	if (m_vPens.size() >= 2) {
-		hpnNew = m_vPens[m_vPens.size() - 2];
+	if (m_pens.size() >= 2) {
+		hpnNew = m_pens[m_pens.size() - 2];
 	}else {
 		hpnNew = m_hpnOrg;
 	}
@@ -247,13 +247,13 @@ void Graphics::PopPen()
 	}
 
 	// 削除
-	if (!m_vPens.empty()) {
-		DeleteObject(m_vPens.back());
-		m_vPens.pop_back();
+	if (!m_pens.empty()) {
+		DeleteObject(m_pens.back());
+		m_pens.pop_back();
 	}
 
 	// オリジナル
-	if (m_vPens.empty()) {
+	if (m_pens.empty()) {
 		m_hpnOrg = NULL;
 	}
 }
@@ -265,19 +265,19 @@ void Graphics::ClearPen()
 		SelectObject(m_hdc, m_hpnOrg);
 		m_hpnOrg = NULL;
 	}
-	int nSize = (int)m_vPens.size();
+	int nSize = (int)m_pens.size();
 	for (int i=0; i<nSize; ++i) {
-		DeleteObject(m_vPens[i]);
+		DeleteObject(m_pens[i]);
 	}
-	m_vPens.clear();
+	m_pens.clear();
 }
 
 //$$note: 高速化
 COLORREF Graphics::GetPenColor() const
 {
-	if (m_vPens.size()) {
+	if (m_pens.size()) {
 		LOGPEN logpen;
-		if (GetObject(m_vPens.back(), sizeof(logpen), &logpen)) {
+		if (GetObject(m_pens.back(), sizeof(logpen), &logpen)) {
 			return logpen.lopnColor;
 		}
 	}else {

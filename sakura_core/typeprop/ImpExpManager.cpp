@@ -29,6 +29,9 @@
 */
 
 #include "StdAfx.h"
+
+#include <memory>
+
 #include "ImpExpManager.h"
 #include "typeprop/DlgTypeAscertain.h"
 
@@ -38,7 +41,6 @@
 #include "plugin/Plugin.h"
 #include "view/EditView.h"
 #include "view/colors/ColorStrategy.h"
-#include "util/other_util.h"
 
 /*-----------------------------------------------------------------------
 定数
@@ -607,7 +609,7 @@ bool ImpExpRegex::Import(const wstring& sFileName, wstring& sErrMsg)
 	}
 
 	RegexKeywordInfo regexKeyArr[MAX_REGEX_KEYWORD];
-	auto_array_ptr<wchar_t> szKeywordList(new wchar_t [MAX_REGEX_KEYWORDLISTLEN]);
+	std::unique_ptr<wchar_t[]> szKeywordList(new wchar_t[MAX_REGEX_KEYWORDLISTLEN]);
 	wchar_t* pKeyword = &szKeywordList[0];
 	int	keywordPos = 0;
 	TCHAR buff[MAX_REGEX_KEYWORDLEN + 20];
@@ -764,7 +766,7 @@ bool ImpExpKeyHelp::Import(const wstring& sFileName, wstring& sErrMsg)
 		if (!p3 ||			// カンマが1個足りない
 			(p3 == p1) //||			// カンマが2個足りない
 			//	2007.02.03 genta ファイル名にカンマがあるかもしれない
-			//(NULL != wcsstr(p3,","))	// カンマが多すぎる
+			//(wcsstr(p3,",") != NULL)	// カンマが多すぎる
 		) {
 			//	2007.02.03 genta 処理を継続
 			++invalid_record;

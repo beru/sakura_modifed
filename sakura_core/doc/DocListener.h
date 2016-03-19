@@ -93,17 +93,17 @@ struct LoadInfo {
 	}
 
 	LoadInfo(
-		const FilePath&	_cFilePath,
-		EncodingType			_eCodeType,
-		bool				_bReadOnly,
-		TypeConfigNum		_nType = TypeConfigNum(-1)
+		const FilePath&	filePath,
+		EncodingType	codeType,
+		bool			bReadOnly,
+		TypeConfigNum	nType = TypeConfigNum(-1)
 	)
 		:
-		filePath(_cFilePath),
-		eCharCode(_eCodeType),
-		bViewMode(_bReadOnly),
+		filePath(filePath),
+		eCharCode(codeType),
+		bViewMode(bReadOnly),
 		bWritableNoMsg(false),
-		nType(_nType),
+		nType(nType),
 		bRequestReload(false),
 		bOpened(false)
 	{
@@ -114,11 +114,11 @@ struct LoadInfo {
 };
 
 struct SaveInfo {
-	FilePath	filePath;	// 保存ファイル名
+	FilePath		filePath;	// 保存ファイル名
 	EncodingType	eCharCode;	// 保存文字コードセット
-	bool		bBomExist;	// 保存時BOM付加
-	bool		bChgCodeSet;// 文字コードセット変更	2013/5/19 Uchi
-	Eol		eol;		// 保存改行コード
+	bool			bBomExist;	// 保存時BOM付加
+	bool			bChgCodeSet;// 文字コードセット変更	2013/5/19 Uchi
+	Eol				eol;		// 保存改行コード
 
 	// モード
 	bool		bOverwriteMode;	// 上書き要求
@@ -135,17 +135,17 @@ struct SaveInfo {
 	}
 
 	SaveInfo(
-		const FilePath& _cFilePath,
-		EncodingType _eCodeType,
-		const Eol& _cEol,
-		bool _bBomExist
+		const FilePath&	filePath,
+		EncodingType	codeType,
+		const Eol&		eol,
+		bool			bBomExist
 	)
 		: 
-		filePath(_cFilePath),
-		eCharCode(_eCodeType),
-		bBomExist(_bBomExist),
+		filePath(filePath),
+		eCharCode(codeType),
+		bBomExist(bBomExist),
 		bChgCodeSet(false),
-		eol(_cEol),
+		eol(eol),
 		bOverwriteMode(false)
 	{
 	}
@@ -209,7 +209,7 @@ public:
 	// -- -- 各種イベント -- -- //
 	// ロード前後
 	virtual CallbackResultType	OnCheckLoad	(LoadInfo* pLoadInfo)		{ return CallbackResultType::Continue; }	// 本当にロードを行うかの判定を行う
-	virtual void			OnBeforeLoad(LoadInfo* loadInfo)			{ return ; }	// ロード事前処理
+	virtual void				OnBeforeLoad(LoadInfo* loadInfo)		{ return ; }	// ロード事前処理
 	virtual LoadResultType		OnLoad		(const LoadInfo& loadInfo)	{ return LoadResultType::NoImplement; }	// ロード処理
 	virtual void			OnLoading	(int nPer)						{ return ; }	// ロード処理の経過情報を受信
 	virtual void			OnAfterLoad	(const LoadInfo& loadInfo) 		{ return ; }	// ロード事後処理

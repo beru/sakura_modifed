@@ -17,9 +17,10 @@
 #include "io/BinaryStream.h"
 #include "util/window.h"
 #include "util/module.h"
-#include "util/other_util.h"
 #include "debug/RunningTimer.h"
 #include <deque>
+#include <memory>
+
 #include "sakura_rc.h"
 
 GrepAgent::GrepAgent()
@@ -57,8 +58,8 @@ void GrepAgent::OnAfterSave(const SaveInfo& saveInfo)
 void GrepAgent::CreateFolders(const TCHAR* pszPath, std::vector<std::tstring>& vPaths)
 {
 	const int nPathLen = auto_strlen(pszPath);
-	auto_array_ptr<TCHAR> szPath(new TCHAR[nPathLen + 1]);
-	auto_array_ptr<TCHAR> szTmp(new TCHAR[nPathLen + 1]);
+	auto szPath = std::make_unique<TCHAR[]>(nPathLen + 1);
+	auto szTmp = std::make_unique<TCHAR[]>(nPathLen + 1);
 	auto_strcpy(&szPath[0], pszPath);
 	TCHAR* token;
 	int nPathPos = 0;
@@ -1122,7 +1123,7 @@ int GrepAgent::DoGrepFile(
 			X / O  :                  (D)Folder(Abs) -> (G)RelPath(File)
 			X / X  : (H)FullPath
 */
-			auto_array_ptr<wchar_t> pszWork(new wchar_t[auto_strlen(pszFullPath) + auto_strlen(pszCodeName) + 10]);
+			auto pszWork = std::make_unique<wchar_t[]>(auto_strlen(pszFullPath) + auto_strlen(pszCodeName) + 10);
 			wchar_t* szWork0 = &pszWork[0];
 			if (grepOption.bGrepOutputBaseFolder || grepOption.bGrepSeparateFolder) {
 				if (!bOutputBaseFolder && grepOption.bGrepOutputBaseFolder) {

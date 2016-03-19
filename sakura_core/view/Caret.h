@@ -63,8 +63,8 @@ public:
 	}
 	void CaretUnderLineON(bool, bool);	// カーソル行アンダーラインのON
 	void CaretUnderLineOFF(bool, bool = true, bool = false);	// カーソル行アンダーラインのOFF
-	void SetUnderLineDoNotOFF(bool flag) { if (!m_nLockCounter)m_bUnderLineDoNotOFF = flag; }
-	void SetVertLineDoNotOFF(bool flag) { if (!m_nLockCounter)m_bVertLineDoNotOFF = flag; }
+	void SetUnderLineDoNotOFF(bool flag) { if (!m_nLockCounter) m_bUnderLineDoNotOFF = flag; }
+	void SetVertLineDoNotOFF(bool flag) { if (!m_nLockCounter) m_bVertLineDoNotOFF = flag; }
 	inline bool GetUnderLineDoNotOFF()const { return m_bUnderLineDoNotOFF; }
 	inline bool GetVertLineDoNotOFF()const { return m_bVertLineDoNotOFF; }
 private:
@@ -179,7 +179,7 @@ public:
 
 	LayoutPoint GetCaretLayoutPos() const	{ return m_ptCaretPos_Layout; }	// キャレット位置(レイアウト)を取得
 	Size GetCaretSize() const				{ return m_sizeCaret; }			// キャレットサイズを取得。※正確には高さは違うらしい (この半分のこともある？)
-	bool ExistCaretFocus() const			{ return m_sizeCaret.cx>0; }	// キャレットのフォーカスがあるか。※横幅値で判定してるらしい。
+	bool ExistCaretFocus() const			{ return m_sizeCaret.cx > 0; }	// キャレットのフォーカスがあるか。※横幅値で判定してるらしい。
 	LogicPoint GetCaretLogicPos() const		{ return m_ptCaretPos_Logic; }	// キャレット位置(ロジック)を取得
 
 
