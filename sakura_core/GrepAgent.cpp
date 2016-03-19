@@ -767,7 +767,7 @@ int GrepAgent::DoGrepTree(
 			// 結果出力
 			if (0 < memMessage.GetStringLength()) {
 				AddTail( viewDst, memMessage, grepOption.bGrepStdout );
-				viewDst.GetCommander().Command_GOFILEEND(FALSE);
+				viewDst.GetCommander().Command_GOFILEEND(false);
 				if (!EditWnd::getInstance().UpdateTextWrap()) {		// 折り返し方法関連の更新	// 2008.06.10 ryoji
 					EditWnd::getInstance().RedrawAllViews(&viewDst);	//	他のペインの表示を更新
 				}
@@ -1919,7 +1919,7 @@ int GrepAgent::DoGrepReplaceFile(
 			if (0 < memMessage.GetStringLength() && 2800 < nHitCount - nOutputHitCount) {
 				nOutputHitCount = nHitCount;
 				AddTail( viewDst, memMessage, grepOption.bGrepStdout );
-				viewDst.GetCommander().Command_GOFILEEND( FALSE );
+				viewDst.GetCommander().Command_GOFILEEND( false );
 				if (!EditWnd::getInstance().UpdateTextWrap())	// 折り返し方法関連の更新	// 2008.06.10 ryoji
 					EditWnd::getInstance().RedrawAllViews( &viewDst );	//	他のペインの表示を更新
 				memMessage._SetStringLength(0);

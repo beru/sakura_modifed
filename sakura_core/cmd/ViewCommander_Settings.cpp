@@ -38,7 +38,7 @@ void ViewCommander::Command_SHOWTOOLBAR(void)
 {
 	EditWnd* pEditWnd = GetEditWindow();	// Sep. 10, 2002 genta
 
-	GetDllShareData().common.window.bDispToolBar = ((!pEditWnd->m_toolbar.GetToolbarHwnd())? TRUE: FALSE);	// ツールバー表示
+	GetDllShareData().common.window.bDispToolBar = (pEditWnd->m_toolbar.GetToolbarHwnd() == NULL);	// ツールバー表示
 	pEditWnd->LayoutToolBar();
 	pEditWnd->EndLayoutBars();
 

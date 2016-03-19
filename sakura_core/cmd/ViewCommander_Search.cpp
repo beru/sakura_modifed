@@ -248,7 +248,7 @@ re_do:;
 		}else {
 			caret.MoveCursorFastMode(pSelectLogic->GetFrom());
 		}
-		bFound = TRUE;
+		bFound = true;
 	}else {
 		if (bSelecting) {
 			si.m_bSelectingLock = bSelectingLock_Old;	// 選択状態のロック
@@ -424,7 +424,7 @@ re_do:;							// hor
 		m_view.AddCurrentLineToHistory();
 		caret.MoveCursor(rangeA.GetFrom(), bReDraw);
 		caret.m_nCaretPosX_Prev = caret.GetCaretLayoutPos().GetX2();
-		bFound = TRUE;
+		bFound = true;
 	}else {
 		if (bSelecting) {
 			si.m_bSelectingLock = bSelectingLock_Old;	// 選択状態のロック
@@ -624,7 +624,7 @@ void ViewCommander::Command_REPLACE(HWND hwndParent)
 			Command_PASTE(0);
 		} else if (nReplaceTarget == 3) {
 			// 行削除
-			Command_INSTEXT( false, L"", LogicInt(0), TRUE );
+			Command_INSTEXT( false, L"", LogicInt(0), true );
 		}else if (bRegularExp) { // 検索／置換  1==正規表現
 			// 先読みに対応するために物理行末までを使うように変更 2005/03/27 かろと
 			// 2002/01/19 novice 正規表現による文字列置換
@@ -683,11 +683,11 @@ void ViewCommander::Command_REPLACE(HWND hwndParent)
 					layoutMgr.LogicToLayout(LogicPoint(nLen, pLayout->GetLogicLineNo()), GetSelect().GetToPointer());	// 2007.01.19 ryoji 追加
 				}
 				// 置換後文字列への書き換え(行末から検索文字列末尾までの文字を除く)
-				Command_INSTEXT(false, regexp.GetString(), regexp.GetStringLen() - colDiff, TRUE);
+				Command_INSTEXT(false, regexp.GetString(), regexp.GetStringLen() - colDiff, true);
 				// To Here Jun. 6, 2005 かろと
 			}
 		}else {
-			Command_INSTEXT(false, memRepKey.GetStringPtr(), memRepKey.GetStringLength(), TRUE);
+			Command_INSTEXT(false, memRepKey.GetStringPtr(), memRepKey.GetStringLength(), true);
 		}
 
 		// 挿入後の検索開始位置を調整
@@ -1164,7 +1164,7 @@ void ViewCommander::Command_REPLACE_ALL()
 				** →m_nSelectXXXが-1の時に m_view.ReplaceData_CEditViewを直接たたくと動作不良となるため
 				**   直接たたくのやめた。2003.05.18 by かろと
 				*/
-				Command_INSTEXT(false, szREPLACEKEY, nReplaceKey, TRUE, bLineSelect);
+				Command_INSTEXT(false, szREPLACEKEY, nReplaceKey, true, bLineSelect);
 			}else {
 				Command_PASTEBOX(szREPLACEKEY, nReplaceKey);
 				// 2013.06.11 再描画しないように

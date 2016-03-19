@@ -296,7 +296,7 @@ bool FileNameManager::ExpandMetaToFolder(LPCTSTR pszSrc, LPTSTR pszDes, int nDes
 			nPathLen = _tcslen(szPath);
 			LPTSTR pStr2 = szPath;
 			if (nPathLen < _MAX_PATH && nPathLen != 0) {
-				if (FALSE != GetLongFileName(szPath, szMeta)) {
+				if (GetLongFileName(szPath, szMeta) != FALSE) {
 					pStr2 = szMeta;
 				}
 			}

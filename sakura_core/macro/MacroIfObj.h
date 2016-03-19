@@ -163,8 +163,8 @@ public:
 		return false;
 	}
 
-	BOOL IsMatch() {
-		return (m_nIsMatch != 0) ? TRUE : FALSE;
+	bool IsMatch() {
+		return (m_nIsMatch != 0);
 	}
 
 	void SetMatch(const int nMatch) {

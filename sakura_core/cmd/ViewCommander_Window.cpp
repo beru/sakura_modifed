@@ -68,7 +68,7 @@ void ViewCommander::Command_WINCLOSE(void)
 void ViewCommander::Command_FILECLOSEALL(void)
 {
 	int nGroup = AppNodeManager::getInstance().GetEditNode(GetMainWindow())->GetGroup();
-	ControlTray::CloseAllEditor(TRUE, GetMainWindow(), FALSE, nGroup);	// 2006.12.25, 2007.02.13 ryoji 引数追加
+	ControlTray::CloseAllEditor(true, GetMainWindow(), false, nGroup);	// 2006.12.25, 2007.02.13 ryoji 引数追加
 	return;
 }
 
@@ -93,7 +93,7 @@ void ViewCommander::Command_TAB_CLOSEOTHER(void)
 	}
 
 	// 終了要求を出す
-	AppNodeGroupHandle(nGroup).RequestCloseEditor(pEditNode, nCount, FALSE, TRUE, GetMainWindow());
+	AppNodeGroupHandle(nGroup).RequestCloseEditor(pEditNode, nCount, false, true, GetMainWindow());
 	delete[] pEditNode;
 	return;
 }
@@ -420,7 +420,7 @@ void ViewCommander::Command_GROUPCLOSE(void)
 		&& !csTabBar.bDispTabWndMultiWin
 	) {
 		int nGroup = AppNodeManager::getInstance().GetEditNode(GetMainWindow())->GetGroup();
-		ControlTray::CloseAllEditor(TRUE, GetMainWindow(), TRUE, nGroup);
+		ControlTray::CloseAllEditor(true, GetMainWindow(), true, nGroup);
 	}
 	return;
 }
@@ -505,21 +505,21 @@ void ViewCommander::Command_TAB_CLOSELEFT(void)
 		// ウィンドウ一覧を取得する
 		EditNode* pEditNode;
 		int nCount = AppNodeManager::getInstance().GetOpenedWindowArr(&pEditNode, true);
-		BOOL bSelfFound = FALSE;
+		bool bSelfFound = false;
 		if (0 >= nCount) return;
 
 		for (int i=0; i<nCount; ++i) {
 			if (pEditNode[i].hWnd == GetMainWindow()) {
 				pEditNode[i].hWnd = NULL;		// 自分自身は閉じない
 				nGroup = pEditNode[i].nGroup;
-				bSelfFound = TRUE;
+				bSelfFound = true;
 			}else if (bSelfFound) {
 				pEditNode[i].hWnd = NULL;		// 右は閉じない
 			}
 		}
 
 		// 終了要求を出す
-		AppNodeGroupHandle(nGroup).RequestCloseEditor(pEditNode, nCount, FALSE, TRUE, GetMainWindow());
+		AppNodeGroupHandle(nGroup).RequestCloseEditor(pEditNode, nCount, false, true, GetMainWindow());
 		delete []pEditNode;
 	}
 	return;
@@ -535,21 +535,21 @@ void ViewCommander::Command_TAB_CLOSERIGHT(void)
 		// ウィンドウ一覧を取得する
 		EditNode* pEditNode;
 		int nCount = AppNodeManager::getInstance().GetOpenedWindowArr(&pEditNode, true);
-		BOOL bSelfFound = FALSE;
+		bool bSelfFound = false;
 		if (0 >= nCount) return;
 
 		for (int i=0; i<nCount; ++i) {
 			if (pEditNode[i].hWnd == GetMainWindow()) {
 				pEditNode[i].hWnd = NULL;		// 自分自身は閉じない
 				nGroup = pEditNode[i].nGroup;
-				bSelfFound = TRUE;
+				bSelfFound = true;
 			}else if (!bSelfFound) {
 				pEditNode[i].hWnd = NULL;		// 左は閉じない
 			}
 		}
 
 		// 終了要求を出す
-		AppNodeGroupHandle(nGroup).RequestCloseEditor(pEditNode, nCount, FALSE, TRUE, GetMainWindow());
+		AppNodeGroupHandle(nGroup).RequestCloseEditor(pEditNode, nCount, false, true, GetMainWindow());
 		delete []pEditNode;
 	}
 	return;

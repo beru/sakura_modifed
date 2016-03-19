@@ -526,10 +526,10 @@ void SplitterWnd::DoSplit(int nHorizontal, int nVertical)
 		if (m_childWndArr[1]) { ::ShowWindow(m_childWndArr[1], SW_SHOW); }
 		if (m_childWndArr[2]) { ::ShowWindow(m_childWndArr[2], SW_SHOW); }
 		if (m_childWndArr[3]) { ::ShowWindow(m_childWndArr[3], SW_SHOW); }
-		if (pViewArr[0]) { pViewArr[0]->SplitBoxOnOff(FALSE, FALSE, FALSE);}	// 縦・横の分割ボックスのＯＮ／ＯＦＦ
-		if (pViewArr[1]) { pViewArr[1]->SplitBoxOnOff(FALSE, FALSE, FALSE);}	// 縦・横の分割ボックスのＯＮ／ＯＦＦ
-		if (pViewArr[2]) { pViewArr[2]->SplitBoxOnOff(FALSE, FALSE, FALSE);}	// 縦・横の分割ボックスのＯＮ／ＯＦＦ
-		if (pViewArr[3]) { pViewArr[3]->SplitBoxOnOff(FALSE, FALSE, bSizeBox);}	// 縦・横の分割ボックスのＯＮ／ＯＦＦ
+		if (pViewArr[0]) { pViewArr[0]->SplitBoxOnOff(false, false, false);}	// 縦・横の分割ボックスのＯＮ／ＯＦＦ
+		if (pViewArr[1]) { pViewArr[1]->SplitBoxOnOff(false, false, false);}	// 縦・横の分割ボックスのＯＮ／ＯＦＦ
+		if (pViewArr[2]) { pViewArr[2]->SplitBoxOnOff(false, false, false);}	// 縦・横の分割ボックスのＯＮ／ＯＦＦ
+		if (pViewArr[3]) { pViewArr[3]->SplitBoxOnOff(false, false, bSizeBox);}	// 縦・横の分割ボックスのＯＮ／ＯＦＦ
 
 		OnSize(0, 0, 0, 0);
 

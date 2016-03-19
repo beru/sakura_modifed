@@ -146,7 +146,7 @@ EditView::EditView(EditWnd* pEditWnd)
 	m_hwndVScrollBar(NULL),
 	m_hwndHScrollBar(NULL),
 	m_pDropTarget(NULL),
-	m_bActivateByMouse(FALSE),	// 2007.10.02 nasukoji
+	m_bActivateByMouse(false),	// 2007.10.02 nasukoji
 	m_nWheelDelta(0),
 	m_eWheelScroll(F_0),
 	m_nMousePouse(0),

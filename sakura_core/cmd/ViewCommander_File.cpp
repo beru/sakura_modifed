@@ -442,7 +442,7 @@ void ViewCommander::Command_PLSQL_COMPILE_ON_SQLPLUS(void)
 	if (GetDocument()->m_docFile.GetFilePathClass().IsValidPath()) {
 		// ファイルパスに空白が含まれている場合はダブルクォーテーションで囲む
 		// 2003.10.20 MIK コード簡略化
-		if (_tcschr(GetDocument()->m_docFile.GetFilePath(), TCODE::SPACE) ? TRUE : FALSE) {
+		if (_tcschr(GetDocument()->m_docFile.GetFilePath(), TCODE::SPACE) != NULL) {
 			auto_sprintf( szPath, _T("@\"%ts\"\r\n"), GetDocument()->m_docFile.GetFilePath() );
 		}else {
 			auto_sprintf( szPath, _T("@%ts\r\n"), GetDocument()->m_docFile.GetFilePath() );

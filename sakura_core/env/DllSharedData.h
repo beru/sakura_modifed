@@ -84,7 +84,7 @@ struct Share_Flags {
 	bool	bEditWndChanging;		// 編集ウィンドウ切替中	// 2007.04.03 ryoji
 	/*	@@@ 2002.1.24 YAZAKI
 		キーボードマクロは、記録終了した時点でファイル「m_szKeyMacroFileName」に書き出すことにする。
-		bRecordingKeyMacroがTRUEのときは、キーボードマクロの記録中なので、m_szKeyMacroFileNameにアクセスしてはならない。
+		bRecordingKeyMacroがtrueのときは、キーボードマクロの記録中なので、m_szKeyMacroFileNameにアクセスしてはならない。
 	*/
 	bool	bRecordingKeyMacro;		// キーボードマクロの記録中
 	HWND	hwndRecordingKeyMacro;	// キーボードマクロを記録中のウィンドウ

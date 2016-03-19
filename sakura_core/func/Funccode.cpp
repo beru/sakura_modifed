@@ -1192,7 +1192,7 @@ bool IsFuncEnable(const EditDoc* pEditDoc, const DllSharedData* pShareData, EFun
 	case F_TAB_8:
 	case F_TAB_9:
 		// 非タブモード時はウィンドウを結合して表示できない
-		return pShareData->common.tabBar.bDispTabWnd != FALSE;
+		return pShareData->common.tabBar.bDispTabWnd;
 	case F_GROUPCLOSE:		// 2007.06.20 ryoji 追加
 	case F_NEXTGROUP:		// 2007.06.20 ryoji 追加
 	case F_PREVGROUP:		// 2007.06.20 ryoji 追加

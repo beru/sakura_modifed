@@ -866,7 +866,7 @@ void PrintPreview::OnPreviewGoDirectPage(void)
 	auto_sprintf(szMessage, LS(STR_ERR_DLGPRNPRVW4) , m_nAllPageNum);
 	auto_sprintf(szPageNum, _T("%d"), m_nCurPageNum + 1);
 
-	BOOL bDlgInputPageResult=cDlgInputPage.DoModal(
+	BOOL bDlgInputPageResult = cDlgInputPage.DoModal(
 		EditApp::getInstance().GetAppInstance(),
 		m_hwndPrintPreviewBar, 
 		LS(STR_ERR_DLGPRNPRVW5),
@@ -874,7 +874,7 @@ void PrintPreview::OnPreviewGoDirectPage(void)
 		INPUT_PAGE_NUM_LEN,
 		szPageNum
 	);
-	if (FALSE != bDlgInputPageResult) {
+	if (bDlgInputPageResult) {
 		int nPageNumLen = _tcslen(szPageNum);
 		for (int i=0; i<nPageNumLen; ++i) {
 			if (!(_T('0') <= szPageNum[i] &&  szPageNum[i] <= _T('9'))) {

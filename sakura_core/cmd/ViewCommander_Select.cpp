@@ -119,13 +119,13 @@ void ViewCommander::Command_SELECTLINE(int lparam)
 		layoutMgr.LogicToLayout(LogicPoint(0, caret.GetCaretLogicPos().y + 1), &ptCaret);
 
 		// カーソルを次の物理行頭へ移動する
-		m_view.MoveCursorSelecting(ptCaret, TRUE);
+		m_view.MoveCursorSelecting(ptCaret, true);
 
 		// 移動後のカーソル位置を取得する
 		ptCaret = caret.GetCaretLayoutPos().Get();
 	}else {
 		// カーソルを最下行（レイアウト行）へ移動する
-		m_view.MoveCursorSelecting(LayoutPoint(LayoutInt(0), layoutMgr.GetLineCount()), TRUE);
+		m_view.MoveCursorSelecting(LayoutPoint(LayoutInt(0), layoutMgr.GetLineCount()), true);
 		Command_GOLINEEND(true, 0, 0);	// 行末に移動
 
 		// 選択するものが無い（[EOF]のみの行）時は選択状態としない

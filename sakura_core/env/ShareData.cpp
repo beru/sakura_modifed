@@ -286,7 +286,7 @@ bool ShareData::InitShareData()
 			window.nRulerType = 0;							// ルーラーのタイプ
 			window.nLineNumRightSpace = 0;					// 行番号の右の隙間
 			window.nVertLineOffset = -1;					// 2005.11.10 Moca 指定桁縦線
-			window.bUseCompatibleBMP = true;				// 2007.09.09 Moca 画面キャッシュを使う	// 2009.06.09 ryoji FALSE->TRUE
+			window.bUseCompatibleBMP = true;				// 2007.09.09 Moca 画面キャッシュを使う	// 2009.06.09 ryoji false->true
 
 			window.bMenuIcon = true;						// メニューにアイコンを表示する
 
@@ -532,7 +532,7 @@ bool ShareData::InitShareData()
 			outline.cxOutlineDockRight		=	0;		// アウトラインの右ドッキング幅
 			outline.cyOutlineDockBottom		=	0;		// アウトラインの下ドッキング高
 			outline.nDockOutline = OutlineType::Text;
-			outline.bAutoCloseDlgFuncList = false;		// アウトライン ダイアログを自動的に閉じる					//Nov. 18, 2000 JEPRO TRUE→FALSE に変更
+			outline.bAutoCloseDlgFuncList = false;		// アウトライン ダイアログを自動的に閉じる					//Nov. 18, 2000 JEPRO true→false に変更
 			outline.bMarkUpBlankLineEnable	=	false;	// アウトラインダイアログでブックマークの空行を無視			2002.02.08 aroka,hor
 			outline.bFunclistSetFocusOnJump	=	false;	// アウトラインダイアログでジャンプしたらフォーカスを移す	2002.02.08 hor
 
@@ -692,8 +692,8 @@ bool ShareData::InitShareData()
 			m_pShareData->tagJump.tagJumpTop = 0;
 			// From Here 2005.04.03 MIK キーワード指定タグジャンプのHistory保管
 			m_pShareData->tagJump.aTagJumpKeywords.clear();
-			m_pShareData->tagJump.bTagJumpICase = FALSE;
-			m_pShareData->tagJump.bTagJumpAnyWhere = FALSE;
+			m_pShareData->tagJump.bTagJumpICase = false;
+			m_pShareData->tagJump.bTagJumpAnyWhere = false;
 			// To Here 2005.04.03 MIK 
 
 			m_pShareData->history.m_aExceptMRU.clear();
@@ -949,8 +949,8 @@ bool ShareData::IsPathOpened(const TCHAR* pszPath, HWND* phwndOwner)
 			CEditDoc::FileLoadからも実行される必要があることに注意。
 			(フォルダ指定の場合やCEditDoc::FileLoadが直接実行される場合もあるため)
 
-	@retval	TRUE すでに開いていた
-	@retval	FALSE 開いていなかった
+	@retval	true すでに開いていた
+	@retval	false 開いていなかった
 
 	@date 2007.03.12 maru 新規作成
 */

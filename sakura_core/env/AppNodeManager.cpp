@@ -223,8 +223,8 @@ void AppNodeGroupHandle::DeleteEditWndList(HWND hWnd)
 
 	@param pWndArr [in] EditNodeの配列。hWndがNULLの要素は処理しない
 	@param nArrCnt [in] pWndArrの長さ
-	@param bExit [in] TRUE: 編集の全終了 / FALSE: すべて閉じる
-	@param bCheckConfirm [in] FALSE:複数ウィンドウを閉じるときの警告を出さない / TRUE:警告を出す（設定による）
+	@param bExit [in] true: 編集の全終了 / false: すべて閉じる
+	@param bCheckConfirm [in] false:複数ウィンドウを閉じるときの警告を出さない / true:警告を出す（設定による）
 	@param hWndFrom [in] 終了要求元のウィンドウ（警告メッセージの親となる）
 
 	@date 2007.02.13 ryoji 「編集の全終了」を示す引数(bExit)を追加
@@ -232,7 +232,7 @@ void AppNodeGroupHandle::DeleteEditWndList(HWND hWnd)
 	@date 2008.11.22 syat 全て→いくつかに変更。複数ウィンドウを閉じる時の警告メッセージを追加
 	@date 2013.03.09 Uchi 終了要求に要求元のウィンドウを渡す
 */
-BOOL AppNodeGroupHandle::RequestCloseEditor(EditNode* pWndArr, int nArrCnt, bool bExit, bool bCheckConfirm, HWND hWndFrom)
+bool AppNodeGroupHandle::RequestCloseEditor(EditNode* pWndArr, int nArrCnt, bool bExit, bool bCheckConfirm, HWND hWndFrom)
 {
 	// クローズ対象ウィンドウを調べる
 	int iGroup = -1;
@@ -262,7 +262,7 @@ BOOL AppNodeGroupHandle::RequestCloseEditor(EditNode* pWndArr, int nArrCnt, bool
 				LS(STR_ERR_CSHAREDATA19)
 				) != IDYES
 			) {
-				return FALSE;
+				return false;
 			}
 		}
 	}
@@ -316,13 +316,13 @@ BOOL AppNodeGroupHandle::RequestCloseEditor(EditNode* pWndArr, int nArrCnt, bool
 				::GetWindowThreadProcessId(wnd.hWnd, &dwPid);
 				::SendMessage(hWndActive, MYWM_ALLOWACTIVATE, dwPid, 0);	// アクティブ化の許可を依頼する
 				if (!::SendMessage(wnd.hWnd, MYWM_CLOSE, bExit ? PM_CLOSE_EXIT : 0, (LPARAM)hWndActive)) {	// 2007.02.13 ryoji bExitを引き継ぐ
-					return FALSE;
+					return false;
 				}
 			}
 		}
 	}
 
-	return TRUE;
+	return true;
 }
 
 
@@ -517,17 +517,17 @@ int AppNodeManager::GetNoNameNumber(HWND hWnd)
 	@param[out] ppEditNode 配列を受け取るポインタ
 		戻り値が0の場合はNULLが返されるが，それを期待しないこと．
 		また，不要になったらdelete []しなくてはならない．
-	@param[in] bSort TRUE: ソートあり / FALSE: ソート無し
-	@param[in]bGSort TRUE: グループソートあり / FALSE: グループソート無し
+	@param[in] bSort true: ソートあり / false: ソート無し
+	@param[in] bGSort true: グループソートあり / false: グループソート無し
 
 	もとの編集ウィンドウリストはソートしなければウィンドウのMRU順に並んでいる
 	-------------------------------------------------
 	bSort	bGSort	処理結果
 	-------------------------------------------------
-	FALSE	FALSE	グループMRU順－ウィンドウMRU順
-	TRUE	FALSE	グループMRU順－ウィンドウ番号順
-	FALSE	TRUE	グループ番号順－ウィンドウMRU順
-	TRUE	TRUE	グループ番号順－ウィンドウ番号順
+	false	false	グループMRU順－ウィンドウMRU順
+	true	false	グループMRU順－ウィンドウ番号順
+	false	true	グループ番号順－ウィンドウMRU順
+	true	true	グループ番号順－ウィンドウ番号順
 	-------------------------------------------------
 
 	@return 配列の要素数を返す

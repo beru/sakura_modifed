@@ -43,7 +43,7 @@ void MainStatusBar::CreateStatusBar()
 	);
 
 	if (m_pOwner->m_funcKeyWnd.GetHwnd()) {
-		m_pOwner->m_funcKeyWnd.SizeBox_ONOFF(FALSE);
+		m_pOwner->m_funcKeyWnd.SizeBox_ONOFF(false);
 	}
 
 	// スプリッターの、サイズボックスの位置を変更

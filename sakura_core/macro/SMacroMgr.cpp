@@ -579,7 +579,7 @@ int SMacroMgr::Append(
 
 	@date 2007.07.16 genta flags追加
 */
-BOOL SMacroMgr::Exec(
+bool SMacroMgr::Exec(
 	int idx,
 	HINSTANCE hInstance,
 	EditView* pEditView,
@@ -595,9 +595,9 @@ BOOL SMacroMgr::Exec(
 			int prevmacro = SetCurrentIdx(idx);
 			m_pKeyMacro->ExecKeyMacro2(pEditView, flags);
 			SetCurrentIdx(prevmacro);
-			return TRUE;
+			return true;
 		}else {
-			return FALSE;
+			return false;
 		}
 	}
 	if (idx == TEMP_KEYMACRO) {		// 一時マクロ
@@ -605,13 +605,13 @@ BOOL SMacroMgr::Exec(
 			int prevmacro = SetCurrentIdx( idx );
 			m_pTempMacro->ExecKeyMacro2(pEditView, flags);
 			SetCurrentIdx( prevmacro );
-			return TRUE;
+			return true;
 		}else {
-			return FALSE;
+			return false;
 		}
 	}
 	if (idx < 0 || MAX_CUSTMACRO <= idx)	// 範囲チェック
-		return FALSE;
+		return false;
 
 	// 読み込み前か、毎回読み込む設定の場合は、ファイルを読み込みなおす
 	// Apr. 29, 2002 genta
@@ -622,11 +622,11 @@ BOOL SMacroMgr::Exec(
 		TCHAR ptr[_MAX_PATH * 2];
 		int n = ShareData::getInstance().GetMacroFilename(idx, ptr, _countof(ptr));
 		if  (n <= 0) {
-			return FALSE;
+			return false;
 		}
 
 		if (!Load(idx, hInstance, ptr, NULL)) {
-			return FALSE;
+			return false;
 		}
 	}
 
@@ -637,7 +637,7 @@ BOOL SMacroMgr::Exec(
 	m_savedKeyMacros[idx]->ExecKeyMacro2(pEditView, flags);
 	SetCurrentIdx(prevmacro);
 
-	return TRUE;
+	return true;
 }
 
 /*! キーボードマクロの読み込み
@@ -906,7 +906,7 @@ EFunctionCode SMacroMgr::GetFuncInfoByName(
 }
 
 // キーマクロに記録可能な機能かどうかを調べる
-BOOL SMacroMgr::CanFuncIsKeyMacro(int nFuncID)
+bool SMacroMgr::CanFuncIsKeyMacro(int nFuncID)
 {
 	switch (nFuncID) {
 	// ファイル操作系
@@ -1229,9 +1229,9 @@ BOOL SMacroMgr::CanFuncIsKeyMacro(int nFuncID)
 //	case F_ABOUT					:// バージョン情報			//Dec. 25, 2000 JEPRO 追加
 
 	// その他
-		return TRUE;
+		return true;
 	}
-	return FALSE;
+	return false;
 
 }
 

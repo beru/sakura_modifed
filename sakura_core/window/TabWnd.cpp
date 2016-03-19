@@ -382,7 +382,7 @@ LRESULT TabWnd::OnTabMouseMove(WPARAM wParam, LPARAM lParam)
 			break;
 		m_eDragState = DRAG_DRAG;
 		m_hDefaultCursor = ::GetCursor();
-		m_bTabSwapped = FALSE;
+		m_bTabSwapped = false;
 
 		// 現在のタブ境界位置を記憶する
 		nTabCount = TabCtrl_GetItemCount(m_hwndTab);

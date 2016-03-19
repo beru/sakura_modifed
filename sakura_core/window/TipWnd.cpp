@@ -27,7 +27,7 @@ TipWnd::TipWnd()
 	Wnd(_T("::TipWnd"))
 {
 	m_hFont = NULL;
-	m_KeyWasHit = FALSE;	// キーがヒットしたか
+	m_KeyWasHit = false;	// キーがヒットしたか
 	return;
 }
 

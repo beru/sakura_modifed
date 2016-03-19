@@ -127,7 +127,7 @@ void LayoutMgr::ReplaceData_CLayoutMgr(
 	ctwArg.ptLayout     = pArg->delRange.GetFrom();		// 編集開始位置
 	ctwArg.nDelLines    = pArg->delRange.GetTo().GetY2() - pArg->delRange.GetFrom().GetY2();	// 削除行数 - 1
 	ctwArg.nAllLinesOld = nWork_nLines;								// 編集前のテキスト行数
-	ctwArg.bInsData     = (pArg->pInsData && pArg->pInsData->size()) ? TRUE : FALSE;			// 追加文字列の有無
+	ctwArg.bInsData     = (pArg->pInsData && pArg->pInsData->size());			// 追加文字列の有無
 
 	// 指定レイアウト行に対応する論理行の次の論理行から指定論理行数だけ再レイアウトする
 	LayoutInt nAddInsLineNum;
@@ -137,7 +137,7 @@ void LayoutMgr::ReplaceData_CLayoutMgr(
 		ptFrom,
 		nCurrentLineType,
 		colorInfo,
-		&ctwArg,
+		ctwArg,
 		&nAddInsLineNum
 	);
 

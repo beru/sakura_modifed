@@ -3697,7 +3697,7 @@ int	EditWnd::CreateFileDropDownMenu(HWND hwnd)
 			MF_BYPOSITION | MF_SEPARATOR,
 			0,
 			NULL,
-			FALSE
+			false
 		);
 	}
 

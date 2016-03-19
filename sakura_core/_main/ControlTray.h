@@ -83,7 +83,7 @@ public:
 	static void ActiveNextWindow(HWND hwndParent);
 	static void ActivePrevWindow(HWND hwndParent);
 
-	static BOOL CloseAllEditor(bool bCheckConfirm, HWND hWndFrom, bool bExit, int nGroup);	// すべてのウィンドウを閉じる	Oct. 7, 2000 jepro 「編集ウィンドウの全終了」という説明を左記のように変更	// 2006.12.25, 2007.02.13 ryoji 引数追加
+	static bool CloseAllEditor(bool bCheckConfirm, HWND hWndFrom, bool bExit, int nGroup);	// すべてのウィンドウを閉じる	Oct. 7, 2000 jepro 「編集ウィンドウの全終了」という説明を左記のように変更	// 2006.12.25, 2007.02.13 ryoji 引数追加
 	static void TerminateApplication(HWND hWndFrom);	// サクラエディタの全終了		2006.12.25 ryoji 引数追加
 
 public:

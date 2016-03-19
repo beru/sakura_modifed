@@ -218,7 +218,7 @@ void MruFile::Add(EditInfo* pEditInfo)
 		}
 	}
 	EditInfo tmpEditInfo = *pEditInfo;
-	tmpEditInfo.bIsModified = FALSE; // 変更フラグを無効に
+	tmpEditInfo.bIsModified = false; // 変更フラグを無効に
 
 	TCHAR szDrive[_MAX_DRIVE];
 	TCHAR szDir[_MAX_DIR];

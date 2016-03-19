@@ -459,7 +459,7 @@ LayoutInt LayoutMgr::DoLayout_Range(
 	LogicPoint			_ptDelLogicalFrom,
 	EColorIndexType		nCurrentLineType,
 	LayoutColorInfo*	colorInfo,
-	const CalTextWidthArg*	pctwArg,
+	const CalTextWidthArg&	ctwArg,
 	LayoutInt*			_pnExtInsLineNum
 	)
 {
@@ -557,7 +557,7 @@ LayoutInt LayoutMgr::DoLayout_Range(
 	}
 
 	// 2009.08.28 nasukoji	テキストが編集されたら最大幅を算出する
-	CalculateTextWidth_Range(pctwArg);
+	CalculateTextWidth_Range(ctwArg);
 
 // 1999.12.22 レイアウト情報がなくなる訳ではないので
 // m_nPrevReferLine = 0;
@@ -570,61 +570,61 @@ LayoutInt LayoutMgr::DoLayout_Range(
 /*!
 	@brief テキストが編集されたら最大幅を算出する
 
-	@param[in] pctwArg テキスト最大幅算出用構造体
+	@param[in] ctwArg テキスト最大幅算出用構造体
 
 	@note 「折り返さない」選択時のみテキスト最大幅を算出する．
 	      編集された行の範囲について算出する（下記を満たす場合は全行）
 	      　削除行なし時：最大幅の行を行頭以外にて改行付きで編集した
 	      　削除行あり時：最大幅の行を含んで編集した
-	      pctwArg->nDelLines が負数の時は削除行なし．
+	      ctwArg.nDelLines が負数の時は削除行なし．
 
 	@date 2009.08.28 nasukoji	新規作成
 */
-void LayoutMgr::CalculateTextWidth_Range(const CalTextWidthArg* pctwArg)
+void LayoutMgr::CalculateTextWidth_Range(const CalTextWidthArg& ctwArg)
 {
 	if (m_pEditDoc->m_nTextWrapMethodCur == TextWrappingMethod::NoWrapping) {	// 「折り返さない」
 		LayoutInt nCalTextWidthLinesFrom(0);	// テキスト最大幅の算出開始レイアウト行
 		LayoutInt nCalTextWidthLinesTo(0);	// テキスト最大幅の算出終了レイアウト行
 		bool bCalTextWidth = true;		// テキスト最大幅の算出要求をON
-		LayoutInt nInsLineNum = m_nLines - pctwArg->nAllLinesOld;		// 追加削除行数
+		LayoutInt nInsLineNum = m_nLines - ctwArg.nAllLinesOld;		// 追加削除行数
 
 		// 削除行なし時：最大幅の行を行頭以外にて改行付きで編集した
 		// 削除行あり時：最大幅の行を含んで編集した
 
 		if (0
 			|| (1
-				&& pctwArg->nDelLines < LayoutInt(0)
+				&& ctwArg.nDelLines < LayoutInt(0)
 				&& Int(m_nTextWidth)
 				&& Int(nInsLineNum)
-				&& Int(pctwArg->ptLayout.x)
-				&& m_nTextWidthMaxLine == pctwArg->ptLayout.y
+				&& Int(ctwArg.ptLayout.x)
+				&& m_nTextWidthMaxLine == ctwArg.ptLayout.y
 			)
 			|| (1
-				&& pctwArg->nDelLines >= LayoutInt(0)
+				&& ctwArg.nDelLines >= LayoutInt(0)
 				&& Int(m_nTextWidth)
-				&& pctwArg->ptLayout.y <= m_nTextWidthMaxLine
-				&& m_nTextWidthMaxLine <= pctwArg->ptLayout.y + pctwArg->nDelLines 
+				&& ctwArg.ptLayout.y <= m_nTextWidthMaxLine
+				&& m_nTextWidthMaxLine <= ctwArg.ptLayout.y + ctwArg.nDelLines 
 			)
 		) {
 			// 全ラインを走査する
 			nCalTextWidthLinesFrom = -1;
 			nCalTextWidthLinesTo   = -1;
 		// 追加削除行 または 追加文字列あり
-		}else if (Int(nInsLineNum) || Int(pctwArg->bInsData)) {
+		}else if (Int(nInsLineNum) || Int(ctwArg.bInsData)) {
 			// 追加削除行のみを走査する
-			nCalTextWidthLinesFrom = pctwArg->ptLayout.y;
+			nCalTextWidthLinesFrom = ctwArg.ptLayout.y;
 
 			// 最終的に編集された行数（3行削除2行追加なら2行追加）
 			// 1行がMAXLINEKETASを超える場合行数が合わなくなるが、超える場合はその先の計算自体が
 			// 不要なので計算を省くためこのままとする。
-			LayoutInt nEditLines = nInsLineNum + ((pctwArg->nDelLines > 0) ? pctwArg->nDelLines : LayoutInt(0));
-			nCalTextWidthLinesTo   = pctwArg->ptLayout.y + ((nEditLines > 0) ? nEditLines : LayoutInt(0));
+			LayoutInt nEditLines = nInsLineNum + ((ctwArg.nDelLines > 0) ? ctwArg.nDelLines : LayoutInt(0));
+			nCalTextWidthLinesTo   = ctwArg.ptLayout.y + ((nEditLines > 0) ? nEditLines : LayoutInt(0));
 
 			// 最大幅の行が上下するのを計算
 			if (1
 				&& Int(m_nTextWidth)
 				&& Int(nInsLineNum)
-				&& m_nTextWidthMaxLine >= pctwArg->ptLayout.y
+				&& m_nTextWidthMaxLine >= ctwArg.ptLayout.y
 			) {
 				m_nTextWidthMaxLine += nInsLineNum;
 			}

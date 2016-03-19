@@ -327,7 +327,7 @@ void _DispEOL(Graphics& gr, DispPos* pDispPos, Eol eol, const EditView* pView, b
 画面描画補助関数:
 行末の改行マークを改行コードによって書き分ける（メイン）
 
-@note bBoldがTRUEの時は横に1ドットずらして重ね書きを行うが、
+@note bBoldがtrueの時は横に1ドットずらして重ね書きを行うが、
 あまり太く見えない。
 
 @date 2001.12.21 YAZAKI 改行記号の描きかたを変更。ペンはこの関数内で作るようにした。
@@ -337,7 +337,7 @@ void _DrawEOL(
 	Graphics&		gr,			// Device Context Handle
 	const Rect&		rcEol,		// 描画領域
 	Eol				eol,		// 行末コード種別
-	bool			bBold,		// TRUE: 太字
+	bool			bBold,		// true: 太字
 	COLORREF		pColor		// 色
 	)
 {

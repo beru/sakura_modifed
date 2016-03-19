@@ -564,7 +564,7 @@ void ViewCommander::Command_UNINDENT(wchar_t wcChar)
 	@date 2001.12.03 hor 新規作成
 */
 void ViewCommander::Command_TRIM(
-	bool bLeft	//  [in] FALSE: 右TRIM / それ以外: 左TRIM
+	bool bLeft	//  [in] false: 右TRIM / それ以外: 左TRIM
 	)
 {
 	bool bBeDisableSelectArea = false;

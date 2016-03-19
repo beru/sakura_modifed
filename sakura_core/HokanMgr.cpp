@@ -525,7 +525,7 @@ BOOL HokanMgr::DoHokan(int nVKey)
 //	pEditView->GetCommander().HandleCommand(F_INSTEXT_W, true, (LPARAM)(wszLabel + m_memCurWord.GetLength()), TRUE, 0, 0);
 	Hide();
 
-	m_pShareData->common.helper.bUseHokan = FALSE;	//	•âŠ®‚µ‚½‚ç
+	m_pShareData->common.helper.bUseHokan = false;	//	•âŠ®‚µ‚½‚ç
 	return TRUE;
 }
 
@@ -600,7 +600,7 @@ int HokanMgr::KeyProc(WPARAM wParam, LPARAM lParam)
 		}
 	case VK_ESCAPE:
 	case VK_LEFT:
-		m_pShareData->common.helper.bUseHokan = FALSE;
+		m_pShareData->common.helper.bUseHokan = false;
 		return -2;
 	}
 	return -2;

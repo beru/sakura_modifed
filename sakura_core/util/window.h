@@ -103,7 +103,7 @@ inline bool IsDlgButtonCheckedBool(HWND hDlg, int nIDButton) {
 
 // ダイアログアイテムの有効化
 inline bool DlgItem_Enable(HWND hwndDlg, int nIDDlgItem, bool nEnable) {
-	return FALSE != ::EnableWindow(::GetDlgItem(hwndDlg, nIDDlgItem), nEnable ? TRUE : FALSE);
+	return ::EnableWindow(::GetDlgItem(hwndDlg, nIDDlgItem), nEnable ? TRUE : FALSE) != FALSE;
 }
 
 // 幅計算補助クラス

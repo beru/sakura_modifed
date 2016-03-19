@@ -273,7 +273,7 @@ bool NormalProcess::InitializeProcess()
 			
 			// Feb. 23, 2003 Moca Owner window‚ª³‚µ‚­Žw’è‚³‚ê‚Ä‚¢‚È‚©‚Á‚½
 			int nRet = pEditWnd->m_dlgGrep.DoModal(GetProcessInstance(), pEditWnd->GetHwnd(), NULL);
-			if (FALSE != nRet) {
+			if (nRet != FALSE) {
 				activeView.GetCommander().HandleCommand(F_GREP, true, 0, 0, 0, 0);
 			}else {
 				// Ž©•ª‚ÍGrep‚Å‚È‚¢

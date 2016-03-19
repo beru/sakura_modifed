@@ -66,9 +66,9 @@ struct LayoutReplaceArg {
 // 編集時のテキスト最大幅算出用		// 2009.08.28 nasukoji
 struct CalTextWidthArg {
 	LayoutPoint	ptLayout;		// 編集開始位置
-	LayoutInt		nDelLines;		// 削除に関係する行数 - 1（負数の時削除なし）
-	LayoutInt		nAllLinesOld;	// 編集前のテキスト行数
-	BOOL			bInsData;		// 追加文字列あり
+	LayoutInt	nDelLines;		// 削除に関係する行数 - 1（負数の時削除なし）
+	LayoutInt	nAllLinesOld;	// 編集前のテキスト行数
+	bool		bInsData;		// 追加文字列あり
 };
 
 class LogicPointEx: public LogicPoint {
@@ -232,8 +232,8 @@ public:
 protected:
 	// 2005.11.21 Moca 引用符の色分け情報を引数から除去
 	// 2009.08.28 nasukoji	テキスト最大幅算出用引数追加
-	LayoutInt DoLayout_Range(Layout* , LogicInt, LogicPoint, EColorIndexType, LayoutColorInfo*, const CalTextWidthArg*, LayoutInt*);	// 指定レイアウト行に対応する論理行の次の論理行から指定論理行数だけ再レイアウトする
-	void CalculateTextWidth_Range(const CalTextWidthArg* pctwArg);	// テキストが編集されたら最大幅を算出する	// 2009.08.28 nasukoji
+	LayoutInt DoLayout_Range(Layout* , LogicInt, LogicPoint, EColorIndexType, LayoutColorInfo*, const CalTextWidthArg&, LayoutInt*);	// 指定レイアウト行に対応する論理行の次の論理行から指定論理行数だけ再レイアウトする
+	void CalculateTextWidth_Range(const CalTextWidthArg& ctwArg);	// テキストが編集されたら最大幅を算出する	// 2009.08.28 nasukoji
 	Layout* DeleteLayoutAsLogical(Layout*, LayoutInt, LogicInt , LogicInt, LogicPoint, LayoutInt*);	// 論理行の指定範囲に該当するレイアウト情報を削除
 	void ShiftLogicalLineNum(Layout* , LogicInt);	// 指定行より後の行のレイアウト情報について、論理行番号を指定行数だけシフトする
 

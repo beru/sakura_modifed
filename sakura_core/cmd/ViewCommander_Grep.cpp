@@ -163,7 +163,7 @@ void ViewCommander::Command_GREP_REPLACE_DLG( void )
 	if (!nRet) {
 		return;
 	}
-	HandleCommand(F_GREP_REPLACE, TRUE, 0, 0, 0, 0);	//	GREPコマンドの発行
+	HandleCommand(F_GREP_REPLACE, true, 0, 0, 0, 0);	//	GREPコマンドの発行
 }
 
 /*! GREP置換実行

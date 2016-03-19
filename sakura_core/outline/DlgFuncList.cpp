@@ -3378,7 +3378,7 @@ void DlgFuncList::DoMenu(POINT pt, HWND hwndFrom)
 				LS(STR_DLGFNCLST_UNIFY)
 			) == IDOK
 		) {
-			CommonSet().bOutlineDockDisp = GetHwnd()? TRUE: FALSE;
+			CommonSet().bOutlineDockDisp = (GetHwnd() != NULL);
 			CommonSet().eOutlineDockSide = GetDockSide();
 			if (GetHwnd()) {
 				RECT rc;

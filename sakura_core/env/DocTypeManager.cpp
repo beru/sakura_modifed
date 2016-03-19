@@ -136,13 +136,13 @@ bool DocTypeManager::GetTypeConfigMini(TypeConfigNum documentType, const TypeCon
 bool DocTypeManager::AddTypeConfig(TypeConfigNum documentType)
 {
 	LockGuard<Mutex> guard(g_docTypeMutex);
-	return FALSE != SendMessage(m_pShareData->handles.hwndTray, MYWM_ADD_TYPESETTING, (WPARAM)documentType.GetIndex(), 0);
+	return SendMessage(m_pShareData->handles.hwndTray, MYWM_ADD_TYPESETTING, (WPARAM)documentType.GetIndex(), 0) != FALSE;
 }
 
 bool DocTypeManager::DelTypeConfig(TypeConfigNum documentType)
 {
 	LockGuard<Mutex> guard(g_docTypeMutex);
-	return FALSE != SendMessage(m_pShareData->handles.hwndTray, MYWM_DEL_TYPESETTING, (WPARAM)documentType.GetIndex(), 0);
+	return SendMessage(m_pShareData->handles.hwndTray, MYWM_DEL_TYPESETTING, (WPARAM)documentType.GetIndex(), 0) != FALSE;
 }
 
 /*!

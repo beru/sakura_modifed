@@ -47,7 +47,7 @@ void ViewCommander::Command_HOKAN(void)
 {
 	auto& csHelper = GetDllShareData().common.helper;
 	if (!csHelper.bUseHokan) {
-		csHelper.bUseHokan = TRUE;
+		csHelper.bUseHokan = true;
 	}
 #if 0
 // 2011.06.24 Moca Plugin“±“ü‚É]‚¢–¢İ’è‚ÌŠm”F‚ğ‚â‚ß‚é

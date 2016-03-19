@@ -1027,7 +1027,7 @@ LRESULT ControlTray::DispatchEvent(
 		case WM_LBUTTONDBLCLK:
 			bLDClick = true;		// 03/02/20 ai
 			// 新規編集ウィンドウの追加
-			OnNewEditor(m_pShareData->common.tabBar.bNewWindow != FALSE);
+			OnNewEditor(m_pShareData->common.tabBar.bNewWindow);
 			// Apr. 1, 2003 genta この後で表示されたメニューは閉じる
 			::PostMessage(GetTrayHwnd(), WM_CANCELMODE, 0, 0);
 			return 0L;
@@ -1535,7 +1535,7 @@ void ControlTray::TerminateApplication(
 	@date 2007.02.13 ryoji 「編集の全終了」を示す引数(bExit)を追加
 	@date 2007.06.20 ryoji nGroup引数を追加
 */
-BOOL ControlTray::CloseAllEditor(
+bool ControlTray::CloseAllEditor(
 	bool	bCheckConfirm,	// [in] [すべて閉じる]確認オプションに従って問い合わせをするかどうか
 	HWND	hWndFrom,		// [in] 呼び出し元のウィンドウハンドル
 	bool	bExit,			// [in] true: 編集の全終了 / false: すべて閉じる
@@ -1545,11 +1545,11 @@ BOOL ControlTray::CloseAllEditor(
 	EditNode* pWndArr;
 	int n = AppNodeManager::getInstance().GetOpenedWindowArr(&pWndArr, false);
 	if (n == 0) {
-		return TRUE;
+		return true;
 	}
 	
 	// 全編集ウィンドウへ終了要求を出す
-	BOOL bRes = AppNodeGroupHandle(nGroup).RequestCloseEditor(pWndArr, n, bExit, bCheckConfirm, hWndFrom);	// 2007.02.13 ryoji bExitを引き継ぐ
+	bool bRes = AppNodeGroupHandle(nGroup).RequestCloseEditor(pWndArr, n, bExit, bCheckConfirm, hWndFrom);	// 2007.02.13 ryoji bExitを引き継ぐ
 	delete []pWndArr;
 	return bRes;
 }
@@ -1633,7 +1633,7 @@ int	ControlTray::CreatePopUpMenu_L(void)
 			}
 		}
 	}
-	m_menuDrawer.MyAppendMenuSep(hMenu, MF_BYPOSITION | MF_SEPARATOR, 0, NULL, FALSE);
+	m_menuDrawer.MyAppendMenuSep(hMenu, MF_BYPOSITION | MF_SEPARATOR, 0, NULL, false);
 	m_menuDrawer.MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING, F_EXITALLEDITORS, _T(""), _T("Q"), false);	// Oct. 17, 2000 JEPRO 名前を変更(F_FILECLOSEALL→F_WIN_CLOSEALL)	//Feb. 18, 2001 JEPRO アクセスキー変更(L→Q)	// 2006.10.21 ryoji 表示文字列変更	// 2007.02.13 ryoji →F_EXITALLEDITORS
 	if (j == 0) {
 		::EnableMenuItem(hMenu, F_EXITALLEDITORS, MF_BYCOMMAND | MF_GRAYED);	// Oct. 17, 2000 JEPRO 名前を変更(F_FILECLOSEALL→F_WIN_CLOSEALL)	// 2007.02.13 ryoji →F_EXITALLEDITORS
