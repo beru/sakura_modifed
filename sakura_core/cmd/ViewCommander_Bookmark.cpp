@@ -29,7 +29,7 @@ void ViewCommander::Command_JUMP_SRCHSTARTPOS(void)
 	if (m_view.m_ptSrchStartPos_PHY.BothNatural()) {
 		LayoutPoint pt;
 		// 範囲選択中か
-		GetDocument()->m_layoutMgr.LogicToLayout(
+		GetDocument().m_layoutMgr.LogicToLayout(
 			m_view.m_ptSrchStartPos_PHY,
 			&pt
 		);
@@ -48,7 +48,7 @@ void ViewCommander::Command_JUMP_SRCHSTARTPOS(void)
 void ViewCommander::Command_JUMP_DIALOG(void)
 {
 	if (!GetEditWindow()->m_dlgJump.DoModal(
-			G_AppInstance(), m_view.GetHwnd(), (LPARAM)GetDocument()
+			G_AppInstance(), m_view.GetHwnd(), (LPARAM)&GetDocument()
 		)
 	) {
 		return;
@@ -59,7 +59,7 @@ void ViewCommander::Command_JUMP_DIALOG(void)
 // 指定行ヘジャンプ
 void ViewCommander::Command_JUMP(void)
 {
-	auto& layoutMgr = GetDocument()->m_layoutMgr;
+	auto& layoutMgr = GetDocument().m_layoutMgr;
 	if (layoutMgr.GetLineCount() == 0) {
 		ErrorBeep();
 		return;
@@ -137,7 +137,7 @@ void ViewCommander::Command_JUMP(void)
 		nLineCount = ptPosXY.y;
 	}
 
-	auto& lineMgr = GetDocument()->m_docLineMgr;
+	auto& lineMgr = GetDocument().m_docLineMgr;
 	for (; nLineCount<lineMgr.GetLineCount(); ++nLineCount) {
 		LogicInt nLineLen;
 		const wchar_t* pLine = lineMgr.GetLine(LogicInt(nLineCount))->GetDocLineStrWithEOL(&nLineLen);
@@ -268,13 +268,13 @@ void ViewCommander::Command_BOOKMARK_SET(void)
 	DocLine* pDocLine;
 	auto& selInfo = m_view.GetSelectionInfo();
 	auto& select = selInfo.m_select;
-	auto& lineMgr = GetDocument()->m_docLineMgr;
+	auto& lineMgr = GetDocument().m_docLineMgr;
 	if (selInfo.IsTextSelected()
 		&& select.GetFrom().y < select.GetTo().y
 	) {
 		LogicPoint ptFrom;
 		LogicPoint ptTo;
-		auto& layoutMgr = GetDocument()->m_layoutMgr;
+		auto& layoutMgr = GetDocument().m_layoutMgr;
 		layoutMgr.LayoutToLogic(
 			LayoutPoint(LayoutInt(0), select.GetFrom().y),
 			&ptFrom
@@ -317,11 +317,11 @@ void ViewCommander::Command_BOOKMARK_NEXT(void)
 	nYOld = ptXY.y;					// hor
 
 re_do:;								// hor
-	if (BookmarkManager(&GetDocument()->m_docLineMgr).SearchBookMark(ptXY.GetY2(), SearchDirection::Forward, &tmp_y)) {
+	if (BookmarkManager(GetDocument().m_docLineMgr).SearchBookMark(ptXY.GetY2(), SearchDirection::Forward, &tmp_y)) {
 		ptXY.y = tmp_y;
 		bFound = true;
 		LayoutPoint ptLayout;
-		GetDocument()->m_layoutMgr.LogicToLayout(ptXY, &ptLayout);
+		GetDocument().m_layoutMgr.LogicToLayout(ptXY, &ptLayout);
 		// 2006.07.09 genta 新規関数にまとめた
 		m_view.MoveCursorSelecting(ptLayout, m_view.GetSelectionInfo().m_bSelectingLock);
 	}
@@ -361,12 +361,12 @@ void ViewCommander::Command_BOOKMARK_PREV(void)
 	nYOld = ptXY.y;						// hor
 
 re_do:;								// hor
-	auto& docLineMgr = GetDocument()->m_docLineMgr;
-	if (BookmarkManager(&docLineMgr).SearchBookMark(ptXY.GetY2(), SearchDirection::Backward, &tmp_y)) {
+	auto& docLineMgr = GetDocument().m_docLineMgr;
+	if (BookmarkManager(docLineMgr).SearchBookMark(ptXY.GetY2(), SearchDirection::Backward, &tmp_y)) {
 		ptXY.y = tmp_y;
 		bFound = true;				// hor
 		LayoutPoint ptLayout;
-		GetDocument()->m_layoutMgr.LogicToLayout(ptXY, &ptLayout);
+		GetDocument().m_layoutMgr.LogicToLayout(ptXY, &ptLayout);
 		// 2006.07.09 genta 新規関数にまとめた
 		m_view.MoveCursorSelecting(ptLayout, m_view.GetSelectionInfo().m_bSelectingLock);
 	}
@@ -397,7 +397,7 @@ re_do:;								// hor
 // ブックマークをクリアする
 void ViewCommander::Command_BOOKMARK_RESET(void)
 {
-	BookmarkManager(&GetDocument()->m_docLineMgr).ResetAllBookMark();
+	BookmarkManager(GetDocument().m_docLineMgr).ResetAllBookMark();
 	// 2002.01.16 hor 分割したビューも更新
 	GetEditWindow()->Views_Redraw();
 }
@@ -412,7 +412,7 @@ void ViewCommander::Command_BOOKMARK_PATTERN(void)
 	if (!m_view.ChangeCurRegexp(false)) {
 		return;
 	}
-	BookmarkManager(&GetDocument()->m_docLineMgr).MarkSearchWord(
+	BookmarkManager(GetDocument().m_docLineMgr).MarkSearchWord(
 		m_view.m_searchPattern
 	);
 	// 2002.01.16 hor 分割したビューも更新
@@ -428,10 +428,10 @@ void ViewCommander::Command_FUNCLIST_NEXT(void)
 	int nYOld = ptXY.y;
 
 	for (int n=0; n<2; ++n) {
-		if (FuncListManager().SearchFuncListMark(&GetDocument()->m_docLineMgr,
+		if (FuncListManager().SearchFuncListMark(&GetDocument().m_docLineMgr,
 				ptXY.GetY2(), SearchDirection::Forward, &ptXY.y)) {
 			LayoutPoint ptLayout;
-			GetDocument()->m_layoutMgr.LogicToLayout(ptXY,&ptLayout);
+			GetDocument().m_layoutMgr.LogicToLayout(ptXY,&ptLayout);
 			m_view.MoveCursorSelecting( ptLayout,
 				m_view.GetSelectionInfo().m_bSelectingLock );
 			if (nYOld >= ptXY.y) {
@@ -460,14 +460,14 @@ void ViewCommander::Command_FUNCLIST_PREV(void)
 
 	for (int n=0; n<2; ++n) {
 		if (FuncListManager().SearchFuncListMark(
-			&GetDocument()->m_docLineMgr,
+			&GetDocument().m_docLineMgr,
 			ptXY.GetY2(),
 			SearchDirection::Backward,
 			&ptXY.y
 			)
 		) {
 			LayoutPoint ptLayout;
-			GetDocument()->m_layoutMgr.LogicToLayout(ptXY, &ptLayout);
+			GetDocument().m_layoutMgr.LogicToLayout(ptXY, &ptLayout);
 			m_view.MoveCursorSelecting(
 				ptLayout,
 				m_view.GetSelectionInfo().m_bSelectingLock
@@ -480,7 +480,7 @@ void ViewCommander::Command_FUNCLIST_PREV(void)
 		if (!GetDllShareData().common.search.bSearchAll) {
 			break;
 		}
-		ptXY.y= GetDocument()->m_docLineMgr.GetLineCount();
+		ptXY.y= GetDocument().m_docLineMgr.GetLineCount();
 	}
 	m_view.SendStatusMessage(LS(STR_ERR_SRPREV2));
 	AlertNotFound( m_view.GetHwnd(), false, LS(STR_FUCLIST_PREV_NOT_FOUND) );

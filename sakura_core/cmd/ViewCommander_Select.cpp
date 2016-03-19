@@ -29,7 +29,7 @@ bool ViewCommander::Command_SELECTWORD(LayoutPoint* pptCaretPos)
 	}
 	auto& caret = GetCaret();
 	LayoutPoint ptCaretPos = ((!pptCaretPos) ? caret.GetCaretLayoutPos() : *pptCaretPos);
-	auto& layoutMgr = GetDocument()->m_layoutMgr;
+	auto& layoutMgr = GetDocument().m_layoutMgr;
 	const Layout* pLayout = layoutMgr.SearchLineByLayoutY(ptCaretPos.GetY2());
 	if (!pLayout) {
 		return false;	// 単語選択に失敗
@@ -85,7 +85,7 @@ void ViewCommander::Command_SELECTALL(void)
 	//int nX, nY;
 	LayoutRange range;
 	range.SetFrom(LayoutPoint(0, 0));
-	GetDocument()->m_layoutMgr.GetEndLayoutPos(range.GetToPointer());
+	GetDocument().m_layoutMgr.GetEndLayoutPos(range.GetToPointer());
 	si.SetSelectArea(range);
 
 	// 選択領域描画
@@ -111,10 +111,10 @@ void ViewCommander::Command_SELECTLINE(int lparam)
 
 	LayoutPoint ptCaret;
 
-	auto& layoutMgr = GetDocument()->m_layoutMgr;
+	auto& layoutMgr = GetDocument().m_layoutMgr;
 	auto& caret = GetCaret();
 	// 最下行（物理行）でない
-	if (caret.GetCaretLogicPos().y < GetDocument()->m_docLineMgr.GetLineCount()) {
+	if (caret.GetCaretLogicPos().y < GetDocument().m_docLineMgr.GetLineCount()) {
 		// 1行先の物理行からレイアウト行を求める
 		layoutMgr.LogicToLayout(LogicPoint(0, caret.GetCaretLogicPos().y + 1), &ptCaret);
 
@@ -131,7 +131,7 @@ void ViewCommander::Command_SELECTLINE(int lparam)
 		// 選択するものが無い（[EOF]のみの行）時は選択状態としない
 		if (
 			!si.IsTextSelected()
-			&& (caret.GetCaretLogicPos().y >= GetDocument()->m_docLineMgr.GetLineCount())
+			&& (caret.GetCaretLogicPos().y >= GetDocument().m_docLineMgr.GetLineCount())
 		) {
 			// 現在の選択範囲を非選択状態に戻す
 			si.DisableSelectArea(true);

@@ -524,23 +524,24 @@ void PropPlugin::EnablePluginPropInput(HWND hwndDlg)
 //	Readme ファイルの取得	2011/11/2 Uchi
 std::tstring PropPlugin::GetReadMeFile(const std::tstring& sName)
 {
-	std::tstring sReadMeName = PluginManager::getInstance().GetBaseDir()
+	auto& pluginMgr = PluginManager::getInstance();
+	std::tstring sReadMeName = pluginMgr.GetBaseDir()
 		+ sName + _T("\\ReadMe.txt");
 	File* fl = new File(sReadMeName.c_str());
 	if (!fl->IsFileExist()) {
-		sReadMeName = PluginManager::getInstance().GetBaseDir()
+		sReadMeName = pluginMgr.GetBaseDir()
 			+ sName + _T("\\") + sName + _T(".txt");
 		delete fl;
 		fl = new File(sReadMeName.c_str());
 	}
 	if (!fl->IsFileExist()) {
 		// exeフォルダ配下
-		sReadMeName = PluginManager::getInstance().GetExePluginDir()
+		sReadMeName = pluginMgr.GetExePluginDir()
 			+ sName + _T("\\ReadMe.txt");
 		delete fl;
 		fl = new File(sReadMeName.c_str());
 		if (!fl->IsFileExist()) {
-			sReadMeName = PluginManager::getInstance().GetExePluginDir()
+			sReadMeName = pluginMgr.GetExePluginDir()
 				+ sName + _T("\\") + sName + _T(".txt");
 			delete fl;
 			fl = new File(sReadMeName.c_str());

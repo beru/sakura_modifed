@@ -361,7 +361,7 @@ HWND DlgFuncList::DoModeless(
 	m_nOutlineType = nOutlineType;		// アウトライン解析の種別
 	m_nListType = nListType;			// 一覧の種類
 	m_bLineNumIsCRLF = bLineNumIsCRLF;	// 行番号の表示 false=折り返し単位／true=改行単位
-	m_nDocType = pEditView->GetDocument()->m_docType.GetDocumentType().GetIndex();
+	m_nDocType = pEditView->GetDocument().m_docType.GetDocumentType().GetIndex();
 	DocTypeManager().GetTypeConfig(TypeConfigNum(m_nDocType), m_type);
 	m_nSortCol = m_type.nOutlineSortCol;
 	m_nSortColOld = m_nSortCol;
@@ -757,7 +757,7 @@ void DlgFuncList::SetData()
 	// 2002/11/1 frozen 項目のソート基準を設定するコンボボックスはブックマーク一覧の以外の時に表示する
 	// Nov. 5, 2002 genta ツリー表示の時だけソート基準コンボボックスを表示
 	EditView* pEditView = (EditView*)m_lParam;
-	int nDocType = pEditView->GetDocument()->m_docType.GetDocumentType().GetIndex();
+	int nDocType = pEditView->GetDocument().m_docType.GetDocumentType().GetIndex();
 	if (nDocType != m_nDocType) {
 		// 以前とはドキュメントタイプが変わったので初期化する
 		m_nDocType = nDocType;
@@ -1610,7 +1610,7 @@ void DlgFuncList::SetDocLineFuncList()
 		return;
 	}
 	EditView* pEditView = (EditView*)m_lParam;
-	DocLineMgr* pDocLineMgr = &pEditView->GetDocument()->m_docLineMgr;
+	DocLineMgr* pDocLineMgr = &pEditView->GetDocument().m_docLineMgr;
 	
 	FuncListManager().ResetAllFucListMark(pDocLineMgr, false);
 	int num = m_pFuncInfoArr->GetNum();
@@ -2060,7 +2060,7 @@ BOOL DlgFuncList::OnBnClicked(int wID)
 			EditView* pEditView = (EditView*)m_lParam;
 			pEditView->GetCommander().HandleCommand(F_BOOKMARK_VIEW, true, TRUE, 0, 0, 0);
 			m_nCurLine=pEditView->GetCaret().GetCaretLayoutPos().GetY2() + LayoutInt(1);
-			DocTypeManager().GetTypeConfig(pEditView->GetDocument()->m_docType.GetDocumentType(), m_type);
+			DocTypeManager().GetTypeConfig(pEditView->GetDocument().m_docType.GetDocumentType(), m_type);
 			SetData();
 		}else
 		if (m_nViewType == VIEWTYPE_TREE) {
@@ -2476,11 +2476,11 @@ bool DlgFuncList::TagJumpTimer(
 	EditView* pView = reinterpret_cast<EditView*>(m_lParam);
 
 	// ファイルを開いていない場合は自分で開く
-	if (pView->GetDocument()->IsAcceptLoad()) {
+	if (pView->GetDocument().IsAcceptLoad()) {
 		std::wstring strFile = to_wchar(pFile);
 		pView->GetCommander().Command_FILEOPEN( strFile.c_str(), CODE_AUTODETECT, AppMode::getInstance().IsViewMode(), NULL );
 		if (point.y != -1) {
-			if (pView->GetDocument()->m_docFile.GetFilePathClass().IsValidPath()) {
+			if (pView->GetDocument().m_docFile.GetFilePathClass().IsValidPath()) {
 				LogicPoint pt;
 				pt.x = LogicInt(point.GetX() - 1);
 				pt.y = LogicInt(point.GetY() - 1);
@@ -2625,7 +2625,7 @@ void DlgFuncList::Redraw(
 	)
 {
 	EditView* pEditView = (EditView*)m_lParam;
-	m_nDocType = pEditView->GetDocument()->m_docType.GetDocumentType().GetIndex();
+	m_nDocType = pEditView->GetDocument().m_docType.GetDocumentType().GetIndex();
 	DocTypeManager().GetTypeConfig(TypeConfigNum(m_nDocType), m_type);
 	SyncColor();
 

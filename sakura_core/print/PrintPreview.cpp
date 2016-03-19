@@ -791,17 +791,17 @@ void PrintPreview::OnChangePrintSetting(void)
 	}
 
 	// 印刷用のレイアウト管理情報の初期化
-	m_pLayoutMgr_Print->Create(m_pParentWnd->GetDocument(), &m_pParentWnd->GetDocument()->m_docLineMgr);
+	m_pLayoutMgr_Print->Create(&m_pParentWnd->GetDocument(), &m_pParentWnd->GetDocument().m_docLineMgr);
 
 	// 印刷用のレイアウト情報の変更
 	// タイプ別設定をコピー
-	m_typePrint = m_pParentWnd->GetDocument()->m_docType.GetDocumentAttribute();
+	m_typePrint = m_pParentWnd->GetDocument().m_docType.GetDocumentAttribute();
 	TypeConfig& ref = m_typePrint;
 
 	ref.nMaxLineKetas = 	m_bPreview_EnableColumns;
 	ref.bWordWrap =		m_pPrintSetting->bPrintWordWrap;	// 英文ワードラップをする
 	//	Sep. 23, 2002 genta LayoutMgrの値を使う
-	ref.nTabSpace =		m_pParentWnd->GetDocument()->m_layoutMgr.GetTabSpace();
+	ref.nTabSpace =		m_pParentWnd->GetDocument().m_layoutMgr.GetTabSpace();
 
 	//@@@ 2002.09.22 YAZAKI
 	ref.lineComment.CopyTo(0, L"", -1);	// 行コメントデリミタ
@@ -1019,12 +1019,12 @@ void PrintPreview::OnPrint(void)
 
 	// プリンタに渡すジョブ名を生成
 	TCHAR szJobName[256 + 1];
-	if (!m_pParentWnd->GetDocument()->m_docFile.GetFilePathClass().IsValidPath()) {	// 現在編集中のファイルのパス
+	if (!m_pParentWnd->GetDocument().m_docFile.GetFilePathClass().IsValidPath()) {	// 現在編集中のファイルのパス
 		_tcscpy_s(szJobName, LS(STR_NO_TITLE2));
 	}else {
 		TCHAR szFileName[_MAX_FNAME];
 		TCHAR szExt[_MAX_EXT];
-		_tsplitpath(m_pParentWnd->GetDocument()->m_docFile.GetFilePath(), NULL, NULL, szFileName, szExt);
+		_tsplitpath(m_pParentWnd->GetDocument().m_docFile.GetFilePath(), NULL, NULL, szFileName, szExt);
 		auto_snprintf_s(szJobName, _countof(szJobName), _T("%ts%ts"), szFileName, szExt);
 	}
 
@@ -1433,6 +1433,8 @@ ColorStrategy* PrintPreview::DrawPageText(
 	// ページトップの色指定を取得
 	ColorStrategy*	pStrategy = pStrategyStart;
 
+	auto& typeConfig = m_pParentWnd->GetDocument().m_docType.GetDocumentAttribute();
+
 	// 段数ループ
 	for (int nDan=0; nDan<m_pPrintSetting->nPrintDansuu; ++nDan) {
 		// 本文1桁目の左隅の座標(行番号がある場合はこの座標より左側)
@@ -1462,7 +1464,7 @@ ColorStrategy* PrintPreview::DrawPageText(
 			if (m_pPrintSetting->bPrintLineNumber) {
 				wchar_t szLineNum[64];	//	行番号を入れる。
 				// 行番号の表示 false=折り返し単位／true=改行単位
-				if (m_pParentWnd->GetDocument()->m_docType.GetDocumentAttribute().bLineNumIsCRLF) {
+				if (typeConfig.bLineNumIsCRLF) {
 					// 論理行番号表示モード
 					if (pLayout->GetLogicOffset() != 0) { // 折り返しレイアウト行
 						wcscpy_s(szLineNum, L" ");
@@ -1475,9 +1477,9 @@ ColorStrategy* PrintPreview::DrawPageText(
 				}
 
 				// 行番号区切り  0=なし 1=縦線 2=任意
-				if (m_pParentWnd->GetDocument()->m_docType.GetDocumentAttribute().nLineTermType == 2) {
+				if (typeConfig.nLineTermType == 2) {
 					wchar_t szLineTerm[2];
-					szLineTerm[0] = m_pParentWnd->GetDocument()->m_docType.GetDocumentAttribute().cLineTermChar;	// 行番号区切り文字
+					szLineTerm[0] = typeConfig.cLineTermChar;	// 行番号区切り文字
 					szLineTerm[1] = L'\0';
 					wcscat(szLineNum, szLineTerm);
 				}else {
@@ -1539,7 +1541,7 @@ ColorStrategy* PrintPreview::DrawPageText(
 
 		// 2006.08.14 Moca 行番号が縦線の場合は1度に引く
 		if (m_pPrintSetting->bPrintLineNumber
-			&& m_pParentWnd->GetDocument()->m_docType.GetDocumentAttribute().nLineTermType == 1
+			&& typeConfig.nLineTermType == 1
 		) {
 			// 縦線は本文と行番号の隙間1桁の中心に作画する(画面作画では、右詰め)
 			::MoveToEx(hdc,
@@ -1646,7 +1648,7 @@ ColorStrategy* PrintPreview::Print_DrawLine(
 	int nDx = m_pPrintSetting->nPrintFontWidth;
 
 	// タブ幅取得
-	LayoutInt nTabSpace = m_pParentWnd->GetDocument()->m_layoutMgr.GetTabSpace(); //	Sep. 23, 2002 genta LayoutMgrの値を使う
+	LayoutInt nTabSpace = m_pParentWnd->GetDocument().m_layoutMgr.GetTabSpace(); //	Sep. 23, 2002 genta LayoutMgrの値を使う
 
 	// 文字間隔配列を生成
 	vector<int> vDxArray;
@@ -1753,7 +1755,7 @@ ColorStrategy* PrintPreview::Print_DrawLine(
 	if (pLayout) {
 		int nColorIdx = ToColorInfoArrIndex(COLORIDX_TEXT);
 		if (nColorIdx != -1) {
-			const ColorInfo& info = m_pParentWnd->GetDocument()->m_docType.GetDocumentAttribute().colorInfoArr[nColorIdx];
+			const ColorInfo& info = m_pParentWnd->GetDocument().m_docType.GetDocumentAttribute().colorInfoArr[nColorIdx];
 			::SetTextColor(hdc, info.colorAttr.cTEXT);
 //			::SetBkColor(hdc, info.m_colBACK);
 		}
@@ -1789,7 +1791,7 @@ void PrintPreview::Print_DrawBlock(
 	// 色設定
 	if (pLayout) {
 		if (nColorIdx != -1) {
-			const ColorInfo& info = m_pParentWnd->GetDocument()->m_docType.GetDocumentAttribute().colorInfoArr[nColorIdx];
+			const ColorInfo& info = m_pParentWnd->GetDocument().m_docType.GetDocumentAttribute().colorInfoArr[nColorIdx];
 			if (nKind == 2 && !info.fontAttr.bUnderLine) {
 				// TABは下線が無ければ印字不要
 				return;

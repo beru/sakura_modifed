@@ -398,12 +398,12 @@ void DocOutline::MakeFuncList_python(FuncInfoArr* pFuncInfoArr)
 	indent_level[0] = 0;	// do as python does.
 	int depth_index = 0;
 
-	for (nLineCount=LogicInt(0); nLineCount<m_pDocRef->m_docLineMgr.GetLineCount(); ++nLineCount) {
+	for (nLineCount=LogicInt(0); nLineCount<m_doc.m_docLineMgr.GetLineCount(); ++nLineCount) {
 		const wchar_t*	pLine;
 		int depth;	//	indent depth
 		LogicInt col = LogicInt(0);	//	current working column position
 
-		pLine = m_pDocRef->m_docLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
+		pLine = m_doc.m_docLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
 		
 		if (python_analyze_state.IsLogicalLineTop()) {
 			//	indent check
@@ -525,7 +525,7 @@ void DocOutline::MakeFuncList_python(FuncInfoArr* pFuncInfoArr)
 			  レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 			*/
 			LayoutPoint ptPosXY;
-			m_pDocRef->m_layoutMgr.LogicToLayout(
+			m_doc.m_layoutMgr.LogicToLayout(
 				LogicPoint(LogicInt(0), nLineCount),
 				&ptPosXY
 			);

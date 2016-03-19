@@ -105,10 +105,10 @@ void DocOutline::MakeTopicList_txt(FuncInfoArr* pFuncInfoArr)
 	wchar_t szTitle[32];			//	一時領域
 	LogicInt				nLineCount;
 	bool b278a = false;
-	for (nLineCount=LogicInt(0); nLineCount<m_pDocRef->m_docLineMgr.GetLineCount(); ++nLineCount) {
+	for (nLineCount=LogicInt(0); nLineCount<m_doc.m_docLineMgr.GetLineCount(); ++nLineCount) {
 		// 行取得
 		LogicInt nLineLen;
-		const wchar_t* pLine = m_pDocRef->m_docLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
+		const wchar_t* pLine = m_doc.m_docLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
 		if (!pLine) {
 			break;
 		}
@@ -204,7 +204,7 @@ void DocOutline::MakeTopicList_txt(FuncInfoArr* pFuncInfoArr)
 		  レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 		*/
 		LayoutPoint ptPos;
-		m_pDocRef->m_layoutMgr.LogicToLayout(
+		m_doc.m_layoutMgr.LogicToLayout(
 			LogicPoint(0, nLineCount),
 			&ptPos
 		);
@@ -259,11 +259,11 @@ void DocOutline::MakeTopicList_wztxt(FuncInfoArr* pFuncInfoArr)
 	int levelPrev = 0;
 	bool bExtEol = GetDllShareData().common.edit.bEnableExtEol;
 
-	for (LogicInt nLineCount=LogicInt(0); nLineCount<m_pDocRef->m_docLineMgr.GetLineCount(); ++nLineCount) {
+	for (LogicInt nLineCount=LogicInt(0); nLineCount<m_doc.m_docLineMgr.GetLineCount(); ++nLineCount) {
 		const wchar_t*	pLine;
 		LogicInt		nLineLen;
 
-		pLine = m_pDocRef->m_docLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
+		pLine = m_doc.m_docLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
 		if (!pLine) {
 			break;
 		}
@@ -278,7 +278,7 @@ void DocOutline::MakeTopicList_wztxt(FuncInfoArr* pFuncInfoArr)
 				;
 
 			LayoutPoint ptPos;
-			m_pDocRef->m_layoutMgr.LogicToLayout(
+			m_doc.m_layoutMgr.LogicToLayout(
 				LogicPoint(0, nLineCount),
 				&ptPos
 			);

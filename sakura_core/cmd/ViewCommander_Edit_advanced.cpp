@@ -56,7 +56,7 @@ void ViewCommander::Command_INDENT(wchar_t wcChar, IndentType eIndent)
 		&& selInfo.IsBoxSelecting()
 		&& GetSelect().GetFrom().x == GetSelect().GetTo().x
 	) {
-		GetSelect().SetToX(GetDocument()->m_layoutMgr.GetMaxLineKetas());
+		GetSelect().SetToX(GetDocument().m_layoutMgr.GetMaxLineKetas());
 		m_view.RedrawAll();
 		return;
 	}
@@ -81,7 +81,7 @@ void ViewCommander::Command_INDENT(
 	if (nDataLen <= 0) {
 		return;
 	}
-	auto& layoutMgr = GetDocument()->m_layoutMgr;
+	auto& layoutMgr = GetDocument().m_layoutMgr;
 	LayoutRange selectOld;		// 範囲選択
 	LayoutPoint ptInserted;		// 挿入後の挿入位置
 	const struct IsIndentCharSpaceTab {
@@ -106,7 +106,7 @@ void ViewCommander::Command_INDENT(
 	} stabData(layoutMgr.GetTabSpace());
 
 	const bool bSoftTab = (eIndent == IndentType::Tab && m_view.m_pTypeData->bInsSpace);
-	GetDocument()->m_docEditor.SetModified(true, true);	// Jan. 22, 2002 genta
+	GetDocument().m_docEditor.SetModified(true, true);	// Jan. 22, 2002 genta
 
 	auto& caret = GetCaret();
 	auto& selInfo = m_view.GetSelectionInfo();
@@ -451,7 +451,7 @@ void ViewCommander::Command_UNINDENT(wchar_t wcChar)
 // 箱型逆インデントについては、保留とする (1998.10.22)
 //**********************************************
 	}else {
-		GetDocument()->m_docEditor.SetModified(true, true);	// Jan. 22, 2002 genta
+		GetDocument().m_docEditor.SetModified(true, true);	// Jan. 22, 2002 genta
 
 		LayoutRange selectOld;	// 範囲選択
 		selectOld.SetFrom(LayoutPoint(LayoutInt(0), GetSelect().GetFrom().y));
@@ -471,7 +471,7 @@ void ViewCommander::Command_UNINDENT(wchar_t wcChar)
 		}
 
 		auto& caret = GetCaret();
-		auto& layoutMgr = GetDocument()->m_layoutMgr;
+		auto& layoutMgr = GetDocument().m_layoutMgr;
 		LogicInt nDelLen;
 		for (LayoutInt i = selectOld.GetFrom().GetY2(); i < selectOld.GetTo().GetY2(); ++i) {
 			LayoutInt nLineCountPrev = layoutMgr.GetLineCount();
@@ -579,7 +579,7 @@ void ViewCommander::Command_TRIM(
 		);
 		viewSelect.m_select.SetTo(
 			LayoutPoint(
-				GetDocument()->m_layoutMgr.GetMaxLineKetas(),
+				GetDocument().m_layoutMgr.GetMaxLineKetas(),
 				GetCaret().GetCaretLayoutPos().GetY()
 			)
 		);
@@ -672,7 +672,7 @@ void ViewCommander::Command_SORT(bool bAsc)	// bAsc:true=昇順, false=降順
 	if (!selInfo.IsTextSelected()) {			// テキストが選択されているか
 		return;
 	}
-	auto& layoutMgr = GetDocument()->m_layoutMgr;
+	auto& layoutMgr = GetDocument().m_layoutMgr;
 	if (selInfo.IsBoxSelecting()) {
 		rangeA = selInfo.m_select;
 		if (selInfo.m_select.GetFrom().x == selInfo.m_select.GetTo().x) {
@@ -701,7 +701,7 @@ void ViewCommander::Command_SORT(bool bAsc)	// bAsc:true=昇順, false=降順
 		// その行も選択範囲に加える
 		if (selectOld.GetTo().x > 0) {
 			// 2006.03.31 Moca nSelectLineToOldは、物理行なのでLayout系からDocLine系に修正
-			const DocLine* pDocLine = GetDocument()->m_docLineMgr.GetLine(selectOld.GetTo().GetY2());
+			const DocLine* pDocLine = GetDocument().m_docLineMgr.GetLine(selectOld.GetTo().GetY2());
 			if (pDocLine && EolType::None != pDocLine->GetEol()) {
 				selectOld.GetToPointer()->y++;
 			}
@@ -717,7 +717,7 @@ void ViewCommander::Command_SORT(bool bAsc)	// bAsc:true=昇順, false=降順
 	
 	sta.reserve(selectOld.GetTo().GetY2() - selectOld.GetFrom().GetY2());
 	for (LogicInt i=selectOld.GetFrom().GetY2(); i<selectOld.GetTo().y; ++i) {
-		const DocLine* pDocLine = GetDocument()->m_docLineMgr.GetLine(i);
+		const DocLine* pDocLine = GetDocument().m_docLineMgr.GetLine(i);
 		const NativeW& memLine = pDocLine->_GetDocLineDataWithEOL();
 		const wchar_t* pLine = memLine.GetStringPtr(&nLineLen);
 		LogicInt nLineLenWithoutEOL = pDocLine->GetLengthWithoutEOL();
@@ -761,13 +761,13 @@ void ViewCommander::Command_SORT(bool bAsc)	// bAsc:true=昇順, false=降順
 	OpeLineData repData;
 	int j = (int)sta.size();
 	repData.resize(sta.size());
-	int opeSeq = GetDocument()->m_docEditor.m_opeBuf.GetNextSeq();
+	int opeSeq = GetDocument().m_docEditor.m_opeBuf.GetNextSeq();
 	for (int i=0; i<j; ++i) {
 		repData[i].nSeq = opeSeq;
 		repData[i].memLine.SetString(sta[i]->pMemLine->GetStringPtr(), sta[i]->pMemLine->GetStringLength());
 		if (pStrLast == sta[i]->pMemLine->GetStringPtr()) {
 			// 元最終行に改行がないのでつける
-			Eol cWork = GetDocument()->m_docEditor.GetNewLineCode();
+			Eol cWork = GetDocument().m_docEditor.GetNewLineCode();
 			repData[i].memLine.AppendString(cWork.GetValue2(), cWork.GetLen());
 		}
 	}
@@ -850,7 +850,7 @@ void ViewCommander::Command_MERGE(void)
 	if (selInfo.IsBoxSelecting()) {
 		return;
 	}
-	auto& layoutMgr = GetDocument()->m_layoutMgr;
+	auto& layoutMgr = GetDocument().m_layoutMgr;
 	nCaretPosYOLD = GetCaret().GetCaretLayoutPos().GetY();
 	LogicRange sSelectOld; // 範囲選択
 	layoutMgr.LayoutToLogic(
@@ -870,7 +870,7 @@ void ViewCommander::Command_MERGE(void)
 		}
 #else
 		// 2010.08.22 Moca ソートと仕様を合わせる
-		const DocLine* pDocLine = GetDocument()->m_docLineMgr.GetLine(sSelectOld.GetTo().GetY2());
+		const DocLine* pDocLine = GetDocument().m_docLineMgr.GetLine(sSelectOld.GetTo().GetY2());
 		if (pDocLine && EolType::None != pDocLine->GetEol()) {
 			sSelectOld.GetToPointer()->y++;
 		}
@@ -885,7 +885,7 @@ void ViewCommander::Command_MERGE(void)
 		return;
 	}
 
-	int j = GetDocument()->m_docLineMgr.GetLineCount();
+	int j = GetDocument().m_docLineMgr.GetLineCount();
 	nMergeLayoutLines = layoutMgr.GetLineCount();
 
 	LayoutRange selectOld_Layout;
@@ -898,7 +898,7 @@ void ViewCommander::Command_MERGE(void)
 	bool bMerge = false;
 	lineArr.reserve(sSelectOld.GetTo().y - sSelectOld.GetFrom().GetY2());
 	for (LogicInt i=sSelectOld.GetFrom().GetY2(); i<sSelectOld.GetTo().y; ++i) {
-		const wchar_t* pLine = GetDocument()->m_docLineMgr.GetLine(i)->GetDocLineStrWithEOL(&nLineLen);
+		const wchar_t* pLine = GetDocument().m_docLineMgr.GetLine(i)->GetDocLineStrWithEOL(&nLineLen);
 		if (!pLine) continue;
 		if (!pLinew || nLineLen != nLineLenw || wmemcmp(pLine, pLinew, nLineLen)) {
 			lineArr.emplace_back(pLine, nLineLen);
@@ -912,7 +912,7 @@ void ViewCommander::Command_MERGE(void)
 		OpeLineData repData;
 		int nSize = (int)lineArr.size();
 		repData.resize(nSize);
-		int opeSeq = GetDocument()->m_docEditor.m_opeBuf.GetNextSeq();
+		int opeSeq = GetDocument().m_docEditor.m_opeBuf.GetNextSeq();
 		for (int idx=0; idx<nSize; ++idx) {
 			repData[idx].nSeq = opeSeq;
 			repData[idx].memLine.SetString(lineArr[idx].GetPtr(), lineArr[idx].GetLength());
@@ -930,7 +930,7 @@ void ViewCommander::Command_MERGE(void)
 		// 2010.08.23 未変更なら変更しない
 	}
 
-	j -= GetDocument()->m_docLineMgr.GetLineCount();
+	j -= GetDocument().m_docLineMgr.GetLineCount();
 	nMergeLayoutLines -= layoutMgr.GetLineCount();
 
 	// 選択エリアの復元

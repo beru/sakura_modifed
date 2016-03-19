@@ -264,9 +264,9 @@ public:
 	//                       各種アクセサ                          //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	HWND			GetHwnd() const			{ return m_hWnd; }
-	MenuDrawer&	GetMenuDrawer()			{ return m_menuDrawer; }
-	EditDoc*		GetDocument()			{ return m_pEditDoc; }
-	const EditDoc*	GetDocument() const		{ return m_pEditDoc; }
+	MenuDrawer&		GetMenuDrawer()			{ return m_menuDrawer; }
+	EditDoc&		GetDocument()			{ return *m_pEditDoc; }
+	const EditDoc&	GetDocument() const		{ return *m_pEditDoc; }
 
 	// ビュー
 	const EditView&	GetActiveView() const		{ return *m_pEditView; }

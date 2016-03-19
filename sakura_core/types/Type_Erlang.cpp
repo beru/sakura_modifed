@@ -404,10 +404,10 @@ void DocOutline::MakeFuncList_Erlang(FuncInfoArr* pFuncInfoArr)
 	OutlineErlang erl_state_machine;
 	LogicInt	nLineCount;
 
-	for (nLineCount=LogicInt(0); nLineCount<m_pDocRef->m_docLineMgr.GetLineCount(); ++nLineCount) {
+	for (nLineCount=LogicInt(0); nLineCount<m_doc.m_docLineMgr.GetLineCount(); ++nLineCount) {
 		LogicInt nLineLen;
 
-		const wchar_t* pLine = m_pDocRef->m_docLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
+		const wchar_t* pLine = m_doc.m_docLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
 		if (erl_state_machine.parse(pLine, nLineLen, nLineCount)) {
 			/*
 			  カーソル位置変換
@@ -416,7 +416,7 @@ void DocOutline::MakeFuncList_Erlang(FuncInfoArr* pFuncInfoArr)
 			  レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 			*/
 			LayoutPoint ptPosXY;
-			m_pDocRef->m_layoutMgr.LogicToLayout(
+			m_doc.m_layoutMgr.LogicToLayout(
 				LogicPoint(LogicInt(0), erl_state_machine.GetFuncLine()),
 				&ptPosXY
 			);

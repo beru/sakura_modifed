@@ -98,7 +98,7 @@ bool ViewCommander::Command_TAGJUMP(bool bClose)
 	  物理位置(行頭からのバイト数、折り返し無し行位置)
 	*/
 	LogicPoint ptXY, ptXYOrg;
-	GetDocument()->m_layoutMgr.LayoutToLogic(
+	GetDocument().m_layoutMgr.LayoutToLogic(
 		GetCaret().GetCaretLayoutPos(),
 		&ptXY
 	);
@@ -107,7 +107,7 @@ bool ViewCommander::Command_TAGJUMP(bool bClose)
 	// 現在行のデータを取得
 	LogicInt		nLineLen;
 	const wchar_t*	pLine;
-	pLine = GetDocument()->m_docLineMgr.GetLine(ptXY.GetY2())->GetDocLineStrWithEOL(&nLineLen);
+	pLine = GetDocument().m_docLineMgr.GetLine(ptXY.GetY2())->GetDocLineStrWithEOL(&nLineLen);
 	if (!pLine) {
 		goto can_not_tagjump;
 	}
@@ -240,7 +240,7 @@ bool ViewCommander::Command_TAGJUMP(bool bClose)
 		ptXY.y--;
 
 		for (; 0<=ptXY.y; --ptXY.y) {
-			pLine = GetDocument()->m_docLineMgr.GetLine(ptXY.GetY2())->GetDocLineStrWithEOL(&nLineLen);
+			pLine = GetDocument().m_docLineMgr.GetLine(ptXY.GetY2())->GetDocLineStrWithEOL(&nLineLen);
 			if (!pLine) {
 				break;
 			}
@@ -304,7 +304,7 @@ bool ViewCommander::Command_TAGJUMP(bool bClose)
 	}while (0);
 
 	if (szJumpToFile[0] == L'\0') {
-		pLine = GetDocument()->m_docLineMgr.GetLine(ptXYOrg.GetY2())->GetDocLineStrWithEOL(&nLineLen);
+		pLine = GetDocument().m_docLineMgr.GetLine(ptXYOrg.GetY2())->GetDocLineStrWithEOL(&nLineLen);
 		if (!pLine) {
 			goto can_not_tagjump;
 		}
@@ -394,7 +394,7 @@ bool ViewCommander::Command_TagsMake(void)
 #define	CTAGS_COMMAND	_T("ctags.exe")
 
 	TCHAR	szTargetPath[1024 /*_MAX_PATH+1*/];
-	auto& docFile = GetDocument()->m_docFile;
+	auto& docFile = GetDocument().m_docFile;
 	if (docFile.GetFilePathClass().IsValidPath()) {
 		_tcscpy_s(szTargetPath, docFile.GetFilePath());
 		szTargetPath[_tcslen(szTargetPath) - _tcslen(docFile.GetFileName())] = _T('\0');
@@ -702,7 +702,7 @@ bool ViewCommander::Sub_PreProcTagJumpByTagsFile(TCHAR* szCurrentPath, int count
 	}
 
 	// 実行可能確認
-	auto& docFile = GetDocument()->m_docFile;
+	auto& docFile = GetDocument().m_docFile;
 	if (! docFile.GetFilePathClass().IsValidPath()) {
 		// 2010.04.02 (無題)でもタグジャンプできるように
 		// Grep、アウトプットは行番号タグジャンプがあるので無効にする(要検討)

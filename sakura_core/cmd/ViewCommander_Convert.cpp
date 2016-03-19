@@ -254,7 +254,7 @@ void ViewCommander::Command_BASE64DECODE(void)
 
 	// 保存ダイアログ モーダルダイアログの表示
 	TCHAR szPath[_MAX_PATH] = _T("");
-	if (!GetDocument()->m_docFileOperation.SaveFileDialog(szPath)) {
+	if (!GetDocument().m_docFileOperation.SaveFileDialog(szPath)) {
 		return;
 	}
 
@@ -303,7 +303,7 @@ void ViewCommander::Command_UUDECODE(void)
 	ctextBuf.Clear();
 
 	// 保存ダイアログ モーダルダイアログの表示
-	if (!GetDocument()->m_docFileOperation.SaveFileDialog(szPath)) {
+	if (!GetDocument().m_docFileOperation.SaveFileDialog(szPath)) {
 		return;
 	}
 

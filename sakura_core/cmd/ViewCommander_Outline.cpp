@@ -67,7 +67,7 @@ bool ViewCommander::Command_FUNCLIST(
 		// タイプ別に設定されたアウトライン解析方法
 		nOutlineType = m_view.m_pTypeData->eDefaultOutline;
 		if (nOutlineType == OutlineType::CPP) {
-			if (CheckEXT(GetDocument()->m_docFile.GetFilePath(), _T("c"))) {
+			if (CheckEXT(GetDocument().m_docFile.GetFilePath(), _T("c"))) {
 				nOutlineType = OutlineType::C;	// これでC関数一覧リストビューになる
 			}
 		}
@@ -107,7 +107,7 @@ bool ViewCommander::Command_FUNCLIST(
 	funcInfoArr.Empty();
 	OutlineType nListType = nOutlineType;			// 2011.06.25 syat
 
-	auto& docOutline = GetDocument()->m_docOutline;
+	auto& docOutline = GetDocument().m_docOutline;
 	switch (nOutlineType) {
 	case OutlineType::C:			// C/C++ は MakeFuncList_C
 	case OutlineType::CPP:			docOutline.MakeFuncList_C(&funcInfoArr);break;
@@ -159,7 +159,7 @@ bool ViewCommander::Command_FUNCLIST(
 	}
 
 	// 解析対象ファイル名
-	_tcscpy(funcInfoArr.m_szFilePath, GetDocument()->m_docFile.GetFilePath());
+	_tcscpy(funcInfoArr.m_szFilePath, GetDocument().m_docFile.GetFilePath());
 
 	// アウトライン ダイアログの表示
 	LayoutPoint poCaret = GetCaret().GetCaretLayoutPos();

@@ -87,9 +87,9 @@ bool EditView::TagJumpSub(
 // その前で保存するように変更。
 
 	// カーソル位置変換
-	EditDoc* pDoc = GetDocument();
+	EditDoc& doc = GetDocument();
 	Caret& caret = GetCaret();
-	pDoc->m_layoutMgr.LayoutToLogic(
+	doc.m_layoutMgr.LayoutToLogic(
 		caret.GetCaretLayoutPos(),
 		&tagJump.point
 	);
@@ -179,7 +179,7 @@ bool EditView::OPEN_ExtFromtoExt(
 {
 	// 編集中ファイルの拡張子を調べる
 	for (int i=0; i<file_extno; ++i) {
-		if (CheckEXT(GetDocument()->m_docFile.GetFilePath(), file_ext[i])) {
+		if (CheckEXT(GetDocument().m_docFile.GetFilePath(), file_ext[i])) {
 			goto open_c;
 		}
 	}
@@ -197,7 +197,7 @@ open_c:;
 	TCHAR	szExt[_MAX_EXT];
 	HWND	hwndOwner;
 
-	_tsplitpath(GetDocument()->m_docFile.GetFilePath(), szDrive, szDir, szFname, szExt);
+	_tsplitpath(GetDocument().m_docFile.GetFilePath(), szDrive, szDir, szFname, szExt);
 
 	for (int i=0; i<open_extno; ++i) {
 		_tmakepath(szPath, szDrive, szDir, szFname, open_ext[i]);
@@ -223,7 +223,7 @@ open_c:;
 		// 文字コードはこのファイルに合わせる
 		LoadInfo loadInfo;
 		loadInfo.filePath = szPath;
-		loadInfo.eCharCode = GetDocument()->GetDocumentEncoding();
+		loadInfo.eCharCode = GetDocument().GetDocumentEncoding();
 		loadInfo.bViewMode = false;
 		ControlTray::OpenNewEditor(
 			G_AppInstance(),
@@ -256,7 +256,7 @@ open_c:;
 	  →
 	  物理位置(行頭からのバイト数、折り返し無し行位置)
 	*/
-	GetDocument()->m_layoutMgr.LayoutToLogic(
+	GetDocument().m_layoutMgr.LayoutToLogic(
 		GetCaret().GetCaretLayoutPos(),
 		&tagJump.point
 	);
@@ -313,7 +313,7 @@ EditView::TOGGLE_WRAP_ACTION EditView::GetWrapMode(LayoutInt* _newKetas)
 		c)　└→ウィンドウ幅
 	*/
 	
-	auto& layoutMgr = GetDocument()->m_layoutMgr;
+	auto& layoutMgr = GetDocument().m_layoutMgr;
 	if (layoutMgr.GetMaxLineKetas() == ViewColNumToWrapColNum(GetTextArea().m_nViewColNum)) {
 		// a)
 		newKetas = LayoutInt(MAXLINEKETAS);

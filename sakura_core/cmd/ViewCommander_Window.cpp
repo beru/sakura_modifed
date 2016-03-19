@@ -429,70 +429,77 @@ void ViewCommander::Command_GROUPCLOSE(void)
 // 次のグループ			// 2007.06.20 ryoji
 void ViewCommander::Command_NEXTGROUP(void)
 {
-	TabWnd* pTabWnd = &GetEditWindow()->m_tabWnd;
-	if (!pTabWnd->GetHwnd())
+	auto& tabWnd = GetEditWindow()->m_tabWnd;
+	if (!tabWnd.GetHwnd()) {
 		return;
-	pTabWnd->NextGroup();
+	}
+	tabWnd.NextGroup();
 }
 
 
 // 前のグループ			// 2007.06.20 ryoji
 void ViewCommander::Command_PREVGROUP(void)
 {
-	TabWnd* pTabWnd = &GetEditWindow()->m_tabWnd;
-	if (!pTabWnd->GetHwnd())
+	auto& tabWnd = GetEditWindow()->m_tabWnd;
+	if (!tabWnd.GetHwnd()) {
 		return;
-	pTabWnd->PrevGroup();
+	}
+	tabWnd.PrevGroup();
 }
 
 
 // タブを右に移動		// 2007.06.20 ryoji
 void ViewCommander::Command_TAB_MOVERIGHT(void)
 {
-	TabWnd* pTabWnd = &GetEditWindow()->m_tabWnd;
-	if (!pTabWnd->GetHwnd())
+	auto& tabWnd = GetEditWindow()->m_tabWnd;
+	if (!tabWnd.GetHwnd()) {
 		return;
-	pTabWnd->MoveRight();
+	}
+	tabWnd.MoveRight();
 }
 
 
 // タブを左に移動		// 2007.06.20 ryoji
 void ViewCommander::Command_TAB_MOVELEFT(void)
 {
-	TabWnd* pTabWnd = &GetEditWindow()->m_tabWnd;
-	if (!pTabWnd->GetHwnd())
+	auto& tabWnd = GetEditWindow()->m_tabWnd;
+	if (!tabWnd.GetHwnd()) {
 		return;
-	pTabWnd->MoveLeft();
+	}
+	tabWnd.MoveLeft();
 }
 
 
 // 新規グループ			// 2007.06.20 ryoji
 void ViewCommander::Command_TAB_SEPARATE(void)
 {
-	TabWnd* pTabWnd = &GetEditWindow()->m_tabWnd;
-	if (!pTabWnd->GetHwnd())
+	auto& tabWnd = GetEditWindow()->m_tabWnd;
+	if (!tabWnd.GetHwnd()) {
 		return;
-	pTabWnd->Separate();
+	}
+	tabWnd.Separate();
 }
 
 
 // 次のグループに移動	// 2007.06.20 ryoji
 void ViewCommander::Command_TAB_JOINTNEXT(void)
 {
-	TabWnd* pTabWnd = &GetEditWindow()->m_tabWnd;
-	if (!pTabWnd->GetHwnd())
+	auto& tabWnd = GetEditWindow()->m_tabWnd;
+	if (!tabWnd.GetHwnd()) {
 		return;
-	pTabWnd->JoinNext();
+	}
+	tabWnd.JoinNext();
 }
 
 
 // 前のグループに移動	// 2007.06.20 ryoji
 void ViewCommander::Command_TAB_JOINTPREV(void)
 {
-	TabWnd* pTabWnd = &GetEditWindow()->m_tabWnd;
-	if (!pTabWnd->GetHwnd())
+	auto& tabWnd = GetEditWindow()->m_tabWnd;
+	if (!tabWnd.GetHwnd()) {
 		return;
-	pTabWnd->JoinPrev();
+	}
+	tabWnd.JoinPrev();
 }
 
 

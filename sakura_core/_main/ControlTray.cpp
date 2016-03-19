@@ -1152,10 +1152,10 @@ bool ControlTray::OpenNewEditor(
 	)
 {
 	// 共有データ構造体のアドレスを返す
-	DllSharedData* pShareData = &GetDllShareData();
+	DllSharedData& shareData = GetDllShareData();
 
 	// 編集ウィンドウの上限チェック
-	if (pShareData->nodes.nEditArrNum >= MAX_EDITWINDOWS) {	// 最大値修正	//@@@ 2003.05.31 MIK
+	if (shareData.nodes.nEditArrNum >= MAX_EDITWINDOWS) {	// 最大値修正	//@@@ 2003.05.31 MIK
 		OkMessage(NULL, LS(STR_MAXWINDOW), MAX_EDITWINDOWS);
 		return false;
 	}
@@ -1321,8 +1321,8 @@ bool ControlTray::OpenNewEditor(
 		}
 	}else {
 		// タブまとめ時は起動したプロセスが立ち上がるまでしばらくタイトルバーをアクティブに保つ	// 2007.02.03 ryoji
-		if (pShareData->common.tabBar.bDispTabWnd
-			&& !pShareData->common.tabBar.bDispTabWndMultiWin
+		if (shareData.common.tabBar.bDispTabWnd
+			&& !shareData.common.tabBar.bDispTabWndMultiWin
 		) {
 			WaitForInputIdle(p.hProcess, 3000);
 			sync = true;
@@ -1377,10 +1377,10 @@ bool ControlTray::OpenNewEditor2(
 {
 
 	// 共有データ構造体のアドレスを返す
-	DllSharedData* pShareData = &GetDllShareData();
+	DllSharedData& shareData = GetDllShareData();
 
 	// 編集ウィンドウの上限チェック
-	if (pShareData->nodes.nEditArrNum >= MAX_EDITWINDOWS) {	// 最大値修正	//@@@ 2003.05.31 MIK
+	if (shareData.nodes.nEditArrNum >= MAX_EDITWINDOWS) {	// 最大値修正	//@@@ 2003.05.31 MIK
 		OkMessage(NULL, LS(STR_MAXWINDOW), MAX_EDITWINDOWS);
 		return false;
 	}
@@ -1502,10 +1502,10 @@ void ControlTray::TerminateApplication(
 	HWND hWndFrom	// [in] 呼び出し元のウィンドウハンドル
 	)
 {
-	DllSharedData* pShareData = &GetDllShareData();	// 共有データ構造体のアドレスを返す
+	DllSharedData& shareData = GetDllShareData();	// 共有データ構造体のアドレスを返す
 
 	// 現在の編集ウィンドウの数を調べる
-	if (pShareData->common.general.bExitConfirm) {	// 終了時の確認
+	if (shareData.common.general.bExitConfirm) {	// 終了時の確認
 		if (0 < AppNodeGroupHandle(0).GetEditorWindowsNum()) {
 			if (::MYMESSAGEBOX(
 					hWndFrom,
@@ -1519,9 +1519,9 @@ void ControlTray::TerminateApplication(
 		}
 	}
 	// 「すべてのウィンドウを閉じる」要求	// Oct. 7, 2000 jepro 「編集ウィンドウの全終了」という説明を左記のように変更
-	bool bCheckConfirm = pShareData->common.general.bExitConfirm;	// 2006.12.25 ryoji 終了確認済みならそれ以上は確認しない
+	bool bCheckConfirm = shareData.common.general.bExitConfirm;	// 2006.12.25 ryoji 終了確認済みならそれ以上は確認しない
 	if (CloseAllEditor(bCheckConfirm, hWndFrom, true, 0)) {	// 2006.12.25, 2007.02.13 ryoji 引数追加
-		::PostMessage(pShareData->handles.hwndTray, WM_CLOSE, 0, 0);
+		::PostMessage(shareData.handles.hwndTray, WM_CLOSE, 0, 0);
 	}
 	return;
 }

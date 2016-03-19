@@ -98,30 +98,31 @@ bool ProcessFactory::ProfileSelect(
 	SelectLang::InitializeLanguageEnvironment();
 	SelectLang::ChangeLang( settings.szDllLanguage );
 
-	CommandLine::getInstance().ParseCommandLine(lpCmdLine);
+	auto& cmdLine = CommandLine::getInstance();
+	cmdLine.ParseCommandLine(lpCmdLine);
 
 	bool bDialog;
-	if (CommandLine::getInstance().IsProfileMgr()) {
+	if (cmdLine.IsProfileMgr()) {
 		bDialog = true;
-	}else if (CommandLine::getInstance().IsSetProfile()) {
+	}else if (cmdLine.IsSetProfile()) {
 		bDialog = false;
 	}else if (settings.nDefaultIndex == -1) {
 		bDialog = true;
 	}else {
 		assert(0 <= settings.nDefaultIndex);
 		if (0 < settings.nDefaultIndex) {
-			CommandLine::getInstance().SetProfileName(
+			cmdLine.SetProfileName(
 				settings.profList[settings.nDefaultIndex - 1].c_str()
 			);
 		}else {
-			CommandLine::getInstance().SetProfileName(L"");
+			cmdLine.SetProfileName(L"");
 		}
 		bDialog = false;
 	}
 	if (bDialog) {
 		DlgProfileMgr dlgProf;
 		if (dlgProf.DoModal(hInstance, NULL, 0)) {
-			CommandLine::getInstance().SetProfileName( to_wchar(dlgProf.m_strProfileName.c_str()) );
+			cmdLine.SetProfileName( to_wchar(dlgProf.m_strProfileName.c_str()) );
 		}else {
 			return false; // プロファイルマネージャで「閉じる」を選んだ。プロセス終了
 		}

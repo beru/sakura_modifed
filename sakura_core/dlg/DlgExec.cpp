@@ -235,8 +235,8 @@ BOOL DlgExec::OnBnClicked(int wID)
 	case IDC_BUTTON_REFERENCE:	// ファイル名の「参照...」ボタン
 		{
 			DlgOpenFile	dlgOpenFile;
-			TCHAR			szPath[_MAX_PATH + 1];
-			int				size = _countof(szPath) - 1;
+			TCHAR		szPath[_MAX_PATH + 1];
+			int			size = _countof(szPath) - 1;
 			_tcsncpy(szPath, m_szCommand, size);
 			szPath[size] = _T('\0');
 			// ファイルオープンダイアログの初期化

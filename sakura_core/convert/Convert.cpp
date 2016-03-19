@@ -63,7 +63,7 @@ void ConvertMediator::ConvMemory(
 
 	EncodingType ecode = CODE_NONE;
 	if (nFuncCode == F_CODECNV_AUTO2SJIS) {
-		CodeMediator ccode(EditWnd::getInstance().GetDocument()->m_docType.GetDocumentAttribute().encoding);
+		CodeMediator ccode(EditWnd::getInstance().GetDocument().m_docType.GetDocumentAttribute().encoding);
 		ecode = ccode.CheckKanjiCode(
 			reinterpret_cast<const char*>(pMemory->_GetMemory()->GetRawPtr()),
 			pMemory->_GetMemory()->GetRawLength());

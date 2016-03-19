@@ -33,9 +33,9 @@ class EditWnd;
 
 class CaretUnderLine {
 public:
-	CaretUnderLine(EditView* pEditView)
+	CaretUnderLine(EditView& editView)
 		:
-		m_pEditView(pEditView)
+		m_editView(editView)
 	{
 		m_nLockCounter = 0;
 		m_nUnderLineLockCounter = 0;
@@ -71,7 +71,7 @@ private:
 	// ロックカウンタ。0のときは、ロックされていない。UnLockが呼ばれすぎても負にはならない
 	int m_nLockCounter;
 	int m_nUnderLineLockCounter;
-	EditView* m_pEditView;
+	EditView& m_editView;
 	bool m_bUnderLineDoNotOFF;
 	bool m_bVertLineDoNotOFF;
 };
@@ -79,7 +79,7 @@ private:
 
 class Caret {
 public:
-	Caret(EditView* pEditView, const EditDoc* pEditDoc);
+	Caret(EditView& editView, const EditDoc& editDoc);
 	
 	virtual
 	~Caret();
@@ -93,7 +93,7 @@ public:
 	int GetHankakuHeight() const;
 
 	// ドキュメントのインスタンスを求める
-	const EditDoc* GetDocument() const { return m_pEditDoc; }
+	const EditDoc& GetDocument() const { return m_editDoc; }
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                         実装補助                            //
@@ -194,8 +194,8 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 private:
 	// 参照
-	EditView*				m_pEditView;
-	const EditDoc*			m_pEditDoc;
+	EditView&				m_editView;
+	const EditDoc&			m_editDoc;
 
 	// キャレット位置
 	LayoutPoint	m_ptCaretPos_Layout;	// ビュー左上端からのカーソル位置。レイアウト単位。

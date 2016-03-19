@@ -227,7 +227,7 @@ void DocOutline::MakeFuncList_RuleFile(
 	auto test = std::make_unique<OneRule[]>(1024);	// 1024個許可。 2007.11.29 kobake スタック使いすぎなので、ヒープに確保するように修正。
 	bool bRegex;
 	std::wstring title;
-	int nCount = ReadRuleFile(m_pDocRef->m_docType.GetDocumentAttribute().szOutlineRuleFilename, test.get(), 1024, bRegex, title);
+	int nCount = ReadRuleFile(m_doc.m_docType.GetDocumentAttribute().szOutlineRuleFilename, test.get(), 1024, bRegex, title);
 	if (nCount < 1) {
 		return;
 	}
@@ -294,10 +294,10 @@ void DocOutline::MakeFuncList_RuleFile(
 		pFuncInfoArr->AppendData(LogicInt(1), LayoutInt(1), mem.GetStringPtr(), FUNCINFO_NOCLIPTEXT, nDepth);
 		nDepth = 1;
 	}
-	for (LogicInt nLineCount=LogicInt(0); nLineCount<m_pDocRef->m_docLineMgr.GetLineCount(); ++nLineCount) {
+	for (LogicInt nLineCount=LogicInt(0); nLineCount<m_doc.m_docLineMgr.GetLineCount(); ++nLineCount) {
 		// 行取得
 		LogicInt nLineLen;
-		const wchar_t* pLine = m_pDocRef->m_docLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
+		const wchar_t* pLine = m_doc.m_docLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
 		if (!pLine) {
 			break;
 		}
@@ -381,7 +381,7 @@ void DocOutline::MakeFuncList_RuleFile(
 		  レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 		*/
 		LayoutPoint ptPos;
-		m_pDocRef->m_layoutMgr.LogicToLayout(
+		m_doc.m_layoutMgr.LogicToLayout(
 			LogicPoint(0, nLineCount),
 			&ptPos
 		);
@@ -443,13 +443,13 @@ void DocOutline::MakeFuncList_BookMark(FuncInfoArr* pFuncInfoArr)
 {
 	LogicInt nLineLen;
 	BOOL bMarkUpBlankLineEnable = GetDllShareData().common.outline.bMarkUpBlankLineEnable;	// 空行をマーク対象にするフラグ 20020119 aroka
-	int nNewLineLen	= m_pDocRef->m_docEditor.m_newLineCode.GetLen();
-	LogicInt nLineLast	= m_pDocRef->m_docLineMgr.GetLineCount();
+	int nNewLineLen	= m_doc.m_docEditor.m_newLineCode.GetLen();
+	LogicInt nLineLast	= m_doc.m_docLineMgr.GetLineCount();
 	int nCharChars;
 
 	for (LogicInt nLineCount=LogicInt(0); nLineCount<nLineLast; ++nLineCount) {
-		if (!BookmarkGetter(m_pDocRef->m_docLineMgr.GetLine(nLineCount)).IsBookmarked()) continue;
-		const wchar_t* pLine = m_pDocRef->m_docLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
+		if (!BookmarkGetter(m_doc.m_docLineMgr.GetLine(nLineCount)).IsBookmarked()) continue;
+		const wchar_t* pLine = m_doc.m_docLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
 		if (!pLine) {
 			break;
 		}
@@ -502,7 +502,7 @@ void DocOutline::MakeFuncList_BookMark(FuncInfoArr* pFuncInfoArr)
 		pszText[nLen] = L'\0';
 		LayoutPoint ptXY;
 		//int nX,nY
-		m_pDocRef->m_layoutMgr.LogicToLayout(	LogicPoint(LogicInt(0), nLineCount), &ptXY);
+		m_doc.m_layoutMgr.LogicToLayout(	LogicPoint(LogicInt(0), nLineCount), &ptXY);
 		pFuncInfoArr->AppendData(nLineCount + LogicInt(1), ptXY.GetY2()+LayoutInt(1) , pszText, 0);
 	}
 	return;

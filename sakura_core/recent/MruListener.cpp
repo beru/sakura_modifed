@@ -181,7 +181,7 @@ void MruListener::OnAfterLoad(const LoadInfo& loadInfo)
 	// ブックマーク復元  // 2002.01.16 hor
 	if (bIsExistInMRU) {
 		if (GetDllShareData().common.file.GetRestoreBookmarks()) {
-			BookmarkManager(&pDoc->m_docLineMgr).SetBookMarks(eiOld.szMarkLines);
+			BookmarkManager(pDoc->m_docLineMgr).SetBookMarks(eiOld.szMarkLines);
 		}
 	}else {
 		eiOld.szMarkLines[0] = 0;
@@ -234,7 +234,7 @@ void MruListener::_HoldBookmarks_And_AddToMRU()
 	pDoc->GetEditInfo(&fi);
 
 	// ブックマーク情報の保存
-	wcscpy_s(fi.szMarkLines, BookmarkManager(&pDoc->m_docLineMgr).GetBookMarks());
+	wcscpy_s(fi.szMarkLines, BookmarkManager(pDoc->m_docLineMgr).GetBookMarks());
 
 	// MRUリストに登録
 	MruFile mru;

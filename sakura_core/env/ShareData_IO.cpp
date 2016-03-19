@@ -121,7 +121,7 @@ bool ShareData_IO::ShareData_IO_2(bool bRead)
 	}
 //	MYTRACE(_T("Iniファイル処理 0 所要時間(ミリ秒) = %d\n"), runningTimer.Read());
 
-	MenuDrawer* pMenuDrawer = new MenuDrawer; // 2010/7/4 Uchi
+	auto menuDrawer = std::make_unique<MenuDrawer>(); // 2010/7/4 Uchi
 
 	if (bRead) {
 		DllSharedData* pShareData = &GetDllShareData();
@@ -138,8 +138,8 @@ bool ShareData_IO::ShareData_IO_2(bool bRead)
 	ShareData_IO_Cmd(profile);
 	ShareData_IO_Nickname(profile);
 	ShareData_IO_Common(profile);
-	ShareData_IO_Plugin(profile, pMenuDrawer);		// Move here	2010/6/24 Uchi
-	ShareData_IO_Toolbar(profile, pMenuDrawer);
+	ShareData_IO_Plugin(profile, menuDrawer.get());		// Move here	2010/6/24 Uchi
+	ShareData_IO_Toolbar(profile, menuDrawer.get());
 	ShareData_IO_CustMenu(profile);
 	ShareData_IO_Font(profile);
 	ShareData_IO_KeyBind(profile);
@@ -150,9 +150,6 @@ bool ShareData_IO::ShareData_IO_2(bool bRead)
 	ShareData_IO_Statusbar(profile);		// 2008/6/21 Uchi
 	ShareData_IO_MainMenu(profile);		// 2010/5/15 Uchi
 	ShareData_IO_Other(profile);
-
-	delete pMenuDrawer;					// 2010/7/4 Uchi
-	pMenuDrawer = NULL;
 
 	if (!bRead) {
 		profile.WriteProfile( szIniFileName, LTEXT(" sakura.ini テキストエディタ設定ファイル") );

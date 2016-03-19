@@ -341,7 +341,7 @@ void HokanMgr::HokanSearchByKeyword(
 	vector_ex<std::wstring>& 	vKouho
 ) {
 	const EditView* pEditView = reinterpret_cast<const EditView*>(m_lParam);
-	const TypeConfig& type = pEditView->GetDocument()->m_docType.GetDocumentAttribute();
+	const TypeConfig& type = pEditView->GetDocument().m_docType.GetDocumentAttribute();
 	KeywordSetMgr& keywordMgr = m_pShareData->common.specialKeyword.keywordSetMgr;
 	const int nKeyLen = wcslen(pszCurWord);
 	for (int n=0; n<MAX_KEYWORDSET_PER_TYPE; ++n) {
@@ -514,7 +514,7 @@ BOOL HokanMgr::DoHokan(int nVKey)
 		return FALSE;
 	}
 	int nLabelLen = List_GetTextLen( hwndList, nItem );
-	std::unique_ptr<WCHAR[]> wszLabel( new WCHAR [nLabelLen + 1] );
+	auto wszLabel = std::make_unique<WCHAR[]>(nLabelLen + 1);
 	List_GetText( hwndList, nItem, &wszLabel[0] );
 
  	// テキストを貼り付け

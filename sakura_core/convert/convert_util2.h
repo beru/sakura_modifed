@@ -265,13 +265,13 @@ int _EncodeBase64(const char* pSrc, const int nSrcLen, CHAR_TYPE* pDest)
 {
 	const unsigned char* psrc;
 	unsigned long lDataSrc;
-	int i, j, k, n;
+	int j, n;
 	char v;
 	int nDesLen;
 
 	psrc = reinterpret_cast<const unsigned char*>(pSrc);
 	nDesLen = 0;
-	for (i=0; i<nSrcLen; i+=3) {
+	for (int i=0; i<nSrcLen; i+=3) {
 		lDataSrc = 0;
 		if (nSrcLen - i < 3) {
 			n = nSrcLen % 3;
@@ -282,13 +282,13 @@ int _EncodeBase64(const char* pSrc, const int nSrcLen, CHAR_TYPE* pDest)
 		}
 		// n 今回エンコードする長さ
 		// j エンコード後のBASE64文字数
-		for (k=0; k<n; ++k) {
+		for (int k=0; k<n; ++k) {
 			lDataSrc |= static_cast<unsigned long>(psrc[i + k]) << ((n - k - 1) * 8);
 		}
 		// パッドビット付加。lDataSrc の長さが 6*j になるように調節する。
 		lDataSrc <<= j * 6 - n * 8;
 		// エンコードして書き込む。
-		for (k=0; k<j; ++k) {
+		for (int k=0; k<j; ++k) {
 			v = static_cast<char>((lDataSrc >> (6 * (j - k - 1))) & 0x0000003f);
 			pDest[nDesLen] = static_cast<CHAR_TYPE>(ValToBase64<CHAR_TYPE>(v));
 			++nDesLen;

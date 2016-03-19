@@ -65,7 +65,7 @@ retry:;
 			) == IDYES
 		) {
 			// タイプ別設定 プロパティシート
-			if (!CEditApp::getInstance()->m_pPropertyManager->OpenPropertySheetTypes(2, GetDocument()->m_docType.GetDocumentType())) {
+			if (!CEditApp::getInstance()->m_pPropertyManager->OpenPropertySheetTypes(2, GetDocument().m_docType.GetDocumentType())) {
 				return;
 			}
 			goto retry;
@@ -143,7 +143,7 @@ void ViewCommander::Command_MENU_ALLFUNC(void)
 	pEditWnd->GetMenuDrawer().ResetContents();
 
 	// Oct. 3, 2001 genta
-	FuncLookup& FuncLookup = GetDocument()->m_funcLookup;
+	FuncLookup& FuncLookup = GetDocument().m_funcLookup;
 	HMENU hMenu = ::CreatePopupMenu();
 // Oct. 14, 2000 JEPRO 「--未定義--」を表示させないように変更したことで1番(カーソル移動系)が前にシフトされた(この変更によって i=1→i=0 と変更)
 	// Oct. 3, 2001 genta
@@ -193,7 +193,7 @@ void ViewCommander::Command_MENU_ALLFUNC(void)
 void ViewCommander::Command_EXTHELP1(void)
 {
 retry:;
-	if (!HelpManager().ExtWinHelpIsSet(&(GetDocument()->m_docType.GetDocumentAttribute()))) {
+	if (!HelpManager().ExtWinHelpIsSet(&(GetDocument().m_docType.GetDocumentAttribute()))) {
 //	if (wcslen(GetDllShareData().common.m_szExtHelp1) == 0) {
 		ErrorBeep();
 // From Here Sept. 15, 2000 JEPRO
@@ -218,7 +218,7 @@ retry:;
 	}
 
 	NativeW memCurText;
-	const TCHAR* helpfile = HelpManager().GetExtWinHelp(&(GetDocument()->m_docType.GetDocumentAttribute()));
+	const TCHAR* helpfile = HelpManager().GetExtWinHelp(&(GetDocument().m_docType.GetDocumentAttribute()));
 
 	// 現在カーソル位置単語または選択範囲より検索等のキーを取得
 	m_view.GetCurrentTextForSearch(memCurText, false);
@@ -264,17 +264,17 @@ void ViewCommander::Command_EXTHTMLHELP(const WCHAR* _helpfile, const WCHAR* kwd
 	// From Here Jul. 5, 2002 genta
 	const TCHAR* filename = NULL;
 	if (helpfile.length() == 0) {
-		while (!HelpManager().ExtHTMLHelpIsSet(&(GetDocument()->m_docType.GetDocumentAttribute()))) {
+		while (!HelpManager().ExtHTMLHelpIsSet(&(GetDocument().m_docType.GetDocumentAttribute()))) {
 			ErrorBeep();
 	// From Here Sept. 15, 2000 JEPRO
 	//		[Esc]キーと[x]ボタンでも中止できるように変更
-			if (IDYES != ::MYMESSAGEBOX(
+			if (::MYMESSAGEBOX(
 					NULL,
 					MB_YESNOCANCEL | MB_ICONEXCLAMATION | MB_APPLMODAL | MB_TOPMOST,
 					GSTR_APPNAME,
 	// To Here Sept. 15, 2000
 					LS(STR_ERR_CEDITVIEW_CMD02)
-				)
+				) != IDYES
 			) {
 				return;
 			}
@@ -283,7 +283,7 @@ void ViewCommander::Command_EXTHTMLHELP(const WCHAR* _helpfile, const WCHAR* kwd
 				return;
 			}
 		}
-		filename = HelpManager().GetExtHTMLHelp(&(GetDocument()->m_docType.GetDocumentAttribute()));
+		filename = HelpManager().GetExtHTMLHelp(&(GetDocument().m_docType.GetDocumentAttribute()));
 	}else {
 		filename = helpfile.c_str();
 	}
@@ -300,7 +300,7 @@ void ViewCommander::Command_EXTHTMLHELP(const WCHAR* _helpfile, const WCHAR* kwd
 	}
 
 	// HtmlHelpビューアはひとつ
-	if (HelpManager().HTMLHelpIsSingle(&(GetDocument()->m_docType.GetDocumentAttribute()))) {
+	if (HelpManager().HTMLHelpIsSingle(&(GetDocument().m_docType.GetDocumentAttribute()))) {
 		// タスクトレイのプロセスにHtmlHelpを起動させる
 		// 2003.06.23 Moca 相対パスは実行ファイルからのパス
 		// 2007.05.21 ryoji 相対パスは設定ファイルからのパスを優先

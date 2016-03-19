@@ -239,7 +239,7 @@ bool EditView::MiniMapCursorLineTip(POINT* po, RECT* rc, bool* pbHide)
 	for (LayoutYInt nCurLine=nTipBeginLine; nCurLine<nTipEndLine; ++nCurLine) {
 		const Layout* pLayout = NULL;
 		if (0 <= nCurLine) {
-			pLayout = GetDocument()->m_layoutMgr.SearchLineByLayoutY( nCurLine );
+			pLayout = GetDocument().m_layoutMgr.SearchLineByLayoutY( nCurLine );
 		}
 		if (pLayout) {
 			NativeW memCurLine;

@@ -162,7 +162,7 @@ EditView::EditView(EditWnd* pEditWnd)
 // 2007.10.23 kobake コンストラクタ内の処理をすべてCreateに移しました。(初期化処理が不必要に分散していたため)
 BOOL EditView::Create(
 	HWND		hwndParent,	// 親
-	EditDoc*	pEditDoc,	// 参照するドキュメント
+	EditDoc&	editDoc,	// 参照するドキュメント
 	int			nMyIndex,	// ビューのインデックス
 	BOOL		bShow,		// 作成時に表示するかどうか
 	bool		bMiniMap
@@ -170,8 +170,8 @@ BOOL EditView::Create(
 {
 	m_bMiniMap = bMiniMap;
 	m_pTextArea = new TextArea(this);
-	m_pCaret = new Caret(this, pEditDoc);
-	m_pRuler = new Ruler(this, pEditDoc);
+	m_pCaret = new Caret(*this, editDoc);
+	m_pRuler = new Ruler(this, &editDoc);
 	if (m_bMiniMap) {
 		m_pViewFont = m_pEditWnd->m_pViewFontMiniMap;
 	}else {
@@ -289,7 +289,7 @@ BOOL EditView::Create(
 
 	WNDCLASS wc;
 	m_hwndParent = hwndParent;
-	m_pEditDoc = pEditDoc;
+	m_pEditDoc = &editDoc;
 	m_pTypeData = &m_pEditDoc->m_docType.GetDocumentAttribute();
 	m_nMyIndex = nMyIndex;
 
@@ -1613,7 +1613,7 @@ int	EditView::CreatePopUpMenuSub(HMENU hMenu, int nMenuIdx, int* pParentMenus)
 			}
 			if (!bMenuLoop) {
 				WCHAR buf[MAX_CUSTOM_MENU_NAME_LEN + 1];
-				LPCWSTR p = GetDocument()->m_funcLookup.Custmenu2Name(nCustIdx, buf, _countof(buf));
+				LPCWSTR p = GetDocument().m_funcLookup.Custmenu2Name(nCustIdx, buf, _countof(buf));
 				wchar_t keys[2];
 				keys[0] = csCustomMenu.nCustMenuItemKeyArr[nMenuIdx][i];
 				keys[1] = 0;
@@ -2265,10 +2265,10 @@ void EditView::CopySelectedAllLines(
 	}
 	{	// 選択範囲内の全行を選択状態にする
 		LayoutRange sSelect(GetSelectionInfo().m_select);
-		const Layout* pLayout = GetDocument()->m_layoutMgr.SearchLineByLayoutY(sSelect.GetFrom().y);
+		const Layout* pLayout = GetDocument().m_layoutMgr.SearchLineByLayoutY(sSelect.GetFrom().y);
 		if (!pLayout) return;
 		sSelect.SetFromX(pLayout->GetIndent());
-		pLayout = GetDocument()->m_layoutMgr.SearchLineByLayoutY(sSelect.GetTo().y);
+		pLayout = GetDocument().m_layoutMgr.SearchLineByLayoutY(sSelect.GetTo().y);
 		if (pLayout && (GetSelectionInfo().IsBoxSelecting() || sSelect.GetTo().x > pLayout->GetIndent())) {
 			// 選択範囲を次行頭まで拡大する
 			sSelect.SetToY(sSelect.GetTo().y + 1);
@@ -2848,7 +2848,7 @@ void EditView::SetUndoBuffer(bool bPaintLineNumber)
 	if (pOpe && pOpe->Release() == 0) {
 		if (0 < pOpe->GetNum()) {	// 操作の数を返す
 			// 操作の追加
-			GetDocument()->m_docEditor.m_opeBuf.AppendOpeBlk(pOpe);
+			GetDocument().m_docEditor.m_opeBuf.AppendOpeBlk(pOpe);
 
 			// 2013.05.01 Moca 正確に変更行を表示するようになったので不要
 			//  if (bPaintLineNumber
@@ -2856,7 +2856,7 @@ void EditView::SetUndoBuffer(bool bPaintLineNumber)
 			//  	Call_OnPaint(PaintAreaType::LineNumber, false);	// 自ペインの行番号（変更行）表示を更新 ← 変更行のみの表示更新で済ませている場合があるため
 
 			if (!m_pEditWnd->UpdateTextWrap())	{	// 折り返し方法関連の更新	// 2008.06.10 ryoji
-				if (0 < pOpe->GetNum() - GetDocument()->m_docEditor.m_nOpeBlkRedawCount) {
+				if (0 < pOpe->GetNum() - GetDocument().m_docEditor.m_nOpeBlkRedawCount) {
 					m_pEditWnd->RedrawAllViews(this);	//	他のペインの表示を更新
 				}
 			}

@@ -260,7 +260,7 @@ bool ImpExpType::ImportAscertain(HINSTANCE hInstance, HWND hwndParent, const wst
 		int nRet = ConfirmMessage(hwndParent,
 			LS(STR_IMPEXP_VER), 
 			_APP_NAME_(LTEXT), szKeyVersion, nStructureVersion);
-		if (IDYES != nRet) {
+		if (nRet != IDYES) {
 			return false;
 		}
 	}
@@ -609,7 +609,7 @@ bool ImpExpRegex::Import(const wstring& sFileName, wstring& sErrMsg)
 	}
 
 	RegexKeywordInfo regexKeyArr[MAX_REGEX_KEYWORD];
-	std::unique_ptr<wchar_t[]> szKeywordList(new wchar_t[MAX_REGEX_KEYWORDLISTLEN]);
+	auto szKeywordList = std::make_unique<wchar_t[]>(MAX_REGEX_KEYWORDLISTLEN);
 	wchar_t* pKeyword = &szKeywordList[0];
 	int	keywordPos = 0;
 	TCHAR buff[MAX_REGEX_KEYWORDLEN + 20];

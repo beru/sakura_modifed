@@ -62,7 +62,7 @@ private:
 // 行全体のブックマーク情報の管理
 class BookmarkManager {
 public:
-	BookmarkManager(DocLineMgr* pDocLineMgr) : m_pDocLineMgr(pDocLineMgr) { }
+	BookmarkManager(DocLineMgr& docLineMgr) : m_docLineMgr(docLineMgr) { }
 
 	void ResetAllBookMark();															// ブックマークの全解除
 	bool SearchBookMark(LogicInt nLineNum, SearchDirection, LogicInt* pnLineNum);	// ブックマーク検索
@@ -71,6 +71,6 @@ public:
 	void MarkSearchWord(const SearchStringPattern&);			// 検索条件に該当する行にブックマークをセットする
 
 private:
-	DocLineMgr* m_pDocLineMgr;
+	DocLineMgr& m_docLineMgr;
 };
 

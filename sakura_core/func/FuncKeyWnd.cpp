@@ -316,7 +316,7 @@ LRESULT FuncKeyWnd::OnTimer(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		for (int i=0; i<_countof(m_szFuncNameArr); ++i) {
 			::EnableWindow(
 				m_hwndButtonArr[i],
-				IsFuncEnable((EditDoc*)m_pEditDoc, m_pShareData, m_nFuncCodeArr[i] ) ? TRUE : FALSE
+				IsFuncEnable(*m_pEditDoc, m_pShareData, m_nFuncCodeArr[i] ) ? TRUE : FALSE
 				);
 		}
 	}

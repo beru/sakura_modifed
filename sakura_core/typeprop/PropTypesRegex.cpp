@@ -173,7 +173,7 @@ INT_PTR PropTypesRegex::DispatchEvent(
 			case IDC_BUTTON_REGEX_INS:	// ‘}“ü
 			{
 				// ‘}“ü‚·‚éƒL[î•ñ‚ğæ“¾‚·‚éB
-				std::unique_ptr<TCHAR[]> szKeyword(new TCHAR [nKeywordSize]);
+				auto szKeyword = std::make_unique<TCHAR[]>(nKeywordSize);
 				szKeyword[0] = _T('\0');
 				::DlgItem_GetText(hwndDlg, IDC_EDIT_REGEX, &szKeyword[0], nKeywordSize);
 				if (szKeyword[0] == _T('\0')) {

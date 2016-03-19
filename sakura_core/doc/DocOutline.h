@@ -29,7 +29,7 @@ struct OneRule;
 
 class DocOutline {
 public:
-	DocOutline(EditDoc* pDoc) : m_pDocRef(pDoc) { }
+	DocOutline(EditDoc& doc) : m_doc(doc) { }
 	void	MakeFuncList_C(FuncInfoArr*, bool bVisibleMemberFunc = true);			// C/C++関数リスト作成
 	void	MakeFuncList_PLSQL(FuncInfoArr*);										// PL/SQL関数リスト作成
 	void	MakeTopicList_txt(FuncInfoArr*);										// テキスト・トピックリスト作成
@@ -47,6 +47,6 @@ public:
 	int		ReadRuleFile(const TCHAR*, OneRule*, int, bool&, std::wstring&);		// ルールファイル読込 2002.04.01 YAZAKI
 	void	MakeFuncList_BookMark(FuncInfoArr*);									// ブックマークリスト作成 // 2001.12.03 hor
 private:
-	EditDoc* m_pDocRef;
+	EditDoc& m_doc;
 };
 

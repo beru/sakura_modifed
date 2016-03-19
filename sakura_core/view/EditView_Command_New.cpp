@@ -88,7 +88,7 @@ void EditView::InsertData_CEditView(
 			ptInsertPos,
 			&pOpe->m_ptCaretPos_PHY_Before
 		);
-		opeSeq = GetDocument()->m_docEditor.m_opeBuf.GetNextSeq();
+		opeSeq = GetDocument().m_docEditor.m_opeBuf.GetNextSeq();
 	}else {
 		opeSeq = 0;
 	}
@@ -109,7 +109,7 @@ void EditView::InsertData_CEditView(
 	const Layout*	pLayout;
 	const wchar_t*	pLine = m_pEditDoc->m_layoutMgr.GetLineStr(ptInsertPos.GetY2(), &nLineLen, &pLayout);
 	bool			bLineModifiedChange = (pLine)? !ModifyVisitor().IsLineModified(pLayout->GetDocLineRef(),
-		GetDocument()->m_docEditor.m_opeBuf.GetNoModifiedSeq()): true;
+		GetDocument().m_docEditor.m_opeBuf.GetNoModifiedSeq()): true;
 
 	// 禁則の有無
 	// 禁則がある場合は1行前から再描画を行う	@@@ 2002.04.19 MIK
@@ -317,7 +317,7 @@ void EditView::InsertData_CEditView(
 				}
 				m_pEditWnd->GetMiniMap().RedrawLines(nLayoutTop, nLayoutBottom);
 				if (!m_bDoing_UndoRedo && pOpe) {
-					GetDocument()->m_docEditor.m_nOpeBlkRedawCount++;
+					GetDocument().m_docEditor.m_nOpeBlkRedawCount++;
 				}
 			}
 
@@ -403,7 +403,7 @@ void EditView::DeleteData2(
 		arg.delRange.SetTo(LayoutPoint(columnTo, _ptCaretPos.GetY2()));
 		arg.pMemDeleted = pmemDeleted;
 		arg.pInsData = NULL;
-		arg.nDelSeq = GetDocument()->m_docEditor.m_opeBuf.GetNextSeq();
+		arg.nDelSeq = GetDocument().m_docEditor.m_opeBuf.GetNextSeq();
 		m_pEditDoc->m_layoutMgr.ReplaceData_CLayoutMgr(&arg);
 	}
 
@@ -674,7 +674,7 @@ void EditView::ReplaceData_CEditView(
 	const LogicRange*	psDelRangeLogicFast
 	)
 {
-	auto& opeBuf = GetDocument()->m_docEditor.m_opeBuf;
+	auto& opeBuf = GetDocument().m_docEditor.m_opeBuf;
 	int opeSeq = m_bDoing_UndoRedo ? opeBuf.GetCurrentPointer() : opeBuf.GetNextSeq();
 	if (nInsDataLen == 0) {
 		ReplaceData_CEditView3(delRange, NULL, NULL, bRedraw, pOpeBlk, opeSeq, NULL, bFastMode, psDelRangeLogicFast);
@@ -735,7 +735,7 @@ bool EditView::ReplaceData_CEditView3(
 		if (!bFastMode) {
 			line = layoutMgr.GetLineStr(delRange.GetFrom().GetY2(), &len, &pLayout);
 		}
-		bLineModifiedChange = (line)? !ModifyVisitor().IsLineModified(pLayout->GetDocLineRef(), GetDocument()->m_docEditor.m_opeBuf.GetNoModifiedSeq()): true;
+		bLineModifiedChange = (line)? !ModifyVisitor().IsLineModified(pLayout->GetDocLineRef(), GetDocument().m_docEditor.m_opeBuf.GetNoModifiedSeq()): true;
 		if (line) {
 			LogicInt pos = LineColumnToIndex(pLayout, delRange.GetFrom().GetX2());
 			//	Jun. 1, 2000 genta
@@ -825,7 +825,7 @@ bool EditView::ReplaceData_CEditView3(
 		DLRArg.pInsData = pInsData;
 		DLRArg.nDelSeq = nDelSeq;
 		// DLRArg.ptNewPos;
-		SearchAgent(&GetDocument()->m_docLineMgr).ReplaceData(&DLRArg);
+		SearchAgent(&GetDocument().m_docLineMgr).ReplaceData(&DLRArg);
 	}else {
 		LRArg.delRange    = delRange;		// 削除範囲レイアウト
 		LRArg.pMemDeleted = pMemDeleted;	// [out] 削除されたデータ
@@ -900,7 +900,7 @@ bool EditView::ReplaceData_CEditView3(
 				}
 				m_pEditWnd->GetMiniMap().RedrawLines(nLayoutTop, nLayoutBottom);
 				if (!m_bDoing_UndoRedo && pOpeBlk) {
-					GetDocument()->m_docEditor.m_nOpeBlkRedawCount++;
+					GetDocument().m_docEditor.m_nOpeBlkRedawCount++;
 				}
 				bUpdateAll = false;
 #if 0 // すでに1行まとめて描画済み

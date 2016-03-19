@@ -48,7 +48,7 @@ static bool Commander_COMPARE_core(
 	const wchar_t*	pLineDes;
 	int nLineLenDes;
 	int max_size = (int)GetDllShareData().workBuffer.GetWorkBufferCount<EDIT_CHAR>();
-	const DocLineMgr& docMgr = commander.GetDocument()->m_docLineMgr;
+	const DocLineMgr& docMgr = commander.GetDocument().m_docLineMgr;
 
 	bDifferent = true;
 	{
@@ -125,8 +125,8 @@ void ViewCommander::Command_COMPARE(void)
 	BOOL bDlgCompareResult = cDlgCompare.DoModal(
 		G_AppInstance(),
 		m_view.GetHwnd(),
-		(LPARAM)GetDocument(),
-		GetDocument()->m_docFile.GetFilePath(),
+		(LPARAM)&GetDocument(),
+		GetDocument().m_docFile.GetFilePath(),
 		szPath,
 		&hwndCompareWnd
 	);
@@ -153,7 +153,7 @@ void ViewCommander::Command_COMPARE(void)
 	  物理位置(行頭からのバイト数、折り返し無し行位置)
 	*/
 	LogicPoint	poSrc;
-	GetDocument()->m_layoutMgr.LayoutToLogic(
+	GetDocument().m_layoutMgr.LayoutToLogic(
 		GetCaret().GetCaretLayoutPos(),
 		&poSrc
 	);
@@ -263,7 +263,7 @@ void ViewCommander::Command_Diff(const WCHAR* _szDiffFile2, int nFlgOpt)
 
 	// 自ファイル
 	// 2013.06.21 Unicodeのときは、いつもファイル出力
-	EncodingType code = GetDocument()->GetDocumentEncoding();
+	EncodingType code = GetDocument().GetDocumentEncoding();
 	EncodingType saveCode = GetDiffCreateTempFileCode(code);
 	EncodingType code2 = GetFileCharCode(szDiffFile2);
 	EncodingType saveCode2 = GetDiffCreateTempFileCode(code2);
@@ -273,16 +273,16 @@ void ViewCommander::Command_Diff(const WCHAR* _szDiffFile2, int nFlgOpt)
 		saveCode2 = CODE_UTF8;
 	}
 
-	if (GetDocument()->m_docEditor.IsModified()
+	if (GetDocument().m_docEditor.IsModified()
 		|| saveCode != code
-		|| !GetDocument()->m_docFile.GetFilePathClass().IsValidPath() // 2014.06.25 Grep/アウトプットも対象にする
+		|| !GetDocument().m_docFile.GetFilePathClass().IsValidPath() // 2014.06.25 Grep/アウトプットも対象にする
 	) {
-		if (!m_view.MakeDiffTmpFile(szTmpFile1, NULL, saveCode, GetDocument()->GetDocumentBomExist())) {
+		if (!m_view.MakeDiffTmpFile(szTmpFile1, NULL, saveCode, GetDocument().GetDocumentBomExist())) {
 			return;
 		}
 		bTmpFile1 = true;
 	}else {
-		_tcscpy( szTmpFile1, GetDocument()->m_docFile.GetFilePath() );
+		_tcscpy( szTmpFile1, GetDocument().m_docFile.GetFilePath() );
 	}
 
 	bool bTmpFile2 = false;
@@ -325,13 +325,13 @@ void ViewCommander::Command_Diff_Dialog(void)
 	DlgDiff cDlgDiff;
 	bool bTmpFile1 = false, bTmpFile2 = false;
 
-	auto& docFile = GetDocument()->m_docFile;
-	auto& docEditor = GetDocument()->m_docEditor;
+	auto& docFile = GetDocument().m_docFile;
+	auto& docEditor = GetDocument().m_docEditor;
 	// DIFF差分表示ダイアログを表示する
 	int nDiffDlgResult = cDlgDiff.DoModal(
 		G_AppInstance(),
 		m_view.GetHwnd(),
-		(LPARAM)GetDocument(),
+		(LPARAM)&GetDocument(),
 		docFile.GetFilePath()
 	);
 	if (!nDiffDlgResult) {
@@ -340,7 +340,7 @@ void ViewCommander::Command_Diff_Dialog(void)
 	
 	// 自ファイル
 	TCHAR szTmpFile1[_MAX_PATH * 2];
-	EncodingType code = GetDocument()->GetDocumentEncoding();
+	EncodingType code = GetDocument().GetDocumentEncoding();
 	EncodingType saveCode = GetDiffCreateTempFileCode(code);
 	EncodingType code2 = cDlgDiff.m_nCodeTypeDst;
 	if (code2 == CODE_ERROR) {
@@ -355,14 +355,14 @@ void ViewCommander::Command_Diff_Dialog(void)
 		saveCode = CODE_UTF8;
 		saveCode2 = CODE_UTF8;
 	}
-	if (GetDocument()->m_docEditor.IsModified()
+	if (GetDocument().m_docEditor.IsModified()
 		|| code != saveCode
-		|| !GetDocument()->m_docFile.GetFilePathClass().IsValidPath() // 2014.06.25 Grep/アウトプットも対象にする
+		|| !GetDocument().m_docFile.GetFilePathClass().IsValidPath() // 2014.06.25 Grep/アウトプットも対象にする
 	) {
-		if (!m_view.MakeDiffTmpFile( szTmpFile1, NULL, saveCode, GetDocument()->GetDocumentBomExist() )) { return; }
+		if (!m_view.MakeDiffTmpFile( szTmpFile1, NULL, saveCode, GetDocument().GetDocumentBomExist() )) { return; }
 		bTmpFile1 = true;
 	}else {
-		_tcscpy( szTmpFile1, GetDocument()->m_docFile.GetFilePath() );
+		_tcscpy( szTmpFile1, GetDocument().m_docFile.GetFilePath() );
 	}
 		
 	// 相手ファイル
@@ -421,11 +421,11 @@ void ViewCommander::Command_Diff_Next(void)
 	auto& selInfo = m_view.GetSelectionInfo();
 
 re_do:;	
-	if (DiffLineMgr(&GetDocument()->m_docLineMgr).SearchDiffMark(ptXY.GetY2(), SearchDirection::Forward, &tmp_y)) {
+	if (DiffLineMgr(&GetDocument().m_docLineMgr).SearchDiffMark(ptXY.GetY2(), SearchDirection::Forward, &tmp_y)) {
 		ptXY.y = tmp_y;
 		bFound = true;
 		LayoutPoint ptXY_Layout;
-		GetDocument()->m_layoutMgr.LogicToLayout(ptXY, &ptXY_Layout);
+		GetDocument().m_layoutMgr.LogicToLayout(ptXY, &ptXY_Layout);
 		if (selInfo.m_bSelectingLock) {
 			if (!selInfo.IsTextSelected()) selInfo.BeginSelectArea();
 		}else {
@@ -472,11 +472,11 @@ void ViewCommander::Command_Diff_Prev(void)
 	auto& selInfo = m_view.GetSelectionInfo();
 
 re_do:;
-	if (DiffLineMgr(&GetDocument()->m_docLineMgr).SearchDiffMark(ptXY.GetY2(), SearchDirection::Backward, &tmp_y)) {
+	if (DiffLineMgr(&GetDocument().m_docLineMgr).SearchDiffMark(ptXY.GetY2(), SearchDirection::Backward, &tmp_y)) {
 		ptXY.y = tmp_y;
 		bFound = true;
 		LayoutPoint ptXY_Layout;
-		GetDocument()->m_layoutMgr.LogicToLayout(ptXY, &ptXY_Layout);
+		GetDocument().m_layoutMgr.LogicToLayout(ptXY, &ptXY_Layout);
 		if (selInfo.m_bSelectingLock) {
 			if (!selInfo.IsTextSelected()) selInfo.BeginSelectArea();
 		}else {
@@ -493,7 +493,7 @@ re_do:;
 		// 見つからなかった、かつ、最初の検索
 		if (!bFound	&& bRedo) {
 			// 2011.02.02 m_layoutMgr→m_docLineMgr
-			ptXY.y = GetDocument()->m_docLineMgr.GetLineCount();	// 1個手前を指定
+			ptXY.y = GetDocument().m_docLineMgr.GetLineCount();	// 1個手前を指定
 			bRedo = false;
 			goto re_do;	// 末尾から再検索
 		}
@@ -516,7 +516,7 @@ re_do:;
 */
 void ViewCommander::Command_Diff_Reset(void)
 {
-	DiffLineMgr(&GetDocument()->m_docLineMgr).ResetAllDiffMark();
+	DiffLineMgr(&GetDocument().m_docLineMgr).ResetAllDiffMark();
 
 	// 分割したビューも更新
 	GetEditWindow()->Views_Redraw();

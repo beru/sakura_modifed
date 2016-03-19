@@ -467,8 +467,8 @@ void DocOutline::MakeFuncList_C(
 	bool bExtEol = GetDllShareData().common.edit.bEnableExtEol;
 	
 	LogicInt nLineCount;
-	for (nLineCount=LogicInt(0); nLineCount<m_pDocRef->m_docLineMgr.GetLineCount(); ++nLineCount) {
-		pLine = m_pDocRef->m_docLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
+	for (nLineCount=LogicInt(0); nLineCount<m_doc.m_docLineMgr.GetLineCount(); ++nLineCount) {
+		pLine = m_doc.m_docLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
 
 		//	From Here Aug. 10, 2004 genta
 		//	プリプロセス処理
@@ -820,7 +820,7 @@ void DocOutline::MakeFuncList_C(
 						  レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 						*/
 						LayoutPoint ptPosXY;
-						m_pDocRef->m_layoutMgr.LogicToLayout(
+						m_doc.m_layoutMgr.LogicToLayout(
 							LogicPoint(0, nItemLine - 1),
 							&ptPosXY
 						);
@@ -1043,7 +1043,7 @@ void DocOutline::MakeFuncList_C(
 						  レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 						*/
 						LayoutPoint ptPosXY;
-						m_pDocRef->m_layoutMgr.LogicToLayout(
+						m_doc.m_layoutMgr.LogicToLayout(
 							LogicPoint(0, nItemLine - 1),
 							&ptPosXY
 						);

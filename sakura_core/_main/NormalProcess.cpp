@@ -170,7 +170,7 @@ bool NormalProcess::InitializeProcess()
 
 	if (bDebugMode) {
 		// デバッグモニタモードに設定
-		pEditWnd->GetDocument()->SetCurDirNotitle();
+		pEditWnd->GetDocument().SetCurDirNotitle();
 		AppMode::getInstance().SetDebugModeON();
 		if (!AppMode::getInstance().IsDebugMode()) {
 			// デバッグではなくて(無題)
@@ -277,7 +277,7 @@ bool NormalProcess::InitializeProcess()
 				activeView.GetCommander().HandleCommand(F_GREP, true, 0, 0, 0, 0);
 			}else {
 				// 自分はGrepでない
-				pEditWnd->GetDocument()->SetCurDirNotitle();
+				pEditWnd->GetDocument().SetCurDirNotitle();
 			}
 			pEditWnd->m_dlgFuncList.Refresh();	// アウトラインを再解析する
 			//return true; // 2003.06.23 Moca
@@ -322,7 +322,7 @@ bool NormalProcess::InitializeProcess()
 			// Note. fi.nCharCode で文字コードが明示指定されていても、読み込み中断しない場合は別の文字コードが選択されることがある。
 			//       以前は「(無題)」にならない場合でも無条件に SetDocumentTypeWhenCreate() を呼んでいたが、
 			//       「前回と異なる文字コード」の問い合わせで前回の文字コードが選択された場合におかしくなっていた。
-			if (!pEditWnd->GetDocument()->m_docFile.GetFilePathClass().IsValidPath()) {
+			if (!pEditWnd->GetDocument().m_docFile.GetFilePathClass().IsValidPath()) {
 				// 読み込み中断して「(無題)」になった
 				// ---> 無効になったオプション指定を有効にする
 				pEditWnd->SetDocumentTypeWhenCreate(
@@ -339,7 +339,7 @@ bool NormalProcess::InitializeProcess()
 			// 移動するようにする． || → &&
 			if (
 				(LayoutInt(0) <= fi.nViewTopLine && LayoutInt(0) <= fi.nViewLeftCol)
-				&& fi.nViewTopLine < pEditWnd->GetDocument()->m_layoutMgr.GetLineCount()
+				&& fi.nViewTopLine < pEditWnd->GetDocument().m_layoutMgr.GetLineCount()
 			) {
 				activeView.GetTextArea().SetViewTopLine(fi.nViewTopLine);
 				activeView.GetTextArea().SetViewLeftCol(fi.nViewLeftCol);
@@ -356,7 +356,7 @@ bool NormalProcess::InitializeProcess()
 				  レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 				*/
 				LayoutPoint ptPos;
-				pEditWnd->GetDocument()->m_layoutMgr.LogicToLayout(
+				pEditWnd->GetDocument().m_layoutMgr.LogicToLayout(
 					fi.ptCursor,
 					&ptPos
 				);
@@ -364,7 +364,7 @@ bool NormalProcess::InitializeProcess()
 				// From Here Mar. 28, 2003 MIK
 				// 改行の真ん中にカーソルが来ないように。
 				// 2008.08.20 ryoji 改行単位の行番号を渡すように修正
-				const DocLine* pTmpDocLine = pEditWnd->GetDocument()->m_docLineMgr.GetLine(fi.ptCursor.GetY2());
+				const DocLine* pTmpDocLine = pEditWnd->GetDocument().m_docLineMgr.GetLine(fi.ptCursor.GetY2());
 				if (pTmpDocLine) {
 					if (pTmpDocLine->GetLengthWithoutEOL() < fi.ptCursor.x) {
 						ptPos.x--;
@@ -378,7 +378,7 @@ bool NormalProcess::InitializeProcess()
 			}
 			activeView.RedrawAll();
 		}else {
-			pEditWnd->GetDocument()->SetCurDirNotitle();	// (無題)ウィンドウ
+			pEditWnd->GetDocument().SetCurDirNotitle();	// (無題)ウィンドウ
 			// 2004.05.13 Moca ファイル名が与えられなくてもReadOnlyとタイプ指定を有効にする
 			pEditWnd->SetDocumentTypeWhenCreate(
 				fi.nCharCode,
@@ -386,8 +386,8 @@ bool NormalProcess::InitializeProcess()
 				nType
 			);
 		}
-		if (!pEditWnd->GetDocument()->m_docFile.GetFilePathClass().IsValidPath()) {
-			pEditWnd->GetDocument()->SetCurDirNotitle();	// (無題)ウィンドウ
+		if (!pEditWnd->GetDocument().m_docFile.GetFilePathClass().IsValidPath()) {
+			pEditWnd->GetDocument().SetCurDirNotitle();	// (無題)ウィンドウ
 			AppNodeManager::getInstance().GetNoNameNumber(pEditWnd->GetHwnd());
 			pEditWnd->UpdateCaption();
 		}
@@ -430,7 +430,7 @@ bool NormalProcess::InitializeProcess()
 
 	// 2006.09.03 ryoji オープン後自動実行マクロを実行する
 	if (!(bDebugMode || bGrepMode)) {
-		pEditWnd->GetDocument()->RunAutoMacro(GetDllShareData().common.macro.nMacroOnOpened);
+		pEditWnd->GetDocument().RunAutoMacro(GetDllShareData().common.macro.nMacroOnOpened);
 	}
 
 	// 起動時マクロオプション

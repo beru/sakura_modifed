@@ -41,7 +41,7 @@ public:
 
 public:
 	// ŠO•”ˆË‘¶
-	EditDoc* GetDocument();
+	EditDoc& GetDocument();
 	EditWnd* GetEditWindow();
 	HWND GetMainWindow();
 	OpeBlk* GetOpeBlk();

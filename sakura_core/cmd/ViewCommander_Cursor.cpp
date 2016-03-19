@@ -33,7 +33,7 @@ void ViewCommander::Command_MOVECURSOR(LogicPoint pos, int option)
 		return;
 	}
 	LayoutPoint layoutPos;
-	GetDocument()->m_layoutMgr.LogicToLayout(pos, &layoutPos);
+	GetDocument().m_layoutMgr.LogicToLayout(pos, &layoutPos);
 	Command_MOVECURSORLAYOUT(layoutPos, option);
 }
 
@@ -189,7 +189,7 @@ int ViewCommander::Command_LEFT(bool bSelect, bool bRepeat)
 		// (これから求める)カーソルの移動先。
 		LayoutPoint ptPos(LayoutInt(0), ptCaretMove.GetY2());
 
-		auto& layoutMgr = GetDocument()->m_layoutMgr;
+		auto& layoutMgr = GetDocument().m_layoutMgr;
 		// 現在行のデータを取得
 		const Layout* pLayout = layoutMgr.SearchLineByLayoutY( ptCaretMove.GetY2() );
 		// カーソルが左端にある
@@ -300,7 +300,7 @@ void ViewCommander::Command_RIGHT(
 		LayoutPoint ptTo(0, 0);
 		const LayoutPoint ptCaret = ptCaretMove;
 
-		auto& layoutMgr = GetDocument()->m_layoutMgr;
+		auto& layoutMgr = GetDocument().m_layoutMgr;
 		// 現在行のデータを取得
 		const Layout* const pcLayout = layoutMgr.SearchLineByLayoutY(ptCaret.y);
 		// 2004.04.02 EOF以降にカーソルがあったときに右を押しても何も起きなかったのを、EOFに移動するように
@@ -437,7 +437,7 @@ void ViewCommander::Command_WORDLEFT(bool bSelect)
 
 	auto& caret = GetCaret();
 	auto& csGeneral = GetDllShareData().common.general;
-	auto& layoutMgr = GetDocument()->m_layoutMgr;
+	auto& layoutMgr = GetDocument().m_layoutMgr;
 	const Layout* pLayout = layoutMgr.SearchLineByLayoutY(caret.GetCaretLayoutPos().GetY2());
 	if (!pLayout) {
 		bool bIsFreeCursorModeOld = csGeneral.bIsFreeCursorMode;	// フリーカーソルモードか
@@ -522,7 +522,7 @@ try_again:;
 	auto& caret = GetCaret();
 	nCurLine = caret.GetCaretLayoutPos().GetY2();
 	const Layout* pLayout;
-	auto& layoutMgr = GetDocument()->m_layoutMgr;
+	auto& layoutMgr = GetDocument().m_layoutMgr;
 	pLayout = layoutMgr.SearchLineByLayoutY(nCurLine);
 	if (!pLayout) {
 		return;
@@ -609,7 +609,7 @@ void ViewCommander::Command_GOLINETOP(
 
 	LayoutPoint ptCaretPos;
 	auto& caret = GetCaret();
-	auto& layoutMgr = GetDocument()->m_layoutMgr;
+	auto& layoutMgr = GetDocument().m_layoutMgr;
 	if (lparam & 8) {
 		// 改行単位指定の場合は、物理行頭位置から目的論理位置を求める
 		layoutMgr.LogicToLayout(
@@ -702,7 +702,7 @@ void ViewCommander::Command_GOLINEEND(
 
 	// 現在行のデータから、そのレイアウト幅を取得
 	auto& caret = GetCaret();
-	auto& layoutMgr = GetDocument()->m_layoutMgr;
+	auto& layoutMgr = GetDocument().m_layoutMgr;
 	LayoutPoint nPosXY = caret.GetCaretLayoutPos();
 	if (nOption & 8) {
 		// 改行単位の行末。1行中の最終レイアウト行を探す
@@ -856,7 +856,7 @@ void ViewCommander::Command_GOFILEEND(bool bSelect)
 	}
 	m_view.AddCurrentLineToHistory();
 	auto& caret = GetCaret();
-	caret.Cursor_UPDOWN(GetDocument()->m_layoutMgr.GetLineCount() , bSelect);
+	caret.Cursor_UPDOWN(GetDocument().m_layoutMgr.GetLineCount() , bSelect);
 	Command_DOWN(bSelect, true);
 	if (!si.IsBoxSelecting()) {							// 2002/04/18 YAZAKI
 		/*	2004.04.19 fotomo
@@ -915,7 +915,7 @@ void ViewCommander::Command_JUMPHIST_PREV(void)
 			::MessageBox(NULL, _T("Inconsistent Implementation"), _T("PrevValid"), MB_OK);
 		}
 		LayoutPoint pt;
-		GetDocument()->m_layoutMgr.LogicToLayout(
+		GetDocument().m_layoutMgr.LogicToLayout(
 			m_view.m_pHistory->GetCurrent().GetPosition(),
 			&pt
 		);
@@ -933,7 +933,7 @@ void ViewCommander::Command_JUMPHIST_NEXT(void)
 			::MessageBox(NULL, _T("Inconsistent Implementation"), _T("NextValid"), MB_OK);
 		}
 		LayoutPoint pt;
-		GetDocument()->m_layoutMgr.LogicToLayout(
+		GetDocument().m_layoutMgr.LogicToLayout(
 			m_view.m_pHistory->GetCurrent().GetPosition(),
 			&pt
 		);
@@ -980,8 +980,8 @@ void ViewCommander::Command_WndScrollDown(void)
 	if (!m_view.GetSelectionInfo().IsTextSelected()) {
 		// カーソルが画面外に出た
 		if (caret.GetCaretLayoutPos().GetY() > textArea.m_nViewRowNum + textArea.GetViewTopLine() - nCaretMarginY) {
-			if (caret.GetCaretLayoutPos().GetY() > GetDocument()->m_layoutMgr.GetLineCount() - nCaretMarginY) {
-				caret.Cursor_UPDOWN((GetDocument()->m_layoutMgr.GetLineCount() - nCaretMarginY) - caret.GetCaretLayoutPos().GetY2(), false);
+			if (caret.GetCaretLayoutPos().GetY() > GetDocument().m_layoutMgr.GetLineCount() - nCaretMarginY) {
+				caret.Cursor_UPDOWN((GetDocument().m_layoutMgr.GetLineCount() - nCaretMarginY) - caret.GetCaretLayoutPos().GetY2(), false);
 			}else {
 				caret.Cursor_UPDOWN(LayoutInt(-1), false);
 			}
@@ -1045,7 +1045,7 @@ void ViewCommander::Command_GONEXTPARAGRAPH(bool bSelect)
 {
 	DocLine* pDocLine;
 	int nCaretPointer = 0;
-	auto& docLineMgr = GetDocument()->m_docLineMgr;
+	auto& docLineMgr = GetDocument().m_docLineMgr;
 	
 	bool nFirstLineIsEmptyLine = false;
 	// まずは、現在位置が空行（スペース、タブ、改行記号のみの行）かどうか判別
@@ -1092,7 +1092,7 @@ void ViewCommander::Command_GONEXTPARAGRAPH(bool bSelect)
 	LayoutPoint ptCaretPos_Layo;
 
 	// 移動前の物理位置
-	GetDocument()->m_layoutMgr.LogicToLayout(
+	GetDocument().m_layoutMgr.LogicToLayout(
 		GetCaret().GetCaretLogicPos(),
 		&ptCaretPos_Layo
 	);
@@ -1100,7 +1100,7 @@ void ViewCommander::Command_GONEXTPARAGRAPH(bool bSelect)
 	// 移動後の物理位置
 	LayoutPoint ptCaretPos_Layo_CaretPointer;
 	//int nCaretPosY_Layo_CaretPointer;
-	GetDocument()->m_layoutMgr.LogicToLayout(
+	GetDocument().m_layoutMgr.LogicToLayout(
 		GetCaret().GetCaretLogicPos() + LogicPoint(0, nCaretPointer),
 		&ptCaretPos_Layo_CaretPointer
 	);
@@ -1116,7 +1116,7 @@ void ViewCommander::Command_GONEXTPARAGRAPH(bool bSelect)
 */
 void ViewCommander::Command_GOPREVPARAGRAPH(bool bSelect)
 {
-	auto& docLineMgr = GetDocument()->m_docLineMgr;
+	auto& docLineMgr = GetDocument().m_docLineMgr;
 	DocLine* pDocLine;
 	int nCaretPointer = -1;
 
@@ -1173,14 +1173,14 @@ void ViewCommander::Command_GOPREVPARAGRAPH(bool bSelect)
 	LayoutPoint ptCaretPos_Layo;
 
 	// 移動前の物理位置
-	GetDocument()->m_layoutMgr.LogicToLayout(
+	GetDocument().m_layoutMgr.LogicToLayout(
 		GetCaret().GetCaretLogicPos(),
 		&ptCaretPos_Layo
 	);
 
 	// 移動後の物理位置
 	LayoutPoint ptCaretPos_Layo_CaretPointer;
-	GetDocument()->m_layoutMgr.LogicToLayout(
+	GetDocument().m_layoutMgr.LogicToLayout(
 		GetCaret().GetCaretLogicPos() + LogicPoint(0, nCaretPointer),
 		&ptCaretPos_Layo_CaretPointer
 	);
@@ -1269,11 +1269,11 @@ void ViewCommander::Command_WHEELPAGERIGHT(int zDelta)
 */
 void ViewCommander::Command_MODIFYLINE_NEXT( bool bSelect )
 {
-	auto& docLineMgr = GetDocument()->m_docLineMgr;
+	auto& docLineMgr = GetDocument().m_docLineMgr;
 	LogicInt nYOld = GetCaret().GetCaretLogicPos().y;
 	LogicPoint ptXY(0, nYOld);
 	const DocLine* pDocLine = docLineMgr.GetLine(ptXY.GetY2());
-	const int nSaveSeq = GetDocument()->m_docEditor.m_opeBuf.GetNoModifiedSeq();
+	const int nSaveSeq = GetDocument().m_docEditor.m_opeBuf.GetNoModifiedSeq();
 	bool bModified = false;
 	if (docLineMgr.GetLineCount() == 0) {
 		return;
@@ -1292,7 +1292,7 @@ void ViewCommander::Command_MODIFYLINE_NEXT( bool bSelect )
 				)
 			) {
 				LayoutPoint ptLayout;
-				GetDocument()->m_layoutMgr.LogicToLayout(ptXY, &ptLayout);
+				GetDocument().m_layoutMgr.LogicToLayout(ptXY, &ptLayout);
 				m_view.MoveCursorSelecting( ptLayout, bSelect );
 				if (nYOld >= ptXY.GetY2()) {
 					m_view.SendStatusMessage(LS(STR_ERR_SRNEXT1));
@@ -1323,7 +1323,7 @@ void ViewCommander::Command_MODIFYLINE_NEXT( bool bSelect )
 			}
 			if (!bSkip) {
 				LayoutPoint ptLayout;
-				GetDocument()->m_layoutMgr.LogicToLayout(pos, &ptLayout);
+				GetDocument().m_layoutMgr.LogicToLayout(pos, &ptLayout);
 				m_view.MoveCursorSelecting( ptLayout, bSelect );
 				return;
 			}
@@ -1347,12 +1347,12 @@ void ViewCommander::Command_MODIFYLINE_NEXT( bool bSelect )
 */
 void ViewCommander::Command_MODIFYLINE_PREV( bool bSelect )
 {
-	auto& docLineMgr = GetDocument()->m_docLineMgr;
+	auto& docLineMgr = GetDocument().m_docLineMgr;
 	LogicInt nYOld = GetCaret().GetCaretLogicPos().y;
 	LogicInt nYOld2 = nYOld;
 	LogicPoint ptXY(0, nYOld);
 	const DocLine* pDocLine = docLineMgr.GetLine(ptXY.GetY2());
-	const int nSaveSeq = GetDocument()->m_docEditor.m_opeBuf.GetNoModifiedSeq();
+	const int nSaveSeq = GetDocument().m_docEditor.m_opeBuf.GetNoModifiedSeq();
 	bool bModified = false;
 	bool bLast = false;
 	if (!pDocLine) {
@@ -1390,7 +1390,7 @@ void ViewCommander::Command_MODIFYLINE_PREV( bool bSelect )
 		ptXY.y--;
 		pDocLine = pDocLine->GetPrevLine();
 	}
-	auto& layoutMgr = GetDocument()->m_layoutMgr;
+	auto& layoutMgr = GetDocument().m_layoutMgr;
 	for (int n=0; n<2; ++n) {
 		while (pDocLine) {
 			bool bModifiedTemp = ModifyVisitor().IsLineModified(pDocLine, nSaveSeq);

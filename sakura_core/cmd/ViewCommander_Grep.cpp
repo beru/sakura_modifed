@@ -42,7 +42,7 @@ void ViewCommander::Command_GREP_DIALOG(void)
 	}
 
 	// Grepダイアログの表示
-	int nRet = dlgGrep.DoModal(G_AppInstance(), m_view.GetHwnd(), GetDocument()->m_docFile.GetFilePath());
+	int nRet = dlgGrep.DoModal(G_AppInstance(), m_view.GetHwnd(), GetDocument().m_docFile.GetFilePath());
 //	MYTRACE(_T("nRet=%d\n"), nRet);
 	if (!nRet) {
 		return;
@@ -67,7 +67,7 @@ void ViewCommander::Command_GREP(void)
 	mWork3.SetString(dlgGrep.m_szFolder);
 
 	auto& grepAgent = *EditApp::getInstance().m_pGrepAgent;
-	auto& doc = *GetDocument();
+	auto& doc = GetDocument();
 	/*	今のEditViewにGrep結果を表示する。
 		Grepモードのとき、または未編集で無題かつアウトプットでない場合。
 		自ウィンドウがGrep実行中も、(異常終了するので)別ウィンドウにする
@@ -159,7 +159,7 @@ void ViewCommander::Command_GREP_REPLACE_DLG( void )
 		}
 	}
 
-	int nRet = dlgGrepRep.DoModal( G_AppInstance(), m_view.GetHwnd(), GetDocument()->m_docFile.GetFilePath(), (LPARAM)&m_view );
+	int nRet = dlgGrepRep.DoModal( G_AppInstance(), m_view.GetHwnd(), GetDocument().m_docFile.GetFilePath(), (LPARAM)&m_view );
 	if (!nRet) {
 		return;
 	}
@@ -187,8 +187,8 @@ void ViewCommander::Command_GREP_REPLACE(void)
 	*/
 	if (( EditApp::getInstance().m_pGrepAgent->m_bGrepMode &&
 		  !EditApp::getInstance().m_pGrepAgent->m_bGrepRunning ) ||
-		( !GetDocument()->m_docEditor.IsModified() &&
-		  !GetDocument()->m_docFile.GetFilePathClass().IsValidPath() &&		// 現在編集中のファイルのパス
+		( !GetDocument().m_docEditor.IsModified() &&
+		  !GetDocument().m_docFile.GetFilePathClass().IsValidPath() &&		// 現在編集中のファイルのパス
 		  !AppMode::getInstance().IsDebugMode()
 		)
 	) {

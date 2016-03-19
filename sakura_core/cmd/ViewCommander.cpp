@@ -88,7 +88,7 @@ bool ViewCommander::HandleCommand(
 		return true;
 	}
 
-	++GetDocument()->m_nCommandExecNum;		// コマンド実行回数
+	++GetDocument().m_nCommandExecNum;		// コマンド実行回数
 //	if (nCommand != F_COPY) {
 		// 辞書Tipを消す
 		m_view.m_tipWnd.Hide();
@@ -198,7 +198,7 @@ bool ViewCommander::HandleCommand(
 		// Feb. 28, 2004 genta 保存＆閉じる
 		// 保存が不要なら単に閉じる
 		{	// Command_FILESAVE()とは別に保存不要をチェック	//### Command_FILESAVE() は実際に保存した場合だけ true を返すようになった（仕様変更？）
-			if (!GetDllShareData().common.file.bEnableUnmodifiedOverwrite && !GetDocument()->m_docEditor.IsModified()) {
+			if (!GetDllShareData().common.file.bEnableUnmodifiedOverwrite && !GetDocument().m_docEditor.IsModified()) {
 				Command_WINCLOSE();
 				break;
 			}
@@ -213,7 +213,7 @@ bool ViewCommander::HandleCommand(
 	case F_FILECLOSE_OPEN:	// 閉じて開く
 		Command_FILECLOSE_OPEN();
 		break;
-	case F_FILE_REOPEN:				Command_FILE_REOPEN(GetDocument()->GetDocumentEncoding(), lparam1 != 0); break;// Dec. 4, 2002 genta
+	case F_FILE_REOPEN:				Command_FILE_REOPEN(GetDocument().GetDocumentEncoding(), lparam1 != 0); break;// Dec. 4, 2002 genta
 	case F_FILE_REOPEN_SJIS:		Command_FILE_REOPEN(CODE_SJIS, lparam1 != 0); break;		// SJISで開き直す
 	case F_FILE_REOPEN_JIS:			Command_FILE_REOPEN(CODE_JIS, lparam1 != 0); break;			// JISで開き直す
 	case F_FILE_REOPEN_EUC:			Command_FILE_REOPEN(CODE_EUC, lparam1 != 0); break;			// EUCで開き直す
@@ -729,7 +729,7 @@ LogicInt ViewCommander::ConvertEol(
 {
 	// original by 2009.02.28 salarm
 	LogicInt nConvertedTextLen;
-	Eol eol = GetDocument()->m_docEditor.GetNewLineCode();
+	Eol eol = GetDocument().m_docEditor.GetNewLineCode();
 
 	nConvertedTextLen = 0;
 	bool bExtEol = GetDllShareData().common.edit.bEnableExtEol;

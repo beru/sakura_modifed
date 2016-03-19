@@ -1254,7 +1254,7 @@ bool Macro::HandleCommand(
 		break;
 	case F_NEXTWINDOW:
 	case F_PREVWINDOW:
-		pEditView->GetDocument()->HandleCommand(Index);	// 2009.04.11 ryoji F_NEXTWINDOW/F_PREVWINDOWが動作しなかったのを修正
+		pEditView->GetDocument().HandleCommand(Index);	// 2009.04.11 ryoji F_NEXTWINDOW/F_PREVWINDOWが動作しなかったのを修正
 		break;
 	case F_MESSAGEBOX:	// メッセージボックスの表示
 	case F_ERRORMSG:	// メッセージボックス（エラー）の表示
@@ -1583,7 +1583,7 @@ bool Macro::HandleFunction(
 			Wrap(&result)->Receive(nTab);
 			// 2013.04.30 Moca 条件追加。不要な場合はChangeLayoutParamを呼ばない
 			if (0 < varCopy.data.iVal && nTab != varCopy.data.iVal) {
-				view->GetDocument()->m_bTabSpaceCurTemp = true;
+				view->GetDocument().m_bTabSpaceCurTemp = true;
 				view->m_pEditWnd->ChangeLayoutParam(
 					false, 
 					LayoutInt(varCopy.data.iVal),
@@ -2129,7 +2129,7 @@ bool Macro::HandleFunction(
 				if (VariantChangeType(&varCopy2.data, const_cast<VARIANTARG*>(&(args[1])), 0, VT_BSTR) != S_OK) {
 					return false;
 				}
-				SysString ret = view->GetDocument()->m_cookie.GetCookie(varCopy.data.bstrVal, varCopy2.data.bstrVal);
+				SysString ret = view->GetDocument().m_cookie.GetCookie(varCopy.data.bstrVal, varCopy2.data.bstrVal);
 				Wrap(&result)->Receive(ret);
 				return true;
 			}
@@ -2146,7 +2146,7 @@ bool Macro::HandleFunction(
 				) {
 					return false;
 				}
-				SysString ret = view->GetDocument()->m_cookie.GetCookieDefault(
+				SysString ret = view->GetDocument().m_cookie.GetCookieDefault(
 					varCopy.data.bstrVal,
 					varCopy2.data.bstrVal,
 					varCopy3.data.bstrVal,
@@ -2164,7 +2164,7 @@ bool Macro::HandleFunction(
 				if (VariantChangeType(&varCopy.data, const_cast<VARIANTARG*>(&(args[0])), 0, VT_BSTR) != S_OK) return false;
 				if (VariantChangeType(&varCopy2.data, const_cast<VARIANTARG*>(&(args[1])), 0, VT_BSTR) != S_OK) return false;
 				if (VariantChangeType(&varCopy3.data, const_cast<VARIANTARG*>(&(args[2])), 0, VT_BSTR) != S_OK) return false;
-				int ret = view->GetDocument()->m_cookie.SetCookie(varCopy.data.bstrVal, varCopy2.data.bstrVal,
+				int ret = view->GetDocument().m_cookie.SetCookie(varCopy.data.bstrVal, varCopy2.data.bstrVal,
 					varCopy3.data.bstrVal, SysStringLen(varCopy3.data.bstrVal));
 				Wrap(&result)->Receive(ret);
 				return true;
@@ -2177,7 +2177,7 @@ bool Macro::HandleFunction(
 			if (numArgs >= 2) {
 				if (VariantChangeType(&varCopy.data, const_cast<VARIANTARG*>(&(args[0])), 0, VT_BSTR) != S_OK) return false;
 				if (VariantChangeType(&varCopy2.data, const_cast<VARIANTARG*>(&(args[1])), 0, VT_BSTR) != S_OK) return false;
-				int ret = view->GetDocument()->m_cookie.DeleteCookie(varCopy.data.bstrVal, varCopy2.data.bstrVal);
+				int ret = view->GetDocument().m_cookie.DeleteCookie(varCopy.data.bstrVal, varCopy2.data.bstrVal);
 				Wrap(&result)->Receive(ret);
 				return true;
 			}
@@ -2187,7 +2187,7 @@ bool Macro::HandleFunction(
 		{
 			if (numArgs >= 1) {
 				if (VariantChangeType(&varCopy.data, const_cast<VARIANTARG*>(&(args[0])), 0, VT_BSTR) != S_OK) return false;
-				SysString ret = view->GetDocument()->m_cookie.GetCookieNames(varCopy.data.bstrVal);
+				SysString ret = view->GetDocument().m_cookie.GetCookieNames(varCopy.data.bstrVal);
 				Wrap(&result)->Receive(ret);
 				return true;
 			}
@@ -2232,7 +2232,7 @@ bool Macro::HandleFunction(
 						--nLen;
 					}
 				}
-				const int nTabWidth = (Int)view->GetDocument()->m_layoutMgr.GetTabSpaceKetas();
+				const int nTabWidth = (Int)view->GetDocument().m_layoutMgr.GetTabSpaceKetas();
 				int nPosX = varCopy2.data.lVal - 1;
 				for (int i=0; i<nLen;) {
 					if (pLine[i] == WCODE::TAB) {
@@ -2351,14 +2351,14 @@ bool Macro::HandleFunction(
 			}else {
 				nLine = LogicInt(nLineNum - 1); // nLineNumは1開始
 			}
-			const DocLine* pDocLine = view->GetDocument()->m_docLineMgr.GetLine(nLine);
+			const DocLine* pDocLine = view->GetDocument().m_docLineMgr.GetLine(nLine);
 			if (!pDocLine) {
 				return false;
 			}
 			int nRet;
 			switch (nAttType) {
 			case 0:
-				nRet = (ModifyVisitor().IsLineModified(pDocLine, view->GetDocument()->m_docEditor.m_opeBuf.GetNoModifiedSeq()) ? 1: 0);
+				nRet = (ModifyVisitor().IsLineModified(pDocLine, view->GetDocument().m_docEditor.m_opeBuf.GetNoModifiedSeq()) ? 1: 0);
 				break;
 			case 1:
 				nRet = pDocLine->m_mark.m_modified.GetSeq();

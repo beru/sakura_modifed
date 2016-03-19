@@ -29,9 +29,9 @@
 #include "OpeBlk.h"
 
 // ŠO•”ˆË‘¶
-inline EditDoc* ViewCommander::GetDocument()
+inline EditDoc& ViewCommander::GetDocument()
 {
-	return m_view.m_pEditDoc;
+	return *m_view.m_pEditDoc;
 }
 
 inline EditWnd* ViewCommander::GetEditWindow()
@@ -46,12 +46,12 @@ inline HWND ViewCommander::GetMainWindow()
 
 inline OpeBlk* ViewCommander::GetOpeBlk()
 {
-	return GetDocument()->m_docEditor.m_pOpeBlk;
+	return GetDocument().m_docEditor.m_pOpeBlk;
 }
 
 inline void ViewCommander::SetOpeBlk(OpeBlk* p)
 {
-	auto& editor = GetDocument()->m_docEditor;
+	auto& editor = GetDocument().m_docEditor;
 	editor.m_pOpeBlk = p;
 	editor.m_nOpeBlkRedawCount = 0;
 }

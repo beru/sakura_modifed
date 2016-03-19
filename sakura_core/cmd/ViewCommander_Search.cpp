@@ -103,7 +103,7 @@ void ViewCommander::Command_SEARCH_NEXT(
 	bool	bRedo = false;	// hor
 	int		nIdxOld = 0;	// hor
 	int		nSearchResult;
-	auto& layoutMgr = GetDocument()->m_layoutMgr;
+	auto& layoutMgr = GetDocument().m_layoutMgr;
 
 	if (pSelectLogic) {
 		pSelectLogic->Clear(-1);
@@ -202,7 +202,7 @@ re_do:;
 			m_view.m_searchPattern
 		);
 	}else {
-		auto& docLineMgr = GetDocument()->m_docLineMgr;
+		auto& docLineMgr = GetDocument().m_docLineMgr;
 		nSearchResult = SearchAgent(&docLineMgr).SearchWord(
 			LogicPoint(nIdx, nLineNumLogic),
 			SearchDirection::Forward,		// 0==前方検索 1==後方検索
@@ -337,7 +337,7 @@ void ViewCommander::Command_SEARCH_PREV(bool bReDraw, HWND hwndParent)
 	LogicInt	nIdx(0);
 
 	auto& caret = GetCaret();
-	auto& layoutMgr = GetDocument()->m_layoutMgr;
+	auto& layoutMgr = GetDocument().m_layoutMgr;
 
 	LayoutRange rangeA;
 	rangeA.Set(caret.GetCaretLayoutPos());
@@ -547,7 +547,7 @@ void ViewCommander::Command_REPLACE(HWND hwndParent)
 	}
 
 	// From Here 2001.12.03 hor
-	if (nPaste && !GetDocument()->m_docEditor.IsEnablePaste()) {
+	if (nPaste && !GetDocument().m_docEditor.IsEnablePaste()) {
 		OkMessage(hwndParent, LS(STR_ERR_CEDITVIEW_CMD10));
 		dlgReplace.CheckButton(IDC_CHK_PASTE, false);
 		dlgReplace.EnableItem(IDC_COMBO_TEXT2, true);
@@ -602,7 +602,7 @@ void ViewCommander::Command_REPLACE(HWND hwndParent)
 				// 位置指定ないので、何もしない
 			}
 		}
-		auto& layoutMgr = GetDocument()->m_layoutMgr;
+		auto& layoutMgr = GetDocument().m_layoutMgr;
 		// 行削除 選択範囲を行全体に拡大。カーソル位置を行頭へ(正規表現でも実行)
 		if (nReplaceTarget == 3) {
 			LogicPoint lineHome;
@@ -740,7 +740,7 @@ void ViewCommander::Command_REPLACE_ALL()
 	dlgReplace.m_nReplaceCnt = 0;
 
 	// From Here 2001.12.03 hor
-	if (bPaste && !GetDocument()->m_docEditor.IsEnablePaste()) {
+	if (bPaste && !GetDocument().m_docEditor.IsEnablePaste()) {
 		OkMessage(m_view.GetHwnd(), LS(STR_ERR_CEDITVIEW_CMD10));
 		dlgReplace.CheckButton(IDC_CHK_PASTE, false);
 		dlgReplace.EnableItem(IDC_COMBO_TEXT2, true);
@@ -759,8 +759,8 @@ void ViewCommander::Command_REPLACE_ALL()
 	bool bDisplayUpdate = false;
 	const bool bDrawSwitchOld = m_view.SetDrawSwitch(bDisplayUpdate);
 
-	auto& layoutMgr = GetDocument()->m_layoutMgr;
-	auto& docLineMgr = GetDocument()->m_docLineMgr;
+	auto& layoutMgr = GetDocument().m_layoutMgr;
+	auto& docLineMgr = GetDocument().m_docLineMgr;
 	bool bFastMode = false;
 	if (((Int)docLineMgr.GetLineCount() * 10 < (Int)layoutMgr.GetLineCount())
 		&& !(bSelectedArea || bPaste)
@@ -904,7 +904,7 @@ void ViewCommander::Command_REPLACE_ALL()
 	// ※レイアウト折り返しの行コピーだった場合は末尾が改行になっていない
 	if (bLineSelect) {
 		if (!WCODE::IsLineDelimiter(szREPLACEKEY[nReplaceKey - 1], GetDllShareData().common.edit.bEnableExtEol)) {
-			memClip.AppendString(GetDocument()->m_docEditor.GetNewLineCode().GetValue2());
+			memClip.AppendString(GetDocument().m_docEditor.GetNewLineCode().GetValue2());
 			szREPLACEKEY = memClip.GetStringPtr(&nReplaceKey);
 		}
 	}
@@ -1369,7 +1369,7 @@ void ViewCommander::Command_REPLACE_ALL()
 			// LayoutMgrの更新(変更有の場合)
 			layoutMgr._DoLayout();
 			GetEditWindow()->ClearViewCaretPosInfo();
-			if (GetDocument()->m_nTextWrapMethodCur == TextWrappingMethod::NoWrapping) {
+			if (GetDocument().m_nTextWrapMethodCur == TextWrappingMethod::NoWrapping) {
 				layoutMgr.CalculateTextWidth();
 			}
 		}

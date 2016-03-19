@@ -142,7 +142,7 @@ void ViewCommander::Command_FILEOPEN(
 				}
 			}
 		}
-		bool bDlgResult = GetDocument()->m_docFileOperation.OpenFileDialog(
+		bool bDlgResult = GetDocument().m_docFileOperation.OpenFileDialog(
 			EditWnd::getInstance().GetHwnd(),	// [in]  オーナーウィンドウ
 			defName.length() == 0 ? NULL : defName.c_str(),	// [in]  フォルダ
 			&loadInfo,							// [out] ロード情報受け取り
@@ -167,7 +167,7 @@ void ViewCommander::Command_FILEOPEN(
 	}
 
 	// 開く
-	GetDocument()->m_docFileOperation.FileLoad(&loadInfo);
+	GetDocument().m_docFileOperation.FileLoad(&loadInfo);
 }
 
 
@@ -183,26 +183,26 @@ void ViewCommander::Command_FILEOPEN(
 */
 bool ViewCommander::Command_FILESAVE(bool warnbeep, bool askname)
 {
-	EditDoc* pDoc = GetDocument();
+	auto& doc = GetDocument();
 
 	// ファイル名が指定されていない場合は「名前を付けて保存」のフローへ遷移
-	if (!GetDocument()->m_docFile.GetFilePathClass().IsValidPath()) {
+	if (!GetDocument().m_docFile.GetFilePathClass().IsValidPath()) {
 		if (!askname) {
 			return false;	// 保存しない
 		}
-		return pDoc->m_docFileOperation.FileSaveAs();
+		return doc.m_docFileOperation.FileSaveAs();
 	}
 
 	// セーブ情報
 	SaveInfo saveInfo;
-	pDoc->GetSaveInfo(&saveInfo);
+	doc.GetSaveInfo(&saveInfo);
 	saveInfo.eol = EolType::None; // 改行コード無変換
 	saveInfo.bOverwriteMode = true; // 上書き要求
 
 	// 上書き処理
 	auto& soundSet = EditApp::getInstance().m_soundSet;
 	if (!warnbeep) soundSet.MuteOn();
-	bool bRet = pDoc->m_docFileOperation.DoSaveFlow(&saveInfo);
+	bool bRet = doc.m_docFileOperation.DoSaveFlow(&saveInfo);
 	if (!warnbeep) soundSet.MuteOff();
 
 	return bRet;
@@ -216,7 +216,7 @@ bool ViewCommander::Command_FILESAVEAS_DIALOG(
 	EolType eEolType
 	)
 {
-	return GetDocument()->m_docFileOperation.FileSaveAs(fileNameDef, eCodeType, eEolType, true);
+	return GetDocument().m_docFileOperation.FileSaveAs(fileNameDef, eCodeType, eEolType, true);
 }
 
 
@@ -228,7 +228,7 @@ bool ViewCommander::Command_FILESAVEAS(
 	EolType eEolType
 	)
 {
-	return GetDocument()->m_docFileOperation.FileSaveAs(filename, CODE_NONE, eEolType, false);
+	return GetDocument().m_docFileOperation.FileSaveAs(filename, CODE_NONE, eEolType, false);
 }
 
 
@@ -256,7 +256,7 @@ bool ViewCommander::Command_FILESAVEALL(void)
 // 閉じて(無題)	// Oct. 17, 2000 jepro 「ファイルを閉じる」というキャプションを変更
 void ViewCommander::Command_FILECLOSE(void)
 {
-	GetDocument()->m_docFileOperation.FileClose();
+	GetDocument().m_docFileOperation.FileClose();
 }
 
 
@@ -271,7 +271,7 @@ void ViewCommander::Command_FILECLOSE_OPEN(
 	bool bViewMode
 	)
 {
-	GetDocument()->m_docFileOperation.FileCloseOpen(LoadInfo(to_tchar(filename), nCharCode, bViewMode));
+	GetDocument().m_docFileOperation.FileCloseOpen(LoadInfo(to_tchar(filename), nCharCode, bViewMode));
 
 	// プラグイン：DocumentOpenイベント実行
 	Plug::Array plugs;
@@ -289,14 +289,14 @@ void ViewCommander::Command_FILE_REOPEN(
 	bool			bNoConfirm	// [in] ファイルが更新された場合に確認を行わ「ない」かどうか。true:確認しない false:確認する
 	)
 {
-	EditDoc* pDoc = GetDocument();
-	if (!bNoConfirm && fexist(pDoc->m_docFile.GetFilePath()) && pDoc->m_docEditor.IsModified()) {
+	auto& doc = GetDocument();
+	if (!bNoConfirm && fexist(doc.m_docFile.GetFilePath()) && doc.m_docEditor.IsModified()) {
 		int nDlgResult = MYMESSAGEBOX(
 			m_view.GetHwnd(),
 			MB_OKCANCEL | MB_ICONQUESTION | MB_TOPMOST,
 			GSTR_APPNAME,
 			LS(STR_ERR_CEDITVIEW_CMD29),
-			pDoc->m_docFile.GetFilePath()
+			doc.m_docFile.GetFilePath()
 		);
 		if (nDlgResult == IDOK) {
 			// 継続。下へ進む
@@ -306,7 +306,7 @@ void ViewCommander::Command_FILE_REOPEN(
 	}
 
 	// 同一ファイルの再オープン
-	pDoc->m_docFileOperation.ReloadCurrentFile(nCharCode);
+	doc.m_docFileOperation.ReloadCurrentFile(nCharCode);
 }
 
 
@@ -411,17 +411,17 @@ void ViewCommander::Command_PLSQL_COMPILE_ON_SQLPLUS(void)
 		return;
 	}
 	// テキストが変更されている場合
-	if (GetDocument()->m_docEditor.IsModified()) {
+	if (GetDocument().m_docEditor.IsModified()) {
 		nRet = ::MYMESSAGEBOX(
 			m_view.GetHwnd(),
 			MB_YESNOCANCEL | MB_ICONEXCLAMATION,
 			GSTR_APPNAME,
 			LS(STR_ERR_CEDITVIEW_CMD18),
-			GetDocument()->m_docFile.GetFilePathClass().IsValidPath() ? GetDocument()->m_docFile.GetFilePath() : LS(STR_NO_TITLE1)
+			GetDocument().m_docFile.GetFilePathClass().IsValidPath() ? GetDocument().m_docFile.GetFilePath() : LS(STR_NO_TITLE1)
 		);
 		switch (nRet) {
 		case IDYES:
-			if (GetDocument()->m_docFile.GetFilePathClass().IsValidPath()) {
+			if (GetDocument().m_docFile.GetFilePathClass().IsValidPath()) {
 				//nBool = HandleCommand(F_FILESAVE, true, 0, 0, 0, 0);
 				nBool = Command_FILESAVE();
 			}else {
@@ -439,13 +439,13 @@ void ViewCommander::Command_PLSQL_COMPILE_ON_SQLPLUS(void)
 			return;
 		}
 	}
-	if (GetDocument()->m_docFile.GetFilePathClass().IsValidPath()) {
+	if (GetDocument().m_docFile.GetFilePathClass().IsValidPath()) {
 		// ファイルパスに空白が含まれている場合はダブルクォーテーションで囲む
 		// 2003.10.20 MIK コード簡略化
-		if (_tcschr(GetDocument()->m_docFile.GetFilePath(), TCODE::SPACE) != NULL) {
-			auto_sprintf( szPath, _T("@\"%ts\"\r\n"), GetDocument()->m_docFile.GetFilePath() );
+		if (_tcschr(GetDocument().m_docFile.GetFilePath(), TCODE::SPACE) != NULL) {
+			auto_sprintf( szPath, _T("@\"%ts\"\r\n"), GetDocument().m_docFile.GetFilePath() );
 		}else {
-			auto_sprintf( szPath, _T("@%ts\r\n"), GetDocument()->m_docFile.GetFilePath() );
+			auto_sprintf( szPath, _T("@%ts\r\n"), GetDocument().m_docFile.GetFilePath() );
 		}
 		// クリップボードにデータを設定
 		m_view.MySetClipboardData(szPath, _tcslen(szPath), false);
@@ -480,12 +480,12 @@ void ViewCommander::Command_PLSQL_COMPILE_ON_SQLPLUS(void)
 // ブラウズ
 void ViewCommander::Command_BROWSE(void)
 {
-	if (!GetDocument()->m_docFile.GetFilePathClass().IsValidPath()) {
+	if (!GetDocument().m_docFile.GetFilePathClass().IsValidPath()) {
 		ErrorBeep();
 		return;
 	}
 //	char	szURL[MAX_PATH + 64];
-//	auto_sprintf( szURL, L"%ls", GetDocument()->m_docFile.GetFilePath() );
+//	auto_sprintf( szURL, L"%ls", GetDocument().m_docFile.GetFilePath() );
 	// URLを開く
 //	::ShellExecuteEx(NULL, L"open", szURL, NULL, NULL, SW_SHOW);
 
@@ -494,7 +494,7 @@ void ViewCommander::Command_BROWSE(void)
     info.fMask = 0;
     info.hwnd = NULL;
     info.lpVerb = NULL;
-    info.lpFile = GetDocument()->m_docFile.GetFilePath();
+    info.lpFile = GetDocument().m_docFile.GetFilePath();
     info.lpParameters = NULL;
     info.lpDirectory = NULL;
     info.nShow = SW_SHOWNORMAL;
@@ -519,10 +519,11 @@ void ViewCommander::Command_VIEWMODE(void)
 
 	// 排他制御の切り替え
 	// ※ビューモード ON 時は排他制御 OFF、ビューモード OFF 時は排他制御 ON の仕様（>>data:5262）を即時反映する
-	GetDocument()->m_docFileOperation.DoFileUnlock();	// ファイルの排他ロック解除
-	GetDocument()->m_docLocker.CheckWritable(!AppMode::getInstance().IsViewMode());	// ファイル書込可能のチェック
-	if (GetDocument()->m_docLocker.IsDocWritable()) {
-		GetDocument()->m_docFileOperation.DoFileLock();	// ファイルの排他ロック
+	auto& doc = GetDocument();
+	doc.m_docFileOperation.DoFileUnlock();	// ファイルの排他ロック解除
+	doc.m_docLocker.CheckWritable(!AppMode::getInstance().IsViewMode());	// ファイル書込可能のチェック
+	if (doc.m_docLocker.IsDocWritable()) {
+		doc.m_docFileOperation.DoFileLock();	// ファイルの排他ロック
 	}
 
 	// 親ウィンドウのタイトルを更新
@@ -540,7 +541,7 @@ void ViewCommander::Command_PROPERTY_FILE(void)
 		int		nDataAllLen;
 		RunningTimer runningTimer("ViewCommander::Command_PROPERTY_FILE 全行データを返すテスト");
 		runningTimer.Reset();
-		pDataAll = DocReader(GetDocument()->m_docLineMgr).GetAllData(&nDataAllLen);
+		pDataAll = DocReader(GetDocument().m_docLineMgr).GetAllData(&nDataAllLen);
 //		MYTRACE(_T("全データ取得             (%dバイト) 所要時間(ミリ秒) = %d\n"), nDataAllLen, runningTimer.Read());
 		free(pDataAll);
 		pDataAll = NULL;
@@ -551,7 +552,7 @@ void ViewCommander::Command_PROPERTY_FILE(void)
 
 	DlgProperty	cDlgProperty;
 //	cDlgProperty.Create(G_AppInstance(), m_view.GetHwnd(), GetDocument());
-	cDlgProperty.DoModal(G_AppInstance(), m_view.GetHwnd(), (LPARAM)GetDocument());
+	cDlgProperty.DoModal(G_AppInstance(), m_view.GetHwnd(), (LPARAM)&GetDocument());
 	return;
 }
 
@@ -621,7 +622,7 @@ bool ViewCommander::Command_PUTFILE(
 	}
 
 	if (nSaveCharCode == CODE_AUTODETECT) {
-		nSaveCharCode = GetDocument()->GetDocumentEncoding();
+		nSaveCharCode = GetDocument().GetDocumentEncoding();
 	}
 
 	// 2007.09.08 genta EditDoc::FileWrite()にならって砂時計カーソル
@@ -631,7 +632,7 @@ bool ViewCommander::Command_PUTFILE(
 
 	bool bBom = false;
 	if (CodeTypeName(nSaveCharCode).UseBom()) {
-		bBom = GetDocument()->GetDocumentBomExist();
+		bBom = GetDocument().GetDocumentBomExist();
 	}
 
 	if (nFlgOpt & 0x01) {	// 選択範囲を出力
@@ -693,7 +694,7 @@ bool ViewCommander::Command_PUTFILE(
 
 		// 一時ファイル出力
 		CodeConvertResult eRet = WriteManager().WriteFile_From_CDocLineMgr(
-			GetDocument()->m_docLineMgr,
+			GetDocument().m_docLineMgr,
 			SaveInfo(
 				to_tchar(filename),
 				nSaveCharCode,
@@ -764,7 +765,7 @@ bool ViewCommander::Command_INSFILE(
 		if (mru.GetEditInfo(to_tchar(filename), &fi)) {
 				nSaveCharCode = fi.nCharCode;
 		}else {
-			nSaveCharCode = GetDocument()->GetDocumentEncoding();
+			nSaveCharCode = GetDocument().GetDocumentEncoding();
 		}
 	}
 

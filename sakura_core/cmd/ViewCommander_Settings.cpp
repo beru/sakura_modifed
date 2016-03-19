@@ -157,7 +157,7 @@ void ViewCommander::Command_TYPE_LIST(void)
 {
 	DlgTypeList dlgTypeList;
 	DlgTypeList::Result result;
-	result.documentType = GetDocument()->m_docType.GetDocumentType();
+	result.documentType = GetDocument().m_docType.GetDocumentType();
 	result.bTempChange = true;
 	if (dlgTypeList.DoModal(G_AppInstance(), m_view.GetHwnd(), &result)) {
 		// Nov. 29, 2000 genta
@@ -177,16 +177,16 @@ void ViewCommander::Command_TYPE_LIST(void)
 void ViewCommander::Command_CHANGETYPE(int nTypePlusOne)
 {
 	TypeConfigNum type = TypeConfigNum(nTypePlusOne - 1);
-	auto doc = GetDocument();
+	auto& doc = GetDocument();
 	if (nTypePlusOne == 0) {
-		type = doc->m_docType.GetDocumentType();
+		type = doc.m_docType.GetDocumentType();
 	}
 	if (type.IsValidType() && type.GetIndex() < GetDllShareData().nTypesCount) {
 		const TypeConfigMini* pConfig;
 		DocTypeManager().GetTypeConfigMini(type, &pConfig);
-		doc->m_docType.SetDocumentTypeIdx(pConfig->id, true);
-		doc->m_docType.LockDocumentType();
-		doc->OnChangeType();
+		doc.m_docType.SetDocumentTypeIdx(pConfig->id, true);
+		doc.m_docType.LockDocumentType();
+		doc.OnChangeType();
 	}
 }
 
@@ -194,7 +194,7 @@ void ViewCommander::Command_CHANGETYPE(int nTypePlusOne)
 // タイプ別設定
 void ViewCommander::Command_OPTION_TYPE(void)
 {
-	EditApp::getInstance().OpenPropertySheetTypes(-1, GetDocument()->m_docType.GetDocumentType());
+	EditApp::getInstance().OpenPropertySheetTypes(-1, GetDocument().m_docType.GetDocumentType());
 }
 
 
@@ -301,12 +301,12 @@ void ViewCommander::Command_SETFONTSIZE(int fontSize, int shift, int mode)
 	// 新しいフォントサイズ設定
 	int lfHeight = DpiPointsToPixels(-nPointSize, 10);
 	int nTypeIndex = -1;
-	auto doc = GetDocument();
+	auto& doc = GetDocument();
 	if (mode == 0) {
 		csView.lf.lfHeight = lfHeight;
 		csView.nPointSize = nPointSize;
 	}else if (mode == 1) {
-		TypeConfigNum nDocType = doc->m_docType.GetDocumentType();
+		TypeConfigNum nDocType = doc.m_docType.GetDocumentType();
 		auto type = std::make_unique<TypeConfig>();
 		if (!DocTypeManager().GetTypeConfig(nDocType, *type)) {
 			// 謎のエラー
@@ -319,11 +319,11 @@ void ViewCommander::Command_SETFONTSIZE(int fontSize, int shift, int mode)
 		DocTypeManager().SetTypeConfig(nDocType, *type);
 		nTypeIndex = nDocType.GetIndex();
 	}else if (mode == 2) {
-		doc->m_blfCurTemp = true;
-		doc->m_lfCur = lf;
-		doc->m_lfCur.lfHeight = lfHeight;
-		doc->m_nPointSizeCur = nPointSize;
-		doc->m_nPointSizeOrg = GetEditWindow()->GetFontPointSize(false);
+		doc.m_blfCurTemp = true;
+		doc.m_lfCur = lf;
+		doc.m_lfCur.lfHeight = lfHeight;
+		doc.m_nPointSizeCur = nPointSize;
+		doc.m_nPointSizeOrg = GetEditWindow()->GetFontPointSize(false);
 	}
 
 	HWND hwndFrame = GetMainWindow();
@@ -340,7 +340,7 @@ void ViewCommander::Command_SETFONTSIZE(int fontSize, int shift, int mode)
 		);
 	}else if (mode == 2) {
 		// 自分だけ更新
-		doc->OnChangeSetting(false);
+		doc.OnChangeSetting(false);
 	}
 }
 
@@ -362,14 +362,14 @@ void ViewCommander::Command_WRAPWINDOWWIDTH(void)	// Oct. 7, 2000 JEPRO WRAPWIND
 	LayoutInt newKetas;
 	
 	nWrapMode = m_view.GetWrapMode(&newKetas);
-	auto doc = GetDocument();
-	doc->m_nTextWrapMethodCur = TextWrappingMethod::SettingWidth;
-	doc->m_bTextWrapMethodCurTemp = (doc->m_nTextWrapMethodCur != m_view.m_pTypeData->nTextWrapMethod);
+	auto& doc = GetDocument();
+	doc.m_nTextWrapMethodCur = TextWrappingMethod::SettingWidth;
+	doc.m_bTextWrapMethodCurTemp = (doc.m_nTextWrapMethodCur != m_view.m_pTypeData->nTextWrapMethod);
 	if (nWrapMode == EditView::TGWRAP_NONE) {
 		return;	// 折り返し桁は元のまま
 	}
 
-	GetEditWindow()->ChangeLayoutParam(true, doc->m_layoutMgr.GetTabSpace(), newKetas);
+	GetEditWindow()->ChangeLayoutParam(true, doc.m_layoutMgr.GetTabSpace(), newKetas);
 	
 	// Aug. 14, 2005 genta 共通設定へは反映させない
 //	m_view.m_pTypeData->nMaxLineKetas = m_nViewColNum;
@@ -393,7 +393,7 @@ void ViewCommander::Command_Favorite(void)
 	DlgFavorite	dlgFavorite;
 
 	// ダイアログを表示する
-	if (!dlgFavorite.DoModal(G_AppInstance(), m_view.GetHwnd(), (LPARAM)GetDocument())) {
+	if (!dlgFavorite.DoModal(G_AppInstance(), m_view.GetHwnd(), (LPARAM)&GetDocument())) {
 		return;
 	}
 
@@ -416,10 +416,10 @@ void ViewCommander::Command_Favorite(void)
 */
 void ViewCommander::Command_TEXTWRAPMETHOD(TextWrappingMethod nWrapMethod)
 {
-	EditDoc* pDoc = GetDocument();
+	auto& doc = GetDocument();
 
 	// 現在の設定値と同じなら何もしない
-	if (pDoc->m_nTextWrapMethodCur == nWrapMethod)
+	if (doc.m_nTextWrapMethodCur == nWrapMethod)
 		return;
 
 	int nWidth;
@@ -430,7 +430,7 @@ void ViewCommander::Command_TEXTWRAPMETHOD(TextWrappingMethod nWrapMethod)
 		break;
 
 	case TextWrappingMethod::SettingWidth:	// 指定桁で折り返す
-		nWidth = (Int)pDoc->m_docType.GetDocumentAttribute().nMaxLineKetas;
+		nWidth = (Int)doc.m_docType.GetDocumentAttribute().nMaxLineKetas;
 		break;
 
 	case TextWrappingMethod::WindowWidth:		// 右端で折り返す
@@ -442,20 +442,20 @@ void ViewCommander::Command_TEXTWRAPMETHOD(TextWrappingMethod nWrapMethod)
 		return;	// 不正な値の時は何もしない
 	}
 
-	pDoc->m_nTextWrapMethodCur = nWrapMethod;	// 設定を記憶
+	doc.m_nTextWrapMethodCur = nWrapMethod;	// 設定を記憶
 
 	// 折り返し方法の一時設定適用／一時設定適用解除	// 2008.06.08 ryoji
-	pDoc->m_bTextWrapMethodCurTemp = (pDoc->m_docType.GetDocumentAttribute().nTextWrapMethod != nWrapMethod);
+	doc.m_bTextWrapMethodCurTemp = (doc.m_docType.GetDocumentAttribute().nTextWrapMethod != nWrapMethod);
 
 	// 折り返し位置を変更
-	GetEditWindow()->ChangeLayoutParam(false, pDoc->m_layoutMgr.GetTabSpace(), (LayoutInt)nWidth);
+	GetEditWindow()->ChangeLayoutParam(false, doc.m_layoutMgr.GetTabSpace(), (LayoutInt)nWidth);
 
 	// 2009.08.28 nasukoji	「折り返さない」ならテキスト最大幅を算出、それ以外は変数をクリア
-	if (pDoc->m_nTextWrapMethodCur == TextWrappingMethod::NoWrapping) {
-		pDoc->m_layoutMgr.CalculateTextWidth();		// テキスト最大幅を算出する
+	if (doc.m_nTextWrapMethodCur == TextWrappingMethod::NoWrapping) {
+		doc.m_layoutMgr.CalculateTextWidth();		// テキスト最大幅を算出する
 		GetEditWindow()->RedrawAllViews(NULL);		// Scroll Barの更新が必要なので再表示を実行する
 	}else {
-		pDoc->m_layoutMgr.ClearLayoutLineWidth();		// 各行のレイアウト行長の記憶をクリアする
+		doc.m_layoutMgr.ClearLayoutLineWidth();		// 各行のレイアウト行長の記憶をクリアする
 	}
 }
 

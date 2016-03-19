@@ -20,8 +20,9 @@ void String::set(const char* szData, int nLength)
 
 const char* String::c_astr() const
 {
-	if (!m_str_cache)
+	if (!m_str_cache) {
 		m_str_cache = wcstombs_new(m_wstr.c_str());
+	}
 	return m_str_cache;
 }
 

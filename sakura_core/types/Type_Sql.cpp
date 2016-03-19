@@ -70,8 +70,8 @@ void DocOutline::MakeFuncList_PLSQL(FuncInfoArr* pFuncInfoArr)
 	nMode = 0;
 	nFuncNum = 0;
 	LogicInt nLineCount;
-	for (nLineCount=LogicInt(0); nLineCount<m_pDocRef->m_docLineMgr.GetLineCount(); ++nLineCount) {
-		pLine = m_pDocRef->m_docLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
+	for (nLineCount=LogicInt(0); nLineCount<m_doc.m_docLineMgr.GetLineCount(); ++nLineCount) {
+		pLine = m_doc.m_docLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
 		for (int i=0; i<nLineLen; ++i) {
 			// 1バイト文字だけを処理する
 			// 2005-09-02 D.S.Koba GetSizeOfChar
@@ -175,7 +175,7 @@ void DocOutline::MakeFuncList_PLSQL(FuncInfoArr* pFuncInfoArr)
 							  レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 							*/
 							LayoutPoint ptPos;
-							m_pDocRef->m_layoutMgr.LogicToLayout(
+							m_doc.m_layoutMgr.LogicToLayout(
 								LogicPoint(0, nFuncLine - 1),
 								&ptPos
 							);
@@ -193,7 +193,7 @@ void DocOutline::MakeFuncList_PLSQL(FuncInfoArr* pFuncInfoArr)
 								  レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 								*/
 								LayoutPoint ptPos;
-								m_pDocRef->m_layoutMgr.LogicToLayout(
+								m_doc.m_layoutMgr.LogicToLayout(
 									LogicPoint(0, nFuncLine - 1),
 									&ptPos
 								);
@@ -209,7 +209,7 @@ void DocOutline::MakeFuncList_PLSQL(FuncInfoArr* pFuncInfoArr)
 								  レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 								*/
 								LayoutPoint ptPos;
-								m_pDocRef->m_layoutMgr.LogicToLayout(
+								m_doc.m_layoutMgr.LogicToLayout(
 									LogicPoint(0, nFuncLine - 1),
 									&ptPos
 								);
@@ -307,7 +307,7 @@ void DocOutline::MakeFuncList_PLSQL(FuncInfoArr* pFuncInfoArr)
 						  レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 						*/
 						LayoutPoint ptPos;
-						m_pDocRef->m_layoutMgr.LogicToLayout(
+						m_doc.m_layoutMgr.LogicToLayout(
 							LogicPoint(0, nFuncLine - 1),
 							&ptPos
 						);

@@ -165,7 +165,7 @@ EditDoc::EditDoc(EditApp* pApp)
 	m_docFileOperation(this),			// warning C4355: 'this' : ベース メンバー初期化子リストで使用されました。
 	m_docEditor(this),					// warning C4355: 'this' : ベース メンバー初期化子リストで使用されました。
 	m_docType(this),					// warning C4355: 'this' : ベース メンバー初期化子リストで使用されました。
-	m_docOutline(this),				// warning C4355: 'this' : ベース メンバー初期化子リストで使用されました。
+	m_docOutline(*this),				// warning C4355: 'this' : ベース メンバー初期化子リストで使用されました。
 	m_nCommandExecNum(0),				// コマンド実行回数
 	m_hBackImg(NULL)
 {

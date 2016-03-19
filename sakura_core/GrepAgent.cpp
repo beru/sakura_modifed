@@ -128,7 +128,7 @@ void GrepAgent::AddTail( EditView& editView, const NativeW& mem, bool bAddStdout
 		if (out && out != INVALID_HANDLE_VALUE) {
 			Memory memOut;
 			std::unique_ptr<CodeBase> pCodeBase( CodeFactory::CreateCodeBase(
-					editView.GetDocument()->GetDocumentEncoding(), 0) );
+					editView.GetDocument().GetDocumentEncoding(), 0) );
 			pCodeBase->UnicodeToCode( mem, &memOut );
 			DWORD dwWrite = 0;
 			::WriteFile(out, memOut.GetRawPtr(), memOut.GetRawLength(), &dwWrite, NULL);
@@ -200,16 +200,16 @@ DWORD GrepAgent::DoGrep(
 
 
 	// アンドゥバッファの処理
-	if (viewDst.GetDocument()->m_docEditor.m_pOpeBlk) {	// 操作ブロック
+	if (viewDst.GetDocument().m_docEditor.m_pOpeBlk) {	// 操作ブロック
 //@@@2002.2.2 YAZAKI NULLじゃないと進まないので、とりあえずコメント。＆NULLのときは、new OpeBlkする。
 //		while (m_pOpeBlk) {}
 //		delete m_pOpeBlk;
 //		m_pOpeBlk = NULL;
 	}else {
-		viewDst.GetDocument()->m_docEditor.m_pOpeBlk = new OpeBlk;
-		viewDst.GetDocument()->m_docEditor.m_nOpeBlkRedawCount = 0;
+		viewDst.GetDocument().m_docEditor.m_pOpeBlk = new OpeBlk;
+		viewDst.GetDocument().m_docEditor.m_nOpeBlkRedawCount = 0;
 	}
-	viewDst.GetDocument()->m_docEditor.m_pOpeBlk->AddRef();
+	viewDst.GetDocument().m_docEditor.m_pOpeBlk->AddRef();
 
 	viewDst.m_bCurSrchKeyMark = true;								// 検索文字列のマーク
 	viewDst.m_strCurSearchKey = pmGrepKey->GetStringPtr();		// 検索文字列
@@ -232,7 +232,7 @@ DWORD GrepAgent::DoGrep(
 			if (bLineSelect) {
 				int len = memReplace.GetStringLength();
 				if (memReplace[len - 1] != WCODE::CR && memReplace[len - 1] != WCODE::LF) {
-					memReplace.AppendString(viewDst.GetDocument()->m_docEditor.GetNewLineCode().GetValue2());
+					memReplace.AppendString(viewDst.GetDocument().m_docEditor.GetNewLineCode().GetValue2());
 				}
 			}
 			if (GetDllShareData().common.edit.bConvertEOLPaste) {

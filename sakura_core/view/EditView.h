@@ -119,11 +119,11 @@ class EditView :
 	public DocListenerEx
 {
 public:
-	const EditDoc* GetDocument() const {
-		return m_pEditDoc;
+	const EditDoc& GetDocument() const {
+		return *m_pEditDoc;
 	}
-	EditDoc* GetDocument() {
-		return m_pEditDoc;
+	EditDoc& GetDocument() {
+		return *m_pEditDoc;
 	}
 public:
 	//! 背景にビットマップを使用するかどうか
@@ -149,7 +149,7 @@ public:
 	// 初期化系メンバ関数
 	BOOL Create(
 		HWND		hwndParent,	// 親
-		EditDoc*	pEditDoc,	// 参照するドキュメント
+		EditDoc&	editDoc,	// 参照するドキュメント
 		int			nMyIndex,	// ビューのインデックス
 		BOOL		bShow,		// 作成時に表示するかどうか
 		bool		bMiniMap

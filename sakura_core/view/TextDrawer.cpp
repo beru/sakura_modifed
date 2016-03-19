@@ -400,10 +400,10 @@ void TextDrawer::DispLineNumber(
 		pDocLine = pLayout->GetDocLineRef();
 
 		if (1
-			&& pView->GetDocument()->m_docEditor.IsModified()
+			&& pView->GetDocument().m_docEditor.IsModified()
 			&& ModifyVisitor().IsLineModified(
 				pDocLine,
-				pView->GetDocument()->m_docEditor.m_opeBuf.GetNoModifiedSeq()
+				pView->GetDocument().m_docEditor.m_opeBuf.GetNoModifiedSeq()
 			)
 		) {
 			// •ÏXƒtƒ‰ƒO

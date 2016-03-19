@@ -996,8 +996,8 @@ void EditView::OnMOUSEMOVE(WPARAM fwKeys, int xPos_, int yPos_)
 			ptNew.x = 0;
 			LogicPoint ptNewLogic;
 			view.GetCaret().GetAdjustCursorPos(&ptNew);
-			GetDocument()->m_layoutMgr.LayoutToLogic(ptNew, &ptNewLogic);
-			GetDocument()->m_layoutMgr.LogicToLayout(ptNewLogic, &ptNew, ptNew.y);
+			GetDocument().m_layoutMgr.LayoutToLogic(ptNew, &ptNewLogic);
+			GetDocument().m_layoutMgr.LogicToLayout(ptNewLogic, &ptNew, ptNew.y);
 			if (GetKeyState_Shift()) {
 				if (view.GetSelectionInfo().IsTextSelected()) {
 					if (view.GetSelectionInfo().IsBoxSelecting()) {
