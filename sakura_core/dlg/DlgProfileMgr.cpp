@@ -147,8 +147,8 @@ void DlgProfileMgr::SetData( int nSelIndex )
 	}
 	List_SetCurSel(hwndList, nSelIndex);
 
-	DlgItem_Enable(GetHwnd(), IDC_BUTTON_PROF_DEFCLEAR, settings.nDefaultIndex != -1);
-	CheckDlgButtonBool(GetHwnd(), IDC_CHECK_PROF_DEFSTART, settings.bDefaultSelect);
+	EnableItem(IDC_BUTTON_PROF_DEFCLEAR, settings.nDefaultIndex != -1);
+	CheckButton(IDC_CHECK_PROF_DEFSTART, settings.bDefaultSelect);
 }
 
 
@@ -224,7 +224,7 @@ BOOL DlgProfileMgr::OnBnClicked( int wID )
 			SetDefaultProf(nSelIndex);
 			UpdateIni();
 			List_SetCurSel(hwndList, nSelIndex);
-			DlgItem_Enable(GetHwnd(), IDC_BUTTON_PROF_DEFCLEAR, true);
+			EnableItem(IDC_BUTTON_PROF_DEFCLEAR, true);
 		}
 		break;
 
@@ -235,7 +235,7 @@ BOOL DlgProfileMgr::OnBnClicked( int wID )
 			ClearDefaultProf();
 			UpdateIni();
 			List_SetCurSel(hwndList, nSelIndex);
-			DlgItem_Enable(GetHwnd(), IDC_BUTTON_PROF_DEFCLEAR, false);
+			EnableItem(IDC_BUTTON_PROF_DEFCLEAR, false);
 		}
 		break;
 
@@ -268,16 +268,14 @@ INT_PTR DlgProfileMgr::DispatchEvent(
 	result = Dialog::DispatchEvent(hWnd, wMsg, wParam, lParam);
 	switch (wMsg) {
 	case WM_COMMAND:
-		{
-			if (LOWORD(wParam) == IDC_LIST_PROFILE) {
-				switch (HIWORD(wParam)) {
-				case LBN_SELCHANGE:
-					HWND hwndList = (HWND)lParam;
-					int nIdx = List_GetCurSel(hwndList);
-					DlgItem_Enable(GetHwnd(), IDC_BUTTON_PROF_DELETE, nIdx != 0);
-					DlgItem_Enable(GetHwnd(), IDC_BUTTON_PROF_RENAME, nIdx != 0);
-					return TRUE;
-				}
+		if (LOWORD(wParam) == IDC_LIST_PROFILE) {
+			switch (HIWORD(wParam)) {
+			case LBN_SELCHANGE:
+				HWND hwndList = (HWND)lParam;
+				int nIdx = List_GetCurSel(hwndList);
+				EnableItem(IDC_BUTTON_PROF_DELETE, nIdx != 0);
+				EnableItem(IDC_BUTTON_PROF_RENAME, nIdx != 0);
+				return TRUE;
 			}
 		}
 	}

@@ -536,9 +536,9 @@ void DlgGrep::SetData(void)
 
 	EnableItem(IDC_CHK_FROMTHISTEXT, m_szCurrentFilePath[0] != _T('\0'));
 
-	CheckDlgButtonBool(GetHwnd(), IDC_CHECK_FILE_ONLY, bGrepOutputFileOnly);
-	CheckDlgButtonBool(GetHwnd(), IDC_CHECK_BASE_PATH, bGrepOutputBaseFolder);
-	CheckDlgButtonBool(GetHwnd(), IDC_CHECK_SEP_FOLDER, bGrepSeparateFolder);
+	CheckButton(IDC_CHECK_FILE_ONLY, bGrepOutputFileOnly);
+	CheckButton(IDC_CHECK_BASE_PATH, bGrepOutputBaseFolder);
+	CheckButton(IDC_CHECK_SEP_FOLDER, bGrepSeparateFolder);
 
 	// フォルダの初期値をカレントフォルダにする
 	CheckButton(IDC_CHK_DEFAULTFOLDER, m_pShareData->common.search.bGrepDefaultFolder);

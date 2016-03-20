@@ -168,7 +168,7 @@ void DlgGrepReplace::SetData(void)
 	for (int i=0; i<replaceKeys.size(); ++i) {
 		Combo_AddString(hwndCombo, replaceKeys[i]);
 	}
-	CheckDlgButtonBool(GetHwnd(), IDC_CHK_BACKUP, m_bBackup);
+	CheckButton(IDC_CHK_BACKUP, m_bBackup);
 	DlgGrep::SetData();
 }
 

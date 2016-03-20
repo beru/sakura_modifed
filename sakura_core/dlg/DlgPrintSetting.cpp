@@ -660,8 +660,8 @@ void DlgPrintSetting::OnChangeSettingType(BOOL bGetData)
 	// 用紙の向き
 	// 2006.08.14 Moca 用紙方向コンボボックスを廃止し、ボタンを有効化
 	bool bIsPortrait = (curPS.nPrintPaperOrientation == DMORIENT_PORTRAIT);
-	CheckDlgButtonBool(GetHwnd(), IDC_RADIO_PORTRAIT, bIsPortrait);
-	CheckDlgButtonBool(GetHwnd(), IDC_RADIO_LANDSCAPE, !bIsPortrait);
+	CheckButton(IDC_RADIO_PORTRAIT, bIsPortrait);
+	CheckButton(IDC_RADIO_LANDSCAPE, !bIsPortrait);
 
 	// 余白
 	SetItemInt(IDC_EDIT_MARGINTY, curPS.nPrintMarginTY / 10, FALSE);
@@ -670,19 +670,19 @@ void DlgPrintSetting::OnChangeSettingType(BOOL bGetData)
 	SetItemInt(IDC_EDIT_MARGINRX, curPS.nPrintMarginRX / 10, FALSE);
 
 	// 行番号を印刷
-	CheckDlgButtonBool(GetHwnd(), IDC_CHECK_LINENUMBER, curPS.bPrintLineNumber);
+	CheckButton(IDC_CHECK_LINENUMBER, curPS.bPrintLineNumber);
 	// 英文ワードラップ
-	CheckDlgButtonBool(GetHwnd(), IDC_CHECK_WORDWRAP, curPS.bPrintWordWrap);
+	CheckButton(IDC_CHECK_WORDWRAP, curPS.bPrintWordWrap);
 
 	// 行頭禁則	//@@@ 2002.04.09 MIK
-	CheckDlgButtonBool(GetHwnd(), IDC_CHECK_PS_KINSOKUHEAD, curPS.bPrintKinsokuHead);
+	CheckButton(IDC_CHECK_PS_KINSOKUHEAD, curPS.bPrintKinsokuHead);
 	// 行末禁則	//@@@ 2002.04.09 MIK
-	CheckDlgButtonBool(GetHwnd(), IDC_CHECK_PS_KINSOKUTAIL, curPS.bPrintKinsokuTail);
+	CheckButton(IDC_CHECK_PS_KINSOKUTAIL, curPS.bPrintKinsokuTail);
 
 	// 改行文字をぶら下げる	//@@@ 2002.04.13 MIK
-	CheckDlgButtonBool(GetHwnd(), IDC_CHECK_PS_KINSOKURET, curPS.bPrintKinsokuRet);
+	CheckButton(IDC_CHECK_PS_KINSOKURET, curPS.bPrintKinsokuRet);
 	// 句読点をぶら下げる	//@@@ 2002.04.17 MIK
-	CheckDlgButtonBool(GetHwnd(), IDC_CHECK_PS_KINSOKUKUTO, curPS.bPrintKinsokuKuto);
+	CheckButton(IDC_CHECK_PS_KINSOKUKUTO, curPS.bPrintKinsokuKuto);
 
 	// カラー印刷
 	CheckButton(IDC_CHECK_COLORPRINT, curPS.bColorPrint);
@@ -870,7 +870,7 @@ void DlgPrintSetting::SetFontName(
 	TCHAR szName[100];
 	bool bUseFont = lf.lfFaceName[0] != _T('\0');
 
-	CheckDlgButtonBool(GetHwnd(), idUse, bUseFont);
+	CheckButton(idUse, bUseFont);
 	EnableItem(idUse, bUseFont);
 	if (bUseFont) {
 		LOGFONT	lft;

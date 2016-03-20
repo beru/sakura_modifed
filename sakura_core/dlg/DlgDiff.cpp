@@ -511,14 +511,14 @@ BOOL DlgDiff::OnMinMaxInfo(LPARAM lParam)
 	}
 	lpmmi->ptMinTrackSize.x = m_ptDefaultSize.x;
 	lpmmi->ptMinTrackSize.y = m_ptDefaultSize.y;
-	lpmmi->ptMaxTrackSize.x = m_ptDefaultSize.x*2;
-	lpmmi->ptMaxTrackSize.y = m_ptDefaultSize.y*2;
+	lpmmi->ptMaxTrackSize.x = m_ptDefaultSize.x * 2;
+	lpmmi->ptMaxTrackSize.y = m_ptDefaultSize.y * 2;
 	return 0;
 }
 
 BOOL DlgDiff::OnLbnDblclk( int wID )
 {
-	HWND hwndList = GetDlgItem( GetHwnd(), IDC_LIST_DIFF_FILES );
+	HWND hwndList = GetDlgItem(GetHwnd(), IDC_LIST_DIFF_FILES);
 	if (List_GetCurSel(hwndList) == LB_ERR) {
 		return FALSE;
 	}

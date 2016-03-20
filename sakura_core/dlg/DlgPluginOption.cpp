@@ -567,7 +567,7 @@ void DlgPluginOption::SetToEdit(int iLine)
 		sType = plugin->m_options[iLine]->GetType();
 		transform(sType.begin(), sType.end(), sType.begin(), my_towlower2);
 		if (sType == OPTION_TYPE_BOOL) {
-			::CheckDlgButtonBool(GetHwnd(), IDC_CHECK_PLUGIN_OPTION, _tcscmp(buf,  BOOL_DISP_FALSE) != 0);
+			CheckButton(IDC_CHECK_PLUGIN_OPTION, _tcscmp(buf,  BOOL_DISP_FALSE) != 0);
 			SetItemText(IDC_CHECK_PLUGIN_OPTION, plugin->m_options[iLine]->GetLabel().c_str());
 
 			// •ÒW—Ìˆæ‚ÌØ‚è‘Ö‚¦
