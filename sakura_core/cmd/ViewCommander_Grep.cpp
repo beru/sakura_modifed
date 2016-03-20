@@ -31,7 +31,7 @@ void ViewCommander::Command_GREP_DIALOG(void)
 	NativeW memCurText;
 	auto& dlgGrep = GetEditWindow().m_dlgGrep;
 	// 2014.07.01 複数Grepウィンドウを使い分けている場合などに影響しないように、未設定のときだけHistoryを見る
-	bool bGetHistory = dlgGrep.m_bSetText == false;
+	bool bGetHistory = (dlgGrep.m_bSetText == false);
 
 	// 現在カーソル位置単語または選択範囲より検索等のキーを取得
 	bool bSet = m_view.GetCurrentTextForSearchDlg(memCurText, bGetHistory);	// 2006.08.23 ryoji ダイアログ専用関数に変更
@@ -85,9 +85,9 @@ void ViewCommander::Command_GREP(void)
 	) {
 		// 2011.01.23 Grepタイプ別適用
 		if (!doc.m_docEditor.IsModified() && doc.m_docLineMgr.GetLineCount() == 0) {
-			TypeConfigNum cTypeGrep = DocTypeManager().GetDocumentTypeOfExt(_T("grepout"));
+			TypeConfigNum typeGrep = DocTypeManager().GetDocumentTypeOfExt(_T("grepout"));
 			const TypeConfigMini* pConfig;
-			DocTypeManager().GetTypeConfigMini(cTypeGrep, &pConfig);
+			DocTypeManager().GetTypeConfigMini(typeGrep, &pConfig);
 			doc.m_docType.SetDocumentTypeIdx(pConfig->id);
 			doc.m_docType.LockDocumentType();
 			doc.OnChangeType();

@@ -778,7 +778,7 @@ void ViewCommander::Command_REDO(void)
 		}
 	}
 
-	caret.m_nCaretPosX_Prev = GetCaret().GetCaretLayoutPos().x;	// 2007.10.11 ryoji 追加
+	caret.m_nCaretPosX_Prev = caret.GetCaretLayoutPos().x;	// 2007.10.11 ryoji 追加
 	m_view.m_bDoing_UndoRedo = false;	// Undo, Redoの実行中か
 
 	return;
@@ -891,13 +891,14 @@ void ViewCommander::DelCharForOverwrite(
 {
 	bool bEol = false;
 	bool bDelete = true;
-	const Layout* pLayout = GetDocument().m_layoutMgr.SearchLineByLayoutY(GetCaret().GetCaretLayoutPos().GetY2());
+	auto& caret = GetCaret();
+	const Layout* pLayout = GetDocument().m_layoutMgr.SearchLineByLayoutY(caret.GetCaretLayoutPos().GetY2());
 	int nDelLen = LogicInt(0);
 	LayoutInt nKetaDiff = LayoutInt(0);
 	LayoutInt nKetaAfterIns = LayoutInt(0);
 	if (pLayout) {
 		// 指定された桁に対応する行のデータ内の位置を調べる
-		LogicInt nIdxTo = m_view.LineColumnToIndex(pLayout, GetCaret().GetCaretLayoutPos().GetX2());
+		LogicInt nIdxTo = m_view.LineColumnToIndex(pLayout, caret.GetCaretLayoutPos().GetX2());
 		if (nIdxTo >= pLayout->GetLengthWithoutEOL()) {
 			bEol = true;	// 現在位置は改行または折り返し以後
 			if (pLayout->GetLayoutEol() != EolType::None) {
@@ -910,7 +911,7 @@ void ViewCommander::DelCharForOverwrite(
 			// 文字幅に合わせてスペースを詰める
 			if (GetDllShareData().common.edit.bOverWriteFixMode) {
 				const StringRef line = pLayout->GetDocLineRef()->GetStringRefWithEOL();
-				LogicInt nPos = GetCaret().GetCaretLogicPos().GetX();
+				LogicInt nPos = caret.GetCaretLogicPos().GetX();
 				if (line.At(nPos) != WCODE::TAB) {
 					LayoutInt nKetaBefore = NativeW::GetKetaOfChar(line, nPos);
 					LayoutInt nKetaAfter = NativeW::GetKetaOfChar(pszInput, nLen, 0);
@@ -939,11 +940,11 @@ void ViewCommander::DelCharForOverwrite(
 		LayoutPoint posBefore;
 		if (bEol) {
 			Command_DELETE();	// 行数減では再描画が必要＆行末以後の削除を処理統一
-			posBefore = GetCaret().GetCaretLayoutPos();
+			posBefore = caret.GetCaretLayoutPos();
 		}else {
 			// 1文字削除
 			m_view.DeleteData(false);
-			posBefore = GetCaret().GetCaretLayoutPos();
+			posBefore = caret.GetCaretLayoutPos();
 			for (int i=1; i<nDelLen; ++i) {
 				m_view.DeleteData(false);
 			}
@@ -957,7 +958,7 @@ void ViewCommander::DelCharForOverwrite(
 		}
 		if (0 < tmp.GetStringLength()) {
 			Command_INSTEXT(false, tmp.GetStringPtr(), tmp.GetStringLength(), false, false);
-			GetCaret().MoveCursor(posBefore, false);
+			caret.MoveCursor(posBefore, false);
 		}
 	}
 }

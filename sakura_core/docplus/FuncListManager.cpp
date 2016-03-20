@@ -46,7 +46,7 @@ void FuncListManager::SetLineFuncList(DocLine* pDocLine, bool bFlag)
 	@date	2002.05.25
 */
 bool FuncListManager::SearchFuncListMark(
-	const DocLineMgr*	pDocLineMgr,
+	const DocLineMgr&	docLineMgr,
 	LogicInt			nLineNum,		// 検索開始行
 	SearchDirection		bPrevOrNext,
 	LogicInt*			pnLineNum 		// マッチ行
@@ -57,7 +57,7 @@ bool FuncListManager::SearchFuncListMark(
 	if (bPrevOrNext == SearchDirection::Backward) {
 		// 後方検索(↑)
 		--nLinePos;
-		const DocLine* pDocLine = pDocLineMgr->GetLine( nLinePos );
+		const DocLine* pDocLine = docLineMgr.GetLine( nLinePos );
 		while (pDocLine) {
 			if (GetLineFuncList(pDocLine)) {
 				*pnLineNum = nLinePos;				// マッチ行
@@ -69,7 +69,7 @@ bool FuncListManager::SearchFuncListMark(
 	}else {
 		// 前方検索(↓)
 		++nLinePos;
-		const DocLine* pDocLine = pDocLineMgr->GetLine( nLinePos );
+		const DocLine* pDocLine = docLineMgr.GetLine( nLinePos );
 		while (pDocLine) {
 			if (GetLineFuncList(pDocLine)) {
 				*pnLineNum = nLinePos;				// マッチ行
@@ -83,9 +83,9 @@ bool FuncListManager::SearchFuncListMark(
 }
 
 // 関数リストマークをすべてリセット
-void FuncListManager::ResetAllFucListMark(DocLineMgr* pDocLineMgr, bool bFlag)
+void FuncListManager::ResetAllFucListMark(DocLineMgr& docLineMgr, bool bFlag)
 {
-	DocLine* pDocLine = pDocLineMgr->GetDocLineTop();
+	DocLine* pDocLine = docLineMgr.GetDocLineTop();
 	while (pDocLine) {
 		DocLine* pDocLineNext = pDocLine->GetNextLine();
 		SetLineFuncList(pDocLine, bFlag);

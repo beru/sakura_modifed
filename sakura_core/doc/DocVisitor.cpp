@@ -21,10 +21,12 @@ void DocVisitor::SetAllEol(Eol eol)
 	}
 
 	// カーソル位置記憶
-	LayoutInt		nViewTopLine = view.GetTextArea().GetViewTopLine();
-	LayoutInt		nViewLeftCol = view.GetTextArea().GetViewLeftCol();
-	LayoutPoint		ptCaretPosXY = view.GetCaret().GetCaretLayoutPos();
-	LayoutInt		nCaretPosX_Prev = view.GetCaret().m_nCaretPosX_Prev;
+	auto& caret = view.GetCaret();
+	auto& textArea = view.GetTextArea();
+	LayoutInt		nViewTopLine = textArea.GetViewTopLine();
+	LayoutInt		nViewLeftCol = textArea.GetViewLeftCol();
+	LayoutPoint		ptCaretPosXY = caret.GetCaretLayoutPos();
+	LayoutInt		nCaretPosX_Prev = caret.m_nCaretPosX_Prev;
 
 	bool bReplace = false;
 	// 改行コードを統一する
@@ -70,13 +72,13 @@ void DocVisitor::SetAllEol(Eol eol)
 	if (view.m_commander.GetOpeBlk()) {
 		if (view.m_commander.GetOpeBlk()->GetNum()>0) {
 			// カーソル位置復元
-			view.GetTextArea().SetViewTopLine(nViewTopLine);
-			view.GetTextArea().SetViewLeftCol(nViewLeftCol);
-			view.GetCaret().MoveCursor(ptCaretPosXY, true);
-			view.GetCaret().m_nCaretPosX_Prev = nCaretPosX_Prev;
+			textArea.SetViewTopLine(nViewTopLine);
+			textArea.SetViewLeftCol(nViewLeftCol);
+			caret.MoveCursor(ptCaretPosXY, true);
+			caret.m_nCaretPosX_Prev = nCaretPosX_Prev;
 			view.m_commander.GetOpeBlk()->AppendOpe(
 				new MoveCaretOpe(
-					view.GetCaret().GetCaretLogicPos()
+					caret.GetCaretLogicPos()
 				)
 			);
 

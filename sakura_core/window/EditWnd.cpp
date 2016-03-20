@@ -1058,7 +1058,7 @@ void EditWnd::LayoutMiniMap( void )
 	@date 2007.03.04 ryoji 印刷Preview時はバーを隠す
 	@date 2011.01.21 ryoji アウトライン画面にゴミが描画されるのを抑止する
 */
-void EditWnd::EndLayoutBars(BOOL bAdjust/* = TRUE*/)
+void EditWnd::EndLayoutBars(bool bAdjust/* = true*/)
 {
 	int nCmdShow = m_pPrintPreview? SW_HIDE: SW_SHOW;
 	HWND hwndToolBar = m_toolbar.GetRebarHwnd() ? m_toolbar.GetRebarHwnd(): m_toolbar.GetToolbarHwnd();
@@ -2378,13 +2378,13 @@ void EditWnd::InitMenu(HMENU hMenu, UINT uPos, BOOL fSystemMenu)
 		EFunctionCode	id = (EFunctionCode)::GetMenuItemID(hMenu, nPos);
 		// 機能が利用可能か調べる
 		//	Jan.  8, 2006 genta 機能が有効な場合には明示的に再設定しないようにする．
-		if (!IsFuncEnable(GetDocument(), m_pShareData, id)) {
+		if (!IsFuncEnable(GetDocument(), *m_pShareData, id)) {
 			UINT fuFlags = MF_BYCOMMAND | MF_GRAYED;
 			::EnableMenuItem(hMenu, id, fuFlags);
 		}
 
 		// 機能がチェック状態か調べる
-		if (IsFuncChecked(GetDocument(), m_pShareData, id)) {
+		if (IsFuncChecked(GetDocument(), *m_pShareData, id)) {
 			UINT fuFlags = MF_BYCOMMAND | MF_CHECKED;
 			::CheckMenuItem(hMenu, id, fuFlags);
 		}
@@ -2510,7 +2510,7 @@ void EditWnd::InitMenu_Function(HMENU hMenu, EFunctionCode eFunc, const wchar_t*
 			break;
 		case F_TOGGLE_KEY_SEARCH:
 			SetMenuFuncSel(hMenu, eFunc, pszKey, 
-				!m_pShareData->common.window.bMenuIcon | !IsFuncChecked(GetDocument(), m_pShareData, F_TOGGLE_KEY_SEARCH));
+				!m_pShareData->common.window.bMenuIcon | !IsFuncChecked(GetDocument(), *m_pShareData, F_TOGGLE_KEY_SEARCH));
 			break;
 		case F_WRAPWINDOWWIDTH:
 			{

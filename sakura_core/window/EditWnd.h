@@ -191,7 +191,7 @@ public:
 	void LayoutTabBar(void);		// タブバーの配置処理				// 2006.12.19 ryoji
 	void LayoutStatusBar(void);		// ステータスバーの配置処理			// 2006.12.19 ryoji
 	void LayoutMiniMap();			// ミニマップの配置処理
-	void EndLayoutBars(BOOL bAdjust = TRUE);	// バーの配置終了処理		// 2006.12.19 ryoji
+	void EndLayoutBars(bool bAdjust = true);	// バーの配置終了処理		// 2006.12.19 ryoji
 
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -247,7 +247,7 @@ public:
 	void SetActivePane(int);	// アクティブなペインを設定
 	int GetActivePane(void) const { return m_nActivePaneIndex; }	// アクティブなペインを取得		2007.08.26 kobake const追加
 	bool SetDrawSwitchOfAllViews(bool bDraw);						// すべてのペインの描画スイッチを設定する	2008.06.08 ryoji
-	void RedrawAllViews(EditView* pViewExclude);				// すべてのペインをRedrawする
+	void RedrawAllViews(EditView* pViewExclude);					// すべてのペインをRedrawする
 	void Views_DisableSelectArea(bool bRedraw);
 	BOOL DetectWidthOfLineNumberAreaAllPane(bool bRedraw);	// すべてのペインで、行番号表示に必要な幅を再設定する（必要なら再描画する）
 	bool WrapWindowWidth(int nPane);	// 右端で折り返す			2008.06.08 ryoji
@@ -269,11 +269,11 @@ public:
 	const EditDoc&	GetDocument() const		{ return *m_pEditDoc; }
 
 	// ビュー
-	const EditView&	GetActiveView() const		{ return *m_pEditView; }
+	const EditView&		GetActiveView() const		{ return *m_pEditView; }
 	EditView&			GetActiveView()				{ return *m_pEditView; }
-	const EditView&	GetView(int n) const		{ return *m_pEditViewArr[n]; }
+	const EditView&		GetView(int n) const		{ return *m_pEditViewArr[n]; }
 	EditView&			GetView(int n)				{ return *m_pEditViewArr[n]; }
-	EditView&          GetMiniMap()       { return *m_pEditViewMiniMap; }
+	EditView&			GetMiniMap()				{ return *m_pEditViewMiniMap; }
 	bool				IsEnablePane(int n) const	{ return 0 <= n && n < m_nEditViewCount; }
 	int					GetAllViewCount() const		{ return m_nEditViewCount; }
 

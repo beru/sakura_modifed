@@ -428,7 +428,8 @@ void ViewCommander::Command_FUNCLIST_NEXT(void)
 	int nYOld = ptXY.y;
 
 	for (int n=0; n<2; ++n) {
-		if (FuncListManager().SearchFuncListMark(&GetDocument().m_docLineMgr,
+		if (FuncListManager().SearchFuncListMark(
+				GetDocument().m_docLineMgr,
 				ptXY.GetY2(), SearchDirection::Forward, &ptXY.y)) {
 			LayoutPoint ptLayout;
 			GetDocument().m_layoutMgr.LogicToLayout(ptXY,&ptLayout);
@@ -455,12 +456,12 @@ void ViewCommander::Command_FUNCLIST_NEXT(void)
 void ViewCommander::Command_FUNCLIST_PREV(void)
 {
 
-	LogicPoint	ptXY(0,GetCaret().GetCaretLogicPos().y);
+	LogicPoint ptXY(0,GetCaret().GetCaretLogicPos().y);
 	int nYOld = ptXY.y;
-
+	auto& docLineMgr = GetDocument().m_docLineMgr;
 	for (int n=0; n<2; ++n) {
 		if (FuncListManager().SearchFuncListMark(
-			&GetDocument().m_docLineMgr,
+			docLineMgr,
 			ptXY.GetY2(),
 			SearchDirection::Backward,
 			&ptXY.y
@@ -480,7 +481,7 @@ void ViewCommander::Command_FUNCLIST_PREV(void)
 		if (!GetDllShareData().common.search.bSearchAll) {
 			break;
 		}
-		ptXY.y= GetDocument().m_docLineMgr.GetLineCount();
+		ptXY.y= docLineMgr.GetLineCount();
 	}
 	m_view.SendStatusMessage(LS(STR_ERR_SRPREV2));
 	AlertNotFound( m_view.GetHwnd(), false, LS(STR_FUCLIST_PREV_NOT_FOUND) );

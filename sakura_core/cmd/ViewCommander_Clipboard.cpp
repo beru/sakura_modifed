@@ -38,10 +38,12 @@ void ViewCommander::Command_CUT(void)
 		return;
 	}
 
+	auto& csEdit = GetDllShareData().common.edit;
+
 	// 範囲選択がされていない
 	if (!selInfo.IsTextSelected()) {
 		// 非選択時は、カーソル行を切り取り
-		if (!GetDllShareData().common.edit.bEnableNoSelectCopy) {	// 2007.11.18 ryoji
+		if (!csEdit.bEnableNoSelectCopy) {	// 2007.11.18 ryoji
 			return;	// 何もしない（音も鳴らさない）
 		}
 		// 行切り取り(折り返し単位)
@@ -53,7 +55,7 @@ void ViewCommander::Command_CUT(void)
 	// 選択範囲のデータを取得
 	// 正常時は true, 範囲未選択の場合は false を返す
 	NativeW memBuf;
-	if (!m_view.GetSelectedData(&memBuf, false, NULL, false, GetDllShareData().common.edit.bAddCRLFWhenCopy)) {
+	if (!m_view.GetSelectedData(&memBuf, false, NULL, false, csEdit.bAddCRLFWhenCopy)) {
 		ErrorBeep();
 		return;
 	}
@@ -75,8 +77,8 @@ void ViewCommander::Command_CUT(void)
 	@date 2007.11.18 ryoji 「選択なしでコピーを可能にする」オプション処理追加
 */
 void ViewCommander::Command_COPY(
-	bool		bIgnoreLockAndDisable,	// [in] 選択範囲を解除するか？
-	bool		bAddCRLFWhenCopy,		// [in] 折り返し位置に改行コードを挿入するか？
+	bool	bIgnoreLockAndDisable,	// [in] 選択範囲を解除するか？
+	bool	bAddCRLFWhenCopy,		// [in] 折り返し位置に改行コードを挿入するか？
 	EolType	neweol					// [in] コピーするときのEOL。
 	)
 {
@@ -287,7 +289,8 @@ void ViewCommander::Command_PASTEBOX(
 		hwndProgress = m_view.StartProgress();
 	}
 
-	LayoutPoint ptCurOld = GetCaret().GetCaretLayoutPos();
+	auto& caret = GetCaret();
+	LayoutPoint ptCurOld = caret.GetCaretLayoutPos();
 
 	LayoutInt nCount = LayoutInt(0);
 	bool bExtEol = GetDllShareData().common.edit.bEnableExtEol;
@@ -295,7 +298,7 @@ void ViewCommander::Command_PASTEBOX(
 	// Jul. 10, 2005 genta 貼り付けデータの最後にCR/LFが無い場合の対策
 	// データの最後まで処理 i.e. nBgnがnPasteSizeを超えたら終了
 	//for (nPos = 0; nPos < nPasteSize;)
-	int				nPos;
+	int nPos;
 	LayoutPoint	ptLayoutNew;	// 挿入された部分の次の位置
 	for (int nBgn=nPos=0; nBgn<nPasteSize;) {
 		// Jul. 10, 2005 genta 貼り付けデータの最後にCR/LFが無いと
@@ -314,13 +317,13 @@ void ViewCommander::Command_PASTEBOX(
 			}
 
 			// この行の挿入位置へカーソルを移動
-			GetCaret().MoveCursor(ptCurOld + LayoutPoint(LayoutInt(0), nCount), false);
-			GetCaret().m_nCaretPosX_Prev = GetCaret().GetCaretLayoutPos().GetX2();
+			caret.MoveCursor(ptCurOld + LayoutPoint(LayoutInt(0), nCount), false);
+			caret.m_nCaretPosX_Prev = caret.GetCaretLayoutPos().GetX2();
 			// カーソル行が最後の行かつ行末に改行が無く、挿入すべきデータがまだある場合
 			bool bAddLastCR = false;
 			const Layout*	pLayout;
 			LogicInt		nLineLen = LogicInt(0);
-			const wchar_t* pLine = GetDocument().m_layoutMgr.GetLineStr(GetCaret().GetCaretLayoutPos().GetY2(), &nLineLen, &pLayout);
+			const wchar_t* pLine = GetDocument().m_layoutMgr.GetLineStr(caret.GetCaretLayoutPos().GetY2(), &nLineLen, &pLayout);
 
 			if (pLine && 1 <= nLineLen) {
 				if (WCODE::IsLineDelimiter(pLine[nLineLen - 1], bExtEol)) {
@@ -336,7 +339,7 @@ void ViewCommander::Command_PASTEBOX(
 				LayoutInt nInsPosX = m_view.LineIndexToColumn(pLayout, nLineLen);
 
 				m_view.InsertData_CEditView(
-					LayoutPoint(nInsPosX, GetCaret().GetCaretLayoutPos().GetY2()),
+					LayoutPoint(nInsPosX, caret.GetCaretLayoutPos().GetY2()),
 					GetDocument().m_docEditor.GetNewLineCode().GetValue2(),
 					GetDocument().m_docEditor.GetNewLineCode().GetLen(),
 					&ptLayoutNew,
@@ -373,14 +376,14 @@ void ViewCommander::Command_PASTEBOX(
 	}
 
 	// 挿入データの先頭位置へカーソルを移動
-	GetCaret().MoveCursor(ptCurOld, true);
-	GetCaret().m_nCaretPosX_Prev = GetCaret().GetCaretLayoutPos().GetX2();
+	caret.MoveCursor(ptCurOld, true);
+	caret.m_nCaretPosX_Prev = caret.GetCaretLayoutPos().GetX2();
 
 	if (!m_view.m_bDoing_UndoRedo) {	// Undo, Redoの実行中か
 		// 操作の追加
 		GetOpeBlk()->AppendOpe(
 			new MoveCaretOpe(
-				GetCaret().GetCaretLogicPos()	// 操作前後のキャレット位置
+				caret.GetCaretLogicPos()	// 操作前後のキャレット位置
 			)
 		);
 	}
@@ -476,6 +479,8 @@ void ViewCommander::Command_INSTEXT(
 
 	GetDocument().m_docEditor.SetModified(true, bRedraw);	// Jan. 22, 2002 genta
 
+	auto& caret = GetCaret();
+
 	// テキストが選択されているか
 	if (selInfo.IsTextSelected() || bFastMode) {
 		// 矩形範囲選択中か
@@ -502,7 +507,7 @@ void ViewCommander::Command_INSTEXT(
 
 				// 開始位置が行末より後ろで、終了位置が同一行
 				if (pos >= len && GetSelect().IsLineOne()) {
-					GetCaret().SetCaretLayoutPos(LayoutPoint(GetSelect().GetFrom().x, GetCaret().GetCaretLayoutPos().y)); // キャレットX変更
+					caret.SetCaretLayoutPos(LayoutPoint(GetSelect().GetFrom().x, caret.GetCaretLayoutPos().y)); // キャレットX変更
 					selInfo.DisableSelectArea(false);
 					bAfterEOLSelect = true;
 				}
@@ -529,9 +534,9 @@ void ViewCommander::Command_INSTEXT(
 		LogicInt	nPosX_PHY_Delta(0);
 		if (bLinePaste) {	// 2007.10.04 ryoji
 			// 挿入ポイント（折り返し単位行頭）にカーソルを移動
-			LogicPoint ptCaretBefore = GetCaret().GetCaretLogicPos();	// 操作前のキャレット位置
+			LogicPoint ptCaretBefore = caret.GetCaretLogicPos();	// 操作前のキャレット位置
 			Command_GOLINETOP(false, 1);								// 行頭に移動(折り返し単位)
-			LogicPoint ptCaretAfter = GetCaret().GetCaretLogicPos();	// 操作後のキャレット位置
+			LogicPoint ptCaretAfter = caret.GetCaretLogicPos();	// 操作後のキャレット位置
 
 			// 挿入ポイントと元の位置との差分文字数
 			nPosX_PHY_Delta = ptCaretBefore.x - ptCaretAfter.x;
@@ -550,7 +555,7 @@ void ViewCommander::Command_INSTEXT(
 		// 現在位置にデータを挿入
 		LayoutPoint ptLayoutNew; // 挿入された部分の次の位置
 		m_view.InsertData_CEditView(
-			GetCaret().GetCaretLayoutPos(),
+			caret.GetCaretLayoutPos(),
 			pszText,
 			nTextLen,
 			&ptLayoutNew,
@@ -558,20 +563,20 @@ void ViewCommander::Command_INSTEXT(
 		);
 
 		// 挿入データの最後へカーソルを移動
-		GetCaret().MoveCursor(ptLayoutNew, bRedraw);
-		GetCaret().m_nCaretPosX_Prev = GetCaret().GetCaretLayoutPos().GetX2();
+		caret.MoveCursor(ptLayoutNew, bRedraw);
+		caret.m_nCaretPosX_Prev = caret.GetCaretLayoutPos().GetX2();
 
 		if (bLinePaste) {	// 2007.10.04 ryoji
 			// 元の位置へカーソルを移動
-			LogicPoint ptCaretBefore = GetCaret().GetCaretLogicPos();	// 操作前のキャレット位置
+			LogicPoint ptCaretBefore = caret.GetCaretLogicPos();	// 操作前のキャレット位置
 			LayoutPoint ptLayout;
 			GetDocument().m_layoutMgr.LogicToLayout(
 				ptCaretBefore + LogicPoint(nPosX_PHY_Delta, LogicInt(0)),
 				&ptLayout
 			);
-			GetCaret().MoveCursor(ptLayout, bRedraw);					// カーソル移動
-			LogicPoint ptCaretAfter = GetCaret().GetCaretLogicPos();	// 操作後のキャレット位置
-			GetCaret().m_nCaretPosX_Prev = GetCaret().GetCaretLayoutPos().x;
+			caret.MoveCursor(ptLayout, bRedraw);					// カーソル移動
+			LogicPoint ptCaretAfter = caret.GetCaretLogicPos();	// 操作後のキャレット位置
+			caret.m_nCaretPosX_Prev = caret.GetCaretLayoutPos().x;
 
 			// UNDO用記録
 			if (!m_view.m_bDoing_UndoRedo) {

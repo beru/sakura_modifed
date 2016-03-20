@@ -1257,15 +1257,16 @@ void EditView::SmartIndent_CPP(wchar_t wcChar)
 	case L'{':
 	case L'(':
 
-		nCaretPosX_PHY = GetCaret().GetCaretLogicPos().x;
+		auto& caret = GetCaret();
+		nCaretPosX_PHY = caret.GetCaretLogicPos().x;
 
-		pLine = m_pEditDoc->m_docLineMgr.GetLine(GetCaret().GetCaretLogicPos().GetY2())->GetDocLineStrWithEOL(&nLineLen);
+		pLine = m_pEditDoc->m_docLineMgr.GetLine(caret.GetCaretLogicPos().GetY2())->GetDocLineStrWithEOL(&nLineLen);
 		if (!pLine) {
 			if (wcChar != WCODE::CR) {
 				return;
 			}
 			// 調整によって置換される箇所
-			rangeA.Set(LogicPoint(0, GetCaret().GetCaretLogicPos().y));
+			rangeA.Set(LogicPoint(0, caret.GetCaretLogicPos().y));
 		}else {
 			//	nWorkに処理の基準桁位置を設定する
 			if (wcChar != WCODE::CR) {
@@ -1316,20 +1317,20 @@ void EditView::SmartIndent_CPP(wchar_t wcChar)
 				}
 			}
 			// 調整によって置換される箇所
-			rangeA.SetFrom(LogicPoint(0, GetCaret().GetCaretLogicPos().GetY2()));
-			rangeA.SetTo(LogicPoint(i, GetCaret().GetCaretLogicPos().GetY2()));
+			rangeA.SetFrom(LogicPoint(0, caret.GetCaretLogicPos().GetY2()));
+			rangeA.SetTo(LogicPoint(i, caret.GetCaretLogicPos().GetY2()));
 		}
 		
 		// 対応する括弧をさがす
 		nLevel = 0;	// {}の入れ子レベル
 		
 		nDataLen = LogicInt(0);
-		for (j=GetCaret().GetCaretLogicPos().GetY2(); j>=LogicInt(0); --j) {
+		for (j=caret.GetCaretLogicPos().GetY2(); j>=LogicInt(0); --j) {
 			pLine2 = m_pEditDoc->m_docLineMgr.GetLine(j)->GetDocLineStrWithEOL(&nLineLen2);
-			if (j == GetCaret().GetCaretLogicPos().y) {
+			if (j == caret.GetCaretLogicPos().y) {
 				// 2005.10.11 ryoji EOF のみの行もスマートインデントの対象にする
 				if (!pLine2) {
-					if (GetCaret().GetCaretLogicPos().y == m_pEditDoc->m_docLineMgr.GetLineCount())
+					if (caret.GetCaretLogicPos().y == m_pEditDoc->m_docLineMgr.GetLineCount())
 						continue;	// EOF のみの行
 					break;
 				}
@@ -1353,7 +1354,7 @@ void EditView::SmartIndent_CPP(wchar_t wcChar)
 //						MYTRACE(_T("▼[%ls]\n"), pLine2);
 					}else {
 						// 同じ行の場合
-						if (j == GetCaret().GetCaretLogicPos().y) {
+						if (j == caret.GetCaretLogicPos().y) {
 							if (wcChar == L'{' && pLine2[k] == L'}') {
 								wcChar = L'}';
 								--nLevel;	// {}の入れ子レベル
@@ -1377,7 +1378,7 @@ void EditView::SmartIndent_CPP(wchar_t wcChar)
 //						MYTRACE(_T("▼[%ls]\n"), pLine2);
 					}else {
 						// 同じ行の場合
-						if (j == GetCaret().GetCaretLogicPos().y) {
+						if (j == caret.GetCaretLogicPos().y) {
 							if (wcChar == L'{' && pLine2[k] == L'{') {
 								return;
 							}
@@ -1457,7 +1458,7 @@ void EditView::SmartIndent_CPP(wchar_t wcChar)
 
 		// 調整後のカーソル位置を計算しておく
 		ptCP.x = nCaretPosX_PHY - rangeA.GetTo().x + nDataLen;
-		ptCP.y = GetCaret().GetCaretLogicPos().y;
+		ptCP.y = caret.GetCaretLogicPos().y;
 
 		nSrcLen = rangeA.GetTo().x - rangeA.GetFrom().x;
 		if (nSrcLen >= _countof(pszSrc) - 1) {
@@ -1499,14 +1500,14 @@ void EditView::SmartIndent_CPP(wchar_t wcChar)
 		m_pEditDoc->m_layoutMgr.LogicToLayout(ptCP, &ptCP_Layout);
 
 		// 選択エリアの先頭へカーソルを移動
-		GetCaret().MoveCursor(ptCP_Layout, true);
-		GetCaret().m_nCaretPosX_Prev = GetCaret().GetCaretLayoutPos().GetX();
+		caret.MoveCursor(ptCP_Layout, true);
+		caret.m_nCaretPosX_Prev = caret.GetCaretLayoutPos().GetX();
 
 		if (bChange && !m_bDoing_UndoRedo) {	// Undo, Redoの実行中か
 			// 操作の追加
 			m_commander.GetOpeBlk()->AppendOpe(
 				new MoveCaretOpe(
-					GetCaret().GetCaretLogicPos()	// 操作前後のキャレット位置
+					caret.GetCaretLogicPos()	// 操作前後のキャレット位置
 				)
 			);
 		}

@@ -1610,14 +1610,14 @@ void DlgFuncList::SetDocLineFuncList()
 		return;
 	}
 	EditView* pEditView = (EditView*)m_lParam;
-	DocLineMgr* pDocLineMgr = &pEditView->GetDocument().m_docLineMgr;
+	auto& docLineMgr = pEditView->GetDocument().m_docLineMgr;
 	
-	FuncListManager().ResetAllFucListMark(pDocLineMgr, false);
+	FuncListManager().ResetAllFucListMark(docLineMgr, false);
 	int num = m_pFuncInfoArr->GetNum();
 	for (int i=0; i<num; ++i) {
 		const FuncInfo* pFuncInfo = m_pFuncInfoArr->GetAt(i);
 		if (0 < pFuncInfo->m_nFuncLineCRLF) {
-			DocLine* pDocLine = pDocLineMgr->GetLine( pFuncInfo->m_nFuncLineCRLF - 1 );
+			DocLine* pDocLine = docLineMgr.GetLine( pFuncInfo->m_nFuncLineCRLF - 1 );
 			if (pDocLine) {
 				FuncListManager().SetLineFuncList( pDocLine, true );
 			}

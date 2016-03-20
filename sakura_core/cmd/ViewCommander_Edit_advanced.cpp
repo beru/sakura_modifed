@@ -688,7 +688,8 @@ void ViewCommander::Command_SORT(bool bAsc)	// bAsc:true=昇順, false=降順
 		}
 	}
 	bBeginBoxSelectOld = selInfo.IsBoxSelecting();
-	nCaretPosYOLD = GetCaret().GetCaretLayoutPos().GetY();
+	auto& caret = GetCaret();
+	nCaretPosYOLD = caret.GetCaretLayoutPos().GetY();
 	layoutMgr.LayoutToLogic(
 		selInfo.m_select,
 		&selectOld
@@ -807,15 +808,15 @@ void ViewCommander::Command_SORT(bool bAsc)	// bAsc:true=昇順, false=降順
 		selInfo.m_select = selectOld_Layout;
 	}
 	if (nCaretPosYOLD == selInfo.m_select.GetFrom().y || selInfo.IsBoxSelecting()) {
-		GetCaret().MoveCursor(selInfo.m_select.GetFrom(), true);
+		caret.MoveCursor(selInfo.m_select.GetFrom(), true);
 	}else {
-		GetCaret().MoveCursor(selInfo.m_select.GetTo(), true);
+		caret.MoveCursor(selInfo.m_select.GetTo(), true);
 	}
-	GetCaret().m_nCaretPosX_Prev = GetCaret().GetCaretLayoutPos().GetX();
+	caret.m_nCaretPosX_Prev = caret.GetCaretLayoutPos().GetX();
 	if (!m_view.m_bDoing_UndoRedo) {	// Undo, Redoの実行中か
 		GetOpeBlk()->AppendOpe(
 			new MoveCaretOpe(
-				GetCaret().GetCaretLogicPos()	// 操作前後のキャレット位置
+				caret.GetCaretLogicPos()	// 操作前後のキャレット位置
 			)
 		);
 	}
@@ -851,7 +852,8 @@ void ViewCommander::Command_MERGE(void)
 		return;
 	}
 	auto& layoutMgr = GetDocument().m_layoutMgr;
-	nCaretPosYOLD = GetCaret().GetCaretLayoutPos().GetY();
+	auto& caret = GetCaret();
+	nCaretPosYOLD = caret.GetCaretLayoutPos().GetY();
 	LogicRange sSelectOld; // 範囲選択
 	layoutMgr.LayoutToLogic(
 		selInfo.m_select,
@@ -939,15 +941,15 @@ void ViewCommander::Command_MERGE(void)
 	selInfo.m_select.GetToPointer()->y -= nMergeLayoutLines;
 
 	if (nCaretPosYOLD == selInfo.m_select.GetFrom().y) {
-		GetCaret().MoveCursor(selInfo.m_select.GetFrom(), true);
+		caret.MoveCursor(selInfo.m_select.GetFrom(), true);
 	}else {
-		GetCaret().MoveCursor(selInfo.m_select.GetTo(), true);
+		caret.MoveCursor(selInfo.m_select.GetTo(), true);
 	}
-	GetCaret().m_nCaretPosX_Prev = GetCaret().GetCaretLayoutPos().GetX();
+	caret.m_nCaretPosX_Prev = caret.GetCaretLayoutPos().GetX();
 	if (!m_view.m_bDoing_UndoRedo) {	// Undo, Redoの実行中か
 		GetOpeBlk()->AppendOpe(
 			new MoveCaretOpe(
-				GetCaret().GetCaretLogicPos()	// 操作前後のキャレット位置
+				caret.GetCaretLogicPos()	// 操作前後のキャレット位置
 			)
 		);
 	}

@@ -84,7 +84,7 @@ bool ViewCommander::HandleCommand(
 	m_view.TranslateCommand_isearch(nCommand, bRedraw, lparam1, lparam2, lparam3, lparam4);
 
 	// 2013.09.23 novice 機能が利用可能か調べる
-	if (!IsFuncEnable(GetDocument(), &GetDllShareData(), nCommand)) {
+	if (!IsFuncEnable(GetDocument(), GetDllShareData(), nCommand)) {
 		return true;
 	}
 

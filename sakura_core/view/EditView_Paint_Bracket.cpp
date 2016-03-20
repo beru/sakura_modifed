@@ -56,12 +56,13 @@ void EditView::SetBracketPairPos(bool flag)
 	int	mode = 2;
 
 	LayoutPoint ptColLine;
+	auto& caret = GetCaret();
 
 	if (1
 		&& flag
 		&& !GetSelectionInfo().IsTextSelected()
 		&& !GetSelectionInfo().m_bDrawSelectArea
-		&& SearchBracket(GetCaret().GetCaretLayoutPos(), &ptColLine, &mode)
+		&& SearchBracket(caret.GetCaretLayoutPos(), &ptColLine, &mode)
 	) {
 		// 登録指定(flag=true)			&&
 		// テキストが選択されていない	&&
@@ -77,13 +78,13 @@ void EditView::SetBracketPairPos(bool flag)
 
 			// レイアウト位置から物理位置へ変換(強調表示位置を登録)
 			m_pEditDoc->m_layoutMgr.LayoutToLogic(ptColLine, &m_ptBracketPairPos_PHY);
-			m_ptBracketCaretPos_PHY.y = GetCaret().GetCaretLogicPos().y;
+			m_ptBracketCaretPos_PHY.y = caret.GetCaretLogicPos().y;
 			if ((mode & 4) == 0) {
 				// カーソルの後方文字位置
-				m_ptBracketCaretPos_PHY.x = GetCaret().GetCaretLogicPos().x;
+				m_ptBracketCaretPos_PHY.x = caret.GetCaretLogicPos().x;
 			}else {
 				// カーソルの前方文字位置
-				m_ptBracketCaretPos_PHY.x = GetCaret().GetCaretLogicPos().x - 1;
+				m_ptBracketCaretPos_PHY.x = caret.GetCaretLogicPos().x - 1;
 			}
 			return;
 		}
@@ -137,6 +138,7 @@ void EditView::DrawBracketPair(bool bDraw)
 	gr.Init(::GetDC(GetHwnd()));
 	bool bCaretChange = false;
 	gr.SetTextBackTransparent(true);
+	auto& caret = GetCaret();
 
 	for (int i=0; i<2; ++i) {
 		// i=0:対括弧,i=1:カーソル位置の括弧
@@ -189,18 +191,18 @@ void EditView::DrawBracketPair(bool bDraw)
 					}
 				}
 				TypeSupport curetLineBg(*this, COLORIDX_CARETLINEBG);
-				EColorIndexType nColorIndexBg = (curetLineBg.IsDisp() && ptColLine.GetY2() == GetCaret().GetCaretLayoutPos().GetY2()
+				EColorIndexType nColorIndexBg = (curetLineBg.IsDisp() && ptColLine.GetY2() == caret.GetCaretLayoutPos().GetY2()
 					? COLORIDX_CARETLINEBG
 					: TypeSupport(*this, COLORIDX_EVENLINEBG).IsDisp() && ptColLine.GetY2() % 2 == 1
 						? COLORIDX_EVENLINEBG
 						: COLORIDX_TEXT);
 				// 03/03/03 ai カーソルの左に括弧があり括弧が強調表示されている状態でShift+←で選択開始すると
 				//             選択範囲内に反転表示されない部分がある問題の修正
-				LayoutInt caretX = GetCaret().GetCaretLayoutPos().GetX2();
-				bool bCaretHide = (!bCaretChange && (ptColLine.x == caretX || ptColLine.x + 1 == caretX) && GetCaret().GetCaretShowFlag());
+				LayoutInt caretX = caret.GetCaretLayoutPos().GetX2();
+				bool bCaretHide = (!bCaretChange && (ptColLine.x == caretX || ptColLine.x + 1 == caretX) && caret.GetCaretShowFlag());
 				if (bCaretHide) {
 					bCaretChange = true;
-					GetCaret().HideCaret_(GetHwnd());	// キャレットが一瞬消えるのを防止
+					caret.HideCaret_(GetHwnd());	// キャレットが一瞬消えるのを防止
 				}
 				
 				{
@@ -252,17 +254,17 @@ void EditView::DrawBracketPair(bool bDraw)
 				if (1
 					&& (m_editWnd.GetActivePane() == m_nMyIndex)
 					&& (0
-						|| (ptColLine.y == GetCaret().GetCaretLayoutPos().GetY())
-						|| (ptColLine.y - 1 == GetCaret().GetCaretLayoutPos().GetY())
+						|| (ptColLine.y == caret.GetCaretLayoutPos().GetY())
+						|| (ptColLine.y - 1 == caret.GetCaretLayoutPos().GetY())
 					) 
 				) {	// 03/02/27 ai 行の間隔が"0"の時にアンダーラインが欠ける事がある為修正
-					GetCaret().m_underLine.CaretUnderLineON(true, false);
+					caret.m_underLine.CaretUnderLineON(true, false);
 				}
 			}
 		}
 	}
 	if (bCaretChange) {
-		GetCaret().ShowCaret_(GetHwnd());	// キャレットが一瞬消えるのを防止
+		caret.ShowCaret_(GetHwnd());	// キャレットが一瞬消えるのを防止
 	}
 
 	::ReleaseDC(GetHwnd(), gr);

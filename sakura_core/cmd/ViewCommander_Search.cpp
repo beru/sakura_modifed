@@ -582,8 +582,9 @@ void ViewCommander::Command_REPLACE(HWND hwndParent)
 	// 次を検索
 	Command_SEARCH_NEXT(true, true, false, hwndParent, NULL);
 
-	BOOL	bRegularExp = m_view.m_curSearchOption.bRegularExp;
+	bool	bRegularExp = m_view.m_curSearchOption.bRegularExp;
 	int 	nFlag       = m_view.m_curSearchOption.bLoHiCase ? 0x01 : 0x00;
+	auto& caret = GetCaret();
 
 	// テキストが選択されているか
 	if (m_view.GetSelectionInfo().IsTextSelected()) {
@@ -596,7 +597,7 @@ void ViewCommander::Command_REPLACE(HWND hwndParent)
 				GetSelect().Clear(-1);
 			}else if (nReplaceTarget == 2) {	// 追加位置へ移動
 				// 正規表現を除外したので、「検索後の文字が改行やったら次の行の先頭へ移動」の処理を削除
-				GetCaret().MoveCursor(GetSelect().GetTo(), false);
+				caret.MoveCursor(GetSelect().GetTo(), false);
 				GetSelect().Clear(-1);
 			}else {
 				// 位置指定ないので、何もしない
@@ -612,11 +613,11 @@ void ViewCommander::Command_REPLACE(HWND hwndParent)
 			layoutMgr.LogicToLayout(lineHome, selectFix.GetFromPointer());
 			lineHome.y++; // 次行の行頭
 			layoutMgr.LogicToLayout(lineHome, selectFix.GetToPointer());
-			GetCaret().GetAdjustCursorPos(selectFix.GetToPointer());
+			caret.GetAdjustCursorPos(selectFix.GetToPointer());
 			m_view.GetSelectionInfo().SetSelectArea(selectFix);
 			m_view.GetSelectionInfo().DrawSelectArea();
-			GetCaret().MoveCursor(selectFix.GetFrom(), false);
-			GetCaret().m_nCaretPosX_Prev = GetCaret().GetCaretLayoutPos().GetX2();
+			caret.MoveCursor(selectFix.GetFrom(), false);
+			caret.m_nCaretPosX_Prev = caret.GetCaretLayoutPos().GetX2();
 		}
 		// コマンドコードによる処理振り分け
 		// テキストを貼り付け
@@ -692,7 +693,7 @@ void ViewCommander::Command_REPLACE(HWND hwndParent)
 
 		// 挿入後の検索開始位置を調整
 		if (nReplaceTarget == 1) {
-			GetCaret().SetCaretLayoutPos(GetCaret().GetCaretLayoutPos() + ptTmp);
+			caret.SetCaretLayoutPos(caret.GetCaretLayoutPos() + ptTmp);
 		}
 
 		// To Here 2001.12.03 hor
