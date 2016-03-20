@@ -73,7 +73,7 @@ bool ViewCommander::Command_FUNCLIST(
 		}
 	}
 
-	auto& dlgFuncList = GetEditWindow()->m_dlgFuncList;
+	auto& dlgFuncList = GetEditWindow().m_dlgFuncList;
 	if (dlgFuncList.GetHwnd() && nAction != ShowDialogType::Reload) {
 		switch (nAction) {
 		case ShowDialogType::Normal: // アクティブにする

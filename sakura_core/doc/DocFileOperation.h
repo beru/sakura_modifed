@@ -30,7 +30,7 @@ class EditDoc;
 
 class DocFileOperation {
 public:
-	DocFileOperation(EditDoc* pDoc) : m_pDocRef(pDoc) { }
+	DocFileOperation(EditDoc& doc) : m_doc(doc) { }
 
 	// ロック
 	bool _ToDoLock() const;
@@ -54,7 +54,7 @@ public:
 		LoadInfo*	pLoadInfo			// [in/out]
 	);
 	void ReloadCurrentFile(				// 同一ファイルの再オープン Jul. 26, 2003 ryoji BOMオプション追加
-		EncodingType	nCharCode			// [in] 文字コード種別
+		EncodingType	nCharCode		// [in] 文字コード種別
 	);
 
 	
@@ -81,6 +81,6 @@ public:
 	);
 
 private:
-	EditDoc* m_pDocRef;
+	EditDoc& m_doc;
 };
 

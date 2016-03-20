@@ -388,7 +388,7 @@ bool EditView::ChangeCurRegexp(bool bRedrawIfChanged)
 		if (bRedrawIfChanged) {
 			Redraw();
 		}
-		m_pEditWnd->m_toolbar.AcceptSharedSearchKey();
+		m_editWnd.m_toolbar.AcceptSharedSearchKey();
 		return true;
 	}
 	if (!m_bCurSrchKeyMark) {
@@ -462,7 +462,7 @@ void EditView::DrawBracketCursorLine(bool bDraw)
 
 HWND EditView::StartProgress()
 {
-	HWND hwndProgress = m_pEditWnd->m_statusBar.GetProgressHwnd();
+	HWND hwndProgress = m_editWnd.m_statusBar.GetProgressHwnd();
 	if (hwndProgress) {
 		::ShowWindow(hwndProgress, SW_SHOW);
 		Progress_SetRange(hwndProgress, 0, 101);

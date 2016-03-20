@@ -127,7 +127,7 @@ void EditView::DrawBracketPair(bool bDraw)
 			|| GetSelectionInfo().IsTextSelected()
 			|| GetSelectionInfo().m_bDrawSelectArea
 			|| !m_bDrawBracketPairFlag
-			|| (m_pEditWnd->GetActivePane() != m_nMyIndex)
+			|| (m_editWnd.GetActivePane() != m_nMyIndex)
 		)
 	) {
 		return;
@@ -176,24 +176,22 @@ void EditView::DrawBracketPair(bool bDraw)
 				}else {
 					if (IsBracket(pLine, OutputX, LogicInt(1))) {
 						DispPos pos(0, 0); // 注意：この値はダミー。CheckChangeColorでの参照位置は不正確
-						ColorStrategyInfo csInfo;
-						ColorStrategyInfo* pInfo = &csInfo;
-						pInfo->pDispPos = &pos;
-						pInfo->pView = this;
+						ColorStrategyInfo csInfo(*this);
+						csInfo.pDispPos = &pos;
 
 						// 03/10/24 ai 折り返し行のColorIndexが正しく取得できない問題に対応
 						// 2009.02.07 ryoji GetColorIndex に渡すインデックスの仕様変更（元はこっちの仕様だった模様）
-						Color3Setting cColor = GetColorIndex(pLayout, ptColLine.GetY2(), OutputX, pInfo);
+						Color3Setting cColor = GetColorIndex(pLayout, ptColLine.GetY2(), OutputX, csInfo);
 						nColorIndex = cColor.eColorIndex2;
 					}else {
 						SetBracketPairPos(false);
 						break;
 					}
 				}
-				TypeSupport curetLineBg(this, COLORIDX_CARETLINEBG);
+				TypeSupport curetLineBg(*this, COLORIDX_CARETLINEBG);
 				EColorIndexType nColorIndexBg = (curetLineBg.IsDisp() && ptColLine.GetY2() == GetCaret().GetCaretLayoutPos().GetY2()
 					? COLORIDX_CARETLINEBG
-					: TypeSupport(this, COLORIDX_EVENLINEBG).IsDisp() && ptColLine.GetY2() % 2 == 1
+					: TypeSupport(*this, COLORIDX_EVENLINEBG).IsDisp() && ptColLine.GetY2() % 2 == 1
 						? COLORIDX_EVENLINEBG
 						: COLORIDX_TEXT);
 				// 03/03/03 ai カーソルの左に括弧があり括弧が強調表示されている状態でShift+←で選択開始すると
@@ -213,11 +211,11 @@ void EditView::DrawBracketPair(bool bDraw)
 					LayoutInt charsWidth = NativeW::GetKetaOfChar(pLine, nLineLen, OutputX);
 
 					// 色設定
-					TypeSupport textType(this, COLORIDX_TEXT);
+					TypeSupport textType(*this, COLORIDX_TEXT);
 					textType.SetGraphicsState_WhileThisObj(gr);
 					// 2013.05.24 背景色がテキストの背景色と同じならカーソル行の背景色を適用
-					TypeSupport colorIndexType(this, nColorIndex);
-					TypeSupport colorIndexBgType(this, nColorIndexBg);
+					TypeSupport colorIndexType(*this, nColorIndex);
+					TypeSupport colorIndexBgType(*this, nColorIndexBg);
 					TypeSupport* pColorBack = &colorIndexType;
 					if (colorIndexType.GetBackColor() == textType.GetBackColor() && nColorIndexBg != COLORIDX_TEXT) {
 						pColorBack = &colorIndexBgType;
@@ -252,7 +250,7 @@ void EditView::DrawBracketPair(bool bDraw)
 				}
 
 				if (1
-					&& (m_pEditWnd->GetActivePane() == m_nMyIndex)
+					&& (m_editWnd.GetActivePane() == m_nMyIndex)
 					&& (0
 						|| (ptColLine.y == GetCaret().GetCaretLayoutPos().GetY())
 						|| (ptColLine.y - 1 == GetCaret().GetCaretLayoutPos().GetY())

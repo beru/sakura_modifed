@@ -32,7 +32,7 @@ class DocLineMgr;
 
 class DocEditor : public DocListenerEx {
 public:
-	DocEditor(EditDoc* pDoc);
+	DocEditor(EditDoc& doc);
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                         イベント                            //
@@ -82,7 +82,7 @@ public:
 	}
 
 public:
-	EditDoc*		m_pDocRef;
+	EditDoc&		m_doc;
 	Eol 			m_newLineCode;				// Enter押下時に挿入する改行コード種別
 	OpeBuf			m_opeBuf;					// アンドゥバッファ
 	OpeBlk*			m_pOpeBlk;					// 操作ブロック
@@ -94,7 +94,7 @@ public:
 
 class DocEditAgent {
 public:
-	DocEditAgent(DocLineMgr* pDocLineMgr) : m_pDocLineMgr(pDocLineMgr) { }
+	DocEditAgent(DocLineMgr& docLineMgr) : m_docLineMgr(docLineMgr) { }
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                           操作                              //
@@ -103,6 +103,6 @@ public:
 	void AddLineStrX(const wchar_t*, int);	// 末尾に行を追加 Ver1.5
 
 private:
-	DocLineMgr* m_pDocLineMgr;
+	DocLineMgr& m_docLineMgr;
 };
 

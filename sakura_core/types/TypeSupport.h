@@ -38,13 +38,13 @@ private:
 	static const COLORREF INVALID_COLOR = 0xFFFFFFFF; // –³Œø‚ÈF’è”
 
 public:
-	TypeSupport(const EditView* pEditView, EColorIndexType eColorIdx)
+	TypeSupport(const EditView& editView, EColorIndexType eColorIdx)
 		:
-		m_pFontset(&pEditView->GetFontset()),
+		m_pFontset(&editView.GetFontset()),
 		m_nColorIdx(ToColorInfoArrIndex(eColorIdx))
 	{
 		assert(0 <= m_nColorIdx);
-		m_pTypes = &pEditView->m_pEditDoc->m_docType.GetDocumentAttribute();
+		m_pTypes = &editView.m_pEditDoc->m_docType.GetDocumentAttribute();
 		m_pColorInfoArr = &m_pTypes->colorInfoArr[m_nColorIdx];
 
 		m_gr = NULL;

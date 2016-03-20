@@ -100,7 +100,7 @@ void EditView::SetIMECompFormFont(void)
 	//
 	HIMC hIMC = ::ImmGetContext(GetHwnd());
 	if (hIMC) {
-		::ImmSetCompositionFont(hIMC, const_cast<LOGFONT *>(&(m_pEditWnd->GetLogfont())));
+		::ImmSetCompositionFont(hIMC, const_cast<LOGFONT *>(&(m_editWnd.GetLogfont())));
 	}
 	::ImmReleaseContext(GetHwnd() , hIMC);
 }

@@ -31,7 +31,7 @@ class Graphics;
 
 class Ruler {
 public:
-	Ruler(const EditView* pEditView, const EditDoc* pEditDoc);
+	Ruler(const EditView& editView, const EditDoc& editDoc);
 	virtual ~Ruler();
 	
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -58,8 +58,8 @@ private:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 private:
 	// 参照
-	const EditView*	m_pEditView;
-	const EditDoc*		m_pEditDoc;
+	const EditView&	m_editView;
+	const EditDoc&	m_editDoc;
 	
 	// 状態
 	bool	m_bRedrawRuler;		// ルーラー全体を描き直す時 = true      2002.02.25 Add By KK

@@ -248,9 +248,9 @@ INT_PTR DlgFuncList::DispatchEvent(
 		// それでは都合が悪いので，特別に以下の処理を行って他と同様な挙動が得られるようにする．
 		if ((BOOL)wParam) {
 			EditView* pEditView = (EditView*)m_lParam;
-			EditWnd* pEditWnd = pEditView->m_pEditWnd;
+			auto& editWnd = pEditView->m_editWnd;
 			if (::GetActiveWindow() == GetHwnd()) {
-				::SetActiveWindow(pEditWnd->GetHwnd());
+				::SetActiveWindow(editWnd.GetHwnd());
 				BlockingHook(NULL);	// キュー内に溜まっているメッセージを処理
 				::SetActiveWindow(GetHwnd());
 				return 0L;
@@ -402,7 +402,7 @@ HWND DlgFuncList::DoModeless(
 		pDlgTemplate->style = (WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | DS_SETFONT);
 		hwndRet = Dialog::DoModeless(hInstance, MyGetAncestor(hwndParent, GA_ROOT), pDlgTemplate, lParam, SW_HIDE);
 		::GlobalFree(pDlgTemplate);
-		pEditView->m_pEditWnd->EndLayoutBars(m_bEditWndReady);	// 画面の再レイアウト
+		pEditView->m_editWnd.EndLayoutBars(m_bEditWndReady);	// 画面の再レイアウト
 	}else {
 		hwndRet = Dialog::DoModeless(
 			hInstance,
@@ -1859,7 +1859,7 @@ BOOL DlgFuncList::OnInitDialog(
 		if (!IsDocking() && m_pShareData->common.outline.bRememberOutlineWindowPos) {
 			WINDOWPLACEMENT windowPlacement;
 			windowPlacement.length = sizeof(windowPlacement);
-			if (::GetWindowPlacement(pEditView->m_pEditWnd->GetHwnd(), &windowPlacement)) {
+			if (::GetWindowPlacement(pEditView->m_editWnd.GetHwnd(), &windowPlacement)) {
 				// ウィンドウ位置・サイズを-1以外の値にしておくと、Dialogで使用される．
 				m_xPos = m_pShareData->common.outline.xOutlineWindowPos + windowPlacement.rcNormalPosition.left;
 				m_yPos = m_pShareData->common.outline.yOutlineWindowPos + windowPlacement.rcNormalPosition.top;
@@ -1914,7 +1914,7 @@ BOOL DlgFuncList::OnInitDialog(
 		}
 		// 他ウィンドウに変更を通知する
 		if (ProfDockSync()) {
-			HWND hwndEdit = pEditView->m_pEditWnd->GetHwnd();
+			HWND hwndEdit = pEditView->m_editWnd.GetHwnd();
 			PostOutlineNotifyToAllEditors((WPARAM)0, (LPARAM)hwndEdit);
 		}
 	}
@@ -2385,7 +2385,7 @@ BOOL DlgFuncList::OnDestroy(void)
 	// アウトライン ■位置とサイズを記憶する	// 20060201 aroka
 	// 前提条件：m_lParam が Dialog::OnDestroy でクリアされないこと
 	EditView* pEditView = (EditView*)m_lParam;
-	HWND hwndEdit = pEditView->m_pEditWnd->GetHwnd();
+	HWND hwndEdit = pEditView->m_editWnd.GetHwnd();
 	if (!IsDocking() && m_pShareData->common.outline.bRememberOutlineWindowPos) {
 		// 親のウィンドウ位置・サイズを記憶
 		WINDOWPLACEMENT windowPlacement;
@@ -2402,7 +2402,7 @@ BOOL DlgFuncList::OnDestroy(void)
 	// ドッキング画面を閉じるときは画面を再レイアウトする
 	// ドッキングでアプリ終了時には hwndEdit は NULL になっている（親に先に WM_DESTROY が送られるため）
 	if (IsDocking() && hwndEdit) {
-		pEditView->m_pEditWnd->EndLayoutBars();
+		pEditView->m_editWnd.EndLayoutBars();
 	}
 
 	// 明示的にアウトライン画面を閉じたときだけアウトライン表示フラグを OFF にする
@@ -2548,7 +2548,7 @@ BOOL DlgFuncList::OnJump(
 				m_pShareData->workBuffer.logicPoint = poCaret;
 
 				//	2006.07.09 genta 移動時に選択状態を保持するように
-				::SendMessage(((EditView*)m_lParam)->m_pEditWnd->GetHwnd(),
+				::SendMessage(((EditView*)m_lParam)->m_editWnd.GetHwnd(),
 					MYWM_SETCARETPOS, 0, PM_SETCARETPOS_KEEPSELECT );
 			}
 			if (bCheckAutoClose && bFileJumpSelf) {
@@ -2704,7 +2704,7 @@ void DlgFuncList::GetDockSpaceRect(LPRECT pRect)
 		hwnd[nCount] = GetHwnd();
 		++nCount;
 	}
-	hwnd[nCount] = pEditView->m_pEditWnd->GetMiniMap().GetHwnd();
+	hwnd[nCount] = pEditView->m_editWnd.GetMiniMap().GetHwnd();
 	if (hwnd[nCount]) {
 		++nCount;
 	}
@@ -3044,7 +3044,7 @@ INT_PTR DlgFuncList::OnMouseMove(
 		::SetWindowPos(GetHwnd(), NULL,
 			rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top,
 			SWP_NOOWNERZORDER | SWP_NOZORDER | SWP_NOACTIVATE);
-		((EditView*)m_lParam)->m_pEditWnd->EndLayoutBars(m_bEditWndReady);
+		((EditView*)m_lParam)->m_editWnd.EndLayoutBars(m_bEditWndReady);
 
 		// 移動後の配置情報を記憶する
 		GetWindowRect(&rc);
@@ -3143,7 +3143,7 @@ INT_PTR DlgFuncList::OnLButtonUp(
 
 		if (ProfDockSync()) {
 			// 他ウィンドウに変更を通知する
-			HWND hwndEdit = ((EditView*)m_lParam)->m_pEditWnd->GetHwnd();
+			HWND hwndEdit = ((EditView*)m_lParam)->m_editWnd.GetHwnd();
 			PostOutlineNotifyToAllEditors((WPARAM)0, (LPARAM)hwndEdit);
 		}
 		return 1L;
@@ -3355,7 +3355,7 @@ void DlgFuncList::DoMenu(POINT pt, HWND hwndFrom)
 	::DestroyMenu(hMenu);	// サブメニューは再帰的に破棄される
 
 	// メニュー選択された状態に切り替える
-	HWND hwndEdit = pEditView->m_pEditWnd->GetHwnd();
+	HWND hwndEdit = pEditView->m_editWnd.GetHwnd();
 	if (nId == 450) {	// 更新
 		EFunctionCode nFuncCode = GetFuncCodeRedraw(m_nOutlineType);
 		EditView* pEditView = (EditView*)m_lParam;
@@ -3514,7 +3514,7 @@ bool DlgFuncList::ChangeLayout(int nId)
 			// ※ 裏では一時的に Disable 化しておいて開く（タブモードでの不正な画面切り替え抑止）
 			EditView* pEditView = &pDoc->m_pEditWnd->GetActiveView();
 			if (nId == OUTLINE_LAYOUT_BACKGROUND) {
-				::EnableWindow(pEditView->m_pEditWnd->GetHwnd(), FALSE);
+				::EnableWindow(pEditView->m_editWnd.GetHwnd(), FALSE);
 			}
 			if (m_nOutlineType == OutlineType::Default) {
 				bool bType = (ProfDockSet() != 0);
@@ -3528,7 +3528,7 @@ bool DlgFuncList::ChangeLayout(int nId)
 			OutlineType nOutlineType = GetOutlineTypeRedraw(m_nOutlineType);	// ブックマークかアウトライン解析かは最後に開いていた時の状態を引き継ぐ（初期状態はアウトライン解析）
 			pEditView->GetCommander().Command_FUNCLIST(ShowDialogType::Normal, nOutlineType);	// 開く	※ HandleCommand(F_OUTLINE,...) だと印刷Preview状態で実行されないので Command_FUNCLIST()
 			if (nId == OUTLINE_LAYOUT_BACKGROUND) {
-				::EnableWindow(pEditView->m_pEditWnd->GetHwnd(), TRUE);
+				::EnableWindow(pEditView->m_editWnd.GetHwnd(), TRUE);
 			}
 			return true;	// 解析した
 		}
@@ -3563,7 +3563,7 @@ bool DlgFuncList::ChangeLayout(int nId)
 			}
 			// ※ 裏では一時的に Disable 化しておいて開く（タブモードでの不正な画面切り替え抑止）
 			if (nId == OUTLINE_LAYOUT_BACKGROUND) {
-				::EnableWindow(pEditView->m_pEditWnd->GetHwnd(), FALSE);
+				::EnableWindow(pEditView->m_editWnd.GetHwnd(), FALSE);
 			}
 			if (m_nOutlineType == OutlineType::Default) {
 				bool bType = (ProfDockSet() != 0);
@@ -3577,7 +3577,7 @@ bool DlgFuncList::ChangeLayout(int nId)
 			OutlineType nOutlineType = GetOutlineTypeRedraw(m_nOutlineType);
 			pEditView->GetCommander().Command_FUNCLIST(ShowDialogType::Normal, nOutlineType);	// 開く	※ HandleCommand(F_OUTLINE,...) だと印刷Preview状態で実行されないので Command_FUNCLIST()
 			if (nId == OUTLINE_LAYOUT_BACKGROUND) {
-				::EnableWindow(pEditView->m_pEditWnd->GetHwnd(), TRUE);
+				::EnableWindow(pEditView->m_editWnd.GetHwnd(), TRUE);
 			}
 			return true;	// 解析した
 		}
@@ -3623,7 +3623,7 @@ bool DlgFuncList::ChangeLayout(int nId)
 			rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top,
 			SWP_NOOWNERZORDER | SWP_NOZORDER | SWP_NOACTIVATE | ((eDockSideOld == eDockSideNew)? 0: SWP_FRAMECHANGED)
 		);	// SWP_FRAMECHANGED 指定で WM_NCCALCSIZE（非クライアント領域の再計算）に誘導する
-		pEditView->m_pEditWnd->EndLayoutBars(m_bEditWndReady);
+		pEditView->m_editWnd.EndLayoutBars(m_bEditWndReady);
 	}
 	return false;
 }
@@ -3891,7 +3891,7 @@ BOOL DlgFuncList::Track(POINT ptDrag)
 					::MoveWindow(GetHwnd(), rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top, TRUE);
 				}
 				if (ProfDockSync()) {
-					PostOutlineNotifyToAllEditors((WPARAM)0, (LPARAM)((EditView*)m_lParam)->m_pEditWnd->GetHwnd());	// 他ウィンドウにドッキング配置変更を通知する
+					PostOutlineNotifyToAllEditors((WPARAM)0, (LPARAM)((EditView*)m_lParam)->m_editWnd.GetHwnd());	// 他ウィンドウにドッキング配置変更を通知する
 				}
 				return TRUE;
 			}

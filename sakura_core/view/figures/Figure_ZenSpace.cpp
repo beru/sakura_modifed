@@ -19,14 +19,14 @@ bool Figure_ZenSpace::Match(const wchar_t* pText, int nTextLen) const
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 // 全角スペース描画
-void Figure_ZenSpace::DispSpace(Graphics& gr, DispPos* pDispPos, EditView* pView, bool bTrans) const
+void Figure_ZenSpace::DispSpace(Graphics& gr, DispPos* pDispPos, EditView& view, bool bTrans) const
 {
 	// クリッピング矩形を計算。画面外なら描画しない
 	RECT rc;
-	if (pView->GetTextArea().GenerateClipRect(&rc, *pDispPos, 2)) {
+	if (view.GetTextArea().GenerateClipRect(&rc, *pDispPos, 2)) {
 		// 描画
 		const wchar_t* szZenSpace =
-			TypeSupport(pView, COLORIDX_ZENSPACE).IsDisp() ? L"□" : L"　";
+			TypeSupport(view, COLORIDX_ZENSPACE).IsDisp() ? L"□" : L"　";
 		::ExtTextOutW_AnyBuild(
 			gr,
 			pDispPos->GetDrawPos().x,
@@ -35,7 +35,7 @@ void Figure_ZenSpace::DispSpace(Graphics& gr, DispPos* pDispPos, EditView* pView
 			&rc,
 			szZenSpace,
 			wcslen(szZenSpace),
-			pView->GetTextMetrics().GetDxArray_AllZenkaku()
+			view.GetTextMetrics().GetDxArray_AllZenkaku()
 		);
 	}
 

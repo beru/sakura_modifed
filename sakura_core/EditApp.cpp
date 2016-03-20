@@ -46,7 +46,7 @@ void EditApp::Create(HINSTANCE hInst, int nGroupId)
 	m_icons.Create(m_hInst);	//	CreateImage List
 
 	// ƒhƒLƒ…ƒƒ“ƒg‚Ìì¬
-	m_pEditDoc = new EditDoc(this);
+	m_pEditDoc = new EditDoc(*this);
 
 	// IOŠÇ—
 	m_pLoadAgent = new LoadAgent();

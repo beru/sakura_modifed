@@ -79,7 +79,7 @@ void ViewCommander::Command_MENU_RBUTTON(void)
 // カスタムメニュー表示
 int ViewCommander::Command_CUSTMENU(int nMenuIdx)
 {
-	GetEditWindow()->GetMenuDrawer().ResetContents();
+	GetEditWindow().GetMenuDrawer().ResetContents();
 
 	// Oct. 3, 2001 genta
 	FuncLookup& FuncLookup = GetDocument().m_funcLookup;

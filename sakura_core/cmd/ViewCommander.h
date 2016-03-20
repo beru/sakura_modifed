@@ -42,7 +42,7 @@ public:
 public:
 	// ŠO•”ˆË‘¶
 	EditDoc& GetDocument();
-	EditWnd* GetEditWindow();
+	EditWnd& GetEditWindow();
 	HWND GetMainWindow();
 	OpeBlk* GetOpeBlk();
 	void SetOpeBlk(OpeBlk* p);

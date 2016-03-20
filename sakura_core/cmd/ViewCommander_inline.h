@@ -34,9 +34,9 @@ inline EditDoc& ViewCommander::GetDocument()
 	return *m_view.m_pEditDoc;
 }
 
-inline EditWnd* ViewCommander::GetEditWindow()
+inline EditWnd& ViewCommander::GetEditWindow()
 {
-	return m_view.m_pEditWnd;
+	return m_view.m_editWnd;
 }
 
 inline HWND ViewCommander::GetMainWindow()

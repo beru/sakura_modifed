@@ -49,7 +49,7 @@ void EditView::OnLBUTTONDOWN(WPARAM fwKeys, int _xPos , int _yPos)
 	Point ptMouse(_xPos, _yPos);
 
 	if (m_bHokan) {
-		m_pEditWnd->m_hokanMgr.Hide();
+		m_editWnd.m_hokanMgr.Hide();
 		m_bHokan = FALSE;
 	}
 
@@ -151,12 +151,12 @@ void EditView::OnLBUTTONDOWN(WPARAM fwKeys, int _xPos , int _yPos)
 					DWORD dwEffectsSrc = (!m_pEditDoc->IsEditable()) ?
 											DROPEFFECT_COPY: DROPEFFECT_COPY | DROPEFFECT_MOVE;
 					int nOpe = m_pEditDoc->m_docEditor.m_opeBuf.GetCurrentPointer();
-					m_pEditWnd->SetDragSourceView(this);
+					m_editWnd.SetDragSourceView(this);
 					DataObject data(memCurText.GetStringPtr(), memCurText.GetStringLength(), GetSelectionInfo().IsBoxSelecting());
 					dwEffects = data.DragDrop(TRUE, dwEffectsSrc);
-					m_pEditWnd->SetDragSourceView(NULL);
+					m_editWnd.SetDragSourceView(NULL);
 					if (m_pEditDoc->m_docEditor.m_opeBuf.GetCurrentPointer() == nOpe) {	// ドキュメント変更なしか？	// 2007.12.09 ryoji
-						m_pEditWnd->SetActivePane(m_nMyIndex);
+						m_editWnd.SetActivePane(m_nMyIndex);
 						if ((dwEffectsSrc & dwEffects) == DROPEFFECT_MOVE) {
 							// 移動範囲を削除する
 							// ドロップ先が移動を処理したが自ドキュメントにここまで変更が無い
@@ -660,17 +660,17 @@ void EditView::OnMBUTTONUP(WPARAM fwKeys, int xPos , int yPos)
 
 	// ホイール操作によるページスクロールあり
 	if (GetDllShareData().common.general.nPageScrollByWheel == (int)MouseFunctionType::CenterClick &&
-	    m_pEditWnd->IsPageScrollByWheel()
+	    m_editWnd.IsPageScrollByWheel()
 	) {
-		m_pEditWnd->SetPageScrollByWheel(FALSE);
+		m_editWnd.SetPageScrollByWheel(FALSE);
 		return;
 	}
 
 	// ホイール操作によるページスクロールあり
 	if (GetDllShareData().common.general.nHorizontalScrollByWheel == (int)MouseFunctionType::CenterClick &&
-	    m_pEditWnd->IsHScrollByWheel()
+	    m_editWnd.IsHScrollByWheel()
 	) {
-		m_pEditWnd->SetHScrollByWheel(FALSE);
+		m_editWnd.SetHScrollByWheel(FALSE);
 		return;
 	}
 
@@ -832,17 +832,17 @@ void EditView::OnXLBUTTONUP(WPARAM fwKeys, int xPos , int yPos)
 
 	// ホイール操作によるページスクロールあり
 	if (GetDllShareData().common.general.nPageScrollByWheel == (int)MouseFunctionType::LeftSideClick &&
-	    m_pEditWnd->IsPageScrollByWheel()
+	    m_editWnd.IsPageScrollByWheel()
 	) {
-		m_pEditWnd->SetPageScrollByWheel(FALSE);
+		m_editWnd.SetPageScrollByWheel(FALSE);
 		return;
 	}
 
 	// ホイール操作によるページスクロールあり
 	if (GetDllShareData().common.general.nHorizontalScrollByWheel == (int)MouseFunctionType::LeftSideClick &&
-	    m_pEditWnd->IsHScrollByWheel()
+	    m_editWnd.IsHScrollByWheel()
 	) {
-		m_pEditWnd->SetHScrollByWheel(FALSE);
+		m_editWnd.SetHScrollByWheel(FALSE);
 		return;
 	}
 
@@ -894,19 +894,19 @@ void EditView::OnXRBUTTONUP(WPARAM fwKeys, int xPos , int yPos)
 
 	// ホイール操作によるページスクロールあり
 	if (GetDllShareData().common.general.nPageScrollByWheel == (int)MouseFunctionType::RightSideClick &&
-	    m_pEditWnd->IsPageScrollByWheel()
+	    m_editWnd.IsPageScrollByWheel()
 	) {
 		// ホイール操作によるページスクロールありをOFF
-		m_pEditWnd->SetPageScrollByWheel(FALSE);
+		m_editWnd.SetPageScrollByWheel(FALSE);
 		return;
 	}
 
 	// ホイール操作によるページスクロールあり
 	if (GetDllShareData().common.general.nHorizontalScrollByWheel == (int)MouseFunctionType::RightSideClick &&
-	    m_pEditWnd->IsHScrollByWheel()
+	    m_editWnd.IsHScrollByWheel()
 	) {
 		// ホイール操作による横スクロールありをOFF
-		m_pEditWnd->SetHScrollByWheel(FALSE);
+		m_editWnd.SetHScrollByWheel(FALSE);
 		return;
 	}
 
@@ -992,7 +992,7 @@ void EditView::OnMOUSEMOVE(WPARAM fwKeys, int xPos_, int yPos_)
 			if (ptNew.y < 0) {
 				ptNew.y = LayoutYInt(0);
 			}
-			EditView& view = m_pEditWnd->GetActiveView();
+			EditView& view = m_editWnd.GetActiveView();
 			ptNew.x = 0;
 			LogicPoint ptNewLogic;
 			view.GetCaret().GetAdjustCursorPos(&ptNew);
@@ -1414,14 +1414,14 @@ LRESULT EditView::OnMOUSEWHEEL2(
 		if (bKeyPageScroll) {
 			if (bHorizontal) {
 				// ホイール操作による横スクロールあり
-				m_pEditWnd->SetHScrollByWheel(TRUE);
+				m_editWnd.SetHScrollByWheel(TRUE);
 			}
 			// ホイール操作によるページスクロールあり
-			m_pEditWnd->SetPageScrollByWheel(TRUE);
+			m_editWnd.SetPageScrollByWheel(TRUE);
 		}else {
 			if (bHorizontal) {
 				// ホイール操作による横スクロールあり
-				m_pEditWnd->SetHScrollByWheel(TRUE);
+				m_editWnd.SetHScrollByWheel(TRUE);
 			}
 		}
 
@@ -1756,7 +1756,7 @@ STDMETHODIMP EditView::DragEnter(
 	}
 	
 	// 自分をアクティブペインにする
-	m_pEditWnd->SetActivePane(m_nMyIndex);
+	m_editWnd.SetActivePane(m_nMyIndex);
 
 	// 現在のカーソル位置を記憶する	// 2007.12.09 ryoji
 	m_ptCaretPos_DragEnter = GetCaret().GetCaretLayoutPos();
@@ -1785,7 +1785,7 @@ STDMETHODIMP EditView::DragOver(DWORD dwKeyState, POINTL pt, LPDWORD pdwEffect)
 
 	*pdwEffect = TranslateDropEffect(m_cfDragData, dwKeyState, pt, *pdwEffect);
 
-	EditView* pDragSourceView = m_pEditWnd->GetDragSourceView();
+	EditView* pDragSourceView = m_editWnd.GetDragSourceView();
 
 	// ドラッグ元が他ビューで、このビューのカーソルがドラッグ元の選択範囲内の場合は禁止マークにする
 	// ※自ビューのときは禁止マークにしない（他アプリでも多くはそうなっている模様）	// 2009.06.09 ryoji
@@ -1854,7 +1854,7 @@ STDMETHODIMP EditView::Drop(LPDATAOBJECT pDataObject, DWORD dwKeyState, POINTL p
 		return PostMyDropFiles(pDataObject);
 
 	// 外部からのドロップは以後の処理ではコピーと同様に扱う
-	EditView* pDragSourceView = m_pEditWnd->GetDragSourceView();
+	EditView* pDragSourceView = m_editWnd.GetDragSourceView();
 	bMove = (*pdwEffect == DROPEFFECT_MOVE) && pDragSourceView;
 	bBoxData = m_bDragBoxData;
 
@@ -2162,7 +2162,7 @@ void EditView::OnMyDropFiles(HDROP hDrop)
 	switch (nId) {
 	case 110:	// ファイルを開く
 		// 通常のドロップファイル処理を行う
-		::SendMessage(m_pEditWnd->GetHwnd(), WM_DROPFILES, (WPARAM)hDrop, 0);
+		::SendMessage(m_editWnd.GetHwnd(), WM_DROPFILES, (WPARAM)hDrop, 0);
 		break;
 
 	case 100:	// パス名を貼り付ける
@@ -2257,7 +2257,7 @@ DWORD EditView::TranslateDropEffect(CLIPFORMAT cf, DWORD dwKeyState, POINTL pt, 
 	if (cf == CF_HDROP)	// 2008.06.20 ryoji
 		return DROPEFFECT_LINK;
 
-	EditView* pDragSourceView = m_pEditWnd->GetDragSourceView();
+	EditView* pDragSourceView = m_editWnd.GetDragSourceView();
 
 	// 2008.06.21 ryoji
 	// Win 98/Me 環境では外部からのドラッグ時に GetKeyState() ではキー状態を正しく取得できないため、
@@ -2280,7 +2280,7 @@ DWORD EditView::TranslateDropEffect(CLIPFORMAT cf, DWORD dwKeyState, POINTL pt, 
 
 bool EditView::IsDragSource(void)
 {
-	return (this == m_pEditWnd->GetDragSourceView());
+	return (this == m_editWnd.GetDragSourceView());
 }
 
 

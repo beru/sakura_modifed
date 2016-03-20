@@ -206,8 +206,8 @@ LRESULT CALLBACK CEditWndProc(
 EditWnd::EditWnd()
 	:
 	m_hWnd(NULL)
-	, m_toolbar(this)			// warning C4355: 'this' : ベース メンバー初期化子リストで使用されました。
-	, m_statusBar(this)		// warning C4355: 'this' : ベース メンバー初期化子リストで使用されました。
+	, m_toolbar(*this)
+	, m_statusBar(*this)
 	, m_pPrintPreview(NULL) //@@@ 2002.01.14 YAZAKI 印刷PreviewをPrintPreviewに独立させたことによる変更
 	, m_pDragSourceView(NULL)
 	, m_nActivePaneIndex(0)
@@ -623,12 +623,12 @@ HWND EditWnd::Create(
 		m_pEditViewArr[i] = NULL;
 	}
 	// [0] - [3] まで作成・初期化していたものを[0]だけ作る。ほかは分割されるまで何もしない
-	m_pEditViewArr[0] = new EditView(this);
+	m_pEditViewArr[0] = new EditView(*this);
 	m_pEditView = m_pEditViewArr[0];
 
 	m_pViewFont = new ViewFont(&GetLogfont());
 
-	m_pEditViewMiniMap = new EditView(this);
+	m_pEditViewMiniMap = new EditView(*this);
 
 	m_pViewFontMiniMap = new ViewFont(&GetLogfont(), true);
 
@@ -2955,7 +2955,7 @@ void EditWnd::PrintPreviewModeONOFF(void)
 		::ShowWindow(m_dlgGrep.GetHwnd(), SW_HIDE);
 
 //@@@ 2002.01.14 YAZAKI 印刷PreviewをPrintPreviewに独立させたことによる変更
-		m_pPrintPreview = new PrintPreview(this);
+		m_pPrintPreview = new PrintPreview(*this);
 		// 現在の印刷設定
 		m_pPrintPreview->SetPrintSetting(
 			&m_pShareData->printSettingArr[
@@ -4259,7 +4259,7 @@ bool EditWnd::CreateEditViewBySplit(int nViewCount)
 	if (GetAllViewCount() < nViewCount) {
 		for (int i=GetAllViewCount(); i<nViewCount; ++i) {
 			assert(!m_pEditViewArr[i]);
-			m_pEditViewArr[i] = new EditView(this);
+			m_pEditViewArr[i] = new EditView(*this);
 			m_pEditViewArr[i]->Create(m_splitterWnd.GetHwnd(), GetDocument(), i, FALSE, false);
 		}
 		m_nEditViewCount = nViewCount;

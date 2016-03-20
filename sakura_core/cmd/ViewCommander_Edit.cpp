@@ -469,7 +469,7 @@ void ViewCommander::Command_UNDO(void)
 			if (bFastMode) {
 				if (i == 0) {
 					layoutMgr._DoLayout();
-					GetEditWindow()->ClearViewCaretPosInfo();
+					GetEditWindow().ClearViewCaretPosInfo();
 					if (GetDocument().m_nTextWrapMethodCur == TextWrappingMethod::NoWrapping) {
 						layoutMgr.CalculateTextWidth();
 					}
@@ -526,8 +526,8 @@ void ViewCommander::Command_UNDO(void)
 
 		caret.ShowCaretPosInfo();	// キャレットの行桁位置を表示する	// 2007.10.19 ryoji
 
-		if (!GetEditWindow()->UpdateTextWrap() && bDrawAll) {	// 折り返し方法関連の更新	// 2008.06.10 ryoji
-			GetEditWindow()->RedrawAllViews(&m_view);	// 他のペインの表示を更新
+		if (!GetEditWindow().UpdateTextWrap() && bDrawAll) {	// 折り返し方法関連の更新	// 2008.06.10 ryoji
+			GetEditWindow().RedrawAllViews(&m_view);	// 他のペインの表示を更新
 		}
 		if (hwndProgress) {
 			::ShowWindow(hwndProgress, SW_HIDE);
@@ -715,7 +715,7 @@ void ViewCommander::Command_REDO(void)
 			if (bFastMode) {
 				if (i == nOpeBlkNum - 1) {
 					layoutMgr._DoLayout();
-					GetEditWindow()->ClearViewCaretPosInfo();
+					GetEditWindow().ClearViewCaretPosInfo();
 					if (GetDocument().m_nTextWrapMethodCur == TextWrappingMethod::NoWrapping) {
 						layoutMgr.CalculateTextWidth();
 					}
@@ -770,8 +770,8 @@ void ViewCommander::Command_REDO(void)
 
 		caret.ShowCaretPosInfo();	// キャレットの行桁位置を表示する	// 2007.10.19 ryoji
 
-		if (!GetEditWindow()->UpdateTextWrap())	// 折り返し方法関連の更新	// 2008.06.10 ryoji
-			GetEditWindow()->RedrawAllViews(&m_view);	// 他のペインの表示を更新
+		if (!GetEditWindow().UpdateTextWrap())	// 折り返し方法関連の更新	// 2008.06.10 ryoji
+			GetEditWindow().RedrawAllViews(&m_view);	// 他のペインの表示を更新
 
 		if (hwndProgress) {
 			::ShowWindow(hwndProgress, SW_HIDE);

@@ -15,11 +15,11 @@ bool Figure_CtrlCode::Match(const wchar_t* pText, int nTextLen) const
 	return (!(pText[0] & 0xFF80) && WCODE::IsControlCode(pText[0]));
 }
 
-void Figure_CtrlCode::DispSpace(Graphics& gr, DispPos* pDispPos, EditView* pView, bool bTrans) const
+void Figure_CtrlCode::DispSpace(Graphics& gr, DispPos* pDispPos, EditView& view, bool bTrans) const
 {
 	// クリッピング矩形を計算。画面外なら描画しない
 	RECT rc;
-	if (pView->GetTextArea().GenerateClipRect(&rc, *pDispPos, 1)) {
+	if (view.GetTextArea().GenerateClipRect(&rc, *pDispPos, 1)) {
 		::ExtTextOutW_AnyBuild(
 			gr,
 			pDispPos->GetDrawPos().x,
@@ -28,7 +28,7 @@ void Figure_CtrlCode::DispSpace(Graphics& gr, DispPos* pDispPos, EditView* pView
 			&rc,
 			L"･",
 			1,
-			pView->GetTextMetrics().GetDxArray_AllHankaku()
+			view.GetTextMetrics().GetDxArray_AllHankaku()
 		);
 	}
 
@@ -54,11 +54,11 @@ bool Figure_HanBinary::Match(const wchar_t* pText, int nTextLen) const
 	return false;
 }
 
-void Figure_HanBinary::DispSpace(Graphics& gr, DispPos* pDispPos, EditView* pView, bool bTrans) const
+void Figure_HanBinary::DispSpace(Graphics& gr, DispPos* pDispPos, EditView& view, bool bTrans) const
 {
 	// クリッピング矩形を計算。画面外なら描画しない
 	RECT rc;
-	if (pView->GetTextArea().GenerateClipRect(&rc, *pDispPos, 1)) {
+	if (view.GetTextArea().GenerateClipRect(&rc, *pDispPos, 1)) {
 		::ExtTextOutW_AnyBuild(
 			gr,
 			pDispPos->GetDrawPos().x,
@@ -67,7 +67,7 @@ void Figure_HanBinary::DispSpace(Graphics& gr, DispPos* pDispPos, EditView* pVie
 			&rc,
 			L"〓",
 			1,
-			pView->GetTextMetrics().GetDxArray_AllHankaku()
+			view.GetTextMetrics().GetDxArray_AllHankaku()
 		);
 	}
 
@@ -93,11 +93,11 @@ bool Figure_ZenBinary::Match(const wchar_t* pText, int nTextLen) const
 	return false;
 }
 
-void Figure_ZenBinary::DispSpace(Graphics& gr, DispPos* pDispPos, EditView* pView, bool bTrans) const
+void Figure_ZenBinary::DispSpace(Graphics& gr, DispPos* pDispPos, EditView& view, bool bTrans) const
 {
 	// クリッピング矩形を計算。画面外なら描画しない
 	RECT rc;
-	if (pView->GetTextArea().GenerateClipRect(&rc, *pDispPos, 2)) {
+	if (view.GetTextArea().GenerateClipRect(&rc, *pDispPos, 2)) {
 		::ExtTextOutW_AnyBuild(
 			gr,
 			pDispPos->GetDrawPos().x,
@@ -106,7 +106,7 @@ void Figure_ZenBinary::DispSpace(Graphics& gr, DispPos* pDispPos, EditView* pVie
 			&rc,
 			L"〓",
 			1,
-			pView->GetTextMetrics().GetDxArray_AllZenkaku()
+			view.GetTextMetrics().GetDxArray_AllZenkaku()
 		);
 	}
 

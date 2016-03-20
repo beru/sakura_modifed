@@ -35,7 +35,7 @@ public:
 	}
 
 	// action
-	void DispSpace(Graphics& gr, DispPos* pDispPos, EditView* pView, bool bTrans) const;
+	void DispSpace(Graphics& gr, DispPos* pDispPos, EditView& view, bool bTrans) const;
 	EColorIndexType GetColorIdx(void) const { return COLORIDX_TAB; }
 };
 

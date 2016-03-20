@@ -3,9 +3,9 @@
 #include "window/EditWnd.h"
 #include "EditApp.h"
 
-MainStatusBar::MainStatusBar(EditWnd* pOwner)
+MainStatusBar::MainStatusBar(EditWnd& owner)
 	:
-	m_pOwner(pOwner),
+	m_owner(owner),
 	m_hwndStatusBar(NULL),
 	m_hwndProgressBar(NULL)
 {
@@ -22,7 +22,7 @@ void MainStatusBar::CreateStatusBar()
 	m_hwndStatusBar = ::CreateStatusWindow(
 		WS_CHILD/* | WS_VISIBLE*/ | WS_EX_RIGHT | SBARS_SIZEGRIP,	// 2007.03.08 ryoji WS_VISIBLE 除去
 		_T(""),
-		m_pOwner->GetHwnd(),
+		m_owner.GetHwnd(),
 		IDW_STATUSBAR
 	);
 
@@ -42,12 +42,12 @@ void MainStatusBar::CreateStatusBar()
 		0
 	);
 
-	if (m_pOwner->m_funcKeyWnd.GetHwnd()) {
-		m_pOwner->m_funcKeyWnd.SizeBox_ONOFF(false);
+	if (m_owner.m_funcKeyWnd.GetHwnd()) {
+		m_owner.m_funcKeyWnd.SizeBox_ONOFF(false);
 	}
 
 	// スプリッターの、サイズボックスの位置を変更
-	m_pOwner->m_splitterWnd.DoSplit(-1, -1);
+	m_owner.m_splitterWnd.DoSplit(-1, -1);
 }
 
 
@@ -61,7 +61,7 @@ void MainStatusBar::DestroyStatusBar()
 	::DestroyWindow(m_hwndStatusBar);
 	m_hwndStatusBar = NULL;
 
-	if (m_pOwner->m_funcKeyWnd.GetHwnd()) {
+	if (m_owner.m_funcKeyWnd.GetHwnd()) {
 		bool bSizeBox;
 		if (GetDllShareData().common.window.nFuncKeyWnd_Place == 0) {	// ファンクションキー表示位置／0:上 1:下
 			// サイズボックスの表示／非表示切り替え
@@ -73,10 +73,10 @@ void MainStatusBar::DestroyStatusBar()
 				bSizeBox = false;
 			}
 		}
-		m_pOwner->m_funcKeyWnd.SizeBox_ONOFF(bSizeBox);
+		m_owner.m_funcKeyWnd.SizeBox_ONOFF(bSizeBox);
 	}
 	// スプリッターの、サイズボックスの位置を変更
-	m_pOwner->m_splitterWnd.DoSplit(-1, -1);
+	m_owner.m_splitterWnd.DoSplit(-1, -1);
 }
 
 

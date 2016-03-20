@@ -12,9 +12,9 @@
 #include "env/DllSharedData.h"
 #include "types/TypeSupport.h"
 
-ViewSelect::ViewSelect(EditView* pEditView)
+ViewSelect::ViewSelect(EditView& editView)
 	:
-	m_pEditView(pEditView)
+	m_editView(editView)
 {
 	m_bSelectingLock   = false;	// 選択状態のロック
 	m_bBeginSelect     = false;		// 範囲選択中
@@ -45,10 +45,10 @@ void ViewSelect::CopySelectStatus(ViewSelect* pSelect) const
 // 現在のカーソル位置から選択を開始する
 void ViewSelect::BeginSelectArea(const LayoutPoint* po)
 {
-	const EditView* pView = GetEditView();
+	const EditView& view = GetEditView();
 	LayoutPoint temp;
 	if (!po) {
-		temp = pView->GetCaret().GetCaretLayoutPos();
+		temp = view.GetCaret().GetCaretLayoutPos();
 		po = &temp;
 	}
 	m_selectBgn.Set(*po); // 範囲選択(原点)
@@ -59,8 +59,8 @@ void ViewSelect::BeginSelectArea(const LayoutPoint* po)
 // 現在の選択範囲を非選択状態に戻す
 void ViewSelect::DisableSelectArea(bool bDraw, bool bDrawBracketCursorLine)
 {
-	const EditView* pView = GetEditView();
-	EditView* pView2 = GetEditView();
+	const EditView& view = GetEditView();
+	EditView& view2 = GetEditView();
 
 	m_selectOld = m_select;		// 範囲選択(Old)
 	m_select.Clear(-1);
@@ -78,7 +78,7 @@ void ViewSelect::DisableSelectArea(bool bDraw, bool bDrawBracketCursorLine)
 	m_nLastSelectedByteLen = 0;		// 前回選択時の選択バイト数
 
 	// 2002.02.16 hor 直前のカーソル位置をリセット
-	pView2->GetCaret().m_nCaretPosX_Prev = pView->GetCaret().GetCaretLayoutPos().GetX();
+	view2.GetCaret().m_nCaretPosX_Prev = view.GetCaret().GetCaretLayoutPos().GetX();
 
 }
 
@@ -151,19 +151,19 @@ void ViewSelect::ChangeSelectAreaByCurrentCursorTEST(
 */
 void ViewSelect::DrawSelectArea(bool bDrawBracketCursorLine)
 {
-	EditView* pView = GetEditView();
+	EditView& view = GetEditView();
 
-	if (!pView->GetDrawSwitch()) {
+	if (!view.GetDrawSwitch()) {
 		return;
 	}
 	m_bDrawSelectArea = true;
 	
-	bool bDispText = TypeSupport(pView, COLORIDX_SELECT).IsDisp();
+	bool bDispText = TypeSupport(view, COLORIDX_SELECT).IsDisp();
 	if (bDispText) {
 		if (m_select != m_selectOld) {
 			// 選択色表示の時は、WM_PAINT経由で作画
-			const int nCharWidth = pView->GetTextMetrics().GetHankakuDx();
-			const TextArea& area =  pView->GetTextArea();
+			const int nCharWidth = view.GetTextMetrics().GetHankakuDx();
+			const TextArea& area =  view.GetTextArea();
 			LayoutRect rcOld; // LayoutRect
 			TwoPointToRect(&rcOld, m_selectOld.GetFrom(), m_selectOld.GetTo());
 			LayoutRect rcNew; // LayoutRect
@@ -209,7 +209,7 @@ void ViewSelect::DrawSelectArea(bool bDrawBracketCursorLine)
 				rc.UnionStrictRect(rcOld, rcNew);
 			}
 			Rect rcPx;
-			if (pView->IsBkBitmap() || drawRight == -1) {
+			if (view.IsBkBitmap() || drawRight == -1) {
 				// 背景表示のクリッピングが甘いので左右を指定しない
 				rcPx.left   =  0;
 				rcPx.right  = SHRT_MAX; 
@@ -221,9 +221,8 @@ void ViewSelect::DrawSelectArea(bool bDrawBracketCursorLine)
 			rcPx.bottom = area.GenerateYPx(rc.bottom + 1);
 
 			Rect rcArea;
-			pView->GetTextArea().GenerateTextAreaRect(&rcArea);
+			view.GetTextArea().GenerateTextAreaRect(&rcArea);
 			RECT rcUpdate;
-			EditView& view = *pView;
 			if (::IntersectRect(&rcUpdate, &rcPx, &rcArea)) {
 				HDC hdc = view.GetDC();
 				PAINTSTRUCT ps;
@@ -243,16 +242,16 @@ void ViewSelect::DrawSelectArea(bool bDrawBracketCursorLine)
 	}else {
 		if (IsTextSelecting() && (!m_selectOld.IsValid() || m_selectOld.IsOne())) {
 			m_bDrawSelectArea = false;
-			pView->DrawBracketPair( false );
+			view.DrawBracketPair( false );
 			m_bDrawSelectArea = true;
 		}
-		HDC hdc = pView->GetDC();
+		HDC hdc = view.GetDC();
 		DrawSelectArea2(hdc);
 		// 2011.12.02 選択解除状態での、カーソル位置ライン復帰
 		if (bDrawBracketCursorLine) {
-			pView->GetCaret().m_underLine.CaretUnderLineON(true, false);
+			view.GetCaret().m_underLine.CaretUnderLineON(true, false);
 		}
-		pView->ReleaseDC(hdc);
+		view.ReleaseDC(hdc);
 	}
 
 	// 2011.12.02 選択解除状態になると対括弧強調ができなくなるバグ対策
@@ -260,8 +259,8 @@ void ViewSelect::DrawSelectArea(bool bDrawBracketCursorLine)
 		// ただし選択ロック中はここでは強調表示されない
 		m_bDrawSelectArea = false;
 		if (bDrawBracketCursorLine) {
-			pView->SetBracketPairPos(true);
-			pView->DrawBracketPair(true);
+			view.SetBracketPairPos(true);
+			view.DrawBracketPair(true);
 		}
 	}
 
@@ -274,7 +273,7 @@ void ViewSelect::DrawSelectArea(bool bDrawBracketCursorLine)
 */
 void ViewSelect::DrawSelectArea2(HDC hdc) const
 {
-	EditView const * const pView = GetEditView();
+	auto& view = GetEditView();
 
 	// 2006.10.01 Moca 重複コード統合
 	HBRUSH	hBrush = ::CreateSolidBrush(SELECTEDAREA_RGB);
@@ -283,15 +282,15 @@ void ViewSelect::DrawSelectArea2(HDC hdc) const
 	// From Here 2007.09.09 Moca 互換BMPによる画面バッファ
 	HBRUSH	hBrushCompatOld = 0;
 	int		nROPCompatOld = 0;
-	bool bCompatBMP = pView->m_hbmpCompatBMP && hdc != pView->m_hdcCompatDC;
+	bool bCompatBMP = view.m_hbmpCompatBMP && hdc != view.m_hdcCompatDC;
 	if (bCompatBMP) {
-		hBrushCompatOld = (HBRUSH)::SelectObject(pView->m_hdcCompatDC, hBrush);
-		nROPCompatOld = ::SetROP2(pView->m_hdcCompatDC, SELECTEDAREA_ROP2);
+		hBrushCompatOld = (HBRUSH)::SelectObject(view.m_hdcCompatDC, hBrush);
+		nROPCompatOld = ::SetROP2(view.m_hdcCompatDC, SELECTEDAREA_ROP2);
 	}
 	// To Here 2007.09.09 Moca
 
 //	MYTRACE(_T("DrawSelectArea()  m_bBeginBoxSelect=%hs\n", m_bBeginBoxSelect?"true":"false"));
-	auto& textArea = pView->GetTextArea();
+	auto& textArea = view.GetTextArea();
 	if (IsBoxSelecting()) {		// 矩形範囲選択中
 		// 2001.12.21 hor 矩形エリアにEOFがある場合、RGN_XORで結合すると
 		// EOF以降のエリアも反転してしまうので、この場合はRedrawを使う
@@ -303,8 +302,8 @@ void ViewSelect::DrawSelectArea2(HDC hdc) const
 		//	return;
 		//}
 
-		const int nCharWidth = pView->GetTextMetrics().GetHankakuDx();
-		const int nCharHeight = pView->GetTextMetrics().GetHankakuDy();
+		const int nCharWidth = view.GetTextMetrics().GetHankakuDx();
+		const int nCharHeight = view.GetTextMetrics().GetHankakuDy();
 
 		// 2点を対角とする矩形を求める
 		LayoutRect  rcOld;
@@ -363,10 +362,10 @@ void ViewSelect::DrawSelectArea2(HDC hdc) const
 
 				// 2006.10.01 Moca Start EOF位置計算をGetEndLayoutPosに書き換え。
 				LayoutPoint ptLast;
-				pView->m_pEditDoc->m_layoutMgr.GetEndLayoutPos(&ptLast);
+				view.m_pEditDoc->m_layoutMgr.GetEndLayoutPos(&ptLast);
 				// 2006.10.01 Moca End
 				// 2011.12.26 EOFのぶら下がり行は反転し、EOFのみの行は反転しない
-				const Layout* pBottom = pView->m_pEditDoc->m_layoutMgr.GetBottomLayout();
+				const Layout* pBottom = view.m_pEditDoc->m_layoutMgr.GetBottomLayout();
 				if (pBottom && pBottom->GetLayoutEol() == EolType::None) {
 					ptLast.x = 0;
 					ptLast.y++;
@@ -394,7 +393,7 @@ void ViewSelect::DrawSelectArea2(HDC hdc) const
 				::PaintRgn(hdc, hrgnDraw);
 				// From Here 2007.09.09 Moca 互換BMPによる画面バッファ
 				if (bCompatBMP) {
-					::PaintRgn(pView->m_hdcCompatDC, hrgnDraw);
+					::PaintRgn(view.m_hdcCompatDC, hrgnDraw);
 				}
 				// To Here 2007.09.09 Moca
 			}
@@ -465,8 +464,8 @@ void ViewSelect::DrawSelectArea2(HDC hdc) const
 
 	// From Here 2007.09.09 Moca 互換BMPによる画面バッファ
 	if (bCompatBMP) {
-		::SetROP2(pView->m_hdcCompatDC, nROPCompatOld);
-		::SelectObject(pView->m_hdcCompatDC, hBrushCompatOld);
+		::SetROP2(view.m_hdcCompatDC, nROPCompatOld);
+		::SelectObject(view.m_hdcCompatDC, hBrushCompatOld);
 	}
 	// To Here 2007.09.09 Moca
 
@@ -490,16 +489,16 @@ void ViewSelect::DrawSelectAreaLine(
 	const LayoutRange&	range		// [in] 選択範囲(レイアウト単位)
 	) const
 {
-	EditView const * const pView = m_pEditView;
-	bool bCompatBMP = pView->m_hbmpCompatBMP && hdc != pView->m_hdcCompatDC;
+	auto& view = m_editView;
+	bool bCompatBMP = view.m_hbmpCompatBMP && hdc != view.m_hdcCompatDC;
 
-	const LayoutMgr& layoutMgr = pView->m_pEditDoc->m_layoutMgr;
+	auto& layoutMgr = view.m_pEditDoc->m_layoutMgr;
 	const Layout* pLayout = layoutMgr.SearchLineByLayoutY(nLineNum);
 	LayoutRange lineArea;
 	GetSelectAreaLineFromRange(lineArea, nLineNum, pLayout, range);
 	LayoutInt nSelectFrom = lineArea.GetFrom().GetX2();
 	LayoutInt nSelectTo = lineArea.GetTo().GetX2();
-	auto& textArea = pView->GetTextArea();
+	auto& textArea = view.GetTextArea();
 	if (nSelectFrom == INT_MAX || nSelectTo == INT_MAX) {
 		LayoutInt nPosX = LayoutInt(0);
 		MemoryIterator it = MemoryIterator(pLayout, layoutMgr.GetTabSpace());
@@ -530,8 +529,8 @@ void ViewSelect::DrawSelectAreaLine(
 	if (nSelectFrom < textArea.GetViewLeftCol()) {
 		nSelectFrom = textArea.GetViewLeftCol();
 	}
-	int		nLineHeight = pView->GetTextMetrics().GetHankakuDy();
-	int		nCharWidth = pView->GetTextMetrics().GetHankakuDx();
+	int		nLineHeight = view.GetTextMetrics().GetHankakuDy();
+	int		nCharWidth = view.GetTextMetrics().GetHankakuDx();
 	Rect	rcClip; // px
 	rcClip.left		= (textArea.GetAreaLeft() - (Int)textArea.GetViewLeftCol() * nCharWidth) + (Int)nSelectFrom * nCharWidth;
 	rcClip.right	= (textArea.GetAreaLeft() - (Int)textArea.GetViewLeftCol() * nCharWidth) + (Int)nSelectTo   * nCharWidth;
@@ -544,7 +543,7 @@ void ViewSelect::DrawSelectAreaLine(
 	if (rcClip.right != rcClip.left) {
 		LayoutRange selectOld = m_select;
 		const_cast<LayoutRange*>(&m_select)->Clear(-1);
-		pView->GetCaret().m_underLine.CaretUnderLineOFF(true, false, true);
+		view.GetCaret().m_underLine.CaretUnderLineOFF(true, false, true);
 		*(const_cast<LayoutRange*>(&m_select)) = selectOld;
 		
 		// 2006.03.28 Moca 表示域内のみ処理する
@@ -553,7 +552,7 @@ void ViewSelect::DrawSelectAreaLine(
 			::PaintRgn(hdc, hrgnDraw);
 			// From Here 2007.09.09 Moca 互換BMPによる画面バッファ
 			if (bCompatBMP) {
-				::PaintRgn(pView->m_hdcCompatDC, hrgnDraw);
+				::PaintRgn(view.m_hdcCompatDC, hrgnDraw);
 			}
 			// To Here 2007.09.09 Moca
 			::DeleteObject(hrgnDraw);
@@ -568,7 +567,7 @@ void ViewSelect::GetSelectAreaLineFromRange(
 	const LayoutRange&	range
 	) const
 {
-	const EditView& view = *GetEditView();
+	const EditView& view = GetEditView();
 	if (nLineNum >= range.GetFrom().y && nLineNum <= range.GetTo().y ||
 		nLineNum >= range.GetTo().y && nLineNum <= range.GetFrom().y
 	) {
@@ -624,21 +623,21 @@ void ViewSelect::GetSelectAreaLineFromRange(
 */
 void ViewSelect::PrintSelectionInfoMsg() const
 {
-	const EditView* pView = GetEditView();
+	auto& view = GetEditView();
 
 	//	出力されないなら計算を省略
-	if (!pView->m_pEditWnd->m_statusBar.SendStatusMessage2IsEffective())
+	if (!view.m_editWnd.m_statusBar.SendStatusMessage2IsEffective())
 		return;
 
-	LayoutInt nLineCount = pView->m_pEditDoc->m_layoutMgr.GetLineCount();
+	LayoutInt nLineCount = view.m_pEditDoc->m_layoutMgr.GetLineCount();
 	if (!IsTextSelected() || m_select.GetFrom().y >= nLineCount) { // 先頭行が実在しない
-		const_cast<EditView*>(pView)->GetCaret().m_bClearStatus = false;
+		const_cast<EditView&>(view).GetCaret().m_bClearStatus = false;
 		if (IsBoxSelecting()) {
-			pView->m_pEditWnd->m_statusBar.SendStatusMessage2(_T("box selecting"));
+			view.m_editWnd.m_statusBar.SendStatusMessage2(_T("box selecting"));
 		}else if (m_bSelectingLock) {
-			pView->m_pEditWnd->m_statusBar.SendStatusMessage2(_T("selecting"));
+			view.m_editWnd.m_statusBar.SendStatusMessage2(_T("selecting"));
 		}else {
-			pView->m_pEditWnd->m_statusBar.SendStatusMessage2(_T(""));
+			view.m_editWnd.m_statusBar.SendStatusMessage2(_T(""));
 		}
 		return;
 	}
@@ -673,12 +672,12 @@ void ViewSelect::PrintSelectionInfoMsg() const
 
 		// 共通設定・選択文字数を文字単位ではなくバイト単位で表示する
 		bool bCountByByteCommon = GetDllShareData().common.statusBar.bDispSelCountByByte;
-		bool bCountByByte = (pView->m_pEditWnd->m_nSelectCountMode == SelectCountMode::Toggle ?
+		bool bCountByByte = (view.m_editWnd.m_nSelectCountMode == SelectCountMode::Toggle ?
 								bCountByByteCommon :
-								pView->m_pEditWnd->m_nSelectCountMode == SelectCountMode::ByByte);
+								view.m_editWnd.m_nSelectCountMode == SelectCountMode::ByByte);
 
 		//	1行目
-		pLine = pView->m_pEditDoc->m_layoutMgr.GetLineStr(m_select.GetFrom().GetY2(), &nLineLen, &pLayout);
+		pLine = view.m_pEditDoc->m_layoutMgr.GetLineStr(m_select.GetFrom().GetY2(), &nLineLen, &pLayout);
 		if (pLine) {
 			if (bCountByByte) {
 				//  バイト数でカウント
@@ -694,9 +693,9 @@ void ViewSelect::PrintSelectionInfoMsg() const
 				bool bSelExtend;						// 選択領域拡大フラグ
 
 				// 最終行の処理
-				pLine = pView->m_pEditDoc->m_layoutMgr.GetLineStr(m_select.GetTo().y, &nLineLen, &pLayout);
+				pLine = view.m_pEditDoc->m_layoutMgr.GetLineStr(m_select.GetTo().y, &nLineLen, &pLayout);
 				if (pLine) {
-					if (pView->LineColumnToIndex(pLayout, m_select.GetTo().GetX2()) == 0) {
+					if (view.LineColumnToIndex(pLayout, m_select.GetTo().GetX2()) == 0) {
 						//	最終行の先頭にキャレットがある場合は
 						//	その行を行数に含めない
 						--select_line;
@@ -719,7 +718,7 @@ void ViewSelect::PrintSelectionInfoMsg() const
 						thiz->m_select = LayoutRange(m_selectOld.GetTo(), m_select.GetTo());
 					}
 
-					const_cast<EditView*>(pView)->GetSelectedDataSimple(memW);
+					const_cast<EditView&>(view).GetSelectedDataSimple(memW);
 					thiz->m_select = rngSelect;		// m_selectを元に戻す
 				}else if (
 					m_bSelectAreaChanging
@@ -735,16 +734,16 @@ void ViewSelect::PrintSelectionInfoMsg() const
 						thiz->m_select = LayoutRange(m_selectOld.GetFrom(), m_select.GetFrom());
 					}
 
-					const_cast<EditView*>(pView)->GetSelectedDataSimple(memW);
+					const_cast<EditView&>(view).GetSelectedDataSimple(memW);
 					thiz->m_select = rngSelect;		// m_selectを元に戻す
 				}else {
 					// 選択領域全体をコード変換対象にする
-					const_cast<EditView*>(pView)->GetSelectedDataSimple(memW);
+					const_cast<EditView&>(view).GetSelectedDataSimple(memW);
 					bSelExtend = true;
 					thiz->m_nLastSelectedByteLen = 0;
 				}
 				//  現在の文字コードに変換し、バイト長を取得する
-				CodeBase* pCode = CodeFactory::CreateCodeBase(pView->m_pEditDoc->GetDocumentEncoding(), false);
+				CodeBase* pCode = CodeFactory::CreateCodeBase(view.m_pEditDoc->GetDocumentEncoding(), false);
 				pCode->UnicodeToCode(memW, &memCode);
 				delete pCode;
 
@@ -765,13 +764,13 @@ void ViewSelect::PrintSelectionInfoMsg() const
 				//	1行だけ選択されている場合
 				if (m_select.IsLineOne()) {
 					select_sum =
-						pView->LineColumnToIndex(pLayout, m_select.GetTo().GetX2())
-						- pView->LineColumnToIndex(pLayout, m_select.GetFrom().GetX2());
+						view.LineColumnToIndex(pLayout, m_select.GetTo().GetX2())
+						- view.LineColumnToIndex(pLayout, m_select.GetFrom().GetX2());
 				}else {	//	2行以上選択されている場合
 					select_sum =
 						pLayout->GetLengthWithoutEOL()
 						+ pLayout->GetLayoutEol().GetLen()
-						- pView->LineColumnToIndex(pLayout, m_select.GetFrom().GetX2());
+						- view.LineColumnToIndex(pLayout, m_select.GetFrom().GetX2());
 
 					//	GetSelectedDataと似ているが，先頭行と最終行は排除している
 					//	Aug. 16, 2005 aroka nLineNumはfor以降でも使われるのでforの前で宣言する
@@ -781,7 +780,7 @@ void ViewSelect::PrintSelectionInfoMsg() const
 						nLineNum < m_select.GetTo().GetY2();
 						++nLineNum
 					) {
-						pLine = pView->m_pEditDoc->m_layoutMgr.GetLineStr(nLineNum, &nLineLen, &pLayout);
+						pLine = view.m_pEditDoc->m_layoutMgr.GetLineStr(nLineNum, &nLineLen, &pLayout);
 						//	2006.06.06 ryoji 指定行のデータが存在しない場合の対策
 						if (!pLine)
 							break;
@@ -789,9 +788,9 @@ void ViewSelect::PrintSelectionInfoMsg() const
 					}
 
 					//	最終行の処理
-					pLine = pView->m_pEditDoc->m_layoutMgr.GetLineStr(nLineNum, &nLineLen, &pLayout);
+					pLine = view.m_pEditDoc->m_layoutMgr.GetLineStr(nLineNum, &nLineLen, &pLayout);
 					if (pLine) {
-						int last_line_chars = pView->LineColumnToIndex(pLayout, m_select.GetTo().GetX2());
+						int last_line_chars = view.LineColumnToIndex(pLayout, m_select.GetTo().GetX2());
 						select_sum += last_line_chars;
 						if (last_line_chars == 0) {
 							//	最終行の先頭にキャレットがある場合は
@@ -825,7 +824,7 @@ void ViewSelect::PrintSelectionInfoMsg() const
 		);
 #endif
 	}
-	const_cast<EditView*>(pView)->GetCaret().m_bClearStatus = false;
-	pView->m_pEditWnd->m_statusBar.SendStatusMessage2(msg);
+	const_cast<EditView&>(view).GetCaret().m_bClearStatus = false;
+	view.m_editWnd.m_statusBar.SendStatusMessage2(msg);
 }
 

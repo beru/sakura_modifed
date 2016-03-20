@@ -1180,7 +1180,7 @@ void ESI::GetDebugInfo(const char* pS, const int nLen, NativeT* pcmtxtOut)
 	TCHAR szWork[10240];
 	int v1, v2, v3, v4;
 
-	EditDoc& doc = *EditWnd::getInstance()->GetDocument();
+	EditDoc& doc = EditWnd::getInstance().GetDocument();
 	ESI esi(doc.m_docType.GetDocumentAttribute().encoding);
 
 	// テスト実行

@@ -297,7 +297,7 @@ LayoutInt Caret::MoveCursor(
 			textArea.OffsetViewTopLine(-nScrollRowNum);
 			if (m_editView.GetDrawSwitch()) {
 				m_editView.InvalidateRect(NULL);
-				if (m_editView.m_pEditWnd->GetMiniMap().GetHwnd()) {
+				if (m_editView.m_editWnd.GetMiniMap().GetHwnd()) {
 					m_editView.MiniMapRedraw(true);
 				}
 			}
@@ -328,7 +328,7 @@ LayoutInt Caret::MoveCursor(
 
 			if (m_editView.GetDrawSwitch()) {
 				m_editView.ScrollDraw(nScrollRowNum, nScrollColNum, rcScroll, rcClip, rcClip2);
-				if (m_editView.m_pEditWnd->GetMiniMap().GetHwnd()) {
+				if (m_editView.m_editWnd.GetMiniMap().GetHwnd()) {
 					m_editView.MiniMapRedraw(false);
 				}
 			}

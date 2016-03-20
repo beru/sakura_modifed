@@ -96,7 +96,7 @@ bool ViewCommander::HandleCommand(
 //	}
 	// ˆóüPreviewƒ‚[ƒh‚©
 //@@@ 2002.01.14 YAZAKI ˆóüPreview‚ðPrintPreview‚É“Æ—§‚³‚¹‚½‚±‚Æ‚É‚æ‚é•ÏX
-	if (GetEditWindow()->m_pPrintPreview && nCommand != F_PRINT_PREVIEW) {
+	if (GetEditWindow().m_pPrintPreview && nCommand != F_PRINT_PREVIEW) {
 		ErrorBeep();
 		return true;
 	}

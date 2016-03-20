@@ -203,7 +203,7 @@ void EditView::ViewDiffInfo(
 
 
 	//分割したビューも更新
-	m_pEditWnd->Views_Redraw();
+	m_editWnd.Views_Redraw();
 
 	return;
 					}
@@ -353,13 +353,13 @@ void EditView::AnalyzeDiffInfo(
 
 	// 抽出したDIFF情報から行番号に差分マークを付ける
 	if (nFlgFile12 == 0) {	// 編集中ファイルは旧ファイル
-		if      (mode == 'a') DiffLineMgr(&m_pEditDoc->m_docLineMgr).SetDiffMarkRange(DiffMark::Delete, LogicInt(s1   ), LogicInt(e1   ));
-		else if (mode == 'c') DiffLineMgr(&m_pEditDoc->m_docLineMgr).SetDiffMarkRange(DiffMark::Change, LogicInt(s1 - 1), LogicInt(e1 - 1));
-		else if (mode == 'd') DiffLineMgr(&m_pEditDoc->m_docLineMgr).SetDiffMarkRange(DiffMark::Append, LogicInt(s1 - 1), LogicInt(e1 - 1));
+		if      (mode == 'a') DiffLineMgr(m_pEditDoc->m_docLineMgr).SetDiffMarkRange(DiffMark::Delete, LogicInt(s1   ), LogicInt(e1   ));
+		else if (mode == 'c') DiffLineMgr(m_pEditDoc->m_docLineMgr).SetDiffMarkRange(DiffMark::Change, LogicInt(s1 - 1), LogicInt(e1 - 1));
+		else if (mode == 'd') DiffLineMgr(m_pEditDoc->m_docLineMgr).SetDiffMarkRange(DiffMark::Append, LogicInt(s1 - 1), LogicInt(e1 - 1));
 	}else {	// 編集中ファイルは新ファイル
-		if      (mode == 'a') DiffLineMgr(&m_pEditDoc->m_docLineMgr).SetDiffMarkRange(DiffMark::Append, LogicInt(s2 - 1), LogicInt(e2 - 1));
-		else if (mode == 'c') DiffLineMgr(&m_pEditDoc->m_docLineMgr).SetDiffMarkRange(DiffMark::Change, LogicInt(s2 - 1), LogicInt(e2 - 1));
-		else if (mode == 'd') DiffLineMgr(&m_pEditDoc->m_docLineMgr).SetDiffMarkRange(DiffMark::Delete, LogicInt(s2   ), LogicInt(e2   ));
+		if      (mode == 'a') DiffLineMgr(m_pEditDoc->m_docLineMgr).SetDiffMarkRange(DiffMark::Append, LogicInt(s2 - 1), LogicInt(e2 - 1));
+		else if (mode == 'c') DiffLineMgr(m_pEditDoc->m_docLineMgr).SetDiffMarkRange(DiffMark::Change, LogicInt(s2 - 1), LogicInt(e2 - 1));
+		else if (mode == 'd') DiffLineMgr(m_pEditDoc->m_docLineMgr).SetDiffMarkRange(DiffMark::Delete, LogicInt(s2   ), LogicInt(e2   ));
 	}
 	
 	return;

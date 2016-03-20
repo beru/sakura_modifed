@@ -421,7 +421,7 @@ void ViewCommander::Command_Diff_Next(void)
 	auto& selInfo = m_view.GetSelectionInfo();
 
 re_do:;	
-	if (DiffLineMgr(&GetDocument().m_docLineMgr).SearchDiffMark(ptXY.GetY2(), SearchDirection::Forward, &tmp_y)) {
+	if (DiffLineMgr(GetDocument().m_docLineMgr).SearchDiffMark(ptXY.GetY2(), SearchDirection::Forward, &tmp_y)) {
 		ptXY.y = tmp_y;
 		bFound = true;
 		LayoutPoint ptXY_Layout;
@@ -472,7 +472,7 @@ void ViewCommander::Command_Diff_Prev(void)
 	auto& selInfo = m_view.GetSelectionInfo();
 
 re_do:;
-	if (DiffLineMgr(&GetDocument().m_docLineMgr).SearchDiffMark(ptXY.GetY2(), SearchDirection::Backward, &tmp_y)) {
+	if (DiffLineMgr(GetDocument().m_docLineMgr).SearchDiffMark(ptXY.GetY2(), SearchDirection::Backward, &tmp_y)) {
 		ptXY.y = tmp_y;
 		bFound = true;
 		LayoutPoint ptXY_Layout;
@@ -516,10 +516,10 @@ re_do:;
 */
 void ViewCommander::Command_Diff_Reset(void)
 {
-	DiffLineMgr(&GetDocument().m_docLineMgr).ResetAllDiffMark();
+	DiffLineMgr(GetDocument().m_docLineMgr).ResetAllDiffMark();
 
 	// 分割したビューも更新
-	GetEditWindow()->Views_Redraw();
+	GetEditWindow().Views_Redraw();
 	return;
 }
 

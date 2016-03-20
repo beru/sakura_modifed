@@ -278,7 +278,7 @@ void ViewCommander::Command_FILECLOSE_OPEN(
 	WSHIfObj::List params;
 	JackManager::getInstance().GetUsablePlug(PP_DOCUMENT_OPEN, 0, &plugs);
 	for (auto it=plugs.begin(); it!=plugs.end(); ++it) {
-		(*it)->Invoke(&GetEditWindow()->GetActiveView(), params);
+		(*it)->Invoke(&GetEditWindow().GetActiveView(), params);
 	}
 }
 
@@ -317,7 +317,7 @@ void ViewCommander::Command_PRINT(void)
 	Command_PRINT_PREVIEW();
 
 	// 印刷実行
-	GetEditWindow()->m_pPrintPreview->OnPrint();
+	GetEditWindow().m_pPrintPreview->OnPrint();
 }
 
 
@@ -325,7 +325,7 @@ void ViewCommander::Command_PRINT(void)
 void ViewCommander::Command_PRINT_PREVIEW(void)
 {
 	// 印刷Previewモードのオン/オフ
-	GetEditWindow()->PrintPreviewModeONOFF();
+	GetEditWindow().PrintPreviewModeONOFF();
 	return;
 }
 
@@ -334,7 +334,7 @@ void ViewCommander::Command_PRINT_PREVIEW(void)
 void ViewCommander::Command_PRINT_PAGESETUP(void)
 {
 	// 印刷ページ設定
-	GetEditWindow()->OnPrintPageSetting();
+	GetEditWindow().OnPrintPageSetting();
 	return;
 }
 
@@ -527,7 +527,7 @@ void ViewCommander::Command_VIEWMODE(void)
 	}
 
 	// 親ウィンドウのタイトルを更新
-	GetEditWindow()->UpdateCaption();
+	GetEditWindow().UpdateCaption();
 }
 
 
@@ -680,14 +680,9 @@ bool ViewCommander::Command_PUTFILE(
 			bResult = false;
 		}
 	}else {	// ファイル全体を出力
-		HWND		hwndProgress;
-		EditWnd*	pEditWnd = GetEditWindow();
-
-		if (pEditWnd) {
-			hwndProgress = pEditWnd->m_statusBar.GetProgressHwnd();
-		}else {
-			hwndProgress = NULL;
-		}
+		HWND	hwndProgress;
+		auto&	editWnd = GetEditWindow();
+		hwndProgress = editWnd.m_statusBar.GetProgressHwnd();
 		if (hwndProgress) {
 			::ShowWindow(hwndProgress, SW_SHOW);
 		}

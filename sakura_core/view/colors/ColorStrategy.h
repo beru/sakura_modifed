@@ -88,8 +88,9 @@ struct Color3Setting {
 };
 
 struct ColorStrategyInfo {
-	ColorStrategyInfo()
+	ColorStrategyInfo(EditView& view)
 		:
+		view(view),
 		dispPosBegin(0, 0),
 		pStrategy(NULL),
 		pStrategyFound(NULL),
@@ -102,7 +103,7 @@ struct ColorStrategyInfo {
 	}
 
 	// 参照
-	EditView*	pView;
+	EditView&	view;
 	Graphics	gr;	// (SColorInfoでは未使用)
 
 	// スキャン位置

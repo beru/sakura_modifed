@@ -35,7 +35,7 @@ class Graphics;
 
 class TextDrawer {
 public:
-	TextDrawer(const EditView* pEditView) : m_pEditView(pEditView) { }
+	TextDrawer(const EditView& editView) : m_editView(editView) { }
 	virtual ~TextDrawer() {}
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -66,6 +66,6 @@ public:
 	void DispLineNumber(Graphics& gr, LayoutInt nLineNum, int y) const;		// çsî‘çÜï\é¶
 
 private:
-	const EditView* m_pEditView;
+	const EditView& m_editView;
 };
 

@@ -33,9 +33,9 @@
 #include "util/window.h"
 #include "uiparts/ImageListMgr.h"
 
-MainToolBar::MainToolBar(EditWnd* pOwner)
+MainToolBar::MainToolBar(EditWnd& owner)
 	:
-	m_pOwner(pOwner),
+	m_owner(owner),
 	m_hwndToolBar(NULL),
 	m_hwndReBar(NULL),
 	m_hwndSearchBox(NULL),
@@ -61,27 +61,27 @@ void MainToolBar::ProcSearchBox(MSG *msg)
 					// 検索キーを登録
 					SearchKeywordManager().AddToSearchKeys(strText.c_str());
 				}
-				m_pOwner->GetActiveView().m_strCurSearchKey = strText;
-				m_pOwner->GetActiveView().m_bCurSearchUpdate = true;
-				m_pOwner->GetActiveView().ChangeCurRegexp();
+				m_owner.GetActiveView().m_strCurSearchKey = strText;
+				m_owner.GetActiveView().m_bCurSearchUpdate = true;
+				m_owner.GetActiveView().ChangeCurRegexp();
 
 				// 検索ボックスを更新	// 2010/6/6 Uchi
 				AcceptSharedSearchKey();
 
 				//::SetFocus(hWnd);	//先にフォーカスを移動しておかないとキャレットが消える
-				m_pOwner->GetActiveView().SetFocus();
+				m_owner.GetActiveView().SetFocus();
 
 				// 検索開始時のカーソル位置登録条件を変更 02/07/28 ai start
-				m_pOwner->GetActiveView().m_ptSrchStartPos_PHY = m_pOwner->GetActiveView().GetCaret().GetCaretLogicPos();
+				m_owner.GetActiveView().m_ptSrchStartPos_PHY = m_owner.GetActiveView().GetCaret().GetCaretLogicPos();
 				// 02/07/28 ai end
 
 				// 次を検索
-				m_pOwner->OnCommand((WORD)0 /*メニュー*/, (WORD)F_SEARCH_NEXT, (HWND)0);
+				m_owner.OnCommand((WORD)0 /*メニュー*/, (WORD)F_SEARCH_NEXT, (HWND)0);
 			}
 		}else if (msg->wParam == VK_TAB) {	// タブキー
 			// フォーカスを移動
 			// 2004.10.27 MIK IME表示位置のずれ修正
-			::SetFocus(m_pOwner->GetHwnd() );
+			::SetFocus(m_owner.GetHwnd() );
 		}
 	}
 }
@@ -139,14 +139,14 @@ void MainToolBar::CreateToolBar(void)
 			WS_CHILD/* | WS_VISIBLE*/ | WS_CLIPSIBLINGS | WS_CLIPCHILDREN |	// 2007.03.08 ryoji WS_VISIBLE 除去
 			RBS_BANDBORDERS | CCS_NODIVIDER,
 			0, 0, 0, 0,
-			m_pOwner->GetHwnd(),
+			m_owner.GetHwnd(),
 			NULL,
 			EditApp::getInstance().GetAppInstance(),
 			NULL
 		);
 
 		if (!m_hwndReBar) {
-			TopWarningMessage(m_pOwner->GetHwnd(), LS(STR_ERR_DLGEDITWND04));
+			TopWarningMessage(m_owner.GetHwnd(), LS(STR_ERR_DLGEDITWND04));
 			return;
 		}
 
@@ -175,7 +175,7 @@ void MainToolBar::CreateToolBar(void)
 		nFlag,
 		0, 0,
 		0, 0,
-		m_pOwner->GetHwnd(),
+		m_owner.GetHwnd(),
 		(HMENU)ID_TOOLBAR,
 		EditApp::getInstance().GetAppInstance(),
 		NULL
@@ -184,7 +184,7 @@ void MainToolBar::CreateToolBar(void)
 		if (csToolBar.bToolBarIsFlat) {	// フラットツールバーにする／しない
 			csToolBar.bToolBarIsFlat = false;
 		}
-		TopWarningMessage(m_pOwner->GetHwnd(), LS(STR_ERR_DLGEDITWND05));
+		TopWarningMessage(m_owner.GetHwnd(), LS(STR_ERR_DLGEDITWND05));
 		DestroyToolBar();	// 2006.06.17 ryoji
 	}else {
 		// 2006.09.06 ryoji ツールバーをサブクラス化する
@@ -208,7 +208,7 @@ void MainToolBar::CreateToolBar(void)
 		TBBUTTON* pTbbArr = &tbButtons[0];
 		for (i=0; i<csToolBar.nToolBarButtonNum; ++i) {
 			nIdx = csToolBar.nToolBarButtonIdxArr[i];
-			pTbbArr[nToolBarButtonNum] = m_pOwner->GetMenuDrawer().getButton(nIdx);
+			pTbbArr[nToolBarButtonNum] = m_owner.GetMenuDrawer().getButton(nIdx);
 			// セパレータが続くときはひとつにまとめる
 			// 折り返しボタンもTBSTYLE_SEP属性を持っているので
 			// 折り返しの前のセパレータは全て削除される．
@@ -282,9 +282,9 @@ void MainToolBar::CreateToolBar(void)
 								rc.left, rc.top + 1, rc.right - rc.left, (rc.bottom - rc.top) * 10,
 								m_hwndToolBar, (HMENU)(INT_PTR)tbb.idCommand, EditApp::getInstance().GetAppInstance(), NULL);
 						if (m_hwndSearchBox) {
-							m_pOwner->SetCurrentFocus(0);
+							m_owner.SetCurrentFocus(0);
 
-							lf = m_pOwner->GetLogfont();
+							lf = m_owner.GetLogfont();
 							//memset_raw(&lf, 0, sizeof(lf));
 							lf.lfHeight			= DpiPointsToPixels(-9); // Jan. 14, 2003 genta ダイアログにあわせてちょっと小さく	// 2009.10.01 ryoji 高DPI対応（ポイント数から算出）
 							lf.lfWidth			= 0;
@@ -377,13 +377,13 @@ void MainToolBar::DestroyToolBar(void)
 			::DestroyWindow(m_hwndSearchBox);
 			m_hwndSearchBox = NULL;
 
-			m_pOwner->SetCurrentFocus(0);
+			m_owner.SetCurrentFocus(0);
 		}
 
 		::DestroyWindow(m_hwndToolBar);
 		m_hwndToolBar = NULL;
 
-		//if (m_cTabWnd.m_pOwner->GetHwnd()) ::UpdateWindow(m_cTabWnd.m_pOwner->GetHwnd());
+		//if (m_cTabWnd.m_owner->GetHwnd()) ::UpdateWindow(m_cTabWnd.m_owner->GetHwnd());
 	}
 
 	// 2006.06.17 ryoji Rebar を破棄する
@@ -468,7 +468,7 @@ LPARAM MainToolBar::ToolBarOwnerDraw(LPNMCUSTOMDRAW pnmh)
 void MainToolBar::OnToolbarTimer(void)
 {
 	// 2012.11.29 aroka ここではカウントアップ不要
-	// m_pOwner->IncrementTimerCount(10);
+	// m_owner->IncrementTimerCount(10);
 	UpdateToolbar();	// 2008.09.23 nasukoji	ツールバーの表示を更新する
 }
 
@@ -482,14 +482,14 @@ void MainToolBar::OnToolbarTimer(void)
 void MainToolBar::UpdateToolbar(void)
 {
 	// 印刷Preview中なら、何もしない。
-	if (m_pOwner->IsInPreviewMode())
+	if (m_owner.IsInPreviewMode())
 		return;
 	
 	// ツールバーの状態更新
 	if (m_hwndToolBar) {
 		auto& csToolBar = GetDllShareData().common.toolBar;
 		for (int i=0; i<csToolBar.nToolBarButtonNum; ++i) {
-			TBBUTTON tbb = m_pOwner->GetMenuDrawer().getButton(
+			TBBUTTON tbb = m_owner.GetMenuDrawer().getButton(
 				csToolBar.nToolBarButtonIdxArr[i]
 			);
 
@@ -497,14 +497,14 @@ void MainToolBar::UpdateToolbar(void)
 			Toolbar_EnableButton(
 				m_hwndToolBar,
 				tbb.idCommand,
-				IsFuncEnable(m_pOwner->GetDocument(), &GetDllShareData(), (EFunctionCode)tbb.idCommand)
+				IsFuncEnable(m_owner.GetDocument(), &GetDllShareData(), (EFunctionCode)tbb.idCommand)
 			);
 
 			// 機能がチェック状態か調べる
 			Toolbar_CheckButton(
 				m_hwndToolBar,
 				tbb.idCommand,
-				IsFuncChecked(m_pOwner->GetDocument(), &GetDllShareData(), (EFunctionCode)tbb.idCommand)
+				IsFuncChecked(m_owner.GetDocument(), &GetDllShareData(), (EFunctionCode)tbb.idCommand)
 			);
 		}
 	}
@@ -525,8 +525,8 @@ void MainToolBar::AcceptSharedSearchKey()
 		}
 		const wchar_t* pszText;
 		if (GetDllShareData().common.search.bInheritKeyOtherView
-			&& m_pOwner->GetActiveView().m_nCurSearchKeySequence < GetDllShareData().common.search.nSearchKeySequence
-			|| m_pOwner->GetActiveView().m_strCurSearchKey.size() == 0
+			&& m_owner.GetActiveView().m_nCurSearchKeySequence < GetDllShareData().common.search.nSearchKeySequence
+			|| m_owner.GetActiveView().m_strCurSearchKey.size() == 0
 		) {
 			if (0 < nSize) {
 				pszText = GetDllShareData().searchKeywords.searchKeys[0];
@@ -534,7 +534,7 @@ void MainToolBar::AcceptSharedSearchKey()
 				pszText = L"";
 			}
 		}else {
-			pszText = m_pOwner->GetActiveView().m_strCurSearchKey.c_str();
+			pszText = m_owner.GetActiveView().m_strCurSearchKey.c_str();
 		}
 		std::wstring strText;
 		GetSearchKey(strText);

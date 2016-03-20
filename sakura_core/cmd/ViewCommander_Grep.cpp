@@ -29,7 +29,7 @@
 void ViewCommander::Command_GREP_DIALOG(void)
 {
 	NativeW memCurText;
-	auto& dlgGrep = GetEditWindow()->m_dlgGrep;
+	auto& dlgGrep = GetEditWindow().m_dlgGrep;
 	// 2014.07.01 複数Grepウィンドウを使い分けている場合などに影響しないように、未設定のときだけHistoryを見る
 	bool bGetHistory = dlgGrep.m_bSetText == false;
 
@@ -61,7 +61,7 @@ void ViewCommander::Command_GREP(void)
 	NativeT mWork3;
 	NativeW	mWork4;
 
-	auto& dlgGrep = GetEditWindow()->m_dlgGrep;
+	auto& dlgGrep = GetEditWindow().m_dlgGrep;
 	mWork1.SetString(dlgGrep.m_strText.c_str());
 	mWork2.SetString(dlgGrep.m_szFile);
 	mWork3.SetString(dlgGrep.m_szFolder);
@@ -120,7 +120,7 @@ void ViewCommander::Command_GREP(void)
 		WSHIfObj::List params;
 		JackManager::getInstance().GetUsablePlug(PP_DOCUMENT_OPEN, 0, &plugs);
 		for (auto it=plugs.begin(); it!=plugs.end(); ++it) {
-			(*it)->Invoke(&GetEditWindow()->GetActiveView(), params);
+			(*it)->Invoke(&GetEditWindow().GetActiveView(), params);
 		}
 	}else {
 		// 編集ウィンドウの上限チェック
@@ -142,7 +142,7 @@ void ViewCommander::Command_GREP(void)
 void ViewCommander::Command_GREP_REPLACE_DLG( void )
 {
 	NativeW memCurText;
-	DlgGrepReplace& dlgGrepRep = GetEditWindow()->m_dlgGrepReplace;
+	DlgGrepReplace& dlgGrepRep = GetEditWindow().m_dlgGrepReplace;
 
 	// 複数Grepウィンドウを使い分けている場合などに影響しないように、未設定のときだけHistoryを見る
 	bool bGetHistory = dlgGrepRep.m_bSetText == false;
@@ -175,7 +175,7 @@ void ViewCommander::Command_GREP_REPLACE(void)
 	NativeT cmWork3;
 	NativeW cmWork4;
 
-	DlgGrepReplace& dlgGrepRep = GetEditWindow()->m_dlgGrepReplace;
+	DlgGrepReplace& dlgGrepRep = GetEditWindow().m_dlgGrepReplace;
 	cmWork1.SetString( dlgGrepRep.m_strText.c_str() );
 	cmWork2.SetString( dlgGrepRep.m_szFile );
 	cmWork3.SetString( dlgGrepRep.m_szFolder );

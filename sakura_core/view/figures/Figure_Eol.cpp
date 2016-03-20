@@ -31,7 +31,7 @@
 #include "window/EditWnd.h"
 
 // 折り返し描画
-void _DispWrap(Graphics& gr, DispPos* pDispPos, const EditView* pView);
+void _DispWrap(Graphics& gr, DispPos* pDispPos, const EditView& view, LayoutYInt nLineNum);
 
 // EOF描画関数
 // 実際には pX と nX が更新される。
@@ -43,7 +43,7 @@ void _DispWrap(Graphics& gr, DispPos* pDispPos, const EditView* pView);
 
 // 改行記号描画
 // 2007.08.30 kobake 追加
-void _DispEOL(Graphics& gr, DispPos* pDispPos, Eol eol, const EditView* pView, bool bTrans);
+void _DispEOL(Graphics& gr, DispPos* pDispPos, Eol eol, const EditView& view, bool bTrans);
 
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -61,25 +61,25 @@ bool Figure_Eol::Match(const wchar_t* pText, int nTextLen) const
 
 // 2006.04.29 Moca 選択処理のため縦線処理を追加
 //$$ 高速化可能。
-bool Figure_Eol::DrawImp(ColorStrategyInfo* pInfo)
+bool Figure_Eol::DrawImp(ColorStrategyInfo& csInfo)
 {
-	EditView* pView = pInfo->pView;
+	auto& view = csInfo.view;
 
 	// 改行取得
-	const Layout* pLayout = pInfo->pDispPos->GetLayoutRef();
+	const Layout* pLayout = csInfo.pDispPos->GetLayoutRef();
 	Eol eol = pLayout->GetLayoutEol();
 	if (eol.GetLen()) {
 		// CFigureSpace::DrawImp_StyleSelectもどき。選択・検索色を優先する
-		TypeSupport currentType(pView, pInfo->GetCurrentColor());	// 周辺の色（現在の指定色/選択色）
-		TypeSupport currentType2(pView, pInfo->GetCurrentColor2());	// 周辺の色（現在の指定色）
-		TypeSupport textType(pView, COLORIDX_TEXT);				// テキストの指定色
-		TypeSupport spaceType(pView, GetDispColorIdx());	// 空白の指定色
-		TypeSupport searchType(pView, COLORIDX_SEARCH);	// 検索色(EOL固有)
-		TypeSupport currentTypeBg(pView, pInfo->GetCurrentColorBg());
+		TypeSupport currentType(view, csInfo.GetCurrentColor());	// 周辺の色（現在の指定色/選択色）
+		TypeSupport currentType2(view, csInfo.GetCurrentColor2());	// 周辺の色（現在の指定色）
+		TypeSupport textType(view, COLORIDX_TEXT);				// テキストの指定色
+		TypeSupport spaceType(view, GetDispColorIdx());	// 空白の指定色
+		TypeSupport searchType(view, COLORIDX_SEARCH);	// 検索色(EOL固有)
+		TypeSupport currentTypeBg(view, csInfo.GetCurrentColorBg());
 		TypeSupport& currentType3 = (currentType2.GetBackColor() == textType.GetBackColor() ? currentTypeBg: currentType2);
 		COLORREF crText;
 		COLORREF crBack;
-		bool bSelecting = pInfo->GetCurrentColor() != pInfo->GetCurrentColor2();
+		bool bSelecting = csInfo.GetCurrentColor() != csInfo.GetCurrentColor2();
 		bool blendColor = bSelecting && currentType.GetTextColor() == currentType.GetBackColor(); // 選択混合色
 		TypeSupport& currentStyle = blendColor ? currentType2 : currentType;
 		TypeSupport *pcText, *pcBack;
@@ -87,7 +87,7 @@ bool Figure_Eol::DrawImp(ColorStrategyInfo* pInfo)
 			// 選択文字色固定指定
 			pcText = &currentType;
 			pcBack = &currentType;
-		}else if (pInfo->GetCurrentColor2() == COLORIDX_SEARCH) {
+		}else if (csInfo.GetCurrentColor2() == COLORIDX_SEARCH) {
 			// 検索色優先
 			pcText = &searchType;
 			pcBack = &searchType;
@@ -97,30 +97,30 @@ bool Figure_Eol::DrawImp(ColorStrategyInfo* pInfo)
 		}
 		if (blendColor) {
 			// 混合色(検索色を優先しつつ)
-			crText = pView->GetTextColorByColorInfo2(currentType.GetColorInfo(), pcText->GetColorInfo());
-			crBack = pView->GetBackColorByColorInfo2(currentType.GetColorInfo(), pcBack->GetColorInfo());
+			crText = view.GetTextColorByColorInfo2(currentType.GetColorInfo(), pcText->GetColorInfo());
+			crBack = view.GetBackColorByColorInfo2(currentType.GetColorInfo(), pcBack->GetColorInfo());
 		}else {
 			crText = pcText->GetTextColor();
 			crBack = pcBack->GetBackColor();
 		}
-		pInfo->gr.PushTextForeColor(crText);
-		pInfo->gr.PushTextBackColor(crBack);
-		bool bTrans = pView->IsBkBitmap() && textType.GetBackColor() == crBack;
+		csInfo.gr.PushTextForeColor(crText);
+		csInfo.gr.PushTextBackColor(crBack);
+		bool bTrans = view.IsBkBitmap() && textType.GetBackColor() == crBack;
 		Font font;
 		font.fontAttr.bBoldFont = spaceType.IsBoldFont() || currentStyle.IsBoldFont();
 		font.fontAttr.bUnderLine = spaceType.HasUnderLine();
-		font.hFont = pInfo->pView->GetFontset().ChooseFontHandle(font.fontAttr);
-		pInfo->gr.PushMyFont(font);
+		font.hFont = csInfo.view.GetFontset().ChooseFontHandle(font.fontAttr);
+		csInfo.gr.PushMyFont(font);
 
-		DispPos pos(*pInfo->pDispPos);	// 現在位置を覚えておく
-		_DispEOL(pInfo->gr, pInfo->pDispPos, eol, pView, bTrans);
-		DrawImp_StylePop(pInfo);
-		DrawImp_DrawUnderline(pInfo, pos);
+		DispPos pos(*csInfo.pDispPos);	// 現在位置を覚えておく
+		_DispEOL(csInfo.gr, csInfo.pDispPos, eol, view, bTrans);
+		DrawImp_StylePop(csInfo);
+		DrawImp_DrawUnderline(csInfo, pos);
 
-		pInfo->nPosInLogic += eol.GetLen();
+		csInfo.nPosInLogic += eol.GetLen();
 	}else {
 		// 無限ループ対策
-		pInfo->nPosInLogic += 1;
+		csInfo.nPosInLogic += 1;
 		assert_warning( 1 );
 	}
 
@@ -135,24 +135,24 @@ bool Figure_Eol::DrawImp(ColorStrategyInfo* pInfo)
 void _DispWrap(
 	Graphics&		gr,
 	DispPos*		pDispPos,
-	const EditView*	pView,
+	const EditView&	view,
 	LayoutYInt		nLineNum
 	)
 {
 	RECT rcClip2;
-	if (pView->GetTextArea().GenerateClipRect(&rcClip2, *pDispPos, 1)) {
+	if (view.GetTextArea().GenerateClipRect(&rcClip2, *pDispPos, 1)) {
 		// サポートクラス
-		TypeSupport wrapType(pView, COLORIDX_WRAP);
-		TypeSupport textType(pView, COLORIDX_TEXT);
-		TypeSupport bgLineType(pView, COLORIDX_CARETLINEBG);
-		TypeSupport evenBgLineType(pView, COLORIDX_EVENLINEBG);
-		TypeSupport pageViewBgLineType(pView,COLORIDX_PAGEVIEW);
+		TypeSupport wrapType(view, COLORIDX_WRAP);
+		TypeSupport textType(view, COLORIDX_TEXT);
+		TypeSupport bgLineType(view, COLORIDX_CARETLINEBG);
+		TypeSupport evenBgLineType(view, COLORIDX_EVENLINEBG);
+		TypeSupport pageViewBgLineType(view,COLORIDX_PAGEVIEW);
 		bool bBgcolor = wrapType.GetBackColor() == textType.GetBackColor();
 		EColorIndexType bgColorOverwrite = COLORIDX_WRAP;
-		bool bTrans = pView->IsBkBitmap();
+		bool bTrans = view.IsBkBitmap();
 		if (wrapType.IsDisp()) {
-			EditView& activeView = pView->m_pEditWnd->GetActiveView();
-			if (bgLineType.IsDisp() && pView->GetCaret().GetCaretLayoutPos().GetY2() == nLineNum) {
+			EditView& activeView = view.m_editWnd.GetActiveView();
+			if (bgLineType.IsDisp() && view.GetCaret().GetCaretLayoutPos().GetY2() == nLineNum) {
 				if (bBgcolor) {
 					bgColorOverwrite = COLORIDX_CARETLINEBG;
 					bTrans = bTrans && bgLineType.GetBackColor() == textType.GetBackColor();
@@ -163,7 +163,7 @@ void _DispWrap(
 					bTrans = bTrans && evenBgLineType.GetBackColor() == textType.GetBackColor();
 				}
 			}else if (
-				pView->m_bMiniMap
+				view.m_bMiniMap
 				&& activeView.GetTextArea().GetViewTopLine() <= nLineNum
 				&& nLineNum < activeView.GetTextArea().GetBottomLine()
 			) {
@@ -180,7 +180,7 @@ void _DispWrap(
 			wrapType.SetGraphicsState_WhileThisObj(gr);
 			if (bgColorOverwrite != COLORIDX_WRAP) {
 				bChangeColor = true;
-				gr.PushTextBackColor(TypeSupport(pView, bgColorOverwrite).GetBackColor());
+				gr.PushTextBackColor(TypeSupport(view, bgColorOverwrite).GetBackColor());
 			}
 		}else {
 			szText = L" ";
@@ -195,7 +195,7 @@ void _DispWrap(
 			&rcClip2,
 			szText,
 			wcslen(szText),
-			pView->GetTextMetrics().GetDxArray_AllHankaku()
+			view.GetTextMetrics().GetDxArray_AllHankaku()
 		);
 		if (bChangeColor) {
 			gr.PopTextBackColor();
@@ -217,20 +217,20 @@ EOF記号の描画
 void _DispEOF(
 	Graphics&			gr,			// [in] 描画対象のDevice Context
 	DispPos*			pDispPos,	// [in] 表示座標
-	const EditView*		pView
+	const EditView&		view
 	)
 {
 	// 描画に使う色情報
-	TypeSupport eofType(pView, COLORIDX_EOF);
+	TypeSupport eofType(view, COLORIDX_EOF);
 	if (!eofType.IsDisp()) {
 		return;
 	}
-	TypeSupport textType(pView, COLORIDX_TEXT);
-	bool bTrans = pView->IsBkBitmap() && eofType.GetBackColor() == textType.GetBackColor();
+	TypeSupport textType(view, COLORIDX_TEXT);
+	bool bTrans = view.IsBkBitmap() && eofType.GetBackColor() == textType.GetBackColor();
 
 	// 必要なインターフェースを取得
-	const TextMetrics* pMetrics = &pView->GetTextMetrics();
-	const TextArea* pArea = &pView->GetTextArea();
+	const TextMetrics* pMetrics = &view.GetTextMetrics();
+	const TextArea* pArea = &view.GetTextArea();
 
 	// 定数
 	static const wchar_t	szEof[] = L"[EOF]";
@@ -276,10 +276,10 @@ void _DrawEOL(
 );
 
 // 2007.08.30 kobake 追加
-void _DispEOL(Graphics& gr, DispPos* pDispPos, Eol eol, const EditView* pView, bool bTrans)
+void _DispEOL(Graphics& gr, DispPos* pDispPos, Eol eol, const EditView& view, bool bTrans)
 {
 	RECT rcClip2;
-	if (pView->GetTextArea().GenerateClipRect(&rcClip2, *pDispPos, 2)) {
+	if (view.GetTextArea().GenerateClipRect(&rcClip2, *pDispPos, 2)) {
 		// 2003.08.17 ryoji 改行文字が欠けないように
 		::ExtTextOutW_AnyBuild(
 			gr,
@@ -289,11 +289,11 @@ void _DispEOL(Graphics& gr, DispPos* pDispPos, Eol eol, const EditView* pView, b
 			&rcClip2,
 			L"  ",
 			2,
-			pView->GetTextMetrics().GetDxArray_AllHankaku()
+			view.GetTextMetrics().GetDxArray_AllHankaku()
 		);
 
 		// 改行記号の表示
-		if (TypeSupport(pView, COLORIDX_EOL).IsDisp()) {
+		if (TypeSupport(view, COLORIDX_EOL).IsDisp()) {
 			// From Here 2003.08.17 ryoji 改行文字が欠けないように
 
 			// リージョン作成、選択。
@@ -302,7 +302,7 @@ void _DispEOL(Graphics& gr, DispPos* pDispPos, Eol eol, const EditView* pView, b
 			// 描画領域
 			Rect rcEol;
 			rcEol.SetPos(pDispPos->GetDrawPos().x + 1, pDispPos->GetDrawPos().y);
-			rcEol.SetSize(pView->GetTextMetrics().GetHankakuWidth(), pView->GetTextMetrics().GetHankakuHeight());
+			rcEol.SetSize(view.GetTextMetrics().GetHankakuWidth(), view.GetTextMetrics().GetHankakuHeight());
 
 			// 描画
 			// 文字色や太字かどうかを現在の DC から調べる	// 2009.05.29 ryoji 

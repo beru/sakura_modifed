@@ -268,13 +268,13 @@ DWORD GrepAgent::DoGrep(
 	}
 
 	// 2014.06.13 別ウィンドウで検索したとき用にGrepダイアログの検索キーを設定
-	viewDst.m_pEditWnd->m_dlgGrep.m_strText = pmGrepKey->GetStringPtr();
-	viewDst.m_pEditWnd->m_dlgGrep.m_bSetText = true;
-	viewDst.m_pEditWnd->m_dlgGrepReplace.m_strText = pmGrepKey->GetStringPtr();
+	viewDst.m_editWnd.m_dlgGrep.m_strText = pmGrepKey->GetStringPtr();
+	viewDst.m_editWnd.m_dlgGrep.m_bSetText = true;
+	viewDst.m_editWnd.m_dlgGrepReplace.m_strText = pmGrepKey->GetStringPtr();
 	if (bGrepReplace) {
-		viewDst.m_pEditWnd->m_dlgGrepReplace.m_strText2 = pmGrepReplace->GetStringPtr();
+		viewDst.m_editWnd.m_dlgGrepReplace.m_strText2 = pmGrepReplace->GetStringPtr();
 	}
-	viewDst.m_pEditWnd->m_dlgGrepReplace.m_bSetText = true;
+	viewDst.m_editWnd.m_dlgGrepReplace.m_bSetText = true;
 	hwndCancel = dlgCancel.DoModeless(G_AppInstance(), viewDst.m_hwndParent, IDD_GREPRUNNING);
 
 	::SetDlgItemInt(hwndCancel, IDC_STATIC_HITCOUNT, 0, FALSE);
@@ -600,7 +600,7 @@ DWORD GrepAgent::DoGrep(
 #ifdef _DEBUG
 		auto_sprintf( szBuffer, LSW(STR_GREP_TIMER), runningTimer.Read() );
 		memOutput.SetString( szBuffer );
-		AddTail( pViewDst, memOutput, grepOption.bGrepStdout );
+		AddTail( viewDst, memOutput, grepOption.bGrepStdout );
 #endif
 	}
 	viewDst.GetCaret().MoveCursor(LayoutPoint(LayoutInt(0), tmp_PosY_Layout), true);	// カーソルをGrep直前の位置に戻す。

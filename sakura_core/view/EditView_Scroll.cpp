@@ -550,7 +550,7 @@ void EditView::ScrollDraw(
 		) {
 			// Scrollのときにルーラー余白更新
 			Rect rcTopYohaku;
-			if (TypeSupport(this, COLORIDX_TEXT).GetBackColor() == TypeSupport(this, COLORIDX_GYOU).GetBackColor()) {
+			if (TypeSupport(*this, COLORIDX_TEXT).GetBackColor() == TypeSupport(*this, COLORIDX_GYOU).GetBackColor()) {
 				rcTopYohaku.left = 0;
 			}else {
 				rcTopYohaku.left = area.GetLineNumberWidth();
@@ -605,8 +605,8 @@ void EditView::ScrollDraw(
 
 void EditView::MiniMapRedraw(bool bUpdateAll)
 {
-	if (this == &m_pEditWnd->GetActiveView() && m_pEditWnd->GetMiniMap().GetHwnd()) {
-		EditView& miniMap = m_pEditWnd->GetMiniMap();
+	if (this == &m_editWnd.GetActiveView() && m_editWnd.GetMiniMap().GetHwnd()) {
+		EditView& miniMap = m_editWnd.GetMiniMap();
 		LayoutYInt nViewTop = miniMap.m_nPageViewTop;
 		LayoutYInt nViewBottom = miniMap.m_nPageViewBottom;
 		LayoutYInt nDiff = nViewTop - GetTextArea().GetViewTopLine();
@@ -688,10 +688,10 @@ void EditView::MiniMapRedraw(bool bUpdateAll)
 void EditView::SyncScrollV(LayoutInt line)
 {
 	if (GetDllShareData().common.window.bSplitterWndVScroll && line != 0 
-		&& m_pEditWnd->IsEnablePane(m_nMyIndex^0x01) 
+		&& m_editWnd.IsEnablePane(m_nMyIndex^0x01) 
 		&& 0 <= m_nMyIndex
 	) {
-		EditView&	editView = m_pEditWnd->GetView(m_nMyIndex^0x01);
+		EditView&	editView = m_editWnd.GetView(m_nMyIndex^0x01);
 #if 0
 		//	差分を保ったままスクロールする場合
 		editView.ScrollByV(line);
@@ -716,10 +716,10 @@ void EditView::SyncScrollV(LayoutInt line)
 void EditView::SyncScrollH(LayoutInt col)
 {
 	if (GetDllShareData().common.window.bSplitterWndHScroll && col != 0
-		&& m_pEditWnd->IsEnablePane(m_nMyIndex^0x02)
+		&& m_editWnd.IsEnablePane(m_nMyIndex^0x02)
 		&& 0 <= m_nMyIndex
 	) {
-		EditView& editView = m_pEditWnd->GetView(m_nMyIndex^0x02);
+		EditView& editView = m_editWnd.GetView(m_nMyIndex^0x02);
 		HDC hdc = ::GetDC(editView.GetHwnd());
 		
 #if 0

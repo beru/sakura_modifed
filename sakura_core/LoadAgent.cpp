@@ -209,7 +209,7 @@ LoadResultType LoadAgent::OnLoad(const LoadInfo& loadInfo)
 		ReadManager reader;
 		ProgressSubject* pOld = EditApp::getInstance().m_pVisualProgress->ProgressListener::Listen(&reader);
 		CodeConvertResult eReadResult = reader.ReadFile_To_CDocLineMgr(
-			&pDoc->m_docLineMgr,
+			pDoc->m_docLineMgr,
 			loadInfo,
 			&pDoc->m_docFile.m_fileInfo
 		);

@@ -1047,7 +1047,7 @@ void ViewCommander::Command_COPY_COLOR_HTML(bool bLineNumber)
 	}
 	memClip.AppendString(L"</pre>", 6);
 
-	Clipboard clipboard(GetEditWindow()->GetHwnd());
+	Clipboard clipboard(GetEditWindow().GetHwnd());
 	if (!clipboard) {
 		return;
 	}

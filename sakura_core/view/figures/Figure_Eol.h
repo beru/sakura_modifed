@@ -35,8 +35,8 @@ public:
 	}
 
 	// action
-	bool DrawImp(ColorStrategyInfo* pInfo);
-	void DispSpace(Graphics& gr, DispPos* pDispPos, EditView* pView, bool bTrans) const {};
+	bool DrawImp(ColorStrategyInfo& csInfo) override;
+	void DispSpace(Graphics& gr, DispPos* pDispPos, EditView& view, bool bTrans) const {};
 	EColorIndexType GetColorIdx(void) const { return COLORIDX_EOL; }
 };
 

@@ -32,7 +32,7 @@ public:
 	bool Match(const wchar_t* pText, int nTextLen) const;
 
 	// action
-	void DispSpace(Graphics& gr, DispPos* pDispPos, EditView* pView, bool trans) const;
+	void DispSpace(Graphics& gr, DispPos* pDispPos, EditView& view, bool trans) const;
 	EColorIndexType GetColorIdx(void) const { return COLORIDX_SPACE; }
 };
 

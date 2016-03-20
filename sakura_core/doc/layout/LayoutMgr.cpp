@@ -647,7 +647,7 @@ bool LayoutMgr::WhereCurrentWord(
 	// 現在位置の単語の範囲を調べる -> ロジック単位pSelect, pMemWord, pMemWordLeft
 	LogicInt nFromX;
 	LogicInt nToX;
-	bool nRetCode = SearchAgent(m_pDocLineMgr).WhereCurrentWord(
+	bool nRetCode = SearchAgent(*m_pDocLineMgr).WhereCurrentWord(
 		pLayout->GetLogicLineNo(),
 		pLayout->GetLogicOffset() + LogicInt(nIdx),
 		&nFromX,
@@ -687,7 +687,7 @@ int LayoutMgr::PrevOrNextWord(
 
 	// 現在位置の左右の単語の先頭位置を調べる
 	LogicInt nPosNew;
-	int nRetCode = SearchAgent(m_pDocLineMgr).PrevOrNextWord(
+	int nRetCode = SearchAgent(*m_pDocLineMgr).PrevOrNextWord(
 		pLayout->GetLogicLineNo(),
 		pLayout->GetLogicOffset() + nIdx,
 		&nPosNew,
@@ -726,7 +726,7 @@ int LayoutMgr::SearchWord(
 
 	// 単語検索 -> logicRange (データ位置)
 	LogicRange logicRange;
-	int nRetCode = SearchAgent(m_pDocLineMgr).SearchWord(
+	int nRetCode = SearchAgent(*m_pDocLineMgr).SearchWord(
 		LogicPoint(pLayout->GetLogicOffset() + nIdx, pLayout->GetLogicLineNo()),
 		searchDirection,
 		&logicRange, //pMatchRange,
@@ -1046,7 +1046,7 @@ void LayoutMgr::DUMP()
 		MYTRACE(_T("\tm_enumEOLType =%ls\n"),	pLayout->GetLayoutEol().GetName());
 		MYTRACE(_T("\tm_nEOLLen =%d\n"),		pLayout->GetLayoutEol().GetLen());
 		MYTRACE(_T("\tm_nTypePrev=%d\n"),		pLayout->GetColorTypePrev());
-		const wchar_t* pData = DocReader(*m_pDocLineMgr).GetLineStr(pLayout->GetLogicLineNo(), &nDataLen);
+		const wchar_t* pData = DocReader(*m_docLineMgr).GetLineStr(pLayout->GetLogicLineNo(), &nDataLen);
 		MYTRACE(_T("\t[%ls]\n"), pData);
 		pLayout = pLayoutNext;
 	}

@@ -31,7 +31,7 @@
 class Figure {
 public:
 	virtual ~Figure() {}
-	virtual bool DrawImp(ColorStrategyInfo* pInfo) = 0;
+	virtual bool DrawImp(ColorStrategyInfo& csInfo) = 0;
 	virtual bool Match(const wchar_t* pText, int nTextLen) const = 0;
 
 	// 色分け表示対象判定
@@ -49,7 +49,7 @@ protected:
 // 通常テキスト描画
 class Figure_Text : public Figure {
 public:
-	bool DrawImp(ColorStrategyInfo* pInfo);
+	bool DrawImp(ColorStrategyInfo& csInfo) override;
 	bool Match(const wchar_t* pText, int nTextLen) const {
 		return true;
 	}
@@ -63,9 +63,9 @@ public:
 // 各種空白（半角空白／全角空白／タブ／改行）描画用の基本クラス
 class FigureSpace : public Figure {
 public:
-	virtual bool DrawImp(ColorStrategyInfo* pInfo);
+	virtual bool DrawImp(ColorStrategyInfo& csInfo) override;
 protected:
-	virtual void DispSpace(Graphics& gr, DispPos* pDispPos, EditView* pView, bool bTrans) const = 0;
+	virtual void DispSpace(Graphics& gr, DispPos* pDispPos, EditView& view, bool bTrans) const = 0;
 	virtual EColorIndexType GetColorIdx(void) const = 0;
 
 	// 色分け表示対象判定
@@ -88,9 +88,9 @@ protected:
 	EColorIndexType GetDispColorIdx(void) const { return m_nDispColorIndex; }
 
 	// 実装補助
-	bool DrawImp_StyleSelect(ColorStrategyInfo* pInfo);
-	void DrawImp_StylePop(ColorStrategyInfo* pInfo);
-	void DrawImp_DrawUnderline(ColorStrategyInfo* pInfo, DispPos&);
+	bool DrawImp_StyleSelect(ColorStrategyInfo& csInfo);
+	void DrawImp_StylePop(ColorStrategyInfo& csInfo);
+	void DrawImp_DrawUnderline(ColorStrategyInfo& csInfo, DispPos&);
 
 protected:
 	EColorIndexType m_nDispColorIndex;

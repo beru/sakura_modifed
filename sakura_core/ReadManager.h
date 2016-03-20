@@ -34,7 +34,7 @@ public:
 	//	Nov. 12, 2000 genta ˆø”’Ç‰Á
 	//	Jul. 26, 2003 ryoji BOMˆø”’Ç‰Á
 	CodeConvertResult ReadFile_To_CDocLineMgr(
-		DocLineMgr*			pDocLineMgr,
+		DocLineMgr&			docLineMgr,
 		const LoadInfo&		loadInfo,
 		FileInfo*			pFileInfo
 	);

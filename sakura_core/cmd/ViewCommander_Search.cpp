@@ -39,7 +39,7 @@
 */
 void ViewCommander::Command_SEARCH_BOX(void)
 {
-	GetEditWindow()->m_toolbar.SetFocusSearchBox();
+	GetEditWindow().m_toolbar.SetFocusSearchBox();
 }
 
 
@@ -50,14 +50,14 @@ void ViewCommander::Command_SEARCH_DIALOG(void)
 	NativeW memCurText;
 	m_view.GetCurrentTextForSearchDlg(memCurText);	// 2006.08.23 ryoji ダイアログ専用関数に変更
 
-	auto& dlgFind = GetEditWindow()->m_dlgFind;
+	auto& dlgFind = GetEditWindow().m_dlgFind;
 	// 検索文字列を初期化
 	if (0 < memCurText.GetStringLength()) {
 		dlgFind.m_strText = memCurText.GetStringPtr();
 	}
 	// 検索ダイアログの表示
 	if (!dlgFind.GetHwnd()) {
-		dlgFind.DoModeless(G_AppInstance(), m_view.GetHwnd(), (LPARAM)&GetEditWindow()->GetActiveView());
+		dlgFind.DoModeless(G_AppInstance(), m_view.GetHwnd(), (LPARAM)&GetEditWindow().GetActiveView());
 	}else {
 		// アクティブにする
 		ActivateFrameWindow(dlgFind.GetHwnd());
@@ -203,7 +203,7 @@ re_do:;
 		);
 	}else {
 		auto& docLineMgr = GetDocument().m_docLineMgr;
-		nSearchResult = SearchAgent(&docLineMgr).SearchWord(
+		nSearchResult = SearchAgent(docLineMgr).SearchWord(
 			LogicPoint(nIdx, nLineNumLogic),
 			SearchDirection::Forward,		// 0==前方検索 1==後方検索
 			pSelectLogic,
@@ -489,7 +489,7 @@ void ViewCommander::Command_REPLACE_DIALOG(void)
 	NativeW memCurText;
 	m_view.GetCurrentTextForSearchDlg(memCurText);	// 2006.08.23 ryoji ダイアログ専用関数に変更
 
-	auto& dlgReplace = GetEditWindow()->m_dlgReplace;
+	auto& dlgReplace = GetEditWindow().m_dlgReplace;
 
 	// 検索文字列を初期化
 	if (0 < memCurText.GetStringLength()) {
@@ -536,7 +536,7 @@ void ViewCommander::Command_REPLACE(HWND hwndParent)
 	if (!hwndParent) {	// 親ウィンドウが指定されていなければ、CEditViewが親。
 		hwndParent = m_view.GetHwnd();
 	}
-	auto& dlgReplace = GetEditWindow()->m_dlgReplace;
+	auto& dlgReplace = GetEditWindow().m_dlgReplace;
 	// 2002.02.10 hor
 	int nPaste			=	dlgReplace.m_bPaste;
 	int nReplaceTarget	=	dlgReplace.m_nReplaceTarget;
@@ -724,7 +724,7 @@ void ViewCommander::Command_REPLACE_ALL()
 		return;
 	}
 
-	auto& dlgReplace = GetEditWindow()->m_dlgReplace;
+	auto& dlgReplace = GetEditWindow().m_dlgReplace;
 	// 2002.02.10 hor
 	bool bPaste			= dlgReplace.m_bPaste;
 	BOOL nReplaceTarget	= dlgReplace.m_nReplaceTarget;
@@ -1368,7 +1368,7 @@ void ViewCommander::Command_REPLACE_ALL()
 		if (0 < nReplaceNum) {
 			// LayoutMgrの更新(変更有の場合)
 			layoutMgr._DoLayout();
-			GetEditWindow()->ClearViewCaretPosInfo();
+			GetEditWindow().ClearViewCaretPosInfo();
 			if (GetDocument().m_nTextWrapMethodCur == TextWrappingMethod::NoWrapping) {
 				layoutMgr.CalculateTextWidth();
 			}

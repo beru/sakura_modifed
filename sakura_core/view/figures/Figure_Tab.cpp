@@ -31,21 +31,21 @@ bool Figure_Tab::Match(const wchar_t* pText, int nTextLen) const
 	@date 2003.03.26 MIK タブ矢印表示
 	@date 2013.05.31 novice TAB表示対応(文字指定/短い矢印/長い矢印)
 */
-void Figure_Tab::DispSpace(Graphics& gr, DispPos* pDispPos, EditView* pView, bool bTrans) const
+void Figure_Tab::DispSpace(Graphics& gr, DispPos* pDispPos, EditView& view, bool bTrans) const
 {
 	DispPos& sPos = *pDispPos;
 
 	// 必要なインターフェース
-	const TextMetrics* pMetrics = &pView->GetTextMetrics();
-	const TextArea* pArea = &pView->GetTextArea();
+	const TextMetrics* pMetrics = &view.GetTextMetrics();
+	const TextArea* pArea = &view.GetTextArea();
 
 	int nLineHeight = pMetrics->GetHankakuDy();
 	int nCharWidth = pMetrics->GetHankakuDx();
 
-	TypeSupport cTabType(pView, COLORIDX_TAB);
+	TypeSupport tabType(view, COLORIDX_TAB);
 
 	// これから描画するタブ幅
-	int tabDispWidth = (Int)pView->m_pEditDoc->m_layoutMgr.GetActualTabSpace(sPos.GetDrawCol());
+	int tabDispWidth = (Int)view.m_pEditDoc->m_layoutMgr.GetActualTabSpace(sPos.GetDrawCol());
 
 	// タブ記号領域
 	RECT rcClip2;
@@ -58,7 +58,7 @@ void Figure_Tab::DispSpace(Graphics& gr, DispPos* pDispPos, EditView* pView, boo
 	rcClip2.bottom = sPos.GetDrawPos().y + nLineHeight;
 
 	if (pArea->IsRectIntersected(rcClip2)) {
-		if (cTabType.IsDisp() && TabArrowType::String == m_pTypeData->bTabArrow) {	// タブ通常表示	//@@@ 2003.03.26 MIK
+		if (tabType.IsDisp() && TabArrowType::String == m_pTypeData->bTabArrow) {	// タブ通常表示	//@@@ 2003.03.26 MIK
 			//@@@ 2001.03.16 by MIK
 			::ExtTextOutW_AnyBuild(
 				gr,
@@ -84,7 +84,7 @@ void Figure_Tab::DispSpace(Graphics& gr, DispPos* pDispPos, EditView* pView, boo
 			);
 
 			// タブ矢印表示
-			if (cTabType.IsDisp()) {
+			if (tabType.IsDisp()) {
 				// 文字色や太字かどうかを現在の DC から調べる	// 2009.05.29 ryoji 
 				// （検索マッチ等の状況に柔軟に対応するため、ここは記号の色指定には決め打ちしない）
 				//	太字かどうか設定も見る様にする 2013/4/11 Uchi

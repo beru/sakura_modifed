@@ -107,7 +107,7 @@ void SaveAgent::OnBeforeSave(const SaveInfo& saveInfo)
 	EditDoc* pDoc = GetListeningDoc();
 
 	// 改行コード統一
-	DocVisitor(pDoc).SetAllEol(saveInfo.eol);
+	DocVisitor(*pDoc).SetAllEol(saveInfo.eol);
 }
 
 void SaveAgent::OnSave(const SaveInfo& saveInfo)

@@ -40,7 +40,7 @@
 	@date	2003/07/26 ryoji BOMの状態の取得を追加
 */
 CodeConvertResult ReadManager::ReadFile_To_CDocLineMgr(
-	DocLineMgr*			pDocLineMgr,	// [out]
+	DocLineMgr&			docLineMgr,		// [out]
 	const LoadInfo&		loadInfo,		// [in]
 	FileInfo*			pFileInfo		// [out]
 	)
@@ -67,7 +67,7 @@ CodeConvertResult ReadManager::ReadFile_To_CDocLineMgr(
 	pFileInfo->SetCodeSet( eCharCode, bBom );
 
 	// 既存データのクリア
-	pDocLineMgr->DeleteAllLine();
+	docLineMgr.DeleteAllLine();
 
 	// 処理中のユーザー操作を可能にする
 	if (!::BlockingHook(NULL)) {
@@ -110,7 +110,7 @@ CodeConvertResult ReadManager::ReadFile_To_CDocLineMgr(
 			const wchar_t* pLine = unicodeBuffer.GetStringPtr();
 			int nLineLen = unicodeBuffer.GetStringLength();
 			++nLineNum;
-			DocEditAgent(pDocLineMgr).AddLineStrX( pLine, nLineLen );
+			DocEditAgent(docLineMgr).AddLineStrX( pLine, nLineLen );
 			// 経過通知
 			if (nLineNum % 512 == 0) {
 				NotifyProgress(fl.GetPercent());
@@ -157,7 +157,7 @@ CodeConvertResult ReadManager::ReadFile_To_CDocLineMgr(
 			pszPath
 		 );
 		// 既存データのクリア
-		pDocLineMgr->DeleteAllLine();
+		docLineMgr.DeleteAllLine();
 	} // 例外処理終わり
 
 	NotifyProgress(0);

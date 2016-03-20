@@ -240,7 +240,7 @@ void EditView::InsertData_CEditView(
 
 	// 再描画
 	// 行番号表示に必要な幅を設定
-	if (m_pEditWnd->DetectWidthOfLineNumberAreaAllPane(bRedraw)) {
+	if (m_editWnd.DetectWidthOfLineNumberAreaAllPane(bRedraw)) {
 		// キャレットの表示・更新
 		GetCaret().ShowEditCaret();
 	}else {
@@ -308,14 +308,14 @@ void EditView::InsertData_CEditView(
 			this->ReleaseDC(hdc);
 			// 2014.07.16 他のビュー(ミニマップ)の再描画を抑制する
 			if (nInsLineNum == 0) {
-				for (int i=0; i<m_pEditWnd->GetAllViewCount(); ++i) {
-					EditView* pView = &m_pEditWnd->GetView(i);
+				for (int i=0; i<m_editWnd.GetAllViewCount(); ++i) {
+					EditView* pView = &m_editWnd.GetView(i);
 					if (pView == this) {
 						continue;
 					}
 					pView->RedrawLines(nLayoutTop, nLayoutBottom);
 				}
-				m_pEditWnd->GetMiniMap().RedrawLines(nLayoutTop, nLayoutBottom);
+				m_editWnd.GetMiniMap().RedrawLines(nLayoutTop, nLayoutBottom);
 				if (!m_bDoing_UndoRedo && pOpe) {
 					GetDocument().m_docEditor.m_nOpeBlkRedawCount++;
 				}
@@ -546,7 +546,7 @@ void EditView::DeleteData(
 			SetDrawSwitch(true);	// 2002.01.25 hor
 
 			// 行番号表示に必要な幅を設定
-			if (m_pEditWnd->DetectWidthOfLineNumberAreaAllPane(true)) {
+			if (m_editWnd.DetectWidthOfLineNumberAreaAllPane(true)) {
 				// キャレットの表示・更新
 				GetCaret().ShowEditCaret();
 			}
@@ -825,7 +825,7 @@ bool EditView::ReplaceData_CEditView3(
 		DLRArg.pInsData = pInsData;
 		DLRArg.nDelSeq = nDelSeq;
 		// DLRArg.ptNewPos;
-		SearchAgent(&GetDocument().m_docLineMgr).ReplaceData(&DLRArg);
+		SearchAgent(GetDocument().m_docLineMgr).ReplaceData(&DLRArg);
 	}else {
 		LRArg.delRange    = delRange;		// 削除範囲レイアウト
 		LRArg.pMemDeleted = pMemDeleted;	// [out] 削除されたデータ
@@ -843,7 +843,7 @@ bool EditView::ReplaceData_CEditView3(
 	}
 
 	// 行番号表示に必要な幅を設定
-	if (m_pEditWnd->DetectWidthOfLineNumberAreaAllPane(bRedraw)) {
+	if (m_editWnd.DetectWidthOfLineNumberAreaAllPane(bRedraw)) {
 		// キャレットの表示・更新
 		GetCaret().ShowEditCaret();
 	}else {
@@ -891,14 +891,14 @@ bool EditView::ReplaceData_CEditView3(
 
 				LayoutYInt nLayoutTop = LRArg.nModLineFrom;
 				LayoutYInt nLayoutBottom = LRArg.nModLineTo + 1 + nAddLine;
-				for (int i=0; i<m_pEditWnd->GetAllViewCount(); ++i) {
-					EditView* pView = &m_pEditWnd->GetView(i);
+				for (int i=0; i<m_editWnd.GetAllViewCount(); ++i) {
+					EditView* pView = &m_editWnd.GetView(i);
 					if (pView == this) {
 						continue;
 					}
 					pView->RedrawLines(nLayoutTop, nLayoutBottom);
 				}
-				m_pEditWnd->GetMiniMap().RedrawLines(nLayoutTop, nLayoutBottom);
+				m_editWnd.GetMiniMap().RedrawLines(nLayoutTop, nLayoutBottom);
 				if (!m_bDoing_UndoRedo && pOpeBlk) {
 					GetDocument().m_docEditor.m_nOpeBlkRedawCount++;
 				}

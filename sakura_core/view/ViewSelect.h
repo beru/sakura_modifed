@@ -30,11 +30,11 @@ class EditView;
 
 class ViewSelect {
 public:
-	EditView* GetEditView() { return m_pEditView; }
-	const EditView* GetEditView() const { return m_pEditView; }
+	EditView& GetEditView() { return m_editView; }
+	const EditView& GetEditView() const { return m_editView; }
 
 public:
-	ViewSelect(EditView* pEditView);
+	ViewSelect(EditView& editView);
 	void CopySelectStatus(ViewSelect* pSelect) const;
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -142,7 +142,7 @@ public:
 
 private:
 	// éQè∆
-	EditView*	m_pEditView;
+	EditView&	m_editView;
 
 public:
 

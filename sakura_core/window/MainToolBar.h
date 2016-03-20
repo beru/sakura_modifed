@@ -31,7 +31,7 @@ class ImageListMgr;
 
 class MainToolBar {
 public:
-	MainToolBar(EditWnd* pOwner);
+	MainToolBar(EditWnd& owner);
 
 	void Create(ImageListMgr* pIcons);
 
@@ -63,7 +63,7 @@ public:
 	void SetFocusSearchBox(void) const;		// ツールバー検索ボックスへフォーカスを移動		2006.06.04 yukihane
 
 private:
-	EditWnd*	m_pOwner;
+	EditWnd&	m_owner;
     HWND		m_hwndToolBar;
 
 	// 子ウィンドウ
@@ -74,7 +74,7 @@ private:
 	HFONT		m_hFontSearchBox;	// 検索コンボボックスのフォント
 
 	ComboBoxItemDeleter	m_comboDel;
-	RecentSearch			m_recentSearch;
-	ImageListMgr*			m_pIcons;
+	RecentSearch		m_recentSearch;
+	ImageListMgr*		m_pIcons;
 };
 

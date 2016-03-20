@@ -5,9 +5,10 @@
 #include "doc/EditDoc.h"
 #include "types/TypeSupport.h"
 
-Ruler::Ruler(const EditView* pEditView, const EditDoc* pEditDoc)
-: m_pEditView(pEditView)
-, m_pEditDoc(pEditDoc)
+Ruler::Ruler(const EditView& editView, const EditDoc& editDoc)
+	:
+	m_editView(editView),
+	m_editDoc(editDoc)
 {
 	m_nOldRulerDrawX = 0;	// 前回描画したルーラーのキャレット位置 2002.02.25 Add By KK
 	m_nOldRulerWidth = 0;	// 前回描画したルーラーのキャレット幅   2002.02.25 Add By KK
@@ -27,9 +28,9 @@ void Ruler::_DrawRulerCaret(
 	// 描画領域 -> hRgn
 	RECT rc;
 	rc.left = nCaretDrawPosX + 1;	// 2012.07.27 Moca 1px右に修正
-	rc.right = rc.left + m_pEditView->GetTextMetrics().GetHankakuDx() - 1;
+	rc.right = rc.left + m_editView.GetTextMetrics().GetHankakuDx() - 1;
 	rc.top = 0;
-	rc.bottom = m_pEditView->GetTextArea().GetAreaTop() - m_pEditView->GetTextArea().GetTopYohaku() - 1;
+	rc.bottom = m_editView.GetTextArea().GetAreaTop() - m_editView.GetTextArea().GetTopYohaku() - 1;
 	HRGN hRgn = ::CreateRectRgnIndirect(&rc);
 
 	// ブラシ作成 -> hBrush
@@ -60,13 +61,13 @@ void Ruler::_DrawRulerCaret(
 */
 void Ruler::DrawRulerCaret(Graphics& gr)
 {
-	auto& textArea = m_pEditView->GetTextArea();
-	auto& caret = m_pEditView->GetCaret();
+	auto& textArea = m_editView.GetTextArea();
+	auto& caret = m_editView.GetCaret();
 	if (1
 		&& textArea.GetViewLeftCol() <= caret.GetCaretLayoutPos().GetX()
 		&& textArea.GetRightCol() + 2 >= caret.GetCaretLayoutPos().GetX()
 	) {
-		auto& ruler = m_pEditView->GetRuler();
+		auto& ruler = m_editView.GetRuler();
 		if (1
 			&& ruler.m_nOldRulerDrawX == caret.CalcCaretDrawPos(caret.GetCaretLayoutPos()).x
 			&& caret.GetCaretSize().cx == ruler.m_nOldRulerWidth
@@ -94,7 +95,7 @@ void Ruler::DrawRulerBg(Graphics& gr)
 	CommonSetting* pCommon = &GetDllShareData().common;
 
 	// サポート
-	TypeSupport cRulerType(m_pEditView, COLORIDX_RULER);
+	TypeSupport rulerType(m_editView, COLORIDX_RULER);
 
 	// フォント設定 (ルーラー上の数字用)
 	LOGFONT	lf = {0};
@@ -116,18 +117,18 @@ void Ruler::DrawRulerBg(Graphics& gr)
 	HFONT hFontOld = (HFONT)::SelectObject(gr, hFont);
 	::SetBkMode(gr, TRANSPARENT);
 	
-	auto& textArea = m_pEditView->GetTextArea();
+	auto& textArea = m_editView.GetTextArea();
 	// 背景塗りつぶし
 	RECT rc;
 	rc.left = 0;
 	rc.top = 0;
 	rc.right = textArea.GetAreaRight();
 	rc.bottom = textArea.GetAreaTop() - textArea.GetTopYohaku();
-	cRulerType.FillBack(gr, rc);
+	rulerType.FillBack(gr, rc);
 	
 	// ルーラー色設定
-	gr.PushPen(cRulerType.GetTextColor(), 0);
-	gr.PushTextForeColor(cRulerType.GetTextColor());
+	gr.PushPen(rulerType.GetTextColor(), 0);
+	gr.PushTextForeColor(rulerType.GetTextColor());
 	
 	// 描画開始位置
 	int nX = textArea.GetAreaLeft();
@@ -136,8 +137,8 @@ void Ruler::DrawRulerBg(Graphics& gr)
 	// 下線 (ルーラーと本文の境界)
 	//	Aug. 14, 2005 genta 折り返し幅をLayoutMgrから取得するように
 	//	2005.11.10 Moca 1dot足りない
-	LayoutInt	nMaxLineKetas = m_pEditDoc->m_layoutMgr.GetMaxLineKetas();
-	int nToX = textArea.GetAreaLeft() + (Int)(nMaxLineKetas - textArea.GetViewLeftCol()) * m_pEditView->GetTextMetrics().GetHankakuDx() + 1;
+	LayoutInt	nMaxLineKetas = m_editDoc.m_layoutMgr.GetMaxLineKetas();
+	int nToX = textArea.GetAreaLeft() + (Int)(nMaxLineKetas - textArea.GetViewLeftCol()) * m_editView.GetTextMetrics().GetHankakuDx() + 1;
 	if (nToX > textArea.GetAreaRight()) {
 		nToX = textArea.GetAreaRight();
 	}
@@ -168,7 +169,7 @@ void Ruler::DrawRulerBg(Graphics& gr)
 			::LineTo(gr, nX, nY - 3);
 		}
 
-		nX += m_pEditView->GetTextMetrics().GetHankakuDx();
+		nX += m_editView.GetTextMetrics().GetHankakuDx();
 		++i;
 	}
 
@@ -188,9 +189,9 @@ void Ruler::DrawRulerBg(Graphics& gr)
 void Ruler::DispRuler(HDC hdc)
 {
 	// サポート
-	TypeSupport rulerType(m_pEditView, COLORIDX_RULER);
+	TypeSupport rulerType(m_editView, COLORIDX_RULER);
 
-	if (!m_pEditView->GetDrawSwitch()) {
+	if (!m_editView.GetDrawSwitch()) {
 		return;
 	}
 	if (!rulerType.IsDisp()) {
@@ -199,14 +200,14 @@ void Ruler::DispRuler(HDC hdc)
 
 	// 描画対象
 	Graphics gr(hdc);
-	auto& caret = m_pEditView->GetCaret();
+	auto& caret = m_editView.GetCaret();
 	// 2002.02.25 Add By KK ルーラー全体を描き直す必要がない場合は、ルーラ上のキャレットのみ描きなおす 
 	if (!m_bRedrawRuler) {
 		DrawRulerCaret(gr);
 	}else {
 		// 背景描画
 		DrawRulerBg(gr);
-		auto& textArea = m_pEditView->GetTextArea();
+		auto& textArea = m_editView.GetTextArea();
 		// キャレット描画
 		if (1
 			&& textArea.GetViewLeftCol() <= caret.GetCaretLayoutPos().GetX()

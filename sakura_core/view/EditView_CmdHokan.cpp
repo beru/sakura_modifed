@@ -40,7 +40,7 @@ void EditView::PreprocessCommand_hokan(int nCommand)
 			&& nCommand != F_WCHAR		//	文字入力
 			&& nCommand != F_IME_CHAR	//	漢字入力
 		) {
-			m_pEditWnd->m_hokanMgr.Hide();
+			m_editWnd.m_hokanMgr.Hide();
 			m_bHokan = false;
 		}
 	}
@@ -62,7 +62,7 @@ void EditView::PostprocessCommand_hokan(void)
 			ShowHokanMgr(memData, false);
 		}else {
 			if (m_bHokan) {
-				m_pEditWnd->m_hokanMgr.Hide();
+				m_editWnd.m_hokanMgr.Hide();
 				m_bHokan = false;
 			}
 		}
@@ -119,7 +119,7 @@ void EditView::ShowHokanMgr(NativeW& memData, bool bAutoDecided)
 	// エディタ起動時だとエディタ可視化の途中になぜか不可視の入力補完ウィンドウが一時的にフォアグラウンドになって、
 	// タブバーに新規タブが追加されるときのタブ切替でタイトルバーがちらつく（一瞬非アクティブ表示になるのがはっきり見える）ことがあった。
 	// ※ Vista/7 の特定の PC でだけのちらつきか？ 該当 PC 以外の Vista/7 PC でもたまに微妙に表示が乱れた感じになる程度の症状が見られたが、それらが同一原因かどうかは不明。
-	auto& hokanMgr = m_pEditWnd->m_hokanMgr;
+	auto& hokanMgr = m_editWnd.m_hokanMgr;
 	if (!hokanMgr.GetHwnd()) {
 		hokanMgr.DoModeless(
 			G_AppInstance(),

@@ -78,7 +78,7 @@ class EditDoc
 {
 public:
 	// コンストラクタ・デストラクタ
-	EditDoc(EditApp* pApp);
+	EditDoc(EditApp& app);
 	~EditDoc();
 
 	// 初期化

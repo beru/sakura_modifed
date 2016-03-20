@@ -159,13 +159,13 @@ static const EFunctionCode EIsModificationForbidden[] = {
 	@date 2002.01.14 YAZAKI 印刷PreviewをCPrintPreviewに独立させたことによる変更
 	@date 2004.06.21 novice タグジャンプ機能追加
 */
-EditDoc::EditDoc(EditApp* pApp)
+EditDoc::EditDoc(EditApp& app)
 	:
-	m_docFile(this),					// warning C4355: 'this' : ベース メンバー初期化子リストで使用されました。
-	m_docFileOperation(this),			// warning C4355: 'this' : ベース メンバー初期化子リストで使用されました。
-	m_docEditor(this),					// warning C4355: 'this' : ベース メンバー初期化子リストで使用されました。
-	m_docType(this),					// warning C4355: 'this' : ベース メンバー初期化子リストで使用されました。
-	m_docOutline(*this),				// warning C4355: 'this' : ベース メンバー初期化子リストで使用されました。
+	m_docFile(*this),
+	m_docFileOperation(*this),
+	m_docEditor(*this),
+	m_docType(*this),
+	m_docOutline(*this),
 	m_nCommandExecNum(0),				// コマンド実行回数
 	m_hBackImg(NULL)
 {

@@ -33,7 +33,7 @@
 // 上下に分割	// Sept. 17, 2000 jepro 説明の「縦」を「上下に」に変更
 void ViewCommander::Command_SPLIT_V(void)
 {
-	GetEditWindow()->m_splitterWnd.VSplitOnOff();
+	GetEditWindow().m_splitterWnd.VSplitOnOff();
 	return;
 }
 
@@ -41,7 +41,7 @@ void ViewCommander::Command_SPLIT_V(void)
 // 左右に分割	// Sept. 17, 2000 jepro 説明の「横」を「左右に」に変更
 void ViewCommander::Command_SPLIT_H(void)
 {
-	GetEditWindow()->m_splitterWnd.HSplitOnOff();
+	GetEditWindow().m_splitterWnd.HSplitOnOff();
 	return;
 }
 
@@ -49,7 +49,7 @@ void ViewCommander::Command_SPLIT_H(void)
 // 縦横に分割	// Sept. 17, 2000 jepro 説明に「に」を追加
 void ViewCommander::Command_SPLIT_VH(void)
 {
-	GetEditWindow()->m_splitterWnd.VHSplitOnOff();
+	GetEditWindow().m_splitterWnd.VHSplitOnOff();
 	return;
 }
 
@@ -107,7 +107,7 @@ void ViewCommander::Command_TAB_CLOSEOTHER(void)
 void ViewCommander::Command_WINLIST(int nCommandFrom)
 {
 	// ウィンドウ一覧をポップアップ表示する
-	GetEditWindow()->PopupWinList((nCommandFrom & FA_FROMKEYBOARD) != FA_FROMKEYBOARD);
+	GetEditWindow().PopupWinList((nCommandFrom & FA_FROMKEYBOARD) != FA_FROMKEYBOARD);
 	// 2007.02.27 ryoji アクセラレータキーからでなければマウス位置に
 }
 
@@ -369,7 +369,7 @@ void ViewCommander::Command_TILE_H(void)
 */
 void ViewCommander::Command_WINTOPMOST(LPARAM lparam)
 {
-	GetEditWindow()->WindowTopMost(int(lparam));
+	GetEditWindow().WindowTopMost(int(lparam));
 }
 
 
@@ -392,8 +392,8 @@ void ViewCommander::Command_BIND_WINDOW(void)
 
 		// まとめるときは WS_EX_TOPMOST 状態を同期する	// 2007.05.18 ryoji
 		if (!csTabBar.bDispTabWndMultiWin) {
-			GetEditWindow()->WindowTopMost(
-				((DWORD)::GetWindowLongPtr(GetEditWindow()->GetHwnd(), GWL_EXSTYLE) & WS_EX_TOPMOST)? 1: 2
+			GetEditWindow().WindowTopMost(
+				((DWORD)::GetWindowLongPtr(GetEditWindow().GetHwnd(), GWL_EXSTYLE) & WS_EX_TOPMOST)? 1: 2
 			);
 		}
 
@@ -403,7 +403,7 @@ void ViewCommander::Command_BIND_WINDOW(void)
 		AppNodeGroupHandle(0).PostMessageToAllEditors(
 			MYWM_TAB_WINDOW_NOTIFY,						// タブウィンドウイベント
 			(WPARAM)((csTabBar.bDispTabWndMultiWin) ? TabWndNotifyType::Disable : TabWndNotifyType::Enable), // タブモード有効/無効化イベント
-			(LPARAM)GetEditWindow()->GetHwnd(),	// EditWndのウィンドウハンドル
+			(LPARAM)GetEditWindow().GetHwnd(),	// EditWndのウィンドウハンドル
 			m_view.GetHwnd());									// 自分自身
 		// End 2004.08.27 Kazika
 	}
@@ -429,7 +429,7 @@ void ViewCommander::Command_GROUPCLOSE(void)
 // 次のグループ			// 2007.06.20 ryoji
 void ViewCommander::Command_NEXTGROUP(void)
 {
-	auto& tabWnd = GetEditWindow()->m_tabWnd;
+	auto& tabWnd = GetEditWindow().m_tabWnd;
 	if (!tabWnd.GetHwnd()) {
 		return;
 	}
@@ -440,7 +440,7 @@ void ViewCommander::Command_NEXTGROUP(void)
 // 前のグループ			// 2007.06.20 ryoji
 void ViewCommander::Command_PREVGROUP(void)
 {
-	auto& tabWnd = GetEditWindow()->m_tabWnd;
+	auto& tabWnd = GetEditWindow().m_tabWnd;
 	if (!tabWnd.GetHwnd()) {
 		return;
 	}
@@ -451,7 +451,7 @@ void ViewCommander::Command_PREVGROUP(void)
 // タブを右に移動		// 2007.06.20 ryoji
 void ViewCommander::Command_TAB_MOVERIGHT(void)
 {
-	auto& tabWnd = GetEditWindow()->m_tabWnd;
+	auto& tabWnd = GetEditWindow().m_tabWnd;
 	if (!tabWnd.GetHwnd()) {
 		return;
 	}
@@ -462,7 +462,7 @@ void ViewCommander::Command_TAB_MOVERIGHT(void)
 // タブを左に移動		// 2007.06.20 ryoji
 void ViewCommander::Command_TAB_MOVELEFT(void)
 {
-	auto& tabWnd = GetEditWindow()->m_tabWnd;
+	auto& tabWnd = GetEditWindow().m_tabWnd;
 	if (!tabWnd.GetHwnd()) {
 		return;
 	}
@@ -473,7 +473,7 @@ void ViewCommander::Command_TAB_MOVELEFT(void)
 // 新規グループ			// 2007.06.20 ryoji
 void ViewCommander::Command_TAB_SEPARATE(void)
 {
-	auto& tabWnd = GetEditWindow()->m_tabWnd;
+	auto& tabWnd = GetEditWindow().m_tabWnd;
 	if (!tabWnd.GetHwnd()) {
 		return;
 	}
@@ -484,7 +484,7 @@ void ViewCommander::Command_TAB_SEPARATE(void)
 // 次のグループに移動	// 2007.06.20 ryoji
 void ViewCommander::Command_TAB_JOINTNEXT(void)
 {
-	auto& tabWnd = GetEditWindow()->m_tabWnd;
+	auto& tabWnd = GetEditWindow().m_tabWnd;
 	if (!tabWnd.GetHwnd()) {
 		return;
 	}
@@ -495,7 +495,7 @@ void ViewCommander::Command_TAB_JOINTNEXT(void)
 // 前のグループに移動	// 2007.06.20 ryoji
 void ViewCommander::Command_TAB_JOINTPREV(void)
 {
-	auto& tabWnd = GetEditWindow()->m_tabWnd;
+	auto& tabWnd = GetEditWindow().m_tabWnd;
 	if (!tabWnd.GetHwnd()) {
 		return;
 	}

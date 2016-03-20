@@ -49,7 +49,7 @@ public:
 	/*
 	||  コンストラクタ
 	*/
-	PrintPreview(class EditWnd* pParentWnd);
+	PrintPreview(class EditWnd& parentWnd);
 	~PrintPreview();
 	
 	/*
@@ -193,7 +193,7 @@ public:
 	// none
 
 protected:
-	EditWnd*		m_pParentWnd;	//	親のCEditDoc*。
+	EditWnd&		m_parentWnd;	//	親のEditEnd。
 
 	// 2006.08.17 Moca YAZAKIさんのメモの通りDC/BMPをCEditDocからPrintPreviewへ移動
 	HDC				m_hdcCompatDC;		// 再描画用コンパチブルDC

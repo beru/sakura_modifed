@@ -32,7 +32,7 @@ void DocVisitor::SetAllEol(Eol eol)
 		LogicInt nLine = LogicInt(0);
 		OpeBlk* pOpeBlk = view.m_bDoing_UndoRedo ? NULL : view.m_commander.GetOpeBlk();
 		for (;;) {
-			DocLine* pDocLine = m_pDocRef->m_docLineMgr.GetLine(nLine); //#######”ñŒø—¦
+			DocLine* pDocLine = m_doc.m_docLineMgr.GetLine(nLine); //#######”ñŒø—¦
 			if (!pDocLine) {
 				break;
 			}
@@ -58,12 +58,12 @@ void DocVisitor::SetAllEol(Eol eol)
 	}
 
 	if (bReplace) {
-		m_pDocRef->m_layoutMgr._DoLayout();
-		m_pDocRef->m_pEditWnd->ClearViewCaretPosInfo();
-		if (m_pDocRef->m_nTextWrapMethodCur == TextWrappingMethod::NoWrapping) {
-			m_pDocRef->m_layoutMgr.CalculateTextWidth();
+		m_doc.m_layoutMgr._DoLayout();
+		m_doc.m_pEditWnd->ClearViewCaretPosInfo();
+		if (m_doc.m_nTextWrapMethodCur == TextWrappingMethod::NoWrapping) {
+			m_doc.m_layoutMgr.CalculateTextWidth();
 		}else {
-			m_pDocRef->m_layoutMgr.ClearLayoutLineWidth();
+			m_doc.m_layoutMgr.ClearLayoutLineWidth();
 		}
 	}
 	// Undo‹L˜^

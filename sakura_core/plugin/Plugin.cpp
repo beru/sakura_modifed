@@ -224,7 +224,7 @@ bool Plugin::ReadPluginDefOption(
 				sLabel = sKey;
 			}
 
-			m_options.push_back(new PluginOption(this, sLabel, sSection, sKey, sType, sSelect, sDefaultVal, nCount));
+			m_options.push_back(new PluginOption(*this, sLabel, sSection, sKey, sType, sSelect, sDefaultVal, nCount));
 		}
 	}
 

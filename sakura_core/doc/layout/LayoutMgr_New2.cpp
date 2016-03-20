@@ -66,7 +66,7 @@ void LayoutMgr::ReplaceData_CLayoutMgr(
 	dlra.pMemDeleted = pArg->pMemDeleted;	// 削除されたデータを保存
 	dlra.pInsData = pArg->pInsData;			// 挿入するデータ
 	dlra.nDelSeq = pArg->nDelSeq;
-	SearchAgent(m_pDocLineMgr).ReplaceData(
+	SearchAgent(*m_pDocLineMgr).ReplaceData(
 		&dlra
 	);
 	pArg->nInsSeq = dlra.nInsSeq;

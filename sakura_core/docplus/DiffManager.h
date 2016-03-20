@@ -87,11 +87,11 @@ private:
 // 行全体のDIFF情報管理
 class DiffLineMgr {
 public:
-	DiffLineMgr(DocLineMgr* pDocLineMgr) : m_pDocLineMgr(pDocLineMgr) { }
+	DiffLineMgr(DocLineMgr& docLineMgr) : m_docLineMgr(docLineMgr) { }
 	void ResetAllDiffMark();															// 差分表示の全解除
 	bool SearchDiffMark(LogicInt , SearchDirection, LogicInt*);						// 差分検索
 	void SetDiffMarkRange(DiffMark nMode, LogicInt nStartLine, LogicInt nEndLine);	// 差分範囲の登録
 private:
-	DocLineMgr* m_pDocLineMgr;
+	DocLineMgr& m_docLineMgr;
 };
 

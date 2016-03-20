@@ -143,7 +143,7 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 public:
 	// Constructors
-	EditView(EditWnd* pEditWnd);
+	EditView(EditWnd& editWnd);
 	~EditView();
 	void Close();
 	// 初期化系メンバ関数
@@ -227,11 +227,11 @@ protected:
 	);
 
 	//! レイアウト行を1行描画
-	bool DrawLayoutLine(ColorStrategyInfo* pInfo);
+	bool DrawLayoutLine(ColorStrategyInfo& csInfo);
 
 	// 色分け
 public:
-	Color3Setting GetColorIndex(const Layout* pLayout, LayoutYInt nLineNum, int nIndex, ColorStrategyInfo* pInfo, bool bPrev = false);	// 指定位置のColorIndexの取得 02/12/13 ai
+	Color3Setting GetColorIndex(const Layout* pLayout, LayoutYInt nLineNum, int nIndex, ColorStrategyInfo& csInfo, bool bPrev = false);	// 指定位置のColorIndexの取得 02/12/13 ai
 	void SetCurrentColor(Graphics& gr, EColorIndexType, EColorIndexType, EColorIndexType);
 	COLORREF GetTextColorByColorInfo2(const ColorInfo& info, const ColorInfo& info2);
 	COLORREF GetBackColorByColorInfo2(const ColorInfo& info, const ColorInfo& info2);
@@ -582,7 +582,7 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 public:
 	// 参照
-	EditWnd*			m_pEditWnd;	// ウィンドウ
+	EditWnd&			m_editWnd;	// ウィンドウ
 	EditDoc*			m_pEditDoc;	// ドキュメント
 	const TypeConfig*	m_pTypeData;
 

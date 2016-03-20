@@ -69,7 +69,7 @@ void MacroBeforeAfter::ExecKeyMacroAfter(
 			pEditView->SetUndoBuffer();
 		}
 	}
-	pEditView->m_pEditWnd->SetDrawSwitchOfAllViews(m_bDrawSwitchOld);
+	pEditView->m_editWnd.SetDrawSwitchOfAllViews(m_bDrawSwitchOld);
 }
 
 // MacroManagerBase

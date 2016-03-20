@@ -47,7 +47,7 @@ void ViewCommander::Command_JUMP_SRCHSTARTPOS(void)
 */
 void ViewCommander::Command_JUMP_DIALOG(void)
 {
-	if (!GetEditWindow()->m_dlgJump.DoModal(
+	if (!GetEditWindow().m_dlgJump.DoModal(
 			G_AppInstance(), m_view.GetHwnd(), (LPARAM)&GetDocument()
 		)
 	) {
@@ -70,7 +70,7 @@ void ViewCommander::Command_JUMP(void)
 	int nCurrentLine;
 	int nCommentBegin = 0;
 
-	auto& dlgJump = GetEditWindow()->m_dlgJump;
+	auto& dlgJump = GetEditWindow().m_dlgJump;
 
 	// 行番号
 	int	nLineNum; //$$ 単位混在
@@ -299,7 +299,7 @@ void ViewCommander::Command_BOOKMARK_SET(void)
 	}
 
 	// 2002.01.16 hor 分割したビューも更新
-	GetEditWindow()->Views_Redraw();
+	GetEditWindow().Views_Redraw();
 }
 
 
@@ -399,7 +399,7 @@ void ViewCommander::Command_BOOKMARK_RESET(void)
 {
 	BookmarkManager(GetDocument().m_docLineMgr).ResetAllBookMark();
 	// 2002.01.16 hor 分割したビューも更新
-	GetEditWindow()->Views_Redraw();
+	GetEditWindow().Views_Redraw();
 }
 
 
@@ -416,7 +416,7 @@ void ViewCommander::Command_BOOKMARK_PATTERN(void)
 		m_view.m_searchPattern
 	);
 	// 2002.01.16 hor 分割したビューも更新
-	GetEditWindow()->Views_Redraw();
+	GetEditWindow().Views_Redraw();
 }
 
 

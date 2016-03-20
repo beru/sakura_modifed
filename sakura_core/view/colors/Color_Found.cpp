@@ -24,7 +24,7 @@ bool Color_Select::BeginColorEx(const StringRef& str, int nPos, LayoutInt nLineN
 	if (!str.IsValid()) return false;
 
 	const EditView& view = *(ColorStrategyPool::getInstance().GetCurrentView());
-	if (!view.GetSelectionInfo().IsTextSelected() || !TypeSupport(&view, COLORIDX_SELECT).IsDisp()) {
+	if (!view.GetSelectionInfo().IsTextSelected() || !TypeSupport(view, COLORIDX_SELECT).IsDisp()) {
 		return false;
 	}
 

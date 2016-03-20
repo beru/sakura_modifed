@@ -179,7 +179,7 @@ public:
 	// コンストラクタ
 public:
 	PluginOption(
-		Plugin* parent,
+		Plugin& parent,
 		const wstring& sLabel,
 		const wstring& sSection,
 		const wstring& sKey,
@@ -188,8 +188,9 @@ public:
 		const wstring& sDefaultVal,
 		int index
 		)
+		:
+		m_parent(parent)
 	{
-		m_parent	= parent;
 		m_sLabel	= sLabel;
 		m_sSection	= sSection;
 		m_sKey		= sKey;
@@ -220,7 +221,7 @@ public:
 	wstring	GetDefaultVal() { return m_sDefaultVal; }
 
 protected:
-	Plugin*		m_parent;
+	Plugin&		m_parent;
 	wstring		m_sLabel;
 	wstring		m_sSection;
 	wstring		m_sKey;

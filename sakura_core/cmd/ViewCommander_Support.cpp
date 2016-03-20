@@ -133,14 +133,14 @@ void ViewCommander::Command_MENU_ALLFUNC(void)
 //	To Here Sept. 15, 2000 (Oct. 7, 2000 300¨500; Nov. 3, 2000 500¨540)
 	po.y = 0;
 
-	EditWnd* pEditWnd = GetEditWindow();	// Sep. 10, 2002 genta
-	::GetClientRect(pEditWnd->GetHwnd(), &rc);
+	auto& editWnd = GetEditWindow();	// Sep. 10, 2002 genta
+	::GetClientRect(editWnd.GetHwnd(), &rc);
 	po.x = t_min(po.x, rc.right);
-	::ClientToScreen(pEditWnd->GetHwnd(), &po);
-	::GetWindowRect(pEditWnd->m_splitterWnd.GetHwnd() , &rc);
+	::ClientToScreen(editWnd.GetHwnd(), &po);
+	::GetWindowRect(editWnd.m_splitterWnd.GetHwnd() , &rc);
 	po.y = rc.top;
 
-	pEditWnd->GetMenuDrawer().ResetContents();
+	editWnd.GetMenuDrawer().ResetContents();
 
 	// Oct. 3, 2001 genta
 	FuncLookup& FuncLookup = GetDocument().m_funcLookup;
@@ -157,12 +157,12 @@ void ViewCommander::Command_MENU_ALLFUNC(void)
 				FuncLookup.Pos2FuncName(i, j, szLabel, 256);
 				UINT uFlags = MF_BYPOSITION | MF_STRING | MF_ENABLED;
 				// Oct. 3, 2001 genta
-				pEditWnd->GetMenuDrawer().MyAppendMenu(hMenuPopUp, uFlags, code, szLabel, L"");
+				editWnd.GetMenuDrawer().MyAppendMenu(hMenuPopUp, uFlags, code, szLabel, L"");
 			}
 		}
 		// Oct. 3, 2001 genta
-		pEditWnd->GetMenuDrawer().MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING | MF_POPUP, (UINT_PTR)hMenuPopUp , FuncLookup.Category2Name(i) , _T(""));
-//		pEditWnd->GetMenuDrawer().MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING | MF_POPUP, (UINT)hMenuPopUp , nsFuncCode::ppszFuncKind[i]);
+		editWnd.GetMenuDrawer().MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING | MF_POPUP, (UINT_PTR)hMenuPopUp , FuncLookup.Category2Name(i) , _T(""));
+//		editWnd.GetMenuDrawer().MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING | MF_POPUP, (UINT)hMenuPopUp , nsFuncCode::ppszFuncKind[i]);
 	}
 	int nId = ::TrackPopupMenu(
 		hMenu,

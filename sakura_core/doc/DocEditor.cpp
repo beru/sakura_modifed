@@ -33,9 +33,9 @@
 #include "window/EditWnd.h"
 #include "debug/RunningTimer.h"
 
-DocEditor::DocEditor(EditDoc* pDoc)
+DocEditor::DocEditor(EditDoc& doc)
 	:
-	m_pDocRef(pDoc),
+	m_doc(doc),
 	m_newLineCode(EolType::CRLF),	// New Line Type
 	m_pOpeBlk(NULL),
 	m_bInsMode(true),			// Oct. 2, 2005 genta
@@ -60,8 +60,9 @@ void DocEditor::SetModified(bool flag, bool redraw)
 		return;
 
 	m_bIsDocModified = flag;
-	if (redraw)
-		m_pDocRef->m_pEditWnd->UpdateCaption();
+	if (redraw) {
+		m_doc.m_pEditWnd->UpdateCaption();
+	}
 }
 
 void DocEditor::OnBeforeLoad(LoadInfo* loadInfo)
@@ -123,7 +124,7 @@ void DocEditor::OnAfterSave(const SaveInfo& saveInfo)
 */
 void DocEditor::SetImeMode(int mode)
 {
-	HWND hwnd = m_pDocRef->m_pEditWnd->GetActiveView().GetHwnd();
+	HWND hwnd = m_doc.m_pEditWnd->GetActiveView().GetHwnd();
 	HIMC hIme = ImmGetContext(hwnd); //######大丈夫？ // 2013.06.04 EditWndからViewに変更
 
 	// 最下位ビットはIME自身のOn/Off制御
@@ -173,7 +174,7 @@ void DocEditor::SetImeMode(int mode)
 void DocEditAgent::AddLineStrX(const wchar_t* pData, int nDataLen)
 {
 	// チェーン適用
-	DocLine* pDocLine = m_pDocLineMgr->AddNewLine();
+	DocLine* pDocLine = m_docLineMgr.AddNewLine();
 
 	// インスタンス設定
 	pDocLine->SetDocLineString(pData, nDataLen);

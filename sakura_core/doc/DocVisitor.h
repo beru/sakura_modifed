@@ -29,10 +29,10 @@ class EditDoc;
 
 class DocVisitor {
 public:
-	DocVisitor(EditDoc* pDoc) : m_pDocRef(pDoc) { }
+	DocVisitor(EditDoc& doc) : m_doc(doc) { }
 
 	void SetAllEol(Eol eol); // 改行コードを統一する
 private:
-	EditDoc* m_pDocRef;
+	EditDoc& m_doc;
 };
 

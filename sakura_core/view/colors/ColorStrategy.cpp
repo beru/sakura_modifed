@@ -51,7 +51,7 @@ bool _IsPosKeywordHead(const StringRef& str, int nPos)
 bool ColorStrategyInfo::CheckChangeColor(const StringRef& lineStr)
 {
 	auto& pool = ColorStrategyPool::getInstance();
-	pool.SetCurrentView(pView);
+	pool.SetCurrentView(&view);
 	Color_Found*  pFound  = pool.GetFoundStrategy();
 	Color_Select* pSelect = pool.GetSelectStrategy();
 	bool bChange = false;
@@ -108,23 +108,23 @@ bool ColorStrategyInfo::CheckChangeColor(const StringRef& lineStr)
 	}
 
 	// ƒJ[ƒ\ƒ‹s”wŒiF
-	TypeSupport caretLineBg(pView, COLORIDX_CARETLINEBG);
-	if (caretLineBg.IsDisp() && !pView->m_bMiniMap) {
+	TypeSupport caretLineBg(view, COLORIDX_CARETLINEBG);
+	if (caretLineBg.IsDisp() && !view.m_bMiniMap) {
 		if (colorIdxBackLine == COLORIDX_CARETLINEBG) {
-			if (pDispPos->GetLayoutLineRef() != pView->GetCaret().GetCaretLayoutPos().GetY2()) {
+			if (pDispPos->GetLayoutLineRef() != view.GetCaret().GetCaretLayoutPos().GetY2()) {
 				colorIdxBackLine = COLORIDX_TEXT;
 				bChange = true;
 			}
 		}else {
-			if (pDispPos->GetLayoutLineRef() == pView->GetCaret().GetCaretLayoutPos().GetY2()) {
+			if (pDispPos->GetLayoutLineRef() == view.GetCaret().GetCaretLayoutPos().GetY2()) {
 				colorIdxBackLine = COLORIDX_CARETLINEBG;
 				bChange = true;
 			}
 		}
 	}
 	// ‹ô”s‚Ì”wŒiF
-	TypeSupport cEvenLineBg(pView, COLORIDX_EVENLINEBG);
-	if (cEvenLineBg.IsDisp() && !pView->m_bMiniMap && colorIdxBackLine != COLORIDX_CARETLINEBG) {
+	TypeSupport evenLineBg(view, COLORIDX_EVENLINEBG);
+	if (evenLineBg.IsDisp() && !view.m_bMiniMap && colorIdxBackLine != COLORIDX_CARETLINEBG) {
 		if (colorIdxBackLine == COLORIDX_EVENLINEBG) {
 			if (pDispPos->GetLayoutLineRef() % 2 == 0) {
 				colorIdxBackLine = COLORIDX_TEXT;
@@ -137,10 +137,10 @@ bool ColorStrategyInfo::CheckChangeColor(const StringRef& lineStr)
 			}
 		}
 	}
-	if (pView->m_bMiniMap) {
-		TypeSupport cPageViewBg(pView, COLORIDX_PAGEVIEW);
+	if (view.m_bMiniMap) {
+		TypeSupport cPageViewBg(view, COLORIDX_PAGEVIEW);
 		if (cPageViewBg.IsDisp()) {
-			EditView& activeView = pView->m_pEditWnd->GetActiveView();
+			EditView& activeView = view.m_editWnd.GetActiveView();
 			LayoutInt curLine = pDispPos->GetLayoutLineRef();
 			auto viewTopLine = activeView.GetTextArea().GetViewTopLine();
 			auto bottomLine = activeView.GetTextArea().GetBottomLine();

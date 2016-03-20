@@ -72,7 +72,7 @@ void ViewCommander::Command_RECKEYMACRO(void)
 //		GetDllShareData().m_CKeyMacroMgr.Clear();
 	}
 	// 親ウィンドウのタイトルを更新
-	GetEditWindow()->UpdateCaption();
+	GetEditWindow().UpdateCaption();
 
 	// キャレットの行桁位置を表示する
 	GetCaret().ShowCaretPosInfo();

@@ -30,23 +30,23 @@
 #include "charset/charcode.h"
 #include "types/TypeSupport.h"
 
-bool Figure_Text::DrawImp(ColorStrategyInfo* pInfo)
+bool Figure_Text::DrawImp(ColorStrategyInfo& csInfo)
 {
-	int nIdx = pInfo->GetPosInLogic();
+	int nIdx = csInfo.GetPosInLogic();
 	int nLength = NativeW::GetSizeOfChar(	// サロゲートペア対策	2008.10.12 ryoji
-						pInfo->pLineOfLogic,
-						pInfo->GetDocLine()->GetLengthWithoutEOL(),
+						csInfo.pLineOfLogic,
+						csInfo.GetDocLine()->GetLengthWithoutEOL(),
 						nIdx
 					);
-	bool bTrans = pInfo->pView->IsBkBitmap() && TypeSupport(pInfo->pView, COLORIDX_TEXT).GetBackColor() == pInfo->gr.GetTextBackColor();
-	pInfo->pView->GetTextDrawer().DispText(
-		pInfo->gr,
-		pInfo->pDispPos,
-		&pInfo->pLineOfLogic[nIdx],
+	bool bTrans = csInfo.view.IsBkBitmap() && TypeSupport(csInfo.view, COLORIDX_TEXT).GetBackColor() == csInfo.gr.GetTextBackColor();
+	csInfo.view.GetTextDrawer().DispText(
+		csInfo.gr,
+		csInfo.pDispPos,
+		&csInfo.pLineOfLogic[nIdx],
 		nLength,
 		bTrans
 	);
-	pInfo->nPosInLogic += nLength;
+	csInfo.nPosInLogic += nLength;
 	return true;
 }
 
@@ -58,33 +58,33 @@ bool Figure_Text::DrawImp(ColorStrategyInfo* pInfo)
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                      FigureSpace                           //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-bool FigureSpace::DrawImp(ColorStrategyInfo* pInfo)
+bool FigureSpace::DrawImp(ColorStrategyInfo& csInfo)
 {
-	bool bTrans = DrawImp_StyleSelect(pInfo);
-	DispPos sPos(*pInfo->pDispPos);	// 現在位置を覚えておく
-	DispSpace(pInfo->gr, pInfo->pDispPos, pInfo->pView, bTrans);	// 空白描画
-	DrawImp_StylePop(pInfo);
-	DrawImp_DrawUnderline(pInfo, sPos);
+	bool bTrans = DrawImp_StyleSelect(csInfo);
+	DispPos sPos(*csInfo.pDispPos);	// 現在位置を覚えておく
+	DispSpace(csInfo.gr, csInfo.pDispPos, csInfo.view, bTrans);	// 空白描画
+	DrawImp_StylePop(csInfo);
+	DrawImp_DrawUnderline(csInfo, sPos);
 	// 1文字前提
-	pInfo->nPosInLogic += NativeW::GetSizeOfChar(	// 行末以外はここでスキャン位置を１字進める
-		pInfo->pLineOfLogic,
-		pInfo->GetDocLine()->GetLengthWithoutEOL(),
-		pInfo->GetPosInLogic()
+	csInfo.nPosInLogic += NativeW::GetSizeOfChar(	// 行末以外はここでスキャン位置を１字進める
+		csInfo.pLineOfLogic,
+		csInfo.GetDocLine()->GetLengthWithoutEOL(),
+		csInfo.GetPosInLogic()
 		);
 	return true;
 }
 
-bool FigureSpace::DrawImp_StyleSelect(ColorStrategyInfo* pInfo)
+bool FigureSpace::DrawImp_StyleSelect(ColorStrategyInfo& csInfo)
 {
 	// この DrawImp はここ（基本クラス）でデフォルト動作を実装しているが
 	// 仮想関数なので派生クラス側のオーバーライドで個別に仕様変更可能
-	EditView* pView = pInfo->pView;
+	auto& view = csInfo.view;
 
-	TypeSupport currentType(pView, pInfo->GetCurrentColor());	// 周辺の色（現在の指定色/選択色）
-	TypeSupport currentType2(pView, pInfo->GetCurrentColor2());	// 周辺の色（現在の指定色）
-	TypeSupport textType(pView, COLORIDX_TEXT);				// テキストの指定色
-	TypeSupport spaceType(pView, GetDispColorIdx());	// 空白の指定色
-	TypeSupport currentTypeBg(pView, pInfo->GetCurrentColorBg());
+	TypeSupport currentType(view, csInfo.GetCurrentColor());	// 周辺の色（現在の指定色/選択色）
+	TypeSupport currentType2(view, csInfo.GetCurrentColor2());	// 周辺の色（現在の指定色）
+	TypeSupport textType(view, COLORIDX_TEXT);				// テキストの指定色
+	TypeSupport spaceType(view, GetDispColorIdx());	// 空白の指定色
+	TypeSupport currentTypeBg(view, csInfo.GetCurrentColorBg());
 	TypeSupport& currentType1 = (currentType.GetBackColor() == textType.GetBackColor() ? currentTypeBg: currentType);
 	TypeSupport& currentType3 = (currentType2.GetBackColor() == textType.GetBackColor() ? currentTypeBg: currentType2);
 
@@ -104,13 +104,13 @@ bool FigureSpace::DrawImp_StyleSelect(ColorStrategyInfo* pInfo)
 	// ・混合色の場合は従来通り。
 	COLORREF crText;
 	COLORREF crBack;
-	bool blendColor = pInfo->GetCurrentColor() != pInfo->GetCurrentColor2() && currentType.GetTextColor() == currentType.GetBackColor(); // 選択混合色
+	bool blendColor = csInfo.GetCurrentColor() != csInfo.GetCurrentColor2() && currentType.GetTextColor() == currentType.GetBackColor(); // 選択混合色
 	bool bBold;
 	if (blendColor) {
 		TypeSupport& text = spaceType.GetTextColor() == textType.GetTextColor() ? currentType2 : spaceType;
 		TypeSupport& back = spaceType.GetBackColor() == textType.GetBackColor() ? currentType3 : spaceType;
-		crText = pView->GetTextColorByColorInfo2(currentType.GetColorInfo(), text.GetColorInfo());
-		crBack = pView->GetBackColorByColorInfo2(currentType.GetColorInfo(), back.GetColorInfo());
+		crText = view.GetTextColorByColorInfo2(currentType.GetColorInfo(), text.GetColorInfo());
+		crBack = view.GetBackColorByColorInfo2(currentType.GetColorInfo(), back.GetColorInfo());
 		bBold = currentType2.IsBoldFont();
 	}else {
 		TypeSupport& text = spaceType.GetTextColor() == textType.GetTextColor() ? currentType : spaceType;
@@ -121,56 +121,56 @@ bool FigureSpace::DrawImp_StyleSelect(ColorStrategyInfo* pInfo)
 	}
 	//spaceType.SetGraphicsState_WhileThisObj(pInfo->gr);
 
-	pInfo->gr.PushTextForeColor(crText);
-	pInfo->gr.PushTextBackColor(crBack);
+	csInfo.gr.PushTextForeColor(crText);
+	csInfo.gr.PushTextBackColor(crBack);
 	// Figureが下線指定ならこちらで下線を指定。元の色のほうが下線指定なら、DrawImp_DrawUnderlineで下線だけ指定
 	Font font;
 	font.fontAttr.bBoldFont = spaceType.IsBoldFont() || bBold;
 	font.fontAttr.bUnderLine = spaceType.HasUnderLine();
-	font.hFont = pInfo->pView->GetFontset().ChooseFontHandle(font.fontAttr);
-	pInfo->gr.PushMyFont(font);
-	bool bTrans = pView->IsBkBitmap() && textType.GetBackColor() == crBack;
+	font.hFont = csInfo.view.GetFontset().ChooseFontHandle(font.fontAttr);
+	csInfo.gr.PushMyFont(font);
+	bool bTrans = view.IsBkBitmap() && textType.GetBackColor() == crBack;
 	return bTrans;
 }
 
-void FigureSpace::DrawImp_StylePop(ColorStrategyInfo* pInfo)
+void FigureSpace::DrawImp_StylePop(ColorStrategyInfo& csInfo)
 {
-	pInfo->gr.PopTextForeColor();
-	pInfo->gr.PopTextBackColor();
-	pInfo->gr.PopMyFont();
+	csInfo.gr.PopTextForeColor();
+	csInfo.gr.PopTextBackColor();
+	csInfo.gr.PopMyFont();
 }
 
-void FigureSpace::DrawImp_DrawUnderline(ColorStrategyInfo* pInfo, DispPos& pos)
+void FigureSpace::DrawImp_DrawUnderline(ColorStrategyInfo& csInfo, DispPos& pos)
 {
-	EditView* pView = pInfo->pView;
+	EditView& view = csInfo.view;
 
-	TypeSupport cCurrentType(pView, pInfo->GetCurrentColor());	// 周辺の色
-	bool blendColor = pInfo->GetCurrentColor() != pInfo->GetCurrentColor2() && cCurrentType.GetTextColor() == cCurrentType.GetBackColor(); // 選択混合色
+	TypeSupport cCurrentType(view, csInfo.GetCurrentColor());	// 周辺の色
+	bool blendColor = csInfo.GetCurrentColor() != csInfo.GetCurrentColor2() && cCurrentType.GetTextColor() == cCurrentType.GetBackColor(); // 選択混合色
 
-	TypeSupport colorStyle(pView, blendColor ? pInfo->GetCurrentColor2() : pInfo->GetCurrentColor());	// 周辺の色
-	TypeSupport cSpaceType(pView, GetDispColorIdx());	// 空白の指定色
+	TypeSupport colorStyle(view, blendColor ? csInfo.GetCurrentColor2() : csInfo.GetCurrentColor());	// 周辺の色
+	TypeSupport cSpaceType(view, GetDispColorIdx());	// 空白の指定色
 
 	if (!cSpaceType.HasUnderLine() && colorStyle.HasUnderLine()) {
 		// 下線を周辺の前景色で描画する
 		Font font;
 		font.fontAttr.bBoldFont = false;
 		font.fontAttr.bUnderLine = true;
-		font.hFont = pInfo->pView->GetFontset().ChooseFontHandle(font.fontAttr);
-		pInfo->gr.PushMyFont(font);
+		font.hFont = csInfo.view.GetFontset().ChooseFontHandle(font.fontAttr);
+		csInfo.gr.PushMyFont(font);
 
-		int nLength = (Int)(pInfo->pDispPos->GetDrawCol() - pos.GetDrawCol());
+		int nLength = (Int)(csInfo.pDispPos->GetDrawCol() - pos.GetDrawCol());
 		std::vector<wchar_t> szText(nLength);
 		wchar_t* pszText = &szText[0];
 		for (int i=0; i<nLength; ++i)
 			pszText[i] = L' ';
-		pInfo->pView->GetTextDrawer().DispText(
-			pInfo->gr,
+		csInfo.view.GetTextDrawer().DispText(
+			csInfo.gr,
 			&pos,
 			pszText,
 			nLength,
 			true		// 背景は透明
 		);
-		pInfo->gr.PopMyFont();
+		csInfo.gr.PopMyFont();
 	}
 }
 

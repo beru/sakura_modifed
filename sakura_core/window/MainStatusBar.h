@@ -30,7 +30,7 @@ class EditWnd;
 class MainStatusBar : public DocListenerEx {
 public:
 	// 作成・破棄
-	MainStatusBar(EditWnd* pOwner);
+	MainStatusBar(EditWnd& owner);
 	void CreateStatusBar();		// ステータスバー作成
 	void DestroyStatusBar();	// ステータスバー破棄
 	void SendStatusMessage2(const TCHAR* msg);	//	Jul. 9, 2005 genta メニューバー右端には出したくない長めのメッセージを出す
@@ -52,7 +52,7 @@ public:
 	// 設定
 	void SetStatusText(int nIndex, int nOption, const TCHAR* pszText);
 private:
-	EditWnd*	m_pOwner;
+	EditWnd&	m_owner;
 	HWND		m_hwndStatusBar;
 	HWND		m_hwndProgressBar;
 };

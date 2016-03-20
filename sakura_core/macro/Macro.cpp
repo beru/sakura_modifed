@@ -177,10 +177,10 @@ void Macro::AddLParam(
 
 	case F_JUMP:	// 指定行へジャンプ（ただしPL/SQLコンパイルエラー行へのジャンプは未対応）
 		{
-			AddIntParam(pEditView->m_pEditWnd->m_dlgJump.m_nLineNum);
+			AddIntParam(pEditView->m_editWnd.m_dlgJump.m_nLineNum);
 			LPARAM lFlag = 0x00;
 			lFlag |= GetDllShareData().bLineNumIsCRLF_ForJump		? 0x01 : 0x00;
-			lFlag |= pEditView->m_pEditWnd->m_dlgJump.m_bPLSQL	? 0x02 : 0x00;
+			lFlag |= pEditView->m_editWnd.m_dlgJump.m_bPLSQL	? 0x02 : 0x00;
 			AddIntParam(lFlag);
 		}
 		break;
@@ -205,7 +205,7 @@ void Macro::AddLParam(
 	case F_REPLACE_ALL:
 		{
 			AddStringParam(pEditView->m_strCurSearchKey.c_str());	// lParamを追加。
-			AddStringParam(pEditView->m_pEditWnd->m_dlgReplace.m_strText2.c_str());	// lParamを追加。
+			AddStringParam(pEditView->m_editWnd.m_dlgReplace.m_strText2.c_str());	// lParamを追加。
 
 			LPARAM lFlag = 0x00;
 			lFlag |= pEditView->m_curSearchOption.bWordOnly		? 0x01 : 0x00;
@@ -214,9 +214,9 @@ void Macro::AddLParam(
 			lFlag |= GetDllShareData().common.search.bNotifyNotFound				? 0x08 : 0x00;
 			lFlag |= GetDllShareData().common.search.bAutoCloseDlgFind			? 0x10 : 0x00;
 			lFlag |= GetDllShareData().common.search.bSearchAll					? 0x20 : 0x00;
-			lFlag |= pEditView->m_pEditWnd->m_dlgReplace.m_bPaste					? 0x40 : 0x00;	// CShareDataに入れなくていいの？
+			lFlag |= pEditView->m_editWnd.m_dlgReplace.m_bPaste					? 0x40 : 0x00;	// CShareDataに入れなくていいの？
 			lFlag |= GetDllShareData().common.search.bSelectedArea				? 0x80 : 0x00;	// 置換する時は選べない
-			lFlag |= pEditView->m_pEditWnd->m_dlgReplace.m_nReplaceTarget << 8;	// 8bitシフト（0x100で掛け算）
+			lFlag |= pEditView->m_editWnd.m_dlgReplace.m_nReplaceTarget << 8;	// 8bitシフト（0x100で掛け算）
 			lFlag |= GetDllShareData().common.search.bConsecutiveAll				? 0x0400: 0x00;	// 2007.01.16 ryoji
 			AddIntParam(lFlag);
 		}
@@ -227,13 +227,13 @@ void Macro::AddLParam(
 			DlgGrep* pDlgGrep;
 			DlgGrepReplace* pDlgGrepRep;
 			if (m_nFuncID == F_GREP) {
-				pDlgGrep = &pEditView->m_pEditWnd->m_dlgGrep;
+				pDlgGrep = &pEditView->m_editWnd.m_dlgGrep;
 				pDlgGrepRep = NULL;
 				AddStringParam( pDlgGrep->m_strText.c_str() );
 			}else {
-				pDlgGrep = pDlgGrepRep = &pEditView->m_pEditWnd->m_dlgGrepReplace;
+				pDlgGrep = pDlgGrepRep = &pEditView->m_editWnd.m_dlgGrepReplace;
 				AddStringParam( pDlgGrep->m_strText.c_str() );
-				AddStringParam( pEditView->m_pEditWnd->m_dlgGrepReplace.m_strText2.c_str() );
+				AddStringParam( pEditView->m_editWnd.m_dlgGrepReplace.m_strText2.c_str() );
 			}
 			AddStringParam(GetDllShareData().searchKeywords.grepFiles[0]);	// lParamを追加。
 			AddStringParam(GetDllShareData().searchKeywords.grepFolders[0]);	// lParamを追加。
@@ -716,10 +716,10 @@ bool Macro::HandleCommand(
 			return false;
 		}
 		{
-			pEditView->m_pEditWnd->m_dlgJump.m_nLineNum = _wtoi(arguments[0]);	// ジャンプ先
+			pEditView->m_editWnd.m_dlgJump.m_nLineNum = _wtoi(arguments[0]);	// ジャンプ先
 			LPARAM lFlag = arguments[1] ? _wtoi(arguments[1]) : 1; // デフォルト1
 			GetDllShareData().bLineNumIsCRLF_ForJump = ((lFlag & 0x01) != 0);
-			pEditView->m_pEditWnd->m_dlgJump.m_bPLSQL = lFlag & 0x02 ? 1 : 0;
+			pEditView->m_editWnd.m_dlgJump.m_bPLSQL = lFlag & 0x02 ? 1 : 0;
 			pEditView->GetCommander().HandleCommand(Index, true, 0, 0, 0, 0);	// 標準
 		}
 		break;
@@ -933,7 +933,7 @@ bool Macro::HandleCommand(
 			return false;
 		}
 		{
-			DlgReplace& dlgReplace = pEditView->m_pEditWnd->m_dlgReplace;
+			DlgReplace& dlgReplace = pEditView->m_editWnd.m_dlgReplace;
 			LPARAM lFlag = arguments[2] ? _wtoi(arguments[2]) : 0;
 			SearchOption searchOption;
 			searchOption.bWordOnly			= ((lFlag & 0x01) != 0);
@@ -1326,13 +1326,13 @@ bool Macro::HandleCommand(
 			if ((val1 & 0x03) == 0) {
 				pEditView->SendStatusMessage(val0.c_str());
 			}else if ((val1 & 0x03) == 1) {
-				if (pEditView->m_pEditWnd->m_statusBar.GetStatusHwnd()) {
+				if (pEditView->m_editWnd.m_statusBar.GetStatusHwnd()) {
 					pEditView->SendStatusMessage(val0.c_str());
 				}else {
 					InfoMessage(pEditView->GetHwnd(), _T("%ts"), val0.c_str());
 				}
 			}else if ((val1 & 0x03) == 2) {
-				pEditView->m_pEditWnd->m_statusBar.SendStatusMessage2(val0.c_str());
+				pEditView->m_editWnd.m_statusBar.SendStatusMessage2(val0.c_str());
 			}
 		}
 		break;
@@ -1584,7 +1584,7 @@ bool Macro::HandleFunction(
 			// 2013.04.30 Moca 条件追加。不要な場合はChangeLayoutParamを呼ばない
 			if (0 < varCopy.data.iVal && nTab != varCopy.data.iVal) {
 				view->GetDocument().m_bTabSpaceCurTemp = true;
-				view->m_pEditWnd->ChangeLayoutParam(
+				view->m_editWnd.ChangeLayoutParam(
 					false, 
 					LayoutInt(varCopy.data.iVal),
 					view->m_pEditDoc->m_layoutMgr.GetMaxLineKetas()
@@ -1595,7 +1595,7 @@ bool Macro::HandleFunction(
 					// 最大幅の再算出時に各行のレイアウト長の計算も行う
 					view->m_pEditDoc->m_layoutMgr.CalculateTextWidth();
 				}
-				view->m_pEditWnd->RedrawAllViews(NULL);		// TAB幅が変わったので再描画が必要
+				view->m_editWnd.RedrawAllViews(NULL);		// TAB幅が変わったので再描画が必要
 			}
 		}
 		return true;
@@ -1703,7 +1703,7 @@ bool Macro::HandleFunction(
 			}
 			view->m_pEditDoc->m_nTextWrapMethodCur = TextWrappingMethod::SettingWidth;
 			view->m_pEditDoc->m_bTextWrapMethodCurTemp = !(view->m_pEditDoc->m_nTextWrapMethodCur == view->m_pEditDoc->m_docType.GetDocumentAttribute().nTextWrapMethod);
-			view->m_pEditWnd->ChangeLayoutParam(
+			view->m_editWnd.ChangeLayoutParam(
 				false, 
 				view->m_pEditDoc->m_layoutMgr.GetTabSpace(),
 				LayoutInt(varCopy.data.iVal)
@@ -2197,7 +2197,7 @@ bool Macro::HandleFunction(
 		{
 			if (1 <= numArgs) {
 				if (!VariantToI4(varCopy, args[0])) return false;
-				int ret = (view->m_pEditWnd->SetDrawSwitchOfAllViews(varCopy.data.iVal != 0) ? 1: 0);
+				int ret = (view->m_editWnd.SetDrawSwitchOfAllViews(varCopy.data.iVal != 0) ? 1: 0);
 				Wrap(&result)->Receive(ret);
 				return true;
 			}
@@ -2211,7 +2211,7 @@ bool Macro::HandleFunction(
 		}
 	case F_ISSHOWNSTATUS:
 		{
-			int ret = (view->m_pEditWnd->m_statusBar.GetStatusHwnd() ? 1: 0);
+			int ret = (view->m_editWnd.m_statusBar.GetStatusHwnd() ? 1: 0);
 			Wrap(&result)->Receive(ret);
 			return true;
 		}

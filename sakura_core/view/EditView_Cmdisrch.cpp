@@ -254,7 +254,7 @@ void EditView::ISearchExit()
 	}
 	m_nCurSearchKeySequence = GetDllShareData().common.search.nSearchKeySequence;
 	GetDllShareData().common.search.searchOption = m_curSearchOption;
-	m_pEditWnd->m_toolbar.AcceptSharedSearchKey();
+	m_editWnd.m_toolbar.AcceptSharedSearchKey();
 	m_nISearchDirection = SearchDirection::Backward;
 	m_nISearchMode = 0;
 	

@@ -28,7 +28,7 @@ class EditView;
 // 品詞解析クラス
 class ViewParser {
 public:
-	ViewParser(const EditView* pEditView) : m_pEditView(pEditView) { }
+	ViewParser(const EditView& editView) : m_editView(editView) { }
 	virtual ~ViewParser() {}
 
 	// カーソル直前の単語を取得
@@ -39,6 +39,6 @@ public:
 	bool GetCurrentWord(NativeW* pMemWord) const;
 
 private:
-	const EditView* m_pEditView;
+	const EditView& m_editView;
 };
 
