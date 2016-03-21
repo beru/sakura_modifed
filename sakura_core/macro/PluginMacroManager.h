@@ -42,12 +42,12 @@ public:
 	PluginMacroManager(const WCHAR* Ext, Plug* plug);
 	virtual ~PluginMacroManager();
 
-	virtual bool ExecKeyMacro(class EditView* pEditView, int flags) const;
+	virtual bool ExecKeyMacro(class EditView& editView, int flags) const;
 	virtual bool LoadKeyMacro(HINSTANCE hInstance, const TCHAR* Path);
 	virtual bool LoadKeyMacroStr(HINSTANCE hInstance, const TCHAR* Code);
 
-	static MacroManagerBase* Creator(const TCHAR* Ext);
-	static void declare(void);
+	static MacroManagerBase* Creator(EditView& view, const TCHAR* Ext);
+	static void Declare(void);
 
 protected:
 	std::wstring	m_source;	// マクロスクリプト

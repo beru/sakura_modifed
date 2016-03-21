@@ -245,7 +245,7 @@ struct TypeConfig {
 	{
 	}
 
-	int					nLineNumWidth;					// 行番号の最小桁数 2014.08.02 katze
+	int			nLineNumWidth;					// 行番号の最小桁数 2014.08.02 katze
 }; // TypeConfig
 
 // タイプ別設定(mini)
@@ -298,13 +298,13 @@ public:
 	virtual ~Type() { }
 	void InitTypeConfig(int nIdx, TypeConfig&);
 protected:
-	virtual void InitTypeConfigImp(TypeConfig* pType) = 0;
+	virtual void InitTypeConfigImp(TypeConfig& type) = 0;
 };
 
 #define GEN_CTYPE(CLASS_NAME) \
 class CLASS_NAME : public Type { \
 protected: \
-	void InitTypeConfigImp(TypeConfig* pType); \
+	void InitTypeConfigImp(TypeConfig& type); \
 };
 
 GEN_CTYPE(CType_Asm)

@@ -29,19 +29,19 @@
 // リッチテキスト
 // JUl. 10, 2001 JEPRO WinHelp作るのにいるケンね
 // Jul. 10, 2001 JEPRO 追加
-void CType_Rich::InitTypeConfigImp(TypeConfig* pType)
+void CType_Rich::InitTypeConfigImp(TypeConfig& type)
 {
 	// 名前と拡張子
-	_tcscpy(pType->szTypeName, _T("リッチテキスト"));
-	_tcscpy(pType->szTypeExts, _T("rtf"));
+	_tcscpy(type.szTypeName, _T("リッチテキスト"));
+	_tcscpy(type.szTypeExts, _T("rtf"));
 
 	// 設定
-	pType->eDefaultOutline = OutlineType::Text;				// アウトライン解析方法
-	pType->nKeywordSetIdx[0]  = 15;							// キーワードセット
-	pType->colorInfoArr[COLORIDX_DIGIT].bDisp = true;		// 半角数値を色分け表示
-	pType->colorInfoArr[COLORIDX_SSTRING].bDisp = false;	// シングルクォーテーション文字列を色分け表示しない
-	pType->colorInfoArr[COLORIDX_WSTRING].bDisp = false;	// ダブルクォーテーション文字列を色分け表示しない
-	pType->colorInfoArr[COLORIDX_URL].bDisp = false;		// URLにアンダーラインを引かない
+	type.eDefaultOutline = OutlineType::Text;				// アウトライン解析方法
+	type.nKeywordSetIdx[0]  = 15;							// キーワードセット
+	type.colorInfoArr[COLORIDX_DIGIT].bDisp = true;		// 半角数値を色分け表示
+	type.colorInfoArr[COLORIDX_SSTRING].bDisp = false;	// シングルクォーテーション文字列を色分け表示しない
+	type.colorInfoArr[COLORIDX_WSTRING].bDisp = false;	// ダブルクォーテーション文字列を色分け表示しない
+	type.colorInfoArr[COLORIDX_URL].bDisp = false;		// URLにアンダーラインを引かない
 }
 
 

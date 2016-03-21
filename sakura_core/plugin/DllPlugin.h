@@ -65,15 +65,15 @@ public:
 
 	// ŽÀ‘•
 public:
-	bool ReadPluginDef(DataProfile* profile, DataProfile* profileMlang);
-	bool ReadPluginOption(DataProfile* profile) {
+	bool ReadPluginDef(DataProfile& profile, DataProfile* profileMlang);
+	bool ReadPluginOption(DataProfile& profile) {
 		return true;
 	}
 	Plug* CreatePlug(Plugin& plugin, PlugId id, const wstring& sJack, const wstring& sHandler, const wstring& sLabel);
 	Plug::Array GetPlugs() const {
 		return m_plugs;
 	}
-	bool InvokePlug(EditView* view, Plug& plug, WSHIfObj::List& params);
+	bool InvokePlug(EditView& view, Plug& plug, WSHIfObj::List& params);
 
 	bool InitDllImp() {
 		return true;

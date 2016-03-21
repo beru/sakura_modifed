@@ -102,7 +102,7 @@ private:
 	// Grep実行
 	int DoGrepTree(
 		EditView&				viewDst,
-		DlgCancel*				pDlgCancel,			// [in] Cancelダイアログへのポインタ
+		DlgCancel&				dlgCancel,			// [in] Cancelダイアログへのポインタ
 		const wchar_t*			pszKey,				// [in] 検索パターン
 		const NativeW&			mGrepReplace,
 		const GrepEnumKeys&		grepEnumKeys,		// [in] 検索対象ファイルパターン(!で除外指定)
@@ -113,7 +113,7 @@ private:
 		const SearchOption&		searchOption,		// [in] 検索オプション
 		const GrepOption&		grepOption,			// [in] Grepオプション
 		const SearchStringPattern& pattern,			// [in] 検索パターン
-		Bregexp*				pRegexp,			// [in] 正規表現コンパイルデータ。既にコンパイルされている必要がある
+		Bregexp&				regexp,				// [in] 正規表現コンパイルデータ。既にコンパイルされている必要がある
 		int						nNest,				// [in] ネストレベル
 		bool&					bOutputBaseFolder,
 		int*					pnHitCount			// [i/o] ヒット数の合計
@@ -122,13 +122,13 @@ private:
 	// Grep実行
 	int DoGrepFile(
 		EditView&				viewDst,
-		DlgCancel*				pDlgCancel,
+		DlgCancel&				dlgCancel,
 		const wchar_t*			pszKey,
 		const TCHAR*			pszFile,
 		const SearchOption&		searchOption,
 		const GrepOption&		grepOption,
 		const SearchStringPattern& pattern,
-		Bregexp*				pRegexp,		//	Jun. 27, 2001 genta	正規表現ライブラリの差し替え
+		Bregexp&				regexp,		//	Jun. 27, 2001 genta	正規表現ライブラリの差し替え
 		int*					pnHitCount,
 		const TCHAR*			pszFullPath,
 		const TCHAR*			pszBaseFolder,
@@ -141,14 +141,14 @@ private:
 
 	int DoGrepReplaceFile(
 		EditView&				viewDst,
-		DlgCancel*				pDlgCancel,
+		DlgCancel&				dlgCancel,
 		const wchar_t*			pszKey,
 		const NativeW&			mGrepReplace,
 		const TCHAR*			pszFile,
 		const SearchOption&		searchOption,
 		const GrepOption&		grepOption,
 		const SearchStringPattern& pattern,
-		Bregexp*				pRegexp,
+		Bregexp&				regexp,
 		int*					pnHitCount,
 		const TCHAR*			pszFullPath,
 		const TCHAR*			pszBaseFolder,

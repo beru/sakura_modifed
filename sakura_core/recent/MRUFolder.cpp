@@ -47,10 +47,10 @@ MruFolder::~MruFolder()
 
 	2010/5/21 Uchi 組み直し
 */
-HMENU MruFolder::CreateMenu(MenuDrawer* pMenuDrawer) const
+HMENU MruFolder::CreateMenu(MenuDrawer& menuDrawer) const
 {
 	HMENU hMenuPopUp = ::CreatePopupMenu();	// Jan. 29, 2002 genta
-	return CreateMenu(hMenuPopUp, pMenuDrawer);
+	return CreateMenu(hMenuPopUp, menuDrawer);
 }
 
 /*!
@@ -62,7 +62,7 @@ HMENU MruFolder::CreateMenu(MenuDrawer* pMenuDrawer) const
 	@author Norio Nakantani
 	@return メニューのハンドル
 */
-HMENU MruFolder::CreateMenu(HMENU	hMenuPopUp, MenuDrawer* pMenuDrawer) const
+HMENU MruFolder::CreateMenu(HMENU	hMenuPopUp, MenuDrawer& menuDrawer) const
 {
 	TCHAR szMenu[_MAX_PATH * 2 + 10];				//	メニューキャプション
 
@@ -84,7 +84,7 @@ HMENU MruFolder::CreateMenu(HMENU	hMenuPopUp, MenuDrawer* pMenuDrawer) const
 		FileNameManager::getInstance().GetMenuFullLabel(szMenu, _countof(szMenu), true, pszFolder, -1, false, CODE_NONE, bFavoriteLabel, i, true, dcFont.GetHDC());
 
 		// メニューに追加
-		pMenuDrawer->MyAppendMenu(
+		menuDrawer.MyAppendMenu(
 			hMenuPopUp,
 			MF_BYPOSITION | MF_STRING,
 			IDM_SELOPENFOLDER + i,

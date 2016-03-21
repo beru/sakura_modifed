@@ -498,9 +498,9 @@ SMacroMgr::SMacroMgr()
 	
 	m_pShareData = &GetDllShareData();
 	
-	PPAMacroMgr::declare();
-	KeyMacroMgr::declare();
-	WSHMacroManager::declare();
+	PPAMacroMgr::Declare();
+	KeyMacroMgr::Declare();
+	WSHMacroManager::Declare();
 	
 	for (int i=0; i<MAX_CUSTMACRO; ++i) {
 		m_savedKeyMacros[i] = NULL;
@@ -547,8 +547,8 @@ int SMacroMgr::Append(
 	int				idx,		//
 	EFunctionCode	nFuncID,	// [in] 機能番号
 	const LPARAM*	lParams,	// [in] パラメータ。
-	EditView*		pEditView	// 
-)
+	EditView&		editView	// 
+	)
 {
 	assert(idx == STAND_KEYMACRO);
 	if (idx == STAND_KEYMACRO) {
@@ -561,7 +561,7 @@ int SMacroMgr::Append(
 			m_pKeyMacro = new KeyMacroMgr;
 			pKeyMacro = dynamic_cast<KeyMacroMgr*>(m_pKeyMacro);
 		}
-		pKeyMacro->Append(nFuncID, lParams, pEditView);
+		pKeyMacro->Append(nFuncID, lParams, editView);
 	}
 	return TRUE;
 }
@@ -582,7 +582,7 @@ int SMacroMgr::Append(
 bool SMacroMgr::Exec(
 	int idx,
 	HINSTANCE hInstance,
-	EditView* pEditView,
+	EditView& editView,
 	int flags
 	)
 {
@@ -593,7 +593,7 @@ bool SMacroMgr::Exec(
 			// Sep. 15, 2005 FILE
 			// Jul. 01, 2007 マクロの多重実行時に備えて直前のマクロ番号を退避
 			int prevmacro = SetCurrentIdx(idx);
-			m_pKeyMacro->ExecKeyMacro2(pEditView, flags);
+			m_pKeyMacro->ExecKeyMacro2(editView, flags);
 			SetCurrentIdx(prevmacro);
 			return true;
 		}else {
@@ -603,7 +603,7 @@ bool SMacroMgr::Exec(
 	if (idx == TEMP_KEYMACRO) {		// 一時マクロ
 		if (m_pTempMacro) {
 			int prevmacro = SetCurrentIdx( idx );
-			m_pTempMacro->ExecKeyMacro2(pEditView, flags);
+			m_pTempMacro->ExecKeyMacro2(editView, flags);
 			SetCurrentIdx( prevmacro );
 			return true;
 		}else {
@@ -625,7 +625,7 @@ bool SMacroMgr::Exec(
 			return false;
 		}
 
-		if (!Load(idx, hInstance, ptr, NULL)) {
+		if (!Load(editView, idx, hInstance, ptr, NULL)) {
 			return false;
 		}
 	}
@@ -634,7 +634,7 @@ bool SMacroMgr::Exec(
 	// Jul. 01, 2007 マクロの多重実行時に備えて直前のマクロ番号を退避
 	int prevmacro = SetCurrentIdx(idx);
 	SetCurrentIdx(idx);
-	m_savedKeyMacros[idx]->ExecKeyMacro2(pEditView, flags);
+	m_savedKeyMacros[idx]->ExecKeyMacro2(editView, flags);
 	SetCurrentIdx(prevmacro);
 
 	return true;
@@ -652,6 +652,7 @@ bool SMacroMgr::Exec(
 	@author Norio Nakatani, YAZAKI, genta
 */
 bool SMacroMgr::Load(
+	EditView& view,
 	int idx,
 	HINSTANCE hInstance,
 	const TCHAR* pszPath,
@@ -688,7 +689,7 @@ bool SMacroMgr::Load(
 	}
 
 	m_sMacroPath = _T("");
-	*ppMacro = MacroFactory::getInstance().Create(ext);
+	*ppMacro = MacroFactory::getInstance().Create(view, ext);
 	if (!*ppMacro) {
 		return false;
 	}

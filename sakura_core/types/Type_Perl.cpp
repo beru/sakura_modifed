@@ -33,20 +33,20 @@
 // Perl
 // Jul. 08, 2001 JEPRO Perl ユーザに贈る
 // Jul. 08, 2001 JEPRO 追加
-void CType_Perl::InitTypeConfigImp(TypeConfig* pType)
+void CType_Perl::InitTypeConfigImp(TypeConfig& type)
 {
 	// 名前と拡張子
-	_tcscpy(pType->szTypeName, _T("Perl"));
-	_tcscpy(pType->szTypeExts, _T("cgi,pl,pm"));
+	_tcscpy(type.szTypeName, _T("Perl"));
+	_tcscpy(type.szTypeExts, _T("cgi,pl,pm"));
 
 	// 設定
-	pType->lineComment.CopyTo(0, L"#", -1);						// 行コメントデリミタ
-	pType->eDefaultOutline = OutlineType::Perl;					// アウトライン解析方法
-	pType->nKeywordSetIdx[0]  = 11;								// キーワードセット
-	pType->nKeywordSetIdx[1] = 12;								// キーワードセット2
-	pType->colorInfoArr[COLORIDX_DIGIT].bDisp = true;			// 半角数値を色分け表示
-	pType->colorInfoArr[COLORIDX_BRACKET_PAIR].bDisp = true;	// 対括弧の強調をデフォルトON	//Sep. 21, 2002 genta
-	pType->bStringLineOnly = true; // 文字列は行内のみ
+	type.lineComment.CopyTo(0, L"#", -1);						// 行コメントデリミタ
+	type.eDefaultOutline = OutlineType::Perl;					// アウトライン解析方法
+	type.nKeywordSetIdx[0]  = 11;								// キーワードセット
+	type.nKeywordSetIdx[1] = 12;								// キーワードセット2
+	type.colorInfoArr[COLORIDX_DIGIT].bDisp = true;			// 半角数値を色分け表示
+	type.colorInfoArr[COLORIDX_BRACKET_PAIR].bDisp = true;	// 対括弧の強調をデフォルトON	//Sep. 21, 2002 genta
+	type.bStringLineOnly = true; // 文字列は行内のみ
 }
 
 

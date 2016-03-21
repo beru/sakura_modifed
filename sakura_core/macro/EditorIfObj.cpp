@@ -44,25 +44,25 @@ MacroFuncInfoArray EditorIfObj::GetMacroFuncInfo() const
 
 // ŠÖ”‚ğˆ—‚·‚é
 bool EditorIfObj::HandleFunction(
-	EditView* pView,
-	EFunctionCode id,
+	EditView& view,
+	EFunctionCode index,
 	const VARIANT* arguments,
 	const int argSize,
 	VARIANT& result
 	)
 {
-	return Macro::HandleFunction(pView, id, arguments, argSize, result);
+	return Macro::HandleFunction(view, index, arguments, argSize, result);
 }
 
 // ƒRƒ}ƒ“ƒh‚ğˆ—‚·‚é
 bool EditorIfObj::HandleCommand(
-	EditView* pView,
-	EFunctionCode id,
+	EditView& view,
+	EFunctionCode index,
 	const WCHAR* arguments[],
 	const int argLengths[],
 	const int argSize
 	)
 {
-	return Macro::HandleCommand(pView, id, arguments, argLengths, argSize);
+	return Macro::HandleCommand(view, index, arguments, argLengths, argSize);
 }
 

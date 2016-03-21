@@ -52,11 +52,11 @@ MruFile::~MruFile()
 
 	2010/5/21 Uchi 組み直し
 */
-HMENU MruFile::CreateMenu(MenuDrawer* pMenuDrawer) const
+HMENU MruFile::CreateMenu(MenuDrawer& menuDrawer) const
 {
 	//	空メニューを作る
 	HMENU hMenuPopUp = ::CreatePopupMenu();	// Jan. 29, 2002 genta
-	return CreateMenu(hMenuPopUp, pMenuDrawer);
+	return CreateMenu(hMenuPopUp, menuDrawer);
 }
 /*!
 	ファイル履歴メニューの作成
@@ -69,7 +69,7 @@ HMENU MruFile::CreateMenu(MenuDrawer* pMenuDrawer) const
 
 	2010/5/21 Uchi 組み直し
 */
-HMENU MruFile::CreateMenu(HMENU hMenuPopUp, MenuDrawer* pMenuDrawer) const
+HMENU MruFile::CreateMenu(HMENU hMenuPopUp, MenuDrawer& menuDrawer) const
 {
 	TCHAR szMenu[_MAX_PATH * 2 + 10];				//	メニューキャプション
 	const BOOL bMenuIcon = m_pShareData->common.window.bMenuIcon;
@@ -94,7 +94,7 @@ HMENU MruFile::CreateMenu(HMENU hMenuPopUp, MenuDrawer* pMenuDrawer) const
 		FileNameManager::getInstance().GetMenuFullLabel_MRU(szMenu, _countof(szMenu), p, -1, bFavoriteLabel, i, dcFont.GetHDC());
 
 		// メニューに追加。
-		pMenuDrawer->MyAppendMenu(
+		menuDrawer.MyAppendMenu(
 			hMenuPopUp,
 			MF_BYPOSITION | MF_STRING,
 			IDM_SELMRU + i,

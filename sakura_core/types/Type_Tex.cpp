@@ -33,19 +33,19 @@
 /* TeX */
 // Oct. 31, 2000 JEPRO TeX  ユーザに贈る
 // Oct. 31, 2000 JEPRO TeX ユーザに贈る	//Mar. 10, 2001 JEPRO 追加
-void CType_Tex::InitTypeConfigImp(TypeConfig* pType)
+void CType_Tex::InitTypeConfigImp(TypeConfig& type)
 {
 	// 名前と拡張子
-	_tcscpy(pType->szTypeName, _T("TeX"));
-	_tcscpy(pType->szTypeExts, _T("tex,ltx,sty,bib,log,blg,aux,bbl,toc,lof,lot,idx,ind,glo"));
+	_tcscpy(type.szTypeName, _T("TeX"));
+	_tcscpy(type.szTypeExts, _T("tex,ltx,sty,bib,log,blg,aux,bbl,toc,lof,lot,idx,ind,glo"));
 
 	// 設定
-	pType->lineComment.CopyTo(0, L"%", -1);					// 行コメントデリミタ
-	pType->eDefaultOutline = OutlineType::TeX;				// アウトライン解析方法
-	pType->nKeywordSetIdx[0] = 9;							// キーワードセット
-	pType->nKeywordSetIdx[1] = 10;							// キーワードセット2 	// Jan. 19, 2001 JEPRO
-	pType->colorInfoArr[COLORIDX_SSTRING].bDisp = false;	// シングルクォーテーション文字列を色分け表示しない
-	pType->colorInfoArr[COLORIDX_WSTRING].bDisp = false;	// ダブルクォーテーション文字列を色分け表示しない
+	type.lineComment.CopyTo(0, L"%", -1);					// 行コメントデリミタ
+	type.eDefaultOutline = OutlineType::TeX;				// アウトライン解析方法
+	type.nKeywordSetIdx[0] = 9;							// キーワードセット
+	type.nKeywordSetIdx[1] = 10;							// キーワードセット2 	// Jan. 19, 2001 JEPRO
+	type.colorInfoArr[COLORIDX_SSTRING].bDisp = false;	// シングルクォーテーション文字列を色分け表示しない
+	type.colorInfoArr[COLORIDX_WSTRING].bDisp = false;	// ダブルクォーテーション文字列を色分け表示しない
 }
 
 

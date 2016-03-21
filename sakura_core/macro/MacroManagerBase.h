@@ -37,8 +37,8 @@ class MacroBeforeAfter {
 public:
 	MacroBeforeAfter() : m_nOpeBlkCount(0), m_bDrawSwitchOld(true) {};
 	virtual ~MacroBeforeAfter() {};
-	virtual void ExecKeyMacroBefore(class EditView* pEditView, int flags);
-	virtual void ExecKeyMacroAfter(class EditView* pEditView, int flags, bool bRet);
+	virtual void ExecKeyMacroBefore(class EditView& editView, int flags);
+	virtual void ExecKeyMacroAfter(class EditView& editView, int flags, bool bRet);
 private:
 	int m_nOpeBlkCount;
 	bool m_bDrawSwitchOld;
@@ -46,7 +46,6 @@ private:
 
 /*!
 	@brief マクロを処理するエンジン部分の基底クラス
-
 */
 class MacroManagerBase : MacroBeforeAfter {
 public:
@@ -58,8 +57,8 @@ public:
 		
 		@date 2007.07.20 genta マクロ実行属性を渡すためにflagsを追加
 	*/
-	virtual bool ExecKeyMacro(class EditView* pEditView, int flags) const = 0;
-	virtual void ExecKeyMacro2(class EditView* pEditView, int flags);
+	virtual bool ExecKeyMacro(class EditView& editView, int flags) const = 0;
+	virtual void ExecKeyMacro2(class EditView& editView, int flags);
 	
 	/*! キーボードマクロをファイルから読み込む
 

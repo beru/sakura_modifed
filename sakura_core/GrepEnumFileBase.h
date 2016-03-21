@@ -107,7 +107,7 @@ public:
 		LPCTSTR					lpBaseFolder,
 		const VGrepEnumKeys&	vecKeys,
 		const GrepEnumOptions&	option,
-		GrepEnumFileBase*	pExceptItems = NULL
+		GrepEnumFileBase*		pExceptItems = NULL
 	) {
 		int found = 0;
 

@@ -600,7 +600,7 @@ Plugin* PluginManager::LoadPlugin(
 	}
 	plugin->m_sOptionDir = m_sBaseDir + pszPluginName;
 	plugin->m_sLangName = pszLangName;
-	plugin->ReadPluginDef(&profDef, pProfDefMLang);
+	plugin->ReadPluginDef(profDef, pProfDefMLang);
 #ifdef _UNICODE
 	DEBUG_TRACE(_T("  プラグインタイプ %ls\n"), sPlugType.c_str() );
 #endif
@@ -609,7 +609,7 @@ Plugin* PluginManager::LoadPlugin(
 	profOption.SetReadingMode();
 	if (profOption.ReadProfile(plugin->GetOptionPath().c_str())) {
 		// オプションファイルが存在する場合、読み込む
-		plugin->ReadPluginOption(&profOption);
+		plugin->ReadPluginOption(profOption);
 	}
 #ifdef _UNICODE
 	DEBUG_TRACE(_T("  オプションファイル読込 %ts\n"),  plugin->GetOptionPath().c_str() );

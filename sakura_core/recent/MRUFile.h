@@ -49,8 +49,8 @@ public:
 	~MruFile();
 
 	//	メニューを取得する
-	HMENU CreateMenu(MenuDrawer* pMenuDrawer) const;	//	うーん。pMenuDrawerが必要なくなるといいなぁ。
-	HMENU CreateMenu(HMENU hMenu, MenuDrawer* pMenuDrawer) const;	//	2010/5/21 Uchi
+	HMENU CreateMenu(MenuDrawer& menuDrawer) const;	//	うーん。menuDrawerが必要なくなるといいなぁ。
+	HMENU CreateMenu(HMENU hMenu, MenuDrawer& menuDrawer) const;	//	2010/5/21 Uchi
 	BOOL DestroyMenu(HMENU hMenu) const;
 	
 	//	ファイル名の一覧を教えて

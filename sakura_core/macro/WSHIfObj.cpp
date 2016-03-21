@@ -42,11 +42,11 @@
 
 // コマンド・関数を準備する
 void WSHIfObj::ReadyMethods(
-	EditView* pView,
+	EditView& view,
 	int flags
 	)
 {
-	this->m_pView = pView;
+	this->m_pView = &view;
 	// 2007.07.20 genta : コマンドに混ぜ込むフラグを渡す
 	ReadyCommands(GetMacroCommandInfo(), flags | FA_FROMMACRO);
 	ReadyCommands(GetMacroFuncInfo(), 0);
@@ -112,17 +112,17 @@ void WSHIfObj::ReadyCommands(
 	@date 2013.06.07 Moca 5つ以上の引数の時ずれるのを修正。NULを含む文字列対応
 */
 HRESULT WSHIfObj::MacroCommand(
-	int IntID,
-	DISPPARAMS* Arguments,
-	VARIANT* Result,
-	void* Data
+	int index,
+	DISPPARAMS* arguments,
+	VARIANT* result,
+	void* data
 	)
 {
-	int argCount = Arguments->cArgs;
+	int argCount = arguments->cArgs;
 
-	const EFunctionCode ID = static_cast<EFunctionCode>(IntID);
+	const EFunctionCode id = static_cast<EFunctionCode>(index);
 	//	2007.07.22 genta : コマンドは下位16ビットのみ
-	if (LOWORD(ID) >= F_FUNCTION_FIRST) {
+	if (LOWORD(id) >= F_FUNCTION_FIRST) {
 		VARIANT ret; // 2005.06.27 zenryaku 戻り値の受け取りが無くても関数を実行する
 		VariantInit(&ret);
 
@@ -130,12 +130,12 @@ HRESULT WSHIfObj::MacroCommand(
 		auto rgvargParam = std::make_unique<VARIANTARG[]>(argCount);
 		for (int i=0; i<argCount; ++i) {
 			::VariantInit(&rgvargParam[argCount - i - 1]);
-			::VariantCopy(&rgvargParam[argCount - i - 1], &Arguments->rgvarg[i]);
+			::VariantCopy(&rgvargParam[argCount - i - 1], &arguments->rgvarg[i]);
 		}
 
 		// 2009.9.5 syat HandleFunctionはサブクラスでオーバーライドする
-		bool r = HandleFunction(m_pView, ID, &rgvargParam[0], argCount, ret);
-		if (Result) {::VariantCopyInd(Result, &ret);}
+		bool r = HandleFunction(*m_pView, id, &rgvargParam[0], argCount, ret);
+		if (result) {::VariantCopyInd(result, &ret);}
 		VariantClear(&ret);
 		for (int i=0; i<argCount; ++i) {
 			::VariantClear(&rgvargParam[i]);
@@ -155,7 +155,7 @@ HRESULT WSHIfObj::MacroCommand(
 		Variant varCopy;							// VT_BYREFだと困るのでコピー用
 		int Len;
 		for (int i=0; i<argCount; ++i) {
-			if (VariantChangeType(&varCopy.data, &(Arguments->rgvarg[i]), 0, VT_BSTR) == S_OK) {
+			if (VariantChangeType(&varCopy.data, &(arguments->rgvarg[i]), 0, VT_BSTR) == S_OK) {
 				Wrap(&varCopy.data.bstrVal)->GetW(&s, &Len);
 			}else {
 				s = new WCHAR[1];
@@ -167,7 +167,7 @@ HRESULT WSHIfObj::MacroCommand(
 		}
 
 		// 2009.10.29 syat HandleCommandはサブクラスでオーバーライドする
-		HandleCommand(m_pView, ID, const_cast<WCHAR const **>(&strArgs[0]), &strLengths[0], argCount);
+		HandleCommand(*m_pView, id, const_cast<WCHAR const **>(&strArgs[0]), &strLengths[0], argCount);
 
 		//	Nov. 29, 2005 FILE 配列の破棄なので、[括弧]を追加
 		for (int j=0; j<argCount; ++j) {

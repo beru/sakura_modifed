@@ -80,14 +80,21 @@ public:
 		return m_macroFuncInfoArr;
 	}
 	// 関数を処理する
-	bool HandleFunction(EditView* View, EFunctionCode ID, const VARIANT* Arguments, const int ArgSize, VARIANT& Result) {
+	bool HandleFunction(
+		EditView& view,
+		EFunctionCode index,
+		const VARIANT* arguments,
+		const int argSize,
+		VARIANT& result
+		)
+	{
 		Variant varCopy;	// VT_BYREFだと困るのでコピー用
 
-		switch (LOWORD(ID)) {
+		switch (LOWORD(index)) {
 		case F_PL_GETPLUGINDIR:			// プラグインフォルダパスを取得する
 			{
 				SysString S(plugin.m_sBaseDir.c_str(), plugin.m_sBaseDir.size());
-				Wrap(&Result)->Receive(S);
+				Wrap(&result)->Receive(S);
 			}
 			return true;
 		case F_PL_GETDEF:				// 設定ファイルから値を読む
@@ -97,21 +104,21 @@ public:
 				wstring sSection;
 				wstring sKey;
 				wstring sValue;
-				if (!variant_to_wstr(Arguments[0], sSection)) {
+				if (!variant_to_wstr(arguments[0], sSection)) {
 					return false;
 				}
-				if (!variant_to_wstr(Arguments[1], sKey)) {
+				if (!variant_to_wstr(arguments[1], sKey)) {
 					return false;
 				}
 
 				profile.SetReadingMode();
-				if (LOWORD(ID) == F_PL_GETDEF) {
+				if (LOWORD(index) == F_PL_GETDEF) {
 					profile.ReadProfile(plugin.GetPluginDefPath().c_str());
 				}else {
 					profile.ReadProfile(plugin.GetOptionPath().c_str());
 				}
 				if (!profile.IOProfileData(sSection.c_str(), sKey.c_str(), sValue)
-					&& LOWORD(ID) == F_PL_GETOPTION
+					&& LOWORD(index) == F_PL_GETOPTION
 				) {
 					// 設定されていなければデフォルトを取得 
 					for (auto it=plugin.m_options.begin(); it!=plugin.m_options.end(); ++it) {
@@ -125,30 +132,30 @@ public:
 					}
 				}
 
-				SysString S(sValue.c_str(), sValue.size());
-				Wrap(&Result)->Receive(S);
+				SysString s(sValue.c_str(), sValue.size());
+				Wrap(&result)->Receive(s);
 			}
 			return true;
 		case F_PL_GETCOMMANDNO:			// 実行中プラグの番号を取得する
 			{
-				Wrap(&Result)->Receive(m_nPlugIndex);
+				Wrap(&result)->Receive(m_nPlugIndex);
 			}
 			return true;
 		case F_PL_GETSTRING:
 			{
 				int num;
-				if (!variant_to_int(Arguments[0], num)) {
+				if (!variant_to_int(arguments[0], num)) {
 					return false;
 				}
 				if (0 < num && num < MAX_PLUG_STRING) {
 					std::wstring& str = plugin.m_aStrings[num];
-					SysString S(str.c_str(), str.size());
-					Wrap(&Result)->Receive(S);
+					SysString s(str.c_str(), str.size());
+					Wrap(&result)->Receive(s);
 					return true;
 				}else if (num == 0) {
 					std::wstring str = to_wchar(plugin.m_sLangName.c_str());
-					SysString S(str.c_str(), str.size());
-					Wrap(&Result)->Receive(S);
+					SysString s(str.c_str(), str.size());
+					Wrap(&result)->Receive(s);
 					return true;
 				}
 			}
@@ -156,26 +163,33 @@ public:
 		return false;
 	}
 	// コマンドを処理する
-	bool HandleCommand(EditView* View, EFunctionCode ID, const WCHAR* Arguments[], const int ArgLengths[], const int ArgSize) {
-		switch (LOWORD(ID)) {
+	bool HandleCommand(
+		EditView& view,
+		EFunctionCode index,
+		const WCHAR* arguments[],
+		const int argLengths[],
+		const int argSize
+		)
+	{
+		switch (LOWORD(index)) {
 		case F_PL_SETOPTION:			// オプションファイルに値を書く
 			{
-				if (!Arguments[0]) return false;
-				if (!Arguments[1]) return false;
-				if (!Arguments[2]) return false;
+				if (!arguments[0]) return false;
+				if (!arguments[1]) return false;
+				if (!arguments[2]) return false;
 				DataProfile profile;
 
 				profile.ReadProfile(plugin.GetOptionPath().c_str());
 				profile.SetWritingMode();
-				wstring tmp(Arguments[2]);
-				profile.IOProfileData(Arguments[0], Arguments[1], tmp);
+				wstring tmp(arguments[2]);
+				profile.IOProfileData(arguments[0], arguments[1], tmp);
 				profile.WriteProfile(plugin.GetOptionPath().c_str(), (plugin.sName + L" プラグイン設定ファイル").c_str());
 			}
 			break;
 		case F_PL_ADDCOMMAND:			// コマンドを追加する
 			{
-				int id = plugin.AddCommand(Arguments[0], Arguments[1], Arguments[2], true);
-				View->m_editWnd.RegisterPluginCommand(id);
+				int id = plugin.AddCommand(arguments[0], arguments[1], arguments[2], true);
+				view.m_editWnd.RegisterPluginCommand(id);
 			}
 			break;
 		}

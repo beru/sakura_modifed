@@ -125,7 +125,6 @@ void ViewCommander::Command_SAVEKEYMACRO(void)
 	if (!m_pSMacroMgr->Save(STAND_KEYMACRO, G_AppInstance(), szPath)) {
 		ErrorMessage(m_view.GetHwnd(), LS(STR_ERR_CEDITVIEW_CMD27), szPath);
 	}
-	return;
 }
 
 
@@ -168,9 +167,7 @@ void ViewCommander::Command_LOADKEYMACRO(void)
 	//@@@ 2002.1.24 YAZAKI 読み込みといいつつも、ファイル名をコピーするだけ。実行直前に読み込む
 	_tcscpy(GetDllShareData().common.macro.szKeyMacroFileName, szPath);
 //	GetDllShareData().m_CKeyMacroMgr.LoadKeyMacro(G_AppInstance(), m_view.GetHwnd(), szPath);
-	return;
 }
-
 
 // キーマクロの実行
 void ViewCommander::Command_EXECKEYMACRO(void)
@@ -189,7 +186,8 @@ void ViewCommander::Command_EXECKEYMACRO(void)
 	if (csMacro.szKeyMacroFileName[0]) {
 		// ファイルが保存されていたら
 		//@@@ 2002.2.2 YAZAKI マクロをCSMacroMgrに統一
-		BOOL bLoadResult = m_pSMacroMgr->Load(
+		bool bLoadResult = m_pSMacroMgr->Load(
+			m_view,
 			STAND_KEYMACRO,
 			G_AppInstance(),
 			csMacro.szKeyMacroFileName,
@@ -199,10 +197,9 @@ void ViewCommander::Command_EXECKEYMACRO(void)
 			ErrorMessage(m_view.GetHwnd(), LS(STR_ERR_CEDITVIEW_CMD28), csMacro.szKeyMacroFileName);
 		}else {
 			// 2007.07.20 genta : flagsオプション追加
-			m_pSMacroMgr->Exec(STAND_KEYMACRO, G_AppInstance(), &m_view, 0);
+			m_pSMacroMgr->Exec(STAND_KEYMACRO, G_AppInstance(), m_view, 0);
 		}
 	}
-	return;
 }
 
 
@@ -230,7 +227,6 @@ void ViewCommander::Command_EXECEXTMACRO(const WCHAR* pszPathW, const WCHAR* psz
 		szPath[0] = 0;
 		// マクロフォルダ
 		const TCHAR* pszFolder = GetDllShareData().common.macro.szMACROFOLDER;
-
 		// ファイル選択ダイアログの初期フォルダ
 		TCHAR szInitDir[_MAX_PATH + 1];
 		if (_IS_REL_PATH(pszFolder)) {
@@ -259,8 +255,7 @@ void ViewCommander::Command_EXECEXTMACRO(const WCHAR* pszPathW, const WCHAR* psz
 		flags.hwndRecordingKeyMacro == GetMainWindow()	// キーボードマクロを記録中のウィンドウ
 	) {
 		LPARAM lparams[] = {(LPARAM)pszPath, 0, 0, 0};
-		m_pSMacroMgr->Append(STAND_KEYMACRO, F_EXECEXTMACRO, lparams, &m_view);
-
+		m_pSMacroMgr->Append(STAND_KEYMACRO, F_EXECEXTMACRO, lparams, m_view);
 		// キーマクロの記録を一時停止する
 		flags.bRecordingKeyMacro = false;
 		hwndRecordingKeyMacro = flags.hwndRecordingKeyMacro;
@@ -269,8 +264,8 @@ void ViewCommander::Command_EXECEXTMACRO(const WCHAR* pszPathW, const WCHAR* psz
 
 	// 古い一時マクロの退避
 	MacroManagerBase* oldMacro = m_pSMacroMgr->SetTempMacro(NULL);
-
-	BOOL bLoadResult = m_pSMacroMgr->Load(
+	bool bLoadResult = m_pSMacroMgr->Load(
+		m_view,
 		TEMP_KEYMACRO,
 		G_AppInstance(),
 		pszPath,
@@ -279,7 +274,7 @@ void ViewCommander::Command_EXECEXTMACRO(const WCHAR* pszPathW, const WCHAR* psz
 	if (!bLoadResult) {
 		ErrorMessage(m_view.GetHwnd(), LS(STR_ERR_MACROERR1), pszPath);
 	}else {
-		m_pSMacroMgr->Exec(TEMP_KEYMACRO, G_AppInstance(), &m_view, FA_NONRECORD | FA_FROMMACRO);
+		m_pSMacroMgr->Exec(TEMP_KEYMACRO, G_AppInstance(), m_view, FA_NONRECORD | FA_FROMMACRO);
 	}
 
 	// 終わったら開放
@@ -293,7 +288,6 @@ void ViewCommander::Command_EXECEXTMACRO(const WCHAR* pszPathW, const WCHAR* psz
 		flags.bRecordingKeyMacro = true;
 		flags.hwndRecordingKeyMacro = hwndRecordingKeyMacro;	// キーボードマクロを記録中のウィンドウ
 	}
-	return;
 }
 
 
@@ -351,6 +345,5 @@ void ViewCommander::Command_EXECCOMMAND(
 	}
 	m_view.ExecCmd(buf2.c_str(), nFlgOpt, (pszCurDir ? buf3.c_str() : NULL));
 	// To Here Aug. 21, 2001 genta
-	return;
 }
 

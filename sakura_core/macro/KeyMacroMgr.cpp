@@ -69,11 +69,11 @@ void KeyMacroMgr::ClearAll(void)
 void KeyMacroMgr::Append(
 	EFunctionCode	nFuncID,
 	const LPARAM*	lParams,
-	EditView*		pEditView
+	EditView&		editView
 	)
 {
 	auto macro = new Macro(nFuncID);
-	macro->AddLParam(lParams, pEditView);
+	macro->AddLParam(lParams, editView);
 	Append(macro);
 }
 
@@ -127,13 +127,13 @@ bool KeyMacroMgr::SaveKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath) const
 	@date 2007.07.20 genta flags追加．Macro::Exec()に
 		FA_FROMMACROを含めた値を渡す．
 */
-bool KeyMacroMgr::ExecKeyMacro(EditView* pEditView, int flags) const
+bool KeyMacroMgr::ExecKeyMacro(EditView& editView, int flags) const
 {
 	Macro* p = m_pTop;
 	int macroflag = flags | FA_FROMMACRO;
 	bool bRet = true;
 	while (p) {
-		if (!p->Exec(pEditView, macroflag)) {
+		if (!p->Exec(editView, macroflag)) {
 			bRet = false;
 			break;
 		}
@@ -466,7 +466,7 @@ bool KeyMacroMgr::LoadKeyMacroStr(HINSTANCE hInstance, const TCHAR* pszCode)
 	@date 2004-01-31 genta RegisterExtの廃止のためRegisterCreatorに置き換え
 		そのため，過ったオブジェクト生成を行わないために拡張子チェックは必須．
 */
-MacroManagerBase* KeyMacroMgr::Creator(const TCHAR* ext)
+MacroManagerBase* KeyMacroMgr::Creator(EditView& view, const TCHAR* ext)
 {
 	if (_tcscmp(ext, _T("mac")) == 0) {
 		return new KeyMacroMgr;
@@ -478,7 +478,7 @@ MacroManagerBase* KeyMacroMgr::Creator(const TCHAR* ext)
 
 	@date 2004.01.31 genta RegisterExtの廃止のためRegisterCreatorに置き換え
 */
-void KeyMacroMgr::declare (void)
+void KeyMacroMgr::Declare (void)
 {
 	// 常に実行
 	MacroFactory::getInstance().RegisterCreator(Creator);

@@ -68,12 +68,12 @@ public:
 
 	// é¿ëï
 public:
-	bool ReadPluginDef(DataProfile* profile, DataProfile* profileMlang);
-	bool ReadPluginOption(DataProfile* profile);
+	bool ReadPluginDef(DataProfile& profile, DataProfile* profileMlang);
+	bool ReadPluginOption(DataProfile& profile);
 	Plug::Array GetPlugs() const {
 		return m_plugs;
 	}
-	bool InvokePlug(EditView* view, Plug& plug, WSHIfObj::List& params);
+	bool InvokePlug(EditView& view, Plug& plug, WSHIfObj::List& params);
 
 	// ÉÅÉìÉoïœêî
 private:

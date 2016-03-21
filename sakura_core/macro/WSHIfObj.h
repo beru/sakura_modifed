@@ -59,18 +59,18 @@ public:
 	{
 	}
 
-	virtual void ReadyMethods(EditView* pView, int flags);
+	virtual void ReadyMethods(EditView& view, int flags);
 
 protected:
 	// 操作
 	//	2007.07.20 genta : flags追加
 	//  2009.09.05 syat CWSHManagerから移動
-	void ReadyCommands(MacroFuncInfo *Info, int flags);
-	HRESULT MacroCommand(int ID, DISPPARAMS *Arguments, VARIANT* Result, void *Data);
+	void ReadyCommands(MacroFuncInfo* info, int flags);
+	HRESULT MacroCommand(int index, DISPPARAMS* arguments, VARIANT* result, void* data);
 
 	// 非実装提供
-	virtual bool HandleFunction(EditView* View, EFunctionCode ID, const VARIANT* Arguments, const int ArgSize, VARIANT& Result) = 0;		// 関数を処理する
-	virtual bool HandleCommand(EditView* View, EFunctionCode ID, const WCHAR* Arguments[], const int ArgLengths[], const int ArgSize) = 0;	// コマンドを処理する
+	virtual bool HandleFunction(EditView& view, EFunctionCode index, const VARIANT* arguments, const int argSize, VARIANT& result) = 0;		// 関数を処理する
+	virtual bool HandleCommand(EditView& view, EFunctionCode index, const WCHAR* arguments[], const int argLengths[], const int argSize) = 0;	// コマンドを処理する
 	virtual MacroFuncInfoArray GetMacroCommandInfo() const = 0;	// コマンド情報を取得する
 	virtual MacroFuncInfoArray GetMacroFuncInfo() const = 0;	// 関数情報を取得する
 

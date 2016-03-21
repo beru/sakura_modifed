@@ -88,7 +88,7 @@ public:
 	void SetTypeByStringForFile_unibe(const char* pszData, int nDataLen);
 
 	// 取得
-	EolType		GetType()	const { return m_eEolType; }		// 現在のTypeを取得
+	EolType			GetType()	const { return m_eEolType; }		// 現在のTypeを取得
 	LogicInt		GetLen()	const;	// 現在のEOL長を取得。文字単位。
 	const TCHAR*	GetName()	const;	// 現在のEOLの名称取得
 	const wchar_t*	GetValue2()	const;	// 現在のEOL文字列先頭へのポインタを取得

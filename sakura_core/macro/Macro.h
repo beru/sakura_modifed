@@ -103,17 +103,17 @@ public:
 	void SetNext(Macro* pNext) { m_pNext = pNext; }
 	Macro* GetNext() { return m_pNext; }
 	// 2007.07.20 genta : flagsí«â¡
-	bool Exec(EditView* pEditView, int flags) const; // 2007.09.30 kobake constí«â¡
+	bool Exec(EditView& editView, int flags) const; // 2007.09.30 kobake constí«â¡
 	void Save(HINSTANCE hInstance, TextOutputStream& out) const; // 2007.09.30 kobake constí«â¡
 	
-	void AddLParam(const LPARAM* lParam, const EditView* pEditView );	//@@@ 2002.2.2 YAZAKI pEditViewÇ‡ìnÇ∑
+	void AddLParam(const LPARAM* lParam, const EditView& editView );	//@@@ 2002.2.2 YAZAKI pEditViewÇ‡ìnÇ∑
 	void AddStringParam( const WCHAR* szParam, int nLength = -1 );
 	void AddStringParam(const ACHAR* lParam) { return AddStringParam(to_wchar(lParam)); }
 	void AddIntParam( const int nParam );
 	int GetParamCount() const;
 
-	static bool HandleCommand(EditView* View, EFunctionCode ID, const WCHAR* Argument[], const int ArgLengths[], const int ArgSize);
-	static bool HandleFunction(EditView* View, EFunctionCode ID, const VARIANT* Arguments, const int ArgSize, VARIANT& Result);
+	static bool HandleCommand(EditView& view, EFunctionCode index, const WCHAR* arguments[], const int argLengths[], const int argSize);
+	static bool HandleFunction(EditView& view, EFunctionCode index, const VARIANT* argumentss, const int argSize, VARIANT& result);
 	// 2009.10.29 syat HandleCommandÇ∆HandleFunctionÇÃà¯êîÇè≠ÇµÇªÇÎÇ¶ÇΩ
 #if 0
 	/*

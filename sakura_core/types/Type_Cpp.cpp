@@ -49,23 +49,23 @@ bool IsHeadCppKeyword(const wchar_t* pData)
 // VC++の生成するテキストファイルも読めるようにする			Oct. 31, 2000 JEPRO
 // 関連づけ上好ましくないのでdsw,dsp,dep,makははずす		Jan. 24, 2004 genta
 // ファイル内からの入力補完機能								2003.06.23 Moca
-void CType_Cpp::InitTypeConfigImp(TypeConfig* pType)
+void CType_Cpp::InitTypeConfigImp(TypeConfig& type)
 {
 	// 名前と拡張子
-	_tcscpy(pType->szTypeName, _T("C/C++"));
-	_tcscpy(pType->szTypeExts, _T("c,cpp,cxx,cc,cp,c++,h,hpp,hxx,hh,hp,h++,rc,hm"));
+	_tcscpy(type.szTypeName, _T("C/C++"));
+	_tcscpy(type.szTypeExts, _T("c,cpp,cxx,cc,cp,c++,h,hpp,hxx,hh,hp,h++,rc,hm"));
 
 	// 設定
-	pType->lineComment.CopyTo(0, L"//", -1);							// 行コメントデリミタ
-	pType->blockComments[0].SetBlockCommentRule(L"/*", L"*/");			// ブロックコメントデリミタ
-	pType->blockComments[1].SetBlockCommentRule(L"#if 0", L"#endif");	// ブロックコメントデリミタ2		Jul. 11, 2001 JEPRO
-	pType->nKeywordSetIdx[0] = 0;										// キーワードセット
-	pType->eDefaultOutline = OutlineType::CPP;							// アウトライン解析方法
-	pType->eSmartIndent = SmartIndentType::Cpp;							// スマートインデント種別
-	pType->colorInfoArr[COLORIDX_DIGIT].bDisp = true;					// 半角数値を色分け表示				Mar. 10, 2001 JEPRO
-	pType->colorInfoArr[COLORIDX_BRACKET_PAIR].bDisp = true;			// 対括弧の強調をデフォルトONに		Sep. 21, 2002 genta 
-	pType->bUseHokanByFile = true;										// 入力補完 開いているファイル内から候補を探す
-	pType->bStringLineOnly = true; // 文字列は行内のみ
+	type.lineComment.CopyTo(0, L"//", -1);							// 行コメントデリミタ
+	type.blockComments[0].SetBlockCommentRule(L"/*", L"*/");			// ブロックコメントデリミタ
+	type.blockComments[1].SetBlockCommentRule(L"#if 0", L"#endif");	// ブロックコメントデリミタ2		Jul. 11, 2001 JEPRO
+	type.nKeywordSetIdx[0] = 0;										// キーワードセット
+	type.eDefaultOutline = OutlineType::CPP;							// アウトライン解析方法
+	type.eSmartIndent = SmartIndentType::Cpp;							// スマートインデント種別
+	type.colorInfoArr[COLORIDX_DIGIT].bDisp = true;					// 半角数値を色分け表示				Mar. 10, 2001 JEPRO
+	type.colorInfoArr[COLORIDX_BRACKET_PAIR].bDisp = true;			// 対括弧の強調をデフォルトONに		Sep. 21, 2002 genta 
+	type.bUseHokanByFile = true;										// 入力補完 開いているファイル内から候補を探す
+	type.bStringLineOnly = true; // 文字列は行内のみ
 }
 
 //	Mar. 15, 2000 genta

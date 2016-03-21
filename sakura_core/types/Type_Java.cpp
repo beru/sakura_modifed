@@ -31,21 +31,21 @@
 #include "view/Colors/EColorIndexType.h"
 
 // Java
-void CType_Java::InitTypeConfigImp(TypeConfig* pType)
+void CType_Java::InitTypeConfigImp(TypeConfig& type)
 {
 	// 名前と拡張子
-	_tcscpy(pType->szTypeName, _T("Java"));
-	_tcscpy(pType->szTypeExts, _T("java,jav"));
+	_tcscpy(type.szTypeName, _T("Java"));
+	_tcscpy(type.szTypeExts, _T("java,jav"));
 
 	// 設定
-	pType->lineComment.CopyTo(0, L"//", -1);						// 行コメントデリミタ
-	pType->blockComments[0].SetBlockCommentRule(L"/*", L"*/");	// ブロックコメントデリミタ
-	pType->nKeywordSetIdx[0] = 4;									// キーワードセット
-	pType->eDefaultOutline = OutlineType::Java;						// アウトライン解析方法
-	pType->eSmartIndent = SmartIndentType::Cpp;						// スマートインデント種別
-	pType->colorInfoArr[COLORIDX_DIGIT].bDisp = true;			// 半角数値を色分け表示			// Mar. 10, 2001 JEPRO
-	pType->colorInfoArr[COLORIDX_BRACKET_PAIR].bDisp = true;	// 対括弧の強調をデフォルトONに	// Sep. 21, 2002 genta
-	pType->bStringLineOnly = true; // 文字列は行内のみ
+	type.lineComment.CopyTo(0, L"//", -1);						// 行コメントデリミタ
+	type.blockComments[0].SetBlockCommentRule(L"/*", L"*/");	// ブロックコメントデリミタ
+	type.nKeywordSetIdx[0] = 4;									// キーワードセット
+	type.eDefaultOutline = OutlineType::Java;						// アウトライン解析方法
+	type.eSmartIndent = SmartIndentType::Cpp;						// スマートインデント種別
+	type.colorInfoArr[COLORIDX_DIGIT].bDisp = true;			// 半角数値を色分け表示			// Mar. 10, 2001 JEPRO
+	type.colorInfoArr[COLORIDX_BRACKET_PAIR].bDisp = true;	// 対括弧の強調をデフォルトONに	// Sep. 21, 2002 genta
+	type.bStringLineOnly = true; // 文字列は行内のみ
 }
 
 

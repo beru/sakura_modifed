@@ -169,7 +169,7 @@ BOOL EditView::Create(
 	)
 {
 	m_bMiniMap = bMiniMap;
-	m_pTextArea = new TextArea(this);
+	m_pTextArea = new TextArea(*this);
 	m_pCaret = new Caret(*this, editDoc);
 	m_pRuler = new Ruler(*this, editDoc);
 	if (m_bMiniMap) {

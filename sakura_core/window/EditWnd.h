@@ -122,7 +122,7 @@ public:
 	);
 
 	void SetDocumentTypeWhenCreate(
-		EncodingType		nCharCode,						// [in] 漢字コード
+		EncodingType	nCharCode,						// [in] 漢字コード
 		bool			bViewMode,							// [in] ビューモードで開くかどうか
 		TypeConfigNum	nDocumentType = TypeConfigNum(-1)	// [in] 文書タイプ．-1のとき強制指定無し．
 	);
@@ -203,8 +203,8 @@ public:
 	void SetWindowIcon(HICON, int);	//	Sep. 10, 2002 genta
 	void GetDefaultIcon(HICON* hIconBig, HICON* hIconSmall) const;	//	Sep. 10, 2002 genta
 	bool GetRelatedIcon(const TCHAR* szFile, HICON* hIconBig, HICON* hIconSmall) const;	//	Sep. 10, 2002 genta
-	void SetPageScrollByWheel(BOOL bState) { m_bPageScrollByWheel = bState; }		// ホイール操作によるページスクロール有無を設定する（TRUE=あり, FALSE=なし）	// 2009.01.17 nasukoji
-	void SetHScrollByWheel(BOOL bState) { m_bHorizontalScrollByWheel = bState; }	// ホイール操作による横スクロール有無を設定する（TRUE=あり, FALSE=なし）	// 2009.01.17 nasukoji
+	void SetPageScrollByWheel(bool bState) { m_bPageScrollByWheel = bState; }		// ホイール操作によるページスクロール有無を設定する（TRUE=あり, FALSE=なし）	// 2009.01.17 nasukoji
+	void SetHScrollByWheel(bool bState) { m_bHorizontalScrollByWheel = bState; }	// ホイール操作による横スクロール有無を設定する（TRUE=あり, FALSE=なし）	// 2009.01.17 nasukoji
 	void ClearMouseState(void);		// 2009.01.17 nasukoji	マウスの状態をクリアする（ホイールスクロール有無状態をクリア）
 	
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -222,8 +222,8 @@ public:
 		return m_pPrintPreview != NULL;
 	}
 	
-	BOOL IsPageScrollByWheel() const { return m_bPageScrollByWheel; }		// ホイール操作によるページスクロール有無	// 2009.01.17 nasukoji
-	BOOL IsHScrollByWheel() const { return m_bHorizontalScrollByWheel; }	// ホイール操作による横スクロール有無		// 2009.01.17 nasukoji
+	bool IsPageScrollByWheel() const { return m_bPageScrollByWheel; }		// ホイール操作によるページスクロール有無	// 2009.01.17 nasukoji
+	bool IsHScrollByWheel() const { return m_bHorizontalScrollByWheel; }	// ホイール操作による横スクロール有無		// 2009.01.17 nasukoji
 	
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                           表示                              //
@@ -249,9 +249,9 @@ public:
 	bool SetDrawSwitchOfAllViews(bool bDraw);						// すべてのペインの描画スイッチを設定する	2008.06.08 ryoji
 	void RedrawAllViews(EditView* pViewExclude);					// すべてのペインをRedrawする
 	void Views_DisableSelectArea(bool bRedraw);
-	BOOL DetectWidthOfLineNumberAreaAllPane(bool bRedraw);	// すべてのペインで、行番号表示に必要な幅を再設定する（必要なら再描画する）
+	bool DetectWidthOfLineNumberAreaAllPane(bool bRedraw);	// すべてのペインで、行番号表示に必要な幅を再設定する（必要なら再描画する）
 	bool WrapWindowWidth(int nPane);	// 右端で折り返す			2008.06.08 ryoji
-	BOOL UpdateTextWrap(void);		// 折り返し方法関連の更新	2008.06.10 ryoji
+	bool UpdateTextWrap(void);		// 折り返し方法関連の更新	2008.06.10 ryoji
 	//	Aug. 14, 2005 genta TAB幅と折り返し位置の更新
 	void ChangeLayoutParam(bool bShowProgress, LayoutInt nTabSize, LayoutInt nMaxLineKetas);
 	//	Aug. 14, 2005 genta
@@ -318,8 +318,8 @@ protected:
 public:
 	// D&Dフラグ管理
 	void SetDragPosOrg(Point ptDragPosOrg)	{ m_ptDragPosOrg = ptDragPosOrg; }
-	void SetDragMode(bool bDragMode)			{ m_bDragMode = bDragMode; }
-	bool GetDragMode() const					{ return m_bDragMode; }
+	void SetDragMode(bool bDragMode)		{ m_bDragMode = bDragMode; }
+	bool GetDragMode() const				{ return m_bDragMode; }
 	const Point& GetDragPosOrg() const		{ return m_ptDragPosOrg; }
 	
 	// IDropTarget実装		2008.06.20 ryoji
@@ -399,9 +399,9 @@ public:
 	LogicPointEx*	m_posSaveAry;
 private:
 	int				m_nCurrentFocus;			// 現在のフォーカス情報
-	int				nWinSizeType;				// サイズ変更のタイプ。SIZE_MAXIMIZED, SIZE_MINIMIZED 等。
-	BOOL			m_bPageScrollByWheel;		// ホイール操作によるページスクロールあり	// 2009.01.17 nasukoji
-	BOOL			m_bHorizontalScrollByWheel;	// ホイール操作による横スクロールあり		// 2009.01.17 nasukoji
+	int				m_nWinSizeType;				// サイズ変更のタイプ。SIZE_MAXIMIZED, SIZE_MINIMIZED 等。
+	bool			m_bPageScrollByWheel;		// ホイール操作によるページスクロールあり	// 2009.01.17 nasukoji
+	bool			m_bHorizontalScrollByWheel;	// ホイール操作による横スクロールあり		// 2009.01.17 nasukoji
 	HACCEL			m_hAccelWine;				// ウィンドウ毎のアクセラレータテーブルのハンドル(Wine用)	// 2009.08.15 nasukoji
 	HACCEL			m_hAccel;					// アクセラレータテーブル(共有 or ウィンドウ毎)
 

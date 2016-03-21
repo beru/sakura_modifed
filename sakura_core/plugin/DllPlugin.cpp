@@ -53,14 +53,14 @@ Plug* DllPlugin::CreatePlug(
 
 // プラグイン定義ファイルの読み込み
 bool DllPlugin::ReadPluginDef(
-	DataProfile* profile,
+	DataProfile& profile,
 	DataProfile* profileMlang
 	)
 {
 	ReadPluginDefCommon(profile, profileMlang);
 
 	// DLL名の読み込み
-	profile->IOProfileData(PII_DLL, PII_DLL_NAME, m_sDllName);
+	profile.IOProfileData(PII_DLL, PII_DLL_NAME, m_sDllName);
 
 	// プラグの読み込み
 	ReadPluginDefPlug(profile, profileMlang);
@@ -79,7 +79,7 @@ bool DllPlugin::ReadPluginDef(
 
 // プラグ実行
 bool DllPlugin::InvokePlug(
-	EditView* view,
+	EditView& view,
 	Plug& plug_raw,
 	WSHIfObj::List& params
 	)
@@ -87,7 +87,7 @@ bool DllPlugin::InvokePlug(
 	tstring dllPath = GetFilePath(to_tchar(m_sDllName.c_str()));
 	InitDllResultType resInit = InitDll(to_tchar(dllPath.c_str()));
 	if (resInit != InitDllResultType::Success) {
-		::MYMESSAGEBOX(view->m_hwndParent, MB_OK, LS(STR_DLLPLG_TITLE), LS(STR_DLLPLG_INIT_ERR1), dllPath.c_str(), sName.c_str());
+		::MYMESSAGEBOX(view.m_hwndParent, MB_OK, LS(STR_DLLPLG_TITLE), LS(STR_DLLPLG_INIT_ERR1), dllPath.c_str(), sName.c_str());
 		return false;
 	}
 

@@ -33,21 +33,21 @@
 // Visual Basic
 // JUl. 10, 2001 JEPRO VB   ユーザに贈る
 // Jul. 09, 2001 JEPRO 追加 //Dec. 16, 2002 MIK追加 // Feb. 19, 2006 genta .vb追加
-void CType_Vb::InitTypeConfigImp(TypeConfig* pType)
+void CType_Vb::InitTypeConfigImp(TypeConfig& type)
 {
 	// 名前と拡張子
-	_tcscpy(pType->szTypeName, _T("Visual Basic"));
-	_tcscpy(pType->szTypeExts, _T("bas,frm,cls,ctl,pag,dob,dsr,vb"));
+	_tcscpy(type.szTypeName, _T("Visual Basic"));
+	_tcscpy(type.szTypeExts, _T("bas,frm,cls,ctl,pag,dob,dsr,vb"));
 
 	// 設定
-	pType->lineComment.CopyTo(0, L"'", -1);					// 行コメントデリミタ
-	pType->eDefaultOutline = OutlineType::VisualBasic;		// アウトライン解析方法
-	pType->nKeywordSetIdx[0]  = 13;							// キーワードセット
-	pType->nKeywordSetIdx[1] = 14;							// キーワードセット2
-	pType->colorInfoArr[COLORIDX_DIGIT].bDisp = true;		// 半角数値を色分け表示
-	pType->stringType = StringLiteralType::PLSQL;			// 文字列区切り記号エスケープ方法  0=[\"][\'] 1=[""]['']
-	pType->colorInfoArr[COLORIDX_SSTRING].bDisp = false;	// シングルクォーテーション文字列を色分け表示しない
-	pType->bStringLineOnly = true; // 文字列は行内のみ
+	type.lineComment.CopyTo(0, L"'", -1);					// 行コメントデリミタ
+	type.eDefaultOutline = OutlineType::VisualBasic;		// アウトライン解析方法
+	type.nKeywordSetIdx[0]  = 13;							// キーワードセット
+	type.nKeywordSetIdx[1] = 14;							// キーワードセット2
+	type.colorInfoArr[COLORIDX_DIGIT].bDisp = true;		// 半角数値を色分け表示
+	type.stringType = StringLiteralType::PLSQL;			// 文字列区切り記号エスケープ方法  0=[\"][\'] 1=[""]['']
+	type.colorInfoArr[COLORIDX_SSTRING].bDisp = false;	// シングルクォーテーション文字列を色分け表示しない
+	type.bStringLineOnly = true; // 文字列は行内のみ
 }
 
 // From Here June 23, 2001 N.Nakatani

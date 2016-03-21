@@ -33,16 +33,16 @@
 // アセンブラ
 //	2004.05.01 MIK/genta
 // Mar. 10, 2001 JEPRO	半角数値を色分け表示
-void CType_Asm::InitTypeConfigImp(TypeConfig* pType)
+void CType_Asm::InitTypeConfigImp(TypeConfig& type)
 {
 	// 名前と拡張子
-	_tcscpy(pType->szTypeName, _T("アセンブラ"));
-	_tcscpy(pType->szTypeExts, _T("asm"));
+	_tcscpy(type.szTypeName, _T("アセンブラ"));
+	_tcscpy(type.szTypeExts, _T("asm"));
 
 	// 設定
-	pType->lineComment.CopyTo(0, L";", -1);				// 行コメントデリミタ
-	pType->eDefaultOutline = OutlineType::Asm;			// アウトライン解析方法
-	pType->colorInfoArr[COLORIDX_DIGIT].bDisp = true;
+	type.lineComment.CopyTo(0, L";", -1);				// 行コメントデリミタ
+	type.eDefaultOutline = OutlineType::Asm;			// アウトライン解析方法
+	type.colorInfoArr[COLORIDX_DIGIT].bDisp = true;
 }
 
 

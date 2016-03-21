@@ -257,7 +257,7 @@ LRESULT PrintPreview::OnPaint(
 	//                         テキスト                            //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-	int nHeaderHeight = Print::CalcHeaderHeight(m_pPrintSetting);
+	int nHeaderHeight = Print::CalcHeaderHeight(*m_pPrintSetting);
 
 	// ヘッダ
 	if (nHeaderHeight) {
@@ -277,7 +277,7 @@ LRESULT PrintPreview::OnPaint(
 	);
 
 	// フッタ
-	if (Print::CalcFooterHeight(m_pPrintSetting)) {
+	if (Print::CalcFooterHeight(*m_pPrintSetting)) {
 		DrawHeaderFooter(hdc, rect, false);
 	}
 	
@@ -778,9 +778,9 @@ void PrintPreview::OnChangePrintSetting(void)
 	m_nPreview_ViewMarginTop = 8 * 10;		// 印刷Preview：ビュー左端と用紙の間隔(1/10mm単位)
 
 	// 行あたりの文字数(行番号込み)
-	m_bPreview_EnableColumns = LayoutInt(Print::CalculatePrintableColumns(m_pPrintSetting, m_nPreview_PaperAllWidth, m_nPreview_LineNumberColumns));	// 印字可能桁数/ページ
+	m_bPreview_EnableColumns = LayoutInt(Print::CalculatePrintableColumns(*m_pPrintSetting, m_nPreview_PaperAllWidth, m_nPreview_LineNumberColumns));	// 印字可能桁数/ページ
 	// 縦方向の行数
-	m_bPreview_EnableLines = Print::CalculatePrintableLines(m_pPrintSetting, m_nPreview_PaperAllHeight);			// 印字可能行数/ページ
+	m_bPreview_EnableLines = Print::CalculatePrintableLines(*m_pPrintSetting, m_nPreview_PaperAllHeight);			// 印字可能行数/ページ
 
 	// 印字可能領域がない場合は印刷Previewを終了する 2013.5.10 aroka
 	if (m_bPreview_EnableColumns == 0 || m_bPreview_EnableLines == 0) {
@@ -1139,7 +1139,7 @@ void PrintPreview::OnPrint(void)
 		::SelectObject(hdc, m_hFontHan);
 		//	To Here Jun. 26, 2003 かろと / おきた
 
-		int nHeaderHeight = Print::CalcHeaderHeight(m_pPrintSetting);
+		int nHeaderHeight = Print::CalcHeaderHeight(*m_pPrintSetting);
 
 		// ヘッダ印刷
 		if (nHeaderHeight) {
@@ -1170,7 +1170,7 @@ void PrintPreview::OnPrint(void)
 		);
 
 		// フッタ印刷
-		if (Print::CalcFooterHeight(m_pPrintSetting)) {
+		if (Print::CalcFooterHeight(*m_pPrintSetting)) {
 			DrawHeaderFooter(hdc, rect, false);
 		}
 

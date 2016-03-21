@@ -30,19 +30,19 @@
 #include "outline/FuncInfoArr.h"
 
 // PL/SQL
-void CType_Sql::InitTypeConfigImp(TypeConfig* pType)
+void CType_Sql::InitTypeConfigImp(TypeConfig& type)
 {
 	// 名前と拡張子
-	_tcscpy(pType->szTypeName, _T("PL/SQL"));
-	_tcscpy(pType->szTypeExts, _T("sql,plsql"));
+	_tcscpy(type.szTypeName, _T("PL/SQL"));
+	_tcscpy(type.szTypeExts, _T("sql,plsql"));
 
 	// 設定
-	pType->lineComment.CopyTo(0, L"--", -1);					// 行コメントデリミタ
-	pType->blockComments[0].SetBlockCommentRule(L"/*", L"*/");	// ブロックコメントデリミタ
-	pType->stringType = StringLiteralType::PLSQL;				// 文字列区切り記号エスケープ方法  0=[\"][\'] 1=[""]['']
-	wcscpy_s(pType->szIndentChars, L"|★");						// その他のインデント対象文字
-	pType->nKeywordSetIdx[0] = 2;								// キーワードセット
-	pType->eDefaultOutline = OutlineType::PLSQL;				// アウトライン解析方法
+	type.lineComment.CopyTo(0, L"--", -1);					// 行コメントデリミタ
+	type.blockComments[0].SetBlockCommentRule(L"/*", L"*/");	// ブロックコメントデリミタ
+	type.stringType = StringLiteralType::PLSQL;				// 文字列区切り記号エスケープ方法  0=[\"][\'] 1=[""]['']
+	wcscpy_s(type.szIndentChars, L"|★");						// その他のインデント対象文字
+	type.nKeywordSetIdx[0] = 2;								// キーワードセット
+	type.eDefaultOutline = OutlineType::PLSQL;				// アウトライン解析方法
 }
 
 

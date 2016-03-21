@@ -66,7 +66,7 @@ public:
 
 		@date 2005.04.22 genta 最大値を可変に
 	*/
-	int GetCapacity(void) const { return m_MAX_TAGJUMPLIST; }
+	int GetCapacity(void) const { return m_capacity; }
 
 private:
 	TagJumpInfo*	m_pTagjump;	// タグジャンプ情報
@@ -75,7 +75,7 @@ private:
 	bool	m_bOverflow;	// オーバーフロー
 	
 	//	2005.04.22 genta 最大値を可変に
-	const int	m_MAX_TAGJUMPLIST;	// 管理する情報の最大数
+	const int	m_capacity;	// 管理する情報の最大数
 
 	void Free(TagJumpInfo* item);
 

@@ -35,18 +35,18 @@
 // Feb. 7, 2001 JEPRO .cc/cp/c++/.hpp/hxx/hh/hp/h++を追加	//Mar. 15, 2001 JEPRO .hmを追加
 // Feb. 2, 2005 genta 苦情が多いのでシングルクォートの色分けはHTMLでは行わない
 // 2012.01.03 シングルクォートの色分けをする
-void CType_Html::InitTypeConfigImp(TypeConfig* pType)
+void CType_Html::InitTypeConfigImp(TypeConfig& type)
 {
-	_tcscpy(pType->szTypeName, _T("HTML"));
-	_tcscpy(pType->szTypeExts, _T("html,htm,shtml,plg"));
+	_tcscpy(type.szTypeName, _T("HTML"));
+	_tcscpy(type.szTypeExts, _T("html,htm,shtml,plg"));
 
 	// 設定
-	pType->blockComments[0].SetBlockCommentRule(L"<!--", L"-->");	// ブロックコメントデリミタ
-	pType->stringType = StringLiteralType::HTML;					// 文字列区切り記号エスケープ方法
-	pType->bStringLineOnly = true;									// 文字列は行内のみ
-	pType->nKeywordSetIdx[0] = 1;									// キーワードセット
-	pType->eDefaultOutline = OutlineType::HTML;						// アウトライン解析方法
-	pType->colorInfoArr[COLORIDX_SSTRING].bDisp = true;				// シングルクォートの色分けOFF
+	type.blockComments[0].SetBlockCommentRule(L"<!--", L"-->");	// ブロックコメントデリミタ
+	type.stringType = StringLiteralType::HTML;					// 文字列区切り記号エスケープ方法
+	type.bStringLineOnly = true;									// 文字列は行内のみ
+	type.nKeywordSetIdx[0] = 1;									// キーワードセット
+	type.eDefaultOutline = OutlineType::HTML;						// アウトライン解析方法
+	type.colorInfoArr[COLORIDX_SSTRING].bDisp = true;				// シングルクォートの色分けOFF
 }
 
 

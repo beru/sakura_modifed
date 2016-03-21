@@ -194,7 +194,7 @@ end_of_for:;
 				GetOpeBlk()->AddRef();	// ※ReleaseはHandleCommandの最後で行う
 
 				// プラグイン呼び出し
-				(*plugs.begin())->Invoke(&m_view, params);
+				(*plugs.begin())->Invoke(m_view, params);
 				objIndent->Release();
 			}
 		}

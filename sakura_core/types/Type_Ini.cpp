@@ -28,17 +28,17 @@
 
 // 設定ファイル
 // Nov. 9, 2000 JEPRO Windows標準のini, inf, cnfファイルとsakuraキーワード設定ファイル.kwd, 色設定ファイル.col も読めるようにする
-void CType_Ini::InitTypeConfigImp(TypeConfig* pType)
+void CType_Ini::InitTypeConfigImp(TypeConfig& type)
 {
 	// 名前と拡張子
-	_tcscpy(pType->szTypeName, _T("設定ファイル"));
-	_tcscpy(pType->szTypeExts, _T("ini,inf,cnf,kwd,col"));
+	_tcscpy(type.szTypeName, _T("設定ファイル"));
+	_tcscpy(type.szTypeExts, _T("ini,inf,cnf,kwd,col"));
 	
 	// 設定
-	pType->lineComment.CopyTo(0, L"//", -1);				// 行コメントデリミタ
-	pType->lineComment.CopyTo(1, L";", -1);					// 行コメントデリミタ2
-	pType->eDefaultOutline = OutlineType::Text;				// アウトライン解析方法
-	pType->colorInfoArr[COLORIDX_SSTRING].bDisp = false;	// シングルクォーテーション文字列を色分け表示しない
-	pType->colorInfoArr[COLORIDX_WSTRING].bDisp = false;	// ダブルクォーテーション文字列を色分け表示しない
+	type.lineComment.CopyTo(0, L"//", -1);				// 行コメントデリミタ
+	type.lineComment.CopyTo(1, L";", -1);					// 行コメントデリミタ2
+	type.eDefaultOutline = OutlineType::Text;				// アウトライン解析方法
+	type.colorInfoArr[COLORIDX_SSTRING].bDisp = false;	// シングルクォーテーション文字列を色分け表示しない
+	type.colorInfoArr[COLORIDX_WSTRING].bDisp = false;	// ダブルクォーテーション文字列を色分け表示しない
 }
 

@@ -27,7 +27,7 @@
 
 /*! ƒtƒHƒ“ƒgì¬
 */
-void ViewFont::CreateFont(const LOGFONT *plf)
+void ViewFont::CreateFont(const LOGFONT* plf)
 {
 	LOGFONT	lf;
 	auto& csWindow = GetDllShareData().common.window;

@@ -156,7 +156,7 @@ bool DocFileOperation::FileLoad(
 		WSHIfObj::List params;
 		JackManager::getInstance().GetUsablePlug(PP_DOCUMENT_OPEN, 0, &plugs);
 		for (auto it=plugs.begin(); it!=plugs.end(); ++it) {
-			(*it)->Invoke(&m_doc.m_pEditWnd->GetActiveView(), params);
+			(*it)->Invoke(m_doc.m_pEditWnd->GetActiveView(), params);
 		}
 	}
 
@@ -186,7 +186,7 @@ void DocFileOperation::ReloadCurrentFile(
 	WSHIfObj::List params;
 	JackManager::getInstance().GetUsablePlug(PP_DOCUMENT_CLOSE, 0, &plugs);
 	for (auto it=plugs.begin(); it!=plugs.end(); ++it) {
-		(*it)->Invoke(&activeView, params);
+		(*it)->Invoke(activeView, params);
 	}
 
 	auto& caret = activeView.GetCaret();
@@ -231,7 +231,7 @@ void DocFileOperation::ReloadCurrentFile(
 		WSHIfObj::List params;
 		JackManager::getInstance().GetUsablePlug(PP_DOCUMENT_OPEN, 0, &plugs);
 		for (auto it=plugs.begin(); it!=plugs.end(); ++it) {
-			(*it)->Invoke(&m_doc.m_pEditWnd->GetActiveView(), params);
+			(*it)->Invoke(m_doc.m_pEditWnd->GetActiveView(), params);
 		}
 	}
 }
@@ -370,7 +370,7 @@ bool DocFileOperation::DoSaveFlow(SaveInfo* pSaveInfo)
 		WSHIfObj::List params;
 		JackManager::getInstance().GetUsablePlug(PP_DOCUMENT_BEFORE_SAVE, 0, &plugs);
 		for (auto it=plugs.begin(); it!=plugs.end(); ++it) {
-			(*it)->Invoke(&m_doc.m_pEditWnd->GetActiveView(), params);
+			(*it)->Invoke(m_doc.m_pEditWnd->GetActiveView(), params);
 		}
 
 		if (!pSaveInfo->bOverwriteMode) {	// 上書きでなければ前文書のクローズイベントを呼ぶ
@@ -378,7 +378,7 @@ bool DocFileOperation::DoSaveFlow(SaveInfo* pSaveInfo)
 			plugs.clear();
 			JackManager::getInstance().GetUsablePlug(PP_DOCUMENT_CLOSE, 0, &plugs);
 			for (auto it=plugs.begin(); it!=plugs.end(); ++it) {
-				(*it)->Invoke(&m_doc.m_pEditWnd->GetActiveView(), params);
+				(*it)->Invoke(m_doc.m_pEditWnd->GetActiveView(), params);
 			}
 		}
 
@@ -391,7 +391,7 @@ bool DocFileOperation::DoSaveFlow(SaveInfo* pSaveInfo)
 		plugs.clear();
 		JackManager::getInstance().GetUsablePlug(PP_DOCUMENT_AFTER_SAVE, 0, &plugs);
 		for (auto it=plugs.begin(); it!=plugs.end(); ++it) {
-			(*it)->Invoke(&m_doc.m_pEditWnd->GetActiveView(), params);
+			(*it)->Invoke(m_doc.m_pEditWnd->GetActiveView(), params);
 		}
 
 		// 結果
@@ -486,7 +486,7 @@ bool DocFileOperation::FileSaveAs(
 		WSHIfObj::List params;
 		JackManager::getInstance().GetUsablePlug(PP_DOCUMENT_OPEN, 0, &plugs);
 		for (auto it=plugs.begin(); it!=plugs.end(); ++it) {
-			(*it)->Invoke(&m_doc.m_pEditWnd->GetActiveView(), params);
+			(*it)->Invoke(m_doc.m_pEditWnd->GetActiveView(), params);
 		}
 
 		return true;
@@ -518,7 +518,7 @@ bool DocFileOperation::FileClose()
 	WSHIfObj::List params;
 	JackManager::getInstance().GetUsablePlug(PP_DOCUMENT_CLOSE, 0, &plugs);
 	for (auto it=plugs.begin(); it!=plugs.end(); ++it) {
-		(*it)->Invoke(&m_doc.m_pEditWnd->GetActiveView(), params);
+		(*it)->Invoke(m_doc.m_pEditWnd->GetActiveView(), params);
 	}
 
 	// 既存データのクリア
@@ -561,7 +561,7 @@ void DocFileOperation::FileCloseOpen(const LoadInfo& argLoadInfo)
 	WSHIfObj::List params;
 	JackManager::getInstance().GetUsablePlug(PP_DOCUMENT_CLOSE, 0, &plugs);
 	for (auto it=plugs.begin(); it!=plugs.end(); ++it) {
-		(*it)->Invoke(&m_doc.m_pEditWnd->GetActiveView(), params);
+		(*it)->Invoke(m_doc.m_pEditWnd->GetActiveView(), params);
 	}
 
 	// ファイル名指定が無い場合はダイアログで入力させる
@@ -612,7 +612,7 @@ void DocFileOperation::FileCloseOpen(const LoadInfo& argLoadInfo)
 	plugs.clear();
 	JackManager::getInstance().GetUsablePlug(PP_DOCUMENT_OPEN, 0, &plugs);
 	for (auto it=plugs.begin(); it!=plugs.end(); ++it) {
-		(*it)->Invoke(&m_doc.m_pEditWnd->GetActiveView(), params);
+		(*it)->Invoke(m_doc.m_pEditWnd->GetActiveView(), params);
 	}
 }
 

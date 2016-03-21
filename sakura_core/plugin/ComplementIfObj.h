@@ -44,11 +44,11 @@ class ComplementIfObj : public WSHIfObj {
 
 	// コンストラクタ
 public:
-	ComplementIfObj(std::wstring& curWord, HokanMgr* pMgr, int option)
+	ComplementIfObj(std::wstring& curWord, HokanMgr& mgr, int option)
 		:
 		WSHIfObj(L"Complement", false),
-		m_sCurrentWord(curWord),
-		m_pHokanMgr(pMgr),
+		m_currentWord(curWord),
+		m_hokanMgr(mgr),
 		m_nOption(option)
 	{
 	}
@@ -65,30 +65,30 @@ public:
 	MacroFuncInfoArray GetMacroFuncInfo() const { return m_macroFuncInfoArr; };
 	// 関数を処理する
 	bool HandleFunction(
-		EditView*		View,
-		EFunctionCode	ID,
-		const VARIANT*	Arguments,
-		const int		ArgSize,
-		VARIANT&		Result
+		EditView&		view,
+		EFunctionCode	index,
+		const VARIANT*	arguments,
+		const int		argSize,
+		VARIANT&		result
 	) {
 		Variant varCopy;	// VT_BYREFだと困るのでコピー用
 
-		switch (LOWORD(ID)) {
+		switch (LOWORD(index)) {
 		case F_CM_GETCURRENTWORD:	// 補完対象の文字列を取得
 			{
-				SysString s(m_sCurrentWord.c_str(), m_sCurrentWord.length());
-				Wrap(&Result)->Receive(s);
+				SysString s(m_currentWord.c_str(), m_currentWord.length());
+				Wrap(&result)->Receive(s);
 			}
 			return true;
 		case F_CM_GETOPTION:	// オプションを取得
 			{
-				Wrap(&Result)->Receive(m_nOption);
+				Wrap(&result)->Receive(m_nOption);
 			}
 			return true;
 		case F_CM_ADDLIST:		// 候補に追加する
 			{
 				std::wstring keyword;
-				if (!variant_to_wstr(Arguments[0], keyword)) {
+				if (!variant_to_wstr(arguments[0], keyword)) {
 					return false;
 				}
 				const wchar_t* word = keyword.c_str();
@@ -97,10 +97,10 @@ public:
 					return false;
 				}
 				std::wstring strWord = std::wstring(word, nWordLen);
-				if (HokanMgr::AddKouhoUnique(m_pHokanMgr->m_vKouho, strWord)) {
-					Wrap(&Result)->Receive(m_pHokanMgr->m_vKouho.size());
+				if (HokanMgr::AddKouhoUnique(m_hokanMgr.m_vKouho, strWord)) {
+					Wrap(&result)->Receive(m_hokanMgr.m_vKouho.size());
 				}else {
-					Wrap(&Result)->Receive(-1);
+					Wrap(&result)->Receive(-1);
 				}
 				return true;
 			}
@@ -109,14 +109,21 @@ public:
 	}
 	
 	// コマンドを処理する
-	bool HandleCommand(EditView* View, EFunctionCode ID, const WCHAR* Arguments[], const int ArgLengths[], const int ArgSize) {
+	bool HandleCommand(
+		EditView& view,
+		EFunctionCode index,
+		const WCHAR* arguments[],
+		const int argLengths[],
+		const int argSize
+		)
+	{
 		return false;
 	}
 
 	// メンバ変数
 private:
-	std::wstring m_sCurrentWord;
-	HokanMgr* m_pHokanMgr;
+	std::wstring m_currentWord;
+	HokanMgr& m_hokanMgr;
 	int m_nOption; // 0x01 == IgnoreCase
 
 private:

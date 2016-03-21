@@ -61,11 +61,11 @@ PPA::~PPA()
 }
 
 // @date 2002.2.17 YAZAKI CShareDataのインスタンスは、CProcessにひとつあるのみ。
-bool PPA::Execute(EditView* pEditView, int flags)
+bool PPA::Execute(EditView& editView, int flags)
 {
 	// PPAの多重起動禁止 2008.10.22 syat
 	if (PPA::m_bIsRunning) {
-		MYMESSAGEBOX(pEditView->GetHwnd(), MB_OK, LS(STR_ERR_DLGPPA7), LS(STR_ERR_DLGPPA1));
+		MYMESSAGEBOX(editView.GetHwnd(), MB_OK, LS(STR_ERR_DLGPPA7), LS(STR_ERR_DLGPPA1));
 		m_fnAbort();
 		PPA::m_bIsRunning = false;
 		return false;
@@ -73,7 +73,7 @@ bool PPA::Execute(EditView* pEditView, int flags)
 	PPA::m_bIsRunning = true;
 
 	PpaExecInfo info;
-	info.m_pEditView = pEditView;
+	info.m_pEditView = &editView;
 	info.m_pShareData = &GetDllShareData();
 	info.m_bError = false;			// 2003.06.01 Moca
 	info.m_memDebug.SetString("");	// 2003.06.01 Moca
@@ -287,7 +287,7 @@ char* PPA::GetDeclarations( const MacroFuncInfo& macroFuncInfo, char* szBuffer )
 */
 void __stdcall PPA::stdStrObj(
 	const char* ObjName,
-	int Index,
+	int index,
 	BYTE GS_Mode,
 	int* Err_CD,
 	char** Value
@@ -295,7 +295,7 @@ void __stdcall PPA::stdStrObj(
 {
 	NEVER_USED_PARAM(ObjName);
 	*Err_CD = 0;
-	switch (Index) {
+	switch (index) {
 	case 2:
 		switch (GS_Mode) {
 		case omGet:
@@ -388,7 +388,7 @@ void __stdcall PPA::stdError(int Err_CD, const char* Err_Mes)
 //----------------------------------------------------------------------
 /** プロシージャ実行callback
 
-	@date 2007.07.20 genta Indexと一緒にフラグを渡す
+	@date 2007.07.20 genta indexと一緒にフラグを渡す
 */
 void __stdcall PPA::stdProc(
 	const char*	funcName,
@@ -419,7 +419,7 @@ void __stdcall PPA::stdProc(
 
 	// 処理
 	bool bRet = Macro::HandleCommand(
-		m_CurInstance->m_pEditView,
+		*m_CurInstance->m_pEditView,
 		(EFunctionCode)(eIndex | m_CurInstance->m_commandflags),
 		tmpArguments,
 		tmpArgLengths,
@@ -450,7 +450,7 @@ void __stdcall PPA::stdProc(
 */
 void __stdcall PPA::stdIntFunc(
 	const char* FuncName,
-	const int Index,
+	const int index,
 	const char* Argument[],
 	const int ArgSize,
 	int* Err_CD,
@@ -463,7 +463,7 @@ void __stdcall PPA::stdIntFunc(
 
 	*ResultValue = 0;
 	*Err_CD = 0;
-	if (false != CallHandleFunction(Index, Argument, ArgSize, &Ret)) {
+	if (false != CallHandleFunction(index, Argument, ArgSize, &Ret)) {
 		switch (Ret.vt) {
 		case VT_I4:
 			*ResultValue = Ret.lVal;
@@ -480,7 +480,7 @@ void __stdcall PPA::stdIntFunc(
 		::VariantClear(&Ret);
 		return;
 	}
-	*Err_CD = Index + 1; // 2003.06.01 Moca
+	*Err_CD = index + 1; // 2003.06.01 Moca
 	::VariantClear(&Ret);
 	return;
 }
@@ -494,7 +494,7 @@ void __stdcall PPA::stdIntFunc(
 */
 void __stdcall PPA::stdStrFunc(
 	const char* FuncName,
-	const int Index,
+	const int index,
 	const char* Argument[],
 	const int ArgSize,
 	int* Err_CD,
@@ -506,7 +506,7 @@ void __stdcall PPA::stdStrFunc(
 	VARIANT Ret;
 	::VariantInit(&Ret);
 	*Err_CD = 0;
-	if (false != CallHandleFunction(Index, Argument, ArgSize, &Ret)) {
+	if (false != CallHandleFunction(index, Argument, ArgSize, &Ret)) {
 		if (Ret.vt == VT_BSTR) {
 			int len;
 			char* buf;
@@ -519,7 +519,7 @@ void __stdcall PPA::stdStrFunc(
 		}
 	}
 	::VariantClear(&Ret);
-	*Err_CD = Index + 1;
+	*Err_CD = index + 1;
 	*ResultValue = const_cast<char*>("");
 	return;
 }
@@ -531,22 +531,22 @@ void __stdcall PPA::stdStrFunc(
 	@author Moca
 */
 bool PPA::CallHandleFunction(
-	const int Index,
-	const char* Arg[],
-	int ArgSize,
-	VARIANT* Result
+	const int index,
+	const char* args[],
+	int argSize,
+	VARIANT* result
 	)
 {
-	int ArgCnt;
+	int argCnt;
 	const int maxArgSize = 8;
 	VARIANT vtArg[maxArgSize];
 	
-	const MacroFuncInfo* mfi = SMacroMgr::GetFuncInfoByID(Index);
-	for (int i=0; i<maxArgSize && i<ArgSize; ++i) {
+	const MacroFuncInfo* mfi = SMacroMgr::GetFuncInfoByID(index);
+	for (int i=0; i<maxArgSize && i<argSize; ++i) {
 		::VariantInit(&vtArg[i]);
 	}
-	ArgCnt = 0;
-	for (int i=0, ArgCnt=0; i<maxArgSize && i<ArgSize; ++i) {
+	argCnt = 0;
+	for (int i=0, ArgCnt=0; i<maxArgSize && i<argSize; ++i) {
 		VARTYPE type = VT_EMPTY;
 		if (i < 4) {
 			type = mfi->varArguments[i];
@@ -562,17 +562,17 @@ bool PPA::CallHandleFunction(
 		case VT_I4:
 		{
 			vtArg[i].vt = VT_I4;
-			vtArg[i].lVal = atoi(Arg[i]);
+			vtArg[i].lVal = atoi(args[i]);
 			break;
 		}
 		case VT_BSTR:
 		{
-			SysString S(Arg[i], lstrlenA(Arg[i]));
+			SysString S(args[i], lstrlenA(args[i]));
 			Wrap(&vtArg[i])->Receive(S);
 			break;
 		}
 		default:
-			for (int i=0; i<maxArgSize && i<ArgSize; ++i) {
+			for (int i=0; i<maxArgSize && i<argSize; ++i) {
 				::VariantClear(&vtArg[i]);
 			}
 			return false;
@@ -580,14 +580,20 @@ bool PPA::CallHandleFunction(
 		++ArgCnt;
 	}
 
-	if (Index >= F_FUNCTION_FIRST) {
-		bool Ret = Macro::HandleFunction(m_CurInstance->m_pEditView, (EFunctionCode)Index, vtArg, ArgCnt, *Result);
-		for (int i=0; i<maxArgSize && i<ArgSize; ++i) {
+	if (index >= F_FUNCTION_FIRST) {
+		bool Ret = Macro::HandleFunction(
+			*m_CurInstance->m_pEditView,
+			(EFunctionCode)index,
+			vtArg,
+			argCnt,
+			*result
+			);
+		for (int i=0; i<maxArgSize && i<argSize; ++i) {
 			::VariantClear(&vtArg[i]);
 		}
 		return Ret;
 	}else {
-		for (int i=0; i<maxArgSize && i<ArgSize; ++i) {
+		for (int i=0; i<maxArgSize && i<argSize; ++i) {
 			::VariantClear(&vtArg[i]);
 		}
 		return false;

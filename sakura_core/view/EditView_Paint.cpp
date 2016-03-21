@@ -59,9 +59,9 @@ void EditView_Paint::Call_OnPaint(
 	bool bUseMemoryDC // ƒƒ‚ƒŠDC‚ðŽg—p‚·‚é
 	)
 {
-	EditView* pView = GetEditView();
+	EditView& view = GetEditView();
 
-	auto& textArea = pView->GetTextArea();
+	auto& textArea = view.GetTextArea();
 	// Še—v‘f
 	Rect rcLineNumber(0, textArea.GetAreaTop(), textArea.GetAreaLeft(), textArea.GetAreaBottom());
 	Rect rcRuler(textArea.GetAreaLeft(), 0, textArea.GetAreaRight(), textArea.GetAreaTop());
@@ -82,9 +82,9 @@ void EditView_Paint::Call_OnPaint(
 	// •`‰æ
 	PAINTSTRUCT	ps;
 	ps.rcPaint = rc;
-	HDC hdc = pView->GetDC();
-	pView->OnPaint(hdc, &ps, bUseMemoryDC);
-	pView->ReleaseDC(hdc);
+	HDC hdc = view.GetDC();
+	view.OnPaint(hdc, &ps, bUseMemoryDC);
+	view.ReleaseDC(hdc);
 }
 
 

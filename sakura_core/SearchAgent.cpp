@@ -298,7 +298,7 @@ void SearchAgent::CreateCharCharsArr(
 /*!	単語単位の単語リスト作成
 */
 void SearchAgent::CreateWordList(
-	std::vector<std::pair<const wchar_t*, LogicInt>>&	searchWords,
+	std::vector<std::pair<const wchar_t*, LogicInt>>& searchWords,
 	const wchar_t* pszPattern,
 	int	nPatternLen
 	)
@@ -385,11 +385,11 @@ bool SearchAgent::WhereCurrentWord(
 
 // 現在位置の左右の単語の先頭位置を調べる
 bool SearchAgent::PrevOrNextWord(
-	LogicInt	nLineNum,		//	行数
-	LogicInt	nIdx,			//	桁数
-	LogicInt*	pnColumnNew,	//	見つかった位置
-	bool		bLEFT,			//	true:前方（左）へ向かう。false:後方（右）へ向かう。
-	bool		bStopsBothEnds	//	単語の両端で止まる
+	LogicInt	nLineNum,		// 行数
+	LogicInt	nIdx,			// 桁数
+	LogicInt*	pnColumnNew,	// 見つかった位置
+	bool		bLeft,			// true : 前方（左）へ向かう。false : 後方（右）へ向かう。
+	bool		bStopsBothEnds	// 単語の両端で止まる
 	)
 {
 	using namespace WCODE;
@@ -404,7 +404,7 @@ bool SearchAgent::PrevOrNextWord(
 	
 	// ABC D[EOF]となっていたときに、Dの後ろにカーソルを合わせ、単語の左端に移動すると、Aにカーソルがあうバグ修正。YAZAKI
 	if (nIdx >= nLineLen) {
-		if (bLEFT && nIdx == nLineLen) {
+		if (bLeft && nIdx == nLineLen) {
 		}else {
 			// 2011.12.26 EOFより右へ行こうとするときもfalseを返すように
 			// nIdx = nLineLen - LogicInt(1);
@@ -412,11 +412,11 @@ bool SearchAgent::PrevOrNextWord(
 		}
 	}
 	// 現在位置の文字の種類によっては選択不能
-	if (!bLEFT && WCODE::IsLineDelimiter(pLine[nIdx], GetDllShareData().common.edit.bEnableExtEol)) {
+	if (!bLeft && WCODE::IsLineDelimiter(pLine[nIdx], GetDllShareData().common.edit.bEnableExtEol)) {
 		return false;
 	}
 	// 前の単語か？後ろの単語か？
-	if (bLEFT) {
+	if (bLeft) {
 		// 現在位置の文字の種類を調べる
 		ECharKind	nCharKind = WordParse::WhatKindOfChar(pLine, nLineLen, nIdx);
 		if (nIdx == 0) {
@@ -425,14 +425,13 @@ bool SearchAgent::PrevOrNextWord(
 
 		// 文字種類が変わるまで前方へサーチ
 		// 空白とタブは無視する
-		int		nCount = 0;
+		int			nCount = 0;
 		LogicInt	nIdxNext = nIdx;
 		LogicInt	nCharChars = LogicInt(&pLine[nIdxNext] - NativeW::GetCharPrev(pLine, nLineLen, &pLine[nIdxNext]));
 		while (nCharChars > 0) {
-			LogicInt		nIdxNextPrev = nIdxNext;
+			LogicInt nIdxNextPrev = nIdxNext;
 			nIdxNext -= nCharChars;
 			ECharKind nCharKindNext = WordParse::WhatKindOfChar(pLine, nLineLen, nIdxNext);
-
 			ECharKind nCharKindMerge = WordParse::WhatKindOfTwoChars(nCharKindNext, nCharKind);
 			if (nCharKindMerge == CK_NULL) {
 				// サーチ開始位置の文字が空白またはタブの場合
@@ -762,7 +761,7 @@ end_of_func:;
 	wsprintf(buf, _T("%d"), clockEnd - clockStart);
 	::MessageBox(NULL, buf, GSTR_APPNAME, MB_OK);
 #endif
-
+	
 	return nRetVal;
 }
 
@@ -783,7 +782,7 @@ void SearchAgent::ReplaceData(DocLineReplaceArg* pArg)
 	if (pArg->pMemDeleted) {
 		pArg->pMemDeleted->clear();
 	}
-
+	
 	DocLine* pDocLine;
 	DocLine* pDocLinePrev;
 	DocLine* pDocLineNext;

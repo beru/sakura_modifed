@@ -120,7 +120,7 @@ bool ViewCommander::HandleCommand(
 			// キーマクロのバッファにデータ追加
 			//@@@ 2002.1.24 m_CKeyMacroMgrをCEditDocへ移動
 			LPARAM lparams[] = {lparam1, lparam2, lparam3, lparam4};
-			m_pSMacroMgr->Append(STAND_KEYMACRO, nCommand, lparams, &m_view);
+			m_pSMacroMgr->Append(STAND_KEYMACRO, nCommand, lparams, m_view);
 		}
 	}
 
@@ -138,7 +138,7 @@ bool ViewCommander::HandleCommand(
 	// From Here Sep. 29, 2001 genta マクロの実行機能追加
 	if (F_USERMACRO_0 <= nCommand && nCommand < F_USERMACRO_0 + MAX_CUSTMACRO) {
 		//@@@ 2002.2.2 YAZAKI マクロをSMacroMgrに統一（インターフェースの変更）
-		if (!m_pSMacroMgr->Exec(nCommand - F_USERMACRO_0, G_AppInstance(), &m_view,
+		if (!m_pSMacroMgr->Exec(nCommand - F_USERMACRO_0, G_AppInstance(), m_view,
 			nCommandFrom & FA_NONRECORD)
 		) {
 			InfoMessage(
@@ -686,7 +686,7 @@ bool ViewCommander::HandleCommand(
 				// インタフェースオブジェクト準備
 				WSHIfObj::List params;
 				// プラグイン呼び出し
-				(*plugs.begin())->Invoke(&m_view, params);
+				(*plugs.begin())->Invoke(m_view, params);
 
 				return bRet;
 			}

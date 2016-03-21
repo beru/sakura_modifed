@@ -134,7 +134,7 @@ public:
 	*/
 	static void SettingInitialize(PrintSetting&, const TCHAR* settingName);
 
-	static TCHAR* GetPaperName(int , TCHAR*);	// 用紙の名前を取得
+	static TCHAR* GetPaperName(int, TCHAR*);	// 用紙の名前を取得
 	// 用紙の幅、高さ
 	static BOOL GetPaperSize(
 		short*		pnPaperAllWidth,
@@ -142,12 +142,12 @@ public:
 		MYDEVMODE*	pDEVMODE
 	);
 	// 印字可能桁・行の計算
-	static int CalculatePrintableColumns(PrintSetting*, int width, int nLineNumberColumns);
-	static int CalculatePrintableLines(PrintSetting*, int height);
+	static int CalculatePrintableColumns(PrintSetting&, int width, int nLineNumberColumns);
+	static int CalculatePrintableLines(PrintSetting&, int height);
 
 	// ヘッダ・フッタの高さ計算
-	static int CalcHeaderHeight(PrintSetting*);
-	static int CalcFooterHeight(PrintSetting*);
+	static int CalcHeaderHeight(PrintSetting&);
+	static int CalcFooterHeight(PrintSetting&);
 public:
 	/*
 	||  Constructors

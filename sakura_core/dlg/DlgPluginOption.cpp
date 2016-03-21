@@ -173,9 +173,7 @@ void DlgPluginOption::SetData(void)
 			// ’l‚©‚ç•\Ž¦‚Ö
 			wstring	sView;
 			wstring	sTrg;
-			std::vector<wstring>	selects;
-			selects = pOpt->GetSelects();
-
+			std::vector<wstring> selects = pOpt->GetSelects();
 			buf[0] = 0;
 			for (auto it=selects.begin(); it!=selects.end(); ++it) {
 				SepSelect(*it, &sView, &sTrg);

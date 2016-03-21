@@ -289,14 +289,14 @@ bool NormalProcess::InitializeProcess()
 		WSHIfObj::List params;
 		JackManager::getInstance().GetUsablePlug(PP_EDITOR_START, 0, &plugs);
 		for (auto it=plugs.begin(); it!=plugs.end(); ++it) {
-			(*it)->Invoke(&activeView, params);
+			(*it)->Invoke(activeView, params);
 		}
 
 		// プラグイン：DocumentOpenイベント実行
 		plugs.clear();
 		JackManager::getInstance().GetUsablePlug(PP_DOCUMENT_OPEN, 0, &plugs);
 		for (auto it=plugs.begin(); it!=plugs.end(); ++it) {
-			(*it)->Invoke(&activeView, params);
+			(*it)->Invoke(activeView, params);
 		}
 
 		if (!bGrepDlg && gi.bGrepStdout) {
@@ -426,7 +426,7 @@ bool NormalProcess::InitializeProcess()
 			&plugs
 		);
 	for (auto it=plugs.begin(); it!=plugs.end(); ++it) {
-		(*it)->Invoke(&activeView, params);
+		(*it)->Invoke(activeView, params);
 	}
 
 	// 2006.09.03 ryoji オープン後自動実行マクロを実行する
@@ -469,7 +469,7 @@ bool NormalProcess::InitializeProcess()
 	plugs.clear();
 	JackManager::getInstance().GetUsablePlug(PP_DOCUMENT_OPEN, 0, &plugs);
 	for (auto it=plugs.begin(); it!=plugs.end(); ++it) {
-		(*it)->Invoke(&activeView, params);
+		(*it)->Invoke(activeView, params);
 	}
 
 	return pEditWnd->GetHwnd() != NULL;

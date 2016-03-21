@@ -51,7 +51,7 @@ void Type::InitTypeConfig(int nIdx, TypeConfig& type)
 	type.id = nIdx;
 	
 	// å¬ï ê›íË
-	InitTypeConfigImp(&type);
+	InitTypeConfigImp(type);
 }
 
 

@@ -115,13 +115,13 @@ bool MacroFactory::Unregister(Creator f)
 	@pararm ext [in] 拡張子
 	@return Macroオブジェクト。適切なものが見つからなければNULL。
 */
-MacroManagerBase* MacroFactory::Create(const TCHAR* ext)
+MacroManagerBase* MacroFactory::Create(EditView& view, const TCHAR* ext)
 {
 	std::tstring key = Ext2Key(ext);
 
 	// Creatorを順に試す
 	for (auto c_it=m_mMacroCreators.begin(); c_it!=m_mMacroCreators.end(); ++c_it) {
-		MacroManagerBase* pobj = (*c_it)(key.c_str());
+		MacroManagerBase* pobj = (*c_it)(view, key.c_str());
 		if (pobj) {
 			DEBUG_TRACE(_T("MacroFactory::Create/ Answered for (%ts)\n"), key.c_str());
 			return pobj;

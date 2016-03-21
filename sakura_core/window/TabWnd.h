@@ -128,7 +128,7 @@ protected:
 	void BreakDrag(void) { if (::GetCapture() == m_hwndTab) ::ReleaseCapture(); m_eDragState = DRAG_NONE; m_nTabCloseCapture = -1; }	// ドラッグ状態解除処理
 	bool ReorderTab(int nSrcTab, int nDstTab);			// タブ順序変更処理
 	void BroadcastRefreshToGroup(void);
-	BOOL SeparateGroup(HWND hwndSrc, HWND hwndDst, POINT ptDrag, POINT ptDrop);	// タブ分離処理	// 2007.06.20 ryoji
+	bool SeparateGroup(HWND hwndSrc, HWND hwndDst, POINT ptDrag, POINT ptDrop);	// タブ分離処理	// 2007.06.20 ryoji
 	LRESULT ExecTabCommand(int nId, POINTS pts);		// タブ部 コマンド実行処理
 	void LayoutTab(void);								// タブのレイアウト調整処理
 

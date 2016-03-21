@@ -31,25 +31,25 @@
 #include "view/Colors/EColorIndexType.h"
 
 // COBOL
-void CType_Cobol::InitTypeConfigImp(TypeConfig* pType)
+void CType_Cobol::InitTypeConfigImp(TypeConfig& type)
 {
 	// 名前と拡張子
-	_tcscpy(pType->szTypeName, _T("COBOL"));
-	_tcscpy(pType->szTypeExts, _T("cbl,cpy,pco,cob"));	// Jun. 04, 2001 JEPRO KENCH氏の助言に従い追加
+	_tcscpy(type.szTypeName, _T("COBOL"));
+	_tcscpy(type.szTypeExts, _T("cbl,cpy,pco,cob"));	// Jun. 04, 2001 JEPRO KENCH氏の助言に従い追加
 
 	// 設定
-	pType->lineComment.CopyTo(0, L"*", 6);				// Jun. 02, 2001 JEPRO 修正
-	pType->lineComment.CopyTo(1, L"D", 6);				// Jun. 04, 2001 JEPRO 追加
-	pType->stringType = StringLiteralType::PLSQL;		// 文字列区切り記号エスケープ方法  0=[\"][\'] 1=[""]['']
-	wcscpy_s(pType->szIndentChars, L"*");				// その他のインデント対象文字
-	pType->nKeywordSetIdx[0] = 3;						// キーワードセット		// Jul. 10, 2001 JEPRO
-	pType->eDefaultOutline = OutlineType::Cobol;		// アウトライン解析方法
+	type.lineComment.CopyTo(0, L"*", 6);				// Jun. 02, 2001 JEPRO 修正
+	type.lineComment.CopyTo(1, L"D", 6);				// Jun. 04, 2001 JEPRO 追加
+	type.stringType = StringLiteralType::PLSQL;		// 文字列区切り記号エスケープ方法  0=[\"][\'] 1=[""]['']
+	wcscpy_s(type.szIndentChars, L"*");				// その他のインデント対象文字
+	type.nKeywordSetIdx[0] = 3;						// キーワードセット		// Jul. 10, 2001 JEPRO
+	type.eDefaultOutline = OutlineType::Cobol;		// アウトライン解析方法
 	// 指定桁縦線	// 2005.11.08 Moca
-	pType->colorInfoArr[COLORIDX_VERTLINE].bDisp = true;
-	pType->nVertLineIdx[0] = LayoutInt(7);
-	pType->nVertLineIdx[1] = LayoutInt(8);
-	pType->nVertLineIdx[2] = LayoutInt(12);
-	pType->nVertLineIdx[3] = LayoutInt(73);
+	type.colorInfoArr[COLORIDX_VERTLINE].bDisp = true;
+	type.nVertLineIdx[0] = LayoutInt(7);
+	type.nVertLineIdx[1] = LayoutInt(8);
+	type.nVertLineIdx[2] = LayoutInt(12);
+	type.nVertLineIdx[3] = LayoutInt(73);
 }
 
 

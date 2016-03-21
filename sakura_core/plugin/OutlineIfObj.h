@@ -67,41 +67,54 @@ public:
 	// 関数情報を取得する
 	MacroFuncInfoArray GetMacroFuncInfo() const { return m_macroFuncInfoArr; }
 	// 関数を処理する
-	bool HandleFunction(EditView* View, EFunctionCode ID, const VARIANT *Arguments, const int ArgSize, VARIANT &Result) {
+	bool HandleFunction(
+		EditView& view,
+		EFunctionCode index,
+		const VARIANT* arguments,
+		const int argSize,
+		VARIANT& result
+	) {
 		return false;
 	}
 	// コマンドを処理する
-	bool HandleCommand(EditView* View, EFunctionCode ID, const WCHAR* Arguments[], const int ArgLengths[], const int ArgSize) {
-		switch (LOWORD(ID)) {
+	bool HandleCommand(
+		EditView& view,
+		EFunctionCode index,
+		const WCHAR* arguments[],
+		const int argLengths[],
+		const int argSize
+		)
+	{
+		switch (LOWORD(index)) {
 		case F_OL_ADDFUNCINFO:			// アウトライン解析に追加する
 		case F_OL_ADDFUNCINFO2:			// アウトライン解析に追加する（深さ指定）
 		case F_OL_ADDFUNCINFO3:			//アウトライン解析に追加する（ファイル名）
 		case F_OL_ADDFUNCINFO4:			//アウトライン解析に追加する（ファイル名/深さ指定）
 			{
-				if (!Arguments[0]) return false;
-				if (!Arguments[1]) return false;
-				if (!Arguments[2]) return false;
-				if (!Arguments[3]) return false;
-				LogicPoint ptLogic( _wtoi(Arguments[1])-1, _wtoi(Arguments[0])-1 );
+				if (!arguments[0]) return false;
+				if (!arguments[1]) return false;
+				if (!arguments[2]) return false;
+				if (!arguments[3]) return false;
+				LogicPoint ptLogic( _wtoi(arguments[1])-1, _wtoi(arguments[0])-1 );
 				LayoutPoint ptLayout;
 				if (ptLogic.x < 0 || ptLogic.y < 0) {
 					ptLayout.x = (Int)ptLogic.x;
 					ptLayout.y = (Int)ptLogic.y;
 				}else {
-					View->GetDocument().m_layoutMgr.LogicToLayout( ptLogic, &ptLayout );
+					view.GetDocument().m_layoutMgr.LogicToLayout( ptLogic, &ptLayout );
 				}
-				int nParam = _wtoi(Arguments[3]);
-				if (LOWORD(ID) == F_OL_ADDFUNCINFO) {
+				int nParam = _wtoi(arguments[3]);
+				if (LOWORD(index) == F_OL_ADDFUNCINFO) {
 					m_cFuncInfoArr.AppendData(
 						ptLogic.GetY() + 1,
 						ptLogic.GetX() + 1, 
 						ptLayout.GetY() + 1,
 						ptLayout.GetX() + 1,
-						Arguments[2],
+						arguments[2],
 						NULL,
 						nParam
 					);
-				}else if (LOWORD(ID) == F_OL_ADDFUNCINFO2) {
+				}else if (LOWORD(index) == F_OL_ADDFUNCINFO2) {
 					int nDepth = nParam & FUNCINFO_INFOMASK;
 					nParam -= nDepth;
 					m_cFuncInfoArr.AppendData(
@@ -109,24 +122,24 @@ public:
 						ptLogic.GetX() + 1,
 						ptLayout.GetY() + 1,
 						ptLayout.GetX() + 1,
-						Arguments[2],
+						arguments[2],
 						NULL,
 						nParam,
 						nDepth
 					);
-				}else if (LOWORD(ID) == F_OL_ADDFUNCINFO3) {
-					if (ArgSize < 5 || Arguments[4] == NULL) { return false; }
+				}else if (LOWORD(index) == F_OL_ADDFUNCINFO3) {
+					if (argSize < 5 || arguments[4] == NULL) { return false; }
 					m_cFuncInfoArr.AppendData(
 						ptLogic.GetY() + 1,
 						ptLogic.GetX() + 1,
 						ptLayout.GetY() + 1,
 						ptLayout.GetX() + 1,
-						Arguments[2],
-						Arguments[4],
+						arguments[2],
+						arguments[4],
 						nParam
 					);
-				}else if (LOWORD(ID) == F_OL_ADDFUNCINFO4) {
-					if (ArgSize < 5 || Arguments[4] == NULL) { return false; }
+				}else if (LOWORD(index) == F_OL_ADDFUNCINFO4) {
+					if (argSize < 5 || arguments[4] == NULL) { return false; }
 					int nDepth = nParam & FUNCINFO_INFOMASK;
 					nParam -= nDepth;
 					m_cFuncInfoArr.AppendData(
@@ -134,8 +147,8 @@ public:
 						ptLogic.GetX() + 1,
 						ptLayout.GetY() + 1,
 						ptLayout.GetX() + 1,
-						Arguments[2],
-						Arguments[4],
+						arguments[2],
+						arguments[4],
 						nParam,
 						nDepth
 					);
@@ -144,20 +157,20 @@ public:
 			}
 			break;
 		case F_OL_SETTITLE:				// アウトラインダイアログタイトルを指定
-			if (!Arguments[0]) return false;
-			m_sOutlineTitle = to_tchar(Arguments[0]);
+			if (!arguments[0]) return false;
+			m_sOutlineTitle = to_tchar(arguments[0]);
 			break;
 		case F_OL_SETLISTTYPE:			// アウトラインリスト種別を指定
-			if (!Arguments[0]) return false;
-			m_nListType = (OutlineType)_wtol(Arguments[0]);
+			if (!arguments[0]) return false;
+			m_nListType = (OutlineType)_wtol(arguments[0]);
 			break;
 		case F_OL_SETLABEL:				// ラベル文字列を指定
-			if (!Arguments[0] || !Arguments[1]) {
+			if (!arguments[0] || !arguments[1]) {
 				return false;
 			}
 			{
-				std::wstring sLabel = Arguments[1];
-				m_cFuncInfoArr.SetAppendText(_wtol(Arguments[0]), sLabel, true);
+				std::wstring sLabel = arguments[1];
+				m_cFuncInfoArr.SetAppendText(_wtol(arguments[0]), sLabel, true);
 			}
 			break;
 		default:

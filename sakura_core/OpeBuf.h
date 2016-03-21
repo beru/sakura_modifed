@@ -41,7 +41,7 @@ public:
 
 	// 操作
 	void ClearAll();							// 全要素のクリア
-	bool AppendOpeBlk(OpeBlk* pOpeBlk);		// 操作ブロックの追加
+	bool AppendOpeBlk(OpeBlk* pOpeBlk);			// 操作ブロックの追加
 	void SetNoModified();						// 現在位置で無変更な状態になったことを通知
 
 	// 使用

@@ -605,18 +605,18 @@ void Print::SettingInitialize(PrintSetting& pPrintSetting, const TCHAR* settingN
 	印字可能桁数の計算
 	@date 2013.05.10 aroka 新規作成
 */
-int Print::CalculatePrintableColumns(PrintSetting* pPS, int nPaperAllWidth, int nLineNumberColumns)
+int Print::CalculatePrintableColumns(PrintSetting& ps, int nPaperAllWidth, int nLineNumberColumns)
 {
-	int nPrintablePaperWidth = nPaperAllWidth - pPS->nPrintMarginLX - pPS->nPrintMarginRX;
+	int nPrintablePaperWidth = nPaperAllWidth - ps.nPrintMarginLX - ps.nPrintMarginRX;
 	if (nPrintablePaperWidth < 0) { return 0; }
 
-	int nPrintSpaceWidth = (pPS->nPrintDansuu - 1) * pPS->nPrintDanSpace
-						 + (pPS->nPrintDansuu) * (nLineNumberColumns * pPS->nPrintFontWidth);
+	int nPrintSpaceWidth = (ps.nPrintDansuu - 1) * ps.nPrintDanSpace
+						 + (ps.nPrintDansuu) * (nLineNumberColumns * ps.nPrintFontWidth);
 	if (nPrintablePaperWidth < nPrintSpaceWidth) { return 0; }
 
 	int nEnableColumns =
 		(nPrintablePaperWidth - nPrintSpaceWidth
-		) / pPS->nPrintFontWidth / pPS->nPrintDansuu;	// 印字可能桁数/ページ
+		) / ps.nPrintFontWidth / ps.nPrintDansuu;	// 印字可能桁数/ページ
 	return nEnableColumns;
 }
 
@@ -626,18 +626,18 @@ int Print::CalculatePrintableColumns(PrintSetting* pPS, int nPaperAllWidth, int 
 	@date 2013.05.10 aroka 新規作成
 */
 int Print::CalculatePrintableLines(
-	PrintSetting* pPS,
+	PrintSetting& ps,
 	int nPaperAllHeight
 	)
 {
-	int nPrintablePaperHeight = nPaperAllHeight - pPS->nPrintMarginTY - pPS->nPrintMarginBY;
+	int nPrintablePaperHeight = nPaperAllHeight - ps.nPrintMarginTY - ps.nPrintMarginBY;
 	if (nPrintablePaperHeight < 0) { return 0; }
 
-	int nPrintSpaceHeight = (pPS->nPrintFontHeight * pPS->nPrintLineSpacing / 100);
+	int nPrintSpaceHeight = (ps.nPrintFontHeight * ps.nPrintLineSpacing / 100);
 
 	int nEnableLines =
-		(nPrintablePaperHeight - CalcHeaderHeight(pPS)*2 - CalcFooterHeight(pPS)*2 + nPrintSpaceHeight) /
-		(pPS->nPrintFontHeight + nPrintSpaceHeight);	// 印字可能行数/ページ
+		(nPrintablePaperHeight - CalcHeaderHeight(ps)*2 - CalcFooterHeight(ps)*2 + nPrintSpaceHeight) /
+		(ps.nPrintFontHeight + nPrintSpaceHeight);	// 印字可能行数/ページ
 	if (nEnableLines < 0) { return 0; }
 	return nEnableLines;
 }
@@ -647,49 +647,49 @@ int Print::CalculatePrintableLines(
 	ヘッダ高さの計算(行送り分こみ)
 	@date 2013.05.16 Uchi 新規作成
 */
-int Print::CalcHeaderHeight(PrintSetting* pPS)
+int Print::CalcHeaderHeight(PrintSetting& ps)
 {
-	if (pPS->szHeaderForm[0][0] == _T('\0')
-		&& pPS->szHeaderForm[1][0] == _T('\0')
-		&& pPS->szHeaderForm[2][0] == _T('\0')
+	if (ps.szHeaderForm[0][0] == _T('\0')
+		&& ps.szHeaderForm[1][0] == _T('\0')
+		&& ps.szHeaderForm[2][0] == _T('\0')
 	) {
 		// 使ってなければ 0
 		return 0;
 	}
 
 	int nHeight;
-	if (pPS->lfHeader.lfFaceName[0] == _T('\0')) {
+	if (ps.lfHeader.lfFaceName[0] == _T('\0')) {
 		// フォント指定無し
-		nHeight = pPS->nPrintFontHeight;
+		nHeight = ps.nPrintFontHeight;
 	}else {
 		// フォントのサイズ計算(pt->1/10mm)
-		nHeight = pPS->nHeaderPointSize * 254 / 720;
+		nHeight = ps.nHeaderPointSize * 254 / 720;
 	}
-	return nHeight * (pPS->nPrintLineSpacing + 100) / 100;	// 行送り計算
+	return nHeight * (ps.nPrintLineSpacing + 100) / 100;	// 行送り計算
 }
 
 /*!
 	フッタ高さの計算(行送り分こみ)
 	@date 2013.05.16 Uchi 新規作成
 */
-int Print::CalcFooterHeight(PrintSetting* pPS)
+int Print::CalcFooterHeight(PrintSetting& ps)
 {
-	if (pPS->szFooterForm[0][0] == _T('\0')
-	 && pPS->szFooterForm[1][0] == _T('\0')
-	 && pPS->szFooterForm[2][0] == _T('\0')
+	if (ps.szFooterForm[0][0] == _T('\0')
+	 && ps.szFooterForm[1][0] == _T('\0')
+	 && ps.szFooterForm[2][0] == _T('\0')
 	) {
 		// 使ってなければ 0
 		return 0;
 	}
 
 	int nHeight;
-	if (pPS->lfFooter.lfFaceName[0] == _T('\0')) {
+	if (ps.lfFooter.lfFaceName[0] == _T('\0')) {
 		// フォント指定無し
-		nHeight = pPS->nPrintFontHeight;
+		nHeight = ps.nPrintFontHeight;
 	}else {
 		// フォントのサイズ計算(pt->1/10mm)
-		nHeight = pPS->nFooterPointSize * 254 / 720;
+		nHeight = ps.nFooterPointSize * 254 / 720;
 	}
-	return nHeight * (pPS->nPrintLineSpacing + 100) / 100;	// 行送り計算
+	return nHeight * (ps.nPrintLineSpacing + 100) / 100;	// 行送り計算
 }
 

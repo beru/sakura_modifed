@@ -1083,7 +1083,7 @@ void EditWnd::EndLayoutBars(bool bAdjust/* = true*/)
 		RECT rc;
 		m_splitterWnd.DoSplit(-1, -1);
 		::GetClientRect(GetHwnd(), &rc);
-		::SendMessage(GetHwnd(), WM_SIZE, nWinSizeType, MAKELONG(rc.right - rc.left, rc.bottom - rc.top));
+		::SendMessage(GetHwnd(), WM_SIZE, m_nWinSizeType, MAKELONG(rc.right - rc.left, rc.bottom - rc.top));
 		::RedrawWindow(GetHwnd(), NULL, NULL, RDW_FRAME | RDW_INVALIDATE | RDW_UPDATENOW);	// ステータスバーに必要？
 
 		GetActiveView().SetIMECompFormPos();
@@ -1629,14 +1629,14 @@ LRESULT EditWnd::DispatchEvent(
 			WSHIfObj::List params;
 			JackManager::getInstance().GetUsablePlug(PP_DOCUMENT_CLOSE, 0, &plugs);
 			for (auto it=plugs.begin(); it!=plugs.end(); ++it) {
-				(*it)->Invoke(&GetActiveView(), params);
+				(*it)->Invoke(GetActiveView(), params);
 			}
 
 			// プラグイン：EditorEndイベント実行
 			plugs.clear();
 			JackManager::getInstance().GetUsablePlug(PP_EDITOR_END, 0, &plugs);
 			for (auto it=plugs.begin(); it!=plugs.end(); ++it) {
-				(*it)->Invoke(&GetActiveView(), params);
+				(*it)->Invoke(GetActiveView(), params);
 			}
 
 			// タブまとめ表示では閉じる動作はオプション指定に従う	// 2006.02.13 ryoji
@@ -1966,7 +1966,7 @@ LRESULT EditWnd::DispatchEvent(
 		{
 			RECT rc;
 			::GetClientRect(GetHwnd(), &rc);
-			OnSize2(nWinSizeType, MAKELONG( rc.right - rc.left, rc.bottom - rc.top ), false);
+			OnSize2(m_nWinSizeType, MAKELONG( rc.right - rc.left, rc.bottom - rc.top ), false);
 			GetActiveView().SetIMECompFormPos();
 		}
 		return 0L;
@@ -2576,7 +2576,7 @@ bool EditWnd::InitMenu_Special(HMENU hMenu, EFunctionCode eFunc)
 		{
 			//@@@ 2001.12.26 YAZAKI MRUリストは、CMRUに依頼する
 			const MruFile mru;
-			mru.CreateMenu(hMenu, &m_menuDrawer);	//	ファイルメニュー
+			mru.CreateMenu(hMenu, m_menuDrawer);	//	ファイルメニュー
 			bInList = (mru.MenuLength() > 0);
 		}
 		break;
@@ -2585,7 +2585,7 @@ bool EditWnd::InitMenu_Special(HMENU hMenu, EFunctionCode eFunc)
 		{
 			//@@@ 2001.12.26 YAZAKI OPENFOLDERリストは、MruFolderにすべて依頼する
 			const MruFolder mruFolder;
-			mruFolder.CreateMenu(hMenu, &m_menuDrawer);
+			mruFolder.CreateMenu(hMenu, m_menuDrawer);
 			bInList = (mruFolder.MenuLength() > 0);
 		}
 		break;
@@ -3036,7 +3036,7 @@ LRESULT EditWnd::OnSize2( WPARAM wParam, LPARAM lParam, bool bUpdateStatus )
 		}
 	}
 
-	nWinSizeType = wParam;	// サイズ変更のタイプ
+	m_nWinSizeType = wParam;	// サイズ変更のタイプ
 
 	// 2006.06.17 ryoji Rebar があればそれをツールバー扱いする
 	HWND hwndToolBar = m_toolbar.GetRebarHwnd() ? m_toolbar.GetRebarHwnd(): m_toolbar.GetToolbarHwnd();
@@ -3692,7 +3692,7 @@ int	EditWnd::CreateFileDropDownMenu(HWND hwnd)
 
 	// MRUリストのファイルのリストをメニューにする
 	const MruFile mru;
-	hMenu = mru.CreateMenu(&m_menuDrawer);
+	hMenu = mru.CreateMenu(m_menuDrawer);
 	if (mru.MenuLength() > 0) {
 		m_menuDrawer.MyAppendMenuSep(
 			hMenu,
@@ -3705,7 +3705,7 @@ int	EditWnd::CreateFileDropDownMenu(HWND hwnd)
 
 	// 最近使ったフォルダのメニューを作成
 	const MruFolder mruFolder;
-	hMenuPopUp = mruFolder.CreateMenu(&m_menuDrawer);
+	hMenuPopUp = mruFolder.CreateMenu(m_menuDrawer);
 	if (mruFolder.MenuLength() > 0) {
 		// アクティブ
 		m_menuDrawer.MyAppendMenu(
@@ -4439,7 +4439,7 @@ void EditWnd::Views_DisableSelectArea(bool bRedraw)
 
 
 // すべてのペインで、行番号表示に必要な幅を再設定する（必要なら再描画する）
-BOOL EditWnd::DetectWidthOfLineNumberAreaAllPane(bool bRedraw)
+bool EditWnd::DetectWidthOfLineNumberAreaAllPane(bool bRedraw)
 {
 	if (GetAllViewCount() == 1) {
 		return GetActiveView().GetTextArea().DetectWidthOfLineNumberArea(bRedraw);
@@ -4463,9 +4463,9 @@ BOOL EditWnd::DetectWidthOfLineNumberAreaAllPane(bool bRedraw)
 			GetView(m_nActivePaneIndex^2).GetTextArea().DetectWidthOfLineNumberArea(false);
 			GetView((m_nActivePaneIndex^1)^2).GetTextArea().DetectWidthOfLineNumberArea(false);
 		}
-		return TRUE;
+		return true;
 	}
-	return FALSE;
+	return false;
 }
 
 
@@ -4490,7 +4490,7 @@ bool EditWnd::WrapWindowWidth(int nPane)
 	@retval 画面更新したかどうか
 	@date 2008.06.10 ryoji 新規作成
 */
-BOOL EditWnd::UpdateTextWrap(void)
+bool EditWnd::UpdateTextWrap(void)
 {
 	// この関数はコマンド実行ごとに処理の最終段階で利用する
 	// （Undo登録＆全ビュー更新のタイミング）
@@ -4507,7 +4507,7 @@ BOOL EditWnd::UpdateTextWrap(void)
 		}
 		return bWrap;	// 画面更新＝折り返し変更
 	}
-	return FALSE;	// 画面更新しなかった
+	return false;	// 画面更新しなかった
 }
 
 /*!	レイアウトパラメータの変更

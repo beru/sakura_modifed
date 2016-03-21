@@ -143,7 +143,7 @@ bool ViewCommander::Command_FUNCLIST(
 				objOutline->AddRef();
 				params.push_back(objOutline);
 				// プラグイン呼び出し
-				(*plugs.begin())->Invoke(&m_view, params);
+				(*plugs.begin())->Invoke(m_view, params);
 
 				nListType = objOutline->m_nListType;			// ダイアログの表示方法をを上書き
 				titleOverride = objOutline->m_sOutlineTitle;	// ダイアログタイトルを上書き

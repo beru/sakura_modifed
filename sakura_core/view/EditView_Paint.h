@@ -38,7 +38,8 @@ enum class PaintAreaType {
 
 class EditView_Paint {
 public:
-	virtual EditView* GetEditView() = 0;
+	virtual EditView& GetEditView() = 0;
+	virtual const EditView& GetEditView() const = 0;
 
 public:
 	virtual ~EditView_Paint() {}

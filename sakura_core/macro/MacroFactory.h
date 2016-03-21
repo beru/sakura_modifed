@@ -42,7 +42,7 @@ class MacroManagerBase;
 	@brief ƒ}ƒNƒHandler¶¬ƒNƒ‰ƒX
 	
 	@par ‰Šú‰»
-	MacroManagerBase::declare() ‚É‚æ‚èCMacroEngine‚ÌCreater‚Ì“o˜^
+	MacroManagerBase::Declare() ‚É‚æ‚èCMacroEngine‚ÌCreater‚Ì“o˜^
 	RegisterEngine() ‹y‚Ñ ‘Î‰Šg’£q‚Ì“o˜^ RegisterExt() ‚ªŒÄ‚Ño‚³‚ê‚éD
 	
 	@par ŒÄ‚Ño‚µ
@@ -57,7 +57,7 @@ class MacroFactory : public TSingleton<MacroFactory> {
 	MacroFactory();
 
 public:
-	typedef MacroManagerBase* (*Creator)(const TCHAR*);
+	typedef MacroManagerBase* (*Creator)(class EditView& view, const TCHAR*);
 
 	bool RegisterCreator(Creator);
 	// Jan. 31, 2004 genta
@@ -65,7 +65,7 @@ public:
 	//bool RegisterExt(const char*, Creator);
 	bool Unregister(Creator);
 
-	MacroManagerBase* Create(const TCHAR* ext);
+	MacroManagerBase* Create(class EditView& view, const TCHAR* ext);
 
 private:
 	std::tstring Ext2Key(const TCHAR* ext);

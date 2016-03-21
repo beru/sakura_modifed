@@ -559,7 +559,7 @@ DWORD GrepAgent::DoGrep(
 		std::tstring sPath = ChopYen( vPaths[nPath] );
 		int nTreeRet = DoGrepTree(
 			viewDst,
-			&dlgCancel,
+			dlgCancel,
 			pmGrepKey->GetStringPtr(),
 			memReplace,
 			grepEnumKeys,
@@ -570,7 +570,7 @@ DWORD GrepAgent::DoGrep(
 			searchOption,
 			grepOption,
 			pattern,
-			&regexp,
+			regexp,
 			0,
 			bOutputBaseFolder,
 			&nHitCount
@@ -649,7 +649,7 @@ DWORD GrepAgent::DoGrep(
 */
 int GrepAgent::DoGrepTree(
 	EditView&				viewDst,
-	DlgCancel*				pDlgCancel,				// [in] Cancelダイアログへのポインタ
+	DlgCancel&				dlgCancel,				// [in] Cancelダイアログへのポインタ
 	const wchar_t*			pszKey,					// [in] 検索キー
 	const NativeW&			mGrepReplace,
 	const GrepEnumKeys&		grepEnumKeys,			// [in] 検索対象ファイルパターン
@@ -660,13 +660,13 @@ int GrepAgent::DoGrepTree(
 	const SearchOption&		searchOption,			// [in] 検索オプション
 	const GrepOption&		grepOption,				// [in] Grepオプション
 	const SearchStringPattern& pattern,				// [in] 検索パターン
-	Bregexp*				pRegexp,				// [in] 正規表現コンパイルデータ。既にコンパイルされている必要がある
+	Bregexp&				regexp,					// [in] 正規表現コンパイルデータ。既にコンパイルされている必要がある
 	int						nNest,					// [in] ネストレベル
 	bool&					bOutputBaseFolder,		// [i/o] ベースフォルダ名出力
 	int*					pnHitCount				// [i/o] ヒット数の合計
 	)
 {
-	pDlgCancel->SetItemText(IDC_STATIC_CURPATH, pszPath);
+	dlgCancel.SetItemText(IDC_STATIC_CURPATH, pszPath);
 
 	NativeW	memMessage;
 	int			nWork = 0;
@@ -685,21 +685,21 @@ int GrepAgent::DoGrepTree(
 		LPCTSTR lpFileName = grepEnumFilterFiles.GetFileName(i);
 
 		// 処理中のユーザー操作を可能にする
-		if (!::BlockingHook(pDlgCancel->GetHwnd())) {
+		if (!::BlockingHook(dlgCancel.GetHwnd())) {
 			goto cancel_return;
 		}
 		// 中断ボタン押下チェック
-		if (pDlgCancel->IsCanceled()) {
+		if (dlgCancel.IsCanceled()) {
 			goto cancel_return;
 		}
 
 		// 表示設定をチェック
 		EditWnd::getInstance().SetDrawSwitchOfAllViews(
-			pDlgCancel->IsButtonChecked(IDC_CHECK_REALTIMEVIEW)
+			dlgCancel.IsButtonChecked(IDC_CHECK_REALTIMEVIEW)
 		);
 
 		// GREP実行！
-		pDlgCancel->SetItemText(IDC_STATIC_CURFILE, lpFileName);
+		dlgCancel.SetItemText(IDC_STATIC_CURFILE, lpFileName);
 
 		std::tstring currentFile = pszPath;
 		currentFile += _T("\\");
@@ -714,14 +714,14 @@ int GrepAgent::DoGrepTree(
 		if (grepOption.bGrepReplace) {
 			nRet = DoGrepReplaceFile(
 				viewDst,
-				pDlgCancel,
+				dlgCancel,
 				pszKey,
 				mGrepReplace,
 				lpFileName,
 				searchOption,
 				grepOption,
 				pattern,
-				pRegexp,
+				regexp,
 				pnHitCount,
 				currentFile.c_str(),
 				pszBasePath,
@@ -734,13 +734,13 @@ int GrepAgent::DoGrepTree(
 		}else {
 			nRet = DoGrepFile(
 				viewDst,
-				pDlgCancel,
+				dlgCancel,
 				pszKey,
 				lpFileName,
 				searchOption,
 				grepOption,
 				pattern,
-				pRegexp,
+				regexp,
 				pnHitCount,
 				currentFile.c_str(),
 				pszBasePath,
@@ -806,16 +806,16 @@ int GrepAgent::DoGrepTree(
 
 			// サブフォルダの探索を再帰呼び出し。
 			// 処理中のユーザー操作を可能にする
-			if (!::BlockingHook(pDlgCancel->GetHwnd())) {
+			if (!::BlockingHook(dlgCancel.GetHwnd())) {
 				goto cancel_return;
 			}
 			// 中断ボタン押下チェック
-			if (pDlgCancel->IsCanceled()) {
+			if (dlgCancel.IsCanceled()) {
 				goto cancel_return;
 			}
 			// 表示設定をチェック
 			EditWnd::getInstance().SetDrawSwitchOfAllViews(
-				pDlgCancel->IsButtonChecked(IDC_CHECK_REALTIMEVIEW)
+				dlgCancel.IsButtonChecked(IDC_CHECK_REALTIMEVIEW)
 			);
 
 			// フォルダ名を作成する。
@@ -826,7 +826,7 @@ int GrepAgent::DoGrepTree(
 
 			int nGrepTreeResult = DoGrepTree(
 				viewDst,
-				pDlgCancel,
+				dlgCancel,
 				pszKey,
 				mGrepReplace,
 				grepEnumKeys,
@@ -837,7 +837,7 @@ int GrepAgent::DoGrepTree(
 				searchOption,
 				grepOption,
 				pattern,
-				pRegexp,
+				regexp,
 				nNest + 1,
 				bOutputBaseFolder,
 				pnHitCount
@@ -845,11 +845,11 @@ int GrepAgent::DoGrepTree(
 			if (nGrepTreeResult == -1) {
 				goto cancel_return;
 			}
-			pDlgCancel->SetItemText(IDC_STATIC_CURPATH, pszPath);	//@@@ 2002.01.10 add サブフォルダから戻ってきたら...
+			dlgCancel.SetItemText(IDC_STATIC_CURPATH, pszPath);	//@@@ 2002.01.10 add サブフォルダから戻ってきたら...
 		}
 	}
 
-	pDlgCancel->SetItemText(IDC_STATIC_CURFILE, LTEXT(" "));	// 2002/09/09 Moca add
+	dlgCancel.SetItemText(IDC_STATIC_CURFILE, LTEXT(" "));	// 2002/09/09 Moca add
 	return 0;
 
 cancel_return:;
@@ -1030,13 +1030,13 @@ static void OutputPathInfo(
 */
 int GrepAgent::DoGrepFile(
 	EditView&				viewDst,			// 
-	DlgCancel*				pDlgCancel,			// [in] Cancelダイアログへのポインタ
+	DlgCancel&				dlgCancel,			// [in] Cancelダイアログへのポインタ
 	const wchar_t*			pszKey,				// [in] 検索パターン
 	const TCHAR*			pszFile,			// [in] 処理対象ファイル名(表示用)
 	const SearchOption&		searchOption,		// [in] 検索オプション
 	const GrepOption&		grepOption,			// [in] Grepオプション
 	const SearchStringPattern& pattern,			// [in] 検索パターン
-	Bregexp*				pRegexp,			// [in] 正規表現コンパイルデータ。既にコンパイルされている必要がある
+	Bregexp&				regexp,			// [in] 正規表現コンパイルデータ。既にコンパイルされている必要がある
 	int*					pnHitCount,			// [i/o] ヒット数の合計．元々の値に見つかった数を加算して返す．
 	const TCHAR*			pszFullPath,		// [in] 処理対象ファイルパス C:\Folder\SubFolder\File.ext
 	const TCHAR*			pszBaseFolder,		// [in] 検索フォルダ C:\Folder
@@ -1157,7 +1157,7 @@ int GrepAgent::DoGrepFile(
 			}
 		}
 		++(*pnHitCount);
-		pDlgCancel->SetItemInt(IDC_STATIC_HITCOUNT, *pnHitCount, FALSE);
+		dlgCancel.SetItemInt(IDC_STATIC_HITCOUNT, *pnHitCount, FALSE);
 		return 1;
 	}
 
@@ -1180,11 +1180,11 @@ int GrepAgent::DoGrepFile(
 		}
 
 	//	// 処理中のユーザー操作を可能にする
-		if (!::BlockingHook(pDlgCancel->GetHwnd())) {
+		if (!::BlockingHook(dlgCancel.GetHwnd())) {
 			return -1;
 		}
 		// 中断ボタン押下チェック
-		if (pDlgCancel->IsCanceled()) {
+		if (dlgCancel.IsCanceled()) {
 			return -1;
 		}
 		int nOutputHitCount = 0;
@@ -1209,17 +1209,17 @@ int GrepAgent::DoGrepFile(
 
 			// 処理中のユーザー操作を可能にする
 			// 2010.08.31 間隔を1/32にする
-			if (((nLine%32 == 0) || nLineLen > 10000) && !::BlockingHook(pDlgCancel->GetHwnd())) {
+			if (((nLine%32 == 0) || nLineLen > 10000) && !::BlockingHook(dlgCancel.GetHwnd())) {
 				return -1;
 			}
 			if (nLine%64 == 0) {
 				// 中断ボタン押下チェック
-				if (pDlgCancel->IsCanceled()) {
+				if (dlgCancel.IsCanceled()) {
 					return -1;
 				}
 				//	2003.06.23 Moca 表示設定をチェック
 				EditWnd::getInstance().SetDrawSwitchOfAllViews(
-					pDlgCancel->IsButtonChecked(IDC_CHECK_REALTIMEVIEW)
+					dlgCancel.IsButtonChecked(IDC_CHECK_REALTIMEVIEW)
 				);
 				// 2002/08/30 Moca 進行状態を表示する(5MB以上)
 				if (5000000 < fl.GetFileSize()) {
@@ -1230,7 +1230,7 @@ int GrepAgent::DoGrepFile(
 						::auto_sprintf( szWork, _T(" (%3d%%)"), nPercent );
 						std::tstring str;
 						str = str + pszFile + szWork;
-						pDlgCancel->SetItemText(IDC_STATIC_CURFILE, str.c_str());
+						dlgCancel.SetItemText(IDC_STATIC_CURFILE, str.c_str());
 					}
 				}
 			}
@@ -1251,11 +1251,11 @@ int GrepAgent::DoGrepFile(
 				//	Jun. 27, 2001 genta	正規表現ライブラリの差し替え
 				// From Here 2005.03.19 かろと もはやBREGEXP構造体に直接アクセスしない
 				// 2010.08.25 行頭以外で^にマッチする不具合の修正
-				while (nIndex <= nLineLen && pRegexp->Match(pLine, nLineLen, nIndex)) {
+				while (nIndex <= nLineLen && regexp.Match(pLine, nLineLen, nIndex)) {
 
 					// パターン発見
-					nIndex = pRegexp->GetIndex();
-					int matchlen = pRegexp->GetMatchLen();
+					nIndex = regexp.GetIndex();
+					int matchlen = regexp.GetMatchLen();
 #ifdef _DEBUG
 					if (nIndex <= nIndexPrev) {
 						MYTRACE(_T("ERROR: EditView::DoGrepFile() nIndex <= nIndexPrev break \n"));
@@ -1286,7 +1286,7 @@ int GrepAgent::DoGrepFile(
 							grepOption
 						);
 						if (((*pnHitCount)%128) == 0 || *pnHitCount < 128) {
-							pDlgCancel->SetItemInt(IDC_STATIC_HITCOUNT, *pnHitCount, FALSE);
+							dlgCancel.SetItemInt(IDC_STATIC_HITCOUNT, *pnHitCount, FALSE);
 						}
 					}
 					// To Here 2005.03.19 かろと もはやBREGEXP構造体に直接アクセスしない
@@ -1345,7 +1345,7 @@ int GrepAgent::DoGrepFile(
 						);
 						//	May 22, 2000 genta
 						if (((*pnHitCount)%128)==0 || *pnHitCount<128) {
-							pDlgCancel->SetItemInt(IDC_STATIC_HITCOUNT, *pnHitCount, FALSE);
+							dlgCancel.SetItemInt(IDC_STATIC_HITCOUNT, *pnHitCount, FALSE);
 						}
 					}
 	
@@ -1397,7 +1397,7 @@ int GrepAgent::DoGrepFile(
 						);
 						//	May 22, 2000 genta
 						if (((*pnHitCount)%128) == 0 || *pnHitCount < 128) {
-							pDlgCancel->SetItemInt(IDC_STATIC_HITCOUNT, *pnHitCount, FALSE);
+							dlgCancel.SetItemInt(IDC_STATIC_HITCOUNT, *pnHitCount, FALSE);
 						}
 					}
 						
@@ -1436,7 +1436,7 @@ int GrepAgent::DoGrepFile(
 						pLine, nLineLen, grepOption
 					);
 					if (((*pnHitCount)%128) == 0 || *pnHitCount < 128) {
-						pDlgCancel->SetItemInt(IDC_STATIC_HITCOUNT, *pnHitCount, FALSE );
+						dlgCancel.SetItemInt(IDC_STATIC_HITCOUNT, *pnHitCount, FALSE );
 					}
 				}
 			}
@@ -1623,14 +1623,14 @@ private:
 */
 int GrepAgent::DoGrepReplaceFile(
 	EditView&				viewDst,
-	DlgCancel*				pDlgCancel,
+	DlgCancel&				dlgCancel,
 	const wchar_t*			pszKey,
 	const NativeW&			mGrepReplace,
 	const TCHAR*			pszFile,
 	const SearchOption&		searchOption,
 	const GrepOption&		grepOption,
 	const SearchStringPattern& pattern,
-	Bregexp*				pRegexp,		//	Jun. 27, 2001 genta	正規表現ライブラリの差し替え
+	Bregexp&				regexp,		//	Jun. 27, 2001 genta	正規表現ライブラリの差し替え
 	int*					pnHitCount,
 	const TCHAR*			pszFullPath,
 	const TCHAR*			pszBaseFolder,
@@ -1678,11 +1678,11 @@ int GrepAgent::DoGrepReplaceFile(
 			}
 		}
 		// 処理中のユーザー操作を可能にする
-		if (!::BlockingHook( pDlgCancel->GetHwnd() )) {
+		if (!::BlockingHook( dlgCancel.GetHwnd() )) {
 			return -1;
 		}
 		// 中断ボタン押下チェック
-		if (pDlgCancel->IsCanceled()) {
+		if (dlgCancel.IsCanceled()) {
 			return -1;
 		}
 		int nOutputHitCount = 0;
@@ -1704,17 +1704,17 @@ int GrepAgent::DoGrepReplaceFile(
 	
 			// 処理中のユーザー操作を可能にする
 			// 2010.08.31 間隔を1/32にする
-			if (((nLine%32 == 0)|| 10000 < nLineLen ) && !::BlockingHook( pDlgCancel->GetHwnd() )) {
+			if (((nLine%32 == 0)|| 10000 < nLineLen ) && !::BlockingHook( dlgCancel.GetHwnd() )) {
 				return -1;
 			}
 			if (nLine%64 == 0) {
 				// 中断ボタン押下チェック
-				if (pDlgCancel->IsCanceled()) {
+				if (dlgCancel.IsCanceled()) {
 					return -1;
 				}
 				//	2003.06.23 Moca 表示設定をチェック
 				EditWnd::getInstance().SetDrawSwitchOfAllViews(
-					pDlgCancel->IsButtonChecked(IDC_CHECK_REALTIMEVIEW)
+					dlgCancel.IsButtonChecked(IDC_CHECK_REALTIMEVIEW)
 				);
 				// 2002/08/30 Moca 進行状態を表示する(5MB以上)
 				if (5000000 < fl.GetFileSize()) {
@@ -1725,7 +1725,7 @@ int GrepAgent::DoGrepReplaceFile(
 						::auto_sprintf( szWork, _T(" (%3d%%)"), nPercent );
 						std::tstring str;
 						str = str + pszFile + szWork;
-						pDlgCancel->SetItemText(IDC_STATIC_CURFILE, str.c_str() );
+						dlgCancel.SetItemText(IDC_STATIC_CURFILE, str.c_str() );
 					}
 				}
 			}
@@ -1749,13 +1749,13 @@ int GrepAgent::DoGrepReplaceFile(
 				// 2010.08.25 行頭以外で^にマッチする不具合の修正
 				while (
 					nIndex <= nLineLen
-					&& (  (!grepOption.bGrepPaste && (nMatchNum = pRegexp->Replace(pLine, nLineLen, nIndex)))
-						|| (grepOption.bGrepPaste && pRegexp->Match(pLine, nLineLen, nIndex))
+					&& (  (!grepOption.bGrepPaste && (nMatchNum = regexp.Replace(pLine, nLineLen, nIndex)))
+						|| (grepOption.bGrepPaste && regexp.Match(pLine, nLineLen, nIndex))
 					)
 				) {
 					//	パターン発見
-					nIndex = pRegexp->GetIndex();
-					int matchlen = pRegexp->GetMatchLen();
+					nIndex = regexp.GetIndex();
+					int matchlen = regexp.GetMatchLen();
 					if (bOutput) {
 						OutputPathInfo(
 							memMessage, grepOption,
@@ -1779,13 +1779,13 @@ int GrepAgent::DoGrepReplaceFile(
 					++nHitCount;
 					++(*pnHitCount);
 					if (((*pnHitCount)%128) == 0 || *pnHitCount < 128) {
-						pDlgCancel->SetItemInt(IDC_STATIC_HITCOUNT, *pnHitCount, FALSE );
+						dlgCancel.SetItemInt(IDC_STATIC_HITCOUNT, *pnHitCount, FALSE );
 					}
 					if (!grepOption.bGrepPaste) {
 						// gオプションでは行末まで一度に置換済み
 						nHitCount += nMatchNum - 1;
 						*pnHitCount += nMatchNum - 1;
-						outBuffer.AppendString( pRegexp->GetString(), pRegexp->GetStringLen() );
+						outBuffer.AppendString( regexp.GetString(), regexp.GetStringLen() );
 						nIndexOld = nLineLen;
 						break;
 					}
@@ -1850,7 +1850,7 @@ int GrepAgent::DoGrepReplaceFile(
 					++(*pnHitCount);
 					//	May 22, 2000 genta
 					if (((*pnHitCount)%128) == 0 || *pnHitCount < 128) {
-						pDlgCancel->SetItemInt(IDC_STATIC_HITCOUNT, *pnHitCount, FALSE );
+						dlgCancel.SetItemInt(IDC_STATIC_HITCOUNT, *pnHitCount, FALSE );
 					}
 					if (0 < pszRes - pLine - nOutputPos) {
 						outBuffer.AppendString( &pLine[nOutputPos], pszRes - pLine - nOutputPos );
@@ -1897,7 +1897,7 @@ int GrepAgent::DoGrepReplaceFile(
 					++(*pnHitCount);
 					//	May 22, 2000 genta
 					if (((*pnHitCount)%128) == 0 || *pnHitCount < 128) {
-						pDlgCancel->SetItemInt(IDC_STATIC_HITCOUNT, *pnHitCount, FALSE );
+						dlgCancel.SetItemInt(IDC_STATIC_HITCOUNT, *pnHitCount, FALSE );
 					}
 					if (nColumn) {
 						outBuffer.AppendString( pCompareData, nColumn );

@@ -96,7 +96,7 @@ public:
 	void ClearAll(void);	// キーマクロのバッファをクリアする
 
 	// キーボードマクロの実行
-	bool Exec(int idx, HINSTANCE hInstance, EditView* pEditView, int flags);
+	bool Exec(int idx, HINSTANCE hInstance, EditView& editView, int flags);
 	
 	//	実行可能か？CShareDataに問い合わせ
 	bool IsEnabled(int idx) const {
@@ -127,12 +127,12 @@ public:
 	}
 
 	// キーボードマクロの読み込み
-	bool Load(int idx, HINSTANCE hInstance, const TCHAR* pszPath, const TCHAR* pszType);
+	bool Load(EditView& view, int idx, HINSTANCE hInstance, const TCHAR* pszPath, const TCHAR* pszType);
 	bool Save(int idx, HINSTANCE hInstance, const TCHAR* pszPath);
 	void UnloadAll(void);
 
 	// キーマクロのバッファにデータ追加
-	int Append(int idx, EFunctionCode nFuncID, const LPARAM* lParams, EditView* pEditView);
+	int Append(int idx, EFunctionCode nFuncID, const LPARAM* lParams, EditView& editView);
 
 	/*
 	||  Attributes & Operations

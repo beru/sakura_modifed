@@ -174,7 +174,7 @@ private:
 public:
 	// exported
 	// 2007.07.22 genta : flags追加
-	bool Execute(class EditView* pEditView, int flags);
+	bool Execute(class EditView& editView, int flags);
 	void SetSource(const char* ss)
 		{ m_fnSetSource(ss); }
 	void SetDeclare(const char* ss)
@@ -254,11 +254,11 @@ private:
 	// コールバックプロシージャ群
 	static void __stdcall stdStrObj(const char*, int, BYTE, int*, char**);	// 2003.06.01 Moca
 
-	static void __stdcall stdProc(const char* FuncName, const int Index, const char* Argument[], const int ArgSize, int* Err_CD);
-	static void __stdcall stdIntFunc(const char* FuncName, const int Index,
+	static void __stdcall stdProc(const char* FuncName, const int index, const char* Argument[], const int ArgSize, int* Err_CD);
+	static void __stdcall stdIntFunc(const char* FuncName, const int index,
 		const char* Argument[], const int ArgSize, int* Err_CD, int* ResultValue); // 2002.02.24 Moca
-	static void __stdcall stdStrFunc(const char* FuncName, const int Index, const char* Argument[], const int ArgSize, int* Err_CD, char** ResultValue);
-	static bool CallHandleFunction(const int Index, const char* Arg[], int ArgSize, VARIANT* Result); // 2002.02.24 Moca
+	static void __stdcall stdStrFunc(const char* FuncName, const int index, const char* Argument[], const int ArgSize, int* Err_CD, char** ResultValue);
+	static bool CallHandleFunction(const int index, const char* Arg[], int ArgSize, VARIANT* Result); // 2002.02.24 Moca
 
 	static void __stdcall stdError(int, const char*);	// 2003.06.01 Moca
 	static void __stdcall stdFinishProc();	// 2003.06.01 Moca

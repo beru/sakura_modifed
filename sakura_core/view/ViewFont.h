@@ -51,7 +51,7 @@ public:
 	}
 
 private:
-	void CreateFont(const LOGFONT *plf);
+	void CreateFont(const LOGFONT* plf);
 	void DeleteFont();
 
 	HFONT	m_hFont_HAN;			// 現在のフォントハンドル

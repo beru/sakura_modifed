@@ -131,11 +131,11 @@ public:
 	bool IsBkBitmap() const { return m_pEditDoc->m_hBackImg != NULL; }
 
 public:
-	EditView* GetEditView() {
-		return this;
+	EditView& GetEditView() override {
+		return *this;
 	}
-	const EditView* GetEditView() const {
-		return this;
+	const EditView& GetEditView() const override {
+		return *this;
 	}
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //

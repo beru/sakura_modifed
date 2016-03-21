@@ -676,7 +676,7 @@ int LayoutMgr::PrevOrNextWord(
 	LayoutInt		nLineNum,
 	LogicInt		nIdx,
 	LayoutPoint*	pptLayoutNew,
-	bool			bLEFT,
+	bool			bLeft,
 	bool			bStopsBothEnds
 	)
 {
@@ -691,7 +691,7 @@ int LayoutMgr::PrevOrNextWord(
 		pLayout->GetLogicLineNo(),
 		pLayout->GetLogicOffset() + nIdx,
 		&nPosNew,
-		bLEFT,
+		bLeft,
 		bStopsBothEnds
 	);
 
@@ -1046,7 +1046,7 @@ void LayoutMgr::DUMP()
 		MYTRACE(_T("\tm_enumEOLType =%ls\n"),	pLayout->GetLayoutEol().GetName());
 		MYTRACE(_T("\tm_nEOLLen =%d\n"),		pLayout->GetLayoutEol().GetLen());
 		MYTRACE(_T("\tm_nTypePrev=%d\n"),		pLayout->GetColorTypePrev());
-		const wchar_t* pData = DocReader(*m_docLineMgr).GetLineStr(pLayout->GetLogicLineNo(), &nDataLen);
+		const wchar_t* pData = DocReader(*m_pDocLineMgr).GetLineStr(pLayout->GetLogicLineNo(), &nDataLen);
 		MYTRACE(_T("\t[%ls]\n"), pData);
 		pLayout = pLayoutNext;
 	}

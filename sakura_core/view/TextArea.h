@@ -30,7 +30,7 @@ class LayoutMgr;
 
 class TextArea {
 public:
-	TextArea(EditView* pEditView);
+	TextArea(EditView& editView);
 	
 	virtual
 	~TextArea();
@@ -195,7 +195,7 @@ public:
 
 private:
 	// QÆ
-	EditView*	m_pEditView;
+	EditView&	m_editView;
 
 public:
 	// ‰æ–Êî•ñ

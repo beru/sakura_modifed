@@ -40,14 +40,14 @@ WSHPlugin::~WSHPlugin(void)
 
 // プラグイン定義ファイルを読み込む
 bool WSHPlugin::ReadPluginDef(
-	DataProfile* profile,
+	DataProfile& profile,
 	DataProfile* profileMlang
 	)
 {
 	ReadPluginDefCommon(profile, profileMlang);
 
 	// WSHセクションの読み込み
-	profile->IOProfileData<bool>(PII_WSH, PII_WSH_USECACHE, m_bUseCache);
+	profile.IOProfileData<bool>(PII_WSH, PII_WSH_USECACHE, m_bUseCache);
 
 	// プラグの読み込み
 	ReadPluginDefPlug(profile, profileMlang);
@@ -66,7 +66,7 @@ bool WSHPlugin::ReadPluginDef(
 
 // オプションファイルを読み込む
 bool WSHPlugin::ReadPluginOption(
-	DataProfile* profile
+	DataProfile& profile
 	)
 {
 	return true;
@@ -74,7 +74,7 @@ bool WSHPlugin::ReadPluginOption(
 
 // プラグを実行する
 bool WSHPlugin::InvokePlug(
-	EditView* view,
+	EditView& view,
 	Plug& plug,
 	WSHIfObj::List& params
 	)
@@ -85,7 +85,7 @@ bool WSHPlugin::InvokePlug(
 	if (!m_bUseCache || !wshPlug.m_Wsh) {
 		FilePath path(plug.plugin.GetFilePath(to_tchar(plug.m_sHandler.c_str())).c_str());
 
-		pWsh = (WSHMacroManager*)WSHMacroManager::Creator(path.GetExt(true));
+		pWsh = (WSHMacroManager*)WSHMacroManager::Creator(view, path.GetExt(true));
 		if (!pWsh) {
 			return false;
 		}
@@ -101,10 +101,10 @@ bool WSHPlugin::InvokePlug(
 		pWsh = wshPlug.m_Wsh;
 	}
 
-	PluginIfObj cPluginIfo(*this);		// Pluginオブジェクトを追加
-	cPluginIfo.AddRef();
-	cPluginIfo.SetPlugIndex(plug.m_id);	// 実行中プラグ番号を提供
-	pWsh->AddParam(&cPluginIfo);
+	PluginIfObj pluginIfo(*this);		// Pluginオブジェクトを追加
+	pluginIfo.AddRef();
+	pluginIfo.SetPlugIndex(plug.m_id);	// 実行中プラグ番号を提供
+	pWsh->AddParam(&pluginIfo);
 	pWsh->AddParam(params);			// パラメータを追加
 	pWsh->ExecKeyMacro2(view, FA_NONRECORD | FA_FROMMACRO);
 	pWsh->ClearParam();

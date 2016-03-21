@@ -64,17 +64,17 @@ WSHMacroManager::~WSHMacroManager()
 	
 	@date 2007.07.20 genta : flags追加
 */
-bool WSHMacroManager::ExecKeyMacro(EditView* EditView, int flags) const
+bool WSHMacroManager::ExecKeyMacro(EditView& editView, int flags) const
 {
-	auto engine = std::make_unique<WSHClient>(m_engineName.c_str(), MacroError, EditView);
+	auto engine = std::make_unique<WSHClient>(m_engineName.c_str(), MacroError, &editView);
 	bool bRet = false;
 	if (engine->m_Valid) {
 		// インタフェースオブジェクトの登録
 		WSHIfObj* objEditor = new EditorIfObj();
-		objEditor->ReadyMethods(EditView, flags);
+		objEditor->ReadyMethods(editView, flags);
 		engine->AddInterfaceObject(objEditor);
 		for (auto it=m_params.begin(); it!=m_params.end(); ++it) {
-			(*it)->ReadyMethods(EditView, flags);
+			(*it)->ReadyMethods(editView, flags);
 			engine->AddInterfaceObject(*it);
 		}
 
@@ -116,7 +116,7 @@ bool WSHMacroManager::LoadKeyMacroStr(HINSTANCE hInstance, const TCHAR* pszCode)
 	return true;
 }
 
-MacroManagerBase* WSHMacroManager::Creator(const TCHAR* FileExt)
+MacroManagerBase* WSHMacroManager::Creator(EditView& editView, const TCHAR* FileExt)
 {
 	TCHAR FileExtWithDot[1024], FileType[1024], EngineName[1024]; // 1024を超えたら後は知りません
 	
@@ -134,7 +134,7 @@ MacroManagerBase* WSHMacroManager::Creator(const TCHAR* FileExt)
 	return NULL;
 }
 
-void WSHMacroManager::declare()
+void WSHMacroManager::Declare()
 {
 	// 暫定
 	MacroFactory::getInstance().RegisterCreator(Creator);

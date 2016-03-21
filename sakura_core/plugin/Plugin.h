@@ -96,7 +96,7 @@ public:
 
 	// 操作
 public:
-	bool Invoke(EditView* view, WSHIfObj::List& params);	// プラグを実行する
+	bool Invoke(EditView& view, WSHIfObj::List& params);	// プラグを実行する
 
 	// 属性
 public:
@@ -258,14 +258,20 @@ public:
 	int 	GetCommandCount()	{ return m_nCommandCount; }			// コマンド数を返す	2010/7/4 Uchi
 
 protected:
-	bool ReadPluginDefCommon(DataProfile* profile, DataProfile* profileMlang);	// プラグイン定義ファイルのCommonセクションを読み込む
-	bool ReadPluginDefPlug(DataProfile* profile, DataProfile* profileMlang);	// プラグイン定義ファイルのPlugセクションを読み込む
-	bool ReadPluginDefCommand(DataProfile* profile, DataProfile* profileMlang);	// プラグイン定義ファイルのCommandセクションを読み込む
-	bool ReadPluginDefOption(DataProfile* profile, DataProfile* profileMlang);	// プラグイン定義ファイルのOptionセクションを読み込む	// 2010/3/24 Uchi
-	bool ReadPluginDefString(DataProfile* profile, DataProfile* profileMlang);	// プラグイン定義ファイルのStringセクションを読み込む
+	bool ReadPluginDefCommon(DataProfile& profile, DataProfile* profileMlang);	// プラグイン定義ファイルのCommonセクションを読み込む
+	bool ReadPluginDefPlug(DataProfile& profile, DataProfile* profileMlang);	// プラグイン定義ファイルのPlugセクションを読み込む
+	bool ReadPluginDefCommand(DataProfile& profile, DataProfile* profileMlang);	// プラグイン定義ファイルのCommandセクションを読み込む
+	bool ReadPluginDefOption(DataProfile& profile, DataProfile* profileMlang);	// プラグイン定義ファイルのOptionセクションを読み込む	// 2010/3/24 Uchi
+	bool ReadPluginDefString(DataProfile& profile, DataProfile* profileMlang);	// プラグイン定義ファイルのStringセクションを読み込む
 
 	// Plugインスタンスの作成。ReadPluginDefPlug/Command から呼ばれる。
-	virtual Plug* CreatePlug(Plugin& plugin, PlugId id, wstring sJack, wstring sHandler, wstring sLabel) {
+	virtual Plug* CreatePlug(
+		Plugin& plugin,
+		PlugId id,
+		const wstring& sJack,
+		const wstring& sHandler,
+		const wstring& sLabel
+	) {
 		return new Plug(plugin, id, sJack, sHandler, sLabel);
 	}
 
@@ -301,8 +307,8 @@ protected:
 
 	// 非実装提供
 public:
-	virtual bool InvokePlug(EditView* view, Plug& plug, WSHIfObj::List& param) = 0;			// プラグを実行する
-	virtual bool ReadPluginDef(DataProfile* profile, DataProfile* profileMlang) = 0;		// プラグイン定義ファイルを読み込む
-	virtual bool ReadPluginOption(DataProfile* profile) = 0;									// オプションファイルを読み込む
+	virtual bool InvokePlug(EditView& view, Plug& plug, WSHIfObj::List& param) = 0;			// プラグを実行する
+	virtual bool ReadPluginDef(DataProfile& profile, DataProfile* profileMlang) = 0;		// プラグイン定義ファイルを読み込む
+	virtual bool ReadPluginOption(DataProfile& profile) = 0;									// オプションファイルを読み込む
 };
 

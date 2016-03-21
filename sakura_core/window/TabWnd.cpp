@@ -596,21 +596,21 @@ void TabWnd::BroadcastRefreshToGroup()
 	@date 2007.06.20 ryoji 新規作成
 	@date 2007.11.30 ryoji 強制的なアクティブ化戻しを追加して最大化時のタブ分離の封印を解除
 */
-BOOL TabWnd::SeparateGroup(HWND hwndSrc, HWND hwndDst, POINT ptDrag, POINT ptDrop)
+bool TabWnd::SeparateGroup(HWND hwndSrc, HWND hwndDst, POINT ptDrag, POINT ptDrop)
 {
 	HWND hWnd = GetParentHwnd();
 	EditNode* pTopEditNode = AppNodeGroupHandle(0).GetEditNodeAt(0);
 	if (!pTopEditNode)
-		return FALSE;
+		return false;
 	if (hWnd != pTopEditNode->hWnd || hWnd != ::GetForegroundWindow())
-		return FALSE;
+		return false;
 	auto& appNodeMgr = AppNodeManager::getInstance();
 	if (hWnd != appNodeMgr.GetEditNode(hwndSrc)->GetGroup().GetTopEditNode()->GetHwnd())
-		return FALSE;
+		return false;
 	if (hwndDst && hwndDst != appNodeMgr.GetEditNode(hwndDst)->GetGroup().GetTopEditNode()->GetHwnd())
-		return FALSE;
+		return false;
 	if (hwndSrc == hwndDst)
-		return TRUE;
+		return true;
 
 	EditNode* pSrcEditNode = appNodeMgr.GetEditNode(hwndSrc);
 	EditNode* pDstEditNode = appNodeMgr.GetEditNode(hwndDst);
@@ -749,7 +749,7 @@ BOOL TabWnd::SeparateGroup(HWND hwndSrc, HWND hwndDst, POINT ptDrag, POINT ptDro
 		// タイトルバー色だけアクティブのままということがあるかもしれない
 	}
 
-	return TRUE;
+	return true;
 }
 
 /*! タブ部 コマンド実行処理

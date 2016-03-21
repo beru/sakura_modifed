@@ -120,7 +120,7 @@ void ViewCommander::Command_GREP(void)
 		WSHIfObj::List params;
 		JackManager::getInstance().GetUsablePlug(PP_DOCUMENT_OPEN, 0, &plugs);
 		for (auto it=plugs.begin(); it!=plugs.end(); ++it) {
-			(*it)->Invoke(&GetEditWindow().GetActiveView(), params);
+			(*it)->Invoke(GetEditWindow().GetActiveView(), params);
 		}
 	}else {
 		// 編集ウィンドウの上限チェック

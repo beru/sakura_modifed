@@ -39,7 +39,7 @@ SortedTagJumpList::SortedTagJumpList(int max)
 	m_pTagjump(NULL),
 	m_nCount(0),
 	m_bOverflow(false),
-	m_MAX_TAGJUMPLIST(max)
+	m_capacity(max)
 {
 	// id == 0 を 空文字列にする
 	m_baseDirArr.push_back(_T(""));
@@ -157,7 +157,7 @@ bool SortedTagJumpList::AddParamA(
 	++m_nCount;
 
 	// 最大数を超えたら最後のアイテムを削除する。
-	if (m_nCount > m_MAX_TAGJUMPLIST) {
+	if (m_nCount > m_capacity) {
 		prev = NULL;
 		for (p=m_pTagjump; p->next; p=p->next) {
 			prev = p;

@@ -77,7 +77,7 @@ public:
 	// コマンド情報を取得する
 	MacroFuncInfoArray GetMacroCommandInfo() const {
 		static MacroFuncInfo macroFuncInfoArr[] = {
-			// ID									関数名						引数										戻り値の型	m_pszData
+			// index									関数名						引数										戻り値の型	m_pszData
 			{ EFunctionCode(F_MA_SET_MATCH),		LTEXT("SetMatch"),			{ VT_EMPTY, VT_EMPTY, VT_EMPTY, VT_EMPTY },	VT_I4,	NULL },	// flagsを取得する
 			// 終端
 			{ F_INVALID, NULL, { VT_EMPTY, VT_EMPTY, VT_EMPTY, VT_EMPTY }, VT_EMPTY, NULL }
@@ -88,7 +88,7 @@ public:
 	// 関数情報を取得する
 	MacroFuncInfoArray GetMacroFuncInfo() const {
 		static MacroFuncInfo macroFuncInfoNotCommandArr[] = {
-			// ID									関数名						引数										戻り値の型	m_pszData
+			// index									関数名						引数										戻り値の型	m_pszData
 			{ EFunctionCode(F_MA_GET_MODE),			LTEXT("GetMode"),			{ VT_EMPTY, VT_EMPTY, VT_EMPTY, VT_EMPTY },	VT_I4,	NULL },	// モードを取得する
 			{ EFunctionCode(F_MA_GET_FLAGS),		LTEXT("GetFlags"),			{ VT_EMPTY, VT_EMPTY, VT_EMPTY, VT_EMPTY },	VT_I4,	NULL },	// flagsを取得する
 			{ EFunctionCode(F_MA_GET_EXT),			LTEXT("GetExt"),			{ VT_EMPTY, VT_EMPTY, VT_EMPTY, VT_EMPTY },	VT_BSTR,	NULL },	// Extを取得する
@@ -103,40 +103,40 @@ public:
 	// 関数を処理する
 	virtual
 	bool HandleFunction(
-		EditView*		View,
-		EFunctionCode	ID,
-		const VARIANT*	Arguments,
-		const int		ArgSize,
-		VARIANT&		Result
+		EditView&		view,
+		EFunctionCode	index,
+		const VARIANT*	arguments,
+		const int		argSize,
+		VARIANT&		result
 		)
 	{
-		switch (LOWORD(ID)) {
+		switch (LOWORD(index)) {
 		case F_MA_GET_MODE:
 			{
-				Wrap(&Result)->Receive(m_nMode);
+				Wrap(&result)->Receive(m_nMode);
 			}
 			return true;
 		case F_MA_GET_FLAGS:	// flagsを取得する
 			{
-				Wrap(&Result)->Receive(m_nFlags);
+				Wrap(&result)->Receive(m_nFlags);
 			}
 			return true;
 		case F_MA_GET_EXT:
 			{
-				SysString S(m_Ext.c_str(), m_Ext.length());
-				Wrap(&Result)->Receive(S);
+				SysString s(m_Ext.c_str(), m_Ext.length());
+				Wrap(&result)->Receive(s);
 			}
 			return true;
 		case F_MA_GET_SOURCE:
 			{
-				SysString S(m_source.c_str(), m_source.length());
-				Wrap(&Result)->Receive(S);
+				SysString s(m_source.c_str(), m_source.length());
+				Wrap(&result)->Receive(s);
 			}
 			return true;
 		case F_MA_GET_INDEX:
 			{
-				Wrap(&Result)->Receive(m_nIndex);
-				//Wrap(&Result)->Receive(CEditApp::getInstance()->m_pSMacroMgr->GetCurrentIdx());
+				Wrap(&result)->Receive(m_nIndex);
+				//Wrap(&result)->Receive(CEditApp::getInstance()->m_pSMacroMgr->GetCurrentIdx());
 			}
 			return true;
 		}
@@ -146,17 +146,17 @@ public:
 	// コマンドを処理する
 	virtual
 	bool HandleCommand(
-		EditView*		View,
-		EFunctionCode	ID,
-		const WCHAR*	Arguments[],
-		const int		ArgLengths[],
-		const int		ArgSize
+		EditView&		view,
+		EFunctionCode	index,
+		const WCHAR*	arguments[],
+		const int		argLengths[],
+		const int		argSize
 		)
 	{
-		switch (LOWORD(ID)) {
+		switch (LOWORD(index)) {
 		case F_MA_SET_MATCH:
-			if (Arguments[0]) {
-				m_nIsMatch = _wtol(Arguments[0]);
+			if (arguments[0]) {
+				m_nIsMatch = _wtol(arguments[0]);
 			}
 			return true;
 		}

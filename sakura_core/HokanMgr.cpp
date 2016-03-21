@@ -203,11 +203,11 @@ int HokanMgr::Search(
 			// インタフェースオブジェクト準備
 			WSHIfObj::List params;
 			std::wstring curWord = pszCurWord;
-			ComplementIfObj* objComp = new ComplementIfObj(curWord , this, nOption);
+			ComplementIfObj* objComp = new ComplementIfObj(curWord , *this, nOption);
 			objComp->AddRef();
 			params.push_back(objComp);
 			// プラグイン呼び出し
-			(*it)->Invoke(pEditView, params);
+			(*it)->Invoke(*pEditView, params);
 
 			objComp->Release();
 		}

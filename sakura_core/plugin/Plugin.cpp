@@ -32,7 +32,7 @@
 
 /////////////////////////////////////////////
 // Plug メンバ関数
-bool Plug::Invoke(EditView* view, WSHIfObj::List& params) {
+bool Plug::Invoke(EditView& view, WSHIfObj::List& params) {
 	return plugin.InvokePlug(view, *this, params);
 }
 
@@ -60,16 +60,16 @@ Plugin::~Plugin(void)
 
 // プラグイン定義ファイルのCommonセクションを読み込む
 bool Plugin::ReadPluginDefCommon(
-	DataProfile* profile,
+	DataProfile& profile,
 	DataProfile* profileMlang
 	)
 {
-	profile->IOProfileData(PII_PLUGIN, PII_PLUGIN_ID, m_sId);
-	profile->IOProfileData(PII_PLUGIN, PII_PLUGIN_NAME, sName);
-	profile->IOProfileData(PII_PLUGIN, PII_PLUGIN_DESCRIPTION, m_sDescription);
-	profile->IOProfileData(PII_PLUGIN, PII_PLUGIN_AUTHOR, m_sAuthor);
-	profile->IOProfileData(PII_PLUGIN, PII_PLUGIN_VERSION, m_sVersion);
-	profile->IOProfileData(PII_PLUGIN, PII_PLUGIN_URL, m_sUrl);
+	profile.IOProfileData(PII_PLUGIN, PII_PLUGIN_ID, m_sId);
+	profile.IOProfileData(PII_PLUGIN, PII_PLUGIN_NAME, sName);
+	profile.IOProfileData(PII_PLUGIN, PII_PLUGIN_DESCRIPTION, m_sDescription);
+	profile.IOProfileData(PII_PLUGIN, PII_PLUGIN_AUTHOR, m_sAuthor);
+	profile.IOProfileData(PII_PLUGIN, PII_PLUGIN_VERSION, m_sVersion);
+	profile.IOProfileData(PII_PLUGIN, PII_PLUGIN_URL, m_sUrl);
 	if (profileMlang) {
 		profileMlang->IOProfileData(PII_PLUGIN, PII_PLUGIN_NAME, sName);
 		profileMlang->IOProfileData(PII_PLUGIN, PII_PLUGIN_DESCRIPTION, m_sDescription);
@@ -90,7 +90,7 @@ bool Plugin::ReadPluginDefCommon(
 // プラグイン定義ファイルのPlugセクションを読み込む
 // @date 2011.08.20 syat Plugセクションも複数定義可能とする
 bool Plugin::ReadPluginDefPlug(
-	DataProfile* profile,
+	DataProfile& profile,
 	DataProfile* profileMlang
 	)
 {
@@ -106,11 +106,11 @@ bool Plugin::ReadPluginDefPlug(
 				swprintf(szIndex, L"[%d]", nCount);
 			}
 			wstring sHandler;
-			if (profile->IOProfileData(PII_PLUG, (sKey + szIndex).c_str(), sHandler)) {
+			if (profile.IOProfileData(PII_PLUG, (sKey + szIndex).c_str(), sHandler)) {
 				// ラベルの取得
 				wstring sKeyLabel = sKey + szIndex + L".Label";
 				wstring sLabel;
-				profile->IOProfileData(PII_PLUG, sKeyLabel.c_str(), sLabel);
+				profile.IOProfileData(PII_PLUG, sKeyLabel.c_str(), sLabel);
 				if (profileMlang) {
 					profileMlang->IOProfileData(PII_PLUG, sKeyLabel.c_str(), sLabel);
 				}
@@ -131,7 +131,7 @@ bool Plugin::ReadPluginDefPlug(
 
 // プラグイン定義ファイルのCommandセクションを読み込む
 bool Plugin::ReadPluginDefCommand(
-	DataProfile* profile,
+	DataProfile& profile,
 	DataProfile* profileMlang
 	)
 {
@@ -140,13 +140,13 @@ bool Plugin::ReadPluginDefCommand(
 
 	for (int nCount=1; nCount<MAX_PLUG_CMD; ++nCount) {	// 添え字は１から始める
 		swprintf(bufKey, L"C[%d]", nCount);
-		if (profile->IOProfileData(PII_COMMAND, bufKey, sHandler)) {
+		if (profile.IOProfileData(PII_COMMAND, bufKey, sHandler)) {
 			wstring sLabel;
 			wstring sIcon;
 
 			// ラベルの取得
 			swprintf(bufKey, L"C[%d].Label", nCount);
-			profile->IOProfileData(PII_COMMAND, bufKey, sLabel);
+			profile.IOProfileData(PII_COMMAND, bufKey, sLabel);
 			if (profileMlang) {
 				profileMlang->IOProfileData(PII_COMMAND, bufKey, sLabel);
 			}
@@ -155,7 +155,7 @@ bool Plugin::ReadPluginDefCommand(
 			}
 			// アイコンの取得
 			swprintf(bufKey, L"C[%d].Icon", nCount);
-			profile->IOProfileData(PII_COMMAND, bufKey, sIcon);
+			profile.IOProfileData(PII_COMMAND, bufKey, sIcon);
 			if (profileMlang) {
 				profileMlang->IOProfileData(PII_COMMAND, bufKey, sIcon);
 			}
@@ -171,7 +171,7 @@ bool Plugin::ReadPluginDefCommand(
 
 // プラグイン定義ファイルのOptionセクションを読み込む	// 2010/3/24 Uchi
 bool Plugin::ReadPluginDefOption(
-	DataProfile* profile,
+	DataProfile& profile,
 	DataProfile* profileMlang
 	)
 {
@@ -189,31 +189,31 @@ bool Plugin::ReadPluginDefOption(
 		sKey = sLabel = sType = sDefaultVal= L"";
 		// Keyの取得
 		swprintf(bufKey, L"O[%d].Key", nCount);
-		if (profile->IOProfileData(PII_OPTION, bufKey, sKey)) {
+		if (profile.IOProfileData(PII_OPTION, bufKey, sKey)) {
 			// Sectionの取得
 			swprintf(bufKey, L"O[%d].Section", nCount);
-			profile->IOProfileData(PII_OPTION, bufKey, sSection_wk);
+			profile.IOProfileData(PII_OPTION, bufKey, sSection_wk);
 			if (!sSection_wk.empty()) {		// 指定が無ければ前を引き継ぐ
 				sSection = sSection_wk;
 			}
 			// ラベルの取得
 			swprintf(bufKey, L"O[%d].Label", nCount);
-			profile->IOProfileData(PII_OPTION, bufKey, sLabel);
+			profile.IOProfileData(PII_OPTION, bufKey, sLabel);
 			if (profileMlang) {
 				profileMlang->IOProfileData(PII_OPTION, bufKey, sLabel);
 			}
 			// Typeの取得
 			swprintf(bufKey, L"O[%d].Type", nCount);
-			profile->IOProfileData(PII_OPTION, bufKey, sType);
+			profile.IOProfileData(PII_OPTION, bufKey, sType);
 			// 項目選択候補
 			swprintf(bufKey, L"O[%d].Select", nCount);
-			profile->IOProfileData(PII_OPTION, bufKey, sSelect);
+			profile.IOProfileData(PII_OPTION, bufKey, sSelect);
 			if (profileMlang) {
 				profileMlang->IOProfileData(PII_OPTION, bufKey, sSelect);
 			}
 			// デフォルト値
 			swprintf(bufKey, L"O[%d].Default", nCount);
-			profile->IOProfileData(PII_OPTION, bufKey, sDefaultVal);
+			profile.IOProfileData(PII_OPTION, bufKey, sDefaultVal);
 
 			if (sSection.empty() || sKey.empty()) {
 				// 設定が無かったら無視
@@ -224,7 +224,9 @@ bool Plugin::ReadPluginDefOption(
 				sLabel = sKey;
 			}
 
-			m_options.push_back(new PluginOption(*this, sLabel, sSection, sKey, sType, sSelect, sDefaultVal, nCount));
+			m_options.push_back(
+				new PluginOption(*this, sLabel, sSection, sKey, sType, sSelect, sDefaultVal, nCount)
+				);
 		}
 	}
 
@@ -279,7 +281,7 @@ std::vector<std::wstring> wstring_split(
     int idx;
 
     while ((idx = sTrg.find(cSep)) != std::wstring::npos) {
-        splitVec.push_back(sTrg.substr(0, idx));
+        splitVec.emplace_back(sTrg.substr(0, idx));
         sTrg = sTrg.substr(++idx);
     }
 	if (sTrg != L"") {
@@ -291,7 +293,7 @@ std::vector<std::wstring> wstring_split(
 
 //!	プラグイン定義ファイルのStringセクションを読み込む
 bool Plugin::ReadPluginDefString(
-	DataProfile* profile,
+	DataProfile& profile,
 	DataProfile* profileMlang
 	)
 {
@@ -301,7 +303,7 @@ bool Plugin::ReadPluginDefString(
 	for (int nCount=1; nCount<MAX_PLUG_STRING; ++nCount) {	// 添え字は１から始める
 		wstring sVal = L"";
 		swprintf(bufKey, L"S[%d]", nCount);
-		if (profile->IOProfileData(PII_STRING, bufKey, sVal)) {
+		if (profile.IOProfileData(PII_STRING, bufKey, sVal)) {
 			if (profileMlang) {
 				profileMlang->IOProfileData(PII_STRING, bufKey, sVal);
 			}

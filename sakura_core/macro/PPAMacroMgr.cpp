@@ -35,10 +35,10 @@ PPAMacroMgr::~PPAMacroMgr()
 
 	@date 2007.07.20 genta flags追加
 */
-bool PPAMacroMgr::ExecKeyMacro(EditView* pEditView, int flags) const
+bool PPAMacroMgr::ExecKeyMacro(EditView& editView, int flags) const
 {
 	m_cPPA.SetSource(to_achar(m_buffer.GetStringPtr()));
-	return m_cPPA.Execute(pEditView, flags);
+	return m_cPPA.Execute(editView, flags);
 }
 
 /*! キーボードマクロの読み込み（ファイルから）
@@ -89,7 +89,7 @@ bool PPAMacroMgr::LoadKeyMacroStr(HINSTANCE hInstance, const TCHAR* pszCode)
 		そのため，過ったオブジェクト生成を行わないために拡張子チェックは必須．
 
 */
-MacroManagerBase* PPAMacroMgr::Creator(const TCHAR* ext)
+MacroManagerBase* PPAMacroMgr::Creator(class EditView& view, const TCHAR* ext)
 {
 	if (_tcscmp(ext, _T("ppa")) == 0) {
 		return new PPAMacroMgr;
@@ -103,7 +103,7 @@ MacroManagerBase* PPAMacroMgr::Creator(const TCHAR* ext)
 
 	@date 2004.01.31 genta RegisterExtの廃止のためRegisterCreatorに置き換え
 */
-void PPAMacroMgr::declare (void)
+void PPAMacroMgr::Declare (void)
 {
 	if (m_cPPA.InitDll() == InitDllResultType::Success) {
 		MacroFactory::getInstance().RegisterCreator(Creator);

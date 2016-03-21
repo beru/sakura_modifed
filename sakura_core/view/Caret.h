@@ -194,8 +194,8 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 private:
 	// 参照
-	EditView&				m_editView;
-	const EditDoc&			m_editDoc;
+	EditView&		m_editView;
+	const EditDoc&	m_editDoc;
 
 	// キャレット位置
 	LayoutPoint	m_ptCaretPos_Layout;	// ビュー左上端からのカーソル位置。レイアウト単位。
@@ -210,7 +210,6 @@ private:
 	LayoutInt m_nOffset50Cache;
 	LogicInt  m_nLogicOffset50Cache;
 	int m_nLineLogicModCache;
-
 	
 public:
 	LayoutInt		m_nCaretPosX_Prev;	// 直前のX座標記憶用。レイアウト単位。このソースの下部に詳細説明があります。

@@ -47,7 +47,7 @@ PluginMacroManager::~PluginMacroManager()
 
 ///////////////////////////////////////////////////////////////////////////////
 // マクロを実行する
-bool PluginMacroManager::ExecKeyMacro(EditView* EditView, int flags) const
+bool PluginMacroManager::ExecKeyMacro(EditView& editView, int flags) const
 {
 	bool result = false;
 	WSHIfObj::List params;
@@ -57,7 +57,7 @@ bool PluginMacroManager::ExecKeyMacro(EditView* EditView, int flags) const
 		params.push_back(objMacro);
 		if (m_Plug) {
 			objMacro->SetMatch(1);	// Run macro mode
-			m_Plug->Invoke(EditView, params);
+			m_Plug->Invoke(editView, params);
 			result = true;
 		}
 		objMacro->Release();
@@ -90,11 +90,11 @@ bool PluginMacroManager::LoadKeyMacroStr(HINSTANCE hInstance, const TCHAR* Code)
 
 ///////////////////////////////////////////////////////////////////////////////
 // 拡張子が一致したらオブジェクトを生成する
-MacroManagerBase* PluginMacroManager::Creator(const TCHAR* Ext)
+MacroManagerBase* PluginMacroManager::Creator(EditView& view, const TCHAR* ext)
 {
 	WSHIfObj::List params;
 #ifdef _UNICODE
-	MacroIfObj* objMacro = new MacroIfObj(MacroIfObj::MACRO_MODE_CREATOR, Ext, 0, L"");
+	MacroIfObj* objMacro = new MacroIfObj(MacroIfObj::MACRO_MODE_CREATOR, ext, 0, L"");
 #else
 	NativeW szWideExt(to_wchar(Ext));
 	MacroIfObj* objMacro = new MacroIfObj(MacroIfObj::MACRO_MODE_CREATOR, szWideExt.GetStringPtr(), 0, L"");
@@ -106,11 +106,11 @@ MacroManagerBase* PluginMacroManager::Creator(const TCHAR* Ext)
 	JackManager::getInstance().GetUsablePlug(PP_MACRO, 0, &plugs);
 	for (auto it=plugs.begin(); it!=plugs.end(); ++it) {
 		objMacro->SetMatch(0);	// Check macro ext mode
-		(*it)->Invoke(NULL, params);
+		(*it)->Invoke(view, params);
 		if (objMacro->IsMatch()) {
 			objMacro->Release();
 #ifdef _UNICODE
-			return new PluginMacroManager(Ext, *it);
+			return new PluginMacroManager(ext, *it);
 #else
 			return new PluginMacroManager(szWideExt.GetStringPtr(), *it);
 #endif
@@ -122,7 +122,7 @@ MacroManagerBase* PluginMacroManager::Creator(const TCHAR* Ext)
 
 ///////////////////////////////////////////////////////////////////////////////
 // Register plugin macro manager
-void PluginMacroManager::declare(void)
+void PluginMacroManager::Declare(void)
 {
 	MacroFactory::getInstance().RegisterCreator(Creator);
 }

@@ -36,12 +36,12 @@ public:
 	virtual ~WSHMacroManager();
 
 	// 2007.07.20 genta : flags追加
-	virtual bool ExecKeyMacro(EditView *EditView, int flags) const;
+	virtual bool ExecKeyMacro(EditView& editView, int flags) const;
 	virtual bool LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath);
 	virtual bool LoadKeyMacroStr(HINSTANCE hInstance, const TCHAR* pszCode);
 
-	static MacroManagerBase* Creator(const TCHAR* FileExt);
-	static void declare();
+	static MacroManagerBase* Creator(EditView& editView, const TCHAR* FileExt);
+	static void Declare();
 
 	void AddParam(WSHIfObj* param);				// インタフェースオブジェクトを追加する
 	void AddParam(WSHIfObj::List& params);		// インタフェースオブジェクト達を追加する

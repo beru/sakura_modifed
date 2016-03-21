@@ -799,11 +799,11 @@ bool DlgPrintSetting::CalcPrintableLineAndColumn()
 
 	// ダイアログデータの取得
 	GetData();
-	PrintSetting* pPS = &m_printSettingArr[m_nCurrentPrintSetting];
+	PrintSetting& ps = m_printSettingArr[m_nCurrentPrintSetting];
 
 	dmDummy.dmFields = DM_PAPERSIZE | DMORIENT_LANDSCAPE;
-	dmDummy.dmPaperSize = pPS->nPrintPaperSize;
-	dmDummy.dmOrientation = pPS->nPrintPaperOrientation;
+	dmDummy.dmPaperSize = ps.nPrintPaperSize;
+	dmDummy.dmOrientation = ps.nPrintPaperOrientation;
 	// 用紙の幅、高さ
 	if (!Print::GetPaperSize(
 			&nPaperAllWidth,
@@ -817,16 +817,16 @@ bool DlgPrintSetting::CalcPrintableLineAndColumn()
 		return false;
 	}
 	// 行あたりの文字数(行番号込み)
-	nEnableColumns = Print::CalculatePrintableColumns(pPS, nPaperAllWidth, pPS->bPrintLineNumber ? m_nLineNumberColumns : 0);	// 印字可能桁数/ページ
+	nEnableColumns = Print::CalculatePrintableColumns(ps, nPaperAllWidth, ps.bPrintLineNumber ? m_nLineNumberColumns : 0);	// 印字可能桁数/ページ
 	// 縦方向の行数
-	nEnableLines = Print::CalculatePrintableLines(pPS, nPaperAllHeight);			// 印字可能行数/ページ
+	nEnableLines = Print::CalculatePrintableLines(ps, nPaperAllHeight);			// 印字可能行数/ページ
 
 	SetItemInt(IDC_STATIC_ENABLECOLUMNS, nEnableColumns, FALSE);
 	SetItemInt(IDC_STATIC_ENABLELINES, nEnableLines, FALSE);
 
 	// フォントのポイント数	2013/5/9 Uchi
 	// 1pt = 1/72in = 25.4/72mm
-	int nFontPoints = pPS->nPrintFontHeight * 720 / 254;
+	int nFontPoints = ps.nPrintFontHeight * 720 / 254;
 	TCHAR szFontPoints[20];
 	auto_sprintf_s(szFontPoints, _countof(szFontPoints), _T("%d.%dpt"), nFontPoints/10, nFontPoints%10);
 	SetItemText(IDC_STATIC_FONTSIZE, szFontPoints);

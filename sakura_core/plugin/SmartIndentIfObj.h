@@ -66,7 +66,7 @@ public:
 	// 関数情報を取得する
 	MacroFuncInfoArray GetMacroFuncInfo() const {
 		static MacroFuncInfo macroFuncInfoNotCommandArr[] = {
-			//ID									関数名							引数										戻り値の型	m_pszData
+			//index									関数名							引数										戻り値の型	m_pszData
 			{EFunctionCode(F_SI_GETCHAR),			LTEXT("GetChar"),				{VT_EMPTY, VT_EMPTY, VT_EMPTY, VT_EMPTY},	VT_BSTR,	NULL }, // 押下したキーを取得する
 			//	終端
 			{F_INVALID,	NULL, {VT_EMPTY, VT_EMPTY, VT_EMPTY, VT_EMPTY},	VT_EMPTY,	NULL}
@@ -74,21 +74,35 @@ public:
 		return macroFuncInfoNotCommandArr;
 	}
 	// 関数を処理する
-	bool HandleFunction(EditView* View, EFunctionCode ID, const VARIANT* Arguments, const int ArgSize, VARIANT& Result) {
-		switch (LOWORD(ID)) {
+	bool HandleFunction(
+		EditView& view,
+		EFunctionCode index,
+		const VARIANT* arguments,
+		const int argSize,
+		VARIANT& result
+		)
+	{
+		switch (LOWORD(index)) {
 		case F_SI_GETCHAR:						// 押下したキーを取得する
 			{
-				wstring sValue;
-				sValue += m_wcChar;
-				SysString S(sValue.c_str(), sValue.size());
-				Wrap(&Result)->Receive(S);
+				wstring value;
+				value += m_wcChar;
+				SysString s(value.c_str(), value.size());
+				Wrap(&result)->Receive(s);
 			}
 			return true;
 		}
 		return false;
 	}
 	// コマンドを処理する
-	bool HandleCommand(EditView* View, EFunctionCode ID, const WCHAR* Arguments[], const int ArgLengths[], const int ArgSize) {
+	bool HandleCommand(
+		EditView& view,
+		EFunctionCode index,
+		const WCHAR* arguments[],
+		const int argLengths[],
+		const int argSize
+		)
+	{
 		return false;
 	}
 

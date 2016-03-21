@@ -1581,14 +1581,14 @@ int	ControlTray::CreatePopUpMenu_L(void)
 	// MRUリストのファイルのリストをメニューにする
 //@@@ 2001.12.26 YAZAKI MRUリストは、CMRUに依頼する
 	const MruFile mru;
-	HMENU hMenuPopUp = mru.CreateMenu(&m_menuDrawer);	// ファイルメニュー
+	HMENU hMenuPopUp = mru.CreateMenu(m_menuDrawer);	// ファイルメニュー
 	int nEnable = (mru.MenuLength() > 0 ? 0 : MF_GRAYED);
 	m_menuDrawer.MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING | MF_POPUP | nEnable, (UINT_PTR)hMenuPopUp , LS(F_FILE_RCNTFILE_SUBMENU), _T("F"));
 
 	// 最近使ったフォルダのメニューを作成
 //@@@ 2001.12.26 YAZAKI OPENFOLDERリストは、MruFolderにすべて依頼する
 	const MruFolder mruFolder;
-	hMenuPopUp = mruFolder.CreateMenu(&m_menuDrawer);
+	hMenuPopUp = mruFolder.CreateMenu(m_menuDrawer);
 	nEnable = (mruFolder.MenuLength() > 0 ? 0 : MF_GRAYED);
 	m_menuDrawer.MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING | MF_POPUP| nEnable, (UINT_PTR)hMenuPopUp, LS(F_FILE_RCNTFLDR_SUBMENU), _T("D"));
 

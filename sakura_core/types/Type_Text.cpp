@@ -39,24 +39,24 @@
 // Feb. 12, 2001 JEPRO .err エラーメッセージ
 // Nov.  6, 2002 genta docはMS Wordに譲ってここからは外す（関連づけ防止のため）
 // Nov.  6, 2002 genta log を追加
-void CType_Text::InitTypeConfigImp(TypeConfig* pType)
+void CType_Text::InitTypeConfigImp(TypeConfig& type)
 {
 	// 名前と拡張子
-	_tcscpy(pType->szTypeName, _T("テキスト"));
-	_tcscpy(pType->szTypeExts, _T("txt,log,1st,err,ps"));
+	_tcscpy(type.szTypeName, _T("テキスト"));
+	_tcscpy(type.szTypeExts, _T("txt,log,1st,err,ps"));
 
 	// 設定
-	pType->nMaxLineKetas = LayoutInt(120);					// 折り返し桁数
-	pType->eDefaultOutline = OutlineType::Text;				// アウトライン解析方法
-	pType->colorInfoArr[COLORIDX_SSTRING].bDisp = false;	// Oct. 17, 2000 JEPRO	シングルクォーテーション文字列を色分け表示しない
-	pType->colorInfoArr[COLORIDX_WSTRING].bDisp = false;	// Sept. 4, 2000 JEPRO	ダブルクォーテーション文字列を色分け表示しない
-	pType->bKinsokuHead = false;								// 行頭禁則				//@@@ 2002.04.08 MIK
-	pType->bKinsokuTail = false;								// 行末禁則				//@@@ 2002.04.08 MIK
-	pType->bKinsokuRet  = false;								// 改行文字をぶら下げる	//@@@ 2002.04.13 MIK
-	pType->bKinsokuKuto = false;								// 句読点をぶら下げる	//@@@ 2002.04.17 MIK
-	wcscpy_s(pType->szKinsokuHead, L"!%),.:;?]}￠°’”‰′″℃、。々〉》」』】〕゛゜ゝゞ・ヽヾ！％），．：；？］｝｡｣､･ﾞﾟ￠");		/* 行頭禁則 */	//@@@ 2002.04.13 MIK 
-	wcscpy_s(pType->szKinsokuTail, L"$([{￡\\‘“〈《「『【〔＄（［｛｢￡￥");		/* 行末禁則 */	//@@@ 2002.04.08 MIK 
-	// pType->m_szKinsokuKuto（句読点ぶら下げ文字）はここではなく全タイプにデフォルト設定	// 2009.08.07 ryoji 
+	type.nMaxLineKetas = LayoutInt(120);					// 折り返し桁数
+	type.eDefaultOutline = OutlineType::Text;				// アウトライン解析方法
+	type.colorInfoArr[COLORIDX_SSTRING].bDisp = false;	// Oct. 17, 2000 JEPRO	シングルクォーテーション文字列を色分け表示しない
+	type.colorInfoArr[COLORIDX_WSTRING].bDisp = false;	// Sept. 4, 2000 JEPRO	ダブルクォーテーション文字列を色分け表示しない
+	type.bKinsokuHead = false;								// 行頭禁則				//@@@ 2002.04.08 MIK
+	type.bKinsokuTail = false;								// 行末禁則				//@@@ 2002.04.08 MIK
+	type.bKinsokuRet  = false;								// 改行文字をぶら下げる	//@@@ 2002.04.13 MIK
+	type.bKinsokuKuto = false;								// 句読点をぶら下げる	//@@@ 2002.04.17 MIK
+	wcscpy_s(type.szKinsokuHead, L"!%),.:;?]}￠°’”‰′″℃、。々〉》」』】〕゛゜ゝゞ・ヽヾ！％），．：；？］｝｡｣､･ﾞﾟ￠");		/* 行頭禁則 */	//@@@ 2002.04.13 MIK 
+	wcscpy_s(type.szKinsokuTail, L"$([{￡\\‘“〈《「『【〔＄（［｛｢￡￥");		/* 行末禁則 */	//@@@ 2002.04.08 MIK 
+	// type.m_szKinsokuKuto（句読点ぶら下げ文字）はここではなく全タイプにデフォルト設定	// 2009.08.07 ryoji 
 
 	// ※小さな親切として、C:\～～ や \\～～ などのファイルパスをクリッカブルにする設定を「テキスト」に既定で仕込む
 	// ※""で挟まれる設定は挟まれない設定よりも上に無ければならない
@@ -64,17 +64,17 @@ void CType_Text::InitTypeConfigImp(TypeConfig* pType)
 
 	// 正規表現キーワード
 	int keywordPos = 0;
-	wchar_t* pKeyword = pType->regexKeywordList;
-	pType->bUseRegexKeyword = true;							// 正規表現キーワードを使うか
-	pType->regexKeywordArr[0].nColorIndex = COLORIDX_URL;	// 色指定番号
+	wchar_t* pKeyword = type.regexKeywordList;
+	type.bUseRegexKeyword = true;							// 正規表現キーワードを使うか
+	type.regexKeywordArr[0].nColorIndex = COLORIDX_URL;	// 色指定番号
 	wcscpyn(&pKeyword[keywordPos],			// 正規表現キーワード
 		L"/(?<=\")(\\b[a-zA-Z]:|\\B\\\\\\\\)[^\"\\r\\n]*/k",			//   ""で挟まれた C:\～, \\～ にマッチするパターン
-		_countof(pType->regexKeywordList) - 1);
+		_countof(type.regexKeywordList) - 1);
 	keywordPos += auto_strlen(&pKeyword[keywordPos]) + 1;
-	pType->regexKeywordArr[1].nColorIndex = COLORIDX_URL;	// 色指定番号
+	type.regexKeywordArr[1].nColorIndex = COLORIDX_URL;	// 色指定番号
 	wcscpyn(&pKeyword[keywordPos],			// 正規表現キーワード
 		L"/(\\b[a-zA-Z]:\\\\|\\B\\\\\\\\)[\\w\\-_.\\\\\\/$%~]*/k",		//   C:\～, \\～ にマッチするパターン
-		_countof(pType->regexKeywordList) - keywordPos - 1);
+		_countof(type.regexKeywordList) - keywordPos - 1);
 	keywordPos += auto_strlen(&pKeyword[keywordPos]) + 1;
 	pKeyword[keywordPos] = L'\0';
 }

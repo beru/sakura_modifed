@@ -52,7 +52,7 @@ public:
 
 	// ŠÔŠÔŠu
 	void SetInterval(int m);	// ŠÔŠÔŠu‚Ìİ’è
-	int GetInterval(void) const {return nInterval / MSec2Min; }	// ŠÔŠÔŠu‚Ìæ“¾
+	int GetInterval(void) const { return nInterval / MSec2Min; }	// ŠÔŠÔŠu‚Ìæ“¾
 	void Reset(void) { nLastTick = ::GetTickCount(); }			// Šî€‚ÌƒŠƒZƒbƒg
 
 	// —LŒø^–³Œø
