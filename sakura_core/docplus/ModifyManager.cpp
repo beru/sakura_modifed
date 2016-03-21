@@ -10,7 +10,7 @@ void ModifyManager::OnAfterSave(const SaveInfo& saveInfo)
 	EditDoc* pDoc = GetListeningDoc();
 
 	// 行変更状態をすべてリセット
-	ModifyVisitor().ResetAllModifyFlag(&pDoc->m_docLineMgr, pDoc->m_docEditor.m_opeBuf.GetCurrentPointer());
+	ModifyVisitor().ResetAllModifyFlag(pDoc->m_docLineMgr, pDoc->m_docEditor.m_opeBuf.GetCurrentPointer());
 }
 
 bool ModifyVisitor::IsLineModified(const DocLine* pDocLine, int saveSeq) const
@@ -42,9 +42,9 @@ void ModifyVisitor::SetLineModified(DocLine* pDocLine, int seq)
   変更回数はUndoしたときに-1される
   変更回数が0になった場合は変更フラグをFALSEにする
 */
-void ModifyVisitor::ResetAllModifyFlag(DocLineMgr* pDocLineMgr, int seq)
+void ModifyVisitor::ResetAllModifyFlag(DocLineMgr& docLineMgr, int seq)
 {
-	DocLine* pDocLine = pDocLineMgr->GetDocLineTop();
+	DocLine* pDocLine = docLineMgr.GetDocLineTop();
 	while (pDocLine) {
 		DocLine* pDocLineNext = pDocLine->GetNextLine();
 		SetLineModified(pDocLine, seq);

@@ -36,7 +36,7 @@
 
 using namespace std;
 
-//! カスタムカラー用の識別文字列
+// カスタムカラー用の識別文字列
 static const TCHAR* TSTR_PTRCUSTOMCOLORS = _T("ptrCustomColors");
 
 WNDPROC	m_wpColorListProc;

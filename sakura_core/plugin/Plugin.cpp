@@ -291,7 +291,7 @@ std::vector<std::wstring> wstring_split(
     return splitVec;
 }
 
-//!	プラグイン定義ファイルのStringセクションを読み込む
+// プラグイン定義ファイルのStringセクションを読み込む
 bool Plugin::ReadPluginDefString(
 	DataProfile& profile,
 	DataProfile* profileMlang

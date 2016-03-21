@@ -43,7 +43,7 @@ class Graphics;
 struct EditNode;
 struct DllSharedData;
 
-//! タブバーウィンドウ
+// タブバーウィンドウ
 class TabWnd : public Wnd {
 public:
 	/*

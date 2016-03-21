@@ -68,12 +68,12 @@ enum EncodingType {
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 // 2007.08.14 kobake 追加
-//!有効な文字コードセットならtrue
+// 有効な文字コードセットならtrue
 // 2010/6/21	inlineをはずす
 bool IsValidCodeType(int code);
 
 // 2007.08.14 kobake 追加
-//!有効な文字コードセットならtrue。ただし、SJISは除く(ファイル一覧に文字コードを[]付きで表示のため)
+// 有効な文字コードセットならtrue。ただし、SJISは除く(ファイル一覧に文字コードを[]付きで表示のため)
 inline bool IsValidCodeTypeExceptSJIS(int code)
 {
 	return IsValidCodeType(code) && code != CODE_SJIS;
@@ -81,7 +81,7 @@ inline bool IsValidCodeTypeExceptSJIS(int code)
 
 // 2010/6/21 Uchi 削除
 // 2007.08.14 kobake 追加
-//!EncodingType型で表せる値ならtrue
+// EncodingType型で表せる値ならtrue
 //inline bool IsInEncodingType(int code)
 //{
 //	return (code >= 0 && code < CODE_CODEMAX) || code == CODE_ERROR || code == CODE_AUTODETECT;

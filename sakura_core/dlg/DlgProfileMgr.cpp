@@ -58,7 +58,7 @@ DlgProfileMgr::DlgProfileMgr()
 	return;
 }
 
-//! モーダルダイアログの表示
+// モーダルダイアログの表示
 int DlgProfileMgr::DoModal(
 	HINSTANCE hInstance,
 	HWND hwndParent,
@@ -107,7 +107,7 @@ static std::tstring GetProfileMgrFileName(LPCTSTR profName = NULL)
 }
 
 
-//! ダイアログデータの設定
+// ダイアログデータの設定
 void DlgProfileMgr::SetData()
 {
 	SetData(-1);
@@ -168,7 +168,7 @@ static bool MyList_GetText(
 }
 
 
-//! ダイアログデータの取得
+// ダイアログデータの取得
 int DlgProfileMgr::GetData()
 {
 	return GetData(true);

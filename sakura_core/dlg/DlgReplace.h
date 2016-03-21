@@ -55,9 +55,9 @@ public:
 	LogicPoint		m_ptEscCaretPos_PHY;	// 検索/置換開始時のカーソル位置退避エリア
 
 protected:
-	RecentSearch			m_recentSearch;
+	RecentSearch		m_recentSearch;
 	ComboBoxItemDeleter	m_comboDelText;
-	RecentReplace			m_recentReplace;
+	RecentReplace		m_recentReplace;
 	ComboBoxItemDeleter	m_comboDelText2;
 	FontAutoDeleter		m_fontText;
 	FontAutoDeleter		m_fontText2;
@@ -65,7 +65,7 @@ protected:
 	/*
 	||  実装ヘルパ関数
 	*/
-	BOOL OnCbnDropDown( HWND hwndCtl, int wID );
+	BOOL OnCbnDropDown(HWND hwndCtl, int wID);
 	BOOL OnInitDialog(HWND, WPARAM, LPARAM);
 	BOOL OnDestroy();
 	BOOL OnBnClicked(int);

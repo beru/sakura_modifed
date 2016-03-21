@@ -59,7 +59,7 @@ public:
 	EncodingType FileOpen( LPCTSTR, bool bBigFile, EncodingType, int, bool* pbBomExist = NULL );		// 指定文字コードでファイルをオープンする
 	void FileClose(void);					// 明示的にファイルをクローズする
 
-	//! 1行データをロードする 順アクセス用
+	// 1行データをロードする 順アクセス用
 	CodeConvertResult ReadLine(
 		NativeW*	pUnicodeBuffer,	// [out] UNICODEデータ受け取りバッファ
 		Eol*		pEol			// [i/o]
@@ -70,17 +70,17 @@ public:
 //	cosnt wchar_t* ReadAtLineW(int, int*, Eol*); // 指定行目をロードする(Unicode版)
 //	bool ReadIgnoreLine(void); // 1行読み飛ばす
 
-	//! ファイルの日時を取得する
+	// ファイルの日時を取得する
 	BOOL GetFileTime(FILETIME*, FILETIME*, FILETIME*); // inline
 
 	// Jun. 08, 2003 Moca
-	//! 開いたファイルにはBOMがあるか？
+	// 開いたファイルにはBOMがあるか？
 	bool IsBomExist(void) { return m_bBomExist; }
 
-	//! 現在の進行率を取得する(0% - 100%) 若干誤差が出る
+	// 現在の進行率を取得する(0% - 100%) 若干誤差が出る
 	int GetPercent(void);
 
-	//! ファイルサイズを取得する
+	// ファイルサイズを取得する
 	inline LONGLONG GetFileSize( void ){ return m_nFileSize; }
 
 	static const int gm_nBufSizeDef; // ロード用バッファサイズの初期値

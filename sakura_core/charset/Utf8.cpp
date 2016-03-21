@@ -8,7 +8,7 @@
 #include "env/ShareData.h"
 #include "env/DllSharedData.h"
 
-//! BOMデータ取得
+// BOMデータ取得
 void Utf8::GetBom(Memory* pMemBom)
 {
 	static const BYTE UTF8_BOM[] = {0xEF, 0xBB, 0xBF};
@@ -85,7 +85,7 @@ int Utf8::Utf8ToUni(const char* pSrc, const int nSrcLen, wchar_t* pDst, bool bCE
 
 
 
-//! UTF-8→Unicodeコード変換
+// UTF-8→Unicodeコード変換
 // 2007.08.13 kobake 作成
 CodeConvertResult Utf8::_UTF8ToUnicode( const Memory& src, NativeW* pDstMem, bool bCESU8Mode/*, bool decodeMime*/ )
 {
@@ -175,7 +175,7 @@ int Utf8::UniToUtf8(const wchar_t* pSrc, const int nSrcLen, char* pDst, bool* pb
 }
 
 
-//! コード変換 Unicode→UTF-8
+// コード変換 Unicode→UTF-8
 CodeConvertResult Utf8::_UnicodeToUTF8( const NativeW& src, Memory* pDstMem, bool bCesu8Mode )
 {
 	// ソースを取得

@@ -66,7 +66,7 @@ void Type::InitTypeConfig(int nIdx, TypeConfig& type)
 	@date 2005.01.30 genta ShareData::Init()から分離．
 */
 void ShareData::InitTypeConfigs(
-	DllSharedData* pShareData,
+	DllSharedData& shareData,
 	std::vector<TypeConfig*>& types
 	)
 {
@@ -94,15 +94,15 @@ void ShareData::InitTypeConfigs(
 		TypeConfig* type = new TypeConfig;
 		types.push_back(type);
 		table[i]->InitTypeConfig(i, *type);
-		auto& typeMini = pShareData->typesMini[i];
+		auto& typeMini = shareData.typesMini[i];
 		auto_strcpy(typeMini.szTypeExts, type->szTypeExts);
 		auto_strcpy(typeMini.szTypeName, type->szTypeName);
 		typeMini.encoding = type->encoding;
 		typeMini.id = type->id;
 		SAFE_DELETE(table[i]);
 	}
-	pShareData->typeBasis = *types[0];
-	pShareData->nTypesCount = (int)types.size();
+	shareData.typeBasis = *types[0];
+	shareData.nTypesCount = (int)types.size();
 }
 
 /*!	@brief 共有メモリ初期化/強調キーワード
@@ -112,18 +112,18 @@ void ShareData::InitTypeConfigs(
 	@date 2005.01.30 genta ShareData::Init()から分離．
 		キーワード定義を関数の外に出し，登録をマクロ化して簡潔に．
 */
-void ShareData::InitKeyword(DllSharedData* pShareData)
+void ShareData::InitKeyword(DllSharedData& shareData)
 {
 	// 強調キーワードのテストデータ
-	pShareData->common.specialKeyword.keywordSetMgr.m_nCurrentKeywordSetIdx = 0;
+	shareData.common.specialKeyword.keywordSetMgr.m_nCurrentKeywordSetIdx = 0;
 
 	int nSetCount = -1;
 
 #define PopulateKeyword(name, case_sensitive, aryname) \
 	extern const wchar_t* g_ppszKeywords##aryname[]; \
 	extern int g_nKeywords##aryname; \
-	pShareData->common.specialKeyword.keywordSetMgr.AddKeywordSet((name), (case_sensitive));	\
-	pShareData->common.specialKeyword.keywordSetMgr.SetKeywordArr(++nSetCount, g_nKeywords##aryname, g_ppszKeywords##aryname);
+	shareData.common.specialKeyword.keywordSetMgr.AddKeywordSet((name), (case_sensitive));	\
+	shareData.common.specialKeyword.keywordSetMgr.SetKeywordArr(++nSetCount, g_nKeywords##aryname, g_ppszKeywords##aryname);
 	
 	PopulateKeyword(L"C/C++",			true,	CPP);			// セット 0の追加
 	PopulateKeyword(L"HTML",			false,	HTML);			// セット 1の追加
@@ -194,7 +194,7 @@ void _DefaultConfig(TypeConfig* pType)
 	pType->bHokanLoHiCase = false;			// 入力補完機能：英大文字小文字を同一視する
 
 	//	2003.06.23 Moca ファイル内からの入力補完機能
-	pType->bUseHokanByFile = true;			//! 入力補完 開いているファイル内から候補を探す
+	pType->bUseHokanByFile = true;			// 入力補完 開いているファイル内から候補を探す
 	pType->bUseHokanByKeyword = false;		// 強調キーワードから入力補完
 
 	// 文字コード設定

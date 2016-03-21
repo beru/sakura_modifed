@@ -134,7 +134,7 @@ bool EditView::TagJumpSub(
 		bool bSuccess = ControlTray::OpenNewEditor2(
 			G_AppInstance(),
 			GetHwnd(),
-			&inf,
+			inf,
 			false,	// ビューモードか
 			true	// 同期モードで開く
 		);

@@ -95,12 +95,12 @@ public:
 		m_eMetaName = CODE_NONE;
 	}
 
-	//! 調査結果の情報を格納
+	// 調査結果の情報を格納
 	void SetInformation(const char*, const int);
 
 protected:
 
-	//! 添え字に使われる優先順位表を作成
+	// 添え字に使われる優先順位表を作成
 	void InitPriorityTable(void);
 
 	// **** 全般
@@ -112,10 +112,10 @@ protected:
 	void SetEvaluation(const EncodingType, const int, const int);
 	void GetEvaluation(const EncodingType, int*, int *) const;
 
-	//! 調査対象となったデータの長さ（8bit 単位）
+	// 調査対象となったデータの長さ（8bit 単位）
 	int m_nTargetDataLen;
 
-	//! 判定結果を格納するもの
+	// 判定結果を格納するもの
 	unsigned int m_dwStatus;
 
 public:
@@ -162,10 +162,10 @@ public:
 	int m_nMbcEucZenHirakata;                // EUC 全角ひらがなカタカナのバイト数
 	int m_nMbcEucZen;                        // EUC 全角のバイト数
 
-	//! マルチバイト系の捜査結果を、ポイントが大きい順にソート。 ソートした結果は、m_apMbcInfo に格納
+	// マルチバイト系の捜査結果を、ポイントが大きい順にソート。 ソートした結果は、m_apMbcInfo に格納
 	void SortMBCInfo(void);
 
-	//! EUC と SJIS が候補のトップ２に上がっているかどうか
+	// EUC と SJIS が候補のトップ２に上がっているかどうか
 	bool IsAmbiguousEucAndSjis(void) {
 		// EUC と SJIS がトップ2に上がった時
 		// かつ、EUC と SJIS のポイント数が同数のとき
@@ -177,7 +177,7 @@ public:
 		);
 	}
 
-	//! SJIS と UTF-8 が候補のトップ2に上がっているかどうか
+	// SJIS と UTF-8 が候補のトップ2に上がっているかどうか
 	bool IsAmbiguousUtf8AndCesu8(void) {
 		// UTF-8 と SJIS がトップ2に上がった時
 		// かつ、UTF-8 と SJIS のポイント数が同数のとき
@@ -204,7 +204,7 @@ public:
 	EncodingType GetMetaName() const { return m_eMetaName; }
 
 protected:
-	//! BOMの種類を推測して m_eWcBomType を設定
+	// BOMの種類を推測して m_eWcBomType を設定
 	void GuessUtf16Bom(void);
 	EncodingType AutoDetectByXML( const char*, int );
 	EncodingType AutoDetectByHTML( const char*, int );

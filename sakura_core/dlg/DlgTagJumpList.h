@@ -62,7 +62,7 @@ public:
 
 	// @@ 2005.03.31 MIK 階層パラメータを追加
 //	bool AddParamA(const ACHAR*, const ACHAR*, int, const ACHAR*, const ACHAR*, int depth, int baseDirId);	// 登録
-	bool GetSelectedParam(TCHAR* s0, TCHAR* s1, int* n2, TCHAR* s3, TCHAR* s4, int* depth, TCHAR* fileBase );	// 取得
+	bool GetSelectedParam(TCHAR* s0, TCHAR* s1, int* n2, TCHAR* s3, TCHAR* s4, int* depth, TCHAR* fileBase);	// 取得
 	void SetFileName(const TCHAR* pszFileName);
 	void SetKeyword(const wchar_t* pszKeyword);	// @@ 2005.03.31 MIK
 	int  FindDirectTagJump();
@@ -95,7 +95,7 @@ private:
 	int		GetData(void);	// ダイアログデータの取得
 	void	UpdateData(bool);	// @@ 2005.03.31 MIK
 
-	TCHAR	*GetNameByType(const TCHAR type, const TCHAR* name);	// タイプを名前に変換する。
+	TCHAR*	GetNameByType(const TCHAR type, const TCHAR* name);	// タイプを名前に変換する。
 	int		SearchBestTag(void);	// もっとも確率の高そうなインデックスを返す。
 	// @@ 2005.03.31 MIK
 	const TCHAR* GetFileName(void);
@@ -109,12 +109,12 @@ private:
 	bool IsDirectTagJump();
 	
 	void ClearPrevFindInfo();
-	bool GetFullPathAndLine( int index, TCHAR *fullPath, int count, int *lineNum, int *depth );
+	bool GetFullPathAndLine(int index, TCHAR *fullPath, int count, int *lineNum, int *depth);
 
 
 	// depthから完全パス名(相対パス/絶対パス)を作成する
 	static TCHAR* GetFullPathFromDepth(TCHAR*, int, TCHAR*, const TCHAR*, int);
-	static TCHAR* CopyDirDir( TCHAR* dest, const TCHAR* target, const TCHAR* base );
+	static TCHAR* CopyDirDir(TCHAR* dest, const TCHAR* target, const TCHAR* base);
 public:
 	static int CalcMaxUpDirectory(const TCHAR*);
 	static TCHAR* DirUp(TCHAR* dir);
@@ -146,14 +146,14 @@ private:
 	bool	m_bNextItem;			// まだ次にヒットするものがある
 
 	// 絞り込み検索用
-	TagFindState* m_psFindPrev;	// 前回の最後に検索した状態
+	TagFindState* m_psFindPrev;		// 前回の最後に検索した状態
 	TagFindState* m_psFind0Match;	// 前回の1つもHitしなかった最後のtags
 
-	NativeW	m_strOldKeyword;	// 前回のキーワード
+	NativeW	m_strOldKeyword;		// 前回のキーワード
 	bool	m_bOldTagJumpICase;		// 前回の大文字小文字を同一視
 	bool	m_bOldTagJumpAnyWhere;	// 前回の文字列の途中にマッチ
 
-	ComboBoxItemDeleter	m_comboDel;
+	ComboBoxItemDeleter		m_comboDel;
 	RecentTagJumpKeyword	m_recentKeyword;
 	
 	POINT	m_ptDefaultSize;

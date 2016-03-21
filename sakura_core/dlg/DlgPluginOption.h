@@ -56,13 +56,13 @@ public:
 	/*
 	||  Constructors
 	*/
-	DlgPluginOption();
+	DlgPluginOption(PropPlugin&);
 	~DlgPluginOption();
 
 	/*
 	||  Attributes & Operations
 	*/
-	int DoModal(HINSTANCE, HWND, PropPlugin*, int);	// モーダルダイアログの表示
+	int DoModal(HINSTANCE, HWND, int);	// モーダルダイアログの表示
 
 protected:
 	/*
@@ -89,7 +89,7 @@ protected:
 
 private:
 	Plugin*		plugin;
-	PropPlugin*	m_pPropPlugin;
+	PropPlugin&	m_propPlugin;
 	int 			m_ID;			// プラグイン番号（エディタがふる番号）
 	int				m_Line;			// 現在編集中のオプション行番号
 	std::tstring	m_sReadMeName;	// ReadMe ファイル名

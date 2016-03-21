@@ -184,7 +184,7 @@ bool AppNodeGroupHandle::AddEditWndList(HWND hWnd)
 			}
 
 			editNode.showCmdRestore = ::IsZoomed(hWnd)? SW_SHOWMAXIMIZED: SW_SHOWNORMAL;
-			editNode.bClosing = FALSE;
+			editNode.bClosing = false;
 		}
 
 		// ’Ç‰Á‚Ü‚½‚Íæ“ª‚ÉˆÚ“®‚·‚éB

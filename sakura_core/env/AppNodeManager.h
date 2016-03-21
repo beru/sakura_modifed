@@ -38,7 +38,7 @@ struct EditNode {
 	SFilePath		szFilePath;					// タブウィンドウ用：ファイル名			//@@@ 2006.01.28 ryoji
 	bool			bIsGrep;					// Grepのウィンドウか					//@@@ 2006.01.28 ryoji
 	UINT			showCmdRestore;				// 元のサイズに戻すときのサイズ種別		//@@@ 2007.06.20 ryoji
-	BOOL			bClosing;					// 終了中か（「最後のファイルを閉じても(無題)を残す」用）	//@@@ 2007.06.20 ryoji
+	bool			bClosing;					// 終了中か（「最後のファイルを閉じても(無題)を残す」用）	//@@@ 2007.06.20 ryoji
 
 	HWND GetHwnd() const { return GetSafeHwnd(); }
 	HWND GetSafeHwnd() const { if (this) return hWnd; else return NULL; }

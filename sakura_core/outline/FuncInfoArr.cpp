@@ -62,7 +62,7 @@ FuncInfo* FuncInfoArr::GetAt(int nIdx)
 	return m_ppcFuncInfoArr[nIdx];
 }
 
-//! 配列の最後にデータを追加する
+// 配列の最後にデータを追加する
 void FuncInfoArr::AppendData(FuncInfo* pFuncInfo)
 {
 	if (m_nFuncInfoArrNum == 0) {

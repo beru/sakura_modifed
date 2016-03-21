@@ -50,7 +50,7 @@ public:
 };
 
 
-//!	アウトライン解析ダイアログボックス
+//	アウトライン解析ダイアログボックス
 class DlgFuncList : public Dialog {
 public:
 	/*
@@ -81,7 +81,7 @@ protected:
 	void SetTypeConfig(TypeConfigNum, const TypeConfig&);
 
 public:
-	//! 現在の種別と同じなら
+	// 現在の種別と同じなら
 	bool CheckListType(OutlineType nOutLineType) const { return nOutLineType == m_nOutlineType; }
 	void Redraw(OutlineType nOutLineType, OutlineType nListType, FuncInfoArr*, LayoutInt nCurLine, LayoutInt nCurCol);
 	void Refresh(void);
@@ -185,7 +185,7 @@ private:
 	bool m_bWaitTreeProcess;
 
 	// 2002/11/1 frozen
-	//! ツリービューをソートする基準
+	// ツリービューをソートする基準
 	// 0 デフォルト(ノードに関連づけれられた値順)
 	// 1 アルファベット順
 	int m_nSortType;

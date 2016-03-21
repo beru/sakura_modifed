@@ -33,7 +33,7 @@ class FigureManager : public TSingleton<FigureManager> {
 	virtual ~FigureManager();
 
 public:
-	//! •`‰æ‚·‚éFigure‚ğæ“¾
+	// •`‰æ‚·‚éFigure‚ğæ“¾
 	//	@param	pText	‘ÎÛ•¶š—ñ‚Ìæ“ª
 	//	@param	nTextLen	pText‚©‚çs––‚Ü‚Å‚Ì’·‚³(‚½‚¾‚µCRLF==2)
 	Figure& GetFigure(const wchar_t* pText, int nTextLen);

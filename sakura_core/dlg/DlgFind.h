@@ -41,7 +41,7 @@ public:
 
 	LogicPoint	m_ptEscCaretPos_PHY;	// 検索開始時のカーソル位置退避エリア
 
-	RecentSearch			m_recentSearch;
+	RecentSearch		m_recentSearch;
 	ComboBoxItemDeleter	m_comboDel;
 	FontAutoDeleter		m_fontText;
 
@@ -49,7 +49,7 @@ protected:
 //@@@ 2002.2.2 YAZAKI CShareDataに移動
 //	void AddToSearchKeys(const char*);
 	// オーバーライド?
-	BOOL OnCbnDropDown( HWND hwndCtl, int wID );
+	BOOL OnCbnDropDown(HWND hwndCtl, int wID);
 	int GetData(void);		// ダイアログデータの取得
 	void SetCombosList(void);	// 検索文字列/置換後文字列リストの設定
 	void SetData(void);		// ダイアログデータの設定

@@ -27,7 +27,7 @@
 class DocLine;
 class DocLineMgr;
 
-//! 行に付加するModified情報
+// 行に付加するModified情報
 class LineFuncList {
 public:
 	LineFuncList() : m_bFuncList(false) { }
@@ -41,7 +41,7 @@ private:
 	bool m_bFuncList;
 };
 
-//! 行全体のFuncList情報アクセサ
+// 行全体のFuncList情報アクセサ
 class FuncListManager {
 public:
 	//状態

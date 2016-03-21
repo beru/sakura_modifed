@@ -75,7 +75,7 @@ public:
 	static bool OpenNewEditor2(						// 新規編集ウィンドウの追加 ver 1
 		HINSTANCE		hInstance,
 		HWND			hWndParent,
-		const EditInfo*	pfi,
+		const EditInfo&	editInfo,
 		bool			bViewMode,
 		bool			sync		= false,
 		bool			bNewWindow	= false
@@ -94,9 +94,9 @@ public:
 	*/
 	static void DoGrepCreateWindow(HINSTANCE hinst, HWND, DlgGrep& dlgGrep);
 protected:
-	void	DoGrep();	// Stonee, 2001/03/21
-	BOOL TrayMessage(HWND , DWORD , UINT , HICON , const TCHAR* );	// タスクトレイのアイコンに関する処理
-	void OnCommand(WORD , WORD  , HWND);	// WM_COMMANDメッセージ処理
+	void DoGrep();	// Stonee, 2001/03/21
+	BOOL TrayMessage(HWND, DWORD, UINT, HICON, const TCHAR*);	// タスクトレイのアイコンに関する処理
+	void OnCommand(WORD, WORD, HWND);	// WM_COMMANDメッセージ処理
 	void OnNewEditor(bool); // 2003.05.30 genta 新規ウィンドウ作成処理を切り出し
 
 	static INT_PTR CALLBACK ExitingDlgProc(	// 終了ダイアログ用プロシージャ			2006.07.02 ryoji CControlProcess から移動

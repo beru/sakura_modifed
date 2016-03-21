@@ -68,10 +68,10 @@ enum class CallbackResultType {
 //###
 struct LoadInfo {
 	// 入力
-	FilePath	filePath;
+	FilePath		filePath;
 	EncodingType	eCharCode;
-	bool		bViewMode;
-	bool		bWritableNoMsg; //<! 書き込み禁止メッセージを表示しない
+	bool			bViewMode;
+	bool			bWritableNoMsg; // 書き込み禁止メッセージを表示しない
 	TypeConfigNum	nType;
 
 	// モード

@@ -29,7 +29,7 @@
 #include "debug/Debug2.h" // assert
 
 
-//! 文字列への参照を取得するインターフェース
+// 文字列への参照を取得するインターフェース
 class IStringRef {
 public:
 	virtual const wchar_t*	GetPtr()	const = 0;
@@ -37,7 +37,7 @@ public:
 };
 
 
-//! 文字列への参照を保持するクラス
+// 文字列への参照を保持するクラス
 class StringRef : public IStringRef {
 public:
 	StringRef() : m_pData(NULL), m_nDataLen(0) { }
@@ -54,7 +54,7 @@ private:
 };
 
 
-//! UNICODE文字列管理クラス
+// UNICODE文字列管理クラス
 class NativeW : public Native {
 public:
 	// コンストラクタ・デストラクタ
@@ -132,7 +132,7 @@ public:
 	//                           判定                              //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	
-	//! 同一の文字列ならtrue
+	// 同一の文字列ならtrue
 	static bool IsEqual(const NativeW& mem1, const NativeW& mem2);
 
 

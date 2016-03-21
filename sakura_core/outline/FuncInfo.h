@@ -24,14 +24,14 @@ class FuncInfo;
 //	2003.06.27 Moca
 #define FUNCINFO_NOCLIPTEXT 0x10000
 
-//! アウトライン解析  データ要素
+// アウトライン解析  データ要素
 //@date 2002.04.01 YAZAKI 深さ導入
 class FuncInfo {
 public:
 	FuncInfo(LogicInt, LogicInt, LayoutInt, LayoutInt, const TCHAR*, const TCHAR*, int);	// FuncInfoクラス構築
 	~FuncInfo();	// FuncInfoクラス消滅
 
-	//! クリップボードに追加する要素か？
+	// クリップボードに追加する要素か？
 	//	2003.06.27 Moca
 	inline bool IsAddClipText(void) const {
 		return (FUNCINFO_NOCLIPTEXT != (m_nInfo & FUNCINFO_NOCLIPTEXT));

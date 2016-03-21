@@ -41,7 +41,7 @@ public:
 	virtual ~Converter() {}
 
 	// インターフェース
-	void CallConvert( NativeW* pData )
+	void CallConvert(NativeW* pData)
 	{
 		bool bRet = DoConvert(pData);
 		if (!bRet) {

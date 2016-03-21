@@ -21,7 +21,7 @@ class DlgGrep;
 #include "recent/Recent.h"
 #include "util/window.h"
 
-//! GREPダイアログボックス
+// GREPダイアログボックス
 class DlgGrep : public Dialog {
 public:
 	/*

@@ -297,7 +297,7 @@ HWND ControlTray::Create(HINSTANCE hInstance)
 	return GetTrayHwnd();
 }
 
-//! タスクトレイにアイコンを登録する
+// タスクトレイにアイコンを登録する
 bool ControlTray::CreateTrayIcon(HWND hWnd)
 {
 	// タスクトレイのアイコンを作る
@@ -954,7 +954,7 @@ LRESULT ControlTray::DispatchEvent(
 					mru.GetEditInfo(nId - IDM_SELMRU, &openEditInfo);
 
 					if (m_pShareData->common.file.GetRestoreCurPosition()) {
-						ControlTray::OpenNewEditor2(m_hInstance, GetTrayHwnd(), &openEditInfo, false);
+						ControlTray::OpenNewEditor2(m_hInstance, GetTrayHwnd(), openEditInfo, false);
 					}else {
 						LoadInfo loadInfo;
 						loadInfo.filePath = openEditInfo.szPath;
@@ -1369,7 +1369,7 @@ bool ControlTray::OpenNewEditor(
 bool ControlTray::OpenNewEditor2(
 	HINSTANCE		hInstance,
 	HWND			hWndParent,
-	const EditInfo*	pfi,
+	const EditInfo&	editInfo,
 	bool			bViewMode,
 	bool			sync,
 	bool			bNewWindow			// [in] 新規エディタを新しいウィンドウで開く
@@ -1387,15 +1387,13 @@ bool ControlTray::OpenNewEditor2(
 
 	// 追加のコマンドラインオプション
 	CommandLineString cmdLine;
-	if (pfi) {
-		if (pfi->ptCursor.x >= 0				) cmdLine.AppendF(_T(" -X=%d"), pfi->ptCursor.x + 1);
-		if (pfi->ptCursor.y >= 0				) cmdLine.AppendF(_T(" -Y=%d"), pfi->ptCursor.y + 1);
-		if (pfi->nViewLeftCol >= LayoutInt(0)) cmdLine.AppendF(_T(" -VX=%d"), (Int)pfi->nViewLeftCol + 1);
-		if (pfi->nViewTopLine >= LayoutInt(0)) cmdLine.AppendF(_T(" -VY=%d"), (Int)pfi->nViewTopLine + 1);
-	}
+	if (editInfo.ptCursor.x >= 0			) cmdLine.AppendF(_T(" -X=%d"), editInfo.ptCursor.x + 1);
+	if (editInfo.ptCursor.y >= 0			) cmdLine.AppendF(_T(" -Y=%d"), editInfo.ptCursor.y + 1);
+	if (editInfo.nViewLeftCol >= LayoutInt(0)) cmdLine.AppendF(_T(" -VX=%d"), (Int)editInfo.nViewLeftCol + 1);
+	if (editInfo.nViewTopLine >= LayoutInt(0)) cmdLine.AppendF(_T(" -VY=%d"), (Int)editInfo.nViewTopLine + 1);
 	LoadInfo loadInfo;
-	loadInfo.filePath = pfi ? pfi->szPath : _T("");
-	loadInfo.eCharCode = pfi ? pfi->nCharCode : CODE_NONE;
+	loadInfo.filePath = editInfo.szPath;
+	loadInfo.eCharCode = editInfo.nCharCode;
 	loadInfo.bViewMode = bViewMode;
 	return OpenNewEditor(
 		hInstance,
@@ -1555,7 +1553,7 @@ bool ControlTray::CloseAllEditor(
 }
 
 
-//! ポップアップメニュー(トレイ左ボタン)
+// ポップアップメニュー(トレイ左ボタン)
 int	ControlTray::CreatePopUpMenu_L(void)
 {
 	// 本当はセマフォにしないとだめ
@@ -1682,7 +1680,7 @@ int	ControlTray::CreatePopUpMenu_L(void)
 // キーワード：トレイ右クリックメニュー順序
 // Oct. 12, 2000 JEPRO ポップアップメニュー(トレイ左ボタン) を参考にして新たに追加した部分
 
-//! ポップアップメニュー(トレイ右ボタン)
+// ポップアップメニュー(トレイ右ボタン)
 int	ControlTray::CreatePopUpMenu_R(void)
 {
 	// 本当はセマフォにしないとだめ

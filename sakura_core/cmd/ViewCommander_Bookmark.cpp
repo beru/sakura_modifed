@@ -421,7 +421,7 @@ void ViewCommander::Command_BOOKMARK_PATTERN(void)
 
 
 
-//! 次の関数リストマークを探し，見つかったら移動する
+// 次の関数リストマークを探し，見つかったら移動する
 void ViewCommander::Command_FUNCLIST_NEXT(void)
 {
 	LogicPoint	ptXY(0, GetCaret().GetCaretLogicPos().y);
@@ -452,7 +452,7 @@ void ViewCommander::Command_FUNCLIST_NEXT(void)
 
 
 
-//! 前のブックマークを探し，見つかったら移動する．
+// 前のブックマークを探し，見つかったら移動する．
 void ViewCommander::Command_FUNCLIST_PREV(void)
 {
 

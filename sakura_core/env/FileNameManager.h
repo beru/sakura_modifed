@@ -60,7 +60,7 @@ class FileNameManager : public TSingleton<FileNameManager> {
 
 public:
 	// ファイル名関連
-	LPTSTR GetTransformFileNameFast( LPCTSTR, LPTSTR, int nDestLen, HDC hDC, bool bFitMode = true, int cchMaxWidth = 0 );	// 2002.11.24 Moca Add
+	LPTSTR GetTransformFileNameFast(LPCTSTR, LPTSTR, int nDestLen, HDC hDC, bool bFitMode = true, int cchMaxWidth = 0);	// 2002.11.24 Moca Add
 	int TransformFileName_MakeCache(void);
 	static LPCTSTR GetFilePathFormat(LPCTSTR, LPTSTR, int, LPCTSTR, LPCTSTR);
 	static bool ExpandMetaToFolder(LPCTSTR, LPTSTR, int);

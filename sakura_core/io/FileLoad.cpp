@@ -52,14 +52,14 @@
 		2GB以上のファイルは開けない
 */
 
-//! ロード用バッファサイズの初期値 */
+// ロード用バッファサイズの初期値 */
 const int FileLoad::gm_nBufSizeDef = 32768;
 // (最適値がマシンによって違うのでとりあえず32KB確保する)
 
 // ロード用バッファサイズの設定可能な最低値
 // const int gm_nBufSizeMin = 1024;
 
-//! コンストラクタ
+// コンストラクタ
 FileLoad::FileLoad(const EncodingConfig& encode)
 {
 	m_pEencoding = &encode;
@@ -83,7 +83,7 @@ FileLoad::FileLoad(const EncodingConfig& encode)
 	m_nReadBufOffSet  = 0;
 }
 
-//! デストラクタ
+// デストラクタ
 FileLoad::~FileLoad(void)
 {
 	if (m_hFile) {

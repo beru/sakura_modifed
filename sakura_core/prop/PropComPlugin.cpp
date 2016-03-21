@@ -230,8 +230,8 @@ INT_PTR PropPlugin::DispatchEvent(
 						Plugin* plugin = PluginManager::getInstance().GetPlugin(sel);
 						wstring sDirName = to_wchar(plugin->GetFolderName().c_str());
 						if (plugin && auto_stricmp(sDirName.c_str(), pluginTable[sel].szName) == 0) {
-							DlgPluginOption dlgPluginOption;
-							dlgPluginOption.DoModal(::GetModuleHandle(NULL), hwndDlg, this, sel);
+							DlgPluginOption dlgPluginOption(*this);
+							dlgPluginOption.DoModal(::GetModuleHandle(NULL), hwndDlg, sel);
 						}else {
 							WarningMessage(hwndDlg, LS(STR_PROPCOMPLG_ERR1));
 						}

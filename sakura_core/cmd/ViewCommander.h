@@ -215,7 +215,7 @@ public:
 	//>> 2002/03/29 Azumaiya
 	void Command_INSBOXTEXT(const wchar_t*, int); // 矩形貼り付け
 	void Command_INSTEXT(bool bRedraw, const wchar_t*, LogicInt, bool bNoWaitCursor,
-		bool bLinePaste = false, bool bFastMode = false, const LogicRange*	psDelRangeLogicFast = NULL); // 2004.05.14 Moca テキストを貼り付け '\0'対応
+		bool bLinePaste = false, bool bFastMode = false, const LogicRange* psDelRangeLogicFast = NULL); // 2004.05.14 Moca テキストを貼り付け '\0'対応
 	void Command_ADDTAIL(const wchar_t* pszData, int nDataLen);	// 最後にテキストを追加
 	void Command_COPYFILENAME(void);				// このファイル名をクリップボードにコピー // 2002/2/3 aroka
 	void Command_COPYPATH(void);					// このファイルのパス名をクリップボードにコピー
@@ -404,7 +404,7 @@ private:
 	bool Sub_PreProcTagJumpByTagsFile( TCHAR* szCurrentPath, int count ); // タグジャンプの前処理
 public:
 	LogicInt ConvertEol(const wchar_t* pszText, LogicInt nTextLen, wchar_t* pszConvertedText);
-	void Sub_BoxSelectLock( int flags );
+	void Sub_BoxSelectLock(int flags);
 
 };
 

@@ -65,14 +65,14 @@ protected:
 	static void ShareData_IO_Other(DataProfile&);
 
 public:
-	static void ShareData_IO_FileTree( DataProfile&, FileTree&, const WCHAR* );
-	static void ShareData_IO_FileTreeItem( DataProfile&, FileTreeItem&, const WCHAR*, int i );
+	static void ShareData_IO_FileTree(DataProfile&, FileTree&, const WCHAR*);
+	static void ShareData_IO_FileTreeItem(DataProfile&, FileTreeItem&, const WCHAR*, int i);
 	static void ShareData_IO_Type_One(DataProfile&, TypeConfig& , const WCHAR*);	// 2010/04/12 Uchi •ª—£
 
 public:
 	static void IO_CustMenu(DataProfile&, CommonSetting_CustomMenu&, bool);
 	static void IO_KeyBind(DataProfile&, CommonSetting_KeyBind&, bool);	// 2012.11.22 aroka
-	static void IO_MainMenu( DataProfile& c, CommonSetting_MainMenu& s, bool b ){		// 2010/5/15 Uchi
+	static void IO_MainMenu(DataProfile& c, CommonSetting_MainMenu& s, bool b){		// 2010/5/15 Uchi
 		IO_MainMenu(c, NULL, s, b);
 	}
 	static void IO_MainMenu(DataProfile& profile,

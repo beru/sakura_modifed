@@ -672,7 +672,7 @@ int SakuraEnvironment::_ExParam_Evaluate(const wchar_t* pCond)
 	return 0;
 }
 
-//! ’·‚¢–¼‘O‚Ìİ’è
+// ’·‚¢–¼‘O‚Ìİ’è
 wchar_t* ExParam_LongName( wchar_t* q, wchar_t* q_max, EExpParamName eLongParam )
 {
 	switch (eLongParam) {

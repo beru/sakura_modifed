@@ -93,7 +93,7 @@ struct CommonSetting_General {
 //                        ウィンドウ                           //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 // 2004.05.13 Moca
-//! ウィンドウサイズ・位置の制御方法
+// ウィンドウサイズ・位置の制御方法
 enum class WinSizeMode {
 	Default		= 0,	// 指定なし
 	Save		= 1,	// 継承(保存)
@@ -152,7 +152,7 @@ struct CommonSetting_Window {
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                         タブバー                            //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-//! 閉じるボタン
+// 閉じるボタン
 enum class DispTabCloseType {
 	No			= 0, // なし
 	Always		= 1, // 常に表示
@@ -195,7 +195,7 @@ struct CommonSetting_TabBar {
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                           編集                              //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-//! ファイルダイアログの初期位置
+// ファイルダイアログの初期位置
 enum EOpenDialogDir {
 	OPENDIALOGDIR_CUR, // カレントフォルダ
 	OPENDIALOGDIR_MRU, // 最近使ったフォルダ
@@ -694,7 +694,7 @@ struct CommonSetting_MainMenu {
 //                                                             //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-//! 共通設定
+// 共通設定
 struct CommonSetting {
 	CommonSetting_General			general;			// 全般
 	CommonSetting_Window			window;				// ウィンドウ

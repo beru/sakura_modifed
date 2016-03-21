@@ -3077,7 +3077,7 @@ void TabWnd::JoinPrev(void)
 }
 
 
-//! サイズボックスの表示／非表示切り替え
+// サイズボックスの表示／非表示切り替え
 void TabWnd::SizeBox_ONOFF(bool bSizeBox)
 {
 	RECT rc;

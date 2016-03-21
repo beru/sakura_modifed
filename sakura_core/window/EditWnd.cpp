@@ -1650,8 +1650,9 @@ LRESULT EditWnd::DispatchEvent(
 					int nGroup = AppNodeManager::getInstance().GetEditNode(GetHwnd())->GetGroup();
 					if (AppNodeGroupHandle(nGroup).GetEditorWindowsNum() == 1) {
 						EditNode* pEditNode = AppNodeManager::getInstance().GetEditNode(GetHwnd());
-						if (pEditNode)
-							pEditNode->bClosing = TRUE;	// 自分はタブ表示してもらわなくていい
+						if (pEditNode) {
+							pEditNode->bClosing = true;	// 自分はタブ表示してもらわなくていい
+						}
 						LoadInfo loadInfo;
 						loadInfo.filePath = _T("");
 						loadInfo.eCharCode = CODE_NONE;

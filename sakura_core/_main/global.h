@@ -159,14 +159,14 @@ struct SearchOption {
 	{
 	}
 	SearchOption(
-		bool _bRegularExp,
-		bool _bLoHiCase,
-		bool _bWordOnly
+		bool bRegularExp,
+		bool bLoHiCase,
+		bool bWordOnly
 	)
 		:
-		bRegularExp(_bRegularExp),
-		bLoHiCase(_bLoHiCase),
-		bWordOnly(_bWordOnly)
+		bRegularExp(bRegularExp),
+		bLoHiCase(bLoHiCase),
+		bWordOnly(bWordOnly)
 	{
 	}
 	void Reset() {

@@ -78,15 +78,15 @@ public:
 	}
 	void SetLayoutWidth(LayoutInt nWidth) { m_nLayoutWidth = nWidth; }
 
-	//! レイアウト幅を計算。改行は含まない。2007.10.11 kobake
+	// レイアウト幅を計算。改行は含まない。2007.10.11 kobake
 	LayoutInt CalcLayoutWidth(const LayoutMgr& layoutMgr) const;
 
-	//! オフセット値をレイアウト単位に変換して取得。2007.10.17 kobake
+	// オフセット値をレイアウト単位に変換して取得。2007.10.17 kobake
 	LayoutInt CalcLayoutOffset(const LayoutMgr& layoutMgr,
 								LogicInt nStartPos = LogicInt(0),
 								LayoutInt nStartOffset = LayoutInt(0)) const;
 
-	//! 文字列参照を取得
+	// 文字列参照を取得
 	StringRef GetStringRef() const { return StringRef(GetPtr(), GetLengthWithEOL()); }
 
 	// チェーン属性

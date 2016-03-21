@@ -64,6 +64,6 @@ public:
 	void SetLineModified(DocLine* pDocLine, int nModifiedSeq);
 
 	// 一括操作
-	void ResetAllModifyFlag(DocLineMgr* pDocLineMgr, int nSeq);	// 行変更状態をすべてリセット
+	void ResetAllModifyFlag(DocLineMgr& docLineMgr, int nSeq);	// 行変更状態をすべてリセット
 };
 

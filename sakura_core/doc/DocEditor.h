@@ -49,7 +49,7 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	// Jan. 22, 2002 genta Modified Flagの設定
 	void SetModified(bool flag, bool redraw);
-	//! ファイルが修正中かどうか
+	// ファイルが修正中かどうか
 	bool IsModified() const { return m_bIsDocModified; }
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -66,17 +66,17 @@ public:
 	bool IsInsMode() const { return m_bInsMode; }
 	void SetInsMode(bool mode) { m_bInsMode = mode; }
 
-	//! Undo(元に戻す)可能な状態か？
+	// Undo(元に戻す)可能な状態か？
 	bool IsEnableUndo(void) const {
 		return m_opeBuf.IsEnableUndo();
 	}
 
-	//! Redo(やり直し)可能な状態か？
+	// Redo(やり直し)可能な状態か？
 	bool IsEnableRedo(void) const {
 		return m_opeBuf.IsEnableRedo();
 	}
 
-	//! クリップボードから貼り付け可能か？
+	// クリップボードから貼り付け可能か？
 	bool IsEnablePaste(void) const {
 		return Clipboard::HasValidData();
 	}

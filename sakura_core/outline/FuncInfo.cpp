@@ -14,7 +14,7 @@
 #include "StdAfx.h"
 #include "FuncInfo.h"
 
-//! FuncInfoクラス構築
+// FuncInfoクラス構築
 FuncInfo::FuncInfo(
 	LogicInt		nFuncLineCRLF,		// 関数のある行(CRLF単位)
 	LogicInt		nFuncColCRLF,		// 関数のある桁(CRLF単位)

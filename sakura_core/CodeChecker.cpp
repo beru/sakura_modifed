@@ -14,7 +14,7 @@
 //                     セーブ時チェック                        //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-//! DocLineMgrが保持するデータに異なる改行コードが混在しているかどうか判定する
+// DocLineMgrが保持するデータに異なる改行コードが混在しているかどうか判定する
 static bool _CheckSavingEolcode(
 	const DocLineMgr& pcDocLineMgr,
 	Eol eolType
@@ -39,7 +39,7 @@ static bool _CheckSavingEolcode(
 	return bMix;
 }
 
-//! DocLineMgrが保持するデータを指定文字コードで安全に保存できるかどうか判定する
+// DocLineMgrが保持するデータを指定文字コードで安全に保存できるかどうか判定する
 static CodeConvertResult _CheckSavingCharcode(
 	const DocLineMgr& pcDocLineMgr,
 	EncodingType eCodeType,

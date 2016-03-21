@@ -91,7 +91,7 @@ Mutex& ShareData::GetMutexShareWork(){
 	return g_cMutexShareWork;
 }
 
-//! ShareDataクラスの初期化処理
+// ShareDataクラスの初期化処理
 /*!
 	ShareDataクラスを利用する前に必ず呼び出すこと。
 
@@ -462,7 +462,7 @@ bool ShareData::InitShareData()
 		{
 			//	Jan. 30, 2005 genta 関数として独立
 			//	2007.11.04 genta 戻り値チェック．falseなら起動中断．
-			if (!InitKeyAssign(m_pShareData)) {
+			if (!InitKeyAssign(*m_pShareData)) {
 				return false;
 			}
 		}
@@ -482,18 +482,18 @@ bool ShareData::InitShareData()
 			}
 			customMenu.szCustMenuNameArr[CUSTMENU_INDEX_FOR_TABWND][0] = '\0';	//@@@ 2003.06.13 MIK
 
-			InitPopupMenu( m_pShareData );
+			InitPopupMenu(*m_pShareData);
 		}
 
 		// [ツールバー]タブ
 		{
 			// Jan. 30, 2005 genta 関数として独立
-			InitToolButtons( m_pShareData );
+			InitToolButtons(*m_pShareData);
 		}
 
 		// [強調キーワード]タブ
 		{
-			InitKeyword(m_pShareData);
+			InitKeyword(*m_pShareData);
 		}
 
 		// [支援]タブ
@@ -656,7 +656,7 @@ bool ShareData::InitShareData()
 		}
 
 		{
-			InitTypeConfigs( m_pShareData, *m_pvTypeSettings );
+			InitTypeConfigs(*m_pShareData, *m_pvTypeSettings);
 		}
 
 		{
@@ -1247,7 +1247,7 @@ bool ShareData::BeReloadWhenExecuteMacro(int idx)
 	@date 2005.01.30 genta ShareData::Init()から分離．
 		一つずつ設定しないで一気にデータ転送するように．
 */
-void ShareData::InitToolButtons(DllSharedData* pShareData)
+void ShareData::InitToolButtons(DllSharedData& shareData)
 {
 	// ツールバーボタン構造体
 	// Sept. 16, 2000 JEPRO
@@ -1290,14 +1290,14 @@ void ShareData::InitToolButtons(DllSharedData* pShareData)
 	dummy[0] = 0;
 
 	memcpy_raw(
-		pShareData->common.toolBar.nToolBarButtonIdxArr,
+		shareData.common.toolBar.nToolBarButtonIdxArr,
 		DEFAULT_TOOL_BUTTONS,
 		sizeof(DEFAULT_TOOL_BUTTONS)
 	);
 
 	// ツールバーボタンの数
-	pShareData->common.toolBar.nToolBarButtonNum = _countof(DEFAULT_TOOL_BUTTONS);
-	pShareData->common.toolBar.bToolBarIsFlat = !IsVisualStyle();			// フラットツールバーにする／しない	// 2006.06.23 ryoji ビジュアルスタイルでは初期値をノーマルにする
+	shareData.common.toolBar.nToolBarButtonNum = _countof(DEFAULT_TOOL_BUTTONS);
+	shareData.common.toolBar.bToolBarIsFlat = !IsVisualStyle();			// フラットツールバーにする／しない	// 2006.06.23 ryoji ビジュアルスタイルでは初期値をノーマルにする
 	
 }
 
@@ -1308,7 +1308,7 @@ void ShareData::InitToolButtons(DllSharedData* pShareData)
 
 	@date 2005.01.30 genta ShareData::Init()から分離．
 */
-void ShareData::InitPopupMenu(DllSharedData* pShareData)
+void ShareData::InitPopupMenu(DllSharedData& shareData)
 {
 	// カスタムメニュー 規定値
 	
@@ -1490,7 +1490,7 @@ void ShareData::InitPopupMenu(DllSharedData* pShareData)
 void ShareData::RefreshString()
 {
 
-	RefreshKeyAssignString(m_pShareData);
+	RefreshKeyAssignString(*m_pShareData);
 }
 
 void ShareData::CreateTypeSettings()
@@ -1506,7 +1506,7 @@ std::vector<TypeConfig*>& ShareData::GetTypeSettings()
 }
 
 
-void ShareData::InitFileTree( FileTree* setting )
+void ShareData::InitFileTree(FileTree* setting)
 {
 	setting->bProject = true;
 	for (int i=0; i<(int)_countof(setting->items); ++i) {

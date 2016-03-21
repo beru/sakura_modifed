@@ -126,8 +126,8 @@ public:
 		return *m_pEditDoc;
 	}
 public:
-	//! 背景にビットマップを使用するかどうか
-	//! 2010.10.03 背景実装
+	// 背景にビットマップを使用するかどうか
+	// 2010.10.03 背景実装
 	bool IsBkBitmap() const { return m_pEditDoc->m_hBackImg != NULL; }
 
 public:
@@ -219,14 +219,14 @@ public:
 	// 2006.05.14 Moca  互換BMPによる画面バッファ
 	// 2007.09.30 genta CompatibleDC操作関数
 protected:
-	//! ロジック行を1行描画
+	// ロジック行を1行描画
 	bool DrawLogicLine(
 		HDC				hdc,			// [in]     作画対象
 		DispPos*		pDispPos,		// [in/out] 描画する箇所、描画元ソース
 		LayoutInt		nLineTo			// [in]     作画終了するレイアウト行番号
 	);
 
-	//! レイアウト行を1行描画
+	// レイアウト行を1行描画
 	bool DrawLayoutLine(ColorStrategyInfo& csInfo);
 
 	// 色分け
@@ -320,7 +320,7 @@ public:
 	// 2006.07.09 genta 行桁指定によるカーソル移動(選択領域を考慮)
 	void MoveCursorSelecting(LayoutPoint ptWk_CaretPos, bool bSelect, int = _CARETMARGINRATE);
 	void ConvSelectedArea(EFunctionCode);									// 選択エリアのテキストを指定方法で変換
-	//! 指定位置または指定範囲がテキストの存在しないエリアかチェックする	// 2008.08.03 nasukoji
+	// 指定位置または指定範囲がテキストの存在しないエリアかチェックする	// 2008.08.03 nasukoji
 	bool IsEmptyArea(LayoutPoint ptFrom, LayoutPoint ptTo = LayoutPoint(LayoutInt(-1), LayoutInt(-1)), bool bSelect = false, bool bBoxSelect = false) const;
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //

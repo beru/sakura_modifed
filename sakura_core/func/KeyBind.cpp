@@ -42,7 +42,7 @@ struct KEYDATAINIT {
 // 実装補助
 // KeyData配列にデータをセット
 static void SetKeyNameArrVal(
-	DllSharedData*		pShareData,
+	DllSharedData&		shareData,
 	int					nIdx,
 	const KEYDATAINIT*	pKeydata
 );
@@ -132,8 +132,8 @@ EFunctionCode KeyBind::GetFuncCode(
 		}
 	}else {
 		// 2012.12.10 aroka キーコード検索時のループを除去
-		DllSharedData* pShareData = &GetDllShareData();
-		return GetFuncCodeAt(pKeyNameArr[pShareData->common.keyBind.keyToKeyNameArr[nCmd]], nSts, bGetDefFuncCode);
+		DllSharedData& shareData = GetDllShareData();
+		return GetFuncCodeAt(pKeyNameArr[shareData.common.keyBind.keyToKeyNameArr[nCmd]], nSts, bGetDefFuncCode);
 	}
 	return F_DEFAULT;
 }
@@ -798,13 +798,13 @@ const int jpVKEXNamesLen = _countof( jpVKEXNames );
 	@date 2005.01.30 genta ShareData::Init()から分離
 	@date 2007.11.04 genta キー設定数がDLLSHAREの領域を超えたら起動できないように
 */
-bool ShareData::InitKeyAssign(DllSharedData* pShareData)
+bool ShareData::InitKeyAssign(DllSharedData& shareData)
 {
 	/********************/
 	/* 共通設定の規定値 */
 	/********************/
 	const int nKeyDataInitNum = _countof(KeyDataInit);
-	const int KEYNAME_SIZE = _countof(pShareData->common.keyBind.pKeyNameArr) -1;// 最後の１要素はダミー用に予約 2012.11.25 aroka
+	const int KEYNAME_SIZE = _countof(shareData.common.keyBind.pKeyNameArr) -1;// 最後の１要素はダミー用に予約 2012.11.25 aroka
 	// From Here 2007.11.04 genta バッファオーバーラン防止
 	assert(!(nKeyDataInitNum > KEYNAME_SIZE));
 //	if (nKeyDataInitNum > KEYNAME_SIZE) {
@@ -819,27 +819,27 @@ bool ShareData::InitKeyAssign(DllSharedData* pShareData)
 	};
 
 	// インデックス用ダミー作成
-	SetKeyNameArrVal(pShareData, KEYNAME_SIZE, &dummy[0]);
+	SetKeyNameArrVal(shareData, KEYNAME_SIZE, &dummy[0]);
 	// インデックス作成 重複した場合は先頭にあるものを優先
-	for (int ii=0; ii<_countof(pShareData->common.keyBind.keyToKeyNameArr); ++ii) {
-		pShareData->common.keyBind.keyToKeyNameArr[ii] = KEYNAME_SIZE;
+	for (int ii=0; ii<_countof(shareData.common.keyBind.keyToKeyNameArr); ++ii) {
+		shareData.common.keyBind.keyToKeyNameArr[ii] = KEYNAME_SIZE;
 	}
 	for (int i=nKeyDataInitNum-1; i>=0; --i) {
-		pShareData->common.keyBind.keyToKeyNameArr[KeyDataInit[i].nKeyCode] = (BYTE)i;
+		shareData.common.keyBind.keyToKeyNameArr[KeyDataInit[i].nKeyCode] = (BYTE)i;
 	}
 	for (int i=0; i<nKeyDataInitNum; ++i) {
-		SetKeyNameArrVal(pShareData, i, &KeyDataInit[i]);
+		SetKeyNameArrVal(shareData, i, &KeyDataInit[i]);
 	}
-	pShareData->common.keyBind.nKeyNameArrNum = nKeyDataInitNum;
+	shareData.common.keyBind.nKeyNameArrNum = nKeyDataInitNum;
 	return true;
 }
 
-//!	@brief 言語選択後の文字列更新処理
-void ShareData::RefreshKeyAssignString(DllSharedData* pShareData)
+//	@brief 言語選択後の文字列更新処理
+void ShareData::RefreshKeyAssignString(DllSharedData& shareData)
 {
 	const int nKeyDataInitNum = _countof(KeyDataInit);
 	for (int i=0; i<nKeyDataInitNum; ++i) {
-		KeyData* pKeydata = &pShareData->common.keyBind.pKeyNameArr[i];
+		KeyData* pKeydata = &shareData.common.keyBind.pKeyNameArr[i];
 		if (KeyDataInit[i].nKeyNameId <= 0xFFFF) {
 			_tcscpy(pKeydata->szKeyName, LS(KeyDataInit[i].nKeyNameId));
 		}
@@ -852,12 +852,12 @@ void ShareData::RefreshKeyAssignString(DllSharedData* pShareData)
 
 // KeyData配列にデータをセット
 static void SetKeyNameArrVal(
-	DllSharedData*		pShareData,
+	DllSharedData&		shareData,
 	int					nIdx,
 	const KEYDATAINIT*	pKeydataInit
 	)
 {
-	KeyData* pKeydata = &pShareData->common.keyBind.pKeyNameArr[nIdx];
+	KeyData* pKeydata = &shareData.common.keyBind.pKeyNameArr[nIdx];
 	pKeydata->nKeyCode = pKeydataInit->nKeyCode;
 	if (0xFFFF < pKeydataInit->nKeyNameId) {
 		_tcscpy(pKeydata->szKeyName, pKeydataInit->pszKeyName);

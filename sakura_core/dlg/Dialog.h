@@ -73,7 +73,7 @@ public:
 	/*
 	||  Constructors
 	*/
-	Dialog( bool bSizable = false, bool bCheckShareData = true );
+	Dialog(bool bSizable = false, bool bCheckShareData = true);
 	virtual ~Dialog();
 	/*
 	||  Attributes & Operations
@@ -118,7 +118,14 @@ public:
 	virtual BOOL OnContextMenu(WPARAM, LPARAM);	//@@@ 2002.01.18 add
 	virtual LPVOID GetHelpIdTable(void);	//@@@ 2002.01.18 add
 
-	void ResizeItem(HWND hTarget, const POINT& ptDlgDefalut, const POINT& ptDlgNew, const RECT& rcItemDefault, AnchorStyle anchor, bool bUpdate = true);
+	void ResizeItem(
+		HWND hTarget,
+		const POINT& ptDlgDefalut,
+		const POINT& ptDlgNew,
+		const RECT& rcItemDefault,
+		AnchorStyle anchor,
+		bool bUpdate = true
+		);
 	void GetItemClientRect(int wID, RECT& rc);
 	static void SetComboBoxDeleter(HWND hwndCtl, ComboBoxItemDeleter* data);
 public:

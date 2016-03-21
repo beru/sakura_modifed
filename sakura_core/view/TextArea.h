@@ -41,7 +41,7 @@ public:
 	//                     ビュー情報を取得                        //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-	//! 表示される最初の行
+	// 表示される最初の行
 	LayoutInt GetViewTopLine() const {
 		return m_nViewTopLine;
 	}
@@ -49,7 +49,7 @@ public:
 		m_nViewTopLine = nLine;
 	}
 
-	//! 表示域の一番左の桁
+	// 表示域の一番左の桁
 	LayoutInt GetViewLeftCol() const {
 		return m_nViewLeftCol;
 	}
@@ -57,12 +57,12 @@ public:
 		m_nViewLeftCol = nLeftCol;
 	}
 
-	//! 右にはみ出した最初の列を返す
+	// 右にはみ出した最初の列を返す
 	LayoutInt GetRightCol() const {
 		return m_nViewLeftCol + m_nViewColNum;
 	}
 
-	//! 下にはみ出した最初の行を返す
+	// 下にはみ出した最初の行を返す
 	LayoutInt GetBottomLine() const {
 		return m_nViewTopLine + m_nViewRowNum;
 	}
@@ -110,17 +110,17 @@ public:
 		return m_nViewAlignLeft - m_nLeftYohaku;
 	}
 
-	//! クライアントサイズ更新
+	// クライアントサイズ更新
 	void TextArea_OnSize(
 		const Size& sizeClient,		// ウィンドウのクライアントサイズ
 		int nCxVScroll,				// 垂直スクロールバーの横幅
 		int nCyHScroll				// 水平スクロールバーの縦幅
 	);
 
-	//! 行番号表示に必要な幅を設定
+	// 行番号表示に必要な幅を設定
 	bool DetectWidthOfLineNumberArea(bool bRedraw);
 
-	//! 行番号表示に必要な桁数を計算
+	// 行番号表示に必要な桁数を計算
 	int  DetectWidthOfLineNumberArea_calculate(const LayoutMgr*, bool bLayout=false) const;
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -145,7 +145,7 @@ public:
 	int GetRulerHeight() const {
 		return m_nViewAlignTop - GetTopYohaku();
 	}
-	//! ドキュメント左端のクライアント座標を取得 (つまり、スクロールされた状態であれば、マイナスを返す)
+	// ドキュメント左端のクライアント座標を取得 (つまり、スクロールされた状態であれば、マイナスを返す)
 	int GetDocumentLeftClientPointX() const;
 
 	// 計算
@@ -175,7 +175,7 @@ public:
 	//                         サポート                            //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//$ Generateなんていう大げさな名前じゃなくて、Get～で良い気がしてきた
-	//! クリッピング矩形を作成。表示範囲外だった場合はfalseを返す。
+	// クリッピング矩形を作成。表示範囲外だった場合はfalseを返す。
 	void GenerateCharRect(RECT* rc, const DispPos& pos, int nHankakuNum) const;
 	bool TrimRectByArea(RECT* rc) const;
 	bool GenerateClipRect(RECT* rc, const DispPos& pos, int nHankakuNum) const;

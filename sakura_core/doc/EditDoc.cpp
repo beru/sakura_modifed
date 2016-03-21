@@ -81,7 +81,7 @@
 
 #define IDT_ROLLMOUSE	1
 
-//! 編集禁止コマンド
+// 編集禁止コマンド
 static const EFunctionCode EIsModificationForbidden[] = {
 	F_WCHAR,
 	F_IME_CHAR,

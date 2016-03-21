@@ -34,14 +34,14 @@
 
 enum class DockSideType;
 
-//! タブ表示方法
+// タブ表示方法
 enum class TabArrowType {
 	String,		// 文字指定
 	Short,		// 短い矢印
 	Long,		// 長い矢印
 };
 
-//! アウトライン解析の種類
+// アウトライン解析の種類
 enum class OutlineType {
 	C,
 	CPP,
@@ -71,20 +71,20 @@ enum class OutlineType {
 	List = 300,			// 汎用リスト 2010.03.28 syat
 };
 
-//! スマートインデント種別
+// スマートインデント種別
 enum class SmartIndentType {
 	None,		// なし
 	Cpp			// C/C++
 };
 
-//! ヒアドキュメント種別
+// ヒアドキュメント種別
 enum class HereDocType {
 	PHP,			// PHP
 	Ruby,			// Ruby
 	Perl			// Perl
 };
 
-//! 背景画像表示位置
+// 背景画像表示位置
 enum class BackgroundImagePosType {
 	TopLeft,		// 左上
 	TopRight,		// 右上
@@ -97,7 +97,7 @@ enum class BackgroundImagePosType {
 	CenterRight	,	// 中央右
 };
 
-//! エンコードオプション
+// エンコードオプション
 struct EncodingConfig {
 	bool			bPriorCesu8;					// 自動判別時に CESU-8 を優先するかどうか
 	EncodingType	eDefaultCodetype;				// デフォルト文字コード
@@ -105,7 +105,7 @@ struct EncodingConfig {
 	bool			bDefaultBom;					// デフォルトBOM			// 2011.01.24 ryoji
 };
 
-//! 文字列区切り記号エスケープ方法
+// 文字列区切り記号エスケープ方法
 enum class StringLiteralType {
 	CPP,	// C/C++言語風
 	PLSQL,	// PL/SQL風
@@ -118,7 +118,7 @@ enum class StringLiteralType {
 //                       タイプ別設定                          //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-//! タイプ別設定
+// タイプ別設定
 struct TypeConfig {
 	// 2007.09.07 変数名変更: m_nMaxLineSize→nMaxLineKetas
 	int					nIdx;
@@ -260,7 +260,7 @@ struct TypeConfigMini {
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                   タイプ別設定アクセサ                      //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-//!ドキュメント種類。共有データ内 TypeConfig へのアクセサも兼ねる。
+// ドキュメント種類。共有データ内 TypeConfig へのアクセサも兼ねる。
 // 2007.12.13 kobake 作成
 class TypeConfigNum {
 public:

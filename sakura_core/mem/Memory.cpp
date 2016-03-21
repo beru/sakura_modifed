@@ -319,7 +319,7 @@ void Memory::SetRawData(const Memory& pMemData)
 	return;
 }
 
-//! バッファの内容を置き換える
+// バッファの内容を置き換える
 void Memory::SetRawDataHoldBuffer(
 	const void* pData,
 	int nDataLen
@@ -336,7 +336,7 @@ void Memory::SetRawDataHoldBuffer(
 	}
 }
 
-//! バッファの内容を置き換える
+// バッファの内容を置き換える
 void Memory::SetRawDataHoldBuffer(const Memory& pMemData)
 {
 	if (this == &pMemData) {

@@ -88,7 +88,7 @@ struct TabGroupInfo {
 	bool IsValid() const { return hwndTop != NULL; }
 };
 
-//! 編集ウィンドウ（外枠）管理クラス
+// 編集ウィンドウ（外枠）管理クラス
 // 2002.02.17 YAZAKI CShareDataのインスタンスは、Processにひとつあるのみ。
 // 2007.10.30 kobake IsFuncEnable,IsFuncCheckedをFunccode.hに移動
 // 2007.10.30 kobake OnHelp_MenuItemをCEditAppに移動
@@ -106,7 +106,7 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//	Mar. 7, 2002 genta 文書タイプ用引数追加
 	// 2007.06.26 ryoji グループ指定引数追加
-	//! 作成
+	// 作成
 	HWND Create(
 		EditDoc*		pEditDoc,
 		ImageListMgr*	pIcons,
@@ -211,13 +211,13 @@ public:
 	//                           情報                              //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	
-	//! 自アプリがアクティブかどうか	// 2007.03.08 ryoji
+	// 自アプリがアクティブかどうか	// 2007.03.08 ryoji
 	bool IsActiveApp() const { return m_bIsActiveApp; }
 	
-	//! ツールチップのテキストを取得。2007.09.08 kobake 追加
+	// ツールチップのテキストを取得。2007.09.08 kobake 追加
 	void GetTooltipText(TCHAR* wszBuf, size_t nBufCount, int nID) const;
 	
-	//! 印刷Preview中かどうか
+	// 印刷Preview中かどうか
 	bool IsInPreviewMode() {
 		return m_pPrintPreview != NULL;
 	}
@@ -304,7 +304,7 @@ protected:
 	void CheckFreeSubMenuSub(HMENU, int);			// メニューバーの無効化を検査	2010/6/18 Uchi
 
 //public:
-	//! 周期内でm_nTimerCountをインクリメント
+	// 周期内でm_nTimerCountをインクリメント
 	void IncrementTimerCount(int nInterval) {
 		++m_nTimerCount;
 		if (nInterval <= m_nTimerCount) { // 2012.11.29 aroka 呼び出し間隔のバグ修正

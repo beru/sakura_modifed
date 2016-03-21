@@ -33,10 +33,10 @@ struct FileInfo {
 	friend class DocFile;
 protected:
 	EncodingType	eCharCode;
-	bool		bBomExist;
+	bool			bBomExist;
 	EncodingType	eCharCodeLoad;
-	bool		bBomExistLoad;
-	FileTime	fileTime;
+	bool			bBomExistLoad;
+	FileTime		fileTime;
 
 public:
 	FileInfo() {
@@ -45,8 +45,8 @@ public:
 		fileTime.ClearFILETIME();
 	}
 	void	SetCodeSet(EncodingType eSet, bool bBom)	{ eCharCode = eCharCodeLoad = eSet; bBomExist = bBomExistLoad = bBom; }	// 文字コードセットを設定
-	void	SetBomExist(bool bBom)					{ bBomExist = bBomExistLoad = bBom; }	// BOM付加を設定
-	void	SetFileTime(FILETIME& Time)			{ fileTime.SetFILETIME(Time); }
+	void	SetBomExist(bool bBom)						{ bBomExist = bBomExistLoad = bBom; }	// BOM付加を設定
+	void	SetFileTime(FILETIME& Time)					{ fileTime.SetFILETIME(Time); }
 };
 
 class DocFile : public File {

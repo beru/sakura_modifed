@@ -66,7 +66,7 @@ public:
 	LogicPoint	m_ptCaretPos_PHY_After;		// キャレット位置。文字単位。			[共通]
 };
 
-//! 削除
+// 削除
 class DeleteOpe : public Ope {
 public:
 	DeleteOpe() : Ope(OpeCode::Delete) {
@@ -79,7 +79,7 @@ public:
 	int				m_nOrgSeq;
 };
 
-//! 挿入
+// 挿入
 class InsertOpe : public Ope {
 public:
 	InsertOpe() : Ope(OpeCode::Insert) { }
@@ -89,7 +89,7 @@ public:
 	int				m_nOrgSeq;
 };
 
-//! 挿入
+// 挿入
 class ReplaceOpe : public Ope {
 public:
 	ReplaceOpe()
@@ -106,7 +106,7 @@ public:
 	int				m_nOrgDelSeq;
 };
 
-//! キャレット移動
+// キャレット移動
 class MoveCaretOpe : public Ope {
 public:
 	MoveCaretOpe() : Ope(OpeCode::MoveCaret) { }

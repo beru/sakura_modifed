@@ -93,15 +93,15 @@ public:
 	//	Apr. 1, 2001 genta
 	virtual void Flush(void);	//	要素の全消去
 
-	//!	要素の取得
+	// 要素の取得
 	const Mark& GetCurrent(void) const { return m_markChain[m_nCurpos]; }
 
-	//	有効性の確認
+	// 有効性の確認
 	bool  CheckCurrent(void) const;
 	bool  CheckPrev(void) const;
 	bool  CheckNext(void) const;
 
-	//	現在位置の移動
+	// 現在位置の移動
 	bool NextValid(void);
 	bool PrevValid(void);
 

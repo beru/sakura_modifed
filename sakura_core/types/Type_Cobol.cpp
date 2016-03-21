@@ -53,7 +53,7 @@ void CType_Cobol::InitTypeConfigImp(TypeConfig& type)
 }
 
 
-//! COBOL アウトライン解析
+// COBOL アウトライン解析
 void DocOutline::MakeTopicList_cobol(FuncInfoArr* pFuncInfoArr)
 {
 	const wchar_t*	pLine;

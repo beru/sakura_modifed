@@ -456,7 +456,7 @@ bool NormalProcess::InitializeProcess()
 		for (int i=0; i<fileNum; ++i) {
 			// ƒtƒ@ƒCƒ‹–¼·‚µ‘Ö‚¦
 			_tcscpy_s(openFileInfo.szPath, cmdLine.GetFileName(i));
-			bool ret = ControlTray::OpenNewEditor2(GetProcessInstance(), pEditWnd->GetHwnd(), &openFileInfo, bViewMode);
+			bool ret = ControlTray::OpenNewEditor2(GetProcessInstance(), pEditWnd->GetHwnd(), openFileInfo, bViewMode);
 			if (!ret) {
 				break;
 			}

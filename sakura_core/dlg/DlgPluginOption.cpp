@@ -77,7 +77,9 @@ const DWORD p_helpids[] = {
 	0, 0
 };
 
-DlgPluginOption::DlgPluginOption()
+DlgPluginOption::DlgPluginOption(PropPlugin& propPlugin)
+	:
+	m_propPlugin(propPlugin)
 {
 
 }
@@ -91,15 +93,12 @@ DlgPluginOption::~DlgPluginOption()
 int DlgPluginOption::DoModal(
 	HINSTANCE			hInstance,
 	HWND				hwndParent,
-	PropPlugin*			propPlugin,
 	int 				ID
 	)
 {
 	// プラグイン番号（エディタがふる番号）
 	m_ID = ID;
 	plugin = PluginManager::getInstance().GetPlugin(m_ID);
-	m_pPropPlugin = propPlugin;
-
 	if (!plugin) {
 		::ErrorMessage(hwndParent, LS(STR_DLGPLUGINOPT_LOAD));
 		return 0;
@@ -207,7 +206,7 @@ void DlgPluginOption::SetData(void)
 	}
 
 	// ReadMe Button
-	m_sReadMeName = m_pPropPlugin->GetReadMeFile(to_tchar(m_pShareData->common.plugin.pluginTable[m_ID].szName));
+	m_sReadMeName = m_propPlugin.GetReadMeFile(to_tchar(m_pShareData->common.plugin.pluginTable[m_ID].szName));
 	EnableItem(IDC_PLUGIN_README, !m_sReadMeName.empty());
 	return;
 }
@@ -399,7 +398,7 @@ BOOL DlgPluginOption::OnBnClicked(int wID)
 		// ReadMe
 		{
 			if (!m_sReadMeName.empty()) {
-				if (!m_pPropPlugin->BrowseReadMe(m_sReadMeName)) {
+				if (!m_propPlugin.BrowseReadMe(m_sReadMeName)) {
 					WarningMessage(GetHwnd(), LS(STR_PROPCOMPLG_ERR2));
 				}
 			}else {

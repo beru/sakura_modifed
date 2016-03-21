@@ -167,7 +167,7 @@ CodeConvertResult ReadManager::ReadFile_To_CDocLineMgr(
 	}
 
 	// 行変更状態をすべてリセット
-//	CModifyVisitor().ResetAllModifyFlag(pDocLineMgr, 0);
+//	ModifyVisitor().ResetAllModifyFlag(docLineMgr, 0);
 	return eRet;
 }
 

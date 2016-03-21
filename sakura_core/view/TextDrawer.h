@@ -52,7 +52,7 @@ public:
 	// 実際には pX と nX が更新される。
 	void DispText(HDC hdc, DispPos* pDispPos, const wchar_t* pData, int nLength, bool bTransparent = false) const; // テキスト表示
 
-	//!	ノート線描画
+	// ノート線描画
 	void DispNoteLine(Graphics& gr, int nTop, int nBottom, int nLeft, int nRight) const;
 
 	// -- -- 指定桁縦線描画 -- -- //

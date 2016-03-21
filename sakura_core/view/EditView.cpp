@@ -2704,7 +2704,7 @@ void EditView::OnAfterLoad(const LoadInfo& loadInfo)
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 
-//!	現在のカーソル行位置を履歴に登録する
+// 現在のカーソル行位置を履歴に登録する
 void EditView::AddCurrentLineToHistory(void)
 {
 	LogicPoint ptPos;
@@ -2842,7 +2842,7 @@ bool EditView::IsEmptyArea(
 	return result;
 }
 
-//! アンドゥバッファの処理
+// アンドゥバッファの処理
 void EditView::SetUndoBuffer(bool bPaintLineNumber)
 {
 	OpeBlk* pOpe = m_commander.GetOpeBlk();
