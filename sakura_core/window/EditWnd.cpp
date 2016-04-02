@@ -2624,7 +2624,7 @@ bool EditWnd::InitMenu_Special(HMENU hMenu, EFunctionCode eFunc)
 		// プラグインコマンドを提供するプラグインを列挙する
 		{
 			auto& jackManager = JackManager::getInstance();
-			const Plugin* prevPlugin = NULL;
+			const Plugin* prevPlugin = nullptr;
 			HMENU hMenuPlugin = 0;
 
 			Plug::Array plugs = jackManager.GetPlugs(PP_COMMAND);
@@ -2642,7 +2642,7 @@ bool EditWnd::InitMenu_Special(HMENU hMenu, EFunctionCode eFunc)
 					(*it)->GetFunctionCode(), to_tchar((*it)->m_sLabel.c_str()), _T(""),
 					TRUE, (*it)->GetFunctionCode());
 			}
-			bInList = (prevPlugin != NULL);
+			bInList = (prevPlugin != nullptr);
 		}
 		break;
 	}
@@ -2909,7 +2909,7 @@ void EditWnd::PrintPreviewModeONOFF(void)
 //@@@ 2002.01.14 YAZAKI 印刷PreviewをPrintPreviewに独立させたことによる変更
 		// 印刷Previewモードを解除します。
 		delete m_pPrintPreview;	//	削除。
-		m_pPrintPreview = NULL;	//	NULLか否かで、プリントPreviewモードか判断するため。
+		m_pPrintPreview = nullptr;	//	NULLか否かで、プリントPreviewモードか判断するため。
 
 		// 通常モードに戻す
 		::ShowWindow(this->m_splitterWnd.GetHwnd(), SW_SHOW);

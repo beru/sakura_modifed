@@ -223,7 +223,7 @@ DWORD GrepAgent::DoGrep(
 			// 矩形・ラインモード貼り付けは未サポート
 			bool bColmnSelect;
 			bool bLineSelect;
-			if (!viewDst.MyGetClipboardData(memReplace, &bColmnSelect, GetDllShareData().common.edit.bEnableLineModePaste? &bLineSelect: NULL)) {
+			if (!viewDst.MyGetClipboardData(memReplace, &bColmnSelect, GetDllShareData().common.edit.bEnableLineModePaste? &bLineSelect: nullptr)) {
 				this->m_bGrepRunning = false;
 				viewDst.m_bDoing_UndoRedo = false;
 				ErrorMessage( viewDst.m_hwndParent, LS(STR_DLGREPLC_CLIPBOARD) );
@@ -1496,7 +1496,7 @@ public:
 		bBom(bBom_),
 		bOldSave(bOldSave_),
 		bufferSize(0),
-		out(NULL),
+		out(nullptr),
 		pCodeBase(CodeFactory::CreateCodeBase(code_,0)),
 		memMessage(message)
 	{
@@ -1548,7 +1548,7 @@ public:
 		if (nHitCount && out) {
 			out->Close();
 			delete out;
-			out = NULL;
+			out = nullptr;
 			if (bOldSave) {
 				std::tstring oldFile = fileName;
 				oldFile += _T(".skrold");
@@ -1598,7 +1598,7 @@ public:
 		if (out) {
 			out->Close();
 			delete out;
-			out = NULL;
+			out = nullptr;
 			std::tstring name = std::tstring(fileName);
 			name += _T(".skrnew");
 			::DeleteFile( name.c_str() );

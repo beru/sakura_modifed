@@ -305,7 +305,7 @@ void SearchAgent::CreateWordList(
 {
 	for (LogicInt pos=LogicInt(0); pos<nPatternLen; ) {
 		LogicInt begin, end; // 検索語に含まれる単語?の posを基準とした相対位置。WhereCurrentWord_2()の仕様では空白文字列も単語に含まれる。
-		if (WordParse::WhereCurrentWord_2(pszPattern+pos, nPatternLen-pos, LogicInt(0), &begin, &end, NULL, NULL)
+		if (WordParse::WhereCurrentWord_2(pszPattern+pos, nPatternLen-pos, LogicInt(0), &begin, &end, nullptr, nullptr)
 			&& begin == 0 && begin < end
 		) {
 			if (!WCODE::IsWordDelimiter(pszPattern[pos])) {
@@ -334,7 +334,7 @@ const wchar_t* SearchAgent::SearchStringWord(
 	LogicInt nNextWordFrom = LogicInt(nIdxPos);
 	LogicInt nNextWordFrom2;
 	LogicInt nNextWordTo2;
-	while (WordParse::WhereCurrentWord_2(pLine, LogicInt(nLineLen), nNextWordFrom, &nNextWordFrom2, &nNextWordTo2, NULL, NULL)) {
+	while (WordParse::WhereCurrentWord_2(pLine, LogicInt(nLineLen), nNextWordFrom, &nNextWordFrom2, &nNextWordTo2, nullptr, nullptr)) {
 		size_t nSize = searchWords.size();
 		for (size_t iSW=0; iSW<nSize; ++iSW) {
 			if (searchWords[iSW].second == nNextWordTo2 - nNextWordFrom2) {
@@ -941,7 +941,7 @@ void SearchAgent::ReplaceData(DocLineReplaceArg* pArg)
 				if (nWorkLen <= nWorkPos && nLineLen <= nNewLen + 10) {
 					// 行を連結して1行にするような操作の高速化
 					// 削除が元データの有効長以下で行の長さが伸びるか少し減る場合reallocを試みる
-					static DocLine* pDocLinePrevAccess = NULL;
+					static DocLine* pDocLinePrevAccess = nullptr;
 					static int nAccessCount = 0;
 					int nBufferReserve = nNewLen;
 					if (pDocLinePrevAccess == pDocLine) {

@@ -399,7 +399,7 @@ public:
 	);
 	bool ReplaceData_CEditView3(
 		LayoutRange		delRange,			// 削除範囲。レイアウト単位。
-		OpeLineData*	pMemCopyOfDeleted,	// 削除されたデータのコピー(NULL可能)
+		OpeLineData*	pMemCopyOfDeleted,	// 削除されたデータのコピー(nullptr可能)
 		OpeLineData*	pInsData,
 		bool			bRedraw,
 		OpeBlk*			pOpeBlk,

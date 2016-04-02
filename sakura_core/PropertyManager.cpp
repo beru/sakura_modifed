@@ -71,7 +71,7 @@ bool PropertyManager::OpenPropertySheet(
 		bool bGroup = (csTabBar.bDispTabWnd && !csTabBar.bDispTabWndMultiWin);
 
 		// 印刷中にキーワードを上書きしないように
-		ShareDataLockCounter* pLock = NULL;
+		ShareDataLockCounter* pLock = nullptr;
 		ShareDataLockCounter::WaitLock(pcPropCommon->m_hwndParent, &pLock);
 
 		pcPropCommon->ApplyData();
@@ -131,7 +131,7 @@ bool PropertyManager::OpenPropertySheetTypes(
 	// プロパティシートの作成
 	if (pcPropTypes->DoPropertySheet(m_nPropTypePageNum)) {
 		// 2013.06.10 Moca 印刷終了まで待機する
-		ShareDataLockCounter* pLock = NULL;
+		ShareDataLockCounter* pLock = nullptr;
 		ShareDataLockCounter::WaitLock(pcPropTypes->GetHwndParent(), &pLock);
 
 		pcPropTypes->GetTypeData(*pType);

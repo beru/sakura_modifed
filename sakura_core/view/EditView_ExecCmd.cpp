@@ -165,7 +165,7 @@ bool EditView::ExecCmd(
 	SECURITY_ATTRIBUTES	sa;
 	sa.nLength = sizeof(sa);
 	sa.bInheritHandle = TRUE;
-	sa.lpSecurityDescriptor = NULL;
+	sa.lpSecurityDescriptor = nullptr;
 	if (CreatePipe(&hStdOutRead, &hStdOutWrite, &sa, 1000) == FALSE) {
 		// ÉGÉâÅ[ÅBëŒçÙñ≥Çµ
 		return false;

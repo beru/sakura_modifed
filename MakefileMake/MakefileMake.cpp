@@ -268,7 +268,7 @@ int main(int argc, char* argv[])
 	}
 
 	// ファイルオープン
-	FILE* in = NULL;
+	FILE* in = nullptr;
 	if (fopen_s( &in, makefile, "rt" ) != 0) {
 		printf("Error: 出力ファイル[%s]を開けません\n", makefile);
 		return 1;
@@ -289,7 +289,7 @@ int main(int argc, char* argv[])
 		printf("Error: 一時ファイル名を作れません[%s]\n", tmp_file);
 		return 1;
 	}
-	FILE* out = NULL;
+	FILE* out = nullptr;
 	if (fopen_s( &out, tmp_file, "wt" ) != 0) {
 		printf("Error: 一時ファイル[%s]を開けません\n", tmp_file);
 		return 1;

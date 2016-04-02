@@ -44,7 +44,7 @@ public:
 		bool			bHokanByFile,			// •ÒW’†ƒf[ƒ^‚©‚çŒó•â‚ğ’T‚·B 2003.06.23 Moca
 		int				nHokanType,
 		bool			bHokanByKeyword,
-		NativeW*		pMemHokanWord = NULL	// •âŠ®Œó•â‚ª‚P‚Â‚Ì‚Æ‚«‚±‚ê‚ÉŠi”[ 2001/06/19 asa-o
+		NativeW*		pMemHokanWord = nullptr	// •âŠ®Œó•â‚ª‚P‚Â‚Ì‚Æ‚«‚±‚ê‚ÉŠi”[ 2001/06/19 asa-o
 	);
 	void HokanSearchByKeyword(
 		const wchar_t*	pszCurWord,

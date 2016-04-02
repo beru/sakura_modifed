@@ -19,7 +19,7 @@
 
 #include <new>
 
-SelectLang::SelLangInfo* SelectLang::m_psLangInfo = NULL;	// メッセージリソース用構造体
+SelectLang::SelLangInfo* SelectLang::m_psLangInfo = nullptr;	// メッセージリソース用構造体
 SelectLang::PSSelLangInfoList SelectLang::m_psLangInfoList;
 
 /*!

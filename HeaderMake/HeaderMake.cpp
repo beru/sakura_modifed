@@ -202,7 +202,7 @@ next:
 	char in_file2[_MAX_PATH];
 	sprintf_s(in_file2, _countof(in_file2), PREPROCESSOR, in_file);
 	FILE* in = _popen(in_file2, "rt");               if (!in ) { printf("Error: 入力ファイルを開けません\n"); return 1; } //※プリプロセス済みストリーム
-	FILE* out = NULL; fopen_s(&out, out_file, "wt");  if (!out) { printf("Error: 出力ファイルを開けません\n"); return 1; }
+	FILE* out = nullptr; fopen_s(&out, out_file, "wt");  if (!out) { printf("Error: 出力ファイルを開けません\n"); return 1; }
 
 	// 処理
 

@@ -51,7 +51,7 @@ bool EditView::TagJumpSub(
 	Point			ptJumpTo,		// ジャンプ位置(1開始)
 	bool			bClose,			// [in] true: 元ウィンドウを閉じる / false: 元ウィンドウを閉じない
 	bool			bRelFromIni,
-	bool*			pbJumpToSelf	// [out] オプションNULL可。自分にジャンプしたか
+	bool*			pbJumpToSelf	// [out] オプションnullptr可。自分にジャンプしたか
 	)
 {
 	// 2004/06/21 novice タグジャンプ機能追加

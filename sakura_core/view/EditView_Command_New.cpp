@@ -80,7 +80,7 @@ void EditView::InsertData_CEditView(
 #endif
 
 	// 2007.10.18 kobake COpe処理をここにまとめる
-	InsertOpe* pOpe = NULL;
+	InsertOpe* pOpe = nullptr;
 	int opeSeq;
 	if (!m_bDoing_UndoRedo) {	// Undo, Redoの実行中か
 		pOpe = new InsertOpe();
@@ -199,7 +199,7 @@ void EditView::InsertData_CEditView(
 	{
 		LayoutReplaceArg arg;
 		arg.delRange.Set(LayoutPoint(nColumnFrom, ptInsertPos.y));
-		arg.pMemDeleted = NULL;
+		arg.pMemDeleted = nullptr;
 		arg.pInsData = &insData;
 		arg.nDelSeq = opeSeq;
 		m_pEditDoc->m_layoutMgr.ReplaceData_CLayoutMgr(&arg);
@@ -351,7 +351,7 @@ void EditView::InsertData_CEditView(
 
 	@param _ptCaretPos [in]  削除データの位置
 	@param nDelLen [out] 削除データのサイズ
-	@param pMem [out]  削除したデータ(NULL可能)
+	@param pMem [out]  削除したデータ(nullptr可能)
 
 	@date 2002/03/24 YAZAKI bUndo削除
 	@date 2002/05/12 YAZAKI bRedraw, bRedraw2削除（常にFALSEだから）
@@ -376,7 +376,7 @@ void EditView::DeleteData2(
 	LogicInt nIdxFrom = LineColumnToIndex(pLayout, _ptCaretPos.GetX2());
 
 	// 2007.10.18 kobake COpeの生成をここにまとめる
-	DeleteOpe*	pOpe = NULL;
+	DeleteOpe*	pOpe = nullptr;
 	LayoutInt columnFrom = LineIndexToColumn(pLayout, nIdxFrom);
 	LayoutInt columnTo = LineIndexToColumn(pLayout, nIdxFrom + nDelLen);
 	if (!m_bDoing_UndoRedo) {
@@ -391,7 +391,7 @@ void EditView::DeleteData2(
 		);
 	}
 	OpeLineData memDeleted;
-	OpeLineData* pmemDeleted = NULL;
+	OpeLineData* pmemDeleted = nullptr;
 	if (pMem || pOpe) {
 		pmemDeleted = &memDeleted;
 	}
@@ -402,7 +402,7 @@ void EditView::DeleteData2(
 		arg.delRange.SetFrom(_ptCaretPos);
 		arg.delRange.SetTo(LayoutPoint(columnTo, _ptCaretPos.GetY2()));
 		arg.pMemDeleted = pmemDeleted;
-		arg.pInsData = NULL;
+		arg.pInsData = nullptr;
 		arg.nDelSeq = GetDocument().m_docEditor.m_opeBuf.GetNextSeq();
 		m_pEditDoc->m_layoutMgr.ReplaceData_CLayoutMgr(&arg);
 	}
@@ -540,7 +540,7 @@ void EditView::DeleteData(
 					DeleteData2(
 						LayoutPoint(rcSel.left, nLineNum + 1),
 						nDelLen,
-						NULL
+						nullptr
 					);
 				}
 			}
@@ -588,7 +588,7 @@ void EditView::DeleteData(
 				L"",					// 挿入するデータ
 				LogicInt(0),			// 挿入するデータの長さ
 				bRedraw,
-				m_bDoing_UndoRedo ? NULL : m_commander.GetOpeBlk()
+				m_bDoing_UndoRedo ? nullptr : m_commander.GetOpeBlk()
 			);
 		}
 	}else {
@@ -635,7 +635,7 @@ void EditView::DeleteData(
 			L"",				// 挿入するデータ
 			LogicInt(0),		// 挿入するデータの長さ
 			bRedraw,
-			m_bDoing_UndoRedo ? NULL : m_commander.GetOpeBlk(),
+			m_bDoing_UndoRedo ? nullptr : m_commander.GetOpeBlk(),
 			false,
 			&delRangeLogic
 		);
@@ -678,11 +678,11 @@ void EditView::ReplaceData_CEditView(
 	auto& opeBuf = GetDocument().m_docEditor.m_opeBuf;
 	int opeSeq = m_bDoing_UndoRedo ? opeBuf.GetCurrentPointer() : opeBuf.GetNextSeq();
 	if (nInsDataLen == 0) {
-		ReplaceData_CEditView3(delRange, NULL, NULL, bRedraw, pOpeBlk, opeSeq, NULL, bFastMode, psDelRangeLogicFast);
+		ReplaceData_CEditView3(delRange, nullptr, nullptr, bRedraw, pOpeBlk, opeSeq, nullptr, bFastMode, psDelRangeLogicFast);
 	}else {
 		OpeLineData insData;
 		StringToOpeLineData(pInsData, nInsDataLen, insData, opeSeq);
-		ReplaceData_CEditView3(delRange, NULL, &insData, bRedraw, pOpeBlk, opeSeq, NULL, bFastMode, psDelRangeLogicFast);
+		ReplaceData_CEditView3(delRange, nullptr, &insData, bRedraw, pOpeBlk, opeSeq, nullptr, bFastMode, psDelRangeLogicFast);
 	}
 }
 
@@ -799,7 +799,7 @@ bool EditView::ReplaceData_CEditView3(
 		}
 	}
 
-	ReplaceOpe* pReplaceOpe = NULL;	// 編集操作要素 COpe
+	ReplaceOpe* pReplaceOpe = nullptr;	// 編集操作要素 COpe
 	if (pOpeBlk) {
 		pReplaceOpe = new ReplaceOpe();
 		pReplaceOpe->m_ptCaretPos_PHY_Before = sDelRangeLogic.GetFrom();
@@ -807,7 +807,7 @@ bool EditView::ReplaceData_CEditView3(
 		pReplaceOpe->m_ptCaretPos_PHY_After = pReplaceOpe->m_ptCaretPos_PHY_Before;	// 操作後のキャレット位置
 	}
 
-	OpeLineData* pMemDeleted = NULL;
+	OpeLineData* pMemDeleted = nullptr;
 	OpeLineData opeData;
 	if (pOpeBlk || pMemCopyOfDeleted) {
 		pMemDeleted = &opeData;
@@ -992,10 +992,10 @@ void EditView::RTrimPrevLine(void)
 				if (!(rangeA.GetFrom().x >= rangeA.GetTo().x && rangeA.GetFrom().y == rangeA.GetTo().y)) {
 					ReplaceData_CEditView(
 						rangeA,
-						NULL,			// 挿入するデータ
+						nullptr,			// 挿入するデータ
 						LogicInt(0),	// 挿入するデータの長さ
 						true,
-						m_bDoing_UndoRedo ? NULL : m_commander.GetOpeBlk()
+						m_bDoing_UndoRedo ? nullptr : m_commander.GetOpeBlk()
 					);
 					LayoutPoint ptCP;
 					layoutMgr.LogicToLayout(ptCaretPos_PHY, &ptCP);

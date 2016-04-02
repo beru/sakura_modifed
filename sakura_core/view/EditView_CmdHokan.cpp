@@ -111,7 +111,7 @@ void EditView::ShowHokanMgr(NativeW& memData, bool bAutoDecided)
 	if (bAutoDecided) {
 		pMemHokanWord = &memHokanWord;
 	}else {
-		pMemHokanWord = NULL;
+		pMemHokanWord = nullptr;
 	}
 
 	// 入力補完ウィンドウ作成

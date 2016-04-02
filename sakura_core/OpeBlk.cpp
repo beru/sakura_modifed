@@ -64,7 +64,7 @@ bool OpeBlk::AppendOpe(Ope* pOpe)
 Ope* OpeBlk::GetOpe(int nIndex)
 {
 	if (GetNum() <= nIndex) {
-		return NULL;
+		return nullptr;
 	}
 	return m_ppCOpeArr[nIndex];
 }

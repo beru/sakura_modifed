@@ -136,24 +136,24 @@ EditView::EditView(EditWnd& editWnd)
 	:
 	ViewCalc(*this),
 	m_editWnd(editWnd),
-	m_pTextArea(NULL),
-	m_pCaret(NULL),
-	m_pRuler(NULL),
+	m_pTextArea(nullptr),
+	m_pCaret(nullptr),
+	m_pRuler(nullptr),
 	m_viewSelect(*this),
 	m_parser(*this),
 	m_textDrawer(*this),
 	m_commander(*this),
 	m_hwndVScrollBar(NULL),
 	m_hwndHScrollBar(NULL),
-	m_pDropTarget(NULL),
+	m_pDropTarget(nullptr),
 	m_bActivateByMouse(false),	// 2007.10.02 nasukoji
 	m_nWheelDelta(0),
 	m_eWheelScroll(F_0),
 	m_nMousePouse(0),
 	m_nAutoScrollMode(0),
 	m_AT_ImmSetReconvertString(NULL),
-	m_pHistory(NULL),
-	m_pRegexKeyword(NULL),
+	m_pHistory(nullptr),
+	m_pRegexKeyword(nullptr),
 	m_hAtokModule(NULL)
 {
 }
@@ -179,7 +179,7 @@ BOOL EditView::Create(
 	}
 
 	m_pHistory = new AutoMarkMgr;
-	m_pRegexKeyword = NULL;				// 2007.04.08 ryoji
+	m_pRegexKeyword = nullptr;				// 2007.04.08 ryoji
 
 	SetDrawSwitch(true);
 	m_pDropTarget = new DropTarget(this);
@@ -199,8 +199,8 @@ BOOL EditView::Create(
 	// 共有データ構造体のアドレスを返す
 	m_bCommandRunning = false;	// コマンドの実行中
 	m_bDoing_UndoRedo = false;	// Undo, Redoの実行中か
-	m_pcsbwVSplitBox = NULL;	// 垂直分割ボックス
-	m_pcsbwHSplitBox = NULL;	// 水平分割ボックス
+	m_pcsbwVSplitBox = nullptr;	// 垂直分割ボックス
+	m_pcsbwHSplitBox = nullptr;	// 水平分割ボックス
 	m_hwndVScrollBar = NULL;
 	m_nVScrollRate = 1;			// 垂直スクロールバーの縮尺
 	m_hwndHScrollBar = NULL;
@@ -261,7 +261,7 @@ BOOL EditView::Create(
 		m_hAtokModule = LoadLibraryExedir(_T("ATOK10WC.DLL"));
 		m_AT_ImmSetReconvertString = NULL;
 		if (m_hAtokModule) {
-			m_AT_ImmSetReconvertString =(BOOL (WINAPI *)(HIMC, int, PRECONVERTSTRING, DWORD )) GetProcAddress(m_hAtokModule,"AT_ImmSetReconvertString");
+			m_AT_ImmSetReconvertString = (BOOL (WINAPI *)(HIMC, int, PRECONVERTSTRING, DWORD )) GetProcAddress(m_hAtokModule,"AT_ImmSetReconvertString");
 		}
 	}else { 
 		// それ以外のOSのときはOS標準を使用する
@@ -414,24 +414,24 @@ void EditView::Close()
 	UseCompatibleDC(FALSE);
 
 	delete m_pDropTarget;
-	m_pDropTarget = NULL;
+	m_pDropTarget = nullptr;
 
 	delete m_pHistory;
-	m_pHistory = NULL;
+	m_pHistory = nullptr;
 
 	delete m_pRegexKeyword;	//@@@ 2001.11.17 add MIK
-	m_pRegexKeyword = NULL;
+	m_pRegexKeyword = nullptr;
 	
 	// 再変換 2002.04.10 minfu
 	if (m_hAtokModule)
 		FreeLibrary(m_hAtokModule);
 
 	delete m_pTextArea;
-	m_pTextArea = NULL;
+	m_pTextArea = nullptr;
 	delete m_pCaret;
-	m_pCaret = NULL;
+	m_pCaret = nullptr;
 	delete m_pRuler;
-	m_pRuler = NULL;
+	m_pRuler = nullptr;
 }
 
 
@@ -1497,7 +1497,7 @@ void EditView::ConvSelectedArea(EFunctionCode nFuncCode)
 			memBuf.GetStringPtr(),		// 挿入するデータ	 // 2002/2/10 aroka CMemory変更
 			memBuf.GetStringLength(),	// 挿入するデータの長さ // 2002/2/10 aroka CMemory変更
 			false,
-			m_bDoing_UndoRedo ? NULL : m_commander.GetOpeBlk()
+			m_bDoing_UndoRedo ? nullptr : m_commander.GetOpeBlk()
 		);
 
 		// From Here 2001.12.03 hor
@@ -1552,7 +1552,7 @@ int	EditView::CreatePopUpMenu_R(void)
 			menuDrawer.MyAppendMenuSep(hMenu, MF_SEPARATOR, F_0, _T(""));
 		}
 	}
-	return CreatePopUpMenuSub(hMenu, nMenuIdx, NULL);
+	return CreatePopUpMenuSub(hMenu, nMenuIdx, nullptr);
 }
 
 /*! ポップアップメニューの作成(Sub)
@@ -2864,7 +2864,7 @@ void EditView::SetUndoBuffer(bool bPaintLineNumber)
 		}else {
 			delete pOpe;
 		}
-		m_commander.SetOpeBlk(NULL);
+		m_commander.SetOpeBlk(nullptr);
 	}
 }
 

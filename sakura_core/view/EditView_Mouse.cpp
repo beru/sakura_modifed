@@ -1210,8 +1210,8 @@ void EditView::OnMOUSEMOVE(WPARAM fwKeys, int xPos_, int yPos_)
 					caret.GetCaretLayoutPos().GetY2(),
 					nIdx,
 					&range,
-					NULL,
-					NULL
+					nullptr,
+					nullptr
 				);
 				if (bResult) {
 					// 指定された行のデータ内の位置に対応する桁の位置を調べる
@@ -1603,7 +1603,7 @@ void EditView::OnLBUTTONDBLCLK(WPARAM fwKeys, int _xPos , int _yPos)
 
 			// URLを開く
 		 	// 現在位置がメールアドレスならば、NULL以外と、その長さを返す
-			if (IsMailAddress(wstrURL.c_str(), wstrURL.length(), NULL)) {
+			if (IsMailAddress(wstrURL.c_str(), wstrURL.length(), nullptr)) {
 				wstrOPEN = pszMailTo + wstrURL;
 			}else {
 				if (wcsnicmp(wstrURL.c_str(), L"ttp://", 6) == 0) {	// 抑止URL

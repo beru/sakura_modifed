@@ -52,7 +52,7 @@ void TipWnd::Create(HINSTANCE hInstance, HWND hwndParent)
 	RegisterWC(
 		hInstance,
 		// WNDCLASS—p
-		NULL,// Handle to the class icon.
+		NULL,	// Handle to the class icon.
 		NULL,	// Handle to a small icon
 		::LoadCursor(NULL, IDC_ARROW),// Handle to the class cursor.
 		(HBRUSH)/*NULL*/(COLOR_INFOBK + 1),// Handle to the class background brush.
