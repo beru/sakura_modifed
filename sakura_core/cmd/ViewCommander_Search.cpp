@@ -580,7 +580,7 @@ void ViewCommander::Command_REPLACE(HWND hwndParent)
 	const NativeW memRepKey(dlgReplace.m_strText2.c_str());
 
 	// 次を検索
-	Command_SEARCH_NEXT(true, true, false, hwndParent, NULL);
+	Command_SEARCH_NEXT(true, true, false, hwndParent, nullptr);
 
 	bool	bRegularExp = m_view.m_curSearchOption.bRegularExp;
 	int 	nFlag       = m_view.m_curSearchOption.bLoHiCase ? 0x01 : 0x00;
@@ -846,7 +846,7 @@ void ViewCommander::Command_REPLACE_ALL()
 
 	LogicRange selectLogic;	// 置換文字列GetSelect()のLogic単位版
 	// 次を検索
-	Command_SEARCH_NEXT(true, bDisplayUpdate, true, 0, NULL, bFastMode ? &selectLogic : NULL);
+	Command_SEARCH_NEXT(true, bDisplayUpdate, true, 0, NULL, bFastMode ? &selectLogic : nullptr);
 	// To Here 2001.12.03 hor
 
 	//<< 2002/03/26 Azumaiya
@@ -860,7 +860,7 @@ void ViewCommander::Command_REPLACE_ALL()
 	// クリップボードからのデータ貼り付けかどうか。
 	if (bPaste) {
 		// クリップボードからデータを取得。
-		if (!m_view.MyGetClipboardData(memClip, &bColumnSelect, GetDllShareData().common.edit.bEnableLineModePaste ? &bLineSelect : NULL)) {
+		if (!m_view.MyGetClipboardData(memClip, &bColumnSelect, GetDllShareData().common.edit.bEnableLineModePaste ? &bLineSelect : nullptr)) {
 			ErrorBeep();
 			m_view.SetDrawSwitch(bDrawSwitchOld);
 
@@ -1050,7 +1050,7 @@ void ViewCommander::Command_REPLACE_ALL()
 					// 次の検索開始位置へシフト
 					caret.SetCaretLayoutPos(LayoutPoint(rangeA.GetFrom().x, LayoutInt(linNext)));
 					// 2004.05.30 Moca 現在の検索文字列を使って検索する
-					Command_SEARCH_NEXT(false, bDisplayUpdate, true, 0, NULL);
+					Command_SEARCH_NEXT(false, bDisplayUpdate, true, 0, nullptr);
 					colDif = (0);
 					continue;
 				}
@@ -1175,7 +1175,7 @@ void ViewCommander::Command_REPLACE_ALL()
 			}
 			++nReplaceNum;
 		}else if (nReplaceTarget == 3) {
-			Command_INSTEXT( false, L"", LogicInt(0), true, false, bFastMode, bFastMode ? &selectLogic : NULL );
+			Command_INSTEXT( false, L"", LogicInt(0), true, false, bFastMode, bFastMode ? &selectLogic : nullptr );
 			++nReplaceNum;
 		}else if (bRegularExp) { // 検索／置換  1==正規表現
 			// 2002/01/19 novice 正規表現による文字列置換
@@ -1276,14 +1276,14 @@ void ViewCommander::Command_REPLACE_ALL()
 				    }
 				}
 				// 置換後文字列への書き換え(行末から検索文字列末尾までの文字を除く)
-				Command_INSTEXT(false, regexp.GetString(), regexp.GetStringLen() - colDiff, true, false, bFastMode, bFastMode ? &selectLogic : NULL);
+				Command_INSTEXT(false, regexp.GetString(), regexp.GetStringLen() - colDiff, true, false, bFastMode, bFastMode ? &selectLogic : nullptr);
 				// To Here Jun. 6, 2005 かろと
 			}
 		}else {
 			/* 本当は元コードを使うべきなんでしょうが、無駄な処理を避けるために直接たたく。
 			** →m_nSelectXXXが-1の時に m_view.ReplaceData_CEditViewを直接たたくと動作不良となるため直接たたくのやめた。2003.05.18 かろと
 			*/
-			Command_INSTEXT(false, szREPLACEKEY, nReplaceKey, true, false, bFastMode, bFastMode ? &selectLogic : NULL);
+			Command_INSTEXT(false, szREPLACEKEY, nReplaceKey, true, false, bFastMode, bFastMode ? &selectLogic : nullptr);
 			++nReplaceNum;
 		}
 
@@ -1362,7 +1362,7 @@ void ViewCommander::Command_REPLACE_ALL()
 
 		// 次を検索
 		// 2004.05.30 Moca 現在の検索文字列を使って検索する
-		Command_SEARCH_NEXT(false, bDisplayUpdate, true, 0, NULL, bFastMode ? &selectLogic : NULL);
+		Command_SEARCH_NEXT(false, bDisplayUpdate, true, 0, NULL, bFastMode ? &selectLogic : nullptr);
 	}
 
 	if (bFastMode) {

@@ -161,7 +161,7 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 public:
 	// 取得
-	bool MyGetClipboardData(NativeW&, bool*, bool* = NULL);			// クリップボードからデータを取得
+	bool MyGetClipboardData(NativeW&, bool*, bool* = nullptr);			// クリップボードからデータを取得
 
 	// 設定
 	bool MySetClipboardData(const ACHAR*, int, bool bColumnSelect, bool = false);	// クリップボードにデータを設定
@@ -330,7 +330,7 @@ public:
 	bool IsCurrentPositionURL(const LayoutPoint& ptCaretPos, LogicRange* pUrlRange, std::wstring* pwstrURL); // カーソル位置にURLが有る場合のその範囲を調べる
 	bool CheckTripleClick(Point ptMouse);							// トリプルクリックをチェックする	// 2007.10.02 nasukoji
 	
-	bool ExecCmd(const TCHAR*, int, const TCHAR*, OutputAdapter* = NULL) ;			// 子プロセスの標準出力をリダイレクトする
+	bool ExecCmd(const TCHAR*, int, const TCHAR*, OutputAdapter* = nullptr) ;			// 子プロセスの標準出力をリダイレクトする
 	void AddToCmdArr(const TCHAR*);
 	bool ChangeCurRegexp(bool bRedrawIfChanged = true);			// 2002.01.16 hor 正規表現の検索パターンを必要に応じて更新する(ライブラリが使用できないときは false を返す)
 	void SendStatusMessage(const TCHAR* msg);					// 2002.01.26 hor 検索／置換／ブックマーク検索時の状態をステータスバーに表示する
@@ -387,7 +387,7 @@ public:
 		bool				bRedraw,
 		OpeBlk*				pOpeBlk,
 		bool				bFastMode = false,
-		const LogicRange*	psDelRangeLogicFast = NULL
+		const LogicRange*	psDelRangeLogicFast = nullptr
 	);
 	void ReplaceData_CEditView2(
 		const LogicRange&	delRange,			// 削除範囲。ロジック単位。
@@ -406,7 +406,7 @@ public:
 		int				nDelSeq,
 		int*			pnInsSeq,
 		bool			bFastMode = false,
-		const LogicRange*	psDelRangeLogicFast = NULL
+		const LogicRange*	psDelRangeLogicFast = nullptr
 	);
 	void RTrimPrevLine(void);		// 2005.10.11 ryoji 前の行にある末尾の空白を削除
 
@@ -496,7 +496,7 @@ public:
 		Point ptJumpTo,
 		bool bClose = false,
 		bool bRelFromIni = false,
-		bool* pbJumpToSelf = NULL
+		bool* pbJumpToSelf = nullptr
 	);
 
 

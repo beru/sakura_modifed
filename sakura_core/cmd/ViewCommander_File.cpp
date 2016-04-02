@@ -732,7 +732,7 @@ bool ViewCommander::Command_INSFILE(
 	Eol			eol;
 	int			nLineNum = 0;
 
-	DlgCancel*	pDlgCancel = NULL;
+	DlgCancel*	pDlgCancel = nullptr;
 	HWND		hwndCancel = NULL;
 	HWND		hwndProgress = NULL;
 	int			nOldPercent = -1;

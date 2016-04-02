@@ -91,6 +91,6 @@ int ViewCommander::Command_CUSTMENU(int nMenuIdx)
 		return 0;
 	}
 	HMENU hMenu = ::CreatePopupMenu();
-	return m_view.CreatePopUpMenuSub(hMenu, nMenuIdx, NULL);
+	return m_view.CreatePopUpMenuSub(hMenu, nMenuIdx, nullptr);
 }
 

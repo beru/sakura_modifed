@@ -55,7 +55,7 @@ bool HtmlHelpDll::InitDllImp()
 		"HtmlHelpA"
 #endif
 	);
-	return HtmlHelp != NULL; 
+	return HtmlHelp != nullptr; 
 }
 
 

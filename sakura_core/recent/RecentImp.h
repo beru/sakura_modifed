@@ -108,9 +108,9 @@ protected:
 	// 外部参照
 	DataType*	m_puUserItemData;		// アイテム配列へのポインタ
 	int*		m_pnUserItemCount;		// アイテム個数へのポインタ
-	bool*		m_pbUserItemFavorite;	// お気に入りへのポインタ (NULL許可)
+	bool*		m_pbUserItemFavorite;	// お気に入りへのポインタ (nullptr許可)
 	int			m_nArrayCount;			// 最大管理可能なアイテム数
-	int*		m_pnUserViewCount;		// 表示個数 (NULL許可)
+	int*		m_pnUserViewCount;		// 表示個数 (nullptr許可)
 };
 
 #include "RecentFile.h"

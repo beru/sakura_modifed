@@ -47,7 +47,7 @@ public:
 		m_pTypes = &editView.m_pEditDoc->m_docType.GetDocumentAttribute();
 		m_pColorInfoArr = &m_pTypes->colorInfoArr[m_nColorIdx];
 
-		m_gr = NULL;
+		m_gr = nullptr;
 	}
 	virtual ~TypeSupport() {
 		if (m_gr) {
@@ -125,7 +125,7 @@ public:
 			gr.PopTextBackColor();
 			gr.PopTextForeColor();
 			gr.PopMyFont();
-			m_gr = NULL;
+			m_gr = nullptr;
 		}
 	}
 

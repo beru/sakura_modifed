@@ -18,8 +18,8 @@
 
 DocLine::DocLine()
 	:
-	m_pPrev(NULL),
-	m_pNext(NULL)
+	m_pPrev(nullptr),
+	m_pNext(nullptr)
 {
 }
 

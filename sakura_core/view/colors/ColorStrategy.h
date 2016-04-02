@@ -92,9 +92,9 @@ struct ColorStrategyInfo {
 		:
 		view(view),
 		dispPosBegin(0, 0),
-		pStrategy(NULL),
-		pStrategyFound(NULL),
-		pStrategySelect(NULL),
+		pStrategy(nullptr),
+		pStrategyFound(nullptr),
+		pStrategySelect(nullptr),
 		colorIdxBackLine(COLORIDX_TEXT)
 	{
 		index.eColorIndex = COLORIDX_TEXT;
@@ -149,11 +149,11 @@ public:
 	// 色定義
 	virtual EColorIndexType GetStrategyColor() const = 0;
 	virtual LayoutColorInfo* GetStrategyColorInfo() const {
-		return NULL;
+		return nullptr;
 	}
 	// 色切り替え開始を検出したら、その直前までの描画を行い、さらに色設定を行う。
 	virtual void InitStrategyStatus() = 0;
-	virtual void SetStrategyColorInfo(const LayoutColorInfo* = NULL) {};
+	virtual void SetStrategyColorInfo(const LayoutColorInfo* = nullptr) {};
 	virtual bool BeginColor(const StringRef& str, int nPos) { return false; }
 	virtual bool EndColor(const StringRef& str, int nPos) { return true; }
 	virtual bool Disp() const = 0;
@@ -172,7 +172,7 @@ public:
 		if (this) {
 			return GetStrategyColorInfo();
 		}
-		return NULL;
+		return nullptr;
 	}
 
 protected:

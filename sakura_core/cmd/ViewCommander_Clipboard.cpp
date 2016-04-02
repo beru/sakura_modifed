@@ -172,7 +172,7 @@ void ViewCommander::Command_PASTE(int option)
 		((option & 0x08) == 0x08) ? false :
 		commonSetting.edit.bEnableLineModePaste;
 	
-	if (!m_view.MyGetClipboardData(memClip, &bColumnSelect, bLineSelectOption ? &bLineSelect: NULL)) {
+	if (!m_view.MyGetClipboardData(memClip, &bColumnSelect, bLineSelectOption ? &bLineSelect: nullptr)) {
 		ErrorBeep();
 		return;
 	}
@@ -757,7 +757,7 @@ void ViewCommander::Command_COPY_COLOR_HTML(bool bLineNumber)
 	LogicRange sSelectLogic;
 	sSelectLogic.Clear(-1);
 	int nBuffSize = 0;
-	const Layout* pLayoutTop = NULL;
+	const Layout* pLayoutTop = nullptr;
 	{
 		const Layout* pLayout;
 		{
@@ -1078,7 +1078,7 @@ ColorStrategy* ViewCommander::GetColorStrategyHTML(
 	// 検索色終了
 	if (*ppStrategyFound) {
 		if ((*ppStrategyFound)->EndColor(stringLine, iLogic)) {
-			*ppStrategyFound = NULL;
+			*ppStrategyFound = nullptr;
 			bChange = true;
 		}
 	}
@@ -1095,7 +1095,7 @@ ColorStrategy* ViewCommander::GetColorStrategyHTML(
 	// 色終了
 	if (*ppStrategy) {
 		if ((*ppStrategy)->EndColor(stringLine, iLogic)) {
-			*ppStrategy = NULL;
+			*ppStrategy = nullptr;
 			bChange = true;
 		}
 	}

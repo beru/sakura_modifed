@@ -126,7 +126,7 @@ private:
 public:
 	DataObject (LPCWSTR lpszText, int nTextLen, BOOL bColumnSelect ):
 		m_nFormat(0),
-		m_pData(NULL)
+		m_pData(nullptr)
 	{
 		SetText(lpszText, nTextLen, bColumnSelect);
 	}

@@ -105,7 +105,7 @@ void ShareDataLockCounter::WaitLock(HWND hwndParent, ShareDataLockCounter** ppLo
 	if (0 < GetCountIf0Lock(ppLock)) {
 		DWORD dwTime = ::GetTickCount();
 		WaitCursor waitCursor(hwndParent);
-		LockCancel* pDlg = NULL;
+		LockCancel* pDlg = nullptr;
 		HWND hwndCancel = NULL;
 		::EnableWindow(hwndParent, FALSE);
 		while (0 < GetCountIf0Lock(ppLock)) {

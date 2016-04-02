@@ -37,9 +37,9 @@ RecentTagJumpKeyword::RecentTagJumpKeyword()
 	Create(
 		GetShareData()->tagJump.aTagJumpKeywords.dataPtr(),
 		&GetShareData()->tagJump.aTagJumpKeywords._GetSizeRef(),
-		NULL,
+		nullptr,
 		MAX_TAGJUMP_KEYWORD,
-		NULL
+		nullptr
 	);
 }
 

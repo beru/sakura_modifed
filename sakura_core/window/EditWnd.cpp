@@ -208,8 +208,8 @@ EditWnd::EditWnd()
 	m_hWnd(NULL)
 	, m_toolbar(*this)
 	, m_statusBar(*this)
-	, m_pPrintPreview(NULL) //@@@ 2002.01.14 YAZAKI 印刷PreviewをPrintPreviewに独立させたことによる変更
-	, m_pDragSourceView(NULL)
+	, m_pPrintPreview(nullptr) //@@@ 2002.01.14 YAZAKI 印刷PreviewをPrintPreviewに独立させたことによる変更
+	, m_pDragSourceView(nullptr)
 	, m_nActivePaneIndex(0)
 	, m_nEditViewCount(1)
 	, m_nEditViewMaxCount(_countof(m_pEditViewArr))	// 今のところ最大値は固定
@@ -218,7 +218,7 @@ EditWnd::EditWnd()
 	, m_bIsActiveApp(false)
 	, m_pszLastCaption(NULL)
 	, m_pszMenubarMessage(new TCHAR[MENUBAR_MESSAGE_MAX_LEN])
-	, m_posSaveAry(NULL)
+	, m_posSaveAry(nullptr)
 	, m_nCurrentFocus(0)
 	, m_hAccelWine(NULL)
 	, m_hAccel(NULL)
@@ -231,25 +231,25 @@ EditWnd::EditWnd()
 
 EditWnd::~EditWnd()
 {
-	g_pcEditWnd = NULL;
+	g_pcEditWnd = nullptr;
 
 	delete m_pPrintPreview;
-	m_pPrintPreview = NULL;
+	m_pPrintPreview = nullptr;
 
 	for (int i=0; i<m_nEditViewMaxCount; ++i) {
 		delete m_pEditViewArr[i];
-		m_pEditViewArr[i] = NULL;
+		m_pEditViewArr[i] = nullptr;
 	}
-	m_pEditView = NULL;
+	m_pEditView = nullptr;
 
 	delete m_pEditViewMiniMap;
-	m_pEditViewMiniMap = NULL;
+	m_pEditViewMiniMap = nullptr;
 
 	delete m_pViewFont;
-	m_pViewFont = NULL;
+	m_pViewFont = nullptr;
 
 	delete m_pViewFontMiniMap;
-	m_pViewFontMiniMap = NULL;
+	m_pViewFontMiniMap = nullptr;
 
 	delete[] m_pszMenubarMessage;
 	delete[] m_pszLastCaption;
@@ -259,7 +259,7 @@ EditWnd::~EditWnd()
 	::DeleteObject(m_hFontCaretPosInfo);
 
 	delete m_pDropTarget;	// 2008.06.20 ryoji
-	m_pDropTarget = NULL;
+	m_pDropTarget = nullptr;
 
 	// ウィンドウ毎に作成したアクセラレータテーブルを破棄する(Wine用)
 	DeleteAccelTbl();
@@ -620,7 +620,7 @@ HWND EditWnd::Create(
 	m_pEditDoc = pEditDoc;
 
 	for (int i=0; i<_countof(m_pEditViewArr); ++i) {
-		m_pEditViewArr[i] = NULL;
+		m_pEditViewArr[i] = nullptr;
 	}
 	// [0] - [3] まで作成・初期化していたものを[0]だけ作る。ほかは分割されるまで何もしない
 	m_pEditViewArr[0] = new EditView(*this);
@@ -2107,7 +2107,7 @@ int	EditWnd::OnClose(HWND hWndActive, bool bGrepNoConfirm)
 		&& !m_pShareData->common.tabBar.bDispTabWndMultiWin
 	) {
 		int i, j;
-		EditNode* p = NULL;
+		EditNode* p = nullptr;
 		int nCount = AppNodeManager::getInstance()->GetOpenedWindowArr(&p, false);
 		if (nCount > 1) {
 			for (i=0; i<nCount; ++i) {

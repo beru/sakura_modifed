@@ -107,7 +107,7 @@ private:
 		bool		m_bAddExcept;		// 除外へ追加
 		int			m_nViewCount;		// カレントの表示数
 		FavoriteInfo():
-			m_pRecent(NULL)
+			m_pRecent(nullptr)
 			,m_pszCaption(NULL)
 			,m_nId(0)
 			,m_bHaveFavorite(false)

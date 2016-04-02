@@ -64,7 +64,7 @@ Stream::Stream(
 	bool bExceptionMode
 	)
 {
-	m_fp = NULL;
+	m_fp = nullptr;
 	m_pFileAttribute = NULL;
 	m_bExceptionMode = bExceptionMode;
 	Open(tszPath, tszMode);
@@ -73,7 +73,7 @@ Stream::Stream(
 /*
 Stream::Stream()
 {
-	m_fp = NULL;
+	m_fp = nullptr;
 	m_pFileAttribute = NULL;
 	m_bExceptionMode = false;
 }
@@ -116,7 +116,7 @@ void Stream::Close()
 	// ÉNÉçÅ[ÉY
 	if (m_fp) {
 		fclose(m_fp);
-		m_fp=NULL;
+		m_fp = nullptr;
 	}
 
 	// ëÆê´ïúå≥

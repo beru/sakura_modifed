@@ -40,7 +40,7 @@ MainToolBar::MainToolBar(EditWnd& owner)
 	m_hwndReBar(NULL),
 	m_hwndSearchBox(NULL),
 	m_hFontSearchBox(NULL),
-	m_pIcons(NULL)
+	m_pIcons(nullptr)
 {
 }
 

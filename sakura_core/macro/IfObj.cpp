@@ -267,7 +267,7 @@ IfObj::IfObj(const wchar_t* name, bool isGlobal)
 	m_isGlobal(isGlobal),
 	m_owner(0),
 	m_methods(),
-	m_typeInfo(NULL)
+	m_typeInfo(nullptr)
 { 
 };
 
@@ -378,7 +378,7 @@ void IfObj::AddMethod(
 	CIfObjMethod	Method
 )
 {
-	// this->m_typeInfoÇ™ NULLÇ≈Ç»ÇØÇÍÇŒ AddMethod()ÇÕîΩâfÇ≥ÇÍÇ»Ç¢ÅB
+	// this->m_typeInfoÇ™ nullptr Ç≈Ç»ÇØÇÍÇŒ AddMethod()ÇÕîΩâfÇ≥ÇÍÇ»Ç¢ÅB
 	m_methods.emplace_back();
 	MethodInfo* info = &m_methods[m_methods.size() - 1];
 	ZeroMemory(info, sizeof(MethodInfo));

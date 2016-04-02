@@ -128,6 +128,6 @@ MacroManagerBase* MacroFactory::Create(EditView& view, const TCHAR* ext)
 		}
 	}
 	
-	return NULL;
+	return nullptr;
 }
 

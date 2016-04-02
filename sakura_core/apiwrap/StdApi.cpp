@@ -146,7 +146,7 @@ namespace ApiWrap {
 
 		// •¶šŠÔŠu”z—ñ‚ğ¶¬
 		int nHankakuDx;
-		const int* lpDxNew = NULL;
+		const int* lpDxNew = nullptr;
 		if (lpDx) {
 			if (WCODE::IsHankaku(lpwString[0])) nHankakuDx = lpDx[0];
 			else nHankakuDx = lpDx[0] / 2;

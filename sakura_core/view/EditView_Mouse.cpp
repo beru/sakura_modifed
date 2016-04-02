@@ -155,7 +155,7 @@ void EditView::OnLBUTTONDOWN(WPARAM fwKeys, int _xPos , int _yPos)
 					m_editWnd.SetDragSourceView(this);
 					DataObject data(memCurText.GetStringPtr(), memCurText.GetStringLength(), GetSelectionInfo().IsBoxSelecting());
 					dwEffects = data.DragDrop(TRUE, dwEffectsSrc);
-					m_editWnd.SetDragSourceView(NULL);
+					m_editWnd.SetDragSourceView(nullptr);
 					if (m_pEditDoc->m_docEditor.m_opeBuf.GetCurrentPointer() == nOpe) {	// ドキュメント変更なしか？	// 2007.12.09 ryoji
 						m_editWnd.SetActivePane(m_nMyIndex);
 						if ((dwEffectsSrc & dwEffects) == DROPEFFECT_MOVE) {
@@ -1981,7 +1981,7 @@ STDMETHODIMP EditView::Drop(LPDATAOBJECT pDataObject, DWORD dwKeyState, POINTL p
 			}
 		}
 
-		GetCommander().Command_INSTEXT(true, memBuf.GetStringPtr(), memBuf.GetStringLength(), FALSE);
+		GetCommander().Command_INSTEXT(true, memBuf.GetStringPtr(), memBuf.GetStringLength(), false);
 
 		// 挿入前のキャレット位置から挿入後のキャレット位置までを選択範囲にする
 		LayoutPoint ptSelectFrom;

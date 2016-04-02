@@ -2315,7 +2315,7 @@ void EditView::CopySelectedAllLines(
 bool EditView::MyGetClipboardData(
 	NativeW& memBuf,
 	bool* pbColumnSelect,
-	bool* pbLineSelect /*= NULL*/
+	bool* pbLineSelect /*= nullptr*/
 	)
 {
 	if (pbColumnSelect) {

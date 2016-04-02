@@ -67,7 +67,7 @@ MenuDrawer::MenuDrawer()
 	m_nMenuHeight = 0;
 	m_nMenuFontHeight = 0;
 	m_hFontMenu = NULL;
-	m_pIcons = NULL;
+	m_pIcons = nullptr;
 	m_hCompBitmap = NULL;
 	m_hCompDC = NULL;
 

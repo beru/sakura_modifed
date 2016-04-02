@@ -143,11 +143,11 @@ void DocLineMgr::DeleteLine(DocLine* pDocLineDel)
 const DocLine* DocLineMgr::GetLine(LogicInt nLine) const
 {
 	if (m_nLines == LogicInt(0)) {
-		return NULL;
+		return nullptr;
 	}
 	// 2004.03.28 Moca nLineが負の場合のチェックを追加
 	if (nLine < LogicInt(0) || nLine >= m_nLines) {
-		return NULL;
+		return nullptr;
 	}
 	LogicInt nCounter;
 	DocLine* pDocLine;
@@ -158,7 +158,7 @@ const DocLine* DocLineMgr::GetLine(LogicInt nLine) const
 	  || m_nLines - nLine < nPrevToLineNumDiff
 	) {
 		if (!m_pCodePrevRefer) {
-			MY_RUNNINGTIMER(runningTimer, "DocLineMgr::GetLine() 	m_pCodePrevRefer == NULL");
+			MY_RUNNINGTIMER(runningTimer, "DocLineMgr::GetLine() 	m_pCodePrevRefer == nullptr");
 		}
 
 		if (nLine < (m_nLines / 2)) {
@@ -222,7 +222,7 @@ const DocLine* DocLineMgr::GetLine(LogicInt nLine) const
 			}
 		}
 	}
-	return NULL;
+	return nullptr;
 }
 
 
@@ -232,12 +232,12 @@ const DocLine* DocLineMgr::GetLine(LogicInt nLine) const
 
 void DocLineMgr::_Init()
 {
-	m_pDocLineTop = NULL;
-	m_pDocLineBot = NULL;
+	m_pDocLineTop = nullptr;
+	m_pDocLineBot = nullptr;
 	m_nLines = LogicInt(0);
 	m_nPrevReferLine = LogicInt(0);
-	m_pCodePrevRefer = NULL;
-	m_pDocLineCurrent = NULL;
+	m_pCodePrevRefer = nullptr;
+	m_pDocLineCurrent = nullptr;
 	DiffManager::getInstance().SetDiffUse(false);	// DIFF使用中	//@@@ 2002.05.25 MIK     //##後でCDocListener::OnClear (OnAfterClose) を作成し、そこに移動
 }
 
@@ -254,12 +254,12 @@ void DocLineMgr::_PushBottom(DocLine* pDocLineNew)
 		m_pDocLineBot->m_pNext = pDocLineNew;
 	}
 	m_pDocLineBot = pDocLineNew;
-	pDocLineNew->m_pNext = NULL;
+	pDocLineNew->m_pNext = nullptr;
 
 	++m_nLines;
 }
 
-// pPosの直前に挿入。pPosにNULLを指定した場合は、最下部に追加。
+// pPosの直前に挿入。pPosに nullptr を指定した場合は、最下部に追加。
 void DocLineMgr::_InsertBeforePos(DocLine* pDocLineNew, DocLine* pPos)
 {
 	// New.Nextを設定
@@ -285,7 +285,7 @@ void DocLineMgr::_InsertBeforePos(DocLine* pDocLineNew, DocLine* pPos)
 	++m_nLines;
 }
 
-// pPosの直後に挿入。pPosにNULLを指定した場合は、先頭に追加。
+// pPosの直後に挿入。pPosに nullptr を指定した場合は、先頭に追加。
 void DocLineMgr::_InsertAfterPos(DocLine* pDocLineNew, DocLine* pPos)
 {
 	// New.Prevを設定
@@ -329,17 +329,17 @@ void DocLineMgr::DUMP()
 	MYTRACE(_T("------------------------\n"));
 	
 	DocLine* pDocLineNext;
-	DocLine* pDocLineEnd = NULL;
+	DocLine* pDocLineEnd = nullptr;
 	
 	// 正当性を調べる
 	bool bIncludeCurrent = false;
 	bool bIncludePrevRefer = false;
 	LogicInt nNum = LogicInt(0);
 	if (m_pDocLineTop->m_pPrev) {
-		MYTRACE(_T("error: m_pDocLineTop->m_pPrev != NULL\n"));
+		MYTRACE(_T("error: m_pDocLineTop->m_pPrev != nullptr\n"));
 	}
 	if (m_pDocLineBot->m_pNext) {
-		MYTRACE(_T("error: m_pDocLineBot->pNext != NULL\n"));
+		MYTRACE(_T("error: m_pDocLineBot->pNext != nullptr\n"));
 	}
 	DocLine* pDocLine = m_pDocLineTop;
 	while (pDocLine) {

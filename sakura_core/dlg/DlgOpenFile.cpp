@@ -126,7 +126,7 @@ public:
 
 	DlgOpenFileData()
 		:
-		m_pDlgOpenFile(NULL),
+		m_pDlgOpenFile(nullptr),
 		m_nHelpTopicID(0)
 	{}
 };

@@ -33,7 +33,7 @@ Process::Process(
 	m_hInstance(hInstance),
 	m_hWnd(0)
 #ifdef USE_CRASHDUMP
-	, m_pfnMiniDumpWriteDump(NULL)
+	, m_pfnMiniDumpWriteDump(nullptr)
 #endif
 {
 	m_pShareData = &ShareData::getInstance();
@@ -72,7 +72,7 @@ bool Process::Run()
 	if (InitializeProcess()) {
 #ifdef USE_CRASHDUMP
 		HMODULE hDllDbgHelp = LoadLibraryExedir(_T("dbghelp.dll"));
-		m_pfnMiniDumpWriteDump = NULL;
+		m_pfnMiniDumpWriteDump = nullptr;
 		if (hDllDbgHelp) {
 			*(FARPROC*)&m_pfnMiniDumpWriteDump = ::GetProcAddress(hDllDbgHelp, "MiniDumpWriteDump");
 		}
@@ -88,7 +88,7 @@ bool Process::Run()
 
 		if (hDllDbgHelp) {
 			::FreeLibrary(hDllDbgHelp);
-			m_pfnMiniDumpWriteDump = NULL;
+			m_pfnMiniDumpWriteDump = nullptr;
 		}
 #endif
 		return true;

@@ -396,7 +396,7 @@ void TextDrawer::DispLineNumber(
 	//                     nColorIndex‚ðŒˆ’è                       //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	EColorIndexType nColorIndex = COLORIDX_GYOU;	// s”Ô†
-	const DocLine*	pDocLine = NULL;
+	const DocLine*	pDocLine = nullptr;
 	bool bGyouMod = false;
 	if (pLayout) {
 		pDocLine = pLayout->GetDocLineRef();

@@ -903,7 +903,7 @@ bool EditView::DrawLogicLine(
 		const Layout* pLayout = csInfo.pDispPos->GetLayoutRef();
 		if (bSkipBeforeLayout) {
 			EColorIndexType eRet = COLORIDX_TEXT;
-			const LayoutColorInfo* colorInfo = NULL;
+			const LayoutColorInfo* colorInfo = nullptr;
 			if (pLayout) {
 				eRet = pLayout->GetColorTypePrev(); // COLORIDX_TEXT‚Ì‚Í‚¸
 				colorInfo = pLayout->GetColorInfo();

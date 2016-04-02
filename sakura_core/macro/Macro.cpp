@@ -61,8 +61,8 @@
 Macro::Macro(EFunctionCode nFuncID)
 {
 	m_nFuncID = nFuncID;
-	m_pNext = NULL;
-	m_pParamTop = m_pParamBot = NULL;
+	m_pNext = nullptr;
+	m_pParamTop = m_pParamBot = nullptr;
 }
 
 Macro::~Macro(void)
@@ -79,8 +79,8 @@ void Macro::ClearMacroParam()
 		p = p->pNext;
 		delete del_p;
 	}
-	m_pParamTop = NULL;
-	m_pParamBot = NULL;
+	m_pParamTop = nullptr;
+	m_pParamBot = nullptr;
 	return;
 }
 
@@ -228,7 +228,7 @@ void Macro::AddLParam(
 			DlgGrepReplace* pDlgGrepRep;
 			if (m_nFuncID == F_GREP) {
 				pDlgGrep = &editView.m_editWnd.m_dlgGrep;
-				pDlgGrepRep = NULL;
+				pDlgGrepRep = nullptr;
 				AddStringParam( pDlgGrep->m_strText.c_str() );
 			}else {
 				pDlgGrep = pDlgGrepRep = &editView.m_editWnd.m_dlgGrepReplace;

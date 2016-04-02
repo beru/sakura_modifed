@@ -29,15 +29,15 @@ int SearchStringPattern::GetMapIndex(wchar_t c)
 SearchStringPattern::SearchStringPattern()
 	: 
 	m_pszKey(NULL),
-	m_pSearchOption(NULL),
-	m_pRegexp(NULL),
+	m_pSearchOption(nullptr),
+	m_pRegexp(nullptr),
 	m_pszCaseKeyRef(NULL),
 	m_pszPatternCase(NULL),
 #ifdef SEARCH_STRING_KMP
 	m_pnNextPossArr(NULL),
 #endif
 #ifdef SEARCH_STRING_SUNDAY_QUICK
-	m_pnUseCharSkipArr(NULL)
+	m_pnUseCharSkipArr(nullptr)
 #endif
 {
 }
@@ -51,15 +51,15 @@ SearchStringPattern::SearchStringPattern(
 	)
 	:
 	m_pszKey(NULL),
-	m_pSearchOption(NULL),
-	m_pRegexp(NULL),
+	m_pSearchOption(nullptr),
+	m_pRegexp(nullptr),
 	m_pszCaseKeyRef(NULL),
 	m_pszPatternCase(NULL),
 #ifdef SEARCH_STRING_KMP
 	m_pnNextPossArr(NULL),
 #endif
 #ifdef SEARCH_STRING_SUNDAY_QUICK
-	m_pnUseCharSkipArr(NULL)
+	m_pnUseCharSkipArr(nullptr)
 #endif
 {
 	SetPattern(hwnd, pszPattern, nPatternLen, searchOption, pRegexp);
@@ -73,8 +73,8 @@ SearchStringPattern::~SearchStringPattern()
 void SearchStringPattern::Reset() {
 	m_pszKey = NULL;
 	m_pszCaseKeyRef = NULL;
-	m_pSearchOption = NULL;
-	m_pRegexp = NULL;
+	m_pSearchOption = nullptr;
+	m_pRegexp = nullptr;
 
 	delete[] m_pszPatternCase;
 	m_pszPatternCase = NULL;
@@ -84,7 +84,7 @@ void SearchStringPattern::Reset() {
 #endif
 #ifdef SEARCH_STRING_SUNDAY_QUICK
 	delete[] m_pnUseCharSkipArr;
-	m_pnUseCharSkipArr = NULL;
+	m_pnUseCharSkipArr = nullptr;
 #endif
 }
 
@@ -609,7 +609,7 @@ int SearchAgent::SearchWord(
 			while (pDocLine) {
 				if (PrevOrNextWord(nLinePos, nNextWordFrom, &nWork, true, false)) {
 					nNextWordFrom = nWork;
-					if (WhereCurrentWord(nLinePos, nNextWordFrom, &nNextWordFrom2, &nNextWordTo2 , NULL, NULL)) {
+					if (WhereCurrentWord(nLinePos, nNextWordFrom, &nNextWordFrom2, &nNextWordTo2 , nullptr, nullptr)) {
 						size_t nSize = searchWords.size();
 						for (size_t iSW=0; iSW<nSize; ++iSW) {
 							if (searchWords[iSW].second == nNextWordTo2 - nNextWordFrom2) {
@@ -800,7 +800,7 @@ void SearchAgent::ReplaceData(DocLineReplaceArg* pArg)
 	pArg->ptNewPos = pArg->delRange.GetFrom();
 
 	// 大量のデータを操作するとき
-	DlgCancel*	pDlgCancel = NULL;
+	DlgCancel*	pDlgCancel = nullptr;
 	class DlgCancelCloser {
 		DlgCancel*& m_pDlg;
 	public:
@@ -913,7 +913,7 @@ void SearchAgent::ReplaceData(DocLineReplaceArg* pArg)
 				delLine.nSeq = ModifyVisitor().GetLineModifiedSeq(pDocLine);
 			}
 			m_docLineMgr.DeleteLine(pDocLine);
-			pDocLine = NULL;
+			pDocLine = nullptr;
 		// 次の行と連結するような削除
 		}else if (nWorkPos + nWorkLen >= nLineLen) { // 2002/2/10 aroka CMemory変更
 			if (pArg->pMemDeleted) {
@@ -990,7 +990,7 @@ void SearchAgent::ReplaceData(DocLineReplaceArg* pArg)
 
 				// 次の行 行オブジェクトの削除
 				m_docLineMgr.DeleteLine(pDocLineNext);
-				pDocLineNext = NULL;
+				pDocLineNext = nullptr;
 
 				// 削除した行の総数
 				++(pArg->nDeletedLineNum);

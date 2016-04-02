@@ -38,9 +38,9 @@ RecentCurDir::RecentCurDir()
 	Create(
 		GetShareData()->history.m_aCurDirs.dataPtr(),
 		&GetShareData()->history.m_aCurDirs._GetSizeRef(),
-		NULL,
+		nullptr,
 		MAX_CMDARR,
-		NULL
+		nullptr
 	);
 }
 

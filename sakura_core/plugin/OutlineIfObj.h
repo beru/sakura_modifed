@@ -48,11 +48,11 @@ class OutlineIfObj : public WSHIfObj {
 
 	// コンストラクタ
 public:
-	OutlineIfObj(FuncInfoArr& cFuncInfoArr)
+	OutlineIfObj(FuncInfoArr& funcInfoArr)
 		:
 		WSHIfObj(L"Outline", false),
 		m_nListType(OutlineType::PlugIn),
-		m_cFuncInfoArr(cFuncInfoArr)
+		m_funcInfoArr(funcInfoArr)
 	{
 	}
 
@@ -85,7 +85,7 @@ public:
 		const int argSize
 		)
 	{
-		switch (LOWORD(index)) {
+		switch (index) {
 		case F_OL_ADDFUNCINFO:			// アウトライン解析に追加する
 		case F_OL_ADDFUNCINFO2:			// アウトライン解析に追加する（深さ指定）
 		case F_OL_ADDFUNCINFO3:			//アウトライン解析に追加する（ファイル名）
@@ -104,8 +104,8 @@ public:
 					view.GetDocument().m_layoutMgr.LogicToLayout( ptLogic, &ptLayout );
 				}
 				int nParam = _wtoi(arguments[3]);
-				if (LOWORD(index) == F_OL_ADDFUNCINFO) {
-					m_cFuncInfoArr.AppendData(
+				if (index == F_OL_ADDFUNCINFO) {
+					m_funcInfoArr.AppendData(
 						ptLogic.GetY() + 1,
 						ptLogic.GetX() + 1, 
 						ptLayout.GetY() + 1,
@@ -114,10 +114,10 @@ public:
 						NULL,
 						nParam
 					);
-				}else if (LOWORD(index) == F_OL_ADDFUNCINFO2) {
+				}else if (index == F_OL_ADDFUNCINFO2) {
 					int nDepth = nParam & FUNCINFO_INFOMASK;
 					nParam -= nDepth;
-					m_cFuncInfoArr.AppendData(
+					m_funcInfoArr.AppendData(
 						ptLogic.GetY() + 1,
 						ptLogic.GetX() + 1,
 						ptLayout.GetY() + 1,
@@ -127,9 +127,9 @@ public:
 						nParam,
 						nDepth
 					);
-				}else if (LOWORD(index) == F_OL_ADDFUNCINFO3) {
+				}else if (index == F_OL_ADDFUNCINFO3) {
 					if (argSize < 5 || arguments[4] == NULL) { return false; }
-					m_cFuncInfoArr.AppendData(
+					m_funcInfoArr.AppendData(
 						ptLogic.GetY() + 1,
 						ptLogic.GetX() + 1,
 						ptLayout.GetY() + 1,
@@ -138,11 +138,11 @@ public:
 						arguments[4],
 						nParam
 					);
-				}else if (LOWORD(index) == F_OL_ADDFUNCINFO4) {
+				}else if (index == F_OL_ADDFUNCINFO4) {
 					if (argSize < 5 || arguments[4] == NULL) { return false; }
 					int nDepth = nParam & FUNCINFO_INFOMASK;
 					nParam -= nDepth;
-					m_cFuncInfoArr.AppendData(
+					m_funcInfoArr.AppendData(
 						ptLogic.GetY() + 1,
 						ptLogic.GetX() + 1,
 						ptLayout.GetY() + 1,
@@ -170,7 +170,7 @@ public:
 			}
 			{
 				std::wstring sLabel = arguments[1];
-				m_cFuncInfoArr.SetAppendText(_wtol(arguments[0]), sLabel, true);
+				m_funcInfoArr.SetAppendText(_wtol(arguments[0]), sLabel, true);
 			}
 			break;
 		default:
@@ -184,7 +184,7 @@ public:
 	tstring m_sOutlineTitle;
 	OutlineType m_nListType;
 private:
-	FuncInfoArr& m_cFuncInfoArr;
+	FuncInfoArr& m_funcInfoArr;
 	static MacroFuncInfo m_macroFuncInfoCommandArr[];	// コマンド情報(戻り値なし)
 	static MacroFuncInfo m_macroFuncInfoArr[];	// 関数情報(戻り値あり)
 };
@@ -195,21 +195,21 @@ MacroFuncInfoEx g_OutlineIfObj_FuncInfoEx_s = {5, 5, g_OutlineIfObj_MacroArgEx_s
 // コマンド情報
 MacroFuncInfo OutlineIfObj::m_macroFuncInfoCommandArr[] = {
 	// ID									関数名							引数										戻り値の型	m_pszData
-	{EFunctionCode(F_OL_ADDFUNCINFO),		LTEXT("AddFuncInfo"),			{VT_I4, VT_I4, VT_BSTR, VT_I4},				VT_EMPTY,	NULL }, // アウトライン解析に追加する
-	{EFunctionCode(F_OL_ADDFUNCINFO2),		LTEXT("AddFuncInfo2"),			{VT_I4, VT_I4, VT_BSTR, VT_I4},				VT_EMPTY,	NULL }, // アウトライン解析に追加する（深さ指定）
-	{EFunctionCode(F_OL_SETTITLE),			LTEXT("SetTitle"),				{VT_BSTR, VT_EMPTY, VT_EMPTY, VT_EMPTY},	VT_EMPTY,	NULL },	// アウトラインダイアログタイトルを指定
-	{EFunctionCode(F_OL_SETLISTTYPE),		LTEXT("SetListType"),			{VT_I4, VT_EMPTY, VT_EMPTY, VT_EMPTY},		VT_EMPTY,	NULL }, // アウトラインリスト種別を指定
-	{EFunctionCode(F_OL_SETLABEL),			LTEXT("SetLabel"),				{VT_I4, VT_BSTR, VT_EMPTY, VT_EMPTY},		VT_EMPTY,	NULL }, // ラベル文字列を指定
+	{EFunctionCode(F_OL_ADDFUNCINFO),		LTEXT("AddFuncInfo"),			{VT_I4, VT_I4, VT_BSTR, VT_I4},				VT_EMPTY,	nullptr }, // アウトライン解析に追加する
+	{EFunctionCode(F_OL_ADDFUNCINFO2),		LTEXT("AddFuncInfo2"),			{VT_I4, VT_I4, VT_BSTR, VT_I4},				VT_EMPTY,	nullptr }, // アウトライン解析に追加する（深さ指定）
+	{EFunctionCode(F_OL_SETTITLE),			LTEXT("SetTitle"),				{VT_BSTR, VT_EMPTY, VT_EMPTY, VT_EMPTY},	VT_EMPTY,	nullptr },	// アウトラインダイアログタイトルを指定
+	{EFunctionCode(F_OL_SETLISTTYPE),		LTEXT("SetListType"),			{VT_I4, VT_EMPTY, VT_EMPTY, VT_EMPTY},		VT_EMPTY,	nullptr }, // アウトラインリスト種別を指定
+	{EFunctionCode(F_OL_SETLABEL),			LTEXT("SetLabel"),				{VT_I4, VT_BSTR, VT_EMPTY, VT_EMPTY},		VT_EMPTY,	nullptr }, // ラベル文字列を指定
 	{EFunctionCode(F_OL_ADDFUNCINFO3),		LTEXT("AddFuncInfo3"),			{VT_I4, VT_I4, VT_BSTR, VT_I4},				VT_EMPTY,	&g_OutlineIfObj_FuncInfoEx_s }, //アウトライン解析に追加する（ファイル名）
 	{EFunctionCode(F_OL_ADDFUNCINFO4),		LTEXT("AddFuncInfo4"),			{VT_I4, VT_I4, VT_BSTR, VT_I4},				VT_EMPTY,	&g_OutlineIfObj_FuncInfoEx_s }, //アウトライン解析に追加する（ファイル名、深さ指定）
 	// 終端
-	{F_INVALID,	NULL, {VT_EMPTY, VT_EMPTY, VT_EMPTY, VT_EMPTY},	VT_EMPTY,	NULL}
+	{F_INVALID,	NULL, {VT_EMPTY, VT_EMPTY, VT_EMPTY, VT_EMPTY},	VT_EMPTY,	nullptr}
 };
 
 // 関数情報
 MacroFuncInfo OutlineIfObj::m_macroFuncInfoArr[] = {
 	//ID									関数名							引数										戻り値の型	m_pszData
 	//	終端
-	{F_INVALID,	NULL, {VT_EMPTY, VT_EMPTY, VT_EMPTY, VT_EMPTY},	VT_EMPTY,	NULL}
+	{F_INVALID,	NULL, {VT_EMPTY, VT_EMPTY, VT_EMPTY, VT_EMPTY},	VT_EMPTY,	nullptr}
 };
 

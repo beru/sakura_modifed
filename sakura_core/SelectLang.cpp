@@ -112,7 +112,7 @@ HINSTANCE SelectLang::InitializeLanguageEnvironment(void)
 		// 読み込み済みのDLLを解放する
 		::FreeLibrary(m_psLangInfo->hInstance);
 		m_psLangInfo->hInstance = NULL;
-		m_psLangInfo = NULL;
+		m_psLangInfo = nullptr;
 	}
 
 	// カレントディレクトリを保存。関数から抜けるときに自動でカレントディレクトリは復元される。

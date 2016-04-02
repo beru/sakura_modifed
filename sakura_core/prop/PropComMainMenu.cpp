@@ -332,7 +332,7 @@ INT_PTR PropMainMenu::DispatchEvent(
 
 				// 編集時のメッセージ処理を戻す
 				SetWindowLongPtr(TreeView_GetEditControl(hwndTreeRes), GWLP_WNDPROC, (LONG_PTR)m_wpEdit);
-				m_wpEdit = NULL;
+				m_wpEdit = nullptr;
 			}
 			return TRUE;
 		case TVN_DELETEITEM:

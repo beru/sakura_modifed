@@ -390,7 +390,7 @@ EEncodingTrait CodePage::GetEncodingTrait(int charcodeEx)
 	}
 }
 
-volatile CodePage::CodePageList* s_list = NULL;
+volatile CodePage::CodePageList* s_list = nullptr;
 
 struct sortByCodePage{
 	bool operator() (const std::pair<int, std::wstring>& left, const std::pair<int, std::wstring>& right) const {
@@ -411,7 +411,7 @@ CodePage::CodePageList& CodePage::GetCodePageList()
 	if (!::EnumSystemCodePages(reinterpret_cast<CODEPAGE_ENUMPROC>(CallBackEnumCodePages), CP_INSTALLED)) {
 		return result;
 	}
-	s_list = NULL;
+	s_list = nullptr;
 
 	// ñºëOÇéÊìæ
 	// GetCPInfoEx 98, 2000à»è„

@@ -37,9 +37,9 @@ RecentReplace::RecentReplace()
 	Create(
 		GetShareData()->searchKeywords.replaceKeys.dataPtr(),
 		&GetShareData()->searchKeywords.replaceKeys._GetSizeRef(),
-		NULL,
+		nullptr,
 		MAX_REPLACEKEY,
-		NULL
+		nullptr
 	);
 }
 

@@ -22,7 +22,7 @@
 FuncInfoArr::FuncInfoArr()
 {
 	m_nFuncInfoArrNum = 0;		// 配列要素数
-	m_ppcFuncInfoArr = NULL;	// 配列
+	m_ppcFuncInfoArr = nullptr;	// 配列
 	m_nAppendTextLenMax = 0;
 	return;
 }
@@ -40,11 +40,11 @@ void FuncInfoArr::Empty(void)
 	if (m_nFuncInfoArrNum > 0 && m_ppcFuncInfoArr) {
 		for (int i=0; i<m_nFuncInfoArrNum; ++i) {
 			delete m_ppcFuncInfoArr[i];
-			m_ppcFuncInfoArr[i] = NULL;
+			m_ppcFuncInfoArr[i] = nullptr;
 		}
 		m_nFuncInfoArrNum = 0;
 		free(m_ppcFuncInfoArr);
-		m_ppcFuncInfoArr = NULL;
+		m_ppcFuncInfoArr = nullptr;
 	}
 	m_AppendTextArr.clear();
 	m_nAppendTextLenMax = 0;

@@ -519,7 +519,7 @@ void ViewCommander::Command_UNINDENT(wchar_t wcChar)
 			m_view.DeleteData2(
 				LayoutPoint(LayoutInt(0), i),
 				nDelLen,	// 2001.12.03 hor
-				NULL
+				nullptr
 			);
 			if (nLineCountPrev != layoutMgr.GetLineCount()) {
 				// 行数が変化した!!
@@ -792,12 +792,12 @@ void ViewCommander::Command_SORT(bool bAsc)	// bAsc:true=昇順, false=降順
 	layoutMgr.LogicToLayout(selectOld, &selectOld_Layout);
 	m_view.ReplaceData_CEditView3(
 		selectOld_Layout,
-		NULL,
+		nullptr,
 		&repData,
 		false,
-		m_view.m_bDoing_UndoRedo ? NULL : GetOpeBlk(),
+		m_view.m_bDoing_UndoRedo ? nullptr : GetOpeBlk(),
 		opeSeq,
-		NULL
+		nullptr
 	);
 
 	// 選択エリアの復元
@@ -921,12 +921,12 @@ void ViewCommander::Command_MERGE(void)
 		}
 		m_view.ReplaceData_CEditView3(
 			selectOld_Layout,
-			NULL,
+			nullptr,
 			&repData,
 			false,
-			m_view.m_bDoing_UndoRedo ? NULL : GetOpeBlk(),
+			m_view.m_bDoing_UndoRedo ? nullptr : GetOpeBlk(),
 			opeSeq,
-			NULL
+			nullptr
 		);
 	}else {
 		// 2010.08.23 未変更なら変更しない

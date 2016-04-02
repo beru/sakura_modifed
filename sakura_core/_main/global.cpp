@@ -20,7 +20,7 @@
 #include "NormalProcess.h"
 
 // 2007.10.02 kobake EditWndのインスタンスへのポインタをここに保存しておく
-EditWnd* g_pcEditWnd = NULL;
+EditWnd* g_pcEditWnd = nullptr;
 
 
 // 選択領域描画用パラメータ

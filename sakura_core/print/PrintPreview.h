@@ -124,8 +124,8 @@ protected:
 		int				nLineStart,
 		int				nLineLen,
 		LayoutInt		nIndent,	// 折り返しインデント桁数 // 2006.08.14 Moca
-		const Layout*	pLayout = NULL,	// 色付用Layout
-		ColorStrategy*	pStrategyStart = NULL
+		const Layout*	pLayout = nullptr,	// 色付用Layout
+		ColorStrategy*	pStrategyStart = nullptr
 	);
 
 	// 印刷／プレビュー ブロック描画

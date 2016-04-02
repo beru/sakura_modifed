@@ -37,7 +37,7 @@ DocEditor::DocEditor(EditDoc& doc)
 	:
 	m_doc(doc),
 	m_newLineCode(EolType::CRLF),	// New Line Type
-	m_pOpeBlk(NULL),
+	m_pOpeBlk(nullptr),
 	m_bInsMode(true),			// Oct. 2, 2005 genta
 	m_bIsDocModified(false)	// 変更フラグ // Jan. 22, 2002 genta 型変更
 {

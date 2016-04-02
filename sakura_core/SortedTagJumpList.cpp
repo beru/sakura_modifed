@@ -36,7 +36,7 @@
 */
 SortedTagJumpList::SortedTagJumpList(int max)
 	:
-	m_pTagjump(NULL),
+	m_pTagjump(nullptr),
 	m_nCount(0),
 	m_bOverflow(false),
 	m_capacity(max)
@@ -75,7 +75,7 @@ void SortedTagJumpList::Empty(void)
 		Free(p);
 		p = next;
 	}
-	m_pTagjump = NULL;
+	m_pTagjump = nullptr;
 	m_nCount = 0;
 	m_bOverflow = false;
 	m_baseDirArr.clear();
@@ -135,7 +135,7 @@ bool SortedTagJumpList::AddParamA(
 	item->type     = to_tchar(typeStr)[0];
 	item->note     = _tcsdup(to_tchar(note));
 	item->depth    = depth;
-	item->next     = NULL;
+	item->next     = nullptr;
 	item->baseDirId = baseDirId;
 
 	// 文字列長ガード
@@ -144,7 +144,7 @@ bool SortedTagJumpList::AddParamA(
 	if (_tcslen(item->note		) >= MAX_TAG_STRING_LENGTH) item->note[    MAX_TAG_STRING_LENGTH-1] = 0;
 
 	// アイテムをリストの適当な位置に追加する。
-	prev = NULL;
+	prev = nullptr;
 	for (p=m_pTagjump; p; p=p->next) {
 		if (_tcscmp(p->keyword, item->keyword) > 0) {
 			break;
@@ -158,12 +158,12 @@ bool SortedTagJumpList::AddParamA(
 
 	// 最大数を超えたら最後のアイテムを削除する。
 	if (m_nCount > m_capacity) {
-		prev = NULL;
+		prev = nullptr;
 		for (p=m_pTagjump; p->next; p=p->next) {
 			prev = p;
 		}
-		if (prev) prev->next = NULL;
-		else      m_pTagjump = NULL;
+		if (prev) prev->next = nullptr;
+		else      m_pTagjump = nullptr;
 		Free(p);
 		m_nCount--;
 		m_bOverflow = true;
@@ -239,6 +239,6 @@ SortedTagJumpList::TagJumpInfo* SortedTagJumpList::GetPtr(int index)
 		}
 		++i;
 	}
-	return NULL;
+	return nullptr;
 }
 

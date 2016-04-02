@@ -38,12 +38,12 @@ public:
 	WSHPlug(Plugin& plugin, PlugId id, wstring sJack, wstring sHandler, wstring sLabel) :
 		Plug(plugin, id, sJack, sHandler, sLabel)
 	{
-		m_Wsh = NULL;
+		m_Wsh = nullptr;
 	}
 	virtual ~WSHPlug() {
 		if (m_Wsh) {
 			delete m_Wsh;
-			m_Wsh = NULL;
+			m_Wsh = nullptr;
 		}
 	}
 	WSHMacroManager* m_Wsh;

@@ -18,7 +18,7 @@ int DebugMonitor_Output(const wchar_t* szInstanceId, const wchar_t* szText)
 	Load();
 	if (!hDll) return -1;
 
-	static FN_DebugMonitor_Output f = NULL;
+	static FN_DebugMonitor_Output f = nullptr;
 	if (!f) {
 		f = (FN_DebugMonitor_Output)GetProcAddress(hDll, "DebugMonitor_Output");
 	}

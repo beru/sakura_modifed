@@ -29,7 +29,7 @@ void LayoutMgr::ReplaceData_CLayoutMgr(
 
 	// 置換先頭位置のレイアウト情報
 	EColorIndexType	nCurrentLineType = COLORIDX_DEFAULT;
-	LayoutColorInfo* colorInfo = NULL;
+	LayoutColorInfo* colorInfo = nullptr;
 	LayoutInt nLineWork = pArg->delRange.GetFrom().GetY2();
 
 	Layout* pLayoutWork = SearchLineByLayoutY(pArg->delRange.GetFrom().GetY2());

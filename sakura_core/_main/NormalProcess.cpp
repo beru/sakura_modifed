@@ -43,7 +43,7 @@
 NormalProcess::NormalProcess(HINSTANCE hInstance, LPCTSTR lpCmdLine)
 	:
 	Process(hInstance, lpCmdLine),
-	m_pEditApp(NULL)
+	m_pEditApp(nullptr)
 {
 }
 

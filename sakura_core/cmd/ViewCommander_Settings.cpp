@@ -453,7 +453,7 @@ void ViewCommander::Command_TEXTWRAPMETHOD(TextWrappingMethod nWrapMethod)
 	// 2009.08.28 nasukoji	「折り返さない」ならテキスト最大幅を算出、それ以外は変数をクリア
 	if (doc.m_nTextWrapMethodCur == TextWrappingMethod::NoWrapping) {
 		doc.m_layoutMgr.CalculateTextWidth();		// テキスト最大幅を算出する
-		GetEditWindow().RedrawAllViews(NULL);		// Scroll Barの更新が必要なので再表示を実行する
+		GetEditWindow().RedrawAllViews(nullptr);	// Scroll Barの更新が必要なので再表示を実行する
 	}else {
 		doc.m_layoutMgr.ClearLayoutLineWidth();		// 各行のレイアウト行長の記憶をクリアする
 	}

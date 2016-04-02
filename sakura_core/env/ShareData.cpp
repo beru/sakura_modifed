@@ -55,8 +55,8 @@ const unsigned int uShareDataVersion = N_SHAREDATA_VERSION;
 ShareData::ShareData()
 {
 	m_hFileMap   = NULL;
-	m_pShareData = NULL;
-	m_pvTypeSettings = NULL;
+	m_pShareData = nullptr;
+	m_pvTypeSettings = nullptr;
 }
 
 /*!
@@ -67,9 +67,9 @@ ShareData::~ShareData()
 {
 	if (m_pShareData) {
 		// プロセスのアドレス空間から､ すでにマップされているファイル ビューをアンマップします
-		SetDllShareData(NULL);
+		SetDllShareData(nullptr);
 		::UnmapViewOfFile(m_pShareData);
-		m_pShareData = NULL;
+		m_pShareData = nullptr;
 	}
 	if (m_hFileMap) {
 		CloseHandle(m_hFileMap);
@@ -77,10 +77,10 @@ ShareData::~ShareData()
 	if (m_pvTypeSettings) {
 		for (int i=0; i<(int)m_pvTypeSettings->size(); ++i) {
 			delete (*m_pvTypeSettings)[i];
-			(*m_pvTypeSettings)[i] = NULL;
+			(*m_pvTypeSettings)[i] = nullptr;
 		}
 		delete m_pvTypeSettings;
-		m_pvTypeSettings = NULL;
+		m_pvTypeSettings = nullptr;
 	}
 }
 
@@ -734,9 +734,9 @@ bool ShareData::InitShareData()
 		) {
 			// この共有データ領域は使えない．
 			// ハンドルを解放する
-			SetDllShareData(NULL);
+			SetDllShareData(nullptr);
 			::UnmapViewOfFile(m_pShareData);
-			m_pShareData = NULL;
+			m_pShareData = nullptr;
 			return false;
 		}
 		// To Here Oct. 27, 2000 genta

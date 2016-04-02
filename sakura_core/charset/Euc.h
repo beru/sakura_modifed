@@ -58,7 +58,7 @@ protected:
 
 	‚‘¬‰»‚Ì‚½‚ßAƒCƒ“ƒ‰ƒCƒ“‰»
 */
-inline int Euc::_EucjpToUni_char(const unsigned char* pSrc, unsigned short* pDst, const ECharSet eCharset, bool* pbError, bool* pbHex = NULL)
+inline int Euc::_EucjpToUni_char(const unsigned char* pSrc, unsigned short* pDst, const ECharSet eCharset, bool* pbError, bool* pbHex = nullptr)
 {
 	int nret;
 	unsigned char czenkaku[2];

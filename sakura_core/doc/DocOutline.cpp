@@ -243,7 +243,7 @@ void DocOutline::MakeFuncList_RuleFile(
 	wchar_t		pszStack[nMaxStack][256];
 	wchar_t		nLvStack[nMaxStack];
 	wchar_t		szTitle[256];			// ˆêŽž—Ìˆæ
-	Bregexp* pRegex = NULL;
+	Bregexp* pRegex = nullptr;
 	if (bRegex) {
 		pRegex = new Bregexp[nCount];
 		for (int i=0; i<nCount; ++i) {

@@ -263,7 +263,7 @@ void ViewCommander::Command_EXECEXTMACRO(const WCHAR* pszPathW, const WCHAR* psz
 	}
 
 	// ŒÃ‚¢ˆêŽžƒ}ƒNƒ‚Ì‘Þ”ð
-	MacroManagerBase* oldMacro = m_pSMacroMgr->SetTempMacro(NULL);
+	MacroManagerBase* oldMacro = m_pSMacroMgr->SetTempMacro(nullptr);
 	bool bLoadResult = m_pSMacroMgr->Load(
 		m_view,
 		TEMP_KEYMACRO,
@@ -343,7 +343,7 @@ void ViewCommander::Command_EXECCOMMAND(
 	if (pszCurDir) {
 		buf3 = to_tchar(pszCurDir);
 	}
-	m_view.ExecCmd(buf2.c_str(), nFlgOpt, (pszCurDir ? buf3.c_str() : NULL));
+	m_view.ExecCmd(buf2.c_str(), nFlgOpt, (pszCurDir ? buf3.c_str() : nullptr));
 	// To Here Aug. 21, 2001 genta
 }
 

@@ -50,7 +50,7 @@ const DWORD p_helpids[] = {
 // Constructors
 DlgTypeAscertain::DlgTypeAscertain()
 	:
-	m_psi(NULL)
+	m_psi(nullptr)
 {
 }
 

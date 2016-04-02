@@ -80,7 +80,7 @@ bool WSHPlugin::InvokePlug(
 	)
 {
 	WSHPlug& wshPlug = static_cast<WSHPlug&>(plug);
-	WSHMacroManager* pWsh = NULL;
+	WSHMacroManager* pWsh = nullptr;
 
 	if (!m_bUseCache || !wshPlug.m_Wsh) {
 		FilePath path(plug.plugin.GetFilePath(to_tchar(plug.m_sHandler.c_str())).c_str());

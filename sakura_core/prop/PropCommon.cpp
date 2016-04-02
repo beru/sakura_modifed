@@ -245,7 +245,7 @@ INT_PTR PropCommon::DoPropertySheet(int nPageNum, bool bTrayProc)
 		p->pfnDlgProc  = ComPropSheetInfoList[nIdx].DProc;
 		p->pszTitle    = sTabname[nIdx].c_str();
 		p->lParam      = (LPARAM)this;
-		p->pfnCallback = NULL;
+		p->pfnCallback = nullptr;
 	}
 	//	To Here Jun. 2, 2001 genta
 
@@ -278,7 +278,7 @@ INT_PTR PropCommon::DoPropertySheet(int nPageNum, bool bTrayProc)
 	}
 
 	psh.ppsp = psp;
-	psh.pfnCallback = NULL;
+	psh.pfnCallback = nullptr;
 
 	nRet = MyPropertySheet(&psh);	// 2007.05.24 ryoji 独自拡張プロパティシート
 	if (nRet == -1) {

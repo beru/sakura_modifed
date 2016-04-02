@@ -763,7 +763,7 @@ void Caret::ShowCaretPosInfo()
 				m_nLineNoCache = GetCaretLayoutPos().GetY2();
 				m_nLineLogicModCache = ModifyVisitor().GetLineModifiedSeq( pLayout->GetDocLineRef() );
 			}
-			Layout cLayout(
+			Layout layout(
 				pLayout->GetDocLineRef(),
 				pLayout->GetLogicPos(),
 				pLayout->GetLengthWithEOL(),
@@ -771,7 +771,7 @@ void Caret::ShowCaretPosInfo()
 				offset,
 				NULL
 			);
-			ptCaret.x = (Int)m_editView.LineIndexToColumn(&cLayout, GetCaretLogicPos().x - pLayout->GetLogicPos().x);
+			ptCaret.x = (Int)m_editView.LineIndexToColumn(&layout, GetCaretLogicPos().x - pLayout->GetLogicPos().x);
 		}
 	// 行番号をレイアウト単位で表示
 	}else {

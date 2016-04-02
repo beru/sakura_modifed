@@ -191,7 +191,7 @@ static LRESULT CALLBACK ControlTrayWndProc(
 ControlTray::ControlTray()
 // Apr. 24, 2001 genta
 	:
-	m_pPropertyManager(NULL),
+	m_pPropertyManager(nullptr),
 	m_hInstance(NULL),
 	m_hWnd(NULL),
 	m_bCreatedTrayIcon(false),	// トレイにアイコンを作った

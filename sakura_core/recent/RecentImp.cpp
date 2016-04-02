@@ -40,7 +40,7 @@
 	でのデータが文字列であると認識して strcpy をする。
 	他の場合は memcpy で nItemSize 分をコピーする。
 	
-	pnViewCount = NULL にすると、擬似的に nViewCount == nArrayCount になる。
+	pnViewCount = nullptr にすると、擬似的に nViewCount == nArrayCount になる。
 */
 template <class T, class S>
 bool RecentImp<T, S>::Create(
@@ -81,10 +81,10 @@ void RecentImp<T, S>::Terminate()
 {
 	m_bCreate = false;
 
-	m_puUserItemData     = NULL;
-	m_pnUserItemCount    = NULL;
-	m_pnUserViewCount    = NULL;
-	m_pbUserItemFavorite = NULL;
+	m_puUserItemData     = nullptr;
+	m_pnUserItemCount    = nullptr;
+	m_pnUserViewCount    = nullptr;
+	m_pbUserItemFavorite = nullptr;
 
 	m_nArrayCount  = 0;
 }
@@ -430,14 +430,14 @@ bool RecentImp<T, S>::CopyItem(int nSrcIndex, int nDstIndex)
 template <class T, class S>
 const T* RecentImp<T, S>::GetItem(int nIndex) const
 {
-	if (!IsAvailable() || nIndex<0 || nIndex >= *m_pnUserItemCount) return NULL;
+	if (!IsAvailable() || nIndex<0 || nIndex >= *m_pnUserItemCount) return nullptr;
 	return &m_puUserItemData[nIndex];
 }
 
 template <class T, class S>
 const T* RecentImp<T, S>::GetItemPointer(int nIndex) const
 {
-	if (!IsAvailable() || nIndex < 0 || nIndex >= m_nArrayCount) return NULL;
+	if (!IsAvailable() || nIndex < 0 || nIndex >= m_nArrayCount) return nullptr;
 	return &m_puUserItemData[nIndex];
 }
 

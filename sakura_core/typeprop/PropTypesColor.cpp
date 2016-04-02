@@ -1169,7 +1169,7 @@ BOOL PropTypesColor::SelectColor(
 	cc.lpCustColors = pCustColors;
 	cc.Flags = /*CC_PREVENTFULLOPEN |*/ CC_RGBINIT;
 	cc.lCustData = 0;
-	cc.lpfnHook = NULL;
+	cc.lpfnHook = nullptr;
 	cc.lpTemplateName = NULL;
 	if (!::ChooseColor(&cc)) {
 		return FALSE;

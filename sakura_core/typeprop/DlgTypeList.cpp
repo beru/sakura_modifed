@@ -185,7 +185,7 @@ INT_PTR DlgTypeList::DispatchEvent(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM l
 	if (wMsg == WM_COMMAND) {
 		HWND hwndList = GetItemHwnd(IDC_LIST_TYPES);
 		int nIdx = List_GetCurSel(hwndList);
-		const TypeConfigMini* type = NULL;
+		const TypeConfigMini* type = nullptr;
 		DocTypeManager().GetTypeConfigMini(TypeConfigNum(nIdx), &type);
 		if (LOWORD(wParam) == IDC_LIST_TYPES) {
 			switch (HIWORD(wParam)) {

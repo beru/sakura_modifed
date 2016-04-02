@@ -316,7 +316,7 @@ void ViewCommander::Command_UNDO(void)
 
 	MY_RUNNINGTIMER(runningTimer, "ViewCommander::Command_UNDO()");
 
-	Ope*		pOpe = NULL;
+	Ope*		pOpe = nullptr;
 
 	OpeBlk*	pOpeBlk;
 	int			nOpeBlkNum;
@@ -390,11 +390,11 @@ void ViewCommander::Command_UNDO(void)
 					bDrawAll |= m_view.ReplaceData_CEditView3(
 						selInfo.m_select,				// 削除範囲
 						&pInsertOpe->m_opeLineData,	// 削除されたデータのコピー(NULL可能)
-						NULL,
+						nullptr,
 						bDraw,						// 再描画するか否か
-						NULL,
+						nullptr,
 						pInsertOpe->m_nOrgSeq,
-						NULL,
+						nullptr,
 						bFastMode,
 						&selectLogic
 					);
@@ -417,10 +417,10 @@ void ViewCommander::Command_UNDO(void)
 						cSelectLogic.Set(pOpe->m_ptCaretPos_PHY_Before);
 						bDrawAll |= m_view.ReplaceData_CEditView3(
 							range,
-							NULL,										// 削除されたデータのコピー(NULL可能)
+							nullptr,									// 削除されたデータのコピー(NULL可能)
 							&pDeleteOpe->m_opeLineData,
 							bDraw,										// 再描画するか否か
-							NULL,
+							nullptr,
 							0,
 							&pDeleteOpe->m_nOrgSeq,
 							bFastMode,
@@ -446,8 +446,8 @@ void ViewCommander::Command_UNDO(void)
 						range,				// 削除範囲
 						&pReplaceOpe->m_pMemDataIns,	// 削除されたデータのコピー(NULL可能)
 						&pReplaceOpe->m_pMemDataDel,	// 挿入するデータ
-						bDraw,						// 再描画するか否か
-						NULL,
+						bDraw,							// 再描画するか否か
+						nullptr,
 						pReplaceOpe->m_nOrgInsSeq,
 						&pReplaceOpe->m_nOrgDelSeq,
 						bFastMode,
@@ -570,7 +570,7 @@ void ViewCommander::Command_REDO(void)
 	}
 	MY_RUNNINGTIMER(runningTimer, "ViewCommander::Command_REDO()");
 
-	Ope*		pOpe = NULL;
+	Ope*		pOpe = nullptr;
 	OpeBlk*	pOpeBlk;
 	int			nOpeBlkNum;
 //	int			nNewLine;	// 挿入された部分の次の位置の行
@@ -636,10 +636,10 @@ void ViewCommander::Command_REDO(void)
 						cSelectLogic.Set(pOpe->m_ptCaretPos_PHY_Before);
 						bDrawAll |= m_view.ReplaceData_CEditView3(
 							range,
-							NULL,										// 削除されたデータのコピー(NULL可能)
+							nullptr,								// 削除されたデータのコピー(NULL可能)
 							&pInsertOpe->m_opeLineData,				// 挿入するデータ
-							bDraw,										// 再描画するか否か
-							NULL,
+							bDraw,									// 再描画するか否か
+							nullptr,
 							0,
 							&pInsertOpe->m_nOrgSeq,
 							bFastMode,
@@ -669,11 +669,11 @@ void ViewCommander::Command_REDO(void)
 					bDrawAll |= m_view.ReplaceData_CEditView3(
 						LayoutRange(ptCaretPos_Before, ptCaretPos_To),
 						&pDeleteOpe->m_opeLineData,	// 削除されたデータのコピー(NULL可能)
-						NULL,
+						nullptr,
 						bDraw,
-						NULL,
+						nullptr,
 						pDeleteOpe->m_nOrgSeq,
-						NULL,
+						nullptr,
 						bFastMode,
 						&cSelectLogic
 					);
@@ -700,7 +700,7 @@ void ViewCommander::Command_REDO(void)
 						&pReplaceOpe->m_pMemDataDel,	// 削除されたデータのコピー(NULL可能)
 						&pReplaceOpe->m_pMemDataIns,	// 挿入するデータ
 						bDraw,
-						NULL,
+						nullptr,
 						pReplaceOpe->m_nOrgDelSeq,
 						&pReplaceOpe->m_nOrgInsSeq,
 						bFastMode,
@@ -806,7 +806,7 @@ void ViewCommander::Command_DELETE(void)
 				nIndex = m_view.LineColumnToIndex2(pLayout, caret.GetCaretLayoutPos().GetX2(), &nLineLen);
 				if (nLineLen != 0) {	// 折り返しや改行コードより右の場合には nLineLen に行全体の表示桁数が入る
 					if (pLayout->GetLayoutEol().GetType() != EolType::None) {	// 行終端は改行コードか?
-						Command_INSTEXT(true, L"", LogicInt(0), FALSE);	// カーソル位置まで半角スペース挿入
+						Command_INSTEXT(true, L"", LogicInt(0), false);	// カーソル位置まで半角スペース挿入
 					}else {	// 行終端が折り返し
 						// 折り返し行末ではスペース挿入後、次の文字を削除する	// 2009.02.19 ryoji
 
@@ -814,7 +814,7 @@ void ViewCommander::Command_DELETE(void)
 						// 非フリーカーソル時（ちょうどカーソルが折り返し位置にある）には次の行の先頭文字を削除したい
 
 						if (nLineLen < caret.GetCaretLayoutPos().GetX2()) {	// 折り返し行末とカーソルの間に隙間がある
-							Command_INSTEXT(true, L"", LogicInt(0), FALSE);	// カーソル位置まで半角スペース挿入
+							Command_INSTEXT(true, L"", LogicInt(0), false);	// カーソル位置まで半角スペース挿入
 							pLayout = layoutMgr.SearchLineByLayoutY(caret.GetCaretLayoutPos().GetY2());
 							nIndex = m_view.LineColumnToIndex2(pLayout, caret.GetCaretLayoutPos().GetX2(), &nLineLen);
 						}

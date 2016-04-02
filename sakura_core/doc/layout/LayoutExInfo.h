@@ -50,7 +50,7 @@ public:
 	}
 	LayoutColorInfo* DetachColorInfo() {
 		LayoutColorInfo* p = m_pColorInfo;
-		m_pColorInfo = NULL;
+		m_pColorInfo = nullptr;
 		return p;
 	}
 private:

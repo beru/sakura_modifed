@@ -29,8 +29,8 @@
 
 KeyMacroMgr::KeyMacroMgr()
 {
-	m_pTop = NULL;
-	m_pBot = NULL;
+	m_pTop = nullptr;
+	m_pBot = nullptr;
 //	m_nKeyMacroDataArrNum = 0;	2002.2.2 YAZAKI
 	// Apr. 29, 2002 genta
 	// m_nReadyÇÕMacroManagerBaseÇ÷
@@ -56,8 +56,8 @@ void KeyMacroMgr::ClearAll(void)
 		delete del_p;
 	}
 //	m_nKeyMacroDataArrNum = 0;	2002.2.2 YAZAKI
-	m_pTop = NULL;
-	m_pBot = NULL;
+	m_pTop = nullptr;
+	m_pBot = nullptr;
 	return;
 
 }
@@ -161,7 +161,7 @@ bool KeyMacroMgr::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
 	EFunctionCode	nFuncID;
 	int		i;
 	int		nBgn, nEnd;
-	Macro* macro = NULL;
+	Macro* macro = nullptr;
 
 	// Jun. 16, 2002 genta
 	m_nReady = true;	// ÉGÉâÅ[Ç™Ç†ÇÍÇŒfalseÇ…Ç»ÇÈ
@@ -471,14 +471,14 @@ MacroManagerBase* KeyMacroMgr::Creator(EditView& view, const TCHAR* ext)
 	if (_tcscmp(ext, _T("mac")) == 0) {
 		return new KeyMacroMgr;
 	}
-	return NULL;
+	return nullptr;
 }
 
 /*!	CKeyMacroManagerÇÃìoò^
 
 	@date 2004.01.31 genta RegisterExtÇÃîpé~ÇÃÇΩÇﬂRegisterCreatorÇ…íuÇ´ä∑Ç¶
 */
-void KeyMacroMgr::Declare (void)
+void KeyMacroMgr::Declare(void)
 {
 	// èÌÇ…é¿çs
 	MacroFactory::getInstance().RegisterCreator(Creator);

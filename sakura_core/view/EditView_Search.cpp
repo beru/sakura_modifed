@@ -237,7 +237,7 @@ bool EditView::MiniMapCursorLineTip(POINT* po, RECT* rc, bool* pbHide)
 	LayoutYInt nTipBeginLine = ptNew.y;
 	LayoutYInt nTipEndLine = ptNew.y + LayoutYInt(4);
 	for (LayoutYInt nCurLine=nTipBeginLine; nCurLine<nTipEndLine; ++nCurLine) {
-		const Layout* pLayout = NULL;
+		const Layout* pLayout = nullptr;
 		if (0 <= nCurLine) {
 			pLayout = GetDocument().m_layoutMgr.SearchLineByLayoutY( nCurLine );
 		}

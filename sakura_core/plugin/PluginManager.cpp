@@ -555,7 +555,7 @@ Plugin* PluginManager::LoadPlugin(
 	DataProfile profDefMLang;			// プラグイン定義ファイル(L10N)
 	DataProfile* pProfDefMLang = &profDefMLang; 
 	DataProfile profOption;			// オプションファイル
-	Plugin* plugin = NULL;
+	Plugin* plugin = nullptr;
 
 #ifdef _UNICODE
 	DEBUG_TRACE(_T("Load Plugin %ts\n"),  pszPluginName );
@@ -566,7 +566,7 @@ Plugin* PluginManager::LoadPlugin(
 	profDef.SetReadingMode();
 	if (!profDef.ReadProfile(pszPath)) {
 		// プラグイン定義ファイルが存在しない
-		return NULL;
+		return nullptr;
 	}
 #ifdef _UNICODE
 	DEBUG_TRACE(_T("  定義ファイル読込 %ts\n"),  pszPath );
@@ -578,7 +578,7 @@ Plugin* PluginManager::LoadPlugin(
 	profDefMLang.SetReadingMode();
 	if (!profDefMLang.ReadProfile(strMlang.c_str())) {
 		// プラグイン定義ファイルが存在しない
-		pProfDefMLang = NULL;
+		pProfDefMLang = nullptr;
 #ifdef _UNICODE
 		DEBUG_TRACE(_T("  L10N定義ファイル読込 %ts Not Found\n"),  strMlang.c_str() );
 #endif
@@ -596,7 +596,7 @@ Plugin* PluginManager::LoadPlugin(
 	}else if (wcsicmp(sPlugType.c_str(), L"dll") == 0) {
 		plugin = new DllPlugin(tstring(pszBasePath));
 	}else {
-		return NULL;
+		return nullptr;
 	}
 	plugin->m_sOptionDir = m_sBaseDir + pszPluginName;
 	plugin->m_sLangName = pszLangName;
@@ -652,7 +652,7 @@ Plugin* PluginManager::GetPlugin(int id)
 			return *plugin;
 		}
 	}
-	return NULL;
+	return nullptr;
 }
 
 // プラグインを削除する

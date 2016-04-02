@@ -55,10 +55,10 @@ LPVOID DlgSameColor::GetHelpIdTable(void)
 }
 
 DlgSameColor::DlgSameColor() :
-	m_wpColorStaticProc(NULL),
-	m_wpColorListProc(NULL),
+	m_wpColorStaticProc(nullptr),
+	m_wpColorListProc(nullptr),
 	m_wID(0),
-	m_pTypes(NULL),
+	m_pTypes(nullptr),
 	m_cr(0)
 {
 	return;
@@ -421,7 +421,7 @@ LRESULT CALLBACK DlgSameColor::ColorStatic_SubclassProc(HWND hwnd, UINT uMsg, WP
 	case WM_DESTROY:
 		// サブクラス化解除
 		::SetWindowLongPtr(hwnd, GWLP_WNDPROC, (LONG_PTR)pDlgSameColor->m_wpColorStaticProc);
-		pDlgSameColor->m_wpColorStaticProc = NULL;
+		pDlgSameColor->m_wpColorStaticProc = nullptr;
 		return (LRESULT)0;
 
 	default:

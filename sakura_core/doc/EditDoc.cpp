@@ -341,8 +341,8 @@ void EditDoc::SetBackgroundImage()
 		}
 		::GlobalUnlock(hGlobal);
 		{
-			IPicture* iPicture = NULL;
-			IStream* iStream = NULL;
+			IPicture* iPicture = nullptr;
+			IStream* iStream = nullptr;
 			// hGlobalの管理を移譲
 			if (::CreateStreamOnHGlobal(hGlobal, TRUE, &iStream) != S_OK) {
 				GlobalFree(hGlobal);
@@ -693,11 +693,11 @@ void EditDoc::OnChangeSetting(
 	// 共有データ構造体のアドレスを返す
 	FileNameManager::getInstance().TransformFileName_MakeCache();
 
-	LogicPointEx* posSaveAry = NULL;
+	LogicPointEx* posSaveAry = nullptr;
 	if (m_pEditWnd->m_posSaveAry) {
 		if (bDoLayout) {
 			posSaveAry = m_pEditWnd->m_posSaveAry;
-			m_pEditWnd->m_posSaveAry = NULL;
+			m_pEditWnd->m_posSaveAry = nullptr;
 		}
 	}else {
 		if (m_pEditWnd->m_pPrintPreview) {

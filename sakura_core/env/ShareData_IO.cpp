@@ -1285,7 +1285,7 @@ void ShareData_IO::ShareData_IO_Types(DataProfile& profile)
 	std::vector<TypeConfig*>& types = ShareData::getInstance().GetTypeSettings();
 	for (int i=GetDllShareData().nTypesCount; i<nCountOld; ++i) {
 		delete types[i];
-		types[i] = NULL;
+		types[i] = nullptr;
 	}
 	types.resize(pShare->nTypesCount);
 	for (int i=nCountOld; i<pShare->nTypesCount; ++i) {

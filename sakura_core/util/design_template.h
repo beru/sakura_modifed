@@ -66,17 +66,17 @@ template <class T>
 class TSingleInstance {
 public:
 	// 公開インターフェース
-	static T* getInstance() { return gm_instance; } // 作成済みのインスタンスを返す。インスタンスが存在しなければ NULL。
+	static T* getInstance() { return gm_instance; } // 作成済みのインスタンスを返す。インスタンスが存在しなければ nullptr。
 
 protected:
 	// ※2個以上のインスタンスは想定していません。assertが破綻を検出します。
-	TSingleInstance() { assert(gm_instance == NULL); gm_instance = static_cast<T*>(this); }
-	~TSingleInstance() { assert(gm_instance); gm_instance = NULL; }
+	TSingleInstance() { assert(gm_instance == nullptr); gm_instance = static_cast<T*>(this); }
+	~TSingleInstance() { assert(gm_instance); gm_instance = nullptr; }
 private:
 	static T* gm_instance;
 };
 template <class T>
-T* TSingleInstance<T>::gm_instance = NULL;
+T* TSingleInstance<T>::gm_instance = nullptr;
 
 
 // 記録もする
@@ -100,7 +100,7 @@ public:
 		if (nIndex >= 0 && nIndex < (int)gm_table.size()) {
 			return gm_table[nIndex];
 		}else {
-			return 0;
+			return nullptr;
 		}
 	}
 private:

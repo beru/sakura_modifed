@@ -432,7 +432,7 @@ bool ViewCommander::Command_TagsMake(void)
 	SECURITY_ATTRIBUTES	sa = {0};
 	sa.nLength              = sizeof(sa);
 	sa.bInheritHandle       = TRUE;
-	sa.lpSecurityDescriptor = NULL;
+	sa.lpSecurityDescriptor = nullptr;
 	hStdOutRead = hStdOutWrite = 0;
 	if (CreatePipe(&hStdOutRead, &hStdOutWrite, &sa, 1000) == FALSE) {
 		// ÉGÉâÅ[

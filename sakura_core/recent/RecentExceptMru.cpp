@@ -38,9 +38,9 @@ RecentExceptMRU::RecentExceptMRU()
 	Create(
 		exceptMRU.dataPtr(),
 		&exceptMRU._GetSizeRef(),
-		NULL,
+		nullptr,
 		MAX_MRU,
-		NULL
+		nullptr
 	);
 }
 

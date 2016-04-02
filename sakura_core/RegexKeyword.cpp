@@ -82,7 +82,7 @@ RegexKeyword::RegexKeyword(LPCTSTR regexp_dll )
 	InitDll(regexp_dll);	// 2007.08.12 genta 引数追加
 	MYDBGMSG("RegexKeyword")
 
-	m_pTypes    = NULL;
+	m_pTypes    = nullptr;
 	m_nTypeIndex = -1;
 	m_nTypeId = -1;
 
@@ -103,13 +103,13 @@ RegexKeyword::~RegexKeyword()
 		if (info.pBregexp && IsAvailable()) {
 			BRegfree(info.pBregexp);
 		}
-		info.pBregexp = NULL;
+		info.pBregexp = nullptr;
 	}
 	
 	RegexKeyInit();
 
 	m_nTypeIndex = -1;
-	m_pTypes     = NULL;
+	m_pTypes     = nullptr;
 }
 
 // 正規表現キーワード初期化処理
@@ -129,7 +129,7 @@ bool RegexKeyword::RegexKeyInit(void)
 	m_nRegexKeyCount = 0;
 	for (int i=0; i<MAX_REGEX_KEYWORD; ++i) {
 		auto& info = m_info[i];
-		info.pBregexp = NULL;
+		info.pBregexp = nullptr;
 #ifdef USE_PARENT
 #else
 		info.sRegexKey.m_nColorIndex = COLORIDX_REGEX1;
@@ -159,7 +159,7 @@ bool RegexKeyword::RegexKeySetTypes(const TypeConfig *pTypesPtr)
 {
 	MYDBGMSG("RegexKeySetTypes")
 	if (!pTypesPtr)  {
-		m_pTypes = NULL;
+		m_pTypes = nullptr;
 		m_bUseRegexKeyword = false;
 		return false;
 	}
@@ -167,7 +167,7 @@ bool RegexKeyword::RegexKeySetTypes(const TypeConfig *pTypesPtr)
 	if (!pTypesPtr->bUseRegexKeyword) {
 		// OFFになったのにまだONならOFFにする。
 		if (m_bUseRegexKeyword) {
-			m_pTypes = NULL;
+			m_pTypes = nullptr;
 			m_bUseRegexKeyword = false;
 		}
 		return false;
@@ -211,7 +211,7 @@ bool RegexKeyword::RegexKeyCompile(void)
 		if (info.pBregexp && IsAvailable()) {
 			BRegfree(info.pBregexp);
 		}
-		info.pBregexp = NULL;
+		info.pBregexp = nullptr;
 	}
 
 	// コンパイルパターンを内部変数に移す。

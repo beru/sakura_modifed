@@ -37,9 +37,9 @@ RecentEditNode::RecentEditNode()
 	Create(
 		GetShareData()->nodes.pEditArr,
 		&GetShareData()->nodes.nEditArrNum,
-		NULL,
+		nullptr,
 		MAX_EDITWINDOWS,
-		NULL
+		nullptr
 	);
 }
 

@@ -36,7 +36,7 @@
 
 FileExt::FileExt()
 {
-	m_puFileExtInfo = NULL;
+	m_puFileExtInfo = nullptr;
 	m_nCount = 0;
 	m_vstrFilter.resize( 1 );
 	m_vstrFilter[0] = _T('\0');
@@ -51,7 +51,7 @@ FileExt::~FileExt()
 	if (m_puFileExtInfo) {
 		free(m_puFileExtInfo);
 	}
-	m_puFileExtInfo = NULL;
+	m_puFileExtInfo = nullptr;
 	m_nCount = 0;
 }
 

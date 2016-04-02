@@ -59,7 +59,7 @@ bool ColorStrategyInfo::CheckChangeColor(const StringRef& lineStr)
 	// 選択範囲色終了
 	if (pStrategySelect) {
 		if (pStrategySelect->EndColor(lineStr, this->GetPosInLogic())) {
-			pStrategySelect = NULL;
+			pStrategySelect = nullptr;
 			bChange = true;
 		}
 	}
@@ -74,7 +74,7 @@ bool ColorStrategyInfo::CheckChangeColor(const StringRef& lineStr)
 	// 検索色終了
 	if (pStrategyFound) {
 		if (pStrategyFound->EndColor(lineStr, this->GetPosInLogic())) {
-			pStrategyFound = NULL;
+			pStrategyFound = nullptr;
 			bChange = true;
 		}
 	}
@@ -90,7 +90,7 @@ bool ColorStrategyInfo::CheckChangeColor(const StringRef& lineStr)
 	// 色終了
 	if (pStrategy) {
 		if (pStrategy->EndColor(lineStr, this->GetPosInLogic())) {
-			pStrategy = NULL;
+			pStrategy = nullptr;
 			bChange = true;
 		}
 	}
@@ -225,7 +225,7 @@ ColorStrategyPool::~ColorStrategyPool()
 	m_vStrategies.clear();
 }
 
-ColorStrategy*	ColorStrategyPool::GetStrategyByColor(EColorIndexType eColor) const
+ColorStrategy* ColorStrategyPool::GetStrategyByColor(EColorIndexType eColor) const
 {
 	if (COLORIDX_SEARCH <= eColor && eColor <= COLORIDX_SEARCHTAIL) {
 		return m_pcFoundStrategy;
@@ -236,7 +236,7 @@ ColorStrategy*	ColorStrategyPool::GetStrategyByColor(EColorIndexType eColor) con
 			return m_vStrategiesDisp[i];
 		}
 	}
-	return NULL;
+	return nullptr;
 }
 
 void ColorStrategyPool::NotifyOnStartScanLogic()
@@ -259,7 +259,7 @@ void ColorStrategyPool::CheckColorMODE(
 	// 色終了
 	if (*ppColorStrategy) {
 		if ((*ppColorStrategy)->EndColor(lineStr, nPos)) {
-			*ppColorStrategy = NULL;
+			*ppColorStrategy = nullptr;
 		}
 	}
 

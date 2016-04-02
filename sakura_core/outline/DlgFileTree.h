@@ -28,8 +28,7 @@
 		   distribution.
 */
 
-#ifndef SAKURA_CDLGFILETREE_H_
-#define SAKURA_CDLGFILETREE_H_
+#pragma once
 
 #include "dlg/Dialog.h"
 #include "outline/DlgFuncList.h"
@@ -62,16 +61,11 @@ private:
 
 private:
 	DlgFuncList*		m_pDlgFuncList;
-	FileTreeSetting	m_fileTreeSetting;
+	FileTreeSetting		m_fileTreeSetting;
 	std::vector<int>	m_aItemRemoveList;
 	int					m_nlParamCount;
 	int					m_nDocType;
 
 	int					m_bInMove;
 };
-
-
-
-#endif /* SAKURA_CDLGFILETREE_H_ */
-
 

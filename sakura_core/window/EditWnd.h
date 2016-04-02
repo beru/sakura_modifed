@@ -219,7 +219,7 @@ public:
 	
 	// 印刷Preview中かどうか
 	bool IsInPreviewMode() {
-		return m_pPrintPreview != NULL;
+		return m_pPrintPreview != nullptr;
 	}
 	
 	bool IsPageScrollByWheel() const { return m_bPageScrollByWheel; }		// ホイール操作によるページスクロール有無	// 2009.01.17 nasukoji

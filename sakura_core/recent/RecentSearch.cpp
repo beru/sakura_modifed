@@ -38,9 +38,9 @@ RecentSearch::RecentSearch()
 	Create(
 		GetShareData()->searchKeywords.searchKeys.dataPtr(),
 		&GetShareData()->searchKeywords.searchKeys._GetSizeRef(),
-		NULL,
+		nullptr,
 		MAX_SEARCHKEY,
-		NULL
+		nullptr
 	);
 }
 

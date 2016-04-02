@@ -38,8 +38,8 @@ LayoutMgr::LayoutMgr()
 	:
 	m_getIndentOffset(&LayoutMgr::getIndentOffset_Normal)	// Oct. 1, 2002 genta	//	Nov. 16, 2002 メンバー関数ポインタにはクラス名が必要
 {
-	m_pDocLineMgr = NULL;
-	m_pTypeConfig = NULL;
+	m_pDocLineMgr = nullptr;
+	m_pTypeConfig = nullptr;
 	m_nMaxLineKetas = LayoutInt(MAXLINEKETAS);
 	m_nTabSpace = LayoutInt(4);
 	m_pszKinsokuHead_1.clear();				// 行頭禁則	//@@@ 2002.04.08 MIK
@@ -83,10 +83,10 @@ void LayoutMgr::Create(
 
 void LayoutMgr::Init()
 {
-	m_pLayoutTop = NULL;
-	m_pLayoutBot = NULL;
+	m_pLayoutTop = nullptr;
+	m_pLayoutBot = nullptr;
 	m_nPrevReferLine = LayoutInt(0);
-	m_pLayoutPrevRefer = NULL;
+	m_pLayoutPrevRefer = nullptr;
 	m_nLines = LayoutInt(0);			// 全物理行数
 	m_nLineTypeBot = COLORIDX_DEFAULT;
 
@@ -191,7 +191,7 @@ const Layout* LayoutMgr::SearchLineByLayoutY(
 	Layout*	pLayout;
 	LayoutInt	nCount;
 	if (m_nLines == LayoutInt(0)) {
-		return NULL;
+		return nullptr;
 	}
 
 	// Mar. 19, 2003 Moca nLineNumが負の場合のチェックを追加
@@ -199,7 +199,7 @@ const Layout* LayoutMgr::SearchLineByLayoutY(
 		if (LayoutInt(0) > nLineNum) {
 			DEBUG_TRACE(_T("LayoutMgr::SearchLineByLayoutY() nLineNum = %d\n"), nLineNum);
 		}
-		return NULL;
+		return nullptr;
 	}
 //	// +++++++ 低速版 +++++++++
 //	if (nLineNum < (m_nLines / 2)) {
@@ -291,7 +291,7 @@ const Layout* LayoutMgr::SearchLineByLayoutY(
 			}
 		}
 	}
-	return NULL;
+	return nullptr;
 }
 
 
@@ -300,13 +300,13 @@ void LayoutMgr::AddLineBottom(Layout* pLayout)
 {
 	if (m_nLines == LayoutInt(0)) {
 		m_pLayoutBot = m_pLayoutTop = pLayout;
-		m_pLayoutTop->m_pPrev = NULL;
+		m_pLayoutTop->m_pPrev = nullptr;
 	}else {
 		m_pLayoutBot->m_pNext = pLayout;
 		pLayout->m_pPrev = m_pLayoutBot;
 		m_pLayoutBot = pLayout;
 	}
-	pLayout->m_pNext = NULL;
+	pLayout->m_pNext = nullptr;
 	++m_nLines;
 	return;
 }
@@ -320,12 +320,12 @@ Layout* LayoutMgr::InsertLineNext(
 	if (m_nLines == LayoutInt(0)) {
 		// 初
 		m_pLayoutBot = m_pLayoutTop = pLayout;
-		m_pLayoutTop->m_pPrev = NULL;
-		m_pLayoutTop->m_pNext = NULL;
+		m_pLayoutTop->m_pPrev = nullptr;
+		m_pLayoutTop->m_pNext = nullptr;
 	}else if (!pLayoutPrev) {
 		// 先頭に挿入
 		m_pLayoutTop->m_pPrev = pLayout;
-		pLayout->m_pPrev = NULL;
+		pLayout->m_pPrev = nullptr;
 		pLayout->m_pNext = m_pLayoutTop;
 		m_pLayoutTop = pLayout;
 	}else
@@ -333,7 +333,7 @@ Layout* LayoutMgr::InsertLineNext(
 		// 最後に挿入
 		m_pLayoutBot->m_pNext = pLayout;
 		pLayout->m_pPrev = m_pLayoutBot;
-		pLayout->m_pNext = NULL;
+		pLayout->m_pNext = nullptr;
 		m_pLayoutBot = pLayout;
 	}else {
 		// 途中に挿入
@@ -519,10 +519,10 @@ Layout* LayoutMgr::DeleteLayoutAsLogical(
 {
 	*pnDeleteLines = LayoutInt(0);
 	if (m_nLines == LayoutInt(0)) {	// 全物理行数
-		return NULL;
+		return nullptr;
 	}
 	if (!pLayoutInThisArea) {
-		return NULL;
+		return nullptr;
 	}
 
 	// 1999.11.22
@@ -545,7 +545,7 @@ Layout* LayoutMgr::DeleteLayoutAsLogical(
 			// 先頭行の処理
 			m_pLayoutTop = pLayout->GetNextLayout();
 			if (pLayout->GetNextLayout()) {
-				pLayout->m_pNext->m_pPrev = NULL;
+				pLayout->m_pNext->m_pPrev = nullptr;
 			}
 		}else {
 			pLayoutWork->m_pNext = pLayout->GetNextLayout();

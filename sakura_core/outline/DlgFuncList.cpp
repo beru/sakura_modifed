@@ -837,7 +837,7 @@ bool DlgFuncList::GetTreeFileFullName(
 // 0==ğŒ–¢“ü—Í   0‚æ‚è‘å‚«‚¢==³í   0‚æ‚è¬‚³‚¢==“ü—ÍƒGƒ‰[
 int DlgFuncList::GetData(void)
 {
-	m_funcInfo = NULL;
+	m_funcInfo = nullptr;
 	m_sJumpFile = _T("");
 	HWND hwndList = GetItemHwnd(IDC_LIST_FL);
 	if (m_nViewType == VIEWTYPE_LIST) {

@@ -54,7 +54,7 @@ const wchar_t Bregexp::m_tmpBuf[2] = L"\0";
 
 
 Bregexp::Bregexp()
-	: m_pRegExp(NULL)
+	: m_pRegExp(nullptr)
 	, m_ePatType(PAT_NORMAL)	// Jul, 25, 2002 genta
 {
 	m_szMsg[0] = L'\0';
@@ -82,7 +82,7 @@ int Bregexp::CheckPattern(const wchar_t* szPattern)
 	static const wchar_t BOT_MATCH[] = L"/\\$\\)*$/k";							// 行末パターンのチェック用パターン
 	static const wchar_t TAB_MATCH[] = L"/^\\(*\\^\\$\\)*$/k";					// "^$"パターンかをチェック用パターン
 	static const wchar_t LOOKAHEAD[] = L"/\\(\\?[=]/k";							// "(?=" 先読み の存在チェックパターン
-	BREGEXP_W* sReg = NULL;						// コンパイル構造体
+	BREGEXP_W* sReg = nullptr;						// コンパイル構造体
 	wchar_t szMsg[80] = L"";					// エラーメッセージ
 	int nLen;									// 検索パターンの長さ
 	const wchar_t* szPatternEnd;				// 検索パターンの終端
@@ -96,19 +96,19 @@ int Bregexp::CheckPattern(const wchar_t* szPattern)
 		m_ePatType |= PAT_TOP;
 	}
 	BRegfree(sReg);
-	sReg = NULL;
+	sReg = nullptr;
 	if (BMatch(TAB_MATCH, szPattern, szPatternEnd, &sReg, szMsg) > 0) {
 		// 行頭行末パターンにマッチした
 		m_ePatType |= PAT_TAB;
 	}
 	BRegfree(sReg);
-	sReg = NULL;
+	sReg = nullptr;
 	if (BMatch(DOL_MATCH, szPattern, szPatternEnd, &sReg, szMsg) > 0) {
 		// 行末の\$ にマッチした
 		// PAT_NORMAL
 	}else {
 		BRegfree(sReg);
-		sReg = NULL;
+		sReg = nullptr;
 		if (BMatch(BOT_MATCH, szPattern, szPatternEnd, &sReg, szMsg) > 0) {
 			// 行末パターンにマッチした
 			m_ePatType |= PAT_BOTTOM;
@@ -118,14 +118,14 @@ int Bregexp::CheckPattern(const wchar_t* szPattern)
 		}
 	}
 	BRegfree(sReg);
-	sReg = NULL;
+	sReg = nullptr;
 	
 	if (BMatch(LOOKAHEAD, szPattern, szPattern + nLen, &sReg, szMsg) > 0) {
 		// 先読みパターンにマッチした
 		m_ePatType |= PAT_LOOKAHEAD;
 	}
 	BRegfree(sReg);
-	sReg = NULL;
+	sReg = nullptr;
 	return (nLen);
 }
 

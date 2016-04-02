@@ -37,9 +37,9 @@ RecentGrepFolder::RecentGrepFolder()
 	Create(
 		GetShareData()->searchKeywords.grepFolders.dataPtr(),
 		&GetShareData()->searchKeywords.grepFolders._GetSizeRef(),
-		NULL,
+		nullptr,
 		MAX_GREPFOLDER,
-		NULL
+		nullptr
 	);
 }
 

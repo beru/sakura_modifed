@@ -625,7 +625,7 @@ DWORD GrepAgent::DoGrep(
 
 	// 再描画
 	if (!editWnd.UpdateTextWrap()) {	// 折り返し方法関連の更新	// 2008.06.10 ryoji
-		editWnd.RedrawAllViews(NULL);
+		editWnd.RedrawAllViews(nullptr);
 	}
 
 	if (!bGrepCurFolder) {

@@ -42,7 +42,7 @@ public:
 private:
 	// 20060126 aroka ‚·‚×‚ÄPrivate‚É‚µ‚ÄA‰Šú‰»‡˜‚É‡‚í‚¹‚Ä•À‚×‘Ö‚¦
 	EditDoc*		m_pEditDoc;
-	DllSharedData*	m_pShareData;
+	DllSharedData&	m_shareData;
 	int				m_nCurrentKeyState;
 	WCHAR			m_szFuncNameArr[12][256];
 	HWND			m_hwndButtonArr[12];

@@ -1367,7 +1367,7 @@ void PrintPreview::DrawHeaderFooter(HDC hdc, const Rect& rect, bool bHeader)
 ColorStrategy* PrintPreview::DrawPageTextFirst(int nPageNum)
 {
 	// ページトップの色指定を取得
-	ColorStrategy*	pStrategy = NULL;
+	ColorStrategy*	pStrategy = nullptr;
 	if (m_pPrintSetting->bColorPrint) {
 		m_pool = &ColorStrategyPool::getInstance();
 		m_pool->SetCurrentView(&(m_parentWnd.GetActiveView()));
@@ -1444,7 +1444,7 @@ ColorStrategy* PrintPreview::DrawPageText(
 			if (pDlgCancel) {
 				// 処理中のユーザー操作を可能にする
 				if (!::BlockingHook(pDlgCancel->GetHwnd())) {
-					return NULL;
+					return nullptr;
 				}
 			}
 
@@ -1689,7 +1689,7 @@ ColorStrategy* PrintPreview::Print_DrawLine(
 		}
 
 		bool bChange = false;
-		pStrategy = pLayout ? GetColorStrategy(cStringLine, iLogic, pStrategy, bChange) : NULL;
+		pStrategy = pLayout ? GetColorStrategy(cStringLine, iLogic, pStrategy, bChange) : nullptr;
 
 		// タブ文字出現 or 文字種(全角／半角)の境界 or 色指定の境界
 		if (nKind != nKindLast || bChange) {
@@ -1839,7 +1839,7 @@ ColorStrategy* PrintPreview::GetColorStrategy(
 {
 	if (pStrategy) {
 		if (pStrategy->EndColor(stringLine, iLogic)) {
-			pStrategy = NULL;
+			pStrategy = nullptr;
 			bChange = true;
 		}
 	}

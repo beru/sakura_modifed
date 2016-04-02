@@ -95,14 +95,14 @@ DECLARE_YB_INTERFACEIMPL(IEnumFORMATETC)
 DropTarget::DropTarget(EditWnd* pEditWnd)
 {
 	m_pEditWnd = pEditWnd;	// 2008.06.20 ryoji
-	m_pEditView = NULL;
+	m_pEditView = nullptr;
 	m_hWnd_DropTarget = NULL;
 	return;
 }
 
 DropTarget::DropTarget(EditView* pEditView)
 {
-	m_pEditWnd = NULL;	// 2008.06.20 ryoji
+	m_pEditWnd = nullptr;	// 2008.06.20 ryoji
 	m_pEditView = pEditView;
 	m_hWnd_DropTarget = NULL;
 	return;
@@ -214,7 +214,7 @@ void DataObject::SetText(LPCWSTR lpszText, int nTextLen, BOOL bColumnSelect)
 			delete [](m_pData[i].data);
 		}
 		delete []m_pData;
-		m_pData = NULL;
+		m_pData = nullptr;
 		m_nFormat = 0;
 	}
 	if (lpszText) {
@@ -294,7 +294,7 @@ STDMETHODIMP DataObject::GetData(LPFORMATETC lpfe, LPSTGMEDIUM lpsm)
 	lpsm->hGlobal = ::GlobalAlloc(GHND | GMEM_DDESHARE, m_pData[i].size);
 	memcpy_raw(::GlobalLock(lpsm->hGlobal), m_pData[i].data, m_pData[i].size);
 	::GlobalUnlock(lpsm->hGlobal);
-	lpsm->pUnkForRelease = NULL;
+	lpsm->pUnkForRelease = nullptr;
 
 	return S_OK;
 }
@@ -411,7 +411,7 @@ STDMETHODIMP EnumFORMATETC::Next(ULONG celt, FORMATETC* rgelt, ULONG* pceltFetch
 	ULONG i = celt;
 	while (m_nIndex < m_pDataObject->m_nFormat && i > 0) {
 		(*rgelt).cfFormat = m_pDataObject->m_pData[m_nIndex].cfFormat;
-		(*rgelt).ptd = NULL;
+		(*rgelt).ptd = nullptr;
 		(*rgelt).dwAspect = DVASPECT_CONTENT;
 		(*rgelt).lindex = -1;
 		(*rgelt).tymed = TYMED_HGLOBAL;

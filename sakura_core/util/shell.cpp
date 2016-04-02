@@ -422,8 +422,8 @@ BOOL ResolveShortcutLink(
 	CurrentDirectoryBackupPoint dirBack;
 	ChangeCurrentDirectoryToExeDir();
 
-	IShellLink* pIShellLink = NULL;
-	IPersistFile* pIPersistFile = NULL;
+	IShellLink* pIShellLink = nullptr;
+	IPersistFile* pIPersistFile = nullptr;
 	HRESULT hRes;
 	if (SUCCEEDED(hRes = ::CoCreateInstance(CLSID_ShellLink, NULL, CLSCTX_INPROC_SERVER, IID_IShellLink, (LPVOID *)&pIShellLink))) {
 		// Get a pointer to the IPersistFile interface.
@@ -458,12 +458,12 @@ BOOL ResolveShortcutLink(
 	// Release the pointer to the IPersistFile interface.
 	if (pIPersistFile) {
 		pIPersistFile->Release();
-		pIPersistFile = NULL;
+		pIPersistFile = nullptr;
 	}
 	// Release the pointer to the IShellLink interface.
 	if (pIShellLink) {
 		pIShellLink->Release();
-		pIShellLink = NULL;
+		pIShellLink = nullptr;
 	}
 // 2009.01.08 ryoji CoUninitialize‚ğíœiWinMain‚ÉOleUninitialize’Ç‰Áj
 	return bRes;

@@ -45,8 +45,8 @@ public:
 		LayoutColorInfo*	pColorInfo
 		)
 	{
-		m_pPrev			= NULL;
-		m_pNext			= NULL;
+		m_pPrev			= nullptr;
+		m_pNext			= nullptr;
 		m_pDocLine		= pDocLine;
 		m_ptLogicPos	= ptLogicPos;	// 実データ参照位置
 		m_nLength		= nLength;		// 実データ内データ長

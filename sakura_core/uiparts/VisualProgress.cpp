@@ -11,7 +11,7 @@
 
 VisualProgress::VisualProgress()
 	:
-	m_pWaitCursor(NULL),
+	m_pWaitCursor(nullptr),
 	nOldValue(-1)
 {
 }

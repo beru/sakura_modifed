@@ -51,11 +51,11 @@ LRESULT CALLBACK CFuncKeyWndProc(
 // @date 2002.2.17 YAZAKI CShareDataのインスタンスは、CProcessにひとつあるのみ。
 FuncKeyWnd::FuncKeyWnd()
 	:
-	Wnd(_T("::FuncKeyWnd"))
+	Wnd(_T("::FuncKeyWnd")),
+	m_shareData(GetDllShareData())
 {
-	m_pEditDoc = NULL;
+	m_pEditDoc = nullptr;
 	// 共有データ構造体のアドレスを返す
-	m_pShareData = &GetDllShareData();
 	m_nCurrentKeyState = -1;
 	for (int i=0; i<_countof(m_szFuncNameArr); ++i) {
 		m_szFuncNameArr[i][0] = 0;
@@ -117,7 +117,7 @@ HWND FuncKeyWnd::Open(
 	m_nCurrentKeyState = -1;
 
 	// 2002.11.04 Moca 変更できるように
-	m_nButtonGroupNum = m_pShareData->common.window.nFuncKeyWnd_GroupNum;
+	m_nButtonGroupNum = m_shareData.common.window.nFuncKeyWnd_GroupNum;
 	if (m_nButtonGroupNum < 1 || 12 < m_nButtonGroupNum) {
 		m_nButtonGroupNum = 4;
 	}
@@ -283,7 +283,7 @@ LRESULT FuncKeyWnd::OnTimer(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		m_nTimerCount = TIMER_CHECKFUNCENABLE + 1;
 
 		// ファンクションキーの機能名を取得
-		auto& csKeyBind = m_pShareData->common.keyBind;
+		auto& csKeyBind = m_shareData.common.keyBind;
 		for (int i=0; i<_countof(m_szFuncNameArr); ++i) {
 			// 2007.02.22 ryoji KeyBind::GetFuncCode()を使う
 			EFunctionCode nFuncCode = KeyBind::GetFuncCode(
@@ -316,7 +316,7 @@ LRESULT FuncKeyWnd::OnTimer(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		for (int i=0; i<_countof(m_szFuncNameArr); ++i) {
 			::EnableWindow(
 				m_hwndButtonArr[i],
-				IsFuncEnable(*m_pEditDoc, *m_pShareData, m_nFuncCodeArr[i] ) ? TRUE : FALSE
+				IsFuncEnable(*m_pEditDoc, m_shareData, m_nFuncCodeArr[i] ) ? TRUE : FALSE
 				);
 		}
 	}

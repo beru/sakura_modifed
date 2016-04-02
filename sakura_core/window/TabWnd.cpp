@@ -291,7 +291,7 @@ LRESULT TabWnd::OnTabLButtonUp(WPARAM wParam, LPARAM lParam)
 		}
 		if (m_nTabBorderArray) {
 			delete[] m_nTabBorderArray;
-			m_nTabBorderArray = NULL;
+			m_nTabBorderArray = nullptr;
 		}
 		Tooltip_Activate(TabCtrl_GetToolTips(m_hwndTab), TRUE);	// ツールチップ有効化
 		break;
@@ -804,7 +804,7 @@ TabWnd::TabWnd()
 
 	m_hwndTab    = NULL;
 	m_hFont      = NULL;
-	gm_pOldWndProc = NULL;
+	gm_pOldWndProc = nullptr;
 	m_hwndToolTip = NULL;
 	m_hIml = NULL;
 
@@ -829,7 +829,7 @@ HWND TabWnd::Open(HINSTANCE hInstance, HWND hwndParent)
 	// 初期化
 	m_hwndTab    = NULL;
 	m_hFont      = NULL;
-	gm_pOldWndProc = NULL;
+	gm_pOldWndProc = nullptr;
 	m_hwndToolTip = NULL;
 	m_bVisualStyle = ::IsVisualStyle();	// 2007.04.01 ryoji
 	m_eDragState = DRAG_NONE;	//	2005.09.29 ryoji
@@ -1871,7 +1871,7 @@ void TabWnd::Refresh(bool bEnsureVisible/* = true*/, bool bRebuild/* = false*/)
 		return;
 	}
 
-	pEditNode = NULL;
+	pEditNode = nullptr;
 	nCount = AppNodeManager::getInstance().GetOpenedWindowArr(&pEditNode, true);
 
 	// 自ウィンドウのグループ番号を調べる

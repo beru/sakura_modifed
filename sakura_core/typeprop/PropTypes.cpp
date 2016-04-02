@@ -164,7 +164,7 @@ INT_PTR PropTypes::DoPropertySheet(int nPageNum)
 		p->pfnDlgProc  = TypePropSheetInfoList[nIdx].DProc;
 		p->pszTitle    = sTabname[nIdx].c_str();
 		p->lParam      = (LPARAM)this;
-		p->pfnCallback = NULL;
+		p->pfnCallback = nullptr;
 	}
 
 	PROPSHEETHEADER	psh = {0};
@@ -194,7 +194,7 @@ INT_PTR PropTypes::DoPropertySheet(int nPageNum)
 		psh.nStartPage = psh.nPages - 1;
 	}
 	psh.ppsp = psp;
-	psh.pfnCallback = NULL;
+	psh.pfnCallback = nullptr;
 
 	nRet = MyPropertySheet(&psh);	// 2007.05.24 ryoji 独自拡張プロパティシート
 

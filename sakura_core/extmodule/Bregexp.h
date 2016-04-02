@@ -193,7 +193,7 @@ protected:
 	void ReleaseCompileBuffer(void) {
 		if (m_pRegExp) {
 			BRegfree( m_pRegExp );
-			m_pRegExp = NULL;
+			m_pRegExp = nullptr;
 		}
 		m_ePatType = PAT_UNKNOWN;
 	}

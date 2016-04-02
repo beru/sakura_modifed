@@ -68,7 +68,7 @@ FileLoad::FileLoad(const EncodingConfig& encode)
 	m_nFileSize		= 0;
 	m_nFileDataLen	= 0;
 	m_CharCode		= CODE_DEFAULT;
-	m_pCodeBase		= NULL;////
+	m_pCodeBase		= nullptr;////
 	m_encodingTrait = ENCODING_TRAIT_ASCII;
 	m_bBomExist		= false;	// Jun. 08, 2003 Moca
 	m_nFlag 		= 0;
@@ -243,7 +243,7 @@ void FileLoad::FileClose(void)
 	}
 	if (m_pCodeBase) {
 		delete m_pCodeBase;
-		m_pCodeBase = NULL;
+		m_pCodeBase = nullptr;
 	}
 	m_nFileSize		=  0;
 	m_nFileDataLen	=  0;

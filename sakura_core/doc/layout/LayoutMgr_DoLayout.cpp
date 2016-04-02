@@ -348,8 +348,8 @@ void LayoutMgr::_DoLayout()
 	LayoutWork	work;
 	LayoutWork* pWork = &work;
 	pWork->pDocLine		= m_pDocLineMgr->GetDocLineTop(); // 2002/2/10 aroka CDocLineMgr変更
-	pWork->pLayout			= NULL;
-	pWork->pColorStrategy	= NULL;
+	pWork->pLayout			= nullptr;
+	pWork->pColorStrategy	= nullptr;
 	pWork->colorPrev		= COLORIDX_DEFAULT;
 	pWork->nCurLine			= LogicInt(0);
 
@@ -394,7 +394,7 @@ void LayoutMgr::_DoLayout()
 	m_layoutExInfoBot.SetColorInfo(pWork->pColorStrategy->GetStrategyColorInfoSafe());
 
 	m_nPrevReferLine = LayoutInt(0);
-	m_pLayoutPrevRefer = NULL;
+	m_pLayoutPrevRefer = nullptr;
 
 	if (GetListenerCount() != 0) {
 		NotifyProgress(0);
@@ -561,8 +561,8 @@ LayoutInt LayoutMgr::DoLayout_Range(
 
 // 1999.12.22 レイアウト情報がなくなる訳ではないので
 // m_nPrevReferLine = 0;
-// m_pLayoutPrevRefer = NULL;
-// m_pLayoutCurrent = NULL;
+// m_pLayoutPrevRefer = nullptr;
+// m_pLayoutCurrent = nullptr;
 
 	return pWork->nModifyLayoutLinesNew;
 }

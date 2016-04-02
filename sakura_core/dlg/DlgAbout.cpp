@@ -442,7 +442,7 @@ LRESULT CALLBACK UrlWnd::UrlWndProc(
 		pUrlWnd->m_hWnd = NULL;
 		pUrlWnd->m_hFont = NULL;
 		pUrlWnd->m_bHilighted = FALSE;
-		pUrlWnd->m_pOldProc = NULL;
+		pUrlWnd->m_pOldProc = nullptr;
 		return (LRESULT)0;
 	}
 
