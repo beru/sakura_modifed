@@ -679,9 +679,9 @@ void DlgFuncList::SetData()
 				m_memClipText.AppendStringT(szText);
 				// "%ts(%ts)\r\n"
 				m_memClipText.AppendNativeDataT(pFuncInfo->m_memFuncName);
-				m_memClipText.AppendString(L"(");
+				m_memClipText.AppendStringLiteral(L"(");
 				m_memClipText.AppendStringT(item.pszText);
-				m_memClipText.AppendString(L")\r\n");
+				m_memClipText.AppendStringLiteral(L")\r\n");
 			}else {
 				// 検出結果の種類(関数,,,)がないとき
 				auto_sprintf(
@@ -693,7 +693,7 @@ void DlgFuncList::SetData()
 				);
 				m_memClipText.AppendStringT(szText);
 				m_memClipText.AppendNativeDataT(pFuncInfo->m_memFuncName);
-				m_memClipText.AppendString(L"\r\n");
+				m_memClipText.AppendStringLiteral(L"\r\n");
 			}
 		}
 		// 2002.02.08 hor Listは列幅調整とかを実行する前に表示しとかないと変になる
@@ -1139,7 +1139,7 @@ void DlgFuncList::SetTreeJava(
 		// "%ts%ls\r\n"
 		m_memClipText.AppendNativeDataT(pFuncInfo->m_memFuncName);
 		m_memClipText.AppendString(pFuncInfo->m_nInfo == FL_OBJ_DECLARE ? m_pFuncInfoArr->GetAppendText(FL_OBJ_DECLARE).c_str() : L""); 	//	Jan. 04, 2001 genta C++で使用
-		m_memClipText.AppendString(L"\r\n");
+		m_memClipText.AppendStringLiteral(L"\r\n");
 
 		// 現在カーソル位置のメソッドかどうか調べる
 		if (!bSelected) {
@@ -1392,9 +1392,9 @@ void DlgFuncList::SetListVB(void)
 			m_memClipText.AppendStringT(szText);
 			// "%ts(%ts)\r\n"
 			m_memClipText.AppendNativeDataT(pFuncInfo->m_memFuncName);
-			m_memClipText.AppendString(L"(");
+			m_memClipText.AppendStringLiteral(L"(");
 			m_memClipText.AppendStringT(item.pszText);
-			m_memClipText.AppendString(L")\r\n");
+			m_memClipText.AppendStringLiteral(L")\r\n");
 		}else {
 			// 検出結果の種類(関数,,,)がないとき
 			auto_sprintf(
@@ -1407,7 +1407,7 @@ void DlgFuncList::SetListVB(void)
 			m_memClipText.AppendStringT(szText);
 			// "%ts\r\n"
 			m_memClipText.AppendNativeDataT(pFuncInfo->m_memFuncName);
-			m_memClipText.AppendString(L"\r\n");
+			m_memClipText.AppendStringLiteral(L"\r\n");
 		}
 	}
 
@@ -1575,13 +1575,13 @@ void DlgFuncList::SetTree(bool tagjump, bool nolabel)
 
 			if (!nolabel) {
 				for (int cnt=0; cnt<nStackPointer; ++cnt) {
-					text.AppendString(_T("  "));
+					text.AppendStringLiteral(_T("  "));
 				}
-				text.AppendString(_T(" "));
+				text.AppendStringLiteral(_T(" "));
 				
 				text.AppendNativeData(pFuncInfo->m_memFuncName);
 			}
-			text.AppendString(_T("\r\n"));
+			text.AppendStringLiteral(_T("\r\n"));
 			m_memClipText.AppendNativeDataT(text);	// クリップボードコピー用テキスト
 		}
 	}

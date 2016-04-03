@@ -168,7 +168,7 @@ BOOL DlgAbout::OnInitDialog(
 	//      (あればSKR_PATCH_INFOの文字列がそのまま表示)
 	NativeT memMsg;
 	memMsg.AppendString(LS(STR_DLGABOUT_APPNAME));
-	memMsg.AppendString(_T("   "));
+	memMsg.AppendStringLiteral(_T("   "));
 
 	// バージョン&リビジョン情報
 	DWORD dwVersionMS, dwVersionLS;
@@ -194,7 +194,7 @@ BOOL DlgAbout::OnInitDialog(
 	memMsg.AppendString(szMsg);
 
 	// コンパイル情報
-	memMsg.AppendString(_T("      Compile Info: "));
+	memMsg.AppendStringLiteral(_T("      Compile Info: "));
 	int Compiler_ver = COMPILER_VER;
 	auto_sprintf(szMsg, _T(COMPILER_TYPE) _T(TARGET_M_SUFFIX) _T("%d ")
 			TSTR_TARGET_MODE _T(" WIN%03x/I%03x/C%03x/N%03x\r\n"),
@@ -218,12 +218,12 @@ BOOL DlgAbout::OnInitDialog(
 
 	// パッチの情報をコンパイル時に渡せるようにする
 #ifdef SKR_PATCH_INFO
-	memMsg.AppendString(_T("      "));
+	memMsg.AppendStringLiteral(_T("      "));
 	const TCHAR* ptszPatchInfo = to_tchar(SKR_PATCH_INFO);
 	int patchInfoLen = auto_strlen(ptszPatchInfo);
 	memMsg.AppendString(ptszPatchInfo, t_min(80, patchInfoLen));
 #endif
-	memMsg.AppendString(_T("\r\n"));
+	memMsg.AppendStringLiteral(_T("\r\n"));
 
 	SetItemText(IDC_EDIT_VER, memMsg.GetStringPtr());
 

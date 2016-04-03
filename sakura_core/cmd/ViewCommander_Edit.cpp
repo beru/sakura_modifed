@@ -951,10 +951,10 @@ void ViewCommander::DelCharForOverwrite(
 		}
 		NativeW tmp;
 		for (LayoutInt i=LayoutInt(0); i<nKetaDiff; ++i) {
-			tmp.AppendString(L" ");
+			tmp.AppendStringLiteral(L" ");
 		}
 		for (LayoutInt i=LayoutInt(0); i<nKetaAfterIns; ++i) {
-			tmp.AppendString(L" ");
+			tmp.AppendStringLiteral(L" ");
 		}
 		if (0 < tmp.GetStringLength()) {
 			Command_INSTEXT(false, tmp.GetStringPtr(), tmp.GetStringLength(), false, false);

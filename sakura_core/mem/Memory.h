@@ -51,12 +51,12 @@ protected:
 
 	// インターフェース
 public:
-	void AllocBuffer(int);											// バッファサイズの調整。必要に応じて拡大する。
-	void SetRawData(const void* pData, int nDataLen);				// バッファの内容を置き換える
+	void AllocBuffer(size_t);											// バッファサイズの調整。必要に応じて拡大する。
+	void SetRawData(const void* pData, size_t nDataLen);				// バッファの内容を置き換える
 	void SetRawData(const Memory&);									// バッファの内容を置き換える
-	void SetRawDataHoldBuffer( const void* pData, int nDataLen );	// バッファの内容を置き換える(バッファを保持)
+	void SetRawDataHoldBuffer( const void* pData, size_t nDataLen );	// バッファの内容を置き換える(バッファを保持)
 	void SetRawDataHoldBuffer( const Memory& );						// バッファの内容を置き換える(バッファを保持)
-	void AppendRawData(const void* pData, int nDataLen);			// バッファの最後にデータを追加する
+	void AppendRawData(const void* pData, size_t nDataLen);			// バッファの最後にデータを追加する
 	void AppendRawData(const Memory*);								// バッファの最後にデータを追加する
 	void Clean() { _Empty(); }
 	void Clear() { _Empty(); }
@@ -87,7 +87,7 @@ protected:
 	void _AddData(const void*, int);
 public:
 	void _AppendSz(const char* str);
-	void _SetRawLength(int nLength);
+	void _SetRawLength(size_t nLength);
 	void swap(Memory& left) {
 		std::swap(m_nDataBufSize, left.m_nDataBufSize);
 		std::swap(m_pRawData, left.m_pRawData);

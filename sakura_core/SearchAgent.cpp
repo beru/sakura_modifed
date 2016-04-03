@@ -335,21 +335,37 @@ const wchar_t* SearchAgent::SearchStringWord(
 	LogicInt nNextWordFrom = LogicInt(nIdxPos);
 	LogicInt nNextWordFrom2;
 	LogicInt nNextWordTo2;
-	while (WordParse::WhereCurrentWord_2(pLine, LogicInt(nLineLen), nNextWordFrom, &nNextWordFrom2, &nNextWordTo2, nullptr, nullptr)) {
-		size_t nSize = searchWords.size();
-		for (size_t iSW=0; iSW<nSize; ++iSW) {
-			if (searchWords[iSW].second == nNextWordTo2 - nNextWordFrom2) {
-				// 1 == 大文字小文字の区別
-				if ((!bLoHiCase && auto_memicmp(&(pLine[nNextWordFrom2]), searchWords[iSW].first, searchWords[iSW].second) == 0) ||
-					(bLoHiCase && auto_memcmp(&(pLine[nNextWordFrom2]), searchWords[iSW].first, searchWords[iSW].second) == 0)
-				) {
-					*pnMatchLen = searchWords[iSW].second;
-					return &pLine[nNextWordFrom2];
+	// 処理が重複するけど分岐除去
+	size_t nSize = searchWords.size();
+	if (bLoHiCase) {
+		while (WordParse::WhereCurrentWord_2(pLine, LogicInt(nLineLen), nNextWordFrom, &nNextWordFrom2, &nNextWordTo2, nullptr, nullptr)) {
+			for (size_t iSW=0; iSW<nSize; ++iSW) {
+				auto& searchWord = searchWords[iSW];
+				if (searchWord.second == nNextWordTo2 - nNextWordFrom2) {
+					if (auto_memcmp(&(pLine[nNextWordFrom2]), searchWord.first, searchWord.second) == 0) {
+						*pnMatchLen = searchWord.second;
+						return &pLine[nNextWordFrom2];
+					}
 				}
 			}
+			if (!WordParse::SearchNextWordPosition(pLine, LogicInt(nLineLen), nNextWordFrom, &nNextWordFrom, false)) {
+				break;	//	次の単語が無い。
+			}
 		}
-		if (!WordParse::SearchNextWordPosition(pLine, LogicInt(nLineLen), nNextWordFrom, &nNextWordFrom, false)) {
-			break;	//	次の単語が無い。
+	}else {
+		while (WordParse::WhereCurrentWord_2(pLine, LogicInt(nLineLen), nNextWordFrom, &nNextWordFrom2, &nNextWordTo2, nullptr, nullptr)) {
+			for (size_t iSW=0; iSW<nSize; ++iSW) {
+				auto& searchWord = searchWords[iSW];
+				if (searchWord.second == nNextWordTo2 - nNextWordFrom2) {
+					if (auto_memicmp(&(pLine[nNextWordFrom2]), searchWord.first, searchWord.second) == 0) {
+						*pnMatchLen = searchWord.second;
+						return &pLine[nNextWordFrom2];
+					}
+				}
+			}
+			if (!WordParse::SearchNextWordPosition(pLine, LogicInt(nLineLen), nNextWordFrom, &nNextWordFrom, false)) {
+				break;	//	次の単語が無い。
+			}
 		}
 	}
 	*pnMatchLen = 0;
@@ -613,16 +629,17 @@ int SearchAgent::SearchWord(
 					if (WhereCurrentWord(nLinePos, nNextWordFrom, &nNextWordFrom2, &nNextWordTo2 , nullptr, nullptr)) {
 						size_t nSize = searchWords.size();
 						for (size_t iSW=0; iSW<nSize; ++iSW) {
-							if (searchWords[iSW].second == nNextWordTo2 - nNextWordFrom2) {
+							auto& searchWord = searchWords[iSW];
+							if (searchWord.second == nNextWordTo2 - nNextWordFrom2) {
 								const wchar_t* pData = pDocLine->GetPtr();	// 2002/2/10 aroka CMemory変更
 								// 1 == 大文字小文字の区別
-								if ((!searchOption.bLoHiCase && auto_memicmp(&(pData[nNextWordFrom2]), searchWords[iSW].first, searchWords[iSW].second) == 0) ||
-									(searchOption.bLoHiCase && auto_memcmp(&(pData[nNextWordFrom2]), searchWords[iSW].first, searchWords[iSW].second) == 0)
+								if ((!searchOption.bLoHiCase && auto_memicmp(&(pData[nNextWordFrom2]), searchWord.first, searchWord.second) == 0) ||
+									(searchOption.bLoHiCase && auto_memcmp(&(pData[nNextWordFrom2]), searchWord.first, searchWord.second) == 0)
 								) {
 									pMatchRange->SetFromY(nLinePos);	// マッチ行
 									pMatchRange->SetToY  (nLinePos);	// マッチ行
 									pMatchRange->SetFromX(nNextWordFrom2);						// マッチ位置from
-									pMatchRange->SetToX  (pMatchRange->GetFrom().x + searchWords[iSW].second);// マッチ位置to
+									pMatchRange->SetToX  (pMatchRange->GetFrom().x + searchWord.second);// マッチ位置to
 									nRetVal = 1;
 									goto end_of_func;
 								}

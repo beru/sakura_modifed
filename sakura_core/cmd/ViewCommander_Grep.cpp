@@ -227,15 +227,15 @@ void ViewCommander::Command_GREP_REPLACE(void)
 		// -GREPMODE -GKEY="1" -GREPR="2" -GFILE="*.*;*.c;*.h" -GFOLDER="c:\" -GCODE=0 -GOPT=S
 		NativeT cmdLine;
 		TCHAR szTemp[20];
-		cmdLine.AppendString(_T("-GREPMODE -GKEY=\""));
+		cmdLine.AppendStringLiteral(_T("-GREPMODE -GKEY=\""));
 		cmdLine.AppendStringW(cmWork1.GetStringPtr());
-		cmdLine.AppendString(_T("\" -GREPR=\""));
+		cmdLine.AppendStringLiteral(_T("\" -GREPR=\""));
 		cmdLine.AppendStringW(cmWork4.GetStringPtr());
-		cmdLine.AppendString(_T("\" -GFILE=\""));
+		cmdLine.AppendStringLiteral(_T("\" -GFILE=\""));
 		cmdLine.AppendString(cmWork2.GetStringPtr());
-		cmdLine.AppendString(_T("\" -GFOLDER=\""));
+		cmdLine.AppendStringLiteral(_T("\" -GFOLDER=\""));
 		cmdLine.AppendString(cmWork3.GetStringPtr());
-		cmdLine.AppendString(_T("\" -GCODE="));
+		cmdLine.AppendStringLiteral(_T("\" -GCODE="));
 		auto_sprintf( szTemp, _T("%d"), dlgGrepRep.nGrepCharSet );
 		cmdLine.AppendString(szTemp);
 
@@ -257,7 +257,7 @@ void ViewCommander::Command_GREP_REPLACE(void)
 		if (dlgGrepRep.m_bPaste					) _tcscat( pOpt, _T("C") );	// クリップボードから貼り付け
 		if (dlgGrepRep.m_bBackup					) _tcscat( pOpt, _T("O") );	// バックアップ作成
 		if (0 < _tcslen( pOpt )) {
-			cmdLine.AppendString( _T(" -GOPT=") );
+			cmdLine.AppendStringLiteral( _T(" -GOPT=") );
 			cmdLine.AppendString( pOpt );
 		}
 

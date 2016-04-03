@@ -690,7 +690,7 @@ void Caret::ShowCaretPosInfo()
 		CodePage::GetNameShort(szCodeName, m_editDoc.GetDocumentEncoding());
 		memCodeName.AppendString(szCodeName);
 		if (m_editDoc.GetDocumentBomExist()) {
-			memCodeName.AppendString(_T("#"));		// BOM付(メニューバーなので小さく)	// 2013/4/17 Uchi
+			memCodeName.AppendStringLiteral(_T("#"));		// BOM付(メニューバーなので小さく)	// 2013/4/17 Uchi
 		}
 	}
 	pszCodeName = memCodeName.GetStringPtr();

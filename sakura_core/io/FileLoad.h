@@ -52,11 +52,18 @@ class CodeBase;
 class FileLoad {
 public:
 
-	FileLoad(const EncodingConfig& encode);
+	FileLoad();
 	~FileLoad(void);
 
 	// Jul. 26, 2003 ryoji BOM引数追加
-	EncodingType FileOpen( LPCTSTR, bool bBigFile, EncodingType, int, bool* pbBomExist = NULL );		// 指定文字コードでファイルをオープンする
+	EncodingType FileOpen(
+		const EncodingConfig& encode,
+		LPCTSTR pFileName,
+		bool bBigFile,
+		EncodingType charCode,
+		int nFlag,
+		bool* pbBomExist = nullptr
+	);		// 指定文字コードでファイルをオープンする
 	void FileClose(void);					// 明示的にファイルをクローズする
 
 	// 1行データをロードする 順アクセス用
@@ -100,7 +107,7 @@ protected:
 	DWORD FilePointer(DWORD, DWORD); // inline
 
 	// メンバオブジェクト
-	const EncodingConfig* m_pEencoding;
+	EncodingConfig m_encoding;
 
 //	LPTSTR	m_pszFileName;	// ファイル名
 	HANDLE	m_hFile;		// ファイルハンドル

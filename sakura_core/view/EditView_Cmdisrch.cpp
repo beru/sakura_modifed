@@ -553,9 +553,9 @@ void EditView::ISearchSetStatusMsg(NativeT* msg) const
 		return;
 	}
 	if ((int)m_nISearchDirection == 0) {
-		msg->AppendString(_T(" Backward: "));
+		msg->AppendStringLiteral(_T(" Backward: "));
 	}else {
-		msg->AppendString(_T(": "));
+		msg->AppendStringLiteral(_T(": "));
 	}
 
 	if ((int)m_nISearchHistoryCount > 0)

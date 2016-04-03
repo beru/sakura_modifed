@@ -118,9 +118,9 @@ bool EditView::KeySearchCore(const NativeW* pMemCurText)
 	m_tipWnd.m_info.SetString(_T(""));	// tooltipバッファ初期化
 	// 1行目にキーワード表示の場合
 	if (m_pTypeData->bUseKeyHelpKeyDisp) {	// キーワードも表示する	// 2006.04.10 fon
-		m_tipWnd.m_info.AppendString(_T("["));
+		m_tipWnd.m_info.AppendStringLiteral(_T("["));
 		m_tipWnd.m_info.AppendString(pMemCurText->GetStringT());
-		m_tipWnd.m_info.AppendString(_T("]"));
+		m_tipWnd.m_info.AppendStringLiteral(_T("]"));
 	}
 	// 途中まで一致を使う場合
 	if (m_pTypeData->bUseKeyHelpPrefix)
@@ -156,11 +156,11 @@ bool EditView::KeySearchCore(const NativeW* pMemCurText)
 						_tsplitpath(keyHelpInfo.szPath, NULL, NULL, szFile, NULL);
 						m_tipWnd.m_info.AppendString(szFile);
 					}
-					m_tipWnd.m_info.AppendString(_T("\n"));
+					m_tipWnd.m_info.AppendStringLiteral(_T("\n"));
 					// 前方一致でヒットした単語を挿入
 					if (m_pTypeData->bUseKeyHelpPrefix) {	// 選択範囲で前方一致検索
 						m_tipWnd.m_info.AppendString(pMemRefKey->GetStringT());
-						m_tipWnd.m_info.AppendString(_T(" >>\n"));
+						m_tipWnd.m_info.AppendStringLiteral(_T(" >>\n"));
 					}// 調査した「意味」を挿入
 					m_tipWnd.m_info.AppendStringW(pszWork);
 					delete pMemRefText;
@@ -174,12 +174,12 @@ bool EditView::KeySearchCore(const NativeW* pMemCurText)
 				}else {	// 最初のヒット項目のみ返す場合
 					// キーワードが入っていたらseparator挿入
 					if (m_tipWnd.m_info.GetStringLength() != 0)
-						m_tipWnd.m_info.AppendString(_T("\n--------------------\n"));
+						m_tipWnd.m_info.AppendStringLiteral(_T("\n--------------------\n"));
 					
 					// 前方一致でヒットした単語を挿入
 					if (m_pTypeData->bUseKeyHelpPrefix) {	// 選択範囲で前方一致検索
 						m_tipWnd.m_info.AppendString(pMemRefKey->GetStringT());
-						m_tipWnd.m_info.AppendString(_T(" >>\n"));
+						m_tipWnd.m_info.AppendStringLiteral(_T(" >>\n"));
 					}
 					
 					// 調査した「意味」を挿入
@@ -259,7 +259,7 @@ bool EditView::MiniMapCursorLineTip(POINT* po, RECT* rc, bool* pbHide)
 					if (pszData[i] == L'\t' || pszData[i] == L' ') {
 						if (charType == 0) {
 							memCurLine.AppendString( pszData + pre , i - pre );
-							memCurLine.AppendString( L" " );
+							memCurLine.AppendStringLiteral( L" " );
 							charType = 1;
 						}
 						pre = i + charSize;
@@ -275,7 +275,7 @@ bool EditView::MiniMapCursorLineTip(POINT* po, RECT* rc, bool* pbHide)
 				memCurLine.AppendString( pszData + pre , i - pre );
 			}
 			if (nTipBeginLine != nCurLine) {
-				memCurText.AppendString( L"\n" );
+				memCurText.AppendStringLiteral( L"\n" );
 			}
 			memCurLine.Replace( L"\\", L"\\\\" );
 			memCurText.AppendNativeData( memCurLine );

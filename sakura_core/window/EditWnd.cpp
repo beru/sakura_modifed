@@ -1205,7 +1205,7 @@ LRESULT EditWnd::DispatchEvent(
 			if (0 < nAssignedKeyNum) {
 				for (int j=0; j<nAssignedKeyNum; ++j) {
 					if (j > 0) {
-						memWork.AppendString(_T(" , "));
+						memWork.AppendStringLiteral(_T(" , "));
 					}
 					memWork.AppendNativeData(*ppcAssignedKeyList[j]);
 					delete ppcAssignedKeyList[j];

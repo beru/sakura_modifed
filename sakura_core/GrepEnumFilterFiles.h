@@ -46,13 +46,13 @@ public:
 	}
 
 	virtual
-	BOOL IsValid(WIN32_FIND_DATA& w32fd, LPCTSTR pFile = NULL) {
+	bool IsValid(WIN32_FIND_DATA& w32fd, LPCTSTR pFile = NULL) override {
 		if (GrepEnumFiles::IsValid(w32fd, pFile)) {
 			if (m_grepEnumExceptFiles.IsValid(w32fd, pFile)) {
-				return TRUE;
+				return true;
 			}
 		}
-		return FALSE;
+		return false;
 	}
 
 	int Enumerates(

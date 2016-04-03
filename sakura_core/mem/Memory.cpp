@@ -252,7 +252,7 @@ bool Memory::SwabHLByte(const Memory& mem)
 /*
 || バッファサイズの調整
 */
-void Memory::AllocBuffer(int nNewDataLen)
+void Memory::AllocBuffer(size_t nNewDataLen)
 {
 	char* pWork = NULL;
 
@@ -298,7 +298,7 @@ void Memory::AllocBuffer(int nNewDataLen)
 // バッファの内容を置き換える
 void Memory::SetRawData(
 	const void* pData,
-	int nDataLen
+	size_t nDataLen
 	)
 {
 	_Empty();
@@ -322,7 +322,7 @@ void Memory::SetRawData(const Memory& pMemData)
 // バッファの内容を置き換える
 void Memory::SetRawDataHoldBuffer(
 	const void* pData,
-	int nDataLen
+	size_t nDataLen
 	)
 {
 	// this 重複不可
@@ -351,7 +351,7 @@ void Memory::SetRawDataHoldBuffer(const Memory& pMemData)
 // バッファの最後にデータを追加する（publicメンバ）
 void Memory::AppendRawData(
 	const void* pData,
-	int nDataLenBytes
+	size_t nDataLenBytes
 	)
 {
 	if (nDataLenBytes <= 0) {
@@ -392,7 +392,7 @@ void Memory::_AppendSz(const char* str)
 }
 
 
-void Memory::_SetRawLength(int nLength)
+void Memory::_SetRawLength(size_t nLength)
 {
 	assert(m_nRawLen <= m_nDataBufSize-2);
 	m_nRawLen = nLength;

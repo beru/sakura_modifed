@@ -69,38 +69,38 @@ public:
 		return;
 	}
 
-	BOOL IsExist(LPCTSTR lpFileName) {
-		for (int i=0; i<GetCount(); ++i) {
+	bool IsExist(LPCTSTR lpFileName) {
+		for (size_t i=0; i<GetCount(); ++i) {
 			if (m_vpItems[i].first == lpFileName) {
-				return TRUE;
+				return true;
 			}
 		}
-		return FALSE;
+		return false;
 	}
 
-	virtual BOOL IsValid( WIN32_FIND_DATA& w32fd, LPCTSTR pFile = NULL ){
+	virtual bool IsValid( WIN32_FIND_DATA& w32fd, LPCTSTR pFile = NULL ){
 		if (!IsExist(pFile ? pFile : w32fd.cFileName)) {
-			return TRUE;
+			return true;
 		}
-		return FALSE;
+		return false;
 	}
 
-	int GetCount(void) {
-		return (int)m_vpItems.size();
+	size_t GetCount(void) {
+		return m_vpItems.size();
 	}
 
-	LPCTSTR GetFileName(int i) {
+	LPCTSTR GetFileName(size_t i) {
 		if (i < 0 || i >= GetCount()) {
 			return NULL;
 		}
-		return m_vpItems[ i ].first.c_str();
+		return m_vpItems[i].first.c_str();
 	}
 
-	DWORD GetFileSizeLow(int i) {
+	DWORD GetFileSizeLow(size_t i) {
 		if (i < 0 || i >= GetCount()) {
 			return 0;
 		}
-		return m_vpItems[ i ].second;
+		return m_vpItems[i].second;
 	}
 
 	int Enumerates(

@@ -679,21 +679,21 @@ static bool AppendHTMLColor(
 		|| colorAttrLast.cBACK != colorAttrLast2.cBACK
 	) {
 		if (fontAttrLast2.bBoldFont) {
-			memClip.AppendString(L"</b>", 4);
+			memClip.AppendStringLiteral(L"</b>");
 		}
 		if (fontAttrLast2.bUnderLine) {
 			if (colorAttrLast.cTEXT != colorAttrLast2.cTEXT
 				|| colorAttrLast.cBACK != colorAttrLast2.cBACK
 				|| fontAttrLast.bUnderLine != fontAttrLast2.bUnderLine
 			) {
-				memClip.AppendString(L"</u>", 4);
+				memClip.AppendStringLiteral(L"</u>");
 			}
 		}
 		if (colorAttrLast.cTEXT != colorAttrLast2.cTEXT
 			|| colorAttrLast.cBACK != colorAttrLast2.cBACK
 		) {
 			if (colorAttrLast2.cTEXT != (COLORREF)-1) {
-				memClip.AppendString(L"</span>", 7);
+				memClip.AppendStringLiteral(L"</span>");
 			}
 			if (colorAttrLast.cTEXT != (COLORREF)-1) {
 				if (colorAttrLast.cTEXT != colorAttrLast2.cTEXT
@@ -712,11 +712,11 @@ static bool AppendHTMLColor(
 				|| colorAttrLast.cBACK != colorAttrLast2.cBACK
 				|| fontAttrLast.bUnderLine != fontAttrLast2.bUnderLine
 			) {
-				memClip.AppendString(L"<u>", 3);
+				memClip.AppendStringLiteral(L"<u>");
 			}
 		}
 		if (fontAttrLast.bBoldFont) {
-			memClip.AppendString(L"<b>", 3);
+			memClip.AppendStringLiteral(L"<b>");
 		}
 		colorAttrLast2 = colorAttrLast;
 		fontAttrLast2  = fontAttrLast;
@@ -831,16 +831,16 @@ void ViewCommander::Command_COPY_COLOR_HTML(bool bLineNumber)
 		}
 		int nWork = 10;
 		int i;
-		memNullLine.AppendString(L" ");
+		memNullLine.AppendStringLiteral(L" ");
 		for (i=1; i<12; ++i) {
 			if (nWork > nLineNumberMax) {
 				break;
 			}
 			nWork *= 10;
-			memNullLine.AppendString(L" ");
+			memNullLine.AppendStringLiteral(L" ");
 		}
 		nLineNumberMaxLen = i + 1; // "%d:"
-		memNullLine.AppendString(L":");
+		memNullLine.AppendStringLiteral(L":");
 		swprintf(szLineFormat, L"%%%dd:", i);
 	}
 	if (bLineNumLayout) {
@@ -1019,13 +1019,13 @@ void ViewCommander::Command_COPY_COLOR_HTML(bool bLineNumber)
 				}
 				if (bAddLineNum) {
 					if (fontAttrLast2.bBoldFont) {
-						memClip.AppendString(L"</b>", 4);
+						memClip.AppendStringLiteral(L"</b>");
 					}
 					if (fontAttrLast2.bUnderLine) {
-						memClip.AppendString(L"</u>", 4);
+						memClip.AppendStringLiteral(L"</u>");
 					}
 					if (colorAttrLast2.cTEXT != (COLORREF)-1) {
-						memClip.AppendString(L"</span>", 7);
+						memClip.AppendStringLiteral(L"</span>");
 					}
 					fontAttrLast.bBoldFont = fontAttrLast2.bBoldFont = false;
 					fontAttrLast.bUnderLine = fontAttrLast2.bUnderLine = false;
@@ -1034,7 +1034,7 @@ void ViewCommander::Command_COPY_COLOR_HTML(bool bLineNumber)
 				}
 			}
 			if (bLineNumLayout && !bAddCRLF) {
-				memClip.AppendString(WCODE::CRLF, 2);
+				memClip.AppendStringLiteral(WCODE::CRLF);
 			}
 			// 2014.06.25 バッファ拡張
 			if (memClip.capacity() < memClip.GetStringLength() + 100) {
@@ -1043,15 +1043,15 @@ void ViewCommander::Command_COPY_COLOR_HTML(bool bLineNumber)
 		}
 	}
 	if (fontAttrLast2.bBoldFont) {
-		memClip.AppendString(L"</b>", 4);
+		memClip.AppendStringLiteral(L"</b>");
 	}
 	if (fontAttrLast2.bUnderLine) {
-		memClip.AppendString(L"</u>", 4);
+		memClip.AppendStringLiteral(L"</u>");
 	}
 	if (colorAttrLast2.cTEXT != (COLORREF)-1) {
-		memClip.AppendString(L"</span>", 7);
+		memClip.AppendStringLiteral(L"</span>");
 	}
-	memClip.AppendString(L"</pre>", 6);
+	memClip.AppendStringLiteral(L"</pre>");
 
 	Clipboard clipboard(GetEditWindow().GetHwnd());
 	if (!clipboard) {

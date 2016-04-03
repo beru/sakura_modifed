@@ -1943,7 +1943,7 @@ bool EditView::GetSelectedData(
 				}
 			}
 			++nRowNum;
-			memBuf->AppendString(WCODE::CRLF);
+			memBuf->AppendStringLiteral(WCODE::CRLF);
 			if (bLineOnly) {	// •¡”s‘I‘ğ‚Ìê‡‚Íæ“ª‚Ìs‚Ì‚İ
 				break;
 			}

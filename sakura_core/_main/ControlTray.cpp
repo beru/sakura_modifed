@@ -97,7 +97,6 @@ void ControlTray::DoGrep()
 
 void ControlTray::DoGrepCreateWindow(HINSTANCE hinst, HWND msgParent, DlgGrep& dlgGrep)
 {
-
 	// ======= Grepの実行 =============
 	// Grep結果ウィンドウの表示
 
@@ -113,24 +112,24 @@ void ControlTray::DoGrepCreateWindow(HINSTANCE hinst, HWND msgParent, DlgGrep& d
 
 	// -GREPMODE -GKEY="1" -GFILE="*.*;*.c;*.h" -GFOLDER="c:\" -GCODE=0 -GOPT=S
 	NativeT cmdLine;
-	cmdLine.AppendString(_T("-GREPMODE -GKEY=\""));
+	cmdLine.AppendStringLiteral(_T("-GREPMODE -GKEY=\""));
 	cmdLine.AppendStringW(mWork1.GetStringPtr());
-	cmdLine.AppendString(_T("\" -GFILE=\""));
+	cmdLine.AppendStringLiteral(_T("\" -GFILE=\""));
 	cmdLine.AppendString(mWork2.GetStringPtr());
-	cmdLine.AppendString(_T("\" -GFOLDER=\""));
+	cmdLine.AppendStringLiteral(_T("\" -GFOLDER=\""));
 	cmdLine.AppendString(mWork3.GetStringPtr());
-	cmdLine.AppendString(_T("\" -GCODE="));
+	cmdLine.AppendStringLiteral(_T("\" -GCODE="));
 	TCHAR szTemp[20];
 	auto_sprintf_s(szTemp, _T("%d"), dlgGrep.nGrepCharSet);
 	cmdLine.AppendString(szTemp);
 
 	// GOPTオプション
 	TCHAR pOpt[64] = _T("");
-	if (dlgGrep.m_bSubFolder				) _tcscat(pOpt, _T("S"));	// サブフォルダからも検索する
+	if (dlgGrep.m_bSubFolder			) _tcscat(pOpt, _T("S"));	// サブフォルダからも検索する
 	if (dlgGrep.searchOption.bLoHiCase	) _tcscat(pOpt, _T("L"));	// 英大文字と英小文字を区別する
 	if (dlgGrep.searchOption.bRegularExp) _tcscat(pOpt, _T("R"));	// 正規表現
-	if (dlgGrep.nGrepOutputLineType == 1	) _tcscat(pOpt, _T("P"));	// 行を出力する
-	if (dlgGrep.nGrepOutputLineType == 2	) _tcscat(pOpt, _T("N"));	// 否ヒット行を出力する 2014.09.23
+	if (dlgGrep.nGrepOutputLineType == 1) _tcscat(pOpt, _T("P"));	// 行を出力する
+	if (dlgGrep.nGrepOutputLineType == 2) _tcscat(pOpt, _T("N"));	// 否ヒット行を出力する 2014.09.23
 	if (dlgGrep.searchOption.bWordOnly	) _tcscat(pOpt, _T("W"));	// 単語単位で探す
 	if (dlgGrep.nGrepOutputStyle == 1	) _tcscat(pOpt, _T("1"));	// Grep: 出力形式
 	if (dlgGrep.nGrepOutputStyle == 2	) _tcscat(pOpt, _T("2"));	// Grep: 出力形式
@@ -139,7 +138,7 @@ void ControlTray::DoGrepCreateWindow(HINSTANCE hinst, HWND msgParent, DlgGrep& d
 	if (dlgGrep.bGrepOutputBaseFolder	) _tcscat(pOpt, _T("B"));
 	if (dlgGrep.bGrepSeparateFolder		) _tcscat(pOpt, _T("D"));
 	if (pOpt[0] != _T('\0')) {
-		cmdLine.AppendString(_T(" -GOPT="));
+		cmdLine.AppendStringLiteral(_T(" -GOPT="));
 		cmdLine.AppendString(pOpt);
 	}
 

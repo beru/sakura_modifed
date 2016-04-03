@@ -103,11 +103,11 @@ void DlgProperty::SetData(void)
 	// Aug. 16, 2000 genta	‘SŠp‰»
 	memProp.AppendString(LS(STR_DLGFLPROP_FILENAME));
 	memProp.AppendString(pEditDoc->m_docFile.GetFilePath());
-	memProp.AppendString(_T("\r\n"));
+	memProp.AppendStringLiteral(_T("\r\n"));
 
 	memProp.AppendString(LS(STR_DLGFLPROP_FILETYPE));
 	memProp.AppendString(pEditDoc->m_docType.GetDocumentAttribute().szTypeName);
-	memProp.AppendString(_T("\r\n"));
+	memProp.AppendStringLiteral(_T("\r\n"));
 
 	memProp.AppendString(LS(STR_DLGFLPROP_ENCODING));
 	{
@@ -120,7 +120,7 @@ void DlgProperty::SetData(void)
 		memProp.AppendString(LS(STR_DLGFLPROP_WITH_BOM));
 	}
 	// To Here  2008/4/27 Uchi
-	memProp.AppendString(_T("\r\n"));
+	memProp.AppendStringLiteral(_T("\r\n"));
 
 	auto_sprintf(szWork, LS(STR_DLGFLPROP_LINE_COUNT), pEditDoc->m_docLineMgr.GetLineCount());
 	memProp.AppendString(szWork);
@@ -187,7 +187,7 @@ void DlgProperty::SetData(void)
 		if (wfd.dwFileAttributes & FILE_ATTRIBUTE_TEMPORARY) {
 			memProp.AppendString(LS(STR_DLGFLPROP_AT_TEMP));
 		}
-		memProp.AppendString(_T("\r\n"));
+		memProp.AppendStringLiteral(_T("\r\n"));
 
 		memProp.AppendString(LS(STR_DLGFLPROP_CREATE_DT));
 		FileTime timeCreation = wfd.ftCreationTime;
@@ -200,7 +200,7 @@ void DlgProperty::SetData(void)
 			timeCreation->wSecond
 		);
 		memProp.AppendString(szWork);
-		memProp.AppendString(_T("\r\n"));
+		memProp.AppendStringLiteral(_T("\r\n"));
 
 		memProp.AppendString(LS(STR_DLGFLPROP_UPDATE_DT));
 		FileTime timeLastWrite = wfd.ftLastWriteTime;
@@ -213,7 +213,7 @@ void DlgProperty::SetData(void)
 			timeLastWrite->wSecond
 		);
 		memProp.AppendString(szWork);
-		memProp.AppendString(_T("\r\n"));
+		memProp.AppendStringLiteral(_T("\r\n"));
 
 		memProp.AppendString(LS(STR_DLGFLPROP_ACCESS_DT));
 		FileTime timeLastAccess = wfd.ftLastAccessTime;
@@ -226,7 +226,7 @@ void DlgProperty::SetData(void)
 			timeLastAccess->wSecond
 		);
 		memProp.AppendString(szWork);
-		memProp.AppendString(_T("\r\n"));
+		memProp.AppendStringLiteral(_T("\r\n"));
 
 		auto_sprintf(szWork, LS(STR_DLGFLPROP_DOS_NAME), wfd.cAlternateFileName);
 		memProp.AppendString(szWork);

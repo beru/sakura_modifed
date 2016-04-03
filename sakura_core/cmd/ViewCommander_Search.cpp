@@ -309,7 +309,7 @@ end_of_func:;
 			auto& curSearchKey = m_view.m_strCurSearchKey;
 			LimitStringLengthW(curSearchKey.c_str(), curSearchKey.size(), _MAX_PATH, keyName);
 			if ((size_t)keyName.GetStringLength() < curSearchKey.size()) {
-				keyName.AppendString(L"...");
+				keyName.AppendStringLiteral(L"...");
 			}
 			AlertNotFound(
 				hwndParent,
@@ -467,7 +467,7 @@ end_of_func:;
 		auto& curSearchKey = m_view.m_strCurSearchKey;
 		LimitStringLengthW(curSearchKey.c_str(), curSearchKey.size(), _MAX_PATH, keyName);
 		if ((size_t)keyName.GetStringLength() < curSearchKey.size()) {
-			keyName.AppendString(L"...");
+			keyName.AppendStringLiteral(L"...");
 		}
 		AlertNotFound(
 			hwndParent,

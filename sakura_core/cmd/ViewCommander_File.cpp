@@ -728,7 +728,7 @@ bool ViewCommander::Command_INSFILE(
 	int nFlgOpt
 	)
 {
-	FileLoad	fl(m_view.m_pTypeData->encoding);
+	FileLoad	fl;
 	Eol			eol;
 	int			nLineNum = 0;
 
@@ -775,7 +775,7 @@ bool ViewCommander::Command_INSFILE(
 		bBigFile = false;
 #endif
 		// ファイルを開く
-		fl.FileOpen( to_tchar(filename), bBigFile, nSaveCharCode, 0 );
+		fl.FileOpen(m_view.m_pTypeData->encoding, to_tchar(filename), bBigFile, nSaveCharCode, 0 );
 
 		// ファイルサイズが65KBを越えたら進捗ダイアログ表示
 		if (0x10000 < fl.GetFileSize()) {

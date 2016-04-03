@@ -517,7 +517,7 @@ bool EditView::MakeDiffTmpFile2(
 	bool bBom = false;
 	const TypeConfigMini* typeMini;
 	DocTypeManager().GetTypeConfigMini(DocTypeManager().GetDocumentTypeOfPath( orgName ), &typeMini);
-	FileLoad fl(typeMini->encoding);
+	FileLoad fl;
 	TextOutputStream out(tmpName, saveCode, true, false);
 	if (!out) {
 		WarningMessage(NULL, LS(STR_DIFF_FAILED_TEMP));
@@ -531,6 +531,7 @@ bool EditView::MakeDiffTmpFile2(
 		bBigFile = false;
 #endif
 		fl.FileOpen(
+			typeMini->encoding,
 			orgName,
 			bBigFile,
 			code,

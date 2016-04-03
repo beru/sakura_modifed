@@ -444,7 +444,7 @@ void SakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszBu
 				// szGrepKey ¨ memDes
 				LimitStringLengthW(AppMode::getInstance().m_szGrepKey, wcslen(AppMode::getInstance().m_szGrepKey), (q_max - q > 32 ? 32 : q_max - q - 3), memDes);
 				if ((int)wcslen(AppMode::getInstance().m_szGrepKey) > memDes.GetStringLength()) {
-					memDes.AppendString(L"...");
+					memDes.AppendStringLiteral(L"...");
 				}
 				q = wcs_pushW(q, q_max - q, memDes.GetStringPtr(), memDes.GetStringLength());
 				++p;

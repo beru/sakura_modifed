@@ -1117,17 +1117,17 @@ bool Macro::HandleCommand(
 			NativeT cmdLine;
 			TCHAR	szTemp[20];
 			TCHAR	pOpt[64];
-			cmdLine.AppendString(_T("-GREPMODE -GKEY=\""));
+			cmdLine.AppendStringLiteral(_T("-GREPMODE -GKEY=\""));
 			cmdLine.AppendStringW(mWork1.GetStringPtr());
 			if (bGrepReplace) {
-				cmdLine.AppendString(_T("\" -GREPR=\""));
+				cmdLine.AppendStringLiteral(_T("\" -GREPR=\""));
 				cmdLine.AppendStringW(mWork4.GetStringPtr());
 			}
-			cmdLine.AppendString(_T("\" -GFILE=\""));
+			cmdLine.AppendStringLiteral(_T("\" -GFILE=\""));
 			cmdLine.AppendString(mWork2.GetStringPtr());
-			cmdLine.AppendString(_T("\" -GFOLDER=\""));
+			cmdLine.AppendStringLiteral(_T("\" -GFOLDER=\""));
 			cmdLine.AppendString(mWork3.GetStringPtr());
-			cmdLine.AppendString(_T("\" -GCODE="));
+			cmdLine.AppendStringLiteral(_T("\" -GCODE="));
 			auto_sprintf( szTemp, _T("%d"), nCharSet );
 			cmdLine.AppendString(szTemp);
 

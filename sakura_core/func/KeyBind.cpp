@@ -168,7 +168,7 @@ int KeyBind::CreateKeyBindList(
 
 	memList.AppendString(LSW(STR_ERR_DLGKEYBIND1));
 	memList.AppendString(pszCR);
-	memList.AppendString(LTEXT("-----\t-----\t-----\t-----\t-----"));
+	memList.AppendStringLiteral(LTEXT("-----\t-----\t-----\t-----\t-----"));
 	memList.AppendString(pszCR);
 
 	for (int j=0; j<8; ++j) {
@@ -228,9 +228,9 @@ int KeyBind::CreateKeyBindList(
 				memList.AppendString(pszTAB);
 				//@@@ 2002.2.2 YAZAKI ƒ}ƒNƒ‚ðSMacroMgr‚É“ˆê
 				if (SMacroMgr::CanFuncIsKeyMacro(iFunc)) {
-					memList.AppendString(LTEXT("›"));
+					memList.AppendStringLiteral(LTEXT("›"));
 				}else {
-					memList.AppendString(LTEXT("~"));
+					memList.AppendStringLiteral(LTEXT("~"));
 				}
 
 				memList.AppendString(pszCR);

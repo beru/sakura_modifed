@@ -60,10 +60,8 @@ const int FileLoad::gm_nBufSizeDef = 32768;
 // const int gm_nBufSizeMin = 1024;
 
 // コンストラクタ
-FileLoad::FileLoad(const EncodingConfig& encode)
+FileLoad::FileLoad()
 {
-	m_pEencoding = &encode;
-
 	m_hFile			= NULL;
 	m_nFileSize		= 0;
 	m_nFileDataLen	= 0;
@@ -108,6 +106,7 @@ FileLoad::~FileLoad(void)
 	@date 2003.07.26 ryoji BOM引数追加
 */
 EncodingType FileLoad::FileOpen(
+	const EncodingConfig& encode,
 	LPCTSTR pFileName,
 	bool bBigFile,
 	EncodingType charCode,
@@ -115,14 +114,11 @@ EncodingType FileLoad::FileOpen(
 	bool* pbBomExist
 	)
 {
+	m_encoding = encode;
 	ULARGE_INTEGER	fileSize;
 
-	// FileCloseを呼んでからにしてください
 	if (m_hFile) {
-#ifdef _DEBUG
-		::MessageBox(NULL, _T("FileLoad::FileOpen\nFileCloseを呼んでからにしてください") , NULL, MB_OK);
-#endif
-		throw Error_FileOpen();
+		FileClose();
 	}
 	HANDLE hFile = ::CreateFile(
 		pFileName,
@@ -167,7 +163,7 @@ EncodingType FileLoad::FileOpen(
 		if (nBomCode != CODE_NONE) {
 			charCode = nBomCode;
 		}else {
-			CodeMediator mediator(*m_pEencoding);
+			CodeMediator mediator(m_encoding);
 			charCode = mediator.CheckKanjiCode(m_pReadBuf, m_nReadDataLen);
 		}
 	}
@@ -176,8 +172,13 @@ EncodingType FileLoad::FileOpen(
 	if (!IsValidCodeType(charCode)) {
 		charCode = CODE_DEFAULT;
 	}
-	m_CharCode = charCode;
-	m_pCodeBase = CodeFactory::CreateCodeBase(m_CharCode, m_nFlag);
+	if (charCode != m_CharCode || m_pCodeBase == nullptr) {
+		m_CharCode = charCode;
+		if (m_pCodeBase != nullptr) {
+			delete m_pCodeBase;
+		}
+		m_pCodeBase = CodeFactory::CreateCodeBase(m_CharCode, m_nFlag);
+	}
 	m_encodingTrait = CodePage::GetEncodingTrait(m_CharCode);
 	m_nFlag = nFlag;
 
@@ -381,8 +382,7 @@ CodeConvertResult FileLoad::ReadLine_core(
 	if (m_nLineIndex == 0) {
 		if (m_bBomExist && 1 <= pUnicodeBuffer->GetStringLength()) {
 			if (pUnicodeBuffer->GetStringPtr()[0] == 0xfeff) {
-				NativeW tmp(pUnicodeBuffer->GetStringPtr() + 1, pUnicodeBuffer->GetStringLength() - 1);
-				*pUnicodeBuffer = tmp;
+				*pUnicodeBuffer = NativeW(pUnicodeBuffer->GetStringPtr() + 1, pUnicodeBuffer->GetStringLength() - 1);
 			}
 		}
 	}
@@ -437,12 +437,7 @@ void FileLoad::Buffering(void)
 */
 void FileLoad::ReadBufEmpty(void)
 {
-	if (m_pReadBuf) {
-		free(m_pReadBuf);
-		m_pReadBuf = NULL;
-	}
 	m_nReadDataLen    = 0;
-	m_nReadBufSize    = 0;
 	m_nReadBufOffSet  = 0;
 }
 
@@ -505,8 +500,8 @@ const char* FileLoad::GetNextLineCharCode(
 					break;
 				}
 				if (m_bEolEx) {
-					int k;
-					for (k=0; k<(int)_countof(eEolEx); ++k) {
+					size_t k;
+					for (k=0; k<_countof(eEolEx); ++k) {
 						if (m_memEols[k].GetRawLength() != 0
 							&& i + m_memEols[k].GetRawLength() - 1 < nDataLen
 							&& memcmp(m_memEols[k].GetRawPtr(), pData+i, m_memEols[k].GetRawLength()) == 0
@@ -516,7 +511,7 @@ const char* FileLoad::GetNextLineCharCode(
 							break;
 						}
 					}
-					if (k != (int)_countof(eEolEx)) {
+					if (k != _countof(eEolEx)) {
 						break;
 					}
 				}
@@ -525,7 +520,7 @@ const char* FileLoad::GetNextLineCharCode(
 			if (i == nDataLen && m_bEolEx) {
 				for (i=t_max(0, nDataLen - m_nMaxEolLen - 1); i < nDataLen; ++i) {
 					bool bSet = false;
-					for (int k=0; k<(int)_countof(eEolEx); ++k) {
+					for (size_t k=0; k<_countof(eEolEx); ++k) {
 						int nCompLen = t_min(nDataLen-i, m_memEols[k].GetRawLength());
 						if (nCompLen != 0
 							&& memcmp(m_memEols[k].GetRawPtr(), pData+i, nCompLen) == 0

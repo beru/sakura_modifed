@@ -13,7 +13,6 @@
 #include "charset/CodeFactory.h"
 #include "charset/CodeBase.h"
 #include "charset/CodePage.h"
-#include "io/FileLoad.h"
 #include "io/BinaryStream.h"
 #include "util/window.h"
 #include "util/module.h"
@@ -404,9 +403,9 @@ DWORD GrepAgent::DoGrep(
 			memWork2.Replace(L"\'", L"\'\'");
 			memWork2.Replace(L"\"", L"\"\"");
 		}
-		memWork.AppendString(L"\"");
+		memWork.AppendStringLiteral(L"\"");
 		memWork.AppendNativeData(memWork2);
-		memWork.AppendString(L"\"\r\n");
+		memWork.AppendStringLiteral(L"\"\r\n");
 	}else {
 		memWork.AppendString(LSW(STR_GREP_SEARCH_FILE));	// L"「ファイル検索」\r\n"
 	}
@@ -435,9 +434,9 @@ DWORD GrepAgent::DoGrep(
 				memWork2.Replace( L"\'", L"\'\'" );
 				memWork2.Replace( L"\"", L"\"\"" );
 			}
-			memMessage.AppendString( L"\"" );
+			memMessage.AppendStringLiteral( L"\"" );
 			memMessage.AppendNativeData( memWork2 );
-			memMessage.AppendString( L"\"\r\n" );
+			memMessage.AppendStringLiteral( L"\"\r\n" );
 		}
 	}
 
@@ -449,7 +448,7 @@ DWORD GrepAgent::DoGrep(
 	memWork.SetStringT(pmGrepFile->GetStringPtr());
 	memMessage += memWork;
 
-	memMessage.AppendString(L"\r\n");
+	memMessage.AppendStringLiteral(L"\r\n");
 	memMessage.AppendString(LSW(STR_GREP_SEARCH_FOLDER));	// L"フォルダ   "
 	{
 		std::tstring grepFolder;
@@ -473,7 +472,7 @@ DWORD GrepAgent::DoGrep(
 	}else {
 	}
 	memMessage += memWork;
-	memMessage.AppendString(L"\r\n");
+	memMessage.AppendStringLiteral(L"\r\n");
 
 	const wchar_t* pszWork;
 	if (grepOption.bGrepSubFolder) {
@@ -504,7 +503,7 @@ DWORD GrepAgent::DoGrep(
 			//	2007.07.22 genta : 正規表現ライブラリのバージョンも出力する
 			memMessage.AppendString(LSW(STR_GREP_REGEX_DLL));	// L"    (正規表現:"
 			memMessage.AppendStringT(regexp.GetVersionT());
-			memMessage.AppendString(L")\r\n");
+			memMessage.AppendStringLiteral(L")\r\n");
 		}
 	}
 
@@ -515,7 +514,7 @@ DWORD GrepAgent::DoGrep(
 		TCHAR szCpName[100];
 		CodePage::GetNameNormal(szCpName, grepOption.nGrepCharSet);
 		memMessage.AppendStringT( szCpName );
-		memMessage.AppendString(L")\r\n");
+		memMessage.AppendStringLiteral(L")\r\n");
 	}
 
 	if (0 < nWork) { // 2003.06.10 Moca ファイル検索の場合は表示しない // 2004.09.26 条件誤り修正
@@ -540,7 +539,7 @@ DWORD GrepAgent::DoGrep(
 		}
 	}
 
-	memMessage.AppendString(L"\r\n\r\n");
+	memMessage.AppendStringLiteral(L"\r\n\r\n");
 	pszWork = memMessage.GetStringPtr(&nWork);
 //@@@ 2002.01.03 YAZAKI Grep直後はカーソルをGrep直前の位置に動かす
 	LayoutInt tmp_PosY_Layout = viewDst.m_pEditDoc->m_layoutMgr.GetLineCount();
@@ -598,6 +597,8 @@ DWORD GrepAgent::DoGrep(
 		}
 		nGrepTreeResult += nTreeRet;
 	}
+	dlgCancel.SetItemText(IDC_STATIC_CURFILE, LTEXT(" "));	// 2002/09/09 Moca add
+
 	// 2010.08.25 フォルダ移動前に残りを先に出力
 	if (0 < memMessage.GetStringLength()) {
 		AddTail(editWnd, viewDst, memMessage, grepOption.bGrepStdout);
@@ -696,7 +697,8 @@ int GrepAgent::DoGrepTree(
 	int		nWork = 0;
 	int		nHitCountOld = -100;
 	bool	bOutputFolderName = false;
-	int		nBasePathLen = auto_strlen(pszBasePath);
+	size_t	pathLen = auto_strlen(pszPath);
+	size_t	nBasePathLen = auto_strlen(pszBasePath);
 	GrepEnumOptions grepEnumOptions;
 	GrepEnumFilterFiles grepEnumFilterFiles;
 	grepEnumFilterFiles.Enumerates( pszPath, grepEnumKeys, grepEnumOptions, grepExceptAbsFiles );
@@ -704,12 +706,12 @@ int GrepAgent::DoGrepTree(
 	/*
 	 * カレントフォルダのファイルを探索する。
 	 */
-	int count = grepEnumFilterFiles.GetCount();
-	for (int i=0; i<count; ++i) {
+	size_t count = grepEnumFilterFiles.GetCount();
+	for (size_t i=0; i<count; ++i) {
 		LPCTSTR lpFileName = grepEnumFilterFiles.GetFileName(i);
 
 		// 処理中のユーザー操作を可能にする
-		if (!::BlockingHook(dlgCancel.GetHwnd())) {
+		if ((i % 16) == 0 && !::BlockingHook(dlgCancel.GetHwnd())) {
 			goto cancel_return;
 		}
 		// 中断ボタン押下チェック
@@ -723,13 +725,17 @@ int GrepAgent::DoGrepTree(
 		);
 
 		// GREP実行！
-		dlgCancel.SetItemText(IDC_STATIC_CURFILE, lpFileName);
+		ULONGLONG now = GetTickCount64();
+		if (now - m_lastStaticCurFileSetTime > 100) {
+			m_lastStaticCurFileSetTime = now;
+			dlgCancel.SetItemText(IDC_STATIC_CURFILE, lpFileName);
+		}
 
 		std::tstring currentFile = pszPath;
 		currentFile += _T("\\");
 		currentFile += lpFileName;
-		int nBasePathLen2 = nBasePathLen + 1;
-		if ((int)auto_strlen(pszPath) < nBasePathLen2) {
+		size_t nBasePathLen2 = nBasePathLen + 1;
+		if (pathLen < nBasePathLen2) {
 			nBasePathLen2 = nBasePathLen;
 		}
 
@@ -822,8 +828,8 @@ int GrepAgent::DoGrepTree(
 		GrepEnumFilterFolders grepEnumFilterFolders;
 		grepEnumFilterFolders.Enumerates( pszPath, grepEnumKeys, grepEnumOptionsDir, grepExceptAbsFolders );
 
-		int count = grepEnumFilterFolders.GetCount();
-		for (int i=0; i<count; ++i) {
+		size_t count = grepEnumFilterFolders.GetCount();
+		for (size_t i=0; i<count; ++i) {
 			LPCTSTR lpFileName = grepEnumFilterFolders.GetFileName(i);
 
 			// サブフォルダの探索を再帰呼び出し。
@@ -869,11 +875,10 @@ int GrepAgent::DoGrepTree(
 			if (nGrepTreeResult == -1) {
 				goto cancel_return;
 			}
-			dlgCancel.SetItemText(IDC_STATIC_CURPATH, pszPath);	//@@@ 2002.01.10 add サブフォルダから戻ってきたら...
+			//dlgCancel.SetItemText(IDC_STATIC_CURPATH, pszPath);	//@@@ 2002.01.10 add サブフォルダから戻ってきたら...
 		}
 	}
 
-	dlgCancel.SetItemText(IDC_STATIC_CURFILE, LTEXT(" "));	// 2002/09/09 Moca add
 	return 0;
 
 cancel_return:;
@@ -925,13 +930,13 @@ void GrepAgent::SetGrepResult(
 	// ノーマル
 	case 1:
 		if (grepOption.bGrepOutputBaseFolder || grepOption.bGrepSeparateFolder) {
-			memBuf.AppendString(L"・");
+			memBuf.AppendStringLiteral(L"・");
 		}
 		memBuf.AppendStringT(pszFilePath);
 		::auto_sprintf( strWork, L"(%I64d,%d)", nLine, nColumn );
 		memBuf.AppendString(strWork);
 		memBuf.AppendStringT(pszCodeName);
-		memBuf.AppendString(L": ");
+		memBuf.AppendStringLiteral(L": ");
 		nMaxOutStr = 2000; // 2003.06.10 Moca 最大長変更
 		break;
 	// WZ風
@@ -971,7 +976,7 @@ void GrepAgent::SetGrepResult(
 	memMessage.AppendNativeData(memBuf);
 	memMessage.AppendString(pDispData, k);
 	if (bEOL) {
-		memMessage.AppendString(L"\r\n", 2);
+		memMessage.AppendStringLiteral(L"\r\n");
 	}
 }
 
@@ -1003,21 +1008,21 @@ static void OutputPathInfo(
 
 	if (!bOutputBaseFolder && grepOption.bGrepOutputBaseFolder) {
 		if (!grepOption.bGrepSeparateFolder && grepOption.nGrepOutputStyle == 1) {
-			memMessage.AppendString(L"■\"");
+			memMessage.AppendStringLiteral(L"■\"");
 		}else {
-			memMessage.AppendString(L"◎\"");
+			memMessage.AppendStringLiteral(L"◎\"");
 		}
 		memMessage.AppendStringT(pszBaseFolder);
-		memMessage.AppendString(L"\"\r\n");
+		memMessage.AppendStringLiteral(L"\"\r\n");
 		bOutputBaseFolder = true;
 	}
 	if (!bOutputFolderName && grepOption.bGrepSeparateFolder) {
 		if (pszFolder[0]) {
-			memMessage.AppendString(L"■\"");
+			memMessage.AppendStringLiteral(L"■\"");
 			memMessage.AppendStringT(pszFolder);
-			memMessage.AppendString(L"\"\r\n");
+			memMessage.AppendStringLiteral(L"\"\r\n");
 		}else {
-			memMessage.AppendString(L"■\r\n");
+			memMessage.AppendStringLiteral(L"■\r\n");
 		}
 		bOutputFolderName = true;
 	}
@@ -1025,14 +1030,14 @@ static void OutputPathInfo(
 		if (!bOutFileName) {
 			const TCHAR* pszDispFilePath = (grepOption.bGrepSeparateFolder || grepOption.bGrepOutputBaseFolder) ? pszRelPath : pszFullPath;
 			if (grepOption.bGrepSeparateFolder) {
-				memMessage.AppendString(L"◆\"");
+				memMessage.AppendStringLiteral(L"◆\"");
 			}else {
-				memMessage.AppendString(L"■\"");
+				memMessage.AppendStringLiteral(L"■\"");
 			}
 			memMessage.AppendStringT(pszDispFilePath);
-			memMessage.AppendString(L"\"");
+			memMessage.AppendStringLiteral(L"\"");
 			memMessage.AppendStringT(pszCodeName);
-			memMessage.AppendString(L"\r\n");
+			memMessage.AppendStringLiteral(L"\r\n");
 			bOutFileName = true;
 		}
 	}
@@ -1080,7 +1085,7 @@ int GrepAgent::DoGrepFile(
 	int nEolCodeLen;
 	const TypeConfigMini* type;
 	DocTypeManager().GetTypeConfigMini(DocTypeManager().GetDocumentTypeOfPath(pszFile), &type);
-	FileLoad fl(type->encoding);	// 2012/12/18 Uchi 検査するファイルのデフォルトの文字コードを取得する様に
+	FileLoad fl;	// 2012/12/18 Uchi 検査するファイルのデフォルトの文字コードを取得する様に
 	int nOldPercent = 0;
 	auto& editWnd = EditWnd::getInstance();
 
@@ -1186,7 +1191,7 @@ int GrepAgent::DoGrepFile(
 		// ファイルを開く
 		// FileCloseで明示的に閉じるが、閉じていないときはデストラクタで閉じる
 		// 2003.06.10 Moca 文字コード判定処理もFileOpenで行う
-		nCharCode = fl.FileOpen( pszFullPath, true, grepOption.nGrepCharSet, GetDllShareData().common.file.GetAutoMIMEdecode() );
+		nCharCode = fl.FileOpen(type->encoding, pszFullPath, true, grepOption.nGrepCharSet, GetDllShareData().common.file.GetAutoMIMEdecode() );
 		TCHAR szCpName[100];
 		{
 			if (grepOption.nGrepCharSet == CODE_AUTODETECT) {
@@ -1665,7 +1670,6 @@ int GrepAgent::DoGrepReplaceFile(
 
 	const TypeConfigMini* type;
 	DocTypeManager().GetTypeConfigMini( DocTypeManager().GetDocumentTypeOfPath( pszFile ), &type );
-	FileLoad fl( type->encoding );	// 2012/12/18 Uchi 検査するファイルのデフォルトの文字コードを取得する様に
 	bool bBom;
 	// ファイル名表示
 	const TCHAR* pszDispFilePath = ( grepOption.bGrepSeparateFolder || grepOption.bGrepOutputBaseFolder ) ? pszRelPath : pszFullPath;
@@ -1675,7 +1679,7 @@ int GrepAgent::DoGrepReplaceFile(
 		// ファイルを開く
 		// FileCloseで明示的に閉じるが、閉じていないときはデストラクタで閉じる
 		// 2003.06.10 Moca 文字コード判定処理もFileOpenで行う
-		nCharCode = fl.FileOpen( pszFullPath, true, grepOption.nGrepCharSet, GetDllShareData().common.file.GetAutoMIMEdecode(), &bBom );
+		nCharCode = m_fl.FileOpen(type->encoding, pszFullPath, true, grepOption.nGrepCharSet, GetDllShareData().common.file.GetAutoMIMEdecode(), &bBom );
 		WriteData output(nHitCount, pszFullPath, nCharCode, bBom, grepOption.bGrepBackup, memMessage );
 		TCHAR szCpName[100];
 		{
@@ -1701,7 +1705,7 @@ int GrepAgent::DoGrepReplaceFile(
 	
 		NativeW outBuffer;
 		// 注意 : fl.ReadLine が throw する可能性がある
-		while (fl.ReadLine(&m_unicodeBuffer, &cEol) != CodeConvertResult::Failure) {
+		while (m_fl.ReadLine(&m_unicodeBuffer, &cEol) != CodeConvertResult::Failure) {
 			const wchar_t*	pLine = m_unicodeBuffer.GetStringPtr();
 			int nLineLen = m_unicodeBuffer.GetStringLength();
 	
@@ -1723,8 +1727,8 @@ int GrepAgent::DoGrepReplaceFile(
 					dlgCancel.IsButtonChecked(IDC_CHECK_REALTIMEVIEW)
 				);
 				// 2002/08/30 Moca 進行状態を表示する(5MB以上)
-				if (5000000 < fl.GetFileSize()) {
-					int nPercent = fl.GetPercent();
+				if (5000000 < m_fl.GetFileSize()) {
+					int nPercent = m_fl.GetPercent();
 					if (5 <= nPercent - nOldPercent) {
 						nOldPercent = nPercent;
 						TCHAR szWork[10];
@@ -1931,7 +1935,7 @@ int GrepAgent::DoGrepReplaceFile(
 		}
 	
 		// ファイルを明示的に閉じるが、ここで閉じないときはデストラクタで閉じている
-		fl.FileClose();
+		m_fl.FileClose();
 		output.Close();
 	} // try
 	catch( Error_FileOpen ){

@@ -24,7 +24,7 @@ NativeW::NativeW(const NativeW& rhs)
 }
 
 // nDataLenは文字単位。
-NativeW::NativeW(const wchar_t* pData, int nDataLen)
+NativeW::NativeW(const wchar_t* pData, size_t nDataLen)
 #if _DEBUG
 	:
 	m_pDebugData((PWCHAR&)_DebugGetPointerRef())
@@ -48,7 +48,7 @@ NativeW::NativeW(const wchar_t* pData)
 
 
 // バッファの内容を置き換える
-void NativeW::SetString(const wchar_t* pData, int nDataLen)
+void NativeW::SetString(const wchar_t* pData, size_t nDataLen)
 {
 	Native::SetRawData(pData, nDataLen * sizeof(wchar_t));
 }
@@ -59,7 +59,7 @@ void NativeW::SetString(const wchar_t* pszData)
 	Native::SetRawData(pszData,wcslen(pszData) * sizeof(wchar_t));
 }
 
-void NativeW::SetStringHoldBuffer( const wchar_t* pData, int nDataLen )
+void NativeW::SetStringHoldBuffer( const wchar_t* pData, size_t nDataLen )
 {
 	Native::SetRawDataHoldBuffer(pData, nDataLen * sizeof(wchar_t));
 }
@@ -71,7 +71,7 @@ void NativeW::SetNativeData(const NativeW& pcNative)
 }
 
 // (重要：nDataLenは文字単位) バッファサイズの調整。必要に応じて拡大する。
-void NativeW::AllocStringBuffer(int nDataLen)
+void NativeW::AllocStringBuffer(size_t nDataLen)
 {
 	Native::AllocBuffer(nDataLen * sizeof(wchar_t));
 }
@@ -83,7 +83,7 @@ void NativeW::AppendString(const wchar_t* pszData)
 }
 
 // バッファの最後にデータを追加する。nLengthは文字単位。
-void NativeW::AppendString(const wchar_t* pszData, int nLength)
+void NativeW::AppendString(const wchar_t* pszData, size_t nLength)
 {
 	Native::AppendRawData(pszData, nLength * sizeof(wchar_t));
 }
@@ -97,7 +97,7 @@ void NativeW::AppendNativeData(const NativeW& memData)
 // -- -- charからの移行用 -- -- //
 
 // バッファの内容を置き換える。nDataLenは文字単位。
-void NativeW::SetStringOld(const char* pData, int nDataLen)
+void NativeW::SetStringOld(const char* pData, size_t nDataLen)
 {
 	int nLen;
 	wchar_t* szTmp = mbstowcs_new(pData, nDataLen, &nLen);
@@ -111,7 +111,7 @@ void NativeW::SetStringOld(const char* pszData)
 	SetStringOld(pszData, strlen(pszData));
 }
 
-void NativeW::AppendStringOld(const char* pData, int nDataLen)
+void NativeW::AppendStringOld(const char* pData, size_t nDataLen)
 {
 	int nLen;
 	wchar_t* szTmp=mbstowcs_new(pData, nDataLen, &nLen);
@@ -174,21 +174,21 @@ void NativeW::Replace(
 	const wchar_t* pszTo
 	)
 {
-	int nFromLen = wcslen(pszFrom);
-	int nToLen = wcslen(pszTo);
+	size_t nFromLen = wcslen(pszFrom);
+	size_t nToLen = wcslen(pszTo);
 	Replace( pszFrom, nFromLen, pszTo, nToLen );
 }
 
 void NativeW::Replace(
 	const wchar_t* pszFrom,
-	int nFromLen,
+	size_t nFromLen,
 	const wchar_t* pszTo,
-	int nToLen
+	size_t nToLen
 	)
 {
 	NativeW memWork;
-	int nBgnOld = 0;
-	int nBgn = 0;
+	size_t nBgnOld = 0;
+	size_t nBgn = 0;
 	while (nBgn <= GetStringLength() - nFromLen) {
 		if (wmemcmp(&GetStringPtr()[nBgn], pszFrom, nFromLen) == 0) {
 			if (nBgnOld == 0 && nFromLen <= nToLen) {
@@ -224,8 +224,8 @@ void NativeW::Replace(
 // 指定した位置の文字がwchar_t何個分かを返す
 LogicInt NativeW::GetSizeOfChar(
 	const wchar_t* pData,
-	int nDataLen,
-	int nIdx
+	size_t nDataLen,
+	size_t nIdx
 	)
 {
 	if (nIdx >= nDataLen) {
@@ -246,8 +246,8 @@ LogicInt NativeW::GetSizeOfChar(
 // 指定した位置の文字が半角何個分かを返す
 LayoutInt NativeW::GetKetaOfChar(
 	const wchar_t* pData,
-	int nDataLen,
-	int nIdx
+	size_t nDataLen,
+	size_t nIdx
 	)
 {
 	// 文字列範囲外なら 0
@@ -286,7 +286,7 @@ LayoutInt NativeW::GetKetaOfChar(
 // 次にある文字がバッファの最後の位置を越える場合は&pData[nDataLen]を返します
 const wchar_t* NativeW::GetCharNext(
 	const wchar_t* pData,
-	int nDataLen,
+	size_t nDataLen,
 	const wchar_t* pDataCurrent
 	)
 {
@@ -310,7 +310,7 @@ const wchar_t* NativeW::GetCharNext(
 // 直前にある文字がバッファの先頭の位置を越える場合はpDataを返します
 const wchar_t* NativeW::GetCharPrev(
 	const wchar_t* pData,
-	int nDataLen,
+	size_t nDataLen,
 	const wchar_t* pDataCurrent
 	)
 {
