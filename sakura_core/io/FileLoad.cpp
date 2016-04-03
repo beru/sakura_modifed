@@ -324,7 +324,7 @@ CodeConvertResult FileLoad::ReadLine_core(
 		return CodeConvertResult::Failure;
 	}
 #endif
-	//行データバッファ (文字コード変換無しの生のデータ)
+	// 行データバッファ (文字コード変換無しの生のデータ)
 	m_lineBuffer.SetRawDataHoldBuffer("", 0);
 
 	// 1行取り出し ReadBuf -> m_memLine

@@ -196,7 +196,7 @@ DWORD GrepAgent::DoGrep(
 	*/
 	memMessage.AllocStringBuffer(4000);
 
-	viewDst.m_bDoing_UndoRedo		= true;
+	viewDst.m_bDoing_UndoRedo = true;
 
 
 	// アンドゥバッファの処理
@@ -463,7 +463,7 @@ DWORD GrepAgent::DoGrep(
 	memMessage += memWork;
 	memMessage.AppendString(L"\r\n");
 
-	const wchar_t*	pszWork;
+	const wchar_t* pszWork;
 	if (grepOption.bGrepSubFolder) {
 		pszWork = LSW(STR_GREP_SUBFOLDER_YES);	// L"    (サブフォルダも検索)\r\n"
 	}else {
@@ -669,10 +669,10 @@ int GrepAgent::DoGrepTree(
 	dlgCancel.SetItemText(IDC_STATIC_CURPATH, pszPath);
 
 	NativeW	memMessage;
-	int			nWork = 0;
-	int			nHitCountOld = -100;
-	bool		bOutputFolderName = false;
-	int			nBasePathLen = auto_strlen(pszBasePath);
+	int		nWork = 0;
+	int		nHitCountOld = -100;
+	bool	bOutputFolderName = false;
+	int		nBasePathLen = auto_strlen(pszBasePath);
 	GrepEnumOptions grepEnumOptions;
 	GrepEnumFilterFiles grepEnumFilterFiles;
 	grepEnumFilterFiles.Enumerates( pszPath, grepEnumKeys, grepEnumOptions, grepExceptAbsFiles );
@@ -769,7 +769,7 @@ int GrepAgent::DoGrepTree(
 			if (0 < memMessage.GetStringLength()) {
 				AddTail( viewDst, memMessage, grepOption.bGrepStdout );
 				viewDst.GetCommander().Command_GOFILEEND(false);
-				if (!EditWnd::getInstance().UpdateTextWrap()) {		// 折り返し方法関連の更新	// 2008.06.10 ryoji
+				if (!EditWnd::getInstance().UpdateTextWrap()) {			// 折り返し方法関連の更新	// 2008.06.10 ryoji
 					EditWnd::getInstance().RedrawAllViews(&viewDst);	//	他のペインの表示を更新
 				}
 				memMessage.Clear();
@@ -965,7 +965,7 @@ static void OutputPathInfo(
 	const TCHAR*	pszCodeName,
 	bool&			bOutputBaseFolder,
 	bool&			bOutputFolderName,
-	BOOL&			bOutFileName
+	bool&			bOutFileName
 	)
 {
 	{
@@ -1013,7 +1013,7 @@ static void OutputPathInfo(
 			memMessage.AppendString(L"\"");
 			memMessage.AppendStringT(pszCodeName);
 			memMessage.AppendString(L"\r\n");
-			bOutFileName = TRUE;
+			bOutFileName = true;
 		}
 	}
 }
@@ -1036,7 +1036,7 @@ int GrepAgent::DoGrepFile(
 	const SearchOption&		searchOption,		// [in] 検索オプション
 	const GrepOption&		grepOption,			// [in] Grepオプション
 	const SearchStringPattern& pattern,			// [in] 検索パターン
-	Bregexp&				regexp,			// [in] 正規表現コンパイルデータ。既にコンパイルされている必要がある
+	Bregexp&				regexp,				// [in] 正規表現コンパイルデータ。既にコンパイルされている必要がある
 	int*					pnHitCount,			// [i/o] ヒット数の合計．元々の値に見つかった数を加算して返す．
 	const TCHAR*			pszFullPath,		// [in] 処理対象ファイルパス C:\Folder\SubFolder\File.ext
 	const TCHAR*			pszBaseFolder,		// [in] 検索フォルダ C:\Folder
@@ -1053,8 +1053,8 @@ int GrepAgent::DoGrepFile(
 	EncodingType	nCharCode;
 	const wchar_t*	pCompareData; // 2002/08/29 const付加
 	int		nColumn;
-	BOOL	bOutFileName;
-	bOutFileName = FALSE;
+	bool	bOutFileName;
+	bOutFileName = false;
 	Eol	eol;
 	int		nEolCodeLen;
 	const TypeConfigMini* type;
@@ -1199,9 +1199,9 @@ int GrepAgent::DoGrepFile(
 
 		// 注意 : fl.ReadLine が throw する可能性がある
 		NativeW unicodeBuffer;
-		while (CodeConvertResult::Failure != fl.ReadLine(&unicodeBuffer, &eol)) {
-			const wchar_t*	pLine = unicodeBuffer.GetStringPtr();
-			int		nLineLen = unicodeBuffer.GetStringLength();
+		while (fl.ReadLine(&unicodeBuffer, &eol) != CodeConvertResult::Failure) {
+			const wchar_t* pLine = unicodeBuffer.GetStringPtr();
+			int nLineLen = unicodeBuffer.GetStringLength();
 
 			nEolCodeLen = eol.GetLen();
 			++nLine;
@@ -1644,7 +1644,7 @@ int GrepAgent::DoGrepReplaceFile(
 	LONGLONG	nLine = 0;
 	int			nHitCount = 0;
 	EncodingType	nCharCode;
-	BOOL		bOutFileName = FALSE;
+	bool	bOutFileName = false;
 	Eol		cEol;
 	int		nEolCodeLen;
 	int		nOldPercent = 0;
