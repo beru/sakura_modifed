@@ -19,7 +19,7 @@
 #include "debug/RunningTimer.h"
 #include "_main/global.h"
 
-#ifdef _DEBUG
+#if 1 //def _DEBUG
 
 #pragma comment(lib, "winmm.lib")
 
@@ -33,7 +33,7 @@ RunningTimer::RunningTimer(const char* pszText)
 	else
 		m_szText[0] = '\0';
 	m_nDeapth = m_nNestCount++;
-	MYTRACE(_T("%3d:\"%hs\" : Enter \n"), m_nDeapth, m_szText);
+	TRACE(_T("%3d:\"%hs\" : Enter \n"), m_nDeapth, m_szText);
 	return;
 }
 
@@ -62,7 +62,7 @@ DWORD RunningTimer::Read()
 */
 void RunningTimer::WriteTrace(const char* msg) const
 {
-	MYTRACE(_T("%3d:\"%hs\", %d‡_•b : %hs\n"), m_nDeapth, m_szText, timeGetTime() - m_nStartTime, msg);
+	TRACE(_T("%3d:\"%hs\", %d‡_•b : %hs\n"), m_nDeapth, m_szText, timeGetTime() - m_nStartTime, msg);
 }
 
 #endif // #ifdef _DEBUG

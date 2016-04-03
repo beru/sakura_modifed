@@ -303,6 +303,7 @@ void SearchAgent::CreateWordList(
 	int	nPatternLen
 	)
 {
+	searchWords.clear();
 	for (LogicInt pos=LogicInt(0); pos<nPatternLen; ) {
 		LogicInt begin, end; // 検索語に含まれる単語?の posを基準とした相対位置。WhereCurrentWord_2()の仕様では空白文字列も単語に含まれる。
 		if (WordParse::WhereCurrentWord_2(pszPattern+pos, nPatternLen-pos, LogicInt(0), &begin, &end, nullptr, nullptr)

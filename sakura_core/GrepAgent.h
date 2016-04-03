@@ -73,7 +73,6 @@ public:
 
 	static void CreateFolders( const TCHAR* pszPath, std::vector<std::tstring>& vPaths );
 	static std::tstring ChopYen( const std::tstring& str );
-	static void AddTail( EditView& editView, const NativeW& mem, bool bAddStdout );
 
 	// Grep実行
 	DWORD DoGrep(
@@ -104,6 +103,7 @@ private:
 		EditView&				viewDst,
 		DlgCancel&				dlgCancel,			// [in] Cancelダイアログへのポインタ
 		const wchar_t*			pszKey,				// [in] 検索パターン
+		size_t					nKeyLen,
 		const NativeW&			mGrepReplace,
 		const GrepEnumKeys&		grepEnumKeys,		// [in] 検索対象ファイルパターン(!で除外指定)
 		GrepEnumFiles&			grepExceptAbsFiles,
@@ -116,7 +116,8 @@ private:
 		Bregexp&				regexp,				// [in] 正規表現コンパイルデータ。既にコンパイルされている必要がある
 		int						nNest,				// [in] ネストレベル
 		bool&					bOutputBaseFolder,
-		int*					pnHitCount			// [i/o] ヒット数の合計
+		int*					pnHitCount,			// [i/o] ヒット数の合計
+		NativeW&				memMessage
 	);
 
 	// Grep実行
@@ -124,6 +125,7 @@ private:
 		EditView&				viewDst,
 		DlgCancel&				dlgCancel,
 		const wchar_t*			pszKey,
+		size_t					nKeyLen,
 		const TCHAR*			pszFile,
 		const SearchOption&		searchOption,
 		const GrepOption&		grepOption,
@@ -143,6 +145,7 @@ private:
 		EditView&				viewDst,
 		DlgCancel&				dlgCancel,
 		const wchar_t*			pszKey,
+		size_t					nKeyLen,
 		const NativeW&			mGrepReplace,
 		const TCHAR*			pszFile,
 		const SearchOption&		searchOption,
@@ -178,9 +181,20 @@ private:
 		// オプション
 		const GrepOption&	grepOption
 	);
+	void AddTail(
+		EditWnd& editWnd,
+		EditView& editView,
+		const NativeW& mem,
+		bool bAddStdout
+	);
 
 public: //$$ 仮
 	bool	m_bGrepMode;		// Grepモードか
 	bool	m_bGrepRunning;		// Grep処理中
+private:
+	ULONGLONG m_lastViewDstAddedTime;
+	std::vector<std::pair<const wchar_t*, LogicInt>> m_searchWords;
+	NativeW m_memBuf;
+	NativeW m_unicodeBuffer;
 };
 

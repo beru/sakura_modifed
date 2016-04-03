@@ -70,7 +70,7 @@ protected:
 	char	m_szText[100];	// タイマー名
 	int		m_nDeapth;		// このオブジェクトのネストの深さ
 
-#ifdef _DEBUG
+#if 1 //def _DEBUG
 	static int m_nNestCount;
 #endif
 };

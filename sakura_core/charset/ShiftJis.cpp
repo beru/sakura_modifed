@@ -117,7 +117,7 @@ CodeConvertResult ShiftJis::SJISToUnicode(
 	int nSrcLen;
 	const char* pSrc = reinterpret_cast<const char*>(src.GetRawPtr(&nSrcLen));
 	if (nSrcLen == 0) {
-		pDstMem->Clear();
+		pDstMem->_SetStringLength(0);
 		return CodeConvertResult::Complete;
 	}
 

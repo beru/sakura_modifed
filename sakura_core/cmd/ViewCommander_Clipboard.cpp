@@ -612,10 +612,11 @@ void ViewCommander::Command_ADDTAIL(
 	// ファイルの最後に移動
 	Command_GOFILEEND(false);
 
+	auto& caret = GetCaret();
 	// 現在位置にデータを挿入
 	LayoutPoint ptLayoutNew;	// 挿入された部分の次の位置
 	m_view.InsertData_CEditView(
-		GetCaret().GetCaretLayoutPos(),
+		caret.GetCaretLayoutPos(),
 		pszData,
 		nDataLen,
 		&ptLayoutNew,
@@ -624,8 +625,8 @@ void ViewCommander::Command_ADDTAIL(
 
 	// 挿入データの最後へカーソルを移動
 	// Sep. 2, 2002 すなふき アンダーラインの表示が残ってしまう問題を修正
-	GetCaret().MoveCursor(ptLayoutNew, true);
-	GetCaret().m_nCaretPosX_Prev = GetCaret().GetCaretLayoutPos().GetX2();
+	caret.MoveCursor(ptLayoutNew, true);
+	caret.m_nCaretPosX_Prev = caret.GetCaretLayoutPos().GetX2();
 }
 
 

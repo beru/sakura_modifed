@@ -73,10 +73,7 @@ void ViewCommander::Command_GREP(void)
 		自ウィンドウがGrep実行中も、(異常終了するので)別ウィンドウにする
 	*/
 	if (
-		(
-			grepAgent.m_bGrepMode
-			&& !grepAgent.m_bGrepRunning
-		)
+		(grepAgent.m_bGrepMode && !grepAgent.m_bGrepRunning)
 		|| (
 			!doc.m_docEditor.IsModified()
 			&& !doc.m_docFile.GetFilePathClass().IsValidPath()		// 現在編集中のファイルのパス
@@ -185,14 +182,15 @@ void ViewCommander::Command_GREP_REPLACE(void)
 		Grepモードのとき、または未編集で無題かつアウトプットでない場合。
 		自ウィンドウがGrep実行中も、(異常終了するので)別ウィンドウにする
 	*/
-	if (( EditApp::getInstance().m_pGrepAgent->m_bGrepMode &&
-		  !EditApp::getInstance().m_pGrepAgent->m_bGrepRunning ) ||
+	auto& grepAgent = *EditApp::getInstance().m_pGrepAgent;
+	if ((grepAgent.m_bGrepMode &&
+		  !grepAgent.m_bGrepRunning ) ||
 		( !GetDocument().m_docEditor.IsModified() &&
 		  !GetDocument().m_docFile.GetFilePathClass().IsValidPath() &&		// 現在編集中のファイルのパス
 		  !AppMode::getInstance().IsDebugMode()
 		)
 	) {
-		EditApp::getInstance().m_pGrepAgent->DoGrep(
+		grepAgent.DoGrep(
 			m_view,
 			true,
 			&cmWork1,
