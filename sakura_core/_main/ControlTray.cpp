@@ -100,24 +100,24 @@ void ControlTray::DoGrepCreateWindow(HINSTANCE hinst, HWND msgParent, DlgGrep& d
 	// ======= Grepの実行 =============
 	// Grep結果ウィンドウの表示
 
-	NativeW mWork1;
+	NativeT mWork1;
 	NativeT mWork2;
 	NativeT mWork3;
 	mWork1.SetString(dlgGrep.m_strText.c_str());
 	mWork2.SetString(dlgGrep.m_szFile);
 	mWork3.SetString(dlgGrep.m_szFolder);
-	mWork1.Replace(L"\"", L"\"\"");
+	mWork1.Replace(_T("\""), _T("\"\""));
 	mWork2.Replace(_T("\""), _T("\"\""));
 	mWork3.Replace(_T("\""), _T("\"\""));
 
 	// -GREPMODE -GKEY="1" -GFILE="*.*;*.c;*.h" -GFOLDER="c:\" -GCODE=0 -GOPT=S
 	NativeT cmdLine;
 	cmdLine.AppendStringLiteral(_T("-GREPMODE -GKEY=\""));
-	cmdLine.AppendStringW(mWork1.GetStringPtr());
+	cmdLine.AppendStringT(mWork1.GetStringPtr());
 	cmdLine.AppendStringLiteral(_T("\" -GFILE=\""));
-	cmdLine.AppendString(mWork2.GetStringPtr());
+	cmdLine.AppendStringT(mWork2.GetStringPtr());
 	cmdLine.AppendStringLiteral(_T("\" -GFOLDER=\""));
-	cmdLine.AppendString(mWork3.GetStringPtr());
+	cmdLine.AppendStringT(mWork3.GetStringPtr());
 	cmdLine.AppendStringLiteral(_T("\" -GCODE="));
 	TCHAR szTemp[20];
 	auto_sprintf_s(szTemp, _T("%d"), dlgGrep.nGrepCharSet);

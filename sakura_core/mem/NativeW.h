@@ -76,7 +76,7 @@ public:
 	template <size_t nLength>
 	__forceinline void AppendStringLiteral(const wchar_t(&pszData)[nLength])
 	{
-		AppendString(pszData, nLength);
+		AppendString(pszData, nLength-1);
 	}
 
 	// NativeW
