@@ -45,57 +45,6 @@ namespace WCODE
 {
 	bool CalcHankakuByFont(wchar_t);
 
-	// 2007.08.30 kobake 追加
-	bool IsHankaku(wchar_t wc)
-	{
-		// ※ほぼ未検証。ロジックが確定したらインライン化すると良い。
-
-		// 参考：http://www.swanq.co.jp/blog/archives/000783.html
-		if (
-			   wc <= 0x007E // ACODEとか
-//			|| wc == 0x00A5 // 円マーク
-//			|| wc == 0x203E // にょろ
-			|| (wc >= 0xFF61 && wc <= 0xFF9f)	// 半角カタカナ
-		) return true;
-
-		// 0x7F ～ 0xA0 も半角とみなす
-		// http://ja.wikipedia.org/wiki/Unicode%E4%B8%80%E8%A6%A7_0000-0FFF を見て、なんとなく
-		if (wc >= 0x007F && wc <= 0x00A0) return true;	// Control Code ISO/IEC 6429
-
-		// 漢字はすべて同一幅とみなす	// 2013.04.07 aroka
-		if (wc >= 0x4E00 && wc <= 0x9FBB		// Unified Ideographs, CJK
-		  || wc>= 0x3400 && wc <= 0x4DB5		// Unified Ideographs Extension A, CJK
-		) {
-			wc = 0x4E00; // '一'(0x4E00)の幅で代用
-		}
-		else
-		// ハングルはすべて同一幅とみなす	// 2013.04.08 aroka
-		if (wc >= 0xAC00 && wc <= 0xD7A3) {		// Hangul Syllables
-			wc = 0xAC00; // (0xAC00)の幅で代用
-		}
-		else
-		// 外字はすべて同一幅とみなす	// 2013.04.08 aroka
-		if (wc >= 0xE000 && wc <= 0xE8FF) { // Private Use Area
-			wc = 0xE000; // (0xE000)の幅で代用
-		}
-
-		//$$ 仮。もう動的に計算しちゃえ。(初回のみ)
-		return CalcHankakuByFont(wc);
-	}
-
-	// 制御文字であるかどうか
-	bool IsControlCode(wchar_t wc)
-	{
-		//// 改行は制御文字とみなさない
-		//if (IsLineDelimiter(wc)) return false;
-
-		//// タブは制御文字とみなさない
-		//if (wc == TAB) return false;
-
-		//return iswcntrl(wc) != 0;
-		return (wc < 128 && gm_keyword_char[wc] == CK_CTRL);
-	}
-
 #if 0
 	/*!
 		句読点か

@@ -266,6 +266,8 @@ void Memory::AllocBuffer(size_t nNewDataLen)
 	}else {
 		// 現在のバッファサイズより大きくなった場合のみ再確保する
 		if (m_nDataBufSize < nWorkLen) {
+			// 頻繁な再確保を行わないようにする為に必要量の倍のサイズにする。
+			nWorkLen <<= 1;
 			// 2014.06.25 有効データ長が0の場合はfree & malloc
 			if (m_nRawLen == 0) {
 				free( m_pRawData );
@@ -394,9 +396,11 @@ void Memory::_AppendSz(const char* str)
 
 void Memory::_SetRawLength(size_t nLength)
 {
+	if (m_nDataBufSize < nLength + 2) {
+		AllocBuffer(nLength + 2);
+	}
 	assert(m_nRawLen <= m_nDataBufSize-2);
 	m_nRawLen = nLength;
-	assert(m_nRawLen <= m_nDataBufSize-2);
 	m_pRawData[m_nRawLen ] = 0;
 	m_pRawData[m_nRawLen + 1] = 0; // 終端'\0'を2つ付加する('\0''\0' == L'\0')。
 }

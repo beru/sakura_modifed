@@ -194,11 +194,12 @@ public: //$$ 仮
 	bool	m_bGrepMode;		// Grepモードか
 	bool	m_bGrepRunning;		// Grep処理中
 private:
-	ULONGLONG m_lastStaticCurFileSetTime;
 	ULONGLONG m_lastViewDstAddedTime;
 	std::vector<std::pair<const wchar_t*, LogicInt>> m_searchWords;
 	NativeW m_memBuf;
 	NativeW m_unicodeBuffer;
 	FileLoad m_fl;	// 2012/12/18 Uchi 検査するファイルのデフォルトの文字コードを取得する様に
+	int m_oldSetHitCnt;
+	LONGLONG m_oldCheckTime = 0;
 };
 
