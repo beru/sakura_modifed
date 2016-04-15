@@ -111,7 +111,9 @@ private:
 		GrepEnumFiles&			grepExceptAbsFiles,
 		GrepEnumFolders&		grepExceptAbsFolders,
 		const TCHAR*			pszPath,			// [in] 検索対象パス
+		size_t					pathLen,
 		const TCHAR*			pszBasePath,		// [in] 検索対象パス(ベース)
+		size_t					basePathLen,
 		const SearchOption&		searchOption,		// [in] 検索オプション
 		const GrepOption&		grepOption,			// [in] Grepオプション
 		const SearchStringPattern& pattern,			// [in] 検索パターン

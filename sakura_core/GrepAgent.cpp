@@ -580,7 +580,9 @@ DWORD GrepAgent::DoGrep(
 			grepExceptAbsFiles,
 			grepExceptAbsFolders,
 			sPath.c_str(),
+			sPath.size(),
 			sPath.c_str(),
+			sPath.size(),
 			searchOption,
 			grepOption,
 			pattern,
@@ -679,7 +681,9 @@ int GrepAgent::DoGrepTree(
 	GrepEnumFiles&			grepExceptAbsFiles,		// [in] 除外ファイル絶対パス
 	GrepEnumFolders&		grepExceptAbsFolders,	// [in] 除外フォルダ絶対パス
 	const TCHAR*			pszPath,				// [in] 検索対象パス
+	size_t					pathLen,
 	const TCHAR*			pszBasePath,			// [in] 検索対象パス(ベースフォルダ)
+	size_t					basePathLen,
 	const SearchOption&		searchOption,			// [in] 検索オプション
 	const GrepOption&		grepOption,				// [in] Grepオプション
 	const SearchStringPattern& pattern,				// [in] 検索パターン
@@ -694,8 +698,6 @@ int GrepAgent::DoGrepTree(
 	int		nWork = 0;
 	int		nHitCountOld = -100;
 	bool	bOutputFolderName = false;
-	size_t	pathLen = auto_strlen(pszPath);
-	size_t	nBasePathLen = auto_strlen(pszBasePath);
 	GrepEnumOptions grepEnumOptions;
 	GrepEnumFilterFiles grepEnumFilterFiles;
 	grepEnumFilterFiles.Enumerates( pszPath, grepEnumKeys, grepEnumOptions, grepExceptAbsFiles );
@@ -710,9 +712,9 @@ int GrepAgent::DoGrepTree(
 		std::tstring currentFile = pszPath;
 		currentFile += _T("\\");
 		currentFile += lpFileName;
-		size_t nBasePathLen2 = nBasePathLen + 1;
+		size_t nBasePathLen2 = basePathLen + 1;
 		if (pathLen < nBasePathLen2) {
-			nBasePathLen2 = nBasePathLen;
+			nBasePathLen2 = basePathLen;
 		}
 
 		// ファイル内の検索
@@ -733,7 +735,7 @@ int GrepAgent::DoGrepTree(
 				currentFile.c_str(),
 				pszBasePath,
 				(grepOption.bGrepSeparateFolder && grepOption.bGrepOutputBaseFolder ? pszPath + nBasePathLen2 : pszPath),
-				(grepOption.bGrepSeparateFolder ? lpFileName : currentFile.c_str() + nBasePathLen + 1),
+				(grepOption.bGrepSeparateFolder ? lpFileName : currentFile.c_str() + basePathLen + 1),
 				bOutputBaseFolder,
 				bOutputFolderName,
 				memMessage
@@ -753,7 +755,7 @@ int GrepAgent::DoGrepTree(
 				currentFile.c_str(),
 				pszBasePath,
 				(grepOption.bGrepSeparateFolder && grepOption.bGrepOutputBaseFolder ? pszPath + nBasePathLen2 : pszPath),
-				(grepOption.bGrepSeparateFolder ? lpFileName : currentFile.c_str() + nBasePathLen + 1),
+				(grepOption.bGrepSeparateFolder ? lpFileName : currentFile.c_str() + basePathLen + 1),
 				bOutputBaseFolder,
 				bOutputFolderName,
 				memMessage
@@ -831,7 +833,9 @@ int GrepAgent::DoGrepTree(
 				grepExceptAbsFiles,
 				grepExceptAbsFolders,
 				currentPath.c_str(),
+				currentPath.size(),
 				pszBasePath,
+				basePathLen,
 				searchOption,
 				grepOption,
 				pattern,
