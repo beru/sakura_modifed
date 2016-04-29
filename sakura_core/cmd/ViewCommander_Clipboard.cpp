@@ -531,7 +531,7 @@ void ViewCommander::Command_INSTEXT(
 	}
 
 	{	// 非選択時の処理 or ラインモード貼り付け時の残りの処理
-		LogicInt	nPosX_PHY_Delta(0);
+		LogicInt nPosX_PHY_Delta(0);
 		if (bLinePaste) {	// 2007.10.04 ryoji
 			// 挿入ポイント（折り返し単位行頭）にカーソルを移動
 			LogicPoint ptCaretBefore = caret.GetCaretLogicPos();	// 操作前のキャレット位置

@@ -519,7 +519,7 @@ void ViewCommander::Command_WORDRIGHT(bool bSelect)
 			si.SetBoxSelect(false);
 		}
 	}
-	bool	bTryAgain = false;
+	bool bTryAgain = false;
 try_again:;
 	auto& caret = GetCaret();
 	nCurLine = caret.GetCaretLayoutPos().GetY2();
@@ -888,7 +888,9 @@ void ViewCommander::Command_CURLINECENTER(void)
 	nViewTopLine = GetCaret().GetCaretLayoutPos().GetY2() - (textArea.m_nViewRowNum / 2);
 
 	// sui 02/08/09
-	if (0 > nViewTopLine) nViewTopLine = LayoutInt(0);
+	if (0 > nViewTopLine) {
+		nViewTopLine = LayoutInt(0);
+	}
 	
 	LayoutInt nScrollLines = nViewTopLine - textArea.GetViewTopLine();	// Sep. 11, 2004 genta 同期用に行数を記憶
 	textArea.SetViewTopLine(nViewTopLine);
@@ -1001,10 +1003,8 @@ void ViewCommander::Command_WndScrollDown(void)
 // テキストを１行上へScroll
 void ViewCommander::Command_WndScrollUp(void)
 {
-	LayoutInt	nCaretMarginY;
-
 	auto& textArea = m_view.GetTextArea();
-	nCaretMarginY = textArea.m_nViewRowNum / _CARETMARGINRATE;
+	LayoutInt nCaretMarginY = textArea.m_nViewRowNum / _CARETMARGINRATE;
 	if (nCaretMarginY < 1)
 		nCaretMarginY = 1;
 

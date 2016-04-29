@@ -83,7 +83,7 @@ public:
 	// Mar. 30, 2003 genta à¯êîí«â¡
 	void Command_FILEOPEN(
 		const WCHAR*	filename	= NULL,
-		EncodingType		nCharCode	= CODE_AUTODETECT,
+		EncodingType	nCharCode	= CODE_AUTODETECT,
 		bool			bViewMode	= false,
 		const WCHAR*	defaultName	= NULL
 	);

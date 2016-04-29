@@ -332,8 +332,7 @@ void EditWnd::_GetWindowRectForInit(Rect* rcResult, int nGroup, const TabGroupIn
 	}
 
 	// ウィンドウサイズ指定
-	EditInfo fi;
-	CommandLine::getInstance().GetEditInfo(&fi);
+	EditInfo fi = CommandLine::getInstance().GetEditInfo();
 	if (fi.nWindowSizeX >= 0) {
 		nWinCX = fi.nWindowSizeX;
 	}
@@ -528,11 +527,11 @@ void EditWnd::_AdjustInMonitor(const TabGroupInfo& tabGroupInfo)
 			TypeConfigNum typeOld, typeNew(-1);
 			typeOld = GetDocument().m_docType.GetDocumentType();	// 現在のタイプ
 			{
-				EditInfo ei, mruei;
-				CommandLine::getInstance().GetEditInfo(&ei);
+				EditInfo ei = CommandLine::getInstance().GetEditInfo();
 				if (ei.szDocType[0] != '\0') {
 					typeNew = DocTypeManager().GetDocumentTypeOfExt(ei.szDocType);
 				}else {
+					EditInfo mruei;
 					if (MruFile().GetEditInfo(ei.szPath, &mruei) && 0 < mruei.nTypeId) {
 						typeNew = DocTypeManager().GetDocumentTypeOfId(mruei.nTypeId);
 					}

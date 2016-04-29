@@ -85,7 +85,7 @@ public:
 		return false;
 	}
 
-	size_t GetCount(void) {
+	size_t GetCount(void) const {
 		return m_vpItems.size();
 	}
 
@@ -157,6 +157,7 @@ public:
 
 			WIN32_FIND_DATA w32fd;
 			HANDLE handle = ::FindFirstFile(lpPath, &w32fd);
+//			HANDLE handle = ::FindFirstFileEx(lpPath, FindExInfoBasic, &w32fd, FindExSearchNameMatch, NULL, FIND_FIRST_EX_LARGE_FETCH);
 			if (handle != INVALID_HANDLE_VALUE) {
 				do {
 					if (w32fd.dwFileAttributes & ignoreFileAttributes) {

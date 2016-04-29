@@ -155,6 +155,7 @@ void ViewCommander::Command_JUMP(void)
 		LogicInt nBgn = i;
 		wchar_t let = 0;
 		wchar_t prevLet;
+		auto& csEdit = GetDllShareData().common.edit;
 		for (i=nBgn; i<nLineLen; ++i) {
 			// シングルクォーテーション文字列読み込み中
 			prevLet = let;
@@ -200,7 +201,7 @@ void ViewCommander::Command_JUMP(void)
 				if (0
 					|| let == L'\t'
 					|| let == L' '
-					|| WCODE::IsLineDelimiter(pLine[i], GetDllShareData().common.edit.bEnableExtEol)
+					|| WCODE::IsLineDelimiter(pLine[i], csEdit.bEnableExtEol)
 				) {
 					continue;
 				}else
@@ -232,7 +233,7 @@ void ViewCommander::Command_JUMP(void)
 				bValidLine = true;
 			}
 			// コメントブロック内の改行だけの行
-			if (WCODE::IsLineDelimiter(pLine[nBgn], GetDllShareData().common.edit.bEnableExtEol)) {
+			if (WCODE::IsLineDelimiter(pLine[nBgn], csEdit.bEnableExtEol)) {
 				bValidLine = false;
 			}
 		}

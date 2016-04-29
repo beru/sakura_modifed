@@ -32,7 +32,7 @@
 #include "sakura_rc.h"
 
 // GetDllShareData用グローバル変数
-DllSharedData* g_theDLLSHAREDATA = NULL;
+DllSharedData* g_theDLLSHAREDATA = nullptr;
 
 static Mutex g_keywordMutex(FALSE, GSTR_MUTEX_SAKURA_KEYWORD);
 

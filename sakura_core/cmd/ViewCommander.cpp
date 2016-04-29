@@ -444,7 +444,7 @@ bool ViewCommander::HandleCommand(
 	case F_JUMP:			Command_JUMP(); break;							// 指定行ヘジャンプ
 	case F_OUTLINE:			bRet = Command_FUNCLIST((ShowDialogType)lparam1, OutlineType::Default); break;	// アウトライン解析
 	case F_OUTLINE_TOGGLE:	bRet = Command_FUNCLIST(ShowDialogType::Toggle, OutlineType::Default); break;	// アウトライン解析(toggle) // 20060201 aroka
-	case F_FILETREE:		bRet = Command_FUNCLIST((ShowDialogType)lparam1 ,OutlineType::FileTree ); break;	//ファイルツリー
+	case F_FILETREE:		bRet = Command_FUNCLIST((ShowDialogType)lparam1, OutlineType::FileTree); break;	//ファイルツリー
 	case F_TAGJUMP:			Command_TAGJUMP(lparam1 != 0); break;			// タグジャンプ機能 // Apr. 03, 2003 genta 引数追加
 	case F_TAGJUMP_CLOSE:	Command_TAGJUMP(true); break;					// タグジャンプ(元ウィンドウClose)	// Apr. 03, 2003 genta
 	case F_TAGJUMPBACK:		Command_TAGJUMPBACK(); break;					// タグジャンプバック機能
@@ -680,7 +680,6 @@ bool ViewCommander::HandleCommand(
 
 			Plug::Array plugs;
 			JackManager::getInstance().GetUsablePlug(PP_COMMAND, nCommand, &plugs);
-
 			if (plugs.size() > 0) {
 				assert_warning(plugs.size() == 1);
 				// インタフェースオブジェクト準備
@@ -691,7 +690,6 @@ bool ViewCommander::HandleCommand(
 				return bRet;
 			}
 		}
-
 	}
 
 	// アンドゥバッファの処理

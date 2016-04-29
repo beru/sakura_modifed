@@ -1203,7 +1203,10 @@ bool ControlTray::OpenNewEditor(
 	TCHAR szResponseFile[_MAX_PATH] = _T("");
 	struct ResponseFileDeleter {
 		LPCTSTR fileName;
-		ResponseFileDeleter(): fileName(NULL) {}
+		ResponseFileDeleter()
+			:
+			fileName(NULL)
+		{}
 		~ResponseFileDeleter() {
 			if (fileName && fileName[0]) {
 				::DeleteFile(fileName);

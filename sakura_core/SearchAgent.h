@@ -29,7 +29,7 @@ class DocLineMgr;
 struct DocLineReplaceArg;
 class Bregexp;
 
-// #define SEARCH_STRING_KMP
+//#define SEARCH_STRING_KMP
 #define SEARCH_STRING_SUNDAY_QUICK
 
 class SearchStringPattern {

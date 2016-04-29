@@ -116,13 +116,13 @@ void ViewCommander::Command_COMPARE(void)
 {
 	HWND		hwndCompareWnd = NULL;
 	TCHAR		szPath[_MAX_PATH + 1];
-	DlgCompare	cDlgCompare;
+	DlgCompare	dlgCompare;
 	HWND		hwndMsgBox;	//@@@ 2003.06.12 MIK
 	auto& commonSetting = GetDllShareData().common;
 	auto& csCompare = commonSetting.compare;
 	// 比較後、左右に並べて表示
-	cDlgCompare.bCompareAndTileHorz = csCompare.bCompareAndTileHorz;
-	BOOL bDlgCompareResult = cDlgCompare.DoModal(
+	dlgCompare.bCompareAndTileHorz = csCompare.bCompareAndTileHorz;
+	BOOL bDlgCompareResult = dlgCompare.DoModal(
 		G_AppInstance(),
 		m_view.GetHwnd(),
 		(LPARAM)&GetDocument(),
@@ -134,7 +134,7 @@ void ViewCommander::Command_COMPARE(void)
 		return;
 	}
 	// 比較後、左右に並べて表示
-	csCompare.bCompareAndTileHorz = cDlgCompare.bCompareAndTileHorz;
+	csCompare.bCompareAndTileHorz = dlgCompare.bCompareAndTileHorz;
 
 	// タブウィンドウ時は禁止	//@@@ 2003.06.12 MIK
 	if (commonSetting.tabBar.bDispTabWnd
@@ -322,13 +322,13 @@ void ViewCommander::Command_Diff(const WCHAR* _szDiffFile2, int nFlgOpt)
 */
 void ViewCommander::Command_Diff_Dialog(void)
 {
-	DlgDiff cDlgDiff;
+	DlgDiff dlgDiff;
 	bool bTmpFile1 = false, bTmpFile2 = false;
 
 	auto& docFile = GetDocument().m_docFile;
 	auto& docEditor = GetDocument().m_docEditor;
 	// DIFF差分表示ダイアログを表示する
-	int nDiffDlgResult = cDlgDiff.DoModal(
+	int nDiffDlgResult = dlgDiff.DoModal(
 		G_AppInstance(),
 		m_view.GetHwnd(),
 		(LPARAM)&GetDocument(),
@@ -342,11 +342,11 @@ void ViewCommander::Command_Diff_Dialog(void)
 	TCHAR szTmpFile1[_MAX_PATH * 2];
 	EncodingType code = GetDocument().GetDocumentEncoding();
 	EncodingType saveCode = GetDiffCreateTempFileCode(code);
-	EncodingType code2 = cDlgDiff.m_nCodeTypeDst;
+	EncodingType code2 = dlgDiff.m_nCodeTypeDst;
 	if (code2 == CODE_ERROR) {
-		if (cDlgDiff.m_szFile2[0] != _T('\0')) {
+		if (dlgDiff.m_szFile2[0] != _T('\0')) {
 			// ファイル名指定
-			code2 = GetFileCharCode(cDlgDiff.m_szFile2);
+			code2 = GetFileCharCode(dlgDiff.m_szFile2);
 		}
 	}
 	EncodingType saveCode2 = GetDiffCreateTempFileCode(code2);
@@ -369,13 +369,13 @@ void ViewCommander::Command_Diff_Dialog(void)
 	// UNICODE,UNICODEBEの場合は常に一時ファイルでUTF-8にする
 	TCHAR szTmpFile2[_MAX_PATH * 2];
 	// 2014.06.25 ファイル名がない(=無題,Grep,アウトプット)もTmpFileModeにする
-	bool bTmpFileMode = cDlgDiff.m_bIsModifiedDst || code2 != saveCode2 || cDlgDiff.m_szFile2[0] == _T('\0');
+	bool bTmpFileMode = dlgDiff.m_bIsModifiedDst || code2 != saveCode2 || dlgDiff.m_szFile2[0] == _T('\0');
 	if (!bTmpFileMode) {
 		// 未変更でファイルありでASCII系コードの場合のみ,そのままファイルを利用する
-		_tcscpy( szTmpFile2, cDlgDiff.m_szFile2 );
-	}else if (cDlgDiff.m_hWnd_Dst) {
+		_tcscpy( szTmpFile2, dlgDiff.m_szFile2 );
+	}else if (dlgDiff.m_hWnd_Dst) {
 		// ファイル一覧から選択
-		if (m_view.MakeDiffTmpFile( szTmpFile2, cDlgDiff.m_hWnd_Dst, saveCode2, cDlgDiff.m_bBomDst )) {
+		if (m_view.MakeDiffTmpFile( szTmpFile2, dlgDiff.m_hWnd_Dst, saveCode2, dlgDiff.m_bBomDst )) {
 			bTmpFile2 = true;
 		}else {
 			if (bTmpFile1) _tunlink( szTmpFile1 );
@@ -383,7 +383,7 @@ void ViewCommander::Command_Diff_Dialog(void)
 		}
 	}else {
 		// ファイル名指定で非ASCII系だった場合
-		if (m_view.MakeDiffTmpFile2( szTmpFile2, cDlgDiff.m_szFile2, code2, saveCode2 )) {
+		if (m_view.MakeDiffTmpFile2( szTmpFile2, dlgDiff.m_szFile2, code2, saveCode2 )) {
 			bTmpFile2 = true;
 		}else {
 			// Error
@@ -397,13 +397,16 @@ void ViewCommander::Command_Diff_Dialog(void)
 		bUTF8io = false;
 	}
 
-	//差分表示
-	m_view.ViewDiffInfo(szTmpFile1, szTmpFile2, cDlgDiff.m_nDiffFlgOpt, bUTF8io);
-	
+	// 差分表示
+	m_view.ViewDiffInfo(szTmpFile1, szTmpFile2, dlgDiff.m_nDiffFlgOpt, bUTF8io);
 	
 	// 一時ファイルを削除する
-	if (bTmpFile1) _tunlink(szTmpFile1);
-	if (bTmpFile2) _tunlink(szTmpFile2);
+	if (bTmpFile1) {
+		_tunlink(szTmpFile1);
+	}
+	if (bTmpFile2) {
+		_tunlink(szTmpFile2);
+	}
 
 	return;
 }
@@ -427,9 +430,13 @@ re_do:;
 		LayoutPoint ptXY_Layout;
 		GetDocument().m_layoutMgr.LogicToLayout(ptXY, &ptXY_Layout);
 		if (selInfo.m_bSelectingLock) {
-			if (!selInfo.IsTextSelected()) selInfo.BeginSelectArea();
+			if (!selInfo.IsTextSelected()) {
+				selInfo.BeginSelectArea();
+			}
 		}else {
-			if (selInfo.IsTextSelected()) selInfo.DisableSelectArea(true);
+			if (selInfo.IsTextSelected()) {
+				selInfo.DisableSelectArea(true);
+			}
 		}
 
 		if (selInfo.m_bSelectingLock) {
@@ -478,9 +485,13 @@ re_do:;
 		LayoutPoint ptXY_Layout;
 		GetDocument().m_layoutMgr.LogicToLayout(ptXY, &ptXY_Layout);
 		if (selInfo.m_bSelectingLock) {
-			if (!selInfo.IsTextSelected()) selInfo.BeginSelectArea();
+			if (!selInfo.IsTextSelected()) {
+				selInfo.BeginSelectArea();
+			}
 		}else {
-			if (selInfo.IsTextSelected()) selInfo.DisableSelectArea(true);
+			if (selInfo.IsTextSelected()) {
+				selInfo.DisableSelectArea(true);
+			}
 		}
 
 		if (selInfo.m_bSelectingLock) {

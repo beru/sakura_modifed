@@ -431,7 +431,7 @@ void CommandLine::ParseCommandLine(LPCTSTR pszCmdLineSrc, bool bResponse)
 					case 'K':
 						// 文字コード自動判別
 						// 2002/09/21 Moca 互換性保持のための処理
-						m_gi.nGrepCharSet = CODE_AUTODETECT;	break;
+						m_gi.charEncoding = CODE_AUTODETECT;	break;
 					case 'P':
 						// 結果出力：[行を出力]/該当部分/否マッチ行
 						m_gi.nGrepOutputLineType = 1;	break;
@@ -465,7 +465,7 @@ void CommandLine::ParseCommandLine(LPCTSTR pszCmdLineSrc, bool bResponse)
 				break;
 			// 2002/09/21 Moca Grepでの文字コードセット 追加
 			case CMDLINEOPT_GCODE:
-				m_gi.nGrepCharSet = (EncodingType)AtoiOptionInt(arg);	break;
+				m_gi.charEncoding = (EncodingType)AtoiOptionInt(arg);	break;
 			case CMDLINEOPT_GROUP:	// GROUP	// 2007.06.26 ryoji
 				m_nGroup = AtoiOptionInt(arg);
 				break;
@@ -538,7 +538,7 @@ CommandLine::CommandLine()
 	m_gi.bGrepCurFolder		= false;
 	m_gi.bGrepStdout		= false;
 	m_gi.bGrepHeader		= true;
-	m_gi.nGrepCharSet		= CODE_SJIS;
+	m_gi.charEncoding		= CODE_SJIS;
 	m_gi.nGrepOutputLineType	= 0;
 	m_gi.nGrepOutputStyle	= 1;
 	m_gi.bGrepOutputFileOnly	= false;

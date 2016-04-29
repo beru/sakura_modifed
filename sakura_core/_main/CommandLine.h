@@ -37,7 +37,7 @@ struct GrepInfo {
 	bool			bGrepStdout;			// 標準出力モード
 	bool			bGrepHeader;			// ヘッダ情報表示
 	bool			bGrepSubFolder;			// サブフォルダを検索する
-	EncodingType	nGrepCharSet;			// 文字コードセット
+	EncodingType	charEncoding;			// 文字コードセット
 	int				nGrepOutputStyle;		// 結果出力形式
 	int				nGrepOutputLineType;	// 結果出力：行を出力/該当部分/否マッチ行
 	bool			bGrepOutputFileOnly;	// ファイル毎最初のみ検索
@@ -83,8 +83,8 @@ public:
 	bool IsGrepDlg() const {return m_bGrepDlg;}
 	bool IsDebugMode() const {return m_bDebugMode;}
 	bool IsViewMode() const {return m_bViewMode;}
-	bool GetEditInfo(EditInfo* fi) const { *fi = m_fi; return true; }
-	bool GetGrepInfo(GrepInfo* gi) const { *gi = m_gi; return true; }
+	const EditInfo& GetEditInfo() const { return m_fi; }
+	const GrepInfo& GetGrepInfo() const { return m_gi; }
 	int GetGroupId() const {return m_nGroup;}	// 2007.06.26 ryoji
 	LPCWSTR GetMacro() const { return m_mMacro.GetStringPtr(); }
 	LPCWSTR GetMacroType() const { return m_mMacroType.GetStringPtr(); }

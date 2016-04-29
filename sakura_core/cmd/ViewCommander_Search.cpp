@@ -129,7 +129,6 @@ void ViewCommander::Command_SEARCH_NEXT(
 		if (!si.IsBoxSelecting() && si.m_bSelectingLock) {
 			bSelecting = true;
 			bSelectingLock_Old = si.m_bSelectingLock;
-
 			selectBgn_Old = si.m_selectBgn; // ”ÍˆÍ‘I‘ð(Œ´“_)
 			select_Old = GetSelect();
 

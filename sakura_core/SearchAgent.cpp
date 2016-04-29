@@ -16,6 +16,7 @@
 #include <time.h>
 #endif
 
+#ifdef SEARCH_STRING_SUNDAY_QUICK
 // SearchStringPattern
 // @date 2010.06.22 Moca
 inline
@@ -25,6 +26,7 @@ int SearchStringPattern::GetMapIndex(wchar_t c)
 	// ‚»‚êˆÈŠO => 0x100 - 0x1ff
 	return ((c & 0xff00) ? 0x100 : 0 ) | (c & 0xff);
 }
+#endif
 
 SearchStringPattern::SearchStringPattern()
 	: 
@@ -32,13 +34,13 @@ SearchStringPattern::SearchStringPattern()
 	m_pSearchOption(nullptr),
 	m_pRegexp(nullptr),
 	m_pszCaseKeyRef(NULL),
-	m_pszPatternCase(NULL),
 #ifdef SEARCH_STRING_KMP
 	m_pnNextPossArr(NULL),
 #endif
 #ifdef SEARCH_STRING_SUNDAY_QUICK
-	m_pnUseCharSkipArr(nullptr)
+	m_pnUseCharSkipArr(nullptr),
 #endif
+	m_pszPatternCase(NULL)
 {
 }
 
@@ -54,13 +56,13 @@ SearchStringPattern::SearchStringPattern(
 	m_pSearchOption(nullptr),
 	m_pRegexp(nullptr),
 	m_pszCaseKeyRef(NULL),
-	m_pszPatternCase(NULL),
 #ifdef SEARCH_STRING_KMP
 	m_pnNextPossArr(NULL),
 #endif
 #ifdef SEARCH_STRING_SUNDAY_QUICK
-	m_pnUseCharSkipArr(nullptr)
+	m_pnUseCharSkipArr(nullptr),
 #endif
+	m_pszPatternCase(NULL)
 {
 	SetPattern(hwnd, pszPattern, nPatternLen, searchOption, pRegexp);
 }
@@ -201,6 +203,31 @@ const wchar_t* SearchAgent::SearchString(
 #if defined(SEARCH_STRING_SUNDAY_QUICK) && !defined(SEARCH_STRING_KMP)
 	// SUNDAY_QUICK‚Ì‚Ý”Å
 	if (!bLoHiCase || nPatternLen > 5) {
+#if 1
+		if (bLoHiCase) {
+			for (int nPos=nIdxPos; nPos<=nCompareTo;) {
+				int i;
+				for (i = 0; i < nPatternLen && (pLine[nPos + i] == pszPattern[i]); ++i) {
+				}
+				if (i >= nPatternLen) {
+					return &pLine[nPos];
+				}
+				int index = SearchStringPattern::GetMapIndex(pLine[nPos + nPatternLen]);
+				nPos += useSkipMap[index];
+			}
+		}else {
+			for (int nPos=nIdxPos; nPos<=nCompareTo;) {
+				int i;
+				for (i = 0; i < nPatternLen && ((wchar_t)skr_towlower(pLine[nPos + i]) == pszPattern[i]); ++i) {
+				}
+				if (i >= nPatternLen) {
+					return &pLine[nPos];
+				}
+				int index = SearchStringPattern::GetMapIndex((wchar_t)skr_towlower(pLine[nPos + nPatternLen]));
+				nPos += useSkipMap[index];
+			}
+		}
+#else
 		for (int nPos=nIdxPos; nPos<=nCompareTo;) {
 			int i;
 			for (i = 0; i < nPatternLen && toLoHiLower(bLoHiCase, pLine[nPos + i]) == pszPattern[i]; ++i) {
@@ -211,6 +238,7 @@ const wchar_t* SearchAgent::SearchString(
 			int index = SearchStringPattern::GetMapIndex((wchar_t)toLoHiLower(bLoHiCase, pLine[nPos + nPatternLen]));
 			nPos += useSkipMap[index];
 		}
+#endif
 	}else {
 		for (int nPos=nIdxPos; nPos<=nCompareTo;) {
 			int n = wmemcmp(&pLine[nPos], pszPattern, nPatternLen);
@@ -231,7 +259,7 @@ const wchar_t* SearchAgent::SearchString(
 		for (int nPos=nIdxPos; nPos<=nCompareTo;) {
 			if (toLoHiLower(bLoHiCase, pLine[nPos]) != pattern0) {
 #ifdef SEARCH_STRING_SUNDAY_QUICK
-				int index = SearchStringPattern::GetMapIndex((wchar_t)toLoHiLower(bLoHiCase, pLine[nPos + nPatternLen));
+				int index = SearchStringPattern::GetMapIndex((wchar_t)toLoHiLower(bLoHiCase, pLine[nPos + nPatternLen]));
 				nPos += useSkipMap[index];
 #else
 				++nPos;

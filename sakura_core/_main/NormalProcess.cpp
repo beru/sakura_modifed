@@ -91,13 +91,11 @@ bool NormalProcess::InitializeProcess()
 	bool		bDebugMode;
 	bool		bGrepMode;
 	bool		bGrepDlg;
-	GrepInfo	gi;
-	EditInfo	fi;
 	
 	auto& cmdLine = CommandLine::getInstance();
 	// コマンドラインで受け取ったファイルが開かれている場合は
 	// その編集ウィンドウをアクティブにする
-	cmdLine.GetEditInfo(&fi); // 2002/2/8 aroka ここに移動
+	EditInfo fi = cmdLine.GetEditInfo(); // 2002/2/8 aroka ここに移動
 	if (fi.szPath[0] != _T('\0')) {
 		// Oct. 27, 2000 genta
 		// MRUからカーソル位置を復元する操作はCEditDoc::FileLoadで
@@ -194,7 +192,7 @@ bool NormalProcess::InitializeProcess()
 			::GetClientRect(hEditWnd, &rc);
 			::SendMessage(hEditWnd, WM_SIZE, ::IsZoomed(hEditWnd) ? SIZE_MAXIMIZED: SIZE_RESTORED, MAKELONG(rc.right - rc.left, rc.bottom - rc.top));
 		}
-		cmdLine.GetGrepInfo(&gi); // 2002/2/8 aroka ここに移動
+		GrepInfo gi = cmdLine.GetGrepInfo(); // 2002/2/8 aroka ここに移動
 		if (!bGrepDlg) {
 			// Grepでは対象パス解析に現在のカレントディレクトリを必要とする
 			// editDoc->SetCurDirNotitle();
@@ -215,7 +213,7 @@ bool NormalProcess::InitializeProcess()
 				gi.bGrepStdout,
 				gi.bGrepHeader,
 				gi.grepSearchOption,
-				gi.nGrepCharSet,	// 2002/09/21 Moca
+				gi.charEncoding,	// 2002/09/21 Moca
 				gi.nGrepOutputLineType,
 				gi.nGrepOutputStyle,
 				gi.bGrepOutputFileOnly,
@@ -250,7 +248,7 @@ bool NormalProcess::InitializeProcess()
 			auto& csSearch = GetDllShareData().common.search;
 			csSearch.bGrepSubFolder = gi.bGrepSubFolder;
 			csSearch.searchOption = gi.grepSearchOption;
-			csSearch.nGrepCharSet = gi.nGrepCharSet;
+			csSearch.nGrepCharSet = gi.charEncoding;
 			csSearch.nGrepOutputLineType = gi.nGrepOutputLineType;
 			csSearch.nGrepOutputStyle = gi.nGrepOutputStyle;
 			// 2003.06.23 Moca GREPダイアログ表示前にMutexを開放
