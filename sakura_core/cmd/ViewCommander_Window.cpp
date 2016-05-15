@@ -252,7 +252,7 @@ void ViewCommander::Command_CASCADE(void)
 			);
 		}
 
-		delete [] pEditNodeArr;
+		delete[] pEditNodeArr;
 	}
 	return;
 }
@@ -305,7 +305,7 @@ void ViewCommander::Command_TILE_V(void)
 		}
 		::SetFocus(phwndArr[0]);	// Aug. 17, 2002 MIK
 
-		delete [] pEditNodeArr;
+		delete[] pEditNodeArr;
 	}
 	return;
 }
@@ -357,7 +357,7 @@ void ViewCommander::Command_TILE_H(void)
 			);
 		}
 		::SetFocus(phwndArr[0]);	// Aug. 17, 2002 MIK
-		delete [] pEditNodeArr;
+		delete[] pEditNodeArr;
 	}
 	return;
 }
@@ -527,7 +527,7 @@ void ViewCommander::Command_TAB_CLOSELEFT(void)
 
 		// 終了要求を出す
 		AppNodeGroupHandle(nGroup).RequestCloseEditor(pEditNode, nCount, false, true, GetMainWindow());
-		delete []pEditNode;
+		delete[] pEditNode;
 	}
 	return;
 }
@@ -557,7 +557,7 @@ void ViewCommander::Command_TAB_CLOSERIGHT(void)
 
 		// 終了要求を出す
 		AppNodeGroupHandle(nGroup).RequestCloseEditor(pEditNode, nCount, false, true, GetMainWindow());
-		delete []pEditNode;
+		delete[] pEditNode;
 	}
 	return;
 }

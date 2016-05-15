@@ -107,7 +107,7 @@ BOOL DlgCompare::OnBnClicked(int wID)
 //			}
 //		}
 //		::TileWindows(NULL, MDITILE_VERTICAL, NULL, 2, phwndArr);
-//		delete [] phwndArr;
+//		delete[] phwndArr;
 //		CloseDialog(0);
 //		return TRUE;
 // To Here Oct. 10, 2000
@@ -175,7 +175,7 @@ void DlgCompare::SetData(void)
 				selIndex = nItem;
 			}
 		}
-		delete [] pEditNodeArr;
+		delete[] pEditNodeArr;
 		// 2002/11/01 Moca 追加 リストビューの横幅を設定。これをやらないと水平スクロールバーが使えない
 		List_SetHorizontalExtent( hwndList, calc.GetCx() );
 	}

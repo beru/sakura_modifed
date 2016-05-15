@@ -290,7 +290,7 @@ void DlgDiff::SetData(void)
 				}
 			}
 
-			delete [] pEditNode;
+			delete[] pEditNode;
 			// 2002/11/01 Moca 追加 リストビューの横幅を設定。これをやらないと水平スクロールバーが使えない
 			List_SetHorizontalExtent( hwndList, calc.GetCx() + 8 );
 

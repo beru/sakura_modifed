@@ -547,7 +547,7 @@ LRESULT ControlTray::DispatchEvent(
 				// 現在開いている編集窓のリスト
 				nRowNum = AppNodeManager::getInstance().GetOpenedWindowArr(&pEditNodeArr, true);
 				if (0 < nRowNum) {
-					delete [] pEditNodeArr;
+					delete[] pEditNodeArr;
 				}
 				// 編集ウィンドウの数が0になったら終了
 				if (nRowNum == 0) {
@@ -1447,7 +1447,7 @@ void ControlTray::ActiveNextWindow(HWND hwndParent)
 			// 最後のペインをアクティブにする
 			::PostMessage(hwndWork, MYWM_SETACTIVEPANE, (WPARAM) - 1, 1);
 		}
-		delete [] pEditNodeArr;
+		delete[] pEditNodeArr;
 	}
 }
 
@@ -1487,7 +1487,7 @@ void ControlTray::ActivePrevWindow(HWND hwndParent)
 			// 最初のペインをアクティブにする
 			::PostMessage(hwndWork, MYWM_SETACTIVEPANE, (WPARAM) - 1, 0);
 		}
-		delete [] pEditNodeArr;
+		delete[] pEditNodeArr;
 	}
 }
 
@@ -1550,7 +1550,7 @@ bool ControlTray::CloseAllEditor(
 	
 	// 全編集ウィンドウへ終了要求を出す
 	bool bRes = AppNodeGroupHandle(nGroup).RequestCloseEditor(pWndArr, n, bExit, bCheckConfirm, hWndFrom);	// 2007.02.13 ryoji bExitを引き継ぐ
-	delete []pWndArr;
+	delete[] pWndArr;
 	return bRes;
 }
 

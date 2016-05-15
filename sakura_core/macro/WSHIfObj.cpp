@@ -100,7 +100,7 @@ void WSHIfObj::ReadyCommands(
 			/* WSHIfObjを継承したサブクラスからReadyCommandsを呼び出した場合、
 			 * サブクラスのMacroCommandが呼び出される。 */
 		);
-		delete [] varArgTmp;
+		delete[] varArgTmp;
 		++Info;
 	}
 }
@@ -171,7 +171,7 @@ HRESULT WSHIfObj::MacroCommand(
 
 		//	Nov. 29, 2005 FILE 配列の破棄なので、[括弧]を追加
 		for (int j=0; j<argCount; ++j) {
-			delete [] strArgs[j];
+			delete[] strArgs[j];
 		}
 		return S_OK;
 	}

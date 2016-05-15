@@ -1476,7 +1476,7 @@ void EditView::SmartIndent_CPP(wchar_t wcChar)
 		nSrcLen = rangeA.GetTo().x - rangeA.GetFrom().x;
 		if (nSrcLen >= _countof(pszSrc) - 1) {
 			//	Sep. 18, 2002 genta ƒƒ‚ƒŠƒŠ[ƒN‘Îô
-			delete [] pszData;
+			delete[] pszData;
 			return;
 		}
 		if (!pLine) {
@@ -1527,7 +1527,7 @@ void EditView::SmartIndent_CPP(wchar_t wcChar)
 		break;
 	}
 	if (pszData) {
-		delete [] pszData;
+		delete[] pszData;
 		pszData = NULL;
 	}
 }

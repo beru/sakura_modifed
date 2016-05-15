@@ -1574,7 +1574,7 @@ static unsigned __stdcall ShellExecuteProc(LPVOID lpParameter)
 {
 	LPTSTR pszFile = (LPTSTR)lpParameter;
 	::ShellExecute(NULL, _T("open"), pszFile, NULL, NULL, SW_SHOW);
-	delete []pszFile;
+	delete[] pszFile;
 	return 0;
 }
 

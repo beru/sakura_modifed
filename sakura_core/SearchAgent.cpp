@@ -101,7 +101,7 @@ bool SearchStringPattern::SetPattern(
 {
 	Reset();
 	pszCaseKeyRef = pszKey = pszPattern;
-	nPatternLen = nPatternLen;
+	this->nPatternLen = nPatternLen;
 	pSearchOption = &searchOption;
 	pRegexp = regexp;
 	if (pSearchOption->bRegularExp) {

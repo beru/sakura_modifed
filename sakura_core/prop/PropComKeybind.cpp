@@ -310,7 +310,7 @@ INT_PTR PropKeybind::DispatchEvent(
 						::List_AddString(hwndAssignedkeyList, cpszString);
 						delete ppcAssignedKeyList[j];
 					}
-					delete [] ppcAssignedKeyList;
+					delete[] ppcAssignedKeyList;
 				}
 				return TRUE;
 			}

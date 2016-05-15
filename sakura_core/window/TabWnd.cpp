@@ -2802,7 +2802,7 @@ LRESULT TabWnd::TabListMenu(POINT pt, bool bSel/* = true*/, bool bFull/* = false
 		if (nTab > nSelfTab && csTabBar.bSortTabList) {
 			qsort(pData + nSelfTab, nTab - nSelfTab, sizeof(pData[0]), compTABMENU_DATA);
 		}
-		delete []pEditNode;
+		delete[] pEditNode;
 
 		// メニューを作成する
 		// 2007.02.28 ryoji 表示切替をメニューに追加
@@ -2860,7 +2860,7 @@ LRESULT TabWnd::TabListMenu(POINT pt, bool bSel/* = true*/, bool bFull/* = false
 			ActivateFrameWindow(pData[nId - IDM_SELWINDOW].hwnd);
 		}
 
-		delete []pData;
+		delete[] pData;
 
 	} while (bRepeat);
 
@@ -2906,7 +2906,7 @@ HWND TabWnd::GetNextGroupWnd(void)
 				}
 			}
 		}
-		delete []pWndArr;
+		delete[] pWndArr;
 	}
 
 	return hwndRet;

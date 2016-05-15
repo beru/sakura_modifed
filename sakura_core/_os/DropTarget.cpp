@@ -211,9 +211,9 @@ void DataObject::SetText(LPCWSTR lpszText, int nTextLen, BOOL bColumnSelect)
 	// Feb. 26, 2001, fixed by yebisuya sugoroku
 	if (pData) {
 		for (int i=0; i<nFormat; ++i) {
-			delete [](pData[i].data);
+			delete[] (pData[i].data);
 		}
-		delete []pData;
+		delete[] pData;
 		pData = nullptr;
 		nFormat = 0;
 	}

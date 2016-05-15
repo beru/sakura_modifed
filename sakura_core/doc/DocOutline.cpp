@@ -251,7 +251,7 @@ void DocOutline::MakeFuncList_RuleFile(
 				continue;
 			}
 			if (!InitRegexp(NULL, pRegex[i], true)) {
-				delete [] pRegex;
+				delete[] pRegex;
 				return;
 			}
 			if (test[i].nRegexMode == 1) {
@@ -263,7 +263,7 @@ void DocOutline::MakeFuncList_RuleFile(
 						str.c_str(),
 						pRegex[i].GetLastMessage()
 					);
-					delete [] pRegex;
+					delete[] pRegex;
 					return;
 				}
 			}else if (!pRegex[i].Compile(test[i].szMatch, test[i].nRegexOption)) {
@@ -271,7 +271,7 @@ void DocOutline::MakeFuncList_RuleFile(
 					test[i].szMatch,
 					pRegex[i].GetLastMessage()
 				);
-				delete [] pRegex;
+				delete[] pRegex;
 				return;
 			}
 		}
@@ -424,10 +424,10 @@ void DocOutline::MakeFuncList_RuleFile(
 			pFuncInfoArr->AppendData(nLineCount + LogicInt(1), ptPos.GetY2() + LayoutInt(1) , pszText, 0, nDepth);
 			++nDepth;
 		}
-		delete [] pszText;
+		delete[] pszText;
 
 	}
-	delete [] pRegex;
+	delete[] pRegex;
 	return;
 }
 

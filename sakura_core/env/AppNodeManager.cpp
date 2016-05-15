@@ -517,7 +517,7 @@ int AppNodeManager::GetNoNameNumber(HWND hWnd)
 
 	@param[out] ppEditNode 配列を受け取るポインタ
 		戻り値が0の場合はNULLが返されるが，それを期待しないこと．
-		また，不要になったらdelete []しなくてはならない．
+		また，不要になったらdelete[]しなくてはならない．
 	@param[in] bSort true: ソートあり / false: ソート無し
 	@param[in] bGSort true: グループソートあり / false: グループソート無し
 
@@ -532,7 +532,7 @@ int AppNodeManager::GetNoNameNumber(HWND hWnd)
 	-------------------------------------------------
 
 	@return 配列の要素数を返す
-	@note 要素数>0 の場合は呼び出し側で配列をdelete []してください
+	@note 要素数>0 の場合は呼び出し側で配列をdelete[]してください
 
 	@date 2003.06.28 MIK CRecent利用で書き換え
 	@date 2007.06.20 ryoji bGroup引数追加、ソート処理を自前のものからqsortに変更
@@ -578,7 +578,7 @@ int AppNodeManager::_GetOpenedWindowArrCore(EditNode** ppEditNode, bool bSort, b
 		}
 	}
 	if (nRowNum <= 0) {
-		delete [](*ppEditNode);
+		delete[] (*ppEditNode);
 		*ppEditNode = nullptr;
 		return 0;
 	}
@@ -649,7 +649,7 @@ bool AppNodeManager::ReorderTab(HWND hwndSrc, HWND hwndDst)
 
 	if (0 > nSrcTab || 0 > nDstTab || nSrcTab == nDstTab) {
 		if (p) {
-			delete []p;
+			delete[] p;
 		}
 		return false;
 	}
@@ -811,7 +811,7 @@ HWND AppNodeManager::GetNextTab(HWND hWndCur)
 			}
 		}
 		if (p) {
-			delete []p;
+			delete[] p;
 		}
 	}
 

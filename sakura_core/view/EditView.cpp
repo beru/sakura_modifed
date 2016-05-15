@@ -2051,7 +2051,7 @@ bool EditView::GetSelectedData(
 		}
 	}
 	if (bWithLineNumber) {	// s”Ô†‚ğ•t—^‚·‚é
-		delete [] pszLineNum;
+		delete[] pszLineNum;
 	}
 	return true;
 }

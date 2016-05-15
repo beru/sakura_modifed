@@ -272,7 +272,7 @@ wchar_t* Bregexp::MakePattern(const wchar_t* szPattern, const wchar_t* szPattern
 			BRegfree(sReg);
 			sReg = NULL;
 		}
-		delete [] szNPattern;
+		delete[] szNPattern;
 
 		if (bJustDollar || (ePatType & PAT_TAB) != 0) {
 			// 行末指定の$ or 行頭行末指定 なので、検索文字列を置換
@@ -452,7 +452,7 @@ bool Bregexp::Compile(const wchar_t* szPattern0, const wchar_t* szPattern1, int 
 		// 置換実行
 		BSubst(pszNPattern, tmpBuf, tmpBuf + 1, &pRegExp, szMsg);
 	}
-	delete [] szNPattern;
+	delete[] szNPattern;
 
 	// メッセージが空文字列でなければ何らかのエラー発生。
 	// サンプルソース参照

@@ -55,7 +55,7 @@ struct SysString {
 		int len;
 		Get(&s, &len);
 		str->assign(s, len);
-		delete [] s;
+		delete[] s;
 	}
 	void GetW(std::wstring* str) {
 		int len = ::SysStringLen(data);

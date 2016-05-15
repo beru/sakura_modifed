@@ -906,7 +906,7 @@ void EditWnd::LayoutMainMenu()
 			case F_WINDOW_LIST:				// ウィンドウリスト
 				EditNode*	pEditNodeArr;
 				nCount = AppNodeManager::getInstance().GetOpenedWindowArr(&pEditNodeArr, true);
-				delete [] pEditNodeArr;
+				delete[] pEditNodeArr;
 				break;
 			case F_FILE_USED_RECENTLY:		// 最近使ったファイル
 				{
@@ -2138,7 +2138,7 @@ int	EditWnd::OnClose(HWND hWndActive, bool bGrepNoConfirm)
 				}
 			}
 		}
-		if (p) delete []p;
+		if (p) delete[] p;
 	}
 #endif	// 0
 
@@ -2565,7 +2565,7 @@ bool EditWnd::InitMenu_Special(HMENU hMenu, EFunctionCode eFunc)
 			int nRowNum = AppNodeManager::getInstance().GetOpenedWindowArr(&pEditNodeArr, true);
 			WinListMenu(hMenu, pEditNodeArr, nRowNum, false);
 			bInList = (nRowNum > 0);
-			delete [] pEditNodeArr;
+			delete[] pEditNodeArr;
 		}
 		break;
 	case F_FILE_USED_RECENTLY:		// 最近使ったファイル
@@ -3513,7 +3513,7 @@ BOOL EditWnd::DoMouseWheel(WPARAM wParam, LPARAM lParam)
 							ActivateFrameWindow(pEditNodeArr[j].GetHwnd());
 						}
 					}
-					delete []pEditNodeArr;
+					delete[] pEditNodeArr;
 				}
 				return TRUE;	// 処理した
 			}

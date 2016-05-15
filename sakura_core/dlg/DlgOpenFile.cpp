@@ -952,7 +952,7 @@ bool DlgOpenFile::DoModalOpenDlg(
 	}else {
 		DlgOpenFail();
 	}
-	delete [] pData->ofn.lpstrFile;
+	delete[] pData->ofn.lpstrFile;
 	return bDlgResult;
 }
 
