@@ -143,7 +143,7 @@ public:
 
 	//$ 設計思想的に微妙
 	void SetCaretLayoutPos(const LayoutPoint& pt) { ptCaretPos_Layout = pt; }	// キャレット位置(レイアウト)を設定
-	void SetCaretLogicPos(const LogicPoint pt) { ptCaretPos_Logic = pt; }		// キャレット位置(ロジック)を設定
+	void SetCaretLogicPos(const LogicPoint& pt) { ptCaretPos_Logic = pt; }		// キャレット位置(ロジック)を設定
 
 	
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //

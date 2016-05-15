@@ -853,7 +853,7 @@ int RegistExt(LPCTSTR sExt, bool bDefProg)
 	tstring sProgIDPath = sBasePath + sGenProgID;
 	if (!RegKey::ExistsKey(HKEY_CURRENT_USER, sProgIDPath.c_str())) {
 		if (szProgID_HKLM[0] != _T('\0')) {
-			if ((errorCode = CopyRegistry(HKEY_LOCAL_MACHINE, (sBasePath + szProgID_HKLM).c_str(), HKEY_CURRENT_USER, sProgIDPath.c_str())) != 0) {
+			if ((errorCode = CopyRegistry(HKEY_LOCAL_MACHINE, (sBasePath + szProgID_HKLM).c_str(), HKEY_CURRENT_USER, sProgIDPath)) != 0) {
 				return errorCode;
 			}
 		}
