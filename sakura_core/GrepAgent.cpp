@@ -24,16 +24,16 @@
 
 GrepAgent::GrepAgent()
 	:
-	m_memBuf(L""),
-	m_bGrepMode(false),		// Grepモードか
-	m_bGrepRunning(false)	// Grep処理中
+	memBuf(L""),
+	bGrepMode(false),		// Grepモードか
+	bGrepRunning(false)	// Grep処理中
 {
 }
 
 CallbackResultType GrepAgent::OnBeforeClose()
 {
 	// GREP処理中は終了できない
-	if (m_bGrepRunning) {
+	if (bGrepRunning) {
 		// アクティブにする
 		ActivateFrameWindow(EditWnd::getInstance().GetHwnd());	//@@@ 2003.06.25 MIK
 		TopInfoMessage(
@@ -48,7 +48,7 @@ CallbackResultType GrepAgent::OnBeforeClose()
 void GrepAgent::OnAfterSave(const SaveInfo& saveInfo)
 {
 	// 名前を付けて保存から再ロードが除去された分の不足処理を追加（ANSI版との差異）	// 2009.08.12 ryoji
-	m_bGrepMode = false;	// grepウィンドウは通常ウィンドウ化
+	bGrepMode = false;	// grepウィンドウは通常ウィンドウ化
 	AppMode::getInstance().m_szGrepKey[0] = 0;
 }
 
@@ -139,7 +139,7 @@ void GrepAgent::AddTail(
 			::WriteFile(out, memOut.GetRawPtr(), memOut.GetRawLength(), &dwWrite, NULL);
 		}
 	}else {
-		m_lastViewDstAddedTime = GetTickCount64();
+		lastViewDstAddedTime = GetTickCount64();
 		auto& cmder = editView.GetCommander();
 		cmder.Command_ADDTAIL( mem.GetStringPtr(), mem.GetStringLength() );
 		if (!editWnd.UpdateTextWrap()) {		// 折り返し方法関連の更新
@@ -185,12 +185,12 @@ DWORD GrepAgent::DoGrep(
 #endif
 
 	// 再入不可
-	if (this->m_bGrepRunning) {
-		assert_warning(!this->m_bGrepRunning);
+	if (this->bGrepRunning) {
+		assert_warning(!this->bGrepRunning);
 		return 0xffffffff;
 	}
 
-	this->m_bGrepRunning = true;
+	this->bGrepRunning = true;
 
 	int			nHitCount = 0;
 	DlgCancel	dlgCancel;
@@ -234,7 +234,7 @@ DWORD GrepAgent::DoGrep(
 			bool bColmnSelect;
 			bool bLineSelect;
 			if (!viewDst.MyGetClipboardData(memReplace, &bColmnSelect, GetDllShareData().common.edit.bEnableLineModePaste? &bLineSelect: nullptr)) {
-				this->m_bGrepRunning = false;
+				this->bGrepRunning = false;
 				viewDst.m_bDoing_UndoRedo = false;
 				ErrorMessage( viewDst.m_hwndParent, LS(STR_DLGREPLC_CLIPBOARD) );
 				return 0;
@@ -271,20 +271,20 @@ DWORD GrepAgent::DoGrep(
 											viewDst.m_curSearchOption,
 											&viewDst.m_curRegexp)
 	) {
-		this->m_bGrepRunning = false;
+		this->bGrepRunning = false;
 		viewDst.m_bDoing_UndoRedo = false;
 		viewDst.SetUndoBuffer();
 		return 0;
 	}
 
 	// 2014.06.13 別ウィンドウで検索したとき用にGrepダイアログの検索キーを設定
-	viewDst.m_editWnd.m_dlgGrep.m_strText = pmGrepKey->GetStringPtr();
-	viewDst.m_editWnd.m_dlgGrep.m_bSetText = true;
-	viewDst.m_editWnd.m_dlgGrepReplace.m_strText = pmGrepKey->GetStringPtr();
+	viewDst.m_editWnd.m_dlgGrep.strText = pmGrepKey->GetStringPtr();
+	viewDst.m_editWnd.m_dlgGrep.bSetText = true;
+	viewDst.m_editWnd.m_dlgGrepReplace.strText = pmGrepKey->GetStringPtr();
 	if (bGrepReplace) {
-		viewDst.m_editWnd.m_dlgGrepReplace.m_strText2 = pmGrepReplace->GetStringPtr();
+		viewDst.m_editWnd.m_dlgGrepReplace.strText2 = pmGrepReplace->GetStringPtr();
 	}
-	viewDst.m_editWnd.m_dlgGrepReplace.m_bSetText = true;
+	viewDst.m_editWnd.m_dlgGrepReplace.bSetText = true;
 	hwndCancel = dlgCancel.DoModeless(G_AppInstance(), viewDst.m_hwndParent, IDD_GREPRUNNING);
 	::SetDlgItemInt(hwndCancel, IDC_STATIC_HITCOUNT, 0, FALSE);
 	::DlgItem_SetText(hwndCancel, IDC_STATIC_CURFILE, _T(" "));	// 2002/09/09 Moca add
@@ -294,7 +294,7 @@ DWORD GrepAgent::DoGrep(
 	//	(正規表現が途中で途切れると困るので)
 	//	2011.12.10 Moca 表示の際に...に切り捨てられるので登録するように
 	wcsncpy_s(AppMode::getInstance().m_szGrepKey, _countof(AppMode::getInstance().m_szGrepKey), pmGrepKey->GetStringPtr(), _TRUNCATE);
-	this->m_bGrepMode = true;
+	this->bGrepMode = true;
 
 	//	2007.07.22 genta
 	//	バージョン番号取得のため，処理を前の方へ移動した
@@ -318,7 +318,7 @@ DWORD GrepAgent::DoGrep(
 										&regexp);
 		}
 		if (bError) {
-			this->m_bGrepRunning = false;
+			this->bGrepRunning = false;
 			viewDst.m_bDoing_UndoRedo = false;
 			viewDst.SetUndoBuffer();
 			return 0;
@@ -361,7 +361,7 @@ DWORD GrepAgent::DoGrep(
 	{
 		int nErrorNo = grepEnumKeys.SetFileKeys(pmGrepFile->GetStringPtr());
 		if (nErrorNo != 0) {
-			this->m_bGrepRunning = false;
+			this->bGrepRunning = false;
 			viewDst.m_bDoing_UndoRedo = false;
 			viewDst.SetUndoBuffer();
 
@@ -482,7 +482,7 @@ DWORD GrepAgent::DoGrep(
 	memMessage.AppendString(pszWork);
 
 	if (searchOption.bWordOnly) {
-		SearchAgent::CreateWordList(m_searchWords, pmGrepKey->GetStringPtr(), pmGrepKey->GetStringLength());
+		SearchAgent::CreateWordList(searchWords, pmGrepKey->GetStringPtr(), pmGrepKey->GetStringLength());
 	}
 
 	if (0 < nWork) { // 2003.06.10 Moca ファイル検索の場合は表示しない // 2004.09.26 条件誤り修正
@@ -562,9 +562,9 @@ DWORD GrepAgent::DoGrep(
 
 	GrepEnumOptions grepEnumOptions;
 	GrepEnumFiles grepExceptAbsFiles;
-	grepExceptAbsFiles.Enumerates(_T(""), grepEnumKeys.m_vecExceptAbsFileKeys, grepEnumOptions);
+	grepExceptAbsFiles.Enumerates(_T(""), grepEnumKeys.vecExceptAbsFileKeys, grepEnumOptions);
 	GrepEnumFolders grepExceptAbsFolders;
-	grepExceptAbsFolders.Enumerates(_T(""), grepEnumKeys.m_vecExceptAbsFolderKeys, grepEnumOptions);
+	grepExceptAbsFolders.Enumerates(_T(""), grepEnumKeys.vecExceptAbsFolderKeys, grepEnumOptions);
 
 	int nGrepTreeResult = 0;
 	for (size_t nPath=0; nPath<vPaths.size(); ++nPath) {
@@ -641,7 +641,7 @@ DWORD GrepAgent::DoGrep(
 	// Grep実行後はファイルを変更無しの状態にする．
 	viewDst.m_pEditDoc->m_docEditor.SetModified(false, false);
 
-	this->m_bGrepRunning = false;
+	this->bGrepRunning = false;
 	viewDst.m_bDoing_UndoRedo = false;
 
 	// 表示処理ON/OFF
@@ -774,7 +774,7 @@ int GrepAgent::DoGrepTree(
 		if (*pnHitCount - nHitCountOld >= 50) {
 			// 結果出力
 			if (0 < memMessage.GetStringLength()
-				&& (GetTickCount64() - m_lastViewDstAddedTime > 500)
+				&& (GetTickCount64() - lastViewDstAddedTime > 500)
 			) {
 				AddTail(editWnd, viewDst, memMessage, grepOption.bGrepStdout);
 				memMessage._SetStringLength(0);
@@ -800,8 +800,8 @@ int GrepAgent::DoGrepTree(
 			LPCTSTR lpFileName = grepEnumFilterFolders.GetFileName(i);
 
 			LONGLONG curTime = GetTickCount64();
-			if (curTime - m_oldCheckTime > 200) {
-				m_oldCheckTime = curTime;
+			if (curTime - oldCheckTime > 200) {
+				oldCheckTime = curTime;
 				// サブフォルダの探索を再帰呼び出し。
 				// 処理中のユーザー操作を可能にする
 				if (!::BlockingHook(dlgCancel.GetHwnd())) {
@@ -891,8 +891,7 @@ void GrepAgent::SetGrepResult(
 	const GrepOption&	grepOption
 	)
 {
-	m_memBuf._SetStringLength(0);
-	auto& memBuf = m_memBuf;
+	memBuf._SetStringLength(0);
 	wchar_t strWork[64];
 	const wchar_t* pDispData;
 	int k;
@@ -1163,7 +1162,7 @@ int GrepAgent::DoGrepFile(
 		// ファイルを開く
 		// FileCloseで明示的に閉じるが、閉じていないときはデストラクタで閉じる
 		// 2003.06.10 Moca 文字コード判定処理もFileOpenで行う
-		nCharCode = m_fl.FileOpen(type->encoding, pszFullPath, true, grepOption.nGrepCharSet, GetDllShareData().common.file.GetAutoMIMEdecode() );
+		nCharCode = fl.FileOpen(type->encoding, pszFullPath, true, grepOption.nGrepCharSet, GetDllShareData().common.file.GetAutoMIMEdecode() );
 		TCHAR szCpName[100];
 		{
 			if (grepOption.nGrepCharSet == CODE_AUTODETECT) {
@@ -1183,9 +1182,9 @@ int GrepAgent::DoGrepFile(
 		// 2002/08/29 ファイルオープンの手前へ移動
 		
 		// 注意 : fl.ReadLine が throw する可能性がある
-		while (m_fl.ReadLine(&m_unicodeBuffer, &eol) != CodeConvertResult::Failure) {
-			const wchar_t* pLine = m_unicodeBuffer.GetStringPtr();
-			int nLineLen = m_unicodeBuffer.GetStringLength();
+		while (fl.ReadLine(&unicodeBuffer, &eol) != CodeConvertResult::Failure) {
+			const wchar_t* pLine = unicodeBuffer.GetStringPtr();
+			int nLineLen = unicodeBuffer.GetStringLength();
 
 			nEolCodeLen = eol.GetLen();
 			++nLine;
@@ -1194,8 +1193,8 @@ int GrepAgent::DoGrepFile(
 			if (nLine % 128 == 0) {
 				// 処理中のユーザー操作を可能にする
 				LONGLONG curTime = GetTickCount64();
-				if (curTime - m_oldCheckTime > 100) {
-					m_oldCheckTime = curTime;
+				if (curTime - oldCheckTime > 100) {
+					oldCheckTime = curTime;
 					if (!::BlockingHook(dlgCancel.GetHwnd())) {
 						return -1;
 					}
@@ -1208,8 +1207,8 @@ int GrepAgent::DoGrepFile(
 						dlgCancel.IsButtonChecked(IDC_CHECK_REALTIMEVIEW)
 					);
 					// 2002/08/30 Moca 進行状態を表示する(5MB以上)
-					if (5000000 < m_fl.GetFileSize()) {
-						int nPercent = m_fl.GetPercent();
+					if (5000000 < fl.GetFileSize()) {
+						int nPercent = fl.GetPercent();
 						if (5 <= nPercent - nOldPercent) {
 							nOldPercent = nPercent;
 							TCHAR szWork[10];
@@ -1305,7 +1304,7 @@ int GrepAgent::DoGrepFile(
 				int nMatchLen;
 				int nIdx = 0;
 				// Jun. 26, 2003 genta 無駄なwhileは削除
-				while ((pszRes = SearchAgent::SearchStringWord(pLine, nLineLen, nIdx, m_searchWords, searchOption.bLoHiCase, &nMatchLen))) {
+				while ((pszRes = SearchAgent::SearchStringWord(pLine, nLineLen, nIdx, searchWords, searchOption.bLoHiCase, &nMatchLen))) {
 					nIdx = pszRes - pLine + nMatchLen;
 					++nHitCount;
 					++(*pnHitCount);
@@ -1430,7 +1429,7 @@ int GrepAgent::DoGrepFile(
 		} // while read line
 
 		// ファイルを明示的に閉じるが、ここで閉じないときはデストラクタで閉じている
-		m_fl.FileClose();
+		fl.FileClose();
 	} // try
 	catch (Error_FileOpen) {
 		NativeW str(LSW(STR_GREP_ERR_FILEOPEN));
@@ -1635,7 +1634,7 @@ int GrepAgent::DoGrepReplaceFile(
 		// ファイルを開く
 		// FileCloseで明示的に閉じるが、閉じていないときはデストラクタで閉じる
 		// 2003.06.10 Moca 文字コード判定処理もFileOpenで行う
-		nCharCode = m_fl.FileOpen(type->encoding, pszFullPath, true, grepOption.nGrepCharSet, GetDllShareData().common.file.GetAutoMIMEdecode(), &bBom );
+		nCharCode = fl.FileOpen(type->encoding, pszFullPath, true, grepOption.nGrepCharSet, GetDllShareData().common.file.GetAutoMIMEdecode(), &bBom );
 		WriteData output(nHitCount, pszFullPath, nCharCode, bBom, grepOption.bGrepBackup, memMessage );
 		TCHAR szCpName[100];
 		{
@@ -1661,9 +1660,9 @@ int GrepAgent::DoGrepReplaceFile(
 	
 		NativeW outBuffer;
 		// 注意 : fl.ReadLine が throw する可能性がある
-		while (m_fl.ReadLine(&m_unicodeBuffer, &cEol) != CodeConvertResult::Failure) {
-			const wchar_t*	pLine = m_unicodeBuffer.GetStringPtr();
-			int nLineLen = m_unicodeBuffer.GetStringLength();
+		while (fl.ReadLine(&unicodeBuffer, &cEol) != CodeConvertResult::Failure) {
+			const wchar_t*	pLine = unicodeBuffer.GetStringPtr();
+			int nLineLen = unicodeBuffer.GetStringLength();
 	
 			nEolCodeLen = cEol.GetLen();
 			++nLine;
@@ -1683,8 +1682,8 @@ int GrepAgent::DoGrepReplaceFile(
 					dlgCancel.IsButtonChecked(IDC_CHECK_REALTIMEVIEW)
 				);
 				// 2002/08/30 Moca 進行状態を表示する(5MB以上)
-				if (5000000 < m_fl.GetFileSize()) {
-					int nPercent = m_fl.GetPercent();
+				if (5000000 < fl.GetFileSize()) {
+					int nPercent = fl.GetPercent();
 					if (5 <= nPercent - nOldPercent) {
 						nOldPercent = nPercent;
 						TCHAR szWork[10];
@@ -1790,7 +1789,7 @@ int GrepAgent::DoGrepReplaceFile(
 				int nIdx = 0;
 				int nOutputPos = 0;
 				// Jun. 26, 2003 genta 無駄なwhileは削除
-				while (pszRes = SearchAgent::SearchStringWord(pLine, nLineLen, nIdx, m_searchWords, searchOption.bLoHiCase, &nMatchLen)) {
+				while (pszRes = SearchAgent::SearchStringWord(pLine, nLineLen, nIdx, searchWords, searchOption.bLoHiCase, &nMatchLen)) {
 					nIdx = pszRes - pLine + nMatchLen;
 					if (bOutput) {
 						OutputPathInfo(
@@ -1891,7 +1890,7 @@ int GrepAgent::DoGrepReplaceFile(
 		}
 	
 		// ファイルを明示的に閉じるが、ここで閉じないときはデストラクタで閉じている
-		m_fl.FileClose();
+		fl.FileClose();
 		output.Close();
 	} // try
 	catch( Error_FileOpen ){

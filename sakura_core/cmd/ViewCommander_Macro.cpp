@@ -296,22 +296,22 @@ void ViewCommander::Command_EXECEXTMACRO(const WCHAR* pszPathW, const WCHAR* psz
 */
 void ViewCommander::Command_EXECCOMMAND_DIALOG(void)
 {
-	DlgExec cDlgExec;
+	DlgExec dlgExec;
 
 	// モードレスダイアログの表示
-	if (!cDlgExec.DoModal(G_AppInstance(), m_view.GetHwnd(), 0)) {
+	if (!dlgExec.DoModal(G_AppInstance(), m_view.GetHwnd(), 0)) {
 		return;
 	}
 
-	m_view.AddToCmdArr(cDlgExec.m_szCommand);
-	const WCHAR* cmd_string = to_wchar(cDlgExec.m_szCommand);
-	const WCHAR* curDir = to_wchar(cDlgExec.m_szCurDir);
+	m_view.AddToCmdArr(dlgExec.szCommand);
+	const WCHAR* cmd_string = to_wchar(dlgExec.szCommand);
+	const WCHAR* curDir = to_wchar(dlgExec.szCurDir);
 	const WCHAR* pszDir = curDir;
 	if (curDir[0] == L'\0') {
 		pszDir = NULL;
 	}else {
 		RecentCurDir cRecentCurDir;
-		cRecentCurDir.AppendItem(cDlgExec.m_szCurDir);
+		cRecentCurDir.AppendItem(dlgExec.szCurDir);
 		cRecentCurDir.Terminate();
 	}
 

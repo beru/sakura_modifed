@@ -21,9 +21,9 @@
 // FuncInfoArrクラス構築
 FuncInfoArr::FuncInfoArr()
 {
-	m_nFuncInfoArrNum = 0;		// 配列要素数
-	m_ppcFuncInfoArr = nullptr;	// 配列
-	m_nAppendTextLenMax = 0;
+	nFuncInfoArrNum = 0;		// 配列要素数
+	ppcFuncInfoArr = nullptr;	// 配列
+	nAppendTextLenMax = 0;
 	return;
 }
 
@@ -37,17 +37,17 @@ FuncInfoArr::~FuncInfoArr()
 
 void FuncInfoArr::Empty(void)
 {
-	if (m_nFuncInfoArrNum > 0 && m_ppcFuncInfoArr) {
-		for (int i=0; i<m_nFuncInfoArrNum; ++i) {
-			delete m_ppcFuncInfoArr[i];
-			m_ppcFuncInfoArr[i] = nullptr;
+	if (nFuncInfoArrNum > 0 && ppcFuncInfoArr) {
+		for (int i=0; i<nFuncInfoArrNum; ++i) {
+			delete ppcFuncInfoArr[i];
+			ppcFuncInfoArr[i] = nullptr;
 		}
-		m_nFuncInfoArrNum = 0;
-		free(m_ppcFuncInfoArr);
-		m_ppcFuncInfoArr = nullptr;
+		nFuncInfoArrNum = 0;
+		free(ppcFuncInfoArr);
+		ppcFuncInfoArr = nullptr;
 	}
-	m_AppendTextArr.clear();
-	m_nAppendTextLenMax = 0;
+	appendTextArr.clear();
+	nAppendTextLenMax = 0;
 	return;
 }
 
@@ -56,22 +56,22 @@ void FuncInfoArr::Empty(void)
 // データがない場合はNULLを返す
 FuncInfo* FuncInfoArr::GetAt(int nIdx)
 {
-	if (nIdx >= m_nFuncInfoArrNum) {
+	if (nIdx >= nFuncInfoArrNum) {
 		return NULL;
 	}
-	return m_ppcFuncInfoArr[nIdx];
+	return ppcFuncInfoArr[nIdx];
 }
 
 // 配列の最後にデータを追加する
 void FuncInfoArr::AppendData(FuncInfo* pFuncInfo)
 {
-	if (m_nFuncInfoArrNum == 0) {
-		m_ppcFuncInfoArr = (FuncInfo**)malloc(sizeof(FuncInfo*) * (m_nFuncInfoArrNum + 1));
+	if (nFuncInfoArrNum == 0) {
+		ppcFuncInfoArr = (FuncInfo**)malloc(sizeof(FuncInfo*) * (nFuncInfoArrNum + 1));
 	}else {
-		m_ppcFuncInfoArr = (FuncInfo**)realloc(m_ppcFuncInfoArr, sizeof(FuncInfo*) * (m_nFuncInfoArrNum + 1));
+		ppcFuncInfoArr = (FuncInfo**)realloc(ppcFuncInfoArr, sizeof(FuncInfo*) * (nFuncInfoArrNum + 1));
 	}
-	m_ppcFuncInfoArr[m_nFuncInfoArrNum] = pFuncInfo;
-	++m_nFuncInfoArrNum;
+	ppcFuncInfoArr[nFuncInfoArrNum] = pFuncInfo;
+	++nFuncInfoArrNum;
 	return;
 }
 
@@ -160,14 +160,14 @@ void FuncInfoArr::DUMP(void)
 {
 #ifdef _DEBUG
 	MYTRACE(_T("=============================\n"));
-	for (int i=0; i<m_nFuncInfoArrNum; ++i) {
+	for (int i=0; i<nFuncInfoArrNum; ++i) {
 		MYTRACE(_T("[%d]------------------\n"), i);
-		MYTRACE(_T("m_nFuncLineCRLF	=%d\n"), m_ppcFuncInfoArr[i]->m_nFuncLineCRLF);
-		MYTRACE(_T("m_nFuncLineLAYOUT	=%d\n"), m_ppcFuncInfoArr[i]->m_nFuncLineLAYOUT);
-		MYTRACE(_T("m_memFuncName	=[%ts]\n"), m_ppcFuncInfoArr[i]->m_memFuncName.GetStringPtr());
+		MYTRACE(_T("m_nFuncLineCRLF	=%d\n"), ppcFuncInfoArr[i]->m_nFuncLineCRLF);
+		MYTRACE(_T("m_nFuncLineLAYOUT	=%d\n"), ppcFuncInfoArr[i]->m_nFuncLineLAYOUT);
+		MYTRACE(_T("m_memFuncName	=[%ts]\n"), ppcFuncInfoArr[i]->m_memFuncName.GetStringPtr());
 		MYTRACE( _T("m_memFileName	=[%ts]\n"),
-			(m_ppcFuncInfoArr[i]->m_memFileName.GetStringPtr() ? m_ppcFuncInfoArr[i]->m_memFileName.GetStringPtr() : _T("NULL")) );
-		MYTRACE(_T("m_nInfo			=%d\n"), m_ppcFuncInfoArr[i]->m_nInfo);
+			(ppcFuncInfoArr[i]->m_memFileName.GetStringPtr() ? ppcFuncInfoArr[i]->m_memFileName.GetStringPtr() : _T("NULL")) );
+		MYTRACE(_T("m_nInfo			=%d\n"), ppcFuncInfoArr[i]->m_nInfo);
 	}
 	MYTRACE(_T("=============================\n"));
 #endif
@@ -179,11 +179,11 @@ void FuncInfoArr::SetAppendText(
 	bool overwrite
 	)
 {
-	if (m_AppendTextArr.find(info) == m_AppendTextArr.end()) {
+	if (appendTextArr.find(info) == appendTextArr.end()) {
 		// キーが存在しない場合、追加する
-		m_AppendTextArr.emplace(info, s);
-		if (m_nAppendTextLenMax < (int)s.length()) {
-			m_nAppendTextLenMax = s.length();
+		appendTextArr.emplace(info, s);
+		if (nAppendTextLenMax < (int)s.length()) {
+			nAppendTextLenMax = s.length();
 		}
 #ifndef	_UNICODE
 		std::tstring t = to_tchar(s.c_str());
@@ -194,19 +194,19 @@ void FuncInfoArr::SetAppendText(
 	}else {
 		// キーが存在する場合、値を書き換える
 		if (overwrite) {
-			m_AppendTextArr[info] = s;
+			appendTextArr[info] = s;
 		}
 	}
 }
 
 std::wstring FuncInfoArr::GetAppendText(int info)
 {
-	if (m_AppendTextArr.find(info) == m_AppendTextArr.end()) {
+	if (appendTextArr.find(info) == appendTextArr.end()) {
 		// キーが存在しない場合、空文字列を返す
 		return std::wstring();
 	}else {
 		// キーが存在する場合、値を返す
-		return m_AppendTextArr[info];
+		return appendTextArr[info];
 	}
 }
 

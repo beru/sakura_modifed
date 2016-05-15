@@ -49,7 +49,7 @@ const DWORD p_helpids[] = {	//12100
 
 DlgExec::DlgExec()
 {
-	m_szCommand[0] = _T('\0');	// コマンドライン
+	szCommand[0] = _T('\0');	// コマンドライン
 	return;
 }
 
@@ -60,8 +60,8 @@ static const int codeTable2[] = { 0x00, 0x10, 0x100 };
 // モーダルダイアログの表示
 int DlgExec::DoModal(HINSTANCE hInstance, HWND hwndParent, LPARAM lParam)
 {
-	m_szCommand[0] = _T('\0');	// コマンドライン
-	m_bEditable = EditDoc::GetInstance(0)->IsEditable();
+	szCommand[0] = _T('\0');	// コマンドライン
+	bEditable = EditDoc::GetInstance(0)->IsEditable();
 	return (int)Dialog::DoModal(hInstance, hwndParent, IDD_EXEC, lParam);
 }
 
@@ -87,12 +87,12 @@ BOOL DlgExec::OnInitDialog(
 
 	BOOL bRet = Dialog::OnInitDialog(hwnd, wParam, lParam);
 
-	m_comboDel = ComboBoxItemDeleter();
-	m_comboDel.pRecent = &m_recentCmd;
-	SetComboBoxDeleter(GetItemHwnd(IDC_COMBO_m_szCommand), &m_comboDel);
-	m_comboDelCur = ComboBoxItemDeleter();
-	m_comboDelCur.pRecent = &m_recentCur;
-	SetComboBoxDeleter(GetItemHwnd(IDC_COMBO_CUR_DIR), &m_comboDelCur);
+	comboDel = ComboBoxItemDeleter();
+	comboDel.pRecent = &recentCmd;
+	SetComboBoxDeleter(GetItemHwnd(IDC_COMBO_m_szCommand), &comboDel);
+	comboDelCur = ComboBoxItemDeleter();
+	comboDelCur.pRecent = &recentCur;
+	SetComboBoxDeleter(GetItemHwnd(IDC_COMBO_CUR_DIR), &comboDelCur);
 	return bRet;
 }
 
@@ -104,18 +104,18 @@ void DlgExec::SetData(void)
 	*           初期             *
 	*****************************/
 	// ユーザーがコンボ ボックスのエディット コントロールに入力できるテキストの長さを制限する
-	Combo_LimitText(GetItemHwnd(IDC_COMBO_m_szCommand), _countof(m_szCommand) - 1);
-	Combo_LimitText(GetItemHwnd(IDC_COMBO_CUR_DIR), _countof2(m_szCurDir) - 1);
+	Combo_LimitText(GetItemHwnd(IDC_COMBO_m_szCommand), _countof(szCommand) - 1);
+	Combo_LimitText(GetItemHwnd(IDC_COMBO_CUR_DIR), _countof2(szCurDir) - 1);
 	// コンボボックスのユーザー インターフェイスを拡張インターフェースにする
 	Combo_SetExtendedUI(GetItemHwnd(IDC_COMBO_m_szCommand), TRUE);
 
 	{	// From Here 2007.01.02 maru 引数を拡張のため
 		// マクロからの呼び出しではShareDataに保存させないように，ShareDataとの受け渡しはExecCmdの外で
 		int nExecFlgOpt;
-		nExecFlgOpt = m_pShareData->nExecFlgOpt;
+		nExecFlgOpt = pShareData->nExecFlgOpt;
 		
 		// ビューモードや上書き禁止のときは編集中ウィンドウへは出力しない	// 2009.02.21 ryoji
-		if (!m_bEditable) {
+		if (!bEditable) {
 			nExecFlgOpt &= ~0x02;
 		}
 
@@ -126,7 +126,7 @@ void DlgExec::SetData(void)
 		CheckButton(IDC_CHECK_CUR_DIR, nExecFlgOpt & 0x200 ? true : false);
 
 		EnableItem(IDC_RADIO_OUTPUT, nExecFlgOpt & 0x01 ? true : false);
-		EnableItem(IDC_RADIO_EDITWINDOW, ((nExecFlgOpt & 0x01) && m_bEditable)? true : false);
+		EnableItem(IDC_RADIO_EDITWINDOW, ((nExecFlgOpt & 0x01) && bEditable)? true : false);
 		EnableItem(IDC_COMBO_CODE_GET, nExecFlgOpt & 0x01 ? true : false);		// 標準出力Off時、Unicodeを使用するをDesableする	2008/6/20 Uchi
 		EnableItem(IDC_COMBO_CODE_SEND, nExecFlgOpt & 0x04 ? true : false);		// 標準入力Off時、Unicodeを使用するをDesableする	2008/6/20 Uchi
 		EnableItem(IDC_COMBO_CUR_DIR, nExecFlgOpt & 0x200 ? true : false);
@@ -136,28 +136,28 @@ void DlgExec::SetData(void)
 	/*****************************
 	*         データ設定         *
 	*****************************/
-	_tcscpy(m_szCommand, m_pShareData->history.m_aCommands[0]);
+	_tcscpy(szCommand, pShareData->history.m_aCommands[0]);
 	HWND hwndCombo = GetItemHwnd(IDC_COMBO_m_szCommand);
 	Combo_ResetContent(hwndCombo);
-	SetItemText(IDC_COMBO_TEXT, m_szCommand);
-	int nSize = m_pShareData->history.m_aCommands.size();
+	SetItemText(IDC_COMBO_TEXT, szCommand);
+	int nSize = pShareData->history.m_aCommands.size();
 	for (int i=0; i<nSize; ++i) {
-		Combo_AddString(hwndCombo, m_pShareData->history.m_aCommands[i]);
+		Combo_AddString(hwndCombo, pShareData->history.m_aCommands[i]);
 	}
 	Combo_SetCurSel(hwndCombo, 0);
 
-	_tcscpy(m_szCurDir, m_pShareData->history.m_aCurDirs[0]);
+	_tcscpy(szCurDir, pShareData->history.m_aCurDirs[0]);
 	hwndCombo = GetItemHwnd(IDC_COMBO_CUR_DIR);
 	Combo_ResetContent(hwndCombo);
-	SetItemText(IDC_COMBO_TEXT, m_szCurDir);
-	for (int i=0; i<m_pShareData->history.m_aCurDirs.size(); ++i) {
-		Combo_AddString(hwndCombo, m_pShareData->history.m_aCurDirs[i]);
+	SetItemText(IDC_COMBO_TEXT, szCurDir);
+	for (int i=0; i<pShareData->history.m_aCurDirs.size(); ++i) {
+		Combo_AddString(hwndCombo, pShareData->history.m_aCurDirs[i]);
 	}
 	Combo_SetCurSel(hwndCombo, 0);
 	
 	int nOpt;
 	hwndCombo = GetItemHwnd(IDC_COMBO_CODE_GET);
-	nOpt = m_pShareData->nExecFlgOpt & 0x88;
+	nOpt = pShareData->nExecFlgOpt & 0x88;
 	for (int i=0; _countof(codeTable1); ++i) {
 		if (codeTable1[i] == nOpt) {
 			Combo_SetCurSel(hwndCombo, i);
@@ -165,7 +165,7 @@ void DlgExec::SetData(void)
 		}
 	}
 	hwndCombo = GetItemHwnd(IDC_COMBO_CODE_SEND);
-	nOpt = m_pShareData->nExecFlgOpt & 0x110;
+	nOpt = pShareData->nExecFlgOpt & 0x110;
 	for (int i=0; _countof(codeTable2); ++i) {
 		if (codeTable2[i] == nOpt) {
 			Combo_SetCurSel(hwndCombo, i);
@@ -179,11 +179,11 @@ void DlgExec::SetData(void)
 // ダイアログデータの取得
 int DlgExec::GetData(void)
 {
-	GetItemText(IDC_COMBO_m_szCommand, m_szCommand, _countof(m_szCommand));
+	GetItemText(IDC_COMBO_m_szCommand, szCommand, _countof(szCommand));
 	if (IsButtonChecked(IDC_CHECK_CUR_DIR)) {
-		GetItemText(IDC_COMBO_CUR_DIR, &m_szCurDir[0], _countof2(m_szCurDir));
+		GetItemText(IDC_COMBO_CUR_DIR, &szCurDir[0], _countof2(szCurDir));
 	}else {
-		m_szCurDir[0] = _T('\0');
+		szCurDir[0] = _T('\0');
 	}
 	
 	{	// From Here 2007.01.02 maru 引数を拡張のため
@@ -198,7 +198,7 @@ int DlgExec::GetData(void)
 		nFlgOpt |= codeTable1[sel];
 		sel = Combo_GetCurSel(GetItemHwnd(IDC_COMBO_CODE_SEND));
 		nFlgOpt |= codeTable2[sel];
-		m_pShareData->nExecFlgOpt = nFlgOpt;
+		pShareData->nExecFlgOpt = nFlgOpt;
 	}	// To Here 2007.01.02 maru 引数を拡張のため
 	return 1;
 }
@@ -211,7 +211,7 @@ BOOL DlgExec::OnBnClicked(int wID)
 		{	// From Here 2007.01.02 maru 引数を拡張のため
 			bool bEnabled = IsButtonChecked(IDC_CHECK_GETSTDOUT);
 			EnableItem(IDC_RADIO_OUTPUT, bEnabled);
-			EnableItem(IDC_RADIO_EDITWINDOW, bEnabled && m_bEditable);	// ビューモードや上書き禁止の条件追加	// 2009.02.21 ryoji
+			EnableItem(IDC_RADIO_EDITWINDOW, bEnabled && bEditable);	// ビューモードや上書き禁止の条件追加	// 2009.02.21 ryoji
 		}	// To Here 2007.01.02 maru 引数を拡張のため
 
 		// 標準出力Off時、Unicodeを使用するをDesableする	2008/6/20 Uchi
@@ -237,18 +237,18 @@ BOOL DlgExec::OnBnClicked(int wID)
 			DlgOpenFile	dlgOpenFile;
 			TCHAR		szPath[_MAX_PATH + 1];
 			int			size = _countof(szPath) - 1;
-			_tcsncpy(szPath, m_szCommand, size);
+			_tcsncpy(szPath, szCommand, size);
 			szPath[size] = _T('\0');
 			// ファイルオープンダイアログの初期化
 			dlgOpenFile.Create(
-				m_hInstance,
+				hInstance,
 				GetHwnd(),
 				_T("*.com;*.exe;*.bat;*.cmd"),
-				m_szCommand
+				szCommand
 			);
 			if (dlgOpenFile.DoModal_GetOpenFileName(szPath)) {
-				_tcscpy(m_szCommand, szPath);
-				SetItemText(IDC_COMBO_m_szCommand, m_szCommand);
+				_tcscpy(szCommand, szPath);
+				SetItemText(IDC_COMBO_m_szCommand, szCommand);
 			}
 		}
 		return TRUE;
@@ -256,8 +256,8 @@ BOOL DlgExec::OnBnClicked(int wID)
 
 	case IDC_BUTTON_REFERENCE2:
 		{
-			if (SelectDir(GetHwnd(), LS(STR_DLGEXEC_SELECT_CURDIR), &m_szCurDir[0], &m_szCurDir[0])) {
-				SetItemText(IDC_COMBO_CUR_DIR, &m_szCurDir[0]);
+			if (SelectDir(GetHwnd(), LS(STR_DLGEXEC_SELECT_CURDIR), &szCurDir[0], &szCurDir[0])) {
+				SetItemText(IDC_COMBO_CUR_DIR, &szCurDir[0]);
 			}
 		}
 		return TRUE;

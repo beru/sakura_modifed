@@ -71,9 +71,9 @@ const DWORD p_helpids[] = {	//12700
 int DlgTypeList::DoModal(HINSTANCE hInstance, HWND hwndParent, Result* psResult)
 {
 	int	nRet;
-	m_nSettingType = psResult->documentType;
-	m_bAlertFileAssociation = true;
-	m_bEnableTempChange = psResult->bTempChange;
+	nSettingType = psResult->documentType;
+	bAlertFileAssociation = true;
+	bEnableTempChange = psResult->bTempChange;
 	nRet = (int)Dialog::DoModal(hInstance, hwndParent, IDD_TYPELIST, (LPARAM)NULL);
 	if (nRet == -1) {
 		return FALSE;
@@ -199,28 +199,28 @@ INT_PTR DlgTypeList::DispatchEvent(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM l
 					::EnableWindow(hwndDblClick, FALSE);
 				}else {
 					EnableItem(IDC_CHECK_EXT_RMENU, true);
-					if (!m_bRegistryChecked[nIdx]) {
+					if (!bRegistryChecked[nIdx]) {
 						TCHAR exts[_countof(type->szTypeExts)] = {0};
 						_tcscpy(exts, type->szTypeExts);
 						TCHAR *ext = _tcstok( exts, DocTypeManager::m_typeExtSeps );
 
-						m_bExtRMenu[nIdx] = true;
-						m_bExtDblClick[nIdx] = true;
+						bExtRMenu[nIdx] = true;
+						bExtDblClick[nIdx] = true;
 						while (ext) {
 							if (!_tcspbrk(ext, DocTypeManager::m_typeExtWildcards)) {
 								bool bRMenu;
 								bool bDblClick;
 								CheckExt(ext, &bRMenu, &bDblClick);
-								m_bExtRMenu[nIdx] &= bRMenu;
-								m_bExtDblClick[nIdx] &= bDblClick;
+								bExtRMenu[nIdx] &= bRMenu;
+								bExtDblClick[nIdx] &= bDblClick;
 							}
 							ext = _tcstok( NULL, DocTypeManager::m_typeExtSeps );
 						}
-						m_bRegistryChecked[nIdx] = true;
+						bRegistryChecked[nIdx] = true;
 					}
-					BtnCtl_SetCheck(hwndRMenu, m_bExtRMenu[nIdx]);
-					::EnableWindow(hwndDblClick, m_bExtRMenu[nIdx]);
-					BtnCtl_SetCheck(hwndDblClick, m_bExtDblClick[nIdx]);
+					BtnCtl_SetCheck(hwndRMenu, bExtRMenu[nIdx]);
+					::EnableWindow(hwndDblClick, bExtRMenu[nIdx]);
+					BtnCtl_SetCheck(hwndDblClick, bExtDblClick[nIdx]);
 				}
 				return TRUE;
 			}
@@ -256,9 +256,9 @@ INT_PTR DlgTypeList::DispatchEvent(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM l
 				}
 				ext = _tcstok( NULL, DocTypeManager::m_typeExtSeps );
 			}
-			m_bExtRMenu[nIdx] = checked;
+			bExtRMenu[nIdx] = checked;
 			::EnableWindow(hwndDblClick, checked);
-			m_bExtDblClick[nIdx] = checked;
+			bExtDblClick[nIdx] = checked;
 			BtnCtl_SetCheck(hwndDblClick, checked);
 			return TRUE;
 		}else if (LOWORD(wParam) == IDC_CHECK_EXT_DBLCLICK && HIWORD(wParam) == BN_CLICKED) {
@@ -285,7 +285,7 @@ INT_PTR DlgTypeList::DispatchEvent(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM l
 				}
 				ext = _tcstok( NULL, DocTypeManager::m_typeExtSeps );
 			}
-			m_bExtDblClick[nIdx] = checked;
+			bExtDblClick[nIdx] = checked;
 			return TRUE;
 		}
 	}
@@ -296,7 +296,7 @@ INT_PTR DlgTypeList::DispatchEvent(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM l
 // ダイアログデータの設定
 void DlgTypeList::SetData(void)
 {
-	SetData(m_nSettingType.GetIndex());
+	SetData(nSettingType.GetIndex());
 }
 
 void DlgTypeList::SetData(int selIdx)
@@ -333,9 +333,9 @@ void DlgTypeList::SetData(int selIdx)
 			);
 		}
 		::List_AddString(hwndList, szText);
-		m_bRegistryChecked[nIdx] = false;
-		m_bExtRMenu[nIdx] = false;
-		m_bExtDblClick[nIdx] = false;
+		bRegistryChecked[nIdx] = false;
+		bExtRMenu[nIdx] = false;
+		bExtDblClick[nIdx] = false;
 
 		SIZE sizeExtent;
 		if (::GetTextExtentPoint32(hDC, szText, _tcslen(szText), &sizeExtent) && sizeExtent.cx > nExtent) {
@@ -343,9 +343,9 @@ void DlgTypeList::SetData(int selIdx)
 		}
 	}
 	for (nIdx; nIdx<MAX_TYPES; ++nIdx) {
-		m_bRegistryChecked[nIdx] = false;
-		m_bExtRMenu[nIdx] = false;
-		m_bExtDblClick[nIdx] = false;
+		bRegistryChecked[nIdx] = false;
+		bExtRMenu[nIdx] = false;
+		bExtDblClick[nIdx] = false;
 	}
 	::SelectObject(hDC, hFontOld);
 	::ReleaseDC(hwndList, hDC);
@@ -356,7 +356,7 @@ void DlgTypeList::SetData(int selIdx)
 	List_SetCurSel(hwndList, selIdx);
 
 	::SendMessage(GetHwnd(), WM_COMMAND, MAKEWPARAM(IDC_LIST_TYPES, LBN_SELCHANGE), 0);
-	EnableItem(IDC_BUTTON_TEMPCHANGE, m_bEnableTempChange);
+	EnableItem(IDC_BUTTON_TEMPCHANGE, bEnableTempChange);
 	EnableItem(IDC_BUTTON_COPY_TYPE, GetDllShareData().nTypesCount < MAX_TYPES);
 	EnableItem(IDC_BUTTON_ADD_TYPE, GetDllShareData().nTypesCount < MAX_TYPES);
 	return;
@@ -1078,14 +1078,14 @@ int CheckExt(LPCTSTR sExt, bool* pbRMenu, bool* pbDblClick)
 */
 bool DlgTypeList::AlertFileAssociation()
 {
-	if (m_bAlertFileAssociation) {
+	if (bAlertFileAssociation) {
 		if (::MYMESSAGEBOX(
 				NULL, MB_YESNO | MB_ICONEXCLAMATION | MB_APPLMODAL | MB_TOPMOST,
 				GSTR_APPNAME,
 				LS(STR_DLGTYPELIST_ACC)
 			) == IDYES
 		) {
-			m_bAlertFileAssociation = false;	//「はい」なら最初の一度だけ確認する
+			bAlertFileAssociation = false;	//「はい」なら最初の一度だけ確認する
 			return true;
 		}else {
 			return false;

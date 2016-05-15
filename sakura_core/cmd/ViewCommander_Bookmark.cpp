@@ -74,9 +74,9 @@ void ViewCommander::Command_JUMP(void)
 
 	// 行番号
 	int	nLineNum; //$$ 単位混在
-	nLineNum = dlgJump.m_nLineNum;
+	nLineNum = dlgJump.nLineNum;
 
-	if (!dlgJump.m_bPLSQL) {	// PL/SQLソースの有効行か
+	if (!dlgJump.bPLSQL) {	// PL/SQLソースの有効行か
 		// 行番号の表示 false=折り返し単位／true=改行単位
 		if (GetDllShareData().bLineNumIsCRLF_ForJump) {
 			if (LogicInt(0) >= nLineNum) {
@@ -116,10 +116,10 @@ void ViewCommander::Command_JUMP(void)
 		nLineNum = 1;
 	}
 	nMode = 0;
-	nCurrentLine = dlgJump.m_nPLSQL_E2 - 1;
+	nCurrentLine = dlgJump.nPLSQL_E2 - 1;
 
 	int	nLineCount; //$$ 単位混在
-	nLineCount = dlgJump.m_nPLSQL_E1 - 1;
+	nLineCount = dlgJump.nPLSQL_E1 - 1;
 
 	// 行番号の表示 false=折り返し単位／true=改行単位
 	if (!m_view.m_pTypeData->bLineNumIsCRLF) { // レイアウト単位

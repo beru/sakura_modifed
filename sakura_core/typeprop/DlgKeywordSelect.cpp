@@ -68,7 +68,7 @@ static const int keyword_select_target_combo[KEYWORD_SELECT_NUM] = {
 
 DlgKeywordSelect::DlgKeywordSelect()
 {
-	m_pKeywordSetMgr = &(m_pShareData->common.specialKeyword.keywordSetMgr);
+	pKeywordSetMgr = &(pShareData->common.specialKeyword.keywordSetMgr);
 
 	return;
 }
@@ -83,13 +83,13 @@ DlgKeywordSelect::~DlgKeywordSelect()
 int DlgKeywordSelect::DoModal(HINSTANCE hInstance, HWND hwndParent, int* pnSet)
 {
 	for (int i=0; i<KEYWORD_SELECT_NUM; ++i) {
-		m_nSet[i] = pnSet[i];
+		nSet[i] = pnSet[i];
 	}
 
 	(void)Dialog::DoModal(hInstance, hwndParent, IDD_DIALOG_KEYWORD_SELECT, (LPARAM)NULL);
 
 	for (int i=0; i<KEYWORD_SELECT_NUM; ++i) {
-		pnSet[i] = m_nSet[i];
+		pnSet[i] = nSet[i];
 	}
 
 	return TRUE;
@@ -128,17 +128,17 @@ void DlgKeywordSelect::SetData(void)
 		// 一行目は空白
 		Combo_AddString(hwndCombo, L" ");
 
-		if (m_pKeywordSetMgr->m_nKeywordSetNum > 0) {
-			for (int i=0; i<m_pKeywordSetMgr->m_nKeywordSetNum; ++i) {
-				Combo_AddString(hwndCombo, m_pKeywordSetMgr->GetTypeName(i));
+		if (pKeywordSetMgr->m_nKeywordSetNum > 0) {
+			for (int i=0; i<pKeywordSetMgr->m_nKeywordSetNum; ++i) {
+				Combo_AddString(hwndCombo, pKeywordSetMgr->GetTypeName(i));
 			}
 
-			if (m_nSet[index] == -1) {
+			if (nSet[index] == -1) {
 				// セット名コンボボックスのデフォルト選択
 				Combo_SetCurSel(hwndCombo, 0);
 			}else {
 				// セット名コンボボックスのデフォルト選択
-				Combo_SetCurSel(hwndCombo, m_nSet[index] + 1);
+				Combo_SetCurSel(hwndCombo, nSet[index] + 1);
 			}
 		}
 	}
@@ -153,9 +153,9 @@ int DlgKeywordSelect::GetData(void)
 
 		int n = Combo_GetCurSel(hwndCombo);
 		if (n == CB_ERR || n == 0) {
-			m_nSet[index] = -1;
+			nSet[index] = -1;
 		}else {
-			m_nSet[index] = n - 1;
+			nSet[index] = n - 1;
 		}
 	}
 

@@ -42,14 +42,14 @@ typedef std::vector<std::tstring> VGrepEnumKeys;
 
 class GrepEnumKeys {
 public:
-	VGrepEnumKeys m_vecSearchFileKeys;
-	VGrepEnumKeys m_vecSearchFolderKeys;
-	VGrepEnumKeys m_vecExceptFileKeys;
-	VGrepEnumKeys m_vecExceptFolderKeys;
+	VGrepEnumKeys vecSearchFileKeys;
+	VGrepEnumKeys vecSearchFolderKeys;
+	VGrepEnumKeys vecExceptFileKeys;
+	VGrepEnumKeys vecExceptFolderKeys;
 
-//	VGrepEnumKeys m_vecSearchAbsFileKeys;
-	VGrepEnumKeys m_vecExceptAbsFileKeys;
-	VGrepEnumKeys m_vecExceptAbsFolderKeys;
+//	VGrepEnumKeys vecSearchAbsFileKeys;
+	VGrepEnumKeys vecExceptAbsFileKeys;
+	VGrepEnumKeys vecExceptAbsFolderKeys;
 
 public:
 	GrepEnumKeys() {
@@ -64,10 +64,10 @@ public:
 private:
 
 	void ClearItems(void) {
-		m_vecExceptFileKeys.clear();
-		m_vecSearchFileKeys.clear();
-		m_vecExceptFolderKeys.clear();
-		m_vecSearchFolderKeys.clear();
+		vecExceptFileKeys.clear();
+		vecSearchFileKeys.clear();
+		vecExceptFolderKeys.clear();
+		vecSearchFolderKeys.clear();
 		return;
 	}
 

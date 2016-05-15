@@ -74,15 +74,15 @@ int DlgWinSize::DoModal(
 	RECT&			rc				// [in/out] ïùÅAçÇÇ≥ÅAç∂ÅAè„
 	)
 {
-	m_eSaveWinSize = eSaveWinSize;
-	m_eSaveWinPos  = eSaveWinPos;
+	eSaveWinSize = eSaveWinSize;
+	eSaveWinPos  = eSaveWinPos;
 	nWinSizeType = nWinSizeType;
-	m_rc = rc;
+	rc = rc;
 	(void)Dialog::DoModal(hInstance, hwndParent, IDD_WINPOSSIZE, (LPARAM)NULL);
-	eSaveWinSize = m_eSaveWinSize;
-	eSaveWinPos  = m_eSaveWinPos;
+	eSaveWinSize = eSaveWinSize;
+	eSaveWinPos  = eSaveWinPos;
 	nWinSizeType = nWinSizeType;
-	rc = m_rc;
+	rc = rc;
 	return TRUE;
 }
 
@@ -131,7 +131,7 @@ BOOL DlgWinSize::OnBnClicked(int wID)
 */
 void DlgWinSize::SetData(void)
 {
-	switch (m_eSaveWinSize) {
+	switch (eSaveWinSize) {
 	case 1:
 		CheckButton(IDC_RADIO_WINSIZE_SAVE, true);
 		break;
@@ -142,7 +142,7 @@ void DlgWinSize::SetData(void)
 		CheckButton(IDC_RADIO_WINSIZE_DEF, true);
 	}
 
-	switch (m_eSaveWinPos) {
+	switch (eSaveWinPos) {
 	case 1:
 		CheckButton(IDC_RADIO_WINPOS_SAVE, true);
 		break;
@@ -165,10 +165,10 @@ void DlgWinSize::SetData(void)
 		nCurIdx = 0;
 	}
 	Combo_SetCurSel(GetItemHwnd(IDC_COMBO_WINTYPE), nCurIdx);
-	SetItemInt(IDC_EDIT_SX, m_rc.right,  TRUE);
-	SetItemInt(IDC_EDIT_SY, m_rc.bottom, TRUE);
-	SetItemInt(IDC_EDIT_WX, m_rc.top,  TRUE);
-	SetItemInt(IDC_EDIT_WY, m_rc.left, TRUE);
+	SetItemInt(IDC_EDIT_SX, rc.right,  TRUE);
+	SetItemInt(IDC_EDIT_SY, rc.bottom, TRUE);
+	SetItemInt(IDC_EDIT_WX, rc.top,  TRUE);
+	SetItemInt(IDC_EDIT_WY, rc.left, TRUE);
 	RenewItemState();
 }
 
@@ -178,19 +178,19 @@ void DlgWinSize::SetData(void)
 int DlgWinSize::GetData(void)
 {
 	if (IsButtonChecked(IDC_RADIO_WINSIZE_DEF)) {
-		m_eSaveWinSize = WinSizeMode::Default;
+		eSaveWinSize = WinSizeMode::Default;
 	}else if (IsButtonChecked(IDC_RADIO_WINSIZE_SAVE)) {
-		m_eSaveWinSize = WinSizeMode::Save;
+		eSaveWinSize = WinSizeMode::Save;
 	}else if (IsButtonChecked(IDC_RADIO_WINSIZE_SET)) {
-		m_eSaveWinSize = WinSizeMode::Set;
+		eSaveWinSize = WinSizeMode::Set;
 	}
 	
 	if (IsButtonChecked(IDC_RADIO_WINPOS_DEF)) {
-		m_eSaveWinPos = WinSizeMode::Default;
+		eSaveWinPos = WinSizeMode::Default;
 	}else if (IsButtonChecked(IDC_RADIO_WINPOS_SAVE)) {
-		m_eSaveWinPos = WinSizeMode::Save;
+		eSaveWinPos = WinSizeMode::Save;
 	}else if (IsButtonChecked(IDC_RADIO_WINPOS_SET)) {
-		m_eSaveWinPos = WinSizeMode::Set;
+		eSaveWinPos = WinSizeMode::Set;
 	}
 
 	int nCurIdx;
@@ -205,10 +205,10 @@ int DlgWinSize::GetData(void)
 	default:
 		nWinSizeType = SIZE_RESTORED;
 	}
-	m_rc.right  = GetItemInt(IDC_EDIT_SX, NULL, TRUE);
-	m_rc.bottom = GetItemInt(IDC_EDIT_SY, NULL, TRUE);
-	m_rc.top    = GetItemInt(IDC_EDIT_WX, NULL, TRUE);
-	m_rc.left   = GetItemInt(IDC_EDIT_WY, NULL, TRUE);
+	rc.right  = GetItemInt(IDC_EDIT_SX, NULL, TRUE);
+	rc.bottom = GetItemInt(IDC_EDIT_SY, NULL, TRUE);
+	rc.top    = GetItemInt(IDC_EDIT_WX, NULL, TRUE);
+	rc.left   = GetItemInt(IDC_EDIT_WY, NULL, TRUE);
 	return TRUE;
 }
 

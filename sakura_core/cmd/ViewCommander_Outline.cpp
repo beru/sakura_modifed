@@ -159,7 +159,7 @@ bool ViewCommander::Command_FUNCLIST(
 	}
 
 	// 解析対象ファイル名
-	_tcscpy(funcInfoArr.m_szFilePath, GetDocument().m_docFile.GetFilePath());
+	_tcscpy(funcInfoArr.szFilePath, GetDocument().m_docFile.GetFilePath());
 
 	// アウトライン ダイアログの表示
 	LayoutPoint poCaret = GetCaret().GetCaretLayoutPos();

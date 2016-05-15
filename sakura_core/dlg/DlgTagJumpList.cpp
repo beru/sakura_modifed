@@ -126,43 +126,43 @@ static const TCHAR* p_extentions[] = {
 };
 
 inline bool DlgTagJumpList::IsDirectTagJump() {
-	return m_bDirectTagJump;
+	return bDirectTagJump;
 }
 
 inline void DlgTagJumpList::ClearPrevFindInfo() {
-	m_psFindPrev->m_nMatchAll = -1;
-	m_psFind0Match->nDepth  = -1;
-	m_psFind0Match->m_nMatchAll = 0;
+	psFindPrev->nMatchAll = -1;
+	psFind0Match->nDepth  = -1;
+	psFind0Match->nMatchAll = 0;
 }
 
 
 DlgTagJumpList::DlgTagJumpList(bool bDirectTagJump)
 	:
 	Dialog(true),
-	m_bDirectTagJump(bDirectTagJump),
-	m_nIndex(-1),
-	m_pszFileName(NULL),
-	m_pszKeyword(NULL),
-	m_nLoop(-1),
-	m_pList(NULL),
-	m_nTimerId(0),
-	m_bTagJumpICase(FALSE),
-	m_bTagJumpAnyWhere(FALSE),
-	m_nTop(0),
-	m_bNextItem(false),
-	m_psFindPrev(NULL),
-	m_psFind0Match(NULL),
-	m_strOldKeyword(L"")
+	bDirectTagJump(bDirectTagJump),
+	nIndex(-1),
+	pszFileName(NULL),
+	pszKeyword(NULL),
+	nLoop(-1),
+	pList(NULL),
+	nTimerId(0),
+	bTagJumpICase(FALSE),
+	bTagJumpAnyWhere(FALSE),
+	nTop(0),
+	bNextItem(false),
+	psFindPrev(NULL),
+	psFind0Match(NULL),
+	strOldKeyword(L"")
 {
 	// サイズ変更時に位置を制御するコントロール数
-	assert(_countof(anchorList) == _countof(m_rcItems));
+	assert(_countof(anchorList) == _countof(rcItems));
 
 	// 2010.07.22 Moca ページング採用で 最大値を100→50に減らす
-	m_pList = new SortedTagJumpList(50);
-	m_psFindPrev = new TagFindState();
-	m_psFind0Match = new TagFindState();
-	m_ptDefaultSize.x = -1;
-	m_ptDefaultSize.y = -1;
+	pList = new SortedTagJumpList(50);
+	psFindPrev = new TagFindState();
+	psFind0Match = new TagFindState();
+	ptDefaultSize.x = -1;
+	ptDefaultSize.y = -1;
 	ClearPrevFindInfo();
 }
 
@@ -170,19 +170,19 @@ DlgTagJumpList::~DlgTagJumpList()
 {
 	Empty();
 
-	if (m_pszFileName) {
-		free(m_pszFileName);
+	if (pszFileName) {
+		free(pszFileName);
 	}
-	m_pszFileName = NULL;
-	if (m_pszKeyword) {
-		free(m_pszKeyword);
+	pszFileName = NULL;
+	if (pszKeyword) {
+		free(pszKeyword);
 	}
-	m_pszKeyword = NULL;
+	pszKeyword = NULL;
 
 	StopTimer();
-	SAFE_DELETE(m_pList);
-	SAFE_DELETE(m_psFindPrev);
-	SAFE_DELETE(m_psFind0Match);
+	SAFE_DELETE(pList);
+	SAFE_DELETE(psFindPrev);
+	SAFE_DELETE(psFind0Match);
 }
 
 /*!
@@ -193,9 +193,9 @@ DlgTagJumpList::~DlgTagJumpList()
 */
 void DlgTagJumpList::StopTimer(void)
 {
-	if (m_nTimerId != 0) {
-		::KillTimer(GetHwnd(), m_nTimerId);
-		m_nTimerId = 0;
+	if (nTimerId != 0) {
+		::KillTimer(GetHwnd(), nTimerId);
+		nTimerId = 0;
 	}
 }
 
@@ -211,7 +211,7 @@ void DlgTagJumpList::StopTimer(void)
 void DlgTagJumpList::StartTimer(int nDelay = TAGJUMP_TIMER_DELAY)
 {
 	StopTimer();
-	m_nTimerId = ::SetTimer(GetHwnd(), 12345, nDelay, NULL);
+	nTimerId = ::SetTimer(GetHwnd(), 12345, nDelay, NULL);
 }
 
 /*!
@@ -222,8 +222,8 @@ void DlgTagJumpList::StartTimer(int nDelay = TAGJUMP_TIMER_DELAY)
 */
 void DlgTagJumpList::Empty(void)
 {
-	m_nIndex = -1;
-	m_pList->Empty();
+	nIndex = -1;
+	pList->Empty();
 }
 
 /*
@@ -246,32 +246,32 @@ int DlgTagJumpList::DoModal(
 void DlgTagJumpList::SetData(void)
 {
 	if (IsDirectTagJump()) {
-		m_bTagJumpICase = false;
+		bTagJumpICase = false;
 		CheckButton(IDC_CHECK_ICASE, false);
-		m_bTagJumpAnyWhere = false;
+		bTagJumpAnyWhere = false;
 		CheckButton(IDC_CHECK_ANYWHERE, false);
-		m_bTagJumpExactMatch = true;
+		bTagJumpExactMatch = true;
 
-		if (m_pszKeyword) {
-			SetItemText(IDC_KEYWORD, m_pszKeyword);
+		if (pszKeyword) {
+			SetItemText(IDC_KEYWORD, pszKeyword);
 		}
 	}else {
 		// From Here 2005.04.03 MIK 設定値の読み込み
 		HWND hwndKey;
 		hwndKey = GetItemHwnd(IDC_KEYWORD);
 
-		m_bTagJumpICase = m_pShareData->tagJump.bTagJumpICase;
-		CheckButton(IDC_CHECK_ICASE, m_bTagJumpICase);
-		m_bTagJumpAnyWhere = m_pShareData->tagJump.bTagJumpAnyWhere;
-		CheckButton(IDC_CHECK_ANYWHERE, m_bTagJumpAnyWhere);
-		m_bTagJumpExactMatch = FALSE;
+		bTagJumpICase = pShareData->tagJump.bTagJumpICase;
+		CheckButton(IDC_CHECK_ICASE, bTagJumpICase);
+		bTagJumpAnyWhere = pShareData->tagJump.bTagJumpAnyWhere;
+		CheckButton(IDC_CHECK_ANYWHERE, bTagJumpAnyWhere);
+		bTagJumpExactMatch = FALSE;
 		Combo_LimitText(hwndKey, _MAX_PATH-1);
 		RecentTagJumpKeyword cRecentTagJump;
 		for (int i=0; i<cRecentTagJump.GetItemCount(); ++i) {
 			Combo_AddString(hwndKey, cRecentTagJump.GetItemText(i));
 		}
-		if (m_pszKeyword) {
-			SetItemText(IDC_KEYWORD, m_pszKeyword);
+		if (pszKeyword) {
+			SetItemText(IDC_KEYWORD, pszKeyword);
 		}else if (cRecentTagJump.GetItemCount() > 0) {
 			Combo_SetCurSel(hwndKey, 0);
 		}
@@ -304,12 +304,12 @@ void DlgTagJumpList::UpdateData(bool bInit)
 	hwndList = GetItemHwnd(IDC_LIST_TAGJUMP);
 	ListView_DeleteAllItems(hwndList);
 
-	count = m_pList->GetCount();
+	count = pList->GetCount();
 
 	TCHAR	tmp[32];
 	for (nIndex=0; nIndex<count; ++nIndex) {
 		SortedTagJumpList::TagJumpInfo* item;
-		item = m_pList->GetPtr(nIndex);
+		item = pList->GetPtr(nIndex);
 		if (!item) break;
 
 		lvi.mask     = LVIF_TEXT;
@@ -341,11 +341,11 @@ void DlgTagJumpList::UpdateData(bool bInit)
 	const TCHAR* pszMsgText = NULL;
 
 	// 数が多すぎる場合は切り捨てた旨を末尾に挿入
-//	if (m_pList->IsOverflow()) {
+//	if (pList->IsOverflow()) {
 		// 2010.04.03 「次」「前」ボタン追加して Overflowしなくなった
 //		pszMsgText = _T("(これ以降は切り捨てました)");
 //	}
-	if (!bInit && m_pList->GetCount() == 0) {
+	if (!bInit && pList->GetCount() == 0) {
 		pszMsgText = LS(STR_DLGTAGJMP2);
 	}
 	if (pszMsgText) {
@@ -362,19 +362,19 @@ void DlgTagJumpList::UpdateData(bool bInit)
 //		ListView_SetItemText(hwndList, nIndex, 5, _T(""));
 	}
 
-	if (IsDirectTagJump() && m_nTop == 0 && ! m_bNextItem) {
+	if (IsDirectTagJump() && nTop == 0 && ! bNextItem) {
 		// ダイレクトタグジャンプで、ページングの必要がないときは非表示
 		::ShowWindow(GetItemHwnd(IDC_BUTTON_NEXTTAG), SW_HIDE);
 		::ShowWindow(GetItemHwnd(IDC_BUTTON_PREVTAG), SW_HIDE);
 	}else {
-		EnableItem(IDC_BUTTON_NEXTTAG, m_bNextItem);
-		EnableItem(IDC_BUTTON_PREVTAG, (0 < m_nTop));
+		EnableItem(IDC_BUTTON_NEXTTAG, bNextItem);
+		EnableItem(IDC_BUTTON_PREVTAG, (0 < nTop));
 	}
 
-	m_nIndex = SearchBestTag();
-	if (m_nIndex != -1) {
-		ListView_SetItemState(hwndList, m_nIndex, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED);
-		ListView_EnsureVisible(hwndList, m_nIndex, FALSE);
+	nIndex = SearchBestTag();
+	if (nIndex != -1) {
+		ListView_SetItemState(hwndList, nIndex, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED);
+		ListView_EnsureVisible(hwndList, nIndex, FALSE);
 	}
 
 	return;
@@ -389,14 +389,14 @@ void DlgTagJumpList::UpdateData(bool bInit)
 int DlgTagJumpList::GetData(void)
 {
 	HWND hwndList = GetItemHwnd(IDC_LIST_TAGJUMP);
-	m_nIndex = ListView_GetNextItem(hwndList, -1, LVIS_SELECTED);
+	nIndex = ListView_GetNextItem(hwndList, -1, LVIS_SELECTED);
 
 	// From Here 2005.04.03 MIK 設定値の保存
 	if (!IsDirectTagJump()) {
-		m_pShareData->tagJump.bTagJumpICase = m_bTagJumpICase;
-		m_pShareData->tagJump.bTagJumpAnyWhere = m_bTagJumpAnyWhere;
+		pShareData->tagJump.bTagJumpICase = bTagJumpICase;
+		pShareData->tagJump.bTagJumpAnyWhere = bTagJumpAnyWhere;
 		// 2010.07.22 候補が空でもジャンプで閉じたときは、オプションを保存する
-		if (m_nIndex == -1 || m_nIndex >= m_pList->GetCapacity()) {
+		if (nIndex == -1 || nIndex >= pList->GetCapacity()) {
 			return FALSE;
 		}
 		wchar_t	tmp[MAX_TAG_STRING_LENGTH];
@@ -406,11 +406,11 @@ int DlgTagJumpList::GetData(void)
 
 		// 設定を保存
 		RecentTagJumpKeyword cRecentTagJumpKeyword;
-		cRecentTagJumpKeyword.AppendItem(m_pszKeyword);
+		cRecentTagJumpKeyword.AppendItem(pszKeyword);
 		cRecentTagJumpKeyword.Terminate();
 	}
 	// To Here 2005.04.03 MIK
-	if (m_nIndex == -1 || m_nIndex >= m_pList->GetCapacity()) return FALSE;
+	if (nIndex == -1 || nIndex >= pList->GetCapacity()) return FALSE;
 
 	return TRUE;
 }
@@ -438,11 +438,11 @@ BOOL DlgTagJumpList::OnInitDialog(
 	Dialog::OnSize();
 	
 	::GetWindowRect(hwndDlg, &rc);
-	m_ptDefaultSize.x = rc.right - rc.left;
-	m_ptDefaultSize.y = rc.bottom - rc.top;
+	ptDefaultSize.x = rc.right - rc.left;
+	ptDefaultSize.y = rc.bottom - rc.top;
 
 	for (int i=0; i<_countof(anchorList); ++i) {
-		GetItemClientRect(anchorList[i].id, m_rcItems[i]);
+		GetItemClientRect(anchorList[i].id, rcItems[i]);
 	}
 
 	RECT rcDialog = GetDllShareData().common.others.rcTagJumpDialog;
@@ -450,10 +450,10 @@ BOOL DlgTagJumpList::OnInitDialog(
 		|| rcDialog.left != 0
 		|| rcDialog.bottom != 0
 	) {
-		m_xPos = rcDialog.left;
-		m_yPos = rcDialog.top;
-		m_nWidth = rcDialog.right - rcDialog.left;
-		m_nHeight = rcDialog.bottom - rcDialog.top;
+		xPos = rcDialog.left;
+		yPos = rcDialog.top;
+		nWidth = rcDialog.right - rcDialog.left;
+		nHeight = rcDialog.bottom - rcDialog.top;
 	}
 
 	// ウィンドウのリサイズ
@@ -530,9 +530,9 @@ BOOL DlgTagJumpList::OnInitDialog(
 		bRet = FALSE;	// for set focus
 	}
 
-	m_comboDel = ComboBoxItemDeleter();
-	m_comboDel.pRecent = &m_recentKeyword;
-	SetComboBoxDeleter(hwndKey, &m_comboDel);
+	comboDel = ComboBoxItemDeleter();
+	comboDel.pRecent = &recentKeyword;
+	SetComboBoxDeleter(hwndKey, &comboDel);
 
 	// 基底クラスメンバ
 	Dialog::OnInitDialog(GetHwnd(), wParam, lParam);
@@ -561,23 +561,23 @@ BOOL DlgTagJumpList::OnBnClicked(int wID)
 
 	// From Here 2005.04.03 MIK 検索条件設定
 	case IDC_CHECK_ICASE:
-		m_bTagJumpICase = IsButtonChecked(IDC_CHECK_ICASE);
+		bTagJumpICase = IsButtonChecked(IDC_CHECK_ICASE);
 		StartTimer(TAGJUMP_TIMER_DELAY_SHORT);
 		return TRUE;
 
 	case IDC_CHECK_ANYWHERE:
-		m_bTagJumpAnyWhere = IsButtonChecked(IDC_CHECK_ANYWHERE);
+		bTagJumpAnyWhere = IsButtonChecked(IDC_CHECK_ANYWHERE);
 		StartTimer(TAGJUMP_TIMER_DELAY_SHORT);
 		return TRUE;
 	// To Here 2005.04.03 MIK 検索条件設定
 
 	case IDC_BUTTON_NEXTTAG:
-		m_nTop += m_pList->GetCapacity();
+		nTop += pList->GetCapacity();
 		StopTimer();
 		FindNext(false);
 		return TRUE;
 	case IDC_BUTTON_PREVTAG:
-		m_nTop = t_max(0, m_nTop - m_pList->GetCapacity());
+		nTop = t_max(0, nTop - pList->GetCapacity());
 		StopTimer();
 		FindNext(false);
 		return TRUE;
@@ -619,7 +619,7 @@ BOOL DlgTagJumpList::OnSize(WPARAM wParam, LPARAM lParam)
 	ptNew.y = rc.bottom - rc.top;
 
 	for (int i=0 ; i<_countof(anchorList); ++i) {
-		ResizeItem(GetItemHwnd(anchorList[i].id), m_ptDefaultSize, ptNew, m_rcItems[i], anchorList[i].anchor);
+		ResizeItem(GetItemHwnd(anchorList[i].id), ptDefaultSize, ptNew, rcItems[i], anchorList[i].anchor);
 	}
 	::InvalidateRect(GetHwnd(), NULL, TRUE);
 	return TRUE;
@@ -637,13 +637,13 @@ BOOL DlgTagJumpList::OnMove(WPARAM wParam, LPARAM lParam)
 BOOL DlgTagJumpList::OnMinMaxInfo(LPARAM lParam)
 {
 	LPMINMAXINFO lpmmi = (LPMINMAXINFO) lParam;
-	if (m_ptDefaultSize.x < 0) {
+	if (ptDefaultSize.x < 0) {
 		return 0;
 	}
-	lpmmi->ptMinTrackSize.x = m_ptDefaultSize.x;
-	lpmmi->ptMinTrackSize.y = m_ptDefaultSize.y;
-	lpmmi->ptMaxTrackSize.x = m_ptDefaultSize.x*2;
-	lpmmi->ptMaxTrackSize.y = m_ptDefaultSize.y*3;
+	lpmmi->ptMinTrackSize.x = ptDefaultSize.x;
+	lpmmi->ptMinTrackSize.y = ptDefaultSize.y;
+	lpmmi->ptMaxTrackSize.x = ptDefaultSize.x*2;
+	lpmmi->ptMaxTrackSize.y = ptDefaultSize.y*3;
 	return 0;
 }
 
@@ -731,8 +731,8 @@ bool DlgTagJumpList::AddParamA(
 	if (nIndex == -1) nIndex = 0;	// 規定値
 
 	ClearPrevFindInfo();
-	m_bNextItem = false;
-	m_pList->AddParamA(s0, s1, n2, s3[0], s4, depth, fileBase);
+	bNextItem = false;
+	pList->AddParamA(s0, s1, n2, s3[0], s4, depth, fileBase);
 
 	return true;
 }
@@ -745,15 +745,15 @@ bool DlgTagJumpList::GetSelectedFullPathAndLine(
 	int* depth
 	)
 {
-	if (m_pList->GetCount() != 1) {
-		if (m_nIndex == -1 || m_nIndex >= m_pList->GetCount()) {
+	if (pList->GetCount() != 1) {
+		if (nIndex == -1 || nIndex >= pList->GetCount()) {
 			return false;
 		}
 	}else {
-		m_nIndex = 0;
+		nIndex = 0;
 	}
 
-	return GetFullPathAndLine( m_nIndex, fullPath, count, lineNum, depth );
+	return GetFullPathAndLine( nIndex, fullPath, count, lineNum, depth );
 }
 
 /*
@@ -775,7 +775,7 @@ bool DlgTagJumpList::GetFullPathAndLine(
 	SplitPath_FolderAndFile(GetFilePath(), path, NULL);
 	AddLastYenFromDirectoryPath(path);
 	
-	m_pList->GetParam(index, NULL, fileName, lineNum, NULL, NULL, &tempDepth, dirFileName);
+	pList->GetParam(index, NULL, fileName, lineNum, NULL, NULL, &tempDepth, dirFileName);
 	if (depth) {
 		*depth = tempDepth;
 	}
@@ -854,13 +854,13 @@ void DlgTagJumpList::SetFileName(const TCHAR* pszFileName)
 		return;
 	}
 
-	if (m_pszFileName) {
-		free(m_pszFileName);
+	if (this->pszFileName) {
+		free(this->pszFileName);
 	}
 
-	m_pszFileName = _tcsdup(pszFileName);
+	this->pszFileName = _tcsdup(pszFileName);
 	
-	m_nLoop = CalcMaxUpDirectory(m_pszFileName);
+	nLoop = CalcMaxUpDirectory(pszFileName);
 }
 
 /*!
@@ -873,13 +873,11 @@ void DlgTagJumpList::SetKeyword(const wchar_t* pszKeyword)
 		return;
 	}
 
-	if (m_pszKeyword) {
-		free(m_pszKeyword);
+	if (this->pszKeyword) {
+		free(this->pszKeyword);
 	}
 
-	m_pszKeyword = wcsdup(pszKeyword);
-
-	return;
+	this->pszKeyword = wcsdup(pszKeyword);
 }
 
 struct TagPathInfo {
@@ -911,10 +909,10 @@ struct TagPathInfo {
 */
 int DlgTagJumpList::SearchBestTag(void)
 {
-	if (m_pList->GetCount() <= 0) {
+	if (pList->GetCount() <= 0) {
 		return -1;	// 選べません。
 	}
-	if (!m_pszFileName) {
+	if (!pszFileName) {
 		return 0;
 	}
 
@@ -933,13 +931,13 @@ int DlgTagJumpList::SearchBestTag(void)
 	lpPathInfo->szPathSrc[0] = _T('\0');
 	lpPathInfo->szFileSrc[0] = _T('\0');
 	lpPathInfo->szExtSrc[0] = _T('\0');
-	_tsplitpath( m_pszFileName, lpPathInfo->szDriveSrc, lpPathInfo->szPathSrc, lpPathInfo->szFileSrc, lpPathInfo->szExtSrc );
+	_tsplitpath( pszFileName, lpPathInfo->szDriveSrc, lpPathInfo->szPathSrc, lpPathInfo->szFileSrc, lpPathInfo->szExtSrc );
 	lpPathInfo->nDriveSrc = _tcslen(lpPathInfo->szDriveSrc);
 	lpPathInfo->nPathSrc = _tcslen(lpPathInfo->szPathSrc);
 	lpPathInfo->nFileSrc = _tcslen(lpPathInfo->szFileSrc);
 	lpPathInfo->nExtSrc = _tcslen(lpPathInfo->szExtSrc);
 
-	count = m_pList->GetCount();
+	count = pList->GetCount();
 
 	for (i=0; i<count; ++i) {
 		// タグのファイル名部分をフルパスにする
@@ -962,7 +960,7 @@ int DlgTagJumpList::SearchBestTag(void)
 		lpPathInfo->nFileDst = _tcslen(lpPathInfo->szFileDst);
 		lpPathInfo->nExtDst = _tcslen(lpPathInfo->szExtDst);
 		
-		if (_tcsicmp(m_pszFileName, lpPathInfo->szFileNameDst) == 0) {
+		if (_tcsicmp(pszFileName, lpPathInfo->szFileNameDst) == 0) {
 			return i;	//同一ファイルを見つけた
 		}
 
@@ -1049,17 +1047,17 @@ void DlgTagJumpList::FindNext(bool bNewFind)
 	GetItemText(IDC_KEYWORD, szKey, _countof(szKey));
 	if (bNewFind) {
 		// 前回のキーワードからの絞込検索のときで、tagsをスキップできるときはスキップ
-		if (-1 < m_psFind0Match->nDepth
-			&& (m_bTagJumpAnyWhere == m_bOldTagJumpAnyWhere || !m_bTagJumpAnyWhere)
-			&& (m_bTagJumpICase    == m_bOldTagJumpICase    || !m_bTagJumpICase)
-			&& wcsncmp(m_strOldKeyword.GetStringPtr(), szKey, m_strOldKeyword.GetStringLength() == 0)
+		if (-1 < psFind0Match->nDepth
+			&& (bTagJumpAnyWhere == bOldTagJumpAnyWhere || !bTagJumpAnyWhere)
+			&& (bTagJumpICase    == bOldTagJumpICase    || !bTagJumpICase)
+			&& wcsncmp(strOldKeyword.GetStringPtr(), szKey, strOldKeyword.GetStringLength() == 0)
 		) {
 			// 元のキーワードで１件もヒットしないtagsがあるので飛ばす
 			// 条件は同じか、厳しくなるなら問題ない
 		}else {
 			ClearPrevFindInfo();
 		}
-		m_nTop = 0;
+		nTop = 0;
 	}
 	find_key(szKey);
 	UpdateData(false);
@@ -1072,12 +1070,12 @@ int DlgTagJumpList::FindDirectTagJump()
 {
 	return find_key_core(
 		0,	// 0開始
-		m_pszKeyword,
+		pszKeyword,
 		false, // 部分一致
 		true,  // 完全一致
 		false, // 大小を区別
 		true,  // 自動モード
-		m_pShareData->common.search.nTagJumpMode
+		pShareData->common.search.nTagJumpMode
 	);
 }
 
@@ -1087,13 +1085,13 @@ void DlgTagJumpList::find_key(const wchar_t* keyword)
 	::UpdateWindow(GetItemHwnd(IDC_STATIC_KEYWORD));
 
 	find_key_core(
-		m_nTop,
+		nTop,
 		keyword,
-		m_bTagJumpAnyWhere,
-		m_bTagJumpExactMatch,
-		m_bTagJumpICase,
+		bTagJumpAnyWhere,
+		bTagJumpExactMatch,
+		bTagJumpICase,
 		IsDirectTagJump(),
-		IsDirectTagJump() ? (m_pShareData->common.search.nTagJumpMode) : m_pShareData->common.search.nTagJumpModeKeyword
+		IsDirectTagJump() ? (pShareData->common.search.nTagJumpMode) : pShareData->common.search.nTagJumpModeKeyword
 	);
 	SetItemText(IDC_STATIC_KEYWORD, LS(STR_DLGTAGJMP_LIST1));
 	::UpdateWindow(GetItemHwnd(IDC_STATIC_KEYWORD));
@@ -1126,10 +1124,10 @@ int DlgTagJumpList::find_key_core(
 
 	Empty();
 
-	m_strOldKeyword.SetString(keyword);
-	m_bOldTagJumpAnyWhere = bTagJumpAnyWhere;
-	m_bOldTagJumpICase    = bTagJumpICase;
-	m_bNextItem = false;
+	strOldKeyword.SetString(keyword);
+	bOldTagJumpAnyWhere = bTagJumpAnyWhere;
+	bOldTagJumpICase    = bTagJumpICase;
+	bNextItem = false;
 
 	if (length == 0) {
 		ClearPrevFindInfo();
@@ -1140,32 +1138,32 @@ int DlgTagJumpList::find_key_core(
 		ClearPrevFindInfo();
 		return -1;
 	}
-	SortedTagJumpList& list = *m_pList;
+	SortedTagJumpList& list = *pList;
 	const int nCap = list.GetCapacity();
 	TagFindState state;
 	state.nDepth    = 0;
-	state.m_nMatchAll = 0;
-	state.m_nNextMode = nDefaultNextMode;
-	state.m_nLoop     = -1;
-	state.m_bJumpPath = false;	// 親以外のパスの移動先指定
-	state.m_szCurPath[0] = 0;
+	state.nMatchAll = 0;
+	state.nNextMode = nDefaultNextMode;
+	state.nLoop     = -1;
+	state.bJumpPath = false;	// 親以外のパスの移動先指定
+	state.szCurPath[0] = 0;
 	
 	// 前回の結果から検索対象tagsを絞る
-	if (m_psFindPrev->m_nMatchAll <= nTop && -1 < m_psFindPrev->m_nMatchAll) {
+	if (psFindPrev->nMatchAll <= nTop && -1 < psFindPrev->nMatchAll) {
 		// 指定ページの検索をスキップ
-		state = *m_psFindPrev;
-		DEBUG_TRACE(_T("skip count  d:%d m:%d n:%d\n"), state.nDepth, state.m_nMatchAll, state.m_nNextMode);
-	}else if (0 <= m_psFind0Match->nDepth) {
+		state = *psFindPrev;
+		DEBUG_TRACE(_T("skip count  d:%d m:%d n:%d\n"), state.nDepth, state.nMatchAll, state.nNextMode);
+	}else if (0 <= psFind0Match->nDepth) {
 		// depthが浅い順にヒットしなかった分をスキップ
-		state = *m_psFind0Match;
-		DEBUG_TRACE(_T("skip 0match d:%d m:%d n:%d\n"), state.nDepth, state.m_nMatchAll, state.m_nNextMode);
+		state = *psFind0Match;
+		DEBUG_TRACE(_T("skip 0match d:%d m:%d n:%d\n"), state.nDepth, state.nMatchAll, state.nNextMode);
 	}else {
 		// 初回or使えないときはクリア
 		ClearPrevFindInfo();
 		// ファイル名をコピーしたあと、ディレクトリ(最後\)のみにする
-		_tcscpy( state.m_szCurPath, GetFilePath() );
-		state.m_szCurPath[GetFileName() - GetFilePath()] = _T('\0');
-		state.m_nLoop = m_nLoop;
+		_tcscpy( state.szCurPath, GetFilePath() );
+		state.szCurPath[GetFileName() - GetFilePath()] = _T('\0');
+		state.nLoop = nLoop;
 	}
 	
 	TCHAR	szTagFile[1024];		// タグファイル
@@ -1177,16 +1175,16 @@ int DlgTagJumpList::find_key_core(
 	vector_ex<std::tstring> seachDirs;
 
 	// パスのJumpで循環している場合に最大値を規制する
-	for (; state.nDepth<=state.m_nLoop && state.nDepth<(_MAX_PATH/2); state.nDepth++) {
+	for (; state.nDepth<=state.nLoop && state.nDepth<(_MAX_PATH/2); state.nDepth++) {
 		// 0 次のファイルは検索しない
 		// 1 1つでもヒットしたら次は検索しない
 		// 2 完全一致のときは1に同じ。 それ以外は3に同じ
 		// 3 必ず次も検索
-		if (state.m_nNextMode == 0) break;
-		if (state.m_nNextMode == 1 && 0 < state.m_nMatchAll) break;
-		if (state.m_nNextMode == 2 && bTagJumpExactMatch && 0 < state.m_nMatchAll) break; 
+		if (state.nNextMode == 0) break;
+		if (state.nNextMode == 1 && 0 < state.nMatchAll) break;
+		if (state.nNextMode == 2 && bTagJumpExactMatch && 0 < state.nMatchAll) break; 
 		{
-			std::tstring curPath = state.m_szCurPath;
+			std::tstring curPath = state.szCurPath;
 			if (seachDirs.exist(curPath)) {
 				// 検索済み =>終了
 				break;
@@ -1195,7 +1193,7 @@ int DlgTagJumpList::find_key_core(
 		}
 
 		// タグファイル名を作成する。
-		auto_sprintf_s(szTagFile, _T("%ts%ts"), state.m_szCurPath, TAG_FILENAME_T);
+		auto_sprintf_s(szTagFile, _T("%ts%ts"), state.szCurPath, TAG_FILENAME_T);
 		DEBUG_TRACE(_T("tag: %ts\n"), szTagFile);
 		
 		// タグファイルを開く。
@@ -1207,10 +1205,10 @@ int DlgTagJumpList::find_key_core(
 			int  nTagFormat = 2; // 2は1も読めるのでデフォルトは2
 			int  nLines = 0;
 			int  baseDirId = 0;
-			if (state.m_bJumpPath) {
-				baseDirId = list.AddBaseDir(state.m_szCurPath);
+			if (state.bJumpPath) {
+				baseDirId = list.AddBaseDir(state.szCurPath);
 			}
-			state.m_nNextMode = nDefaultNextMode;
+			state.nNextMode = nDefaultNextMode;
 
 			// バッファの後ろから2文字目が\0かどうかで、行末まで読み込んだか確認する
 			const int nLINEDATA_LAST_CHAR = _countof(szLineData) - 2;
@@ -1260,12 +1258,12 @@ int DlgTagJumpList::find_key_core(
 							if ('0' <= s[1][0] && s[1][0] <= '3') {
 								n2 = atoi(s[1]);
 								if (0 <= n2 && n2 <= 3) {
-									state.m_nNextMode = n2;
+									state.nNextMode = n2;
 								}
 								if (1 <= n2 && s[2][0]) {
 									// s[2] == 絶対パス(ディレクトリ)
 									TCHAR baseWork[1024];
-									CopyDirDir(baseWork, to_tchar(s[2]), state.m_szCurPath);
+									CopyDirDir(baseWork, to_tchar(s[2]), state.szCurPath);
 									szNextPath[0] = 0;
 									if (!GetLongFileName(baseWork, szNextPath)) {
 										// エラーなら変換前を適用
@@ -1276,9 +1274,9 @@ int DlgTagJumpList::find_key_core(
 						}else if (strncmp_literal(pTag, "S_FILE_BASEDIR") == 0) {
 							TCHAR baseWork[1024];
 							// 独自拡張:ファイル名の基準ディレクトリ
-							if (state.m_bJumpPath) {
+							if (state.bJumpPath) {
 								// パス親読み替え中は、相対パスだった場合に連結が必要
-								CopyDirDir(baseWork, to_tchar(s[1]), state.m_szCurPath);
+								CopyDirDir(baseWork, to_tchar(s[1]), state.szCurPath);
 								baseDirId = list.AddBaseDir(baseWork);
 							}else {
 								auto_strcpy(baseWork, to_tchar(s[1]));
@@ -1341,13 +1339,13 @@ int DlgTagJumpList::find_key_core(
 					}
 				}
 				if (cmp == 0) {
-					state.m_nMatchAll++;
-					if (nTop < state.m_nMatchAll) {
+					state.nMatchAll++;
+					if (nTop < state.nMatchAll) {
 						if (list.GetCount() < nCap) {
 							list.AddParamA(s[0], s[1], n2, s[2][0], s[3], state.nDepth, baseDirId);
 						}else {
 							// 探索打ち切り(次ページでやり直し)
-							m_bNextItem = true;
+							bNextItem = true;
 							break;
 						}
 					}
@@ -1366,42 +1364,42 @@ next_line:
 
 			// ファイルを閉じる。
 			fclose(fp);
-			DEBUG_TRACE(_T("close m:%d\n "), state.m_nMatchAll);
+			DEBUG_TRACE(_T("close m:%d\n "), state.nMatchAll);
 		}
 		
 		if (szNextPath[0]) {
-			state.m_bJumpPath = true;
-			auto_strcpy(state.m_szCurPath, szNextPath);
-			std::tstring path = state.m_szCurPath;
+			state.bJumpPath = true;
+			auto_strcpy(state.szCurPath, szNextPath);
+			std::tstring path = state.szCurPath;
 			path += _T("\\dummy");
-			state.m_nLoop = CalcMaxUpDirectory( path.c_str() );
+			state.nLoop = CalcMaxUpDirectory( path.c_str() );
 			state.nDepth = 0;
 			szNextPath[0] = 0;
 		}else {
-//			_tcscat(state.m_szCurPath, _T("..\\"));
+//			_tcscat(state.szCurPath, _T("..\\"));
 			// カレントパスを1階層上へ。
-			DirUp(state.m_szCurPath);
+			DirUp(state.szCurPath);
 		}
 		
-		if (state.m_nMatchAll != 0 && !m_bNextItem) {
+		if (state.nMatchAll != 0 && !bNextItem) {
 			// 0 ページめくり用: 打ち切られていないので次のページでは、このtagsの次から検索できる
 			// (最後に通過したものを保持)
-			*m_psFindPrev = state;
-			++(m_psFindPrev->nDepth);
-			DEBUG_TRACE(_T("FindPrev udpate: d:%d m:%d n:%d L:%d j:%d\n") , m_psFindPrev->nDepth, m_psFindPrev->m_nMatchAll, m_psFindPrev->m_nNextMode, m_psFindPrev->m_nLoop, (int)m_psFindPrev->m_bJumpPath);
+			*psFindPrev = state;
+			++(psFindPrev->nDepth);
+			DEBUG_TRACE(_T("FindPrev udpate: d:%d m:%d n:%d L:%d j:%d\n") , psFindPrev->nDepth, psFindPrev->nMatchAll, psFindPrev->nNextMode, psFindPrev->nLoop, (int)psFindPrev->bJumpPath);
 		}
-		if (state.m_nMatchAll == 0) {
+		if (state.nMatchAll == 0) {
 			// キーワード絞込み用: 次の絞り込み検索では、このtagsの次から検索できる
 			// (最後に通過したものを保持)
-			*m_psFind0Match = state;
-			++(m_psFind0Match->nDepth);
-			DEBUG_TRACE(_T("Find0Match udpate: d:%d m:%d n:%d L:%d j:%d\n") , m_psFind0Match->nDepth, m_psFind0Match->m_nMatchAll, m_psFind0Match->m_nNextMode, m_psFind0Match->m_nLoop, (int)m_psFind0Match->m_bJumpPath);
+			*psFind0Match = state;
+			++(psFind0Match->nDepth);
+			DEBUG_TRACE(_T("Find0Match udpate: d:%d m:%d n:%d L:%d j:%d\n") , psFind0Match->nDepth, psFind0Match->nMatchAll, psFind0Match->nNextMode, psFind0Match->nLoop, (int)psFind0Match->bJumpPath);
 		}
-		if (m_bNextItem) {
+		if (bNextItem) {
 			break;
 		}
 	}
-	return state.m_nMatchAll;
+	return state.nMatchAll;
 }
 
 /*!

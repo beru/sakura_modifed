@@ -39,7 +39,7 @@ ViewCommander::ViewCommander(EditView& editView)
 	m_view(editView)
 {
 	m_bPrevCommand = 0;
-	m_pSMacroMgr = EditApp::getInstance().m_pSMacroMgr;
+	m_pSMacroMgr = EditApp::getInstance().pSMacroMgr;
 }
 
 

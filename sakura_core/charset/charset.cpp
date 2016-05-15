@@ -90,7 +90,7 @@ void InitCodeSet()
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                           îªíË                              //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-extern bool IsValidCodeType(int code)
+bool IsValidCodeType(int code)
 {
 	// èâä˙âª
 	InitCodeSet();

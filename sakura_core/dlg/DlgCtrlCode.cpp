@@ -96,7 +96,7 @@ static ResourceString cLabel_jname[_countof(p_ctrl_list)];
 
 DlgCtrlCode::DlgCtrlCode()
 {
-	m_nCode = L'\0';
+	nCode = L'\0';
 }
 
 // モーダルダイアログの表示
@@ -187,7 +187,7 @@ int DlgCtrlCode::GetData(void)
 	if (nIndex == -1) {
 		return FALSE;
 	}
-	m_nCode = p_ctrl_list[nIndex].code;
+	nCode = p_ctrl_list[nIndex].code;
 
 	return TRUE;
 }

@@ -33,14 +33,14 @@ public:
 	*/
 	int DoModal(HINSTANCE, HWND, const TCHAR*, LPARAM);	// モーダルダイアログの表示
 
-	bool		m_bPaste;
-	bool		m_bBackup;
+	bool		bPaste;
+	bool		bBackup;
 
-	std::wstring	m_strText2;				// 置換後
+	std::wstring	strText2;				// 置換後
 	int				nReplaceKeySequence;	// 置換後シーケンス
 
 protected:
-	FontAutoDeleter		m_fontText2;
+	FontAutoDeleter		fontText2;
 
 	/*
 	||  実装ヘルパ関数

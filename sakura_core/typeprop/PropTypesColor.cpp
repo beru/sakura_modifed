@@ -340,9 +340,9 @@ INT_PTR PropTypesColor::DispatchEvent(
 			case IDC_BUTTON_SAMETEXTCOLOR: // 文字色統一
 				{
 					// 2006.04.26 ryoji 文字色／背景色統一ダイアログを使う
-					DlgSameColor cDlgSameColor;
+					DlgSameColor dlgSameColor;
 					COLORREF cr = m_types.colorInfoArr[m_nCurrentColorType].colorAttr.cTEXT;
-					cDlgSameColor.DoModal(::GetModuleHandle(NULL), hwndDlg, wID, &m_types, cr);
+					dlgSameColor.DoModal(::GetModuleHandle(NULL), hwndDlg, wID, &m_types, cr);
 				}
 				::InvalidateRect(hwndListColor, NULL, TRUE);
 				return TRUE;
@@ -350,9 +350,9 @@ INT_PTR PropTypesColor::DispatchEvent(
 			case IDC_BUTTON_SAMEBKCOLOR:	// 背景色統一
 				{
 					// 2006.04.26 ryoji 文字色／背景色統一ダイアログを使う
-					DlgSameColor cDlgSameColor;
+					DlgSameColor dlgSameColor;
 					COLORREF cr = m_types.colorInfoArr[m_nCurrentColorType].colorAttr.cBACK;
-					cDlgSameColor.DoModal(::GetModuleHandle(NULL), hwndDlg, wID, &m_types, cr);
+					dlgSameColor.DoModal(::GetModuleHandle(NULL), hwndDlg, wID, &m_types, cr);
 				}
 				::InvalidateRect(hwndListColor, NULL, TRUE);
 				return TRUE;
@@ -412,7 +412,7 @@ INT_PTR PropTypesColor::DispatchEvent(
 			// 強調キーワードの選択
 			case IDC_BUTTON_KEYWORD_SELECT:
 				{
-					DlgKeywordSelect cDlgKeywordSelect;
+					DlgKeywordSelect dlgKeywordSelect;
 					// 強調キーワード1を取得する。
 					HWND hwndCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_SET);
 					int nIdx = Combo_GetCurSel(hwndCombo);
@@ -421,7 +421,7 @@ INT_PTR PropTypesColor::DispatchEvent(
 					}else {
 						m_nSet[0] = nIdx - 1;
 					}
-					cDlgKeywordSelect.DoModal(::GetModuleHandle(NULL), hwndDlg, m_nSet);
+					dlgKeywordSelect.DoModal(::GetModuleHandle(NULL), hwndDlg, m_nSet);
 					RearrangeKeywordSet(hwndDlg);	// Jan. 23, 2005 genta キーワードセット再配置
 					// 強調キーワード1を反映する。
 					if (m_nSet[0] == -1) {

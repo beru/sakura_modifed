@@ -33,9 +33,9 @@ const DWORD p_helpids[] = {
 
 DlgSetCharSet::DlgSetCharSet()
 {
-	m_pnCharSet = NULL;			// 文字コードセット
-	m_pbBom = NULL;				// 文字コードセット
-	m_bCP = false;
+	pnCharSet = NULL;			// 文字コードセット
+	pbBom = NULL;				// 文字コードセット
+	bCP = false;
 }
 
 
@@ -47,8 +47,8 @@ int DlgSetCharSet::DoModal(
 	bool* pbBom
 	)
 {
-	m_pnCharSet = pnCharSet;	// 文字コードセット
-	m_pbBom = pbBom;			// BOM
+	pnCharSet = pnCharSet;	// 文字コードセット
+	pbBom = pbBom;			// BOM
 
 	return (int)Dialog::DoModal(hInstance, hwndParent, IDD_SETCHARSET, (LPARAM)NULL);
 }
@@ -62,18 +62,18 @@ BOOL DlgSetCharSet::OnInitDialog(
 {
 	_SetHwnd(hwndDlg);
 	
-	m_hwndCharSet = GetItemHwnd(IDC_COMBO_CHARSET);	// 文字コードセットコンボボックス
-	m_hwndCheckBOM = GetItemHwnd(IDC_CHECK_BOM);		// BOMチェックボックス
+	hwndCharSet = GetItemHwnd(IDC_COMBO_CHARSET);	// 文字コードセットコンボボックス
+	hwndCheckBOM = GetItemHwnd(IDC_CHECK_BOM);		// BOMチェックボックス
 
 	// コンボボックスのユーザー インターフェイスを拡張インターフェースにする
-	Combo_SetExtendedUI(m_hwndCharSet, TRUE);
+	Combo_SetExtendedUI(hwndCharSet, TRUE);
 
 	// 文字コードセット選択コンボボックス初期化
 	CodeTypesForCombobox codeTypes;
-	Combo_ResetContent(m_hwndCharSet);
+	Combo_ResetContent(hwndCharSet);
 	for (int i=1; i<codeTypes.GetCount(); ++i) {
-		int idx = Combo_AddString(m_hwndCharSet, codeTypes.GetName(i));
-		Combo_SetItemData(m_hwndCharSet, idx, codeTypes.GetCode(i));
+		int idx = Combo_AddString(hwndCharSet, codeTypes.GetName(i));
+		Combo_SetItemData(hwndCharSet, idx, codeTypes.GetCode(i));
 	}
 
 	// 基底クラスメンバ
@@ -85,10 +85,10 @@ BOOL DlgSetCharSet::OnBnClicked(int wID)
 {
 	switch (wID) {
 	case IDC_CHECK_CP:
-		if (!m_bCP) {
-			m_bCP = true;
+		if (!bCP) {
+			bCP = true;
 			EnableItem(IDC_CHECK_CP, false);
-			CodePage::AddComboCodePages( GetHwnd(), m_hwndCharSet, -1 );
+			CodePage::AddComboCodePages( GetHwnd(), hwndCharSet, -1 );
 		}
 		return TRUE;
 	case IDC_BUTTON_HELP:
@@ -115,21 +115,21 @@ BOOL DlgSetCharSet::OnBnClicked(int wID)
 void DlgSetCharSet::SetBOM(void)
 {
 	WPARAM fCheck;
-	int nIdx = Combo_GetCurSel(m_hwndCharSet);
-	LRESULT lRes = Combo_GetItemData(m_hwndCharSet, nIdx);
+	int nIdx = Combo_GetCurSel(hwndCharSet);
+	LRESULT lRes = Combo_GetItemData(hwndCharSet, nIdx);
 	CodeTypeName codeTypeName(lRes);
 	if (codeTypeName.UseBom()) {
-		::EnableWindow(m_hwndCheckBOM, TRUE);
-		if (lRes == *m_pnCharSet) {
-			fCheck = *m_pbBom ? BST_CHECKED : BST_UNCHECKED;
+		::EnableWindow(hwndCheckBOM, TRUE);
+		if (lRes == *pnCharSet) {
+			fCheck = *pbBom ? BST_CHECKED : BST_UNCHECKED;
 		}else {
 			fCheck = codeTypeName.IsBomDefOn() ? BST_CHECKED : BST_UNCHECKED;
 		}
 	}else {
-		::EnableWindow(m_hwndCheckBOM, FALSE);
+		::EnableWindow(hwndCheckBOM, FALSE);
 		fCheck = BST_UNCHECKED;
 	}
-	BtnCtl_SetCheck(m_hwndCheckBOM, fCheck);
+	BtnCtl_SetCheck(hwndCheckBOM, fCheck);
 }
 
 
@@ -148,17 +148,17 @@ BOOL DlgSetCharSet::OnCbnSelChange(HWND hwndCtl, int wID)
 		lRes = Combo_GetItemData(hwndCtl, nIdx);
 		CodeTypeName	codeTypeName(lRes);
 		if (codeTypeName.UseBom()) {
-			::EnableWindow(m_hwndCheckBOM, TRUE);
-			if (lRes == *m_pnCharSet) {
-				fCheck = *m_pbBom ? BST_CHECKED : BST_UNCHECKED;
+			::EnableWindow(hwndCheckBOM, TRUE);
+			if (lRes == *pnCharSet) {
+				fCheck = *pbBom ? BST_CHECKED : BST_UNCHECKED;
 			}else {
 				fCheck = codeTypeName.IsBomDefOn() ? BST_CHECKED : BST_UNCHECKED;
 			}
 		}else {
-			::EnableWindow(m_hwndCheckBOM, FALSE);
+			::EnableWindow(hwndCheckBOM, FALSE);
 			fCheck = BST_UNCHECKED;
 		}
-		BtnCtl_SetCheck(m_hwndCheckBOM, fCheck);
+		BtnCtl_SetCheck(hwndCheckBOM, fCheck);
 		break;
 	}
 	return TRUE;
@@ -177,24 +177,24 @@ void DlgSetCharSet::SetData(void)
 	// 文字コードセット
 	CodeTypesForCombobox codeTypes;
 
-	int nIdxOld = Combo_GetCurSel(m_hwndCharSet);
+	int nIdxOld = Combo_GetCurSel(hwndCharSet);
 	int nCurIdx = -1;
-	for (int nIdx=0; nIdx<Combo_GetCount(m_hwndCharSet); ++nIdx) {
-		EncodingType nCharSet = (EncodingType)Combo_GetItemData( m_hwndCharSet, nIdx );
-		if (nCharSet == *m_pnCharSet) {
+	for (int nIdx=0; nIdx<Combo_GetCount(hwndCharSet); ++nIdx) {
+		EncodingType nCharSet = (EncodingType)Combo_GetItemData( hwndCharSet, nIdx );
+		if (nCharSet == *pnCharSet) {
 			nCurIdx = nIdx;
 		}
 	}
 	if (nCurIdx == -1) {
-		m_bCP = true;
+		bCP = true;
 		CheckButton(IDC_CHECK_CP, true);
 		EnableItem(IDC_CHECK_CP, false);
-		nCurIdx = CodePage::AddComboCodePages(GetHwnd(), m_hwndCharSet, *m_pnCharSet);
+		nCurIdx = CodePage::AddComboCodePages(GetHwnd(), hwndCharSet, *pnCharSet);
 		if (nCurIdx == -1) {
 			nCurIdx = nIdxOld;
 		}
 	}
-	Combo_SetCurSel(m_hwndCharSet, nCurIdx);
+	Combo_SetCurSel(hwndCharSet, nCurIdx);
 
 	// BOMを設定
 	SetBOM();
@@ -206,11 +206,11 @@ void DlgSetCharSet::SetData(void)
 int DlgSetCharSet::GetData(void)
 {
 	// 文字コードセット
-	int nIdx = Combo_GetCurSel(m_hwndCharSet);
-	*m_pnCharSet = (EncodingType)Combo_GetItemData(m_hwndCharSet, nIdx);
+	int nIdx = Combo_GetCurSel(hwndCharSet);
+	*pnCharSet = (EncodingType)Combo_GetItemData(hwndCharSet, nIdx);
 
 	// BOM
-	*m_pbBom = (BtnCtl_GetCheck(m_hwndCheckBOM) == BST_CHECKED);
+	*pbBom = (BtnCtl_GetCheck(hwndCheckBOM) == BST_CHECKED);
 
 	return TRUE;
 }

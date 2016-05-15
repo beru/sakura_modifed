@@ -59,10 +59,10 @@ DlgReplace::DlgReplace()
 	searchOption.Reset();	// 検索オプション
 	bConsecutiveAll = false;	//「すべて置換」は置換の繰返し	// 2007.01.16 ryoji
 	bSelectedArea = false;	// 選択範囲内置換
-	m_nReplaceTarget = 0;		// 置換対象		// 2001.12.03 hor
-	m_bPaste = false;			// 貼り付ける？	// 2001.12.03 hor
-	m_nReplaceCnt = 0;			// すべて置換の実行結果		// 2002.02.08 hor
-	m_bCanceled = false;		// すべて置換を中断したか	// 2002.02.08 hor
+	nReplaceTarget = 0;		// 置換対象		// 2001.12.03 hor
+	bPaste = false;			// 貼り付ける？	// 2001.12.03 hor
+	nReplaceCnt = 0;			// すべて置換の実行結果		// 2002.02.08 hor
+	bCanceled = false;		// すべて置換を中断したか	// 2002.02.08 hor
 }
 
 /*!
@@ -75,17 +75,17 @@ BOOL DlgReplace::OnCbnDropDown(HWND hwndCtl, int wID)
 	switch (wID) {
 	case IDC_COMBO_TEXT:
 		if (::SendMessage(hwndCtl, CB_GETCOUNT, 0L, 0L) == 0) {
-			int nSize = m_pShareData->searchKeywords.searchKeys.size();
+			int nSize = pShareData->searchKeywords.searchKeys.size();
 			for (int i=0; i<nSize; ++i) {
-				Combo_AddString( hwndCtl, m_pShareData->searchKeywords.searchKeys[i] );
+				Combo_AddString( hwndCtl, pShareData->searchKeywords.searchKeys[i] );
 			}
 		}
 		break;
 	case IDC_COMBO_TEXT2:
 		if (::SendMessage(hwndCtl, CB_GETCOUNT, 0L, 0L) == 0) {
-			int nSize = m_pShareData->searchKeywords.replaceKeys.size();
+			int nSize = pShareData->searchKeywords.replaceKeys.size();
 			for (int i=0; i<nSize; ++i) {
-				Combo_AddString( hwndCtl, m_pShareData->searchKeywords.replaceKeys[i] );
+				Combo_AddString( hwndCtl, pShareData->searchKeywords.replaceKeys[i] );
 			}
 		}
 		break;
@@ -101,13 +101,13 @@ HWND DlgReplace::DoModeless(
 	bool bSelected
 	)
 {
-	auto& csSearch = m_pShareData->common.search;
+	auto& csSearch = pShareData->common.search;
 	searchOption = csSearch.searchOption;		// 検索オプション
 	bConsecutiveAll = csSearch.bConsecutiveAll;	//「すべて置換」は置換の繰返し	// 2007.01.16 ryoji
 	bSelectedArea = csSearch.bSelectedArea;		// 選択範囲内置換
 	bNotifyNotFound = csSearch.bNotifyNotFound;	// 検索／置換  見つからないときメッセージを表示
-	m_bSelected = bSelected;
-	m_ptEscCaretPos_PHY = ((EditView*)lParam)->GetCaret().GetCaretLogicPos();	// 検索/置換開始時のカーソル位置退避
+	bSelected = bSelected;
+	ptEscCaretPos_PHY = ((EditView*)lParam)->GetCaret().GetCaretLogicPos();	// 検索/置換開始時のカーソル位置退避
 	((EditView*)lParam)->m_bSearch = true;			// 検索/置換開始位置の登録有無			02/07/28 ai
 	return Dialog::DoModeless(hInstance, hwndParent, IDD_REPLACE, lParam, SW_SHOW);
 }
@@ -115,7 +115,7 @@ HWND DlgReplace::DoModeless(
 // モードレス時：置換・検索対象となるビューの変更
 void DlgReplace::ChangeView(LPARAM pcEditView)
 {
-	m_lParam = pcEditView;
+	lParam = pcEditView;
 	return;
 }
 
@@ -123,7 +123,7 @@ void DlgReplace::ChangeView(LPARAM pcEditView)
 // ダイアログデータの設定
 void DlgReplace::SetData(void)
 {
-	auto& csSearch = m_pShareData->common.search;
+	auto& csSearch = pShareData->common.search;
 
 	// 検索文字列/置換後文字列リストの設定(関数化)	2010/5/26 Uchi
 	SetCombosList();
@@ -170,15 +170,15 @@ void DlgReplace::SetData(void)
 
 	// From Here 2001.12.03 hor
 	// クリップボードから貼り付ける？
-	CheckButton(IDC_CHK_PASTE, m_bPaste);
+	CheckButton(IDC_CHK_PASTE, bPaste);
 	// 置換対象
-	if (m_nReplaceTarget == 0) {
+	if (nReplaceTarget == 0) {
 		CheckButton(IDC_RADIO_REPLACE, true);
-	}else if (m_nReplaceTarget == 1) {
+	}else if (nReplaceTarget == 1) {
 		CheckButton(IDC_RADIO_INSERT, true);
-	}else if (m_nReplaceTarget == 2) {
+	}else if (nReplaceTarget == 2) {
 		CheckButton(IDC_RADIO_ADD, true);
-	}else if (m_nReplaceTarget == 3) {
+	}else if (nReplaceTarget == 3) {
 		CheckButton(IDC_RADIO_LINEDELETE, true);
 		EnableItem(IDC_COMBO_TEXT2, false);
 		EnableItem(IDC_CHK_PASTE, false);
@@ -202,8 +202,8 @@ void DlgReplace::SetCombosList(void)
 	std::vector<TCHAR> vText;
 	vText.resize(nBufferSize);
 	Combo_GetText(hwndCombo, &vText[0], nBufferSize);
-	if (auto_strcmp(to_wchar(&vText[0]), m_strText.c_str()) != 0) {
-		SetItemText(IDC_COMBO_TEXT, m_strText.c_str());
+	if (auto_strcmp(to_wchar(&vText[0]), strText.c_str()) != 0) {
+		SetItemText(IDC_COMBO_TEXT, strText.c_str());
 	}
 
 	// 置換後文字列
@@ -214,8 +214,8 @@ void DlgReplace::SetCombosList(void)
 	nBufferSize = ::GetWindowTextLength(hwndCombo) + 1;
 	vText.resize(nBufferSize);
 	Combo_GetText(hwndCombo, &vText[0], nBufferSize);
-	if (auto_strcmp(to_wchar(&vText[0]), m_strText2.c_str()) != 0) {
-		SetItemText(IDC_COMBO_TEXT2, m_strText2.c_str());
+	if (auto_strcmp(to_wchar(&vText[0]), strText2.c_str()) != 0) {
+		SetItemText(IDC_COMBO_TEXT2, strText2.c_str());
 	}
 }
 
@@ -224,7 +224,7 @@ void DlgReplace::SetCombosList(void)
 // 0==条件未入力  0より大きい==正常   0より小さい==入力エラー
 int DlgReplace::GetData(void)
 {
-	auto& csSearch = m_pShareData->common.search;
+	auto& csSearch = pShareData->common.search;
 
 	// 英大文字と英小文字を区別する
 	searchOption.bLoHiCase = IsButtonChecked(IDC_CHK_LOHICASE);
@@ -251,15 +251,15 @@ int DlgReplace::GetData(void)
 	int nBufferSize = ::GetWindowTextLength(GetItemHwnd(IDC_COMBO_TEXT)) + 1;
 	std::vector<TCHAR> vText(nBufferSize);
 	GetItemText(IDC_COMBO_TEXT, &vText[0], nBufferSize);
-	m_strText = to_wchar(&vText[0]);
+	strText = to_wchar(&vText[0]);
 	// 置換後文字列
 	if (IsButtonChecked(IDC_RADIO_LINEDELETE )) {
-		m_strText2 = L"";
+		strText2 = L"";
 	}else {
 		nBufferSize = ::GetWindowTextLength(GetItemHwnd(IDC_COMBO_TEXT2)) + 1;
 		vText.resize(nBufferSize);
 		GetItemText(IDC_COMBO_TEXT2, &vText[0], nBufferSize);
-		m_strText2 = to_wchar(&vText[0]);
+		strText2 = to_wchar(&vText[0]);
 	}
 
 	// 置換 ダイアログを自動的に閉じる
@@ -268,14 +268,14 @@ int DlgReplace::GetData(void)
 	// 先頭（末尾）から再検索 2002.01.26 hor
 	csSearch.bSearchAll = IsButtonChecked(IDC_CHECK_SEARCHALL);
 
-	if (0 < m_strText.size()) {
+	if (0 < strText.size()) {
 		// 正規表現？
 		// From Here Jun. 26, 2001 genta
 		// 正規表現ライブラリの差し替えに伴う処理の見直し
 		int nFlag = 0x00;
 		nFlag |= searchOption.bLoHiCase ? 0x01 : 0x00;
 		if (searchOption.bRegularExp
-			&& !CheckRegexpSyntax(m_strText.c_str(), GetHwnd(), true, nFlag)
+			&& !CheckRegexpSyntax(strText.c_str(), GetHwnd(), true, nFlag)
 		) {
 			return -1;
 		}
@@ -283,15 +283,15 @@ int DlgReplace::GetData(void)
 
 		// 検索文字列
 		//@@@ 2002.2.2 YAZAKI CShareData.AddToSearchKeys()追加に伴う変更
-		if (m_strText.size() < _MAX_PATH) {
-			SearchKeywordManager().AddToSearchKeys(m_strText.c_str());
+		if (strText.size() < _MAX_PATH) {
+			SearchKeywordManager().AddToSearchKeys(strText.c_str());
 			csSearch.searchOption = searchOption;		// 検索オプション
 		}
 		// 2011.12.18 viewに直接設定
-		EditView* pEditView = (EditView*)m_lParam;
-		if (pEditView->m_strCurSearchKey == m_strText && pEditView->m_curSearchOption == searchOption) {
+		EditView* pEditView = (EditView*)lParam;
+		if (pEditView->m_strCurSearchKey == strText && pEditView->m_curSearchOption == searchOption) {
 		}else {
-			pEditView->m_strCurSearchKey = m_strText;
+			pEditView->m_strCurSearchKey = strText;
 			pEditView->m_curSearchOption = searchOption;
 			pEditView->m_bCurSearchUpdate = true;
 		}
@@ -299,30 +299,30 @@ int DlgReplace::GetData(void)
 
 		// 置換後文字列
 		//@@@ 2002.2.2 YAZAKI CShareData.AddToReplaceKeys()追加に伴う変更
-		if (m_strText2.size() < _MAX_PATH) {
-			SearchKeywordManager().AddToReplaceKeys(m_strText2.c_str());
+		if (strText2.size() < _MAX_PATH) {
+			SearchKeywordManager().AddToReplaceKeys(strText2.c_str());
 		}
 		nReplaceKeySequence = GetDllShareData().common.search.nReplaceKeySequence;
 
 		// From Here 2001.12.03 hor
 		// クリップボードから貼り付ける？
-		m_bPaste = IsButtonChecked(IDC_CHK_PASTE);
-		EnableItem(IDC_COMBO_TEXT2, !m_bPaste);
+		bPaste = IsButtonChecked(IDC_CHK_PASTE);
+		EnableItem(IDC_COMBO_TEXT2, !bPaste);
 		// 置換対象
-		m_nReplaceTarget = 0;
+		nReplaceTarget = 0;
 		if (IsButtonChecked(IDC_RADIO_INSERT)) {
-			m_nReplaceTarget = 1;
+			nReplaceTarget = 1;
 		}else if (IsButtonChecked(IDC_RADIO_ADD)) {
-			m_nReplaceTarget = 2;
+			nReplaceTarget = 2;
 		}else if (IsButtonChecked(IDC_RADIO_LINEDELETE )) {
-			m_nReplaceTarget = 3;
-			m_bPaste = false;
+			nReplaceTarget = 3;
+			bPaste = false;
 			EnableItem(IDC_COMBO_TEXT2, false);
 		}
 		// To Here 2001.12.03 hor
 
 		// 検索文字列/置換後文字列リストの設定	2010/5/26 Uchi
-		if (!m_bModal) {
+		if (!bModal) {
 			SetCombosList();
 		}
 		return 1;
@@ -352,7 +352,7 @@ BOOL DlgReplace::OnInitDialog(
 	Combo_SetExtendedUI(GetItemHwnd(IDC_COMBO_TEXT2), TRUE);
 
 	// テキスト選択中か
-	if (m_bSelected) {
+	if (bSelected) {
 		EnableItem(IDC_BUTTON_SEARCHPREV, false);	// 2001.12.03 hor コメント解除
 		EnableItem(IDC_BUTTON_SEARCHNEXT, false);	// 2001.12.03 hor コメント解除
 		EnableItem(IDC_BUTTON_REPALCE, false);		// 2001.12.03 hor コメント解除
@@ -364,21 +364,21 @@ BOOL DlgReplace::OnInitDialog(
 		CheckButton(IDC_RADIO_ALLAREA, true);
 	}
 
-	m_comboDelText = ComboBoxItemDeleter();
-	m_comboDelText.pRecent = &m_recentSearch;
-	SetComboBoxDeleter(GetItemHwnd(IDC_COMBO_TEXT), &m_comboDelText);
-	m_comboDelText2 = ComboBoxItemDeleter();
-	m_comboDelText2.pRecent = &m_recentReplace;
-	SetComboBoxDeleter(GetItemHwnd(IDC_COMBO_TEXT2), &m_comboDelText2);
+	comboDelText = ComboBoxItemDeleter();
+	comboDelText.pRecent = &recentSearch;
+	SetComboBoxDeleter(GetItemHwnd(IDC_COMBO_TEXT), &comboDelText);
+	comboDelText2 = ComboBoxItemDeleter();
+	comboDelText2.pRecent = &recentReplace;
+	SetComboBoxDeleter(GetItemHwnd(IDC_COMBO_TEXT2), &comboDelText2);
 
 	// フォント設定	2012/11/27 Uchi
 	HFONT hFontOld = (HFONT)::SendMessage(GetItemHwnd(IDC_COMBO_TEXT), WM_GETFONT, 0, 0);
 	HFONT hFont = SetMainFont(GetItemHwnd(IDC_COMBO_TEXT));
-	m_fontText.SetFont(hFontOld, hFont, GetItemHwnd(IDC_COMBO_TEXT));
+	fontText.SetFont(hFontOld, hFont, GetItemHwnd(IDC_COMBO_TEXT));
 
 	hFontOld = (HFONT)::SendMessage(GetItemHwnd(IDC_COMBO_TEXT2), WM_GETFONT, 0, 0);
 	hFont = SetMainFont(GetItemHwnd(IDC_COMBO_TEXT2));
-	m_fontText2.SetFont(hFontOld, hFont, GetItemHwnd(IDC_COMBO_TEXT2));
+	fontText2.SetFont(hFontOld, hFont, GetItemHwnd(IDC_COMBO_TEXT2));
 
 	// 基底クラスメンバ
 	return Dialog::OnInitDialog(hwndDlg, wParam, lParam);
@@ -387,8 +387,8 @@ BOOL DlgReplace::OnInitDialog(
 
 BOOL DlgReplace::OnDestroy()
 {
-	m_fontText.ReleaseOnDestroy();
-	m_fontText2.ReleaseOnDestroy();
+	fontText.ReleaseOnDestroy();
+	fontText2.ReleaseOnDestroy();
 	return Dialog::OnDestroy();
 }
 
@@ -396,7 +396,7 @@ BOOL DlgReplace::OnDestroy()
 BOOL DlgReplace::OnBnClicked(int wID)
 {
 	int nRet;
-	EditView* pEditView = (EditView*)m_lParam;
+	EditView* pEditView = (EditView*)lParam;
 
 	switch (wID) {
 	case IDC_CHK_PASTE:
@@ -515,7 +515,7 @@ BOOL DlgReplace::OnBnClicked(int wID)
 
 			// 検索開始位置を登録 02/07/28 ai start
 			if (pEditView->m_bSearch != FALSE) {
-				pEditView->m_ptSrchStartPos_PHY = m_ptEscCaretPos_PHY;
+				pEditView->m_ptSrchStartPos_PHY = ptEscCaretPos_PHY;
 				pEditView->m_bSearch = FALSE;
 			}// 02/07/28 ai end
 
@@ -534,7 +534,7 @@ BOOL DlgReplace::OnBnClicked(int wID)
 
 			// 検索開始位置を登録 02/07/28 ai start
 			if (pEditView->m_bSearch) {
-				pEditView->m_ptSrchStartPos_PHY = m_ptEscCaretPos_PHY;
+				pEditView->m_ptSrchStartPos_PHY = ptEscCaretPos_PHY;
 				pEditView->m_bSearch = false;
 			}// 02/07/28 ai end
 
@@ -562,7 +562,7 @@ BOOL DlgReplace::OnBnClicked(int wID)
 
 			// 置換開始位置を登録 02/07/28 ai start
 			if (pEditView->m_bSearch) {
-				pEditView->m_ptSrchStartPos_PHY = m_ptEscCaretPos_PHY;
+				pEditView->m_ptSrchStartPos_PHY = ptEscCaretPos_PHY;
 				pEditView->m_bSearch = false;
 			}// 02/07/28 ai end
 
@@ -581,7 +581,7 @@ BOOL DlgReplace::OnBnClicked(int wID)
 		if (0 < nRet) {
 			// 置換開始位置を登録 02/07/28 ai start
 			if (pEditView->m_bSearch) {
-				pEditView->m_ptSrchStartPos_PHY = m_ptEscCaretPos_PHY;
+				pEditView->m_ptSrchStartPos_PHY = ptEscCaretPos_PHY;
 				pEditView->m_bSearch = false;
 			}// 02/07/28 ai end
 
@@ -592,15 +592,15 @@ BOOL DlgReplace::OnBnClicked(int wID)
 			// アクティブにする
 			ActivateFrameWindow(GetHwnd());
 
-			TopOkMessage(GetHwnd(), LS(STR_DLGREPLC_REPLACE), m_nReplaceCnt);
+			TopOkMessage(GetHwnd(), LS(STR_DLGREPLC_REPLACE), nReplaceCnt);
 
-			if (!m_bCanceled) {
-				if (m_bModal) {		// モーダルダイアログか
+			if (!bCanceled) {
+				if (bModal) {		// モーダルダイアログか
 					// 置換ダイアログを閉じる
 					::EndDialog(GetHwnd(), 0);
 				}else {
 					// 置換 ダイアログを自動的に閉じる
-					if (m_pShareData->common.search.bAutoCloseDlgReplace) {
+					if (pShareData->common.search.bAutoCloseDlgReplace) {
 						::DestroyWindow(GetHwnd());
 					}
 				}
@@ -622,7 +622,7 @@ BOOL DlgReplace::OnBnClicked(int wID)
 BOOL DlgReplace::OnActivate(WPARAM wParam, LPARAM lParam)
 {
 	// 0文字幅マッチ描画のON/OFF	// 2009.11.29 ryoji
-	EditView*	pEditView = (EditView*)m_lParam;
+	EditView*	pEditView = (EditView*)(this->lParam);
 	LayoutRange rangeSel = pEditView->GetSelectionInfo().m_select;
 	if (rangeSel.IsValid() && rangeSel.IsLineOne() && rangeSel.IsOne())
 		pEditView->InvalidateRect(NULL);	// アクティブ化／非アクティブ化が完了してから再描画

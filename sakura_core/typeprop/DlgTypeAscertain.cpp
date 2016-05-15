@@ -50,7 +50,7 @@ const DWORD p_helpids[] = {
 // Constructors
 DlgTypeAscertain::DlgTypeAscertain()
 	:
-	m_psi(nullptr)
+	psi(nullptr)
 {
 }
 
@@ -61,9 +61,9 @@ int DlgTypeAscertain::DoModal(
 	AscertainInfo* psAscertainInfo
 	)
 {
-	m_psi = psAscertainInfo;
+	psi = psAscertainInfo;
 
-	m_psi->nColorType = -1;
+	psi->nColorType = -1;
 
 	return (int)Dialog::DoModal(hInstance, hwndParent, IDD_TYPE_ASCERTAIN, (LPARAM)NULL);
 }
@@ -80,15 +80,15 @@ BOOL DlgTypeAscertain::OnBnClicked(int wID)
 		TCHAR	buff1[_MAX_PATH + 20];
 		wchar_t	buff2[_MAX_PATH + 20];
 
-		m_psi->bAddType = IsButtonChecked(IDC_RADIO_TYPE_ADD);
-		m_psi->sColorFile = L"";
-		m_psi->nColorType = Combo_GetCurSel(GetItemHwnd(IDC_COMBO_COLORS)) - 1;
-		if (m_psi->nColorType >= MAX_TYPES
-			&& Combo_GetLBText(GetItemHwnd(IDC_COMBO_COLORS), m_psi->nColorType + 1, buff1)
+		psi->bAddType = IsButtonChecked(IDC_RADIO_TYPE_ADD);
+		psi->sColorFile = L"";
+		psi->nColorType = Combo_GetCurSel(GetItemHwnd(IDC_COMBO_COLORS)) - 1;
+		if (psi->nColorType >= MAX_TYPES
+			&& Combo_GetLBText(GetItemHwnd(IDC_COMBO_COLORS), psi->nColorType + 1, buff1)
 		) {
 			if (_stscanf(buff1, _T("File -- %ls"), buff2) > 0) {
-				m_psi->sColorFile = buff2;
-				m_psi->nColorType = MAX_TYPES;
+				psi->sColorFile = buff2;
+				psi->nColorType = MAX_TYPES;
 			}
 		}
 		::EndDialog(GetHwnd(), TRUE);
@@ -106,9 +106,9 @@ BOOL DlgTypeAscertain::OnBnClicked(int wID)
 void DlgTypeAscertain::SetData(void)
 {
 	// ƒ^ƒCƒv–¼Ý’è
-	std::wstring typeNameTo = m_psi->sTypeNameTo + L"(&B)";
+	std::wstring typeNameTo = psi->sTypeNameTo + L"(&B)";
 	SetItemText(IDC_RADIO_TYPE_TO, typeNameTo.c_str());
-	SetItemText(IDC_STATIC_TYPE_FILE, m_psi->sTypeNameFile.c_str());
+	SetItemText(IDC_STATIC_TYPE_FILE, psi->sTypeNameFile.c_str());
 
 	CheckButton(IDC_RADIO_TYPE_ADD, true);
 
@@ -141,7 +141,7 @@ void DlgTypeAscertain::SetData(void)
 	BOOL	bFind;
 	TCHAR	sTrgCol[_MAX_PATH + 1];
 
-	::SplitPath_FolderAndFile(m_psi->sImportFile.c_str(), sTrgCol, NULL);
+	::SplitPath_FolderAndFile(psi->sImportFile.c_str(), sTrgCol, NULL);
 	_tcscat(sTrgCol, _T("\\*.col"));
 	for (bFind = ((hFind = FindFirstFile(sTrgCol, &wf)) != INVALID_HANDLE_VALUE);
 		bFind;

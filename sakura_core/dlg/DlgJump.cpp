@@ -45,10 +45,10 @@ const DWORD p_helpids[] = {	//12800
 
 DlgJump::DlgJump()
 {
-	m_nLineNum = 0;			// 行番号
-	m_bPLSQL = FALSE;		// PL/SQLソースの有効行か
-	m_nPLSQL_E1 = 1;
-	m_nPLSQL_E2 = 1;
+	nLineNum = 0;			// 行番号
+	bPLSQL = FALSE;		// PL/SQLソースの有効行か
+	nPLSQL_E1 = 1;
+	nPLSQL_E2 = 1;
 
 	return;
 }
@@ -136,7 +136,7 @@ BOOL DlgJump::OnBnClicked(int wID)
 			EnableItem(IDC_EDIT_PLSQL_E1, true);
 			EnableItem(IDC_SPIN_PLSQL_E1, true);	// Oct. 6, 2000 JEPRO
 			EnableItem(IDC_COMBO_PLSQLBLOCKS, true);
-			m_pShareData->bLineNumIsCRLF_ForJump = true;
+			pShareData->bLineNumIsCRLF_ForJump = true;
 			EnableItem(IDC_RADIO_LINENUM_LAYOUT, false);
 			EnableItem(IDC_RADIO_LINENUM_CRLF, false);
 		}else {
@@ -150,7 +150,7 @@ BOOL DlgJump::OnBnClicked(int wID)
 			EnableItem(IDC_RADIO_LINENUM_CRLF, true);
 		}
 		// 行番号の表示 false=折り返し単位／true=改行単位
-		if (m_pShareData->bLineNumIsCRLF_ForJump) {
+		if (pShareData->bLineNumIsCRLF_ForJump) {
 			CheckButton(IDC_RADIO_LINENUM_LAYOUT, false);
 			CheckButton(IDC_RADIO_LINENUM_CRLF, true);
 		}else {
@@ -170,7 +170,7 @@ BOOL DlgJump::OnBnClicked(int wID)
 		}
 // To Here Feb. 20, 2001
 		{	//@@@ 2002.2.2 YAZAKI 指定行へジャンプを、ダイアログを表示するコマンドと、実際にジャンプするコマンドに分離。
-			EditDoc* pEditDoc = (EditDoc*)m_lParam;
+			EditDoc* pEditDoc = (EditDoc*)lParam;
 			pEditDoc->m_pEditWnd->GetActiveView().GetCommander().HandleCommand(F_JUMP, true, 0, 0, 0, 0);	// ジャンプコマンド発行
 		}
 		return TRUE;
@@ -186,7 +186,7 @@ BOOL DlgJump::OnBnClicked(int wID)
 // ダイアログデータの設定
 void DlgJump::SetData(void)
 {
-	EditDoc* pEditDoc = (EditDoc*)m_lParam;
+	EditDoc* pEditDoc = (EditDoc*)lParam;
 	FuncInfoArr funcInfoArr;
 	wchar_t szText[1024];
 	int nIndexCurSel = 0;	// Sep. 11, 2004 genta 初期化
@@ -194,13 +194,13 @@ void DlgJump::SetData(void)
 //	GetHwnd() = hwndDlg;
 // From Here Oct. 7, 2000 JEPRO 前回入力した行番号を保持するように下行を変更
 //	::DlgItem_SetText(GetHwnd(), IDC_EDIT_LINENUM, "");	// 行番号
-	if (m_nLineNum == 0) {
+	if (nLineNum == 0) {
 		SetItemText(IDC_EDIT_LINENUM, _T(""));	// 行番号
 	}else {
-		SetItemInt(IDC_EDIT_LINENUM, m_nLineNum, FALSE);	// 前回の行番号
+		SetItemInt(IDC_EDIT_LINENUM, nLineNum, FALSE);	// 前回の行番号
 	}
 // To Here Oct. 7, 2000
-	SetItemInt(IDC_EDIT_PLSQL_E1, m_nPLSQL_E1, FALSE);
+	SetItemInt(IDC_EDIT_PLSQL_E1, nPLSQL_E1, FALSE);
 	// PL/SQL関数リスト作成
 	HWND hwndCtrl = GetItemHwnd(IDC_COMBO_PLSQLBLOCKS);
 	// タイプ別に設定されたアウトライン解析方法
@@ -216,7 +216,7 @@ void DlgJump::SetData(void)
 		if (pFI->m_nInfo == 31 || pFI->m_nInfo == 41) {
 		}
 		if (pFI->m_nInfo == 31) {
-			if (m_pShareData->bLineNumIsCRLF_ForJump) {	// 行番号の表示 false=折り返し単位／true=改行単位
+			if (pShareData->bLineNumIsCRLF_ForJump) {	// 行番号の表示 false=折り返し単位／true=改行単位
 				auto_sprintf(szText, LSW(STR_DLGJUMP_PSLQL),
 					pFI->m_nFuncLineCRLF,
 					pFI->m_memFuncName.GetStringPtr()
@@ -228,7 +228,7 @@ void DlgJump::SetData(void)
 				);
 			}
 			nIndex = Combo_AddString(hwndCtrl, szText);
-			if (m_pShareData->bLineNumIsCRLF_ForJump) {	// 行番号の表示 false=折り返し単位／true=改行単位
+			if (pShareData->bLineNumIsCRLF_ForJump) {	// 行番号の表示 false=折り返し単位／true=改行単位
 				Combo_SetItemData(hwndCtrl, nIndex, (Int)pFI->m_nFuncLineCRLF);
 			}else {
 				Combo_SetItemData(hwndCtrl, nIndex, (Int)pFI->m_nFuncLineLAYOUT);
@@ -236,7 +236,7 @@ void DlgJump::SetData(void)
 			nPLSQLBlockNum++;
 		}
 		if (pFI->m_nInfo == 41) {
-			if (m_pShareData->bLineNumIsCRLF_ForJump) {	// 行番号の表示 false=折り返し単位／true=改行単位
+			if (pShareData->bLineNumIsCRLF_ForJump) {	// 行番号の表示 false=折り返し単位／true=改行単位
 				auto_sprintf(szText, LSW(STR_DLGJUMP_PSLQL),
 					pFI->m_nFuncLineCRLF,
 					pFI->m_memFuncName.GetStringPtr()
@@ -248,7 +248,7 @@ void DlgJump::SetData(void)
 				);
 			}
 			nIndexCurSel = nIndex = Combo_AddString(hwndCtrl, szText);
-			if (m_pShareData->bLineNumIsCRLF_ForJump) {	// 行番号の表示 false=折り返し単位／true=改行単位
+			if (pShareData->bLineNumIsCRLF_ForJump) {	// 行番号の表示 false=折り返し単位／true=改行単位
 				nWorkLine = (Int)pFI->m_nFuncLineCRLF;
 				Combo_SetItemData(hwndCtrl, nIndex, (Int)pFI->m_nFuncLineCRLF);
 			}else {
@@ -262,14 +262,14 @@ void DlgJump::SetData(void)
 
 	// PL/SQLのパッケージ本体が検出された場合
 	if (nWorkLine != -1) {
-		m_nPLSQL_E1 = nWorkLine;
-		SetItemInt(IDC_EDIT_PLSQL_E1, m_nPLSQL_E1, FALSE);
+		nPLSQL_E1 = nWorkLine;
+		SetItemInt(IDC_EDIT_PLSQL_E1, nPLSQL_E1, FALSE);
 	}
 	// PL/SQLのパッケージブロックが検出された場合
 	if (0 < nPLSQLBlockNum) {
-		m_bPLSQL = TRUE;
+		bPLSQL = TRUE;
 	}
-	CheckButton(IDC_CHECK_PLSQL, m_bPLSQL);	// PL/SQLソースの有効行か
+	CheckButton(IDC_CHECK_PLSQL, bPLSQL);	// PL/SQLソースの有効行か
 	if (IsButtonChecked(IDC_CHECK_PLSQL)) {
 		EnableItem(IDC_LABEL_PLSQL1, true);	// Sept. 12, 2000 JEPRO
 		EnableItem(IDC_LABEL_PLSQL2, true);	// Sept. 12, 2000 JEPRO
@@ -277,7 +277,7 @@ void DlgJump::SetData(void)
 		EnableItem(IDC_EDIT_PLSQL_E1, true);
 		EnableItem(IDC_SPIN_PLSQL_E1, true);	// Oct. 6, 2000 JEPRO
 		EnableItem(IDC_COMBO_PLSQLBLOCKS, true);
-		m_pShareData->bLineNumIsCRLF_ForJump = true;
+		pShareData->bLineNumIsCRLF_ForJump = true;
 		EnableItem(IDC_RADIO_LINENUM_LAYOUT, false);
 		EnableItem(IDC_RADIO_LINENUM_CRLF, false);
 	}else {
@@ -291,7 +291,7 @@ void DlgJump::SetData(void)
 		EnableItem(IDC_RADIO_LINENUM_CRLF, true);
 	}
 	// 行番号の表示 false=折り返し単位／true=改行単位
-	if (m_pShareData->bLineNumIsCRLF_ForJump) {
+	if (pShareData->bLineNumIsCRLF_ForJump) {
 		CheckButton(IDC_RADIO_LINENUM_LAYOUT, false);
 		CheckButton(IDC_RADIO_LINENUM_CRLF, true);
 	}else {
@@ -309,23 +309,23 @@ int DlgJump::GetData(void)
 	BOOL pTranslated;
 
 	// 行番号の表示 false=折り返し単位／true=改行単位
-	m_pShareData->bLineNumIsCRLF_ForJump = !IsButtonChecked(IDC_RADIO_LINENUM_LAYOUT);
+	pShareData->bLineNumIsCRLF_ForJump = !IsButtonChecked(IDC_RADIO_LINENUM_LAYOUT);
 
 	// PL/SQLソースの有効行か
-	m_bPLSQL = IsButtonChecked(IDC_CHECK_PLSQL);
-	m_nPLSQL_E1 = GetItemInt(IDC_EDIT_PLSQL_E1, &pTranslated, FALSE);
-	if (m_nPLSQL_E1 == 0 && !pTranslated) {
-		m_nPLSQL_E1 = 1;
+	bPLSQL = IsButtonChecked(IDC_CHECK_PLSQL);
+	nPLSQL_E1 = GetItemInt(IDC_EDIT_PLSQL_E1, &pTranslated, FALSE);
+	if (nPLSQL_E1 == 0 && !pTranslated) {
+		nPLSQL_E1 = 1;
 	}
 
-//	m_nPLSQL_E2 = GetItemInt(IDC_EDIT_PLSQL_E2, &pTranslated, FALSE);
-//	if (m_nPLSQL_E2 == 0 && !pTranslated) {
-//		m_nPLSQL_E2 = 1;
+//	nPLSQL_E2 = GetItemInt(IDC_EDIT_PLSQL_E2, &pTranslated, FALSE);
+//	if (nPLSQL_E2 == 0 && !pTranslated) {
+//		nPLSQL_E2 = 1;
 //	}
 
 	// 行番号
-	m_nLineNum = GetItemInt(IDC_EDIT_LINENUM, &pTranslated, FALSE);
-	if (m_nLineNum == 0 && !pTranslated) {
+	nLineNum = GetItemInt(IDC_EDIT_LINENUM, &pTranslated, FALSE);
+	if (nLineNum == 0 && !pTranslated) {
 		return FALSE;
 	}
 	return TRUE;

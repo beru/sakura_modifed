@@ -25,11 +25,11 @@
 
 class SoundSet {
 public:
-	SoundSet() : m_nMuteCount(0) { }
+	SoundSet() : nMuteCount(0) { }
 	void NeedlessToSaveBeep(); // 上書き不要ビープ音
-	void MuteOn() { ++m_nMuteCount; }
-	void MuteOff() { --m_nMuteCount; }
+	void MuteOn() { ++nMuteCount; }
+	void MuteOff() { --nMuteCount; }
 private:
-	int	m_nMuteCount;
+	int	nMuteCount;
 };
 

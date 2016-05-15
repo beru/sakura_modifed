@@ -60,18 +60,18 @@ void FillSolidRect(HDC hdc, int x, int y, int cx, int cy, COLORREF clr)
 MenuDrawer::MenuDrawer()
 {
 	// 共有データ構造体のアドレスを返す
-	m_pShareData = &GetDllShareData();
+	pShareData = &GetDllShareData();
 
-	m_hInstance = NULL;
-	m_hWndOwner = NULL;
-	m_nMenuHeight = 0;
-	m_nMenuFontHeight = 0;
-	m_hFontMenu = NULL;
-	m_pIcons = nullptr;
-	m_hCompBitmap = NULL;
-	m_hCompDC = NULL;
+	hInstance = NULL;
+	hWndOwner = NULL;
+	nMenuHeight = 0;
+	nMenuFontHeight = 0;
+	hFontMenu = NULL;
+	pIcons = nullptr;
+	hCompBitmap = NULL;
+	hCompDC = NULL;
 
-//@@@ 2002.01.03 YAZAKI m_tbMyButtonなどをCShareDataからMenuDrawerへ移動したことによる修正。	/* ツールバーのボタン TBBUTTON構造体 */
+//@@@ 2002.01.03 YAZAKI tbMyButtonなどをCShareDataからMenuDrawerへ移動したことによる修正。	/* ツールバーのボタン TBBUTTON構造体 */
 	/* ツールバーのボタン TBBUTTON構造体 */
 	/*
 	typedef struct _TBBUTTON {
@@ -653,7 +653,7 @@ MenuDrawer::MenuDrawer()
 	};
 	int tbd_num = _countof(tbd);
 
-	// m_tbMyButton[0]にはセパレータが入っているため、アイコン番号とボタン番号は１つずれる
+	// tbMyButton[0]にはセパレータが入っているため、アイコン番号とボタン番号は１つずれる
 	const int INDEX_GAP = 1;
 	const int myButtonEnd = tbd_num + INDEX_GAP;
 	// 定数の整合性確認
@@ -662,10 +662,10 @@ MenuDrawer::MenuDrawer()
 	assert_warning(tbd[TOOLBAR_ICON_PLUGCOMMAND_DEFAULT - INDEX_GAP] == F_PLUGCOMMAND);
 	// コマンド番号
 	assert_warning(tbd[TOOLBAR_BUTTON_F_TOOLBARWRAP     - INDEX_GAP] == F_TOOLBARWRAP);
-	m_tbMyButton.resize(tbd_num + INDEX_GAP);
-	SetTBBUTTONVal(&m_tbMyButton[0], -1, F_SEPARATOR, 0, TBSTYLE_SEP, 0, 0);	// セパレータ	// 2007.11.02 ryoji アイコンの未定義化(-1)
+	tbMyButton.resize(tbd_num + INDEX_GAP);
+	SetTBBUTTONVal(&tbMyButton[0], -1, F_SEPARATOR, 0, TBSTYLE_SEP, 0, 0);	// セパレータ	// 2007.11.02 ryoji アイコンの未定義化(-1)
 
-	// 2010.06.23 Moca ループインデックスの基準をm_tbMyButtonに変更
+	// 2010.06.23 Moca ループインデックスの基準をtbMyButtonに変更
 	for (int i=INDEX_GAP; i<myButtonEnd; ++i) {
 		const int funcCode = tbd[i-INDEX_GAP];
 		const int imageIndex = i - INDEX_GAP;
@@ -676,9 +676,9 @@ MenuDrawer::MenuDrawer()
 			//	インデックスを変更するとsakura.iniが引き継げなくなるので
 			//	重複を承知でそのままにする
 			//	2010.06.23 アイコン位置は外部マクロのデフォルトアイコンとして利用中
-			//	m_tbMyButton[384]自体は、ツールバーの折り返し用
+			//	tbMyButton[384]自体は、ツールバーの折り返し用
 			SetTBBUTTONVal(
-				&m_tbMyButton[i],
+				&tbMyButton[i],
 				-1,						// 2007.11.02 ryoji アイコンの未定義化(-1)
 				F_MENU_NOT_USED_FIRST,
 				TBSTATE_ENABLED|TBSTATE_WRAP,
@@ -703,7 +703,7 @@ MenuDrawer::MenuDrawer()
 		}
 
 		SetTBBUTTONVal(
-			&m_tbMyButton[i],
+			&tbMyButton[i],
 			(F_DUMMY_MAX_CODE < funcCode)? imageIndex : -1,	// 2007.11.02 ryoji アイコンの未定義化(-1)
 			funcCode,
 			(tbd[i] == F_DISABLE)? 0 : TBSTATE_ENABLED,	// F_DISABLE なら DISABLEに	2010/7/11 Uchi
@@ -711,33 +711,33 @@ MenuDrawer::MenuDrawer()
 		);
 	}
 	
-	m_nMyButtonFixSize = m_tbMyButton.size();
+	nMyButtonFixSize = tbMyButton.size();
 	
 	// 2010.06.25 Moca 専用アイコンのない外部マクロがあれば、同じアイコンを共有して登録
 	if (MAX_CUSTMACRO_ICO < MAX_CUSTMACRO) {
 		const int nAddFuncs = MAX_CUSTMACRO - MAX_CUSTMACRO_ICO;
-		const int nBaseIndex = m_tbMyButton.size();
-		m_tbMyButton.resize(m_tbMyButton.size() + nAddFuncs);
+		const int nBaseIndex = tbMyButton.size();
+		tbMyButton.resize(tbMyButton.size() + nAddFuncs);
 		for (int k=0; k<nAddFuncs; ++k) {
 			const int macroFuncCode = F_USERMACRO_0 + MAX_CUSTMACRO_ICO + k;
 			SetTBBUTTONVal(
-				&m_tbMyButton[k + nBaseIndex],
+				&tbMyButton[k + nBaseIndex],
 				TOOLBAR_ICON_MACRO_INTERNAL - INDEX_GAP,
 				macroFuncCode, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0
 			);
 		}
 	}
 	
-	m_nMyButtonNum = m_tbMyButton.size();
+	nMyButtonNum = tbMyButton.size();
 	return;
 }
 
 
 MenuDrawer::~MenuDrawer()
 {
-	if (m_hFontMenu) {
-		::DeleteObject(m_hFontMenu);
-		m_hFontMenu = NULL;
+	if (hFontMenu) {
+		::DeleteObject(hFontMenu);
+		hFontMenu = NULL;
 	}
 	DeleteCompDC();
 	return;
@@ -749,9 +749,9 @@ void MenuDrawer::Create(
 	ImageListMgr* pIcons
 	)
 {
-	m_hInstance = hInstance;
-	m_hWndOwner = hWndOwner;
-	m_pIcons = pIcons;
+	this->hInstance = hInstance;
+	this->hWndOwner = hWndOwner;
+	this->pIcons = pIcons;
 
 	return;
 }
@@ -760,7 +760,7 @@ void MenuDrawer::Create(
 void MenuDrawer::ResetContents(void)
 {
 	LOGFONT	lf;
-	m_menuItems.clear();
+	menuItems.clear();
 
 	NONCLIENTMETRICS ncm = {0};
 
@@ -768,27 +768,27 @@ void MenuDrawer::ResetContents(void)
 	ncm.cbSize = CCSIZEOF_STRUCT(NONCLIENTMETRICS, lfMessageFont);
 	::SystemParametersInfo(SPI_GETNONCLIENTMETRICS, ncm.cbSize, (PVOID)&ncm, 0);
 
-	if (m_hFontMenu) {
-		::DeleteObject(m_hFontMenu);
-		m_hFontMenu = NULL;
+	if (hFontMenu) {
+		::DeleteObject(hFontMenu);
+		hFontMenu = NULL;
 	}
 	lf = ncm.lfMenuFont;
-	m_hFontMenu = ::CreateFontIndirect(&lf);
-	m_nMenuFontHeight = lf.lfHeight;
-	if (m_nMenuFontHeight < 0) {
-		m_nMenuFontHeight = -m_nMenuFontHeight;
+	hFontMenu = ::CreateFontIndirect(&lf);
+	nMenuFontHeight = lf.lfHeight;
+	if (nMenuFontHeight < 0) {
+		nMenuFontHeight = -nMenuFontHeight;
 	}else {
 		// ポイント(1/72インチ)をピクセルへ
-		m_nMenuFontHeight = DpiScaleY(m_nMenuFontHeight);
-		if (m_nMenuFontHeight == -1) {
-			m_nMenuFontHeight = lf.lfHeight;
+		nMenuFontHeight = DpiScaleY(nMenuFontHeight);
+		if (nMenuFontHeight == -1) {
+			nMenuFontHeight = lf.lfHeight;
 		}
 	}
-	m_nMenuHeight = m_nMenuFontHeight + 4; // margin
-	if (m_pShareData->common.window.bMenuIcon) {
+	nMenuHeight = nMenuFontHeight + 4; // margin
+	if (pShareData->common.window.bMenuIcon) {
 		// 最低アイコン分の高さを確保
-		if (20 > m_nMenuHeight) {
-			m_nMenuHeight = 20;
+		if (20 > nMenuHeight) {
+			nMenuHeight = 20;
 		}
 	}
 
@@ -826,9 +826,9 @@ void MenuDrawer::MyAppendMenu(
 	auto_strcpy(szKey, pszKey); 
 	if (nFuncId != 0) {
 		// メニューラベルの作成
-		auto& csKeyBind = m_pShareData->common.keyBind;
+		auto& csKeyBind = pShareData->common.keyBind;
 		KeyBind::GetMenuLabel(
-			m_hInstance,
+			hInstance,
 			csKeyBind.nKeyNameArrNum,
 			csKeyBind.pKeyNameArr,
 			nFuncId,
@@ -841,24 +841,24 @@ void MenuDrawer::MyAppendMenu(
 		// アイコン用ビットマップを持つものは、オーナードロウにする
 		{
 			MyMenuItemInfo item;
-			item.m_nBitmapIdx = -1;
-			item.m_nFuncId = nFuncId;
-			item.m_memLabel.SetString(szLabel);
+			item.nBitmapIdx = -1;
+			item.nFuncId = nFuncId;
+			item.memLabel.SetString(szLabel);
 			// メニュー項目をオーナー描画にして、アイコンを表示する
 			// 2010.03.29 アクセスキーの分を詰めるためいつもオーナードローにする。ただしVista未満限定
 			// Vista以上ではメニューもテーマが適用されるので、オーナードローにすると見た目がXP風になってしまう。
-			if (m_pShareData->common.window.bMenuIcon || !IsWinVista_or_later()) {
+			if (pShareData->common.window.bMenuIcon || !IsWinVista_or_later()) {
 				nFlagAdd = MF_OWNERDRAW;
 			}
 			// 機能のビットマップの情報を覚えておく
-			item.m_nBitmapIdx = GetIconIdByFuncId(nForceIconId);
-			m_menuItems.push_back(item);
+			item.nBitmapIdx = GetIconIdByFuncId(nForceIconId);
+			menuItems.push_back(item);
 		}
 	}else {
 #ifdef DRAW_MENU_ICON_BACKGROUND_3DFACE
 		// セパレータかサブメニュー
 		if (nFlag & (MF_SEPARATOR | MF_POPUP)) {
-			if (m_pShareData->common.window.bMenuIcon || !IsWinVista_or_later()) {
+			if (pShareData->common.window.bMenuIcon || !IsWinVista_or_later()) {
 					nFlagAdd = MF_OWNERDRAW;
 			}
 		}
@@ -903,8 +903,8 @@ inline int MenuDrawer::ToolbarNoToIndex(int nToolbarNo) const
 	if (nToolbarNo < 0) {
 		return -1;
 	}
-	// 固定アクセス分のみ直接番号でアクセスさせる。m_nMyButtonNum は使わない
-	if (0 <= nToolbarNo && nToolbarNo < m_nMyButtonFixSize) {
+	// 固定アクセス分のみ直接番号でアクセスさせる。nMyButtonNum は使わない
+	if (0 <= nToolbarNo && nToolbarNo < nMyButtonFixSize) {
 		return nToolbarNo;
 	}
 	int nFuncID = nToolbarNo;
@@ -920,7 +920,7 @@ inline int MenuDrawer::GetIconIdByFuncId(int nFuncID) const
 	if (index < 0) {
 		return -1;
 	}
-	return m_tbMyButton[index].iBitmap;
+	return tbMyButton[index].iBitmap;
 }
 
 
@@ -938,27 +938,27 @@ int MenuDrawer::MeasureItem(int nFuncID, int* pnItemHeight)
 
 	if (nFuncID == F_0) { // F_0, なぜか F_SEPARATOR ではない
 		// セパレータ。フォントの方の通常項目の半分の高さ
-		*pnItemHeight = m_nMenuFontHeight / 2;
+		*pnItemHeight = nMenuFontHeight / 2;
 		return 30; // ダミーの幅
 	}else if (!(pszLabel = GetLabel(nFuncID))) {
-		*pnItemHeight = m_nMenuHeight;
+		*pnItemHeight = nMenuHeight;
 		return 0;
 	}
-	*pnItemHeight = m_nMenuHeight;
+	*pnItemHeight = nMenuHeight;
 
-	hdc = ::GetDC(m_hWndOwner);
-	hFontOld = (HFONT)::SelectObject(hdc, m_hFontMenu);
+	hdc = ::GetDC(hWndOwner);
+	hFontOld = (HFONT)::SelectObject(hdc, hFontMenu);
 	// DT_EXPANDTABSをやめる
 	::DrawText(hdc, pszLabel, -1, &rc, DT_SINGLELINE | DT_VCENTER | DT_CALCRECT);
 	::SelectObject(hdc, hFontOld);
-	::ReleaseDC(m_hWndOwner, hdc);
+	::ReleaseDC(hWndOwner, hdc);
 
 //	*pnItemHeight = 20;
 //	*pnItemHeight = 2 + 15 + 1;
 	//@@@ 2002.2.2 YAZAKI Windowsの設定でメニューのフォントを大きくすると表示が崩れる問題に対処
 
 	int nMenuWidth = rc.Width() + 3;
-	if (m_pShareData->common.window.bMenuIcon) {
+	if (pShareData->common.window.bMenuIcon) {
 		nMenuWidth += 28+ DpiScaleX(8); // アイコンと枠 + アクセスキー隙間
 	}else {
 		// WM_MEASUREITEMで報告するメニュー幅より実際の幅は1文字分相当位広いので、その分は加えない
@@ -985,7 +985,7 @@ void MenuDrawer::DrawItem(DRAWITEMSTRUCT* lpdis)
 	int			nBkModeOld;
 	int			nTxSysColor;
 
-	const bool bMenuIconDraw = !!m_pShareData->common.window.bMenuIcon;
+	const bool bMenuIconDraw = !!pShareData->common.window.bMenuIcon;
 	const int nCxCheck = ::GetSystemMetrics(SM_CXMENUCHECK);
 	const int nCyCheck = ::GetSystemMetrics(SM_CYMENUCHECK);
 
@@ -995,7 +995,7 @@ void MenuDrawer::DrawItem(DRAWITEMSTRUCT* lpdis)
 		nIndentLeft = 2 + 2 + nCxCheck;
 	}
 	// サブメニューの|＞の分は必要 最低8ぐらい
-	nIndentRight = t_max(m_nMenuFontHeight, 8);
+	nIndentRight = t_max(nMenuFontHeight, 8);
 
 	// 2010.07.24 Moca アイコンを描くときにチラつくので、バックサーフェスを使う
 	const bool bBackSurface = bMenuIconDraw;
@@ -1005,17 +1005,17 @@ void MenuDrawer::DrawItem(DRAWITEMSTRUCT* lpdis)
 	HDC hdc = NULL;
 	if (bBackSurface) {
 		hdcOrg = lpdis->hDC;
-		if (m_hCompDC && nTargetWidth <= m_nCompBitmapWidth && nTargetHeight <= m_nCompBitmapHeight) {
-			hdc = m_hCompDC;
+		if (hCompDC && nTargetWidth <= nCompBitmapWidth && nTargetHeight <= nCompBitmapHeight) {
+			hdc = hCompDC;
 		}else {
-			if (m_hCompDC) {
+			if (hCompDC) {
 				DeleteCompDC();
 			}
-			hdc = m_hCompDC  = ::CreateCompatibleDC(hdcOrg);
-			m_hCompBitmap    = ::CreateCompatibleBitmap(hdcOrg, nTargetWidth + 20, nTargetHeight + 4);
-			m_hCompBitmapOld = (HBITMAP)::SelectObject(hdc, m_hCompBitmap);
-			m_nCompBitmapWidth  = nTargetWidth + 20;
-			m_nCompBitmapHeight = nTargetHeight + 4;
+			hdc = hCompDC  = ::CreateCompatibleDC(hdcOrg);
+			hCompBitmap    = ::CreateCompatibleBitmap(hdcOrg, nTargetWidth + 20, nTargetHeight + 4);
+			hCompBitmapOld = (HBITMAP)::SelectObject(hdc, hCompBitmap);
+			nCompBitmapWidth  = nTargetWidth + 20;
+			nCompBitmapHeight = nTargetHeight + 4;
 		}
 		::SetWindowOrgEx(hdc, lpdis->rcItem.left, lpdis->rcItem.top, NULL);
 	}else {
@@ -1104,8 +1104,8 @@ void MenuDrawer::DrawItem(DRAWITEMSTRUCT* lpdis)
 #endif
 
 	const int    nItemIndex = Find((int)lpdis->itemID);
-	const TCHAR* pszItemStr = m_menuItems[nItemIndex].m_memLabel.GetStringPtr(&nItemStrLen);
-	HFONT hFontOld = (HFONT)::SelectObject(hdc, m_hFontMenu);
+	const TCHAR* pszItemStr = menuItems[nItemIndex].memLabel.GetStringPtr(&nItemStrLen);
+	HFONT hFontOld = (HFONT)::SelectObject(hdc, hFontMenu);
 
 	nBkModeOld = ::SetBkMode(hdc, TRANSPARENT);
 	if (lpdis->itemState & ODS_SELECTED) {
@@ -1114,7 +1114,7 @@ void MenuDrawer::DrawItem(DRAWITEMSTRUCT* lpdis)
 		if (bMenuIconDraw
 #ifdef DRAW_MENU_ICON_BACKGROUND_3DFACE
 #else
-			&& m_menuItems[nItemIndex].m_nBitmapIdx != -1 || lpdis->itemState & ODS_CHECKED
+			&& menuItems[nItemIndex].nBitmapIdx != -1 || lpdis->itemState & ODS_CHECKED
 #endif
 		) {
 			//rc1.left += (nIndentLeft - 3);
@@ -1329,7 +1329,7 @@ void MenuDrawer::DrawItem(DRAWITEMSTRUCT* lpdis)
 	}
 
 	// 機能の画像が存在するならメニューアイコン?を描画する
-	if (bMenuIconDraw && m_menuItems[nItemIndex].m_nBitmapIdx != -1) {
+	if (bMenuIconDraw && menuItems[nItemIndex].nBitmapIdx != -1) {
 		// 3D枠を描画する
 		// アイテムが選択されている
 		if (lpdis->itemState & ODS_SELECTED) {
@@ -1355,7 +1355,7 @@ void MenuDrawer::DrawItem(DRAWITEMSTRUCT* lpdis)
 		// アイテムが使用不可
 		if (lpdis->itemState & ODS_DISABLED) {
 			// 淡色アイコン
-			m_pIcons->Draw(m_menuItems[nItemIndex].m_nBitmapIdx,
+			pIcons->Draw(menuItems[nItemIndex].nBitmapIdx,
 				hdc,	//	Target DC
 				lpdis->rcItem.left + 2,	//	X
 				//@@@ 2002.1.29 YAZAKI Windowsの設定でメニューのフォントを大きくすると表示が崩れる問題に対処
@@ -1364,7 +1364,7 @@ void MenuDrawer::DrawItem(DRAWITEMSTRUCT* lpdis)
 			);
 		}else {
 			// 通常のアイコン
-			m_pIcons->Draw(m_menuItems[nItemIndex].m_nBitmapIdx,
+			pIcons->Draw(menuItems[nItemIndex].nBitmapIdx,
 				hdc,	//	Target DC
 				lpdis->rcItem.left + 2,	//	X
 				//@@@ 2002.1.29 YAZAKI Windowsの設定でメニューのフォントを大きくすると表示が崩れる問題に対処
@@ -1446,14 +1446,14 @@ void MenuDrawer::EndDrawMenu()
 
 void MenuDrawer::DeleteCompDC()
 {
-	if (m_hCompDC) {
-		::SelectObject(m_hCompDC, m_hCompBitmapOld);
-		::DeleteObject(m_hCompBitmap);
-		::DeleteObject(m_hCompDC);
-//		DEBUG_TRACE(_T("MenuDrawer::DeleteCompDC %x\n"), m_hCompDC);
-		m_hCompDC = NULL;
-		m_hCompBitmap = NULL;
-		m_hCompBitmapOld = NULL;
+	if (hCompDC) {
+		::SelectObject(hCompDC, hCompBitmapOld);
+		::DeleteObject(hCompBitmap);
+		::DeleteObject(hCompDC);
+//		DEBUG_TRACE(_T("MenuDrawer::DeleteCompDC %x\n"), hCompDC);
+		hCompDC = NULL;
+		hCompBitmap = NULL;
+		hCompBitmapOld = NULL;
 	}
 }
 
@@ -1469,9 +1469,9 @@ int MenuDrawer::FindToolbarNoFromCommandId(int idCommand, bool bOnlyFunc) const
 	int index = FindIndexFromCommandId(idCommand, bOnlyFunc);
 	if (-1 < index) {
 		// 固定部分以外(プラグインなど)はindexではなくidCommandのままにする
-		if (m_nMyButtonFixSize <= index) {
+		if (nMyButtonFixSize <= index) {
 			// もし コマンド番号が明らかに小さいと区別がつかない
-			assert_warning(idCommand < m_nMyButtonFixSize);
+			assert_warning(idCommand < nMyButtonFixSize);
 			return idCommand;
 		}
 	}
@@ -1485,7 +1485,7 @@ int MenuDrawer::FindToolbarNoFromCommandId(int idCommand, bool bOnlyFunc) const
 
 	@retval みつからなければ-1を返す。
 
-	@date 2005.08.09 aroka m_nMyButtonNum隠蔽のため追加
+	@date 2005.08.09 aroka nMyButtonNum隠蔽のため追加
 	@date 2005.11.02 ryoji bOnlyFuncパラメータを追加
  */
 int MenuDrawer::FindIndexFromCommandId(int idCommand, bool bOnlyFunc) const
@@ -1500,8 +1500,8 @@ int MenuDrawer::FindIndexFromCommandId(int idCommand, bool bOnlyFunc) const
 	}
 
 	int nIndex = -1;
-	for (int i=0; i<m_nMyButtonNum; ++i) {
-		if (m_tbMyButton[i].idCommand == idCommand) {
+	for (int i=0; i<nMyButtonNum; ++i) {
+		if (tbMyButton[i].idCommand == idCommand) {
 			nIndex = i;
 			break;
 		}
@@ -1521,8 +1521,8 @@ int MenuDrawer::FindIndexFromCommandId(int idCommand, bool bOnlyFunc) const
 TBBUTTON MenuDrawer::getButton(int nToolbarNo) const
 {
 	int index = ToolbarNoToIndex(nToolbarNo);
-	if (0 <= index && index < m_nMyButtonNum) {
-		return m_tbMyButton[index];
+	if (0 <= index && index < nMyButtonNum) {
+		return tbMyButton[index];
 	}
 
 	// 範囲外なら未定義のボタン情報を作成して返す
@@ -1536,9 +1536,9 @@ TBBUTTON MenuDrawer::getButton(int nToolbarNo) const
 int MenuDrawer::Find(int nFuncID)
 {
 	int i;
-	int nItemNum = (int)m_menuItems.size();
+	int nItemNum = (int)menuItems.size();
 	for (i=0; i<nItemNum; ++i) {
-		if (nFuncID == m_menuItems[i].m_nFuncId) {
+		if (nFuncID == menuItems[i].nFuncId) {
 			break;
 		}
 	}
@@ -1556,7 +1556,7 @@ const TCHAR* MenuDrawer::GetLabel(int nFuncID)
 	if ((i = Find(nFuncID)) == -1) {
 		return NULL;
 	}
-	return m_menuItems[i].m_memLabel.GetStringPtr();
+	return menuItems[i].memLabel.GetStringPtr();
 }
 
 TCHAR MenuDrawer::GetAccelCharFromLabel(const TCHAR* pszLabel)
@@ -1693,55 +1693,55 @@ void MenuDrawer::AddToolButton(int iBitmap, int iCommand)
 	int 	iCmdNo;
 	int 	i;
 	
-	if (m_pShareData->maxToolBarButtonNum < m_nMyButtonNum) {
-		m_pShareData->maxToolBarButtonNum = m_nMyButtonNum;
+	if (pShareData->maxToolBarButtonNum < nMyButtonNum) {
+		pShareData->maxToolBarButtonNum = nMyButtonNum;
 	}
 
 	if (iCommand >= F_PLUGCOMMAND_FIRST && iCommand <= F_PLUGCOMMAND_LAST) {
-		auto& cmdIcons = m_pShareData->plugCmdIcons;
+		auto& cmdIcons = pShareData->plugCmdIcons;
 		iCmdNo = iCommand - F_PLUGCOMMAND_FIRST;
 		if (cmdIcons[iCmdNo] != 0) {
-			if (m_tbMyButton.size() <= (size_t)(int)cmdIcons[iCmdNo]) {
+			if (tbMyButton.size() <= (size_t)(int)cmdIcons[iCmdNo]) {
 				// このウィンドウで未登録
 				// 空きを詰め込む
 				SetTBBUTTONVal(&tbb, TOOLBAR_ICON_PLUGCOMMAND_DEFAULT - 1, 0, 0, TBSTYLE_BUTTON, 0, 0);
-				for (i=m_tbMyButton.size(); i<cmdIcons[iCmdNo]; ++i) {
-					m_tbMyButton.push_back(tbb);
-					++m_nMyButtonNum;
+				for (i=tbMyButton.size(); i<cmdIcons[iCmdNo]; ++i) {
+					tbMyButton.push_back(tbb);
+					++nMyButtonNum;
 				}
 
 				// 未登録
 				SetTBBUTTONVal(&tbb, iBitmap, iCommand, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0);
 				// 最後に追加に変更
-				m_tbMyButton.push_back(tbb);
-				++m_nMyButtonNum;
+				tbMyButton.push_back(tbb);
+				++nMyButtonNum;
 			}else {
 				// 再設定
-				SetTBBUTTONVal(&m_tbMyButton[cmdIcons[iCmdNo]],
+				SetTBBUTTONVal(&tbMyButton[cmdIcons[iCmdNo]],
 					iBitmap, iCommand, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0);
 			}
 		}else {
 			// 全体で未登録
-			if (m_tbMyButton.size() < (size_t)m_pShareData->maxToolBarButtonNum) {
+			if (tbMyButton.size() < (size_t)pShareData->maxToolBarButtonNum) {
 				// 空きを詰め込む
 				SetTBBUTTONVal(&tbb, TOOLBAR_ICON_PLUGCOMMAND_DEFAULT-1, 0, 0, TBSTYLE_BUTTON, 0, 0);
-				for (i=m_tbMyButton.size(); i<m_pShareData->maxToolBarButtonNum; ++i) {
-					m_tbMyButton.push_back(tbb);
-					++m_nMyButtonNum;
+				for (i=tbMyButton.size(); i<pShareData->maxToolBarButtonNum; ++i) {
+					tbMyButton.push_back(tbb);
+					++nMyButtonNum;
 				}
 			}
 			// 新規登録
 			SetTBBUTTONVal(&tbb, iBitmap, iCommand, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0);
 
-			cmdIcons[iCmdNo] = (short)m_tbMyButton.size();
+			cmdIcons[iCmdNo] = (short)tbMyButton.size();
 			// 最後から２番目に挿入する。一番最後は番兵で固定。
 			// 2010.06.23 Moca 最後に追加に変更
-			m_tbMyButton.push_back(tbb);
-			++m_nMyButtonNum;
+			tbMyButton.push_back(tbb);
+			++nMyButtonNum;
 		}
 	}
-	if (m_pShareData->maxToolBarButtonNum < m_nMyButtonNum) {
-		m_pShareData->maxToolBarButtonNum = m_nMyButtonNum;
+	if (pShareData->maxToolBarButtonNum < nMyButtonNum) {
+		pShareData->maxToolBarButtonNum = nMyButtonNum;
 	}
 }
 

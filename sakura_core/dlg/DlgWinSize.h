@@ -55,9 +55,9 @@ protected:
 	void RenewItemState(void);
 
 private:
-	WinSizeMode	m_eSaveWinSize;	// ウィンドウサイズの保存: 0/デフォルト，1/継承，2/指定
-	WinSizeMode	m_eSaveWinPos;	// ウィンドウ位置の保存: 0/デフォルト，1/継承，2/指定
+	WinSizeMode	eSaveWinSize;	// ウィンドウサイズの保存: 0/デフォルト，1/継承，2/指定
+	WinSizeMode	eSaveWinPos;	// ウィンドウ位置の保存: 0/デフォルト，1/継承，2/指定
 	int			nWinSizeType;	// ウィンドウ表示方法: 0/標準，1/最大化，2/最小化
-	RECT		m_rc;
+	RECT		rc;
 };
 

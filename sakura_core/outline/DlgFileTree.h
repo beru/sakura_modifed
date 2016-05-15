@@ -60,12 +60,12 @@ private:
 	HTREEITEM InsertTreeItem(FileTreeItem&, HTREEITEM, HTREEITEM);
 
 private:
-	DlgFuncList*		m_pDlgFuncList;
-	FileTreeSetting		m_fileTreeSetting;
-	std::vector<int>	m_aItemRemoveList;
-	int					m_nlParamCount;
-	int					m_nDocType;
+	DlgFuncList*		pDlgFuncList;
+	FileTreeSetting		fileTreeSetting;
+	std::vector<int>	aItemRemoveList;
+	int					nlParamCount;
+	int					nDocType;
 
-	int					m_bInMove;
+	int					bInMove;
 };
 

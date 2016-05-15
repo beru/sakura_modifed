@@ -48,9 +48,9 @@ public:
 	*/
 	int DoModal(HINSTANCE, HWND, LPARAM, const TCHAR*);	// モーダルダイアログの表示
 
-	TCHAR	m_szPath[_MAX_PATH + 1];	// フォルダ
-	TCHAR	m_szTagsCmdLine[_MAX_PATH];	// コマンドラインオプション(個別)
-	int		m_nTagsOpt;					// CTAGSオプション(チェック)
+	TCHAR	szPath[_MAX_PATH + 1];	// フォルダ
+	TCHAR	szTagsCmdLine[_MAX_PATH];	// コマンドラインオプション(個別)
+	int		nTagsOpt;					// CTAGSオプション(チェック)
 
 protected:
 	/*

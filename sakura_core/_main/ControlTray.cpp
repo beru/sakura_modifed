@@ -77,13 +77,13 @@ void ControlTray::DoGrep()
 	if (0 < searchKeywords.searchKeys.size()
 		&& m_nCurSearchKeySequence < csSearch.nSearchKeySequence
 	) {
-		m_dlgGrep.m_strText = searchKeywords.searchKeys[0];
+		m_dlgGrep.strText = searchKeywords.searchKeys[0];
 	}
 	if (0 < searchKeywords.grepFiles.size()) {
-		_tcscpy(m_dlgGrep.m_szFile, searchKeywords.grepFiles[0]);		// 検索ファイル
+		_tcscpy(m_dlgGrep.szFile, searchKeywords.grepFiles[0]);		// 検索ファイル
 	}
 	if (0 < searchKeywords.grepFolders.size()) {
-		_tcscpy(m_dlgGrep.m_szFolder, searchKeywords.grepFolders[0]);	// 検索フォルダ
+		_tcscpy(m_dlgGrep.szFolder, searchKeywords.grepFolders[0]);	// 検索フォルダ
 	}
 
 	// Grepダイアログの表示
@@ -103,9 +103,9 @@ void ControlTray::DoGrepCreateWindow(HINSTANCE hinst, HWND msgParent, DlgGrep& d
 	NativeT mWork1;
 	NativeT mWork2;
 	NativeT mWork3;
-	mWork1.SetString(dlgGrep.m_strText.c_str());
-	mWork2.SetString(dlgGrep.m_szFile);
-	mWork3.SetString(dlgGrep.m_szFolder);
+	mWork1.SetString(dlgGrep.strText.c_str());
+	mWork2.SetString(dlgGrep.szFile);
+	mWork3.SetString(dlgGrep.szFolder);
 	mWork1.Replace(_T("\""), _T("\"\""));
 	mWork2.Replace(_T("\""), _T("\"\""));
 	mWork3.Replace(_T("\""), _T("\"\""));
@@ -125,7 +125,7 @@ void ControlTray::DoGrepCreateWindow(HINSTANCE hinst, HWND msgParent, DlgGrep& d
 
 	// GOPTオプション
 	TCHAR pOpt[64] = _T("");
-	if (dlgGrep.m_bSubFolder			) _tcscat(pOpt, _T("S"));	// サブフォルダからも検索する
+	if (dlgGrep.bSubFolder			) _tcscat(pOpt, _T("S"));	// サブフォルダからも検索する
 	if (dlgGrep.searchOption.bLoHiCase	) _tcscat(pOpt, _T("L"));	// 英大文字と英小文字を区別する
 	if (dlgGrep.searchOption.bRegularExp) _tcscat(pOpt, _T("R"));	// 正規表現
 	if (dlgGrep.nGrepOutputLineType == 1) _tcscat(pOpt, _T("P"));	// 行を出力する
@@ -821,12 +821,12 @@ LRESULT ControlTray::DispatchEvent(
 					{
 						// アイコンの登録
 						const auto& plugs = JackManager::getInstance().GetPlugs(PP_COMMAND);
-						m_menuDrawer.m_pIcons->ResetExtend();
+						m_menuDrawer.pIcons->ResetExtend();
 						for (auto it=plugs.begin(); it!=plugs.end(); ++it) {
 							int iBitmap = MenuDrawer::TOOLBAR_ICON_PLUGCOMMAND_DEFAULT - 1;
 							const Plug* plug = *it;
 							if (!plug->m_sIcon.empty()) {
-								iBitmap = m_menuDrawer.m_pIcons->Add(
+								iBitmap = m_menuDrawer.pIcons->Add(
 									to_tchar(plug->plugin.GetFilePath(to_tchar(plug->m_sIcon.c_str())).c_str()) );
 							}
 							m_menuDrawer.AddToolButton( iBitmap, plug->GetFunctionCode() );

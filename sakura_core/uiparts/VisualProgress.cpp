@@ -11,14 +11,14 @@
 
 VisualProgress::VisualProgress()
 	:
-	m_pWaitCursor(nullptr),
+	pWaitCursor(nullptr),
 	nOldValue(-1)
 {
 }
 
 VisualProgress::~VisualProgress()
 {
-	SAFE_DELETE(m_pWaitCursor);
+	SAFE_DELETE(pWaitCursor);
 }
 
 
@@ -69,8 +69,8 @@ void VisualProgress::OnProgress(int nPer)
 void VisualProgress::_Begin()
 {
 	// 砂時計
-	if (!m_pWaitCursor) {
-		m_pWaitCursor = new WaitCursor(EditWnd::getInstance().GetHwnd());
+	if (!pWaitCursor) {
+		pWaitCursor = new WaitCursor(EditWnd::getInstance().GetHwnd());
 	}
 
 	// プログレスバー
@@ -106,6 +106,6 @@ void VisualProgress::_End()
 	}
 
 	// 砂時計
-	SAFE_DELETE(m_pWaitCursor);
+	SAFE_DELETE(pWaitCursor);
 }
 

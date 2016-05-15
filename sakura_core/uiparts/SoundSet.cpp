@@ -3,7 +3,7 @@
 
 void SoundSet::NeedlessToSaveBeep()
 {
-	if (m_nMuteCount >= 1)
+	if (nMuteCount >= 1)
 		return;
 	ErrorBeep();
 }

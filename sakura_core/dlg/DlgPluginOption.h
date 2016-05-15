@@ -89,9 +89,9 @@ protected:
 
 private:
 	Plugin*		plugin;
-	PropPlugin&	m_propPlugin;
-	int 			m_ID;			// プラグイン番号（エディタがふる番号）
-	int				m_Line;			// 現在編集中のオプション行番号
-	std::tstring	m_sReadMeName;	// ReadMe ファイル名
+	PropPlugin&	propPlugin;
+	int 			id;			// プラグイン番号（エディタがふる番号）
+	int				line;			// 現在編集中のオプション行番号
+	std::tstring	sReadMeName;	// ReadMe ファイル名
 };
 

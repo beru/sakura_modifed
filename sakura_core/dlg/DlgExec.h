@@ -30,16 +30,15 @@ public:
 	*/
 	int DoModal(HINSTANCE, HWND, LPARAM);	// モーダルダイアログの表示
 
-	TCHAR	m_szCommand[1024 + 1];	// コマンドライン
-	SFilePath	m_szCurDir;			// カレントディレクトリ
-	bool	m_bEditable;			// 編集ウィンドウへの入力可能	// 2009.02.21 ryoji
-
+	TCHAR		szCommand[1024 + 1];	// コマンドライン
+	SFilePath	szCurDir;				// カレントディレクトリ
+	bool		bEditable;				// 編集ウィンドウへの入力可能	// 2009.02.21 ryoji
 
 protected:
-	ComboBoxItemDeleter m_comboDel;
-	RecentCmd m_recentCmd;
-	ComboBoxItemDeleter m_comboDelCur;
-	RecentCurDir m_recentCur;
+	ComboBoxItemDeleter comboDel;
+	RecentCmd recentCmd;
+	ComboBoxItemDeleter comboDelCur;
+	RecentCurDir recentCur;
 
 	// オーバーライド?
 	int GetData(void);	// ダイアログデータの取得
@@ -47,7 +46,6 @@ protected:
 	BOOL OnInitDialog(HWND, WPARAM, LPARAM);
 	BOOL OnBnClicked(int);
 	LPVOID GetHelpIdTable(void);	//@@@ 2002.01.18 add
-
 
 };
 

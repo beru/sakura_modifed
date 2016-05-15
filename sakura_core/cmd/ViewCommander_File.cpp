@@ -200,7 +200,7 @@ bool ViewCommander::Command_FILESAVE(bool warnbeep, bool askname)
 	saveInfo.bOverwriteMode = true; // è„èëÇ´óvãÅ
 
 	// è„èëÇ´èàóù
-	auto& soundSet = EditApp::getInstance().m_soundSet;
+	auto& soundSet = EditApp::getInstance().soundSet;
 	if (!warnbeep) soundSet.MuteOn();
 	bool bRet = doc.m_docFileOperation.DoSaveFlow(&saveInfo);
 	if (!warnbeep) soundSet.MuteOff();
@@ -550,9 +550,9 @@ void ViewCommander::Command_PROPERTY_FILE(void)
 #endif
 
 
-	DlgProperty	cDlgProperty;
+	DlgProperty	dlgProperty;
 //	cDlgProperty.Create(G_AppInstance(), m_view.GetHwnd(), GetDocument());
-	cDlgProperty.DoModal(G_AppInstance(), m_view.GetHwnd(), (LPARAM)&GetDocument());
+	dlgProperty.DoModal(G_AppInstance(), m_view.GetHwnd(), (LPARAM)&GetDocument());
 	return;
 }
 
@@ -562,7 +562,7 @@ void ViewCommander::Command_PROFILEMGR( void )
 	DlgProfileMgr profMgr;
 	if (profMgr.DoModal( G_AppInstance(), m_view.GetHwnd(), 0 )) {
 		TCHAR szOpt[MAX_PATH+10];
-		auto_sprintf( szOpt, _T("-PROF=\"%ts\""), profMgr.m_strProfileName.c_str() );
+		auto_sprintf( szOpt, _T("-PROF=\"%ts\""), profMgr.strProfileName.c_str() );
 		LoadInfo loadInfo;
 		loadInfo.filePath = _T("");
 		loadInfo.eCharCode = CODE_DEFAULT;

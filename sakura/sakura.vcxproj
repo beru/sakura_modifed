@@ -547,7 +547,6 @@
     <ClInclude Include="..\sakura_core\uiparts\SoundSet.h" />
     <ClInclude Include="..\sakura_core\uiparts\VisualProgress.h" />
     <ClInclude Include="..\sakura_core\uiparts\WaitCursor.h" />
-    <ClInclude Include="..\sakura_core\uiparts\Handursor.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\sakura_core\Funccode_x.hsrc" />

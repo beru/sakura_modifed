@@ -37,15 +37,15 @@ class DlgFileUpdateQuery : public Dialog {
 public:
 	DlgFileUpdateQuery(const TCHAR* filename, bool IsModified)
 		:
-		m_pFilename(filename),
-		m_bModified(IsModified)
+		pFilename(filename),
+		bModified(IsModified)
 	{
 	}
 	virtual BOOL OnInitDialog(HWND, WPARAM wParam, LPARAM lParam);
 	virtual BOOL OnBnClicked(int);
 
 private:
-	const TCHAR* m_pFilename;
-	bool m_bModified;
+	const TCHAR* pFilename;
+	bool bModified;
 };
 

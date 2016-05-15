@@ -180,9 +180,9 @@ int DlgProfileMgr::GetData(bool bStart)
 	int nCurIndex = List_GetCurSel(hwndList);
 	TCHAR szText[_MAX_PATH];
 	MyList_GetText(hwndList, nCurIndex, szText);
-	m_strProfileName = szText;
-	if (m_strProfileName == _T("(default)")) {
-		m_strProfileName = _T("");
+	strProfileName = szText;
+	if (strProfileName == _T("(default)")) {
+		strProfileName = _T("");
 	}
 	bool bDefaultSelect = IsButtonChecked(IDC_CHECK_PROF_DEFSTART);
 	ProfileSettings settings;

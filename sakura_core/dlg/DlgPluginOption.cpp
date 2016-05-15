@@ -79,7 +79,7 @@ const DWORD p_helpids[] = {
 
 DlgPluginOption::DlgPluginOption(PropPlugin& propPlugin)
 	:
-	m_propPlugin(propPlugin)
+	propPlugin(propPlugin)
 {
 
 }
@@ -97,8 +97,8 @@ int DlgPluginOption::DoModal(
 	)
 {
 	// プラグイン番号（エディタがふる番号）
-	m_ID = ID;
-	plugin = PluginManager::getInstance().GetPlugin(m_ID);
+	id = ID;
+	plugin = PluginManager::getInstance().GetPlugin(id);
 	if (!plugin) {
 		::ErrorMessage(hwndParent, LS(STR_DLGPLUGINOPT_LOAD));
 		return 0;
@@ -123,7 +123,7 @@ void DlgPluginOption::SetData(void)
 	// リスト
 	hwndList = GetItemHwnd(IDC_LIST_PLUGIN_OPTIONS);
 	ListView_DeleteAllItems(hwndList);	// リストを空にする
-	m_Line = -1;							// 行非選択
+	line = -1;							// 行非選択
 
 	auto profile = std::make_unique<DataProfile>();
 	profile->SetReadingMode();
@@ -206,8 +206,8 @@ void DlgPluginOption::SetData(void)
 	}
 
 	// ReadMe Button
-	m_sReadMeName = m_propPlugin.GetReadMeFile(to_tchar(m_pShareData->common.plugin.pluginTable[m_ID].szName));
-	EnableItem(IDC_PLUGIN_README, !m_sReadMeName.empty());
+	sReadMeName = propPlugin.GetReadMeFile(to_tchar(pShareData->common.plugin.pluginTable[id].szName));
+	EnableItem(IDC_PLUGIN_README, !sReadMeName.empty());
 	return;
 }
 
@@ -372,7 +372,7 @@ BOOL DlgPluginOption::OnNotify(WPARAM wParam, LPARAM lParam)
 		SetItemInt(IDC_EDIT_PLUGIN_OPTION_NUM, nVal, TRUE);
 
 		// 編集中のデータの戻し
-		SetFromEdit(m_Line);
+		SetFromEdit(line);
 		return TRUE;
 	}
 
@@ -386,19 +386,19 @@ BOOL DlgPluginOption::OnBnClicked(int wID)
 	switch (wID) {
 	case IDC_CHECK_PLUGIN_OPTION:
 		// 編集中のデータの戻し
-		SetFromEdit(m_Line);
+		SetFromEdit(line);
 		return TRUE;
 
 	case IDC_BUTTON_PLUGIN_OPTION_DIR:	// 2013/05/22 Uchi
 		// ディレクトリ選択
-		SelectDirectory(m_Line);
+		SelectDirectory(line);
 		return TRUE;
 
 	case IDC_PLUGIN_README:		// 2012/12/22 Uchi
 		// ReadMe
 		{
-			if (!m_sReadMeName.empty()) {
-				if (!m_propPlugin.BrowseReadMe(m_sReadMeName)) {
+			if (!sReadMeName.empty()) {
+				if (!propPlugin.BrowseReadMe(sReadMeName)) {
 					WarningMessage(GetHwnd(), LS(STR_PROPCOMPLG_ERR2));
 				}
 			}else {
@@ -414,7 +414,7 @@ BOOL DlgPluginOption::OnBnClicked(int wID)
 
 	case IDOK:
 		// 編集中のデータの戻し
-		SetFromEdit(m_Line);
+		SetFromEdit(line);
 		// ダイアログデータの取得
 		::EndDialog(GetHwnd(), (BOOL)GetData());
 		return TRUE;
@@ -433,7 +433,7 @@ BOOL DlgPluginOption::OnCbnSelChange(HWND hwndCtl, int wID)
 	switch (wID) {
 	case IDC_COMBO_PLUGIN_OPTION:
 		// 編集中のデータの戻し
-		SetFromEdit(m_Line);
+		SetFromEdit(line);
 		return TRUE;
 	}
 
@@ -449,7 +449,7 @@ BOOL DlgPluginOption::OnEnChange(HWND hwndCtl, int wID)
 	case IDC_EDIT_PLUGIN_OPTION_DIR:
 	case IDC_EDIT_PLUGIN_OPTION_NUM:
 		// 編集中のデータの戻し
-		SetFromEdit(m_Line);
+		SetFromEdit(line);
 		return TRUE;
 	}
 
@@ -462,7 +462,7 @@ BOOL DlgPluginOption::OnActivate(WPARAM wParam, LPARAM lParam)
 {
 	switch (LOWORD(wParam)) {
 	case WA_INACTIVE:
-		SetFromEdit(m_Line);
+		SetFromEdit(line);
 		break;
 	case WA_ACTIVE:
 	case WA_CLICKACTIVE:
@@ -487,7 +487,7 @@ void DlgPluginOption::ChangeListPosition(void)
 
 	// 現在のFocus取得
 	int current = ListView_GetNextItem(hwndList, -1, LVNI_SELECTED);
-	if (current == -1 || current == m_Line) {
+	if (current == -1 || current == line) {
 		return;
 	}
 
@@ -495,11 +495,11 @@ void DlgPluginOption::ChangeListPosition(void)
 	LVITEM	lvi;
 
 	// 戻し
-	if (m_Line >= 0) {
-		SetFromEdit(m_Line);
+	if (line >= 0) {
+		SetFromEdit(line);
 	}
 
-	m_Line = current;
+	line = current;
 
 	// 編集領域に書き込み
 	SetToEdit(current);

@@ -177,10 +177,10 @@ void Macro::AddLParam(
 
 	case F_JUMP:	// 指定行へジャンプ（ただしPL/SQLコンパイルエラー行へのジャンプは未対応）
 		{
-			AddIntParam(editView.m_editWnd.m_dlgJump.m_nLineNum);
+			AddIntParam(editView.m_editWnd.m_dlgJump.nLineNum);
 			LPARAM lFlag = 0x00;
 			lFlag |= GetDllShareData().bLineNumIsCRLF_ForJump		? 0x01 : 0x00;
-			lFlag |= editView.m_editWnd.m_dlgJump.m_bPLSQL	? 0x02 : 0x00;
+			lFlag |= editView.m_editWnd.m_dlgJump.bPLSQL	? 0x02 : 0x00;
 			AddIntParam(lFlag);
 		}
 		break;
@@ -205,7 +205,7 @@ void Macro::AddLParam(
 	case F_REPLACE_ALL:
 		{
 			AddStringParam(editView.m_strCurSearchKey.c_str());	// lParamを追加。
-			AddStringParam(editView.m_editWnd.m_dlgReplace.m_strText2.c_str());	// lParamを追加。
+			AddStringParam(editView.m_editWnd.m_dlgReplace.strText2.c_str());	// lParamを追加。
 
 			LPARAM lFlag = 0x00;
 			lFlag |= editView.m_curSearchOption.bWordOnly		? 0x01 : 0x00;
@@ -214,9 +214,9 @@ void Macro::AddLParam(
 			lFlag |= GetDllShareData().common.search.bNotifyNotFound				? 0x08 : 0x00;
 			lFlag |= GetDllShareData().common.search.bAutoCloseDlgFind			? 0x10 : 0x00;
 			lFlag |= GetDllShareData().common.search.bSearchAll					? 0x20 : 0x00;
-			lFlag |= editView.m_editWnd.m_dlgReplace.m_bPaste					? 0x40 : 0x00;	// CShareDataに入れなくていいの？
+			lFlag |= editView.m_editWnd.m_dlgReplace.bPaste					? 0x40 : 0x00;	// CShareDataに入れなくていいの？
 			lFlag |= GetDllShareData().common.search.bSelectedArea				? 0x80 : 0x00;	// 置換する時は選べない
-			lFlag |= editView.m_editWnd.m_dlgReplace.m_nReplaceTarget << 8;	// 8bitシフト（0x100で掛け算）
+			lFlag |= editView.m_editWnd.m_dlgReplace.nReplaceTarget << 8;	// 8bitシフト（0x100で掛け算）
 			lFlag |= GetDllShareData().common.search.bConsecutiveAll				? 0x0400: 0x00;	// 2007.01.16 ryoji
 			AddIntParam(lFlag);
 		}
@@ -229,11 +229,11 @@ void Macro::AddLParam(
 			if (m_nFuncID == F_GREP) {
 				pDlgGrep = &editView.m_editWnd.m_dlgGrep;
 				pDlgGrepRep = nullptr;
-				AddStringParam( pDlgGrep->m_strText.c_str() );
+				AddStringParam( pDlgGrep->strText.c_str() );
 			}else {
 				pDlgGrep = pDlgGrepRep = &editView.m_editWnd.m_dlgGrepReplace;
-				AddStringParam( pDlgGrep->m_strText.c_str() );
-				AddStringParam( editView.m_editWnd.m_dlgGrepReplace.m_strText2.c_str() );
+				AddStringParam( pDlgGrep->strText.c_str() );
+				AddStringParam( editView.m_editWnd.m_dlgGrepReplace.strText2.c_str() );
 			}
 			AddStringParam(GetDllShareData().searchKeywords.grepFiles[0]);	// lParamを追加。
 			AddStringParam(GetDllShareData().searchKeywords.grepFolders[0]);	// lParamを追加。
@@ -257,7 +257,7 @@ void Macro::AddLParam(
 			lFlag |= GetDllShareData().common.search.bGrepOutputBaseFolder		? 0x40000 : 0x00;
 			lFlag |= GetDllShareData().common.search.bGrepSeparateFolder			? 0x80000 : 0x00;
 			if (m_nFuncID == F_GREP_REPLACE) {
-				lFlag |= pDlgGrepRep->m_bPaste											? 0x100000 : 0x00;
+				lFlag |= pDlgGrepRep->bPaste											? 0x100000 : 0x00;
 				lFlag |= GetDllShareData().common.search.bGrepBackup				? 0x200000 : 0x00;
 			}
 			AddIntParam(lFlag);
@@ -725,10 +725,10 @@ bool Macro::HandleCommand(
 			return false;
 		}
 		{
-			editView.m_editWnd.m_dlgJump.m_nLineNum = _wtoi(arguments[0]);	// ジャンプ先
+			editView.m_editWnd.m_dlgJump.nLineNum = _wtoi(arguments[0]);	// ジャンプ先
 			LPARAM lFlag = arguments[1] ? _wtoi(arguments[1]) : 1; // デフォルト1
 			GetDllShareData().bLineNumIsCRLF_ForJump = ((lFlag & 0x01) != 0);
-			editView.m_editWnd.m_dlgJump.m_bPLSQL = lFlag & 0x02 ? 1 : 0;
+			editView.m_editWnd.m_dlgJump.bPLSQL = lFlag & 0x02 ? 1 : 0;
 			editView.GetCommander().HandleCommand(index, true, 0, 0, 0, 0);	// 標準
 		}
 		break;
@@ -960,7 +960,7 @@ bool Macro::HandleCommand(
 				backupFlags = GetDllShareData().common.search;
 				backupLocalFlags = editView.m_curSearchOption;
 				backupStr = editView.m_strCurSearchKey;
-				backupStrRep = dlgReplace.m_strText2;
+				backupStrRep = dlgReplace.strText2;
 				backupKeyMark = editView.m_bCurSrchKeyMark;
 				nBackupSearchKeySequence = editView.m_nCurSearchKeySequence;
 				bAddHistory = false;
@@ -986,12 +986,12 @@ bool Macro::HandleCommand(
 			if (wcslen(arguments[1]) < _MAX_PATH && bAddHistory) {
 				SearchKeywordManager().AddToReplaceKeys(arguments[1]);
 			}
-			dlgReplace.m_strText2 = arguments[1];
+			dlgReplace.strText2 = arguments[1];
 
 			GetDllShareData().common.search.bNotifyNotFound	= lFlag & 0x08 ? 1 : 0;
 			GetDllShareData().common.search.bAutoCloseDlgFind	= lFlag & 0x10 ? 1 : 0;
 			GetDllShareData().common.search.bSearchAll			= lFlag & 0x20 ? 1 : 0;
-			dlgReplace.m_bPaste			= lFlag & 0x40 ? 1 : 0;	// CShareDataに入れなくていいの？
+			dlgReplace.bPaste			= lFlag & 0x40 ? 1 : 0;	// CShareDataに入れなくていいの？
 			dlgReplace.bConsecutiveAll = lFlag & 0x0400 ? 1 : 0;	// 2007.01.16 ryoji
 			if (LOWORD(index) == F_REPLACE) {	// 2007.07.08 genta コマンドは下位ワード
 				// 置換する時は選べない
@@ -1000,7 +1000,7 @@ bool Macro::HandleCommand(
 				// 全置換の時は選べる？
 				dlgReplace.bSelectedArea	= lFlag & 0x80 ? 1 : 0;
 			}
-			dlgReplace.m_nReplaceTarget	= (lFlag >> 8) & 0x03;	// 8bitシフト（0x100で割り算）	// 2007.01.16 ryoji 下位 2bitだけ取り出す
+			dlgReplace.nReplaceTarget	= (lFlag >> 8) & 0x03;	// 8bitシフト（0x100で割り算）	// 2007.01.16 ryoji 下位 2bitだけ取り出す
 			if (bAddHistory) {
 				GetDllShareData().common.search.bConsecutiveAll = dlgReplace.bConsecutiveAll;
 				GetDllShareData().common.search.bSelectedArea = dlgReplace.bSelectedArea;
@@ -1012,7 +1012,7 @@ bool Macro::HandleCommand(
 				editView.m_curSearchOption = backupLocalFlags;
 				editView.m_strCurSearchKey = backupStr;
 				editView.m_bCurSearchUpdate = true;
-				dlgReplace.m_strText2 = backupStrRep;
+				dlgReplace.strText2 = backupStrRep;
 				editView.m_nCurSearchKeySequence = GetDllShareData().common.search.nSearchKeySequence;
 				editView.ChangeCurRegexp( backupKeyMark );
 				editView.m_bCurSrchKeyMark = backupKeyMark;

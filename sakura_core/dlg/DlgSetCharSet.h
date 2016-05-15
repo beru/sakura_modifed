@@ -28,12 +28,12 @@ public:
 	int DoModal(HINSTANCE, HWND, EncodingType*, bool*);	// モーダルダイアログの表示
 
 
-	EncodingType*	m_pnCharSet;			// 文字コードセット
-	bool*		m_pbBom;				// BOM
-	bool		m_bCP;
+	EncodingType*	pnCharSet;			// 文字コードセット
+	bool*		pbBom;				// BOM
+	bool		bCP;
 
-	HWND		m_hwndCharSet;
-	HWND		m_hwndCheckBOM;
+	HWND		hwndCharSet;
+	HWND		hwndCheckBOM;
 
 protected:
 	/*

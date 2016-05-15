@@ -213,7 +213,7 @@ void CommandLine::ParseCommandLine(LPCTSTR pszCmdLineSrc, bool bResponse)
 				if (WCODE::Is09(wexename[k])) {
 					EncodingType n = (EncodingType)_wtoi(&wexename[k]);
 					if (IsValidCodeOrCPType(n)) {
-						m_fi.nCharCode = n;
+						fi.nCharCode = n;
 					}
 				}
 				break;
@@ -245,10 +245,10 @@ void CommandLine::ParseCommandLine(LPCTSTR pszCmdLineSrc, bool bResponse)
 	}
 	if (bFind) {
 		SakuraEnvironment::ResolvePath(szPath);
-		_tcscpy(m_fi.szPath, szPath);	// ファイル名
+		_tcscpy(fi.szPath, szPath);	// ファイル名
 		nPos = i + 1;
 	}else {
-		m_fi.szPath[0] = _T('\0');
+		fi.szPath[0] = _T('\0');
 		nPos = 0;
 	}
 
@@ -312,10 +312,10 @@ void CommandLine::ParseCommandLine(LPCTSTR pszCmdLineSrc, bool bResponse)
 
 			if (szPath[0] != _T('\0')) {
 				SakuraEnvironment::ResolvePath(szPath);
-				if (m_fi.szPath[0] == _T('\0')) {
-					_tcscpy(m_fi.szPath, szPath );
+				if (fi.szPath[0] == _T('\0')) {
+					_tcscpy(fi.szPath, szPath );
 				}else {
-					m_fileNames.push_back(szPath);
+					fileNames.push_back(szPath);
 				}
 			}
 		}else {
@@ -335,163 +335,163 @@ void CommandLine::ParseCommandLine(LPCTSTR pszCmdLineSrc, bool bResponse)
 				break;
 			case CMDLINEOPT_X: // X
 				// 行桁指定を1開始にした
-				m_fi.ptCursor.x = AtoiOptionInt(arg) - 1;
+				fi.ptCursor.x = AtoiOptionInt(arg) - 1;
 				break;
 			case CMDLINEOPT_Y:	// Y
-				m_fi.ptCursor.y = AtoiOptionInt(arg) - 1;
+				fi.ptCursor.y = AtoiOptionInt(arg) - 1;
 				break;
 			case CMDLINEOPT_VX:	// VX
 				// 行桁指定を1開始にした
-				m_fi.nViewLeftCol = LayoutInt(AtoiOptionInt(arg) - 1);
+				fi.nViewLeftCol = LayoutInt(AtoiOptionInt(arg) - 1);
 				break;
 			case CMDLINEOPT_VY:	// VY
 				// 行桁指定を1開始にした
-				m_fi.nViewTopLine = LayoutInt(AtoiOptionInt(arg) - 1);
+				fi.nViewTopLine = LayoutInt(AtoiOptionInt(arg) - 1);
 				break;
 			case CMDLINEOPT_SX: // SX
-				m_fi.nWindowSizeX = AtoiOptionInt(arg) - 1;
+				fi.nWindowSizeX = AtoiOptionInt(arg) - 1;
 				break;
 			case CMDLINEOPT_SY:	// SY
-				m_fi.nWindowSizeY = AtoiOptionInt(arg) - 1;
+				fi.nWindowSizeY = AtoiOptionInt(arg) - 1;
 				break;
 			case CMDLINEOPT_WX: // WX
-				m_fi.nWindowOriginX = AtoiOptionInt(arg);
+				fi.nWindowOriginX = AtoiOptionInt(arg);
 				break;
 			case CMDLINEOPT_WY:	// WY
-				m_fi.nWindowOriginY = AtoiOptionInt(arg);
+				fi.nWindowOriginY = AtoiOptionInt(arg);
 				break;
 			case CMDLINEOPT_TYPE:	// TYPE
 				// Mar. 7, 2002 genta
 				// ファイルタイプの強制指定
 				{
-					_tcsncpy(m_fi.szDocType, arg, MAX_DOCTYPE_LEN);
-					m_fi.szDocType[nArgLen < MAX_DOCTYPE_LEN ? nArgLen : MAX_DOCTYPE_LEN] = L'\0';
+					_tcsncpy(fi.szDocType, arg, MAX_DOCTYPE_LEN);
+					fi.szDocType[nArgLen < MAX_DOCTYPE_LEN ? nArgLen : MAX_DOCTYPE_LEN] = L'\0';
 				}
 				break;
 			case CMDLINEOPT_CODE:	// CODE
-				m_fi.nCharCode = (EncodingType)AtoiOptionInt(arg);
+				fi.nCharCode = (EncodingType)AtoiOptionInt(arg);
 				break;
 			case CMDLINEOPT_R:	// R
-				m_bViewMode = true;
+				bViewMode = true;
 				break;
 			case CMDLINEOPT_NOWIN:	// NOWIN
-				m_bNoWindow = true;
+				bNoWindow = true;
 				break;
 			case CMDLINEOPT_WRITEQUIT:	// WRITEQUIT	// 2007.05.19 ryoji sakuext用に追加
-				m_bWriteQuit = true;
-				m_bNoWindow = true;	// 2007.09.05 ryoji -WQを指定されたら-NOWINも指定されたとして扱う
+				bWriteQuit = true;
+				bNoWindow = true;	// 2007.09.05 ryoji -WQを指定されたら-NOWINも指定されたとして扱う
 				break;
 			case CMDLINEOPT_GREPMODE:	// GREPMODE
-				m_bGrepMode = true;
-				if (m_fi.szDocType[0] == _T('\0')) {
-					auto_strcpy(m_fi.szDocType , _T("grepout"));
+				bGrepMode = true;
+				if (fi.szDocType[0] == _T('\0')) {
+					auto_strcpy(fi.szDocType , _T("grepout"));
 				}
 				break;
 			case CMDLINEOPT_GREPDLG:	// GREPDLG
-				m_bGrepDlg = true;
+				bGrepDlg = true;
 				break;
 			case CMDLINEOPT_GKEY:	// GKEY
 				// 前後の""を取り除く
-				m_gi.mGrepKey.SetStringT(arg,  lstrlen(arg));
-				m_gi.mGrepKey.Replace(L"\"\"", L"\"");
+				gi.mGrepKey.SetStringT(arg,  lstrlen(arg));
+				gi.mGrepKey.Replace(L"\"\"", L"\"");
 				break;
 			case CMDLINEOPT_GREPR:	//	GREPR
 				//	前後の""を取り除く
-				m_gi.mGrepRep.SetStringT( arg,  lstrlen( arg ) );
-				m_gi.mGrepRep.Replace( L"\"\"", L"\"" );
-				m_gi.bGrepReplace = true;
+				gi.mGrepRep.SetStringT( arg,  lstrlen( arg ) );
+				gi.mGrepRep.Replace( L"\"\"", L"\"" );
+				gi.bGrepReplace = true;
 				break;
 			case CMDLINEOPT_GFILE:	// GFILE
 				// 前後の""を取り除く
-				m_gi.mGrepFile.SetStringT(arg,  lstrlen(arg));
-				m_gi.mGrepFile.Replace(_T("\"\""), _T("\""));
+				gi.mGrepFile.SetStringT(arg,  lstrlen(arg));
+				gi.mGrepFile.Replace(_T("\"\""), _T("\""));
 				break;
 			case CMDLINEOPT_GFOLDER:	// GFOLDER
-				m_gi.mGrepFolder.SetString(arg,  lstrlen(arg));
-				m_gi.mGrepFolder.Replace(_T("\"\""), _T("\""));
+				gi.mGrepFolder.SetString(arg,  lstrlen(arg));
+				gi.mGrepFolder.Replace(_T("\"\""), _T("\""));
 				break;
 			case CMDLINEOPT_GOPT:	// GOPT
 				for (; *arg!='\0' ; ++arg) {
 					switch (*arg) {
 					case 'X':
-						m_gi.bGrepCurFolder = true;	break;
+						gi.bGrepCurFolder = true;	break;
 					case 'U':
-						m_gi.bGrepStdout = true;	break;
+						gi.bGrepStdout = true;	break;
 					case 'H':
-						m_gi.bGrepHeader = false;	break;
+						gi.bGrepHeader = false;	break;
 					case 'S':
 						// サブフォルダからも検索する
-						m_gi.bGrepSubFolder = true;	break;
+						gi.bGrepSubFolder = true;	break;
 					case 'L':
 						// 英大文字と英小文字を区別する
-						m_gi.grepSearchOption.bLoHiCase = true;	break;
+						gi.grepSearchOption.bLoHiCase = true;	break;
 					case 'R':
 						// 正規表現
-						m_gi.grepSearchOption.bRegularExp = true;	break;
+						gi.grepSearchOption.bRegularExp = true;	break;
 					case 'K':
 						// 文字コード自動判別
 						// 2002/09/21 Moca 互換性保持のための処理
-						m_gi.charEncoding = CODE_AUTODETECT;	break;
+						gi.charEncoding = CODE_AUTODETECT;	break;
 					case 'P':
 						// 結果出力：[行を出力]/該当部分/否マッチ行
-						m_gi.nGrepOutputLineType = 1;	break;
+						gi.nGrepOutputLineType = 1;	break;
 					case 'N':
 						// 結果出力：行を出力/該当部分/[否マッチ行]
-						m_gi.nGrepOutputLineType = 2;	break;
+						gi.nGrepOutputLineType = 2;	break;
 					case 'W':
 						// 単語単位で探す
-						m_gi.grepSearchOption.bWordOnly = true;	break;
+						gi.grepSearchOption.bWordOnly = true;	break;
 					case '1':
 						// Grep: 出力形式
-						m_gi.nGrepOutputStyle = 1;	break;
+						gi.nGrepOutputStyle = 1;	break;
 					case '2':
 						// Grep: 出力形式
-						m_gi.nGrepOutputStyle = 2;	break;
+						gi.nGrepOutputStyle = 2;	break;
 					case '3':
 						// Grep: 出力形式
-						m_gi.nGrepOutputStyle = 3;	break;
+						gi.nGrepOutputStyle = 3;	break;
 					case 'F':
-						m_gi.bGrepOutputFileOnly = true;	break;
+						gi.bGrepOutputFileOnly = true;	break;
 					case 'B':
-						m_gi.bGrepOutputBaseFolder = true;	break;
+						gi.bGrepOutputBaseFolder = true;	break;
 					case 'D':
-						m_gi.bGrepSeparateFolder = true;	break;
+						gi.bGrepSeparateFolder = true;	break;
 					case 'C':
-						m_gi.bGrepPaste = true;	break;
+						gi.bGrepPaste = true;	break;
 					case 'O':
-						m_gi.bGrepBackup = true;	break;
+						gi.bGrepBackup = true;	break;
 					}
 				}
 				break;
 			// 2002/09/21 Moca Grepでの文字コードセット 追加
 			case CMDLINEOPT_GCODE:
-				m_gi.charEncoding = (EncodingType)AtoiOptionInt(arg);	break;
+				gi.charEncoding = (EncodingType)AtoiOptionInt(arg);	break;
 			case CMDLINEOPT_GROUP:	// GROUP	// 2007.06.26 ryoji
-				m_nGroup = AtoiOptionInt(arg);
+				nGroup = AtoiOptionInt(arg);
 				break;
 			case CMDLINEOPT_DEBUGMODE:
-				m_bDebugMode = true;
+				bDebugMode = true;
 				// 2010.06.16 Moca -TYPE=output 扱いとする
-				if (m_fi.szDocType[0] == _T('\0')) {
-					auto_strcpy(m_fi.szDocType , _T("output"));
+				if (fi.szDocType[0] == _T('\0')) {
+					auto_strcpy(fi.szDocType , _T("output"));
 				}
 				break;
 			case CMDLINEOPT_NOMOREOPT:	// 2007.09.09 genta これ以降引数無効
 				bParseOptDisabled = true;
 				break;
 			case CMDLINEOPT_M:			// 2009.06.14 syat 追加
-				m_mMacro.SetStringT(arg);
-				m_mMacro.Replace(L"\"\"", L"\"");
+				mMacro.SetStringT(arg);
+				mMacro.Replace(L"\"\"", L"\"");
 				break;
 			case CMDLINEOPT_MTYPE:		// 2009.06.14 syat 追加
-				m_mMacroType.SetStringT(arg);
+				mMacroType.SetStringT(arg);
 				break;
 			case CMDLINEOPT_PROF:		// 2013.12.20 Moca 追加
-				m_mProfile.SetStringT( arg );
-				m_bSetProfile = true;
+				mProfile.SetStringT( arg );
+				bSetProfile = true;
 				break;
 			case CMDLINEOPT_PROFMGR:
-				m_bProfileMgr = true;
+				bProfileMgr = true;
 				break;
 			}
 		}
@@ -521,34 +521,34 @@ void CommandLine::ParseCommandLine(LPCTSTR pszCmdLineSrc, bool bResponse)
 */
 CommandLine::CommandLine()
 {
-	m_bGrepMode				= false;
-	m_bGrepDlg				= false;
-	m_bDebugMode			= false;
-	m_bNoWindow				= false;
-	m_bWriteQuit			= false;
-	m_bProfileMgr			= false;
-	m_bSetProfile			= false;
-	m_gi.bGrepSubFolder		= false;
-	m_gi.grepSearchOption.Reset();
+	bGrepMode				= false;
+	bGrepDlg				= false;
+	bDebugMode			= false;
+	bNoWindow				= false;
+	bWriteQuit			= false;
+	bProfileMgr			= false;
+	bSetProfile			= false;
+	gi.bGrepSubFolder		= false;
+	gi.grepSearchOption.Reset();
 	/*
 	m_gi.sGrepSearchOption.bLoHiCase	= false;
 	m_gi.bGrepRegularExp	= false;
 	m_gi.bGrepWordOnly		= false;
 	*/
-	m_gi.bGrepCurFolder		= false;
-	m_gi.bGrepStdout		= false;
-	m_gi.bGrepHeader		= true;
-	m_gi.charEncoding		= CODE_SJIS;
-	m_gi.nGrepOutputLineType	= 0;
-	m_gi.nGrepOutputStyle	= 1;
-	m_gi.bGrepOutputFileOnly	= false;
-	m_gi.bGrepOutputBaseFolder	= false;
-	m_gi.bGrepSeparateFolder	= false;
-	m_gi.bGrepReplace		= false;
-	m_gi.bGrepPaste			= false;
-	m_gi.bGrepBackup		= false;
-	m_bViewMode				= false;
-	m_nGroup				= -1;		// 2007.06.26 ryoji
-	m_mProfile.SetString(L"");
+	gi.bGrepCurFolder		= false;
+	gi.bGrepStdout		= false;
+	gi.bGrepHeader		= true;
+	gi.charEncoding		= CODE_SJIS;
+	gi.nGrepOutputLineType	= 0;
+	gi.nGrepOutputStyle	= 1;
+	gi.bGrepOutputFileOnly	= false;
+	gi.bGrepOutputBaseFolder	= false;
+	gi.bGrepSeparateFolder	= false;
+	gi.bGrepReplace		= false;
+	gi.bGrepPaste			= false;
+	gi.bGrepBackup		= false;
+	bViewMode				= false;
+	nGroup				= -1;		// 2007.06.26 ryoji
+	mProfile.SetString(L"");
 }
 

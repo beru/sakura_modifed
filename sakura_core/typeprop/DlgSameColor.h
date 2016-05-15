@@ -60,8 +60,8 @@ protected:
 	WNDPROC m_wpColorStaticProc;	// サブクラス化以前の指定色スタティックのウィンドウプロシージャ
 	WNDPROC m_wpColorListProc;		// サブクラス化以前の色選択リストのウィンドウプロシージャ
 
-	WORD m_wID;				// タイプ別設定ダイアログ（親ダイアログ）で押されたボタンID
-	TypeConfig* m_pTypes;	// タイプ別設定データ
-	COLORREF m_cr;			// 指定色
+	WORD wID;				// タイプ別設定ダイアログ（親ダイアログ）で押されたボタンID
+	TypeConfig* pTypes;	// タイプ別設定データ
+	COLORREF cr;			// 指定色
 };
 

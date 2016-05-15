@@ -121,17 +121,17 @@ int DlgPrintSetting::DoModal(
 	int				nLineNumberColumns
 	)
 {
-	m_nCurrentPrintSetting = *pnCurrentPrintSetting;
+	nCurrentPrintSetting = *pnCurrentPrintSetting;
 	for (int i=0; i<MAX_PrintSettingARR; ++i) {
-		m_printSettingArr[i] = pPrintSettingArr[i];
+		printSettingArr[i] = pPrintSettingArr[i];
 	}
-	m_nLineNumberColumns = nLineNumberColumns;
+	nLineNumberColumns = nLineNumberColumns;
 
 	int nRet = (int)Dialog::DoModal(hInstance, hwndParent, IDD_PrintSetting, (LPARAM)NULL);
 	if (nRet != FALSE) {
-		*pnCurrentPrintSetting = m_nCurrentPrintSetting;
+		*pnCurrentPrintSetting = nCurrentPrintSetting;
 		for (int i=0; i<MAX_PrintSettingARR; ++i) {
-			pPrintSettingArr[i] = m_printSettingArr[i];
+			pPrintSettingArr[i] = printSettingArr[i];
 		}
 	}
 	return nRet;
@@ -157,10 +157,10 @@ BOOL DlgPrintSetting::OnInitDialog(
 	// UpdatePrintableLineAndColumn();
 
 	// ダイアログのフォントの取得
-	m_hFontDlg = (HFONT)::SendMessage(GetHwnd(), WM_GETFONT, 0, 0);	// ダイアログのフォント
+	hFontDlg = (HFONT)::SendMessage(GetHwnd(), WM_GETFONT, 0, 0);	// ダイアログのフォント
 	LOGFONT	lf;
-	::GetObject(m_hFontDlg, sizeof(LOGFONT), &lf);
-	m_nFontHeight = lf.lfHeight;		// フォントサイズ
+	::GetObject(hFontDlg, sizeof(LOGFONT), &lf);
+	nFontHeight = lf.lfHeight;		// フォントサイズ
 
 	// 基底クラスメンバ
 	return Dialog::OnInitDialog(GetHwnd(), wParam, lParam);
@@ -173,11 +173,11 @@ BOOL DlgPrintSetting::OnDestroy(void)
 	// フォントの破棄
 	HFONT hFontOld;
 	hFontOld = (HFONT)::SendMessage(GetItemHwnd(IDC_STATIC_FONT_HEAD), WM_GETFONT, 0, 0);
-	if (m_hFontDlg != hFontOld) {
+	if (hFontDlg != hFontOld) {
 		::DeleteObject(hFontOld);
 	}
 	hFontOld = (HFONT)::SendMessage(GetItemHwnd(IDC_STATIC_FONT_FOOT), WM_GETFONT, 0, 0);
-	if (m_hFontDlg != hFontOld) {
+	if (hFontDlg != hFontOld) {
 		::DeleteObject(hFontOld);
 	}
 
@@ -237,7 +237,7 @@ BOOL DlgPrintSetting::OnBnClicked(int wID)
 	TCHAR szWork[256];
 	DlgInput1 dlgInput1;
 	HWND hwndComboSettingName;
-	auto& curPS = m_printSettingArr[m_nCurrentPrintSetting];
+	auto& curPS = printSettingArr[nCurrentPrintSetting];
 
 	switch (wID) {
 	case IDC_BUTTON_HELP:
@@ -249,7 +249,7 @@ BOOL DlgPrintSetting::OnBnClicked(int wID)
 		_tcscpy(szWork, curPS.szPrintSettingName);
 		{
 			BOOL bDlgInputResult = dlgInput1.DoModal(
-				m_hInstance,
+				hInstance,
 				GetHwnd(),
 				LS(STR_DLGPRNST1),
 				LS(STR_DLGPRNST2),
@@ -261,7 +261,7 @@ BOOL DlgPrintSetting::OnBnClicked(int wID)
 			}
 		}
 		if (szWork[0] != _T('\0')) {
-			int		size = _countof(m_printSettingArr[0].szPrintSettingName) - 1;
+			int		size = _countof(printSettingArr[0].szPrintSettingName) - 1;
 			_tcsncpy(curPS.szPrintSettingName, szWork, size);
 			curPS.szPrintSettingName[size] = _T('\0');
 			// 印刷設定名一覧
@@ -271,10 +271,10 @@ BOOL DlgPrintSetting::OnBnClicked(int wID)
 			for (int i=0; i<MAX_PrintSettingARR; ++i) {
 				int nItemIdx = Combo_AddString(
 					hwndComboSettingName,
-					m_printSettingArr[i].szPrintSettingName
+					printSettingArr[i].szPrintSettingName
 				);
 				Combo_SetItemData(hwndComboSettingName, nItemIdx, i);
-				if (i == m_nCurrentPrintSetting) {
+				if (i == nCurrentPrintSetting) {
 					nSelectIdx = nItemIdx;
 				}
 			}
@@ -291,7 +291,7 @@ BOOL DlgPrintSetting::OnBnClicked(int wID)
 				auto_strcpy(lf.lfFaceName, curPS.szPrintFontFaceHan);
 				// 1/10mm→画面ドット数
 				lf.lfHeight = -(curPS.nPrintFontHeight * 
-					::GetDeviceCaps (::GetDC(m_hwndParent), LOGPIXELSY) / 254);
+					::GetDeviceCaps (::GetDC(hwndParent), LOGPIXELSY) / 254);
 			}
 
 			if (MySelectFont(&lf, &nPointSize, GetHwnd(), false)) {
@@ -314,7 +314,7 @@ BOOL DlgPrintSetting::OnBnClicked(int wID)
 				auto_strcpy(lf.lfFaceName, curPS.szPrintFontFaceHan);
 				// 1/10mm→画面ドット数
 				lf.lfHeight = -(curPS.nPrintFontHeight * 
-					::GetDeviceCaps (::GetDC(m_hwndParent), LOGPIXELSY) / 254);
+					::GetDeviceCaps (::GetDC(hwndParent), LOGPIXELSY) / 254);
 			}
 
 			if (MySelectFont(&lf, &nPointSize, GetHwnd(), false)) {
@@ -376,8 +376,8 @@ BOOL DlgPrintSetting::OnStnClicked(int wID)
 	case IDC_STATIC_ENABLELINES:
 		// 現状クリックは受け付けていないが、メッセージ処理したいのでここに配置 2013.5.5 aroka
 		// メッセージが連続して送られたときは一回だけ対応する 2013.5.5 aroka
-		if (m_bPrintableLinesAndColumnInvalid) {
-			m_bPrintableLinesAndColumnInvalid = false;
+		if (bPrintableLinesAndColumnInvalid) {
+			bPrintableLinesAndColumnInvalid = false;
 			CalcPrintableLineAndColumn();
 		}
 		return TRUE;
@@ -439,7 +439,7 @@ BOOL DlgPrintSetting::OnEnKillFocus(HWND hwndCtl, int wID)
 void DlgPrintSetting::SetData(void)
 {
 	// フォント一覧
-	HDC hdc = ::GetDC(m_hwndParent);
+	HDC hdc = ::GetDC(hwndParent);
 	HWND hwndComboFont = GetItemHwnd(IDC_COMBO_FONT_HAN);
 	Combo_ResetContent(hwndComboFont);
 	hwndComboFont = GetItemHwnd(IDC_COMBO_FONT_ZEN);
@@ -450,7 +450,7 @@ void DlgPrintSetting::SetData(void)
 		(FONTENUMPROC)SetData_EnumFontFamProc,
 		(LPARAM)this
 	);
-	::ReleaseDC(m_hwndParent, hdc);
+	::ReleaseDC(hwndParent, hdc);
 
 	// 用紙サイズ一覧
 	HWND hwndComboPaper = GetItemHwnd(IDC_COMBO_PAPER);
@@ -466,9 +466,9 @@ void DlgPrintSetting::SetData(void)
 	Combo_ResetContent(hwndComboSettingName);
 	int nSelectIdx = 0;
 	for (int i=0; i<MAX_PrintSettingARR; ++i) {
-		int nItemIdx = Combo_AddString(hwndComboSettingName, m_printSettingArr[i].szPrintSettingName);
+		int nItemIdx = Combo_AddString(hwndComboSettingName, printSettingArr[i].szPrintSettingName);
 		Combo_SetItemData(hwndComboSettingName, nItemIdx, i);
-		if (i == m_nCurrentPrintSetting) {
+		if (i == nCurrentPrintSetting) {
 			nSelectIdx = nItemIdx;
 		}
 	}
@@ -487,7 +487,7 @@ int DlgPrintSetting::GetData(void)
 {
 	HWND hwndCtrl;
 	int nIdx1;
-	auto& curPS = m_printSettingArr[m_nCurrentPrintSetting];
+	auto& curPS = printSettingArr[nCurrentPrintSetting];
 	// フォント一覧
 	hwndCtrl = GetItemHwnd(IDC_COMBO_FONT_HAN);
 	nIdx1 = Combo_GetCurSel(hwndCtrl);
@@ -622,14 +622,14 @@ void DlgPrintSetting::OnChangeSettingType(BOOL bGetData)
 	HWND	hwndCtrl;
 	int		nIdx1;
 	int		nItemNum;
-	auto& curPS = m_printSettingArr[m_nCurrentPrintSetting];
+	auto& curPS = printSettingArr[nCurrentPrintSetting];
 
 	HWND hwndComboSettingName = GetItemHwnd(IDC_COMBO_SETTINGNAME);
 	nIdx1 = Combo_GetCurSel(hwndComboSettingName);
 	if (nIdx1 == CB_ERR) {
 		return;
 	}
-	m_nCurrentPrintSetting = Combo_GetItemData(hwndComboSettingName, nIdx1);
+	nCurrentPrintSetting = Combo_GetItemData(hwndComboSettingName, nIdx1);
 
 	// フォント一覧
 	hwndCtrl = GetItemHwnd(IDC_COMBO_FONT_HAN);
@@ -799,7 +799,7 @@ bool DlgPrintSetting::CalcPrintableLineAndColumn()
 
 	// ダイアログデータの取得
 	GetData();
-	PrintSetting& ps = m_printSettingArr[m_nCurrentPrintSetting];
+	PrintSetting& ps = printSettingArr[nCurrentPrintSetting];
 
 	dmDummy.dmFields = DM_PAPERSIZE | DMORIENT_LANDSCAPE;
 	dmDummy.dmPaperSize = ps.nPrintPaperSize;
@@ -817,7 +817,7 @@ bool DlgPrintSetting::CalcPrintableLineAndColumn()
 		return false;
 	}
 	// 行あたりの文字数(行番号込み)
-	nEnableColumns = Print::CalculatePrintableColumns(ps, nPaperAllWidth, ps.bPrintLineNumber ? m_nLineNumberColumns : 0);	// 印字可能桁数/ページ
+	nEnableColumns = Print::CalculatePrintableColumns(ps, nPaperAllWidth, ps.bPrintLineNumber ? nLineNumberColumns : 0);	// 印字可能桁数/ページ
 	// 縦方向の行数
 	nEnableLines = Print::CalculatePrintableLines(ps, nPaperAllHeight);			// 印字可能行数/ページ
 
@@ -846,7 +846,7 @@ bool DlgPrintSetting::CalcPrintableLineAndColumn()
 // ダイアログ初期化の途中で EN_CHANGE に反応すると計算がおかしくなるため、関数呼び出しではなくPostMessageで処理 2013.5.5 aroka
 void DlgPrintSetting::UpdatePrintableLineAndColumn()
 {
-	m_bPrintableLinesAndColumnInvalid = true;
+	bPrintableLinesAndColumnInvalid = true;
 	::PostMessageA(GetHwnd(), WM_COMMAND, MAKELONG(IDC_STATIC_ENABLECOLUMNS, STN_CLICKED), (LPARAM)GetItemHwnd(IDC_STATIC_ENABLECOLUMNS));
 }
 
@@ -875,7 +875,7 @@ void DlgPrintSetting::SetFontName(
 	if (bUseFont) {
 		LOGFONT	lft;
 		lft = lf;
-		lft.lfHeight = m_nFontHeight;		// フォントサイズをダイアログに合せる
+		lft.lfHeight = nFontHeight;		// フォントサイズをダイアログに合せる
 		HFONT hFontOld = (HFONT)::SendMessage(GetItemHwnd(idTxt), WM_GETFONT, 0, 0);
 		// 論理フォントを作成
 		HFONT hFont = ::CreateFontIndirect(&lft);
@@ -883,7 +883,7 @@ void DlgPrintSetting::SetFontName(
 			// フォントの設定
 			::SendMessage(GetItemHwnd(idTxt), WM_SETFONT, (WPARAM)hFont, MAKELPARAM(FALSE, 0));
 		}
-		if (m_hFontDlg != hFontOld) {
+		if (hFontDlg != hFontOld) {
 			// 古いフォントの破棄
 			::DeleteObject(hFontOld);
 		}

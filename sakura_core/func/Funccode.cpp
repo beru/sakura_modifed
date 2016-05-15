@@ -1013,7 +1013,7 @@ bool IsFuncEnable(const EditDoc& editDoc, const DllSharedData& shareData, EFunct
 		if (shareData.flags.bRecordingKeyMacro) {	// キーボードマクロの記録中
 			return (shareData.flags.hwndRecordingKeyMacro == EditWnd::getInstance().GetHwnd());	// キーボードマクロを記録中のウィンドウ
 		}else {
-			return EditApp::getInstance().m_pSMacroMgr->IsSaveOk();
+			return EditApp::getInstance().pSMacroMgr->IsSaveOk();
 		}
 	case F_EXECKEYMACRO:	// キーマクロの実行
 		if (shareData.flags.bRecordingKeyMacro) {	// キーボードマクロの記録中
@@ -1166,7 +1166,7 @@ bool IsFuncEnable(const EditDoc& editDoc, const DllSharedData& shareData, EFunct
 	case F_TAGJUMP_KEYWORD:	// キーワードを指定してダイレクトタグジャンプ	//@@@ 2005.03.31 MIK
 	// 2003.05.12 MIK タグファイル作成先を選べるようにしたので、常に作成可能とする
 //	case F_TAGS_MAKE:	// タグファイルの作成	//@@@ 2003.04.13 MIK
-		return (!EditApp::getInstance().m_pGrepAgent->m_bGrepMode
+		return (!EditApp::getInstance().pGrepAgent->bGrepMode
 			&& editDoc.m_docFile.GetFilePathClass().IsValidPath()
 		);
 		

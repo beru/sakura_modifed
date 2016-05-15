@@ -58,7 +58,7 @@ protected:
 	void SetData(void);
 	LPVOID GetHelpIdTable(void);
 
-	int m_nSet[ KEYWORD_SELECT_NUM ];
-	KeywordSetMgr*	m_pKeywordSetMgr;
+	int nSet[ KEYWORD_SELECT_NUM ];
+	KeywordSetMgr*	pKeywordSetMgr;
 };
 

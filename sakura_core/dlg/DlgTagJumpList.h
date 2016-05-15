@@ -99,7 +99,7 @@ private:
 	int		SearchBestTag(void);	// もっとも確率の高そうなインデックスを返す。
 	// @@ 2005.03.31 MIK
 	const TCHAR* GetFileName(void);
-	const TCHAR* GetFilePath(void) { return m_pszFileName ? m_pszFileName : _T(""); }
+	const TCHAR* GetFilePath(void) { return pszFileName ? pszFileName : _T(""); }
 	void Empty(void);
 	void SetTextDir();
 	void FindNext(bool);
@@ -123,41 +123,41 @@ private:
 
 	struct TagFindState {
 		int   nDepth;
-		int   m_nMatchAll;
-		int   m_nNextMode;
-		int   m_nLoop;
-		bool  m_bJumpPath;
-		TCHAR m_szCurPath[1024];
+		int   nMatchAll;
+		int   nNextMode;
+		int   nLoop;
+		bool  bJumpPath;
+		TCHAR szCurPath[1024];
 	};
 	
-	bool	m_bDirectTagJump;
+	bool	bDirectTagJump;
 
-	int		m_nIndex;				// 選択された要素番号
-	TCHAR	*m_pszFileName;			// 編集中のファイル名
-	wchar_t	*m_pszKeyword;			// キーワード(DoModalのlParam != 0を指定した場合に指定できる)
-	int		m_nLoop;				// さかのぼれる階層数
-	SortedTagJumpList*	m_pList;	// タグジャンプ情報
-	UINT	m_nTimerId;				// タイマ番号
-	bool	m_bTagJumpICase;		// 大文字小文字を同一視
-	bool	m_bTagJumpAnyWhere;		// 文字列の途中にマッチ
-	bool	m_bTagJumpExactMatch;	// 完全一致(画面無し)
+	int			nIndex;				// 選択された要素番号
+	TCHAR*		pszFileName;		// 編集中のファイル名
+	wchar_t*	pszKeyword;			// キーワード(DoModalのlParam != 0を指定した場合に指定できる)
+	int			nLoop;				// さかのぼれる階層数
+	SortedTagJumpList*	pList;		// タグジャンプ情報
+	UINT	nTimerId;				// タイマ番号
+	bool	bTagJumpICase;			// 大文字小文字を同一視
+	bool	bTagJumpAnyWhere;		// 文字列の途中にマッチ
+	bool	bTagJumpExactMatch;		// 完全一致(画面無し)
 
-	int 	m_nTop;					// ページめくりの表示の先頭(0開始)
-	bool	m_bNextItem;			// まだ次にヒットするものがある
+	int 	nTop;					// ページめくりの表示の先頭(0開始)
+	bool	bNextItem;				// まだ次にヒットするものがある
 
 	// 絞り込み検索用
-	TagFindState* m_psFindPrev;		// 前回の最後に検索した状態
-	TagFindState* m_psFind0Match;	// 前回の1つもHitしなかった最後のtags
+	TagFindState* psFindPrev;		// 前回の最後に検索した状態
+	TagFindState* psFind0Match;		// 前回の1つもHitしなかった最後のtags
 
-	NativeW	m_strOldKeyword;		// 前回のキーワード
-	bool	m_bOldTagJumpICase;		// 前回の大文字小文字を同一視
-	bool	m_bOldTagJumpAnyWhere;	// 前回の文字列の途中にマッチ
+	NativeW	strOldKeyword;			// 前回のキーワード
+	bool	bOldTagJumpICase;		// 前回の大文字小文字を同一視
+	bool	bOldTagJumpAnyWhere;	// 前回の文字列の途中にマッチ
 
-	ComboBoxItemDeleter		m_comboDel;
-	RecentTagJumpKeyword	m_recentKeyword;
+	ComboBoxItemDeleter		comboDel;
+	RecentTagJumpKeyword	recentKeyword;
 	
-	POINT	m_ptDefaultSize;
-	RECT	m_rcItems[11];
+	POINT	ptDefaultSize;
+	RECT	rcItems[11];
 
 private:
 	DISALLOW_COPY_AND_ASSIGN(DlgTagJumpList);

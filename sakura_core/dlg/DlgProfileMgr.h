@@ -72,7 +72,7 @@ protected:
 	void	SetDefaultProf(int);
 	void	ClearDefaultProf();
 public:
-	std::tstring m_strProfileName;
+	std::tstring strProfileName;
 
 	static bool ReadProfSettings(ProfileSettings&);
 	static bool WriteProfSettings(ProfileSettings&);

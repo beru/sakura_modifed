@@ -63,8 +63,8 @@ public:
 		GrepEnumFolders& except
 		)
 	{
-		m_grepEnumExceptFolders.Enumerates( lpBaseFolder, grepEnumKeys.m_vecExceptFolderKeys, option, NULL );
-		return GrepEnumFolders::Enumerates( lpBaseFolder, grepEnumKeys.m_vecSearchFolderKeys, option, &except );
+		m_grepEnumExceptFolders.Enumerates( lpBaseFolder, grepEnumKeys.vecExceptFolderKeys, option, NULL );
+		return GrepEnumFolders::Enumerates( lpBaseFolder, grepEnumKeys.vecSearchFolderKeys, option, &except );
 	}
 };
 

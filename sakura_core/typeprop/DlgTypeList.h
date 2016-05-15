@@ -57,12 +57,12 @@ protected:
 	bool AlertFileAssociation();	// 2011/8/20 syat
 
 private:
-	TypeConfigNum m_nSettingType;
+	TypeConfigNum nSettingType;
 	// 関連付け状態
-	bool m_bRegistryChecked[ MAX_TYPES ];	// レジストリ確認 未／済
-	bool m_bExtRMenu[ MAX_TYPES ];			// 右クリック登録 未／済
-	bool m_bExtDblClick[ MAX_TYPES ];		// ダブルクリック 未／済
-	bool m_bAlertFileAssociation;			// 関連付け警告の表示フラグ
-	bool m_bEnableTempChange;				// 一時適用の有効化
+	bool bRegistryChecked[ MAX_TYPES ];	// レジストリ確認 未／済
+	bool bExtRMenu[ MAX_TYPES ];		// 右クリック登録 未／済
+	bool bExtDblClick[ MAX_TYPES ];		// ダブルクリック 未／済
+	bool bAlertFileAssociation;			// 関連付け警告の表示フラグ
+	bool bEnableTempChange;				// 一時適用の有効化
 };
 

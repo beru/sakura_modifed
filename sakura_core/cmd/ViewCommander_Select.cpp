@@ -20,7 +20,7 @@
 
 
 // 現在位置の単語選択
-bool ViewCommander::Command_SELECTWORD(LayoutPoint* pptCaretPos)
+bool ViewCommander::Command_SELECTWORD(const LayoutPoint* pptCaretPos)
 {
 	auto& si = m_view.GetSelectionInfo();
 	if (si.IsTextSelected()) {	// テキストが選択されているか

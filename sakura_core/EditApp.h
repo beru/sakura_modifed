@@ -49,42 +49,42 @@ public:
 	void Create(HINSTANCE hInst, int);
 
 	// モジュール情報
-	HINSTANCE GetAppInstance() const { return m_hInst; }	// インスタンスハンドル取得
+	HINSTANCE GetAppInstance() const { return hInst; }	// インスタンスハンドル取得
 
 	// ウィンドウ情報
-	EditWnd* GetEditWindow() { return m_pEditWnd; }		// ウィンドウ取得
+	EditWnd* GetEditWindow() { return pEditWnd; }		// ウィンドウ取得
 
-	EditDoc*		GetDocument() { return m_pEditDoc; }
-	ImageListMgr&	GetIcons() { return m_icons; }
+	EditDoc*		GetDocument() { return pEditDoc; }
+	ImageListMgr&	GetIcons() { return icons; }
 
 	bool OpenPropertySheet(int nPageNum);
 	bool OpenPropertySheetTypes(int nPageNum, TypeConfigNum nSettingType);
 
 public:
-	HINSTANCE			m_hInst;
+	HINSTANCE			hInst;
 
 	// ドキュメント
-	EditDoc*			m_pEditDoc;
+	EditDoc*			pEditDoc;
 
 	// ウィンドウ
-	EditWnd*			m_pEditWnd;
+	EditWnd*			pEditWnd;
 
 	// IO管理
-	LoadAgent*			m_pLoadAgent;
-	SaveAgent*			m_pSaveAgent;
-	VisualProgress*		m_pVisualProgress;
+	LoadAgent*			pLoadAgent;
+	SaveAgent*			pSaveAgent;
+	VisualProgress*		pVisualProgress;
 
 	// その他ヘルパ
-	MruListener*		m_pMruListener;		// MRU管理
-	SMacroMgr*			m_pSMacroMgr;		// マクロ管理
+	MruListener*		pMruListener;		// MRU管理
+	SMacroMgr*			pSMacroMgr;			// マクロ管理
 private:
-	PropertyManager*	m_pPropertyManager;	// プロパティ管理
+	PropertyManager*	pPropertyManager;	// プロパティ管理
 public:
-	GrepAgent*			m_pGrepAgent;		// GREPモード
-	SoundSet			m_soundSet;			// サウンド管理
+	GrepAgent*			pGrepAgent;			// GREPモード
+	SoundSet			soundSet;			// サウンド管理
 
 	// GUIオブジェクト
-	ImageListMgr		m_icons;			// Image List
+	ImageListMgr		icons;				// Image List
 };
 
 

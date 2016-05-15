@@ -52,9 +52,9 @@ const DWORD p_helpids[] = {	//13700
 
 DlgTagsMake::DlgTagsMake()
 {
-	m_szPath[0] = 0;
-	m_szTagsCmdLine[0] = 0;
-	m_nTagsOpt = 0;
+	szPath[0] = 0;
+	szTagsCmdLine[0] = 0;
+	nTagsOpt = 0;
 	return;
 }
 
@@ -66,7 +66,7 @@ int DlgTagsMake::DoModal(
 	const TCHAR*	pszPath		// パス
 	)
 {
-	_tcscpy( m_szPath, pszPath );
+	_tcscpy( szPath, pszPath );
 	return (int)Dialog::DoModal(hInstance, hwndParent, IDD_TAG_MAKE, lParam);
 }
 
@@ -137,19 +137,19 @@ void DlgTagsMake::SelectFolder()
 void DlgTagsMake::SetData(void)
 {
 	// 作成フォルダ
-	Combo_LimitText(GetItemHwnd(IDC_EDIT_TAG_MAKE_FOLDER), _countof(m_szPath));
-	SetItemText(IDC_EDIT_TAG_MAKE_FOLDER, m_szPath);
+	Combo_LimitText(GetItemHwnd(IDC_EDIT_TAG_MAKE_FOLDER), _countof(szPath));
+	SetItemText(IDC_EDIT_TAG_MAKE_FOLDER, szPath);
 
 	// オプション
-	m_nTagsOpt = m_pShareData->nTagsOpt;
-	if (m_nTagsOpt & 0x0001) {
+	nTagsOpt = pShareData->nTagsOpt;
+	if (nTagsOpt & 0x0001) {
 		CheckButton(IDC_CHECK_TAG_MAKE_RECURSE, true);
 	}
 
 	// コマンドライン
-	Combo_LimitText(GetItemHwnd(IDC_EDIT_TAG_MAKE_CMDLINE), _countof(m_pShareData->szTagsCmdLine));
-	_tcscpy(m_szTagsCmdLine, m_pShareData->szTagsCmdLine);
-	SetItemText(IDC_EDIT_TAG_MAKE_CMDLINE, m_pShareData->szTagsCmdLine);
+	Combo_LimitText(GetItemHwnd(IDC_EDIT_TAG_MAKE_CMDLINE), _countof(pShareData->szTagsCmdLine));
+	_tcscpy(szTagsCmdLine, pShareData->szTagsCmdLine);
+	SetItemText(IDC_EDIT_TAG_MAKE_CMDLINE, pShareData->szTagsCmdLine);
 
 	return;
 }
@@ -159,22 +159,22 @@ void DlgTagsMake::SetData(void)
 int DlgTagsMake::GetData(void)
 {
 	// フォルダ
-	GetItemText(IDC_EDIT_TAG_MAKE_FOLDER, m_szPath, _countof(m_szPath));
-	int length = _tcslen(m_szPath);
+	GetItemText(IDC_EDIT_TAG_MAKE_FOLDER, szPath, _countof(szPath));
+	int length = _tcslen(szPath);
 	if (length > 0) {
-		if (m_szPath[length - 1] != _T('\\')) _tcscat(m_szPath, _T("\\"));
+		if (szPath[length - 1] != _T('\\')) _tcscat(szPath, _T("\\"));
 	}
 
 	// CTAGSオプション
-	m_nTagsOpt = 0;
+	nTagsOpt = 0;
 	if (IsButtonChecked(IDC_CHECK_TAG_MAKE_RECURSE)) {
-		m_nTagsOpt |= 0x0001;
+		nTagsOpt |= 0x0001;
 	}
-	m_pShareData->nTagsOpt = m_nTagsOpt;
+	pShareData->nTagsOpt = nTagsOpt;
 
 	// コマンドライン
-	GetItemText(IDC_EDIT_TAG_MAKE_CMDLINE, m_szTagsCmdLine, _countof(m_szTagsCmdLine));
-	_tcscpy(m_pShareData->szTagsCmdLine, m_szTagsCmdLine);
+	GetItemText(IDC_EDIT_TAG_MAKE_CMDLINE, szTagsCmdLine, _countof(szTagsCmdLine));
+	_tcscpy(pShareData->szTagsCmdLine, szTagsCmdLine);
 
 	return TRUE;
 }

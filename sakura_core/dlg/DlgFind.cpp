@@ -61,7 +61,7 @@ BOOL DlgFind::OnCbnDropDown(HWND hwndCtl, int wID)
 	switch (wID) {
 	case IDC_COMBO_TEXT:
 		if (::SendMessage(hwndCtl, CB_GETCOUNT, 0L, 0L) == 0) {
-			auto& keywords = m_pShareData->searchKeywords.searchKeys;
+			auto& keywords = pShareData->searchKeywords.searchKeys;
 			int nSize = keywords.size();
 			for (int i=0; i<nSize; ++i) {
 				Combo_AddString( hwndCtl, keywords[i] );
@@ -80,10 +80,10 @@ HWND DlgFind::DoModeless(
 	LPARAM lParam
 	)
 {
-	auto& csSearch = m_pShareData->common.search;
+	auto& csSearch = pShareData->common.search;
 	searchOption = csSearch.searchOption;		// 検索オプション
 	bNotifyNotFound = csSearch.bNotifyNotFound;	// 検索／置換  見つからないときメッセージを表示
-	m_ptEscCaretPos_PHY = ((EditView*)lParam)->GetCaret().GetCaretLogicPos();	// 検索開始時のカーソル位置退避
+	ptEscCaretPos_PHY = ((EditView*)lParam)->GetCaret().GetCaretLogicPos();	// 検索開始時のカーソル位置退避
 	((EditView*)lParam)->m_bSearch = TRUE;							// 検索開始位置の登録有無		02/07/28 ai
 	return Dialog::DoModeless(hInstance, hwndParent, IDD_FIND, lParam, SW_SHOW);
 }
@@ -91,7 +91,7 @@ HWND DlgFind::DoModeless(
 // モードレス時：検索対象となるビューの変更
 void DlgFind::ChangeView(LPARAM pcEditView)
 {
-	m_lParam = pcEditView;
+	lParam = pcEditView;
 	return;
 }
 
@@ -103,21 +103,21 @@ BOOL DlgFind::OnInitDialog(
 	)
 {
 	BOOL bRet = Dialog::OnInitDialog(hwnd, wParam, lParam);
-	m_comboDel = ComboBoxItemDeleter();
-	m_comboDel.pRecent = &m_recentSearch;
-	SetComboBoxDeleter(GetItemHwnd(IDC_COMBO_TEXT), &m_comboDel);
+	comboDel = ComboBoxItemDeleter();
+	comboDel.pRecent = &recentSearch;
+	SetComboBoxDeleter(GetItemHwnd(IDC_COMBO_TEXT), &comboDel);
 
 	// フォント設定	2012/11/27 Uchi
 	HFONT hFontOld = (HFONT)::SendMessage(GetItemHwnd(IDC_COMBO_TEXT), WM_GETFONT, 0, 0);
 	HFONT hFont = SetMainFont(GetItemHwnd(IDC_COMBO_TEXT));
-	m_fontText.SetFont(hFontOld, hFont, GetItemHwnd(IDC_COMBO_TEXT));
+	fontText.SetFont(hFontOld, hFont, GetItemHwnd(IDC_COMBO_TEXT));
 	return bRet;
 }
 
 
 BOOL DlgFind::OnDestroy()
 {
-	m_fontText.ReleaseOnDestroy();
+	fontText.ReleaseOnDestroy();
 	return Dialog::OnDestroy();
 }
 
@@ -180,10 +180,10 @@ void DlgFind::SetData(void)
 	// To Here Jun. 29, 2001 genta
 
 	// 検索ダイアログを自動的に閉じる
-	CheckButton(IDC_CHECK_bAutoCloseDlgFind, m_pShareData->common.search.bAutoCloseDlgFind);
+	CheckButton(IDC_CHECK_bAutoCloseDlgFind, pShareData->common.search.bAutoCloseDlgFind);
 
 	// 先頭（末尾）から再検索 2002.01.26 hor
-	CheckButton(IDC_CHECK_SEARCHALL, m_pShareData->common.search.bSearchAll);
+	CheckButton(IDC_CHECK_SEARCHALL, pShareData->common.search.bSearchAll);
 
 	return;
 }
@@ -201,8 +201,8 @@ void DlgFind::SetCombosList(void)
 	int nBufferSize = ::GetWindowTextLength(GetItemHwnd(IDC_COMBO_TEXT)) + 1;
 	std::vector<TCHAR> vText(nBufferSize);
 	Combo_GetText(hwndCombo, &vText[0], nBufferSize);
-	if (auto_strcmp(to_wchar(&vText[0]), m_strText.c_str()) != 0) {
-		SetItemText(IDC_COMBO_TEXT, m_strText.c_str());
+	if (auto_strcmp(to_wchar(&vText[0]), strText.c_str()) != 0) {
+		SetItemText(IDC_COMBO_TEXT, strText.c_str());
 	}
 }
 
@@ -226,28 +226,28 @@ int DlgFind::GetData(void)
 	// 検索／置換  見つからないときメッセージを表示
 	bNotifyNotFound = IsButtonChecked(IDC_CHECK_NOTIFYNOTFOUND);
 
-	m_pShareData->common.search.bNotifyNotFound = bNotifyNotFound;	// 検索／置換  見つからないときメッセージを表示
+	pShareData->common.search.bNotifyNotFound = bNotifyNotFound;	// 検索／置換  見つからないときメッセージを表示
 
 	// 検索文字列
 	int nBufferSize = ::GetWindowTextLength(GetItemHwnd(IDC_COMBO_TEXT)) + 1;
 	std::vector<TCHAR> vText(nBufferSize);
 	GetItemText(IDC_COMBO_TEXT, &vText[0], nBufferSize);
-	m_strText = to_wchar(&vText[0]);
+	strText = to_wchar(&vText[0]);
 
 	// 検索ダイアログを自動的に閉じる
-	m_pShareData->common.search.bAutoCloseDlgFind = IsButtonChecked(IDC_CHECK_bAutoCloseDlgFind);
+	pShareData->common.search.bAutoCloseDlgFind = IsButtonChecked(IDC_CHECK_bAutoCloseDlgFind);
 
 	// 先頭（末尾）から再検索 2002.01.26 hor
-	m_pShareData->common.search.bSearchAll = IsButtonChecked(IDC_CHECK_SEARCHALL);
+	pShareData->common.search.bSearchAll = IsButtonChecked(IDC_CHECK_SEARCHALL);
 
-	if (0 < m_strText.length()) {
+	if (0 < strText.length()) {
 		// 正規表現？
 		// From Here Jun. 26, 2001 genta
 		// 正規表現ライブラリの差し替えに伴う処理の見直し
 		int nFlag = 0x00;
 		nFlag |= searchOption.bLoHiCase ? 0x01 : 0x00;
 		if (searchOption.bRegularExp
-			&& !CheckRegexpSyntax(m_strText.c_str(), GetHwnd(), true, nFlag)
+			&& !CheckRegexpSyntax(strText.c_str(), GetHwnd(), true, nFlag)
 		) {
 			return -1;
 		}
@@ -255,22 +255,22 @@ int DlgFind::GetData(void)
 
 		// 検索文字列
 		//@@@ 2002.2.2 YAZAKI CShareDataに移動
-		if (m_strText.size() < _MAX_PATH) {
-			SearchKeywordManager().AddToSearchKeys(m_strText.c_str());
-			m_pShareData->common.search.searchOption = searchOption;		// 検索オプション
+		if (strText.size() < _MAX_PATH) {
+			SearchKeywordManager().AddToSearchKeys(strText.c_str());
+			pShareData->common.search.searchOption = searchOption;		// 検索オプション
 		}
-		EditView* pEditView = (EditView*)m_lParam;
+		EditView* pEditView = (EditView*)lParam;
 		if (1
-			&& pEditView->m_strCurSearchKey == m_strText
+			&& pEditView->m_strCurSearchKey == strText
 			&& pEditView->m_curSearchOption == searchOption
 		) {
 		}else {
-			pEditView->m_strCurSearchKey = m_strText;
+			pEditView->m_strCurSearchKey = strText;
 			pEditView->m_curSearchOption = searchOption;
 			pEditView->m_bCurSearchUpdate = true;
 		}
 		pEditView->m_nCurSearchKeySequence = GetDllShareData().common.search.nSearchKeySequence;
-		if (!m_bModal) {
+		if (!bModal) {
 			// ダイアログデータの設定
 			//SetData();
 			SetCombosList();		// コンボのみの初期化	2010/5/28 Uchi
@@ -285,7 +285,7 @@ int DlgFind::GetData(void)
 BOOL DlgFind::OnBnClicked(int wID)
 {
 	int nRet;
-	EditView*	pEditView = (EditView*)m_lParam;
+	EditView*	pEditView = (EditView*)lParam;
 	switch (wID) {
 	case IDC_BUTTON_HELP:
 		//「検索」のヘルプ
@@ -328,7 +328,7 @@ BOOL DlgFind::OnBnClicked(int wID)
 		// ダイアログデータの取得
 		nRet = GetData();
 		if (0 < nRet) {
-			if (m_bModal) {		// モーダルダイアログか
+			if (bModal) {		// モーダルダイアログか
 				CloseDialog(1);
 			}else {
 				// 前を検索
@@ -341,13 +341,13 @@ BOOL DlgFind::OnBnClicked(int wID)
 				// 検索開始位置を登録
 				if (pEditView->m_bSearch) {
 					// 検索開始時のカーソル位置登録条件変更 02/07/28 ai start
-					pEditView->m_ptSrchStartPos_PHY = m_ptEscCaretPos_PHY;
+					pEditView->m_ptSrchStartPos_PHY = ptEscCaretPos_PHY;
 					pEditView->m_bSearch = false;
 					// 02/07/28 ai end
 				}//  02/06/26 ai End
 
 				// 検索ダイアログを自動的に閉じる
-				if (m_pShareData->common.search.bAutoCloseDlgFind) {
+				if (pShareData->common.search.bAutoCloseDlgFind) {
 					CloseDialog(0);
 				}
 			}
@@ -359,7 +359,7 @@ BOOL DlgFind::OnBnClicked(int wID)
 		// ダイアログデータの取得
 		nRet = GetData();
 		if (0 < nRet) {
-			if (m_bModal) {		// モーダルダイアログか
+			if (bModal) {		// モーダルダイアログか
 				CloseDialog(2);
 			}else {
 				// 次を検索
@@ -371,12 +371,12 @@ BOOL DlgFind::OnBnClicked(int wID)
 				// 検索開始位置を登録
 				if (pEditView->m_bSearch) {
 					// 検索開始時のカーソル位置登録条件変更 02/07/28 ai start
-					pEditView->m_ptSrchStartPos_PHY = m_ptEscCaretPos_PHY;
+					pEditView->m_ptSrchStartPos_PHY = ptEscCaretPos_PHY;
 					pEditView->m_bSearch = false;
 				}
 
 				// 検索ダイアログを自動的に閉じる
-				if (m_pShareData->common.search.bAutoCloseDlgFind) {
+				if (pShareData->common.search.bAutoCloseDlgFind) {
 					CloseDialog(0);
 				}
 			}
@@ -386,12 +386,12 @@ BOOL DlgFind::OnBnClicked(int wID)
 		return TRUE;
 	case IDC_BUTTON_SETMARK:	// 2002.01.16 hor 該当行マーク
 		if (0 < GetData()) {
-			if (m_bModal) {		// モーダルダイアログか
+			if (bModal) {		// モーダルダイアログか
 				CloseDialog(2);
 			}else {
 				pEditView->GetCommander().HandleCommand(F_BOOKMARK_PATTERN, false, 0, 0, 0, 0);
 				// 検索ダイアログを自動的に閉じる
-				if (m_pShareData->common.search.bAutoCloseDlgFind) {
+				if (pShareData->common.search.bAutoCloseDlgFind) {
 					CloseDialog(0);
 				}else {
 					::SendMessage(GetHwnd(), WM_NEXTDLGCTL, (WPARAM)GetItemHwnd(IDC_COMBO_TEXT), TRUE);
@@ -409,7 +409,7 @@ BOOL DlgFind::OnBnClicked(int wID)
 BOOL DlgFind::OnActivate(WPARAM wParam, LPARAM lParam)
 {
 	// 0文字幅マッチ描画のON/OFF	// 2009.11.29 ryoji
-	EditView* pEditView = (EditView*)m_lParam;
+	EditView* pEditView = (EditView*)(this->lParam);
 	LayoutRange rangeSel = pEditView->GetSelectionInfo().m_select;
 	if (rangeSel.IsValid() && rangeSel.IsLineOne() && rangeSel.IsOne())
 		pEditView->InvalidateRect(NULL);	// アクティブ化／非アクティブ化が完了してから再描画

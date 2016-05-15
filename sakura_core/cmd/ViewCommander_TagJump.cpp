@@ -457,10 +457,10 @@ bool ViewCommander::Command_TagsMake(void)
 
 	TCHAR	options[1024];
 	_tcscpy(options, _T("--excmd=n"));	// デフォルトのオプション
-	if (dlgTagsMake.m_nTagsOpt & 0x0001) _tcscat(options, _T(" -R"));	// サブフォルダも対象
-	if (dlgTagsMake.m_szTagsCmdLine[0] != _T('\0')) {	// 個別指定のコマンドライン
+	if (dlgTagsMake.nTagsOpt & 0x0001) _tcscat(options, _T(" -R"));	// サブフォルダも対象
+	if (dlgTagsMake.szTagsCmdLine[0] != _T('\0')) {	// 個別指定のコマンドライン
 		_tcscat(options, _T(" "));
-		_tcscat(options, dlgTagsMake.m_szTagsCmdLine);
+		_tcscat(options, dlgTagsMake.szTagsCmdLine);
 	}
 	_tcscat(options, _T(" *"));	// 配下のすべてのファイル
 
@@ -495,7 +495,7 @@ bool ViewCommander::Command_TagsMake(void)
 	// コマンドライン実行
 	BOOL bProcessResult = CreateProcess(
 		NULL, cmdline, NULL, NULL, TRUE,
-		CREATE_NEW_CONSOLE, NULL, dlgTagsMake.m_szPath, &sui, &pi
+		CREATE_NEW_CONSOLE, NULL, dlgTagsMake.szPath, &sui, &pi
 	);
 	if (!bProcessResult) {
 		WarningMessage(m_view.GetHwnd(), LS(STR_ERR_CEDITVIEW_CMD04), cmdline);
@@ -707,7 +707,7 @@ bool ViewCommander::Sub_PreProcTagJumpByTagsFile(TCHAR* szCurrentPath, int count
 		// 2010.04.02 (無題)でもタグジャンプできるように
 		// Grep、アウトプットは行番号タグジャンプがあるので無効にする(要検討)
 		if (
-			EditApp::getInstance().m_pGrepAgent->m_bGrepMode
+			EditApp::getInstance().pGrepAgent->bGrepMode
 		    || AppMode::getInstance().IsDebugMode()
 		) {
 		    return false;

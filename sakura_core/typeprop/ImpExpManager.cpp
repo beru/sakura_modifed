@@ -267,7 +267,7 @@ bool ImpExpType::ImportAscertain(HINSTANCE hInstance, HWND hwndParent, const wst
 
 	// 確認＆色指定
 	DlgTypeAscertain::AscertainInfo sAscertainInfo;
-	DlgTypeAscertain cDlgTypeAscertain;
+	DlgTypeAscertain dlgTypeAscertain;
 	wchar_t wszLabel[1024];
 	TypeConfig TmpType;
 
@@ -280,7 +280,7 @@ bool ImpExpType::ImportAscertain(HINSTANCE hInstance, HWND hwndParent, const wst
 	sAscertainInfo.sTypeNameFile = wszLabel;
 
 	// 確認
-	if (!cDlgTypeAscertain.DoModal(hInstance, hwndParent, &sAscertainInfo)) {
+	if (!dlgTypeAscertain.DoModal(hInstance, hwndParent, &sAscertainInfo)) {
 		return false;
 	}
 

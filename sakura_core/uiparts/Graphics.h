@@ -35,28 +35,28 @@ template <class T>
 class TOriginalHolder {
 public:
 	TOriginalHolder<T>() {
-		m_data = 0;
-		m_hold = false;
+		data = 0;
+		hold = false;
 	}
 	void Clear() {
-		m_data = 0;
-		m_hold = false;
+		data = 0;
+		hold = false;
 	}
 	void AssignOnce(const T& t) {
-		if (!m_hold) {
-			m_data = t;
-			m_hold = true;
+		if (!hold) {
+			data = t;
+			hold = true;
 		}
 	}
 	const T& Get() const {
-		return m_data;
+		return data;
 	}
 	bool HasData() const {
-		return m_hold;
+		return hold;
 	}
 private:
-	T		m_data;
-	bool	m_hold;
+	T		data;
+	bool	hold;
 };
 
 
@@ -70,12 +70,12 @@ struct Font {
 // 最新実装：ブラシ
 class Graphics {
 public:
-	Graphics(const Graphics& rhs) { Init(rhs.m_hdc); }
+	Graphics(const Graphics& rhs) { Init(rhs.hdc); }
 	Graphics(HDC hdc = NULL) { Init(hdc); }
 	~Graphics();
 	void Init(HDC hdc);
 
-	operator HDC() const { return m_hdc; }
+	operator HDC() const { return hdc; }
 
 	// クリッピング
 private:
@@ -99,8 +99,8 @@ public:
 		PushTextForeColor(color);
 	}
 	COLORREF GetCurrentTextForeColor() {
-		assert(!m_textForeColors.empty());
-		return m_textForeColors.back();
+		assert(!textForeColors.empty());
+		return textForeColors.back();
 	}
 
 	// テキスト背景色
@@ -113,14 +113,14 @@ public:
 		PushTextBackColor(color);
 	}
 	COLORREF GetTextBackColor() {
-		assert(!m_textBackColors.empty());
-		return m_textBackColors.back();
+		assert(!textBackColors.empty());
+		return textBackColors.back();
 	}
 
 	// テキストモード
 public:
 	void SetTextBackTransparent(bool b) {
-		m_nTextModeOrg.AssignOnce(::SetBkMode(m_hdc, b ? TRANSPARENT : OPAQUE));
+		nTextModeOrg.AssignOnce(::SetBkMode(hdc, b ? TRANSPARENT : OPAQUE));
 	}
 
 	// テキスト
@@ -142,8 +142,8 @@ public:
 		PushMyFont(font);
 	}
 	bool GetCurrentMyFontBold() {
-		assert(!m_fonts.empty());
-		return  m_fonts.back().fontAttr.bBoldFont;
+		assert(!fonts.empty());
+		return  fonts.back().fontAttr.bBoldFont;
 	}
 
 	// ペン
@@ -170,21 +170,21 @@ public:
 		ClearBrush();
 		PushBrushColor(color);
 	}
-	HBRUSH GetCurrentBrush() const { return m_brushes.size() ? m_brushes.back() : NULL; }
+	HBRUSH GetCurrentBrush() const { return brushes.size() ? brushes.back() : NULL; }
 
 	// 描画
 public:
 	// 直線
 	void DrawLine(int x1, int y1, int x2, int y2) {
-		::MoveToEx(m_hdc, x1, y1, NULL);
-		::LineTo(m_hdc, x2, y2);
+		::MoveToEx(hdc, x1, y1, NULL);
+		::LineTo(hdc, x2, y2);
 	}
 	void DrawDotLine(int x1, int y1, int x2, int y2);	// 点線
 	// 矩形塗り潰し
 	void FillMyRect(const RECT& rc) {
-		::FillRect(m_hdc, &rc, GetCurrentBrush());
+		::FillRect(hdc, &rc, GetCurrentBrush());
 #ifdef _DEBUG
-		::SetPixel(m_hdc, -1, -1, 0); //###########実験
+		::SetPixel(hdc, -1, -1, 0); //###########実験
 #endif
 	}
 	// 矩形塗り潰し
@@ -195,7 +195,7 @@ public:
 	}
 	// 矩形塗り潰し
 	void FillMyRectTextBackColor(const RECT& rc) {
-		::ExtTextOut(m_hdc, rc.left, rc.top, ETO_OPAQUE|ETO_CLIPPED, &rc, _T(""), 0, NULL);
+		::ExtTextOut(hdc, rc.left, rc.top, ETO_OPAQUE|ETO_CLIPPED, &rc, _T(""), 0, NULL);
 	}
 
 	static void DrawDropRect(LPCRECT lpRectNew, SIZE sizeNew, LPCRECT lpRectLast, SIZE sizeLast);	// ドロップ先の矩形を描画する
@@ -205,27 +205,27 @@ private:
 	typedef TOriginalHolder<COLORREF>	OrgColor;
 	typedef TOriginalHolder<int>		OrgInt;
 private:
-	HDC					m_hdc;
+	HDC					hdc;
 
 	// クリッピング
-	std::vector<HRGN>		m_clippingRgns;
+	std::vector<HRGN>		clippingRgns;
 
 	// テキスト
-	std::vector<COLORREF>	m_textForeColors;
-	std::vector<COLORREF>	m_textBackColors;
-	std::vector<Font>		m_fonts;
+	std::vector<COLORREF>	textForeColors;
+	std::vector<COLORREF>	textBackColors;
+	std::vector<Font>		fonts;
 
 	// テキスト
-	OrgInt				m_nTextModeOrg;
+	OrgInt				nTextModeOrg;
 
 	// ペン
-	HPEN				m_hpnOrg;
-	std::vector<HPEN>	m_pens;
+	HPEN				hpnOrg;
+	std::vector<HPEN>	pens;
 
 	// ブラシ
-	std::vector<HBRUSH>	m_brushes;
-	HBRUSH				m_hbrOrg;
-	HBRUSH				m_hbrCurrent;
-	bool				m_bDynamicBrush;	// m_hbrCurrentを動的に作成した場合はtrue
+	std::vector<HBRUSH>	brushes;
+	HBRUSH				hbrOrg;
+	HBRUSH				hbrCurrent;
+	bool				bDynamicBrush;	// m_hbrCurrentを動的に作成した場合はtrue
 };
 

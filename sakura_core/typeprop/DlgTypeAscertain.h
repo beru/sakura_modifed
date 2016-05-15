@@ -67,6 +67,6 @@ protected:
 	LPVOID GetHelpIdTable(void);
 
 private:
-	AscertainInfo* m_psi;			// インターフェイス
+	AscertainInfo* psi;			// インターフェイス
 };
 

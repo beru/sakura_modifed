@@ -76,9 +76,9 @@ public:
 	int  Count(void) const;	//	アイコン数
 	
 	// アイコンの幅
-	int  cx(void) const { return m_cx; }
+	int  GetCx(void) const { return cx; }
 	// アイコンの高さ
-	int  cy(void) const { return m_cy; }
+	int  GetCy(void) const { return cy; }
 	
 	// アイコンを追加する
 	int Add(const TCHAR* szPath);
@@ -98,21 +98,21 @@ public:
 	void  SetToolBarImages(HWND hToolBar, int id = 0) const {}
 
 protected:
-	int m_cx;			// width of icon
-	int m_cy;			// height of icon
+	int cx;			// width of icon
+	int cy;			// height of icon
 	/*!	@brief 透過色
 	
 		描画を自前で行うため，透過色を覚えておく必要がある．
 		@date 2003.07.21 genta
 	*/
-	COLORREF m_cTrans;
+	COLORREF cTrans;
 	
 	/*! アイコン用ビットマップを保持する
 		@date 2003.07.21 genta
 	*/
-	HBITMAP m_hIconBitmap;
+	HBITMAP hIconBitmap;
 
-	int m_nIconCount;	// アイコンの個数
+	int nIconCount;	// アイコンの個数
 
 	//	オリジナルテキストエディタからの描画関数
 	//	2003.08.27 Moca 背景を透過処理するので背景色の指定は不要に

@@ -112,7 +112,7 @@ void DocType::SetDocumentTypeIdx(int id, bool force)
 void DocType::SetDocumentIcon()
 {
 	// Grepモードの時はアイコンを変更しない
-	if (EditApp::getInstance().m_pGrepAgent->m_bGrepMode) {
+	if (EditApp::getInstance().pGrepAgent->bGrepMode) {
 		return;
 	}
 	

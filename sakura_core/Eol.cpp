@@ -140,19 +140,19 @@ EolType _GetEOLType_unibe(const char* pszData, int nDataLen)
 // 現在のEOL長を取得。文字単位。
 LogicInt Eol::GetLen() const
 {
-	return LogicInt(g_aEolTable[(int)m_eEolType].m_nLen);
+	return LogicInt(g_aEolTable[(int)eEolType].m_nLen);
 }
 
 // 現在のEOLの名称取得
 const TCHAR* Eol::GetName() const
 {
-	return g_aEolTable[(int)m_eEolType].m_szName;
+	return g_aEolTable[(int)eEolType].m_szName;
 }
 
 // 現在のEOL文字列先頭へのポインタを取得
 const wchar_t* Eol::GetValue2() const
 {
-	return g_aEolTable[(int)m_eEolType].m_szDataW;
+	return g_aEolTable[(int)eEolType].m_szDataW;
 }
 
 /*!
@@ -165,11 +165,11 @@ bool Eol::SetType(EolType t)
 {
 	if (t < EolType::None || EolType::CodeMax <= t) {
 		//	異常値
-		m_eEolType = EolType::CRLF;
+		eEolType = EolType::CRLF;
 		return false;
 	}
 	//	正しい値
-	m_eEolType = t;
+	eEolType = t;
 	return true;
 }
 

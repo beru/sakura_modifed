@@ -84,7 +84,7 @@ public:
 	// iBitmapに対応する定数
 	static const int TOOLBAR_ICON_MACRO_INTERNAL = 384;		// 外部マクロ既定アイコン
 	static const int TOOLBAR_ICON_PLUGCOMMAND_DEFAULT = 283;// プラグインコマンド既定アイコン
-	// m_tbMyButtonのindexに対応する定数
+	// tbMyButtonのindexに対応する定数
 	static const int TOOLBAR_BUTTON_F_SEPARATOR = 0;		// セパレータ（ダミー）
 	static const int TOOLBAR_BUTTON_F_TOOLBARWRAP = 384;	// ツールバー折返しアイコン（ダミー）
 
@@ -97,37 +97,37 @@ private:
 	int ToolbarNoToIndex(int nToolbarNo) const;
 
 private:
-	DllSharedData*	m_pShareData;
+	DllSharedData*	pShareData;
 
-	HINSTANCE		m_hInstance;
-	HWND			m_hWndOwner;
+	HINSTANCE		hInstance;
+	HWND			hWndOwner;
 
-//@@@ 2002.01.03 YAZAKI m_tbMyButtonなどをCShareDataからMenuDrawerへ移動したことによる修正。
+//@@@ 2002.01.03 YAZAKI tbMyButtonなどをCShareDataからMenuDrawerへ移動したことによる修正。
 // 2009.11.14 syat プラグインコマンド動的追加のためvector化
-	std::vector<TBBUTTON>	m_tbMyButton;	/* ツールバーのボタン */
-	int				m_nMyButtonNum;
-	int				m_nMyButtonFixSize;	// 固定部分の最大数
+	std::vector<TBBUTTON>	tbMyButton;	// ツールバーのボタン
+	int				nMyButtonNum;
+	int				nMyButtonFixSize;	// 固定部分の最大数
 	
 	// 2011.11.18 MenuItemのvector化
 	struct MyMenuItemInfo {
-		int				m_nBitmapIdx;
-		int				m_nFuncId;
-		NativeT			m_memLabel;
+		int				nBitmapIdx;
+		int				nFuncId;
+		NativeT			memLabel;
 	};
-	std::vector<MyMenuItemInfo> m_menuItems;
-	int				m_nMenuHeight;
-	int				m_nMenuFontHeight;
-	HFONT			m_hFontMenu;
-	HBITMAP			m_hCompBitmap;
-	HBITMAP			m_hCompBitmapOld;
-	HDC				m_hCompDC;
-	int				m_nCompBitmapHeight;
-	int				m_nCompBitmapWidth;
+	std::vector<MyMenuItemInfo> menuItems;
+	int				nMenuHeight;
+	int				nMenuFontHeight;
+	HFONT			hFontMenu;
+	HBITMAP			hCompBitmap;
+	HBITMAP			hCompBitmapOld;
+	HDC				hCompDC;
+	int				nCompBitmapHeight;
+	int				nCompBitmapWidth;
 
 public:
 	// 2010.01.30 syat アイコンイメージリストをprivate->public
 	//	Oct. 16, 2000 genta
-	ImageListMgr* m_pIcons;	//	Image List
+	ImageListMgr* pIcons;	//	Image List
 
 protected:
 	/*
@@ -135,7 +135,7 @@ protected:
 	*/
 	int GetData(void);	/* ダイアログデータの取得 */
 
-//@@@ 2002.01.03 YAZAKI m_tbMyButtonなどをCShareDataからMenuDrawerへ移動したことによる修正。
+//@@@ 2002.01.03 YAZAKI tbMyButtonなどをCShareDataからMenuDrawerへ移動したことによる修正。
 	void SetTBBUTTONVal(TBBUTTON*, int, int, BYTE, BYTE, DWORD_PTR, INT_PTR) const;	/* TBBUTTON構造体にデータをセット */
 };
 

@@ -240,7 +240,7 @@ BOOL DlgAbout::OnInitDialog(
 
 	// From Here Dec. 2, 2002 genta
 	// アイコンをカスタマイズアイコンに合わせる
-	HICON hIcon = GetAppIcon(m_hInstance, ICON_DEFAULT_APP, FN_APP_ICON, false);
+	HICON hIcon = GetAppIcon(hInstance, ICON_DEFAULT_APP, FN_APP_ICON, false);
 	HWND hIconWnd = GetItemHwnd(IDC_STATIC_MYICON);
 	
 	if (hIconWnd && hIcon) {
@@ -249,7 +249,7 @@ BOOL DlgAbout::OnInitDialog(
 	// To Here Dec. 2, 2002 genta
 
 	// URLウィンドウをサブクラス化する
-	m_UrlUrWnd.SetSubclassWindow(GetItemHwnd(IDC_STATIC_URL_UR));
+	UrlUrWnd.SetSubclassWindow(GetItemHwnd(IDC_STATIC_URL_UR));
 
 	// Oct. 22, 2005 genta 原作者ホームページが無くなったので削除
 	//m_UrlOrgWnd.SubclassWindow(GetItemHwnd(IDC_STATIC_URL_ORG));
@@ -313,20 +313,20 @@ BOOL UrlWnd::SetSubclassWindow(HWND hWnd)
 	if (lptr == 0 && GetLastError() != 0) {
 		return FALSE;
 	}
-	m_pOldProc = (WNDPROC)SetWindowLongPtr(hWnd, GWLP_WNDPROC, (LONG_PTR)UrlWndProc);
-	if (!m_pOldProc) {
+	pOldProc = (WNDPROC)SetWindowLongPtr(hWnd, GWLP_WNDPROC, (LONG_PTR)UrlWndProc);
+	if (!pOldProc) {
 		return FALSE;
 	}
-	m_hWnd = hWnd;
+	hWnd = hWnd;
 
 	// 下線付きフォントに変更する
 	LOGFONT lf;
 	HFONT hFont = (HFONT)SendMessage(hWnd, WM_GETFONT, (WPARAM)0, (LPARAM)0);
 	GetObject(hFont, sizeof(lf), &lf);
 	lf.lfUnderline = TRUE;
-	m_hFont = CreateFontIndirect(&lf);
-	if (m_hFont) {
-		SendMessage(hWnd, WM_SETFONT, (WPARAM)m_hFont, (LPARAM)FALSE);
+	hFont = CreateFontIndirect(&lf);
+	if (hFont) {
+		SendMessage(hWnd, WM_SETFONT, (WPARAM)hFont, (LPARAM)FALSE);
 	}
 	return TRUE;
 }
@@ -372,10 +372,10 @@ LRESULT CALLBACK UrlWnd::UrlWndProc(
 		pt.y = HIWORD(lParam);
 		GetClientRect(hWnd, &rc);
 		bHilighted = PtInRect(&rc, pt);
-		if (bHilighted != pUrlWnd->m_bHilighted) {
-			pUrlWnd->m_bHilighted = bHilighted;
+		if (bHilighted != pUrlWnd->bHilighted) {
+			pUrlWnd->bHilighted = bHilighted;
 			InvalidateRect(hWnd, NULL, TRUE);
-			if (pUrlWnd->m_bHilighted)
+			if (pUrlWnd->bHilighted)
 				SetTimer(hWnd, 1, 200, NULL);
 			else
 				KillTimer(hWnd, 1);
@@ -405,7 +405,7 @@ LRESULT CALLBACK UrlWnd::UrlWndProc(
 
 		// テキスト描画
 		SetBkMode(hdc, TRANSPARENT);
-		SetTextColor(hdc, pUrlWnd->m_bHilighted ? RGB(0x84, 0, 0): RGB(0, 0, 0xff));
+		SetTextColor(hdc, pUrlWnd->bHilighted ? RGB(0x84, 0, 0): RGB(0, 0, 0xff));
 		hFontOld = (HFONT)SelectObject(hdc, (HGDIOBJ)hFont);
 		TextOut(hdc, 2, 0, szText, _tcslen(szText));
 		SelectObject(hdc, (HGDIOBJ)hFontOld);
@@ -421,7 +421,7 @@ LRESULT CALLBACK UrlWnd::UrlWndProc(
 		GetClientRect(hWnd, &rc);
 
 		// 背景描画
-		if (pUrlWnd->m_bHilighted) {
+		if (pUrlWnd->bHilighted) {
 			// ハイライト時背景描画
 			SetBkColor(hdc, RGB(0xff, 0xff, 0));
 			::ExtTextOutW_AnyBuild(hdc, 0, 0, ETO_OPAQUE, &rc, NULL, 0, NULL);
@@ -436,17 +436,17 @@ LRESULT CALLBACK UrlWnd::UrlWndProc(
 	case WM_DESTROY:
 		// 後始末
 		KillTimer(hWnd, 1);
-		SetWindowLongPtr(hWnd, GWLP_WNDPROC, (LONG_PTR)pUrlWnd->m_pOldProc);
-		if (pUrlWnd->m_hFont)
-			DeleteObject(pUrlWnd->m_hFont);
-		pUrlWnd->m_hWnd = NULL;
-		pUrlWnd->m_hFont = NULL;
-		pUrlWnd->m_bHilighted = FALSE;
-		pUrlWnd->m_pOldProc = nullptr;
+		SetWindowLongPtr(hWnd, GWLP_WNDPROC, (LONG_PTR)pUrlWnd->pOldProc);
+		if (pUrlWnd->hFont)
+			DeleteObject(pUrlWnd->hFont);
+		pUrlWnd->hWnd = NULL;
+		pUrlWnd->hFont = NULL;
+		pUrlWnd->bHilighted = FALSE;
+		pUrlWnd->pOldProc = nullptr;
 		return (LRESULT)0;
 	}
 
-	return CallWindowProc(pUrlWnd->m_pOldProc, hWnd, msg, wParam, lParam);
+	return CallWindowProc(pUrlWnd->pOldProc, hWnd, msg, wParam, lParam);
 }
 //@@@ 2002.01.18 add end
 

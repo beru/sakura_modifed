@@ -15,8 +15,8 @@
 
 DlgCancel::DlgCancel()
 {
-	m_bCANCEL = false;	// IDCANCELボタンが押された
-	m_bAutoCleanup = false;
+	bCANCEL = false;	// IDCANCELボタンが押された
+	bAutoCleanup = false;
 }
 
 /** 標準以外のメッセージを捕捉する
@@ -32,13 +32,13 @@ INT_PTR DlgCancel::DispatchEvent(
 	INT_PTR result = Dialog::DispatchEvent(hWnd, wMsg, wParam, lParam);
 	switch (wMsg) {
 	case WM_CLOSE:
-		if (m_bAutoCleanup) {
+		if (bAutoCleanup) {
 			::DestroyWindow(GetHwnd());
 			return TRUE;
 		}
 		break;
 	case WM_NCDESTROY:
-		if (m_bAutoCleanup) {
+		if (bAutoCleanup) {
 			delete this;
 			return TRUE;
 		}
@@ -52,7 +52,7 @@ INT_PTR DlgCancel::DispatchEvent(
 */
 void DlgCancel::DeleteAsync(void)
 {
-	m_bAutoCleanup = true;
+	bAutoCleanup = true;
 	::PostMessage(GetHwnd(), WM_CLOSE, 0, 0);
 }
 
@@ -63,7 +63,7 @@ int DlgCancel::DoModal(
 	int nDlgTemplete
 	)
 {
-	m_bCANCEL = false;	// IDCANCELボタンが押された
+	bCANCEL = false;	// IDCANCELボタンが押された
 	return (int)Dialog::DoModal(hInstance, hwndParent, nDlgTemplete, (LPARAM)NULL);
 }
 
@@ -74,7 +74,7 @@ HWND DlgCancel::DoModeless(
 	int nDlgTemplete
 	)
 {
-	m_bCANCEL = false;	// IDCANCELボタンが押された
+	bCANCEL = false;	// IDCANCELボタンが押された
 	return Dialog::DoModeless(hInstance, hwndParent, nDlgTemplete, (LPARAM)NULL, SW_SHOW);
 }
 
@@ -103,7 +103,7 @@ BOOL DlgCancel::OnBnClicked(int wID)
 {
 	switch (wID) {
 	case IDCANCEL:
-		m_bCANCEL = true;	// IDCANCELボタンが押された
+		bCANCEL = true;	// IDCANCELボタンが押された
 //		CloseDialog(0);
 		return TRUE;
 	}

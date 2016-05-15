@@ -35,15 +35,15 @@ public:
 	*/
 	INT_PTR DispatchEvent(HWND, UINT, WPARAM, LPARAM);	// ダイアログのメッセージ処理
 
-	HINSTANCE	m_hInstance;	// アプリケーションインスタンスのハンドル
-	HWND		m_hwndParent;	// オーナーウィンドウのハンドル
-	HWND		m_hWnd;			// このダイアログのハンドル
+	HINSTANCE	hInstance;	// アプリケーションインスタンスのハンドル
+	HWND		hwndParent;	// オーナーウィンドウのハンドル
+	HWND		hWnd;			// このダイアログのハンドル
 
-	const TCHAR*	m_pszTitle;		// ダイアログタイトル
-	const TCHAR*	m_pszMessage;	// メッセージ
-	int			m_nMaxTextLen;		// 入力サイズ上限
+	const TCHAR*	pszTitle;		// ダイアログタイトル
+	const TCHAR*	pszMessage;	// メッセージ
+	int			nMaxTextLen;		// 入力サイズ上限
 //	char*		m_pszText;			// テキスト
-	NativeT	m_memText;			// テキスト
+	NativeT	memText;			// テキスト
 protected:
 	/*
 	||  実装ヘルパ関数

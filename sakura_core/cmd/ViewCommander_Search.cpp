@@ -53,7 +53,7 @@ void ViewCommander::Command_SEARCH_DIALOG(void)
 	auto& dlgFind = GetEditWindow().m_dlgFind;
 	// 検索文字列を初期化
 	if (0 < memCurText.GetStringLength()) {
-		dlgFind.m_strText = memCurText.GetStringPtr();
+		dlgFind.strText = memCurText.GetStringPtr();
 	}
 	// 検索ダイアログの表示
 	if (!dlgFind.GetHwnd()) {
@@ -492,11 +492,11 @@ void ViewCommander::Command_REPLACE_DIALOG(void)
 
 	// 検索文字列を初期化
 	if (0 < memCurText.GetStringLength()) {
-		dlgReplace.m_strText = memCurText.GetStringPtr();
+		dlgReplace.strText = memCurText.GetStringPtr();
 	}
 	if (0 < GetDllShareData().searchKeywords.replaceKeys.size()) {
 		if (dlgReplace.nReplaceKeySequence < GetDllShareData().common.search.nReplaceKeySequence) {
-			dlgReplace.m_strText2 = GetDllShareData().searchKeywords.replaceKeys[0];	// 2006.08.23 ryoji 前回の置換後文字列を引き継ぐ
+			dlgReplace.strText2 = GetDllShareData().searchKeywords.replaceKeys[0];	// 2006.08.23 ryoji 前回の置換後文字列を引き継ぐ
 		}
 	}
 	
@@ -506,8 +506,8 @@ void ViewCommander::Command_REPLACE_DIALOG(void)
 		bSelected = false;	// ファイル全体をチェックしてダイアログ表示
 	}
 	// 置換オプションの初期化
-	dlgReplace.m_nReplaceTarget = 0;	// 置換対象
-	dlgReplace.m_bPaste = false;		// 貼り付ける？
+	dlgReplace.nReplaceTarget = 0;	// 置換対象
+	dlgReplace.bPaste = false;		// 貼り付ける？
 // To Here 2001.12.03 hor
 
 	// 置換ダイアログの表示
@@ -537,8 +537,8 @@ void ViewCommander::Command_REPLACE(HWND hwndParent)
 	}
 	auto& dlgReplace = GetEditWindow().m_dlgReplace;
 	// 2002.02.10 hor
-	int nPaste			=	dlgReplace.m_bPaste;
-	int nReplaceTarget	=	dlgReplace.m_nReplaceTarget;
+	int nPaste			=	dlgReplace.bPaste;
+	int nReplaceTarget	=	dlgReplace.nReplaceTarget;
 
 	if (nPaste && nReplaceTarget == 3) {
 		// 置換対象：行削除のときは、クリップボードから貼り付けを無効にする
@@ -576,7 +576,7 @@ void ViewCommander::Command_REPLACE(HWND hwndParent)
 	m_view.GetSelectionInfo().DisableSelectArea(true);
 
 	// 2004.06.01 Moca 検索中に、他のプロセスによってreplaceKeysが書き換えられても大丈夫なように
-	const NativeW memRepKey(dlgReplace.m_strText2.c_str());
+	const NativeW memRepKey(dlgReplace.strText2.c_str());
 
 	// 次を検索
 	Command_SEARCH_NEXT(true, true, false, hwndParent, nullptr);
@@ -726,8 +726,8 @@ void ViewCommander::Command_REPLACE_ALL()
 
 	auto& dlgReplace = GetEditWindow().m_dlgReplace;
 	// 2002.02.10 hor
-	bool bPaste			= dlgReplace.m_bPaste;
-	BOOL nReplaceTarget	= dlgReplace.m_nReplaceTarget;
+	bool bPaste			= dlgReplace.bPaste;
+	BOOL nReplaceTarget	= dlgReplace.nReplaceTarget;
 	bool bRegularExp	= m_view.m_curSearchOption.bRegularExp;
 	bool bSelectedArea	= dlgReplace.bSelectedArea;
 	bool bConsecutiveAll = dlgReplace.bConsecutiveAll;	// 「すべて置換」は置換の繰返し	// 2007.01.16 ryoji
@@ -736,8 +736,8 @@ void ViewCommander::Command_REPLACE_ALL()
 		bPaste = false;
 	}
 
-	dlgReplace.m_bCanceled = false;
-	dlgReplace.m_nReplaceCnt = 0;
+	dlgReplace.bCanceled = false;
+	dlgReplace.nReplaceCnt = 0;
 
 	// From Here 2001.12.03 hor
 	if (bPaste && !GetDocument().m_docEditor.IsEnablePaste()) {
@@ -894,7 +894,7 @@ void ViewCommander::Command_REPLACE_ALL()
 		}
 	}else {
 		// 2004.05.14 Moca 全置換の途中で他のウィンドウで置換されるとまずいのでコピーする
-		memClip.SetString(dlgReplace.m_strText2.c_str());
+		memClip.SetString(dlgReplace.strText2.c_str());
 	}
 
 	LogicInt nReplaceKey;			// 置換後文字列の長さ。
@@ -921,7 +921,7 @@ void ViewCommander::Command_REPLACE_ALL()
 	// 取得にステップがかかりそうな変数などを、一時変数化する。
 	// とはいえ、これらの操作をすることによって得をするクロック数は合わせても 1 ループで数十だと思います。
 	// 数百クロック毎ループのオーダーから考えてもそんなに得はしないように思いますけど・・・。
-	bool& bCancel = dlgCancel.m_bCANCEL;
+	bool& bCancel = dlgCancel.bCANCEL;
 
 	// クラス関係をループの中で宣言してしまうと、毎ループごとにコンストラクタ、デストラクタが
 	// 呼ばれて遅くなるので、ここで宣言。
@@ -1431,8 +1431,8 @@ void ViewCommander::Command_REPLACE_ALL()
 	}
 	// To Here 2001.12.03 hor
 
-	dlgReplace.m_bCanceled = dlgCancel.IsCanceled();
-	dlgReplace.m_nReplaceCnt = nReplaceNum;
+	dlgReplace.bCanceled = dlgCancel.IsCanceled();
+	dlgReplace.nReplaceCnt = nReplaceNum;
 	m_view.SetDrawSwitch(bDrawSwitchOld);
 	ActivateFrameWindow(GetMainWindow());
 }

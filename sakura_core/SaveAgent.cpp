@@ -116,7 +116,7 @@ void SaveAgent::OnSave(const SaveInfo& saveInfo)
 
 	// ƒJƒLƒR
 	WriteManager writer;
-	EditApp::getInstance().m_pVisualProgress->ProgressListener::Listen(&writer);
+	EditApp::getInstance().pVisualProgress->ProgressListener::Listen(&writer);
 	writer.WriteFile_From_CDocLineMgr(
 		pDoc->m_docLineMgr,
 		saveInfo

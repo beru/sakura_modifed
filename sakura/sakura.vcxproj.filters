@@ -1054,9 +1054,6 @@
     <ClInclude Include="..\sakura_core\uiparts\WaitCursor.h">
       <Filter>Cpp Source Files\uiparts</Filter>
     </ClInclude>
-    <ClInclude Include="..\sakura_core\uiparts\Handursor.h">
-      <Filter>Cpp Source Files\uiparts</Filter>
-    </ClInclude>
     <ClInclude Include="..\sakura_core\plugin\SakuraPlugin.h">
       <Filter>Cpp Source Files\plugin</Filter>
     </ClInclude>

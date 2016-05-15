@@ -134,40 +134,40 @@ public:
 	static bool DirectoryUp(TCHAR*);
 
 public:
-	HWND GetHwnd() const { return m_hWnd; }
+	HWND GetHwnd() const { return hWnd; }
 	// 特殊インターフェース (使用は好ましくない)
-	void _SetHwnd(HWND hwnd) { m_hWnd = hwnd; }
-	bool IsButtonChecked(int id) { return DlgButton_IsChecked(m_hWnd, id); }
-	bool CheckButton(int id, bool bCheck) { return ::CheckDlgButton(m_hWnd, id, bCheck ? BST_CHECKED : BST_UNCHECKED) != 0; }
-	UINT GetItemText(int nIDDlgItem, TCHAR* str, int nMaxCount) { return ::GetDlgItemText(m_hWnd, nIDDlgItem, str, nMaxCount); }
-	BOOL SetItemText(int nIDDlgItem, const TCHAR* str) { return ::SetDlgItemText(m_hWnd, nIDDlgItem, str); }
-	UINT GetItemInt(int nIDDlgItem, BOOL *lpTranslated, BOOL bSigned) { return ::GetDlgItemInt(m_hWnd, nIDDlgItem, lpTranslated, bSigned); }
-	bool SetItemInt(int nIDDlgItem, UINT uValue, BOOL bSigned) { return ::SetDlgItemInt(m_hWnd, nIDDlgItem, uValue, bSigned) != 0; }
+	void _SetHwnd(HWND hwnd) { hWnd = hwnd; }
+	bool IsButtonChecked(int id) { return DlgButton_IsChecked(hWnd, id); }
+	bool CheckButton(int id, bool bCheck) { return ::CheckDlgButton(hWnd, id, bCheck ? BST_CHECKED : BST_UNCHECKED) != 0; }
+	UINT GetItemText(int nIDDlgItem, TCHAR* str, int nMaxCount) { return ::GetDlgItemText(hWnd, nIDDlgItem, str, nMaxCount); }
+	BOOL SetItemText(int nIDDlgItem, const TCHAR* str) { return ::SetDlgItemText(hWnd, nIDDlgItem, str); }
+	UINT GetItemInt(int nIDDlgItem, BOOL *lpTranslated, BOOL bSigned) { return ::GetDlgItemInt(hWnd, nIDDlgItem, lpTranslated, bSigned); }
+	bool SetItemInt(int nIDDlgItem, UINT uValue, BOOL bSigned) { return ::SetDlgItemInt(hWnd, nIDDlgItem, uValue, bSigned) != 0; }
 
-	HWND GetItemHwnd(int nID) { return ::GetDlgItem(m_hWnd, nID); }
+	HWND GetItemHwnd(int nID) { return ::GetDlgItem(hWnd, nID); }
 	bool EnableItem(int nID, bool bEnable) { return ::EnableWindow(GetItemHwnd(nID), bEnable ? TRUE : FALSE) != 0; }
 
-	bool GetWindowRect(LPRECT lpRect) { return ::GetWindowRect(m_hWnd, lpRect) != 0; }
+	bool GetWindowRect(LPRECT lpRect) { return ::GetWindowRect(hWnd, lpRect) != 0; }
 
 public:
-	HINSTANCE		m_hInstance;	// アプリケーションインスタンスのハンドル
-	HWND			m_hwndParent;	// オーナーウィンドウのハンドル
+	HINSTANCE		hInstance;	// アプリケーションインスタンスのハンドル
+	HWND			hwndParent;	// オーナーウィンドウのハンドル
 private:
-	HWND			m_hWnd;			// このダイアログのハンドル
+	HWND			hWnd;			// このダイアログのハンドル
 public:
-	HWND			m_hwndSizeBox;
-	LPARAM			m_lParam;
-	bool			m_bModal;		// モーダル ダイアログか
-	bool			m_bSizable;		// 可変ダイアログかどうか
-	int				m_nShowCmd;		// 最大化/最小化
-	int				m_nWidth;
-	int				m_nHeight;
-	int				m_xPos;
-	int				m_yPos;
+	HWND			hwndSizeBox;
+	LPARAM			lParam;
+	bool			bModal;		// モーダル ダイアログか
+	bool			bSizable;		// 可変ダイアログかどうか
+	int				nShowCmd;		// 最大化/最小化
+	int				nWidth;
+	int				nHeight;
+	int				xPos;
+	int				yPos;
 //	void*			m_pcEditView;
-	DllSharedData*	m_pShareData;
-	bool			m_bInited;
-	HINSTANCE		m_hLangRsrcInstance;		// メッセージリソースDLLのインスタンスハンドル	// 2011.04.10 nasukoji
+	DllSharedData*	pShareData;
+	bool			bInited;
+	HINSTANCE		hLangRsrcInstance;		// メッセージリソースDLLのインスタンスハンドル	// 2011.04.10 nasukoji
 
 protected:
 	void CreateSizeBox(void);

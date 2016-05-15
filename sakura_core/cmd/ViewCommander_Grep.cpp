@@ -31,14 +31,14 @@ void ViewCommander::Command_GREP_DIALOG(void)
 	NativeW memCurText;
 	auto& dlgGrep = GetEditWindow().m_dlgGrep;
 	// 2014.07.01 複数Grepウィンドウを使い分けている場合などに影響しないように、未設定のときだけHistoryを見る
-	bool bGetHistory = (dlgGrep.m_bSetText == false);
+	bool bGetHistory = (dlgGrep.bSetText == false);
 
 	// 現在カーソル位置単語または選択範囲より検索等のキーを取得
 	bool bSet = m_view.GetCurrentTextForSearchDlg(memCurText, bGetHistory);	// 2006.08.23 ryoji ダイアログ専用関数に変更
 
 	if (bSet) {
-		dlgGrep.m_strText = memCurText.GetStringPtr();
-		dlgGrep.m_bSetText = true;
+		dlgGrep.strText = memCurText.GetStringPtr();
+		dlgGrep.bSetText = true;
 	}
 
 	// Grepダイアログの表示
@@ -62,18 +62,18 @@ void ViewCommander::Command_GREP(void)
 	NativeW	mWork4;
 
 	auto& dlgGrep = GetEditWindow().m_dlgGrep;
-	mWork1.SetString(dlgGrep.m_strText.c_str());
-	mWork2.SetString(dlgGrep.m_szFile);
-	mWork3.SetString(dlgGrep.m_szFolder);
+	mWork1.SetString(dlgGrep.strText.c_str());
+	mWork2.SetString(dlgGrep.szFile);
+	mWork3.SetString(dlgGrep.szFolder);
 
-	auto& grepAgent = *EditApp::getInstance().m_pGrepAgent;
+	auto& grepAgent = *EditApp::getInstance().pGrepAgent;
 	auto& doc = GetDocument();
 	/*	今のEditViewにGrep結果を表示する。
 		Grepモードのとき、または未編集で無題かつアウトプットでない場合。
 		自ウィンドウがGrep実行中も、(異常終了するので)別ウィンドウにする
 	*/
 	if (
-		(grepAgent.m_bGrepMode && !grepAgent.m_bGrepRunning)
+		(grepAgent.bGrepMode && !grepAgent.bGrepRunning)
 		|| (
 			!doc.m_docEditor.IsModified()
 			&& !doc.m_docFile.GetFilePathClass().IsValidPath()		// 現在編集中のファイルのパス
@@ -98,7 +98,7 @@ void ViewCommander::Command_GREP(void)
 			&mWork2,
 			&mWork3,
 			false,
-			dlgGrep.m_bSubFolder,
+			dlgGrep.bSubFolder,
 			false,
 			true, // Header
 			dlgGrep.searchOption,
@@ -142,17 +142,17 @@ void ViewCommander::Command_GREP_REPLACE_DLG( void )
 	DlgGrepReplace& dlgGrepRep = GetEditWindow().m_dlgGrepReplace;
 
 	// 複数Grepウィンドウを使い分けている場合などに影響しないように、未設定のときだけHistoryを見る
-	bool bGetHistory = dlgGrepRep.m_bSetText == false;
+	bool bGetHistory = dlgGrepRep.bSetText == false;
 
 	m_view.GetCurrentTextForSearchDlg( memCurText, bGetHistory );
 
 	if (0 < memCurText.GetStringLength()) {
-		dlgGrepRep.m_strText = memCurText.GetStringPtr();
-		dlgGrepRep.m_bSetText = true;
+		dlgGrepRep.strText = memCurText.GetStringPtr();
+		dlgGrepRep.bSetText = true;
 	}
 	if (0 < GetDllShareData().searchKeywords.replaceKeys.size()) {
 		if (dlgGrepRep.nReplaceKeySequence < GetDllShareData().common.search.nReplaceKeySequence) {
-			dlgGrepRep.m_strText2 = GetDllShareData().searchKeywords.replaceKeys[0];
+			dlgGrepRep.strText2 = GetDllShareData().searchKeywords.replaceKeys[0];
 		}
 	}
 
@@ -173,18 +173,18 @@ void ViewCommander::Command_GREP_REPLACE(void)
 	NativeW cmWork4;
 
 	DlgGrepReplace& dlgGrepRep = GetEditWindow().m_dlgGrepReplace;
-	cmWork1.SetString( dlgGrepRep.m_strText.c_str() );
-	cmWork2.SetString( dlgGrepRep.m_szFile );
-	cmWork3.SetString( dlgGrepRep.m_szFolder );
-	cmWork4.SetString( dlgGrepRep.m_strText2.c_str() );
+	cmWork1.SetString( dlgGrepRep.strText.c_str() );
+	cmWork2.SetString( dlgGrepRep.szFile );
+	cmWork3.SetString( dlgGrepRep.szFolder );
+	cmWork4.SetString( dlgGrepRep.strText2.c_str() );
 
 	/*	今のEditViewにGrep結果を表示する。
 		Grepモードのとき、または未編集で無題かつアウトプットでない場合。
 		自ウィンドウがGrep実行中も、(異常終了するので)別ウィンドウにする
 	*/
-	auto& grepAgent = *EditApp::getInstance().m_pGrepAgent;
-	if ((grepAgent.m_bGrepMode &&
-		  !grepAgent.m_bGrepRunning ) ||
+	auto& grepAgent = *EditApp::getInstance().pGrepAgent;
+	if ((grepAgent.bGrepMode &&
+		  !grepAgent.bGrepRunning ) ||
 		( !GetDocument().m_docEditor.IsModified() &&
 		  !GetDocument().m_docFile.GetFilePathClass().IsValidPath() &&		// 現在編集中のファイルのパス
 		  !AppMode::getInstance().IsDebugMode()
@@ -198,7 +198,7 @@ void ViewCommander::Command_GREP_REPLACE(void)
 			&cmWork2,
 			&cmWork3,
 			false,
-			dlgGrepRep.m_bSubFolder,
+			dlgGrepRep.bSubFolder,
 			false, // Stdout
 			true, // Header
 			dlgGrepRep.searchOption,
@@ -208,8 +208,8 @@ void ViewCommander::Command_GREP_REPLACE(void)
 			dlgGrepRep.bGrepOutputFileOnly,
 			dlgGrepRep.bGrepOutputBaseFolder,
 			dlgGrepRep.bGrepSeparateFolder,
-			dlgGrepRep.m_bPaste,
-			dlgGrepRep.m_bBackup
+			dlgGrepRep.bPaste,
+			dlgGrepRep.bBackup
 		);
 	}else {
 		// 編集ウィンドウの上限チェック
@@ -242,20 +242,20 @@ void ViewCommander::Command_GREP_REPLACE(void)
 		//GOPTオプション
 		TCHAR	pOpt[64];
 		pOpt[0] = _T('\0');
-		if (dlgGrepRep.m_bSubFolder				) _tcscat( pOpt, _T("S") );	// サブフォルダからも検索する
+		if (dlgGrepRep.bSubFolder				) _tcscat( pOpt, _T("S") );	// サブフォルダからも検索する
 		if (dlgGrepRep.searchOption.bWordOnly	) _tcscat( pOpt, _T("W") );	// 単語単位で探す
 		if (dlgGrepRep.searchOption.bLoHiCase	) _tcscat( pOpt, _T("L") );	// 英大文字と英小文字を区別する
 		if (dlgGrepRep.searchOption.bRegularExp	) _tcscat( pOpt, _T("R") );	// 正規表現
 		if (dlgGrepRep.nGrepOutputLineType == 1	) _tcscat( pOpt, _T("P") );	// 行を出力する
 		// if (dlgGrepRep.nGrepOutputLineType == 2) _tcscat( pOpt, _T("N") );	// 否ヒット行を出力する 2014.09.23
-		if (dlgGrepRep.nGrepOutputStyle == 1		) _tcscat( pOpt, _T("1") );	// Grep: 出力形式
-		if (dlgGrepRep.nGrepOutputStyle == 2		) _tcscat( pOpt, _T("2") );	// Grep: 出力形式
-		if (dlgGrepRep.nGrepOutputStyle == 3		) _tcscat( pOpt, _T("3") );
+		if (dlgGrepRep.nGrepOutputStyle == 1	) _tcscat( pOpt, _T("1") );	// Grep: 出力形式
+		if (dlgGrepRep.nGrepOutputStyle == 2	) _tcscat( pOpt, _T("2") );	// Grep: 出力形式
+		if (dlgGrepRep.nGrepOutputStyle == 3	) _tcscat( pOpt, _T("3") );
 		if (dlgGrepRep.bGrepOutputFileOnly		) _tcscat( pOpt, _T("F") );
-		if (dlgGrepRep.bGrepOutputBaseFolder		) _tcscat( pOpt, _T("B") );
+		if (dlgGrepRep.bGrepOutputBaseFolder	) _tcscat( pOpt, _T("B") );
 		if (dlgGrepRep.bGrepSeparateFolder		) _tcscat( pOpt, _T("D") );
-		if (dlgGrepRep.m_bPaste					) _tcscat( pOpt, _T("C") );	// クリップボードから貼り付け
-		if (dlgGrepRep.m_bBackup					) _tcscat( pOpt, _T("O") );	// バックアップ作成
+		if (dlgGrepRep.bPaste					) _tcscat( pOpt, _T("C") );	// クリップボードから貼り付け
+		if (dlgGrepRep.bBackup				) _tcscat( pOpt, _T("O") );	// バックアップ作成
 		if (0 < _tcslen( pOpt )) {
 			cmdLine.AppendStringLiteral( _T(" -GOPT=") );
 			cmdLine.AppendString( pOpt );

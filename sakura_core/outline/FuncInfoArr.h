@@ -43,20 +43,20 @@ public:
 	void AppendData(LogicInt, LayoutInt, const NOT_TCHAR*, int, int nDepth = 0);	// 配列の最後にデータを追加する 2002.04.01 YAZAKI 深さ導入
 	void AppendData(LogicInt nLogicLine, LogicInt nLogicCol, LayoutInt nLayoutLine, LayoutInt nLayoutCol, const TCHAR*, const TCHAR*, int, int nDepth = 0);	/* 配列の最後にデータを追加する 2010.03.01 syat 桁導入*/
 	void AppendData(LogicInt nLogicLine, LogicInt nLogicCol, LayoutInt nLayoutLine, LayoutInt nLayoutCol, const NOT_TCHAR*, const NOT_TCHAR*, int, int nDepth = 0);	/* 配列の最後にデータを追加する 2010.03.01 syat 桁導入*/
-	int	GetNum(void) {	return m_nFuncInfoArrNum; }	// 配列要素数を返す
+	int	GetNum(void) {	return nFuncInfoArrNum; }	// 配列要素数を返す
 	void Empty(void);
 	void DUMP(void);
 	void SetAppendText(int info, const std::wstring& s, bool overwrite);
 	std::wstring GetAppendText(int info);
-	int AppendTextLenMax() { return m_nAppendTextLenMax; }
+	int AppendTextLenMax() { return nAppendTextLenMax; }
 
 public:
-	SFilePath	m_szFilePath;	// 解析対象ファイル名
+	SFilePath	szFilePath;	// 解析対象ファイル名
 private:
-	int			m_nFuncInfoArrNum;	// 配列要素数
-	FuncInfo**	m_ppcFuncInfoArr;	// 配列
-	std::map<int, std::wstring>	m_AppendTextArr;	// 追加文字列のリスト
-	int			m_nAppendTextLenMax;
+	int			nFuncInfoArrNum;	// 配列要素数
+	FuncInfo**	ppcFuncInfoArr;	// 配列
+	std::map<int, std::wstring>	appendTextArr;	// 追加文字列のリスト
+	int			nAppendTextLenMax;
 
 private:
 	DISALLOW_COPY_AND_ASSIGN(FuncInfoArr);

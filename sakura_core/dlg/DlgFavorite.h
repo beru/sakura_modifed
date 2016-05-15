@@ -80,15 +80,15 @@ protected:
 	void	RightMenu(POINT&);
 
 private:
-	RecentFile			m_recentFile;
-	RecentFolder		m_recentFolder;
-	RecentExceptMRU		m_recentExceptMRU;
-	RecentSearch		m_recentSearch;
-	RecentReplace		m_recentReplace;
-	RecentGrepFile		m_recentGrepFile;
-	RecentGrepFolder	m_recentGrepFolder;
-	RecentCmd			m_recentCmd;
-	RecentCurDir		m_recentCurDir;
+	RecentFile			recentFile;
+	RecentFolder		recentFolder;
+	RecentExceptMRU		recentExceptMRU;
+	RecentSearch		recentSearch;
+	RecentReplace		recentReplace;
+	RecentGrepFile		recentGrepFile;
+	RecentGrepFolder	recentGrepFolder;
+	RecentCmd			recentCmd;
+	RecentCurDir		recentCurDir;
 
 	enum {
 		// 管理数
@@ -96,26 +96,26 @@ private:
 	};
 
 	struct FavoriteInfo {
-		Recent*	m_pRecent;			// オブジェクトへのポインタ
-		std::tstring	m_strCaption;	// キャプション
-		const TCHAR*	m_pszCaption;	// キャプション
-		int			m_nId;				// コントロールのID
-		bool		m_bHaveFavorite;	// お気に入りを持っているか？
-		bool		m_bHaveView;		// 表示数変更機能をもっているか？
-		bool		m_bFilePath;		// ファイル/フォルダか？
-		bool		m_bEditable;		// 編集可能
-		bool		m_bAddExcept;		// 除外へ追加
-		int			m_nViewCount;		// カレントの表示数
+		Recent*	pRecent;			// オブジェクトへのポインタ
+		std::tstring	strCaption;	// キャプション
+		const TCHAR*	pszCaption;	// キャプション
+		int			nId;				// コントロールのID
+		bool		bHaveFavorite;	// お気に入りを持っているか？
+		bool		bHaveView;		// 表示数変更機能をもっているか？
+		bool		bFilePath;		// ファイル/フォルダか？
+		bool		bEditable;		// 編集可能
+		bool		bAddExcept;		// 除外へ追加
+		int			nViewCount;		// カレントの表示数
 		FavoriteInfo():
-			m_pRecent(nullptr)
-			,m_pszCaption(NULL)
-			,m_nId(0)
-			,m_bHaveFavorite(false)
-			,m_bHaveView(false)
-			,m_bFilePath(false)
-			,m_bEditable(false)
-			,m_bAddExcept(false)
-			,m_nViewCount(0)
+			pRecent(nullptr)
+			,pszCaption(NULL)
+			,nId(0)
+			,bHaveFavorite(false)
+			,bHaveView(false)
+			,bFilePath(false)
+			,bEditable(false)
+			,bAddExcept(false)
+			,nViewCount(0)
 		{};
 	};
 
@@ -125,15 +125,15 @@ private:
 		bool	bSortAscending; // ソートが昇順
 	};
 
-	FavoriteInfo        m_aFavoriteInfo[FAVORITE_INFO_MAX];
-	ListViewSortInfo    m_aListViewInfo[FAVORITE_INFO_MAX];
-	POINT				m_ptDefaultSize;
-	RECT				m_rcListDefault;
-	RECT				m_rcItems[10];
+	FavoriteInfo        aFavoriteInfo[FAVORITE_INFO_MAX];
+	ListViewSortInfo    aListViewInfo[FAVORITE_INFO_MAX];
+	POINT				ptDefaultSize;
+	RECT				rcListDefault;
+	RECT				rcItems[10];
 
-	int		m_nCurrentTab;
-	int		m_nExceptTab;
-	TCHAR	m_szMsg[1024];
+	int		nCurrentTab;
+	int		nExceptTab;
+	TCHAR	szMsg[1024];
 
 	static void  ListViewSort(ListViewSortInfo&, const Recent* , int, bool);
 };

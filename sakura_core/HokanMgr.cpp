@@ -63,7 +63,7 @@ LRESULT APIENTRY HokanList_SubclassProc(
 		// 補完実行キーなら補完する
 		if (pHokanMgr->KeyProc(wParam, lParam) != -1) {
 			// キーストロークを親に転送
-			return ::PostMessage(::GetParent(::GetParent(pDialog->m_hwndParent)), uMsg, wParam, lParam);
+			return ::PostMessage(::GetParent(::GetParent(pDialog->hwndParent)), uMsg, wParam, lParam);
 		}
 		break;
 	case WM_GETDLGCODE:
@@ -111,7 +111,7 @@ HWND HokanMgr::DoModeless(
 // モードレス時：対象となるビューの変更
 void HokanMgr::ChangeView(LPARAM pcEditView)
 {
-	m_lParam = pcEditView;
+	lParam = pcEditView;
 	return;
 }
 
@@ -120,7 +120,7 @@ void HokanMgr::Hide(void)
 	::ShowWindow(GetHwnd(), SW_HIDE);
 	m_nCurKouhoIdx = -1;
 	// 入力フォーカスを受け取ったときの処理
-	EditView* pEditView = reinterpret_cast<EditView*>(m_lParam);
+	EditView* pEditView = reinterpret_cast<EditView*>(lParam);
 	pEditView->OnSetFocus();
 }
 
@@ -143,10 +143,10 @@ int HokanMgr::Search(
 	NativeW*		pMemHokanWord	// 2001/06/19 asa-o
 	)
 {
-	EditView* pEditView = reinterpret_cast<EditView*>(m_lParam);
+	EditView* pEditView = reinterpret_cast<EditView*>(lParam);
 
 	// 共有データ構造体のアドレスを返す
-	m_pShareData = &GetDllShareData();
+	pShareData = &GetDllShareData();
 
 	/*
 	||  補完キーワードの検索
@@ -259,22 +259,22 @@ int HokanMgr::Search(
 
 	int nX = m_point.x - m_nColumnWidth;
 	int nY = m_point.y + m_nWinHeight + 4;
-	int nCX = m_nWidth;
-	int nCY = m_nHeight;
+	int nCX = nWidth;
+	int nCY = nHeight;
 
 	// 下に入るなら
 	if (nY + nCY < rcDesktop.bottom) {
 		// 何もしない
 	}else
 	// 上に入るなら
-	if (rcDesktop.top < m_point.y - m_nHeight - 4) {
+	if (rcDesktop.top < m_point.y - nHeight - 4) {
 		// 上に出す
-		nY = m_point.y - m_nHeight - 4;
+		nY = m_point.y - nHeight - 4;
 	}else
 	// 上に出すか下に出すか(広いほうに出す)
 	if (rcDesktop.bottom - nY > m_point.y) {
 		// 下に出す
-//		m_nHeight = rcDesktop.bottom - nY;
+//		nHeight = rcDesktop.bottom - nY;
 		nCY = rcDesktop.bottom - nY;
 	}else {
 		// 上に出す
@@ -302,8 +302,8 @@ int HokanMgr::Search(
 //	2001/06/18 Start by asa-o: 補正後の位置・サイズを保存
 	m_point.x = nX;
 	m_point.y = nY;
-	m_nHeight = nCY;
-	m_nWidth = nCX;
+	nHeight = nCY;
+	nWidth = nCX;
 //	2001/06/18 End
 
 	// はみ出すなら小さくする
@@ -340,9 +340,9 @@ void HokanMgr::HokanSearchByKeyword(
 	bool 			bHokanLoHiCase,
 	vector_ex<std::wstring>& 	vKouho
 ) {
-	const EditView* pEditView = reinterpret_cast<const EditView*>(m_lParam);
+	const EditView* pEditView = reinterpret_cast<const EditView*>(lParam);
 	const TypeConfig& type = pEditView->GetDocument().m_docType.GetDocumentAttribute();
-	KeywordSetMgr& keywordMgr = m_pShareData->common.specialKeyword.keywordSetMgr;
+	KeywordSetMgr& keywordMgr = pShareData->common.specialKeyword.keywordSetMgr;
 	const int nKeyLen = wcslen(pszCurWord);
 	for (int n=0; n<MAX_KEYWORDSET_PER_TYPE; ++n) {
 		int kwdset = type.nKeywordSetIdx[n];
@@ -503,7 +503,7 @@ BOOL HokanMgr::DoHokan(int nVKey)
 	DEBUG_TRACE(_T("HokanMgr::DoHokan(nVKey==%xh)\n"), nVKey);
 
 	// 補完候補決定キー
-	auto& csHelper = m_pShareData->common.helper;
+	auto& csHelper = pShareData->common.helper;
 	if (nVKey == VK_RETURN	&& !csHelper.bHokanKey_RETURN)	return FALSE; // VK_RETURN 補完決定キーが有効/無効
 	if (nVKey == VK_TAB		&& !csHelper.bHokanKey_TAB)		return FALSE; // VK_TAB    補完決定キーが有効/無効
 	if (nVKey == VK_RIGHT	&& !csHelper.bHokanKey_RIGHT)	return FALSE; // VK_RIGHT  補完決定キーが有効/無効
@@ -518,7 +518,7 @@ BOOL HokanMgr::DoHokan(int nVKey)
 	List_GetText( hwndList, nItem, &wszLabel[0] );
 
  	// テキストを貼り付け
-	EditView* pEditView = reinterpret_cast<EditView*>(m_lParam);
+	EditView* pEditView = reinterpret_cast<EditView*>(lParam);
 	//	Apr. 28, 2000 genta
 	pEditView->GetCommander().HandleCommand(F_WordDeleteToStart, false, 0, 0, 0, 0);
 	pEditView->GetCommander().HandleCommand( F_INSTEXT_W, true, (LPARAM)&wszLabel[0], wcslen(&wszLabel[0]), TRUE, 0 );
@@ -527,7 +527,7 @@ BOOL HokanMgr::DoHokan(int nVKey)
 //	pEditView->GetCommander().HandleCommand(F_INSTEXT_W, true, (LPARAM)(wszLabel + m_memCurWord.GetLength()), TRUE, 0, 0);
 	Hide();
 
-	m_pShareData->common.helper.bUseHokan = false;	//	補完したら
+	pShareData->common.helper.bUseHokan = false;	//	補完したら
 	return TRUE;
 }
 
@@ -602,7 +602,7 @@ int HokanMgr::KeyProc(WPARAM wParam, LPARAM lParam)
 		}
 	case VK_ESCAPE:
 	case VK_LEFT:
-		m_pShareData->common.helper.bUseHokan = false;
+		pShareData->common.helper.bUseHokan = false;
 		return -2;
 	}
 	return -2;
@@ -621,7 +621,7 @@ void HokanMgr::ShowTip()
 	auto szLabel = std::make_unique<WCHAR[]>(nLabelLen + 1);
 	List_GetText( hwndCtrl, nItem, &szLabel[0] );	// 選択中の単語を取得
 
-	EditView* pEditView = reinterpret_cast<EditView*>(m_lParam);
+	EditView* pEditView = reinterpret_cast<EditView*>(lParam);
 	// すでに辞書Tipが表示されていたら
 	if (pEditView->m_dwTipTimer == 0) {
 		// 辞書Tipを消す
@@ -633,12 +633,12 @@ void HokanMgr::ShowTip()
 	int nTopItem = List_GetTopIndex(hwndCtrl);
 	int nItemHeight = List_GetItemHeight(hwndCtrl, 0);
 	POINT point;
-	point.x = m_point.x + m_nWidth;
+	point.x = m_point.x + nWidth;
 	point.y = m_point.y + 4 + (nItem - nTopItem) * nItemHeight;
 	// 2001/06/19 asa-o 選択中の単語が補完ウィンドウに表示されているなら辞書Tipを表示
-	if (point.y > m_point.y && point.y < m_point.y + m_nHeight) {
+	if (point.y > m_point.y && point.y < m_point.y + nHeight) {
 		RECT rcHokanWin;
-		::SetRect(&rcHokanWin , m_point.x, m_point.y, m_point.x + m_nWidth, m_point.y + m_nHeight);
+		::SetRect(&rcHokanWin , m_point.x, m_point.y, m_point.x + nWidth, m_point.y + nHeight);
 		if (!pEditView -> ShowKeywordHelp( point, &szLabel[0], &rcHokanWin )) {
 			pEditView -> m_dwTipTimer = ::GetTickCount();	// 表示するべきキーワードヘルプが無い
 		}

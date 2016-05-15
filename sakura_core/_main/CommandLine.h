@@ -77,45 +77,45 @@ class CommandLine : public TSingleton<CommandLine> {
 
 // member accessor method
 public:
-	bool IsNoWindow() const {return m_bNoWindow;}
-	bool IsWriteQuit() const {return m_bWriteQuit;}	// 2007.05.19 ryoji sakuext用に追加
-	bool IsGrepMode() const {return m_bGrepMode;}
-	bool IsGrepDlg() const {return m_bGrepDlg;}
-	bool IsDebugMode() const {return m_bDebugMode;}
-	bool IsViewMode() const {return m_bViewMode;}
-	const EditInfo& GetEditInfo() const { return m_fi; }
-	const GrepInfo& GetGrepInfo() const { return m_gi; }
-	int GetGroupId() const {return m_nGroup;}	// 2007.06.26 ryoji
-	LPCWSTR GetMacro() const { return m_mMacro.GetStringPtr(); }
-	LPCWSTR GetMacroType() const { return m_mMacroType.GetStringPtr(); }
-	LPCWSTR GetProfileName() const{ return m_mProfile.GetStringPtr(); }
-	bool IsSetProfile() const{ return m_bSetProfile; }
+	bool IsNoWindow() const {return bNoWindow;}
+	bool IsWriteQuit() const {return bWriteQuit;}	// 2007.05.19 ryoji sakuext用に追加
+	bool IsGrepMode() const {return bGrepMode;}
+	bool IsGrepDlg() const {return bGrepDlg;}
+	bool IsDebugMode() const {return bDebugMode;}
+	bool IsViewMode() const {return bViewMode;}
+	const EditInfo& GetEditInfo() const { return fi; }
+	const GrepInfo& GetGrepInfo() const { return gi; }
+	int GetGroupId() const {return nGroup;}	// 2007.06.26 ryoji
+	LPCWSTR GetMacro() const { return mMacro.GetStringPtr(); }
+	LPCWSTR GetMacroType() const { return mMacroType.GetStringPtr(); }
+	LPCWSTR GetProfileName() const{ return mProfile.GetStringPtr(); }
+	bool IsSetProfile() const{ return bSetProfile; }
 	void SetProfileName(LPCWSTR s){
-		m_bSetProfile = true;
-		m_mProfile.SetString(s);
+		bSetProfile = true;
+		mProfile.SetString(s);
 	}
-	bool IsProfileMgr() { return m_bProfileMgr; }
-	int GetFileNum(void) { return m_fileNames.size(); }
-	const TCHAR* GetFileName(int i) { return i < GetFileNum() ? m_fileNames[i].c_str() : NULL; }
-	void ClearFile(void) { m_fileNames.clear(); }
+	bool IsProfileMgr() { return bProfileMgr; }
+	int GetFileNum(void) { return fileNames.size(); }
+	const TCHAR* GetFileName(int i) { return i < GetFileNum() ? fileNames[i].c_str() : NULL; }
+	void ClearFile(void) { fileNames.clear(); }
 	void ParseCommandLine(LPCTSTR pszCmdLineSrc, bool bResponse = true);
 
 // member valiables
 private:
-	bool		m_bGrepMode;		// [out] true: Grep Mode
-	bool		m_bGrepDlg;			// Grepダイアログ
-	bool		m_bDebugMode;		
-	bool		m_bNoWindow;		// [out] true: 編集Windowを開かない
-	bool		m_bWriteQuit;		// [out] true: 設定を保存して終了	// 2007.05.19 ryoji sakuext用に追加
-	bool		m_bProfileMgr;
-	bool		m_bSetProfile;
-	EditInfo	m_fi;				//
-	GrepInfo	m_gi;				//
-	bool		m_bViewMode;		// [out] true: Read Only
-	int			m_nGroup;			// グループID	// 2007.06.26 ryoji
-	NativeW	m_mMacro;				// [out] マクロファイル名／マクロ文
-	NativeW	m_mMacroType;			// [out] マクロ種別
-	NativeW	m_mProfile;				// プロファイル名
-	std::vector<std::tstring> m_fileNames;	// ファイル名(複数)
+	bool		bGrepMode;		// [out] true: Grep Mode
+	bool		bGrepDlg;		// Grepダイアログ
+	bool		bDebugMode;		
+	bool		bNoWindow;		// [out] true: 編集Windowを開かない
+	bool		bWriteQuit;		// [out] true: 設定を保存して終了	// 2007.05.19 ryoji sakuext用に追加
+	bool		bProfileMgr;
+	bool		bSetProfile;
+	EditInfo	fi;				//
+	GrepInfo	gi;				//
+	bool		bViewMode;		// [out] true: Read Only
+	int			nGroup;			// グループID	// 2007.06.26 ryoji
+	NativeW	mMacro;				// [out] マクロファイル名／マクロ文
+	NativeW	mMacroType;			// [out] マクロ種別
+	NativeW	mProfile;			// プロファイル名
+	std::vector<std::tstring> fileNames;	// ファイル名(複数)
 };
 

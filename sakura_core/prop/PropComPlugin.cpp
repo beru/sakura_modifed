@@ -596,12 +596,12 @@ static void LoadPluginTemp(CommonSetting& common, MenuDrawer& menuDrawer)
 		PluginManager::getInstance().LoadAllPlugin(&common);
 		// ツールバーアイコンの更新
 		const Plug::Array& plugs = JackManager::getInstance().GetPlugs(PP_COMMAND);
-		menuDrawer.m_pIcons->ResetExtend();
+		menuDrawer.pIcons->ResetExtend();
 		for (auto it=plugs.begin(); it!=plugs.end(); ++it) {
 			int iBitmap = MenuDrawer::TOOLBAR_ICON_PLUGCOMMAND_DEFAULT - 1;
 			const Plug* plug = *it;
 			if (!plug->m_sIcon.empty()) {
-				iBitmap = menuDrawer.m_pIcons->Add(
+				iBitmap = menuDrawer.pIcons->Add(
 					to_tchar(plug->plugin.GetFilePath(to_tchar(plug->m_sIcon.c_str())).c_str()));
 			}
 			menuDrawer.AddToolButton(iBitmap, plug->GetFunctionCode());

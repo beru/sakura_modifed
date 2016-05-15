@@ -49,12 +49,12 @@ public:
 	int DoModal(HINSTANCE, HWND, int*, PrintSetting*, int);	// モーダルダイアログの表示
 
 private:
-	int				m_nCurrentPrintSetting;
-	PrintSetting	m_printSettingArr[MAX_PrintSettingARR];
-	int				m_nLineNumberColumns;					// 行番号表示する場合の桁数
-	bool			m_bPrintableLinesAndColumnInvalid;
-	HFONT			m_hFontDlg;								// ダイアログのフォントハンドル
-	int				m_nFontHeight;							// ダイアログのフォントのサイズ
+	int				nCurrentPrintSetting;
+	PrintSetting	printSettingArr[MAX_PrintSettingARR];
+	int				nLineNumberColumns;					// 行番号表示する場合の桁数
+	bool			bPrintableLinesAndColumnInvalid;
+	HFONT			hFontDlg;								// ダイアログのフォントハンドル
+	int				nFontHeight;							// ダイアログのフォントのサイズ
 
 protected:
 	/*

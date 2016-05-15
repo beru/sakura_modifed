@@ -74,7 +74,7 @@ private:
 	HFONT		m_hFontSearchBox;	// 検索コンボボックスのフォント
 
 	ComboBoxItemDeleter	m_comboDel;
-	RecentSearch		m_recentSearch;
+	RecentSearch		recentSearch;
 	ImageListMgr*		m_pIcons;
 };
 

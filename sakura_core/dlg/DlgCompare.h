@@ -31,9 +31,9 @@ public:
 	*/
 	int DoModal(HINSTANCE, HWND, LPARAM, const TCHAR*, TCHAR*, HWND*);	// モーダルダイアログの表示
 	
-	const TCHAR*	m_pszPath;
-	TCHAR*			m_pszCompareLabel;
-	HWND*			m_phwndCompareWnd;
+	const TCHAR*	pszPath;
+	TCHAR*			pszCompareLabel;
+	HWND*			phwndCompareWnd;
 	bool			bCompareAndTileHorz;	// 左右に並べて表示
 	
 protected:
@@ -53,8 +53,8 @@ protected:
 	int GetData(void);	// ダイアログデータの取得
 	
 private:
-	POINT			m_ptDefaultSize;
-	RECT			m_rcItems[6];
+	POINT	ptDefaultSize;
+	RECT	rcItems[6];
 };
 
 

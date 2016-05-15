@@ -193,7 +193,7 @@ LoadResultType LoadAgent::OnLoad(const LoadInfo& loadInfo)
 
 	// 起動と同時に読む場合は予めアウトライン解析画面を配置しておく
 	// （ファイル読み込み開始とともにビューが表示されるので、あとで配置すると画面のちらつきが大きいの）
-	if (!pDoc->m_pEditWnd->m_dlgFuncList.m_bEditWndReady) {
+	if (!pDoc->m_pEditWnd->m_dlgFuncList.bEditWndReady) {
 		pDoc->m_pEditWnd->m_dlgFuncList.Refresh();
 		HWND hEditWnd = pDoc->m_pEditWnd->GetHwnd();
 		if (!::IsIconic( hEditWnd ) && pDoc->m_pEditWnd->m_dlgFuncList.GetHwnd()) {
@@ -207,7 +207,7 @@ LoadResultType LoadAgent::OnLoad(const LoadInfo& loadInfo)
 	if (fexist(loadInfo.filePath)) {
 		// CDocLineMgrの構成
 		ReadManager reader;
-		ProgressSubject* pOld = EditApp::getInstance().m_pVisualProgress->ProgressListener::Listen(&reader);
+		ProgressSubject* pOld = EditApp::getInstance().pVisualProgress->ProgressListener::Listen(&reader);
 		CodeConvertResult eReadResult = reader.ReadFile_To_CDocLineMgr(
 			pDoc->m_docLineMgr,
 			loadInfo,
@@ -216,7 +216,7 @@ LoadResultType LoadAgent::OnLoad(const LoadInfo& loadInfo)
 		if (eReadResult == CodeConvertResult::LoseSome) {
 			eRet = LoadResultType::LoseSome;
 		}
-		EditApp::getInstance().m_pVisualProgress->ProgressListener::Listen(pOld);
+		EditApp::getInstance().pVisualProgress->ProgressListener::Listen(pOld);
 	}else {
 		// 存在しないときもドキュメントに文字コードを反映する
 		const TypeConfig& types = pDoc->m_docType.GetDocumentAttribute();
@@ -235,11 +235,11 @@ LoadResultType LoadAgent::OnLoad(const LoadInfo& loadInfo)
 		nMaxLineKetas = MAXLINEKETAS;
 	}
 
-	ProgressSubject* pOld = EditApp::getInstance().m_pVisualProgress->ProgressListener::Listen(&pDoc->m_layoutMgr);
+	ProgressSubject* pOld = EditApp::getInstance().pVisualProgress->ProgressListener::Listen(&pDoc->m_layoutMgr);
 	pDoc->m_layoutMgr.SetLayoutInfo( true, ref, ref.nTabSpace, nMaxLineKetas );
 	pDoc->m_pEditWnd->ClearViewCaretPosInfo();
 	
-	EditApp::getInstance().m_pVisualProgress->ProgressListener::Listen(pOld);
+	EditApp::getInstance().pVisualProgress->ProgressListener::Listen(pOld);
 
 	return eRet;
 }

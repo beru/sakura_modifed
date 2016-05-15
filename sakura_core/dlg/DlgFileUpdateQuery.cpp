@@ -40,8 +40,8 @@ BOOL DlgFileUpdateQuery::OnInitDialog(
 	LPARAM lParam
 	)
 {
-	::DlgItem_SetText(hWnd, IDC_UPDATEDFILENAME, m_pFilename);
-	::DlgItem_SetText(hWnd, IDC_QUERYRELOADMSG, m_bModified ?
+	::DlgItem_SetText(hWnd, IDC_UPDATEDFILENAME, pFilename);
+	::DlgItem_SetText(hWnd, IDC_QUERYRELOADMSG, bModified ?
 		LS(STR_ERR_DLGUPQRY1):LS(STR_ERR_DLGUPQRY2));
 
 	return Dialog::OnInitDialog(hWnd, wParam, lParam);

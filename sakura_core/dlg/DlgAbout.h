@@ -25,17 +25,17 @@
 
 class UrlWnd {
 public:
-	UrlWnd() { m_hWnd = NULL; m_hFont = NULL; m_bHilighted = FALSE; m_pOldProc = NULL; }
+	UrlWnd() { hWnd = NULL; hFont = NULL; bHilighted = FALSE; pOldProc = NULL; }
 	virtual ~UrlWnd() { ; }
 	BOOL SetSubclassWindow(HWND hWnd);
-	HWND GetHwnd() const { return m_hWnd; }
+	HWND GetHwnd() const { return hWnd; }
 protected:
 	static LRESULT CALLBACK UrlWndProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp);
 protected:
-	HWND m_hWnd;
-	HFONT m_hFont;
-	BOOL m_bHilighted;
-	WNDPROC m_pOldProc;
+	HWND hWnd;
+	HFONT hFont;
+	BOOL bHilighted;
+	WNDPROC pOldProc;
 };
 
 class DlgAbout : public Dialog {
@@ -49,7 +49,7 @@ protected:
 	BOOL OnStnClicked(int);
 	LPVOID GetHelpIdTable(void);	//@@@ 2002.01.18 add
 private:
-	UrlWnd m_UrlUrWnd;
-	UrlWnd m_UrlOrgWnd;
+	UrlWnd UrlUrWnd;
+	UrlWnd UrlOrgWnd;
 };
 

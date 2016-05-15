@@ -66,19 +66,19 @@ Dialog::Dialog(bool bSizable, bool bCheckShareData)
 {
 //	MYTRACE(_T("Dialog::Dialog()\n"));
 	// 共有データ構造体のアドレスを返す
-	m_pShareData = &GetDllShareData(bCheckShareData);
+	pShareData = &GetDllShareData(bCheckShareData);
 
-	m_hInstance = NULL;		// アプリケーションインスタンスのハンドル
-	m_hwndParent = NULL;	// オーナーウィンドウのハンドル
-	m_hWnd  = NULL;			// このダイアログのハンドル
-	m_hwndSizeBox = NULL;
-	m_bSizable = bSizable;
-	m_lParam = (LPARAM)NULL;
-	m_nShowCmd = SW_SHOW;
-	m_xPos = -1;
-	m_yPos = -1;
-	m_nWidth = -1;
-	m_nHeight = -1;
+	hInstance = NULL;		// アプリケーションインスタンスのハンドル
+	hwndParent = NULL;	// オーナーウィンドウのハンドル
+	hWnd  = NULL;			// このダイアログのハンドル
+	hwndSizeBox = NULL;
+	bSizable = bSizable;
+	lParam = (LPARAM)NULL;
+	nShowCmd = SW_SHOW;
+	xPos = -1;
+	yPos = -1;
+	nWidth = -1;
+	nHeight = -1;
 
 	return;
 }
@@ -104,16 +104,16 @@ INT_PTR Dialog::DoModal(
 	LPARAM lParam
 	)
 {
-	m_bInited = false;
-	m_bModal = true;
-	m_hInstance = hInstance;	// アプリケーションインスタンスのハンドル
-	m_hwndParent = hwndParent;	// オーナーウィンドウのハンドル
-	m_lParam = lParam;
-	m_hLangRsrcInstance = SelectLang::getLangRsrcInstance();		// メッセージリソースDLLのインスタンスハンドル
+	bInited = false;
+	bModal = true;
+	this->hInstance = hInstance;	// アプリケーションインスタンスのハンドル
+	this->hwndParent = hwndParent;	// オーナーウィンドウのハンドル
+	this->lParam = lParam;
+	hLangRsrcInstance = SelectLang::getLangRsrcInstance();		// メッセージリソースDLLのインスタンスハンドル
 	return ::DialogBoxParam(
-		m_hLangRsrcInstance,
+		this->hLangRsrcInstance,
 		MAKEINTRESOURCE(nDlgTemplete),
-		m_hwndParent,
+		hwndParent,
 		MyDialogProc,
 		(LPARAM)this
 	);
@@ -134,23 +134,23 @@ HWND Dialog::DoModeless(
 	int nCmdShow
 	)
 {
-	m_bInited = false;
-	m_bModal = false;
-	m_hInstance = hInstance;	// アプリケーションインスタンスのハンドル
-	m_hwndParent = hwndParent;	// オーナーウィンドウのハンドル
-	m_lParam = lParam;
-	m_hLangRsrcInstance = SelectLang::getLangRsrcInstance();		// メッセージリソースDLLのインスタンスハンドル
-	m_hWnd = ::CreateDialogParam(
-		m_hLangRsrcInstance,
+	bInited = false;
+	bModal = false;
+	this->hInstance = hInstance;	// アプリケーションインスタンスのハンドル
+	this->hwndParent = hwndParent;	// オーナーウィンドウのハンドル
+	this->lParam = lParam;
+	hLangRsrcInstance = SelectLang::getLangRsrcInstance();		// メッセージリソースDLLのインスタンスハンドル
+	hWnd = ::CreateDialogParam(
+		hLangRsrcInstance,
 		MAKEINTRESOURCE(nDlgTemplete),
-		m_hwndParent,
+		hwndParent,
 		MyDialogProc,
 		(LPARAM)this
 	);
-	if (m_hWnd) {
-		::ShowWindow(m_hWnd, nCmdShow);
+	if (hWnd) {
+		::ShowWindow(hWnd, nCmdShow);
 	}
-	return m_hWnd;
+	return hWnd;
 }
 
 HWND Dialog::DoModeless(
@@ -161,33 +161,33 @@ HWND Dialog::DoModeless(
 	int nCmdShow
 	)
 {
-	m_bInited = false;
-	m_bModal = false;
-	m_hInstance = hInstance;	// アプリケーションインスタンスのハンドル
-	m_hwndParent = hwndParent;	// オーナーウィンドウのハンドル
-	m_lParam = lParam;
-	m_hWnd = ::CreateDialogIndirectParam(
-		m_hInstance,
+	bInited = false;
+	bModal = false;
+	this->hInstance = hInstance;	// アプリケーションインスタンスのハンドル
+	this->hwndParent = hwndParent;	// オーナーウィンドウのハンドル
+	this->lParam = lParam;
+	hWnd = ::CreateDialogIndirectParam(
+		hInstance,
 		lpTemplate,
-		m_hwndParent,
+		hwndParent,
 		MyDialogProc,
 		(LPARAM)this
 	);
-	if (m_hWnd) {
-		::ShowWindow(m_hWnd, nCmdShow);
+	if (hWnd) {
+		::ShowWindow(hWnd, nCmdShow);
 	}
-	return m_hWnd;
+	return hWnd;
 }
 
 void Dialog::CloseDialog(int nModalRetVal)
 {
-	if (m_hWnd) {
-		if (m_bModal) {
-			::EndDialog(m_hWnd, nModalRetVal);
+	if (hWnd) {
+		if (bModal) {
+			::EndDialog(hWnd, nModalRetVal);
 		}else {
-			::DestroyWindow(m_hWnd);
+			::DestroyWindow(hWnd);
 		}
-		m_hWnd = NULL;
+		hWnd = NULL;
 	}
 	return;
 }
@@ -199,16 +199,16 @@ BOOL Dialog::OnInitDialog(
 	LPARAM lParam
 	)
 {
-	m_hWnd = hwndDlg;
+	hWnd = hwndDlg;
 	// Modified by KEITA for WIN64 2003.9.6
-	::SetWindowLongPtr(m_hWnd, DWLP_USER, lParam);
+	::SetWindowLongPtr(hWnd, DWLP_USER, lParam);
 
 	// ダイアログデータの設定
 	SetData();
 
 	SetDialogPosSize();
 
-	m_bInited = true;
+	bInited = true;
 	return TRUE;
 }
 
@@ -216,26 +216,26 @@ void Dialog::SetDialogPosSize()
 {
 #if 0
 	// ダイアログのサイズ、位置の再現
-	if (m_xPos != -1 && m_yPos != -1) {
-		::SetWindowPos(hWnd, NULL, m_xPos, m_yPos, 0, 0, SWP_NOSIZE | SWP_NOOWNERZORDER | SWP_NOZORDER);
-		DEBUG_TRACE(_T("Dialog::OnInitDialog() m_xPos=%d m_yPos=%d\n"), m_xPos, m_yPos);
+	if (xPos != -1 && yPos != -1) {
+		::SetWindowPos(hWnd, NULL, xPos, yPos, 0, 0, SWP_NOSIZE | SWP_NOOWNERZORDER | SWP_NOZORDER);
+		DEBUG_TRACE(_T("Dialog::OnInitDialog() xPos=%d yPos=%d\n"), xPos, yPos);
 	}
-	if (m_nWidth != -1 && m_nHeight != -1) {
-		::SetWindowPos(hWnd, NULL, 0, 0, m_nWidth, m_nHeight, SWP_NOMOVE | SWP_NOOWNERZORDER | SWP_NOZORDER);
+	if (nWidth != -1 && nHeight != -1) {
+		::SetWindowPos(hWnd, NULL, 0, 0, nWidth, nHeight, SWP_NOMOVE | SWP_NOOWNERZORDER | SWP_NOZORDER);
 	}
 #endif
 
-	if (m_xPos != -1 && m_yPos != -1) {
+	if (xPos != -1 && yPos != -1) {
 		// ウィンドウ位置・サイズを再現
 		// 2014.11.28 フォント変更対応
-		if (m_nWidth == -1) {
+		if (nWidth == -1) {
 			RECT rc;
-			::GetWindowRect(m_hWnd, &rc);
-			m_nWidth = rc.right - rc.left;
-			m_nHeight = rc.bottom - rc.top;
+			::GetWindowRect(hWnd, &rc);
+			nWidth = rc.right - rc.left;
+			nHeight = rc.bottom - rc.top;
 		}
 
-		if (!(::GetWindowLongPtr(m_hWnd, GWL_STYLE) & WS_CHILD)) {
+		if (!(::GetWindowLongPtr(hWnd, GWL_STYLE) & WS_CHILD)) {
 			// 2006.06.09 ryoji
 			// モニタのワーク領域よりも左右上下に１ドット小さい領域内に全体が収まるように位置調整する
 			//
@@ -246,10 +246,10 @@ void Dialog::SetDialogPosSize()
 
 			RECT rc;
 			RECT rcWork;
-			rc.left = m_xPos;
-			rc.top = m_yPos;
-			rc.right = m_xPos + m_nWidth;
-			rc.bottom = m_yPos + m_nHeight;
+			rc.left = xPos;
+			rc.top = yPos;
+			rc.right = xPos + nWidth;
+			rc.bottom = yPos + nHeight;
 			GetMonitorWorkRect(&rc, &rcWork);
 			rcWork.top += 1;
 			rcWork.bottom -= 1;
@@ -271,20 +271,20 @@ void Dialog::SetDialogPosSize()
 				rc.right += (rcWork.left - rc.left);
 				rc.left = rcWork.left;
 			}
-			m_xPos = rc.left;
-			m_yPos = rc.top;
-			m_nWidth = rc.right - rc.left;
-			m_nHeight = rc.bottom - rc.top;
+			xPos = rc.left;
+			yPos = rc.top;
+			nWidth = rc.right - rc.left;
+			nHeight = rc.bottom - rc.top;
 		}
 
 		WINDOWPLACEMENT windowPlacement;
 		windowPlacement.length = sizeof(windowPlacement);
-		windowPlacement.showCmd = m_nShowCmd;	// 最大化・最小化
-		windowPlacement.rcNormalPosition.left = m_xPos;
-		windowPlacement.rcNormalPosition.top = m_yPos;
-		windowPlacement.rcNormalPosition.right = m_nWidth + m_xPos;
-		windowPlacement.rcNormalPosition.bottom = m_nHeight + m_yPos;
-		::SetWindowPlacement(m_hWnd, &windowPlacement);
+		windowPlacement.showCmd = nShowCmd;	// 最大化・最小化
+		windowPlacement.rcNormalPosition.left = xPos;
+		windowPlacement.rcNormalPosition.top = yPos;
+		windowPlacement.rcNormalPosition.right = nWidth + xPos;
+		windowPlacement.rcNormalPosition.bottom = nHeight + yPos;
+		::SetWindowPlacement(hWnd, &windowPlacement);
 	}
 }
 
@@ -293,24 +293,24 @@ BOOL Dialog::OnDestroy(void)
 	// ウィンドウ位置・サイズを記憶
 	WINDOWPLACEMENT windowPlacement;
 	windowPlacement.length = sizeof(windowPlacement);
-	if (::GetWindowPlacement(m_hWnd, &windowPlacement)) {
-		m_nShowCmd = windowPlacement.showCmd;	// 最大化・最小化
-		m_xPos = windowPlacement.rcNormalPosition.left;
-		m_yPos = windowPlacement.rcNormalPosition.top;
-		m_nWidth = windowPlacement.rcNormalPosition.right - windowPlacement.rcNormalPosition.left;
-		m_nHeight = windowPlacement.rcNormalPosition.bottom - windowPlacement.rcNormalPosition.top;
+	if (::GetWindowPlacement(hWnd, &windowPlacement)) {
+		nShowCmd = windowPlacement.showCmd;	// 最大化・最小化
+		xPos = windowPlacement.rcNormalPosition.left;
+		yPos = windowPlacement.rcNormalPosition.top;
+		nWidth = windowPlacement.rcNormalPosition.right - windowPlacement.rcNormalPosition.left;
+		nHeight = windowPlacement.rcNormalPosition.bottom - windowPlacement.rcNormalPosition.top;
 		// 2014.11.28 フォント変更によるサイズ変更対応
-		if (!m_bSizable) {
-			m_nWidth = -1;
-			m_nHeight = -1;
+		if (!bSizable) {
+			nWidth = -1;
+			nHeight = -1;
 		}
 	}
 	// 破棄
-	if (m_hwndSizeBox) {
-		::DestroyWindow(m_hwndSizeBox);
-		m_hwndSizeBox = NULL;
+	if (hwndSizeBox) {
+		::DestroyWindow(hwndSizeBox);
+		hwndSizeBox = NULL;
 	}
-	m_hWnd = NULL;
+	hWnd = NULL;
 	return TRUE;
 }
 
@@ -334,18 +334,18 @@ BOOL Dialog::OnSize()
 BOOL Dialog::OnSize(WPARAM wParam, LPARAM lParam)
 {
 	RECT rc;
-	::GetWindowRect(m_hWnd, &rc);
+	::GetWindowRect(hWnd, &rc);
 
 	// ダイアログのサイズの記憶
-	m_xPos = rc.left;
-	m_yPos = rc.top;
-	m_nWidth = rc.right - rc.left;
-	m_nHeight = rc.bottom - rc.top;
+	xPos = rc.left;
+	yPos = rc.top;
+	nWidth = rc.right - rc.left;
+	nHeight = rc.bottom - rc.top;
 
 	// サイズボックスの移動
-	if (m_hwndSizeBox) {
-		::GetClientRect(m_hWnd, &rc);
-//		::SetWindowPos(m_hwndSizeBox, NULL,
+	if (hwndSizeBox) {
+		::GetClientRect(hWnd, &rc);
+//		::SetWindowPos(hwndSizeBox, NULL,
 // Sept. 17, 2000 JEPRO_16thdot アイコンの16dot目が表示されるように次行を変更する必要ある？
 // Jan. 12, 2001 JEPRO (directed by stonee) 15を16に変更するとアウトライン解析のダイアログの右下にある
 // グリップサイズに`遊び'ができてしまい(移動する！)、ダイアログを大きくできないという障害が発生するので
@@ -357,7 +357,7 @@ BOOL Dialog::OnSize(WPARAM wParam, LPARAM lParam)
 
 // Jan. 12, 2001 Stonee (suggested by genta)
 //		"13"という固定値ではなくシステムから取得したスクロールバーサイズを使うように修正
-		::SetWindowPos(m_hwndSizeBox, NULL,
+		::SetWindowPos(hwndSizeBox, NULL,
 			rc.right - rc.left - GetSystemMetrics(SM_CXVSCROLL), //<-- stonee
 			rc.bottom - rc.top - GetSystemMetrics(SM_CYHSCROLL), //<-- stonee
 			GetSystemMetrics(SM_CXVSCROLL), //<-- stonee
@@ -367,11 +367,11 @@ BOOL Dialog::OnSize(WPARAM wParam, LPARAM lParam)
 
 		// SizeBox問題テスト
 		if (wParam == SIZE_MAXIMIZED) {
-			::ShowWindow(m_hwndSizeBox, SW_HIDE);
+			::ShowWindow(hwndSizeBox, SW_HIDE);
 		}else {
-			::ShowWindow(m_hwndSizeBox, SW_SHOW);
+			::ShowWindow(hwndSizeBox, SW_SHOW);
 		}
-		::InvalidateRect(m_hwndSizeBox, NULL, TRUE);
+		::InvalidateRect(hwndSizeBox, NULL, TRUE);
 	}
 	return FALSE;
 
@@ -380,18 +380,18 @@ BOOL Dialog::OnSize(WPARAM wParam, LPARAM lParam)
 BOOL Dialog::OnMove(WPARAM wParam, LPARAM lParam)
 {
 	// ダイアログの位置の記憶
-	if (!m_bInited) {
+	if (!bInited) {
 		return TRUE;
 	}
 	RECT rc;
-	::GetWindowRect(m_hWnd, &rc);
+	::GetWindowRect(hWnd, &rc);
 
 	// ダイアログのサイズの記憶
-	m_xPos = rc.left;
-	m_yPos = rc.top;
-	m_nWidth = rc.right - rc.left;
-	m_nHeight = rc.bottom - rc.top;
-	DEBUG_TRACE(_T("Dialog::OnMove() m_xPos=%d m_yPos=%d\n"), m_xPos, m_yPos);
+	xPos = rc.left;
+	yPos = rc.top;
+	nWidth = rc.right - rc.left;
+	nHeight = rc.bottom - rc.top;
+	DEBUG_TRACE(_T("Dialog::OnMove() xPos=%d yPos=%d\n"), xPos, yPos);
 	return TRUE;
 
 }
@@ -399,7 +399,7 @@ BOOL Dialog::OnMove(WPARAM wParam, LPARAM lParam)
 void Dialog::CreateSizeBox(void)
 {
 	// サイズボックス
-	m_hwndSizeBox = ::CreateWindowEx(
+	hwndSizeBox = ::CreateWindowEx(
 		WS_EX_CONTROLPARENT,								// no extended styles
 		_T("SCROLLBAR"),									// scroll bar control class
 		NULL,												// text for window title bar
@@ -408,12 +408,12 @@ void Dialog::CreateSizeBox(void)
 		0,													// vertical position
 		0,													// width of the scroll bar
 		0,													// default height
-		m_hWnd/*hdlg*/, 									// handle of main window
+		hWnd/*hdlg*/, 									// handle of main window
 		(HMENU) NULL,										// no menu for a scroll bar
 		SelectLang::getLangRsrcInstance(),					// instance owning this window
 		(LPVOID) NULL										// pointer not needed
 	);
-	::ShowWindow(m_hwndSizeBox, SW_SHOW);
+	::ShowWindow(hwndSizeBox, SW_SHOW);
 
 }
 
@@ -433,10 +433,10 @@ INT_PTR Dialog::DispatchEvent(
 	case WM_COMMAND:	return OnCommand(wParam, lParam);
 	case WM_NOTIFY:		return OnNotify(wParam, lParam);
 	case WM_SIZE:
-		m_hWnd = hwndDlg;
+		hWnd = hwndDlg;
 		return OnSize(wParam, lParam);
 	case WM_MOVE:
-		m_hWnd = hwndDlg;
+		hWnd = hwndDlg;
 		return OnMove(wParam, lParam);
 	case WM_DRAWITEM:	return OnDrawItem(wParam, lParam);
 	case WM_TIMER:		return OnTimer(wParam);
@@ -515,7 +515,7 @@ BOOL Dialog::OnPopupHelp(WPARAM wPara, LPARAM lParam)
 
 BOOL Dialog::OnContextMenu(WPARAM wPara, LPARAM lParam)
 {
-	MyWinHelp(m_hWnd, HELP_CONTEXTMENU, (ULONG_PTR)GetHelpIdTable());	// 2006.10.10 ryoji MyWinHelpに変更に変更
+	MyWinHelp(hWnd, HELP_CONTEXTMENU, (ULONG_PTR)GetHelpIdTable());	// 2006.10.10 ryoji MyWinHelpに変更に変更
 	return TRUE;
 }
 
@@ -680,7 +680,7 @@ HFONT Dialog::SetMainFont(HWND hTarget)
 	LONG nfHeight = lf.lfHeight;
 
 	// LOGFONTの作成
-	lf = m_pShareData->common.view.lf;
+	lf = pShareData->common.view.lf;
 	lf.lfHeight			= nfHeight;
 	lf.lfWidth			= 0;
 	lf.lfEscapement		= 0;

@@ -216,7 +216,7 @@ void SakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszBu
 		// To Here 2003/06/21 Moca
 		case L'n':
 			if (!pDoc->m_docFile.GetFilePathClass().IsValidPath()) {
-				if (EditApp::getInstance().m_pGrepAgent->m_bGrepMode) {
+				if (EditApp::getInstance().pGrepAgent->bGrepMode) {
 				}else if (AppMode::getInstance().IsDebugMode()) {
 				}else {
 					WCHAR szText[10];
@@ -473,7 +473,7 @@ void SakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszBu
 			// 現在実行しているマクロファイルパスの取得
 			{
 				// 実行中マクロのインデックス番号 (INVALID_MACRO_IDX:無効 / STAND_KEYMACRO:標準マクロ)
-				SMacroMgr* pSMacroMgr = EditApp::getInstance().m_pSMacroMgr;
+				SMacroMgr* pSMacroMgr = EditApp::getInstance().pSMacroMgr;
 				switch (pSMacroMgr->GetCurrentIdx()) {
 				case INVALID_MACRO_IDX:
 					break;
@@ -633,7 +633,7 @@ int SakuraEnvironment::_ExParam_Evaluate(const wchar_t* pCond)
 			return 2; // 上記以外
 		}
 	case L'w': // $w Grepモード/Output Mode
-		if (EditApp::getInstance().m_pGrepAgent->m_bGrepMode) {
+		if (EditApp::getInstance().pGrepAgent->bGrepMode) {
 			return 0;
 		}else if (AppMode::getInstance().IsDebugMode()) {
 			return 1;

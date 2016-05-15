@@ -43,10 +43,10 @@ class FileTreeSetting {
 public:
 	std::vector<FileTreeItem>	items;	// ツリーアイテム
 	bool		bProject;				// プロジェクトファイルモード
-	SFilePath	m_szDefaultProjectIni;	// デフォルトiniファイル名
-	SFilePath	m_szLoadProjectIni;		// 現在読み込んでいるiniファイル名
-	FileTreeSettingFromType	m_eFileTreeSettingOrgType;
-	FileTreeSettingFromType	m_eFileTreeSettingLoadType;
+	SFilePath	szDefaultProjectIni;	// デフォルトiniファイル名
+	SFilePath	szLoadProjectIni;		// 現在読み込んでいるiniファイル名
+	FileTreeSettingFromType	eFileTreeSettingOrgType;
+	FileTreeSettingFromType	eFileTreeSettingLoadType;
 };
 
 
@@ -62,14 +62,14 @@ public:
 	*/
 	HWND DoModeless(HINSTANCE, HWND, LPARAM, FuncInfoArr*, LayoutInt, LayoutInt, OutlineType, OutlineType, bool); // モードレスダイアログの表示
 	void ChangeView(LPARAM);	// モードレス時：検索対象となるビューの変更
-	bool IsDocking() { return m_eDockSide > DockSideType::Float; }
-	DockSideType GetDockSide() { return m_eDockSide; }
+	bool IsDocking() { return eDockSide > DockSideType::Float; }
+	DockSideType GetDockSide() { return eDockSide; }
 
 protected:
 	INT_PTR DispatchEvent(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM lParam);	// 2007.11.07 ryoji 標準以外のメッセージを捕捉する
 
-	CommonSetting_OutLine& CommonSet(void) { return m_pShareData->common.outline; }
-	TypeConfig& TypeSet(void) { return m_type; }
+	CommonSetting_OutLine& CommonSet(void) { return pShareData->common.outline; }
+	TypeConfig& TypeSet(void) { return type; }
 	int& ProfDockSet() { return CommonSet().nOutlineDockSet; }
 	bool& ProfDockSync() { return CommonSet().bOutlineDockSync; }
 	bool& ProfDockDisp() { return (ProfDockSet() == 0)? CommonSet().bOutlineDockDisp: TypeSet().bOutlineDockDisp; }
@@ -82,7 +82,7 @@ protected:
 
 public:
 	// 現在の種別と同じなら
-	bool CheckListType(OutlineType nOutLineType) const { return nOutLineType == m_nOutlineType; }
+	bool CheckListType(OutlineType nOutLineType) const { return nOutLineType == nOutlineType; }
 	void Redraw(OutlineType nOutLineType, OutlineType nListType, FuncInfoArr*, LayoutInt nCurLine, LayoutInt nCurCol);
 	void Refresh(void);
 	bool ChangeLayout(int nId);
@@ -94,21 +94,21 @@ public:
 	static void ReadFileTreeIni( DataProfile&, FileTreeSetting& );
 
 protected:
-	bool m_bInChangeLayout;
+	bool bInChangeLayout;
 
-	FuncInfoArr*	m_pFuncInfoArr;	// 関数情報配列
-	LayoutInt		m_nCurLine;			// 現在行
-	LayoutInt		m_nCurCol;			// 現在桁
-	int				m_nSortCol;			// ソートする列番号
-	int				m_nSortColOld;		// ソートする列番号(OLD)
-	bool			m_bSortDesc;		// 降順
-	NativeW			m_memClipText;		// クリップボードコピー用テキスト
-	bool			m_bLineNumIsCRLF;	// 行番号の表示 false=折り返し単位／true=改行単位
-	OutlineType		m_nListType;		// 一覧の種類
+	FuncInfoArr*	pFuncInfoArr;	// 関数情報配列
+	LayoutInt		nCurLine;		// 現在行
+	LayoutInt		nCurCol;		// 現在桁
+	int				nSortCol;		// ソートする列番号
+	int				nSortColOld;	// ソートする列番号(OLD)
+	bool			bSortDesc;		// 降順
+	NativeW			memClipText;	// クリップボードコピー用テキスト
+	bool			bLineNumIsCRLF;	// 行番号の表示 false=折り返し単位／true=改行単位
+	OutlineType		nListType;		// 一覧の種類
 public:
-	int				m_nDocType;			// ドキュメントの種類
-	OutlineType		m_nOutlineType;		// アウトライン解析の種別
-	bool			m_bEditWndReady;	// エディタ画面の準備完了
+	int				nDocType;		// ドキュメントの種類
+	OutlineType		nOutlineType;	// アウトライン解析の種別
+	bool			bEditWndReady;	// エディタ画面の準備完了
 protected:
 	BOOL OnInitDialog(HWND, WPARAM, LPARAM);
 	BOOL OnBnClicked(int);
@@ -134,7 +134,7 @@ protected:
 
 	void SetTreeFileSub( HTREEITEM, const TCHAR* );
 	// 2002/11/1 frozen 
-	void SortTree(HWND hWndTree, HTREEITEM htiParent);	// ツリービューの項目をソートする（ソート基準はm_nSortTypeを使用）
+	void SortTree(HWND hWndTree, HTREEITEM htiParent);	// ツリービューの項目をソートする（ソート基準はnSortTypeを使用）
 #if 0
 2002.04.01 YAZAKI SetTreeTxt()、SetTreeTxtNest()は廃止。GetTreeTextNextはもともと使用されていなかった。
 	void SetTreeTxt(HWND);	// ツリーコントロールの初期化：テキストトピックツリー
@@ -150,7 +150,7 @@ protected:
 	// 2001.12.03 hor
 //	void SetTreeBookMark(HWND);		// ツリーコントロールの初期化：ブックマーク
 	LPVOID GetHelpIdTable(void);	//@@@ 2002.01.18 add
-	void Key2Command(WORD);		//	キー操作→コマンド変換
+	void Key2Command(WORD);			//	キー操作→コマンド変換
 	bool HitTestSplitter(int xPos, int yPos);
 	int HitTestCaptionButton(int xPos, int yPos);
 	INT_PTR OnNcCalcSize(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
@@ -178,42 +178,42 @@ private:
 
 		0: List, 1: Tree
 	*/
-	int	m_nViewType;
+	int	nViewType;
 
 	// 2002.02.16 hor Treeのダブルクリックでフォーカス移動できるように 1/4
 	// (無理矢理なのでどなたか修正お願いします)
-	bool m_bWaitTreeProcess;
+	bool bWaitTreeProcess;
 
 	// 2002/11/1 frozen
 	// ツリービューをソートする基準
 	// 0 デフォルト(ノードに関連づけれられた値順)
 	// 1 アルファベット順
-	int m_nSortType;
+	int nSortType;
 
 	// 選択中の関数情報
-	FuncInfo* m_funcInfo;
-	std::tstring m_sJumpFile;
+	FuncInfo* funcInfo;
+	std::tstring sJumpFile;
 
-	const TCHAR* m_pszTimerJumpFile;
-	Point		m_pointTimerJump;
-	bool		m_bTimerJumpAutoClose;
+	const TCHAR* pszTimerJumpFile;
+	Point	pointTimerJump;
+	bool	bTimerJumpAutoClose;
 
-	DockSideType	m_eDockSide;	// 現在の画面の表示位置
-	HWND		m_hwndToolTip;		// ツールチップ（ボタン用）
-	bool		m_bStretching;
-	bool		m_bHovering;
-	int			m_nHilightedBtn;
-	int			m_nCapturingBtn;
+	DockSideType	eDockSide;	// 現在の画面の表示位置
+	HWND	hwndToolTip;		// ツールチップ（ボタン用）
+	bool	bStretching;
+	bool	bHovering;
+	int		nHilightedBtn;
+	int		nCapturingBtn;
 	
-	TypeConfig m_type;
-	FileTreeSetting	m_fileTreeSetting;
+	TypeConfig type;
+	FileTreeSetting	fileTreeSetting;
 
-	static LPDLGTEMPLATE m_pDlgTemplate;
-	static DWORD m_dwDlgTmpSize;
-	static HINSTANCE m_lastRcInstance;		// リソース生存チェック用
+	static LPDLGTEMPLATE pDlgTemplate;
+	static DWORD dwDlgTmpSize;
+	static HINSTANCE lastRcInstance;		// リソース生存チェック用
 
-	POINT				m_ptDefaultSize;
-	POINT				m_ptDefaultSizeClient;
-	RECT				m_rcItems[12];
+	POINT	ptDefaultSize;
+	POINT	ptDefaultSizeClient;
+	RECT	rcItems[12];
 };
 

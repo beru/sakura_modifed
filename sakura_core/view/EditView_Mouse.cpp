@@ -1641,7 +1641,7 @@ void EditView::OnLBUTTONDBLCLK(WPARAM fwKeys, int _xPos , int _yPos)
 		// GREP出力モードまたはデバッグモード かつ マウス左ボタンダブルクリックでタグジャンプ の場合
 		//	2004.09.20 naoh 外部コマンドの出力からTagjumpできるように
 		if (1
-			&& (EditApp::getInstance().m_pGrepAgent->m_bGrepMode || AppMode::getInstance().IsDebugMode())
+			&& (EditApp::getInstance().pGrepAgent->bGrepMode || AppMode::getInstance().IsDebugMode())
 			&& GetDllShareData().common.search.bGTJW_DoubleClick
 		) {
 			// タグジャンプ機能

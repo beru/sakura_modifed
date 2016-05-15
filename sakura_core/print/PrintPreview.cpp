@@ -858,14 +858,14 @@ void PrintPreview::OnPreviewGoDirectPage(void)
 {
 	const int INPUT_PAGE_NUM_LEN = 12;
 
-	DlgInput1 cDlgInputPage;
+	DlgInput1 dlgInputPage;
 	TCHAR szMessage[512];
 	TCHAR szPageNum[INPUT_PAGE_NUM_LEN];
 	
 	auto_sprintf(szMessage, LS(STR_ERR_DLGPRNPRVW4) , m_nAllPageNum);
 	auto_sprintf(szPageNum, _T("%d"), m_nCurPageNum + 1);
 
-	BOOL bDlgInputPageResult = cDlgInputPage.DoModal(
+	BOOL bDlgInputPageResult = dlgInputPage.DoModal(
 		EditApp::getInstance().GetAppInstance(),
 		m_hwndPrintPreviewBar, 
 		LS(STR_ERR_DLGPRNPRVW5),

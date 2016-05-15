@@ -63,8 +63,8 @@ const DWORD p_helpids[] = {
 
 DlgGrepReplace::DlgGrepReplace()
 {
-	if (0 < m_pShareData->searchKeywords.replaceKeys.size()) {
-		m_strText2 = m_pShareData->searchKeywords.replaceKeys[0];
+	if (0 < pShareData->searchKeywords.replaceKeys.size()) {
+		strText2 = pShareData->searchKeywords.replaceKeys[0];
 	}
 	return;
 }
@@ -79,24 +79,24 @@ int DlgGrepReplace::DoModal(
 	LPARAM lParam
 	)
 {
-	auto& csSearch = m_pShareData->common.search;
-	m_bSubFolder = csSearch.bGrepSubFolder;				// Grep: サブフォルダも検索
+	auto& csSearch = pShareData->common.search;
+	bSubFolder = csSearch.bGrepSubFolder;				// Grep: サブフォルダも検索
 	searchOption = csSearch.searchOption;				// 検索オプション
 	nGrepCharSet = csSearch.nGrepCharSet;				// 文字コードセット
 	nGrepOutputLineType = csSearch.nGrepOutputLineType;	// 行を出力するか該当部分だけ出力するか
 	nGrepOutputStyle = csSearch.nGrepOutputStyle;		// Grep: 出力形式
-	m_bPaste = false;
-	m_bBackup = csSearch.bGrepBackup;
+	bPaste = false;
+	bBackup = csSearch.bGrepBackup;
 
-	auto& searchKeywords = m_pShareData->searchKeywords;
-	if (m_szFile[0] == _T('\0') && searchKeywords.grepFiles.size()) {
-		_tcscpy(m_szFile, searchKeywords.grepFiles[0]);		// 検索ファイル
+	auto& searchKeywords = pShareData->searchKeywords;
+	if (szFile[0] == _T('\0') && searchKeywords.grepFiles.size()) {
+		_tcscpy(szFile, searchKeywords.grepFiles[0]);		// 検索ファイル
 	}
-	if (m_szFolder[0] == _T('\0') && searchKeywords.grepFolders.size()) {
-		_tcscpy(m_szFolder, searchKeywords.grepFolders[0]);	// 検索フォルダ
+	if (szFolder[0] == _T('\0') && searchKeywords.grepFolders.size()) {
+		_tcscpy(szFolder, searchKeywords.grepFolders[0]);	// 検索フォルダ
 	}
 	if (pszCurrentFilePath) {	// 2010.01.10 ryoji
-		_tcscpy(m_szCurrentFilePath, pszCurrentFilePath);
+		_tcscpy(szCurrentFilePath, pszCurrentFilePath);
 	}
 
 	return (int)Dialog::DoModal( hInstance, hwndParent, IDD_GREP_REPLACE, lParam );
@@ -115,7 +115,7 @@ BOOL DlgGrepReplace::OnInitDialog(
 
 	HFONT hFontOld = (HFONT)::SendMessage(GetItemHwnd( IDC_COMBO_TEXT2 ), WM_GETFONT, 0, 0);
 	HFONT hFont = SetMainFont(GetItemHwnd( IDC_COMBO_TEXT2 ));
-	m_fontText2.SetFont(hFontOld, hFont, GetItemHwnd( IDC_COMBO_TEXT2 ));
+	fontText2.SetFont(hFontOld, hFont, GetItemHwnd( IDC_COMBO_TEXT2 ));
 
 	return DlgGrep::OnInitDialog( hwndDlg, wParam, lParam );
 }
@@ -123,7 +123,7 @@ BOOL DlgGrepReplace::OnInitDialog(
 
 BOOL DlgGrepReplace::OnDestroy()
 {
-	m_fontText2.ReleaseOnDestroy();
+	fontText2.ReleaseOnDestroy();
 	return DlgGrep::OnDestroy();
 }
 
@@ -138,7 +138,7 @@ BOOL DlgGrepReplace::OnBnClicked(int wID)
 	case IDOK:
 		{
 			bool bStop = false;
-			EditView* pEditView = (EditView*)m_lParam;
+			EditView* pEditView = (EditView*)lParam;
 			if (IsButtonChecked(IDC_CHK_PASTE)
 				&& !pEditView->m_pEditDoc->m_docEditor.IsEnablePaste()
 			) {
@@ -162,13 +162,13 @@ BOOL DlgGrepReplace::OnBnClicked(int wID)
 void DlgGrepReplace::SetData(void)
 {
 	// 置換後
-	SetItemText(IDC_COMBO_TEXT2, m_strText2.c_str() );
+	SetItemText(IDC_COMBO_TEXT2, strText2.c_str() );
 	HWND hwndCombo = GetItemHwnd(IDC_COMBO_TEXT2);
-	auto& replaceKeys = m_pShareData->searchKeywords.replaceKeys;
+	auto& replaceKeys = pShareData->searchKeywords.replaceKeys;
 	for (int i=0; i<replaceKeys.size(); ++i) {
 		Combo_AddString(hwndCombo, replaceKeys[i]);
 	}
-	CheckButton(IDC_CHK_BACKUP, m_bBackup);
+	CheckButton(IDC_CHK_BACKUP, bBackup);
 	DlgGrep::SetData();
 }
 
@@ -178,28 +178,28 @@ void DlgGrepReplace::SetData(void)
 */
 int DlgGrepReplace::GetData(void)
 {
-	m_bPaste = IsButtonChecked(IDC_CHK_PASTE);
+	bPaste = IsButtonChecked(IDC_CHK_PASTE);
 
 	// 置換後
 	int nBufferSize = ::GetWindowTextLength( GetItemHwnd(IDC_COMBO_TEXT2) ) + 1;
 	std::vector<TCHAR> vText(nBufferSize);
 	GetItemText(IDC_COMBO_TEXT2, &vText[0], nBufferSize);
-	m_strText2 = to_wchar(&vText[0]);
+	strText2 = to_wchar(&vText[0]);
 
 	if (::GetWindowTextLength( GetItemHwnd(IDC_COMBO_TEXT) ) == 0){
 		WarningMessage(	GetHwnd(), LS(STR_DLGREPLC_REPSTR) );
 		return FALSE;
 	}
 
-	m_bBackup = IsButtonChecked(IDC_CHK_BACKUP);
-	m_pShareData->common.search.bGrepBackup = m_bBackup;
+	bBackup = IsButtonChecked(IDC_CHK_BACKUP);
+	pShareData->common.search.bGrepBackup = bBackup;
 
 	if (!DlgGrep::GetData()) {
 		return FALSE;
 	}
 
-	if (m_strText2.size() < _MAX_PATH) {
-		SearchKeywordManager().AddToReplaceKeys( m_strText2.c_str() );
+	if (strText2.size() < _MAX_PATH) {
+		SearchKeywordManager().AddToReplaceKeys( strText2.c_str() );
 	}
 	nReplaceKeySequence = GetDllShareData().common.search.nReplaceKeySequence;
 

@@ -36,10 +36,10 @@
 
 FileExt::FileExt()
 {
-	m_puFileExtInfo = nullptr;
-	m_nCount = 0;
-	m_vstrFilter.resize( 1 );
-	m_vstrFilter[0] = _T('\0');
+	puFileExtInfo = nullptr;
+	nCount = 0;
+	vstrFilter.resize( 1 );
+	vstrFilter[0] = _T('\0');
 
 //	// テキストエディタとして、既定でリストに載ってほしい拡張子
 //	AppendExt("すべてのファイル", "*");
@@ -48,16 +48,16 @@ FileExt::FileExt()
 
 FileExt::~FileExt()
 {
-	if (m_puFileExtInfo) {
-		free(m_puFileExtInfo);
+	if (puFileExtInfo) {
+		free(puFileExtInfo);
 	}
-	m_puFileExtInfo = nullptr;
-	m_nCount = 0;
+	puFileExtInfo = nullptr;
+	nCount = 0;
 }
 
 bool FileExt::AppendExt(const TCHAR* pszName, const TCHAR* pszExt)
 {
-	TCHAR szWork[_countof(m_puFileExtInfo[0].m_szExt) + 10];
+	TCHAR szWork[_countof(puFileExtInfo[0].szExt) + 10];
 
 	if (!DocTypeManager::ConvertTypesExtToDlgExt(pszExt, NULL, szWork)) {
 		return false;
@@ -75,40 +75,40 @@ bool FileExt::AppendExtRaw(const TCHAR* pszName, const TCHAR* pszExt)
 	}
 
 	FileExtInfoTag* p;
-	if (!m_puFileExtInfo) {
+	if (!puFileExtInfo) {
 		p = (FileExtInfoTag*)malloc(sizeof(FileExtInfoTag) * 1);
 		if (!p) {
 			return false;
 		}
 	}else {
-		p = (FileExtInfoTag*)realloc(m_puFileExtInfo, sizeof(FileExtInfoTag) * (m_nCount + 1));
+		p = (FileExtInfoTag*)realloc(puFileExtInfo, sizeof(FileExtInfoTag) * (nCount + 1));
 		if (!p) {
 			return false;
 		}
 	}
-	m_puFileExtInfo = p;
+	puFileExtInfo = p;
 
-	_tcscpy(m_puFileExtInfo[m_nCount].m_szName, pszName);
-	_tcscpy(m_puFileExtInfo[m_nCount].m_szExt, pszExt);
-	++m_nCount;
+	_tcscpy(puFileExtInfo[nCount].szName, pszName);
+	_tcscpy(puFileExtInfo[nCount].szExt, pszExt);
+	++nCount;
 
 	return true;
 }
 
 const TCHAR* FileExt::GetName(int nIndex)
 {
-	if (nIndex < 0 || nIndex >= m_nCount) {
+	if (nIndex < 0 || nIndex >= nCount) {
 		return NULL;
 	}
-	return m_puFileExtInfo[nIndex].m_szName;
+	return puFileExtInfo[nIndex].szName;
 }
 
 const TCHAR* FileExt::GetExt(int nIndex)
 {
-	if (nIndex < 0 || nIndex >= m_nCount) {
+	if (nIndex < 0 || nIndex >= nCount) {
 		return NULL;
 	}
-	return m_puFileExtInfo[nIndex].m_szExt;
+	return puFileExtInfo[nIndex].szExt;
 }
 
 const TCHAR* FileExt::GetExtFilter(void)
@@ -116,28 +116,28 @@ const TCHAR* FileExt::GetExtFilter(void)
 	std::tstring work;
 
 	// 拡張子フィルタの作成
-	m_vstrFilter.resize(0);
+	vstrFilter.resize(0);
 
-	for (int i=0; i<m_nCount; ++i) {
+	for (int i=0; i<nCount; ++i) {
 		// "%ts (%ts)\0%ts\0"
-		work = m_puFileExtInfo[i].m_szName;
+		work = puFileExtInfo[i].szName;
 		work.append(_T(" ("));
-		work.append(m_puFileExtInfo[i].m_szExt);
+		work.append(puFileExtInfo[i].szExt);
 		work.append(_T(")"));
 		work.append(_T("\0"), 1);
-		work.append(m_puFileExtInfo[i].m_szExt);
+		work.append(puFileExtInfo[i].szExt);
 		work.append(_T("\0"), 1);
 
-		int sz = (int)m_vstrFilter.size();
-		m_vstrFilter.resize(sz + work.length());
-		auto_memcpy(&m_vstrFilter[sz], &work[0], work.length());
+		int sz = (int)vstrFilter.size();
+		vstrFilter.resize(sz + work.length());
+		auto_memcpy(&vstrFilter[sz], &work[0], work.length());
 	}
-	if (m_nCount == 0) {
-		m_vstrFilter.push_back(_T('\0'));
+	if (nCount == 0) {
+		vstrFilter.push_back(_T('\0'));
 	}
-	m_vstrFilter.push_back(_T('\0'));
+	vstrFilter.push_back(_T('\0'));
 
-	return &m_vstrFilter[0];
+	return &vstrFilter[0];
 
 }
 

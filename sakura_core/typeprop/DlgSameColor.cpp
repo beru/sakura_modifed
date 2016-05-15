@@ -57,9 +57,9 @@ LPVOID DlgSameColor::GetHelpIdTable(void)
 DlgSameColor::DlgSameColor() :
 	m_wpColorStaticProc(nullptr),
 	m_wpColorListProc(nullptr),
-	m_wID(0),
-	m_pTypes(nullptr),
-	m_cr(0)
+	wID(0),
+	pTypes(nullptr),
+	cr(0)
 {
 	return;
 }
@@ -112,9 +112,9 @@ INT_PTR DlgSameColor::DispatchEvent(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM 
 */
 int DlgSameColor::DoModal(HINSTANCE hInstance, HWND hwndParent, WORD wID, TypeConfig* pTypes, COLORREF cr)
 {
-	m_wID = wID;
-	m_pTypes = pTypes;
-	m_cr = cr;
+	wID = wID;
+	pTypes = pTypes;
+	cr = cr;
 
 	(void)Dialog::DoModal(hInstance, hwndParent, IDD_SAMECOLOR, (LPARAM)NULL);
 
@@ -141,7 +141,7 @@ BOOL DlgSameColor::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
 	WCHAR szText[30];
 	int nItem;
 
-	switch (m_wID) {	// タイプ別設定ダイアログで押されたボタンID
+	switch (wID) {	// タイプ別設定ダイアログで押されたボタンID
 	case IDC_BUTTON_SAMETEXTCOLOR:
 		// タイプ別設定から文字色を重複しないように取り出す
 		::SetWindowText(GetHwnd(), LS(STR_DLGSMCLR_BTN1));
@@ -149,8 +149,8 @@ BOOL DlgSameColor::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
 			if ((g_ColorAttributeArr[i].fAttribute & COLOR_ATTRIB_NO_TEXT) != 0) {
 				continue;
 			}
-			if (m_cr != m_pTypes->colorInfoArr[i].colorAttr.cTEXT) {
-				_ultow(m_pTypes->colorInfoArr[i].colorAttr.cTEXT, szText, 10);
+			if (cr != pTypes->colorInfoArr[i].colorAttr.cTEXT) {
+				_ultow(pTypes->colorInfoArr[i].colorAttr.cTEXT, szText, 10);
 				if (List_FindStringExact(hwndList, -1, szText) == LB_ERR) {
 					nItem = ::List_AddString(hwndList, szText);
 					List_SetItemData(hwndList, nItem, FALSE); 
@@ -166,8 +166,8 @@ BOOL DlgSameColor::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
 			if ((g_ColorAttributeArr[i].fAttribute & COLOR_ATTRIB_NO_BACK) != 0) {	// 2006.12.18 ryoji フラグ利用で簡素化
 				continue;
 			}
-			if (m_cr != m_pTypes->colorInfoArr[i].colorAttr.cBACK) {
-				_ultow(m_pTypes->colorInfoArr[i].colorAttr.cBACK, szText, 10);
+			if (cr != pTypes->colorInfoArr[i].colorAttr.cBACK) {
+				_ultow(pTypes->colorInfoArr[i].colorAttr.cBACK, szText, 10);
 				if (List_FindStringExact(hwndList, -1, szText) == LB_ERR) {
 					nItem = ::List_AddString(hwndList, szText);
 					List_SetItemData(hwndList, nItem, FALSE); 
@@ -226,21 +226,21 @@ BOOL DlgSameColor::OnBnClicked(int wID)
 				List_GetText(hwndList, i, szText);
 				cr = wcstoul(szText, &pszStop, 10);
 
-				switch (m_wID) {
+				switch (wID) {
 				case IDC_BUTTON_SAMETEXTCOLOR:
 					for (int j=0; j<COLORIDX_LAST; ++j) {
-						auto& colorAttr = m_pTypes->colorInfoArr[j].colorAttr.cTEXT;
+						auto& colorAttr = pTypes->colorInfoArr[j].colorAttr.cTEXT;
 						if (cr == colorAttr) {
-							colorAttr = m_cr;
+							colorAttr = cr;
 						}
 					}
 					break;
 
 				case IDC_BUTTON_SAMEBKCOLOR:
 					for (int j=0; j<COLORIDX_LAST; ++j) {
-						auto& colorAttr = m_pTypes->colorInfoArr[j].colorAttr.cBACK;
+						auto& colorAttr = pTypes->colorInfoArr[j].colorAttr.cBACK;
 						if (cr == colorAttr) {
-							colorAttr = m_cr;
+							colorAttr = cr;
 						}
 					}
 					break;
@@ -341,14 +341,14 @@ BOOL DlgSameColor::OnSelChangeListColors(HWND hwndCtl)
 		LPWSTR pszStop;
 		COLORREF cr = wcstoul(szText, &pszStop, 10);
 
-		switch (m_wID) {
+		switch (wID) {
 		case IDC_BUTTON_SAMETEXTCOLOR:
 			for (int j=0; j<COLORIDX_LAST; ++j) {
 				if ((g_ColorAttributeArr[i].fAttribute & COLOR_ATTRIB_NO_TEXT) != 0) {
 					continue;
 				}
-				if (cr == m_pTypes->colorInfoArr[j].colorAttr.cTEXT) {
-					::List_AddString(hwndListInfo, m_pTypes->colorInfoArr[j].szName);
+				if (cr == pTypes->colorInfoArr[j].colorAttr.cTEXT) {
+					::List_AddString(hwndListInfo, pTypes->colorInfoArr[j].szName);
 				}
 			}
 			break;
@@ -358,8 +358,8 @@ BOOL DlgSameColor::OnSelChangeListColors(HWND hwndCtl)
 				if ((g_ColorAttributeArr[j].fAttribute & COLOR_ATTRIB_NO_BACK) != 0) {	// 2006.12.18 ryoji フラグ利用で簡素化
 					continue;
 				}
-				if (cr == m_pTypes->colorInfoArr[j].colorAttr.cBACK) {
-					::List_AddString(hwndListInfo, m_pTypes->colorInfoArr[j].szName);
+				if (cr == pTypes->colorInfoArr[j].colorAttr.cBACK) {
+					::List_AddString(hwndListInfo, pTypes->colorInfoArr[j].szName);
 				}
 			}
 			break;
@@ -397,7 +397,7 @@ LRESULT CALLBACK DlgSameColor::ColorStatic_SubclassProc(HWND hwnd, UINT uMsg, WP
 		rc.bottom -= 2;
 		{
 			Graphics gr(hDC);
-			gr.SetBrushColor(pDlgSameColor->m_cr);
+			gr.SetBrushColor(pDlgSameColor->cr);
 			gr.SetPen(::GetSysColor(COLOR_3DSHADOW));
 			::RoundRect(gr, rc.left, rc.top, rc.right, rc.bottom, 5, 5);
 		}

@@ -346,7 +346,7 @@ bool DocFileOperation::DoSaveFlow(SaveInfo* pSaveInfo)
 					pSaveInfo->eol == EolType::None &&	// ※改行コード指定保存がリクエストされた場合は、「変更があったもの」とみなす
 					!pSaveInfo->bChgCodeSet
 				) {		// 文字コードセットの変更が有った場合は、「変更があったもの」とみなす
-					EditApp::getInstance().m_soundSet.NeedlessToSaveBeep();
+					EditApp::getInstance().soundSet.NeedlessToSaveBeep();
 					throw FlowInterruption();
 				}
 			}

@@ -58,7 +58,7 @@ public:
 	bool DoModalSaveDlg(SaveInfo* pSaveInfo, bool bSimpleMode);		// 保存ダイアログ モーダルダイアログの表示
 
 protected:
-	DlgOpenFileMem*	m_mem;
+	DlgOpenFileMem*	mem;
 
 	/*
 	||  実装ヘルパ関数

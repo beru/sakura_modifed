@@ -309,7 +309,7 @@ void EditWnd::UpdateCaption()
 	this->ChangeFileNameNotify(
 		to_tchar(pszCap),
 		GetListeningDoc()->m_docFile.GetFilePath(),
-		EditApp::getInstance().m_pGrepAgent->m_bGrepMode
+		EditApp::getInstance().pGrepAgent->bGrepMode
 	);	// 2006.01.28 ryoji ファイル名、Grepモードパラメータを追加
 	//@@@ To Here 2003.06.13 MIK
 }
@@ -1801,7 +1801,7 @@ LRESULT EditWnd::DispatchEvent(
 #endif
 				if (m_dlgFuncList.GetHwnd() && !bAnalyzed) {	// アウトラインを開いていれば再解析
 					// SHOW_NORMAL: 解析方法が変化していれば再解析される。そうでなければ描画更新（変更されたカラーの適用）のみ。
-					EFunctionCode nFuncCode = m_dlgFuncList.GetFuncCodeRedraw(m_dlgFuncList.m_nOutlineType);
+					EFunctionCode nFuncCode = m_dlgFuncList.GetFuncCodeRedraw(m_dlgFuncList.nOutlineType);
 					GetActiveView().GetCommander().HandleCommand(nFuncCode, true, (LPARAM)ShowDialogType::Normal, 0, 0, 0);
 				}
 				if (MyGetAncestor(::GetForegroundWindow(), GA_ROOTOWNER2) == GetHwnd())
@@ -2837,7 +2837,7 @@ LRESULT EditWnd::OnTimer(WPARAM wParam, LPARAM lParam)
 		OnSysMenuTimer();
 		break;
 	case IDT_FIRST_IDLE:
-		m_dlgFuncList.m_bEditWndReady = true;	// エディタ画面の準備完了
+		m_dlgFuncList.bEditWndReady = true;	// エディタ画面の準備完了
 		AppNodeGroupHandle(0).PostMessageToAllEditors(MYWM_FIRST_IDLE, ::GetCurrentProcessId(), 0, NULL);	// プロセスの初回アイドリング通知	// 2008.04.19 ryoji
 		::PostMessage(m_pShareData->handles.hwndTray, MYWM_FIRST_IDLE, (WPARAM)::GetCurrentProcessId(), (LPARAM)0);
 		::KillTimer(m_hWnd, wParam);
@@ -4774,7 +4774,7 @@ void EditWnd::RegisterPluginCommand(Plug* plug)
 {
 	int iBitmap = MenuDrawer::TOOLBAR_ICON_PLUGCOMMAND_DEFAULT - 1;
 	if (!plug->m_sIcon.empty()) {
-		iBitmap = m_menuDrawer.m_pIcons->Add(to_tchar(plug->plugin.GetFilePath(to_tchar(plug->m_sIcon.c_str())).c_str()));
+		iBitmap = m_menuDrawer.pIcons->Add(to_tchar(plug->plugin.GetFilePath(to_tchar(plug->m_sIcon.c_str())).c_str()));
 	}
 
 	m_menuDrawer.AddToolButton(iBitmap, plug->GetFunctionCode());

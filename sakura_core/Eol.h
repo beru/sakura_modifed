@@ -64,7 +64,7 @@ extern const EolType gm_pnEolTypeArr[EOL_TYPE_NUM];
 class Eol {
 public:
 	// コンストラクタ・デストラクタ
-	Eol() { m_eEolType = EolType::None; }
+	Eol() { eEolType = EolType::None; }
 	Eol(EolType t) { SetType(t); }
 
 	// 比較
@@ -72,7 +72,7 @@ public:
 	bool operator != (EolType t) const { return GetType() != t; }
 
 	// 代入
-	const Eol& operator = (const Eol& t) { m_eEolType = t.m_eEolType; return *this; }
+	const Eol& operator = (const Eol& t) { eEolType = t.eEolType; return *this; }
 
 	// 型変換
 	operator EolType() const { return GetType(); }
@@ -88,17 +88,17 @@ public:
 	void SetTypeByStringForFile_unibe(const char* pszData, int nDataLen);
 
 	// 取得
-	EolType			GetType()	const { return m_eEolType; }		// 現在のTypeを取得
+	EolType			GetType()	const { return eEolType; }		// 現在のTypeを取得
 	LogicInt		GetLen()	const;	// 現在のEOL長を取得。文字単位。
 	const TCHAR*	GetName()	const;	// 現在のEOLの名称取得
 	const wchar_t*	GetValue2()	const;	// 現在のEOL文字列先頭へのポインタを取得
 	//#####
 
 	bool IsValid() const {
-		return m_eEolType >= EolType::CRLF && m_eEolType < EolType::CodeMax;
+		return eEolType >= EolType::CRLF && eEolType < EolType::CodeMax;
 	}
 
 private:
-	EolType	m_eEolType;	// 改行コードの種類
+	EolType	eEolType;	// 改行コードの種類
 };
 

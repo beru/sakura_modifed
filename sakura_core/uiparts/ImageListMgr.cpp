@@ -31,11 +31,11 @@ const int MAX_Y = MAX_TOOLBAR_ICON_Y;	// 2002.01.17
 // コンストラクタ
 ImageListMgr::ImageListMgr()
 	:
-	m_cx(16),
-	m_cy(16),
-	m_cTrans(RGB(0, 0, 0)),
-	m_hIconBitmap(NULL),
-	m_nIconCount(MAX_TOOLBAR_ICON_COUNT)
+	cx(16),
+	cy(16),
+	cTrans(RGB(0, 0, 0)),
+	hIconBitmap(NULL),
+	nIconCount(MAX_TOOLBAR_ICON_COUNT)
 {
 }
 
@@ -66,8 +66,8 @@ void FillSolidRect(
 ImageListMgr::~ImageListMgr()
 {
 	//	2003.07.21 Image Listの代わりに描画用bitmapを解放
-	if (m_hIconBitmap) {
-		DeleteObject(m_hIconBitmap);
+	if (hIconBitmap) {
+		DeleteObject(hIconBitmap);
 	}
 }
 
@@ -84,7 +84,7 @@ ImageListMgr::~ImageListMgr()
 bool ImageListMgr::Create(HINSTANCE hInstance)
 {
 	MY_RUNNINGTIMER(runningTimer, "CImageListMgr::Create");
-	if (m_hIconBitmap) {	//	既に構築済みなら無視する
+	if (hIconBitmap) {	//	既に構築済みなら無視する
 		return true;
 	}
 
@@ -92,7 +92,7 @@ bool ImageListMgr::Create(HINSTANCE hInstance)
 	HBITMAP	hFOldbmp = NULL;	//	SetObjectで得られた1つ前のハンドルを保持する
 	HDC		dcFrom = 0;			//	描画用
 	int		nRetPos;			//	後処理用
-	m_cx = m_cy  = 16;
+	cx = cy  = 16;
 
 	nRetPos = 0;
 	do {
@@ -119,7 +119,7 @@ bool ImageListMgr::Create(HINSTANCE hInstance)
 			}
 		}
 		//	To Here 2001.7.1 GAE
-		m_hIconBitmap = hRscbmp;
+		hIconBitmap = hRscbmp;
 
 		//	透過色を得るためにDCにマップする
 		//	2003.07.21 genta 透過色を得る以外の目的では使わなくなった
@@ -141,7 +141,7 @@ bool ImageListMgr::Create(HINSTANCE hInstance)
 			break;
 		}
 
-		m_cTrans = GetPixel(dcFrom, 0, 0);//	取得した画像の(0,0)の色を背景色として使う
+		cTrans = GetPixel(dcFrom, 0, 0);//	取得した画像の(0,0)の色を背景色として使う
 		
 		//	2003.07.21 genta
 		//	ImageListへの登録部分は当然ばっさり削除
@@ -262,7 +262,7 @@ void ImageListMgr::DitherBlt2(
 {
 
 	//COLORREF colToTransParent = RGB(192, 192, 192);	// BMPの中の透明にする色
-	COLORREF colToTransParent = m_cTrans;
+	COLORREF colToTransParent = cTrans;
 
 	// create a monochrome memory DC
 	HDC hdcMask = CreateCompatibleDC(drawdc);
@@ -351,7 +351,7 @@ bool ImageListMgr::Draw(
 	int fstyle
 	) const
 {
-	if (!m_hIconBitmap) {
+	if (!hIconBitmap) {
 		return false;
 	}
 	if (index < 0) {
@@ -359,11 +359,11 @@ bool ImageListMgr::Draw(
 	}
 
 	if (fstyle == ILD_MASK) {
-		DitherBlt2(dc, x, y, cx(), cy(), m_hIconBitmap,
-			(index % MAX_X) * cx(), (index / MAX_X) * cy());
+		DitherBlt2(dc, x, y, cx, cy, hIconBitmap,
+			(index % MAX_X) * cx, (index / MAX_X) * cy);
 	}else {
-		MyBitBlt(dc, x, y, cx(), cy(), m_hIconBitmap,
-			(index % MAX_X) * cx(), (index / MAX_X) * cy(), m_cTrans);
+		MyBitBlt(dc, x, y, cx, cy, hIconBitmap,
+			(index % MAX_X) * cx, (index / MAX_X) * cy, cTrans);
 	}
 	return true;
 }
@@ -374,18 +374,18 @@ bool ImageListMgr::Draw(
 */
 int ImageListMgr::Count() const
 {
-	return m_nIconCount;
+	return nIconCount;
 //	return MAX_X * MAX_Y;
 }
 
 /*!	アイコンを追加してそのIDを返す */
 int ImageListMgr::Add(const TCHAR* szPath)
 {
-	if ((m_nIconCount % MAX_X) == 0) {
+	if ((nIconCount % MAX_X) == 0) {
 		Extend();
 	}
-	int index = m_nIconCount;
-	++m_nIconCount;
+	int index = nIconCount;
+	++nIconCount;
 
 	// アイコンを読み込む
 	HBITMAP hExtBmp = (HBITMAP)::LoadImage(NULL, szPath, IMAGE_BITMAP, 0, 0,
@@ -397,7 +397,7 @@ int ImageListMgr::Add(const TCHAR* szPath)
 
 	// m_hIconBitmapにコピーする
 	HDC hDestDC = ::CreateCompatibleDC(0);
-	HBITMAP hOldDestBmp = (HBITMAP)::SelectObject(hDestDC, m_hIconBitmap);
+	HBITMAP hOldDestBmp = (HBITMAP)::SelectObject(hDestDC, hIconBitmap);
 
 	HDC hExtDC = ::CreateCompatibleDC(0);
 	HBITMAP hOldBmp = (HBITMAP)::SelectObject(hExtDC, hExtBmp);
@@ -405,7 +405,7 @@ int ImageListMgr::Add(const TCHAR* szPath)
 	::SelectObject(hExtDC, hOldBmp);
 	::DeleteDC(hExtDC);
 
-	MyBitBlt(hDestDC, (index % MAX_X) * cx(), (index / MAX_X) * cy(), cx(), cy(), hExtBmp, 0, 0, cTrans);
+	MyBitBlt(hDestDC, (index % MAX_X) * cx, (index / MAX_X) * cy, cx, cy, hExtBmp, 0, 0, cTrans);
 
 	::SelectObject(hDestDC, hOldDestBmp);
 	::DeleteDC(hDestDC);
@@ -417,40 +417,40 @@ int ImageListMgr::Add(const TCHAR* szPath)
 // ビットマップを一行（MAX_X個）拡張する
 void ImageListMgr::Extend(bool bExtend)
 {
-	int curY = m_nIconCount / MAX_X;
+	int curY = nIconCount / MAX_X;
 	if (curY < MAX_Y) {
 		curY = MAX_Y;
 	}
 
 	HDC hSrcDC = ::CreateCompatibleDC(0);
-	HBITMAP hSrcBmpOld = (HBITMAP)::SelectObject(hSrcDC, m_hIconBitmap);
+	HBITMAP hSrcBmpOld = (HBITMAP)::SelectObject(hSrcDC, hIconBitmap);
 
 	// 1行拡張したビットマップを作成
 	HDC hDestDC = ::CreateCompatibleDC(hSrcDC);
-	HBITMAP hDestBmp = ::CreateCompatibleBitmap(hSrcDC, MAX_X * cx(), (curY + (bExtend ? 1 : 0)) * cy());
+	HBITMAP hDestBmp = ::CreateCompatibleBitmap(hSrcDC, MAX_X * cx, (curY + (bExtend ? 1 : 0)) * cy);
 	HBITMAP hDestBmpOld = (HBITMAP)::SelectObject(hDestDC, hDestBmp);
 
-	::BitBlt(hDestDC, 0, 0, MAX_X * cx(), curY * cy(), hSrcDC, 0, 0, SRCCOPY);
+	::BitBlt(hDestDC, 0, 0, MAX_X * cx, curY * cy, hSrcDC, 0, 0, SRCCOPY);
 
 	// 拡張した部分は透過色で塗る
 	if (bExtend) {
-		FillSolidRect(hDestDC, 0, curY * cy(), MAX_X * cx(), cy(), m_cTrans);
+		FillSolidRect(hDestDC, 0, curY * cy, MAX_X * cx, cy, cTrans);
 	}
 
 	::SelectObject(hSrcDC, hSrcBmpOld);
-	::DeleteObject(m_hIconBitmap);
+	::DeleteObject(hIconBitmap);
 	::DeleteDC(hSrcDC);
 
 	::SelectObject(hDestDC, hDestBmpOld);
 	::DeleteDC(hDestDC);
 
 	// ビットマップの差し替え
-	m_hIconBitmap = hDestBmp;
+	hIconBitmap = hDestBmp;
 }
 
 void ImageListMgr::ResetExtend()
 {
-	m_nIconCount = MAX_TOOLBAR_ICON_COUNT;
+	nIconCount = MAX_TOOLBAR_ICON_COUNT;
 	Extend(false);
 }
 

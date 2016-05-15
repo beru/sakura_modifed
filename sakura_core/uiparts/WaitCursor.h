@@ -31,10 +31,10 @@ public:
 	WaitCursor(HWND, bool bEnable = true);
 	~WaitCursor();
 
-	bool IsEnable() { return m_bEnable; }
+	bool IsEnable() { return bEnable; }
 private: // 2002/2/10 aroka
-	HCURSOR	m_hCursor;
-	HCURSOR	m_hCursorOld;
-	bool	m_bEnable;
+	HCURSOR	hCursor;
+	HCURSOR	hCursorOld;
+	bool	bEnable;
 };
 

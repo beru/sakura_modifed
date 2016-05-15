@@ -18,11 +18,11 @@
 */
 WaitCursor::WaitCursor(HWND hWnd, bool bEnable)
 {
-	m_bEnable = bEnable;
+	this->bEnable = bEnable;
 	if (!bEnable) return;
 	SetCapture(hWnd);
-	m_hCursor = ::LoadCursor(NULL, IDC_WAIT);
-	m_hCursorOld = ::SetCursor(m_hCursor);
+	hCursor = ::LoadCursor(NULL, IDC_WAIT);
+	hCursorOld = ::SetCursor(hCursor);
 	return;
 }
 
@@ -31,9 +31,9 @@ WaitCursor::WaitCursor(HWND hWnd, bool bEnable)
 */
 WaitCursor::~WaitCursor()
 {
-	if (m_bEnable) {
+	if (bEnable) {
 		ReleaseCapture();
-		::SetCursor(m_hCursorOld);
+		::SetCursor(hCursorOld);
 	}
 }
 

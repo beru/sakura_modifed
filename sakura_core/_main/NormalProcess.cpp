@@ -201,7 +201,7 @@ bool NormalProcess::InitializeProcess()
 			SetMainWindow(pEditWnd->GetHwnd());
 			::ReleaseMutex(hMutex);
 			::CloseHandle(hMutex);
-			this->m_pEditApp->m_pGrepAgent->DoGrep(
+			this->m_pEditApp->pGrepAgent->DoGrep(
 				activeView,
 				gi.bGrepReplace,
 				&gi.mGrepKey,
@@ -260,14 +260,14 @@ bool NormalProcess::InitializeProcess()
 			
 			// Oct. 9, 2003 genta コマンドラインからGERPダイアログを表示させた場合に
 			// 引数の設定がBOXに反映されない
-			pEditWnd->m_dlgGrep.m_strText = gi.mGrepKey.GetStringPtr();		// 検索文字列
-			pEditWnd->m_dlgGrep.m_bSetText = true;
-			int nSize = _countof2(pEditWnd->m_dlgGrep.m_szFile);
-			_tcsncpy(pEditWnd->m_dlgGrep.m_szFile, gi.mGrepFile.GetStringPtr(), nSize);	// 検索ファイル
-			pEditWnd->m_dlgGrep.m_szFile[nSize - 1] = _T('\0');
-			nSize = _countof2(pEditWnd->m_dlgGrep.m_szFolder);
-			_tcsncpy(pEditWnd->m_dlgGrep.m_szFolder, memGrepFolder.GetStringPtr(), nSize);	// 検索フォルダ
-			pEditWnd->m_dlgGrep.m_szFolder[nSize - 1] = _T('\0');
+			pEditWnd->m_dlgGrep.strText = gi.mGrepKey.GetStringPtr();		// 検索文字列
+			pEditWnd->m_dlgGrep.bSetText = true;
+			int nSize = _countof2(pEditWnd->m_dlgGrep.szFile);
+			_tcsncpy(pEditWnd->m_dlgGrep.szFile, gi.mGrepFile.GetStringPtr(), nSize);	// 検索ファイル
+			pEditWnd->m_dlgGrep.szFile[nSize - 1] = _T('\0');
+			nSize = _countof2(pEditWnd->m_dlgGrep.szFolder);
+			_tcsncpy(pEditWnd->m_dlgGrep.szFolder, memGrepFolder.GetStringPtr(), nSize);	// 検索フォルダ
+			pEditWnd->m_dlgGrep.szFolder[nSize - 1] = _T('\0');
 
 			
 			// Feb. 23, 2003 Moca Owner windowが正しく指定されていなかった

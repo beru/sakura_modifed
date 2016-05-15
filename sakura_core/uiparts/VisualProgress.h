@@ -53,7 +53,7 @@ protected:
 	void _Doing(int nPer);
 	void _End();
 private:
-	WaitCursor* m_pWaitCursor;
+	WaitCursor* pWaitCursor;
 	int	nOldValue;
 
 private:

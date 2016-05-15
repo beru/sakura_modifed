@@ -94,7 +94,7 @@ BOOL DlgProperty::OnBnClicked(int wID)
 */
 void DlgProperty::SetData(void)
 {
-	EditDoc* pEditDoc = (EditDoc*)m_lParam;
+	EditDoc* pEditDoc = (EditDoc*)lParam;
 	NativeT memProp;
 	TCHAR szWork[500];
 
@@ -145,9 +145,9 @@ void DlgProperty::SetData(void)
 
 	if ((nFind = ::FindFirstFile(pEditDoc->m_docFile.GetFilePath(), &wfd)) != INVALID_HANDLE_VALUE) {
 		if (pEditDoc->m_docFile.IsFileLocking()) {
-			if (m_pShareData->common.file.nFileShareMode == FileShareMode::DenyWrite) {
+			if (pShareData->common.file.nFileShareMode == FileShareMode::DenyWrite) {
 				auto_sprintf(szWork, LS(STR_DLGFLPROP_W_LOCK));
-			}else if (m_pShareData->common.file.nFileShareMode == FileShareMode::DenyReadWrite) {
+			}else if (pShareData->common.file.nFileShareMode == FileShareMode::DenyReadWrite) {
 				auto_sprintf(szWork, LS(STR_DLGFLPROP_RW_LOCK));
 			}else {
 				auto_sprintf(szWork, LS(STR_DLGFLPROP_LOCK));

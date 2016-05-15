@@ -50,7 +50,7 @@ int GrepEnumKeys::SetFileKeys(LPCTSTR lpKeys)
 		}
 		if (keyType == FILTER_SEARCH) {
 			if (bRelPath) {
-				push_back_unique(m_vecSearchFileKeys, token);
+				push_back_unique(vecSearchFileKeys, token);
 			}else {
 //					push_back_unique(m_vecSearchAbsFileKeys, token);
 //					push_back_unique(m_vecSearchFileKeys, token);
@@ -58,23 +58,23 @@ int GrepEnumKeys::SetFileKeys(LPCTSTR lpKeys)
 			}
 		}else if (keyType == FILTER_EXCEPT_FILE) {
 			if (bRelPath) {
-				push_back_unique(m_vecExceptFileKeys, token);
+				push_back_unique(vecExceptFileKeys, token);
 			}else {
-				push_back_unique(m_vecExceptAbsFileKeys, token);
+				push_back_unique(vecExceptAbsFileKeys, token);
 			}
 		}else if (keyType == FILTER_EXCEPT_FOLDER) {
 			if (bRelPath) {
-				push_back_unique(m_vecExceptFolderKeys, token);
+				push_back_unique(vecExceptFolderKeys, token);
 			}else {
-				push_back_unique(m_vecExceptAbsFolderKeys, token);
+				push_back_unique(vecExceptAbsFolderKeys, token);
 			}
 		}
 	}
-	if (m_vecSearchFileKeys.size() == 0) {
-		push_back_unique(m_vecSearchFileKeys, wildcard_any);
+	if (vecSearchFileKeys.size() == 0) {
+		push_back_unique(vecSearchFileKeys, wildcard_any);
 	}
-	if (m_vecSearchFolderKeys.size() == 0) {
-		push_back_unique(m_vecSearchFolderKeys, wildcard_any);
+	if (vecSearchFolderKeys.size() == 0) {
+		push_back_unique(vecSearchFolderKeys, wildcard_any);
 	}
 	return 0;
 }

@@ -52,12 +52,12 @@ DlgCompare::DlgCompare()
 	Dialog(true)
 {
 	// サイズ変更時に位置を制御するコントロール数
-	assert(_countof(anchorList) == _countof(m_rcItems));
+	assert(_countof(anchorList) == _countof(rcItems));
 
 	bCompareAndTileHorz = true;	// 左右に並べて表示
 
-	m_ptDefaultSize.x = -1;
-	m_ptDefaultSize.y = -1;
+	ptDefaultSize.x = -1;
+	ptDefaultSize.y = -1;
 	return;
 }
 
@@ -72,9 +72,9 @@ int DlgCompare::DoModal(
 	HWND*			phwndCompareWnd
 	)
 {
-	m_pszPath = pszPath;
-	m_pszCompareLabel = pszCompareLabel;
-	m_phwndCompareWnd = phwndCompareWnd;
+	pszPath = pszPath;
+	pszCompareLabel = pszCompareLabel;
+	phwndCompareWnd = phwndCompareWnd;
 	return Dialog::DoModal(hInstance, hwndParent, IDD_COMPARE, lParam);
 }
 
@@ -99,7 +99,7 @@ BOOL DlgCompare::OnBnClicked(int wID)
 //		HWND*	phwndArr;
 //		int		i;
 //		phwndArr = new HWND[2];
-//		phwndArr[0] = ::GetParent(m_hwndParent);
+//		phwndArr[0] = ::GetParent(hwndParent);
 //		phwndArr[1] = hwndCompareWnd;
 //		for (i=0; i<2; ++i) {
 //			if (::IsZoomed(phwndArr[i])) {
@@ -143,11 +143,11 @@ void DlgCompare::SetData(void)
 		TextWidthCalc calc(hwndList);
 		int score = 0;
 		TCHAR szFile1[_MAX_PATH];
-		SplitPath_FolderAndFile(m_pszPath, NULL, szFile1);
+		SplitPath_FolderAndFile(pszPath, NULL, szFile1);
 		for (int i=0; i<nRowNum; ++i) {
 			// トレイからエディタへの編集ファイル名要求通知
 			::SendMessage(pEditNodeArr[i].GetHwnd(), MYWM_GETFILEINFO, 0, 0);
-			EditInfo* pfi = (EditInfo*)&m_pShareData->workBuffer.editInfo_MYWM_GETFILEINFO;
+			EditInfo* pfi = (EditInfo*)&pShareData->workBuffer.editInfo_MYWM_GETFILEINFO;
 
 //@@@ 2001.12.26 YAZAKI ファイル名で比較すると(無題)だったときに問題同士の比較ができない
 			if (pEditNodeArr[i].GetHwnd() == EditWnd::getInstance().GetHwnd()) {
@@ -184,8 +184,8 @@ void DlgCompare::SetData(void)
 	// 左右に並べて表示
 	//@@@ 2003.06.12 MIK
 	// TAB 1ウィンドウ表示のときは並べて比較できなくする
-	if (m_pShareData->common.tabBar.bDispTabWnd
-		&& !m_pShareData->common.tabBar.bDispTabWndMultiWin
+	if (pShareData->common.tabBar.bDispTabWnd
+		&& !pShareData->common.tabBar.bDispTabWndMultiWin
 	) {
 		bCompareAndTileHorz = false;
 		EnableItem(IDC_CHECK_TILE_H, false);
@@ -204,15 +204,15 @@ int DlgCompare::GetData(void)
 	if (nItem == LB_ERR) {
 		return FALSE;
 	}else {
-		*m_phwndCompareWnd = (HWND)List_GetItemData(hwndList, nItem);
+		*phwndCompareWnd = (HWND)List_GetItemData(hwndList, nItem);
 		// トレイからエディタへの編集ファイル名要求通知
-		::SendMessage(*m_phwndCompareWnd, MYWM_GETFILEINFO, 0, 0);
-		EditInfo* pfi = (EditInfo*)&m_pShareData->workBuffer.editInfo_MYWM_GETFILEINFO;
+		::SendMessage(*phwndCompareWnd, MYWM_GETFILEINFO, 0, 0);
+		EditInfo* pfi = (EditInfo*)&pShareData->workBuffer.editInfo_MYWM_GETFILEINFO;
 
 		// 2010.07.30 パス名はやめて表示名に変更
-		int nId = AppNodeManager::getInstance().GetEditNode(*m_phwndCompareWnd)->GetId();
+		int nId = AppNodeManager::getInstance().GetEditNode(*phwndCompareWnd)->GetId();
 		TextWidthCalc calc(hwndList);
-		FileNameManager::getInstance().GetMenuFullLabel_WinListNoEscape( m_pszCompareLabel, _MAX_PATH/*長さ不明*/, pfi, nId, -1, calc.GetDC() );
+		FileNameManager::getInstance().GetMenuFullLabel_WinListNoEscape( pszCompareLabel, _MAX_PATH/*長さ不明*/, pfi, nId, -1, calc.GetDC() );
 
 		// 左右に並べて表示
 		bCompareAndTileHorz = IsButtonChecked(IDC_CHECK_TILE_H);
@@ -250,21 +250,21 @@ BOOL DlgCompare::OnInitDialog(
 	
 	RECT rc;
 	::GetWindowRect(hwndDlg, &rc);
-	m_ptDefaultSize.x = rc.right - rc.left;
-	m_ptDefaultSize.y = rc.bottom - rc.top;
+	ptDefaultSize.x = rc.right - rc.left;
+	ptDefaultSize.y = rc.bottom - rc.top;
 
 	for (int i=0; i<_countof(anchorList); ++i) {
-		GetItemClientRect(anchorList[i].id, m_rcItems[i]);
+		GetItemClientRect(anchorList[i].id, rcItems[i]);
 	}
 
 	RECT rcDialog = GetDllShareData().common.others.rcCompareDialog;
 	if (rcDialog.left != 0
 		|| rcDialog.bottom != 0
 	) {
-		m_xPos = rcDialog.left;
-		m_yPos = rcDialog.top;
-		m_nWidth = rcDialog.right - rcDialog.left;
-		m_nHeight = rcDialog.bottom - rcDialog.top;
+		xPos = rcDialog.left;
+		yPos = rcDialog.top;
+		nWidth = rcDialog.right - rcDialog.left;
+		nHeight = rcDialog.bottom - rcDialog.top;
 	}
 
 	return Dialog::OnInitDialog(hwndDlg, wParam, lParam);
@@ -283,7 +283,7 @@ BOOL DlgCompare::OnSize(WPARAM wParam, LPARAM lParam)
 	ptNew.x = rc.right - rc.left;
 	ptNew.y = rc.bottom - rc.top;
 	for (int i=0; i<_countof(anchorList); ++i) {
-		ResizeItem(GetItemHwnd(anchorList[i].id), m_ptDefaultSize, ptNew, m_rcItems[i], anchorList[i].anchor);
+		ResizeItem(GetItemHwnd(anchorList[i].id), ptDefaultSize, ptNew, rcItems[i], anchorList[i].anchor);
 	}
 	::InvalidateRect(GetHwnd(), NULL, TRUE);
 	return TRUE;
@@ -298,13 +298,13 @@ BOOL DlgCompare::OnMove(WPARAM wParam, LPARAM lParam)
 BOOL DlgCompare::OnMinMaxInfo(LPARAM lParam)
 {
 	LPMINMAXINFO lpmmi = (LPMINMAXINFO) lParam;
-	if (m_ptDefaultSize.x < 0) {
+	if (ptDefaultSize.x < 0) {
 		return 0;
 	}
-	lpmmi->ptMinTrackSize.x = m_ptDefaultSize.x;
-	lpmmi->ptMinTrackSize.y = m_ptDefaultSize.y;
-	lpmmi->ptMaxTrackSize.x = m_ptDefaultSize.x*2;
-	lpmmi->ptMaxTrackSize.y = m_ptDefaultSize.y*3;
+	lpmmi->ptMinTrackSize.x = ptDefaultSize.x;
+	lpmmi->ptMinTrackSize.y = ptDefaultSize.y;
+	lpmmi->ptMaxTrackSize.x = ptDefaultSize.x*2;
+	lpmmi->ptMaxTrackSize.y = ptDefaultSize.y*3;
 	return 0;
 }
 

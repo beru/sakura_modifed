@@ -67,8 +67,8 @@ static void SetGrepFolder(HWND hwndCtrl, LPCTSTR folder);
 
 DlgGrep::DlgGrep()
 {
-	m_bSubFolder = false;				// サブフォルダからも検索する
-	m_bFromThisText = false;			// この編集中のテキストから検索する
+	bSubFolder = false;				// サブフォルダからも検索する
+	bFromThisText = false;			// この編集中のテキストから検索する
 	searchOption.Reset();			// 検索オプション
 	nGrepCharSet = CODE_SJIS;			// 文字コードセット
 	nGrepOutputLineType = 1;			// 行を出力/該当部分/否マッチ行 を出力
@@ -77,9 +77,9 @@ DlgGrep::DlgGrep()
 	bGrepOutputBaseFolder = false;
 	bGrepSeparateFolder = false;
 
-	m_bSetText = false;
-	m_szFile[0] = 0;
-	m_szFolder[0] = 0;
+	bSetText = false;
+	szFile[0] = 0;
+	szFolder[0] = 0;
 	return;
 }
 
@@ -90,7 +90,7 @@ DlgGrep::DlgGrep()
 */
 BOOL DlgGrep::OnCbnDropDown(HWND hwndCtl, int wID)
 {
-	auto& searchKeywords = m_pShareData->searchKeywords;
+	auto& searchKeywords = pShareData->searchKeywords;
 	switch (wID) {
 	case IDC_COMBO_TEXT:
 		if (::SendMessage(hwndCtl, CB_GETCOUNT, 0L, 0L) == 0) {
@@ -127,8 +127,8 @@ int DlgGrep::DoModal(
 	const TCHAR* pszCurrentFilePath
 	)
 {
-	auto& csSearch = m_pShareData->common.search;
-	m_bSubFolder = csSearch.bGrepSubFolder;			// Grep: サブフォルダも検索
+	auto& csSearch = pShareData->common.search;
+	bSubFolder = csSearch.bGrepSubFolder;			// Grep: サブフォルダも検索
 	searchOption = csSearch.searchOption;			// 検索オプション
 	nGrepCharSet = csSearch.nGrepCharSet;			// 文字コードセット
 	nGrepOutputLineType = csSearch.nGrepOutputLineType;	// 行を出力/該当部分/否マッチ行 を出力
@@ -138,17 +138,17 @@ int DlgGrep::DoModal(
 	bGrepSeparateFolder = csSearch.bGrepSeparateFolder;
 
 	// 2013.05.21 コンストラクタからDoModalに移動
-	// m_strText は呼び出し元で設定済み
-	auto& searchKeywords = m_pShareData->searchKeywords;
-	if (m_szFile[0] == _T('\0') && searchKeywords.grepFiles.size()) {
-		_tcscpy(m_szFile, searchKeywords.grepFiles[0]);		// 検索ファイル
+	// strText は呼び出し元で設定済み
+	auto& searchKeywords = pShareData->searchKeywords;
+	if (szFile[0] == _T('\0') && searchKeywords.grepFiles.size()) {
+		_tcscpy(szFile, searchKeywords.grepFiles[0]);		// 検索ファイル
 	}
-	if (m_szFolder[0] == _T('\0') && searchKeywords.grepFolders.size()) {
-		_tcscpy(m_szFolder, searchKeywords.grepFolders[0]);	// 検索フォルダ
+	if (szFolder[0] == _T('\0') && searchKeywords.grepFolders.size()) {
+		_tcscpy(szFolder, searchKeywords.grepFolders[0]);	// 検索フォルダ
 	}
 
 	if (pszCurrentFilePath) {	// 2010.01.10 ryoji
-		_tcscpy(m_szCurrentFilePath, pszCurrentFilePath);
+		_tcscpy(szCurrentFilePath, pszCurrentFilePath);
 	}
 
 	return (int)Dialog::DoModal(hInstance, hwndParent, IDD_GREP, (LPARAM)NULL);
@@ -179,8 +179,8 @@ BOOL DlgGrep::OnInitDialog(
 	// ダイアログのアイコン
 // 2002.02.08 Grepアイコンも大きいアイコンと小さいアイコンを別々にする。
 	// Dec, 2, 2002 genta アイコン読み込み方法変更
-	HICON hIconBig   = GetAppIcon(m_hInstance, ICON_DEFAULT_GREP, FN_GREP_ICON, false);
-	HICON hIconSmall = GetAppIcon(m_hInstance, ICON_DEFAULT_GREP, FN_GREP_ICON, true);
+	HICON hIconBig   = GetAppIcon(hInstance, ICON_DEFAULT_GREP, FN_GREP_ICON, false);
+	HICON hIconSmall = GetAppIcon(hInstance, ICON_DEFAULT_GREP, FN_GREP_ICON, true);
 	::SendMessage(GetHwnd(), WM_SETICON, ICON_SMALL, (LPARAM)hIconSmall);
 	::SendMessage(GetHwnd(), WM_SETICON, ICON_BIG, (LPARAM)hIconBig);
 
@@ -196,20 +196,20 @@ BOOL DlgGrep::OnInitDialog(
 	g_pOnFolderProc = (WNDPROC)GetWindowLongPtr(hFolder, GWLP_WNDPROC);
 	SetWindowLongPtr(hFolder, GWLP_WNDPROC, (LONG_PTR)OnFolderProc);
 
-	m_comboDelText = ComboBoxItemDeleter();
-	m_comboDelText.pRecent = &m_recentSearch;
-	SetComboBoxDeleter(GetItemHwnd(IDC_COMBO_TEXT), &m_comboDelText);
-	m_comboDelFile = ComboBoxItemDeleter();
-	m_comboDelFile.pRecent = &m_recentGrepFile;
-	SetComboBoxDeleter(GetItemHwnd(IDC_COMBO_FILE), &m_comboDelFile);
-	m_comboDelFolder = ComboBoxItemDeleter();
-	m_comboDelFolder.pRecent = &m_recentGrepFolder;
-	SetComboBoxDeleter(GetItemHwnd(IDC_COMBO_FOLDER), &m_comboDelFolder);
+	comboDelText = ComboBoxItemDeleter();
+	comboDelText.pRecent = &recentSearch;
+	SetComboBoxDeleter(GetItemHwnd(IDC_COMBO_TEXT), &comboDelText);
+	comboDelFile = ComboBoxItemDeleter();
+	comboDelFile.pRecent = &recentGrepFile;
+	SetComboBoxDeleter(GetItemHwnd(IDC_COMBO_FILE), &comboDelFile);
+	comboDelFolder = ComboBoxItemDeleter();
+	comboDelFolder.pRecent = &recentGrepFolder;
+	SetComboBoxDeleter(GetItemHwnd(IDC_COMBO_FOLDER), &comboDelFolder);
 
 	// フォント設定	2012/11/27 Uchi
 	HFONT hFontOld = (HFONT)::SendMessage(GetItemHwnd(IDC_COMBO_TEXT), WM_GETFONT, 0, 0);
 	HFONT hFont = SetMainFont(GetItemHwnd(IDC_COMBO_TEXT));
-	m_fontText.SetFont(hFontOld, hFont, GetItemHwnd(IDC_COMBO_TEXT));
+	fontText.SetFont(hFontOld, hFont, GetItemHwnd(IDC_COMBO_TEXT));
 
 	// 基底クラスメンバ
 //	CreateSizeBox();
@@ -256,7 +256,7 @@ LRESULT CALLBACK OnFolderProc(
 
 BOOL DlgGrep::OnDestroy()
 {
-	m_fontText.ReleaseOnDestroy();
+	fontText.ReleaseOnDestroy();
 	return Dialog::OnDestroy();
 }
 
@@ -274,10 +274,10 @@ BOOL DlgGrep::OnBnClicked(int wID)
 		return TRUE;
 	case IDC_BUTTON_CURRENTFOLDER:	// 現在編集中のファイルのフォルダ
 		// ファイルを開いているか
-		if (m_szCurrentFilePath[0] != _T('\0')) {
+		if (szCurrentFilePath[0] != _T('\0')) {
 			TCHAR	szWorkFolder[MAX_PATH];
 			TCHAR	szWorkFile[MAX_PATH];
-			SplitPath_FolderAndFile(m_szCurrentFilePath, szWorkFolder, szWorkFile);
+			SplitPath_FolderAndFile(szCurrentFilePath, szWorkFolder, szWorkFile);
 			SetGrepFolder(GetItemHwnd(IDC_COMBO_FOLDER), szWorkFolder);
 		}else {
 			// 現在のプロセスのカレントディレクトリを取得します
@@ -386,7 +386,7 @@ BOOL DlgGrep::OnBnClicked(int wID)
 	case IDC_CHK_DEFAULTFOLDER:
 		// フォルダの初期値をカレントフォルダにする
 		{
-			m_pShareData->common.search.bGrepDefaultFolder = IsButtonChecked(IDC_CHK_DEFAULTFOLDER);
+			pShareData->common.search.bGrepDefaultFolder = IsButtonChecked(IDC_CHK_DEFAULTFOLDER);
 		}
 		return TRUE;
 	case IDC_RADIO_OUTPUTSTYLE3:
@@ -424,31 +424,31 @@ BOOL DlgGrep::OnBnClicked(int wID)
 void DlgGrep::SetData(void)
 {
 	// 検索文字列
-	SetItemText(IDC_COMBO_TEXT, m_strText.c_str());
+	SetItemText(IDC_COMBO_TEXT, strText.c_str());
 
 	// 検索ファイル
-	SetItemText(IDC_COMBO_FILE, m_szFile);
+	SetItemText(IDC_COMBO_FILE, szFile);
 
 	// 検索フォルダ
-	SetItemText(IDC_COMBO_FOLDER, m_szFolder);
+	SetItemText(IDC_COMBO_FOLDER, szFolder);
 
 	if (1
-		&& (m_szFolder[0] == _T('\0') || m_pShareData->common.search.bGrepDefaultFolder)
-		&& m_szCurrentFilePath[0] != _T('\0')
+		&& (szFolder[0] == _T('\0') || pShareData->common.search.bGrepDefaultFolder)
+		&& szCurrentFilePath[0] != _T('\0')
 	) {
 		TCHAR szWorkFolder[MAX_PATH];
 		TCHAR szWorkFile[MAX_PATH];
-		SplitPath_FolderAndFile(m_szCurrentFilePath, szWorkFolder, szWorkFile);
+		SplitPath_FolderAndFile(szCurrentFilePath, szWorkFolder, szWorkFile);
 		SetGrepFolder(GetItemHwnd(IDC_COMBO_FOLDER), szWorkFolder);
 	}
 
 	// サブフォルダからも検索する
-	CheckButton(IDC_CHK_SUBFOLDER, m_bSubFolder);
+	CheckButton(IDC_CHK_SUBFOLDER, bSubFolder);
 
 	// この編集中のテキストから検索する
-	CheckButton(IDC_CHK_FROMTHISTEXT, m_bFromThisText);
+	CheckButton(IDC_CHK_FROMTHISTEXT, bFromThisText);
 	// 2010.05.30 関数化
-	SetDataFromThisText(m_bFromThisText);
+	SetDataFromThisText(bFromThisText);
 
 	// 英大文字と英小文字を区別する
 	CheckButton(IDC_CHK_LOHICASE, searchOption.bLoHiCase);
@@ -534,14 +534,14 @@ void DlgGrep::SetData(void)
 	}
 	// To Here Jun. 29, 2001 genta
 
-	EnableItem(IDC_CHK_FROMTHISTEXT, m_szCurrentFilePath[0] != _T('\0'));
+	EnableItem(IDC_CHK_FROMTHISTEXT, szCurrentFilePath[0] != _T('\0'));
 
 	CheckButton(IDC_CHECK_FILE_ONLY, bGrepOutputFileOnly);
 	CheckButton(IDC_CHECK_BASE_PATH, bGrepOutputBaseFolder);
 	CheckButton(IDC_CHECK_SEP_FOLDER, bGrepSeparateFolder);
 
 	// フォルダの初期値をカレントフォルダにする
-	CheckButton(IDC_CHK_DEFAULTFOLDER, m_pShareData->common.search.bGrepDefaultFolder);
+	CheckButton(IDC_CHK_DEFAULTFOLDER, pShareData->common.search.bGrepDefaultFolder);
 
 	return;
 }
@@ -553,12 +553,12 @@ void DlgGrep::SetData(void)
 void DlgGrep::SetDataFromThisText(bool bChecked)
 {
 	bool bEnableControls = true;
-	if (m_szCurrentFilePath[0] != 0 && bChecked) {
+	if (szCurrentFilePath[0] != 0 && bChecked) {
 		TCHAR szWorkFolder[MAX_PATH];
 		TCHAR szWorkFile[MAX_PATH];
 		// 2003.08.01 Moca ファイル名はスペースなどは区切り記号になるので、""で囲い、エスケープする
 		szWorkFile[0] = _T('"');
-		SplitPath_FolderAndFile(m_szCurrentFilePath, szWorkFolder, szWorkFile + 1);
+		SplitPath_FolderAndFile(szCurrentFilePath, szWorkFolder, szWorkFile + 1);
 		_tcscat(szWorkFile, _T("\"")); // 2003.08.01 Moca
 		SetItemText(IDC_COMBO_FILE, szWorkFile);
 		SetGrepFolder(GetItemHwnd(IDC_COMBO_FOLDER), szWorkFolder);
@@ -578,13 +578,13 @@ void DlgGrep::SetDataFromThisText(bool bChecked)
 int DlgGrep::GetData(void)
 {
 	// サブフォルダからも検索する
-	m_bSubFolder = IsButtonChecked(IDC_CHK_SUBFOLDER);
+	bSubFolder = IsButtonChecked(IDC_CHK_SUBFOLDER);
 
-	auto& csSearch = m_pShareData->common.search;
-	csSearch.bGrepSubFolder = m_bSubFolder;		// Grep：サブフォルダも検索
+	auto& csSearch = pShareData->common.search;
+	csSearch.bGrepSubFolder = bSubFolder;		// Grep：サブフォルダも検索
 
 	// この編集中のテキストから検索する
-	m_bFromThisText = IsButtonChecked(IDC_CHK_FROMTHISTEXT);
+	bFromThisText = IsButtonChecked(IDC_CHK_FROMTHISTEXT);
 	// 英大文字と英小文字を区別する
 	searchOption.bLoHiCase = IsButtonChecked(IDC_CHK_LOHICASE);
 
@@ -634,13 +634,13 @@ int DlgGrep::GetData(void)
 	int nBufferSize = ::GetWindowTextLength(GetItemHwnd(IDC_COMBO_TEXT)) + 1;
 	std::vector<TCHAR> vText(nBufferSize);
 	GetItemText(IDC_COMBO_TEXT, &vText[0], nBufferSize);
-	m_strText = to_wchar(&vText[0]);
-	m_bSetText = true;
+	strText = to_wchar(&vText[0]);
+	bSetText = true;
 	
 	// 検索ファイル
-	GetItemText(IDC_COMBO_FILE, m_szFile, _countof2(m_szFile));
+	GetItemText(IDC_COMBO_FILE, szFile, _countof2(szFile));
 	// 検索フォルダ
-	GetItemText(IDC_COMBO_FOLDER, m_szFolder, _countof2(m_szFolder));
+	GetItemText(IDC_COMBO_FOLDER, szFolder, _countof2(szFolder));
 
 	csSearch.nGrepCharSet = nGrepCharSet;				// 文字コード自動判別
 	csSearch.nGrepOutputLineType = nGrepOutputLineType;	// 行を出力/該当部分/否マッチ行 を出力
@@ -654,9 +654,9 @@ int DlgGrep::GetData(void)
 //		WarningMessage(	GetHwnd(), _T("検索のキーワードを指定してください。"));
 //		return FALSE;
 //	}
-	if (auto_strlen(m_szFile) != 0) {
+	if (auto_strlen(szFile) != 0) {
 		GrepEnumKeys enumKeys;
-		int nErrorNo = enumKeys.SetFileKeys(m_szFile);
+		int nErrorNo = enumKeys.SetFileKeys(szFile);
 		if (nErrorNo == 1) {
 			WarningMessage(	GetHwnd(), LS(STR_DLGGREP2));
 			return FALSE;
@@ -666,13 +666,13 @@ int DlgGrep::GetData(void)
 		}
 	}
 	// この編集中のテキストから検索する
-	if (m_szFile[0] == _T('\0')) {
+	if (szFile[0] == _T('\0')) {
 		// Jun. 16, 2003 Moca
 		// 検索パターンが指定されていない場合のメッセージ表示をやめ、
 		//「*.*」が指定されたものと見なす．
-		_tcscpy(m_szFile, _T("*.*"));
+		_tcscpy(szFile, _T("*.*"));
 	}
-	if (m_szFolder[0] == _T('\0')) {
+	if (szFolder[0] == _T('\0')) {
 		WarningMessage(	GetHwnd(), LS(STR_DLGGREP4));
 		return FALSE;
 	}
@@ -683,7 +683,7 @@ int DlgGrep::GetData(void)
 
 		// 2011.11.24 Moca 複数フォルダ指定
 		std::vector<std::tstring> paths;
-		GrepAgent::CreateFolders(m_szFolder, paths);
+		GrepAgent::CreateFolders(szFolder, paths);
 		int nFolderLen = 0;
 		TCHAR szFolder[_MAX_PATH];
 		szFolder[0] = _T('\0');
@@ -712,22 +712,22 @@ int DlgGrep::GetData(void)
 			auto_strcat(szFolder, szFolderItem);
 			nFolderLen = auto_strlen(szFolder);
 		}
-		auto_strcpy(m_szFolder, szFolder);
+		auto_strcpy(szFolder, szFolder);
 	}
 
 //@@@ 2002.2.2 YAZAKI CShareData.AddToSearchKeys()追加に伴う変更
 	// 検索文字列
-	if (0 < m_strText.size()) {
+	if (0 < strText.size()) {
 		// From Here Jun. 26, 2001 genta
 		// 正規表現ライブラリの差し替えに伴う処理の見直し
 		int nFlag = 0;
 		nFlag |= searchOption.bLoHiCase ? 0x01 : 0x00;
-		if (searchOption.bRegularExp  && !CheckRegexpSyntax(m_strText.c_str(), GetHwnd(), true, nFlag)) {
+		if (searchOption.bRegularExp  && !CheckRegexpSyntax(strText.c_str(), GetHwnd(), true, nFlag)) {
 			return FALSE;
 		}
 		// To Here Jun. 26, 2001 genta 正規表現ライブラリ差し替え
-		if (m_strText.size() < _MAX_PATH) {
-			SearchKeywordManager().AddToSearchKeys(m_strText.c_str());
+		if (strText.size() < _MAX_PATH) {
+			SearchKeywordManager().AddToSearchKeys(strText.c_str());
 			csSearch.searchOption = searchOption;		// 検索オプション
 		}
 	}else {
@@ -736,12 +736,12 @@ int DlgGrep::GetData(void)
 	}
 
 	// この編集中のテキストから検索する場合、履歴に残さない	Uchi 2008/5/23
-	if (!m_bFromThisText) {
+	if (!bFromThisText) {
 		// 検索ファイル
-		SearchKeywordManager().AddToGrepFiles(m_szFile);
+		SearchKeywordManager().AddToGrepFiles(szFile);
 
 		// 検索フォルダ
-		SearchKeywordManager().AddToGrepFolders(m_szFolder);
+		SearchKeywordManager().AddToGrepFolders(szFolder);
 	}
 
 	return TRUE;

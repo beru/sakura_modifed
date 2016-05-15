@@ -246,7 +246,7 @@ UINT_PTR CALLBACK OFNHookProc(
 			//「開く」ダイアログのサイズと位置
 			DlgOpenFileData* pData = (DlgOpenFileData*)::GetWindowLongPtr(hdlg, DWLP_USER);
 			HWND hwndFrame = ::GetParent(hdlg);
-			::GetWindowRect(hwndFrame, &pData->m_pDlgOpenFile->m_mem->m_pShareData->common.others.rcOpenDialog);
+			::GetWindowRect(hwndFrame, &pData->m_pDlgOpenFile->mem->m_pShareData->common.others.rcOpenDialog);
 			// 2005.10.29 ryoji 最近のファイル／フォルダ コンボの右端を子ダイアログの右端に合わせる
 			::GetWindowRect(pData->m_hwndComboMRU, &rc);
 			po.x = rc.left;
@@ -413,7 +413,7 @@ UINT_PTR CALLBACK OFNHookProc(
 						}else {
 							switch (pData->m_pOf->nFilterIndex) {	// 選択されているファイルの種類
 							case 1:		// ユーザー定義
-								pszCur = pData->m_pDlgOpenFile->m_mem->m_szDefaultWildCard;
+								pszCur = pData->m_pDlgOpenFile->mem->m_szDefaultWildCard;
 								while (*pszCur != _T('.') && *pszCur != _T('\0')) {	// '.'まで読み飛ばす
 									pszCur = ::CharNext(pszCur);
 								}
@@ -582,9 +582,9 @@ UINT_PTR CALLBACK OFNHookProc(
 					if (Combo_GetCount( pData->m_hwndComboMRU ) == 0) {
 						// 最近開いたファイル コンボボックス初期値設定
 						//	2003.06.22 Moca m_vMRU がNULLの場合を考慮する
-						int nSize = (int)pData->m_pDlgOpenFile->m_mem->m_vMRU.size();
+						int nSize = (int)pData->m_pDlgOpenFile->mem->m_vMRU.size();
 						for (i=0; i<nSize; ++i) {
-							Combo_AddString(pData->m_hwndComboMRU, pData->m_pDlgOpenFile->m_mem->m_vMRU[i]);
+							Combo_AddString(pData->m_hwndComboMRU, pData->m_pDlgOpenFile->mem->m_vMRU[i]);
 						}
 					}
 					Dialog::OnCbnDropDown( hwndCtl, true );
@@ -594,9 +594,9 @@ UINT_PTR CALLBACK OFNHookProc(
 					if (Combo_GetCount( pData->m_hwndComboOPENFOLDER ) == 0) {
 						// 最近開いたフォルダ コンボボックス初期値設定
 						//	2003.06.22 Moca m_vOPENFOLDER がNULLの場合を考慮する
-						int nSize = (int)pData->m_pDlgOpenFile->m_mem->m_vOPENFOLDER.size();
+						int nSize = (int)pData->m_pDlgOpenFile->mem->m_vOPENFOLDER.size();
 						for (i=0; i<nSize; ++i) {
-							Combo_AddString(pData->m_hwndComboOPENFOLDER, pData->m_pDlgOpenFile->m_mem->m_vOPENFOLDER[i]);
+							Combo_AddString(pData->m_hwndComboOPENFOLDER, pData->m_pDlgOpenFile->mem->m_vOPENFOLDER[i]);
 						}
 					}
 					Dialog::OnCbnDropDown(hwndCtl, true);
@@ -658,13 +658,13 @@ int AddComboCodePages(HWND hdlg, HWND combo, int nSelCode, bool& bInit)
 DlgOpenFile::DlgOpenFile()
 {
 	// メンバの初期化
-	m_mem = new DlgOpenFileMem();
+	mem = new DlgOpenFileMem();
 
-	m_mem->m_hInstance = NULL;		// アプリケーションインスタンスのハンドル
-	m_mem->m_hwndParent = NULL;		// オーナーウィンドウのハンドル
+	mem->m_hInstance = NULL;		// アプリケーションインスタンスのハンドル
+	mem->m_hwndParent = NULL;		// オーナーウィンドウのハンドル
 
 	// 共有データ構造体のアドレスを返す
-	m_mem->m_pShareData = &GetDllShareData();
+	mem->m_pShareData = &GetDllShareData();
 
 	TCHAR szFile[_MAX_PATH + 1];
 	TCHAR szDrive[_MAX_DRIVE];
@@ -674,10 +674,10 @@ DlgOpenFile::DlgOpenFile()
 		szFile, _countof(szFile)
 	);
 	_tsplitpath(szFile, szDrive, szDir, NULL, NULL);
-	_tcscpy(m_mem->m_szInitialDir, szDrive);
-	_tcscat(m_mem->m_szInitialDir, szDir);
+	_tcscpy(mem->m_szInitialDir, szDrive);
+	_tcscat(mem->m_szInitialDir, szDir);
 
-	_tcscpy(m_mem->m_szDefaultWildCard, _T("*.*"));	//「開く」での最初のワイルドカード（保存時の拡張子補完でも使用される）
+	_tcscpy(mem->m_szDefaultWildCard, _T("*.*"));	//「開く」での最初のワイルドカード（保存時の拡張子補完でも使用される）
 
 	return;
 }
@@ -685,8 +685,8 @@ DlgOpenFile::DlgOpenFile()
 
 DlgOpenFile::~DlgOpenFile()
 {
-	delete m_mem;
-	m_mem = NULL;
+	delete mem;
+	mem = NULL;
 	return;
 }
 
@@ -701,12 +701,12 @@ void DlgOpenFile::Create(
 	const std::vector<LPCTSTR>& vOPENFOLDER
 	)
 {
-	m_mem->m_hInstance = hInstance;
-	m_mem->m_hwndParent = hwndParent;
+	mem->m_hInstance = hInstance;
+	mem->m_hwndParent = hwndParent;
 
 	// ユーザー定義ワイルドカード（保存時の拡張子補完でも使用される）
 	if (pszUserWildCard) {
-		_tcscpy(m_mem->m_szDefaultWildCard, pszUserWildCard);
+		_tcscpy(mem->m_szDefaultWildCard, pszUserWildCard);
 	}
 
 	//「開く」での初期フォルダ
@@ -719,12 +719,12 @@ void DlgOpenFile::Create(
 		TCHAR szRelPath[_MAX_PATH];
 		auto_sprintf(szRelPath, _T("%ts%ts"), szDrive, szDir);
 		const TCHAR* p = szRelPath;
-		if (!::GetLongFileName(p, m_mem->m_szInitialDir)) {
-			auto_strcpy(m_mem->m_szInitialDir, p);
+		if (!::GetLongFileName(p, mem->m_szInitialDir)) {
+			auto_strcpy(mem->m_szInitialDir, p);
 		}
 	}
-	m_mem->m_vMRU = vMRU;
-	m_mem->m_vOPENFOLDER = vOPENFOLDER;
+	mem->m_vMRU = vMRU;
+	mem->m_vOPENFOLDER = vOPENFOLDER;
 	return;
 }
 
@@ -745,7 +745,7 @@ bool DlgOpenFile::DoModal_GetOpenFileName(TCHAR* pszPath, bool bSetCurDir)
 
 	// 2003.05.12 MIK
 	FileExt fileExt;
-	fileExt.AppendExtRaw(LS(STR_DLGOPNFL_EXTNAME1), m_mem->m_szDefaultWildCard);
+	fileExt.AppendExtRaw(LS(STR_DLGOPNFL_EXTNAME1), mem->m_szDefaultWildCard);
 	fileExt.AppendExtRaw(LS(STR_DLGOPNFL_EXTNAME2), _T("*.txt"));
 	fileExt.AppendExtRaw(LS(STR_DLGOPNFL_EXTNAME3), _T("*.*"));
 
@@ -755,7 +755,7 @@ bool DlgOpenFile::DoModal_GetOpenFileName(TCHAR* pszPath, bool bSetCurDir)
 	pData->m_pDlgOpenFile = this;
 	pData->m_ofn.lCustData = (LPARAM)(pData.get());
 
-	pData->m_ofn.hwndOwner = m_mem->m_hwndParent;
+	pData->m_ofn.hwndOwner = mem->m_hwndParent;
 	pData->m_ofn.hInstance = SelectLang::getLangRsrcInstance();
 	pData->m_ofn.lpstrFilter = fileExt.GetExtFilter();
 	// From Here Jun. 23, 2002 genta
@@ -787,7 +787,7 @@ bool DlgOpenFile::DoModal_GetOpenFileName(TCHAR* pszPath, bool bSetCurDir)
 	pData->m_ofn.lpstrFile = pszPath;
 	// To Here Jun. 23, 2002 genta
 	pData->m_ofn.nMaxFile = _MAX_PATH;
-	pData->m_ofn.lpstrInitialDir = m_mem->m_szInitialDir;
+	pData->m_ofn.lpstrInitialDir = mem->m_szInitialDir;
 	pData->m_ofn.Flags = OFN_EXPLORER | OFN_FILEMUSTEXIST | OFN_HIDEREADONLY;
 	pData->m_ofn.lpstrDefExt = _T(""); // 2005/02/20 novice 拡張子を省略したら補完する
 
@@ -818,7 +818,7 @@ bool DlgOpenFile::DoModal_GetSaveFileName(TCHAR* pszPath, bool bSetCurDir)
 
 	// 2003.05.12 MIK
 	FileExt fileExt;
-	fileExt.AppendExtRaw(LS(STR_DLGOPNFL_EXTNAME1), m_mem->m_szDefaultWildCard);
+	fileExt.AppendExtRaw(LS(STR_DLGOPNFL_EXTNAME1), mem->m_szDefaultWildCard);
 	fileExt.AppendExtRaw(LS(STR_DLGOPNFL_EXTNAME2), _T("*.txt"));
 	fileExt.AppendExtRaw(LS(STR_DLGOPNFL_EXTNAME3), _T("*.*"));
 	
@@ -837,12 +837,12 @@ bool DlgOpenFile::DoModal_GetSaveFileName(TCHAR* pszPath, bool bSetCurDir)
 	InitOfn(&pData->m_ofn);		// 2005.10.29 ryoji
 	pData->m_pDlgOpenFile = this;
 	pData->m_ofn.lCustData = (LPARAM)(pData.get());
-	pData->m_ofn.hwndOwner = m_mem->m_hwndParent;
+	pData->m_ofn.hwndOwner = mem->m_hwndParent;
 	pData->m_ofn.hInstance = SelectLang::getLangRsrcInstance();
 	pData->m_ofn.lpstrFilter = fileExt.GetExtFilter();
 	pData->m_ofn.lpstrFile = pszPath; // 2005/02/20 novice デフォルトのファイル名は何も設定しない
 	pData->m_ofn.nMaxFile = _MAX_PATH;
-	pData->m_ofn.lpstrInitialDir = m_mem->m_szInitialDir;
+	pData->m_ofn.lpstrInitialDir = mem->m_szInitialDir;
 	pData->m_ofn.Flags = OFN_CREATEPROMPT | OFN_EXPLORER | OFN_FILEMUSTEXIST | OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT;
 	
 	pData->m_ofn.lpstrDefExt = _T("");	// 2005/02/20 novice 拡張子を省略したら補完する
@@ -902,12 +902,12 @@ bool DlgOpenFile::DoModalOpenDlg(
 	InitOfn( &pData->m_ofn );		// 2005.10.29 ryoji
 	pData->m_pDlgOpenFile = this;
 	pData->m_ofn.lCustData = (LPARAM)(pData.get());
-	pData->m_ofn.hwndOwner = m_mem->m_hwndParent;
+	pData->m_ofn.hwndOwner = mem->m_hwndParent;
 	pData->m_ofn.hInstance = SelectLang::getLangRsrcInstance();
 	pData->m_ofn.lpstrFilter = fileExt.GetExtFilter();
 	pData->m_ofn.lpstrFile = pszPathBuf;
 	pData->m_ofn.nMaxFile = 2000;
-	pData->m_ofn.lpstrInitialDir = m_mem->m_szInitialDir;
+	pData->m_ofn.lpstrInitialDir = mem->m_szInitialDir;
 	pData->m_ofn.Flags = OFN_EXPLORER | OFN_CREATEPROMPT | OFN_FILEMUSTEXIST | OFN_ENABLETEMPLATE | OFN_ENABLEHOOK | OFN_SHOWHELP | OFN_ENABLESIZING;
 	if (pData->m_bViewMode) pData->m_ofn.Flags |= OFN_READONLY;
 	if (bMultiSelect) {
@@ -979,7 +979,7 @@ bool DlgOpenFile::DoModalSaveDlg(
 
 	// 2003.05.12 MIK
 	FileExt fileExt;
-	fileExt.AppendExtRaw(LS(STR_DLGOPNFL_EXTNAME1), m_mem->m_szDefaultWildCard);
+	fileExt.AppendExtRaw(LS(STR_DLGOPNFL_EXTNAME1), mem->m_szDefaultWildCard);
 	fileExt.AppendExtRaw(LS(STR_DLGOPNFL_EXTNAME2), _T("*.txt"));
 	fileExt.AppendExtRaw(LS(STR_DLGOPNFL_EXTNAME3), _T("*.*"));
 
@@ -991,12 +991,12 @@ bool DlgOpenFile::DoModalSaveDlg(
 	InitOfn(&pData->m_ofn);		// 2005.10.29 ryoji
 	pData->m_pDlgOpenFile = this;
 	pData->m_ofn.lCustData = (LPARAM)(pData.get());
-	pData->m_ofn.hwndOwner = m_mem->m_hwndParent;
+	pData->m_ofn.hwndOwner = mem->m_hwndParent;
 	pData->m_ofn.hInstance = SelectLang::getLangRsrcInstance();
 	pData->m_ofn.lpstrFilter = fileExt.GetExtFilter();
 	pData->m_ofn.lpstrFile = pSaveInfo->filePath;	// 2005/02/20 novice デフォルトのファイル名は何も設定しない
 	pData->m_ofn.nMaxFile = _MAX_PATH;
-	pData->m_ofn.lpstrInitialDir = m_mem->m_szInitialDir;
+	pData->m_ofn.lpstrInitialDir = mem->m_szInitialDir;
 	pData->m_ofn.Flags = OFN_CREATEPROMPT | OFN_EXPLORER | OFN_FILEMUSTEXIST | OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_SHOWHELP | OFN_ENABLESIZING;
 	if (!bSimpleMode) {
 		pData->m_ofn.Flags = pData->m_ofn.Flags | OFN_ENABLETEMPLATE | OFN_ENABLEHOOK;
@@ -1095,7 +1095,7 @@ void DlgOpenFile::DlgOpenFail(void)
 	}
 
 	ErrorBeep();
-	TopErrorMessage( m_mem->m_hwndParent,
+	TopErrorMessage( mem->m_hwndParent,
 		LS(STR_DLGOPNFL_ERR1),
 		pszError
 	);

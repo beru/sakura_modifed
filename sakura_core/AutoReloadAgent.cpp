@@ -35,8 +35,8 @@
 
 AutoReloadAgent::AutoReloadAgent()
 	:
-	m_watchUpdateType(WatchUpdateType::Query),
-	m_nPauseCount(0)
+	watchUpdateType(WatchUpdateType::Query),
+	nPauseCount(0)
 {
 }
 
@@ -60,7 +60,7 @@ void AutoReloadAgent::OnAfterSave(const SaveInfo& saveInfo)
 
 	// 名前を付けて保存から再ロードが除去された分の不足処理を追加（ANSI版との差異）	// 2009.08.12 ryoji
 	if (!saveInfo.bOverwriteMode) {
-		m_watchUpdateType = WatchUpdateType::Query;	// 「名前を付けて保存」で対象ファイルが変更されたので更新監視方法をデフォルトに戻す
+		watchUpdateType = WatchUpdateType::Query;	// 「名前を付けて保存」で対象ファイルが変更されたので更新監視方法をデフォルトに戻す
 	}
 }
 
@@ -85,7 +85,7 @@ bool AutoReloadAgent::_ToDoChecking() const
 	if (0
 		|| IsPausing()
 		|| !setting.bCheckFileTimeStamp	// 更新の監視設定
-		|| m_watchUpdateType == WatchUpdateType::None
+		|| watchUpdateType == WatchUpdateType::None
 		|| setting.nFileShareMode != FileShareMode::NonExclusive	 // ファイルの排他制御モード
 		|| !hwndActive		// アクティブ？
 		|| hwndActive != EditWnd::getInstance().GetHwnd()
@@ -120,11 +120,11 @@ bool AutoReloadAgent::_IsFileUpdatedByOther(FILETIME* pNewFileTime) const
 void AutoReloadAgent::CheckFileTimeStamp()
 {
 	// 未編集で再ロード時の遅延
-	if (m_watchUpdateType == WatchUpdateType::AutoLoad) {
-		if (++m_nDelayCount < GetDllShareData().common.file.nAutoloadDelay) {
+	if (watchUpdateType == WatchUpdateType::AutoLoad) {
+		if (++nDelayCount < GetDllShareData().common.file.nAutoloadDelay) {
 			return;
 		}
-		m_nDelayCount = 0;
+		nDelayCount = 0;
 	}
 
 	if (!_ToDoChecking()) {
@@ -141,7 +141,7 @@ void AutoReloadAgent::CheckFileTimeStamp()
 	pDoc->m_docFile.SetFileTime(ftime); // タイムスタンプ更新
 
 	//	From Here Dec. 4, 2002 genta
-	switch (m_watchUpdateType) {
+	switch (watchUpdateType) {
 	case WatchUpdateType::Notify:
 		{
 			// ファイル更新のお知らせ -> ステータスバー
@@ -157,7 +157,7 @@ void AutoReloadAgent::CheckFileTimeStamp()
 
 			// 同一ファイルの再オープン
 			pDoc->m_docFileOperation.ReloadCurrentFile(pDoc->m_docFile.GetCodeSet());
-			m_watchUpdateType = WatchUpdateType::AutoLoad;
+			watchUpdateType = WatchUpdateType::AutoLoad;
 
 			ResumeWatching(); // 監視再開
 			break;
@@ -179,23 +179,23 @@ void AutoReloadAgent::CheckFileTimeStamp()
 			case 1:	// 再読込
 				// 同一ファイルの再オープン
 				pDoc->m_docFileOperation.ReloadCurrentFile(pDoc->m_docFile.GetCodeSet());
-				m_watchUpdateType = WatchUpdateType::Query;
+				watchUpdateType = WatchUpdateType::Query;
 				break;
 			case 2:	// 以後通知メッセージのみ
-				m_watchUpdateType = WatchUpdateType::Notify;
+				watchUpdateType = WatchUpdateType::Notify;
 				break;
 			case 3:	// 以後更新を監視しない
-				m_watchUpdateType = WatchUpdateType::None;
+				watchUpdateType = WatchUpdateType::None;
 				break;
 			case 4:	// 以後未編集で再ロード
 				// 同一ファイルの再オープン
 				pDoc->m_docFileOperation.ReloadCurrentFile(pDoc->m_docFile.GetCodeSet());
-				m_watchUpdateType = WatchUpdateType::AutoLoad;
-				m_nDelayCount = 0;
+				watchUpdateType = WatchUpdateType::AutoLoad;
+				nDelayCount = 0;
 				break;
 			case 0:	// CLOSE
 			default:
-				m_watchUpdateType = WatchUpdateType::Query;
+				watchUpdateType = WatchUpdateType::Query;
 				break;
 			}
 

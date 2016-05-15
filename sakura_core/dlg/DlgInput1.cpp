@@ -84,21 +84,21 @@ BOOL DlgInput1::DoModal(
 	)
 {
 	BOOL bRet;
-	m_hInstance = hInstApp;			// アプリケーションインスタンスのハンドル
-	m_hwndParent = hwndParent;		// オーナーウィンドウのハンドル
-	m_pszTitle = pszTitle;			// ダイアログタイトル
-	m_pszMessage = pszMessage;		// メッセージ
-	m_nMaxTextLen = nMaxTextLen;	// 入力サイズ上限
+	hInstance = hInstApp;			// アプリケーションインスタンスのハンドル
+	hwndParent = hwndParent;		// オーナーウィンドウのハンドル
+	pszTitle = pszTitle;			// ダイアログタイトル
+	pszMessage = pszMessage;		// メッセージ
+	nMaxTextLen = nMaxTextLen;	// 入力サイズ上限
 //	m_pszText = pszText;			// テキスト
-	m_memText.SetString(pszText);
+	memText.SetString(pszText);
 	bRet = (BOOL)::DialogBoxParam(
-		m_hInstance,
+		hInstance,
 		MAKEINTRESOURCE(IDD_INPUT1),
-		m_hwndParent,
+		hwndParent,
 		CDlgInput1Proc,
 		(LPARAM)this
 	);
-	_tcscpy(pszText, m_memText.GetStringPtr());
+	_tcscpy(pszText, memText.GetStringPtr());
 	return bRet;
 }
 
@@ -138,10 +138,10 @@ INT_PTR DlgInput1::DispatchEvent(
 		// Modified by KEITA for WIN64 2003.9.6
 		::SetWindowLongPtr(hwndDlg, DWLP_USER, lParam);
 
-		::SetWindowText(hwndDlg, m_pszTitle);	// ダイアログタイトル
-		EditCtl_LimitText(::GetDlgItem(hwndDlg, IDC_EDIT_INPUT1), m_nMaxTextLen);	// 入力サイズ上限
-		::SetDlgItemText(hwndDlg, IDC_EDIT_INPUT1, m_memText.GetStringPtr());		// テキスト
-		::SetDlgItemText(hwndDlg, IDC_STATIC_MSG, m_pszMessage);		// メッセージ
+		::SetWindowText(hwndDlg, pszTitle);	// ダイアログタイトル
+		EditCtl_LimitText(::GetDlgItem(hwndDlg, IDC_EDIT_INPUT1), nMaxTextLen);	// 入力サイズ上限
+		::SetDlgItemText(hwndDlg, IDC_EDIT_INPUT1, memText.GetStringPtr());		// テキスト
+		::SetDlgItemText(hwndDlg, IDC_STATIC_MSG, pszMessage);		// メッセージ
 		return TRUE;
 	case WM_COMMAND:
 		wNotifyCode = HIWORD(wParam);	// 通知コード
@@ -151,8 +151,8 @@ INT_PTR DlgInput1::DispatchEvent(
 		case BN_CLICKED:
 			switch (wID) {
 			case IDOK:
-				m_memText.AllocStringBuffer(::GetWindowTextLength(::GetDlgItem(hwndDlg, IDC_EDIT_INPUT1)));
-				::GetWindowText(::GetDlgItem(hwndDlg, IDC_EDIT_INPUT1), m_memText.GetStringPtr(), m_nMaxTextLen + 1);	// テキスト
+				memText.AllocStringBuffer(::GetWindowTextLength(::GetDlgItem(hwndDlg, IDC_EDIT_INPUT1)));
+				::GetWindowText(::GetDlgItem(hwndDlg, IDC_EDIT_INPUT1), memText.GetStringPtr(), nMaxTextLen + 1);	// テキスト
 				::EndDialog(hwndDlg, TRUE);
 				return TRUE;
 			case IDCANCEL:

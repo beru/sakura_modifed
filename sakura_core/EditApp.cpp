@@ -40,66 +40,66 @@
 
 void EditApp::Create(HINSTANCE hInst, int nGroupId)
 {
-	m_hInst = hInst;
+	hInst = hInst;
 
 	// ヘルパ作成
-	m_icons.Create(m_hInst);	//	CreateImage List
+	icons.Create(hInst);	//	CreateImage List
 
 	// ドキュメントの作成
-	m_pEditDoc = new EditDoc(*this);
+	pEditDoc = new EditDoc(*this);
 
 	// IO管理
-	m_pLoadAgent = new LoadAgent();
-	m_pSaveAgent = new SaveAgent();
-	m_pVisualProgress = new VisualProgress();
+	pLoadAgent = new LoadAgent();
+	pSaveAgent = new SaveAgent();
+	pVisualProgress = new VisualProgress();
 
 	// GREPモード管理
-	m_pGrepAgent = new GrepAgent();
+	pGrepAgent = new GrepAgent();
 
 	// 編集モード
 	AppMode::getInstance();	// ウィンドウよりも前にイベントを受け取るためにここでインスタンス作成
 
 	// マクロ
-	m_pSMacroMgr = new SMacroMgr();
+	pSMacroMgr = new SMacroMgr();
 
 	// ウィンドウの作成
-	m_pEditWnd = &EditWnd::getInstance();
+	pEditWnd = &EditWnd::getInstance();
 
-	m_pEditDoc->Create(m_pEditWnd);
-	m_pEditWnd->Create(m_pEditDoc, &m_icons, nGroupId);
+	pEditDoc->Create(pEditWnd);
+	pEditWnd->Create(pEditDoc, &icons, nGroupId);
 
 	// MRU管理
-	m_pMruListener = new MruListener();
+	pMruListener = new MruListener();
 
 	// プロパティ管理
-	m_pPropertyManager = new PropertyManager();
-	m_pPropertyManager->Create(
-		m_pEditWnd->GetHwnd(),
+	pPropertyManager = new PropertyManager();
+	pPropertyManager->Create(
+		pEditWnd->GetHwnd(),
 		&GetIcons(),
-		&m_pEditWnd->GetMenuDrawer()
+		&pEditWnd->GetMenuDrawer()
 	);
 }
 
 EditApp::~EditApp()
 {
-	delete m_pSMacroMgr;
-	delete m_pPropertyManager;
-	delete m_pMruListener;
-	delete m_pGrepAgent;
-	delete m_pVisualProgress;
-	delete m_pSaveAgent;
-	delete m_pLoadAgent;
-	delete m_pEditDoc;
+	delete pSMacroMgr;
+	delete pPropertyManager;
+	delete pMruListener;
+	delete pGrepAgent;
+	delete pVisualProgress;
+	delete pSaveAgent;
+	delete pLoadAgent;
+	delete pEditDoc;
 }
 
 // 共通設定 プロパティシート
 bool EditApp::OpenPropertySheet(int nPageNum)
 {
 	// プロパティシートの作成
-	bool bRet = m_pPropertyManager->OpenPropertySheet(m_pEditWnd->GetHwnd(), nPageNum, false);
+	bool bRet = pPropertyManager->OpenPropertySheet(pEditWnd->GetHwnd(), nPageNum, false);
 	if (bRet) {
 		// 2007.10.19 genta マクロ登録変更を反映するため，読み込み済みのマクロを破棄する
-		m_pSMacroMgr->UnloadAll();
+		pSMacroMgr->UnloadAll();
 	}
 	return bRet;
 }
@@ -107,7 +107,7 @@ bool EditApp::OpenPropertySheet(int nPageNum)
 // タイプ別設定 プロパティシート
 bool EditApp::OpenPropertySheetTypes(int nPageNum, TypeConfigNum nSettingType)
 {
-	bool bRet = m_pPropertyManager->OpenPropertySheetTypes(m_pEditWnd->GetHwnd(), nPageNum, nSettingType);
+	bool bRet = pPropertyManager->OpenPropertySheetTypes(pEditWnd->GetHwnd(), nPageNum, nSettingType);
 
 	return bRet;
 }

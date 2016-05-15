@@ -122,7 +122,7 @@ bool ProcessFactory::ProfileSelect(
 	if (bDialog) {
 		DlgProfileMgr dlgProf;
 		if (dlgProf.DoModal(hInstance, NULL, 0)) {
-			cmdLine.SetProfileName( to_wchar(dlgProf.m_strProfileName.c_str()) );
+			cmdLine.SetProfileName( to_wchar(dlgProf.strProfileName.c_str()) );
 		}else {
 			return false; // プロファイルマネージャで「閉じる」を選んだ。プロセス終了
 		}
