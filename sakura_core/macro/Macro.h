@@ -100,7 +100,7 @@ public:
 	~Macro();
 	void ClearMacroParam();
 
-	void SetNext(Macro* pNext) { pNext = pNext; }
+	void SetNext(Macro* pNext) { this->pNext = pNext; }
 	Macro* GetNext() { return pNext; }
 	// 2007.07.20 genta : flags’Ç‰Á
 	bool Exec(EditView& editView, int flags) const; // 2007.09.30 kobake const’Ç‰Á

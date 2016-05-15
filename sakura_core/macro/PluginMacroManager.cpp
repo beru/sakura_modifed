@@ -34,10 +34,11 @@
 #include "plugin/JackManager.h"
 
 ///////////////////////////////////////////////////////////////////////////////
-PluginMacroManager::PluginMacroManager(const WCHAR* Ext, Plug* plug)
+PluginMacroManager::PluginMacroManager(const WCHAR* ext, Plug* plug)
+	:
+	ext(ext),
+	plug(plug)
 {
-	ext = Ext;
-	plug = plug;
 }
 
 ///////////////////////////////////////////////////////////////////////////////

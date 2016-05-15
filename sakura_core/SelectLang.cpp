@@ -372,7 +372,7 @@ HINSTANCE SelectLang::ChangeLang(UINT nIndex)
 		return psLangInfo->hInstance;
 	}
 
-	SelLangInfo *psLangInfo = psLangInfoList.at(nIndex);
+	SelLangInfo* psLangInfo = psLangInfoList.at(nIndex);
 	if (psLangInfo->hInstance != GetModuleHandle(NULL)) {
 		psLangInfo->hInstance = LoadLangRsrcLibrary(*psLangInfo);
 		if (!psLangInfo->hInstance) {
@@ -388,7 +388,7 @@ HINSTANCE SelectLang::ChangeLang(UINT nIndex)
 		::FreeLibrary(psLangInfo->hInstance);
 		psLangInfo->hInstance = NULL;
 	}
-	psLangInfo = psLangInfo;
+	SelectLang::psLangInfo = psLangInfo;
 
 	// ƒƒP[ƒ‹‚ğİ’è
 	// SetThreadUILanguage‚ÌŒÄ‚Ño‚µ‚ğ‚İ‚é

@@ -287,7 +287,7 @@ HFONT PropTypes::SetFontLabel(HWND hwndDlg, int idc_static, const LOGFONT& lf, i
 		hFont = SetCtrlFont(hwndDlg, idc_static, lfTemp);
 		// ÉtÉHÉìÉgñºÇÃê›íË
 		TCHAR szFontName[80];
-		auto_sprintf_s(szFontName, nps % 10 ? _T("%s(%.1fpt)") : _T("%s(%.0fpt)"),
+		auto_sprintf_s(szFontName, (nps % 10) ? _T("%s(%.1fpt)") : _T("%s(%.0fpt)"),
 			lf.lfFaceName, double(nps)/10);
 		::DlgItem_SetText(hwndDlg, idc_static, szFontName);
 	}else {

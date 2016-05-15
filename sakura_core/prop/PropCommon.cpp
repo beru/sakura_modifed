@@ -72,7 +72,7 @@ INT_PTR PropCommon::DlgProc(
 	HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam
 )
 {
-	PROPSHEETPAGE*	pPsp;
+	PROPSHEETPAGE* pPsp;
 	PropCommon*	pPropCommon;
 	switch (uMsg) {
 	case WM_INITDIALOG:
@@ -166,8 +166,8 @@ PropCommon::~PropCommon()
 //@@@ 2002.01.03 YAZAKI tbMyButtonなどをCShareDataからMenuDrawerへ移動したことによる修正。
 void PropCommon::Create(HWND hwndParent, ImageListMgr* pIcons, MenuDrawer* pMenuDrawer)
 {
-	hwndParent = hwndParent;	// オーナーウィンドウのハンドル
-	pIcons = pIcons;
+	this->hwndParent = hwndParent;	// オーナーウィンドウのハンドル
+	this->pIcons = pIcons;
 
 	// 2007.11.02 ryoji マクロ設定を変更したあと、画面を閉じないでカスタムメニュー、ツールバー、
 	//                  キー割り当ての画面に切り替えた時に各画面でマクロ設定の変更が反映されるよう、
@@ -175,7 +175,7 @@ void PropCommon::Create(HWND hwndParent, ImageListMgr* pIcons, MenuDrawer* pMenu
 	lookup.Init(common.macro.macroTable, &common);	//	機能名・番号resolveクラス．
 
 //@@@ 2002.01.03 YAZAKI tbMyButtonなどをCShareDataからMenuDrawerへ移動したことによる修正。
-	pMenuDrawer = pMenuDrawer;
+	this->pMenuDrawer = pMenuDrawer;
 
 	return;
 }
@@ -199,8 +199,8 @@ struct ComPropSheetInfo {
 */
 INT_PTR PropCommon::DoPropertySheet(int nPageNum, bool bTrayProc)
 {
-	INT_PTR				nRet;
-	int					nIdx;
+	INT_PTR	nRet;
+	int		nIdx;
 
 	this->bTrayProc = bTrayProc;
 
@@ -249,7 +249,7 @@ INT_PTR PropCommon::DoPropertySheet(int nPageNum, bool bTrayProc)
 	}
 	//	To Here Jun. 2, 2001 genta
 
-	PROPSHEETHEADER		psh;
+	PROPSHEETHEADER psh;
 	memset_raw(&psh, 0, sizeof_raw(psh));
 	
 	//	Jun. 29, 2002 こおり
@@ -467,7 +467,7 @@ HFONT PropCommon::SetFontLabel(HWND hwndDlg, int idc_static, const LOGFONT& lf, 
 	hFont = SetCtrlFont(hwndDlg, idc_static, lfTemp);
 
 	// フォント名の設定
-	auto_sprintf_s(szFontName, nps % 10 ? _T("%s(%.1fpt)") : _T("%s(%.0fpt)"),
+	auto_sprintf_s(szFontName, (nps % 10) ? _T("%s(%.1fpt)") : _T("%s(%.0fpt)"),
 		lf.lfFaceName, double(nps)/10);
 	::DlgItem_SetText(hwndDlg, idc_static, szFontName);
 

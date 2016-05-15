@@ -170,7 +170,7 @@ public:
 		@retval false 先読みがない 又は コンパイル前
 	*/
 	bool IsLookAhead(void) {
-		return ePatType & PAT_LOOKAHEAD ? true : false;
+		return (ePatType & PAT_LOOKAHEAD) ? true : false;
 	}
 	/*!	検索パターンに先読みが含まれるか？（コンパイル前でも判別可能）
 		@param[in] pattern 検索パターン

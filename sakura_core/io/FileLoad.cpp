@@ -134,7 +134,7 @@ EncodingType FileLoad::FileOpen(
 	if (hFile == INVALID_HANDLE_VALUE) {
 		throw Error_FileOpen();
 	}
-	hFile = hFile;
+	this->hFile = hFile;
 
 	// GetFileSizeEx ‚Í Win2KˆÈã
 	fileSize.LowPart = ::GetFileSize( hFile, &fileSize.HighPart );
@@ -219,8 +219,8 @@ EncodingType FileLoad::FileOpen(
 			nMaxEolLen = t_max(nMaxEolLen, memEols[k].GetRawLength());
 		}
 	}
-	bEolEx = bEolEx;
-	nMaxEolLen = nMaxEolLen;
+	this->bEolEx = bEolEx;
+	this->nMaxEolLen = nMaxEolLen;
 	if (!GetDllShareData().common.edit.bEnableExtEol) {
 		bEolEx = false;
 	}

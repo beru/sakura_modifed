@@ -113,7 +113,7 @@ INT_PTR DlgSameColor::DispatchEvent(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM 
 int DlgSameColor::DoModal(HINSTANCE hInstance, HWND hwndParent, WORD wID, TypeConfig* pTypes, COLORREF cr)
 {
 	wID = wID;
-	pTypes = pTypes;
+	this->pTypes = pTypes;
 	cr = cr;
 
 	(void)Dialog::DoModal(hInstance, hwndParent, IDD_SAMECOLOR, (LPARAM)NULL);

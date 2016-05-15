@@ -278,7 +278,7 @@ public:
 	int					GetAllViewCount() const		{ return nEditViewCount; }
 
 	EditView*			GetDragSourceView() const	{ return pDragSourceView; }
-	void				SetDragSourceView(EditView* pDragSourceView)	{ pDragSourceView = pDragSourceView; }
+	void				SetDragSourceView(EditView* pDragSourceView)	{ this->pDragSourceView = pDragSourceView; }
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                         ŽÀ‘••â•                            //
@@ -318,7 +318,7 @@ protected:
 public:
 	// D&Dƒtƒ‰ƒOŠÇ—
 	void SetDragPosOrg(Point ptDragPosOrg)	{ ptDragPosOrg = ptDragPosOrg; }
-	void SetDragMode(bool bDragMode)		{ bDragMode = bDragMode; }
+	void SetDragMode(bool bDragMode)		{ this->bDragMode = bDragMode; }
 	bool GetDragMode() const				{ return bDragMode; }
 	const Point& GetDragPosOrg() const		{ return ptDragPosOrg; }
 	

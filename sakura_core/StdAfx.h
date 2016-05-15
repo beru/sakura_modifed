@@ -18,6 +18,9 @@
 #pragma warning(disable: 4996)	//warning C4996: 'xxxx': This function or variable may be unsafe. Consider using wcscpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
 #pragma warning(disable: 4355)	//warning C4355: 'this' : ベース メンバ初期化リストで使用されました。
 
+#pragma warning(error: 6244)
+#pragma warning(error: 6246)
+
 #if defined _M_IX86
 #pragma comment(linker,"/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='x86' publicKeyToken='6595b64144ccf1df' language='*'\"")
 #elif defined _M_IA64

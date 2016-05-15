@@ -316,13 +316,13 @@ void ViewCommander::Command_UNDO(void)
 
 	MY_RUNNINGTIMER(runningTimer, "ViewCommander::Command_UNDO()");
 
-	Ope*		pOpe = nullptr;
+	Ope* pOpe = nullptr;
 
 	OpeBlk*	pOpeBlk;
-	int			nOpeBlkNum;
-	bool		bIsModified;
-//	int			nNewLine;	// 挿入された部分の次の位置の行
-//	int			nNewPos;	// 挿入された部分の次の位置のデータ位置
+	int nOpeBlkNum;
+	bool bIsModified;
+//	int nNewLine;	// 挿入された部分の次の位置の行
+//	int nNewPos;	// 挿入された部分の次の位置のデータ位置
 
 	LayoutPoint ptCaretPos_Before;
 	LayoutPoint ptCaretPos_After;
@@ -352,7 +352,7 @@ void ViewCommander::Command_UNDO(void)
 		const bool bFastMode = (100 < nOpeBlkNum);
 		auto& layoutMgr = GetDocument().layoutMgr;
 		for (int i=nOpeBlkNum-1; i>=0; --i) {
-			Ope* pOpe = pOpeBlk->GetOpe(i);
+			pOpe = pOpeBlk->GetOpe(i);
 			if (bFastMode) {
 				caret.MoveCursorFastMode(pOpe->ptCaretPos_PHY_After);
 			}else {

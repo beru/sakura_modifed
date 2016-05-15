@@ -560,7 +560,7 @@ int Bregexp::Replace(const wchar_t* szTarget, int nLen, int nStart)
 	}else {
 		result = BSubstEx(NULL, szTarget, szTarget + nStart, szTarget + nLen, &pRegExp, szMsg);
 	}
-	szTarget = szTarget;
+	this->szTarget = szTarget;
 
 	// メッセージが空文字列でなければ何らかのエラー発生。
 	// サンプルソース参照

@@ -231,8 +231,8 @@ int HokanMgr::Search(
 //	hFont = hFont;
 	point.x = pPt->x;
 	point.y = pPt->y;
-	nWinHeight = nWinHeight;
-	nColumnWidth = nColumnWidth;
+	this->nWinHeight = nWinHeight;
+	this->nColumnWidth = nColumnWidth;
 //	memCurWord.SetData(pszCurWord, lstrlen(pszCurWord));
 	memCurWord.SetString(pszCurWord);
 	nCurKouhoIdx = 0;

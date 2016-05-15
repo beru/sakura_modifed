@@ -36,12 +36,12 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Unicode|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
-    <PlatformToolset>v120_xp</PlatformToolset>
+    <PlatformToolset>v120</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_Unicode|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
-    <PlatformToolset>v120_xp</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
@@ -69,12 +69,16 @@
     <IntDir>$(Configuration)\obj\</IntDir>
     <LinkIncremental>false</LinkIncremental>
     <EmbedManifest>false</EmbedManifest>
+    <CodeAnalysisRuleSet>C:\Program Files (x86)\Microsoft Visual Studio 14.0\Team Tools\Static Analysis Tools\Rule Sets\NativeRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Unicode|Win32'">
     <OutDir>$(Configuration)\</OutDir>
     <IntDir>$(Configuration)\obj\</IntDir>
     <LinkIncremental>true</LinkIncremental>
     <EmbedManifest>false</EmbedManifest>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+    <CodeAnalysisRuleSet>NativeRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_Ansi|Win32'">
     <OutDir>$(Configuration)\</OutDir>
@@ -108,6 +112,7 @@
       <FavorSizeOrSpeed>Size</FavorSizeOrSpeed>
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
+      <EnablePREfast>true</EnablePREfast>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -145,6 +150,8 @@
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <EnablePREfast>false</EnablePREfast>
+      <DisableSpecificWarnings>4100;4127;4512;4706;</DisableSpecificWarnings>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -275,6 +282,7 @@
     <ClInclude Include="..\sakura_core\SortedTagJumpList.h" />
     <ClInclude Include="..\sakura_core\WriteManager.h" />
     <ClInclude Include="..\sakura_core\EditInfo.h" />
+    <ClInclude Include="..\sakura_core\apiwrap\commonControl.h" />
     <ClInclude Include="..\sakura_core\apiwrap\StdApi.h" />
     <ClInclude Include="..\sakura_core\apiwrap\StdControl.h" />
     <ClInclude Include="..\sakura_core\charset\Cesu8.h" />
@@ -284,6 +292,7 @@
     <ClInclude Include="..\sakura_core\charset\ESI.h" />
     <ClInclude Include="..\sakura_core\charset\Euc.h" />
     <ClInclude Include="..\sakura_core\charset\charcode.h" />
+    <ClInclude Include="..\sakura_core\charset\charPointer.h" />
     <ClInclude Include="..\sakura_core\charset\charset.h" />
     <ClInclude Include="..\sakura_core\charset\Jis.h" />
     <ClInclude Include="..\sakura_core\charset\Latin1.h" />
@@ -405,6 +414,7 @@
     <ClInclude Include="..\sakura_core\view\colors\Color_RegexKeyword.h" />
     <ClInclude Include="..\sakura_core\view\colors\Color_Url.h" />
     <ClInclude Include="..\sakura_core\view\colors\ColorStrategy.h" />
+    <ClInclude Include="..\sakura_core\view\colors\ColorIndexType.h" />
     <ClInclude Include="..\sakura_core\view\figures\Figure_CtrlCode.h" />
     <ClInclude Include="..\sakura_core\view\figures\Figure_Eol.h" />
     <ClInclude Include="..\sakura_core\view\figures\Figure_HanSpace.h" />

@@ -220,7 +220,7 @@ public:
 
 	// ƒrƒ…[‚ÌÝ’èEŽæ“¾
 	EditView* GetCurrentView(void) const { return pView; }
-	void SetCurrentView(EditView* pView) { pView = pView; }
+	void SetCurrentView(EditView* pView) { this->pView = pView; }
 
 private:
 	std::vector<ColorStrategy*>	vStrategies;

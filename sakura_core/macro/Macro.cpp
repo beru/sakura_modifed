@@ -798,9 +798,9 @@ bool Macro::HandleCommand(
 			}
 			// 設定値バックアップ
 			// マクロパラメータ→設定値変換
-			GetDllShareData().common.search.bNotifyNotFound	= lFlag & 0x08 ? 1 : 0;
-			GetDllShareData().common.search.bAutoCloseDlgFind	= lFlag & 0x10 ? 1 : 0;
-			GetDllShareData().common.search.bSearchAll			= lFlag & 0x20 ? 1 : 0;
+			GetDllShareData().common.search.bNotifyNotFound		= (lFlag & 0x08) ? 1 : 0;
+			GetDllShareData().common.search.bAutoCloseDlgFind	= (lFlag & 0x10) ? 1 : 0;
+			GetDllShareData().common.search.bSearchAll			= (lFlag & 0x20) ? 1 : 0;
 
 			// コマンド発行
 			editView.GetCommander().HandleCommand(index, true, 0, 0, 0, 0);
@@ -987,17 +987,17 @@ bool Macro::HandleCommand(
 			}
 			dlgReplace.strText2 = arguments[1];
 
-			GetDllShareData().common.search.bNotifyNotFound	= lFlag & 0x08 ? 1 : 0;
-			GetDllShareData().common.search.bAutoCloseDlgFind	= lFlag & 0x10 ? 1 : 0;
-			GetDllShareData().common.search.bSearchAll			= lFlag & 0x20 ? 1 : 0;
-			dlgReplace.bPaste			= lFlag & 0x40 ? 1 : 0;	// CShareDataに入れなくていいの？
-			dlgReplace.bConsecutiveAll = lFlag & 0x0400 ? 1 : 0;	// 2007.01.16 ryoji
+			GetDllShareData().common.search.bNotifyNotFound		= (lFlag & 0x08) ? 1 : 0;
+			GetDllShareData().common.search.bAutoCloseDlgFind	= (lFlag & 0x10) ? 1 : 0;
+			GetDllShareData().common.search.bSearchAll			= (lFlag & 0x20) ? 1 : 0;
+			dlgReplace.bPaste			= (lFlag & 0x40) ? 1 : 0;	// CShareDataに入れなくていいの？
+			dlgReplace.bConsecutiveAll	= (lFlag & 0x0400) ? 1 : 0;	// 2007.01.16 ryoji
 			if (LOWORD(index) == F_REPLACE) {	// 2007.07.08 genta コマンドは下位ワード
 				// 置換する時は選べない
 				dlgReplace.bSelectedArea = 0;
 			}else if (LOWORD(index) == F_REPLACE_ALL) {	// 2007.07.08 genta コマンドは下位ワード
 				// 全置換の時は選べる？
-				dlgReplace.bSelectedArea	= lFlag & 0x80 ? 1 : 0;
+				dlgReplace.bSelectedArea	= (lFlag & 0x80) ? 1 : 0;
 			}
 			dlgReplace.nReplaceTarget	= (lFlag >> 8) & 0x03;	// 8bitシフト（0x100で割り算）	// 2007.01.16 ryoji 下位 2bitだけ取り出す
 			if (bAddHistory) {

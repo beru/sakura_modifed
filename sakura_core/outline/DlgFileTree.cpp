@@ -204,7 +204,6 @@ void DlgFileTree::SetDataItem(int nItemIndex)
 
 void DlgFileTree::ChangeEnableItemType()
 {
-	HWND hwndDlg = GetHwnd();
 	bool bGrepEnable = false;
 	bool bPathEnable = false;
 	if (IsButtonChecked(IDC_RADIO_GREP)) { 

@@ -233,6 +233,7 @@ int SplitterWnd::HitTestSplitter(int xPos, int yPos)
 */
 void SplitterWnd::DoSplit(int nHorizontal, int nVertical)
 {
+	int			nActivePane;
 	int			nLimit = 32;
 	RECT		rc;
 	int			nAllSplitRowsOld = nAllSplitRows;	// 分割行数
@@ -343,10 +344,10 @@ void SplitterWnd::DoSplit(int nHorizontal, int nVertical)
 				}
 			}else {
 				// ペインの表示状態を他のビューにコピー
-				if (nActivePane != 0 &&
-					pViewArr[nActivePane] && pViewArr[0]
+				if (this->nActivePane != 0 &&
+					pViewArr[this->nActivePane] && pViewArr[0]
 				) {
-					pViewArr[nActivePane]->CopyViewStatus(pViewArr[0]);
+					pViewArr[this->nActivePane]->CopyViewStatus(pViewArr[0]);
 				}
 			}
 		}else
@@ -358,19 +359,19 @@ void SplitterWnd::DoSplit(int nHorizontal, int nVertical)
 				}
 			}else {
 				// ペインの表示状態を他のビューにコピー
-				if (nActivePane != 0 &&
-					pViewArr[nActivePane] && pViewArr[0]
+				if (this->nActivePane != 0 &&
+					pViewArr[this->nActivePane] && pViewArr[0]
 				) {
-					pViewArr[nActivePane]->CopyViewStatus(pViewArr[0]);
+					pViewArr[this->nActivePane]->CopyViewStatus(pViewArr[0]);
 				}
 			}
 		}else {
 			if (!bVUp && !bHUp) {
 				// ペインの表示状態を他のビューにコピー
-				if (nActivePane != 0 &&
-					pViewArr[nActivePane] && pViewArr[0]
+				if (this->nActivePane != 0 &&
+					pViewArr[this->nActivePane] && pViewArr[0]
 				) {
-					pViewArr[nActivePane]->CopyViewStatus(pViewArr[0]);
+					pViewArr[this->nActivePane]->CopyViewStatus(pViewArr[0]);
 				}
 			}else
 			if (bVUp && !bHUp) {
@@ -430,8 +431,8 @@ void SplitterWnd::DoSplit(int nHorizontal, int nVertical)
 				}
 			}else {
 				// ペインの表示状態を他のビューにコピー
-				if (nActivePane != 0 &&
-					nActivePane != 2 &&
+				if (this->nActivePane != 0 &&
+					this->nActivePane != 2 &&
 					pViewArr[0] &&
 					pViewArr[1] &&
 					pViewArr[2] &&
@@ -442,7 +443,7 @@ void SplitterWnd::DoSplit(int nHorizontal, int nVertical)
 				}
 			}
 		}
-		if (nActivePane == 0 || nActivePane == 1) {
+		if (this->nActivePane == 0 || this->nActivePane == 1) {
 			// 2007.10.01 ryoji
 			// 分割無しからの切替時のみ従来コードを実行してアクティブペインを決める。
 			// それ以外の場合はペイン0をアクティブにする。
@@ -500,8 +501,8 @@ void SplitterWnd::DoSplit(int nHorizontal, int nVertical)
 				}
 			}else {
 				// ペインの表示状態を他のビューにコピー
-				if (nActivePane != 0 &&
-					nActivePane != 1 &&
+				if (this->nActivePane != 0 &&
+					this->nActivePane != 1 &&
 					pViewArr[0] &&
 					pViewArr[1] &&
 					pViewArr[2] &&
@@ -512,7 +513,7 @@ void SplitterWnd::DoSplit(int nHorizontal, int nVertical)
 				}
 			}
 		}
-		if (nActivePane == 0 || nActivePane == 2) {
+		if (this->nActivePane == 0 || this->nActivePane == 2) {
 			nActivePane = 0;
 		}else {
 			nActivePane = 1;
@@ -566,7 +567,7 @@ void SplitterWnd::DoSplit(int nHorizontal, int nVertical)
 			}
 		}else {
 		}
-		nActivePane = nActivePane;
+		nActivePane = this->nActivePane;
 	}
 	OnSize(0, 0, 0, 0);
 

@@ -497,11 +497,11 @@ LRESULT PrintPreview::OnVScroll(WPARAM wParam, LPARAM lParam)
 	}
 	nMove = nNowPos - nNewPos;
 	int nPreviewVScrollPos = -1 * nNewPos;
-	if (nPreviewVScrollPos != nPreviewVScrollPos) {
+	if (this->nPreviewVScrollPos != nPreviewVScrollPos) {
 		si.fMask = SIF_POS;
 		si.nPos = nNewPos;
 		::SetScrollInfo(hwndScrollBar, SB_CTL, &si, TRUE);
-		nPreviewVScrollPos = nPreviewVScrollPos;
+		this->nPreviewVScrollPos = nPreviewVScrollPos;
 		// •`‰æ
 		::ScrollWindowEx(parentWnd.GetHwnd(), 0, nMove, NULL, NULL, NULL , NULL, SW_ERASE | SW_INVALIDATE);
 	}
@@ -560,11 +560,11 @@ LRESULT PrintPreview::OnHScroll(WPARAM wParam, LPARAM lParam)
 	}
 	nMove = nNowPos - nNewPos;
 	int nPreviewHScrollPos = nNewPos;
-	if (nPreviewHScrollPos != nPreviewHScrollPos) {
+	if (this->nPreviewHScrollPos != nPreviewHScrollPos) {
 		si.fMask = SIF_POS;
 		si.nPos = nNewPos;
 		::SetScrollInfo(hwndScrollBar, SB_CTL, &si, TRUE);
-		nPreviewHScrollPos = nPreviewHScrollPos;
+		this->nPreviewHScrollPos = nPreviewHScrollPos;
 		// •`‰æ
 		::ScrollWindowEx(parentWnd.GetHwnd(), nMove, 0, NULL, NULL, NULL , NULL, SW_ERASE | SW_INVALIDATE);
 	}

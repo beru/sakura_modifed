@@ -36,7 +36,8 @@
 AutoReloadAgent::AutoReloadAgent()
 	:
 	watchUpdateType(WatchUpdateType::Query),
-	nPauseCount(0)
+	nPauseCount(0),
+	nDelayCount(0)
 {
 }
 

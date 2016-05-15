@@ -53,8 +53,8 @@ struct EolDefinition {
 	const ACHAR*	szDataA;
 	int				nLen;
 
-	bool StartsWith(const WCHAR* pData, int nLen) const { return nLen <= nLen && auto_memcmp(pData, szDataW, nLen) == 0; }
-	bool StartsWith(const ACHAR* pData, int nLen) const { return nLen <= nLen && szDataA[0] != '\0' && auto_memcmp(pData, szDataA, nLen) == 0; }
+	bool StartsWith(const WCHAR* pData, int nLen) const { return this->nLen <= nLen && auto_memcmp(pData, szDataW, this->nLen) == 0; }
+	bool StartsWith(const ACHAR* pData, int nLen) const { return this->nLen <= nLen && szDataA[0] != '\0' && auto_memcmp(pData, szDataA, this->nLen) == 0; }
 };
 
 static const EolDefinition g_aEolTable[] = {
@@ -72,8 +72,8 @@ struct EolDefinitionForUniFile {
 	const char* szDataWB;
 	int			nLen;
 
-	bool StartsWithW(const char* pData, int nLen) const { return nLen <= nLen && memcmp(pData, szDataW, nLen) == 0; }
-	bool StartsWithWB(const char* pData, int nLen) const { return nLen <= nLen && memcmp(pData, szDataWB, nLen) == 0; }
+	bool StartsWithW(const char* pData, int nLen) const { return this->nLen <= nLen && memcmp(pData, szDataW, this->nLen) == 0; }
+	bool StartsWithWB(const char* pData, int nLen) const { return this->nLen <= nLen && memcmp(pData, szDataWB, this->nLen) == 0; }
 };
 static const EolDefinitionForUniFile g_aEolTable_uni_file[] = {
 	{ "",					"", 					0 },

@@ -256,7 +256,7 @@ INT_PTR PropTypesScreen::DispatchEvent(
 					bool bFixedFont = true;
 					if (pShareData->common.view.lf.lfPitchAndFamily & FIXED_PITCH) {
 					}else {
-						bool bFixedFont = false;
+						bFixedFont = false;
 					}
 
 					if (MySelectFont(&lf, &nPointSize, hwndDlg, bFixedFont)) {

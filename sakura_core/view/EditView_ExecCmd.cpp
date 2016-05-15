@@ -128,7 +128,7 @@ bool EditView::ExecCmd(
 	//	From Here 2006.12.03 maru 引数を拡張のため
 	bool	bGetStdout		= (nFlgOpt & 0x01) != 0;	//	子プロセスの標準出力を得る
 	BOOL	bToEditWindow	= ((nFlgOpt & 0x02) && bEditable) ? TRUE : FALSE;	//	TRUE=編集中のウィンドウ / FALSAE=アウトプットウィンドウ
-	BOOL	bSendStdin		= nFlgOpt & 0x04 ? TRUE : FALSE;	//	編集中ファイルを子プロセスSTDINに渡す
+	BOOL	bSendStdin		= (nFlgOpt & 0x04) ? TRUE : FALSE;	//	編集中ファイルを子プロセスSTDINに渡す
 	// BOOL	bIOUnicodeGet	= nFlgOpt & 0x08 ? TRUE : FALSE;	//	標準出力をUnicodeで行う	2008/6/17 Uchi
 	// BOOL	bIOUnicodeSend	= nFlgOpt & 0x10 ? TRUE : FALSE;	//	標準入力をUnicodeで行う	2008/6/20 Uchi
 	EncodingType outputEncoding;

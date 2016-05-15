@@ -237,16 +237,13 @@ INT_PTR PropToolbar::DispatchEvent(
 			switch (wNotifyCode) {
 			case CBN_SELCHANGE:
 				nIndex2 = Combo_GetCurSel(hwndCombo);
-
 				List_ResetContent(hwndFuncList);
-
 				// 機能一覧に文字列をセット (リストボックス)
 				//	From Here Oct. 15, 2001 genta Lookupを使うように変更
 				nNum = lookup.GetItemCount(nIndex2);
 				for (i=0; i<nNum; ++i) {
 					nIndex1 = lookup.Pos2FuncCode(nIndex2, i);
 					int nbarNo = pMenuDrawer->FindToolbarNoFromCommandId(nIndex1);
-
 					if (nbarNo >= 0) {
 						// ツールバーボタンの情報をセット (リストボックス)
 						lResult = ::Listbox_ADDDATA(hwndFuncList, (LPARAM)nbarNo);

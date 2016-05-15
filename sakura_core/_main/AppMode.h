@@ -43,7 +43,7 @@ class AppMode
 public:
 	// インターフェース
 	bool	IsViewMode() const				{ return bViewMode; }			// ビューモードを取得
-	void	SetViewMode(bool bViewMode)		{ bViewMode = bViewMode; }	// ビューモードを設定
+	void	SetViewMode(bool bViewMode)		{ this->bViewMode = bViewMode; }	// ビューモードを設定
 	bool	IsDebugMode() const				{ return bDebugMode; }
 	void	SetDebugModeON();	// デバッグモニタモード設定
 	void	SetDebugModeOFF();	// デバッグモニタモード解除
@@ -52,7 +52,7 @@ public:
 	void OnAfterSave(const SaveInfo& saveInfo);
 
 protected:
-	void _SetDebugMode(bool bDebugMode) { bDebugMode = bDebugMode; }
+	void _SetDebugMode(bool bDebugMode) { this->bDebugMode = bDebugMode; }
 
 private:
 	bool	bViewMode;				// ビューモード

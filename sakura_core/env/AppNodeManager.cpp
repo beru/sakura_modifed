@@ -431,7 +431,7 @@ bool AppNodeGroupHandle::PostMessageToAllEditors(
 
 /** 全編集ウィンドウへメッセージを送る
 
-	@date 2005.01.24 genta hWndLast == NULLのとき全くメッセージが送られなかった
+	@date 2005.01.24 genta m_hWndLast == NULLのとき全くメッセージが送られなかった
 	@date 2007.06.22 ryoji nGroup引数を追加、グループ単位で順番に送る
 */
 bool AppNodeGroupHandle::SendMessageToAllEditors(

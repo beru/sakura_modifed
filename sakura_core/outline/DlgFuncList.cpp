@@ -758,9 +758,9 @@ void DlgFuncList::SetData()
 	// Nov. 5, 2002 genta ツリー表示の時だけソート基準コンボボックスを表示
 	EditView* pEditView = (EditView*)(this->lParam);
 	int nDocType = pEditView->GetDocument().docType.GetDocumentType().GetIndex();
-	if (nDocType != nDocType) {
+	if (this->nDocType != nDocType) {
 		// 以前とはドキュメントタイプが変わったので初期化する
-		nDocType = nDocType;
+		this->nDocType = nDocType;
 		nSortCol = type.nOutlineSortCol;
 		nSortColOld = nSortCol;
 		bSortDesc = type.bOutlineSortDesc;
@@ -2940,8 +2940,8 @@ INT_PTR DlgFuncList::OnNcMouseMove(
 	RECT rc;
 	GetWindowRect(&rc);
 	bool bHovering = ::PtInRect(&rc, pt) ? true: false;
-	if (bHovering != bHovering) {
-		bHovering = bHovering;
+	if (this->bHovering != bHovering) {
+		this->bHovering = bHovering;
 		if (bHovering) {
 			::SetTimer(hwnd, 1, 200, NULL);
 		}else {
@@ -2951,9 +2951,9 @@ INT_PTR DlgFuncList::OnNcMouseMove(
 
 	// マウスカーソルがボタン上にあればハイライト
 	int nHilightedBtn = HitTestCaptionButton(pt.x, pt.y);
-	if (nHilightedBtn != nHilightedBtn) {
+	if (this->nHilightedBtn != nHilightedBtn) {
 		// ハイライト状態の変更を反映するために再描画する
-		nHilightedBtn = nHilightedBtn;
+		this->nHilightedBtn = nHilightedBtn;
 		::RedrawWindow(GetHwnd(), NULL, NULL, RDW_FRAME | RDW_INVALIDATE | RDW_UPDATENOW | RDW_NOINTERNALPAINT);
 
 		// ツールチップ更新
@@ -3332,7 +3332,7 @@ void DlgFuncList::DoMenu(POINT pt, HWND hwndFrom)
 	}
 	::InsertMenu(hMenuRef, iPosRef++, MF_BYPOSITION | MF_SEPARATOR, 0,	NULL);
 	::InsertMenu(hMenuRef, iPosRef++, uFlags, 200, LS(STR_DLGFNCLST_MENU_SYNC));
-	::CheckMenuItem(hMenuRef, 200, MF_BYCOMMAND | ProfDockSync()? MF_CHECKED: MF_UNCHECKED);
+	::CheckMenuItem(hMenuRef, 200, (MF_BYCOMMAND | ProfDockSync()) ? MF_CHECKED: MF_UNCHECKED);
 	::InsertMenu(hMenuRef, iPosRef++, MF_BYPOSITION | MF_SEPARATOR, 0,	NULL);
 	::InsertMenu(hMenuRef, iPosRef++, MF_BYPOSITION | MF_STRING, 300, LS(STR_DLGFNCLST_MENU_INHERIT));
 	::InsertMenu(hMenuRef, iPosRef++, MF_BYPOSITION | MF_STRING, 301, LS(STR_DLGFNCLST_MENU_TYPE));

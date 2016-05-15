@@ -259,11 +259,9 @@ INT_PTR PropMainMenu::DispatchEvent(
 		::SendMessage(hwndDlg, WM_COMMAND, MAKELONG(IDC_COMBO_FUNCKIND, CBN_SELCHANGE), (LPARAM)hwndComboFunkKind);
 
 		// TreeViewのメッセージ処理（アクセスキー入力用）
-		hwndDlg = hwndDlg;
+		::hwndDlg = hwndDlg;
 		wpTreeView = (WNDPROC)SetWindowLongPtr(hwndTreeRes, GWLP_WNDPROC, (LONG_PTR)TreeViewProc);
-
 		::SetTimer(hwndDlg, 1, 300, NULL);
-
 		bInMove = false;
 
 		return TRUE;
@@ -1112,7 +1110,7 @@ void PropMainMenu::Import(HWND hwndDlg)
 // メインメニュー設定をエクスポートする
 void PropMainMenu::Export(HWND hwndDlg)
 {
-	ImpExpMainMenu	impExp(common);
+	ImpExpMainMenu impExp(common);
 	GetData(hwndDlg);
 
 	// エクスポート

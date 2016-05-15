@@ -119,8 +119,9 @@ Caret::Caret(EditView& editView, const EditDoc& editDoc)
 Caret::~Caret()
 {
 	// キャレット用ビットマップ	// 2006.11.28 ryoji
-	if (hbmpCaret)
+	if (hbmpCaret) {
 		DeleteObject(hbmpCaret);
+	}
 }
 
 
@@ -209,7 +210,7 @@ LayoutInt Caret::MoveCursor(
 	{
 		// カーソルが真ん中にあるときに左右にぶれないように
 		int nNoMove = SCROLLMARGIN_NOMOVE;
-		LayoutInt a = ((textArea.nViewColNum) - nNoMove) / 2;
+		LayoutInt a = (textArea.nViewColNum - nNoMove) / 2;
 		LayoutInt nMin = (2 <= a ? a : LayoutInt(0)); // 1だと全角移動に支障があるので2以上
 		nScrollMarginRight = t_min(nScrollMarginRight, nMin);
 		nScrollMarginLeft  = t_min(nScrollMarginLeft,  nMin);
@@ -614,7 +615,7 @@ void Caret::ShowEditCaret()
 	}else {
 		if (
 			GetCaretSize() != Size(nCaretWidth, nCaretHeight)
-			|| crCaret != crCaret
+			|| this->crCaret != crCaret
 			|| editView.crBack != crBack
 		) {
 			// キャレットはあるが、大きさや色が変わった場合
@@ -642,7 +643,7 @@ void Caret::ShowEditCaret()
 		ShowCaret_(editView.GetHwnd()); // 2002/07/22 novice
 	}
 
-	crCaret = crCaret;	//	2006.12.07 ryoji
+	this->crCaret = crCaret;	//	2006.12.07 ryoji
 	editView.crBack2 = crBack;		//	2006.12.07 ryoji
 	editView.SetIMECompFormPos();
 }
@@ -1048,10 +1049,10 @@ void Caret::CreateEditCaret(COLORREF crCaret, COLORREF crBack, int nWidth, int n
 	editView.ReleaseDC(hdc);
 
 	// 以前のビットマップを破棄する
-	if (hbmpCaret) {
-		::DeleteObject(hbmpCaret);
+	if (this->hbmpCaret) {
+		::DeleteObject(this->hbmpCaret);
 	}
-	hbmpCaret = hbmpCaret;
+	this->hbmpCaret = hbmpCaret;
 
 	// キャレットを作成する
 	editView.CreateCaret(hbmpCaret, nWidth, nHeight);

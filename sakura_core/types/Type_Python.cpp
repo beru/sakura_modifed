@@ -147,7 +147,7 @@ int OutlinePython::EnterString(const wchar_t* data, int linelen, int start_offse
 	if (data[col] == '\"' || data[col] == '\'') {
 		int quote_char = data[col];
 		state = STATE_STRING;
-		quote_char = quote_char;
+		this->quote_char = quote_char;
 		//	•¶š—ñ‚ÌŠJn
 		if (col >= 1 &&
 			(data[col - 1] == 'r' || data[col - 1] == 'R')

@@ -82,7 +82,7 @@ next:
 Wnd::Wnd(const TCHAR* pszInheritanceAppend)
 {
 	hInstance = NULL;		// アプリケーションインスタンスのハンドル
-	hwndParent = NULL;	// オーナーウィンドウのハンドル
+	hwndParent = NULL;		// オーナーウィンドウのハンドル
 	hWnd = NULL;			// このウィンドウのハンドル
 #ifdef _DEBUG
 	_tcscpy(szClassInheritances, _T("Wnd"));
@@ -151,7 +151,7 @@ HWND Wnd::Create(
 	HMENU		hMenu			// handle to menu, or child-window identifier
 )
 {
-	hwndParent = hwndParent;
+	this->hwndParent = hwndParent;
 
 	// ウィンドウ作成前の処理(クラス登録前) (virtual)
 	PreviCreateWindow();

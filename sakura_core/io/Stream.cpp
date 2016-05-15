@@ -66,7 +66,7 @@ Stream::Stream(
 {
 	fp = nullptr;
 	pFileAttribute = NULL;
-	bExceptionMode = bExceptionMode;
+	this->bExceptionMode = bExceptionMode;
 	Open(tszPath, tszMode);
 }
 

@@ -119,18 +119,18 @@ void DlgExec::SetData(void)
 			nExecFlgOpt &= ~0x02;
 		}
 
-		CheckButton(IDC_CHECK_GETSTDOUT, nExecFlgOpt & 0x01 ? true : false);
-		CheckButton(IDC_RADIO_OUTPUT, nExecFlgOpt & 0x02 ? false : true);
-		CheckButton(IDC_RADIO_EDITWINDOW, nExecFlgOpt & 0x02 ? true : false);
-		CheckButton(IDC_CHECK_SENDSTDIN, nExecFlgOpt & 0x04 ? true : false);
-		CheckButton(IDC_CHECK_CUR_DIR, nExecFlgOpt & 0x200 ? true : false);
+		CheckButton(IDC_CHECK_GETSTDOUT,	(nExecFlgOpt & 0x01) ? true : false);
+		CheckButton(IDC_RADIO_OUTPUT,		(nExecFlgOpt & 0x02) ? false : true);
+		CheckButton(IDC_RADIO_EDITWINDOW,	(nExecFlgOpt & 0x02) ? true : false);
+		CheckButton(IDC_CHECK_SENDSTDIN,	(nExecFlgOpt & 0x04) ? true : false);
+		CheckButton(IDC_CHECK_CUR_DIR,		(nExecFlgOpt & 0x200) ? true : false);
 
-		EnableItem(IDC_RADIO_OUTPUT, nExecFlgOpt & 0x01 ? true : false);
-		EnableItem(IDC_RADIO_EDITWINDOW, ((nExecFlgOpt & 0x01) && bEditable)? true : false);
-		EnableItem(IDC_COMBO_CODE_GET, nExecFlgOpt & 0x01 ? true : false);		// 標準出力Off時、Unicodeを使用するをDesableする	2008/6/20 Uchi
-		EnableItem(IDC_COMBO_CODE_SEND, nExecFlgOpt & 0x04 ? true : false);		// 標準入力Off時、Unicodeを使用するをDesableする	2008/6/20 Uchi
-		EnableItem(IDC_COMBO_CUR_DIR, nExecFlgOpt & 0x200 ? true : false);
-		EnableItem(IDC_BUTTON_REFERENCE2, nExecFlgOpt & 0x200 ? true : false);
+		EnableItem(IDC_RADIO_OUTPUT,		(nExecFlgOpt & 0x01) ? true : false);
+		EnableItem(IDC_RADIO_EDITWINDOW,	((nExecFlgOpt & 0x01) && bEditable)? true : false);
+		EnableItem(IDC_COMBO_CODE_GET,		(nExecFlgOpt & 0x01) ? true : false);		// 標準出力Off時、Unicodeを使用するをDesableする	2008/6/20 Uchi
+		EnableItem(IDC_COMBO_CODE_SEND,		(nExecFlgOpt & 0x04) ? true : false);		// 標準入力Off時、Unicodeを使用するをDesableする	2008/6/20 Uchi
+		EnableItem(IDC_COMBO_CUR_DIR,		(nExecFlgOpt & 0x200) ? true : false);
+		EnableItem(IDC_BUTTON_REFERENCE2,	(nExecFlgOpt & 0x200) ? true : false);
 	}	// To Here 2007.01.02 maru 引数を拡張のため
 
 	/*****************************

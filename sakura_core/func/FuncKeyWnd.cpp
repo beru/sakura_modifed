@@ -111,8 +111,8 @@ HWND FuncKeyWnd::Open(
 {
 	LPCTSTR pszClassName = _T("FuncKeyWnd");
 
-	pEditDoc = pEditDoc;
-	bSizeBox = bSizeBox;
+	this->pEditDoc = pEditDoc;
+	this->bSizeBox = bSizeBox;
 	hwndSizeBox = NULL;
 	nCurrentKeyState = -1;
 

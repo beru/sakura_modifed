@@ -1077,7 +1077,7 @@ int GrepAgent::DoGrepFile(
 			// 2003.06.10 Moca コード判別処理をここに移動．
 			// 判別エラーでもファイル数にカウントするため
 			// ファイルの日本語コードセット判別
-			// 2014.06.19 Moca ファイル名のタイプ別のencodingに変更
+			// 2014.06.19 Moca ファイル名のタイプ別のm_encodingに変更
 			CodeMediator mediator( type->encoding );
 			nCharCode = mediator.CheckKanjiCodeOfFile(pszFullPath);
 			if (!IsValidCodeOrCPType(nCharCode)) {

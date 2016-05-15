@@ -238,6 +238,9 @@
     <ClInclude Include="..\sakura_core\EditInfo.h">
       <Filter>Cpp Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\sakura_core\apiwrap\CommonControl.h">
+      <Filter>Cpp Source Files\apiwrap</Filter>
+    </ClInclude>
     <ClInclude Include="..\sakura_core\apiwrap\StdApi.h">
       <Filter>Cpp Source Files\apiwrap</Filter>
     </ClInclude>
@@ -263,6 +266,9 @@
       <Filter>Cpp Source Files\charset</Filter>
     </ClInclude>
     <ClInclude Include="..\sakura_core\charset\charcode.h">
+      <Filter>Cpp Source Files\charset</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sakura_core\charset\charPointer.h">
       <Filter>Cpp Source Files\charset</Filter>
     </ClInclude>
     <ClInclude Include="..\sakura_core\charset\charset.h">
@@ -626,6 +632,9 @@
       <Filter>Cpp Source Files\view\colors</Filter>
     </ClInclude>
     <ClInclude Include="..\sakura_core\view\colors\ColorStrategy.h">
+      <Filter>Cpp Source Files\view\colors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sakura_core\view\colors\ColorIndexType.h">
       <Filter>Cpp Source Files\view\colors</Filter>
     </ClInclude>
     <ClInclude Include="..\sakura_core\view\figures\Figure_CtrlCode.h">
