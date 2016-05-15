@@ -95,7 +95,7 @@ public:
 	bool			GetDocumentBomExist() const;							// ドキュメントのBOM付加を取得
 	void			SetDocumentEncoding(EncodingType eCharCode, bool bBom);	// ドキュメントの文字コードを設定
 	bool IsModificationForbidden(EFunctionCode nCommand) const;			// 指定コマンドによる書き換えが禁止されているかどうか	// Aug. 14, 2000 genta
-	bool IsEditable() const { return !AppMode::getInstance().IsViewMode() && !(!m_docLocker.IsDocWritable() && GetDllShareData().common.file.bUneditableIfUnwritable); }	// 編集可能かどうか
+	bool IsEditable() const { return !AppMode::getInstance().IsViewMode() && !(!docLocker.IsDocWritable() && GetDllShareData().common.file.bUneditableIfUnwritable); }	// 編集可能かどうか
 	void GetSaveInfo(SaveInfo* pSaveInfo) const;			// セーブ情報を取得
 
 	// 状態
@@ -118,43 +118,43 @@ public:
 	//                       メンバ変数群                          //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	// 参照
-	EditWnd*			m_pEditWnd;	// Sep. 10, 2002
+	EditWnd*			pEditWnd;	// Sep. 10, 2002
 
 	// データ構造
-	DocLineMgr			m_docLineMgr;
-	LayoutMgr			m_layoutMgr;
+	DocLineMgr			docLineMgr;
+	LayoutMgr			layoutMgr;
 
 	// 各種機能
-	DocFile				m_docFile;
-	DocFileOperation	m_docFileOperation;
-	DocEditor			m_docEditor;
-	DocType				m_docType;
-	CookieManager		m_cookie;
+	DocFile				docFile;
+	DocFileOperation	docFileOperation;
+	DocEditor			docEditor;
+	DocType				docType;
+	CookieManager		cookie;
 
 	// ヘルパ
-	BackupAgent			m_backupAgent;
-	AutoSaveAgent		m_autoSaveAgent;		// 自動保存管理
-	AutoReloadAgent		m_autoReloadAgent;
-	DocOutline			m_docOutline;
-	DocLocker			m_docLocker;
+	BackupAgent			backupAgent;
+	AutoSaveAgent		autoSaveAgent;		// 自動保存管理
+	AutoReloadAgent		autoReloadAgent;
+	DocOutline			docOutline;
+	DocLocker			docLocker;
 
 	// 動的状態
-	int					m_nCommandExecNum;			// コマンド実行回数
+	int					nCommandExecNum;			// コマンド実行回数
 
 	// 環境情報
-	FuncLookup			m_funcLookup;				// 機能名，機能番号などのresolve
+	FuncLookup			funcLookup;				// 機能名，機能番号などのresolve
 
 	// 未整理変数
-	TextWrappingMethod	m_nTextWrapMethodCur;		// 折り返し方法					// 2008.05.30 nasukoji
-	bool			m_bTextWrapMethodCurTemp;	// 折り返し方法一時設定適用中	// 2008.05.30 nasukoji
-	LOGFONT			m_lfCur;					// 一時設定フォント
-	int				m_nPointSizeCur;			// 一時設定フォントサイズ
-	bool			m_blfCurTemp;				// フォント設定適用中
-	int				m_nPointSizeOrg;			// 元のフォントサイズ
-	bool			m_bTabSpaceCurTemp;			// タブ幅一時設定適用中			// 2013.05.30 Moca
+	TextWrappingMethod	nTextWrapMethodCur;		// 折り返し方法					// 2008.05.30 nasukoji
+	bool			bTextWrapMethodCurTemp;	// 折り返し方法一時設定適用中	// 2008.05.30 nasukoji
+	LOGFONT			lfCur;					// 一時設定フォント
+	int				nPointSizeCur;			// 一時設定フォントサイズ
+	bool			blfCurTemp;				// フォント設定適用中
+	int				nPointSizeOrg;			// 元のフォントサイズ
+	bool			bTabSpaceCurTemp;			// タブ幅一時設定適用中			// 2013.05.30 Moca
 
-	HBITMAP			m_hBackImg;
-	int				m_nBackImgWidth;
-	int				m_nBackImgHeight;
+	HBITMAP			hBackImg;
+	int				nBackImgWidth;
+	int				nBackImgHeight;
 };
 

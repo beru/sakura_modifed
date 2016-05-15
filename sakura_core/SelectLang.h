@@ -30,11 +30,11 @@ public:
 	};
 
 protected:
-	//static LPTSTR m_szDefaultLang;					// メッセージリソースDLL未読み込み時のデフォルト言語
-	static SelLangInfo* m_psLangInfo;				// メッセージリソースの情報
+	//static LPTSTR szDefaultLang;					// メッセージリソースDLL未読み込み時のデフォルト言語
+	static SelLangInfo* psLangInfo;				// メッセージリソースの情報
 public:
 	typedef std::vector<SelLangInfo*> PSSelLangInfoList;
-	static PSSelLangInfoList m_psLangInfoList;
+	static PSSelLangInfoList psLangInfoList;
 
 public:
 	/*
@@ -78,40 +78,40 @@ protected:
 	class LoadStrBuffer {
 	public:
 		LoadStrBuffer() {
-			m_pszString   = m_szString;				// 変数内に準備したバッファを接続
-			m_nBufferSize = _countof(m_szString);	// 配列個数
-			m_nLength     = 0;
-			m_szString[0] = 0;
+			pszString   = szString;				// 変数内に準備したバッファを接続
+			nBufferSize = _countof(szString);	// 配列個数
+			nLength     = 0;
+			szString[0] = 0;
 		}
 
 		// virtual
 		~LoadStrBuffer() {
 			// バッファを取得していた場合は解放する。
-			if ( m_pszString && m_pszString != m_szString ) {
-				delete[] m_pszString;
+			if (pszString && pszString != szString) {
+				delete[] pszString;
 			}
 		}
 
-		/*virtual*/ LPCTSTR GetStringPtr() const { return m_pszString; }	// 読み込んだ文字列のポインタを返す
-		/*virtual*/ int GetBufferSize() const { return m_nBufferSize; }		// 読み込みバッファのサイズ（TCHAR単位）を返す
-		/*virtual*/ int GetStringLength() const { return m_nLength; }		// 読み込んだ文字数（TCHAR単位）を返す
+		/*virtual*/ LPCTSTR GetStringPtr() const { return pszString; }	// 読み込んだ文字列のポインタを返す
+		/*virtual*/ int GetBufferSize() const { return nBufferSize; }		// 読み込みバッファのサイズ（TCHAR単位）を返す
+		/*virtual*/ int GetStringLength() const { return nLength; }		// 読み込んだ文字数（TCHAR単位）を返す
 
 		/*virtual*/ int Load( UINT uid );								// 文字列リソースを読み込む（読み込み実行部）
 
 	protected:
-		LPTSTR m_pszString;						// 文字列読み込みバッファのポインタ
-		int m_nBufferSize;						// 取得配列個数（TCHAR単位）
-		int m_nLength;							// 取得文字数（TCHAR単位）
-		TCHAR m_szString[LOADSTR_ADD_SIZE];		// 文字列読み込みバッファ（バッファ拡張後は使用されない）
+		LPTSTR pszString;						// 文字列読み込みバッファのポインタ
+		int nBufferSize;						// 取得配列個数（TCHAR単位）
+		int nLength;							// 取得文字数（TCHAR単位）
+		TCHAR szString[LOADSTR_ADD_SIZE];		// 文字列読み込みバッファ（バッファ拡張後は使用されない）
 
 	private:
 		LoadStrBuffer( const LoadStrBuffer& );					// コピー禁止とする
 		LoadStrBuffer operator = ( const LoadStrBuffer& );		// 代入禁止とする
 	};
 
-	static LoadStrBuffer m_aLoadStrBufferTemp[4];		// 文字列読み込みバッファの配列（ResourceString::LoadStringSt() が使用する）
-	static int m_nDataTempArrayIndex;					// 最後に使用したバッファのインデックス（ResourceString::LoadStringSt() が使用する）
-	LoadStrBuffer m_loadStrBuffer;					// 文字列読み込みバッファ（ResourceString::LoadString() が使用する）
+	static LoadStrBuffer aLoadStrBufferTemp[4];		// 文字列読み込みバッファの配列（ResourceString::LoadStringSt() が使用する）
+	static int nDataTempArrayIndex;					// 最後に使用したバッファのインデックス（ResourceString::LoadStringSt() が使用する）
+	LoadStrBuffer loadStrBuffer;					// 文字列読み込みバッファ（ResourceString::LoadString() が使用する）
 
 public:
 	/*
@@ -125,9 +125,9 @@ public:
 	/*
 	||  Attributes & Operations
 	*/
-	/*virtual*/ LPCTSTR GetStringPtr() const { return m_loadStrBuffer.GetStringPtr(); }	// 読み込んだ文字列のポインタを返す
-//	/*virtual*/ int GetBufferSize() const { return m_loadStrBuffer.GetBufferSize(); }		// 読み込みバッファのサイズ（TCHAR単位）を返す
-	/*virtual*/ int GetStringLength() const { return m_loadStrBuffer.GetStringLength(); }	// 読み込んだ文字数（TCHAR単位）を返す
+	/*virtual*/ LPCTSTR GetStringPtr() const { return loadStrBuffer.GetStringPtr(); }	// 読み込んだ文字列のポインタを返す
+//	/*virtual*/ int GetBufferSize() const { return loadStrBuffer.GetBufferSize(); }		// 読み込みバッファのサイズ（TCHAR単位）を返す
+	/*virtual*/ int GetStringLength() const { return loadStrBuffer.GetStringLength(); }	// 読み込んだ文字数（TCHAR単位）を返す
 
 	static LPCTSTR LoadStringSt( UINT uid );			// 静的バッファに文字列リソースを読み込む（各国語メッセージリソース対応）
 	/*virtual*/ LPCTSTR Load( UINT uid );			// 文字列リソースを読み込む（各国語メッセージリソース対応）

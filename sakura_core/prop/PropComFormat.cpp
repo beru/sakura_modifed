@@ -91,7 +91,7 @@ INT_PTR CALLBACK PropFormat::DlgProc_page(
 
 void PropFormat::ChangeDateExample(HWND hwndDlg)
 {
-	auto& csFormat = m_common.format;
+	auto& csFormat = common.format;
 	// ダイアログデータの取得 Format
 	GetData(hwndDlg);
 
@@ -106,7 +106,7 @@ void PropFormat::ChangeDateExample(HWND hwndDlg)
 
 void PropFormat::ChangeTimeExample(HWND hwndDlg)
 {
-	auto& csFormat = m_common.format;
+	auto& csFormat = common.format;
 	// ダイアログデータの取得 Format
 	GetData(hwndDlg);
 
@@ -134,7 +134,7 @@ INT_PTR PropFormat::DispatchEvent(
 //	NM_UPDOWN*	pMNUD;
 //	int			idCtrl;
 //	int			nVal;
-	auto& csFormat = m_common.format;
+	auto& csFormat = common.format;
 
 	switch (uMsg) {
 	case WM_INITDIALOG:
@@ -218,7 +218,7 @@ INT_PTR PropFormat::DispatchEvent(
 				return TRUE;
 //@@@ 2002.01.03 YAZAKI 最後に表示していたシートを正しく覚えていないバグ修正
 			case PSN_SETACTIVE:
-				m_nPageNum = ID_PROPCOM_PAGENUM_FORMAT;
+				nPageNum = ID_PROPCOM_PAGENUM_FORMAT;
 				return TRUE;
 			}
 //			break;	// default
@@ -257,7 +257,7 @@ INT_PTR PropFormat::DispatchEvent(
 // ダイアログデータの設定 Format
 void PropFormat::SetData(HWND hwndDlg)
 {
-	auto& csFormat = m_common.format;
+	auto& csFormat = common.format;
 	
 	// 見出し記号
 	::DlgItem_SetText(hwndDlg, IDC_EDIT_MIDASHIKIGOU, csFormat.szMidashiKigou);
@@ -296,7 +296,7 @@ void PropFormat::SetData(HWND hwndDlg)
 // ダイアログデータの取得 Format
 int PropFormat::GetData(HWND hwndDlg)
 {
-	auto& csFormat = m_common.format;
+	auto& csFormat = common.format;
 	// 見出し記号
 	::DlgItem_GetText(hwndDlg, IDC_EDIT_MIDASHIKIGOU, csFormat.szMidashiKigou, _countof(csFormat.szMidashiKigou));
 

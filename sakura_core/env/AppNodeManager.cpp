@@ -107,11 +107,12 @@ EditNode* AppNodeGroupHandle::GetEditNodeAt(int nIndex)
 	DllSharedData* pShare = &GetDllShareData();
 
 	int iIndex = 0;
-	for (int i = 0; i < pShare->nodes.nEditArrNum; ++i) {
+	for (int i=0; i<pShare->nodes.nEditArrNum; ++i) {
 		if (nGroup == 0 || nGroup == pShare->nodes.pEditArr[i].nGroup) {
 			if (IsSakuraMainWindow(pShare->nodes.pEditArr[i].hWnd)) {
-				if (iIndex == nIndex)
+				if (iIndex == nIndex) {
 					return &pShare->nodes.pEditArr[i];
+				}
 				++iIndex;
 			}
 		}
@@ -430,7 +431,7 @@ bool AppNodeGroupHandle::PostMessageToAllEditors(
 
 /** 全編集ウィンドウへメッセージを送る
 
-	@date 2005.01.24 genta m_hWndLast == NULLのとき全くメッセージが送られなかった
+	@date 2005.01.24 genta hWndLast == NULLのとき全くメッセージが送られなかった
 	@date 2007.06.22 ryoji nGroup引数を追加、グループ単位で順番に送る
 */
 bool AppNodeGroupHandle::SendMessageToAllEditors(

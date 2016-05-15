@@ -45,22 +45,22 @@ class DllHandler {
 public:
 	// コンストラクタ・デストラクタ
 	DllHandler() {
-		m_pDllImp = new DLLIMP();
-		m_pDllImp->InitDll();
+		pDllImp = new DLLIMP();
+		pDllImp->InitDll();
 	}
 	~DllHandler() {
-		m_pDllImp->DeinitDll(true); // ※終了処理に失敗しても強制的にDLL解放
-		delete m_pDllImp;
+		pDllImp->DeinitDll(true); // ※終了処理に失敗しても強制的にDLL解放
+		delete pDllImp;
 	}
 
 	// アクセサ
-	DLLIMP* operator -> () { return m_pDllImp; }
+	DLLIMP* operator -> () { return pDllImp; }
 
 	// 利用状態のチェック（operator版）
-	bool operator!() const { return m_pDllImp->IsAvailable(); }
+	bool operator!() const { return pDllImp->IsAvailable(); }
 
 private:
-	DLLIMP*	m_pDllImp;
+	DLLIMP*	pDllImp;
 };
 
 
@@ -111,7 +111,7 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 public:
 	// DLLの関数を呼び出せるか状態どうか
-	virtual bool IsAvailable() const { return m_hInstance != NULL; }
+	virtual bool IsAvailable() const { return hInstance != NULL; }
 
 	// DLLロードと初期処理
 	InitDllResultType InitDll(
@@ -124,7 +124,7 @@ public:
 	);
 
 	// インスタンスハンドルの取得
-	HINSTANCE GetInstance() const { return m_hInstance; }
+	HINSTANCE GetInstance() const { return hInstance; }
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                           属性                              //
@@ -201,7 +201,7 @@ protected:
 	//                        メンバ変数                           //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 private:
-	HINSTANCE		m_hInstance;
-	std::tstring	m_strLoadedDllName;
+	HINSTANCE		hInstance;
+	std::tstring	strLoadedDllName;
 };
 

@@ -158,34 +158,34 @@ public:
 	// void Release();
 
 private:
-	HFONT m_hFontOld;
-	HFONT m_hFont;
-	HWND  m_hwnd;
+	HFONT hFontOld;
+	HFONT hFont;
+	HWND  hwnd;
 };
 
 class DCFont
 {
 public:
 	DCFont(LOGFONT& font, HWND hwnd = NULL) {
-		m_hwnd = hwnd;
-		m_hDC = ::GetDC(hwnd);
+		this->hwnd = hwnd;
+		this->hDC = ::GetDC(hwnd);
 		HFONT hFont = ::CreateFontIndirect(&font);
-		m_hFontOld = (HFONT)::SelectObject(m_hDC, hFont);
+		hFontOld = (HFONT)::SelectObject(hDC, hFont);
 	}
 	~DCFont() {
-		if (m_hDC) {
-			::SelectObject(m_hDC, m_hFontOld);
-			::ReleaseDC(m_hwnd, m_hDC);
-			m_hDC = NULL;
-			::DeleteObject(m_hFont);
-			m_hFont = NULL;
+		if (hDC) {
+			::SelectObject(hDC, hFontOld);
+			::ReleaseDC(hwnd, hDC);
+			hDC = NULL;
+			::DeleteObject(hFont);
+			hFont = NULL;
 		}
 	}
-	HDC GetHDC() { return m_hDC; }
+	HDC GetHDC() { return hDC; }
 private:
-	HWND  m_hwnd;
-	HDC   m_hDC;
-	HFONT m_hFontOld;
-	HFONT m_hFont;
+	HWND  hwnd;
+	HDC   hDC;
+	HFONT hFontOld;
+	HFONT hFont;
 };
 

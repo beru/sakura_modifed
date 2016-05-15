@@ -34,35 +34,35 @@ class Bregexp;
 // 行に付加するブックマーク情報
 class LineBookmarked {
 public:
-	LineBookmarked() : m_bBookmarked(false) { }
-	operator bool() const { return m_bBookmarked; }
-	LineBookmarked& operator = (bool b) { m_bBookmarked = b; return *this; }
+	LineBookmarked() : bBookmarked(false) { }
+	operator bool() const { return bBookmarked; }
+	LineBookmarked& operator = (bool b) { bBookmarked = b; return *this; }
 private:
-	bool m_bBookmarked;
+	bool bBookmarked;
 };
 
 // 行のブックマーク情報の取得
 class BookmarkGetter {
 public:
-	BookmarkGetter(const DocLine* pDocLine) : m_pDocLine(pDocLine) { }
+	BookmarkGetter(const DocLine* pDocLine) : pDocLine(pDocLine) { }
 	bool IsBookmarked() const;
 private:
-	const DocLine* m_pDocLine;
+	const DocLine* pDocLine;
 };
 
 // 行のブックマーク情報の取得・設定
 class BookmarkSetter : public BookmarkGetter {
 public:
-	BookmarkSetter(DocLine* pDocLine) : BookmarkGetter(pDocLine), m_pDocLine(pDocLine) { }
+	BookmarkSetter(DocLine* pDocLine) : BookmarkGetter(pDocLine), pDocLine(pDocLine) { }
 	void SetBookmark(bool bFlag);
 private:
-	DocLine* m_pDocLine;
+	DocLine* pDocLine;
 };
 
 // 行全体のブックマーク情報の管理
 class BookmarkManager {
 public:
-	BookmarkManager(DocLineMgr& docLineMgr) : m_docLineMgr(docLineMgr) { }
+	BookmarkManager(DocLineMgr& docLineMgr) : docLineMgr(docLineMgr) { }
 
 	void ResetAllBookMark();															// ブックマークの全解除
 	bool SearchBookMark(LogicInt nLineNum, SearchDirection, LogicInt* pnLineNum);	// ブックマーク検索
@@ -71,6 +71,6 @@ public:
 	void MarkSearchWord(const SearchStringPattern&);			// 検索条件に該当する行にブックマークをセットする
 
 private:
-	DocLineMgr& m_docLineMgr;
+	DocLineMgr& docLineMgr;
 };
 

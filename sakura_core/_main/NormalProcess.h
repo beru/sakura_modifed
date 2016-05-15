@@ -45,6 +45,6 @@ protected:
 	HANDLE _GetInitializeMutex() const; // 2002/2/8 aroka
 
 private:
-	EditApp*	m_pEditApp;	// 2007.10.23 kobake
+	EditApp* pEditApp;	// 2007.10.23 kobake
 };
 

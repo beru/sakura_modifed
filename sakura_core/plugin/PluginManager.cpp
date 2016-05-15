@@ -39,7 +39,7 @@ PluginManager::PluginManager()
 	// pluginsフォルダの場所を取得
 	TCHAR szPluginPath[_MAX_PATH];
 	GetInidir(szPluginPath, _T("plugins\\"));	// iniと同じ階層のpluginsフォルダを検索
-	m_sBaseDir.append(szPluginPath);
+	sBaseDir.append(szPluginPath);
 
 	// Exeフォルダ配下pluginsフォルダのパスを取得
 	TCHAR	szPath[_MAX_PATH];
@@ -50,22 +50,22 @@ PluginManager::PluginManager()
 	SplitPath_FolderAndFile(szPath, szFolder, szFname);
 	Concat_FolderAndFile(szFolder, _T("plugins\\"), szPluginPath);
 
-	m_sExePluginDir.append(szPluginPath);
+	sExePluginDir.append(szPluginPath);
 }
 
 // 全プラグインを解放する
 void PluginManager::UnloadAllPlugin()
 {
-	for (auto it=m_plugins.begin(); it!=m_plugins.end(); ++it) {
+	for (auto it=plugins.begin(); it!=plugins.end(); ++it) {
 		UnRegisterPlugin(*it);
 	}
 
-	for (auto it=m_plugins.begin(); it!=m_plugins.end(); ++it) {
+	for (auto it=plugins.begin(); it!=plugins.end(); ++it) {
 		delete *it;
 	}
 	
-	// 2010.08.04 Moca m_plugins.claerする
-	m_plugins.clear();
+	// 2010.08.04 Moca plugins.claerする
+	plugins.clear();
 }
 
 // 新規プラグインを追加する
@@ -83,10 +83,10 @@ bool PluginManager::SearchNewPlugin(
 
 	// プラグインフォルダの配下を検索
 	WIN32_FIND_DATA wf;
-	hFind = FindFirstFile((m_sBaseDir + _T("*")).c_str(), &wf);
+	hFind = FindFirstFile((sBaseDir + _T("*")).c_str(), &wf);
 	if (hFind == INVALID_HANDLE_VALUE) {
 		// プラグインフォルダが存在しない
-		if (!CreateDirectory(m_sBaseDir.c_str(), NULL)) {
+		if (!CreateDirectory(sBaseDir.c_str(), NULL)) {
 			InfoMessage(hWndOwner, _T("%ts"), LS(STR_PLGMGR_FOLDER));
 			return true;
 		}
@@ -95,14 +95,14 @@ bool PluginManager::SearchNewPlugin(
 
 	bool	bCancel = false;
 	// プラグインフォルダの配下を検索
-	bool bFindNewDir = SearchNewPluginDir(common, hWndOwner, m_sBaseDir, bCancel);
-	if (!bCancel && m_sBaseDir != m_sExePluginDir) {
-		bFindNewDir |= SearchNewPluginDir(common, hWndOwner, m_sExePluginDir, bCancel);
+	bool bFindNewDir = SearchNewPluginDir(common, hWndOwner, sBaseDir, bCancel);
+	if (!bCancel && sBaseDir != sExePluginDir) {
+		bFindNewDir |= SearchNewPluginDir(common, hWndOwner, sExePluginDir, bCancel);
 	}
 	if (!bCancel && zipFile.IsOk()) {
-		bFindNewDir |= SearchNewPluginZip(common, hWndOwner, m_sBaseDir, bCancel);
-		if (!bCancel && m_sBaseDir != m_sExePluginDir) {
-			bFindNewDir |= SearchNewPluginZip(common, hWndOwner, m_sExePluginDir, bCancel);
+		bFindNewDir |= SearchNewPluginZip(common, hWndOwner, sBaseDir, bCancel);
+		if (!bCancel && sBaseDir != sExePluginDir) {
+			bFindNewDir |= SearchNewPluginZip(common, hWndOwner, sExePluginDir, bCancel);
 		}
 	}
 
@@ -248,14 +248,14 @@ bool PluginManager::InstZipPlugin(
 	// プラグインフォルダの存在を確認
 	WIN32_FIND_DATA wf;
 	HANDLE hFind;
-	if ((hFind = ::FindFirstFile((m_sBaseDir + _T("*")).c_str(), &wf )) == INVALID_HANDLE_VALUE) {
+	if ((hFind = ::FindFirstFile((sBaseDir + _T("*")).c_str(), &wf )) == INVALID_HANDLE_VALUE) {
 		// プラグインフォルダが存在しない
-		if (m_sBaseDir == m_sExePluginDir) {
+		if (sBaseDir == sExePluginDir) {
 			InfoMessage(hWndOwner, LS(STR_PLGMGR_ERR_FOLDER));
 			::FindClose(hFind);
 			return false;
 		}else {
-			if (!CreateDirectory(m_sBaseDir.c_str(), NULL)) {
+			if (!CreateDirectory(sBaseDir.c_str(), NULL)) {
 				WarningMessage(hWndOwner, LS(STR_PLGMGR_ERR_CREATEDIR));
 				::FindClose(hFind);
 				return false;
@@ -330,8 +330,8 @@ bool PluginManager::InstZipPluginSub(
 	}else {
 		// pluginsフォルダ検索中
 		// フォルダ チェック。すでに解凍されていたならインストールしない(前段でインストール済み或は可否を確認済み)
-		if (bOk && fexist(to_tchar((m_sBaseDir + to_tchar(sFolderName.c_str())).c_str()))
-			|| fexist(to_tchar((m_sExePluginDir + to_tchar(sFolderName.c_str())).c_str()))
+		if (bOk && fexist(to_tchar((sBaseDir + to_tchar(sFolderName.c_str())).c_str()))
+			|| fexist(to_tchar((sExePluginDir + to_tchar(sFolderName.c_str())).c_str()))
 		) {
 			bOk = false;
 			bSkip = true;
@@ -355,7 +355,7 @@ bool PluginManager::InstZipPluginSub(
 	}
 
 	// Zip解凍
-	if (bOk && !zipFile.Unzip(m_sBaseDir)) {
+	if (bOk && !zipFile.Unzip(sBaseDir)) {
 		auto_snprintf_s(msg, _countof(msg), LS(STR_PLGMGR_INST_ZIP_UNZIP), sDispName.c_str());
 		bOk = false;
 	}
@@ -393,8 +393,8 @@ int PluginManager::InstallPlugin(
 
 	// プラグイン定義ファイルを読み込む
 	profDef.SetReadingMode();
-	if (!profDef.ReadProfile((m_sBaseDir + pszPluginName + _T("\\") + PII_FILENAME).c_str())
-		&& !profDef.ReadProfile((m_sExePluginDir + pszPluginName + _T("\\") + PII_FILENAME).c_str()) 
+	if (!profDef.ReadProfile((sBaseDir + pszPluginName + _T("\\") + PII_FILENAME).c_str())
+		&& !profDef.ReadProfile((sExePluginDir + pszPluginName + _T("\\") + PII_FILENAME).c_str()) 
 	) {
 		errorMsg = LSW(STR_PLGMGR_INST_DEF);
 		return -1;
@@ -522,15 +522,15 @@ bool PluginManager::LoadAllPlugin(CommonSetting* common)
 			continue; // 2013.05.31 読み込み済み
 		}
 		std::tstring name = to_tchar(pluginTable[iNo].szName);
-		Plugin* plugin = LoadPlugin(m_sBaseDir.c_str(), name.c_str(), szLangName.c_str());
+		Plugin* plugin = LoadPlugin(sBaseDir.c_str(), name.c_str(), szLangName.c_str());
 		if (!plugin) {
-			plugin = LoadPlugin(m_sExePluginDir.c_str(), name.c_str(), szLangName.c_str());
+			plugin = LoadPlugin(sExePluginDir.c_str(), name.c_str(), szLangName.c_str());
 		}
 		if (plugin) {
 			// 要検討：plugin.defのidとsakuraw.iniのidの不一致処理
-			assert_warning(auto_strcmp(pluginTable[iNo].szId, plugin->m_sId.c_str()) == 0);
-			plugin->m_id = iNo;		// プラグインテーブルの行番号をIDとする
-			m_plugins.push_back(plugin);
+			assert_warning(auto_strcmp(pluginTable[iNo].szId, plugin->sId.c_str()) == 0);
+			plugin->id = iNo;		// プラグインテーブルの行番号をIDとする
+			plugins.push_back(plugin);
 			pluginTable[iNo].state = PLS_LOADED;
 			// コマンド数設定
 			pluginTable[iNo].nCmdNum = plugin->GetCommandCount();
@@ -598,8 +598,8 @@ Plugin* PluginManager::LoadPlugin(
 	}else {
 		return nullptr;
 	}
-	plugin->m_sOptionDir = m_sBaseDir + pszPluginName;
-	plugin->m_sLangName = pszLangName;
+	plugin->sOptionDir = sBaseDir + pszPluginName;
+	plugin->sLangName = pszLangName;
 	plugin->ReadPluginDef(profDef, pProfDefMLang);
 #ifdef _UNICODE
 	DEBUG_TRACE(_T("  プラグインタイプ %ls\n"), sPlugType.c_str() );
@@ -625,7 +625,7 @@ bool PluginManager::RegisterPlugin(Plugin* plugin)
 	Plug::Array plugs = plugin->GetPlugs();
 
 	for (auto plug=plugs.begin(); plug!=plugs.end(); ++plug) {
-		jackMgr.RegisterPlug((*plug)->m_sJack.c_str(), *plug);
+		jackMgr.RegisterPlug((*plug)->sJack.c_str(), *plug);
 	}
 
 	return true;
@@ -638,7 +638,7 @@ bool PluginManager::UnRegisterPlugin(Plugin* plugin)
 	Plug::Array plugs = plugin->GetPlugs();
 
 	for (auto plug=plugs.begin(); plug!=plugs.end(); ++plug) {
-		jackMgr.UnRegisterPlug((*plug)->m_sJack.c_str(), *plug);
+		jackMgr.UnRegisterPlug((*plug)->sJack.c_str(), *plug);
 	}
 
 	return true;
@@ -647,8 +647,8 @@ bool PluginManager::UnRegisterPlugin(Plugin* plugin)
 // プラグインを取得する
 Plugin* PluginManager::GetPlugin(int id)
 {
-	for (auto plugin=m_plugins.begin(); plugin!=m_plugins.end(); ++plugin) {
-		if ((*plugin)->m_id == id) {
+	for (auto plugin=plugins.begin(); plugin!=plugins.end(); ++plugin) {
+		if ((*plugin)->id == id) {
 			return *plugin;
 		}
 	}

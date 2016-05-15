@@ -36,13 +36,13 @@
 */
 SortedTagJumpList::SortedTagJumpList(int max)
 	:
-	m_pTagjump(nullptr),
-	m_nCount(0),
-	m_bOverflow(false),
-	m_capacity(max)
+	pTagjump(nullptr),
+	nCount(0),
+	bOverflow(false),
+	capacity(max)
 {
 	// id == 0 を 空文字列にする
-	m_baseDirArr.push_back(_T(""));
+	baseDirArr.push_back(_T(""));
 }
 
 SortedTagJumpList::~SortedTagJumpList()
@@ -69,17 +69,17 @@ void SortedTagJumpList::Free(TagJumpInfo* item)
 */
 void SortedTagJumpList::Empty(void)
 {
-	auto p = m_pTagjump;
+	auto p = pTagjump;
 	while (p) {
 		auto next = p->next;
 		Free(p);
 		p = next;
 	}
-	m_pTagjump = nullptr;
-	m_nCount = 0;
-	m_bOverflow = false;
-	m_baseDirArr.clear();
-	m_baseDirArr.push_back(_T(""));
+	pTagjump = nullptr;
+	nCount = 0;
+	bOverflow = false;
+	baseDirArr.clear();
+	baseDirArr.push_back(_T(""));
 }
 
 /*
@@ -88,8 +88,8 @@ void SortedTagJumpList::Empty(void)
 */
 int SortedTagJumpList::AddBaseDir(const TCHAR* baseDir)
 {
-	m_baseDirArr.push_back(baseDir);
-	return m_baseDirArr.size() -1;
+	baseDirArr.push_back(baseDir);
+	return baseDirArr.size() -1;
 }
 
 /*
@@ -145,7 +145,7 @@ bool SortedTagJumpList::AddParamA(
 
 	// アイテムをリストの適当な位置に追加する。
 	prev = nullptr;
-	for (p=m_pTagjump; p; p=p->next) {
+	for (p=pTagjump; p; p=p->next) {
 		if (_tcscmp(p->keyword, item->keyword) > 0) {
 			break;
 		}
@@ -153,20 +153,20 @@ bool SortedTagJumpList::AddParamA(
 	}
 	item->next = p;
 	if (prev) prev->next = item;
-	else      m_pTagjump = item;
-	++m_nCount;
+	else      pTagjump = item;
+	++nCount;
 
 	// 最大数を超えたら最後のアイテムを削除する。
-	if (m_nCount > m_capacity) {
+	if (nCount > capacity) {
 		prev = nullptr;
-		for (p=m_pTagjump; p->next; p=p->next) {
+		for (p=pTagjump; p->next; p=p->next) {
 			prev = p;
 		}
 		if (prev) prev->next = nullptr;
-		else      m_pTagjump = nullptr;
+		else      pTagjump = nullptr;
 		Free(p);
-		m_nCount--;
-		m_bOverflow = true;
+		nCount--;
+		bOverflow = true;
 	}
 	return true;
 }
@@ -214,8 +214,8 @@ bool SortedTagJumpList::GetParam(
 		if (note    ) _tcscpy(note, p->note);
 		if (depth   ) *depth = p->depth;
 		if (baseDir) {
-			if (0 <= p->baseDirId && (size_t)p->baseDirId < m_baseDirArr.size()) {
-				auto_strcpy(baseDir, m_baseDirArr[p->baseDirId].c_str());
+			if (0 <= p->baseDirId && (size_t)p->baseDirId < baseDirArr.size()) {
+				auto_strcpy(baseDir, baseDirArr[p->baseDirId].c_str());
 			}
 		}
 		return true;
@@ -233,7 +233,7 @@ bool SortedTagJumpList::GetParam(
 SortedTagJumpList::TagJumpInfo* SortedTagJumpList::GetPtr(int index)
 {
 	int	i = 0;
-	for (auto p=m_pTagjump; p; p=p->next) {
+	for (auto p=pTagjump; p; p=p->next) {
 		if (index == i) {
 			return p;
 		}

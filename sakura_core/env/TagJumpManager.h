@@ -61,12 +61,12 @@ struct Share_TagJump {
 class TagJumpManager {
 public:
 	TagJumpManager() {
-		m_pShareData = &GetDllShareData();
+		pShareData = &GetDllShareData();
 	}
 	// タグジャンプ関連	// 2004/06/21 novice タグジャンプ機能追加
 	void PushTagJump(const TagJump*);		// タグジャンプ情報の保存
 	bool PopTagJump(TagJump*);				// タグジャンプ情報の参照
 private:
-	DllSharedData* m_pShareData;
+	DllSharedData* pShareData;
 };
 

@@ -98,8 +98,8 @@ void DocOutline::MakeTopicList_html(FuncInfoArr* pFuncInfoArr)
 	for (k=0; k<=6; ++k) {
 		nHeadDepth[k] = -1;
 	}
-	for (nLineCount=LogicInt(0); nLineCount<m_doc.m_docLineMgr.GetLineCount(); ++nLineCount) {
-		pLineBuf = m_doc.m_docLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
+	for (nLineCount=LogicInt(0); nLineCount<doc.docLineMgr.GetLineCount(); ++nLineCount) {
+		pLineBuf = doc.docLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
 		if (!pLineBuf) {
 			break;
 		}
@@ -236,7 +236,7 @@ void DocOutline::MakeTopicList_html(FuncInfoArr* pFuncInfoArr)
 					}
 
 					LayoutPoint ptPos;
-					m_doc.m_layoutMgr.LogicToLayout(
+					doc.layoutMgr.LogicToLayout(
 						LogicPoint(i, nLineCount),
 						&ptPos
 					);

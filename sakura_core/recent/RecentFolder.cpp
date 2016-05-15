@@ -35,9 +35,9 @@
 RecentFolder::RecentFolder()
 {
 	Create(
-		&GetShareData()->history.m_szOPENFOLDERArr[0],
-		&GetShareData()->history.m_nOPENFOLDERArrNum,
-		GetShareData()->history.m_bOPENFOLDERArrFavorite,
+		&GetShareData()->history.szOPENFOLDERArr[0],
+		&GetShareData()->history.nOPENFOLDERArrNum,
+		GetShareData()->history.bOPENFOLDERArrFavorite,
 		MAX_OPENFOLDER,
 		&(GetShareData()->common.general.nOPENFOLDERArrNum_MAX)
 	);

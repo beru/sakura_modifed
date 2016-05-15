@@ -54,23 +54,23 @@ typedef void (WINAPI *HandleCommandCallback)(LPCWSTR lpszName, LPVOID lpIfObj, L
 	マクロ定義情報
 */
 typedef struct tagMACRO_FUNC_INFO_EX {
-	int					m_nArgSize;			// 総引数数
-	VARTYPE*			m_lpVarArgEx;		// VARTYPE配列へのポインタ
+	int					nArgSize;			// 総引数数
+	VARTYPE*			lpVarArgEx;		// VARTYPE配列へのポインタ
 } MACRO_FUNC_INFO_EX;
 
 typedef struct tagMACRO_FUNC_INFO {
-	DWORD				m_nFuncID;			// 機能ID
-	LPCWSTR				m_lpszFuncName;		// 関数名
-	VARTYPE				m_varArguments[4];	// 引数
-	VARTYPE				m_varResult;		// 戻り値
-	MACRO_FUNC_INFO_EX*	m_lpExData;			// 5個目以降の引数情報
+	DWORD				nFuncID;			// 機能ID
+	LPCWSTR				lpszFuncName;		// 関数名
+	VARTYPE				varArguments[4];	// 引数
+	VARTYPE				varResult;		// 戻り値
+	MACRO_FUNC_INFO_EX*	lpExData;			// 5個目以降の引数情報
 } MACRO_FUNC_INFO;
 
 typedef struct tagSAKURA_DLL_PLUGIN_IF_OBJ {
-	WCHAR						szName[64];			// 識別子
-	LPVOID						m_lpIfObj;				// プラグイン情報
-	MACRO_FUNC_INFO*			m_pFunctionInfo;			// マクロ関数情報
-	MACRO_FUNC_INFO*			m_pCommandInfo;			// マクロコマンド情報
+	WCHAR				szName[64];			// 識別子
+	LPVOID				lpIfObj;				// プラグイン情報
+	MACRO_FUNC_INFO*	pFunctionInfo;			// マクロ関数情報
+	MACRO_FUNC_INFO*	pCommandInfo;			// マクロコマンド情報
 } SAKURA_DLL_PLUGIN_IF_OBJ;
 
 /*
@@ -78,22 +78,22 @@ typedef struct tagSAKURA_DLL_PLUGIN_IF_OBJ {
 	この構造体を修正した場合はCBasePluginInitialize::Copy()を修正すること。
 */
 typedef struct tagSAKURA_DLL_PLUGIN_OBJ {
-	DWORD						m_dwVersion;			// DLLプラグイン構造体識別バージョン
-	DWORD						m_dwVersionMS;			// sakuraバージョン(MS)
-	DWORD						m_dwVersionLS;			// sakuraバージョン(LS)
-	DWORD						m_dwVersionShare;		// 共有メモリバージョン
-	LANGID						m_wLangId;				// 言語ID
-	WORD						m_wPadding1;			// 予備(パディング)
-	HWND						m_hParentHwnd;			// 親ウィンドウハンドル
-	LPVOID						m_lpDllPluginObj;		// プラグイン情報(CWSHIfObj::List)
-	LPVOID						m_lpEditView;			// EditView情報
-	HandleFunctionCallback		m_fnFunctionHandler;	// 関数ハンドラ
-	HandleCommandCallback		m_fnCommandHandler;		// コマンドハンドラ
-	SAKURA_DLL_PLUGIN_IF_OBJ*	m_IfObjList;			// プラグイン情報
-	DWORD						m_dwIfObjListCount;		// プラグイン情報個数
-	DWORD						m_wPadding2;			// 予備(パディング)
-	LPVOID						m_lpUserData[4];		// ユーザ情報
-	DWORD						m_dwReserve[8];			// 予備
+	DWORD						dwVersion;			// DLLプラグイン構造体識別バージョン
+	DWORD						dwVersionMS;			// sakuraバージョン(MS)
+	DWORD						dwVersionLS;			// sakuraバージョン(LS)
+	DWORD						dwVersionShare;		// 共有メモリバージョン
+	LANGID						wLangId;				// 言語ID
+	WORD						wPadding1;			// 予備(パディング)
+	HWND						hParentHwnd;			// 親ウィンドウハンドル
+	LPVOID						lpDllPluginObj;		// プラグイン情報(CWSHIfObj::List)
+	LPVOID						lpEditView;			// EditView情報
+	HandleFunctionCallback		fnFunctionHandler;	// 関数ハンドラ
+	HandleCommandCallback		fnCommandHandler;		// コマンドハンドラ
+	SAKURA_DLL_PLUGIN_IF_OBJ*	IfObjList;			// プラグイン情報
+	DWORD						dwIfObjListCount;		// プラグイン情報個数
+	DWORD						wPadding2;			// 予備(パディング)
+	LPVOID						lpUserData[4];		// ユーザ情報
+	DWORD						dwReserve[8];			// 予備
 // TODO: 構造体を拡張するときはDLL_PLUGIN_INFO_VERSIONを変更しifdefで拡張する
 } SAKURA_DLL_PLUGIN_OBJ;
 

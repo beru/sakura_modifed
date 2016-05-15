@@ -31,38 +31,38 @@
 // ŠO•”ˆË‘¶
 inline EditDoc& ViewCommander::GetDocument()
 {
-	return *m_view.m_pEditDoc;
+	return *view.pEditDoc;
 }
 
 inline EditWnd& ViewCommander::GetEditWindow()
 {
-	return m_view.m_editWnd;
+	return view.editWnd;
 }
 
 inline HWND ViewCommander::GetMainWindow()
 {
-	return ::GetParent(m_view.m_hwndParent);
+	return ::GetParent(view.hwndParent);
 }
 
 inline OpeBlk* ViewCommander::GetOpeBlk()
 {
-	return GetDocument().m_docEditor.m_pOpeBlk;
+	return GetDocument().docEditor.pOpeBlk;
 }
 
 inline void ViewCommander::SetOpeBlk(OpeBlk* p)
 {
-	auto& editor = GetDocument().m_docEditor;
-	editor.m_pOpeBlk = p;
-	editor.m_nOpeBlkRedawCount = 0;
+	auto& editor = GetDocument().docEditor;
+	editor.pOpeBlk = p;
+	editor.nOpeBlkRedawCount = 0;
 }
 
 inline LayoutRange& ViewCommander::GetSelect()
 {
-	return m_view.GetSelectionInfo().m_select;
+	return view.GetSelectionInfo().select;
 }
 
 inline Caret& ViewCommander::GetCaret()
 {
-	return m_view.GetCaret();
+	return view.GetCaret();
 }
 

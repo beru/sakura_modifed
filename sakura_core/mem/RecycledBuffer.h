@@ -36,7 +36,7 @@ private:
 // コンストラクタ・デストラクタ
 public:
 	RecycledBuffer() {
-		m_current=0;
+		current=0;
 	}
 
 // インターフェース
@@ -50,8 +50,8 @@ public:
 		if (nCount) {
 			*nCount = BLOCK_SIZE / sizeof(T);
 		}
-		m_current = (m_current + 1) % CHAIN_COUNT;
-		return reinterpret_cast<T*>(m_buf[m_current]);
+		current = (current + 1) % CHAIN_COUNT;
+		return reinterpret_cast<T*>(buf[current]);
 	}
 
 	// 領域の要素数を取得。T単位
@@ -63,8 +63,8 @@ public:
 
 // メンバ変数
 private:
-	BYTE m_buf[CHAIN_COUNT][BLOCK_SIZE];
-	int  m_current;
+	BYTE buf[CHAIN_COUNT][BLOCK_SIZE];
+	int  current;
 };
 
 class RecycledBufferDynamic {
@@ -75,14 +75,14 @@ private:
 // コンストラクタ・デストラクタ
 public:
 	RecycledBufferDynamic() {
-		m_current=0;
-		for (int i=0; i<_countof(m_buf); ++i) {
-			m_buf[i] = NULL;
+		current = 0;
+		for (int i=0; i<_countof(buf); ++i) {
+			buf[i] = NULL;
 		}
 	}
 	~RecycledBufferDynamic() {
-		for (int i=0; i<_countof(m_buf); ++i) {
-			if (m_buf[i])delete[] m_buf[i];
+		for (int i=0; i<_countof(buf); ++i) {
+			if (buf[i])delete[] buf[i];
 		}
 	}
 
@@ -94,20 +94,20 @@ public:
 		size_t nCount // [in] 確保する要素数。T単位。
 	)
 	{
-		m_current = (m_current + 1) % CHAIN_COUNT;
+		current = (current + 1) % CHAIN_COUNT;
 
 		// メモリ確保
-		if (m_buf[m_current]) {
-			delete[] m_buf[m_current];
+		if (buf[current]) {
+			delete[] buf[current];
 		}
-		m_buf[m_current] = new BYTE[nCount * sizeof(T)];
+		buf[current] = new BYTE[nCount * sizeof(T)];
 
-		return reinterpret_cast<T*>(m_buf[m_current]);
+		return reinterpret_cast<T*>(buf[current]);
 	}
 
 // メンバ変数
 private:
-	BYTE* m_buf[CHAIN_COUNT];
-	int   m_current;
+	BYTE* buf[CHAIN_COUNT];
+	int   current;
 };
 

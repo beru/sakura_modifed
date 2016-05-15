@@ -29,7 +29,6 @@ class EditView;// 2002/2/3 aroka ヘッダ軽量化
 class OleLibrary {
 	friend class CYbInterfaceBase;
 private:
-//	DWORD m_dwCount;	// 2009.01.08 ryoji m_dwCount削除
 	OleLibrary();
 public:
 	~OleLibrary();
@@ -42,7 +41,7 @@ private:
 
 class CYbInterfaceBase {
 private:
-	static OleLibrary m_olelib;
+	static OleLibrary olelib;
 protected:
 	CYbInterfaceBase();
 	~CYbInterfaceBase();
@@ -56,11 +55,11 @@ class CYbInterfaceImpl :
 	public CYbInterfaceBase
 {
 private:
-	static REFIID m_owniid;
+	static REFIID owniid;
 public:
 	CYbInterfaceImpl() {AddRef();}
 	STDMETHOD(QueryInterface)(REFIID riid, void** ppvObj)
-	{return QueryInterfaceImpl(this, m_owniid, riid, ppvObj);}
+	{return QueryInterfaceImpl(this, owniid, riid, ppvObj);}
 	STDMETHOD_(ULONG, AddRef)(void)
 	{return 1;}
 	STDMETHOD_(ULONG, Release)(void)
@@ -80,10 +79,10 @@ public:
 	||  Attributes & Operations
 	*/
 private: // 2002/2/10 aroka アクセス権変更
-	EditWnd*		m_pEditWnd;	// 2008.06.20 ryoji
-	HWND			m_hWnd_DropTarget;
-	EditView*		m_pEditView;
-	//	static REFIID	m_owniid;
+	EditWnd*		pEditWnd;	// 2008.06.20 ryoji
+	HWND			hWnd_DropTarget;
+	EditView*		pEditView;
+	//	static REFIID	owniid;
 public:
 	BOOL			Register_DropTarget(HWND);
 	BOOL			Revoke_DropTarget(void);
@@ -100,9 +99,9 @@ protected:
 
 class DropSource : public CYbInterfaceImpl<IDropSource> {
 private:
-	BOOL m_bLeft;
+	BOOL bLeft;
 public:
-	DropSource(BOOL bLeft):m_bLeft(bLeft) {}
+	DropSource(BOOL bLeft) : bLeft(bLeft) {}
 
 	STDMETHOD(QueryContinueDrag)(BOOL bEscapePressed, DWORD dwKeyState);
 	STDMETHOD(GiveFeedback)(DWORD dropEffect);
@@ -120,13 +119,13 @@ private:
 		unsigned int	size;	// データサイズ。バイト単位。
 	} DATA, *PDATA;
 
-	int m_nFormat;
-	PDATA m_pData;
+	int nFormat;
+	PDATA pData;
 
 public:
 	DataObject (LPCWSTR lpszText, int nTextLen, BOOL bColumnSelect ):
-		m_nFormat(0),
-		m_pData(nullptr)
+		nFormat(0),
+		pData(nullptr)
 	{
 		SetText(lpszText, nTextLen, bColumnSelect);
 	}
@@ -153,20 +152,20 @@ private:
 // 2008.03.26 ryoji 新規作成
 class EnumFORMATETC : public CYbInterfaceImpl<IEnumFORMATETC> {
 private:
-	LONG m_lRef;
-	int m_nIndex;
-	DataObject* m_pDataObject;
+	LONG lRef;
+	int nIndex;
+	DataObject* pDataObject;
 public:
-	EnumFORMATETC(DataObject* pDataObject) : m_lRef(1), m_nIndex(0), m_pDataObject(pDataObject) {}
+	EnumFORMATETC(DataObject* pDataObject) : lRef(1), nIndex(0), pDataObject(pDataObject) {}
 	STDMETHOD_(ULONG, AddRef)(void)
-	{return ::InterlockedIncrement(&m_lRef);}
+	{return ::InterlockedIncrement(&lRef);}
 	STDMETHOD_(ULONG, Release)(void)
 	{
-		if (::InterlockedDecrement(&m_lRef) == 0) {
+		if (::InterlockedDecrement(&lRef) == 0) {
 			delete this;
-			return 0;	// 削除後なので m_lRef は使わない
+			return 0;	// 削除後なので lRef は使わない
 		}
-		return m_lRef;
+		return lRef;
 	}
 	STDMETHOD(Next)(ULONG celt, FORMATETC* rgelt, ULONG* pceltFetched);
 	STDMETHOD(Skip)(ULONG celt);

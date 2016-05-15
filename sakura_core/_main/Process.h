@@ -39,20 +39,20 @@ protected:
 	virtual void OnExitProcess() = 0;
 
 protected:
-	void			SetMainWindow(HWND hwnd) { m_hWnd = hwnd; }
+	void			SetMainWindow(HWND hwnd) { hWnd = hwnd; }
 #ifdef USE_CRASHDUMP
 	int				WriteDump(PEXCEPTION_POINTERS pExceptPtrs);
 #endif
 public:
-	HINSTANCE		GetProcessInstance() const { return m_hInstance; }
-	ShareData&		GetShareData()   { return *m_pShareData; }
-	HWND			GetMainWindow() const { return m_hWnd; }
+	HINSTANCE		GetProcessInstance() const { return hInstance; }
+	ShareData&		GetShareData()   { return *pShareData; }
+	HWND			GetMainWindow() const { return hWnd; }
 
 private:
-	HINSTANCE	m_hInstance;
-	HWND		m_hWnd;
+	HINSTANCE	hInstance;
+	HWND		hWnd;
 #ifdef USE_CRASHDUMP
-	BOOL (WINAPI *m_pfnMiniDumpWriteDump)(
+	BOOL (WINAPI *pfnMiniDumpWriteDump)(
 		HANDLE hProcess,
 		DWORD ProcessId,
 		HANDLE hFile,
@@ -62,7 +62,7 @@ private:
 		PMINIDUMP_CALLBACK_INFORMATION CallbackParam
 	);
 #endif
-	ShareData* m_pShareData;
+	ShareData* pShareData;
 
 private:
 };

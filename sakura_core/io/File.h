@@ -39,10 +39,10 @@ public:
 	File(LPCTSTR pszPath = NULL);
 	virtual ~File();
 	// パス
-	const FilePath& GetFilePathClass() const { return m_szFilePath; }
-	LPCTSTR GetFilePath() const { return m_szFilePath; }
+	const FilePath& GetFilePathClass() const { return szFilePath; }
+	LPCTSTR GetFilePath() const { return szFilePath; }
 	// 設定
-	void SetFilePath(LPCTSTR pszPath) { m_szFilePath.Assign(pszPath); }
+	void SetFilePath(LPCTSTR pszPath) { szFilePath.Assign(pszPath); }
 	// 各種判定
 	bool IsFileExist() const;
 	bool HasWritablePermission() const;
@@ -51,23 +51,23 @@ public:
 	// ロック
 	bool FileLock(FileShareMode eShareMode, bool bMsg);	// ファイルの排他ロック
 	void FileUnlock();						// ファイルの排他ロック解除
-	bool IsFileLocking() const { return m_hLockedFile != INVALID_HANDLE_VALUE; }
-	FileShareMode GetShareMode() const { return m_nFileShareModeOld; }
-	void SetShareMode(FileShareMode eShareMode) { m_nFileShareModeOld = eShareMode; }
+	bool IsFileLocking() const { return hLockedFile != INVALID_HANDLE_VALUE; }
+	FileShareMode GetShareMode() const { return nFileShareModeOld; }
+	void SetShareMode(FileShareMode eShareMode) { nFileShareModeOld = eShareMode; }
 private:
-	FilePath	m_szFilePath;				// ファイルパス
-	HANDLE		m_hLockedFile;				// ロックしているファイルのハンドル
-	FileShareMode	m_nFileShareModeOld;		// ファイルの排他制御モード
+	FilePath	szFilePath;					// ファイルパス
+	HANDLE		hLockedFile;				// ロックしているファイルのハンドル
+	FileShareMode	nFileShareModeOld;		// ファイルの排他制御モード
 };
 
 
 // 一時ファイル
 class TmpFile {
 public:
-	TmpFile() { m_fp = tmpfile(); }
-	~TmpFile() { fclose(m_fp); }
-	FILE* GetFilePointer() const { return m_fp; }
+	TmpFile() { fp = tmpfile(); }
+	~TmpFile() { fclose(fp); }
+	FILE* GetFilePointer() const { return fp; }
 private:
-	FILE* m_fp;
+	FILE* fp;
 };
 

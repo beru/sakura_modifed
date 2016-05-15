@@ -72,8 +72,8 @@ void DocOutline::MakeTopicList_cobol(FuncInfoArr* pFuncInfoArr)
 
 
 	LogicInt	nLineCount;
-	for (nLineCount=LogicInt(0); nLineCount<m_doc.m_docLineMgr.GetLineCount(); ++nLineCount) {
-		pLine = m_doc.m_docLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
+	for (nLineCount=LogicInt(0); nLineCount<doc.docLineMgr.GetLineCount(); ++nLineCount) {
+		pLine = doc.docLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
 		if (!pLine) {
 			break;
 		}
@@ -128,7 +128,7 @@ void DocOutline::MakeTopicList_cobol(FuncInfoArr* pFuncInfoArr)
 
 			LayoutPoint ptPos;
 			wchar_t	szWork[1024];
-			m_doc.m_layoutMgr.LogicToLayout(
+			doc.layoutMgr.LogicToLayout(
 				LogicPoint(0, nLineCount),
 				&ptPos
 			);

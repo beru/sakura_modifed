@@ -24,7 +24,7 @@ bool Converter_SpaceToTab::DoConvert(NativeW* pData)
 	nBgn = 0;
 	nPosDes = 0;
 	// 変換後に必要なバイト数を調べる
-	while ((pLine = GetNextLineW(pData->GetStringPtr(), pData->GetStringLength(), &nLineLen, &nBgn, &eol, m_bExtEol))) {
+	while ((pLine = GetNextLineW(pData->GetStringPtr(), pData->GetStringLength(), &nLineLen, &nBgn, &eol, bExtEol))) {
 		if (0 < nLineLen) {
 			nPosDes += nLineLen;
 		}
@@ -38,10 +38,10 @@ bool Converter_SpaceToTab::DoConvert(NativeW* pData)
 	nBgn = 0;
 	nPosDes = 0;
 	// CRLFで区切られる「行」を返す。CRLFは行長に加えない
-	while ((pLine = GetNextLineW(pData->GetStringPtr(), pData->GetStringLength(), &nLineLen, &nBgn, &eol, m_bExtEol))) {
+	while ((pLine = GetNextLineW(pData->GetStringPtr(), pData->GetStringLength(), &nLineLen, &nBgn, &eol, bExtEol))) {
 		if (0 < nLineLen) {
 			// 先頭行については開始桁位置を考慮する（さらに折り返し関連の対策が必要？）
-			nPosX = (pData->GetStringPtr() == pLine)? m_nStartColumn: 0;	// 処理中のiに対応する表示桁位置
+			nPosX = (pData->GetStringPtr() == pLine)? nStartColumn: 0;	// 処理中のiに対応する表示桁位置
 			bSpace = false;	// 直前がスペースか
 			nStartPos = 0;	// スペースの先頭
 			for (i=0; i<nLineLen; ++i) {
@@ -53,7 +53,7 @@ bool Converter_SpaceToTab::DoConvert(NativeW* pData)
 					if (pLine[i] == SPACE) {
 						++nPosX;
 					}else if (pLine[i] == TAB) {
-						nPosX += m_nTabWidth - (nPosX % m_nTabWidth);
+						nPosX += nTabWidth - (nPosX % nTabWidth);
 					}
 				}else {
 					if (bSpace) {
@@ -61,10 +61,10 @@ bool Converter_SpaceToTab::DoConvert(NativeW* pData)
 							pDes[nPosDes] = SPACE;
 							++nPosDes;
 						}else {
-							for (j = nStartPos / m_nTabWidth; j < (nPosX / m_nTabWidth); ++j) {
+							for (j = nStartPos / nTabWidth; j < (nPosX / nTabWidth); ++j) {
 								pDes[nPosDes] = TAB;
 								++nPosDes;
-								nStartPos += m_nTabWidth - (nStartPos % m_nTabWidth);
+								nStartPos += nTabWidth - (nStartPos % nTabWidth);
 							}
 							// 2003.08.05 Moca
 							// 変換後にTABが1つも入らない場合にスペースを詰めすぎて
@@ -91,11 +91,11 @@ bool Converter_SpaceToTab::DoConvert(NativeW* pData)
 					pDes[nPosDes] = SPACE;
 					++nPosDes;
 				}else {
-					//for (j = nStartPos - 1; (j + m_nTabWidth) <= nPosX + 1; j += m_nTabWidth) {
-					for (j=nStartPos/m_nTabWidth; j<(nPosX/m_nTabWidth); ++j) {
+					//for (j = nStartPos - 1; (j + nTabWidth) <= nPosX + 1; j += nTabWidth) {
+					for (j=nStartPos/nTabWidth; j<(nPosX/nTabWidth); ++j) {
 						pDes[nPosDes] = TAB;
 						++nPosDes;
-						nStartPos += m_nTabWidth - (nStartPos % m_nTabWidth);
+						nStartPos += nTabWidth - (nStartPos % nTabWidth);
 					}
 					// 2003.08.05 Moca
 					// 変換後にTABが1つも入らない場合にスペースを詰めすぎて

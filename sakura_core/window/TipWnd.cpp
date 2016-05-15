@@ -26,8 +26,8 @@ TipWnd::TipWnd()
 	:
 	Wnd(_T("::TipWnd"))
 {
-	m_hFont = NULL;
-	m_KeyWasHit = false;	// キーがヒットしたか
+	hFont = NULL;
+	KeyWasHit = false;	// キーがヒットしたか
 	return;
 }
 
@@ -35,9 +35,9 @@ TipWnd::TipWnd()
 // TipWndクラス デストラクタ
 TipWnd::~TipWnd()
 {
-	if (m_hFont) {
-		::DeleteObject(m_hFont);
-		m_hFont = NULL;
+	if (hFont) {
+		::DeleteObject(hFont);
+		hFont = NULL;
 	}
 	return;
 }
@@ -76,12 +76,12 @@ void TipWnd::Create(HINSTANCE hInstance, HWND hwndParent)
 		NULL // handle to menu, or child-window identifier
 	);
 
-	if (m_hFont) {
-		::DeleteObject(m_hFont);
-		m_hFont = NULL;
+	if (hFont) {
+		::DeleteObject(hFont);
+		hFont = NULL;
 	}
 
-	m_hFont = ::CreateFontIndirect(&(GetDllShareData().common.helper.lf));
+	hFont = ::CreateFontIndirect(&(GetDllShareData().common.helper.lf));
 	return;
 }
 
@@ -100,9 +100,9 @@ void TipWnd::AfterCreateWindow(void)
 void TipWnd::Show(int nX, int nY, const TCHAR* szText, RECT* pRect)
 {
 	if (szText) {
-		m_info.SetString(szText);
+		info.SetString(szText);
 	}
-	const TCHAR* pszInfo = m_info.GetStringPtr();
+	const TCHAR* pszInfo = info.GetStringPtr();
 	HDC hdc = ::GetDC(GetHwnd());
 
 	// サイズを計算済み	2001/06/19 asa-o
@@ -111,12 +111,12 @@ void TipWnd::Show(int nX, int nY, const TCHAR* szText, RECT* pRect)
 		rc = *pRect;
 	}else {
 		// ウィンドウのサイズを決める
-		ComputeWindowSize(hdc, m_hFont, pszInfo, &rc);
+		ComputeWindowSize(hdc, hFont, pszInfo, &rc);
 	}
 
 	::ReleaseDC(GetHwnd(), hdc);
 
-	if (m_bAlignLeft) {
+	if (bAlignLeft) {
 		// 右側固定で表示(MiniMap)
 		::MoveWindow(GetHwnd(), nX - rc.right, nY, rc.right + 8, rc.bottom + 8, TRUE);
 	}else {
@@ -267,7 +267,7 @@ LRESULT TipWnd::OnPaint(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l_Param)
 	::GetClientRect(hwnd, &rc);
 
 	// ウィンドウのテキストを表示
-	DrawTipText(hdc, m_hFont, m_info.GetStringPtr());
+	DrawTipText(hdc, hFont, info.GetStringPtr());
 
 	::EndPaint(	hwnd, &ps);
 	return 0L;
@@ -278,9 +278,9 @@ LRESULT TipWnd::OnPaint(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l_Param)
 void TipWnd::GetWindowSize(LPRECT pRect)
 {
 	HDC hdc = ::GetDC(GetHwnd());
-	const TCHAR* pszText = m_info.GetStringPtr();
+	const TCHAR* pszText = info.GetStringPtr();
 	// ウィンドウのサイズを得る
-	ComputeWindowSize(hdc, m_hFont, pszText , pRect);
+	ComputeWindowSize(hdc, hFont, pszText , pRect);
 	ReleaseDC(GetHwnd(), hdc); // 2007.10.10 kobake ReleaseDCが抜けていたのを修正
 }
 

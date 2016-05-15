@@ -7,11 +7,11 @@
 
 Ruler::Ruler(const EditView& editView, const EditDoc& editDoc)
 	:
-	m_editView(editView),
-	m_editDoc(editDoc)
+	editView(editView),
+	editDoc(editDoc)
 {
-	m_nOldRulerDrawX = 0;	// 前回描画したルーラーのキャレット位置 2002.02.25 Add By KK
-	m_nOldRulerWidth = 0;	// 前回描画したルーラーのキャレット幅   2002.02.25 Add By KK
+	nOldRulerDrawX = 0;	// 前回描画したルーラーのキャレット位置 2002.02.25 Add By KK
+	nOldRulerWidth = 0;	// 前回描画したルーラーのキャレット幅   2002.02.25 Add By KK
 }
 
 Ruler::~Ruler()
@@ -28,9 +28,9 @@ void Ruler::_DrawRulerCaret(
 	// 描画領域 -> hRgn
 	RECT rc;
 	rc.left = nCaretDrawPosX + 1;	// 2012.07.27 Moca 1px右に修正
-	rc.right = rc.left + m_editView.GetTextMetrics().GetHankakuDx() - 1;
+	rc.right = rc.left + editView.GetTextMetrics().GetHankakuDx() - 1;
 	rc.top = 0;
-	rc.bottom = m_editView.GetTextArea().GetAreaTop() - m_editView.GetTextArea().GetTopYohaku() - 1;
+	rc.bottom = editView.GetTextArea().GetAreaTop() - editView.GetTextArea().GetTopYohaku() - 1;
 	HRGN hRgn = ::CreateRectRgnIndirect(&rc);
 
 	// ブラシ作成 -> hBrush
@@ -42,7 +42,7 @@ void Ruler::_DrawRulerCaret(
 	}
 
 	// 領域を描画 (色を反転させる)
-	int    nROP_Old  = ::SetROP2(gr, R2_NOTXORPEN);
+	int nROP_Old  = ::SetROP2(gr, R2_NOTXORPEN);
 	HBRUSH hBrushOld = (HBRUSH)::SelectObject(gr, hBrush);
 	::SelectObject(gr, hBrush);
 	::PaintRgn(gr, hRgn);
@@ -61,23 +61,23 @@ void Ruler::_DrawRulerCaret(
 */
 void Ruler::DrawRulerCaret(Graphics& gr)
 {
-	auto& textArea = m_editView.GetTextArea();
-	auto& caret = m_editView.GetCaret();
+	auto& textArea = editView.GetTextArea();
+	auto& caret = editView.GetCaret();
 	if (1
 		&& textArea.GetViewLeftCol() <= caret.GetCaretLayoutPos().GetX()
 		&& textArea.GetRightCol() + 2 >= caret.GetCaretLayoutPos().GetX()
 	) {
-		auto& ruler = m_editView.GetRuler();
+		auto& ruler = editView.GetRuler();
 		if (1
-			&& ruler.m_nOldRulerDrawX == caret.CalcCaretDrawPos(caret.GetCaretLayoutPos()).x
-			&& caret.GetCaretSize().cx == ruler.m_nOldRulerWidth
+			&& ruler.nOldRulerDrawX == caret.CalcCaretDrawPos(caret.GetCaretLayoutPos()).x
+			&& caret.GetCaretSize().cx == ruler.nOldRulerWidth
 		) {
 			// 前描画した位置画同じ かつ ルーラーのキャレット幅が同じ 
 			return;
 		}
 
-		// 元位置をクリア m_nOldRulerWidth
-		this->_DrawRulerCaret(gr, m_nOldRulerDrawX, m_nOldRulerWidth);
+		// 元位置をクリア nOldRulerWidth
+		this->_DrawRulerCaret(gr, nOldRulerDrawX, nOldRulerWidth);
 
 		// 新しい位置で描画   2007.08.26 kobake UNICODE用にX位置を変更
 		this->_DrawRulerCaret(
@@ -95,7 +95,7 @@ void Ruler::DrawRulerBg(Graphics& gr)
 	CommonSetting* pCommon = &GetDllShareData().common;
 
 	// サポート
-	TypeSupport rulerType(m_editView, COLORIDX_RULER);
+	TypeSupport rulerType(editView, COLORIDX_RULER);
 
 	// フォント設定 (ルーラー上の数字用)
 	LOGFONT	lf = {0};
@@ -117,7 +117,7 @@ void Ruler::DrawRulerBg(Graphics& gr)
 	HFONT hFontOld = (HFONT)::SelectObject(gr, hFont);
 	::SetBkMode(gr, TRANSPARENT);
 	
-	auto& textArea = m_editView.GetTextArea();
+	auto& textArea = editView.GetTextArea();
 	// 背景塗りつぶし
 	RECT rc;
 	rc.left = 0;
@@ -137,8 +137,8 @@ void Ruler::DrawRulerBg(Graphics& gr)
 	// 下線 (ルーラーと本文の境界)
 	//	Aug. 14, 2005 genta 折り返し幅をLayoutMgrから取得するように
 	//	2005.11.10 Moca 1dot足りない
-	LayoutInt	nMaxLineKetas = m_editDoc.m_layoutMgr.GetMaxLineKetas();
-	int nToX = textArea.GetAreaLeft() + (Int)(nMaxLineKetas - textArea.GetViewLeftCol()) * m_editView.GetTextMetrics().GetHankakuDx() + 1;
+	LayoutInt	nMaxLineKetas = editDoc.layoutMgr.GetMaxLineKetas();
+	int nToX = textArea.GetAreaLeft() + (Int)(nMaxLineKetas - textArea.GetViewLeftCol()) * editView.GetTextMetrics().GetHankakuDx() + 1;
 	if (nToX > textArea.GetAreaRight()) {
 		nToX = textArea.GetAreaRight();
 	}
@@ -169,7 +169,7 @@ void Ruler::DrawRulerBg(Graphics& gr)
 			::LineTo(gr, nX, nY - 3);
 		}
 
-		nX += m_editView.GetTextMetrics().GetHankakuDx();
+		nX += editView.GetTextMetrics().GetHankakuDx();
 		++i;
 	}
 
@@ -189,9 +189,9 @@ void Ruler::DrawRulerBg(Graphics& gr)
 void Ruler::DispRuler(HDC hdc)
 {
 	// サポート
-	TypeSupport rulerType(m_editView, COLORIDX_RULER);
+	TypeSupport rulerType(editView, COLORIDX_RULER);
 
-	if (!m_editView.GetDrawSwitch()) {
+	if (!editView.GetDrawSwitch()) {
 		return;
 	}
 	if (!rulerType.IsDisp()) {
@@ -200,14 +200,14 @@ void Ruler::DispRuler(HDC hdc)
 
 	// 描画対象
 	Graphics gr(hdc);
-	auto& caret = m_editView.GetCaret();
+	auto& caret = editView.GetCaret();
 	// 2002.02.25 Add By KK ルーラー全体を描き直す必要がない場合は、ルーラ上のキャレットのみ描きなおす 
-	if (!m_bRedrawRuler) {
+	if (!bRedrawRuler) {
 		DrawRulerCaret(gr);
 	}else {
 		// 背景描画
 		DrawRulerBg(gr);
-		auto& textArea = m_editView.GetTextArea();
+		auto& textArea = editView.GetTextArea();
 		// キャレット描画
 		if (1
 			&& textArea.GetViewLeftCol() <= caret.GetCaretLayoutPos().GetX()
@@ -216,11 +216,11 @@ void Ruler::DispRuler(HDC hdc)
 			_DrawRulerCaret(gr, caret.CalcCaretDrawPos(caret.GetCaretLayoutPos()).x, caret.GetCaretSize().cx);
 		}
 
-		m_bRedrawRuler = false;	// m_bRedrawRuler = true で指定されるまで、ルーラのキャレットのみを再描画 2002.02.25 Add By KK
+		bRedrawRuler = false;	// bRedrawRuler = true で指定されるまで、ルーラのキャレットのみを再描画 2002.02.25 Add By KK
 	}
 
 	// 描画したルーラーのキャレット位置・幅を保存 2002.02.25 Add By KK
-	m_nOldRulerDrawX = caret.CalcCaretDrawPos(caret.GetCaretLayoutPos()).x;
-	m_nOldRulerWidth = caret.GetCaretSize().cx ;
+	nOldRulerDrawX = caret.CalcCaretDrawPos(caret.GetCaretLayoutPos()).x;
+	nOldRulerWidth = caret.GetCaretSize().cx ;
 }
 

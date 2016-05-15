@@ -56,15 +56,15 @@ public:
 	MacroIfObj(tagModeID nMode, LPCWSTR Ext, int flags, LPCWSTR Source)
 		: WSHIfObj(L"Macro", false)
 	{
-		m_nMode = nMode;
-		m_Ext = Ext;
-		m_nFlags = flags | FA_FROMMACRO;
-		m_nIsMatch = 0;
-		m_source = Source;
-		m_nIndex = INVALID_MACRO_IDX;
+		nMode = nMode;
+		ext = Ext;
+		nFlags = flags | FA_FROMMACRO;
+		nIsMatch = 0;
+		source = Source;
+		nIndex = INVALID_MACRO_IDX;
 		if (nMode == MACRO_MODE_EXEC) {
 			// 呼び出しの直前で設定されている番号を保存する
-			m_nIndex = EditApp::getInstance().pSMacroMgr->GetCurrentIdx();
+			nIndex = EditApp::getInstance().pSMacroMgr->GetCurrentIdx();
 		}
 	}
 
@@ -77,7 +77,7 @@ public:
 	// コマンド情報を取得する
 	MacroFuncInfoArray GetMacroCommandInfo() const {
 		static MacroFuncInfo macroFuncInfoArr[] = {
-			// index									関数名						引数										戻り値の型	m_pszData
+			// index									関数名						引数										戻り値の型	pszData
 			{ EFunctionCode(F_MA_SET_MATCH),		LTEXT("SetMatch"),			{ VT_EMPTY, VT_EMPTY, VT_EMPTY, VT_EMPTY },	VT_I4,	nullptr },	// flagsを取得する
 			// 終端
 			{ F_INVALID, NULL, { VT_EMPTY, VT_EMPTY, VT_EMPTY, VT_EMPTY }, VT_EMPTY, nullptr }
@@ -88,7 +88,7 @@ public:
 	// 関数情報を取得する
 	MacroFuncInfoArray GetMacroFuncInfo() const {
 		static MacroFuncInfo macroFuncInfoNotCommandArr[] = {
-			// index									関数名						引数										戻り値の型	m_pszData
+			// index									関数名						引数										戻り値の型	pszData
 			{ EFunctionCode(F_MA_GET_MODE),			LTEXT("GetMode"),			{ VT_EMPTY, VT_EMPTY, VT_EMPTY, VT_EMPTY },	VT_I4,	nullptr },	// モードを取得する
 			{ EFunctionCode(F_MA_GET_FLAGS),		LTEXT("GetFlags"),			{ VT_EMPTY, VT_EMPTY, VT_EMPTY, VT_EMPTY },	VT_I4,	nullptr },	// flagsを取得する
 			{ EFunctionCode(F_MA_GET_EXT),			LTEXT("GetExt"),			{ VT_EMPTY, VT_EMPTY, VT_EMPTY, VT_EMPTY },	VT_BSTR,	nullptr },	// Extを取得する
@@ -113,29 +113,29 @@ public:
 		switch (LOWORD(index)) {
 		case F_MA_GET_MODE:
 			{
-				Wrap(&result)->Receive(m_nMode);
+				Wrap(&result)->Receive(nMode);
 			}
 			return true;
 		case F_MA_GET_FLAGS:	// flagsを取得する
 			{
-				Wrap(&result)->Receive(m_nFlags);
+				Wrap(&result)->Receive(nFlags);
 			}
 			return true;
 		case F_MA_GET_EXT:
 			{
-				SysString s(m_Ext.c_str(), m_Ext.length());
+				SysString s(ext.c_str(), ext.length());
 				Wrap(&result)->Receive(s);
 			}
 			return true;
 		case F_MA_GET_SOURCE:
 			{
-				SysString s(m_source.c_str(), m_source.length());
+				SysString s(source.c_str(), source.length());
 				Wrap(&result)->Receive(s);
 			}
 			return true;
 		case F_MA_GET_INDEX:
 			{
-				Wrap(&result)->Receive(m_nIndex);
+				Wrap(&result)->Receive(nIndex);
 				//Wrap(&result)->Receive(CEditApp::getInstance()->pSMacroMgr->GetCurrentIdx());
 			}
 			return true;
@@ -156,7 +156,7 @@ public:
 		switch (LOWORD(index)) {
 		case F_MA_SET_MATCH:
 			if (arguments[0]) {
-				m_nIsMatch = _wtol(arguments[0]);
+				nIsMatch = _wtol(arguments[0]);
 			}
 			return true;
 		}
@@ -164,20 +164,20 @@ public:
 	}
 
 	bool IsMatch() {
-		return (m_nIsMatch != 0);
+		return (nIsMatch != 0);
 	}
 
 	void SetMatch(const int nMatch) {
-		m_nIsMatch = nMatch;
+		nIsMatch = nMatch;
 	}
 
 	// メンバ変数
 public:
-	tagModeID m_nMode;
-	int m_nIsMatch;
-	int m_nFlags;
-	std::wstring m_Ext;
-	std::wstring m_source;
-	int m_nIndex;
+	tagModeID nMode;
+	int nIsMatch;
+	int nFlags;
+	std::wstring ext;
+	std::wstring source;
+	int nIndex;
 };
 

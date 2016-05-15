@@ -81,24 +81,24 @@ next:
 
 Wnd::Wnd(const TCHAR* pszInheritanceAppend)
 {
-	m_hInstance = NULL;		// アプリケーションインスタンスのハンドル
-	m_hwndParent = NULL;	// オーナーウィンドウのハンドル
-	m_hWnd = NULL;			// このウィンドウのハンドル
+	hInstance = NULL;		// アプリケーションインスタンスのハンドル
+	hwndParent = NULL;	// オーナーウィンドウのハンドル
+	hWnd = NULL;			// このウィンドウのハンドル
 #ifdef _DEBUG
-	_tcscpy(m_szClassInheritances, _T("Wnd"));
-	_tcscat(m_szClassInheritances, pszInheritanceAppend);
+	_tcscpy(szClassInheritances, _T("Wnd"));
+	_tcscat(szClassInheritances, pszInheritanceAppend);
 #endif
 }
 
 Wnd::~Wnd()
 {
-	if (::IsWindow(m_hWnd)) {
+	if (::IsWindow(hWnd)) {
 		// クラスオブジェクトのポインタをNULLにして拡張ウィンドウメモリに格納しておく
 		// Modified by KEITA for WIN64 2003.9.6
-		::SetWindowLongPtr(m_hWnd, GWLP_USERDATA, (LONG_PTR)NULL);
-		::DestroyWindow(m_hWnd);
+		::SetWindowLongPtr(hWnd, GWLP_USERDATA, (LONG_PTR)NULL);
+		::DestroyWindow(hWnd);
 	}
-	m_hWnd = NULL;
+	hWnd = NULL;
 	return;
 }
 
@@ -115,7 +115,7 @@ ATOM Wnd::RegisterWC(
 	LPCTSTR		lpszClassName	// Pointer to a null-terminated string or is an atom.
 	)
 {
-	m_hInstance = hInstance;
+	hInstance = hInstance;
 
 	// ウィンドウクラスの登録
 	WNDCLASSEX wc;
@@ -126,7 +126,7 @@ ATOM Wnd::RegisterWC(
 	wc.lpfnWndProc   = CWndProc;
 	wc.cbClsExtra    = 0;
 	wc.cbWndExtra    = 32;
-	wc.hInstance     = m_hInstance;
+	wc.hInstance     = hInstance;
 	wc.hIcon         = hIcon;
 	wc.hCursor       = hCursor;
 	wc.hbrBackground = hbrBackground;
@@ -151,7 +151,7 @@ HWND Wnd::Create(
 	HMENU		hMenu			// handle to menu, or child-window identifier
 )
 {
-	m_hwndParent = hwndParent;
+	hwndParent = hwndParent;
 
 	// ウィンドウ作成前の処理(クラス登録前) (virtual)
 	PreviCreateWindow();
@@ -162,7 +162,7 @@ HWND Wnd::Create(
 	// Windowsフックにより、ウィンドウが作成されるタイミングを横取りする 2007.10.01 kobake
 	CWindowCreationHook::Use();
 
-	m_hWnd = ::CreateWindowEx(
+	hWnd = ::CreateWindowEx(
 		dwExStyle,		// extended window style
 		lpszClassName,	// pointer to registered class name
 		lpWindowName,	// pointer to window name
@@ -171,23 +171,23 @@ HWND Wnd::Create(
 		y,				// vertical position of window
 		nWidth,			// window width
 		nHeight,		// window height
-		m_hwndParent,	// handle to parent or owner window
+		hwndParent,	// handle to parent or owner window
 		hMenu,			// handle to menu, or child-window identifier
-		m_hInstance,	// handle to application instance
+		hInstance,	// handle to application instance
 		(LPVOID)this	// pointer to window-creation data
 	);
 	
 	// Windowsフック解除
 	CWindowCreationHook::Unuse();
 
-	if (!m_hWnd) {
-		::MessageBox(m_hwndParent, _T("Wnd::Create()\n\n::CreateWindowEx failed."), _T("error"), MB_OK);
+	if (!hWnd) {
+		::MessageBox(hwndParent, _T("Wnd::Create()\n\n::CreateWindowEx failed."), _T("error"), MB_OK);
 		return NULL;
 	}
 
 	// ウィンドウ作成後の処理
 	AfterCreateWindow();
-	return m_hWnd;
+	return hWnd;
 }
 
 
@@ -250,9 +250,9 @@ LRESULT Wnd::CallDefWndProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
 // ウィンドウを破棄
 void Wnd::DestroyWindow()
 {
-	if (m_hWnd) {
-		::DestroyWindow(m_hWnd);
-		m_hWnd = NULL;
+	if (hWnd) {
+		::DestroyWindow(hWnd);
+		hWnd = NULL;
 	}
 }
 

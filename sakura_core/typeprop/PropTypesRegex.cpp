@@ -58,10 +58,10 @@ static const DWORD p_helpids[] = {	//11600
 // 2010/4/23 Uchi Importの外出し
 bool PropTypesRegex::Import(HWND hwndDlg)
 {
-	ImpExpRegex cImpExpRegex(m_types);
+	ImpExpRegex impExpRegex(types);
 
 	// インポート
-	bool bImport = cImpExpRegex.ImportUI(m_hInstance, hwndDlg);
+	bool bImport = impExpRegex.ImportUI(hInstance, hwndDlg);
 	if (bImport) {
 		SetDataKeywordList(hwndDlg);
 	}
@@ -73,10 +73,10 @@ bool PropTypesRegex::Import(HWND hwndDlg)
 bool PropTypesRegex::Export(HWND hwndDlg)
 {
 	GetData(hwndDlg);
-	ImpExpRegex cImpExpRegex(m_types);
+	ImpExpRegex cImpExpRegex(types);
 
 	// エクスポート
-	return cImpExpRegex.ExportUI(m_hInstance, hwndDlg);
+	return cImpExpRegex.ExportUI(hInstance, hwndDlg);
 }
 
 // 正規表現キーワード メッセージ処理
@@ -167,7 +167,7 @@ INT_PTR PropTypesRegex::DispatchEvent(
 						EnableWindow(GetDlgItem(hwndDlg, IDC_CHECK_REGEX), FALSE);
 					}
 				}
-				m_types.nRegexKeyMagicNumber = RegexKeyword::GetNewMagicNumber();	// Need Compile
+				types.nRegexKeyMagicNumber = RegexKeyword::GetNewMagicNumber();	// Need Compile
 				return TRUE;
 
 			case IDC_BUTTON_REGEX_INS:	// 挿入
@@ -453,7 +453,7 @@ INT_PTR PropTypesRegex::DispatchEvent(
 
 			case IDC_BUTTON_REGEX_IMPORT:	// インポート
 				Import(hwndDlg);
-				m_types.nRegexKeyMagicNumber = RegexKeyword::GetNewMagicNumber();	// Need Compile	//@@@ 2001.11.17 add MIK 正規表現キーワードのため
+				types.nRegexKeyMagicNumber = RegexKeyword::GetNewMagicNumber();	// Need Compile	//@@@ 2001.11.17 add MIK 正規表現キーワードのため
 				return TRUE;
 
 			case IDC_BUTTON_REGEX_EXPORT:	// エクスポート
@@ -476,7 +476,7 @@ INT_PTR PropTypesRegex::DispatchEvent(
 			return TRUE;
 //@@@ 2002.01.03 YAZAKI 最後に表示していたシートを正しく覚えていないバグ修正
 		case PSN_SETACTIVE:
-			m_nPageNum = ID_PROPTYPE_PAGENUM_REGEX;
+			nPageNum = ID_PROPTYPE_PAGENUM_REGEX;
 			return TRUE;
 		case LVN_ITEMCHANGED:
 			if (pNMHDR->hwndFrom == hwndList) {
@@ -493,7 +493,7 @@ INT_PTR PropTypesRegex::DispatchEvent(
 						if ((g_ColorAttributeArr[i].fAttribute & COLOR_ATTRIB_NO_TEXT) == 0 &&
 							(g_ColorAttributeArr[i].fAttribute & COLOR_ATTRIB_NO_BACK) == 0
 						) {	// 2006.12.18 ryoji フラグ利用で簡素化
-							if (m_types.colorInfoArr[i].nColorIdx == COLORIDX_REGEX1) {
+							if (types.colorInfoArr[i].nColorIdx == COLORIDX_REGEX1) {
 								Combo_SetCurSel(hwndCombo, j);	// コンボボックスのデフォルト選択
 								break;
 							}
@@ -514,7 +514,7 @@ INT_PTR PropTypesRegex::DispatchEvent(
 						if ((g_ColorAttributeArr[i].fAttribute & COLOR_ATTRIB_NO_TEXT) == 0 &&
 							(g_ColorAttributeArr[i].fAttribute & COLOR_ATTRIB_NO_BACK) == 0
 						) {	// 2006.12.18 ryoji フラグ利用で簡素化
-							if (_tcscmp(m_types.colorInfoArr[i].szName, szColorIndex) == 0) {
+							if (_tcscmp(types.colorInfoArr[i].szName, szColorIndex) == 0) {
 								Combo_SetCurSel(hwndCombo, j);
 								break;
 							}
@@ -557,18 +557,18 @@ void PropTypesRegex::SetData(HWND hwndDlg)
 	HWND hwndWork = ::GetDlgItem(hwndDlg, IDC_COMBO_REGEX_COLOR);
 	Combo_ResetContent(hwndWork);  // コンボボックスを空にする
 	for (int i=0; i<COLORIDX_LAST; ++i) {
-		GetDefaultColorInfoName(&m_types.colorInfoArr[i], i);
+		GetDefaultColorInfoName(&types.colorInfoArr[i], i);
 		if ((g_ColorAttributeArr[i].fAttribute & COLOR_ATTRIB_NO_TEXT) == 0 &&
 			(g_ColorAttributeArr[i].fAttribute & COLOR_ATTRIB_NO_BACK) == 0
 		) {	// 2006.12.18 ryoji フラグ利用で簡素化
-			int j = Combo_AddString(hwndWork, m_types.colorInfoArr[i].szName);
-			if (m_types.colorInfoArr[i].nColorIdx == COLORIDX_REGEX1) {
+			int j = Combo_AddString(hwndWork, types.colorInfoArr[i].szName);
+			if (types.colorInfoArr[i].nColorIdx == COLORIDX_REGEX1) {
 				Combo_SetCurSel(hwndWork, j);	// コンボボックスのデフォルト選択
 			}
 		}
 	}
 
-	if (m_types.bUseRegexKeyword) {
+	if (types.bUseRegexKeyword) {
 		CheckDlgButton(hwndDlg, IDC_CHECK_REGEX, BST_CHECKED);
 	}else {
 		CheckDlgButton(hwndDlg, IDC_CHECK_REGEX, BST_UNCHECKED);
@@ -594,7 +594,7 @@ void PropTypesRegex::SetDataKeywordList(HWND hwndDlg)
 	ListView_DeleteAllItems(hwndWork);  // リストを空にする
 
 	// データ表示
-	wchar_t* pKeyword = &m_types.regexKeywordList[0];
+	wchar_t* pKeyword = &types.regexKeywordList[0];
 	for (int i=0; i<MAX_REGEX_KEYWORD; ++i) {
 		if (*pKeyword == L'\0') {
 			break;
@@ -604,12 +604,12 @@ void PropTypesRegex::SetDataKeywordList(HWND hwndDlg)
 		lvi.pszText  = const_cast<TCHAR*>(to_tchar(pKeyword));
 		lvi.iItem    = i;
 		lvi.iSubItem = 0;
-		lvi.lParam   = 0; //m_types.regexKeywordArr[i].nColorIndex;
+		lvi.lParam   = 0; //types.regexKeywordArr[i].nColorIndex;
 		ListView_InsertItem(hwndWork, &lvi);
 		lvi.mask     = LVIF_TEXT;
 		lvi.iItem    = i;
 		lvi.iSubItem = 1;
-		lvi.pszText  = m_types.colorInfoArr[m_types.regexKeywordArr[i].nColorIndex].szName;
+		lvi.pszText  = types.colorInfoArr[types.regexKeywordArr[i].nColorIndex].szName;
 		ListView_SetItem(hwndWork, &lvi);
 		for (; *pKeyword!='\0'; ++pKeyword) {
 			;
@@ -626,22 +626,22 @@ int PropTypesRegex::GetData(HWND hwndDlg)
 {
 	HWND	hwndList;
 	int	nIndex, i, j;
-	const int szKeywordSize = _countof(m_types.regexKeywordList) * 2 + 1;
+	const int szKeywordSize = _countof(types.regexKeywordList) * 2 + 1;
 	auto szKeyword = std::make_unique<TCHAR[]>(szKeywordSize);
 	TCHAR	szColorIndex[256];
 
 	// 使用する・使用しない
 	if (IsDlgButtonChecked(hwndDlg, IDC_CHECK_REGEX)) {
-		m_types.bUseRegexKeyword = true;
+		types.bUseRegexKeyword = true;
 	}else {
-		m_types.bUseRegexKeyword = false;
+		types.bUseRegexKeyword = false;
 	}
 
 	// リストに登録されている情報を配列に取り込む
 	hwndList = GetDlgItem(hwndDlg, IDC_LIST_REGEX);
 	nIndex = ListView_GetItemCount(hwndList);
-	wchar_t* pKeyword = &m_types.regexKeywordList[0];
-	wchar_t* pKeywordLast = pKeyword + _countof(m_types.regexKeywordList) - 1;
+	wchar_t* pKeyword = &types.regexKeywordList[0];
+	wchar_t* pKeywordLast = pKeyword + _countof(types.regexKeywordList) - 1;
 	// key1\0key2\0\0 の形式
 	for (i=0; i<MAX_REGEX_KEYWORD; ++i) {
 		if (i < nIndex) {
@@ -653,10 +653,10 @@ int PropTypesRegex::GetData(HWND hwndDlg)
 				_tcstowcs(pKeyword, &szKeyword[0], pKeywordLast - pKeyword);
 			}
 			// 色指定文字列を番号に変換する
-			m_types.regexKeywordArr[i].nColorIndex = COLORIDX_REGEX1;
+			types.regexKeywordArr[i].nColorIndex = COLORIDX_REGEX1;
 			for (j=0; j<COLORIDX_LAST; ++j) {
-				if (_tcscmp(m_types.colorInfoArr[j].szName, szColorIndex) == 0) {
-					m_types.regexKeywordArr[i].nColorIndex = j;
+				if (_tcscmp(types.colorInfoArr[j].szName, szColorIndex) == 0) {
+					types.regexKeywordArr[i].nColorIndex = j;
 					break;
 				}
 			}
@@ -665,14 +665,14 @@ int PropTypesRegex::GetData(HWND hwndDlg)
 				++pKeyword;
 			}
 		}else { // 未登録部分はクリアする
-			m_types.regexKeywordArr[i].nColorIndex = COLORIDX_REGEX1;
+			types.regexKeywordArr[i].nColorIndex = COLORIDX_REGEX1;
 		}
 	}
 	*pKeyword = L'\0'; // 番兵
 
 	// タイプ設定の変更があった
-	m_types.nRegexKeyMagicNumber = RegexKeyword::GetNewMagicNumber();
-//	m_types.nRegexKeyMagicNumber = 0;	// Not Compiled.
+	types.nRegexKeyMagicNumber = RegexKeyword::GetNewMagicNumber();
+//	types.nRegexKeyMagicNumber = 0;	// Not Compiled.
 
 	return TRUE;
 }
@@ -728,7 +728,7 @@ bool PropTypesRegex::CheckKeywordList(
 			}
 			// 長さには\0も含む
 			nKeywordLen += auto_strlen(to_wchar(&szKeyword[0])) + 1;
-			if (_countof(m_types.regexKeywordList) - 1 < nKeywordLen) {
+			if (_countof(types.regexKeywordList) - 1 < nKeywordLen) {
 				ErrorMessage(hwndDlg, LS(STR_PROPTYPEREGEX_FULL));
 				return false;
 			}

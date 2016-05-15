@@ -35,7 +35,7 @@
 
 UxTheme::UxTheme()
 	:
-	m_bInitialized(false)
+	bInitialized(false)
 {
 }
 
@@ -54,10 +54,10 @@ UxTheme::~UxTheme()
 */
 bool UxTheme::InitThemeDll(TCHAR* str)
 {
-	if (m_bInitialized) {
+	if (bInitialized) {
 		return IsAvailable();
 	}
-	m_bInitialized = true;
+	bInitialized = true;
 	return DllImp::InitDll(str) == InitDllResultType::Success;
 }
 
@@ -72,12 +72,12 @@ LPCTSTR UxTheme::GetDllNameImp(int nIndex)
 bool UxTheme::InitDllImp()
 {
 	const ImportTable table[] = {
-		{ &m_pfnIsThemeActive,							"IsThemeActive" },
-		{ &m_pfnSetWindowTheme,							"SetWindowTheme" },
-		{ &m_pfnOpenThemeData,							"OpenThemeData" },
-		{ &m_pfnDrawThemeBackground,					"DrawThemeBackground" },
-		{ &m_pfnDrawThemeParentBackground,				"DrawThemeParentBackground" },
-		{ &m_pfnIsThemeBackgroundPartiallyTransparent,	"IsThemeBackgroundPartiallyTransparent" },
+		{ &pfnIsThemeActive,							"IsThemeActive" },
+		{ &pfnSetWindowTheme,							"SetWindowTheme" },
+		{ &pfnOpenThemeData,							"OpenThemeData" },
+		{ &pfnDrawThemeBackground,					"DrawThemeBackground" },
+		{ &pfnDrawThemeParentBackground,				"DrawThemeParentBackground" },
+		{ &pfnIsThemeBackgroundPartiallyTransparent,	"IsThemeBackgroundPartiallyTransparent" },
 		{ NULL, 0 }
 	};
 
@@ -94,7 +94,7 @@ BOOL UxTheme::IsThemeActive(VOID)
 	if (!InitThemeDll()) {
 		return FALSE;
 	}
-	return m_pfnIsThemeActive();
+	return pfnIsThemeActive();
 }
 
 // SetWindowTheme API Wrapper
@@ -103,7 +103,7 @@ HRESULT UxTheme::SetWindowTheme(HWND hwnd, LPCWSTR pszSubAppName, LPCWSTR pszSub
 	if (!InitThemeDll()) {
 		return S_FALSE;
 	}
-	return m_pfnSetWindowTheme(hwnd, pszSubAppName, pszSubIdList);
+	return pfnSetWindowTheme(hwnd, pszSubAppName, pszSubIdList);
 }
 
 // SetWindowTheme API Wrapper
@@ -112,7 +112,7 @@ HTHEME UxTheme::OpenThemeData(HWND hwnd, LPCWSTR pszClassList)
 	if (!InitThemeDll()) {
 		return NULL;
 	}
-	return (HTHEME)m_pfnOpenThemeData(hwnd, pszClassList);
+	return (HTHEME)pfnOpenThemeData(hwnd, pszClassList);
 }
 
 // SetWindowTheme API Wrapper
@@ -121,7 +121,7 @@ HRESULT UxTheme::DrawThemeBackground(HTHEME htheme, HDC hdc, int iPartId, int iS
 	if (!InitThemeDll()) {
 		return S_FALSE;
 	}
-	return m_pfnDrawThemeBackground(htheme, hdc, iPartId, iStateId, prc, prcClip);
+	return pfnDrawThemeBackground(htheme, hdc, iPartId, iStateId, prc, prcClip);
 }
 
 // SetWindowTheme API Wrapper
@@ -130,7 +130,7 @@ HRESULT UxTheme::DrawThemeParentBackground(HWND hwnd, HDC hdc, RECT *prc)
 	if (!InitThemeDll()) {
 		return S_FALSE;
 	}
-	return m_pfnDrawThemeParentBackground(hwnd, hdc, prc);
+	return pfnDrawThemeParentBackground(hwnd, hdc, prc);
 }
 
 // SetWindowTheme API Wrapper
@@ -139,6 +139,6 @@ HRESULT UxTheme::IsThemeBackgroundPartiallyTransparent(HTHEME htheme, int iPartI
 	if (!InitThemeDll()) {
 		return S_FALSE;
 	}
-	return m_pfnIsThemeBackgroundPartiallyTransparent(htheme, iPartId, iStateId);
+	return pfnIsThemeBackgroundPartiallyTransparent(htheme, iPartId, iStateId);
 }
 

@@ -54,7 +54,7 @@ void FillSolidRect(
 	)
 {
 //	ASSERT_VALID(this);
-//	ASSERT(m_hDC);
+//	ASSERT(hDC);
 
 	RECT rect;
 	::SetBkColor(hdc, clr);
@@ -171,7 +171,7 @@ bool ImageListMgr::Create(HINSTANCE hInstance)
 		DeleteDC(dcFrom);
 	case 2:
 	case 1:
-		//	2003.07.21 genta hRscbmpは m_hIconBitmap としてオブジェクトと
+		//	2003.07.21 genta hRscbmpは hIconBitmap としてオブジェクトと
 		//	同じだけ保持されるので解放してはならない
 		break;
 	}
@@ -395,7 +395,7 @@ int ImageListMgr::Add(const TCHAR* szPath)
 		return -1;
 	}
 
-	// m_hIconBitmapにコピーする
+	// hIconBitmapにコピーする
 	HDC hDestDC = ::CreateCompatibleDC(0);
 	HBITMAP hOldDestBmp = (HBITMAP)::SelectObject(hDestDC, hIconBitmap);
 

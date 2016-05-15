@@ -87,7 +87,7 @@ BOOL DlgCancel::OnInitDialog(
 	_SetHwnd(hwndDlg);
 	HICON	hIcon;
 	hIcon = ::LoadIcon(NULL, IDI_ASTERISK);
-//	hIcon = ::LoadIcon(m_hInstance, MAKEINTRESOURCE(IDI_ICON_GREP));
+//	hIcon = ::LoadIcon(hInstance, MAKEINTRESOURCE(IDI_ICON_GREP));
 	::SendMessage(GetHwnd(), WM_SETICON, ICON_SMALL, (LPARAM)NULL);
 	::SendMessage(GetHwnd(), WM_SETICON, ICON_SMALL, (LPARAM)hIcon);
 	::SendMessage(GetHwnd(), WM_SETICON, ICON_BIG, (LPARAM)NULL);

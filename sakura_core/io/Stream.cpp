@@ -2,7 +2,7 @@
 #include "Stream.h"
 #include <string>
 
-//	::fflush(m_hFile);
+//	::fflush(hFile);
 // ネットワーク上のファイルを扱っている場合、
 // 書き込み後にFlushを行うとデットロックが発生することがあるので、
 // Close時に::fflushを呼び出してはいけません。
@@ -17,24 +17,24 @@ class FileAttribute {
 public:
 	FileAttribute(const TCHAR* tszPath)
 		:
-		m_strPath(tszPath),
-		m_bAttributeChanged(false),
-		m_dwAttribute(0)
+		strPath(tszPath),
+		bAttributeChanged(false),
+		dwAttribute(0)
 	{
 	}
 
 	// 指定属性を取り除く
 	void PopAttribute(DWORD dwPopAttribute)
 	{
-		if (m_bAttributeChanged) {
+		if (bAttributeChanged) {
 			return; // 既に取り除き済み
 		}
-		m_dwAttribute = ::GetFileAttributes(m_strPath.c_str());
-		if (m_dwAttribute != (DWORD)-1) {
-			if (m_dwAttribute & dwPopAttribute) {
-				DWORD dwNewAttribute = m_dwAttribute & ~dwPopAttribute;
-				::SetFileAttributes(m_strPath.c_str(), dwNewAttribute);
-				m_bAttributeChanged = true;
+		dwAttribute = ::GetFileAttributes(strPath.c_str());
+		if (dwAttribute != (DWORD)-1) {
+			if (dwAttribute & dwPopAttribute) {
+				DWORD dwNewAttribute = dwAttribute & ~dwPopAttribute;
+				::SetFileAttributes(strPath.c_str(), dwNewAttribute);
+				bAttributeChanged = true;
 			}
 		}
 	}
@@ -42,16 +42,16 @@ public:
 	// 属性を元に戻す
 	void RestoreAttribute()
 	{
-		if (m_bAttributeChanged) {
-			::SetFileAttributes(m_strPath.c_str(), m_dwAttribute);
+		if (bAttributeChanged) {
+			::SetFileAttributes(strPath.c_str(), dwAttribute);
 		}
-		m_bAttributeChanged = false;
-		m_dwAttribute = 0;
+		bAttributeChanged = false;
+		dwAttribute = 0;
 	}
 private:
-	std::tstring	m_strPath;
-	bool			m_bAttributeChanged;
-	DWORD			m_dwAttribute;
+	std::tstring	strPath;
+	bool			bAttributeChanged;
+	DWORD			dwAttribute;
 };
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -64,18 +64,18 @@ Stream::Stream(
 	bool bExceptionMode
 	)
 {
-	m_fp = nullptr;
-	m_pFileAttribute = NULL;
-	m_bExceptionMode = bExceptionMode;
+	fp = nullptr;
+	pFileAttribute = NULL;
+	bExceptionMode = bExceptionMode;
 	Open(tszPath, tszMode);
 }
 
 /*
 Stream::Stream()
 {
-	m_fp = nullptr;
-	m_pFileAttribute = NULL;
-	m_bExceptionMode = false;
+	fp = nullptr;
+	pFileAttribute = NULL;
+	bExceptionMode = false;
 }
 */
 
@@ -96,17 +96,17 @@ void Stream::Open(
 	Close(); // 既に開いていたら、一度閉じる
 
 	// 属性変更：隠しorシステムファイルはCの関数で読み書きできないので属性を変更する
-	m_pFileAttribute = new FileAttribute(tszPath);
-	m_pFileAttribute->PopAttribute(FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_SYSTEM);
+	pFileAttribute = new FileAttribute(tszPath);
+	pFileAttribute->PopAttribute(FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_SYSTEM);
 
 	// オープン
-	m_fp = _tfopen(tszPath, tszMode);
-	if (!m_fp) {
+	fp = _tfopen(tszPath, tszMode);
+	if (!fp) {
 		Close(); // 属性復元
 	}
 
 	// エラー処理
-	if (!m_fp && IsExceptionMode()) {
+	if (!fp && IsExceptionMode()) {
 		throw Error_FileOpen();
 	}
 }
@@ -114,15 +114,15 @@ void Stream::Open(
 void Stream::Close()
 {
 	// クローズ
-	if (m_fp) {
-		fclose(m_fp);
-		m_fp = nullptr;
+	if (fp) {
+		fclose(fp);
+		fp = nullptr;
 	}
 
 	// 属性復元
-	if (m_pFileAttribute) {
-		m_pFileAttribute->RestoreAttribute();
-		SAFE_DELETE(m_pFileAttribute);
+	if (pFileAttribute) {
+		pFileAttribute->RestoreAttribute();
+		SAFE_DELETE(pFileAttribute);
 	}
 }
 
@@ -135,13 +135,13 @@ void Stream::SeekSet(	// シーク
 	long offset	// ストリーム先頭からのオフセット 
 	)
 {
-	fseek(m_fp, offset, SEEK_SET);
+	fseek(fp, offset, SEEK_SET);
 }
 
 void Stream::SeekEnd(  // シーク
 	long offset // ストリーム終端からのオフセット
 	)
 {
-	fseek(m_fp, offset, SEEK_END);
+	fseek(fp, offset, SEEK_END);
 }
 

@@ -128,7 +128,7 @@ BOOL DlgDiff::OnBnClicked(int wID)
 				hInstance,
 				GetHwnd(),
 				_T("*.*"),
-				szFile1 //m_szFile2
+				szFile1 //szFile2
 			);
 			if (dlgOpenFile.DoModal_GetOpenFileName(szPath)) {
 				_tcscpy(szFile2, szPath);
@@ -383,7 +383,7 @@ int DlgDiff::GetData(void)
 
 	// 相手ファイルが指定されてなければキャンセル
 	// 2004.02.21 MIK 相手が無題だと比較できないので判定削除
-	//if (m_szFile2[0] == '\0') ret = FALSE;
+	//if (szFile2[0] == '\0') ret = FALSE;
 
 	return ret;
 }

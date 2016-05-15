@@ -38,7 +38,7 @@
 
 DllImp::DllImp()
 	:
-	m_hInstance(NULL)
+	hInstance(NULL)
 {
 }
 
@@ -88,8 +88,8 @@ InitDllResultType DllImp::InitDll(LPCTSTR pszSpecifiedDllName)
 		if (!pszName || !pszName[0]) continue;
 
 		// DLLロード。ロードできなかったら次の名前候補を試す。
-		m_hInstance = LoadLibraryExedir(pszName);
-		if (!m_hInstance) continue;
+		hInstance = LoadLibraryExedir(pszName);
+		if (!hInstance) continue;
 
 		// 初期処理
 		bool ret = InitDllImp();
@@ -97,14 +97,14 @@ InitDllResultType DllImp::InitDll(LPCTSTR pszSpecifiedDllName)
 		// 初期処理に失敗した場合はDLLを解放し、次の名前候補を試す。
 		if (!ret) {
 			bInitImpFailure = true;
-			::FreeLibrary(m_hInstance);
-			m_hInstance = NULL;
+			::FreeLibrary(hInstance);
+			hInstance = NULL;
 			continue;
 		}
 
 		// 初期処理に成功した場合は、DLL名を保存し、ループを抜ける
 		if (ret) {
-			m_strLoadedDllName = pszName;
+			strLoadedDllName = pszName;
 			break;
 		}
 	}
@@ -123,7 +123,7 @@ InitDllResultType DllImp::InitDll(LPCTSTR pszSpecifiedDllName)
 
 bool DllImp::DeinitDll(bool force)
 {
-	if (!m_hInstance || (!IsAvailable())) {
+	if (!hInstance || (!IsAvailable())) {
 		// DLLが読み込まれていなければ何もしない
 		return true;
 	}
@@ -134,11 +134,11 @@ bool DllImp::DeinitDll(bool force)
 	// DLL解放
 	if (ret || force) {
 		// DLL名を解放
-		m_strLoadedDllName = _T("");
+		strLoadedDllName = _T("");
 
 		// DLL解放
-		::FreeLibrary(m_hInstance);
-		m_hInstance = NULL;
+		::FreeLibrary(hInstance);
+		hInstance = NULL;
 
 		return true;
 	}else {
@@ -153,7 +153,7 @@ bool DllImp::DeinitDll(bool force)
 
 LPCTSTR DllImp::GetLoadedDllName() const
 {
-	return m_strLoadedDllName.c_str();
+	return strLoadedDllName.c_str();
 }
 
 

@@ -124,7 +124,7 @@ INT_PTR PropKeybind::DispatchEvent(
 	int			j;
 	EFunctionCode	nFuncCode;
 	static WCHAR szLabel[256];
-	auto& csKeybind = m_common.keyBind;
+	auto& csKeybind = common.keyBind;
 
 	switch (uMsg) {
 	case WM_INITDIALOG:
@@ -170,7 +170,7 @@ INT_PTR PropKeybind::DispatchEvent(
 			return TRUE;
 //@@@ 2002.01.03 YAZAKI 最後に表示していたシートを正しく覚えていないバグ修正
 		case PSN_SETACTIVE:
-			m_nPageNum = ID_PROPCOM_PAGENUM_KEYBOARD;
+			nPageNum = ID_PROPCOM_PAGENUM_KEYBOARD;
 
 			// 表示を更新する（マクロ設定画面でのマクロ名変更を反映）	// 2007.11.02 ryoji
 			nIndex = List_GetCurSel(hwndKeyList);
@@ -213,7 +213,7 @@ INT_PTR PropKeybind::DispatchEvent(
 				if (nIndex == LB_ERR || nIndex2 == CB_ERR || nIndex3 == LB_ERR) {
 					return TRUE;
 				}
-				nFuncCode = m_lookup.Pos2FuncCode(nIndex2, nIndex3);	// Oct. 2, 2001 genta
+				nFuncCode = lookup.Pos2FuncCode(nIndex2, nIndex3);	// Oct. 2, 2001 genta
 				i = 0;
 				if (IsDlgButtonChecked(hwndDlg, IDC_CHECK_SHIFT)) {
 					i |= _SHIFT;
@@ -281,7 +281,7 @@ INT_PTR PropKeybind::DispatchEvent(
 				if (nFuncCode == F_DISABLE) {
 					auto_strcpy(szLabel, LSW(STR_PROPCOMKEYBIND_UNASSIGN));
 				}else {
-					m_lookup.Funccode2Name(nFuncCode, szLabel, 255);
+					lookup.Funccode2Name(nFuncCode, szLabel, 255);
 				}
 				Wnd_SetText(hwndEDIT_KEYSFUNC, szLabel);
 				return TRUE;
@@ -293,7 +293,7 @@ INT_PTR PropKeybind::DispatchEvent(
 				nIndex = List_GetCurSel(hwndKeyList);
 				nIndex2 = Combo_GetCurSel(hwndCombo);
 				nIndex3 = List_GetCurSel(hwndFuncList);
-				nFuncCode = m_lookup.Pos2FuncCode(nIndex2, nIndex3);	// Oct. 2, 2001 genta
+				nFuncCode = lookup.Pos2FuncCode(nIndex2, nIndex3);	// Oct. 2, 2001 genta
 				// 機能に対応するキー名の取得(複数)
 				NativeT**	ppcAssignedKeyList;
 				nAssignedKeyNum = KeyBind::GetKeyStrList(	// 機能に対応するキー名の取得(複数)
@@ -320,7 +320,7 @@ INT_PTR PropKeybind::DispatchEvent(
 			case CBN_SELCHANGE:
 				nIndex2 = Combo_GetCurSel(hwndCombo);
 				// 機能一覧に文字列をセット（リストボックス）
-				m_lookup.SetListItem(hwndFuncList, nIndex2);	//	Oct. 2, 2001 genta
+				lookup.SetListItem(hwndFuncList, nIndex2);	//	Oct. 2, 2001 genta
 				return TRUE;
 			}
 
@@ -421,14 +421,14 @@ void PropKeybind::SetData(HWND hwndDlg)
 {
 	// 機能種別一覧に文字列をセット（コンボボックス）
 	HWND hwndCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_FUNCKIND);
-	m_lookup.SetCategory2Combo(hwndCombo);	//	Oct. 2, 2001 genta
+	lookup.SetCategory2Combo(hwndCombo);	//	Oct. 2, 2001 genta
 
 	// 種別の先頭の項目を選択（コンボボックス）
 	Combo_SetCurSel(hwndCombo, 0);	// Oct. 14, 2000 JEPRO JEPRO 「--未定義--」を表示させないように大元 Funcode.cpp で変更してある
 
 	// キー一覧に文字列をセット（リストボックス）
 	HWND hwndKeyList = ::GetDlgItem(hwndDlg, IDC_LIST_KEY);
-	auto& csKeybind = m_common.keyBind;
+	auto& csKeybind = common.keyBind;
 	for (int i=0; i<csKeybind.nKeyNameArrNum; ++i) {
 		::List_AddString(hwndKeyList, csKeybind.pKeyNameArr[i].szKeyName);
 	}
@@ -470,7 +470,7 @@ void PropKeybind::ChangeKeyList(HWND hwndDlg) {
 	}
 	// キー一覧に文字列をセット（リストボックス）
 	List_ResetContent(hwndKeyList);
-	auto& csKeybind = m_common.keyBind;
+	auto& csKeybind = common.keyBind;
 	for (i=0; i<csKeybind.nKeyNameArrNum; ++i) {
 		TCHAR	szLabel[256];
 		auto_sprintf(szLabel, _T("%ls%ts"), szKeyState, csKeybind.pKeyNameArr[i].szKeyName);
@@ -484,7 +484,7 @@ void PropKeybind::ChangeKeyList(HWND hwndDlg) {
 // Keybind:キー割り当て設定をインポートする
 void PropKeybind::Import(HWND hwndDlg)
 {
-	ImpExpKeybind	impExpKeybind(m_common);
+	ImpExpKeybind	impExpKeybind(common);
 
 	// インポート
 	if (!impExpKeybind.ImportUI(G_AppInstance(), hwndDlg)) {
@@ -506,7 +506,7 @@ void PropKeybind::Import(HWND hwndDlg)
 // Keybind:キー割り当て設定をエクスポートする
 void PropKeybind::Export(HWND hwndDlg)
 {
-	ImpExpKeybind	impExpKeybind(m_common);
+	ImpExpKeybind	impExpKeybind(common);
 
 	// エクスポート
 	if (!impExpKeybind.ExportUI(G_AppInstance(), hwndDlg)) {

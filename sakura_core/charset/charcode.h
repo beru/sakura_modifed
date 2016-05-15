@@ -88,7 +88,7 @@ namespace WCODE {
 
 
 // キーワードキャラクタ
-extern const unsigned char gm_keyword_char[128];
+extern const unsigned char g_keyword_char[128];
 
 // Oct. 31, 2000 JEPRO  TeX Keyword のために'\'を追加
 // Nov.  9, 2000 JEPRO  HSP Keyword のために'@'を追加
@@ -98,8 +98,8 @@ inline bool IS_KEYWORD_CHAR(wchar_t wc)
 {
 	return (1
 		&& 0 <= wc
-		&& wc < _countof(gm_keyword_char)
-		&& (gm_keyword_char[wc] == CK_CSYM||gm_keyword_char[wc] == CK_UDEF)
+		&& wc < _countof(g_keyword_char)
+		&& (g_keyword_char[wc] == CK_CSYM||g_keyword_char[wc] == CK_UDEF)
 	);
 }
 
@@ -167,7 +167,7 @@ namespace WCODE {
 		//if (wc == TAB) return false;
 
 		//return iswcntrl(wc) != 0;
-		return (wc < 128 && gm_keyword_char[wc] == CK_CTRL);
+		return (wc < 128 && g_keyword_char[wc] == CK_CTRL);
 	}
 
 	// 全角文字(正方形)かどうか判定

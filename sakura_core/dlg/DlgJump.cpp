@@ -171,7 +171,7 @@ BOOL DlgJump::OnBnClicked(int wID)
 // To Here Feb. 20, 2001
 		{	//@@@ 2002.2.2 YAZAKI 指定行へジャンプを、ダイアログを表示するコマンドと、実際にジャンプするコマンドに分離。
 			EditDoc* pEditDoc = (EditDoc*)lParam;
-			pEditDoc->m_pEditWnd->GetActiveView().GetCommander().HandleCommand(F_JUMP, true, 0, 0, 0, 0);	// ジャンプコマンド発行
+			pEditDoc->pEditWnd->GetActiveView().GetCommander().HandleCommand(F_JUMP, true, 0, 0, 0, 0);	// ジャンプコマンド発行
 		}
 		return TRUE;
 	case IDCANCEL:
@@ -204,8 +204,8 @@ void DlgJump::SetData(void)
 	// PL/SQL関数リスト作成
 	HWND hwndCtrl = GetItemHwnd(IDC_COMBO_PLSQLBLOCKS);
 	// タイプ別に設定されたアウトライン解析方法
-	if (pEditDoc->m_docType.GetDocumentAttribute().eDefaultOutline == OutlineType::PLSQL) {
-		pEditDoc->m_docOutline.MakeFuncList_PLSQL(&funcInfoArr);
+	if (pEditDoc->docType.GetDocumentAttribute().eDefaultOutline == OutlineType::PLSQL) {
+		pEditDoc->docOutline.MakeFuncList_PLSQL(&funcInfoArr);
 	}
 	//$$ 条件により、レイアウト・ロジックの単位が混在するため、ミスの原因になりやすい
 	int nWorkLine = -1;
@@ -213,47 +213,47 @@ void DlgJump::SetData(void)
 	int nPLSQLBlockNum = 0;
 	for (int i=0; i<funcInfoArr.GetNum(); ++i) {
 		FuncInfo* pFI = funcInfoArr.GetAt(i);
-		if (pFI->m_nInfo == 31 || pFI->m_nInfo == 41) {
+		if (pFI->nInfo == 31 || pFI->nInfo == 41) {
 		}
-		if (pFI->m_nInfo == 31) {
+		if (pFI->nInfo == 31) {
 			if (pShareData->bLineNumIsCRLF_ForJump) {	// 行番号の表示 false=折り返し単位／true=改行単位
 				auto_sprintf(szText, LSW(STR_DLGJUMP_PSLQL),
-					pFI->m_nFuncLineCRLF,
-					pFI->m_memFuncName.GetStringPtr()
+					pFI->nFuncLineCRLF,
+					pFI->memFuncName.GetStringPtr()
 				);
 			}else {
 				auto_sprintf(szText, LSW(STR_DLGJUMP_PSLQL),
-					pFI->m_nFuncLineLAYOUT,
-					pFI->m_memFuncName.GetStringPtr()
+					pFI->nFuncLineLAYOUT,
+					pFI->memFuncName.GetStringPtr()
 				);
 			}
 			nIndex = Combo_AddString(hwndCtrl, szText);
 			if (pShareData->bLineNumIsCRLF_ForJump) {	// 行番号の表示 false=折り返し単位／true=改行単位
-				Combo_SetItemData(hwndCtrl, nIndex, (Int)pFI->m_nFuncLineCRLF);
+				Combo_SetItemData(hwndCtrl, nIndex, (Int)pFI->nFuncLineCRLF);
 			}else {
-				Combo_SetItemData(hwndCtrl, nIndex, (Int)pFI->m_nFuncLineLAYOUT);
+				Combo_SetItemData(hwndCtrl, nIndex, (Int)pFI->nFuncLineLAYOUT);
 			}
 			nPLSQLBlockNum++;
 		}
-		if (pFI->m_nInfo == 41) {
+		if (pFI->nInfo == 41) {
 			if (pShareData->bLineNumIsCRLF_ForJump) {	// 行番号の表示 false=折り返し単位／true=改行単位
 				auto_sprintf(szText, LSW(STR_DLGJUMP_PSLQL),
-					pFI->m_nFuncLineCRLF,
-					pFI->m_memFuncName.GetStringPtr()
+					pFI->nFuncLineCRLF,
+					pFI->memFuncName.GetStringPtr()
 				);
 			}else {
 				auto_sprintf(szText, LSW(STR_DLGJUMP_PSLQL),
-					pFI->m_nFuncLineLAYOUT,
-					pFI->m_memFuncName.GetStringPtr()
+					pFI->nFuncLineLAYOUT,
+					pFI->memFuncName.GetStringPtr()
 				);
 			}
 			nIndexCurSel = nIndex = Combo_AddString(hwndCtrl, szText);
 			if (pShareData->bLineNumIsCRLF_ForJump) {	// 行番号の表示 false=折り返し単位／true=改行単位
-				nWorkLine = (Int)pFI->m_nFuncLineCRLF;
-				Combo_SetItemData(hwndCtrl, nIndex, (Int)pFI->m_nFuncLineCRLF);
+				nWorkLine = (Int)pFI->nFuncLineCRLF;
+				Combo_SetItemData(hwndCtrl, nIndex, (Int)pFI->nFuncLineCRLF);
 			}else {
-				nWorkLine = (Int)pFI->m_nFuncLineLAYOUT;
-				Combo_SetItemData(hwndCtrl, nIndex, (Int)pFI->m_nFuncLineLAYOUT);
+				nWorkLine = (Int)pFI->nFuncLineLAYOUT;
+				Combo_SetItemData(hwndCtrl, nIndex, (Int)pFI->nFuncLineLAYOUT);
 			}
 			++nPLSQLBlockNum;
 		}

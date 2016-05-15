@@ -43,11 +43,11 @@ public:
 protected:
 	// 生成
 	bool Create(
-		DataType*		pszItemArray,	// アイテム配列へのポインタ
-		int*			pnItemCount,	// アイテム個数へのポインタ
-		bool*			pbItemFavorite,	// お気に入りへのポインタ(NULL許可)
-		int				nArrayCount,	// 最大管理可能なアイテム数
-		int*			pnViewCount		// 表示個数(NULL許可)
+		DataType*	pszItemArray,	// アイテム配列へのポインタ
+		int*		pnItemCount,	// アイテム個数へのポインタ
+		bool*		pbItemFavorite,	// お気に入りへのポインタ(NULL許可)
+		int			nArrayCount,	// 最大管理可能なアイテム数
+		int*		pnViewCount		// 表示個数(NULL許可)
 	);
 public:
 	void Terminate();
@@ -59,9 +59,9 @@ public:
 	bool UpdateView();
 
 	// プロパティ取得系
-	int GetArrayCount() const { return m_nArrayCount; }	// 最大要素数
-	int GetItemCount() const { return (IsAvailable() ? *m_pnUserItemCount : 0); }	// 登録アイテム数
-	int GetViewCount() const { return (IsAvailable() ? (m_pnUserViewCount ? *m_pnUserViewCount : m_nArrayCount) : 0); }	// 表示数
+	int GetArrayCount() const { return nArrayCount; }	// 最大要素数
+	int GetItemCount() const { return (IsAvailable() ? *pnUserItemCount : 0); }	// 登録アイテム数
+	int GetViewCount() const { return (IsAvailable() ? (pnUserViewCount ? *pnUserViewCount : nArrayCount) : 0); }	// 表示数
 
 	// お気に入り制御系
 	bool SetFavorite(int nIndex, bool bFavorite = true);	// お気に入りに設定
@@ -86,7 +86,6 @@ public:
 	int FindItem(ReceiveType pItemData) const;
 	bool MoveItem(int nSrcIndex, int nDstIndex);	// アイテムを移動
 
-
 	// オーバーライド用インターフェース
 	virtual int  CompareItem(const DataType* p1, ReceiveType p2) const = 0;
 	virtual void CopyItem(DataType* dst, ReceiveType src) const = 0;
@@ -103,14 +102,14 @@ private:
 
 protected:
 	// 内部フラグ
-	bool		m_bCreate;				// Create済みか
+	bool		bCreate;				// Create済みか
 
 	// 外部参照
-	DataType*	m_puUserItemData;		// アイテム配列へのポインタ
-	int*		m_pnUserItemCount;		// アイテム個数へのポインタ
-	bool*		m_pbUserItemFavorite;	// お気に入りへのポインタ (nullptr許可)
-	int			m_nArrayCount;			// 最大管理可能なアイテム数
-	int*		m_pnUserViewCount;		// 表示個数 (nullptr許可)
+	DataType*	puUserItemData;			// アイテム配列へのポインタ
+	int*		pnUserItemCount;		// アイテム個数へのポインタ
+	bool*		pbUserItemFavorite;		// お気に入りへのポインタ (nullptr許可)
+	int			nArrayCount;			// 最大管理可能なアイテム数
+	int*		pnUserViewCount;		// 表示個数 (nullptr許可)
 };
 
 #include "RecentFile.h"

@@ -35,13 +35,13 @@ class EditView;
 
 class MacroBeforeAfter {
 public:
-	MacroBeforeAfter() : m_nOpeBlkCount(0), m_bDrawSwitchOld(true) {};
+	MacroBeforeAfter() : nOpeBlkCount(0), bDrawSwitchOld(true) {};
 	virtual ~MacroBeforeAfter() {};
 	virtual void ExecKeyMacroBefore(class EditView& editView, int flags);
 	virtual void ExecKeyMacroAfter(class EditView& editView, int flags, bool bRet);
 private:
-	int m_nOpeBlkCount;
-	bool m_bDrawSwitchOld;
+	int nOpeBlkCount;
+	bool bDrawSwitchOld;
 };
 
 /*!
@@ -84,7 +84,7 @@ public:
 
 protected:
 	// Load済みかどうかを表すフラグ true...Load済み、false...未Load。
-	bool m_nReady;
+	bool nReady;
 
 public:
 	/*!	Load済みかどうか
@@ -92,7 +92,7 @@ public:
 		@retval true Load済み
 		@retval false 未Load
 	*/
-	bool IsReady() { return m_nReady; }
+	bool IsReady() { return nReady; }
 
 	// Constructor
 	MacroManagerBase();

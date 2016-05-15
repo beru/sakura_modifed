@@ -473,7 +473,7 @@ BOOL DlgFavorite::OnInitDialog(
 	hwndList = ::GetDlgItem(hwndDlg, aFavoriteInfo[nCurrentTab].nId);
 	::ShowWindow(hwndList, SW_SHOW);
 	TabCtrl_SetCurSel(hwndTab, nCurrentTab);
-	//ChangeSlider(m_nCurrentTab);
+	//ChangeSlider(nCurrentTab);
 
 	return Dialog::OnInitDialog(GetHwnd(), wParam, lParam);
 }

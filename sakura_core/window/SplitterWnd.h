@@ -41,21 +41,21 @@ private: // 2002/2/3 aroka
 	/*
 	||  Attributes & Operations
 	*/
-	DllSharedData*	m_pShareData;
-	void*			m_pEditWnd;
-	int				m_nAllSplitRows;		// 分割行数
-	int				m_nAllSplitCols;		// 分割桁数
-	int				m_nVSplitPos;			// 垂直分割位置
-	int				m_nHSplitPos;			// 水平分割位置
-	HWND			m_childWndArr[MAXCOUNTOFVIEW];		// 子ウィンドウ配列
-	int				m_nChildWndCount;		// 有効な子ウィンドウ配列の数
-	HCURSOR			m_hcurOld;				// もとのマウスカーソル
-	int				m_bDragging;			// 分割バーをドラッグ中か
-	int				m_nDragPosX;			// ドラッグ位置Ｘ
-	int				m_nDragPosY;			// ドラッグ位置Ｙ
-	int				m_nActivePane;			// アクティブなペイン
+	DllSharedData*	pShareData;
+	EditWnd*		pEditWnd;
+	int				nAllSplitRows;		// 分割行数
+	int				nAllSplitCols;		// 分割桁数
+	int				nVSplitPos;			// 垂直分割位置
+	int				nHSplitPos;			// 水平分割位置
+	HWND			childWndArr[MAXCOUNTOFVIEW];		// 子ウィンドウ配列
+	int				nChildWndCount;		// 有効な子ウィンドウ配列の数
+	HCURSOR			hcurOld;			// もとのマウスカーソル
+	int				bDragging;			// 分割バーをドラッグ中か
+	int				nDragPosX;			// ドラッグ位置Ｘ
+	int				nDragPosY;			// ドラッグ位置Ｙ
+	int				nActivePane;		// アクティブなペイン
 public: // 2002/2/3 aroka
-	HWND Create(HINSTANCE, HWND, void* pEditWnd);	// 初期化
+	HWND Create(HINSTANCE, HWND, EditWnd* pEditWnd);	// 初期化
 	void SetChildWndArr(HWND*);	// 子ウィンドウの設定 
 	void DoSplit(int, int);		// ウィンドウの分割
 	void SetActivePane(int);	// アクティブペインの設定
@@ -68,8 +68,8 @@ public: // 2002/2/3 aroka
 	void HSplitOnOff(void);		// 横分割ＯＮ／ＯＦＦ
 	void VHSplitOnOff(void);	// 縦横分割ＯＮ／ＯＦＦ
 //	LRESULT DispatchEvent(HWND, UINT, WPARAM, LPARAM);	// ダイアログのメッセージ処理
-	int GetAllSplitRows() { return m_nAllSplitRows;} // 2002/2/3 aroka
-	int GetAllSplitCols() { return m_nAllSplitCols;} // 2002/2/3 aroka
+	int GetAllSplitRows() { return nAllSplitRows;} // 2002/2/3 aroka
+	int GetAllSplitCols() { return nAllSplitCols;} // 2002/2/3 aroka
 protected:
 	// 仮想関数
 	virtual LRESULT DispatchEvent_WM_APP(HWND, UINT, WPARAM, LPARAM);	// アプリケーション定義のメッセージ(WM_APP <= msg <= 0xBFFF)

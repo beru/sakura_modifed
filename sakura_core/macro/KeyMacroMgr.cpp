@@ -29,11 +29,11 @@
 
 KeyMacroMgr::KeyMacroMgr()
 {
-	m_pTop = nullptr;
-	m_pBot = nullptr;
-//	m_nKeyMacroDataArrNum = 0;	2002.2.2 YAZAKI
+	pTop = nullptr;
+	pBot = nullptr;
+//	nKeyMacroDataArrNum = 0;	2002.2.2 YAZAKI
 	// Apr. 29, 2002 genta
-	// m_nReadyはMacroManagerBaseへ
+	// nReadyはMacroManagerBaseへ
 	return;
 }
 
@@ -48,16 +48,16 @@ KeyMacroMgr::~KeyMacroMgr()
 // キーマクロのバッファをクリアする
 void KeyMacroMgr::ClearAll(void)
 {
-	Macro* p = m_pTop;
+	Macro* p = pTop;
 	Macro* del_p;
 	while (p) {
 		del_p = p;
 		p = p->GetNext();
 		delete del_p;
 	}
-//	m_nKeyMacroDataArrNum = 0;	2002.2.2 YAZAKI
-	m_pTop = nullptr;
-	m_pBot = nullptr;
+//	nKeyMacroDataArrNum = 0;	2002.2.2 YAZAKI
+	pTop = nullptr;
+	pBot = nullptr;
 	return;
 
 }
@@ -82,14 +82,14 @@ void KeyMacroMgr::Append(
 */
 void KeyMacroMgr::Append(Macro* macro)
 {
-	if (m_pTop) {
-		m_pBot->SetNext(macro);
-		m_pBot = macro;
+	if (pTop) {
+		pBot->SetNext(macro);
+		pBot = macro;
 	}else {
-		m_pTop = macro;
-		m_pBot = m_pTop;
+		pTop = macro;
+		pBot = pTop;
 	}
-//	m_nKeyMacroDataArrNum++;	2002.2.2 YAZAKI
+//	nKeyMacroDataArrNum++;	2002.2.2 YAZAKI
 	return;
 }
 
@@ -109,7 +109,7 @@ bool KeyMacroMgr::SaveKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath) const
 	out.WriteF(LSW(STR_ERR_DLGKEYMACMGR1));
 
 	// マクロ内容
-	Macro* p = m_pTop;
+	Macro* p = pTop;
 	while (p) {
 		p->Save(hInstance, out);
 		p = p->GetNext();
@@ -129,7 +129,7 @@ bool KeyMacroMgr::SaveKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath) const
 */
 bool KeyMacroMgr::ExecKeyMacro(EditView& editView, int flags) const
 {
-	Macro* p = m_pTop;
+	Macro* p = pTop;
 	int macroflag = flags | FA_FROMMACRO;
 	bool bRet = true;
 	while (p) {
@@ -152,7 +152,7 @@ bool KeyMacroMgr::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
 
 	TextInputStream in(pszPath);
 	if (!in) {
-		m_nReady = false;
+		nReady = false;
 		return false;
 	}
 
@@ -164,7 +164,7 @@ bool KeyMacroMgr::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
 	Macro* macro = nullptr;
 
 	// Jun. 16, 2002 genta
-	m_nReady = true;	// エラーがあればfalseになる
+	nReady = true;	// エラーがあればfalseになる
 	std::tstring MACRO_ERROR_TITLE_string = LS(STR_ERR_DLGKEYMACMGR2);
 	const TCHAR* MACRO_ERROR_TITLE = MACRO_ERROR_TITLE_string.c_str();
 
@@ -229,7 +229,7 @@ bool KeyMacroMgr::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
 						line,
 						i + 1
 					);
-					m_nReady = false;
+					nReady = false;
 				}
 				VARTYPE type = VT_EMPTY;
 				if (nArgs < 4) {
@@ -262,7 +262,7 @@ bool KeyMacroMgr::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
 							szFuncName,
 							nArgs + 1
 						);
-						m_nReady = false;
+						nReady = false;
 						break;
 					}
 					WCHAR cQuote = szLine[i];
@@ -290,13 +290,13 @@ bool KeyMacroMgr::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
 								nArgs + 1,
 								cQuote
 							);
-							m_nReady = false;
+							nReady = false;
 							nEnd = i - 1;	// nEndは終わりの次の文字（'）
 							break;
 						}
 					}
 					// Jun. 16, 2002 genta
-					if (!m_nReady) {
+					if (!nReady) {
 						break;
 					}
 
@@ -367,7 +367,7 @@ bool KeyMacroMgr::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
 							szFuncName,
 							nArgs + 1
 						);
-						m_nReady = false;
+						nReady = false;
 						break;
 					}
 					nBgn = nEnd = i;	// nBgnは引数の先頭の文字
@@ -400,7 +400,7 @@ bool KeyMacroMgr::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
 					nBgn = nEnd = i;
 					::MYMESSAGEBOX(NULL, MB_OK | MB_ICONSTOP | MB_TOPMOST, MACRO_ERROR_TITLE,
 						LS(STR_ERR_DLGKEYMACMGR7), line, i + 1);
-					m_nReady = false;
+					nReady = false;
 					break;
 				}
 				for (; i<nLineLen; ++i) {		// 最後の文字までスキャン
@@ -414,7 +414,7 @@ bool KeyMacroMgr::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
 				}
 			}
 			// Jun. 16, 2002 genta
-			if (!m_nReady) {
+			if (!nReady) {
 				// どこかでエラーがあったらしい
 				delete macro;
 				break;
@@ -425,7 +425,7 @@ bool KeyMacroMgr::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
 			::MYMESSAGEBOX(NULL, MB_OK | MB_ICONSTOP | MB_TOPMOST, MACRO_ERROR_TITLE,
 				LS(STR_ERR_DLGKEYMACMGR8), line, szFuncName);
 			// Jun. 16, 2002 genta
-			m_nReady = false;
+			nReady = false;
 			break;
 		}
 	}
@@ -433,7 +433,7 @@ bool KeyMacroMgr::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
 
 	// Jun. 16, 2002 genta
 	// マクロ中にエラーがあったら異常終了できるようにする．
-	return m_nReady;
+	return nReady;
 }
 
 // キーボードマクロを文字列から読み込み

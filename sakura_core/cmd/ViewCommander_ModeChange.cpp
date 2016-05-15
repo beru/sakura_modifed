@@ -42,7 +42,7 @@
 void ViewCommander::Command_CHGMOD_INS(void)
 {
 	// 挿入モードか？
-	m_view.SetInsMode(!m_view.IsInsMode());
+	view.SetInsMode(!view.IsInsMode());
 	// キャレットの表示・更新
 	GetCaret().ShowEditCaret();
 	// キャレットの行桁位置を表示する
@@ -59,7 +59,7 @@ void ViewCommander::Command_CHGMOD_INS(void)
 void ViewCommander::Command_CHGMOD_EOL(EolType e)
 {
 	if (EolType::None < e && e < EolType::CodeMax) {
-		GetDocument().m_docEditor.SetNewLineCode(e);
+		GetDocument().docEditor.SetNewLineCode(e);
 		// ステータスバーを更新するため
 		// キャレットの行桁位置を表示する関数を呼び出す
 		GetCaret().ShowCaretPosInfo();
@@ -78,7 +78,7 @@ void ViewCommander::Command_CHG_CHARSET(
 		// 文字コードの確認
 		eCharSet = GetDocument().GetDocumentEncoding();	// 設定する文字コードセット
 		bBom     = GetDocument().GetDocumentBomExist();	// 設定するBOM
-		int nRet = GetEditWindow().m_dlgSetCharSet.DoModal(G_AppInstance(), m_view.GetHwnd(), 
+		int nRet = GetEditWindow().dlgSetCharSet.DoModal(G_AppInstance(), view.GetHwnd(), 
 						&eCharSet, &bBom);
 		if (!nRet) {
 			return;
@@ -86,7 +86,7 @@ void ViewCommander::Command_CHG_CHARSET(
 	}
 
 	// 文字コードの設定
-	GetDocument().m_docFile.SetCodeSetChg(eCharSet, CodeTypeName(eCharSet).UseBom() & bBom);
+	GetDocument().docFile.SetCodeSetChg(eCharSet, CodeTypeName(eCharSet).UseBom() & bBom);
 
 	// ステータス表示
 	GetCaret().ShowCaretPosInfo();
@@ -99,7 +99,7 @@ void ViewCommander::Command_CHG_CHARSET(
 void ViewCommander::Command_CANCEL_MODE(int whereCursorIs)
 {
 	bool bBoxSelect = false;
-	auto& selInfo = m_view.GetSelectionInfo();
+	auto& selInfo = view.GetSelectionInfo();
 	auto& caret = GetCaret();
 	if (selInfo.IsTextSelected()) {
 		// 選択解除後のカーソル位置を決める。
@@ -129,7 +129,7 @@ void ViewCommander::Command_CANCEL_MODE(int whereCursorIs)
 		selInfo.DisableSelectArea(true);
 
 		// カーソルを移動
-		auto& layoutMgr = GetDocument().m_layoutMgr;
+		auto& layoutMgr = GetDocument().layoutMgr;
 		if (ptTo.y >= layoutMgr.GetLineCount()) {
 			// ファイルの最後に移動
 			Command_GOFILEEND(false);
@@ -143,7 +143,7 @@ void ViewCommander::Command_CANCEL_MODE(int whereCursorIs)
 			}
 
 			caret.MoveCursor(ptTo, true);
-			caret.m_nCaretPosX_Prev = caret.GetCaretLayoutPos().GetX2();
+			caret.nCaretPosX_Prev = caret.GetCaretLayoutPos().GetX2();
 		}
 	}else {
 		// 2011.12.05 Moca 選択中の未選択状態でもLockの解除と描画が必要
@@ -151,7 +151,7 @@ void ViewCommander::Command_CANCEL_MODE(int whereCursorIs)
 			|| selInfo.IsBoxSelecting()
 		) {
 			selInfo.DisableSelectArea(true);
-			caret.m_underLine.CaretUnderLineON(true, false);
+			caret.underLine.CaretUnderLineON(true, false);
 			selInfo.PrintSelectionInfoMsg();
 		}
 	}

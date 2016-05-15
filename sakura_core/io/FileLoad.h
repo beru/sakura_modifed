@@ -82,16 +82,16 @@ public:
 
 	// Jun. 08, 2003 Moca
 	// 開いたファイルにはBOMがあるか？
-	bool IsBomExist(void) { return m_bBomExist; }
+	bool IsBomExist(void) { return bBomExist; }
 
 	// 現在の進行率を取得する(0% - 100%) 若干誤差が出る
 	int GetPercent(void);
 
 	// ファイルサイズを取得する
-	inline LONGLONG GetFileSize( void ){ return m_nFileSize; }
+	inline LONGLONG GetFileSize( void ){ return nFileSize; }
 
-	static const int gm_nBufSizeDef; // ロード用バッファサイズの初期値
-//	static const int gm_nBufSizeMin; // ロード用バッファサイズの設定可能な最低値
+	static const int g_nBufSizeDef; // ロード用バッファサイズの初期値
+//	static const int g_nBufSizeMin; // ロード用バッファサイズの設定可能な最低値
 
 protected:
 	// Oct. 19, 2002 genta スペルミス修正
@@ -107,22 +107,22 @@ protected:
 	DWORD FilePointer(DWORD, DWORD); // inline
 
 	// メンバオブジェクト
-	EncodingConfig m_encoding;
+	EncodingConfig encoding;
 
-//	LPTSTR	m_pszFileName;	// ファイル名
-	HANDLE	m_hFile;		// ファイルハンドル
-	LONGLONG	m_nFileSize;	// ファイルサイズ(64bit)
-	LONGLONG	m_nFileDataLen;	// ファイルデータ長からBOM長を引いたバイト数
-	LONGLONG	m_nReadLength;	// 現在までにロードしたデータの合計バイト数(BOM長を含まない)
-	int		m_nLineIndex;		// 現在ロードしている論理行(0開始)
-	EncodingType	m_CharCode;	// 文字コード
-	CodeBase*	m_pCodeBase;	////
-	EEncodingTrait	m_encodingTrait;
-	Memory			m_memEols[3];
-	bool	m_bEolEx;		// CR/LF以外のEOLが有効か
-	int		m_nMaxEolLen;	// EOLの長さ
-	bool	m_bBomExist;	// ファイルのBOMが付いているか Jun. 08, 2003 Moca 
-	int		m_nFlag;		// 文字コードの変換オプション
+//	LPTSTR	pszFileName;		// ファイル名
+	HANDLE		hFile;			// ファイルハンドル
+	LONGLONG	nFileSize;		// ファイルサイズ(64bit)
+	LONGLONG	nFileDataLen;	// ファイルデータ長からBOM長を引いたバイト数
+	LONGLONG	nReadLength;	// 現在までにロードしたデータの合計バイト数(BOM長を含まない)
+	int			nLineIndex;		// 現在ロードしている論理行(0開始)
+	EncodingType	CharCode;	// 文字コード
+	CodeBase*	pCodeBase;	////
+	EEncodingTrait	encodingTrait;
+	Memory			memEols[3];
+	bool	bEolEx;		// CR/LF以外のEOLが有効か
+	int		nMaxEolLen;	// EOLの長さ
+	bool	bBomExist;	// ファイルのBOMが付いているか Jun. 08, 2003 Moca 
+	int		nFlag;		// 文字コードの変換オプション
 	// Jun. 13, 2003 Moca
 	// 状態をenumとしてわかりやすく．
 	enum class FileLoadMode {
@@ -131,18 +131,18 @@ protected:
 		Ready,		// 順アクセスOK
 		ReadBufEnd	// ファイルの終端までバッファに入れた
 	};
-	FileLoadMode	m_mode;	// 現在の読み込み状態
+	FileLoadMode	mode;	// 現在の読み込み状態
 
 	// 読み込みバッファ系
-	char*	m_pReadBuf;			// 読み込みバッファへのポインタ
-	int		m_nReadBufSize;		// 読み込みバッファの実際に確保しているサイズ
-	int		m_nReadDataLen;		// 読み込みバッファの有効データサイズ
-	int		m_nReadBufOffSet;	// 読み込みバッファ中のオフセット(次の行頭位置)
-//	int		m_nReadBufSumSize;	// 今までにバッファに読み込んだデータの合計サイズ
-	Memory m_lineBuffer;
-	NativeW m_lineTemp;
-	int		m_nReadOffset2;
-	CodeConvertResult m_nTempResult;
+	char*	pReadBuf;			// 読み込みバッファへのポインタ
+	int		nReadBufSize;		// 読み込みバッファの実際に確保しているサイズ
+	int		nReadDataLen;		// 読み込みバッファの有効データサイズ
+	int		nReadBufOffSet;		// 読み込みバッファ中のオフセット(次の行頭位置)
+//	int		nReadBufSumSize;	// 今までにバッファに読み込んだデータの合計サイズ
+	Memory lineBuffer;
+	NativeW lineTemp;
+	int		nReadOffset2;
+	CodeConvertResult nTempResult;
 
 private:
 	DISALLOW_COPY_AND_ASSIGN(FileLoad);
@@ -152,13 +152,13 @@ private:
 
 // public
 inline BOOL FileLoad::GetFileTime(FILETIME* pftCreate, FILETIME* pftLastAccess, FILETIME* pftLastWrite) {
-	return ::GetFileTime(m_hFile, pftCreate, pftLastAccess, pftLastWrite);
+	return ::GetFileTime(hFile, pftCreate, pftLastAccess, pftLastWrite);
 }
 
 // protected
 inline int FileLoad::Read(void* pBuf, size_t nSize) {
 	DWORD ReadSize;
-	if (!::ReadFile(m_hFile, pBuf, nSize, &ReadSize, NULL)) {
+	if (!::ReadFile(hFile, pBuf, nSize, &ReadSize, NULL)) {
 		throw Error_FileRead();
 	}
 	return (int)ReadSize;
@@ -167,7 +167,7 @@ inline int FileLoad::Read(void* pBuf, size_t nSize) {
 // protected
 inline DWORD FileLoad::FilePointer(DWORD offset, DWORD origin) {
 	DWORD fp;
-	if ((fp = ::SetFilePointer(m_hFile, offset, NULL, FILE_BEGIN)) == INVALID_SET_FILE_POINTER) {
+	if ((fp = ::SetFilePointer(hFile, offset, NULL, FILE_BEGIN)) == INVALID_SET_FILE_POINTER) {
 		throw Error_FileRead();
 	}
 	return fp;

@@ -29,15 +29,15 @@ class Color_Heredoc : public ColorStrategy {
 public:
 	virtual EColorIndexType GetStrategyColor() const { return COLORIDX_HEREDOC; }
 	virtual LayoutColorInfo* GetStrategyColorInfo() const;
-	virtual void InitStrategyStatus() { m_nCOMMENTEND = 0; }
+	virtual void InitStrategyStatus() { nCommentEnd = 0; }
 	virtual void SetStrategyColorInfo(const LayoutColorInfo*);
 	virtual bool BeginColor(const StringRef& str, int nPos);
-	virtual bool Disp() const { return m_pTypeData->colorInfoArr[COLORIDX_HEREDOC].bDisp; }
+	virtual bool Disp() const { return pTypeData->colorInfoArr[COLORIDX_HEREDOC].bDisp; }
 	virtual bool EndColor(const StringRef& str, int nPos);
 private:
-	std::wstring m_id;
-	int m_nSize;
-	const wchar_t* m_pszId;
-	int m_nCOMMENTEND;
+	std::wstring id;
+	int nSize;
+	const wchar_t* pszId;
+	int nCommentEnd;
 };
 

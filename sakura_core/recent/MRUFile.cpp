@@ -33,13 +33,13 @@
 MruFile::MruFile()
 {
 	//	初期化。
-	m_pShareData = &GetDllShareData();
+	pShareData = &GetDllShareData();
 }
 
 // デストラクタ
 MruFile::~MruFile()
 {
-	m_recentFile.Terminate();
+	recentFile.Terminate();
 }
 
 /*!
@@ -72,7 +72,7 @@ HMENU MruFile::CreateMenu(MenuDrawer& menuDrawer) const
 HMENU MruFile::CreateMenu(HMENU hMenuPopUp, MenuDrawer& menuDrawer) const
 {
 	TCHAR szMenu[_MAX_PATH * 2 + 10];				//	メニューキャプション
-	const BOOL bMenuIcon = m_pShareData->common.window.bMenuIcon;
+	const BOOL bMenuIcon = pShareData->common.window.bMenuIcon;
 	FileNameManager::getInstance().TransformFileName_MakeCache();
 
 	NONCLIENTMETRICS met;
@@ -80,16 +80,16 @@ HMENU MruFile::CreateMenu(HMENU hMenuPopUp, MenuDrawer& menuDrawer) const
 	::SystemParametersInfo(SPI_GETNONCLIENTMETRICS, met.cbSize, &met, 0);
 	DCFont dcFont(met.lfMenuFont);
 
-	for (int i=0; i<m_recentFile.GetItemCount(); ++i) {
+	for (int i=0; i<recentFile.GetItemCount(); ++i) {
 		//	「共通設定」→「全般」→「ファイルの履歴MAX」を反映
-		if (i >= m_recentFile.GetViewCount()) {
+		if (i >= recentFile.GetViewCount()) {
 			break;
 		}
 		
 		// MRUリストの中にある開かれていないファイル
 
-		const EditInfo* p = m_recentFile.GetItem(i);
-		bool bFavorite = m_recentFile.IsFavorite(i);
+		const EditInfo* p = recentFile.GetItem(i);
+		bool bFavorite = recentFile.IsFavorite(i);
 		bool bFavoriteLabel = bFavorite && !bMenuIcon;
 		FileNameManager::getInstance().GetMenuFullLabel_MRU(szMenu, _countof(szMenu), p, -1, bFavoriteLabel, i, dcFont.GetHDC());
 
@@ -122,12 +122,12 @@ BOOL MruFile::DestroyMenu(HMENU hMenuPopUp) const
 std::vector<LPCTSTR> MruFile::GetPathList() const
 {
 	std::vector<LPCTSTR> ret;
-	for (int i=0; i<m_recentFile.GetItemCount(); ++i) {
+	for (int i=0; i<recentFile.GetItemCount(); ++i) {
 		//「共通設定」→「全般」→「ファイルの履歴MAX」を反映
-		if (i >= m_recentFile.GetViewCount()) {
+		if (i >= recentFile.GetViewCount()) {
 			break;
 		}
-		ret.push_back(m_recentFile.GetItemText(i));
+		ret.push_back(recentFile.GetItemText(i));
 	}
 	return ret;
 }
@@ -135,7 +135,7 @@ std::vector<LPCTSTR> MruFile::GetPathList() const
 // アイテム数を返す
 int MruFile::Length(void) const
 {
-	return m_recentFile.GetItemCount();
+	return recentFile.GetItemCount();
 }
 
 /*!
@@ -143,7 +143,7 @@ int MruFile::Length(void) const
 */
 void MruFile::ClearAll(void)
 {
-	m_recentFile.DeleteAllItem();
+	recentFile.DeleteAllItem();
 }
 
 /*!
@@ -157,7 +157,7 @@ void MruFile::ClearAll(void)
 */
 bool MruFile::GetEditInfo(int num, EditInfo* pfi) const
 {
-	const EditInfo*	p = m_recentFile.GetItem(num);
+	const EditInfo*	p = recentFile.GetItem(num);
 	if (!p) {
 		return false;
 	}
@@ -180,7 +180,7 @@ bool MruFile::GetEditInfo(int num, EditInfo* pfi) const
 */
 bool MruFile::GetEditInfo(const TCHAR* pszPath, EditInfo* pfi) const
 {
-	const EditInfo*	p = m_recentFile.GetItem(m_recentFile.FindItemByPath(pszPath));
+	const EditInfo*	p = recentFile.GetItem(recentFile.FindItemByPath(pszPath));
 	if (!p) {
 		return false;
 	}
@@ -207,11 +207,11 @@ void MruFile::Add(EditInfo* pEditInfo)
 	}
 	
 	// すでに登録されている場合は、除外指定を無視する
-	if (m_recentFile.FindItemByPath(pEditInfo->szPath) == -1) {
-		int nSize = m_pShareData->history.m_aExceptMRU.size();
+	if (recentFile.FindItemByPath(pEditInfo->szPath) == -1) {
+		int nSize = pShareData->history.aExceptMRU.size();
 		for (int i=0; i<nSize; ++i) {
 			TCHAR szExceptMRU[_MAX_PATH];
-			FileNameManager::ExpandMetaToFolder(m_pShareData->history.m_aExceptMRU[i], szExceptMRU, _countof(szExceptMRU));
+			FileNameManager::ExpandMetaToFolder(pShareData->history.aExceptMRU[i], szExceptMRU, _countof(szExceptMRU));
 			if (_tcsistr(pEditInfo->szPath,  szExceptMRU)) {
 				return;
 			}
@@ -241,7 +241,7 @@ void MruFile::Add(EditInfo* pEditInfo)
 	MruFolder mruFolder;
 	mruFolder.Add(szFolder);
 
-	m_recentFile.AppendItem(&tmpEditInfo);
+	recentFile.AppendItem(&tmpEditInfo);
 	
 	::SHAddToRecentDocs(SHARD_PATH, to_wchar(pEditInfo->szPath));
 }

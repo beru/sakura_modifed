@@ -20,15 +20,15 @@ void String::set(const char* szData, int nLength)
 
 const char* String::c_astr() const
 {
-	if (!m_str_cache) {
-		m_str_cache = wcstombs_new(m_wstr.c_str());
+	if (!str_cache) {
+		str_cache = wcstombs_new(wstr.c_str());
 	}
-	return m_str_cache;
+	return str_cache;
 }
 
 String::~String()
 {
-	m_delete2(m_str_cache);
+	delete2(str_cache);
 }
 
 /*
@@ -36,13 +36,13 @@ CFilePath::CFilePath(const char* rhs)
 {
 	// 現時点ではNULLを受け付けない
 	assert(rhs);
-	_mbstotcs(m_tszPath, _countof(m_tszPath), rhs);
+	_mbstotcs(tszPath, _countof(tszPath), rhs);
 }
 CFilePath::CFilePath(const wchar_t* rhs)
 {
 	// 現時点ではNULLを受け付けない
 	assert(rhs);
-	_wcstotcs(m_tszPath, _countof(m_tszPath), rhs);
+	_wcstotcs(tszPath, _countof(tszPath), rhs);
 }
 */
 

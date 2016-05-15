@@ -54,14 +54,14 @@
 	@li 各項目の値は、0 以上 CODE_MAX 未満で有効とする。
 
 	CODE_UNICODE と CODE_UNICODEBE を除く各項目の値は、
-	対応する文字コード情報の格納先 (m_pMbInfo) インデックスとして使っているため、
+	対応する文字コード情報の格納先 (pMbInfo) インデックスとして使っているため、
 	連続させている。
 
 	CODE_SJIS と CODE_UTF8 が同ポイントの第一候補になる可能性があるため、
 	CODE_UTF8, CODE_CESU8 を優先的にしている。つまり、SJIS と UTF-8系(UTF-8 と CESU-8) が
 	同ポイントになった場合は、必ず UTF=8系 を優先させるようにする。
 */
-static const int gm_aMbcPriority[] =
+static const int g_aMbcPriority[] =
 {
 	2,			// CODE_SJIS
 	4,			// CODE_JIS
@@ -89,11 +89,11 @@ void ESI::SetInformation(const char* pS, const int nLen)
 
 
 /*!
-	文字コード ID から情報格納配列 m_pMbInfo または m_pWcInfo の添え字を取得
+	文字コード ID から情報格納配列 pMbInfo または pWcInfo の添え字を取得
 
 	@return
-	　nCodeType が CODE_UNICODE, CODE_UNICODEBE の場合は m_pWcInfo 用の添え字が，
-	それ以外の場合は m_pMbInfo 用の添え字が返却される。
+	　nCodeType が CODE_UNICODE, CODE_UNICODEBE の場合は pWcInfo 用の添え字が，
+	それ以外の場合は pMbInfo 用の添え字が返却される。
 */
 int ESI::GetIndexById(const EncodingType eCodeType) const
 {
@@ -103,7 +103,7 @@ int ESI::GetIndexById(const EncodingType eCodeType) const
 	}else if (eCodeType == CODE_UNICODEBE) {
 		nret = 1;
 	}else {
-		nret = gm_aMbcPriority[eCodeType]; // 優先順位表の優先度数をそのまま m_aMbcInfo の添え字として使う。
+		nret = g_aMbcPriority[eCodeType]; // 優先順位表の優先度数をそのまま aMbcInfo の添え字として使う。
 	}
 	return nret;
 }
@@ -112,8 +112,8 @@ int ESI::GetIndexById(const EncodingType eCodeType) const
 	収集した評価値を格納
 
 	@return
-	　nCodeType が CODE_UNICODE, CODE_UNICODEBE の場合は m_pWcInfo へ，
-	それ以外の場合は m_pMbInfo へ値が格納されることに注意。
+	　nCodeType が CODE_UNICODE, CODE_UNICODEBE の場合は pWcInfo へ，
+	それ以外の場合は pMbInfo へ値が格納されることに注意。
 */
 void ESI::SetEvaluation(const EncodingType eCodeId, const int v1, const int v2)
 {
@@ -121,9 +121,9 @@ void ESI::SetEvaluation(const EncodingType eCodeId, const int v1, const int v2)
 
 	int nidx = GetIndexById(eCodeId);
 	if (eCodeId == CODE_UNICODE || eCodeId == CODE_UNICODEBE) {
-		pEI = &m_aWcInfo[nidx];
+		pEI = &aWcInfo[nidx];
 	}else {
-		pEI = &m_aMbcInfo[nidx];
+		pEI = &aMbcInfo[nidx];
 	}
 	pEI->eCodeID = eCodeId;
 	pEI->nSpecific = v1;
@@ -137,8 +137,8 @@ void ESI::SetEvaluation(const EncodingType eCodeId, const int v1, const int v2)
 	収集した評価値を取得
 
 	@return
-	　nCodeType が CODE_UNICODE, CODE_UNICODEBE の場合は m_pWcInfo から，
-	それ以外の場合は m_pMbInfo から値が取得されることに注意。
+	　nCodeType が CODE_UNICODE, CODE_UNICODEBE の場合は pWcInfo から，
+	それ以外の場合は pMbInfo から値が取得されることに注意。
 */
 void ESI::GetEvaluation(const EncodingType eCodeId, int* pv1, int* pv2) const
 {
@@ -146,9 +146,9 @@ void ESI::GetEvaluation(const EncodingType eCodeId, int* pv1, int* pv2) const
 
 	int nidx = GetIndexById(eCodeId);
 	if (eCodeId == CODE_UNICODE || eCodeId == CODE_UNICODEBE) {
-		pEI = &m_aWcInfo[nidx];
+		pEI = &aWcInfo[nidx];
 	}else {
-		pEI = &m_aMbcInfo[nidx];
+		pEI = &aMbcInfo[nidx];
 	}
 	*pv1 = pEI->nSpecific;
 	*pv2 = pEI->nPoints;
@@ -159,9 +159,9 @@ void ESI::GetEvaluation(const EncodingType eCodeId, int* pv1, int* pv2) const
 
 
 /*!
-	配列 m_pMbInfo の要素へのポインタを評価順にソートして m_ppMbInfo にセット
+	配列 pMbInfo の要素へのポインタを評価順にソートして ppMbInfo にセット
 
-	m_pMbInfo に格納される文字コード情報の元々の順番は、m_pMbPriority[] テーブルの添え字に従う。
+	pMbInfo に格納される文字コード情報の元々の順番は、pMbPriority[] テーブルの添え字に従う。
 	バブルソートは、元あった順序を比較的変更しない。
 */
 void ESI::SortMBCInfo(void)
@@ -170,14 +170,14 @@ void ESI::SortMBCInfo(void)
 		「特有バイト数 － 不正バイト数＝ポイント数 (.nPoints)」の数の大きい順にソート（バブルソート）
 	*/
 	for (int i=0; i<NUM_OF_MBCODE; ++i) {
-		m_apMbcInfo[i] = &m_aMbcInfo[i];
+		apMbcInfo[i] = &aMbcInfo[i];
 	}
 	for (int i=1; i<NUM_OF_MBCODE; ++i) {
 		for (int j=0; j<NUM_OF_MBCODE-i; ++j) {
-			if (m_apMbcInfo[j]->nPoints < m_apMbcInfo[j + 1]->nPoints) {
-				MBCODE_INFO* pei_tmp = m_apMbcInfo[j + 1];
-				m_apMbcInfo[j + 1] = m_apMbcInfo[j];
-				m_apMbcInfo[j] = pei_tmp;
+			if (apMbcInfo[j]->nPoints < apMbcInfo[j + 1]->nPoints) {
+				MBCODE_INFO* pei_tmp = apMbcInfo[j + 1];
+				apMbcInfo[j + 1] = apMbcInfo[j];
+				apMbcInfo[j] = pei_tmp;
 			}
 		}
 	}
@@ -192,7 +192,7 @@ void ESI::GetEncodingInfo_sjis(const char* pS, const int nLen)
 {
 	if (nLen < 1 || !pS) {
 		SetEvaluation(CODE_SJIS, 0, 0);
-		m_nMbcSjisHankata = 0;
+		nMbcSjisHankata = 0;
 		return;
 	}
 
@@ -228,7 +228,7 @@ void ESI::GetEncodingInfo_sjis(const char* pS, const int nLen)
 		num_of_sjis_encoded_bytes - nillbytes
 	);
 
-	m_nMbcSjisHankata = num_of_sjis_hankata;
+	nMbcSjisHankata = num_of_sjis_hankata;
 
 	return;
 }
@@ -294,8 +294,8 @@ void ESI::GetEncodingInfo_eucjp(const char* pS, const int nLen)
 
 	if (nLen < 1 || !pS) {
 		SetEvaluation(CODE_EUC, 0, 0);
-		m_nMbcEucZenHirakata = 0;
-		m_nMbcEucZen = 0;
+		nMbcEucZenHirakata = 0;
+		nMbcEucZen = 0;
 		return;
 	}
 
@@ -334,8 +334,8 @@ void ESI::GetEncodingInfo_eucjp(const char* pS, const int nLen)
 		num_of_eucjp_encoded_bytes - nillbytes
 	);
 
-	m_nMbcEucZen = num_of_euc_zen;
-	m_nMbcEucZenHirakata = num_of_euc_zen_hirakata;
+	nMbcEucZen = num_of_euc_zen;
+	nMbcEucZenHirakata = num_of_euc_zen_hirakata;
 
 	return;
 }
@@ -510,7 +510,7 @@ void ESI::GetEncodingInfo_meta( const char* pS, const int nLen )
 	if (encoding == CODE_NONE) {
 		encoding = AutoDetectByHTML( pS, nLen );
 	}
-	m_eMetaName = encoding;
+	eMetaName = encoding;
 }
 
 
@@ -684,8 +684,8 @@ void ESI::ScanCode(const char* pS, const int nLen)
 */
 void ESI::GuessUtf16Bom(void)
 {
-	int i = m_aWcInfo[ESI_WCIDX_UTF16LE].nSpecific;  // UTF-16 LE の改行の個数
-	int j = m_aWcInfo[ESI_WCIDX_UTF16BE].nSpecific;  // UTF-16 BE の改行の個数
+	int i = aWcInfo[ESI_WCIDX_UTF16LE].nSpecific;  // UTF-16 LE の改行の個数
+	int j = aWcInfo[ESI_WCIDX_UTF16BE].nSpecific;  // UTF-16 BE の改行の個数
 	BOMType ebom_type = BOMType::Unknown;
 	if (i > j && j < 1) {
 		ebom_type = BOMType::LittleEndian;   // LE
@@ -693,13 +693,13 @@ void ESI::GuessUtf16Bom(void)
 		ebom_type = BOMType::BigEndian;   // BE
 	}
 	if (ebom_type != BOMType::Unknown) {
-		if (m_aWcInfo[(int)ebom_type].nSpecific - m_aWcInfo[(int)ebom_type].nPoints > 0) {
+		if (aWcInfo[(int)ebom_type].nSpecific - aWcInfo[(int)ebom_type].nPoints > 0) {
 			// 不正バイトが検出されている場合は、BOM タイプ不明とする。
 			ebom_type = BOMType::Unknown;
 		}
 	}
 
-	m_eWcBomType = ebom_type;
+	eWcBomType = ebom_type;
 }
 
 
@@ -708,25 +708,25 @@ void ESI::GuessUtf16Bom(void)
 /*!
 	SJIS と EUC の紛らわしさを解消する
 
-	m_bEucFlag が TRUE のとき EUC, FALSE のとき SJIS
+	bEucFlag が TRUE のとき EUC, FALSE のとき SJIS
 */
 void ESI::GuessEucOrSjis(void)
 {
 	if (IsAmbiguousEucAndSjis()
-	 && static_cast<double>(m_nMbcEucZenHirakata) / m_nMbcEucZen >= 0.25
+	 && static_cast<double>(nMbcEucZenHirakata) / nMbcEucZen >= 0.25
 	) { // 0.25 という値は適当です。
 		// EUC をトップに持ってくる
 		int i;
 		for (i=0; i<2; ++i) {
-			if (m_apMbcInfo[i]->eCodeID == CODE_EUC) {
+			if (apMbcInfo[i]->eCodeID == CODE_EUC) {
 				break;
 			}
 		}
 		if (i == 1) {
 			MBCODE_INFO* ptemp;
-			ptemp = m_apMbcInfo[0];
-			m_apMbcInfo[0] = m_apMbcInfo[1];
-			m_apMbcInfo[1] = ptemp;
+			ptemp = apMbcInfo[0];
+			apMbcInfo[0] = apMbcInfo[1];
+			apMbcInfo[1] = ptemp;
 		}
 	}
 }
@@ -735,23 +735,23 @@ void ESI::GuessEucOrSjis(void)
 /*!
 	UTF-8 と CESU-8 の紛らわしさを解消する
 
-	m_bCesu8Flag が TRUE のとき CESU-8, FALSE のとき UTF-8
+	bCesu8Flag が TRUE のとき CESU-8, FALSE のとき UTF-8
 */
 void ESI::GuessUtf8OrCesu8(void)
 {
 	if (IsAmbiguousUtf8AndCesu8()
-	 && m_pEncodingConfig->bPriorCesu8) {
+	 && pEncodingConfig->bPriorCesu8) {
 		int i;
 		for (i=0; i<2; ++i) {
-			if (m_apMbcInfo[i]->eCodeID == CODE_CESU8) {
+			if (apMbcInfo[i]->eCodeID == CODE_CESU8) {
 				break;
 			}
 		}
 		if (i == 1) {
 			MBCODE_INFO* ptemp;
-			ptemp = m_apMbcInfo[0];
-			m_apMbcInfo[0] = m_apMbcInfo[1];
-			m_apMbcInfo[1] = ptemp;
+			ptemp = apMbcInfo[0];
+			apMbcInfo[0] = apMbcInfo[1];
+			apMbcInfo[1] = ptemp;
 		}
 	}
 }
@@ -1181,7 +1181,7 @@ void ESI::GetDebugInfo(const char* pS, const int nLen, NativeT* pcmtxtOut)
 	int v1, v2, v3, v4;
 
 	EditDoc& doc = EditWnd::getInstance().GetDocument();
-	ESI esi(doc.m_docType.GetDocumentAttribute().encoding);
+	ESI esi(doc.docType.GetDocumentAttribute().encoding);
 
 	// テスト実行
 	esi.SetInformation(pS, nLen/*, CODE_SJIS*/);
@@ -1193,11 +1193,11 @@ void ESI::GetDebugInfo(const char* pS, const int nLen, NativeT* pcmtxtOut)
 	pcmtxtOut->AppendString(LS(STR_ESI_CHARCODE_DETECT));	// "--文字コード調査結果-----------\r\n"
 	pcmtxtOut->AppendString(LS(STR_ESI_RESULT_STATE));	// "判別結果の状態\r\n"
 
-	if (esi.m_nTargetDataLen < 1 || esi.m_dwStatus == ESI_NOINFORMATION) {
+	if (esi.nTargetDataLen < 1 || esi.dwStatus == ESI_NOINFORMATION) {
 		pcmtxtOut->AppendString(LS(STR_ESI_NO_INFO));	// "\t判別結果を取得できません。\r\n"
 		return;
 	}
-	if (esi.m_dwStatus != ESI_NODETECTED) {
+	if (esi.dwStatus != ESI_NODETECTED) {
 		// nstat == CESI_MBC_DETECTED or CESI_WC_DETECTED
 		pcmtxtOut->AppendString(LS(STR_ESI_DETECTED));	// "\tおそらく正常に判定されました。\r\n"
 	}else {
@@ -1206,13 +1206,13 @@ void ESI::GetDebugInfo(const char* pS, const int nLen, NativeT* pcmtxtOut)
 
 	pcmtxtOut->AppendString(LS(STR_ESI_DOC_TYPE));	// "文書種別\r\n"
 
-	auto_sprintf( szWork, _T("\t%s\r\n"), doc.m_docType.GetDocumentAttribute().szTypeName );
+	auto_sprintf( szWork, _T("\t%s\r\n"), doc.docType.GetDocumentAttribute().szTypeName );
 	pcmtxtOut->AppendString(szWork);
 
 	pcmtxtOut->AppendString(LS(STR_ESI_DEFAULT_CHARCODE));	// "デフォルト文字コード\r\n"
 
 	TCHAR szCpName[100];
-	CodePage::GetNameNormal(szCpName, doc.m_docType.GetDocumentAttribute().encoding.eDefaultCodetype);
+	CodePage::GetNameNormal(szCpName, doc.docType.GetDocumentAttribute().encoding.eDefaultCodetype);
 	auto_sprintf(szWork, _T("\t%ts\r\n"), szCpName);
 	pcmtxtOut->AppendString(szWork);
 	pcmtxtOut->AppendString(LS(STR_ESI_SAMPLE_LEN));	// "サンプルデータ長\r\n"
@@ -1229,7 +1229,7 @@ void ESI::GetDebugInfo(const char* pS, const int nLen, NativeT* pcmtxtOut)
 	auto_sprintf(szWork, LS(STR_ESI_UTF16BE_B_AND_P), v3, v4); // "\t\tUTF16BE 固有バイト数 %d,\tポイント数 %d\r\n"
 	pcmtxtOut->AppendString(szWork);
 	pcmtxtOut->AppendString(LS(STR_ESI_BOM));	// "\t\tBOM の推測結果　"
-	switch (esi.m_eWcBomType) {
+	switch (esi.eWcBomType) {
 	case BOMType::LittleEndian:
 		auto_sprintf( szWork, _T("LE\r\n") );
 		break;
@@ -1242,16 +1242,16 @@ void ESI::GetDebugInfo(const char* pS, const int nLen, NativeT* pcmtxtOut)
 	pcmtxtOut->AppendString(szWork);
 	pcmtxtOut->AppendString(LS(STR_ESI_MBC_OTHER_UNICODE));
 	for (int i=0; i<NUM_OF_MBCODE; ++i) {
-		if (!IsValidCodeType(esi.m_apMbcInfo[i]->eCodeID)) {
-			esi.m_apMbcInfo[i]->eCodeID = CODE_SJIS;
+		if (!IsValidCodeType(esi.apMbcInfo[i]->eCodeID)) {
+			esi.apMbcInfo[i]->eCodeID = CODE_SJIS;
 		}
-		esi.GetEvaluation(esi.m_apMbcInfo[i]->eCodeID, &v1, &v2);
+		esi.GetEvaluation(esi.apMbcInfo[i]->eCodeID, &v1, &v2);
 		auto_sprintf(szWork, LS(STR_ESI_OTHER_B_AND_P),	// "\t\t%d.%ts\t固有バイト数 %d\tポイント数 %d\r\n"
-			i + 1, CodeTypeName(esi.m_apMbcInfo[i]->eCodeID).Normal(), v1, v2
+			i + 1, CodeTypeName(esi.apMbcInfo[i]->eCodeID).Normal(), v1, v2
 		);
 		pcmtxtOut->AppendString(szWork);
 	}
-	auto_sprintf(szWork, LS(STR_ESI_EUC_ZENKAKU), static_cast<double>(esi.m_nMbcEucZenHirakata)/esi.m_nMbcEucZen);	// "\t\t・EUC全角カナかな/EUC全角\t%6.3f\r\n"
+	auto_sprintf(szWork, LS(STR_ESI_EUC_ZENKAKU), static_cast<double>(esi.nMbcEucZenHirakata)/esi.nMbcEucZen);	// "\t\t・EUC全角カナかな/EUC全角\t%6.3f\r\n"
 	pcmtxtOut->AppendString(szWork);
 
 	pcmtxtOut->AppendString(LS(STR_ESI_RESULT));	// "判定結果\r\n"

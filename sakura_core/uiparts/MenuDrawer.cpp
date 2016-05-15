@@ -46,7 +46,7 @@
 void FillSolidRect(HDC hdc, int x, int y, int cx, int cy, COLORREF clr)
 {
 //	ASSERT_VALID(this);
-//	ASSERT(m_hDC != NULL);
+//	ASSERT(hDC != NULL);
 
 	RECT rect;
 	::SetBkColor(hdc, clr);
@@ -793,8 +793,8 @@ void MenuDrawer::ResetContents(void)
 	}
 
 //@@@ 2002.01.03 YAZAKI •sŽg—p‚Ì‚½‚ß
-//	m_nMaxTab = 0;
-//	m_nMaxTabLen = 0;
+//	nMaxTab = 0;
+//	nMaxTabLen = 0;
 	return;
 }
 

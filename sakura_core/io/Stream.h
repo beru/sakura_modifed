@@ -54,18 +54,18 @@ public:
 	);
 
 	// 状態
-	virtual bool Good() const { return m_fp && !Eof(); }
-	bool Eof() const { return !m_fp || feof(m_fp); }
+	virtual bool Good() const { return fp && !Eof(); }
+	bool Eof() const { return !fp || feof(fp); }
 
 	// ファイルハンドル
-	FILE* GetFp() const { return m_fp; }
+	FILE* GetFp() const { return fp; }
 
 	// モード
-	bool IsExceptionMode() const { return m_bExceptionMode; }
+	bool IsExceptionMode() const { return bExceptionMode; }
 private:
-	FILE*			m_fp;
-	FileAttribute*	m_pFileAttribute;
-	bool			m_bExceptionMode;
+	FILE*			fp;
+	FileAttribute*	pFileAttribute;
+	bool			bExceptionMode;
 };
 
 

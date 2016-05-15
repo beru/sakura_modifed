@@ -77,7 +77,7 @@ bool MacroFactory::RegisterCreator(Creator f)
 		return false;
 	}
 
-	m_mMacroCreators.push_back(f);
+	mMacroCreators.push_back(f);
 	return true;
 }
 
@@ -89,13 +89,13 @@ bool MacroFactory::RegisterCreator(Creator f)
 bool MacroFactory::Unregister(Creator f)
 {
 	// Creator Listからの削除
-	auto c_it = m_mMacroCreators.begin();
-	while (c_it != m_mMacroCreators.end()) {
+	auto c_it = mMacroCreators.begin();
+	while (c_it != mMacroCreators.end()) {
 		if (*c_it == f) {
 			// いきなり削除するとiteratorが無効になるので，
 			// iteratorを1つ進めてから現在位置を削除する．
 			auto tmp_it = c_it++;
-			m_mMacroCreators.erase(tmp_it);
+			mMacroCreators.erase(tmp_it);
 			// 重複登録されている場合を考慮して，
 			// 1つ見つかっても最後までチェックする
 		}else {
@@ -120,7 +120,7 @@ MacroManagerBase* MacroFactory::Create(EditView& view, const TCHAR* ext)
 	std::tstring key = Ext2Key(ext);
 
 	// Creatorを順に試す
-	for (auto c_it=m_mMacroCreators.begin(); c_it!=m_mMacroCreators.end(); ++c_it) {
+	for (auto c_it=mMacroCreators.begin(); c_it!=mMacroCreators.end(); ++c_it) {
 		MacroManagerBase* pobj = (*c_it)(view, key.c_str());
 		if (pobj) {
 			DEBUG_TRACE(_T("MacroFactory::Create/ Answered for (%ts)\n"), key.c_str());

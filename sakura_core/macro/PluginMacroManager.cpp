@@ -36,8 +36,8 @@
 ///////////////////////////////////////////////////////////////////////////////
 PluginMacroManager::PluginMacroManager(const WCHAR* Ext, Plug* plug)
 {
-	m_Ext = Ext;
-	m_Plug = plug;
+	ext = Ext;
+	plug = plug;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -51,13 +51,13 @@ bool PluginMacroManager::ExecKeyMacro(EditView& editView, int flags) const
 {
 	bool result = false;
 	WSHIfObj::List params;
-	MacroIfObj* objMacro = new MacroIfObj(MacroIfObj::MACRO_MODE_EXEC, m_Ext.c_str(), flags, m_source.c_str());
+	MacroIfObj* objMacro = new MacroIfObj(MacroIfObj::MACRO_MODE_EXEC, ext.c_str(), flags, source.c_str());
 	if (objMacro) {
 		objMacro->AddRef();
 		params.push_back(objMacro);
-		if (m_Plug) {
+		if (plug) {
 			objMacro->SetMatch(1);	// Run macro mode
-			m_Plug->Invoke(editView, params);
+			plug->Invoke(editView, params);
 			result = true;
 		}
 		objMacro->Release();
@@ -69,11 +69,11 @@ bool PluginMacroManager::ExecKeyMacro(EditView& editView, int flags) const
 //	ファイルからマクロを読み込む
 bool PluginMacroManager::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* Path)
 {
-	m_source = L"";
+	source = L"";
 	TextInputStream in(Path);
 	if (in) {
 		while (in) {
-			m_source += in.ReadLineW() + L"\r\n";
+			source += in.ReadLineW() + L"\r\n";
 		}
 		return true;
 	}
@@ -84,7 +84,7 @@ bool PluginMacroManager::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* Path)
 // 文字列からマクロを読み込む
 bool PluginMacroManager::LoadKeyMacroStr(HINSTANCE hInstance, const TCHAR* Code)
 {
-	m_source = to_wchar(Code);
+	source = to_wchar(Code);
 	return true;
 }
 

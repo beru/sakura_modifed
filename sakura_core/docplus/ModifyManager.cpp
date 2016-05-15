@@ -10,22 +10,22 @@ void ModifyManager::OnAfterSave(const SaveInfo& saveInfo)
 	EditDoc* pDoc = GetListeningDoc();
 
 	// 行変更状態をすべてリセット
-	ModifyVisitor().ResetAllModifyFlag(pDoc->m_docLineMgr, pDoc->m_docEditor.m_opeBuf.GetCurrentPointer());
+	ModifyVisitor().ResetAllModifyFlag(pDoc->docLineMgr, pDoc->docEditor.opeBuf.GetCurrentPointer());
 }
 
 bool ModifyVisitor::IsLineModified(const DocLine* pDocLine, int saveSeq) const
 {
-	return pDocLine->m_mark.m_modified.GetSeq() != saveSeq;
+	return pDocLine->mark.modified.GetSeq() != saveSeq;
 }
 
 int ModifyVisitor::GetLineModifiedSeq(const DocLine* pDocLine) const
 {
-	return pDocLine->m_mark.m_modified.GetSeq();
+	return pDocLine->mark.modified.GetSeq();
 }
 
 void ModifyVisitor::SetLineModified(DocLine* pDocLine, int seq)
 {
-	pDocLine->m_mark.m_modified = seq;
+	pDocLine->mark.modified = seq;
 }
 
 // 行変更状態をすべてリセット

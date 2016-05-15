@@ -39,11 +39,11 @@ public:
 	DllPlug(Plugin& plugin, PlugId id, const wstring& sJack, const wstring& sHandler, const wstring& sLabel)
 		:
 		Plug(plugin, id, sJack, sHandler, sLabel),
-		m_handler(NULL)
+		handler(NULL)
 	{
 	}
 public:
-	DllPlugHandler m_handler;
+	DllPlugHandler handler;
 };
 
 class DllPlugin :
@@ -71,7 +71,7 @@ public:
 	}
 	Plug* CreatePlug(Plugin& plugin, PlugId id, const wstring& sJack, const wstring& sHandler, const wstring& sLabel);
 	Plug::Array GetPlugs() const {
-		return m_plugs;
+		return plugs;
 	}
 	bool InvokePlug(EditView& view, Plug& plug, WSHIfObj::List& params);
 
@@ -84,7 +84,7 @@ public:
 
 	// ÉÅÉìÉoïœêî
 private:
-	wstring m_sDllName;
+	wstring sDllName;
 
 };
 

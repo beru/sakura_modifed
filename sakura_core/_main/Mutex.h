@@ -42,24 +42,24 @@ public:
 		LPCTSTR pszName,
 		LPSECURITY_ATTRIBUTES psa = NULL
 	) {
-		m_hObj = ::CreateMutex(psa, bInitialOwner, pszName);
+		hObj = ::CreateMutex(psa, bInitialOwner, pszName);
 	}
 	~Mutex() {
-		if (m_hObj) {
-			::CloseHandle(m_hObj);
-			m_hObj = NULL;
+		if (hObj) {
+			::CloseHandle(hObj);
+			hObj = NULL;
 		}
 	}
 	bool Lock(DWORD dwTimeout = INFINITE) {
-		DWORD dwRet = ::WaitForSingleObject(m_hObj, dwTimeout);
+		DWORD dwRet = ::WaitForSingleObject(hObj, dwTimeout);
 		return (dwRet == WAIT_OBJECT_0 || dwRet == WAIT_ABANDONED);
 	}
 	bool Unlock() {
-		return ::ReleaseMutex(m_hObj) != 0;
+		return ::ReleaseMutex(hObj) != 0;
 	}
-	operator HANDLE() const { return m_hObj; }
+	operator HANDLE() const { return hObj; }
 protected:
-	HANDLE m_hObj;
+	HANDLE hObj;
 };
 
 /**	スコープから抜けると同時にロックを解除する．

@@ -50,7 +50,7 @@ public:
 	// Jan. 22, 2002 genta Modified Flagの設定
 	void SetModified(bool flag, bool redraw);
 	// ファイルが修正中かどうか
-	bool IsModified() const { return m_bIsDocModified; }
+	bool IsModified() const { return bIsDocModified; }
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                           設定                              //
@@ -59,21 +59,21 @@ public:
 	void SetImeMode(int mode);	// IME状態の設定
 
 	// May 15, 2000 genta
-	Eol  GetNewLineCode() const { return m_newLineCode; }
-	void  SetNewLineCode(const Eol& t) { m_newLineCode = t; }
+	Eol  GetNewLineCode() const { return newLineCode; }
+	void  SetNewLineCode(const Eol& t) { newLineCode = t; }
 
 	// Oct. 2, 2005 genta 挿入モードの設定
-	bool IsInsMode() const { return m_bInsMode; }
-	void SetInsMode(bool mode) { m_bInsMode = mode; }
+	bool IsInsMode() const { return bInsMode; }
+	void SetInsMode(bool mode) { bInsMode = mode; }
 
 	// Undo(元に戻す)可能な状態か？
 	bool IsEnableUndo(void) const {
-		return m_opeBuf.IsEnableUndo();
+		return opeBuf.IsEnableUndo();
 	}
 
 	// Redo(やり直し)可能な状態か？
 	bool IsEnableRedo(void) const {
-		return m_opeBuf.IsEnableRedo();
+		return opeBuf.IsEnableRedo();
 	}
 
 	// クリップボードから貼り付け可能か？
@@ -82,19 +82,19 @@ public:
 	}
 
 public:
-	EditDoc&		m_doc;
-	Eol 			m_newLineCode;				// Enter押下時に挿入する改行コード種別
-	OpeBuf			m_opeBuf;					// アンドゥバッファ
-	OpeBlk*			m_pOpeBlk;					// 操作ブロック
-	int				m_nOpeBlkRedawCount;		// OpeBlkの再描画非対象数
-	bool			m_bInsMode;					// 挿入・上書きモード Oct. 2, 2005 genta
-	bool			m_bIsDocModified;
+	EditDoc&	doc;
+	Eol 		newLineCode;			// Enter押下時に挿入する改行コード種別
+	OpeBuf		opeBuf;					// アンドゥバッファ
+	OpeBlk*		pOpeBlk;				// 操作ブロック
+	int			nOpeBlkRedawCount;		// OpeBlkの再描画非対象数
+	bool		bInsMode;				// 挿入・上書きモード Oct. 2, 2005 genta
+	bool		bIsDocModified;
 };
 
 
 class DocEditAgent {
 public:
-	DocEditAgent(DocLineMgr& docLineMgr) : m_docLineMgr(docLineMgr) { }
+	DocEditAgent(DocLineMgr& docLineMgr) : docLineMgr(docLineMgr) { }
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                           操作                              //
@@ -103,6 +103,6 @@ public:
 	void AddLineStrX(const wchar_t*, int);	// 末尾に行を追加 Ver1.5
 
 private:
-	DocLineMgr& m_docLineMgr;
+	DocLineMgr& docLineMgr;
 };
 

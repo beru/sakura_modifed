@@ -116,9 +116,9 @@ inline bool IsValidCodeOrCPTypeExceptSJIS(int code)
 
 class CodeTypeName {
 public:
-	CodeTypeName(EncodingType eCodeType) : m_eCodeType(eCodeType) { InitCodeSet(); }
-	CodeTypeName(int eCodeType) : m_eCodeType((EncodingType)eCodeType) { InitCodeSet(); }
-	EncodingType GetCode() const { return m_eCodeType; }
+	CodeTypeName(EncodingType eCodeType) : eCodeType(eCodeType) { InitCodeSet(); }
+	CodeTypeName(int eCodeType) : eCodeType((EncodingType)eCodeType) { InitCodeSet(); }
+	EncodingType GetCode() const { return eCodeType; }
 	LPCTSTR	Normal() const;
 	LPCTSTR	Short() const;
 	LPCTSTR	Bracket() const;
@@ -126,7 +126,7 @@ public:
 	bool	CanDefault();
 	bool	IsBomDefOn();
 private:
-	EncodingType m_eCodeType;
+	EncodingType eCodeType;
 };
 
 

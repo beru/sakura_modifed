@@ -239,8 +239,8 @@ LRESULT CALLBACK PropSheetWndProc(
 				);
 				if (nMsgResult == IDOK) {
 					DllSharedData *pShareData = &GetDllShareData();
-					GetInidir(pShareData->history.m_szIMPORTFOLDER);
-					AddLastChar(pShareData->history.m_szIMPORTFOLDER, _countof2(pShareData->history.m_szIMPORTFOLDER), _T('\\'));
+					GetInidir(pShareData->history.szIMPORTFOLDER);
+					AddLastChar(pShareData->history.szIMPORTFOLDER, _countof2(pShareData->history.szIMPORTFOLDER), _T('\\'));
 				}
 				break;
 			}

@@ -64,7 +64,7 @@ EFunctionCode FuncLookup::Pos2FuncCode(int category, int position, bool bGetUnav
 	}else if (category == nsFuncCode::nFuncKindNum + LUOFFSET_MACRO) {
 		// キー割り当てマクロ
 		if (position < MAX_CUSTMACRO) {
-			if (bGetUnavailable || m_pMacroRec[position].IsEnabled()) {
+			if (bGetUnavailable || pMacroRec[position].IsEnabled()) {
 				return (EFunctionCode)(F_USERMACRO_0 + position);
 			}
 		}
@@ -117,8 +117,8 @@ bool FuncLookup::Funccode2Name(int funccode, WCHAR* ptr, int bufsize) const
 
 	if (F_USERMACRO_0 <= funccode && funccode < F_USERMACRO_0 + MAX_CUSTMACRO) {
 		int position = funccode - F_USERMACRO_0;
-		if (m_pMacroRec[position].IsEnabled()) {
-			const TCHAR* p = m_pMacroRec[position].GetTitle();
+		if (pMacroRec[position].IsEnabled()) {
+			const TCHAR* p = pMacroRec[position].GetTitle();
 			_tcstowcs(ptr, p, bufsize - 1);
 			ptr[bufsize - 1] = LTEXT('\0');
 		}else {
@@ -260,9 +260,9 @@ const WCHAR* FuncLookup::Custmenu2Name(int index, WCHAR buf[], int bufSize) cons
 		return NULL;
 	}
 	// 共通設定で名称を設定していればそれを返す
-	if (m_pCommon->customMenu.szCustMenuNameArr[index][0] != '\0') {
-		wcscpyn(buf, m_pCommon->customMenu.szCustMenuNameArr[index], bufSize);
-		return m_pCommon->customMenu.szCustMenuNameArr[index];
+	if (pCommon->customMenu.szCustMenuNameArr[index][0] != '\0') {
+		wcscpyn(buf, pCommon->customMenu.szCustMenuNameArr[index], bufSize);
+		return pCommon->customMenu.szCustMenuNameArr[index];
 	}
 
 	// 共通設定で未設定の場合、リソースのデフォルト名を返す

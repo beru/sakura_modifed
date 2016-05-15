@@ -20,17 +20,17 @@
 #include "_main/global.h"
 #include "Clipboard.h"
 
-OleLibrary CYbInterfaceBase::m_olelib;
+OleLibrary CYbInterfaceBase::olelib;
 
 CYbInterfaceBase::CYbInterfaceBase()
 {
-	m_olelib.Initialize();
+	olelib.Initialize();
 	return;
 }
 
 CYbInterfaceBase::~CYbInterfaceBase()
 {
-	m_olelib.UnInitialize();
+	olelib.UnInitialize();
 	return;
 }
 
@@ -52,7 +52,7 @@ HRESULT CYbInterfaceBase::QueryInterfaceImpl(
 
 /////////////////////////////////////////
 
-OleLibrary::OleLibrary()//:m_dwCount(0)	// 2009.01.08 ryoji m_dwCount削除
+OleLibrary::OleLibrary()//:dwCount(0)	// 2009.01.08 ryoji dwCount削除
 {
 	return;
 }
@@ -60,7 +60,7 @@ OleLibrary::OleLibrary()//:m_dwCount(0)	// 2009.01.08 ryoji m_dwCount削除
 OleLibrary::~OleLibrary()
 {
 // 2009.01.08 ryoji OleUninitialize削除（WinMainにOleInitialize/OleUninitialize追加）
-//	if (m_dwCount > 0)
+//	if (dwCount > 0)
 //		::OleUninitialize();
 	return;
 }
@@ -69,7 +69,7 @@ OleLibrary::~OleLibrary()
 void OleLibrary::Initialize()
 {
 // 2009.01.08 ryoji OleInitialize削除（WinMainにOleInitialize/OleUninitialize追加）
-//	if (m_dwCount++ == 0)
+//	if (dwCount++ == 0)
 //		::OleInitialize(NULL);
 	return;
 }
@@ -77,14 +77,14 @@ void OleLibrary::Initialize()
 void OleLibrary::UnInitialize()
 {
 // 2009.01.08 ryoji OleUninitialize削除（WinMainにOleInitialize/OleUninitialize追加）
-//	if (m_dwCount > 0 && --m_dwCount == 0)
+//	if (dwCount > 0 && --dwCount == 0)
 //		::OleUninitialize();
 	return;
 }
 
 
 #define DECLARE_YB_INTERFACEIMPL(BASEINTERFACE) \
-template <> REFIID CYbInterfaceImpl<BASEINTERFACE>::m_owniid = IID_##BASEINTERFACE;
+template <> REFIID CYbInterfaceImpl<BASEINTERFACE>::owniid = IID_##BASEINTERFACE;
 
 DECLARE_YB_INTERFACEIMPL(IDataObject)
 DECLARE_YB_INTERFACEIMPL(IDropSource)
@@ -94,17 +94,17 @@ DECLARE_YB_INTERFACEIMPL(IEnumFORMATETC)
 
 DropTarget::DropTarget(EditWnd* pEditWnd)
 {
-	m_pEditWnd = pEditWnd;	// 2008.06.20 ryoji
-	m_pEditView = nullptr;
-	m_hWnd_DropTarget = NULL;
+	this->pEditWnd = pEditWnd;	// 2008.06.20 ryoji
+	this->pEditView = nullptr;
+	hWnd_DropTarget = NULL;
 	return;
 }
 
 DropTarget::DropTarget(EditView* pEditView)
 {
-	m_pEditWnd = nullptr;	// 2008.06.20 ryoji
-	m_pEditView = pEditView;
-	m_hWnd_DropTarget = NULL;
+	this->pEditWnd = nullptr;	// 2008.06.20 ryoji
+	this->pEditView = pEditView;
+	hWnd_DropTarget = NULL;
 	return;
 }
 
@@ -122,7 +122,7 @@ BOOL DropTarget::Register_DropTarget(HWND hWnd)
 		TopWarningMessage(hWnd, LS(STR_ERR_DLGDRPTGT1));
 		return FALSE;
 	}
-	m_hWnd_DropTarget = hWnd;
+	hWnd_DropTarget = hWnd;
 	return TRUE;
 }
 
@@ -130,9 +130,9 @@ BOOL DropTarget::Register_DropTarget(HWND hWnd)
 BOOL DropTarget::Revoke_DropTarget(void)
 {
 	BOOL bResult = TRUE;
-	if (m_hWnd_DropTarget) {
-		bResult = SUCCEEDED(::RevokeDragDrop(m_hWnd_DropTarget));
-		m_hWnd_DropTarget = NULL;
+	if (hWnd_DropTarget) {
+		bResult = SUCCEEDED(::RevokeDragDrop(hWnd_DropTarget));
+		hWnd_DropTarget = NULL;
 	}
 	return bResult;
 }
@@ -145,26 +145,26 @@ STDMETHODIMP DropTarget::DragEnter(
 	)
 {
 	DEBUG_TRACE(_T("DropTarget::DragEnter()\n"));
-	if (m_pEditWnd) {	// 2008.06.20 ryoji
-		return m_pEditWnd->DragEnter(pDataObject, dwKeyState, pt, pdwEffect);
+	if (pEditWnd) {	// 2008.06.20 ryoji
+		return pEditWnd->DragEnter(pDataObject, dwKeyState, pt, pdwEffect);
 	}
-	return m_pEditView->DragEnter(pDataObject, dwKeyState, pt, pdwEffect);
+	return pEditView->DragEnter(pDataObject, dwKeyState, pt, pdwEffect);
 }
 
 STDMETHODIMP DropTarget::DragOver(DWORD dwKeyState, POINTL pt, LPDWORD pdwEffect)
 {
-	if (m_pEditWnd) {	// 2008.06.20 ryoji
-		return m_pEditWnd->DragOver(dwKeyState, pt, pdwEffect);
+	if (pEditWnd) {	// 2008.06.20 ryoji
+		return pEditWnd->DragOver(dwKeyState, pt, pdwEffect);
 	}
-	return m_pEditView->DragOver(dwKeyState, pt, pdwEffect);
+	return pEditView->DragOver(dwKeyState, pt, pdwEffect);
 }
 
 STDMETHODIMP DropTarget::DragLeave(void)
 {
-	if (m_pEditWnd) {	// 2008.06.20 ryoji
-		return m_pEditWnd->DragLeave();
+	if (pEditWnd) {	// 2008.06.20 ryoji
+		return pEditWnd->DragLeave();
 	}
-	return m_pEditView->DragLeave();
+	return pEditView->DragLeave();
 }
 
 
@@ -175,19 +175,19 @@ STDMETHODIMP DropTarget::Drop(
 	LPDWORD pdwEffect
 	)
 {
-	if (m_pEditWnd) {	// 2008.06.20 ryoji
-		return m_pEditWnd->Drop(pDataObject, dwKeyState, pt, pdwEffect);
+	if (pEditWnd) {	// 2008.06.20 ryoji
+		return pEditWnd->Drop(pDataObject, dwKeyState, pt, pdwEffect);
 	}
-	return m_pEditView->Drop(pDataObject, dwKeyState, pt, pdwEffect);
+	return pEditView->Drop(pDataObject, dwKeyState, pt, pdwEffect);
 }
 
 
 STDMETHODIMP DropSource::QueryContinueDrag(BOOL bEscapePressed, DWORD dwKeyState)
 {
-	if (bEscapePressed || (dwKeyState & (m_bLeft ? MK_RBUTTON : MK_LBUTTON))) {
+	if (bEscapePressed || (dwKeyState & (bLeft ? MK_RBUTTON : MK_LBUTTON))) {
 		return DRAGDROP_S_CANCEL;
 	}
-	if (!(dwKeyState & (m_bLeft ? MK_LBUTTON : MK_RBUTTON))) {
+	if (!(dwKeyState & (bLeft ? MK_LBUTTON : MK_RBUTTON))) {
 		return DRAGDROP_S_DROP;
 	}
 	return S_OK;
@@ -209,44 +209,44 @@ STDMETHODIMP DropSource::GiveFeedback(DWORD dropEffect)
 void DataObject::SetText(LPCWSTR lpszText, int nTextLen, BOOL bColumnSelect)
 {
 	// Feb. 26, 2001, fixed by yebisuya sugoroku
-	if (m_pData) {
-		for (int i=0; i<m_nFormat; ++i) {
-			delete [](m_pData[i].data);
+	if (pData) {
+		for (int i=0; i<nFormat; ++i) {
+			delete [](pData[i].data);
 		}
-		delete []m_pData;
-		m_pData = nullptr;
-		m_nFormat = 0;
+		delete []pData;
+		pData = nullptr;
+		nFormat = 0;
 	}
 	if (lpszText) {
-		m_nFormat = bColumnSelect? 4: 3;	// 矩形を含めるか
-		m_pData = new DATA[m_nFormat];
+		nFormat = bColumnSelect? 4: 3;	// 矩形を含めるか
+		pData = new DATA[nFormat];
 
 		int i = 0;
-		m_pData[0].cfFormat = CF_UNICODETEXT;
-		m_pData[0].size = (nTextLen + 1) * sizeof(wchar_t);
-		m_pData[0].data = new BYTE[m_pData[0].size];
-		memcpy_raw(m_pData[0].data, lpszText, nTextLen * sizeof(wchar_t));
-		*((wchar_t*)m_pData[0].data + nTextLen) = L'\0';
+		pData[0].cfFormat = CF_UNICODETEXT;
+		pData[0].size = (nTextLen + 1) * sizeof(wchar_t);
+		pData[0].data = new BYTE[pData[0].size];
+		memcpy_raw(pData[0].data, lpszText, nTextLen * sizeof(wchar_t));
+		*((wchar_t*)pData[0].data + nTextLen) = L'\0';
 
 		++i;
-		m_pData[i].cfFormat = CF_TEXT;
-		m_pData[i].size = ::WideCharToMultiByte(CP_ACP, 0, (LPCWSTR)m_pData[0].data, m_pData[0].size/sizeof(wchar_t), NULL, 0, NULL, NULL);
-		m_pData[i].data = new BYTE[m_pData[i].size];
-		::WideCharToMultiByte(CP_ACP, 0, (LPCWSTR)m_pData[0].data, m_pData[0].size/sizeof(wchar_t), (LPSTR)m_pData[i].data, m_pData[i].size, NULL, NULL);
+		pData[i].cfFormat = CF_TEXT;
+		pData[i].size = ::WideCharToMultiByte(CP_ACP, 0, (LPCWSTR)pData[0].data, pData[0].size/sizeof(wchar_t), NULL, 0, NULL, NULL);
+		pData[i].data = new BYTE[pData[i].size];
+		::WideCharToMultiByte(CP_ACP, 0, (LPCWSTR)pData[0].data, pData[0].size/sizeof(wchar_t), (LPSTR)pData[i].data, pData[i].size, NULL, NULL);
 
 		++i;
-		m_pData[i].cfFormat = Clipboard::GetSakuraFormat();
-		m_pData[i].size = sizeof(int) + nTextLen * sizeof(wchar_t);
-		m_pData[i].data = new BYTE[m_pData[i].size];
-		*(int*)m_pData[i].data = nTextLen;
-		memcpy_raw(m_pData[i].data + sizeof(int), lpszText, nTextLen * sizeof(wchar_t));
+		pData[i].cfFormat = Clipboard::GetSakuraFormat();
+		pData[i].size = sizeof(int) + nTextLen * sizeof(wchar_t);
+		pData[i].data = new BYTE[pData[i].size];
+		*(int*)pData[i].data = nTextLen;
+		memcpy_raw(pData[i].data + sizeof(int), lpszText, nTextLen * sizeof(wchar_t));
 
 		++i;
 		if (bColumnSelect) {
-			m_pData[i].cfFormat = (CLIPFORMAT)::RegisterClipboardFormat(_T("MSDEVColumnSelect"));
-			m_pData[i].size = 1;
-			m_pData[i].data = new BYTE[1];
-			m_pData[i].data[0] = '\0';
+			pData[i].cfFormat = (CLIPFORMAT)::RegisterClipboardFormat(_T("MSDEVColumnSelect"));
+			pData[i].size = 1;
+			pData[i].data = new BYTE[1];
+			pData[i].data[0] = '\0';
 		}
 	}
 }
@@ -269,7 +269,7 @@ STDMETHODIMP DataObject::GetData(LPFORMATETC lpfe, LPSTGMEDIUM lpsm)
 	// Feb. 26, 2001, fixed by yebisuya sugoroku
 	if (!lpfe || !lpsm)
 		return E_INVALIDARG;
-	if (!m_pData)
+	if (!pData)
 		return OLE_E_NOTRUNNING;
 	if (lpfe->lindex != -1)
 		return DV_E_LINDEX;
@@ -283,16 +283,16 @@ STDMETHODIMP DataObject::GetData(LPFORMATETC lpfe, LPSTGMEDIUM lpsm)
 		return DV_E_FORMATETC;
 
 	int i;
-	for (i=0; i<m_nFormat; ++i) {
-		if (lpfe->cfFormat == m_pData[i].cfFormat)
+	for (i=0; i<nFormat; ++i) {
+		if (lpfe->cfFormat == pData[i].cfFormat)
 			break;
 	}
-	if (i == m_nFormat)
+	if (i == nFormat)
 		return DV_E_FORMATETC;
 
 	lpsm->tymed = TYMED_HGLOBAL;
-	lpsm->hGlobal = ::GlobalAlloc(GHND | GMEM_DDESHARE, m_pData[i].size);
-	memcpy_raw(::GlobalLock(lpsm->hGlobal), m_pData[i].data, m_pData[i].size);
+	lpsm->hGlobal = ::GlobalAlloc(GHND | GMEM_DDESHARE, pData[i].size);
+	memcpy_raw(::GlobalLock(lpsm->hGlobal), pData[i].data, pData[i].size);
 	::GlobalUnlock(lpsm->hGlobal);
 	lpsm->pUnkForRelease = nullptr;
 
@@ -307,7 +307,7 @@ STDMETHODIMP DataObject::GetDataHere(LPFORMATETC lpfe, LPSTGMEDIUM lpsm)
 	// Feb. 26, 2001, fixed by yebisuya sugoroku
 	if (!lpfe || !lpsm || !lpsm->hGlobal)
 		return E_INVALIDARG;
-	if (!m_pData)
+	if (!pData)
 		return OLE_E_NOTRUNNING;
 
 	if (lpfe->lindex != -1)
@@ -319,16 +319,16 @@ STDMETHODIMP DataObject::GetDataHere(LPFORMATETC lpfe, LPSTGMEDIUM lpsm)
 		return DV_E_DVASPECT;
 
 	int i;
-	for (i=0; i<m_nFormat; ++i) {
-		if (lpfe->cfFormat == m_pData[i].cfFormat)
+	for (i=0; i<nFormat; ++i) {
+		if (lpfe->cfFormat == pData[i].cfFormat)
 			break;
 	}
-	if (i == m_nFormat)
+	if (i == nFormat)
 		return DV_E_FORMATETC;
-	if (m_pData[i].size > ::GlobalSize(lpsm->hGlobal))
+	if (pData[i].size > ::GlobalSize(lpsm->hGlobal))
 		return STG_E_MEDIUMFULL;
 
-	memcpy_raw(::GlobalLock(lpsm->hGlobal), m_pData[i].data, m_pData[i].size);
+	memcpy_raw(::GlobalLock(lpsm->hGlobal), pData[i].data, pData[i].size);
 	::GlobalUnlock(lpsm->hGlobal);
 
 	return S_OK;
@@ -342,7 +342,7 @@ STDMETHODIMP DataObject::QueryGetData(LPFORMATETC lpfe)
 	if (!lpfe)
 		return E_INVALIDARG;
 	// Feb. 26, 2001, fixed by yebisuya sugoroku
-	if (!m_pData)
+	if (!pData)
 		return OLE_E_NOTRUNNING;
 
 	if (lpfe->ptd
@@ -352,11 +352,11 @@ STDMETHODIMP DataObject::QueryGetData(LPFORMATETC lpfe)
 		return DATA_E_FORMATETC;
 
 	int i;
-	for (i=0; i<m_nFormat; ++i) {
-		if (lpfe->cfFormat == m_pData[i].cfFormat)
+	for (i=0; i<nFormat; ++i) {
+		if (lpfe->cfFormat == pData[i].cfFormat)
 			break;
 	}
-	if (i == m_nFormat)
+	if (i == nFormat)
 		return DATA_E_FORMATETC;
 	return S_OK;
 }
@@ -403,20 +403,20 @@ STDMETHODIMP DataObject::EnumDAdvise(LPENUMSTATDATA*)
 */
 STDMETHODIMP EnumFORMATETC::Next(ULONG celt, FORMATETC* rgelt, ULONG* pceltFetched)
 {
-	if (celt <= 0 || !rgelt || m_nIndex >= m_pDataObject->m_nFormat)
+	if (celt <= 0 || !rgelt || nIndex >= pDataObject->nFormat)
 		return S_FALSE;
 	if (celt != 1 && !pceltFetched)
 		return S_FALSE;
 
 	ULONG i = celt;
-	while (m_nIndex < m_pDataObject->m_nFormat && i > 0) {
-		(*rgelt).cfFormat = m_pDataObject->m_pData[m_nIndex].cfFormat;
+	while (nIndex < pDataObject->nFormat && i > 0) {
+		(*rgelt).cfFormat = pDataObject->pData[nIndex].cfFormat;
 		(*rgelt).ptd = nullptr;
 		(*rgelt).dwAspect = DVASPECT_CONTENT;
 		(*rgelt).lindex = -1;
 		(*rgelt).tymed = TYMED_HGLOBAL;
 		++rgelt;
-		++m_nIndex;
+		++nIndex;
 		--i;
 	}
 	if (pceltFetched)
@@ -430,8 +430,8 @@ STDMETHODIMP EnumFORMATETC::Next(ULONG celt, FORMATETC* rgelt, ULONG* pceltFetch
 */
 STDMETHODIMP EnumFORMATETC::Skip(ULONG celt)
 {
-	while (m_nIndex < m_pDataObject->m_nFormat && celt > 0) {
-		++m_nIndex;
+	while (nIndex < pDataObject->nFormat && celt > 0) {
+		++nIndex;
 		--celt;
 	}
 
@@ -443,7 +443,7 @@ STDMETHODIMP EnumFORMATETC::Skip(ULONG celt)
 */
 STDMETHODIMP EnumFORMATETC::Reset(void)
 {
-	m_nIndex = 0;
+	nIndex = 0;
 	return S_OK;
 }
 

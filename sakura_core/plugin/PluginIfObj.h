@@ -59,7 +59,7 @@ public:
 		WSHIfObj(L"Plugin", false),
 		plugin(plugin)
 	{
-		m_nPlugIndex = -1;
+		nPlugIndex = -1;
 	}
 
 	// デストラクタ
@@ -68,16 +68,16 @@ public:
 
 	// 操作
 public:
-	void SetPlugIndex(int nIndex) { m_nPlugIndex = nIndex; }
+	void SetPlugIndex(int nIndex) { nPlugIndex = nIndex; }
 	// 実装
 public:
 	// コマンド情報を取得する
 	MacroFuncInfoArray GetMacroCommandInfo() const {
-		return m_macroFuncInfoCommandArr;
+		return macroFuncInfoCommandArr;
 	}
 	// 関数情報を取得する
 	MacroFuncInfoArray GetMacroFuncInfo() const {
-		return m_macroFuncInfoArr;
+		return macroFuncInfoArr;
 	}
 	// 関数を処理する
 	bool HandleFunction(
@@ -93,7 +93,7 @@ public:
 		switch (LOWORD(index)) {
 		case F_PL_GETPLUGINDIR:			// プラグインフォルダパスを取得する
 			{
-				SysString S(plugin.m_sBaseDir.c_str(), plugin.m_sBaseDir.size());
+				SysString S(plugin.sBaseDir.c_str(), plugin.sBaseDir.size());
 				Wrap(&result)->Receive(S);
 			}
 			return true;
@@ -121,7 +121,7 @@ public:
 					&& LOWORD(index) == F_PL_GETOPTION
 				) {
 					// 設定されていなければデフォルトを取得 
-					for (auto it=plugin.m_options.begin(); it!=plugin.m_options.end(); ++it) {
+					for (auto it=plugin.options.begin(); it!=plugin.options.end(); ++it) {
 						wstring sSectionTmp;
 						wstring sKeyTmp;
 						(*it)->GetKey(&sSectionTmp, &sKeyTmp);
@@ -138,7 +138,7 @@ public:
 			return true;
 		case F_PL_GETCOMMANDNO:			// 実行中プラグの番号を取得する
 			{
-				Wrap(&result)->Receive(m_nPlugIndex);
+				Wrap(&result)->Receive(nPlugIndex);
 			}
 			return true;
 		case F_PL_GETSTRING:
@@ -148,12 +148,12 @@ public:
 					return false;
 				}
 				if (0 < num && num < MAX_PLUG_STRING) {
-					std::wstring& str = plugin.m_aStrings[num];
+					std::wstring& str = plugin.aStrings[num];
 					SysString s(str.c_str(), str.size());
 					Wrap(&result)->Receive(s);
 					return true;
 				}else if (num == 0) {
-					std::wstring str = to_wchar(plugin.m_sLangName.c_str());
+					std::wstring str = to_wchar(plugin.sLangName.c_str());
 					SysString s(str.c_str(), str.size());
 					Wrap(&result)->Receive(s);
 					return true;
@@ -189,7 +189,7 @@ public:
 		case F_PL_ADDCOMMAND:			// コマンドを追加する
 			{
 				int id = plugin.AddCommand(arguments[0], arguments[1], arguments[2], true);
-				view.m_editWnd.RegisterPluginCommand(id);
+				view.editWnd.RegisterPluginCommand(id);
 			}
 			break;
 		}
@@ -200,8 +200,8 @@ public:
 public:
 private:
 	Plugin& plugin;
-	static MacroFuncInfo m_macroFuncInfoCommandArr[];	// コマンド情報(戻り値なし)
-	static MacroFuncInfo m_macroFuncInfoArr[];	// 関数情報(戻り値あり)
-	int m_nPlugIndex;	// 実行中プラグの番号
+	static MacroFuncInfo macroFuncInfoCommandArr[];	// コマンド情報(戻り値なし)
+	static MacroFuncInfo macroFuncInfoArr[];	// 関数情報(戻り値あり)
+	int nPlugIndex;	// 実行中プラグの番号
 };
 

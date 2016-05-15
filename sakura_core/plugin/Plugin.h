@@ -83,10 +83,10 @@ public:
 public:
 	Plug(Plugin& plugin, PlugId id, const wstring& sJack, const wstring& sHandler, const wstring& sLabel)
 		:
-		m_id(id),
-		m_sJack(sJack),
-		m_sHandler(sHandler),
-		m_sLabel(sLabel),
+		id(id),
+		sJack(sJack),
+		sHandler(sHandler),
+		sLabel(sLabel),
 		plugin(plugin)
 	{
 	}
@@ -157,11 +157,11 @@ public:
 
 	// メンバ変数
 public:
-	const PlugId m_id;					// プラグID
-	const wstring m_sJack;				// 関連付けるジャック名
-	const wstring m_sHandler;			// ハンドラ文字列（関数名）
-	const wstring m_sLabel;				// ラベル文字列
-	wstring m_sIcon;					// アイコンのファイルパス
+	const PlugId id;				// プラグID
+	const wstring sJack;			// 関連付けるジャック名
+	const wstring sHandler;			// ハンドラ文字列（関数名）
+	const wstring sLabel;			// ラベル文字列
+	wstring sIcon;					// アイコンのファイルパス
 	Plugin& plugin;					// 親プラグイン
 };
 
@@ -189,17 +189,17 @@ public:
 		int index
 		)
 		:
-		m_parent(parent)
+		parent(parent),
+		sLabel(sLabel),
+		sSection(sSection),
+		sKey(sKey),
+		sType(sType),
+		sSelects(sSelects),
+		sDefaultVal(sDefaultVal),
+		index(index)
 	{
-		m_sLabel	= sLabel;
-		m_sSection	= sSection;
-		m_sKey		= sKey;
 		// 小文字変換
-		m_sType		= sType;
-		std::transform(m_sType.begin(), m_sType.end(), m_sType.begin(), tolower);
-		m_sSelects	= sSelects;
-		m_sDefaultVal = sDefaultVal;
-		m_index		= index;
+		std::transform(this->sType.begin(), this->sType.end(), this->sType.begin(), tolower);
 	}
 
 	// デストラクタ
@@ -208,32 +208,31 @@ public:
 
 	// 操作
 public:
-	wstring	GetLabel(void)	{ return m_sLabel; }
+	wstring	GetLabel(void)	{ return sLabel; }
 	void	GetKey(wstring* sectin, wstring* key)	{ 
-		*sectin = m_sSection; 
-		*key = m_sKey;
+		*sectin = sSection; 
+		*key = sKey;
 	}
-	wstring	GetType(void)	{ return m_sType; }
-	int 	GetIndex(void)	{ return m_index; }
+	wstring	GetType(void)	{ return sType; }
+	int 	GetIndex(void)	{ return index; }
 	std::vector<wstring> GetSelects() {
-		return (wstring_split(m_sSelects, L'|'));
+		return (wstring_split(sSelects, L'|'));
 	}
-	wstring	GetDefaultVal() { return m_sDefaultVal; }
+	wstring	GetDefaultVal() { return sDefaultVal; }
 
 protected:
-	Plugin&		m_parent;
-	wstring		m_sLabel;
-	wstring		m_sSection;
-	wstring		m_sKey;
-	wstring		m_sType;
-	wstring		m_sSelects;		// 選択候補
-	wstring		m_sDefaultVal;
-	int 		m_index; 
+	Plugin&		parent;
+	wstring		sLabel;
+	wstring		sSection;
+	wstring		sKey;
+	wstring		sType;
+	wstring		sSelects;		// 選択候補
+	wstring		sDefaultVal;
+	int 		index; 
 };
 
 
 // プラグインクラス
-
 class Plugin {
 	// 型定義
 protected:
@@ -255,7 +254,7 @@ public:
 	// 操作
 public:
 	virtual int AddCommand(const WCHAR* handler, const WCHAR* label, const WCHAR* icon, bool doRegister);	// コマンドを追加する
-	int 	GetCommandCount()	{ return m_nCommandCount; }			// コマンド数を返す	2010/7/4 Uchi
+	int 	GetCommandCount()	{ return nCommandCount; }			// コマンド数を返す	2010/7/4 Uchi
 
 protected:
 	bool ReadPluginDefCommon(DataProfile& profile, DataProfile* profileMlang);	// プラグイン定義ファイルのCommonセクションを読み込む
@@ -281,29 +280,29 @@ protected:
 public:
 	tstring GetFilePath(const tstring& sFileName) const;					// プラグインフォルダ基準の相対パスをフルパスに変換
 	tstring GetPluginDefPath() const { return GetFilePath(PII_FILENAME); }	// プラグイン定義ファイルのパス
-	tstring GetOptionPath() const { return m_sOptionDir + PII_OPTFILEEXT; }	// オプションファイルのパス
+	tstring GetOptionPath() const { return sOptionDir + PII_OPTFILEEXT; }	// オプションファイルのパス
 	tstring GetFolderName() const;	// プラグインのフォルダ名を取得
 	virtual Plug::Array GetPlugs() const = 0;								// プラグの一覧
 
 	// メンバ変数
 public:
-	PluginId m_id;				// プラグイン番号（エディタがふる0～MAX_PLUGIN-1の番号）
-	wstring m_sId;				// プラグインID
-	wstring sName;			// プラグイン和名
-	wstring m_sDescription;		// プラグインについての簡単な記述
-	wstring m_sAuthor;			// 作者
-	wstring m_sVersion;			// バージョン
-	wstring m_sUrl;				// 配布URL
-	tstring m_sBaseDir;
-	tstring m_sOptionDir;
-	tstring m_sLangName;		// 言語名
-	PluginOption::Array m_options;		// オプション	// 2010/3/24 Uchi
-	std::vector<std::wstring> m_aStrings;	// 文字列
+	PluginId id;				// プラグイン番号（エディタがふる0～MAX_PLUGIN-1の番号）
+	wstring sId;				// プラグインID
+	wstring sName;				// プラグイン和名
+	wstring sDescription;		// プラグインについての簡単な記述
+	wstring sAuthor;			// 作者
+	wstring sVersion;			// バージョン
+	wstring sUrl;				// 配布URL
+	tstring sBaseDir;
+	tstring sOptionDir;
+	tstring sLangName;		// 言語名
+	PluginOption::Array options;		// オプション	// 2010/3/24 Uchi
+	std::vector<std::wstring> aStrings;	// 文字列
 private:
-	bool m_bLoaded;
+	bool bLoaded;
 protected:
-	Plug::Array m_plugs;
-	int m_nCommandCount;
+	Plug::Array plugs;
+	int nCommandCount;
 
 	// 非実装提供
 public:

@@ -30,15 +30,15 @@ private:
 
 public:
 	// コンストラクタ・デストラクタ
-	LaxInteger() { m_value = 0; }
-	LaxInteger(const Me& rhs) { m_value = rhs.m_value; }
-	LaxInteger(int value) { m_value = value; }
+	LaxInteger() { value = 0; }
+	LaxInteger(const Me& rhs) { value = rhs.value; }
+	LaxInteger(int value) { this->value = value; }
 
 	// 暗黙の変換
-	operator const int&() const { return m_value; }
-	operator       int&()       { return m_value; }
+	operator const int&() const { return value; }
+	operator       int&()       { return value; }
 
 private:
-	int m_value;
+	int value;
 };
 

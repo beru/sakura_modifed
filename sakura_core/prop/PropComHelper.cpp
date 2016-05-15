@@ -99,7 +99,7 @@ INT_PTR PropHelper::DispatchEvent(
 	WORD		wID;
 	NMHDR*		pNMHDR;
 
-	auto& csHelper = m_common.helper;
+	auto& csHelper = common.helper;
 
 	switch (uMsg) {
 	case WM_INITDIALOG:
@@ -183,10 +183,10 @@ INT_PTR PropHelper::DispatchEvent(
 						csHelper.nPointSize = nPointSize;	// 2009.10.01 ryoji
 						// キーワードヘルプ フォント表示	// 2013/4/24 Uchi
 						HFONT hFont = SetFontLabel(hwndDlg, IDC_STATIC_KEYWORDHELPFONT, csHelper.lf, csHelper.nPointSize);
-						if (m_hKeywordHelpFont) {
-							::DeleteObject(m_hKeywordHelpFont);
+						if (hKeywordHelpFont) {
+							::DeleteObject(hKeywordHelpFont);
 						}
-						m_hKeywordHelpFont = hFont;
+						hKeywordHelpFont = hFont;
 					}
 				}
 				return TRUE;
@@ -252,7 +252,7 @@ INT_PTR PropHelper::DispatchEvent(
 				return TRUE;
 //@@@ 2002.01.03 YAZAKI 最後に表示していたシートを正しく覚えていないバグ修正
 			case PSN_SETACTIVE:
-				m_nPageNum = ID_PROPCOM_PAGENUM_HELPER;
+				nPageNum = ID_PROPCOM_PAGENUM_HELPER;
 				return TRUE;
 			}
 //			break;	// default
@@ -285,9 +285,9 @@ INT_PTR PropHelper::DispatchEvent(
 
 	case WM_DESTROY:
 		// キーワードヘルプ フォント破棄	// 2013/4/24 Uchi
-		if (m_hKeywordHelpFont) {
-			::DeleteObject(m_hKeywordHelpFont);
-			m_hKeywordHelpFont = NULL;
+		if (hKeywordHelpFont) {
+			::DeleteObject(hKeywordHelpFont);
+			hKeywordHelpFont = NULL;
 		}
 		return TRUE;
 	}
@@ -297,7 +297,7 @@ INT_PTR PropHelper::DispatchEvent(
 // ダイアログデータの設定 Helper
 void PropHelper::SetData(HWND hwndDlg)
 {
-	auto& csHelper = m_common.helper;
+	auto& csHelper = common.helper;
 	
 	// 補完候補決定キー
 	::CheckDlgButton(hwndDlg, IDC_CHECK_m_bHokanKey_RETURN, csHelper.bHokanKey_RETURN);	// VK_RETURN 補完決定キーが有効/無効
@@ -314,7 +314,7 @@ void PropHelper::SetData(HWND hwndDlg)
 	::CheckDlgButton(hwndDlg, IDC_CHECK_HTMLHELPISSINGLE, csHelper.bHtmlHelpIsSingle ? BST_CHECKED : BST_UNCHECKED);
 
 	// キーワードヘルプ フォント	// 2013/4/24 Uchi
-	m_hKeywordHelpFont = SetFontLabel(hwndDlg, IDC_STATIC_KEYWORDHELPFONT, csHelper.lf, csHelper.nPointSize);
+	hKeywordHelpFont = SetFontLabel(hwndDlg, IDC_STATIC_KEYWORDHELPFONT, csHelper.lf, csHelper.nPointSize);
 
 	// migemo dict
 	::DlgItem_SetText(hwndDlg, IDC_EDIT_MIGEMO_DLL, csHelper.szMigemoDll);
@@ -325,7 +325,7 @@ void PropHelper::SetData(HWND hwndDlg)
 // ダイアログデータの取得 Helper
 int PropHelper::GetData(HWND hwndDlg)
 {
-	auto& csHelper = m_common.helper;
+	auto& csHelper = common.helper;
 	
 	// 補完候補決定キー
 	csHelper.bHokanKey_RETURN = DlgButton_IsChecked(hwndDlg, IDC_CHECK_m_bHokanKey_RETURN);// VK_RETURN 補完決定キーが有効/無効

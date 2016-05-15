@@ -140,7 +140,7 @@ BOOL DlgGrepReplace::OnBnClicked(int wID)
 			bool bStop = false;
 			EditView* pEditView = (EditView*)lParam;
 			if (IsButtonChecked(IDC_CHK_PASTE)
-				&& !pEditView->m_pEditDoc->m_docEditor.IsEnablePaste()
+				&& !pEditView->pEditDoc->docEditor.IsEnablePaste()
 			) {
 				OkMessage(GetHwnd(), LS(STR_DLGREPLC_CLIPBOARD));
 				CheckButton(IDC_CHK_PASTE, false);

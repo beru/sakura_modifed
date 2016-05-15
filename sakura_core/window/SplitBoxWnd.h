@@ -39,9 +39,9 @@ public:
 //	LRESULT DispatchEvent(HWND, UINT, WPARAM, LPARAM);	// メッセージディスパッチャ
 	
 private:
-	int			m_bVertical;	// 垂直分割ボックスか
-	int			m_nDragPosY;
-	int			m_nDragPosX;
+	int	bVertical;	// 垂直分割ボックスか
+	int	nDragPosY;
+	int	nDragPosX;
 protected:
 	// 仮想関数
 	

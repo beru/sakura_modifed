@@ -40,7 +40,7 @@ VARTYPE s_MacroArgEx_s[] = {VT_BSTR};
 MacroFuncInfoEx s_MacroInfoEx_s = {5, 5, s_MacroArgEx_s};
 #endif
 
-MacroFuncInfo SMacroMgr::m_macroFuncInfoCommandArr[] = 
+MacroFuncInfo SMacroMgr::macroFuncInfoCommandArr[] = 
 {
 //	機能番号			関数名			引数				作業用バッファ
 
@@ -417,9 +417,9 @@ MacroFuncInfo SMacroMgr::m_macroFuncInfoCommandArr[] =
 	{F_INVALID,	NULL, {VT_EMPTY, VT_EMPTY, VT_EMPTY, VT_EMPTY},	VT_EMPTY,	NULL}
 };
 
-MacroFuncInfo SMacroMgr::m_macroFuncInfoArr[] = 
+MacroFuncInfo SMacroMgr::macroFuncInfoArr[] = 
 {
-	//ID					関数名							引数										戻り値の型	m_pszData
+	//ID					関数名							引数										戻り値の型	pszData
 	{F_GETFILENAME,			LTEXT("GetFilename"),			{VT_EMPTY, VT_EMPTY, VT_EMPTY, VT_EMPTY},	VT_BSTR,	NULL }, // ファイル名を返す
 	{F_GETSAVEFILENAME,		LTEXT("GetSaveFilename"),		{VT_EMPTY, VT_EMPTY, VT_EMPTY, VT_EMPTY},	VT_BSTR,	NULL }, // 保存時のファイル名を返す 2006.09.04 ryoji
 	{F_GETSELECTED,			LTEXT("GetSelectedString"),		{VT_I4,    VT_EMPTY, VT_EMPTY, VT_EMPTY},	VT_BSTR,	NULL }, // 選択部分
@@ -496,18 +496,18 @@ SMacroMgr::SMacroMgr()
 {
 	MY_RUNNINGTIMER(runningTimer, "SMacroMgr::SMacroMgr");
 	
-	m_pShareData = &GetDllShareData();
+	pShareData = &GetDllShareData();
 	
 	PPAMacroMgr::Declare();
 	KeyMacroMgr::Declare();
 	WSHMacroManager::Declare();
 	
 	for (int i=0; i<MAX_CUSTMACRO; ++i) {
-		m_savedKeyMacros[i] = NULL;
+		savedKeyMacros[i] = NULL;
 	}
 	// Jun. 16, 2002 genta
-	m_pKeyMacro = NULL;
-	m_pTempMacro = NULL;
+	pKeyMacro = NULL;
+	pTempMacro = NULL;
 
 	// Sep. 15, 2005 FILE
 	SetCurrentIdx(INVALID_MACRO_IDX);
@@ -527,14 +527,14 @@ void SMacroMgr::ClearAll(void)
 {
 	for (int i=0; i<MAX_CUSTMACRO; ++i) {
 		// Apr. 29, 2002 genta
-		delete m_savedKeyMacros[i];
-		m_savedKeyMacros[i] = NULL;
+		delete savedKeyMacros[i];
+		savedKeyMacros[i] = NULL;
 	}
 	// Jun. 16, 2002 genta
-	delete m_pKeyMacro;
-	m_pKeyMacro = NULL;
-	delete m_pTempMacro;
-	m_pTempMacro = NULL;
+	delete pKeyMacro;
+	pKeyMacro = NULL;
+	delete pTempMacro;
+	pTempMacro = NULL;
 }
 
 /*! @briefキーマクロのバッファにデータ追加
@@ -552,14 +552,14 @@ int SMacroMgr::Append(
 {
 	assert(idx == STAND_KEYMACRO);
 	if (idx == STAND_KEYMACRO) {
-		KeyMacroMgr* pKeyMacro = dynamic_cast<KeyMacroMgr*>(m_pKeyMacro);
+		KeyMacroMgr* pKeyMacro = dynamic_cast<KeyMacroMgr*>(this->pKeyMacro);
 		if (!pKeyMacro) {
 			// 1. 実体がまだ無い場合
 			// 2. KeyMacroMgr以外の物が入っていた場合
 			// いずれにしても再生成する．
-			delete m_pKeyMacro;
-			m_pKeyMacro = new KeyMacroMgr;
-			pKeyMacro = dynamic_cast<KeyMacroMgr*>(m_pKeyMacro);
+			delete pKeyMacro;
+			pKeyMacro = new KeyMacroMgr;
+			pKeyMacro = dynamic_cast<KeyMacroMgr*>(pKeyMacro);
 		}
 		pKeyMacro->Append(nFuncID, lParams, editView);
 	}
@@ -589,11 +589,11 @@ bool SMacroMgr::Exec(
 	if (idx == STAND_KEYMACRO) {
 		// Jun. 16, 2002 genta
 		// キーマクロ以外のサポートによりNULLの可能性が出てきたので判定追加
-		if (m_pKeyMacro) {
+		if (pKeyMacro) {
 			// Sep. 15, 2005 FILE
 			// Jul. 01, 2007 マクロの多重実行時に備えて直前のマクロ番号を退避
 			int prevmacro = SetCurrentIdx(idx);
-			m_pKeyMacro->ExecKeyMacro2(editView, flags);
+			pKeyMacro->ExecKeyMacro2(editView, flags);
 			SetCurrentIdx(prevmacro);
 			return true;
 		}else {
@@ -601,9 +601,9 @@ bool SMacroMgr::Exec(
 		}
 	}
 	if (idx == TEMP_KEYMACRO) {		// 一時マクロ
-		if (m_pTempMacro) {
+		if (pTempMacro) {
 			int prevmacro = SetCurrentIdx( idx );
-			m_pTempMacro->ExecKeyMacro2(editView, flags);
+			pTempMacro->ExecKeyMacro2(editView, flags);
 			SetCurrentIdx( prevmacro );
 			return true;
 		}else {
@@ -615,7 +615,7 @@ bool SMacroMgr::Exec(
 
 	// 読み込み前か、毎回読み込む設定の場合は、ファイルを読み込みなおす
 	// Apr. 29, 2002 genta
-	if (!m_savedKeyMacros[idx] || ShareData::getInstance().BeReloadWhenExecuteMacro(idx)) {
+	if (!savedKeyMacros[idx] || ShareData::getInstance().BeReloadWhenExecuteMacro(idx)) {
 		// ShareDataから、マクロファイル名を取得
 		// Jun. 08, 2003 Moca 呼び出し側でパス名を用意
 		// Jun. 16, 2003 genta 書式をちょっと変更
@@ -634,7 +634,7 @@ bool SMacroMgr::Exec(
 	// Jul. 01, 2007 マクロの多重実行時に備えて直前のマクロ番号を退避
 	int prevmacro = SetCurrentIdx(idx);
 	SetCurrentIdx(idx);
-	m_savedKeyMacros[idx]->ExecKeyMacro2(editView, flags);
+	savedKeyMacros[idx]->ExecKeyMacro2(editView, flags);
 	SetCurrentIdx(prevmacro);
 
 	return true;
@@ -688,7 +688,7 @@ bool SMacroMgr::Load(
 		ext = pszType;
 	}
 
-	m_sMacroPath = _T("");
+	sMacroPath = _T("");
 	*ppMacro = MacroFactory::getInstance().Create(view, ext);
 	if (!*ppMacro) {
 		return false;
@@ -697,7 +697,7 @@ bool SMacroMgr::Load(
 	if (!pszType) {
 		bRet = (*ppMacro)->LoadKeyMacro(hInstance, pszPath);
 		if (idx == STAND_KEYMACRO || idx == TEMP_KEYMACRO) {
-			m_sMacroPath = pszPath;
+			sMacroPath = pszPath;
 		}
 	}else {
 		bRet = (*ppMacro)->LoadKeyMacroStr(hInstance, pszPath);
@@ -725,8 +725,8 @@ bool SMacroMgr::Load(
 void SMacroMgr::UnloadAll(void)
 {
 	for (int idx=0; idx<MAX_CUSTMACRO; ++idx) {
-		delete m_savedKeyMacros[idx];
-		m_savedKeyMacros[idx] = NULL;
+		delete savedKeyMacros[idx];
+		savedKeyMacros[idx] = NULL;
 	}
 
 }
@@ -747,19 +747,19 @@ bool SMacroMgr::Save(
 {
 	assert(idx == STAND_KEYMACRO);
 	if (idx == STAND_KEYMACRO) {
-		KeyMacroMgr* pKeyMacro = dynamic_cast<KeyMacroMgr*>(m_pKeyMacro);
+		KeyMacroMgr* pKeyMacro = dynamic_cast<KeyMacroMgr*>(this->pKeyMacro);
 		if (pKeyMacro) {
 			return pKeyMacro->SaveKeyMacro(hInstance, pszPath);
 		}
 		// Jun. 27, 2002 genta
 		// 空マクロの場合は正常終了と見なす．
-		if (!m_pKeyMacro) {
+		if (!pKeyMacro) {
 			return true;
 		}
 
 	}
 //	else if (0 <= idx && idx < MAX_CUSTMACRO) {
-//		return m_savedKeyMacros[idx]->SaveKeyMacro(hInstance, pszPath);
+//		return savedKeyMacros[idx]->SaveKeyMacro(hInstance, pszPath);
 //	}
 	return false;
 }
@@ -789,20 +789,20 @@ void SMacroMgr::Clear(int idx)
 	@return 構造体へのポインタ．見つからなければNULL
 	
 	@date 2002.06.16 genta
-	@date 2003.02.24 m_macroFuncInfoArrも検索対象にする
+	@date 2003.02.24 macroFuncInfoArrも検索対象にする
 */
 const MacroFuncInfo* SMacroMgr::GetFuncInfoByID(int nFuncID)
 {
 	// Jun. 27, 2002 genta
 	// 番人をコード0として拾ってしまうので，配列サイズによる判定をやめた．
-	for (int i=0; m_macroFuncInfoCommandArr[i].pszFuncName; ++i) {
-		if (m_macroFuncInfoCommandArr[i].nFuncID == nFuncID) {
-			return &m_macroFuncInfoCommandArr[i];
+	for (int i=0; macroFuncInfoCommandArr[i].pszFuncName; ++i) {
+		if (macroFuncInfoCommandArr[i].nFuncID == nFuncID) {
+			return &macroFuncInfoCommandArr[i];
 		}
 	}
-	for (int i=0; m_macroFuncInfoArr[i].pszFuncName; ++i) {
-		if (m_macroFuncInfoArr[i].nFuncID == nFuncID) {
-			return &m_macroFuncInfoArr[i];
+	for (int i=0; macroFuncInfoArr[i].pszFuncName; ++i) {
+		if (macroFuncInfoArr[i].nFuncID == nFuncID) {
+			return &macroFuncInfoArr[i];
 		}
 	}
 	return NULL;
@@ -882,9 +882,9 @@ EFunctionCode SMacroMgr::GetFuncInfoByName(
 	}
 
 	// コマンド関数を検索
-	for (int i=0; m_macroFuncInfoCommandArr[i].pszFuncName; ++i) {
-		if (auto_strcmp(normalizedFuncName, m_macroFuncInfoCommandArr[i].pszFuncName) == 0) {
-			EFunctionCode nFuncID = EFunctionCode(m_macroFuncInfoCommandArr[i].nFuncID);
+	for (int i=0; macroFuncInfoCommandArr[i].pszFuncName; ++i) {
+		if (auto_strcmp(normalizedFuncName, macroFuncInfoCommandArr[i].pszFuncName) == 0) {
+			EFunctionCode nFuncID = EFunctionCode(macroFuncInfoCommandArr[i].nFuncID);
 			if (pszFuncNameJapanese) {
 				wcsncpy(pszFuncNameJapanese, LSW(nFuncID), 255);
 				pszFuncNameJapanese[255] = L'\0';
@@ -893,9 +893,9 @@ EFunctionCode SMacroMgr::GetFuncInfoByName(
 		}
 	}
 	// 非コマンド関数を検索
-	for (int i=0; m_macroFuncInfoArr[i].pszFuncName; ++i) {
-		if (auto_strcmp(normalizedFuncName, m_macroFuncInfoArr[i].pszFuncName) == 0) {
-			EFunctionCode nFuncID = EFunctionCode(m_macroFuncInfoArr[i].nFuncID);
+	for (int i=0; macroFuncInfoArr[i].pszFuncName; ++i) {
+		if (auto_strcmp(normalizedFuncName, macroFuncInfoArr[i].pszFuncName) == 0) {
+			EFunctionCode nFuncID = EFunctionCode(macroFuncInfoArr[i].nFuncID);
 			if (pszFuncNameJapanese) {
 				wcsncpy(pszFuncNameJapanese, LSW(nFuncID), 255);
 				pszFuncNameJapanese[255] = L'\0';
@@ -1247,11 +1247,11 @@ MacroManagerBase** SMacroMgr::Idx2Ptr(int idx)
 	//	Jun. 16, 2002 genta
 	//	キーマクロ以外のマクロを読み込めるように
 	if (idx == STAND_KEYMACRO) {
-		return &m_pKeyMacro;
+		return &pKeyMacro;
 	}else if (idx == TEMP_KEYMACRO) {
-		return &m_pTempMacro;
+		return &pTempMacro;
 	}else if (0 <= idx && idx < MAX_CUSTMACRO) {
-		return &m_savedKeyMacros[idx];
+		return &savedKeyMacros[idx];
 	}
 
 	DEBUG_TRACE(_T("SMacroMgr::Idx2Ptr() Out of range: idx=%d\n"), idx);
@@ -1267,7 +1267,7 @@ MacroManagerBase** SMacroMgr::Idx2Ptr(int idx)
 */
 bool SMacroMgr::IsSaveOk(void)
 {
-	return !dynamic_cast<KeyMacroMgr*>(m_pKeyMacro) ? false : true;
+	return !dynamic_cast<KeyMacroMgr*>(pKeyMacro) ? false : true;
 }
 
 /*!
@@ -1278,8 +1278,8 @@ bool SMacroMgr::IsSaveOk(void)
 */
 MacroManagerBase* SMacroMgr::SetTempMacro(MacroManagerBase *newMacro)
 {
-	MacroManagerBase* oldMacro = m_pTempMacro;
-	m_pTempMacro = newMacro;
+	MacroManagerBase* oldMacro = pTempMacro;
+	pTempMacro = newMacro;
 	return oldMacro;
 }
 

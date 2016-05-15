@@ -39,9 +39,9 @@ bool Color_RegexKeyword::BeginColor(const StringRef& str, int nPos)
 	const EditView* pView = ColorStrategyPool::getInstance().GetCurrentView();
 
 	// 正規表現キーワード
-	if (pView->m_pRegexKeyword->RegexIsKeyword(str, nPos, &nMatchLen, &nMatchColor)) {
-		this->m_nCOMMENTEND = nPos + nMatchLen;  // キーワード文字列の終端をセットする
-		this->m_nCOMMENTMODE = ToColorIndexType_RegularExpression(nMatchColor);
+	if (pView->pRegexKeyword->RegexIsKeyword(str, nPos, &nMatchLen, &nMatchColor)) {
+		this->nCommentEnd = nPos + nMatchLen;  // キーワード文字列の終端をセットする
+		this->nCommentMode = ToColorIndexType_RegularExpression(nMatchColor);
 		return true;
 	}
 	return false;
@@ -50,14 +50,14 @@ bool Color_RegexKeyword::BeginColor(const StringRef& str, int nPos)
 
 bool Color_RegexKeyword::EndColor(const StringRef& str, int nPos)
 {
-	return (nPos == this->m_nCOMMENTEND);
+	return (nPos == this->nCommentEnd);
 }
 
 void Color_RegexKeyword::OnStartScanLogic()
 {
 	EditView* pView = ColorStrategyPool::getInstance().GetCurrentView();
-	if (m_pTypeData->bUseRegexKeyword) {
-		pView->m_pRegexKeyword->RegexKeyLineStart();
+	if (pTypeData->bUseRegexKeyword) {
+		pView->pRegexKeyword->RegexKeyLineStart();
 	}
 }
 

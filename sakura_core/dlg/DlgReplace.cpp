@@ -108,7 +108,7 @@ HWND DlgReplace::DoModeless(
 	bNotifyNotFound = csSearch.bNotifyNotFound;	// 検索／置換  見つからないときメッセージを表示
 	bSelected = bSelected;
 	ptEscCaretPos_PHY = ((EditView*)lParam)->GetCaret().GetCaretLogicPos();	// 検索/置換開始時のカーソル位置退避
-	((EditView*)lParam)->m_bSearch = true;			// 検索/置換開始位置の登録有無			02/07/28 ai
+	((EditView*)lParam)->bSearch = true;			// 検索/置換開始位置の登録有無			02/07/28 ai
 	return Dialog::DoModeless(hInstance, hwndParent, IDD_REPLACE, lParam, SW_SHOW);
 }
 
@@ -289,13 +289,13 @@ int DlgReplace::GetData(void)
 		}
 		// 2011.12.18 viewに直接設定
 		EditView* pEditView = (EditView*)lParam;
-		if (pEditView->m_strCurSearchKey == strText && pEditView->m_curSearchOption == searchOption) {
+		if (pEditView->strCurSearchKey == strText && pEditView->curSearchOption == searchOption) {
 		}else {
-			pEditView->m_strCurSearchKey = strText;
-			pEditView->m_curSearchOption = searchOption;
-			pEditView->m_bCurSearchUpdate = true;
+			pEditView->strCurSearchKey = strText;
+			pEditView->curSearchOption = searchOption;
+			pEditView->bCurSearchUpdate = true;
 		}
-		pEditView->m_nCurSearchKeySequence = GetDllShareData().common.search.nSearchKeySequence;
+		pEditView->nCurSearchKeySequence = GetDllShareData().common.search.nSearchKeySequence;
 
 		// 置換後文字列
 		//@@@ 2002.2.2 YAZAKI CShareData.AddToReplaceKeys()追加に伴う変更
@@ -403,7 +403,7 @@ BOOL DlgReplace::OnBnClicked(int wID)
 		// テキストの貼り付け
 		if (1
 			&& IsButtonChecked(IDC_CHK_PASTE)
-			&& !pEditView->m_pEditDoc->m_docEditor.IsEnablePaste()
+			&& !pEditView->pEditDoc->docEditor.IsEnablePaste()
 		) {
 			OkMessage(GetHwnd(), LS(STR_DLGREPLC_CLIPBOARD));
 			CheckButton(IDC_CHK_PASTE, false);
@@ -514,9 +514,9 @@ BOOL DlgReplace::OnBnClicked(int wID)
 		if (0 < nRet) {
 
 			// 検索開始位置を登録 02/07/28 ai start
-			if (pEditView->m_bSearch != FALSE) {
-				pEditView->m_ptSrchStartPos_PHY = ptEscCaretPos_PHY;
-				pEditView->m_bSearch = FALSE;
+			if (pEditView->bSearch != FALSE) {
+				pEditView->ptSrchStartPos_PHY = ptEscCaretPos_PHY;
+				pEditView->bSearch = FALSE;
 			}// 02/07/28 ai end
 
 			// コマンドコードによる処理振り分け
@@ -533,9 +533,9 @@ BOOL DlgReplace::OnBnClicked(int wID)
 		if (0 < nRet) {
 
 			// 検索開始位置を登録 02/07/28 ai start
-			if (pEditView->m_bSearch) {
-				pEditView->m_ptSrchStartPos_PHY = ptEscCaretPos_PHY;
-				pEditView->m_bSearch = false;
+			if (pEditView->bSearch) {
+				pEditView->ptSrchStartPos_PHY = ptEscCaretPos_PHY;
+				pEditView->bSearch = false;
 			}// 02/07/28 ai end
 
 			// コマンドコードによる処理振り分け
@@ -561,9 +561,9 @@ BOOL DlgReplace::OnBnClicked(int wID)
 		if (0 < nRet) {
 
 			// 置換開始位置を登録 02/07/28 ai start
-			if (pEditView->m_bSearch) {
-				pEditView->m_ptSrchStartPos_PHY = ptEscCaretPos_PHY;
-				pEditView->m_bSearch = false;
+			if (pEditView->bSearch) {
+				pEditView->ptSrchStartPos_PHY = ptEscCaretPos_PHY;
+				pEditView->bSearch = false;
 			}// 02/07/28 ai end
 
 			// 置換
@@ -580,9 +580,9 @@ BOOL DlgReplace::OnBnClicked(int wID)
 		nRet = GetData();
 		if (0 < nRet) {
 			// 置換開始位置を登録 02/07/28 ai start
-			if (pEditView->m_bSearch) {
-				pEditView->m_ptSrchStartPos_PHY = ptEscCaretPos_PHY;
-				pEditView->m_bSearch = false;
+			if (pEditView->bSearch) {
+				pEditView->ptSrchStartPos_PHY = ptEscCaretPos_PHY;
+				pEditView->bSearch = false;
 			}// 02/07/28 ai end
 
 			// すべて行置換時の処置は「すべて置換」は置換の繰返しオプションOFFの場合にして削除 2007.01.16 ryoji
@@ -623,7 +623,7 @@ BOOL DlgReplace::OnActivate(WPARAM wParam, LPARAM lParam)
 {
 	// 0文字幅マッチ描画のON/OFF	// 2009.11.29 ryoji
 	EditView*	pEditView = (EditView*)(this->lParam);
-	LayoutRange rangeSel = pEditView->GetSelectionInfo().m_select;
+	LayoutRange rangeSel = pEditView->GetSelectionInfo().select;
 	if (rangeSel.IsValid() && rangeSel.IsLineOne() && rangeSel.IsOne())
 		pEditView->InvalidateRect(NULL);	// アクティブ化／非アクティブ化が完了してから再描画
 

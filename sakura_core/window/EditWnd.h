@@ -203,8 +203,8 @@ public:
 	void SetWindowIcon(HICON, int);	//	Sep. 10, 2002 genta
 	void GetDefaultIcon(HICON* hIconBig, HICON* hIconSmall) const;	//	Sep. 10, 2002 genta
 	bool GetRelatedIcon(const TCHAR* szFile, HICON* hIconBig, HICON* hIconSmall) const;	//	Sep. 10, 2002 genta
-	void SetPageScrollByWheel(bool bState) { m_bPageScrollByWheel = bState; }		// ホイール操作によるページスクロール有無を設定する（TRUE=あり, FALSE=なし）	// 2009.01.17 nasukoji
-	void SetHScrollByWheel(bool bState) { m_bHorizontalScrollByWheel = bState; }	// ホイール操作による横スクロール有無を設定する（TRUE=あり, FALSE=なし）	// 2009.01.17 nasukoji
+	void SetPageScrollByWheel(bool bState) { bPageScrollByWheel = bState; }		// ホイール操作によるページスクロール有無を設定する（TRUE=あり, FALSE=なし）	// 2009.01.17 nasukoji
+	void SetHScrollByWheel(bool bState) { bHorizontalScrollByWheel = bState; }	// ホイール操作による横スクロール有無を設定する（TRUE=あり, FALSE=なし）	// 2009.01.17 nasukoji
 	void ClearMouseState(void);		// 2009.01.17 nasukoji	マウスの状態をクリアする（ホイールスクロール有無状態をクリア）
 	
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -212,18 +212,18 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	
 	// 自アプリがアクティブかどうか	// 2007.03.08 ryoji
-	bool IsActiveApp() const { return m_bIsActiveApp; }
+	bool IsActiveApp() const { return bIsActiveApp; }
 	
 	// ツールチップのテキストを取得。2007.09.08 kobake 追加
 	void GetTooltipText(TCHAR* wszBuf, size_t nBufCount, int nID) const;
 	
 	// 印刷Preview中かどうか
 	bool IsInPreviewMode() {
-		return m_pPrintPreview != nullptr;
+		return pPrintPreview != nullptr;
 	}
 	
-	bool IsPageScrollByWheel() const { return m_bPageScrollByWheel; }		// ホイール操作によるページスクロール有無	// 2009.01.17 nasukoji
-	bool IsHScrollByWheel() const { return m_bHorizontalScrollByWheel; }	// ホイール操作による横スクロール有無		// 2009.01.17 nasukoji
+	bool IsPageScrollByWheel() const { return bPageScrollByWheel; }		// ホイール操作によるページスクロール有無	// 2009.01.17 nasukoji
+	bool IsHScrollByWheel() const { return bHorizontalScrollByWheel; }	// ホイール操作による横スクロール有無		// 2009.01.17 nasukoji
 	
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                           表示                              //
@@ -245,7 +245,7 @@ public:
 	void Views_RedrawAll();
 	void Views_Redraw();
 	void SetActivePane(int);	// アクティブなペインを設定
-	int GetActivePane(void) const { return m_nActivePaneIndex; }	// アクティブなペインを取得		2007.08.26 kobake const追加
+	int GetActivePane(void) const { return nActivePaneIndex; }	// アクティブなペインを取得		2007.08.26 kobake const追加
 	bool SetDrawSwitchOfAllViews(bool bDraw);						// すべてのペインの描画スイッチを設定する	2008.06.08 ryoji
 	void RedrawAllViews(EditView* pViewExclude);					// すべてのペインをRedrawする
 	void Views_DisableSelectArea(bool bRedraw);
@@ -263,22 +263,22 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                       各種アクセサ                          //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-	HWND			GetHwnd() const			{ return m_hWnd; }
-	MenuDrawer&		GetMenuDrawer()			{ return m_menuDrawer; }
-	EditDoc&		GetDocument()			{ return *m_pEditDoc; }
-	const EditDoc&	GetDocument() const		{ return *m_pEditDoc; }
+	HWND			GetHwnd() const			{ return hWnd; }
+	MenuDrawer&		GetMenuDrawer()			{ return menuDrawer; }
+	EditDoc&		GetDocument()			{ return *pEditDoc; }
+	const EditDoc&	GetDocument() const		{ return *pEditDoc; }
 
 	// ビュー
-	const EditView&		GetActiveView() const		{ return *m_pEditView; }
-	EditView&			GetActiveView()				{ return *m_pEditView; }
-	const EditView&		GetView(int n) const		{ return *m_pEditViewArr[n]; }
-	EditView&			GetView(int n)				{ return *m_pEditViewArr[n]; }
-	EditView&			GetMiniMap()				{ return *m_pEditViewMiniMap; }
-	bool				IsEnablePane(int n) const	{ return 0 <= n && n < m_nEditViewCount; }
-	int					GetAllViewCount() const		{ return m_nEditViewCount; }
+	const EditView&		GetActiveView() const		{ return *pEditView; }
+	EditView&			GetActiveView()				{ return *pEditView; }
+	const EditView&		GetView(int n) const		{ return *pEditViewArr[n]; }
+	EditView&			GetView(int n)				{ return *pEditViewArr[n]; }
+	EditView&			GetMiniMap()				{ return *pEditViewMiniMap; }
+	bool				IsEnablePane(int n) const	{ return 0 <= n && n < nEditViewCount; }
+	int					GetAllViewCount() const		{ return nEditViewCount; }
 
-	EditView*			GetDragSourceView() const	{ return m_pDragSourceView; }
-	void				SetDragSourceView(EditView* pDragSourceView)	{ m_pDragSourceView = pDragSourceView; }
+	EditView*			GetDragSourceView() const	{ return pDragSourceView; }
+	void				SetDragSourceView(EditView* pDragSourceView)	{ pDragSourceView = pDragSourceView; }
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                         実装補助                            //
@@ -304,11 +304,11 @@ protected:
 	void CheckFreeSubMenuSub(HMENU, int);			// メニューバーの無効化を検査	2010/6/18 Uchi
 
 //public:
-	// 周期内でm_nTimerCountをインクリメント
+	// 周期内でnTimerCountをインクリメント
 	void IncrementTimerCount(int nInterval) {
-		++m_nTimerCount;
-		if (nInterval <= m_nTimerCount) { // 2012.11.29 aroka 呼び出し間隔のバグ修正
-			m_nTimerCount = 0;
+		++nTimerCount;
+		if (nInterval <= nTimerCount) { // 2012.11.29 aroka 呼び出し間隔のバグ修正
+			nTimerCount = 0;
 		}
 	}
 
@@ -317,10 +317,10 @@ protected:
 
 public:
 	// D&Dフラグ管理
-	void SetDragPosOrg(Point ptDragPosOrg)	{ m_ptDragPosOrg = ptDragPosOrg; }
-	void SetDragMode(bool bDragMode)		{ m_bDragMode = bDragMode; }
-	bool GetDragMode() const				{ return m_bDragMode; }
-	const Point& GetDragPosOrg() const		{ return m_ptDragPosOrg; }
+	void SetDragPosOrg(Point ptDragPosOrg)	{ ptDragPosOrg = ptDragPosOrg; }
+	void SetDragMode(bool bDragMode)		{ bDragMode = bDragMode; }
+	bool GetDragMode() const				{ return bDragMode; }
+	const Point& GetDragPosOrg() const		{ return ptDragPosOrg; }
 	
 	// IDropTarget実装		2008.06.20 ryoji
 	STDMETHODIMP DragEnter(LPDATAOBJECT, DWORD, POINTL, LPDWORD);
@@ -329,8 +329,8 @@ public:
 	STDMETHODIMP Drop(LPDATAOBJECT, DWORD, POINTL, LPDWORD);
 	
 	// フォーカス管理
-	int GetCurrentFocus() const { return m_nCurrentFocus; }
-	void SetCurrentFocus(int n) { m_nCurrentFocus = n; }
+	int GetCurrentFocus() const { return nCurrentFocus; }
+	void SetCurrentFocus(int n) { nCurrentFocus = n; }
 	
 	const LOGFONT& GetLogfont(bool bTempSetting = true);
 	int GetFontPointSize(bool bTempSetting = true);
@@ -342,85 +342,85 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 private:
 	// 自ウィンドウ
-	HWND			m_hWnd;
+	HWND			hWnd;
 
 	// 親ウィンドウ
-	HWND			m_hwndParent;
+	HWND			hwndParent;
 
 public:
 	// 子ウィンドウ
-	MainToolBar		m_toolbar;			// ツールバー
-	TabWnd			m_tabWnd;			// タブウィンドウ	//@@@ 2003.05.31 MIK
-	FuncKeyWnd		m_funcKeyWnd;		// ファンクションバー
-	MainStatusBar	m_statusBar;		// ステータスバー
-	PrintPreview*	m_pPrintPreview;	// 印刷Preview表示情報。必要になったときのみインスタンスを生成する。
+	MainToolBar		toolbar;		// ツールバー
+	TabWnd			tabWnd;			// タブウィンドウ	//@@@ 2003.05.31 MIK
+	FuncKeyWnd		funcKeyWnd;		// ファンクションバー
+	MainStatusBar	statusBar;		// ステータスバー
+	PrintPreview*	pPrintPreview;	// 印刷Preview表示情報。必要になったときのみインスタンスを生成する。
 
-	SplitterWnd		m_splitterWnd;		// 分割フレーム
-	EditView*		m_pDragSourceView;	// ドラッグ元のビュー
-	ViewFont*		m_pViewFont;		// フォント
-	ViewFont*		m_pViewFontMiniMap;	// フォント
+	SplitterWnd		splitterWnd;		// 分割フレーム
+	EditView*		pDragSourceView;	// ドラッグ元のビュー
+	ViewFont*		pViewFont;			// フォント
+	ViewFont*		pViewFontMiniMap;	// フォント
 
 	// ダイアログ達
-	DlgFind			m_dlgFind;			//「検索」ダイアログ
-	DlgReplace		m_dlgReplace;		//「置換」ダイアログ
-	DlgJump			m_dlgJump;			//「指定行へジャンプ」ダイアログ
-	DlgGrep			m_dlgGrep;			// Grepダイアログ
-	DlgGrepReplace	m_dlgGrepReplace;	// Grep置換ダイアログ
-	DlgFuncList		m_dlgFuncList;		// アウトライン解析結果ダイアログ
-	HokanMgr		m_hokanMgr;			// 入力補完
-	DlgSetCharSet	m_dlgSetCharSet;	//「文字コードセット設定」ダイアログ
+	DlgFind			dlgFind;		//「検索」ダイアログ
+	DlgReplace		dlgReplace;		//「置換」ダイアログ
+	DlgJump			dlgJump;		//「指定行へジャンプ」ダイアログ
+	DlgGrep			dlgGrep;		// Grepダイアログ
+	DlgGrepReplace	dlgGrepReplace;	// Grep置換ダイアログ
+	DlgFuncList		dlgFuncList;	// アウトライン解析結果ダイアログ
+	HokanMgr		hokanMgr;		// 入力補完
+	DlgSetCharSet	dlgSetCharSet;	//「文字コードセット設定」ダイアログ
 
 private:
 	// 2010.04.10 Moca  public -> private. 起動直後は[0]のみ有効 4つとは限らないので注意
-	EditDoc* 		m_pEditDoc;
-	EditView*		m_pEditViewArr[4];		// ビュー
-	EditView*		m_pEditView;			// 有効なビュー
-	EditView*		m_pEditViewMiniMap;		// ミニマップ
-	int				m_nActivePaneIndex;		// 有効なビューのindex
-	int				m_nEditViewCount;		// 有効なビューの数
-	const int		m_nEditViewMaxCount;	// ビューの最大数=4
+	EditDoc* 		pEditDoc;
+	EditView*		pEditViewArr[4];		// ビュー
+	EditView*		pEditView;			// 有効なビュー
+	EditView*		pEditViewMiniMap;		// ミニマップ
+	int				nActivePaneIndex;		// 有効なビューのindex
+	int				nEditViewCount;		// 有効なビューの数
+	const int		nEditViewMaxCount;	// ビューの最大数=4
 
 	// 共有データ
-	DllSharedData*	m_pShareData;
+	DllSharedData*	pShareData;
 
 	// ヘルパ
-	MenuDrawer		m_menuDrawer;
+	MenuDrawer		menuDrawer;
 
 	// メッセージID
-	UINT			m_uMSIMEReconvertMsg;
-	UINT			m_uATOKReconvertMsg;
+	UINT			uMSIMEReconvertMsg;
+	UINT			uATOKReconvertMsg;
 
 	// 状態
-	bool			m_bIsActiveApp;			// 自アプリがアクティブかどうか	// 2007.03.08 ryoji
-	LPTSTR			m_pszLastCaption;
-	LPTSTR			m_pszMenubarMessage;	// メニューバー右端に表示するメッセージ
+	bool			bIsActiveApp;			// 自アプリがアクティブかどうか	// 2007.03.08 ryoji
+	LPTSTR			pszLastCaption;
+	LPTSTR			pszMenubarMessage;		// メニューバー右端に表示するメッセージ
 public:
-	int				m_nTimerCount;			// OnTimer用 2003.08.29 wmlhq
-	LogicPointEx*	m_posSaveAry;
+	int				nTimerCount;			// OnTimer用 2003.08.29 wmlhq
+	LogicPointEx*	posSaveAry;
 private:
-	int				m_nCurrentFocus;			// 現在のフォーカス情報
-	int				m_nWinSizeType;				// サイズ変更のタイプ。SIZE_MAXIMIZED, SIZE_MINIMIZED 等。
-	bool			m_bPageScrollByWheel;		// ホイール操作によるページスクロールあり	// 2009.01.17 nasukoji
-	bool			m_bHorizontalScrollByWheel;	// ホイール操作による横スクロールあり		// 2009.01.17 nasukoji
-	HACCEL			m_hAccelWine;				// ウィンドウ毎のアクセラレータテーブルのハンドル(Wine用)	// 2009.08.15 nasukoji
-	HACCEL			m_hAccel;					// アクセラレータテーブル(共有 or ウィンドウ毎)
+	int				nCurrentFocus;				// 現在のフォーカス情報
+	int				nWinSizeType;				// サイズ変更のタイプ。SIZE_MAXIMIZED, SIZE_MINIMIZED 等。
+	bool			bPageScrollByWheel;			// ホイール操作によるページスクロールあり	// 2009.01.17 nasukoji
+	bool			bHorizontalScrollByWheel;	// ホイール操作による横スクロールあり		// 2009.01.17 nasukoji
+	HACCEL			hAccelWine;					// ウィンドウ毎のアクセラレータテーブルのハンドル(Wine用)	// 2009.08.15 nasukoji
+	HACCEL			hAccel;						// アクセラレータテーブル(共有 or ウィンドウ毎)
 
 	// フォント・イメージ
-	HFONT			m_hFontCaretPosInfo;		// キャレットの行桁位置表示用フォント
-	int				m_nCaretPosInfoCharWidth;	// キャレットの行桁位置表示用フォントの幅
-	int				m_nCaretPosInfoCharHeight;	// キャレットの行桁位置表示用フォントの高さ
+	HFONT			hFontCaretPosInfo;			// キャレットの行桁位置表示用フォント
+	int				nCaretPosInfoCharWidth;		// キャレットの行桁位置表示用フォントの幅
+	int				nCaretPosInfoCharHeight;	// キャレットの行桁位置表示用フォントの高さ
 
 	// D&Dフラグ
-	bool			m_bDragMode;
-	Point			m_ptDragPosOrg;
-	DropTarget*		m_pDropTarget;
+	bool			bDragMode;
+	Point			ptDragPosOrg;
+	DropTarget*		pDropTarget;
 
 	// その他フラグ
-	BOOL			m_bUIPI;		// エディタ－トレイ間でのUI特権分離確認用フラグ	// 2007.06.07 ryoji
-	IconClickStatus	m_iconClicked;
+	BOOL			bUIPI;		// エディタ－トレイ間でのUI特権分離確認用フラグ	// 2007.06.07 ryoji
+	IconClickStatus	iconClicked;
 
 public:
-	SelectCountMode	m_nSelectCountMode; // 選択文字カウント方法
+	SelectCountMode	nSelectCountMode; // 選択文字カウント方法
 
 };
 

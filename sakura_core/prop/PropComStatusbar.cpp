@@ -85,7 +85,7 @@ INT_PTR PropStatusbar::DispatchEvent(
 			return TRUE;
 
 		case PSN_SETACTIVE: //@@@ 2002.01.03 YAZAKI 最後に表示していたシートを正しく覚えていないバグ修正
-			m_nPageNum = ID_PROPCOM_PAGENUM_STATUSBAR;
+			nPageNum = ID_PROPCOM_PAGENUM_STATUSBAR;
 			return TRUE;
 		}
 		break;	// WM_NOTIFY
@@ -115,7 +115,7 @@ INT_PTR PropStatusbar::DispatchEvent(
 // ダイアログデータの設定
 void PropStatusbar::SetData(HWND hwndDlg)
 {
-	auto& csStatusbar = m_common.statusBar;
+	auto& csStatusbar = common.statusBar;
 	// 示文字コードの指定
 	// SJISで文字コード値をUnicodeで出力する
 	::CheckDlgButton(hwndDlg, IDC_CHECK_DISP_UNICODE_IN_SJIS, csStatusbar.bDispUniInSjis);
@@ -135,7 +135,7 @@ void PropStatusbar::SetData(HWND hwndDlg)
 // ダイアログデータの取得
 int PropStatusbar::GetData(HWND hwndDlg)
 {
-	auto& csStatusbar = m_common.statusBar;
+	auto& csStatusbar = common.statusBar;
 	// 表示文字コードの指定
 	// SJISで文字コード値をUnicodeで出力する
 	csStatusbar.bDispUniInSjis	= DlgButton_IsChecked(hwndDlg, IDC_CHECK_DISP_UNICODE_IN_SJIS);

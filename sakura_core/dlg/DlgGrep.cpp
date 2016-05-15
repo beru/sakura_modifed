@@ -460,7 +460,7 @@ void DlgGrep::SetData(void)
 //	EnableItem(IDC_CHK_WORD) , false);	// チェックボックスを使用不可にすも
 
 	// 文字コード自動判別
-//	CheckButton(IDC_CHK_KANJICODEAUTODETECT, m_bKanjiCode_AutoDetect);
+//	CheckButton(IDC_CHK_KANJICODEAUTODETECT, bKanjiCode_AutoDetect);
 
 	// 2002/09/22 Moca Add
 	// 文字コードセット
@@ -596,7 +596,7 @@ int DlgGrep::GetData(void)
 	searchOption.bRegularExp = IsButtonChecked(IDC_CHK_REGULAREXP);
 
 	// 文字コード自動判別
-//	m_bKanjiCode_AutoDetect = IsButtonChecked(IDC_CHK_KANJICODEAUTODETECT);
+//	bKanjiCode_AutoDetect = IsButtonChecked(IDC_CHK_KANJICODEAUTODETECT);
 
 	// 文字コードセット
 	{
@@ -650,7 +650,7 @@ int DlgGrep::GetData(void)
 	csSearch.bGrepSeparateFolder = bGrepSeparateFolder;
 
 // やめました
-//	if (wcslen(m_szText) == 0) {
+//	if (wcslen(szText) == 0) {
 //		WarningMessage(	GetHwnd(), _T("検索のキーワードを指定してください。"));
 //		return FALSE;
 //	}

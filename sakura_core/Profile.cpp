@@ -50,9 +50,9 @@ using namespace std;
 */
 void Profile::Init(void)
 {
-	m_strProfileName = _T("");
-	m_profileData.clear();
-	m_bRead = true;
+	strProfileName = _T("");
+	profileData.clear();
+	bRead = true;
 	return;
 }
 
@@ -84,12 +84,12 @@ void Profile::ReadOneline(
 		&& line.find(LTEXT("=")) == line.npos
 		&& line.find(LTEXT("]")) == ( line.size() - 1 )
 	) {
-		m_profileData.emplace_back(line.substr(1, line.size() - 1 - 1));
+		profileData.emplace_back(line.substr(1, line.size() - 1 - 1));
 	// エントリ取得
-	}else if (!m_profileData.empty()) {	// 最初のセクション以前の行のエントリは無視
+	}else if (!profileData.empty()) {	// 最初のセクション以前の行のエントリは無視
 		wstring::size_type idx = line.find( LTEXT("=") );
 		if (idx != line.npos) {
-			m_profileData.back().mapEntries.emplace(
+			profileData.back().mapEntries.emplace(
 				line.substr(0,idx),
 				line.substr(idx+1)
 			);
@@ -132,11 +132,11 @@ void Profile::ReadOneline(
 		&& eqPos == lineEnd
 		&& line[len - 1] == ']'
 	) {
-		m_profileData.emplace_back(std::wstring(line + 1, len - 1 - 1));
+		profileData.emplace_back(std::wstring(line + 1, len - 1 - 1));
 		// エントリ取得
-	}else if (!m_profileData.empty()) {	// 最初のセクション以前の行のエントリは無視
+	}else if (!profileData.empty()) {	// 最初のセクション以前の行のエントリは無視
 		if (eqPos != lineEnd) {
-			m_profileData.back().mapEntries.emplace(
+			profileData.back().mapEntries.emplace(
 				std::wstring(line, eqPos - line),
 				std::wstring(eqPos + 1, len - (eqPos - line) - 1)
 			);
@@ -199,7 +199,7 @@ bool findLine(
 bool Profile::ReadProfile(const TCHAR* pszProfileName)
 {
 	Timer t;
-	m_strProfileName = pszProfileName;
+	strProfileName = pszProfileName;
 
 	std::vector<wchar_t> buff;
 	if (!ReadFileAndUnicodify(pszProfileName, buff)) {
@@ -258,7 +258,7 @@ bool Profile::ReadProfileRes(
 	wstring		line;
 	Memory mLine;
 	NativeW mLineW;
-	m_strProfileName = _T("-Res-");
+	strProfileName = _T("-Res-");
 
 	if (1
 		&& (hRsrc = ::FindResource(0, pName, pType))
@@ -326,7 +326,7 @@ bool Profile::WriteProfile(
 	Timer t;
 
 	if (pszProfileName) {
-		m_strProfileName = pszProfileName;
+		strProfileName = pszProfileName;
 	}
     
 	std::vector<wstring> vecLine;
@@ -334,8 +334,8 @@ bool Profile::WriteProfile(
 		vecLine.push_back(LTEXT(";") + wstring(pszComment));		// //->;	2008/5/24 Uchi
 		vecLine.push_back(LTEXT(""));
 	}
-	auto iterEnd = m_profileData.end();
-	for (auto iter=m_profileData.begin(); iter!=iterEnd; ++iter) {
+	auto iterEnd = profileData.end();
+	for (auto iter=profileData.begin(); iter!=iterEnd; ++iter) {
 		// セクション名を書き込む
 		vecLine.push_back(LTEXT("[") + iter->strSectionName + LTEXT("]"));
 		auto mapiterEnd = iter->mapEntries.end();
@@ -351,7 +351,7 @@ bool Profile::WriteProfile(
 	szMirrorFile[0] = _T('\0');
 	TCHAR szPath[_MAX_PATH];
 	LPTSTR lpszName;
-	DWORD nLen = ::GetFullPathName(m_strProfileName.c_str(), _countof(szPath), szPath, &lpszName);
+	DWORD nLen = ::GetFullPathName(strProfileName.c_str(), _countof(szPath), szPath, &lpszName);
 	if (0 < nLen && nLen < _countof(szPath)
 		&& (lpszName - szPath + 11) < _countof(szMirrorFile) )	// path\preuuuu.TMP
 	{
@@ -359,7 +359,7 @@ bool Profile::WriteProfile(
 		::GetTempFileName(szPath, _T("sak"), 0, szMirrorFile);
 	}
 
-	if (!_WriteFile(szMirrorFile[0]? szMirrorFile: m_strProfileName, vecLine)) {
+	if (!_WriteFile(szMirrorFile[0]? szMirrorFile: strProfileName, vecLine)) {
 		return false;
 	}
 
@@ -372,13 +372,13 @@ bool Profile::WriteProfile(
 #else
 			::GetProcAddress(hModule, "ReplaceFileW");
 #endif
-		if (!pfnReplaceFile || !pfnReplaceFile(m_strProfileName.c_str(), szMirrorFile, NULL, 0, NULL, NULL)) {
-			if (fexist(m_strProfileName.c_str())) {
-				if (!::DeleteFile(m_strProfileName.c_str())) {
+		if (!pfnReplaceFile || !pfnReplaceFile(strProfileName.c_str(), szMirrorFile, NULL, 0, NULL, NULL)) {
+			if (fexist(strProfileName.c_str())) {
+				if (!::DeleteFile(strProfileName.c_str())) {
 					return false;
 				}
 			}
-			if (!::MoveFile(szMirrorFile, m_strProfileName.c_str())) {
+			if (!::MoveFile(szMirrorFile, strProfileName.c_str())) {
 				return false;
 			}
 		}
@@ -436,8 +436,8 @@ bool Profile::GetProfileDataImp(
 	wstring&		strEntryValue	// [out] エントリ値
 	)
 {
-	auto iterEnd = m_profileData.end();
-	for (auto iter = m_profileData.begin(); iter != iterEnd; ++iter) {
+	auto iterEnd = profileData.end();
+	for (auto iter = profileData.begin(); iter != iterEnd; ++iter) {
 		if (iter->strSectionName == strSectionName) {
 			auto mapiter = iter->mapEntries.find(strEntryKey);
 			if (iter->mapEntries.end() != mapiter) {
@@ -462,8 +462,8 @@ bool Profile::SetProfileDataImp(
 	const wstring&	strEntryValue	// [in] エントリ値
 	)
 {
-	auto iterEnd = m_profileData.end();
-	auto iter = m_profileData.begin();
+	auto iterEnd = profileData.end();
+	auto iter = profileData.begin();
 	for (; iter != iterEnd; ++iter) {
 		if (iter->strSectionName == strSectionName) {
 			// 既存のセクションの場合
@@ -481,8 +481,8 @@ bool Profile::SetProfileDataImp(
 	}
 	// 既存のセクションではない場合，セクション及びエントリを追加
 	if (iter == iterEnd) {
-		m_profileData.emplace_back(strSectionName);
-		Section& section = m_profileData.back();
+		profileData.emplace_back(strSectionName);
+		Section& section = profileData.back();
 		section.mapEntries.emplace(strEntryKey, strEntryValue);
 	}
 	return true;
@@ -492,10 +492,10 @@ bool Profile::SetProfileDataImp(
 void Profile::Dump(void)
 {
 #ifdef _DEBUG
-	auto iterEnd = m_profileData.end();
+	auto iterEnd = profileData.end();
 	// 2006.02.20 ryoji: map_str_str_iter削除時の修正漏れによるコンパイルエラー修正
 	MYTRACE(_T("\n\nCProfile::DUMP()======================"));
-	for (auto iter=m_profileData.begin(); iter!=iterEnd; ++iter) {
+	for (auto iter=profileData.begin(); iter!=iterEnd; ++iter) {
 		MYTRACE(_T("\n■strSectionName=%ls"), iter->strSectionName.c_str());
 		auto mapiterEnd = iter->mapEntries.end();
 		for (auto mapiter=iter->mapEntries.begin(); mapiter!=mapiterEnd; ++mapiter) {

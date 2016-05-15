@@ -109,7 +109,7 @@ bool ColorStrategyInfo::CheckChangeColor(const StringRef& lineStr)
 
 	// カーソル行背景色
 	TypeSupport caretLineBg(view, COLORIDX_CARETLINEBG);
-	if (caretLineBg.IsDisp() && !view.m_bMiniMap) {
+	if (caretLineBg.IsDisp() && !view.bMiniMap) {
 		if (colorIdxBackLine == COLORIDX_CARETLINEBG) {
 			if (pDispPos->GetLayoutLineRef() != view.GetCaret().GetCaretLayoutPos().GetY2()) {
 				colorIdxBackLine = COLORIDX_TEXT;
@@ -124,7 +124,7 @@ bool ColorStrategyInfo::CheckChangeColor(const StringRef& lineStr)
 	}
 	// 偶数行の背景色
 	TypeSupport evenLineBg(view, COLORIDX_EVENLINEBG);
-	if (evenLineBg.IsDisp() && !view.m_bMiniMap && colorIdxBackLine != COLORIDX_CARETLINEBG) {
+	if (evenLineBg.IsDisp() && !view.bMiniMap && colorIdxBackLine != COLORIDX_CARETLINEBG) {
 		if (colorIdxBackLine == COLORIDX_EVENLINEBG) {
 			if (pDispPos->GetLayoutLineRef() % 2 == 0) {
 				colorIdxBackLine = COLORIDX_TEXT;
@@ -137,10 +137,10 @@ bool ColorStrategyInfo::CheckChangeColor(const StringRef& lineStr)
 			}
 		}
 	}
-	if (view.m_bMiniMap) {
+	if (view.bMiniMap) {
 		TypeSupport cPageViewBg(view, COLORIDX_PAGEVIEW);
 		if (cPageViewBg.IsDisp()) {
-			EditView& activeView = view.m_editWnd.GetActiveView();
+			EditView& activeView = view.editWnd.GetActiveView();
 			LayoutInt curLine = pDispPos->GetLayoutLineRef();
 			auto viewTopLine = activeView.GetTextArea().GetViewTopLine();
 			auto bottomLine = activeView.GetTextArea().GetBottomLine();
@@ -194,20 +194,20 @@ void ColorStrategyInfo::DoChangeColor(Color3Setting *pcColor)
 
 ColorStrategyPool::ColorStrategyPool()
 {
-	m_pView = &(EditWnd::getInstance().GetView(0));
-	m_pcSelectStrategy = new Color_Select();
-	m_pcFoundStrategy = new Color_Found();
-//	m_vStrategies.push_back(new Color_Found);			// マッチ文字列
-	m_vStrategies.push_back(new Color_RegexKeyword);	// 正規表現キーワード
-	m_vStrategies.push_back(new Color_Heredoc);			// ヒアドキュメント
-	m_vStrategies.push_back(new Color_BlockComment(COLORIDX_BLOCK1));	// ブロックコメント
-	m_vStrategies.push_back(new Color_BlockComment(COLORIDX_BLOCK2));	// ブロックコメント2
-	m_vStrategies.push_back(new Color_LineComment);		// 行コメント
-	m_vStrategies.push_back(new Color_SingleQuote);		// シングルクォーテーション文字列
-	m_vStrategies.push_back(new Color_DoubleQuote);		// ダブルクォーテーション文字列
-	m_vStrategies.push_back(new Color_Url);				// URL
-	m_vStrategies.push_back(new Color_Numeric);			// 半角数字
-	m_vStrategies.push_back(new Color_KeywordSet);		// キーワードセット
+	pView = &(EditWnd::getInstance().GetView(0));
+	pcSelectStrategy = new Color_Select();
+	pcFoundStrategy = new Color_Found();
+//	vStrategies.push_back(new Color_Found);			// マッチ文字列
+	vStrategies.push_back(new Color_RegexKeyword);	// 正規表現キーワード
+	vStrategies.push_back(new Color_Heredoc);			// ヒアドキュメント
+	vStrategies.push_back(new Color_BlockComment(COLORIDX_BLOCK1));	// ブロックコメント
+	vStrategies.push_back(new Color_BlockComment(COLORIDX_BLOCK2));	// ブロックコメント2
+	vStrategies.push_back(new Color_LineComment);		// 行コメント
+	vStrategies.push_back(new Color_SingleQuote);		// シングルクォーテーション文字列
+	vStrategies.push_back(new Color_DoubleQuote);		// ダブルクォーテーション文字列
+	vStrategies.push_back(new Color_Url);				// URL
+	vStrategies.push_back(new Color_Numeric);			// 半角数字
+	vStrategies.push_back(new Color_KeywordSet);		// キーワードセット
 
 	// 設定更新
 	OnChangeSetting();
@@ -215,25 +215,25 @@ ColorStrategyPool::ColorStrategyPool()
 
 ColorStrategyPool::~ColorStrategyPool()
 {
-	SAFE_DELETE(m_pcSelectStrategy);
-	SAFE_DELETE(m_pcFoundStrategy);
-	m_vStrategiesDisp.clear();
-	int size = (int)m_vStrategies.size();
+	SAFE_DELETE(pcSelectStrategy);
+	SAFE_DELETE(pcFoundStrategy);
+	vStrategiesDisp.clear();
+	int size = (int)vStrategies.size();
 	for (int i=0; i<size; ++i) {
-		delete m_vStrategies[i];
+		delete vStrategies[i];
 	}
-	m_vStrategies.clear();
+	vStrategies.clear();
 }
 
 ColorStrategy* ColorStrategyPool::GetStrategyByColor(EColorIndexType eColor) const
 {
 	if (COLORIDX_SEARCH <= eColor && eColor <= COLORIDX_SEARCHTAIL) {
-		return m_pcFoundStrategy;
+		return pcFoundStrategy;
 	}
-	int size = (int)m_vStrategiesDisp.size();
+	int size = (int)vStrategiesDisp.size();
 	for (int i=0; i<size; ++i) {
-		if (m_vStrategiesDisp[i]->GetStrategyColor() == eColor) {
-			return m_vStrategiesDisp[i];
+		if (vStrategiesDisp[i]->GetStrategyColor() == eColor) {
+			return vStrategiesDisp[i];
 		}
 	}
 	return nullptr;
@@ -241,8 +241,8 @@ ColorStrategy* ColorStrategyPool::GetStrategyByColor(EColorIndexType eColor) con
 
 void ColorStrategyPool::NotifyOnStartScanLogic()
 {
-	m_pcSelectStrategy->OnStartScanLogic();
-	m_pcFoundStrategy->OnStartScanLogic();
+	pcSelectStrategy->OnStartScanLogic();
+	pcFoundStrategy->OnStartScanLogic();
 	int size = GetStrategyCount();
 	for (int i=0; i<size; ++i) {
 		GetStrategy(i)->OnStartScanLogic();
@@ -268,12 +268,12 @@ void ColorStrategyPool::CheckColorMODE(
 		// CheckColorMODE はレイアウト処理全体のボトルネックになるくらい頻繁に呼び出される
 		// 基本クラスからの動的仮想関数呼び出しを使用すると無視できないほどのオーバヘッドになる模様
 		// ここはエレガントさよりも性能優先で個々の派生クラスから BeginColor() を呼び出す
-		if (m_pcHeredoc && m_pcHeredoc->BeginColor(lineStr, nPos)) { *ppColorStrategy = m_pcHeredoc; return; }
-		if (m_pcBlockComment1 && m_pcBlockComment1->BeginColor(lineStr, nPos)) { *ppColorStrategy = m_pcBlockComment1; return; }
-		if (m_pcBlockComment2 && m_pcBlockComment2->BeginColor(lineStr, nPos)) { *ppColorStrategy = m_pcBlockComment2; return; }
-		if (m_pcLineComment && m_pcLineComment->BeginColor(lineStr, nPos)) { *ppColorStrategy = m_pcLineComment; return; }
-		if (m_pcSingleQuote && m_pcSingleQuote->BeginColor(lineStr, nPos)) { *ppColorStrategy = m_pcSingleQuote; return; }
-		if (m_pcDoubleQuote && m_pcDoubleQuote->BeginColor(lineStr, nPos)) { *ppColorStrategy = m_pcDoubleQuote; return; }
+		if (pcHeredoc && pcHeredoc->BeginColor(lineStr, nPos)) { *ppColorStrategy = pcHeredoc; return; }
+		if (pcBlockComment1 && pcBlockComment1->BeginColor(lineStr, nPos)) { *ppColorStrategy = pcBlockComment1; return; }
+		if (pcBlockComment2 && pcBlockComment2->BeginColor(lineStr, nPos)) { *ppColorStrategy = pcBlockComment2; return; }
+		if (pcLineComment && pcLineComment->BeginColor(lineStr, nPos)) { *ppColorStrategy = pcLineComment; return; }
+		if (pcSingleQuote && pcSingleQuote->BeginColor(lineStr, nPos)) { *ppColorStrategy = pcSingleQuote; return; }
+		if (pcDoubleQuote && pcDoubleQuote->BeginColor(lineStr, nPos)) { *ppColorStrategy = pcDoubleQuote; return; }
 	}
 }
 
@@ -281,30 +281,30 @@ void ColorStrategyPool::CheckColorMODE(
 */
 void ColorStrategyPool::OnChangeSetting(void)
 {
-	m_vStrategiesDisp.clear();
+	vStrategiesDisp.clear();
 
-	m_pcSelectStrategy->Update();
-	m_pcFoundStrategy->Update();
-	int size = (int)m_vStrategies.size();
+	pcSelectStrategy->Update();
+	pcFoundStrategy->Update();
+	int size = (int)vStrategies.size();
 	for (int i=0; i<size; ++i) {
-		m_vStrategies[i]->Update();
+		vStrategies[i]->Update();
 
 		// 色分け表示対象であれば登録
-		if (m_vStrategies[i]->Disp()) {
-			m_vStrategiesDisp.push_back(m_vStrategies[i]);
+		if (vStrategies[i]->Disp()) {
+			vStrategiesDisp.push_back(vStrategies[i]);
 		}
 	}
 
 	// CheckColorMODE 用
-	m_pcHeredoc = static_cast<Color_Heredoc*>(GetStrategyByColor(COLORIDX_HEREDOC));
-	m_pcBlockComment1 = static_cast<Color_BlockComment*>(GetStrategyByColor(COLORIDX_BLOCK1));	// ブロックコメント
-	m_pcBlockComment2 = static_cast<Color_BlockComment*>(GetStrategyByColor(COLORIDX_BLOCK2));	// ブロックコメント2
-	m_pcLineComment = static_cast<Color_LineComment*>(GetStrategyByColor(COLORIDX_COMMENT));	// 行コメント
-	m_pcSingleQuote = static_cast<Color_SingleQuote*>(GetStrategyByColor(COLORIDX_SSTRING));	// シングルクォーテーション文字列
-	m_pcDoubleQuote = static_cast<Color_DoubleQuote*>(GetStrategyByColor(COLORIDX_WSTRING));	// ダブルクォーテーション文字列
+	pcHeredoc = static_cast<Color_Heredoc*>(GetStrategyByColor(COLORIDX_HEREDOC));
+	pcBlockComment1 = static_cast<Color_BlockComment*>(GetStrategyByColor(COLORIDX_BLOCK1));	// ブロックコメント
+	pcBlockComment2 = static_cast<Color_BlockComment*>(GetStrategyByColor(COLORIDX_BLOCK2));	// ブロックコメント2
+	pcLineComment = static_cast<Color_LineComment*>(GetStrategyByColor(COLORIDX_COMMENT));	// 行コメント
+	pcSingleQuote = static_cast<Color_SingleQuote*>(GetStrategyByColor(COLORIDX_SSTRING));	// シングルクォーテーション文字列
+	pcDoubleQuote = static_cast<Color_DoubleQuote*>(GetStrategyByColor(COLORIDX_WSTRING));	// ダブルクォーテーション文字列
 
 	// 色分けをしない場合に、処理をスキップできるように確認する
-	const TypeConfig& type = EditDoc::GetInstance(0)->m_docType.GetDocumentAttribute();
+	const TypeConfig& type = EditDoc::GetInstance(0)->docType.GetDocumentAttribute();
 	EColorIndexType bSkipColorTypeTable[] = {
 		COLORIDX_DIGIT,
 		COLORIDX_COMMENT,
@@ -323,7 +323,7 @@ void ColorStrategyPool::OnChangeSetting(void)
 		COLORIDX_KEYWORD9,
 		COLORIDX_KEYWORD10,
 	};
-	m_bSkipBeforeLayoutGeneral = true;
+	bSkipBeforeLayoutGeneral = true;
 	int nKeyword1;
 	int bUnuseKeyword = false;
 	for (int n=0; n<_countof(bSkipColorTypeTable); ++n) {
@@ -337,23 +337,23 @@ void ColorStrategyPool::OnChangeSetting(void)
 				bUnuseKeyword = true; // -1以降は無効
 			}
 			if (!bUnuseKeyword && type.colorInfoArr[bSkipColorTypeTable[n]].bDisp) {
-				m_bSkipBeforeLayoutGeneral = false;
+				bSkipBeforeLayoutGeneral = false;
 				break;
 			}
 		}else if (type.colorInfoArr[bSkipColorTypeTable[n]].bDisp) {
-			m_bSkipBeforeLayoutGeneral = false;
+			bSkipBeforeLayoutGeneral = false;
 			break;
 		}
 	}
-	if (m_bSkipBeforeLayoutGeneral) {
+	if (bSkipBeforeLayoutGeneral) {
 		if (type.bUseRegexKeyword) {
-			m_bSkipBeforeLayoutGeneral = false;
+			bSkipBeforeLayoutGeneral = false;
 		}
 	}
-	m_bSkipBeforeLayoutFound = true;
+	bSkipBeforeLayoutFound = true;
 	for (int n=COLORIDX_SEARCH; n<=COLORIDX_SEARCHTAIL; ++n) {
 		if (type.colorInfoArr[n].bDisp) {
-			m_bSkipBeforeLayoutFound = false;
+			bSkipBeforeLayoutFound = false;
 			break;
 		}
 	}
@@ -361,10 +361,10 @@ void ColorStrategyPool::OnChangeSetting(void)
 
 bool ColorStrategyPool::IsSkipBeforeLayout()
 {
-	if (!m_bSkipBeforeLayoutGeneral) {
+	if (!bSkipBeforeLayoutGeneral) {
 		return false;
 	}
-	if (!m_bSkipBeforeLayoutFound && m_pView->m_bCurSrchKeyMark) {
+	if (!bSkipBeforeLayoutFound && pView->bCurSrchKeyMark) {
 		return false;
 	}
 	return true;

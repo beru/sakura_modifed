@@ -50,9 +50,9 @@ CallbackResultType BackupAgent::OnPreBeforeSave(SaveInfo* pSaveInfo)
 		// ファイル保存前にバックアップ処理
 		int nBackupResult = 0;
 		{
-			pDoc->m_docFileOperation.DoFileUnlock();	// バックアップ作成前にロックを解除する #####スマートじゃないよ！
+			pDoc->docFileOperation.DoFileUnlock();	// バックアップ作成前にロックを解除する #####スマートじゃないよ！
 			nBackupResult = MakeBackUp(pSaveInfo->filePath);
-			pDoc->m_docFileOperation.DoFileLock();	// バックアップ作成後にロックを戻す #####スマートじゃないよ！
+			pDoc->docFileOperation.DoFileLock();	// バックアップ作成後にロックを戻す #####スマートじゃないよ！
 		}
 		switch (nBackupResult) {
 		case 2:	//	中断指示
@@ -317,7 +317,7 @@ bool BackupAgent::FormatBackUpPath(
 
 	if (bup_setting.bBackUpFolder
 	  && (!bup_setting.bBackUpFolderRM || !IsLocalDrive(target_file))
-	) {	// 指定フォルダにバックアップを作成する	// m_bBackUpFolderRM 追加	2010/5/27 Uchi
+	) {	// 指定フォルダにバックアップを作成する	// bBackUpFolderRM 追加	2010/5/27 Uchi
 		TCHAR selDir[_MAX_PATH];
 		FileNameManager::ExpandMetaToFolder(bup_setting.szBackUpFolder, selDir, _countof(selDir));
 		if (GetFullPathName(selDir, _MAX_PATH, szNewPath, &psNext) == 0) {

@@ -8,7 +8,7 @@
 // ŠO•”ˆË‘¶
 LayoutInt ViewCalc::GetTabSpace() const
 {
-	return m_owner.m_pEditDoc->m_layoutMgr.GetTabSpace();
+	return owner.pEditDoc->layoutMgr.GetTabSpace();
 }
 
 

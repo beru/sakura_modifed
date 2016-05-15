@@ -13,30 +13,30 @@ Subject::Subject()
 Subject::~Subject()
 {
 	// リスナを解除
-	for (int i=0; i<(int)m_vListenersRef.size(); ++i) {
-		m_vListenersRef[i]->Listen(NULL);
+	for (int i=0; i<(int)vListenersRef.size(); ++i) {
+		vListenersRef[i]->Listen(NULL);
 	}
-	m_vListenersRef.clear();
+	vListenersRef.clear();
 }
 
 void Subject::_AddListener(Listener* pListener)
 {
 	// 既に追加済みなら何もしない
-	for (int i=0; i<(int)m_vListenersRef.size(); ++i) {
-		if (m_vListenersRef[i] == pListener) {
+	for (int i=0; i<(int)vListenersRef.size(); ++i) {
+		if (vListenersRef[i] == pListener) {
 			return;
 		}
 	}
 	// 追加
-	m_vListenersRef.push_back(pListener);
+	vListenersRef.push_back(pListener);
 }
 
 void Subject::_RemoveListener(Listener* pListener)
 {
 	// 配列から削除
-	for (int i=0; i<(int)m_vListenersRef.size(); ++i) {
-		if (m_vListenersRef[i] == pListener) {
-			m_vListenersRef.erase(m_vListenersRef.begin() + i);
+	for (int i=0; i<(int)vListenersRef.size(); ++i) {
+		if (vListenersRef[i] == pListener) {
+			vListenersRef.erase(vListenersRef.begin() + i);
 			break;
 		}
 	}
@@ -47,7 +47,8 @@ void Subject::_RemoveListener(Listener* pListener)
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 Listener::Listener()
-: m_pSubjectRef(nullptr)
+	:
+	pSubjectRef(nullptr)
 {
 }
 
@@ -61,15 +62,15 @@ Subject* Listener::Listen(Subject* pSubject)
 	Subject* pOld = GetListeningSubject();
 
 	// 古いサブジェクトを解除
-	if (m_pSubjectRef) {
-		m_pSubjectRef->_RemoveListener(this);
-		m_pSubjectRef = nullptr;
+	if (pSubjectRef) {
+		pSubjectRef->_RemoveListener(this);
+		pSubjectRef = nullptr;
 	}
 
 	// 新しく設定
-	m_pSubjectRef = pSubject;
-	if (m_pSubjectRef) {
-		m_pSubjectRef->_AddListener(this);
+	pSubjectRef = pSubject;
+	if (pSubjectRef) {
+		pSubjectRef->_AddListener(this);
 	}
 
 	return pOld;

@@ -43,8 +43,8 @@ public:
 	INT_PTR DispatchEvent(HWND, UINT, WPARAM, LPARAM);	// ダイアログのメッセージ処理 BOOL->INT_PTR 2008/7/18 Uchi
 	void DeleteAsync(void);	// 自動破棄を遅延実行する	// 2008.05.28 ryoji
 
-//	HINSTANCE	m_hInstance;	// アプリケーションインスタンスのハンドル
-//	HWND		m_hwndParent;	// オーナーウィンドウのハンドル
+//	HINSTANCE	hInstance;	// アプリケーションインスタンスのハンドル
+//	HWND		hwndParent;	// オーナーウィンドウのハンドル
 //	HWND		hWnd;			// このダイアログのハンドル
 	bool		bCANCEL;		// IDCANCELボタンが押された
 	bool		bAutoCleanup;	// 自動後処理型	// 2008.05.28 ryoji

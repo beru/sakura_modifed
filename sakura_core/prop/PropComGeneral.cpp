@@ -135,7 +135,7 @@ INT_PTR PropGeneral::DispatchEvent(
 					return TRUE;
 				}
 //@@@ 2001.12.26 YAZAKI MRUリストは、CMRUに依頼する
-//				m_pShareData->m_sHistory.m_nMRUArrNum = 0;
+//				pShareData->sHistory.m_nMRUArrNum = 0;
 				{
 					MruFile mru;
 					mru.ClearAll();
@@ -150,7 +150,7 @@ INT_PTR PropGeneral::DispatchEvent(
 					return TRUE;
 				}
 //@@@ 2001.12.26 YAZAKI OPENFOLDERリストは、MruFolderにすべて依頼する
-//				m_pShareData->m_sHistory.m_nOPENFOLDERArrNum = 0;
+//				pShareData->sHistory.m_nOPENFOLDERArrNum = 0;
 				{
 					MruFolder mruFolder;	//	MRUリストの初期化。ラベル内だと問題あり？
 					mruFolder.ClearAll();
@@ -258,7 +258,7 @@ INT_PTR PropGeneral::DispatchEvent(
 				return TRUE;
 //@@@ 2002.01.03 YAZAKI 最後に表示していたシートを正しく覚えていないバグ修正
 			case PSN_SETACTIVE:
-				m_nPageNum = ID_PROPCOM_PAGENUM_GENERAL;	// Oct. 25, 2000 JEPRO ZENPAN1→ZENPAN に変更(参照しているのはCPropCommon.cppのみの1箇所)
+				nPageNum = ID_PROPCOM_PAGENUM_GENERAL;	// Oct. 25, 2000 JEPRO ZENPAN1→ZENPAN に変更(参照しているのはCPropCommon.cppのみの1箇所)
 				return TRUE;
 			}
 			break;
@@ -297,7 +297,7 @@ INT_PTR PropGeneral::DispatchEvent(
 // ダイアログデータの設定 General
 void PropGeneral::SetData(HWND hwndDlg)
 {
-	auto& csGeneral = m_common.general;
+	auto& csGeneral = common.general;
 
 	// カーソルのタイプ 0=win 1=dos 
 	if (csGeneral.GetCaretType() == 0) {
@@ -361,7 +361,7 @@ void PropGeneral::SetData(HWND hwndDlg)
 
 	// 2007.09.09 Moca 画面キャッシュ設定追加
 	// 画面キャッシュを使う
-	::CheckDlgButton(hwndDlg, IDC_CHECK_MEMDC, m_common.window.bUseCompatibleBMP);
+	::CheckDlgButton(hwndDlg, IDC_CHECK_MEMDC, common.window.bUseCompatibleBMP);
 
 	// ファイルの履歴MAX
 	::SetDlgItemInt(hwndDlg, IDC_EDIT_MAX_MRU_FILE, csGeneral.nMRUArrNum_MAX, FALSE);
@@ -392,7 +392,7 @@ void PropGeneral::SetData(HWND hwndDlg)
 // ダイアログデータの取得 General
 int PropGeneral::GetData(HWND hwndDlg)
 {
-	auto& csGeneral = m_common.general;
+	auto& csGeneral = common.general;
 	
 	// カーソルのタイプ 0=win 1=dos 
 	if (DlgButton_IsChecked(hwndDlg, IDC_RADIO_CARETTYPE0)) {
@@ -437,7 +437,7 @@ int PropGeneral::GetData(HWND hwndDlg)
 
 	// 2007.09.09 Moca 画面キャッシュ設定追加
 	// 画面キャッシュを使う
-	m_common.window.bUseCompatibleBMP = DlgButton_IsChecked(hwndDlg, IDC_CHECK_MEMDC);
+	common.window.bUseCompatibleBMP = DlgButton_IsChecked(hwndDlg, IDC_CHECK_MEMDC);
 
 	hwndCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_WHEEL_PAGESCROLL);
 	nSelPos = Combo_GetCurSel(hwndCombo);

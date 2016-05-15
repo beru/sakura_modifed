@@ -66,12 +66,12 @@ public:
 	void WriteTrace(const char* msg = "") const;
 
 protected:
-	DWORD	m_nStartTime;
-	char	m_szText[100];	// タイマー名
-	int		m_nDeapth;		// このオブジェクトのネストの深さ
+	DWORD	nStartTime;
+	char	szText[100];	// タイマー名
+	int		nDepth;		// このオブジェクトのネストの深さ
 
 #if 1 //def _DEBUG
-	static int m_nNestCount;
+	static int nNestCount;
 #endif
 };
 

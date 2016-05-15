@@ -38,7 +38,7 @@ void ViewCommander::Command_SHOWTOOLBAR(void)
 {
 	auto& editWnd = GetEditWindow();	// Sep. 10, 2002 genta
 
-	GetDllShareData().common.window.bDispToolBar = (editWnd.m_toolbar.GetToolbarHwnd() == NULL);	// ツールバー表示
+	GetDllShareData().common.window.bDispToolBar = (editWnd.toolbar.GetToolbarHwnd() == NULL);	// ツールバー表示
 	editWnd.LayoutToolBar();
 	editWnd.EndLayoutBars();
 
@@ -60,7 +60,7 @@ void ViewCommander::Command_SHOWFUNCKEY(void)
 {
 	EditWnd& editWnd = GetEditWindow();	// Sep. 10, 2002 genta
 
-	GetDllShareData().common.window.bDispFuncKeyWnd = !editWnd.m_funcKeyWnd.GetHwnd();	// ファンクションキー表示
+	GetDllShareData().common.window.bDispFuncKeyWnd = !editWnd.funcKeyWnd.GetHwnd();	// ファンクションキー表示
 	editWnd.LayoutFuncKey();
 	editWnd.EndLayoutBars();
 
@@ -85,7 +85,7 @@ void ViewCommander::Command_SHOWTAB(void)
 {
 	auto& editWnd = GetEditWindow();	// Sep. 10, 2002 genta
 
-	GetDllShareData().common.tabBar.bDispTabWnd = !editWnd.m_tabWnd.GetHwnd();	// タブバー表示
+	GetDllShareData().common.tabBar.bDispTabWnd = !editWnd.tabWnd.GetHwnd();	// タブバー表示
 	editWnd.LayoutTabBar();
 	editWnd.EndLayoutBars();
 
@@ -117,7 +117,7 @@ void ViewCommander::Command_SHOWSTATUSBAR(void)
 {
 	auto& editWnd = GetEditWindow();	// Sep. 10, 2002 genta
 
-	GetDllShareData().common.window.bDispStatusBar = !editWnd.m_statusBar.GetStatusHwnd();	// ステータスバー表示
+	GetDllShareData().common.window.bDispStatusBar = !editWnd.statusBar.GetStatusHwnd();	// ステータスバー表示
 	editWnd.LayoutStatusBar();
 	editWnd.EndLayoutBars();
 
@@ -157,9 +157,9 @@ void ViewCommander::Command_TYPE_LIST(void)
 {
 	DlgTypeList dlgTypeList;
 	DlgTypeList::Result result;
-	result.documentType = GetDocument().m_docType.GetDocumentType();
+	result.documentType = GetDocument().docType.GetDocumentType();
 	result.bTempChange = true;
-	if (dlgTypeList.DoModal(G_AppInstance(), m_view.GetHwnd(), &result)) {
+	if (dlgTypeList.DoModal(G_AppInstance(), view.GetHwnd(), &result)) {
 		// Nov. 29, 2000 genta
 		// 一時的な設定適用機能を無理矢理追加
 		if (result.bTempChange) {
@@ -179,13 +179,13 @@ void ViewCommander::Command_CHANGETYPE(int nTypePlusOne)
 	TypeConfigNum type = TypeConfigNum(nTypePlusOne - 1);
 	auto& doc = GetDocument();
 	if (nTypePlusOne == 0) {
-		type = doc.m_docType.GetDocumentType();
+		type = doc.docType.GetDocumentType();
 	}
 	if (type.IsValidType() && type.GetIndex() < GetDllShareData().nTypesCount) {
 		const TypeConfigMini* pConfig;
 		DocTypeManager().GetTypeConfigMini(type, &pConfig);
-		doc.m_docType.SetDocumentTypeIdx(pConfig->id, true);
-		doc.m_docType.LockDocumentType();
+		doc.docType.SetDocumentTypeIdx(pConfig->id, true);
+		doc.docType.LockDocumentType();
 		doc.OnChangeType();
 	}
 }
@@ -194,7 +194,7 @@ void ViewCommander::Command_CHANGETYPE(int nTypePlusOne)
 // タイプ別設定
 void ViewCommander::Command_OPTION_TYPE(void)
 {
-	EditApp::getInstance().OpenPropertySheetTypes(-1, GetDocument().m_docType.GetDocumentType());
+	EditApp::getInstance().OpenPropertySheetTypes(-1, GetDocument().docType.GetDocumentType());
 }
 
 
@@ -220,7 +220,7 @@ void ViewCommander::Command_FONT(void)
 #else
 	bool bFixedFont = true;
 #endif
-	if (MySelectFont(&lf, &nPointSize, EditWnd::getInstance().m_splitterWnd.GetHwnd(), bFixedFont)) {
+	if (MySelectFont(&lf, &nPointSize, EditWnd::getInstance().splitterWnd.GetHwnd(), bFixedFont)) {
 		csView.lf = lf;
 		csView.nPointSize = nPointSize;
 
@@ -306,7 +306,7 @@ void ViewCommander::Command_SETFONTSIZE(int fontSize, int shift, int mode)
 		csView.lf.lfHeight = lfHeight;
 		csView.nPointSize = nPointSize;
 	}else if (mode == 1) {
-		TypeConfigNum nDocType = doc.m_docType.GetDocumentType();
+		TypeConfigNum nDocType = doc.docType.GetDocumentType();
 		auto type = std::make_unique<TypeConfig>();
 		if (!DocTypeManager().GetTypeConfig(nDocType, *type)) {
 			// 謎のエラー
@@ -319,11 +319,11 @@ void ViewCommander::Command_SETFONTSIZE(int fontSize, int shift, int mode)
 		DocTypeManager().SetTypeConfig(nDocType, *type);
 		nTypeIndex = nDocType.GetIndex();
 	}else if (mode == 2) {
-		doc.m_blfCurTemp = true;
-		doc.m_lfCur = lf;
-		doc.m_lfCur.lfHeight = lfHeight;
-		doc.m_nPointSizeCur = nPointSize;
-		doc.m_nPointSizeOrg = GetEditWindow().GetFontPointSize(false);
+		doc.blfCurTemp = true;
+		doc.lfCur = lf;
+		doc.lfCur.lfHeight = lfHeight;
+		doc.nPointSizeCur = nPointSize;
+		doc.nPointSizeOrg = GetEditWindow().GetFontPointSize(false);
 	}
 
 	HWND hwndFrame = GetMainWindow();
@@ -357,28 +357,28 @@ void ViewCommander::Command_SETFONTSIZE(int fontSize, int shift, int mode)
 */
 void ViewCommander::Command_WRAPWINDOWWIDTH(void)	// Oct. 7, 2000 JEPRO WRAPWINDIWWIDTH を WRAPWINDOWWIDTH に変更
 {
-	// Jan. 8, 2006 genta 判定処理をm_view.GetWrapMode()へ移動
+	// Jan. 8, 2006 genta 判定処理をview.GetWrapMode()へ移動
 	EditView::TOGGLE_WRAP_ACTION nWrapMode;
 	LayoutInt newKetas;
 	
-	nWrapMode = m_view.GetWrapMode(&newKetas);
+	nWrapMode = view.GetWrapMode(&newKetas);
 	auto& doc = GetDocument();
-	doc.m_nTextWrapMethodCur = TextWrappingMethod::SettingWidth;
-	doc.m_bTextWrapMethodCurTemp = (doc.m_nTextWrapMethodCur != m_view.m_pTypeData->nTextWrapMethod);
+	doc.nTextWrapMethodCur = TextWrappingMethod::SettingWidth;
+	doc.bTextWrapMethodCurTemp = (doc.nTextWrapMethodCur != view.pTypeData->nTextWrapMethod);
 	if (nWrapMode == EditView::TGWRAP_NONE) {
 		return;	// 折り返し桁は元のまま
 	}
 
-	GetEditWindow().ChangeLayoutParam(true, doc.m_layoutMgr.GetTabSpace(), newKetas);
+	GetEditWindow().ChangeLayoutParam(true, doc.layoutMgr.GetTabSpace(), newKetas);
 	
 	// Aug. 14, 2005 genta 共通設定へは反映させない
-//	m_view.m_pTypeData->nMaxLineKetas = m_nViewColNum;
+//	view.pTypeData->nMaxLineKetas = nViewColNum;
 
 // 2013.12.30 左隅に移動しないように
-//	m_view.GetTextArea().SetViewLeftCol(LayoutInt(0));		// 表示域の一番左の桁(0開始)
+//	view.GetTextArea().SetViewLeftCol(LayoutInt(0));		// 表示域の一番左の桁(0開始)
 
 	// フォーカス移動時の再描画
-	m_view.RedrawAll();
+	view.RedrawAll();
 	return;
 }
 
@@ -393,7 +393,7 @@ void ViewCommander::Command_Favorite(void)
 	DlgFavorite	dlgFavorite;
 
 	// ダイアログを表示する
-	if (!dlgFavorite.DoModal(G_AppInstance(), m_view.GetHwnd(), (LPARAM)&GetDocument())) {
+	if (!dlgFavorite.DoModal(G_AppInstance(), view.GetHwnd(), (LPARAM)&GetDocument())) {
 		return;
 	}
 
@@ -419,7 +419,7 @@ void ViewCommander::Command_TEXTWRAPMETHOD(TextWrappingMethod nWrapMethod)
 	auto& doc = GetDocument();
 
 	// 現在の設定値と同じなら何もしない
-	if (doc.m_nTextWrapMethodCur == nWrapMethod)
+	if (doc.nTextWrapMethodCur == nWrapMethod)
 		return;
 
 	int nWidth;
@@ -430,32 +430,32 @@ void ViewCommander::Command_TEXTWRAPMETHOD(TextWrappingMethod nWrapMethod)
 		break;
 
 	case TextWrappingMethod::SettingWidth:	// 指定桁で折り返す
-		nWidth = (Int)doc.m_docType.GetDocumentAttribute().nMaxLineKetas;
+		nWidth = (Int)doc.docType.GetDocumentAttribute().nMaxLineKetas;
 		break;
 
 	case TextWrappingMethod::WindowWidth:		// 右端で折り返す
 		// ウィンドウが左右に分割されている場合は左側のウィンドウ幅を使用する
-		nWidth = (Int)m_view.ViewColNumToWrapColNum(GetEditWindow().GetView(0).GetTextArea().m_nViewColNum);
+		nWidth = (Int)view.ViewColNumToWrapColNum(GetEditWindow().GetView(0).GetTextArea().nViewColNum);
 		break;
 
 	default:
 		return;	// 不正な値の時は何もしない
 	}
 
-	doc.m_nTextWrapMethodCur = nWrapMethod;	// 設定を記憶
+	doc.nTextWrapMethodCur = nWrapMethod;	// 設定を記憶
 
 	// 折り返し方法の一時設定適用／一時設定適用解除	// 2008.06.08 ryoji
-	doc.m_bTextWrapMethodCurTemp = (doc.m_docType.GetDocumentAttribute().nTextWrapMethod != nWrapMethod);
+	doc.bTextWrapMethodCurTemp = (doc.docType.GetDocumentAttribute().nTextWrapMethod != nWrapMethod);
 
 	// 折り返し位置を変更
-	GetEditWindow().ChangeLayoutParam(false, doc.m_layoutMgr.GetTabSpace(), (LayoutInt)nWidth);
+	GetEditWindow().ChangeLayoutParam(false, doc.layoutMgr.GetTabSpace(), (LayoutInt)nWidth);
 
 	// 2009.08.28 nasukoji	「折り返さない」ならテキスト最大幅を算出、それ以外は変数をクリア
-	if (doc.m_nTextWrapMethodCur == TextWrappingMethod::NoWrapping) {
-		doc.m_layoutMgr.CalculateTextWidth();		// テキスト最大幅を算出する
+	if (doc.nTextWrapMethodCur == TextWrappingMethod::NoWrapping) {
+		doc.layoutMgr.CalculateTextWidth();		// テキスト最大幅を算出する
 		GetEditWindow().RedrawAllViews(nullptr);	// Scroll Barの更新が必要なので再表示を実行する
 	}else {
-		doc.m_layoutMgr.ClearLayoutLineWidth();		// 各行のレイアウト行長の記憶をクリアする
+		doc.layoutMgr.ClearLayoutLineWidth();		// 各行のレイアウト行長の記憶をクリアする
 	}
 }
 
@@ -472,7 +472,7 @@ void ViewCommander::Command_SELECT_COUNT_MODE(int nMode)
 {
 	// 設定には保存せず、View毎に持つフラグを設定
 	//BOOL* pbDispSelCountByByte = &GetDllShareData().common.statusBar.bDispSelCountByByte;
-	auto& selectCountMode = GetEditWindow().m_nSelectCountMode;
+	auto& selectCountMode = GetEditWindow().nSelectCountMode;
 
 	if (nMode == (int)SelectCountMode::Toggle) {
 		// 文字数⇔バイト数トグル

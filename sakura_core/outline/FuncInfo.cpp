@@ -25,18 +25,18 @@ FuncInfo::FuncInfo(
 	int				nInfo				// 付加情報
 	)
 	:
-	m_nDepth(0) // 深さ
+	nDepth(0) // 深さ
 {
-	m_nFuncLineCRLF = nFuncLineCRLF;		// 関数のある行(CRLF単位)
-	m_nFuncColCRLF = nFuncColCRLF;			// 関数のある桁(CRLF単位)
-	m_nFuncLineLAYOUT = nFuncLineLAYOUT;	// 関数のある行(折り返し単位)
-	m_nFuncColLAYOUT = nFuncColLAYOUT;		// 関数のある桁(折り返し単位)
-	m_memFuncName.SetString(pszFuncName);
+	nFuncLineCRLF = nFuncLineCRLF;		// 関数のある行(CRLF単位)
+	nFuncColCRLF = nFuncColCRLF;			// 関数のある桁(CRLF単位)
+	nFuncLineLAYOUT = nFuncLineLAYOUT;	// 関数のある行(折り返し単位)
+	nFuncColLAYOUT = nFuncColLAYOUT;		// 関数のある桁(折り返し単位)
+	memFuncName.SetString(pszFuncName);
 	if (pszFileName) {
-		m_memFileName.SetString( pszFileName );
+		memFileName.SetString( pszFileName );
 	}
 
-	m_nInfo = nInfo;
+	nInfo = nInfo;
 	return;
 }
 

@@ -63,12 +63,12 @@ public:
 	// Oct. 15, 2001 genta 引数追加
 	// 2007.11.02 ryoji 引数変更（CSMacroMgr->MacroRec）
 //	FuncLookup(HINSTANCE hInst, MacroRec* pMacroRec, CommonSetting* pCom)
-//		: m_pMacroRec(pMacroRec), m_pCommon(pCom) {}
-	FuncLookup() : m_pMacroRec(nullptr) {}
+//		: pMacroRec(pMacroRec), pCommon(pCom) {}
+	FuncLookup() : pMacroRec(nullptr) {}
 
 	void Init(MacroRec* pMacroRec, CommonSetting* pCom) {
-		m_pMacroRec = pMacroRec;
-		m_pCommon = pCom;
+		pMacroRec = pMacroRec;
+		pCommon = pCom;
 	}
 
 	EFunctionCode Pos2FuncCode(int category, int position, bool bGetUnavailable = true) const;	// 2007.10.31 ryoji bGetUnavailableパラメータ追加
@@ -88,9 +88,8 @@ public:
 
 
 private:
-	MacroRec* m_pMacroRec;	// マクロ情報	// 2007.11.02 ryoji メンバ変更（CSMacroMgr->MacroRec）
-	
-	CommonSetting* m_pCommon;	// 共通設定データ領域へのポインタ
+	MacroRec* pMacroRec;	// マクロ情報	// 2007.11.02 ryoji メンバ変更（CSMacroMgr->MacroRec）
+	CommonSetting* pCommon;	// 共通設定データ領域へのポインタ
 
 };
 

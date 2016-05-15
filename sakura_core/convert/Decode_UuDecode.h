@@ -34,9 +34,9 @@
 
 class Decode_UuDecode : public Decode {
 
-	TCHAR m_aFilename[_MAX_PATH];
+	TCHAR aFilename[_MAX_PATH];
 public:
 	bool DoDecode(const NativeW& data, Memory* pDst);
-	void CopyFilename(TCHAR* pDst) const { _tcscpy(pDst, m_aFilename); }
+	void CopyFilename(TCHAR* pDst) const { _tcscpy(pDst, aFilename); }
 };
 

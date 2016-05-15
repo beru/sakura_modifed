@@ -35,26 +35,26 @@ public:
 
 class LayoutExInfo {
 public:
-	LayoutExInfo() : m_pColorInfo(NULL) {}
+	LayoutExInfo() : pColorInfo(NULL) {}
 	~LayoutExInfo() {
-		delete m_pColorInfo;
+		delete pColorInfo;
 	}
 	void SetColorInfo(LayoutColorInfo* p) {
-		if (m_pColorInfo) {
-			delete m_pColorInfo;
+		if (pColorInfo) {
+			delete pColorInfo;
 		}
-		m_pColorInfo = p;
+		pColorInfo = p;
 	}
 	const LayoutColorInfo* GetColorInfo() const {
-		return m_pColorInfo;
+		return pColorInfo;
 	}
 	LayoutColorInfo* DetachColorInfo() {
-		LayoutColorInfo* p = m_pColorInfo;
-		m_pColorInfo = nullptr;
+		LayoutColorInfo* p = pColorInfo;
+		pColorInfo = nullptr;
 		return p;
 	}
 private:
-	LayoutColorInfo* m_pColorInfo;
+	LayoutColorInfo* pColorInfo;
 
 private:
 	DISALLOW_COPY_AND_ASSIGN(LayoutExInfo);

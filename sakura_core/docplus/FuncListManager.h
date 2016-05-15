@@ -30,15 +30,15 @@ class DocLineMgr;
 // 行に付加するModified情報
 class LineFuncList {
 public:
-	LineFuncList() : m_bFuncList(false) { }
-	bool GetFuncListMark() const { return m_bFuncList; }
+	LineFuncList() : bFuncList(false) { }
+	bool GetFuncListMark() const { return bFuncList; }
 	LineFuncList& operator = (bool bSet)
 	{
-		m_bFuncList = bSet;
+		bFuncList = bSet;
 		return *this;
 	}
 private:
-	bool m_bFuncList;
+	bool bFuncList;
 };
 
 // 行全体のFuncList情報アクセサ

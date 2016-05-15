@@ -131,7 +131,7 @@ void DlgPluginOption::SetData(void)
 
 	PluginOption* pOpt;
 	PluginOption::ArrayIter it;
-	for (i=0, it=plugin->m_options.begin(); it!=plugin->m_options.end(); ++i, ++it) {
+	for (i=0, it=plugin->options.begin(); it!=plugin->options.end(); ++i, ++it) {
 		pOpt = *it;
 
 		auto_snprintf_s(buf, _countof(buf), _T("%ls"), pOpt->GetLabel().c_str());
@@ -230,7 +230,7 @@ int DlgPluginOption::GetData(void)
 	TCHAR	buf[MAX_LENGTH_VALUE + 1];
 	PluginOption::ArrayIter it;
 	int i;
-	for (i=0, it=plugin->m_options.begin(); it!=plugin->m_options.end(); ++i, ++it) {
+	for (i=0, it=plugin->options.begin(); it!=plugin->options.end(); ++i, ++it) {
 		pOpt = *it;
 
 		memset_raw(&lvi, 0, sizeof(lvi));
@@ -524,7 +524,7 @@ void DlgPluginOption::MoveFocusToEdit(void)
 
 	if (iLine >= 0) {
 		// FocusÇÃêÿÇËë÷Ç¶
-		sType = plugin->m_options[iLine]->GetType();
+		sType = plugin->options[iLine]->GetType();
 		transform(sType.begin(), sType.end(), sType.begin(), my_towlower2);
 		if (sType == OPTION_TYPE_BOOL) {
 			hwndCtrl = GetItemHwnd(IDC_CHECK_PLUGIN_OPTION);
@@ -561,11 +561,11 @@ void DlgPluginOption::SetToEdit(int iLine)
 		lvi.cchTextMax = MAX_LENGTH_VALUE + 1;
 		ListView_GetItem(hwndList, &lvi);
 
-		sType = plugin->m_options[iLine]->GetType();
+		sType = plugin->options[iLine]->GetType();
 		transform(sType.begin(), sType.end(), sType.begin(), my_towlower2);
 		if (sType == OPTION_TYPE_BOOL) {
 			CheckButton(IDC_CHECK_PLUGIN_OPTION, _tcscmp(buf,  BOOL_DISP_FALSE) != 0);
-			SetItemText(IDC_CHECK_PLUGIN_OPTION, plugin->m_options[iLine]->GetLabel().c_str());
+			SetItemText(IDC_CHECK_PLUGIN_OPTION, plugin->options[iLine]->GetLabel().c_str());
 
 			// ï“èWóÃàÊÇÃêÿÇËë÷Ç¶
 			SelectEdit(IDC_CHECK_PLUGIN_OPTION);
@@ -577,7 +577,7 @@ void DlgPluginOption::SetToEdit(int iLine)
 		}else if (sType == OPTION_TYPE_SEL) {
 			// CONBO ê›íË
 			std::vector<wstring> selects;
-			selects = plugin->m_options[iLine]->GetSelects();
+			selects = plugin->options[iLine]->GetSelects();
 
 			HWND hwndCombo = GetItemHwnd(IDC_COMBO_PLUGIN_OPTION);
 			Combo_ResetContent(hwndCombo);
@@ -639,7 +639,7 @@ void DlgPluginOption::SetFromEdit(int iLine)
 	wstring	sType;
 
 	if (iLine >= 0) {
-		sType = plugin->m_options[iLine]->GetType();
+		sType = plugin->options[iLine]->GetType();
 		transform(sType.begin (), sType.end (), sType.begin (), my_towlower2);
 		if (sType == OPTION_TYPE_BOOL) {
 			if (IsButtonChecked(IDC_CHECK_PLUGIN_OPTION)) {

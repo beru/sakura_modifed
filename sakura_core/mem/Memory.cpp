@@ -44,9 +44,9 @@
 
 void Memory::_init_members()
 {
-	m_nDataBufSize = 0;
-	m_pRawData = NULL;
-	m_nRawLen = 0;
+	nDataBufSize = 0;
+	pRawData = NULL;
+	nRawLen = 0;
 }
 
 Memory::Memory()
@@ -100,13 +100,13 @@ const Memory& Memory::operator = (const Memory& rhs)
 */
 void Memory::_AddData(const void* pData, int nDataLen)
 {
-	if (!m_pRawData) {
+	if (!pRawData) {
 		return;
 	}
-	memcpy(&m_pRawData[m_nRawLen], pData, nDataLen);
-	m_nRawLen += nDataLen;
-	m_pRawData[m_nRawLen] = '\0';
-	m_pRawData[m_nRawLen+1] = '\0'; // 終端'\0'を2つ付加する('\0''\0' == L'\0')。 2007.08.13 kobake 追加
+	memcpy(&pRawData[nRawLen], pData, nDataLen);
+	nRawLen += nDataLen;
+	pRawData[nRawLen] = '\0';
+	pRawData[nRawLen+1] = '\0'; // 終端'\0'を2つ付加する('\0''\0' == L'\0')。 2007.08.13 kobake 追加
 	return;
 }
 
@@ -231,7 +231,7 @@ bool Memory::SwabHLByte(const Memory& mem)
 		return true;
 	}
 	int nSize = mem.GetRawLength();
-	if (m_pRawData && nSize + 2 <= m_nDataBufSize) {
+	if (pRawData && nSize + 2 <= nDataBufSize) {
 		// データが短い時はバッファの再利用
 		_SetRawLength(0);
 	}else {
@@ -259,24 +259,24 @@ void Memory::AllocBuffer(size_t nNewDataLen)
 	// 2バイト多くメモリ確保しておく('\0'またはL'\0'を入れるため) 2007.08.13 kobake 変更
 	int nWorkLen = ((nNewDataLen + 2) + 7) & (~7); // 8Byteごとに整列
 
-	if (m_nDataBufSize == 0) {
+	if (nDataBufSize == 0) {
 		// 未確保の状態
 		pWork = malloc_char(nWorkLen);
-		m_nDataBufSize = nWorkLen;
+		nDataBufSize = nWorkLen;
 	}else {
 		// 現在のバッファサイズより大きくなった場合のみ再確保する
-		if (m_nDataBufSize < nWorkLen) {
+		if (nDataBufSize < nWorkLen) {
 			// 頻繁な再確保を行わないようにする為に必要量の倍のサイズにする。
 			nWorkLen <<= 1;
 			// 2014.06.25 有効データ長が0の場合はfree & malloc
-			if (m_nRawLen == 0) {
-				free( m_pRawData );
-				m_pRawData = NULL;
+			if (nRawLen == 0) {
+				free( pRawData );
+				pRawData = NULL;
 				pWork = malloc_char( nWorkLen );
 			}else {
-				pWork = (char*)realloc(m_pRawData, nWorkLen);
+				pWork = (char*)realloc(pRawData, nWorkLen);
 			}
-			m_nDataBufSize = nWorkLen;
+			nDataBufSize = nWorkLen;
 		}else {
 			return;
 		}
@@ -286,13 +286,13 @@ void Memory::AllocBuffer(size_t nNewDataLen)
 		::MYMESSAGEBOX(	NULL, MB_OKCANCEL | MB_ICONQUESTION | MB_TOPMOST, GSTR_APPNAME,
 			LS(STR_ERR_DLGMEM1), nNewDataLen
 		);
-		if (m_pRawData && nWorkLen != 0) {
+		if (pRawData && nWorkLen != 0) {
 			// 古いバッファを解放して初期化
 			_Empty();
 		}
 		return;
 	}
-	m_pRawData = pWork;
+	pRawData = pWork;
 	return;
 }
 
@@ -328,8 +328,8 @@ void Memory::SetRawDataHoldBuffer(
 	)
 {
 	// this 重複不可
-	assert(m_pRawData != pData);
-	if (m_nRawLen != 0) {
+	assert(pRawData != pData);
+	if (nRawLen != 0) {
 		_SetRawLength(0);
 	}
 	if (nDataLen != 0) {
@@ -359,7 +359,7 @@ void Memory::AppendRawData(
 	if (nDataLenBytes <= 0) {
 		return;
 	}
-	AllocBuffer(m_nRawLen + nDataLenBytes);
+	AllocBuffer(nRawLen + nDataLenBytes);
 	_AddData(pData, nDataLenBytes);
 }
 
@@ -372,16 +372,16 @@ void Memory::AppendRawData(const Memory* pMemData)
 	}
 	int	nDataLen;
 	const void*	pData = pMemData->GetRawPtr(&nDataLen);
-	AllocBuffer(m_nRawLen + nDataLen);
+	AllocBuffer(nRawLen + nDataLen);
 	_AddData(pData, nDataLen);
 }
 
 void Memory::_Empty(void)
 {
-	free(m_pRawData);
-	m_pRawData = NULL;
-	m_nDataBufSize = 0;
-	m_nRawLen = 0;
+	free(pRawData);
+	pRawData = NULL;
+	nDataBufSize = 0;
+	nRawLen = 0;
 	return;
 }
 
@@ -389,19 +389,19 @@ void Memory::_Empty(void)
 void Memory::_AppendSz(const char* str)
 {
 	int len = strlen(str);
-	AllocBuffer(m_nRawLen + len);
+	AllocBuffer(nRawLen + len);
 	_AddData(str, len);
 }
 
 
 void Memory::_SetRawLength(size_t nLength)
 {
-	if (m_nDataBufSize < nLength + 2) {
+	if (nDataBufSize < nLength + 2) {
 		AllocBuffer(nLength + 2);
 	}
-	assert(m_nRawLen <= m_nDataBufSize-2);
-	m_nRawLen = nLength;
-	m_pRawData[m_nRawLen ] = 0;
-	m_pRawData[m_nRawLen + 1] = 0; // 終端'\0'を2つ付加する('\0''\0' == L'\0')。
+	assert(nRawLen <= nDataBufSize-2);
+	nRawLen = nLength;
+	pRawData[nRawLen ] = 0;
+	pRawData[nRawLen + 1] = 0; // 終端'\0'を2つ付加する('\0''\0' == L'\0')。
 }
 

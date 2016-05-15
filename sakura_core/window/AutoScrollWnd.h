@@ -34,8 +34,8 @@ public:
 	void Close();
 
 private:
-	HBITMAP	m_hCenterImg;
-	EditView*	m_pView;
+	HBITMAP hCenterImg;
+	EditView* pView;
 protected:
 	// âºëzä÷êî
 

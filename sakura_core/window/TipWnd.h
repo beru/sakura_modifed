@@ -40,23 +40,23 @@ public:
 	void GetWindowSize(LPRECT pRect);		// 2001/06/19 asa-o ウィンドウのサイズを得る
 
 	void ChangeFont(LOGFONT* lf) {
-		if (m_hFont) {
-			::DeleteObject(m_hFont);
+		if (hFont) {
+			::DeleteObject(hFont);
 		}
-		m_hFont = ::CreateFontIndirect(lf);
+		hFont = ::CreateFontIndirect(lf);
 	}
 
 protected: // 2002/2/10 aroka アクセス権変更
-	HFONT		m_hFont;
+	HFONT		hFont;
 
 public:
-	NativeW		m_key;			// キーの内容データ
-	bool		m_KeyWasHit;	// キーがヒットしたか
-	int			m_nSearchLine;	// 辞書のヒット行	// 2006.04.10 fon
-	int			m_nSearchDict;	// ヒット辞書番号	// 2006.04.10 fon
+	NativeW		key;			// キーの内容データ
+	bool		KeyWasHit;		// キーがヒットしたか
+	int			nSearchLine;	// 辞書のヒット行	// 2006.04.10 fon
+	int			nSearchDict;	// ヒット辞書番号	// 2006.04.10 fon
 
-	NativeT		m_info;		// Tipの内容データ
-	bool		m_bAlignLeft;	// 右側揃えでチップを表示
+	NativeT		info;			// Tipの内容データ
+	bool		bAlignLeft;		// 右側揃えでチップを表示
 
 protected:
 	/*

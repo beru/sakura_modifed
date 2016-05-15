@@ -275,7 +275,6 @@
     <ClInclude Include="..\sakura_core\SortedTagJumpList.h" />
     <ClInclude Include="..\sakura_core\WriteManager.h" />
     <ClInclude Include="..\sakura_core\EditInfo.h" />
-    <ClInclude Include="..\sakura_core\apiwrap\ommonControl.h" />
     <ClInclude Include="..\sakura_core\apiwrap\StdApi.h" />
     <ClInclude Include="..\sakura_core\apiwrap\StdControl.h" />
     <ClInclude Include="..\sakura_core\charset\Cesu8.h" />
@@ -285,7 +284,6 @@
     <ClInclude Include="..\sakura_core\charset\ESI.h" />
     <ClInclude Include="..\sakura_core\charset\Euc.h" />
     <ClInclude Include="..\sakura_core\charset\charcode.h" />
-    <ClInclude Include="..\sakura_core\charset\harPointer.h" />
     <ClInclude Include="..\sakura_core\charset\charset.h" />
     <ClInclude Include="..\sakura_core\charset\Jis.h" />
     <ClInclude Include="..\sakura_core\charset\Latin1.h" />
@@ -407,7 +405,6 @@
     <ClInclude Include="..\sakura_core\view\colors\Color_RegexKeyword.h" />
     <ClInclude Include="..\sakura_core\view\colors\Color_Url.h" />
     <ClInclude Include="..\sakura_core\view\colors\ColorStrategy.h" />
-    <ClInclude Include="..\sakura_core\view\colors\EolorIndexType.h" />
     <ClInclude Include="..\sakura_core\view\figures\Figure_CtrlCode.h" />
     <ClInclude Include="..\sakura_core\view\figures\Figure_Eol.h" />
     <ClInclude Include="..\sakura_core\view\figures\Figure_HanSpace.h" />

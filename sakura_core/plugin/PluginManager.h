@@ -58,17 +58,17 @@ private:
 	// 属性
 public:
 	// pluginsフォルダのパス
-	const tstring GetBaseDir() { return m_sBaseDir; }
-	const tstring GetExePluginDir() { return m_sExePluginDir; }
+	const tstring GetBaseDir() { return sBaseDir; }
+	const tstring GetExePluginDir() { return sExePluginDir; }
 	bool SearchNewPluginDir(CommonSetting& common, HWND hWndOwner, const tstring& sSearchDir, bool& bCancel);		// 新規プラグインを追加する(下請け)
 	bool SearchNewPluginZip(CommonSetting& common, HWND hWndOwner, const tstring& sSearchDir, bool& bCancel);		// 新規プラグインを追加する(下請け)Zip File
 	bool InstZipPluginSub(CommonSetting& common, HWND hWndOwner, const tstring& sZipName, const tstring& sDispName, bool bInSearch, bool& bCancel);		// Zipプラグインを導入する(下請け)
 
 	// メンバ変数
 private:
-	Plugin::List m_plugins;
-	tstring m_sBaseDir;					// pluginsフォルダのパス
-	tstring m_sExePluginDir;			// Exeフォルダ配下pluginsフォルダのパス
+	Plugin::List plugins;
+	tstring sBaseDir;					// pluginsフォルダのパス
+	tstring sExePluginDir;			// Exeフォルダ配下pluginsフォルダのパス
 
 };
 

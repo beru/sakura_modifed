@@ -114,7 +114,7 @@ void EditView::RedrawAll()
 	GetCaret().ShowCaretPosInfo();
 
 	// 親ウィンドウのタイトルを更新
-	m_editWnd.UpdateCaption();
+	editWnd.UpdateCaption();
 
 	//	Jul. 9, 2005 genta	選択範囲の情報をステータスバーへ表示
 	GetSelectionInfo().PrintSelectionInfoMsg();
@@ -190,8 +190,8 @@ void EditView::DrawBackImage(HDC hdc, RECT& rcPaint, HDC hdcBgImg)
 	TypeSupport textType(*this, COLORIDX_TEXT);
 	COLORREF colorOld = ::SetBkColor(hdc, textType.GetBackColor());
 	const TextArea& textArea = GetTextArea();
-	const EditDoc& doc  = *m_pEditDoc;
-	const TypeConfig& typeConfig = doc.m_docType.GetDocumentAttribute();
+	const EditDoc& doc  = *pEditDoc;
+	const TypeConfig& typeConfig = doc.docType.GetDocumentAttribute();
 
 	Rect rcImagePos;
 	switch (typeConfig.backImgPos) {
@@ -203,12 +203,12 @@ void EditView::DrawBackImage(HDC hdc, RECT& rcPaint, HDC hdcBgImg)
 	case BackgroundImagePosType::TopRight:
 	case BackgroundImagePosType::BottomRight:
 	case BackgroundImagePosType::CenterRight:
-		rcImagePos.left = textArea.GetAreaRight() - doc.m_nBackImgWidth;
+		rcImagePos.left = textArea.GetAreaRight() - doc.nBackImgWidth;
 		break;
 	case BackgroundImagePosType::TopCenter:
 	case BackgroundImagePosType::BottomCenter:
 	case BackgroundImagePosType::Center:
-		rcImagePos.left = textArea.GetAreaLeft() + textArea.GetAreaWidth()/2 - doc.m_nBackImgWidth/2;
+		rcImagePos.left = textArea.GetAreaLeft() + textArea.GetAreaWidth()/2 - doc.nBackImgWidth/2;
 		break;
 	default:
 		assert_warning(false);
@@ -223,12 +223,12 @@ void EditView::DrawBackImage(HDC hdc, RECT& rcPaint, HDC hdcBgImg)
 	case BackgroundImagePosType::BottomLeft:
 	case BackgroundImagePosType::BottomRight:
 	case BackgroundImagePosType::BottomCenter:
-		rcImagePos.top  = textArea.GetAreaBottom() - doc.m_nBackImgHeight;
+		rcImagePos.top  = textArea.GetAreaBottom() - doc.nBackImgHeight;
 		break;
 	case BackgroundImagePosType::CenterLeft:
 	case BackgroundImagePosType::CenterRight:
 	case BackgroundImagePosType::Center:
-		rcImagePos.top  = textArea.GetAreaTop() + textArea.GetAreaHeight()/2 - doc.m_nBackImgHeight/2;
+		rcImagePos.top  = textArea.GetAreaTop() + textArea.GetAreaHeight()/2 - doc.nBackImgHeight/2;
 		break;
 	default:
 		assert_warning(false);
@@ -238,28 +238,28 @@ void EditView::DrawBackImage(HDC hdc, RECT& rcPaint, HDC hdcBgImg)
 	rcImagePos.top  += typeConfig.backImgPosOffset.y;
 	// スクロール時の画面の端を作画するときの位置あたりへ移動
 	if (typeConfig.backImgScrollX) {
-		int tile = typeConfig.backImgRepeatX ? doc.m_nBackImgWidth : INT_MAX;
+		int tile = typeConfig.backImgRepeatX ? doc.nBackImgWidth : INT_MAX;
 		Int posX = (textArea.GetViewLeftCol() % tile) * GetTextMetrics().GetHankakuDx();
 		rcImagePos.left -= posX % tile;
 	}
 	if (typeConfig.backImgScrollY) {
-		int tile = typeConfig.backImgRepeatY ? doc.m_nBackImgHeight : INT_MAX;
+		int tile = typeConfig.backImgRepeatY ? doc.nBackImgHeight : INT_MAX;
 		Int posY = (textArea.GetViewTopLine() % tile) * GetTextMetrics().GetHankakuDy();
 		rcImagePos.top -= posY % tile;
 	}
 	if (typeConfig.backImgRepeatX) {
 		if (0 < rcImagePos.left) {
-			// rcImagePos.left = rcImagePos.left - (rcImagePos.left / doc.m_nBackImgWidth + 1) * doc.m_nBackImgWidth;
-			rcImagePos.left = rcImagePos.left % doc.m_nBackImgWidth - doc.m_nBackImgWidth;
+			// rcImagePos.left = rcImagePos.left - (rcImagePos.left / doc.nBackImgWidth + 1) * doc.m_nBackImgWidth;
+			rcImagePos.left = rcImagePos.left % doc.nBackImgWidth - doc.nBackImgWidth;
 		}
 	}
 	if (typeConfig.backImgRepeatY) {
 		if (0 < rcImagePos.top) {
-			// rcImagePos.top = rcImagePos.top - (rcImagePos.top / doc.m_nBackImgHeight + 1) * doc.m_nBackImgHeight;
-			rcImagePos.top = rcImagePos.top % doc.m_nBackImgHeight - doc.m_nBackImgHeight;
+			// rcImagePos.top = rcImagePos.top - (rcImagePos.top / doc.nBackImgHeight + 1) * doc.m_nBackImgHeight;
+			rcImagePos.top = rcImagePos.top % doc.nBackImgHeight - doc.nBackImgHeight;
 		}
 	}
-	rcImagePos.SetSize(doc.m_nBackImgWidth, doc.m_nBackImgHeight);
+	rcImagePos.SetSize(doc.nBackImgWidth, doc.nBackImgHeight);
 	
 	RECT rc = rcPaint;
 	// rc.left = t_max((int)rc.left, textArea.GetAreaLeft());
@@ -289,16 +289,16 @@ void EditView::DrawBackImage(HDC hdc, RECT& rcPaint, HDC hdcBgImg)
 				rcBltAll.right  = t_max(rcBltAll.right,  rcBlt.right);
 				rcBltAll.bottom = t_max(rcBltAll.bottom, rcBlt.bottom);
 			}
-			rcImagePos.left  += doc.m_nBackImgWidth;
-			rcImagePos.right += doc.m_nBackImgWidth;
+			rcImagePos.left  += doc.nBackImgWidth;
+			rcImagePos.right += doc.nBackImgWidth;
 			if (!typeConfig.backImgRepeatX) {
 				break;
 			}
 		}
 		rcImagePos.left  = rcImagePosOrg.left;
 		rcImagePos.right = rcImagePosOrg.right;
-		rcImagePos.top    += doc.m_nBackImgHeight;
-		rcImagePos.bottom += doc.m_nBackImgHeight;
+		rcImagePos.top    += doc.nBackImgHeight;
+		rcImagePos.bottom += doc.nBackImgHeight;
 		if (!typeConfig.backImgRepeatY) {
 			break;
 		}
@@ -472,13 +472,13 @@ void EditView::SetCurrentColor(
 	int nColorIdxBg = ToColorInfoArrIndex(eColorIndexBg);
 
 	// 実際に色を設定
-	const ColorInfo& info  = m_pTypeData->colorInfoArr[nColorIdx];
-	const ColorInfo& info2 = m_pTypeData->colorInfoArr[nColorIdx2];
-	const ColorInfo& infoBg = m_pTypeData->colorInfoArr[nColorIdxBg];
+	const ColorInfo& info  = pTypeData->colorInfoArr[nColorIdx];
+	const ColorInfo& info2 = pTypeData->colorInfoArr[nColorIdx2];
+	const ColorInfo& infoBg = pTypeData->colorInfoArr[nColorIdxBg];
 	COLORREF fgcolor = GetTextColorByColorInfo2(info, info2);
 	gr.SetTextForeColor(fgcolor);
 	// 2012.11.21 背景色がテキストとおなじなら背景色はカーソル行背景
-	const ColorInfo& info3 = (info2.colorAttr.cBACK == m_crBack ? infoBg : info2);
+	const ColorInfo& info3 = (info2.colorAttr.cBACK == crBack ? infoBg : info2);
 	COLORREF bkcolor = (nColorIdx == nColorIdx2) ? info3.colorAttr.cBACK : GetBackColorByColorInfo2(info, info3);
 	gr.SetTextBackColor(bkcolor);
 	Font font;
@@ -527,7 +527,7 @@ COLORREF EditView::GetTextColorByColorInfo2(const ColorInfo& info, const ColorIn
 		return info.colorAttr.cTEXT;
 	}
 	// 反転表示
-	if (info.colorAttr.cBACK == m_crBack) {
+	if (info.colorAttr.cBACK == crBack) {
 		return  info2.colorAttr.cTEXT ^ 0x00FFFFFF;
 	}
 	int alpha = 255*30/100; // 30%
@@ -540,7 +540,7 @@ COLORREF EditView::GetBackColorByColorInfo2(const ColorInfo& info, const ColorIn
 		return info.colorAttr.cBACK;
 	}
 	// 反転表示
-	if (info.colorAttr.cBACK == m_crBack) {
+	if (info.colorAttr.cBACK == crBack) {
 		return  info2.colorAttr.cBACK ^ 0x00FFFFFF;
 	}
 	int alpha = 255*30/100; // 30%
@@ -552,15 +552,16 @@ COLORREF EditView::GetBackColorByColorInfo2(const ColorInfo& info, const ColorIn
 //                           描画                              //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-void EditView::OnPaint(HDC _hdc, PAINTSTRUCT *pPs, BOOL bDrawFromComptibleBmp)
+void EditView::OnPaint(HDC _hdc, PAINTSTRUCT* pPs, BOOL bDrawFromComptibleBmp)
 {
-	bool bChangeFont = m_bMiniMap;
+
+	bool bChangeFont = bMiniMap;
 	if (bChangeFont) {
 		SelectCharWidthCache(CharWidthFontMode::MiniMap, CharWidthCacheMode::Local);
 	}
 	OnPaint2(_hdc, pPs, bDrawFromComptibleBmp);
 	if (bChangeFont) {
-		SelectCharWidthCache(CharWidthFontMode::Edit, m_editWnd.GetLogfontCacheMode());
+		SelectCharWidthCache(CharWidthFontMode::Edit, editWnd.GetLogfontCacheMode());
 	}
 }
 
@@ -573,7 +574,7 @@ void EditView::OnPaint(HDC _hdc, PAINTSTRUCT *pPs, BOOL bDrawFromComptibleBmp)
 	@date 2007.09.09 Moca 元々無効化されていた第三パラメータのbUseMemoryDCをbDrawFromComptibleBmpに変更。
 	@date 2009.03.26 ryoji 行番号のみ描画を通常の行描画と分離（効率化）
 */
-void EditView::OnPaint2(HDC _hdc, PAINTSTRUCT *pPs, BOOL bDrawFromComptibleBmp)
+void EditView::OnPaint2(HDC _hdc, PAINTSTRUCT* pPs, BOOL bDrawFromComptibleBmp)
 {
 //	MY_RUNNINGTIMER(runningTimer, "EditView::OnPaint");
 	Graphics gr(_hdc);
@@ -598,8 +599,8 @@ void EditView::OnPaint2(HDC _hdc, PAINTSTRUCT *pPs, BOOL bDrawFromComptibleBmp)
 	// From Here 2007.09.09 Moca 互換BMPによる画面バッファ
 	// 互換BMPからの転送のみによる作画
 	if (bDrawFromComptibleBmp
-		&& m_hdcCompatDC
-		&& m_hbmpCompatBMP
+		&& hdcCompatDC
+		&& hbmpCompatBMP
 	) {
 		::BitBlt(
 			gr,
@@ -607,20 +608,20 @@ void EditView::OnPaint2(HDC _hdc, PAINTSTRUCT *pPs, BOOL bDrawFromComptibleBmp)
 			pPs->rcPaint.top,
 			pPs->rcPaint.right - pPs->rcPaint.left,
 			pPs->rcPaint.bottom - pPs->rcPaint.top,
-			m_hdcCompatDC,
+			hdcCompatDC,
 			pPs->rcPaint.left,
 			pPs->rcPaint.top,
 			SRCCOPY
 		);
-		if (m_editWnd.GetActivePane() == m_nMyIndex) {
+		if (editWnd.GetActivePane() == nMyIndex) {
 			// アクティブペインは、アンダーライン描画
-			GetCaret().m_underLine.CaretUnderLineON(true, false);
+			GetCaret().underLine.CaretUnderLineON(true, false);
 		}
 		return;
 	}
-	if (m_hdcCompatDC && !m_hbmpCompatBMP
-		 || m_nCompatBMPWidth < (pPs->rcPaint.right - pPs->rcPaint.left)
-		 || m_nCompatBMPHeight < (pPs->rcPaint.bottom - pPs->rcPaint.top)
+	if (hdcCompatDC && !hbmpCompatBMP
+		 || nCompatBMPWidth < (pPs->rcPaint.right - pPs->rcPaint.left)
+		 || nCompatBMPHeight < (pPs->rcPaint.bottom - pPs->rcPaint.top)
 	) {
 		RECT rect;
 		::GetWindowRect(this->GetHwnd(), &rect);
@@ -641,9 +642,9 @@ void EditView::OnPaint2(HDC _hdc, PAINTSTRUCT *pPs, BOOL bDrawFromComptibleBmp)
 
 //@@@ 2001.11.17 add start MIK
 	// 変更があればタイプ設定を行う。
-	if (m_pTypeData->bUseRegexKeyword || m_pRegexKeyword->m_bUseRegexKeyword) { // OFFなのに前回のデータが残ってる
+	if (pTypeData->bUseRegexKeyword || pRegexKeyword->bUseRegexKeyword) { // OFFなのに前回のデータが残ってる
 		// タイプ別設定をする。設定済みかどうかは呼び先でチェックする。
-		m_pRegexKeyword->RegexKeySetTypes(m_pTypeData);
+		pRegexKeyword->RegexKeySetTypes(pTypeData);
 	}
 //@@@ 2001.11.17 add end MIK
 
@@ -652,11 +653,11 @@ void EditView::OnPaint2(HDC _hdc, PAINTSTRUCT *pPs, BOOL bDrawFromComptibleBmp)
 	HDC hdcOld = 0;
 	// 2007.09.09 Moca bUseMemoryDCを有効化。
 	// bUseMemoryDC = FALSE;
-	bool bUseMemoryDC = (m_hdcCompatDC != NULL);
-	assert_warning(gr != m_hdcCompatDC);
+	bool bUseMemoryDC = (hdcCompatDC != NULL);
+	assert_warning(gr != hdcCompatDC);
 	if (bUseMemoryDC) {
 		hdcOld = gr;
-		gr = m_hdcCompatDC;
+		gr = hdcCompatDC;
 	}else {
 		if (bTransText || pPs->rcPaint.bottom - pPs->rcPaint.top <= 2 || pPs->rcPaint.left - pPs->rcPaint.right <= 2) {
 			// 透過処理の場合フォントの輪郭が重ね塗りになるため自分でクリッピング領域を設定
@@ -672,14 +673,14 @@ void EditView::OnPaint2(HDC _hdc, PAINTSTRUCT *pPs, BOOL bDrawFromComptibleBmp)
 		DrawBracketPair(false);
 	}
 
-	EditView& activeView = m_editWnd.GetActiveView();
-	m_nPageViewTop = activeView.GetTextArea().GetViewTopLine();
-	m_nPageViewBottom = activeView.GetTextArea().GetBottomLine();
+	EditView& activeView = editWnd.GetActiveView();
+	nPageViewTop = activeView.GetTextArea().GetViewTopLine();
+	nPageViewBottom = activeView.GetTextArea().GetBottomLine();
 
 	// 背景の表示
 	if (bTransText) {
 		HDC hdcBgImg = CreateCompatibleDC(gr);
-		HBITMAP hOldBmp = (HBITMAP)::SelectObject(hdcBgImg, m_pEditDoc->m_hBackImg);
+		HBITMAP hOldBmp = (HBITMAP)::SelectObject(hdcBgImg, pEditDoc->hBackImg);
 		DrawBackImage(gr, pPs->rcPaint, hdcBgImg);
 		SelectObject(hdcBgImg, hOldBmp);
 		DeleteObject(hdcBgImg);
@@ -701,13 +702,13 @@ void EditView::OnPaint2(HDC _hdc, PAINTSTRUCT *pPs, BOOL bDrawFromComptibleBmp)
 	//	From Here Sep. 7, 2001 genta
 	//	Sep. 23, 2002 genta 行番号非表示でも行番号色の帯があるので隙間を埋める
 	if (GetTextArea().GetTopYohaku()) {
-		if (bTransText && m_pTypeData->colorInfoArr[COLORIDX_GYOU].colorAttr.cBACK == textType.GetBackColor()) {
+		if (bTransText && pTypeData->colorInfoArr[COLORIDX_GYOU].colorAttr.cBACK == textType.GetBackColor()) {
 		}else {
 			rc.left   = 0;
 			rc.top    = GetTextArea().GetRulerHeight();
 			rc.right  = GetTextArea().GetLineNumberWidth(); //	Sep. 23 ,2002 genta 余白はテキスト色のまま残す
 			rc.bottom = GetTextArea().GetAreaTop();
-			gr.SetTextBackColor(m_pTypeData->colorInfoArr[COLORIDX_GYOU].colorAttr.cBACK);
+			gr.SetTextBackColor(pTypeData->colorInfoArr[COLORIDX_GYOU].colorAttr.cBACK);
 			gr.FillMyRectTextBackColor(rc);
 		}
 	}
@@ -804,7 +805,7 @@ void EditView::OnPaint2(HDC _hdc, PAINTSTRUCT *pPs, BOOL bDrawFromComptibleBmp)
 	}
 	
 	{
-		if (!m_bMiniMap) {
+		if (!bMiniMap) {
 			GetTextDrawer().DispNoteLine(gr, pos.GetDrawPos().y, pPs->rcPaint.bottom, pPs->rcPaint.left, pPs->rcPaint.right);
 		}
 		// 2006.04.29 行部分は行ごとに作画し、ここでは縦線の残りを作画
@@ -846,9 +847,9 @@ void EditView::OnPaint2(HDC _hdc, PAINTSTRUCT *pPs, BOOL bDrawFromComptibleBmp)
 
 	// From Here 2007.09.09 Moca 互換BMPによる画面バッファ
 	//     アンダーライン描画をメモリDCからのコピー前処理から後に移動
-	if (m_editWnd.GetActivePane() == m_nMyIndex) {
+	if (editWnd.GetActivePane() == nMyIndex) {
 		// アクティブペインは、アンダーライン描画
-		GetCaret().m_underLine.CaretUnderLineON(true, false);
+		GetCaret().underLine.CaretUnderLineON(true, false);
 	}
 	// To Here 2007.09.09 Moca
 
@@ -966,7 +967,7 @@ bool EditView::DrawLayoutLine(ColorStrategyInfo& csInfo)
 	bool bDispEOF = false;
 	TypeSupport textType(*this, COLORIDX_TEXT);
 
-	const Layout* pLayout = csInfo.pDispPos->GetLayoutRef(); //m_pEditDoc->m_layoutMgr.SearchLineByLayoutY(pInfo->pDispPos->GetLayoutLineRef());
+	const Layout* pLayout = csInfo.pDispPos->GetLayoutRef(); //pEditDoc->m_layoutMgr.SearchLineByLayoutY(pInfo->pDispPos->GetLayoutLineRef());
 
 	// レイアウト情報
 	if (pLayout) {
@@ -1010,13 +1011,13 @@ bool EditView::DrawLayoutLine(ColorStrategyInfo& csInfo)
 	TypeSupport	caretLineBg(*this, COLORIDX_CARETLINEBG);
 	TypeSupport	evenLineBg(*this, COLORIDX_EVENLINEBG);
 	TypeSupport	pageViewBg(*this, COLORIDX_PAGEVIEW);
-	EditView& activeView = m_editWnd.GetActiveView();
+	EditView& activeView = editWnd.GetActiveView();
 	TypeSupport&	backType = (caretLineBg.IsDisp() &&
-		GetCaret().GetCaretLayoutPos().GetY() == csInfo.pDispPos->GetLayoutLineRef() && !m_bMiniMap
+		GetCaret().GetCaretLayoutPos().GetY() == csInfo.pDispPos->GetLayoutLineRef() && !bMiniMap
 			? caretLineBg
-			: evenLineBg.IsDisp() && csInfo.pDispPos->GetLayoutLineRef() % 2 == 1 && !m_bMiniMap
+			: evenLineBg.IsDisp() && csInfo.pDispPos->GetLayoutLineRef() % 2 == 1 && !bMiniMap
 				? evenLineBg
-				: (pageViewBg.IsDisp() && m_bMiniMap
+				: (pageViewBg.IsDisp() && bMiniMap
 					&& activeView.GetTextArea().GetViewTopLine() <= csInfo.pDispPos->GetLayoutLineRef()
 					&& csInfo.pDispPos->GetLayoutLineRef() < activeView.GetTextArea().GetBottomLine())
 						? pageViewBg
@@ -1098,9 +1099,9 @@ bool EditView::DrawLayoutLine(ColorStrategyInfo& csInfo)
 		// 有文字行のEOF
 		_DispEOF(csInfo.gr, csInfo.pDispPos, *this);
 		bDispEOF = true;
-	}else if (!pLayout && csInfo.pDispPos->GetLayoutLineRef() == m_pEditDoc->m_layoutMgr.GetLineCount()) {
+	}else if (!pLayout && csInfo.pDispPos->GetLayoutLineRef() == pEditDoc->layoutMgr.GetLineCount()) {
 		// 空行のEOF
-		const Layout* pBottom = m_pEditDoc->m_layoutMgr.GetBottomLayout();
+		const Layout* pBottom = pEditDoc->layoutMgr.GetBottomLayout();
 		if (!pBottom || (pBottom && pBottom->GetLayoutEol().GetLen())) {
 			_DispEOF(csInfo.gr, csInfo.pDispPos, *this);
 			bDispEOF = true;
@@ -1144,7 +1145,7 @@ bool EditView::DrawLayoutLine(ColorStrategyInfo& csInfo)
 	}
 
 	// ノート線描画
-	if (!m_bMiniMap) {
+	if (!bMiniMap) {
 		GetTextDrawer().DispNoteLine(
 			csInfo.gr,
 			csInfo.pDispPos->GetDrawPos().y,
@@ -1164,7 +1165,7 @@ bool EditView::DrawLayoutLine(ColorStrategyInfo& csInfo)
 	);
 
 	// 折り返し桁縦線描画
-	if (!m_bMiniMap) {
+	if (!bMiniMap) {
 		GetTextDrawer().DispWrapLine(
 			csInfo.gr,
 			csInfo.pDispPos->GetDrawPos().y,
@@ -1178,7 +1179,7 @@ bool EditView::DrawLayoutLine(ColorStrategyInfo& csInfo)
 			csInfo.gr,
 			csInfo.pDispPos->GetLayoutLineRef(),
 			Point(csInfo.dispPosBegin.GetDrawPos().x, csInfo.pDispPos->GetDrawPos().y),
-			pLayout->CalcLayoutWidth(EditDoc::GetInstance(0)->m_layoutMgr) + LayoutInt(pLayout->GetLayoutEol().GetLen() ? 1 : 0)
+			pLayout->CalcLayoutWidth(EditDoc::GetInstance(0)->layoutMgr) + LayoutInt(pLayout->GetLayoutEol().GetLen() ? 1 : 0)
 		);
 	}
 
@@ -1213,8 +1214,8 @@ void EditView::DispTextSelected(
 	int			nLineHeight = GetTextMetrics().GetHankakuDy();
 	int			nCharWidth = GetTextMetrics().GetHankakuDx();
 	HRGN		hrgnDraw;
-	const Layout* pLayout = m_pEditDoc->m_layoutMgr.SearchLineByLayoutY(nLineNum);
-	LayoutRange& select = GetSelectionInfo().m_select;
+	const Layout* pLayout = pEditDoc->layoutMgr.SearchLineByLayoutY(nLineNum);
+	LayoutRange& select = GetSelectionInfo().select;
 
 	// 選択範囲内の行かな
 //	if (IsTextSelected()) {
@@ -1255,7 +1256,7 @@ void EditView::DispTextSelected(
 				select.GetFrom().x >= GetTextArea().GetViewLeftCol()
 			) {
 				HWND hWnd = ::GetForegroundWindow();
-				if (hWnd && (hWnd == m_editWnd.m_dlgFind.GetHwnd() || hWnd == m_editWnd.m_dlgReplace.GetHwnd())) {
+				if (hWnd && (hWnd == editWnd.dlgFind.GetHwnd() || hWnd == editWnd.dlgReplace.GetHwnd())) {
 					rcClip.right = rcClip.left + (nCharWidth/3 == 0 ? 1 : nCharWidth/3);
 					bOMatch = true;
 				}
@@ -1315,19 +1316,19 @@ void EditView::DispTextSelected(
 */
 bool EditView::CreateOrUpdateCompatibleBitmap(int cx, int cy)
 {
-	if (!m_hdcCompatDC) {
+	if (!hdcCompatDC) {
 		return false;
 	}
 	// サイズを64の倍数で整列
 	int nBmpWidthNew  = ((cx + 63) & (0x7fffffff - 63));
 	int nBmpHeightNew = ((cy + 63) & (0x7fffffff - 63));
-	if (nBmpWidthNew != m_nCompatBMPWidth || nBmpHeightNew != m_nCompatBMPHeight) {
+	if (nBmpWidthNew != nCompatBMPWidth || nBmpHeightNew != nCompatBMPHeight) {
 #if 0
 	MYTRACE(_T("EditView::CreateOrUpdateCompatibleBitmap(%d, %d): resized\n"), cx, cy);
 #endif
 		HDC	hdc = ::GetDC(GetHwnd());
 		HBITMAP hBitmapNew = NULL;
-		if (m_hbmpCompatBMP) {
+		if (hbmpCompatBMP) {
 			// BMPの更新
 			HDC hdcTemp = ::CreateCompatibleDC(hdc);
 			hBitmapNew = ::CreateCompatibleBitmap(hdc, nBmpWidthNew, nBmpHeightNew);
@@ -1335,12 +1336,12 @@ bool EditView::CreateOrUpdateCompatibleBitmap(int cx, int cy)
 				HBITMAP hBitmapOld = (HBITMAP)::SelectObject(hdcTemp, hBitmapNew);
 				// 前の画面内容をコピーする
 				::BitBlt(hdcTemp, 0, 0,
-					t_min(nBmpWidthNew, m_nCompatBMPWidth),
-					t_min(nBmpHeightNew, m_nCompatBMPHeight),
-					m_hdcCompatDC, 0, 0, SRCCOPY);
+					t_min(nBmpWidthNew, nCompatBMPWidth),
+					t_min(nBmpHeightNew, nCompatBMPHeight),
+					hdcCompatDC, 0, 0, SRCCOPY);
 				::SelectObject(hdcTemp, hBitmapOld);
-				::SelectObject(m_hdcCompatDC, m_hbmpCompatBMPOld);
-				::DeleteObject(m_hbmpCompatBMP);
+				::SelectObject(hdcCompatDC, hbmpCompatBMPOld);
+				::DeleteObject(hbmpCompatBMP);
 			}
 			::DeleteDC(hdcTemp);
 		}else {
@@ -1348,20 +1349,20 @@ bool EditView::CreateOrUpdateCompatibleBitmap(int cx, int cy)
 			hBitmapNew = ::CreateCompatibleBitmap(hdc, nBmpWidthNew, nBmpHeightNew);
 		}
 		if (hBitmapNew) {
-			m_hbmpCompatBMP = hBitmapNew;
-			m_nCompatBMPWidth = nBmpWidthNew;
-			m_nCompatBMPHeight = nBmpHeightNew;
-			m_hbmpCompatBMPOld = (HBITMAP)::SelectObject(m_hdcCompatDC, m_hbmpCompatBMP);
+			hbmpCompatBMP = hBitmapNew;
+			nCompatBMPWidth = nBmpWidthNew;
+			nCompatBMPHeight = nBmpHeightNew;
+			hbmpCompatBMPOld = (HBITMAP)::SelectObject(hdcCompatDC, hbmpCompatBMP);
 		}else {
 			// 互換BMPの作成に失敗
 			// 今後も失敗を繰り返す可能性が高いので
-			// m_hdcCompatDCをNULLにすることで画面バッファ機能をこのウィンドウのみ無効にする。
+			// hdcCompatDCをNULLにすることで画面バッファ機能をこのウィンドウのみ無効にする。
 			//	2007.09.29 genta 関数化．既存のBMPも解放
 			UseCompatibleDC(FALSE);
 		}
 		::ReleaseDC(GetHwnd(), hdc);
 	}
-	return m_hbmpCompatBMP != NULL;
+	return hbmpCompatBMP != NULL;
 }
 
 
@@ -1374,13 +1375,13 @@ bool EditView::CreateOrUpdateCompatibleBitmap(int cx, int cy)
 */
 void EditView::DeleteCompatibleBitmap()
 {
-	if (m_hbmpCompatBMP) {
-		::SelectObject(m_hdcCompatDC, m_hbmpCompatBMPOld);
-		::DeleteObject(m_hbmpCompatBMP);
-		m_hbmpCompatBMP = NULL;
-		m_hbmpCompatBMPOld = NULL;
-		m_nCompatBMPWidth = -1;
-		m_nCompatBMPHeight = -1;
+	if (hbmpCompatBMP) {
+		::SelectObject(hdcCompatDC, hbmpCompatBMPOld);
+		::DeleteObject(hbmpCompatBMP);
+		hbmpCompatBMP = NULL;
+		hbmpCompatBMPOld = NULL;
+		nCompatBMPWidth = -1;
+		nCompatBMPHeight = -1;
 	}
 }
 
@@ -1395,9 +1396,9 @@ void EditView::UseCompatibleDC(BOOL fCache)
 {
 	// From Here 2007.09.09 Moca 互換BMPによる画面バッファ
 	if (fCache) {
-		if (!m_hdcCompatDC) {
+		if (!hdcCompatDC) {
 			HDC hdc = ::GetDC(GetHwnd());
-			m_hdcCompatDC = ::CreateCompatibleDC(hdc);
+			hdcCompatDC = ::CreateCompatibleDC(hdc);
 			::ReleaseDC(GetHwnd(), hdc);
 			DEBUG_TRACE(_T("EditView::UseCompatibleDC: Created\n"), fCache);
 		}else {
@@ -1406,10 +1407,10 @@ void EditView::UseCompatibleDC(BOOL fCache)
 	}else {
 		//	CompatibleBitmapが残っているかもしれないので最初に削除
 		DeleteCompatibleBitmap();
-		if (m_hdcCompatDC) {
-			::DeleteDC(m_hdcCompatDC);
+		if (hdcCompatDC) {
+			::DeleteDC(hdcCompatDC);
 			DEBUG_TRACE(_T("EditView::UseCompatibleDC: Deleted.\n"));
-			m_hdcCompatDC = NULL;
+			hdcCompatDC = NULL;
 		}
 	}
 }

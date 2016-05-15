@@ -64,7 +64,7 @@ class OutputAdapterDiff: public OutputAdapter
 {
 public:
 	OutputAdapterDiff(EditView* view, int nFlgFile12_){
-		m_view = view;
+		this->view = view;
 		bLineHead = true;
 		bDiffInfo = false;
 		nDiffLen = 0;
@@ -84,7 +84,7 @@ public:
 	int		nDiffLen;			// DIFF情報長
 	char	szDiffData[100];	// DIFF情報
 protected:
-	EditView* m_view;
+	EditView* view;
 	bool	bLineHead;			// 行頭か
 	bool	bFirst;				// 先頭か？	//@@@ 2003.05.31 MIK
 	int		nFlgFile12;
@@ -146,7 +146,7 @@ void EditView::ViewDiffInfo(
 	// 今あるDIFF差分を消去する。
 	if (DiffManager::getInstance().IsDiffUse())
 		GetCommander().Command_Diff_Reset();
-		//m_pEditDoc->m_docLineMgr.ResetAllDiffMark();
+		//pEditDoc->docLineMgr.ResetAllDiffMark();
 
 	// オプションを作成する
 	TCHAR	szOption[16];	// "-cwbBt"
@@ -203,7 +203,7 @@ void EditView::ViewDiffInfo(
 
 
 	//分割したビューも更新
-	m_editWnd.Views_Redraw();
+	editWnd.Views_Redraw();
 
 	return;
 					}
@@ -249,7 +249,7 @@ bool OutputAdapterDiff::OutputA(const ACHAR* pBuf, int size)
 				// DIFF情報があれば解析する
 				if (bDiffInfo && nDiffLen > 0) {
 					szDiffData[nDiffLen] = '\0';
-					m_view->AnalyzeDiffInfo(szDiffData, nFlgFile12);
+					view->AnalyzeDiffInfo(szDiffData, nFlgFile12);
 					nDiffLen = 0;
 				}
 				
@@ -353,13 +353,13 @@ void EditView::AnalyzeDiffInfo(
 
 	// 抽出したDIFF情報から行番号に差分マークを付ける
 	if (nFlgFile12 == 0) {	// 編集中ファイルは旧ファイル
-		if      (mode == 'a') DiffLineMgr(m_pEditDoc->m_docLineMgr).SetDiffMarkRange(DiffMark::Delete, LogicInt(s1   ), LogicInt(e1   ));
-		else if (mode == 'c') DiffLineMgr(m_pEditDoc->m_docLineMgr).SetDiffMarkRange(DiffMark::Change, LogicInt(s1 - 1), LogicInt(e1 - 1));
-		else if (mode == 'd') DiffLineMgr(m_pEditDoc->m_docLineMgr).SetDiffMarkRange(DiffMark::Append, LogicInt(s1 - 1), LogicInt(e1 - 1));
+		if      (mode == 'a') DiffLineMgr(pEditDoc->docLineMgr).SetDiffMarkRange(DiffMark::Delete, LogicInt(s1   ), LogicInt(e1   ));
+		else if (mode == 'c') DiffLineMgr(pEditDoc->docLineMgr).SetDiffMarkRange(DiffMark::Change, LogicInt(s1 - 1), LogicInt(e1 - 1));
+		else if (mode == 'd') DiffLineMgr(pEditDoc->docLineMgr).SetDiffMarkRange(DiffMark::Append, LogicInt(s1 - 1), LogicInt(e1 - 1));
 	}else {	// 編集中ファイルは新ファイル
-		if      (mode == 'a') DiffLineMgr(m_pEditDoc->m_docLineMgr).SetDiffMarkRange(DiffMark::Append, LogicInt(s2 - 1), LogicInt(e2 - 1));
-		else if (mode == 'c') DiffLineMgr(m_pEditDoc->m_docLineMgr).SetDiffMarkRange(DiffMark::Change, LogicInt(s2 - 1), LogicInt(e2 - 1));
-		else if (mode == 'd') DiffLineMgr(m_pEditDoc->m_docLineMgr).SetDiffMarkRange(DiffMark::Delete, LogicInt(s2   ), LogicInt(e2   ));
+		if      (mode == 'a') DiffLineMgr(pEditDoc->docLineMgr).SetDiffMarkRange(DiffMark::Append, LogicInt(s2 - 1), LogicInt(e2 - 1));
+		else if (mode == 'c') DiffLineMgr(pEditDoc->docLineMgr).SetDiffMarkRange(DiffMark::Change, LogicInt(s2 - 1), LogicInt(e2 - 1));
+		else if (mode == 'd') DiffLineMgr(pEditDoc->docLineMgr).SetDiffMarkRange(DiffMark::Delete, LogicInt(s2   ), LogicInt(e2   ));
 	}
 	
 	return;
@@ -376,7 +376,7 @@ bool MakeDiffTmpFile_core(
 	LogicInt y = LogicInt(0);
 	const wchar_t*	pLineData;
 	if (!hwnd) {
-		const DocLineMgr& docMgr = view.m_pEditDoc->m_docLineMgr;
+		const DocLineMgr& docMgr = view.pEditDoc->docLineMgr;
 		for (;;){
 			LogicInt		nLineLen;
 			pLineData = docMgr.GetLine(y)->GetDocLineStrWithEOL(&nLineLen);
@@ -401,7 +401,7 @@ bool MakeDiffTmpFile_core(
 			int nLineOffset = 0;
 			int nLineLen = 0; //初回用仮値
 			do {
-				// m_workBuffer#m_Workの排他制御。外部コマンド出力/TraceOut/Diffが対象
+				// workBuffer#m_Workの排他制御。外部コマンド出力/TraceOut/Diffが対象
 				LockGuard<Mutex> guard(ShareData::GetMutexShareWork());
 				{
 					nLineLen = ::SendMessage(hwnd, MYWM_GETLINEDATA, y, nLineOffset);
@@ -458,7 +458,7 @@ bool EditView::MakeDiffTmpFile(
 	// 自分か？
 	if (!hWnd) {
 		CodeConvertResult eWriteResult = WriteManager().WriteFile_From_CDocLineMgr(
-			m_pEditDoc->m_docLineMgr,
+			pEditDoc->docLineMgr,
 			SaveInfo(
 				filename,
 				code,

@@ -176,11 +176,11 @@ void ShareData_IO::ShareData_IO_Mru(DataProfile& profile)
 	EditInfo*	pfiWork;
 	WCHAR		szKeyName[64];
 
-	profile.IOProfileData(pszSecName, LTEXT("_MRU_Counts"), pShare->history.m_nMRUArrNum);
-	SetValueLimit(pShare->history.m_nMRUArrNum, MAX_MRU);
-	nSize = pShare->history.m_nMRUArrNum;
+	profile.IOProfileData(pszSecName, LTEXT("_MRU_Counts"), pShare->history.nMRUArrNum);
+	SetValueLimit(pShare->history.nMRUArrNum, MAX_MRU);
+	nSize = pShare->history.nMRUArrNum;
 	for (i=0; i<nSize; ++i) {
-		pfiWork = &pShare->history.m_fiMRUArr[i];
+		pfiWork = &pShare->history.fiMRUArr[i];
 		if (profile.IsReadingMode()) {
 			pfiWork->nTypeId = -1;
 		}
@@ -207,9 +207,9 @@ void ShareData_IO::ShareData_IO_Mru(DataProfile& profile)
 		profile.IOProfileData(pszSecName, szKeyName, pfiWork->nTypeId);
 		// お気に入り	//@@@ 2003.04.08 MIK
 		auto_sprintf( szKeyName, LTEXT("MRU[%02d].bFavorite"), i );
-		profile.IOProfileData(pszSecName, szKeyName, pShare->history.m_bMRUArrFavorite[i]);
+		profile.IOProfileData(pszSecName, szKeyName, pShare->history.bMRUArrFavorite[i]);
 	}
-	//@@@ 2001.12.26 YAZAKI 残りのm_fiMRUArrを初期化。
+	//@@@ 2001.12.26 YAZAKI 残りのfiMRUArrを初期化。
 	if (profile.IsReadingMode()) {
 		EditInfo	fiInit;
 		// 残りをfiInitで初期化しておく。
@@ -220,36 +220,36 @@ void ShareData_IO::ShareData_IO_Mru(DataProfile& profile)
 		_tcscpy( fiInit.szPath, _T("") );
 		fiInit.szMarkLines[0] = L'\0';	// 2002.01.16 hor
 		for (; i<MAX_MRU; ++i) {
-			pShare->history.m_fiMRUArr[i] = fiInit;
-			pShare->history.m_bMRUArrFavorite[i] = false;	// お気に入り	//@@@ 2003.04.08 MIK
+			pShare->history.fiMRUArr[i] = fiInit;
+			pShare->history.bMRUArrFavorite[i] = false;	// お気に入り	//@@@ 2003.04.08 MIK
 		}
 	}
 
-	profile.IOProfileData(pszSecName, LTEXT("_MRUFOLDER_Counts"), pShare->history.m_nOPENFOLDERArrNum);
-	SetValueLimit(pShare->history.m_nOPENFOLDERArrNum, MAX_OPENFOLDER);
-	nSize = pShare->history.m_nOPENFOLDERArrNum;
+	profile.IOProfileData(pszSecName, LTEXT("_MRUFOLDER_Counts"), pShare->history.nOPENFOLDERArrNum);
+	SetValueLimit(pShare->history.nOPENFOLDERArrNum, MAX_OPENFOLDER);
+	nSize = pShare->history.nOPENFOLDERArrNum;
 	for (i=0; i<nSize; ++i) {
 		auto_sprintf( szKeyName, LTEXT("MRUFOLDER[%02d]"), i );
-		profile.IOProfileData(pszSecName, szKeyName, pShare->history.m_szOPENFOLDERArr[i]);
+		profile.IOProfileData(pszSecName, szKeyName, pShare->history.szOPENFOLDERArr[i]);
 		// お気に入り	//@@@ 2003.04.08 MIK
 		wcscat(szKeyName, LTEXT(".bFavorite"));
-		profile.IOProfileData(pszSecName, szKeyName, pShare->history.m_bOPENFOLDERArrFavorite[i]);
+		profile.IOProfileData(pszSecName, szKeyName, pShare->history.bOPENFOLDERArrFavorite[i]);
 	}
 	// 読み込み時は残りを初期化
 	if (profile.IsReadingMode()) {
 		for (; i<MAX_OPENFOLDER; ++i) {
 			// 2005.04.05 D.S.Koba
-			pShare->history.m_szOPENFOLDERArr[i][0] = L'\0';
-			pShare->history.m_bOPENFOLDERArrFavorite[i] = false;	// お気に入り	//@@@ 2003.04.08 MIK
+			pShare->history.szOPENFOLDERArr[i][0] = L'\0';
+			pShare->history.bOPENFOLDERArrFavorite[i] = false;	// お気に入り	//@@@ 2003.04.08 MIK
 		}
 	}
 	
-	profile.IOProfileData(pszSecName, LTEXT("_ExceptMRU_Counts"), pShare->history.m_aExceptMRU._GetSizeRef());
-	pShare->history.m_aExceptMRU.SetSizeLimit();
-	nSize = pShare->history.m_aExceptMRU.size();
+	profile.IOProfileData(pszSecName, LTEXT("_ExceptMRU_Counts"), pShare->history.aExceptMRU._GetSizeRef());
+	pShare->history.aExceptMRU.SetSizeLimit();
+	nSize = pShare->history.aExceptMRU.size();
 	for (i=0; i<nSize; ++i) {
 		auto_sprintf( szKeyName, LTEXT("ExceptMRU[%02d]"), i );
-		profile.IOProfileData(pszSecName, szKeyName, pShare->history.m_aExceptMRU[i]);
+		profile.IOProfileData(pszSecName, szKeyName, pShare->history.aExceptMRU[i]);
 	}
 }
 
@@ -328,7 +328,7 @@ void ShareData_IO::ShareData_IO_Folders(DataProfile& profile)
 	// マクロ用フォルダ
 	profile.IOProfileData(pszSecName, LTEXT("szMACROFOLDER"), pShare->common.macro.szMACROFOLDER);
 	// 設定インポート用フォルダ
-	profile.IOProfileData(pszSecName, LTEXT("szIMPORTFOLDER"), pShare->history.m_szIMPORTFOLDER);
+	profile.IOProfileData(pszSecName, LTEXT("szIMPORTFOLDER"), pShare->history.szIMPORTFOLDER);
 }
 
 /*!
@@ -344,20 +344,20 @@ void ShareData_IO::ShareData_IO_Cmd(DataProfile& profile)
 	static const WCHAR* pszSecName = LTEXT("Cmd");
 	WCHAR szKeyName[64];
 
-	profile.IOProfileData(pszSecName, LTEXT("nCmdArrNum"), pShare->history.m_aCommands._GetSizeRef());
-	pShare->history.m_aCommands.SetSizeLimit();
-	int nSize = pShare->history.m_aCommands.size();
+	profile.IOProfileData(pszSecName, LTEXT("nCmdArrNum"), pShare->history.aCommands._GetSizeRef());
+	pShare->history.aCommands.SetSizeLimit();
+	int nSize = pShare->history.aCommands.size();
 	for (int i=0; i<nSize; ++i) {
 		auto_sprintf(szKeyName, LTEXT("szCmdArr[%02d]"), i);
-		profile.IOProfileData(pszSecName, szKeyName, pShare->history.m_aCommands[i]);
+		profile.IOProfileData(pszSecName, szKeyName, pShare->history.aCommands[i]);
 	}
 
-	profile.IOProfileData(pszSecName, LTEXT("nCurDirArrNum"), pShare->history.m_aCurDirs._GetSizeRef());
-	pShare->history.m_aCurDirs.SetSizeLimit();
-	nSize = pShare->history.m_aCurDirs.size();
+	profile.IOProfileData(pszSecName, LTEXT("nCurDirArrNum"), pShare->history.aCurDirs._GetSizeRef());
+	pShare->history.aCurDirs.SetSizeLimit();
+	nSize = pShare->history.aCurDirs.size();
 	for (int i=0; i<nSize; ++i) {
 		auto_sprintf(szKeyName, LTEXT("szCurDirArr[%02d]"), i);
-		profile.IOProfileData(pszSecName, szKeyName, pShare->history.m_aCurDirs[i]);
+		profile.IOProfileData(pszSecName, szKeyName, pShare->history.aCurDirs[i]);
 	}
 }
 
@@ -613,7 +613,7 @@ void ShareData_IO::ShareData_IO_Common(DataProfile& profile)
 	profile.IOProfileData(pszSecName, LTEXT("bEnableUnmodifiedOverwrite")	, common.file.bEnableUnmodifiedOverwrite);
 	profile.IOProfileData(pszSecName, LTEXT("bSelectClickedURL")			, common.edit.bSelectClickedURL);
 	profile.IOProfileData(pszSecName, LTEXT("bGrepExitConfirm")			, common.search.bGrepExitConfirm);// Grepモードで保存確認するか
-//	profile.IOProfileData(pszSecName, LTEXT("bRulerDisp")					, common.m_bRulerDisp);					// ルーラー表示
+//	profile.IOProfileData(pszSecName, LTEXT("bRulerDisp")					, common.bRulerDisp);					// ルーラー表示
 	profile.IOProfileData(pszSecName, LTEXT("nRulerHeight")				, common.window.nRulerHeight);		// ルーラー高さ
 	profile.IOProfileData(pszSecName, LTEXT("nRulerBottomSpace")			, common.window.nRulerBottomSpace);	// ルーラーとテキストの隙間
 	profile.IOProfileData(pszSecName, LTEXT("nRulerType")					, common.window.nRulerType);			// ルーラーのタイプ
@@ -975,7 +975,7 @@ void ShareData_IO::IO_KeyBind(DataProfile& profile, CommonSetting_KeyBind& keyBi
 	static const WCHAR* szSecName = L"KeyBind";
 	WCHAR	szKeyName[64];
 	WCHAR	szKeyData[1024];
-//	int		nSize = m_pShareData->nKeyNameArrNum;
+//	int		nSize = pShareData->nKeyNameArrNum;
 	WCHAR	szWork[MAX_PLUGIN_ID + 20 + 4];
 	bool	bOldVer = false;
 	const int KEYNAME_SIZE = _countof(keyBind.pKeyNameArr) - 1;// 最後の１要素はダミー用に予約 2012.11.25 aroka
@@ -993,7 +993,7 @@ void ShareData_IO::IO_KeyBind(DataProfile& profile, CommonSetting_KeyBind& keyBi
 
 	for (int i=0; i<keyBind.nKeyNameArrNum; ++i) {
 		// 2005.04.07 D.S.Koba
-		//KeyData& keydata = m_pShareData->pKeyNameArr[i];
+		//KeyData& keydata = pShareData->pKeyNameArr[i];
 		//KeyData& keydata = keyBind.ppKeyNameArr[i];
 		
 		if (profile.IsReadingMode()) {
@@ -1353,8 +1353,8 @@ void ShareData_IO::ShareData_IO_Type_One(DataProfile& profile, TypeConfig& types
 			types.nTabSpace				= buf[3];
 			types.nKeywordSetIdx[0]		= buf[4];
 			types.nKeywordSetIdx[1]		= buf[5];
-			types.stringType				= (StringLiteralType)buf[6];
-			types.bLineNumIsCRLF			= (buf[7] != 0);
+			types.stringType			= (StringLiteralType)buf[6];
+			types.bLineNumIsCRLF		= (buf[7] != 0);
 			types.nLineTermType			= buf[8];
 			types.bWordWrap				= (buf[9] != 0);
 			types.nCurrentPrintSetting	= buf[10];
@@ -1730,9 +1730,9 @@ void ShareData_IO::ShareData_IO_Keywords(DataProfile& profile)
 	WCHAR			szKeyName[64];
 	WCHAR			szKeyData[1024];
 	KeywordSetMgr*	pKeywordSetMgr = &pShare->common.specialKeyword.keywordSetMgr;
-	int				nKeywordSetNum = pKeywordSetMgr->m_nKeywordSetNum;
+	int				nKeywordSetNum = pKeywordSetMgr->nKeywordSetNum;
 
-	profile.IOProfileData(pszSecName, LTEXT("nCurrentKeywordSetIdx")	, pKeywordSetMgr->m_nCurrentKeywordSetIdx);
+	profile.IOProfileData(pszSecName, LTEXT("nCurrentKeywordSetIdx")	, pKeywordSetMgr->nCurrentKeywordSetIdx);
 	bool bIOSuccess = profile.IOProfileData(pszSecName, LTEXT("nKeywordSetNum"), nKeywordSetNum);
 	if (profile.IsReadingMode()) {
 		// nKeywordSetNum が読み込めていれば、すべての情報がそろっていると仮定して処理を進める
@@ -1761,17 +1761,17 @@ void ShareData_IO::ShareData_IO_Keywords(DataProfile& profile)
 			}
 		}
 	}else {
-		int nSize = pKeywordSetMgr->m_nKeywordSetNum;
+		int nSize = pKeywordSetMgr->nKeywordSetNum;
 		for (int i=0; i<nSize; ++i) {
 			auto_sprintf(szKeyName, LTEXT("szSN[%02d]"), i);
-			profile.IOProfileData(pszSecName, szKeyName, MakeStringBufferW(pKeywordSetMgr->m_szSetNameArr[i]));
+			profile.IOProfileData(pszSecName, szKeyName, MakeStringBufferW(pKeywordSetMgr->szSetNameArr[i]));
 			auto_sprintf(szKeyName, LTEXT("nCASE[%02d]"), i);
-			profile.IOProfileData(pszSecName, szKeyName, pKeywordSetMgr->m_bKeywordCaseArr[i]);
+			profile.IOProfileData(pszSecName, szKeyName, pKeywordSetMgr->bKeywordCaseArr[i]);
 			auto_sprintf(szKeyName, LTEXT("nKWN[%02d]"), i);
-			profile.IOProfileData(pszSecName, szKeyName, pKeywordSetMgr->m_nKeywordNumArr[i]);
+			profile.IOProfileData(pszSecName, szKeyName, pKeywordSetMgr->nKeywordNumArr[i]);
 			
 			int nMemLen = 0;
-			for (int j=0; j<pKeywordSetMgr->m_nKeywordNumArr[i]; ++j) {
+			for (int j=0; j<pKeywordSetMgr->nKeywordNumArr[i]; ++j) {
 				nMemLen += wcslen(pKeywordSetMgr->GetKeyword(i, j));
 				nMemLen ++;
 			}
@@ -1781,7 +1781,7 @@ void ShareData_IO::ShareData_IO_Keywords(DataProfile& profile)
 			std::vector<wchar_t> szMem(nMemLen + 1); // May 25, 2003 genta 区切りをTABに変更したので，最後の\0の分を追加
 			wchar_t* pszMem = &szMem[0];
 			wchar_t* pMem = pszMem;
-			for (int j=0; j<pKeywordSetMgr->m_nKeywordNumArr[i]; ++j) {
+			for (int j=0; j<pKeywordSetMgr->nKeywordNumArr[i]; ++j) {
 				// May 25, 2003 genta 区切りをTABに変更
 				int kwlen = wcslen(pKeywordSetMgr->GetKeyword(i, j));
 				auto_memcpy(pMem, pKeywordSetMgr->GetKeyword(i, j), kwlen);
@@ -2212,7 +2212,7 @@ void ShareData_IO::ShareData_IO_Other(DataProfile& profile)
 	
 	// From Here 2005.04.03 MIK キーワード指定タグジャンプ
 	profile.IOProfileData(pszSecName, LTEXT("_TagJumpKeyword_Counts"), pShare->tagJump.aTagJumpKeywords._GetSizeRef());
-	pShare->history.m_aCommands.SetSizeLimit();
+	pShare->history.aCommands.SetSizeLimit();
 	int nSize = pShare->tagJump.aTagJumpKeywords.size();
 	for (int i=0; i<nSize; ++i) {
 		auto_sprintf(szKeyName, LTEXT("TagJumpKeyword[%02d]"), i);
@@ -2389,7 +2389,7 @@ void ShareData_IO::ShareData_IO_FileTreeItem(
 		auto_sprintf( szKey, L"FileTree(%d).szLabelName", i );
 		profile.IOProfileData( pszSecName, szKey, item.szLabelName );
 	}
-	auto_sprintf( szKey, L"FileTree(%d).m_nDepth", i );
+	auto_sprintf( szKey, L"FileTree(%d).nDepth", i );
 	profile.IOProfileData( pszSecName, szKey, item.nDepth );
 	if (profile.IsReadingMode()
 		|| item.eFileTreeItemType == FileTreeItemType::Grep

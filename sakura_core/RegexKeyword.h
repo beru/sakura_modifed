@@ -78,19 +78,19 @@ protected:
 	bool RegexKeyInit(void);
 
 public:
-	int				m_nTypeIndex;				// 現在のタイプ設定番号
-	bool			m_bUseRegexKeyword;			// 正規表現キーワードを使用する・しない
+	int				nTypeIndex;				// 現在のタイプ設定番号
+	bool			bUseRegexKeyword;		// 正規表現キーワードを使用する・しない
 
 private:
-	const TypeConfig*	m_pTypes;				// タイプ設定へのポインタ(呼び出し側が持っているもの)
-	int				m_nTypeId;					// タイプ設定ID
-	DWORD			m_nCompiledMagicNumber;		// コンパイル済みか？
-	int				m_nRegexKeyCount;			// 現在のキーワード数
-	RegexInfo		m_info[MAX_REGEX_KEYWORD];	// キーワード一覧(BREGEXPコンパイル対象)
+	const TypeConfig*	pTypes;					// タイプ設定へのポインタ(呼び出し側が持っているもの)
+	int				nTypeId;					// タイプ設定ID
+	DWORD			nCompiledMagicNumber;		// コンパイル済みか？
+	int				nRegexKeyCount;				// 現在のキーワード数
+	RegexInfo		info[MAX_REGEX_KEYWORD];	// キーワード一覧(BREGEXPコンパイル対象)
 #ifdef USE_PARENT
 #else
-	wchar_t			m_keywordList[MAX_REGEX_KEYWORDLISTLEN];
+	wchar_t			keywordList[MAX_REGEX_KEYWORDLISTLEN];
 #endif
-	wchar_t			m_szMsg[256];				// BREGEXP_Wからのメッセージを保持する
+	wchar_t			szMsg[256];				// BREGEXP_Wからのメッセージを保持する
 };
 

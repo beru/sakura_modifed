@@ -35,20 +35,20 @@ public:
 		operator = (rhs);
 	}
 	RangeBase(const PointType& _ptFrom, const PointType& _ptTo) {
-		m_ptFrom = _ptFrom;
-		m_ptTo = _ptTo;
+		ptFrom = _ptFrom;
+		ptTo = _ptTo;
 	}
 
 	// ë„ì¸
 	RangeBase& operator = (const RangeBase& rhs) {
-		m_ptFrom = rhs.m_ptFrom;
-		m_ptTo = rhs.m_ptTo;
+		ptFrom = rhs.ptFrom;
+		ptTo = rhs.ptTo;
 		return *this;
 	}
 
 	// î‰är
 	bool operator == (const RangeBase& rhs) const {
-		return m_ptFrom == rhs.m_ptFrom && m_ptTo == rhs.m_ptTo;
+		return ptFrom == rhs.ptFrom && ptTo == rhs.ptTo;
 	}
 	bool operator != (const RangeBase& rhs) const {
 		return !(operator == (rhs));
@@ -57,76 +57,76 @@ public:
 	// îªíË
 	// 1ï∂éöÇµÇ©ëIëÇµÇƒÇ»Ç¢èÛë‘Ç»ÇÁtrue
 	bool IsOne() const {
-		return m_ptFrom == m_ptTo;
+		return ptFrom == ptTo;
 	}
 	bool IsLineOne() const {
-		return m_ptFrom.y == m_ptTo.y;
+		return ptFrom.y == ptTo.y;
 	}
 	bool IsValid() const { // óLå¯Ç»îÕàÕÇ»ÇÁtrue
-		return m_ptFrom.BothNatural() && m_ptTo.BothNatural();
+		return ptFrom.BothNatural() && ptTo.BothNatural();
 	}
 
 	// éÊìæ
 	PointType GetFrom() const {
-		return m_ptFrom;
+		return ptFrom;
 	}
 	PointType GetTo() const {
-		return m_ptTo;
+		return ptTo;
 	}
 
 	// ì¡éÍ
 	PointType* GetFromPointer() {
-		return &m_ptFrom;
+		return &ptFrom;
 	}
 	PointType* GetToPointer() {
-		return &m_ptTo;
+		return &ptTo;
 	}
 
 	// ê›íË
 	void Clear(int n) {
-		m_ptFrom.Set(IntType(n), IntType(n));
-		m_ptTo.Set(IntType(n), IntType(n));
+		ptFrom.Set(IntType(n), IntType(n));
+		ptTo.Set(IntType(n), IntType(n));
 	}
 	void Set(const PointType& pt) {
-		m_ptFrom = pt;
-		m_ptTo = pt;
+		ptFrom = pt;
+		ptTo = pt;
 	}
 	void SetFrom(const PointType& pt) {
-		m_ptFrom = pt;
+		ptFrom = pt;
 	}
 	void SetTo(const PointType& pt) {
-		m_ptTo = pt;
+		ptTo = pt;
 	}
 
 	void SetFromX(IntType nX) {
-		m_ptFrom.x = nX;
+		ptFrom.x = nX;
 	}
 	/*
 	void SetFromY(int nY) {
-		m_ptFrom.y = nY;
+		ptFrom.y = nY;
 	}
 	*/
 	void SetFromY(IntType nY) {
-		m_ptFrom.y = nY;
+		ptFrom.y = nY;
 	}
 	
 	void SetToX(IntType nX) {
-		m_ptTo.x = nX;
+		ptTo.x = nX;
 	}
 	/*
 	void SetToY(int nY) {
-		m_ptTo.y = nY;
+		ptTo.y = nY;
 	}
 	*/
 	void SetToY(IntType nY) {
-		m_ptTo.y = nY;
+		ptTo.y = nY;
 	}
 
 	// ì¡éÍê›íË
-	void SetLine(IntType nY)					{ m_ptFrom.y = nY;     m_ptTo.y = nY;   }
-	void SetXs(IntType nXFrom, IntType nXTo)	{ m_ptFrom.x = nXFrom; m_ptTo.x = nXTo; }
+	void SetLine(IntType nY)					{ ptFrom.y = nY;     ptTo.y = nY;   }
+	void SetXs(IntType nXFrom, IntType nXTo)	{ ptFrom.x = nXFrom; ptTo.x = nXTo; }
 private:
-	PointType m_ptFrom;
-	PointType m_ptTo;
+	PointType ptFrom;
+	PointType ptTo;
 };
 

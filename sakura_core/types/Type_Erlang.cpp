@@ -48,11 +48,11 @@ struct OutlineErlang {
 		STATE_FUNC_FOUND,			// 関数を発見．データの取得が可能
 	} state;
 
-	wchar_t m_func[64];			// 関数名(Arity含む) = 表示名
-	LogicInt m_lnum;			// 関数の行番号
-	int m_argcount;				// 発見した引数の数
-	wchar_t m_parenthesis[32];	// 括弧のネストを管理するもの
-	int m_parenthesis_ptr;		// 括弧のネストレベル
+	wchar_t func[64];			// 関数名(Arity含む) = 表示名
+	LogicInt lnum;			// 関数の行番号
+	int argcount;				// 発見した引数の数
+	wchar_t parenthesis[32];	// 括弧のネストを管理するもの
+	int parenthesis_ptr;		// 括弧のネストレベル
 	
 	OutlineErlang();
 	bool parse(const wchar_t* buf, int linelen, LogicInt linenum);
@@ -62,8 +62,8 @@ struct OutlineErlang {
 	const wchar_t* ScanArgs1(const wchar_t* end, const wchar_t* p);
 	const wchar_t* ScanArgs(const wchar_t* end, const wchar_t* p);
 	const wchar_t* EnterCond(const wchar_t* end, const wchar_t* p);
-	const wchar_t* GetFuncName() const { return m_func; }
-	LogicInt GetFuncLine() const { return m_lnum; }
+	const wchar_t* GetFuncName() const { return func; }
+	LogicInt GetFuncLine() const { return lnum; }
 
 private:
 	// helper functions
@@ -92,7 +92,9 @@ private:
 };
 
 OutlineErlang::OutlineErlang() :
-	state(STATE_NORMAL), m_lnum(0), m_argcount(0)
+	state(STATE_NORMAL),
+	lnum(0),
+	argcount(0)
 {
 }
 
@@ -128,7 +130,7 @@ const wchar_t* OutlineErlang::ScanFuncName(const wchar_t* buf, const wchar_t* en
 		}while (IS_ALNUM(*p) && p < end);
 	}
 	
-	int buf_len = _countof(m_func);
+	int buf_len = _countof(func);
 	int len = p - buf;
 	if (buf[0] == L'\'') {
 		++buf;
@@ -136,8 +138,8 @@ const wchar_t* OutlineErlang::ScanFuncName(const wchar_t* buf, const wchar_t* en
 		--buf_len;
 	}
 	len = len < buf_len - 1 ? len : buf_len - 1;
-	wcsncpy(m_func, buf, len);
-	m_func[len] = L'\0';
+	wcsncpy(func, buf, len);
+	func[len] = L'\0';
 	state = STATE_FUNC_CANDIDATE_FIN;
 	return p;
 }
@@ -163,9 +165,9 @@ const wchar_t* OutlineErlang::EnterArgs(const wchar_t* end, const wchar_t* p)
 		return end;
 	}else if (*p == L'(') { //)
 		state = STATE_FUNC_ARGS1;
-		m_argcount = 0;
-		m_parenthesis_ptr = 1;
-		m_parenthesis[0] = *p;
+		argcount = 0;
+		parenthesis_ptr = 1;
+		parenthesis[0] = *p;
 		++p;
 		return p;
 	}
@@ -200,7 +202,7 @@ const wchar_t* OutlineErlang::ScanArgs1(const wchar_t* end, const wchar_t* p)
 	}else {
 		// argument found
 		state = STATE_FUNC_ARGS;
-		++m_argcount;
+		++argcount;
 	}
 	return p;
 }
@@ -218,7 +220,7 @@ const wchar_t* OutlineErlang::ScanArgs(const wchar_t* end, const wchar_t* p)
 {
 	assert(state == STATE_FUNC_ARGS);
 
-	const int parptr_max = _countof(m_parenthesis);
+	const int parptr_max = _countof(parenthesis);
 	wchar_t quote = L'\0'; // 先頭位置を保存
 	for (const wchar_t* head=p; p<end; ++p) {
 		if (quote) {
@@ -227,10 +229,10 @@ const wchar_t* OutlineErlang::ScanArgs(const wchar_t* end, const wchar_t* p)
 		}else {
 			if (wcschr(L"([{", *p)) {	//)
 				// level up
-				if (m_parenthesis_ptr < parptr_max) {
-					m_parenthesis[m_parenthesis_ptr] = *p;
+				if (parenthesis_ptr < parptr_max) {
+					parenthesis[parenthesis_ptr] = *p;
 				}
-				++m_parenthesis_ptr;
+				++parenthesis_ptr;
 			}else if (wcschr(L")]}", *p)) {	//)
 				wchar_t op;
 				switch (*p) {
@@ -243,24 +245,24 @@ const wchar_t* OutlineErlang::ScanArgs(const wchar_t* end, const wchar_t* p)
 					break;
 				}
 				// level down
-				--m_parenthesis_ptr;
-				while (1 <= m_parenthesis_ptr && m_parenthesis_ptr < parptr_max) {
-					if (m_parenthesis[m_parenthesis_ptr] != op) {
+				--parenthesis_ptr;
+				while (1 <= parenthesis_ptr && parenthesis_ptr < parptr_max) {
+					if (parenthesis[parenthesis_ptr] != op) {
 						// if unmatch then skip
-						--m_parenthesis_ptr;
+						--parenthesis_ptr;
 					}else {
 						break;
 					}
 				}
 				
 				// check level
-				if (m_parenthesis_ptr == 0) {
+				if (parenthesis_ptr == 0) {
 					state = STATE_FUNC_ARGS_FIN;
 					++p;
 					return p;
 				}
-			}else if (*p == L',' && m_parenthesis_ptr == 1) {
-				++m_argcount;
+			}else if (*p == L',' && parenthesis_ptr == 1) {
+				++argcount;
 			}else if (*p == L';') {
 				//	セミコロンは複数の文の区切り．
 				//	パラメータ中には現れないので，解析が失敗している
@@ -336,7 +338,7 @@ bool OutlineErlang::parse(const wchar_t* buf, int linelen, LogicInt linenum)
 	if (state == STATE_NORMAL) {
 		pos = ScanFuncName(buf, end, pos);
 		if (state != STATE_NORMAL) {
-			m_lnum = linenum;
+			lnum = linenum;
 		}
 	}
 	while (pos < end) {
@@ -354,7 +356,7 @@ bool OutlineErlang::parse(const wchar_t* buf, int linelen, LogicInt linenum)
 			break;
 		}
 		if (state == STATE_FUNC_FOUND) {
-			build_arity(m_argcount);
+			build_arity(argcount);
 			break;
 		}
 	}
@@ -371,9 +373,9 @@ bool OutlineErlang::parse(const wchar_t* buf, int linelen, LogicInt linenum)
 */ 
 void OutlineErlang::build_arity(int arity)
 {
-	int len = wcslen(m_func);
-	const int buf_size = _countof(m_func);
-	wchar_t* p = &m_func[len];
+	int len = wcslen(func);
+	const int buf_size = _countof(func);
+	wchar_t* p = &func[len];
 	wchar_t numstr[12];
 	
 	if (len + 1 >= buf_size)
@@ -382,7 +384,7 @@ void OutlineErlang::build_arity(int arity)
 	numstr[0] = L'/';
 	_itow(arity, numstr + 1, 10);
 	wcsncpy(p, numstr, buf_size - len - 1);
-	m_func[buf_size - 1] = L'\0';
+	func[buf_size - 1] = L'\0';
 }
 
 /** Erlang アウトライン解析
@@ -404,10 +406,10 @@ void DocOutline::MakeFuncList_Erlang(FuncInfoArr* pFuncInfoArr)
 	OutlineErlang erl_state_machine;
 	LogicInt	nLineCount;
 
-	for (nLineCount=LogicInt(0); nLineCount<m_doc.m_docLineMgr.GetLineCount(); ++nLineCount) {
+	for (nLineCount=LogicInt(0); nLineCount<doc.docLineMgr.GetLineCount(); ++nLineCount) {
 		LogicInt nLineLen;
 
-		const wchar_t* pLine = m_doc.m_docLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
+		const wchar_t* pLine = doc.docLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
 		if (erl_state_machine.parse(pLine, nLineLen, nLineCount)) {
 			/*
 			  カーソル位置変換
@@ -416,7 +418,7 @@ void DocOutline::MakeFuncList_Erlang(FuncInfoArr* pFuncInfoArr)
 			  レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 			*/
 			LayoutPoint ptPosXY;
-			m_doc.m_layoutMgr.LogicToLayout(
+			doc.layoutMgr.LogicToLayout(
 				LogicPoint(LogicInt(0), erl_state_machine.GetFuncLine()),
 				&ptPosXY
 			);

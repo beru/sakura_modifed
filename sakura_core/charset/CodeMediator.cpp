@@ -52,19 +52,19 @@ EncodingType CodeMediator::DetectUnicodeBom(const char* pS, const int nLen)
 
 	@return SJIS, JIS, EUCJP, UTF-8, UTF-7 の何れかの ID を返す．
 
-	@note 適切な検出が行われた場合は、m_dwStatus に CESI_MB_DETECTED フラグが格納される。
+	@note 適切な検出が行われた場合は、dwStatus に CESI_MB_DETECTED フラグが格納される。
 */
 EncodingType CodeMediator::DetectMBCode(ESI* pEsi)
 {
-//	pEsi->m_dwStatus = ESI_NOINFORMATION;
+//	pEsi->dwStatus = ESI_NOINFORMATION;
 
-	if (pEsi->GetDataLen() < (pEsi->m_apMbcInfo[0]->nSpecific - pEsi->m_apMbcInfo[0]->nPoints) * 2000) {
+	if (pEsi->GetDataLen() < (pEsi->apMbcInfo[0]->nSpecific - pEsi->apMbcInfo[0]->nPoints) * 2000) {
 		// 不正バイトの割合が、全体の 0.05% 未満であることを確認。
 		// 全体の0.05%ほどの不正バイトは、無視する。
 		pEsi->SetStatus(ESI_NODETECTED);
 		return CODE_NONE;
 	}
-	if (pEsi->m_apMbcInfo[0]->nPoints <= 0) {
+	if (pEsi->apMbcInfo[0]->nPoints <= 0) {
 		pEsi->SetStatus(ESI_NODETECTED);
 		return CODE_NONE;
 	}
@@ -73,7 +73,7 @@ EncodingType CodeMediator::DetectMBCode(ESI* pEsi)
 		判定状況を確認
 	*/
 	pEsi->SetStatus(ESI_MBC_DETECTED);
-	return pEsi->m_apMbcInfo[0]->eCodeID;
+	return pEsi->apMbcInfo[0]->eCodeID;
 }
 
 
@@ -87,7 +87,7 @@ EncodingType CodeMediator::DetectMBCode(ESI* pEsi)
 */
 EncodingType CodeMediator::DetectUnicode(ESI* pEsi)
 {
-//	pEsi->m_dwStatus = ESI_NOINFORMATION;
+//	pEsi->dwStatus = ESI_NOINFORMATION;
 
 	BOMType bomType = pEsi->GetBOMType();
 	if (bomType == BOMType::Unknown) {
@@ -97,14 +97,14 @@ EncodingType CodeMediator::DetectUnicode(ESI* pEsi)
 
 	// 1行の平均桁数が200を超えている場合はUnicode未検出とする
 	int nDataLen = pEsi->GetDataLen();
-	int nLineBreak = pEsi->m_aWcInfo[(int)bomType].nSpecific;  // 改行数を nLineBreakに取得
+	int nLineBreak = pEsi->aWcInfo[(int)bomType].nSpecific;  // 改行数を nLineBreakに取得
 	if (static_cast<double>(nDataLen) / nLineBreak > 200) {
 		pEsi->SetStatus(ESI_NODETECTED);
 		return CODE_NONE;
 	}
 
 	pEsi->SetStatus(ESI_WC_DETECTED);
-	return pEsi->m_aWcInfo[(int)bomType].eCodeID;
+	return pEsi->aWcInfo[(int)bomType].eCodeID;
 }
 
 
@@ -116,7 +116,7 @@ EncodingType CodeMediator::CheckKanjiCode(ESI* pEsi)
 	/*
 		判定状況は、
 		DetectMBCode(), DetectUnicode() 内で
-		esi.m_dwStatus に記録する。
+		esi.dwStatus に記録する。
 	*/
 
 	if (!pEsi) {
@@ -136,7 +136,7 @@ EncodingType CodeMediator::CheckKanjiCode(ESI* pEsi)
 	}
 
 	// デフォルト文字コードを返す
-	return pEsi->m_pEncodingConfig->eDefaultCodetype;
+	return pEsi->pEncodingConfig->eDefaultCodetype;
 }
 
 
@@ -154,12 +154,12 @@ EncodingType CodeMediator::CheckKanjiCode(ESI* pEsi)
 */
 EncodingType CodeMediator::CheckKanjiCode(const char* pBuf, int nBufLen)
 {
-	ESI esi(*m_pEncodingConfig);
+	ESI esi(*pEncodingConfig);
 
 	/*
 		判定状況は、
 		DetectMBCode(), DetectUnicode() 内で
-		esi.m_dwStatus に記録する。
+		esi.dwStatus に記録する。
 	*/
 
 	esi.SetInformation(pBuf, nBufLen/*, CODE_SJIS*/);
@@ -197,7 +197,7 @@ EncodingType CodeMediator::CheckKanjiCodeOfFile(const TCHAR* pszFile)
 
 	// 0バイトならタイプ別のデフォルト設定
 	if (nBufLen == 0) {
-		return m_pEncodingConfig->eDefaultCodetype;
+		return pEncodingConfig->eDefaultCodetype;
 	}
 
 	// データ確保

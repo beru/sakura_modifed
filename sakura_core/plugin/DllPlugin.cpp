@@ -32,7 +32,7 @@
 // デストラクタ
 DllPlugin::~DllPlugin(void)
 {
-	for (auto it=m_plugs.begin(); it!=m_plugs.end(); ++it) {
+	for (auto it=plugs.begin(); it!=plugs.end(); ++it) {
 		delete (DllPlug*)(*it);
 	}
 }
@@ -60,7 +60,7 @@ bool DllPlugin::ReadPluginDef(
 	ReadPluginDefCommon(profile, profileMlang);
 
 	// DLL名の読み込み
-	profile.IOProfileData(PII_DLL, PII_DLL_NAME, m_sDllName);
+	profile.IOProfileData(PII_DLL, PII_DLL_NAME, sDllName);
 
 	// プラグの読み込み
 	ReadPluginDefPlug(profile, profileMlang);
@@ -84,18 +84,18 @@ bool DllPlugin::InvokePlug(
 	WSHIfObj::List& params
 	)
 {
-	tstring dllPath = GetFilePath(to_tchar(m_sDllName.c_str()));
+	tstring dllPath = GetFilePath(to_tchar(sDllName.c_str()));
 	InitDllResultType resInit = InitDll(to_tchar(dllPath.c_str()));
 	if (resInit != InitDllResultType::Success) {
-		::MYMESSAGEBOX(view.m_hwndParent, MB_OK, LS(STR_DLLPLG_TITLE), LS(STR_DLLPLG_INIT_ERR1), dllPath.c_str(), sName.c_str());
+		::MYMESSAGEBOX(view.hwndParent, MB_OK, LS(STR_DLLPLG_TITLE), LS(STR_DLLPLG_INIT_ERR1), dllPath.c_str(), sName.c_str());
 		return false;
 	}
 
 	DllPlug& plug = *(static_cast<DllPlug*>(&plug_raw));
-	if (!plug.m_handler) {
+	if (!plug.handler) {
 		// DLL関数の取得
 		ImportTable imp[2] = {
-			{ &plug.m_handler, to_achar(plug.m_sHandler.c_str()) },
+			{ &plug.handler, to_achar(plug.sHandler.c_str()) },
 			{ NULL, 0 }
 		};
 		if (!RegisterEntries(imp)) {
@@ -108,7 +108,7 @@ bool DllPlugin::InvokePlug(
 	int flags = FA_NONRECORD | FA_FROMMACRO;
 	ba.ExecKeyMacroBefore(view, flags);
 	// DLL関数の呼び出し
-	plug.m_handler();
+	plug.handler();
 	ba.ExecKeyMacroAfter(view, flags, true);
 	
 	return true;

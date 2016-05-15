@@ -47,9 +47,9 @@ public:
 	ComplementIfObj(std::wstring& curWord, HokanMgr& mgr, int option)
 		:
 		WSHIfObj(L"Complement", false),
-		m_currentWord(curWord),
-		m_hokanMgr(mgr),
-		m_nOption(option)
+		currentWord(curWord),
+		hokanMgr(mgr),
+		nOption(option)
 	{
 	}
 
@@ -60,9 +60,9 @@ public:
 	// 実装
 public:
 	// コマンド情報を取得する
-	MacroFuncInfoArray GetMacroCommandInfo() const { return m_macroFuncInfoCommandArr; }
+	MacroFuncInfoArray GetMacroCommandInfo() const { return macroFuncInfoCommandArr; }
 	// 関数情報を取得する
-	MacroFuncInfoArray GetMacroFuncInfo() const { return m_macroFuncInfoArr; };
+	MacroFuncInfoArray GetMacroFuncInfo() const { return macroFuncInfoArr; };
 	// 関数を処理する
 	bool HandleFunction(
 		EditView&		view,
@@ -76,13 +76,13 @@ public:
 		switch (LOWORD(index)) {
 		case F_CM_GETCURRENTWORD:	// 補完対象の文字列を取得
 			{
-				SysString s(m_currentWord.c_str(), m_currentWord.length());
+				SysString s(currentWord.c_str(), currentWord.length());
 				Wrap(&result)->Receive(s);
 			}
 			return true;
 		case F_CM_GETOPTION:	// オプションを取得
 			{
-				Wrap(&result)->Receive(m_nOption);
+				Wrap(&result)->Receive(nOption);
 			}
 			return true;
 		case F_CM_ADDLIST:		// 候補に追加する
@@ -97,8 +97,8 @@ public:
 					return false;
 				}
 				std::wstring strWord = std::wstring(word, nWordLen);
-				if (HokanMgr::AddKouhoUnique(m_hokanMgr.m_vKouho, strWord)) {
-					Wrap(&result)->Receive(m_hokanMgr.m_vKouho.size());
+				if (HokanMgr::AddKouhoUnique(hokanMgr.vKouho, strWord)) {
+					Wrap(&result)->Receive(hokanMgr.vKouho.size());
 				}else {
 					Wrap(&result)->Receive(-1);
 				}
@@ -122,25 +122,25 @@ public:
 
 	// メンバ変数
 private:
-	std::wstring m_currentWord;
-	HokanMgr& m_hokanMgr;
-	int m_nOption; // 0x01 == IgnoreCase
+	std::wstring currentWord;
+	HokanMgr& hokanMgr;
+	int nOption; // 0x01 == IgnoreCase
 
 private:
-	static MacroFuncInfo m_macroFuncInfoCommandArr[];	// コマンド情報(戻り値なし)
-	static MacroFuncInfo m_macroFuncInfoArr[];			// 関数情報(戻り値あり)
+	static MacroFuncInfo macroFuncInfoCommandArr[];	// コマンド情報(戻り値なし)
+	static MacroFuncInfo macroFuncInfoArr[];			// 関数情報(戻り値あり)
 };
 
 // コマンド情報
-MacroFuncInfo ComplementIfObj::m_macroFuncInfoCommandArr[] = {
-	//ID									関数名							引数										戻り値の型	m_pszData
+MacroFuncInfo ComplementIfObj::macroFuncInfoCommandArr[] = {
+	//ID									関数名							引数										戻り値の型	pszData
 	// 終端
 	{F_INVALID,	NULL, {VT_EMPTY, VT_EMPTY, VT_EMPTY, VT_EMPTY},	VT_EMPTY,	NULL}
 };
 
 // 関数情報
-MacroFuncInfo ComplementIfObj::m_macroFuncInfoArr[] = {
-	//ID								関数名				引数										戻り値の型	m_pszData
+MacroFuncInfo ComplementIfObj::macroFuncInfoArr[] = {
+	//ID								関数名				引数										戻り値の型	pszData
 	{EFunctionCode(F_CM_GETCURRENTWORD),L"GetCurrentWord",	{VT_EMPTY, VT_EMPTY, VT_EMPTY, VT_EMPTY},	VT_BSTR,	NULL }, // 補完対象の文字列を取得
 	{EFunctionCode(F_CM_GETOPTION),		L"GetOption",		{VT_EMPTY, VT_EMPTY, VT_EMPTY, VT_EMPTY},	VT_I4,		NULL }, // 補完対象の文字列を取得
 	{EFunctionCode(F_CM_ADDLIST),		L"AddList",			{VT_BSTR,  VT_EMPTY, VT_EMPTY, VT_EMPTY},	VT_I4,		NULL }, // 候補に追加する

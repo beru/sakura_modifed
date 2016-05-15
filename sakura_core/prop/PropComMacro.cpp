@@ -98,7 +98,7 @@ INT_PTR PropMacro::DispatchEvent(
 	WORD		wNotifyCode;
 	WORD		wID;
 
-	auto& csMacro = m_common.macro;
+	auto& csMacro = common.macro;
 
 	switch (uMsg) {
 	case WM_INITDIALOG:
@@ -138,7 +138,7 @@ INT_PTR PropMacro::DispatchEvent(
 				return TRUE;
 //@@@ 2002.01.03 YAZAKI 最後に表示していたシートを正しく覚えていないバグ修正
 			case PSN_SETACTIVE:
-				m_nPageNum = ID_PROPCOM_PAGENUM_MACRO;
+				nPageNum = ID_PROPCOM_PAGENUM_MACRO;
 				return TRUE;
 			}
 			break;
@@ -221,7 +221,7 @@ void PropMacro::SetData(HWND hwndDlg)
 
 	// マクロデータ
 	HWND hListView = ::GetDlgItem(hwndDlg, IDC_MACROLIST);
-	auto& csMacro = m_pShareData->common.macro;
+	auto& csMacro = pShareData->common.macro;
 	
 	for (index=0; index<MAX_CUSTMACRO; ++index) {
 		auto& macroRec = csMacro.macroTable[index];
@@ -267,7 +267,7 @@ void PropMacro::SetData(HWND hwndDlg)
 	}
 	
 	//	マクロディレクトリ
-	::DlgItem_SetText(hwndDlg, IDC_MACRODIR, /*m_pShareData->*/m_common.macro.szMACROFOLDER);
+	::DlgItem_SetText(hwndDlg, IDC_MACRODIR, /*pShareData->*/common.macro.szMACROFOLDER);
 
 	nLastPos_Macro = -1;
 	
@@ -281,7 +281,7 @@ void PropMacro::SetData(HWND hwndDlg)
 	
 	//	マクロ停止ダイアログ表示待ち時間
 	TCHAR szCancelTimer[16] = {0};
-	::DlgItem_SetText(hwndDlg, IDC_MACROCANCELTIMER, _itot(m_common.macro.nMacroCancelTimer, szCancelTimer, 10));
+	::DlgItem_SetText(hwndDlg, IDC_MACROCANCELTIMER, _itot(common.macro.nMacroCancelTimer, szCancelTimer, 10));
 
 	return;
 }
@@ -297,7 +297,7 @@ int PropMacro::GetData(HWND hwndDlg)
 	int index;
 	LVITEM lvItem;
 
-	auto& csMacro = m_common.macro;
+	auto& csMacro = common.macro;
 
 	// 自動実行マクロ変数初期化	// 2006.09.01 ryoji
 	csMacro.nMacroOnOpened = -1;
@@ -314,7 +314,7 @@ int PropMacro::GetData(HWND hwndDlg)
 		lvItem.iSubItem = 1;
 		lvItem.cchTextMax = MACRONAME_MAX - 1;
 //@@@ 2002.01.03 YAZAKI 共通設定『マクロ』がタブを切り替えるだけで設定が保存されないように。
-		lvItem.pszText = /*m_pShareData->*/csMacro.macroTable[index].szName;
+		lvItem.pszText = /*pShareData->*/csMacro.macroTable[index].szName;
 		ListView_GetItem(hListView, &lvItem);
 
 		memset_raw(&lvItem, 0, sizeof(lvItem));
@@ -323,7 +323,7 @@ int PropMacro::GetData(HWND hwndDlg)
 		lvItem.iSubItem = 2;
 		lvItem.cchTextMax = _MAX_PATH;
 //@@@ 2002.01.03 YAZAKI 共通設定『マクロ』がタブを切り替えるだけで設定が保存されないように。
-		lvItem.pszText = /*m_pShareData->*/csMacro.macroTable[index].szFile;
+		lvItem.pszText = /*pShareData->*/csMacro.macroTable[index].szFile;
 		ListView_GetItem(hListView, &lvItem);
 
 		memset_raw(&lvItem, 0, sizeof(lvItem));

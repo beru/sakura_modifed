@@ -66,27 +66,27 @@ class WSHSite :
 	public IActiveScriptSiteWindow
 {
 private:
-	WSHClient* m_Client;
-	ITypeInfo* m_typeInfo;
-	ULONG m_refCount;
+	WSHClient* Client;
+	ITypeInfo* typeInfo;
+	ULONG refCount;
 public:
 	WSHSite(WSHClient *AClient)
 		:
-		m_Client(AClient),
-		m_refCount(0)
+		Client(AClient),
+		refCount(0)
 	{
 	}
 
 	virtual ULONG _stdcall AddRef() {
-		return ++m_refCount;
+		return ++refCount;
 	}
 
 	virtual ULONG _stdcall Release() {
-		if (--m_refCount == 0) {
+		if (--refCount == 0) {
 			delete this;
 			return 0;
 		}
-		return m_refCount;
+		return refCount;
 	}
 
 	virtual HRESULT STDMETHODCALLTYPE QueryInterface(
@@ -97,7 +97,7 @@ public:
 
 		if (iid == IID_IActiveScriptSiteWindow) {
 			*ppvObject = static_cast<IActiveScriptSiteWindow*>(this);
-			++m_refCount;
+			++refCount;
 			return S_OK;
 		}
 
@@ -123,10 +123,10 @@ public:
 		wcout << L"GetItemInfo:" << pstrName << endl;
 #endif
 		// 指定された名前のインタフェースオブジェクトを検索
-		const WSHClient::List& objects = m_Client->GetInterfaceObjects();
+		const WSHClient::List& objects = Client->GetInterfaceObjects();
 		for (auto it=objects.begin(); it!=objects.end(); ++it) {
 			// Nov. 10, 2003 FILE Win9Xでは、[lstrcmpiW]が無効のため、[_wcsicmp]に修正
-			if (_wcsicmp(pstrName, (*it)->m_name.c_str()) == 0) {
+			if (_wcsicmp(pstrName, (*it)->name.c_str()) == 0) {
 				if (dwReturnMask & SCRIPTINFO_IUNKNOWN) {
 					(*ppiunkItem) = *it;
 					(*ppiunkItem)->AddRef();
@@ -190,7 +190,7 @@ public:
 				auto_sprintf(message, L"[Line %d] %ls", Line + 1, szDesc);
 				SysReAllocString(&Info.bstrDescription, message);
 			}
-			m_Client->Error(Info.bstrDescription, Info.bstrSource);
+			Client->Error(Info.bstrDescription, Info.bstrSource);
 			SysFreeString(Info.bstrSource);
 			SysFreeString(Info.bstrDescription);
 			SysFreeString(Info.bstrHelpFile);
@@ -216,7 +216,7 @@ public:
 	virtual HRESULT __stdcall GetWindow(
 	    /* [out] */ HWND *phwnd)
 	{
-		*phwnd = EditWnd::getInstance().m_splitterWnd.GetHwnd();
+		*phwnd = EditWnd::getInstance().splitterWnd.GetHwnd();
 		return S_OK;
 	}
 
@@ -236,10 +236,10 @@ WSHClient::WSHClient(
 	void *AData
 	)
 	: 
-	m_OnError(AErrorHandler),
-	m_Data(AData),
-	m_Valid(false),
-	m_Engine(NULL)
+	onError(AErrorHandler),
+	data(AData),
+	isValid(false),
+	engine(NULL)
 { 
 	// 2010.08.28 DLL インジェクション対策としてEXEのフォルダに移動する
 	CurrentDirectoryBackupPoint dirBack;
@@ -249,15 +249,15 @@ WSHClient::WSHClient(
 	if (CLSIDFromProgID(AEngine, &ClassID) != S_OK) {
 		Error(LSW(STR_ERR_CWSH01));
 	}else {
-		if (CoCreateInstance(ClassID, 0, CLSCTX_INPROC_SERVER, IID_IActiveScript, reinterpret_cast<void **>(&m_Engine)) != S_OK) {
+		if (CoCreateInstance(ClassID, 0, CLSCTX_INPROC_SERVER, IID_IActiveScript, reinterpret_cast<void **>(&engine)) != S_OK) {
 			Error(LSW(STR_ERR_CWSH02));
 		}else {
 			IActiveScriptSite* site = new WSHSite(this);
-			if (m_Engine->SetScriptSite(site) != S_OK) {
+			if (engine->SetScriptSite(site) != S_OK) {
 				delete site;
 				Error(LSW(STR_ERR_CWSH03));
 			}else {
-				m_Valid = true;
+				isValid = true;
 			}
 		}
 	}
@@ -266,12 +266,12 @@ WSHClient::WSHClient(
 WSHClient::~WSHClient()
 {
 	// インタフェースオブジェクトを解放
-	for (auto it=m_IfObjArr.begin(); it!=m_IfObjArr.end(); ++it) {
+	for (auto it=ifObjArr.begin(); it!=ifObjArr.end(); ++it) {
 		(*it)->Release();
 	}
 	
-	if (m_Engine) {
-		m_Engine->Release();
+	if (engine) {
+		engine->Release();
 	}
 }
 
@@ -299,7 +299,7 @@ static unsigned __stdcall AbortMacroProc(LPVOID lpParameter)
 		// ダイアログタイトルとファイル名を設定
 		::SendMessage(hwndDlg, WM_SETTEXT, 0, (LPARAM)GSTR_APPNAME);
 		::SendMessage(GetDlgItem(hwndDlg, IDC_STATIC_CMD),
-			WM_SETTEXT, 0, (LPARAM)pParam->view->GetDocument().m_docFile.GetFilePath());
+			WM_SETTEXT, 0, (LPARAM)pParam->view->GetDocument().docFile.GetFilePath());
 		
 		bool bCanceled = false;
 		for (;;) {
@@ -343,7 +343,7 @@ bool WSHClient::Execute(const wchar_t* AScript)
 {
 	bool bRet = false;
 	IActiveScriptParse *Parser;
-	if (m_Engine->QueryInterface(IID_IActiveScriptParse, reinterpret_cast<void **>(&Parser)) != S_OK) {
+	if (engine->QueryInterface(IID_IActiveScriptParse, reinterpret_cast<void **>(&Parser)) != S_OK) {
 		Error(LSW(STR_ERR_CWSH04));
 	}else {
 		if (Parser->InitNew() != S_OK) {
@@ -351,12 +351,12 @@ bool WSHClient::Execute(const wchar_t* AScript)
 		}else {
 			bool bAddNamedItemError = false;
 
-			for (auto it=m_IfObjArr.begin(); it!=m_IfObjArr.end(); ++it) {
+			for (auto it=ifObjArr.begin(); it!=ifObjArr.end(); ++it) {
 				DWORD dwFlag = SCRIPTITEM_ISVISIBLE;
 
 				if ((*it)->IsGlobal()) { dwFlag |= SCRIPTITEM_GLOBALMEMBERS; }
 
-				if (m_Engine->AddNamedItem((*it)->Name(), dwFlag) != S_OK) {
+				if (engine->AddNamedItem((*it)->Name(), dwFlag) != S_OK) {
 					bAddNamedItemError = true;
 					Error(LSW(STR_ERR_CWSH06));
 					break;
@@ -365,9 +365,9 @@ bool WSHClient::Execute(const wchar_t* AScript)
 			if (!bAddNamedItemError) {
 				// マクロ停止スレッドの起動
 				AbortMacroParam sThreadParam;
-				sThreadParam.pEngine = m_Engine;
+				sThreadParam.pEngine = engine;
 				sThreadParam.nCancelTimer = GetDllShareData().common.macro.nMacroCancelTimer;
-				sThreadParam.view = (EditView*)m_Data;
+				sThreadParam.view = (EditView*)data;
 
 				HANDLE hThread = NULL;
 				unsigned int nThreadId = 0;
@@ -378,7 +378,7 @@ bool WSHClient::Execute(const wchar_t* AScript)
 				}
 
 				// マクロ実行
-				if (m_Engine->SetScriptState(SCRIPTSTATE_STARTED) != S_OK) {
+				if (engine->SetScriptState(SCRIPTSTATE_STARTED) != S_OK) {
 					Error(LSW(STR_ERR_CWSH07));
 				}else {
 					HRESULT hr = Parser->ParseScriptText(AScript, 0, 0, 0, 0, 0, SCRIPTTEXT_ISVISIBLE, 0, 0);
@@ -407,14 +407,14 @@ bool WSHClient::Execute(const wchar_t* AScript)
 		}
 		Parser->Release();
 	}
-	m_Engine->Close();
+	engine->Close();
 	return bRet;
 }
 
 void WSHClient::Error(BSTR Description, BSTR Source)
 {
-	if (m_OnError) {
-		m_OnError(Description, Source, m_Data);
+	if (onError) {
+		onError(Description, Source, data);
 	}
 }
 
@@ -431,8 +431,8 @@ void WSHClient::Error(const wchar_t* Description)
 void WSHClient::AddInterfaceObject(IfObj* obj)
 {
 	if (!obj) return;
-	m_IfObjArr.push_back(obj);
-	obj->m_owner = this;
+	ifObjArr.push_back(obj);
+	obj->owner = this;
 	obj->AddRef();
 }
 

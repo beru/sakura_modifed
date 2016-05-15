@@ -38,22 +38,22 @@ public:
 	WSHPlug(Plugin& plugin, PlugId id, wstring sJack, wstring sHandler, wstring sLabel) :
 		Plug(plugin, id, sJack, sHandler, sLabel)
 	{
-		m_Wsh = nullptr;
+		wsh = nullptr;
 	}
 	virtual ~WSHPlug() {
-		if (m_Wsh) {
-			delete m_Wsh;
-			m_Wsh = nullptr;
+		if (wsh) {
+			delete wsh;
+			wsh = nullptr;
 		}
 	}
-	WSHMacroManager* m_Wsh;
+	WSHMacroManager* wsh;
 };
 
 class WSHPlugin : public Plugin {
 	// コンストラクタ
 public:
 	WSHPlugin(const tstring& sBaseDir) : Plugin(sBaseDir) {
-		m_bUseCache = false;
+		bUseCache = false;
 	}
 
 	// デストラクタ
@@ -71,13 +71,13 @@ public:
 	bool ReadPluginDef(DataProfile& profile, DataProfile* profileMlang);
 	bool ReadPluginOption(DataProfile& profile);
 	Plug::Array GetPlugs() const {
-		return m_plugs;
+		return plugs;
 	}
 	bool InvokePlug(EditView& view, Plug& plug, WSHIfObj::List& params);
 
 	// メンバ変数
 private:
-	bool m_bUseCache;
+	bool bUseCache;
 
 };
 

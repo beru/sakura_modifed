@@ -89,10 +89,10 @@ class ESI {
 public:
 
 	virtual ~ESI() { ; }
-	explicit ESI(const EncodingConfig& ref) : m_pEncodingConfig(&ref) {
-		m_dwStatus = ESI_NOINFORMATION;
-		m_nTargetDataLen = -1;
-		m_eMetaName = CODE_NONE;
+	explicit ESI(const EncodingConfig& ref) : pEncodingConfig(&ref) {
+		dwStatus = ESI_NOINFORMATION;
+		nTargetDataLen = -1;
+		eMetaName = CODE_NONE;
 	}
 
 	// 調査結果の情報を格納
@@ -113,22 +113,22 @@ protected:
 	void GetEvaluation(const EncodingType, int*, int *) const;
 
 	// 調査対象となったデータの長さ（8bit 単位）
-	int m_nTargetDataLen;
+	int nTargetDataLen;
 
 	// 判定結果を格納するもの
-	unsigned int m_dwStatus;
+	unsigned int dwStatus;
 
 public:
 
-	// m_dwStatus のセッター／ゲッター
-	void SetStatus(DWORD inf) { m_dwStatus |= inf; }
-	DWORD GetStatus(void) const { return m_dwStatus; }
+	// dwStatus のセッター／ゲッター
+	void SetStatus(DWORD inf) { dwStatus |= inf; }
+	DWORD GetStatus(void) const { return dwStatus; }
 
-	// m_nTargetDataLen のセッター／ゲッター
+	// nTargetDataLen のセッター／ゲッター
 protected:
-	void SetDataLen(const int n) { if (n < 1) { m_nTargetDataLen = 0; }else { m_nTargetDataLen = n; } }
+	void SetDataLen(const int n) { if (n < 1) { nTargetDataLen = 0; }else { nTargetDataLen = n; } }
 public:
-	int GetDataLen(void) const { return m_nTargetDataLen; }
+	int GetDataLen(void) const { return nTargetDataLen; }
 
 protected:
 	/*
@@ -156,13 +156,13 @@ public:
 	// **** マルチバイト判定関係の変数その他
 	//
 	static const int NUM_OF_MBCODE = (CODE_CODEMAX - 2);
-	MBCODE_INFO m_aMbcInfo[NUM_OF_MBCODE];   // SJIS, JIS, EUCJP, UTF8, UTF7 情報（優先度に従って格納される）
-	MBCODE_INFO* m_apMbcInfo[NUM_OF_MBCODE]; // 評価順にソートされた SJIS, JIS, EUCJP, UTF8, UTF7, CESU8 の情報
-	int m_nMbcSjisHankata;                   // SJIS 半角カタカナのバイト数
-	int m_nMbcEucZenHirakata;                // EUC 全角ひらがなカタカナのバイト数
-	int m_nMbcEucZen;                        // EUC 全角のバイト数
+	MBCODE_INFO aMbcInfo[NUM_OF_MBCODE];   // SJIS, JIS, EUCJP, UTF8, UTF7 情報（優先度に従って格納される）
+	MBCODE_INFO* apMbcInfo[NUM_OF_MBCODE]; // 評価順にソートされた SJIS, JIS, EUCJP, UTF8, UTF7, CESU8 の情報
+	int nMbcSjisHankata;                   // SJIS 半角カタカナのバイト数
+	int nMbcEucZenHirakata;                // EUC 全角ひらがなカタカナのバイト数
+	int nMbcEucZen;                        // EUC 全角のバイト数
 
-	// マルチバイト系の捜査結果を、ポイントが大きい順にソート。 ソートした結果は、m_apMbcInfo に格納
+	// マルチバイト系の捜査結果を、ポイントが大きい順にソート。 ソートした結果は、apMbcInfo に格納
 	void SortMBCInfo(void);
 
 	// EUC と SJIS が候補のトップ２に上がっているかどうか
@@ -170,10 +170,10 @@ public:
 		// EUC と SJIS がトップ2に上がった時
 		// かつ、EUC と SJIS のポイント数が同数のとき
 		return (
-			(m_apMbcInfo[0]->eCodeID == CODE_SJIS && m_apMbcInfo[1]->eCodeID == CODE_EUC
-			|| m_apMbcInfo[1]->eCodeID == CODE_SJIS && m_apMbcInfo[0]->eCodeID == CODE_EUC
+			(apMbcInfo[0]->eCodeID == CODE_SJIS && apMbcInfo[1]->eCodeID == CODE_EUC
+			|| apMbcInfo[1]->eCodeID == CODE_SJIS && apMbcInfo[0]->eCodeID == CODE_EUC
 			)
-			&& m_apMbcInfo[0]->nPoints == m_apMbcInfo[1]->nPoints
+			&& apMbcInfo[0]->nPoints == apMbcInfo[1]->nPoints
 		);
 	}
 
@@ -182,10 +182,10 @@ public:
 		// UTF-8 と SJIS がトップ2に上がった時
 		// かつ、UTF-8 と SJIS のポイント数が同数のとき
 		return (
-			(m_apMbcInfo[0]->eCodeID == CODE_UTF8 && m_apMbcInfo[1]->eCodeID == CODE_CESU8
-			|| m_apMbcInfo[1]->eCodeID == CODE_UTF8 && m_apMbcInfo[0]->eCodeID == CODE_CESU8
+			(apMbcInfo[0]->eCodeID == CODE_UTF8 && apMbcInfo[1]->eCodeID == CODE_CESU8
+			|| apMbcInfo[1]->eCodeID == CODE_UTF8 && apMbcInfo[0]->eCodeID == CODE_CESU8
 			)
-			&& m_apMbcInfo[0]->nPoints == m_apMbcInfo[1]->nPoints
+			&& apMbcInfo[0]->nPoints == apMbcInfo[1]->nPoints
 		);
 	}
 
@@ -196,23 +196,22 @@ public:
 	//
 	// 	**** UTF-16 判定関係の変数その他
 	//
-	WCCODE_INFO m_aWcInfo[ESI_WCIDX_MAX];	// UTF-16 LE/BE 情報
-	BOMType m_eWcBomType;					// m_pWcInfo から推測される BOM の種類
-	EncodingType m_eMetaName;				// エンコーディング名からの種類判別
+	WCCODE_INFO aWcInfo[ESI_WCIDX_MAX];	// UTF-16 LE/BE 情報
+	BOMType eWcBomType;					// pWcInfo から推測される BOM の種類
+	EncodingType eMetaName;				// エンコーディング名からの種類判別
 
-	BOMType GetBOMType(void) const { return m_eWcBomType; }
-	EncodingType GetMetaName() const { return m_eMetaName; }
+	BOMType GetBOMType(void) const { return eWcBomType; }
+	EncodingType GetMetaName() const { return eMetaName; }
 
 protected:
-	// BOMの種類を推測して m_eWcBomType を設定
+	// BOMの種類を推測して eWcBomType を設定
 	void GuessUtf16Bom(void);
 	EncodingType AutoDetectByXML( const char*, int );
 	EncodingType AutoDetectByHTML( const char*, int );
 	EncodingType AutoDetectByCoding( const char*, int );
-
-
+	
 public:
-	const EncodingConfig* m_pEncodingConfig;
+	const EncodingConfig* pEncodingConfig;
 
 #ifdef _DEBUG
 public:

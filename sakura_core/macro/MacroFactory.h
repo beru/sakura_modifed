@@ -61,7 +61,7 @@ public:
 
 	bool RegisterCreator(Creator);
 	// Jan. 31, 2004 genta
-	// バイナリサイズ削減のためm_mMacroExtsを削除
+	// バイナリサイズ削減のためmMacroExtsを削除
 	//bool RegisterExt(const char*, Creator);
 	bool Unregister(Creator);
 
@@ -77,12 +77,12 @@ private:
 
 	// Jan. 31, 2004 genta
 	// バイナリサイズ削減のため
-	//MacroTypeRep m_mMacroExts;	// 拡張子対応表
+	//MacroTypeRep mMacroExts;	// 拡張子対応表
 	/*!
 		Creatorリスト
 		@date 2002.08.25 genta 追加
 	*/
-	MacroEngineRep m_mMacroCreators;
+	MacroEngineRep mMacroCreators;
 
 };
 

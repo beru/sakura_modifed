@@ -58,7 +58,7 @@ public:
 
 	//	アクセス関数
 	int Length(void) const;	//	アイテムの数。
-	int MenuLength(void) const { return t_min(Length(), m_recentFile.GetViewCount()); }	//	メニューに表示されるアイテムの数
+	int MenuLength(void) const { return t_min(Length(), recentFile.GetViewCount()); }	//	メニューに表示されるアイテムの数
 	void ClearAll(void);	//	アイテムを削除～。
 	bool GetEditInfo(int num, EditInfo* pfi) const;				//	番号で指定したEditInfo（情報をまるごと）
 	bool GetEditInfo(const TCHAR* pszPath, EditInfo* pfi) const;	//	ファイル名で指定したEditInfo（情報をまるごと）
@@ -66,9 +66,9 @@ public:
 
 protected:
 	// 共有メモリアクセス用。
-	struct DllSharedData* m_pShareData;		//	共有メモリを参照するよ。
+	struct DllSharedData* pShareData;		//	共有メモリを参照するよ。
 	
 private:
-	RecentFile	m_recentFile;	// 履歴	//@@@ 2003.04.08 MIK
+	RecentFile	recentFile;	// 履歴	//@@@ 2003.04.08 MIK
 };
 

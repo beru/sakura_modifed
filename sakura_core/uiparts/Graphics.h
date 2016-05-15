@@ -226,6 +226,6 @@ private:
 	std::vector<HBRUSH>	brushes;
 	HBRUSH				hbrOrg;
 	HBRUSH				hbrCurrent;
-	bool				bDynamicBrush;	// m_hbrCurrent‚ğ“®“I‚Éì¬‚µ‚½ê‡‚Ítrue
+	bool				bDynamicBrush;	// hbrCurrent‚ğ“®“I‚Éì¬‚µ‚½ê‡‚Ítrue
 };
 

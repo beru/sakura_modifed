@@ -81,7 +81,7 @@
 	いろいろ
 	
 	Version 25:
-	m_bStopsBothEndsWhenSearchWord追加
+	bStopsBothEndsWhenSearchWord追加
 	
 	Version 26:
 	MacroRecに、m_bReloadWhenExecuteを追加 2002/03/11 YAZAKI
@@ -110,7 +110,7 @@
 
 	Version 33:
 	Commonに、m_lf_kh(後にCommonSetting_Helper::lf)を追加 2002/05/21 ai
-	m_nDiffFlgOptを追加 2002.05.27 MIK
+	nDiffFlgOptを追加 2002.05.27 MIK
 	STypeConfig-ColorにCOLORIDX_DIFF_APPEND,COLORIDX_DIFF_CHANGE,COLORIDX_DIFF_DELETEを追加
 
 	Version 34:
@@ -120,14 +120,14 @@
 	CommonにnLineNumRightSpace 追加．2002.09.18 genta
 
 	Version 36:
-	Commonのm_bGrepKanjiCode_AutoDetectを削除、m_nGrepCharSetを追加 2002/09/21 Moca
+	CommonのbGrepKanjiCode_AutoDetectを削除、m_nGrepCharSetを追加 2002/09/21 Moca
 
 	Version 37:
-	STypeConfigのLineComment関連をm_cLineCommentに変更．  @@@ 2002.09.23 YAZAKI
-	STypeConfigのBlockComment関連をm_cBlockCommentsに変更．@@@ 2002.09.23 YAZAKI
+	STypeConfigのLineComment関連をcLineCommentに変更．  @@@ 2002.09.23 YAZAKI
+	STypeConfigのBlockComment関連をcBlockCommentsに変更．@@@ 2002.09.23 YAZAKI
 
 	Version 38:
-	STypeConfigにm_bIndentLayoutを追加. @@@ 2002.09.29 YAZAKI
+	STypeConfigにbIndentLayoutを追加. @@@ 2002.09.29 YAZAKI
 	2002.10.01 genta m_nIndentLayoutに名前変更
 
 	Version 39:

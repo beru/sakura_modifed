@@ -5,9 +5,9 @@
 
 MainStatusBar::MainStatusBar(EditWnd& owner)
 	:
-	m_owner(owner),
-	m_hwndStatusBar(NULL),
-	m_hwndProgressBar(NULL)
+	owner(owner),
+	hwndStatusBar(NULL),
+	hwndProgressBar(NULL)
 {
 }
 
@@ -16,18 +16,18 @@ MainStatusBar::MainStatusBar(EditWnd& owner)
 // ステータスバー作成
 void MainStatusBar::CreateStatusBar()
 {
-	if (m_hwndStatusBar) return;
+	if (hwndStatusBar) return;
 
 	// ステータスバー
-	m_hwndStatusBar = ::CreateStatusWindow(
+	hwndStatusBar = ::CreateStatusWindow(
 		WS_CHILD/* | WS_VISIBLE*/ | WS_EX_RIGHT | SBARS_SIZEGRIP,	// 2007.03.08 ryoji WS_VISIBLE 除去
 		_T(""),
-		m_owner.GetHwnd(),
+		owner.GetHwnd(),
 		IDW_STATUSBAR
 	);
 
 	// プログレスバー
-	m_hwndProgressBar = ::CreateWindowEx(
+	hwndProgressBar = ::CreateWindowEx(
 		WS_EX_TOOLWINDOW,
 		PROGRESS_CLASS,
 		NULL,
@@ -36,32 +36,32 @@ void MainStatusBar::CreateStatusBar()
 		5,
 		150,
 		13,
-		m_hwndStatusBar,
+		hwndStatusBar,
 		NULL,
 		EditApp::getInstance().GetAppInstance(),
 		0
 	);
 
-	if (m_owner.m_funcKeyWnd.GetHwnd()) {
-		m_owner.m_funcKeyWnd.SizeBox_ONOFF(false);
+	if (owner.funcKeyWnd.GetHwnd()) {
+		owner.funcKeyWnd.SizeBox_ONOFF(false);
 	}
 
 	// スプリッターの、サイズボックスの位置を変更
-	m_owner.m_splitterWnd.DoSplit(-1, -1);
+	owner.splitterWnd.DoSplit(-1, -1);
 }
 
 
 // ステータスバー破棄
 void MainStatusBar::DestroyStatusBar()
 {
-	if (m_hwndProgressBar) {
-		::DestroyWindow(m_hwndProgressBar);
-		m_hwndProgressBar = NULL;
+	if (hwndProgressBar) {
+		::DestroyWindow(hwndProgressBar);
+		hwndProgressBar = NULL;
 	}
-	::DestroyWindow(m_hwndStatusBar);
-	m_hwndStatusBar = NULL;
+	::DestroyWindow(hwndStatusBar);
+	hwndStatusBar = NULL;
 
-	if (m_owner.m_funcKeyWnd.GetHwnd()) {
+	if (owner.funcKeyWnd.GetHwnd()) {
 		bool bSizeBox;
 		if (GetDllShareData().common.window.nFuncKeyWnd_Place == 0) {	// ファンクションキー表示位置／0:上 1:下
 			// サイズボックスの表示／非表示切り替え
@@ -69,14 +69,14 @@ void MainStatusBar::DestroyStatusBar()
 		}else {
 			bSizeBox = true;
 			// ステータスパーを表示している場合はサイズボックスを表示しない
-			if (m_hwndStatusBar) {
+			if (hwndStatusBar) {
 				bSizeBox = false;
 			}
 		}
-		m_owner.m_funcKeyWnd.SizeBox_ONOFF(bSizeBox);
+		owner.funcKeyWnd.SizeBox_ONOFF(bSizeBox);
 	}
 	// スプリッターの、サイズボックスの位置を変更
-	m_owner.m_splitterWnd.DoSplit(-1, -1);
+	owner.splitterWnd.DoSplit(-1, -1);
 }
 
 
@@ -96,15 +96,15 @@ void MainStatusBar::DestroyStatusBar()
 */
 void MainStatusBar::SendStatusMessage2(const TCHAR* msg)
 {
-	if (m_hwndStatusBar) {
+	if (hwndStatusBar) {
 		// ステータスバーへ
-		StatusBar_SetText(m_hwndStatusBar, 0 | SBT_NOBORDERS, msg);
+		StatusBar_SetText(hwndStatusBar, 0 | SBT_NOBORDERS, msg);
 	}
 }
 
 
 void MainStatusBar::SetStatusText(int nIndex, int nOption, const TCHAR* pszText)
 {
-	StatusBar_SetText(m_hwndStatusBar, nIndex | nOption, pszText);
+	StatusBar_SetText(hwndStatusBar, nIndex | nOption, pszText);
 }
 

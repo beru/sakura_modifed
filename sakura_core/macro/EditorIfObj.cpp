@@ -33,13 +33,13 @@
 // ƒRƒ}ƒ“ƒhî•ñ‚ğæ“¾‚·‚é
 MacroFuncInfoArray EditorIfObj::GetMacroCommandInfo() const
 {
-	return SMacroMgr::m_macroFuncInfoCommandArr;
+	return SMacroMgr::macroFuncInfoCommandArr;
 }
 
 // ŠÖ”î•ñ‚ğæ“¾‚·‚é
 MacroFuncInfoArray EditorIfObj::GetMacroFuncInfo() const
 {
-	return SMacroMgr::m_macroFuncInfoArr;
+	return SMacroMgr::macroFuncInfoArr;
 }
 
 // ŠÖ”‚ğˆ—‚·‚é

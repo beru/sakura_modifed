@@ -7,7 +7,7 @@
 //                     DiffLineGetter                         //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-DiffMark DiffLineGetter::GetLineDiffMark() const { return (DiffMark)m_pDocLine->m_mark.m_diffMarked; }
+DiffMark DiffLineGetter::GetLineDiffMark() const { return (DiffMark)pDocLine->mark.diffMarked; }
 
 /*! 行の差分マークに対応した色を返す -> pColorIndex
 	
@@ -109,7 +109,7 @@ bool DiffLineGetter::DrawDiffMark(
 //                     DiffLineSetter                         //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-void DiffLineSetter::SetLineDiffMark(DiffMark mark) { m_pDocLine->m_mark.m_diffMarked = mark; }
+void DiffLineSetter::SetLineDiffMark(DiffMark mark) { pDocLine->mark.diffMarked = mark; }
 
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -122,9 +122,9 @@ void DiffLineSetter::SetLineDiffMark(DiffMark mark) { m_pDocLine->m_mark.m_diffM
 */
 void DiffLineMgr::ResetAllDiffMark()
 {
-	DocLine* pDocLine = m_docLineMgr.GetDocLineTop();
+	DocLine* pDocLine = docLineMgr.GetDocLineTop();
 	while (pDocLine) {
-		pDocLine->m_mark.m_diffMarked = DiffMark::None;
+		pDocLine->mark.diffMarked = DiffMark::None;
 		pDocLine = pDocLine->GetNextLine();
 	}
 
@@ -146,7 +146,7 @@ bool DiffLineMgr::SearchDiffMark(
 	// 前方検索
 	if (bPrevOrNext == SearchDirection::Backward) {
 		--nLinePos;
-		const DocLine* pDocLine = m_docLineMgr.GetLine(nLinePos);
+		const DocLine* pDocLine = docLineMgr.GetLine(nLinePos);
 		while (pDocLine) {
 			if (DiffLineGetter(pDocLine).GetLineDiffMark() != DiffMark::None) {
 				*pnLineNum = nLinePos;				// マッチ行
@@ -158,7 +158,7 @@ bool DiffLineMgr::SearchDiffMark(
 	// 後方検索
 	}else {
 		++nLinePos;
-		const DocLine* pDocLine = m_docLineMgr.GetLine(nLinePos);
+		const DocLine* pDocLine = docLineMgr.GetLine(nLinePos);
 		while (pDocLine) {
 			if (DiffLineGetter(pDocLine).GetLineDiffMark() != DiffMark::None) {
 				*pnLineNum = nLinePos;				// マッチ行
@@ -183,10 +183,10 @@ void DiffLineMgr::SetDiffMarkRange(DiffMark nMode, LogicInt nStartLine, LogicInt
 		nStartLine = LogicInt(0);
 	}
 	// 最終行より後に削除行あり
-	LogicInt nLines = m_docLineMgr.GetLineCount();
+	LogicInt nLines = docLineMgr.GetLineCount();
 	if (nLines <= nEndLine) {
 		nEndLine = nLines - LogicInt(1);
-		DocLine* pDocLine = m_docLineMgr.GetLine(nEndLine);
+		DocLine* pDocLine = docLineMgr.GetLine(nEndLine);
 		if (pDocLine) {
 			DiffLineSetter(pDocLine).SetLineDiffMark(DiffMark::DeleteEx);
 		}
@@ -194,7 +194,7 @@ void DiffLineMgr::SetDiffMarkRange(DiffMark nMode, LogicInt nStartLine, LogicInt
 
 	// 行範囲にマークをつける
 	for (LogicInt i=nStartLine; i<=nEndLine; ++i) {
-		DocLine* pDocLine = m_docLineMgr.GetLine(i);
+		DocLine* pDocLine = docLineMgr.GetLine(i);
 		if (pDocLine) {
 			DiffLineSetter(pDocLine).SetLineDiffMark(nMode);
 		}

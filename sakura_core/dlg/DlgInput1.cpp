@@ -89,7 +89,7 @@ BOOL DlgInput1::DoModal(
 	pszTitle = pszTitle;			// ダイアログタイトル
 	pszMessage = pszMessage;		// メッセージ
 	nMaxTextLen = nMaxTextLen;	// 入力サイズ上限
-//	m_pszText = pszText;			// テキスト
+//	pszText = pszText;			// テキスト
 	memText.SetString(pszText);
 	bRet = (BOOL)::DialogBoxParam(
 		hInstance,

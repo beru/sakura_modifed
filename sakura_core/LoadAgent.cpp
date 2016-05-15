@@ -48,7 +48,7 @@ CallbackResultType LoadAgent::OnCheckLoad(LoadInfo* pLoadInfo)
 	if (IsDirectory(pLoadInfo->filePath)) {
 		std::vector<std::tstring> files;
 		LoadInfo loadInfo(_T(""), CODE_AUTODETECT, false);
-		bool bDlgResult = pDoc->m_docFileOperation.OpenFileDialog(
+		bool bDlgResult = pDoc->docFileOperation.OpenFileDialog(
 			EditWnd::getInstance().GetHwnd(),
 			pLoadInfo->filePath,	// 指定されたフォルダ
 			&loadInfo,
@@ -120,15 +120,15 @@ next:
 
 		// ロックは一時的に解除してチェックする（チェックせずに後戻りできないところまで進めるより安全）
 		// ※ ロックしていてもアクセス許可の変更によって読み取れなくなっていることもある
-		bool bLock = (pLoadInfo->IsSamePath(pDoc->m_docFile.GetFilePath()) && pDoc->m_docFile.IsFileLocking());
+		bool bLock = (pLoadInfo->IsSamePath(pDoc->docFile.GetFilePath()) && pDoc->docFile.IsFileLocking());
 		if (bLock) {
-			pDoc->m_docFileOperation.DoFileUnlock();
+			pDoc->docFileOperation.DoFileUnlock();
 		}
 
 		// チェック
 		if (!file.IsFileReadable()) {
 			if (bLock) {
-				pDoc->m_docFileOperation.DoFileLock(false);
+				pDoc->docFileOperation.DoFileLock(false);
 			}
 			ErrorMessage(
 				EditWnd::getInstance().GetHwnd(),
@@ -138,7 +138,7 @@ next:
 			return CallbackResultType::Interrupt; // ファイルが存在しているのに読み取れない場合は中断
 		}
 		if (bLock) {
-			pDoc->m_docFileOperation.DoFileLock(false);
+			pDoc->docFileOperation.DoFileLock(false);
 		}
 	}while (false);	//	1回しか通らない. breakでここまで飛ぶ
 
@@ -151,7 +151,7 @@ next:
 			LARGE_INTEGER nFileSize;
 			nFileSize.HighPart = wfd.nFileSizeHigh;
 			nFileSize.LowPart = wfd.nFileSizeLow;
-			// csFile.m_nAlertFileSize はMB単位
+			// csFile.nAlertFileSize はMB単位
 			if ((nFileSize.QuadPart>>20) >= (csFile.nAlertFileSize)) {
 				int nRet = MYMESSAGEBOX( EditWnd::getInstance().GetHwnd(),
 					MB_ICONQUESTION | MB_YESNO | MB_TOPMOST,
@@ -184,19 +184,19 @@ LoadResultType LoadAgent::OnLoad(const LoadInfo& loadInfo)
 	pDoc->SetFilePathAndIcon( loadInfo.filePath );
 
 	// 文書種別確定
-	pDoc->m_docType.SetDocumentType( loadInfo.nType, true );
-	pDoc->m_pEditWnd->m_pViewFontMiniMap->UpdateFont(&pDoc->m_pEditWnd->GetLogfont());
-	InitCharWidthCache( pDoc->m_pEditWnd->m_pViewFontMiniMap->GetLogfont(), CharWidthFontMode::MiniMap );
-	SelectCharWidthCache( CharWidthFontMode::Edit, pDoc->m_pEditWnd->GetLogfontCacheMode() );
-	InitCharWidthCache( pDoc->m_pEditWnd->GetLogfont() );
-	pDoc->m_pEditWnd->m_pViewFont->UpdateFont(&pDoc->m_pEditWnd->GetLogfont());
+	pDoc->docType.SetDocumentType( loadInfo.nType, true );
+	pDoc->pEditWnd->pViewFontMiniMap->UpdateFont(&pDoc->pEditWnd->GetLogfont());
+	InitCharWidthCache( pDoc->pEditWnd->pViewFontMiniMap->GetLogfont(), CharWidthFontMode::MiniMap );
+	SelectCharWidthCache( CharWidthFontMode::Edit, pDoc->pEditWnd->GetLogfontCacheMode() );
+	InitCharWidthCache( pDoc->pEditWnd->GetLogfont() );
+	pDoc->pEditWnd->pViewFont->UpdateFont(&pDoc->pEditWnd->GetLogfont());
 
 	// 起動と同時に読む場合は予めアウトライン解析画面を配置しておく
 	// （ファイル読み込み開始とともにビューが表示されるので、あとで配置すると画面のちらつきが大きいの）
-	if (!pDoc->m_pEditWnd->m_dlgFuncList.bEditWndReady) {
-		pDoc->m_pEditWnd->m_dlgFuncList.Refresh();
-		HWND hEditWnd = pDoc->m_pEditWnd->GetHwnd();
-		if (!::IsIconic( hEditWnd ) && pDoc->m_pEditWnd->m_dlgFuncList.GetHwnd()) {
+	if (!pDoc->pEditWnd->dlgFuncList.bEditWndReady) {
+		pDoc->pEditWnd->dlgFuncList.Refresh();
+		HWND hEditWnd = pDoc->pEditWnd->GetHwnd();
+		if (!::IsIconic( hEditWnd ) && pDoc->pEditWnd->dlgFuncList.GetHwnd()) {
 			RECT rc;
 			::GetClientRect( hEditWnd, &rc );
 			::SendMessage( hEditWnd, WM_SIZE, ::IsZoomed( hEditWnd )? SIZE_MAXIMIZED: SIZE_RESTORED, MAKELONG( rc.right - rc.left, rc.bottom - rc.top ) );
@@ -209,9 +209,9 @@ LoadResultType LoadAgent::OnLoad(const LoadInfo& loadInfo)
 		ReadManager reader;
 		ProgressSubject* pOld = EditApp::getInstance().pVisualProgress->ProgressListener::Listen(&reader);
 		CodeConvertResult eReadResult = reader.ReadFile_To_CDocLineMgr(
-			pDoc->m_docLineMgr,
+			pDoc->docLineMgr,
 			loadInfo,
-			&pDoc->m_docFile.m_fileInfo
+			&pDoc->docFile.fileInfo
 		);
 		if (eReadResult == CodeConvertResult::LoseSome) {
 			eRet = LoadResultType::LoseSome;
@@ -219,8 +219,8 @@ LoadResultType LoadAgent::OnLoad(const LoadInfo& loadInfo)
 		EditApp::getInstance().pVisualProgress->ProgressListener::Listen(pOld);
 	}else {
 		// 存在しないときもドキュメントに文字コードを反映する
-		const TypeConfig& types = pDoc->m_docType.GetDocumentAttribute();
-		pDoc->m_docFile.SetCodeSet( loadInfo.eCharCode, 
+		const TypeConfig& types = pDoc->docType.GetDocumentAttribute();
+		pDoc->docFile.SetCodeSet( loadInfo.eCharCode, 
 			( loadInfo.eCharCode == types.encoding.eDefaultCodetype ) ?
 				types.encoding.bDefaultBom : CodeTypeName( loadInfo.eCharCode ).IsBomDefOn() );
 	}
@@ -229,15 +229,15 @@ LoadResultType LoadAgent::OnLoad(const LoadInfo& loadInfo)
 	// 2008.06.07 nasukoji	折り返し方法の追加に対応
 	// 「指定桁で折り返す」以外の時は折り返し幅をMAXLINEKETASで初期化する
 	// 「右端で折り返す」は、この後のOnSize()で再設定される
-	const TypeConfig& ref = pDoc->m_docType.GetDocumentAttribute();
+	const TypeConfig& ref = pDoc->docType.GetDocumentAttribute();
 	LayoutInt nMaxLineKetas = ref.nMaxLineKetas;
 	if (ref.nTextWrapMethod != TextWrappingMethod::SettingWidth) {
 		nMaxLineKetas = MAXLINEKETAS;
 	}
 
-	ProgressSubject* pOld = EditApp::getInstance().pVisualProgress->ProgressListener::Listen(&pDoc->m_layoutMgr);
-	pDoc->m_layoutMgr.SetLayoutInfo( true, ref, ref.nTabSpace, nMaxLineKetas );
-	pDoc->m_pEditWnd->ClearViewCaretPosInfo();
+	ProgressSubject* pOld = EditApp::getInstance().pVisualProgress->ProgressListener::Listen(&pDoc->layoutMgr);
+	pDoc->layoutMgr.SetLayoutInfo( true, ref, ref.nTabSpace, nMaxLineKetas );
+	pDoc->pEditWnd->ClearViewCaretPosInfo();
 	
 	EditApp::getInstance().pVisualProgress->ProgressListener::Listen(pOld);
 
@@ -250,22 +250,22 @@ void LoadAgent::OnAfterLoad(const LoadInfo& loadInfo)
 	EditDoc* pDoc = GetListeningDoc();
 
 	// 親ウィンドウのタイトルを更新
-	pDoc->m_pEditWnd->UpdateCaption();
+	pDoc->pEditWnd->UpdateCaption();
 
 	// -- -- ※ InitAllViewでやってたこと -- -- //	// 2009.08.28 nasukoji	CEditView::OnAfterLoad()からここに移動
-	pDoc->m_nCommandExecNum = 0;
+	pDoc->nCommandExecNum = 0;
 
 	// テキストの折り返し方法を初期化
-	pDoc->m_nTextWrapMethodCur = pDoc->m_docType.GetDocumentAttribute().nTextWrapMethod;	// 折り返し方法
-	pDoc->m_bTextWrapMethodCurTemp = false;													// 一時設定適用中を解除
-	pDoc->m_blfCurTemp = false;
-	pDoc->m_bTabSpaceCurTemp = false;
+	pDoc->nTextWrapMethodCur = pDoc->docType.GetDocumentAttribute().nTextWrapMethod;	// 折り返し方法
+	pDoc->bTextWrapMethodCurTemp = false;													// 一時設定適用中を解除
+	pDoc->blfCurTemp = false;
+	pDoc->bTabSpaceCurTemp = false;
 
 	// 2009.08.28 nasukoji	「折り返さない」ならテキスト最大幅を算出、それ以外は変数をクリア
-	if (pDoc->m_nTextWrapMethodCur == TextWrappingMethod::NoWrapping) {
-		pDoc->m_layoutMgr.CalculateTextWidth();		// テキスト最大幅を算出する
+	if (pDoc->nTextWrapMethodCur == TextWrappingMethod::NoWrapping) {
+		pDoc->layoutMgr.CalculateTextWidth();		// テキスト最大幅を算出する
 	}else {
-		pDoc->m_layoutMgr.ClearLayoutLineWidth();		// 各行のレイアウト行長の記憶をクリアする
+		pDoc->layoutMgr.ClearLayoutLineWidth();		// 各行のレイアウト行長の記憶をクリアする
 	}
 }
 
@@ -276,7 +276,7 @@ void LoadAgent::OnFinalLoad(LoadResultType eLoadResult)
 
 	if (eLoadResult == LoadResultType::Failure) {
 		pDoc->SetFilePathAndIcon(_T(""));
-		pDoc->m_docFile.SetBomDefoult();
+		pDoc->docFile.SetBomDefoult();
 	}
 	if (eLoadResult == LoadResultType::LoseSome) {
 		AppMode::getInstance().SetViewMode(true);

@@ -137,9 +137,9 @@ CallbackResultType CodeChecker::OnCheckSave(SaveInfo* pSaveInfo)
 
 	// 改行コードが混在しているかどうか判定
 	bool bTmpResult = false;
-	if (pDoc->m_docType.GetDocumentAttribute().bChkEnterAtEnd) {
+	if (pDoc->docType.GetDocumentAttribute().bChkEnterAtEnd) {
 		bTmpResult = _CheckSavingEolcode(
-			pDoc->m_docLineMgr, pSaveInfo->eol
+			pDoc->docLineMgr, pSaveInfo->eol
 		);
 	}
 
@@ -150,10 +150,10 @@ CallbackResultType CodeChecker::OnCheckSave(SaveInfo* pSaveInfo)
 			MB_YESNOCANCEL | MB_ICONWARNING,
 			GSTR_APPNAME,
 			LS(STR_CODECHECKER_EOL_UNIFY),
-			pDoc->m_docEditor.GetNewLineCode().GetName()
+			pDoc->docEditor.GetNewLineCode().GetName()
 		);
 		switch (nDlgResult) {
-		case IDYES:		pSaveInfo->eol = pDoc->m_docEditor.GetNewLineCode(); break; // 統一
+		case IDYES:		pSaveInfo->eol = pDoc->docEditor.GetNewLineCode(); break; // 統一
 		case IDNO:		break; // 続行
 		case IDCANCEL:	return CallbackResultType::Interrupt; // 中断
 		}
@@ -163,7 +163,7 @@ CallbackResultType CodeChecker::OnCheckSave(SaveInfo* pSaveInfo)
 	LogicPoint point;
 	NativeW memChar(L"", 0);
 	CodeConvertResult nTmpResult = _CheckSavingCharcode(
-		pDoc->m_docLineMgr, pSaveInfo->eCharCode,
+		pDoc->docLineMgr, pSaveInfo->eCharCode,
 		point, memChar
 	);
 
@@ -200,7 +200,7 @@ CallbackResultType CodeChecker::OnCheckSave(SaveInfo* pSaveInfo)
 		case IDCANCEL:
 			{
 				LogicPoint pt(point.x < 0 ? LogicInt(0) : point.x, point.y);
-				pDoc->m_pEditWnd->GetActiveView().GetCommander().Command_MOVECURSOR(pt, 0);
+				pDoc->pEditWnd->GetActiveView().GetCommander().Command_MOVECURSOR(pt, 0);
 			}
 			return CallbackResultType::Interrupt; //中断
 		}

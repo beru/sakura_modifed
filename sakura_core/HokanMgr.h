@@ -74,16 +74,16 @@ public:
 
 	static bool AddKouhoUnique(vector_ex<std::wstring>&, const std::wstring&);
 
-	NativeW			m_memCurWord;
-	vector_ex<std::wstring>	m_vKouho;
-	int				m_nKouhoNum;
+	NativeW			memCurWord;
+	vector_ex<std::wstring>	vKouho;
+	int				nKouhoNum;
 
-	int				m_nCurKouhoIdx;
+	int				nCurKouhoIdx;
 
-	POINT			m_point;
-	int				m_nWinHeight;
-	int				m_nColumnWidth;
-	int				m_bTimerFlag;
+	POINT			point;
+	int				nWinHeight;
+	int				nColumnWidth;
+	int				bTimerFlag;
 
 protected:
 	/*

@@ -50,7 +50,7 @@ enum class EolType {
 #define EOL_TYPE_NUM	(int)EolType::CodeMax // 8
 
 // 行終端子の配列
-extern const EolType gm_pnEolTypeArr[EOL_TYPE_NUM];
+extern const EolType g_pnEolTypeArr[EOL_TYPE_NUM];
 
 #include "basis/SakuraBasis.h"
 

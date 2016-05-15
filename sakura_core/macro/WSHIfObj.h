@@ -74,6 +74,6 @@ protected:
 	virtual MacroFuncInfoArray GetMacroCommandInfo() const = 0;	// ƒRƒ}ƒ“ƒhî•ñ‚ğæ“¾‚·‚é
 	virtual MacroFuncInfoArray GetMacroFuncInfo() const = 0;	// ŠÖ”î•ñ‚ğæ“¾‚·‚é
 
-	EditView* m_pView;
+	EditView* pView;
 };
 

@@ -70,7 +70,7 @@ void ViewCommander::Command_FILENEW(void)
 	std::tstring curDir = SakuraEnvironment::GetDlgInitialDir();
 	ControlTray::OpenNewEditor(
 		G_AppInstance(),
-		m_view.GetHwnd(),
+		view.GetHwnd(),
 		loadInfo,
 		NULL,
 		false,
@@ -92,7 +92,7 @@ void ViewCommander::Command_FILENEW_NEWWINDOW(void)
 	std::tstring curDir = SakuraEnvironment::GetDlgInitialDir();
 	ControlTray::OpenNewEditor(
 		G_AppInstance(),
-		m_view.GetHwnd(),
+		view.GetHwnd(),
 		loadInfo,
 		NULL,
 		false,
@@ -142,7 +142,7 @@ void ViewCommander::Command_FILEOPEN(
 				}
 			}
 		}
-		bool bDlgResult = GetDocument().m_docFileOperation.OpenFileDialog(
+		bool bDlgResult = GetDocument().docFileOperation.OpenFileDialog(
 			EditWnd::getInstance().GetHwnd(),	// [in]  オーナーウィンドウ
 			defName.length() == 0 ? NULL : defName.c_str(),	// [in]  フォルダ
 			&loadInfo,							// [out] ロード情報受け取り
@@ -167,7 +167,7 @@ void ViewCommander::Command_FILEOPEN(
 	}
 
 	// 開く
-	GetDocument().m_docFileOperation.FileLoad(&loadInfo);
+	GetDocument().docFileOperation.FileLoad(&loadInfo);
 }
 
 
@@ -186,11 +186,11 @@ bool ViewCommander::Command_FILESAVE(bool warnbeep, bool askname)
 	auto& doc = GetDocument();
 
 	// ファイル名が指定されていない場合は「名前を付けて保存」のフローへ遷移
-	if (!GetDocument().m_docFile.GetFilePathClass().IsValidPath()) {
+	if (!GetDocument().docFile.GetFilePathClass().IsValidPath()) {
 		if (!askname) {
 			return false;	// 保存しない
 		}
-		return doc.m_docFileOperation.FileSaveAs();
+		return doc.docFileOperation.FileSaveAs();
 	}
 
 	// セーブ情報
@@ -202,7 +202,7 @@ bool ViewCommander::Command_FILESAVE(bool warnbeep, bool askname)
 	// 上書き処理
 	auto& soundSet = EditApp::getInstance().soundSet;
 	if (!warnbeep) soundSet.MuteOn();
-	bool bRet = doc.m_docFileOperation.DoSaveFlow(&saveInfo);
+	bool bRet = doc.docFileOperation.DoSaveFlow(&saveInfo);
 	if (!warnbeep) soundSet.MuteOff();
 
 	return bRet;
@@ -216,7 +216,7 @@ bool ViewCommander::Command_FILESAVEAS_DIALOG(
 	EolType eEolType
 	)
 {
-	return GetDocument().m_docFileOperation.FileSaveAs(fileNameDef, eCodeType, eEolType, true);
+	return GetDocument().docFileOperation.FileSaveAs(fileNameDef, eCodeType, eEolType, true);
 }
 
 
@@ -228,7 +228,7 @@ bool ViewCommander::Command_FILESAVEAS(
 	EolType eEolType
 	)
 {
-	return GetDocument().m_docFileOperation.FileSaveAs(filename, CODE_NONE, eEolType, false);
+	return GetDocument().docFileOperation.FileSaveAs(filename, CODE_NONE, eEolType, false);
 }
 
 
@@ -256,7 +256,7 @@ bool ViewCommander::Command_FILESAVEALL(void)
 // 閉じて(無題)	// Oct. 17, 2000 jepro 「ファイルを閉じる」というキャプションを変更
 void ViewCommander::Command_FILECLOSE(void)
 {
-	GetDocument().m_docFileOperation.FileClose();
+	GetDocument().docFileOperation.FileClose();
 }
 
 
@@ -271,7 +271,7 @@ void ViewCommander::Command_FILECLOSE_OPEN(
 	bool bViewMode
 	)
 {
-	GetDocument().m_docFileOperation.FileCloseOpen(LoadInfo(to_tchar(filename), nCharCode, bViewMode));
+	GetDocument().docFileOperation.FileCloseOpen(LoadInfo(to_tchar(filename), nCharCode, bViewMode));
 
 	// プラグイン：DocumentOpenイベント実行
 	Plug::Array plugs;
@@ -290,13 +290,13 @@ void ViewCommander::Command_FILE_REOPEN(
 	)
 {
 	auto& doc = GetDocument();
-	if (!bNoConfirm && fexist(doc.m_docFile.GetFilePath()) && doc.m_docEditor.IsModified()) {
+	if (!bNoConfirm && fexist(doc.docFile.GetFilePath()) && doc.docEditor.IsModified()) {
 		int nDlgResult = MYMESSAGEBOX(
-			m_view.GetHwnd(),
+			view.GetHwnd(),
 			MB_OKCANCEL | MB_ICONQUESTION | MB_TOPMOST,
 			GSTR_APPNAME,
 			LS(STR_ERR_CEDITVIEW_CMD29),
-			doc.m_docFile.GetFilePath()
+			doc.docFile.GetFilePath()
 		);
 		if (nDlgResult == IDOK) {
 			// 継続。下へ進む
@@ -306,7 +306,7 @@ void ViewCommander::Command_FILE_REOPEN(
 	}
 
 	// 同一ファイルの再オープン
-	doc.m_docFileOperation.ReloadCurrentFile(nCharCode);
+	doc.docFileOperation.ReloadCurrentFile(nCharCode);
 }
 
 
@@ -317,7 +317,7 @@ void ViewCommander::Command_PRINT(void)
 	Command_PRINT_PREVIEW();
 
 	// 印刷実行
-	GetEditWindow().m_pPrintPreview->OnPrint();
+	GetEditWindow().pPrintPreview->OnPrint();
 }
 
 
@@ -359,7 +359,7 @@ bool ViewCommander::Command_OPEN_HHPP(bool bCheckOnly, bool bBeepWhenMiss)
 	// 2003.06.28 Moca ヘッダ・ソースのコードを統合＆削除
 	static const TCHAR* source_ext[] = { _T("c"), _T("cpp"), _T("cxx"), _T("cc"), _T("cp"), _T("c++") };
 	static const TCHAR* header_ext[] = { _T("h"), _T("hpp"), _T("hxx"), _T("hh"), _T("hp"), _T("h++") };
-	return m_view.OPEN_ExtFromtoExt(
+	return view.OPEN_ExtFromtoExt(
 		bCheckOnly, bBeepWhenMiss, source_ext, header_ext,
 		_countof(source_ext), _countof(header_ext),
 		LS(STR_ERR_CEDITVIEW_CMD08));
@@ -373,7 +373,7 @@ bool ViewCommander::Command_OPEN_CCPP(bool bCheckOnly, bool bBeepWhenMiss)
 	// 2003.06.28 Moca ヘッダ・ソースのコードを統合＆削除
 	static const TCHAR* source_ext[] = { _T("c"), _T("cpp"), _T("cxx"), _T("cc"), _T("cp"), _T("c++") };
 	static const TCHAR* header_ext[] = { _T("h"), _T("hpp"), _T("hxx"), _T("hh"), _T("hp"), _T("h++") };
-	return m_view.OPEN_ExtFromtoExt(
+	return view.OPEN_ExtFromtoExt(
 		bCheckOnly, bBeepWhenMiss, header_ext, source_ext,
 		_countof(header_ext), _countof(source_ext),
 		LS(STR_ERR_CEDITVIEW_CMD09));
@@ -385,7 +385,7 @@ void ViewCommander::Command_ACTIVATE_SQLPLUS(void)
 {
 	HWND hwndSQLPLUS = ::FindWindow(_T("SqlplusWClass"), _T("Oracle SQL*Plus"));
 	if (!hwndSQLPLUS) {
-		ErrorMessage(m_view.GetHwnd(), LS(STR_SQLERR_ACTV_BUT_NOT_RUN));	// "Oracle SQL*Plusをアクティブ表示します。\n\n\nOracle SQL*Plusが起動されていません。\n"
+		ErrorMessage(view.GetHwnd(), LS(STR_SQLERR_ACTV_BUT_NOT_RUN));	// "Oracle SQL*Plusをアクティブ表示します。\n\n\nOracle SQL*Plusが起動されていません。\n"
 		return;
 	}
 	// Oracle SQL*Plusをアクティブにする
@@ -407,21 +407,21 @@ void ViewCommander::Command_PLSQL_COMPILE_ON_SQLPLUS(void)
 
 	HWND hwndSQLPLUS = ::FindWindow(_T("SqlplusWClass"), _T("Oracle SQL*Plus"));
 	if (!hwndSQLPLUS) {
-		ErrorMessage(m_view.GetHwnd(), LS(STR_SQLERR_EXEC_BUT_NOT_RUN));	// "Oracle SQL*Plusで実行します。\n\n\nOracle SQL*Plusが起動されていません。\n"
+		ErrorMessage(view.GetHwnd(), LS(STR_SQLERR_EXEC_BUT_NOT_RUN));	// "Oracle SQL*Plusで実行します。\n\n\nOracle SQL*Plusが起動されていません。\n"
 		return;
 	}
 	// テキストが変更されている場合
-	if (GetDocument().m_docEditor.IsModified()) {
+	if (GetDocument().docEditor.IsModified()) {
 		nRet = ::MYMESSAGEBOX(
-			m_view.GetHwnd(),
+			view.GetHwnd(),
 			MB_YESNOCANCEL | MB_ICONEXCLAMATION,
 			GSTR_APPNAME,
 			LS(STR_ERR_CEDITVIEW_CMD18),
-			GetDocument().m_docFile.GetFilePathClass().IsValidPath() ? GetDocument().m_docFile.GetFilePath() : LS(STR_NO_TITLE1)
+			GetDocument().docFile.GetFilePathClass().IsValidPath() ? GetDocument().docFile.GetFilePath() : LS(STR_NO_TITLE1)
 		);
 		switch (nRet) {
 		case IDYES:
-			if (GetDocument().m_docFile.GetFilePathClass().IsValidPath()) {
+			if (GetDocument().docFile.GetFilePathClass().IsValidPath()) {
 				//nBool = HandleCommand(F_FILESAVE, true, 0, 0, 0, 0);
 				nBool = Command_FILESAVE();
 			}else {
@@ -439,16 +439,16 @@ void ViewCommander::Command_PLSQL_COMPILE_ON_SQLPLUS(void)
 			return;
 		}
 	}
-	if (GetDocument().m_docFile.GetFilePathClass().IsValidPath()) {
+	if (GetDocument().docFile.GetFilePathClass().IsValidPath()) {
 		// ファイルパスに空白が含まれている場合はダブルクォーテーションで囲む
 		// 2003.10.20 MIK コード簡略化
-		if (_tcschr(GetDocument().m_docFile.GetFilePath(), TCODE::SPACE) != NULL) {
-			auto_sprintf( szPath, _T("@\"%ts\"\r\n"), GetDocument().m_docFile.GetFilePath() );
+		if (_tcschr(GetDocument().docFile.GetFilePath(), TCODE::SPACE) != NULL) {
+			auto_sprintf( szPath, _T("@\"%ts\"\r\n"), GetDocument().docFile.GetFilePath() );
 		}else {
-			auto_sprintf( szPath, _T("@%ts\r\n"), GetDocument().m_docFile.GetFilePath() );
+			auto_sprintf( szPath, _T("@%ts\r\n"), GetDocument().docFile.GetFilePath() );
 		}
 		// クリップボードにデータを設定
-		m_view.MySetClipboardData(szPath, _tcslen(szPath), false);
+		view.MySetClipboardData(szPath, _tcslen(szPath), false);
 
 		// Oracle SQL*Plusをアクティブにする
 		// アクティブにする
@@ -466,11 +466,11 @@ void ViewCommander::Command_PLSQL_COMPILE_ON_SQLPLUS(void)
 			&dwResult
 		);
 		if (!bResult) {
-			TopErrorMessage(m_view.GetHwnd(), LS(STR_ERR_CEDITVIEW_CMD20));
+			TopErrorMessage(view.GetHwnd(), LS(STR_ERR_CEDITVIEW_CMD20));
 		}
 	}else {
 		ErrorBeep();
-		ErrorMessage(m_view.GetHwnd(), LS(STR_ERR_CEDITVIEW_CMD21));
+		ErrorMessage(view.GetHwnd(), LS(STR_ERR_CEDITVIEW_CMD21));
 		return;
 	}
 	return;
@@ -480,12 +480,12 @@ void ViewCommander::Command_PLSQL_COMPILE_ON_SQLPLUS(void)
 // ブラウズ
 void ViewCommander::Command_BROWSE(void)
 {
-	if (!GetDocument().m_docFile.GetFilePathClass().IsValidPath()) {
+	if (!GetDocument().docFile.GetFilePathClass().IsValidPath()) {
 		ErrorBeep();
 		return;
 	}
 //	char	szURL[MAX_PATH + 64];
-//	auto_sprintf( szURL, L"%ls", GetDocument().m_docFile.GetFilePath() );
+//	auto_sprintf( szURL, L"%ls", GetDocument().docFile.GetFilePath() );
 	// URLを開く
 //	::ShellExecuteEx(NULL, L"open", szURL, NULL, NULL, SW_SHOW);
 
@@ -494,7 +494,7 @@ void ViewCommander::Command_BROWSE(void)
     info.fMask = 0;
     info.hwnd = NULL;
     info.lpVerb = NULL;
-    info.lpFile = GetDocument().m_docFile.GetFilePath();
+    info.lpFile = GetDocument().docFile.GetFilePath();
     info.lpParameters = NULL;
     info.lpDirectory = NULL;
     info.nShow = SW_SHOWNORMAL;
@@ -520,10 +520,10 @@ void ViewCommander::Command_VIEWMODE(void)
 	// 排他制御の切り替え
 	// ※ビューモード ON 時は排他制御 OFF、ビューモード OFF 時は排他制御 ON の仕様（>>data:5262）を即時反映する
 	auto& doc = GetDocument();
-	doc.m_docFileOperation.DoFileUnlock();	// ファイルの排他ロック解除
-	doc.m_docLocker.CheckWritable(!AppMode::getInstance().IsViewMode());	// ファイル書込可能のチェック
-	if (doc.m_docLocker.IsDocWritable()) {
-		doc.m_docFileOperation.DoFileLock();	// ファイルの排他ロック
+	doc.docFileOperation.DoFileUnlock();	// ファイルの排他ロック解除
+	doc.docLocker.CheckWritable(!AppMode::getInstance().IsViewMode());	// ファイル書込可能のチェック
+	if (doc.docLocker.IsDocWritable()) {
+		doc.docFileOperation.DoFileLock();	// ファイルの排他ロック
 	}
 
 	// 親ウィンドウのタイトルを更新
@@ -541,7 +541,7 @@ void ViewCommander::Command_PROPERTY_FILE(void)
 		int		nDataAllLen;
 		RunningTimer runningTimer("ViewCommander::Command_PROPERTY_FILE 全行データを返すテスト");
 		runningTimer.Reset();
-		pDataAll = DocReader(GetDocument().m_docLineMgr).GetAllData(&nDataAllLen);
+		pDataAll = DocReader(GetDocument().docLineMgr).GetAllData(&nDataAllLen);
 //		MYTRACE(_T("全データ取得             (%dバイト) 所要時間(ミリ秒) = %d\n"), nDataAllLen, runningTimer.Read());
 		free(pDataAll);
 		pDataAll = NULL;
@@ -551,8 +551,8 @@ void ViewCommander::Command_PROPERTY_FILE(void)
 
 
 	DlgProperty	dlgProperty;
-//	cDlgProperty.Create(G_AppInstance(), m_view.GetHwnd(), GetDocument());
-	dlgProperty.DoModal(G_AppInstance(), m_view.GetHwnd(), (LPARAM)&GetDocument());
+//	cDlgProperty.Create(G_AppInstance(), view.GetHwnd(), GetDocument());
+	dlgProperty.DoModal(G_AppInstance(), view.GetHwnd(), (LPARAM)&GetDocument());
 	return;
 }
 
@@ -560,7 +560,7 @@ void ViewCommander::Command_PROPERTY_FILE(void)
 void ViewCommander::Command_PROFILEMGR( void )
 {
 	DlgProfileMgr profMgr;
-	if (profMgr.DoModal( G_AppInstance(), m_view.GetHwnd(), 0 )) {
+	if (profMgr.DoModal( G_AppInstance(), view.GetHwnd(), 0 )) {
 		TCHAR szOpt[MAX_PATH+10];
 		auto_sprintf( szOpt, _T("-PROF=\"%ts\""), profMgr.strProfileName.c_str() );
 		LoadInfo loadInfo;
@@ -569,7 +569,7 @@ void ViewCommander::Command_PROFILEMGR( void )
 		loadInfo.bViewMode = false;
 		ControlTray::OpenNewEditor(
 			G_AppInstance(),
-			m_view.GetHwnd(),
+			view.GetHwnd(),
 			loadInfo,
 			szOpt,
 			false,
@@ -626,7 +626,7 @@ bool ViewCommander::Command_PUTFILE(
 	}
 
 	// 2007.09.08 genta EditDoc::FileWrite()にならって砂時計カーソル
-	WaitCursor waitCursor(m_view.GetHwnd());
+	WaitCursor waitCursor(view.GetHwnd());
 
 	std::unique_ptr<CodeBase> pcSaveCode(CodeFactory::CreateCodeBase(nSaveCharCode, 0));
 
@@ -641,7 +641,7 @@ bool ViewCommander::Command_PUTFILE(
 
 			// 選択範囲の取得 -> mem
 			NativeW mem;
-			m_view.GetSelectedDataSimple(mem);
+			view.GetSelectedDataSimple(mem);
 
 			// BOM追加
 			NativeW mem2;
@@ -682,14 +682,14 @@ bool ViewCommander::Command_PUTFILE(
 	}else {	// ファイル全体を出力
 		HWND	hwndProgress;
 		auto&	editWnd = GetEditWindow();
-		hwndProgress = editWnd.m_statusBar.GetProgressHwnd();
+		hwndProgress = editWnd.statusBar.GetProgressHwnd();
 		if (hwndProgress) {
 			::ShowWindow(hwndProgress, SW_SHOW);
 		}
 
 		// 一時ファイル出力
 		CodeConvertResult eRet = WriteManager().WriteFile_From_CDocLineMgr(
-			GetDocument().m_docLineMgr,
+			GetDocument().docLineMgr,
 			SaveInfo(
 				to_tchar(filename),
 				nSaveCharCode,
@@ -743,13 +743,13 @@ bool ViewCommander::Command_INSFILE(
 	}
 
 	// 2007.09.08 genta EditDoc::FileLoad()にならって砂時計カーソル
-	WaitCursor waitCursor(m_view.GetHwnd());
+	WaitCursor waitCursor(view.GetHwnd());
 
 	// 範囲選択中なら挿入後も選択状態にするため	// 2007.04.29 maru
-	bool bBeforeTextSelected = m_view.GetSelectionInfo().IsTextSelected();
+	bool bBeforeTextSelected = view.GetSelectionInfo().IsTextSelected();
 	LayoutPoint ptFrom;
 	if (bBeforeTextSelected) {
-		ptFrom = m_view.GetSelectionInfo().m_select.GetFrom();
+		ptFrom = view.GetSelectionInfo().select.GetFrom();
 	}
 
 
@@ -775,7 +775,7 @@ bool ViewCommander::Command_INSFILE(
 		bBigFile = false;
 #endif
 		// ファイルを開く
-		fl.FileOpen(m_view.m_pTypeData->encoding, to_tchar(filename), bBigFile, nSaveCharCode, 0 );
+		fl.FileOpen(view.pTypeData->encoding, to_tchar(filename), bBigFile, nSaveCharCode, 0 );
 
 		// ファイルサイズが65KBを越えたら進捗ダイアログ表示
 		if (0x10000 < fl.GetFileSize()) {
@@ -816,7 +816,7 @@ bool ViewCommander::Command_INSFILE(
 					Progress_SetPos(hwndProgress, fl.GetPercent());
 					nOldPercent = fl.GetPercent();
 				}
-				m_view.Redraw();
+				view.Redraw();
 			}
 		}
 		// ファイルを明示的に閉じるが、ここで閉じないときはデストラクタで閉じている
@@ -832,18 +832,18 @@ bool ViewCommander::Command_INSFILE(
 	delete pDlgCancel;
 
 	if (bBeforeTextSelected) {	// 挿入された部分を選択状態に
-		m_view.GetSelectionInfo().SetSelectArea(
+		view.GetSelectionInfo().SetSelectArea(
 			LayoutRange(
 				ptFrom,
 				GetCaret().GetCaretLayoutPos()
 				/*
-				m_nCaretPosY, m_nCaretPosX
+				nCaretPosY, nCaretPosX
 				*/
 			)
 		);
-		m_view.GetSelectionInfo().DrawSelectArea();
+		view.GetSelectionInfo().DrawSelectArea();
 	}
-	m_view.Redraw();
+	view.Redraw();
 	return bResult;
 }
 

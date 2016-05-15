@@ -40,13 +40,13 @@ void MacroBeforeAfter::ExecKeyMacroBefore(
 	int flags
 	)
 {
-	OpeBlk* opeBlk = editView.m_commander.GetOpeBlk();
+	OpeBlk* opeBlk = editView.commander.GetOpeBlk();
 	if (opeBlk) {
-		m_nOpeBlkCount = opeBlk->GetRefCount();
+		nOpeBlkCount = opeBlk->GetRefCount();
 	}else {
-		m_nOpeBlkCount = 0;
+		nOpeBlkCount = 0;
 	}
-	m_bDrawSwitchOld = editView.GetDrawSwitch();
+	bDrawSwitchOld = editView.GetDrawSwitch();
 }
 
 void MacroBeforeAfter::ExecKeyMacroAfter(
@@ -55,13 +55,13 @@ void MacroBeforeAfter::ExecKeyMacroAfter(
 	bool bRet
 	)
 {
-	OpeBlk* opeBlk = editView.m_commander.GetOpeBlk();
-	if (0 < m_nOpeBlkCount) {
+	OpeBlk* opeBlk = editView.commander.GetOpeBlk();
+	if (0 < nOpeBlkCount) {
 		if (!opeBlk) {
-			editView.m_commander.SetOpeBlk(new OpeBlk());
+			editView.commander.SetOpeBlk(new OpeBlk());
 		}
-		if (editView.m_commander.GetOpeBlk()->GetRefCount() != m_nOpeBlkCount) {
-			editView.m_commander.GetOpeBlk()->SetRefCount(m_nOpeBlkCount);
+		if (editView.commander.GetOpeBlk()->GetRefCount() != nOpeBlkCount) {
+			editView.commander.GetOpeBlk()->SetRefCount(nOpeBlkCount);
 		}
 	}else {
 		if (opeBlk) {
@@ -69,7 +69,7 @@ void MacroBeforeAfter::ExecKeyMacroAfter(
 			editView.SetUndoBuffer();
 		}
 	}
-	editView.m_editWnd.SetDrawSwitchOfAllViews(m_bDrawSwitchOld);
+	editView.editWnd.SetDrawSwitchOfAllViews(bDrawSwitchOld);
 }
 
 // MacroManagerBase
@@ -77,7 +77,7 @@ void MacroBeforeAfter::ExecKeyMacroAfter(
 
 MacroManagerBase::MacroManagerBase()
 	:
-	m_nReady(false)
+	nReady(false)
 {}
 
 MacroManagerBase::~MacroManagerBase()

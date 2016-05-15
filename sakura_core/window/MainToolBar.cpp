@@ -35,24 +35,24 @@
 
 MainToolBar::MainToolBar(EditWnd& owner)
 	:
-	m_owner(owner),
-	m_hwndToolBar(NULL),
-	m_hwndReBar(NULL),
-	m_hwndSearchBox(NULL),
-	m_hFontSearchBox(NULL),
-	m_pIcons(nullptr)
+	owner(owner),
+	hwndToolBar(NULL),
+	hwndReBar(NULL),
+	hwndSearchBox(NULL),
+	hFontSearchBox(NULL),
+	pIcons(nullptr)
 {
 }
 
 void MainToolBar::Create(ImageListMgr* pIcons)
 {
-	m_pIcons = pIcons;
+	pIcons = pIcons;
 }
 
 // 検索ボックスでの処理
 void MainToolBar::ProcSearchBox(MSG *msg)
 {
-	if (msg->message == WM_KEYDOWN /* && ::GetParent(msg->hwnd) == m_hwndSearchBox */) {
+	if (msg->message == WM_KEYDOWN /* && ::GetParent(msg->hwnd) == hwndSearchBox */) {
 		if (msg->wParam == VK_RETURN) {  // リターンキー
 			// 検索キーワードを取得
 			std::wstring strText;
@@ -61,27 +61,27 @@ void MainToolBar::ProcSearchBox(MSG *msg)
 					// 検索キーを登録
 					SearchKeywordManager().AddToSearchKeys(strText.c_str());
 				}
-				m_owner.GetActiveView().m_strCurSearchKey = strText;
-				m_owner.GetActiveView().m_bCurSearchUpdate = true;
-				m_owner.GetActiveView().ChangeCurRegexp();
+				owner.GetActiveView().strCurSearchKey = strText;
+				owner.GetActiveView().bCurSearchUpdate = true;
+				owner.GetActiveView().ChangeCurRegexp();
 
 				// 検索ボックスを更新	// 2010/6/6 Uchi
 				AcceptSharedSearchKey();
 
 				//::SetFocus(hWnd);	//先にフォーカスを移動しておかないとキャレットが消える
-				m_owner.GetActiveView().SetFocus();
+				owner.GetActiveView().SetFocus();
 
 				// 検索開始時のカーソル位置登録条件を変更 02/07/28 ai start
-				m_owner.GetActiveView().m_ptSrchStartPos_PHY = m_owner.GetActiveView().GetCaret().GetCaretLogicPos();
+				owner.GetActiveView().ptSrchStartPos_PHY = owner.GetActiveView().GetCaret().GetCaretLogicPos();
 				// 02/07/28 ai end
 
 				// 次を検索
-				m_owner.OnCommand((WORD)0 /*メニュー*/, (WORD)F_SEARCH_NEXT, (HWND)0);
+				owner.OnCommand((WORD)0 /*メニュー*/, (WORD)F_SEARCH_NEXT, (HWND)0);
 			}
 		}else if (msg->wParam == VK_TAB) {	// タブキー
 			// フォーカスを移動
 			// 2004.10.27 MIK IME表示位置のずれ修正
-			::SetFocus(m_owner.GetHwnd() );
+			::SetFocus(owner.GetHwnd() );
 		}
 	}
 }
@@ -111,13 +111,13 @@ static LRESULT CALLBACK ToolBarWndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARA
 
 
 /* ツールバー作成
-	@date @@@ 2002.01.03 YAZAKI m_tbMyButtonなどをCShareDataからCMenuDrawerへ移動したことによる修正。
+	@date @@@ 2002.01.03 YAZAKI tbMyButtonなどをCShareDataからCMenuDrawerへ移動したことによる修正。
 	@date 2005.08.29 aroka ツールバーの折り返し
 	@date 2006.06.17 ryoji ビジュアルスタイルが有効の場合はツールバーを Rebar に入れてサイズ変更時のちらつきを無くす
 */
 void MainToolBar::CreateToolBar(void)
 {
-	if (m_hwndToolBar)
+	if (hwndToolBar)
 		return;
 	
 	REBARBANDINFO	rbBand;
@@ -132,37 +132,37 @@ void MainToolBar::CreateToolBar(void)
 	// 2006.06.17 ryoji
 	// Rebar ウィンドウの作成
 	if (IsVisualStyle()) {	// ビジュアルスタイル有効
-		m_hwndReBar = ::CreateWindowEx(
+		hwndReBar = ::CreateWindowEx(
 			WS_EX_TOOLWINDOW,
 			REBARCLASSNAME, // レバーコントロール
 			NULL,
 			WS_CHILD/* | WS_VISIBLE*/ | WS_CLIPSIBLINGS | WS_CLIPCHILDREN |	// 2007.03.08 ryoji WS_VISIBLE 除去
 			RBS_BANDBORDERS | CCS_NODIVIDER,
 			0, 0, 0, 0,
-			m_owner.GetHwnd(),
+			owner.GetHwnd(),
 			NULL,
 			EditApp::getInstance().GetAppInstance(),
 			NULL
 		);
 
-		if (!m_hwndReBar) {
-			TopWarningMessage(m_owner.GetHwnd(), LS(STR_ERR_DLGEDITWND04));
+		if (!hwndReBar) {
+			TopWarningMessage(owner.GetHwnd(), LS(STR_ERR_DLGEDITWND04));
 			return;
 		}
 
 		if (csToolBar.bToolBarIsFlat) {	// フラットツールバーにする／しない
-			PreventVisualStyle(m_hwndReBar);	// ビジュアルスタイル非適用のフラットな Rebar にする
+			PreventVisualStyle(hwndReBar);	// ビジュアルスタイル非適用のフラットな Rebar にする
 		}
 
 		REBARINFO rbi = {0};
 		rbi.cbSize = sizeof(rbi);
-		Rebar_SetbarInfo(m_hwndReBar, &rbi);
+		Rebar_SetbarInfo(hwndReBar, &rbi);
 
 		nFlag = CCS_NORESIZE | CCS_NODIVIDER | CCS_NOPARENTALIGN | TBSTYLE_FLAT;	// ツールバーへの追加スタイル
 	}
 
 	// ツールバーウィンドウの作成
-	m_hwndToolBar = ::CreateWindowEx(
+	hwndToolBar = ::CreateWindowEx(
 		0,
 		TOOLBARCLASSNAME,
 		NULL,
@@ -175,30 +175,30 @@ void MainToolBar::CreateToolBar(void)
 		nFlag,
 		0, 0,
 		0, 0,
-		m_owner.GetHwnd(),
+		owner.GetHwnd(),
 		(HMENU)ID_TOOLBAR,
 		EditApp::getInstance().GetAppInstance(),
 		NULL
 	);
-	if (!m_hwndToolBar) {
+	if (!hwndToolBar) {
 		if (csToolBar.bToolBarIsFlat) {	// フラットツールバーにする／しない
 			csToolBar.bToolBarIsFlat = false;
 		}
-		TopWarningMessage(m_owner.GetHwnd(), LS(STR_ERR_DLGEDITWND05));
+		TopWarningMessage(owner.GetHwnd(), LS(STR_ERR_DLGEDITWND05));
 		DestroyToolBar();	// 2006.06.17 ryoji
 	}else {
 		// 2006.09.06 ryoji ツールバーをサブクラス化する
 		g_pOldToolBarWndProc = (WNDPROC)::SetWindowLongPtr(
-			m_hwndToolBar,
+			hwndToolBar,
 			GWLP_WNDPROC,
 			(LONG_PTR)ToolBarWndProc
 		);
 
-		Toolbar_SetButtonSize(m_hwndToolBar, DpiScaleX(22), DpiScaleY(22));	// 2009.10.01 ryoji 高DPI対応スケーリング
-		Toolbar_ButtonStructSize(m_hwndToolBar, sizeof(TBBUTTON));
+		Toolbar_SetButtonSize(hwndToolBar, DpiScaleX(22), DpiScaleY(22));	// 2009.10.01 ryoji 高DPI対応スケーリング
+		Toolbar_ButtonStructSize(hwndToolBar, sizeof(TBBUTTON));
 		//	Oct. 12, 2000 genta
 		//	既に用意されているImage Listをアイコンとして登録
-		m_pIcons->SetToolBarImages(m_hwndToolBar);
+		pIcons->SetToolBarImages(hwndToolBar);
 		// ツールバーにボタンを追加
 		int count = 0;	//@@@ 2002.06.15 MIK
 		int nToolBarButtonNum = 0;// 2005/8/29 aroka
@@ -208,7 +208,7 @@ void MainToolBar::CreateToolBar(void)
 		TBBUTTON* pTbbArr = &tbButtons[0];
 		for (i=0; i<csToolBar.nToolBarButtonNum; ++i) {
 			nIdx = csToolBar.nToolBarButtonIdxArr[i];
-			pTbbArr[nToolBarButtonNum] = m_owner.GetMenuDrawer().getButton(nIdx);
+			pTbbArr[nToolBarButtonNum] = owner.GetMenuDrawer().getButton(nIdx);
 			// セパレータが続くときはひとつにまとめる
 			// 折り返しボタンもTBSTYLE_SEP属性を持っているので
 			// 折り返しの前のセパレータは全て削除される．
@@ -236,8 +236,8 @@ void MainToolBar::CreateToolBar(void)
 			switch (tbb.fsStyle) {
 			case TBSTYLE_DROPDOWN:	// ドロップダウン
 				// 拡張スタイルに設定
-				Toolbar_SetExtendedStyle(m_hwndToolBar, TBSTYLE_EX_DRAWDDARROWS);
-				Toolbar_AddButtons(m_hwndToolBar, 1, &tbb);
+				Toolbar_SetExtendedStyle(hwndToolBar, TBSTYLE_EX_DRAWDDARROWS);
+				Toolbar_AddButtons(hwndToolBar, 1, &tbb);
 				++count;
 				break;
 
@@ -250,7 +250,7 @@ void MainToolBar::CreateToolBar(void)
 
 					switch (tbb.idCommand) {
 					case F_SEARCH_BOX:
-						if (m_hwndSearchBox) {
+						if (hwndSearchBox) {
 							break;
 						}
 						
@@ -261,30 +261,30 @@ void MainToolBar::CreateToolBar(void)
 						if (tbb.fsState & TBSTATE_WRAP) {   // 折り返し 2005/8/29 aroka
 							my_tbb.fsState |=  TBSTATE_WRAP;
 						}
-						Toolbar_AddButtons(m_hwndToolBar, 1, &my_tbb);
+						Toolbar_AddButtons(hwndToolBar, 1, &my_tbb);
 						++count;
 
 						// サイズを設定する
 						tbi.cbSize = sizeof(tbi);
 						tbi.dwMask = TBIF_SIZE;
 						tbi.cx     = (WORD)DpiScaleX(160);	// ボックスの幅	// 2009.10.01 ryoji 高DPI対応スケーリング
-						Toolbar_SetButtonInfo(m_hwndToolBar, tbb.idCommand, &tbi);
+						Toolbar_SetButtonInfo(hwndToolBar, tbb.idCommand, &tbi);
 
 						// 位置とサイズを取得する
 						rc.right = rc.left = rc.top = rc.bottom = 0;
-						Toolbar_GetItemRect(m_hwndToolBar, count-1, &rc);
+						Toolbar_GetItemRect(hwndToolBar, count-1, &rc);
 
 						// コンボボックスを作る
 						// Mar. 8, 2003 genta 検索ボックスを1ドット下にずらした
-						m_hwndSearchBox = CreateWindow(_T("COMBOBOX"), _T("Combo"),
+						hwndSearchBox = CreateWindow(_T("COMBOBOX"), _T("Combo"),
 								WS_CHILD | WS_VISIBLE | WS_TABSTOP | WS_VSCROLL | CBS_DROPDOWN
 								/*| CBS_SORT*/ | CBS_AUTOHSCROLL /*| CBS_DISABLENOSCROLL*/,
 								rc.left, rc.top + 1, rc.right - rc.left, (rc.bottom - rc.top) * 10,
-								m_hwndToolBar, (HMENU)(INT_PTR)tbb.idCommand, EditApp::getInstance().GetAppInstance(), NULL);
-						if (m_hwndSearchBox) {
-							m_owner.SetCurrentFocus(0);
+								hwndToolBar, (HMENU)(INT_PTR)tbb.idCommand, EditApp::getInstance().GetAppInstance(), NULL);
+						if (hwndSearchBox) {
+							owner.SetCurrentFocus(0);
 
-							lf = m_owner.GetLogfont();
+							lf = owner.GetLogfont();
 							//memset_raw(&lf, 0, sizeof(lf));
 							lf.lfHeight			= DpiPointsToPixels(-9); // Jan. 14, 2003 genta ダイアログにあわせてちょっと小さく	// 2009.10.01 ryoji 高DPI対応（ポイント数から算出）
 							lf.lfWidth			= 0;
@@ -294,26 +294,26 @@ void MainToolBar::CreateToolBar(void)
 							lf.lfItalic			= FALSE;
 							lf.lfUnderline		= FALSE;
 							lf.lfStrikeOut		= FALSE;
-							//lf.lfCharSet		= GetDllShareData().common.m_sView.lf.lfCharSet;
+							//lf.lfCharSet		= GetDllShareData().common.sView.lf.lfCharSet;
 							lf.lfOutPrecision	= OUT_TT_ONLY_PRECIS;		// Raster Font を使わないように
-							//lf.lfClipPrecision	= GetDllShareData().common.m_sView.lf.lfClipPrecision;
-							//lf.lfQuality		= GetDllShareData().common.m_sView.lf.lfQuality;
-							//lf.lfPitchAndFamily	= GetDllShareData().common.m_sView.lf.lfPitchAndFamily;
-							//_tcsncpy(lf.lfFaceName, GetDllShareData().common.m_sView.lf.lfFaceName, _countof(lf.lfFaceName));	// 画面のフォントに設定	2012/11/27 Uchi
-							m_hFontSearchBox = ::CreateFontIndirect(&lf);
-							if (m_hFontSearchBox) {
-								::SendMessage(m_hwndSearchBox, WM_SETFONT, (WPARAM)m_hFontSearchBox, MAKELONG (TRUE, 0));
+							//lf.lfClipPrecision	= GetDllShareData().common.sView.lf.lfClipPrecision;
+							//lf.lfQuality		= GetDllShareData().common.sView.lf.lfQuality;
+							//lf.lfPitchAndFamily	= GetDllShareData().common.sView.lf.lfPitchAndFamily;
+							//_tcsncpy(lf.lfFaceName, GetDllShareData().common.sView.lf.lfFaceName, _countof(lf.lfFaceName));	// 画面のフォントに設定	2012/11/27 Uchi
+							hFontSearchBox = ::CreateFontIndirect(&lf);
+							if (hFontSearchBox) {
+								::SendMessage(hwndSearchBox, WM_SETFONT, (WPARAM)hFontSearchBox, MAKELONG (TRUE, 0));
 							}
 
 							// 入力長制限
-							// Combo_LimitText(m_hwndSearchBox, (WPARAM)_MAX_PATH - 1);
+							// Combo_LimitText(hwndSearchBox, (WPARAM)_MAX_PATH - 1);
 
 							// 検索ボックスを更新	// 関数化 2010/6/6 Uchi
 							AcceptSharedSearchKey();
 
-							m_comboDel = ComboBoxItemDeleter(); // 再表示用の初期化
-							m_comboDel.pRecent = &recentSearch;
-							Dialog::SetComboBoxDeleter(m_hwndSearchBox, &m_comboDel);
+							comboDel = ComboBoxItemDeleter(); // 再表示用の初期化
+							comboDel.pRecent = &recentSearch;
+							Dialog::SetComboBoxDeleter(hwndSearchBox, &comboDel);
 						}
 						break;
 
@@ -326,40 +326,40 @@ void MainToolBar::CreateToolBar(void)
 			case TBSTYLE_BUTTON:	// ボタン
 			case TBSTYLE_SEP:		// セパレータ
 			default:
-				Toolbar_AddButtons(m_hwndToolBar, 1, &tbb);
+				Toolbar_AddButtons(hwndToolBar, 1, &tbb);
 				++count;
 				break;
 			}
 			//@@@ 2002.06.15 MIK end
 		}
 		if (csToolBar.bToolBarIsFlat) {	// フラットツールバーにする／しない
-			lToolType = ::GetWindowLongPtr(m_hwndToolBar, GWL_STYLE);
+			lToolType = ::GetWindowLongPtr(hwndToolBar, GWL_STYLE);
 			lToolType |= (TBSTYLE_FLAT);
-			::SetWindowLongPtr(m_hwndToolBar, GWL_STYLE, lToolType);
-			::InvalidateRect(m_hwndToolBar, NULL, TRUE);
+			::SetWindowLongPtr(hwndToolBar, GWL_STYLE, lToolType);
+			::InvalidateRect(hwndToolBar, NULL, TRUE);
 		}
 	}
 
 	// 2006.06.17 ryoji
 	// ツールバーを Rebar に入れる
-	if (m_hwndReBar && m_hwndToolBar) {
+	if (hwndReBar && hwndToolBar) {
 		// ツールバーの高さを取得する
-		DWORD dwBtnSize = Toolbar_GetButtonSize(m_hwndToolBar);
-		DWORD dwRows = Toolbar_GetRows(m_hwndToolBar);
+		DWORD dwBtnSize = Toolbar_GetButtonSize(hwndToolBar);
+		DWORD dwRows = Toolbar_GetRows(hwndToolBar);
 
 		// バンド情報を設定する
 		// 以前のプラットフォームに _WIN32_WINNT >= 0x0600 で定義される構造体のフルサイズを渡すと失敗する	// 2007.12.21 ryoji
 		rbBand.cbSize = CCSIZEOF_STRUCT(REBARBANDINFO, wID);
 		rbBand.fMask  = RBBIM_STYLE | RBBIM_CHILD | RBBIM_CHILDSIZE | RBBIM_SIZE;
 		rbBand.fStyle = RBBS_CHILDEDGE;
-		rbBand.hwndChild  = m_hwndToolBar;	// ツールバー
+		rbBand.hwndChild  = hwndToolBar;	// ツールバー
 		rbBand.cxMinChild = 0;
 		rbBand.cyMinChild = HIWORD(dwBtnSize) * dwRows;
 		rbBand.cx         = 250;
 
 		// バンドを追加する
-		Rebar_InsertBand(m_hwndReBar, -1, &rbBand);
-		::ShowWindow(m_hwndToolBar, SW_SHOW);
+		Rebar_InsertBand(hwndReBar, -1, &rbBand);
+		::ShowWindow(hwndToolBar, SW_SHOW);
 	}
 
 	return;
@@ -367,29 +367,29 @@ void MainToolBar::CreateToolBar(void)
 
 void MainToolBar::DestroyToolBar(void)
 {
-	if (m_hwndToolBar) {
-		if (m_hwndSearchBox) {
-			if (m_hFontSearchBox) {
-				::DeleteObject(m_hFontSearchBox);
-				m_hFontSearchBox = NULL;
+	if (hwndToolBar) {
+		if (hwndSearchBox) {
+			if (hFontSearchBox) {
+				::DeleteObject(hFontSearchBox);
+				hFontSearchBox = NULL;
 			}
 
-			::DestroyWindow(m_hwndSearchBox);
-			m_hwndSearchBox = NULL;
+			::DestroyWindow(hwndSearchBox);
+			hwndSearchBox = NULL;
 
-			m_owner.SetCurrentFocus(0);
+			owner.SetCurrentFocus(0);
 		}
 
-		::DestroyWindow(m_hwndToolBar);
-		m_hwndToolBar = NULL;
+		::DestroyWindow(hwndToolBar);
+		hwndToolBar = NULL;
 
-		//if (m_cTabWnd.m_owner->GetHwnd()) ::UpdateWindow(m_cTabWnd.m_owner->GetHwnd());
+		//if (cTabWnd.owner->GetHwnd()) ::UpdateWindow(cTabWnd.owner->GetHwnd());
 	}
 
 	// 2006.06.17 ryoji Rebar を破棄する
-	if (m_hwndReBar) {
-		::DestroyWindow(m_hwndReBar);
-		m_hwndReBar = NULL;
+	if (hwndReBar) {
+		::DestroyWindow(hwndReBar);
+		hwndReBar = NULL;
 	}
 
 	return;
@@ -398,7 +398,7 @@ void MainToolBar::DestroyToolBar(void)
 // メッセージ処理。なんか処理したなら true を返す。
 bool MainToolBar::EatMessage(MSG* msg)
 {
-	if (m_hwndSearchBox && ::IsDialogMessage(m_hwndSearchBox, msg)) {	// 検索コンボボックス
+	if (hwndSearchBox && ::IsDialogMessage(hwndSearchBox, msg)) {	// 検索コンボボックス
 		ProcSearchBox(msg);
 		return true;
 	}
@@ -441,11 +441,11 @@ LPARAM MainToolBar::ToolBarOwnerDraw(LPNMCUSTOMDRAW pnmh)
 			// コマンド番号（pnmh->dwItemSpec）からアイコン番号を取得する	// 2007.11.02 ryoji
 			int nIconId = Toolbar_GetBitmap(pnmh->hdr.hwndFrom, (WPARAM)pnmh->dwItemSpec);
 
-			int offset = ((pnmh->rc.bottom - pnmh->rc.top) - m_pIcons->GetCy()) / 2;		// アイテム矩形からの画像のオフセット	// 2007.03.25 ryoji
+			int offset = ((pnmh->rc.bottom - pnmh->rc.top) - pIcons->GetCy()) / 2;		// アイテム矩形からの画像のオフセット	// 2007.03.25 ryoji
 			int shift = pnmh->uItemState & (CDIS_SELECTED | CDIS_CHECKED) ? 1 : 0;	//	Aug. 30, 2003 genta ボタンを押されたらちょっと画像をずらす
 
 			//	Sep. 6, 2003 genta 押下時は右だけでなく下にもずらす
-			m_pIcons->Draw(nIconId, pnmh->hdc, pnmh->rc.left + offset + shift, pnmh->rc.top + offset + shift,
+			pIcons->Draw(nIconId, pnmh->hdc, pnmh->rc.left + offset + shift, pnmh->rc.top + offset + shift,
 				(pnmh->uItemState & CDIS_DISABLED) ? ILD_MASK : ILD_NORMAL
 			);
 		}
@@ -458,7 +458,7 @@ LPARAM MainToolBar::ToolBarOwnerDraw(LPNMCUSTOMDRAW pnmh)
 
 
 /*! ツールバー更新用タイマーの処理
-	@date 2002.01.03 YAZAKI m_tbMyButtonなどをCShareDataからCMenuDrawerへ移動したことによる修正。
+	@date 2002.01.03 YAZAKI tbMyButtonなどをCShareDataからCMenuDrawerへ移動したことによる修正。
 	@date 2003.08.29 wmlhq, ryoji nTimerCountの導入
 	@date 2006.01.28 aroka OnTimerから分離
 	@date 2007.04.03 ryoji パラメータ無しにした
@@ -468,7 +468,7 @@ LPARAM MainToolBar::ToolBarOwnerDraw(LPNMCUSTOMDRAW pnmh)
 void MainToolBar::OnToolbarTimer(void)
 {
 	// 2012.11.29 aroka ここではカウントアップ不要
-	// m_owner->IncrementTimerCount(10);
+	// owner->IncrementTimerCount(10);
 	UpdateToolbar();	// 2008.09.23 nasukoji	ツールバーの表示を更新する
 }
 
@@ -482,29 +482,29 @@ void MainToolBar::OnToolbarTimer(void)
 void MainToolBar::UpdateToolbar(void)
 {
 	// 印刷Preview中なら、何もしない。
-	if (m_owner.IsInPreviewMode())
+	if (owner.IsInPreviewMode())
 		return;
 	
 	// ツールバーの状態更新
-	if (m_hwndToolBar) {
+	if (hwndToolBar) {
 		auto& csToolBar = GetDllShareData().common.toolBar;
 		for (int i=0; i<csToolBar.nToolBarButtonNum; ++i) {
-			TBBUTTON tbb = m_owner.GetMenuDrawer().getButton(
+			TBBUTTON tbb = owner.GetMenuDrawer().getButton(
 				csToolBar.nToolBarButtonIdxArr[i]
 			);
 
 			// 機能が利用可能か調べる
 			Toolbar_EnableButton(
-				m_hwndToolBar,
+				hwndToolBar,
 				tbb.idCommand,
-				IsFuncEnable(m_owner.GetDocument(), GetDllShareData(), (EFunctionCode)tbb.idCommand)
+				IsFuncEnable(owner.GetDocument(), GetDllShareData(), (EFunctionCode)tbb.idCommand)
 			);
 
 			// 機能がチェック状態か調べる
 			Toolbar_CheckButton(
-				m_hwndToolBar,
+				hwndToolBar,
 				tbb.idCommand,
-				IsFuncChecked(m_owner.GetDocument(), GetDllShareData(), (EFunctionCode)tbb.idCommand)
+				IsFuncChecked(owner.GetDocument(), GetDllShareData(), (EFunctionCode)tbb.idCommand)
 			);
 		}
 	}
@@ -513,20 +513,20 @@ void MainToolBar::UpdateToolbar(void)
 // 検索ボックスを更新
 void MainToolBar::AcceptSharedSearchKey()
 {
-	if (m_hwndSearchBox) {
+	if (hwndSearchBox) {
 		int	i;
 		// 2013.05.28 Combo_ResetContentだとちらつくのでDeleteStringでリストだけ削除
-		while (Combo_GetCount(m_hwndSearchBox) > 0) {
-			Combo_DeleteString(m_hwndSearchBox, 0);
+		while (Combo_GetCount(hwndSearchBox) > 0) {
+			Combo_DeleteString(hwndSearchBox, 0);
 		}
 		int nSize = GetDllShareData().searchKeywords.searchKeys.size();
 		for (i=0; i<nSize; ++i) {
-			Combo_AddString(m_hwndSearchBox, GetDllShareData().searchKeywords.searchKeys[i]);
+			Combo_AddString(hwndSearchBox, GetDllShareData().searchKeywords.searchKeys[i]);
 		}
 		const wchar_t* pszText;
 		if (GetDllShareData().common.search.bInheritKeyOtherView
-			&& m_owner.GetActiveView().m_nCurSearchKeySequence < GetDllShareData().common.search.nSearchKeySequence
-			|| m_owner.GetActiveView().m_strCurSearchKey.size() == 0
+			&& owner.GetActiveView().nCurSearchKeySequence < GetDllShareData().common.search.nSearchKeySequence
+			|| owner.GetActiveView().strCurSearchKey.size() == 0
 		) {
 			if (0 < nSize) {
 				pszText = GetDllShareData().searchKeywords.searchKeys[0];
@@ -534,23 +534,23 @@ void MainToolBar::AcceptSharedSearchKey()
 				pszText = L"";
 			}
 		}else {
-			pszText = m_owner.GetActiveView().m_strCurSearchKey.c_str();
+			pszText = owner.GetActiveView().strCurSearchKey.c_str();
 		}
 		std::wstring strText;
 		GetSearchKey(strText);
 		if (0 < nSize && wcscmp(strText.c_str(), pszText) != 0) {
-			::SetWindowText(m_hwndSearchBox, to_tchar(pszText));
+			::SetWindowText(hwndSearchBox, to_tchar(pszText));
 		}
 	}
 }
 
 int MainToolBar::GetSearchKey(std::wstring& strText)
 {
-	if (m_hwndSearchBox) {
-		int nBufferSize = ::GetWindowTextLength(m_hwndSearchBox) + 1;
+	if (hwndSearchBox) {
+		int nBufferSize = ::GetWindowTextLength(hwndSearchBox) + 1;
 		std::vector<TCHAR> vText(nBufferSize);
 
-		::GetWindowText(m_hwndSearchBox, &vText[0], vText.size());
+		::GetWindowText(hwndSearchBox, &vText[0], vText.size());
 		strText = to_wchar(&vText[0]);
 	}else {
 		strText = L"";
@@ -565,8 +565,8 @@ int MainToolBar::GetSearchKey(std::wstring& strText)
 */
 void MainToolBar::SetFocusSearchBox(void) const
 {
-	if (m_hwndSearchBox) {
-		::SetFocus(m_hwndSearchBox);
+	if (hwndSearchBox) {
+		::SetFocus(hwndSearchBox);
 	}
 }
 

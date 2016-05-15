@@ -40,9 +40,9 @@ public:
 	virtual void OnStartScanLogic();
 
 private:
-	LayoutInt	m_nSelectLine;
-	LogicInt	m_nSelectStart;
-	LogicInt	m_nSelectEnd;
+	LayoutInt	nSelectLine;
+	LogicInt	nSelectStart;
+	LogicInt	nSelectEnd;
 };
 
 class Color_Found : public ColorStrategy {
@@ -51,7 +51,7 @@ public:
 	virtual EColorIndexType GetStrategyColor() const {
 		return
 			this->validColorNum != 0
-			? this->highlightColors[ (m_nSearchResult - 1) % this->validColorNum ]
+			? this->highlightColors[ (nSearchResult - 1) % this->validColorNum ]
 			: COLORIDX_DEFAULT
 		;
 	}
@@ -64,9 +64,9 @@ public:
 	virtual void OnStartScanLogic();
 
 private:
-	int				m_nSearchResult;
-	LogicInt		m_nSearchStart;
-	LogicInt		m_nSearchEnd;
+	int				nSearchResult;
+	LogicInt		nSearchStart;
+	LogicInt		nSearchEnd;
 	EColorIndexType highlightColors[ COLORIDX_SEARCHTAIL - COLORIDX_SEARCH + 1 ]; ///< チェックが付いている検索文字列色の配列。
 	unsigned validColorNum; ///< highlightColorsの何番目の要素までが有効か。
 };

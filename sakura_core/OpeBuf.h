@@ -35,9 +35,9 @@ public:
 	// 状態
 	bool IsEnableUndo() const;					// Undo可能な状態か
 	bool IsEnableRedo() const;					// Redo可能な状態か
-	int GetCurrentPointer(void) const { return m_nCurrentPointer; }	// 現在位置を返す	// 2007.12.09 ryoji
-	int GetNextSeq() const { return m_nCurrentPointer + 1; }
-	int GetNoModifiedSeq() const { return m_nNoModifiedIndex; }
+	int GetCurrentPointer(void) const { return nCurrentPointer; }	// 現在位置を返す	// 2007.12.09 ryoji
+	int GetNextSeq() const { return nCurrentPointer + 1; }
+	int GetNoModifiedSeq() const { return nNoModifiedIndex; }
 
 	// 操作
 	void ClearAll();							// 全要素のクリア
@@ -52,9 +52,9 @@ public:
 	void DUMP();								// 編集操作要素ブロックのダンプ
 
 private:
-	std::vector<OpeBlk*>	m_vCOpeBlkArr;		// 操作ブロックの配列
-	int						m_nCurrentPointer;	// 現在位置
-	int						m_nNoModifiedIndex;	// 無変更な状態になった位置
+	std::vector<OpeBlk*>	vCOpeBlkArr;		// 操作ブロックの配列
+	int						nCurrentPointer;	// 現在位置
+	int						nNoModifiedIndex;	// 無変更な状態になった位置
 };
 
 

@@ -136,22 +136,22 @@ void DlgExec::SetData(void)
 	/*****************************
 	*         ƒf[ƒ^Ý’è         *
 	*****************************/
-	_tcscpy(szCommand, pShareData->history.m_aCommands[0]);
+	_tcscpy(szCommand, pShareData->history.aCommands[0]);
 	HWND hwndCombo = GetItemHwnd(IDC_COMBO_m_szCommand);
 	Combo_ResetContent(hwndCombo);
 	SetItemText(IDC_COMBO_TEXT, szCommand);
-	int nSize = pShareData->history.m_aCommands.size();
+	int nSize = pShareData->history.aCommands.size();
 	for (int i=0; i<nSize; ++i) {
-		Combo_AddString(hwndCombo, pShareData->history.m_aCommands[i]);
+		Combo_AddString(hwndCombo, pShareData->history.aCommands[i]);
 	}
 	Combo_SetCurSel(hwndCombo, 0);
 
-	_tcscpy(szCurDir, pShareData->history.m_aCurDirs[0]);
+	_tcscpy(szCurDir, pShareData->history.aCurDirs[0]);
 	hwndCombo = GetItemHwnd(IDC_COMBO_CUR_DIR);
 	Combo_ResetContent(hwndCombo);
 	SetItemText(IDC_COMBO_TEXT, szCurDir);
-	for (int i=0; i<pShareData->history.m_aCurDirs.size(); ++i) {
-		Combo_AddString(hwndCombo, pShareData->history.m_aCurDirs[i]);
+	for (int i=0; i<pShareData->history.aCurDirs.size(); ++i) {
+		Combo_AddString(hwndCombo, pShareData->history.aCurDirs[i]);
 	}
 	Combo_SetCurSel(hwndCombo, 0);
 	

@@ -51,28 +51,28 @@ public:
 
 class DocFile : public File {
 public:
-	DocFile(EditDoc& doc) : m_doc(doc) {}
+	DocFile(EditDoc& doc) : doc(doc) {}
 
-	void			SetCodeSet(EncodingType eCodeSet, bool bBomExist)		{ m_fileInfo.SetCodeSet(eCodeSet, bBomExist); }	// 文字コードセットを設定
-	void			SetCodeSetChg(EncodingType eCodeSet, bool bBomExist)	{ m_fileInfo.eCharCode = eCodeSet; m_fileInfo.bBomExist = bBomExist; }	// 文字コードセットを設定(文字コード指定用)
-	EncodingType	GetCodeSet() const			{ return m_fileInfo.eCharCode; }		// 文字コードセットを取得
-	void			SetBomDefoult()				{ m_fileInfo.bBomExist= CodeTypeName(m_fileInfo.eCharCode).IsBomDefOn(); }	// BOM付加のデフォルト値を設定する
-	void			CancelChgCodeSet()			{ m_fileInfo.eCharCode = m_fileInfo.eCharCodeLoad; m_fileInfo.bBomExist = m_fileInfo.bBomExistLoad; }		// 文字コードセット1の変更をキャンセルする
-	bool			IsBomExist() const			{ return m_fileInfo.bBomExist; }		// 保存時にBOMを付加するかどうかを取得
-	bool			IsChgCodeSet() const		{ return (!IsFileTimeZero()) && ((m_fileInfo.eCharCode != m_fileInfo.eCharCodeLoad) || (m_fileInfo.bBomExist != m_fileInfo.bBomExistLoad)); }		// 文字コードセットが変更されたか？
+	void			SetCodeSet(EncodingType eCodeSet, bool bBomExist)		{ fileInfo.SetCodeSet(eCodeSet, bBomExist); }	// 文字コードセットを設定
+	void			SetCodeSetChg(EncodingType eCodeSet, bool bBomExist)	{ fileInfo.eCharCode = eCodeSet; fileInfo.bBomExist = bBomExist; }	// 文字コードセットを設定(文字コード指定用)
+	EncodingType	GetCodeSet() const			{ return fileInfo.eCharCode; }		// 文字コードセットを取得
+	void			SetBomDefoult()				{ fileInfo.bBomExist= CodeTypeName(fileInfo.eCharCode).IsBomDefOn(); }	// BOM付加のデフォルト値を設定する
+	void			CancelChgCodeSet()			{ fileInfo.eCharCode = fileInfo.eCharCodeLoad; fileInfo.bBomExist = fileInfo.bBomExistLoad; }		// 文字コードセット1の変更をキャンセルする
+	bool			IsBomExist() const			{ return fileInfo.bBomExist; }		// 保存時にBOMを付加するかどうかを取得
+	bool			IsChgCodeSet() const		{ return (!IsFileTimeZero()) && ((fileInfo.eCharCode != fileInfo.eCharCodeLoad) || (fileInfo.bBomExist != fileInfo.bBomExistLoad)); }		// 文字コードセットが変更されたか？
 
-	FileTime&		GetFileTime()					{ return m_fileInfo.fileTime; }
-	void			ClearFileTime()					{ m_fileInfo.fileTime.ClearFILETIME(); }
-	bool			IsFileTimeZero() const			{ return m_fileInfo.fileTime.IsZero(); }	// 新規ファイル？
-	const SYSTEMTIME	GetFileSysTime() const		{ return m_fileInfo.fileTime.GetSYSTEMTIME(); }
-	void			SetFileTime(FILETIME& Time)		{ m_fileInfo.fileTime.SetFILETIME(Time); }
+	FileTime&		GetFileTime()					{ return fileInfo.fileTime; }
+	void			ClearFileTime()					{ fileInfo.fileTime.ClearFILETIME(); }
+	bool			IsFileTimeZero() const			{ return fileInfo.fileTime.IsZero(); }	// 新規ファイル？
+	const SYSTEMTIME	GetFileSysTime() const		{ return fileInfo.fileTime.GetSYSTEMTIME(); }
+	void			SetFileTime(FILETIME& Time)		{ fileInfo.fileTime.SetFILETIME(Time); }
 
 	const TCHAR*	GetFileName() const					{ return GetFileTitlePointer(GetFilePath()); }	// ファイル名(パスなし)を取得
 	const TCHAR*	GetSaveFilePath(void) const;
-	void			SetSaveFilePath(LPCTSTR pszPath)	{ m_szSaveFilePath.Assign(pszPath); }
+	void			SetSaveFilePath(LPCTSTR pszPath)	{ szSaveFilePath.Assign(pszPath); }
 public: //####
-	EditDoc&	m_doc;
-	FileInfo	m_fileInfo;
-	FilePath	m_szSaveFilePath;	// 保存時のファイルのパス（マクロ用）	// 2006.09.04 ryoji
+	EditDoc&	doc;
+	FileInfo	fileInfo;
+	FilePath	szSaveFilePath;	// 保存時のファイルのパス（マクロ用）	// 2006.09.04 ryoji
 };
 

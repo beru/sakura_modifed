@@ -252,7 +252,7 @@ BOOL DlgAbout::OnInitDialog(
 	UrlUrWnd.SetSubclassWindow(GetItemHwnd(IDC_STATIC_URL_UR));
 
 	// Oct. 22, 2005 genta 原作者ホームページが無くなったので削除
-	//m_UrlOrgWnd.SubclassWindow(GetItemHwnd(IDC_STATIC_URL_ORG));
+	//UrlOrgWnd.SubclassWindow(GetItemHwnd(IDC_STATIC_URL_ORG));
 
 	// 基底クラスメンバ
 	return Dialog::OnInitDialog(GetHwnd(), wParam, lParam);

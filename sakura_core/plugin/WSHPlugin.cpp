@@ -33,7 +33,7 @@
 // デストラクタ
 WSHPlugin::~WSHPlugin(void)
 {
-	for (auto it=m_plugs.begin(); it!=m_plugs.end(); ++it) {
+	for (auto it=plugs.begin(); it!=plugs.end(); ++it) {
 		delete *it;
 	}
 }
@@ -47,7 +47,7 @@ bool WSHPlugin::ReadPluginDef(
 	ReadPluginDefCommon(profile, profileMlang);
 
 	// WSHセクションの読み込み
-	profile.IOProfileData<bool>(PII_WSH, PII_WSH_USECACHE, m_bUseCache);
+	profile.IOProfileData<bool>(PII_WSH, PII_WSH_USECACHE, bUseCache);
 
 	// プラグの読み込み
 	ReadPluginDefPlug(profile, profileMlang);
@@ -82,8 +82,8 @@ bool WSHPlugin::InvokePlug(
 	WSHPlug& wshPlug = static_cast<WSHPlug&>(plug);
 	WSHMacroManager* pWsh = nullptr;
 
-	if (!m_bUseCache || !wshPlug.m_Wsh) {
-		FilePath path(plug.plugin.GetFilePath(to_tchar(plug.m_sHandler.c_str())).c_str());
+	if (!bUseCache || !wshPlug.wsh) {
+		FilePath path(plug.plugin.GetFilePath(to_tchar(plug.sHandler.c_str())).c_str());
 
 		pWsh = (WSHMacroManager*)WSHMacroManager::Creator(view, path.GetExt(true));
 		if (!pWsh) {
@@ -98,19 +98,19 @@ bool WSHPlugin::InvokePlug(
 		}
 
 	}else {
-		pWsh = wshPlug.m_Wsh;
+		pWsh = wshPlug.wsh;
 	}
 
 	PluginIfObj pluginIfo(*this);		// Pluginオブジェクトを追加
 	pluginIfo.AddRef();
-	pluginIfo.SetPlugIndex(plug.m_id);	// 実行中プラグ番号を提供
+	pluginIfo.SetPlugIndex(plug.id);	// 実行中プラグ番号を提供
 	pWsh->AddParam(&pluginIfo);
 	pWsh->AddParam(params);			// パラメータを追加
 	pWsh->ExecKeyMacro2(view, FA_NONRECORD | FA_FROMMACRO);
 	pWsh->ClearParam();
 
-	if (m_bUseCache) {
-		wshPlug.m_Wsh = pWsh;
+	if (bUseCache) {
+		wshPlug.wsh = pWsh;
 	}else {
 		// 終わったら開放
 		delete pWsh;

@@ -59,18 +59,18 @@ public:
 	class Mark {
 	public:
 		//	constructor
-		Mark(const LogicPoint& pt) : m_ptLogic(pt) { }
+		Mark(const LogicPoint& pt) : ptLogic(pt) { }
 
-		LogicPoint GetPosition() const { return m_ptLogic; }
-		void SetPosition(const LogicPoint& pt) { m_ptLogic = pt; }
+		LogicPoint GetPosition() const { return ptLogic; }
+		void SetPosition(const LogicPoint& pt) { ptLogic = pt; }
 
 		bool IsValid(void) const { return true; }
 
-		bool operator == (Mark &r) const { return m_ptLogic.y == r.m_ptLogic.y; }
-		bool operator != (Mark &r) const { return m_ptLogic.y != r.m_ptLogic.y; }
+		bool operator == (Mark &r) const { return ptLogic.y == r.ptLogic.y; }
+		bool operator != (Mark &r) const { return ptLogic.y != r.ptLogic.y; }
 
 	private:
-		LogicPoint m_ptLogic;
+		LogicPoint ptLogic;
 	};
 
 	// GENERATE_FACTORY(Mark, CMarkFactory);	//	Mark用Factory class
@@ -81,11 +81,11 @@ public:
 
 	//	Interface
 	//	constructor
-	MarkMgr() : m_nCurpos(0), m_nMaxitem(10) {}
+	MarkMgr() : nCurpos(0), nMaxitem(10) {}
 	// MarkMgr(const CDocLineMgr *p) : doc(p) {}
 
-	int Count(void) const { return (int)m_markChain.size(); }	//	項目数を返す
-	int GetMax(void) const { return m_nMaxitem; }	//	最大項目数を返す
+	int Count(void) const { return (int)markChain.size(); }	//	項目数を返す
+	int GetMax(void) const { return nMaxitem; }	//	最大項目数を返す
 	void SetMax(int max);	//	最大項目数を設定
 
 	virtual void Add(const Mark& m) = 0;	//	要素の追加
@@ -94,7 +94,7 @@ public:
 	virtual void Flush(void);	//	要素の全消去
 
 	// 要素の取得
-	const Mark& GetCurrent(void) const { return m_markChain[m_nCurpos]; }
+	const Mark& GetCurrent(void) const { return markChain[nCurpos]; }
 
 	// 有効性の確認
 	bool  CheckCurrent(void) const;
@@ -105,21 +105,21 @@ public:
 	bool NextValid(void);
 	bool PrevValid(void);
 
-	const Mark& operator[](int index) const { return m_markChain[index]; }
+	const Mark& operator[](int index) const { return markChain[index]; }
 
 	//	連続取得インターフェース
-//	MarkIterator CurrentPos(void) const { return (MarkIterator)m_markChain.begin() + m_nCurpos; }
-//	MarkIterator Begin(void) const { return (MarkIterator)m_markChain.begin(); }
-//	MarkIterator End(void) const { return (MarkIterator)m_markChain.end(); }
+//	MarkIterator CurrentPos(void) const { return (MarkIterator)markChain.begin() + nCurpos; }
+//	MarkIterator Begin(void) const { return (MarkIterator)markChain.begin(); }
+//	MarkIterator End(void) const { return (MarkIterator)markChain.end(); }
 
 protected:
 	virtual void Expire(void) = 0;
 
-	// CMarkFactory m_factory;	//	Factory Class (マクロで生成される）
-	MarkChain m_markChain;	//	マークデータ本体
-	int m_nCurpos;	//	現在位置（番号）
+	// CMarkFactory factory;	//	Factory Class (マクロで生成される）
+	MarkChain markChain;	//	マークデータ本体
+	int nCurpos;	//	現在位置（番号）
 
-	int m_nMaxitem;	//	保管可能アイテムの最大数
+	int nMaxitem;	//	保管可能アイテムの最大数
 private:
 	//MarkMgr(const MarkMgr&);	//	Copy禁止
 

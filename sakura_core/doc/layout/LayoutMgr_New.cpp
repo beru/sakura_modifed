@@ -35,7 +35,7 @@
 */
 bool LayoutMgr::IsKinsokuHead(wchar_t wc)
 {
-	return m_pszKinsokuHead_1.exist(wc);
+	return pszKinsokuHead_1.exist(wc);
 }
 
 /*!
@@ -48,7 +48,7 @@ bool LayoutMgr::IsKinsokuHead(wchar_t wc)
 */
 bool LayoutMgr::IsKinsokuTail(wchar_t wc)
 {
-	return m_pszKinsokuTail_1.exist(wc);
+	return pszKinsokuTail_1.exist(wc);
 }
 
 
@@ -62,7 +62,7 @@ bool LayoutMgr::IsKinsokuTail(wchar_t wc)
 */
 bool LayoutMgr::IsKinsokuKuto(wchar_t wc)
 {
-	return m_pszKinsokuKuto_1.exist(wc);
+	return pszKinsokuKuto_1.exist(wc);
 }
 
 /*!
@@ -227,8 +227,8 @@ LayoutInt LayoutMgr::getIndentOffset_LeftSpace(Layout* pLayoutPrev)
 	MemoryIterator it(pLayoutPrev, GetTabSpace());
 
 	// Jul. 20, 2003 genta 自動インデントに準じた動作にする
-	bool bZenSpace = m_pTypeConfig->bAutoIndent_ZENSPACE;
-	const wchar_t* szSpecialIndentChar = m_pTypeConfig->szIndentChars;
+	bool bZenSpace = pTypeConfig->bAutoIndent_ZENSPACE;
+	const wchar_t* szSpecialIndentChar = pTypeConfig->szIndentChars;
 	while (!it.end()) {
 		it.scanNext();
 		if (it.getIndexDelta() == 1 && WCODE::IsIndentChar(it.getCurrentChar(), bZenSpace)) {
@@ -305,7 +305,7 @@ BOOL LayoutMgr::CalculateTextWidth(bool bCalLineLen, LayoutInt nStart, LayoutInt
 	// 算出開始レイアウト行を探す
 	// 2013.05.13 SearchLineByLayoutYを使う
 	if (nStart == 0) {
-		pLayout = m_pLayoutTop;
+		pLayout = pLayoutTop;
 	}else {
 		pLayout = SearchLineByLayoutY(nStart);
 	}
@@ -313,7 +313,7 @@ BOOL LayoutMgr::CalculateTextWidth(bool bCalLineLen, LayoutInt nStart, LayoutInt
 	if (nStart * 2 < nLines) {
 		// 前方からサーチ
 		LayoutInt nCount = LayoutInt(0);
-		pLayout = m_pLayoutTop;
+		pLayout = pLayoutTop;
 		while (pLayout) {
 			if (nStart == nCount) {
 				break;
@@ -323,8 +323,8 @@ BOOL LayoutMgr::CalculateTextWidth(bool bCalLineLen, LayoutInt nStart, LayoutInt
 		}
 	}else {
 		// 後方からサーチ
-		LayoutInt nCount = LayoutInt(m_nLines - 1);
-		pLayout = m_pLayoutBot;
+		LayoutInt nCount = LayoutInt(nLines - 1);
+		pLayout = pLayoutBot;
 		while (pLayout) {
 			if (nStart == nCount) {
 				break;
@@ -364,17 +364,17 @@ BOOL LayoutMgr::CalculateTextWidth(bool bCalLineLen, LayoutInt nStart, LayoutInt
 	// テキストの幅の変化をチェック
 	if (Int(nMaxLen)) {
 		// 最大幅が拡大した または 最大幅の拡大のみチェックでない
-		if (m_nTextWidth < nMaxLen || !bOnlyExpansion) {
-			m_nTextWidthMaxLine = nMaxLineNum;
-			if (m_nTextWidth != nMaxLen) {	// 最大幅変化あり
-				m_nTextWidth = nMaxLen;
+		if (nTextWidth < nMaxLen || !bOnlyExpansion) {
+			nTextWidthMaxLine = nMaxLineNum;
+			if (nTextWidth != nMaxLen) {	// 最大幅変化あり
+				nTextWidth = nMaxLen;
 				bRet = true;
 			}
 		}
-	}else if (Int(m_nTextWidth) && !Int(nLines)) {
+	}else if (Int(nTextWidth) && !Int(nLines)) {
 		// 全削除されたら幅の記憶をクリア
-		m_nTextWidthMaxLine = 0;
-		m_nTextWidth = 0;
+		nTextWidthMaxLine = 0;
+		nTextWidth = 0;
 		bRet = true;
 	}
 	
@@ -385,7 +385,7 @@ BOOL LayoutMgr::CalculateTextWidth(bool bCalLineLen, LayoutInt nStart, LayoutInt
 	@brief  各行のレイアウト行長の記憶をクリアする
 	
 	@note 折り返し方法が「折り返さない」以外の時は、パフォーマンスの低下を
-		  防止する目的で各行のレイアウト行長(m_nLayoutWidth)を計算していない。
+		  防止する目的で各行のレイアウト行長(nLayoutWidth)を計算していない。
 		  後で設計する人が誤って使用してしまうかもしれないので「折り返さない」
 		  以外の時はクリアしておく。
 		  パフォーマンスの低下が気にならない程なら、全ての折り返し方法で計算
@@ -395,9 +395,9 @@ BOOL LayoutMgr::CalculateTextWidth(bool bCalLineLen, LayoutInt nStart, LayoutInt
 */
 void LayoutMgr::ClearLayoutLineWidth(void)
 {
-	Layout* pLayout = m_pLayoutTop;
+	Layout* pLayout = pLayoutTop;
 	while (pLayout) {
-		pLayout->m_nLayoutWidth = 0;			// レイアウト行長をクリア
+		pLayout->nLayoutWidth = 0;			// レイアウト行長をクリア
 		pLayout = pLayout->GetNextLayout();		// 次のレイアウト行のデータ
 	}
 }

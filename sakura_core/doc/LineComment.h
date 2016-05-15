@@ -37,15 +37,15 @@ public:
 	bool Match(int pos, const StringRef& str) const;				// 行コメントに値するか確認する
 
 	const wchar_t* getLineComment(const int n) {
-		return m_pszLineComment[n];
+		return pszLineComment[n];
 	}
 	int getLineCommentPos(const int n) const {
-		return m_lineCommentPos[n];
+		return lineCommentPos[n];
 	}
 
 private:
-	wchar_t	m_pszLineComment[COMMENT_DELIMITER_NUM][COMMENT_DELIMITER_BUFFERSIZE];	// 行コメントデリミタ
-	int		m_lineCommentPos[COMMENT_DELIMITER_NUM];	// 行コメントの開始位置(負数は指定無し)
-	int		m_lineCommentLen[COMMENT_DELIMITER_NUM];	// 行コメント文字列の長さ
+	wchar_t	pszLineComment[COMMENT_DELIMITER_NUM][COMMENT_DELIMITER_BUFFERSIZE];	// 行コメントデリミタ
+	int		lineCommentPos[COMMENT_DELIMITER_NUM];	// 行コメントの開始位置(負数は指定無し)
+	int		lineCommentLen[COMMENT_DELIMITER_NUM];	// 行コメント文字列の長さ
 };
 

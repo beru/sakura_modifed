@@ -33,7 +33,7 @@
 class FormatManager {
 public:
 	FormatManager() {
-		m_pShareData = &GetDllShareData();
+		pShareData = &GetDllShareData();
 	}
 	// èëéÆ //@@@ 2002.2.9 YAZAKI
 	// ã§óLDllSharedDataàÀë∂
@@ -44,6 +44,6 @@ public:
 	const TCHAR* MyGetDateFormat(const SYSTEMTIME& systime, TCHAR* pszDest, int nDestLen, int nDateFormatType, const TCHAR* szDateFormat);
 	const TCHAR* MyGetTimeFormat(const SYSTEMTIME& systime, TCHAR* pszDest, int nDestLen, int nTimeFormatType, const TCHAR* szTimeFormat);
 private:
-	DllSharedData* m_pShareData;
+	DllSharedData* pShareData;
 };
 

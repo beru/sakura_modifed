@@ -42,7 +42,7 @@ struct Share_SearchKeywords {
 class SearchKeywordManager {
 public:
 	SearchKeywordManager() {
-		m_pShareData = &GetDllShareData();
+		pShareData = &GetDllShareData();
 	}
 	//@@@ 2002.2.2 YAZAKI
 	void AddToSearchKeys(const wchar_t* pszSearchKey);		// searchKeys ‚É pszSearchKey ‚ð’Ç‰Á‚·‚é
@@ -50,6 +50,6 @@ public:
 	void AddToGrepFiles(const TCHAR* pszGrepFile);			// grepFiles ‚É pszGrepFile ‚ð’Ç‰Á‚·‚é
 	void AddToGrepFolders(const TCHAR* pszGrepFolder);		// grepFolders.size() ‚É pszGrepFolder ‚ð’Ç‰Á‚·‚é
 private:
-	DllSharedData* m_pShareData;
+	DllSharedData* pShareData;
 };
 

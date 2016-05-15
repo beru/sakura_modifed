@@ -49,7 +49,7 @@ void GrepAgent::OnAfterSave(const SaveInfo& saveInfo)
 {
 	// 名前を付けて保存から再ロードが除去された分の不足処理を追加（ANSI版との差異）	// 2009.08.12 ryoji
 	bGrepMode = false;	// grepウィンドウは通常ウィンドウ化
-	AppMode::getInstance().m_szGrepKey[0] = 0;
+	AppMode::getInstance().szGrepKey[0] = 0;
 }
 
 /*!
@@ -206,25 +206,25 @@ DWORD GrepAgent::DoGrep(
 	*/
 	memMessage.AllocStringBuffer(4000);
 
-	viewDst.m_bDoing_UndoRedo = true;
+	viewDst.bDoing_UndoRedo = true;
 	auto& csSearch = GetDllShareData().common.search;
 
 	// アンドゥバッファの処理
-	if (viewDst.GetDocument().m_docEditor.m_pOpeBlk) {	// 操作ブロック
+	if (viewDst.GetDocument().docEditor.pOpeBlk) {	// 操作ブロック
 //@@@2002.2.2 YAZAKI NULLじゃないと進まないので、とりあえずコメント。＆NULLのときは、new OpeBlkする。
-//		while (m_pOpeBlk) {}
-//		delete m_pOpeBlk;
-//		m_pOpeBlk = NULL;
+//		while (pOpeBlk) {}
+//		delete pOpeBlk;
+//		pOpeBlk = NULL;
 	}else {
-		viewDst.GetDocument().m_docEditor.m_pOpeBlk = new OpeBlk;
-		viewDst.GetDocument().m_docEditor.m_nOpeBlkRedawCount = 0;
+		viewDst.GetDocument().docEditor.pOpeBlk = new OpeBlk;
+		viewDst.GetDocument().docEditor.nOpeBlkRedawCount = 0;
 	}
-	viewDst.GetDocument().m_docEditor.m_pOpeBlk->AddRef();
+	viewDst.GetDocument().docEditor.pOpeBlk->AddRef();
 
-	viewDst.m_bCurSrchKeyMark = true;							// 検索文字列のマーク
-	viewDst.m_strCurSearchKey = pmGrepKey->GetStringPtr();		// 検索文字列
-	viewDst.m_curSearchOption = searchOption;					// 検索オプション
-	viewDst.m_nCurSearchKeySequence = csSearch.nSearchKeySequence;
+	viewDst.bCurSrchKeyMark = true;							// 検索文字列のマーク
+	viewDst.strCurSearchKey = pmGrepKey->GetStringPtr();		// 検索文字列
+	viewDst.curSearchOption = searchOption;					// 検索オプション
+	viewDst.nCurSearchKeySequence = csSearch.nSearchKeySequence;
 
 	// 置換後文字列の準備
 	NativeW memReplace;
@@ -235,21 +235,21 @@ DWORD GrepAgent::DoGrep(
 			bool bLineSelect;
 			if (!viewDst.MyGetClipboardData(memReplace, &bColmnSelect, GetDllShareData().common.edit.bEnableLineModePaste? &bLineSelect: nullptr)) {
 				this->bGrepRunning = false;
-				viewDst.m_bDoing_UndoRedo = false;
-				ErrorMessage( viewDst.m_hwndParent, LS(STR_DLGREPLC_CLIPBOARD) );
+				viewDst.bDoing_UndoRedo = false;
+				ErrorMessage( viewDst.hwndParent, LS(STR_DLGREPLC_CLIPBOARD) );
 				return 0;
 			}
 			if (bLineSelect) {
 				int len = memReplace.GetStringLength();
 				if (memReplace[len - 1] != WCODE::CR && memReplace[len - 1] != WCODE::LF) {
-					memReplace.AppendString(viewDst.GetDocument().m_docEditor.GetNewLineCode().GetValue2());
+					memReplace.AppendString(viewDst.GetDocument().docEditor.GetNewLineCode().GetValue2());
 				}
 			}
 			if (GetDllShareData().common.edit.bConvertEOLPaste) {
 				LogicInt len = memReplace.GetStringLength();
 				std::vector<wchar_t> convertedText(len * 2); // 全文字\n→\r\n変換で最大の２倍になる
 				wchar_t* pszConvertedText = &convertedText[0];
-				LogicInt nConvertedTextLen = viewDst.m_commander.ConvertEol(memReplace.GetStringPtr(), len, pszConvertedText);
+				LogicInt nConvertedTextLen = viewDst.commander.ConvertEol(memReplace.GetStringPtr(), len, pszConvertedText);
 				memReplace.SetString(pszConvertedText, nConvertedTextLen);
 			}
 		}else {
@@ -265,27 +265,27 @@ DWORD GrepAgent::DoGrep(
 		Note: ここで強調するのは最後の検索文字列であって
 		Grep対象パターンではないことに注意
 	*/
-	if (!viewDst.m_searchPattern.SetPattern(viewDst.GetHwnd(),
-											viewDst.m_strCurSearchKey.c_str(),
-											viewDst.m_strCurSearchKey.size(),
-											viewDst.m_curSearchOption,
-											&viewDst.m_curRegexp)
+	if (!viewDst.searchPattern.SetPattern(viewDst.GetHwnd(),
+											viewDst.strCurSearchKey.c_str(),
+											viewDst.strCurSearchKey.size(),
+											viewDst.curSearchOption,
+											&viewDst.curRegexp)
 	) {
 		this->bGrepRunning = false;
-		viewDst.m_bDoing_UndoRedo = false;
+		viewDst.bDoing_UndoRedo = false;
 		viewDst.SetUndoBuffer();
 		return 0;
 	}
 
 	// 2014.06.13 別ウィンドウで検索したとき用にGrepダイアログの検索キーを設定
-	viewDst.m_editWnd.m_dlgGrep.strText = pmGrepKey->GetStringPtr();
-	viewDst.m_editWnd.m_dlgGrep.bSetText = true;
-	viewDst.m_editWnd.m_dlgGrepReplace.strText = pmGrepKey->GetStringPtr();
+	viewDst.editWnd.dlgGrep.strText = pmGrepKey->GetStringPtr();
+	viewDst.editWnd.dlgGrep.bSetText = true;
+	viewDst.editWnd.dlgGrepReplace.strText = pmGrepKey->GetStringPtr();
 	if (bGrepReplace) {
-		viewDst.m_editWnd.m_dlgGrepReplace.strText2 = pmGrepReplace->GetStringPtr();
+		viewDst.editWnd.dlgGrepReplace.strText2 = pmGrepReplace->GetStringPtr();
 	}
-	viewDst.m_editWnd.m_dlgGrepReplace.bSetText = true;
-	hwndCancel = dlgCancel.DoModeless(G_AppInstance(), viewDst.m_hwndParent, IDD_GREPRUNNING);
+	viewDst.editWnd.dlgGrepReplace.bSetText = true;
+	hwndCancel = dlgCancel.DoModeless(G_AppInstance(), viewDst.hwndParent, IDD_GREPRUNNING);
 	::SetDlgItemInt(hwndCancel, IDC_STATIC_HITCOUNT, 0, FALSE);
 	::DlgItem_SetText(hwndCancel, IDC_STATIC_CURFILE, _T(" "));	// 2002/09/09 Moca add
 	::CheckDlgButton(hwndCancel, IDC_CHECK_REALTIMEVIEW, csSearch.bGrepRealTimeView);	// 2003.06.23 Moca
@@ -293,7 +293,7 @@ DWORD GrepAgent::DoGrep(
 	//	2008.12.13 genta パターンが長すぎる場合は登録しない
 	//	(正規表現が途中で途切れると困るので)
 	//	2011.12.10 Moca 表示の際に...に切り捨てられるので登録するように
-	wcsncpy_s(AppMode::getInstance().m_szGrepKey, _countof(AppMode::getInstance().m_szGrepKey), pmGrepKey->GetStringPtr(), _TRUNCATE);
+	wcsncpy_s(AppMode::getInstance().szGrepKey, _countof(AppMode::getInstance().szGrepKey), pmGrepKey->GetStringPtr(), _TRUNCATE);
 	this->bGrepMode = true;
 
 	//	2007.07.22 genta
@@ -319,7 +319,7 @@ DWORD GrepAgent::DoGrep(
 		}
 		if (bError) {
 			this->bGrepRunning = false;
-			viewDst.m_bDoing_UndoRedo = false;
+			viewDst.bDoing_UndoRedo = false;
 			viewDst.SetUndoBuffer();
 			return 0;
 		}
@@ -362,7 +362,7 @@ DWORD GrepAgent::DoGrep(
 		int nErrorNo = grepEnumKeys.SetFileKeys(pmGrepFile->GetStringPtr());
 		if (nErrorNo != 0) {
 			this->bGrepRunning = false;
-			viewDst.m_bDoing_UndoRedo = false;
+			viewDst.bDoing_UndoRedo = false;
 			viewDst.SetUndoBuffer();
 
 			const TCHAR* pszErrorMessage = LS(STR_GREP_ERR_ENUMKEYS0);
@@ -371,7 +371,7 @@ DWORD GrepAgent::DoGrep(
 			}else if (nErrorNo == 2) {
 				pszErrorMessage = LS(STR_GREP_ERR_ENUMKEYS2);
 			}
-			ErrorMessage(viewDst.m_hwndParent, _T("%ts"), pszErrorMessage);
+			ErrorMessage(viewDst.hwndParent, _T("%ts"), pszErrorMessage);
 			return 0;
 		}
 	}
@@ -387,7 +387,7 @@ DWORD GrepAgent::DoGrep(
 	if (0 < nWork) {
 		NativeW memWork2;
 		memWork2.SetNativeData(*pmGrepKey);
-		const TypeConfig& type = viewDst.m_pEditDoc->m_docType.GetDocumentAttribute();
+		const TypeConfig& type = viewDst.pEditDoc->docType.GetDocumentAttribute();
 		if (!type.colorInfoArr[COLORIDX_WSTRING].bDisp) {
 			// 2011.11.28 色指定が無効ならエスケープしない
 		}else
@@ -417,7 +417,7 @@ DWORD GrepAgent::DoGrep(
 		}else {
 			NativeW memWork2;
 			memWork2.SetNativeData( memReplace );
-			const TypeConfig& type = viewDst.m_pEditDoc->m_docType.GetDocumentAttribute();
+			const TypeConfig& type = viewDst.pEditDoc->docType.GetDocumentAttribute();
 			if (!type.colorInfoArr[COLORIDX_WSTRING].bDisp) {
 				// 2011.11.28 色指定が無効ならエスケープしない
 			}else
@@ -441,7 +441,7 @@ DWORD GrepAgent::DoGrep(
 
 	memMessage.AppendString(LSW(STR_GREP_SEARCH_TARGET));	// L"検索対象   "
 	// 文字列区切り記号エスケープ方法  0=[\"][\'] 1=[""]['']
-	if (viewDst.m_pEditDoc->m_docType.GetDocumentAttribute().stringType == StringLiteralType::CPP) {
+	if (viewDst.pEditDoc->docType.GetDocumentAttribute().stringType == StringLiteralType::CPP) {
 	}else {
 	}
 	memWork.SetStringT(pmGrepFile->GetStringPtr());
@@ -467,7 +467,7 @@ DWORD GrepAgent::DoGrep(
 		memWork.SetStringT(grepFolder.c_str());
 	}
 	// 文字列区切り記号エスケープ方法  0=[\"][\'] 1=[""]['']
-	if (viewDst.m_pEditDoc->m_docType.GetDocumentAttribute().stringType == StringLiteralType::CPP) {
+	if (viewDst.pEditDoc->docType.GetDocumentAttribute().stringType == StringLiteralType::CPP) {
 	}else {
 	}
 	memMessage += memWork;
@@ -541,7 +541,7 @@ DWORD GrepAgent::DoGrep(
 	memMessage.AppendStringLiteral(L"\r\n\r\n");
 	pszWork = memMessage.GetStringPtr(&nWork);
 //@@@ 2002.01.03 YAZAKI Grep直後はカーソルをGrep直前の位置に動かす
-	LayoutInt tmp_PosY_Layout = viewDst.m_pEditDoc->m_layoutMgr.GetLineCount();
+	LayoutInt tmp_PosY_Layout = viewDst.pEditDoc->layoutMgr.GetLineCount();
 	if (0 < nWork && grepOption.bGrepHeader) {
 		AddTail(editWnd, viewDst, memMessage, grepOption.bGrepStdout);
 	}
@@ -639,10 +639,10 @@ DWORD GrepAgent::DoGrep(
 
 	// Apr. 13, 2001 genta
 	// Grep実行後はファイルを変更無しの状態にする．
-	viewDst.m_pEditDoc->m_docEditor.SetModified(false, false);
+	viewDst.pEditDoc->docEditor.SetModified(false, false);
 
 	this->bGrepRunning = false;
-	viewDst.m_bDoing_UndoRedo = false;
+	viewDst.bDoing_UndoRedo = false;
 
 	// 表示処理ON/OFF
 	editWnd.SetDrawSwitchOfAllViews(bDrawSwitchOld);
@@ -1077,7 +1077,7 @@ int GrepAgent::DoGrepFile(
 			// 2003.06.10 Moca コード判別処理をここに移動．
 			// 判別エラーでもファイル数にカウントするため
 			// ファイルの日本語コードセット判別
-			// 2014.06.19 Moca ファイル名のタイプ別のm_encodingに変更
+			// 2014.06.19 Moca ファイル名のタイプ別のencodingに変更
 			CodeMediator mediator( type->encoding );
 			nCharCode = mediator.CheckKanjiCodeOfFile(pszFullPath);
 			if (!IsValidCodeOrCPType(nCharCode)) {

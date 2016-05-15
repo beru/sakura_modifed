@@ -66,50 +66,50 @@ public:
 	// UNICODEインターフェースを提供する
 	int BMatch(const wchar_t* str, const wchar_t* target, const wchar_t* targetendp, BREGEXP_W** rxp, wchar_t* msg)
 	{
-		return m_BMatch(str, target, targetendp, rxp, msg);
+		return pBMatch(str, target, targetendp, rxp, msg);
 	}
 	int BSubst(const wchar_t* str, const wchar_t* target, const wchar_t* targetendp, BREGEXP_W** rxp, wchar_t* msg)
 	{
-		return m_BSubst(str, target, targetendp, rxp, msg);
+		return pBSubst(str, target, targetendp, rxp, msg);
 	}
 	int BTrans(const wchar_t* str, wchar_t* target, wchar_t* targetendp, BREGEXP_W** rxp, wchar_t* msg)
 	{
-		return m_BTrans(str, target, targetendp, rxp, msg);
+		return pBTrans(str, target, targetendp, rxp, msg);
 	}
 	int BSplit(const wchar_t* str, wchar_t* target, wchar_t* targetendp, int limit, BREGEXP_W** rxp, wchar_t* msg)
 	{
-		return m_BSplit(str, target, targetendp, limit, rxp, msg);
+		return pBSplit(str, target, targetendp, limit, rxp, msg);
 	}
 	void BRegfree(BREGEXP_W* rx)
 	{
-		return m_BRegfree(rx);
+		return pBRegfree(rx);
 	}
 	const wchar_t* BRegexpVersion(void)
 	{
-		return m_BRegexpVersion();
+		return pBRegexpVersion();
 	}
 	int BMatchEx(const wchar_t* str, const wchar_t* targetbeg, const wchar_t* target, const wchar_t* targetendp, BREGEXP_W** rxp, wchar_t* msg)
 	{
-		return m_BMatchEx(str, targetbeg, target, targetendp, rxp, msg);
+		return pBMatchEx(str, targetbeg, target, targetendp, rxp, msg);
 	}
 	int BSubstEx(const wchar_t* str, const wchar_t* targetbeg, const wchar_t* target, const wchar_t* targetendp, BREGEXP_W** rxp, wchar_t* msg)
 	{
-		return m_BSubstEx(str, targetbeg, target, targetendp, rxp, msg);
+		return pBSubstEx(str, targetbeg, target, targetendp, rxp, msg);
 	}
 
 	// 関数があるかどうか
-	bool ExistBMatchEx() const { return m_BMatchEx != nullptr; }
-	bool ExistBSubstEx() const { return m_BSubstEx != nullptr; }
+	bool ExistBMatchEx() const { return pBMatchEx != nullptr; }
+	bool ExistBSubstEx() const { return pBSubstEx != nullptr; }
 
 private:
 	// DLL内関数ポインタ
-	BREGEXP_BMatchW2         m_BMatch;
-	BREGEXP_BSubstW2         m_BSubst;
-	BREGEXP_BTransW2         m_BTrans;
-	BREGEXP_BSplitW2         m_BSplit;
-	BREGEXP_BRegfreeW2       m_BRegfree;
-	BREGEXP_BRegexpVersionW2 m_BRegexpVersion;
-	BREGEXP_BMatchExW2       m_BMatchEx;
-	BREGEXP_BSubstExW2       m_BSubstEx;
+	BREGEXP_BMatchW2         pBMatch;
+	BREGEXP_BSubstW2         pBSubst;
+	BREGEXP_BTransW2         pBTrans;
+	BREGEXP_BSplitW2         pBSplit;
+	BREGEXP_BRegfreeW2       pBRegfree;
+	BREGEXP_BRegexpVersionW2 pBRegexpVersion;
+	BREGEXP_BMatchExW2       pBMatchEx;
+	BREGEXP_BSubstExW2       pBSubstEx;
 };
 

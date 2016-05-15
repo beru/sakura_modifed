@@ -30,15 +30,15 @@
 
 bool FuncListManager::IsLineFuncList(const DocLine* pDocLine, bool bFlag) const
 {
-	return pDocLine->m_mark.m_funcList.GetFuncListMark() != bFlag;
+	return pDocLine->mark.funcList.GetFuncListMark() != bFlag;
 }
 bool FuncListManager::GetLineFuncList(const DocLine* pDocLine) const
 {
-	return pDocLine->m_mark.m_funcList.GetFuncListMark();
+	return pDocLine->mark.funcList.GetFuncListMark();
 }
 void FuncListManager::SetLineFuncList(DocLine* pDocLine, bool bFlag)
 {
-	pDocLine->m_mark.m_funcList = bFlag;
+	pDocLine->mark.funcList = bFlag;
 }
 
 /*! ·•ªŒŸõ

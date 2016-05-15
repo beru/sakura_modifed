@@ -41,11 +41,11 @@ public:
 	~WSHClient();
 
 	// フィールド・アクセサ
-	ScriptErrorHandler m_OnError;
-	void *m_Data;
-	bool m_Valid; ///< trueの場合スクリプトエンジンが使用可能。falseになる場合は ScriptErrorHandlerにエラー内容が通知されている。
-	virtual /*override*/ void* GetData() const { return this->m_Data; }
-	const List& GetInterfaceObjects() {	return this->m_IfObjArr; }
+	ScriptErrorHandler onError;
+	void* data;
+	bool isValid; ///< trueの場合スクリプトエンジンが使用可能。falseになる場合は ScriptErrorHandlerにエラー内容が通知されている。
+	virtual /*override*/ void* GetData() const { return this->data; }
+	const List& GetInterfaceObjects() {	return this->ifObjArr; }
 
 	// 操作
 	void AddInterfaceObject(IfObj* obj);
@@ -54,7 +54,7 @@ public:
 	void Error(const wchar_t* Description);          ///< ScriptErrorHandlerを呼び出す。
 
 private:
-	IActiveScript *m_Engine;
-	List m_IfObjArr;
+	IActiveScript* engine;
+	List ifObjArr;
 };
 

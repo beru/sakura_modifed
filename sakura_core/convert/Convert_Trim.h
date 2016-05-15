@@ -28,13 +28,13 @@
 
 class Converter_Trim : public Converter {
 public:
-	Converter_Trim(bool bLeft, bool bExtEol) : m_bLeft(bLeft), m_bExtEol(bExtEol) { }
+	Converter_Trim(bool bLeft, bool bExtEol) : bLeft(bLeft), bExtEol(bExtEol) { }
 
 public:
 	bool DoConvert(NativeW* pData);
 
 private:
-	bool m_bLeft;
-	bool m_bExtEol;
+	bool bLeft;
+	bool bExtEol;
 };
 

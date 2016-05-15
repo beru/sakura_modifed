@@ -83,19 +83,19 @@ private:
 	};
 public:
 	// コンストラクタ・デストラクタ
-	StrictInteger() { m_value = 0; }
-	StrictInteger(const Me& rhs) { m_value = rhs.m_value; }
+	StrictInteger() { value = 0; }
+	StrictInteger(const Me& rhs) { value = rhs.value; }
 
 	// intからの変換は、「明示的に指定したときのみ」可能
-	explicit StrictInteger(int value) { m_value = value; }
+	explicit StrictInteger(int value) { this->value = value; }
 
 	// 算術演算子 (加算、減算は同クラス同士でしか許さない)
-	Me& operator += (const Me& rhs)	{ m_value += rhs.m_value; return *this; }
-	Me& operator -= (const Me& rhs)	{ m_value -= rhs.m_value; return *this; }
-	Me& operator *= (int n)			{ m_value *= n; return *this; }
-	Me& operator /= (int n)			{ m_value /= n; return *this; }
-	Me& operator %= (int n)			{ m_value %= n; return *this; }
-	Me& operator %= (const Me& rhs)	{ m_value %= rhs.m_value; return *this; }
+	Me& operator += (const Me& rhs)	{ value += rhs.value; return *this; }
+	Me& operator -= (const Me& rhs)	{ value -= rhs.value; return *this; }
+	Me& operator *= (int n)			{ value *= n; return *this; }
+	Me& operator /= (int n)			{ value /= n; return *this; }
+	Me& operator %= (int n)			{ value %= n; return *this; }
+	Me& operator %= (const Me& rhs)	{ value %= rhs.value; return *this; }
 
 	// 算術演算子２ (加算、減算は同クラス同士でしか許さない)
 	Me operator + (const Me& rhs)	const { Me ret = *this; return ret += rhs; }
@@ -106,31 +106,31 @@ public:
 	Me operator % (const Me& rhs)	const { Me ret = *this; return ret %= rhs; }
 
 	// 算術演算子３
-	int operator ++ ()   { return ++m_value; }	// ++c;
-	int operator ++ (int) { return m_value++; }	// c++;
-	int operator -- ()   { return --m_value; }	// --c;
-	int operator -- (int) { return m_value--; }	// c--;
+	int operator ++ ()   { return ++value; }	// ++c;
+	int operator ++ (int) { return value++; }	// c++;
+	int operator -- ()   { return --value; }	// --c;
+	int operator -- (int) { return value--; }	// c--;
 
 	// 算術演算子４
-	Me operator - () const { return Me(-m_value); }
+	Me operator - () const { return Me(-value); }
 
 	// 代入演算子
-	Me& operator = (const Me& rhs) { m_value = rhs.m_value; return *this; }
+	Me& operator = (const Me& rhs) { value = rhs.value; return *this; }
 
 	// 比較演算子
-	bool operator <  (const Me& rhs) const { return m_value <  rhs.m_value; }
-	bool operator <= (const Me& rhs) const { return m_value <= rhs.m_value; }
-	bool operator >  (const Me& rhs) const { return m_value >  rhs.m_value; }
-	bool operator >= (const Me& rhs) const { return m_value >= rhs.m_value; }
-	bool operator == (const Me& rhs) const { return m_value == rhs.m_value; }
-	bool operator != (const Me& rhs) const { return m_value != rhs.m_value; }
+	bool operator <  (const Me& rhs) const { return value <  rhs.value; }
+	bool operator <= (const Me& rhs) const { return value <= rhs.value; }
+	bool operator >  (const Me& rhs) const { return value >  rhs.value; }
+	bool operator >= (const Me& rhs) const { return value >= rhs.value; }
+	bool operator == (const Me& rhs) const { return value == rhs.value; }
+	bool operator != (const Me& rhs) const { return value != rhs.value; }
 
 	// 関数
-	int GetValue() const { return m_value; }
-	void SetValue(int n) { m_value = n; }
+	int GetValue() const { return value; }
+	void SetValue(int n) { value = n; }
 
 	// Int(CLaxInt)への変換は常に許す
-	operator Int() const { return Int(m_value); }
+	operator Int() const { return Int(value); }
 
 	// int以外の整数型もintにキャストして扱う
 	STRICTINT_OTHER_TYPE_AS_INT(short)
@@ -156,8 +156,8 @@ private:
 	typedef typename ChooseIntOrDummy< ALLOW_ADDSUB_INT>::Type AddsubIntegerType;
 	typedef typename ChooseIntOrDummy<!ALLOW_ADDSUB_INT>::Type NotAddsubIntegerType;
 public:
-	Me& operator += (AddsubIntegerType rhs) { m_value += rhs; return *this; }
-	Me& operator -= (AddsubIntegerType rhs) { m_value -= rhs; return *this; }
+	Me& operator += (AddsubIntegerType rhs) { value += rhs; return *this; }
+	Me& operator -= (AddsubIntegerType rhs) { value -= rhs; return *this; }
 	Me  operator +  (AddsubIntegerType rhs) const { Me ret = *this; return ret += rhs; }
 	Me  operator -  (AddsubIntegerType rhs) const { Me ret = *this; return ret -= rhs; }
 private:
@@ -173,12 +173,12 @@ private:
 	typedef typename ChooseIntOrDummy< ALLOW_CMP_INT>::Type CmpIntegerType;
 	typedef typename ChooseIntOrDummy<!ALLOW_CMP_INT>::Type NotCmpIntegerType;
 public:
-	bool operator <  (CmpIntegerType rhs) const { return m_value <  rhs; }
-	bool operator <= (CmpIntegerType rhs) const { return m_value <= rhs; }
-	bool operator >  (CmpIntegerType rhs) const { return m_value >  rhs; }
-	bool operator >= (CmpIntegerType rhs) const { return m_value >= rhs; }
-	bool operator == (CmpIntegerType rhs) const { return m_value == rhs; }
-	bool operator != (CmpIntegerType rhs) const { return m_value != rhs; }
+	bool operator <  (CmpIntegerType rhs) const { return value <  rhs; }
+	bool operator <= (CmpIntegerType rhs) const { return value <= rhs; }
+	bool operator >  (CmpIntegerType rhs) const { return value >  rhs; }
+	bool operator >= (CmpIntegerType rhs) const { return value >= rhs; }
+	bool operator == (CmpIntegerType rhs) const { return value == rhs; }
+	bool operator != (CmpIntegerType rhs) const { return value != rhs; }
 private:
 	// ※ALLOW_CMP_INTがfalseの場合は、privateメンバを置くことにより、「明示的に」比較を禁止する。
 	bool operator <  (NotCmpIntegerType rhs) const;
@@ -194,7 +194,7 @@ private:
 	typedef typename ChooseIntOrDummy< ALLOW_CAST_INT>::Type CastIntegerType;
 	typedef typename ChooseIntOrDummy<!ALLOW_CAST_INT>::Type NotCastIntegerType;
 public:
-	operator CastIntegerType() const { return m_value; }
+	operator CastIntegerType() const { return value; }
 private:
 	// ※ALLOW_CAST_INTがfalseの場合は、privateメンバを置くことにより、「明示的に」暗黙変換を禁止する。
 	operator NotCastIntegerType() const;
@@ -205,7 +205,7 @@ private:
 	typedef typename ChooseIntOrDummy< ALLOW_ASSIGNOP_INT>::Type AssignIntegerType;
 	typedef typename ChooseIntOrDummy<!ALLOW_ASSIGNOP_INT>::Type NotAssignIntegerType;
 public:
-	Me& operator = (const AssignIntegerType& rhs) { m_value = rhs; return *this; }
+	Me& operator = (const AssignIntegerType& rhs) { value = rhs; return *this; }
 private:
 	// ※ALLOW_ASSIGNOP_INTがfalseの場合は、privateメンバを置くことにより、「明示的に」代入を禁止する。
 	Me& operator = (const NotAssignIntegerType&);
@@ -213,7 +213,7 @@ private:
 
 	// -- -- -- -- メンバ変数 -- -- -- -- //
 private:
-	int m_value;
+	int value;
 };
 
 // 左辺がint等の場合の演算子

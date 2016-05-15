@@ -65,9 +65,9 @@ public:
 	Profile() {}
 	~Profile() {}
 	void Init(void);
-	bool IsReadingMode(void) { return m_bRead; }
-	void SetReadingMode(void) { m_bRead = true; }
-	void SetWritingMode(void) { m_bRead = false; }
+	bool IsReadingMode(void) { return bRead; }
+	void SetReadingMode(void) { bRead = true; }
+	void SetWritingMode(void) { bRead = false; }
 	bool ReadProfile(const TCHAR*);
 	bool ReadProfileRes( const TCHAR*, const TCHAR*, std::vector<std::wstring>* = NULL );				// 200/5/19 Uchi
 	bool WriteProfile(const TCHAR*, const WCHAR* pszComment);
@@ -84,9 +84,9 @@ protected:
 
 protected:
 	// メンバ変数
-	tstring					m_strProfileName;	// 最後に読み書きしたファイル名
-	std::vector<Section>	m_profileData;
-	bool					m_bRead;			// モード(true=読み込み/false=書き出し)
+	tstring					strProfileName;	// 最後に読み書きしたファイル名
+	std::vector<Section>	profileData;
+	bool					bRead;			// モード(true=読み込み/false=書き出し)
 };
 
 #define _INI_T LTEXT

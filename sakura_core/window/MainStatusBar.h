@@ -42,18 +42,18 @@ public:
 		@sa SendStatusMessage2
 	*/
 	bool SendStatusMessage2IsEffective() const {
-		return m_hwndStatusBar != NULL;
+		return hwndStatusBar != NULL;
 	}
 
 	// éÊìæ
-	HWND GetStatusHwnd() const { return m_hwndStatusBar; }
-	HWND GetProgressHwnd() const { return m_hwndProgressBar; }
+	HWND GetStatusHwnd() const { return hwndStatusBar; }
+	HWND GetProgressHwnd() const { return hwndProgressBar; }
 
 	// ê›íË
 	void SetStatusText(int nIndex, int nOption, const TCHAR* pszText);
 private:
-	EditWnd&	m_owner;
-	HWND		m_hwndStatusBar;
-	HWND		m_hwndProgressBar;
+	EditWnd&	owner;
+	HWND		hwndStatusBar;
+	HWND		hwndProgressBar;
 };
 

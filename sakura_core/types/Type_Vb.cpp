@@ -82,9 +82,9 @@ void DocOutline::MakeFuncList_VisualBasic(FuncInfoArr* pFuncInfoArr)
 	
 	// 調べるファイルがクラスモジュールのときはType、Constの挙動が異なるのでフラグを立てる
 	bClass = false;
-	int filelen = _tcslen(m_doc.m_docFile.GetFilePath());
+	int filelen = _tcslen(doc.docFile.GetFilePath());
 	if (4 < filelen) {
-		if (_tcsicmp((m_doc.m_docFile.GetFilePath() + filelen - 4), _FT(".cls")) == 0) {
+		if (_tcsicmp((doc.docFile.GetFilePath() + filelen - 4), _FT(".cls")) == 0) {
 			bClass = true;
 		}
 	}
@@ -95,13 +95,13 @@ void DocOutline::MakeFuncList_VisualBasic(FuncInfoArr* pFuncInfoArr)
 	const wchar_t* pLine = NULL;
 	// プロシージャフラグ（プロシージャ内ではTrue）
 	bool bProcedure = false;
-	for (LogicInt nLineCount=LogicInt(0); nLineCount<m_doc.m_docLineMgr.GetLineCount(); ++nLineCount) {
+	for (LogicInt nLineCount=LogicInt(0); nLineCount<doc.docLineMgr.GetLineCount(); ++nLineCount) {
 		if (pLine) {
 			if (L'_' != pLine[nLineLen-1]) {
 				nParseCnt = 0;
 			}
 		}
-		pLine = m_doc.m_docLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
+		pLine = doc.docLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
 		nFuncId = 0;
 		bDQuote	= false;
 		for (int i=0; i<nLineLen; ++i) {
@@ -262,7 +262,7 @@ void DocOutline::MakeFuncList_VisualBasic(FuncInfoArr* pFuncInfoArr)
 						  → レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 						*/
 						LayoutPoint ptPosXY;
-						m_doc.m_layoutMgr.LogicToLayout(	LogicPoint(LogicInt(0), nFuncLine - LogicInt(1)), &ptPosXY);
+						doc.layoutMgr.LogicToLayout(	LogicPoint(LogicInt(0), nFuncLine - LogicInt(1)), &ptPosXY);
 						pFuncInfoArr->AppendData(nFuncLine, ptPosXY.GetY2() + LayoutInt(1) , szFuncName, nFuncId);
 						nParseCnt = 0;
 						nFuncId	= 0;	// Jul 10, 2003  little YOSHI  論理和を使用するため、必ず初期化

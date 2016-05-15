@@ -31,16 +31,16 @@ struct DispPos {
 public:
 	DispPos(int nDx, int nDy)
 		:
-		m_nDx(nDx),
-		m_nDy(nDy)
+		nDx(nDx),
+		nDy(nDy)
 	{
-		m_ptDrawOrigin.x = 0;
-		m_ptDrawOrigin.y = 0;
-		m_ptDrawLayout.x = LayoutInt(0);
-		m_ptDrawLayout.y = LayoutInt(0);
-		m_nLineRef = LayoutInt(0);
+		ptDrawOrigin.x = 0;
+		ptDrawOrigin.y = 0;
+		ptDrawLayout.x = LayoutInt(0);
+		ptDrawLayout.y = LayoutInt(0);
+		nLineRef = LayoutInt(0);
 		// キャッシュ
-		m_pLayoutRef = EditDoc::GetInstance(0)->m_layoutMgr.GetTopLayout();
+		pLayoutRef = EditDoc::GetInstance(0)->layoutMgr.GetTopLayout();
 	}
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -48,28 +48,28 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	// 固定値
 	void InitDrawPos(const POINT& pt) {
-		m_ptDrawOrigin = pt;
-		m_ptDrawLayout.x = m_ptDrawLayout.y = LayoutInt(0);
+		ptDrawOrigin = pt;
+		ptDrawLayout.x = ptDrawLayout.y = LayoutInt(0);
 	}
 
 	// 取得
 	Point GetDrawPos() const {
 		return Point(
-			m_ptDrawOrigin.x + (Int)m_ptDrawLayout.x * m_nDx,
-			m_ptDrawOrigin.y + (Int)m_ptDrawLayout.y * m_nDy
+			ptDrawOrigin.x + (Int)ptDrawLayout.x * nDx,
+			ptDrawOrigin.y + (Int)ptDrawLayout.y * nDy
 		);
 	}
 
 	// 進む
-	void ForwardDrawCol (int nColOffset) { m_ptDrawLayout.x += nColOffset; }
-	void ForwardDrawLine(int nOffsetLine) { m_ptDrawLayout.y += nOffsetLine; }
+	void ForwardDrawCol (int nColOffset) { ptDrawLayout.x += nColOffset; }
+	void ForwardDrawLine(int nOffsetLine) { ptDrawLayout.y += nOffsetLine; }
 
 	// リセット
-	void ResetDrawCol() { m_ptDrawLayout.x = LayoutInt(0); }
+	void ResetDrawCol() { ptDrawLayout.x = LayoutInt(0); }
 
 	// 取得
-	LayoutInt GetDrawCol() const { return m_ptDrawLayout.x; }
-	LayoutInt GetDrawLine() const { return m_ptDrawLayout.y; }
+	LayoutInt GetDrawCol() const { return ptDrawLayout.x; }
+	LayoutInt GetDrawLine() const { return ptDrawLayout.y; }
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                     テキスト参照位置                        //
@@ -77,29 +77,29 @@ public:
 
 	// 変更
 	void SetLayoutLineRef(LayoutInt nOffsetLine) {
-		m_nLineRef = nOffsetLine;
+		nLineRef = nOffsetLine;
 		// キャッシュ更新
-		m_pLayoutRef = EditDoc::GetInstance(0)->m_layoutMgr.SearchLineByLayoutY(m_nLineRef);
+		pLayoutRef = EditDoc::GetInstance(0)->layoutMgr.SearchLineByLayoutY(nLineRef);
 	}
 	void ForwardLayoutLineRef(int nOffsetLine);
 
 	// 取得
-	LayoutInt		GetLayoutLineRef() const { return m_nLineRef; }
-	const Layout*	GetLayoutRef() const { return m_pLayoutRef; }
+	LayoutInt		GetLayoutLineRef() const { return nLineRef; }
+	const Layout*	GetLayoutRef() const { return pLayoutRef; }
 
 private:
 	// 固定要素
-	int				m_nDx;			// 半角文字の文字間隔。固定。
-	int				m_nDy;			// 半角文字の行間隔。固定。
-	POINT			m_ptDrawOrigin;	// 描画位置基準。単位はピクセル。固定。
+	int				nDx;			// 半角文字の文字間隔。固定。
+	int				nDy;			// 半角文字の行間隔。固定。
+	POINT			ptDrawOrigin;	// 描画位置基準。単位はピクセル。固定。
 
 	// 描画位置
-	LayoutPoint		m_ptDrawLayout; // 描画位置。相対レイアウト単位。
+	LayoutPoint		ptDrawLayout;	// 描画位置。相対レイアウト単位。
 
 	// テキスト参照位置
-	LayoutInt		m_nLineRef;		// 絶対レイアウト単位。
+	LayoutInt		nLineRef;		// 絶対レイアウト単位。
 
 	// キャッシュ############
-	const Layout*	m_pLayoutRef;
+	const Layout*	pLayoutRef;
 };
 

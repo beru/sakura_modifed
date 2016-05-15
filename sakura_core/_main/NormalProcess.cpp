@@ -43,7 +43,7 @@
 NormalProcess::NormalProcess(HINSTANCE hInstance, LPCTSTR lpCmdLine)
 	:
 	Process(hInstance, lpCmdLine),
-	m_pEditApp(nullptr)
+	pEditApp(nullptr)
 {
 }
 
@@ -146,9 +146,9 @@ bool NormalProcess::InitializeProcess()
 		nGroupId = AppNodeManager::getInstance().GetFreeGroupId();
 	}
 	// CEditAppを作成
-	m_pEditApp = &EditApp::getInstance();
-	m_pEditApp->Create(GetProcessInstance(), nGroupId);
-	EditWnd* pEditWnd = m_pEditApp->GetEditWindow();
+	pEditApp = &EditApp::getInstance();
+	pEditApp->Create(GetProcessInstance(), nGroupId);
+	EditWnd* pEditWnd = pEditApp->GetEditWindow();
 	auto& activeView = pEditWnd->GetActiveView();
 	if (!pEditWnd->GetHwnd()) {
 		::ReleaseMutex(hMutex);
@@ -180,14 +180,14 @@ bool NormalProcess::InitializeProcess()
 		// 文字コードを有効とする Uchi 2008/6/8
 		// 2010.06.16 Moca アウトプットは CCommnadLineで -TYPE=output 扱いとする
 		pEditWnd->SetDocumentTypeWhenCreate(fi.nCharCode, false, nType);
-		pEditWnd->m_dlgFuncList.Refresh();	// アウトラインを表示する
+		pEditWnd->dlgFuncList.Refresh();	// アウトラインを表示する
 	}else if (bGrepMode) {
 		// GREP
 		// 2010.06.16 Moca Grepでもオプション指定を適用
 		pEditWnd->SetDocumentTypeWhenCreate(fi.nCharCode, false, nType);
-		pEditWnd->m_dlgFuncList.Refresh();	// アウトラインを予め表示しておく
+		pEditWnd->dlgFuncList.Refresh();	// アウトラインを予め表示しておく
 		HWND hEditWnd = pEditWnd->GetHwnd();
-		if (!::IsIconic(hEditWnd) && pEditWnd->m_dlgFuncList.GetHwnd()) {
+		if (!::IsIconic(hEditWnd) && pEditWnd->dlgFuncList.GetHwnd()) {
 			RECT rc;
 			::GetClientRect(hEditWnd, &rc);
 			::SendMessage(hEditWnd, WM_SIZE, ::IsZoomed(hEditWnd) ? SIZE_MAXIMIZED: SIZE_RESTORED, MAKELONG(rc.right - rc.left, rc.bottom - rc.top));
@@ -201,7 +201,7 @@ bool NormalProcess::InitializeProcess()
 			SetMainWindow(pEditWnd->GetHwnd());
 			::ReleaseMutex(hMutex);
 			::CloseHandle(hMutex);
-			this->m_pEditApp->pGrepAgent->DoGrep(
+			this->pEditApp->pGrepAgent->DoGrep(
 				activeView,
 				gi.bGrepReplace,
 				&gi.mGrepKey,
@@ -222,7 +222,7 @@ bool NormalProcess::InitializeProcess()
 				gi.bGrepPaste,
 				gi.bGrepBackup
 			);
-			pEditWnd->m_dlgFuncList.Refresh();	// アウトラインを再解析する
+			pEditWnd->dlgFuncList.Refresh();	// アウトラインを再解析する
 			//return true; // 2003.06.23 Moca
 		}else {
 			AppNodeManager::getInstance().GetNoNameNumber(pEditWnd->GetHwnd());
@@ -260,25 +260,25 @@ bool NormalProcess::InitializeProcess()
 			
 			// Oct. 9, 2003 genta コマンドラインからGERPダイアログを表示させた場合に
 			// 引数の設定がBOXに反映されない
-			pEditWnd->m_dlgGrep.strText = gi.mGrepKey.GetStringPtr();		// 検索文字列
-			pEditWnd->m_dlgGrep.bSetText = true;
-			int nSize = _countof2(pEditWnd->m_dlgGrep.szFile);
-			_tcsncpy(pEditWnd->m_dlgGrep.szFile, gi.mGrepFile.GetStringPtr(), nSize);	// 検索ファイル
-			pEditWnd->m_dlgGrep.szFile[nSize - 1] = _T('\0');
-			nSize = _countof2(pEditWnd->m_dlgGrep.szFolder);
-			_tcsncpy(pEditWnd->m_dlgGrep.szFolder, memGrepFolder.GetStringPtr(), nSize);	// 検索フォルダ
-			pEditWnd->m_dlgGrep.szFolder[nSize - 1] = _T('\0');
+			pEditWnd->dlgGrep.strText = gi.mGrepKey.GetStringPtr();		// 検索文字列
+			pEditWnd->dlgGrep.bSetText = true;
+			int nSize = _countof2(pEditWnd->dlgGrep.szFile);
+			_tcsncpy(pEditWnd->dlgGrep.szFile, gi.mGrepFile.GetStringPtr(), nSize);	// 検索ファイル
+			pEditWnd->dlgGrep.szFile[nSize - 1] = _T('\0');
+			nSize = _countof2(pEditWnd->dlgGrep.szFolder);
+			_tcsncpy(pEditWnd->dlgGrep.szFolder, memGrepFolder.GetStringPtr(), nSize);	// 検索フォルダ
+			pEditWnd->dlgGrep.szFolder[nSize - 1] = _T('\0');
 
 			
 			// Feb. 23, 2003 Moca Owner windowが正しく指定されていなかった
-			int nRet = pEditWnd->m_dlgGrep.DoModal(GetProcessInstance(), pEditWnd->GetHwnd(), NULL);
+			int nRet = pEditWnd->dlgGrep.DoModal(GetProcessInstance(), pEditWnd->GetHwnd(), NULL);
 			if (nRet != FALSE) {
 				activeView.GetCommander().HandleCommand(F_GREP, true, 0, 0, 0, 0);
 			}else {
 				// 自分はGrepでない
 				editDoc.SetCurDirNotitle();
 			}
-			pEditWnd->m_dlgFuncList.Refresh();	// アウトラインを再解析する
+			pEditWnd->dlgFuncList.Refresh();	// アウトラインを再解析する
 			//return true; // 2003.06.23 Moca
 		}
 
@@ -321,7 +321,7 @@ bool NormalProcess::InitializeProcess()
 			// Note. fi.nCharCode で文字コードが明示指定されていても、読み込み中断しない場合は別の文字コードが選択されることがある。
 			//       以前は「(無題)」にならない場合でも無条件に SetDocumentTypeWhenCreate() を呼んでいたが、
 			//       「前回と異なる文字コード」の問い合わせで前回の文字コードが選択された場合におかしくなっていた。
-			if (!editDoc.m_docFile.GetFilePathClass().IsValidPath()) {
+			if (!editDoc.docFile.GetFilePathClass().IsValidPath()) {
 				// 読み込み中断して「(無題)」になった
 				// ---> 無効になったオプション指定を有効にする
 				pEditWnd->SetDocumentTypeWhenCreate(
@@ -338,7 +338,7 @@ bool NormalProcess::InitializeProcess()
 			// 移動するようにする． || → &&
 			if (
 				(LayoutInt(0) <= fi.nViewTopLine && LayoutInt(0) <= fi.nViewLeftCol)
-				&& fi.nViewTopLine < editDoc.m_layoutMgr.GetLineCount()
+				&& fi.nViewTopLine < editDoc.layoutMgr.GetLineCount()
 			) {
 				activeView.GetTextArea().SetViewTopLine(fi.nViewTopLine);
 				activeView.GetTextArea().SetViewLeftCol(fi.nViewLeftCol);
@@ -355,7 +355,7 @@ bool NormalProcess::InitializeProcess()
 				  レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 				*/
 				LayoutPoint ptPos;
-				editDoc.m_layoutMgr.LogicToLayout(
+				editDoc.layoutMgr.LogicToLayout(
 					fi.ptCursor,
 					&ptPos
 				);
@@ -363,7 +363,7 @@ bool NormalProcess::InitializeProcess()
 				// From Here Mar. 28, 2003 MIK
 				// 改行の真ん中にカーソルが来ないように。
 				// 2008.08.20 ryoji 改行単位の行番号を渡すように修正
-				const DocLine* pTmpDocLine = editDoc.m_docLineMgr.GetLine(fi.ptCursor.GetY2());
+				const DocLine* pTmpDocLine = editDoc.docLineMgr.GetLine(fi.ptCursor.GetY2());
 				if (pTmpDocLine) {
 					if (pTmpDocLine->GetLengthWithoutEOL() < fi.ptCursor.x) {
 						ptPos.x--;
@@ -372,7 +372,7 @@ bool NormalProcess::InitializeProcess()
 				// To Here Mar. 28, 2003 MIK
 
 				activeView.GetCaret().MoveCursor(ptPos, true);
-				activeView.GetCaret().m_nCaretPosX_Prev =
+				activeView.GetCaret().nCaretPosX_Prev =
 					activeView.GetCaret().GetCaretLayoutPos().GetX2();
 			}
 			activeView.RedrawAll();
@@ -385,7 +385,7 @@ bool NormalProcess::InitializeProcess()
 				nType
 			);
 		}
-		if (!editDoc.m_docFile.GetFilePathClass().IsValidPath()) {
+		if (!editDoc.docFile.GetFilePathClass().IsValidPath()) {
 			editDoc.SetCurDirNotitle();	// (無題)ウィンドウ
 			AppNodeManager::getInstance().GetNoNameNumber(pEditWnd->GetHwnd());
 			pEditWnd->UpdateCaption();
@@ -482,7 +482,7 @@ bool NormalProcess::InitializeProcess()
 bool NormalProcess::MainLoop()
 {
 	if (GetMainWindow()) {
-		m_pEditApp->GetEditWindow()->MessageLoop();	// メッセージループ
+		pEditApp->GetEditWindow()->MessageLoop();	// メッセージループ
 		return true;
 	}
 	return false;

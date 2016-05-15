@@ -28,7 +28,7 @@
 #include "env/DllSharedData.h"
 
 // キーワードキャラクタ
-const unsigned char gm_keyword_char[128] = {
+const unsigned char g_keyword_char[128] = {
 //  0         1         2         3         4         5         6         7         8         9         A         B         C         D         E         F             : 0123456789ABCDEF
 	CK_NULL,  CK_CTRL,  CK_CTRL,  CK_CTRL,  CK_CTRL,  CK_CTRL,  CK_CTRL,  CK_CTRL,  CK_CTRL,  CK_TAB,   CK_LF,    CK_CTRL,  CK_CTRL,  CK_CR,    CK_CTRL,  CK_CTRL,  // 0: ................
 	CK_CTRL,  CK_CTRL,  CK_CTRL,  CK_CTRL,  CK_CTRL,  CK_CTRL,  CK_CTRL,  CK_CTRL,  CK_CTRL,  CK_CTRL,  CK_CTRL,  CK_CTRL,  CK_CTRL,  CK_CTRL,  CK_CTRL,  CK_CTRL,  // 1: ................
@@ -85,64 +85,64 @@ namespace WCODE
 		LocalCache()
 		{
 			// LOGFONTの初期化
-			memset(&m_lf, 0, sizeof(m_lf));
+			memset(&lf, 0, sizeof(lf));
 
 			// HDC の初期化
 			HDC hdc = GetDC(NULL);
-			m_hdc = CreateCompatibleDC(hdc);
+			this->hdc = CreateCompatibleDC(hdc);
 			ReleaseDC(NULL, hdc);
 
-			m_hFont = NULL;
-			m_hFontOld = NULL;
-			m_pCache = 0;
+			hFont = NULL;
+			hFontOld = NULL;
+			pCache = 0;
 		}
 		~LocalCache()
 		{
 			// -- -- 後始末 -- -- //
-			if (m_hFont) {
-				SelectObject(m_hdc, m_hFontOld);
-				DeleteObject(m_hFont);
+			if (hFont) {
+				SelectObject(hdc, hFontOld);
+				DeleteObject(hFont);
 			}
-			DeleteDC(m_hdc);
+			DeleteDC(hdc);
 		}
 		// 再初期化
 		void Init(const LOGFONT& lf)
 		{
-			if (m_hFontOld) {
-				m_hFontOld = (HFONT)SelectObject(m_hdc, m_hFontOld);
-				DeleteObject(m_hFontOld);
+			if (hFontOld) {
+				hFontOld = (HFONT)SelectObject(hdc, hFontOld);
+				DeleteObject(hFontOld);
 			}
 
-			m_lf = lf;
+			this->lf = lf;
 
-			m_hFont = ::CreateFontIndirect(&lf);
-			m_hFontOld = (HFONT)SelectObject(m_hdc, m_hFont);
+			hFont = ::CreateFontIndirect(&lf);
+			hFontOld = (HFONT)SelectObject(hdc, hFont);
 
 			// -- -- 半角基準 -- -- //
-			GetTextExtentPoint32W_AnyBuild(m_hdc, L"x", 1, &m_han_size);
+			GetTextExtentPoint32W_AnyBuild(hdc, L"x", 1, &han_size);
 		}
 		void SelectCache(CharWidthCache* pCache)
 		{
-			m_pCache = pCache;
+			this->pCache = pCache;
 		}
 		void Clear()
 		{
-			assert(m_pCache != 0);
+			assert(pCache != 0);
 			// キャッシュのクリア
-			memcpy(m_pCache->lfFaceName, m_lf.lfFaceName, sizeof(m_lf.lfFaceName));
-			memset(m_pCache->bCharWidthCache, 0, sizeof(m_pCache->bCharWidthCache));
-			m_pCache->nCharWidthCacheTest = 0x12345678;
+			memcpy(pCache->lfFaceName, lf.lfFaceName, sizeof(lf.lfFaceName));
+			memset(pCache->bCharWidthCache, 0, sizeof(pCache->bCharWidthCache));
+			pCache->nCharWidthCacheTest = 0x12345678;
 		}
 		bool IsSameFontFace(const LOGFONT& lf)
 		{
-			assert(m_pCache != 0);
-			return (memcmp(m_pCache->lfFaceName, lf.lfFaceName, sizeof(lf.lfFaceName)) == 0);
+			assert(pCache != 0);
+			return (memcmp(pCache->lfFaceName, lf.lfFaceName, sizeof(lf.lfFaceName)) == 0);
 		}
 		void SetCache(wchar_t c, bool cache_value)
 		{
 			int v = cache_value ? 0x1 : 0x2;
-			m_pCache->bCharWidthCache[c/4] &= ~(0x3<< ((c%4)*2)); // 該当箇所クリア
-			m_pCache->bCharWidthCache[c/4] |=  (v  << ((c%4)*2)); // 該当箇所セット
+			pCache->bCharWidthCache[c/4] &= ~(0x3<< ((c%4)*2)); // 該当箇所クリア
+			pCache->bCharWidthCache[c/4] |=  (v  << ((c%4)*2)); // 該当箇所セット
 		}
 		bool GetCache(wchar_t c) const
 		{
@@ -150,75 +150,75 @@ namespace WCODE
 		}
 		bool ExistCache(wchar_t c) const
 		{
-			assert(m_pCache->nCharWidthCacheTest == 0x12345678);
+			assert(pCache->nCharWidthCacheTest == 0x12345678);
 			return _GetRaw(c) != 0x0;
 		}
 		bool CalcHankakuByFont(wchar_t c)
 		{
-			SIZE size = {m_han_size.cx * 2, 0}; // 関数が失敗したときのことを考え、全角幅で初期化しておく
-			GetTextExtentPoint32W_AnyBuild(m_hdc, &c, 1, &size);
-			return (size.cx <= m_han_size.cx);
+			SIZE size = {han_size.cx * 2, 0}; // 関数が失敗したときのことを考え、全角幅で初期化しておく
+			GetTextExtentPoint32W_AnyBuild(hdc, &c, 1, &size);
+			return (size.cx <= han_size.cx);
 		}
 	protected:
 		int _GetRaw(wchar_t c) const
 		{
-			return (m_pCache->bCharWidthCache[c/4]>>((c%4)*2))&0x3;
+			return (pCache->bCharWidthCache[c/4]>>((c%4)*2))&0x3;
 		}
 	private:
-		HDC					m_hdc;
-		HFONT				m_hFontOld;
-		HFONT				m_hFont;
-		SIZE				m_han_size;
-		LOGFONT				m_lf;				// 2008/5/15 Uchi
-		CharWidthCache*	m_pCache;
+		HDC					hdc;
+		HFONT				hFontOld;
+		HFONT				hFont;
+		SIZE				han_size;
+		LOGFONT				lf;				// 2008/5/15 Uchi
+		CharWidthCache*	pCache;
 	};
 
 	class LocalCacheSelector {
 	public:
 		LocalCacheSelector()
 		{
-			m_pCache = &m_localCache[0];
+			pCache = &localCache[0];
 			for (int i=0; i<(int)CharWidthFontMode::Max; ++i) {
-				m_parCache[i] = 0;
+				parCache[i] = 0;
 			}
-			m_lastEditCacheMode = CharWidthCacheMode::Neutral;
+			lastEditCacheMode = CharWidthCacheMode::Neutral;
 		}
 		~LocalCacheSelector()
 		{
 			for (int i=0; i<(int)CharWidthFontMode::Max; ++i) {
-				delete m_parCache[i];
-				m_parCache[i] = 0;
+				delete parCache[i];
+				parCache[i] = 0;
 			}
 		}
 		void Init(const LOGFONT& lf, CharWidthFontMode fMode)
 	 	{
 			// Fontfaceが変更されていたらキャッシュをクリアする	2013.04.08 aroka
-			m_localCache[(int)fMode].Init(lf);
-			if (!m_localCache[(int)fMode].IsSameFontFace(lf)) {
-				m_localCache[(int)fMode].Clear();
+			localCache[(int)fMode].Init(lf);
+			if (!localCache[(int)fMode].IsSameFontFace(lf)) {
+				localCache[(int)fMode].Clear();
 			}
 		}
 		void Select(CharWidthFontMode fMode, CharWidthCacheMode cMode)
 		{
-			CharWidthCacheMode cmode = (cMode == CharWidthCacheMode::Neutral) ? m_lastEditCacheMode : cMode;
+			CharWidthCacheMode cmode = (cMode == CharWidthCacheMode::Neutral) ? lastEditCacheMode : cMode;
 
-			m_pCache = &m_localCache[(int)fMode];
+			pCache = &localCache[(int)fMode];
 			if (cmode == CharWidthCacheMode::Share) {
-				m_pCache->SelectCache(&(GetDllShareData().charWidth));
+				pCache->SelectCache(&(GetDllShareData().charWidth));
 			}else {
-				if (m_parCache[(int)fMode] == 0) {
-					m_parCache[(int)fMode] = new CharWidthCache;
+				if (parCache[(int)fMode] == 0) {
+					parCache[(int)fMode] = new CharWidthCache;
 				}
-				m_pCache->SelectCache(m_parCache[(int)fMode]);
+				pCache->SelectCache(parCache[(int)fMode]);
 			}
-			if (fMode == CharWidthFontMode::Edit) { m_lastEditCacheMode = cmode; }
+			if (fMode == CharWidthFontMode::Edit) { lastEditCacheMode = cmode; }
 		}
-		LocalCache* GetCache() { return m_pCache; }
+		LocalCache* GetCache() { return pCache; }
 	private:
-		LocalCache* m_pCache;
-		LocalCache m_localCache[3];
-		CharWidthCache* m_parCache[3];
-		CharWidthCacheMode m_lastEditCacheMode;
+		LocalCache* pCache;
+		LocalCache localCache[3];
+		CharWidthCache* parCache[3];
+		CharWidthCacheMode lastEditCacheMode;
 	private:
 		DISALLOW_COPY_AND_ASSIGN(LocalCacheSelector);
 	};

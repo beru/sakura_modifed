@@ -90,7 +90,7 @@ public:
 	PropCommon();
 	~PropCommon();
 	//	Sep. 29, 2001 genta マクロクラスを渡すように;
-//@@@ 2002.01.03 YAZAKI m_tbMyButtonなどをCShareDataからMenuDrawerへ移動したことによる修正。
+//@@@ 2002.01.03 YAZAKI tbMyButtonなどをCShareDataからMenuDrawerへ移動したことによる修正。
 	void Create(HWND, ImageListMgr*, MenuDrawer*);	// 初期化
 
 	/*
@@ -101,7 +101,7 @@ public:
 	// 2002.12.11 Moca 追加
 	void InitData(void);		// DllSharedDataから一時データ領域に設定を複製する
 	void ApplyData(void);		// 一時データ領域からにDllSharedData設定をコピーする
-	int GetPageNum() { return m_nPageNum; }
+	int GetPageNum() { return nPageNum; }
 
 	//
 	static INT_PTR CALLBACK DlgProc_page(
@@ -110,34 +110,34 @@ public:
 	//	Jun. 2, 2001 genta
 	//	ここにあったEvent Handlerはprotectedエリアに移動した．
 
-	HWND				m_hwndParent;	// オーナーウィンドウのハンドル
-	HWND				m_hwndThis;		// このダイアログのハンドル
-	PropComSheetOrder	m_nPageNum;
-	DllSharedData*		m_pShareData;
-	int					m_nKeywordSet1;
+	HWND				hwndParent;	// オーナーウィンドウのハンドル
+	HWND				hwndThis;		// このダイアログのハンドル
+	PropComSheetOrder	nPageNum;
+	DllSharedData*		pShareData;
+	int					nKeywordSet1;
 	//	Oct. 16, 2000 genta
-	ImageListMgr*	m_pIcons;	//	Image List
+	ImageListMgr*	pIcons;	//	Image List
 	
 	//	Oct. 2, 2001 genta 外部マクロ追加に伴う，対応部分の別クラス化
 	//	Oct. 15, 2001 genta Lookupはダイアログボックス内で別インスタンスを作るように
 	//	(検索対象として，設定用common領域を指すようにするため．)
-	FuncLookup			m_lookup;
+	FuncLookup			lookup;
 
-	MenuDrawer*		m_pMenuDrawer;
+	MenuDrawer*		pMenuDrawer;
 	/*
 	|| ダイアログデータ
 	*/
-	CommonSetting	m_common;
+	CommonSetting	common;
 
 	// 2005.01.13 MIK セット数増加
 	struct KeywordSetIndex {
 		int typeId;
 		int index[MAX_KEYWORDSET_PER_TYPE];
 	};
-	std::vector<KeywordSetIndex>	m_Types_nKeywordSetIdx;
-	bool			m_bTrayProc;
-	HFONT			m_hKeywordHelpFont;		// キーワードヘルプ フォント ハンドル
-	HFONT			m_hTabFont;				// タブ フォント ハンドル
+	std::vector<KeywordSetIndex> types_nKeywordSetIdx;
+	bool	bTrayProc;
+	HFONT	hKeywordHelpFont;		// キーワードヘルプ フォント ハンドル
+	HFONT	hTabFont;				// タブ フォント ハンドル
 
 protected:
 	/*
@@ -165,7 +165,7 @@ protected:
 	typedef	INT_PTR (PropCommon::*pDispatchPage)(HWND, UINT, WPARAM, LPARAM);
 
 	int nLastPos_Macro;			// 前回フォーカスのあった場所
-	int m_nLastPos_FILENAME;	// 前回フォーカスのあった場所 ファイル名タブ用
+	int nLastPos_FILENAME;	// 前回フォーカスのあった場所 ファイル名タブ用
 
 	// Message Handler
 	INT_PTR DispatchEvent(HWND, UINT, WPARAM, LPARAM);

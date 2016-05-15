@@ -41,17 +41,17 @@ public:
 	*/
 private:
 	// 20060126 aroka すべてPrivateにして、初期化順序に合わせて並べ替え
-	EditDoc*		m_pEditDoc;
-	DllSharedData&	m_shareData;
-	int				m_nCurrentKeyState;
-	WCHAR			m_szFuncNameArr[12][256];
-	HWND			m_hwndButtonArr[12];
-	HFONT			m_hFont;	// 表示用フォント
-	bool			m_bSizeBox;
-	HWND			m_hwndSizeBox;
-	int				m_nTimerCount;
-	int				m_nButtonGroupNum;	// Openで初期化
-	EFunctionCode	m_nFuncCodeArr[12];	// Open->CreateButtonsで初期化
+	EditDoc*		pEditDoc;
+	DllSharedData&	shareData;
+	int				nCurrentKeyState;
+	WCHAR			szFuncNameArr[12][256];
+	HWND			hwndButtonArr[12];
+	HFONT			hFont;	// 表示用フォント
+	bool			bSizeBox;
+	HWND			hwndSizeBox;
+	int				nTimerCount;
+	int				nButtonGroupNum;	// Openで初期化
+	EFunctionCode	nFuncCodeArr[12];	// Open->CreateButtonsで初期化
 protected:
 	/*
 	|| 実装ヘルパ系

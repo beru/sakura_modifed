@@ -102,23 +102,23 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 public:
 	// タブ幅の取得
-	KetaXInt GetTabSpaceKetas() const { return m_nTabSpace; }
-	LayoutInt GetTabSpace() const { return m_nTabSpace; }
+	KetaXInt GetTabSpaceKetas() const { return nTabSpace; }
+	LayoutInt GetTabSpace() const { return nTabSpace; }
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                          参照系                             //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 public:
 	//2007.10.09 kobake 関数名変更: Search → SearchLineByLayoutY
-	LayoutInt		GetLineCount() const { return m_nLines; }	// 全物理行数を返す
+	LayoutInt		GetLineCount() const { return nLines; }	// 全物理行数を返す
 	const wchar_t*	GetLineStr(LayoutInt nLine, LogicInt* pnLineLen) const;	// 指定された物理行のデータへのポインタとその長さを返す
 	const wchar_t*	GetLineStr(LayoutInt nLine, LogicInt* pnLineLen, const Layout** ppcLayoutDes) const;	// 指定された物理行のデータへのポインタとその長さを返す
 
 	// 先頭と末尾
-	Layout*			GetTopLayout()		{ return m_pLayoutTop; }
-	Layout*			GetBottomLayout()	{ return m_pLayoutBot; }
-	const Layout*	GetTopLayout() const { return m_pLayoutTop; }
-	const Layout*	GetBottomLayout() const { return m_pLayoutBot; }
+	Layout*			GetTopLayout()		{ return pLayoutTop; }
+	Layout*			GetBottomLayout()	{ return pLayoutBot; }
+	const Layout*	GetTopLayout() const { return pLayoutTop; }
+	const Layout*	GetBottomLayout() const { return pLayoutBot; }
 
 	// レイアウトを探す
 	const Layout*	SearchLineByLayoutY(LayoutInt nLineLayout) const;	// 指定された物理行のレイアウトデータ(Layout)へのポインタを返す
@@ -134,11 +134,11 @@ public:
 		@param pos [in] 現在の位置
 		@return 次のTAB位置までの文字数．1～TAB幅
 	 */
-	LayoutInt GetActualTabSpace(LayoutInt pos) const { return m_nTabSpace - pos % m_nTabSpace; }
+	LayoutInt GetActualTabSpace(LayoutInt pos) const { return nTabSpace - pos % nTabSpace; }
 
 	// Aug. 14, 2005 genta
 	// Sep. 07, 2007 kobake 関数名変更 GetMaxLineSize→GetMaxLineKetas
-	LayoutInt GetMaxLineKetas(void) const { return m_nMaxLineKetas; }
+	LayoutInt GetMaxLineKetas(void) const { return nMaxLineKetas; }
 
 	// 2005.11.21 Moca 引用符の色分け情報を引数から除去
 	bool ChangeLayoutParam(LayoutInt nTabSize, LayoutInt nMaxLineKetas);
@@ -146,7 +146,7 @@ public:
 	// Jul. 29, 2006 genta
 	void GetEndLayoutPos(LayoutPoint* ptLayoutEnd);
 
-	LayoutInt GetMaxTextWidth(void) const { return m_nTextWidth; }		// 2009.08.28 nasukoji	テキスト最大幅を返す
+	LayoutInt GetMaxTextWidth(void) const { return nTextWidth; }		// 2009.08.28 nasukoji	テキスト最大幅を返す
 
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -288,8 +288,8 @@ protected:
 	void _OnLine2(LayoutWork* pWork);
 	
 private:
-	bool _ExistKinsokuKuto(wchar_t wc) const { return m_pszKinsokuKuto_1.exist(wc); }
-	bool _ExistKinsokuHead(wchar_t wc) const { return m_pszKinsokuHead_1.exist(wc); }
+	bool _ExistKinsokuKuto(wchar_t wc) const { return pszKinsokuKuto_1.exist(wc); }
+	bool _ExistKinsokuHead(wchar_t wc) const { return pszKinsokuHead_1.exist(wc); }
 	bool IsKinsokuHead(wchar_t wc);	// 行頭禁則文字をチェックする	//@@@ 2002.04.08 MIK
 	bool IsKinsokuTail(wchar_t wc);	// 行末禁則文字をチェックする	//@@@ 2002.04.08 MIK
 	bool IsKinsokuKuto(wchar_t wc);	// 句読点文字をチェックする	//@@@ 2002.04.17 MIK
@@ -323,44 +323,44 @@ protected:
 	//                        メンバ変数                           //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 public:
-	DocLineMgr*			m_pDocLineMgr;	// 行バッファ管理マネージャ
+	DocLineMgr*			pDocLineMgr;	// 行バッファ管理マネージャ
 
 protected:
-	// 2002.10.07 YAZAKI add m_nLineTypeBot
-	// 2007.09.07 kobake 変数名変更: m_nMaxLineSize→nMaxLineKetas
-	// 2007.10.08 kobake 変数名変更: getIndentOffset→m_getIndentOffset
+	// 2002.10.07 YAZAKI add nLineTypeBot
+	// 2007.09.07 kobake 変数名変更: nMaxLineSize→nMaxLineKetas
+	// 2007.10.08 kobake 変数名変更: getIndentOffset→getIndentOffset
 
 	// 参照
-	EditDoc*			m_pEditDoc;
+	EditDoc*			pEditDoc;
 
 	// 実データ
-	Layout*				m_pLayoutTop;
-	Layout*				m_pLayoutBot;
+	Layout*				pLayoutTop;
+	Layout*				pLayoutBot;
 
 	// タイプ別設定
-	const TypeConfig*		m_pTypeConfig;
-	LayoutInt				m_nMaxLineKetas;
-	LayoutInt				m_nTabSpace;
-	vector_ex<wchar_t>		m_pszKinsokuHead_1;			// 行頭禁則文字	//@@@ 2002.04.08 MIK
-	vector_ex<wchar_t>		m_pszKinsokuTail_1;			// 行末禁則文字	//@@@ 2002.04.08 MIK
-	vector_ex<wchar_t>		m_pszKinsokuKuto_1;			// 句読点ぶらさげ文字	//@@@ 2002.04.17 MIK
-	CalcIndentProc			m_getIndentOffset;			// Oct. 1, 2002 genta インデント幅計算関数を保持
+	const TypeConfig*		pTypeConfig;
+	LayoutInt				nMaxLineKetas;
+	LayoutInt				nTabSpace;
+	vector_ex<wchar_t>		pszKinsokuHead_1;			// 行頭禁則文字	//@@@ 2002.04.08 MIK
+	vector_ex<wchar_t>		pszKinsokuTail_1;			// 行末禁則文字	//@@@ 2002.04.08 MIK
+	vector_ex<wchar_t>		pszKinsokuKuto_1;			// 句読点ぶらさげ文字	//@@@ 2002.04.17 MIK
+	CalcIndentProc			getIndentOffset;			// Oct. 1, 2002 genta インデント幅計算関数を保持
 
 	// フラグ等
-	EColorIndexType			m_nLineTypeBot;				// タイプ 0=通常 1=行コメント 2=ブロックコメント 3=シングルクォーテーション文字列 4=ダブルクォーテーション文字列
-	LayoutExInfo			m_layoutExInfoBot;
-	LayoutInt				m_nLines;					// 全レイアウト行数
+	EColorIndexType			nLineTypeBot;				// タイプ 0=通常 1=行コメント 2=ブロックコメント 3=シングルクォーテーション文字列 4=ダブルクォーテーション文字列
+	LayoutExInfo			layoutExInfoBot;
+	LayoutInt				nLines;					// 全レイアウト行数
 
-	mutable LayoutInt		m_nPrevReferLine;
-	mutable Layout*			m_pLayoutPrevRefer;
+	mutable LayoutInt		nPrevReferLine;
+	mutable Layout*			pLayoutPrevRefer;
 	
 	// EOFカーソル位置を記憶する(_DoLayout/DoLayout_Rangeで無効にする)	//2006.10.01 Moca
-	LayoutInt				m_nEOFLine;		// EOF行数
-	LayoutInt				m_nEOFColumn;	// EOF幅位置
+	LayoutInt				nEOFLine;		// EOF行数
+	LayoutInt				nEOFColumn;	// EOF幅位置
 
 	// テキスト最大幅を記憶（折り返し位置算出に使用）	// 2009.08.28 nasukoji
-	LayoutInt				m_nTextWidth;				// テキスト最大幅の記憶
-	LayoutInt				m_nTextWidthMaxLine;		// 最大幅のレイアウト行
+	LayoutInt				nTextWidth;				// テキスト最大幅の記憶
+	LayoutInt				nTextWidthMaxLine;		// 最大幅のレイアウト行
 
 private:
 	DISALLOW_COPY_AND_ASSIGN(LayoutMgr);

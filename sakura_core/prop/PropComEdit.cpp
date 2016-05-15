@@ -144,7 +144,7 @@ INT_PTR PropEdit::DispatchEvent(
 			return TRUE;
 
 		case PSN_SETACTIVE: //@@@ 2002.01.03 YAZAKI 最後に表示していたシートを正しく覚えていないバグ修正
-			m_nPageNum = ID_PROPCOM_PAGENUM_EDIT;
+			nPageNum = ID_PROPCOM_PAGENUM_EDIT;
 			return TRUE;
 		}
 		break;	// WM_NOTIFY
@@ -175,7 +175,7 @@ INT_PTR PropEdit::DispatchEvent(
 // ダイアログデータの設定
 void PropEdit::SetData(HWND hwndDlg)
 {
-	auto& csEdit = m_common.edit;
+	auto& csEdit = common.edit;
 	// ドラッグ & ドロップ編集
 	::CheckDlgButton(hwndDlg, IDC_CHECK_DRAGDROP, csEdit.bUseOLE_DragDrop);
 	if (DlgButton_IsChecked(hwndDlg, IDC_CHECK_DRAGDROP)) {
@@ -238,7 +238,7 @@ void PropEdit::SetData(HWND hwndDlg)
 // ダイアログデータの取得
 int PropEdit::GetData(HWND hwndDlg)
 {
-	auto& csEdit = m_common.edit;
+	auto& csEdit = common.edit;
 	
 	// ドラッグ & ドロップ編集
 	csEdit.bUseOLE_DragDrop = DlgButton_IsChecked(hwndDlg, IDC_CHECK_DRAGDROP);

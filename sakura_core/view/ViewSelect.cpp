@@ -14,32 +14,32 @@
 
 ViewSelect::ViewSelect(EditView& editView)
 	:
-	m_editView(editView)
+	editView(editView)
 {
-	m_bSelectingLock   = false;	// 選択状態のロック
-	m_bBeginSelect     = false;		// 範囲選択中
-	m_bBeginBoxSelect  = false;	// 矩形範囲選択中
-	m_bBeginLineSelect = false;	// 行単位選択中
-	m_bBeginWordSelect = false;	// 単語単位選択中
+	bSelectingLock   = false;	// 選択状態のロック
+	bBeginSelect     = false;		// 範囲選択中
+	bBeginBoxSelect  = false;	// 矩形範囲選択中
+	bBeginLineSelect = false;	// 行単位選択中
+	bBeginWordSelect = false;	// 単語単位選択中
 
-	m_selectBgn.Clear(-1); // 範囲選択(原点)
-	m_select.Clear(-1); // 範囲選択
-	m_selectOld.Clear(0);  // 範囲選択(Old)
-	m_bSelectAreaChanging = false;	// 選択範囲変更中
-	m_nLastSelectedByteLen = 0;	// 前回選択時の選択バイト数
+	selectBgn.Clear(-1); // 範囲選択(原点)
+	select.Clear(-1); // 範囲選択
+	selectOld.Clear(0);  // 範囲選択(Old)
+	bSelectAreaChanging = false;	// 選択範囲変更中
+	nLastSelectedByteLen = 0;	// 前回選択時の選択バイト数
 }
 
 void ViewSelect::CopySelectStatus(ViewSelect* pSelect) const
 {
-	pSelect->m_bSelectingLock		= m_bSelectingLock;		// 選択状態のロック
-	pSelect->m_bBeginSelect			= m_bBeginSelect;		// 範囲選択中
-	pSelect->m_bBeginBoxSelect		= m_bBeginBoxSelect;	// 矩形範囲選択中
+	pSelect->bSelectingLock		= bSelectingLock;		// 選択状態のロック
+	pSelect->bBeginSelect		= bBeginSelect;		// 範囲選択中
+	pSelect->bBeginBoxSelect	= bBeginBoxSelect;	// 矩形範囲選択中
 
-	pSelect->m_selectBgn			= m_selectBgn;			// 範囲選択(原点)
-	pSelect->m_select				= m_select;				// 範囲選択
-	pSelect->m_selectOld			= m_selectOld;			// 範囲選択
+	pSelect->selectBgn			= selectBgn;			// 範囲選択(原点)
+	pSelect->select			= select;				// 範囲選択
+	pSelect->selectOld		= selectOld;			// 範囲選択
 
-	pSelect->m_ptMouseRollPosOld	= m_ptMouseRollPosOld;	// マウス範囲選択前回位置(XY座標)
+	pSelect->ptMouseRollPosOld	= ptMouseRollPosOld;	// マウス範囲選択前回位置(XY座標)
 }
 
 // 現在のカーソル位置から選択を開始する
@@ -51,8 +51,8 @@ void ViewSelect::BeginSelectArea(const LayoutPoint* po)
 		temp = view.GetCaret().GetCaretLayoutPos();
 		po = &temp;
 	}
-	m_selectBgn.Set(*po); // 範囲選択(原点)
-	m_select.   Set(*po); // 範囲選択
+	selectBgn.Set(*po); // 範囲選択(原点)
+	select.   Set(*po); // 範囲選択
 }
 
 
@@ -62,23 +62,23 @@ void ViewSelect::DisableSelectArea(bool bDraw, bool bDrawBracketCursorLine)
 	const EditView& view = GetEditView();
 	EditView& view2 = GetEditView();
 
-	m_selectOld = m_select;		// 範囲選択(Old)
-	m_select.Clear(-1);
-	m_bSelectingLock	 = false;	// 選択状態のロック
+	selectOld = select;		// 範囲選択(Old)
+	select.Clear(-1);
+	bSelectingLock	 = false;	// 選択状態のロック
 
 	if (bDraw) {
 		DrawSelectArea(bDrawBracketCursorLine);
 	}
-	m_bDrawSelectArea = false;	// 02/12/13 ai // 2011.12.24 bDraw括弧内から移動
+	bDrawSelectArea = false;	// 02/12/13 ai // 2011.12.24 bDraw括弧内から移動
 
-	m_selectOld.Clear(0);			// 範囲選択(Old)
-	m_bBeginBoxSelect = false;		// 矩形範囲選択中
-	m_bBeginLineSelect = false;		// 行単位選択中
-	m_bBeginWordSelect = false;		// 単語単位選択中
-	m_nLastSelectedByteLen = 0;		// 前回選択時の選択バイト数
+	selectOld.Clear(0);			// 範囲選択(Old)
+	bBeginBoxSelect = false;		// 矩形範囲選択中
+	bBeginLineSelect = false;		// 行単位選択中
+	bBeginWordSelect = false;		// 単語単位選択中
+	nLastSelectedByteLen = 0;		// 前回選択時の選択バイト数
 
 	// 2002.02.16 hor 直前のカーソル位置をリセット
-	view2.GetCaret().m_nCaretPosX_Prev = view.GetCaret().GetCaretLayoutPos().GetX();
+	view2.GetCaret().nCaretPosX_Prev = view.GetCaret().GetCaretLayoutPos().GetX();
 
 }
 
@@ -86,18 +86,18 @@ void ViewSelect::DisableSelectArea(bool bDraw, bool bDrawBracketCursorLine)
 // 現在のカーソル位置によって選択範囲を変更
 void ViewSelect::ChangeSelectAreaByCurrentCursor(const LayoutPoint& ptCaretPos)
 {
-	m_selectOld = m_select; // 範囲選択(Old)
+	selectOld = select; // 範囲選択(Old)
 
 	//	2002/04/08 YAZAKI コードの重複を排除
 	ChangeSelectAreaByCurrentCursorTEST(
 		ptCaretPos,
-		&m_select
+		&select
 	);
 
 	// 選択領域の描画
-	m_bSelectAreaChanging = true;
+	bSelectAreaChanging = true;
 	DrawSelectArea(true);
-	m_bSelectAreaChanging = false;
+	bSelectAreaChanging = false;
 }
 
 
@@ -107,36 +107,36 @@ void ViewSelect::ChangeSelectAreaByCurrentCursorTEST(
 	LayoutRange* pSelect
 )
 {
-	if (m_selectBgn.GetFrom() == m_selectBgn.GetTo()) {
-		if (ptCaretPos == m_selectBgn.GetFrom()) {
+	if (selectBgn.GetFrom() == selectBgn.GetTo()) {
+		if (ptCaretPos == selectBgn.GetFrom()) {
 			// 選択解除
 			pSelect->Clear(-1);
-			m_nLastSelectedByteLen = 0;		// 前回選択時の選択バイト数
-		}else if (PointCompare(ptCaretPos, m_selectBgn.GetFrom()) < 0) { // キャレット位置がm_sSelectBgnのfromより小さかったら
+			nLastSelectedByteLen = 0;		// 前回選択時の選択バイト数
+		}else if (PointCompare(ptCaretPos, selectBgn.GetFrom()) < 0) { // キャレット位置がsSelectBgnのfromより小さかったら
 			 pSelect->SetFrom(ptCaretPos);
-			 pSelect->SetTo(m_selectBgn.GetFrom());
+			 pSelect->SetTo(selectBgn.GetFrom());
 		}else {
-			pSelect->SetFrom(m_selectBgn.GetFrom());
+			pSelect->SetFrom(selectBgn.GetFrom());
 			pSelect->SetTo(ptCaretPos);
 		}
 	}else {
 		// 常時選択範囲の範囲内
-		// キャレット位置が m_sSelectBgn の from以上で、toより小さい場合
-		if (PointCompare(ptCaretPos, m_selectBgn.GetFrom()) >= 0 && PointCompare(ptCaretPos, m_selectBgn.GetTo()) < 0) {
-			pSelect->SetFrom(m_selectBgn.GetFrom());
-			if (ptCaretPos == m_selectBgn.GetFrom()) {
-				pSelect->SetTo(m_selectBgn.GetTo());
+		// キャレット位置が sSelectBgn の from以上で、toより小さい場合
+		if (PointCompare(ptCaretPos, selectBgn.GetFrom()) >= 0 && PointCompare(ptCaretPos, selectBgn.GetTo()) < 0) {
+			pSelect->SetFrom(selectBgn.GetFrom());
+			if (ptCaretPos == selectBgn.GetFrom()) {
+				pSelect->SetTo(selectBgn.GetTo());
 			}else {
 				pSelect->SetTo(ptCaretPos);
 			}
-		// キャレット位置がm_sSelectBgnのfromより小さかったら
-		}else if (PointCompare(ptCaretPos, m_selectBgn.GetFrom()) < 0) {
+		// キャレット位置がsSelectBgnのfromより小さかったら
+		}else if (PointCompare(ptCaretPos, selectBgn.GetFrom()) < 0) {
 			// 常時選択範囲の前方向
 			pSelect->SetFrom(ptCaretPos);
-			pSelect->SetTo(m_selectBgn.GetTo());
+			pSelect->SetTo(selectBgn.GetTo());
 		}else {
 			// 常時選択範囲の後ろ方向
-			pSelect->SetFrom(m_selectBgn.GetFrom());
+			pSelect->SetFrom(selectBgn.GetFrom());
 			pSelect->SetTo(ptCaretPos);
 		}
 	}
@@ -156,46 +156,46 @@ void ViewSelect::DrawSelectArea(bool bDrawBracketCursorLine)
 	if (!view.GetDrawSwitch()) {
 		return;
 	}
-	m_bDrawSelectArea = true;
+	bDrawSelectArea = true;
 	
 	bool bDispText = TypeSupport(view, COLORIDX_SELECT).IsDisp();
 	if (bDispText) {
-		if (m_select != m_selectOld) {
+		if (select != selectOld) {
 			// 選択色表示の時は、WM_PAINT経由で作画
 			const int nCharWidth = view.GetTextMetrics().GetHankakuDx();
 			const TextArea& area =  view.GetTextArea();
 			LayoutRect rcOld; // LayoutRect
-			TwoPointToRect(&rcOld, m_selectOld.GetFrom(), m_selectOld.GetTo());
+			TwoPointToRect(&rcOld, selectOld.GetFrom(), selectOld.GetTo());
 			LayoutRect rcNew; // LayoutRect
-			TwoPointToRect(&rcNew, m_select.GetFrom(), m_select.GetTo());
+			TwoPointToRect(&rcNew, select.GetFrom(), select.GetTo());
 			LayoutRect rc; // LayoutRect ただしtop,bottomだけ使う
 			LayoutInt drawLeft = LayoutInt(0);
 			LayoutInt drawRight = LayoutInt(-1);
-			if (!m_select.IsValid()) {
+			if (!select.IsValid()) {
 				rc.top    = rcOld.top;
 				rc.bottom = rcOld.bottom;
-			}else if (!m_selectOld.IsValid()) {
+			}else if (!selectOld.IsValid()) {
 				rc.top    = rcNew.top;
 				rc.bottom = rcNew.bottom;
 			}else if (1
 				&& IsBoxSelecting()
 				&& (
-					m_select.GetTo().x != m_selectOld.GetTo().x
-					|| m_select.GetFrom().x != m_selectOld.GetFrom().x
+					select.GetTo().x != selectOld.GetTo().x
+					|| select.GetFrom().x != selectOld.GetFrom().x
 				)
 			) {
 				rc.UnionStrictRect(rcOld, rcNew);
 			}else if (!IsBoxSelecting() && rcOld.top == rcNew.top && rcOld.bottom == rcNew.bottom) {
-				if (m_select.GetFrom() == m_selectOld.GetFrom() && m_select.GetTo().x != m_selectOld.GetTo().x) {
+				if (select.GetFrom() == selectOld.GetFrom() && select.GetTo().x != selectOld.GetTo().x) {
 					// GetToの行が対象
-					rc.top = rc.bottom = m_select.GetTo().GetY2();
-					drawLeft  = t_min(m_select.GetTo().x, m_selectOld.GetTo().x);
-					drawRight = t_max(m_select.GetTo().x, m_selectOld.GetTo().x) + 1;
-				}else if (m_select.GetTo() == m_selectOld.GetTo() && m_select.GetFrom().x != m_selectOld.GetFrom().x) {
+					rc.top = rc.bottom = select.GetTo().GetY2();
+					drawLeft  = t_min(select.GetTo().x, selectOld.GetTo().x);
+					drawRight = t_max(select.GetTo().x, selectOld.GetTo().x) + 1;
+				}else if (select.GetTo() == selectOld.GetTo() && select.GetFrom().x != selectOld.GetFrom().x) {
 					// GetFromの行が対象
-					rc.top = rc.bottom = m_select.GetFrom().GetY2();
-					drawLeft  = t_min(m_selectOld.GetFrom().x, m_select.GetFrom().x);
-					drawRight = t_max(m_selectOld.GetFrom().x, m_select.GetFrom().x) + 1;
+					rc.top = rc.bottom = select.GetFrom().GetY2();
+					drawLeft  = t_min(selectOld.GetFrom().x, select.GetFrom().x);
+					drawRight = t_max(selectOld.GetFrom().x, select.GetFrom().x) + 1;
 				}else {
 					rc.UnionStrictRect(rcOld, rcNew);
 				}
@@ -228,28 +228,28 @@ void ViewSelect::DrawSelectArea(bool bDrawBracketCursorLine)
 				PAINTSTRUCT ps;
 				ps.rcPaint = rcUpdate;
 				// DrawSelectAreaLineでの下線OFFの代わり
-				view.GetCaret().m_underLine.CaretUnderLineOFF(true, false);
-				view.GetCaret().m_underLine.Lock();
+				view.GetCaret().underLine.CaretUnderLineOFF(true, false);
+				view.GetCaret().underLine.Lock();
 				view.OnPaint(hdc, &ps, false);
-				view.GetCaret().m_underLine.UnLock();
+				view.GetCaret().underLine.UnLock();
 				view.ReleaseDC(hdc);
 			}
 			// 2010.10.10 0幅選択(解除)状態での、カーソル位置ライン復帰(リージョン外)
 			if (bDrawBracketCursorLine) {
-				view.GetCaret().m_underLine.CaretUnderLineON(true, false);
+				view.GetCaret().underLine.CaretUnderLineON(true, false);
 			}
 		}
 	}else {
-		if (IsTextSelecting() && (!m_selectOld.IsValid() || m_selectOld.IsOne())) {
-			m_bDrawSelectArea = false;
+		if (IsTextSelecting() && (!selectOld.IsValid() || selectOld.IsOne())) {
+			bDrawSelectArea = false;
 			view.DrawBracketPair( false );
-			m_bDrawSelectArea = true;
+			bDrawSelectArea = true;
 		}
 		HDC hdc = view.GetDC();
 		DrawSelectArea2(hdc);
 		// 2011.12.02 選択解除状態での、カーソル位置ライン復帰
 		if (bDrawBracketCursorLine) {
-			view.GetCaret().m_underLine.CaretUnderLineON(true, false);
+			view.GetCaret().underLine.CaretUnderLineON(true, false);
 		}
 		view.ReleaseDC(hdc);
 	}
@@ -257,7 +257,7 @@ void ViewSelect::DrawSelectArea(bool bDrawBracketCursorLine)
 	// 2011.12.02 選択解除状態になると対括弧強調ができなくなるバグ対策
 	if (!IsTextSelecting()) {
 		// ただし選択ロック中はここでは強調表示されない
-		m_bDrawSelectArea = false;
+		bDrawSelectArea = false;
 		if (bDrawBracketCursorLine) {
 			view.SetBracketPairPos(true);
 			view.DrawBracketPair(true);
@@ -282,22 +282,22 @@ void ViewSelect::DrawSelectArea2(HDC hdc) const
 	// From Here 2007.09.09 Moca 互換BMPによる画面バッファ
 	HBRUSH	hBrushCompatOld = 0;
 	int		nROPCompatOld = 0;
-	bool bCompatBMP = view.m_hbmpCompatBMP && hdc != view.m_hdcCompatDC;
+	bool bCompatBMP = view.hbmpCompatBMP && hdc != view.hdcCompatDC;
 	if (bCompatBMP) {
-		hBrushCompatOld = (HBRUSH)::SelectObject(view.m_hdcCompatDC, hBrush);
-		nROPCompatOld = ::SetROP2(view.m_hdcCompatDC, SELECTEDAREA_ROP2);
+		hBrushCompatOld = (HBRUSH)::SelectObject(view.hdcCompatDC, hBrush);
+		nROPCompatOld = ::SetROP2(view.hdcCompatDC, SELECTEDAREA_ROP2);
 	}
 	// To Here 2007.09.09 Moca
 
-//	MYTRACE(_T("DrawSelectArea()  m_bBeginBoxSelect=%hs\n", m_bBeginBoxSelect?"true":"false"));
+//	MYTRACE(_T("DrawSelectArea()  bBeginBoxSelect=%hs\n", bBeginBoxSelect?"true":"false"));
 	auto& textArea = view.GetTextArea();
 	if (IsBoxSelecting()) {		// 矩形範囲選択中
 		// 2001.12.21 hor 矩形エリアにEOFがある場合、RGN_XORで結合すると
 		// EOF以降のエリアも反転してしまうので、この場合はRedrawを使う
 		// 2002.02.16 hor ちらつきを抑止するためEOF以降のエリアが反転したらもう一度反転して元に戻すことにする
-		//if ((GetTextArea().GetViewTopLine()+m_nViewRowNum+1 >= m_pEditDoc->m_layoutMgr.GetLineCount()) &&
-		//   (m_select.GetTo().y+1 >= m_pEditDoc->m_layoutMgr.GetLineCount() ||
-		//	m_selectOld.GetTo().y+1 >= m_pEditDoc->m_layoutMgr.GetLineCount())) {
+		//if ((GetTextArea().GetViewTopLine()+nViewRowNum+1 >= pEditDoc->layoutMgr.GetLineCount()) &&
+		//   (select.GetTo().y+1 >= pEditDoc->layoutMgr.GetLineCount() ||
+		//	selectOld.GetTo().y+1 >= pEditDoc->layoutMgr.GetLineCount())) {
 		//	Redraw();
 		//	return;
 		//}
@@ -309,8 +309,8 @@ void ViewSelect::DrawSelectArea2(HDC hdc) const
 		LayoutRect  rcOld;
 		TwoPointToRect(
 			&rcOld,
-			m_selectOld.GetFrom(),	// 範囲選択開始
-			m_selectOld.GetTo()	// 範囲選択終了
+			selectOld.GetFrom(),	// 範囲選択開始
+			selectOld.GetTo()	// 範囲選択終了
 		);
 		rcOld.left   = t_max(rcOld.left  , textArea.GetViewLeftCol() );
 		rcOld.right  = t_max(rcOld.right , textArea.GetViewLeftCol() );
@@ -330,8 +330,8 @@ void ViewSelect::DrawSelectArea2(HDC hdc) const
 		LayoutRect  rcNew;
 		TwoPointToRect(
 			&rcNew,
-			m_select.GetFrom(),	// 範囲選択開始
-			m_select.GetTo()		// 範囲選択終了
+			select.GetFrom(),	// 範囲選択開始
+			select.GetTo()		// 範囲選択終了
 		);
 		rcNew.left   = t_max(rcNew.left  , textArea.GetViewLeftCol());
 		rcNew.right  = t_max(rcNew.right , textArea.GetViewLeftCol());
@@ -362,19 +362,19 @@ void ViewSelect::DrawSelectArea2(HDC hdc) const
 
 				// 2006.10.01 Moca Start EOF位置計算をGetEndLayoutPosに書き換え。
 				LayoutPoint ptLast;
-				view.m_pEditDoc->m_layoutMgr.GetEndLayoutPos(&ptLast);
+				view.pEditDoc->layoutMgr.GetEndLayoutPos(&ptLast);
 				// 2006.10.01 Moca End
 				// 2011.12.26 EOFのぶら下がり行は反転し、EOFのみの行は反転しない
-				const Layout* pBottom = view.m_pEditDoc->m_layoutMgr.GetBottomLayout();
+				const Layout* pBottom = view.pEditDoc->layoutMgr.GetBottomLayout();
 				if (pBottom && pBottom->GetLayoutEol() == EolType::None) {
 					ptLast.x = 0;
 					ptLast.y++;
 				}
 				if (0
-					|| m_select.GetFrom().y >= ptLast.y
-					|| m_select.GetTo().y >= ptLast.y
-					|| m_selectOld.GetFrom().y >= ptLast.y
-					|| m_selectOld.GetTo().y >= ptLast.y
+					|| select.GetFrom().y >= ptLast.y
+					|| select.GetTo().y >= ptLast.y
+					|| selectOld.GetFrom().y >= ptLast.y
+					|| selectOld.GetTo().y >= ptLast.y
 				) {
 					//	Jan. 24, 2004 genta nLastLenは物理桁なので変換必要
 					//	最終行にTABが入っていると反転範囲が不足する．
@@ -393,7 +393,7 @@ void ViewSelect::DrawSelectArea2(HDC hdc) const
 				::PaintRgn(hdc, hrgnDraw);
 				// From Here 2007.09.09 Moca 互換BMPによる画面バッファ
 				if (bCompatBMP) {
-					::PaintRgn(view.m_hdcCompatDC, hrgnDraw);
+					::PaintRgn(view.hdcCompatDC, hrgnDraw);
 				}
 				// To Here 2007.09.09 Moca
 			}
@@ -418,28 +418,28 @@ void ViewSelect::DrawSelectArea2(HDC hdc) const
 		LayoutInt nLineNum;
 
 		// 現在描画されている範囲と始点が同じ
-		if (m_select.GetFrom() == m_selectOld.GetFrom()) {
+		if (select.GetFrom() == selectOld.GetFrom()) {
 			// 範囲が後方に拡大された
-			if (PointCompare(m_select.GetTo(), m_selectOld.GetTo()) > 0) {
-				rangeA.SetFrom(m_selectOld.GetTo());
-				rangeA.SetTo  (m_select.GetTo());
+			if (PointCompare(select.GetTo(), selectOld.GetTo()) > 0) {
+				rangeA.SetFrom(selectOld.GetTo());
+				rangeA.SetTo  (select.GetTo());
 			}else {
-				rangeA.SetFrom(m_select.GetTo());
-				rangeA.SetTo  (m_selectOld.GetTo());
+				rangeA.SetFrom(select.GetTo());
+				rangeA.SetTo  (selectOld.GetTo());
 			}
 			for (nLineNum=rangeA.GetFrom().GetY2(); nLineNum<=rangeA.GetTo().GetY2(); ++nLineNum) {
 				if (nLineNum >= textArea.GetViewTopLine() && nLineNum <= textArea.GetBottomLine() + 1) {
 					DrawSelectAreaLine(	hdc, nLineNum, rangeA);
 				}
 			}
-		}else if (m_select.GetTo() == m_selectOld.GetTo()) {
+		}else if (select.GetTo() == selectOld.GetTo()) {
 			// 範囲が前方に拡大された
-			if (PointCompare(m_select.GetFrom(), m_selectOld.GetFrom()) < 0) {
-				rangeA.SetFrom(m_select.GetFrom());
-				rangeA.SetTo  (m_selectOld.GetFrom());
+			if (PointCompare(select.GetFrom(), selectOld.GetFrom()) < 0) {
+				rangeA.SetFrom(select.GetFrom());
+				rangeA.SetTo  (selectOld.GetFrom());
 			}else {
-				rangeA.SetFrom(m_selectOld.GetFrom());
-				rangeA.SetTo  (m_select.GetFrom());
+				rangeA.SetFrom(selectOld.GetFrom());
+				rangeA.SetTo  (select.GetFrom());
 			}
 			for (nLineNum=rangeA.GetFrom().GetY2(); nLineNum<=rangeA.GetTo().GetY2(); ++nLineNum) {
 				if (nLineNum >= textArea.GetViewTopLine() && nLineNum <= textArea.GetBottomLine() + 1) {
@@ -447,13 +447,13 @@ void ViewSelect::DrawSelectArea2(HDC hdc) const
 				}
 			}
 		}else {
-			rangeA = m_selectOld;
+			rangeA = selectOld;
 			for (nLineNum=rangeA.GetFrom().GetY2(); nLineNum<=rangeA.GetTo().GetY2(); ++nLineNum) {
 				if (nLineNum >= textArea.GetViewTopLine() && nLineNum <= textArea.GetBottomLine() + 1) {
 					DrawSelectAreaLine(hdc, nLineNum, rangeA);
 				}
 			}
-			rangeA = m_select;
+			rangeA = select;
 			for (nLineNum=rangeA.GetFrom().GetY2(); nLineNum<=rangeA.GetTo().GetY2(); ++nLineNum) {
 				if (nLineNum >= textArea.GetViewTopLine() && nLineNum <= textArea.GetBottomLine() + 1) {
 					DrawSelectAreaLine(hdc, nLineNum, rangeA);
@@ -464,8 +464,8 @@ void ViewSelect::DrawSelectArea2(HDC hdc) const
 
 	// From Here 2007.09.09 Moca 互換BMPによる画面バッファ
 	if (bCompatBMP) {
-		::SetROP2(view.m_hdcCompatDC, nROPCompatOld);
-		::SelectObject(view.m_hdcCompatDC, hBrushCompatOld);
+		::SetROP2(view.hdcCompatDC, nROPCompatOld);
+		::SelectObject(view.hdcCompatDC, hBrushCompatOld);
 	}
 	// To Here 2007.09.09 Moca
 
@@ -489,10 +489,10 @@ void ViewSelect::DrawSelectAreaLine(
 	const LayoutRange&	range		// [in] 選択範囲(レイアウト単位)
 	) const
 {
-	auto& view = m_editView;
-	bool bCompatBMP = view.m_hbmpCompatBMP && hdc != view.m_hdcCompatDC;
+	auto& view = editView;
+	bool bCompatBMP = view.hbmpCompatBMP && hdc != view.hdcCompatDC;
 
-	auto& layoutMgr = view.m_pEditDoc->m_layoutMgr;
+	auto& layoutMgr = view.pEditDoc->layoutMgr;
 	const Layout* pLayout = layoutMgr.SearchLineByLayoutY(nLineNum);
 	LayoutRange lineArea;
 	GetSelectAreaLineFromRange(lineArea, nLineNum, pLayout, range);
@@ -541,10 +541,10 @@ void ViewSelect::DrawSelectAreaLine(
 	}
 	//	必要なときだけ。
 	if (rcClip.right != rcClip.left) {
-		LayoutRange selectOld = m_select;
-		const_cast<LayoutRange*>(&m_select)->Clear(-1);
-		view.GetCaret().m_underLine.CaretUnderLineOFF(true, false, true);
-		*(const_cast<LayoutRange*>(&m_select)) = selectOld;
+		LayoutRange selectOld = select;
+		const_cast<LayoutRange*>(&select)->Clear(-1);
+		view.GetCaret().underLine.CaretUnderLineOFF(true, false, true);
+		*(const_cast<LayoutRange*>(&select)) = selectOld;
 		
 		// 2006.03.28 Moca 表示域内のみ処理する
 		if (nSelectFrom <= textArea.GetRightCol() && textArea.GetViewLeftCol() < nSelectTo) {
@@ -552,7 +552,7 @@ void ViewSelect::DrawSelectAreaLine(
 			::PaintRgn(hdc, hrgnDraw);
 			// From Here 2007.09.09 Moca 互換BMPによる画面バッファ
 			if (bCompatBMP) {
-				::PaintRgn(view.m_hdcCompatDC, hrgnDraw);
+				::PaintRgn(view.hdcCompatDC, hrgnDraw);
 			}
 			// To Here 2007.09.09 Moca
 			::DeleteObject(hrgnDraw);
@@ -578,7 +578,7 @@ void ViewSelect::GetSelectAreaLineFromRange(
 			nSelectTo   = range.GetTo().GetX2();
 			// 2006.09.30 Moca From 矩形選択時[EOF]とその右側は反転しないように修正。処理を追加
 			// 2011.12.26 [EOF]単独行以外なら反転する
-			if (view.m_pEditDoc->m_layoutMgr.GetLineCount() <= nLineNum) {
+			if (view.pEditDoc->layoutMgr.GetLineCount() <= nLineNum) {
 				nSelectFrom = -1;
 				nSelectTo = -1;
 			}
@@ -626,18 +626,18 @@ void ViewSelect::PrintSelectionInfoMsg() const
 	auto& view = GetEditView();
 
 	//	出力されないなら計算を省略
-	if (!view.m_editWnd.m_statusBar.SendStatusMessage2IsEffective())
+	if (!view.editWnd.statusBar.SendStatusMessage2IsEffective())
 		return;
 
-	LayoutInt nLineCount = view.m_pEditDoc->m_layoutMgr.GetLineCount();
-	if (!IsTextSelected() || m_select.GetFrom().y >= nLineCount) { // 先頭行が実在しない
-		const_cast<EditView&>(view).GetCaret().m_bClearStatus = false;
+	LayoutInt nLineCount = view.pEditDoc->layoutMgr.GetLineCount();
+	if (!IsTextSelected() || select.GetFrom().y >= nLineCount) { // 先頭行が実在しない
+		const_cast<EditView&>(view).GetCaret().bClearStatus = false;
 		if (IsBoxSelecting()) {
-			view.m_editWnd.m_statusBar.SendStatusMessage2(_T("box selecting"));
-		}else if (m_bSelectingLock) {
-			view.m_editWnd.m_statusBar.SendStatusMessage2(_T("selecting"));
+			view.editWnd.statusBar.SendStatusMessage2(_T("box selecting"));
+		}else if (bSelectingLock) {
+			view.editWnd.statusBar.SendStatusMessage2(_T("selecting"));
 		}else {
-			view.m_editWnd.m_statusBar.SendStatusMessage2(_T(""));
+			view.editWnd.statusBar.SendStatusMessage2(_T(""));
 		}
 		return;
 	}
@@ -646,16 +646,16 @@ void ViewSelect::PrintSelectionInfoMsg() const
 	//	From here 2006.06.06 ryoji 選択範囲の行が実在しない場合の対策
 
 	LayoutInt select_line;
-	if (m_select.GetTo().y >= nLineCount) {	// 最終行が実在しない
-		select_line = nLineCount - m_select.GetFrom().y + 1;
+	if (select.GetTo().y >= nLineCount) {	// 最終行が実在しない
+		select_line = nLineCount - select.GetFrom().y + 1;
 	}else {
-		select_line = m_select.GetTo().y - m_select.GetFrom().y + 1;
+		select_line = select.GetTo().y - select.GetFrom().y + 1;
 	}
 	
 	//	To here 2006.06.06 ryoji 選択範囲の行が実在しない場合の対策
 	if (IsBoxSelecting()) {
 		//	矩形の場合は幅と高さだけでごまかす
-		LayoutInt select_col = m_select.GetFrom().x - m_select.GetTo().x;
+		LayoutInt select_col = select.GetFrom().x - select.GetTo().x;
 		if (select_col < 0) {
 			select_col = -select_col;
 		}
@@ -672,12 +672,12 @@ void ViewSelect::PrintSelectionInfoMsg() const
 
 		// 共通設定・選択文字数を文字単位ではなくバイト単位で表示する
 		bool bCountByByteCommon = GetDllShareData().common.statusBar.bDispSelCountByByte;
-		bool bCountByByte = (view.m_editWnd.m_nSelectCountMode == SelectCountMode::Toggle ?
+		bool bCountByByte = (view.editWnd.nSelectCountMode == SelectCountMode::Toggle ?
 								bCountByByteCommon :
-								view.m_editWnd.m_nSelectCountMode == SelectCountMode::ByByte);
+								view.editWnd.nSelectCountMode == SelectCountMode::ByByte);
 
 		//	1行目
-		pLine = view.m_pEditDoc->m_layoutMgr.GetLineStr(m_select.GetFrom().GetY2(), &nLineLen, &pLayout);
+		pLine = view.pEditDoc->layoutMgr.GetLineStr(select.GetFrom().GetY2(), &nLineLen, &pLayout);
 		if (pLine) {
 			if (bCountByByte) {
 				//  バイト数でカウント
@@ -687,15 +687,15 @@ void ViewSelect::PrintSelectionInfoMsg() const
 				NativeW memW;
 				Memory memCode;
 
-				// 増減分文字列の取得にEditView::GetSelectedDataを使いたいが、m_select限定のため、
-				// 呼び出し前にm_selectを書き換える。呼出し後に元に戻すので、constと言えないこともない。
-				LayoutRange rngSelect = m_select;		// 選択領域の退避
+				// 増減分文字列の取得にEditView::GetSelectedDataを使いたいが、select限定のため、
+				// 呼び出し前にselectを書き換える。呼出し後に元に戻すので、constと言えないこともない。
+				LayoutRange rngSelect = select;		// 選択領域の退避
 				bool bSelExtend;						// 選択領域拡大フラグ
 
 				// 最終行の処理
-				pLine = view.m_pEditDoc->m_layoutMgr.GetLineStr(m_select.GetTo().y, &nLineLen, &pLayout);
+				pLine = view.pEditDoc->layoutMgr.GetLineStr(select.GetTo().y, &nLineLen, &pLayout);
 				if (pLine) {
-					if (view.LineColumnToIndex(pLayout, m_select.GetTo().GetX2()) == 0) {
+					if (view.LineColumnToIndex(pLayout, select.GetTo().GetX2()) == 0) {
 						//	最終行の先頭にキャレットがある場合は
 						//	その行を行数に含めない
 						--select_line;
@@ -706,81 +706,81 @@ void ViewSelect::PrintSelectionInfoMsg() const
 					--select_line;
 				}
 
-				// 2009.07.07 syat m_nLastSelectedByteLenが0の場合は、差分ではなく全体を変換する（モード切替時にキャッシュクリアするため）
+				// 2009.07.07 syat nLastSelectedByteLenが0の場合は、差分ではなく全体を変換する（モード切替時にキャッシュクリアするため）
 
-				if (m_bSelectAreaChanging && m_nLastSelectedByteLen && m_select.GetFrom() == m_selectOld.GetFrom()) {
+				if (bSelectAreaChanging && nLastSelectedByteLen && select.GetFrom() == selectOld.GetFrom()) {
 					// 範囲が後方に拡大された
-					if (PointCompare(m_select.GetTo(), m_selectOld.GetTo()) < 0) {
+					if (PointCompare(select.GetTo(), selectOld.GetTo()) < 0) {
 						bSelExtend = false;				// 縮小
-						thiz->m_select = LayoutRange(m_select.GetTo(), m_selectOld.GetTo());
+						thiz->select = LayoutRange(select.GetTo(), selectOld.GetTo());
 					}else {
 						bSelExtend = true;				// 拡大
-						thiz->m_select = LayoutRange(m_selectOld.GetTo(), m_select.GetTo());
+						thiz->select = LayoutRange(selectOld.GetTo(), select.GetTo());
 					}
 
 					const_cast<EditView&>(view).GetSelectedDataSimple(memW);
-					thiz->m_select = rngSelect;		// m_selectを元に戻す
+					thiz->select = rngSelect;		// selectを元に戻す
 				}else if (
-					m_bSelectAreaChanging
-					&& m_nLastSelectedByteLen
-					&& m_select.GetTo() == m_selectOld.GetTo()
+					bSelectAreaChanging
+					&& nLastSelectedByteLen
+					&& select.GetTo() == selectOld.GetTo()
 				) {
 					// 範囲が前方に拡大された
-					if (PointCompare(m_select.GetFrom(), m_selectOld.GetFrom()) < 0) {
+					if (PointCompare(select.GetFrom(), selectOld.GetFrom()) < 0) {
 						bSelExtend = true;				// 拡大
-						thiz->m_select = LayoutRange(m_select.GetFrom(), m_selectOld.GetFrom());
+						thiz->select = LayoutRange(select.GetFrom(), selectOld.GetFrom());
 					}else {
 						bSelExtend = false;				// 縮小
-						thiz->m_select = LayoutRange(m_selectOld.GetFrom(), m_select.GetFrom());
+						thiz->select = LayoutRange(selectOld.GetFrom(), select.GetFrom());
 					}
 
 					const_cast<EditView&>(view).GetSelectedDataSimple(memW);
-					thiz->m_select = rngSelect;		// m_selectを元に戻す
+					thiz->select = rngSelect;		// selectを元に戻す
 				}else {
 					// 選択領域全体をコード変換対象にする
 					const_cast<EditView&>(view).GetSelectedDataSimple(memW);
 					bSelExtend = true;
-					thiz->m_nLastSelectedByteLen = 0;
+					thiz->nLastSelectedByteLen = 0;
 				}
 				//  現在の文字コードに変換し、バイト長を取得する
-				CodeBase* pCode = CodeFactory::CreateCodeBase(view.m_pEditDoc->GetDocumentEncoding(), false);
+				CodeBase* pCode = CodeFactory::CreateCodeBase(view.pEditDoc->GetDocumentEncoding(), false);
 				pCode->UnicodeToCode(memW, &memCode);
 				delete pCode;
 
 				if (bSelExtend) {
-					select_sum = m_nLastSelectedByteLen + memCode.GetRawLength();
+					select_sum = nLastSelectedByteLen + memCode.GetRawLength();
 				}else {
-					select_sum = m_nLastSelectedByteLen - memCode.GetRawLength();
+					select_sum = nLastSelectedByteLen - memCode.GetRawLength();
 				}
-				thiz->m_nLastSelectedByteLen = select_sum;
+				thiz->nLastSelectedByteLen = select_sum;
 
 			}else {
 				//  文字数でカウント
 
 				// 2009.07.07 syat カウント方法を切り替えながら選択範囲を拡大・縮小すると整合性が
 				//                とれなくなるため、モード切替時にキャッシュをクリアする。
-				thiz->m_nLastSelectedByteLen = 0;
+				thiz->nLastSelectedByteLen = 0;
 
 				//	1行だけ選択されている場合
-				if (m_select.IsLineOne()) {
+				if (select.IsLineOne()) {
 					select_sum =
-						view.LineColumnToIndex(pLayout, m_select.GetTo().GetX2())
-						- view.LineColumnToIndex(pLayout, m_select.GetFrom().GetX2());
+						view.LineColumnToIndex(pLayout, select.GetTo().GetX2())
+						- view.LineColumnToIndex(pLayout, select.GetFrom().GetX2());
 				}else {	//	2行以上選択されている場合
 					select_sum =
 						pLayout->GetLengthWithoutEOL()
 						+ pLayout->GetLayoutEol().GetLen()
-						- view.LineColumnToIndex(pLayout, m_select.GetFrom().GetX2());
+						- view.LineColumnToIndex(pLayout, select.GetFrom().GetX2());
 
 					//	GetSelectedDataと似ているが，先頭行と最終行は排除している
 					//	Aug. 16, 2005 aroka nLineNumはfor以降でも使われるのでforの前で宣言する
 					//	VC .NET以降でもMicrosoft拡張を有効にした標準動作はVC6と同じことに注意
 					LayoutInt nLineNum;
-					for (nLineNum = m_select.GetFrom().GetY2() + LayoutInt(1);
-						nLineNum < m_select.GetTo().GetY2();
+					for (nLineNum = select.GetFrom().GetY2() + LayoutInt(1);
+						nLineNum < select.GetTo().GetY2();
 						++nLineNum
 					) {
-						pLine = view.m_pEditDoc->m_layoutMgr.GetLineStr(nLineNum, &nLineLen, &pLayout);
+						pLine = view.pEditDoc->layoutMgr.GetLineStr(nLineNum, &nLineLen, &pLayout);
 						//	2006.06.06 ryoji 指定行のデータが存在しない場合の対策
 						if (!pLine)
 							break;
@@ -788,9 +788,9 @@ void ViewSelect::PrintSelectionInfoMsg() const
 					}
 
 					//	最終行の処理
-					pLine = view.m_pEditDoc->m_layoutMgr.GetLineStr(nLineNum, &nLineLen, &pLayout);
+					pLine = view.pEditDoc->layoutMgr.GetLineStr(nLineNum, &nLineLen, &pLayout);
 					if (pLine) {
-						int last_line_chars = view.LineColumnToIndex(pLayout, m_select.GetTo().GetX2());
+						int last_line_chars = view.LineColumnToIndex(pLayout, select.GetTo().GetX2());
 						select_sum += last_line_chars;
 						if (last_line_chars == 0) {
 							//	最終行の先頭にキャレットがある場合は
@@ -812,8 +812,8 @@ void ViewSelect::PrintSelectionInfoMsg() const
 			select_sum,
 			(bCountByByte ? _T("bytes") : _T("chars")),
 			select_line,
-			m_select.GetFrom().x, m_select.GetFrom().y,
-			m_select.GetTo().x, m_select.GetTo().y
+			select.GetFrom().x, select.GetFrom().y,
+			select.GetTo().x, select.GetTo().y
 		);
 #else
 		auto_sprintf_s(
@@ -824,7 +824,7 @@ void ViewSelect::PrintSelectionInfoMsg() const
 		);
 #endif
 	}
-	const_cast<EditView&>(view).GetCaret().m_bClearStatus = false;
-	view.m_editWnd.m_statusBar.SendStatusMessage2(msg);
+	const_cast<EditView&>(view).GetCaret().bClearStatus = false;
+	view.editWnd.statusBar.SendStatusMessage2(msg);
 }
 

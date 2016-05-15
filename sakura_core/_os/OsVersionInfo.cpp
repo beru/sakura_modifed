@@ -32,12 +32,12 @@
 
 // OsVersionInfoの内部static変数の定義
 // 初期化はIsValidVersion()で行う
-BOOL	 		OsVersionInfo::m_bSuccess;
-OSVERSIONINFO	OsVersionInfo::m_osVersionInfo;
+BOOL	 		OsVersionInfo::bSuccess;
+OSVERSIONINFO	OsVersionInfo::osVersionInfo;
 #ifdef USE_SSE2
-bool			COsVersionInfo::m_bSSE2;
+bool			COsVersionInfo::bSSE2;
 #endif
-bool			OsVersionInfo::m_bWine;
+bool			OsVersionInfo::bWine;
 
 /*!
 	初期化を行う(引数はダミー)
@@ -45,9 +45,9 @@ bool			OsVersionInfo::m_bWine;
 */
 OsVersionInfo::OsVersionInfo(bool pbStart)
 {
-	memset_raw(&m_osVersionInfo, 0, sizeof(m_osVersionInfo));
-	m_osVersionInfo.dwOSVersionInfoSize = sizeof(m_osVersionInfo);
-	m_bSuccess = ::GetVersionEx(&m_osVersionInfo);
+	memset_raw(&osVersionInfo, 0, sizeof(osVersionInfo));
+	osVersionInfo.dwOSVersionInfoSize = sizeof(osVersionInfo);
+	bSuccess = ::GetVersionEx(&osVersionInfo);
 
 #ifdef USE_SSE2
  		int data[4];
@@ -56,10 +56,10 @@ OsVersionInfo::OsVersionInfo(bool pbStart)
 #else
 		__cpuid(data, 1);
 #endif
-		m_bSSE2 = (data[3] & (1<<26)) != 0;
+		bSSE2 = (data[3] & (1<<26)) != 0;
 #endif
 
 	RegKey reg;
-	m_bWine = (reg.Open(HKEY_CURRENT_USER, _T("Software\\Wine\\Debug"), KEY_READ) == ERROR_SUCCESS);
+	bWine = (reg.Open(HKEY_CURRENT_USER, _T("Software\\Wine\\Debug"), KEY_READ) == ERROR_SUCCESS);
 }
 

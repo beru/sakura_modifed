@@ -33,7 +33,7 @@
 // 上下に分割	// Sept. 17, 2000 jepro 説明の「縦」を「上下に」に変更
 void ViewCommander::Command_SPLIT_V(void)
 {
-	GetEditWindow().m_splitterWnd.VSplitOnOff();
+	GetEditWindow().splitterWnd.VSplitOnOff();
 	return;
 }
 
@@ -41,7 +41,7 @@ void ViewCommander::Command_SPLIT_V(void)
 // 左右に分割	// Sept. 17, 2000 jepro 説明の「横」を「左右に」に変更
 void ViewCommander::Command_SPLIT_H(void)
 {
-	GetEditWindow().m_splitterWnd.HSplitOnOff();
+	GetEditWindow().splitterWnd.HSplitOnOff();
 	return;
 }
 
@@ -49,7 +49,7 @@ void ViewCommander::Command_SPLIT_H(void)
 // 縦横に分割	// Sept. 17, 2000 jepro 説明に「に」を追加
 void ViewCommander::Command_SPLIT_VH(void)
 {
-	GetEditWindow().m_splitterWnd.VHSplitOnOff();
+	GetEditWindow().splitterWnd.VHSplitOnOff();
 	return;
 }
 
@@ -172,7 +172,7 @@ void ViewCommander::Command_CASCADE(void)
 		// デスクトップサイズを得る
 		RECT rcDesktop;
 		// May 01, 2004 genta マルチモニタ対応
-		::GetMonitorWorkRect(m_view.GetHwnd(), &rcDesktop);
+		::GetMonitorWorkRect(view.GetHwnd(), &rcDesktop);
 		
 		int width = (rcDesktop.right - rcDesktop.left) * 4 / 5; // Mar. 9, 2003 genta 整数演算のみにする
 		int height = (rcDesktop.bottom - rcDesktop.top) * 4 / 5;
@@ -272,7 +272,7 @@ void ViewCommander::Command_TILE_V(void)
 		// デスクトップサイズを得る
 		RECT rcDesktop;
 		// May 01, 2004 genta マルチモニタ対応
-		::GetMonitorWorkRect(m_view.GetHwnd(), &rcDesktop);
+		::GetMonitorWorkRect(view.GetHwnd(), &rcDesktop);
 		for (int i=0; i<nRowNum; ++i) {
 			auto editNodeHWnd = pEditNodeArr[i].GetHwnd();
 			if (::IsIconic(editNodeHWnd)) {	// 最小化しているウィンドウは無視。
@@ -325,7 +325,7 @@ void ViewCommander::Command_TILE_H(void)
 		// デスクトップサイズを得る
 		RECT rcDesktop;
 		// May 01, 2004 genta マルチモニタ対応
-		::GetMonitorWorkRect(m_view.GetHwnd(), &rcDesktop);
+		::GetMonitorWorkRect(view.GetHwnd(), &rcDesktop);
 		for (int i=0; i<nRowNum; ++i) {
 			auto editNodeHWnd = pEditNodeArr[i].GetHwnd();
 			if (::IsIconic(editNodeHWnd)) {	// 最小化しているウィンドウは無視。
@@ -380,7 +380,7 @@ void ViewCommander::Command_WINTOPMOST(LPARAM lparam)
 	[共通設定]->[ウィンドウ]->[タブ表示 まとめない]の切り替えと同じです。
 	@author Kazika
 	@date 2004.07.14 Kazika 新規作成
-	@date 2007.06.20 ryoji GetDllShareData().m_TabWndWndplの廃止，グループIDリセット
+	@date 2007.06.20 ryoji GetDllShareData().TabWndWndplの廃止，グループIDリセット
 */
 void ViewCommander::Command_BIND_WINDOW(void)
 {
@@ -404,7 +404,7 @@ void ViewCommander::Command_BIND_WINDOW(void)
 			MYWM_TAB_WINDOW_NOTIFY,						// タブウィンドウイベント
 			(WPARAM)((csTabBar.bDispTabWndMultiWin) ? TabWndNotifyType::Disable : TabWndNotifyType::Enable), // タブモード有効/無効化イベント
 			(LPARAM)GetEditWindow().GetHwnd(),	// EditWndのウィンドウハンドル
-			m_view.GetHwnd());									// 自分自身
+			view.GetHwnd());									// 自分自身
 		// End 2004.08.27 Kazika
 	}
 }
@@ -429,7 +429,7 @@ void ViewCommander::Command_GROUPCLOSE(void)
 // 次のグループ			// 2007.06.20 ryoji
 void ViewCommander::Command_NEXTGROUP(void)
 {
-	auto& tabWnd = GetEditWindow().m_tabWnd;
+	auto& tabWnd = GetEditWindow().tabWnd;
 	if (!tabWnd.GetHwnd()) {
 		return;
 	}
@@ -440,7 +440,7 @@ void ViewCommander::Command_NEXTGROUP(void)
 // 前のグループ			// 2007.06.20 ryoji
 void ViewCommander::Command_PREVGROUP(void)
 {
-	auto& tabWnd = GetEditWindow().m_tabWnd;
+	auto& tabWnd = GetEditWindow().tabWnd;
 	if (!tabWnd.GetHwnd()) {
 		return;
 	}
@@ -451,7 +451,7 @@ void ViewCommander::Command_PREVGROUP(void)
 // タブを右に移動		// 2007.06.20 ryoji
 void ViewCommander::Command_TAB_MOVERIGHT(void)
 {
-	auto& tabWnd = GetEditWindow().m_tabWnd;
+	auto& tabWnd = GetEditWindow().tabWnd;
 	if (!tabWnd.GetHwnd()) {
 		return;
 	}
@@ -462,7 +462,7 @@ void ViewCommander::Command_TAB_MOVERIGHT(void)
 // タブを左に移動		// 2007.06.20 ryoji
 void ViewCommander::Command_TAB_MOVELEFT(void)
 {
-	auto& tabWnd = GetEditWindow().m_tabWnd;
+	auto& tabWnd = GetEditWindow().tabWnd;
 	if (!tabWnd.GetHwnd()) {
 		return;
 	}
@@ -473,7 +473,7 @@ void ViewCommander::Command_TAB_MOVELEFT(void)
 // 新規グループ			// 2007.06.20 ryoji
 void ViewCommander::Command_TAB_SEPARATE(void)
 {
-	auto& tabWnd = GetEditWindow().m_tabWnd;
+	auto& tabWnd = GetEditWindow().tabWnd;
 	if (!tabWnd.GetHwnd()) {
 		return;
 	}
@@ -484,7 +484,7 @@ void ViewCommander::Command_TAB_SEPARATE(void)
 // 次のグループに移動	// 2007.06.20 ryoji
 void ViewCommander::Command_TAB_JOINTNEXT(void)
 {
-	auto& tabWnd = GetEditWindow().m_tabWnd;
+	auto& tabWnd = GetEditWindow().tabWnd;
 	if (!tabWnd.GetHwnd()) {
 		return;
 	}
@@ -495,7 +495,7 @@ void ViewCommander::Command_TAB_JOINTNEXT(void)
 // 前のグループに移動	// 2007.06.20 ryoji
 void ViewCommander::Command_TAB_JOINTPREV(void)
 {
-	auto& tabWnd = GetEditWindow().m_tabWnd;
+	auto& tabWnd = GetEditWindow().tabWnd;
 	if (!tabWnd.GetHwnd()) {
 		return;
 	}
@@ -628,7 +628,7 @@ void ViewCommander::Command_MINIMIZE_ALL(void)
 void ViewCommander::Command_REDRAW(void)
 {
 	// フォーカス移動時の再描画
-	m_view.RedrawAll();
+	view.RedrawAll();
 	return;
 }
 

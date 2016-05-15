@@ -152,7 +152,7 @@ static const EFunctionCode EIsModificationForbidden[] = {
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 /*!
 	@note
-		m_pEditWnd はコンストラクタ内では使用しないこと．
+		pEditWnd はコンストラクタ内では使用しないこと．
 
 	@date 2000.05.12 genta 初期化方法変更
 	@date 2002.2.17 YAZAKI CShareDataのインスタンスは、Processにひとつあるのみ。
@@ -161,32 +161,32 @@ static const EFunctionCode EIsModificationForbidden[] = {
 */
 EditDoc::EditDoc(EditApp& app)
 	:
-	m_docFile(*this),
-	m_docFileOperation(*this),
-	m_docEditor(*this),
-	m_docType(*this),
-	m_docOutline(*this),
-	m_nCommandExecNum(0),				// コマンド実行回数
-	m_hBackImg(NULL)
+	docFile(*this),
+	docFileOperation(*this),
+	docEditor(*this),
+	docType(*this),
+	docOutline(*this),
+	nCommandExecNum(0),				// コマンド実行回数
+	hBackImg(NULL)
 {
 	MY_RUNNINGTIMER(runningTimer, "EditDoc::EditDoc");
 	
 	// レイアウト管理情報の初期化
-	m_layoutMgr.Create(this, &m_docLineMgr);
+	layoutMgr.Create(this, &docLineMgr);
 	
 	// レイアウト情報の変更
 	// 2008.06.07 nasukoji	折り返し方法の追加に対応
 	// 「指定桁で折り返す」以外の時は折り返し幅をMAXLINEKETASで初期化する
 	// 「右端で折り返す」は、この後のOnSize()で再設定される
-	const TypeConfig& ref = m_docType.GetDocumentAttribute();
+	const TypeConfig& ref = docType.GetDocumentAttribute();
 	LayoutInt nMaxLineKetas = ref.nMaxLineKetas;
 	if (ref.nTextWrapMethod != TextWrappingMethod::SettingWidth) {
 		nMaxLineKetas = MAXLINEKETAS;
 	}
-	m_layoutMgr.SetLayoutInfo(true, ref, ref.nTabSpace, nMaxLineKetas);
+	layoutMgr.SetLayoutInfo(true, ref, ref.nTabSpace, nMaxLineKetas);
 
 	// 自動保存の設定	// Aug, 21, 2000 genta
-	m_autoSaveAgent.ReloadAutoSaveParam();
+	autoSaveAgent.ReloadAutoSaveParam();
 
 	//$$ ModifyManager インスタンスを生成
 	ModifyManager::getInstance();
@@ -195,19 +195,19 @@ EditDoc::EditDoc(EditApp& app)
 	CodeChecker::getInstance();
 
 	// 2008.06.07 nasukoji	テキストの折り返し方法を初期化
-	m_nTextWrapMethodCur = m_docType.GetDocumentAttribute().nTextWrapMethod;	// 折り返し方法
-	m_bTextWrapMethodCurTemp = false;									// 一時設定適用中を解除
-	m_blfCurTemp = false;
-	m_nPointSizeCur = -1;
-	m_nPointSizeOrg = -1;
-	m_bTabSpaceCurTemp = false;
+	nTextWrapMethodCur = docType.GetDocumentAttribute().nTextWrapMethod;	// 折り返し方法
+	bTextWrapMethodCurTemp = false;									// 一時設定適用中を解除
+	blfCurTemp = false;
+	nPointSizeCur = -1;
+	nPointSizeOrg = -1;
+	bTabSpaceCurTemp = false;
 
 	// 文字コード種別を初期化
-	m_docFile.SetCodeSet(ref.encoding.eDefaultCodetype, ref.encoding.bDefaultBom);
-	m_docEditor.m_newLineCode = ref.encoding.eDefaultEoltype;
+	docFile.SetCodeSet(ref.encoding.eDefaultCodetype, ref.encoding.bDefaultBom);
+	docEditor.newLineCode = ref.encoding.eDefaultEoltype;
 
 	// 排他制御オプションを初期化
-	m_docFile.SetShareMode(GetDllShareData().common.file.nFileShareMode);
+	docFile.SetShareMode(GetDllShareData().common.file.nFileShareMode);
 
 #ifdef _DEBUG
 	{
@@ -222,8 +222,8 @@ EditDoc::EditDoc(EditApp& app)
 
 EditDoc::~EditDoc()
 {
-	if (m_hBackImg) {
-		::DeleteObject(m_hBackImg);
+	if (hBackImg) {
+		::DeleteObject(hBackImg);
 	}
 }
 
@@ -234,50 +234,50 @@ EditDoc::~EditDoc()
 void EditDoc::Clear()
 {
 	// ファイルの排他ロック解除
-	m_docFileOperation.DoFileUnlock();
+	docFileOperation.DoFileUnlock();
 
 	// 書込み禁止のクリア
-	m_docLocker.Clear();
+	docLocker.Clear();
 
 	// Undo, Redoバッファのクリア
-	m_docEditor.m_opeBuf.ClearAll();
+	docEditor.opeBuf.ClearAll();
 
 	// テキストデータのクリア
-	m_docLineMgr.DeleteAllLine();
+	docLineMgr.DeleteAllLine();
 
 	// ファイルパスとアイコンのクリア
 	SetFilePathAndIcon(_T(""));
 
 	// ファイルのタイムスタンプのクリア
-	m_docFile.ClearFileTime();
+	docFile.ClearFileTime();
 
 	// 「基本」のタイプ別設定を適用
-	m_docType.SetDocumentType(DocTypeManager().GetDocumentTypeOfPath(m_docFile.GetFilePath()), true);
-	m_blfCurTemp = false;
-	m_pEditWnd->m_pViewFontMiniMap->UpdateFont(&m_pEditWnd->GetLogfont());
-	InitCharWidthCache( m_pEditWnd->m_pViewFontMiniMap->GetLogfont(), CharWidthFontMode::MiniMap );
-	SelectCharWidthCache(CharWidthFontMode::Edit, m_pEditWnd->GetLogfontCacheMode());
-	InitCharWidthCache(m_pEditWnd->GetLogfont());
-	m_pEditWnd->m_pViewFont->UpdateFont(&m_pEditWnd->GetLogfont());
+	docType.SetDocumentType(DocTypeManager().GetDocumentTypeOfPath(docFile.GetFilePath()), true);
+	blfCurTemp = false;
+	pEditWnd->pViewFontMiniMap->UpdateFont(&pEditWnd->GetLogfont());
+	InitCharWidthCache( pEditWnd->pViewFontMiniMap->GetLogfont(), CharWidthFontMode::MiniMap );
+	SelectCharWidthCache(CharWidthFontMode::Edit, pEditWnd->GetLogfontCacheMode());
+	InitCharWidthCache(pEditWnd->GetLogfont());
+	pEditWnd->pViewFont->UpdateFont(&pEditWnd->GetLogfont());
 
 	// 2008.06.07 nasukoji	折り返し方法の追加に対応
-	const TypeConfig& ref = m_docType.GetDocumentAttribute();
+	const TypeConfig& ref = docType.GetDocumentAttribute();
 	LayoutInt nMaxLineKetas = ref.nMaxLineKetas;
 	if (ref.nTextWrapMethod != TextWrappingMethod::SettingWidth) {
 		nMaxLineKetas = MAXLINEKETAS;
 	}
-	m_layoutMgr.SetLayoutInfo(true, ref, ref.nTabSpace, nMaxLineKetas);
-	m_pEditWnd->ClearViewCaretPosInfo();
+	layoutMgr.SetLayoutInfo(true, ref, ref.nTabSpace, nMaxLineKetas);
+	pEditWnd->ClearViewCaretPosInfo();
 }
 
 // 既存データのクリア
 void EditDoc::InitDoc()
 {
 	AppMode::getInstance().SetViewMode(false);	// ビューモード $$ 今後OnClearDocを用意したい
-	AppMode::getInstance().m_szGrepKey[0] = 0;	//$$
+	AppMode::getInstance().szGrepKey[0] = 0;	//$$
 
 	EditApp::getInstance().pGrepAgent->bGrepMode = false;	// Grepモード	//$$同上
-	m_autoReloadAgent.watchUpdateType = WatchUpdateType::Query; // Dec. 4, 2002 genta 更新監視方法 $$
+	autoReloadAgent.watchUpdateType = WatchUpdateType::Query; // Dec. 4, 2002 genta 更新監視方法 $$
 
 	// 2005.06.24 Moca バグ修正
 	// アウトプットウィンドウで「閉じて(無題)」を行ってもアウトプットウィンドウのまま
@@ -291,25 +291,25 @@ void EditDoc::InitDoc()
 	Clear();
 
 	// 変更フラグ
-	m_docEditor.SetModified(false, false);	// Jan. 22, 2002 genta
+	docEditor.SetModified(false, false);	// Jan. 22, 2002 genta
 
 	// 文字コード種別
-	const TypeConfig& ref = m_docType.GetDocumentAttribute();
-	m_docFile.SetCodeSet(ref.encoding.eDefaultCodetype, ref.encoding.bDefaultBom);
-	m_docEditor.m_newLineCode = ref.encoding.eDefaultEoltype;
+	const TypeConfig& ref = docType.GetDocumentAttribute();
+	docFile.SetCodeSet(ref.encoding.eDefaultCodetype, ref.encoding.bDefaultBom);
+	docEditor.newLineCode = ref.encoding.eDefaultEoltype;
 
 	// Oct. 2, 2005 genta 挿入モード
-	m_docEditor.SetInsMode(GetDllShareData().common.general.bIsINSMode);
+	docEditor.SetInsMode(GetDllShareData().common.general.bIsINSMode);
 
-	m_cookie.DeleteAll(L"document");
+	cookie.DeleteAll(L"document");
 }
 
 void EditDoc::SetBackgroundImage()
 {
-	FilePath path = m_docType.GetDocumentAttribute().szBackImgPath.c_str();
-	if (m_hBackImg) {
-		::DeleteObject(m_hBackImg);
-		m_hBackImg = NULL;
+	FilePath path = docType.GetDocumentAttribute().szBackImgPath.c_str();
+	if (hBackImg) {
+		::DeleteObject(hBackImg);
+		hBackImg = NULL;
 	}
 	if (path[0] == 0) {
 		return;
@@ -355,8 +355,8 @@ void EditDoc::SetBackgroundImage()
 						&& imgType == PICTYPE_BITMAP
 						&& iPicture->get_Handle((OLE_HANDLE*)&hBitmap) == S_OK
 					) {
-						m_nBackImgWidth = m_nBackImgHeight = 1;
-						m_hBackImg = (HBITMAP)::CopyImage(hBitmap, IMAGE_BITMAP, 0, 0, 0);
+						nBackImgWidth = nBackImgHeight = 1;
+						hBackImg = (HBITMAP)::CopyImage(hBitmap, IMAGE_BITMAP, 0, 0, 0);
 					}
 				}
 			}
@@ -364,16 +364,16 @@ void EditDoc::SetBackgroundImage()
 			if (iPicture) iPicture->Release();
 		}
 	}else {
-		m_hBackImg = (HBITMAP)::LoadImage(NULL, path.c_str(), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
+		hBackImg = (HBITMAP)::LoadImage(NULL, path.c_str(), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
 	}
-	if (m_hBackImg) {
+	if (hBackImg) {
 		BITMAP bmp;
-		GetObject(m_hBackImg, sizeof(BITMAP), &bmp);
-		m_nBackImgWidth  = bmp.bmWidth;
-		m_nBackImgHeight = bmp.bmHeight;
-		if (m_nBackImgWidth == 0 || m_nBackImgHeight == 0) {
-			::DeleteObject(m_hBackImg);
-			m_hBackImg = NULL;
+		GetObject(hBackImg, sizeof(BITMAP), &bmp);
+		nBackImgWidth  = bmp.bmWidth;
+		nBackImgHeight = bmp.bmHeight;
+		if (nBackImgWidth == 0 || nBackImgHeight == 0) {
+			::DeleteObject(hBackImg);
+			hBackImg = NULL;
 		}
 	}
 }
@@ -381,22 +381,22 @@ void EditDoc::SetBackgroundImage()
 // 全ビューの初期化：ファイルオープン/クローズ時等に、ビューを初期化する
 void EditDoc::InitAllView(void)
 {
-	m_nCommandExecNum = 0;	// コマンド実行回数
+	nCommandExecNum = 0;	// コマンド実行回数
 	
 	// 2008.05.30 nasukoji	テキストの折り返し方法を初期化
-	m_nTextWrapMethodCur = m_docType.GetDocumentAttribute().nTextWrapMethod;	// 折り返し方法
-	m_bTextWrapMethodCurTemp = false;											// 一時設定適用中を解除
-	m_blfCurTemp = false;
-	m_bTabSpaceCurTemp = false;
+	nTextWrapMethodCur = docType.GetDocumentAttribute().nTextWrapMethod;	// 折り返し方法
+	bTextWrapMethodCurTemp = false;											// 一時設定適用中を解除
+	blfCurTemp = false;
+	bTabSpaceCurTemp = false;
 	
 	// 2009.08.28 nasukoji	「折り返さない」ならテキスト最大幅を算出、それ以外は変数をクリア
-	if (m_nTextWrapMethodCur == TextWrappingMethod::NoWrapping) {
-		m_layoutMgr.CalculateTextWidth();		// テキスト最大幅を算出する
+	if (nTextWrapMethodCur == TextWrappingMethod::NoWrapping) {
+		layoutMgr.CalculateTextWidth();		// テキスト最大幅を算出する
 	}else {
-		m_layoutMgr.ClearLayoutLineWidth();	// 各行のレイアウト行長の記憶をクリアする
+		layoutMgr.ClearLayoutLineWidth();	// 各行のレイアウト行長の記憶をクリアする
 	}
 	// EditWndに引越し
-	m_pEditWnd->InitAllViews();
+	pEditWnd->InitAllViews();
 	
 	return;
 }
@@ -404,16 +404,16 @@ void EditDoc::InitAllView(void)
 /*! ウィンドウの作成等
 
 	@date 2001.09.29 genta マクロクラスを渡すように
-	@date 2002.01.03 YAZAKI m_tbMyButtonなどをCShareDataからCMenuDrawerへ移動したことによる修正。
+	@date 2002.01.03 YAZAKI tbMyButtonなどをCShareDataからCMenuDrawerへ移動したことによる修正。
 */
 BOOL EditDoc::Create(EditWnd* pEditWnd)
 {
 	MY_RUNNINGTIMER(runningTimer, "EditDoc::Create");
 
-	m_pEditWnd = pEditWnd;
+	this->pEditWnd = pEditWnd;
 
 	// Oct. 2, 2001 genta
-	m_funcLookup.Init(GetDllShareData().common.macro.macroTable, &GetDllShareData().common);
+	funcLookup.Init(GetDllShareData().common.macro.macroTable, &GetDllShareData().common);
 
 	SetBackgroundImage();
 
@@ -443,8 +443,8 @@ void EditDoc::SetFilePathAndIcon(const TCHAR* szFile)
 	if (::GetLongFileName(szFile, szWork)) {
 		szFile = szWork;
 	}
-	m_docFile.SetFilePath(szFile);
-	m_docType.SetDocumentIcon();
+	docFile.SetFilePath(szFile);
+	docType.SetDocumentIcon();
 }
 
 
@@ -455,13 +455,13 @@ void EditDoc::SetFilePathAndIcon(const TCHAR* szFile)
 // ドキュメントの文字コードを取得
 EncodingType EditDoc::GetDocumentEncoding() const
 {
-	return m_docFile.GetCodeSet();
+	return docFile.GetCodeSet();
 }
 
 // ドキュメントのBOM付加を取得
 bool EditDoc::GetDocumentBomExist() const
 {
-	return m_docFile.IsBomExist();
+	return docFile.IsBomExist();
 }
 
 // ドキュメントの文字コードを設定
@@ -471,17 +471,17 @@ void EditDoc::SetDocumentEncoding(EncodingType eCharCode, bool bBom)
 		return; // 無効な範囲を受け付けない
 	}
 
-	m_docFile.SetCodeSet(eCharCode, bBom);
+	docFile.SetCodeSet(eCharCode, bBom);
 }
 
 
 void EditDoc::GetSaveInfo(SaveInfo* pSaveInfo) const
 {
-	pSaveInfo->filePath		= m_docFile.GetFilePath();
-	pSaveInfo->eCharCode	= m_docFile.GetCodeSet();
-	pSaveInfo->bBomExist	= m_docFile.IsBomExist();
-	pSaveInfo->bChgCodeSet	= m_docFile.IsChgCodeSet();
-	pSaveInfo->eol			= m_docEditor.m_newLineCode; // 編集時改行コードを保存時改行コードとして設定
+	pSaveInfo->filePath		= docFile.GetFilePath();
+	pSaveInfo->eCharCode	= docFile.GetCodeSet();
+	pSaveInfo->bBomExist	= docFile.IsBomExist();
+	pSaveInfo->bChgCodeSet	= docFile.IsChgCodeSet();
+	pSaveInfo->eol			= docEditor.newLineCode; // 編集時改行コードを保存時改行コードとして設定
 }
 
 
@@ -491,24 +491,24 @@ void EditDoc::GetEditInfo(
 	) const
 {
 	// ファイルパス
-	_tcscpy(pfi->szPath, m_docFile.GetFilePath());
+	_tcscpy(pfi->szPath, docFile.GetFilePath());
 
 	// 表示域
-	pfi->nViewTopLine = m_pEditWnd->GetActiveView().GetTextArea().GetViewTopLine();	// 表示域の一番上の行(0開始)
-	pfi->nViewLeftCol = m_pEditWnd->GetActiveView().GetTextArea().GetViewLeftCol();	// 表示域の一番左の桁(0開始)
+	pfi->nViewTopLine = pEditWnd->GetActiveView().GetTextArea().GetViewTopLine();	// 表示域の一番上の行(0開始)
+	pfi->nViewLeftCol = pEditWnd->GetActiveView().GetTextArea().GetViewLeftCol();	// 表示域の一番左の桁(0開始)
 
 	// キャレット位置
-	pfi->ptCursor.Set(m_pEditWnd->GetActiveView().GetCaret().GetCaretLogicPos());
+	pfi->ptCursor.Set(pEditWnd->GetActiveView().GetCaret().GetCaretLogicPos());
 
 	// 各種状態
-	pfi->bIsModified = m_docEditor.IsModified();			// 変更フラグ
-	pfi->nCharCode = m_docFile.GetCodeSet();				// 文字コード種別
+	pfi->bIsModified = docEditor.IsModified();			// 変更フラグ
+	pfi->nCharCode = docFile.GetCodeSet();				// 文字コード種別
 	pfi->bBom = GetDocumentBomExist();
-	pfi->nTypeId = m_docType.GetDocumentAttribute().id;
+	pfi->nTypeId = docType.GetDocumentAttribute().id;
 
 	// GREPモード
 	pfi->bIsGrep = EditApp::getInstance().pGrepAgent->bGrepMode;
-	wcscpy(pfi->szGrepKey, AppMode::getInstance().m_szGrepKey);
+	wcscpy(pfi->szGrepKey, AppMode::getInstance().szGrepKey);
 
 	// デバッグモニタ (アウトプットウィンドウ) モード
 	pfi->bIsDebug = AppMode::getInstance().IsDebugMode();
@@ -567,8 +567,8 @@ bool EditDoc::IsModificationForbidden(EFunctionCode nCommand) const
 bool EditDoc::IsAcceptLoad() const
 {
 	if (
-		m_docEditor.IsModified()
-		|| m_docFile.GetFilePathClass().IsValidPath()
+		docEditor.IsModified()
+		|| docFile.GetFilePathClass().IsValidPath()
 		|| EditApp::getInstance().pGrepAgent->bGrepMode
 		|| AppMode::getInstance().IsDebugMode()
 	) {
@@ -596,29 +596,29 @@ bool EditDoc::HandleCommand(EFunctionCode nCommand)
 	switch (LOWORD(nCommand)) {
 	case F_PREVWINDOW:	// 前のウィンドウ
 		{
-			int nPane = m_pEditWnd->m_splitterWnd.GetPrevPane();
+			int nPane = pEditWnd->splitterWnd.GetPrevPane();
 			if (nPane != -1) {
-				m_pEditWnd->SetActivePane(nPane);
+				pEditWnd->SetActivePane(nPane);
 			}else {
-				ControlTray::ActiveNextWindow(m_pEditWnd->GetHwnd());
+				ControlTray::ActiveNextWindow(pEditWnd->GetHwnd());
 			}
 		}
 		return TRUE;
 	case F_NEXTWINDOW:	// 次のウィンドウ
 		{
-			int nPane = m_pEditWnd->m_splitterWnd.GetNextPane();
+			int nPane = pEditWnd->splitterWnd.GetNextPane();
 			if (nPane != -1) {
-				m_pEditWnd->SetActivePane(nPane);
+				pEditWnd->SetActivePane(nPane);
 			}else {
-				ControlTray::ActivePrevWindow(m_pEditWnd->GetHwnd());
+				ControlTray::ActivePrevWindow(pEditWnd->GetHwnd());
 			}
 		}
 		return TRUE;
 	case F_CHG_CHARSET:
-		return m_pEditWnd->GetActiveView().GetCommander().HandleCommand(nCommand, true, (LPARAM)CODE_NONE, 0, 0, 0);
+		return pEditWnd->GetActiveView().GetCommander().HandleCommand(nCommand, true, (LPARAM)CODE_NONE, 0, 0, 0);
 
 	default:
-		return m_pEditWnd->GetActiveView().GetCommander().HandleCommand(nCommand, true, 0, 0, 0, 0);
+		return pEditWnd->GetActiveView().GetCommander().HandleCommand(nCommand, true, 0, 0, 0, 0);
 	}
 }
 
@@ -628,18 +628,18 @@ bool EditDoc::HandleCommand(EFunctionCode nCommand)
 void EditDoc::OnChangeType()
 {
 	// 設定変更を反映させる
-	m_bTextWrapMethodCurTemp = false;	// 折り返し方法の一時設定適用中を解除	// 2008.06.08 ryoji
-	m_blfCurTemp = false;
-	m_bTabSpaceCurTemp = false;
+	bTextWrapMethodCurTemp = false;	// 折り返し方法の一時設定適用中を解除	// 2008.06.08 ryoji
+	blfCurTemp = false;
+	bTabSpaceCurTemp = false;
 	OnChangeSetting();
 
 	// 新規で無変更ならデフォルト文字コードを適用する	// 2011.01.24 ryoji
-	if (!m_docFile.GetFilePathClass().IsValidPath()) {
-		if (!m_docEditor.IsModified() && m_docLineMgr.GetLineCount() == 0) {
-			const TypeConfig& types = m_docType.GetDocumentAttribute();
-			m_docFile.SetCodeSet(types.encoding.eDefaultCodetype, types.encoding.bDefaultBom);
-			m_docEditor.m_newLineCode = types.encoding.eDefaultEoltype;
-			m_pEditWnd->GetActiveView().GetCaret().ShowCaretPosInfo();
+	if (!docFile.GetFilePathClass().IsValidPath()) {
+		if (!docEditor.IsModified() && docLineMgr.GetLineCount() == 0) {
+			const TypeConfig& types = docType.GetDocumentAttribute();
+			docFile.SetCodeSet(types.encoding.eDefaultCodetype, types.encoding.bDefaultBom);
+			docEditor.newLineCode = types.encoding.eDefaultEoltype;
+			pEditWnd->GetActiveView().GetCaret().ShowCaretPosInfo();
 		}
 	}
 
@@ -659,11 +659,9 @@ void EditDoc::OnChangeSetting(
 	)
 {
 	HWND hwndProgress = NULL;
-	EditWnd* pEditWnd = m_pEditWnd;	// Sep. 10, 2002 genta
-
 	if (pEditWnd) {
-		hwndProgress = pEditWnd->m_statusBar.GetProgressHwnd();
-		// Status Barが表示されていないときはm_hwndProgressBar == NULL
+		hwndProgress = pEditWnd->statusBar.GetProgressHwnd();
+		// Status Barが表示されていないときはhwndProgressBar == NULL
 	}
 
 	if (hwndProgress) {
@@ -671,22 +669,22 @@ void EditDoc::OnChangeSetting(
 	}
 
 	// ファイルの排他モード変更
-	if (m_docFile.GetShareMode() != GetDllShareData().common.file.nFileShareMode) {
-		m_docFile.SetShareMode(GetDllShareData().common.file.nFileShareMode);
+	if (docFile.GetShareMode() != GetDllShareData().common.file.nFileShareMode) {
+		docFile.SetShareMode(GetDllShareData().common.file.nFileShareMode);
 
 		// ファイルの排他ロック解除
-		m_docFileOperation.DoFileUnlock();
+		docFileOperation.DoFileUnlock();
 
 		// ファイル書込可能のチェック処理
-		bool bOld = m_docLocker.IsDocWritable();
-		m_docLocker.CheckWritable(bOld && !AppMode::getInstance().IsViewMode());	// 書込可から不可に遷移したときだけメッセージを出す（出過ぎると鬱陶しいよね？）
-		if (bOld != m_docLocker.IsDocWritable()) {
+		bool bOld = docLocker.IsDocWritable();
+		docLocker.CheckWritable(bOld && !AppMode::getInstance().IsViewMode());	// 書込可から不可に遷移したときだけメッセージを出す（出過ぎると鬱陶しいよね？）
+		if (bOld != docLocker.IsDocWritable()) {
 			pEditWnd->UpdateCaption();
 		}
 
 		// ファイルの排他ロック
-		if (m_docLocker.IsDocWritable()) {
-			m_docFileOperation.DoFileLock();
+		if (docLocker.IsDocWritable()) {
+			docFileOperation.DoFileLock();
 		}
 	}
 
@@ -694,141 +692,141 @@ void EditDoc::OnChangeSetting(
 	FileNameManager::getInstance().TransformFileName_MakeCache();
 
 	LogicPointEx* posSaveAry = nullptr;
-	if (m_pEditWnd->m_posSaveAry) {
+	if (pEditWnd->posSaveAry) {
 		if (bDoLayout) {
-			posSaveAry = m_pEditWnd->m_posSaveAry;
-			m_pEditWnd->m_posSaveAry = nullptr;
+			posSaveAry = pEditWnd->posSaveAry;
+			pEditWnd->posSaveAry = nullptr;
 		}
 	}else {
-		if (m_pEditWnd->m_pPrintPreview) {
+		if (pEditWnd->pPrintPreview) {
 			// 一時的に設定を戻す
 			SelectCharWidthCache(CharWidthFontMode::Edit, CharWidthCacheMode::Neutral);
 		}
 		if (bDoLayout) {
-			posSaveAry = m_pEditWnd->SavePhysPosOfAllView();
+			posSaveAry = pEditWnd->SavePhysPosOfAllView();
 		}
 	}
 
 	// 旧情報の保持
-	const int nTypeId = m_docType.GetDocumentAttribute().id;
-	const bool bFontTypeOld = m_docType.GetDocumentAttribute().bUseTypeFont;
-	int nFontPointSizeOld = m_nPointSizeOrg;
+	const int nTypeId = docType.GetDocumentAttribute().id;
+	const bool bFontTypeOld = docType.GetDocumentAttribute().bUseTypeFont;
+	int nFontPointSizeOld = nPointSizeOrg;
 	if (bFontTypeOld) {
-		nFontPointSizeOld = m_docType.GetDocumentAttribute().nPointSize;
+		nFontPointSizeOld = docType.GetDocumentAttribute().nPointSize;
 	}
-	const KetaXInt nTabSpaceOld = m_docType.GetDocumentAttribute().nTabSpace;
+	const KetaXInt nTabSpaceOld = docType.GetDocumentAttribute().nTabSpace;
 
 	// 文書種別
-	m_docType.SetDocumentType(DocTypeManager().GetDocumentTypeOfPath(m_docFile.GetFilePath()), false);
-	const TypeConfig& ref = m_docType.GetDocumentAttribute();
+	docType.SetDocumentType(DocTypeManager().GetDocumentTypeOfPath(docFile.GetFilePath()), false);
+	const TypeConfig& ref = docType.GetDocumentAttribute();
 
 	// タイプ別設定の種類が変更されたら、一時適用を元に戻す
 	if (nTypeId != ref.id) {
-		m_blfCurTemp = false;
+		blfCurTemp = false;
 		if (bDoLayout) {
-			m_bTextWrapMethodCurTemp = false;
-			m_bTabSpaceCurTemp = false;
+			bTextWrapMethodCurTemp = false;
+			bTabSpaceCurTemp = false;
 		}
 	}
 
 	// フォントサイズの一時設定
-	if (m_blfCurTemp) {
+	if (blfCurTemp) {
 		if (bFontTypeOld != ref.bUseTypeFont) {
-			m_blfCurTemp = false;
+			blfCurTemp = false;
 		}else if (nFontPointSizeOld != pEditWnd->GetFontPointSize(false)) {
-			m_blfCurTemp = false; // フォント設定が変更された。元に戻す
+			blfCurTemp = false; // フォント設定が変更された。元に戻す
 		}else {
 			// フォントの種類の変更に追随する
-			int lfHeight = m_lfCur.lfHeight;
-			m_lfCur = pEditWnd->GetLogfont(false);
-			m_lfCur.lfHeight = lfHeight;
+			int lfHeight = lfCur.lfHeight;
+			lfCur = pEditWnd->GetLogfont(false);
+			lfCur.lfHeight = lfHeight;
 		}
 	}
 
 	// フォント更新
-	m_pEditWnd->m_pViewFont->UpdateFont(&m_pEditWnd->GetLogfont());
-	m_pEditWnd->m_pViewFontMiniMap->UpdateFont(&m_pEditWnd->GetLogfont());
+	pEditWnd->pViewFont->UpdateFont(&pEditWnd->GetLogfont());
+	pEditWnd->pViewFontMiniMap->UpdateFont(&pEditWnd->GetLogfont());
 
-	InitCharWidthCache( m_pEditWnd->m_pViewFontMiniMap->GetLogfont(), CharWidthFontMode::MiniMap );
-	SelectCharWidthCache(CharWidthFontMode::Edit, m_pEditWnd->GetLogfontCacheMode());
-	InitCharWidthCache(m_pEditWnd->GetLogfont());
+	InitCharWidthCache( pEditWnd->pViewFontMiniMap->GetLogfont(), CharWidthFontMode::MiniMap );
+	SelectCharWidthCache(CharWidthFontMode::Edit, pEditWnd->GetLogfontCacheMode());
+	InitCharWidthCache(pEditWnd->GetLogfont());
 
 	LayoutInt nMaxLineKetas = ref.nMaxLineKetas;
 	LayoutInt nTabSpace = ref.nTabSpace;
 	if (bDoLayout) {
 		// 2008.06.07 nasukoji	折り返し方法の追加に対応
 		// 折り返し方法の一時設定とタイプ別設定が一致したら一時設定適用中は解除
-		if (m_nTextWrapMethodCur == ref.nTextWrapMethod) {
-			if (m_nTextWrapMethodCur == TextWrappingMethod::SettingWidth
-				&& m_layoutMgr.GetMaxLineKetas() != ref.nMaxLineKetas
+		if (nTextWrapMethodCur == ref.nTextWrapMethod) {
+			if (nTextWrapMethodCur == TextWrappingMethod::SettingWidth
+				&& layoutMgr.GetMaxLineKetas() != ref.nMaxLineKetas
 			) {
 				// 2013.05.29 折り返し幅が違うのでそのままにする
 			}else if (bDoLayout) {
-				m_bTextWrapMethodCurTemp = false;		// 一時設定適用中を解除
+				bTextWrapMethodCurTemp = false;		// 一時設定適用中を解除
 			}
 		}
 		// 一時設定適用中でなければ折り返し方法変更
-		if (!m_bTextWrapMethodCurTemp) {
-			m_nTextWrapMethodCur = ref.nTextWrapMethod;	// 折り返し方法
+		if (!bTextWrapMethodCurTemp) {
+			nTextWrapMethodCur = ref.nTextWrapMethod;	// 折り返し方法
 		}
 		// 指定桁で折り返す：タイプ別設定を使用
 		// 右端で折り返す：仮に現在の折り返し幅を使用
 		// 上記以外：MAXLINEKETASを使用
-		switch (m_nTextWrapMethodCur) {
+		switch (nTextWrapMethodCur) {
 		case TextWrappingMethod::NoWrapping:
 			nMaxLineKetas = MAXLINEKETAS;
 			break;
 		case TextWrappingMethod::SettingWidth:
-			if (m_bTextWrapMethodCurTemp) {
+			if (bTextWrapMethodCurTemp) {
 				// 2013.05.29 現在の一時適用の折り返し幅を使うように
-				nMaxLineKetas = m_layoutMgr.GetMaxLineKetas();
+				nMaxLineKetas = layoutMgr.GetMaxLineKetas();
 			}
 			break;
 		case TextWrappingMethod::WindowWidth:
-			nMaxLineKetas = m_layoutMgr.GetMaxLineKetas();	// 現在の折り返し幅
+			nMaxLineKetas = layoutMgr.GetMaxLineKetas();	// 現在の折り返し幅
 			break;
 		}
 
-		if (m_bTabSpaceCurTemp) {
+		if (bTabSpaceCurTemp) {
 			if (nTabSpaceOld != ref.nTabSpace) {
 				// タイプ別設定が変更されたので一時適用解除
-				m_bTabSpaceCurTemp = false;
+				bTabSpaceCurTemp = false;
 			}else {
 				// 一時適用継続
-				nTabSpace = m_layoutMgr.GetTabSpace();
+				nTabSpace = layoutMgr.GetTabSpace();
 			}
 		}
 	}else {
 		// レイアウトを再構築しないので元の設定を維持
-		nMaxLineKetas = m_layoutMgr.GetMaxLineKetas();	// 現在の折り返し幅
-		nTabSpace = m_layoutMgr.GetTabSpace();	// 現在のタブ幅
+		nMaxLineKetas = layoutMgr.GetMaxLineKetas();	// 現在の折り返し幅
+		nTabSpace = layoutMgr.GetTabSpace();	// 現在のタブ幅
 	}
-	ProgressSubject* pOld = EditApp::getInstance().pVisualProgress->ProgressListener::Listen(&m_layoutMgr);
-	m_layoutMgr.SetLayoutInfo(bDoLayout, ref, nTabSpace, nMaxLineKetas);
+	ProgressSubject* pOld = EditApp::getInstance().pVisualProgress->ProgressListener::Listen(&layoutMgr);
+	layoutMgr.SetLayoutInfo(bDoLayout, ref, nTabSpace, nMaxLineKetas);
 	EditApp::getInstance().pVisualProgress->ProgressListener::Listen(pOld);
-	m_pEditWnd->ClearViewCaretPosInfo();
+	pEditWnd->ClearViewCaretPosInfo();
 	
 	// 2009.08.28 nasukoji	「折り返さない」ならテキスト最大幅を算出、それ以外は変数をクリア
-	if (m_nTextWrapMethodCur == TextWrappingMethod::NoWrapping) {
-		m_layoutMgr.CalculateTextWidth();		// テキスト最大幅を算出する
+	if (nTextWrapMethodCur == TextWrappingMethod::NoWrapping) {
+		layoutMgr.CalculateTextWidth();		// テキスト最大幅を算出する
 	}else {
-		m_layoutMgr.ClearLayoutLineWidth();	// 各行のレイアウト行長の記憶をクリアする
+		layoutMgr.ClearLayoutLineWidth();	// 各行のレイアウト行長の記憶をクリアする
 	}
 	// ビューに設定変更を反映させる
-	int viewCount = m_pEditWnd->GetAllViewCount();
+	int viewCount = pEditWnd->GetAllViewCount();
 	for (int i=0; i<viewCount; ++i) {
-		m_pEditWnd->GetView(i).OnChangeSetting();
+		pEditWnd->GetView(i).OnChangeSetting();
 	}
 	if (posSaveAry) {
-		m_pEditWnd->RestorePhysPosOfAllView(posSaveAry);
+		pEditWnd->RestorePhysPosOfAllView(posSaveAry);
 	}
 	for (int i=0; i<viewCount; ++i) {
-		m_pEditWnd->GetView(i).AdjustScrollBars();	// 2008.06.18 ryoji
+		pEditWnd->GetView(i).AdjustScrollBars();	// 2008.06.18 ryoji
 	}
 	if (hwndProgress) {
 		::ShowWindow(hwndProgress, SW_HIDE);
 	}
-	if (m_pEditWnd->m_pPrintPreview) {
+	if (pEditWnd->pPrintPreview) {
 		// 設定を戻す
 		SelectCharWidthCache(CharWidthFontMode::Print, CharWidthCacheMode::Local);
 	}
@@ -862,16 +860,16 @@ BOOL EditDoc::OnFileClose(bool bGrepNoConfirm)
 		}
 	}else {
 		// テキスト,文字コードセットが変更されていない場合は保存確認しない
-		if (!m_docEditor.IsModified() && !m_docFile.IsChgCodeSet()) {
+		if (!docEditor.IsModified() && !docFile.IsChgCodeSet()) {
 			return TRUE;
 		}
 	}
 
 	// -- -- 保存確認 -- -- //
 	TCHAR szGrepTitle[90];
-	LPCTSTR pszTitle = m_docFile.GetFilePathClass().IsValidPath() ? m_docFile.GetFilePath() : NULL;
+	LPCTSTR pszTitle = docFile.GetFilePathClass().IsValidPath() ? docFile.GetFilePath() : NULL;
 	if (EditApp::getInstance().pGrepAgent->bGrepMode) {
-		LPCWSTR		pszGrepKey = AppMode::getInstance().m_szGrepKey;
+		LPCWSTR		pszGrepKey = AppMode::getInstance().szGrepKey;
 		int			nLen = (int)wcslen(pszGrepKey);
 		NativeW	memDes;
 		LimitStringLengthW(pszGrepKey , nLen, 64, memDes);
@@ -901,7 +899,7 @@ BOOL EditDoc::OnFileClose(bool bGrepNoConfirm)
 		);
 		switch (nRet) {
 		case IDYES:
-			nBool = m_docFileOperation.FileSaveAs();	// 2006.12.30 ryoji
+			nBool = docFileOperation.FileSaveAs();	// 2006.12.30 ryoji
 			return nBool;
 		case IDNO:
 			return TRUE;
@@ -912,7 +910,7 @@ BOOL EditDoc::OnFileClose(bool bGrepNoConfirm)
 	}else {
 		ConfirmBeep();
 		int nRet;
-		if (m_docFile.IsChgCodeSet()) {
+		if (docFile.IsChgCodeSet()) {
 			nRet = ::MYMESSAGEBOX(
 				hwndMainFrame,
 				MB_YESNOCANCEL | MB_ICONQUESTION | MB_TOPMOST,
@@ -930,19 +928,19 @@ BOOL EditDoc::OnFileClose(bool bGrepNoConfirm)
 		}
 		switch (nRet) {
 		case IDYES:
-			if (m_docFile.GetFilePathClass().IsValidPath()) {
-				nBool = m_docFileOperation.FileSave();	// 2006.12.30 ryoji
+			if (docFile.GetFilePathClass().IsValidPath()) {
+				nBool = docFileOperation.FileSave();	// 2006.12.30 ryoji
 			}else {
-				nBool = m_docFileOperation.FileSaveAs();	// 2006.12.30 ryoji
+				nBool = docFileOperation.FileSaveAs();	// 2006.12.30 ryoji
 			}
 			return nBool;
 		case IDNO:
 			return TRUE;
 		case IDCANCEL:
 		default:
-			if (m_docFile.IsChgCodeSet()) {
-				m_docFile.CancelChgCodeSet();	// 文字コードセットの変更をキャンセルする
-				this->m_pEditWnd->GetActiveView().GetCaret().ShowCaretPosInfo();	// ステータス表示
+			if (docFile.IsChgCodeSet()) {
+				docFile.CancelChgCodeSet();	// 文字コードセットの変更をキャンセルする
+				this->pEditWnd->GetActiveView().GetCaret().ShowCaretPosInfo();	// ステータス表示
 			}
 			return FALSE;
 		}
@@ -963,7 +961,7 @@ void EditDoc::RunAutoMacro(int idx, LPCTSTR pszSaveFilePath)
 {
 	// 開ファイル／タイプ変更時はアウトラインを再解析する
 	if (!pszSaveFilePath) {
-		m_pEditWnd->m_dlgFuncList.Refresh();
+		pEditWnd->dlgFuncList.Refresh();
 	}
 
 	static bool bRunning = false;
@@ -974,10 +972,10 @@ void EditDoc::RunAutoMacro(int idx, LPCTSTR pszSaveFilePath)
 	if (EditApp::getInstance().pSMacroMgr->IsEnabled(idx)) {
 		if (!(::GetAsyncKeyState(VK_SHIFT) & 0x8000)) {	// Shift キーが押されていなければ実行
 			if (pszSaveFilePath)
-				m_docFile.SetSaveFilePath(pszSaveFilePath);
+				docFile.SetSaveFilePath(pszSaveFilePath);
 			// 2007.07.20 genta 自動実行マクロで発行したコマンドはキーマクロに保存しない
 			HandleCommand((EFunctionCode)((F_USERMACRO_0 + idx) | FA_NONRECORD));
-			m_docFile.SetSaveFilePath(_T(""));
+			docFile.SetSaveFilePath(_T(""));
 		}
 	}
 	bRunning = false;
@@ -986,7 +984,7 @@ void EditDoc::RunAutoMacro(int idx, LPCTSTR pszSaveFilePath)
 // (無題)の時のカレントディレクトリを設定する
 void EditDoc::SetCurDirNotitle()
 {
-	if (m_docFile.GetFilePathClass().IsValidPath()) {
+	if (docFile.GetFilePathClass().IsValidPath()) {
 		return; // ファイルがあるときは何もしない
 	}
 	EOpenDialogDir eOpenDialogDir = GetDllShareData().common.edit.eOpenDialogDir;

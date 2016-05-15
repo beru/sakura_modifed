@@ -40,7 +40,7 @@ class EditView;
 template <class Base>
 class ImplementsIUnknown : public Base {
 private:
-	int m_refCount;
+	int refCount;
 	ImplementsIUnknown(const ImplementsIUnknown&);
 	ImplementsIUnknown& operator = (const ImplementsIUnknown&);
 public:
@@ -50,10 +50,10 @@ public:
 	virtual HRESULT STDMETHODCALLTYPE QueryInterface(REFIID iid, void ** ppvObject) {
 		return E_NOINTERFACE; 
 	}
-	virtual ULONG STDMETHODCALLTYPE AddRef() { ++ m_refCount; return m_refCount; }
-	virtual ULONG STDMETHODCALLTYPE Release() { -- m_refCount; int R = m_refCount; if (m_refCount == 0) delete this; return R; }
+	virtual ULONG STDMETHODCALLTYPE AddRef() { ++ refCount; return refCount; }
+	virtual ULONG STDMETHODCALLTYPE Release() { -- refCount; int r = refCount; if (refCount == 0) delete this; return r; }
 public:
-	ImplementsIUnknown(): m_refCount(0) {}
+	ImplementsIUnknown(): refCount(0) {}
 	virtual ~ImplementsIUnknown() {}
 };
 
@@ -87,18 +87,18 @@ public:
 	virtual ~IfObj();
 
 	// フィールド・アクセサ
-	const std::wstring::value_type* Name() const { return this->m_name.c_str(); } // インタフェースオブジェクト名
-	bool IsGlobal() const { return this->m_isGlobal; } // オブジェクト名の省略可否
-	IWSHClient* Owner() const { return this->m_owner; } // オーナーIWSHClient
-	std::wstring m_name;
-	bool m_isGlobal;
-	IWSHClient *m_owner;
+	const std::wstring::value_type* Name() const { return this->name.c_str(); } // インタフェースオブジェクト名
+	bool IsGlobal() const { return this->isGlobal; } // オブジェクト名の省略可否
+	IWSHClient* Owner() const { return this->owner; } // オーナーIWSHClient
+	std::wstring name;
+	bool isGlobal;
+	IWSHClient* owner;
 
 	// 操作
 	void AddMethod(const wchar_t* Name, int ID, VARTYPE *ArgumentTypes,
 		int ArgumentCount, VARTYPE ResultType, CIfObjMethod Method);
 	void ReserveMethods(int Count) {
-		m_methods.reserve(Count);
+		methods.reserve(Count);
 	}
 
 	// 実装
@@ -127,7 +127,7 @@ public:
 
 private:
 	// メンバ変数
-	MethodInfoList m_methods;			// メソッド情報リスト
-	ITypeInfo* m_typeInfo;
+	MethodInfoList methods;			// メソッド情報リスト
+	ITypeInfo* typeInfo;
 };
 

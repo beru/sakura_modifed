@@ -36,18 +36,18 @@
 
 LayoutMgr::LayoutMgr()
 	:
-	m_getIndentOffset(&LayoutMgr::getIndentOffset_Normal)	// Oct. 1, 2002 genta	//	Nov. 16, 2002 メンバー関数ポインタにはクラス名が必要
+	getIndentOffset(&LayoutMgr::getIndentOffset_Normal)	// Oct. 1, 2002 genta	//	Nov. 16, 2002 メンバー関数ポインタにはクラス名が必要
 {
-	m_pDocLineMgr = nullptr;
-	m_pTypeConfig = nullptr;
-	m_nMaxLineKetas = LayoutInt(MAXLINEKETAS);
-	m_nTabSpace = LayoutInt(4);
-	m_pszKinsokuHead_1.clear();				// 行頭禁則	//@@@ 2002.04.08 MIK
-	m_pszKinsokuTail_1.clear();				// 行末禁則	//@@@ 2002.04.08 MIK
-	m_pszKinsokuKuto_1.clear();				// 句読点ぶらさげ	//@@@ 2002.04.17 MIK
+	pDocLineMgr = nullptr;
+	pTypeConfig = nullptr;
+	nMaxLineKetas = LayoutInt(MAXLINEKETAS);
+	nTabSpace = LayoutInt(4);
+	pszKinsokuHead_1.clear();				// 行頭禁則	//@@@ 2002.04.08 MIK
+	pszKinsokuTail_1.clear();				// 行末禁則	//@@@ 2002.04.08 MIK
+	pszKinsokuKuto_1.clear();				// 句読点ぶらさげ	//@@@ 2002.04.17 MIK
 
-	m_nTextWidth = LayoutInt(0);			// テキスト最大幅の記憶		// 2009.08.28 nasukoji
-	m_nTextWidthMaxLine = LayoutInt(0);	// 最大幅のレイアウト行		// 2009.08.28 nasukoji
+	nTextWidth = LayoutInt(0);			// テキスト最大幅の記憶		// 2009.08.28 nasukoji
+	nTextWidthMaxLine = LayoutInt(0);	// 最大幅のレイアウト行		// 2009.08.28 nasukoji
 
 	Init();
 }
@@ -57,9 +57,9 @@ LayoutMgr::~LayoutMgr()
 {
 	_Empty();
 
-	m_pszKinsokuHead_1.clear();	// 行頭禁則
-	m_pszKinsokuTail_1.clear();	// 行末禁則			//@@@ 2002.04.08 MIK
-	m_pszKinsokuKuto_1.clear();	// 句読点ぶらさげ	//@@@ 2002.04.17 MIK
+	pszKinsokuHead_1.clear();	// 行頭禁則
+	pszKinsokuTail_1.clear();	// 行末禁則			//@@@ 2002.04.08 MIK
+	pszKinsokuKuto_1.clear();	// 句読点ぶらさげ	//@@@ 2002.04.17 MIK
 }
 
 
@@ -76,29 +76,29 @@ void LayoutMgr::Create(
 	_Empty();
 	Init();
 	// Jun. 20, 2003 genta EditDocへのポインタ追加
-	m_pEditDoc = pEditDoc;
-	m_pDocLineMgr = pDocLineMgr;
+	this->pEditDoc = pEditDoc;
+	this->pDocLineMgr = pDocLineMgr;
 }
 
 
 void LayoutMgr::Init()
 {
-	m_pLayoutTop = nullptr;
-	m_pLayoutBot = nullptr;
-	m_nPrevReferLine = LayoutInt(0);
-	m_pLayoutPrevRefer = nullptr;
-	m_nLines = LayoutInt(0);			// 全物理行数
-	m_nLineTypeBot = COLORIDX_DEFAULT;
+	pLayoutTop = nullptr;
+	pLayoutBot = nullptr;
+	nPrevReferLine = LayoutInt(0);
+	pLayoutPrevRefer = nullptr;
+	nLines = LayoutInt(0);			// 全物理行数
+	nLineTypeBot = COLORIDX_DEFAULT;
 
 	// EOFレイアウト位置記憶	// 2006.10.07 Moca
-	m_nEOFLine = LayoutInt(-1);
-	m_nEOFColumn = LayoutInt(-1);
+	nEOFLine = LayoutInt(-1);
+	nEOFColumn = LayoutInt(-1);
 }
 
 
 void LayoutMgr::_Empty()
 {
-	Layout* pLayout = m_pLayoutTop;
+	Layout* pLayout = pLayoutTop;
 	while (pLayout) {
 		Layout* pLayoutNext = pLayout->GetNextLayout();
 		delete pLayout;
@@ -120,54 +120,54 @@ void LayoutMgr::SetLayoutInfo(
 {
 	MY_RUNNINGTIMER(runningTimer, "LayoutMgr::SetLayoutInfo");
 
-	assert_warning((!bDoLayout && m_nMaxLineKetas == nMaxLineKetas) || bDoLayout);
-	assert_warning((!bDoLayout && m_nTabSpace == refType.nTabSpace) || bDoLayout);
+	assert_warning((!bDoLayout && nMaxLineKetas == nMaxLineKetas) || bDoLayout);
+	assert_warning((!bDoLayout && nTabSpace == refType.nTabSpace) || bDoLayout);
 
 	// タイプ別設定
-	m_pTypeConfig = &refType;
-	m_nMaxLineKetas = nMaxLineKetas;
-	m_nTabSpace = nTabSpace;
+	pTypeConfig = &refType;
+	nMaxLineKetas = nMaxLineKetas;
+	nTabSpace = nTabSpace;
 
 	// Oct. 1, 2002 genta タイプによって処理関数を変更する
 	// 数が増えてきたらテーブルにすべき
 	switch (refType.nIndentLayout) {	// 折り返しは2行目以降を字下げ表示	//@@@ 2002.09.29 YAZAKI
 	case 1:
 		// Nov. 16, 2002 メンバー関数ポインタにはクラス名が必要
-		m_getIndentOffset = &LayoutMgr::getIndentOffset_Tx2x;
+		getIndentOffset = &LayoutMgr::getIndentOffset_Tx2x;
 		break;
 	case 2:
-		m_getIndentOffset = &LayoutMgr::getIndentOffset_LeftSpace;
+		getIndentOffset = &LayoutMgr::getIndentOffset_LeftSpace;
 		break;
 	default:
-		m_getIndentOffset = &LayoutMgr::getIndentOffset_Normal;
+		getIndentOffset = &LayoutMgr::getIndentOffset_Normal;
 		break;
 	}
 
 	// 句読点ぶら下げ文字	// 2009.08.07 ryoji
-	// refType.szKinsokuKuto → m_pszKinsokuKuto_1
-	m_pszKinsokuKuto_1.clear();
+	// refType.szKinsokuKuto → pszKinsokuKuto_1
+	pszKinsokuKuto_1.clear();
 	if (refType.bKinsokuKuto) {	// 2009.08.06 ryoji bKinsokuKutoで振り分ける(Fix)
 		for (const wchar_t* p=refType.szKinsokuKuto; *p; ++p) {
-			m_pszKinsokuKuto_1.push_back_unique(*p);
+			pszKinsokuKuto_1.push_back_unique(*p);
 		}
 	}
 
 	// 行頭禁則文字
-	// refType.szKinsokuHead → (句読点以外) m_pszKinsokuHead_1
-	m_pszKinsokuHead_1.clear();
+	// refType.szKinsokuHead → (句読点以外) pszKinsokuHead_1
+	pszKinsokuHead_1.clear();
 	for (const wchar_t* p=refType.szKinsokuHead; *p; ++p) {
-		if (m_pszKinsokuKuto_1.exist(*p)) {
+		if (pszKinsokuKuto_1.exist(*p)) {
 			continue;
 		}else {
-			m_pszKinsokuHead_1.push_back_unique(*p);
+			pszKinsokuHead_1.push_back_unique(*p);
 		}
 	}
 
 	// 行末禁則文字
-	// refType.szKinsokuTail → m_pszKinsokuTail_1
-	m_pszKinsokuTail_1.clear();
+	// refType.szKinsokuTail → pszKinsokuTail_1
+	pszKinsokuTail_1.clear();
 	for (const wchar_t* p=refType.szKinsokuTail; *p; ++p) {
-		m_pszKinsokuTail_1.push_back_unique(*p);
+		pszKinsokuTail_1.push_back_unique(*p);
 	}
 
 	// レイアウト
@@ -190,37 +190,37 @@ const Layout* LayoutMgr::SearchLineByLayoutY(
 
 	Layout*	pLayout;
 	LayoutInt	nCount;
-	if (m_nLines == LayoutInt(0)) {
+	if (nLines == LayoutInt(0)) {
 		return nullptr;
 	}
 
 	// Mar. 19, 2003 Moca nLineNumが負の場合のチェックを追加
-	if (LayoutInt(0) > nLineNum || nLineNum >= m_nLines) {
+	if (LayoutInt(0) > nLineNum || nLineNum >= nLines) {
 		if (LayoutInt(0) > nLineNum) {
 			DEBUG_TRACE(_T("LayoutMgr::SearchLineByLayoutY() nLineNum = %d\n"), nLineNum);
 		}
 		return nullptr;
 	}
 //	// +++++++ 低速版 +++++++++
-//	if (nLineNum < (m_nLines / 2)) {
+//	if (nLineNum < (nLines / 2)) {
 //		nCount = 0;
-//		pLayout = m_pLayoutTop;
+//		pLayout = pLayoutTop;
 //		while (pLayout) {
 //			if (nLineNum == nCount) {
-//				m_pLayoutPrevRefer = pLayout;
-//				m_nPrevReferLine = nLineNum;
+//				pLayoutPrevRefer = pLayout;
+//				nPrevReferLine = nLineNum;
 //				return pLayout;
 //			}
 //			pLayout = pLayout->GetNextLayout();
 //			++nCount;
 //		}
 //	}else {
-//		nCount = m_nLines - 1;
-//		pLayout = m_pLayoutBot;
+//		nCount = nLines - 1;
+//		pLayout = pLayoutBot;
 //		while (pLayout) {
 //			if (nLineNum == nCount) {
-//				m_pLayoutPrevRefer = pLayout;
-//				m_nPrevReferLine = nLineNum;
+//				pLayoutPrevRefer = pLayout;
+//				nPrevReferLine = nLineNum;
 //				return pLayout;
 //			}
 //			pLayout = pLayout->GetPrevLayout();
@@ -230,32 +230,32 @@ const Layout* LayoutMgr::SearchLineByLayoutY(
 
 
 	// +++++++わずかに高速版+++++++
-	// 2004.03.28 Moca m_pLayoutPrevReferより、Top,Botのほうが近い場合は、そちらを利用する
-	LayoutInt nPrevToLineNumDiff = t_abs(m_nPrevReferLine - nLineNum);
+	// 2004.03.28 Moca pLayoutPrevReferより、Top,Botのほうが近い場合は、そちらを利用する
+	LayoutInt nPrevToLineNumDiff = t_abs(nPrevReferLine - nLineNum);
 	if (0
-		|| !m_pLayoutPrevRefer
+		|| !pLayoutPrevRefer
 		|| nLineNum < nPrevToLineNumDiff
-		|| m_nLines - nLineNum < nPrevToLineNumDiff
+		|| nLines - nLineNum < nPrevToLineNumDiff
 	) {
-		if (nLineNum < (m_nLines / 2)) {
+		if (nLineNum < (nLines / 2)) {
 			nCount = LayoutInt(0);
-			pLayout = m_pLayoutTop;
+			pLayout = pLayoutTop;
 			while (pLayout) {
 				if (nLineNum == nCount) {
-					m_pLayoutPrevRefer = pLayout;
-					m_nPrevReferLine = nLineNum;
+					pLayoutPrevRefer = pLayout;
+					nPrevReferLine = nLineNum;
 					return pLayout;
 				}
 				pLayout = pLayout->GetNextLayout();
 				++nCount;
 			}
 		}else {
-			nCount = m_nLines - LayoutInt(1);
-			pLayout = m_pLayoutBot;
+			nCount = nLines - LayoutInt(1);
+			pLayout = pLayoutBot;
 			while (pLayout) {
 				if (nLineNum == nCount) {
-					m_pLayoutPrevRefer = pLayout;
-					m_nPrevReferLine = nLineNum;
+					pLayoutPrevRefer = pLayout;
+					nPrevReferLine = nLineNum;
 					return pLayout;
 				}
 				pLayout = pLayout->GetPrevLayout();
@@ -263,27 +263,27 @@ const Layout* LayoutMgr::SearchLineByLayoutY(
 			}
 		}
 	}else {
-		if (nLineNum == m_nPrevReferLine) {
-			return m_pLayoutPrevRefer;
-		}else if (nLineNum > m_nPrevReferLine) {
-			nCount = m_nPrevReferLine + LayoutInt(1);
-			pLayout = m_pLayoutPrevRefer->GetNextLayout();
+		if (nLineNum == nPrevReferLine) {
+			return pLayoutPrevRefer;
+		}else if (nLineNum > nPrevReferLine) {
+			nCount = nPrevReferLine + LayoutInt(1);
+			pLayout = pLayoutPrevRefer->GetNextLayout();
 			while (pLayout) {
 				if (nLineNum == nCount) {
-					m_pLayoutPrevRefer = pLayout;
-					m_nPrevReferLine = nLineNum;
+					pLayoutPrevRefer = pLayout;
+					nPrevReferLine = nLineNum;
 					return pLayout;
 				}
 				pLayout = pLayout->GetNextLayout();
 				++nCount;
 			}
 		}else {
-			nCount = m_nPrevReferLine - LayoutInt(1);
-			pLayout = m_pLayoutPrevRefer->GetPrevLayout();
+			nCount = nPrevReferLine - LayoutInt(1);
+			pLayout = pLayoutPrevRefer->GetPrevLayout();
 			while (pLayout) {
 				if (nLineNum == nCount) {
-					m_pLayoutPrevRefer = pLayout;
-					m_nPrevReferLine = nLineNum;
+					pLayoutPrevRefer = pLayout;
+					nPrevReferLine = nLineNum;
 					return pLayout;
 				}
 				pLayout = pLayout->GetPrevLayout();
@@ -298,16 +298,16 @@ const Layout* LayoutMgr::SearchLineByLayoutY(
 //@@@ 2002.09.23 YAZAKI Layout*を作成するところは分離して、InsertLineNext()と共通化
 void LayoutMgr::AddLineBottom(Layout* pLayout)
 {
-	if (m_nLines == LayoutInt(0)) {
-		m_pLayoutBot = m_pLayoutTop = pLayout;
-		m_pLayoutTop->m_pPrev = nullptr;
+	if (nLines == LayoutInt(0)) {
+		pLayoutBot = pLayoutTop = pLayout;
+		pLayoutTop->pPrev = nullptr;
 	}else {
-		m_pLayoutBot->m_pNext = pLayout;
-		pLayout->m_pPrev = m_pLayoutBot;
-		m_pLayoutBot = pLayout;
+		pLayoutBot->pNext = pLayout;
+		pLayout->pPrev = pLayoutBot;
+		pLayoutBot = pLayout;
 	}
-	pLayout->m_pNext = nullptr;
-	++m_nLines;
+	pLayout->pNext = nullptr;
+	++nLines;
 	return;
 }
 
@@ -317,33 +317,33 @@ Layout* LayoutMgr::InsertLineNext(
 	Layout* pLayout
 	)
 {
-	if (m_nLines == LayoutInt(0)) {
+	if (nLines == LayoutInt(0)) {
 		// 初
-		m_pLayoutBot = m_pLayoutTop = pLayout;
-		m_pLayoutTop->m_pPrev = nullptr;
-		m_pLayoutTop->m_pNext = nullptr;
+		pLayoutBot = pLayoutTop = pLayout;
+		pLayoutTop->pPrev = nullptr;
+		pLayoutTop->pNext = nullptr;
 	}else if (!pLayoutPrev) {
 		// 先頭に挿入
-		m_pLayoutTop->m_pPrev = pLayout;
-		pLayout->m_pPrev = nullptr;
-		pLayout->m_pNext = m_pLayoutTop;
-		m_pLayoutTop = pLayout;
+		pLayoutTop->pPrev = pLayout;
+		pLayout->pPrev = nullptr;
+		pLayout->pNext = pLayoutTop;
+		pLayoutTop = pLayout;
 	}else
 	if (!pLayoutPrev->GetNextLayout()) {
 		// 最後に挿入
-		m_pLayoutBot->m_pNext = pLayout;
-		pLayout->m_pPrev = m_pLayoutBot;
-		pLayout->m_pNext = nullptr;
-		m_pLayoutBot = pLayout;
+		pLayoutBot->pNext = pLayout;
+		pLayout->pPrev = pLayoutBot;
+		pLayout->pNext = nullptr;
+		pLayoutBot = pLayout;
 	}else {
 		// 途中に挿入
 		Layout* pLayoutNext = pLayoutPrev->GetNextLayout();
-		pLayoutPrev->m_pNext = pLayout;
-		pLayoutNext->m_pPrev = pLayout;
-		pLayout->m_pPrev = pLayoutPrev;
-		pLayout->m_pNext = pLayoutNext;
+		pLayoutPrev->pNext = pLayout;
+		pLayoutNext->pPrev = pLayout;
+		pLayout->pPrev = pLayoutPrev;
+		pLayout->pNext = pLayoutNext;
 	}
-	++m_nLines;
+	++nLines;
 	return pLayout;
 }
 
@@ -371,14 +371,14 @@ Layout* LayoutMgr::CreateLayout(
 	);
 
 	if (pDocLine->GetEol() == EolType::None) {
-		pLayout->m_eol.SetType(EolType::None);	// 改行コードの種類
+		pLayout->eol.SetType(EolType::None);	// 改行コードの種類
 	}else {
 		if (pLayout->GetLogicOffset() + pLayout->GetLengthWithEOL() >
 			pDocLine->GetLengthWithEOL() - pDocLine->GetEol().GetLen()
 		) {
-			pLayout->m_eol = pDocLine->GetEol();	// 改行コードの種類
+			pLayout->eol = pDocLine->GetEol();	// 改行コードの種類
 		}else {
-			pLayout->m_eol = EolType::None;	// 改行コードの種類
+			pLayout->eol = EolType::None;	// 改行コードの種類
 		}
 	}
 
@@ -387,7 +387,7 @@ Layout* LayoutMgr::CreateLayout(
 	// パフォーマンスの低下が気にならない程なら全ての折り返し方法で計算する
 	// ようにしても良いと思う。
 	// （その場合LayoutMgr::CalculateTextWidth()の呼び出し箇所をチェック）
-	pLayout->SetLayoutWidth((m_pEditDoc->m_nTextWrapMethodCur == TextWrappingMethod::NoWrapping) ? nPosX : LayoutInt(0));
+	pLayout->SetLayoutWidth((pEditDoc->nTextWrapMethodCur == TextWrappingMethod::NoWrapping) ? nPosX : LayoutInt(0));
 
 	return pLayout;
 }
@@ -424,7 +424,7 @@ const wchar_t* LayoutMgr::GetLineStr(
 		return NULL;
 	}
 	*pnLineLen = (*ppcLayoutDes)->GetLengthWithEOL();
-	return (*ppcLayoutDes)->m_pDocLine->GetPtr() + (*ppcLayoutDes)->GetLogicOffset();
+	return (*ppcLayoutDes)->pDocLine->GetPtr() + (*ppcLayoutDes)->GetLogicOffset();
 }
 
 /*
@@ -467,23 +467,23 @@ void LayoutMgr::GetEndLayoutPos(
 	LayoutPoint* ptLayoutEnd // [out]
 	)
 {
-	if (m_nEOFLine != -1) {
-		ptLayoutEnd->x = m_nEOFColumn;
-		ptLayoutEnd->y = m_nEOFLine;
+	if (nEOFLine != -1) {
+		ptLayoutEnd->x = nEOFColumn;
+		ptLayoutEnd->y = nEOFLine;
 		return;
 	}
 
-	if (m_nLines == LayoutInt(0) || !m_pLayoutBot) {
+	if (nLines == LayoutInt(0) || !pLayoutBot) {
 		// データが空
 		ptLayoutEnd->x = LayoutInt(0);
 		ptLayoutEnd->y = LayoutInt(0);
-		m_nEOFColumn = ptLayoutEnd->x;
-		m_nEOFLine = ptLayoutEnd->y;
+		nEOFColumn = ptLayoutEnd->x;
+		nEOFLine = ptLayoutEnd->y;
 		return;
 	}
 
-	Layout* btm = m_pLayoutBot;
-	if (btm->m_eol != EolType::None) {
+	Layout* btm = pLayoutBot;
+	if (btm->eol != EolType::None) {
 		// 末尾に改行がある
 		ptLayoutEnd->Set(LayoutInt(0), GetLineCount());
 	}else {
@@ -501,8 +501,8 @@ void LayoutMgr::GetEndLayoutPos(
 		//}
 		//// 2006.10.01 Moca End
 	}
-	m_nEOFColumn = ptLayoutEnd->x;
-	m_nEOFLine = ptLayoutEnd->y;
+	nEOFColumn = ptLayoutEnd->x;
+	nEOFLine = ptLayoutEnd->y;
 }
 
 
@@ -518,7 +518,7 @@ Layout* LayoutMgr::DeleteLayoutAsLogical(
 	)
 {
 	*pnDeleteLines = LayoutInt(0);
-	if (m_nLines == LayoutInt(0)) {	// 全物理行数
+	if (nLines == LayoutInt(0)) {	// 全物理行数
 		return nullptr;
 	}
 	if (!pLayoutInThisArea) {
@@ -526,8 +526,8 @@ Layout* LayoutMgr::DeleteLayoutAsLogical(
 	}
 
 	// 1999.11.22
-	m_pLayoutPrevRefer = pLayoutInThisArea->GetPrevLayout();
-	m_nPrevReferLine = nLineOf_pLayoutInThisArea - LayoutInt(1);
+	pLayoutPrevRefer = pLayoutInThisArea->GetPrevLayout();
+	nPrevReferLine = nLineOf_pLayoutInThisArea - LayoutInt(1);
 
 	// 範囲内先頭に該当するレイアウト情報をサーチ
 	Layout* pLayoutWork = pLayoutInThisArea->GetPrevLayout();
@@ -535,7 +535,7 @@ Layout* LayoutMgr::DeleteLayoutAsLogical(
 		pLayoutWork = pLayoutWork->GetPrevLayout();
 	}
 
-	Layout* pLayout = pLayoutWork ? pLayoutWork->GetNextLayout() : m_pLayoutTop;
+	Layout* pLayout = pLayoutWork ? pLayoutWork->GetNextLayout() : pLayoutTop;
 	while (pLayout) {
 		if (pLayout->GetLogicLineNo() > nLineTo) {
 			break;
@@ -543,20 +543,20 @@ Layout* LayoutMgr::DeleteLayoutAsLogical(
 		Layout* pLayoutNext = pLayout->GetNextLayout();
 		if (!pLayoutWork) {
 			// 先頭行の処理
-			m_pLayoutTop = pLayout->GetNextLayout();
+			pLayoutTop = pLayout->GetNextLayout();
 			if (pLayout->GetNextLayout()) {
-				pLayout->m_pNext->m_pPrev = nullptr;
+				pLayout->pNext->pPrev = nullptr;
 			}
 		}else {
-			pLayoutWork->m_pNext = pLayout->GetNextLayout();
+			pLayoutWork->pNext = pLayout->GetNextLayout();
 			if (pLayout->GetNextLayout()) {
-				pLayout->m_pNext->m_pPrev = pLayoutWork;
+				pLayout->pNext->pPrev = pLayoutWork;
 			}
 		}
-//		if (m_pLayoutPrevRefer == pLayout) {
+//		if (pLayoutPrevRefer == pLayout) {
 //			// 1999.12.22 前にずらすだけでよいのでは
-//			m_pLayoutPrevRefer = pLayout->GetPrevLayout();
-//			--m_nPrevReferLine;
+//			pLayoutPrevRefer = pLayout->GetPrevLayout();
+//			--nPrevReferLine;
 //		}
 
 		if (0
@@ -569,15 +569,15 @@ Layout* LayoutMgr::DeleteLayoutAsLogical(
 			(*pnDeleteLines)++;
 		}
 
-		if (m_pLayoutPrevRefer == pLayout) {
+		if (pLayoutPrevRefer == pLayout) {
 			DEBUG_TRACE(_T("バグバグ\n"));
 		}
 
 		delete pLayout;
 
-		--m_nLines;	// 全物理行数
+		--nLines;	// 全物理行数
 		if (!pLayoutNext) {
-			m_pLayoutBot = pLayoutWork;
+			pLayoutBot = pLayoutWork;
 		}
 		pLayout = pLayoutNext;
 	}
@@ -600,7 +600,7 @@ void LayoutMgr::ShiftLogicalLineNum(
 	if (nShiftLines == 0) {
 		return;
 	}
-	Layout* pLayout = pLayoutPrev ? pLayoutPrev->GetNextLayout() : m_pLayoutTop;
+	Layout* pLayout = pLayoutPrev ? pLayoutPrev->GetNextLayout() : pLayoutTop;
 	// レイアウト情報全体を更新する(なな、なんと!!!)
 	while (pLayout) {
 		pLayout->OffsetLogicLineNo(nShiftLines);	// 対応する論理行番号
@@ -621,8 +621,8 @@ bool LayoutMgr::ChangeLayoutParam(
 		return false;
 	}
 
-	m_nTabSpace = nTabSize;
-	m_nMaxLineKetas = nMaxLineKetas;
+	nTabSpace = nTabSize;
+	nMaxLineKetas = nMaxLineKetas;
 
 	_DoLayout();
 
@@ -647,7 +647,7 @@ bool LayoutMgr::WhereCurrentWord(
 	// 現在位置の単語の範囲を調べる -> ロジック単位pSelect, pMemWord, pMemWordLeft
 	LogicInt nFromX;
 	LogicInt nToX;
-	bool nRetCode = SearchAgent(*m_pDocLineMgr).WhereCurrentWord(
+	bool nRetCode = SearchAgent(*pDocLineMgr).WhereCurrentWord(
 		pLayout->GetLogicLineNo(),
 		pLayout->GetLogicOffset() + LogicInt(nIdx),
 		&nFromX,
@@ -687,7 +687,7 @@ int LayoutMgr::PrevOrNextWord(
 
 	// 現在位置の左右の単語の先頭位置を調べる
 	LogicInt nPosNew;
-	int nRetCode = SearchAgent(*m_pDocLineMgr).PrevOrNextWord(
+	int nRetCode = SearchAgent(*pDocLineMgr).PrevOrNextWord(
 		pLayout->GetLogicLineNo(),
 		pLayout->GetLogicOffset() + nIdx,
 		&nPosNew,
@@ -726,7 +726,7 @@ int LayoutMgr::SearchWord(
 
 	// 単語検索 -> logicRange (データ位置)
 	LogicRange logicRange;
-	int nRetCode = SearchAgent(*m_pDocLineMgr).SearchWord(
+	int nRetCode = SearchAgent(*pDocLineMgr).SearchWord(
 		LogicPoint(pLayout->GetLogicOffset() + nIdx, pLayout->GetLogicLineNo()),
 		searchDirection,
 		&logicRange, //pMatchRange,
@@ -778,20 +778,20 @@ void LayoutMgr::LogicToLayout(
 		nLineHint = t_min(GetLineCount() - 1, nLineHint);
 		nCaretPosY = t_max(LayoutInt(ptLogic.y), nLineHint);
 
-		// 2013.05.12 m_pLayoutPrevReferを見る
+		// 2013.05.12 pLayoutPrevReferを見る
 		if (1
-			&& nCaretPosY <= m_nPrevReferLine
-			&& m_pLayoutPrevRefer
-			&& m_pLayoutPrevRefer->GetLogicLineNo() <= ptLogic.y
+			&& nCaretPosY <= nPrevReferLine
+			&& pLayoutPrevRefer
+			&& pLayoutPrevRefer->GetLogicLineNo() <= ptLogic.y
 		) {
 			// ヒントより現在位置のほうが後ろか同じぐらいで近い
-			nCaretPosY = LayoutInt(ptLogic.y - m_pLayoutPrevRefer->GetLogicLineNo()) + m_nPrevReferLine;
+			nCaretPosY = LayoutInt(ptLogic.y - pLayoutPrevRefer->GetLogicLineNo()) + nPrevReferLine;
 			pLayout = SearchLineByLayoutY(nCaretPosY);
 		}else {
 			pLayout = SearchLineByLayoutY(nCaretPosY);
 		}
 		if (!pLayout) {
-			pptLayout->SetY(m_nLines);
+			pptLayout->SetY(nLines);
 			return;
 		}
 		
@@ -879,7 +879,7 @@ void LayoutMgr::LogicToLayout(
 				break;
 			}
 
-			if (ptLogic.y < pLayout->m_pNext->GetLogicLineNo()) {
+			if (ptLogic.y < pLayout->pNext->GetLogicLineNo()) {
 				// 次のLayoutが当該物理行を過ぎてしまう場合はデータ末尾のレイアウト位置を返す．
 				nCaretPosX = pLayout->CalcLayoutWidth(*this) + LayoutInt(pLayout->GetLayoutEol().GetLen() > 0 ? 1 : 0);
 				break;
@@ -918,10 +918,10 @@ void LayoutMgr::LayoutToLogicEx(
 {
 	pptLogic->Set(LogicInt(0), LogicInt(0));
 	pptLogic->ext = 0;
-	if (ptLayout.GetY2() > m_nLines) {
+	if (ptLayout.GetY2() > nLines) {
 		// 2007.10.11 kobake Y値が間違っていたので修正
-		//pptLogic->Set(0, m_nLines);
-		pptLogic->Set(LogicInt(0), m_pDocLineMgr->GetLineCount());
+		//pptLogic->Set(0, nLines);
+		pptLogic->Set(LogicInt(0), pDocLineMgr->GetLineCount());
 		return;
 	}
 
@@ -931,23 +931,23 @@ void LayoutMgr::LayoutToLogicEx(
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                        Ｙ値の決定                           //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-	BOOL bEOF = FALSE;
+	bool bEOF = false;
 	LayoutInt nX;
 	const Layout* pLayout = SearchLineByLayoutY(ptLayout.GetY2());
 	if (!pLayout) {
 		if (0 < ptLayout.y) {
 			pLayout = SearchLineByLayoutY(ptLayout.GetY2() - LayoutInt(1));
 			if (!pLayout) {
-				pptLogic->Set(LogicInt(0), m_pDocLineMgr->GetLineCount());
+				pptLogic->Set(LogicInt(0), pDocLineMgr->GetLineCount());
 				return;
 			}else {
 				pData = GetLineStr(ptLayout.GetY2() - LayoutInt(1), &nDataLen);
 				if (WCODE::IsLineDelimiter(pData[nDataLen - 1], GetDllShareData().common.edit.bEnableExtEol)) {
-					pptLogic->Set(LogicInt(0), m_pDocLineMgr->GetLineCount());
+					pptLogic->Set(LogicInt(0), pDocLineMgr->GetLineCount());
 					return;
 				}else {
-					pptLogic->y = m_pDocLineMgr->GetLineCount() - 1; // 2002/2/10 aroka DocLineMgr変更
-					bEOF = TRUE;
+					pptLogic->y = pDocLineMgr->GetLineCount() - 1; // 2002/2/10 aroka DocLineMgr変更
+					bEOF = true;
 					// nX = LayoutInt(MAXLINEKETAS);
 					nX = pLayout->GetIndent();
 					goto checkloop;
@@ -955,8 +955,8 @@ void LayoutMgr::LayoutToLogicEx(
 			}
 		}
 		// 2007.10.11 kobake Y値が間違っていたので修正
-		//pptLogic->Set(0, m_nLines);
-		pptLogic->Set(LogicInt(0), m_pDocLineMgr->GetLineCount());
+		//pptLogic->Set(0, nLines);
+		pptLogic->Set(LogicInt(0), pDocLineMgr->GetLineCount());
 		return;
 	}else {
 		pptLogic->y = pLayout->GetLogicLineNo();
@@ -1027,26 +1027,26 @@ void LayoutMgr::DUMP()
 #ifdef _DEBUG
 	LogicInt nDataLen;
 	MYTRACE(_T("------------------------\n"));
-	MYTRACE(_T("m_nLines=%d\n"), m_nLines);
-	MYTRACE(_T("m_pLayoutTop=%08lxh\n"), m_pLayoutTop);
-	MYTRACE(_T("m_pLayoutBot=%08lxh\n"), m_pLayoutBot);
-	MYTRACE(_T("nMaxLineKetas=%d\n"), m_nMaxLineKetas);
+	MYTRACE(_T("nLines=%d\n"), nLines);
+	MYTRACE(_T("pLayoutTop=%08lxh\n"), pLayoutTop);
+	MYTRACE(_T("pLayoutBot=%08lxh\n"), pLayoutBot);
+	MYTRACE(_T("nMaxLineKetas=%d\n"), nMaxLineKetas);
 
-	MYTRACE(_T("nTabSpace=%d\n"), m_nTabSpace);
-	Layout* pLayout = m_pLayoutTop;
+	MYTRACE(_T("nTabSpace=%d\n"), nTabSpace);
+	Layout* pLayout = pLayoutTop;
 	while (pLayout) {
 		Layout* pLayoutNext = pLayout->GetNextLayout();
 		MYTRACE(_T("\t-------\n"));
-		MYTRACE(_T("\tthis=%08lxh\n"), pLayout);
-		MYTRACE(_T("\tm_pPrev =%08lxh\n"),		pLayout->GetPrevLayout());
-		MYTRACE(_T("\tm_pNext =%08lxh\n"),		pLayout->GetNextLayout());
-		MYTRACE(_T("\tm_nLinePhysical=%d\n"),	pLayout->GetLogicLineNo());
-		MYTRACE(_T("\tm_nOffset=%d\n"),		pLayout->GetLogicOffset());
-		MYTRACE(_T("\tm_nLength=%d\n"),		pLayout->GetLengthWithEOL());
-		MYTRACE(_T("\tm_enumEOLType =%ls\n"),	pLayout->GetLayoutEol().GetName());
-		MYTRACE(_T("\tm_nEOLLen =%d\n"),		pLayout->GetLayoutEol().GetLen());
-		MYTRACE(_T("\tm_nTypePrev=%d\n"),		pLayout->GetColorTypePrev());
-		const wchar_t* pData = DocReader(*m_pDocLineMgr).GetLineStr(pLayout->GetLogicLineNo(), &nDataLen);
+		MYTRACE(_T("\tthis=%08lxh\n"),		pLayout);
+		MYTRACE(_T("\tpPrev =%08lxh\n"),	pLayout->GetPrevLayout());
+		MYTRACE(_T("\tpNext =%08lxh\n"),	pLayout->GetNextLayout());
+		MYTRACE(_T("\tnLinePhysical=%d\n"),	pLayout->GetLogicLineNo());
+		MYTRACE(_T("\tnOffset=%d\n"),		pLayout->GetLogicOffset());
+		MYTRACE(_T("\tnLength=%d\n"),		pLayout->GetLengthWithEOL());
+		MYTRACE(_T("\tenumEOLType =%ls\n"),	pLayout->GetLayoutEol().GetName());
+		MYTRACE(_T("\tnEOLLen =%d\n"),		pLayout->GetLayoutEol().GetLen());
+		MYTRACE(_T("\tnTypePrev=%d\n"),		pLayout->GetColorTypePrev());
+		const wchar_t* pData = DocReader(*pDocLineMgr).GetLineStr(pLayout->GetLogicLineNo(), &nDataLen);
 		MYTRACE(_T("\t[%ls]\n"), pData);
 		pLayout = pLayoutNext;
 	}

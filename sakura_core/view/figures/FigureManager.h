@@ -42,7 +42,7 @@ public:
 	void OnChangeSetting(void);
 
 private:
-	std::vector<Figure*>	m_vFigures;
-	std::vector<Figure*>	m_vFiguresDisp;	// 色分け表示対象
+	std::vector<Figure*>	vFigures;
+	std::vector<Figure*>	vFiguresDisp;	// 色分け表示対象
 };
 

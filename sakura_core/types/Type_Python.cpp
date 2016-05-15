@@ -86,9 +86,9 @@ struct OutlinePython {
 		STATE_CONTINUE,	// 継続行 : 前の行からの続きなので行頭とはみなされない
 	} state;
 	
-	int m_quote_char;	// 引用符記号
-	bool m_raw_string;	// エスケープ記号無視ならtrue
-	bool m_long_string;	// 長い文字列中ならtrue
+	int quote_char;	// 引用符記号
+	bool raw_string;	// エスケープ記号無視ならtrue
+	bool long_string;	// 長い文字列中ならtrue
 
 	OutlinePython();
 
@@ -110,9 +110,10 @@ struct OutlinePython {
 	初期状態をSTATE_NORMALに設定する．
 */
 OutlinePython::OutlinePython()
-	: state(STATE_NORMAL),
-	m_raw_string(false),
-	m_long_string(false)
+	:
+	state(STATE_NORMAL),
+	raw_string(false),
+	long_string(false)
 {
 }
 
@@ -146,25 +147,25 @@ int OutlinePython::EnterString(const wchar_t* data, int linelen, int start_offse
 	if (data[col] == '\"' || data[col] == '\'') {
 		int quote_char = data[col];
 		state = STATE_STRING;
-		m_quote_char = quote_char;
+		quote_char = quote_char;
 		//	文字列の開始
 		if (col >= 1 &&
 			(data[col - 1] == 'r' || data[col - 1] == 'R')
 		) {
 			//	厳密には直前がSHIFT_JISの2バイト目だと誤判定する可能性があるが
 			//	そういう動かないコードは相手にしない
-			m_raw_string = true;
+			raw_string = true;
 		}else {
-			m_raw_string = false;
+			raw_string = false;
 		}
 		if (col + 2 < linelen &&
 			data[col + 1] == quote_char &&
 			data[col + 2] == quote_char
 		) {
-			m_long_string = true;
+			long_string = true;
 			col += 2;
 		}else {
-			m_long_string = false;
+			long_string = false;
 		}
 		++col;
 	}
@@ -240,10 +241,10 @@ int OutlinePython::ScanNormal(const wchar_t* data, int linelen, int start_offset
 	最終的な状態を決定する．
 	
 	文字列の開始判定はEnterString()関数で処理済みであり，その結果が
-	state, m_raw_string, m_long_string, m_quote_charに与えられている．
+	state, raw_string, long_string, m_quote_charに与えられている．
 	
-	m_raw_stringがtrueならbackslashによるエスケープ処理を行わない
-	m_long_stringならm_quote_charが3つ続くまで文字列となる．
+	raw_stringがtrueならbackslashによるエスケープ処理を行わない
+	long_stringならquote_charが3つ続くまで文字列となる．
 
 	@param[in] data 対象文字列
 	@param[in] linelen データの長さ
@@ -264,7 +265,6 @@ int OutlinePython::ScanString(const wchar_t* data, int linelen, int start_offset
 	assert(state == STATE_STRING);
 	bool bExtEol = GetDllShareData().common.edit.bEnableExtEol;
 
-	int quote_char = m_quote_char;
 	for (int col=start_offset; col<linelen; ++col) {
 		int nCharChars = NativeW::GetSizeOfChar(data, linelen, col);
 		if (1 < nCharChars) {
@@ -275,7 +275,7 @@ int OutlinePython::ScanString(const wchar_t* data, int linelen, int start_offset
 		//	rawモードでも継続行はチェック
 		if (data[col] == '\\' && col + 1 < linelen) {
 			wchar_t key = data[col + 1];
-			if (! m_raw_string) {
+			if (! raw_string) {
 				if (key == L'\\' ||
 					key == L'\"' ||
 					key == L'\''
@@ -300,14 +300,14 @@ int OutlinePython::ScanString(const wchar_t* data, int linelen, int start_offset
 		//	short string + 改行の場合はエラーから強制復帰
 		}else if (WCODE::IsLineDelimiter(data[col], bExtEol)) {
 			// あとで
-			if (!m_long_string) {
+			if (!long_string) {
 				//	文字列の末尾を発見した
 				state = STATE_NORMAL;
 				return col + 1;
 			}
 		//	引用符が見つかったら終了チェック
 		}else if (data[col] == quote_char) {
-			if (!m_long_string) {
+			if (!long_string) {
 				//	文字列の末尾を発見した
 				state = STATE_NORMAL;
 				return col + 1;
@@ -398,12 +398,12 @@ void DocOutline::MakeFuncList_python(FuncInfoArr* pFuncInfoArr)
 	indent_level[0] = 0;	// do as python does.
 	int depth_index = 0;
 
-	for (nLineCount=LogicInt(0); nLineCount<m_doc.m_docLineMgr.GetLineCount(); ++nLineCount) {
+	for (nLineCount=LogicInt(0); nLineCount<doc.docLineMgr.GetLineCount(); ++nLineCount) {
 		const wchar_t*	pLine;
 		int depth;	//	indent depth
 		LogicInt col = LogicInt(0);	//	current working column position
 
-		pLine = m_doc.m_docLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
+		pLine = doc.docLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
 		
 		if (python_analyze_state.IsLogicalLineTop()) {
 			//	indent check
@@ -525,7 +525,7 @@ void DocOutline::MakeFuncList_python(FuncInfoArr* pFuncInfoArr)
 			  レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 			*/
 			LayoutPoint ptPosXY;
-			m_doc.m_layoutMgr.LogicToLayout(
+			doc.layoutMgr.LogicToLayout(
 				LogicPoint(LogicInt(0), nLineCount),
 				&ptPosXY
 			);

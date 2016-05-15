@@ -49,8 +49,8 @@
 #define omSet (1)
 
 // 2007.07.26 genta
-PPA::PpaExecInfo* PPA::m_CurInstance = NULL;
-bool PPA::m_bIsRunning = false;
+PPA::PpaExecInfo* PPA::curInstance = NULL;
+bool PPA::bIsRunning = false;
 
 PPA::PPA()
 {
@@ -64,32 +64,32 @@ PPA::~PPA()
 bool PPA::Execute(EditView& editView, int flags)
 {
 	// PPAの多重起動禁止 2008.10.22 syat
-	if (PPA::m_bIsRunning) {
+	if (PPA::bIsRunning) {
 		MYMESSAGEBOX(editView.GetHwnd(), MB_OK, LS(STR_ERR_DLGPPA7), LS(STR_ERR_DLGPPA1));
-		m_fnAbort();
-		PPA::m_bIsRunning = false;
+		fnAbort();
+		PPA::bIsRunning = false;
 		return false;
 	}
-	PPA::m_bIsRunning = true;
+	PPA::bIsRunning = true;
 
 	PpaExecInfo info;
-	info.m_pEditView = &editView;
-	info.m_pShareData = &GetDllShareData();
-	info.m_bError = false;			// 2003.06.01 Moca
-	info.m_memDebug.SetString("");	// 2003.06.01 Moca
-	info.m_commandflags = flags | FA_FROMMACRO;	// 2007.07.22 genta
+	info.pEditView = &editView;
+	info.pShareData = &GetDllShareData();
+	info.bError = false;			// 2003.06.01 Moca
+	info.memDebug.SetString("");	// 2003.06.01 Moca
+	info.commandflags = flags | FA_FROMMACRO;	// 2007.07.22 genta
 	
 	// 実行前にインスタンスを待避する
-	PpaExecInfo* old_instance = m_CurInstance;
-	m_CurInstance = &info;
-	m_fnExecute();
+	PpaExecInfo* old_instance = curInstance;
+	curInstance = &info;
+	fnExecute();
 	
 	// マクロ実行完了後はここに戻ってくる
-	m_CurInstance = old_instance;
+	curInstance = old_instance;
 
 	// PPAの多重起動禁止 2008.10.22 syat
-	PPA::m_bIsRunning = false;
-	return !info.m_bError;
+	PPA::bIsRunning = false;
+	return !info.bError;
 }
 
 LPCTSTR PPA::GetDllNameImp(int nIndex)
@@ -113,46 +113,46 @@ bool PPA::InitDllImp()
 	// アドレスの入れ場所はオブジェクトに依存するので
 	// tatic配列にはできない。
 	const ImportTable table[] = {
-		{ &m_fnExecute,		"Execute" },
-		{ &m_fnSetDeclare,	"SetDeclare" },
-		{ &m_fnSetSource,	"SetSource" },
-		{ &m_fnSetDefProc,	"SetDefProc" },
-		{ &m_fnSetDefine,	"SetDefine" },
-		{ &m_fnSetIntFunc,	"SetIntFunc" },
-		{ &m_fnSetStrFunc,	"SetStrFunc" },
-		{ &m_fnSetProc,		"SetProc" },
-		{ &m_fnSetErrProc,	"SetErrProc" },
-		{ &m_fnAbort,		"ppaAbort" },
-		{ &m_fnGetVersion,	"GetVersion" },
-		{ &m_fnDeleteVar,	"DeleteVar" },
-		{ &m_fnGetArgInt,	"GetArgInt" },
-		{ &m_fnGetArgStr,	"GetArgStr" },
-		{ &m_fnGetArgBStr,	"GetArgBStr" },
-		{ &m_fnGetIntVar,	"GetIntVar" },
-		{ &m_fnGetStrVar,	"GetStrVar" },
-		{ &m_fnGetBStrVar,	"GetBStrVar" },
-		{ &m_fnSetIntVar,	"SetIntVar" },
-		{ &m_fnSetStrVar,	"SetStrVar" },
-		{ &m_fnAddIntObj,	"AddIntObj" },
-		{ &m_fnAddStrObj,	"AddStrObj" },
-		{ &m_fnAddIntVar,	"AddIntVar" },
-		{ &m_fnAddStrVar,	"AddStrVar" },
-		{ &m_fnSetIntObj,	"SetIntObj" },
-		{ &m_fnSetStrObj,	"SetStrObj" },
+		{ &fnExecute,		"Execute" },
+		{ &fnSetDeclare,	"SetDeclare" },
+		{ &fnSetSource,	"SetSource" },
+		{ &fnSetDefProc,	"SetDefProc" },
+		{ &fnSetDefine,	"SetDefine" },
+		{ &fnSetIntFunc,	"SetIntFunc" },
+		{ &fnSetStrFunc,	"SetStrFunc" },
+		{ &fnSetProc,		"SetProc" },
+		{ &fnSetErrProc,	"SetErrProc" },
+		{ &fnAbort,		"ppaAbort" },
+		{ &fnGetVersion,	"GetVersion" },
+		{ &fnDeleteVar,	"DeleteVar" },
+		{ &fnGetArgInt,	"GetArgInt" },
+		{ &fnGetArgStr,	"GetArgStr" },
+		{ &fnGetArgBStr,	"GetArgBStr" },
+		{ &fnGetIntVar,	"GetIntVar" },
+		{ &fnGetStrVar,	"GetStrVar" },
+		{ &fnGetBStrVar,	"GetBStrVar" },
+		{ &fnSetIntVar,	"SetIntVar" },
+		{ &fnSetStrVar,	"SetStrVar" },
+		{ &fnAddIntObj,	"AddIntObj" },
+		{ &fnAddStrObj,	"AddStrObj" },
+		{ &fnAddIntVar,	"AddIntVar" },
+		{ &fnAddStrVar,	"AddStrVar" },
+		{ &fnSetIntObj,	"SetIntObj" },
+		{ &fnSetStrObj,	"SetStrObj" },
 
 #if PPADLL_VER >= 120
-		{ &m_fnAddRealVar,	"AddRealVar" },
-		{ &m_fnSetRealObj,	"SetRealObj" },
-		{ &m_fnAddRealObj,	"AddRealObj" },
-		{ &m_fnGetRealVar,	"GetRealVar" },
-		{ &m_fnSetRealVar,	"SetRealVar" },
-		{ &m_fnSetRealFunc,	"SetRealFunc" },
-		{ &m_fnGetArgReal,	"GetArgReal" },
+		{ &fnAddRealVar,	"AddRealVar" },
+		{ &fnSetRealObj,	"SetRealObj" },
+		{ &fnAddRealObj,	"AddRealObj" },
+		{ &fnGetRealVar,	"GetRealVar" },
+		{ &fnSetRealVar,	"SetRealVar" },
+		{ &fnSetRealFunc,	"SetRealFunc" },
+		{ &fnGetArgReal,	"GetArgReal" },
 #endif
 
 #if PPADLL_VER >= 123
-		{ &m_fnIsRunning, "IsRunning" },
-		{ &m_fnSetFinishProc, "SetFinishProc"}, // 2003.06.23 Moca
+		{ &fnIsRunning, "IsRunning" },
+		{ &fnSetFinishProc, "SetFinishProc"}, // 2003.06.23 Moca
 #endif
 
 		{ NULL, 0 }
@@ -181,20 +181,20 @@ bool PPA::InitDllImp()
 	// Jun. 16, 2003 genta 一時作業エリア
 	char buf[1024];
 	// コマンドに置き換えられない関数 ＝ PPA無しでは使えない。。。
-	for (int i=0; SMacroMgr::m_macroFuncInfoArr[i].pszFuncName; ++i) {
+	for (int i=0; SMacroMgr::macroFuncInfoArr[i].pszFuncName; ++i) {
 		// 2003.06.08 Moca メモリーリークの修正
 		// 2003.06.16 genta バッファを外から与えるように
 		// 関数登録用文字列を作成する
-		GetDeclarations(SMacroMgr::m_macroFuncInfoArr[i], buf);
+		GetDeclarations(SMacroMgr::macroFuncInfoArr[i], buf);
 		SetDefProc(buf);
 	}
 
 	// コマンドに置き換えられる関数 ＝ PPA無しでも使える。
-	for (int i=0; SMacroMgr::m_macroFuncInfoCommandArr[i].pszFuncName; ++i) {
+	for (int i=0; SMacroMgr::macroFuncInfoCommandArr[i].pszFuncName; ++i) {
 		// 2003.06.08 Moca メモリーリークの修正
 		// 2003.06.16 genta バッファを外から与えるように
 		// 関数登録用文字列を作成する
-		GetDeclarations(SMacroMgr::m_macroFuncInfoCommandArr[i], buf);
+		GetDeclarations(SMacroMgr::macroFuncInfoCommandArr[i], buf);
 		SetDefProc(buf);
 	}
 	return true; 
@@ -209,7 +209,7 @@ bool PPA::InitDllImp()
 
 	@date 2003.06.01 Moca
 				スタティックメンバに変更
-				macroFuncInfo.m_pszDataを書き換えないように変更
+				macroFuncInfo.pszDataを書き換えないように変更
 
 	@date 2003.06.16 genta 無駄なnew/deleteを避けるためバッファを外から与えるように
 */
@@ -299,10 +299,10 @@ void __stdcall PPA::stdStrObj(
 	case 2:
 		switch (GS_Mode) {
 		case omGet:
-			*Value = m_CurInstance->m_memDebug.GetStringPtr();
+			*Value = curInstance->memDebug.GetStringPtr();
 			break;
 		case omSet:
-			m_CurInstance->m_memDebug.SetString(*Value);
+			curInstance->memDebug.SetString(*Value);
 			break;
 		}
 		break;
@@ -327,10 +327,10 @@ void __stdcall PPA::stdStrObj(
 */
 void __stdcall PPA::stdError(int Err_CD, const char* Err_Mes)
 {
-	if (m_CurInstance->m_bError) {
+	if (curInstance->bError) {
 		return;
 	}
-	m_CurInstance->m_bError = true; // 関数内で関数を呼ぶ場合等、2回表示されるのを防ぐ
+	curInstance->bError = true; // 関数内で関数を呼ぶ場合等、2回表示されるのを防ぐ
 
 	TCHAR szMes[2048]; // 2048あれば足りるかと
 	const TCHAR* pszErr;
@@ -340,16 +340,16 @@ void __stdcall PPA::stdError(int Err_CD, const char* Err_Mes)
 		FuncID = Err_CD - 1;
 		char szFuncDec[1024];
 		szFuncDec[0] = '\0';
-		for (i=0; SMacroMgr::m_macroFuncInfoCommandArr[i].nFuncID!=-1; ++i) {
-			if (SMacroMgr::m_macroFuncInfoCommandArr[i].nFuncID == FuncID) {
-				GetDeclarations(SMacroMgr::m_macroFuncInfoCommandArr[i], szFuncDec);
+		for (i=0; SMacroMgr::macroFuncInfoCommandArr[i].nFuncID!=-1; ++i) {
+			if (SMacroMgr::macroFuncInfoCommandArr[i].nFuncID == FuncID) {
+				GetDeclarations(SMacroMgr::macroFuncInfoCommandArr[i], szFuncDec);
 				break;
 			}
 		}
-		if (SMacroMgr::m_macroFuncInfoArr[i].nFuncID != -1) {
-			for (i=0; SMacroMgr::m_macroFuncInfoArr[i].nFuncID!=-1; ++i) {
-				if (SMacroMgr::m_macroFuncInfoArr[i].nFuncID == FuncID) {
-					GetDeclarations(SMacroMgr::m_macroFuncInfoArr[i], szFuncDec);
+		if (SMacroMgr::macroFuncInfoArr[i].nFuncID != -1) {
+			for (i=0; SMacroMgr::macroFuncInfoArr[i].nFuncID!=-1; ++i) {
+				if (SMacroMgr::macroFuncInfoArr[i].nFuncID == FuncID) {
+					GetDeclarations(SMacroMgr::macroFuncInfoArr[i], szFuncDec);
 					break;
 				}
 			}
@@ -378,10 +378,10 @@ void __stdcall PPA::stdError(int Err_CD, const char* Err_Mes)
 			}
 		}
 	}
-	if (m_CurInstance->m_memDebug.GetStringLength() == 0) {
-		MYMESSAGEBOX(m_CurInstance->m_pEditView->GetHwnd(), MB_OK, LS(STR_ERR_DLGPPA7), _T("%ts"), pszErr);
+	if (curInstance->memDebug.GetStringLength() == 0) {
+		MYMESSAGEBOX(curInstance->pEditView->GetHwnd(), MB_OK, LS(STR_ERR_DLGPPA7), _T("%ts"), pszErr);
 	}else {
-		MYMESSAGEBOX(m_CurInstance->m_pEditView->GetHwnd(), MB_OK, LS(STR_ERR_DLGPPA7), _T("%ts\n%hs"), pszErr, m_CurInstance->m_memDebug.GetStringPtr());
+		MYMESSAGEBOX(curInstance->pEditView->GetHwnd(), MB_OK, LS(STR_ERR_DLGPPA7), _T("%ts\n%hs"), pszErr, curInstance->memDebug.GetStringPtr());
 	}
 }
 
@@ -419,8 +419,8 @@ void __stdcall PPA::stdProc(
 
 	// 処理
 	bool bRet = Macro::HandleCommand(
-		*m_CurInstance->m_pEditView,
-		(EFunctionCode)(eIndex | m_CurInstance->m_commandflags),
+		*curInstance->pEditView,
+		(EFunctionCode)(eIndex | curInstance->commandflags),
 		tmpArguments,
 		tmpArgLengths,
 		numArgs
@@ -511,9 +511,9 @@ void __stdcall PPA::stdStrFunc(
 			int len;
 			char* buf;
 			Wrap(&Ret.bstrVal)->Get(&buf, &len);
-			m_CurInstance->m_memRet.SetString(buf, len); // Mar. 9, 2003 genta
+			curInstance->memRet.SetString(buf, len); // Mar. 9, 2003 genta
 			delete[] buf;
-			*ResultValue = m_CurInstance->m_memRet.GetStringPtr();
+			*ResultValue = curInstance->memRet.GetStringPtr();
 			::VariantClear(&Ret);
 			return;
 		}
@@ -582,7 +582,7 @@ bool PPA::CallHandleFunction(
 
 	if (index >= F_FUNCTION_FIRST) {
 		bool Ret = Macro::HandleFunction(
-			*m_CurInstance->m_pEditView,
+			*curInstance->pEditView,
 			(EFunctionCode)index,
 			vtArg,
 			argCnt,

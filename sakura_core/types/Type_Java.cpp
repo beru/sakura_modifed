@@ -95,8 +95,8 @@ void DocOutline::MakeFuncList_Java(FuncInfoArr* pFuncInfoArr)
 	const wchar_t*	szJavaKigou = L"!\"#%&'()=-^|\\`@[{+;*}]<,>?/";	// 識別子に使用できない半角記号。_:~.$は許可
 	bool bExtEol = GetDllShareData().common.edit.bEnableExtEol;
 
-	for (nLineCount=LogicInt(0); nLineCount<m_doc.m_docLineMgr.GetLineCount(); ++nLineCount) {
-		pLine = m_doc.m_docLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
+	for (nLineCount=LogicInt(0); nLineCount<doc.docLineMgr.GetLineCount(); ++nLineCount) {
+		pLine = doc.docLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
 		for (i=0; i<nLineLen; i+=nCharChars) {
 			nCharChars = NativeW::GetSizeOfChar(pLine, nLineLen, i);
 
@@ -165,7 +165,7 @@ void DocOutline::MakeFuncList_Java(FuncInfoArr* pFuncInfoArr)
 						*/
 						LogicPoint  ptPosXY_Logic = LogicPoint(LogicInt(0), nLineCount);
 						LayoutPoint ptPosXY_Layout;
-						m_doc.m_layoutMgr.LogicToLayout(
+						doc.layoutMgr.LogicToLayout(
 							ptPosXY_Logic,
 							&ptPosXY_Layout
 						);
@@ -259,7 +259,7 @@ void DocOutline::MakeFuncList_Java(FuncInfoArr* pFuncInfoArr)
 							  レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 							*/
 							LayoutPoint ptPosXY;
-							m_doc.m_layoutMgr.LogicToLayout(
+							doc.layoutMgr.LogicToLayout(
 								LogicPoint(LogicInt(0), nFuncLine - LogicInt(1)),
 								&ptPosXY
 							);
@@ -346,7 +346,7 @@ void DocOutline::MakeFuncList_Java(FuncInfoArr* pFuncInfoArr)
 					if (k >= nLineLen2) {
 						k = 0;
 						++nLineCount2;
-						pLine2 = m_doc.m_docLineMgr.GetLine(nLineCount2)->GetDocLineStrWithEOL(&nLineLen2);
+						pLine2 = doc.docLineMgr.GetLine(nLineCount2)->GetDocLineStrWithEOL(&nLineLen2);
 						if (pLine2) {
 							goto loop_is_func;
 						}
@@ -396,7 +396,7 @@ void DocOutline::MakeFuncList_Java(FuncInfoArr* pFuncInfoArr)
 							  レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 							*/
 							LayoutPoint ptPosXY;
-							m_doc.m_layoutMgr.LogicToLayout(
+							doc.layoutMgr.LogicToLayout(
 								LogicPoint(LogicInt(0), nFuncLine - LogicInt(1)),
 								&ptPosXY
 							);

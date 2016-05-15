@@ -28,7 +28,7 @@
 #include "util/os.h"
 #include "sakura_rc.h"
 
-WNDPROC gm_wpHokanListProc;
+WNDPROC g_wpHokanListProc;
 
 
 LRESULT APIENTRY HokanList_SubclassProc(
@@ -75,16 +75,16 @@ LRESULT APIENTRY HokanList_SubclassProc(
 //		MYTRACE(_T("WM_GETDLGCODE  pMsg->message = %xh\n"), pMsg->message);
 		return DLGC_WANTALLKEYS; // すべてのキーストロークを私に下さい	//	Sept. 17, 2000 jepro 説明の「全て」を「すべて」に統一
 	}
-	return CallWindowProc(gm_wpHokanListProc, hwnd, uMsg, wParam, lParam);
+	return CallWindowProc(g_wpHokanListProc, hwnd, uMsg, wParam, lParam);
 }
 
 
 HokanMgr::HokanMgr()
 {
-	m_memCurWord.SetString(L"");
+	memCurWord.SetString(L"");
 
-	m_nCurKouhoIdx = -1;
-	m_bTimerFlag = TRUE;
+	nCurKouhoIdx = -1;
+	bTimerFlag = TRUE;
 }
 
 HokanMgr::~HokanMgr()
@@ -102,7 +102,7 @@ HWND HokanMgr::DoModeless(
 	OnSize(0, 0);
 	// リストをフック
 	// Modified by KEITA for WIN64 2003.9.6
-	::gm_wpHokanListProc = (WNDPROC) ::SetWindowLongPtr(GetItemHwnd(IDC_LIST_WORDS), GWLP_WNDPROC, (LONG_PTR)HokanList_SubclassProc);
+	::g_wpHokanListProc = (WNDPROC) ::SetWindowLongPtr(GetItemHwnd(IDC_LIST_WORDS), GWLP_WNDPROC, (LONG_PTR)HokanList_SubclassProc);
 
 	::ShowWindow(GetHwnd(), SW_HIDE);
 	return hwndWork;
@@ -118,7 +118,7 @@ void HokanMgr::ChangeView(LPARAM pcEditView)
 void HokanMgr::Hide(void)
 {
 	::ShowWindow(GetHwnd(), SW_HIDE);
-	m_nCurKouhoIdx = -1;
+	nCurKouhoIdx = -1;
 	// 入力フォーカスを受け取ったときの処理
 	EditView* pEditView = reinterpret_cast<EditView*>(lParam);
 	pEditView->OnSetFocus();
@@ -156,11 +156,11 @@ int HokanMgr::Search(
 	||  ・見つかった数を返す
 	||
 	*/
-	m_vKouho.clear();
+	vKouho.clear();
 	DicMgr::HokanSearch(
 		pszCurWord,
 		bHokanLoHiCase,								// 引数からに変更	2001/06/19 asa-o
-		m_vKouho,
+		vKouho,
 		0, // Max候補数
 		pszHokanFile
 	);
@@ -170,7 +170,7 @@ int HokanMgr::Search(
 		pEditView->HokanSearchByFile(
 			pszCurWord,
 			bHokanLoHiCase,
-			m_vKouho,
+			vKouho,
 			1024 // 編集中データからなので数を制限しておく
 		);
 	}
@@ -179,7 +179,7 @@ int HokanMgr::Search(
 		HokanSearchByKeyword(
 			pszCurWord,
 			bHokanLoHiCase,
-			m_vKouho
+			vKouho
 		);
 	}
 
@@ -213,29 +213,29 @@ int HokanMgr::Search(
 		}
 	}
 
-	if (m_vKouho.size() == 0) {
-		m_nCurKouhoIdx = -1;
+	if (vKouho.size() == 0) {
+		nCurKouhoIdx = -1;
 		return 0;
 	}
 
 //	2001/06/19 asa-o 候補が１つの場合補完ウィンドウは表示しない(逐次補完の場合は除く)
-	if (m_vKouho.size() == 1) {
+	if (vKouho.size() == 1) {
 		if (pMemHokanWord) {
-			m_nCurKouhoIdx = -1;
-			pMemHokanWord->SetString(m_vKouho[0].c_str());
+			nCurKouhoIdx = -1;
+			pMemHokanWord->SetString(vKouho[0].c_str());
 			return 1;
 		}
 	}
 
 
-//	m_hFont = hFont;
-	m_point.x = pPt->x;
-	m_point.y = pPt->y;
-	m_nWinHeight = nWinHeight;
-	m_nColumnWidth = nColumnWidth;
-//	m_memCurWord.SetData(pszCurWord, lstrlen(pszCurWord));
-	m_memCurWord.SetString(pszCurWord);
-	m_nCurKouhoIdx = 0;
+//	hFont = hFont;
+	point.x = pPt->x;
+	point.y = pPt->y;
+	nWinHeight = nWinHeight;
+	nColumnWidth = nColumnWidth;
+//	memCurWord.SetData(pszCurWord, lstrlen(pszCurWord));
+	memCurWord.SetString(pszCurWord);
+	nCurKouhoIdx = 0;
 //	SetCurKouhoStr();
 
 //	::ShowWindow(GetHwnd(), SW_SHOWNA);
@@ -244,21 +244,21 @@ int HokanMgr::Search(
 	hwndList = GetItemHwnd(IDC_LIST_WORDS);
 	List_ResetContent(hwndList);
 	{
-		size_t kouhoNum = m_vKouho.size();
+		size_t kouhoNum = vKouho.size();
 		for (size_t i=0; i<kouhoNum; ++i) {
-			::List_AddString(hwndList, m_vKouho[i].c_str());
+			::List_AddString(hwndList, vKouho[i].c_str());
 		}
 	}
 	List_SetCurSel(hwndList, 0);
 
-//@@	::EnableWindow(::GetParent(::GetParent(m_hwndParent)), FALSE);
+//@@	::EnableWindow(::GetParent(::GetParent(hwndParent)), FALSE);
 
 	RECT rcDesktop;
 	//	May 01, 2004 genta マルチモニタ対応
 	::GetMonitorWorkRect(GetHwnd(), &rcDesktop );
 
-	int nX = m_point.x - m_nColumnWidth;
-	int nY = m_point.y + m_nWinHeight + 4;
+	int nX = point.x - nColumnWidth;
+	int nY = point.y + nWinHeight + 4;
 	int nCX = nWidth;
 	int nCY = nHeight;
 
@@ -267,19 +267,19 @@ int HokanMgr::Search(
 		// 何もしない
 	}else
 	// 上に入るなら
-	if (rcDesktop.top < m_point.y - nHeight - 4) {
+	if (rcDesktop.top < point.y - nHeight - 4) {
 		// 上に出す
-		nY = m_point.y - nHeight - 4;
+		nY = point.y - nHeight - 4;
 	}else
 	// 上に出すか下に出すか(広いほうに出す)
-	if (rcDesktop.bottom - nY > m_point.y) {
+	if (rcDesktop.bottom - nY > point.y) {
 		// 下に出す
 //		nHeight = rcDesktop.bottom - nY;
 		nCY = rcDesktop.bottom - nY;
 	}else {
 		// 上に出す
 		nY = rcDesktop.top;
-		nCY = m_point.y - 4 - rcDesktop.top;
+		nCY = point.y - 4 - rcDesktop.top;
 	}
 
 //	2001/06/19 Start by asa-o: 表示位置補正
@@ -300,8 +300,8 @@ int HokanMgr::Search(
 //	2001/06/19 End
 
 //	2001/06/18 Start by asa-o: 補正後の位置・サイズを保存
-	m_point.x = nX;
-	m_point.y = nY;
+	point.x = nX;
+	point.y = nY;
 	nHeight = nCY;
 	nWidth = nCX;
 //	2001/06/18 End
@@ -309,7 +309,7 @@ int HokanMgr::Search(
 	// はみ出すなら小さくする
 //	if (rcDesktop.bottom < nY + nCY) {
 //		// 下にはみ出す
-//		if (m_point.y - 4 - nCY < 0) {
+//		if (point.y - 4 - nCY < 0) {
 //			// 上にはみ出す
 //			// →高さだけ調節
 //			nCY = rcDesktop.bottom - nY - 4;
@@ -323,15 +323,15 @@ int HokanMgr::Search(
 //	::ShowWindow(GetHwnd(), SW_SHOWNA);
 	::SetFocus(GetHwnd());
 //	::SetFocus(GetItemHwnd(IDC_LIST_WORDS));
-//	::SetFocus(::GetParent(::GetParent(m_hwndParent)));
+//	::SetFocus(::GetParent(::GetParent(hwndParent)));
 
 
 //	2001/06/18 asa-o:
 	ShowTip();	// 補完ウィンドウで選択中の単語にキーワードヘルプを表示
 
 //	2003.06.25 Moca 他のメソッドで使っていないので、とりあえず削除しておく
-	int kouhoNum = m_vKouho.size();
-	m_vKouho.clear();
+	int kouhoNum = vKouho.size();
+	vKouho.clear();
 	return kouhoNum;
 }
 
@@ -341,7 +341,7 @@ void HokanMgr::HokanSearchByKeyword(
 	vector_ex<std::wstring>& 	vKouho
 ) {
 	const EditView* pEditView = reinterpret_cast<const EditView*>(lParam);
-	const TypeConfig& type = pEditView->GetDocument().m_docType.GetDocumentAttribute();
+	const TypeConfig& type = pEditView->GetDocument().docType.GetDocumentAttribute();
 	KeywordSetMgr& keywordMgr = pShareData->common.specialKeyword.keywordSetMgr;
 	const int nKeyLen = wcslen(pszCurWord);
 	for (int n=0; n<MAX_KEYWORDSET_PER_TYPE; ++n) {
@@ -399,9 +399,9 @@ BOOL HokanMgr::OnSize(WPARAM wParam, LPARAM lParam)
 	int nHeight = rcDlg.bottom - rcDlg.top; // height of client area
 
 //	2001/06/18 Start by asa-o: サイズ変更後の位置を保存
-	m_point.x = rcDlg.left - 4;
-	m_point.y = rcDlg.top - 3;
-	::ClientToScreen(GetHwnd(), &m_point);
+	point.x = rcDlg.left - 4;
+	point.y = rcDlg.top - 3;
+	::ClientToScreen(GetHwnd(), &point);
 //	2001/06/18 End
 
 	int nControls = _countof(controls);
@@ -524,7 +524,7 @@ BOOL HokanMgr::DoHokan(int nVKey)
 	pEditView->GetCommander().HandleCommand( F_INSTEXT_W, true, (LPARAM)&wszLabel[0], wcslen(&wszLabel[0]), TRUE, 0 );
 
 	// Until here
-//	pEditView->GetCommander().HandleCommand(F_INSTEXT_W, true, (LPARAM)(wszLabel + m_memCurWord.GetLength()), TRUE, 0, 0);
+//	pEditView->GetCommander().HandleCommand(F_INSTEXT_W, true, (LPARAM)(wszLabel + memCurWord.GetLength()), TRUE, 0, 0);
 	Hide();
 
 	pShareData->common.helper.bUseHokan = false;	//	補完したら
@@ -623,24 +623,24 @@ void HokanMgr::ShowTip()
 
 	EditView* pEditView = reinterpret_cast<EditView*>(lParam);
 	// すでに辞書Tipが表示されていたら
-	if (pEditView->m_dwTipTimer == 0) {
+	if (pEditView->dwTipTimer == 0) {
 		// 辞書Tipを消す
-		pEditView -> m_tipWnd.Hide();
-		pEditView -> m_dwTipTimer = ::GetTickCount();
+		pEditView -> tipWnd.Hide();
+		pEditView -> dwTipTimer = ::GetTickCount();
 	}
 
 	// 表示する位置を決定
 	int nTopItem = List_GetTopIndex(hwndCtrl);
 	int nItemHeight = List_GetItemHeight(hwndCtrl, 0);
-	POINT point;
-	point.x = m_point.x + nWidth;
-	point.y = m_point.y + 4 + (nItem - nTopItem) * nItemHeight;
+	POINT pt;
+	pt.x = point.x + nWidth;
+	pt.y = point.y + 4 + (nItem - nTopItem) * nItemHeight;
 	// 2001/06/19 asa-o 選択中の単語が補完ウィンドウに表示されているなら辞書Tipを表示
-	if (point.y > m_point.y && point.y < m_point.y + nHeight) {
+	if (pt.y > point.y && pt.y < point.y + nHeight) {
 		RECT rcHokanWin;
-		::SetRect(&rcHokanWin , m_point.x, m_point.y, m_point.x + nWidth, m_point.y + nHeight);
+		::SetRect(&rcHokanWin, point.x, point.y, point.x + nWidth, point.y + nHeight);
 		if (!pEditView -> ShowKeywordHelp( point, &szLabel[0], &rcHokanWin )) {
-			pEditView -> m_dwTipTimer = ::GetTickCount();	// 表示するべきキーワードヘルプが無い
+			pEditView -> dwTipTimer = ::GetTickCount();	// 表示するべきキーワードヘルプが無い
 		}
 	}
 }

@@ -97,7 +97,7 @@ INT_PTR PropGrep::DispatchEvent(
 				return TRUE;
 //@@@ 2002.01.03 YAZAKI 最後に表示していたシートを正しく覚えていないバグ修正
 			case PSN_SETACTIVE:
-				m_nPageNum = ID_PROPCOM_PAGENUM_GREP;
+				nPageNum = ID_PROPCOM_PAGENUM_GREP;
 				return TRUE;
 			}
 //			break;	// default
@@ -140,7 +140,7 @@ struct TagJumpMode {
 // ダイアログデータの設定
 void PropGrep::SetData(HWND hwndDlg)
 {
-	auto& csSearch = m_common.search;
+	auto& csSearch = common.search;
 	// 2006.08.23 ryoji カーソル位置の文字列をデフォルトの検索文字列にする
 	CheckDlgButtonBool(hwndDlg, IDC_CHECK_bCaretTextForSearch, csSearch.bCaretTextForSearch);
 	CheckDlgButtonBool(hwndDlg, IDC_CHECK_INHERIT_KEY_OTHER_VIEW, csSearch.bInheritKeyOtherView);
@@ -175,7 +175,7 @@ void PropGrep::SetData(HWND hwndDlg)
 	for (int i=0; i<_countof(tagJumpMode1Arr); ++i) {
 		Combo_InsertString(hwndCombo, i, LS(tagJumpMode1Arr[i].nNameID));
 		Combo_SetItemData(hwndCombo, i, tagJumpMode1Arr[i].nMethod);
-		if (tagJumpMode1Arr[i].nMethod == m_common.search.nTagJumpMode) {
+		if (tagJumpMode1Arr[i].nMethod == common.search.nTagJumpMode) {
 			nSelPos = i;
 		}
 	}
@@ -193,7 +193,7 @@ void PropGrep::SetData(HWND hwndDlg)
 	for (int i=0; i<_countof(tagJumpMode2Arr); ++i) {
 		Combo_InsertString(hwndCombo, i, LS(tagJumpMode2Arr[i].nNameID));
 		Combo_SetItemData(hwndCombo, i, tagJumpMode2Arr[i].nMethod);
-		if (tagJumpMode2Arr[i].nMethod == m_common.search.nTagJumpModeKeyword) {
+		if (tagJumpMode2Arr[i].nMethod == common.search.nTagJumpModeKeyword) {
 			nSelPos = i;
 		}
 	}
@@ -206,7 +206,7 @@ void PropGrep::SetData(HWND hwndDlg)
 // ダイアログデータの取得
 int PropGrep::GetData(HWND hwndDlg)
 {
-	auto& csSearch = m_common.search;
+	auto& csSearch = common.search;
 
 	// 2006.08.23 ryoji カーソル位置の文字列をデフォルトの検索文字列にする
 	csSearch.bCaretTextForSearch = DlgButton_IsChecked(hwndDlg, IDC_CHECK_bCaretTextForSearch);
@@ -229,11 +229,11 @@ int PropGrep::GetData(HWND hwndDlg)
 
 	HWND hwndCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_TAGJUMP);
 	int nSelPos = Combo_GetCurSel(hwndCombo);
-	m_common.search.nTagJumpMode = Combo_GetItemData(hwndCombo, nSelPos);
+	common.search.nTagJumpMode = Combo_GetItemData(hwndCombo, nSelPos);
 	
 	hwndCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_KEYWORD_TAGJUMP);
 	nSelPos = Combo_GetCurSel(hwndCombo);
-	m_common.search.nTagJumpModeKeyword = Combo_GetItemData(hwndCombo, nSelPos);
+	common.search.nTagJumpModeKeyword = Combo_GetItemData(hwndCombo, nSelPos);
 
 	return TRUE;
 }

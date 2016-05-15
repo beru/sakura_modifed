@@ -46,9 +46,9 @@ const TCHAR* RecentFile::GetItemText(int nIndex) const
 RecentFile::RecentFile()
 {
 	Create(
-		GetShareData()->history.m_fiMRUArr,
-		&GetShareData()->history.m_nMRUArrNum,
-		GetShareData()->history.m_bMRUArrFavorite,
+		GetShareData()->history.fiMRUArr,
+		&GetShareData()->history.nMRUArrNum,
+		GetShareData()->history.bMRUArrFavorite,
 		MAX_MRU,
 		&(GetShareData()->common.general.nMRUArrNum_MAX)
 	);

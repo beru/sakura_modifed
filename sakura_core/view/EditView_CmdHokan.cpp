@@ -34,14 +34,14 @@
 void EditView::PreprocessCommand_hokan(int nCommand)
 {
 	// 補完ウィンドウが表示されているとき、特別な場合を除いてウィンドウを非表示にする
-	if (m_bHokan) {
+	if (bHokan) {
 		if (1
 			&& nCommand != F_HOKAN		//	補完開始・終了コマンド
 			&& nCommand != F_WCHAR		//	文字入力
 			&& nCommand != F_IME_CHAR	//	漢字入力
 		) {
-			m_editWnd.m_hokanMgr.Hide();
-			m_bHokan = false;
+			editWnd.hokanMgr.Hide();
+			bHokan = false;
 		}
 	}
 }
@@ -54,16 +54,16 @@ void EditView::PreprocessCommand_hokan(int nCommand)
 */
 void EditView::PostprocessCommand_hokan(void)
 {
-	if (GetDllShareData().common.helper.bUseHokan && !m_bExecutingKeyMacro) { // キーボードマクロの実行中
+	if (GetDllShareData().common.helper.bUseHokan && !bExecutingKeyMacro) { // キーボードマクロの実行中
 		NativeW memData;
 
 		// カーソル直前の単語を取得
 		if (0 < GetParser().GetLeftWord(&memData, 100)) {
 			ShowHokanMgr(memData, false);
 		}else {
-			if (m_bHokan) {
-				m_editWnd.m_hokanMgr.Hide();
-				m_bHokan = false;
+			if (bHokan) {
+				editWnd.hokanMgr.Hide();
+				bHokan = false;
 			}
 		}
 	}
@@ -87,7 +87,7 @@ void EditView::ShowHokanMgr(NativeW& memData, bool bAutoDecided)
 	LayoutXInt nX = GetCaret().GetCaretLayoutPos().GetX2() - textArea.GetViewLeftCol();
 	if (nX < 0) {
 		poWin.x = 0;
-	}else if (textArea.m_nViewColNum < nX) {
+	}else if (textArea.nViewColNum < nX) {
 		poWin.x = textArea.GetAreaRight();
 	}else {
 		poWin.x = textArea.GetAreaLeft() + (Int)(nX) * GetTextMetrics().GetHankakuDx();
@@ -95,7 +95,7 @@ void EditView::ShowHokanMgr(NativeW& memData, bool bAutoDecided)
 	LayoutYInt nY = GetCaret().GetCaretLayoutPos().GetY2() - textArea.GetViewTopLine();
 	if (nY < 0) {
 		poWin.y = 0;
-	}else if (textArea.m_nViewRowNum < nY) {
+	}else if (textArea.nViewRowNum < nY) {
 		poWin.y = textArea.GetAreaBottom();
 	}else {
 		poWin.y = textArea.GetAreaTop() + (Int)(nY) * GetTextMetrics().GetHankakuDy();
@@ -119,7 +119,7 @@ void EditView::ShowHokanMgr(NativeW& memData, bool bAutoDecided)
 	// エディタ起動時だとエディタ可視化の途中になぜか不可視の入力補完ウィンドウが一時的にフォアグラウンドになって、
 	// タブバーに新規タブが追加されるときのタブ切替でタイトルバーがちらつく（一瞬非アクティブ表示になるのがはっきり見える）ことがあった。
 	// ※ Vista/7 の特定の PC でだけのちらつきか？ 該当 PC 以外の Vista/7 PC でもたまに微妙に表示が乱れた感じになる程度の症状が見られたが、それらが同一原因かどうかは不明。
-	auto& hokanMgr = m_editWnd.m_hokanMgr;
+	auto& hokanMgr = editWnd.hokanMgr;
 	if (!hokanMgr.GetHwnd()) {
 		hokanMgr.DoModeless(
 			G_AppInstance(),
@@ -133,36 +133,36 @@ void EditView::ShowHokanMgr(NativeW& memData, bool bAutoDecided)
 		GetTextMetrics().GetHankakuHeight(),
 		GetTextMetrics().GetHankakuDx(),
 		memData.GetStringPtr(),
-		m_pTypeData->szHokanFile,
-		m_pTypeData->bHokanLoHiCase,
-		m_pTypeData->bUseHokanByFile, // 2003.06.22 Moca
-		m_pTypeData->nHokanType,
-		m_pTypeData->bUseHokanByKeyword,
+		pTypeData->szHokanFile,
+		pTypeData->bHokanLoHiCase,
+		pTypeData->bUseHokanByFile, // 2003.06.22 Moca
+		pTypeData->nHokanType,
+		pTypeData->bUseHokanByKeyword,
 		pMemHokanWord
 	);
 	// 補完候補の数によって動作を変える
 	if (nKouhoNum <= 0) {				//	候補無し
-		if (m_bHokan) {
+		if (bHokan) {
 			hokanMgr.Hide();
-			m_bHokan = false;
+			bHokan = false;
 			// 2003.06.25 Moca 失敗してたら、ビープ音を出して補完終了。
 			ErrorBeep();
 		}
 	}else if (bAutoDecided && nKouhoNum == 1) { //	候補1つのみ→確定。
-		if (m_bHokan) {
+		if (bHokan) {
 			hokanMgr.Hide();
-			m_bHokan = false;
+			bHokan = false;
 		}
 		// 2004.05.14 Moca HokanMgr::Search側で改行を削除するようにし、直接書き換えるのをやめた
 
 		GetCommander().Command_WordDeleteToStart();
 		GetCommander().Command_INSTEXT(true, memHokanWord.GetStringPtr(), memHokanWord.GetStringLength(), true);
 	}else {
-		m_bHokan = true;
+		bHokan = true;
 	}
 	
 	//	補完終了。
-	if (!m_bHokan) {
+	if (!bHokan) {
 		GetDllShareData().common.helper.bUseHokan = false;	//	入力補完終了の知らせ
 	}
 }
@@ -190,7 +190,7 @@ int EditView::HokanSearchByFile(
 	int				nMaxKouho				// [in] Max候補数(0 == 無制限)
 ) {
 	const int nKeyLen = wcslen(pszKey);
-	int nLines = m_pEditDoc->m_docLineMgr.GetLineCount();
+	int nLines = pEditDoc->docLineMgr.GetLineCount();
 	int j, nWordLen, nLineLen, nRet, nCharSize, nWordBegin, nWordLenStop;
 
 	LogicPoint ptCur = GetCaret().GetCaretLogicPos(); // 物理カーソル位置
@@ -200,7 +200,7 @@ int EditView::HokanSearchByFile(
 	bool bKeyStartWithMark = wcschr(L"$@#\\", pszKey[0]) != NULL;
 
 	for (LogicInt i=LogicInt(0); i<nLines; ++i) {
-		const wchar_t* pszLine = DocReader(m_pEditDoc->m_docLineMgr).GetLineStrWithoutEOL(i, &nLineLen);
+		const wchar_t* pszLine = DocReader(pEditDoc->docLineMgr).GetLineStrWithoutEOL(i, &nLineLen);
 
 		for (j=0; j<nLineLen; j+=nCharSize) {
 			nCharSize = NativeW::GetSizeOfChar(pszLine, nLineLen, j);

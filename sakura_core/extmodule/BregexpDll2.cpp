@@ -35,14 +35,14 @@ bool BregexpDll2::InitDllImp()
 {
 	// DLLì‡ä÷êîñºÉäÉXÉg
 	const ImportTable table[] = {
-		{ &m_BMatch,			"BMatchW" },
-		{ &m_BSubst,			"BSubstW" },
-		{ &m_BTrans,			"BTransW" },
-		{ &m_BSplit,			"BSplitW" },
-		{ &m_BRegfree,			"BRegfreeW" },
-		{ &m_BRegexpVersion,	"BRegexpVersionW" },
-		{ &m_BMatchEx,			"BMatchExW" },
-		{ &m_BSubstEx,			"BSubstExW" },
+		{ &pBMatch,				"BMatchW" },
+		{ &pBSubst,				"BSubstW" },
+		{ &pBTrans,				"BTransW" },
+		{ &pBSplit,				"BSplitW" },
+		{ &pBRegfree,			"BRegfreeW" },
+		{ &pBRegexpVersion,		"BRegexpVersionW" },
+		{ &pBMatchEx,			"BMatchExW" },
+		{ &pBSubstEx,			"BSubstExW" },
 		{ NULL, 0 }
 	};
 	

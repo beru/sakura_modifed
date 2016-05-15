@@ -35,11 +35,11 @@
 
 DocEditor::DocEditor(EditDoc& doc)
 	:
-	m_doc(doc),
-	m_newLineCode(EolType::CRLF),	// New Line Type
-	m_pOpeBlk(nullptr),
-	m_bInsMode(true),			// Oct. 2, 2005 genta
-	m_bIsDocModified(false)	// 変更フラグ // Jan. 22, 2002 genta 型変更
+	doc(doc),
+	newLineCode(EolType::CRLF),	// New Line Type
+	pOpeBlk(nullptr),
+	bInsMode(true),			// Oct. 2, 2005 genta
+	bIsDocModified(false)	// 変更フラグ // Jan. 22, 2002 genta 型変更
 {
 	// Oct. 2, 2005 genta 挿入モード
 	this->SetInsMode(GetDllShareData().common.general.bIsINSMode);
@@ -56,19 +56,19 @@ DocEditor::DocEditor(EditDoc& doc)
 */
 void DocEditor::SetModified(bool flag, bool redraw)
 {
-	if (m_bIsDocModified == flag)	// 変更がなければ何もしない
+	if (bIsDocModified == flag)	// 変更がなければ何もしない
 		return;
 
-	m_bIsDocModified = flag;
+	bIsDocModified = flag;
 	if (redraw) {
-		m_doc.m_pEditWnd->UpdateCaption();
+		doc.pEditWnd->UpdateCaption();
 	}
 }
 
 void DocEditor::OnBeforeLoad(LoadInfo* loadInfo)
 {
 	// ビューのテキスト選択解除
-	GetListeningDoc()->m_pEditWnd->Views_DisableSelectArea(true);
+	GetListeningDoc()->pEditWnd->Views_DisableSelectArea(true);
 }
 
 void DocEditor::OnAfterLoad(const LoadInfo& loadInfo)
@@ -78,13 +78,13 @@ void DocEditor::OnAfterLoad(const LoadInfo& loadInfo)
 	// May 12, 2000 genta
 	// 編集用改行コードの設定
 	{
-		const TypeConfig& type = pDoc->m_docType.GetDocumentAttribute();
-		if (pDoc->m_docFile.GetCodeSet() == type.encoding.eDefaultCodetype) {
+		const TypeConfig& type = pDoc->docType.GetDocumentAttribute();
+		if (pDoc->docFile.GetCodeSet() == type.encoding.eDefaultCodetype) {
 			SetNewLineCode(type.encoding.eDefaultEoltype);	// 2011.01.24 ryoji デフォルトEOL
 		}else {
 			SetNewLineCode(EolType::CRLF);
 		}
-		DocLine* pFirstlineinfo = pDoc->m_docLineMgr.GetLine(LogicInt(0));
+		DocLine* pFirstlineinfo = pDoc->docLineMgr.GetLine(LogicInt(0));
 		if (pFirstlineinfo) {
 			EolType t = pFirstlineinfo->GetEol();
 			if (t != EolType::None && t != EolType::Unknown) {
@@ -95,10 +95,10 @@ void DocEditor::OnAfterLoad(const LoadInfo& loadInfo)
 
 	// Nov. 20, 2000 genta
 	// IME状態の設定
-	this->SetImeMode(pDoc->m_docType.GetDocumentAttribute().nImeState);
+	this->SetImeMode(pDoc->docType.GetDocumentAttribute().nImeState);
 
 	// カレントディレクトリの変更
-	::SetCurrentDirectory(pDoc->m_docFile.GetFilePathClass().GetDirPath().c_str());
+	::SetCurrentDirectory(pDoc->docFile.GetFilePathClass().GetDirPath().c_str());
 	AppMode::getInstance().SetViewMode(loadInfo.bViewMode);		// ビューモード	##ここも、アリかな
 }
 
@@ -109,10 +109,10 @@ void DocEditor::OnAfterSave(const SaveInfo& saveInfo)
 	this->SetModified(false, false);	// Jan. 22, 2002 genta 関数化 更新フラグのクリア
 
 	// 現在位置で無変更な状態になったことを通知
-	this->m_opeBuf.SetNoModified();
+	this->opeBuf.SetNoModified();
 
 	// カレントディレクトリの変更
-	::SetCurrentDirectory(pDoc->m_docFile.GetFilePathClass().GetDirPath().c_str());
+	::SetCurrentDirectory(pDoc->docFile.GetFilePathClass().GetDirPath().c_str());
 }
 
 // From Here Nov. 20, 2000 genta
@@ -124,7 +124,7 @@ void DocEditor::OnAfterSave(const SaveInfo& saveInfo)
 */
 void DocEditor::SetImeMode(int mode)
 {
-	HWND hwnd = m_doc.m_pEditWnd->GetActiveView().GetHwnd();
+	HWND hwnd = doc.pEditWnd->GetActiveView().GetHwnd();
 	HIMC hIme = ImmGetContext(hwnd); //######大丈夫？ // 2013.06.04 EditWndからViewに変更
 
 	// 最下位ビットはIME自身のOn/Off制御
@@ -174,7 +174,7 @@ void DocEditor::SetImeMode(int mode)
 void DocEditAgent::AddLineStrX(const wchar_t* pData, int nDataLen)
 {
 	// チェーン適用
-	DocLine* pDocLine = m_docLineMgr.AddNewLine();
+	DocLine* pDocLine = docLineMgr.AddNewLine();
 
 	// インスタンス設定
 	pDocLine->SetDocLineString(pData, nDataLen);

@@ -37,7 +37,7 @@ bool Decode_UuDecode::DoDecode(const NativeW& pSrc, Memory* pDst)
 
 	// ƒwƒbƒ_[‚ð‰ðÍ
 	pline = GetNextLineW( psrc, nsrclen, &nlinelen, &ncuridx, &eol, false );
-	if (!CheckUUHeader(pline, nlinelen, m_aFilename)) {
+	if (!CheckUUHeader(pline, nlinelen, aFilename)) {
 		pDst->_AppendSz("");
 		return false;
 	}

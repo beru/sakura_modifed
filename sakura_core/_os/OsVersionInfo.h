@@ -70,21 +70,21 @@ public:
 
 	// OsVersionが取得できたか？
 	BOOL GetVersion() {
-		return m_bSuccess;
+		return bSuccess;
 	}
 
 	// 使用しているOS（Windows）が、動作対象か確認する
 	bool OsIsEnableVersion() {
 #if (WINVER >= _WIN32_WINNT_WIN7)
 		return (_IsWin32NT() &&
-			(m_osVersionInfo.dwMajorVersion >= 7 ||
-			(m_osVersionInfo.dwMajorVersion == 6 && m_osVersionInfo.dwMinorVersion >= 1)));
+			(osVersionInfo.dwMajorVersion >= 7 ||
+			(osVersionInfo.dwMajorVersion == 6 && osVersionInfo.dwMinorVersion >= 1)));
 #elif (WINVER >= _WIN32_WINNT_VISTA)
-		return (_IsWin32NT() && (m_osVersionInfo.dwMajorVersion >= 6));
+		return (_IsWin32NT() && (osVersionInfo.dwMajorVersion >= 6));
 #elif (WINVER >= _WIN32_WINNT_WIN2K)
-		return (_IsWin32NT() && (m_osVersionInfo.dwMajorVersion >= 5));
+		return (_IsWin32NT() && (osVersionInfo.dwMajorVersion >= 5));
 #else
-		return (m_osVersionInfo.dwMajorVersion >= 4);
+		return (osVersionInfo.dwMajorVersion >= 4);
 #endif
 	}
 
@@ -96,7 +96,7 @@ public:
 		@retval false non-NT platform
 	*/
 	bool _IsWin32NT() {
-		return (m_osVersionInfo.dwPlatformId == VER_PLATFORM_WIN32_NT);
+		return (osVersionInfo.dwPlatformId == VER_PLATFORM_WIN32_NT);
 	}
 
 	// 2005.10.31 ryoji
@@ -106,7 +106,7 @@ public:
 		@retval false non-Windows platform
 	*/
 	bool IsWin32Windows() {
-		return (m_osVersionInfo.dwPlatformId == VER_PLATFORM_WIN32_WINDOWS);
+		return (osVersionInfo.dwPlatformId == VER_PLATFORM_WIN32_WINDOWS);
 	}
 
 	/*	::WinHelp(hwnd, lpszHelp, HELP_COMMAND, (ULONG_PTR)"CONTENTS()");
@@ -114,7 +114,7 @@ public:
 		使用できるバージョンなら、false
 	*/
 	bool _HasWinHelpContentsProblem() {
-		return (_IsWin32NT() && (m_osVersionInfo.dwMajorVersion <= 4));
+		return (_IsWin32NT() && (osVersionInfo.dwMajorVersion <= 4));
 	}
 
 	/*	再変換がOS標準で提供されていないか。
@@ -125,7 +125,7 @@ public:
 		それ以外のOSなら、true（提供されている）
 	*/
 	bool _OsSupportReconvert() {
-		return !((m_osVersionInfo.dwMajorVersion == 4) && (m_osVersionInfo.dwMinorVersion == 0));
+		return !((osVersionInfo.dwMajorVersion == 4) && (osVersionInfo.dwMinorVersion == 0));
 	}
 
 	// 2005.10.29 ryoji
@@ -144,7 +144,7 @@ public:
 	*/
 	bool _IsWinVista_or_later()
 	{
-		return (6 <= m_osVersionInfo.dwMajorVersion);
+		return (6 <= osVersionInfo.dwMajorVersion);
 	}
 
 	/*! Windows XP以上か調べる
@@ -154,8 +154,8 @@ public:
 		@date 2003.09.06 genta
 	*/
 	bool _IsWinXP_or_later() {
-		return (m_osVersionInfo.dwMajorVersion >= 6 ||	// 2006.06.17 ryoji Ver 6.0, 7.0,...も含める
-			(m_osVersionInfo.dwMajorVersion >= 5 && m_osVersionInfo.dwMinorVersion >= 1));
+		return (osVersionInfo.dwMajorVersion >= 6 ||	// 2006.06.17 ryoji Ver 6.0, 7.0,...も含める
+			(osVersionInfo.dwMajorVersion >= 5 && osVersionInfo.dwMinorVersion >= 1));
 	}
 
 	/*! Windows 2000以上か調べる
@@ -165,7 +165,7 @@ public:
 		@date 2005.10.26 ryoji
 	*/
 	bool _IsWin2000_or_later() {
-		return (_IsWin32NT() && (5 <= m_osVersionInfo.dwMajorVersion));
+		return (_IsWin32NT() && (5 <= osVersionInfo.dwMajorVersion));
 	}
 
 	/*! Windows Meか調べる
@@ -175,7 +175,7 @@ public:
 		@date 2005.10.26 ryoji
 	*/
 	bool _IsWinMe() {
-		return (IsWin32Windows() && (m_osVersionInfo.dwMajorVersion == 4) && (m_osVersionInfo.dwMinorVersion == 90));
+		return (IsWin32Windows() && (osVersionInfo.dwMajorVersion == 4) && (osVersionInfo.dwMinorVersion == 90));
 	}
 
 #ifdef USE_SSE2
@@ -184,7 +184,7 @@ public:
 		@retval true support SSE2
 	*/
 	bool _SupportSSE2() {
-		return m_bSSE2;
+		return bSSE2;
 	}
 #endif
 
@@ -195,20 +195,18 @@ public:
 		@date 2013.10.19 novice
 	*/
 	bool _IsWine() {
-		return m_bWine;
+		return bWine;
 	}
 
 protected:
 	// Classはstatic(全クラス共有)変数以外持たない
-	static BOOL m_bSuccess;
-	static OSVERSIONINFO m_osVersionInfo;
+	static BOOL bSuccess;
+	static OSVERSIONINFO osVersionInfo;
 #ifdef USE_SSE2
-	static bool m_bSSE2;
+	static bool bSSE2;
 #endif
-	static bool m_bWine;
+	static bool bWine;
 };
-
-
 
 inline bool IsWin32NT() {
 #if (WINVER >= _WIN32_WINNT_WIN2K)

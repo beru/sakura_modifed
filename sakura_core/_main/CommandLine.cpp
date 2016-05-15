@@ -531,9 +531,9 @@ CommandLine::CommandLine()
 	gi.bGrepSubFolder		= false;
 	gi.grepSearchOption.Reset();
 	/*
-	m_gi.sGrepSearchOption.bLoHiCase	= false;
-	m_gi.bGrepRegularExp	= false;
-	m_gi.bGrepWordOnly		= false;
+	gi.sGrepSearchOption.bLoHiCase	= false;
+	gi.bGrepRegularExp	= false;
+	gi.bGrepWordOnly		= false;
 	*/
 	gi.bGrepCurFolder		= false;
 	gi.bGrepStdout		= false;

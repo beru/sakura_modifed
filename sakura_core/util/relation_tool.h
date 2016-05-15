@@ -38,8 +38,8 @@ public:
 	virtual ~Subject();
 
 	// 公開インターフェース
-	int GetListenerCount() const { return (int)m_vListenersRef.size(); }
-	Listener* GetListener(int nIndex) const { return m_vListenersRef[nIndex]; }
+	int GetListenerCount() const { return (int)vListenersRef.size(); }
+	Listener* GetListener(int nIndex) const { return vListenersRef[nIndex]; }
 
 public:
 	// 管理用
@@ -47,7 +47,7 @@ public:
 	void _RemoveListener(Listener* pListener);
 
 private:
-	std::vector<Listener*> m_vListenersRef;
+	std::vector<Listener*> vListenersRef;
 };
 
 // 1つのSubjectをウォッチする
@@ -58,10 +58,10 @@ public:
 
 	// 公開インターフェース
 	Subject* Listen(Subject* pSubject); // 直前にウォッチしていたサブジェクトを返す
-	Subject* GetListeningSubject() const { return m_pSubjectRef; }
+	Subject* GetListeningSubject() const { return pSubjectRef; }
 
 private:
-	Subject* m_pSubjectRef;
+	Subject* pSubjectRef;
 };
 
 

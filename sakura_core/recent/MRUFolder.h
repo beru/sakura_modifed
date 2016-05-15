@@ -55,16 +55,16 @@ public:
 
 	// アクセス関数
 	int Length() const;	// アイテムの数。
-	int MenuLength(void) const { return t_min(Length(), m_recentFolder.GetViewCount()); }	// メニューに表示されるアイテムの数
+	int MenuLength(void) const { return t_min(Length(), recentFolder.GetViewCount()); }	// メニューに表示されるアイテムの数
 	void ClearAll();					// アイテムを削除～。
 	void Add(const TCHAR* pszFolder);	// pszFolderを追加する。
 	const TCHAR* GetPath(int num) const;
 
 protected:
 	// 共有メモリアクセス用。
-	struct DllSharedData* m_pShareData;			// 共有メモリを参照するよ。
+	struct DllSharedData* pShareData;			// 共有メモリを参照するよ。
 
 private:
-	RecentFolder m_recentFolder;	// 履歴	//@@@ 2003.04.08 MIK
+	RecentFolder recentFolder;	// 履歴	//@@@ 2003.04.08 MIK
 };
 

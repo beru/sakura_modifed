@@ -40,11 +40,11 @@ public:
 	bool OpenPropertySheetTypes(HWND hWnd, int nPageNum, TypeConfigNum nSettingType);	// É^ÉCÉvï ê›íË
 
 private:
-	HWND			m_hwndOwner;
-	ImageListMgr*	m_pImageList;
-	MenuDrawer*	m_pMenuDrawer;
+	HWND			hwndOwner;
+	ImageListMgr*	pImageList;
+	MenuDrawer*		pMenuDrawer;
 
-	int				m_nPropComPageNum;
-	int				m_nPropTypePageNum;
+	int				nPropComPageNum;
+	int				nPropTypePageNum;
 };
 

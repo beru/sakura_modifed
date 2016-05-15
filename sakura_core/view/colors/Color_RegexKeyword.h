@@ -28,15 +28,15 @@
 
 class Color_RegexKeyword : public ColorStrategy {
 public:
-	Color_RegexKeyword() : m_nCOMMENTEND(0), m_nCOMMENTMODE(ToColorIndexType_RegularExpression(0)) { }
-	virtual EColorIndexType GetStrategyColor() const { return m_nCOMMENTMODE; }
-	virtual void InitStrategyStatus() { m_nCOMMENTEND = 0; m_nCOMMENTMODE = ToColorIndexType_RegularExpression(0); }
+	Color_RegexKeyword() : nCommentEnd(0), nCommentMode(ToColorIndexType_RegularExpression(0)) { }
+	virtual EColorIndexType GetStrategyColor() const { return nCommentMode; }
+	virtual void InitStrategyStatus() { nCommentEnd = 0; nCommentMode = ToColorIndexType_RegularExpression(0); }
 	virtual bool BeginColor(const StringRef& str, int nPos);
 	virtual bool EndColor(const StringRef& str, int nPos);
-	virtual bool Disp() const { return m_pTypeData->bUseRegexKeyword; }
+	virtual bool Disp() const { return pTypeData->bUseRegexKeyword; }
 	virtual void OnStartScanLogic();
 private:
-	int m_nCOMMENTEND;
-	EColorIndexType m_nCOMMENTMODE;
+	int nCommentEnd;
+	EColorIndexType nCommentMode;
 };
 

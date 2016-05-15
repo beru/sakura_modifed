@@ -40,10 +40,10 @@ public:
 	// 設定更新
 	virtual void Update(void) {
 		EditDoc* pEditDoc = EditDoc::GetInstance(0);
-		m_pTypeData = &pEditDoc->m_docType.GetDocumentAttribute();
+		pTypeData = &pEditDoc->docType.GetDocumentAttribute();
 	}
 protected:
-	const TypeConfig* m_pTypeData;
+	const TypeConfig* pTypeData;
 };
 
 // 通常テキスト描画
@@ -71,21 +71,21 @@ protected:
 	// 色分け表示対象判定
 	virtual bool Disp(void) const {
 		EColorIndexType nColorIndex = GetColorIdx();
-		return m_pTypeData->colorInfoArr[nColorIndex].bDisp;
+		return pTypeData->colorInfoArr[nColorIndex].bDisp;
 	}
 
 	virtual void Update(void) {
 		Figure::Update();
 
 		EColorIndexType nColorIndex = GetColorIdx();
-		if (m_pTypeData->colorInfoArr[nColorIndex].bDisp) {
-			m_nDispColorIndex = nColorIndex;
+		if (pTypeData->colorInfoArr[nColorIndex].bDisp) {
+			nDispColorIndex = nColorIndex;
 		}else {
-			m_nDispColorIndex = COLORIDX_TEXT;
+			nDispColorIndex = COLORIDX_TEXT;
 		}
 	}
 
-	EColorIndexType GetDispColorIdx(void) const { return m_nDispColorIndex; }
+	EColorIndexType GetDispColorIdx(void) const { return nDispColorIndex; }
 
 	// 実装補助
 	bool DrawImp_StyleSelect(ColorStrategyInfo& csInfo);
@@ -93,6 +93,6 @@ protected:
 	void DrawImp_DrawUnderline(ColorStrategyInfo& csInfo, DispPos&);
 
 protected:
-	EColorIndexType m_nDispColorIndex;
+	EColorIndexType nDispColorIndex;
 };
 

@@ -5,7 +5,7 @@
 
 void AppMode::OnAfterSave(const SaveInfo& saveInfo)
 {
-	m_bViewMode = false;	// ビューモード
+	bViewMode = false;	// ビューモード
 	// 名前を付けて保存から再ロードが除去された分の不足処理を追加（ANSI版との差異）	// 2009.08.12 ryoji
 	if (IsDebugMode()) {
 		SetDebugModeOFF();	// アウトプットウィンドウは通常ウィンドウ化

@@ -27,10 +27,10 @@
 
 class Jis : public CodeBase {
 public:
-	Jis(bool base64decode = true) : m_base64decode(base64decode) { }
+	Jis(bool base64decode = true) : base64decode(base64decode) { }
 public:
 	// CodeBaseインターフェース
-	CodeConvertResult CodeToUnicode(const Memory& src, NativeW* pDst){ return JISToUnicode(src, pDst, m_base64decode); }	// 特定コード → UNICODE    変換
+	CodeConvertResult CodeToUnicode(const Memory& src, NativeW* pDst){ return JISToUnicode(src, pDst, base64decode); }	// 特定コード → UNICODE    変換
 	CodeConvertResult UnicodeToCode(const NativeW& src, Memory* pDst){ return UnicodeToJIS(src, pDst); }	// UNICODE    → 特定コード 変換
 // GetEolはCodeBaseに移動	2010/6/13 Uchi
 	CodeConvertResult UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR* pDst, const CommonSetting_StatusBar* psStatusbar);			// UNICODE → Hex 変換
@@ -49,7 +49,7 @@ protected:
 
 private:
 	// 変換方針
-	bool m_base64decode;
+	bool base64decode;
 
 public:
 	// 各種判定定数

@@ -82,27 +82,27 @@ void TextMetrics::Update(HFONT hFont)
 
 void TextMetrics::SetHankakuWidth(int nHankakuWidth)
 {
-	m_nCharWidth = nHankakuWidth;
+	nCharWidth = nHankakuWidth;
 }
 
 // 半角文字の縦幅を設定。単位はピクセル。
 void TextMetrics::SetHankakuHeight(int nHankakuHeight)
 {
-	m_nCharHeight = nHankakuHeight;
+	nCharHeight = nHankakuHeight;
 }
 
 
 //文字間隔基準設定。nDxBasisは半角文字の基準ピクセル幅。SetHankakuDx
 void TextMetrics::SetHankakuDx(int nDxBasis)
 {
-	m_nDxBasis = nDxBasis;
-	for (int i=0; i<_countof(m_anHankakuDx); ++i) m_anHankakuDx[i] = GetHankakuDx();
-	for (int i=0; i<_countof(m_anZenkakuDx); ++i) m_anZenkakuDx[i] = GetZenkakuDx();
+	this->nDxBasis = nDxBasis;
+	for (int i=0; i<_countof(anHankakuDx); ++i) anHankakuDx[i] = GetHankakuDx();
+	for (int i=0; i<_countof(anZenkakuDx); ++i) anZenkakuDx[i] = GetZenkakuDx();
 }
 
 void TextMetrics::SetHankakuDy(int nDyBasis)
 {
-	m_nDyBasis = nDyBasis;
+	this->nDyBasis = nDyBasis;
 }
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //

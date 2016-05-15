@@ -40,7 +40,7 @@
 
 
 // 2006.08.14 Moca 用紙名一覧の重複削除・情報の統合
-const PaperInfo Print::m_paperInfoArr[] = {
+const PaperInfo Print::paperInfoArr[] = {
 	// 	用紙ID, 幅
 	{DMPAPER_A4,                  2100,  2970, _T("A4 (210 x 297 mm)")},
 	{DMPAPER_A3,                  2970,  4200, _T("A3 (297 x 420 mm)")},
@@ -85,14 +85,14 @@ const PaperInfo Print::m_paperInfoArr[] = {
 	{DMPAPER_FANFOLD_LGL_GERMAN,  2159,  3302, _T("German Legal Fanfold (8 1/2 x 13 inch)")},
 };
 
-const int Print::m_nPaperInfoArrNum = _countof(m_paperInfoArr);
+const int Print::nPaperInfoArrNum = _countof(paperInfoArr);
 
 
 
 Print::Print(void)
 {
-	m_hDevMode	= NULL;
-	m_hDevNames	= NULL;
+	hDevMode	= NULL;
+	hDevNames	= NULL;
 	return;
 }
 
@@ -100,14 +100,14 @@ Print::~Print(void)
 {
 	// メモリ割り当て済みならば、解放する
 	// 2003.05.18 かろと
-	if (m_hDevMode) {
-		::GlobalFree(m_hDevMode);
+	if (hDevMode) {
+		::GlobalFree(hDevMode);
 	}
-	if (m_hDevNames) {
-		::GlobalFree(m_hDevNames);
+	if (hDevNames) {
+		::GlobalFree(hDevNames);
 	}
-	m_hDevMode	= NULL;
-	m_hDevNames	= NULL;
+	hDevMode	= NULL;
+	hDevNames	= NULL;
 	return;
 }
 
@@ -127,7 +127,7 @@ BOOL Print::PrintDlg(
 	)
 {
 	// デフォルトプリンタが選択されていなければ、選択する
-	if (!m_hDevMode) {
+	if (!hDevMode) {
 		if (!GetDefaultPrinter(pMYDEVMODE)) {
 			return FALSE;
 		}
@@ -136,29 +136,29 @@ BOOL Print::PrintDlg(
 	//
 	//  現在のプリンタ設定の必要部分を変更
 	//
-	DEVMODE* pDEVMODE = (DEVMODE*)::GlobalLock(m_hDevMode);
+	DEVMODE* pDEVMODE = (DEVMODE*)::GlobalLock(hDevMode);
 	pDEVMODE->dmOrientation		= pMYDEVMODE->dmOrientation;
 	pDEVMODE->dmPaperSize		= pMYDEVMODE->dmPaperSize;
 	pDEVMODE->dmPaperLength		= pMYDEVMODE->dmPaperLength;
 	pDEVMODE->dmPaperWidth		= pMYDEVMODE->dmPaperWidth;
 	// PrintDlg()でReAllocされる事を考えて、呼び出す前にUnlock
-	::GlobalUnlock(m_hDevMode);
+	::GlobalUnlock(hDevMode);
 
 	// プリンタダイアログを表示して、プリンタを選択
 	pPD->lStructSize = sizeof(*pPD);
-	pPD->hDevMode = m_hDevMode;
-	pPD->hDevNames = m_hDevNames;
+	pPD->hDevMode = hDevMode;
+	pPD->hDevNames = hDevNames;
 	if (!::PrintDlg(pPD)) {
 		// プリンタを変更しなかった
 		return FALSE;
 	}
 
-	m_hDevMode = pPD->hDevMode;
-	m_hDevNames = pPD->hDevNames;
+	hDevMode = pPD->hDevMode;
+	hDevNames = pPD->hDevNames;
 
-	pDEVMODE = (DEVMODE*)::GlobalLock(m_hDevMode);
+	pDEVMODE = (DEVMODE*)::GlobalLock(hDevMode);
 	// プリンタ設定 DEVNAMES用
-	DEVNAMES* pDEVNAMES = (DEVNAMES*)::GlobalLock(m_hDevNames);
+	DEVNAMES* pDEVNAMES = (DEVNAMES*)::GlobalLock(hDevNames);
 
 	// プリンタドライバ名
 	_tcscpy_s(
@@ -192,8 +192,8 @@ BOOL Print::PrintDlg(
 	DEBUG_TRACE(_T("物理出力メディア (出力ポート) =[%ts]\n"), (TCHAR*)pDEVNAMES + pDEVNAMES->wOutputOffset);
 	DEBUG_TRACE(_T("デフォルトのプリンタか=[%d]\n"),          pDEVNAMES->wDefault);
 
-	::GlobalUnlock(m_hDevMode);
-	::GlobalUnlock(m_hDevNames);
+	::GlobalUnlock(hDevMode);
+	::GlobalUnlock(hDevNames);
 	return TRUE;
 }
 
@@ -207,12 +207,12 @@ BOOL Print::GetDefaultPrinter(MYDEVMODE* pMYDEVMODE)
 	PRINTDLG	pd;
 	// 2009.08.08 印刷で用紙サイズ、横指定が効かない問題対応 syat
 	//// すでに DEVMODEを取得済みなら、何もしない
-	//if (m_hDevMode != NULL) {
+	//if (hDevMode != NULL) {
 	//	return TRUE;
 	//}
 
 	// DEVMODEを取得済みでない場合、取得する
-	if (!m_hDevMode) {
+	if (!hDevMode) {
 		//
 		// PRINTDLG構造体を初期化する（ダイアログは表示しないように）
 		// PrintDlg()でデフォルトプリンタのデバイス名などを取得する
@@ -228,14 +228,14 @@ BOOL Print::GetDefaultPrinter(MYDEVMODE* pMYDEVMODE)
 
 		// 初期化
 		memset_raw(pMYDEVMODE, 0, sizeof(*pMYDEVMODE));
-		m_hDevMode = pd.hDevMode;
-		m_hDevNames = pd.hDevNames;
+		hDevMode = pd.hDevMode;
+		hDevNames = pd.hDevNames;
 	}
 
 	// MYDEVMODEへのコピー
-	DEVMODE* pDEVMODE = (DEVMODE*)::GlobalLock(m_hDevMode);
+	DEVMODE* pDEVMODE = (DEVMODE*)::GlobalLock(hDevMode);
 	// プリンタ設定 DEVNAMES用
-	DEVNAMES* pDEVNAMES = (DEVNAMES*)::GlobalLock(m_hDevNames);
+	DEVNAMES* pDEVNAMES = (DEVNAMES*)::GlobalLock(hDevNames);
 
 	// プリンタドライバ名
 	_tcscpy_s(
@@ -269,8 +269,8 @@ BOOL Print::GetDefaultPrinter(MYDEVMODE* pMYDEVMODE)
 	DEBUG_TRACE(_T("物理出力メディア (出力ポート) =[%ts]\n"), (TCHAR*)pDEVNAMES + pDEVNAMES->wOutputOffset);
 	DEBUG_TRACE(_T("デフォルトのプリンタか=[%d]\n"),          pDEVNAMES->wDefault);
 
-	::GlobalUnlock(m_hDevMode);
-	::GlobalUnlock(m_hDevNames);
+	::GlobalUnlock(hDevMode);
+	::GlobalUnlock(hDevNames);
 	return TRUE;
 }
 
@@ -283,7 +283,7 @@ HDC Print::CreateDC(
 	)
 {
 	// プリンタが選択されていなければ、NULLを返す
-	if (!m_hDevMode) {
+	if (!hDevMode) {
 		return NULL;
 	}
 	HDC	hdc = NULL;
@@ -305,7 +305,7 @@ HDC Print::CreateDC(
 		goto end_of_func;
 	}
 
-	DEVMODE* pDEVMODE = (DEVMODE*)::GlobalLock(m_hDevMode);
+	DEVMODE* pDEVMODE = (DEVMODE*)::GlobalLock(hDevMode);
 	pDEVMODE->dmOrientation	= pMYDEVMODE->dmOrientation;
 	pDEVMODE->dmPaperSize	= pMYDEVMODE->dmPaperSize;
 	pDEVMODE->dmPaperLength	= pMYDEVMODE->dmPaperLength;
@@ -339,7 +339,7 @@ HDC Print::CreateDC(
 	pMYDEVMODE->dmPaperLength	= pDEVMODE->dmPaperLength;
 	pMYDEVMODE->dmPaperWidth	= pDEVMODE->dmPaperWidth;
 
-	::GlobalUnlock(m_hDevMode);
+	::GlobalUnlock(hDevMode);
 
 end_of_func:;
 	if (hPrinter) {
@@ -544,9 +544,9 @@ TCHAR* Print::GetPaperName(int nPaperSize, TCHAR* pszPaperName)
 */
 const PaperInfo* Print::FindPaperInfo(int id)
 {
-	for (int i=0; i<m_nPaperInfoArrNum; ++i) {
-		if (m_paperInfoArr[i].nId == id) {
-			return &(m_paperInfoArr[i]);
+	for (int i=0; i<nPaperInfoArrNum; ++i) {
+		if (paperInfoArr[i].nId == id) {
+			return &(paperInfoArr[i]);
 		}
 	}
 	return NULL;
@@ -585,7 +585,7 @@ void Print::SettingInitialize(PrintSetting& pPrintSetting, const TCHAR* settingN
 	pPrintSetting.nPrintPaperSize = DMPAPER_A4;	// 用紙サイズ
 	// プリンタ設定 DEVMODE用
 	// プリンタ設定を取得するのはコストがかかるので、後ほど
-	//	m_print.GetDefaultPrinterInfo(&(pPrintSetting.mdmDevMode));
+	//	print.GetDefaultPrinterInfo(&(pPrintSetting.mdmDevMode));
 	pPrintSetting.bHeaderUse[0] = TRUE;
 	pPrintSetting.bHeaderUse[1] = FALSE;
 	pPrintSetting.bHeaderUse[2] = FALSE;

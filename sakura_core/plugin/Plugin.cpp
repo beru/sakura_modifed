@@ -37,7 +37,7 @@ bool Plug::Invoke(EditView& view, WSHIfObj::List& params) {
 }
 
 EFunctionCode Plug::GetFunctionCode() const {
-	return GetPluginFunctionCode(plugin.m_id, m_id);
+	return GetPluginFunctionCode(plugin.id, id);
 }
 
 /////////////////////////////////////////////
@@ -45,15 +45,15 @@ EFunctionCode Plug::GetFunctionCode() const {
 
 // コンストラクタ
 Plugin::Plugin(const tstring& sBaseDir)
-	: m_sBaseDir(sBaseDir)
+	: sBaseDir(sBaseDir)
 {
-	m_nCommandCount = 0;
+	nCommandCount = 0;
 }
 
 // デストラクタ
 Plugin::~Plugin(void)
 {
-	for (auto it=m_options.begin(); it!=m_options.end(); ++it) {
+	for (auto it=options.begin(); it!=options.end(); ++it) {
 		delete *it;
 	}
 }
@@ -64,24 +64,24 @@ bool Plugin::ReadPluginDefCommon(
 	DataProfile* profileMlang
 	)
 {
-	profile.IOProfileData(PII_PLUGIN, PII_PLUGIN_ID, m_sId);
+	profile.IOProfileData(PII_PLUGIN, PII_PLUGIN_ID, sId);
 	profile.IOProfileData(PII_PLUGIN, PII_PLUGIN_NAME, sName);
-	profile.IOProfileData(PII_PLUGIN, PII_PLUGIN_DESCRIPTION, m_sDescription);
-	profile.IOProfileData(PII_PLUGIN, PII_PLUGIN_AUTHOR, m_sAuthor);
-	profile.IOProfileData(PII_PLUGIN, PII_PLUGIN_VERSION, m_sVersion);
-	profile.IOProfileData(PII_PLUGIN, PII_PLUGIN_URL, m_sUrl);
+	profile.IOProfileData(PII_PLUGIN, PII_PLUGIN_DESCRIPTION, sDescription);
+	profile.IOProfileData(PII_PLUGIN, PII_PLUGIN_AUTHOR, sAuthor);
+	profile.IOProfileData(PII_PLUGIN, PII_PLUGIN_VERSION, sVersion);
+	profile.IOProfileData(PII_PLUGIN, PII_PLUGIN_URL, sUrl);
 	if (profileMlang) {
 		profileMlang->IOProfileData(PII_PLUGIN, PII_PLUGIN_NAME, sName);
-		profileMlang->IOProfileData(PII_PLUGIN, PII_PLUGIN_DESCRIPTION, m_sDescription);
-		profileMlang->IOProfileData(PII_PLUGIN, PII_PLUGIN_URL, m_sUrl);
+		profileMlang->IOProfileData(PII_PLUGIN, PII_PLUGIN_DESCRIPTION, sDescription);
+		profileMlang->IOProfileData(PII_PLUGIN, PII_PLUGIN_URL, sUrl);
 	}
 
 #ifdef _UNICODE
 	DEBUG_TRACE(_T("    Name:%ls\n"), sName.c_str());
-	DEBUG_TRACE(_T("    Description:%ls\n"), m_sDescription.c_str());
-	DEBUG_TRACE(_T("    Author:%ls\n"), m_sAuthor.c_str());
-	DEBUG_TRACE(_T("    Version:%ls\n"), m_sVersion.c_str());
-	DEBUG_TRACE(_T("    Url:%ls\n"), m_sUrl.c_str());
+	DEBUG_TRACE(_T("    Description:%ls\n"), sDescription.c_str());
+	DEBUG_TRACE(_T("    Author:%ls\n"), sAuthor.c_str());
+	DEBUG_TRACE(_T("    Version:%ls\n"), sVersion.c_str());
+	DEBUG_TRACE(_T("    Url:%ls\n"), sUrl.c_str());
 #endif
 
 	return true;
@@ -119,7 +119,7 @@ bool Plugin::ReadPluginDefPlug(
 				}
 
 				Plug *newPlug = CreatePlug(*this, nCount, sKey, sHandler, sLabel);
-				m_plugs.push_back(newPlug);
+				plugs.push_back(newPlug);
 			}else {
 				break;		// 定義がなければ読み込みを終了
 			}
@@ -224,7 +224,7 @@ bool Plugin::ReadPluginDefOption(
 				sLabel = sKey;
 			}
 
-			m_options.push_back(
+			options.push_back(
 				new PluginOption(*this, sLabel, sSection, sKey, sType, sSelect, sDefaultVal, nCount)
 				);
 		}
@@ -236,12 +236,12 @@ bool Plugin::ReadPluginDefOption(
 // プラグインフォルダ基準の相対パスをフルパスに変換
 Plugin::tstring Plugin::GetFilePath(const tstring& sFileName) const
 {
-	return m_sBaseDir + _T("\\") + to_tchar(sFileName.c_str());
+	return sBaseDir + _T("\\") + to_tchar(sFileName.c_str());
 }
 
 Plugin::tstring Plugin::GetFolderName() const
 {
-	return tstring(GetFileTitlePointer(m_sBaseDir.c_str()));
+	return tstring(GetFileTitlePointer(sBaseDir.c_str()));
 }
 
 // コマンドを追加する
@@ -256,13 +256,13 @@ int Plugin::AddCommand(
 	if (!label) { label = L""; }
 
 	// コマンドプラグIDは1から振る
-	++m_nCommandCount;
-	Plug* newPlug = CreatePlug(*this, m_nCommandCount, PP_COMMAND_STR, wstring(handler), wstring(label));
+	++nCommandCount;
+	Plug* newPlug = CreatePlug(*this, nCommandCount, PP_COMMAND_STR, wstring(handler), wstring(label));
 	if (icon) {
-		newPlug->m_sIcon = icon;
+		newPlug->sIcon = icon;
 	}
 
-	m_plugs.push_back(newPlug);
+	plugs.push_back(newPlug);
 
 	if (doRegister) {
 		JackManager::getInstance().RegisterPlug(PP_COMMAND_STR, newPlug);
@@ -298,8 +298,8 @@ bool Plugin::ReadPluginDefString(
 	)
 {
 	WCHAR bufKey[64];
-	m_aStrings.clear();
-	m_aStrings.emplace_back(); // 0番目ダミー
+	aStrings.clear();
+	aStrings.emplace_back(); // 0番目ダミー
 	for (int nCount=1; nCount<MAX_PLUG_STRING; ++nCount) {	// 添え字は１から始める
 		wstring sVal = L"";
 		swprintf(bufKey, L"S[%d]", nCount);
@@ -308,7 +308,7 @@ bool Plugin::ReadPluginDefString(
 				profileMlang->IOProfileData(PII_STRING, bufKey, sVal);
 			}
 		}
-		m_aStrings.push_back(sVal);
+		aStrings.push_back(sVal);
 	}
 	return true;
 }

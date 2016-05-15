@@ -54,27 +54,27 @@ public:
 	void AcceptSharedSearchKey();
 
 	// 取得
-	HWND GetToolbarHwnd() const	{ return m_hwndToolBar; }
-	HWND GetRebarHwnd() const	{ return m_hwndReBar; }
-	HWND GetSearchHwnd() const	{ return m_hwndSearchBox; }
+	HWND GetToolbarHwnd() const	{ return hwndToolBar; }
+	HWND GetRebarHwnd() const	{ return hwndReBar; }
+	HWND GetSearchHwnd() const	{ return hwndSearchBox; }
 	int GetSearchKey(std::wstring&); // 検索キーを取得。戻り値は検索キーの文字数。
 
 	// 操作
 	void SetFocusSearchBox(void) const;		// ツールバー検索ボックスへフォーカスを移動		2006.06.04 yukihane
 
 private:
-	EditWnd&	m_owner;
-    HWND		m_hwndToolBar;
+	EditWnd&	owner;
+    HWND		hwndToolBar;
 
 	// 子ウィンドウ
-    HWND		m_hwndReBar;		// Rebar ウィンドウ	//@@@ 2006.06.17 ryoji
-	HWND		m_hwndSearchBox;	// 検索コンボボックス
+    HWND		hwndReBar;		// Rebar ウィンドウ	//@@@ 2006.06.17 ryoji
+	HWND		hwndSearchBox;	// 検索コンボボックス
 
 	// フォント
-	HFONT		m_hFontSearchBox;	// 検索コンボボックスのフォント
+	HFONT		hFontSearchBox;	// 検索コンボボックスのフォント
 
-	ComboBoxItemDeleter	m_comboDel;
+	ComboBoxItemDeleter	comboDel;
 	RecentSearch		recentSearch;
-	ImageListMgr*		m_pIcons;
+	ImageListMgr*		pIcons;
 };
 

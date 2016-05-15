@@ -29,17 +29,17 @@ class Converter_TabToSpace : public Converter {
 public:
 	Converter_TabToSpace(int nTabWidth, int nStartColumn, bool bExtEol)
 		:
-		m_nTabWidth(nTabWidth),
-		m_nStartColumn(nStartColumn),
-		m_bExtEol(bExtEol)
+		nTabWidth(nTabWidth),
+		nStartColumn(nStartColumn),
+		bExtEol(bExtEol)
 	{
 	}
 
 	bool DoConvert(NativeW* pData);
 
 private:
-	int m_nTabWidth;
-	int m_nStartColumn;
-	bool m_bExtEol;
+	int nTabWidth;
+	int nStartColumn;
+	bool bExtEol;
 };
 

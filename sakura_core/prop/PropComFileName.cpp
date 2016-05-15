@@ -105,7 +105,7 @@ INT_PTR PropFileName::DispatchEvent(
 
 			// Apr. 28, 2003 Moca 初期化漏れ修正
 			// ダイアログを開いたときにリストが選択されていてもフィールドが空の場合があった
-			m_nLastPos_FILENAME = -1;
+			nLastPos_FILENAME = -1;
 
 			// ダイアログデータの設定
 			SetData(hwndDlg);
@@ -132,15 +132,15 @@ INT_PTR PropFileName::DispatchEvent(
 					if (nIndex == -1) {
 						::DlgItem_SetText(hwndDlg, IDC_EDIT_FNAME_FROM, _T(""));
 						::DlgItem_SetText(hwndDlg, IDC_EDIT_FNAME_TO, _T(""));
-					}else if (nIndex != m_nLastPos_FILENAME) {
+					}else if (nIndex != nLastPos_FILENAME) {
 						GetListViewItem_FILENAME(hListView, nIndex, szFrom, szTo);
 						::DlgItem_SetText(hwndDlg, IDC_EDIT_FNAME_FROM, szFrom);
 						::DlgItem_SetText(hwndDlg, IDC_EDIT_FNAME_TO, szTo);
 					}else {
-						// nIndex == m_nLastPos_FILENAMEのとき
+						// nIndex == nLastPos_FILENAMEのとき
 						// リスト→エディットボックスにデータをコピーすると[更新]がうまくうまく動作しない
 					}
-					m_nLastPos_FILENAME = nIndex;
+					nLastPos_FILENAME = nIndex;
 					break;
 				}
 				break;
@@ -155,7 +155,7 @@ INT_PTR PropFileName::DispatchEvent(
 					return TRUE;
 	//@@@ 2002.01.03 YAZAKI 最後に表示していたシートを正しく覚えていないバグ修正
 				case PSN_SETACTIVE:
-					m_nPageNum = ID_PROPCOM_PAGENUM_FILENAME;
+					nPageNum = ID_PROPCOM_PAGENUM_FILENAME;
 					return TRUE;
 				}
 				break;
@@ -280,14 +280,14 @@ INT_PTR PropFileName::DispatchEvent(
 */
 void PropFileName::SetData(HWND hwndDlg)
 {
-	::CheckDlgButtonBool( hwndDlg, IDC_CHECK_SHORTPATH, m_common.fileName.bTransformShortPath );
-	::SetDlgItemInt( hwndDlg, IDC_EDIT_SHORTMAXWIDTH, m_common.fileName.nTransformShortMaxWidth, FALSE );
+	::CheckDlgButtonBool( hwndDlg, IDC_CHECK_SHORTPATH, common.fileName.bTransformShortPath );
+	::SetDlgItemInt( hwndDlg, IDC_EDIT_SHORTMAXWIDTH, common.fileName.nTransformShortMaxWidth, FALSE );
 
 	// ファイル名置換リスト
 	HWND hListView = ::GetDlgItem(hwndDlg, IDC_LIST_FNAME);
 	ListView_DeleteAllItems(hListView); // リストを空にする
 
-	auto& csFileName = m_common.fileName;
+	auto& csFileName = common.fileName;
 	// リストにデータをセット
 	int nIndex = 0;
 	for (int i=0; i<csFileName.nTransformFileNameArrNum; ++i) {
@@ -333,10 +333,10 @@ void PropFileName::SetData(HWND hwndDlg)
 
 int PropFileName::GetData(HWND hwndDlg)
 {
-	auto& csFileName = m_common.fileName;
+	auto& csFileName = common.fileName;
 
-	m_common.fileName.bTransformShortPath = ::IsDlgButtonCheckedBool( hwndDlg, IDC_CHECK_SHORTPATH );
-	m_common.fileName.nTransformShortMaxWidth = ::GetDlgItemInt( hwndDlg, IDC_EDIT_SHORTMAXWIDTH, NULL, FALSE );
+	common.fileName.bTransformShortPath = ::IsDlgButtonCheckedBool( hwndDlg, IDC_CHECK_SHORTPATH );
+	common.fileName.nTransformShortMaxWidth = ::GetDlgItemInt( hwndDlg, IDC_EDIT_SHORTMAXWIDTH, NULL, FALSE );
 
 	// ファイル名置換リスト
 	HWND hListView = ::GetDlgItem(hwndDlg, IDC_LIST_FNAME);

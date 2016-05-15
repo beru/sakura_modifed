@@ -52,8 +52,8 @@ int GrepEnumKeys::SetFileKeys(LPCTSTR lpKeys)
 			if (bRelPath) {
 				push_back_unique(vecSearchFileKeys, token);
 			}else {
-//					push_back_unique(m_vecSearchAbsFileKeys, token);
-//					push_back_unique(m_vecSearchFileKeys, token);
+//					push_back_unique(vecSearchAbsFileKeys, token);
+//					push_back_unique(vecSearchFileKeys, token);
 				return 2; // 絶対パス指定は不可
 			}
 		}else if (keyType == FILTER_EXCEPT_FILE) {

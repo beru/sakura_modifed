@@ -46,15 +46,15 @@ public:
 	int Match_CommentTo(int nPos, const StringRef& str) const;			// 行コメントに値するか確認する
 
 	// 取得
-	const wchar_t* getBlockCommentFrom() const { return m_szBlockCommentFrom; }
-	const wchar_t* getBlockCommentTo() const { return m_szBlockCommentTo; }
-	int getBlockFromLen() const { return m_nBlockFromLen; }
-	int getBlockToLen() const { return m_nBlockToLen; }
+	const wchar_t* getBlockCommentFrom() const { return szBlockCommentFrom; }
+	const wchar_t* getBlockCommentTo() const { return szBlockCommentTo; }
+	int getBlockFromLen() const { return nBlockFromLen; }
+	int getBlockToLen() const { return nBlockToLen; }
 
 private:
-	wchar_t	m_szBlockCommentFrom[BLOCKCOMMENT_BUFFERSIZE]; // ブロックコメントデリミタ(From)
-	wchar_t	m_szBlockCommentTo[BLOCKCOMMENT_BUFFERSIZE];   // ブロックコメントデリミタ(To)
-	int		m_nBlockFromLen;
-	int		m_nBlockToLen;
+	wchar_t	szBlockCommentFrom[BLOCKCOMMENT_BUFFERSIZE]; // ブロックコメントデリミタ(From)
+	wchar_t	szBlockCommentTo[BLOCKCOMMENT_BUFFERSIZE];   // ブロックコメントデリミタ(To)
+	int		nBlockFromLen;
+	int		nBlockToLen;
 };
 

@@ -40,7 +40,7 @@
 
 void EditApp::Create(HINSTANCE hInst, int nGroupId)
 {
-	hInst = hInst;
+	this->hInst = hInst;
 
 	// ƒwƒ‹ƒpì¬
 	icons.Create(hInst);	//	CreateImage List

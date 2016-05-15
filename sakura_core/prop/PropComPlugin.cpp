@@ -93,7 +93,7 @@ INT_PTR PropPlugin::DispatchEvent(
 
 	WORD	wNotifyCode;
 	WORD	wID;
-	PluginRec* pluginTable = m_common.plugin.pluginTable;
+	PluginRec* pluginTable = common.plugin.pluginTable;
 
 	switch (uMsg) {
 	case WM_INITDIALOG:
@@ -117,9 +117,9 @@ INT_PTR PropPlugin::DispatchEvent(
 					if (sel >= 0) {
 						Plugin* plugin = PluginManager::getInstance().GetPlugin(sel);
 						if (plugin) {
-							::SetWindowText(::GetDlgItem(hwndDlg, IDC_LABEL_PLUGIN_Description), to_tchar(plugin->m_sDescription.c_str()));
-							::SetWindowText(::GetDlgItem(hwndDlg, IDC_LABEL_PLUGIN_Author), to_tchar(plugin->m_sAuthor.c_str()));
-							::SetWindowText(::GetDlgItem(hwndDlg, IDC_LABEL_PLUGIN_Version), to_tchar(plugin->m_sVersion.c_str()));
+							::SetWindowText(::GetDlgItem(hwndDlg, IDC_LABEL_PLUGIN_Description), to_tchar(plugin->sDescription.c_str()));
+							::SetWindowText(::GetDlgItem(hwndDlg, IDC_LABEL_PLUGIN_Author), to_tchar(plugin->sAuthor.c_str()));
+							::SetWindowText(::GetDlgItem(hwndDlg, IDC_LABEL_PLUGIN_Version), to_tchar(plugin->sVersion.c_str()));
 						}else {
 							::SetWindowText(::GetDlgItem(hwndDlg, IDC_LABEL_PLUGIN_Description), _T(""));
 							::SetWindowText(::GetDlgItem(hwndDlg, IDC_LABEL_PLUGIN_Author), _T(""));
@@ -129,11 +129,11 @@ INT_PTR PropPlugin::DispatchEvent(
 						EPluginState state = pluginTable[sel].state;
 						BOOL bEdit = (state != PLS_DELETED && state != PLS_NONE);
 						::EnableWindow(::GetDlgItem(hwndDlg, IDC_PLUGIN_Remove), bEdit);
-						::EnableWindow(::GetDlgItem(hwndDlg, IDC_PLUGIN_OPTION), state == PLS_LOADED && plugin && plugin->m_options.size() > 0);
+						::EnableWindow(::GetDlgItem(hwndDlg, IDC_PLUGIN_OPTION), state == PLS_LOADED && plugin && plugin->options.size() > 0);
 						::EnableWindow(::GetDlgItem(hwndDlg, IDC_PLUGIN_README), 
 							(state == PLS_INSTALLED || state == PLS_UPDATED || state == PLS_LOADED || state == PLS_DELETED)
 							&& !GetReadMeFile(to_tchar(pluginTable[sel].szName)).empty());
-						::EnableWindow(::GetDlgItem(hwndDlg, IDC_PLUGIN_URL), state == PLS_LOADED && plugin && plugin->m_sUrl.size() > 0);
+						::EnableWindow(::GetDlgItem(hwndDlg, IDC_PLUGIN_URL), state == PLS_LOADED && plugin && plugin->sUrl.size() > 0);
 					}
 				}
 				break;
@@ -155,7 +155,7 @@ INT_PTR PropPlugin::DispatchEvent(
 				GetData(hwndDlg);
 				return TRUE;
 			case PSN_SETACTIVE:
-				m_nPageNum = ID_PROPCOM_PAGENUM_PLUGIN;
+				nPageNum = ID_PROPCOM_PAGENUM_PLUGIN;
 				return TRUE;
 			}
 			break;
@@ -172,9 +172,9 @@ INT_PTR PropPlugin::DispatchEvent(
 			switch (wID) {
 			case IDC_PLUGIN_SearchNew:		// 新規プラグインを追加
 				GetData(hwndDlg);
-				PluginManager::getInstance().SearchNewPlugin(m_common, hwndDlg);
-				if (m_bTrayProc) {
-					LoadPluginTemp(m_common, *m_pMenuDrawer);
+				PluginManager::getInstance().SearchNewPlugin(common, hwndDlg);
+				if (bTrayProc) {
+					LoadPluginTemp(common, *pMenuDrawer);
 				}
 				SetData_LIST(hwndDlg);	// リストの再構築
 				break;
@@ -193,9 +193,9 @@ INT_PTR PropPlugin::DispatchEvent(
 					);
 					if (dlgOpenFile.DoModal_GetOpenFileName(szPath)) {
 						GetData(hwndDlg);
-						PluginManager::getInstance().InstZipPlugin(m_common, hwndDlg, szPath);
-						if (m_bTrayProc) {
-							LoadPluginTemp(m_common, *m_pMenuDrawer);
+						PluginManager::getInstance().InstZipPlugin(common, hwndDlg, szPath);
+						if (bTrayProc) {
+							LoadPluginTemp(common, *pMenuDrawer);
 						}
 						SetData_LIST(hwndDlg);	// リストの再構築
 					}
@@ -215,7 +215,7 @@ INT_PTR PropPlugin::DispatchEvent(
 					int sel = ListView_GetNextItem(hListView, -1, LVNI_SELECTED);
 					if (sel >= 0) {
 						if (MYMESSAGEBOX(hwndDlg, MB_YESNO, GSTR_APPNAME, LS(STR_PROPCOMPLG_DELETE), pluginTable[sel].szName) == IDYES) {
-							PluginManager::getInstance().UninstallPlugin(m_common, sel);
+							PluginManager::getInstance().UninstallPlugin(common, sel);
 							SetData_LIST(hwndDlg);
 						}
 					}
@@ -271,7 +271,7 @@ INT_PTR PropPlugin::DispatchEvent(
 					if (sel >= 0) {
 						Plugin* plugin = PluginManager::getInstance().GetPlugin(sel);
 						if (plugin) {
-							::ShellExecute(NULL, _T("Open"), to_tchar(plugin->m_sUrl.c_str()), NULL, NULL, SW_SHOW);
+							::ShellExecute(NULL, _T("Open"), to_tchar(plugin->sUrl.c_str()), NULL, NULL, SW_SHOW);
 						}
 					}
 				}
@@ -324,7 +324,7 @@ INT_PTR PropPlugin::DispatchEvent(
 void PropPlugin::SetData(HWND hwndDlg)
 {
 	// プラグインを有効にする
-	::CheckDlgButton(hwndDlg, IDC_CHECK_PluginEnable, m_common.plugin.bEnablePlugin);
+	::CheckDlgButton(hwndDlg, IDC_CHECK_PluginEnable, common.plugin.bEnablePlugin);
 
 	// プラグインリスト
 	SetData_LIST(hwndDlg);
@@ -342,7 +342,7 @@ void PropPlugin::SetData_LIST(HWND hwndDlg)
 {
 	int index;
 	LVITEM lvItem;
-	PluginRec* pluginTable = m_common.plugin.pluginTable;
+	PluginRec* pluginTable = common.plugin.pluginTable;
 
 	::EnableWindow(::GetDlgItem(hwndDlg, IDC_PLUGIN_Remove), FALSE);
 	::EnableWindow(::GetDlgItem(hwndDlg, IDC_PLUGIN_OPTION), FALSE);
@@ -450,7 +450,7 @@ void PropPlugin::SetData_LIST(HWND hwndDlg)
 int PropPlugin::GetData(HWND hwndDlg)
 {
 	// プラグインを有効にする
-	m_common.plugin.bEnablePlugin = DlgButton_IsChecked(hwndDlg, IDC_CHECK_PluginEnable);
+	common.plugin.bEnablePlugin = DlgButton_IsChecked(hwndDlg, IDC_CHECK_PluginEnable);
 
 	// プラグインリストは今のところ変更できる部分がない
 	//「新規プラグイン追加」はcommonに直接書き込むので、この関数ですることはない
@@ -600,9 +600,9 @@ static void LoadPluginTemp(CommonSetting& common, MenuDrawer& menuDrawer)
 		for (auto it=plugs.begin(); it!=plugs.end(); ++it) {
 			int iBitmap = MenuDrawer::TOOLBAR_ICON_PLUGCOMMAND_DEFAULT - 1;
 			const Plug* plug = *it;
-			if (!plug->m_sIcon.empty()) {
+			if (!plug->sIcon.empty()) {
 				iBitmap = menuDrawer.pIcons->Add(
-					to_tchar(plug->plugin.GetFilePath(to_tchar(plug->m_sIcon.c_str())).c_str()));
+					to_tchar(plug->plugin.GetFilePath(to_tchar(plug->sIcon.c_str())).c_str()));
 			}
 			menuDrawer.AddToolButton(iBitmap, plug->GetFunctionCode());
 		}

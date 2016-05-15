@@ -37,7 +37,7 @@ protected:
 	LayoutInt GetTabSpace() const;
 
 public:
-	ViewCalc(const EditView& owner) : m_owner(owner) { }
+	ViewCalc(const EditView& owner) : owner(owner) { }
 	virtual ~ViewCalc() {}
 
 	// 単位変換: レイアウト→ロジック
@@ -50,6 +50,6 @@ public:
 	LayoutInt LineIndexToColumn (const DocLine* pLayout,  LogicInt nIndex) const;		// 指定された行のデータ内の位置に対応する桁の位置を調べる	// @@@ 2002.09.28 YAZAKI
 
 private:
-	const EditView& m_owner;
+	const EditView& owner;
 };
 

@@ -30,7 +30,7 @@ class EditDoc;
 
 class DocFileOperation {
 public:
-	DocFileOperation(EditDoc& doc) : m_doc(doc) { }
+	DocFileOperation(EditDoc& doc) : doc(doc) { }
 
 	// ÉçÉbÉN
 	bool _ToDoLock() const;
@@ -81,6 +81,6 @@ public:
 	);
 
 private:
-	EditDoc& m_doc;
+	EditDoc& doc;
 };
 

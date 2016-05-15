@@ -34,10 +34,10 @@
 
 DocType::DocType(EditDoc& doc)
 	:
-	m_doc(doc),
-	m_nSettingType(0),			// Sep. 11, 2002 genta
-	m_typeConfig(GetDllShareData().typeBasis),
-	m_nSettingTypeLocked(false)	// 設定値変更可能フラグ
+	doc(doc),
+	nSettingType(0),			// Sep. 11, 2002 genta
+	typeConfig(GetDllShareData().typeBasis),
+	nSettingTypeLocked(false)	// 設定値変更可能フラグ
 {
 }
 
@@ -48,12 +48,12 @@ void DocType::SetDocumentType(
 	bool bTypeOnly
 	)
 {
-	if (!m_nSettingTypeLocked || force) {
-		m_nSettingType = type;
-		if (!DocTypeManager().GetTypeConfig(m_nSettingType, m_typeConfig)) {
+	if (!nSettingTypeLocked || force) {
+		nSettingType = type;
+		if (!DocTypeManager().GetTypeConfig(nSettingType, typeConfig)) {
 			// 削除されてる/不正
-			m_nSettingType = DocTypeManager().GetDocumentTypeOfPath(m_doc.m_docFile.GetFilePath());
-			DocTypeManager().GetTypeConfig(m_nSettingType, m_typeConfig);
+			nSettingType = DocTypeManager().GetDocumentTypeOfPath(doc.docFile.GetFilePath());
+			DocTypeManager().GetTypeConfig(nSettingType, typeConfig);
 		}
 		if (bTypeOnly) {
 			return;	// bTypeOnly == true は特殊ケース（一時利用）に限定
@@ -61,15 +61,15 @@ void DocType::SetDocumentType(
 		UnlockDocumentType();
 	}else {
 		// データは更新しておく
-		TypeConfigNum temp = DocTypeManager().GetDocumentTypeOfId(m_typeConfig.id);
+		TypeConfigNum temp = DocTypeManager().GetDocumentTypeOfId(typeConfig.id);
 		if (temp.IsValidType()) {
-			m_nSettingType = temp;
-			DocTypeManager().GetTypeConfig(m_nSettingType, m_typeConfig);
+			nSettingType = temp;
+			DocTypeManager().GetTypeConfig(nSettingType, typeConfig);
 		}else {
-			m_nSettingType = type;
-			if (!DocTypeManager().GetTypeConfig(m_nSettingType, m_typeConfig)) {
-				m_nSettingType = DocTypeManager().GetDocumentTypeOfPath(m_doc.m_docFile.GetFilePath());
-				DocTypeManager().GetTypeConfig(m_nSettingType, m_typeConfig);
+			nSettingType = type;
+			if (!DocTypeManager().GetTypeConfig(nSettingType, typeConfig)) {
+				nSettingType = DocTypeManager().GetDocumentTypeOfPath(doc.docFile.GetFilePath());
+				DocTypeManager().GetTypeConfig(nSettingType, typeConfig);
 			}
 		}
 		if (bTypeOnly) {
@@ -81,22 +81,22 @@ void DocType::SetDocumentType(
 	ColorStrategyPool::getInstance().OnChangeSetting();
 	FigureManager::getInstance().OnChangeSetting();
 	this->SetDocumentIcon();	// Sep. 11, 2002 genta
-	m_doc.SetBackgroundImage();
+	doc.SetBackgroundImage();
 }
 
 void DocType::SetDocumentTypeIdx(int id, bool force)
 {
-	int setId = m_typeConfig.id;
-	if (!m_nSettingTypeLocked || force) {
+	int setId = typeConfig.id;
+	if (!nSettingTypeLocked || force) {
 		if (id != -1) {
 			setId = id;
 		}
 	}
 	TypeConfigNum temp = DocTypeManager().GetDocumentTypeOfId(setId);
 	if (temp.IsValidType()) {
-		m_nSettingType = temp;
-		m_typeConfig.nIdx = temp.GetIndex();
-		m_typeConfig.id = setId;
+		nSettingType = temp;
+		typeConfig.nIdx = temp.GetIndex();
+		typeConfig.id = setId;
 	}
 }
 
@@ -118,11 +118,11 @@ void DocType::SetDocumentIcon()
 	
 	HICON hIconBig, hIconSmall;
 	if (this->GetDocumentAttribute().bUseDocumentIcon) {
-		m_doc.m_pEditWnd->GetRelatedIcon(m_doc.m_docFile.GetFilePath(), &hIconBig, &hIconSmall);
+		doc.pEditWnd->GetRelatedIcon(doc.docFile.GetFilePath(), &hIconBig, &hIconSmall);
 	}else {
-		m_doc.m_pEditWnd->GetDefaultIcon(&hIconBig, &hIconSmall);
+		doc.pEditWnd->GetDefaultIcon(&hIconBig, &hIconSmall);
 	}
-	m_doc.m_pEditWnd->SetWindowIcon(hIconBig, ICON_BIG);
-	m_doc.m_pEditWnd->SetWindowIcon(hIconSmall, ICON_SMALL);
+	doc.pEditWnd->SetWindowIcon(hIconBig, ICON_BIG);
+	doc.pEditWnd->SetWindowIcon(hIconSmall, ICON_SMALL);
 }
 

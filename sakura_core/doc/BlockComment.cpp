@@ -18,10 +18,10 @@
 
 BlockComment::BlockComment()
 {
-	m_szBlockCommentFrom[0] = '\0';
-	m_szBlockCommentTo[0] = '\0';
-	m_nBlockFromLen = 0;
-	m_nBlockToLen = 0;
+	szBlockCommentFrom[0] = '\0';
+	szBlockCommentTo[0] = '\0';
+	nBlockFromLen = 0;
+	nBlockToLen = 0;
 }
 
 /*!
@@ -34,19 +34,19 @@ void BlockComment::SetBlockCommentRule(
 {
 	int nStrLen = wcslen(pszFrom);
 	if (0 < nStrLen && nStrLen < BLOCKCOMMENT_BUFFERSIZE) {
-		wcscpy(m_szBlockCommentFrom, pszFrom);
-		m_nBlockFromLen = nStrLen;
+		wcscpy(szBlockCommentFrom, pszFrom);
+		nBlockFromLen = nStrLen;
 	}else {
-		m_szBlockCommentFrom[0] = L'\0';
-		m_nBlockFromLen = 0;
+		szBlockCommentFrom[0] = L'\0';
+		nBlockFromLen = 0;
 	}
 	nStrLen = wcslen(pszTo);
 	if (0 < nStrLen && nStrLen < BLOCKCOMMENT_BUFFERSIZE) {
-		wcscpy(m_szBlockCommentTo, pszTo);
-		m_nBlockToLen = nStrLen;
+		wcscpy(szBlockCommentTo, pszTo);
+		nBlockToLen = nStrLen;
 	}else {
-		m_szBlockCommentTo[0] = L'\0';
-		m_nBlockToLen = 0;
+		szBlockCommentTo[0] = L'\0';
+		nBlockToLen = 0;
 	}
 }
 
@@ -66,11 +66,11 @@ bool BlockComment::Match_CommentFrom(
 	) const
 {
 	return (1
-		&& m_szBlockCommentFrom[0] != L'\0'
-		&& m_szBlockCommentTo[0] != L'\0'
-		&& nPos <= str.GetLength() - m_nBlockFromLen 	// ブロックコメントデリミタ(From)
-		//&& auto_memicmp(&str.GetPtr()[nPos], m_szBlockCommentFrom, m_nBlockFromLen) == 0	// 非ASCIIも大文字小文字を区別しない	//###locale 依存
-		&& wmemicmp_ascii(&str.GetPtr()[nPos], m_szBlockCommentFrom, m_nBlockFromLen) == 0	// ASCIIのみ大文字小文字を区別しない（高速）
+		&& szBlockCommentFrom[0] != L'\0'
+		&& szBlockCommentTo[0] != L'\0'
+		&& nPos <= str.GetLength() - nBlockFromLen 	// ブロックコメントデリミタ(From)
+		//&& auto_memicmp(&str.GetPtr()[nPos], szBlockCommentFrom, nBlockFromLen) == 0	// 非ASCIIも大文字小文字を区別しない	//###locale 依存
+		&& wmemicmp_ascii(&str.GetPtr()[nPos], szBlockCommentFrom, nBlockFromLen) == 0	// ASCIIのみ大文字小文字を区別しない（高速）
 	);
 }
 
@@ -88,10 +88,10 @@ int BlockComment::Match_CommentTo(
 	*/
 	) const
 {
-	for (int i=nPos; i<=str.GetLength()-m_nBlockToLen; ++i) {
-		//if (auto_memicmp(&str.GetPtr()[i], m_szBlockCommentTo, m_nBlockToLen) == 0) {	// 非ASCIIも大文字小文字を区別しない	//###locale 依存
-		if (wmemicmp_ascii(&str.GetPtr()[i], m_szBlockCommentTo, m_nBlockToLen) == 0) {	// ASCIIのみ大文字小文字を区別しない（高速）
-			return i + m_nBlockToLen;
+	for (int i=nPos; i<=str.GetLength()-nBlockToLen; ++i) {
+		//if (auto_memicmp(&str.GetPtr()[i], szBlockCommentTo, nBlockToLen) == 0) {	// 非ASCIIも大文字小文字を区別しない	//###locale 依存
+		if (wmemicmp_ascii(&str.GetPtr()[i], szBlockCommentTo, nBlockToLen) == 0) {	// ASCIIのみ大文字小文字を区別しない（高速）
+			return i + nBlockToLen;
 		}
 	}
 	return str.GetLength();

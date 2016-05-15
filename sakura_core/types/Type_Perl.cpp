@@ -78,8 +78,8 @@ void DocOutline::MakeFuncList_Perl(FuncInfoArr* pFuncInfoArr)
 	bool bExtEol = GetDllShareData().common.edit.bEnableExtEol;
 
 	LogicInt	nLineCount;
-	for (nLineCount=LogicInt(0); nLineCount<m_doc.m_docLineMgr.GetLineCount(); ++nLineCount) {
-		pLine = m_doc.m_docLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
+	for (nLineCount=LogicInt(0); nLineCount<doc.docLineMgr.GetLineCount(); ++nLineCount) {
+		pLine = doc.docLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
 		nMode = 0;
 		for (i=0; i<nLineLen; ++i) {
 			/* 1バイト文字だけを処理する */
@@ -157,7 +157,7 @@ void DocOutline::MakeFuncList_Perl(FuncInfoArr* pFuncInfoArr)
 					  レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 					*/
 					LayoutPoint ptPosXY;
-					m_doc.m_layoutMgr.LogicToLayout(
+					doc.layoutMgr.LogicToLayout(
 						LogicPoint(LogicInt(0), nLineCount),
 						&ptPosXY
 					);

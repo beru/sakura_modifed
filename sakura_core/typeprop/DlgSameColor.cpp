@@ -55,8 +55,8 @@ LPVOID DlgSameColor::GetHelpIdTable(void)
 }
 
 DlgSameColor::DlgSameColor() :
-	m_wpColorStaticProc(nullptr),
-	m_wpColorListProc(nullptr),
+	wpColorStaticProc(nullptr),
+	wpColorListProc(nullptr),
 	wID(0),
 	pTypes(nullptr),
 	cr(0)
@@ -133,9 +133,9 @@ BOOL DlgSameColor::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
 
 	// 指定色スタティック、色選択リストをサブクラス化
 	::SetWindowLongPtr(hwndStatic, GWLP_USERDATA, (LONG_PTR)this);
-	m_wpColorStaticProc = (WNDPROC)::SetWindowLongPtr(hwndStatic, GWLP_WNDPROC, (LONG_PTR)ColorStatic_SubclassProc);
+	wpColorStaticProc = (WNDPROC)::SetWindowLongPtr(hwndStatic, GWLP_WNDPROC, (LONG_PTR)ColorStatic_SubclassProc);
 	::SetWindowLongPtr(hwndList, GWLP_USERDATA, (LONG_PTR)this);
-	m_wpColorListProc = (WNDPROC)::SetWindowLongPtr(hwndList, GWLP_WNDPROC, (LONG_PTR)ColorList_SubclassProc);
+	wpColorListProc = (WNDPROC)::SetWindowLongPtr(hwndList, GWLP_WNDPROC, (LONG_PTR)ColorList_SubclassProc);
 
 
 	WCHAR szText[30];
@@ -420,15 +420,15 @@ LRESULT CALLBACK DlgSameColor::ColorStatic_SubclassProc(HWND hwnd, UINT uMsg, WP
 
 	case WM_DESTROY:
 		// サブクラス化解除
-		::SetWindowLongPtr(hwnd, GWLP_WNDPROC, (LONG_PTR)pDlgSameColor->m_wpColorStaticProc);
-		pDlgSameColor->m_wpColorStaticProc = nullptr;
+		::SetWindowLongPtr(hwnd, GWLP_WNDPROC, (LONG_PTR)pDlgSameColor->wpColorStaticProc);
+		pDlgSameColor->wpColorStaticProc = nullptr;
 		return (LRESULT)0;
 
 	default:
 		break;
 	}
 
-	return CallWindowProc(pDlgSameColor->m_wpColorStaticProc, hwnd, uMsg, wParam, lParam);
+	return CallWindowProc(pDlgSameColor->wpColorStaticProc, hwnd, uMsg, wParam, lParam);
 }
 
 /*! サブクラス化された色選択リストのウィンドウプロシージャ
@@ -479,14 +479,14 @@ LRESULT CALLBACK DlgSameColor::ColorList_SubclassProc(HWND hwnd, UINT uMsg, WPAR
 
 	case WM_DESTROY:
 		// サブクラス化解除
-		::SetWindowLongPtr(hwnd, GWLP_WNDPROC, (LONG_PTR)pDlgSameColor->m_wpColorListProc);
-		pDlgSameColor->m_wpColorListProc = NULL;
+		::SetWindowLongPtr(hwnd, GWLP_WNDPROC, (LONG_PTR)pDlgSameColor->wpColorListProc);
+		pDlgSameColor->wpColorListProc = NULL;
 		return (LRESULT)0;
 
 	default:
 		break;
 	}
 
-	return ::CallWindowProc(pDlgSameColor->m_wpColorListProc, hwnd, uMsg, wParam, lParam);
+	return ::CallWindowProc(pDlgSameColor->wpColorListProc, hwnd, uMsg, wParam, lParam);
 }
 

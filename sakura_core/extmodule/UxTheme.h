@@ -74,7 +74,7 @@ class UxTheme :
 	virtual ~UxTheme();
 
 protected:
-	bool m_bInitialized;
+	bool bInitialized;
 
 	bool InitThemeDll( TCHAR* str = NULL );
 	virtual bool InitDllImp();
@@ -82,12 +82,12 @@ protected:
 
 protected:
 	// UxTheme API Entry Points
-	BOOL (WINAPI* m_pfnIsThemeActive)( VOID );
-	HRESULT (WINAPI* m_pfnSetWindowTheme)( HWND hwnd, LPCWSTR pszSubAppName, LPCWSTR pszSubIdList );
-	HTHEME (WINAPI* m_pfnOpenThemeData)( HWND hwnd, LPCWSTR pszClassList );
-	HRESULT (WINAPI* m_pfnDrawThemeBackground)( HTHEME htheme, HDC hdc, int iPartId, int iStateId, RECT* prc, RECT* prcClip );
-	HRESULT (WINAPI* m_pfnDrawThemeParentBackground)( HWND hwnd, HDC hdc, RECT* prc );
-	HRESULT (WINAPI* m_pfnIsThemeBackgroundPartiallyTransparent)( HTHEME htheme, int iPartId, int iStateId );
+	BOOL (WINAPI* pfnIsThemeActive)( VOID );
+	HRESULT (WINAPI* pfnSetWindowTheme)( HWND hwnd, LPCWSTR pszSubAppName, LPCWSTR pszSubIdList );
+	HTHEME (WINAPI* pfnOpenThemeData)( HWND hwnd, LPCWSTR pszClassList );
+	HRESULT (WINAPI* pfnDrawThemeBackground)( HTHEME htheme, HDC hdc, int iPartId, int iStateId, RECT* prc, RECT* prcClip );
+	HRESULT (WINAPI* pfnDrawThemeParentBackground)( HWND hwnd, HDC hdc, RECT* prc );
+	HRESULT (WINAPI* pfnIsThemeBackgroundPartiallyTransparent)( HTHEME htheme, int iPartId, int iStateId );
 
 public:
 	// UxTheme API Wrapper Functions

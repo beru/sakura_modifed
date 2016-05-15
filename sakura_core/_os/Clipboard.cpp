@@ -43,8 +43,8 @@
 
 Clipboard::Clipboard(HWND hwnd)
 {
-	m_hwnd = hwnd;
-	m_bOpenResult = ::OpenClipboard(hwnd);
+	hwnd = hwnd;
+	bOpenResult = ::OpenClipboard(hwnd);
 }
 
 Clipboard::~Clipboard()
@@ -63,9 +63,9 @@ void Clipboard::Empty()
 
 void Clipboard::Close()
 {
-	if (m_bOpenResult) {
+	if (bOpenResult) {
 		::CloseClipboard();
-		m_bOpenResult = FALSE;
+		bOpenResult = FALSE;
 	}
 }
 
@@ -77,7 +77,7 @@ bool Clipboard::SetText(
 	UINT			uFormat
 	)
 {
-	if (!m_bOpenResult) {
+	if (!bOpenResult) {
 		return false;
 	}
 
@@ -221,7 +221,7 @@ bool Clipboard::SetText(
 
 bool Clipboard::SetHtmlText(const NativeW& memBUf)
 {
-	if (!m_bOpenResult) {
+	if (!bOpenResult) {
 		return false;
 	}
 
@@ -275,7 +275,7 @@ bool Clipboard::SetHtmlText(const NativeW& memBUf)
 */
 bool Clipboard::GetText(NativeW* pMemBuf, bool* pbColumnSelect, bool* pbLineSelect, const Eol& eol, UINT uGetFormat)
 {
-	if (!m_bOpenResult) {
+	if (!bOpenResult) {
 		return false;
 	}
 	if (pbColumnSelect) {
@@ -635,7 +635,7 @@ bool Clipboard::GetClipboradByFormat(
 				if (nBomCode != CODE_NONE) {
 					eMode = nBomCode;
 				}else {
-					const TypeConfig& type = EditDoc::GetInstance(0)->m_docType.GetDocumentAttribute();
+					const TypeConfig& type = EditDoc::GetInstance(0)->docType.GetDocumentAttribute();
 					CodeMediator mediator(type.encoding);
 					eMode = mediator.CheckKanjiCode((const char*)pData, nLength);
 				}

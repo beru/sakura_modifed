@@ -32,10 +32,10 @@ public:
 	// DocLine用コンストラクタ
 	MemoryIterator(const DocLine* pcT, LayoutInt nTabSpace)
 		:
-		m_pLine(pcT ? pcT->GetPtr() : NULL),
-		m_nLineLen(pcT ? pcT->GetLengthWithEOL() : 0),
-		m_nTabSpace(nTabSpace),
-		m_nIndent(LayoutInt(0))
+		pLine(pcT ? pcT->GetPtr() : NULL),
+		nLineLen(pcT ? pcT->GetLengthWithEOL() : 0),
+		nTabSpace(nTabSpace),
+		nIndent(LayoutInt(0))
 	{
 		first();
 	}
@@ -43,27 +43,27 @@ public:
 	// Layout用コンストラクタ
 	MemoryIterator(const Layout* pcT, LayoutInt nTabSpace)
 		:
-		m_pLine(pcT ? pcT->GetPtr() : NULL),
-		m_nLineLen(pcT ? pcT->GetLengthWithEOL() : 0),
-		m_nTabSpace(nTabSpace),
-		m_nIndent(pcT ? pcT->GetIndent() : LayoutInt(0))
+		pLine(pcT ? pcT->GetPtr() : NULL),
+		nLineLen(pcT ? pcT->GetLengthWithEOL() : 0),
+		nTabSpace(nTabSpace),
+		nIndent(pcT ? pcT->GetIndent() : LayoutInt(0))
 	{
 		first();
 	}
 
 	// 桁位置を行の先頭にセット
 	void first() {
-		m_nIndex = LogicInt(0);
-		m_nColumn = m_nIndent;
-		m_nIndex_Delta = LogicInt(0);
-		m_nColumn_Delta = LayoutInt(0);
+		nIndex = LogicInt(0);
+		nColumn = nIndent;
+		nIndex_Delta = LogicInt(0);
+		nColumn_Delta = LayoutInt(0);
 	}
 
 	/*! 行末かどうか
 		@return true: 行末, false: 行末ではない
 	 */
 	bool end() const {
-		return (m_nLineLen <= m_nIndex);
+		return (nLineLen <= nIndex);
 	}
 
 	// 次の文字を確認して次の文字との差を求める
@@ -72,18 +72,18 @@ public:
 		// 2007.09.04 kobake UNICODE化：データ増分と桁増分を別々の値として計算する。
 
 		// データ増分を計算
-		m_nIndex_Delta = LogicInt(NativeW::GetSizeOfChar(m_pLine, m_nLineLen, m_nIndex));
-		if (m_nIndex_Delta == 0) {
-			m_nIndex_Delta = LogicInt(1);
+		nIndex_Delta = LogicInt(NativeW::GetSizeOfChar(pLine, nLineLen, nIndex));
+		if (nIndex_Delta == 0) {
+			nIndex_Delta = LogicInt(1);
 		}
 
 		// 桁増分を計算
-		if (m_pLine[m_nIndex] == WCODE::TAB) {
-			m_nColumn_Delta = m_nTabSpace - (m_nColumn % m_nTabSpace);
+		if (pLine[nIndex] == WCODE::TAB) {
+			nColumn_Delta = nTabSpace - (nColumn % nTabSpace);
 		}else {
-			m_nColumn_Delta = LayoutInt(NativeW::GetKetaOfChar(m_pLine, m_nLineLen, m_nIndex));
-//			if (m_nColumn_Delta == 0) {				// 削除 サロゲートペア対策	2008/7/5 Uchi
-//				m_nColumn_Delta = LayoutInt(1);
+			nColumn_Delta = LayoutInt(NativeW::GetKetaOfChar(pLine, nLineLen, nIndex));
+//			if (nColumn_Delta == 0) {				// 削除 サロゲートペア対策	2008/7/5 Uchi
+//				nColumn_Delta = LayoutInt(1);
 //			}
 		}
 	}
@@ -92,34 +92,34 @@ public:
 		@sa scanNext()
 	 */
 	void addDelta() {
-		m_nColumn += m_nColumn_Delta;
-		m_nIndex += m_nIndex_Delta;
+		nColumn += nColumn_Delta;
+		nIndex += nIndex_Delta;
 	}	// ポインタをずらす
 	
-	LogicInt	getIndex()			const {	return m_nIndex;	}
-	LayoutInt	getColumn()			const {	return m_nColumn;	}
-	LogicInt	getIndexDelta()		const {	return m_nIndex_Delta;	}
-	LayoutInt	getColumnDelta()	const {	return m_nColumn_Delta;	}
+	LogicInt	getIndex()			const {	return nIndex;	}
+	LayoutInt	getColumn()			const {	return nColumn;	}
+	LogicInt	getIndexDelta()		const {	return nIndex_Delta;	}
+	LayoutInt	getColumnDelta()	const {	return nColumn_Delta;	}
 
 	// 2002.10.07 YAZAKI
-	const wchar_t getCurrentChar() {	return m_pLine[m_nIndex];	}
+	const wchar_t getCurrentChar() {	return pLine[nIndex];	}
 	// Jul. 20, 2003 genta 追加
 	// memcpyをするのにポインタがとれないと面倒
-	const wchar_t* getCurrentPos() {	return m_pLine + m_nIndex;	}
+	const wchar_t* getCurrentPos() {	return pLine + nIndex;	}
 
 
 private:
 	// コンストラクタで受け取ったパラメータ (固定)
-	const wchar_t*		m_pLine;
-	const int			m_nLineLen;  // データ長。文字単位。
-	const LayoutInt	m_nTabSpace;
-	const LayoutInt	m_nIndent;
+	const wchar_t*		pLine;
+	const int			nLineLen;  // データ長。文字単位。
+	const LayoutInt	nTabSpace;
+	const LayoutInt	nIndent;
 
 	// 状態変数
-	LogicInt	m_nIndex;        // データ位置。文字単位。
-	LayoutInt	m_nColumn;       // レイアウト位置。桁(半角幅)単位。
-	LogicInt	m_nIndex_Delta;  // index増分
-	LayoutInt	m_nColumn_Delta; // column増分
+	LogicInt	nIndex;        // データ位置。文字単位。
+	LayoutInt	nColumn;       // レイアウト位置。桁(半角幅)単位。
+	LogicInt	nIndex_Delta;  // index増分
+	LayoutInt	nColumn_Delta; // column増分
 
 };
 

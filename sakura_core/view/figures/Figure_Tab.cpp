@@ -45,7 +45,7 @@ void Figure_Tab::DispSpace(Graphics& gr, DispPos* pDispPos, EditView& view, bool
 	TypeSupport tabType(view, COLORIDX_TAB);
 
 	// これから描画するタブ幅
-	int tabDispWidth = (Int)view.m_pEditDoc->m_layoutMgr.GetActualTabSpace(sPos.GetDrawCol());
+	int tabDispWidth = (Int)view.pEditDoc->layoutMgr.GetActualTabSpace(sPos.GetDrawCol());
 
 	// タブ記号領域
 	RECT rcClip2;
@@ -58,7 +58,7 @@ void Figure_Tab::DispSpace(Graphics& gr, DispPos* pDispPos, EditView& view, bool
 	rcClip2.bottom = sPos.GetDrawPos().y + nLineHeight;
 
 	if (pArea->IsRectIntersected(rcClip2)) {
-		if (tabType.IsDisp() && TabArrowType::String == m_pTypeData->bTabArrow) {	// タブ通常表示	//@@@ 2003.03.26 MIK
+		if (tabType.IsDisp() && TabArrowType::String == pTypeData->bTabArrow) {	// タブ通常表示	//@@@ 2003.03.26 MIK
 			//@@@ 2001.03.16 by MIK
 			::ExtTextOutW_AnyBuild(
 				gr,
@@ -66,7 +66,7 @@ void Figure_Tab::DispSpace(Graphics& gr, DispPos* pDispPos, EditView& view, bool
 				sPos.GetDrawPos().y,
 				ExtTextOutOption() & ~(bTrans? ETO_OPAQUE: 0),
 				&rcClip2,
-				m_pTypeData->szTabViewString,
+				pTypeData->szTabViewString,
 				tabDispWidth <= 8 ? tabDispWidth : 8, // Sep. 22, 2002 genta
 				pMetrics->GetDxArray_AllHankaku()
 			);
@@ -90,7 +90,7 @@ void Figure_Tab::DispSpace(Graphics& gr, DispPos* pDispPos, EditView& view, bool
 				//	太字かどうか設定も見る様にする 2013/4/11 Uchi
 				// 2013.06.21 novice 文字色、太字をGraphicsから取得
 
-				if (TabArrowType::Short == m_pTypeData->bTabArrow) {
+				if (TabArrowType::Short == pTypeData->bTabArrow) {
 					if (rcClip2.left <= sPos.GetDrawPos().x) { // Apr. 1, 2003 MIK 行番号と重なる
 						_DrawTabArrow(
 							gr,
@@ -98,11 +98,11 @@ void Figure_Tab::DispSpace(Graphics& gr, DispPos* pDispPos, EditView& view, bool
 							sPos.GetDrawPos().y,
 							pMetrics->GetHankakuWidth(),
 							pMetrics->GetHankakuHeight(),
-							gr.GetCurrentMyFontBold() || m_pTypeData->colorInfoArr[COLORIDX_TAB].fontAttr.bBoldFont,
+							gr.GetCurrentMyFontBold() || pTypeData->colorInfoArr[COLORIDX_TAB].fontAttr.bBoldFont,
 							gr.GetCurrentTextForeColor()
 						);
 					}
-				}else if (TabArrowType::Long == m_pTypeData->bTabArrow) {
+				}else if (TabArrowType::Long == pTypeData->bTabArrow) {
 					int	nPosLeft = rcClip2.left > sPos.GetDrawPos().x ? rcClip2.left : sPos.GetDrawPos().x;
 					_DrawTabArrow(
 						gr,
@@ -110,7 +110,7 @@ void Figure_Tab::DispSpace(Graphics& gr, DispPos* pDispPos, EditView& view, bool
 						sPos.GetDrawPos().y,
 						nCharWidth * tabDispWidth - (nPosLeft -  sPos.GetDrawPos().x),	// Tab Area一杯に 2013/4/11 Uchi
 						pMetrics->GetHankakuHeight(),
-						gr.GetCurrentMyFontBold() || m_pTypeData->colorInfoArr[COLORIDX_TAB].fontAttr.bBoldFont,
+						gr.GetCurrentMyFontBold() || pTypeData->colorInfoArr[COLORIDX_TAB].fontAttr.bBoldFont,
 						gr.GetCurrentTextForeColor()
 					);
 				}

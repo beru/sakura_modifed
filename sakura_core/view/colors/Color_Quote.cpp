@@ -7,8 +7,8 @@
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 class LayoutColorQuoteInfo : public LayoutColorInfo {
 public:
-	std::wstring m_tag;
-	int m_nColorTypeIndex;
+	std::wstring tag;
+	int nColorTypeIndex;
 	bool IsEqual(const LayoutColorInfo* p) const {
 		if (!p) {
 			return false;
@@ -17,15 +17,15 @@ public:
 		if (!info) {
 			return false;
 		}
-		return info->m_tag == this->m_tag;
+		return info->tag == this->tag;
 	}
 };
 
 void Color_Quote::Update(void)
 {
 	const EditDoc* pEditDoc = EditDoc::GetInstance(0);
-	m_pTypeData = &pEditDoc->m_docType.GetDocumentAttribute();
-	m_nStringType = m_pTypeData->stringType;
+	pTypeData = &pEditDoc->docType.GetDocumentAttribute();
+	nStringType = pTypeData->stringType;
 	StringLiteralType nEspaceTypeList[] = {
 		StringLiteralType::CPP,
 		StringLiteralType::PLSQL,
@@ -33,15 +33,15 @@ void Color_Quote::Update(void)
 		StringLiteralType::CPP,
 		StringLiteralType::CPP,
 	};
-	m_nEscapeType = nEspaceTypeList[(int)m_nStringType];
+	nEscapeType = nEspaceTypeList[(int)nStringType];
 	bool* pbEscapeEndList[] = {
-		&m_bEscapeEnd,
+		&bEscapeEnd,
 		NULL,
 		NULL,
 		NULL,
-		&m_bEscapeEnd,
+		&bEscapeEnd,
 	};
-	m_pbEscapeEnd = pbEscapeEndList[(int)m_nStringType];
+	pbEscapeEnd = pbEscapeEndList[(int)nStringType];
 }
 
 void Color_Quote::SetStrategyColorInfo(const LayoutColorInfo* colorInfo)
@@ -51,19 +51,19 @@ void Color_Quote::SetStrategyColorInfo(const LayoutColorInfo* colorInfo)
 		if (!info) {
 			return;
 		}
-		m_tag = info->m_tag;
-		m_nColorTypeIndex = info->m_nColorTypeIndex;
+		tag = info->tag;
+		nColorTypeIndex = info->nColorTypeIndex;
 	}else {
-		m_nColorTypeIndex = 0;
+		nColorTypeIndex = 0;
 	}
 }
 
 LayoutColorInfo* Color_Quote::GetStrategyColorInfo() const
 {
-	if (0 < m_nColorTypeIndex) {
+	if (0 < nColorTypeIndex) {
 		LayoutColorQuoteInfo* info = new LayoutColorQuoteInfo();
-		info->m_tag = m_tag;
-		info->m_nColorTypeIndex = m_nColorTypeIndex;
+		info->tag = tag;
+		info->nColorTypeIndex = nColorTypeIndex;
 		return info;
 	}
 	return NULL;
@@ -113,9 +113,9 @@ bool Color_Quote::BeginColor(const StringRef& str, int nPos)
 {
 	if (!str.IsValid()) return false;
 
-	if (str.At(nPos) == m_cQuote) {
-		m_nCOMMENTEND = -1;
-		StringLiteralType nStringType = m_pTypeData->stringType;
+	if (str.At(nPos) == cQuote) {
+		nCommentEnd = -1;
+		StringLiteralType nStringType = pTypeData->stringType;
 		bool bPreString = true;
 		// クォーテーション文字列の終端があるか
 		switch (nStringType) {
@@ -129,14 +129,14 @@ bool Color_Quote::BeginColor(const StringRef& str, int nPos)
 				for (int i=nPos+1; i<str.GetLength(); ++i) {
 					if (str.At(i) == '(') {
 						if (nPos + 1 < i) {
-							m_tag = L')';
-							m_tag.append(str.GetPtr() + nPos + 1, i - (nPos + 1));
-							m_tag += L'"';
+							tag = L')';
+							tag.append(str.GetPtr() + nPos + 1, i - (nPos + 1));
+							tag += L'"';
 						}else {
-							m_tag.assign(L")\"", 2);
+							tag.assign(L")\"", 2);
 						}
-						m_nCOMMENTEND = Match_QuoteStr(m_tag.c_str(), m_tag.size(), i + 1, str, false);
-						m_nColorTypeIndex = 1;
+						nCommentEnd = Match_QuoteStr(tag.c_str(), tag.size(), i + 1, str, false);
+						nColorTypeIndex = 1;
 						return true;
 					}
 				}
@@ -156,38 +156,38 @@ bool Color_Quote::BeginColor(const StringRef& str, int nPos)
 			}
 			break;
 		case StringLiteralType::CSharp:
-			if (0 < nPos && str.At(nPos - 1) == L'@' && m_cQuote == L'"') {
-				m_nCOMMENTEND = Match_Quote(m_cQuote, nPos + 1, str, StringLiteralType::PLSQL);
-				m_nColorTypeIndex = 2;
+			if (0 < nPos && str.At(nPos - 1) == L'@' && cQuote == L'"') {
+				nCommentEnd = Match_Quote(cQuote, nPos + 1, str, StringLiteralType::PLSQL);
+				nColorTypeIndex = 2;
 				return true;
 			}
 			break;
 		case StringLiteralType::Python:
 			if (
 				nPos + 2 < str.GetLength()
-			 	&& str.At(nPos + 1) == m_cQuote
-			 	&& str.At(nPos + 2) == m_cQuote
+			 	&& str.At(nPos + 1) == cQuote
+			 	&& str.At(nPos + 2) == cQuote
 			) {
-				m_nCOMMENTEND = Match_QuoteStr(m_szQuote, 3, nPos + 3, str, true);
-				m_nColorTypeIndex = 3;
+				nCommentEnd = Match_QuoteStr(szQuote, 3, nPos + 3, str, true);
+				nColorTypeIndex = 3;
 				return true;
 			}
 			break;
 		}
-		m_bEscapeEnd = false;
+		bEscapeEnd = false;
 		if (bPreString) {
-			m_nCOMMENTEND = Match_Quote(m_cQuote, nPos + 1, str, m_nEscapeType, m_pbEscapeEnd);
-			m_nColorTypeIndex = 0;
+			nCommentEnd = Match_Quote(cQuote, nPos + 1, str, nEscapeType, pbEscapeEnd);
+			nColorTypeIndex = 0;
 		}
 
 		// 「文字列は行内のみ」(C++ Raw String、Pythonのlong string、@""は特別)
 		if (
-			m_pTypeData->bStringLineOnly
-			&& !m_bEscapeEnd
-			&& m_nCOMMENTEND == str.GetLength()
+			pTypeData->bStringLineOnly
+			&& !bEscapeEnd
+			&& nCommentEnd == str.GetLength()
 		) {
 			// 終了文字列がない場合は行末までを色分け
-			if (m_pTypeData->bStringEndLine) {
+			if (pTypeData->bStringEndLine) {
 				// 改行コードを除く
 				if (
 					0 < str.GetLength()
@@ -201,18 +201,18 @@ bool Color_Quote::BeginColor(const StringRef& str, int nPos)
 						&& str.At(str.GetLength() - 2) == WCODE::CR
 						&& str.At(str.GetLength() - 1) == WCODE::LF
 					) {
-						m_nCOMMENTEND = str.GetLength() - 2;
+						nCommentEnd = str.GetLength() - 2;
 					}else {
-						m_nCOMMENTEND = str.GetLength() - 1;
+						nCommentEnd = str.GetLength() - 1;
 					}
 				}
 				return true;
 			}
 			// 終了文字列がない場合は色分けしない
-			m_nCOMMENTEND = -1;
+			nCommentEnd = -1;
 			return false;
 		}
-		if (0 < m_nCOMMENTEND) {
+		if (0 < nCommentEnd) {
 			return true;
 		}
 	}
@@ -221,27 +221,27 @@ bool Color_Quote::BeginColor(const StringRef& str, int nPos)
 
 bool Color_Quote::EndColor(const StringRef& str, int nPos)
 {
-	if (m_nCOMMENTEND == -1) {
+	if (nCommentEnd == -1) {
 		// ここにくるのは行頭のはず
 		assert_warning(nPos == 0);
 		// クォーテーション文字列の終端があるか
-		switch (m_nColorTypeIndex) {
+		switch (nColorTypeIndex) {
 		case 0:
-			m_nCOMMENTEND = Match_Quote(m_cQuote, nPos, str, m_nEscapeType);
+			nCommentEnd = Match_Quote(cQuote, nPos, str, nEscapeType);
 			break;
 		case 1:
-			m_nCOMMENTEND = Match_QuoteStr(m_tag.c_str(), m_tag.size(), nPos, str, false);
+			nCommentEnd = Match_QuoteStr(tag.c_str(), tag.size(), nPos, str, false);
 			break;
 		case 2:
-			m_nCOMMENTEND = Match_Quote(m_cQuote, nPos, str, StringLiteralType::PLSQL);
+			nCommentEnd = Match_Quote(cQuote, nPos, str, StringLiteralType::PLSQL);
 			break;
 		case 3:
-			m_nCOMMENTEND = Match_QuoteStr(m_szQuote, 3, nPos, str, true);
+			nCommentEnd = Match_QuoteStr(szQuote, 3, nPos, str, true);
 			break;
 		}
 		// -1でEndColorが呼び出されるのは行を超えてきたからなので行内チェックは不要
 	}
-	else if (nPos == m_nCOMMENTEND) {
+	else if (nPos == nCommentEnd) {
 		return true;
 	}
 	return false;

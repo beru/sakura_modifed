@@ -114,21 +114,21 @@ public:
 		@retval 検索に一致した文字列の先頭位置
 	*/
 	LogicInt GetIndex(void) {
-		return LogicInt(m_pRegExp->startp[0] - m_szTarget);
+		return LogicInt(pRegExp->startp[0] - szTarget);
 	}
 	/*!
 	    検索に一致した文字列の次の位置を返す
 		@retval 検索に一致した文字列の次の位置
 	*/
 	LogicInt GetLastIndex(void) {
-		return LogicInt(m_pRegExp->endp[0] - m_szTarget);
+		return LogicInt(pRegExp->endp[0] - szTarget);
 	}
 	/*!
 		検索に一致した文字列の長さを返す
 		@retval 検索に一致した文字列の長さ
 	*/
 	LogicInt GetMatchLen(void) {
-		return LogicInt(m_pRegExp->endp[0] - m_pRegExp->startp[0]);
+		return LogicInt(pRegExp->endp[0] - pRegExp->startp[0]);
 	}
 	/*!
 		置換された文字列の長さを返す
@@ -143,10 +143,10 @@ public:
 		// 置換後文字列が0幅の場合にoutpがNULLでもoutendpがNULLでない場合があるので，
 		// outpのNULLチェックが必要
 
-		if (!m_pRegExp->outp) {
+		if (!pRegExp->outp) {
 			return LogicInt(0);
 		} else {
-			return LogicInt(m_pRegExp->outendp - m_pRegExp->outp);
+			return LogicInt(pRegExp->outendp - pRegExp->outp);
 		}
 	}
 	/*!
@@ -154,7 +154,7 @@ public:
 		@retval 置換された文字列へのポインタ
 	*/
 	const wchar_t* GetString(void) {
-		return m_pRegExp->outp;
+		return pRegExp->outp;
 	}
 	/*! @} */
 	//-----------------------------------------
@@ -162,7 +162,7 @@ public:
 	/*! BREGEXPメッセージを取得する
 		@retval メッセージへのポインタ
 	*/
-	const TCHAR* GetLastMessage() const;// { return m_szMsg; }
+	const TCHAR* GetLastMessage() const;// { return szMsg; }
 
 	/*!	先読みパターンが存在するかを返す
 		この関数は、コンパイル後であることが前提なので、コンパイル前はfalse
@@ -170,7 +170,7 @@ public:
 		@retval false 先読みがない 又は コンパイル前
 	*/
 	bool IsLookAhead(void) {
-		return m_ePatType & PAT_LOOKAHEAD ? true : false;
+		return ePatType & PAT_LOOKAHEAD ? true : false;
 	}
 	/*!	検索パターンに先読みが含まれるか？（コンパイル前でも判別可能）
 		@param[in] pattern 検索パターン
@@ -187,15 +187,15 @@ protected:
 
 	// コンパイルバッファを解放する
 	/*!
-		m_pcRegをBRegfree()に渡して解放する．解放後はNULLにセットする．
+		pcRegをBRegfree()に渡して解放する．解放後はNULLにセットする．
 		元々NULLなら何もしない
 	*/
 	void ReleaseCompileBuffer(void) {
-		if (m_pRegExp) {
-			BRegfree( m_pRegExp );
-			m_pRegExp = nullptr;
+		if (pRegExp) {
+			BRegfree( pRegExp );
+			pRegExp = nullptr;
 		}
-		m_ePatType = PAT_UNKNOWN;
+		ePatType = PAT_UNKNOWN;
 	}
 
 private:
@@ -208,13 +208,13 @@ private:
 	wchar_t* MakePatternAlternate( const wchar_t* const szSearch, const wchar_t* const szReplace, int nOption );
 
 	// メンバ変数
-	BREGEXP_W*			m_pRegExp;			// コンパイル構造体
-	int					m_ePatType;			// 検索文字列パターン種別
-	const wchar_t*		m_szTarget;			// 対象文字列へのポインタ
-	wchar_t				m_szMsg[80];		// BREGEXP_Wからのメッセージを保持する
+	BREGEXP_W*			pRegExp;			// コンパイル構造体
+	int					ePatType;			// 検索文字列パターン種別
+	const wchar_t*		szTarget;			// 対象文字列へのポインタ
+	wchar_t				szMsg[80];		// BREGEXP_Wからのメッセージを保持する
 
 	// 静的メンバ変数
-	static const wchar_t	m_tmpBuf[2];	// ダミー文字列
+	static const wchar_t	tmpBuf[2];	// ダミー文字列
 };
 
 

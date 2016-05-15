@@ -1036,7 +1036,7 @@ bool IsFuncEnable(const EditDoc& editDoc, const DllSharedData& shareData, EFunct
 
 	// 02/06/26 ai Start
 	case F_JUMP_SRCHSTARTPOS:	// 検索開始位置へ戻る
-		return (editDoc.m_pEditWnd->GetActiveView().m_ptSrchStartPos_PHY.BothNatural());
+		return (editDoc.pEditWnd->GetActiveView().ptSrchStartPos_PHY.BothNatural());
 	// 02/06/26 ai End
 
 	case F_COMPARE:	// ファイル内容比較
@@ -1048,7 +1048,7 @@ bool IsFuncEnable(const EditDoc& editDoc, const DllSharedData& shareData, EFunct
 		return DiffManager::getInstance().IsDiffUse();
 	case F_DIFF_DIALOG:	// DIFF差分表示	//@@@ 2002.05.25 MIK
 		//if (pEditDoc->IsModified()) return false;
-		//if (! pEditDoc->m_docFile.GetFilePathClass().IsValidPath()) return false;
+		//if (! pEditDoc->docFile.GetFilePathClass().IsValidPath()) return false;
 		return true;
 
 	case F_BEGIN_BOX:	// 矩形範囲選択開始
@@ -1073,11 +1073,11 @@ bool IsFuncEnable(const EditDoc& editDoc, const DllSharedData& shareData, EFunct
 
 	case F_PASTEBOX:
 		// クリップボードから貼り付け可能か？
-		return (editDoc.m_docEditor.IsEnablePaste() && shareData.common.view.bFontIs_FixedPitch);
+		return (editDoc.docEditor.IsEnablePaste() && shareData.common.view.bFontIs_FixedPitch);
 		
 	case F_PASTE:
 		// クリップボードから貼り付け可能か？
-		return (editDoc.m_docEditor.IsEnablePaste());
+		return (editDoc.docEditor.IsEnablePaste());
 
 	case F_FILENEW:		// 新規作成
 	case F_GREP_DIALOG:	// Grep
@@ -1086,9 +1086,9 @@ bool IsFuncEnable(const EditDoc& editDoc, const DllSharedData& shareData, EFunct
 
 	case F_FILESAVE:	// 上書き保存
 		if (!AppMode::getInstance().IsViewMode()) {	// ビューモード
-			if (editDoc.m_docEditor.IsModified()) {	// 変更フラグ
+			if (editDoc.docEditor.IsModified()) {	// 変更フラグ
 				return true;
-			}else if (editDoc.m_docFile.IsChgCodeSet()) {	// 文字コードの変更
+			}else if (editDoc.docFile.IsChgCodeSet()) {	// 文字コードの変更
 				return true;
 			}else {
 				// 無変更でも上書きするか
@@ -1103,7 +1103,7 @@ bool IsFuncEnable(const EditDoc& editDoc, const DllSharedData& shareData, EFunct
 	case F_COPY_COLOR_HTML:				//選択範囲内色付きHTMLコピー
 	case F_COPY_COLOR_HTML_LINENUMBER:	//選択範囲内行番号色付きHTMLコピー
 		// テキストが選択されていればtrue
-		return editDoc.m_pEditWnd->GetActiveView().GetSelectionInfo().IsTextSelected();
+		return editDoc.pEditWnd->GetActiveView().GetSelectionInfo().IsTextSelected();
 
 	case F_TOLOWER:					// 小文字
 	case F_TOUPPER:					// 大文字
@@ -1131,15 +1131,15 @@ bool IsFuncEnable(const EditDoc& editDoc, const DllSharedData& shareData, EFunct
 	case F_BASE64DECODE:			// Base64デコードして保存
 	case F_UUDECODE:				// uudecodeして保存	//Oct. 17, 2000 jepro 説明を「選択部分をUUENCODEデコード」から変更
 		// テキストが選択されていればtrue
-		return editDoc.m_pEditWnd->GetActiveView().GetSelectionInfo().IsTextSelected();
+		return editDoc.pEditWnd->GetActiveView().GetSelectionInfo().IsTextSelected();
 
 	case F_CUT_LINE:	// 行切り取り(折り返し単位)
 	case F_DELETE_LINE:	// 行削除(折り返し単位)
 		// テキストが選択されていなければtrue
-		return !editDoc.m_pEditWnd->GetActiveView().GetSelectionInfo().IsTextSelected();
+		return !editDoc.pEditWnd->GetActiveView().GetSelectionInfo().IsTextSelected();
 
-	case F_UNDO:		return editDoc.m_docEditor.IsEnableUndo();	// Undo(元に戻す)可能な状態か？
-	case F_REDO:		return editDoc.m_docEditor.IsEnableRedo();	// Redo(やり直し)可能な状態か？
+	case F_UNDO:		return editDoc.docEditor.IsEnableUndo();	// Undo(元に戻す)可能な状態か？
+	case F_REDO:		return editDoc.docEditor.IsEnableRedo();	// Redo(やり直し)可能な状態か？
 
 	case F_COPYPATH:
 	case F_COPYTAG:
@@ -1151,13 +1151,13 @@ bool IsFuncEnable(const EditDoc& editDoc, const DllSharedData& shareData, EFunct
 	case F_BROWSE:						// ブラウズ
 	//case F_VIEWMODE:					// ビューモード	//	Sep. 10, 2002 genta 常に使えるように
 	//case F_PROPERTY_FILE:				// ファイルのプロパティ	// 2009.04.11 ryoji コメントアウト
-		return editDoc.m_docFile.GetFilePathClass().IsValidPath();	// 現在編集中のファイルのパス名をクリップボードにコピーできるか
+		return editDoc.docFile.GetFilePathClass().IsValidPath();	// 現在編集中のファイルのパス名をクリップボードにコピーできるか
 
 	case F_JUMPHIST_PREV:	// 移動履歴: 前へ
-		return (editDoc.m_pEditWnd->GetActiveView().m_pHistory->CheckPrev());
+		return (editDoc.pEditWnd->GetActiveView().pHistory->CheckPrev());
 
 	case F_JUMPHIST_NEXT:	// 移動履歴: 次へ
-		return (editDoc.m_pEditWnd->GetActiveView().m_pHistory->CheckNext());
+		return (editDoc.pEditWnd->GetActiveView().pHistory->CheckNext());
 
 	case F_JUMPHIST_SET:	// 現在位置を移動履歴に登録
 		return true;
@@ -1167,7 +1167,7 @@ bool IsFuncEnable(const EditDoc& editDoc, const DllSharedData& shareData, EFunct
 	// 2003.05.12 MIK タグファイル作成先を選べるようにしたので、常に作成可能とする
 //	case F_TAGS_MAKE:	// タグファイルの作成	//@@@ 2003.04.13 MIK
 		return (!EditApp::getInstance().pGrepAgent->bGrepMode
-			&& editDoc.m_docFile.GetFilePathClass().IsValidPath()
+			&& editDoc.docFile.GetFilePathClass().IsValidPath()
 		);
 		
 	// タブモード時はウィンドウ並べ替え禁止です。	@@@ 2003.06.12 MIK
@@ -1231,27 +1231,27 @@ bool IsFuncChecked(const EditDoc& editDoc, const DllSharedData& shareData, EFunc
 		}else {
 			return false;
 		}
-	case F_SHOWTOOLBAR:			return pEditWnd->m_toolbar.GetToolbarHwnd() != NULL;
-	case F_SHOWFUNCKEY:			return pEditWnd->m_funcKeyWnd.GetHwnd() != NULL;
-	case F_SHOWTAB:				return pEditWnd->m_tabWnd.GetHwnd() != NULL;	//@@@ 2003.06.10 MIK
-	case F_SHOWSTATUSBAR:		return pEditWnd->m_statusBar.GetStatusHwnd() != NULL;
+	case F_SHOWTOOLBAR:			return pEditWnd->toolbar.GetToolbarHwnd() != NULL;
+	case F_SHOWFUNCKEY:			return pEditWnd->funcKeyWnd.GetHwnd() != NULL;
+	case F_SHOWTAB:				return pEditWnd->tabWnd.GetHwnd() != NULL;	//@@@ 2003.06.10 MIK
+	case F_SHOWSTATUSBAR:		return pEditWnd->statusBar.GetStatusHwnd() != NULL;
 	// 2008.05.30 nasukoji	テキストの折り返し方法
-	case F_TMPWRAPNOWRAP:		return (editDoc.m_nTextWrapMethodCur == TextWrappingMethod::NoWrapping);		// 折り返さない
-	case F_TMPWRAPSETTING:		return (editDoc.m_nTextWrapMethodCur == TextWrappingMethod::SettingWidth);		// 指定桁で折り返す
-	case F_TMPWRAPWINDOW:		return (editDoc.m_nTextWrapMethodCur == TextWrappingMethod::WindowWidth);		// 右端で折り返す
+	case F_TMPWRAPNOWRAP:		return (editDoc.nTextWrapMethodCur == TextWrappingMethod::NoWrapping);		// 折り返さない
+	case F_TMPWRAPSETTING:		return (editDoc.nTextWrapMethodCur == TextWrappingMethod::SettingWidth);		// 指定桁で折り返す
+	case F_TMPWRAPWINDOW:		return (editDoc.nTextWrapMethodCur == TextWrappingMethod::WindowWidth);		// 右端で折り返す
 	// 2009.07.06 syat  文字カウント方法
-	case F_SELECT_COUNT_MODE:	return (pEditWnd->m_nSelectCountMode == SelectCountMode::Toggle ?
+	case F_SELECT_COUNT_MODE:	return (pEditWnd->nSelectCountMode == SelectCountMode::Toggle ?
 											shareData.common.statusBar.bDispSelCountByByte != FALSE :
-											pEditWnd->m_nSelectCountMode == SelectCountMode::ByByte);
+											pEditWnd->nSelectCountMode == SelectCountMode::ByByte);
 	// Mar. 6, 2002 genta
 	case F_VIEWMODE:			return AppMode::getInstance().IsViewMode(); // ビューモード
 	// From Here 2003.06.23 Moca
-	case F_CHGMOD_EOL_CRLF:		return editDoc.m_docEditor.GetNewLineCode() == EolType::CRLF;
-	case F_CHGMOD_EOL_LF:		return editDoc.m_docEditor.GetNewLineCode() == EolType::LF;
-	case F_CHGMOD_EOL_CR:		return editDoc.m_docEditor.GetNewLineCode() == EolType::CR;
+	case F_CHGMOD_EOL_CRLF:		return editDoc.docEditor.GetNewLineCode() == EolType::CRLF;
+	case F_CHGMOD_EOL_LF:		return editDoc.docEditor.GetNewLineCode() == EolType::LF;
+	case F_CHGMOD_EOL_CR:		return editDoc.docEditor.GetNewLineCode() == EolType::CR;
 	// To Here 2003.06.23 Moca
 	// 2003.07.21 genta
-	case F_CHGMOD_INS:			return editDoc.m_docEditor.IsInsMode();	// Oct. 2, 2005 genta 挿入モードはドキュメント毎に補完するように変更した
+	case F_CHGMOD_INS:			return editDoc.docEditor.IsInsMode();	// Oct. 2, 2005 genta 挿入モードはドキュメント毎に補完するように変更した
 	case F_TOGGLE_KEY_SEARCH:	return shareData.common.search.bUseCaretKeyword != FALSE;	// 2007.02.03 genta キーワードポップアップのON/OFF状態を反映する
 	case F_BIND_WINDOW:			return ((shareData.common.tabBar.bDispTabWnd) && !(shareData.common.tabBar.bDispTabWndMultiWin));	//2004.07.14 Kazika 追加
 	case F_TOPMOST:				return ((DWORD)::GetWindowLongPtr(pEditWnd->GetHwnd(), GWL_EXSTYLE) & WS_EX_TOPMOST) != 0;	// 2004.09.21 Moca
@@ -1262,10 +1262,10 @@ bool IsFuncChecked(const EditDoc& editDoc, const DllSharedData& shareData, EFunc
 	case F_ISEARCH_REGEXP_PREV:
 	case F_ISEARCH_MIGEMO_NEXT:
 	case F_ISEARCH_MIGEMO_PREV:
-		return editDoc.m_pEditWnd->GetActiveView().IsISearchEnabled(nId);
+		return editDoc.pEditWnd->GetActiveView().IsISearchEnabled(nId);
 	case F_OUTLINE_TOGGLE: // 20060201 aroka アウトラインウィンドウ
 		// ToDo:ブックマークリストが出ているときもへこんでしまう。
-		return editDoc.m_pEditWnd->m_dlgFuncList.GetHwnd() != NULL;
+		return editDoc.pEditWnd->dlgFuncList.GetHwnd() != NULL;
 	}
 	//End 2004.07.14 Kazika
 

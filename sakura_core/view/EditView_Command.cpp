@@ -89,7 +89,7 @@ bool EditView::TagJumpSub(
 	// カーソル位置変換
 	EditDoc& doc = GetDocument();
 	Caret& caret = GetCaret();
-	doc.m_layoutMgr.LayoutToLogic(
+	doc.layoutMgr.LayoutToLogic(
 		caret.GetCaretLayoutPos(),
 		&tagJump.point
 	);
@@ -179,7 +179,7 @@ bool EditView::OPEN_ExtFromtoExt(
 {
 	// 編集中ファイルの拡張子を調べる
 	for (int i=0; i<file_extno; ++i) {
-		if (CheckEXT(GetDocument().m_docFile.GetFilePath(), file_ext[i])) {
+		if (CheckEXT(GetDocument().docFile.GetFilePath(), file_ext[i])) {
 			goto open_c;
 		}
 	}
@@ -197,7 +197,7 @@ open_c:;
 	TCHAR	szExt[_MAX_EXT];
 	HWND	hwndOwner;
 
-	_tsplitpath(GetDocument().m_docFile.GetFilePath(), szDrive, szDir, szFname, szExt);
+	_tsplitpath(GetDocument().docFile.GetFilePath(), szDrive, szDir, szFname, szExt);
 
 	for (int i=0; i<open_extno; ++i) {
 		_tmakepath(szPath, szDrive, szDir, szFname, open_ext[i]);
@@ -256,7 +256,7 @@ open_c:;
 	  →
 	  物理位置(行頭からのバイト数、折り返し無し行位置)
 	*/
-	GetDocument().m_layoutMgr.LayoutToLogic(
+	GetDocument().layoutMgr.LayoutToLogic(
 		GetCaret().GetCaretLayoutPos(),
 		&tagJump.point
 	);
@@ -313,36 +313,36 @@ EditView::TOGGLE_WRAP_ACTION EditView::GetWrapMode(LayoutInt* _newKetas)
 		c)　└→ウィンドウ幅
 	*/
 	
-	auto& layoutMgr = GetDocument().m_layoutMgr;
-	if (layoutMgr.GetMaxLineKetas() == ViewColNumToWrapColNum(GetTextArea().m_nViewColNum)) {
+	auto& layoutMgr = GetDocument().layoutMgr;
+	if (layoutMgr.GetMaxLineKetas() == ViewColNumToWrapColNum(GetTextArea().nViewColNum)) {
 		// a)
 		newKetas = LayoutInt(MAXLINEKETAS);
 		return TGWRAP_FULL;
-	}else if (MINLINEKETAS > GetTextArea().m_nViewColNum - GetWrapOverhang()) { // 2)
+	}else if (MINLINEKETAS > GetTextArea().nViewColNum - GetWrapOverhang()) { // 2)
 		// 3)
 		if (layoutMgr.GetMaxLineKetas() != MAXLINEKETAS) {
 			// 4)
 			newKetas = LayoutInt(MAXLINEKETAS);
 			return TGWRAP_FULL;
-		}else if (m_pTypeData->nMaxLineKetas == MAXLINEKETAS) { // 5)
+		}else if (pTypeData->nMaxLineKetas == MAXLINEKETAS) { // 5)
 			// 6)
 			return TGWRAP_NONE;
 		}else { // 7)
-			newKetas = LayoutInt(m_pTypeData->nMaxLineKetas);
+			newKetas = LayoutInt(pTypeData->nMaxLineKetas);
 			return TGWRAP_PROP;
 		}
 	}else { // 8)
 		if (1
 			&& layoutMgr.GetMaxLineKetas() == MAXLINEKETAS // 9)
-			&& m_pTypeData->nMaxLineKetas != MAXLINEKETAS
+			&& pTypeData->nMaxLineKetas != MAXLINEKETAS
 		) {
 			// a)
-			newKetas = LayoutInt(m_pTypeData->nMaxLineKetas);
+			newKetas = LayoutInt(pTypeData->nMaxLineKetas);
 			return TGWRAP_PROP;
 			
 		}else {	// b) c)
 			//	現在のウィンドウ幅
-			newKetas = ViewColNumToWrapColNum(GetTextArea().m_nViewColNum);
+			newKetas = ViewColNumToWrapColNum(GetTextArea().nViewColNum);
 			return TGWRAP_WINDOW;
 		}
 	}
@@ -365,34 +365,34 @@ bool EditView::ChangeCurRegexp(bool bRedrawIfChanged)
 	bool bChangeState = false;
 
 	if (GetDllShareData().common.search.bInheritKeyOtherView
-			&& m_nCurSearchKeySequence < GetDllShareData().common.search.nSearchKeySequence
-		|| m_strCurSearchKey.size() == 0
+			&& nCurSearchKeySequence < GetDllShareData().common.search.nSearchKeySequence
+		|| strCurSearchKey.size() == 0
 	) {
 		// 履歴の検索キーに更新
-		m_strCurSearchKey = GetDllShareData().searchKeywords.searchKeys[0];		// 検索文字列
-		m_curSearchOption = GetDllShareData().common.search.searchOption;// 検索／置換  オプション
-		m_nCurSearchKeySequence = GetDllShareData().common.search.nSearchKeySequence;
+		strCurSearchKey = GetDllShareData().searchKeywords.searchKeys[0];		// 検索文字列
+		curSearchOption = GetDllShareData().common.search.searchOption;// 検索／置換  オプション
+		nCurSearchKeySequence = GetDllShareData().common.search.nSearchKeySequence;
 		bChangeState = true;
-	}else if (m_bCurSearchUpdate) {
+	}else if (bCurSearchUpdate) {
 		bChangeState = true;
 	}
-	m_bCurSearchUpdate = false;
+	bCurSearchUpdate = false;
 	if (bChangeState) {
-		if (!m_searchPattern.SetPattern(this->GetHwnd(), m_strCurSearchKey.c_str(), m_strCurSearchKey.size(),
-			m_curSearchOption, &m_curRegexp)
+		if (!searchPattern.SetPattern(this->GetHwnd(), strCurSearchKey.c_str(), strCurSearchKey.size(),
+			curSearchOption, &curRegexp)
 		) {
-			m_bCurSrchKeyMark = false;
+			bCurSrchKeyMark = false;
 			return false;
 		}
-		m_bCurSrchKeyMark = true;
+		bCurSrchKeyMark = true;
 		if (bRedrawIfChanged) {
 			Redraw();
 		}
-		m_editWnd.m_toolbar.AcceptSharedSearchKey();
+		editWnd.toolbar.AcceptSharedSearchKey();
 		return true;
 	}
-	if (!m_bCurSrchKeyMark) {
-		m_bCurSrchKeyMark = true;
+	if (!bCurSrchKeyMark) {
+		bCurSrchKeyMark = true;
 		// 検索文字列のマークだけ設定
 		if (bRedrawIfChanged) {
 			Redraw(); // 自View再描画
@@ -418,7 +418,7 @@ void EditView::CopyCurLine(
 		return;
 	}
 
-	const Layout* pLayout = m_pEditDoc->m_layoutMgr.SearchLineByLayoutY(GetCaret().GetCaretLayoutPos().y);
+	const Layout* pLayout = pEditDoc->layoutMgr.SearchLineByLayoutY(GetCaret().GetCaretLayoutPos().y);
 	if (!pLayout) {
 		return;
 	}
@@ -453,7 +453,7 @@ void EditView::CopyCurLine(
 void EditView::DrawBracketCursorLine(bool bDraw)
 {
 	if (bDraw) {
-		GetCaret().m_underLine.CaretUnderLineON(true, true);
+		GetCaret().underLine.CaretUnderLineON(true, true);
 		DrawBracketPair(false);
 		SetBracketPairPos(true);
 		DrawBracketPair(true);
@@ -462,7 +462,7 @@ void EditView::DrawBracketCursorLine(bool bDraw)
 
 HWND EditView::StartProgress()
 {
-	HWND hwndProgress = m_editWnd.m_statusBar.GetProgressHwnd();
+	HWND hwndProgress = editWnd.statusBar.GetProgressHwnd();
 	if (hwndProgress) {
 		::ShowWindow(hwndProgress, SW_SHOW);
 		Progress_SetRange(hwndProgress, 0, 101);

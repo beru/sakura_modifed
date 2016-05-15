@@ -34,17 +34,17 @@ class AppMode
 	friend class TSingleton<AppMode>;
 	AppMode()
 		:
-		m_bViewMode(false),	// ビューモード
-		m_bDebugMode(false)	// デバッグモニタモード
+		bViewMode(false),	// ビューモード
+		bDebugMode(false)	// デバッグモニタモード
 	{
-		m_szGrepKey[0] = 0;
+		szGrepKey[0] = 0;
 	}
 
 public:
 	// インターフェース
-	bool	IsViewMode() const				{ return m_bViewMode; }			// ビューモードを取得
-	void	SetViewMode(bool bViewMode)		{ m_bViewMode = bViewMode; }	// ビューモードを設定
-	bool	IsDebugMode() const				{ return m_bDebugMode; }
+	bool	IsViewMode() const				{ return bViewMode; }			// ビューモードを取得
+	void	SetViewMode(bool bViewMode)		{ bViewMode = bViewMode; }	// ビューモードを設定
+	bool	IsDebugMode() const				{ return bDebugMode; }
 	void	SetDebugModeON();	// デバッグモニタモード設定
 	void	SetDebugModeOFF();	// デバッグモニタモード解除
 
@@ -52,12 +52,12 @@ public:
 	void OnAfterSave(const SaveInfo& saveInfo);
 
 protected:
-	void _SetDebugMode(bool bDebugMode) { m_bDebugMode = bDebugMode; }
+	void _SetDebugMode(bool bDebugMode) { bDebugMode = bDebugMode; }
 
 private:
-	bool	m_bViewMode;				// ビューモード
-	bool	m_bDebugMode;				// デバッグモニタモード
+	bool	bViewMode;				// ビューモード
+	bool	bDebugMode;				// デバッグモニタモード
 public:
-	wchar_t	m_szGrepKey[1024];			// Grepモードの場合、その検索キー
+	wchar_t	szGrepKey[1024];			// Grepモードの場合、その検索キー
 };
 

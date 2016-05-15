@@ -54,7 +54,7 @@ public:
 
 class GrepEnumFileBase {
 private:
-	VPGrepEnumItem m_vpItems;
+	VPGrepEnumItem vpItems;
 
 public:
 	GrepEnumFileBase() {
@@ -65,13 +65,13 @@ public:
 	}
 
 	void ClearItems(void) {
-		m_vpItems.clear();
+		vpItems.clear();
 		return;
 	}
 
 	bool IsExist(LPCTSTR lpFileName) {
 		for (size_t i=0; i<GetCount(); ++i) {
-			if (m_vpItems[i].first == lpFileName) {
+			if (vpItems[i].first == lpFileName) {
 				return true;
 			}
 		}
@@ -86,21 +86,21 @@ public:
 	}
 
 	size_t GetCount(void) const {
-		return m_vpItems.size();
+		return vpItems.size();
 	}
 
 	LPCTSTR GetFileName(size_t i) {
 		if (i < 0 || i >= GetCount()) {
 			return NULL;
 		}
-		return m_vpItems[i].first.c_str();
+		return vpItems[i].first.c_str();
 	}
 
 	DWORD GetFileSizeLow(size_t i) {
 		if (i < 0 || i >= GetCount()) {
 			return 0;
 		}
-		return m_vpItems[i].second;
+		return vpItems[i].second;
 	}
 
 	int Enumerates(
@@ -174,11 +174,11 @@ public:
 					if (IsValid(w32fd, lpName)) {
 						if (pExceptItems && pExceptItems->IsExist(lpFullPath)) {
 						}else {
-							m_vpItems.emplace_back(lpName, w32fd.nFileSizeLow);
+							vpItems.emplace_back(lpName, w32fd.nFileSizeLow);
 							++found; // 2011.11.19
 							if (pExceptItems && nKeyDirLen) {
 								// フォルダを含んだパスなら検索済みとして除外指定に追加する
-								pExceptItems->m_vpItems.emplace_back(lpFullPath, w32fd.nFileSizeLow);
+								pExceptItems->vpItems.emplace_back(lpFullPath, w32fd.nFileSizeLow);
 							}
 							continue;
 						}

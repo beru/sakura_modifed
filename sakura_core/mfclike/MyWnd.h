@@ -31,12 +31,12 @@
 
 class MyWnd {
 public:
-	MyWnd() : m_hWnd(NULL) { }
+	MyWnd() : hWnd(NULL) { }
 
-	void SetHwnd(HWND hwnd) { m_hWnd = hwnd; }
-	HWND GetHwnd() const { return m_hWnd; }
-	HWND GetSafeHwnd() const { return this ? m_hWnd : NULL; }
-	void InvalidateRect(LPCRECT lpRect, BOOL bErase = TRUE) { ::InvalidateRect(m_hWnd, lpRect, bErase); }
+	void SetHwnd(HWND hwnd) { this->hWnd = hwnd; }
+	HWND GetHwnd() const { return hWnd; }
+	HWND GetSafeHwnd() const { return this ? hWnd : NULL; }
+	void InvalidateRect(LPCRECT lpRect, BOOL bErase = TRUE) { ::InvalidateRect(hWnd, lpRect, bErase); }
 	int ScrollWindowEx(
 		int dx,
 		int dy,
@@ -47,35 +47,35 @@ public:
 		UINT uFlags
 		)
 	{
-		return ::ScrollWindowEx(m_hWnd, dx, dy, prcScroll, prcClip, hrgnUpdate, prcUpdate, uFlags);
+		return ::ScrollWindowEx(hWnd, dx, dy, prcScroll, prcClip, hrgnUpdate, prcUpdate, uFlags);
 	}
 	HDC GetDC() const {
-		return ::GetDC(m_hWnd);
+		return ::GetDC(hWnd);
 	}
 	int ReleaseDC(HDC hdc) const {
-		return ::ReleaseDC(m_hWnd, hdc);
+		return ::ReleaseDC(hWnd, hdc);
 	}
 	HWND GetAncestor(UINT gaFlags) const {
-		return ::GetAncestor(m_hWnd, gaFlags);
+		return ::GetAncestor(hWnd, gaFlags);
 	}
 	BOOL CreateCaret(HBITMAP hBitmap, int nWidth, int nHeight) {
-		return ::CreateCaret(m_hWnd, hBitmap, nWidth, nHeight);
+		return ::CreateCaret(hWnd, hBitmap, nWidth, nHeight);
 	}
 	BOOL ClientToScreen(LPPOINT lpPoint) const {
-		return ::ClientToScreen(m_hWnd, lpPoint);
+		return ::ClientToScreen(hWnd, lpPoint);
 	}
 
 	BOOL UpdateWindow() {
-		return ::UpdateWindow(m_hWnd);
+		return ::UpdateWindow(hWnd);
 	}
 	HWND SetFocus() {
-		return ::SetFocus(m_hWnd);
+		return ::SetFocus(hWnd);
 	}
 	BOOL GetClientRect(LPRECT lpRect) const {
-		return ::GetClientRect(m_hWnd, lpRect);
+		return ::GetClientRect(hWnd, lpRect);
 	}
 
 private:
-	HWND m_hWnd;
+	HWND hWnd;
 };
 

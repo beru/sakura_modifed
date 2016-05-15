@@ -9,8 +9,8 @@
 
 File::File(LPCTSTR pszPath)
 	:
-	m_hLockedFile(INVALID_HANDLE_VALUE),
-	m_nFileShareModeOld(FileShareMode::NonExclusive)
+	hLockedFile(INVALID_HANDLE_VALUE),
+	nFileShareModeOld(FileShareMode::NonExclusive)
 {
 	if (pszPath) {
 		SetFilePath(pszPath);
@@ -85,9 +85,9 @@ bool File::IsFileReadable() const
 void File::FileUnlock()
 {
 	// クローズ
-	if (m_hLockedFile != INVALID_HANDLE_VALUE) {
-		::CloseHandle(m_hLockedFile);
-		m_hLockedFile = INVALID_HANDLE_VALUE;
+	if (hLockedFile != INVALID_HANDLE_VALUE) {
+		::CloseHandle(hLockedFile);
+		hLockedFile = INVALID_HANDLE_VALUE;
 	}
 }
 
@@ -116,7 +116,7 @@ bool File::FileLock(FileShareMode eShareMode, bool bMsg)
 	}
 
 	// オープン
-	m_hLockedFile = CreateFile(
+	hLockedFile = CreateFile(
 		this->GetFilePath(),			// ファイル名
 		GENERIC_READ,					// 読み書きタイプ
 		dwShareMode,					// 共有モード
@@ -127,7 +127,7 @@ bool File::FileLock(FileShareMode eShareMode, bool bMsg)
 	);
 
 	// 結果
-	if (m_hLockedFile == INVALID_HANDLE_VALUE && bMsg) {
+	if (hLockedFile == INVALID_HANDLE_VALUE && bMsg) {
 		const TCHAR* pszMode;
 		switch (eShareMode) {
 		case FileShareMode::DenyReadWrite:	pszMode = LS(STR_EXCLU_DENY_READWRITE); break;

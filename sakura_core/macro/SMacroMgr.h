@@ -73,13 +73,13 @@ typedef MacroFuncInfo* MacroFuncInfoArray;
 -----------------------------------------------------------------------*/
 class SMacroMgr {
 	// データの型宣言
-	MacroManagerBase* m_savedKeyMacros[MAX_CUSTMACRO];	// キーマクロをカスタムメニューの数だけ管理
+	MacroManagerBase* savedKeyMacros[MAX_CUSTMACRO];	// キーマクロをカスタムメニューの数だけ管理
 	// Jun. 16, 2002 genta
 	// キーマクロに標準マクロ以外のマクロを読み込めるように
-	MacroManagerBase* m_pKeyMacro;	// 標準の（保存ができる）キーマクロも管理
+	MacroManagerBase* pKeyMacro;	// 標準の（保存ができる）キーマクロも管理
 
 	// 一時マクロ（名前を指定してマクロ実行）を管理
-	MacroManagerBase* m_pTempMacro;
+	MacroManagerBase* pTempMacro;
 
 public:
 
@@ -101,19 +101,19 @@ public:
 	//	実行可能か？CShareDataに問い合わせ
 	bool IsEnabled(int idx) const {
 		return (0 <= idx && idx < MAX_CUSTMACRO) ?
-		m_pShareData->common.macro.macroTable[idx].IsEnabled() : false;
+		pShareData->common.macro.macroTable[idx].IsEnabled() : false;
 	}
 	
 	//	表示する名前の取得
 	const TCHAR* GetTitle(int idx) const {
 		return (0 <= idx && idx < MAX_CUSTMACRO) ?
-		m_pShareData->common.macro.macroTable[idx].GetTitle() : NULL;	// 2007.11.02 ryoji
+		pShareData->common.macro.macroTable[idx].GetTitle() : NULL;	// 2007.11.02 ryoji
 	}
 	
 	//	表示名の取得
 	const TCHAR* GetName(int idx) const {
 		return (0 <= idx && idx < MAX_CUSTMACRO) ?
-		m_pShareData->common.macro.macroTable[idx].szName : NULL;
+		pShareData->common.macro.macroTable[idx].szName : NULL;
 	}
 	
 	/*!	@brief ファイル名の取得
@@ -121,9 +121,9 @@ public:
 	*/
 	const TCHAR* GetFile(int idx) const {
 		return (0 <= idx && idx < MAX_CUSTMACRO) ?
-		m_pShareData->common.macro.macroTable[idx].szFile : 
-		((idx == STAND_KEYMACRO || idx == TEMP_KEYMACRO) && m_sMacroPath != _T("")) ?
-		m_sMacroPath.c_str() : NULL;
+		pShareData->common.macro.macroTable[idx].szFile : 
+		((idx == STAND_KEYMACRO || idx == TEMP_KEYMACRO) && sMacroPath != _T("")) ?
+		sMacroPath.c_str() : NULL;
 	}
 
 	// キーボードマクロの読み込み
@@ -148,11 +148,11 @@ public:
 
 	// Sep. 15, 2005 FILE	実行中マクロのインデックス番号操作 (INVALID_MACRO_IDX:無効)
 	int GetCurrentIdx(void) const {
-		return m_currentIdx;
+		return currentIdx;
 	}
 	int SetCurrentIdx(int idx) {
-		int oldIdx = m_currentIdx;
-		m_currentIdx = idx;
+		int oldIdx = currentIdx;
+		currentIdx = idx;
 		return oldIdx;
 	}
 
@@ -160,19 +160,18 @@ public:
 	MacroManagerBase* SetTempMacro(MacroManagerBase* newMacro);
 
 private:
-	DllSharedData*	m_pShareData;
+	DllSharedData*	pShareData;
 	MacroManagerBase** Idx2Ptr(int idx);
 
 	/*!	実行中マクロのインデックス番号 (INVALID_MACRO_IDX:無効)
 		@date Sep. 15, 2005 FILE
 	*/
-	int m_currentIdx;
-
-	std::tstring	m_sMacroPath;	// Loadしたマクロ名
+	int currentIdx;
+	std::tstring sMacroPath;	// Loadしたマクロ名
 
 public:
-	static MacroFuncInfo	m_macroFuncInfoCommandArr[];	// コマンド情報(戻り値なし)
-	static MacroFuncInfo	m_macroFuncInfoArr[];		// 関数情報(戻り値あり)
+	static MacroFuncInfo	macroFuncInfoCommandArr[];	// コマンド情報(戻り値なし)
+	static MacroFuncInfo	macroFuncInfoArr[];		// 関数情報(戻り値あり)
 
 private:
 	DISALLOW_COPY_AND_ASSIGN(SMacroMgr);

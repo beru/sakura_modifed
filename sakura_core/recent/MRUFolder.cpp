@@ -29,13 +29,13 @@
 MruFolder::MruFolder()
 {
 	// 初期化。
-	m_pShareData = &GetDllShareData();
+	pShareData = &GetDllShareData();
 }
 
 // デストラクタ
 MruFolder::~MruFolder()
 {
-	m_recentFolder.Terminate();
+	recentFolder.Terminate();
 }
 
 /*!
@@ -72,15 +72,15 @@ HMENU MruFolder::CreateMenu(HMENU	hMenuPopUp, MenuDrawer& menuDrawer) const
 	DCFont dcFont(met.lfMenuFont);
 
 	FileNameManager::getInstance().TransformFileName_MakeCache();
-	for (int i=0; i<m_recentFolder.GetItemCount(); ++i) {
+	for (int i=0; i<recentFolder.GetItemCount(); ++i) {
 		//	「共通設定」→「全般」→「ファイルの履歴MAX」を反映
-		if (i >= m_recentFolder.GetViewCount()) {
+		if (i >= recentFolder.GetViewCount()) {
 			break;
 		}
 
-		const TCHAR* pszFolder = m_recentFolder.GetItemText(i);
-		bool bFavorite = m_recentFolder.IsFavorite(i);
-		bool bFavoriteLabel = bFavorite && !m_pShareData->common.window.bMenuIcon;
+		const TCHAR* pszFolder = recentFolder.GetItemText(i);
+		bool bFavorite = recentFolder.IsFavorite(i);
+		bool bFavoriteLabel = bFavorite && !pShareData->common.window.bMenuIcon;
 		FileNameManager::getInstance().GetMenuFullLabel(szMenu, _countof(szMenu), true, pszFolder, -1, false, CODE_NONE, bFavoriteLabel, i, true, dcFont.GetHDC());
 
 		// メニューに追加
@@ -100,24 +100,24 @@ HMENU MruFolder::CreateMenu(HMENU	hMenuPopUp, MenuDrawer& menuDrawer) const
 std::vector<LPCTSTR> MruFolder::GetPathList() const
 {
 	std::vector<LPCTSTR> ret;
-	for (int i=0; i<m_recentFolder.GetItemCount(); ++i) {
+	for (int i=0; i<recentFolder.GetItemCount(); ++i) {
 		// 「共通設定」→「全般」→「フォルダの履歴MAX」を反映
-		if (i >= m_recentFolder.GetViewCount()) {
+		if (i >= recentFolder.GetViewCount()) {
 			break;
 		}
-		ret.push_back(m_recentFolder.GetItemText(i));
+		ret.push_back(recentFolder.GetItemText(i));
 	}
 	return ret;
 }
 
 int MruFolder::Length() const
 {
-	return m_recentFolder.GetItemCount();
+	return recentFolder.GetItemCount();
 }
 
 void MruFolder::ClearAll()
 {
-	m_recentFolder.DeleteAllItem();
+	recentFolder.DeleteAllItem();
 }
 
 /*	@brief 開いたフォルダ リストへの登録
@@ -133,22 +133,22 @@ void MruFolder::Add(const TCHAR* pszFolder)
 	}
 
 	// すでに登録されている場合は、除外指定を無視する
-	if (m_recentFolder.FindItemByText(pszFolder) == -1) {
-		int nSize = m_pShareData->history.m_aExceptMRU.size();
+	if (recentFolder.FindItemByText(pszFolder) == -1) {
+		int nSize = pShareData->history.aExceptMRU.size();
 		for (int i=0; i<nSize; ++i) {
 			TCHAR szExceptMRU[_MAX_PATH];
-			FileNameManager::ExpandMetaToFolder(m_pShareData->history.m_aExceptMRU[i], szExceptMRU, _countof(szExceptMRU));
+			FileNameManager::ExpandMetaToFolder(pShareData->history.aExceptMRU[i], szExceptMRU, _countof(szExceptMRU));
 			if (_tcsistr(pszFolder, szExceptMRU)) {
 				return;
 			}
 		}
 	}
 
-	m_recentFolder.AppendItem(pszFolder);
+	recentFolder.AppendItem(pszFolder);
 }
 
 const TCHAR* MruFolder::GetPath(int num) const
 {
-	return m_recentFolder.GetItemText(num);
+	return recentFolder.GetItemText(num);
 }
 

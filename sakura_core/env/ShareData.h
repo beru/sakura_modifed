@@ -47,9 +47,9 @@ class Mutex;
 	Process内のデータ領域へのポインタをstatic変数に保存することで
 	Singletonのようにどこからでもアクセスできる構造になっています．
 
-	共有メモリへのポインタをm_pShareDataに保持します．このメンバは
+	共有メモリへのポインタをpShareDataに保持します．このメンバは
 	公開されていますが，ShareDataによってMap/Unmapされるために
-	ChareDataの消滅によってポインタm_pShareDataも無効になることに
+	ChareDataの消滅によってポインタpShareDataも無効になることに
 	注意してください．
 
 	@date 2002.01.03 YAZAKI m_tbMyButtonなどをShareDataからCMenuDrawerへ移動したことによる修正。
@@ -73,7 +73,7 @@ public:
 	// デバッグ  今は主にマクロ・外部コマンド実行用
 	void TraceOut(LPCTSTR lpFmt, ...);	// アウトプットウィンドウに出力(printfフォーマット)
 	void TraceOutString(const wchar_t* pszStr, int len = -1);	// アウトプットウィンドウに出力(未加工文字列)
-	void SetTraceOutSource(HWND hwnd) { m_hwndTraceOutSource = hwnd; }	// TraceOut起動元ウィンドウの設定
+	void SetTraceOutSource(HWND hwnd) { hwndTraceOutSource = hwnd; }	// TraceOut起動元ウィンドウの設定
 	bool OpenDebugWindow(HWND hwnd, bool bAllwaysActive);	// デバッグウィンドウを開く
 
 	bool IsPrivateSettings(void);
@@ -108,11 +108,11 @@ public:
 	static void InitFileTree(FileTree*);
 
 private:
-	SelectLang		m_selectLang;			// メッセージリソースDLL読み込み用（プロセスに1個）		// 2011.04.10 nasukoji
-	HANDLE			m_hFileMap;
-	DllSharedData*	m_pShareData;
-	std::vector<TypeConfig*>* 	m_pvTypeSettings;	// (コントロールプロセスのみ)
-	HWND			m_hwndTraceOutSource;	// TraceOutA()起動元ウィンドウ（いちいち起動元を指定しなくてすむように）
+	SelectLang		selectLang;			// メッセージリソースDLL読み込み用（プロセスに1個）		// 2011.04.10 nasukoji
+	HANDLE			hFileMap;
+	DllSharedData*	pShareData;
+	std::vector<TypeConfig*>* 	pvTypeSettings;	// (コントロールプロセスのみ)
+	HWND			hwndTraceOutSource;	// TraceOutA()起動元ウィンドウ（いちいち起動元を指定しなくてすむように）
 
 };
 

@@ -17,8 +17,8 @@
 LineComment::LineComment()
 {
 	for (int i=0; i<COMMENT_DELIMITER_NUM; ++i) {
-		m_pszLineComment[i][0] = '\0';
-		m_lineCommentPos[i] = -1;
+		pszLineComment[i][0] = '\0';
+		lineCommentPos[i] = -1;
 	}
 }
 
@@ -32,13 +32,13 @@ void LineComment::CopyTo(const int n, const wchar_t* buffer, int commentPos)
 {
 	int nStrLen = wcslen(buffer);
 	if (0 < nStrLen && nStrLen < COMMENT_DELIMITER_BUFFERSIZE) {
-		wcscpy(m_pszLineComment[n], buffer);
-		m_lineCommentPos[n] = commentPos;
-		m_lineCommentLen[n] = nStrLen;
+		wcscpy(pszLineComment[n], buffer);
+		lineCommentPos[n] = commentPos;
+		lineCommentLen[n] = nStrLen;
 	}else {
-		m_pszLineComment[n][0] = L'\0';
-		m_lineCommentPos[n] = -1;
-		m_lineCommentLen[n] = 0;
+		pszLineComment[n][0] = L'\0';
+		lineCommentPos[n] = -1;
+		lineCommentLen[n] = 0;
 	}
 }
 
@@ -46,11 +46,11 @@ bool LineComment::Match(int pos, const StringRef& str) const
 {
 	for (int i=0; i<COMMENT_DELIMITER_NUM; ++i) {
 		if (1
-			&& m_pszLineComment[i][0] != L'\0'	// 行コメントデリミタ
-			&& (m_lineCommentPos[i] < 0 || m_lineCommentPos[i] == pos)	// 位置指定ON.
-			&& pos <= str.GetLength() - m_lineCommentLen[i]	// 行コメントデリミタ
-			//&& auto_memicmp(&str.GetPtr()[pos], m_pszLineComment[i], m_lineCommentLen[i]) == 0	// 非ASCIIも大文字小文字を区別しない	//###locale 依存
-			&& wmemicmp_ascii(&str.GetPtr()[pos], m_pszLineComment[i], m_lineCommentLen[i]) == 0	// ASCIIのみ大文字小文字を区別しない（高速）
+			&& pszLineComment[i][0] != L'\0'	// 行コメントデリミタ
+			&& (lineCommentPos[i] < 0 || lineCommentPos[i] == pos)	// 位置指定ON.
+			&& pos <= str.GetLength() - lineCommentLen[i]	// 行コメントデリミタ
+			//&& auto_memicmp(&str.GetPtr()[pos], pszLineComment[i], lineCommentLen[i]) == 0	// 非ASCIIも大文字小文字を区別しない	//###locale 依存
+			&& wmemicmp_ascii(&str.GetPtr()[pos], pszLineComment[i], lineCommentLen[i]) == 0	// ASCIIのみ大文字小文字を区別しない（高速）
 		) {
 			return true;
 		}

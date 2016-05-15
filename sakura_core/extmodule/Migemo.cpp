@@ -44,43 +44,43 @@ bool Migemo::InitDllImp()
 {
 	// staticÇ…ÇµÇƒÇÕÇ¢ÇØÇ»Ç¢ÇÁÇµÇ¢
 	const ImportTable table[] = {
-		{ &m_migemo_open              ,"migemo_open"              },
-		{ &m_migemo_close             ,"migemo_close"             },
-		{ &m_migemo_query             ,"migemo_query"             },
-		{ &m_migemo_release           ,"migemo_release"           },
-		{ &m_migemo_set_operator      ,"migemo_set_operator"      },
-		{ &m_migemo_get_operator      ,"migemo_get_operator"      },
-		{ &m_migemo_setproc_char2int  ,"migemo_setproc_char2int"  },
-		{ &m_migemo_setproc_int2char  ,"migemo_setproc_int2char"  },
-		{ &m_migemo_load              ,"migemo_load"              },
-		{ &m_migemo_is_enable         ,"migemo_is_enable"         },
-		{ NULL, 0                                                 }
+		{ &p_migemo_open              ,"migemo_open"              },
+		{ &p_migemo_close             ,"migemo_close"             },
+		{ &p_migemo_query             ,"migemo_query"             },
+		{ &p_migemo_release           ,"migemo_release"           },
+		{ &p_migemo_set_operator      ,"migemo_set_operator"      },
+		{ &p_migemo_get_operator      ,"migemo_get_operator"      },
+		{ &p_migemo_setproc_char2int  ,"migemo_setproc_char2int"  },
+		{ &p_migemo_setproc_int2char  ,"migemo_setproc_int2char"  },
+		{ &p_migemo_load              ,"migemo_load"              },
+		{ &p_migemo_is_enable         ,"migemo_is_enable"         },
+		{ nullptr, 0                                                 }
 	};
 	
 	if (!RegisterEntries(table)) {
 		return false;
 	}
 
-	m_migemo_open_s             = (Proc_migemo_open_s)            m_migemo_open;
-	m_migemo_close_s            = (Proc_migemo_close_s)           m_migemo_close;
-	m_migemo_query_s            = (Proc_migemo_query_s)           m_migemo_query;
-	m_migemo_release_s          = (Proc_migemo_release_s)         m_migemo_release;
-	m_migemo_set_operator_s     = (Proc_migemo_set_operator_s)    m_migemo_set_operator;
-	m_migemo_get_operator_s     = (Proc_migemo_get_operator_s)    m_migemo_get_operator;
-	m_migemo_setproc_char2int_s = (Proc_migemo_setproc_char2int_s)m_migemo_setproc_char2int;
-	m_migemo_setproc_int2char_s = (Proc_migemo_setproc_int2char_s)m_migemo_setproc_int2char;
-	m_migemo_load_s             = (Proc_migemo_load_s)            m_migemo_load;
-	m_migemo_is_enable_s        = (Proc_migemo_is_enable_s)       m_migemo_is_enable;
+	p_migemo_open_s             = (Proc_migemo_open_s)				p_migemo_open;
+	p_migemo_close_s            = (Proc_migemo_close_s)				p_migemo_close;
+	p_migemo_query_s            = (Proc_migemo_query_s)				p_migemo_query;
+	p_migemo_release_s          = (Proc_migemo_release_s)			p_migemo_release;
+	p_migemo_set_operator_s     = (Proc_migemo_set_operator_s)		p_migemo_set_operator;
+	p_migemo_get_operator_s     = (Proc_migemo_get_operator_s)		p_migemo_get_operator;
+	p_migemo_setproc_char2int_s = (Proc_migemo_setproc_char2int_s)	p_migemo_setproc_char2int;
+	p_migemo_setproc_int2char_s = (Proc_migemo_setproc_int2char_s)	p_migemo_setproc_int2char;
+	p_migemo_load_s             = (Proc_migemo_load_s)				p_migemo_load;
+	p_migemo_is_enable_s        = (Proc_migemo_is_enable_s)			p_migemo_is_enable;
 
 	// ver 1.3 à»ç~ÇÕ stdcall
 	DWORD dwVersionMS, dwVersionLS;
 	GetAppVersionInfo(GetInstance(), VS_VERSION_INFO, &dwVersionMS, &dwVersionLS);
 	
 	DWORD dwver103 = (1 << 16) | 3;
-	m_bStdcall = (dwVersionMS >= dwver103);
-	m_bUtf8 = false;
+	bStdcall = (dwVersionMS >= dwver103);
+	bUtf8 = false;
 
-	if (!migemo_open(NULL)) {
+	if (!p_migemo_open(NULL)) {
 		return false;
 	}
 	
@@ -121,13 +121,13 @@ long Migemo::migemo_open(char* dict)
 
 	if (!IsAvailable())
 		return 0;
-	if (m_bStdcall) {
-		m_migemo = (*m_migemo_open_s)(NULL);
+	if (bStdcall) {
+		migemo = (*p_migemo_open_s)(NULL);
 	}else {
-		m_migemo = (*m_migemo_open)(NULL);
+		migemo = (*p_migemo_open)(NULL);
 	}
 	
-	if (!m_migemo)
+	if (!migemo)
 		return 0;
 	
 	//if (!migemo_load(MIGEMO_DICTID_MIGEMO, path2))
@@ -138,33 +138,33 @@ long Migemo::migemo_open(char* dict)
 
 void Migemo::migemo_close()
 {
-	if (!IsAvailable() || !m_migemo) {
+	if (!IsAvailable() || !migemo) {
 		return;
 	}
 	
-	if (m_bStdcall) {
-		(*m_migemo_close_s)(m_migemo);
+	if (bStdcall) {
+		(*p_migemo_close_s)(migemo);
 	}else {
-		(*m_migemo_close)(m_migemo);
+		(*p_migemo_close)(migemo);
 	}
 }
 
 unsigned char* Migemo::migemo_query(unsigned char* query)
 {
-	if (!IsAvailable() || !m_migemo) {
+	if (!IsAvailable() || !migemo) {
 		return NULL;
 	}
 	
-	if (m_bStdcall) {
-		return (*m_migemo_query_s)(m_migemo, query);
+	if (bStdcall) {
+		return (*p_migemo_query_s)(migemo, query);
 	}else {
-		return (*m_migemo_query)(m_migemo, query);
+		return (*p_migemo_query)(migemo, query);
 	}
 }
 
 std::wstring Migemo::migemo_query_w(const wchar_t* query)
 {
-	if (m_bUtf8) {
+	if (bUtf8) {
 		NativeW cnvStr;
 		NativeA utf8Str;
 		cnvStr.SetString(query);
@@ -184,78 +184,78 @@ std::wstring Migemo::migemo_query_w(const wchar_t* query)
 
 void Migemo::migemo_release(unsigned char* str)
 {
-	if (!IsAvailable() || !m_migemo) {
+	if (!IsAvailable() || !migemo) {
 		return;
 	}
 	
-	if (m_bStdcall) {
-		(*m_migemo_release_s)(m_migemo, str);
+	if (bStdcall) {
+		(*p_migemo_release_s)(migemo, str);
 	}else {
-		(*m_migemo_release)(m_migemo, str);
+		(*p_migemo_release)(migemo, str);
 	}
 
 }
 int Migemo::migemo_set_operator(int index, unsigned char* op)
 {
-	if (!IsAvailable() || !m_migemo) {
+	if (!IsAvailable() || !migemo) {
 		return 0;
 	}
 	
-	if (m_bStdcall) {
-		return (*m_migemo_set_operator_s)(m_migemo, index, op);
+	if (bStdcall) {
+		return (*p_migemo_set_operator_s)(migemo, index, op);
 	}else {
-		return (*m_migemo_set_operator)(m_migemo, index, op);
+		return (*p_migemo_set_operator)(migemo, index, op);
 	}
 }
 const unsigned char* Migemo::migemo_get_operator(int index)
 {
-	if (!IsAvailable() || !m_migemo) {
+	if (!IsAvailable() || !migemo) {
 		return NULL;
 	}
 	
-	if (m_bStdcall) {
-		return (*m_migemo_get_operator_s)(m_migemo, index);
+	if (bStdcall) {
+		return (*p_migemo_get_operator_s)(migemo, index);
 	}else {
-		return (*m_migemo_get_operator)(m_migemo, index);
+		return (*p_migemo_get_operator)(migemo, index);
 	}
 }
 
 void Migemo::migemo_setproc_char2int(MIGEMO_PROC_CHAR2INT proc)
 {
-	if (!IsAvailable() || !m_migemo) {
+	if (!IsAvailable() || !migemo) {
 		return ;
 	}
 	
-	if (m_bStdcall) {
-		(*m_migemo_setproc_char2int_s)(m_migemo, proc);
+	if (bStdcall) {
+		(*p_migemo_setproc_char2int_s)(migemo, proc);
 	}else {
-		(*m_migemo_setproc_char2int)(m_migemo, proc);
+		(*p_migemo_setproc_char2int)(migemo, proc);
 	}
 }
 
 void Migemo::migemo_setproc_int2char(MIGEMO_PROC_INT2CHAR proc)
 {
-	if (!IsAvailable() || !m_migemo) {
+	if (!IsAvailable() || !migemo) {
 		return;
 	}
 	
-	if (m_bStdcall) {
-		(*m_migemo_setproc_int2char_s)(m_migemo, proc);
+	if (bStdcall) {
+		(*p_migemo_setproc_int2char_s)(migemo, proc);
 	}else {
-		(*m_migemo_setproc_int2char)(m_migemo, proc);
+		(*p_migemo_setproc_int2char)(migemo, proc);
 	}
 }
 
 int Migemo::migemo_load_a(int dict_id, const char* dict_file)
 {
-	if (!IsAvailable() || !m_migemo) {
+	if (!IsAvailable() || !migemo) {
 		return 0;
 	}
 	
-	if (m_bStdcall) {
-		return (*m_migemo_load_s)(m_migemo, dict_id, dict_file);
+	if (bStdcall) {
+		return (*p_migemo_load_s)(migemo, dict_id, dict_file);
 	}else {
-		return (*m_migemo_load)(m_migemo, dict_id, dict_file);
+		return (*p_migemo_load)(migemo, dict_id, dict_file);
 	}
 }
 
@@ -268,21 +268,21 @@ int Migemo::migemo_load_w(int dict_id, const wchar_t* dict_file)
 
 int Migemo::migemo_is_enable()
 {
-	if (!IsAvailable() || !m_migemo) {
+	if (!IsAvailable() || !migemo) {
 		return 0;
 	}
 	
-	if (m_bStdcall) {
-		return (*m_migemo_is_enable_s)(m_migemo);
+	if (bStdcall) {
+		return (*p_migemo_is_enable_s)(migemo);
 	}else {
-		return (*m_migemo_is_enable)(m_migemo);
+		return (*p_migemo_is_enable)(migemo);
 	}
 }
 
 int Migemo::migemo_load_all()
 {
 	if (!migemo_is_enable()) {
-		
+
 		TCHAR* szDict = GetDllShareData().common.helper.szMigemoDict;
 		TCHAR path[MAX_PATH];
 		//char path2[MAX_PATH];
@@ -304,14 +304,14 @@ int Migemo::migemo_load_all()
 		if (fexist(path)) {
 			_tcscpy(ppath, _T("utf-8\\"));
 			ppath = &path[_tcslen(path)];
-			m_bUtf8 = true;
+			bUtf8 = true;
 		}else {
 			_tcscpy(ppath, _T("cp932\\migemo-dict"));
 			if (fexist(path)) {
 				_tcscpy(ppath, _T("cp932\\"));
 				ppath = &path[_tcslen(path)];
 			}
-			m_bUtf8 = false;
+			bUtf8 = false;
 		}
 		_tcscpy(ppath, _T("migemo-dict"));
 
@@ -326,7 +326,7 @@ int Migemo::migemo_load_all()
 		migemo_load_t(MIGEMO_DICTID_ZEN2HAN, path);
 
 		// 2011.12.11 Moca é´èëìoò^å„Ç≈Ç»Ç¢Ç∆migemoì‡ëüÇÃÇ‡ÇÃÇ…ïœçXÇ≥ÇÍÇƒÇµÇ‹Ç§
-		if (m_bUtf8) {
+		if (bUtf8) {
 			migemo_setproc_char2int(pcre_char2int_utf8);
 			migemo_setproc_int2char(pcre_int2char_utf8);
 		}else {

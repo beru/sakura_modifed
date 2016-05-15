@@ -30,13 +30,13 @@ Process::Process(
 	LPCTSTR		lpCmdLine		// pointer to command line
 	)
 	:
-	m_hInstance(hInstance),
-	m_hWnd(0)
+	hInstance(hInstance),
+	hWnd(0)
 #ifdef USE_CRASHDUMP
-	, m_pfnMiniDumpWriteDump(nullptr)
+	, pfnMiniDumpWriteDump(nullptr)
 #endif
 {
-	m_pShareData = &ShareData::getInstance();
+	pShareData = &ShareData::getInstance();
 }
 
 /*!
@@ -72,9 +72,9 @@ bool Process::Run()
 	if (InitializeProcess()) {
 #ifdef USE_CRASHDUMP
 		HMODULE hDllDbgHelp = LoadLibraryExedir(_T("dbghelp.dll"));
-		m_pfnMiniDumpWriteDump = nullptr;
+		pfnMiniDumpWriteDump = nullptr;
 		if (hDllDbgHelp) {
-			*(FARPROC*)&m_pfnMiniDumpWriteDump = ::GetProcAddress(hDllDbgHelp, "MiniDumpWriteDump");
+			*(FARPROC*)&pfnMiniDumpWriteDump = ::GetProcAddress(hDllDbgHelp, "MiniDumpWriteDump");
 		}
 
 		__try {
@@ -88,7 +88,7 @@ bool Process::Run()
 
 		if (hDllDbgHelp) {
 			::FreeLibrary(hDllDbgHelp);
-			m_pfnMiniDumpWriteDump = nullptr;
+			pfnMiniDumpWriteDump = nullptr;
 		}
 #endif
 		return true;
@@ -105,7 +105,7 @@ bool Process::Run()
 */
 int Process::WriteDump(PEXCEPTION_POINTERS pExceptPtrs)
 {
-	if (!m_pfnMiniDumpWriteDump) {
+	if (!pfnMiniDumpWriteDump) {
 		return EXCEPTION_CONTINUE_SEARCH;
 	}
 
@@ -129,7 +129,7 @@ int Process::WriteDump(PEXCEPTION_POINTERS pExceptPtrs)
 		eInfo.ExceptionPointers = pExceptPtrs;
 		eInfo.ClientPointers = FALSE;
 
-		m_pfnMiniDumpWriteDump(
+		pfnMiniDumpWriteDump(
 			::GetCurrentProcess(),
 			::GetCurrentProcessId(),
 			hFile,
@@ -150,6 +150,6 @@ int Process::WriteDump(PEXCEPTION_POINTERS pExceptPtrs)
 */
 void Process::RefreshString()
 {
-	m_pShareData->RefreshString();
+	pShareData->RefreshString();
 }
 

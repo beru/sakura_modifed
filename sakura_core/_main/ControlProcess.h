@@ -34,10 +34,10 @@ public:
 	ControlProcess(HINSTANCE hInstance, LPCTSTR lpCmdLine) :
 		Process(hInstance, lpCmdLine),
 		// 2006.04.10 ryoji 同期オブジェクトのハンドルを初期化
-		m_hMutex(NULL),
-		m_hMutexCP(NULL),
-		m_hEventCPInitialized(NULL),
-		m_pTray(0)
+		hMutex(NULL),
+		hMutexCP(NULL),
+		hEventCPInitialized(NULL),
+		pTray(0)
 	{
 	}
 
@@ -49,9 +49,9 @@ protected:
 	virtual void OnExitProcess();
 
 private:
-	HANDLE			m_hMutex;				// アプリケーション実行検出用ミューテックス
-	HANDLE			m_hMutexCP;				// コントロールプロセスミューテックス
-	HANDLE			m_hEventCPInitialized;	// コントロールプロセス初期化完了イベント 2006.04.10 ryoji
-	ControlTray*	m_pTray;
+	HANDLE			hMutex;					// アプリケーション実行検出用ミューテックス
+	HANDLE			hMutexCP;				// コントロールプロセスミューテックス
+	HANDLE			hEventCPInitialized;	// コントロールプロセス初期化完了イベント 2006.04.10 ryoji
+	ControlTray*	pTray;
 };
 

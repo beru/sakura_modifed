@@ -42,26 +42,26 @@ class OutputAdapterDefault: public OutputAdapter
 public:
 	OutputAdapterDefault(EditView* view, BOOL bToEditWindow)
 		:
-		m_bWindow(bToEditWindow),
-		m_view(view),
-		m_commander(view->GetCommander())
+		bWindow(bToEditWindow),
+		view(view),
+		commander(view->GetCommander())
 	{
-		m_pCShareData = &ShareData::getInstance();
+		pCShareData = &ShareData::getInstance();
 		
 	}
 	~OutputAdapterDefault(){};
 
 	bool OutputW(const WCHAR* pBuf, int size = -1);
 	bool OutputA(const ACHAR* pBuf, int size = -1);
-	bool IsActiveDebugWindow(){ return !m_bWindow; }
+	bool IsActiveDebugWindow(){ return !bWindow; }
 
 protected:
 	void OutputBuf(const WCHAR* pBuf, int size);
 
-	BOOL			m_bWindow;
-	EditView*		m_view;
-	ShareData*		m_pCShareData;
-	ViewCommander&	m_commander;
+	BOOL			bWindow;
+	EditView*		view;
+	ShareData*		pCShareData;
+	ViewCommander&	commander;
 };
 
 class OutputAdapterUTF8: public OutputAdapterDefault
@@ -123,7 +123,7 @@ bool EditView::ExecCmd(
 	DlgCancel dlgCancel;
 	OutputAdapter* oaInst = nullptr;
 
-	bool bEditable = m_pEditDoc->IsEditable();
+	bool bEditable = pEditDoc->IsEditable();
 
 	//	From Here 2006.12.03 maru 引数を拡張のため
 	bool	bGetStdout		= (nFlgOpt & 0x01) != 0;	//	子プロセスの標準出力を得る
@@ -158,7 +158,7 @@ bool EditView::ExecCmd(
 	LayoutPoint ptFrom(0, 0);
 	bool bBeforeTextSelected = GetSelectionInfo().IsTextSelected();
 	if (bBeforeTextSelected) {
-		ptFrom = this->GetSelectionInfo().m_select.GetFrom();
+		ptFrom = this->GetSelectionInfo().select.GetFrom();
 	}
 
 	// 子プロセスの標準出力と接続するパイプを作成
@@ -283,7 +283,7 @@ bool EditView::ExecCmd(
 		GetSelectionInfo().SetSelectArea(
 			LayoutRange(
 				LayoutPoint(LayoutInt(0), LayoutInt(0)),
-				LayoutPoint(LayoutInt(0), m_pEditDoc->m_layoutMgr.GetLineCount())
+				LayoutPoint(LayoutInt(0), pEditDoc->layoutMgr.GetLineCount())
 			)
 		);
 		DeleteData(true);
@@ -309,7 +309,7 @@ bool EditView::ExecCmd(
 
 		// 中断ダイアログ表示
 		if (oa.IsEnableRunningDlg()) {
-			dlgCancel.DoModeless(G_AppInstance(), m_hwndParent, IDD_EXECRUNNING);
+			dlgCancel.DoModeless(G_AppInstance(), hwndParent, IDD_EXECRUNNING);
 			// ダイアログにコマンドを表示
 			::DlgItem_SetText(dlgCancel.GetHwnd(), IDC_STATIC_CMD, pszCmd);
 		}
@@ -594,7 +594,7 @@ user_cancel:
 				GetSelectionInfo().SetSelectArea(
 					LayoutRange(
 						ptFrom,
-						GetCaret().GetCaretLayoutPos()// LayoutPoint(m_nCaretPosY, m_nCaretPosX)
+						GetCaret().GetCaretLayoutPos()// LayoutPoint(nCaretPosY, nCaretPosX)
 					)
 				);
 				GetSelectionInfo().DrawSelectArea();
@@ -627,10 +627,10 @@ finish:
 */
 void OutputAdapterDefault::OutputBuf(const WCHAR* pBuf, int size)
 {
-	if (m_bWindow) {
-		m_commander.Command_INSTEXT(false, pBuf, LogicInt(size), true);
+	if (bWindow) {
+		commander.Command_INSTEXT(false, pBuf, LogicInt(size), true);
 	}else {
-		m_pCShareData->TraceOutString(pBuf , size);
+		pCShareData->TraceOutString(pBuf , size);
 	}
 }
 

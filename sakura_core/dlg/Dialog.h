@@ -164,7 +164,7 @@ public:
 	int				nHeight;
 	int				xPos;
 	int				yPos;
-//	void*			m_pcEditView;
+//	void*			pcEditView;
 	DllSharedData*	pShareData;
 	bool			bInited;
 	HINSTANCE		hLangRsrcInstance;		// メッセージリソースDLLのインスタンスハンドル	// 2011.04.10 nasukoji

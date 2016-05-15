@@ -100,7 +100,7 @@ void EditView::SetIMECompFormFont(void)
 	//
 	HIMC hIMC = ::ImmGetContext(GetHwnd());
 	if (hIMC) {
-		::ImmSetCompositionFont(hIMC, const_cast<LOGFONT *>(&(m_editWnd.GetLogfont())));
+		::ImmSetCompositionFont(hIMC, const_cast<LOGFONT *>(&(editWnd.GetLogfont())));
 	}
 	::ImmReleaseContext(GetHwnd() , hIMC);
 }
@@ -125,8 +125,8 @@ LRESULT EditView::SetReconvertStruct(
 	)
 {
 	if (!bDocumentFeed) {
-		m_nLastReconvIndex = -1;
-		m_nLastReconvLine  = -1;
+		nLastReconvIndex = -1;
+		nLastReconvLine  = -1;
 	}
 	
 	// 矩形選択中は何もしない
@@ -148,8 +148,8 @@ LRESULT EditView::SetReconvertStruct(
 	auto& caret = GetCaret();
 	if (GetSelectionInfo().IsTextSelected()) {
 		// テキストが選択されているとき
-		m_pEditDoc->m_layoutMgr.LayoutToLogic(GetSelectionInfo().m_select.GetFrom(), &ptSelect);
-		m_pEditDoc->m_layoutMgr.LayoutToLogic(GetSelectionInfo().m_select.GetTo(), &ptSelectTo);
+		pEditDoc->layoutMgr.LayoutToLogic(GetSelectionInfo().select.GetFrom(), &ptSelect);
+		pEditDoc->layoutMgr.LayoutToLogic(GetSelectionInfo().select.GetTo(), &ptSelectTo);
 		
 		// 選択範囲が複数行の時、１ロジック行以内に制限
 		if (ptSelectTo.y != ptSelect.y) {
@@ -160,23 +160,23 @@ LRESULT EditView::SetReconvertStruct(
 				ptSelectTo.x = ptSelect.x;
 			}else {
 				// 2010.04.06 対象をptSelect.yの行からカーソル行に変更
-				const DocLine* pDocLine = m_pEditDoc->m_docLineMgr.GetLine(caret.GetCaretLogicPos().y);
+				const DocLine* pDocLine = pEditDoc->docLineMgr.GetLine(caret.GetCaretLogicPos().y);
 				LogicInt targetY = caret.GetCaretLogicPos().y;
 				// カーソル行が実質無選択なら、直前・直後の行を選択
 				if (ptSelect.y == caret.GetCaretLogicPos().y
 					&& pDocLine && pDocLine->GetLengthWithoutEOL() == caret.GetCaretLogicPos().x
 				) {
 					// カーソルが上側行末 => 次の行。行末カーソルでのShift+Upなど
-					targetY = t_min(m_pEditDoc->m_docLineMgr.GetLineCount(),
+					targetY = t_min(pEditDoc->docLineMgr.GetLineCount(),
 						caret.GetCaretLogicPos().y + 1);
-					pDocLine = m_pEditDoc->m_docLineMgr.GetLine(targetY);
+					pDocLine = pEditDoc->docLineMgr.GetLine(targetY);
 				}else if (1
 					&& ptSelectTo.y == caret.GetCaretLogicPos().y
 					&& caret.GetCaretLogicPos().x == 0
 				) {
 					// カーソルが下側行頭 => 前の行。 行頭でShift+Down/Shift+End→Rightなど
 					targetY = caret.GetCaretLogicPos().y - 1;
-					pDocLine = m_pEditDoc->m_docLineMgr.GetLine(targetY);
+					pDocLine = pEditDoc->docLineMgr.GetLine(targetY);
 				}
 				// 選択範囲をxで指定：こちらはカーソルではなく選択範囲基準
 				if (targetY == ptSelect.y) {
@@ -195,14 +195,14 @@ LRESULT EditView::SetReconvertStruct(
 		}
 	}else {
 		// テキストが選択されていないとき
-		m_pEditDoc->m_layoutMgr.LayoutToLogic(caret.GetCaretLayoutPos(), &ptSelect);
+		pEditDoc->layoutMgr.LayoutToLogic(caret.GetCaretLayoutPos(), &ptSelect);
 		ptSelectTo = ptSelect;
 	}
 	nSelectedLen = ptSelectTo.x - ptSelect.x;
 	// 以下 ptSelect.y ptSelect.x, nSelectedLen を使用
 
 	// ドキュメント行取得 -> pCurDocLine
-	DocLine* pCurDocLine = m_pEditDoc->m_docLineMgr.GetLine(ptSelect.GetY2());
+	DocLine* pCurDocLine = pEditDoc->docLineMgr.GetLine(ptSelect.GetY2());
 	if (!pCurDocLine)
 		return 0;
 
@@ -261,21 +261,21 @@ LRESULT EditView::SetReconvertStruct(
 	
 	if (bDocumentFeed) {
 		// IMR_DOCUMENTFEEDでは、再変換対象はIMEから取得した入力中文字列
-		nInsertCompLen = auto_strlen(m_szComposition);
+		nInsertCompLen = auto_strlen(szComposition);
 		if (nInsertCompLen == 0) {
-			// 2回呼ばれるので、m_szCompositionに覚えておく
+			// 2回呼ばれるので、szCompositionに覚えておく
 			HWND hwnd = GetHwnd();
 			HIMC hIMC = ::ImmGetContext(hwnd);
 			if (!hIMC) {
 				return 0;
 			}
-			auto_memset(m_szComposition, _T('\0'), _countof(m_szComposition));
-			LONG immRet = ::ImmGetCompositionString(hIMC, GCS_COMPSTR, m_szComposition, _countof(m_szComposition));
+			auto_memset(szComposition, _T('\0'), _countof(szComposition));
+			LONG immRet = ::ImmGetCompositionString(hIMC, GCS_COMPSTR, szComposition, _countof(szComposition));
 			if (immRet == IMM_ERROR_NODATA || immRet == IMM_ERROR_GENERAL) {
-				m_szComposition[0] = _T('\0');
+				szComposition[0] = _T('\0');
 			}
 			::ImmReleaseContext(hwnd, hIMC);
-			nInsertCompLen = auto_strlen(m_szComposition);
+			nInsertCompLen = auto_strlen(szComposition);
 		}
 	}
 
@@ -300,7 +300,7 @@ LRESULT EditView::SetReconvertStruct(
 		const WCHAR* pszCompInsStr = L"";
 		int nCompInsStr   = 0;
 		if (nInsertCompLen) {
-			pszCompInsStr = to_wchar(m_szComposition);
+			pszCompInsStr = to_wchar(szComposition);
 			nCompInsStr   = wcslen(pszCompInsStr);
 		}
 		dwInsByteCount      = nCompInsStr * sizeof(wchar_t);
@@ -332,7 +332,7 @@ LRESULT EditView::SetReconvertStruct(
 			dwCompStrLen = memBuf2._GetMemory()->GetRawLength();					// comp文字列長。文字単位。
 		}else if (nInsertCompLen > 0) {
 			// nSelectedLen と nInsertCompLen が両方指定されることはないはず
-			const ACHAR* pComp = to_achar(m_szComposition);
+			const ACHAR* pComp = to_achar(szComposition);
 			pszInsBuffer = pComp;
 			dwInsByteCount = strlen(pComp);
 			dwCompStrLen = dwInsByteCount;
@@ -361,7 +361,7 @@ LRESULT EditView::SetReconvertStruct(
 		//     のはずなのに Win XP+IME2002+TSF では dwSizeが0で送られてくる
 		if (dwOrgSize != 0 && dwOrgSize < sizeof(*pReconv) + cbReconvLenWithNull) {
 			// バッファ不足
-			m_szComposition[0] = _T('\0');
+			szComposition[0] = _T('\0');
 			return 0;
 		}else if (dwOrgSize == 0) {
 			pReconv->dwSize = sizeof(*pReconv) + cbReconvLenWithNull;
@@ -421,11 +421,11 @@ LRESULT EditView::SetReconvertStruct(
 	
 	if (!bDocumentFeed) {
 		// 再変換情報の保存
-		m_nLastReconvIndex = nReconvIndex;
-		m_nLastReconvLine  = ptSelect.y;
+		nLastReconvIndex = nReconvIndex;
+		nLastReconvLine  = ptSelect.y;
 	}
 	if (bDocumentFeed && pReconv) {
-		m_szComposition[0] = _T('\0');
+		szComposition[0] = _T('\0');
 	}
 	return sizeof(RECONVERTSTRING) + cbReconvLenWithNull;
 }
@@ -437,7 +437,7 @@ LRESULT EditView::SetSelectionFromReonvert(
 	)
 {
 	// 再変換情報が保存されているか
-	if ((m_nLastReconvIndex < 0) || (m_nLastReconvLine < 0))
+	if ((nLastReconvIndex < 0) || (nLastReconvLine < 0))
 		return 0;
 
 	if (GetSelectionInfo().IsTextSelected()) 
@@ -489,26 +489,26 @@ LRESULT EditView::SetSelectionFromReonvert(
 	}
 	
 	// 選択開始の位置を取得
-	m_pEditDoc->m_layoutMgr.LogicToLayout(
-		LogicPoint(m_nLastReconvIndex + dwOffset, m_nLastReconvLine),
-		GetSelectionInfo().m_select.GetFromPointer()
+	pEditDoc->layoutMgr.LogicToLayout(
+		LogicPoint(nLastReconvIndex + dwOffset, nLastReconvLine),
+		GetSelectionInfo().select.GetFromPointer()
 	);
 
 	// 選択終了の位置を取得
-	m_pEditDoc->m_layoutMgr.LogicToLayout(
-		LogicPoint(m_nLastReconvIndex + dwOffset + dwLen, m_nLastReconvLine),
-		GetSelectionInfo().m_select.GetToPointer()
+	pEditDoc->layoutMgr.LogicToLayout(
+		LogicPoint(nLastReconvIndex + dwOffset + dwLen, nLastReconvLine),
+		GetSelectionInfo().select.GetToPointer()
 	);
 
 	// 単語の先頭にカーソルを移動
-	GetCaret().MoveCursor(GetSelectionInfo().m_select.GetFrom(), true);
+	GetCaret().MoveCursor(GetSelectionInfo().select.GetFrom(), true);
 
 	// 選択範囲再描画 
 	GetSelectionInfo().DrawSelectArea();
 
 	// 再変換情報の破棄
-	m_nLastReconvIndex = -1;
-	m_nLastReconvLine  = -1;
+	nLastReconvIndex = -1;
+	nLastReconvLine  = -1;
 
 	return 1;
 

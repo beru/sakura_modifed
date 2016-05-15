@@ -94,7 +94,7 @@ INT_PTR PropBackup::DispatchEvent(
 //	int			nDummy;
 //	int			nCharChars;
 
-	auto& csBackup = m_common.backup;
+	auto& csBackup = common.backup;
 
 	switch (uMsg) {
 	case WM_INITDIALOG:
@@ -127,7 +127,7 @@ INT_PTR PropBackup::DispatchEvent(
 				return TRUE;
 //@@@ 2002.01.03 YAZAKI 最後に表示していたシートを正しく覚えていないバグ修正
 			case PSN_SETACTIVE:
-				m_nPageNum = ID_PROPCOM_PAGENUM_BACKUP;
+				nPageNum = ID_PROPCOM_PAGENUM_BACKUP;
 				return TRUE;
 			}
 			break;
@@ -243,7 +243,7 @@ void PropBackup::SetData(HWND hwndDlg)
 
 //	BOOL	bGrepExitConfirm;	// Grepモードで保存確認するか
 
-	auto& csBackup = m_common.backup;
+	auto& csBackup = common.backup;
 
 	// バックアップの作成
 	::CheckDlgButtonBool(hwndDlg, IDC_CHECK_BACKUP, csBackup.bBackUp);
@@ -337,7 +337,7 @@ void PropBackup::SetData(HWND hwndDlg)
 // ダイアログデータの取得
 int PropBackup::GetData(HWND hwndDlg)
 {
-	auto& csBackup = m_common.backup;
+	auto& csBackup = common.backup;
 
 	// バックアップの作成
 	csBackup.bBackUp = DlgButton_IsChecked(hwndDlg, IDC_CHECK_BACKUP);
@@ -521,7 +521,7 @@ void PropBackup::EnableBackupInput(HWND hwndDlg)
 void PropBackup::UpdateBackupFile(HWND hwndDlg)	//	バックアップファイルの詳細設定
 {
 	wchar_t temp[MAX_PATH];
-	auto& csBackup = m_common.backup;
+	auto& csBackup = common.backup;
 	// バックアップを作成するファイル // 20051107 aroka
 	if (!csBackup.bBackUp) {
 		temp[0] = 0;

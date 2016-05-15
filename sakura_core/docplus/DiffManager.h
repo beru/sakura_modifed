@@ -47,51 +47,51 @@ class DiffManager : public TSingleton<DiffManager> {
 	DiffManager() {}
 
 public:
-	void SetDiffUse(bool b) { m_bIsDiffUse = b; }
-	bool IsDiffUse() const { return m_bIsDiffUse; }		// DIFF使用中
+	void SetDiffUse(bool b) { bIsDiffUse = b; }
+	bool IsDiffUse() const { return bIsDiffUse; }		// DIFF使用中
 
 private:
-	bool	m_bIsDiffUse;		// DIFF差分表示実施中 @@@ 2002.05.25 MIK
+	bool bIsDiffUse;		// DIFF差分表示実施中 @@@ 2002.05.25 MIK
 };
 
 // 行に付加するDIFF情報
 class LineDiffed {
 public:
-	LineDiffed() : m_nDiffed(DiffMark::None) { }
-	operator DiffMark() const { return m_nDiffed; }
-	LineDiffed& operator = (DiffMark e) { m_nDiffed = e; return *this; }
+	LineDiffed() : nDiffed(DiffMark::None) { }
+	operator DiffMark() const { return nDiffed; }
+	LineDiffed& operator = (DiffMark e) { nDiffed = e; return *this; }
 private:
-	DiffMark m_nDiffed;
+	DiffMark nDiffed;
 };
 
 // 行のDIFF情報取得
 class DiffLineGetter {
 public:
-	DiffLineGetter(const DocLine* pDocLine) : m_pDocLine(pDocLine) { }
+	DiffLineGetter(const DocLine* pDocLine) : pDocLine(pDocLine) { }
 	DiffMark GetLineDiffMark() const;
 	bool GetDiffColor(EColorIndexType* nColor) const;
 	bool DrawDiffMark(Graphics& gr, int y, int nLineHeight, COLORREF color) const;
 private:
-	const DocLine* m_pDocLine;
+	const DocLine* pDocLine;
 };
 
 // 行のDIFF情報設定
 class DiffLineSetter {
 public:
-	DiffLineSetter(DocLine* pDocLine) : m_pDocLine(pDocLine) { }
+	DiffLineSetter(DocLine* pDocLine) : pDocLine(pDocLine) { }
 	void SetLineDiffMark(DiffMark mark);
 private:
-	DocLine* m_pDocLine;
+	DocLine* pDocLine;
 };
 
 // 行全体のDIFF情報管理
 class DiffLineMgr {
 public:
-	DiffLineMgr(DocLineMgr& docLineMgr) : m_docLineMgr(docLineMgr) { }
+	DiffLineMgr(DocLineMgr& docLineMgr) : docLineMgr(docLineMgr) { }
 	void ResetAllDiffMark();															// 差分表示の全解除
 	bool SearchDiffMark(LogicInt , SearchDirection, LogicInt*);						// 差分検索
 	void SetDiffMarkRange(DiffMark nMode, LogicInt nStartLine, LogicInt nEndLine);	// 差分範囲の登録
 private:
-	DocLineMgr& m_docLineMgr;
+	DocLineMgr& docLineMgr;
 };
 

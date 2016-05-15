@@ -19,8 +19,8 @@
 
 #include <new>
 
-SelectLang::SelLangInfo* SelectLang::m_psLangInfo = nullptr;	// メッセージリソース用構造体
-SelectLang::PSSelLangInfoList SelectLang::m_psLangInfoList;
+SelectLang::SelLangInfo* SelectLang::psLangInfo = nullptr;	// メッセージリソース用構造体
+SelectLang::PSSelLangInfoList SelectLang::psLangInfoList;
 
 /*!
 	@brief デストラクタ
@@ -31,14 +31,14 @@ SelectLang::PSSelLangInfoList SelectLang::m_psLangInfoList;
 */
 SelectLang::~SelectLang(void)
 {
-	for (auto it=m_psLangInfoList.begin(); it!=m_psLangInfoList.end(); ++it) {
+	for (auto it=psLangInfoList.begin(); it!=psLangInfoList.end(); ++it) {
 		if ((*it)->hInstance) {
 			FreeLibrary((*it)->hInstance);
 			(*it)->hInstance = NULL;
 		}
 		delete *it;
 	}
-	m_psLangInfoList.clear();
+	psLangInfoList.clear();
 }
 
 /*!
@@ -52,7 +52,7 @@ SelectLang::~SelectLang(void)
 */
 HINSTANCE SelectLang::getLangRsrcInstance(void)
 {
-	return m_psLangInfo ? m_psLangInfo->hInstance : GetModuleHandle(NULL);
+	return psLangInfo ? psLangInfo->hInstance : GetModuleHandle(NULL);
 }
 
 /*!
@@ -66,16 +66,16 @@ HINSTANCE SelectLang::getLangRsrcInstance(void)
 */
 LPCTSTR SelectLang::getDefaultLangString(void)
 {
-	return m_psLangInfo->szLangName;
+	return psLangInfo->szLangName;
 }
 
 // 言語IDを返す
 WORD SelectLang::getDefaultLangId(void)
 {
-	if (!m_psLangInfo) {
+	if (!psLangInfo) {
 		return ::GetUserDefaultLangID();
 	}
-	return m_psLangInfo->wLangId;
+	return psLangInfo->wLangId;
 }
 
 /*!
@@ -94,7 +94,7 @@ HINSTANCE SelectLang::InitializeLanguageEnvironment(void)
 {
 	SelLangInfo* psLangInfo;
 
-	if (m_psLangInfoList.size() == 0) {
+	if (psLangInfoList.size() == 0) {
 		// デフォルト情報を作成する
 		psLangInfo = new SelLangInfo();
 		psLangInfo->hInstance = GetModuleHandle(NULL);
@@ -102,17 +102,17 @@ HINSTANCE SelectLang::InitializeLanguageEnvironment(void)
 		// 言語情報ダイアログで "System default" に表示する文字列を作成する
 		::LoadString( GetModuleHandle(NULL), STR_SELLANG_NAME, psLangInfo->szLangName, _countof(psLangInfo->szLangName) );
 
-		m_psLangInfoList.push_back(psLangInfo);
+		psLangInfoList.push_back(psLangInfo);
 	}
 
-	if (m_psLangInfo
-		&& m_psLangInfo->hInstance
-		&& m_psLangInfo->hInstance != GetModuleHandle(NULL)
+	if (psLangInfo
+		&& psLangInfo->hInstance
+		&& psLangInfo->hInstance != GetModuleHandle(NULL)
 	) {
 		// 読み込み済みのDLLを解放する
-		::FreeLibrary(m_psLangInfo->hInstance);
-		m_psLangInfo->hInstance = NULL;
-		m_psLangInfo = nullptr;
+		::FreeLibrary(psLangInfo->hInstance);
+		psLangInfo->hInstance = NULL;
+		psLangInfo = nullptr;
 	}
 
 	// カレントディレクトリを保存。関数から抜けるときに自動でカレントディレクトリは復元される。
@@ -141,7 +141,7 @@ HINSTANCE SelectLang::InitializeLanguageEnvironment(void)
 				}else {
 					// 有効なメッセージリソースDLL
 					// 一旦DLLを解放し、後でChangeLangで再読み込みする
-					m_psLangInfoList.push_back(psLangInfo);
+					psLangInfoList.push_back(psLangInfo);
 					::FreeLibrary(psLangInfo->hInstance);
 					psLangInfo->hInstance = NULL;
 				}
@@ -157,9 +157,9 @@ HINSTANCE SelectLang::InitializeLanguageEnvironment(void)
 	}
 
 	// この時点ではexeのインスタンスハンドルで起動し、共有メモリ初期化後にChangeLangする
-	m_psLangInfo = *m_psLangInfoList.begin();
+	psLangInfo = *psLangInfoList.begin();
 
-	return m_psLangInfo->hInstance;
+	return psLangInfo->hInstance;
 }
 
 /*!
@@ -207,8 +207,8 @@ HINSTANCE SelectLang::LoadLangRsrcLibrary(SelLangInfo& lang)
 
 
 // 文字列リソース読み込み用グローバル
-ResourceString::LoadStrBuffer ResourceString::m_aLoadStrBufferTemp[];	// 文字列読み込みバッファの配列（LoadString::LoadStringSt() が使用する）
-int ResourceString::m_nDataTempArrayIndex = 0;							// 最後に使用したバッファのインデックス（LoadString::LoadStringSt() が使用する）
+ResourceString::LoadStrBuffer ResourceString::aLoadStrBufferTemp[];	// 文字列読み込みバッファの配列（LoadString::LoadStringSt() が使用する）
+int ResourceString::nDataTempArrayIndex = 0;							// 最後に使用したバッファのインデックス（LoadString::LoadStringSt() が使用する）
 
 
 /*!
@@ -218,12 +218,12 @@ int ResourceString::m_nDataTempArrayIndex = 0;							// 最後に使用したバッファの
 
 	@retval 読み込んだ文字列（文字列無しの時 "" が返る）
 
-	@note 静的バッファ（m_aLoadStrBufferTemp[?]）に文字列リソースを読み込む。
+	@note 静的バッファ（aLoadStrBufferTemp[?]）に文字列リソースを読み込む。
 	@note バッファは複数準備しているが、呼び出す毎に更新するのでバッファ個数を
 	@note 超えて呼び出すと順次内容が失われていく。
 	@note 呼び出し直後での使用や関数の引数などでの使用を想定しており、前回値を
 	@note 取り出すことはできない。
-	@note 使用例）::SetWindowText(m_hWnd, LoadString::LoadStringSt(STR_ERR_DLGSMCLR1));
+	@note 使用例）::SetWindowText(hWnd, LoadString::LoadStringSt(STR_ERR_DLGSMCLR1));
 	@note アプリケーション内の関数への引数とする場合、その関数が本関数を使用
 	@note しているか意識する必要がある（上限を超えれば内容が更新されるため）
 	@note 内容を保持したい場合は LoadString::LoadString() を使用する。
@@ -233,11 +233,11 @@ int ResourceString::m_nDataTempArrayIndex = 0;							// 最後に使用したバッファの
 LPCTSTR ResourceString::LoadStringSt(UINT uid)
 {
 	// 使用するバッファの現在位置を進める
-	m_nDataTempArrayIndex = (m_nDataTempArrayIndex + 1) % _countof(m_aLoadStrBufferTemp);
+	nDataTempArrayIndex = (nDataTempArrayIndex + 1) % _countof(aLoadStrBufferTemp);
 
-	m_aLoadStrBufferTemp[m_nDataTempArrayIndex].Load(uid);
+	aLoadStrBufferTemp[nDataTempArrayIndex].Load(uid);
 
-	return /* LoadString:: */ m_aLoadStrBufferTemp[m_nDataTempArrayIndex].GetStringPtr();
+	return aLoadStrBufferTemp[nDataTempArrayIndex].GetStringPtr();
 }
 
 /*!
@@ -252,18 +252,18 @@ LPCTSTR ResourceString::LoadStringSt(UINT uid)
 	@note ただし、変数を準備する必要があるのが不便。
 	@note 使用例）
 	@note   LoadString cStr[2];
-	@note   dlgInput1.DoModal(m_hInstance, m_hWnd,
+	@note   dlgInput1.DoModal(hInstance, m_hWnd,
 	@note       cStr[0].LoadString(STR_ERR_DLGPRNST1),
 	@note       cStr[1].LoadString(STR_ERR_DLGPRNST2),
-	@note       sizeof(m_PrintSettingArr[m_nCurrentPrintSetting].m_szPrintSettingName) - 1, szWork) )
+	@note       sizeof(PrintSettingArr[m_nCurrentPrintSetting].m_szPrintSettingName) - 1, szWork) )
 
 	@date 2011.06.01 nasukoji	新規作成
 */
 LPCTSTR ResourceString::Load(UINT uid)
 {
-	m_loadStrBuffer.Load(uid);
+	loadStrBuffer.Load(uid);
 
-	return /* this-> */ m_loadStrBuffer.GetStringPtr();
+	return loadStrBuffer.GetStringPtr();
 }
 
 /*!
@@ -286,12 +286,12 @@ LPCTSTR ResourceString::Load(UINT uid)
 */
 int ResourceString::LoadStrBuffer::Load(UINT uid)
 {
-	if (!m_pszString) {
+	if (!pszString) {
 		// バッファポインタが設定されていない場合初期化する（普通はあり得ない）
-		m_pszString = m_szString;					// 変数内に準備したバッファを接続
-		m_nBufferSize = _countof(m_szString);		// 配列個数
-		m_szString[m_nBufferSize - 1] = 0;
-		m_nLength = _tcslen(m_szString);			// 文字数
+		pszString = szString;					// 変数内に準備したバッファを接続
+		nBufferSize = _countof(szString);		// 配列個数
+		szString[nBufferSize - 1] = 0;
+		nLength = _tcslen(szString);			// 文字数
 	}
 
 	HINSTANCE hRsrc = SelectLang::getLangRsrcInstance();		// メッセージリソースDLLのインスタンスハンドル
@@ -304,7 +304,7 @@ int ResourceString::LoadStrBuffer::Load(UINT uid)
 	int nRet = 0;
 
 	while (1) {
-		nRet = ::LoadString(hRsrc, uid, m_pszString, m_nBufferSize);
+		nRet = ::LoadString(hRsrc, uid, pszString, nBufferSize);
 
 		// リソースが無い
 		if (nRet == 0) {
@@ -312,16 +312,16 @@ int ResourceString::LoadStrBuffer::Load(UINT uid)
 				hRsrc = ::GetModuleHandle(NULL);	// 内部リソースを使う
 			}else {
 				// 内部リソースからも読めなかったら諦める（普通はあり得ない）
-				m_pszString[0] = 0;
+				pszString[0] = 0;
 				break;
 			}
 #ifdef UNICODE
-		}else if (nRet >= m_nBufferSize - 1) {
+		}else if (nRet >= nBufferSize - 1) {
 #else
-		}else if (nRet >= m_nBufferSize - 2) {		// ANSI版は1小さい長さで再読み込みを判定する
+		}else if (nRet >= nBufferSize - 2) {		// ANSI版は1小さい長さで再読み込みを判定する
 #endif
 			// 読みきれなかった場合、バッファを拡張して読み直す
-			int nTemp = m_nBufferSize + LOADSTR_ADD_SIZE;		// 拡張したサイズ
+			int nTemp = nBufferSize + LOADSTR_ADD_SIZE;		// 拡張したサイズ
 			LPTSTR pTemp;
 			try {
 				pTemp = new TCHAR[nTemp];
@@ -331,15 +331,15 @@ int ResourceString::LoadStrBuffer::Load(UINT uid)
 			}
 
 			if (pTemp) {
-				if (m_pszString != m_szString) {
-					delete[] m_pszString;
+				if (pszString != szString) {
+					delete[] pszString;
 				}
 
-				m_pszString = pTemp;
-				m_nBufferSize = nTemp;
+				pszString = pTemp;
+				nBufferSize = nTemp;
 			}else {
 				// メモリ取得に失敗した場合は直前の内容で諦める
-				nRet = _tcslen(m_pszString);
+				nRet = _tcslen(pszString);
 				break;
 			}
 		}else {
@@ -347,7 +347,7 @@ int ResourceString::LoadStrBuffer::Load(UINT uid)
 		}
 	}
 
-	m_nLength = nRet;	// 読み込んだ文字数
+	nLength = nRet;	// 読み込んだ文字数
 
 	return nRet;
 }
@@ -355,8 +355,8 @@ int ResourceString::LoadStrBuffer::Load(UINT uid)
 void SelectLang::ChangeLang(TCHAR* pszDllName)
 {
 	// 言語を選択する
-	for (size_t unIndex=0; unIndex<SelectLang::m_psLangInfoList.size(); ++unIndex) {
-		SelectLang::SelLangInfo* psLangInfo = SelectLang::m_psLangInfoList.at(unIndex);
+	for (size_t unIndex=0; unIndex<SelectLang::psLangInfoList.size(); ++unIndex) {
+		SelectLang::SelLangInfo* psLangInfo = SelectLang::psLangInfoList.at(unIndex);
 		if (_tcsncmp(pszDllName, psLangInfo->szDllName, MAX_PATH) == 0) {
 			SelectLang::ChangeLang(unIndex);
 			break;
@@ -366,29 +366,29 @@ void SelectLang::ChangeLang(TCHAR* pszDllName)
 
 HINSTANCE SelectLang::ChangeLang(UINT nIndex)
 {
-	if (m_psLangInfoList.size() <= nIndex
-		|| m_psLangInfoList.at(nIndex) == m_psLangInfo
+	if (psLangInfoList.size() <= nIndex
+		|| psLangInfoList.at(nIndex) == psLangInfo
 	) {
-		return m_psLangInfo->hInstance;
+		return psLangInfo->hInstance;
 	}
 
-	SelLangInfo *psLangInfo = m_psLangInfoList.at(nIndex);
+	SelLangInfo *psLangInfo = psLangInfoList.at(nIndex);
 	if (psLangInfo->hInstance != GetModuleHandle(NULL)) {
 		psLangInfo->hInstance = LoadLangRsrcLibrary(*psLangInfo);
 		if (!psLangInfo->hInstance) {
-			return m_psLangInfo->hInstance;
+			return psLangInfo->hInstance;
 		}else if (!psLangInfo->bValid) {
 			::FreeLibrary(psLangInfo->hInstance);
 			psLangInfo->hInstance = NULL;
-			return m_psLangInfo->hInstance;
+			return psLangInfo->hInstance;
 		}
 	}
 
-	if (m_psLangInfo->hInstance != GetModuleHandle(NULL)) {
-		::FreeLibrary(m_psLangInfo->hInstance);
-		m_psLangInfo->hInstance = NULL;
+	if (psLangInfo->hInstance != GetModuleHandle(NULL)) {
+		::FreeLibrary(psLangInfo->hInstance);
+		psLangInfo->hInstance = NULL;
 	}
-	m_psLangInfo = psLangInfo;
+	psLangInfo = psLangInfo;
 
 	// ロケールを設定
 	// SetThreadUILanguageの呼び出しを試みる
@@ -399,15 +399,15 @@ HINSTANCE SelectLang::ChangeLang(UINT nIndex)
 			typedef short (CALLBACK* SetThreadUILanguageType)(LANGID);
 			SetThreadUILanguageType _SetThreadUILanguage = (SetThreadUILanguageType)
 					GetProcAddress(hDll, "SetThreadUILanguage");
-			isSuccess = _SetThreadUILanguage && _SetThreadUILanguage(m_psLangInfo->wLangId);
+			isSuccess = _SetThreadUILanguage && _SetThreadUILanguage(psLangInfo->wLangId);
 			FreeLibrary(hDll);
 		}
 	}
 	if (!isSuccess) {
-		SetThreadLocale(MAKELCID(m_psLangInfo->wLangId, SORT_DEFAULT));
+		SetThreadLocale(MAKELCID(psLangInfo->wLangId, SORT_DEFAULT));
 	}
 
-	return m_psLangInfo->hInstance;
+	return psLangInfo->hInstance;
 }
 
 // [EOF]

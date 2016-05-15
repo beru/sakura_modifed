@@ -45,8 +45,8 @@ bool ControlProcess::InitializeProcess()
 	MY_RUNNINGTIMER(runningTimer, "ControlProcess::InitializeProcess");
 
 	// アプリケーション実行検出用(インストーラで使用)
-	m_hMutex = ::CreateMutex(NULL, FALSE, GSTR_MUTEX_SAKURA);
-	if (!m_hMutex) {
+	hMutex = ::CreateMutex(NULL, FALSE, GSTR_MUTEX_SAKURA);
+	if (!hMutex) {
 		ErrorBeep();
 		TopErrorMessage(NULL, _T("CreateMutex()失敗。\n終了します。"));
 		return false;
@@ -57,8 +57,8 @@ bool ControlProcess::InitializeProcess()
 	// 初期化完了イベントを作成する
 	std::tstring strInitEvent = GSTR_EVENT_SAKURA_CP_INITIALIZED;
 	strInitEvent += strProfileName;
-	m_hEventCPInitialized = ::CreateEvent( NULL, TRUE, FALSE, strInitEvent.c_str() );
-	if (!m_hEventCPInitialized) {
+	hEventCPInitialized = ::CreateEvent( NULL, TRUE, FALSE, strInitEvent.c_str() );
+	if (!hEventCPInitialized) {
 		ErrorBeep();
 		TopErrorMessage(NULL, _T("CreateEvent()失敗。\n終了します。"));
 		return false;
@@ -67,8 +67,8 @@ bool ControlProcess::InitializeProcess()
 	// コントロールプロセスの目印
 	std::tstring strCtrlProcEvent = GSTR_MUTEX_SAKURA_CP;
 	strCtrlProcEvent += strProfileName;
-	m_hMutexCP = ::CreateMutex( NULL, TRUE, strCtrlProcEvent.c_str() );
-	if (!m_hMutexCP) {
+	hMutexCP = ::CreateMutex( NULL, TRUE, strCtrlProcEvent.c_str() );
+	if (!hMutexCP) {
 		ErrorBeep();
 		TopErrorMessage(NULL, _T("CreateMutex()失敗。\n終了します。"));
 		return false;
@@ -107,11 +107,11 @@ bool ControlProcess::InitializeProcess()
 	MY_TRACETIME(runningTimer, "Before new ControlTray");
 
 	// タスクトレイにアイコン作成
-	m_pTray = new ControlTray();
+	pTray = new ControlTray();
 
 	MY_TRACETIME(runningTimer, "After new ControlTray");
 
-	HWND hwnd = m_pTray->Create(GetProcessInstance());
+	HWND hwnd = pTray->Create(GetProcessInstance());
 	if (!hwnd) {
 		ErrorBeep();
 		TopErrorMessage(NULL, LS(STR_ERR_CTRLMTX3));
@@ -121,7 +121,7 @@ bool ControlProcess::InitializeProcess()
 	GetDllShareData().handles.hwndTray = hwnd;
 
 	// 初期化完了イベントをシグナル状態にする
-	if (!::SetEvent(m_hEventCPInitialized)) {
+	if (!::SetEvent(hEventCPInitialized)) {
 		ErrorBeep();
 		TopErrorMessage(NULL, LS(STR_ERR_CTRLMTX4));
 		return false;
@@ -137,8 +137,8 @@ bool ControlProcess::InitializeProcess()
 */
 bool ControlProcess::MainLoop()
 {
-	if (m_pTray && GetMainWindow()) {
-		m_pTray->MessageLoop();	// メッセージループ
+	if (pTray && GetMainWindow()) {
+		pTray->MessageLoop();	// メッセージループ
 		return true;
 	}
 	return false;
@@ -158,21 +158,21 @@ void ControlProcess::OnExitProcess()
 
 ControlProcess::~ControlProcess()
 {
-	delete m_pTray;
+	delete pTray;
 
-	if (m_hEventCPInitialized) {
-		::ResetEvent(m_hEventCPInitialized);
+	if (hEventCPInitialized) {
+		::ResetEvent(hEventCPInitialized);
 	}
-	::CloseHandle(m_hEventCPInitialized);
-	if (m_hMutexCP) {
-		::ReleaseMutex(m_hMutexCP);
+	::CloseHandle(hEventCPInitialized);
+	if (hMutexCP) {
+		::ReleaseMutex(hMutexCP);
 	}
-	::CloseHandle(m_hMutexCP);
+	::CloseHandle(hMutexCP);
 	// 旧バージョン（1.2.104.1以前）との互換性：「異なるバージョン...」が二回出ないように
-	if (m_hMutex) {
-		::ReleaseMutex(m_hMutex);
+	if (hMutex) {
+		::ReleaseMutex(hMutex);
 	}
-	::CloseHandle(m_hMutex);
+	::CloseHandle(hMutex);
 };
 
 

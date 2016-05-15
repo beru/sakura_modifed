@@ -15,21 +15,21 @@
 
 TextArea::TextArea(EditView& editView)
 	:
-	m_editView(editView)
+	editView(editView)
 {
 	DllSharedData* pShareData = &GetDllShareData();
 
-	m_nViewAlignLeft = 0;					// 表示域の左端座標
-	m_nViewAlignLeftCols = 0;				// 行番号域の桁数
-	m_nViewCx = 0;							// 表示域の幅
-	m_nViewCy = 0;							// 表示域の高さ
-	m_nViewColNum = LayoutInt(0);			// 表示域の桁数
-	m_nViewRowNum = LayoutInt(0);			// 表示域の行数
-	m_nViewTopLine = LayoutInt(0);			// 表示域の一番上の行
-	m_nViewLeftCol = LayoutInt(0);			// 表示域の一番左の桁
+	nViewAlignLeft = 0;					// 表示域の左端座標
+	nViewAlignLeftCols = 0;				// 行番号域の桁数
+	nViewCx = 0;							// 表示域の幅
+	nViewCy = 0;							// 表示域の高さ
+	nViewColNum = LayoutInt(0);			// 表示域の桁数
+	nViewRowNum = LayoutInt(0);			// 表示域の行数
+	nViewTopLine = LayoutInt(0);			// 表示域の一番上の行
+	nViewLeftCol = LayoutInt(0);			// 表示域の一番左の桁
 	SetTopYohaku(pShareData->common.window.nRulerBottomSpace); 	// ルーラーとテキストの隙間
 	SetLeftYohaku(pShareData->common.window.nLineNumRightSpace);
-	m_nViewAlignTop = GetTopYohaku();		// 表示域の上端座標
+	nViewAlignTop = GetTopYohaku();		// 表示域の上端座標
 }
 
 TextArea::~TextArea()
@@ -39,12 +39,12 @@ TextArea::~TextArea()
 void TextArea::CopyTextAreaStatus(TextArea* pDst) const
 {
 	pDst->SetAreaLeft				(this->GetAreaLeft());		// 表示域の左端座標
-	pDst->m_nViewAlignLeftCols		= this->m_nViewAlignLeftCols;	// 行番号域の桁数
+	pDst->nViewAlignLeftCols		= this->nViewAlignLeftCols;	// 行番号域の桁数
 	pDst->SetAreaTop				(this->GetAreaTop());			// 表示域の上端座標
-//	pDst->m_nViewCx					= m_nViewCx;					// 表示域の幅
-//	pDst->m_nViewCy					= m_nViewCy;					// 表示域の高さ
-//	pDst->m_nViewColNum				= this->m_nViewColNum;			// 表示域の桁数
-//	pDst->m_nViewRowNum				= this->m_nViewRowNum;			// 表示域の行数
+//	pDst->nViewCx					= nViewCx;					// 表示域の幅
+//	pDst->nViewCy					= nViewCy;					// 表示域の高さ
+//	pDst->nViewColNum				= this->nViewColNum;			// 表示域の桁数
+//	pDst->nViewRowNum				= this->nViewRowNum;			// 表示域の行数
 	pDst->SetViewTopLine			(this->GetViewTopLine());		// 表示域の一番上の行(0開始)
 	pDst->SetViewLeftCol			(this->GetViewLeftCol());		// 表示域の一番左の桁(0開始)
 }
@@ -52,19 +52,19 @@ void TextArea::CopyTextAreaStatus(TextArea* pDst) const
 // 表示域の再計算
 void TextArea::UpdateViewColRowNums()
 {
-	auto& view = m_editView;
+	auto& view = editView;
 	// Note: マイナスの割り算は処理系依存です。
 	// 0だとカーソルを設定できない・選択できないなど動作不良になるので1以上にする
-	m_nViewColNum = LayoutInt(t_max(1, t_max(0, m_nViewCx - 1) / view.GetTextMetrics().GetHankakuDx()));	// 表示域の桁数
-	m_nViewRowNum = LayoutInt(t_max(1, t_max(0, m_nViewCy - 1) / view.GetTextMetrics().GetHankakuDy()));	// 表示域の行数
+	nViewColNum = LayoutInt(t_max(1, t_max(0, nViewCx - 1) / view.GetTextMetrics().GetHankakuDx()));	// 表示域の桁数
+	nViewRowNum = LayoutInt(t_max(1, t_max(0, nViewCy - 1) / view.GetTextMetrics().GetHankakuDy()));	// 表示域の行数
 }
 
 //フォント変更の際、各種パラメータを計算し直す
 void TextArea::UpdateAreaMetrics(HDC hdc)
 {
-	auto& view = m_editView;
+	auto& view = editView;
 	auto& textMetrics = view.GetTextMetrics();
-	if (view.m_bMiniMap) {
+	if (view.bMiniMap) {
 		// 文字間隔
 		textMetrics.SetHankakuDx(textMetrics.GetHankakuWidth());
 
@@ -72,10 +72,10 @@ void TextArea::UpdateAreaMetrics(HDC hdc)
 		textMetrics.SetHankakuDy(textMetrics.GetHankakuHeight());
 	}else {
 		// 文字間隔
-		textMetrics.SetHankakuDx(textMetrics.GetHankakuWidth() + view.m_pTypeData->nColumnSpace);
+		textMetrics.SetHankakuDx(textMetrics.GetHankakuWidth() + view.pTypeData->nColumnSpace);
 	
 		// 行間隔
-		textMetrics.SetHankakuDy(textMetrics.GetHankakuHeight() + view.m_pTypeData->nLineSpace);
+		textMetrics.SetHankakuDy(textMetrics.GetHankakuHeight() + view.pTypeData->nLineSpace);
 	}
 
 	// 表示域の再計算
@@ -85,7 +85,7 @@ void TextArea::UpdateAreaMetrics(HDC hdc)
 
 void TextArea::GenerateCharRect(RECT* rc, const DispPos& pos, int nHankakuNum) const
 {
-	auto& view = m_editView;
+	auto& view = editView;
 
 	rc->left   = pos.GetDrawPos().x;
 	rc->right  = pos.GetDrawPos().x + view.GetTextMetrics().GetHankakuDx() * nHankakuNum;
@@ -118,7 +118,7 @@ bool TextArea::GenerateClipRect(RECT* rc, const DispPos& pos, int nHankakuNum) c
 // 右の残りを表す矩形を生成する
 bool TextArea::GenerateClipRectRight(RECT* rc, const DispPos& pos) const
 {
-	auto& view = m_editView;
+	auto& view = editView;
 
 	rc->left   = pos.GetDrawPos().x;
 	rc->right  = GetAreaRight();
@@ -144,7 +144,7 @@ bool TextArea::GenerateClipRectLine(RECT* rc, const DispPos& pos) const
 	rc->left   = 0;
 	rc->right  = GetAreaRight();
 	rc->top    = pos.GetDrawPos().y;
-	rc->bottom = pos.GetDrawPos().y + m_editView.GetTextMetrics().GetHankakuDy();
+	rc->bottom = pos.GetDrawPos().y + editView.GetTextMetrics().GetHankakuDy();
 	return true;
 }
 
@@ -152,21 +152,21 @@ bool TextArea::GenerateClipRectLine(RECT* rc, const DispPos& pos) const
 // 行番号表示に必要な幅を設定。幅が変更された場合は true を返す
 bool TextArea::DetectWidthOfLineNumberArea(bool bRedraw)
 {
-	auto& view = m_editView;
+	auto& view = editView;
 
 	int nViewAlignLeftNew;
 
-	if (view.m_pTypeData->colorInfoArr[COLORIDX_GYOU].bDisp && !view.m_bMiniMap) {
+	if (view.pTypeData->colorInfoArr[COLORIDX_GYOU].bDisp && !view.bMiniMap) {
 		// 行番号表示に必要な桁数を計算
-		int i = DetectWidthOfLineNumberArea_calculate(&view.m_pEditDoc->m_layoutMgr);
+		int i = DetectWidthOfLineNumberArea_calculate(&view.pEditDoc->layoutMgr);
 		nViewAlignLeftNew = view.GetTextMetrics().GetHankakuDx() * (i + 1);	// 表示域の左端座標
-		m_nViewAlignLeftCols = i + 1;
-	}else if (view.m_bMiniMap) {
+		nViewAlignLeftCols = i + 1;
+	}else if (view.bMiniMap) {
 		nViewAlignLeftNew = 4;
-		m_nViewAlignLeftCols = 0;
+		nViewAlignLeftCols = 0;
 	}else {
 		nViewAlignLeftNew = 8;
-		m_nViewAlignLeftCols = 0;
+		nViewAlignLeftCols = 0;
 	}
 
 	//	Sep 18, 2002 genta
@@ -176,31 +176,31 @@ bool TextArea::DetectWidthOfLineNumberArea(bool bRedraw)
 		SetAreaLeft(nViewAlignLeftNew);
 		view.GetClientRect(&rc);
 		int nCxVScroll = ::GetSystemMetrics(SM_CXVSCROLL);		// 垂直スクロールバーの横幅
-		m_nViewCx = rc.Width() - nCxVScroll - GetAreaLeft();	// 表示域の幅
+		nViewCx = rc.Width() - nCxVScroll - GetAreaLeft();	// 表示域の幅
 		// 2008.05.27 nasukoji	表示域の桁数も算出する（右端カーソル移動時の表示場所ずれへの対処）
-		// m_nViewColNum = LayoutInt(t_max(0, m_nViewCx - 1) / pView->GetTextMetrics().GetHankakuDx());	// 表示域の桁数
+		// nViewColNum = LayoutInt(t_max(0, nViewCx - 1) / pView->GetTextMetrics().GetHankakuDx());	// 表示域の桁数
 		UpdateViewColRowNums();
 
 		if (bRedraw && view.GetDrawSwitch()) {
 			// 再描画
-			view.GetCaret().m_underLine.Lock();
+			view.GetCaret().underLine.Lock();
 			// From Here 2007.09.09 Moca 互換BMPによる画面バッファ
 			view.Call_OnPaint((int)PaintAreaType::LineNumber | (int)PaintAreaType::Ruler | (int)PaintAreaType::Body, false); // メモリＤＣを使用してちらつきのない再描画
 			// To Here 2007.09.09 Moca
-			view.GetCaret().m_underLine.UnLock();
+			view.GetCaret().underLine.UnLock();
 			view.GetCaret().ShowEditCaret();
 			/*
 			PAINTSTRUCT		ps;
-			HDC hdc = ::GetDC(view.m_hWnd);
+			HDC hdc = ::GetDC(view.hWnd);
 			ps.rcPaint.left   = 0;
 			ps.rcPaint.right  = GetAreaRight();
 			ps.rcPaint.top    = 0;
 			ps.rcPaint.bottom = GetAreaBottom();
-			view.GetCaret().m_underLine.Lock();
+			view.GetCaret().underLine.Lock();
 			view.OnPaint(hdc, &ps, TRUE);	
-			GetCaret().m_underLine.UnLock();
+			GetCaret().underLine.UnLock();
 			view.GetCaret().ShowEditCaret();
-			::ReleaseDC(m_hWnd, hdc);
+			::ReleaseDC(hWnd, hdc);
 			*/
 		}
 		view.GetRuler().SetRedrawFlag();
@@ -214,13 +214,13 @@ bool TextArea::DetectWidthOfLineNumberArea(bool bRedraw)
 // 行番号表示に必要な桁数を計算
 int TextArea::DetectWidthOfLineNumberArea_calculate(const LayoutMgr* pLayoutMgr, bool bLayout) const
 {
-	auto& view = m_editView;
+	auto& view = editView;
 
 	int nAllLines; //$$ 単位混在
 
 	// 行番号の表示 false=折り返し単位／true=改行単位
-	if (view.m_pTypeData->bLineNumIsCRLF && !bLayout) {
-		nAllLines = view.m_pEditDoc->m_docLineMgr.GetLineCount();
+	if (view.pTypeData->bLineNumIsCRLF && !bLayout) {
+		nAllLines = view.pEditDoc->docLineMgr.GetLineCount();
 	}else {
 		nAllLines = (Int)pLayoutMgr->GetLineCount();
 	}
@@ -230,23 +230,23 @@ int TextArea::DetectWidthOfLineNumberArea_calculate(const LayoutMgr* pLayoutMgr,
 		int i;
 
 		// 行番号の桁数を決める 2014.07.26 katze
-		// m_nLineNumWidthは純粋に数字の桁数を示し、先頭の空白を含まない（仕様変更） 2014.08.02 katze
+		// nLineNumWidthは純粋に数字の桁数を示し、先頭の空白を含まない（仕様変更） 2014.08.02 katze
 #ifdef USE_LOG10
 		// 表示している行数の桁数を求める
 		nWork = (int)(log10( (double)nAllLines) +1);	// 10を底とする対数(小数点以下切り捨て)+1で桁数
 		// 設定値と比較し、大きい方を取る
-		i = nWork > view.m_pTypeData->m_nLineNumWidth ?
-			nWork : view.m_pTypeData->m_nLineNumWidth;
+		i = nWork > view.pTypeData->nLineNumWidth ?
+			nWork : view.pTypeData->nLineNumWidth;
 		// 先頭の空白分を加算する
 		return (i +1);
 #else
 		// 設定から行数を求める
 		nWork = 10;
-		for (i=1; i<view.m_pTypeData->nLineNumWidth; ++i) {
+		for (i=1; i<view.pTypeData->nLineNumWidth; ++i) {
 			nWork *= 10;
 		}
 		// 表示している行数と比較し、大きい方の値を取る
-		for (i= view.m_pTypeData->nLineNumWidth; i<LINENUMWIDTH_MAX; ++i) {
+		for (i= view.pTypeData->nLineNumWidth; i<LINENUMWIDTH_MAX; ++i) {
 			if (nWork > nAllLines) {	// Oct. 18, 2003 genta 式を整理
 				break;
 			}
@@ -258,7 +258,7 @@ int TextArea::DetectWidthOfLineNumberArea_calculate(const LayoutMgr* pLayoutMgr,
 	}else {
 		//	2003.09.11 wmlhq 行番号が1桁のときと幅を合わせる
 		// 最小桁数を可変に変更 2014.07.26 katze	// 先頭の空白分を加算する 2014.07.31 katze
-		return view.m_pTypeData->nLineNumWidth +1;
+		return view.pTypeData->nLineNumWidth +1;
 	}
 }
 
@@ -268,21 +268,21 @@ void TextArea::TextArea_OnSize(
 	int nCyHScroll				// 水平スクロールバーの縦幅
 	)
 {
-	m_nViewCx = sizeClient.cx - nCxVScroll - GetAreaLeft(); // 表示域の幅
-	m_nViewCy = sizeClient.cy - nCyHScroll - GetAreaTop();  // 表示域の高さ
+	nViewCx = sizeClient.cx - nCxVScroll - GetAreaLeft(); // 表示域の幅
+	nViewCy = sizeClient.cy - nCyHScroll - GetAreaTop();  // 表示域の高さ
 	UpdateViewColRowNums();
 }
 
 
 int TextArea::GetDocumentLeftClientPointX() const
 {
-	return GetAreaLeft() - (Int)GetViewLeftCol() * m_editView.GetTextMetrics().GetHankakuDx();
+	return GetAreaLeft() - (Int)GetViewLeftCol() * editView.GetTextMetrics().GetHankakuDx();
 }
 
 // クライアント座標からレイアウト位置に変換する
 void TextArea::ClientToLayout(Point ptClient, LayoutPoint* pptLayout) const
 {
-	auto& view = m_editView;
+	auto& view = editView;
 	pptLayout->Set(
 		GetViewLeftCol() + LayoutInt((ptClient.x - GetAreaLeft()) / view.GetTextMetrics().GetHankakuDx()),
 		GetViewTopLine() + LayoutInt((ptClient.y - GetAreaTop()) / view.GetTextMetrics().GetHankakuDy())
@@ -293,51 +293,51 @@ void TextArea::ClientToLayout(Point ptClient, LayoutPoint* pptLayout) const
 // 行番号エリアも含む範囲
 void TextArea::GenerateTopRect(RECT* rc, LayoutInt nLineCount) const
 {
-	rc->left   = 0; //m_nViewAlignLeft;
-	rc->right  = m_nViewAlignLeft + m_nViewCx;
-	rc->top    = m_nViewAlignTop;
-	rc->bottom = m_nViewAlignTop + (Int)nLineCount * m_editView.GetTextMetrics().GetHankakuDy();
+	rc->left   = 0; //nViewAlignLeft;
+	rc->right  = nViewAlignLeft + nViewCx;
+	rc->top    = nViewAlignTop;
+	rc->bottom = nViewAlignTop + (Int)nLineCount * editView.GetTextMetrics().GetHankakuDy();
 }
 
 // 行番号エリアも含む範囲
 void TextArea::GenerateBottomRect(RECT* rc, LayoutInt nLineCount) const
 {
-	rc->left   = 0; //m_nViewAlignLeft;
-	rc->right  = m_nViewAlignLeft + m_nViewCx;
-	rc->top    = m_nViewAlignTop  + m_nViewCy - (Int)nLineCount * m_editView.GetTextMetrics().GetHankakuDy();
-	rc->bottom = m_nViewAlignTop  + m_nViewCy;
+	rc->left   = 0; //nViewAlignLeft;
+	rc->right  = nViewAlignLeft + nViewCx;
+	rc->top    = nViewAlignTop  + nViewCy - (Int)nLineCount * editView.GetTextMetrics().GetHankakuDy();
+	rc->bottom = nViewAlignTop  + nViewCy;
 }
 
 void TextArea::GenerateLeftRect(RECT* rc, LayoutInt nColCount) const
 {
-	rc->left   = m_nViewAlignLeft;
-	rc->right  = m_nViewAlignLeft + (Int)nColCount * m_editView.GetTextMetrics().GetHankakuDx();
-	rc->top    = m_nViewAlignTop;
-	rc->bottom = m_nViewAlignTop + m_nViewCy;
+	rc->left   = nViewAlignLeft;
+	rc->right  = nViewAlignLeft + (Int)nColCount * editView.GetTextMetrics().GetHankakuDx();
+	rc->top    = nViewAlignTop;
+	rc->bottom = nViewAlignTop + nViewCy;
 }
 
 void TextArea::GenerateRightRect(RECT* rc, LayoutInt nColCount) const
 {
-	rc->left   = m_nViewAlignLeft + m_nViewCx - (Int)nColCount * m_editView.GetTextMetrics().GetHankakuDx(); // 2008.01.26 kobake 符号が逆になってたのを修正
-	rc->right  = m_nViewAlignLeft + m_nViewCx;
-	rc->top    = m_nViewAlignTop;
-	rc->bottom = m_nViewAlignTop  + m_nViewCy;
+	rc->left   = nViewAlignLeft + nViewCx - (Int)nColCount * editView.GetTextMetrics().GetHankakuDx(); // 2008.01.26 kobake 符号が逆になってたのを修正
+	rc->right  = nViewAlignLeft + nViewCx;
+	rc->top    = nViewAlignTop;
+	rc->bottom = nViewAlignTop  + nViewCy;
 }
 
 void TextArea::GenerateLineNumberRect(RECT* rc) const
 {
 	rc->left   = 0;
-	rc->right  = m_nViewAlignLeft;
+	rc->right  = nViewAlignLeft;
 	rc->top    = 0;
-	rc->bottom = m_nViewAlignTop + m_nViewCy;
+	rc->bottom = nViewAlignTop + nViewCy;
 }
 
 void TextArea::GenerateTextAreaRect(RECT* rc) const
 {
 	rc->left   = 0;
-	rc->right  = m_nViewAlignLeft + m_nViewCx;
-	rc->top    = m_nViewAlignTop;
-	rc->bottom = m_nViewAlignTop + m_nViewCy;
+	rc->right  = nViewAlignLeft + nViewCx;
+	rc->top    = nViewAlignTop;
+	rc->bottom = nViewAlignTop + nViewCy;
 }
 
 
@@ -347,10 +347,10 @@ int TextArea::GenerateYPx(LayoutYInt nLineNum) const
 	int ret;
 	if (nY < 0) {
 		ret = GetAreaTop();
-	}else if (m_nViewRowNum < nY) {
+	}else if (nViewRowNum < nY) {
 		ret = GetAreaBottom();
 	}else {
-		ret = GetAreaTop() + m_editView.GetTextMetrics().GetHankakuDy() * (Int)(nY);
+		ret = GetAreaTop() + editView.GetTextMetrics().GetHankakuDy() * (Int)(nY);
 	}
 	return ret;
 }

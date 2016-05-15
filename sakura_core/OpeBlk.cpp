@@ -21,17 +21,17 @@
 
 OpeBlk::OpeBlk()
 {
-	m_refCount = 0;
+	refCount = 0;
 }
 
 OpeBlk::~OpeBlk()
 {
 	// 操作の配列を削除する
-	int size = (int)m_ppCOpeArr.size();
+	int size = (int)ppCOpeArr.size();
 	for (int i=0; i<size; ++i) {
-		SAFE_DELETE(m_ppCOpeArr[i]);
+		SAFE_DELETE(ppCOpeArr[i]);
 	}
-	m_ppCOpeArr.clear();
+	ppCOpeArr.clear();
 }
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -41,21 +41,21 @@ OpeBlk::~OpeBlk()
 // 操作の追加
 bool OpeBlk::AppendOpe(Ope* pOpe)
 {
-	if (pOpe->m_ptCaretPos_PHY_Before.HasNegative() || pOpe->m_ptCaretPos_PHY_After.HasNegative()) {
+	if (pOpe->ptCaretPos_PHY_Before.HasNegative() || pOpe->ptCaretPos_PHY_After.HasNegative()) {
 		TopErrorMessage(NULL,
 			_T("COpeBlk::AppendOpe() error.\n")
 			_T("Bug.\n")
-			_T("pOpe->m_ptCaretPos_PHY_Before = %d,%d\n")
-			_T("pOpe->m_ptCaretPos_PHY_After = %d,%d\n"),
-			pOpe->m_ptCaretPos_PHY_Before.x,
-			pOpe->m_ptCaretPos_PHY_Before.y,
-			pOpe->m_ptCaretPos_PHY_After.x,
-			pOpe->m_ptCaretPos_PHY_After.y
+			_T("pOpe->ptCaretPos_PHY_Before = %d,%d\n")
+			_T("pOpe->ptCaretPos_PHY_After = %d,%d\n"),
+			pOpe->ptCaretPos_PHY_Before.x,
+			pOpe->ptCaretPos_PHY_Before.y,
+			pOpe->ptCaretPos_PHY_After.x,
+			pOpe->ptCaretPos_PHY_After.y
 		);
 	}
 
 	// 配列のメモリサイズを調整
-	m_ppCOpeArr.push_back(pOpe);
+	ppCOpeArr.push_back(pOpe);
 	return true;
 }
 
@@ -66,7 +66,7 @@ Ope* OpeBlk::GetOpe(int nIndex)
 	if (GetNum() <= nIndex) {
 		return nullptr;
 	}
-	return m_ppCOpeArr[nIndex];
+	return ppCOpeArr[nIndex];
 }
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -79,8 +79,8 @@ void OpeBlk::DUMP(void)
 #ifdef _DEBUG
 	int size = GetNum();
 	for (int i=0; i<size; ++i) {
-		MYTRACE(_T("\tCOpeBlk.m_ppCOpeArr[%d]----\n"), i);
-		m_ppCOpeArr[i]->DUMP();
+		MYTRACE(_T("\tCOpeBlk.ppCOpeArr[%d]----\n"), i);
+		ppCOpeArr[i]->DUMP();
 	}
 #endif
 }

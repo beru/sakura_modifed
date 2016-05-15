@@ -32,7 +32,7 @@
 */
 void ViewCommander::Command_CUT(void)
 {
-	auto& selInfo = m_view.GetSelectionInfo();
+	auto& selInfo = view.GetSelectionInfo();
 	if (selInfo.IsMouseSelecting()) {	// マウスによる範囲選択中
 		ErrorBeep();
 		return;
@@ -55,19 +55,19 @@ void ViewCommander::Command_CUT(void)
 	// 選択範囲のデータを取得
 	// 正常時は true, 範囲未選択の場合は false を返す
 	NativeW memBuf;
-	if (!m_view.GetSelectedData(&memBuf, false, NULL, false, csEdit.bAddCRLFWhenCopy)) {
+	if (!view.GetSelectedData(&memBuf, false, NULL, false, csEdit.bAddCRLFWhenCopy)) {
 		ErrorBeep();
 		return;
 	}
 	// クリップボードにデータを設定
-	if (!m_view.MySetClipboardData(memBuf.GetStringPtr(), memBuf.GetStringLength(), bBeginBoxSelect)) {
+	if (!view.MySetClipboardData(memBuf.GetStringPtr(), memBuf.GetStringLength(), bBeginBoxSelect)) {
 		ErrorBeep();
 		return;
 	}
 	memBuf.Clear();
 
 	// カーソル位置または選択エリアを削除
-	m_view.DeleteData(true);
+	view.DeleteData(true);
 	return;
 }
 
@@ -83,7 +83,7 @@ void ViewCommander::Command_COPY(
 	)
 {
 	NativeW memBuf;
-	auto& selInfo = m_view.GetSelectionInfo();
+	auto& selInfo = view.GetSelectionInfo();
 	auto& csEdit = GetDllShareData().common.edit;
 	// クリップボードに入れるべきテキストデータを、memBufに格納する
 	if (!selInfo.IsTextSelected()) {
@@ -91,7 +91,7 @@ void ViewCommander::Command_COPY(
 		if (!csEdit.bEnableNoSelectCopy) {	// 2007.11.18 ryoji
 			return;	// 何もしない（音も鳴らさない）
 		}
-		m_view.CopyCurLine(
+		view.CopyCurLine(
 			bAddCRLFWhenCopy,
 			neweol,
 			csEdit.bEnableLineModePaste
@@ -101,13 +101,13 @@ void ViewCommander::Command_COPY(
 		bool bBeginBoxSelect = selInfo.IsBoxSelecting();
 		// 選択範囲のデータを取得
 		// 正常時はtrue,範囲未選択の場合はfalseを返す
-		if (!m_view.GetSelectedData(&memBuf, false, NULL, false, bAddCRLFWhenCopy, neweol)) {
+		if (!view.GetSelectedData(&memBuf, false, NULL, false, bAddCRLFWhenCopy, neweol)) {
 			ErrorBeep();
 			return;
 		}
 
 		// クリップボードにデータmemBufの内容を設定
-		if (!m_view.MySetClipboardData(
+		if (!view.MySetClipboardData(
 			memBuf.GetStringPtr(),
 			memBuf.GetStringLength(),
 			bBeginBoxSelect,
@@ -123,11 +123,11 @@ void ViewCommander::Command_COPY(
 	// 選択範囲の後片付け
 	if (!bIgnoreLockAndDisable) {
 		// 選択状態のロック
-		if (selInfo.m_bSelectingLock) {
-			selInfo.m_bSelectingLock = false;
+		if (selInfo.bSelectingLock) {
+			selInfo.bSelectingLock = false;
 			selInfo.PrintSelectionInfoMsg();
 			if (!selInfo.IsTextSelected()) {
-				GetCaret().m_underLine.CaretUnderLineON(true, false);
+				GetCaret().underLine.CaretUnderLineON(true, false);
 			}
 		}
 	}
@@ -155,7 +155,7 @@ void ViewCommander::Command_COPY(
 */
 void ViewCommander::Command_PASTE(int option)
 {
-	auto& selInfo = m_view.GetSelectionInfo();
+	auto& selInfo = view.GetSelectionInfo();
 
 	if (selInfo.IsMouseSelecting()) {	// マウスによる範囲選択中
 		ErrorBeep();
@@ -172,7 +172,7 @@ void ViewCommander::Command_PASTE(int option)
 		((option & 0x08) == 0x08) ? false :
 		commonSetting.edit.bEnableLineModePaste;
 	
-	if (!m_view.MyGetClipboardData(memClip, &bColumnSelect, bLineSelectOption ? &bLineSelect: nullptr)) {
+	if (!view.MyGetClipboardData(memClip, &bColumnSelect, bLineSelectOption ? &bLineSelect: nullptr)) {
 		ErrorBeep();
 		return;
 	}
@@ -203,8 +203,8 @@ void ViewCommander::Command_PASTE(int option)
 				return;
 			}
 			Command_PASTEBOX(pszText, nTextLen);
-			m_view.AdjustScrollBars();
-			m_view.Redraw();
+			view.AdjustScrollBars();
+			view.Redraw();
 			return;
 		}
 	}
@@ -214,7 +214,7 @@ void ViewCommander::Command_PASTE(int option)
 	// ※レイアウト折り返しの行コピーだった場合は末尾が改行になっていない
 	if (bLineSelect) {
 		if (!WCODE::IsLineDelimiter(pszText[nTextLen-1], GetDllShareData().common.edit.bEnableExtEol)) {
-			memClip.AppendString(GetDocument().m_docEditor.GetNewLineCode().GetValue2());
+			memClip.AppendString(GetDocument().docEditor.GetNewLineCode().GetValue2());
 			pszText = memClip.GetStringPtr(&nTextLen);
 		}
 	}
@@ -239,9 +239,9 @@ void ViewCommander::Command_PASTE(int option)
 //<< 2002/03/28 Azumaiya
 // メモリデータを矩形貼り付け用のデータと解釈して処理する。
 //  なお、この関数は Command_PASTEBOX(void) と、
-// 2769 : GetDocument().m_docEditor.SetModified(true, true);	// Jan. 22, 2002 genta
+// 2769 : GetDocument().docEditor.SetModified(true, true);	// Jan. 22, 2002 genta
 // から、
-// 3057 : m_view.SetDrawSwitch(true);	// 2002.01.25 hor
+// 3057 : view.SetDrawSwitch(true);	// 2002.01.25 hor
 // 間まで、一緒です。
 //  ですが、コメントを削ったり、#if 0 のところを削ったりしていますので、Command_PASTEBOX(void) は
 // 残すようにしました(下にこの関数を使った使ったバージョンをコメントで書いておきました)。
@@ -261,7 +261,7 @@ void ViewCommander::Command_PASTEBOX(
 	)
 {
 	/* これらの動作は残しておきたいのだが、呼び出し側で責任を持ってやってもらうことに変更。
-	if (m_view.GetSelectionInfo().IsMouseSelecting())	// マウスによる範囲選択中
+	if (view.GetSelectionInfo().IsMouseSelecting())	// マウスによる範囲選択中
 	{
 		ErrorBeep();
 		return;
@@ -272,21 +272,21 @@ void ViewCommander::Command_PASTEBOX(
 	}
 	*/
 
-	GetDocument().m_docEditor.SetModified(true, true);	// Jan. 22, 2002 genta
+	GetDocument().docEditor.SetModified(true, true);	// Jan. 22, 2002 genta
 
-	bool bDrawSwitchOld = m_view.SetDrawSwitch(false);	// 2002.01.25 hor
+	bool bDrawSwitchOld = view.SetDrawSwitch(false);	// 2002.01.25 hor
 
 	// とりあえず選択範囲を削除
-	// 2004.06.30 Moca m_view.GetSelectionInfo().IsTextSelected()がないと未選択時、一文字消えてしまう
-	if (m_view.GetSelectionInfo().IsTextSelected()) {
-		m_view.DeleteData(false/*true 2002.01.25 hor*/);
+	// 2004.06.30 Moca view.GetSelectionInfo().IsTextSelected()がないと未選択時、一文字消えてしまう
+	if (view.GetSelectionInfo().IsTextSelected()) {
+		view.DeleteData(false/*true 2002.01.25 hor*/);
 	}
 
-	WaitCursor waitCursor(m_view.GetHwnd(), 10000 < nPasteSize);
+	WaitCursor waitCursor(view.GetHwnd(), 10000 < nPasteSize);
 	HWND hwndProgress = NULL;
 	int nProgressPos = 0;
 	if (waitCursor.IsEnable()) {
-		hwndProgress = m_view.StartProgress();
+		hwndProgress = view.StartProgress();
 	}
 
 	auto& caret = GetCaret();
@@ -307,7 +307,7 @@ void ViewCommander::Command_PASTEBOX(
 		if (WCODE::IsLineDelimiter(szPaste[nPos], bExtEol) || nPos == nPasteSize) {
 			// 現在位置にデータを挿入
 			if (nPos - nBgn > 0) {
-				m_view.InsertData_CEditView(
+				view.InsertData_CEditView(
 					ptCurOld + LayoutPoint(LayoutInt(0), nCount),
 					&szPaste[nBgn],
 					nPos - nBgn,
@@ -318,12 +318,12 @@ void ViewCommander::Command_PASTEBOX(
 
 			// この行の挿入位置へカーソルを移動
 			caret.MoveCursor(ptCurOld + LayoutPoint(LayoutInt(0), nCount), false);
-			caret.m_nCaretPosX_Prev = caret.GetCaretLayoutPos().GetX2();
+			caret.nCaretPosX_Prev = caret.GetCaretLayoutPos().GetX2();
 			// カーソル行が最後の行かつ行末に改行が無く、挿入すべきデータがまだある場合
 			bool bAddLastCR = false;
 			const Layout*	pLayout;
 			LogicInt		nLineLen = LogicInt(0);
-			const wchar_t* pLine = GetDocument().m_layoutMgr.GetLineStr(caret.GetCaretLayoutPos().GetY2(), &nLineLen, &pLayout);
+			const wchar_t* pLine = GetDocument().layoutMgr.GetLineStr(caret.GetCaretLayoutPos().GetY2(), &nLineLen, &pLayout);
 
 			if (pLine && 1 <= nLineLen) {
 				if (WCODE::IsLineDelimiter(pLine[nLineLen - 1], bExtEol)) {
@@ -336,12 +336,12 @@ void ViewCommander::Command_PASTEBOX(
 
 			if (bAddLastCR) {
 //				MYTRACE(_T(" カーソル行が最後の行かつ行末に改行が無く、\n挿入すべきデータがまだある場合は行末に改行を挿入。\n"));
-				LayoutInt nInsPosX = m_view.LineIndexToColumn(pLayout, nLineLen);
+				LayoutInt nInsPosX = view.LineIndexToColumn(pLayout, nLineLen);
 
-				m_view.InsertData_CEditView(
+				view.InsertData_CEditView(
 					LayoutPoint(nInsPosX, caret.GetCaretLayoutPos().GetY2()),
-					GetDocument().m_docEditor.GetNewLineCode().GetValue2(),
-					GetDocument().m_docEditor.GetNewLineCode().GetLen(),
+					GetDocument().docEditor.GetNewLineCode().GetValue2(),
+					GetDocument().docEditor.GetNewLineCode().GetLen(),
 					&ptLayoutNew,
 					false
 				);
@@ -377,9 +377,9 @@ void ViewCommander::Command_PASTEBOX(
 
 	// 挿入データの先頭位置へカーソルを移動
 	caret.MoveCursor(ptCurOld, true);
-	caret.m_nCaretPosX_Prev = caret.GetCaretLayoutPos().GetX2();
+	caret.nCaretPosX_Prev = caret.GetCaretLayoutPos().GetX2();
 
-	if (!m_view.m_bDoing_UndoRedo) {	// Undo, Redoの実行中か
+	if (!view.bDoing_UndoRedo) {	// Undo, Redoの実行中か
 		// 操作の追加
 		GetOpeBlk()->AppendOpe(
 			new MoveCaretOpe(
@@ -388,7 +388,7 @@ void ViewCommander::Command_PASTEBOX(
 		);
 	}
 
-	m_view.SetDrawSwitch(bDrawSwitchOld);	// 2002.01.25 hor
+	view.SetDrawSwitch(bDrawSwitchOld);	// 2002.01.25 hor
 	return;
 }
 
@@ -401,7 +401,7 @@ void ViewCommander::Command_PASTEBOX(
 */
 void ViewCommander::Command_PASTEBOX(int option)
 {
-	if (m_view.GetSelectionInfo().IsMouseSelecting()) {	// マウスによる範囲選択中
+	if (view.GetSelectionInfo().IsMouseSelecting()) {	// マウスによる範囲選択中
 		ErrorBeep();
 		return;
 	}
@@ -412,7 +412,7 @@ void ViewCommander::Command_PASTEBOX(int option)
 
 	// クリップボードからデータを取得
 	NativeW memClip;
-	if (!m_view.MyGetClipboardData(memClip, NULL)) {
+	if (!view.MyGetClipboardData(memClip, NULL)) {
 		ErrorBeep();
 		return;
 	}
@@ -421,8 +421,8 @@ void ViewCommander::Command_PASTEBOX(int option)
 	const wchar_t* lptstr = memClip.GetStringPtr(&nstrlen);
 
 	Command_PASTEBOX(lptstr, nstrlen);
-	m_view.AdjustScrollBars(); // 2007.07.22 ryoji
-	m_view.Redraw();			// 2002.01.25 hor
+	view.AdjustScrollBars(); // 2007.07.22 ryoji
+	view.Redraw();			// 2002.01.25 hor
 }
 
 
@@ -432,7 +432,7 @@ void ViewCommander::Command_INSBOXTEXT(
 	int nPasteSize
 	)
 {
-	if (m_view.GetSelectionInfo().IsMouseSelecting()) {	// マウスによる範囲選択中
+	if (view.GetSelectionInfo().IsMouseSelecting()) {	// マウスによる範囲選択中
 		ErrorBeep();
 		return;
 	}
@@ -442,8 +442,8 @@ void ViewCommander::Command_INSBOXTEXT(
 	}
 
 	Command_PASTEBOX(pszPaste, nPasteSize);
-	m_view.AdjustScrollBars(); // 2007.07.22 ryoji
-	m_view.Redraw();			// 2002.01.25 hor
+	view.AdjustScrollBars(); // 2007.07.22 ryoji
+	view.Redraw();			// 2002.01.25 hor
 }
 
 
@@ -462,7 +462,7 @@ void ViewCommander::Command_INSTEXT(
 	const LogicRange*	pSelectLogic	// [in] オプション。高速モードのときの削除範囲ロジック単位
 	)
 {
-	auto& selInfo = m_view.GetSelectionInfo();
+	auto& selInfo = view.GetSelectionInfo();
 	if (selInfo.IsMouseSelecting()) {	// マウスによる範囲選択中
 		ErrorBeep();
 		return;
@@ -473,11 +473,11 @@ void ViewCommander::Command_INSTEXT(
 	}
 
 	WaitCursor waitCursor(
-		m_view.GetHwnd(),
+		view.GetHwnd(),
 		10000 < nTextLen && !selInfo.IsBoxSelecting()
 	);
 
-	GetDocument().m_docEditor.SetModified(true, bRedraw);	// Jan. 22, 2002 genta
+	GetDocument().docEditor.SetModified(true, bRedraw);	// Jan. 22, 2002 genta
 
 	auto& caret = GetCaret();
 
@@ -502,8 +502,8 @@ void ViewCommander::Command_INSTEXT(
 			if (!bFastMode) {
 				LogicInt len;
 				const Layout* pLayout;
-				const wchar_t* line = GetDocument().m_layoutMgr.GetLineStr(GetSelect().GetFrom().GetY2(), &len, &pLayout);
-				int pos = (!line) ? 0 : m_view.LineColumnToIndex(pLayout, GetSelect().GetFrom().GetX2());
+				const wchar_t* line = GetDocument().layoutMgr.GetLineStr(GetSelect().GetFrom().GetY2(), &len, &pLayout);
+				int pos = (!line) ? 0 : view.LineColumnToIndex(pLayout, GetSelect().GetFrom().GetX2());
 
 				// 開始位置が行末より後ろで、終了位置が同一行
 				if (pos >= len && GetSelect().IsLineOne()) {
@@ -515,12 +515,12 @@ void ViewCommander::Command_INSTEXT(
 			if (!bAfterEOLSelect) {
 				// データ置換 削除&挿入にも使える
 				// 行コピーの貼り付けでは選択範囲は削除（後で行頭に貼り付ける）	// 2007.10.04 ryoji
-				m_view.ReplaceData_CEditView(
+				view.ReplaceData_CEditView(
 					GetSelect(),				// 選択範囲
 					bLinePaste? L"": pszText,	// 挿入するデータ
 					bLinePaste? LogicInt(0): nTextLen,	// 挿入するデータの長さ
 					bRedraw,
-					m_view.m_bDoing_UndoRedo ? NULL : GetOpeBlk(),
+					view.bDoing_UndoRedo ? NULL : GetOpeBlk(),
 					bFastMode,
 					pSelectLogic
 				);
@@ -542,7 +542,7 @@ void ViewCommander::Command_INSTEXT(
 			nPosX_PHY_Delta = ptCaretBefore.x - ptCaretAfter.x;
 
 			// UNDO用記録
-			if (!m_view.m_bDoing_UndoRedo) {
+			if (!view.bDoing_UndoRedo) {
 				GetOpeBlk()->AppendOpe(
 					new MoveCaretOpe(
 						ptCaretBefore,	// 操作前のキャレット位置
@@ -554,7 +554,7 @@ void ViewCommander::Command_INSTEXT(
 
 		// 現在位置にデータを挿入
 		LayoutPoint ptLayoutNew; // 挿入された部分の次の位置
-		m_view.InsertData_CEditView(
+		view.InsertData_CEditView(
 			caret.GetCaretLayoutPos(),
 			pszText,
 			nTextLen,
@@ -564,22 +564,22 @@ void ViewCommander::Command_INSTEXT(
 
 		// 挿入データの最後へカーソルを移動
 		caret.MoveCursor(ptLayoutNew, bRedraw);
-		caret.m_nCaretPosX_Prev = caret.GetCaretLayoutPos().GetX2();
+		caret.nCaretPosX_Prev = caret.GetCaretLayoutPos().GetX2();
 
 		if (bLinePaste) {	// 2007.10.04 ryoji
 			// 元の位置へカーソルを移動
 			LogicPoint ptCaretBefore = caret.GetCaretLogicPos();	// 操作前のキャレット位置
 			LayoutPoint ptLayout;
-			GetDocument().m_layoutMgr.LogicToLayout(
+			GetDocument().layoutMgr.LogicToLayout(
 				ptCaretBefore + LogicPoint(nPosX_PHY_Delta, LogicInt(0)),
 				&ptLayout
 			);
 			caret.MoveCursor(ptLayout, bRedraw);					// カーソル移動
 			LogicPoint ptCaretAfter = caret.GetCaretLogicPos();	// 操作後のキャレット位置
-			caret.m_nCaretPosX_Prev = caret.GetCaretLayoutPos().x;
+			caret.nCaretPosX_Prev = caret.GetCaretLayoutPos().x;
 
 			// UNDO用記録
-			if (!m_view.m_bDoing_UndoRedo) {
+			if (!view.bDoing_UndoRedo) {
 				GetOpeBlk()->AppendOpe(
 					new MoveCaretOpe(
 						ptCaretBefore,	// 操作前のキャレット位置Ｘ
@@ -607,7 +607,7 @@ void ViewCommander::Command_ADDTAIL(
 		nDataLen = wcslen(pszData);
 	}
 
-	GetDocument().m_docEditor.SetModified(true, true);	// Jan. 22, 2002 genta
+	GetDocument().docEditor.SetModified(true, true);	// Jan. 22, 2002 genta
 
 	// ファイルの最後に移動
 	Command_GOFILEEND(false);
@@ -615,7 +615,7 @@ void ViewCommander::Command_ADDTAIL(
 	auto& caret = GetCaret();
 	// 現在位置にデータを挿入
 	LayoutPoint ptLayoutNew;	// 挿入された部分の次の位置
-	m_view.InsertData_CEditView(
+	view.InsertData_CEditView(
 		caret.GetCaretLayoutPos(),
 		pszData,
 		nDataLen,
@@ -626,7 +626,7 @@ void ViewCommander::Command_ADDTAIL(
 	// 挿入データの最後へカーソルを移動
 	// Sep. 2, 2002 すなふき アンダーラインの表示が残ってしまう問題を修正
 	caret.MoveCursor(ptLayoutNew, true);
-	caret.m_nCaretPosX_Prev = caret.GetCaretLayoutPos().GetX2();
+	caret.nCaretPosX_Prev = caret.GetCaretLayoutPos().GetX2();
 }
 
 
@@ -634,7 +634,7 @@ void ViewCommander::Command_ADDTAIL(
 void ViewCommander::Command_COPYLINES(void)
 {
 	// 選択範囲内の全行をクリップボードにコピーする
-	m_view.CopySelectedAllLines(
+	view.CopySelectedAllLines(
 		NULL,	// 引用符
 		false	// 行番号を付与する
 	);
@@ -646,7 +646,7 @@ void ViewCommander::Command_COPYLINES(void)
 void ViewCommander::Command_COPYLINESASPASSAGE(void)
 {
 	// 選択範囲内の全行をクリップボードにコピーする
-	m_view.CopySelectedAllLines(
+	view.CopySelectedAllLines(
 		GetDllShareData().common.format.szInyouKigou,	// 引用符
 		false 									// 行番号を付与する
 	);
@@ -658,7 +658,7 @@ void ViewCommander::Command_COPYLINESASPASSAGE(void)
 void ViewCommander::Command_COPYLINESWITHLINENUMBER(void)
 {
 	// 選択範囲内の全行をクリップボードにコピーする
-	m_view.CopySelectedAllLines(
+	view.CopySelectedAllLines(
 		NULL,	// 引用符
 		true	// 行番号を付与する
 	);
@@ -739,13 +739,13 @@ static bool AppendHTMLColor(
 // 選択範囲内色付きHTMLコピー
 void ViewCommander::Command_COPY_COLOR_HTML(bool bLineNumber)
 {
-	auto& selInfo = m_view.GetSelectionInfo();
+	auto& selInfo = view.GetSelectionInfo();
 	if (!selInfo.IsTextSelected()
 	  || GetSelect().GetFrom() == GetSelect().GetTo()
 	) {
 		return;
 	}
-	const TypeConfig& type = GetDocument().m_docType.GetDocumentAttribute();
+	const TypeConfig& type = GetDocument().docType.GetDocumentAttribute();
 	bool bLineNumLayout = GetDllShareData().common.edit.bAddCRLFWhenCopy
 		|| selInfo.IsBoxSelecting();
 	LayoutRect rcSel;
@@ -763,7 +763,7 @@ void ViewCommander::Command_COPY_COLOR_HTML(bool bLineNumber)
 		const Layout* pLayout;
 		{
 			LogicInt nLineLenTmp;
-			GetDocument().m_layoutMgr.GetLineStr(rcSel.top, &nLineLenTmp, &pLayout);
+			GetDocument().layoutMgr.GetLineStr(rcSel.top, &nLineLenTmp, &pLayout);
 		}
 		pLayoutTop = pLayout;
 		LayoutInt i = rcSel.top;
@@ -772,8 +772,8 @@ void ViewCommander::Command_COPY_COLOR_HTML(bool bLineNumber)
 			LogicInt nIdxFrom;
 			LogicInt nIdxTo;
 			if (selInfo.IsBoxSelecting()) {
-				nIdxFrom = m_view.LineColumnToIndex(pLayout, rcSel.left);
-				nIdxTo   = m_view.LineColumnToIndex(pLayout, rcSel.right);
+				nIdxFrom = view.LineColumnToIndex(pLayout, rcSel.left);
+				nIdxTo   = view.LineColumnToIndex(pLayout, rcSel.right);
 				// 改行は除く
 				if (nIdxTo - nIdxFrom > 0) {
 					const WCHAR* pLine = pLayout->GetPtr();
@@ -791,14 +791,14 @@ void ViewCommander::Command_COPY_COLOR_HTML(bool bLineNumber)
 				}
 			}else {
 				if (i == rcSel.top) {
-					nIdxFrom = m_view.LineColumnToIndex(pLayout, rcSel.left);
+					nIdxFrom = view.LineColumnToIndex(pLayout, rcSel.left);
 					sSelectLogic.SetFromY(pLayout->GetLogicLineNo());
 					sSelectLogic.SetFromX(nIdxFrom);
 				}else {
 					nIdxFrom = LogicInt(0);
 				}
 				if (i == rcSel.bottom) {
-					nIdxTo = m_view.LineColumnToIndex(pLayout, rcSel.right);
+					nIdxTo = view.LineColumnToIndex(pLayout, rcSel.right);
 					sSelectLogic.SetToY(pLayout->GetLogicLineNo());
 					sSelectLogic.SetToX(nIdxTo);
 				}else {
@@ -813,7 +813,7 @@ void ViewCommander::Command_COPY_COLOR_HTML(bool bLineNumber)
 			}
 		}
 		if (sSelectLogic.GetTo().x == -1) {
-			sSelectLogic.SetToY(GetDocument().m_docLineMgr.GetLineCount());
+			sSelectLogic.SetToY(GetDocument().docLineMgr.GetLineCount());
 			sSelectLogic.SetToX(LogicInt(0));
 		}
 	}
@@ -873,7 +873,7 @@ void ViewCommander::Command_COPY_COLOR_HTML(bool bLineNumber)
 	FontAttr fontAttrLast = { false, false };
 	FontAttr fontAttrLast2 = { false, false };
 	auto& pool = ColorStrategyPool::getInstance();
-	pool.SetCurrentView(&m_view);
+	pool.SetCurrentView(&view);
 	for (auto nLineNum = sSelectLogic.GetFrom().y;
 		nLineNum <= nLineNumLast;
 		++nLineNum, pDocLine = pDocLine->GetNextLine()
@@ -911,8 +911,8 @@ void ViewCommander::Command_COPY_COLOR_HTML(bool bLineNumber)
 				nIdxTo = nIdxFrom = LogicInt(-1);
 			}else {
 				if (selInfo.IsBoxSelecting()) {
-					nIdxFrom = m_view.LineColumnToIndex(pLayout, rcSel.left);
-					nIdxTo   = m_view.LineColumnToIndex(pLayout, rcSel.right);
+					nIdxFrom = view.LineColumnToIndex(pLayout, rcSel.left);
+					nIdxTo   = view.LineColumnToIndex(pLayout, rcSel.right);
 					// 改行は除く
 					if (nIdxTo - nIdxFrom > 0) {
 						const WCHAR* pLine = pLayout->GetPtr();
@@ -1130,10 +1130,10 @@ void ViewCommander::Command_COPY_COLOR_HTML_LINENUMBER()
 */
 void ViewCommander::Command_COPYFILENAME(void)
 {
-	if (GetDocument().m_docFile.GetFilePathClass().IsValidPath()) {
+	if (GetDocument().docFile.GetFilePathClass().IsValidPath()) {
 		// クリップボードにデータを設定
-		const WCHAR* pszFile = to_wchar(GetDocument().m_docFile.GetFileName());
-		m_view.MySetClipboardData(pszFile , wcslen(pszFile), false);
+		const WCHAR* pszFile = to_wchar(GetDocument().docFile.GetFileName());
+		view.MySetClipboardData(pszFile , wcslen(pszFile), false);
 	}else {
 		ErrorBeep();
 	}
@@ -1143,10 +1143,10 @@ void ViewCommander::Command_COPYFILENAME(void)
 // 現在編集中のファイルのパス名をクリップボードにコピー
 void ViewCommander::Command_COPYPATH(void)
 {
-	if (GetDocument().m_docFile.GetFilePathClass().IsValidPath()) {
+	if (GetDocument().docFile.GetFilePathClass().IsValidPath()) {
 		// クリップボードにデータを設定
-		const TCHAR* szPath = GetDocument().m_docFile.GetFilePath();
-		m_view.MySetClipboardData(szPath, _tcslen(szPath), false);
+		const TCHAR* szPath = GetDocument().docFile.GetFilePath();
+		view.MySetClipboardData(szPath, _tcslen(szPath), false);
 	}else {
 		ErrorBeep();
 	}
@@ -1157,17 +1157,17 @@ void ViewCommander::Command_COPYPATH(void)
 // 現在編集中のファイルのパス名とカーソル位置をクリップボードにコピー
 void ViewCommander::Command_COPYTAG(void)
 {
-	if (GetDocument().m_docFile.GetFilePathClass().IsValidPath()) {
+	if (GetDocument().docFile.GetFilePathClass().IsValidPath()) {
 		wchar_t	buf[MAX_PATH + 20];
 
 		LogicPoint ptColLine;
 
 		// 論理行番号を得る
-		GetDocument().m_layoutMgr.LayoutToLogic(GetCaret().GetCaretLayoutPos(), &ptColLine);
+		GetDocument().layoutMgr.LayoutToLogic(GetCaret().GetCaretLayoutPos(), &ptColLine);
 
 		// クリップボードにデータを設定
-		auto_sprintf( buf, L"%ts (%d,%d): ", GetDocument().m_docFile.GetFilePath(), ptColLine.y+1, ptColLine.x+1 );
-		m_view.MySetClipboardData(buf, wcslen(buf), false);
+		auto_sprintf( buf, L"%ts (%d,%d): ", GetDocument().docFile.GetFilePath(), ptColLine.y+1, ptColLine.x+1 );
+		view.MySetClipboardData(buf, wcslen(buf), false);
 	}else {
 		ErrorBeep();
 	}
@@ -1185,14 +1185,14 @@ void ViewCommander::Command_CREATEKEYBINDLIST(void)
 		csKeyBind.nKeyNameArrNum,
 		csKeyBind.pKeyNameArr,
 		memKeyList,
-		&GetDocument().m_funcLookup,	// Oct. 31, 2001 genta 追加
+		&GetDocument().funcLookup,	// Oct. 31, 2001 genta 追加
 		false	// 2007.02.22 ryoji 追加
 	);
 
 	// Windowsクリップボードにコピー
 	// 2004.02.17 Moca 関数化
 	SetClipboardText(
-		EditWnd::getInstance().m_splitterWnd.GetHwnd(),
+		EditWnd::getInstance().splitterWnd.GetHwnd(),
 		memKeyList.GetStringPtr(),
 		memKeyList.GetStringLength()
 	);

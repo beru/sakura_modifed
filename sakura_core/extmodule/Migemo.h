@@ -76,16 +76,16 @@ protected:
 	typedef int            (__cdecl *Proc_migemo_load)            (migemo* obj, int dict_id, const char* dict_file);
 	typedef int            (__cdecl *Proc_migemo_is_enable)       (migemo* obj);
 	
-	Proc_migemo_open                  m_migemo_open                ;
-	Proc_migemo_close                 m_migemo_close               ;
-	Proc_migemo_query                 m_migemo_query               ;
-	Proc_migemo_release               m_migemo_release             ;
-	Proc_migemo_set_operator          m_migemo_set_operator        ;
-	Proc_migemo_get_operator          m_migemo_get_operator        ;
-	Proc_migemo_setproc_char2int      m_migemo_setproc_char2int    ;
-	Proc_migemo_setproc_int2char      m_migemo_setproc_int2char    ;
-	Proc_migemo_load                  m_migemo_load                ;
-	Proc_migemo_is_enable             m_migemo_is_enable           ;
+	Proc_migemo_open                  p_migemo_open                ;
+	Proc_migemo_close                 p_migemo_close               ;
+	Proc_migemo_query                 p_migemo_query               ;
+	Proc_migemo_release               p_migemo_release             ;
+	Proc_migemo_set_operator          p_migemo_set_operator        ;
+	Proc_migemo_get_operator          p_migemo_get_operator        ;
+	Proc_migemo_setproc_char2int      p_migemo_setproc_char2int    ;
+	Proc_migemo_setproc_int2char      p_migemo_setproc_int2char    ;
+	Proc_migemo_load                  p_migemo_load                ;
+	Proc_migemo_is_enable             p_migemo_is_enable           ;
 
 	typedef migemo*        (__stdcall *Proc_migemo_open_s)            (char* dict);
 	typedef void           (__stdcall *Proc_migemo_close_s)           (migemo* object);
@@ -98,20 +98,20 @@ protected:
 	typedef int            (__stdcall *Proc_migemo_load_s)            (migemo* obj, int dict_id, const char* dict_file);
 	typedef int            (__stdcall *Proc_migemo_is_enable_s)       (migemo* obj);
 
-	Proc_migemo_open_s                m_migemo_open_s;
-	Proc_migemo_close_s               m_migemo_close_s;
-	Proc_migemo_query_s               m_migemo_query_s;
-	Proc_migemo_release_s             m_migemo_release_s;
-	Proc_migemo_set_operator_s        m_migemo_set_operator_s;
-	Proc_migemo_get_operator_s        m_migemo_get_operator_s;
-	Proc_migemo_setproc_char2int_s    m_migemo_setproc_char2int_s;
-	Proc_migemo_setproc_int2char_s    m_migemo_setproc_int2char_s;
-	Proc_migemo_load_s                m_migemo_load_s;
-	Proc_migemo_is_enable_s           m_migemo_is_enable_s;
+	Proc_migemo_open_s                p_migemo_open_s;
+	Proc_migemo_close_s               p_migemo_close_s;
+	Proc_migemo_query_s               p_migemo_query_s;
+	Proc_migemo_release_s             p_migemo_release_s;
+	Proc_migemo_set_operator_s        p_migemo_set_operator_s;
+	Proc_migemo_get_operator_s        p_migemo_get_operator_s;
+	Proc_migemo_setproc_char2int_s    p_migemo_setproc_char2int_s;
+	Proc_migemo_setproc_int2char_s    p_migemo_setproc_int2char_s;
+	Proc_migemo_load_s                p_migemo_load_s;
+	Proc_migemo_is_enable_s           p_migemo_is_enable_s;
 
-	migemo* m_migemo;
-	bool	m_bStdcall;
-	bool	m_bUtf8;
+	migemo* migemo;
+	bool	bStdcall;
+	bool	bUtf8;
 	
 	LPCTSTR GetDllNameImp(int nIndex);
 	bool InitDllImp();

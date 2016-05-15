@@ -31,7 +31,7 @@ AutoScrollWnd::AutoScrollWnd()
 	:
 	Wnd(_T("::AutoScrollWnd"))
 {
-	m_hCenterImg = NULL;
+	hCenterImg = NULL;
 	return;
 }
 
@@ -52,7 +52,7 @@ HWND AutoScrollWnd::Create(
 {
 	LPCTSTR pszClassName;
 
-	m_pView = view;
+	pView = view;
 	int idb, idc;
 	if (bVertical) {
 		if (bHorizontal) {
@@ -69,7 +69,7 @@ HWND AutoScrollWnd::Create(
 		idc = IDC_CURSOR_AUTOSCROLL_HORIZONTAL;
 		pszClassName = _T("SakuraAutoScrollHWnd");
 	}
-	m_hCenterImg = (HBITMAP)::LoadImage(hInstance, MAKEINTRESOURCE(idb), IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION);
+	hCenterImg = (HBITMAP)::LoadImage(hInstance, MAKEINTRESOURCE(idb), IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION);
 	HCURSOR hCursor = ::LoadCursor(GetModuleHandle(NULL), MAKEINTRESOURCE(idc));
 
 	// ウィンドウクラス作成
@@ -103,32 +103,32 @@ void AutoScrollWnd::Close()
 {
 	this->DestroyWindow();
 
-	if (m_hCenterImg) {
-		::DeleteObject(m_hCenterImg);
-		m_hCenterImg = NULL;
+	if (hCenterImg) {
+		::DeleteObject(hCenterImg);
+		hCenterImg = NULL;
 	}
 }
 
 LRESULT AutoScrollWnd::OnLButtonDown(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
 {
-	if (m_pView->m_nAutoScrollMode) {
-		m_pView->AutoScrollExit();
+	if (pView->nAutoScrollMode) {
+		pView->AutoScrollExit();
 	}
 	return 0;
 }
 
 LRESULT AutoScrollWnd::OnRButtonDown(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
 {
-	if (m_pView->m_nAutoScrollMode) {
-		m_pView->AutoScrollExit();
+	if (pView->nAutoScrollMode) {
+		pView->AutoScrollExit();
 	}
 	return 0;
 }
 
 LRESULT AutoScrollWnd::OnMButtonDown(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
 {
-	if (m_pView->m_nAutoScrollMode) {
-		m_pView->AutoScrollExit();
+	if (pView->nAutoScrollMode) {
+		pView->AutoScrollExit();
 	}
 	return 0;
 }
@@ -139,7 +139,7 @@ LRESULT AutoScrollWnd::OnPaint(HWND hwnd, UINT, WPARAM, LPARAM)
 	PAINTSTRUCT ps;
 	HDC hdc = ::BeginPaint(hwnd, &ps);
 	HDC hdcBmp = ::CreateCompatibleDC(hdc);
-	HBITMAP hBbmpOld = (HBITMAP)::SelectObject(hdcBmp, m_hCenterImg);
+	HBITMAP hBbmpOld = (HBITMAP)::SelectObject(hdcBmp, hCenterImg);
 	::BitBlt(hdc, 0, 0, 32, 32, hdcBmp, 0, 0, SRCCOPY);
 	::SelectObject(hdcBmp, hBbmpOld);
 	::DeleteObject(hdcBmp);

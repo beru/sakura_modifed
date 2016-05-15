@@ -47,7 +47,7 @@ private:
 	std::map<wstring, wstring>* SelectCookieType(LPCWSTR scope) const;
 	bool ValidateCookieName(LPCWSTR cookieName) const;
 
-	std::map<wstring, wstring> m_cookieWindow;
-	std::map<wstring, wstring> m_cookieDocument;
+	std::map<wstring, wstring> cookieWindow;
+	std::map<wstring, wstring> cookieDocument;
 };
 

@@ -132,7 +132,7 @@ INT_PTR PropTab::DispatchEvent(
 				return TRUE;
 //@@@ 2002.01.03 YAZAKI 最後に表示していたシートを正しく覚えていないバグ修正
 			case PSN_SETACTIVE:
-				m_nPageNum = ID_PROPCOM_PAGENUM_TAB;
+				nPageNum = ID_PROPCOM_PAGENUM_TAB;
 				return TRUE;
 			}
 //			break;	// default
@@ -150,7 +150,7 @@ INT_PTR PropTab::DispatchEvent(
 					EnableTabPropInput(hwndDlg);
 					break;
 				case IDC_BUTTON_TABFONT:
-					auto& csTabBar = m_common.tabBar;
+					auto& csTabBar = common.tabBar;
 					LOGFONT   lf = csTabBar.lf;
 					INT nPointSize = csTabBar.nPointSize;
 
@@ -159,10 +159,10 @@ INT_PTR PropTab::DispatchEvent(
 						csTabBar.nPointSize = nPointSize;
 						// タブ フォント表示	// 2013/4/24 Uchi
 						HFONT hFont = SetFontLabel(hwndDlg, IDC_STATIC_TABFONT, csTabBar.lf, csTabBar.nPointSize);
-						if (m_hTabFont) {
-							::DeleteObject(m_hTabFont);
+						if (hTabFont) {
+							::DeleteObject(hTabFont);
 						}
-						m_hTabFont = hFont;
+						hTabFont = hFont;
 					}
 					break;
 				}
@@ -189,9 +189,9 @@ INT_PTR PropTab::DispatchEvent(
 
 	case WM_DESTROY:
 		// タブ フォント破棄	// 2013/4/24 Uchi
-		if (m_hTabFont) {
-			::DeleteObject(m_hTabFont);
-			m_hTabFont = NULL;
+		if (hTabFont) {
+			::DeleteObject(hTabFont);
+			hTabFont = NULL;
 		}
 		return TRUE;
 	}
@@ -202,7 +202,7 @@ INT_PTR PropTab::DispatchEvent(
 // ダイアログデータの設定
 void PropTab::SetData(HWND hwndDlg)
 {
-	auto& csTabBar = m_common.tabBar;
+	auto& csTabBar = common.tabBar;
 
 	//	Feb. 11, 2007 genta「ウィンドウ」シートより移動
 	CheckDlgButtonBool(hwndDlg, IDC_CHECK_DispTabWnd, csTabBar.bDispTabWnd);	//@@@ 2003.05.31 MIK
@@ -219,7 +219,7 @@ void PropTab::SetData(HWND hwndDlg)
 	int nSelPos = 0;
 	for (int i=0; i<_countof(DispTabCloseArr); ++i) {
 		Combo_InsertString(hwndCombo, i, LS(DispTabCloseArr[i].nNameId));
-		if (DispTabCloseArr[i].nMethod == m_common.tabBar.dispTabClose) {
+		if (DispTabCloseArr[i].nMethod == common.tabBar.dispTabClose) {
 			nSelPos = i;
 		}
 	}
@@ -230,7 +230,7 @@ void PropTab::SetData(HWND hwndDlg)
 	nSelPos = 0;
 	for (int i=0; i<_countof(TabPosArr); ++i) {
 		Combo_InsertString(hwndCombo, i, LS(TabPosArr[i].nNameId));
-		if (TabPosArr[i].nMethod == m_common.tabBar.eTabPosition) {
+		if (TabPosArr[i].nMethod == common.tabBar.eTabPosition) {
 			nSelPos = i;
 		}
 	}
@@ -243,7 +243,7 @@ void PropTab::SetData(HWND hwndDlg)
 	CheckDlgButtonBool(hwndDlg, IDC_CHECK_OpenNewWin, csTabBar.bNewWindow); // 2009.06.17
 
 	// タブ フォント	// 2013/4/24 Uchi
-	m_hTabFont = SetFontLabel(hwndDlg, IDC_STATIC_TABFONT, csTabBar.lf, csTabBar.nPointSize);
+	hTabFont = SetFontLabel(hwndDlg, IDC_STATIC_TABFONT, csTabBar.lf, csTabBar.nPointSize);
 
 	EnableTabPropInput(hwndDlg);
 }
@@ -251,7 +251,7 @@ void PropTab::SetData(HWND hwndDlg)
 // ダイアログデータの取得
 int PropTab::GetData(HWND hwndDlg)
 {
-	auto& csTabBar = m_common.tabBar;
+	auto& csTabBar = common.tabBar;
 	//	Feb. 11, 2007 genta「ウィンドウ」シートより移動
 	csTabBar.bDispTabWnd = DlgButton_IsChecked(hwndDlg, IDC_CHECK_DispTabWnd);
 	csTabBar.bSameTabWidth = DlgButton_IsChecked(hwndDlg, IDC_CHECK_SameTabWidth);		// 2006.01.28 ryoji

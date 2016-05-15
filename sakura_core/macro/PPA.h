@@ -62,16 +62,16 @@ public:
 	PPA();
 	virtual ~PPA();
 
-	const char* GetVersion() {		// DLLのバージョン情報を取得。m_szMsgを壊す
+	const char* GetVersion() {		// DLLのバージョン情報を取得。szMsgを壊す
 		if (IsAvailable()) {
-			auto_sprintf(m_szMsg, "PPA.DLL Version %d.%d", m_fnGetVersion() / 100, m_fnGetVersion() % 100);
-			return m_szMsg;
+			auto_sprintf(szMsg, "PPA.DLL Version %d.%d", fnGetVersion() / 100, fnGetVersion() % 100);
+			return szMsg;
 		}
 		return "";
 	}
 
 	// PPAメッセージを取得する
-	const char* GetLastMessage(void) const { return m_szMsg; }
+	const char* GetLastMessage(void) const { return szMsg; }
 
 	// Jun. 16, 2003 genta 引数追加
 	static char* GetDeclarations(const MacroFuncInfo&, char* buf);
@@ -129,46 +129,46 @@ private:
 	typedef void (WINAPI *PPA_SetFinishProc)(void* p);	// 2003.06.01 Moca
 	#endif // PPADLL_VER >= 123
 
-	PPA_Execute    m_fnExecute;
-	PPA_SetSource  m_fnSetSource;
-	PPA_SetDeclare m_fnSetDeclare;
-	PPA_SetDefProc m_fnSetDefProc;
-	PPA_SetDefine  m_fnSetDefine;
-	PPA_AddIntVar  m_fnAddIntVar;
-	PPA_AddStrVar  m_fnAddStrVar;
-	PPA_SetIntFunc m_fnSetIntFunc;
-	PPA_SetStrFunc m_fnSetStrFunc;
-	PPA_SetProc    m_fnSetProc;
-	PPA_SetErrProc m_fnSetErrProc;
-	PPA_Abort      m_fnAbort;
-	PPA_GetVersion m_fnGetVersion;
-	PPA_DeleteVar  m_fnDeleteVar;
-	PPA_GetArgInt  m_fnGetArgInt;
-	PPA_GetArgStr  m_fnGetArgStr;
-	PPA_GetArgBStr m_fnGetArgBStr;
-	PPA_SetStrObj  m_fnSetStrObj;
-	PPA_SetIntObj  m_fnSetIntObj;
-	PPA_AddIntObj  m_fnAddIntObj;
-	PPA_AddStrObj  m_fnAddStrObj;
-	PPA_GetIntVar  m_fnGetIntVar;
-	PPA_GetStrVar  m_fnGetStrVar;
-	PPA_GetBStrVar m_fnGetBStrVar;
-	PPA_SetIntVar  m_fnSetIntVar;
-	PPA_SetStrVar  m_fnSetStrVar;
+	PPA_Execute    fnExecute;
+	PPA_SetSource  fnSetSource;
+	PPA_SetDeclare fnSetDeclare;
+	PPA_SetDefProc fnSetDefProc;
+	PPA_SetDefine  fnSetDefine;
+	PPA_AddIntVar  fnAddIntVar;
+	PPA_AddStrVar  fnAddStrVar;
+	PPA_SetIntFunc fnSetIntFunc;
+	PPA_SetStrFunc fnSetStrFunc;
+	PPA_SetProc    fnSetProc;
+	PPA_SetErrProc fnSetErrProc;
+	PPA_Abort      fnAbort;
+	PPA_GetVersion fnGetVersion;
+	PPA_DeleteVar  fnDeleteVar;
+	PPA_GetArgInt  fnGetArgInt;
+	PPA_GetArgStr  fnGetArgStr;
+	PPA_GetArgBStr fnGetArgBStr;
+	PPA_SetStrObj  fnSetStrObj;
+	PPA_SetIntObj  fnSetIntObj;
+	PPA_AddIntObj  fnAddIntObj;
+	PPA_AddStrObj  fnAddStrObj;
+	PPA_GetIntVar  fnGetIntVar;
+	PPA_GetStrVar  fnGetStrVar;
+	PPA_GetBStrVar fnGetBStrVar;
+	PPA_SetIntVar  fnSetIntVar;
+	PPA_SetStrVar  fnSetStrVar;
 
 #if PPADLL_VER >= 120
-	PPA_AddRealVar  m_fnAddRealVar;
-	PPA_SetRealObj  m_fnSetRealObj;
-	PPA_AddRealObj  m_fnAddRealObj;
-	PPA_GetRealVar  m_fnGetRealVar;
-	PPA_SetRealVar  m_fnSetRealVar;
-	PPA_SetRealFunc m_fnSetRealFunc;
-	PPA_GetArgReal  m_fnGetArgReal;
+	PPA_AddRealVar  fnAddRealVar;
+	PPA_SetRealObj  fnSetRealObj;
+	PPA_AddRealObj  fnAddRealObj;
+	PPA_GetRealVar  fnGetRealVar;
+	PPA_SetRealVar  fnSetRealVar;
+	PPA_SetRealFunc fnSetRealFunc;
+	PPA_GetArgReal  fnGetArgReal;
 #endif
 
 #if PPADLL_VER >= 123
-	PPA_IsRunning m_fnIsRunning;
-	PPA_SetFinishProc m_fnSetFinishProc;	// 2003.06.01 Moca
+	PPA_IsRunning fnIsRunning;
+	PPA_SetFinishProc fnSetFinishProc;	// 2003.06.01 Moca
 #endif
 
 public:
@@ -176,78 +176,78 @@ public:
 	// 2007.07.22 genta : flags追加
 	bool Execute(class EditView& editView, int flags);
 	void SetSource(const char* ss)
-		{ m_fnSetSource(ss); }
+		{ fnSetSource(ss); }
 	void SetDeclare(const char* ss)
-		{ m_fnSetDeclare(ss); }
+		{ fnSetDeclare(ss); }
 	void SetDefProc(const char* ss)
-		{ m_fnSetDefProc(ss); }
+		{ fnSetDefProc(ss); }
 	void SetDefine(const char* ss)
-		{ m_fnSetDefine(ss); }
+		{ fnSetDefine(ss); }
 	void AddIntVar(const char* lpszDef, int nVal, int nCnst)
-		{ m_fnAddIntVar(lpszDef, nVal, nCnst); }
+		{ fnAddIntVar(lpszDef, nVal, nCnst); }
 	void AddStrVar(const char* lpszDef, const char* lpszVal, int nCnst)
-		{ m_fnAddStrVar(lpszDef, lpszVal, nCnst); }
+		{ fnAddStrVar(lpszDef, lpszVal, nCnst); }
 	void SetIntFunc(void* proc)
-		{ m_fnSetIntFunc(proc); }
+		{ fnSetIntFunc(proc); }
 	void SetStrFunc(void* proc)
-		{ m_fnSetStrFunc(proc); }
+		{ fnSetStrFunc(proc); }
 	void SetProc(void* proc)
-		{ m_fnSetProc(proc); }
+		{ fnSetProc(proc); }
 	void SetErrProc(void* proc)
-		{ m_fnSetErrProc(proc); }
+		{ fnSetErrProc(proc); }
 	void Abort()
-		{ m_fnAbort(); }
+		{ fnAbort(); }
 //	int  GetVersion()
-//		{ return m_fnGetVersion(); }
+//		{ return fnGetVersion(); }
 	void DeleteVar(const char* ss)
-		{ m_fnDeleteVar(ss); }
+		{ fnDeleteVar(ss); }
 	int  GetArgInt(int index)
-		{ return m_fnGetArgInt(index); }
+		{ return fnGetArgInt(index); }
 	char* GetArgStr(int index)
-		{ return m_fnGetArgStr(index); }
+		{ return fnGetArgStr(index); }
 	char* GetArgBStr(int index)
-		{ return m_fnGetArgBStr(index); }
+		{ return fnGetArgBStr(index); }
 	void SetStrObj(void* proc)
-		{ m_fnSetStrObj(proc); }
+		{ fnSetStrObj(proc); }
 	void SetIntObj(void* proc)
-		{ m_fnSetIntObj(proc); }
+		{ fnSetIntObj(proc); }
 	void AddIntObj(const char* ss, int def, BOOL read, int index)
-		{ m_fnAddIntObj(ss, def, read, index); }
+		{ fnAddIntObj(ss, def, read, index); }
 	void AddStrObj(const char* ss, const char* def, BOOL read, int index)
-		{ m_fnAddStrObj(ss, def, read, index); }
+		{ fnAddStrObj(ss, def, read, index); }
 	int  GetIntVar(const char* ss)
-		{ return m_fnGetIntVar(ss); }
+		{ return fnGetIntVar(ss); }
 	char* GetStrVar(const char* ss)
-		{ return m_fnGetStrVar(ss); }
+		{ return fnGetStrVar(ss); }
 	char* GetBStrVar(const char* ss)
-		{ return m_fnGetBStrVar(ss); }
+		{ return fnGetBStrVar(ss); }
 	BOOL SetIntVar(const char* ss, int val)
-		{ return m_fnSetIntVar(ss, val); }
+		{ return fnSetIntVar(ss, val); }
 	BOOL SetStrVar(const char* ss, const char* val)
-		{ return m_fnSetStrVar(ss, val); }
+		{ return fnSetStrVar(ss, val); }
 
 #if PPADLL_VER >= 120
 	void AddRealVar(const char* ss, double val, BOOL cnst)
-		{ m_fnAddRealVar(ss, val, cnst); }
+		{ fnAddRealVar(ss, val, cnst); }
 	void SetRealObj(void* proc)
-		{ m_fnSetRealObj(proc); }
+		{ fnSetRealObj(proc); }
 	void AddRealObj(const char* ss, double val, BOOL read, LONG index)
-		{ m_fnAddRealObj(ss, val, read, index); }
+		{ fnAddRealObj(ss, val, read, index); }
 	double GetRealVar(const char* ss)
-		{ return m_fnGetRealVar(ss); }
+		{ return fnGetRealVar(ss); }
 	BOOL SetRealVar(const char* ss, double val)
-		{ return m_fnSetRealVar(ss, val); }
+		{ return fnSetRealVar(ss, val); }
 	void SetRealFunc(void* proc)
-		{ m_fnSetRealFunc(proc); }
+		{ fnSetRealFunc(proc); }
 	DWORD GetArgReal(int index)
-		{ return m_fnGetArgReal(index); }
+		{ return fnGetArgReal(index); }
 #endif
 
 #if PPADLL_VER >= 123
 	BOOL IsRunning()
-		{ return (BOOL)m_fnIsRunning(); }
+		{ return (BOOL)fnIsRunning(); }
 	void SetFinishProc(void* proc)	// 2003.06.01 Moca
-		{ m_fnSetFinishProc(proc); }
+		{ fnSetFinishProc(proc); }
 #endif
 
 private:
@@ -264,32 +264,31 @@ private:
 	static void __stdcall stdFinishProc();	// 2003.06.01 Moca
 
 	// メンバ変数
-	char m_szMsg[80];		// PPAからのメッセージを保持する
+	char szMsg[80];		// PPAからのメッセージを保持する
 
 	// 2007.07.26 genta : PPAのネストを許容するために，別データ構造とする．
 	
 	struct PpaExecInfo {
-		NativeA		m_memRet;		// コールバックからDLLに渡す文字列を保持
-		EditView*		m_pEditView;	// 2003.06.01 Moca
-		DllSharedData*	m_pShareData;	// 2003.06.01 Moca
-		bool			m_bError;		// エラーが2回表示されるのを防ぐ	2003.06.01 Moca
-		NativeA		m_memDebug;	// デバッグ用変数UserErrorMes 2003.06.01 Moca
+		NativeA			memRet;		// コールバックからDLLに渡す文字列を保持
+		EditView*		pEditView;	// 2003.06.01 Moca
+		DllSharedData*	pShareData;	// 2003.06.01 Moca
+		bool			bError;		// エラーが2回表示されるのを防ぐ	2003.06.01 Moca
+		NativeA			memDebug;	// デバッグ用変数UserErrorMes 2003.06.01 Moca
 		/** オプションフラグ
 		
 			EditView::HandleCommand()にコマンドと一緒に渡すことで
 			コマンドの素性を教える．
 		*/
-		int				m_commandflags;	// 
+		int commandflags;	// 
 	};
 	// 2007.07.26 genta : 現在実行中のインスタンス
-	static PpaExecInfo* m_CurInstance;
+	static PpaExecInfo* curInstance;
 	// PPAの多重起動禁止 2008.10.22 syat
-	static bool				m_bIsRunning;	// PPAが同時実行されるのを防ぐ
-
+	static bool bIsRunning;	// PPAが同時実行されるのを防ぐ
 
 /*	関数名はCMacroが持つ。
 	static struct MacroFuncInfo	S_Table[];
-	static int					m_nFuncNum;	// SAKURAエディタ用関数の数
+	static int nFuncNum;	// SAKURAエディタ用関数の数
 */
 };
 

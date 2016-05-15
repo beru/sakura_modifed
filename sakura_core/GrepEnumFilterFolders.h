@@ -36,7 +36,7 @@ class GrepEnumFilterFolders : public GrepEnumFolders {
 private:
 
 public:
-	GrepEnumFolders m_grepEnumExceptFolders;
+	GrepEnumFolders grepEnumExceptFolders;
 
 public:
 	GrepEnumFilterFolders() {
@@ -49,7 +49,7 @@ public:
 	virtual
 	bool IsValid(WIN32_FIND_DATA& w32fd, LPCTSTR pFile = NULL) override {
 		if (GrepEnumFolders::IsValid(w32fd, pFile)) {
-			if (m_grepEnumExceptFolders.IsValid(w32fd, pFile)) {
+			if (grepEnumExceptFolders.IsValid(w32fd, pFile)) {
 				return true;
 			}
 		}
@@ -63,7 +63,7 @@ public:
 		GrepEnumFolders& except
 		)
 	{
-		m_grepEnumExceptFolders.Enumerates( lpBaseFolder, grepEnumKeys.vecExceptFolderKeys, option, NULL );
+		grepEnumExceptFolders.Enumerates( lpBaseFolder, grepEnumKeys.vecExceptFolderKeys, option, NULL );
 		return GrepEnumFolders::Enumerates( lpBaseFolder, grepEnumKeys.vecSearchFolderKeys, option, &except );
 	}
 };

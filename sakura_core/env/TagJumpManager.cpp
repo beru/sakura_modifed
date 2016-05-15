@@ -45,15 +45,15 @@
 */
 void TagJumpManager::PushTagJump(const TagJump* pTagJump)
 {
-	int i = m_pShareData->tagJump.tagJumpTop + 1;
+	int i = pShareData->tagJump.tagJumpTop + 1;
 	if (MAX_TAGJUMPNUM <= i) {
 		i = 0;
 	}
-	if (m_pShareData->tagJump.tagJumpNum < MAX_TAGJUMPNUM) {
-		m_pShareData->tagJump.tagJumpNum++;
+	if (pShareData->tagJump.tagJumpNum < MAX_TAGJUMPNUM) {
+		pShareData->tagJump.tagJumpNum++;
 	}
-	m_pShareData->tagJump.tagJumps[i] = *pTagJump;
-	m_pShareData->tagJump.tagJumpTop = i;
+	pShareData->tagJump.tagJumps[i] = *pTagJump;
+	pShareData->tagJump.tagJumpTop = i;
 }
 
 
@@ -71,12 +71,12 @@ void TagJumpManager::PushTagJump(const TagJump* pTagJump)
 */
 bool TagJumpManager::PopTagJump(TagJump *pTagJump)
 {
-	if (0 < m_pShareData->tagJump.tagJumpNum) {
-		*pTagJump = m_pShareData->tagJump.tagJumps[m_pShareData->tagJump.tagJumpTop--];
-		if (m_pShareData->tagJump.tagJumpTop < 0) {
-			m_pShareData->tagJump.tagJumpTop = MAX_TAGJUMPNUM - 1;
+	if (0 < pShareData->tagJump.tagJumpNum) {
+		*pTagJump = pShareData->tagJump.tagJumps[pShareData->tagJump.tagJumpTop--];
+		if (pShareData->tagJump.tagJumpTop < 0) {
+			pShareData->tagJump.tagJumpTop = MAX_TAGJUMPNUM - 1;
 		}
-		m_pShareData->tagJump.tagJumpNum--;
+		pShareData->tagJump.tagJumpNum--;
 		return true;
 	}
 	return false;

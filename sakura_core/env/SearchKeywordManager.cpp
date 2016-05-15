@@ -32,7 +32,7 @@
 #include "recent/Recent.h"
 
 
-/*!	m_aSearchKeys‚ÉpszSearchKey‚ğ’Ç‰Á‚·‚éB
+/*!	aSearchKeys‚ÉpszSearchKey‚ğ’Ç‰Á‚·‚éB
 	YAZAKI
 */
 void SearchKeywordManager::AddToSearchKeys(const wchar_t* pszSearchKey)
@@ -43,7 +43,7 @@ void SearchKeywordManager::AddToSearchKeys(const wchar_t* pszSearchKey)
 	GetDllShareData().common.search.nSearchKeySequence++;
 }
 
-/*!	m_aReplaceKeys‚ÉpszReplaceKey‚ğ’Ç‰Á‚·‚é
+/*!	aReplaceKeys‚ÉpszReplaceKey‚ğ’Ç‰Á‚·‚é
 	YAZAKI
 */
 void SearchKeywordManager::AddToReplaceKeys(const wchar_t* pszReplaceKey)
@@ -56,7 +56,7 @@ void SearchKeywordManager::AddToReplaceKeys(const wchar_t* pszReplaceKey)
 	return;
 }
 
-/*!	m_aGrepFiles‚ÉpszGrepFile‚ğ’Ç‰Á‚·‚é
+/*!	aGrepFiles‚ÉpszGrepFile‚ğ’Ç‰Á‚·‚é
 	YAZAKI
 */
 void SearchKeywordManager::AddToGrepFiles(const TCHAR* pszGrepFile)

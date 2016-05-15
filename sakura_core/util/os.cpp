@@ -336,19 +336,19 @@ BOOL GetSystemResources(
 
 CurrentDirectoryBackupPoint::CurrentDirectoryBackupPoint()
 {
-	int n = ::GetCurrentDirectory(_countof(m_szCurDir), m_szCurDir);
-	if (n>0 && n<_countof(m_szCurDir)) {
+	int n = ::GetCurrentDirectory(_countof(szCurDir), szCurDir);
+	if (n>0 && n<_countof(szCurDir)) {
 		// ok
 	}else {
 		// ng
-		m_szCurDir[0] = _T('\0');
+		szCurDir[0] = _T('\0');
 	}
 }
 
 CurrentDirectoryBackupPoint::~CurrentDirectoryBackupPoint()
 {
-	if (m_szCurDir[0]) {
-		::SetCurrentDirectory(m_szCurDir);
+	if (szCurDir[0]) {
+		::SetCurrentDirectory(szCurDir);
 	}
 }
 

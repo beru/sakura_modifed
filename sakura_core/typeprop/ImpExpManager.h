@@ -46,22 +46,22 @@ public:
 	void SetBaseName(const wstring&);
 	// フルパス名を取得
 	inline wstring GetFullPath() {
-		return to_wchar(GetDllShareData().history.m_szIMPORTFOLDER) + m_sOriginName;
+		return to_wchar(GetDllShareData().history.szIMPORTFOLDER) + sOriginName;
 	}
 	// フルパス名を取得
 	inline wstring MakeFullPath(wstring sFileName) {
-		return to_wchar(GetDllShareData().history.m_szIMPORTFOLDER) + sFileName;
+		return to_wchar(GetDllShareData().history.szIMPORTFOLDER) + sFileName;
 	}
 	// ファイル名を取得
-	inline wstring GetFileName()	{ return m_sOriginName; }
+	inline wstring GetFileName()	{ return sOriginName; }
 
 protected:
 	// Import Folderの設定
 	inline void SetImportFolder(const TCHAR* szPath) {
 		// ファイルのフルパスをフォルダとファイル名に分割
 		// [c:\work\test\aaa.txt] → [c:\work\test] + [aaa.txt]
-		::SplitPath_FolderAndFile(szPath, GetDllShareData().history.m_szIMPORTFOLDER, NULL);
-		_tcscat(GetDllShareData().history.m_szIMPORTFOLDER, _T("\\"));
+		::SplitPath_FolderAndFile(szPath, GetDllShareData().history.szIMPORTFOLDER, NULL);
+		_tcscat(GetDllShareData().history.szIMPORTFOLDER, _T("\\"));
 	}
 
 	// デフォルト拡張子の取得(「*.txt」形式)
@@ -70,8 +70,8 @@ protected:
 	virtual const wchar_t* GetOriginExtension();
 
 protected:
-	wstring		m_sBase;
-	wstring		m_sOriginName;
+	wstring		sBase;
+	wstring		sOriginName;
 };
 
 
@@ -82,12 +82,12 @@ class ImpExpType : public ImpExpManager {
 public:
 	// Constructor
 	ImpExpType(int nIdx, TypeConfig& types, HWND hwndList)
-		: m_nIdx(nIdx)
-		, m_types(types)
-		, m_hwndList(hwndList)
+		: nIdx(nIdx)
+		, types(types)
+		, hwndList(hwndList)
 	{
 		// 共有データ構造体のアドレスを返す
-		m_pShareData = &GetDllShareData();
+		pShareData = &GetDllShareData();
 	}
 
 public:
@@ -99,20 +99,20 @@ public:
 	// デフォルト拡張子の取得
 	const TCHAR* GetDefaultExtension()	{ return _T("*.ini"); }
 	const wchar_t* GetOriginExtension()	{ return L"ini"; }
-	bool IsAddType() { return m_bAddType; }
+	bool IsAddType() { return bAddType; }
 
 private:
 	// インターフェース用
-	int 			m_nIdx;
-	TypeConfig&		m_types;
-	HWND			m_hwndList;
+	int 			nIdx;
+	TypeConfig&		types;
+	HWND			hwndList;
 
 	// 内部使用
-	DllSharedData*	m_pShareData;
-	int				m_nColorType;
-	wstring 		m_sColorFile;
-	bool			m_bAddType;
-	DataProfile		m_profile;
+	DllSharedData*	pShareData;
+	int				nColorType;
+	wstring 		sColorFile;
+	bool			bAddType;
+	DataProfile		profile;
 };
 
 
@@ -124,7 +124,7 @@ public:
 	// Constructor
 	ImpExpColors(ColorInfo * psColorInfoArr)
 		:
-		m_colorInfoArr(psColorInfoArr)
+		colorInfoArr(psColorInfoArr)
 	{
 	}
 
@@ -138,7 +138,7 @@ public:
 	const wchar_t* GetOriginExtension()	{ return L"col"; }
 
 private:
-	ColorInfo*		m_colorInfoArr;
+	ColorInfo*		colorInfoArr;
 };
 
 
@@ -150,7 +150,7 @@ public:
 	// Constructor
 	ImpExpRegex(TypeConfig& types)
 		:
-		m_types(types)
+		types(types)
 	{
 	}
 
@@ -164,7 +164,7 @@ public:
 	const wchar_t* GetOriginExtension()	{ return L"rkw"; }
 
 private:
-	TypeConfig&	m_types;
+	TypeConfig&	types;
 };
 
 
@@ -176,7 +176,7 @@ public:
 	// Constructor
 	ImpExpKeyHelp(TypeConfig& types)
 		:
-		m_types(types)
+		types(types)
 	{
 	}
 
@@ -190,7 +190,7 @@ public:
 	const wchar_t* GetOriginExtension()	{ return L"txt"; }
 
 private:
-	TypeConfig&	m_types;
+	TypeConfig&	types;
 };
 
 
@@ -202,7 +202,7 @@ public:
 	// Constructor
 	ImpExpKeybind(CommonSetting& common)
 		:
-		m_common(common)
+		common(common)
 	{
 	}
 
@@ -216,7 +216,7 @@ public:
 	const wchar_t* GetOriginExtension()	{ return L"key"; }
 
 private:
-	CommonSetting& m_common;
+	CommonSetting& common;
 };
 
 
@@ -228,7 +228,7 @@ public:
 	// Constructor
 	ImpExpCustMenu(CommonSetting& common)
 		:
-		m_common(common)
+		common(common)
 	{
 	}
 
@@ -242,7 +242,7 @@ public:
 	const wchar_t* GetOriginExtension()	{ return L"mnu"; }
 
 private:
-	CommonSetting& m_common;
+	CommonSetting& common;
 };
 
 
@@ -254,9 +254,9 @@ public:
 	// Constructor
 	ImpExpKeyword(CommonSetting& common, int nKeywordSetIdx, bool& bCase)
 		:
-		m_common(common),
-		m_nIdx(nKeywordSetIdx),
-		m_bCase(bCase)
+		common(common),
+		nIdx(nKeywordSetIdx),
+		bCase(bCase)
 	{
 	}
 
@@ -270,9 +270,9 @@ public:
 	const wchar_t* GetOriginExtension()	{ return L"kwd"; }
 
 private:
-	CommonSetting&	m_common;
-	int 			m_nIdx;
-	bool&			m_bCase;
+	CommonSetting&	common;
+	int 			nIdx;
+	bool&			bCase;
 };
 
 
@@ -284,7 +284,7 @@ public:
 	// Constructor
 	ImpExpMainMenu(CommonSetting& common)
 		:
-		m_common(common)
+		common(common)
 	{
 	}
 
@@ -298,7 +298,7 @@ public:
 	const wchar_t* GetOriginExtension()	{ return L"ini"; }
 
 private:
-	CommonSetting& m_common;
+	CommonSetting& common;
 };
 
 
@@ -311,7 +311,7 @@ public:
 	// Constructor
 	ImpExpFileTree(std::vector<FileTreeItem>& items)
 		:
-		m_fileTreeItems(items)
+		fileTreeItems(items)
 	{
 	}
 
@@ -326,6 +326,6 @@ public:
 	const wchar_t* GetOriginExtension()	{ return L"ini"; }
 
 private:
-	std::vector<FileTreeItem>&	m_fileTreeItems;
+	std::vector<FileTreeItem>&	fileTreeItems;
 };
 

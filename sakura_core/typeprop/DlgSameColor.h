@@ -57,11 +57,11 @@ protected:
 	static LRESULT CALLBACK ColorStatic_SubclassProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);	// サブクラス化された指定色スタティックのウィンドウプロシージャ
 	static LRESULT CALLBACK ColorList_SubclassProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);		// サブクラス化された色選択リストのウィンドウプロシージャ
 
-	WNDPROC m_wpColorStaticProc;	// サブクラス化以前の指定色スタティックのウィンドウプロシージャ
-	WNDPROC m_wpColorListProc;		// サブクラス化以前の色選択リストのウィンドウプロシージャ
+	WNDPROC wpColorStaticProc;	// サブクラス化以前の指定色スタティックのウィンドウプロシージャ
+	WNDPROC wpColorListProc;	// サブクラス化以前の色選択リストのウィンドウプロシージャ
 
 	WORD wID;				// タイプ別設定ダイアログ（親ダイアログ）で押されたボタンID
-	TypeConfig* pTypes;	// タイプ別設定データ
+	TypeConfig* pTypes;		// タイプ別設定データ
 	COLORREF cr;			// 指定色
 };
 

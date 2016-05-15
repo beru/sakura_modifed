@@ -186,7 +186,7 @@ public:
 	template <class T> //T=={bool, int, WORD, wchar_t, char, wstring, StringBufferA, StringBufferW, StaticString}
 	bool IOProfileData(const WCHAR* pszSectionName, const WCHAR* pszEntryKey, T& tEntryValue) {
 		// ì«Ç›çûÇ›
-		if (m_bRead) {
+		if (bRead) {
 			// ï∂éöóÒì«Ç›çûÇ›
 			wstring buf;
 			bool ret = GetProfileDataImp(pszSectionName, pszEntryKey, buf);

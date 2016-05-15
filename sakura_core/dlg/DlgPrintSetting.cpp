@@ -456,9 +456,9 @@ void DlgPrintSetting::SetData(void)
 	HWND hwndComboPaper = GetItemHwnd(IDC_COMBO_PAPER);
 	Combo_ResetContent(hwndComboPaper);
 	// 2006.08.14 Moca —p†–¼ˆê——‚Ìd•¡íœ
-	for (int i=0; i<Print::m_nPaperInfoArrNum; ++i) {
-		int nItemIdx = Combo_AddString(hwndComboPaper, Print::m_paperInfoArr[i].pszName);
-		Combo_SetItemData(hwndComboPaper, nItemIdx, Print::m_paperInfoArr[i].nId);
+	for (int i=0; i<Print::nPaperInfoArrNum; ++i) {
+		int nItemIdx = Combo_AddString(hwndComboPaper, Print::paperInfoArr[i].pszName);
+		Combo_SetItemData(hwndComboPaper, nItemIdx, Print::paperInfoArr[i].nId);
 	}
 
 	// ˆóüİ’è–¼ˆê——

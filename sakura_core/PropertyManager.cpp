@@ -34,12 +34,12 @@ void PropertyManager::Create(
 	MenuDrawer*		pMenuDrawer
 	)
 {
-	m_hwndOwner = hwndOwner;
-	m_pImageList = pImageList;
-	m_pMenuDrawer = pMenuDrawer;
+	this->hwndOwner = hwndOwner;
+	this->pImageList = pImageList;
+	this->pMenuDrawer = pMenuDrawer;
 
-	m_nPropComPageNum = -1;
-	m_nPropTypePageNum = -1;
+	nPropComPageNum = -1;
+	nPropTypePageNum = -1;
 }
 
 // 共通設定 プロパティシート
@@ -51,18 +51,18 @@ bool PropertyManager::OpenPropertySheet(
 {
 	bool bRet;
 	auto pcPropCommon = std::make_unique<PropCommon>();
-	pcPropCommon->Create(m_hwndOwner, m_pImageList, m_pMenuDrawer);
+	pcPropCommon->Create(hwndOwner, pImageList, pMenuDrawer);
 
 	// 2002.12.11 Moca この部分で行われていたデータのコピーをPropCommonに移動・関数化
 	// 共通設定の一時設定領域にSharaDataをコピーする
 	pcPropCommon->InitData();
 
 	if (nPageNum != -1) {
-		m_nPropComPageNum = nPageNum;
+		nPropComPageNum = nPageNum;
 	}
 
 	// プロパティシートの作成
-	if (pcPropCommon->DoPropertySheet(m_nPropComPageNum, bTrayProc)) {
+	if (pcPropCommon->DoPropertySheet(nPropComPageNum, bTrayProc)) {
 
 		// 2002.12.11 Moca この部分で行われていたデータのコピーをPropCommonに移動・関数化
 		// ShareData に 設定を適用・コピーする
@@ -72,7 +72,7 @@ bool PropertyManager::OpenPropertySheet(
 
 		// 印刷中にキーワードを上書きしないように
 		ShareDataLockCounter* pLock = nullptr;
-		ShareDataLockCounter::WaitLock(pcPropCommon->m_hwndParent, &pLock);
+		ShareDataLockCounter::WaitLock(pcPropCommon->hwndParent, &pLock);
 
 		pcPropCommon->ApplyData();
 		// note: 基本的にここで適用しないで、MYWM_CHANGESETTINGからたどって適用してください。
@@ -102,7 +102,7 @@ bool PropertyManager::OpenPropertySheet(
 	}
 
 	// 最後にアクセスしたシートを覚えておく
-	m_nPropComPageNum = pcPropCommon->GetPageNum();
+	nPropComPageNum = pcPropCommon->GetPageNum();
 
 	return bRet;
 }
@@ -117,7 +117,7 @@ bool PropertyManager::OpenPropertySheetTypes(
 {
 	bool bRet;
 	auto pcPropTypes = std::make_unique<PropTypes>();
-	pcPropTypes->Create(G_AppInstance(), m_hwndOwner);
+	pcPropTypes->Create(G_AppInstance(), hwndOwner);
 
 	auto pType = std::make_unique<TypeConfig>();
 	DocTypeManager().GetTypeConfig(nSettingType, *pType);
@@ -125,11 +125,11 @@ bool PropertyManager::OpenPropertySheetTypes(
 	// Mar. 31, 2003 genta メモリ削減のためポインタに変更しProperySheet内で取得するように
 
 	if (nPageNum != -1) {
-		m_nPropTypePageNum = nPageNum;
+		nPropTypePageNum = nPageNum;
 	}
 
 	// プロパティシートの作成
-	if (pcPropTypes->DoPropertySheet(m_nPropTypePageNum)) {
+	if (pcPropTypes->DoPropertySheet(nPropTypePageNum)) {
 		// 2013.06.10 Moca 印刷終了まで待機する
 		ShareDataLockCounter* pLock = nullptr;
 		ShareDataLockCounter::WaitLock(pcPropTypes->GetHwndParent(), &pLock);
@@ -139,7 +139,7 @@ bool PropertyManager::OpenPropertySheetTypes(
 		DocTypeManager().SetTypeConfig(nSettingType, *pType);
 
 		// アクセラレータテーブルの再作成
-		// ::SendMessage(GetDllShareData().m_handles.m_hwndTray, MYWM_CHANGESETTING,  (WPARAM)0, (LPARAM)PM_CHANGESETTING_ALL);
+		// ::SendMessage(GetDllShareData().handles.hwndTray, MYWM_CHANGESETTING,  (WPARAM)0, (LPARAM)PM_CHANGESETTING_ALL);
 
 		// 設定変更を反映させる
 		// 全編集ウィンドウへメッセージをポストする
@@ -165,7 +165,7 @@ bool PropertyManager::OpenPropertySheetTypes(
 	}
 
 	// 最後にアクセスしたシートを覚えておく
-	m_nPropTypePageNum = pcPropTypes->GetPageNum();
+	nPropTypePageNum = pcPropTypes->GetPageNum();
 
 	return bRet;
 }

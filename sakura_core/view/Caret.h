@@ -35,45 +35,45 @@ class CaretUnderLine {
 public:
 	CaretUnderLine(EditView& editView)
 		:
-		m_editView(editView)
+		editView(editView)
 	{
-		m_nLockCounter = 0;
-		m_nUnderLineLockCounter = 0;
+		nLockCounter = 0;
+		nUnderLineLockCounter = 0;
 	}
 	// 表示非表示を切り替えられないようにする
 	void Lock() {
-		++m_nLockCounter;
+		++nLockCounter;
 	}
 	// 表示非表示を切り替えられるようにする
 	void UnLock() {
-		--m_nLockCounter;
-		if (m_nLockCounter < 0) {
-			m_nLockCounter = 0;
+		--nLockCounter;
+		if (nLockCounter < 0) {
+			nLockCounter = 0;
 		}
 	}
 	void UnderLineLock() {
-		++m_nUnderLineLockCounter;
+		++nUnderLineLockCounter;
 	}
 	// 表示非表示を切り替えられるようにする
 	void UnderLineUnLock() {
-		--m_nUnderLineLockCounter;
-		if (m_nUnderLineLockCounter < 0) {
-			m_nUnderLineLockCounter = 0;
+		--nUnderLineLockCounter;
+		if (nUnderLineLockCounter < 0) {
+			nUnderLineLockCounter = 0;
 		}
 	}
 	void CaretUnderLineON(bool, bool);	// カーソル行アンダーラインのON
 	void CaretUnderLineOFF(bool, bool = true, bool = false);	// カーソル行アンダーラインのOFF
-	void SetUnderLineDoNotOFF(bool flag) { if (!m_nLockCounter) m_bUnderLineDoNotOFF = flag; }
-	void SetVertLineDoNotOFF(bool flag) { if (!m_nLockCounter) m_bVertLineDoNotOFF = flag; }
-	inline bool GetUnderLineDoNotOFF()const { return m_bUnderLineDoNotOFF; }
-	inline bool GetVertLineDoNotOFF()const { return m_bVertLineDoNotOFF; }
+	void SetUnderLineDoNotOFF(bool flag) { if (!nLockCounter) bUnderLineDoNotOFF = flag; }
+	void SetVertLineDoNotOFF(bool flag) { if (!nLockCounter) bVertLineDoNotOFF = flag; }
+	inline bool GetUnderLineDoNotOFF()const { return bUnderLineDoNotOFF; }
+	inline bool GetVertLineDoNotOFF()const { return bVertLineDoNotOFF; }
 private:
 	// ロックカウンタ。0のときは、ロックされていない。UnLockが呼ばれすぎても負にはならない
-	int m_nLockCounter;
-	int m_nUnderLineLockCounter;
-	EditView& m_editView;
-	bool m_bUnderLineDoNotOFF;
-	bool m_bVertLineDoNotOFF;
+	int nLockCounter;
+	int nUnderLineLockCounter;
+	EditView& editView;
+	bool bUnderLineDoNotOFF;
+	bool bVertLineDoNotOFF;
 };
 
 
@@ -93,7 +93,7 @@ public:
 	int GetHankakuHeight() const;
 
 	// ドキュメントのインスタンスを求める
-	const EditDoc& GetDocument() const { return m_editDoc; }
+	const EditDoc& GetDocument() const { return editDoc; }
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                         実装補助                            //
@@ -116,7 +116,7 @@ public:
 	// キャレットを破棄する（内部的にも破棄）
 	void DestroyCaret() {
 		::DestroyCaret();
-		m_sizeCaret.cx = 0;
+		sizeCaret.cx = 0;
 	}
 
 	// コピー
@@ -142,14 +142,14 @@ public:
 	LayoutInt MoveCursorProperly(LayoutPoint ptNewXY, bool, bool = false, LayoutPoint* = nullptr, int = _CARETMARGINRATE, int = 0);	// 行桁指定によるカーソル移動（座標調整付き）
 
 	//$ 設計思想的に微妙
-	void SetCaretLayoutPos(const LayoutPoint& pt) { m_ptCaretPos_Layout = pt; }	// キャレット位置(レイアウト)を設定
-	void SetCaretLogicPos(const LogicPoint pt) { m_ptCaretPos_Logic = pt; }		// キャレット位置(ロジック)を設定
+	void SetCaretLayoutPos(const LayoutPoint& pt) { ptCaretPos_Layout = pt; }	// キャレット位置(レイアウト)を設定
+	void SetCaretLogicPos(const LogicPoint pt) { ptCaretPos_Logic = pt; }		// キャレット位置(ロジック)を設定
 
 	
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                        サイズ変更                           //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-	void SetCaretSize(int nW, int nH) { m_sizeCaret.Set(nW, nH); }						// キャレットサイズを設定
+	void SetCaretSize(int nW, int nH) { sizeCaret.Set(nW, nH); }						// キャレットサイズを設定
 
 	
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -177,16 +177,16 @@ public:
 	//                           取得                              //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-	LayoutPoint GetCaretLayoutPos() const	{ return m_ptCaretPos_Layout; }	// キャレット位置(レイアウト)を取得
-	Size GetCaretSize() const				{ return m_sizeCaret; }			// キャレットサイズを取得。※正確には高さは違うらしい (この半分のこともある？)
-	bool ExistCaretFocus() const			{ return m_sizeCaret.cx > 0; }	// キャレットのフォーカスがあるか。※横幅値で判定してるらしい。
-	LogicPoint GetCaretLogicPos() const		{ return m_ptCaretPos_Logic; }	// キャレット位置(ロジック)を取得
+	LayoutPoint GetCaretLayoutPos() const	{ return ptCaretPos_Layout; }	// キャレット位置(レイアウト)を取得
+	Size GetCaretSize() const				{ return sizeCaret; }			// キャレットサイズを取得。※正確には高さは違うらしい (この半分のこともある？)
+	bool ExistCaretFocus() const			{ return sizeCaret.cx > 0; }	// キャレットのフォーカスがあるか。※横幅値で判定してるらしい。
+	LogicPoint GetCaretLogicPos() const		{ return ptCaretPos_Logic; }	// キャレット位置(ロジック)を取得
 
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                  低頻度インターフェース                     //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-	bool GetCaretShowFlag() const { return m_bCaretShowFlag; }
+	bool GetCaretShowFlag() const { return bCaretShowFlag; }
 
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -194,42 +194,42 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 private:
 	// 参照
-	EditView&		m_editView;
-	const EditDoc&	m_editDoc;
+	EditView&		editView;
+	const EditDoc&	editDoc;
 
 	// キャレット位置
-	LayoutPoint	m_ptCaretPos_Layout;	// ビュー左上端からのカーソル位置。レイアウト単位。
-	LogicPoint	m_ptCaretPos_Logic;		// カーソル位置。ロジック単位。データ内文字単位。
+	LayoutPoint	ptCaretPos_Layout;		// ビュー左上端からのカーソル位置。レイアウト単位。
+	LogicPoint	ptCaretPos_Logic;		// カーソル位置。ロジック単位。データ内文字単位。
 
 	// カーソル位置計算キャッシュ
-	LayoutInt m_nOffsetCache;
-	LayoutInt m_nLineNoCache;
-	LogicInt  m_nLogicOffsetCache;
-	LogicInt  m_nLineLogicNoCache;
-	LayoutInt m_nLineNo50Cache;
-	LayoutInt m_nOffset50Cache;
-	LogicInt  m_nLogicOffset50Cache;
-	int m_nLineLogicModCache;
+	LayoutInt nOffsetCache;
+	LayoutInt nLineNoCache;
+	LogicInt  nLogicOffsetCache;
+	LogicInt  nLineLogicNoCache;
+	LayoutInt nLineNo50Cache;
+	LayoutInt nOffset50Cache;
+	LogicInt  nLogicOffset50Cache;
+	int nLineLogicModCache;
 	
 public:
-	LayoutInt		m_nCaretPosX_Prev;	// 直前のX座標記憶用。レイアウト単位。このソースの下部に詳細説明があります。
+	LayoutInt	nCaretPosX_Prev;	// 直前のX座標記憶用。レイアウト単位。このソースの下部に詳細説明があります。
 
 	// キャレット見た目
 private:
-	Size			m_sizeCaret;		// キャレットのサイズ。ピクセル単位。
-	COLORREF		m_crCaret;			// キャレットの色				// 2006.12.07 ryoji
-	HBITMAP			m_hbmpCaret;		// キャレットのビットマップ		// 2006.11.28 ryoji
-	bool			m_bCaretShowFlag;
+	Size		sizeCaret;		// キャレットのサイズ。ピクセル単位。
+	COLORREF	crCaret;			// キャレットの色				// 2006.12.07 ryoji
+	HBITMAP		hbmpCaret;		// キャレットのビットマップ		// 2006.11.28 ryoji
+	bool		bCaretShowFlag;
 
 	// アンダーライン
 public:
-	mutable CaretUnderLine m_underLine;
+	mutable CaretUnderLine underLine;
 	
-	bool			m_bClearStatus;
+	bool	bClearStatus;
 };
 
 
-/*!	@brief Caret::m_nCaretPosX_Prev
+/*!	@brief Caret::nCaretPosX_Prev
 	直前のX座標記憶用
 
 	フリーカーソルモードでない場合にカーソルを上下に移動させた場合
@@ -240,7 +240,7 @@ public:
 	@par 使い方
 	読み出しはEditView::Cursor_UPDOWN()のみで行う．
 	カーソル上下移動以外でカーソル移動を行った場合には
-	直ちにm_nCaretPosXの値を設定する．そうしないと
+	直ちにnCaretPosXの値を設定する．そうしないと
 	その直後のカーソル上下移動で移動前のX座標に戻ってしまう．
 
 	ビュー左端からのカーソル桁位置(０開始)

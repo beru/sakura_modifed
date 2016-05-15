@@ -50,14 +50,14 @@
 
 
 // Compile時、行頭置換(len=0)の時にダミー文字列(１つに統一) by かろと
-const wchar_t Bregexp::m_tmpBuf[2] = L"\0";
+const wchar_t Bregexp::tmpBuf[2] = L"\0";
 
 
 Bregexp::Bregexp()
-	: m_pRegExp(nullptr)
-	, m_ePatType(PAT_NORMAL)	// Jul, 25, 2002 genta
+	: pRegExp(nullptr)
+	, ePatType(PAT_NORMAL)	// Jul, 25, 2002 genta
 {
-	m_szMsg[0] = L'\0';
+	szMsg[0] = L'\0';
 }
 
 Bregexp::~Bregexp()
@@ -87,19 +87,19 @@ int Bregexp::CheckPattern(const wchar_t* szPattern)
 	int nLen;									// 検索パターンの長さ
 	const wchar_t* szPatternEnd;				// 検索パターンの終端
 
-	m_ePatType = PAT_NORMAL;	//　ノーマルは確定
+	ePatType = PAT_NORMAL;	//　ノーマルは確定
 	nLen = wcslen(szPattern);
 	szPatternEnd = szPattern + nLen;
 	// パターン種別の設定
 	if (BMatch(TOP_MATCH, szPattern, szPatternEnd, &sReg, szMsg) > 0) {
 		// 行頭パターンにマッチした
-		m_ePatType |= PAT_TOP;
+		ePatType |= PAT_TOP;
 	}
 	BRegfree(sReg);
 	sReg = nullptr;
 	if (BMatch(TAB_MATCH, szPattern, szPatternEnd, &sReg, szMsg) > 0) {
 		// 行頭行末パターンにマッチした
-		m_ePatType |= PAT_TAB;
+		ePatType |= PAT_TAB;
 	}
 	BRegfree(sReg);
 	sReg = nullptr;
@@ -111,7 +111,7 @@ int Bregexp::CheckPattern(const wchar_t* szPattern)
 		sReg = nullptr;
 		if (BMatch(BOT_MATCH, szPattern, szPatternEnd, &sReg, szMsg) > 0) {
 			// 行末パターンにマッチした
-			m_ePatType |= PAT_BOTTOM;
+			ePatType |= PAT_BOTTOM;
 		}else {
 			// その他
 			// PAT_NORMAL
@@ -122,7 +122,7 @@ int Bregexp::CheckPattern(const wchar_t* szPattern)
 	
 	if (BMatch(LOOKAHEAD, szPattern, szPattern + nLen, &sReg, szMsg) > 0) {
 		// 先読みパターンにマッチした
-		m_ePatType |= PAT_LOOKAHEAD;
+		ePatType |= PAT_LOOKAHEAD;
 	}
 	BRegfree(sReg);
 	sReg = nullptr;
@@ -243,7 +243,7 @@ wchar_t* Bregexp::MakePattern(const wchar_t* szPattern, const wchar_t* szPattern
 
 	// szPatternの長さ
 	int nLen = CheckPattern(szPattern);
-	if ((m_ePatType & PAT_BOTTOM) != 0) {
+	if ((ePatType & PAT_BOTTOM) != 0) {
 		bool bJustDollar = false;			// 行末指定の$のみであるフラグ($の前に \r\nが指定されていない)
 		// 検索パターン
 		wchar_t* szNPattern = MakePatternSub(szPattern, NULL, NULL, nOption);
@@ -274,7 +274,7 @@ wchar_t* Bregexp::MakePattern(const wchar_t* szPattern, const wchar_t* szPattern
 		}
 		delete [] szNPattern;
 
-		if (bJustDollar || (m_ePatType & PAT_TAB) != 0) {
+		if (bJustDollar || (ePatType & PAT_TAB) != 0) {
 			// 行末指定の$ or 行頭行末指定 なので、検索文字列を置換
 			if (BSubst(BOT_SUBST, szPattern, szPattern + nLen, &sReg, szMsg) > 0) {
 				szPattern = sReg->outp;
@@ -444,19 +444,19 @@ bool Bregexp::Compile(const wchar_t* szPattern0, const wchar_t* szPattern1, int 
 		szNPattern = MakePatternAlternate(szPattern0, szPattern1, nOption);
 		pszNPattern = szNPattern;
 	}
-	m_szMsg[0] = L'\0';		// エラー解除
+	szMsg[0] = L'\0';		// エラー解除
 	if (!szPattern1) {
 		// 検索実行
-		BMatch(pszNPattern, m_tmpBuf, m_tmpBuf + 1, &m_pRegExp, m_szMsg);
+		BMatch(pszNPattern, tmpBuf, tmpBuf + 1, &pRegExp, szMsg);
 	}else {
 		// 置換実行
-		BSubst(pszNPattern, m_tmpBuf, m_tmpBuf + 1, &m_pRegExp, m_szMsg);
+		BSubst(pszNPattern, tmpBuf, tmpBuf + 1, &pRegExp, szMsg);
 	}
 	delete [] szNPattern;
 
 	// メッセージが空文字列でなければ何らかのエラー発生。
 	// サンプルソース参照
-	if (m_szMsg[0]) {
+	if (szMsg[0]) {
 		ReleaseCompileBuffer();
 		return false;
 	}
@@ -483,29 +483,29 @@ bool Bregexp::Match(const wchar_t* target, int len, int nStart)
 	int matched;		// 検索一致したか? >0:Match, 0:NoMatch, <0:Error
 
 	// DLLが利用可能でないとき、または構造体が未設定の時はエラー終了
-	if ((!IsAvailable() || !m_pRegExp)) {
+	if ((!IsAvailable() || !pRegExp)) {
 		return false;
 	}
 
-	m_szMsg[0] = '\0';		// エラー解除
+	szMsg[0] = '\0';		// エラー解除
 	// 拡張関数がない場合は、行の先頭("^")の検索時の特別処理 by かろと
 	if (!ExistBMatchEx()) {
 		/*
 		** 行頭(^)とマッチするのは、nStart=0の時だけなので、それ以外は false
 		*/
-		if ((m_ePatType & PAT_TOP) != 0 && nStart != 0) {
+		if ((ePatType & PAT_TOP) != 0 && nStart != 0) {
 			// nStart != 0でも、BMatch()にとっては行頭になるので、ここでfalseにする必要がある
 			return false;
 		}
 		// 検索文字列＝NULLを指定すると前回と同一の文字列と見なされる
-		matched = BMatch(NULL, target + nStart, target + len, &m_pRegExp, m_szMsg);
+		matched = BMatch(NULL, target + nStart, target + len, &pRegExp, szMsg);
 	}else {
 		// 検索文字列＝NULLを指定すると前回と同一の文字列と見なされる
-		matched = BMatchEx(NULL, target, target + nStart, target + len, &m_pRegExp, m_szMsg);
+		matched = BMatchEx(NULL, target, target + nStart, target + len, &pRegExp, szMsg);
 	}
-	m_szTarget = target;
+	szTarget = target;
 			
-	if (matched < 0 || m_szMsg[0]) {
+	if (matched < 0 || szMsg[0]) {
 		// BMatchエラー
 		// エラー処理をしていなかったので、nStart >= lenのような場合に、マッチ扱いになり
 		// 無限置換等の不具合になっていた 2003.05.03 by かろと
@@ -536,35 +536,35 @@ bool Bregexp::Match(const wchar_t* target, int len, int nStart)
 int Bregexp::Replace(const wchar_t* szTarget, int nLen, int nStart)
 {
 	// DLLが利用可能でないとき、または構造体が未設定の時はエラー終了
-	if (!IsAvailable() || !m_pRegExp) {
+	if (!IsAvailable() || !pRegExp) {
 		return false;
 	}
 
 	// From Here 2003.05.03 かろと
-	// nLenが０だと、BSubst()が置換に失敗してしまうので、代用データ(m_tmpBuf)を使う
+	// nLenが０だと、BSubst()が置換に失敗してしまうので、代用データ(tmpBuf)を使う
 	//
 	// 2007.01.19 ryoji 代用データ使用をコメントアウト
 	// 使用すると現状では結果に１バイト余分なゴミが付加される
 	// 置換に失敗するのはnLenが０に限らず nLen = nStart のとき（行頭マッチだけ対策しても．．．）
 	//
 	//if (nLen == 0) {
-	//	szTarget = m_tmpBuf;
+	//	szTarget = tmpBuf;
 	//	nLen = 1;
 	//}
 	// To Here 2003.05.03 かろと
 
 	int result;
-	m_szMsg[0] = '\0';		// エラー解除
+	szMsg[0] = '\0';		// エラー解除
 	if (!ExistBSubstEx()) {
-		result = BSubst(NULL, szTarget + nStart, szTarget + nLen, &m_pRegExp, m_szMsg);
+		result = BSubst(NULL, szTarget + nStart, szTarget + nLen, &pRegExp, szMsg);
 	}else {
-		result = BSubstEx(NULL, szTarget, szTarget + nStart, szTarget + nLen, &m_pRegExp, m_szMsg);
+		result = BSubstEx(NULL, szTarget, szTarget + nStart, szTarget + nLen, &pRegExp, szMsg);
 	}
-	m_szTarget = szTarget;
+	szTarget = szTarget;
 
 	// メッセージが空文字列でなければ何らかのエラー発生。
 	// サンプルソース参照
-	if (m_szMsg[0]) {
+	if (szMsg[0]) {
 		return 0;
 	}
 
@@ -579,7 +579,7 @@ int Bregexp::Replace(const wchar_t* szTarget, int nLen, int nStart)
 
 const TCHAR* Bregexp::GetLastMessage() const
 {
-	return to_tchar(m_szMsg);
+	return to_tchar(szMsg);
 }
 
 

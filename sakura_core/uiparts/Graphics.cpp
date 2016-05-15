@@ -10,20 +10,20 @@ class GDIStock {
 public:
 	GDIStock() {}
 	~GDIStock() {
-		while (!m_objects.empty()) {
-			::DeleteObject(m_objects.back());
-			m_objects.pop_back();
+		while (!objects.empty()) {
+			::DeleteObject(objects.back());
+			objects.pop_back();
 		}
 	}
 	bool Register(HGDIOBJ hObject) {
 		if (hObject) {
-			m_objects.push_back(hObject);
+			objects.push_back(hObject);
 			return true;
 		}
 		return false;
 	}
 protected:
-	std::vector<HGDIOBJ> m_objects;
+	std::vector<HGDIOBJ> objects;
 };
 
 static GDIStock s_gdiStock;	// 唯一の GDIStock オブジェクト

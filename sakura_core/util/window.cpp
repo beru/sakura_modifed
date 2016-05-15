@@ -261,40 +261,40 @@ int TextWidthCalc::GetTextHeight() const
 }
 
 FontAutoDeleter::FontAutoDeleter()
-	: m_hFontOld(NULL)
-	, m_hFont(NULL)
-	, m_hwnd(NULL)
+	: hFontOld(NULL)
+	, hFont(NULL)
+	, hwnd(NULL)
 {}
 
 FontAutoDeleter::~FontAutoDeleter()
 {
-	if (m_hFont) {
-		DeleteObject(m_hFont);
-		m_hFont = NULL;
+	if (hFont) {
+		DeleteObject(hFont);
+		hFont = NULL;
 	}
 }
 
 void FontAutoDeleter::SetFont(HFONT hfontOld, HFONT hfont, HWND hwnd)
 {
-	if (m_hFont) {
-		::DeleteObject(m_hFont);
+	if (hFont) {
+		::DeleteObject(hFont);
 	}
-	if (m_hFont != hfontOld) {
-		m_hFontOld = hfontOld;
+	if (hFont != hfontOld) {
+		hFontOld = hfontOld;
 	}
-	m_hFont = hfont;
-	m_hwnd = hwnd;
+	hFont = hfont;
+	hwnd = hwnd;
 }
 
 /*! ウィンドウのリリース(WM_DESTROY用)
 */
 void FontAutoDeleter::ReleaseOnDestroy()
 {
-	if (m_hFont) {
-		::DeleteObject(m_hFont);
-		m_hFont = NULL;
+	if (hFont) {
+		::DeleteObject(hFont);
+		hFont = NULL;
 	}
-	m_hFontOld = NULL;
+	hFontOld = NULL;
 }
 
 /*! ウィンドウ生存中のリリース
@@ -302,11 +302,11 @@ void FontAutoDeleter::ReleaseOnDestroy()
 #if 0
 void FontAutoDeleter::Release()
 {
-	if (m_hwnd && hFont) {
-		::SendMessage(m_hwnd, WM_SETFONT, (WPARAM)m_hFontOld, FALSE);
+	if (hwnd && hFont) {
+		::SendMessage(hwnd, WM_SETFONT, (WPARAM)m_hFontOld, FALSE);
 		::DeleteObject(hFont);
 		hFont = NULL;
-		m_hwnd = NULL;
+		hwnd = NULL;
 	}
 }
 #endif

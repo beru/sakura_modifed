@@ -63,9 +63,9 @@ public:
 
 	inline const void* GetRawPtr(int* pnLength) const;			// データへのポインタと長さ返す
 	inline void* GetRawPtr(int* pnLength);						// データへのポインタと長さ返す
-	inline const void* GetRawPtr() const { return m_pRawData; } // データへのポインタを返す
-	inline void* GetRawPtr() { return m_pRawData; }				// データへのポインタを返す
-	int GetRawLength() const { return m_nRawLen; }				// データ長を返す。バイト単位。
+	inline const void* GetRawPtr() const { return pRawData; } // データへのポインタを返す
+	inline void* GetRawPtr() { return pRawData; }				// データへのポインタを返す
+	int GetRawLength() const { return nRawLen; }				// データ長を返す。バイト単位。
 
 	// 演算子
 	const Memory& operator = (const Memory&);
@@ -83,31 +83,31 @@ protected:
 	/*
 	||  実装ヘルパ関数
 	*/
-	void _Empty(void); // 解放する。m_pRawDataはNULLになる。
+	void _Empty(void); // 解放する。pRawDataはNULLになる。
 	void _AddData(const void*, int);
 public:
 	void _AppendSz(const char* str);
 	void _SetRawLength(size_t nLength);
 	void swap(Memory& left) {
-		std::swap(m_nDataBufSize, left.m_nDataBufSize);
-		std::swap(m_pRawData, left.m_pRawData);
-		std::swap(m_nRawLen, left.m_nRawLen);
+		std::swap(nDataBufSize, left.nDataBufSize);
+		std::swap(pRawData, left.pRawData);
+		std::swap(nRawLen, left.nRawLen);
 	}
-	int capacity() const { return m_nDataBufSize ? m_nDataBufSize - 2: 0; }
+	int capacity() const { return nDataBufSize ? nDataBufSize - 2: 0; }
 
 #ifdef _DEBUG
 protected:
 	typedef char* PCHAR;
-	PCHAR& _DebugGetPointerRef() { return m_pRawData; } // デバッグ用。バッファポインタの参照を返す。
+	PCHAR& _DebugGetPointerRef() { return pRawData; } // デバッグ用。バッファポインタの参照を返す。
 #endif
 
 private: // 2002/2/10 aroka アクセス権変更
 	/*
 	|| メンバ変数
 	*/
-	char*	m_pRawData;		// バッファ
-	int		m_nRawLen;		// データサイズ(m_nDataBufSize以内)。バイト単位。
-	int		m_nDataBufSize;	//バッファサイズ。バイト単位。
+	char*	pRawData;		// バッファ
+	int		nRawLen;		// データサイズ(nDataBufSize以内)。バイト単位。
+	int		nDataBufSize;	//バッファサイズ。バイト単位。
 };
 
 
@@ -118,13 +118,13 @@ inline
 const void* Memory::GetRawPtr(int* pnLength) const // データへのポインタと長さ返す
 {
 	if (pnLength) *pnLength = GetRawLength();
-	return m_pRawData;
+	return pRawData;
 }
 
 inline
 void* Memory::GetRawPtr(int* pnLength) // データへのポインタと長さ返す
 {
 	if (pnLength) *pnLength = GetRawLength();
-	return m_pRawData;
+	return pRawData;
 }
 

@@ -175,35 +175,35 @@ bool CPP_IsFunctionAfterKeyword(const wchar_t* s)
 
 	ネストレベルは32レベル=(sizeof(int) * 8)まで
 	
-	@date 2007.12.15 genta : m_enablebufの初期値が悪さをすることがあるので0に
+	@date 2007.12.15 genta : enablebufの初期値が悪さをすることがあるので0に
 */
 
 class CppPreprocessMng {
 public:
 	CppPreprocessMng(void) :
-		// 2007.12.15 genta : m_bitpatternを0にしないと，
+		// 2007.12.15 genta : bitpatternを0にしないと，
 		// いきなり#elseが現れたときにパターンがおかしくなる
-		m_ismultiline(false),
-		m_maxnestlevel(32),
-		m_stackptr(0),
-		m_bitpattern(0),
-		m_enablebuf(0)
+		ismultiline(false),
+		maxnestlevel(32),
+		stackptr(0),
+		bitpattern(0),
+		enablebuf(0)
 	{}
 
 	LogicInt ScanLine(const wchar_t*, LogicInt);
 
 private:
-	bool m_ismultiline; // 複数行のディレクティブ
-	int m_maxnestlevel;	// ネストレベルの最大値
+	bool ismultiline; // 複数行のディレクティブ
+	int maxnestlevel;	// ネストレベルの最大値
 
-	int m_stackptr;	// ネストレベル
+	int stackptr;	// ネストレベル
 	/*!
 		ネストレベルに対応するビットパターン
 		
-		m_stackptr = n の時，下から(n-1)bit目に1が入っている
+		stackptr = n の時，下から(n-1)bit目に1が入っている
 	*/
-	unsigned int m_bitpattern;
-	unsigned int m_enablebuf;	// 処理の有無を保存するバッファ
+	unsigned int bitpattern;
+	unsigned int enablebuf;	// 処理の有無を保存するバッファ
 };
 
 /*!
@@ -251,13 +251,13 @@ LogicInt CppPreprocessMng::ScanLine(
 	if (lastptr <= p)
 		return LogicInt(length);	//	空行のため処理不要
 
-	if (m_ismultiline) { // 複数行のディレクティブは無視
-		m_ismultiline = C_IsLineEsc(str, length); // 行末が \ で終わっていないか
+	if (ismultiline) { // 複数行のディレクティブは無視
+		ismultiline = C_IsLineEsc(str, length); // 行末が \ で終わっていないか
 		return LogicInt(length);
 	}
 
 	if (*p != L'#') {	//	プリプロセッサ以外の処理はメイン部に任せる
-		if (m_enablebuf) {
+		if (enablebuf) {
 			return LogicInt(length);	//	1ビットでも1となっていたら無視
 		}
 		return LogicInt(p - str);
@@ -300,25 +300,25 @@ LogicInt CppPreprocessMng::ScanLine(
 		
 		//	保存領域の確保とビットパターンの設定
 		if (enable > 0) {
-			m_bitpattern = 1 << m_stackptr;
-			++m_stackptr;
+			bitpattern = 1 << stackptr;
+			++stackptr;
 			if (enable == 1) {
-				m_enablebuf |= m_bitpattern;
+				enablebuf |= bitpattern;
 			}
 		}
 	}else if (p+4 < lastptr && wcsncmp_literal(p, L"else") == 0) {
 		//	2007.12.14 genta : #ifが無く#elseが出たときのガード追加
-		if (0 < m_stackptr && m_stackptr < m_maxnestlevel) {
-			m_enablebuf ^= m_bitpattern;
+		if (0 < stackptr && stackptr < maxnestlevel) {
+			enablebuf ^= bitpattern;
 		}
 	}else if (p+5 < lastptr && wcsncmp_literal(p, L"endif") == 0) {
-		if (m_stackptr > 0) {
-			--m_stackptr;
-			m_enablebuf &= ~m_bitpattern;
-			m_bitpattern = (1 << (m_stackptr - 1));
+		if (stackptr > 0) {
+			--stackptr;
+			enablebuf &= ~bitpattern;
+			bitpattern = (1 << (stackptr - 1));
 		}
 	}else {
-		m_ismultiline = C_IsLineEsc(str, length); // 行末が \ で終わっていないか
+		ismultiline = C_IsLineEsc(str, length); // 行末が \ で終わっていないか
 	}
 
 	return LogicInt(length);	//	基本的にプリプロセッサ指令は無視
@@ -467,8 +467,8 @@ void DocOutline::MakeFuncList_C(
 	bool bExtEol = GetDllShareData().common.edit.bEnableExtEol;
 	
 	LogicInt nLineCount;
-	for (nLineCount=LogicInt(0); nLineCount<m_doc.m_docLineMgr.GetLineCount(); ++nLineCount) {
-		pLine = m_doc.m_docLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
+	for (nLineCount=LogicInt(0); nLineCount<doc.docLineMgr.GetLineCount(); ++nLineCount) {
+		pLine = doc.docLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
 
 		//	From Here Aug. 10, 2004 genta
 		//	プリプロセス処理
@@ -821,7 +821,7 @@ void DocOutline::MakeFuncList_C(
 						  レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 						*/
 						LayoutPoint ptPosXY;
-						m_doc.m_layoutMgr.LogicToLayout(
+						doc.layoutMgr.LogicToLayout(
 							LogicPoint(0, nItemLine - 1),
 							&ptPosXY
 						);
@@ -1048,7 +1048,7 @@ void DocOutline::MakeFuncList_C(
 						  レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 						*/
 						LayoutPoint ptPosXY;
-						m_doc.m_layoutMgr.LogicToLayout(
+						doc.layoutMgr.LogicToLayout(
 							LogicPoint(0, nItemLine - 1),
 							&ptPosXY
 						);
@@ -1273,7 +1273,7 @@ void EditView::SmartIndent_CPP(wchar_t wcChar)
 		auto& caret = GetCaret();
 		nCaretPosX_PHY = caret.GetCaretLogicPos().x;
 
-		pLine = m_pEditDoc->m_docLineMgr.GetLine(caret.GetCaretLogicPos().GetY2())->GetDocLineStrWithEOL(&nLineLen);
+		pLine = pEditDoc->docLineMgr.GetLine(caret.GetCaretLogicPos().GetY2())->GetDocLineStrWithEOL(&nLineLen);
 		if (!pLine) {
 			if (wcChar != WCODE::CR) {
 				return;
@@ -1339,11 +1339,11 @@ void EditView::SmartIndent_CPP(wchar_t wcChar)
 		
 		nDataLen = LogicInt(0);
 		for (j=caret.GetCaretLogicPos().GetY2(); j>=LogicInt(0); --j) {
-			pLine2 = m_pEditDoc->m_docLineMgr.GetLine(j)->GetDocLineStrWithEOL(&nLineLen2);
+			pLine2 = pEditDoc->docLineMgr.GetLine(j)->GetDocLineStrWithEOL(&nLineLen2);
 			if (j == caret.GetCaretLogicPos().y) {
 				// 2005.10.11 ryoji EOF のみの行もスマートインデントの対象にする
 				if (!pLine2) {
-					if (caret.GetCaretLogicPos().y == m_pEditDoc->m_docLineMgr.GetLineCount())
+					if (caret.GetCaretLogicPos().y == pEditDoc->docLineMgr.GetLineCount())
 						continue;	// EOF のみの行
 					break;
 				}
@@ -1424,25 +1424,25 @@ void EditView::SmartIndent_CPP(wchar_t wcChar)
 			}
 
 			nDataLen = LogicInt(m);
-			nCharChars = (m_pEditDoc->m_docType.GetDocumentAttribute().bInsSpace)? (Int)m_pEditDoc->m_layoutMgr.GetTabSpace(): 1;
+			nCharChars = (pEditDoc->docType.GetDocumentAttribute().bInsSpace)? (Int)pEditDoc->layoutMgr.GetTabSpace(): 1;
 			pszData = new wchar_t[nDataLen + nCharChars + 1];
 			wmemcpy(pszData, pLine2, nDataLen);
 			if (wcChar == WCODE::CR || wcChar == L'{' || wcChar == L'(') {
 				// 2005.10.11 ryoji TABキーがSPACE挿入の設定なら追加インデントもSPACEにする
 				//	既存文字列の右端の表示位置を求めた上で挿入するスペースの数を決定する
-				if (m_pEditDoc->m_docType.GetDocumentAttribute().bInsSpace) {	// SPACE挿入設定
+				if (pEditDoc->docType.GetDocumentAttribute().bInsSpace) {	// SPACE挿入設定
 					int i;
 					i = m = 0;
 					while (i < nDataLen) {
 						nCharChars = NativeW::GetSizeOfChar(pszData, nDataLen, i);
 						if (nCharChars == 1 && pszData[i] == WCODE::TAB) {
-							m += (Int)m_pEditDoc->m_layoutMgr.GetActualTabSpace(LayoutInt(m));
+							m += (Int)pEditDoc->layoutMgr.GetActualTabSpace(LayoutInt(m));
 						}else {
 							m += nCharChars;
 						}
 						i += nCharChars;
 					}
-					nCharChars = (Int)m_pEditDoc->m_layoutMgr.GetActualTabSpace(LayoutInt(m));
+					nCharChars = (Int)pEditDoc->layoutMgr.GetActualTabSpace(LayoutInt(m));
 					for (int i=0; i<nCharChars; ++i) {
 						pszData[nDataLen + i] = WCODE::SPACE;
 					}
@@ -1488,7 +1488,7 @@ void EditView::SmartIndent_CPP(wchar_t wcChar)
 		
 		// 調整によって置換される箇所
 		LayoutRange rangeLayout;
-		m_pEditDoc->m_layoutMgr.LogicToLayout(rangeA, &rangeLayout);
+		pEditDoc->layoutMgr.LogicToLayout(rangeA, &rangeLayout);
 
 		if (0
 			|| (nDataLen == 0 && rangeLayout.IsOne())
@@ -1504,21 +1504,21 @@ void EditView::SmartIndent_CPP(wchar_t wcChar)
 				pszData,	// 挿入するデータ
 				nDataLen,	// 挿入するデータの長さ
 				true,
-				m_bDoing_UndoRedo ? nullptr : m_commander.GetOpeBlk()
+				bDoing_UndoRedo ? nullptr : commander.GetOpeBlk()
 			);
 		}
 
 		// カーソル位置調整
 		LayoutPoint ptCP_Layout;
-		m_pEditDoc->m_layoutMgr.LogicToLayout(ptCP, &ptCP_Layout);
+		pEditDoc->layoutMgr.LogicToLayout(ptCP, &ptCP_Layout);
 
 		// 選択エリアの先頭へカーソルを移動
 		caret.MoveCursor(ptCP_Layout, true);
-		caret.m_nCaretPosX_Prev = caret.GetCaretLayoutPos().GetX();
+		caret.nCaretPosX_Prev = caret.GetCaretLayoutPos().GetX();
 
-		if (bChange && !m_bDoing_UndoRedo) {	// Undo, Redoの実行中か
+		if (bChange && !bDoing_UndoRedo) {	// Undo, Redoの実行中か
 			// 操作の追加
-			m_commander.GetOpeBlk()->AppendOpe(
+			commander.GetOpeBlk()->AppendOpe(
 				new MoveCaretOpe(
 					caret.GetCaretLogicPos()	// 操作前後のキャレット位置
 				)

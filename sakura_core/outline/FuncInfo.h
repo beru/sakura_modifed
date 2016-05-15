@@ -19,7 +19,7 @@ class FuncInfo;
 
 #include "mem/Memory.h"
 
-// CDlgFuncList::SetTree()用 m_Info
+// CDlgFuncList::SetTree()用 Info
 #define FUNCINFO_INFOMASK	0xFFFF
 //	2003.06.27 Moca
 #define FUNCINFO_NOCLIPTEXT 0x10000
@@ -34,17 +34,17 @@ public:
 	// クリップボードに追加する要素か？
 	//	2003.06.27 Moca
 	inline bool IsAddClipText(void) const {
-		return (FUNCINFO_NOCLIPTEXT != (m_nInfo & FUNCINFO_NOCLIPTEXT));
+		return (FUNCINFO_NOCLIPTEXT != (nInfo & FUNCINFO_NOCLIPTEXT));
 	}
 
 //	private:
-	LogicInt	m_nFuncLineCRLF;	// 関数のある行(CRLF単位)
-	LayoutInt	m_nFuncLineLAYOUT;	// 関数のある行(折り返し単位)
-	LogicInt	m_nFuncColCRLF;		// 関数のある桁(CRLF単位)
-	LayoutInt	m_nFuncColLAYOUT;	// 関数のある桁(折り返し単位)
-	NativeT		m_memFuncName;		// 関数名
-	NativeT		m_memFileName;		// ファイル名
-	int			m_nInfo;			// 付加情報
-	int			m_nDepth;			// 深さ
+	LogicInt	nFuncLineCRLF;	// 関数のある行(CRLF単位)
+	LayoutInt	nFuncLineLAYOUT;	// 関数のある行(折り返し単位)
+	LogicInt	nFuncColCRLF;		// 関数のある桁(CRLF単位)
+	LayoutInt	nFuncColLAYOUT;	// 関数のある桁(折り返し単位)
+	NativeT		memFuncName;		// 関数名
+	NativeT		memFileName;		// ファイル名
+	int			nInfo;			// 付加情報
+	int			nDepth;			// 深さ
 };
 

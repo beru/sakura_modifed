@@ -28,7 +28,7 @@
 
 class LayoutColorHeredocInfo : public LayoutColorInfo {
 public:
-	std::wstring m_id;
+	std::wstring id;
 	bool IsEqual(const LayoutColorInfo* p) const {
 		if (!p) {
 			return false;
@@ -37,7 +37,7 @@ public:
 		if (!info) {
 			return false;
 		}
-		return info->m_id == this->m_id;
+		return info->id == this->id;
 	}
 };
 
@@ -48,15 +48,15 @@ void Color_Heredoc::SetStrategyColorInfo(const LayoutColorInfo* colorInfo)
 		if (!info) {
 			return;
 		}
-		m_pszId = info->m_id.c_str();
-		m_nSize = (int)info->m_id.size();
+		pszId = info->id.c_str();
+		nSize = (int)info->id.size();
 	}
 }
 
 LayoutColorInfo* Color_Heredoc::GetStrategyColorInfo() const
 {
 	LayoutColorHeredocInfo* info = new LayoutColorHeredocInfo();
-	info->m_id.assign(m_pszId, m_nSize);
+	info->id.assign(pszId, nSize);
 	return info;
 }
 
@@ -69,7 +69,7 @@ bool Color_Heredoc::BeginColor(const StringRef& str, int nPos)
 	// ...
 	// HEREDOC_ID
 	if (1
-		&& m_pTypeData->nHeredocType == HereDocType::PHP
+		&& pTypeData->nHeredocType == HereDocType::PHP
 		&& str.At(nPos) == '<' && nPos + 3 < str.GetLength()
 		&& wmemcmp(str.GetPtr() + nPos + 1, L"<<", 2) == 0
 	) {
@@ -113,10 +113,10 @@ bool Color_Heredoc::BeginColor(const StringRef& str, int nPos)
 				GetDllShareData().common.edit.bEnableExtEol
 			)
 		) {
-			m_id = std::wstring(str.GetPtr() + nPosIdStart, k - nPosIdStart);
-			m_pszId = m_id.c_str();
-			m_nSize = m_id.size();
-			this->m_nCOMMENTEND = length;
+			id = std::wstring(str.GetPtr() + nPosIdStart, k - nPosIdStart);
+			pszId = id.c_str();
+			nSize = id.size();
+			this->nCommentEnd = length;
 			return true;
 		}
 	}
@@ -125,17 +125,17 @@ bool Color_Heredoc::BeginColor(const StringRef& str, int nPos)
 
 bool Color_Heredoc::EndColor(const StringRef& str, int nPos)
 {
-	if (this->m_nCOMMENTEND == 0) {
+	if (this->nCommentEnd == 0) {
 		if (1
-			&& m_pTypeData->nHeredocType == HereDocType::PHP
-			&& nPos == 0 && m_nSize <= str.GetLength()
-			&& wmemcmp(str.GetPtr(), m_pszId, m_nSize) == 0
+			&& pTypeData->nHeredocType == HereDocType::PHP
+			&& nPos == 0 && nSize <= str.GetLength()
+			&& wmemcmp(str.GetPtr(), pszId, nSize) == 0
 		) {
-			if (m_nSize == str.GetLength()) {
-				this->m_nCOMMENTEND = m_nSize;
+			if (nSize == str.GetLength()) {
+				this->nCommentEnd = nSize;
 				return false;
 			}else {
-				int i = m_nSize;
+				int i = nSize;
 				if (
 					i + 1 < str.GetLength()
 					&& str.At(i) == L';'
@@ -145,25 +145,25 @@ bool Color_Heredoc::EndColor(const StringRef& str, int nPos)
 					)
 				) {
 					// ID;
-					this->m_nCOMMENTEND = i;
+					this->nCommentEnd = i;
 					return false;
 				}else if (
-					m_nSize < str.GetLength()
+					nSize < str.GetLength()
 					&& WCODE::IsLineDelimiter(
-						str.At(m_nSize),
+						str.At(nSize),
 						GetDllShareData().common.edit.bEnableExtEol
 					)
 				) {
 					// ID
-					this->m_nCOMMENTEND = m_nSize;
+					this->nCommentEnd = nSize;
 					return false;
 				}
 			}
-			this->m_nCOMMENTEND = str.GetLength();
+			this->nCommentEnd = str.GetLength();
 		}else {
-			this->m_nCOMMENTEND = str.GetLength();
+			this->nCommentEnd = str.GetLength();
 		}
-	}else if (nPos == this->m_nCOMMENTEND) {
+	}else if (nPos == this->nCommentEnd) {
 		return true;
 	}
 	return false;

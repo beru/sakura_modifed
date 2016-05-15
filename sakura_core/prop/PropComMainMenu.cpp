@@ -102,11 +102,11 @@ extern const int gSpecialFuncsCount = (int)_countof(gSpecialFuncs);
 static	int 	nSpecialFuncsNum;		// 特別機能のコンボボックス内での番号
 
 //  TreeViewキー入力時のメッセージ処理用
-static WNDPROC	m_wpTreeView = NULL;
-static HWND		m_hwndDlg;
+static WNDPROC	wpTreeView = NULL;
+static HWND		hwndDlg;
 
 // TreeViewラベル編集時のメッセージ処理用
-static WNDPROC	m_wpEdit = NULL;
+static WNDPROC	wpEdit = NULL;
 
 
 /*!
@@ -176,7 +176,7 @@ static LRESULT CALLBACK TreeViewProc(
 		switch (wParam) {
 		case VK_BACK:
 		case VK_DELETE:	//	DELキーが押されたらダイアログボックスにメッセージを送信
-			::SendMessage(m_hwndDlg, WM_COMMAND, IDC_BUTTON_DELETE, (LPARAM)::GetDlgItem(m_hwndDlg, IDC_BUTTON_DELETE));
+			::SendMessage(hwndDlg, WM_COMMAND, IDC_BUTTON_DELETE, (LPARAM)::GetDlgItem(hwndDlg, IDC_BUTTON_DELETE));
 			return 0;
 		case VK_F2:						// F2で編集
 			if (htiItem) {
@@ -188,7 +188,7 @@ static LRESULT CALLBACK TreeViewProc(
 	case WM_CHAR:
 		return 0;
 	}
-	return  CallWindowProc(m_wpTreeView, hwndTree, uMsg, wParam, lParam);
+	return  CallWindowProc(wpTreeView, hwndTree, uMsg, wParam, lParam);
 }
 
 // TreeViewラベル編集時のメッセージ処理
@@ -203,7 +203,7 @@ static LRESULT CALLBACK WindowProcEdit(
 	case WM_GETDLGCODE:
 		return DLGC_WANTALLKEYS;
 	}
-	return CallWindowProc(m_wpEdit, hwndEdit, uMsg, wParam, lParam);
+	return CallWindowProc(wpEdit, hwndEdit, uMsg, wParam, lParam);
 }
 
 // Menu メッセージ処理
@@ -259,8 +259,8 @@ INT_PTR PropMainMenu::DispatchEvent(
 		::SendMessage(hwndDlg, WM_COMMAND, MAKELONG(IDC_COMBO_FUNCKIND, CBN_SELCHANGE), (LPARAM)hwndComboFunkKind);
 
 		// TreeViewのメッセージ処理（アクセスキー入力用）
-		m_hwndDlg = hwndDlg;
-		m_wpTreeView = (WNDPROC)SetWindowLongPtr(hwndTreeRes, GWLP_WNDPROC, (LONG_PTR)TreeViewProc);
+		hwndDlg = hwndDlg;
+		wpTreeView = (WNDPROC)SetWindowLongPtr(hwndTreeRes, GWLP_WNDPROC, (LONG_PTR)TreeViewProc);
 
 		::SetTimer(hwndDlg, 1, 300, NULL);
 
@@ -281,7 +281,7 @@ INT_PTR PropMainMenu::DispatchEvent(
 			GetData(hwndDlg);
 			return TRUE;
 		case PSN_SETACTIVE:
-			m_nPageNum = ID_PROPCOM_PAGENUM_MAINMENU;
+			nPageNum = ID_PROPCOM_PAGENUM_MAINMENU;
 
 			// 表示を更新する（マクロ設定画面でのマクロ名変更を反映）
 			nIdxFIdx = Combo_GetCurSel(hwndComboFunkKind);
@@ -301,7 +301,7 @@ INT_PTR PropMainMenu::DispatchEvent(
 					SetWindowText(hEdit, to_tchar(msMenu[ptdi->item.lParam].sName.c_str())) ;
 					EditCtl_LimitText(hEdit, MAX_MAIN_MENU_NAME_LEN);
 					// 編集時のメッセージ処理
-					m_wpEdit = (WNDPROC)SetWindowLongPtr(hEdit, GWLP_WNDPROC, (LONG_PTR)WindowProcEdit);
+					wpEdit = (WNDPROC)SetWindowLongPtr(hEdit, GWLP_WNDPROC, (LONG_PTR)WindowProcEdit);
 				}else {
 					// ノード以外編集不可
 					SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, TRUE);
@@ -331,8 +331,8 @@ INT_PTR PropMainMenu::DispatchEvent(
 				TreeView_SetItem(hwndTreeRes , &ptdi->item);	//	編集結果を反映
 
 				// 編集時のメッセージ処理を戻す
-				SetWindowLongPtr(TreeView_GetEditControl(hwndTreeRes), GWLP_WNDPROC, (LONG_PTR)m_wpEdit);
-				m_wpEdit = nullptr;
+				SetWindowLongPtr(TreeView_GetEditControl(hwndTreeRes), GWLP_WNDPROC, (LONG_PTR)wpEdit);
+				wpEdit = nullptr;
 			}
 			return TRUE;
 		case TVN_DELETEITEM:
@@ -405,7 +405,7 @@ INT_PTR PropMainMenu::DispatchEvent(
 					}
 				}else {
 					// 機能一覧に文字列をセット（リストボックス）
-					m_lookup.SetListItem(hwndListFunk, nIdxFIdx);
+					lookup.SetListItem(hwndListFunk, nIdxFIdx);
 				}
 				return TRUE;
 			}
@@ -448,7 +448,7 @@ INT_PTR PropMainMenu::DispatchEvent(
 						profile.SetReadingMode();
 						profile.ReadProfileRes(MAKEINTRESOURCE(IDR_MENU1), MAKEINTRESOURCE(ID_RC_TYPE_INI));
 
-						ShareData_IO::IO_MainMenu(profile, m_common.mainMenu, false);
+						ShareData_IO::IO_MainMenu(profile, common.mainMenu, false);
 						
 						SetData(hwndDlg); 
 					}
@@ -507,9 +507,9 @@ INT_PTR PropMainMenu::DispatchEvent(
 							// 特殊機能
 							auto_strcpy(szLabel, LSW(gSpecialFuncs[nIdxFunc].nNameId));
 							eFuncCode = gSpecialFuncs[nIdxFunc].nFunc;
-						}else if (m_lookup.Pos2FuncCode(nIdxFIdx, nIdxFunc) != 0) {
+						}else if (lookup.Pos2FuncCode(nIdxFIdx, nIdxFunc) != 0) {
 							List_GetText(hwndListFunk, nIdxFunc, szLabel);
-							eFuncCode = m_lookup.Pos2FuncCode(nIdxFIdx, nIdxFunc);
+							eFuncCode = lookup.Pos2FuncCode(nIdxFIdx, nIdxFunc);
 						}else {
 							auto_strcpy(szLabel, L"?");
 							eFuncCode = F_SEPARATOR;
@@ -778,7 +778,7 @@ INT_PTR PropMainMenu::DispatchEvent(
 			|| (1
 				&& CB_ERR != nIdxFIdx
 				&& LB_ERR != nIdxFunc
-				&& m_lookup.Pos2FuncCode(nIdxFIdx, nIdxFunc) == 0
+				&& lookup.Pos2FuncCode(nIdxFIdx, nIdxFunc) == 0
 				&& nIdxFIdx != nSpecialFuncsNum
 			)
 		) {
@@ -795,8 +795,8 @@ INT_PTR PropMainMenu::DispatchEvent(
 		::KillTimer(hwndDlg, 1);
 
 		// 編集時のメッセージ処理を戻す
-		SetWindowLongPtr(hwndTreeRes, GWLP_WNDPROC, (LONG_PTR)m_wpTreeView);
-		m_wpTreeView = NULL;
+		SetWindowLongPtr(hwndTreeRes, GWLP_WNDPROC, (LONG_PTR)wpTreeView);
+		wpTreeView = NULL;
 
 		// ワークのクリア
 		msMenu.clear();
@@ -853,7 +853,7 @@ wstring RemoveAmpersand(wstring sLavel)
 // ダイアログデータの設定 MainMenu
 void PropMainMenu::SetData(HWND hwndDlg)
 {
-	MainMenu*	pMenuTBL = m_common.mainMenu.mainMenuTbl;
+	MainMenu*	pMenuTBL = common.mainMenu.mainMenuTbl;
 	MainMenu*	pFunc;
 	HWND		hwndCombo;
 	HWND		hwndCheck;
@@ -868,7 +868,7 @@ void PropMainMenu::SetData(HWND hwndDlg)
 
 	// 機能種別一覧に文字列をセット（コンボボックス）
 	hwndCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_FUNCKIND);
-	m_lookup.SetCategory2Combo(hwndCombo);
+	lookup.SetCategory2Combo(hwndCombo);
 
 	// 特別機能追加
 	nSpecialFuncsNum = Combo_AddString(hwndCombo, LS(STR_SPECIAL_FUNC));
@@ -885,13 +885,13 @@ void PropMainMenu::SetData(HWND hwndDlg)
 
 	// アクセスキーを()付で表示
 	hwndCheck = ::GetDlgItem(hwndDlg, IDC_CHECK_KEY_PARENTHESES);
-	BtnCtl_SetCheck(hwndCheck, m_common.mainMenu.bMainMenuKeyParentheses);
+	BtnCtl_SetCheck(hwndCheck, common.mainMenu.bMainMenuKeyParentheses);
 
 	// メニュー項目一覧と内部データをセット（TreeView）
 	nCurLevel = 0;
 	htiParent = TVI_ROOT;
 	htiItem = TreeView_GetRoot(hwndTreeRes);
-	for (int i=0; i<m_common.mainMenu.nMainMenuNum; ++i) {
+	for (int i=0; i<common.mainMenu.nMainMenuNum; ++i) {
 		pFunc = &pMenuTBL[i];
 		if (pFunc->nLevel < nCurLevel) {
 			// Level Up
@@ -916,7 +916,7 @@ void PropMainMenu::SetData(HWND hwndDlg)
 		pFuncWk->bIsNode = false;
 		switch (pFunc->type) {
 		case MainMenuType::Leaf:
-			m_lookup.Funccode2Name(pFunc->nFunc, szLabel, MAX_MAIN_MENU_NAME_LEN);
+			lookup.Funccode2Name(pFunc->nFunc, szLabel, MAX_MAIN_MENU_NAME_LEN);
 			pFuncWk->sName = szLabel;
 			break;
 		case MainMenuType::Separator:
@@ -965,11 +965,11 @@ int PropMainMenu::GetData(HWND hwndDlg)
 
 	// アクセスキーを()付で表示
 	hwndCheck = ::GetDlgItem(hwndDlg, IDC_CHECK_KEY_PARENTHESES);
-	m_common.mainMenu.bMainMenuKeyParentheses = (BtnCtl_GetCheck(hwndCheck) != 0);
+	common.mainMenu.bMainMenuKeyParentheses = (BtnCtl_GetCheck(hwndCheck) != 0);
 
 	// メニュートップ項目をセット
-	m_common.mainMenu.nMainMenuNum = 0;
-	memset(m_common.mainMenu.nMenuTopIdx, -1, sizeof(m_common.mainMenu.nMenuTopIdx));
+	common.mainMenu.nMainMenuNum = 0;
+	memset(common.mainMenu.nMenuTopIdx, -1, sizeof(common.mainMenu.nMenuTopIdx));
 
 	hwndTreeRes = ::GetDlgItem(hwndDlg, IDC_TREE_RES);
 
@@ -987,7 +987,7 @@ bool PropMainMenu::GetDataTree(
 	)
 {
 	static	bool	bOptionOk;
-	MainMenu*		pMenuTbl = m_common.mainMenu.mainMenuTbl;
+	MainMenu*		pMenuTbl = common.mainMenu.mainMenuTbl;
 	MainMenu*		pFunc;
 	HTREEITEM		s;
 	HTREEITEM		ts;
@@ -1001,7 +1001,7 @@ bool PropMainMenu::GetDataTree(
 	}
 
 	for (s=htiTrg; s; s=TreeView_GetNextSibling(hwndTree, s)) {
-		if (m_common.mainMenu.nMainMenuNum >= MAX_MAINMENU) {
+		if (common.mainMenu.nMainMenuNum >= MAX_MAINMENU) {
 			// 登録数 over
 			return false;
 		}
@@ -1018,9 +1018,9 @@ bool PropMainMenu::GetDataTree(
 				continue;
 			}
 			// Top Levelの記録
-			m_common.mainMenu.nMenuTopIdx[nTopCount++] = m_common.mainMenu.nMainMenuNum;
+			common.mainMenu.nMenuTopIdx[nTopCount++] = common.mainMenu.nMainMenuNum;
 		}
-		pFunc = &pMenuTbl[m_common.mainMenu.nMainMenuNum++];
+		pFunc = &pMenuTbl[common.mainMenu.nMainMenuNum++];
 
 		switch (pFuncWk->nFunc) {
 		case F_NODE:
@@ -1066,11 +1066,11 @@ bool PropMainMenu::GetDataTree(
 	}
 	if (nLevel == 0 && !bOptionOk) {
 		// 共通設定が無い
-		if (nTopCount < MAX_MAINMENU_TOP && m_common.mainMenu.nMainMenuNum + 1 < MAX_MAINMENU) {
+		if (nTopCount < MAX_MAINMENU_TOP && common.mainMenu.nMainMenuNum + 1 < MAX_MAINMENU) {
 			// Top Levelの記録
-			m_common.mainMenu.nMenuTopIdx[nTopCount++] = m_common.mainMenu.nMainMenuNum;
+			common.mainMenu.nMenuTopIdx[nTopCount++] = common.mainMenu.nMainMenuNum;
 			// Top Levelの追加（ダミー）
-			pFunc = &pMenuTbl[m_common.mainMenu.nMainMenuNum++];
+			pFunc = &pMenuTbl[common.mainMenu.nMainMenuNum++];
 			pFunc->type = MainMenuType::Node;
 			pFunc->nFunc = F_NODE;
 			auto_strcpy(pFunc->sName, L"auto_add");
@@ -1080,9 +1080,9 @@ bool PropMainMenu::GetDataTree(
 			// 末尾に追加を指定
 			nLevel = 1;
 		}
-		if (m_common.mainMenu.nMainMenuNum < MAX_MAINMENU) {
+		if (common.mainMenu.nMainMenuNum < MAX_MAINMENU) {
 			// 共通設定
-			pFunc = &pMenuTbl[m_common.mainMenu.nMainMenuNum++];
+			pFunc = &pMenuTbl[common.mainMenu.nMainMenuNum++];
 			pFunc->type = MainMenuType::Leaf;
 			pFunc->nFunc = F_OPTION;
 			pFunc->sName[0] = L'\0';
@@ -1099,7 +1099,7 @@ bool PropMainMenu::GetDataTree(
 // メインメニュー設定をインポートする
 void PropMainMenu::Import(HWND hwndDlg)
 {
-	ImpExpMainMenu	impExp(m_common);
+	ImpExpMainMenu	impExp(common);
 
 	// インポート
 	if (!impExp.ImportUI(G_AppInstance(), hwndDlg)) {
@@ -1112,7 +1112,7 @@ void PropMainMenu::Import(HWND hwndDlg)
 // メインメニュー設定をエクスポートする
 void PropMainMenu::Export(HWND hwndDlg)
 {
-	ImpExpMainMenu	impExp(m_common);
+	ImpExpMainMenu	impExp(common);
 	GetData(hwndDlg);
 
 	// エクスポート

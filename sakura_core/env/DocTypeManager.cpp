@@ -31,8 +31,8 @@
 #include "FileExt.h"
 #include <Shlwapi.h>	// PathMatchSpec
 
-const TCHAR* DocTypeManager::m_typeExtSeps = _T(" ;,");	// タイプ別拡張子 区切り文字
-const TCHAR* DocTypeManager::m_typeExtWildcards = _T("*?");	// タイプ別拡張子 ワイルドカード
+const TCHAR* DocTypeManager::typeExtSeps = _T(" ;,");	// タイプ別拡張子 区切り文字
+const TCHAR* DocTypeManager::typeExtWildcards = _T("*?");	// タイプ別拡張子 ワイルドカード
 
 static Mutex g_docTypeMutex(FALSE, GSTR_MUTEX_SAKURA_DOCTYPE);
 
@@ -53,7 +53,7 @@ TypeConfigNum DocTypeManager::GetDocumentTypeOfPath(const TCHAR* pszFilePath)
 		pszFileName = pszSep + 1;
 	}
 
-	for (int i=0; i<m_pShareData->nTypesCount; ++i) {
+	for (int i=0; i<pShareData->nTypesCount; ++i) {
 		const TypeConfigMini* mini;
 		GetTypeConfigMini(TypeConfigNum(i), &mini);
 		if (IsFileNameMatch(mini->szTypeExts, pszFileName)) {
@@ -82,7 +82,7 @@ TypeConfigNum DocTypeManager::GetDocumentTypeOfExt(const TCHAR* pszExt)
 
 TypeConfigNum DocTypeManager::GetDocumentTypeOfId(int id)
 {
-	for (int i=0; i<m_pShareData->nTypesCount; ++i) {
+	for (int i=0; i<pShareData->nTypesCount; ++i) {
 		const TypeConfigMini* mini;
 		GetTypeConfigMini(TypeConfigNum(i), &mini);
 		if (mini->id == id) {
@@ -95,14 +95,14 @@ TypeConfigNum DocTypeManager::GetDocumentTypeOfId(int id)
 bool DocTypeManager::GetTypeConfig(TypeConfigNum documentType, TypeConfig& type)
 {
 	int n = documentType.GetIndex();
-	if (0 <= n && n < m_pShareData->nTypesCount) {
+	if (0 <= n && n < pShareData->nTypesCount) {
 		if (n == 0) {
-			type = m_pShareData->typeBasis;
+			type = pShareData->typeBasis;
 			return true;
 		}else {
 			LockGuard<Mutex> guard(g_docTypeMutex);
-			 if (SendMessage(m_pShareData->handles.hwndTray, MYWM_GET_TYPESETTING, (WPARAM)n, 0)) {
-				type = m_pShareData->workBuffer.typeConfig;
+			 if (SendMessage(pShareData->handles.hwndTray, MYWM_GET_TYPESETTING, (WPARAM)n, 0)) {
+				type = pShareData->workBuffer.typeConfig;
 				return true;
 			}
 		}
@@ -113,10 +113,10 @@ bool DocTypeManager::GetTypeConfig(TypeConfigNum documentType, TypeConfig& type)
 bool DocTypeManager::SetTypeConfig(TypeConfigNum documentType, const TypeConfig& type)
 {
 	int n = documentType.GetIndex();
-	if (0 <= n && n < m_pShareData->nTypesCount) {
+	if (0 <= n && n < pShareData->nTypesCount) {
 		LockGuard<Mutex> guard(g_docTypeMutex);
-		m_pShareData->workBuffer.typeConfig = type;
-		if (SendMessage(m_pShareData->handles.hwndTray, MYWM_SET_TYPESETTING, (WPARAM)n, 0)) {
+		pShareData->workBuffer.typeConfig = type;
+		if (SendMessage(pShareData->handles.hwndTray, MYWM_SET_TYPESETTING, (WPARAM)n, 0)) {
 			return true;
 		}
 	}
@@ -126,8 +126,8 @@ bool DocTypeManager::SetTypeConfig(TypeConfigNum documentType, const TypeConfig&
 bool DocTypeManager::GetTypeConfigMini(TypeConfigNum documentType, const TypeConfigMini** type)
 {
 	int n = documentType.GetIndex();
-	if (0 <= n && n < m_pShareData->nTypesCount) {
-		*type = &m_pShareData->typesMini[n];
+	if (0 <= n && n < pShareData->nTypesCount) {
+		*type = &pShareData->typesMini[n];
 		return true;
 	}
 	return false;
@@ -136,13 +136,13 @@ bool DocTypeManager::GetTypeConfigMini(TypeConfigNum documentType, const TypeCon
 bool DocTypeManager::AddTypeConfig(TypeConfigNum documentType)
 {
 	LockGuard<Mutex> guard(g_docTypeMutex);
-	return SendMessage(m_pShareData->handles.hwndTray, MYWM_ADD_TYPESETTING, (WPARAM)documentType.GetIndex(), 0) != FALSE;
+	return SendMessage(pShareData->handles.hwndTray, MYWM_ADD_TYPESETTING, (WPARAM)documentType.GetIndex(), 0) != FALSE;
 }
 
 bool DocTypeManager::DelTypeConfig(TypeConfigNum documentType)
 {
 	LockGuard<Mutex> guard(g_docTypeMutex);
-	return SendMessage(m_pShareData->handles.hwndTray, MYWM_DEL_TYPESETTING, (WPARAM)documentType.GetIndex(), 0) != FALSE;
+	return SendMessage(pShareData->handles.hwndTray, MYWM_DEL_TYPESETTING, (WPARAM)documentType.GetIndex(), 0) != FALSE;
 }
 
 /*!
@@ -157,9 +157,9 @@ bool DocTypeManager::IsFileNameMatch(const TCHAR* pszTypeExts, const TCHAR* pszF
 
 	_tcsncpy(szWork, pszTypeExts, _countof(szWork));
 	szWork[_countof(szWork) - 1] = '\0';
-	TCHAR* token = _tcstok(szWork, m_typeExtSeps);
+	TCHAR* token = _tcstok(szWork, typeExtSeps);
 	while (token) {
-		if (_tcspbrk(token, m_typeExtWildcards) == NULL) {
+		if (_tcspbrk(token, typeExtWildcards) == NULL) {
 			if (_tcsicmp(token, pszFileName) == 0) {
 				return true;
 			}
@@ -172,7 +172,7 @@ bool DocTypeManager::IsFileNameMatch(const TCHAR* pszTypeExts, const TCHAR* pszF
 				return true;
 			}
 		}
-		token = _tcstok(NULL, m_typeExtSeps);
+		token = _tcstok(NULL, typeExtSeps);
 	}
 	return false;
 }
@@ -190,9 +190,9 @@ void DocTypeManager::GetFirstExt(const TCHAR* pszTypeExts, TCHAR szFirstExt[], i
 
 	_tcsncpy(szWork, pszTypeExts, _countof(szWork));
 	szWork[_countof(szWork) - 1] = '\0';
-	TCHAR* token = _tcstok(szWork, m_typeExtSeps);
+	TCHAR* token = _tcstok(szWork, typeExtSeps);
 	while (token) {
-		if (_tcspbrk(token, m_typeExtWildcards) == NULL) {
+		if (_tcspbrk(token, typeExtWildcards) == NULL) {
 			_tcsncpy(szFirstExt, token, nBuffSize);
 			szFirstExt[nBuffSize - 1] = _T('\0');
 			return;
@@ -227,19 +227,19 @@ bool DocTypeManager::ConvertTypesExtToDlgExt( const TCHAR *pszSrcExt, const TCHA
 		_tcscat(pszDstExt, szExt);
 	}
 
-	token = _tcstok(p, m_typeExtSeps);
+	token = _tcstok(p, typeExtSeps);
 	while (token) {
 		if (!szExt || szExt[0] == _T('\0') || auto_stricmp(token, szExt + 1) != 0) {
 			if (pszDstExt[0] != '\0') _tcscat( pszDstExt, _T(";") );
 			// 拡張子指定なし、またはマッチした拡張子でない
-			if (_tcspbrk(token, m_typeExtWildcards) == NULL) {
+			if (_tcspbrk(token, typeExtWildcards) == NULL) {
 				if (_T('.') == *token) _tcscat(pszDstExt, _T("*"));
 				else                 _tcscat(pszDstExt, _T("*."));
 			}
 			_tcscat(pszDstExt, token);
 		}
 
-		token = _tcstok( NULL, m_typeExtSeps );
+		token = _tcstok( NULL, typeExtSeps );
 	}
 	free( p );	// 2003.05.20 MIK メモリ解放漏れ
 	return true;

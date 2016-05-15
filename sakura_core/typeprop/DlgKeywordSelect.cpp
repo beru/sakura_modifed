@@ -128,8 +128,8 @@ void DlgKeywordSelect::SetData(void)
 		// ˆês–Ú‚Í‹ó”’
 		Combo_AddString(hwndCombo, L" ");
 
-		if (pKeywordSetMgr->m_nKeywordSetNum > 0) {
-			for (int i=0; i<pKeywordSetMgr->m_nKeywordSetNum; ++i) {
+		if (pKeywordSetMgr->nKeywordSetNum > 0) {
+			for (int i=0; i<pKeywordSetMgr->nKeywordSetNum; ++i) {
 				Combo_AddString(hwndCombo, pKeywordSetMgr->GetTypeName(i));
 			}
 

@@ -388,7 +388,7 @@ int KeyBind::GetKeyStrList(
 
 
 /*! アクセスキー付きの文字列の作成
-	@param m_name ラベル
+	@param name ラベル
 	@param sKey アクセスキー
 	@return アクセスキー付きの文字列
 	@data 2013.12.09 novice アクセスキーと文字列の比較で小文字も有効にする
@@ -808,7 +808,7 @@ bool ShareData::InitKeyAssign(DllSharedData& shareData)
 	// From Here 2007.11.04 genta バッファオーバーラン防止
 	assert(!(nKeyDataInitNum > KEYNAME_SIZE));
 //	if (nKeyDataInitNum > KEYNAME_SIZE) {
-//		PleaseReportToAuthor(NULL, _T("キー設定数に対してDLLSHARE::m_nKeyNameArr[]のサイズが不足しています"));
+//		PleaseReportToAuthor(NULL, _T("キー設定数に対してDLLSHARE::nKeyNameArr[]のサイズが不足しています"));
 //		return false;
 //	}
 	// To Here 2007.11.04 genta バッファオーバーラン防止

@@ -36,7 +36,7 @@
 BOOL EditView::CreateScrollBar()
 {
 	// スクロールバーの作成
-	m_hwndVScrollBar = ::CreateWindowEx(
+	hwndVScrollBar = ::CreateWindowEx(
 		0L,									// no extended styles
 		_T("SCROLLBAR"),					// scroll bar control class
 		NULL,								// text for window title bar
@@ -58,13 +58,13 @@ BOOL EditView::CreateScrollBar()
 	si.nPage = 10;
 	si.nPos  = 0;
 	si.nTrackPos = 1;
-	::SetScrollInfo(m_hwndVScrollBar, SB_CTL, &si, TRUE);
-	::ShowScrollBar(m_hwndVScrollBar, SB_CTL, TRUE);
+	::SetScrollInfo(hwndVScrollBar, SB_CTL, &si, TRUE);
+	::ShowScrollBar(hwndVScrollBar, SB_CTL, TRUE);
 
 	// スクロールバーの作成
-	m_hwndHScrollBar = NULL;
+	hwndHScrollBar = NULL;
 	if (GetDllShareData().common.window.bScrollBarHorz) {	// 水平スクロールバーを使う
-		m_hwndHScrollBar = ::CreateWindowEx(
+		hwndHScrollBar = ::CreateWindowEx(
 			0L,									// no extended styles
 			_T("SCROLLBAR"),					// scroll bar control class
 			NULL,								// text for window title bar
@@ -85,13 +85,13 @@ BOOL EditView::CreateScrollBar()
 		si.nPage = 10;
 		si.nPos  = 0;
 		si.nTrackPos = 1;
-		::SetScrollInfo(m_hwndHScrollBar, SB_CTL, &si, TRUE);
-		::ShowScrollBar(m_hwndHScrollBar, SB_CTL, TRUE);
+		::SetScrollInfo(hwndHScrollBar, SB_CTL, &si, TRUE);
+		::ShowScrollBar(hwndHScrollBar, SB_CTL, TRUE);
 	}
 
 	// サイズボックス
 	if (GetDllShareData().common.window.nFuncKeyWnd_Place == 0) {	// ファンクションキー表示位置／0:上 1:下
-		m_hwndSizeBox = ::CreateWindowEx(
+		hwndSizeBox = ::CreateWindowEx(
 			WS_EX_CONTROLPARENT/*0L*/, 			// no extended styles
 			_T("SCROLLBAR"),					// scroll bar control class
 			NULL,								// text for window title bar
@@ -106,7 +106,7 @@ BOOL EditView::CreateScrollBar()
 			(LPVOID) NULL						// pointer not needed
 		);
 	}else {
-		m_hwndSizeBox = ::CreateWindowEx(
+		hwndSizeBox = ::CreateWindowEx(
 			0L, 								// no extended styles
 			_T("STATIC"),						// scroll bar control class
 			NULL,								// text for window title bar
@@ -131,19 +131,19 @@ BOOL EditView::CreateScrollBar()
 */
 void EditView::DestroyScrollBar()
 {
-	if (m_hwndVScrollBar) {
-		::DestroyWindow(m_hwndVScrollBar);
-		m_hwndVScrollBar = NULL;
+	if (hwndVScrollBar) {
+		::DestroyWindow(hwndVScrollBar);
+		hwndVScrollBar = NULL;
 	}
 
-	if (m_hwndHScrollBar) {
-		::DestroyWindow(m_hwndHScrollBar);
-		m_hwndHScrollBar = NULL;
+	if (hwndHScrollBar) {
+		::DestroyWindow(hwndHScrollBar);
+		hwndHScrollBar = NULL;
 	}
 
-	if (m_hwndSizeBox) {
-		::DestroyWindow(m_hwndSizeBox);
-		m_hwndSizeBox = NULL;
+	if (hwndSizeBox) {
+		::DestroyWindow(hwndSizeBox);
+		hwndSizeBox = NULL;
 	}
 }
 
@@ -162,8 +162,8 @@ LayoutInt EditView::OnVScroll(int nScrollCode, int nPos)
 
 	// nPos 32bit対応
 	if (nScrollCode == SB_THUMBTRACK || nScrollCode == SB_THUMBPOSITION) {
-		if (m_hwndVScrollBar) {
-			HWND hWndScroll = m_hwndVScrollBar;
+		if (hwndVScrollBar) {
+			HWND hWndScroll = hwndVScrollBar;
 			SCROLLINFO info;
 			info.cbSize = sizeof(SCROLLINFO);
 			info.fMask = SIF_TRACKPOS;
@@ -189,7 +189,7 @@ LayoutInt EditView::OnVScroll(int nScrollCode, int nPos)
 		nScrollVal = ScrollAtV(GetTextArea().GetBottomLine());
 		break;
 	case SB_PAGEUP:
-		nScrollVal = ScrollAtV(GetTextArea().GetViewTopLine() - GetTextArea().m_nViewRowNum);
+		nScrollVal = ScrollAtV(GetTextArea().GetViewTopLine() - GetTextArea().nViewRowNum);
 		break;
 	case SB_THUMBPOSITION:
 		nScrollVal = ScrollAtV(LayoutInt(nPos));
@@ -201,7 +201,7 @@ LayoutInt EditView::OnVScroll(int nScrollCode, int nPos)
 		nScrollVal = ScrollAtV(LayoutInt(0));
 		break;
 	case SB_BOTTOM:
-		nScrollVal = ScrollAtV((m_pEditDoc->m_layoutMgr.GetLineCount()) - GetTextArea().m_nViewRowNum);
+		nScrollVal = ScrollAtV((pEditDoc->layoutMgr.GetLineCount()) - GetTextArea().nViewRowNum);
 		break;
 	default:
 		break;
@@ -225,8 +225,8 @@ LayoutInt EditView::OnHScroll(int nScrollCode, int nPos)
 
 	// nPos 32bit対応
 	if (nScrollCode == SB_THUMBTRACK || nScrollCode == SB_THUMBPOSITION) {
-		if (m_hwndHScrollBar) {
-			HWND hWndScroll = m_hwndHScrollBar;
+		if (hwndHScrollBar) {
+			HWND hWndScroll = hwndHScrollBar;
 			SCROLLINFO info;
 			info.cbSize = sizeof(SCROLLINFO);
 			info.fMask = SIF_TRACKPOS;
@@ -244,7 +244,7 @@ LayoutInt EditView::OnHScroll(int nScrollCode, int nPos)
 		nScrollVal = ScrollAtH(GetTextArea().GetViewLeftCol() + nHScrollNum);
 		break;
 	case SB_PAGELEFT:
-		nScrollVal = ScrollAtH(GetTextArea().GetViewLeftCol() - GetTextArea().m_nViewColNum);
+		nScrollVal = ScrollAtH(GetTextArea().GetViewLeftCol() - GetTextArea().nViewColNum);
 		break;
 	case SB_PAGERIGHT:
 		nScrollVal = ScrollAtH(GetTextArea().GetRightCol());
@@ -262,7 +262,7 @@ LayoutInt EditView::OnHScroll(int nScrollCode, int nPos)
 		break;
 	case SB_RIGHT:
 		//	Aug. 14, 2005 genta 折り返し幅をLayoutMgrから取得するように
-		nScrollVal = ScrollAtH(m_pEditDoc->m_layoutMgr.GetMaxLineKetas() - GetTextArea().m_nViewColNum);
+		nScrollVal = ScrollAtH(pEditDoc->layoutMgr.GetMaxLineKetas() - GetTextArea().nViewColNum);
 		break;
 	}
 	return nScrollVal;
@@ -286,10 +286,10 @@ void EditView::AdjustScrollBars()
 
 	SCROLLINFO	si;
 
-	if (m_hwndVScrollBar) {
+	if (hwndVScrollBar) {
 		// 垂直スクロールバー
 		const LayoutInt	nEofMargin = LayoutInt(2); // EOFとその下のマージン
-		const LayoutInt	nAllLines = m_pEditDoc->m_layoutMgr.GetLineCount() + nEofMargin;
+		const LayoutInt	nAllLines = pEditDoc->layoutMgr.GetLineCount() + nEofMargin;
 		int	nVScrollRate = 1;
 #ifdef _WIN64
 		// nAllLines / nVScrollRate < INT_MAX となる整数nVScrollRateを求める
@@ -302,39 +302,39 @@ void EditView::AdjustScrollBars()
 		si.fMask = SIF_ALL | SIF_DISABLENOSCROLL;
 		si.nMin  = 0;
 		si.nMax  = (Int)nAllLines / nVScrollRate - 1;	// 全行数
-		si.nPage = (Int)GetTextArea().m_nViewRowNum / nVScrollRate;	// 表示域の行数
+		si.nPage = (Int)GetTextArea().nViewRowNum / nVScrollRate;	// 表示域の行数
 		si.nPos  = (Int)GetTextArea().GetViewTopLine() / nVScrollRate;	// 表示域の一番上の行(0開始)
 		si.nTrackPos = 0;
-		::SetScrollInfo(m_hwndVScrollBar, SB_CTL, &si, TRUE);
-		m_nVScrollRate = nVScrollRate;				// 垂直スクロールバーの縮尺
+		::SetScrollInfo(hwndVScrollBar, SB_CTL, &si, TRUE);
+		this->nVScrollRate = nVScrollRate;				// 垂直スクロールバーの縮尺
 		
 		//	Nov. 16, 2002 genta
 		//	縦スクロールバーがDisableになったときは必ず全体が画面内に収まるように
 		//	スクロールさせる
 		//	2005.11.01 aroka 判定条件誤り修正 (バーが消えてもスクロールしない)
-		bool bEnable = (GetTextArea().m_nViewRowNum < nAllLines);
-		if (bEnable != (::IsWindowEnabled(m_hwndVScrollBar) != 0)) {
-			::EnableWindow(m_hwndVScrollBar, bEnable? TRUE: FALSE);	// SIF_DISABLENOSCROLL 誤動作時の強制切替
+		bool bEnable = (GetTextArea().nViewRowNum < nAllLines);
+		if (bEnable != (::IsWindowEnabled(hwndVScrollBar) != 0)) {
+			::EnableWindow(hwndVScrollBar, bEnable? TRUE: FALSE);	// SIF_DISABLENOSCROLL 誤動作時の強制切替
 		}
 		if (!bEnable) {
 			ScrollAtV(LayoutInt(0));
 		}
 	}
-	if (m_hwndHScrollBar) {
+	if (hwndHScrollBar) {
 		// 水平スクロールバー
 		si.cbSize = sizeof(si);
 		si.fMask = SIF_ALL | SIF_DISABLENOSCROLL;
 		si.nMin  = 0;
 		si.nMax  = (Int)GetRightEdgeForScrollBar() - 1;		// 2009.08.28 nasukoji	スクロールバー制御用の右端座標を取得
-		si.nPage = (Int)GetTextArea().m_nViewColNum;		// 表示域の桁数
+		si.nPage = (Int)GetTextArea().nViewColNum;		// 表示域の桁数
 		si.nPos  = (Int)GetTextArea().GetViewLeftCol();		// 表示域の一番左の桁(0開始)
 		si.nTrackPos = 1;
-		::SetScrollInfo(m_hwndHScrollBar, SB_CTL, &si, TRUE);
+		::SetScrollInfo(hwndHScrollBar, SB_CTL, &si, TRUE);
 
 		//	2006.1.28 aroka 判定条件誤り修正 (バーが消えてもスクロールしない)
-		bool bEnable = (GetTextArea().m_nViewColNum < GetRightEdgeForScrollBar());
-		if (bEnable != (::IsWindowEnabled(m_hwndHScrollBar) != 0)) {
-			::EnableWindow(m_hwndHScrollBar, bEnable? TRUE: FALSE);	// SIF_DISABLENOSCROLL 誤動作時の強制切替
+		bool bEnable = (GetTextArea().nViewColNum < GetRightEdgeForScrollBar());
+		if (bEnable != (::IsWindowEnabled(hwndHScrollBar) != 0)) {
+			::EnableWindow(hwndHScrollBar, bEnable? TRUE: FALSE);	// SIF_DISABLENOSCROLL 誤動作時の強制切替
 		}
 		if (!bEnable) {
 			ScrollAtH(LayoutInt(0));
@@ -354,8 +354,8 @@ LayoutInt EditView::ScrollAtV(LayoutInt nPos)
 	LayoutInt	nScrollRowNum;
 	if (nPos < 0) {
 		nPos = LayoutInt(0);
-	}else if ((m_pEditDoc->m_layoutMgr.GetLineCount() + 2) - GetTextArea().m_nViewRowNum < nPos) {
-		nPos = (m_pEditDoc->m_layoutMgr.GetLineCount() + LayoutInt(2)) - GetTextArea().m_nViewRowNum;
+	}else if ((pEditDoc->layoutMgr.GetLineCount() + 2) - GetTextArea().nViewRowNum < nPos) {
+		nPos = (pEditDoc->layoutMgr.GetLineCount() + LayoutInt(2)) - GetTextArea().nViewRowNum;
 		if (nPos < 0) {
 			nPos = LayoutInt(0);
 		}
@@ -367,7 +367,7 @@ LayoutInt EditView::ScrollAtV(LayoutInt nPos)
 	nScrollRowNum = GetTextArea().GetViewTopLine() - nPos;
 
 	// スクロール
-	if (t_abs(nScrollRowNum) >= GetTextArea().m_nViewRowNum) {
+	if (t_abs(nScrollRowNum) >= GetTextArea().nViewRowNum) {
 		GetTextArea().SetViewTopLine(LayoutInt(nPos));
 		::InvalidateRect(GetHwnd(), NULL, TRUE);
 	}else {
@@ -435,7 +435,7 @@ LayoutInt EditView::ScrollAtH(LayoutInt nPos)
 	//	ウィンドウの幅をきわめて狭くしたときに編集領域が行番号から離れてしまうことがあった．
 	//	Aug. 14, 2005 genta 折り返し幅をLayoutMgrから取得するように
 	else {
-		LayoutInt nPos2 = GetRightEdgeForScrollBar() + GetWrapOverhang() - GetTextArea().m_nViewColNum;
+		LayoutInt nPos2 = GetRightEdgeForScrollBar() + GetWrapOverhang() - GetTextArea().nViewColNum;
 		if (nPos2 < nPos) {
 			nPos = nPos2;
 			//	May 29, 2004 genta 折り返し幅よりウィンドウ幅が大きいときにWM_HSCROLLが来ると
@@ -454,7 +454,7 @@ LayoutInt EditView::ScrollAtH(LayoutInt nPos)
 	const LayoutInt	nScrollColNum = textArea.GetViewLeftCol() - nPos;
 
 	// スクロール
-	if (t_abs(nScrollColNum) >= textArea.m_nViewColNum /*|| abs(nScrollRowNum) >= textArea.m_nViewRowNum*/) {
+	if (t_abs(nScrollColNum) >= textArea.nViewColNum /*|| abs(nScrollRowNum) >= textArea.nViewRowNum*/) {
 		textArea.SetViewLeftCol(nPos);
 		::InvalidateRect(GetHwnd(), NULL, TRUE);
 	}else {
@@ -516,8 +516,8 @@ void EditView::ScrollDraw(
 
 	// 背景は画面に対して固定か
 	bool bBackImgFixed = IsBkBitmap() &&
-		(nScrollRowNum != 0 && !m_pTypeData->backImgScrollY ||
-		 nScrollColNum != 0 && !m_pTypeData->backImgScrollX);
+		(nScrollRowNum != 0 && !pTypeData->backImgScrollY ||
+		 nScrollColNum != 0 && !pTypeData->backImgScrollX);
 	if (bBackImgFixed) {
 		Rect rcBody = area.GetAreaRect();
 		rcBody.left = 0; // 行番号も移動
@@ -532,21 +532,21 @@ void EditView::ScrollDraw(
 			NULL, NULL , NULL, SW_ERASE | SW_INVALIDATE
 		);
 		// From Here 2007.09.09 Moca 互換BMPによる画面バッファ
-		if (m_hbmpCompatBMP) {
+		if (hbmpCompatBMP) {
 			// 互換BMPもスクロール処理のためにBitBltで移動させる
 			::BitBlt(
-				m_hdcCompatDC,
+				hdcCompatDC,
 				rcScroll.left + nScrollColPxWidth,
 				rcScroll.top  + (Int)nScrollRowNum * GetTextMetrics().GetHankakuDy(),
 				rcScroll.right - rcScroll.left, rcScroll.bottom - rcScroll.top,
-				m_hdcCompatDC, rcScroll.left, rcScroll.top, SRCCOPY
+				hdcCompatDC, rcScroll.left, rcScroll.top, SRCCOPY
 			);
 		}
 
 		if (1
 			&& 0 < area.GetTopYohaku()
 			&& IsBkBitmap()
-			&& (nScrollRowNum != 0 && m_pTypeData->backImgScrollY || nScrollColNum != 0 && m_pTypeData->backImgScrollX)
+			&& (nScrollRowNum != 0 && pTypeData->backImgScrollY || nScrollColNum != 0 && pTypeData->backImgScrollX)
 		) {
 			// Scrollのときにルーラー余白更新
 			Rect rcTopYohaku;
@@ -559,18 +559,18 @@ void EditView::ScrollDraw(
 			rcTopYohaku.right  = area.GetAreaRight();
 			rcTopYohaku.bottom = area.GetAreaTop();
 			HDC hdcSelf = GetDC();
-			HDC hdcBgImg = m_hdcCompatDC ? m_hdcCompatDC : CreateCompatibleDC(hdcSelf);
-			HBITMAP hOldBmp = (HBITMAP)::SelectObject(hdcBgImg, m_pEditDoc->m_hBackImg);
+			HDC hdcBgImg = hdcCompatDC ? hdcCompatDC : CreateCompatibleDC(hdcSelf);
+			HBITMAP hOldBmp = (HBITMAP)::SelectObject(hdcBgImg, pEditDoc->hBackImg);
 			DrawBackImage(hdcSelf, rcTopYohaku, hdcBgImg);
 			SelectObject(hdcBgImg, hOldBmp);
 			ReleaseDC(hdcSelf);
-			if (!m_hdcCompatDC) {
+			if (!hdcCompatDC) {
 				DeleteObject(hdcBgImg);
 			}
 		}
 		if (IsBkBitmap()
 			&& nScrollColNum != 0
-			&& m_pTypeData->backImgScrollX
+			&& pTypeData->backImgScrollX
 		) {
 			// 行番号背景のために更新
 			Rect rcLineNum;
@@ -579,10 +579,10 @@ void EditView::ScrollDraw(
 		}
 	}
 	// カーソルの縦線がテキストと行番号の隙間にあるとき、スクロール時に縦線領域を更新
-	if (nScrollColNum != 0 && m_nOldCursorLineX == GetTextArea().GetAreaLeft() - 1) {
+	if (nScrollColNum != 0 && nOldCursorLineX == GetTextArea().GetAreaLeft() - 1) {
 		RECT rcClip3;
-		rcClip3.left   = m_nOldCursorLineX - (m_nOldCursorVLineWidth - 1);
-		rcClip3.right  = m_nOldCursorLineX + 1;
+		rcClip3.left   = nOldCursorLineX - (nOldCursorVLineWidth - 1);
+		rcClip3.right  = nOldCursorLineX + 1;
 		rcClip3.top    = GetTextArea().GetAreaTop();
 		rcClip3.bottom = GetTextArea().GetAreaBottom();
 		InvalidateRect(&rcClip3, FALSE);
@@ -605,10 +605,10 @@ void EditView::ScrollDraw(
 
 void EditView::MiniMapRedraw(bool bUpdateAll)
 {
-	if (this == &m_editWnd.GetActiveView() && m_editWnd.GetMiniMap().GetHwnd()) {
-		EditView& miniMap = m_editWnd.GetMiniMap();
-		LayoutYInt nViewTop = miniMap.m_nPageViewTop;
-		LayoutYInt nViewBottom = miniMap.m_nPageViewBottom;
+	if (this == &editWnd.GetActiveView() && editWnd.GetMiniMap().GetHwnd()) {
+		EditView& miniMap = editWnd.GetMiniMap();
+		LayoutYInt nViewTop = miniMap.nPageViewTop;
+		LayoutYInt nViewBottom = miniMap.nPageViewBottom;
 		LayoutYInt nDiff = nViewTop - GetTextArea().GetViewTopLine();
 		LayoutYInt nDrawTopTop;
 		LayoutYInt nDrawTopBottom;
@@ -688,10 +688,10 @@ void EditView::MiniMapRedraw(bool bUpdateAll)
 void EditView::SyncScrollV(LayoutInt line)
 {
 	if (GetDllShareData().common.window.bSplitterWndVScroll && line != 0 
-		&& m_editWnd.IsEnablePane(m_nMyIndex^0x01) 
-		&& 0 <= m_nMyIndex
+		&& editWnd.IsEnablePane(nMyIndex^0x01) 
+		&& 0 <= nMyIndex
 	) {
-		EditView&	editView = m_editWnd.GetView(m_nMyIndex^0x01);
+		EditView& editView = editWnd.GetView(nMyIndex^0x01);
 #if 0
 		//	差分を保ったままスクロールする場合
 		editView.ScrollByV(line);
@@ -716,10 +716,10 @@ void EditView::SyncScrollV(LayoutInt line)
 void EditView::SyncScrollH(LayoutInt col)
 {
 	if (GetDllShareData().common.window.bSplitterWndHScroll && col != 0
-		&& m_editWnd.IsEnablePane(m_nMyIndex^0x02)
-		&& 0 <= m_nMyIndex
+		&& editWnd.IsEnablePane(nMyIndex^0x02)
+		&& 0 <= nMyIndex
 	) {
-		EditView& editView = m_editWnd.GetView(m_nMyIndex^0x02);
+		EditView& editView = editWnd.GetView(nMyIndex^0x02);
 		HDC hdc = ::GetDC(editView.GetHwnd());
 		
 #if 0
@@ -740,10 +740,10 @@ void EditView::SyncScrollH(LayoutInt col)
 LayoutInt EditView::GetWrapOverhang(void) const
 {
 	int nMargin = 1;	// 折り返し記号
-	if (!m_pTypeData->bKinsokuHide) {	// ぶら下げを隠す時はスキップ	2012/11/30 Uchi
-		if (m_pTypeData->bKinsokuRet)
+	if (!pTypeData->bKinsokuHide) {	// ぶら下げを隠す時はスキップ	2012/11/30 Uchi
+		if (pTypeData->bKinsokuRet)
 			nMargin += 1;	// 改行ぶら下げ
-		if (m_pTypeData->bKinsokuKuto)
+		if (pTypeData->bKinsokuKuto)
 			nMargin += 2;	// 句読点ぶら下げ
 	}
 	return LayoutInt(nMargin);
@@ -791,15 +791,15 @@ LayoutInt EditView::ViewColNumToWrapColNum(LayoutInt nViewColNum) const
 LayoutInt EditView::GetRightEdgeForScrollBar(void)
 {
 	// 折り返し桁以後のぶら下げ余白計算
-	LayoutInt nWidth = m_pEditDoc->m_layoutMgr.GetMaxLineKetas() + GetWrapOverhang();
+	LayoutInt nWidth = pEditDoc->layoutMgr.GetMaxLineKetas() + GetWrapOverhang();
 	
-	if (m_pEditDoc->m_nTextWrapMethodCur == TextWrappingMethod::NoWrapping) {
-		LayoutInt nRightEdge = m_pEditDoc->m_layoutMgr.GetMaxTextWidth();	// テキストの最大幅
+	if (pEditDoc->nTextWrapMethodCur == TextWrappingMethod::NoWrapping) {
+		LayoutInt nRightEdge = pEditDoc->layoutMgr.GetMaxTextWidth();	// テキストの最大幅
 
 		// 選択範囲あり かつ 範囲の右端がテキストの幅より右側
 		if (GetSelectionInfo().IsTextSelected()) {
 			// 開始位置・終了位置のより右側にある方で比較
-			auto& select = GetSelectionInfo().m_select;
+			auto& select = GetSelectionInfo().select;
 			if (select.GetFrom().GetX2() < select.GetTo().GetX2()) {
 				if (nRightEdge < select.GetTo().GetX2())
 					nRightEdge = select.GetTo().GetX2();

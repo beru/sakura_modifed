@@ -26,18 +26,18 @@
 #include <string>
 #include "util/string_ex.h"
 
-#define m_delete2(p) { if (p) { delete[] p; p = 0; } }
+#define delete2(p) { if (p) { delete[] p; p = 0; } }
 
 class String {
 public:
 	// コンストラクタ・デストラクタ
-	String(WCHAR wc)								: m_wstr(1, wc),		m_str_cache(NULL) { }
-	String(const WCHAR* szData = L"")				: m_wstr(szData),		m_str_cache(NULL) { }
-	String(const WCHAR* pData, size_t nLength)		: m_wstr(pData, nLength), m_str_cache(NULL) { }
-	String(const ACHAR* szData)						: m_wstr(L""), m_str_cache(NULL) { set(szData); }
-	String(const ACHAR* pData, size_t nLength)		: m_wstr(L""), m_str_cache(NULL) { set(pData, nLength); }
-	String(ACHAR wc)								: m_wstr(L""), m_str_cache(NULL) { ACHAR buf[2] = {wc, 0}; set(buf); }
-	String(const String& rhs) : m_wstr(rhs.c_wstr()), m_str_cache(NULL) { }
+	String(WCHAR wc)								: wstr(1, wc),		str_cache(NULL) { }
+	String(const WCHAR* szData = L"")				: wstr(szData),		str_cache(NULL) { }
+	String(const WCHAR* pData, size_t nLength)		: wstr(pData, nLength), str_cache(NULL) { }
+	String(const ACHAR* szData)						: wstr(L""), str_cache(NULL) { set(szData); }
+	String(const ACHAR* pData, size_t nLength)		: wstr(L""), str_cache(NULL) { set(pData, nLength); }
+	String(ACHAR wc)								: wstr(L""), str_cache(NULL) { ACHAR buf[2] = {wc, 0}; set(buf); }
+	String(const String& rhs) : wstr(rhs.c_wstr()), str_cache(NULL) { }
 	~String();
 
 	// 演算子
@@ -46,14 +46,14 @@ public:
 	String& operator = (const String& rhs) { set(rhs); return *this; }
 
 	// 設定
-	void set(const wchar_t* wszData) { m_wstr = wszData; m_delete2(m_str_cache); }
-	void set(const wchar_t* wszData, int nLength) { m_wstr.assign(wszData, nLength); m_delete2(m_str_cache); }
+	void set(const wchar_t* wszData) { wstr = wszData; delete2(str_cache); }
+	void set(const wchar_t* wszData, int nLength) { wstr.assign(wszData, nLength); delete2(str_cache); }
 	void set(const char* szData);
 	void set(const char* szData, int nLength);
 	void set(const String& szData) { set(szData.c_wstr()); }
 
 	// 取得
-	const wchar_t* c_wstr() const { return m_wstr.c_str(); }
+	const wchar_t* c_wstr() const { return wstr.c_str(); }
 	const char* c_astr() const;
 	int wlength() const { return wcslen(c_wstr()); }
 	int alength() const { return strlen(c_astr()); }
@@ -67,8 +67,8 @@ public:
 #endif
 
 private:
-	std::wstring m_wstr;
-	mutable char* m_str_cache; // c_str用キャッシュ。m_wstrが変更(set)されたらこれを解放し、NULLにしておくのがルール。
+	std::wstring wstr;
+	mutable char* str_cache; // c_str用キャッシュ。wstrが変更(set)されたらこれを解放し、NULLにしておくのがルール。
 };
 
 // std::string の TCHAR 対応用マクロ定義
@@ -126,26 +126,26 @@ public:
 class CommandLineString {
 public:
 	CommandLineString() {
-		m_szCmdLine[0] = _T('\0');
-		m_pHead = m_szCmdLine;
+		szCmdLine[0] = _T('\0');
+		pHead = szCmdLine;
 	}
 	void AppendF(const TCHAR* szFormat, ...) {
 		va_list v;
 		va_start(v, szFormat);
-		m_pHead += auto_vsprintf_s(m_pHead, _countof(m_szCmdLine) - (m_pHead - m_szCmdLine), szFormat, v);
+		pHead += auto_vsprintf_s(pHead, _countof(szCmdLine) - (pHead - szCmdLine), szFormat, v);
 		va_end(v);
 	}
 	const TCHAR* c_str() const {
-		return m_szCmdLine;
+		return szCmdLine;
 	}
 	size_t size() const {
-		return m_pHead - m_szCmdLine;
+		return pHead - szCmdLine;
 	}
 	size_t max_size() const {
-		return _countof(m_szCmdLine) - 1;
+		return _countof(szCmdLine) - 1;
 	}
 private:
-	TCHAR	m_szCmdLine[1024];
-	TCHAR*	m_pHead;
+	TCHAR	szCmdLine[1024];
+	TCHAR*	pHead;
 };
 

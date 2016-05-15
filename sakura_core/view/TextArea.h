@@ -43,71 +43,71 @@ public:
 
 	// 表示される最初の行
 	LayoutInt GetViewTopLine() const {
-		return m_nViewTopLine;
+		return nViewTopLine;
 	}
 	void SetViewTopLine(LayoutInt nLine) {
-		m_nViewTopLine = nLine;
+		nViewTopLine = nLine;
 	}
 
 	// 表示域の一番左の桁
 	LayoutInt GetViewLeftCol() const {
-		return m_nViewLeftCol;
+		return nViewLeftCol;
 	}
 	void SetViewLeftCol(LayoutInt nLeftCol) {
-		m_nViewLeftCol = nLeftCol;
+		nViewLeftCol = nLeftCol;
 	}
 
 	// 右にはみ出した最初の列を返す
 	LayoutInt GetRightCol() const {
-		return m_nViewLeftCol + m_nViewColNum;
+		return nViewLeftCol + nViewColNum;
 	}
 
 	// 下にはみ出した最初の行を返す
 	LayoutInt GetBottomLine() const {
-		return m_nViewTopLine + m_nViewRowNum;
+		return nViewTopLine + nViewRowNum;
 	}
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                   領域を取得(ピクセル)                      //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	int GetAreaLeft() const {
-		return m_nViewAlignLeft;
+		return nViewAlignLeft;
 	}
 	int GetAreaTop() const {
-		return m_nViewAlignTop;
+		return nViewAlignTop;
 	}
 	int GetAreaRight() const {
-		return m_nViewAlignLeft + m_nViewCx;
+		return nViewAlignLeft + nViewCx;
 	}
 	int GetAreaBottom() const {
-		return m_nViewAlignTop + m_nViewCy;
+		return nViewAlignTop + nViewCy;
 	}
 	Rect GetAreaRect() const {
 		return Rect(GetAreaLeft(), GetAreaTop(), GetAreaRight(), GetAreaBottom());
 	}
 
 	int GetAreaWidth() const {
-		return m_nViewCx;
+		return nViewCx;
 	}
 	int GetAreaHeight() const {
-		return m_nViewCy;
+		return nViewCy;
 	}
 
 	int GetTopYohaku() const {
-		return m_nTopYohaku;
+		return nTopYohaku;
 	}
 	void SetTopYohaku(int nPixel) {
-		m_nTopYohaku = nPixel;
+		nTopYohaku = nPixel;
 	}
 	int GetLeftYohaku() const {
-		return m_nLeftYohaku;
+		return nLeftYohaku;
 	}
 	void SetLeftYohaku(int nPixel) {
-		m_nLeftYohaku = nPixel;
+		nLeftYohaku = nPixel;
 	}
 	// 行番号の幅(余白なし)
 	int GetLineNumberWidth() const {
-		return m_nViewAlignLeft - m_nLeftYohaku;
+		return nViewAlignLeft - nLeftYohaku;
 	}
 
 	// クライアントサイズ更新
@@ -143,7 +143,7 @@ public:
 	//                        その他取得                           //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	int GetRulerHeight() const {
-		return m_nViewAlignTop - GetTopYohaku();
+		return nViewAlignTop - GetTopYohaku();
 	}
 	// ドキュメント左端のクライアント座標を取得 (つまり、スクロールされた状態であれば、マイナスを返す)
 	int GetDocumentLeftClientPointX() const;
@@ -157,13 +157,13 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	void UpdateAreaMetrics(HDC hdc);
 	void SetAreaLeft(int nAreaLeft) {
-		m_nViewAlignLeft = nAreaLeft;
+		nViewAlignLeft = nAreaLeft;
 	}
 	void SetAreaTop(int nAreaTop) {
-		m_nViewAlignTop = nAreaTop;
+		nViewAlignTop = nAreaTop;
 	}
 	void OffsetViewTopLine(LayoutInt nOff) {
-		m_nViewTopLine += nOff;
+		nViewTopLine += nOff;
 	}
 protected:
 	void UpdateViewColRowNums();
@@ -195,33 +195,33 @@ public:
 
 private:
 	// 参照
-	EditView&	m_editView;
+	EditView&	editView;
 
 public:
 	// 画面情報
 	// ピクセル
 private:
-	int		m_nViewAlignLeft;		// 表示域の左端座標
-	int		m_nViewAlignTop;		// 表示域の上端座標
+	int		nViewAlignLeft;		// 表示域の左端座標
+	int		nViewAlignTop;		// 表示域の上端座標
 private:
-	int		m_nTopYohaku;
-	int		m_nLeftYohaku;
+	int		nTopYohaku;
+	int		nLeftYohaku;
 private:
-	int		m_nViewCx;				// 表示域の幅
-	int		m_nViewCy;				// 表示域の高さ
+	int		nViewCx;				// 表示域の幅
+	int		nViewCy;				// 表示域の高さ
 
 	// テキスト
 private:
-	LayoutInt	m_nViewTopLine;		// 表示域の一番上の行(0開始)
+	LayoutInt	nViewTopLine;		// 表示域の一番上の行(0開始)
 public:
-	LayoutInt	m_nViewRowNum;		// 表示域の行数
+	LayoutInt	nViewRowNum;		// 表示域の行数
 
 private:
-	LayoutInt	m_nViewLeftCol;		// 表示域の一番左の桁(0開始)
+	LayoutInt	nViewLeftCol;		// 表示域の一番左の桁(0開始)
 public:
-	LayoutInt	m_nViewColNum;		// 表示域の桁数
+	LayoutInt	nViewColNum;		// 表示域の桁数
 
 	// その他
-	int		m_nViewAlignLeftCols;	// 行番号域の桁数
+	int		nViewAlignLeftCols;	// 行番号域の桁数
 };
 

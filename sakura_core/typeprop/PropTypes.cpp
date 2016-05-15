@@ -92,15 +92,15 @@ PropTypes::PropTypes()
 	}
 
 	// 共有データ構造体のアドレスを返す
-	m_pShareData = &GetDllShareData();
+	pShareData = &GetDllShareData();
 
 	// Mar. 31, 2003 genta メモリ削減のためポインタに変更
-	m_pKeywordSetMgr = &m_pShareData->common.specialKeyword.keywordSetMgr;
+	pKeywordSetMgr = &pShareData->common.specialKeyword.keywordSetMgr;
 
-	m_hInstance = NULL;		// アプリケーションインスタンスのハンドル
-	m_hwndParent = NULL;	// オーナーウィンドウのハンドル
-	m_hwndThis  = NULL;		// このダイアログのハンドル
-	m_nPageNum = ID_PROPTYPE_PAGENUM_SCREEN;
+	hInstance = NULL;		// アプリケーションインスタンスのハンドル
+	hwndParent = NULL;	// オーナーウィンドウのハンドル
+	hwndThis  = NULL;		// このダイアログのハンドル
+	nPageNum = ID_PROPTYPE_PAGENUM_SCREEN;
 
 	(static_cast<PropTypesScreen*>(this))->CPropTypes_Screen();
 }
@@ -112,12 +112,12 @@ PropTypes::~PropTypes()
 // 初期化
 void PropTypes::Create(HINSTANCE hInstApp, HWND hwndParent)
 {
-	m_hInstance = hInstApp;		// アプリケーションインスタンスのハンドル
-	m_hwndParent = hwndParent;	// オーナーウィンドウのハンドル
+	this->hInstance = hInstApp;		// アプリケーションインスタンスのハンドル
+	this->hwndParent = hwndParent;	// オーナーウィンドウのハンドル
 }
 
 struct TypePropSheetInfo {
-	int m_nTabNameId;										// TABの表示名
+	int nTabNameId;											// TABの表示名
 	unsigned int resId;										// Property sheetに対応するDialog resource
 	INT_PTR (CALLBACK *DProc)(HWND, UINT, WPARAM, LPARAM);	// Dialog Procedure
 };
@@ -143,16 +143,16 @@ INT_PTR PropTypes::DoPropertySheet(int nPageNum)
 	};
 
 	// カスタム色を共有メモリから取得
-	memcpy_raw( m_dwCustColors, m_pShareData->dwCustColors, sizeof(m_dwCustColors) );
+	memcpy_raw( dwCustColors, pShareData->dwCustColors, sizeof(dwCustColors) );
 	// 2005.11.30 Moca カスタム色の先頭にテキスト色を設定しておく
-	m_dwCustColors[0] = m_types.colorInfoArr[COLORIDX_TEXT].colorAttr.cTEXT;
-	m_dwCustColors[1] = m_types.colorInfoArr[COLORIDX_TEXT].colorAttr.cBACK;
+	dwCustColors[0] = types.colorInfoArr[COLORIDX_TEXT].colorAttr.cTEXT;
+	dwCustColors[1] = types.colorInfoArr[COLORIDX_TEXT].colorAttr.cBACK;
 
 	std::tstring sTabname[_countof(TypePropSheetInfoList)];
-	m_bChangeKeywordSet = false;
+	bChangeKeywordSet = false;
 	PROPSHEETPAGE psp[_countof(TypePropSheetInfoList)];
 	for (nIdx=0; nIdx<_countof(TypePropSheetInfoList); ++nIdx) {
-		sTabname[nIdx] = LS(TypePropSheetInfoList[nIdx].m_nTabNameId);
+		sTabname[nIdx] = LS(TypePropSheetInfoList[nIdx].nTabNameId);
 
 		PROPSHEETPAGE* p = &psp[nIdx];
 		memset_raw(p, 0, sizeof_raw(*p));
@@ -175,7 +175,7 @@ INT_PTR PropTypes::DoPropertySheet(int nPageNum)
 
 	// JEPROtest Sept. 30, 2000 タイプ別設定の隠れ[適用]ボタンの正体はここ。行頭のコメントアウトを入れ替えてみればわかる
 	psh.dwFlags    = /*PSH_USEICONID |*/ PSH_NOAPPLYNOW | PSH_PROPSHEETPAGE/* | PSH_HASHELP*/ | PSH_USEPAGELANG;
-	psh.hwndParent = m_hwndParent;
+	psh.hwndParent = hwndParent;
 	psh.hInstance  = SelectLang::getLangRsrcInstance();
 	psh.pszIcon    = NULL;
 	psh.pszCaption = LS(STR_PROPTYPE);	// _T("タイプ別設定");	// Sept. 8, 2000 jepro 単なる「設定」から変更
@@ -183,7 +183,7 @@ INT_PTR PropTypes::DoPropertySheet(int nPageNum)
 
 	//- 20020106 aroka # psh.nStartPage は unsigned なので負にならない
 	if (nPageNum == -1) {
-		psh.nStartPage = m_nPageNum;
+		psh.nStartPage = nPageNum;
 	}else if (0 > nPageNum) {			//- 20020106 aroka
 		psh.nStartPage = 0;
 	}else {
@@ -221,7 +221,7 @@ INT_PTR PropTypes::DoPropertySheet(int nPageNum)
 	}
 
 	// カスタム色を共有メモリに設定
-	memcpy_raw( m_pShareData->dwCustColors, m_dwCustColors, sizeof(m_dwCustColors) );
+	memcpy_raw( pShareData->dwCustColors, dwCustColors, sizeof(dwCustColors) );
 
 	return nRet;
 }

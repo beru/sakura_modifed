@@ -47,7 +47,7 @@ public:
 	std::wstring ReadLineW(); // 1行読込。改行は削る
 
 private:
-	bool m_bIsUtf8; // UTF-8ならtrue
+	bool bIsUtf8; // UTF-8ならtrue
 };
 
 // テキスト出力ストリーム
@@ -66,7 +66,7 @@ public:
 	void WriteInt(int n);
 
 private:
-	CodeBase* m_pCodeBase;
+	CodeBase* pCodeBase;
 };
 
 

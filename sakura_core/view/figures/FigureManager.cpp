@@ -32,55 +32,55 @@
 
 FigureManager::FigureManager()
 {
-	m_vFigures.push_back(new Figure_Tab());
-	m_vFigures.push_back(new Figure_HanSpace());
-	m_vFigures.push_back(new Figure_ZenSpace());
-	m_vFigures.push_back(new Figure_Eol());
-	m_vFigures.push_back(new Figure_CtrlCode());
-	m_vFigures.push_back(new Figure_HanBinary());
-	m_vFigures.push_back(new Figure_ZenBinary());
-	m_vFigures.push_back(new Figure_Text());
+	vFigures.push_back(new Figure_Tab());
+	vFigures.push_back(new Figure_HanSpace());
+	vFigures.push_back(new Figure_ZenSpace());
+	vFigures.push_back(new Figure_Eol());
+	vFigures.push_back(new Figure_CtrlCode());
+	vFigures.push_back(new Figure_HanBinary());
+	vFigures.push_back(new Figure_ZenBinary());
+	vFigures.push_back(new Figure_Text());
 
 	OnChangeSetting();
 }
 
 FigureManager::~FigureManager()
 {
-	m_vFiguresDisp.clear();
+	vFiguresDisp.clear();
 
-	int size = (int)m_vFigures.size();
+	int size = (int)vFigures.size();
 	for (int i=0; i<size; ++i) {
-		SAFE_DELETE(m_vFigures[i]);
+		SAFE_DELETE(vFigures[i]);
 	}
-	m_vFigures.clear();
+	vFigures.clear();
 }
 
 //$$ 高速化可能
 Figure& FigureManager::GetFigure(const wchar_t* pText, int nTextLen)
 {
-	int size = (int)m_vFiguresDisp.size();
+	int size = (int)vFiguresDisp.size();
 	for (int i=0; i<size; ++i) {
-		Figure* pFigure = m_vFiguresDisp[i];
+		Figure* pFigure = vFiguresDisp[i];
 		if (pFigure->Match(pText, nTextLen)) {
 			return *pFigure;
 		}
 	}
 
 	assert(0);
-	return *m_vFiguresDisp.back();
+	return *vFiguresDisp.back();
 }
 
 // 設定更新
 void FigureManager::OnChangeSetting(void)
 {
-	m_vFiguresDisp.clear();
+	vFiguresDisp.clear();
 
-	int size = (int)m_vFigures.size();
+	int size = (int)vFigures.size();
 	for (int i=0; i<size; ++i) {
-		m_vFigures[i]->Update();
+		vFigures[i]->Update();
 		// 色分け表示対象のみを登録
-		if (m_vFigures[i]->Disp()) {
-			m_vFiguresDisp.push_back(m_vFigures[i]);
+		if (vFigures[i]->Disp()) {
+			vFiguresDisp.push_back(vFigures[i]);
 		}
 	}
 }

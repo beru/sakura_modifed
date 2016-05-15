@@ -42,7 +42,7 @@ public:
 	const TCHAR*	pszTitle;		// ダイアログタイトル
 	const TCHAR*	pszMessage;	// メッセージ
 	int			nMaxTextLen;		// 入力サイズ上限
-//	char*		m_pszText;			// テキスト
+//	char*		pszText;			// テキスト
 	NativeT	memText;			// テキスト
 protected:
 	/*

@@ -30,7 +30,7 @@ public:
 	DocLocker();
 
 	// クリア
-	void Clear(void) { m_bIsDocWritable = true; }
+	void Clear(void) { bIsDocWritable = true; }
 
 	// ロード前後
 	void OnAfterLoad(const LoadInfo& loadInfo);
@@ -40,12 +40,12 @@ public:
 	void OnAfterSave(const SaveInfo& saveInfo);
 
 	// 状態
-	bool IsDocWritable() const { return m_bIsDocWritable; }
+	bool IsDocWritable() const { return bIsDocWritable; }
 
 	// チェック
 	void CheckWritable(bool bMsg);
 
 private:
-	bool m_bIsDocWritable;
+	bool bIsDocWritable;
 };
 

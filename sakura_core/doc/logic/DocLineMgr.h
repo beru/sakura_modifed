@@ -50,17 +50,17 @@ public:
 	~DocLineMgr();
 	
 	// 状態
-	LogicInt GetLineCount() const { return m_nLines; }	// 全行数を返す
+	LogicInt GetLineCount() const { return nLines; }	// 全行数を返す
 	
 	// 行データへのアクセス
 	const DocLine* GetLine(LogicInt nLine) const;		// 指定行を取得
 	DocLine* GetLine(LogicInt nLine) {
 		return const_cast<DocLine*>(const_cast<DocLine*>(static_cast<const DocLineMgr*>(this)->GetLine( nLine )));
 	}
-	const DocLine* GetDocLineTop() const { return m_pDocLineTop; }		// 先頭行を取得
-	DocLine* GetDocLineTop() { return m_pDocLineTop; }					// 先頭行を取得
-	const DocLine* GetDocLineBottom() const { return m_pDocLineBot; }	// 最終行を取得
-	DocLine* GetDocLineBottom() { return m_pDocLineBot; }				// 最終行を取得
+	const DocLine* GetDocLineTop() const { return pDocLineTop; }		// 先頭行を取得
+	DocLine* GetDocLineTop() { return pDocLineTop; }					// 先頭行を取得
+	const DocLine* GetDocLineBottom() const { return pDocLineBot; }	// 最終行を取得
+	DocLine* GetDocLineBottom() { return pDocLineBot; }				// 最終行を取得
 	
 	// 行データの管理
 	DocLine* InsertNewLine(DocLine* pPos);		// pPosの直前に新しい行を挿入
@@ -85,15 +85,15 @@ protected:
 	//                        メンバ変数                           //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 private:
-	DocLine*	m_pDocLineTop;		// 最初の行
-	DocLine*	m_pDocLineBot;		// 最後の行(※1行しかない場合はm_pDocLineTopと等しくなる)
-	LogicInt	m_nLines;			// 全行数
+	DocLine*	pDocLineTop;	// 最初の行
+	DocLine*	pDocLineBot;	// 最後の行(※1行しかない場合はpDocLineTopと等しくなる)
+	LogicInt	nLines;			// 全行数
 	
 public:
 	//$$ kobake注: 以下、絶対に切り離したい（最低切り離せなくても、変数の意味をコメントで明確に記すべき）変数群
-	mutable DocLine*	m_pDocLineCurrent;	// 順アクセス時の現在位置
-	mutable LogicInt	m_nPrevReferLine;
-	mutable DocLine*	m_pCodePrevRefer;
+	mutable DocLine*	pDocLineCurrent;	// 順アクセス時の現在位置
+	mutable LogicInt	nPrevReferLine;
+	mutable DocLine*	pCodePrevRefer;
 
 private:
 	DISALLOW_COPY_AND_ASSIGN(DocLineMgr);

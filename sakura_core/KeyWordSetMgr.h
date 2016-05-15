@@ -134,15 +134,15 @@ public:
 		本来の処理とは無関係だが，あるウィンドウで選択したセットが
 		別のウィンドウの設定画面にも引き継がれるようにするため．
 	*/
-	int		m_nCurrentKeywordSetIdx;
-	int		m_nKeywordSetNum;				// キーワードセット数
-	wchar_t	m_szSetNameArr[MAX_SETNUM][MAX_SETNAMELEN + 1];	// キーワードセット名
-	bool	m_bKeywordCaseArr[MAX_SETNUM];	// キーワードの英大文字小文字区別
-	int		m_nKeywordNumArr[MAX_SETNUM];	// キーワードセットに登録されているキーワード数
+	int		nCurrentKeywordSetIdx;
+	int		nKeywordSetNum;				// キーワードセット数
+	wchar_t	szSetNameArr[MAX_SETNUM][MAX_SETNAMELEN + 1];	// キーワードセット名
+	bool	bKeywordCaseArr[MAX_SETNUM];	// キーワードの英大文字小文字区別
+	int		nKeywordNumArr[MAX_SETNUM];	// キーワードセットに登録されているキーワード数
 private:
 	// キーワード格納領域
-	wchar_t	m_szKeywordArr[MAX_KEYWORDNUM][MAX_KEYWORDLEN + 1];	
-	char	m_isSorted[MAX_SETNUM];	// ソートしたかどうかのフラグ(INI未保存)	 //MIK
+	wchar_t	szKeywordArr[MAX_KEYWORDNUM][MAX_KEYWORDLEN + 1];	
+	char	isSorted[MAX_SETNUM];	// ソートしたかどうかのフラグ(INI未保存)	 //MIK
 
 protected:
 	// 2004.07.29 Moca 可変長記憶
@@ -150,8 +150,8 @@ protected:
 		次の開始位置までが確保済みの領域．
 		+1しているのは最後が0で終わるようにするため．
 	*/
-	int		m_nStartIdx[MAX_SETNUM + 1];
-	int		m_nKeywordMaxLenArr[MAX_SETNUM]; // 一番長いキーワードの長さ(ソート後のみ有効)(INI未保存)
+	int		nStartIdx[MAX_SETNUM + 1];
+	int		nKeywordMaxLenArr[MAX_SETNUM]; // 一番長いキーワードの長さ(ソート後のみ有効)(INI未保存)
 
 protected:
 	/*

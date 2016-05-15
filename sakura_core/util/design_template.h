@@ -66,17 +66,17 @@ template <class T>
 class TSingleInstance {
 public:
 	// 公開インターフェース
-	static T* getInstance() { return gm_instance; } // 作成済みのインスタンスを返す。インスタンスが存在しなければ nullptr。
+	static T* getInstance() { return g_instance; } // 作成済みのインスタンスを返す。インスタンスが存在しなければ nullptr。
 
 protected:
 	// ※2個以上のインスタンスは想定していません。assertが破綻を検出します。
-	TSingleInstance() { assert(gm_instance == nullptr); gm_instance = static_cast<T*>(this); }
-	~TSingleInstance() { assert(gm_instance); gm_instance = nullptr; }
+	TSingleInstance() { assert(g_instance == nullptr); g_instance = static_cast<T*>(this); }
+	~TSingleInstance() { assert(g_instance); g_instance = nullptr; }
 private:
-	static T* gm_instance;
+	static T* g_instance;
 };
 template <class T>
-T* TSingleInstance<T>::gm_instance = nullptr;
+T* TSingleInstance<T>::g_instance = nullptr;
 
 
 // 記録もする
@@ -85,28 +85,28 @@ template <class T>
 class TInstanceHolder {
 public:
 	TInstanceHolder() {
-		gm_table.push_back(static_cast<T*>(this));
+		g_table.push_back(static_cast<T*>(this));
 	}
 	virtual ~TInstanceHolder() {
-		for (size_t i=0; i<gm_table.size(); ++i) {
-			if (gm_table[i] == static_cast<T*>(this)) {
-				gm_table.erase(gm_table.begin() + i);
+		for (size_t i=0; i<g_table.size(); ++i) {
+			if (g_table[i] == static_cast<T*>(this)) {
+				g_table.erase(g_table.begin() + i);
 				break;
 			}
 		}
 	}
-	static int GetInstanceCount() { return (int)gm_table.size(); }
+	static int GetInstanceCount() { return (int)g_table.size(); }
 	static T* GetInstance(int nIndex) {
-		if (nIndex >= 0 && nIndex < (int)gm_table.size()) {
-			return gm_table[nIndex];
+		if (nIndex >= 0 && nIndex < (int)g_table.size()) {
+			return g_table[nIndex];
 		}else {
 			return nullptr;
 		}
 	}
 private:
-	static std::vector<T*> gm_table;
+	static std::vector<T*> g_table;
 };
 
 template <class T>
-std::vector<T*> TInstanceHolder<T>::gm_table;
+std::vector<T*> TInstanceHolder<T>::g_table;
 

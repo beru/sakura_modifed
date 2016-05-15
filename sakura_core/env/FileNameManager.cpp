@@ -56,12 +56,12 @@ LPTSTR FileNameManager::GetTransformFileNameFast( LPCTSTR pszSrc, LPTSTR pszDest
 {
 	TCHAR szBuf[_MAX_PATH + 1];
 
-	if (m_nTransformFileNameCount == -1) {
+	if (nTransformFileNameCount == -1) {
 		TransformFileName_MakeCache();
 	}
 
 	int nPxWidth = -1;
-	auto& csFileName = m_pShareData->common.fileName;
+	auto& csFileName = pShareData->common.fileName;
 	if (csFileName.bTransformShortPath && cchMaxWidth != -1) {
 		if (cchMaxWidth == 0) {
 			cchMaxWidth = csFileName.nTransformShortMaxWidth;
@@ -70,16 +70,16 @@ LPTSTR FileNameManager::GetTransformFileNameFast( LPCTSTR pszSrc, LPTSTR pszDest
 		nPxWidth = calc.GetTextWidth(_T("x")) * cchMaxWidth;
 	}
 
-	if (0 < m_nTransformFileNameCount) {
+	if (0 < nTransformFileNameCount) {
 		GetFilePathFormat(pszSrc, pszDest, nDestLen,
-			m_szTransformFileNameFromExp[0],
-			csFileName.szTransformFileNameTo[m_nTransformFileNameOrgId[0]]
+			szTransformFileNameFromExp[0],
+			csFileName.szTransformFileNameTo[nTransformFileNameOrgId[0]]
 		);
-		for (int i=1; i<m_nTransformFileNameCount; ++i) {
+		for (int i=1; i<nTransformFileNameCount; ++i) {
 			_tcscpy(szBuf, pszDest);
 			GetFilePathFormat(szBuf, pszDest, nDestLen,
-				m_szTransformFileNameFromExp[i],
-				csFileName.szTransformFileNameTo[m_nTransformFileNameOrgId[i]]);
+				szTransformFileNameFromExp[i],
+				csFileName.szTransformFileNameTo[nTransformFileNameOrgId[i]]);
 		}
 		if (nPxWidth != -1) {
 			_tcscpy( szBuf, pszDest );
@@ -102,22 +102,22 @@ LPTSTR FileNameManager::GetTransformFileNameFast( LPCTSTR pszSrc, LPTSTR pszDest
 */
 int FileNameManager::TransformFileName_MakeCache(void) {
 	int nCount = 0;
-	auto& csFileName = m_pShareData->common.fileName;
+	auto& csFileName = pShareData->common.fileName;
 	for (int i=0; i<csFileName.nTransformFileNameArrNum; ++i) {
 		if (csFileName.szTransformFileNameFrom[i][0] != L'\0') {
 			if (ExpandMetaToFolder(
 				csFileName.szTransformFileNameFrom[i],
-				m_szTransformFileNameFromExp[nCount],
+				szTransformFileNameFromExp[nCount],
 				_MAX_PATH
 				)
 			) {
-				// szTransformFileNameToとm_szTransformFileNameFromExpの番号がずれることがあるので記録しておく
-				m_nTransformFileNameOrgId[nCount] = i;
+				// szTransformFileNameToとszTransformFileNameFromExpの番号がずれることがあるので記録しておく
+				nTransformFileNameOrgId[nCount] = i;
 				++nCount;
 			}
 		}
 	}
-	m_nTransformFileNameCount = nCount;
+	nTransformFileNameCount = nCount;
 	return nCount;
 }
 
@@ -379,7 +379,7 @@ bool FileNameManager::GetMenuFullLabel(
 	}else if (pfi->bIsGrep) {
 		
 		GetAccessKeyLabelByIndex(szAccKey, bEspaceAmp, index, bAccKeyZeroOrigin);
-		//pfi->m_szGrepKeyShort → memDes
+		//pfi->szGrepKeyShort → memDes
 		NativeW memDes;
 		int nGrepKeyLen = wcslen(pfi->szGrepKey);
 		const int GREPKEY_LIMIT_LEN = 64;
@@ -545,7 +545,7 @@ void FileNameManager::GetIniFileNameDirect( LPTSTR pszPrivateIniFile, LPTSTR psz
 */
 void FileNameManager::GetIniFileName( LPTSTR pszIniFileName, LPCTSTR pszProfName, BOOL bRead/*=FALSE*/ )
 {
-	auto& iniFolder = m_pShareData->fileNameManagement.iniFolder;
+	auto& iniFolder = pShareData->fileNameManagement.iniFolder;
 	if (!iniFolder.bInit) {
 		iniFolder.bInit = true;			// 初期化済フラグ
 		iniFolder.bReadPrivate = false;	// マルチユーザ用iniからの読み出しフラグ

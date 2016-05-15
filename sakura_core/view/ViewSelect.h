@@ -30,8 +30,8 @@ class EditView;
 
 class ViewSelect {
 public:
-	EditView& GetEditView() { return m_editView; }
-	const EditView& GetEditView() const { return m_editView; }
+	EditView& GetEditView() { return editView; }
+	const EditView& GetEditView() const { return editView; }
 
 public:
 	ViewSelect(EditView& editView);
@@ -42,49 +42,51 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	void DisableSelectArea(bool bDraw, bool bDrawBracketCursorLine = true); // 現在の選択範囲を非選択状態に戻す
 
-	void BeginSelectArea(const LayoutPoint* po = NULL);								// 現在のカーソル位置から選択を開始する
-	void ChangeSelectAreaByCurrentCursor(const LayoutPoint& ptCaretPos);			// 現在のカーソル位置によって選択範囲を変更
-	void ChangeSelectAreaByCurrentCursorTEST(const LayoutPoint& ptCaretPos, LayoutRange* pSelect);// 現在のカーソル位置によって選択範囲を変更
+	void BeginSelectArea(const LayoutPoint* po = nullptr);					// 現在のカーソル位置から選択を開始する
+	void ChangeSelectAreaByCurrentCursor(const LayoutPoint& ptCaretPos);	// 現在のカーソル位置によって選択範囲を変更
+	void ChangeSelectAreaByCurrentCursorTEST(
+		const LayoutPoint& ptCaretPos,
+		LayoutRange* pSelect);	// 現在のカーソル位置によって選択範囲を変更
 
 	// 選択範囲を指定する(原点未選択)
 	// 2005.06.24 Moca
 	void SetSelectArea(const LayoutRange& range) {
-		m_selectBgn.Set(range.GetFrom());
-		m_select = range;
+		selectBgn.Set(range.GetFrom());
+		select = range;
 	}
 
 	// 単語選択開始
 	void SelectBeginWord() {
-		m_bBeginSelect     = true;			// 範囲選択中
-		m_bBeginBoxSelect  = false;			// 矩形範囲選択中でない
-		m_bBeginLineSelect = false;			// 行単位選択中
-		m_bBeginWordSelect = true;			// 単語単位選択中
+		bBeginSelect     = true;			// 範囲選択中
+		bBeginBoxSelect  = false;			// 矩形範囲選択中でない
+		bBeginLineSelect = false;			// 行単位選択中
+		bBeginWordSelect = true;			// 単語単位選択中
 	}
 
 	// 矩形選択開始
 	void SelectBeginBox() {
-		m_bBeginSelect     = true;		// 範囲選択中
-		m_bBeginBoxSelect  = true;		// 矩形範囲選択中
-		m_bBeginLineSelect = false;		// 行単位選択中
-		m_bBeginWordSelect = false;		// 単語単位選択中
+		bBeginSelect     = true;		// 範囲選択中
+		bBeginBoxSelect  = true;		// 矩形範囲選択中
+		bBeginLineSelect = false;		// 行単位選択中
+		bBeginWordSelect = false;		// 単語単位選択中
 	}
 
 	// 謎の選択開始
 	void SelectBeginNazo() {
-		m_bBeginSelect     = true;		// 範囲選択中
-//		m_bBeginBoxSelect  = false;		// 矩形範囲選択中でない
-		m_bBeginLineSelect = false;		// 行単位選択中
-		m_bBeginWordSelect = false;		// 単語単位選択中
+		bBeginSelect     = true;		// 範囲選択中
+//		bBeginBoxSelect  = false;		// 矩形範囲選択中でない
+		bBeginLineSelect = false;		// 行単位選択中
+		bBeginWordSelect = false;		// 単語単位選択中
 	}
 
 	// 範囲選択終了
 	void SelectEnd() {
-		m_bBeginSelect = false;
+		bBeginSelect = false;
 	}
 
-	// m_bBeginBoxSelectを設定。
+	// bBeginBoxSelectを設定。
 	void SetBoxSelect(bool b) {
-		m_bBeginBoxSelect = b;
+		bBeginBoxSelect = b;
 	}
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -99,13 +101,17 @@ private:
 		const LayoutRange&	range		// [in] 選択範囲(レイアウト単位)
 	) const;
 public:
-	void GetSelectAreaLineFromRange(LayoutRange& ret, LayoutInt nLineNum, const Layout* pLayout, const LayoutRange& range) const;
+	void GetSelectAreaLineFromRange(
+		LayoutRange& ret,
+		LayoutInt nLineNum,
+		const Layout* pLayout,
+		const LayoutRange& range) const;
 	void GetSelectAreaLine(LayoutRange& ret, LayoutInt nLineNum, const Layout* pLayout) const {
-		GetSelectAreaLineFromRange(ret, nLineNum, pLayout, m_select);
+		GetSelectAreaLineFromRange(ret, nLineNum, pLayout, select);
 	}
 	LayoutRange GetSelectAreaLine(LayoutInt nLineNum, const Layout* pLayout) const {
 		LayoutRange ret;
-		GetSelectAreaLineFromRange(ret, nLineNum, pLayout, m_select);
+		GetSelectAreaLineFromRange(ret, nLineNum, pLayout, select);
 		return ret;
 	}
 	// 選択情報データの作成	2005.07.09 genta
@@ -117,9 +123,9 @@ public:
 	// テキストが選択されているか
 	// 2002/03/29 Azumaiya インライン関数化
 	bool IsTextSelected() const {
-		return m_select.IsValid();
+		return select.IsValid();
 //		return 0 != (
-//			~((DWORD)(m_sSelect.nLineFrom | m_sSelect.nLineTo | m_sSelect.nColumnFrom | m_sSelect.nColumnTo)) >> 31
+//			~((DWORD)(sSelect.nLineFrom | m_sSelect.nLineTo | m_sSelect.nColumnFrom | m_sSelect.nColumnTo)) >> 31
 //			);
 	}
 
@@ -127,50 +133,50 @@ public:
 	// 2002/03/29 Azumaiya インライン関数化
 	bool IsTextSelecting() const {
 		// ジャンプ回数を減らして、一気に判定。
-		return m_bSelectingLock || IsTextSelected();
+		return bSelectingLock || IsTextSelected();
 	}
 
 	// マウスで選択中か
 	bool IsMouseSelecting() const {
-		return m_bBeginSelect;
+		return bBeginSelect;
 	}
 
 	// 矩形選択中か
 	bool IsBoxSelecting() const {
-		return m_bBeginBoxSelect;
+		return bBeginBoxSelect;
 	}
 
 private:
 	// 参照
-	EditView&	m_editView;
+	EditView&	editView;
 
 public:
 
-	bool	m_bDrawSelectArea;		// 選択範囲を描画したか	// 02/12/13 ai
+	bool	bDrawSelectArea;		// 選択範囲を描画したか	// 02/12/13 ai
 
 	// 選択状態
-	bool	m_bSelectingLock;		// 選択状態のロック
+	bool	bSelectingLock;		// 選択状態のロック
 private:
-	bool	m_bBeginSelect;			// 範囲選択中
-	bool	m_bBeginBoxSelect;		// 矩形範囲選択中
-	bool	m_bSelectAreaChanging;	// 選択範囲変更中
-	int		m_nLastSelectedByteLen;	// 前回選択時の選択バイト数
+	bool	bBeginSelect;			// 範囲選択中
+	bool	bBeginBoxSelect;		// 矩形範囲選択中
+	bool	bSelectAreaChanging;	// 選択範囲変更中
+	int		nLastSelectedByteLen;	// 前回選択時の選択バイト数
 
 public:
-	bool	m_bBeginLineSelect;		// 行単位選択中
-	bool	m_bBeginWordSelect;		// 単語単位選択中
+	bool	bBeginLineSelect;		// 行単位選択中
+	bool	bBeginWordSelect;		// 単語単位選択中
 
 	// 選択範囲を保持するための変数群
 	// これらはすべて折り返し行と、折り返し桁を保持している。
-	LayoutRange m_selectBgn; // 範囲選択(原点)
-	LayoutRange m_select;    // 範囲選択
-	LayoutRange m_selectOld; // 範囲選択Old
+	LayoutRange selectBgn; // 範囲選択(原点)
+	LayoutRange select;    // 範囲選択
+	LayoutRange selectOld; // 範囲選択Old
 
-	Point	m_ptMouseRollPosOld;	// マウス範囲選択前回位置(XY座標)
+	Point	ptMouseRollPosOld;	// マウス範囲選択前回位置(XY座標)
 };
 
 /*
-m_sSelectOldについて
+sSelectOldについて
 	DrawSelectArea()に現在の選択範囲を教えて差分のみ描画するためのもの
 	現在の選択範囲をOldへコピーした上で新しい選択範囲をSelectに設定して
 	DrawSelectArea()を呼びだすことで新しい範囲が描かれる．

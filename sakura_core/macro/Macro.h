@@ -85,7 +85,7 @@ struct MacroParam {
 	
 	さて、このクラスは次のような前提で動作している。
 
-	@li 引数のリストを、m_pParamTopからのリスト構造で保持。
+	@li 引数のリストを、pParamTopからのリスト構造で保持。
 	@li 引数を新たに追加するには、AddParam()を使用する。
 	  AddParamにどんな値が渡されてもよいように準備するコト。
 	  渡された値が数値なのか、文字列へのポインタなのかは、nFuncID（機能 ID）によって、このクラス内で判別し、よろしくやること。
@@ -100,8 +100,8 @@ public:
 	~Macro();
 	void ClearMacroParam();
 
-	void SetNext(Macro* pNext) { m_pNext = pNext; }
-	Macro* GetNext() { return m_pNext; }
+	void SetNext(Macro* pNext) { pNext = pNext; }
+	Macro* GetNext() { return pNext; }
 	// 2007.07.20 genta : flags追加
 	bool Exec(EditView& editView, int flags) const; // 2007.09.30 kobake const追加
 	void Save(HINSTANCE hInstance, TextOutputStream& out) const; // 2007.09.30 kobake const追加
@@ -130,9 +130,9 @@ protected:
 	/*
 	||  実装ヘルパ関数
 	*/
-	EFunctionCode	m_nFuncID;		// 機能ID
-	MacroParam*	m_pParamTop;	// パラメータ
-	MacroParam*	m_pParamBot;
-	Macro*			m_pNext;		// 次のマクロへのポインタ
+	EFunctionCode	nFuncID;		// 機能ID
+	MacroParam*		pParamTop;	// パラメータ
+	MacroParam*		pParamBot;
+	Macro*			pNext;		// 次のマクロへのポインタ
 };
 

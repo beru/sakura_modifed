@@ -45,9 +45,9 @@ public:
 	int AddBaseDir(const TCHAR* baseDir);
 	bool AddParamA(const ACHAR* keyword, const ACHAR* filename, int no, ACHAR type, const ACHAR* note, int depth, const int baseDirId);
 	bool GetParam(int index, TCHAR* keyword, TCHAR* filename, int* no, TCHAR* type, TCHAR* note, int* depth, TCHAR* baseDir);
-	int GetCount(void) { return m_nCount; }
+	int GetCount(void) { return nCount; }
 	void Empty(void);
-	bool IsOverflow(void) { return m_bOverflow; }
+	bool IsOverflow(void) { return bOverflow; }
 
 	typedef struct tagjump_info_t {
 		struct tagjump_info_t*	next;	// 次のリスト
@@ -66,16 +66,16 @@ public:
 
 		@date 2005.04.22 genta 最大値を可変に
 	*/
-	int GetCapacity(void) const { return m_capacity; }
+	int GetCapacity(void) const { return capacity; }
 
 private:
-	TagJumpInfo*	m_pTagjump;	// タグジャンプ情報
-	std::vector<std::tstring> m_baseDirArr;	// ベースディレクトリ情報
-	int		m_nCount;		// 個数
-	bool	m_bOverflow;	// オーバーフロー
+	TagJumpInfo* pTagjump;	// タグジャンプ情報
+	std::vector<std::tstring> baseDirArr;	// ベースディレクトリ情報
+	int		nCount;		// 個数
+	bool	bOverflow;	// オーバーフロー
 	
 	//	2005.04.22 genta 最大値を可変に
-	const int	m_capacity;	// 管理する情報の最大数
+	const int	capacity;	// 管理する情報の最大数
 
 	void Free(TagJumpInfo* item);
 

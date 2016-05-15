@@ -146,12 +146,12 @@ PropCommon::PropCommon()
 	}
 
 	// 共有データ構造体のアドレスを返す
-	m_pShareData = &GetDllShareData();
+	pShareData = &GetDllShareData();
 
-	m_hwndParent = NULL;	// オーナーウィンドウのハンドル
-	m_hwndThis  = NULL;		// このダイアログのハンドル
-	m_nPageNum = ID_PROPCOM_PAGENUM_GENERAL;
-	m_nKeywordSet1 = -1;
+	hwndParent = NULL;	// オーナーウィンドウのハンドル
+	hwndThis  = NULL;		// このダイアログのハンドル
+	nPageNum = ID_PROPCOM_PAGENUM_GENERAL;
+	nKeywordSet1 = -1;
 
 	return;
 }
@@ -163,19 +163,19 @@ PropCommon::~PropCommon()
 
 
 // 初期化
-//@@@ 2002.01.03 YAZAKI m_tbMyButtonなどをCShareDataからMenuDrawerへ移動したことによる修正。
+//@@@ 2002.01.03 YAZAKI tbMyButtonなどをCShareDataからMenuDrawerへ移動したことによる修正。
 void PropCommon::Create(HWND hwndParent, ImageListMgr* pIcons, MenuDrawer* pMenuDrawer)
 {
-	m_hwndParent = hwndParent;	// オーナーウィンドウのハンドル
-	m_pIcons = pIcons;
+	hwndParent = hwndParent;	// オーナーウィンドウのハンドル
+	pIcons = pIcons;
 
 	// 2007.11.02 ryoji マクロ設定を変更したあと、画面を閉じないでカスタムメニュー、ツールバー、
 	//                  キー割り当ての画面に切り替えた時に各画面でマクロ設定の変更が反映されるよう、
-	//                  common.macro.macroTable（ローカルメンバ）でm_lookupを初期化する
-	m_lookup.Init(m_common.macro.macroTable, &m_common);	//	機能名・番号resolveクラス．
+	//                  common.macro.macroTable（ローカルメンバ）でlookupを初期化する
+	lookup.Init(common.macro.macroTable, &common);	//	機能名・番号resolveクラス．
 
-//@@@ 2002.01.03 YAZAKI m_tbMyButtonなどをCShareDataからMenuDrawerへ移動したことによる修正。
-	m_pMenuDrawer = pMenuDrawer;
+//@@@ 2002.01.03 YAZAKI tbMyButtonなどをCShareDataからMenuDrawerへ移動したことによる修正。
+	pMenuDrawer = pMenuDrawer;
 
 	return;
 }
@@ -202,7 +202,7 @@ INT_PTR PropCommon::DoPropertySheet(int nPageNum, bool bTrayProc)
 	INT_PTR				nRet;
 	int					nIdx;
 
-	m_bTrayProc = bTrayProc;
+	this->bTrayProc = bTrayProc;
 
 	// From Here Jun. 2, 2001 genta
 	// Feb. 11, 2007 genta URLをTABと入れ換え	// 2007.02.13 順序変更（TABをWINの次に）
@@ -258,7 +258,7 @@ INT_PTR PropCommon::DoPropertySheet(int nPageNum, bool bTrayProc)
 
 	//	JEPROtest Sept. 30, 2000 共通設定の隠れ[適用]ボタンの正体はここ。行頭のコメントアウトを入れ替えてみればわかる
 	psh.dwFlags    = PSH_NOAPPLYNOW | PSH_PROPSHEETPAGE | PSH_USEPAGELANG;
-	psh.hwndParent = m_hwndParent;
+	psh.hwndParent = hwndParent;
 	psh.hInstance  = SelectLang::getLangRsrcInstance();
 	psh.pszIcon    = NULL;
 	psh.pszCaption = LS(STR_PROPCOMMON);	//_T("共通設定");
@@ -266,7 +266,7 @@ INT_PTR PropCommon::DoPropertySheet(int nPageNum, bool bTrayProc)
 
 	//- 20020106 aroka # psh.nStartPage は unsigned なので負にならない
 	if (nPageNum == -1) {
-		psh.nStartPage = m_nPageNum;
+		psh.nStartPage = nPageNum;
 	}else
 	if (0 > nPageNum) {			//- 20020106 aroka
 		psh.nStartPage = 0;
@@ -311,7 +311,7 @@ INT_PTR PropCommon::DoPropertySheet(int nPageNum, bool bTrayProc)
 */
 void PropCommon::InitData(void)
 {
-	m_common = m_pShareData->common;
+	common = pShareData->common;
 
 	// 2002/04/25 YAZAKI TypeConfig全体を保持する必要はない。	;
 	for (int i=0; i<GetDllShareData().nTypesCount; ++i) {
@@ -322,7 +322,7 @@ void PropCommon::InitData(void)
 		for (int j=0; j<MAX_KEYWORDSET_PER_TYPE; ++j) {
 			indexs.index[j] = type.nKeywordSetIdx[j];
 		}
-		m_Types_nKeywordSetIdx.push_back(indexs);
+		types_nKeywordSetIdx.push_back(indexs);
 	}
 }
 
@@ -332,18 +332,18 @@ void PropCommon::InitData(void)
 */
 void PropCommon::ApplyData(void)
 {
-	m_pShareData->common = m_common;
+	pShareData->common = common;
 
-	const int nSize = (int)m_Types_nKeywordSetIdx.size();
+	const int nSize = (int)types_nKeywordSetIdx.size();
 	for (int i=0; i<nSize; ++i) {
-		TypeConfigNum configIdx = DocTypeManager().GetDocumentTypeOfId(m_Types_nKeywordSetIdx[i].typeId);
+		TypeConfigNum configIdx = DocTypeManager().GetDocumentTypeOfId(types_nKeywordSetIdx[i].typeId);
 		if (configIdx.IsValidType()) {
 			TypeConfig type;
 			DocTypeManager().GetTypeConfig(configIdx, type);
 			// 2002/04/25 YAZAKI TypeConfig全体を保持する必要はない。
 			// 変更された設定値のコピー
 			for (int j = 0; j < MAX_KEYWORDSET_PER_TYPE; ++j) {
-				type.nKeywordSetIdx[j] = m_Types_nKeywordSetIdx[i].index[j];
+				type.nKeywordSetIdx[j] = types_nKeywordSetIdx[i].index[j];
 			}
 			DocTypeManager().SetTypeConfig(configIdx, type);
 		}

@@ -19,7 +19,7 @@
 #include "io/TextStream.h"
 using namespace std;
 
-PPA PPAMacroMgr::m_cPPA;
+PPA PPAMacroMgr::cPPA;
 
 PPAMacroMgr::PPAMacroMgr()
 {
@@ -37,8 +37,8 @@ PPAMacroMgr::~PPAMacroMgr()
 */
 bool PPAMacroMgr::ExecKeyMacro(EditView& editView, int flags) const
 {
-	m_cPPA.SetSource(to_achar(m_buffer.GetStringPtr()));
-	return m_cPPA.Execute(editView, flags);
+	cPPA.SetSource(to_achar(buffer.GetStringPtr()));
+	return cPPA.Execute(editView, flags);
 }
 
 /*! キーボードマクロの読み込み（ファイルから）
@@ -48,13 +48,13 @@ bool PPAMacroMgr::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
 {
 	TextInputStream in(pszPath);
 	if (!in) {
-		m_nReady = false;
+		nReady = false;
 		return false;
 	}
 
 	NativeW memWork;
 
-	// バッファ（memWork）にファイル内容を読み込み、m_cPPAに渡す。
+	// バッファ（memWork）にファイル内容を読み込み、cPPAに渡す。
 	while (in) {
 		wstring szLine = in.ReadLineW();
 		szLine += L"\n";
@@ -62,9 +62,9 @@ bool PPAMacroMgr::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
 	}
 	in.Close();
 
-	m_buffer.SetNativeData(memWork);	// m_bufferにコピー
+	buffer.SetNativeData(memWork);	// bufferにコピー
 
-	m_nReady = true;
+	nReady = true;
 	return true;
 }
 
@@ -73,9 +73,9 @@ bool PPAMacroMgr::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
 */
 bool PPAMacroMgr::LoadKeyMacroStr(HINSTANCE hInstance, const TCHAR* pszCode)
 {
-	m_buffer.SetNativeData(to_wchar(pszCode));	// m_bufferにコピー
+	buffer.SetNativeData(to_wchar(pszCode));	// bufferにコピー
 
-	m_nReady = true;
+	nReady = true;
 	return true;
 }
 
@@ -105,7 +105,7 @@ MacroManagerBase* PPAMacroMgr::Creator(class EditView& view, const TCHAR* ext)
 */
 void PPAMacroMgr::Declare (void)
 {
-	if (m_cPPA.InitDll() == InitDllResultType::Success) {
+	if (cPPA.InitDll() == InitDllResultType::Success) {
 		MacroFactory::getInstance().RegisterCreator(Creator);
 	}
 }

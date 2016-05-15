@@ -23,17 +23,17 @@
 
 #pragma comment(lib, "winmm.lib")
 
-int RunningTimer::m_nNestCount = 0;
+int RunningTimer::nNestCount = 0;
 
 RunningTimer::RunningTimer(const char* pszText)
 {
 	Reset();
 	if (pszText)
-		strcpy(m_szText, pszText);
+		strcpy(szText, pszText);
 	else
-		m_szText[0] = '\0';
-	m_nDeapth = m_nNestCount++;
-	TRACE(_T("%3d:\"%hs\" : Enter \n"), m_nDeapth, m_szText);
+		szText[0] = '\0';
+	nDepth = nNestCount++;
+	TRACE(_T("%3d:\"%hs\" : Enter \n"), nDepth, szText);
 	return;
 }
 
@@ -41,20 +41,20 @@ RunningTimer::RunningTimer(const char* pszText)
 RunningTimer::~RunningTimer()
 {
 	WriteTrace("Exit Scope");
-	--m_nNestCount;
+	--nNestCount;
 	return;
 }
 
 
 void RunningTimer::Reset()
 {
-	m_nStartTime = timeGetTime();
+	nStartTime = timeGetTime();
 }
 
 
 DWORD RunningTimer::Read()
 {
-	return timeGetTime() - m_nStartTime;
+	return timeGetTime() - nStartTime;
 }
 
 /*!
@@ -62,7 +62,7 @@ DWORD RunningTimer::Read()
 */
 void RunningTimer::WriteTrace(const char* msg) const
 {
-	TRACE(_T("%3d:\"%hs\", %d‡_•b : %hs\n"), m_nDeapth, m_szText, timeGetTime() - m_nStartTime, msg);
+	TRACE(_T("%3d:\"%hs\", %d‡_•b : %hs\n"), nDepth, szText, timeGetTime() - nStartTime, msg);
 }
 
 #endif // #ifdef _DEBUG

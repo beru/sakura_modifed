@@ -50,7 +50,7 @@ static void MacroError(
 	MessageBox(View->GetHwnd(), to_tchar(Description), to_tchar(Source), MB_ICONERROR);
 }
 
-WSHMacroManager::WSHMacroManager(std::wstring const AEngineName) : m_engineName(AEngineName)
+WSHMacroManager::WSHMacroManager(std::wstring const AEngineName) : engineName(AEngineName)
 {
 }
 
@@ -66,19 +66,19 @@ WSHMacroManager::~WSHMacroManager()
 */
 bool WSHMacroManager::ExecKeyMacro(EditView& editView, int flags) const
 {
-	auto engine = std::make_unique<WSHClient>(m_engineName.c_str(), MacroError, &editView);
+	auto engine = std::make_unique<WSHClient>(engineName.c_str(), MacroError, &editView);
 	bool bRet = false;
-	if (engine->m_Valid) {
+	if (engine->isValid) {
 		// インタフェースオブジェクトの登録
 		WSHIfObj* objEditor = new EditorIfObj();
 		objEditor->ReadyMethods(editView, flags);
 		engine->AddInterfaceObject(objEditor);
-		for (auto it=m_params.begin(); it!=m_params.end(); ++it) {
+		for (auto it=params.begin(); it!=params.end(); ++it) {
 			(*it)->ReadyMethods(editView, flags);
 			engine->AddInterfaceObject(*it);
 		}
 
-		bRet = engine->Execute(m_source.c_str());
+		bRet = engine->Execute(source.c_str());
 	}
 	return bRet;
 }
@@ -91,14 +91,14 @@ bool WSHMacroManager::ExecKeyMacro(EditView& editView, int flags) const
 */
 bool WSHMacroManager::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
 {
-	// ソース読み込み -> m_source
-	m_source = L"";
+	// ソース読み込み -> source
+	source = L"";
 	
 	std::vector<wchar_t> buffW;
 	ReadFileAndUnicodify(pszPath, buffW);
 
 	buffW.push_back(0);
-	m_source = &buffW[0];
+	source = &buffW[0];
 
 	return true;
 }
@@ -111,8 +111,8 @@ bool WSHMacroManager::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
 */
 bool WSHMacroManager::LoadKeyMacroStr(HINSTANCE hInstance, const TCHAR* pszCode)
 {
-	// ソース読み込み -> m_source
-	m_source = to_wchar(pszCode);
+	// ソース読み込み -> source
+	source = to_wchar(pszCode);
 	return true;
 }
 
@@ -143,18 +143,18 @@ void WSHMacroManager::Declare()
 // インタフェースオブジェクトを追加する
 void WSHMacroManager::AddParam(WSHIfObj* param)
 {
-	m_params.push_back(param);
+	params.push_back(param);
 }
 
 // インタフェースオブジェクト達を追加する
 void WSHMacroManager::AddParam(WSHIfObj::List& params)
 {
-	m_params.insert(m_params.end(), params.begin(), params.end());
+	params.insert(params.end(), params.begin(), params.end());
 }
 
 // インタフェースオブジェクトを削除する
 void WSHMacroManager::ClearParam()
 {
-	m_params.clear();
+	params.clear();
 }
 

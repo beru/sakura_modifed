@@ -126,8 +126,8 @@ struct PrintSetting {
 */
 class Print {
 public:
-	static const PaperInfo m_paperInfoArr[];	// 用紙情報一覧
-	static const int m_nPaperInfoArrNum; // 用紙情報一覧の要素数
+	static const PaperInfo paperInfoArr[];	// 用紙情報一覧
+	static const int nPaperInfoArrNum; // 用紙情報一覧の要素数
 
 	/*
 	||	static関数群
@@ -158,8 +158,8 @@ public:
 	/*
 	||  Attributes & Operations
 	*/
-	BOOL GetDefaultPrinter(MYDEVMODE *pMYDEVMODE);		// デフォルトのプリンタ情報を取得
-	BOOL PrintDlg(PRINTDLG *pd, MYDEVMODE *pMYDEVMODE);	// プリンタ情報を取得
+	BOOL GetDefaultPrinter(MYDEVMODE* pMYDEVMODE);		// デフォルトのプリンタ情報を取得
+	BOOL PrintDlg(PRINTDLG* pd, MYDEVMODE* pMYDEVMODE);	// プリンタ情報を取得
 	// 印刷/Previewに必要な情報を取得
 	BOOL GetPrintMetrics(
 		MYDEVMODE*	pMYDEVMODE,
@@ -195,7 +195,7 @@ private:
 	/*
 	||  メンバ変数
 	*/
-	HGLOBAL	m_hDevMode;							// 現在プリンタのDEVMODEへのメモリハンドル
-	HGLOBAL	m_hDevNames;						// 現在プリンタのDEVNAMESへのメモリハンドル
+	HGLOBAL	hDevMode;							// 現在プリンタのDEVMODEへのメモリハンドル
+	HGLOBAL	hDevNames;						// 現在プリンタのDEVNAMESへのメモリハンドル
 };
 

@@ -40,17 +40,17 @@ public:
 // 文字列への参照を保持するクラス
 class StringRef : public IStringRef {
 public:
-	StringRef() : m_pData(NULL), m_nDataLen(0) { }
-	StringRef(const wchar_t* pData, int nDataLen) : m_pData(pData), m_nDataLen(nDataLen) { }
-	const wchar_t*	GetPtr()		const { return m_pData;    }
-	int				GetLength()		const { return m_nDataLen; }
+	StringRef() : pData(NULL), nDataLen(0) { }
+	StringRef(const wchar_t* pData, int nDataLen) : pData(pData), nDataLen(nDataLen) { }
+	const wchar_t*	GetPtr()		const { return pData;    }
+	int				GetLength()		const { return nDataLen; }
 
 	//########補助
-	bool			IsValid()		const { return m_pData != NULL; }
-	wchar_t			At(int nIndex)	const { assert(nIndex >= 0 && nIndex < m_nDataLen); return m_pData[nIndex]; }
+	bool			IsValid()		const { return pData != NULL; }
+	wchar_t			At(int nIndex)	const { assert(nIndex >= 0 && nIndex < nDataLen); return pData[nIndex]; }
 private:
-	const wchar_t*	m_pData;
-	int				m_nDataLen;
+	const wchar_t*	pData;
+	int				nDataLen;
 };
 
 
@@ -193,7 +193,7 @@ public:
 #if _DEBUG
 private:
 	typedef wchar_t* PWCHAR;
-	PWCHAR& m_pDebugData; // デバッグ用。CMemoryの内容をwchar_t*型でウォッチするためのモノ
+	PWCHAR& pDebugData; // デバッグ用。CMemoryの内容をwchar_t*型でウォッチするためのモノ
 #endif
 
 public:

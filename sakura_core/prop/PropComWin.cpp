@@ -123,7 +123,7 @@ INT_PTR PropWin::DispatchEvent(
 				return TRUE;
 //@@@ 2002.01.03 YAZAKI 最後に表示していたシートを正しく覚えていないバグ修正
 			case PSN_SETACTIVE:
-				m_nPageNum = ID_PROPCOM_PAGENUM_WIN;
+				nPageNum = ID_PROPCOM_PAGENUM_WIN;
 				return TRUE;
 			}
 			break;
@@ -214,7 +214,7 @@ INT_PTR PropWin::DispatchEvent(
 			//	ウィンドウ設定ダイアログにて起動時のウィンドウ状態指定
 			case IDC_BUTTON_WINSIZE:
 				{
-					auto& csWindow = m_common.window;
+					auto& csWindow = common.window;
 					DlgWinSize dlgWinSize;
 					RECT rc;
 					rc.right  = csWindow.nWinSizeCX;
@@ -268,7 +268,7 @@ INT_PTR PropWin::DispatchEvent(
 void PropWin::SetData(HWND hwndDlg)
 {
 //	BOOL	bRet;
-	auto& csWindow = m_common.window;
+	auto& csWindow = common.window;
 
 	// 次回ウィンドウを開いたときツールバーを表示する
 	::CheckDlgButton(hwndDlg, IDC_CHECK_DispTOOLBAR, csWindow.bDispToolBar);
@@ -339,8 +339,8 @@ void PropWin::SetData(HWND hwndDlg)
 	Combo_ResetContent(hwndCombo);
 	int nSelPos = 0;
 	UINT uiIndex = 0;
-	for (uiIndex=0; uiIndex<SelectLang::m_psLangInfoList.size(); ++uiIndex) {
-		SelectLang::SelLangInfo* psLangInfo = SelectLang::m_psLangInfoList.at(uiIndex);
+	for (uiIndex=0; uiIndex<SelectLang::psLangInfoList.size(); ++uiIndex) {
+		SelectLang::SelLangInfo* psLangInfo = SelectLang::psLangInfoList.at(uiIndex);
 		Combo_InsertString(hwndCombo, uiIndex, psLangInfo->szLangName);
 		if (_tcscmp(csWindow.szLanguageDll, psLangInfo->szDllName) == 0) {
 			nSelPos = uiIndex;
@@ -355,7 +355,7 @@ void PropWin::SetData(HWND hwndDlg)
 // ダイアログデータの取得
 int PropWin::GetData(HWND hwndDlg)
 {
-	auto& csWindow = m_common.window;
+	auto& csWindow = common.window;
 
 	// 次回ウィンドウを開いたときツールバーを表示する
 	csWindow.bDispToolBar = DlgButton_IsChecked(hwndDlg, IDC_CHECK_DispTOOLBAR);
@@ -441,7 +441,7 @@ int PropWin::GetData(HWND hwndDlg)
 	// 言語選択
 	HWND hwndCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_LANGUAGE);
 	int nSelPos = Combo_GetCurSel(hwndCombo);
-	SelectLang::SelLangInfo *psLangInfo = SelectLang::m_psLangInfoList.at(nSelPos);
+	SelectLang::SelLangInfo *psLangInfo = SelectLang::psLangInfoList.at(nSelPos);
 	if (_tcscmp(csWindow.szLanguageDll, psLangInfo->szDllName) != 0) {
 		_tcsncpy(csWindow.szLanguageDll, psLangInfo->szDllName, _countof(csWindow.szLanguageDll));
 	}

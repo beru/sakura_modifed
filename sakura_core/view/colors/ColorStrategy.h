@@ -163,7 +163,7 @@ public:
 	// 設定更新
 	virtual void Update(void) {
 		const EditDoc* pEditDoc = EditDoc::GetInstance(0);
-		m_pTypeData = &pEditDoc->m_docType.GetDocumentAttribute();
+		pTypeData = &pEditDoc->docType.GetDocumentAttribute();
 	}
 
 	//#######ラップ
@@ -176,7 +176,7 @@ public:
 	}
 
 protected:
-	const TypeConfig* m_pTypeData;
+	const TypeConfig* pTypeData;
 };
 
 #include "util/design_template.h"
@@ -196,13 +196,13 @@ class ColorStrategyPool : public TSingleton<ColorStrategyPool> {
 public:
 
 	// 取得
-	ColorStrategy*	GetStrategy(int nIndex) const { return m_vStrategiesDisp[nIndex]; }
-	int				GetStrategyCount() const { return (int)m_vStrategiesDisp.size(); }
+	ColorStrategy*	GetStrategy(int nIndex) const { return vStrategiesDisp[nIndex]; }
+	int				GetStrategyCount() const { return (int)vStrategiesDisp.size(); }
 	ColorStrategy*	GetStrategyByColor(EColorIndexType eColor) const;
 
 	// 特定取得
-	Color_Found*   GetFoundStrategy() const { return m_pcFoundStrategy; }
-	Color_Select*  GetSelectStrategy() const { return m_pcSelectStrategy; }
+	Color_Found*   GetFoundStrategy() const { return pcFoundStrategy; }
+	Color_Select*  GetSelectStrategy() const { return pcSelectStrategy; }
 
 	// イベント
 	void NotifyOnStartScanLogic();
@@ -219,25 +219,25 @@ public:
 	void OnChangeSetting(void);
 
 	// ビューの設定・取得
-	EditView* GetCurrentView(void) const { return m_pView; }
-	void SetCurrentView(EditView* pView) { m_pView = pView; }
+	EditView* GetCurrentView(void) const { return pView; }
+	void SetCurrentView(EditView* pView) { pView = pView; }
 
 private:
-	std::vector<ColorStrategy*>	m_vStrategies;
-	std::vector<ColorStrategy*>	m_vStrategiesDisp;	// 色分け表示対象
-	Color_Found*					m_pcFoundStrategy;
-	Color_Select*					m_pcSelectStrategy;
+	std::vector<ColorStrategy*>	vStrategies;
+	std::vector<ColorStrategy*>	vStrategiesDisp;	// 色分け表示対象
+	Color_Found*					pcFoundStrategy;
+	Color_Select*					pcSelectStrategy;
 
-	Color_LineComment*				m_pcLineComment;
-	Color_BlockComment*				m_pcBlockComment1;
-	Color_BlockComment*				m_pcBlockComment2;
-	Color_SingleQuote*				m_pcSingleQuote;
-	Color_DoubleQuote*				m_pcDoubleQuote;
-	Color_Heredoc*					m_pcHeredoc;
+	Color_LineComment*				pcLineComment;
+	Color_BlockComment*				pcBlockComment1;
+	Color_BlockComment*				pcBlockComment2;
+	Color_SingleQuote*				pcSingleQuote;
+	Color_DoubleQuote*				pcDoubleQuote;
+	Color_Heredoc*					pcHeredoc;
 
-	EditView*						m_pView;
+	EditView*						pView;
 
-	bool	m_bSkipBeforeLayoutGeneral;
-	bool	m_bSkipBeforeLayoutFound;
+	bool	bSkipBeforeLayoutGeneral;
+	bool	bSkipBeforeLayoutFound;
 };
 

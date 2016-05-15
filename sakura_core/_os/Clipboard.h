@@ -43,11 +43,11 @@ public:
 	bool GetClipboradByFormat(NativeW& mem, const wchar_t* pFormatName, int nMode, int nEndMode, const Eol& eol);
 	
 	// 演算子
-	operator bool() const { return m_bOpenResult != FALSE; } // クリップボードを開けたならtrue
+	operator bool() const { return bOpenResult != FALSE; } // クリップボードを開けたならtrue
 	
 private:
-	HWND m_hwnd;
-	BOOL m_bOpenResult;
+	HWND hwnd;
+	BOOL bOpenResult;
 	
 	// -- -- staticインターフェース -- -- //
 public:

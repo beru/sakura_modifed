@@ -37,17 +37,17 @@ void ViewFont::CreateFont(const LOGFONT* plf)
 
 	// フォント作成
 	lf = *plf;
-	if (m_bMiniMap) {
+	if (bMiniMap) {
 		lf.lfHeight = miniSize;
 		lf.lfQuality = quality;
 		lf.lfOutPrecision = outPrec;
 	}
-	m_hFont_HAN = CreateFontIndirect(&lf);
-	m_logFont = lf;
+	hFont_HAN = CreateFontIndirect(&lf);
+	logFont = lf;
 
 	// 太字フォント作成
 	lf = *plf;
-	if (m_bMiniMap) {
+	if (bMiniMap) {
 		lf.lfHeight = miniSize;
 		lf.lfQuality = quality;
 		lf.lfOutPrecision = outPrec;
@@ -56,22 +56,22 @@ void ViewFont::CreateFont(const LOGFONT* plf)
 	if (1000 < lf.lfWeight) {
 		lf.lfWeight = 1000;
 	}
-	m_hFont_HAN_BOLD = CreateFontIndirect(&lf);
+	hFont_HAN_BOLD = CreateFontIndirect(&lf);
 
 	// 下線フォント作成
 	lf = *plf;
-	if (m_bMiniMap) {
+	if (bMiniMap) {
 		lf.lfHeight = miniSize;
 		lf.lfQuality = quality;
 		lf.lfOutPrecision = outPrec;
 	}
 	
 	lf.lfUnderline = TRUE;
-	m_hFont_HAN_UL = CreateFontIndirect(&lf);
+	hFont_HAN_UL = CreateFontIndirect(&lf);
 
 	// 太字下線フォント作成
 	lf = *plf;
-	if (m_bMiniMap) {
+	if (bMiniMap) {
 		lf.lfHeight = miniSize;
 		lf.lfQuality = quality;
 		lf.lfOutPrecision = outPrec;
@@ -81,35 +81,35 @@ void ViewFont::CreateFont(const LOGFONT* plf)
 	if (1000 < lf.lfWeight) {
 		lf.lfWeight = 1000;
 	}
-	m_hFont_HAN_BOLD_UL = CreateFontIndirect(&lf);
+	hFont_HAN_BOLD_UL = CreateFontIndirect(&lf);
 }
 
 // フォント削除
 void ViewFont::DeleteFont()
 {
-	DeleteObject(m_hFont_HAN);
-	DeleteObject(m_hFont_HAN_BOLD);
-	DeleteObject(m_hFont_HAN_UL);
-	DeleteObject(m_hFont_HAN_BOLD_UL);
+	DeleteObject(hFont_HAN);
+	DeleteObject(hFont_HAN_BOLD);
+	DeleteObject(hFont_HAN_UL);
+	DeleteObject(hFont_HAN_BOLD_UL);
 }
 
 /*! フォントを選ぶ
-	@param m_bBoldFont trueで太字
-	@param m_bUnderLine trueで下線
+	@param bBoldFont trueで太字
+	@param bUnderLine trueで下線
 */
 HFONT ViewFont::ChooseFontHandle(FontAttr fontAttr) const
 {
 	if (fontAttr.bBoldFont) {		// 太字か
 		if (fontAttr.bUnderLine) {	// 下線か
-			return m_hFont_HAN_BOLD_UL;
+			return hFont_HAN_BOLD_UL;
 		}else {
-			return m_hFont_HAN_BOLD;
+			return hFont_HAN_BOLD;
 		}
 	}else {
 		if (fontAttr.bUnderLine) {	// 下線か
-			return m_hFont_HAN_UL;
+			return hFont_HAN_UL;
 		}else {
-			return m_hFont_HAN;
+			return hFont_HAN;
 		}
 	}
 }

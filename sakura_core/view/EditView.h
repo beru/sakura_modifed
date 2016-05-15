@@ -120,15 +120,15 @@ class EditView :
 {
 public:
 	const EditDoc& GetDocument() const {
-		return *m_pEditDoc;
+		return *pEditDoc;
 	}
 	EditDoc& GetDocument() {
-		return *m_pEditDoc;
+		return *pEditDoc;
 	}
 public:
 	// 背景にビットマップを使用するかどうか
 	// 2010.10.03 背景実装
-	bool IsBkBitmap() const { return m_pEditDoc->m_hBackImg != NULL; }
+	bool IsBkBitmap() const { return pEditDoc->hBackImg != NULL; }
 
 public:
 	EditView& GetEditView() override {
@@ -251,11 +251,11 @@ public:
 	void CaretUnderLineON(bool, bool, bool);				// カーソル行アンダーラインのON
 	void CaretUnderLineOFF(bool, bool, bool, bool);			// カーソル行アンダーラインのOFF
 	bool GetDrawSwitch() const {
-		return m_bDrawSWITCH;
+		return bDrawSwitch;
 	}
 	bool SetDrawSwitch(bool b) {
-		bool bOld = m_bDrawSWITCH;
-		m_bDrawSWITCH = b;
+		bool bOld = bDrawSwitch;
+		bDrawSwitch = b;
 		return bOld;
 	}
 	bool IsDrawCursorVLinePos(int);
@@ -353,7 +353,7 @@ public: // テスト用にアクセス属性を変更
 	bool IsDragSource(void);
 
 	void _SetDragMode(bool b) {
-		m_bDragMode = b;
+		bDragMode = b;
 	}
 	
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -554,27 +554,27 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 public:
 	// 主要構成部品アクセス
-	TextArea& GetTextArea() { assert(m_pTextArea); return *m_pTextArea; }
-	const TextArea& GetTextArea() const { assert(m_pTextArea); return *m_pTextArea; }
-	Caret& GetCaret() { assert(m_pCaret); return *m_pCaret; }
-	const Caret& GetCaret() const { assert(m_pCaret); return *m_pCaret; }
-	Ruler& GetRuler() { assert(m_pRuler); return *m_pRuler; }
-	const Ruler& GetRuler() const { assert(m_pRuler); return *m_pRuler; }
+	TextArea& GetTextArea() { assert(pTextArea); return *pTextArea; }
+	const TextArea& GetTextArea() const { assert(pTextArea); return *pTextArea; }
+	Caret& GetCaret() { assert(pCaret); return *pCaret; }
+	const Caret& GetCaret() const { assert(pCaret); return *pCaret; }
+	Ruler& GetRuler() { assert(pRuler); return *pRuler; }
+	const Ruler& GetRuler() const { assert(pRuler); return *pRuler; }
 
 	// 主要属性アクセス
-	TextMetrics& GetTextMetrics() { return m_textMetrics; }
-	const TextMetrics& GetTextMetrics() const { return m_textMetrics; }
-	ViewSelect& GetSelectionInfo() { return m_viewSelect; }
-	const ViewSelect& GetSelectionInfo() const { return m_viewSelect; }
+	TextMetrics& GetTextMetrics() { return textMetrics; }
+	const TextMetrics& GetTextMetrics() const { return textMetrics; }
+	ViewSelect& GetSelectionInfo() { return viewSelect; }
+	const ViewSelect& GetSelectionInfo() const { return viewSelect; }
 
 	// 主要オブジェクトアクセス
-	ViewFont& GetFontset() { assert(m_pViewFont); return *m_pViewFont; }
-	const ViewFont& GetFontset() const { assert(m_pViewFont); return *m_pViewFont; }
+	ViewFont& GetFontset() { assert(pViewFont); return *pViewFont; }
+	const ViewFont& GetFontset() const { assert(pViewFont); return *pViewFont; }
 
 	// 主要ヘルパアクセス
-	const ViewParser& GetParser() const { return m_parser; }
-	const TextDrawer& GetTextDrawer() const { return m_textDrawer; }
-	ViewCommander& GetCommander() { return m_commander; }
+	const ViewParser& GetParser() const { return parser; }
+	const TextDrawer& GetTextDrawer() const { return textDrawer; }
+	ViewCommander& GetCommander() { return commander; }
 
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -582,157 +582,155 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 public:
 	// 参照
-	EditWnd&			m_editWnd;	// ウィンドウ
-	EditDoc*			m_pEditDoc;	// ドキュメント
-	const TypeConfig*	m_pTypeData;
+	EditWnd&			editWnd;	// ウィンドウ
+	EditDoc*			pEditDoc;	// ドキュメント
+	const TypeConfig*	pTypeData;
 
 	// 主要構成部品
-	TextArea*		m_pTextArea;
-	Caret*			m_pCaret;
-	Ruler*			m_pRuler;
+	TextArea*		pTextArea;
+	Caret*			pCaret;
+	Ruler*			pRuler;
 
 	// 主要属性
-	TextMetrics		m_textMetrics;
-	ViewSelect		m_viewSelect;
+	TextMetrics		textMetrics;
+	ViewSelect		viewSelect;
 
 	// 主要オブジェクト
-	ViewFont*		m_pViewFont;
+	ViewFont*		pViewFont;
 
 	// 主要ヘルパ
-	ViewParser		m_parser;
-	TextDrawer		m_textDrawer;
-	ViewCommander	m_commander;
+	ViewParser		parser;
+	TextDrawer		textDrawer;
+	ViewCommander	commander;
 
 public:
 	// ウィンドウ
-	HWND			m_hwndParent;		// 親ウィンドウハンドル
-	HWND			m_hwndVScrollBar;	// 垂直スクロールバーウィンドウハンドル
-	int				m_nVScrollRate;		// 垂直スクロールバーの縮尺
-	HWND			m_hwndHScrollBar;	// 水平スクロールバーウィンドウハンドル
-	HWND			m_hwndSizeBox;		// サイズボックスウィンドウハンドル
-	SplitBoxWnd*	m_pcsbwVSplitBox;	// 垂直分割ボックス
-	SplitBoxWnd*	m_pcsbwHSplitBox;	// 水平分割ボックス
-	AutoScrollWnd	m_autoScrollWnd;	// オートスクロール
+	HWND			hwndParent;			// 親ウィンドウハンドル
+	HWND			hwndVScrollBar;		// 垂直スクロールバーウィンドウハンドル
+	int				nVScrollRate;		// 垂直スクロールバーの縮尺
+	HWND			hwndHScrollBar;		// 水平スクロールバーウィンドウハンドル
+	HWND			hwndSizeBox;		// サイズボックスウィンドウハンドル
+	SplitBoxWnd*	pcsbwVSplitBox;		// 垂直分割ボックス
+	SplitBoxWnd*	pcsbwHSplitBox;		// 水平分割ボックス
+	AutoScrollWnd	autoScrollWnd;		// オートスクロール
 
 public:
 	// 描画
-	bool			m_bDrawSWITCH;
-	COLORREF		m_crBack;				// テキストの背景色			// 2006.12.07 ryoji
-	COLORREF		m_crBack2;				// テキストの背景(キャレット用)
-	LayoutInt		m_nOldUnderLineY;		// 前回作画したカーソルアンダーラインの位置 0未満=非表示
-	LayoutInt		m_nOldUnderLineYBg;
-	int				m_nOldUnderLineYMargin;
-	int				m_nOldUnderLineYHeight;
-	int				m_nOldUnderLineYHeightReal;
-	int				m_nOldCursorLineX;		// 前回作画したカーソル位置縦線の位置 // 2007.09.09 Moca
-	int				m_nOldCursorVLineWidth;	// カーソル位置縦線の太さ(px)
+	bool			bDrawSwitch;
+	COLORREF		crBack;				// テキストの背景色			// 2006.12.07 ryoji
+	COLORREF		crBack2;			// テキストの背景(キャレット用)
+	LayoutInt		nOldUnderLineY;		// 前回作画したカーソルアンダーラインの位置 0未満=非表示
+	LayoutInt		nOldUnderLineYBg;
+	int				nOldUnderLineYMargin;
+	int				nOldUnderLineYHeight;
+	int				nOldUnderLineYHeightReal;
+	int				nOldCursorLineX;		// 前回作画したカーソル位置縦線の位置 // 2007.09.09 Moca
+	int				nOldCursorVLineWidth;	// カーソル位置縦線の太さ(px)
 
 public:
 	// 画面バッファ
-	HDC				m_hdcCompatDC;		// 再描画用コンパチブルＤＣ
-	HBITMAP			m_hbmpCompatBMP;	// 再描画用メモリＢＭＰ
-	HBITMAP			m_hbmpCompatBMPOld;	// 再描画用メモリＢＭＰ(OLD)
-	int				m_nCompatBMPWidth;  // 再作画用メモリＢＭＰの幅	// 2007.09.09 Moca 互換BMPによる画面バッファ
-	int				m_nCompatBMPHeight; // 再作画用メモリＢＭＰの高さ	// 2007.09.09 Moca 互換BMPによる画面バッファ
+	HDC				hdcCompatDC;		// 再描画用コンパチブルＤＣ
+	HBITMAP			hbmpCompatBMP;		// 再描画用メモリＢＭＰ
+	HBITMAP			hbmpCompatBMPOld;	// 再描画用メモリＢＭＰ(OLD)
+	int				nCompatBMPWidth;	// 再作画用メモリＢＭＰの幅	// 2007.09.09 Moca 互換BMPによる画面バッファ
+	int				nCompatBMPHeight;	// 再作画用メモリＢＭＰの高さ	// 2007.09.09 Moca 互換BMPによる画面バッファ
 
 public:
 	// D&D
-	DropTarget*		m_pDropTarget;
-	bool			m_bDragMode;					// 選択テキストのドラッグ中か
-	CLIPFORMAT		m_cfDragData;					// ドラッグデータのクリップ形式	// 2008.06.20 ryoji
-	bool			m_bDragBoxData;					// ドラッグデータは矩形か
-	LayoutPoint		m_ptCaretPos_DragEnter;			// ドラッグ開始時のカーソル位置	// 2007.12.09 ryoji
-	LayoutInt		m_nCaretPosX_Prev_DragEnter;	// ドラッグ開始時のX座標記憶	// 2007.12.09 ryoji
+	DropTarget*		pDropTarget;
+	bool			bDragMode;					// 選択テキストのドラッグ中か
+	CLIPFORMAT		cfDragData;					// ドラッグデータのクリップ形式	// 2008.06.20 ryoji
+	bool			bDragBoxData;				// ドラッグデータは矩形か
+	LayoutPoint		ptCaretPos_DragEnter;		// ドラッグ開始時のカーソル位置	// 2007.12.09 ryoji
+	LayoutInt		nCaretPosX_Prev_DragEnter;	// ドラッグ開始時のX座標記憶	// 2007.12.09 ryoji
 
 	// 括弧
-	LogicPoint		m_ptBracketCaretPos_PHY;	// 前カーソル位置の括弧の位置 (改行単位行先頭からのバイト数(0開始), 改行単位行の行番号(0開始))
-	LogicPoint		m_ptBracketPairPos_PHY;		// 対括弧の位置 (改行単位行先頭からのバイト数(0開始), 改行単位行の行番号(0開始))
-	bool			m_bDrawBracketPairFlag;		// 対括弧の強調表示を行なうか						// 03/02/18 ai
+	LogicPoint		ptBracketCaretPos_PHY;		// 前カーソル位置の括弧の位置 (改行単位行先頭からのバイト数(0開始), 改行単位行の行番号(0開始))
+	LogicPoint		ptBracketPairPos_PHY;		// 対括弧の位置 (改行単位行先頭からのバイト数(0開始), 改行単位行の行番号(0開始))
+	bool			bDrawBracketPairFlag;		// 対括弧の強調表示を行なうか						// 03/02/18 ai
 
 	// マウス
-	bool			m_bActivateByMouse;		// マウスによるアクティベート	// 2007.10.02 nasukoji
-	DWORD			m_dwTripleClickCheck;	// トリプルクリックチェック用時刻	// 2007.10.02 nasukoji
-	Point			m_mouseDownPos;			// クリック時のマウス座標
-	int				m_nWheelDelta;			// ホイール変化量
-	EFunctionCode	m_eWheelScroll; 		// スクロールの種類
-	int				m_nMousePouse;			// マウス停止時間
-	Point			m_mousePousePos;		// マウスの停止位置
-	bool			m_bHideMouse;
+	bool			bActivateByMouse;		// マウスによるアクティベート	// 2007.10.02 nasukoji
+	DWORD			dwTripleClickCheck;		// トリプルクリックチェック用時刻	// 2007.10.02 nasukoji
+	Point			mouseDownPos;			// クリック時のマウス座標
+	int				nWheelDelta;			// ホイール変化量
+	EFunctionCode	eWheelScroll; 			// スクロールの種類
+	int				nMousePouse;			// マウス停止時間
+	Point			mousePousePos;			// マウスの停止位置
+	bool			bHideMouse;
 
-	int				m_nAutoScrollMode;			// オートスクロールモード
-	bool			m_bAutoScrollDragMode;		// ドラッグモード
-	Point			m_autoScrollMousePos;		// オートスクロールのマウス基準位置
-	bool			m_bAutoScrollVertical;		// 垂直スクロール可
-	bool			m_bAutoScrollHorizontal;	// 水平スクロール可
+	int				nAutoScrollMode;			// オートスクロールモード
+	bool			bAutoScrollDragMode;		// ドラッグモード
+	Point			autoScrollMousePos;			// オートスクロールのマウス基準位置
+	bool			bAutoScrollVertical;		// 垂直スクロール可
+	bool			bAutoScrollHorizontal;		// 水平スクロール可
 
 	// 検索
-	SearchStringPattern m_searchPattern;
-	mutable Bregexp		m_curRegexp;				// コンパイルデータ
-	bool				m_bCurSrchKeyMark;			// 検索文字列のマーク
-	bool				m_bCurSearchUpdate;			// コンパイルデータ更新要求
-	int					m_nCurSearchKeySequence;	// 検索キーシーケンス
-	std::wstring		m_strCurSearchKey;			// 検索文字列
-	SearchOption		m_curSearchOption;			// 検索／置換  オプション
-	LogicPoint			m_ptSrchStartPos_PHY;		// 検索/置換開始時のカーソル位置 (改行単位行先頭からのバイト数(0開始), 改行単位行の行番号(0開始))
-	bool				m_bSearch;					// 検索/置換開始位置を登録するか											// 02/06/26 ai
-	SearchDirection		m_nISearchDirection;
-	int					m_nISearchMode;
-	bool				m_bISearchWrap;
-	bool				m_bISearchFlagHistory[256];
-	int					m_nISearchHistoryCount;
-	bool				m_bISearchFirst;
-	LayoutRange			m_searchHistory[256];
+	SearchStringPattern searchPattern;
+	mutable Bregexp		curRegexp;				// コンパイルデータ
+	bool				bCurSrchKeyMark;		// 検索文字列のマーク
+	bool				bCurSearchUpdate;		// コンパイルデータ更新要求
+	int					nCurSearchKeySequence;	// 検索キーシーケンス
+	std::wstring		strCurSearchKey;		// 検索文字列
+	SearchOption		curSearchOption;		// 検索／置換  オプション
+	LogicPoint			ptSrchStartPos_PHY;		// 検索/置換開始時のカーソル位置 (改行単位行先頭からのバイト数(0開始), 改行単位行の行番号(0開始))
+	bool				bSearch;				// 検索/置換開始位置を登録するか											// 02/06/26 ai
+	SearchDirection		nISearchDirection;
+	int					nISearchMode;
+	bool				bISearchWrap;
+	bool				bISearchFlagHistory[256];
+	int					nISearchHistoryCount;
+	bool				bISearchFirst;
+	LayoutRange			searchHistory[256];
 
 	// マクロ
-	bool			m_bExecutingKeyMacro;	// キーボードマクロの実行中
-	bool			m_bCommandRunning;		// コマンドの実行中
+	bool			bExecutingKeyMacro;		// キーボードマクロの実行中
+	bool			bCommandRunning;		// コマンドの実行中
 
 	// 入力補完
-	bool			m_bHokan;				//	補完中か？＝補完ウィンドウが表示されているか？かな？
+	bool			bHokan;					//	補完中か？＝補完ウィンドウが表示されているか？かな？
 
 	// 編集
-	bool			m_bDoing_UndoRedo;		// Undo, Redoの実行中か
+	bool			bDoing_UndoRedo;		// Undo, Redoの実行中か
 
 	// 辞書Tip関連
-	DWORD			m_dwTipTimer;			// Tip起動タイマー
-	TipWnd			m_tipWnd;				// Tip表示ウィンドウ
-	POINT			m_poTipCurPos;			// Tip起動時のマウスカーソル位置
-	bool			m_bInMenuLoop;			// メニュー モーダル ループに入っています
-	DicMgr			m_dicMgr;				// 辞書マネージャ
+	DWORD			dwTipTimer;				// Tip起動タイマー
+	TipWnd			tipWnd;					// Tip表示ウィンドウ
+	POINT			poTipCurPos;			// Tip起動時のマウスカーソル位置
+	bool			bInMenuLoop;			// メニュー モーダル ループに入っています
+	DicMgr			dicMgr;					// 辞書マネージャ
 
-	TCHAR			m_szComposition[512];	// IMR_DOCUMENTFEED用入力中文字列データ
+	TCHAR			szComposition[512];		// IMR_DOCUMENTFEED用入力中文字列データ
 
 	// IME
 private:
-	UINT			m_uMSIMEReconvertMsg;
-	UINT			m_uATOKReconvertMsg;
+	UINT			uMSIMEReconvertMsg;
+	UINT			uATOKReconvertMsg;
 public:
-	UINT			m_uWM_MSIME_RECONVERTREQUEST;
+	UINT			uWM_MSIME_RECONVERTREQUEST;
 private:
-	int				m_nLastReconvLine;             // 2002.04.09 minfu 再変換情報保存用;
-	int				m_nLastReconvIndex;            // 2002.04.09 minfu 再変換情報保存用;
+	int				nLastReconvLine;		// 2002.04.09 minfu 再変換情報保存用;
+	int				nLastReconvIndex;		// 2002.04.09 minfu 再変換情報保存用;
 
 public:
 	// ATOK専用再変換のAPI
 	typedef BOOL (WINAPI *FP_ATOK_RECONV)(HIMC, int, PRECONVERTSTRING, DWORD);
-	HMODULE			m_hAtokModule;
-	FP_ATOK_RECONV	m_AT_ImmSetReconvertString;
+	HMODULE			hAtokModule;
+	FP_ATOK_RECONV	AT_ImmSetReconvertString;
 
 	// その他
-	AutoMarkMgr*	m_pHistory;			//	Jump履歴
-	RegexKeyword*	m_pRegexKeyword;	//@@@ 2001.11.17 add MIK
-	int				m_nMyIndex;			// 分割状態
-	Migemo*			m_pMigemo;
-	bool			m_bMiniMap;
-	bool			m_bMiniMapMouseDown;
-	LayoutInt		m_nPageViewTop;
-	LayoutInt		m_nPageViewBottom;
+	AutoMarkMgr*	pHistory;			//	Jump履歴
+	RegexKeyword*	pRegexKeyword;		//@@@ 2001.11.17 add MIK
+	int				nMyIndex;			// 分割状態
+	Migemo*			pMigemo;
+	bool			bMiniMap;
+	bool			bMiniMapMouseDown;
+	LayoutInt		nPageViewTop;
+	LayoutInt		nPageViewBottom;
 
 private:
 	DISALLOW_COPY_AND_ASSIGN(EditView);
 };
-
-
 
 class OutputAdapter
 {

@@ -115,7 +115,7 @@ void ShareData::InitTypeConfigs(
 void ShareData::InitKeyword(DllSharedData& shareData)
 {
 	// 強調キーワードのテストデータ
-	shareData.common.specialKeyword.keywordSetMgr.m_nCurrentKeywordSetIdx = 0;
+	shareData.common.specialKeyword.keywordSetMgr.nCurrentKeywordSetIdx = 0;
 
 	int nSetCount = -1;
 

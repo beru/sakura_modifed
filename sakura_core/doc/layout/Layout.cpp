@@ -25,10 +25,10 @@ Layout::~Layout()
 void Layout::DUMP(void)
 {
 	DEBUG_TRACE(_T("\n\n■Layout::DUMP()======================\n"));
-	DEBUG_TRACE(_T("m_ptLogicPos.y=%d\t\t対応する論理行番号\n"), m_ptLogicPos.y);
-	DEBUG_TRACE(_T("m_ptLogicPos.x=%d\t\t対応する論理行の先頭からのオフセット\n"), m_ptLogicPos.x);
-	DEBUG_TRACE(_T("m_nLength=%d\t\t対応する論理行のハイト数\n"), (int)m_nLength);
-	DEBUG_TRACE(_T("m_nTypePrev=%d\t\tタイプ 0=通常 1=行コメント 2=ブロックコメント 3=シングルクォーテーション文字列 4=ダブルクォーテーション文字列 \n"), m_nTypePrev);
+	DEBUG_TRACE(_T("ptLogicPos.y=%d\t\t対応する論理行番号\n"), ptLogicPos.y);
+	DEBUG_TRACE(_T("ptLogicPos.x=%d\t\t対応する論理行の先頭からのオフセット\n"), ptLogicPos.x);
+	DEBUG_TRACE(_T("nLength=%d\t\t対応する論理行のハイト数\n"), (int)nLength);
+	DEBUG_TRACE(_T("nTypePrev=%d\t\tタイプ 0=通常 1=行コメント 2=ブロックコメント 3=シングルクォーテーション文字列 4=ダブルクォーテーション文字列 \n"), nTypePrev);
 	DEBUG_TRACE(_T("======================\n"));
 	return;
 }
@@ -40,12 +40,12 @@ void Layout::DUMP(void)
 LayoutInt Layout::CalcLayoutWidth(const LayoutMgr& layoutMgr) const
 {
 	// ソース
-	const wchar_t* pText    = m_pDocLine->GetPtr();
-	LogicInt      nTextLen = m_pDocLine->GetLengthWithoutEOL();
+	const wchar_t* pText    = pDocLine->GetPtr();
+	LogicInt      nTextLen = pDocLine->GetLengthWithoutEOL();
 
 	// 計算
 	LayoutInt nWidth = GetIndent();
-	for (LogicInt i=m_ptLogicPos.GetX2(); i<m_ptLogicPos.GetX2()+m_nLength; ++i) {
+	for (LogicInt i=ptLogicPos.GetX2(); i<ptLogicPos.GetX2()+nLength; ++i) {
 		if (pText[i] == WCODE::TAB) {
 			nWidth += layoutMgr.GetActualTabSpace(nWidth);
 		}else {
@@ -63,8 +63,8 @@ LayoutInt Layout::CalcLayoutOffset(
 {
 	LayoutInt nRet = nStartOffset;
 	if (this->GetLogicOffset()) {
-		const wchar_t* pLine = this->m_pDocLine->GetPtr();
-		int nLineLen = this->m_pDocLine->GetLengthWithEOL();
+		const wchar_t* pLine = this->pDocLine->GetPtr();
+		int nLineLen = this->pDocLine->GetLengthWithEOL();
 		const int nOffset = GetLogicOffset();
 		for (int i=(Int)nStartPos; i<nOffset; ++i) {
 			if (pLine[i] == WCODE::TAB) {

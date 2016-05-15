@@ -187,7 +187,7 @@ INT_PTR PropTypesKeyHelp::DispatchEvent(
 					EnableWindow(GetDlgItem(hwndDlg, IDC_CHECK_KEYHELP_KEYDISP), TRUE);		// キーワードも表示する(&W)
 					EnableWindow(GetDlgItem(hwndDlg, IDC_CHECK_KEYHELP_PREFIX), TRUE);		// 前方一致検索(&P)
 				}
-				m_types.nKeyHelpNum = ListView_GetItemCount(hwndList);
+				types.nKeyHelpNum = ListView_GetItemCount(hwndList);
 				return TRUE;
 
 			// 挿入・更新イベントを纏めて処理
@@ -476,7 +476,7 @@ INT_PTR PropTypesKeyHelp::DispatchEvent(
 					}else {
 						::lstrcpy(szPath, szWk);
 					}
-					dlgOpenFile.Create(m_hInstance, hwndDlg, _T("*.khp"), szPath);
+					dlgOpenFile.Create(hInstance, hwndDlg, _T("*.khp"), szPath);
 					if (dlgOpenFile.DoModal_GetOpenFileName(szPath)) {
 						::DlgItem_SetText(hwndDlg, IDC_EDIT_KEYHELP, szPath);
 					}
@@ -485,7 +485,7 @@ INT_PTR PropTypesKeyHelp::DispatchEvent(
 
 			case IDC_BUTTON_KEYHELP_IMPORT:	// インポート
 				Import(hwndDlg);
-				m_types.nKeyHelpNum = ListView_GetItemCount(hwndList);
+				types.nKeyHelpNum = ListView_GetItemCount(hwndList);
 				return TRUE;
 
 			case IDC_BUTTON_KEYHELP_EXPORT:	// エクスポート
@@ -511,7 +511,7 @@ INT_PTR PropTypesKeyHelp::DispatchEvent(
 
 //@@@ 2002.01.03 YAZAKI 最後に表示していたシートを正しく覚えていないバグ修正
 		case PSN_SETACTIVE:
-			m_nPageNum = ID_PROPTYPE_PAGENUM_KEYHELP;
+			nPageNum = ID_PROPTYPE_PAGENUM_KEYHELP;
 			return TRUE;
 
 		case LVN_ITEMCHANGED:	// リストの項目が変更された際の処理
@@ -555,13 +555,13 @@ void CheckDlgButtonBOOL(HWND hwnd, int id, BOOL bState) {
 void PropTypesKeyHelp::SetData(HWND hwndDlg)
 {
 	// ユーザーがエディット コントロールに入力できるテキストの長さを制限する
-	EditCtl_LimitText(::GetDlgItem(hwndDlg, IDC_EDIT_KEYHELP), _countof2(m_types.keyHelpArr[0].szPath) - 1);
+	EditCtl_LimitText(::GetDlgItem(hwndDlg, IDC_EDIT_KEYHELP), _countof2(types.keyHelpArr[0].szPath) - 1);
 
 	// 使用する・使用しない
-	CheckDlgButtonBOOL(hwndDlg, IDC_CHECK_KEYHELP, m_types.bUseKeywordHelp);
-	CheckDlgButtonBOOL(hwndDlg, IDC_CHECK_KEYHELP_ALLSEARCH, m_types.bUseKeyHelpAllSearch);
-	CheckDlgButtonBOOL(hwndDlg, IDC_CHECK_KEYHELP_KEYDISP, m_types.bUseKeyHelpKeyDisp);
-	CheckDlgButtonBOOL(hwndDlg, IDC_CHECK_KEYHELP_PREFIX, m_types.bUseKeyHelpPrefix);
+	CheckDlgButtonBOOL(hwndDlg, IDC_CHECK_KEYHELP, types.bUseKeywordHelp);
+	CheckDlgButtonBOOL(hwndDlg, IDC_CHECK_KEYHELP_ALLSEARCH, types.bUseKeyHelpAllSearch);
+	CheckDlgButtonBOOL(hwndDlg, IDC_CHECK_KEYHELP_KEYDISP, types.bUseKeyHelpKeyDisp);
+	CheckDlgButtonBOOL(hwndDlg, IDC_CHECK_KEYHELP_PREFIX, types.bUseKeyHelpPrefix);
 
 	// リスト
 	HWND hwndWork = ::GetDlgItem(hwndDlg, IDC_LIST_KEYHELP);
@@ -573,29 +573,29 @@ void PropTypesKeyHelp::SetData(HWND hwndDlg)
 	// データ表示
 	LV_ITEM	lvi;
 	for (int i=0; i<MAX_KEYHELP_FILE; ++i) {
-		if (m_types.keyHelpArr[i].szPath[0] == _T('\0')) {
+		if (types.keyHelpArr[i].szPath[0] == _T('\0')) {
 			break;
 		}
 		// ON-OFF
 		lvi.mask     = LVIF_TEXT;
 		lvi.iItem    = i;
 		lvi.iSubItem = 0;
-		lvi.pszText = GetFileName(m_types.keyHelpArr[i].szPath);
+		lvi.pszText = GetFileName(types.keyHelpArr[i].szPath);
 		ListView_InsertItem(hwndWork, &lvi);
 		// 辞書の説明
 		lvi.mask     = LVIF_TEXT;
 		lvi.iItem    = i;
 		lvi.iSubItem = 1;
-		lvi.pszText  = m_types.keyHelpArr[i].szAbout;
+		lvi.pszText  = types.keyHelpArr[i].szAbout;
 		ListView_SetItem(hwndWork, &lvi);
 		// 辞書ファイルパス
 		lvi.mask     = LVIF_TEXT;
 		lvi.iItem    = i;
 		lvi.iSubItem = 2;
-		lvi.pszText  = m_types.keyHelpArr[i].szPath;
+		lvi.pszText  = types.keyHelpArr[i].szPath;
 		ListView_SetItem(hwndWork, &lvi);
 		// ON/OFFを取得してチェックボックスにセット（とりあえず応急処置）
-		if (m_types.keyHelpArr[i].bUse) {	// ON
+		if (types.keyHelpArr[i].bUse) {	// ON
 			ListView_SetCheckState(hwndWork, i, TRUE);
 		}else {
 			ListView_SetCheckState(hwndWork, i, FALSE);
@@ -615,10 +615,10 @@ int PropTypesKeyHelp::GetData(HWND hwndDlg)
 	TCHAR	szPath[_MAX_PATH];			// ファイルパス
 
 	// 使用する・使用しない
-	m_types.bUseKeywordHelp      = (IsDlgButtonChecked(hwndDlg, IDC_CHECK_KEYHELP) == BST_CHECKED);
-	m_types.bUseKeyHelpAllSearch = (IsDlgButtonChecked(hwndDlg, IDC_CHECK_KEYHELP_ALLSEARCH) == BST_CHECKED);
-	m_types.bUseKeyHelpKeyDisp   = (IsDlgButtonChecked(hwndDlg, IDC_CHECK_KEYHELP_KEYDISP) == BST_CHECKED);
-	m_types.bUseKeyHelpPrefix    = (IsDlgButtonChecked(hwndDlg, IDC_CHECK_KEYHELP_PREFIX) == BST_CHECKED);
+	types.bUseKeywordHelp      = (IsDlgButtonChecked(hwndDlg, IDC_CHECK_KEYHELP) == BST_CHECKED);
+	types.bUseKeyHelpAllSearch = (IsDlgButtonChecked(hwndDlg, IDC_CHECK_KEYHELP_ALLSEARCH) == BST_CHECKED);
+	types.bUseKeyHelpKeyDisp   = (IsDlgButtonChecked(hwndDlg, IDC_CHECK_KEYHELP_KEYDISP) == BST_CHECKED);
+	types.bUseKeyHelpPrefix    = (IsDlgButtonChecked(hwndDlg, IDC_CHECK_KEYHELP_PREFIX) == BST_CHECKED);
 
 	// リストに登録されている情報を配列に取り込む
 	HWND hwndList = GetDlgItem(hwndDlg, IDC_LIST_KEYHELP);
@@ -633,15 +633,15 @@ int PropTypesKeyHelp::GetData(HWND hwndDlg)
 				bUse = true;
 			ListView_GetItemText(hwndList, i, 1, szAbout, _countof(szAbout));
 			ListView_GetItemText(hwndList, i, 2, szPath, _countof(szPath));
-			m_types.keyHelpArr[i].bUse = bUse;
-			_tcscpy(m_types.keyHelpArr[i].szAbout, szAbout);
-			_tcscpy(m_types.keyHelpArr[i].szPath, szPath);
+			types.keyHelpArr[i].bUse = bUse;
+			_tcscpy(types.keyHelpArr[i].szAbout, szAbout);
+			_tcscpy(types.keyHelpArr[i].szPath, szPath);
 		}else {	// 未登録部分はクリアする
-			m_types.keyHelpArr[i].szPath[0] = _T('\0');
+			types.keyHelpArr[i].szPath[0] = _T('\0');
 		}
 	}
 	// 辞書の冊数を取得
-	m_types.nKeyHelpNum = nIndex;
+	types.nKeyHelpNum = nIndex;
 	return TRUE;
 }
 
@@ -654,8 +654,8 @@ bool PropTypesKeyHelp::Import(HWND hwndDlg)
 	// インポート
 	GetData(hwndDlg);
 
-	ImpExpKeyHelp  cImpExpKeyHelp(m_types);
-	if (!cImpExpKeyHelp.ImportUI(m_hInstance, hwndDlg)) {
+	ImpExpKeyHelp  cImpExpKeyHelp(types);
+	if (!cImpExpKeyHelp.ImportUI(hInstance, hwndDlg)) {
 		// インポートをしていない
 		return false;
 	}
@@ -672,10 +672,10 @@ bool PropTypesKeyHelp::Import(HWND hwndDlg)
 bool PropTypesKeyHelp::Export(HWND hwndDlg)
 {
 	GetData(hwndDlg);
-	ImpExpKeyHelp	cImpExpKeyHelp(m_types);
+	ImpExpKeyHelp	cImpExpKeyHelp(types);
 
 	// エクスポート
-	return cImpExpKeyHelp.ExportUI(m_hInstance, hwndDlg);
+	return cImpExpKeyHelp.ExportUI(hInstance, hwndDlg);
 }
 
 

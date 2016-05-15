@@ -65,32 +65,32 @@ public:
 	FileTime() { ClearFILETIME(); }
 	FileTime(const FILETIME& ftime) { SetFILETIME(ftime); }
 	// 設定
-	void ClearFILETIME() { m_ftime.dwLowDateTime = m_ftime.dwHighDateTime = 0; m_bModified = true; }
-	void SetFILETIME(const FILETIME& ftime) { m_ftime = ftime; m_bModified = true; }
+	void ClearFILETIME() { ftime.dwLowDateTime = ftime.dwHighDateTime = 0; bModified = true; }
+	void SetFILETIME(const FILETIME& ftime) { this->ftime = ftime; bModified = true; }
 	// 取得
-	const FILETIME& GetFILETIME() const { return m_ftime; }
+	const FILETIME& GetFILETIME() const { return ftime; }
 	const SYSTEMTIME& GetSYSTEMTIME() const {
-		// キャッシュ更新 -> m_systime, m_bModified
-		if (m_bModified) {
-			m_bModified = false;
+		// キャッシュ更新 -> systime, bModified
+		if (bModified) {
+			bModified = false;
 			FILETIME ftimeLocal;
-			if (!::FileTimeToLocalFileTime(&m_ftime, &ftimeLocal) || !::FileTimeToSystemTime(&ftimeLocal, &m_systime)) {
-				memset(&m_systime, 0, sizeof(m_systime)); // 失敗時ゼロクリア
+			if (!::FileTimeToLocalFileTime(&ftime, &ftimeLocal) || !::FileTimeToSystemTime(&ftimeLocal, &systime)) {
+				memset(&systime, 0, sizeof(systime)); // 失敗時ゼロクリア
 			}
 		}
-		return m_systime;
+		return systime;
 	}
 	const SYSTEMTIME* operator->() const { return &GetSYSTEMTIME(); }
 	// 判定
 	bool IsZero() const {
-		return m_ftime.dwLowDateTime == 0 && m_ftime.dwHighDateTime == 0;
+		return ftime.dwLowDateTime == 0 && ftime.dwHighDateTime == 0;
 	}
 protected:
 private:
-	FILETIME m_ftime;
+	FILETIME ftime;
 	// キャッシュ
-	mutable SYSTEMTIME	m_systime;
-	mutable bool		m_bModified;
+	mutable SYSTEMTIME	systime;
+	mutable bool		bModified;
 };
 
 bool GetLastWriteTimestamp(const TCHAR* filename, FileTime* pFileTime); //	Oct. 22, 2005 genta

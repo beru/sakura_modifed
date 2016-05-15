@@ -202,19 +202,19 @@ INT_PTR DlgTypeList::DispatchEvent(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM l
 					if (!bRegistryChecked[nIdx]) {
 						TCHAR exts[_countof(type->szTypeExts)] = {0};
 						_tcscpy(exts, type->szTypeExts);
-						TCHAR *ext = _tcstok( exts, DocTypeManager::m_typeExtSeps );
+						TCHAR *ext = _tcstok( exts, DocTypeManager::typeExtSeps );
 
 						bExtRMenu[nIdx] = true;
 						bExtDblClick[nIdx] = true;
 						while (ext) {
-							if (!_tcspbrk(ext, DocTypeManager::m_typeExtWildcards)) {
+							if (!_tcspbrk(ext, DocTypeManager::typeExtWildcards)) {
 								bool bRMenu;
 								bool bDblClick;
 								CheckExt(ext, &bRMenu, &bDblClick);
 								bExtRMenu[nIdx] &= bRMenu;
 								bExtDblClick[nIdx] &= bDblClick;
 							}
-							ext = _tcstok( NULL, DocTypeManager::m_typeExtSeps );
+							ext = _tcstok( NULL, DocTypeManager::typeExtSeps );
 						}
 						bRegistryChecked[nIdx] = true;
 					}
@@ -232,10 +232,10 @@ INT_PTR DlgTypeList::DispatchEvent(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM l
 			}
 			TCHAR exts[_countof(type->szTypeExts)] = {0};
 			_tcscpy(exts, type->szTypeExts);
-			TCHAR *ext = _tcstok( exts, DocTypeManager::m_typeExtSeps );
+			TCHAR *ext = _tcstok( exts, DocTypeManager::typeExtSeps );
 			int nRet;
 			while (ext) {
-				if (_tcspbrk(ext, DocTypeManager::m_typeExtWildcards) == NULL) {
+				if (_tcspbrk(ext, DocTypeManager::typeExtWildcards) == NULL) {
 					if (checked) {	//「右クリック」チェックON
 						if ((nRet = RegistExt( ext, true )) != 0 ) {
 	
@@ -254,7 +254,7 @@ INT_PTR DlgTypeList::DispatchEvent(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM l
 						}
 					}
 				}
-				ext = _tcstok( NULL, DocTypeManager::m_typeExtSeps );
+				ext = _tcstok( NULL, DocTypeManager::typeExtSeps );
 			}
 			bExtRMenu[nIdx] = checked;
 			::EnableWindow(hwndDblClick, checked);
@@ -271,10 +271,10 @@ INT_PTR DlgTypeList::DispatchEvent(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM l
 			}
 			TCHAR exts[_countof(type->szTypeExts)] = {0};
 			_tcscpy(exts, type->szTypeExts);
-			TCHAR *ext = _tcstok( exts, DocTypeManager::m_typeExtSeps );
+			TCHAR *ext = _tcstok( exts, DocTypeManager::typeExtSeps );
 			int nRet;
 			while (ext) {
-				if (_tcspbrk(ext, DocTypeManager::m_typeExtWildcards) == NULL) {
+				if (_tcspbrk(ext, DocTypeManager::typeExtWildcards) == NULL) {
 					if ((nRet = RegistExt( ext, checked )) != 0) {
 
 						TCHAR buf[BUFFER_SIZE] = {0};
@@ -283,7 +283,7 @@ INT_PTR DlgTypeList::DispatchEvent(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM l
 						break;
 					}
 				}
-				ext = _tcstok( NULL, DocTypeManager::m_typeExtSeps );
+				ext = _tcstok( NULL, DocTypeManager::typeExtSeps );
 			}
 			bExtDblClick[nIdx] = checked;
 			return TRUE;

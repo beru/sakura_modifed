@@ -76,15 +76,15 @@ void SetDllShareData(DllSharedData* pShareData)
 #include "EditInfo.h"
 #include "types/Type.h" // TypeConfig
 #include "print/Print.h" // PrintSetting
-#include "recent/SShare_History.h"	// SShare_History
+#include "recent/Share_History.h"	// Share_History
 
 
 // 共有フラグ
 struct Share_Flags {
 	bool	bEditWndChanging;		// 編集ウィンドウ切替中	// 2007.04.03 ryoji
 	/*	@@@ 2002.1.24 YAZAKI
-		キーボードマクロは、記録終了した時点でファイル「m_szKeyMacroFileName」に書き出すことにする。
-		bRecordingKeyMacroがtrueのときは、キーボードマクロの記録中なので、m_szKeyMacroFileNameにアクセスしてはならない。
+		キーボードマクロは、記録終了した時点でファイル「szKeyMacroFileName」に書き出すことにする。
+		bRecordingKeyMacroがtrueのときは、キーボードマクロの記録中なので、szKeyMacroFileNameにアクセスしてはならない。
 	*/
 	bool	bRecordingKeyMacro;		// キーボードマクロの記録中
 	HWND	hwndRecordingKeyMacro;	// キーボードマクロを記録中のウィンドウ
@@ -95,13 +95,13 @@ struct Share_WorkBuffer {
 	// 2007.09.16 kobake char型だと、常に文字列であるという誤解を招くので、BYTE型に変更。変数名も変更。
 	//           UNICODE版では、余分に領域を使うことが予想されるため、ANSI版の2倍確保。
 private:
-	BYTE m_pWork[32000 * sizeof(TCHAR)];
+	BYTE pWork[32000 * sizeof(TCHAR)];
 public:
 	template <class T>
-	T* GetWorkBuffer() { return reinterpret_cast<T*>(m_pWork); }
+	T* GetWorkBuffer() { return reinterpret_cast<T*>(pWork); }
 
 	template <class T>
-	size_t GetWorkBufferCount() { return sizeof(m_pWork)/sizeof(T); }
+	size_t GetWorkBufferCount() { return sizeof(pWork)/sizeof(T); }
 
 public:
 	EditInfo	editInfo_MYWM_GETFILEINFO;	// MYWM_GETFILEINFOデータ受け渡し用	####美しくない
@@ -164,7 +164,7 @@ struct DllSharedData {
 	Share_SearchKeywords		searchKeywords;
 	Share_TagJump				tagJump;
 	Share_FileNameManagement	fileNameManagement;
-	SShare_History				history;
+	Share_History				history;
 
 	// 外部コマンド実行ダイアログのオプション
 	int							nExecFlgOpt;				// 外部コマンド実行オプション	// 2006.12.03 maru オプションの拡張のため

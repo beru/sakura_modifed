@@ -98,7 +98,7 @@ bool ViewCommander::Command_TAGJUMP(bool bClose)
 	  物理位置(行頭からのバイト数、折り返し無し行位置)
 	*/
 	LogicPoint ptXY, ptXYOrg;
-	GetDocument().m_layoutMgr.LayoutToLogic(
+	GetDocument().layoutMgr.LayoutToLogic(
 		GetCaret().GetCaretLayoutPos(),
 		&ptXY
 	);
@@ -107,7 +107,7 @@ bool ViewCommander::Command_TAGJUMP(bool bClose)
 	// 現在行のデータを取得
 	LogicInt		nLineLen;
 	const wchar_t*	pLine;
-	pLine = GetDocument().m_docLineMgr.GetLine(ptXY.GetY2())->GetDocLineStrWithEOL(&nLineLen);
+	pLine = GetDocument().docLineMgr.GetLine(ptXY.GetY2())->GetDocLineStrWithEOL(&nLineLen);
 	if (!pLine) {
 		goto can_not_tagjump;
 	}
@@ -240,7 +240,7 @@ bool ViewCommander::Command_TAGJUMP(bool bClose)
 		ptXY.y--;
 
 		for (; 0<=ptXY.y; --ptXY.y) {
-			pLine = GetDocument().m_docLineMgr.GetLine(ptXY.GetY2())->GetDocLineStrWithEOL(&nLineLen);
+			pLine = GetDocument().docLineMgr.GetLine(ptXY.GetY2())->GetDocLineStrWithEOL(&nLineLen);
 			if (!pLine) {
 				break;
 			}
@@ -304,7 +304,7 @@ bool ViewCommander::Command_TAGJUMP(bool bClose)
 	}while (0);
 
 	if (szJumpToFile[0] == L'\0') {
-		pLine = GetDocument().m_docLineMgr.GetLine(ptXYOrg.GetY2())->GetDocLineStrWithEOL(&nLineLen);
+		pLine = GetDocument().docLineMgr.GetLine(ptXYOrg.GetY2())->GetDocLineStrWithEOL(&nLineLen);
 		if (!pLine) {
 			goto can_not_tagjump;
 		}
@@ -345,13 +345,13 @@ bool ViewCommander::Command_TAGJUMP(bool bClose)
 
 	// Apr. 21, 2003 genta bClose追加
 	if (szJumpToFile[0]) {
-		if (m_view.TagJumpSub(to_tchar(szJumpToFile), Point(nJumpToColumn, nJumpToLine), bClose)) {	//@@@ 2003.04.13
+		if (view.TagJumpSub(to_tchar(szJumpToFile), Point(nJumpToColumn, nJumpToLine), bClose)) {	//@@@ 2003.04.13
 			return true;
 		}
 	}
 
 can_not_tagjump:;
-	m_view.SendStatusMessage(LS(STR_ERR_TAGJMP1));	//@@@ 2003.04.13
+	view.SendStatusMessage(LS(STR_ERR_TAGJMP1));	//@@@ 2003.04.13
 	return false;
 }
 
@@ -364,7 +364,7 @@ void ViewCommander::Command_TAGJUMPBACK(void)
 
 	// タグジャンプ情報の参照
 	if (!TagJumpManager().PopTagJump(&tagJump) || !IsSakuraMainWindow(tagJump.hwndReferer)) {
-		m_view.SendStatusMessage(LS(STR_ERR_TAGJMPBK1));
+		view.SendStatusMessage(LS(STR_ERR_TAGJMPBK1));
 		// 2004.07.10 Moca tagJumpNumを0にしなくてもいいと思う
 		// GetDllShareData().tagJumpNum = 0;
 		return;
@@ -394,7 +394,7 @@ bool ViewCommander::Command_TagsMake(void)
 #define	CTAGS_COMMAND	_T("ctags.exe")
 
 	TCHAR	szTargetPath[1024 /*_MAX_PATH+1*/];
-	auto& docFile = GetDocument().m_docFile;
+	auto& docFile = GetDocument().docFile;
 	if (docFile.GetFilePathClass().IsValidPath()) {
 		_tcscpy_s(szTargetPath, docFile.GetFilePath());
 		szTargetPath[_tcslen(szTargetPath) - _tcslen(docFile.GetFileName())] = _T('\0');
@@ -405,7 +405,7 @@ bool ViewCommander::Command_TagsMake(void)
 
 	// ダイアログを表示する
 	DlgTagsMake	dlgTagsMake;
-	if (!dlgTagsMake.DoModal(G_AppInstance(), m_view.GetHwnd(), 0, szTargetPath)) {
+	if (!dlgTagsMake.DoModal(G_AppInstance(), view.GetHwnd(), 0, szTargetPath)) {
 		return false;
 	}
 
@@ -418,13 +418,13 @@ bool ViewCommander::Command_TagsMake(void)
 
 	// ctags.exeの存在チェック
 	if (::GetFileAttributes(cmdline) == (DWORD)-1) {
-		WarningMessage(m_view.GetHwnd(), LS(STR_ERR_CEDITVIEW_CMD03));
+		WarningMessage(view.GetHwnd(), LS(STR_ERR_CEDITVIEW_CMD03));
 		return false;
 	}
 
 	HANDLE	hStdOutWrite, hStdOutRead;
 	DlgCancel	dlgCancel;
-	WaitCursor	waitCursor(m_view.GetHwnd());
+	WaitCursor	waitCursor(view.GetHwnd());
 
 	PROCESS_INFORMATION	pi = {0};
 
@@ -498,7 +498,7 @@ bool ViewCommander::Command_TagsMake(void)
 		CREATE_NEW_CONSOLE, NULL, dlgTagsMake.szPath, &sui, &pi
 	);
 	if (!bProcessResult) {
-		WarningMessage(m_view.GetHwnd(), LS(STR_ERR_CEDITVIEW_CMD04), cmdline);
+		WarningMessage(view.GetHwnd(), LS(STR_ERR_CEDITVIEW_CMD04), cmdline);
 		goto finish;
 	}
 
@@ -508,7 +508,7 @@ bool ViewCommander::Command_TagsMake(void)
 		bool	bLoopFlag = true;
 
 		// 中断ダイアログ表示
-		HWND hwndCancel = dlgCancel.DoModeless(G_AppInstance(), m_view.m_hwndParent, IDD_EXECRUNNING);
+		HWND hwndCancel = dlgCancel.DoModeless(G_AppInstance(), view.hwndParent, IDD_EXECRUNNING);
 		HWND hwndMsg = ::GetDlgItem(hwndCancel, IDC_STATIC_CMD);
 		SetWindowText(hwndMsg, LS(STR_ERR_CEDITVIEW_CMD05));
 
@@ -564,7 +564,7 @@ bool ViewCommander::Command_TagsMake(void)
 						dlgCancel.CloseDialog(TRUE);
 
 						work[read_cnt] = L'\0';	// Nov. 15, 2003 genta 表示用に0終端する
-						WarningMessage(m_view.GetHwnd(), LS(STR_ERR_CEDITVIEW_CMD06), work); // 2003.11.09 じゅうじ
+						WarningMessage(view.GetHwnd(), LS(STR_ERR_CEDITVIEW_CMD06), work); // 2003.11.09 じゅうじ
 
 						return true;
 					}
@@ -585,7 +585,7 @@ finish:
 
 	dlgCancel.CloseDialog(TRUE);
 
-	InfoMessage(m_view.GetHwnd(), LS(STR_ERR_CEDITVIEW_CMD07));
+	InfoMessage(view.GetHwnd(), LS(STR_ERR_CEDITVIEW_CMD07));
 
 	return true;
 }
@@ -600,7 +600,7 @@ bool ViewCommander::Command_TagJumpByTagsFileMsg(bool bMsg)
 {
 	bool ret = Command_TagJumpByTagsFile(false);
 	if (!ret && bMsg) {
-		m_view.SendStatusMessage(LS(STR_ERR_TAGJMP1));
+		view.SendStatusMessage(LS(STR_ERR_TAGJMP1));
 	}
 	return ret;
 }
@@ -617,7 +617,7 @@ bool ViewCommander::Command_TagJumpByTagsFileMsg(bool bMsg)
 bool ViewCommander::Command_TagJumpByTagsFile(bool bClose)
 {
 	NativeW memKeyW;
-	m_view.GetCurrentTextForSearch(memKeyW, true, true);
+	view.GetCurrentTextForSearch(memKeyW, true, true);
 	if (memKeyW.GetStringLength() == 0) {
 		return false;
 	}
@@ -635,7 +635,7 @@ bool ViewCommander::Command_TagJumpByTagsFile(bool bClose)
 
 	// 複数あれば選択してもらう。
 	if (1 < nMatchAll) {
-		if (! dlgTagJumpList.DoModal(G_AppInstance(), m_view.GetHwnd(), (LPARAM)0)) {
+		if (! dlgTagJumpList.DoModal(G_AppInstance(), view.GetHwnd(), (LPARAM)0)) {
 			nMatchAll = 0;
 			return true;	// キャンセル
 		}
@@ -650,7 +650,7 @@ bool ViewCommander::Command_TagJumpByTagsFile(bool bClose)
 		if (!dlgTagJumpList.GetSelectedFullPathAndLine(fileName, _countof(fileName), &fileLine , NULL)) {
 			return false;
 		}
-		return m_view.TagJumpSub(fileName, Point(0, fileLine), bClose);
+		return view.TagJumpSub(fileName, Point(0, fileLine), bClose);
 	}
 
 	return false;
@@ -676,7 +676,7 @@ bool ViewCommander::Command_TagJumpByTagsFileKeyword(const wchar_t* keyword)
 	dlgTagJumpList.SetFileName(szCurrentPath);
 	dlgTagJumpList.SetKeyword(keyword);
 
-	if (!dlgTagJumpList.DoModal(G_AppInstance(), m_view.GetHwnd(), 0)) {
+	if (!dlgTagJumpList.DoModal(G_AppInstance(), view.GetHwnd(), 0)) {
 		return true;	// キャンセル
 	}
 
@@ -687,7 +687,7 @@ bool ViewCommander::Command_TagJumpByTagsFileKeyword(const wchar_t* keyword)
 		return false;
 	}
 
-	return m_view.TagJumpSub(fileName, Point(0, fileLine));
+	return view.TagJumpSub(fileName, Point(0, fileLine));
 }
 
 
@@ -702,7 +702,7 @@ bool ViewCommander::Sub_PreProcTagJumpByTagsFile(TCHAR* szCurrentPath, int count
 	}
 
 	// 実行可能確認
-	auto& docFile = GetDocument().m_docFile;
+	auto& docFile = GetDocument().docFile;
 	if (! docFile.GetFilePathClass().IsValidPath()) {
 		// 2010.04.02 (無題)でもタグジャンプできるように
 		// Grep、アウトプットは行番号タグジャンプがあるので無効にする(要検討)
@@ -724,7 +724,7 @@ bool ViewCommander::Sub_PreProcTagJumpByTagsFile(TCHAR* szCurrentPath, int count
 		// (無題)でもファイル名を要求してくるのでダミーをつける
 		// 現在のタイプ別の1番目の拡張子を拝借
 		TCHAR szExts[MAX_TYPES_EXTS];
-		DocTypeManager::GetFirstExt(m_view.m_pTypeData->szTypeExts, szExts, _countof(szExts));
+		DocTypeManager::GetFirstExt(view.pTypeData->szTypeExts, szExts, _countof(szExts));
 		int nExtLen = auto_strlen( szExts );
 		_tcscat(szCurrentPath, _T("\\dmy"));
 		if (nExtLen) {

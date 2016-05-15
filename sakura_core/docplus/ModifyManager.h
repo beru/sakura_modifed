@@ -45,14 +45,14 @@ public:
 // 行に付加するModified情報
 class LineModified {
 public:
-	LineModified() : m_nModifiedSeq(0) { }
-	int GetSeq() const { return m_nModifiedSeq; }
+	LineModified() : nModifiedSeq(0) { }
+	int GetSeq() const { return nModifiedSeq; }
 	LineModified& operator = (int seq) {
-		m_nModifiedSeq = seq;
+		nModifiedSeq = seq;
 		return *this;
 	}
 private:
-	int m_nModifiedSeq;
+	int nModifiedSeq;
 };
 
 // 行全体のModified情報アクセサ

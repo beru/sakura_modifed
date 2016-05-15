@@ -131,9 +131,9 @@ int CookieManager::DeleteAll(LPCWSTR scope)
 std::map<std::wstring, std::wstring>* CookieManager::SelectCookieType(LPCWSTR scope) const
 {
 	if (wcscmp(scope, L"window") == 0) {
-		return const_cast<std::map<std::wstring, std::wstring>*>(&m_cookieWindow);
+		return const_cast<std::map<std::wstring, std::wstring>*>(&cookieWindow);
 	}else if (wcscmp(scope, L"document") == 0) {
-		return const_cast<std::map<std::wstring, std::wstring>*>(&m_cookieDocument);
+		return const_cast<std::map<std::wstring, std::wstring>*>(&cookieDocument);
 	}
 	return NULL;
 }

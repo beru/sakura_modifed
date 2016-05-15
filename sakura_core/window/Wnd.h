@@ -73,7 +73,7 @@ protected:
 	// 仮想関数
 	virtual LRESULT DispatchEvent_WM_APP(HWND, UINT, WPARAM, LPARAM);	// アプリケーション定義のメッセージ(WM_APP <= msg <= 0xBFFF)
 	virtual void PreviCreateWindow(void) { return; } // ウィンドウ作成前の処理(クラス登録前) (virtual)
-	virtual void AfterCreateWindow(void) { ::ShowWindow(m_hWnd, SW_SHOW); } // ウィンドウ作成後の処理 (virtual)
+	virtual void AfterCreateWindow(void) { ::ShowWindow(hWnd, SW_SHOW); } // ウィンドウ作成後の処理 (virtual)
 
 	// 仮想関数 メッセージ処理(デフォルト動作)
 	#define DECLH(method) LRESULT method(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp) {return CallDefWndProc(hwnd, msg, wp, lp);}
@@ -110,23 +110,23 @@ protected:
 
 public:
 	// インターフェース
-	HWND GetHwnd() const { return m_hWnd; }
-	HWND GetParentHwnd() const { return m_hwndParent; }
-	HINSTANCE GetAppInstance() const { return m_hInstance; }
-	bool GetWindowRect(LPRECT lpRect) { return ::GetWindowRect(m_hWnd, lpRect) != 0; }
+	HWND GetHwnd() const { return hWnd; }
+	HWND GetParentHwnd() const { return hwndParent; }
+	HINSTANCE GetAppInstance() const { return hInstance; }
+	bool GetWindowRect(LPRECT lpRect) { return ::GetWindowRect(hWnd, lpRect) != 0; }
 
 	// 特殊インターフェース (使用は好ましくない)
-	void _SetHwnd(HWND hwnd) { m_hWnd = hwnd; }
+	void _SetHwnd(HWND hwnd) { hWnd = hwnd; }
 
 	// ウィンドウ標準操作
 	void DestroyWindow();
 
 private: // 2002/2/10 aroka アクセス権変更
-	HINSTANCE	m_hInstance;	// アプリケーションインスタンスのハンドル
-	HWND		m_hwndParent;	// オーナーウィンドウのハンドル
-	HWND		m_hWnd;			// このダイアログのハンドル
+	HINSTANCE	hInstance;	// アプリケーションインスタンスのハンドル
+	HWND		hwndParent;	// オーナーウィンドウのハンドル
+	HWND		hWnd;			// このダイアログのハンドル
 #ifdef _DEBUG
-	TCHAR		m_szClassInheritances[1024];
+	TCHAR		szClassInheritances[1024];
 #endif
 };
 

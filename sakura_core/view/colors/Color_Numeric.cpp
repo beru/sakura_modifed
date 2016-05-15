@@ -23,7 +23,7 @@ bool Color_Numeric::BeginColor(const StringRef& str, int nPos)
 		&& (nnn = IsNumber(str, nPos)) > 0
 	) {		// 半角数字を表示する
 		// キーワード文字列の終端をセットする
-		this->m_nCOMMENTEND = nPos + nnn;
+		this->nCommentEnd = nPos + nnn;
 		return true;	// 半角数値である // 2002/03/13 novice
 	}
 	return false;
@@ -32,7 +32,7 @@ bool Color_Numeric::BeginColor(const StringRef& str, int nPos)
 
 bool Color_Numeric::EndColor(const StringRef& str, int nPos)
 {
-	return (nPos == this->m_nCOMMENTEND);
+	return (nPos == this->nCommentEnd);
 }
 
 

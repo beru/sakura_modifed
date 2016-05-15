@@ -102,11 +102,11 @@ void DlgProperty::SetData(void)
 	WIN32_FIND_DATA	wfd;
 	// Aug. 16, 2000 genta	全角化
 	memProp.AppendString(LS(STR_DLGFLPROP_FILENAME));
-	memProp.AppendString(pEditDoc->m_docFile.GetFilePath());
+	memProp.AppendString(pEditDoc->docFile.GetFilePath());
 	memProp.AppendStringLiteral(_T("\r\n"));
 
 	memProp.AppendString(LS(STR_DLGFLPROP_FILETYPE));
-	memProp.AppendString(pEditDoc->m_docType.GetDocumentAttribute().szTypeName);
+	memProp.AppendString(pEditDoc->docType.GetDocumentAttribute().szTypeName);
 	memProp.AppendStringLiteral(_T("\r\n"));
 
 	memProp.AppendString(LS(STR_DLGFLPROP_ENCODING));
@@ -122,29 +122,29 @@ void DlgProperty::SetData(void)
 	// To Here  2008/4/27 Uchi
 	memProp.AppendStringLiteral(_T("\r\n"));
 
-	auto_sprintf(szWork, LS(STR_DLGFLPROP_LINE_COUNT), pEditDoc->m_docLineMgr.GetLineCount());
+	auto_sprintf(szWork, LS(STR_DLGFLPROP_LINE_COUNT), pEditDoc->docLineMgr.GetLineCount());
 	memProp.AppendString(szWork);
 
-	auto_sprintf(szWork, LS(STR_DLGFLPROP_LAYOUT_LINE), pEditDoc->m_layoutMgr.GetLineCount());
+	auto_sprintf(szWork, LS(STR_DLGFLPROP_LAYOUT_LINE), pEditDoc->layoutMgr.GetLineCount());
 	memProp.AppendString(szWork);
 
 	if (AppMode::getInstance().IsViewMode()) {
 		memProp.AppendString(LS(STR_DLGFLPROP_VIEW_MODE));	// 2009.04.11 ryoji 「上書き禁止モード」→「ビューモード」
 	}
-	if (pEditDoc->m_docEditor.IsModified()) {
+	if (pEditDoc->docEditor.IsModified()) {
 		memProp.AppendString(LS(STR_DLGFLPROP_MODIFIED));
 	}else {
 		memProp.AppendString(LS(STR_DLGFLPROP_NOT_MODIFIED));
 	}
 
-	auto_sprintf(szWork, LS(STR_DLGFLPROP_CMD_COUNT), pEditDoc->m_nCommandExecNum);
+	auto_sprintf(szWork, LS(STR_DLGFLPROP_CMD_COUNT), pEditDoc->nCommandExecNum);
 	memProp.AppendString(szWork);
 
-	auto_sprintf(szWork, LS(STR_DLGFLPROP_FILE_INFO), pEditDoc->m_docLineMgr.GetLineCount());
+	auto_sprintf(szWork, LS(STR_DLGFLPROP_FILE_INFO), pEditDoc->docLineMgr.GetLineCount());
 	memProp.AppendString(szWork);
 
-	if ((nFind = ::FindFirstFile(pEditDoc->m_docFile.GetFilePath(), &wfd)) != INVALID_HANDLE_VALUE) {
-		if (pEditDoc->m_docFile.IsFileLocking()) {
+	if ((nFind = ::FindFirstFile(pEditDoc->docFile.GetFilePath(), &wfd)) != INVALID_HANDLE_VALUE) {
+		if (pEditDoc->docFile.IsFileLocking()) {
 			if (pShareData->common.file.nFileShareMode == FileShareMode::DenyWrite) {
 				auto_sprintf(szWork, LS(STR_DLGFLPROP_W_LOCK));
 			}else if (pShareData->common.file.nFileShareMode == FileShareMode::DenyReadWrite) {
@@ -158,7 +158,7 @@ void DlgProperty::SetData(void)
 			memProp.AppendString(szWork);
 		}
 
-		auto_sprintf(szWork, LS(STR_DLGFLPROP_ATTRIBUTES), pEditDoc->m_docLineMgr.GetLineCount());
+		auto_sprintf(szWork, LS(STR_DLGFLPROP_ATTRIBUTES), pEditDoc->docLineMgr.GetLineCount());
 		memProp.AppendString(szWork);
 		if (wfd.dwFileAttributes & FILE_ATTRIBUTE_ARCHIVE) {
 			memProp.AppendString(LS(STR_DLGFLPROP_AT_ARCHIVE));
@@ -241,7 +241,7 @@ void DlgProperty::SetData(void)
 #ifdef _DEBUG/////////////////////////////////////////////////////
 	// メモリ確保 & ファイル読み込み
 	NativeT text;
-	BinaryInputStream in(pEditDoc->m_docFile.GetFilePath());
+	BinaryInputStream in(pEditDoc->docFile.GetFilePath());
 	if (!in) {
 		goto end_of_CodeTest;
 	}

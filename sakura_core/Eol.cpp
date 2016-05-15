@@ -32,7 +32,7 @@
 #include "Eol.h"
 
 // 行終端子の配列
-const EolType gm_pnEolTypeArr[EOL_TYPE_NUM] = {
+const EolType g_pnEolTypeArr[EOL_TYPE_NUM] = {
 	EolType::None			,	// == 0
 	EolType::CRLF			,	// == 2
 	EolType::LF				,	// == 1
@@ -48,13 +48,13 @@ const EolType gm_pnEolTypeArr[EOL_TYPE_NUM] = {
 //-----------------------------------------------
 
 struct EolDefinition {
-	const TCHAR*	m_szName;
-	const WCHAR*	m_szDataW;
-	const ACHAR*	m_szDataA;
-	int				m_nLen;
+	const TCHAR*	szName;
+	const WCHAR*	szDataW;
+	const ACHAR*	szDataA;
+	int				nLen;
 
-	bool StartsWith(const WCHAR* pData, int nLen) const { return m_nLen <= nLen && auto_memcmp(pData, m_szDataW, m_nLen) == 0; }
-	bool StartsWith(const ACHAR* pData, int nLen) const { return m_nLen <= nLen && m_szDataA[0] != '\0' && auto_memcmp(pData, m_szDataA, m_nLen) == 0; }
+	bool StartsWith(const WCHAR* pData, int nLen) const { return nLen <= nLen && auto_memcmp(pData, szDataW, nLen) == 0; }
+	bool StartsWith(const ACHAR* pData, int nLen) const { return nLen <= nLen && szDataA[0] != '\0' && auto_memcmp(pData, szDataA, nLen) == 0; }
 };
 
 static const EolDefinition g_aEolTable[] = {
@@ -68,12 +68,12 @@ static const EolDefinition g_aEolTable[] = {
 };
 
 struct EolDefinitionForUniFile {
-	const char*	m_szDataW;
-	const char* m_szDataWB;
-	int			m_nLen;
+	const char*	szDataW;
+	const char* szDataWB;
+	int			nLen;
 
-	bool StartsWithW(const char* pData, int nLen) const { return m_nLen <= nLen && memcmp(pData, m_szDataW, m_nLen) == 0; }
-	bool StartsWithWB(const char* pData, int nLen) const { return m_nLen <= nLen && memcmp(pData, m_szDataWB, m_nLen) == 0; }
+	bool StartsWithW(const char* pData, int nLen) const { return nLen <= nLen && memcmp(pData, szDataW, nLen) == 0; }
+	bool StartsWithWB(const char* pData, int nLen) const { return nLen <= nLen && memcmp(pData, szDataWB, nLen) == 0; }
 };
 static const EolDefinitionForUniFile g_aEolTable_uni_file[] = {
 	{ "",					"", 					0 },
@@ -101,7 +101,7 @@ EolType GetEOLType(const T* pszData, int nDataLen)
 {
 	for (int i=1; i<EOL_TYPE_NUM; ++i) {
 		if (g_aEolTable[i].StartsWith(pszData, nDataLen)) {
-			return gm_pnEolTypeArr[i];
+			return g_pnEolTypeArr[i];
 		}
 	}
 	return EolType::None;
@@ -116,7 +116,7 @@ EolType _GetEOLType_uni(const char* pszData, int nDataLen)
 {
 	for (int i=1; i<EOL_TYPE_NUM; ++i) {
 		if (g_aEolTable_uni_file[i].StartsWithW(pszData, nDataLen)) {
-			return gm_pnEolTypeArr[i];
+			return g_pnEolTypeArr[i];
 		}
 	}
 	return EolType::None;
@@ -126,7 +126,7 @@ EolType _GetEOLType_unibe(const char* pszData, int nDataLen)
 {
 	for (int i=1; i<EOL_TYPE_NUM; ++i) {
 		if (g_aEolTable_uni_file[i].StartsWithWB(pszData, nDataLen)) {
-			return gm_pnEolTypeArr[i];
+			return g_pnEolTypeArr[i];
 		}
 	}
 	return EolType::None;
@@ -140,19 +140,19 @@ EolType _GetEOLType_unibe(const char* pszData, int nDataLen)
 // 現在のEOL長を取得。文字単位。
 LogicInt Eol::GetLen() const
 {
-	return LogicInt(g_aEolTable[(int)eEolType].m_nLen);
+	return LogicInt(g_aEolTable[(int)eEolType].nLen);
 }
 
 // 現在のEOLの名称取得
 const TCHAR* Eol::GetName() const
 {
-	return g_aEolTable[(int)eEolType].m_szName;
+	return g_aEolTable[(int)eEolType].szName;
 }
 
 // 現在のEOL文字列先頭へのポインタを取得
 const wchar_t* Eol::GetValue2() const
 {
-	return g_aEolTable[(int)eEolType].m_szDataW;
+	return g_aEolTable[(int)eEolType].szDataW;
 }
 
 /*!

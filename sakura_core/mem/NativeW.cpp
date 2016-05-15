@@ -9,7 +9,7 @@
 NativeW::NativeW()
 #if _DEBUG
 	:
-	m_pDebugData((PWCHAR&)_DebugGetPointerRef())
+	pDebugData((PWCHAR&)_DebugGetPointerRef())
 #endif
 {
 }
@@ -17,7 +17,7 @@ NativeW::NativeW()
 NativeW::NativeW(const NativeW& rhs)
 #if _DEBUG
 	:
-	m_pDebugData((PWCHAR&)_DebugGetPointerRef())
+	pDebugData((PWCHAR&)_DebugGetPointerRef())
 #endif
 {
 	SetNativeData(rhs);
@@ -27,7 +27,7 @@ NativeW::NativeW(const NativeW& rhs)
 NativeW::NativeW(const wchar_t* pData, size_t nDataLen)
 #if _DEBUG
 	:
-	m_pDebugData((PWCHAR&)_DebugGetPointerRef())
+	pDebugData((PWCHAR&)_DebugGetPointerRef())
 #endif
 {
 	SetString(pData, nDataLen);
@@ -36,7 +36,7 @@ NativeW::NativeW(const wchar_t* pData, size_t nDataLen)
 NativeW::NativeW(const wchar_t* pData)
 #if _DEBUG
 	:
-	m_pDebugData((PWCHAR&)_DebugGetPointerRef())
+	pDebugData((PWCHAR&)_DebugGetPointerRef())
 #endif
 {
 	SetString(pData, wcslen(pData));

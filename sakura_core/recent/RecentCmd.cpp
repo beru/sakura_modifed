@@ -36,8 +36,8 @@
 RecentCmd::RecentCmd()
 {
 	Create(
-		GetShareData()->history.m_aCommands.dataPtr(),
-		&GetShareData()->history.m_aCommands._GetSizeRef(),
+		GetShareData()->history.aCommands.dataPtr(),
+		&GetShareData()->history.aCommands._GetSizeRef(),
 		NULL,
 		MAX_CMDARR,
 		NULL

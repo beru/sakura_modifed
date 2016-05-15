@@ -30,39 +30,39 @@ class Color_Quote : public ColorStrategy {
 public:
 	Color_Quote(wchar_t cQuote)
 		:
-		m_cQuote(cQuote),
-		m_nCOMMENTEND(-1),
-		m_nColorTypeIndex(0)
+		cQuote(cQuote),
+		nCommentEnd(-1),
+		nColorTypeIndex(0)
 	{
-		m_szQuote[0] = cQuote;
-		m_szQuote[1] = cQuote;
-		m_szQuote[2] = cQuote;
+		szQuote[0] = cQuote;
+		szQuote[1] = cQuote;
+		szQuote[2] = cQuote;
 	}
 	virtual void Update(void);
 	virtual EColorIndexType GetStrategyColor() const = 0;
 	virtual LayoutColorInfo* GetStrategyColorInfo() const;
-	virtual void InitStrategyStatus() { m_nCOMMENTEND = -1; }
+	virtual void InitStrategyStatus() { nCommentEnd = -1; }
 	virtual void SetStrategyColorInfo(const LayoutColorInfo*);
 	virtual bool BeginColor(const StringRef& str, int nPos);
 	virtual bool EndColor(const StringRef& str, int nPos);
-	virtual bool Disp() const { return m_pTypeData->colorInfoArr[this->GetStrategyColor()].bDisp; }
+	virtual bool Disp() const { return pTypeData->colorInfoArr[this->GetStrategyColor()].bDisp; }
 	
 	static bool IsCppRawString(const StringRef& str, int nPos);
 	static int Match_Quote(wchar_t wcQuote, int nPos, const StringRef& lineStr, StringLiteralType escapeType, bool* pbEscapeEnd = NULL);
 	static int Match_QuoteStr(const wchar_t* szQuote, int nQuoteLen, int nPos, const StringRef& lineStr, bool bEscape);
 private:
 
-	wchar_t m_cQuote;
-	wchar_t m_szQuote[3];
-	int m_nCOMMENTEND;
-	std::wstring m_tag;
+	wchar_t cQuote;
+	wchar_t szQuote[3];
+	int nCommentEnd;
+	std::wstring tag;
 
-	StringLiteralType m_nStringType;
-	StringLiteralType m_nEscapeType;
-	bool* m_pbEscapeEnd;
-	bool m_bEscapeEnd;
+	StringLiteralType nStringType;
+	StringLiteralType nEscapeType;
+	bool* pbEscapeEnd;
+	bool bEscapeEnd;
 protected:
-	int m_nColorTypeIndex;
+	int nColorTypeIndex;
 };
 
 

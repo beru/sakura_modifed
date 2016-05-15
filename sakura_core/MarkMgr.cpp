@@ -45,7 +45,7 @@
 */
 void MarkMgr::SetMax(int max)
 {
-	m_nMaxitem = max;
+	nMaxitem = max;
 	Expire();	//	éwíËÇµÇΩêîÇ…óvëfÇå∏ÇÁÇ∑
 }
 
@@ -57,8 +57,8 @@ void MarkMgr::SetMax(int max)
 */
 bool MarkMgr::CheckCurrent(void) const
 {
-	if (m_nCurpos < Count()) {
-		return m_markChain[m_nCurpos].IsValid();
+	if (nCurpos < Count()) {
+		return markChain[nCurpos].IsValid();
 	}
 
 	return false;
@@ -72,8 +72,8 @@ bool MarkMgr::CheckCurrent(void) const
 */
 bool MarkMgr::CheckPrev(void) const
 {
-	for (int i=m_nCurpos-1; i>=0; --i) {
-		if (m_markChain[i].IsValid()) {
+	for (int i=nCurpos-1; i>=0; --i) {
+		if (markChain[i].IsValid()) {
 			return true;
 		}
 	}
@@ -88,8 +88,8 @@ bool MarkMgr::CheckPrev(void) const
 */
 bool MarkMgr::CheckNext(void) const
 {
-	for (int i=m_nCurpos+1; i<Count(); ++i) {
-		if (m_markChain[i].IsValid()) {
+	for (int i=nCurpos+1; i<Count(); ++i) {
+		if (markChain[i].IsValid()) {
 			return true;
 		}
 	}
@@ -104,9 +104,9 @@ bool MarkMgr::CheckNext(void) const
 */
 bool MarkMgr::PrevValid(void)
 {
-	for (int i=m_nCurpos-1; i>=0; --i) {
-		if (m_markChain[i].IsValid()) {
-			m_nCurpos = i;
+	for (int i=nCurpos-1; i>=0; --i) {
+		if (markChain[i].IsValid()) {
+			nCurpos = i;
 			return true;
 		}
 	}
@@ -121,9 +121,9 @@ bool MarkMgr::PrevValid(void)
 */
 bool MarkMgr::NextValid(void)
 {
-	for (int i=m_nCurpos+1; i<Count(); ++i) {
-		if (m_markChain[i].IsValid()) {
-			m_nCurpos = i;
+	for (int i=nCurpos+1; i<Count(); ++i) {
+		if (markChain[i].IsValid()) {
+			nCurpos = i;
 			return true;
 		}
 	}
@@ -139,8 +139,8 @@ bool MarkMgr::NextValid(void)
 */
 void MarkMgr::Flush(void)
 {
-	m_markChain.erase(m_markChain.begin(), m_markChain.end());
-	m_nCurpos = 0;
+	markChain.erase(markChain.begin(), markChain.end());
+	nCurpos = 0;
 }
 
 //	To Here
@@ -158,14 +158,14 @@ void MarkMgr::Flush(void)
 void AutoMarkMgr::Add(const Mark& m)
 {
 	// åªç›à íuÇ™ìríÜÇÃéû
-	if (m_nCurpos < (int)m_markChain.size()) {
+	if (nCurpos < (int)markChain.size()) {
 		// åªç›à íuÇ‹Ç≈óvëfÇçÌèú
-		m_markChain.erase(m_markChain.begin() + m_nCurpos, m_markChain.end());
+		markChain.erase(markChain.begin() + nCurpos, markChain.end());
 	}
 
 	// óvëfÇÃí«â¡
-	m_markChain.push_back(m);
-	++m_nCurpos;
+	markChain.push_back(m);
+	++nCurpos;
 
 	// ãKíËêîÇí¥Ç¶ÇƒÇµÇ‹Ç§Ç∆Ç´ÇÃëŒâû
 	Expire();
@@ -177,17 +177,17 @@ void AutoMarkMgr::Add(const Mark& m)
 */
 void AutoMarkMgr::Expire(void)
 {
-	int range = m_markChain.size() - GetMax();
+	int range = markChain.size() - GetMax();
 
 	if (range <= 0) {
 		return;
 	}
 
 	// ç≈ëÂílÇí¥Ç¶ÇƒÇ¢ÇÈèÍçá
-	m_markChain.erase(m_markChain.begin(), m_markChain.begin() + range);
-	m_nCurpos -= range;
-	if (m_nCurpos < 0) {
-		m_nCurpos = 0;
+	markChain.erase(markChain.begin(), markChain.begin() + range);
+	nCurpos -= range;
+	if (nCurpos < 0) {
+		nCurpos = 0;
 	}
 }
 

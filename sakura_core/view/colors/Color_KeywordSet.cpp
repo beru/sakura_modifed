@@ -16,8 +16,8 @@ static int NextWordBreak(const StringRef& str, const int start);
 
 Color_KeywordSet::Color_KeywordSet()
 	:
-	m_nKeywordIndex(0),
-	m_nCOMMENTEND(0)
+	nKeywordIndex(0),
+	nCommentEnd(0)
 {
 }
 
@@ -48,10 +48,10 @@ bool Color_KeywordSet::BeginColor(const StringRef& str, int nPos)
 
 	const int posNextWordHead = NextWordBreak(str, nPos);
 	for (int i=0; i<MAX_KEYWORDSET_PER_TYPE; ++i) {
-		if (!m_pTypeData->colorInfoArr[COLORIDX_KEYWORD1 + i].bDisp) {
+		if (!pTypeData->colorInfoArr[COLORIDX_KEYWORD1 + i].bDisp) {
 			continue; // 色設定が非表示なのでスキップ。
 		}
-		const int iKwdSet = m_pTypeData->nKeywordSetIdx[i];
+		const int iKwdSet = pTypeData->nKeywordSetIdx[i];
 		if (iKwdSet == -1) {
 			continue; // キーワードセットが設定されていないのでスキップ。
 		}
@@ -82,8 +82,8 @@ bool Color_KeywordSet::BeginColor(const StringRef& str, int nPos)
 
 		// nPos...posWordEnd がキーワード。
 		if (nPos < posWordEnd) {
-			this->m_nCOMMENTEND = posWordEnd;
-			this->m_nKeywordIndex = i;
+			this->nCommentEnd = posWordEnd;
+			this->nKeywordIndex = i;
 			return true;
 		}
 	}
@@ -92,7 +92,7 @@ bool Color_KeywordSet::BeginColor(const StringRef& str, int nPos)
 
 bool Color_KeywordSet::EndColor(const StringRef& str, int nPos)
 {
-	return nPos == this->m_nCOMMENTEND;
+	return nPos == this->nCommentEnd;
 }
 
 

@@ -61,7 +61,7 @@ public:
 	CurrentDirectoryBackupPoint();
 	~CurrentDirectoryBackupPoint();
 private:
-	TCHAR m_szCurDir[_MAX_PATH];
+	TCHAR szCurDir[_MAX_PATH];
 };
 
 

@@ -48,7 +48,7 @@ CallbackResultType SaveAgent::OnCheckSave(SaveInfo* pSaveInfo)
 	//	ビューモードのチェックをEditDocから上書き保存処理に移動
 	//	同名で上書きされるのを防ぐ
 	if (AppMode::getInstance().IsViewMode()
-		&& pSaveInfo->IsSamePath(pDoc->m_docFile.GetFilePath())
+		&& pSaveInfo->IsSamePath(pDoc->docFile.GetFilePath())
 	) {
 		ErrorBeep();
 		TopErrorMessage(EditWnd::getInstance().GetHwnd(), LS(STR_SAVEAGENT_VIEW_FILE));
@@ -56,7 +56,7 @@ CallbackResultType SaveAgent::OnCheckSave(SaveInfo* pSaveInfo)
 	}
 
 	// 他ウィンドウで開いているか確認する	// 2009.04.07 ryoji
-	if (!pSaveInfo->IsSamePath(pDoc->m_docFile.GetFilePath())) {
+	if (!pSaveInfo->IsSamePath(pDoc->docFile.GetFilePath())) {
 		HWND hwndOwner;
 		if (ShareData::getInstance().IsPathOpened(pSaveInfo->filePath, &hwndOwner)) {
 			ErrorMessage(
@@ -72,9 +72,9 @@ CallbackResultType SaveAgent::OnCheckSave(SaveInfo* pSaveInfo)
 	{
 		// ロックは一時的に解除してチェックする（チェックせずに後戻りできないところまで進めるより安全）
 		// ※ ロックしていてもファイル属性やアクセス許可の変更によって書き込めなくなっていることもある
-		bool bLock = (pSaveInfo->IsSamePath(pDoc->m_docFile.GetFilePath()) && pDoc->m_docFile.IsFileLocking());
+		bool bLock = (pSaveInfo->IsSamePath(pDoc->docFile.GetFilePath()) && pDoc->docFile.IsFileLocking());
 		if (bLock) {
-			pDoc->m_docFileOperation.DoFileUnlock();
+			pDoc->docFileOperation.DoFileUnlock();
 		}
 		try {
 			bool bExist = fexist(pSaveInfo->filePath);
@@ -86,7 +86,7 @@ CallbackResultType SaveAgent::OnCheckSave(SaveInfo* pSaveInfo)
 		}catch (Error_FileOpen) {
 			// ※ たとえ上書き保存の場合でもここでの失敗では書込み禁止へは遷移しない
 			if (bLock) {
-				pDoc->m_docFileOperation.DoFileLock(false);
+				pDoc->docFileOperation.DoFileLock(false);
 			}
 			ErrorMessage(
 				EditWnd::getInstance().GetHwnd(),
@@ -96,7 +96,7 @@ CallbackResultType SaveAgent::OnCheckSave(SaveInfo* pSaveInfo)
 			return CallbackResultType::Interrupt;
 		}
 		if (bLock) {
-			pDoc->m_docFileOperation.DoFileLock(false);
+			pDoc->docFileOperation.DoFileLock(false);
 		}
 	}
 	return CallbackResultType::Continue;
@@ -118,15 +118,15 @@ void SaveAgent::OnSave(const SaveInfo& saveInfo)
 	WriteManager writer;
 	EditApp::getInstance().pVisualProgress->ProgressListener::Listen(&writer);
 	writer.WriteFile_From_CDocLineMgr(
-		pDoc->m_docLineMgr,
+		pDoc->docLineMgr,
 		saveInfo
 	);
 
 	// セーブ情報の確定
 	pDoc->SetFilePathAndIcon(saveInfo.filePath);
-	pDoc->m_docFile.SetCodeSet(saveInfo.eCharCode, saveInfo.bBomExist);
+	pDoc->docFile.SetCodeSet(saveInfo.eCharCode, saveInfo.bBomExist);
 	if (saveInfo.eol.IsValid()) {
-		pDoc->m_docEditor.SetNewLineCode(saveInfo.eol);
+		pDoc->docEditor.SetNewLineCode(saveInfo.eol);
 	}
 }
 
@@ -138,7 +138,7 @@ void SaveAgent::OnAfterSave(const SaveInfo& saveInfo)
 	 * CloseHandle前ではFlushFileBuffersを呼んでもタイムスタンプが更新
 	 * されないことがある。
 	 */
-	GetLastWriteTimestamp(pDoc->m_docFile.GetFilePath(), &pDoc->m_docFile.GetFileTime());
+	GetLastWriteTimestamp(pDoc->docFile.GetFilePath(), &pDoc->docFile.GetFileTime());
 
 	// タイプ別設定の変更を指示。
 	// 上書き（明示的な上書きや自動保存）では変更しない

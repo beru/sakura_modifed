@@ -20,10 +20,10 @@
 Ope::Ope(OpeCode eCode)
 {
 	assert( eCode != OpeCode::Unknown );
-	m_nOpe = eCode;		// 操作種別
+	nOpe = eCode;		// 操作種別
 
-	m_ptCaretPos_PHY_Before.Set(LogicInt(-1), LogicInt(-1));	// カーソル位置
-	m_ptCaretPos_PHY_After.Set(LogicInt(-1), LogicInt(-1));	// カーソル位置
+	ptCaretPos_PHY_Before.Set(LogicInt(-1), LogicInt(-1));	// カーソル位置
+	ptCaretPos_PHY_After.Set(LogicInt(-1), LogicInt(-1));	// カーソル位置
 
 }
 
@@ -35,9 +35,9 @@ Ope::~Ope()
 // 編集操作要素のダンプ
 void Ope::DUMP(void)
 {
-	DEBUG_TRACE(_T("\t\tm_nOpe                  = [%d]\n"), m_nOpe               );
-	DEBUG_TRACE(_T("\t\tm_ptCaretPos_PHY_Before = [%d,%d]\n"), m_ptCaretPos_PHY_Before.x, m_ptCaretPos_PHY_Before.y   );
-	DEBUG_TRACE(_T("\t\tm_ptCaretPos_PHY_After  = [%d,%d]\n"), m_ptCaretPos_PHY_After.x, m_ptCaretPos_PHY_After.y   );
+	DEBUG_TRACE(_T("\t\tnOpe                  = [%d]\n"), nOpe               );
+	DEBUG_TRACE(_T("\t\tptCaretPos_PHY_Before = [%d,%d]\n"), ptCaretPos_PHY_Before.x, ptCaretPos_PHY_Before.y   );
+	DEBUG_TRACE(_T("\t\tptCaretPos_PHY_After  = [%d,%d]\n"), ptCaretPos_PHY_After.x, ptCaretPos_PHY_After.y   );
 	return;
 }
 
@@ -45,11 +45,11 @@ void Ope::DUMP(void)
 void DeleteOpe::DUMP(void)
 {
 	Ope::DUMP();
-	DEBUG_TRACE(_T("\t\tm_ptCaretPos_PHY_To     = [%d,%d]\n"), m_ptCaretPos_PHY_To.x, m_ptCaretPos_PHY_To.y);
-	DEBUG_TRACE(_T("\t\tm_opeLineData.size         = [%d]\n"), m_opeLineData.size());
-	for (size_t i=0; i<m_opeLineData.size(); ++i) {
-		DEBUG_TRACE(_T("\t\tm_cOpeLineData[%d].nSeq        = [%d]\n"), m_opeLineData[i].nSeq);
-		DEBUG_TRACE(_T("\t\tm_cOpeLineData[%d].memLine     = [%ls]\n"), m_opeLineData[i].memLine.GetStringPtr());		
+	DEBUG_TRACE(_T("\t\tptCaretPos_PHY_To     = [%d,%d]\n"), ptCaretPos_PHY_To.x, ptCaretPos_PHY_To.y);
+	DEBUG_TRACE(_T("\t\topeLineData.size         = [%d]\n"), opeLineData.size());
+	for (size_t i=0; i<opeLineData.size(); ++i) {
+		DEBUG_TRACE(_T("\t\tcOpeLineData[%d].nSeq        = [%d]\n"), opeLineData[i].nSeq);
+		DEBUG_TRACE(_T("\t\tcOpeLineData[%d].memLine     = [%ls]\n"), opeLineData[i].memLine.GetStringPtr());		
 	}
 	return;
 }
@@ -58,10 +58,10 @@ void DeleteOpe::DUMP(void)
 void InsertOpe::DUMP(void)
 {
 	Ope::DUMP();
-	DEBUG_TRACE(_T("\t\tm_cOpeLineData.size         = [%d]\n"), m_opeLineData.size());
-	for (size_t i=0; i<m_opeLineData.size(); ++i) {
-		DEBUG_TRACE(_T("\t\tm_cOpeLineData[%d].nSeq        = [%d]\n"), m_opeLineData[i].nSeq);
-		DEBUG_TRACE(_T("\t\tm_cOpeLineData[%d].memLine     = [%ls]\n"), m_opeLineData[i].memLine.GetStringPtr());		
+	DEBUG_TRACE(_T("\t\tcOpeLineData.size         = [%d]\n"), opeLineData.size());
+	for (size_t i=0; i<opeLineData.size(); ++i) {
+		DEBUG_TRACE(_T("\t\tcOpeLineData[%d].nSeq        = [%d]\n"), opeLineData[i].nSeq);
+		DEBUG_TRACE(_T("\t\tcOpeLineData[%d].memLine     = [%ls]\n"), opeLineData[i].memLine.GetStringPtr());		
 	}
 	return;
 }

@@ -151,7 +151,7 @@ void _DispWrap(
 		EColorIndexType bgColorOverwrite = COLORIDX_WRAP;
 		bool bTrans = view.IsBkBitmap();
 		if (wrapType.IsDisp()) {
-			EditView& activeView = view.m_editWnd.GetActiveView();
+			EditView& activeView = view.editWnd.GetActiveView();
 			if (bgLineType.IsDisp() && view.GetCaret().GetCaretLayoutPos().GetY2() == nLineNum) {
 				if (bBgcolor) {
 					bgColorOverwrite = COLORIDX_CARETLINEBG;
@@ -163,7 +163,7 @@ void _DispWrap(
 					bTrans = bTrans && evenBgLineType.GetBackColor() == textType.GetBackColor();
 				}
 			}else if (
-				view.m_bMiniMap
+				view.bMiniMap
 				&& activeView.GetTextArea().GetViewTopLine() <= nLineNum
 				&& nLineNum < activeView.GetTextArea().GetBottomLine()
 			) {

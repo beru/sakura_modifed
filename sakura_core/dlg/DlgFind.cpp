@@ -84,7 +84,7 @@ HWND DlgFind::DoModeless(
 	searchOption = csSearch.searchOption;		// 検索オプション
 	bNotifyNotFound = csSearch.bNotifyNotFound;	// 検索／置換  見つからないときメッセージを表示
 	ptEscCaretPos_PHY = ((EditView*)lParam)->GetCaret().GetCaretLogicPos();	// 検索開始時のカーソル位置退避
-	((EditView*)lParam)->m_bSearch = TRUE;							// 検索開始位置の登録有無		02/07/28 ai
+	((EditView*)lParam)->bSearch = TRUE;							// 検索開始位置の登録有無		02/07/28 ai
 	return Dialog::DoModeless(hInstance, hwndParent, IDD_FIND, lParam, SW_SHOW);
 }
 
@@ -261,15 +261,15 @@ int DlgFind::GetData(void)
 		}
 		EditView* pEditView = (EditView*)lParam;
 		if (1
-			&& pEditView->m_strCurSearchKey == strText
-			&& pEditView->m_curSearchOption == searchOption
+			&& pEditView->strCurSearchKey == strText
+			&& pEditView->curSearchOption == searchOption
 		) {
 		}else {
-			pEditView->m_strCurSearchKey = strText;
-			pEditView->m_curSearchOption = searchOption;
-			pEditView->m_bCurSearchUpdate = true;
+			pEditView->strCurSearchKey = strText;
+			pEditView->curSearchOption = searchOption;
+			pEditView->bCurSearchUpdate = true;
 		}
-		pEditView->m_nCurSearchKeySequence = GetDllShareData().common.search.nSearchKeySequence;
+		pEditView->nCurSearchKeySequence = GetDllShareData().common.search.nSearchKeySequence;
 		if (!bModal) {
 			// ダイアログデータの設定
 			//SetData();
@@ -339,10 +339,10 @@ BOOL DlgFind::OnBnClicked(int wID)
 
 				// 02/06/26 ai Start
 				// 検索開始位置を登録
-				if (pEditView->m_bSearch) {
+				if (pEditView->bSearch) {
 					// 検索開始時のカーソル位置登録条件変更 02/07/28 ai start
-					pEditView->m_ptSrchStartPos_PHY = ptEscCaretPos_PHY;
-					pEditView->m_bSearch = false;
+					pEditView->ptSrchStartPos_PHY = ptEscCaretPos_PHY;
+					pEditView->bSearch = false;
 					// 02/07/28 ai end
 				}//  02/06/26 ai End
 
@@ -369,10 +369,10 @@ BOOL DlgFind::OnBnClicked(int wID)
 				pEditView->Redraw();	// 前回0文字幅マッチの消去にも必要
 
 				// 検索開始位置を登録
-				if (pEditView->m_bSearch) {
+				if (pEditView->bSearch) {
 					// 検索開始時のカーソル位置登録条件変更 02/07/28 ai start
-					pEditView->m_ptSrchStartPos_PHY = ptEscCaretPos_PHY;
-					pEditView->m_bSearch = false;
+					pEditView->ptSrchStartPos_PHY = ptEscCaretPos_PHY;
+					pEditView->bSearch = false;
 				}
 
 				// 検索ダイアログを自動的に閉じる
@@ -410,7 +410,7 @@ BOOL DlgFind::OnActivate(WPARAM wParam, LPARAM lParam)
 {
 	// 0文字幅マッチ描画のON/OFF	// 2009.11.29 ryoji
 	EditView* pEditView = (EditView*)(this->lParam);
-	LayoutRange rangeSel = pEditView->GetSelectionInfo().m_select;
+	LayoutRange rangeSel = pEditView->GetSelectionInfo().select;
 	if (rangeSel.IsValid() && rangeSel.IsLineOne() && rangeSel.IsOne())
 		pEditView->InvalidateRect(NULL);	// アクティブ化／非アクティブ化が完了してから再描画
 

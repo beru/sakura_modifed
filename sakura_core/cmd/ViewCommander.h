@@ -50,12 +50,12 @@ public:
 	Caret& GetCaret();
 
 private:
-	EditView&		m_view;
-	SMacroMgr*		m_pSMacroMgr;
+	EditView&	view;
+	SMacroMgr*	pSMacroMgr;
 
 public:
 	// キーリピート状態
-	int				m_bPrevCommand;
+	int			bPrevCommand;
 
 private:
 	enum class IndentType {

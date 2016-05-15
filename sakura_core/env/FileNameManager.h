@@ -54,8 +54,8 @@ struct Share_FileNameManagement {
 class FileNameManager : public TSingleton<FileNameManager> {
 	friend class TSingleton<FileNameManager>;
 	FileNameManager() {
-		m_pShareData = &GetDllShareData();
-		m_nTransformFileNameCount = -1;
+		pShareData = &GetDllShareData();
+		nTransformFileNameCount = -1;
 	}
 
 public:
@@ -91,11 +91,11 @@ public:
 	void GetIniFileName( LPTSTR pszIniFileName, LPCTSTR pszProfName, BOOL bRead = FALSE );	// iniファイル名の取得		// 2007.05.19 ryoji
 
 private:
-	DllSharedData* m_pShareData;
+	DllSharedData* pShareData;
 
 	// ファイル名簡易表示用キャッシュ
-	int		m_nTransformFileNameCount; // 有効数
-	TCHAR	m_szTransformFileNameFromExp[MAX_TRANSFORM_FILENAME][_MAX_PATH];
-	int		m_nTransformFileNameOrgId[MAX_TRANSFORM_FILENAME];
+	int		nTransformFileNameCount; // 有効数
+	TCHAR	szTransformFileNameFromExp[MAX_TRANSFORM_FILENAME][_MAX_PATH];
+	int		nTransformFileNameOrgId[MAX_TRANSFORM_FILENAME];
 };
 

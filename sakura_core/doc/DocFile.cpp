@@ -32,8 +32,8 @@
 */
 const TCHAR* DocFile::GetSaveFilePath(void) const
 {
-	if (m_szSaveFilePath.IsValidPath()) {
-		return m_szSaveFilePath;
+	if (szSaveFilePath.IsValidPath()) {
+		return szSaveFilePath;
 	}else {
 		return GetFilePath();
 	}

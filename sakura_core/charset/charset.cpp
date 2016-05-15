@@ -104,29 +104,29 @@ bool IsValidCodeType(int code)
 
 LPCTSTR CodeTypeName::Normal() const
 {
-	if (msCodeSet.find(m_eCodeType) == msCodeSet.end()) {
+	if (msCodeSet.find(eCodeType) == msCodeSet.end()) {
 		return NULL;
 	}
-	return to_tchar(msCodeSet[m_eCodeType].sNormal);
+	return to_tchar(msCodeSet[eCodeType].sNormal);
 }
 
 LPCTSTR CodeTypeName::Short() const
 {
-	if (msCodeSet.find(m_eCodeType) == msCodeSet.end()) {
+	if (msCodeSet.find(eCodeType) == msCodeSet.end()) {
 		return NULL;
 	}
-	return to_tchar(msCodeSet[m_eCodeType].sShort);
+	return to_tchar(msCodeSet[eCodeType].sShort);
 }
 
 LPCTSTR CodeTypeName::Bracket() const
 {
-	if (msCodeSet.find(m_eCodeType) == msCodeSet.end()) {
+	if (msCodeSet.find(eCodeType) == msCodeSet.end()) {
 		return NULL;
 	}
 
-//	static	std::wstring	sWork = L"  [" + msCodeSet[m_eCodeType].sShort + L"]";
+//	static	std::wstring	sWork = L"  [" + msCodeSet[eCodeType].sShort + L"]";
 	static	std::wstring	sWork;
-	sWork = std::wstring(L"  [") + msCodeSet[m_eCodeType].sShort + L"]";	// 変数の定義と値の設定を一緒にやるとバグる様なので分離	// 2013/4/20 Uchi
+	sWork = std::wstring(L"  [") + msCodeSet[eCodeType].sShort + L"]";	// 変数の定義と値の設定を一緒にやるとバグる様なので分離	// 2013/4/20 Uchi
 
 	return to_tchar(sWork.c_str());
 }
@@ -134,9 +134,9 @@ LPCTSTR CodeTypeName::Bracket() const
 
 bool CodeTypeName::UseBom()
 {
-	if (msCodeSet.find(m_eCodeType) == msCodeSet.end()) {
-		if (IsValidCodeOrCPType(m_eCodeType)) {
-			CodePage encoding(m_eCodeType);
+	if (msCodeSet.find(eCodeType) == msCodeSet.end()) {
+		if (IsValidCodeOrCPType(eCodeType)) {
+			CodePage encoding(eCodeType);
 			Memory mem;
 			encoding.GetBom(&mem);
 			return 0 < mem.GetRawLength();
@@ -144,28 +144,28 @@ bool CodeTypeName::UseBom()
 		return false;
 	}
 
-	return msCodeSet[m_eCodeType].bUseBom;
+	return msCodeSet[eCodeType].bUseBom;
 }
 
 bool CodeTypeName::IsBomDefOn()
 {
-	if (msCodeSet.find(m_eCodeType) == msCodeSet.end()) {
+	if (msCodeSet.find(eCodeType) == msCodeSet.end()) {
 		return false;
 	}
 
-	return msCodeSet[m_eCodeType].bIsBomDefOn;
+	return msCodeSet[eCodeType].bIsBomDefOn;
 }
 
 bool CodeTypeName::CanDefault()
 {
-	if (msCodeSet.find(m_eCodeType) == msCodeSet.end()) {
-		if (IsValidCodeOrCPType(m_eCodeType)) {
+	if (msCodeSet.find(eCodeType) == msCodeSet.end()) {
+		if (IsValidCodeOrCPType(eCodeType)) {
 			return true;
 		}
 		return false;
 	}
 
-	return msCodeSet[m_eCodeType].bCanDefault;
+	return msCodeSet[eCodeType].bCanDefault;
 }
 
 

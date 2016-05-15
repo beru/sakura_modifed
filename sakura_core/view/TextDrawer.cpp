@@ -37,7 +37,7 @@
 
 const TextArea& TextDrawer::GetTextArea() const
 {
-	return m_editView.GetTextArea();
+	return editView.GetTextArea();
 }
 
 using namespace std;
@@ -63,12 +63,12 @@ void TextDrawer::DispText(
 	int y = pDispPos->GetDrawPos().y;
 
 	// 必要なインターフェースを取得
-	const TextMetrics* pMetrics = &m_editView.GetTextMetrics();
+	const TextMetrics* pMetrics = &editView.GetTextMetrics();
 	const TextArea& textArea = GetTextArea();
 
 	// 文字間隔配列を生成
 	static vector<int> vDxArray(1);
-	const int* pDxArray = pMetrics->GenerateDxArray(&vDxArray, pData, nLength, m_editView.GetTextMetrics().GetHankakuDx());
+	const int* pDxArray = pMetrics->GenerateDxArray(&vDxArray, pData, nLength, editView.GetTextMetrics().GetHankakuDx());
 
 	// 文字列のピクセル幅
 	int nTextWidth = pMetrics->CalcTextWidth(pData, nLength, pDxArray);
@@ -78,13 +78,13 @@ void TextDrawer::DispText(
 	rcClip.left   = x;
 	rcClip.right  = x + nTextWidth;
 	rcClip.top    = y;
-	rcClip.bottom = y + m_editView.GetTextMetrics().GetHankakuDy();
+	rcClip.bottom = y + editView.GetTextMetrics().GetHankakuDy();
 	if (rcClip.left < textArea.GetAreaLeft()) {
 		rcClip.left = textArea.GetAreaLeft();
 	}
 
 	// 文字間隔
-	int nDx = m_editView.GetTextMetrics().GetHankakuDx();
+	int nDx = editView.GetTextMetrics().GetHankakuDx();
 
 	if (textArea.IsRectIntersected(rcClip) && rcClip.top >= textArea.GetAreaTop()) {
 
@@ -169,7 +169,7 @@ end:
 	@date 2005.11.08 Moca 新規作成
 	@date 2006.04.29 Moca 太線・点線のサポート。選択中の反転対策に行ごとに作画するように変更
 	    縦線の色がテキストの背景色と同じ場合は、縦線の背景色をEXORで作画する
-	@note Common::m_nVertLineOffsetにより、指定桁の前の文字の上に作画されることがある。
+	@note Common::nVertLineOffsetにより、指定桁の前の文字の上に作画されることがある。
 */
 void TextDrawer::DispVerticalLines(
 	Graphics&	gr,			// 作画するウィンドウのDC
@@ -179,9 +179,9 @@ void TextDrawer::DispVerticalLines(
 	LayoutInt	nRightCol	// 線を引く範囲の右桁の指定(-1で未指定)
 	) const
 {
-	auto& view = m_editView;
+	auto& view = editView;
 	
-	const TypeConfig& typeData = view.m_pEditDoc->m_docType.GetDocumentAttribute();
+	const TypeConfig& typeData = view.pEditDoc->docType.GetDocumentAttribute();
 	
 	TypeSupport vertType(view, COLORIDX_VERTLINE);
 	TypeSupport textType(view, COLORIDX_TEXT);
@@ -193,7 +193,7 @@ void TextDrawer::DispVerticalLines(
 	auto& textArea = view.GetTextArea();
 	nLeftCol = t_max(textArea.GetViewLeftCol(), nLeftCol);
 	
-	const LayoutInt nWrapKetas  = view.m_pEditDoc->m_layoutMgr.GetMaxLineKetas();
+	const LayoutInt nWrapKetas  = view.pEditDoc->layoutMgr.GetMaxLineKetas();
 	const int nCharDx  = view.GetTextMetrics().GetHankakuDx();
 	if (nRightCol < 0) {
 		nRightCol = nWrapKetas;
@@ -298,7 +298,7 @@ void TextDrawer::DispNoteLine(
 	int			nRight		// 線を引く右端
 	) const
 {
-	auto& view = m_editView;
+	auto& view = editView;
 
 	TypeSupport noteLine(view, COLORIDX_NOTELINE);
 	if (noteLine.IsDisp()) {
@@ -306,7 +306,7 @@ void TextDrawer::DispNoteLine(
 		const int nLineHeight = view.GetTextMetrics().GetHankakuDy();
 		const int left = nLeft;
 		const int right = nRight;
-		int userOffset = view.m_pTypeData->nNoteLineOffset;
+		int userOffset = view.pTypeData->nNoteLineOffset;
 		int offset = view.GetTextArea().GetAreaTop() + userOffset - 1;
 		while (offset < 0) {
 			offset += nLineHeight;
@@ -335,14 +335,14 @@ void TextDrawer::DispWrapLine(
 	int			nBottom		// 線を引く下端のクライアント座標y
 	) const
 {
-	auto& view = m_editView;
+	auto& view = editView;
 	TypeSupport wrapType(view, COLORIDX_WRAP);
 	if (!wrapType.IsDisp()) {
 		return;
 	}
 
 	const TextArea& textArea = GetTextArea();
-	const LayoutInt nWrapKetas = view.m_pEditDoc->m_layoutMgr.GetMaxLineKetas();
+	const LayoutInt nWrapKetas = view.pEditDoc->layoutMgr.GetMaxLineKetas();
 	const int nCharDx = view.GetTextMetrics().GetHankakuDx();
 	int nXPos = textArea.GetAreaLeft() + (Int)(nWrapKetas - textArea.GetViewLeftCol()) * nCharDx;
 	//	2005.11.08 Moca 作画条件変更
@@ -369,16 +369,16 @@ void TextDrawer::DispLineNumber(
 	) const
 {
 	//$$ 高速化：SearchLineByLayoutYにキャッシュを持たせる
-	const Layout*	pLayout = EditDoc::GetInstance(0)->m_layoutMgr.SearchLineByLayoutY(nLineNum);
+	const Layout*	pLayout = EditDoc::GetInstance(0)->layoutMgr.SearchLineByLayoutY(nLineNum);
 
-	auto& view = m_editView;
-	const TypeConfig& typeConfig = view.m_pEditDoc->m_docType.GetDocumentAttribute();
+	auto& view = editView;
+	const TypeConfig& typeConfig = view.pEditDoc->docType.GetDocumentAttribute();
 
-	int				nLineHeight = view.GetTextMetrics().GetHankakuDy();
-	int				nCharWidth = view.GetTextMetrics().GetHankakuDx();
+	int nLineHeight = view.GetTextMetrics().GetHankakuDy();
+	int nCharWidth = view.GetTextMetrics().GetHankakuDx();
 	// 行番号表示部分X幅	Sep. 23, 2002 genta 共通式のくくりだし
-	//int				nLineNumAreaWidth = pView->GetTextArea().m_nViewAlignLeftCols * nCharWidth;
-	int				nLineNumAreaWidth = view.GetTextArea().GetAreaLeft() - GetDllShareData().common.window.nLineNumRightSpace;	// 2009.03.26 ryoji
+	//int nLineNumAreaWidth = pView->GetTextArea().nViewAlignLeftCols * nCharWidth;
+	int nLineNumAreaWidth = view.GetTextArea().GetAreaLeft() - GetDllShareData().common.window.nLineNumRightSpace;	// 2009.03.26 ryoji
 
 	TypeSupport textType(view, COLORIDX_TEXT);
 	TypeSupport caretLineBg(view, COLORIDX_CARETLINEBG);
@@ -396,16 +396,15 @@ void TextDrawer::DispLineNumber(
 	//                     nColorIndexを決定                       //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	EColorIndexType nColorIndex = COLORIDX_GYOU;	// 行番号
-	const DocLine*	pDocLine = nullptr;
+	const DocLine* pDocLine = nullptr;
 	bool bGyouMod = false;
 	if (pLayout) {
 		pDocLine = pLayout->GetDocLineRef();
-
 		if (1
-			&& view.GetDocument().m_docEditor.IsModified()
+			&& view.GetDocument().docEditor.IsModified()
 			&& ModifyVisitor().IsLineModified(
 				pDocLine,
-				view.GetDocument().m_docEditor.m_opeBuf.GetNoModifiedSeq()
+				view.GetDocument().docEditor.opeBuf.GetNoModifiedSeq()
 			)
 		) {
 			// 変更フラグ
@@ -437,7 +436,7 @@ void TextDrawer::DispLineNumber(
 	TypeSupport markType(view, COLORIDX_MARK);
 
 	// 該当行の行番号エリア矩形
-	RECT	rcLineNum;
+	RECT rcLineNum;
 	rcLineNum.left = 0;
 	rcLineNum.right = nLineNumAreaWidth;
 	rcLineNum.top = y;
@@ -524,7 +523,7 @@ void TextDrawer::DispLineNumber(
 		}
 
 		//	Sep. 23, 2002 genta
-		int drawNumTop = (view.GetTextArea().m_nViewAlignLeftCols - nLineNumCols - 1) * (nCharWidth);
+		int drawNumTop = (view.GetTextArea().nViewAlignLeftCols - nLineNumCols - 1) * (nCharWidth);
 		::ExtTextOutW_AnyBuild(gr,
 			drawNumTop,
 			y,
@@ -582,7 +581,7 @@ void TextDrawer::DispLineNumber(
 	}
 	
 	// 行番号部分のノート線描画
-	if (!view.m_bMiniMap) {
+	if (!view.bMiniMap) {
 		int left   = bDispLineNumTrans ? 0 : rcLineNum.right;
 		int right  = view.GetTextArea().GetAreaLeft();
 		int top    = y;

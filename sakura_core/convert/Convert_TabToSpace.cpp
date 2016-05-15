@@ -19,13 +19,13 @@ bool Converter_TabToSpace::DoConvert(NativeW* pData)
 	nBgn = 0;
 	nPosDes = 0;
 	// CRLFで区切られる「行」を返す。CRLFは行長に加えない
-	while ((pLine = GetNextLineW(pData->GetStringPtr(), pData->GetStringLength(), &nLineLen, &nBgn, &eol, m_bExtEol))) {
+	while ((pLine = GetNextLineW(pData->GetStringPtr(), pData->GetStringLength(), &nLineLen, &nBgn, &eol, bExtEol))) {
 		if (0 < nLineLen) {
 			// 先頭行については開始桁位置を考慮する（さらに折り返し関連の対策が必要？）
-			nPosX = (pData->GetStringPtr() == pLine)? m_nStartColumn: 0;
+			nPosX = (pData->GetStringPtr() == pLine)? nStartColumn: 0;
 			for (int i=0; i<nLineLen; ++i) {
 				if (pLine[i] == TAB) {
-					nWork = m_nTabWidth - (nPosX % m_nTabWidth);
+					nWork = nTabWidth - (nPosX % nTabWidth);
 					nPosDes += nWork;
 					nPosX += nWork;
 				}else {
@@ -45,13 +45,13 @@ bool Converter_TabToSpace::DoConvert(NativeW* pData)
 	nBgn = 0;
 	nPosDes = 0;
 	// CRLFで区切られる「行」を返す。CRLFは行長に加えない
-	while ((pLine = GetNextLineW(pData->GetStringPtr(), pData->GetStringLength(), &nLineLen, &nBgn, &eol, m_bExtEol))) {
+	while ((pLine = GetNextLineW(pData->GetStringPtr(), pData->GetStringLength(), &nLineLen, &nBgn, &eol, bExtEol))) {
 		if (0 < nLineLen) {
 			// 先頭行については開始桁位置を考慮する（さらに折り返し関連の対策が必要？）
-			nPosX = (pData->GetStringPtr() == pLine)? m_nStartColumn: 0;
+			nPosX = (pData->GetStringPtr() == pLine)? nStartColumn: 0;
 			for (int i=0; i<nLineLen; ++i) {
 				if (pLine[i] == TAB) {
-					nWork = m_nTabWidth - (nPosX % m_nTabWidth);
+					nWork = nTabWidth - (nPosX % nTabWidth);
 					auto_memset(&pDes[nPosDes], L' ', nWork);
 					nPosDes += nWork;
 					nPosX += nWork;

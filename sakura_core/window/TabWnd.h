@@ -72,7 +72,7 @@ public:
 
 	void SizeBox_ONOFF(bool bSizeBox);
 	HWND GetHwndSizeBox() {
-		return m_hwndSizeBox;
+		return hwndSizeBox;
 	}
 	void OnSize() {
 		OnSize( GetHwnd(), WM_SIZE, 0, 0 );
@@ -125,7 +125,7 @@ protected:
 	LRESULT OnTabNotify(WPARAM wParam, LPARAM lParam);				// タブ部 WM_NOTIFY 処理
 
 	// 実装補助インターフェース
-	void BreakDrag(void) { if (::GetCapture() == m_hwndTab) ::ReleaseCapture(); m_eDragState = DRAG_NONE; m_nTabCloseCapture = -1; }	// ドラッグ状態解除処理
+	void BreakDrag(void) { if (::GetCapture() == hwndTab) ::ReleaseCapture(); eDragState = DRAG_NONE; nTabCloseCapture = -1; }	// ドラッグ状態解除処理
 	bool ReorderTab(int nSrcTab, int nDstTab);			// タブ順序変更処理
 	void BroadcastRefreshToGroup(void);
 	bool SeparateGroup(HWND hwndSrc, HWND hwndDst, POINT ptDrag, POINT ptDrop);	// タブ分離処理	// 2007.06.20 ryoji
@@ -173,45 +173,45 @@ protected:
 	|| メンバ変数
 	*/
 public:
-	DllSharedData*	m_pShareData;		// 共有データ
-	HFONT			m_hFont;			// 表示用フォント
-	HWND			m_hwndTab;			// タブコントロール
-	HWND			m_hwndToolTip;		// ツールチップ（ボタン用）
-	TCHAR			m_szTextTip[1024];	// ツールチップのテキスト（タブ用）
-	TabPosition	eTabPosition;		// タブ表示位置
+	DllSharedData*	pShareData;			// 共有データ
+	HFONT			hFont;				// 表示用フォント
+	HWND			hwndTab;			// タブコントロール
+	HWND			hwndToolTip;		// ツールチップ（ボタン用）
+	TCHAR			szTextTip[1024];	// ツールチップのテキスト（タブ用）
+	TabPosition		eTabPosition;		// タブ表示位置
 
 private:
-	DragState	m_eDragState;			// ドラッグ状態
-	int			m_nSrcTab;				// 移動元タブ
-	POINT		m_ptSrcCursor;			// ドラッグ開始カーソル位置
-	HCURSOR		m_hDefaultCursor;		// ドラッグ開始時のカーソル
+	DragState	eDragState;				// ドラッグ状態
+	int			nSrcTab;				// 移動元タブ
+	POINT		ptSrcCursor;			// ドラッグ開始カーソル位置
+	HCURSOR		hDefaultCursor;			// ドラッグ開始時のカーソル
 
 	// 2006.01.28 ryoji タブへのアイコン表示を可能に
-	FN_ImageList_Duplicate	m_RealImageList_Duplicate;
+	FN_ImageList_Duplicate	realImageList_Duplicate;
 
-	HIMAGELIST	m_hIml;					// イメージリスト
-	HICON		m_hIconApp;				// アプリケーションアイコン
-	HICON		m_hIconGrep;			// Grepアイコン
-	int			m_iIconApp;				// アプリケーションアイコンのインデックス
-	int			m_iIconGrep;			// Grepアイコンのインデックス
+	HIMAGELIST	hIml;					// イメージリスト
+	HICON		hIconApp;				// アプリケーションアイコン
+	HICON		hIconGrep;				// Grepアイコン
+	int			iIconApp;				// アプリケーションアイコンのインデックス
+	int			iIconGrep;				// Grepアイコンのインデックス
 
-	bool		m_bVisualStyle;			// ビジュアルスタイルかどうか	// 2007.04.01 ryoji
-	bool		m_bHovering;
-	bool		m_bListBtnHilighted;
-	bool		m_bCloseBtnHilighted;	// 閉じるボタンハイライト状態	// 2006.10.21 ryoji
-	CaptureSrc	m_eCaptureSrc;			// キャプチャー元
-	bool		m_bTabSwapped;			// ドラッグ中にタブの入れ替えがあったかどうか
-	LONG*		m_nTabBorderArray;		// ドラッグ前のタブ境界位置配列
-	LOGFONT		lf;					// 表示フォントの特性情報
-	bool		m_bMultiLine;			// 複数行
+	bool		bVisualStyle;			// ビジュアルスタイルかどうか	// 2007.04.01 ryoji
+	bool		bHovering;
+	bool		bListBtnHilighted;
+	bool		bCloseBtnHilighted;		// 閉じるボタンハイライト状態	// 2006.10.21 ryoji
+	CaptureSrc	eCaptureSrc;			// キャプチャー元
+	bool		bTabSwapped;			// ドラッグ中にタブの入れ替えがあったかどうか
+	LONG*		nTabBorderArray;		// ドラッグ前のタブ境界位置配列
+	LOGFONT		lf;						// 表示フォントの特性情報
+	bool		bMultiLine;				// 複数行
 
 	// タブ内の閉じるボタン用変数
-	int			m_nTabHover;			// マウスカーソル下のタブ（無いときは-1）
-	bool		m_bTabCloseHover;		// マウスカーソル下にタブ内の閉じるボタンがあるか
-	int			m_nTabCloseCapture;		// 閉じるボタンがマウス押下されているタブ（無いときは-1）
+	int			nTabHover;				// マウスカーソル下のタブ（無いときは-1）
+	bool		bTabCloseHover;			// マウスカーソル下にタブ内の閉じるボタンがあるか
+	int			nTabCloseCapture;		// 閉じるボタンがマウス押下されているタブ（無いときは-1）
 
-	HWND		m_hwndSizeBox;
-	bool		m_bSizeBox;
+	HWND		hwndSizeBox;
+	bool		bSizeBox;
 
 private:
 	DISALLOW_COPY_AND_ASSIGN(TabWnd);

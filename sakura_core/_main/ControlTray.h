@@ -87,7 +87,7 @@ public:
 	static void TerminateApplication(HWND hWndFrom);	// サクラエディタの全終了		2006.12.25 ryoji 引数追加
 
 public:
-	HWND GetTrayHwnd() const { return m_hWnd; }
+	HWND GetTrayHwnd() const { return hWnd; }
 
 	/*
 	|| 実装ヘルパ系
@@ -110,21 +110,21 @@ protected:
 	|| メンバ変数
 	*/
 private:
-	MenuDrawer			m_menuDrawer;
-	PropertyManager*	m_pPropertyManager;
-	bool				m_bUseTrayMenu;			// トレイメニュー表示中
-	HINSTANCE			m_hInstance;
-	HWND				m_hWnd;
-	bool				m_bCreatedTrayIcon;		// トレイにアイコンを作った
+	MenuDrawer			menuDrawer;
+	PropertyManager*	pPropertyManager;
+	bool				bUseTrayMenu;			// トレイメニュー表示中
+	HINSTANCE			hInstance;
+	HWND				hWnd;
+	bool				bCreatedTrayIcon;		// トレイにアイコンを作った
 
-	DllSharedData*		m_pShareData;
-	DlgGrep				m_dlgGrep;				// Jul. 2, 2001 genta
-	int					m_nCurSearchKeySequence;
+	DllSharedData*		pShareData;
+	DlgGrep				dlgGrep;				// Jul. 2, 2001 genta
+	int					nCurSearchKeySequence;
 
-	ImageListMgr		m_hIcons;
+	ImageListMgr		hIcons;
 
-	UINT				m_uCreateTaskBarMsg;	// RegisterMessageで得られるMessage IDの保管場所。Apr. 24, 2001 genta
+	UINT				uCreateTaskBarMsg;	// RegisterMessageで得られるMessage IDの保管場所。Apr. 24, 2001 genta
 
-	TCHAR				m_szLanguageDll[MAX_PATH];
+	TCHAR				szLanguageDll[MAX_PATH];
 };
 

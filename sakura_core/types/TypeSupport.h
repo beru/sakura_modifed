@@ -40,18 +40,18 @@ private:
 public:
 	TypeSupport(const EditView& editView, EColorIndexType eColorIdx)
 		:
-		m_pFontset(&editView.GetFontset()),
-		m_nColorIdx(ToColorInfoArrIndex(eColorIdx))
+		pFontset(&editView.GetFontset()),
+		nColorIdx(ToColorInfoArrIndex(eColorIdx))
 	{
-		assert(0 <= m_nColorIdx);
-		m_pTypes = &editView.m_pEditDoc->m_docType.GetDocumentAttribute();
-		m_pColorInfoArr = &m_pTypes->colorInfoArr[m_nColorIdx];
+		assert(0 <= nColorIdx);
+		pTypes = &editView.pEditDoc->docType.GetDocumentAttribute();
+		pColorInfoArr = &pTypes->colorInfoArr[nColorIdx];
 
-		m_gr = nullptr;
+		gr = nullptr;
 	}
 	virtual ~TypeSupport() {
-		if (m_gr) {
-			RewindGraphicsState(*m_gr);
+		if (gr) {
+			RewindGraphicsState(*gr);
 		}
 	}
 
@@ -61,38 +61,38 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	// 前景色(文字色)
 	COLORREF GetTextColor() const {
-		return m_pColorInfoArr->colorAttr.cTEXT;
+		return pColorInfoArr->colorAttr.cTEXT;
 	}
 
 	// 背景色
 	COLORREF GetBackColor() const {
-		return m_pColorInfoArr->colorAttr.cBACK;
+		return pColorInfoArr->colorAttr.cBACK;
 	}
 
 	// 表示するかどうか
 	bool IsDisp() const {
-		return m_pColorInfoArr->bDisp;
+		return pColorInfoArr->bDisp;
 	}
 
 	// 太字かどうか
 	bool IsBoldFont() const {
-		return m_pColorInfoArr->fontAttr.bBoldFont;
+		return pColorInfoArr->fontAttr.bBoldFont;
 	}
 
 	// 下線を持つかどうか
 	bool HasUnderLine() const {
-		return m_pColorInfoArr->fontAttr.bUnderLine;
+		return pColorInfoArr->fontAttr.bUnderLine;
 	}
 
 	const ColorInfo& GetColorInfo() const {
-		return *m_pColorInfoArr;
+		return *pColorInfoArr;
 	}
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                           描画                              //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	void FillBack(Graphics& gr, const RECT& rc) {
-		gr.FillSolidMyRect(rc, m_pColorInfoArr->colorAttr.cBACK);
+		gr.FillSolidMyRect(rc, pColorInfoArr->colorAttr.cBACK);
 	}
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -100,17 +100,17 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	Font GetTypeFont() {
 		Font font;
-		font.fontAttr = m_pColorInfoArr->fontAttr;
-		font.hFont = m_pFontset->ChooseFontHandle( m_pColorInfoArr->fontAttr );
+		font.fontAttr = pColorInfoArr->fontAttr;
+		font.hFont = pFontset->ChooseFontHandle( pColorInfoArr->fontAttr );
 		return font;
 	}
 	
 	void SetGraphicsState_WhileThisObj(Graphics& gr) {
-		if (m_gr) {
-			RewindGraphicsState(*m_gr);
+		if (this->gr) {
+			RewindGraphicsState(*this->gr);
 		}
 
-		m_gr = &gr;
+		this->gr = &gr;
 
 		// テキスト色
 		gr.PushTextBackColor(GetBackColor());
@@ -121,20 +121,20 @@ public:
 	}
 	
 	void RewindGraphicsState(Graphics& gr) {
-		if (m_gr) {
+		if (this->gr) {
 			gr.PopTextBackColor();
 			gr.PopTextForeColor();
 			gr.PopMyFont();
-			m_gr = nullptr;
+			this->gr = nullptr;
 		}
 	}
 
 private:
-	const ViewFont*	m_pFontset;
-	const TypeConfig*	m_pTypes;
-	int					m_nColorIdx;
-	const ColorInfo*	m_pColorInfoArr;
+	const ViewFont*		pFontset;
+	const TypeConfig*	pTypes;
+	int					nColorIdx;
+	const ColorInfo*	pColorInfoArr;
 
-	Graphics* m_gr;    // 設定を変更したHDC
+	Graphics* gr;    // 設定を変更したHDC
 };
 

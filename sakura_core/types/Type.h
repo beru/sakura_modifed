@@ -120,7 +120,7 @@ enum class StringLiteralType {
 
 // タイプ別設定
 struct TypeConfig {
-	// 2007.09.07 変数名変更: m_nMaxLineSize→nMaxLineKetas
+	// 2007.09.07 変数名変更: nMaxLineSize→nMaxLineKetas
 	int					nIdx;
 	int					id;
 	TCHAR				szTypeName[64];				// タイプ属性：名称

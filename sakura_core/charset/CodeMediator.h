@@ -34,7 +34,7 @@ protected:
 
 public:
 
-	explicit CodeMediator(const EncodingConfig& ref) : m_pEncodingConfig(&ref) { }
+	explicit CodeMediator(const EncodingConfig& ref) : pEncodingConfig(&ref) { }
 
 	static EncodingType DetectUnicodeBom(const char* pS, const int nLen);
 
@@ -46,6 +46,6 @@ public:
 	static EncodingType CheckKanjiCode(ESI*);  // CESI 構造体（？）を外部で構築した場合に使用
 
 private:
-	const EncodingConfig* m_pEncodingConfig;
+	const EncodingConfig* pEncodingConfig;
 };
 

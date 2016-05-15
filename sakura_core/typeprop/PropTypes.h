@@ -78,11 +78,11 @@ public:
 	INT_PTR DoPropertySheet(int);		// プロパティシートの作成
 
 	// インターフェース	
-	void SetTypeData(const TypeConfig& t) { m_types = t; }	// タイプ別設定データの設定  Jan. 23, 2005 genta
-	void GetTypeData(TypeConfig& t) const { t = m_types; }	// タイプ別設定データの取得  Jan. 23, 2005 genta
-	HWND GetHwndParent()const { return m_hwndParent; }
-	int GetPageNum() { return m_nPageNum; }
-	bool GetChangeKeywordSet() const { return m_bChangeKeywordSet; }
+	void SetTypeData(const TypeConfig& t) { types = t; }	// タイプ別設定データの設定  Jan. 23, 2005 genta
+	void GetTypeData(TypeConfig& t) const { t = types; }	// タイプ別設定データの取得  Jan. 23, 2005 genta
+	HWND GetHwndParent()const { return hwndParent; }
+	int GetPageNum() { return nPageNum; }
+	bool GetChangeKeywordSet() const { return bChangeKeywordSet; }
 
 protected:
 	// イベント
@@ -90,28 +90,28 @@ protected:
 
 protected:
 	// 各種参照
-	HINSTANCE	m_hInstance;	// アプリケーションインスタンスのハンドル
-	HWND		m_hwndParent;	// オーナーウィンドウのハンドル
-	HWND		m_hwndThis;		// このダイアログのハンドル
+	HINSTANCE	hInstance;	// アプリケーションインスタンスのハンドル
+	HWND		hwndParent;	// オーナーウィンドウのハンドル
+	HWND		hwndThis;		// このダイアログのハンドル
 
 	// ダイアログデータ
-	PropTypeSheetOrder	m_nPageNum;
-	DllSharedData*		m_pShareData;
-	TypeConfig			m_types;
+	PropTypeSheetOrder	nPageNum;
+	DllSharedData*		pShareData;
+	TypeConfig			types;
 
 	// スクリーン用データ	2010/5/10 CPropTypes_P1_Screen.cppから移動
-	static std::vector<TYPE_NAME_ID2<OutlineType>> m_OlmArr;			// アウトライン解析ルール配列
-	static std::vector<TYPE_NAME_ID2<SmartIndentType>> m_SIndentArr;	// スマートインデントルール配列
+	static std::vector<TYPE_NAME_ID2<OutlineType>> OlmArr;			// アウトライン解析ルール配列
+	static std::vector<TYPE_NAME_ID2<SmartIndentType>> SIndentArr;	// スマートインデントルール配列
 
 	// カラー用データ
-	DWORD			m_dwCustColors[16];						// フォントDialogカスタムパレット
-	int				m_nSet[ MAX_KEYWORDSET_PER_TYPE ];		// keyword set index  2005.01.13 MIK
-	int				m_nCurrentColorType;					// 現在選択されている色タイプ
-	KeywordSetMgr*	m_pKeywordSetMgr;						// メモリ削減のためポインタに  Mar. 31, 2003 genta
-	bool			m_bChangeKeywordSet;
+	DWORD			dwCustColors[16];						// フォントDialogカスタムパレット
+	int				nSet[ MAX_KEYWORDSET_PER_TYPE ];		// keyword set index  2005.01.13 MIK
+	int				nCurrentColorType;					// 現在選択されている色タイプ
+	KeywordSetMgr*	pKeywordSetMgr;						// メモリ削減のためポインタに  Mar. 31, 2003 genta
+	bool			bChangeKeywordSet;
 
 	// フォント表示用データ
-	HFONT			m_hTypeFont;							// タイプ別フォント表示ハンドル
+	HFONT			hTypeFont;							// タイプ別フォント表示ハンドル
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                      各プロパティページ                     //

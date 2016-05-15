@@ -46,7 +46,7 @@ void WSHIfObj::ReadyMethods(
 	int flags
 	)
 {
-	this->m_pView = &view;
+	this->pView = &view;
 	// 2007.07.20 genta : コマンドに混ぜ込むフラグを渡す
 	ReadyCommands(GetMacroCommandInfo(), flags | FA_FROMMACRO);
 	ReadyCommands(GetMacroFuncInfo(), 0);
@@ -134,7 +134,7 @@ HRESULT WSHIfObj::MacroCommand(
 		}
 
 		// 2009.9.5 syat HandleFunctionはサブクラスでオーバーライドする
-		bool r = HandleFunction(*m_pView, id, &rgvargParam[0], argCount, ret);
+		bool r = HandleFunction(*pView, id, &rgvargParam[0], argCount, ret);
 		if (result) {::VariantCopyInd(result, &ret);}
 		VariantClear(&ret);
 		for (int i=0; i<argCount; ++i) {
@@ -167,7 +167,7 @@ HRESULT WSHIfObj::MacroCommand(
 		}
 
 		// 2009.10.29 syat HandleCommandはサブクラスでオーバーライドする
-		HandleCommand(*m_pView, id, const_cast<WCHAR const **>(&strArgs[0]), &strLengths[0], argCount);
+		HandleCommand(*pView, id, const_cast<WCHAR const **>(&strArgs[0]), &strLengths[0], argCount);
 
 		//	Nov. 29, 2005 FILE 配列の破棄なので、[括弧]を追加
 		for (int j=0; j<argCount; ++j) {

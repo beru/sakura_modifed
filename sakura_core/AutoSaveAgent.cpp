@@ -45,18 +45,18 @@ void AutoSaveAgent::CheckAutoSave()
 
 		//	上書き保存
 
-		if (!pDoc->m_docEditor.IsModified()) {	//	変更無しなら何もしない
+		if (!pDoc->docEditor.IsModified()) {	//	変更無しなら何もしない
 			return;				//	ここでは，「無変更でも保存」は無視する
 		}
 
 		//	2003.10.09 zenryaku 保存失敗エラーの抑制
-		if (!pDoc->m_docFile.GetFilePathClass().IsValidPath()) {	//	まだファイル名が設定されていなければ保存しない
+		if (!pDoc->docFile.GetFilePathClass().IsValidPath()) {	//	まだファイル名が設定されていなければ保存しない
 			return;
 		}
 
 		bool en = passiveTimer.IsEnabled();
 		passiveTimer.Enable(false);	//	2重呼び出しを防ぐため
-		pDoc->m_docFileOperation.FileSave();	//	保存
+		pDoc->docFileOperation.FileSave();	//	保存
 		passiveTimer.Enable(en);
 	}
 }

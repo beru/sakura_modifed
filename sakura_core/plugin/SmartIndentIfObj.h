@@ -45,7 +45,7 @@ class SmartIndentIfObj : public WSHIfObj {
 public:
 	SmartIndentIfObj(wchar_t ch)
 		: WSHIfObj(L"Indent", false)
-		, m_wcChar(ch)
+		, wcChar(ch)
 	{
 	}
 
@@ -66,7 +66,7 @@ public:
 	// 関数情報を取得する
 	MacroFuncInfoArray GetMacroFuncInfo() const {
 		static MacroFuncInfo macroFuncInfoNotCommandArr[] = {
-			//index									関数名							引数										戻り値の型	m_pszData
+			//index									関数名							引数										戻り値の型	pszData
 			{EFunctionCode(F_SI_GETCHAR),			LTEXT("GetChar"),				{VT_EMPTY, VT_EMPTY, VT_EMPTY, VT_EMPTY},	VT_BSTR,	nullptr }, // 押下したキーを取得する
 			//	終端
 			{F_INVALID,	NULL, {VT_EMPTY, VT_EMPTY, VT_EMPTY, VT_EMPTY},	VT_EMPTY,	nullptr}
@@ -86,7 +86,7 @@ public:
 		case F_SI_GETCHAR:						// 押下したキーを取得する
 			{
 				wstring value;
-				value += m_wcChar;
+				value += wcChar;
 				SysString s(value.c_str(), value.size());
 				Wrap(&result)->Receive(s);
 			}
@@ -108,6 +108,6 @@ public:
 
 	// メンバ変数
 public:
-	wchar_t m_wcChar;
+	wchar_t wcChar;
 };
 

@@ -17,22 +17,22 @@ TextInputStream::TextInputStream(const TCHAR* tszPath)
 	:
 	Stream(tszPath, _T("rb"))
 {
-	m_bIsUtf8 = false;
+	bIsUtf8 = false;
 
 	if (Good()) {
-		// BOM確認 -> m_bIsUtf8
+		// BOM確認 -> bIsUtf8
 		static const BYTE utf8_bom[] = {0xEF, 0xBB, 0xBF};
 		BYTE buf[3];
 		if (fread(&buf, 1, sizeof(utf8_bom), GetFp()) == sizeof(utf8_bom)) {
-			m_bIsUtf8 = (memcmp(buf, utf8_bom, sizeof(utf8_bom)) == 0);
+			bIsUtf8 = (memcmp(buf, utf8_bom, sizeof(utf8_bom)) == 0);
 		}
 
 		// UTF-8じゃなければ、ファイルポインタを元に戻す
-		if (!m_bIsUtf8) {
+		if (!bIsUtf8) {
 			fseek(GetFp(), 0, SEEK_SET);
 		}
 	}else {
-		m_bIsUtf8 = false;
+		bIsUtf8 = false;
 	}
 }
 
@@ -40,7 +40,7 @@ TextInputStream::TextInputStream(const TCHAR* tszPath)
 TextInputStream::TextInputStream()
 : Stream()
 {
-	m_bIsUtf8=false;
+	bIsUtf8=false;
 }
 */
 
@@ -80,7 +80,7 @@ wstring TextInputStream::ReadLineW()
 
 	NativeW line2;
 	// UTF-8 → UNICODE
-	if (m_bIsUtf8) {
+	if (bIsUtf8) {
 		Utf8::UTF8ToUnicode(*(line._GetMemory()), &line2);
 	// Shift_JIS → UNICODE
 	}else {
@@ -103,11 +103,11 @@ TextOutputStream::TextOutputStream(
 	)
 	: OutputStream(tszPath, _T("wb"), bExceptionMode)
 {
-	m_pCodeBase = CodeFactory::CreateCodeBase(eCodeType, 0);
+	pCodeBase = CodeFactory::CreateCodeBase(eCodeType, 0);
 	if (Good() && bBom) {
 		// BOM付加
 		Memory memBom;
-		m_pCodeBase->GetBom(&memBom);
+		pCodeBase->GetBom(&memBom);
 		if (memBom.GetRawLength() > 0) {
 			fwrite(memBom.GetRawPtr(), memBom.GetRawLength(), 1, GetFp());
 		}
@@ -116,7 +116,7 @@ TextOutputStream::TextOutputStream(
 
 TextOutputStream::~TextOutputStream()
 {
-	delete m_pCodeBase;
+	delete pCodeBase;
 }
 
 void TextOutputStream::WriteString(
@@ -149,12 +149,12 @@ void TextOutputStream::WriteString(
 			// \nの前まで(p～lf)出力
 			NativeW src(p, lf-p);
 			Memory dst;
-			m_pCodeBase->UnicodeToCode(src, &dst); // コード変換
+			pCodeBase->UnicodeToCode(src, &dst); // コード変換
 			fwrite(dst.GetRawPtr(), 1, dst.GetRawLength(), GetFp());
 
 			// \r\nを出力
 			src.SetString(L"\r\n");
-			m_pCodeBase->UnicodeToCode(src, &dst);
+			pCodeBase->UnicodeToCode(src, &dst);
 			fwrite(dst.GetRawPtr(), 1, dst.GetRawLength(), GetFp());
 
 			// 次へ
@@ -163,7 +163,7 @@ void TextOutputStream::WriteString(
 			// 残りぜんぶ出力
 			NativeW src(p, pEnd - p);
 			Memory dst;
-			m_pCodeBase->UnicodeToCode(src, &dst); // コード変換
+			pCodeBase->UnicodeToCode(src, &dst); // コード変換
 			fwrite(dst.GetRawPtr(), 1, dst.GetRawLength(), GetFp());
 			break;
 		}

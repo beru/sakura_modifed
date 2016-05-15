@@ -98,7 +98,7 @@ void FuncInfoArr::AppendData(
 									  pszFuncName,
 									  pszFileName,
 									  nInfo);
-	pFuncInfo->m_nDepth = nDepth;
+	pFuncInfo->nDepth = nDepth;
 	AppendData(pFuncInfo);
 	return;
 }
@@ -162,12 +162,12 @@ void FuncInfoArr::DUMP(void)
 	MYTRACE(_T("=============================\n"));
 	for (int i=0; i<nFuncInfoArrNum; ++i) {
 		MYTRACE(_T("[%d]------------------\n"), i);
-		MYTRACE(_T("m_nFuncLineCRLF	=%d\n"), ppcFuncInfoArr[i]->m_nFuncLineCRLF);
-		MYTRACE(_T("m_nFuncLineLAYOUT	=%d\n"), ppcFuncInfoArr[i]->m_nFuncLineLAYOUT);
-		MYTRACE(_T("m_memFuncName	=[%ts]\n"), ppcFuncInfoArr[i]->m_memFuncName.GetStringPtr());
-		MYTRACE( _T("m_memFileName	=[%ts]\n"),
-			(ppcFuncInfoArr[i]->m_memFileName.GetStringPtr() ? ppcFuncInfoArr[i]->m_memFileName.GetStringPtr() : _T("NULL")) );
-		MYTRACE(_T("m_nInfo			=%d\n"), ppcFuncInfoArr[i]->m_nInfo);
+		MYTRACE(_T("nFuncLineCRLF	=%d\n"), ppcFuncInfoArr[i]->nFuncLineCRLF);
+		MYTRACE(_T("nFuncLineLAYOUT	=%d\n"), ppcFuncInfoArr[i]->nFuncLineLAYOUT);
+		MYTRACE(_T("memFuncName	=[%ts]\n"), ppcFuncInfoArr[i]->memFuncName.GetStringPtr());
+		MYTRACE( _T("memFileName	=[%ts]\n"),
+			(ppcFuncInfoArr[i]->memFileName.GetStringPtr() ? ppcFuncInfoArr[i]->memFileName.GetStringPtr() : _T("NULL")) );
+		MYTRACE(_T("nInfo			=%d\n"), ppcFuncInfoArr[i]->nInfo);
 	}
 	MYTRACE(_T("=============================\n"));
 #endif
@@ -187,8 +187,8 @@ void FuncInfoArr::SetAppendText(
 		}
 #ifndef	_UNICODE
 		std::tstring t = to_tchar(s.c_str());
-		if (m_nAppendTextLenMax < (int)t.length()) {
-			m_nAppendTextLenMax = t.length();
+		if (nAppendTextLenMax < (int)t.length()) {
+			nAppendTextLenMax = t.length();
 		}
 #endif
 	}else {

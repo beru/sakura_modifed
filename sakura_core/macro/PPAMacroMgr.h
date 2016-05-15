@@ -38,13 +38,13 @@ public:
 	virtual bool LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath);		// キーボードマクロをファイルから読み込み、CMacroの列に変換
 	virtual bool LoadKeyMacroStr(HINSTANCE hInstance, const TCHAR* pszCode);	// キーボードマクロを文字列から読み込み、CMacroの列に変換
 
-	static class PPA m_cPPA;
+	static class PPA cPPA;
 
 	// Apr. 29, 2002 genta
 	static MacroManagerBase* Creator(EditView& view, const TCHAR* ext);
 	static void Declare(void);
 
 protected:
-	NativeW m_buffer;
+	NativeW buffer;
 };
 

@@ -28,7 +28,7 @@ void ViewCommander::Command_MENU_RBUTTON(void)
 //	HGLOBAL		hgClip;
 //	char*		pszClip;
 	// ポップアップメニュー(右クリック)
-	int nId = m_view.CreatePopUpMenu_R();
+	int nId = view.CreatePopUpMenu_R();
 	if (nId == 0) {
 		return;
 	}
@@ -36,7 +36,7 @@ void ViewCommander::Command_MENU_RBUTTON(void)
 	case IDM_COPYDICINFO:
 		{
 			int nLength;
-			const TCHAR* pszStr = m_view.m_tipWnd.m_info.GetStringPtr(&nLength);
+			const TCHAR* pszStr = view.tipWnd.info.GetStringPtr(&nLength);
 			std::vector<TCHAR> szWork(nLength + 1);
 			TCHAR* pszWork = &szWork[0];
 			auto_memcpy(pszWork, pszStr, nLength);
@@ -50,16 +50,16 @@ void ViewCommander::Command_MENU_RBUTTON(void)
 				}
 			}
 			// クリップボードにデータを設定
-			m_view.MySetClipboardData(pszWork, nLength, false);
+			view.MySetClipboardData(pszWork, nLength, false);
 		}
 		break;
 	case IDM_JUMPDICT:
 		// キーワード辞書ファイルを開く
-		if (m_view.m_pTypeData->bUseKeywordHelp) {		// キーワード辞書セレクトを使用する	// 2006.04.10 fon
+		if (view.pTypeData->bUseKeywordHelp) {		// キーワード辞書セレクトを使用する	// 2006.04.10 fon
 			// Feb. 17, 2007 genta 相対パスを実行ファイル基準で開くように
-			m_view.TagJumpSub(
-				m_view.m_pTypeData->keyHelpArr[m_view.m_tipWnd.m_nSearchDict].szPath,
-				Point(1, m_view.m_tipWnd.m_nSearchLine),
+			view.TagJumpSub(
+				view.pTypeData->keyHelpArr[view.tipWnd.nSearchDict].szPath,
+				Point(1, view.tipWnd.nSearchLine),
 				0,
 				true
 			);
@@ -82,7 +82,7 @@ int ViewCommander::Command_CUSTMENU(int nMenuIdx)
 	GetEditWindow().GetMenuDrawer().ResetContents();
 
 	// Oct. 3, 2001 genta
-	FuncLookup& FuncLookup = GetDocument().m_funcLookup;
+	FuncLookup& FuncLookup = GetDocument().funcLookup;
 
 	if (nMenuIdx < 0 || MAX_CUSTOM_MENU <= nMenuIdx) {
 		return 0;
@@ -91,6 +91,6 @@ int ViewCommander::Command_CUSTMENU(int nMenuIdx)
 		return 0;
 	}
 	HMENU hMenu = ::CreatePopupMenu();
-	return m_view.CreatePopUpMenuSub(hMenu, nMenuIdx, nullptr);
+	return view.CreatePopUpMenuSub(hMenu, nMenuIdx, nullptr);
 }
 

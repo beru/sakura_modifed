@@ -29,12 +29,12 @@
 void ViewCommander::Command_GREP_DIALOG(void)
 {
 	NativeW memCurText;
-	auto& dlgGrep = GetEditWindow().m_dlgGrep;
+	auto& dlgGrep = GetEditWindow().dlgGrep;
 	// 2014.07.01 複数Grepウィンドウを使い分けている場合などに影響しないように、未設定のときだけHistoryを見る
 	bool bGetHistory = (dlgGrep.bSetText == false);
 
 	// 現在カーソル位置単語または選択範囲より検索等のキーを取得
-	bool bSet = m_view.GetCurrentTextForSearchDlg(memCurText, bGetHistory);	// 2006.08.23 ryoji ダイアログ専用関数に変更
+	bool bSet = view.GetCurrentTextForSearchDlg(memCurText, bGetHistory);	// 2006.08.23 ryoji ダイアログ専用関数に変更
 
 	if (bSet) {
 		dlgGrep.strText = memCurText.GetStringPtr();
@@ -42,7 +42,7 @@ void ViewCommander::Command_GREP_DIALOG(void)
 	}
 
 	// Grepダイアログの表示
-	int nRet = dlgGrep.DoModal(G_AppInstance(), m_view.GetHwnd(), GetDocument().m_docFile.GetFilePath());
+	int nRet = dlgGrep.DoModal(G_AppInstance(), view.GetHwnd(), GetDocument().docFile.GetFilePath());
 //	MYTRACE(_T("nRet=%d\n"), nRet);
 	if (!nRet) {
 		return;
@@ -61,7 +61,7 @@ void ViewCommander::Command_GREP(void)
 	NativeT mWork3;
 	NativeW	mWork4;
 
-	auto& dlgGrep = GetEditWindow().m_dlgGrep;
+	auto& dlgGrep = GetEditWindow().dlgGrep;
 	mWork1.SetString(dlgGrep.strText.c_str());
 	mWork2.SetString(dlgGrep.szFile);
 	mWork3.SetString(dlgGrep.szFolder);
@@ -75,23 +75,23 @@ void ViewCommander::Command_GREP(void)
 	if (
 		(grepAgent.bGrepMode && !grepAgent.bGrepRunning)
 		|| (
-			!doc.m_docEditor.IsModified()
-			&& !doc.m_docFile.GetFilePathClass().IsValidPath()		// 現在編集中のファイルのパス
+			!doc.docEditor.IsModified()
+			&& !doc.docFile.GetFilePathClass().IsValidPath()		// 現在編集中のファイルのパス
 			&& !AppMode::getInstance().IsDebugMode()
 		)
 	) {
 		// 2011.01.23 Grepタイプ別適用
-		if (!doc.m_docEditor.IsModified() && doc.m_docLineMgr.GetLineCount() == 0) {
+		if (!doc.docEditor.IsModified() && doc.docLineMgr.GetLineCount() == 0) {
 			TypeConfigNum typeGrep = DocTypeManager().GetDocumentTypeOfExt(_T("grepout"));
 			const TypeConfigMini* pConfig;
 			DocTypeManager().GetTypeConfigMini(typeGrep, &pConfig);
-			doc.m_docType.SetDocumentTypeIdx(pConfig->id);
-			doc.m_docType.LockDocumentType();
+			doc.docType.SetDocumentTypeIdx(pConfig->id);
+			doc.docType.LockDocumentType();
 			doc.OnChangeType();
 		}
 		
 		grepAgent.DoGrep(
-			m_view,
+			view,
 			false,
 			&mWork1,
 			&mWork4,
@@ -122,13 +122,13 @@ void ViewCommander::Command_GREP(void)
 	}else {
 		// 編集ウィンドウの上限チェック
 		if (GetDllShareData().nodes.nEditArrNum >= MAX_EDITWINDOWS) {	// 最大値修正	//@@@ 2003.05.31 MIK
-			OkMessage(m_view.GetHwnd(), LS(STR_MAXWINDOW), MAX_EDITWINDOWS);
+			OkMessage(view.GetHwnd(), LS(STR_MAXWINDOW), MAX_EDITWINDOWS);
 			return;
 		}
 
 		//======= Grepの実行 =============
 		// Grep結果ウィンドウの表示
-		ControlTray::DoGrepCreateWindow(G_AppInstance(), m_view.GetHwnd(), dlgGrep);
+		ControlTray::DoGrepCreateWindow(G_AppInstance(), view.GetHwnd(), dlgGrep);
 	}
 	return;
 }
@@ -139,12 +139,12 @@ void ViewCommander::Command_GREP(void)
 void ViewCommander::Command_GREP_REPLACE_DLG( void )
 {
 	NativeW memCurText;
-	DlgGrepReplace& dlgGrepRep = GetEditWindow().m_dlgGrepReplace;
+	DlgGrepReplace& dlgGrepRep = GetEditWindow().dlgGrepReplace;
 
 	// 複数Grepウィンドウを使い分けている場合などに影響しないように、未設定のときだけHistoryを見る
 	bool bGetHistory = dlgGrepRep.bSetText == false;
 
-	m_view.GetCurrentTextForSearchDlg( memCurText, bGetHistory );
+	view.GetCurrentTextForSearchDlg( memCurText, bGetHistory );
 
 	if (0 < memCurText.GetStringLength()) {
 		dlgGrepRep.strText = memCurText.GetStringPtr();
@@ -156,7 +156,7 @@ void ViewCommander::Command_GREP_REPLACE_DLG( void )
 		}
 	}
 
-	int nRet = dlgGrepRep.DoModal( G_AppInstance(), m_view.GetHwnd(), GetDocument().m_docFile.GetFilePath(), (LPARAM)&m_view );
+	int nRet = dlgGrepRep.DoModal( G_AppInstance(), view.GetHwnd(), GetDocument().docFile.GetFilePath(), (LPARAM)&view );
 	if (!nRet) {
 		return;
 	}
@@ -172,7 +172,7 @@ void ViewCommander::Command_GREP_REPLACE(void)
 	NativeT cmWork3;
 	NativeW cmWork4;
 
-	DlgGrepReplace& dlgGrepRep = GetEditWindow().m_dlgGrepReplace;
+	DlgGrepReplace& dlgGrepRep = GetEditWindow().dlgGrepReplace;
 	cmWork1.SetString( dlgGrepRep.strText.c_str() );
 	cmWork2.SetString( dlgGrepRep.szFile );
 	cmWork3.SetString( dlgGrepRep.szFolder );
@@ -185,13 +185,13 @@ void ViewCommander::Command_GREP_REPLACE(void)
 	auto& grepAgent = *EditApp::getInstance().pGrepAgent;
 	if ((grepAgent.bGrepMode &&
 		  !grepAgent.bGrepRunning ) ||
-		( !GetDocument().m_docEditor.IsModified() &&
-		  !GetDocument().m_docFile.GetFilePathClass().IsValidPath() &&		// 現在編集中のファイルのパス
+		( !GetDocument().docEditor.IsModified() &&
+		  !GetDocument().docFile.GetFilePathClass().IsValidPath() &&		// 現在編集中のファイルのパス
 		  !AppMode::getInstance().IsDebugMode()
 		)
 	) {
 		grepAgent.DoGrep(
-			m_view,
+			view,
 			true,
 			&cmWork1,
 			&cmWork4,
@@ -214,7 +214,7 @@ void ViewCommander::Command_GREP_REPLACE(void)
 	}else {
 		// 編集ウィンドウの上限チェック
 		if (GetDllShareData().nodes.nEditArrNum >= MAX_EDITWINDOWS ){	//最大値修正	//@@@ 2003.05.31 MIK
-			OkMessage( m_view.GetHwnd(), _T("編集ウィンドウ数の上限は%dです。\nこれ以上は同時に開けません。"), MAX_EDITWINDOWS );
+			OkMessage( view.GetHwnd(), _T("編集ウィンドウ数の上限は%dです。\nこれ以上は同時に開けません。"), MAX_EDITWINDOWS );
 			return;
 		}
 		// ======= Grepの実行 =============
@@ -267,7 +267,7 @@ void ViewCommander::Command_GREP_REPLACE(void)
 		loadInfo.bViewMode = false;
 		ControlTray::OpenNewEditor(
 			G_AppInstance(),
-			m_view.GetHwnd(),
+			view.GetHwnd(),
 			loadInfo,
 			cmdLine.GetStringPtr(),
 			false,

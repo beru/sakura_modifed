@@ -57,8 +57,8 @@ public:
 	static void Declare(void);
 
 protected:
-	Macro*	m_pTop;	// 先頭と終端を保持
-	Macro*	m_pBot;
+	Macro*	pTop;	// 先頭と終端を保持
+	Macro*	pBot;
 };
 
 

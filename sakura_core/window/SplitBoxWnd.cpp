@@ -20,7 +20,7 @@ SplitBoxWnd::SplitBoxWnd()
 	:
 	Wnd(_T("::SplitBoxWnd"))
 {
-	m_bVertical = TRUE;	// 垂直分割ボックスか
+	bVertical = TRUE;	// 垂直分割ボックスか
 	return;
 }
 
@@ -56,7 +56,7 @@ HWND SplitBoxWnd::Create(HINSTANCE hInstance, HWND hwndParent, int bVertical)
 		pszClassName// Pointer to a null-terminated string or is an atom.
 	);
 
-	m_bVertical = bVertical;
+	bVertical = bVertical;
 	// システムマトリックスの取得
 	nCyHScroll = ::GetSystemMetrics(SM_CYHSCROLL);	// 水平スクロールバーの高さ
 	nCxVScroll = ::GetSystemMetrics(SM_CXVSCROLL);	// 垂直スクロールバーの幅
@@ -133,7 +133,7 @@ LRESULT SplitBoxWnd::OnPaint(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	nVSplitHeight = 7;	// 垂直分割ボックスの高さ
 	nHSplitWidth = 7;	// 水平分割ボックスの幅
 
-	if (m_bVertical) {
+	if (bVertical) {
 		// 垂直分割ボックスの描画
 		Draw3dRect(hdc, 0, 0, nCxVScroll, nVSplitHeight,
 			::GetSysColor(COLOR_3DLIGHT), ::GetSysColor(COLOR_3DDKSHADOW)
@@ -167,8 +167,8 @@ LRESULT SplitBoxWnd::OnLButtonDown(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
 	HBRUSH		hBrush;
 	HBRUSH		hBrushOld;
 	::SetCapture(hwnd);
-	if (m_bVertical) {
-		m_nDragPosY = 1;
+	if (bVertical) {
+		nDragPosY = 1;
 
 		hdc = ::GetDC(::GetParent(GetParentHwnd()));
 		::SetBkColor(hdc, RGB(0, 0, 0));
@@ -182,7 +182,7 @@ LRESULT SplitBoxWnd::OnLButtonDown(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
 		rc.bottom -= nCyHScroll;
 
 		rc2.left = -1;
-		rc2.top = m_nDragPosY;
+		rc2.top = nDragPosY;
 		rc2.right = rc.right;
 		rc2.bottom = rc2.top + 6;
 		::Rectangle(hdc, rc2.left, rc2.top, rc2.right, rc2.bottom);
@@ -191,7 +191,7 @@ LRESULT SplitBoxWnd::OnLButtonDown(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
 		::DeleteObject(hBrush);
 		::ReleaseDC(::GetParent(GetParentHwnd()), hdc);
 	}else {
-		m_nDragPosX = 1;
+		nDragPosX = 1;
 
 		hdc = ::GetDC(::GetParent(GetParentHwnd()));
 		::SetBkColor(hdc, RGB(0, 0, 0));
@@ -202,7 +202,7 @@ LRESULT SplitBoxWnd::OnLButtonDown(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
 		::SetBkMode(hdc, TRANSPARENT);
 		::GetClientRect(::GetParent(GetParentHwnd()), &rc);
 
-		rc2.left = m_nDragPosX;
+		rc2.left = nDragPosX;
 		rc2.top = 0;
 		rc2.right = rc2.left + 6;
 		rc2.bottom = rc.bottom;
@@ -234,7 +234,7 @@ LRESULT SplitBoxWnd::OnMouseMove(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 	if (hwnd != ::GetCapture()) {
 		return 0L;
 	}
-	if (m_bVertical) {
+	if (bVertical) {
 		::GetClientRect(::GetParent(GetParentHwnd()), &rc);
 		nCyHScroll = ::GetSystemMetrics(SM_CYHSCROLL);	// 水平スクロールバーの高さ
 		rc.bottom -= nCyHScroll;
@@ -259,7 +259,7 @@ LRESULT SplitBoxWnd::OnMouseMove(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 		xPos = po.x;
 		yPos = po.y;
 
-		if (yPos != m_nDragPosY) {
+		if (yPos != nDragPosY) {
 //			MYTRACE(_T("xPos=%d yPos=%d\n"), xPos, yPos);
 
 			hdc = ::GetDC(::GetParent(GetParentHwnd()));
@@ -270,15 +270,15 @@ LRESULT SplitBoxWnd::OnMouseMove(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 			::SetROP2(hdc, R2_XORPEN);
 			::SetBkMode(hdc, TRANSPARENT);
 			rc2.left = -1;
-			rc2.top = m_nDragPosY;
+			rc2.top = nDragPosY;
 			rc2.right = rc.right;
 			rc2.bottom = rc2.top + 6;
 			::Rectangle(hdc, rc2.left, rc2.top, rc2.right, rc2.bottom);
 
-			m_nDragPosY =  po.y;
+			nDragPosY =  po.y;
 
 			rc2.left = -1;
-			rc2.top = m_nDragPosY;
+			rc2.top = nDragPosY;
 			rc2.right = rc.right;
 			rc2.bottom = rc2.top + 6;
 			::Rectangle(hdc, rc2.left, rc2.top, rc2.right, rc2.bottom);
@@ -313,7 +313,7 @@ LRESULT SplitBoxWnd::OnMouseMove(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 		xPos = po.x;
 		yPos = po.y;
 
-		if (xPos != m_nDragPosX) {
+		if (xPos != nDragPosX) {
 //			MYTRACE(_T("xPos=%d yPos=%d\n"), xPos, yPos);
 
 			hdc = ::GetDC(::GetParent(GetParentHwnd()));
@@ -324,15 +324,15 @@ LRESULT SplitBoxWnd::OnMouseMove(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 			::SetROP2(hdc, R2_XORPEN);
 			::SetBkMode(hdc, TRANSPARENT);
 
-			rc2.left = m_nDragPosX;
+			rc2.left = nDragPosX;
 			rc2.top = 0;
 			rc2.right = rc2.left + 6;
 			rc2.bottom = rc.bottom;
 			::Rectangle(hdc, rc2.left, rc2.top, rc2.right, rc2.bottom);
 
-			m_nDragPosX =  po.x;
+			nDragPosX =  po.x;
 
-			rc2.left = m_nDragPosX;
+			rc2.left = nDragPosX;
 			rc2.top = 0;
 			rc2.right = rc2.left + 6;
 			rc2.bottom = rc.bottom;
@@ -360,7 +360,7 @@ LRESULT SplitBoxWnd::OnLButtonUp(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 	if (hwnd != ::GetCapture()) {
 		return 0L;
 	}
-	if (m_bVertical) {
+	if (bVertical) {
 		::GetClientRect(::GetParent(GetParentHwnd()), &rc);
 		nCyHScroll = ::GetSystemMetrics(SM_CYHSCROLL);	// 水平スクロールバーの高さ
 		rc.bottom -= nCyHScroll;
@@ -373,7 +373,7 @@ LRESULT SplitBoxWnd::OnLButtonUp(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 		::SetROP2(hdc, R2_XORPEN);
 		::SetBkMode(hdc, TRANSPARENT);
 		rc2.left = -1;
-		rc2.top = m_nDragPosY;
+		rc2.top = nDragPosY;
 		rc2.right = rc.right;
 		rc2.bottom = rc2.top + 6;
 		::Rectangle(hdc, rc2.left, rc2.top, rc2.right, rc2.bottom);
@@ -383,7 +383,7 @@ LRESULT SplitBoxWnd::OnLButtonUp(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 		::ReleaseDC(::GetParent(GetParentHwnd()), hdc);
 
 		// 親ウィンドウに、メッセージをポストする
-		::PostMessage(GetParentHwnd(), MYWM_DOSPLIT, (WPARAM)0, (LPARAM)m_nDragPosY);
+		::PostMessage(GetParentHwnd(), MYWM_DOSPLIT, (WPARAM)0, (LPARAM)nDragPosY);
 
 	}else {
 		::GetClientRect(::GetParent(GetParentHwnd()), &rc);
@@ -398,7 +398,7 @@ LRESULT SplitBoxWnd::OnLButtonUp(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 		::SetROP2(hdc, R2_XORPEN);
 		::SetBkMode(hdc, TRANSPARENT);
 
-		rc2.left = m_nDragPosX;
+		rc2.left = nDragPosX;
 		rc2.top = 0;
 		rc2.right = rc2.left + 6;
 		rc2.bottom = rc.bottom;
@@ -409,7 +409,7 @@ LRESULT SplitBoxWnd::OnLButtonUp(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 		::ReleaseDC(GetParentHwnd(), hdc);
 
 		// 親ウィンドウに、メッセージをポストする
-		::PostMessage(GetParentHwnd(), MYWM_DOSPLIT, (WPARAM)m_nDragPosX, (LPARAM)0);
+		::PostMessage(GetParentHwnd(), MYWM_DOSPLIT, (WPARAM)nDragPosX, (LPARAM)0);
 	}
 	::ReleaseCapture();
 	return 0L;
@@ -421,7 +421,7 @@ LRESULT SplitBoxWnd::OnLButtonDblClk(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
 {
 	RECT	rc;
 	int		nCyHScroll;
-	if (m_bVertical) {
+	if (bVertical) {
 		::GetClientRect(GetParentHwnd(), &rc);
 		nCyHScroll = ::GetSystemMetrics(SM_CYHSCROLL);	// 水平スクロールバーの高さ
 		rc.bottom -= nCyHScroll;

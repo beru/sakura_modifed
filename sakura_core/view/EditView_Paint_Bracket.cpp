@@ -39,11 +39,11 @@
 void EditView::SetBracketPairPos(bool flag)
 {
 	// 03/03/06 ai すべて置換、すべて置換後のUndo&Redoがかなり遅い問題に対応
-	if (m_bDoing_UndoRedo || !GetDrawSwitch()) {
+	if (bDoing_UndoRedo || !GetDrawSwitch()) {
 		return;
 	}
 
-	if (!m_pTypeData->colorInfoArr[COLORIDX_BRACKET_PAIR].bDisp) {
+	if (!pTypeData->colorInfoArr[COLORIDX_BRACKET_PAIR].bDisp) {
 		return;
 	}
 
@@ -61,7 +61,7 @@ void EditView::SetBracketPairPos(bool flag)
 	if (1
 		&& flag
 		&& !GetSelectionInfo().IsTextSelected()
-		&& !GetSelectionInfo().m_bDrawSelectArea
+		&& !GetSelectionInfo().bDrawSelectArea
 		&& SearchBracket(caret.GetCaretLayoutPos(), &ptColLine, &mode)
 	) {
 		// 登録指定(flag=true)			&&
@@ -77,22 +77,22 @@ void EditView::SetBracketPairPos(bool flag)
 			// 表示領域内の場合
 
 			// レイアウト位置から物理位置へ変換(強調表示位置を登録)
-			m_pEditDoc->m_layoutMgr.LayoutToLogic(ptColLine, &m_ptBracketPairPos_PHY);
-			m_ptBracketCaretPos_PHY.y = caret.GetCaretLogicPos().y;
+			pEditDoc->layoutMgr.LayoutToLogic(ptColLine, &ptBracketPairPos_PHY);
+			ptBracketCaretPos_PHY.y = caret.GetCaretLogicPos().y;
 			if ((mode & 4) == 0) {
 				// カーソルの後方文字位置
-				m_ptBracketCaretPos_PHY.x = caret.GetCaretLogicPos().x;
+				ptBracketCaretPos_PHY.x = caret.GetCaretLogicPos().x;
 			}else {
 				// カーソルの前方文字位置
-				m_ptBracketCaretPos_PHY.x = caret.GetCaretLogicPos().x - 1;
+				ptBracketCaretPos_PHY.x = caret.GetCaretLogicPos().x - 1;
 			}
 			return;
 		}
 	}
 
 	// 括弧の強調表示位置情報初期化
-	m_ptBracketPairPos_PHY.Set(LogicInt(-1), LogicInt(-1));
-	m_ptBracketCaretPos_PHY.Set(LogicInt(-1), LogicInt(-1));
+	ptBracketPairPos_PHY.Set(LogicInt(-1), LogicInt(-1));
+	ptBracketCaretPos_PHY.Set(LogicInt(-1), LogicInt(-1));
 
 	return;
 }
@@ -105,16 +105,16 @@ void EditView::SetBracketPairPos(bool flag)
 void EditView::DrawBracketPair(bool bDraw)
 {
 	// 03/03/06 ai すべて置換、すべて置換後のUndo&Redoがかなり遅い問題に対応
-	if (m_bDoing_UndoRedo || !GetDrawSwitch()) {
+	if (bDoing_UndoRedo || !GetDrawSwitch()) {
 		return;
 	}
 
-	if (!m_pTypeData->colorInfoArr[COLORIDX_BRACKET_PAIR].bDisp) {
+	if (!pTypeData->colorInfoArr[COLORIDX_BRACKET_PAIR].bDisp) {
 		return;
 	}
 
 	// 括弧の強調表示位置が未登録の場合は終了
-	if (m_ptBracketPairPos_PHY.HasNegative() || m_ptBracketCaretPos_PHY.HasNegative()) {
+	if (ptBracketPairPos_PHY.HasNegative() || ptBracketCaretPos_PHY.HasNegative()) {
 		return;
 	}
 
@@ -126,9 +126,9 @@ void EditView::DrawBracketPair(bool bDraw)
 	if (bDraw
 		&& (0
 			|| GetSelectionInfo().IsTextSelected()
-			|| GetSelectionInfo().m_bDrawSelectArea
-			|| !m_bDrawBracketPairFlag
-			|| (m_editWnd.GetActivePane() != m_nMyIndex)
+			|| GetSelectionInfo().bDrawSelectArea
+			|| !bDrawBracketPairFlag
+			|| (editWnd.GetActivePane() != nMyIndex)
 		)
 	) {
 		return;
@@ -149,9 +149,9 @@ void EditView::DrawBracketPair(bool bDraw)
 		LayoutPoint	ptColLine;
 
 		if (i == 0) {
-			m_pEditDoc->m_layoutMgr.LogicToLayout(m_ptBracketPairPos_PHY,  &ptColLine);
+			pEditDoc->layoutMgr.LogicToLayout(ptBracketPairPos_PHY,  &ptColLine);
 		}else {
-			m_pEditDoc->m_layoutMgr.LogicToLayout(m_ptBracketCaretPos_PHY, &ptColLine);
+			pEditDoc->layoutMgr.LogicToLayout(ptBracketCaretPos_PHY, &ptColLine);
 		}
 
 		if (1
@@ -162,14 +162,14 @@ void EditView::DrawBracketPair(bool bDraw)
 		) {	// 表示領域内の場合
 			if (1
 				&& !bDraw
-				&& GetSelectionInfo().m_bDrawSelectArea
+				&& GetSelectionInfo().bDrawSelectArea
 				&& (IsCurrentPositionSelected(ptColLine) == 0)
 			) {	// 選択範囲描画済みで消去対象の括弧が選択範囲内の場合
 				continue;
 			}
 			const Layout* pLayout;
 			LogicInt		nLineLen;
-			const wchar_t*	pLine = m_pEditDoc->m_layoutMgr.GetLineStr(ptColLine.GetY2(), &nLineLen, &pLayout);
+			const wchar_t*	pLine = pEditDoc->layoutMgr.GetLineStr(ptColLine.GetY2(), &nLineLen, &pLayout);
 			if (pLine) {
 				EColorIndexType nColorIndex;
 				LogicInt	OutputX = LineColumnToIndex(pLayout, ptColLine.GetX2());
@@ -237,7 +237,7 @@ void EditView::DrawBracketPair(bool bDraw)
 						rcChar.right = nLeft + (Int)charsWidth * nWidth;
 						rcChar.bottom = nTop + nHeight;
 						HDC hdcBgImg = ::CreateCompatibleDC(gr);
-						HBITMAP hBmpOld = (HBITMAP)::SelectObject(hdcBgImg, m_pEditDoc->m_hBackImg);
+						HBITMAP hBmpOld = (HBITMAP)::SelectObject(hdcBgImg, pEditDoc->hBackImg);
 						DrawBackImage(gr, rcChar, hdcBgImg);
 						::SelectObject(hdcBgImg, hBmpOld);
 						::DeleteDC(hdcBgImg);
@@ -252,13 +252,13 @@ void EditView::DrawBracketPair(bool bDraw)
 				}
 
 				if (1
-					&& (m_editWnd.GetActivePane() == m_nMyIndex)
+					&& (editWnd.GetActivePane() == nMyIndex)
 					&& (0
 						|| (ptColLine.y == caret.GetCaretLayoutPos().GetY())
 						|| (ptColLine.y - 1 == caret.GetCaretLayoutPos().GetY())
 					) 
 				) {	// 03/02/27 ai 行の間隔が"0"の時にアンダーラインが欠ける事がある為修正
-					caret.m_underLine.CaretUnderLineON(true, false);
+					caret.underLine.CaretUnderLineON(true, false);
 				}
 			}
 		}
@@ -340,8 +340,8 @@ bool EditView::SearchBracket(
 
 	LogicPoint ptPos;
 
-	m_pEditDoc->m_layoutMgr.LayoutToLogic(ptLayout, &ptPos);
-	const wchar_t* cline = m_pEditDoc->m_docLineMgr.GetLine(ptPos.GetY2())->GetDocLineStrWithEOL(&len);
+	pEditDoc->layoutMgr.LayoutToLogic(ptLayout, &ptPos);
+	const wchar_t* cline = pEditDoc->docLineMgr.GetLine(ptPos.GetY2())->GetDocLineStrWithEOL(&len);
 
 	//	Jun. 19, 2000 genta
 	if (!cline)	//	最後の行に本文がない場合
@@ -417,15 +417,15 @@ bool EditView::SearchBracketForward(
 	LayoutPoint ptColLine;
 
 	// 初期位置の設定
-	m_pEditDoc->m_layoutMgr.LogicToLayout(ptPos, &ptColLine);	// 02/09/19 ai
+	pEditDoc->layoutMgr.LogicToLayout(ptPos, &ptColLine);	// 02/09/19 ai
 	LayoutInt nSearchNum = (GetTextArea().GetBottomLine()) - ptColLine.y;					// 02/09/19 ai
-	DocLine* ci = m_pEditDoc->m_docLineMgr.GetLine(ptPos.GetY2());
+	DocLine* ci = pEditDoc->docLineMgr.GetLine(ptPos.GetY2());
 	const wchar_t* cline = ci->GetDocLineStrWithEOL(&len);
 	const wchar_t* lineend = cline + len;
 	const wchar_t* cPos = cline + ptPos.x;
 
-//	auto typeData = *m_pTypeData;
-//	auto lineComment = typeData.m_lineComment;
+//	auto typeData = *pTypeData;
+//	auto lineComment = typeData.lineComment;
 
 	do {
 		while (cPos < lineend) {
@@ -444,7 +444,7 @@ bool EditView::SearchBracketForward(
 
 			if (level == 0) {	// 見つかった！
 				ptPos.x = cPos - cline;
-				m_pEditDoc->m_layoutMgr.LogicToLayout(ptPos, pptLayoutNew);
+				pEditDoc->layoutMgr.LogicToLayout(ptPos, pptLayoutNew);
 				return true;
 				// Happy Ending
 			}
@@ -503,9 +503,9 @@ bool EditView::SearchBracketBackward(
 	LayoutPoint ptColLine;
 
 	// 初期位置の設定
-	m_pEditDoc->m_layoutMgr.LogicToLayout(ptPos, &ptColLine);	// 02/09/19 ai
+	pEditDoc->layoutMgr.LogicToLayout(ptPos, &ptColLine);	// 02/09/19 ai
 	LayoutInt nSearchNum = ptColLine.y - GetTextArea().GetViewTopLine();										// 02/09/19 ai
-	DocLine* ci = m_pEditDoc->m_docLineMgr.GetLine(ptPos.GetY2());
+	DocLine* ci = pEditDoc->docLineMgr.GetLine(ptPos.GetY2());
 	const wchar_t* cline = ci->GetDocLineStrWithEOL(&len);
 	const wchar_t* cPos = cline + ptPos.x;
 
@@ -526,7 +526,7 @@ bool EditView::SearchBracketBackward(
 
 			if (level == 0) {	// 見つかった！
 				ptPos.x = pPos - cline;
-				m_pEditDoc->m_layoutMgr.LogicToLayout(ptPos, pptLayoutNew);
+				pEditDoc->layoutMgr.LogicToLayout(ptPos, pptLayoutNew);
 				return true;
 				// Happy Ending
 			}

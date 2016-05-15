@@ -133,7 +133,7 @@ INT_PTR PropFile::DispatchEvent(
 				return TRUE;
 //@@@ 2002.01.03 YAZAKI 最後に表示していたシートを正しく覚えていないバグ修正
 			case PSN_SETACTIVE:
-				m_nPageNum = ID_PROPCOM_PAGENUM_FILE;
+				nPageNum = ID_PROPCOM_PAGENUM_FILE;
 				return TRUE;
 			}
 			break;
@@ -269,7 +269,7 @@ INT_PTR PropFile::DispatchEvent(
 */
 void PropFile::SetData(HWND hwndDlg)
 {
-	auto& csFile = m_common.file;
+	auto& csFile = common.file;
 	//--- File ---
 	// ファイルの排他制御モード
 	HWND hwndCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_FILESHAREMODE);
@@ -302,10 +302,10 @@ void PropFile::SetData(HWND hwndDlg)
 
 	//	From Here Aug. 21, 2000 genta
 	//	自動保存の有効・無効
-	::CheckDlgButton(hwndDlg, IDC_CHECK_AUTOSAVE, m_common.backup.IsAutoBackupEnabled());
+	::CheckDlgButton(hwndDlg, IDC_CHECK_AUTOSAVE, common.backup.IsAutoBackupEnabled());
 
 	TCHAR buf[6];
-	int nN = m_common.backup.GetAutoBackupInterval();
+	int nN = common.backup.GetAutoBackupInterval();
 	nN = nN < 1  ?  1 : nN;
 	nN = nN > 35791 ? 35791 : nN;
 
@@ -346,7 +346,7 @@ void PropFile::SetData(HWND hwndDlg)
 */
 int PropFile::GetData(HWND hwndDlg)
 {
-	auto& csFile = m_common.file;
+	auto& csFile = common.file;
 
 	// ファイルの排他制御モード
 	HWND hwndCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_FILESHAREMODE);
@@ -378,7 +378,7 @@ int PropFile::GetData(HWND hwndDlg)
 
 	//	From Here Aug. 16, 2000 genta
 	//	自動保存を行うかどうか
-	m_common.backup.EnableAutoBackup(DlgButton_IsChecked(hwndDlg, IDC_CHECK_AUTOSAVE));
+	common.backup.EnableAutoBackup(DlgButton_IsChecked(hwndDlg, IDC_CHECK_AUTOSAVE));
 
 	//	自動保存間隔の取得
 	TCHAR szNumBuf[/*6*/ 7];	//@@@ 2001.03.21 by MIK
@@ -395,7 +395,7 @@ int PropFile::GetData(HWND hwndDlg)
 	}
 	nN = nN < 1  ?  1 : nN;
 	nN = nN > 35791 ? 35791 : nN;
-	m_common.backup.SetAutoBackupInterval(nN);
+	common.backup.SetAutoBackupInterval(nN);
 
 	//	To Here Aug. 16, 2000 genta
 

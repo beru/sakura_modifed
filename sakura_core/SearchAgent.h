@@ -42,38 +42,38 @@ public:
 		return SetPattern(hwnd, pszPattern, nPatternLen, NULL, searchOption, pRegexp);
 	}
 	bool SetPattern(HWND, const wchar_t* pszPattern, int nPatternLen, const wchar_t* pszPattern2, const SearchOption& searchOption, Bregexp* pRegexp);
-	const wchar_t* GetKey() const { return m_pszKey; }
-	const wchar_t* GetCaseKey() const { return m_pszCaseKeyRef; }
-	int GetLen() const { return m_nPatternLen; }
-	bool GetIgnoreCase() const { return !m_pSearchOption->bLoHiCase; }
-	bool GetLoHiCase() const { return m_pSearchOption->bLoHiCase; }
-	const SearchOption& GetSearchOption() const { return *m_pSearchOption; }
-	Bregexp* GetRegexp() const { return m_pRegexp; }
+	const wchar_t* GetKey() const { return pszKey; }
+	const wchar_t* GetCaseKey() const { return pszCaseKeyRef; }
+	int GetLen() const { return nPatternLen; }
+	bool GetIgnoreCase() const { return !pSearchOption->bLoHiCase; }
+	bool GetLoHiCase() const { return pSearchOption->bLoHiCase; }
+	const SearchOption& GetSearchOption() const { return *pSearchOption; }
+	Bregexp* GetRegexp() const { return pRegexp; }
 #ifdef SEARCH_STRING_KMP
-	const int* GetKMPNextTable() const { return m_pnNextPossArr; }
+	const int* GetKMPNextTable() const { return pnNextPossArr; }
 #endif
 #ifdef SEARCH_STRING_SUNDAY_QUICK
-	const int* GetUseCharSkipMap() const { return m_pnUseCharSkipArr; }
+	const int* GetUseCharSkipMap() const { return pnUseCharSkipArr; }
 
 	static int GetMapIndex(wchar_t c);
 #endif
 
 private:
 	// 外部依存
-	const wchar_t* m_pszKey;
-	const SearchOption* m_pSearchOption;
-	mutable Bregexp* m_pRegexp;
+	const wchar_t* pszKey;
+	const SearchOption* pSearchOption;
+	mutable Bregexp* pRegexp;
 
-	const wchar_t* m_pszCaseKeyRef;
+	const wchar_t* pszCaseKeyRef;
 
 	// 内部バッファ
-	wchar_t* m_pszPatternCase;
-	int  m_nPatternLen;
+	wchar_t* pszPatternCase;
+	int  nPatternLen;
 #ifdef SEARCH_STRING_KMP
-	int* m_pnNextPossArr;
+	int* pnNextPossArr;
 #endif
 #ifdef SEARCH_STRING_SUNDAY_QUICK
-	int* m_pnUseCharSkipArr;
+	int* pnUseCharSkipArr;
 #endif
 
 private:
@@ -117,7 +117,7 @@ public:
 	);
 
 public:
-	SearchAgent(DocLineMgr& docLineMgr) : m_docLineMgr(docLineMgr) { }
+	SearchAgent(DocLineMgr& docLineMgr) : docLineMgr(docLineMgr) { }
 
 	bool WhereCurrentWord(LogicInt , LogicInt , LogicInt* , LogicInt*, NativeW*, NativeW*);	// 現在位置の単語の範囲を調べる
 
@@ -127,6 +127,6 @@ public:
 
 	void ReplaceData(DocLineReplaceArg*);
 private:
-	DocLineMgr& m_docLineMgr;
+	DocLineMgr& docLineMgr;
 };
 

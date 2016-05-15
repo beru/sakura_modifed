@@ -35,9 +35,9 @@ struct CommonValueInfo {
 		WStr,    // wchar_t文字列 (終端NULL)
 	};
 
-	void* m_pValue;     // 値へのポインタ
-	int   m_nValueSize; // 値のサイズ。バイト単位。
-	char  m_szEntryKey[32];
+	void* pValue;     // 値へのポインタ
+	int   nValueSize; // 値のサイズ。バイト単位。
+	char  szEntryKey[32];
 	Type type;
 
 	CommonValueInfo(
@@ -47,24 +47,24 @@ struct CommonValueInfo {
 		Type type = Type::Unknown
 	)
 		:
-		m_pValue(pValue),
-		m_nValueSize(nValueSize),
+		pValue(pValue),
+		nValueSize(nValueSize),
 		type(type)
 	{
-		strcpy_s(m_szEntryKey, _countof(m_szEntryKey), szEntryKey);
+		strcpy_s(this->szEntryKey, _countof(this->szEntryKey), szEntryKey);
 	}
 
 	void Save()
 	{
-		printf("%hs=", m_szEntryKey);
+		printf("%hs=", szEntryKey);
 
 		// intと同じサイズならintとして出力
-		if (m_nValueSize == sizeof(int)) {
-			printf("%d\n", *((int*)m_pValue));
+		if (nValueSize == sizeof(int)) {
+			printf("%d\n", *((int*)pValue));
 		// それ以外ならバイナリ出力
 		}else {
-			for (int i=0; i<m_nValueSize; ++i) {
-				printf("%%%02X", ((BYTE*)m_pValue)[i]);
+			for (int i=0; i<nValueSize; ++i) {
+				printf("%%%02X", ((BYTE*)pValue)[i]);
 			}
 		}
 	}
@@ -89,13 +89,13 @@ public:
 	}
 	void Regist(const char* szEntryKey) {
 		// CommonValueリストに自分を追加
-		g_commonvalues.emplace_back(&m_value, sizeof(m_value), szEntryKey);
+		g_commonvalues.emplace_back(&value, sizeof(value), szEntryKey);
 	}
-	Me& operator = (const T& rhs) { m_value = rhs; return *this; }
-	operator T& () { return m_value; }
-	operator const T& () const { return m_value; }
+	Me& operator = (const T& rhs) { value = rhs; return *this; }
+	operator T& () { return value; }
+	operator const T& () const { return value; }
 private:
-	T m_value;
+	T value;
 };
 
 typedef char mystring[10];

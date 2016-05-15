@@ -67,8 +67,8 @@ public:
 	void OnChangeSetting();
 	void OnChangePrintSetting(void);
 	void OnPreviewGoPage(int nPage);	// プレビュー ページ指定
-	void OnPreviewGoPreviousPage() { OnPreviewGoPage(m_nCurPageNum - 1); }		//	前のページへ
-	void OnPreviewGoNextPage() { OnPreviewGoPage(m_nCurPageNum + 1); }		//	前のページへ
+	void OnPreviewGoPreviousPage() { OnPreviewGoPage(nCurPageNum - 1); }		//	前のページへ
+	void OnPreviewGoNextPage() { OnPreviewGoPage(nCurPageNum + 1); }		//	前のページへ
 	void OnPreviewGoDirectPage(void);
 	void OnPreviewZoom(BOOL bZoomUp);
 	void OnPrint(void);	// 印刷実行
@@ -86,8 +86,8 @@ public:
 	void DestroyPrintPreviewControls(void);
 
 	void SetFocusToPrintPreviewBar(void);
-	HWND GetPrintPreviewBarHANDLE(void) { return m_hwndPrintPreviewBar;	}
-	HWND GetPrintPreviewBarHANDLE_Safe() const { if (!this) return NULL; else return m_hwndPrintPreviewBar; } // thisがNULLでも実行できる版。2007.10.29 kobake
+	HWND GetPrintPreviewBarHANDLE(void) { return hwndPrintPreviewBar;	}
+	HWND GetPrintPreviewBarHANDLE_Safe() const { if (!this) return NULL; else return hwndPrintPreviewBar; } // thisがNULLでも実行できる版。2007.10.29 kobake
 	
 	//	PrintPreviewバーのメッセージ処理。
 	//	まずPrintPreviewBar_DlgProcにメッセージが届き、DispatchEvent_PPBに転送する仕組み
@@ -169,13 +169,13 @@ public:
 	||	アクセサ
 	*/
 	void SetPrintSetting(PrintSetting* pPrintSetting) {
-		m_sPrintSetting = *pPrintSetting;
-		m_pPrintSetting = &m_sPrintSetting;
-		m_pPrintSettingOrg = pPrintSetting;
+		sPrintSetting = *pPrintSetting;
+		pPrintSetting = &sPrintSetting;
+		pPrintSettingOrg = pPrintSetting;
 	}
-	BOOL GetDefaultPrinterInfo() { return m_print.GetDefaultPrinter(&m_pPrintSetting->mdmDevMode); }
-	int  GetCurPageNum() { return m_nCurPageNum; }	// 現在のページ
-	int  GetAllPageNum() { return m_nAllPageNum; }	// 現在のページ
+	BOOL GetDefaultPrinterInfo() { return print.GetDefaultPrinter(&pPrintSetting->mdmDevMode); }
+	int  GetCurPageNum() { return nCurPageNum; }	// 現在のページ
+	int  GetAllPageNum() { return nAllPageNum; }	// 現在のページ
 
 	
 	/*
@@ -193,77 +193,77 @@ public:
 	// none
 
 protected:
-	EditWnd&		m_parentWnd;	//	親のEditEnd。
+	EditWnd&		parentWnd;	//	親のEditEnd。
 
 	// 2006.08.17 Moca YAZAKIさんのメモの通りDC/BMPをCEditDocからPrintPreviewへ移動
-	HDC				m_hdcCompatDC;		// 再描画用コンパチブルDC
-	HBITMAP			m_hbmpCompatBMP;	// 再描画用メモリBMP
-	HBITMAP			m_hbmpCompatBMPOld;	// 再描画用メモリBMP(OLD)
-	int				m_nbmpCompatScale;	// BMPの画面の10(COMPAT_BMP_BASE)ピクセル幅あたりのBMPのピクセル幅
+	HDC				hdcCompatDC;		// 再描画用コンパチブルDC
+	HBITMAP			hbmpCompatBMP;		// 再描画用メモリBMP
+	HBITMAP			hbmpCompatBMPOld;	// 再描画用メモリBMP(OLD)
+	int				nbmpCompatScale;	// BMPの画面の10(COMPAT_BMP_BASE)ピクセル幅あたりのBMPのピクセル幅
 
 	//	コントロール制御用
 	//	操作バー
-	HWND			m_hwndPrintPreviewBar;	// 印刷プレビュー 操作バー
+	HWND			hwndPrintPreviewBar;	// 印刷プレビュー 操作バー
 	//	スクロールバー
-	int				m_nPreviewVScrollPos;	// 印刷プレビュー：スクロール位置縦
-	int				m_nPreviewHScrollPos;	// 印刷プレビュー：スクロール位置横
-	BOOL			m_SCROLLBAR_HORZ;
-	BOOL			m_SCROLLBAR_VERT;
-	HWND			m_hwndVScrollBar;	// 垂直スクロールバーウィンドウハンドル
-	HWND			m_hwndHScrollBar;	// 水平スクロールバーウィンドウハンドル
+	int				nPreviewVScrollPos;	// 印刷プレビュー：スクロール位置縦
+	int				nPreviewHScrollPos;	// 印刷プレビュー：スクロール位置横
+	BOOL			SCROLLBAR_HORZ;
+	BOOL			SCROLLBAR_VERT;
+	HWND			hwndVScrollBar;		// 垂直スクロールバーウィンドウハンドル
+	HWND			hwndHScrollBar;		// 水平スクロールバーウィンドウハンドル
 	//	サイズボックス
-	HWND			m_hwndSizeBox;		// サイズボックスウィンドウハンドル
-	BOOL			m_SizeBoxCanMove;	// サイズボックスウィンドウハンドルを動かせるかどうか
+	HWND			hwndSizeBox;		// サイズボックスウィンドウハンドル
+	BOOL			sizeBoxCanMove;		// サイズボックスウィンドウハンドルを動かせるかどうか
 
 	//	表示
-	int				m_nPreview_Zoom;	// 印刷プレビュー：倍率
+	int				nPreview_Zoom;	// 印刷プレビュー：倍率
 
 	//	印刷位置を決定するための変数
-	int				m_nPreview_ViewWidth;		// 印刷プレビュー：ビュー幅(ピクセル)
-	int				m_nPreview_ViewHeight;		// 印刷プレビュー：ビュー高さ(ピクセル)
-	int				m_nPreview_ViewMarginLeft;	// 印刷プレビュー：ビュー左端と用紙の間隔(1/10mm単位)
-	int				m_nPreview_ViewMarginTop;	// 印刷プレビュー：ビュー左端と用紙の間隔(1/10mm単位)
-	short			m_nPreview_PaperAllWidth;	// 用紙幅(1/10mm単位)
-	short			m_nPreview_PaperAllHeight;	// 用紙高さ(1/10mm単位)
-	short			m_nPreview_PaperWidth;		// 用紙印刷有効幅(1/10mm単位)
-	short			m_nPreview_PaperHeight;		// 用紙印刷有効高さ(1/10mm単位)
-	short			m_nPreview_PaperOffsetLeft;	// 用紙余白左端(1/10mm単位)
-	short			m_nPreview_PaperOffsetTop;	// 用紙余白上端(1/10mm単位)
-	LayoutInt		m_bPreview_EnableColumns;	// 印字可能桁数/ページ
-	int				m_bPreview_EnableLines;		// 印字可能行数/ページ
-	int				m_nPreview_LineNumberColumns;	// 行番号エリアの幅（文字数）
-	WORD			m_nAllPageNum;				// 全ページ数
-	WORD			m_nCurPageNum;				// 現在のページ
+	int				nPreview_ViewWidth;			// 印刷プレビュー：ビュー幅(ピクセル)
+	int				nPreview_ViewHeight;		// 印刷プレビュー：ビュー高さ(ピクセル)
+	int				nPreview_ViewMarginLeft;	// 印刷プレビュー：ビュー左端と用紙の間隔(1/10mm単位)
+	int				nPreview_ViewMarginTop;		// 印刷プレビュー：ビュー左端と用紙の間隔(1/10mm単位)
+	short			nPreview_PaperAllWidth;		// 用紙幅(1/10mm単位)
+	short			nPreview_PaperAllHeight;	// 用紙高さ(1/10mm単位)
+	short			nPreview_PaperWidth;		// 用紙印刷有効幅(1/10mm単位)
+	short			nPreview_PaperHeight;		// 用紙印刷有効高さ(1/10mm単位)
+	short			nPreview_PaperOffsetLeft;	// 用紙余白左端(1/10mm単位)
+	short			nPreview_PaperOffsetTop;	// 用紙余白上端(1/10mm単位)
+	LayoutInt		bPreview_EnableColumns;		// 印字可能桁数/ページ
+	int				bPreview_EnableLines;		// 印字可能行数/ページ
+	int				nPreview_LineNumberColumns;	// 行番号エリアの幅（文字数）
+	WORD			nAllPageNum;				// 全ページ数
+	WORD			nCurPageNum;				// 現在のページ
 
-	PrintSetting*	m_pPrintSetting;			// 現在の印刷設定(キャッシュへのポインタ)
-	PrintSetting*	m_pPrintSettingOrg;			// 現在の印刷設定(共有データ)
-	PrintSetting	m_sPrintSetting;			// 現在の印刷設定(キャッシュ)
-	LOGFONT			m_lfPreviewHan;				// プレビュー用フォント
-	LOGFONT			m_lfPreviewZen;				// プレビュー用フォント
+	PrintSetting*	pPrintSetting;				// 現在の印刷設定(キャッシュへのポインタ)
+	PrintSetting*	pPrintSettingOrg;			// 現在の印刷設定(共有データ)
+	PrintSetting	sPrintSetting;				// 現在の印刷設定(キャッシュ)
+	LOGFONT			lfPreviewHan;				// プレビュー用フォント
+	LOGFONT			lfPreviewZen;				// プレビュー用フォント
 
-	HFONT			m_hFontHan;					// 印刷用半角フォントハンドル
-	HFONT			m_hFontHan_b;				// 印刷用半角フォントハンドル 太字
-	HFONT			m_hFontHan_u;				// 印刷用半角フォントハンドル 下線
-	HFONT			m_hFontHan_bu;				// 印刷用半角フォントハンドル 太字、下線
-	HFONT			m_hFontZen;					// 印刷用全角フォントハンドル
-	HFONT			m_hFontZen_b;				// 印刷用全角フォントハンドル 太字
-	HFONT			m_hFontZen_u;				// 印刷用全角フォントハンドル 下線
-	HFONT			m_hFontZen_bu;				// 印刷用全角フォントハンドル 太字、下線
-	int				m_nAscentHan;				// 半角文字のアセント（文字高/基準ラインからの高さ）
-	int				m_nAscentZen;				// 全角文字のアセント（文字高/基準ラインからの高さ）
+	HFONT			hFontHan;					// 印刷用半角フォントハンドル
+	HFONT			hFontHan_b;					// 印刷用半角フォントハンドル 太字
+	HFONT			hFontHan_u;					// 印刷用半角フォントハンドル 下線
+	HFONT			hFontHan_bu;				// 印刷用半角フォントハンドル 太字、下線
+	HFONT			hFontZen;					// 印刷用全角フォントハンドル
+	HFONT			hFontZen_b;					// 印刷用全角フォントハンドル 太字
+	HFONT			hFontZen_u;					// 印刷用全角フォントハンドル 下線
+	HFONT			hFontZen_bu;				// 印刷用全角フォントハンドル 太字、下線
+	int				nAscentHan;					// 半角文字のアセント（文字高/基準ラインからの高さ）
+	int				nAscentZen;					// 全角文字のアセント（文字高/基準ラインからの高さ）
 
-	ColorStrategyPool*	m_pool;					// 色定義管理情報
+	ColorStrategyPool*	pool;					// 色定義管理情報
 
 public:
-	class LayoutMgr*	m_pLayoutMgr_Print;		// 印刷用のレイアウト管理情報
+	class LayoutMgr*	pLayoutMgr_Print;		// 印刷用のレイアウト管理情報
 protected:
-	TypeConfig m_typePrint;
+	TypeConfig typePrint;
 
 	// プレビューから出ても現在のプリンタ情報を記憶しておけるようにstaticにする 2003.05.02 かろと 
-	static Print	m_print;					// 現在のプリンタ情報
+	static Print	print;						// 現在のプリンタ情報
 
-	bool			m_bLockSetting;				// 設定のロック
-	bool			m_bDemandUpdateSetting;		// 設定の更新要求
+	bool			bLockSetting;				// 設定のロック
+	bool			bDemandUpdateSetting;		// 設定の更新要求
 
 private:
 	DISALLOW_COPY_AND_ASSIGN(PrintPreview);

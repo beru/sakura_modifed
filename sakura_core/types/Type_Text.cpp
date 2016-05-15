@@ -56,7 +56,7 @@ void CType_Text::InitTypeConfigImp(TypeConfig& type)
 	type.bKinsokuKuto = false;								// 句読点をぶら下げる	//@@@ 2002.04.17 MIK
 	wcscpy_s(type.szKinsokuHead, L"!%),.:;?]}￠°’”‰′″℃、。々〉》」』】〕゛゜ゝゞ・ヽヾ！％），．：；？］｝｡｣､･ﾞﾟ￠");		/* 行頭禁則 */	//@@@ 2002.04.13 MIK 
 	wcscpy_s(type.szKinsokuTail, L"$([{￡\\‘“〈《「『【〔＄（［｛｢￡￥");		/* 行末禁則 */	//@@@ 2002.04.08 MIK 
-	// type.m_szKinsokuKuto（句読点ぶら下げ文字）はここではなく全タイプにデフォルト設定	// 2009.08.07 ryoji 
+	// type.szKinsokuKuto（句読点ぶら下げ文字）はここではなく全タイプにデフォルト設定	// 2009.08.07 ryoji 
 
 	// ※小さな親切として、C:\～～ や \\～～ などのファイルパスをクリッカブルにする設定を「テキスト」に既定で仕込む
 	// ※""で挟まれる設定は挟まれない設定よりも上に無ければならない
@@ -105,10 +105,10 @@ void DocOutline::MakeTopicList_txt(FuncInfoArr* pFuncInfoArr)
 	wchar_t szTitle[32];			//	一時領域
 	LogicInt				nLineCount;
 	bool b278a = false;
-	for (nLineCount=LogicInt(0); nLineCount<m_doc.m_docLineMgr.GetLineCount(); ++nLineCount) {
+	for (nLineCount=LogicInt(0); nLineCount<doc.docLineMgr.GetLineCount(); ++nLineCount) {
 		// 行取得
 		LogicInt nLineLen;
-		const wchar_t* pLine = m_doc.m_docLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
+		const wchar_t* pLine = doc.docLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
 		if (!pLine) {
 			break;
 		}
@@ -204,12 +204,12 @@ void DocOutline::MakeTopicList_txt(FuncInfoArr* pFuncInfoArr)
 		  レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 		*/
 		LayoutPoint ptPos;
-		m_doc.m_layoutMgr.LogicToLayout(
+		doc.layoutMgr.LogicToLayout(
 			LogicPoint(0, nLineCount),
 			&ptPos
 		);
 
-		// m_nDepthを計算
+		// nDepthを計算
 		int k;
 		bool bAppend = true;
 		for (k=0; k<nDepth; ++k) {
@@ -228,7 +228,7 @@ void DocOutline::MakeTopicList_txt(FuncInfoArr* pFuncInfoArr)
 			wcscpy_s(pszStack[nDepth], szTitle);
 		}else {
 			// 2002.11.03 Moca 最大値を超えるとバッファオーバーラン
-			// m_nDepth = nMaxStack;
+			// nDepth = nMaxStack;
 			bAppend = false;
 		}
 		
@@ -259,11 +259,11 @@ void DocOutline::MakeTopicList_wztxt(FuncInfoArr* pFuncInfoArr)
 	int levelPrev = 0;
 	bool bExtEol = GetDllShareData().common.edit.bEnableExtEol;
 
-	for (LogicInt nLineCount=LogicInt(0); nLineCount<m_doc.m_docLineMgr.GetLineCount(); ++nLineCount) {
+	for (LogicInt nLineCount=LogicInt(0); nLineCount<doc.docLineMgr.GetLineCount(); ++nLineCount) {
 		const wchar_t*	pLine;
 		LogicInt		nLineLen;
 
-		pLine = m_doc.m_docLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
+		pLine = doc.docLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
 		if (!pLine) {
 			break;
 		}
@@ -278,7 +278,7 @@ void DocOutline::MakeTopicList_wztxt(FuncInfoArr* pFuncInfoArr)
 				;
 
 			LayoutPoint ptPos;
-			m_doc.m_layoutMgr.LogicToLayout(
+			doc.layoutMgr.LogicToLayout(
 				LogicPoint(0, nLineCount),
 				&ptPos
 			);
