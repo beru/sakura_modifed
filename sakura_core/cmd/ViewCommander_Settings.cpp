@@ -34,7 +34,7 @@
 
 	@date 2006.12.19 ryoji 表示切替は EditWnd::LayoutToolBar(), EditWnd::EndLayoutBars() で行うように変更
 */
-void ViewCommander::Command_SHOWTOOLBAR(void)
+void ViewCommander::Command_ShowToolBar(void)
 {
 	auto& editWnd = GetEditWindow();	// Sep. 10, 2002 genta
 
@@ -56,7 +56,7 @@ void ViewCommander::Command_SHOWTOOLBAR(void)
 
 	@date 2006.12.19 ryoji 表示切替は EditWnd::LayoutFuncKey(), EditWnd::EndLayoutBars() で行うように変更
 */
-void ViewCommander::Command_SHOWFUNCKEY(void)
+void ViewCommander::Command_ShowFuncKey(void)
 {
 	EditWnd& editWnd = GetEditWindow();	// Sep. 10, 2002 genta
 
@@ -81,7 +81,7 @@ void ViewCommander::Command_SHOWFUNCKEY(void)
 	@date 2006.12.19 ryoji 表示切替は EditWnd::LayoutTabBar(), EditWnd::EndLayoutBars() で行うように変更
 	@date 2007.06.20 ryoji グループIDリセット
  */
-void ViewCommander::Command_SHOWTAB(void)
+void ViewCommander::Command_ShowTab(void)
 {
 	auto& editWnd = GetEditWindow();	// Sep. 10, 2002 genta
 
@@ -113,7 +113,7 @@ void ViewCommander::Command_SHOWTAB(void)
 
 	@date 2006.12.19 ryoji 表示切替は EditWnd::LayoutStatusBar(), EditWnd::EndLayoutBars() で行うように変更
 */
-void ViewCommander::Command_SHOWSTATUSBAR(void)
+void ViewCommander::Command_ShowStatusBar(void)
 {
 	auto& editWnd = GetEditWindow();	// Sep. 10, 2002 genta
 
@@ -134,7 +134,7 @@ void ViewCommander::Command_SHOWSTATUSBAR(void)
 
 	@date 2014.07.14 新規作成
 */
-void ViewCommander::Command_SHOWMINIMAP(void)
+void ViewCommander::Command_ShowMiniMap(void)
 {
 	auto& editWnd = GetEditWindow();	//	Sep. 10, 2002 genta
 
@@ -174,7 +174,7 @@ void ViewCommander::Command_TYPE_LIST(void)
 
 
 // タイプ別設定一時適用
-void ViewCommander::Command_CHANGETYPE(int nTypePlusOne)
+void ViewCommander::Command_ChangeType(int nTypePlusOne)
 {
 	TypeConfigNum type = TypeConfigNum(nTypePlusOne - 1);
 	auto& doc = GetDocument();
@@ -260,7 +260,7 @@ void ViewCommander::Command_FONT(void)
 
 	@date 2013.04.10 novice 新規作成
 */
-void ViewCommander::Command_SETFONTSIZE(int fontSize, int shift, int mode)
+void ViewCommander::Command_SetFontSize(int fontSize, int shift, int mode)
 {
 	// The point sizes recommended by "The Windows Interface: An Application Design Guide", 1/10ポイント単位
 	static const INT sizeTable[] = { 8*10, 9*10, 10*10, (INT)(10.5*10), 11*10, 12*10, 14*10, 16*10, 18*10, 20*10, 22*10, 24*10, 26*10, 28*10, 36*10, 48*10, 72*10 };
@@ -355,7 +355,7 @@ void ViewCommander::Command_SETFONTSIZE(int fontSize, int shift, int mode)
 	@note 変更する順序を変更したときはEditWnd::InitMenu()も変更すること
 	@sa EditWnd::InitMenu()
 */
-void ViewCommander::Command_WRAPWINDOWWIDTH(void)	// Oct. 7, 2000 JEPRO WRAPWINDIWWIDTH を WRAPWINDOWWIDTH に変更
+void ViewCommander::Command_WrapWindowWidth(void)	// Oct. 7, 2000 JEPRO WRAPWINDIWWIDTH を WRAPWINDOWWIDTH に変更
 {
 	// Jan. 8, 2006 genta 判定処理をview.GetWrapMode()へ移動
 	EditView::TOGGLE_WRAP_ACTION nWrapMode;
@@ -414,7 +414,7 @@ void ViewCommander::Command_Favorite(void)
 	@date 2008.05.31 nasukoji	新規作成
 	@date 2009.08.28 nasukoji	テキストの最大幅を算出する
 */
-void ViewCommander::Command_TEXTWRAPMETHOD(TextWrappingMethod nWrapMethod)
+void ViewCommander::Command_TextWrapMethod(TextWrappingMethod nWrapMethod)
 {
 	auto& doc = GetDocument();
 

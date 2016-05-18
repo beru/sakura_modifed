@@ -604,7 +604,7 @@ bool KeywordSetMgr::KeywordAlloc(int nSize)
 		// ƒƒ‚ƒŠ•s‘«
 		return false;
 	}
-	nStartIdx[nKeywordSetNum + 1] = m_nStartIdx[m_nKeywordSetNum] + nAllocSize;
+	nStartIdx[nKeywordSetNum + 1] = nStartIdx[m_nKeywordSetNum] + nAllocSize;
 	for (int i=nKeywordSetNum+1; i<MAX_SETNUM; ++i) {
 		nStartIdx[i + 1] = nStartIdx[i];
 	}

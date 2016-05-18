@@ -241,7 +241,7 @@ int OutlinePython::ScanNormal(const wchar_t* data, int linelen, int start_offset
 	最終的な状態を決定する．
 	
 	文字列の開始判定はEnterString()関数で処理済みであり，その結果が
-	state, raw_string, long_string, m_quote_charに与えられている．
+	state, raw_string, long_string, quote_charに与えられている．
 	
 	raw_stringがtrueならbackslashによるエスケープ処理を行わない
 	long_stringならquote_charが3つ続くまで文字列となる．

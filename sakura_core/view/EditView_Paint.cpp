@@ -249,13 +249,13 @@ void EditView::DrawBackImage(HDC hdc, RECT& rcPaint, HDC hdcBgImg)
 	}
 	if (typeConfig.backImgRepeatX) {
 		if (0 < rcImagePos.left) {
-			// rcImagePos.left = rcImagePos.left - (rcImagePos.left / doc.nBackImgWidth + 1) * doc.m_nBackImgWidth;
+			// rcImagePos.left = rcImagePos.left - (rcImagePos.left / doc.nBackImgWidth + 1) * doc.nBackImgWidth;
 			rcImagePos.left = rcImagePos.left % doc.nBackImgWidth - doc.nBackImgWidth;
 		}
 	}
 	if (typeConfig.backImgRepeatY) {
 		if (0 < rcImagePos.top) {
-			// rcImagePos.top = rcImagePos.top - (rcImagePos.top / doc.nBackImgHeight + 1) * doc.m_nBackImgHeight;
+			// rcImagePos.top = rcImagePos.top - (rcImagePos.top / doc.nBackImgHeight + 1) * doc.nBackImgHeight;
 			rcImagePos.top = rcImagePos.top % doc.nBackImgHeight - doc.nBackImgHeight;
 		}
 	}

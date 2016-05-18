@@ -135,7 +135,7 @@ end_of_for:;
 		if (selInfo.IsTextSelected()) {
 			// 矩形範囲選択中か
 			if (selInfo.IsBoxSelecting()) {
-				Command_INDENT(wcChar);
+				Command_Indent(wcChar);
 				return;
 			}else {
 				view.DeleteData(true);
@@ -263,7 +263,7 @@ void ViewCommander::Command_IME_CHAR(WORD wChar)
 	if (selInfo.IsTextSelected()) {
 		// 矩形範囲選択中か
 		if (selInfo.IsBoxSelecting()) {
-			Command_INDENT(szWord, nWord);	// Oct. 6 ,2002 genta 
+			Command_Indent(szWord, nWord);	// Oct. 6 ,2002 genta 
 			return;
 		}else {
 			view.DeleteData(true);
@@ -289,7 +289,7 @@ void ViewCommander::Command_IME_CHAR(WORD wChar)
 
 // from ViewCommander_New.cpp
 // Undo 元に戻す
-void ViewCommander::Command_UNDO(void)
+void ViewCommander::Command_Undo(void)
 {
 	auto& selInfo = view.GetSelectionInfo();
 	if (selInfo.IsMouseSelecting()) {	// マウスによる範囲選択中
@@ -314,7 +314,7 @@ void ViewCommander::Command_UNDO(void)
 		return;
 	}
 
-	MY_RUNNINGTIMER(runningTimer, "ViewCommander::Command_UNDO()");
+	MY_RUNNINGTIMER(runningTimer, "ViewCommander::Command_Undo()");
 
 	Ope* pOpe = nullptr;
 
@@ -543,7 +543,7 @@ void ViewCommander::Command_UNDO(void)
 
 // from ViewCommander_New.cpp
 // Redo やり直し
-void ViewCommander::Command_REDO(void)
+void ViewCommander::Command_Redo(void)
 {
 	if (view.GetSelectionInfo().IsMouseSelecting()) {	// マウスによる範囲選択中
 		ErrorBeep();
@@ -568,7 +568,7 @@ void ViewCommander::Command_REDO(void)
 	if (!docEditor.IsEnableRedo()) {	// Redo(やり直し)可能な状態か？
 		return;
 	}
-	MY_RUNNINGTIMER(runningTimer, "ViewCommander::Command_REDO()");
+	MY_RUNNINGTIMER(runningTimer, "ViewCommander::Command_Redo()");
 
 	Ope*		pOpe = nullptr;
 	OpeBlk*	pOpeBlk;
@@ -786,7 +786,7 @@ void ViewCommander::Command_REDO(void)
 
 
 // カーソル位置または選択エリアを削除
-void ViewCommander::Command_DELETE(void)
+void ViewCommander::Command_Delete(void)
 {
 	auto& selInfo = view.GetSelectionInfo();
 	if (selInfo.IsMouseSelecting()) {		// マウスによる範囲選択中
@@ -838,7 +838,7 @@ void ViewCommander::Command_DELETE(void)
 
 
 // カーソル前を削除
-void ViewCommander::Command_DELETE_BACK(void)
+void ViewCommander::Command_Delete_Back(void)
 {
 	auto& selInfo = view.GetSelectionInfo();
 	if (selInfo.IsMouseSelecting()) {	// マウスによる範囲選択中
@@ -939,7 +939,7 @@ void ViewCommander::DelCharForOverwrite(
 		// 上書きモードなので、現在位置の文字を１文字消去
 		LayoutPoint posBefore;
 		if (bEol) {
-			Command_DELETE();	// 行数減では再描画が必要＆行末以後の削除を処理統一
+			Command_Delete();	// 行数減では再描画が必要＆行末以後の削除を処理統一
 			posBefore = caret.GetCaretLayoutPos();
 		}else {
 			// 1文字削除

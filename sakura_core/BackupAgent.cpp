@@ -317,7 +317,7 @@ bool BackupAgent::FormatBackUpPath(
 
 	if (bup_setting.bBackUpFolder
 	  && (!bup_setting.bBackUpFolderRM || !IsLocalDrive(target_file))
-	) {	// 指定フォルダにバックアップを作成する	// m_bBackUpFolderRM 追加	2010/5/27 Uchi
+	) {	// 指定フォルダにバックアップを作成する	// bBackUpFolderRM 追加	2010/5/27 Uchi
 		TCHAR selDir[_MAX_PATH];
 		FileNameManager::ExpandMetaToFolder(bup_setting.szBackUpFolder, selDir, _countof(selDir));
 		if (GetFullPathName(selDir, _MAX_PATH, szNewPath, &psNext) == 0) {

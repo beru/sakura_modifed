@@ -833,7 +833,7 @@ void ViewCommander::Command_REPLACE_ALL()
 		// ファイル全体置換
 		// ファイルの先頭に移動
 	//	HandleCommand(F_GOFILETOP, bDisplayUpdate, 0, 0, 0, 0);
-		Command_GOFILETOP(bDisplayUpdate);
+		Command_GoFileTop(bDisplayUpdate);
 	}
 
 	LayoutPoint ptLast = caret.GetCaretLayoutPos();

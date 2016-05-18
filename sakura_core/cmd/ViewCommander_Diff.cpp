@@ -112,7 +112,7 @@ static bool Commander_COMPARE_core(
 }
 
 // ファイル内容比較
-void ViewCommander::Command_COMPARE(void)
+void ViewCommander::Command_Compare(void)
 {
 	HWND		hwndCompareWnd = NULL;
 	TCHAR		szPath[_MAX_PATH + 1];

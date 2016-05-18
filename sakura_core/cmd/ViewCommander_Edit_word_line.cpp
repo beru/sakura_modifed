@@ -100,7 +100,7 @@ void ViewCommander::Command_WordCut(void)
 		return;
 	}
 	// 現在位置の単語選択
-	Command_SELECTWORD();
+	Command_SelectWord();
 	// 切り取り(選択範囲をクリップボードにコピーして削除)
 	if (!selInfo.IsTextSelected()) {
 		// 単語選択で選択できなかったら、次の文字を選ぶことに挑戦。
@@ -120,7 +120,7 @@ void ViewCommander::Command_WordDelete(void)
 		return;
 	}
 	// 現在位置の単語選択
-	Command_SELECTWORD();
+	Command_SelectWord();
 	// 削除
 	view.DeleteData(true);
 	return;
@@ -310,7 +310,7 @@ void ViewCommander::Command_LineDeleteToEnd(void)
 
 
 // 行切り取り(折り返し単位)
-void ViewCommander::Command_CUT_LINE(void)
+void ViewCommander::Command_Cut_Line(void)
 {
 	auto& selInfo = view.GetSelectionInfo();
 	if (selInfo.IsMouseSelecting()) {	// マウスによる範囲選択中
@@ -335,13 +335,13 @@ void ViewCommander::Command_CUT_LINE(void)
 		EolType::Unknown,
 		GetDllShareData().common.edit.bEnableLineModePaste
 	);
-	Command_DELETE_LINE();
+	Command_Delete_Line();
 	return;
 }
 
 
 // 行削除(折り返し単位)
-void ViewCommander::Command_DELETE_LINE(void)
+void ViewCommander::Command_Delete_Line(void)
 {
 	auto& selInfo = view.GetSelectionInfo();
 	if (selInfo.IsMouseSelecting()) {	// マウスによる範囲選択中
@@ -364,7 +364,7 @@ void ViewCommander::Command_DELETE_LINE(void)
 
 	LayoutPoint ptCaretPos_OLD = caret.GetCaretLayoutPos();
 
-	Command_DELETE();
+	Command_Delete();
 	pLayout = GetDocument().layoutMgr.SearchLineByLayoutY(caret.GetCaretLayoutPos().GetY2());
 	if (pLayout) {
 		// 2003-04-30 かろと
@@ -400,7 +400,7 @@ void ViewCommander::Command_DELETE_LINE(void)
 
 
 // 行の二重化(折り返し単位)
-void ViewCommander::Command_DUPLICATELINE(void)
+void ViewCommander::Command_DuplicateLine(void)
 {
 	NativeW		memBuf;
 	auto& selInfo = view.GetSelectionInfo();
@@ -429,7 +429,7 @@ void ViewCommander::Command_DUPLICATELINE(void)
 	LayoutPoint ptCaretPosOld = caret.GetCaretLayoutPos() + LayoutPoint(0, 1);
 
 	// 行頭に移動(折り返し単位)
-	Command_GOLINETOP(selInfo.bSelectingLock, 0x1 /* カーソル位置に関係なく行頭に移動 */);
+	Command_GoLineTop(selInfo.bSelectingLock, 0x1 /* カーソル位置に関係なく行頭に移動 */);
 
 	if (!view.bDoing_UndoRedo) {	// Undo, Redoの実行中か
 		// 操作の追加

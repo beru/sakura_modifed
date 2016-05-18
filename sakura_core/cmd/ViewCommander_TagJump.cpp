@@ -75,7 +75,7 @@ bool IsFileExists2(const wchar_t* pszFile)
 	@date 2004.05.13 Moca 行桁位置の指定が無い場合は、行桁を移動しない
 	@date 2011.11.24 Moca Grepフォルダ毎表示対応
 */
-bool ViewCommander::Command_TAGJUMP(bool bClose)
+bool ViewCommander::Command_TagJump(bool bClose)
 {
 	// 2004.05.13 Moca 初期値を1ではなく元の位置を継承するように
 	// 0以下は未指定扱い。(1開始)
@@ -357,7 +357,7 @@ can_not_tagjump:;
 
 
 // タグジャンプバック
-void ViewCommander::Command_TAGJUMPBACK(void)
+void ViewCommander::Command_TagJumpBack(void)
 {
 // 2004/06/21 novice タグジャンプ機能追加
 	TagJump tagJump;

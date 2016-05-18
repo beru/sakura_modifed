@@ -43,7 +43,7 @@
 #include "dlg/DlgProperty.h"
 #include "dlg/DlgCancel.h"// 2002/2/8 hor
 #include "dlg/DlgProfileMgr.h"
-#include "doc/DocReader.h"	//  Command_PROPERTY_FILE for _DEBUG
+#include "doc/DocReader.h"	//  Command_Property_File for _DEBUG
 #include "print/PrintPreview.h"
 #include "io/BinaryStream.h"
 #include "io/FileLoad.h"
@@ -60,7 +60,7 @@
 
 
 // 新規作成
-void ViewCommander::Command_FILENEW(void)
+void ViewCommander::Command_FileNew(void)
 {
 	// 新たな編集ウィンドウを起動
 	LoadInfo loadInfo;
@@ -82,7 +82,7 @@ void ViewCommander::Command_FILENEW(void)
 
 
 // 新規作成（新しいウィンドウで開く）
-void ViewCommander::Command_FILENEW_NEWWINDOW(void)
+void ViewCommander::Command_FileNew_NewWindow(void)
 {
 	// 新たな編集ウィンドウを起動
 	LoadInfo loadInfo;
@@ -108,7 +108,7 @@ void ViewCommander::Command_FILENEW_NEWWINDOW(void)
 	@date 2003.03.30 genta 「閉じて開く」から利用するために引数追加
 	@date 2004.10.09 genta 実装をEditDocへ移動
 */
-void ViewCommander::Command_FILEOPEN(
+void ViewCommander::Command_FileOpen(
 	const WCHAR* filename,
 	EncodingType nCharCode,
 	bool bViewMode,
@@ -181,7 +181,7 @@ void ViewCommander::Command_FILEOPEN(
 	@date 2005.01.24 genta 引数askname追加
 
 */
-bool ViewCommander::Command_FILESAVE(bool warnbeep, bool askname)
+bool ViewCommander::Command_FileSave(bool warnbeep, bool askname)
 {
 	auto& doc = GetDocument();
 
@@ -210,7 +210,7 @@ bool ViewCommander::Command_FILESAVE(bool warnbeep, bool askname)
 
 
 // 名前を付けて保存ダイアログ
-bool ViewCommander::Command_FILESAVEAS_DIALOG(
+bool ViewCommander::Command_FileSaveAs_Dialog(
 	const WCHAR* fileNameDef,
 	EncodingType eCodeType,
 	EolType eEolType
@@ -223,7 +223,7 @@ bool ViewCommander::Command_FILESAVEAS_DIALOG(
 /* 名前を付けて保存
 	filenameで保存。NULLは厳禁。
 */
-bool ViewCommander::Command_FILESAVEAS(
+bool ViewCommander::Command_FileSaveAs(
 	const WCHAR* filename,
 	EolType eEolType
 	)
@@ -241,7 +241,7 @@ bool ViewCommander::Command_FILESAVEAS(
 
 	@date 2005.01.24 genta 新規作成
 */
-bool ViewCommander::Command_FILESAVEALL(void)
+bool ViewCommander::Command_FileSaveAll(void)
 {
 	AppNodeGroupHandle(0).SendMessageToAllEditors(
 		WM_COMMAND,
@@ -254,7 +254,7 @@ bool ViewCommander::Command_FILESAVEALL(void)
 
 
 // 閉じて(無題)	// Oct. 17, 2000 jepro 「ファイルを閉じる」というキャプションを変更
-void ViewCommander::Command_FILECLOSE(void)
+void ViewCommander::Command_FileClose(void)
 {
 	GetDocument().docFileOperation.FileClose();
 }
@@ -265,7 +265,7 @@ void ViewCommander::Command_FILECLOSE(void)
 	@date 2003.03.30 genta 開くダイアログでキャンセルしたとき元のファイルが残るように。
 				ついでにFILEOPENと同じように引数を追加しておく
 */
-void ViewCommander::Command_FILECLOSE_OPEN(
+void ViewCommander::Command_FileClose_Open(
 	LPCWSTR filename,
 	EncodingType nCharCode,
 	bool bViewMode
@@ -284,7 +284,7 @@ void ViewCommander::Command_FILECLOSE_OPEN(
 
 
 // ファイルの再オープン
-void ViewCommander::Command_FILE_REOPEN(
+void ViewCommander::Command_File_Reopen(
 	EncodingType	nCharCode,	// [in] 開き直す際の文字コード
 	bool			bNoConfirm	// [in] ファイルが更新された場合に確認を行わ「ない」かどうか。true:確認しない false:確認する
 	)
@@ -311,10 +311,10 @@ void ViewCommander::Command_FILE_REOPEN(
 
 
 // 印刷
-void ViewCommander::Command_PRINT(void)
+void ViewCommander::Command_Print(void)
 {
 	// 使っていない処理を削除 2003.05.04 かろと
-	Command_PRINT_PREVIEW();
+	Command_Print_Preview();
 
 	// 印刷実行
 	GetEditWindow().pPrintPreview->OnPrint();
@@ -322,7 +322,7 @@ void ViewCommander::Command_PRINT(void)
 
 
 // 印刷Preview
-void ViewCommander::Command_PRINT_PREVIEW(void)
+void ViewCommander::Command_Print_Preview(void)
 {
 	// 印刷Previewモードのオン/オフ
 	GetEditWindow().PrintPreviewModeONOFF();
@@ -331,7 +331,7 @@ void ViewCommander::Command_PRINT_PREVIEW(void)
 
 
 // 印刷のページレイアウトの設定
-void ViewCommander::Command_PRINT_PAGESETUP(void)
+void ViewCommander::Command_Print_PageSetUp(void)
 {
 	// 印刷ページ設定
 	GetEditWindow().OnPrintPageSetting();
@@ -423,10 +423,10 @@ void ViewCommander::Command_PLSQL_COMPILE_ON_SQLPLUS(void)
 		case IDYES:
 			if (GetDocument().docFile.GetFilePathClass().IsValidPath()) {
 				//nBool = HandleCommand(F_FILESAVE, true, 0, 0, 0, 0);
-				nBool = Command_FILESAVE();
+				nBool = Command_FileSave();
 			}else {
 				//nBool = HandleCommand(F_FILESAVEAS_DIALOG, true, 0, 0, 0, 0);
-				nBool = Command_FILESAVEAS_DIALOG(NULL, CODE_NONE, EolType::None);
+				nBool = Command_FileSaveAs_Dialog(NULL, CODE_NONE, EolType::None);
 			}
 			if (!nBool) {
 				return;
@@ -478,7 +478,7 @@ void ViewCommander::Command_PLSQL_COMPILE_ON_SQLPLUS(void)
 
 
 // ブラウズ
-void ViewCommander::Command_BROWSE(void)
+void ViewCommander::Command_Browse(void)
 {
 	if (!GetDocument().docFile.GetFilePathClass().IsValidPath()) {
 		ErrorBeep();
@@ -512,7 +512,7 @@ void ViewCommander::Command_BROWSE(void)
 
 
 // ビューモード
-void ViewCommander::Command_VIEWMODE(void)
+void ViewCommander::Command_ViewMode(void)
 {
 	// ビューモードを反転
 	AppMode::getInstance().SetViewMode(!AppMode::getInstance().IsViewMode());
@@ -532,14 +532,14 @@ void ViewCommander::Command_VIEWMODE(void)
 
 
 // ファイルのプロパティ
-void ViewCommander::Command_PROPERTY_FILE(void)
+void ViewCommander::Command_Property_File(void)
 {
 #ifdef _DEBUG
 	{
 		// 全行データを返すテスト
 		wchar_t*	pDataAll;
 		int		nDataAllLen;
-		RunningTimer runningTimer("ViewCommander::Command_PROPERTY_FILE 全行データを返すテスト");
+		RunningTimer runningTimer("ViewCommander::Command_Property_File 全行データを返すテスト");
 		runningTimer.Reset();
 		pDataAll = DocReader(GetDocument().docLineMgr).GetAllData(&nDataAllLen);
 //		MYTRACE(_T("全データ取得             (%dバイト) 所要時間(ミリ秒) = %d\n"), nDataAllLen, runningTimer.Read());
@@ -557,7 +557,7 @@ void ViewCommander::Command_PROPERTY_FILE(void)
 }
 
 
-void ViewCommander::Command_PROFILEMGR( void )
+void ViewCommander::Command_ProfileMgr( void )
 {
 	DlgProfileMgr profMgr;
 	if (profMgr.DoModal( G_AppInstance(), view.GetHwnd(), 0 )) {
@@ -580,7 +580,7 @@ void ViewCommander::Command_PROFILEMGR( void )
 }
 
 // 編集の全終了	// 2007.02.13 ryoji 追加
-void ViewCommander::Command_EXITALLEDITORS(void)
+void ViewCommander::Command_ExitAllEditors(void)
 {
 	ControlTray::CloseAllEditor(true, GetMainWindow(), true, 0);
 	return;
@@ -588,7 +588,7 @@ void ViewCommander::Command_EXITALLEDITORS(void)
 
 
 // サクラエディタの全終了	// Dec. 27, 2000 JEPRO 追加
-void ViewCommander::Command_EXITALL(void)
+void ViewCommander::Command_ExitAll(void)
 {
 	ControlTray::TerminateApplication(GetMainWindow());	// 2006.12.25 ryoji 引数追加
 	return;
@@ -606,7 +606,7 @@ void ViewCommander::Command_EXITALL(void)
 	@author	maru
 	@date	2006.12.10 maru 新規作成
 */
-bool ViewCommander::Command_PUTFILE(
+bool ViewCommander::Command_PutFile(
 	LPCWSTR			filename,	// [in] filename 出力ファイル名
 	EncodingType	nCharCode,	// [in] nCharCode 文字コード指定
 								//  @li CODE_xxxxxxxxxx:各種文字コード
@@ -722,7 +722,7 @@ bool ViewCommander::Command_PUTFILE(
 	@author	maru
 	@date	2006.12.10 maru 新規作成
 */
-bool ViewCommander::Command_INSFILE(
+bool ViewCommander::Command_InsFile(
 	LPCWSTR filename,
 	EncodingType nCharCode,
 	int nFlgOpt

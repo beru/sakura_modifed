@@ -88,7 +88,7 @@ int ViewParser::GetLeftWord(NativeW* pMemWord, int nMaxWordLen) const
 	@param[out] pMemWord キャレット位置の単語
 	@return true: 成功，false: 失敗
 	
-	@date 2006.03.24 fon (CEditView::Command_SELECTWORDを流用)
+	@date 2006.03.24 fon (CEditView::Command_SelectWordを流用)
 */
 bool ViewParser::GetCurrentWord(
 	NativeW* pMemWord

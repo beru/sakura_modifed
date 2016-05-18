@@ -43,12 +43,12 @@ using namespace std; // 2002/2/3 aroka to here
 #endif
 
 // インデント ver1
-void ViewCommander::Command_INDENT(wchar_t wcChar, IndentType eIndent)
+void ViewCommander::Command_Indent(wchar_t wcChar, IndentType eIndent)
 {
 	using namespace WCODE;
 
 	auto& selInfo = view.GetSelectionInfo();
-#if 1	// ↓ここを残せば選択幅ゼロを最大にする（従来互換挙動）。無くても Command_INDENT() ver0 が適切に動作するように変更されたので、削除しても特に不都合にはならない。
+#if 1	// ↓ここを残せば選択幅ゼロを最大にする（従来互換挙動）。無くても Command_Indent() ver0 が適切に動作するように変更されたので、削除しても特に不都合にはならない。
 	// From Here 2001.12.03 hor
 	// SPACEorTABインンデントで矩形選択桁がゼロの時は選択範囲を最大にする
 	// Aug. 14, 2005 genta 折り返し幅をLayoutMgrから取得するように
@@ -62,7 +62,7 @@ void ViewCommander::Command_INDENT(wchar_t wcChar, IndentType eIndent)
 	}
 	// To Here 2001.12.03 hor
 #endif
-	Command_INDENT(&wcChar, LogicInt(1), eIndent);
+	Command_Indent(&wcChar, LogicInt(1), eIndent);
 	return;
 }
 
@@ -72,7 +72,7 @@ void ViewCommander::Command_INDENT(wchar_t wcChar, IndentType eIndent)
 	選択された各行の範囲の直前に、与えられた文字列(pData)を挿入する。
 	@param eIndent インデントの種別
 */
-void ViewCommander::Command_INDENT(
+void ViewCommander::Command_Indent(
 	const wchar_t* const pData,
 	const LogicInt nDataLen,
 	IndentType eIndent
@@ -421,7 +421,7 @@ void ViewCommander::Command_INDENT(
 
 
 // 逆インデント
-void ViewCommander::Command_UNINDENT(wchar_t wcChar)
+void ViewCommander::Command_Unindent(wchar_t wcChar)
 {
 	// Aug. 9, 2003 genta
 	// 選択されていない場合に逆インデントした場合に
@@ -439,7 +439,7 @@ void ViewCommander::Command_UNINDENT(wchar_t wcChar)
 		default:
 			eIndent = IndentType::None;
 		}
-		Command_INDENT(wcChar, eIndent);
+		Command_Indent(wcChar, eIndent);
 		view.SendStatusMessage(LS(STR_ERR_UNINDENT1));
 		return;
 	}
@@ -563,7 +563,7 @@ void ViewCommander::Command_UNINDENT(wchar_t wcChar)
 	@author hor
 	@date 2001.12.03 hor 新規作成
 */
-void ViewCommander::Command_TRIM(
+void ViewCommander::Command_Trim(
 	bool bLeft	//  [in] false: 右TRIM / それ以外: 左TRIM
 	)
 {
@@ -656,7 +656,7 @@ bool SortByKeyDesc(SortData* pst1, SortData* pst2) {return CStringRef_comp(pst1-
 	@date 2010.07.27 行ソートでコピーを減らす/NULより後ろも比較対照に
 	@date 2013.06.19 Moca 矩形選択時最終行に改行がない場合は付加+ソート後の最終行の改行を削除
 */
-void ViewCommander::Command_SORT(bool bAsc)	// bAsc:true=昇順, false=降順
+void ViewCommander::Command_Sort(bool bAsc)	// bAsc:true=昇順, false=降順
 {
 	LayoutRange rangeA;
 	LogicRange selectOld;
@@ -838,7 +838,7 @@ void ViewCommander::Command_SORT(bool bAsc)	// bAsc:true=昇順, false=降順
 	@date 2001.12.03 hor 新規作成
 	@date 2001.12.21 hor 選択範囲の調整ロジックを訂正
 */
-void ViewCommander::Command_MERGE(void)
+void ViewCommander::Command_Merge(void)
 {
 	LayoutInt	nCaretPosYOLD;
 	LogicInt	nLineLen;

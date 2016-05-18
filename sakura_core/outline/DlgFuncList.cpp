@@ -2478,7 +2478,7 @@ bool DlgFuncList::TagJumpTimer(
 	// ファイルを開いていない場合は自分で開く
 	if (pView->GetDocument().IsAcceptLoad()) {
 		std::wstring strFile = to_wchar(pFile);
-		pView->GetCommander().Command_FILEOPEN( strFile.c_str(), CODE_AUTODETECT, AppMode::getInstance().IsViewMode(), NULL );
+		pView->GetCommander().Command_FileOpen( strFile.c_str(), CODE_AUTODETECT, AppMode::getInstance().IsViewMode(), NULL );
 		if (point.y != -1) {
 			if (pView->GetDocument().docFile.GetFilePathClass().IsValidPath()) {
 				LogicPoint pt;

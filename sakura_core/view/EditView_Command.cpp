@@ -154,7 +154,7 @@ bool EditView::TagJumpSub(
 	// grep結果からEnterでジャンプするところにCtrl判定移動
 	if (bClose) {
 		ViewCommander& commander = GetCommander();
-		commander.Command_WINCLOSE();	// 挑戦するだけ。
+		commander.Command_WinClose();	// 挑戦するだけ。
 	}
 
 	return true;
@@ -276,7 +276,7 @@ open_c:;
 	@retval TGWRAP_WINDOW ウィンドウ幅
 	@retval TGWRAP_PROP 設定値
 
-	@date 2006.01.08 genta メニュー表示で同一の判定を使うため，Command_WRAPWINDOWWIDTH()より分離．
+	@date 2006.01.08 genta メニュー表示で同一の判定を使うため，Command_WrapWindowWidth()より分離．
 	@date 2006.01.08 genta 判定条件を見直し
 	@date 2008.06.08 ryoji ウィンドウ幅設定にぶら下げ余白を追加
 */

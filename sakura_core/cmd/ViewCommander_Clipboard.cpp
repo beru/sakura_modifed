@@ -47,7 +47,7 @@ void ViewCommander::Command_CUT(void)
 			return;	// 何もしない（音も鳴らさない）
 		}
 		// 行切り取り(折り返し単位)
-		Command_CUT_LINE();
+		Command_Cut_Line();
 		return;
 	}
 	bool bBeginBoxSelect = selInfo.IsBoxSelecting();
@@ -493,7 +493,7 @@ void ViewCommander::Command_INSTEXT(
 					break;
 				}
 			}
-			Command_INDENT(pszText, i);
+			Command_Indent(pszText, i);
 			goto end_of_func;
 		}else {
 			// Jun. 23, 2000 genta
@@ -535,7 +535,7 @@ void ViewCommander::Command_INSTEXT(
 		if (bLinePaste) {	// 2007.10.04 ryoji
 			// 挿入ポイント（折り返し単位行頭）にカーソルを移動
 			LogicPoint ptCaretBefore = caret.GetCaretLogicPos();	// 操作前のキャレット位置
-			Command_GOLINETOP(false, 1);								// 行頭に移動(折り返し単位)
+			Command_GoLineTop(false, 1);								// 行頭に移動(折り返し単位)
 			LogicPoint ptCaretAfter = caret.GetCaretLogicPos();	// 操作後のキャレット位置
 
 			// 挿入ポイントと元の位置との差分文字数
@@ -610,7 +610,7 @@ void ViewCommander::Command_ADDTAIL(
 	GetDocument().docEditor.SetModified(true, true);	// Jan. 22, 2002 genta
 
 	// ファイルの最後に移動
-	Command_GOFILEEND(false);
+	Command_GoFileEnd(false);
 
 	auto& caret = GetCaret();
 	// 現在位置にデータを挿入
@@ -1128,7 +1128,7 @@ void ViewCommander::Command_COPY_COLOR_HTML_LINENUMBER()
 /*!	現在編集中のファイル名をクリップボードにコピー
 	2002/2/3 aroka
 */
-void ViewCommander::Command_COPYFILENAME(void)
+void ViewCommander::Command_CopyFileName(void)
 {
 	if (GetDocument().docFile.GetFilePathClass().IsValidPath()) {
 		// クリップボードにデータを設定
@@ -1141,7 +1141,7 @@ void ViewCommander::Command_COPYFILENAME(void)
 
 
 // 現在編集中のファイルのパス名をクリップボードにコピー
-void ViewCommander::Command_COPYPATH(void)
+void ViewCommander::Command_CopyPath(void)
 {
 	if (GetDocument().docFile.GetFilePathClass().IsValidPath()) {
 		// クリップボードにデータを設定

@@ -2905,7 +2905,7 @@ void EditWnd::PrintPreviewModeONOFF(void)
 //@@@ 2002.01.14 YAZAKI 印刷PreviewをPrintPreviewに独立させたことによる変更
 		// 印刷Previewモードを解除します。
 		delete pPrintPreview;	//	削除。
-		pPrintPreview = nullptr;	//	NULLか否かで、プリントPreviewモードか判断するため。
+		pPrintPreview = nullptr;	//	nullptrか否かで、プリントPreviewモードか判断するため。
 
 		// 通常モードに戻す
 		::ShowWindow(this->splitterWnd.GetHwnd(), SW_SHOW);

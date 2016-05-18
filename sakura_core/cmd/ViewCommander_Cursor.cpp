@@ -52,7 +52,7 @@ void ViewCommander::Command_MOVECURSORLAYOUT(LayoutPoint pos, int option)
 	if (bSelect || bBoxSelect) {
 		if (!si.IsTextSelected()) {
 			if (bBoxSelect) {
-				Command_BEGIN_BOXSELECT();
+				Command_Begin_BoxSelect();
 			}else {
 				si.BeginSelectArea();
 			}
@@ -60,7 +60,7 @@ void ViewCommander::Command_MOVECURSORLAYOUT(LayoutPoint pos, int option)
 			// 2014.01.08 追加
 			if (bBoxSelect && !si.IsBoxSelecting()) {
 				// 通常選択→矩形選択に変更。他のコマンドに合わせる
-				Command_BEGIN_BOXSELECT();
+				Command_Begin_BoxSelect();
 			}
 		}
 	}else {
@@ -591,7 +591,7 @@ try_again:;
 	@date Oct.  7, 2002 YAZAKI 冗長な引数 bLineTopOnly を削除
 	@date Jun. 18, 2007 maru 行頭判定に全角空白のインデント設定も考慮する
 */
-void ViewCommander::Command_GOLINETOP(
+void ViewCommander::Command_GoLineTop(
 	bool	bSelect,	// [in] 選択の有無。true: 選択しながら移動。false: 選択しないで移動。
 	int		lparam		/* [in] マクロから使用する拡張フラグ
 								  @li 0: キー操作と同一(default)
@@ -676,7 +676,7 @@ void ViewCommander::Command_GOLINETOP(
 /*! 行末に移動(折り返し単位)
 	@praram nOption	0x08 改行単位(合成可)
 */
-void ViewCommander::Command_GOLINEEND(
+void ViewCommander::Command_GoLineEnd(
 	bool bSelect,
 	int bIgnoreCurrentSelection,
 	int nOption
@@ -829,7 +829,7 @@ void ViewCommander::Command_1PageDown(
 
 
 // ファイルの先頭に移動
-void ViewCommander::Command_GOFILETOP(bool bSelect)
+void ViewCommander::Command_GoFileTop(bool bSelect)
 {
 	// 先頭へカーソルを移動
 	// Sep. 8, 2000 genta
@@ -845,7 +845,7 @@ void ViewCommander::Command_GOFILETOP(bool bSelect)
 
 
 // ファイルの最後に移動
-void ViewCommander::Command_GOFILEEND(bool bSelect)
+void ViewCommander::Command_GoFileEnd(bool bSelect)
 {
 	auto& si = view.GetSelectionInfo();
 // 2001.12.13 hor BOX選択中にファイルの最後にジャンプすると[EOF]の行が反転したままになるの修正
@@ -865,7 +865,7 @@ void ViewCommander::Command_GOFILEEND(bool bSelect)
 			改行のない最終行で選択肢ながら文書末へ移動した場合に
 			選択範囲が正しくない場合がある問題に対応
 		*/
-		Command_GOLINEEND(bSelect, 0, 0);				// 2001.12.21 hor Add
+		Command_GoLineEnd(bSelect, 0, 0);				// 2001.12.21 hor Add
 	}
 	caret.MoveCursor(caret.GetCaretLayoutPos(), true);	// 2001.12.21 hor Add
 	// 2002.02.16 hor 矩形選択中を除き直前のカーソル位置をリセット
@@ -1044,7 +1044,7 @@ void ViewCommander::Command_WndScrollUp(void)
 	2002/04/26 段落の両端で止まるオプションを追加
 	2002/04/19 新規
 */
-void ViewCommander::Command_GONEXTPARAGRAPH(bool bSelect)
+void ViewCommander::Command_GoNextParagraph(bool bSelect)
 {
 	DocLine* pDocLine;
 	int nCaretPointer = 0;
@@ -1118,7 +1118,7 @@ void ViewCommander::Command_GONEXTPARAGRAPH(bool bSelect)
 	2002/04/26 段落の両端で止まるオプションを追加
 	2002/04/19 新規
 */
-void ViewCommander::Command_GOPREVPARAGRAPH(bool bSelect)
+void ViewCommander::Command_GoPrevParagraph(bool bSelect)
 {
 	auto& docLineMgr = GetDocument().docLineMgr;
 	DocLine* pDocLine;
@@ -1193,7 +1193,7 @@ void ViewCommander::Command_GOPREVPARAGRAPH(bool bSelect)
 	caret.Cursor_UPDOWN(ptCaretPos_Layo_CaretPointer.y - ptCaretPos_Layo.y, bSelect);
 }
 
-void ViewCommander::Command_AUTOSCROLL()
+void ViewCommander::Command_AutoScroll()
 {
 	if (view.nAutoScrollMode == 0) {
 		GetCursorPos(&view.autoScrollMousePos);

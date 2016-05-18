@@ -30,8 +30,8 @@
 
 /*! ファイル情報
 
-	@date 2002.03.07 genta m_szDocType追加
-	@date 2003.01.26 aroka m_nWindowSizeX/Y m_nWindowOriginX/Y追加
+	@date 2002.03.07 genta szDocType追加
+	@date 2003.01.26 aroka nWindowSizeX/Y nWindowOriginX/Y追加
 */
 struct EditInfo {
 	// ファイル

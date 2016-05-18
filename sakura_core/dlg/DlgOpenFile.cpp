@@ -99,7 +99,7 @@ public:
 	int				nHelpTopicID;
 	bool			bViewMode;		// ビューモードか
 	bool			bIsSaveDialog;	// 保存のダイアログか
-	EncodingType		nCharCode;		// 文字コード
+	EncodingType	nCharCode;		// 文字コード
 
 	Eol				eol;
 	bool			bUseCharCode;
@@ -653,7 +653,7 @@ int AddComboCodePages(HWND hdlg, HWND combo, int nSelCode, bool& bInit)
 
 
 /*! コンストラクタ
-	@date 2008.05.05 novice GetModuleHandle(NULL)→NULLに変更
+	@date 2008.05.05 novice GetModuleHandle(NULL) → NULLに変更
 */
 DlgOpenFile::DlgOpenFile()
 {

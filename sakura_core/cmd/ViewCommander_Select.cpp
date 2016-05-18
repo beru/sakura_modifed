@@ -20,7 +20,7 @@
 
 
 // 現在位置の単語選択
-bool ViewCommander::Command_SELECTWORD(const LayoutPoint* pptCaretPos)
+bool ViewCommander::Command_SelectWord(const LayoutPoint* pptCaretPos)
 {
 	auto& si = view.GetSelectionInfo();
 	if (si.IsTextSelected()) {	// テキストが選択されているか
@@ -67,7 +67,7 @@ bool ViewCommander::Command_SELECTWORD(const LayoutPoint* pptCaretPos)
 
 
 // すべて選択
-void ViewCommander::Command_SELECTALL(void)
+void ViewCommander::Command_SelectAll(void)
 {
 	auto& si = view.GetSelectionInfo();
 	if (si.IsTextSelected()) {	// テキストが選択されているか
@@ -101,10 +101,10 @@ void ViewCommander::Command_SELECTALL(void)
 
 	@date 2007.11.15 nasukoji	新規作成
 */
-void ViewCommander::Command_SELECTLINE(int lparam)
+void ViewCommander::Command_SelectLine(int lparam)
 {
 	// 改行単位で1行選択する
-	Command_GOLINETOP(false, 0x9);	// 物理行頭に移動
+	Command_GoLineTop(false, 0x9);	// 物理行頭に移動
 
 	auto& si = view.GetSelectionInfo();
 	si.bBeginLineSelect = true;		// 行単位選択中
@@ -126,7 +126,7 @@ void ViewCommander::Command_SELECTLINE(int lparam)
 	}else {
 		// カーソルを最下行（レイアウト行）へ移動する
 		view.MoveCursorSelecting(LayoutPoint(LayoutInt(0), layoutMgr.GetLineCount()), true);
-		Command_GOLINEEND(true, 0, 0);	// 行末に移動
+		Command_GoLineEnd(true, 0, 0);	// 行末に移動
 
 		// 選択するものが無い（[EOF]のみの行）時は選択状態としない
 		if (
@@ -148,7 +148,7 @@ void ViewCommander::Command_SELECTLINE(int lparam)
 }
 
 // 範囲選択開始
-void ViewCommander::Command_BEGIN_SELECT(void)
+void ViewCommander::Command_Begin_Select(void)
 {
 	auto& si = view.GetSelectionInfo();
 	if (!si.IsTextSelected()) {	// テキストが選択されているか
@@ -171,7 +171,7 @@ void ViewCommander::Command_BEGIN_SELECT(void)
 
 
 // 矩形範囲選択開始
-void ViewCommander::Command_BEGIN_BOXSELECT(bool bSelectingLock)
+void ViewCommander::Command_Begin_BoxSelect(bool bSelectingLock)
 {
 	if (!GetDllShareData().common.view.bFontIs_FixedPitch) {	// 現在のフォントは固定幅フォントである
 		return;

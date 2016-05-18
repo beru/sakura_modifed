@@ -338,7 +338,7 @@ normal_action:;
 			GetSelectionInfo().bBeginWordSelect = true;		// 単語単位選択中
 			if (!GetSelectionInfo().IsTextSelected()) {
 				// 現在位置の単語選択
-				if (GetCommander().Command_SELECTWORD(&ptNewCaret)) {
+				if (GetCommander().Command_SelectWord(&ptNewCaret)) {
 					bSelectWord = true;
 					GetSelectionInfo().selectBgn = GetSelectionInfo().select;
 				}
@@ -428,8 +428,8 @@ normal_action:;
 			GetSelectionInfo().bBeginLineSelect = true;
 
 			// 2009.02.22 ryoji 
-			// Command_GOLINEEND()/Command_RIGHT()ではなく次のレイアウトを調べて移動選択する方法に変更
-			// ※Command_GOLINEEND()/Command_RIGHT()は[折り返し末尾文字の右へ移動]＋[次行の先頭文字の右に移動]の仕様だとＮＧ
+			// Command_GoLineEnd()/Command_RIGHT()ではなく次のレイアウトを調べて移動選択する方法に変更
+			// ※Command_GoLineEnd()/Command_RIGHT()は[折り返し末尾文字の右へ移動]＋[次行の先頭文字の右に移動]の仕様だとＮＧ
 			const Layout* pLayout = pEditDoc->layoutMgr.SearchLineByLayoutY(ptNewCaret.GetY2());
 			if (pLayout) {
 				LayoutPoint ptCaret;
@@ -457,7 +457,7 @@ normal_action:;
 			//	行番号の下をクリックしてドラッグを開始するとおかしくなるのを修正
 			//	行番号をクリックした場合にはGetSelectionInfo().ChangeSelectAreaByCurrentCursor()にて
 			//	GetSelectionInfo().select.GetTo().x/GetSelectionInfo().select.GetTo().yに-1が設定されるが、上の
-			//	GetCommander().Command_GOLINEEND(), Command_RIGHT()によって行選択が行われる。
+			//	GetCommander().Command_GoLineEnd(), Command_RIGHT()によって行選択が行われる。
 			//	しかしキャレットが末尾にある場合にはキャレットが移動しないので
 			//	GetSelectionInfo().select.GetTo().x/GetSelectionInfo().select.GetTo().yが-1のまま残ってしまい、それが
 			//	原点に設定されるためにおかしくなっていた。
@@ -1137,7 +1137,7 @@ void EditView::OnMOUSEMOVE(WPARAM fwKeys, int xPos_, int yPos_)
 			if (dwTripleClickCheck) {
 				// 選択開始行以上にドラッグした
 				if (ptNewCursor.GetY() <= GetSelectionInfo().selectBgn.GetTo().y) {
-					// GetCommander().Command_GOLINETOP(true, 0x09);		// 改行単位の行頭へ移動
+					// GetCommander().Command_GoLineTop(true, 0x09);		// 改行単位の行頭へ移動
 					LogicInt nLineLen;
 					const Layout*	pLayout;
 					const wchar_t*	pLine = pEditDoc->layoutMgr.GetLineStr(ptNewCursor.GetY2(), &nLineLen, &pLayout);
@@ -1645,7 +1645,7 @@ void EditView::OnLBUTTONDBLCLK(WPARAM fwKeys, int _xPos , int _yPos)
 			&& GetDllShareData().common.search.bGTJW_DoubleClick
 		) {
 			// タグジャンプ機能
-			if (GetCommander().Command_TAGJUMP()) {
+			if (GetCommander().Command_TagJump()) {
 				// 2013.05.27 タグジャンプ失敗時は通常の処理を実行する
 				return;
 			}

@@ -416,7 +416,7 @@ bool DocFileOperation::DoSaveFlow(SaveInfo* pSaveInfo)
 	@return 保存が行われたor保存不要のため何も行わなかったときにtrueを返す
 
 	@date 2004.06.05 genta  ビューモードのチェックをCEditDocから上書き保存処理に移動
-	@date 2006.12.30 ryoji  CEditView::Command_FILESAVE()から処理本体を切り出し
+	@date 2006.12.30 ryoji  CEditView::Command_FileSave()から処理本体を切り出し
 	@date 2008.03.20 kobake 戻り値の仕様を定義
 */
 bool DocFileOperation::FileSave()
@@ -439,7 +439,7 @@ bool DocFileOperation::FileSave()
 
 /*! 名前を付けて保存フロー
 
-	@date 2006.12.30 ryoji CEditView::Command_FILESAVEAS_DIALOG()から処理本体を切り出し
+	@date 2006.12.30 ryoji CEditView::Command_FileSaveAs_Dialog()から処理本体を切り出し
 */
 bool DocFileOperation::FileSaveAs(
 	const WCHAR* filename,
@@ -504,7 +504,7 @@ bool DocFileOperation::FileSaveAs(
 	閉じて(無題)。
 	ユーザキャンセル操作等によりクローズされなかった場合は false を返す。
 
-	@date 2006.12.30 ryoji CEditView::Command_FILESAVEAS()から処理本体を切り出し
+	@date 2006.12.30 ryoji CEditView::Command_FileSaveAs()から処理本体を切り出し
 */
 bool DocFileOperation::FileClose()
 {
@@ -547,7 +547,7 @@ bool DocFileOperation::FileClose()
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 /* 閉じて開く
-	@date 2006.12.30 ryoji CEditView::Command_FILESAVEAS()から処理本体を切り出し
+	@date 2006.12.30 ryoji CEditView::Command_FileSaveAs()から処理本体を切り出し
 */
 void DocFileOperation::FileCloseOpen(const LoadInfo& argLoadInfo)
 {

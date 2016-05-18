@@ -363,7 +363,7 @@ void ViewCommander::Command_EXTHTMLHELP(const WCHAR* _helpfile, const WCHAR* kwd
 
 
 // ƒo[ƒWƒ‡ƒ“î•ñ
-void ViewCommander::Command_ABOUT(void)
+void ViewCommander::Command_About(void)
 {
 	DlgAbout dlgAbout;
 	dlgAbout.DoModal(G_AppInstance(), view.GetHwnd());

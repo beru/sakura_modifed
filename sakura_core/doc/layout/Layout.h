@@ -98,7 +98,7 @@ public:
 	void _SetNextLayout(Layout* pLayout) { pNext = pLayout; }
 
 	// 実データ参照
-	const DocLine* GetDocLineRef() const { if (this) return pDocLine; else return NULL; } //$$note:高速化
+	const DocLine* GetDocLineRef() const { if (this) return pDocLine; else return nullptr; } //$$note:高速化
 
 	// その他属性参照
 	const Eol& GetLayoutEol() const { return eol; }

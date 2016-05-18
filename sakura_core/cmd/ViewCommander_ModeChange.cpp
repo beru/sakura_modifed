@@ -132,7 +132,7 @@ void ViewCommander::Command_CANCEL_MODE(int whereCursorIs)
 		auto& layoutMgr = GetDocument().layoutMgr;
 		if (ptTo.y >= layoutMgr.GetLineCount()) {
 			// ファイルの最後に移動
-			Command_GOFILEEND(false);
+			Command_GoFileEnd(false);
 		}else {
 			if (!GetDllShareData().common.general.bIsFreeCursorMode && bBoxSelect) {
 				// 2013.04.22 Moca 矩形選択のとき左上固定をやめたので代わりにEOLより右だった場合にEOLに補正する
