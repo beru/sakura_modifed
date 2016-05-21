@@ -23,7 +23,7 @@
 
 
 // 小文字
-void ViewCommander::Command_TOLOWER(void)
+void ViewCommander::Command_ToLower(void)
 {
 	// 選択エリアのテキストを指定方法で変換
 	view.ConvSelectedArea(F_TOLOWER);
@@ -32,7 +32,7 @@ void ViewCommander::Command_TOLOWER(void)
 
 
 // 大文字
-void ViewCommander::Command_TOUPPER(void)
+void ViewCommander::Command_ToUpper(void)
 {
 	// 選択エリアのテキストを指定方法で変換
 	view.ConvSelectedArea(F_TOUPPER);
@@ -41,7 +41,7 @@ void ViewCommander::Command_TOUPPER(void)
 
 
 // 全角→半角
-void ViewCommander::Command_TOHANKAKU(void)
+void ViewCommander::Command_ToHankaku(void)
 {
 	// 選択エリアのテキストを指定方法で変換
 	view.ConvSelectedArea(F_TOHANKAKU);
@@ -50,7 +50,7 @@ void ViewCommander::Command_TOHANKAKU(void)
 
 
 // 半角＋全ひら→全角・カタカナ		// Sept. 17, 2000 jepro 説明を「半角→全角カタカナ」から変更
-void ViewCommander::Command_TOZENKAKUKATA(void)
+void ViewCommander::Command_ToZenkakuKata(void)
 {
 	// 選択エリアのテキストを指定方法で変換
 	view.ConvSelectedArea(F_TOZENKAKUKATA);
@@ -59,7 +59,7 @@ void ViewCommander::Command_TOZENKAKUKATA(void)
 
 
 // 半角＋全カタ→全角・ひらがな		// Sept. 17, 2000 jepro 説明を「半角→全角ひらがな」から変更
-void ViewCommander::Command_TOZENKAKUHIRA(void)
+void ViewCommander::Command_ToZenkakuHira(void)
 {
 	// 選択エリアのテキストを指定方法で変換
 	view.ConvSelectedArea(F_TOZENKAKUHIRA);
@@ -68,7 +68,7 @@ void ViewCommander::Command_TOZENKAKUHIRA(void)
 
 
 // 半角英数→全角英数				// July. 30, 2001 Misaka
-void ViewCommander::Command_TOZENEI(void)
+void ViewCommander::Command_ToZenEi(void)
 {
 	// 選択エリアのテキストを指定方法で変換
 	view.ConvSelectedArea(F_TOZENEI);
@@ -77,7 +77,7 @@ void ViewCommander::Command_TOZENEI(void)
 
 
 // 全角英数→半角英数
-void ViewCommander::Command_TOHANEI(void)
+void ViewCommander::Command_ToHanEi(void)
 {
 	// 選択エリアのテキストを指定方法で変換
 	view.ConvSelectedArea(F_TOHANEI);
@@ -86,7 +86,7 @@ void ViewCommander::Command_TOHANEI(void)
 
 
 // 全角カタカナ→半角カタカナ		// Aug. 29, 2002 ai
-void ViewCommander::Command_TOHANKATA(void)
+void ViewCommander::Command_ToHankata(void)
 {
 	// 選択エリアのテキストを指定方法で変換
 	view.ConvSelectedArea(F_TOHANKATA);
@@ -95,7 +95,7 @@ void ViewCommander::Command_TOHANKATA(void)
 
 
 // 半角カタカナ→全角カタカナ
-void ViewCommander::Command_HANKATATOZENKAKUKATA(void)
+void ViewCommander::Command_HanKataToZenkakuKata(void)
 {
 	// 選択エリアのテキストを指定方法で変換
 	view.ConvSelectedArea(F_HANKATATOZENKATA);
@@ -104,7 +104,7 @@ void ViewCommander::Command_HANKATATOZENKAKUKATA(void)
 
 
 // 半角カタカナ→全角ひらがな
-void ViewCommander::Command_HANKATATOZENKAKUHIRA(void)
+void ViewCommander::Command_HanKataToZenKakuHira(void)
 {
 	// 選択エリアのテキストを指定方法で変換
 	view.ConvSelectedArea(F_HANKATATOZENHIRA);
@@ -113,7 +113,7 @@ void ViewCommander::Command_HANKATATOZENKAKUHIRA(void)
 
 
 // TAB→空白
-void ViewCommander::Command_TABTOSPACE(void)
+void ViewCommander::Command_TabToSpace(void)
 {
 	// 選択エリアのテキストを指定方法で変換
 	view.ConvSelectedArea(F_TABTOSPACE);
@@ -121,7 +121,7 @@ void ViewCommander::Command_TABTOSPACE(void)
 }
 
 // 空白→TAB	 //---- Stonee, 2001/05/27
-void ViewCommander::Command_SPACETOTAB(void)
+void ViewCommander::Command_SpaceToTab(void)
 {
 	// 選択エリアのテキストを指定方法で変換
 	view.ConvSelectedArea(F_SPACETOTAB);
@@ -130,7 +130,7 @@ void ViewCommander::Command_SPACETOTAB(void)
 
 
 // 自動判別→SJISコード変換
-void ViewCommander::Command_CODECNV_AUTO2SJIS(void)
+void ViewCommander::Command_CodeCnv_Auto2SJIS(void)
 {
 	// 選択エリアのテキストを指定方法で変換
 	view.ConvSelectedArea(F_CODECNV_AUTO2SJIS);
@@ -139,7 +139,7 @@ void ViewCommander::Command_CODECNV_AUTO2SJIS(void)
 
 
 // E-Mail(JIS→SJIS)コード変換
-void ViewCommander::Command_CODECNV_EMAIL(void)
+void ViewCommander::Command_CodeCnv_EMail(void)
 {
 	// 選択エリアのテキストを指定方法で変換
 	view.ConvSelectedArea(F_CODECNV_EMAIL);
@@ -148,7 +148,7 @@ void ViewCommander::Command_CODECNV_EMAIL(void)
 
 
 // EUC→SJISコード変換
-void ViewCommander::Command_CODECNV_EUC2SJIS(void)
+void ViewCommander::Command_CodeCnv_EUC2SJIS(void)
 {
 	// 選択エリアのテキストを指定方法で変換
 	view.ConvSelectedArea(F_CODECNV_EUC2SJIS);
@@ -157,7 +157,7 @@ void ViewCommander::Command_CODECNV_EUC2SJIS(void)
 
 
 // Unicode→SJISコード変換
-void ViewCommander::Command_CODECNV_UNICODE2SJIS(void)
+void ViewCommander::Command_CodeCnv_Unicode2SJIS(void)
 {
 	// 選択エリアのテキストを指定方法で変換
 	view.ConvSelectedArea(F_CODECNV_UNICODE2SJIS);
@@ -166,7 +166,7 @@ void ViewCommander::Command_CODECNV_UNICODE2SJIS(void)
 
 
 // UnicodeBE→SJISコード変換
-void ViewCommander::Command_CODECNV_UNICODEBE2SJIS(void)
+void ViewCommander::Command_CodeCnv_UnicodeBE2SJIS(void)
 {
 	// 選択エリアのテキストを指定方法で変換
 	view.ConvSelectedArea(F_CODECNV_UNICODEBE2SJIS);
@@ -175,7 +175,7 @@ void ViewCommander::Command_CODECNV_UNICODEBE2SJIS(void)
 
 
 // UTF-8→SJISコード変換
-void ViewCommander::Command_CODECNV_UTF82SJIS(void)
+void ViewCommander::Command_CodeCnv_UTF82SJIS(void)
 {
 	// 選択エリアのテキストを指定方法で変換
 	view.ConvSelectedArea(F_CODECNV_UTF82SJIS);
@@ -184,7 +184,7 @@ void ViewCommander::Command_CODECNV_UTF82SJIS(void)
 
 
 // UTF-7→SJISコード変換
-void ViewCommander::Command_CODECNV_UTF72SJIS(void)
+void ViewCommander::Command_CodeCnv_UTF72SJIS(void)
 {
 	// 選択エリアのテキストを指定方法で変換
 	view.ConvSelectedArea(F_CODECNV_UTF72SJIS);
@@ -193,7 +193,7 @@ void ViewCommander::Command_CODECNV_UTF72SJIS(void)
 
 
 // SJIS→JISコード変換
-void ViewCommander::Command_CODECNV_SJIS2JIS(void)
+void ViewCommander::Command_CodeCnv_SJIS2JIS(void)
 {
 	// 選択エリアのテキストを指定方法で変換
 	view.ConvSelectedArea(F_CODECNV_SJIS2JIS);
@@ -202,7 +202,7 @@ void ViewCommander::Command_CODECNV_SJIS2JIS(void)
 
 
 // SJIS→EUCコード変換
-void ViewCommander::Command_CODECNV_SJIS2EUC(void)
+void ViewCommander::Command_CodeCnv_SJIS2EUC(void)
 {
 	// 選択エリアのテキストを指定方法で変換
 	view.ConvSelectedArea(F_CODECNV_SJIS2EUC);
@@ -211,7 +211,7 @@ void ViewCommander::Command_CODECNV_SJIS2EUC(void)
 
 
 // SJIS→UTF-8コード変換
-void ViewCommander::Command_CODECNV_SJIS2UTF8(void)
+void ViewCommander::Command_CodeCnv_SJIS2UTF8(void)
 {
 	// 選択エリアのテキストを指定方法で変換
 	view.ConvSelectedArea(F_CODECNV_SJIS2UTF8);
@@ -220,7 +220,7 @@ void ViewCommander::Command_CODECNV_SJIS2UTF8(void)
 
 
 // SJIS→UTF-7コード変換
-void ViewCommander::Command_CODECNV_SJIS2UTF7(void)
+void ViewCommander::Command_CodeCnv_SJIS2UTF7(void)
 {
 	// 選択エリアのテキストを指定方法で変換
 	view.ConvSelectedArea(F_CODECNV_SJIS2UTF7);
@@ -229,7 +229,7 @@ void ViewCommander::Command_CODECNV_SJIS2UTF7(void)
 
 
 // Base64デコードして保存
-void ViewCommander::Command_BASE64DECODE(void)
+void ViewCommander::Command_Base64Decode(void)
 {
 	// テキストが選択されているか
 	if (!view.GetSelectionInfo().IsTextSelected()) {
@@ -276,7 +276,7 @@ err:
 
 
 // uudecodeして保存
-void ViewCommander::Command_UUDECODE(void)
+void ViewCommander::Command_UUDecode(void)
 {
 	// テキストが選択されているか
 	if (!view.GetSelectionInfo().IsTextSelected()) {

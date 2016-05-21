@@ -23,7 +23,7 @@
 #include <vector>
 
 // 右クリックメニュー
-void ViewCommander::Command_MENU_RBUTTON(void)
+void ViewCommander::Command_Menu_RButton(void)
 {
 //	HGLOBAL		hgClip;
 //	char*		pszClip;
@@ -77,7 +77,7 @@ void ViewCommander::Command_MENU_RBUTTON(void)
 
 
 // カスタムメニュー表示
-int ViewCommander::Command_CUSTMENU(int nMenuIdx)
+int ViewCommander::Command_CustMenu(int nMenuIdx)
 {
 	GetEditWindow().GetMenuDrawer().ResetContents();
 

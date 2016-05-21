@@ -43,7 +43,7 @@
 	@date 2000/09/15 JEPRO [Esc]キーと[x]ボタンでも中止できるように変更
 	@date 2005/01/10 genta CEditView_Commandから移動
 */
-void ViewCommander::Command_HOKAN(void)
+void ViewCommander::Command_Hokan(void)
 {
 	auto& csHelper = GetDllShareData().common.helper;
 	if (!csHelper.bUseHokan) {
@@ -103,7 +103,7 @@ void ViewCommander::Command_ToggleKeySearch(int option)
 
 
 // ヘルプ目次
-void ViewCommander::Command_HELP_CONTENTS(void)
+void ViewCommander::Command_Help_Contents(void)
 {
 	ShowWinHelpContents(view.GetHwnd());	// 目次を表示する
 	return;
@@ -111,7 +111,7 @@ void ViewCommander::Command_HELP_CONTENTS(void)
 
 
 // ヘルプキーワード検索
-void ViewCommander::Command_HELP_SEARCH(void)
+void ViewCommander::Command_Help_Search(void)
 {
 	MyWinHelp(view.GetHwnd(), HELP_KEY, (ULONG_PTR)_T(""));	// 2006.10.10 ryoji MyWinHelpに変更に変更
 	return;
@@ -119,7 +119,7 @@ void ViewCommander::Command_HELP_SEARCH(void)
 
 
 // コマンド一覧
-void ViewCommander::Command_MENU_ALLFUNC(void)
+void ViewCommander::Command_Menu_AllFunc(void)
 {
 	POINT	po;
 	RECT	rc;
@@ -190,7 +190,7 @@ void ViewCommander::Command_MENU_ALLFUNC(void)
 /* 外部ヘルプ１
 	@date 2012.09.26 Moca HTMLHELP対応
 */
-void ViewCommander::Command_EXTHELP1(void)
+void ViewCommander::Command_ExtHelp1(void)
 {
 retry:;
 	if (!HelpManager().ExtWinHelpIsSet(&(GetDocument().docType.GetDocumentAttribute()))) {
@@ -235,7 +235,7 @@ retry:;
 	_tsplitpath(path, NULL, NULL, NULL, szExt);
 	if (_tcsicmp(szExt, _T(".chi")) == 0 || _tcsicmp(szExt, _T(".chm")) == 0 || _tcsicmp(szExt, _T(".col")) == 0) {
 		std::wstring pathw = to_wchar(path);
-		Command_EXTHTMLHELP(pathw.c_str(), memCurText.GetStringPtr());
+		Command_ExtHTMLHelp(pathw.c_str(), memCurText.GetStringPtr());
 	}else {
 		::WinHelp(view.hwndParent, path, HELP_KEY, (ULONG_PTR)memCurText.GetStringPtr());
 	}
@@ -250,7 +250,7 @@ retry:;
 	@param kwd [in] 検索キーワード．NULLのときはカーソル位置or選択されたワード
 	@date 2002.07.05 genta 任意のファイル・キーワードの指定ができるよう引数追加
 */
-void ViewCommander::Command_EXTHTMLHELP(const WCHAR* _helpfile, const WCHAR* kwd)
+void ViewCommander::Command_ExtHTMLHelp(const WCHAR* _helpfile, const WCHAR* kwd)
 {
 	std::tstring helpfile;
 	if (_helpfile) {

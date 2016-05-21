@@ -226,12 +226,12 @@ bool ViewCommander::HandleCommand(
 	case F_PRINT:					Command_Print(); break;					// 印刷
 	case F_PRINT_PREVIEW:			Command_Print_Preview(); break;			// 印刷Preview
 	case F_PRINT_PAGESETUP:			Command_Print_PageSetUp(); break;		// 印刷ページ設定	// Sept. 14, 2000 jepro 「印刷のページレイアウトの設定」から変更
-	case F_OPEN_HfromtoC:			bRet = Command_OPEN_HfromtoC(lparam1 != 0); break;			// 同名のC/C++ヘッダ(ソース)を開く	// Feb. 7, 2001 JEPRO 追加
-//	case F_OPEN_HHPP:				bRet = Command_OPEN_HHPP((bool)lparam1, true); break;		// 同名のC/C++ヘッダファイルを開く	// Feb. 9, 2001 jepro「.cまたは.cppと同名の.hを開く」から変更		del 2008/6/23 Uchi
-//	case F_OPEN_CCPP:				bRet = Command_OPEN_CCPP((bool)lparam1, true); break;		// 同名のC/C++ソースファイルを開く	// Feb. 9, 2001 jepro「.hと同名の.c(なければ.cpp)を開く」から変更	del 2008/6/23 Uchi
-	case F_ACTIVATE_SQLPLUS:		Command_ACTIVATE_SQLPLUS(); break;		// Oracle SQL*Plusをアクティブ表示
+	case F_OPEN_HfromtoC:			bRet = Command_Open_HfromtoC(lparam1 != 0); break;			// 同名のC/C++ヘッダ(ソース)を開く	// Feb. 7, 2001 JEPRO 追加
+//	case F_OPEN_HHPP:				bRet = Command_Open_HHPP((bool)lparam1, true); break;		// 同名のC/C++ヘッダファイルを開く	// Feb. 9, 2001 jepro「.cまたは.cppと同名の.hを開く」から変更		del 2008/6/23 Uchi
+//	case F_OPEN_CCPP:				bRet = Command_Open_CCPP((bool)lparam1, true); break;		// 同名のC/C++ソースファイルを開く	// Feb. 9, 2001 jepro「.hと同名の.c(なければ.cpp)を開く」から変更	del 2008/6/23 Uchi
+	case F_ACTIVATE_SQLPLUS:		Command_Activate_SQLPlus(); break;		// Oracle SQL*Plusをアクティブ表示
 	case F_PLSQL_COMPILE_ON_SQLPLUS:									// Oracle SQL*Plusで実行
-		Command_PLSQL_COMPILE_ON_SQLPLUS();
+		Command_PLSQL_Compile_On_SQLPlus();
 		break;
 	case F_BROWSE:				Command_Browse(); break;			// ブラウズ
 	case F_VIEWMODE:			Command_ViewMode(); break;			// ビューモード
@@ -272,16 +272,16 @@ bool ViewCommander::HandleCommand(
 
 	// カーソル移動系
 	case F_IME_CHAR:			Command_IME_CHAR((WORD)lparam1); break;					// 全角文字入力
-	case F_MOVECURSOR:			Command_MOVECURSOR(LogicPoint(LogicInt((int)lparam2), LogicInt((int)lparam1)), (int)lparam3); break;
-	case F_MOVECURSORLAYOUT:	Command_MOVECURSORLAYOUT(LayoutPoint(LayoutInt((int)lparam2), LayoutInt((int)lparam1)), (int)lparam3); break;
-	case F_UP:					Command_UP(view.GetSelectionInfo().bSelectingLock, bRepeat); break;				// カーソル上移動
-	case F_DOWN:				Command_DOWN(view.GetSelectionInfo().bSelectingLock, bRepeat); break;			// カーソル下移動
-	case F_LEFT:				Command_LEFT(view.GetSelectionInfo().bSelectingLock, bRepeat); break;			// カーソル左移動
-	case F_RIGHT:				Command_RIGHT(view.GetSelectionInfo().bSelectingLock, false, bRepeat); break;	// カーソル右移動
-	case F_UP2:					Command_UP2(view.GetSelectionInfo().bSelectingLock); break;						// カーソル上移動(２行づつ)
-	case F_DOWN2:				Command_DOWN2(view.GetSelectionInfo().bSelectingLock); break;					// カーソル下移動(２行づつ)
-	case F_WORDLEFT:			Command_WORDLEFT(view.GetSelectionInfo().bSelectingLock); break;					// 単語の左端に移動
-	case F_WORDRIGHT:			Command_WORDRIGHT(view.GetSelectionInfo().bSelectingLock); break;				// 単語の右端に移動
+	case F_MOVECURSOR:			Command_MoveCursor(LogicPoint(LogicInt((int)lparam2), LogicInt((int)lparam1)), (int)lparam3); break;
+	case F_MOVECURSORLAYOUT:	Command_MoveCursorLayout(LayoutPoint(LayoutInt((int)lparam2), LayoutInt((int)lparam1)), (int)lparam3); break;
+	case F_UP:					Command_Up(view.GetSelectionInfo().bSelectingLock, bRepeat); break;				// カーソル上移動
+	case F_DOWN:				Command_Down(view.GetSelectionInfo().bSelectingLock, bRepeat); break;			// カーソル下移動
+	case F_LEFT:				Command_Left(view.GetSelectionInfo().bSelectingLock, bRepeat); break;			// カーソル左移動
+	case F_RIGHT:				Command_Right(view.GetSelectionInfo().bSelectingLock, false, bRepeat); break;	// カーソル右移動
+	case F_UP2:					Command_Up2(view.GetSelectionInfo().bSelectingLock); break;						// カーソル上移動(２行づつ)
+	case F_DOWN2:				Command_Down2(view.GetSelectionInfo().bSelectingLock); break;					// カーソル下移動(２行づつ)
+	case F_WORDLEFT:			Command_WordLeft(view.GetSelectionInfo().bSelectingLock); break;					// 単語の左端に移動
+	case F_WORDRIGHT:			Command_WordRight(view.GetSelectionInfo().bSelectingLock); break;				// 単語の右端に移動
 	// 0ct. 29, 2001 genta マクロ向け機能拡張
 	case F_GOLINETOP:			Command_GoLineTop(view.GetSelectionInfo().bSelectingLock, lparam1); break;		// 行頭に移動(折り返し単位/改行単位)
 	case F_GOLINEEND:			Command_GoLineEnd(view.GetSelectionInfo().bSelectingLock, 0, lparam1); break;	// 行末に移動(折り返し単位)
@@ -293,39 +293,39 @@ bool ViewCommander::HandleCommand(
 	case F_1PageDown:			Command_1PageDown( view.GetSelectionInfo().bSelectingLock, LayoutYInt(lparam1) ); break;				//１ページダウン	//Oct. 10, 2000 JEPRO 従来のページダウンを半ページダウンと名称変更し１ページダウンを追加
 	case F_GOFILETOP:			Command_GoFileTop(view.GetSelectionInfo().bSelectingLock); break;				// ファイルの先頭に移動
 	case F_GOFILEEND:			Command_GoFileEnd(view.GetSelectionInfo().bSelectingLock); break;				// ファイルの最後に移動
-	case F_CURLINECENTER:		Command_CURLINECENTER(); break;								// カーソル行をウィンドウ中央へ
-	case F_JUMPHIST_PREV:		Command_JUMPHIST_PREV(); break;								// 移動履歴: 前へ
-	case F_JUMPHIST_NEXT:		Command_JUMPHIST_NEXT(); break;								// 移動履歴: 次へ
-	case F_JUMPHIST_SET:		Command_JUMPHIST_SET(); break;								// 現在位置を移動履歴に登録
+	case F_CURLINECENTER:		Command_CurLineCenter(); break;								// カーソル行をウィンドウ中央へ
+	case F_JUMPHIST_PREV:		Command_JumpHist_Prev(); break;								// 移動履歴: 前へ
+	case F_JUMPHIST_NEXT:		Command_JumpHist_Next(); break;								// 移動履歴: 次へ
+	case F_JUMPHIST_SET:		Command_JumpHist_Set(); break;								// 現在位置を移動履歴に登録
 	case F_WndScrollDown:		Command_WndScrollDown(); break;								// テキストを１行下へScroll	// 2001/06/20 asa-o
 	case F_WndScrollUp:			Command_WndScrollUp(); break;								// テキストを１行上へScroll	// 2001/06/20 asa-o
 	case F_GONEXTPARAGRAPH:		Command_GoNextParagraph(view.GetSelectionInfo().bSelectingLock); break;			// 次の段落へ進む
 	case F_GOPREVPARAGRAPH:		Command_GoPrevParagraph(view.GetSelectionInfo().bSelectingLock); break;			// 前の段落へ戻る
 	case F_AUTOSCROLL:			Command_AutoScroll(); break;									// Auto Scroll
-	case F_WHEELUP:				Command_WHEELUP(lparam1); break;
-	case F_WHEELDOWN:			Command_WHEELDOWN(lparam1); break;
-	case F_WHEELLEFT:			Command_WHEELLEFT(lparam1); break;
-	case F_WHEELRIGHT:			Command_WHEELRIGHT(lparam1); break;
-	case F_WHEELPAGEUP:			Command_WHEELPAGEUP(lparam1); break;
-	case F_WHEELPAGEDOWN:		Command_WHEELPAGEDOWN(lparam1); break;
-	case F_WHEELPAGELEFT:		Command_WHEELPAGELEFT(lparam1); break;
-	case F_WHEELPAGERIGHT:		Command_WHEELPAGERIGHT(lparam1); break;
-	case F_MODIFYLINE_NEXT:		Command_MODIFYLINE_NEXT( view.GetSelectionInfo().bSelectingLock ); break;	// 次の変更行へ
-	case F_MODIFYLINE_PREV:		Command_MODIFYLINE_PREV( view.GetSelectionInfo().bSelectingLock ); break;	// 前の変更行へ
+	case F_WHEELUP:				Command_WheelUp(lparam1); break;
+	case F_WHEELDOWN:			Command_WheelDown(lparam1); break;
+	case F_WHEELLEFT:			Command_WheelLeft(lparam1); break;
+	case F_WHEELRIGHT:			Command_WheelRight(lparam1); break;
+	case F_WHEELPAGEUP:			Command_WheelPageUp(lparam1); break;
+	case F_WHEELPAGEDOWN:		Command_WheelPageDown(lparam1); break;
+	case F_WHEELPAGELEFT:		Command_WheelPageLeft(lparam1); break;
+	case F_WHEELPAGERIGHT:		Command_WheelPageRight(lparam1); break;
+	case F_MODIFYLINE_NEXT:		Command_ModifyLine_Next( view.GetSelectionInfo().bSelectingLock ); break;	// 次の変更行へ
+	case F_MODIFYLINE_PREV:		Command_ModifyLine_Prev( view.GetSelectionInfo().bSelectingLock ); break;	// 前の変更行へ
 
 	// 選択系
 	case F_SELECTWORD:		Command_SelectWord(); break;					// 現在位置の単語選択
 	case F_SELECTALL:		Command_SelectAll(); break;						// すべて選択
 	case F_SELECTLINE:		Command_SelectLine(lparam1); break;				// 1行選択	// 2007.10.13 nasukoji
 	case F_BEGIN_SEL:		Command_Begin_Select(); break;					// 範囲選択開始
-	case F_UP_SEL:			Command_UP(true, bRepeat, lparam1); break;		// (範囲選択)カーソル上移動
-	case F_DOWN_SEL:		Command_DOWN(true, bRepeat); break;				// (範囲選択)カーソル下移動
-	case F_LEFT_SEL:		Command_LEFT(true, bRepeat); break;				// (範囲選択)カーソル左移動
-	case F_RIGHT_SEL:		Command_RIGHT(true, false, bRepeat); break;		// (範囲選択)カーソル右移動
-	case F_UP2_SEL:			Command_UP2(true); break;						// (範囲選択)カーソル上移動(２行ごと)
-	case F_DOWN2_SEL:		Command_DOWN2(true); break;						// (範囲選択)カーソル下移動(２行ごと)
-	case F_WORDLEFT_SEL:	Command_WORDLEFT(true); break;					// (範囲選択)単語の左端に移動
-	case F_WORDRIGHT_SEL:	Command_WORDRIGHT(true); break;					// (範囲選択)単語の右端に移動
+	case F_UP_SEL:			Command_Up(true, bRepeat, lparam1); break;		// (範囲選択)カーソル上移動
+	case F_DOWN_SEL:		Command_Down(true, bRepeat); break;				// (範囲選択)カーソル下移動
+	case F_LEFT_SEL:		Command_Left(true, bRepeat); break;				// (範囲選択)カーソル左移動
+	case F_RIGHT_SEL:		Command_Right(true, false, bRepeat); break;		// (範囲選択)カーソル右移動
+	case F_UP2_SEL:			Command_Up2(true); break;						// (範囲選択)カーソル上移動(２行ごと)
+	case F_DOWN2_SEL:		Command_Down2(true); break;						// (範囲選択)カーソル下移動(２行ごと)
+	case F_WORDLEFT_SEL:	Command_WordLeft(true); break;					// (範囲選択)単語の左端に移動
+	case F_WORDRIGHT_SEL:	Command_WordRight(true); break;					// (範囲選択)単語の右端に移動
 	case F_GOLINETOP_SEL:	Command_GoLineTop(true, lparam1); break;		// (範囲選択)行頭に移動(折り返し単位/改行単位)
 	case F_GOLINEEND_SEL:	Command_GoLineEnd(true, 0, lparam1); break;		// (範囲選択)行末に移動(折り返し単位)
 //	case F_ROLLDOWN_SEL:	Command_ROLLDOWN(TRUE); break;					// (範囲選択)Scroll Down
@@ -338,20 +338,20 @@ bool ViewCommander::HandleCommand(
 	case F_GOFILEEND_SEL:	Command_GoFileEnd(true); break;					// (範囲選択)ファイルの最後に移動
 	case F_GONEXTPARAGRAPH_SEL:	Command_GoNextParagraph(true); break;		// 次の段落へ進む
 	case F_GOPREVPARAGRAPH_SEL:	Command_GoPrevParagraph(true); break;		// 前の段落へ戻る
-	case F_MODIFYLINE_NEXT_SEL:	Command_MODIFYLINE_NEXT( true ); break;			//(範囲選択)次の変更行へ
-	case F_MODIFYLINE_PREV_SEL:	Command_MODIFYLINE_PREV( true ); break;			//(範囲選択)前の変更行へ
+	case F_MODIFYLINE_NEXT_SEL:	Command_ModifyLine_Next( true ); break;			//(範囲選択)次の変更行へ
+	case F_MODIFYLINE_PREV_SEL:	Command_ModifyLine_Prev( true ); break;			//(範囲選択)前の変更行へ
 
 	// 矩形選択系
 //	case F_BOXSELALL:		Command_BOXSELECTALL(); break;			// 矩形ですべて選択
 	case F_BEGIN_BOX:		Command_Begin_BoxSelect(true); break;	// 矩形範囲選択開始
-	case F_UP_BOX:			Sub_BoxSelectLock(lparam1); this->Command_UP(true, bRepeat); break;		// (矩形選択)カーソル上移動
-	case F_DOWN_BOX:		Sub_BoxSelectLock(lparam1); this->Command_DOWN(true, bRepeat); break;	// (矩形選択)カーソル下移動
-	case F_LEFT_BOX:		Sub_BoxSelectLock(lparam1); this->Command_LEFT(true, bRepeat); break;	// (矩形選択)カーソル左移動
-	case F_RIGHT_BOX:		Sub_BoxSelectLock(lparam1); this->Command_RIGHT(true, false, bRepeat); break;	// (矩形選択)カーソル右移動
-	case F_UP2_BOX:			Sub_BoxSelectLock(lparam1); this->Command_UP2(true); break;				// (矩形選択)カーソル上移動(２行ごと)
-	case F_DOWN2_BOX:		Sub_BoxSelectLock(lparam1); this->Command_DOWN2(true);break;			// (矩形選択)カーソル下移動(２行ごと)
-	case F_WORDLEFT_BOX:	Sub_BoxSelectLock(lparam1); this->Command_WORDLEFT(true);break;			// (矩形選択)単語の左端に移動
-	case F_WORDRIGHT_BOX:	Sub_BoxSelectLock(lparam1); this->Command_WORDRIGHT(true);break;		// (矩形選択)単語の右端に移動
+	case F_UP_BOX:			Sub_BoxSelectLock(lparam1); this->Command_Up(true, bRepeat); break;		// (矩形選択)カーソル上移動
+	case F_DOWN_BOX:		Sub_BoxSelectLock(lparam1); this->Command_Down(true, bRepeat); break;	// (矩形選択)カーソル下移動
+	case F_LEFT_BOX:		Sub_BoxSelectLock(lparam1); this->Command_Left(true, bRepeat); break;	// (矩形選択)カーソル左移動
+	case F_RIGHT_BOX:		Sub_BoxSelectLock(lparam1); this->Command_Right(true, false, bRepeat); break;	// (矩形選択)カーソル右移動
+	case F_UP2_BOX:			Sub_BoxSelectLock(lparam1); this->Command_Up2(true); break;				// (矩形選択)カーソル上移動(２行ごと)
+	case F_DOWN2_BOX:		Sub_BoxSelectLock(lparam1); this->Command_Down2(true);break;			// (矩形選択)カーソル下移動(２行ごと)
+	case F_WORDLEFT_BOX:	Sub_BoxSelectLock(lparam1); this->Command_WordLeft(true);break;			// (矩形選択)単語の左端に移動
+	case F_WORDRIGHT_BOX:	Sub_BoxSelectLock(lparam1); this->Command_WordRight(true);break;		// (矩形選択)単語の右端に移動
 	case F_GOLOGICALLINETOP_BOX:Sub_BoxSelectLock(lparam2); this->Command_GoLineTop(true, 8 | lparam1);break;	// (矩形選択)行頭に移動(改行単位)
 //	case F_GOLOGICALLINEEND_BOX:Sub_BoxSelectLock(lparam2); this->Command_GoLineEnd(true, 0, 8 | lparam1);break;	// (矩形選択)行末に移動(改行単位)
 	case F_GOLINETOP_BOX:	Sub_BoxSelectLock(lparam2); this->Command_GoLineTop(true, lparam1);break;		// (矩形選択)行頭に移動(折り返し単位/改行単位)
@@ -364,87 +364,87 @@ bool ViewCommander::HandleCommand(
 	case F_GOFILEEND_BOX:	Sub_BoxSelectLock(lparam1); this->Command_GoFileEnd(true);break;			// (矩形選択)ファイルの最後に移動
 
 	// クリップボード系
-	case F_CUT:						Command_CUT(); break;					// 切り取り(選択範囲をクリップボードにコピーして削除)
-	case F_COPY:					Command_COPY(false, GetDllShareData().common.edit.bAddCRLFWhenCopy); break;			// コピー(選択範囲をクリップボードにコピー)
-	case F_COPY_ADDCRLF:			Command_COPY(false, true); break;		// 折り返し位置に改行をつけてコピー(選択範囲をクリップボードにコピー)
-	case F_COPY_CRLF:				Command_COPY(false, GetDllShareData().common.edit.bAddCRLFWhenCopy, EolType::CRLF); break;	// CRLF改行でコピー(選択範囲をクリップボードにコピー)
-	case F_PASTE:					Command_PASTE((int)lparam1); break;					// 貼り付け(クリップボードから貼り付け)
-	case F_PASTEBOX:				Command_PASTEBOX((int)lparam1); break;				// 矩形貼り付け(クリップボードから矩形貼り付け)
-	case F_INSBOXTEXT:				Command_INSBOXTEXT((const wchar_t*)lparam1, (int)lparam2); break;				// 矩形テキスト挿入
-	case F_INSTEXT_W:				Command_INSTEXT(bRedraw, (const wchar_t*)lparam1, (LogicInt)lparam2, lparam3 != FALSE); break; // テキストを貼り付け // 2004.05.14 Moca 長さを示す引数追加
-	case F_ADDTAIL_W:				Command_ADDTAIL((const wchar_t*)lparam1, (int)lparam2); break;	// 最後にテキストを追加
+	case F_CUT:						Command_Cut(); break;					// 切り取り(選択範囲をクリップボードにコピーして削除)
+	case F_COPY:					Command_Copy(false, GetDllShareData().common.edit.bAddCRLFWhenCopy); break;			// コピー(選択範囲をクリップボードにコピー)
+	case F_COPY_ADDCRLF:			Command_Copy(false, true); break;		// 折り返し位置に改行をつけてコピー(選択範囲をクリップボードにコピー)
+	case F_COPY_CRLF:				Command_Copy(false, GetDllShareData().common.edit.bAddCRLFWhenCopy, EolType::CRLF); break;	// CRLF改行でコピー(選択範囲をクリップボードにコピー)
+	case F_PASTE:					Command_Paste((int)lparam1); break;					// 貼り付け(クリップボードから貼り付け)
+	case F_PASTEBOX:				Command_PasteBox((int)lparam1); break;				// 矩形貼り付け(クリップボードから矩形貼り付け)
+	case F_INSBOXTEXT:				Command_InsBoxText((const wchar_t*)lparam1, (int)lparam2); break;				// 矩形テキスト挿入
+	case F_INSTEXT_W:				Command_InsText(bRedraw, (const wchar_t*)lparam1, (LogicInt)lparam2, lparam3 != FALSE); break; // テキストを貼り付け // 2004.05.14 Moca 長さを示す引数追加
+	case F_ADDTAIL_W:				Command_AddTail((const wchar_t*)lparam1, (int)lparam2); break;	// 最後にテキストを追加
 	case F_COPYFNAME:				Command_CopyFileName(); break;						// このファイル名をクリップボードにコピー / /2002/2/3 aroka
 	case F_COPYPATH:				Command_CopyPath(); break;							// このファイルのパス名をクリップボードにコピー
-	case F_COPYTAG:					Command_COPYTAG(); break;							// このファイルのパス名とカーソル位置をコピー	// Sept. 15, 2000 jepro 上と同じ説明になっていたのを修正
-	case F_COPYLINES:				Command_COPYLINES(); break;							// 選択範囲内全行コピー
-	case F_COPYLINESASPASSAGE:		Command_COPYLINESASPASSAGE(); break;				// 選択範囲内全行引用符付きコピー
-	case F_COPYLINESWITHLINENUMBER:	Command_COPYLINESWITHLINENUMBER(); break;			// 選択範囲内全行行番号付きコピー
-	case F_COPY_COLOR_HTML:				Command_COPY_COLOR_HTML(); break;				// 選択範囲内色付きHTMLコピー
-	case F_COPY_COLOR_HTML_LINENUMBER:	Command_COPY_COLOR_HTML_LINENUMBER(); break;	// 選択範囲内行番号色付きHTMLコピー
+	case F_COPYTAG:					Command_CopyTag(); break;							// このファイルのパス名とカーソル位置をコピー	// Sept. 15, 2000 jepro 上と同じ説明になっていたのを修正
+	case F_COPYLINES:				Command_CopyLines(); break;							// 選択範囲内全行コピー
+	case F_COPYLINESASPASSAGE:		Command_CopyLinesAsPassage(); break;				// 選択範囲内全行引用符付きコピー
+	case F_COPYLINESWITHLINENUMBER:	Command_CopyLinesWithLineNumber(); break;			// 選択範囲内全行行番号付きコピー
+	case F_COPY_COLOR_HTML:				Command_Copy_Color_HTML(); break;				// 選択範囲内色付きHTMLコピー
+	case F_COPY_COLOR_HTML_LINENUMBER:	Command_Copy_Color_HTML_LineNumber(); break;	// 選択範囲内行番号色付きHTMLコピー
 
-	case F_CREATEKEYBINDLIST:		Command_CREATEKEYBINDLIST(); break;		// キー割り当て一覧をコピー // Sept. 15, 2000 JEPRO 追加 //Dec. 25, 2000 復活
+	case F_CREATEKEYBINDLIST:		Command_CreateKeyBindList(); break;		// キー割り当て一覧をコピー // Sept. 15, 2000 JEPRO 追加 //Dec. 25, 2000 復活
 
 	// 挿入系
-	case F_INS_DATE:				Command_INS_DATE(); break;				// 日付挿入
-	case F_INS_TIME:				Command_INS_TIME(); break;				// 時刻挿入
+	case F_INS_DATE:				Command_Ins_Date(); break;				// 日付挿入
+	case F_INS_TIME:				Command_Ins_Time(); break;				// 時刻挿入
     case F_CTRL_CODE_DIALOG:		Command_CtrlCode_Dialog(); break;		// コントロールコードの入力(ダイアログ)	//@@@ 2002.06.02 MIK
     case F_CTRL_CODE:				Command_WCHAR((wchar_t)lparam1, false); break;
 
 	// 変換
-	case F_TOLOWER:					Command_TOLOWER(); break;				// 小文字
-	case F_TOUPPER:					Command_TOUPPER(); break;				// 大文字
-	case F_TOHANKAKU:				Command_TOHANKAKU(); break;				// 全角→半角
-	case F_TOHANKATA:				Command_TOHANKATA(); break;				// 全角カタカナ→半角カタカナ	// Aug. 29, 2002 ai
-	case F_TOZENEI:					Command_TOZENEI(); break;				// 全角→半角					// July. 30, 2001 Misaka
-	case F_TOHANEI:					Command_TOHANEI(); break;				// 半角→全角
-	case F_TOZENKAKUKATA:			Command_TOZENKAKUKATA(); break;			// 半角＋全ひら→全角・カタカナ	// Sept. 17, 2000 jepro 説明を「半角→全角カタカナ」から変更
-	case F_TOZENKAKUHIRA:			Command_TOZENKAKUHIRA(); break;			// 半角＋全カタ→全角・ひらがな	// Sept. 17, 2000 jepro 説明を「半角→全角ひらがな」から変更
-	case F_HANKATATOZENKATA:		Command_HANKATATOZENKAKUKATA(); break;	// 半角カタカナ→全角カタカナ
-	case F_HANKATATOZENHIRA:		Command_HANKATATOZENKAKUHIRA(); break;	// 半角カタカナ→全角ひらがな
-	case F_TABTOSPACE:				Command_TABTOSPACE(); break;			// TAB→空白
-	case F_SPACETOTAB:				Command_SPACETOTAB(); break;			// 空白→TAB  //---- Stonee, 2001/05/27
-	case F_CODECNV_AUTO2SJIS:		Command_CODECNV_AUTO2SJIS(); break;		// 自動判別→SJISコード変換
-	case F_CODECNV_EMAIL:			Command_CODECNV_EMAIL(); break;			// E-Mail(JIS→SJIS)コード変換
-	case F_CODECNV_EUC2SJIS:		Command_CODECNV_EUC2SJIS(); break;		// EUC→SJISコード変換
-	case F_CODECNV_UNICODE2SJIS:	Command_CODECNV_UNICODE2SJIS(); break;	// Unicode→SJISコード変換
-	case F_CODECNV_UNICODEBE2SJIS:	Command_CODECNV_UNICODEBE2SJIS(); break;	// UnicodeBE→SJISコード変換
-	case F_CODECNV_UTF82SJIS:		Command_CODECNV_UTF82SJIS(); break;		// UTF-8→SJISコード変換
-	case F_CODECNV_UTF72SJIS:		Command_CODECNV_UTF72SJIS(); break;		// UTF-7→SJISコード変換
-	case F_CODECNV_SJIS2JIS:		Command_CODECNV_SJIS2JIS(); break;		// SJIS→JISコード変換
-	case F_CODECNV_SJIS2EUC:		Command_CODECNV_SJIS2EUC(); break;		// SJIS→EUCコード変換
-	case F_CODECNV_SJIS2UTF8:		Command_CODECNV_SJIS2UTF8(); break;		// SJIS→UTF-8コード変換
-	case F_CODECNV_SJIS2UTF7:		Command_CODECNV_SJIS2UTF7(); break;		// SJIS→UTF-7コード変換
-	case F_BASE64DECODE:			Command_BASE64DECODE(); break;			// Base64デコードして保存
-	case F_UUDECODE:				Command_UUDECODE(); break;				// uudecodeして保存	// Oct. 17, 2000 jepro 説明を「選択部分をUUENCODEデコード」から変更
+	case F_TOLOWER:					Command_ToLower(); break;				// 小文字
+	case F_TOUPPER:					Command_ToUpper(); break;				// 大文字
+	case F_TOHANKAKU:				Command_ToHankaku(); break;				// 全角→半角
+	case F_TOHANKATA:				Command_ToHankata(); break;				// 全角カタカナ→半角カタカナ	// Aug. 29, 2002 ai
+	case F_TOZENEI:					Command_ToZenEi(); break;				// 全角→半角					// July. 30, 2001 Misaka
+	case F_TOHANEI:					Command_ToHanEi(); break;				// 半角→全角
+	case F_TOZENKAKUKATA:			Command_ToZenkakuKata(); break;			// 半角＋全ひら→全角・カタカナ	// Sept. 17, 2000 jepro 説明を「半角→全角カタカナ」から変更
+	case F_TOZENKAKUHIRA:			Command_ToZenkakuHira(); break;			// 半角＋全カタ→全角・ひらがな	// Sept. 17, 2000 jepro 説明を「半角→全角ひらがな」から変更
+	case F_HANKATATOZENKATA:		Command_HanKataToZenkakuKata(); break;	// 半角カタカナ→全角カタカナ
+	case F_HANKATATOZENHIRA:		Command_HanKataToZenKakuHira(); break;	// 半角カタカナ→全角ひらがな
+	case F_TABTOSPACE:				Command_TabToSpace(); break;			// TAB→空白
+	case F_SPACETOTAB:				Command_SpaceToTab(); break;			// 空白→TAB  //---- Stonee, 2001/05/27
+	case F_CODECNV_AUTO2SJIS:		Command_CodeCnv_Auto2SJIS(); break;		// 自動判別→SJISコード変換
+	case F_CODECNV_EMAIL:			Command_CodeCnv_EMail(); break;			// E-Mail(JIS→SJIS)コード変換
+	case F_CODECNV_EUC2SJIS:		Command_CodeCnv_EUC2SJIS(); break;		// EUC→SJISコード変換
+	case F_CODECNV_UNICODE2SJIS:	Command_CodeCnv_Unicode2SJIS(); break;	// Unicode→SJISコード変換
+	case F_CODECNV_UNICODEBE2SJIS:	Command_CodeCnv_UnicodeBE2SJIS(); break;	// UnicodeBE→SJISコード変換
+	case F_CODECNV_UTF82SJIS:		Command_CodeCnv_UTF82SJIS(); break;		// UTF-8→SJISコード変換
+	case F_CODECNV_UTF72SJIS:		Command_CodeCnv_UTF72SJIS(); break;		// UTF-7→SJISコード変換
+	case F_CODECNV_SJIS2JIS:		Command_CodeCnv_SJIS2JIS(); break;		// SJIS→JISコード変換
+	case F_CODECNV_SJIS2EUC:		Command_CodeCnv_SJIS2EUC(); break;		// SJIS→EUCコード変換
+	case F_CODECNV_SJIS2UTF8:		Command_CodeCnv_SJIS2UTF8(); break;		// SJIS→UTF-8コード変換
+	case F_CODECNV_SJIS2UTF7:		Command_CodeCnv_SJIS2UTF7(); break;		// SJIS→UTF-7コード変換
+	case F_BASE64DECODE:			Command_Base64Decode(); break;			// Base64デコードして保存
+	case F_UUDECODE:				Command_UUDecode(); break;				// uudecodeして保存	// Oct. 17, 2000 jepro 説明を「選択部分をUUENCODEデコード」から変更
 
 	// 検索系
-	case F_SEARCH_DIALOG:		Command_SEARCH_DIALOG(); break;				// 検索(単語検索ダイアログ)
-	case F_SEARCH_BOX:			Command_SEARCH_BOX(); break;		// Jan. 13, 2003 MIK	// 検索(ボックス)	// 2006.06.04 yukihane Command_SEARCH_BOX()
-	case F_SEARCH_NEXT:			Command_SEARCH_NEXT(true, bRedraw, false, (HWND)lparam1, (const WCHAR*)lparam2); break;	// 次を検索
-	case F_SEARCH_PREV:			Command_SEARCH_PREV(bRedraw, (HWND)lparam1); break;						// 前を検索
+	case F_SEARCH_DIALOG:		Command_Search_Dialog(); break;				// 検索(単語検索ダイアログ)
+	case F_SEARCH_BOX:			Command_Search_Box(); break;		// Jan. 13, 2003 MIK	// 検索(ボックス)	// 2006.06.04 yukihane Command_SEARCH_BOX()
+	case F_SEARCH_NEXT:			Command_Search_Next(true, bRedraw, false, (HWND)lparam1, (const WCHAR*)lparam2); break;	// 次を検索
+	case F_SEARCH_PREV:			Command_Search_Prev(bRedraw, (HWND)lparam1); break;						// 前を検索
 	case F_REPLACE_DIALOG:	// 置換(置換ダイアログ)
-		Command_REPLACE_DIALOG();	//@@@ 2002.2.2 YAZAKI ダイアログ呼び出しと、実行を分離
+		Command_Replace_Dialog();	//@@@ 2002.2.2 YAZAKI ダイアログ呼び出しと、実行を分離
 		break;
-	case F_REPLACE:				Command_REPLACE((HWND)lparam1); break;			// 置換実行 @@@ 2002.2.2 YAZAKI
-	case F_REPLACE_ALL:			Command_REPLACE_ALL(); break;		// すべて置換実行(通常) 2002.2.8 hor 2006.04.02 かろと
-	case F_SEARCH_CLEARMARK:	Command_SEARCH_CLEARMARK(); break;	// 検索マークのクリア
+	case F_REPLACE:				Command_Replace((HWND)lparam1); break;			// 置換実行 @@@ 2002.2.2 YAZAKI
+	case F_REPLACE_ALL:			Command_Replace_All(); break;		// すべて置換実行(通常) 2002.2.8 hor 2006.04.02 かろと
+	case F_SEARCH_CLEARMARK:	Command_Search_ClearMark(); break;	// 検索マークのクリア
 	case F_GREP_DIALOG:	// Grepダイアログの表示
 		// 再帰処理対策
 		view.SetUndoBuffer(true);
-		Command_GREP_DIALOG();
+		Command_Grep_Dialog();
 		return bRet;
-	case F_GREP:			Command_GREP(); break;							// Grep
+	case F_GREP:			Command_Grep(); break;							// Grep
 	case F_GREP_REPLACE_DLG:	// Grep置換ダイアログの表示
 		// 再帰処理対策
 		view.SetUndoBuffer( true );
-		Command_GREP_REPLACE_DLG();
+		Command_Grep_Replace_Dlg();
 		return bRet;
-	case F_GREP_REPLACE:	Command_GREP_REPLACE();break;							//Grep置換
-	case F_JUMP_DIALOG:		Command_JUMP_DIALOG(); break;					// 指定行ヘジャンプダイアログの表示
-	case F_JUMP:			Command_JUMP(); break;							// 指定行ヘジャンプ
-	case F_OUTLINE:			bRet = Command_FUNCLIST((ShowDialogType)lparam1, OutlineType::Default); break;	// アウトライン解析
-	case F_OUTLINE_TOGGLE:	bRet = Command_FUNCLIST(ShowDialogType::Toggle, OutlineType::Default); break;	// アウトライン解析(toggle) // 20060201 aroka
-	case F_FILETREE:		bRet = Command_FUNCLIST((ShowDialogType)lparam1, OutlineType::FileTree); break;	//ファイルツリー
+	case F_GREP_REPLACE:	Command_Grep_Replace();break;							//Grep置換
+	case F_JUMP_DIALOG:		Command_Jump_Dialog(); break;					// 指定行ヘジャンプダイアログの表示
+	case F_JUMP:			Command_Jump(); break;							// 指定行ヘジャンプ
+	case F_OUTLINE:			bRet = Command_FuncList((ShowDialogType)lparam1, OutlineType::Default); break;	// アウトライン解析
+	case F_OUTLINE_TOGGLE:	bRet = Command_FuncList(ShowDialogType::Toggle, OutlineType::Default); break;	// アウトライン解析(toggle) // 20060201 aroka
+	case F_FILETREE:		bRet = Command_FuncList((ShowDialogType)lparam1, OutlineType::FileTree); break;	//ファイルツリー
 	case F_TAGJUMP:			Command_TagJump(lparam1 != 0); break;			// タグジャンプ機能 // Apr. 03, 2003 genta 引数追加
 	case F_TAGJUMP_CLOSE:	Command_TagJump(true); break;					// タグジャンプ(元ウィンドウClose)	// Apr. 03, 2003 genta
 	case F_TAGJUMPBACK:		Command_TagJumpBack(); break;					// タグジャンプバック機能
@@ -457,31 +457,31 @@ bool ViewCommander::HandleCommand(
 	case F_DIFF_NEXT:		Command_Diff_Next(); break;						// DIFF差分表示(次へ)			//@@@ 2002.05.25 MIK
 	case F_DIFF_PREV:		Command_Diff_Prev(); break;						// DIFF差分表示(前へ)			//@@@ 2002.05.25 MIK
 	case F_DIFF_RESET:		Command_Diff_Reset(); break;					// DIFF差分表示(全解除)			//@@@ 2002.05.25 MIK
-	case F_BRACKETPAIR:		Command_BRACKETPAIR(); break;					// 対括弧の検索
+	case F_BRACKETPAIR:		Command_BracketPair(); break;					// 対括弧の検索
 // From Here 2001.12.03 hor
-	case F_BOOKMARK_SET:	Command_BOOKMARK_SET(); break;					// ブックマーク設定・解除
-	case F_BOOKMARK_NEXT:	Command_BOOKMARK_NEXT(); break;					// 次のブックマークへ
-	case F_BOOKMARK_PREV:	Command_BOOKMARK_PREV(); break;					// 前のブックマークへ
-	case F_BOOKMARK_RESET:	Command_BOOKMARK_RESET(); break;				// ブックマークの全解除
-	case F_BOOKMARK_VIEW:	bRet = Command_FUNCLIST((ShowDialogType)lparam1 , OutlineType::BookMark); break;	// アウトライン解析
+	case F_BOOKMARK_SET:	Command_Bookmark_Set(); break;					// ブックマーク設定・解除
+	case F_BOOKMARK_NEXT:	Command_Bookmark_Next(); break;					// 次のブックマークへ
+	case F_BOOKMARK_PREV:	Command_Bookmark_Prev(); break;					// 前のブックマークへ
+	case F_BOOKMARK_RESET:	Command_Bookmark_Reset(); break;				// ブックマークの全解除
+	case F_BOOKMARK_VIEW:	bRet = Command_FuncList((ShowDialogType)lparam1 , OutlineType::BookMark); break;	// アウトライン解析
 // To Here 2001.12.03 hor
-	case F_BOOKMARK_PATTERN:Command_BOOKMARK_PATTERN(); break;				// 2002.01.16 hor 指定パターンに一致する行をマーク
-	case F_JUMP_SRCHSTARTPOS:	Command_JUMP_SRCHSTARTPOS(); break;			// 検索開始位置へ戻る 02/06/26 ai
-	case F_FUNCLIST_NEXT:	Command_FUNCLIST_NEXT();break;					// 次の関数リストマーク	2014.01.05
-	case F_FUNCLIST_PREV:	Command_FUNCLIST_PREV();break;					// 前の関数リストマーク	2014.01.05
+	case F_BOOKMARK_PATTERN:Command_Bookmark_Pattern(); break;				// 2002.01.16 hor 指定パターンに一致する行をマーク
+	case F_JUMP_SRCHSTARTPOS:	Command_Jump_SrchStartPos(); break;			// 検索開始位置へ戻る 02/06/26 ai
+	case F_FUNCLIST_NEXT:	Command_FuncList_Next();break;					// 次の関数リストマーク	2014.01.05
+	case F_FUNCLIST_PREV:	Command_FuncList_Prev();break;					// 前の関数リストマーク	2014.01.05
 
 	// モード切り替え系
-	case F_CHGMOD_INS:		Command_CHGMOD_INS(); break;		// 挿入／上書きモード切り替え
-	case F_CHG_CHARSET:		Command_CHG_CHARSET((EncodingType)lparam1, lparam2 != 0); break;	// 文字コードセット指定	2010/6/14 Uchi
+	case F_CHGMOD_INS:		Command_ChgMod_Ins(); break;		// 挿入／上書きモード切り替え
+	case F_CHG_CHARSET:		Command_Chg_Charset((EncodingType)lparam1, lparam2 != 0); break;	// 文字コードセット指定	2010/6/14 Uchi
 	// From Here 2003.06.23 Moca
 	// F_CHGMOD_EOL_xxx はマクロに記録されないが、F_CHGMOD_EOLはマクロに記録されるので、マクロ関数を統合できるという手はず
 	case F_CHGMOD_EOL_CRLF:	HandleCommand(F_CHGMOD_EOL, bRedraw, (int)EolType::CRLF, 0, 0, 0); break;	// 入力する改行コードをCRLFに設定
 	case F_CHGMOD_EOL_LF:	HandleCommand(F_CHGMOD_EOL, bRedraw, (int)EolType::LF, 0, 0, 0); break;	// 入力する改行コードをLFに設定
 	case F_CHGMOD_EOL_CR:	HandleCommand(F_CHGMOD_EOL, bRedraw, (int)EolType::CR, 0, 0, 0); break;	// 入力する改行コードをCRに設定
 	// 2006.09.03 Moca F_CHGMOD_EOLで break 忘れの修正
-	case F_CHGMOD_EOL:		Command_CHGMOD_EOL((EolType)lparam1); break;	// 入力する改行コードを設定
+	case F_CHGMOD_EOL:		Command_ChgMod_EOL((EolType)lparam1); break;	// 入力する改行コードを設定
 	// To Here 2003.06.23 Moca
-	case F_CANCEL_MODE:		Command_CANCEL_MODE(); break;	// 各種モードの取り消し
+	case F_CANCEL_MODE:		Command_Cancel_Mode(); break;	// 各種モードの取り消し
 
 	// 設定系
 	case F_SHOWTOOLBAR:		Command_ShowToolBar(); break;	// ツールバーの表示/非表示
@@ -489,55 +489,55 @@ bool ViewCommander::HandleCommand(
 	case F_SHOWTAB:			Command_ShowTab(); break;		// タブの表示/非表示	//@@@ 2003.06.10 MIK
 	case F_SHOWSTATUSBAR:	Command_ShowStatusBar(); break;	// ステータスバーの表示/非表示
 	case F_SHOWMINIMAP:		Command_ShowMiniMap(); break;	// ミニマップの表示/非表示
-	case F_TYPE_LIST:		Command_TYPE_LIST(); break;		// タイプ別設定一覧
+	case F_TYPE_LIST:		Command_Type_List(); break;		// タイプ別設定一覧
 	case F_CHANGETYPE:		Command_ChangeType((int)lparam1); break;		// タイプ別設定一時適用
-	case F_OPTION_TYPE:		Command_OPTION_TYPE(); break;	// タイプ別設定
-	case F_OPTION:			Command_OPTION(); break;		// 共通設定
-	case F_FONT:			Command_FONT(); break;			// フォント設定
+	case F_OPTION_TYPE:		Command_Option_Type(); break;	// タイプ別設定
+	case F_OPTION:			Command_Option(); break;		// 共通設定
+	case F_FONT:			Command_Font(); break;			// フォント設定
 	case F_SETFONTSIZE:		Command_SetFontSize((int)lparam1, (int)lparam2, (int)lparam3); break;	// フォントサイズ設定
 	case F_SETFONTSIZEUP:	HandleCommand(F_SETFONTSIZE, bRedraw, 0, 1, 2, 0); break;	// フォントサイズ拡大
 	case F_SETFONTSIZEDOWN:	HandleCommand(F_SETFONTSIZE, bRedraw, 0, -1, 2, 0); break;	// フォントサイズ縮小
 	case F_WRAPWINDOWWIDTH:	Command_WrapWindowWidth(); break;// 現在のウィンドウ幅で折り返し	// Oct. 7, 2000 JEPRO WRAPWINDIWWIDTH を WRAPWINDOWWIDTH に変更
 	case F_FAVORITE:		Command_Favorite(); break;		// 履歴の管理	//@@@ 2003.04.08 MIK
 	// Jan. 29, 2005 genta 引用符の設定
-	case F_SET_QUOTESTRING:	Command_SET_QUOTESTRING((const WCHAR*)lparam1);	break;
+	case F_SET_QUOTESTRING:	Command_Set_QuoteString((const WCHAR*)lparam1);	break;
 	case F_TMPWRAPNOWRAP:	HandleCommand(F_TEXTWRAPMETHOD, bRedraw, (LPARAM)TextWrappingMethod::NoWrapping, 0, 0, 0); break;	// 折り返さない（一時設定）			// 2008.05.30 nasukoji
 	case F_TMPWRAPSETTING:	HandleCommand(F_TEXTWRAPMETHOD, bRedraw, (LPARAM)TextWrappingMethod::SettingWidth, 0, 0, 0); break;	// 指定桁で折り返す（一時設定）		// 2008.05.30 nasukoji
 	case F_TMPWRAPWINDOW:	HandleCommand(F_TEXTWRAPMETHOD, bRedraw, (LPARAM)TextWrappingMethod::WindowWidth, 0, 0, 0); break;	// 右端で折り返す（一時設定）		// 2008.05.30 nasukoji
 	case F_TEXTWRAPMETHOD:	Command_TextWrapMethod((TextWrappingMethod)lparam1); break;			// テキストの折り返し方法	// 2008.05.30 nasukoji
-	case F_SELECT_COUNT_MODE:	Command_SELECT_COUNT_MODE((int)lparam1); break;		// 文字カウントの方法		// 2009.07.06 syat
+	case F_SELECT_COUNT_MODE:	Command_Select_Count_Mode((int)lparam1); break;		// 文字カウントの方法		// 2009.07.06 syat
 
 	// マクロ系
-	case F_RECKEYMACRO:		Command_RECKEYMACRO(); break;	// キーマクロの記録開始／終了
-	case F_SAVEKEYMACRO:	Command_SAVEKEYMACRO(); break;	// キーマクロの保存
-	case F_LOADKEYMACRO:	Command_LOADKEYMACRO(); break;	// キーマクロの読み込み
+	case F_RECKEYMACRO:		Command_RecKeyMacro(); break;	// キーマクロの記録開始／終了
+	case F_SAVEKEYMACRO:	Command_SaveKeyMacro(); break;	// キーマクロの保存
+	case F_LOADKEYMACRO:	Command_LoadKeyMacro(); break;	// キーマクロの読み込み
 	case F_EXECKEYMACRO:									// キーマクロの実行
 		// 再帰処理対策
 		view.SetUndoBuffer(true);
-		Command_EXECKEYMACRO(); return bRet;
+		Command_ExecKeyMacro(); return bRet;
 	case F_EXECEXTMACRO:
 		// 再帰処理対策
 		view.SetUndoBuffer(true);
 		// 名前を指定してマクロ実行
-		Command_EXECEXTMACRO((const WCHAR*)lparam1, (const WCHAR*)lparam2);
+		Command_ExecExtMacro((const WCHAR*)lparam1, (const WCHAR*)lparam2);
 		return bRet;
 	//	From Here Sept. 20, 2000 JEPRO 名称CMMANDをCOMMANDに変更
-	//	case F_EXECCMMAND:		Command_EXECCMMAND(); break;	// 外部コマンド実行
+	//	case F_EXECCMMAND:		Command_ExecCmmand(); break;	// 外部コマンド実行
 	case F_EXECMD_DIALOG:
-		//Command_EXECCOMMAND_DIALOG((const char*)lparam1);	// 外部コマンド実行
-		Command_EXECCOMMAND_DIALOG();	// 外部コマンド実行	// 引数つかってないみたいなので
+		//Command_ExecCommand_Dialog((const char*)lparam1);	// 外部コマンド実行
+		Command_ExecCommand_Dialog();	// 外部コマンド実行	// 引数つかってないみたいなので
 		break;
 	// To Here Sept. 20, 2000
 	case F_EXECMD:
-		//Command_EXECCOMMAND((const char*)lparam1);
-		Command_EXECCOMMAND((LPCWSTR)lparam1, (int)lparam2, (LPCWSTR)lparam3);	// 2006.12.03 maru 引数の拡張のため
+		//Command_ExecCommand((const char*)lparam1);
+		Command_ExecCommand((LPCWSTR)lparam1, (int)lparam2, (LPCWSTR)lparam3);	// 2006.12.03 maru 引数の拡張のため
 		break;
 
 	// カスタムメニュー
 	case F_MENU_RBUTTON:	// 右クリックメニュー
 		// 再帰処理対策
 		view.SetUndoBuffer(true);
-		Command_MENU_RBUTTON();
+		Command_Menu_RButton();
 		return bRet;
 	case F_CUSTMENU_1:  // カスタムメニュー1
 	case F_CUSTMENU_2:  // カスタムメニュー2
@@ -565,7 +565,7 @@ bool ViewCommander::HandleCommand(
 	case F_CUSTMENU_24: // カスタムメニュー24
 		// 再帰処理対策
 		view.SetUndoBuffer(true);
-		nFuncID = Command_CUSTMENU(nCommand - F_CUSTMENU_1 + 1);
+		nFuncID = Command_CustMenu(nCommand - F_CUSTMENU_1 + 1);
 		if (nFuncID != 0) {
 			// コマンドコードによる処理振り分け
 //			HandleCommand(nFuncID, true, 0, 0, 0, 0);
@@ -574,9 +574,9 @@ bool ViewCommander::HandleCommand(
 		return bRet;
 
 	// ウィンドウ系
-	case F_SPLIT_V:			Command_SPLIT_V(); break;	// 上下に分割	// Sept. 17, 2000 jepro 説明の「縦」を「上下に」に変更
-	case F_SPLIT_H:			Command_SPLIT_H(); break;	// 左右に分割	// Sept. 17, 2000 jepro 説明の「横」を「左右に」に変更
-	case F_SPLIT_VH:		Command_SPLIT_VH(); break;	// 縦横に分割	// Sept. 17, 2000 jepro 説明に「に」を追加
+	case F_SPLIT_V:			Command_Split_V(); break;	// 上下に分割	// Sept. 17, 2000 jepro 説明の「縦」を「上下に」に変更
+	case F_SPLIT_H:			Command_Split_H(); break;	// 左右に分割	// Sept. 17, 2000 jepro 説明の「横」を「左右に」に変更
+	case F_SPLIT_VH:		Command_Split_VH(); break;	// 縦横に分割	// Sept. 17, 2000 jepro 説明に「に」を追加
 	case F_WINCLOSE:		Command_WinClose(); break;	// ウィンドウを閉じる
 	case F_WIN_CLOSEALL:	// すべてのウィンドウを閉じる	// Oct. 7, 2000 jepro 「編集ウィンドウの全終了」を左記のように変更
 		// Oct. 17, 2000 JEPRO 名前を変更(F_FILECLOSEALL→F_WIN_CLOSEALL)
@@ -653,19 +653,19 @@ bool ViewCommander::HandleCommand(
 		break;
 
 	// 支援
-	case F_HOKAN:			Command_HOKAN(); break;			// 入力補完
-	case F_HELP_CONTENTS:	Command_HELP_CONTENTS(); break;	// ヘルプ目次 					// Nov. 25, 2000 JEPRO 追加
-	case F_HELP_SEARCH:		Command_HELP_SEARCH(); break;	// ヘルプトキーワード検索 		// Nov. 25, 2000 JEPRO 追加
+	case F_HOKAN:			Command_Hokan(); break;			// 入力補完
+	case F_HELP_CONTENTS:	Command_Help_Contents(); break;	// ヘルプ目次 					// Nov. 25, 2000 JEPRO 追加
+	case F_HELP_SEARCH:		Command_Help_Search(); break;	// ヘルプトキーワード検索 		// Nov. 25, 2000 JEPRO 追加
 	case F_TOGGLE_KEY_SEARCH:	Command_ToggleKeySearch((int)lparam1); break;	// キャレット位置の単語を辞書検索する機能ON-OFF		// 2006.03.24 fon
 	case F_MENU_ALLFUNC:									// コマンド一覧
 		// 再帰処理対策
 		view.SetUndoBuffer(true);
-		Command_MENU_ALLFUNC();
+		Command_Menu_AllFunc();
 		return bRet;
-	case F_EXTHELP1:	Command_EXTHELP1(); break;		// 外部ヘルプ１
+	case F_EXTHELP1:	Command_ExtHelp1(); break;		// 外部ヘルプ１
 	case F_EXTHTMLHELP:	// 外部HTMLヘルプ
 		// Jul. 5, 2002 genta
-		Command_EXTHTMLHELP((const WCHAR*)lparam1, (const WCHAR*)lparam2);
+		Command_ExtHTMLHelp((const WCHAR*)lparam1, (const WCHAR*)lparam2);
 		break;
 	case F_ABOUT:	Command_About(); break;				// バージョン情報	// Dec. 24, 2000 JEPRO 追加
 

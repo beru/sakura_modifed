@@ -341,10 +341,10 @@ void ViewCommander::Command_Print_PageSetUp(void)
 
 // From Here Feb. 10, 2001 JEPRO 追加
 // C/C++ヘッダファイルまたはソースファイル オープン機能
-bool ViewCommander::Command_OPEN_HfromtoC(bool bCheckOnly)
+bool ViewCommander::Command_Open_HfromtoC(bool bCheckOnly)
 {
-	if (Command_OPEN_HHPP(bCheckOnly, false))	return true;
-	if (Command_OPEN_CCPP(bCheckOnly, false))	return true;
+	if (Command_Open_HHPP(bCheckOnly, false))	return true;
+	if (Command_Open_CCPP(bCheckOnly, false))	return true;
 	ErrorBeep();
 	return false;
 // 2002/03/24 YAZAKI コードの重複を削減
@@ -354,7 +354,7 @@ bool ViewCommander::Command_OPEN_HfromtoC(bool bCheckOnly)
 
 // C/C++ヘッダファイル オープン機能		// Feb. 10, 2001 jepro	説明を「インクルードファイル」から変更
 //BOOL ViewCommander::Command_OPENINCLUDEFILE(bool bCheckOnly)
-bool ViewCommander::Command_OPEN_HHPP(bool bCheckOnly, bool bBeepWhenMiss)
+bool ViewCommander::Command_Open_HHPP(bool bCheckOnly, bool bBeepWhenMiss)
 {
 	// 2003.06.28 Moca ヘッダ・ソースのコードを統合＆削除
 	static const TCHAR* source_ext[] = { _T("c"), _T("cpp"), _T("cxx"), _T("cc"), _T("cp"), _T("c++") };
@@ -368,7 +368,7 @@ bool ViewCommander::Command_OPEN_HHPP(bool bCheckOnly, bool bBeepWhenMiss)
 
 // C/C++ソースファイル オープン機能
 //BOOL ViewCommander::Command_OPENCCPP(bool bCheckOnly)	//Feb. 10, 2001 JEPRO	コマンド名を若干変更
-bool ViewCommander::Command_OPEN_CCPP(bool bCheckOnly, bool bBeepWhenMiss)
+bool ViewCommander::Command_Open_CCPP(bool bCheckOnly, bool bBeepWhenMiss)
 {
 	// 2003.06.28 Moca ヘッダ・ソースのコードを統合＆削除
 	static const TCHAR* source_ext[] = { _T("c"), _T("cpp"), _T("cxx"), _T("cc"), _T("cp"), _T("c++") };
@@ -381,7 +381,7 @@ bool ViewCommander::Command_OPEN_CCPP(bool bCheckOnly, bool bBeepWhenMiss)
 
 
 // Oracle SQL*Plusをアクティブ表示
-void ViewCommander::Command_ACTIVATE_SQLPLUS(void)
+void ViewCommander::Command_Activate_SQLPlus(void)
 {
 	HWND hwndSQLPLUS = ::FindWindow(_T("SqlplusWClass"), _T("Oracle SQL*Plus"));
 	if (!hwndSQLPLUS) {
@@ -396,7 +396,7 @@ void ViewCommander::Command_ACTIVATE_SQLPLUS(void)
 
 
 // Oracle SQL*Plusで実行
-void ViewCommander::Command_PLSQL_COMPILE_ON_SQLPLUS(void)
+void ViewCommander::Command_PLSQL_Compile_On_SQLPlus(void)
 {
 //	HGLOBAL		hgClip;
 //	char*		pszClip;
@@ -796,7 +796,7 @@ bool ViewCommander::Command_InsFile(
 			int			nLineLen = buf.GetStringLength();
 
 			++nLineNum;
-			Command_INSTEXT(false, pLine, LogicInt(nLineLen), true);
+			Command_InsText(false, pLine, LogicInt(nLineLen), true);
 
 			// 進捗ダイアログ有無
 			if (!pDlgCancel) {

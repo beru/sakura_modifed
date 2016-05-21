@@ -210,7 +210,7 @@ normal_action:;
 		caret.underLine.UnderLineLock();
 		if (ptMouse.x < textArea.GetAreaLeft()) {
 			// カーソル下移動
-			GetCommander().Command_DOWN(true, false);
+			GetCommander().Command_Down(true, false);
 		}
 	}else {
 		// カーソル移動
@@ -428,8 +428,8 @@ normal_action:;
 			GetSelectionInfo().bBeginLineSelect = true;
 
 			// 2009.02.22 ryoji 
-			// Command_GoLineEnd()/Command_RIGHT()ではなく次のレイアウトを調べて移動選択する方法に変更
-			// ※Command_GoLineEnd()/Command_RIGHT()は[折り返し末尾文字の右へ移動]＋[次行の先頭文字の右に移動]の仕様だとＮＧ
+			// Command_GoLineEnd()/Command_Right()ではなく次のレイアウトを調べて移動選択する方法に変更
+			// ※Command_GoLineEnd()/Command_Right()は[折り返し末尾文字の右へ移動]＋[次行の先頭文字の右に移動]の仕様だとＮＧ
 			const Layout* pLayout = pEditDoc->layoutMgr.SearchLineByLayoutY(ptNewCaret.GetY2());
 			if (pLayout) {
 				LayoutPoint ptCaret;
@@ -457,7 +457,7 @@ normal_action:;
 			//	行番号の下をクリックしてドラッグを開始するとおかしくなるのを修正
 			//	行番号をクリックした場合にはGetSelectionInfo().ChangeSelectAreaByCurrentCursor()にて
 			//	GetSelectionInfo().select.GetTo().x/GetSelectionInfo().select.GetTo().yに-1が設定されるが、上の
-			//	GetCommander().Command_GoLineEnd(), Command_RIGHT()によって行選択が行われる。
+			//	GetCommander().Command_GoLineEnd(), Command_Right()によって行選択が行われる。
 			//	しかしキャレットが末尾にある場合にはキャレットが移動しないので
 			//	GetSelectionInfo().select.GetTo().x/GetSelectionInfo().select.GetTo().yが-1のまま残ってしまい、それが
 			//	原点に設定されるためにおかしくなっていた。
@@ -613,7 +613,7 @@ void EditView::OnRBUTTONUP(WPARAM fwKeys, int xPos , int yPos)
 		::PostMessage(::GetParent(hwndParent), WM_COMMAND, MAKELONG(nFuncID, CMD_FROM_MOUSE), (LPARAM)NULL);
 	}
 //	// 右クリックメニュー
-//	GetCommander().Command_MENU_RBUTTON();
+//	GetCommander().Command_Menu_RButton();
 	return;
 }
 
@@ -1981,7 +1981,7 @@ STDMETHODIMP EditView::Drop(LPDATAOBJECT pDataObject, DWORD dwKeyState, POINTL p
 			}
 		}
 
-		GetCommander().Command_INSTEXT(true, memBuf.GetStringPtr(), memBuf.GetStringLength(), false);
+		GetCommander().Command_InsText(true, memBuf.GetStringPtr(), memBuf.GetStringLength(), false);
 
 		// 挿入前のキャレット位置から挿入後のキャレット位置までを選択範囲にする
 		LayoutPoint ptSelectFrom;
@@ -1995,7 +1995,7 @@ STDMETHODIMP EditView::Drop(LPDATAOBJECT pDataObject, DWORD dwKeyState, POINTL p
 		// bBoxSelected == TRUE
 		// GetSelectionInfo().IsBoxSelecting() == FALSE
 		// 貼り付け（クリップボードから貼り付け）
-		GetCommander().Command_PASTEBOX(memBuf.GetStringPtr(), memBuf.GetStringLength());
+		GetCommander().Command_PasteBox(memBuf.GetStringPtr(), memBuf.GetStringLength());
 		AdjustScrollBars(); // 2007.07.22 ryoji
 		Redraw();
 	}

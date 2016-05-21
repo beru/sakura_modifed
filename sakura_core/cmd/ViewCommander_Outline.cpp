@@ -33,7 +33,7 @@
 	2002/3/13 YAZAKI nOutlineTypeとnListTypeを統合。
 */
 // トグル用のフラグに変更 20060201 aroka
-bool ViewCommander::Command_FUNCLIST(
+bool ViewCommander::Command_FuncList(
 	ShowDialogType nAction,
 	OutlineType _nOutlineType = OutlineType::Default
 	)

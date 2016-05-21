@@ -141,7 +141,7 @@ void GrepAgent::AddTail(
 	}else {
 		lastViewDstAddedTime = GetTickCount64();
 		auto& cmder = editView.GetCommander();
-		cmder.Command_ADDTAIL( mem.GetStringPtr(), mem.GetStringLength() );
+		cmder.Command_AddTail( mem.GetStringPtr(), mem.GetStringLength() );
 		if (!editWnd.UpdateTextWrap()) {		// 折り返し方法関連の更新
 			editWnd.RedrawAllViews(&editView);	//	他のペインの表示を更新
 		}

@@ -26,7 +26,7 @@
 #include "mem/MemoryIterator.h"	// @@@ 2002.09.28 YAZAKI
 
 
-void ViewCommander::Command_MOVECURSOR(LogicPoint pos, int option)
+void ViewCommander::Command_MoveCursor(LogicPoint pos, int option)
 {
 	if (pos.GetX2() < 0 || pos.GetY2() < 0) {
 		ErrorBeep();
@@ -34,10 +34,10 @@ void ViewCommander::Command_MOVECURSOR(LogicPoint pos, int option)
 	}
 	LayoutPoint layoutPos;
 	GetDocument().layoutMgr.LogicToLayout(pos, &layoutPos);
-	Command_MOVECURSORLAYOUT(layoutPos, option);
+	Command_MoveCursorLayout(layoutPos, option);
 }
 
-void ViewCommander::Command_MOVECURSORLAYOUT(LayoutPoint pos, int option)
+void ViewCommander::Command_MoveCursorLayout(LayoutPoint pos, int option)
 {
 	if (pos.GetX2() < 0 || pos.GetY2() < 0) {
 		ErrorBeep();
@@ -84,7 +84,7 @@ void ViewCommander::Command_MOVECURSORLAYOUT(LayoutPoint pos, int option)
 /////////////////////////////////// 以下はコマンド群 (Oct. 17, 2000 jepro note) ///////////////////////////////////////////
 
 // カーソル上移動
-int ViewCommander::Command_UP(bool bSelect, bool bRepeat, int lines)
+int ViewCommander::Command_Up(bool bSelect, bool bRepeat, int lines)
 {
 	auto& caret = GetCaret();
 	// From Here Oct. 24, 2001 genta
@@ -123,7 +123,7 @@ int ViewCommander::Command_UP(bool bSelect, bool bRepeat, int lines)
 
 
 // カーソル下移動
-int ViewCommander::Command_DOWN(bool bSelect, bool bRepeat)
+int ViewCommander::Command_Down(bool bSelect, bool bRepeat)
 {
 	auto& caret = GetCaret();
 	int nRepeat = 0;
@@ -161,7 +161,7 @@ int ViewCommander::Command_DOWN(bool bSelect, bool bRepeat)
 			位置に移動させられる．
 	@date 2014.01.10 Moca キーリピート時、MoveCursorを一度にまとめる
 */
-int ViewCommander::Command_LEFT(bool bSelect, bool bRepeat)
+int ViewCommander::Command_Left(bool bSelect, bool bRepeat)
 {
 	bool bUnderlineDoNotOFF = true;		// アンダーラインを消去しない
 	if (bSelect) {
@@ -180,7 +180,7 @@ int ViewCommander::Command_LEFT(bool bSelect, bool bRepeat)
 		}
 		if (!bSelect) {
 			if (selInfo.IsTextSelected()) {
-				this->Command_CANCEL_MODE(1);
+				this->Command_Cancel_Mode(1);
 				nRes = 1;
 				continue; // 選択のキャンセルで左移動を 1消費。この後の移動処理はスキップする。
 			}else if (selInfo.IsBoxSelecting()) {
@@ -264,7 +264,7 @@ int ViewCommander::Command_LEFT(bool bSelect, bool bRepeat)
 /* カーソル右移動
 	@date 2014.01.10 Moca キーリピート時、MoveCursorを一度にまとめる
 */
-void ViewCommander::Command_RIGHT(
+void ViewCommander::Command_Right(
 	bool bSelect,
 	bool bIgnoreCurrentSelection,
 	bool bRepeat
@@ -289,7 +289,7 @@ void ViewCommander::Command_RIGHT(
 			}
 			if (!bSelect) {
 				if (selInfo.IsTextSelected()) {
-					this->Command_CANCEL_MODE(2);
+					this->Command_Cancel_Mode(2);
 					continue; // 選択のキャンセルで右移動を 1消費。この後の移動処理はスキップする。
 				}else if (selInfo.IsBoxSelecting()) {
 					selInfo.SetBoxSelect(false);
@@ -399,7 +399,7 @@ void ViewCommander::Command_RIGHT(
 
 
 // カーソル上移動(２行づつ)
-void ViewCommander::Command_UP2(bool bSelect)
+void ViewCommander::Command_Up2(bool bSelect)
 {
 	GetCaret().Cursor_UPDOWN(LayoutInt(-2), bSelect);
 	return;
@@ -407,7 +407,7 @@ void ViewCommander::Command_UP2(bool bSelect)
 
 
 // カーソル下移動(２行づつ)
-void ViewCommander::Command_DOWN2(bool bSelect)
+void ViewCommander::Command_Down2(bool bSelect)
 {
 	GetCaret().Cursor_UPDOWN(LayoutInt(2), bSelect);
 	return;
@@ -415,7 +415,7 @@ void ViewCommander::Command_DOWN2(bool bSelect)
 
 
 // 単語の左端に移動
-void ViewCommander::Command_WORDLEFT(bool bSelect)
+void ViewCommander::Command_WordLeft(bool bSelect)
 {
 	bool bUnderlineDoNotOFF = true;		// アンダーラインを消去しない
 	if (bSelect) {
@@ -445,7 +445,7 @@ void ViewCommander::Command_WORDLEFT(bool bSelect)
 		bool bIsFreeCursorModeOld = csGeneral.bIsFreeCursorMode;	// フリーカーソルモードか
 		csGeneral.bIsFreeCursorMode = false;
 		// カーソル左移動
-		Command_LEFT(bSelect, false);
+		Command_Left(bSelect, false);
 		csGeneral.bIsFreeCursorMode = bIsFreeCursorModeOld;	// フリーカーソルモードか
 		return;
 	}
@@ -489,7 +489,7 @@ void ViewCommander::Command_WORDLEFT(bool bSelect)
 		bool bIsFreeCursorModeOld = csGeneral.bIsFreeCursorMode;	// フリーカーソルモードか
 		csGeneral.bIsFreeCursorMode = false;
 		// カーソル左移動
-		Command_LEFT(bSelect, false);
+		Command_Left(bSelect, false);
 		csGeneral.bIsFreeCursorMode = bIsFreeCursorModeOld;	// フリーカーソルモードか
 	}
 	return;
@@ -497,7 +497,7 @@ void ViewCommander::Command_WORDLEFT(bool bSelect)
 
 
 // 単語の右端に移動
-void ViewCommander::Command_WORDRIGHT(bool bSelect)
+void ViewCommander::Command_WordRight(bool bSelect)
 {
 	bool bUnderlineDoNotOFF = true;	// アンダーラインを消去しない
 	if (bSelect) {
@@ -573,7 +573,7 @@ try_again:;
 		bool bIsFreeCursorModeOld = csGeneral.bIsFreeCursorMode;	// フリーカーソルモードか
 		csGeneral.bIsFreeCursorMode = false;
 		// カーソル右移動
-		Command_RIGHT(bSelect, false, false);
+		Command_Right(bSelect, false, false);
 		csGeneral.bIsFreeCursorMode = bIsFreeCursorModeOld;	// フリーカーソルモードか
 		if (!bTryAgain) {
 			bTryAgain = true;
@@ -859,7 +859,7 @@ void ViewCommander::Command_GoFileEnd(bool bSelect)
 	view.AddCurrentLineToHistory();
 	auto& caret = GetCaret();
 	caret.Cursor_UPDOWN(GetDocument().layoutMgr.GetLineCount() , bSelect);
-	Command_DOWN(bSelect, true);
+	Command_Down(bSelect, true);
 	if (!si.IsBoxSelecting()) {							// 2002/04/18 YAZAKI
 		/*	2004.04.19 fotomo
 			改行のない最終行で選択肢ながら文書末へ移動した場合に
@@ -881,7 +881,7 @@ void ViewCommander::Command_GoFileEnd(bool bSelect)
 
 
 // カーソル行をウィンドウ中央へ
-void ViewCommander::Command_CURLINECENTER(void)
+void ViewCommander::Command_CurLineCenter(void)
 {
 	LayoutInt nViewTopLine;
 	auto& textArea = view.GetTextArea();
@@ -904,7 +904,7 @@ void ViewCommander::Command_CURLINECENTER(void)
 
 
 // 移動履歴を前へたどる
-void ViewCommander::Command_JUMPHIST_PREV(void)
+void ViewCommander::Command_JumpHist_Prev(void)
 {
 	// 2001.12.13 hor
 	// 移動履歴の最後に現在の位置を記憶する
@@ -930,7 +930,7 @@ void ViewCommander::Command_JUMPHIST_PREV(void)
 
 
 // 移動履歴を次へたどる
-void ViewCommander::Command_JUMPHIST_NEXT(void)
+void ViewCommander::Command_JumpHist_Next(void)
 {
 	if (view.pHistory->CheckNext()) {
 		if (!view.pHistory->NextValid()) {
@@ -948,7 +948,7 @@ void ViewCommander::Command_JUMPHIST_NEXT(void)
 
 
 // 現在位置を移動履歴に登録する
-void ViewCommander::Command_JUMPHIST_SET(void)
+void ViewCommander::Command_JumpHist_Set(void)
 {
 	view.AddCurrentLineToHistory();
 }
@@ -1205,7 +1205,7 @@ void ViewCommander::Command_AutoScroll()
 	}
 }
 
-void ViewCommander::Command_WHEELUP(int zDelta)
+void ViewCommander::Command_WheelUp(int zDelta)
 {
 	int zDelta2 = (zDelta == 0 ? 120: zDelta);
 	WPARAM wParam = MAKELONG(0, zDelta2);
@@ -1213,7 +1213,7 @@ void ViewCommander::Command_WHEELUP(int zDelta)
 	view.OnMOUSEWHEEL2(wParam, lParam, false, F_WHEELUP);
 }
 
-void ViewCommander::Command_WHEELDOWN(int zDelta)
+void ViewCommander::Command_WheelDown(int zDelta)
 {
 	int zDelta2 = -1 * (zDelta == 0 ? 120: zDelta);
 	WPARAM wParam = MAKELONG(0, zDelta2);
@@ -1221,7 +1221,7 @@ void ViewCommander::Command_WHEELDOWN(int zDelta)
 	view.OnMOUSEWHEEL2(wParam, lParam, false, F_WHEELDOWN);
 }
 
-void ViewCommander::Command_WHEELLEFT(int zDelta)
+void ViewCommander::Command_WheelLeft(int zDelta)
 {
 	int zDelta2 = -1 * (zDelta == 0 ? 120: zDelta);
 	WPARAM wParam = MAKELONG(0, zDelta2);
@@ -1229,7 +1229,7 @@ void ViewCommander::Command_WHEELLEFT(int zDelta)
 	view.OnMOUSEWHEEL2(wParam, lParam, true, F_WHEELLEFT);
 }
 
-void ViewCommander::Command_WHEELRIGHT(int zDelta)
+void ViewCommander::Command_WheelRight(int zDelta)
 {
 	int zDelta2 = (zDelta == 0 ? 120: zDelta);
 	WPARAM wParam = MAKELONG(0, zDelta2);
@@ -1237,7 +1237,7 @@ void ViewCommander::Command_WHEELRIGHT(int zDelta)
 	view.OnMOUSEWHEEL2(wParam, lParam, true, F_WHEELRIGHT);
 }
 
-void ViewCommander::Command_WHEELPAGEUP(int zDelta)
+void ViewCommander::Command_WheelPageUp(int zDelta)
 {
 	int zDelta2 = (zDelta == 0 ? 120: zDelta);
 	WPARAM wParam = MAKELONG(0, zDelta2);
@@ -1245,7 +1245,7 @@ void ViewCommander::Command_WHEELPAGEUP(int zDelta)
 	view.OnMOUSEWHEEL2(wParam, lParam, false, F_WHEELPAGEUP);
 }
 
-void ViewCommander::Command_WHEELPAGEDOWN(int zDelta)
+void ViewCommander::Command_WheelPageDown(int zDelta)
 {
 	int zDelta2 = -1 * (zDelta == 0 ? 120: zDelta);
 	WPARAM wParam = MAKELONG(0, zDelta2);
@@ -1253,7 +1253,7 @@ void ViewCommander::Command_WHEELPAGEDOWN(int zDelta)
 	view.OnMOUSEWHEEL2(wParam, lParam, false, F_WHEELPAGEDOWN);
 }
 
-void ViewCommander::Command_WHEELPAGELEFT(int zDelta)
+void ViewCommander::Command_WheelPageLeft(int zDelta)
 {
 	int zDelta2 = -1 * (zDelta == 0 ? 120: zDelta);
 	WPARAM wParam = MAKELONG(0, zDelta2);
@@ -1261,7 +1261,7 @@ void ViewCommander::Command_WHEELPAGELEFT(int zDelta)
 	view.OnMOUSEWHEEL2(wParam, lParam, true, F_WHEELPAGELEFT);
 }
 
-void ViewCommander::Command_WHEELPAGERIGHT(int zDelta)
+void ViewCommander::Command_WheelPageRight(int zDelta)
 {
 	int zDelta2 = (zDelta == 0 ? 120: zDelta);
 	WPARAM wParam = MAKELONG(0, zDelta2);
@@ -1272,7 +1272,7 @@ void ViewCommander::Command_WHEELPAGERIGHT(int zDelta)
 /*! 次の変更行へ
 	変更行のブロックの先頭行と、変更行のブロックの末尾(次の行頭)に移動する
 */
-void ViewCommander::Command_MODIFYLINE_NEXT( bool bSelect )
+void ViewCommander::Command_ModifyLine_Next( bool bSelect )
 {
 	auto& docLineMgr = GetDocument().docLineMgr;
 	LogicInt nYOld = GetCaret().GetCaretLogicPos().y;
@@ -1348,9 +1348,9 @@ void ViewCommander::Command_MODIFYLINE_NEXT( bool bSelect )
 
 /*! 前の変更行へ
 	変更行のブロックの先頭行と、変更行のブロックの末尾(次の行頭)に移動する
-	Command_MODIFYLINE_NEXTと同じ位置に止まる
+	Command_ModifyLine_Nextと同じ位置に止まる
 */
-void ViewCommander::Command_MODIFYLINE_PREV( bool bSelect )
+void ViewCommander::Command_ModifyLine_Prev( bool bSelect )
 {
 	auto& docLineMgr = GetDocument().docLineMgr;
 	LogicInt nYOld = GetCaret().GetCaretLogicPos().y;

@@ -32,7 +32,7 @@ void ViewCommander::Command_WordDeleteToStart(void)
 	}
 
 	// 単語の左端に移動
-	ViewCommander::Command_WORDLEFT(true);
+	ViewCommander::Command_WordLeft(true);
 	if (!selInfo.IsTextSelected()) {
 		ErrorBeep();
 		return;
@@ -70,7 +70,7 @@ void ViewCommander::Command_WordDeleteToEnd(void)
 		}
 	}
 	// 単語の右端に移動
-	ViewCommander::Command_WORDRIGHT(true);
+	ViewCommander::Command_WordRight(true);
 	if (!selInfo.IsTextSelected()) {
 		ErrorBeep();
 		return;
@@ -96,7 +96,7 @@ void ViewCommander::Command_WordCut(void)
 	auto& selInfo = view.GetSelectionInfo();
 	if (selInfo.IsTextSelected()) {
 		// 切り取り(選択範囲をクリップボードにコピーして削除)
-		Command_CUT();
+		Command_Cut();
 		return;
 	}
 	// 現在位置の単語選択
@@ -104,9 +104,9 @@ void ViewCommander::Command_WordCut(void)
 	// 切り取り(選択範囲をクリップボードにコピーして削除)
 	if (!selInfo.IsTextSelected()) {
 		// 単語選択で選択できなかったら、次の文字を選ぶことに挑戦。
-		Command_RIGHT(true, false, false);
+		Command_Right(true, false, false);
 	}
-	Command_CUT();
+	Command_Cut();
 	return;
 }
 
@@ -134,7 +134,7 @@ void ViewCommander::Command_LineCutToStart(void)
 	Layout* pLayout;
 	if (selInfo.IsTextSelected()) {	// テキストが選択されているか
 		// 切り取り(選択範囲をクリップボードにコピーして削除)
-		Command_CUT();
+		Command_Cut();
 		return;
 	}
 	auto& layoutMgr = GetDocument().layoutMgr;
@@ -158,7 +158,7 @@ void ViewCommander::Command_LineCutToStart(void)
 	selInfo.SetSelectArea(range);
 
 	// 切り取り(選択範囲をクリップボードにコピーして削除)
-	Command_CUT();
+	Command_Cut();
 }
 
 
@@ -170,7 +170,7 @@ void ViewCommander::Command_LineCutToEnd(void)
 	Layout* pLayout;
 	if (selInfo.IsTextSelected()) {	// テキストが選択されているか
 		// 切り取り(選択範囲をクリップボードにコピーして削除)
-		Command_CUT();
+		Command_Cut();
 		return;
 	}
 	auto& layoutMgr = GetDocument().layoutMgr;
@@ -215,7 +215,7 @@ void ViewCommander::Command_LineCutToEnd(void)
 	selInfo.SetSelectArea(range);
 
 	// 切り取り(選択範囲をクリップボードにコピーして削除)
-	Command_CUT();
+	Command_Cut();
 }
 
 

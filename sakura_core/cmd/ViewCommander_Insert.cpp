@@ -19,7 +19,7 @@
 #include "env/FormatManager.h"
 
 // 日付挿入
-void ViewCommander::Command_INS_DATE(void)
+void ViewCommander::Command_Ins_Date(void)
 {
 	// 日付をフォーマット
 	TCHAR szText[1024];
@@ -28,12 +28,12 @@ void ViewCommander::Command_INS_DATE(void)
 	FormatManager().MyGetDateFormat(systime, szText, _countof(szText) - 1);
 
 	// テキストを貼り付け ver1
-	Command_INSTEXT(true, to_wchar(szText), LogicInt(-1), true);
+	Command_InsText(true, to_wchar(szText), LogicInt(-1), true);
 }
 
 
 // 時刻挿入
-void ViewCommander::Command_INS_TIME(void)
+void ViewCommander::Command_Ins_Time(void)
 {
 	// 時刻をフォーマット
 	TCHAR szText[1024];
@@ -42,7 +42,7 @@ void ViewCommander::Command_INS_TIME(void)
 	FormatManager().MyGetTimeFormat(systime, szText, _countof(szText) - 1);
 
 	// テキストを貼り付け ver1
-	Command_INSTEXT(true, to_wchar(szText), LogicInt(-1), true);
+	Command_InsText(true, to_wchar(szText), LogicInt(-1), true);
 }
 
 

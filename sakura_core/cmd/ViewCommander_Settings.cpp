@@ -153,7 +153,7 @@ void ViewCommander::Command_ShowMiniMap(void)
 
 
 // タイプ別設定一覧
-void ViewCommander::Command_TYPE_LIST(void)
+void ViewCommander::Command_Type_List(void)
 {
 	DlgTypeList dlgTypeList;
 	DlgTypeList::Result result;
@@ -192,14 +192,14 @@ void ViewCommander::Command_ChangeType(int nTypePlusOne)
 
 
 // タイプ別設定
-void ViewCommander::Command_OPTION_TYPE(void)
+void ViewCommander::Command_Option_Type(void)
 {
 	EditApp::getInstance().OpenPropertySheetTypes(-1, GetDocument().docType.GetDocumentType());
 }
 
 
 // 共通設定
-void ViewCommander::Command_OPTION(void)
+void ViewCommander::Command_Option(void)
 {
 	// 設定プロパティシート テスト用
 	EditApp::getInstance().OpenPropertySheet(-1);
@@ -207,7 +207,7 @@ void ViewCommander::Command_OPTION(void)
 
 
 // フォント設定
-void ViewCommander::Command_FONT(void)
+void ViewCommander::Command_Font(void)
 {
 	HWND hwndFrame = GetMainWindow();
 
@@ -468,7 +468,7 @@ void ViewCommander::Command_TextWrapMethod(TextWrappingMethod nWrapMethod)
 		SelectCountMode::ByChar ; 文字数でカウント
 		SelectCountMode::ByByte ; バイト数でカウント
 */
-void ViewCommander::Command_SELECT_COUNT_MODE(int nMode)
+void ViewCommander::Command_Select_Count_Mode(int nMode)
 {
 	// 設定には保存せず、View毎に持つフラグを設定
 	//BOOL* pbDispSelCountByByte = &GetDllShareData().common.statusBar.bDispSelCountByByte;
@@ -496,7 +496,7 @@ void ViewCommander::Command_SELECT_COUNT_MODE(int nMode)
 /*!	@brief 引用符の設定
 	@date Jan. 29, 2005 genta 新規作成
 */
-void ViewCommander::Command_SET_QUOTESTRING(const wchar_t* quotestr)
+void ViewCommander::Command_Set_QuoteString(const wchar_t* quotestr)
 {
 	if (!quotestr) {
 		return;

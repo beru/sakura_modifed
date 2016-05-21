@@ -1535,7 +1535,7 @@ int	EditView::CreatePopUpMenu_R(void)
 	// 右クリックメニューの定義はカスタムメニュー配列の0番目
 	int nMenuIdx = CUSTMENU_INDEX_FOR_RBUTTONUP;	// マジックナンバー排除	//@@@ 2003.06.13 MIK
 
-	// Note: ViewCommander::Command_CUSTMENU と大体同じ
+	// Note: ViewCommander::Command_CustMenu と大体同じ
 	HMENU hMenu = ::CreatePopupMenu();
 
 	// 2010.07.24 Moca オーナードロー対応のために前に移動してMenuDrawer経由で追加する

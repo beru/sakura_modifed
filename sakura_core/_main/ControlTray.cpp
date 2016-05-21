@@ -798,7 +798,7 @@ LRESULT ControlTray::DispatchEvent(
 			case F_EXTHTMLHELP:
 				// 外部HTMLヘルプ
 				{
-//						CEditView::Command_EXTHTMLHELP();
+//						CEditView::Command_ExtHTMLHelp();
 				}
 				break;
 			case F_TYPE_LIST:	// タイプ別設定一覧

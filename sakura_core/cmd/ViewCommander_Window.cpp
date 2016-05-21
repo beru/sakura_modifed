@@ -31,7 +31,7 @@
 
 
 // 上下に分割	// Sept. 17, 2000 jepro 説明の「縦」を「上下に」に変更
-void ViewCommander::Command_SPLIT_V(void)
+void ViewCommander::Command_Split_V(void)
 {
 	GetEditWindow().splitterWnd.VSplitOnOff();
 	return;
@@ -39,7 +39,7 @@ void ViewCommander::Command_SPLIT_V(void)
 
 
 // 左右に分割	// Sept. 17, 2000 jepro 説明の「横」を「左右に」に変更
-void ViewCommander::Command_SPLIT_H(void)
+void ViewCommander::Command_Split_H(void)
 {
 	GetEditWindow().splitterWnd.HSplitOnOff();
 	return;
@@ -47,7 +47,7 @@ void ViewCommander::Command_SPLIT_H(void)
 
 
 // 縦横に分割	// Sept. 17, 2000 jepro 説明に「に」を追加
-void ViewCommander::Command_SPLIT_VH(void)
+void ViewCommander::Command_Split_VH(void)
 {
 	GetEditWindow().splitterWnd.VHSplitOnOff();
 	return;

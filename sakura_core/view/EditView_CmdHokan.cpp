@@ -156,7 +156,7 @@ void EditView::ShowHokanMgr(NativeW& memData, bool bAutoDecided)
 		// 2004.05.14 Moca HokanMgr::Search‘¤‚Å‰üs‚ğíœ‚·‚é‚æ‚¤‚É‚µA’¼Ú‘‚«Š·‚¦‚é‚Ì‚ğ‚â‚ß‚½
 
 		GetCommander().Command_WordDeleteToStart();
-		GetCommander().Command_INSTEXT(true, memHokanWord.GetStringPtr(), memHokanWord.GetStringLength(), true);
+		GetCommander().Command_InsText(true, memHokanWord.GetStringPtr(), memHokanWord.GetStringLength(), true);
 	}else {
 		bHokan = true;
 	}

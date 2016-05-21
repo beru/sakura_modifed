@@ -34,7 +34,7 @@
 
 
 // キーマクロの記録開始／終了
-void ViewCommander::Command_RECKEYMACRO(void)
+void ViewCommander::Command_RecKeyMacro(void)
 {
 	auto& flags = GetDllShareData().flags;
 	if (flags.bRecordingKeyMacro) {									// キーボードマクロの記録中
@@ -80,7 +80,7 @@ void ViewCommander::Command_RECKEYMACRO(void)
 
 
 // キーマクロの保存
-void ViewCommander::Command_SAVEKEYMACRO(void)
+void ViewCommander::Command_SaveKeyMacro(void)
 {
 	auto& flags = GetDllShareData().flags;
 	flags.bRecordingKeyMacro = false;
@@ -131,7 +131,7 @@ void ViewCommander::Command_SAVEKEYMACRO(void)
 /*! キーマクロの読み込み
 	@date 2005.02.20 novice デフォルトの拡張子変更
  */
-void ViewCommander::Command_LOADKEYMACRO(void)
+void ViewCommander::Command_LoadKeyMacro(void)
 {
 	auto& flags = GetDllShareData().flags;
 	flags.bRecordingKeyMacro = false;
@@ -170,12 +170,12 @@ void ViewCommander::Command_LOADKEYMACRO(void)
 }
 
 // キーマクロの実行
-void ViewCommander::Command_EXECKEYMACRO(void)
+void ViewCommander::Command_ExecKeyMacro(void)
 {
 	auto& flags = GetDllShareData().flags;
 	//@@@ 2002.1.24 YAZAKI 記録中は終了してから実行
 	if (flags.bRecordingKeyMacro) {
-		Command_RECKEYMACRO();
+		Command_RecKeyMacro();
 	}
 	flags.bRecordingKeyMacro = false;
 	flags.hwndRecordingKeyMacro = NULL;	// キーボードマクロを記録中のウィンドウ
@@ -210,7 +210,7 @@ void ViewCommander::Command_EXECKEYMACRO(void)
 	@date 2008.10.23 syat 新規作成
 	@date 2008.12.21 syat 引数「種別」を追加
  */
-void ViewCommander::Command_EXECEXTMACRO(const WCHAR* pszPathW, const WCHAR* pszTypeW)
+void ViewCommander::Command_ExecExtMacro(const WCHAR* pszPathW, const WCHAR* pszTypeW)
 {
 	TCHAR			szPath[_MAX_PATH + 1];
 	const TCHAR*	pszPath = NULL;				// 第1引数をTCHAR*に変換した文字列
@@ -294,7 +294,7 @@ void ViewCommander::Command_EXECEXTMACRO(const WCHAR* pszPathW, const WCHAR* psz
 /*! 外部コマンド実行ダイアログ表示
 	@date 2002.02.02 YAZAKI.
 */
-void ViewCommander::Command_EXECCOMMAND_DIALOG(void)
+void ViewCommander::Command_ExecCommand_Dialog(void)
 {
 	DlgExec dlgExec;
 
@@ -324,8 +324,8 @@ void ViewCommander::Command_EXECCOMMAND_DIALOG(void)
 // Sept. 20, 2000 JEPRO  名称CMMANDをCOMMANDに変更
 // Oct. 9, 2001   genta  マクロ対応のため引数追加
 // 2002.2.2       YAZAKI ダイアログ呼び出し部とコマンド実行部を分離
-//void CEditView::Command_EXECCOMMAND(const char* cmd_string)
-void ViewCommander::Command_EXECCOMMAND(
+//void CEditView::Command_ExecCommand(const char* cmd_string)
+void ViewCommander::Command_ExecCommand(
 	LPCWSTR cmd_string,
 	const int nFlgOpt,
 	LPCWSTR pszCurDir

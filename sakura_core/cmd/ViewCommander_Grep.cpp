@@ -26,7 +26,7 @@
 	@date 2005.01.10 genta CEditView_Commandより移動
 	@author Yazaki
 */
-void ViewCommander::Command_GREP_DIALOG(void)
+void ViewCommander::Command_Grep_Dialog(void)
 {
 	NativeW memCurText;
 	auto& dlgGrep = GetEditWindow().dlgGrep;
@@ -54,7 +54,7 @@ void ViewCommander::Command_GREP_DIALOG(void)
 
 	@date 2005.01.10 genta CEditView_Commandより移動
 */
-void ViewCommander::Command_GREP(void)
+void ViewCommander::Command_Grep(void)
 {
 	NativeW mWork1;
 	NativeT mWork2;
@@ -136,7 +136,7 @@ void ViewCommander::Command_GREP(void)
 
 /*! GREP置換ダイアログの表示
 */
-void ViewCommander::Command_GREP_REPLACE_DLG( void )
+void ViewCommander::Command_Grep_Replace_Dlg( void )
 {
 	NativeW memCurText;
 	DlgGrepReplace& dlgGrepRep = GetEditWindow().dlgGrepReplace;
@@ -165,7 +165,7 @@ void ViewCommander::Command_GREP_REPLACE_DLG( void )
 
 /*! GREP置換実行
 */
-void ViewCommander::Command_GREP_REPLACE(void)
+void ViewCommander::Command_Grep_Replace(void)
 {
 	NativeW cmWork1;
 	NativeT cmWork2;

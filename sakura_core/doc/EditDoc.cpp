@@ -623,7 +623,7 @@ bool EditDoc::HandleCommand(EFunctionCode nCommand)
 }
 
 /*!	タイプ別設定の適用を変更
-	@date 2011.12.15 ViewCommander::Command_TYPE_LISTから移動
+	@date 2011.12.15 ViewCommander::Command_Type_Listから移動
 */
 void EditDoc::OnChangeType()
 {

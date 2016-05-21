@@ -30,7 +30,7 @@
 
 	@date 2007.11.18 ryoji 「選択なしでコピーを可能にする」オプション処理追加
 */
-void ViewCommander::Command_CUT(void)
+void ViewCommander::Command_Cut(void)
 {
 	auto& selInfo = view.GetSelectionInfo();
 	if (selInfo.IsMouseSelecting()) {	// マウスによる範囲選択中
@@ -76,7 +76,7 @@ void ViewCommander::Command_CUT(void)
 
 	@date 2007.11.18 ryoji 「選択なしでコピーを可能にする」オプション処理追加
 */
-void ViewCommander::Command_COPY(
+void ViewCommander::Command_Copy(
 	bool	bIgnoreLockAndDisable,	// [in] 選択範囲を解除するか？
 	bool	bAddCRLFWhenCopy,		// [in] 折り返し位置に改行コードを挿入するか？
 	EolType	neweol					// [in] コピーするときのEOL。
@@ -153,7 +153,7 @@ void ViewCommander::Command_COPY(
 
 	@date 2007.10.04 ryoji MSDEVLineSelect形式の行コピー対応処理を追加（VS2003/2005のエディタと類似の挙動に）
 */
-void ViewCommander::Command_PASTE(int option)
+void ViewCommander::Command_Paste(int option)
 {
 	auto& selInfo = view.GetSelectionInfo();
 
@@ -202,7 +202,7 @@ void ViewCommander::Command_PASTE(int option)
 			if (!commonSetting.view.bFontIs_FixedPitch) {
 				return;
 			}
-			Command_PASTEBOX(pszText, nTextLen);
+			Command_PasteBox(pszText, nTextLen);
 			view.AdjustScrollBars();
 			view.Redraw();
 			return;
@@ -225,10 +225,10 @@ void ViewCommander::Command_PASTE(int option)
 		wchar_t* pszConvertedText = &szConvertedText[0];
 		ConvertEol(pszText, nTextLen, pszConvertedText);
 		// テキストを貼り付け
-		Command_INSTEXT(true, pszConvertedText, nConvertedTextLen, true, bLineSelect);	// 2010.09.17 ryoji
+		Command_InsText(true, pszConvertedText, nConvertedTextLen, true, bLineSelect);	// 2010.09.17 ryoji
 	}else {
 		// テキストを貼り付け
-		Command_INSTEXT(true, pszText, nTextLen, true, bLineSelect);	// 2010.09.17 ryoji
+		Command_InsText(true, pszText, nTextLen, true, bLineSelect);	// 2010.09.17 ryoji
 	}
 
 	return;
@@ -238,14 +238,14 @@ void ViewCommander::Command_PASTE(int option)
 
 //<< 2002/03/28 Azumaiya
 // メモリデータを矩形貼り付け用のデータと解釈して処理する。
-//  なお、この関数は Command_PASTEBOX(void) と、
+//  なお、この関数は Command_PasteBox(void) と、
 // 2769 : GetDocument().docEditor.SetModified(true, true);	// Jan. 22, 2002 genta
 // から、
 // 3057 : view.SetDrawSwitch(true);	// 2002.01.25 hor
 // 間まで、一緒です。
-//  ですが、コメントを削ったり、#if 0 のところを削ったりしていますので、Command_PASTEBOX(void) は
+//  ですが、コメントを削ったり、#if 0 のところを削ったりしていますので、Command_PasteBox(void) は
 // 残すようにしました(下にこの関数を使った使ったバージョンをコメントで書いておきました)。
-//  なお、以下にあげるように Command_PASTEBOX(void) と違うところがあるので注意してください。
+//  なお、以下にあげるように Command_PasteBox(void) と違うところがあるので注意してください。
 // > 呼び出し側が責任を持って、
 // ・マウスによる範囲選択中である。
 // ・現在のフォントは固定幅フォントである。
@@ -255,7 +255,7 @@ void ViewCommander::Command_PASTE(int option)
 //  なお、これらを呼び出し側に期待するわけは、「すべて置換」のような何回も連続で呼び出す
 // ときに、最初に一回チェックすればよいものを何回もチェックするのは無駄と判断したためです。
 // @note 2004.06.30 現在、すべて置換では使用していない
-void ViewCommander::Command_PASTEBOX(
+void ViewCommander::Command_PasteBox(
 	const wchar_t* szPaste,
 	int nPasteSize
 	)
@@ -397,9 +397,9 @@ void ViewCommander::Command_PASTEBOX(
 	@param [in] option 未使用
 
 	@date 2004.06.29 Moca 未使用だったものを有効にする
-	オリジナルのCommand_PASTEBOX(void)はばっさり削除 (genta)
+	オリジナルのCommand_PasteBox(void)はばっさり削除 (genta)
 */
-void ViewCommander::Command_PASTEBOX(int option)
+void ViewCommander::Command_PasteBox(int option)
 {
 	if (view.GetSelectionInfo().IsMouseSelecting()) {	// マウスによる範囲選択中
 		ErrorBeep();
@@ -420,14 +420,14 @@ void ViewCommander::Command_PASTEBOX(int option)
 	int nstrlen;
 	const wchar_t* lptstr = memClip.GetStringPtr(&nstrlen);
 
-	Command_PASTEBOX(lptstr, nstrlen);
+	Command_PasteBox(lptstr, nstrlen);
 	view.AdjustScrollBars(); // 2007.07.22 ryoji
 	view.Redraw();			// 2002.01.25 hor
 }
 
 
 // 矩形文字列挿入
-void ViewCommander::Command_INSBOXTEXT(
+void ViewCommander::Command_InsBoxText(
 	const wchar_t* pszPaste,
 	int nPasteSize
 	)
@@ -441,7 +441,7 @@ void ViewCommander::Command_INSBOXTEXT(
 		return;
 	}
 
-	Command_PASTEBOX(pszPaste, nPasteSize);
+	Command_PasteBox(pszPaste, nPasteSize);
 	view.AdjustScrollBars(); // 2007.07.22 ryoji
 	view.Redraw();			// 2002.01.25 hor
 }
@@ -449,10 +449,10 @@ void ViewCommander::Command_INSBOXTEXT(
 
 /*! テキストを貼り付け
 	@date 2004.05.14 Moca '\\0'を受け入れるように、引数に長さを追加
-	@date 2010.09.17 ryoji ラインモード貼り付けオプションを追加して以前の Command_PASTE() との重複部を整理・統合
+	@date 2010.09.17 ryoji ラインモード貼り付けオプションを追加して以前の Command_Paste() との重複部を整理・統合
 	@date 2013.05.10 Moca 高速モード
 */
-void ViewCommander::Command_INSTEXT(
+void ViewCommander::Command_InsText(
 	bool				bRedraw,		// 
 	const wchar_t*		pszText,		// [in] 貼り付ける文字列。
 	LogicInt			nTextLen,		// [in] pszTextの長さ。-1を指定すると、pszTextをNUL終端文字列とみなして長さを自動計算する
@@ -597,7 +597,7 @@ end_of_func:
 
 
 // 最後にテキストを追加
-void ViewCommander::Command_ADDTAIL(
+void ViewCommander::Command_AddTail(
 	const wchar_t*	pszData,	// 追加するテキスト
 	int				nDataLen	// 追加するテキストの長さ。文字単位。-1を指定すると、テキスト終端まで。
 	)
@@ -631,7 +631,7 @@ void ViewCommander::Command_ADDTAIL(
 
 
 // 選択範囲内全行コピー
-void ViewCommander::Command_COPYLINES(void)
+void ViewCommander::Command_CopyLines(void)
 {
 	// 選択範囲内の全行をクリップボードにコピーする
 	view.CopySelectedAllLines(
@@ -643,7 +643,7 @@ void ViewCommander::Command_COPYLINES(void)
 
 
 // 選択範囲内全行引用符付きコピー
-void ViewCommander::Command_COPYLINESASPASSAGE(void)
+void ViewCommander::Command_CopyLinesAsPassage(void)
 {
 	// 選択範囲内の全行をクリップボードにコピーする
 	view.CopySelectedAllLines(
@@ -655,7 +655,7 @@ void ViewCommander::Command_COPYLINESASPASSAGE(void)
 
 
 // 選択範囲内全行行番号付きコピー
-void ViewCommander::Command_COPYLINESWITHLINENUMBER(void)
+void ViewCommander::Command_CopyLinesWithLineNumber(void)
 {
 	// 選択範囲内の全行をクリップボードにコピーする
 	view.CopySelectedAllLines(
@@ -737,7 +737,7 @@ static bool AppendHTMLColor(
 
 
 // 選択範囲内色付きHTMLコピー
-void ViewCommander::Command_COPY_COLOR_HTML(bool bLineNumber)
+void ViewCommander::Command_Copy_Color_HTML(bool bLineNumber)
 {
 	auto& selInfo = view.GetSelectionInfo();
 	if (!selInfo.IsTextSelected()
@@ -1119,9 +1119,9 @@ ColorStrategy* ViewCommander::GetColorStrategyHTML(
 }
 
 // 選択範囲内行番号色付きHTMLコピー
-void ViewCommander::Command_COPY_COLOR_HTML_LINENUMBER()
+void ViewCommander::Command_Copy_Color_HTML_LineNumber()
 {
-	Command_COPY_COLOR_HTML(true);
+	Command_Copy_Color_HTML(true);
 }
 
 
@@ -1155,7 +1155,7 @@ void ViewCommander::Command_CopyPath(void)
 
 // May 9, 2000 genta
 // 現在編集中のファイルのパス名とカーソル位置をクリップボードにコピー
-void ViewCommander::Command_COPYTAG(void)
+void ViewCommander::Command_CopyTag(void)
 {
 	if (GetDocument().docFile.GetFilePathClass().IsValidPath()) {
 		wchar_t	buf[MAX_PATH + 20];
@@ -1176,7 +1176,7 @@ void ViewCommander::Command_COPYTAG(void)
 
 //// キー割り当て一覧をコピー
 // Dec. 26, 2000 JEPRO // Jan. 24, 2001 JEPRO debug version (directed by genta)
-void ViewCommander::Command_CREATEKEYBINDLIST(void)
+void ViewCommander::Command_CreateKeyBindList(void)
 {
 	NativeW memKeyList;
 	auto& csKeyBind = GetDllShareData().common.keyBind;

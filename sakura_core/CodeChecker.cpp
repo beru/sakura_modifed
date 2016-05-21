@@ -200,7 +200,7 @@ CallbackResultType CodeChecker::OnCheckSave(SaveInfo* pSaveInfo)
 		case IDCANCEL:
 			{
 				LogicPoint pt(point.x < 0 ? LogicInt(0) : point.x, point.y);
-				pDoc->pEditWnd->GetActiveView().GetCommander().Command_MOVECURSOR(pt, 0);
+				pDoc->pEditWnd->GetActiveView().GetCommander().Command_MoveCursor(pt, 0);
 			}
 			return CallbackResultType::Interrupt; //’†’f
 		}

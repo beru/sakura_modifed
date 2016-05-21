@@ -3977,7 +3977,7 @@ BEGIN
 	STR_ERR_CEDITVIEW_CMD29		"%ts\n\nこのファイルは変更されています。\n再ロードを行うと変更が失われますが、よろしいですか?"
 
 	// FIXME -- possibly some left over text in the form of square blocks in the TAGList
-	// inside funciton Command_EXTHELP1
+	// inside funciton Command_ExtHelp1
 
 	// CEditView_Command_New.cpp
 	STR_BOOKMARK_NEXT_NOT_FOUND	"前方(↓) にブックマークが見つかりません。"
@@ -4648,7 +4648,7 @@ GDI リソース\t残り  %d%%\n\n"
 	// CONTAINS one array with Japanese, ppszFuncKind.
 	//  - CPropCom* -- in code that is no longer used.
 	//  - CFuncLookup.cpp -- usedi in func CFuncLookup::Category2Name
-	//  - CEditView_Command.cpp -- Command_MENU_ALLFUNC() uses CFuncLookup::Category2Name.
+	//  - CEditView_Command.cpp -- Command_Menu_AllFunc() uses CFuncLookup::Category2Name.
 
 	// global.cpp
 	// GSTR_APPNAME (for debug) contains the words "sakura(debug version)"

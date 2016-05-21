@@ -406,7 +406,7 @@ bool EditView::ChangeCurRegexp(bool bRedrawIfChanged)
 /*!
 	カーソル行をクリップボードにコピーする
 
-	@date 2007.10.08 ryoji 新規（Command_COPY()から処理抜き出し）
+	@date 2007.10.08 ryoji 新規（Command_Copy()から処理抜き出し）
 */
 void EditView::CopyCurLine(
 	bool	bAddCRLFWhenCopy,		// [in] 折り返し位置に改行コードを挿入するか？

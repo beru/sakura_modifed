@@ -37,14 +37,14 @@
 ツールバーの検索ボックスにフォーカスを移動する.
 	@date 2006.06.04 yukihane 新規作成
 */
-void ViewCommander::Command_SEARCH_BOX(void)
+void ViewCommander::Command_Search_Box(void)
 {
 	GetEditWindow().toolbar.SetFocusSearchBox();
 }
 
 
 // 検索(単語検索ダイアログ)
-void ViewCommander::Command_SEARCH_DIALOG(void)
+void ViewCommander::Command_Search_Dialog(void)
 {
 	// 現在カーソル位置単語または選択範囲より検索等のキーを取得
 	NativeW memCurText;
@@ -72,7 +72,7 @@ void ViewCommander::Command_SEARCH_DIALOG(void)
 	@date 2003.05.22 かろと 無限マッチ対策．行頭・行末処理見直し．
 	@date 2004.05.30 Moca bChangeCurRegexp=trueで従来通り。falseで、CEditViewの現在設定されている検索パターンを使う
 */
-void ViewCommander::Command_SEARCH_NEXT(
+void ViewCommander::Command_Search_Next(
 	bool			bChangeCurRegexp,
 	bool			bRedraw,
 	bool			bReplaceAll,
@@ -324,7 +324,7 @@ end_of_func:;
 
 
 // 前を検索
-void ViewCommander::Command_SEARCH_PREV(bool bReDraw, HWND hwndParent)
+void ViewCommander::Command_Search_Prev(bool bReDraw, HWND hwndParent)
 {
 	bool		bSelectingLock_Old = false;
 	bool		bFound = false;
@@ -480,7 +480,7 @@ end_of_func:;
 
 
 // 置換(置換ダイアログ)
-void ViewCommander::Command_REPLACE_DIALOG(void)
+void ViewCommander::Command_Replace_Dialog(void)
 {
 	bool bSelected = false;
 
@@ -530,7 +530,7 @@ void ViewCommander::Command_REPLACE_DIALOG(void)
 	@date 2003.05.17 かろと 長さ０マッチの無限置換回避など
 	@date 2011.12.18 Moca オプション・検索キーをDllShareDataからdlgReplace/EditViewベースに変更。文字列長制限の撤廃
 */
-void ViewCommander::Command_REPLACE(HWND hwndParent)
+void ViewCommander::Command_Replace(HWND hwndParent)
 {
 	if (!hwndParent) {	// 親ウィンドウが指定されていなければ、CEditViewが親。
 		hwndParent = view.GetHwnd();
@@ -559,7 +559,7 @@ void ViewCommander::Command_REPLACE(HWND hwndParent)
 		if (view.GetSelectionInfo().IsBoxSelecting()) {
 			GetCaret().MoveCursor(GetSelect().GetFrom(), true);
 		}else {
-			Command_LEFT(false, false);
+			Command_Left(false, false);
 		}
 	}
 	// To Here 2002.01.09 hor
@@ -579,7 +579,7 @@ void ViewCommander::Command_REPLACE(HWND hwndParent)
 	const NativeW memRepKey(dlgReplace.strText2.c_str());
 
 	// 次を検索
-	Command_SEARCH_NEXT(true, true, false, hwndParent, nullptr);
+	Command_Search_Next(true, true, false, hwndParent, nullptr);
 
 	bool	bRegularExp = view.curSearchOption.bRegularExp;
 	int 	nFlag       = view.curSearchOption.bLoHiCase ? 0x01 : 0x00;
@@ -621,10 +621,10 @@ void ViewCommander::Command_REPLACE(HWND hwndParent)
 		// コマンドコードによる処理振り分け
 		// テキストを貼り付け
 		if (nPaste) {
-			Command_PASTE(0);
+			Command_Paste(0);
 		} else if (nReplaceTarget == 3) {
 			// 行削除
-			Command_INSTEXT( false, L"", LogicInt(0), true );
+			Command_InsText( false, L"", LogicInt(0), true );
 		}else if (bRegularExp) { // 検索／置換  1==正規表現
 			// 先読みに対応するために物理行末までを使うように変更 2005/03/27 かろと
 			// 2002/01/19 novice 正規表現による文字列置換
@@ -683,11 +683,11 @@ void ViewCommander::Command_REPLACE(HWND hwndParent)
 					layoutMgr.LogicToLayout(LogicPoint(nLen, pLayout->GetLogicLineNo()), GetSelect().GetToPointer());	// 2007.01.19 ryoji 追加
 				}
 				// 置換後文字列への書き換え(行末から検索文字列末尾までの文字を除く)
-				Command_INSTEXT(false, regexp.GetString(), regexp.GetStringLen() - colDiff, true);
+				Command_InsText(false, regexp.GetString(), regexp.GetStringLen() - colDiff, true);
 				// To Here Jun. 6, 2005 かろと
 			}
 		}else {
-			Command_INSTEXT(false, memRepKey.GetStringPtr(), memRepKey.GetStringLength(), true);
+			Command_InsText(false, memRepKey.GetStringPtr(), memRepKey.GetStringLength(), true);
 		}
 
 		// 挿入後の検索開始位置を調整
@@ -702,7 +702,7 @@ void ViewCommander::Command_REPLACE(HWND hwndParent)
 		view.Redraw();
 
 		// 次を検索
-		Command_SEARCH_NEXT(true, true, false, hwndParent, LSW(STR_ERR_CEDITVIEW_CMD11));
+		Command_Search_Next(true, true, false, hwndParent, LSW(STR_ERR_CEDITVIEW_CMD11));
 	}
 }
 
@@ -717,7 +717,7 @@ void ViewCommander::Command_REPLACE(HWND hwndParent)
 	@date 2011.12.18 Moca オプション・検索キーをDllShareDataからdlgReplace/EditViewベースに変更。文字列長制限の撤廃
 	@date 2013.05.10 Moca fastMode
 */
-void ViewCommander::Command_REPLACE_ALL()
+void ViewCommander::Command_Replace_All()
 {
 	// sSearchOption選択のための先に適用
 	if (!view.ChangeCurRegexp()) {
@@ -845,7 +845,7 @@ void ViewCommander::Command_REPLACE_ALL()
 
 	LogicRange selectLogic;	// 置換文字列GetSelect()のLogic単位版
 	// 次を検索
-	Command_SEARCH_NEXT(true, bDisplayUpdate, true, 0, NULL, bFastMode ? &selectLogic : nullptr);
+	Command_Search_Next(true, bDisplayUpdate, true, 0, NULL, bFastMode ? &selectLogic : nullptr);
 	// To Here 2001.12.03 hor
 
 	//<< 2002/03/26 Azumaiya
@@ -1049,7 +1049,7 @@ void ViewCommander::Command_REPLACE_ALL()
 					// 次の検索開始位置へシフト
 					caret.SetCaretLayoutPos(LayoutPoint(rangeA.GetFrom().x, LayoutInt(linNext)));
 					// 2004.05.30 Moca 現在の検索文字列を使って検索する
-					Command_SEARCH_NEXT(false, bDisplayUpdate, true, 0, nullptr);
+					Command_Search_Next(false, bDisplayUpdate, true, 0, nullptr);
 					colDif = (0);
 					continue;
 				}
@@ -1160,13 +1160,13 @@ void ViewCommander::Command_REPLACE_ALL()
 		// テキストを貼り付け
 		if (bPaste) {
 			if (!bColumnSelect) {
-				/* 本当は Command_INSTEXT を使うべきなんでしょうが、無駄な処理を避けるために直接たたく。
+				/* 本当は Command_InsText を使うべきなんでしょうが、無駄な処理を避けるために直接たたく。
 				** →nSelectXXXが-1の時に view.ReplaceData_CEditViewを直接たたくと動作不良となるため
 				**   直接たたくのやめた。2003.05.18 by かろと
 				*/
-				Command_INSTEXT(false, szREPLACEKEY, nReplaceKey, true, bLineSelect);
+				Command_InsText(false, szREPLACEKEY, nReplaceKey, true, bLineSelect);
 			}else {
-				Command_PASTEBOX(szREPLACEKEY, nReplaceKey);
+				Command_PasteBox(szREPLACEKEY, nReplaceKey);
 				// 2013.06.11 再描画しないように
 				// 再描画を行わないとどんな結果が起きているのか分からずみっともないので・・・。
 				// view.AdjustScrollBars(); // 2007.07.22 ryoji
@@ -1174,7 +1174,7 @@ void ViewCommander::Command_REPLACE_ALL()
 			}
 			++nReplaceNum;
 		}else if (nReplaceTarget == 3) {
-			Command_INSTEXT( false, L"", LogicInt(0), true, false, bFastMode, bFastMode ? &selectLogic : nullptr );
+			Command_InsText( false, L"", LogicInt(0), true, false, bFastMode, bFastMode ? &selectLogic : nullptr );
 			++nReplaceNum;
 		}else if (bRegularExp) { // 検索／置換  1==正規表現
 			// 2002/01/19 novice 正規表現による文字列置換
@@ -1275,14 +1275,14 @@ void ViewCommander::Command_REPLACE_ALL()
 				    }
 				}
 				// 置換後文字列への書き換え(行末から検索文字列末尾までの文字を除く)
-				Command_INSTEXT(false, regexp.GetString(), regexp.GetStringLen() - colDiff, true, false, bFastMode, bFastMode ? &selectLogic : nullptr);
+				Command_InsText(false, regexp.GetString(), regexp.GetStringLen() - colDiff, true, false, bFastMode, bFastMode ? &selectLogic : nullptr);
 				// To Here Jun. 6, 2005 かろと
 			}
 		}else {
 			/* 本当は元コードを使うべきなんでしょうが、無駄な処理を避けるために直接たたく。
 			** →nSelectXXXが-1の時に view.ReplaceData_CEditViewを直接たたくと動作不良となるため直接たたくのやめた。2003.05.18 かろと
 			*/
-			Command_INSTEXT(false, szREPLACEKEY, nReplaceKey, true, false, bFastMode, bFastMode ? &selectLogic : nullptr);
+			Command_InsText(false, szREPLACEKEY, nReplaceKey, true, false, bFastMode, bFastMode ? &selectLogic : nullptr);
 			++nReplaceNum;
 		}
 
@@ -1361,7 +1361,7 @@ void ViewCommander::Command_REPLACE_ALL()
 
 		// 次を検索
 		// 2004.05.30 Moca 現在の検索文字列を使って検索する
-		Command_SEARCH_NEXT(false, bDisplayUpdate, true, 0, NULL, bFastMode ? &selectLogic : nullptr);
+		Command_Search_Next(false, bDisplayUpdate, true, 0, NULL, bFastMode ? &selectLogic : nullptr);
 	}
 
 	if (bFastMode) {
@@ -1439,7 +1439,7 @@ void ViewCommander::Command_REPLACE_ALL()
 
 
 // 検索マークの切替え	// 2001.12.03 hor クリア を 切替え に変更
-void ViewCommander::Command_SEARCH_CLEARMARK(void)
+void ViewCommander::Command_Search_ClearMark(void)
 {
 // From Here 2001.12.03 hor
 
@@ -1485,7 +1485,7 @@ void ViewCommander::Command_SEARCH_CLEARMARK(void)
 
 // Jun. 16, 2000 genta
 // 対括弧の検索
-void ViewCommander::Command_BRACKETPAIR(void)
+void ViewCommander::Command_BracketPair(void)
 {
 	LayoutPoint ptColLine;
 	//int nLine, nCol;

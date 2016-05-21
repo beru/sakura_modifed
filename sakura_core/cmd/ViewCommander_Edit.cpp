@@ -328,7 +328,7 @@ void ViewCommander::Command_Undo(void)
 	LayoutPoint ptCaretPos_After;
 
 	// 各種モードの取り消し
-	Command_CANCEL_MODE();
+	Command_Cancel_Mode();
 
 	view.bDoing_UndoRedo = true;	// Undo, Redoの実行中か
 
@@ -582,7 +582,7 @@ void ViewCommander::Command_Redo(void)
 	LayoutPoint ptCaretPos_After;
 
 	// 各種モードの取り消し
-	Command_CANCEL_MODE();
+	Command_Cancel_Mode();
 
 	view.bDoing_UndoRedo = true;	// Undo, Redoの実行中か
 
@@ -806,7 +806,7 @@ void ViewCommander::Command_Delete(void)
 				nIndex = view.LineColumnToIndex2(pLayout, caret.GetCaretLayoutPos().GetX2(), &nLineLen);
 				if (nLineLen != 0) {	// 折り返しや改行コードより右の場合には nLineLen に行全体の表示桁数が入る
 					if (pLayout->GetLayoutEol().GetType() != EolType::None) {	// 行終端は改行コードか?
-						Command_INSTEXT(true, L"", LogicInt(0), false);	// カーソル位置まで半角スペース挿入
+						Command_InsText(true, L"", LogicInt(0), false);	// カーソル位置まで半角スペース挿入
 					}else {	// 行終端が折り返し
 						// 折り返し行末ではスペース挿入後、次の文字を削除する	// 2009.02.19 ryoji
 
@@ -814,7 +814,7 @@ void ViewCommander::Command_Delete(void)
 						// 非フリーカーソル時（ちょうどカーソルが折り返し位置にある）には次の行の先頭文字を削除したい
 
 						if (nLineLen < caret.GetCaretLayoutPos().GetX2()) {	// 折り返し行末とカーソルの間に隙間がある
-							Command_INSTEXT(true, L"", LogicInt(0), false);	// カーソル位置まで半角スペース挿入
+							Command_InsText(true, L"", LogicInt(0), false);	// カーソル位置まで半角スペース挿入
 							pLayout = layoutMgr.SearchLineByLayoutY(caret.GetCaretLayoutPos().GetY2());
 							nIndex = view.LineColumnToIndex2(pLayout, caret.GetCaretLayoutPos().GetX2(), &nLineLen);
 						}
@@ -854,7 +854,7 @@ void ViewCommander::Command_Delete_Back(void)
 		auto& caret = GetCaret();
 		LayoutPoint	ptLayoutPos_Old = caret.GetCaretLayoutPos();
 		LogicPoint		ptLogicPos_Old = caret.GetCaretLogicPos();
-		BOOL bBool = Command_LEFT(false, false);
+		BOOL bBool = Command_Left(false, false);
 		if (bBool) {
 			const Layout* pLayout = GetDocument().layoutMgr.SearchLineByLayoutY(caret.GetCaretLayoutPos().GetY2());
 			if (pLayout) {
@@ -957,7 +957,7 @@ void ViewCommander::DelCharForOverwrite(
 			tmp.AppendStringLiteral(L" ");
 		}
 		if (0 < tmp.GetStringLength()) {
-			Command_INSTEXT(false, tmp.GetStringPtr(), tmp.GetStringLength(), false, false);
+			Command_InsText(false, tmp.GetStringPtr(), tmp.GetStringLength(), false, false);
 			caret.MoveCursor(posBefore, false);
 		}
 	}

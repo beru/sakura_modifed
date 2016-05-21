@@ -24,7 +24,7 @@
 	@author	ai
 	@date	02/06/26
 */
-void ViewCommander::Command_JUMP_SRCHSTARTPOS(void)
+void ViewCommander::Command_Jump_SrchStartPos(void)
 {
 	if (view.ptSrchStartPos_PHY.BothNatural()) {
 		LayoutPoint pt;
@@ -45,7 +45,7 @@ void ViewCommander::Command_JUMP_SRCHSTARTPOS(void)
 /*! 指定行へジャンプダイアログの表示
 	2002.2.2 YAZAKI
 */
-void ViewCommander::Command_JUMP_DIALOG(void)
+void ViewCommander::Command_Jump_Dialog(void)
 {
 	if (!GetEditWindow().dlgJump.DoModal(
 			G_AppInstance(), view.GetHwnd(), (LPARAM)&GetDocument()
@@ -57,7 +57,7 @@ void ViewCommander::Command_JUMP_DIALOG(void)
 
 
 // 指定行ヘジャンプ
-void ViewCommander::Command_JUMP(void)
+void ViewCommander::Command_Jump(void)
 {
 	auto& layoutMgr = GetDocument().layoutMgr;
 	if (layoutMgr.GetLineCount() == 0) {
@@ -264,7 +264,7 @@ void ViewCommander::Command_JUMP(void)
 
 // from ViewCommander_New.cpp
 // ブックマークの設定・解除を行う(トグル動作)
-void ViewCommander::Command_BOOKMARK_SET(void)
+void ViewCommander::Command_Bookmark_Set(void)
 {
 	DocLine* pDocLine;
 	auto& selInfo = view.GetSelectionInfo();
@@ -306,7 +306,7 @@ void ViewCommander::Command_BOOKMARK_SET(void)
 
 // from ViewCommander_New.cpp
 // 次のブックマークを探し，見つかったら移動する
-void ViewCommander::Command_BOOKMARK_NEXT(void)
+void ViewCommander::Command_Bookmark_Next(void)
 {
 	int		nYOld;				// hor
 	bool	bFound	=	false;	// hor
@@ -350,7 +350,7 @@ re_do:;								// hor
 
 // from ViewCommander_New.cpp
 // 前のブックマークを探し，見つかったら移動する．
-void ViewCommander::Command_BOOKMARK_PREV(void)
+void ViewCommander::Command_Bookmark_Prev(void)
 {
 	int		nYOld;				// hor
 	bool	bFound	=	false;	// hor
@@ -396,7 +396,7 @@ re_do:;								// hor
 
 // from ViewCommander_New.cpp
 // ブックマークをクリアする
-void ViewCommander::Command_BOOKMARK_RESET(void)
+void ViewCommander::Command_Bookmark_Reset(void)
 {
 	BookmarkManager(GetDocument().docLineMgr).ResetAllBookMark();
 	// 2002.01.16 hor 分割したビューも更新
@@ -407,7 +407,7 @@ void ViewCommander::Command_BOOKMARK_RESET(void)
 // from ViewCommander_New.cpp
 // 指定パターンに一致する行をマーク 2002.01.16 hor
 // キーマクロで記録できるように	2002.02.08 hor
-void ViewCommander::Command_BOOKMARK_PATTERN(void)
+void ViewCommander::Command_Bookmark_Pattern(void)
 {
 	// 検索or置換ダイアログから呼び出された
 	if (!view.ChangeCurRegexp(false)) {
@@ -423,7 +423,7 @@ void ViewCommander::Command_BOOKMARK_PATTERN(void)
 
 
 // 次の関数リストマークを探し，見つかったら移動する
-void ViewCommander::Command_FUNCLIST_NEXT(void)
+void ViewCommander::Command_FuncList_Next(void)
 {
 	LogicPoint	ptXY(0, GetCaret().GetCaretLogicPos().y);
 	int nYOld = ptXY.y;
@@ -454,7 +454,7 @@ void ViewCommander::Command_FUNCLIST_NEXT(void)
 
 
 // 前のブックマークを探し，見つかったら移動する．
-void ViewCommander::Command_FUNCLIST_PREV(void)
+void ViewCommander::Command_FuncList_Prev(void)
 {
 
 	LogicPoint ptXY(0,GetCaret().GetCaretLogicPos().y);

@@ -160,7 +160,7 @@ BOOL DlgJump::OnBnClicked(int wID)
 		return TRUE;
 	case IDC_BUTTON_JUMP:			// 指定行へジャンプ	// Feb. 20, 2001 JEPRO ボタン名を[IDOK]→[IDC_BUTTON_JUMP]に変更
 		// ダイアログデータの取得
-		// From Here Feb. 20, 2001 JEPRO 次行をコメントアウト (CEditView_Command.cpp の Command_JUMP も関係しているので参照のこと)
+		// From Here Feb. 20, 2001 JEPRO 次行をコメントアウト (CEditView_Command.cpp の Command_Jump も関係しているので参照のこと)
 //		::EndDialog(GetHwnd(), GetData());
 //		次行から追加
 		if (0 < GetData()) {

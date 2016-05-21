@@ -628,7 +628,7 @@ finish:
 void OutputAdapterDefault::OutputBuf(const WCHAR* pBuf, int size)
 {
 	if (bWindow) {
-		commander.Command_INSTEXT(false, pBuf, LogicInt(size), true);
+		commander.Command_InsText(false, pBuf, LogicInt(size), true);
 	}else {
 		pCShareData->TraceOutString(pBuf , size);
 	}

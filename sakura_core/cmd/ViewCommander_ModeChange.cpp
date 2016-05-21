@@ -39,7 +39,7 @@
 
 	@date 2005.10.02 genta InsMode関数化
 */
-void ViewCommander::Command_CHGMOD_INS(void)
+void ViewCommander::Command_ChgMod_Ins(void)
 {
 	// 挿入モードか？
 	view.SetInsMode(!view.IsInsMode());
@@ -56,7 +56,7 @@ void ViewCommander::Command_CHGMOD_INS(void)
 	@author moca
 	@date 2003.06.23 新規作成
 */
-void ViewCommander::Command_CHGMOD_EOL(EolType e)
+void ViewCommander::Command_ChgMod_EOL(EolType e)
 {
 	if (EolType::None < e && e < EolType::CodeMax) {
 		GetDocument().docEditor.SetNewLineCode(e);
@@ -68,7 +68,7 @@ void ViewCommander::Command_CHGMOD_EOL(EolType e)
 
 
 // 文字コードセット指定
-void ViewCommander::Command_CHG_CHARSET(
+void ViewCommander::Command_Chg_Charset(
 	EncodingType	eCharSet,	// [in] 設定する文字コードセット
 	bool		bBom		// [in] 設定するBOM(Unicode系以外は無視)
 	)
@@ -96,7 +96,7 @@ void ViewCommander::Command_CHG_CHARSET(
 /** 各種モードの取り消し
 	@param whereCursorIs 選択をキャンセルした後、キャレットをどこに置くか。0=動かさない。1=左上。2=右下。
 */
-void ViewCommander::Command_CANCEL_MODE(int whereCursorIs)
+void ViewCommander::Command_Cancel_Mode(int whereCursorIs)
 {
 	bool bBoxSelect = false;
 	auto& selInfo = view.GetSelectionInfo();
