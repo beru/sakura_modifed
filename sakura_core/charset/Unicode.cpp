@@ -9,7 +9,7 @@
 CodeConvertResult Unicode::_UnicodeToUnicode_in( const Memory& src, NativeW* pDstMem, const bool bBigEndian )
 {
 	// É\Å[ÉXéÊìæ
-	int nSrcLen;
+	size_t nSrcLen;
 	const unsigned char* pSrc = reinterpret_cast<const unsigned char*>( src.GetRawPtr(&nSrcLen) );
 	Memory* pDstMem2 = pDstMem->_GetMemory();
 

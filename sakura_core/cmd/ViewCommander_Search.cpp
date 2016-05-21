@@ -638,7 +638,7 @@ void ViewCommander::Command_Replace(HWND hwndParent)
 			const Layout* pLayout = layoutMgr.SearchLineByLayoutY(GetSelect().GetFrom().GetY2());
 			const wchar_t* pLine = pLayout->GetDocLineRef()->GetPtr();
 			LogicInt nIdx = view.LineColumnToIndex(pLayout, GetSelect().GetFrom().GetX2()) + pLayout->GetLogicOffset();
-			LogicInt nLen = pLayout->GetDocLineRef()->GetLengthWithEOL();
+			size_t nLen = pLayout->GetDocLineRef()->GetLengthWithEOL();
 			// 正規表現で選択始点・終点への挿入を記述
 			// Jun. 6, 2005 かろと
 			// →これでは「検索の後ろの文字が改行だったら次の行頭へ移動」が処理できない
@@ -910,7 +910,7 @@ void ViewCommander::Command_Replace_All()
 	}
 
 	if (GetDllShareData().common.edit.bConvertEOLPaste) {
-		LogicInt nConvertedTextLen = ConvertEol(szREPLACEKEY, nReplaceKey, NULL);
+		size_t nConvertedTextLen = ConvertEol(szREPLACEKEY, nReplaceKey, NULL);
 		std::vector<wchar_t> szConvertedText(nConvertedTextLen);
 		wchar_t* pszConvertedText = &szConvertedText[0];
 		ConvertEol(szREPLACEKEY, nReplaceKey, pszConvertedText);

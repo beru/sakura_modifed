@@ -200,7 +200,7 @@ void CommandLine::ParseCommandLine(LPCTSTR pszCmdLineSrc, bool bResponse)
 		WCHAR wexename[512];
 		auto_strcpy( wexename, to_wchar(exename) );
 
-		int	len = wcslen( wexename );
+		size_t len = wcslen( wexename );
 
 		for (int i=len-1; 0<=i; --i) {
 			if (wexename[i] == L'.' ) {
@@ -293,7 +293,7 @@ void CommandLine::ParseCommandLine(LPCTSTR pszCmdLineSrc, bool bResponse)
 			if (_tcsncmp_literal(szPath, _T("file:///")) == 0) {
 				_tcscpy(szPath, &(szPath[8]));
 			}
-			int len = _tcslen(szPath);
+			size_t len = _tcslen(szPath);
 			for (int i=0; i<len; ) {
 				if (!TCODE::IsValidFilenameChar(szPath, i)) {
 					TCHAR msg_str[_MAX_PATH + 1];
@@ -321,7 +321,7 @@ void CommandLine::ParseCommandLine(LPCTSTR pszCmdLineSrc, bool bResponse)
 		}else {
 			if (*pszToken == '"') {
 				++pszToken;	// 2007.09.09 genta 先頭の"はスキップ
-				int tokenlen = _tcslen(pszToken);
+				size_t tokenlen = _tcslen(pszToken);
 				if (pszToken[tokenlen - 1] == '"') {	// 2009.06.14 syat 末尾の"を取り除く
 					pszToken[tokenlen - 1] = '\0';
 				}

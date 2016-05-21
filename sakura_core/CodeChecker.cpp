@@ -98,7 +98,7 @@ static CodeConvertResult _CheckSavingCharcode(
 				point.y = nLine;
 				point.x = LogicInt(-1);
 				const WCHAR* pLine = pDocLine->GetPtr();
-				const LogicInt nLineLen = pDocLine->GetLengthWithEOL();
+				const size_t nLineLen = pDocLine->GetLengthWithEOL();
 				LogicInt chars = NativeW::GetSizeOfChar( pLine, nLineLen, 0 );
 				LogicInt nPos = LogicInt(0);
 				NativeW mem;

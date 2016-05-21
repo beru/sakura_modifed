@@ -563,7 +563,7 @@ void DlgFuncList::SetData()
 
 		memClipText.SetString(L"");	// クリップボードコピー用テキスト
 		{
-			const int nBuffLenTag = 13 + wcslen(to_wchar(pFuncInfoArr->szFilePath));
+			const size_t nBuffLenTag = 13 + wcslen(to_wchar(pFuncInfoArr->szFilePath));
 			const int nNum = pFuncInfoArr->GetNum();
 			int nBuffLen = 0;
 			for (int i=0; i<nNum; ++i) {
@@ -916,7 +916,7 @@ void DlgFuncList::SetTreeJava(
 
 	memClipText.SetString(L"");
 	{
-		const int nBuffLenTag = 13 + wcslen(to_wchar(pFuncInfoArr->szFilePath));
+		const size_t nBuffLenTag = 13 + wcslen(to_wchar(pFuncInfoArr->szFilePath));
 		const int nNum = pFuncInfoArr->GetNum();
 		int nBuffLen = 0;
 		for (int i=0; i<nNum; ++i) {
@@ -1208,7 +1208,7 @@ void DlgFuncList::SetListVB(void)
 
 	memClipText.SetString(L"");
 	{
-		const int nBuffLenTag = 17 + wcslen(to_wchar(pFuncInfoArr->szFilePath));
+		const size_t nBuffLenTag = 17 + wcslen(to_wchar(pFuncInfoArr->szFilePath));
 		const int nNum = pFuncInfoArr->GetNum();
 		int nBuffLen = 0;
 		for (int i=0; i<nNum; ++i) {
@@ -1462,8 +1462,8 @@ void DlgFuncList::SetTree(bool tagjump, bool nolabel)
 	memClipText.SetString(L"");
 	{
 		int nCount = 0;
-		int nBuffLen = 0;
-		int nBuffLenTag = 3; // " \r\n"
+		size_t nBuffLen = 0;
+		size_t nBuffLenTag = 3; // " \r\n"
 		if (tagjump) {
 			nBuffLenTag = 10 + wcslen(to_wchar(pFuncInfoArr->szFilePath));
 		}

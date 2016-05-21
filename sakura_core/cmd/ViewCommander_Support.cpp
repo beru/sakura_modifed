@@ -310,7 +310,7 @@ void ViewCommander::Command_ExtHTMLHelp(const WCHAR* _helpfile, const WCHAR* kwd
 		}else {
 			_tcscpy(pWork, filename); // Jul. 5, 2002 genta
 		}
-		int nLen = _tcslen(pWork);
+		size_t nLen = _tcslen(pWork);
 		_tcscpy(&pWork[nLen + 1], memCurText.GetStringT());
 		hwndHtmlHelp = (HWND)::SendMessage(
 			GetDllShareData().handles.hwndTray,

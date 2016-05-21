@@ -137,7 +137,7 @@ private:
 class CodeTypesForCombobox {
 public:
 	CodeTypesForCombobox() { InitCodeSet(); }
-	int			GetCount() const;
+	size_t			GetCount() const;
 	EncodingType	GetCode(int nIndex) const;
 	LPCTSTR		GetName(int nIndex) const;
 };

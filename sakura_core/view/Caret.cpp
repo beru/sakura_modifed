@@ -818,7 +818,7 @@ void Caret::ShowCaretPosInfo()
 		TCHAR	szFormat[64];
 		TCHAR	szLeft[64];
 		TCHAR	szRight[64];
-		int		nLen;
+		size_t	nLen;
 		{	// メッセージの左側文字列（「行:列」を除いた表示）
 			nLen = _tcslen(pszCodeName) + _tcslen(szEolMode) + _tcslen(szCaretChar);
 			// これは %s(%s)%6s%s%s 等になる。%6ts表記は使えないので注意

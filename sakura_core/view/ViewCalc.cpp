@@ -58,7 +58,6 @@ LogicInt ViewCalc::LineColumnToIndex(
 }
 
 
-
 /*
   指定された桁に対応する行のデータ内の位置を調べる Ver0
   指定された桁より、行が短い場合はpnLineAllColLenに行全体の表示桁数を返す

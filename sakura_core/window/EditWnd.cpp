@@ -3407,7 +3407,7 @@ LRESULT EditWnd::OnMouseMove(WPARAM wParam, LPARAM lParam)
 
 								STGMEDIUM medium;
 								const wchar_t* pFilePath = to_wchar(GetDocument().docFile.GetFilePath());
-								int Len = wcslen(pFilePath);
+								size_t Len = wcslen(pFilePath);
 								medium.tymed          = TYMED_HGLOBAL;
 								medium.pUnkForRelease = NULL;
 								medium.hGlobal        = GlobalAlloc(GMEM_MOVEABLE, (Len + 1) * sizeof(wchar_t));
@@ -3888,7 +3888,7 @@ void EditWnd::PrintMenubarMessage(const TCHAR* msg)
 
 	// msg == NULL のときは以前の pszMenubarMessage で再描画
 	if (msg) {
-		int len = _tcslen(msg);
+		size_t len = _tcslen(msg);
 		_tcsncpy(pszMenubarMessage, msg, MENUBAR_MESSAGE_MAX_LEN);
 		if (len < MENUBAR_MESSAGE_MAX_LEN) {
 			auto_memset(pszMenubarMessage + len, _T(' '), MENUBAR_MESSAGE_MAX_LEN - len);	//  null終端は不要
@@ -4164,7 +4164,7 @@ void EditWnd::GetTooltipText(TCHAR* wszBuf, size_t nBufCount, int nID) const
 	if (0 < nAssignedKeyNum) {
 		for (int j=0; j<nAssignedKeyNum; ++j) {
 			const TCHAR* pszKey = ppcAssignedKeyList[j]->GetStringPtr();
-			int nKeyLen = _tcslen(pszKey);
+			size_t nKeyLen = _tcslen(pszKey);
 			if (nLen + 9 + nKeyLen < nBufCount) {
 				_tcscat_s(wszBuf, nBufCount, _T("\n        "));
 				_tcscat_s(wszBuf, nBufCount, pszKey);

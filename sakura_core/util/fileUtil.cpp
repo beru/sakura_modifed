@@ -67,7 +67,7 @@ bool IsFilePath(
 	wchar_t	szJumpToFile[_MAX_PATH];
 	wmemset(szJumpToFile, 0, _countof(szJumpToFile));
 
-	int	nLineLen = wcslen(pLine);
+	size_t	nLineLen = wcslen(pLine);
 
 	// 先頭の空白を読み飛ばす
 	int i;
@@ -242,7 +242,7 @@ void CutLastYenFromDirectoryPath(TCHAR* pszFolder)
 		// ドライブ名:'\\'
 	}else {
 		// フォルダの最後が半角かつ'\\'の場合は、取り除く
-		int	nFolderLen = _tcslen(pszFolder);
+		size_t nFolderLen = _tcslen(pszFolder);
 		if (0 < nFolderLen) {
 			int	nCharChars = &pszFolder[nFolderLen] - NativeT::GetCharPrev(pszFolder, nFolderLen, &pszFolder[nFolderLen]);
 			if (nCharChars == 1 && pszFolder[nFolderLen - 1] == _T('\\')) {
@@ -264,7 +264,7 @@ void AddLastYenFromDirectoryPath(CHAR* pszFolder)
 		// ドライブ名:'\\'
 	}else {
 		// フォルダの最後が半角かつ'\\'でない場合は、付加する
-		int	nFolderLen = auto_strlen(pszFolder);
+		size_t	nFolderLen = auto_strlen(pszFolder);
 		if (0 < nFolderLen) {
 			int	nCharChars = &pszFolder[nFolderLen] - NativeA::GetCharPrev(pszFolder, nFolderLen, &pszFolder[nFolderLen]);
 			if (nCharChars == 1 && ('\\' == pszFolder[nFolderLen - 1] || '/' == pszFolder[nFolderLen - 1])) {
@@ -286,7 +286,7 @@ void AddLastYenFromDirectoryPath(WCHAR* pszFolder)
 		// ドライブ名:'\\'
 	}else {
 		// フォルダの最後が半角かつ'\\'でない場合は、付加する
-		int	nFolderLen = auto_strlen(pszFolder);
+		size_t	nFolderLen = auto_strlen(pszFolder);
 		if (0 < nFolderLen) {
 			if (L'\\' == pszFolder[nFolderLen - 1] || L'/' == pszFolder[nFolderLen - 1]) {
 			}else {
@@ -316,7 +316,7 @@ void SplitPath_FolderAndFile(
 		_tcscpy(pszFolder, szDrive);
 		_tcscat(pszFolder, szDir);
 		// フォルダの最後が半角かつ'\\'の場合は、取り除く
-		int nFolderLen = _tcslen(pszFolder);
+		size_t nFolderLen = _tcslen(pszFolder);
 		if (0 < nFolderLen) {
 			int nCharChars = &pszFolder[nFolderLen] - NativeT::GetCharPrev(pszFolder, nFolderLen, &pszFolder[nFolderLen]);
 			if (nCharChars == 1 && pszFolder[nFolderLen - 1] == _T('\\')) {
@@ -591,7 +591,7 @@ LPCTSTR GetRelPath(LPCTSTR pszPath)
 	LPCTSTR pszFileName = pszPath;
 
 	GetInidir(szPath, _T(""));
-	int nLen = auto_strlen(szPath);
+	size_t nLen = auto_strlen(szPath);
 	if (auto_strnicmp(szPath, pszPath, nLen) == 0) {
 		pszFileName = pszPath + nLen;
 	}else {
@@ -1147,8 +1147,8 @@ int FileMatchScore(
 	)
 {
 	int score = 0;
-	int len1 = auto_strlen(file1);
-	int len2 = auto_strlen(file2);
+	size_t len1 = auto_strlen(file1);
+	size_t len2 = auto_strlen(file2);
 	if (len1 < len2) {
 		const TCHAR* tmp = file1;
 		file1 = file2;
@@ -1206,7 +1206,7 @@ void GetStrTrancateWidth(
 {
 	// できるだけ左側から表示
 	// \\server\dir...
-	const int nPathLen = auto_strlen(path);
+	const size_t nPathLen = auto_strlen(path);
 	TextWidthCalc calc(hDC);
 	if (calc.GetTextWidth(path) <= nPxWidth) {
 		_tcsncpy_s(dest, nSize, path, _TRUNCATE);
@@ -1248,7 +1248,7 @@ void GetShortViewPath(
 {
 	int nLeft = 0; // 左側固定表示部分
 	int nSkipLevel = 1;
-	const int nPathLen = auto_strlen(path);
+	const size_t nPathLen = auto_strlen(path);
 	TextWidthCalc calc(hDC);
 	if (calc.GetTextWidth(path) <= nPxWidth) {
 		// 全部表示可能

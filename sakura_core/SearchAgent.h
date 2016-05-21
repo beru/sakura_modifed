@@ -35,16 +35,16 @@ class Bregexp;
 class SearchStringPattern {
 public:
 	SearchStringPattern();
-	SearchStringPattern(HWND, const wchar_t* pszPattern, int nPatternLen, const SearchOption& searchOption, Bregexp* pRegexp);
+	SearchStringPattern(HWND, const wchar_t* pszPattern, size_t nPatternLen, const SearchOption& searchOption, Bregexp* pRegexp);
 	~SearchStringPattern();
 	void Reset();
-	bool SetPattern(HWND hwnd, const wchar_t* pszPattern, int nPatternLen, const SearchOption& searchOption, Bregexp* pRegexp) {
+	bool SetPattern(HWND hwnd, const wchar_t* pszPattern, size_t nPatternLen, const SearchOption& searchOption, Bregexp* pRegexp) {
 		return SetPattern(hwnd, pszPattern, nPatternLen, NULL, searchOption, pRegexp);
 	}
-	bool SetPattern(HWND, const wchar_t* pszPattern, int nPatternLen, const wchar_t* pszPattern2, const SearchOption& searchOption, Bregexp* pRegexp);
+	bool SetPattern(HWND, const wchar_t* pszPattern, size_t nPatternLen, const wchar_t* pszPattern2, const SearchOption& searchOption, Bregexp* pRegexp);
 	const wchar_t* GetKey() const { return pszKey; }
 	const wchar_t* GetCaseKey() const { return pszCaseKeyRef; }
-	int GetLen() const { return nPatternLen; }
+	size_t GetLen() const { return nPatternLen; }
 	bool GetIgnoreCase() const { return !pSearchOption->bLoHiCase; }
 	bool GetLoHiCase() const { return pSearchOption->bLoHiCase; }
 	const SearchOption& GetSearchOption() const { return *pSearchOption; }
@@ -68,7 +68,7 @@ private:
 
 	// 内部バッファ
 	wchar_t* pszPatternCase;
-	int  nPatternLen;
+	size_t nPatternLen;
 #ifdef SEARCH_STRING_KMP
 	int* pnNextPossArr;
 #endif

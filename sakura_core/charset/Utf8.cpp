@@ -90,7 +90,7 @@ int Utf8::Utf8ToUni(const char* pSrc, const int nSrcLen, wchar_t* pDst, bool bCE
 CodeConvertResult Utf8::_UTF8ToUnicode( const Memory& src, NativeW* pDstMem, bool bCESU8Mode/*, bool decodeMime*/ )
 {
 	// ÉfÅ[É^éÊìæ
-	int nSrcLen;
+	size_t nSrcLen;
 	const char* pSrc = reinterpret_cast<const char*>( src.GetRawPtr(&nSrcLen) );
 	if (nSrcLen == 0) {
 		pDstMem->Clear();

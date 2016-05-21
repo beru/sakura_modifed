@@ -452,7 +452,7 @@ bool RegexKeyword::RegexKeyCheckSyntax(const wchar_t* s)
 		NULL, NULL,
 	};
 
-	int	length = wcslen(s);
+	size_t length = wcslen(s);
 	for (int i=0; kakomi[i]; i+=2) {
 		// •¶š’·‚ğŠm‚©‚ß‚é
 		if (length > (int)wcslen(kakomi[i]) + (int)wcslen(kakomi[i + 1])) {

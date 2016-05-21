@@ -5,7 +5,7 @@ int GrepEnumKeys::SetFileKeys(LPCTSTR lpKeys)
 {
 	const TCHAR* wildcard_delimiter = _T(" ;,");	// リストの区切り
 	const TCHAR* wildcard_any = _T("*.*");			// サブフォルダ探索用
-	int nWildCardLen = _tcslen(lpKeys);
+	size_t nWildCardLen = _tcslen(lpKeys);
 	std::vector<TCHAR> wildCard( nWildCardLen + 1 );
 	TCHAR* pWildCard = &wildCard[0];
 	_tcscpy(pWildCard, lpKeys);

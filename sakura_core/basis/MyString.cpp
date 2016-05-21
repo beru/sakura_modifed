@@ -10,7 +10,7 @@ void String::set(const char* szData)
 	delete[] wszData;
 }
 
-void String::set(const char* szData, int nLength)
+void String::set(const char* szData, size_t nLength)
 {
 	int nLen;
 	wchar_t* wszData = mbstowcs_new(szData, nLength, &nLen);

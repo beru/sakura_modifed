@@ -509,7 +509,7 @@ LRESULT ControlTray::DispatchEvent(
 			// szHtmlFileæ“¾
 			TCHAR szHtmlHelpFile[1024];
 			_tcscpy_s(szHtmlHelpFile, pWork);
-			int nLen = _tcslen(szHtmlHelpFile);
+			size_t nLen = _tcslen(szHtmlHelpFile);
 			// Jul. 6, 2001 genta HtmlHelp‚ÌŒÄ‚Ño‚µ•û–@•ÏX
 			hwndHtmlHelp = OpenHtmlHelp(
 				NULL,

@@ -371,7 +371,7 @@ bool ViewCommander::HandleCommand(
 	case F_PASTE:					Command_Paste((int)lparam1); break;					// 貼り付け(クリップボードから貼り付け)
 	case F_PASTEBOX:				Command_PasteBox((int)lparam1); break;				// 矩形貼り付け(クリップボードから矩形貼り付け)
 	case F_INSBOXTEXT:				Command_InsBoxText((const wchar_t*)lparam1, (int)lparam2); break;				// 矩形テキスト挿入
-	case F_INSTEXT_W:				Command_InsText(bRedraw, (const wchar_t*)lparam1, (LogicInt)lparam2, lparam3 != FALSE); break; // テキストを貼り付け // 2004.05.14 Moca 長さを示す引数追加
+	case F_INSTEXT_W:				Command_InsText(bRedraw, (const wchar_t*)lparam1, (size_t)lparam2, lparam3 != FALSE); break; // テキストを貼り付け // 2004.05.14 Moca 長さを示す引数追加
 	case F_ADDTAIL_W:				Command_AddTail((const wchar_t*)lparam1, (int)lparam2); break;	// 最後にテキストを追加
 	case F_COPYFNAME:				Command_CopyFileName(); break;						// このファイル名をクリップボードにコピー / /2002/2/3 aroka
 	case F_COPYPATH:				Command_CopyPath(); break;							// このファイルのパス名をクリップボードにコピー
@@ -719,20 +719,20 @@ void ViewCommander::Sub_BoxSelectLock( int flags )
 }
 
 
-LogicInt ViewCommander::ConvertEol(
+size_t ViewCommander::ConvertEol(
 	const wchar_t* pszText,
-	LogicInt nTextLen,
+	size_t nTextLen,
 	wchar_t* pszConvertedText
 	)
 {
 	// original by 2009.02.28 salarm
-	LogicInt nConvertedTextLen;
+	size_t nConvertedTextLen;
 	Eol eol = GetDocument().docEditor.GetNewLineCode();
 
 	nConvertedTextLen = 0;
 	bool bExtEol = GetDllShareData().common.edit.bEnableExtEol;
 	if (!pszConvertedText) {
-		for (int i=0; i<nTextLen; ++i) {
+		for (size_t i=0; i<nTextLen; ++i) {
 			if (WCODE::IsLineDelimiter(pszText[i], bExtEol)) {
 				if (pszText[i] == WCODE::CR) {
 					if (i + 1 < nTextLen && pszText[i + 1] == WCODE::LF) {

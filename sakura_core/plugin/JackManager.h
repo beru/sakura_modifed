@@ -90,7 +90,7 @@ public:
 	std::vector<JackDef> GetJackDef() const;	// ジャック定義一覧を返す
 	EFunctionCode GetCommandCode(int index) const;		// プラグインコマンドの機能コードを返す
 	int GetCommandName(int funccode, WCHAR* buf, int size) const;	// プラグインコマンドの名前を返す
-	int GetCommandCount() const;	// プラグインコマンドの数を返す
+	size_t GetCommandCount() const;	// プラグインコマンドの数を返す
 	Plug* GetCommandById(int id) const;	// IDに合致するコマンドプラグを返す
 	const Plug::Array& GetPlugs(EJack jack) const;	// プラグを返す
 	// TODO: 作りが一貫してないので整理する syat

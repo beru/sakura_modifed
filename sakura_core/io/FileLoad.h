@@ -100,7 +100,7 @@ protected:
 	void ReadBufEmpty(void);	// バッファを空にする
 
 	// GetLextLine の 文字コード考慮版
-	const char* GetNextLineCharCode( const char*, int, int*, int*, Eol*, int*, int* );
+	const char* GetNextLineCharCode( const char*, size_t, int*, int*, Eol*, int*, int* );
 	CodeConvertResult ReadLine_core( NativeW*, Eol* );
 
 	int Read(void*, size_t); // inline
@@ -136,7 +136,7 @@ protected:
 	// 読み込みバッファ系
 	char*	pReadBuf;			// 読み込みバッファへのポインタ
 	int		nReadBufSize;		// 読み込みバッファの実際に確保しているサイズ
-	int		nReadDataLen;		// 読み込みバッファの有効データサイズ
+	size_t	nReadDataLen;		// 読み込みバッファの有効データサイズ
 	int		nReadBufOffSet;		// 読み込みバッファ中のオフセット(次の行頭位置)
 //	int		nReadBufSumSize;	// 今までにバッファに読み込んだデータの合計サイズ
 	Memory lineBuffer;

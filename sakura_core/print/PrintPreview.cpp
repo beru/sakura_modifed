@@ -874,8 +874,8 @@ void PrintPreview::OnPreviewGoDirectPage(void)
 		szPageNum
 	);
 	if (bDlgInputPageResult) {
-		int nPageNumLen = _tcslen(szPageNum);
-		for (int i=0; i<nPageNumLen; ++i) {
+		size_t nPageNumLen = _tcslen(szPageNum);
+		for (size_t i=0; i<nPageNumLen; ++i) {
 			if (!(_T('0') <= szPageNum[i] &&  szPageNum[i] <= _T('9'))) {
 				return;
 			}
@@ -1222,7 +1222,7 @@ void PrintPreview::DrawHeaderFooter(HDC hdc, const Rect& rect, bool bHeader)
 	bool		bFontSetting = (bHeader ? pPrintSetting->lfHeader.lfFaceName[0] : pPrintSetting->lfFooter.lfFaceName[0]) != _T('\0');
 	const int	nWorkLen = 1024;
 	wchar_t		szWork[1024 + 1];
-	int			nLen;
+	size_t		nLen;
 
 	if (bFontSetting) {
 		// ÉtÉHÉìÉgçÏê¨

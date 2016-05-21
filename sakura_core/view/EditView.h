@@ -383,7 +383,7 @@ public:
 	void ReplaceData_CEditView(
 		const LayoutRange&	delRange,			// 削除範囲。レイアウト単位。
 		const wchar_t*		pInsData,			// 挿入するデータ
-		LogicInt			nInsDataLen,		// 挿入するデータの長さ
+		size_t				nInsDataLen,		// 挿入するデータの長さ
 		bool				bRedraw,
 		OpeBlk*				pOpeBlk,
 		bool				bFastMode = false,
@@ -392,7 +392,7 @@ public:
 	void ReplaceData_CEditView2(
 		const LogicRange&	delRange,			// 削除範囲。ロジック単位。
 		const wchar_t*		pInsData,			// 挿入するデータ
-		LogicInt			nInsDataLen,		// 挿入するデータの長さ
+		size_t				nInsDataLen,		// 挿入するデータの長さ
 		bool				bRedraw,
 		OpeBlk*				pOpeBlk,
 		bool				bFastMode = false

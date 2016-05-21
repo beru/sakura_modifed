@@ -43,7 +43,7 @@ public:
 	// 実装
 	static CodeConvertResult Latin1ToUnicode(const Memory& src, NativeW* pDstMem);		// Latin1   → Unicodeコード変換
 	static CodeConvertResult UnicodeToLatin1(const NativeW& src, Memory* pDstMem);		// Unicode  → Latin1コード変換
-	static int GetSizeOfChar(const char* pData, int nDataLen, int nIdx); // 指定した位置の文字が何バイト文字かを返す
+	static size_t GetSizeOfChar(const char* pData, size_t nDataLen, size_t nIdx); // 指定した位置の文字が何バイト文字かを返す
 
 protected:
 	// 実装

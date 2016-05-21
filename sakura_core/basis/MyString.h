@@ -49,14 +49,14 @@ public:
 	void set(const wchar_t* wszData) { wstr = wszData; delete2(str_cache); }
 	void set(const wchar_t* wszData, int nLength) { wstr.assign(wszData, nLength); delete2(str_cache); }
 	void set(const char* szData);
-	void set(const char* szData, int nLength);
+	void set(const char* szData, size_t nLength);
 	void set(const String& szData) { set(szData.c_wstr()); }
 
 	// Žæ“¾
 	const wchar_t* c_wstr() const { return wstr.c_str(); }
 	const char* c_astr() const;
-	int wlength() const { return wcslen(c_wstr()); }
-	int alength() const { return strlen(c_astr()); }
+	size_t wlength() const { return wcslen(c_wstr()); }
+	size_t alength() const { return strlen(c_astr()); }
 
 
 	// TCHAR

@@ -173,7 +173,7 @@ bool CodeTypeName::CanDefault()
 //                      コンボボックス                         //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-int CodeTypesForCombobox::GetCount() const
+size_t CodeTypesForCombobox::GetCount() const
 {
 	return vDispIdx.size();
 }

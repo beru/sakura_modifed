@@ -648,7 +648,7 @@ BOOL Dialog::SelectFile(
 // static
 bool Dialog::DirectoryUp(TCHAR* szDir)
 {
-	int nLen = auto_strlen(szDir);
+	size_t nLen = auto_strlen(szDir);
 	if (3 < nLen) {
 		// X:\ ‚â\\. ‚æ‚è’·‚¢
 		CutLastYenFromDirectoryPath(szDir);

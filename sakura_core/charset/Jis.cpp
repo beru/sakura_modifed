@@ -248,7 +248,7 @@ int Jis::JisToUni(const char* pSrc, const int nSrcLen, wchar_t* pDst, bool* pbEr
 CodeConvertResult Jis::JISToUnicode(const Memory& src, NativeW* pDstMem, bool base64decode)
 {
 	// É\Å[ÉXÇéÊìæ
-	int nSrcLen;
+	size_t nSrcLen;
 	const char* pSrc = reinterpret_cast<const char*>( src.GetRawPtr(&nSrcLen) );
 	if (nSrcLen == 0) {
 		pDstMem->Clear();

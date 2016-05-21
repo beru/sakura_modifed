@@ -189,7 +189,7 @@ int EditView::HokanSearchByFile(
 	vector_ex<std::wstring>& candidates,	// [in,out] Œó•â
 	int				nMaxKouho				// [in] MaxŒó•â”(0 == –³§ŒÀ)
 ) {
-	const int nKeyLen = wcslen(pszKey);
+	const size_t nKeyLen = wcslen(pszKey);
 	int nLines = pEditDoc->docLineMgr.GetLineCount();
 	int j, nWordLen, nLineLen, nRet, nCharSize, nWordBegin, nWordLenStop;
 

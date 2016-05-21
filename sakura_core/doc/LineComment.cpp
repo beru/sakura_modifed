@@ -30,7 +30,7 @@ LineComment::LineComment()
 */
 void LineComment::CopyTo(const int n, const wchar_t* buffer, int commentPos)
 {
-	int nStrLen = wcslen(buffer);
+	size_t nStrLen = wcslen(buffer);
 	if (0 < nStrLen && nStrLen < COMMENT_DELIMITER_BUFFERSIZE) {
 		wcscpy(pszLineComment[n], buffer);
 		lineCommentPos[n] = commentPos;

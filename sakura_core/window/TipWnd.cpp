@@ -141,7 +141,7 @@ void TipWnd::ComputeWindowSize(
 	HFONT hFontOld = (HFONT)::SelectObject(hdc, hFont);
 	int nCurMaxWidth = 0;
 	int nCurHeight = 0;
-	int nTextLength = _tcslen(pszText);
+	size_t nTextLength = _tcslen(pszText);
 	int nBgn = 0;
 	for (int i=0; i<=nTextLength; ++i) {
 		// 2005-09-02 D.S.Koba GetSizeOfChar
@@ -202,7 +202,7 @@ void TipWnd::DrawTipText(
 	COLORREF colText_Old = ::SetTextColor(hdc, ::GetSysColor(COLOR_INFOTEXT));
 	int nCurMaxWidth = 0;
 	int nCurHeight = 0;
-	int nTextLength = _tcslen(pszText);
+	size_t nTextLength = _tcslen(pszText);
 	int nBgn = 0;
 	for (int i=0; i<=nTextLength; ++i) {
 //		int nCharChars = &pszText[i] - CMemory::MemCharPrev(pszText, nTextLength, &pszText[i]);

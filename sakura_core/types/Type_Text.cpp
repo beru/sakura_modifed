@@ -63,7 +63,7 @@ void CType_Text::InitTypeConfigImp(TypeConfig& type)
 	// ※""で挟まれる設定を複製してちょっと修正すれば、<>や[]に挟まれたものにも対応できる（ユーザに任せる）
 
 	// 正規表現キーワード
-	int keywordPos = 0;
+	size_t keywordPos = 0;
 	wchar_t* pKeyword = type.regexKeywordList;
 	type.bUseRegexKeyword = true;							// 正規表現キーワードを使うか
 	type.regexKeywordArr[0].nColorIndex = COLORIDX_URL;	// 色指定番号
@@ -94,7 +94,7 @@ void DocOutline::MakeTopicList_txt(FuncInfoArr* pFuncInfoArr)
 
 	// 見出し記号
 	const wchar_t*	pszStarts = GetDllShareData().common.format.szMidashiKigou;
-	int				nStartsLen = wcslen(pszStarts);
+	size_t			nStartsLen = wcslen(pszStarts);
 
 	/*	ネストの深さは、nMaxStackレベルまで、ひとつのヘッダは、最長32文字まで区別
 		（32文字まで同じだったら同じものとして扱います）

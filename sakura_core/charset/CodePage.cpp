@@ -114,7 +114,7 @@ CodeConvertResult CodePage::CPToUnicode(const Memory& src, NativeW* pDst, int co
 	bool bError = false;
 
 	// É\Å[ÉXéÊìæ
-	int nSrcLen;
+	size_t nSrcLen;
 	const char* pSrc = reinterpret_cast<const char*>( src.GetRawPtr(&nSrcLen) );
 
 	UINT codepage = CodePageExToMSCP(codepageEx);

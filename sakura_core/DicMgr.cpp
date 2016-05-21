@@ -134,7 +134,7 @@ int DicMgr::HokanSearch(
 	if (!in) {
 		return 0;
 	}
-	int nKeyLen = wcslen(pszKey);
+	size_t nKeyLen = wcslen(pszKey);
 	while (in) {
 		wstring szLine = in.ReadLineW();
 		if (nKeyLen > (int)szLine.length()) {

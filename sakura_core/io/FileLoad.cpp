@@ -185,7 +185,7 @@ EncodingType FileLoad::FileOpen(
 	nFileDataLen = nFileSize;
 	bool bBom = false;
 	if (0 < nReadDataLen) {
-		Memory headData(pReadBuf, t_min(nReadDataLen, 10));
+		Memory headData(pReadBuf, t_min(nReadDataLen, (size_t)10));
 		NativeW headUni;
 		IoBridge::FileToImpl(headData, &headUni, pCodeBase, nFlag);
 		if (1 <= headUni.GetStringLength() && headUni.GetStringPtr()[0] == 0xfeff) {
@@ -212,7 +212,7 @@ EncodingType FileLoad::FileOpen(
 	pCodeBase->GetEol( &memEols[1], EolType::LS );
 	pCodeBase->GetEol( &memEols[2], EolType::PS );
 	bool bEolEx = false;
-	int nMaxEolLen = 0;
+	size_t nMaxEolLen = 0;
 	for (int k=0; k<(int)_countof(memEols); ++k) {
 		if (memEols[k].GetRawLength() != 0) {
 			bEolEx = true;
@@ -460,7 +460,7 @@ int FileLoad::GetPercent(void) {
 */
 const char* FileLoad::GetNextLineCharCode(
 	const char*	pData,			// [in]		検索文字列
-	int			nDataLen,		// [in]		検索文字列のバイト数
+	size_t		nDataLen,		// [in]		検索文字列のバイト数
 	int*		pnLineLen,		// [out]	1行のバイト数を返すただしEOLは含まない
 	int*		pnBgn,			// [i/o]	検索文字列のバイト単位のオフセット位置
 	Eol*		pEol,			// [i/o]	EOL
@@ -518,7 +518,7 @@ const char* FileLoad::GetNextLineCharCode(
 			}
 			// UTF-8のNEL,PS,LS断片の検出
 			if (i == nDataLen && bEolEx) {
-				for (i=t_max(0, nDataLen - nMaxEolLen - 1); i < nDataLen; ++i) {
+				for (i=t_max(0, (int)nDataLen - nMaxEolLen - 1); i < nDataLen; ++i) {
 					bool bSet = false;
 					for (size_t k=0; k<_countof(eEolEx); ++k) {
 						int nCompLen = t_min(nDataLen-i, memEols[k].GetRawLength());
@@ -632,7 +632,7 @@ const char* FileLoad::GetNextLineCharCode(
 							(i + 1 < nDataLen ? pData[i+1] : 0))),
 					0
 				};
-				pEol->SetTypeByStringForFile( szEof, t_min(nDataLen - i, 2) );
+				pEol->SetTypeByStringForFile( szEof, t_min((int)nDataLen - i, 2) );
 				neollen = (Int)pEol->GetLen();
 				break;
 			}

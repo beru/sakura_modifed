@@ -105,7 +105,7 @@ public:
 	Me& operator = (const CHAR_TYPE* src)	{ Assign(src); return *this; }
 
 	// 各種メソッド
-	int Length() const	{ return auto_strlen(szData); }
+	size_t Length() const	{ return auto_strlen(szData); }
 
 private:
 	CHAR_TYPE szData[N_BUFFER_COUNT];

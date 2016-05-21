@@ -701,7 +701,7 @@ int DlgGrep::GetData(void)
 				::GetCurrentDirectory(_MAX_PATH, szFolderItem + 1);
 				auto_strcat(szFolderItem, _T("\""));
 			}
-			int nFolderItemLen = auto_strlen(szFolderItem);
+			size_t nFolderItemLen = auto_strlen(szFolderItem);
 			if (_MAX_PATH < nFolderLen + nFolderItemLen + 1) {
 				WarningMessage(	GetHwnd(), LS(STR_DLGGREP6));
 				return FALSE;

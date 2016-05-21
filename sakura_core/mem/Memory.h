@@ -44,7 +44,7 @@ class Memory {
 public:
 	Memory();
 	Memory(const Memory& rhs);
-	Memory(const void* pData, int nDataLenBytes);
+	Memory(const void* pData, size_t nDataLenBytes);
 	virtual ~Memory();
 protected:
 	void _init_members();
@@ -53,7 +53,7 @@ protected:
 public:
 	void AllocBuffer(size_t);											// バッファサイズの調整。必要に応じて拡大する。
 	void SetRawData(const void* pData, size_t nDataLen);				// バッファの内容を置き換える
-	void SetRawData(const Memory&);									// バッファの内容を置き換える
+	void SetRawData(const Memory&);										// バッファの内容を置き換える
 	void SetRawDataHoldBuffer( const void* pData, size_t nDataLen );	// バッファの内容を置き換える(バッファを保持)
 	void SetRawDataHoldBuffer( const Memory& );						// バッファの内容を置き換える(バッファを保持)
 	void AppendRawData(const void* pData, size_t nDataLen);			// バッファの最後にデータを追加する
@@ -61,11 +61,11 @@ public:
 	void Clean() { _Empty(); }
 	void Clear() { _Empty(); }
 
-	inline const void* GetRawPtr(int* pnLength) const;			// データへのポインタと長さ返す
-	inline void* GetRawPtr(int* pnLength);						// データへのポインタと長さ返す
+	inline const void* GetRawPtr(size_t* pnLength) const;			// データへのポインタと長さ返す
+	inline void* GetRawPtr(size_t* pnLength);						// データへのポインタと長さ返す
 	inline const void* GetRawPtr() const { return pRawData; } // データへのポインタを返す
 	inline void* GetRawPtr() { return pRawData; }				// データへのポインタを返す
-	int GetRawLength() const { return nRawLen; }				// データ長を返す。バイト単位。
+	size_t GetRawLength() const { return nRawLen; }				// データ長を返す。バイト単位。
 
 	// 演算子
 	const Memory& operator = (const Memory&);
@@ -74,7 +74,7 @@ public:
 	static int IsEqual(Memory&, Memory&);	// 等しい内容か
 
 	// 変換関数
-	static void SwapHLByte(char*, const int); // 下記関数のstatic関数版
+	static void SwapHLByte(char*, const size_t); // 下記関数のstatic関数版
 	void SwapHLByte();					// Byteを交換する
 	bool SwabHLByte( const Memory& );	// Byteを交換する(コピー版)
 
@@ -84,7 +84,7 @@ protected:
 	||  実装ヘルパ関数
 	*/
 	void _Empty(void); // 解放する。pRawDataはNULLになる。
-	void _AddData(const void*, int);
+	void _AddData(const void*, size_t);
 public:
 	void _AppendSz(const char* str);
 	void _SetRawLength(size_t nLength);
@@ -106,8 +106,8 @@ private: // 2002/2/10 aroka アクセス権変更
 	|| メンバ変数
 	*/
 	char*	pRawData;		// バッファ
-	int		nRawLen;		// データサイズ(nDataBufSize以内)。バイト単位。
-	int		nDataBufSize;	//バッファサイズ。バイト単位。
+	size_t	nRawLen;		// データサイズ(nDataBufSize以内)。バイト単位。
+	size_t	nDataBufSize;	//バッファサイズ。バイト単位。
 };
 
 
@@ -115,14 +115,14 @@ private: // 2002/2/10 aroka アクセス権変更
 //                     inline関数の実装                        //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 inline
-const void* Memory::GetRawPtr(int* pnLength) const // データへのポインタと長さ返す
+const void* Memory::GetRawPtr(size_t* pnLength) const // データへのポインタと長さ返す
 {
 	if (pnLength) *pnLength = GetRawLength();
 	return pRawData;
 }
 
 inline
-void* Memory::GetRawPtr(int* pnLength) // データへのポインタと長さ返す
+void* Memory::GetRawPtr(size_t* pnLength) // データへのポインタと長さ返す
 {
 	if (pnLength) *pnLength = GetRawLength();
 	return pRawData;

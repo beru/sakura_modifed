@@ -144,7 +144,7 @@ LPCWSTR BookmarkManager::GetBookMarks()
 	wchar_t szBuff2[10];
 	LogicInt nLinePos = LogicInt(0);
 	LogicInt nLinePosOld = LogicInt(-1);
-	int nTextLen = 2;
+	size_t nTextLen = 2;
 	DocLine* pDocLine = docLineMgr.GetLine(nLinePos);
 	wcscpy(szText, L":0");
 	while (pDocLine) {
@@ -185,7 +185,7 @@ LPCWSTR BookmarkManager::GetBookMarks()
 				}
 				szBuff2[nColumn] = L'\0';
 			}
-			int nBuff2Len = wcslen(szBuff2);
+			size_t nBuff2Len = wcslen(szBuff2);
 			if (nBuff2Len + nTextLen > MAX_MARKLINES_LEN) {
 				break;	//2002.01.17
 			}

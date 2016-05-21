@@ -32,7 +32,7 @@ void BlockComment::SetBlockCommentRule(
 	const wchar_t* pszTo	// [in] ƒRƒƒ“ƒgI—¹•¶š—ñ
 	)
 {
-	int nStrLen = wcslen(pszFrom);
+	size_t nStrLen = wcslen(pszFrom);
 	if (0 < nStrLen && nStrLen < BLOCKCOMMENT_BUFFERSIZE) {
 		wcscpy(szBlockCommentFrom, pszFrom);
 		nBlockFromLen = nStrLen;

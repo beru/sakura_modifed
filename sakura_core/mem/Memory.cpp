@@ -59,7 +59,7 @@ Memory::Memory()
 */
 Memory::Memory(
 	const void*	pData,			// 格納データアドレス
-	int			nDataLenBytes	// 格納データの有効長
+	size_t		nDataLenBytes	// 格納データの有効長
 	)
 {
 	_init_members();
@@ -98,7 +98,7 @@ const Memory& Memory::operator = (const Memory& rhs)
 /*
 || バッファの最後にデータを追加する（protectメンバ
 */
-void Memory::_AddData(const void* pData, int nDataLen)
+void Memory::_AddData(const void* pData, size_t nDataLen)
 {
 	if (!pRawData) {
 		return;
@@ -114,8 +114,8 @@ void Memory::_AddData(const void* pData, int nDataLen)
 // 等しい内容か
 int Memory::IsEqual(Memory& mem1, Memory& mem2)
 {
-	int nLen1;
-	int nLen2;
+	size_t nLen1;
+	size_t nLen2;
 	const char*	psz1 = (const char*)mem1.GetRawPtr(&nLen1);
 	const char*	psz2 = (const char*)mem2.GetRawPtr(&nLen2);
 	if (nLen1 == nLen2) {
@@ -134,12 +134,12 @@ int Memory::IsEqual(Memory& mem1, Memory& mem2)
 	
 	@note	nBufLen が2の倍数でないときは、最後の1バイトは交換されない
 */
-void Memory::SwapHLByte(char* pData, const int nDataLen) {
+void Memory::SwapHLByte(char* pData, const size_t nDataLen) {
 	unsigned char ctemp;
 
 	//pBuf = (unsigned char*)GetRawPtr(&nBufLen);
 	unsigned char* pBuf = reinterpret_cast<unsigned char*>(pData);
-	int nBufLen = nDataLen;
+	size_t nBufLen = nDataLen;
 
 	if (nBufLen < 2) {
 		return;
@@ -178,7 +178,7 @@ void Memory::SwapHLByte(char* pData, const int nDataLen) {
 	@note	nBufLen が2の倍数でないときは、最後の1バイトは交換されない
 */
 void Memory::SwapHLByte(void) {
-	int nBufLen;
+	size_t nBufLen;
 	char* pBuf = reinterpret_cast<char*>(GetRawPtr(&nBufLen));
 	SwapHLByte(pBuf, nBufLen);
 	return;
@@ -313,7 +313,7 @@ void Memory::SetRawData(
 // バッファの内容を置き換える
 void Memory::SetRawData(const Memory& pMemData)
 {
-	int nDataLen;
+	size_t nDataLen;
 	const void*	pData = pMemData.GetRawPtr(&nDataLen);
 	_Empty();
 	AllocBuffer(nDataLen);
@@ -344,7 +344,7 @@ void Memory::SetRawDataHoldBuffer(const Memory& pMemData)
 	if (this == &pMemData) {
 		return;
 	}
-	int nDataLen;
+	size_t nDataLen;
 	const void*	pData = pMemData.GetRawPtr( &nDataLen );
 	SetRawDataHoldBuffer( pData, nDataLen );
 }
@@ -370,7 +370,7 @@ void Memory::AppendRawData(const Memory* pMemData)
 		Memory mem = *pMemData;
 		AppendRawData(&mem);
 	}
-	int	nDataLen;
+	size_t	nDataLen;
 	const void*	pData = pMemData->GetRawPtr(&nDataLen);
 	AllocBuffer(nRawLen + nDataLen);
 	_AddData(pData, nDataLen);
@@ -388,7 +388,7 @@ void Memory::_Empty(void)
 
 void Memory::_AppendSz(const char* str)
 {
-	int len = strlen(str);
+	size_t len = strlen(str);
 	AllocBuffer(nRawLen + len);
 	_AddData(str, len);
 }

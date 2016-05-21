@@ -122,7 +122,7 @@ int Utf7::Utf7ToUni(const char* pSrc, const int nSrcLen, wchar_t* pDst, bool* pb
 CodeConvertResult Utf7::UTF7ToUnicode( const Memory& src, NativeW* pDstMem )
 {
 	// ÉfÅ[É^éÊìæ
-	int nDataLen;
+	size_t nDataLen;
 	const char* pData = reinterpret_cast<const char*>( src.GetRawPtr(&nDataLen) );
 	if (nDataLen == 0) {
 		pDstMem->Clear();

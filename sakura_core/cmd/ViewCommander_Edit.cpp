@@ -806,7 +806,7 @@ void ViewCommander::Command_Delete(void)
 				nIndex = view.LineColumnToIndex2(pLayout, caret.GetCaretLayoutPos().GetX2(), &nLineLen);
 				if (nLineLen != 0) {	// 折り返しや改行コードより右の場合には nLineLen に行全体の表示桁数が入る
 					if (pLayout->GetLayoutEol().GetType() != EolType::None) {	// 行終端は改行コードか?
-						Command_InsText(true, L"", LogicInt(0), false);	// カーソル位置まで半角スペース挿入
+						Command_InsText(true, L"", 0, false);	// カーソル位置まで半角スペース挿入
 					}else {	// 行終端が折り返し
 						// 折り返し行末ではスペース挿入後、次の文字を削除する	// 2009.02.19 ryoji
 
@@ -814,7 +814,7 @@ void ViewCommander::Command_Delete(void)
 						// 非フリーカーソル時（ちょうどカーソルが折り返し位置にある）には次の行の先頭文字を削除したい
 
 						if (nLineLen < caret.GetCaretLayoutPos().GetX2()) {	// 折り返し行末とカーソルの間に隙間がある
-							Command_InsText(true, L"", LogicInt(0), false);	// カーソル位置まで半角スペース挿入
+							Command_InsText(true, L"", 0, false);	// カーソル位置まで半角スペース挿入
 							pLayout = layoutMgr.SearchLineByLayoutY(caret.GetCaretLayoutPos().GetY2());
 							nIndex = view.LineColumnToIndex2(pLayout, caret.GetCaretLayoutPos().GetX2(), &nLineLen);
 						}
@@ -886,7 +886,7 @@ void ViewCommander::Command_Delete_Back(void)
 // 	上書き用の一文字削除	2009.04.11 ryoji
 void ViewCommander::DelCharForOverwrite(
 	const wchar_t* pszInput,
-	int nLen
+	size_t nLen
 	)
 {
 	bool bEol = false;

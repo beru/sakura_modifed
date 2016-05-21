@@ -378,7 +378,7 @@ void DocOutline::MakeFuncList_C(
 
 	wchar_t		szWordPrev[256];	//	1つ前のword
 	wchar_t		szWord[256];		//	現在解読中のwordを入れるところ
-	int			nWordIdx = 0;
+	size_t		nWordIdx = 0;
 	int			nMaxWordLeng = 100;	//	許容されるwordの最大長さ
 	int			nMode;				//	現在のstate
 	/*
@@ -526,7 +526,7 @@ void DocOutline::MakeFuncList_C(
 				// ダブルクォーテーション文字列読み込み中
 				// operator "" _userliteral
 				if (nMode2 == M2_OPERATOR_WORD) {
-					int nLen = wcslen(szWordPrev);
+					size_t nLen = wcslen(szWordPrev);
 					if (nLen + 1 < _countof(szWordPrev)) {
 						szWordPrev[nLen] = pLine[i];
 						szWordPrev[nLen + 1] = L'\0';
@@ -590,7 +590,7 @@ void DocOutline::MakeFuncList_C(
 						// strcut name<X> final のfinalはクラス名の一部ではない
 						// struct name<final> のfinalは一部
 						if (wcscmp(L"final", szWord) != 0 || nNestLevel_template != 0) {
-							int nLen = wcslen(szTemplateName);
+							size_t nLen = wcslen(szTemplateName);
 							if (0 < nLen && C_IsWordChar(szTemplateName[nLen - 1]) && szTemplateName[nLen - 1] != L':' && szWord[nWordIdx] != L':') {
 								// template func<const x>() のような場合にconstの後ろにスペースを挿入
 								if (nLen + 1 < nItemNameLenMax) {
@@ -673,7 +673,7 @@ void DocOutline::MakeFuncList_C(
 						szWord[nWordIdx + 1] = L'\0';
 					}
 					if (nMode2 == M2_TEMPLATE_SAVE || nMode2 == M2_TEMPLATE_WORD) {
-						int nItemNameLen = wcslen(szTemplateName);
+						size_t nItemNameLen = wcslen(szTemplateName);
 						if (nItemNameLen + 1 < nItemNameLenMax) {
 							szTemplateName[nItemNameLen] = pLine[i];
 							szTemplateName[nItemNameLen + 1] = L'\0';
@@ -779,7 +779,7 @@ void DocOutline::MakeFuncList_C(
 						bAddFunction = true;
 					}
 					int nItemNameLen = 0;
-					int nLenDefPos = wcslen(LSW(STR_OUTLINE_CPP_DEFPOS));
+					size_t nLenDefPos = wcslen(LSW(STR_OUTLINE_CPP_DEFPOS));
 					if (nNestLevel_func !=0 || (szWordPrev[0] == L'=' && szWordPrev[1] == L'\0') || nMode2 == M2_AFTER_EQUAL)
 						++nNestLevel_func;
 					else if (1
@@ -881,7 +881,7 @@ void DocOutline::MakeFuncList_C(
 //						nNestLevel2 = 1;
 //					}
 //					nMode = 0;
-					int nLen = (int)wcslen(szWordPrev);
+					size_t nLen = (int)wcslen(szWordPrev);
 					bool bOperator = false;
 					if (nMode2 == M2_NORMAL && nNestLevel_fparam == 0 && C_IsOperator(szWordPrev, nLen)) {
 						int k;
@@ -941,7 +941,7 @@ void DocOutline::MakeFuncList_C(
 					}
 					//  2002/10/27 frozen ここまで
 					if (nMode2 == M2_TEMPLATE_SAVE || nMode2 == M2_TEMPLATE_WORD) {
-						int nItemNameLen = wcslen(szTemplateName);
+						size_t nItemNameLen = wcslen(szTemplateName);
 						if (nItemNameLen + 1 < nItemNameLenMax) {
 							szTemplateName[nItemNameLen] = pLine[i];
 							szTemplateName[nItemNameLen + 1] = L'\0';
@@ -969,13 +969,13 @@ void DocOutline::MakeFuncList_C(
 					}
 					//  2002/10/27 frozen ここまで
 					if (nMode2 == M2_OPERATOR_WORD) {
-						int nLen = wcslen(szWordPrev);
+						size_t nLen = wcslen(szWordPrev);
 						if (nLen + 1 < _countof(szWordPrev)) {
 							szWordPrev[nLen] = pLine[i];
 							szWordPrev[nLen + 1] = L'\0';
 						}
 					}else if (nMode2 == M2_TEMPLATE_SAVE || nMode2 == M2_TEMPLATE_WORD) {
-						int nItemNameLen = wcslen(szTemplateName);
+						size_t nItemNameLen = wcslen(szTemplateName);
 						if (nItemNameLen + 1 < nItemNameLenMax) {
 							szTemplateName[nItemNameLen] = pLine[i];
 							szTemplateName[nItemNameLen + 1] = L'\0';
@@ -984,7 +984,7 @@ void DocOutline::MakeFuncList_C(
 					continue;
 				}else if (pLine[i] == '[') {
 					// From Here 2007.05.26 genta C++/CLI Attributeの取り扱い
-					int nLen = (int)wcslen(szWordPrev);
+					size_t nLen = (int)wcslen(szWordPrev);
 					if (nMode2 == M2_NORMAL && C_IsOperator(szWordPrev, nLen)) {
 						// 演算子のオペレータだった operator []
 						if (nLen + 1 < _countof(szWordPrev)) {
@@ -1015,7 +1015,7 @@ void DocOutline::MakeFuncList_C(
 						continue;
 					}
 					if (nMode2 == M2_OPERATOR_WORD) {
-						int nLen = wcslen(szWordPrev);
+						size_t nLen = wcslen(szWordPrev);
 						if (nLen + 1 < _countof(szWordPrev)) {
 							szWordPrev[nLen] = pLine[i];
 							szWordPrev[nLen + 1] = L'\0';
@@ -1154,7 +1154,7 @@ void DocOutline::MakeFuncList_C(
 						// 2011.12.02 template対応
 						if (nMode2 == M2_NORMAL || nMode2 == M2_OPERATOR_WORD) {
 							if (pLine[i] == L'<') {
-								int nLen = (int)wcslen(szWordPrev);
+								size_t nLen = (int)wcslen(szWordPrev);
 								if (wcscmp(szWordPrev, L"template") == 0) {
 									nMode2 = M2_TEMPLATE;
 									szTemplateName[0] = L'\0';
@@ -1176,7 +1176,7 @@ void DocOutline::MakeFuncList_C(
 						//	operatorの判定は前にクラス名が付いている可能性があるので
 						//	専用の判定関数を使うべし．
 						//	operatorで無ければ=は代入なのでここは宣言文ではない．
-						int nLen = (int)wcslen(szWordPrev);
+						size_t nLen = (int)wcslen(szWordPrev);
 						if (1
 							&& (pLine[i] == L'=')
 							&& (nNestLevel_func == 0)

@@ -228,7 +228,7 @@ int JackManager::GetCommandName(
 }
 
 // プラグインコマンドの数を返す
-int JackManager::GetCommandCount() const
+size_t JackManager::GetCommandCount() const
 {
 	return jacks[PP_COMMAND].plugs.size();
 }

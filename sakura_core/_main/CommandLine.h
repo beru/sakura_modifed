@@ -95,7 +95,7 @@ public:
 		mProfile.SetString(s);
 	}
 	bool IsProfileMgr() { return bProfileMgr; }
-	int GetFileNum(void) { return fileNames.size(); }
+	size_t GetFileNum(void) { return fileNames.size(); }
 	const TCHAR* GetFileName(int i) { return i < GetFileNum() ? fileNames[i].c_str() : NULL; }
 	void ClearFile(void) { fileNames.clear(); }
 	void ParseCommandLine(LPCTSTR pszCmdLineSrc, bool bResponse = true);

@@ -695,7 +695,7 @@ bool ViewCommander::Command_TagJumpByTagsFileKeyword(const wchar_t* keyword)
 	タグジャンプの前処理
 	実行可能確認と、基準ファイル名の設定
 */
-bool ViewCommander::Sub_PreProcTagJumpByTagsFile(TCHAR* szCurrentPath, int count)
+bool ViewCommander::Sub_PreProcTagJumpByTagsFile(TCHAR* szCurrentPath, size_t count)
 {
 	if (count) {
 		szCurrentPath[0] = _T('\0');
@@ -725,7 +725,7 @@ bool ViewCommander::Sub_PreProcTagJumpByTagsFile(TCHAR* szCurrentPath, int count
 		// 現在のタイプ別の1番目の拡張子を拝借
 		TCHAR szExts[MAX_TYPES_EXTS];
 		DocTypeManager::GetFirstExt(view.pTypeData->szTypeExts, szExts, _countof(szExts));
-		int nExtLen = auto_strlen( szExts );
+		size_t nExtLen = auto_strlen( szExts );
 		_tcscat(szCurrentPath, _T("\\dmy"));
 		if (nExtLen) {
 			_tcscat(szCurrentPath, _T("."));

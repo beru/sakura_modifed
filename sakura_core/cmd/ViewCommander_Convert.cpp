@@ -259,7 +259,7 @@ void ViewCommander::Command_Base64Decode(void)
 	}
 
 	// データ
-	int nDataLen;
+	size_t nDataLen;
 	const void* pData = memBuf.GetRawPtr(&nDataLen);
 
 	// カキコ
@@ -308,7 +308,7 @@ void ViewCommander::Command_UUDecode(void)
 	}
 
 	// データ
-	int nDataLen;
+	size_t nDataLen;
 	const void* pData = memBin.GetRawPtr(&nDataLen);
 
 	// カキコ

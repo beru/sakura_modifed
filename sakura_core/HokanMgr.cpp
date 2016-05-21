@@ -343,7 +343,7 @@ void HokanMgr::HokanSearchByKeyword(
 	const EditView* pEditView = reinterpret_cast<const EditView*>(lParam);
 	const TypeConfig& type = pEditView->GetDocument().docType.GetDocumentAttribute();
 	KeywordSetMgr& keywordMgr = pShareData->common.specialKeyword.keywordSetMgr;
-	const int nKeyLen = wcslen(pszCurWord);
+	const size_t nKeyLen = wcslen(pszCurWord);
 	for (int n=0; n<MAX_KEYWORDSET_PER_TYPE; ++n) {
 		int kwdset = type.nKeywordSetIdx[n];
 		if (kwdset == -1) {

@@ -33,7 +33,7 @@
 class IStringRef {
 public:
 	virtual const wchar_t*	GetPtr()	const = 0;
-	virtual int				GetLength()	const = 0;
+	virtual size_t			GetLength()	const = 0;
 };
 
 
@@ -41,16 +41,16 @@ public:
 class StringRef : public IStringRef {
 public:
 	StringRef() : pData(NULL), nDataLen(0) { }
-	StringRef(const wchar_t* pData, int nDataLen) : pData(pData), nDataLen(nDataLen) { }
+	StringRef(const wchar_t* pData, size_t nDataLen) : pData(pData), nDataLen(nDataLen) { }
 	const wchar_t*	GetPtr()		const { return pData;    }
-	int				GetLength()		const { return nDataLen; }
+	size_t			GetLength()		const { return nDataLen; }
 
 	//########補助
 	bool			IsValid()		const { return pData != NULL; }
 	wchar_t			At(int nIndex)	const { assert(nIndex >= 0 && nIndex < nDataLen); return pData[nIndex]; }
 private:
 	const wchar_t*	pData;
-	int				nDataLen;
+	size_t			nDataLen;
 };
 
 
@@ -92,8 +92,8 @@ public:
 
 	// ネイティブ取得インターフェース
 	wchar_t operator [] (int nIndex) const;					// 任意位置の文字取得。nIndexは文字単位。
-	LogicInt GetStringLength() const {						// 文字列長を返す。文字単位。
-		return LogicInt(Native::GetRawLength() / sizeof(wchar_t));
+	size_t GetStringLength() const {						// 文字列長を返す。文字単位。
+		return Native::GetRawLength() / sizeof(wchar_t);
 	}
 	const wchar_t* GetStringPtr() const {
 		return reinterpret_cast<const wchar_t*>(GetRawPtr());
@@ -120,9 +120,9 @@ public:
 	}
 	// 末尾を1文字削る
 	void Chop() {
-		int n = GetStringLength();
-		n -= 1;
-		if (n >= 0) {
+		size_t n = GetStringLength();
+		if (n > 0) {
+			n -= 1;
 			_SetStringLength(n);
 		}
 	}

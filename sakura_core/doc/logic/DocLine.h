@@ -45,7 +45,7 @@ public:
 	// データ取得
 	LogicInt		GetLengthWithoutEOL() const			{ return line.GetStringLength() - eol.GetLen(); } // 戻り値は文字単位。
 	const wchar_t*	GetPtr() const						{ return line.GetStringPtr(); }
-	LogicInt		GetLengthWithEOL() const			{ return line.GetStringLength(); }	// CMemoryIterator用
+	size_t			GetLengthWithEOL() const			{ return line.GetStringLength(); }	// CMemoryIterator用
 #ifdef USE_STRICT_INT
 	const wchar_t*	GetDocLineStrWithEOL(int* pnLen) const {	//###仮の名前、仮の対処
 		LogicInt n;

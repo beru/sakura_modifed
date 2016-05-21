@@ -47,7 +47,7 @@ SearchStringPattern::SearchStringPattern()
 SearchStringPattern::SearchStringPattern(
 	HWND hwnd,
 	const wchar_t* pszPattern,
-	int nPatternLen,
+	size_t nPatternLen,
 	const SearchOption& searchOption,
 	Bregexp* pRegexp
 	)
@@ -93,7 +93,7 @@ void SearchStringPattern::Reset() {
 bool SearchStringPattern::SetPattern(
 	HWND hwnd,
 	const wchar_t* pszPattern,
-	int nPatternLen,
+	size_t nPatternLen,
 	const wchar_t* pszPattern2,
 	const SearchOption& searchOption,
 	Bregexp* regexp
@@ -1143,7 +1143,7 @@ prev_line:;
 	// 挿入データを行終端で区切った行数カウンタ
 	pDocLine = docLineMgr.GetLine(pArg->delRange.GetFrom().GetY2());
 
-	int nInsSize = pArg->pInsData->size();
+	size_t nInsSize = pArg->pInsData->size();
 	bool bInsertLineMode = false;
 	bool bLastInsert = false;
 	{

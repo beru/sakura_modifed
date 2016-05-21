@@ -84,7 +84,7 @@ int AddLastChar(
 	TCHAR c
 	)
 {
-	int pos = _tcslen(pszPath);
+	size_t pos = _tcslen(pszPath);
 	// 何もないときは\を付加
 	if (pos == 0) {
 		if (nMaxLen <= pos + 1) {
@@ -272,8 +272,8 @@ const char* GetNextLimitedLengthText(
 // データを指定「文字数」以内に切り詰める。戻り値は結果の文字数。
 int LimitStringLengthW(
 	const wchar_t*	pszData,		// [in]
-	int				nDataLength,	// [in]
-	int				nLimitLength,	// [in]
+	size_t			nDataLength,	// [in]
+	size_t			nLimitLength,	// [in]
 	NativeW&		memDes			// [out]
 	)
 {
@@ -298,7 +298,7 @@ void GetLineColumn(
 	int* pnJumpToColumn
 	)
 {
-	int nLineLen = wcslen(pLine);
+	size_t nLineLen = wcslen(pLine);
 	int i = 0;
 	for (; i<nLineLen; ++i) {
 		if (pLine[i] >= L'0' &&

@@ -58,7 +58,7 @@ void NativeA::AppendString(const char* pszData)
 }
 
 // バッファの最後にデータを追加する。nLengthは文字単位。
-void NativeA::AppendString(const char* pszData, int nLength)
+void NativeA::AppendString(const char* pszData, size_t nLength)
 {
 	Native::AppendRawData(pszData, nLength * sizeof(char));
 }
@@ -79,7 +79,7 @@ void NativeA::AppendNativeData(const NativeA& pcNative)
 }
 
 // (重要：nDataLenは文字単位) バッファサイズの調整。必要に応じて拡大する。
-void NativeA::AllocStringBuffer(int nDataLen)
+void NativeA::AllocStringBuffer(size_t nDataLen)
 {
 	Native::AllocBuffer(nDataLen * sizeof(char));
 }
@@ -97,7 +97,7 @@ const NativeA& NativeA::operator += (char ch)
 
 void NativeA::SetStringNew(
 	const wchar_t* wszData,
-	int nDataLen
+	size_t nDataLen
 	)
 {
 	std::wstring buf(wszData, nDataLen); // 切り出し
@@ -116,12 +116,12 @@ void NativeA::SetStringNew(const wchar_t* wszData)
 //              ネイティブ取得インターフェース                 //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-int NativeA::GetStringLength() const
+size_t NativeA::GetStringLength() const
 {
 	return Native::GetRawLength() / sizeof(char);
 }
 
-const char* NativeA::GetStringPtr(int* pnLength) const
+const char* NativeA::GetStringPtr(size_t* pnLength) const
 {
 	if (pnLength) {
 		*pnLength = GetStringLength();
@@ -130,7 +130,7 @@ const char* NativeA::GetStringPtr(int* pnLength) const
 }
 
 // 任意位置の文字取得。nIndexは文字単位。
-char NativeA::operator[](int nIndex) const
+char NativeA::operator[](size_t nIndex) const
 {
 	if (nIndex < GetStringLength()) {
 		return GetStringPtr()[nIndex];
@@ -150,8 +150,8 @@ void NativeA::Replace(
 	)
 {
 	NativeA	memWork;
-	int			nFromLen = strlen(pszFrom);
-	int			nToLen = strlen(pszTo);
+	size_t		nFromLen = strlen(pszFrom);
+	size_t		nToLen = strlen(pszTo);
 	int			nBgnOld = 0;
 	int			nBgn = 0;
 	while (nBgn <= GetStringLength() - nFromLen) {
@@ -610,10 +610,10 @@ void NativeA::SPACEToTAB(int nTabSpace)
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 // 指定した位置の文字が何バイト文字かを返す
-int NativeA::GetSizeOfChar(
+size_t NativeA::GetSizeOfChar(
 	const char* pData,
-	int nDataLen,
-	int nIdx
+	size_t nDataLen,
+	size_t nIdx
 	)
 {
 	return ShiftJis::GetSizeOfChar(pData, nDataLen, nIdx);
@@ -623,7 +623,7 @@ int NativeA::GetSizeOfChar(
 // 次にある文字がバッファの最後の位置を越える場合は&pData[nDataLen]を返します
 const char* NativeA::GetCharNext(
 	const char* pData,
-	int nDataLen,
+	size_t nDataLen,
 	const char* pDataCurrent
 	)
 {
@@ -657,7 +657,7 @@ const char* NativeA::GetCharNext(
 
 // ポインタで示した文字の直前にある文字の位置を返します
 // 直前にある文字がバッファの先頭の位置を越える場合はpDataを返します
-const char* NativeA::GetCharPrev(const char* pData, int nDataLen, const char* pDataCurrent)
+const char* NativeA::GetCharPrev(const char* pData, size_t nDataLen, const char* pDataCurrent)
 {
 //#ifdef _DEBUG
 //	CRunningTimer cRunningTimer("Memory::MemCharPrev");
@@ -699,7 +699,7 @@ void NativeA::AppendStringNew(const wchar_t* pszData)
 	AppendStringNew(pszData, wcslen(pszData));
 }
 
-void NativeA::AppendStringNew(const wchar_t* pData, int nDataLen)
+void NativeA::AppendStringNew(const wchar_t* pData, size_t nDataLen)
 {
 	char* buf = wcstombs_new(pData, nDataLen);
 	AppendString(buf);

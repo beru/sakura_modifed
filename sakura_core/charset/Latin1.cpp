@@ -49,7 +49,7 @@
 
 	エラーでなければ1を返す
 */
-int Latin1::GetSizeOfChar(const char* pData, int nDataLen, int nIdx)
+size_t Latin1::GetSizeOfChar(const char* pData, size_t nDataLen, size_t nIdx)
 {
 	if (nIdx >= nDataLen) {
 		return 0;
@@ -102,7 +102,7 @@ int Latin1::Latin1ToUni(const char* pSrc, const int nSrcLen, wchar_t* pDst, bool
 CodeConvertResult Latin1::Latin1ToUnicode( const Memory& src, NativeW* pDstMem )
 {
 	// ソース取得
-	int nSrcLen;
+	size_t nSrcLen;
 	const char* pSrc = reinterpret_cast<const char*>( src.GetRawPtr(&nSrcLen) );
 	if (nSrcLen == 0) {
 		pDstMem->Clear();

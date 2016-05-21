@@ -717,7 +717,7 @@ bool PropTypesRegex::CheckKeywordList(
 	HWND hwndList = GetDlgItem(hwndDlg, IDC_LIST_REGEX);
 	int  nIndex  = ListView_GetItemCount(hwndList);
 	auto szKeyword = std::make_unique<TCHAR[]>(nKeywordSize);
-	int nKeywordLen = auto_strlen(to_wchar(szNewKeyword)) + 1;
+	size_t nKeywordLen = auto_strlen(to_wchar(szNewKeyword)) + 1;
 	for (int i=0; i<nIndex; ++i) {
 		if (i != nUpdateItem) {
 			szKeyword[0] = _T('\0');

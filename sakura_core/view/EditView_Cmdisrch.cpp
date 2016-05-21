@@ -519,7 +519,7 @@ void EditView::ISearchWordMake(void)
 			
 			// 検索パターンのコンパイル
 			const wchar_t* p = strMigemoWord.c_str();
-			searchPattern.SetPattern(this->GetHwnd(), p, (int)strMigemoWord.size(), curSearchOption, &curRegexp);
+			searchPattern.SetPattern(this->GetHwnd(), p, strMigemoWord.size(), curSearchOption, &curRegexp);
 
 		}
 		break;

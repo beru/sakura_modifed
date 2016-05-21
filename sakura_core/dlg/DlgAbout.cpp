@@ -220,7 +220,7 @@ BOOL DlgAbout::OnInitDialog(
 #ifdef SKR_PATCH_INFO
 	memMsg.AppendStringLiteral(_T("      "));
 	const TCHAR* ptszPatchInfo = to_tchar(SKR_PATCH_INFO);
-	int patchInfoLen = auto_strlen(ptszPatchInfo);
+	size_t patchInfoLen = auto_strlen(ptszPatchInfo);
 	memMsg.AppendString(ptszPatchInfo, t_min(80, patchInfoLen));
 #endif
 	memMsg.AppendStringLiteral(_T("\r\n"));

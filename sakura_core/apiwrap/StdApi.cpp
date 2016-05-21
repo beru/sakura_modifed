@@ -251,7 +251,7 @@ namespace ApiWrap {
 
 		// WCHAR‚É•ÏŠ·
 		mbstowcs2(lpBuffer, pTmp, nBufferCount);
-		int ret2 = wcslen(lpBuffer);
+		size_t ret2 = wcslen(lpBuffer);
 
 		// ŒãŽn––
 		delete[] pTmp;

@@ -566,10 +566,10 @@ bool DlgTypeList::CopyType()
 			}
 			TCHAR szNum[12];
 			auto_sprintf( szNum, _T("%d"), n );
-			int nLen = auto_strlen( szNum );
+			size_t nLen = auto_strlen( szNum );
 			TCHAR szTemp[_countof(type.szTypeName) + 12];
 			auto_strcpy( szTemp, type.szTypeName );
-			int nTempLen = auto_strlen( szTemp );
+			size_t nTempLen = auto_strlen( szTemp );
 			NativeT mem;
 			// バッファをはみ出さないように
 			LimitStringLengthT( szTemp, nTempLen, _countof(type.szTypeName) - nLen - 1, mem );

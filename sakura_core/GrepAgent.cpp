@@ -57,7 +57,7 @@ void GrepAgent::OnAfterSave(const SaveInfo& saveInfo)
 */
 void GrepAgent::CreateFolders(const TCHAR* pszPath, std::vector<std::tstring>& vPaths)
 {
-	const int nPathLen = auto_strlen(pszPath);
+	const size_t nPathLen = auto_strlen(pszPath);
 	auto szPath = std::make_unique<TCHAR[]>(nPathLen + 1);
 	auto szTmp = std::make_unique<TCHAR[]>(nPathLen + 1);
 	auto_strcpy(&szPath[0], pszPath);
@@ -141,7 +141,7 @@ void GrepAgent::AddTail(
 	}else {
 		lastViewDstAddedTime = GetTickCount64();
 		auto& cmder = editView.GetCommander();
-		cmder.Command_AddTail( mem.GetStringPtr(), mem.GetStringLength() );
+		cmder.Command_AddTail(mem.GetStringPtr(), mem.GetStringLength());
 		if (!editWnd.UpdateTextWrap()) {		// 折り返し方法関連の更新
 			editWnd.RedrawAllViews(&editView);	//	他のペインの表示を更新
 		}
@@ -246,10 +246,10 @@ DWORD GrepAgent::DoGrep(
 				}
 			}
 			if (GetDllShareData().common.edit.bConvertEOLPaste) {
-				LogicInt len = memReplace.GetStringLength();
+				size_t len = memReplace.GetStringLength();
 				std::vector<wchar_t> convertedText(len * 2); // 全文字\n→\r\n変換で最大の２倍になる
 				wchar_t* pszConvertedText = &convertedText[0];
-				LogicInt nConvertedTextLen = viewDst.commander.ConvertEol(memReplace.GetStringPtr(), len, pszConvertedText);
+				size_t nConvertedTextLen = viewDst.commander.ConvertEol(memReplace.GetStringPtr(), len, pszConvertedText);
 				memReplace.SetString(pszConvertedText, nConvertedTextLen);
 			}
 		}else {

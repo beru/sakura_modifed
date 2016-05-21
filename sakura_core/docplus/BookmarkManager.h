@@ -64,10 +64,10 @@ class BookmarkManager {
 public:
 	BookmarkManager(DocLineMgr& docLineMgr) : docLineMgr(docLineMgr) { }
 
-	void ResetAllBookMark();															// ブックマークの全解除
+	void ResetAllBookMark();														// ブックマークの全解除
 	bool SearchBookMark(LogicInt nLineNum, SearchDirection, LogicInt* pnLineNum);	// ブックマーク検索
-	void SetBookMarks(wchar_t*);														// 物理行番号のリストからまとめて行マーク
-	LPCWSTR GetBookMarks();																// 行マークされてる物理行番号のリストを作る
+	void SetBookMarks(wchar_t*);													// 物理行番号のリストからまとめて行マーク
+	LPCWSTR GetBookMarks();															// 行マークされてる物理行番号のリストを作る
 	void MarkSearchWord(const SearchStringPattern&);			// 検索条件に該当する行にブックマークをセットする
 
 private:

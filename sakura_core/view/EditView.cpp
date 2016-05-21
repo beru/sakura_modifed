@@ -1897,7 +1897,7 @@ bool EditView::GetSelectedData(
 		LayoutInt i = rcSel.bottom - rcSel.top + 1; // 2013.05.06 「+1」
 
 		// 最初に行数分の改行量を計算してしまう。
-		int nBufSize = wcslen(WCODE::CRLF) * (Int)i;
+		size_t nBufSize = wcslen(WCODE::CRLF) * (Int)i;
 
 		// 実際の文字量。
 		const wchar_t* pLine = pEditDoc->layoutMgr.GetLineStr(rcSel.top, &nLineLen, &pLayout);

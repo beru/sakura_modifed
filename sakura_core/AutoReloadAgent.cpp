@@ -169,7 +169,7 @@ void AutoReloadAgent::CheckFileTimeStamp()
 			PauseWatching(); // XVŠÄŽ‹‚Ì—}§
 
 			DlgFileUpdateQuery dlg(pDoc->docFile.GetFilePath(), pDoc->docEditor.IsModified());
-			int result = dlg.DoModal(
+			INT_PTR result = dlg.DoModal(
 				G_AppInstance(),
 				EditWnd::getInstance().GetHwnd(),
 				IDD_FILEUPDATEQUERY,

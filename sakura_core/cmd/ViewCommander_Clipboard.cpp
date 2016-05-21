@@ -220,7 +220,7 @@ void ViewCommander::Command_Paste(int option)
 	}
 
 	if (bConvertEol) {
-		LogicInt nConvertedTextLen = ConvertEol(pszText, nTextLen, NULL);
+		size_t nConvertedTextLen = ConvertEol(pszText, nTextLen, NULL);
 		std::vector<wchar_t> szConvertedText(nConvertedTextLen);
 		wchar_t* pszConvertedText = &szConvertedText[0];
 		ConvertEol(pszText, nTextLen, pszConvertedText);
@@ -257,7 +257,7 @@ void ViewCommander::Command_Paste(int option)
 // @note 2004.06.30 現在、すべて置換では使用していない
 void ViewCommander::Command_PasteBox(
 	const wchar_t* szPaste,
-	int nPasteSize
+	size_t nPasteSize
 	)
 {
 	/* これらの動作は残しておきたいのだが、呼び出し側で責任を持ってやってもらうことに変更。
@@ -455,7 +455,7 @@ void ViewCommander::Command_InsBoxText(
 void ViewCommander::Command_InsText(
 	bool				bRedraw,		// 
 	const wchar_t*		pszText,		// [in] 貼り付ける文字列。
-	LogicInt			nTextLen,		// [in] pszTextの長さ。-1を指定すると、pszTextをNUL終端文字列とみなして長さを自動計算する
+	size_t				nTextLen,		// [in] pszTextの長さ。-1を指定すると、pszTextをNUL終端文字列とみなして長さを自動計算する
 	bool				bNoWaitCursor,	// 
 	bool				bLinePaste,		// [in] ラインモード貼り付け
 	bool				bFastMode,		// [in] 高速モード(レイアウト座標は無視する)
@@ -466,10 +466,6 @@ void ViewCommander::Command_InsText(
 	if (selInfo.IsMouseSelecting()) {	// マウスによる範囲選択中
 		ErrorBeep();
 		return;
-	}
-
-	if (nTextLen < 0) {
-		nTextLen = LogicInt(wcslen(pszText));
 	}
 
 	WaitCursor waitCursor(
@@ -599,11 +595,11 @@ end_of_func:
 // 最後にテキストを追加
 void ViewCommander::Command_AddTail(
 	const wchar_t*	pszData,	// 追加するテキスト
-	int				nDataLen	// 追加するテキストの長さ。文字単位。-1を指定すると、テキスト終端まで。
+	size_t			nDataLen	// 追加するテキストの長さ。文字単位。-1を指定すると、テキスト終端まで。
 	)
 {
 	// テキスト長自動計算
-	if (nDataLen == -1 && pszData) {
+	if ((int)nDataLen == -1 && pszData) {
 		nDataLen = wcslen(pszData);
 	}
 

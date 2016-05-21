@@ -25,8 +25,8 @@ struct SysString {
 	SysString()                         { data = NULL; }
 	SysString(const SysString& source)  { data = ::SysAllocStringLen(source.data, SysStringLen(source.data)); }
 	SysString(BSTR& source)             { data = ::SysAllocStringLen(source, SysStringLen(source)); }
-	SysString(const wchar_t* s, int l)  { data = ::SysAllocStringLen(s, l); }
-	SysString(const char* s, int l) { 
+	SysString(const wchar_t* s, size_t l)  { data = ::SysAllocStringLen(s, l); }
+	SysString(const char* s, size_t l) { 
 		auto buf = std::make_unique<wchar_t[]>(l + 1);
 		int l2 = ::MultiByteToWideChar(CP_ACP, 0, s, l, &buf[0], l);
 		data = ::SysAllocStringLen(&buf[0], l2); 
@@ -38,13 +38,13 @@ struct SysString {
 	}
 	int Length()                        { return ::SysStringLen(data); }
 	void Get(char** s, int* l) {
-		int len = ::SysStringLen(data);
+		UINT len = ::SysStringLen(data);
 		*s = new char[len * 2 + 1];
 		*l = ::WideCharToMultiByte(CP_ACP, 0, data, len, *s, len * 2, NULL, NULL);
 		(*s)[*l] = 0;
 	}
 	void GetW(wchar_t** s, int* l) {
-		int len = ::SysStringLen(data);
+		UINT len = ::SysStringLen(data);
 		*s = new wchar_t[len + 1];
 		*l = len;
 		wmemcpy(*s, data, len);

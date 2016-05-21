@@ -793,10 +793,10 @@ bool ViewCommander::Command_InsFile(
 		while (CodeConvertResult::Failure != fl.ReadLine(&buf, &eol)) {
 
 			const wchar_t*	pLine = buf.GetStringPtr();
-			int			nLineLen = buf.GetStringLength();
+			size_t			nLineLen = buf.GetStringLength();
 
 			++nLineNum;
-			Command_InsText(false, pLine, LogicInt(nLineLen), true);
+			Command_InsText(false, pLine, nLineLen, true);
 
 			// 進捗ダイアログ有無
 			if (!pDlgCancel) {

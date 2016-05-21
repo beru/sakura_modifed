@@ -92,13 +92,13 @@ public:
 					return false;
 				}
 				const wchar_t* word = keyword.c_str();
-				int nWordLen = keyword.length();
+				size_t nWordLen = keyword.length();
 				if (nWordLen <= 0) {
 					return false;
 				}
 				std::wstring strWord = std::wstring(word, nWordLen);
 				if (HokanMgr::AddKouhoUnique(hokanMgr.vKouho, strWord)) {
-					Wrap(&result)->Receive(hokanMgr.vKouho.size());
+					Wrap(&result)->Receive((int)hokanMgr.vKouho.size());
 				}else {
 					Wrap(&result)->Receive(-1);
 				}

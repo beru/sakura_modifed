@@ -113,11 +113,11 @@ void SakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszBu
 
 	// Apr. 03, 2003 genta 固定文字列をまとめる
 	const wstring	PRINT_PREVIEW_ONLY		= LSW(STR_PREVIEW_ONLY);	// L"(印刷Previewでのみ使用できます)";
-	const int		PRINT_PREVIEW_ONLY_LEN	= PRINT_PREVIEW_ONLY.length();
+	const size_t	PRINT_PREVIEW_ONLY_LEN	= PRINT_PREVIEW_ONLY.length();
 	const wstring	NO_TITLE				= LSW(STR_NO_TITLE1);	// L"(無題)";
-	const int		NO_TITLE_LEN			= NO_TITLE.length();
+	const size_t	NO_TITLE_LEN			= NO_TITLE.length();
 	const wstring	NOT_SAVED				= LSW(STR_NOT_SAVED);	// L"(保存されていません)";
-	const int		NOT_SAVED_LEN			= NOT_SAVED.length();
+	const size_t	NOT_SAVED_LEN			= NOT_SAVED.length();
 
 	const wchar_t *p, *r;	// p：目的のバッファ。r：作業用のポインタ。
 	wchar_t *q, *q_max;

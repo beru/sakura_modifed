@@ -41,11 +41,10 @@
 bool EditView::IsImeON(void)
 {
 	bool bRet;
-	HIMC hIme;
 	DWORD conv, sent;
 
 	//	From here Nov. 26, 2006 genta
-	hIme = ImmGetContext(GetHwnd());
+	HIMC hIme = ImmGetContext(GetHwnd());
 	if (ImmGetOpenStatus(hIme) != FALSE) {
 		ImmGetConversionStatus(hIme, &conv, &sent);
 		if ((conv & IME_CMODE_NOCONVERSION) == 0) {
@@ -298,7 +297,7 @@ LRESULT EditView::SetReconvertStruct(
 	// UNICODEÅ®UNICODE
 	if (bUnicode) {
 		const WCHAR* pszCompInsStr = L"";
-		int nCompInsStr   = 0;
+		size_t nCompInsStr = 0;
 		if (nInsertCompLen) {
 			pszCompInsStr = to_wchar(szComposition);
 			nCompInsStr   = wcslen(pszCompInsStr);

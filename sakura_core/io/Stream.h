@@ -78,8 +78,8 @@ public:
 	}
 
 	// データを無変換で書き込む。戻り値は書き込んだバイト数。
-	int Write(const void* pBuffer, int nSizeInBytes) {
-		int nRet = fwrite(pBuffer, 1, nSizeInBytes, GetFp());
+	size_t Write(const void* pBuffer, size_t nSizeInBytes) {
+		size_t nRet = fwrite(pBuffer, 1, nSizeInBytes, GetFp());
 		if (nRet != nSizeInBytes && IsExceptionMode()) {
 			throw Error_FileWrite();
 		}

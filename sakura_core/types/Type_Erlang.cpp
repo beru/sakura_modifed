@@ -373,7 +373,7 @@ bool OutlineErlang::parse(const wchar_t* buf, int linelen, LogicInt linenum)
 */ 
 void OutlineErlang::build_arity(int arity)
 {
-	int len = wcslen(func);
+	size_t len = wcslen(func);
 	const int buf_size = _countof(func);
 	wchar_t* p = &func[len];
 	wchar_t numstr[12];

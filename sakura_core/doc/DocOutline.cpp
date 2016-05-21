@@ -72,7 +72,7 @@ int DocOutline::ReadRuleFile(
 	wchar_t szLine[LINEREADBUFSIZE];
 	wchar_t szText[256];
 	static const wchar_t* pszDelimit = L" /// ";
-	static const int nDelimitLen = wcslen(pszDelimit);
+	static const size_t nDelimitLen = wcslen(pszDelimit);
 	static const wchar_t* pszKeySeps = L",\0";
 	wchar_t	cComment = L';';
 	int nCount = 0;

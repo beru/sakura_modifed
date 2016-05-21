@@ -284,7 +284,7 @@ LPCTSTR ResourceString::Load(UINT uid)
 
 	@date 2011.06.01 nasukoji	新規作成
 */
-int ResourceString::LoadStrBuffer::Load(UINT uid)
+size_t ResourceString::LoadStrBuffer::Load(UINT uid)
 {
 	if (!pszString) {
 		// バッファポインタが設定されていない場合初期化する（普通はあり得ない）
@@ -301,7 +301,7 @@ int ResourceString::LoadStrBuffer::Load(UINT uid)
 		hRsrc = ::GetModuleHandle(NULL);
 	}
 
-	int nRet = 0;
+	size_t nRet = 0;
 
 	while (1) {
 		nRet = ::LoadString(hRsrc, uid, pszString, nBufferSize);
@@ -321,7 +321,7 @@ int ResourceString::LoadStrBuffer::Load(UINT uid)
 		}else if (nRet >= nBufferSize - 2) {		// ANSI版は1小さい長さで再読み込みを判定する
 #endif
 			// 読みきれなかった場合、バッファを拡張して読み直す
-			int nTemp = nBufferSize + LOADSTR_ADD_SIZE;		// 拡張したサイズ
+			size_t nTemp = nBufferSize + LOADSTR_ADD_SIZE;		// 拡張したサイズ
 			LPTSTR pTemp;
 			try {
 				pTemp = new TCHAR[nTemp];

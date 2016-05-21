@@ -128,17 +128,17 @@ int FileNameManager::TransformFileName_MakeCache(void) {
 */
 LPCTSTR FileNameManager::GetFilePathFormat(LPCTSTR pszSrc, LPTSTR pszDest, int nDestLen, LPCTSTR pszFrom, LPCTSTR pszTo)
 {
-	int nSrcLen  = _tcslen(pszSrc);
-	int nFromLen = _tcslen(pszFrom);
-	int nToLen   = _tcslen(pszTo);
+	size_t nSrcLen  = _tcslen(pszSrc);
+	size_t nFromLen = _tcslen(pszFrom);
+	size_t nToLen   = _tcslen(pszTo);
 
 	--nDestLen;
 
-	int j = 0;
-	for (int i=0; i<nSrcLen && j<nDestLen; ++i) {
+	size_t j = 0;
+	for (size_t i=0; i<nSrcLen && j<nDestLen; ++i) {
 		if (_tcsncicmp(&pszSrc[i], pszFrom, nFromLen) == 0)
 		{
-			int nCopy = t_min(nToLen, nDestLen - j);
+			size_t nCopy = t_min(nToLen, nDestLen - j);
 			memcpy(&pszDest[j], pszTo, nCopy * sizeof(TCHAR));
 			j += nCopy;
 			i += nFromLen - 1;
@@ -214,7 +214,7 @@ bool FileNameManager::ExpandMetaToFolder(LPCTSTR pszSrc, LPTSTR pszDes, int nDes
 			TCHAR szMeta[_MAX_PATH];
 			TCHAR szPath[_MAX_PATH + 1];
 			int   nMetaLen;
-			int   nPathLen;
+			size_t   nPathLen;
 			bool  bFolderPath;
 			LPCTSTR  pStr;
 			++ps;
@@ -381,7 +381,7 @@ bool FileNameManager::GetMenuFullLabel(
 		GetAccessKeyLabelByIndex(szAccKey, bEspaceAmp, index, bAccKeyZeroOrigin);
 		//pfi->szGrepKeyShort Å® memDes
 		NativeW memDes;
-		int nGrepKeyLen = wcslen(pfi->szGrepKey);
+		size_t nGrepKeyLen = wcslen(pfi->szGrepKey);
 		const int GREPKEY_LIMIT_LEN = 64;
 		// CSakuraEnvironment::ExpandParameter Ç≈ÇÕ 32ï∂éöêßå¿
 		// ÉÅÉjÉÖÅ[ÇÕ 64ï∂éöêßå¿

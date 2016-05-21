@@ -495,7 +495,7 @@ void ShareData_IO::ShareData_IO_Common(DataProfile& profile)
 	profile.IOProfileData(pszSecName, LTEXT("bBackUpFolderRM")		, common.backup.bBackUpFolderRM);	// 2010/5/27 Uchi
 	
 	if (!profile.IsReadingMode()) {
-		int nDummy = _tcslen(common.backup.szBackUpFolder);
+		size_t nDummy = _tcslen(common.backup.szBackUpFolder);
 		// フォルダの最後が「半角かつ'\\'」でない場合は、付加する
 		int	nCharChars = &common.backup.szBackUpFolder[nDummy]
 			- NativeT::GetCharPrev(common.backup.szBackUpFolder, nDummy, &common.backup.szBackUpFolder[nDummy]);
@@ -509,7 +509,7 @@ void ShareData_IO::ShareData_IO_Common(DataProfile& profile)
 	}
 	profile.IOProfileData(pszSecName, LTEXT("szBackUpFolder"), common.backup.szBackUpFolder);
 	if (profile.IsReadingMode()) {
-		int	nDummy;
+		size_t	nDummy;
 		int	nCharChars;
 		nDummy = _tcslen(common.backup.szBackUpFolder);
 		// フォルダの最後が「半角かつ'\\'」でない場合は、付加する
@@ -1783,7 +1783,7 @@ void ShareData_IO::ShareData_IO_Keywords(DataProfile& profile)
 			wchar_t* pMem = pszMem;
 			for (int j=0; j<pKeywordSetMgr->nKeywordNumArr[i]; ++j) {
 				// May 25, 2003 genta 区切りをTABに変更
-				int kwlen = wcslen(pKeywordSetMgr->GetKeyword(i, j));
+				size_t kwlen = wcslen(pKeywordSetMgr->GetKeyword(i, j));
 				auto_memcpy(pMem, pKeywordSetMgr->GetKeyword(i, j), kwlen);
 				pMem += kwlen;
 				*pMem++ = L'\t';

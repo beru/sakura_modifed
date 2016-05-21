@@ -152,7 +152,7 @@ wchar_t* Bregexp::MakePatternSub(
 	wchar_t* pPat;				// パターン文字列操作用のポインタ
 
 	// szPatternの長さ
-	int nLen = wcslen(szPattern);
+	size_t nLen = wcslen(szPattern);
 	if (!szPattern2) {
 		// 検索(BMatch)時
 		szNPattern = new wchar_t[nLen + 15];	// 15：「s///option」が余裕ではいるように。
@@ -161,7 +161,7 @@ wchar_t* Bregexp::MakePatternSub(
 	}else {
 		// 置換(BSubst)時
 		// szPattern2 + szAdd2 の長さ
-		int nLen2 = wcslen(szPattern2) + wcslen(szAdd2);
+		size_t nLen2 = wcslen(szPattern2) + wcslen(szAdd2);
 		szNPattern = new wchar_t[nLen + nLen2 + 15];
 		pPat = szNPattern;
 		*pPat++ = L's';
@@ -478,7 +478,7 @@ bool Bregexp::Compile(const wchar_t* szPattern0, const wchar_t* szPattern1, int 
 	@retval false No Match または エラー。エラーは GetLastMessage()により判定可能。
 
 */
-bool Bregexp::Match(const wchar_t* target, int len, int nStart)
+bool Bregexp::Match(const wchar_t* target, size_t len, int nStart)
 {
 	int matched;		// 検索一致したか? >0:Match, 0:NoMatch, <0:Error
 
@@ -533,7 +533,7 @@ bool Bregexp::Match(const wchar_t* target, int len, int nStart)
 
 	@date	2007.01.16 ryoji 戻り値を置換個数に変更
 */
-int Bregexp::Replace(const wchar_t* szTarget, int nLen, int nStart)
+int Bregexp::Replace(const wchar_t* szTarget, size_t nLen, int nStart)
 {
 	// DLLが利用可能でないとき、または構造体が未設定の時はエラー終了
 	if (!IsAvailable() || !pRegExp) {

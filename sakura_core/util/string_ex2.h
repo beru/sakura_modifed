@@ -38,14 +38,9 @@ wchar_t* wcs_pushA(wchar_t* dst, size_t dst_count, const char* src);
 #endif
 
 int AddLastChar(TCHAR*, int, TCHAR); // 2003.06.24 Moca 最後の文字が指定された文字でないときは付加する
-int LimitStringLengthA(const ACHAR*, int, int, NativeA&); // データを指定「文字数」以内に切り詰める
-int LimitStringLengthW(const WCHAR*, int, int, NativeW&); // データを指定「文字数」以内に切り詰める
-int LimitStringLengthT(const TCHAR*, int, int, NativeT&); // データを指定「文字数」以内に切り詰める
-#ifdef _UNICODE
+int LimitStringLengthW(const WCHAR*, size_t, size_t, NativeW&); // データを指定「文字数」以内に切り詰める
+int LimitStringLengthT(const TCHAR*, size_t, size_t, NativeT&); // データを指定「文字数」以内に切り詰める
 #define LimitStringLengthT LimitStringLengthW
-#else
-#define LimitStringLengthT LimitStringLengthA
-#endif
 
 const char* GetNextLimitedLengthText(const char*, int, int, int*, int*); // 指定長以下のテキストに切り分ける
 const char* GetNextLine(const char*   , int, int*, int*, Eol*); // CR0LF0,CRLF,LF,CRで区切られる「行」を返す。改行コードは行長に加えない

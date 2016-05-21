@@ -777,7 +777,7 @@ bool Macro::HandleCommand(
 				bAddHistory = false;
 			}
 			const WCHAR* pszSearchKey = wtow_def(arguments[0], L"");
-			int nLen = wcslen( pszSearchKey );
+			size_t nLen = wcslen( pszSearchKey );
 			if (0 < nLen) {
 				// ³‹K•\Œ»
 				if (lFlag & 0x04
@@ -2278,7 +2278,7 @@ bool Macro::HandleFunction(
 					offset,
 					NULL
 				);
-				LayoutXInt width = view.LineIndexToColumn(&tmpLayout, tmpDocLine.GetLengthWithEOL()) - offset;
+				LayoutXInt width = view.LineIndexToColumn(&tmpLayout, (LogicInt)tmpDocLine.GetLengthWithEOL()) - offset;
 				Wrap(&result)->Receive((Int)width);
 				return true;
 			}

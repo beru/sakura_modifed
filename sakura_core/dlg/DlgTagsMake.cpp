@@ -123,7 +123,7 @@ void DlgTagsMake::SelectFolder()
 
 	if (SelectDir(hwndDlg, LS(STR_DLGTAGMAK_SELECTDIR), szPath, szPath)) {
 		// 末尾に\\マークを追加する．
-		int pos = _tcslen(szPath);
+		size_t pos = _tcslen(szPath);
 		if (pos > 0 && szPath[pos - 1] != _T('\\')) {
 			szPath[pos    ] = _T('\\');
 			szPath[pos + 1] = _T('\0');
@@ -160,7 +160,7 @@ int DlgTagsMake::GetData(void)
 {
 	// フォルダ
 	GetItemText(IDC_EDIT_TAG_MAKE_FOLDER, szPath, _countof(szPath));
-	int length = _tcslen(szPath);
+	size_t length = _tcslen(szPath);
 	if (length > 0) {
 		if (szPath[length - 1] != _T('\\')) _tcscat(szPath, _T("\\"));
 	}

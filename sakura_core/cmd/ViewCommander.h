@@ -112,7 +112,7 @@ public:
 	void Command_Browse(void);					// ブラウズ
 	void Command_ViewMode(void);				// ビューモード
 	void Command_Property_File(void);			// ファイルのプロパティ
-	void Command_ProfileMgr( void );			// プロファイルマネージャ
+	void Command_ProfileMgr(void);				// プロファイルマネージャ
 	void Command_ExitAllEditors(void);			// 編集の全終了	// 2007.02.13 ryoji 追加
 	void Command_ExitAll(void);					// サクラエディタの全終了	// Dec. 27, 2000 JEPRO 追加
 	bool Command_PutFile(LPCWSTR, EncodingType, int);	// 作業中ファイルの一時出力 maru 2006.12.10
@@ -139,7 +139,7 @@ public:
 	void Command_Indent(wchar_t cChar, IndentType = IndentType::None); // インデント ver 1
 // From Here 2001.12.03 hor
 //	void Command_Indent(const char*, int);// インデント ver0
-	void Command_Indent(const wchar_t*, LogicInt , IndentType = IndentType::None);// インデント ver0
+	void Command_Indent(const wchar_t*, LogicInt, IndentType = IndentType::None);// インデント ver0
 // To Here 2001.12.03 hor
 	void Command_Unindent(wchar_t wcChar);// 逆インデント
 //	void Command_WORDSREFERENCE(void);		// 単語リファレンス
@@ -164,13 +164,13 @@ public:
 	void Command_WordRight(bool bSelect);			// 単語の右端に移動
 	// Oct. 29, 2001 genta マクロ向け機能拡張
 	void Command_GoLineTop(bool bSelect, int lparam);	// 行頭に移動（折り返し単位）
-	void Command_GoLineEnd(bool bSelect, int , int);	// 行末に移動（折り返し単位）
+	void Command_GoLineEnd(bool bSelect, int, int);	// 行末に移動（折り返し単位）
 //	void Command_ROLLDOWN(int);						// Scroll Down
 //	void Command_ROLLUP(int);						// Scroll Up
-	void Command_HalfPageUp( bool bSelect, LayoutYInt );		// 半ページアップ	//Oct. 6, 2000 JEPRO 名称をPC-AT互換機系に変更(ROLL→PAGE) //Oct. 10, 2000 JEPRO 名称変更
-	void Command_HalfPageDown( bool bSelect, LayoutYInt );		// 半ページダウン	//Oct. 6, 2000 JEPRO 名称をPC-AT互換機系に変更(ROLL→PAGE) //Oct. 10, 2000 JEPRO 名称変更
-	void Command_1PageUp( bool bSelect, LayoutYInt );			// １ページアップ	//Oct. 10, 2000 JEPRO 従来のページアップを半ページアップと名称変更し１ページアップを追加
-	void Command_1PageDown( bool bSelect, LayoutYInt );			// １ページダウン	//Oct. 10, 2000 JEPRO 従来のページダウンを半ページダウンと名称変更し１ページダウンを追加
+	void Command_HalfPageUp(bool bSelect, LayoutYInt);		// 半ページアップ	//Oct. 6, 2000 JEPRO 名称をPC-AT互換機系に変更(ROLL→PAGE) //Oct. 10, 2000 JEPRO 名称変更
+	void Command_HalfPageDown(bool bSelect, LayoutYInt);		// 半ページダウン	//Oct. 6, 2000 JEPRO 名称をPC-AT互換機系に変更(ROLL→PAGE) //Oct. 10, 2000 JEPRO 名称変更
+	void Command_1PageUp(bool bSelect, LayoutYInt);			// １ページアップ	//Oct. 10, 2000 JEPRO 従来のページアップを半ページアップと名称変更し１ページアップを追加
+	void Command_1PageDown(bool bSelect, LayoutYInt);			// １ページダウン	//Oct. 10, 2000 JEPRO 従来のページダウンを半ページダウンと名称変更し１ページダウンを追加
 	void Command_GoFileTop(bool bSelect);			// ファイルの先頭に移動
 	void Command_GoFileEnd(bool bSelect);			// ファイルの最後に移動
 	void Command_CurLineCenter(void);				// カーソル行をウィンドウ中央へ
@@ -190,8 +190,8 @@ public:
 	void Command_WheelPageDown(int);
 	void Command_WheelPageLeft(int);
 	void Command_WheelPageRight(int);
-	void Command_ModifyLine_Next( bool bSelect );	// 次の変更行へ
-	void Command_ModifyLine_Prev( bool bSelect );	// 前の変更行へ
+	void Command_ModifyLine_Next(bool bSelect);	// 次の変更行へ
+	void Command_ModifyLine_Prev(bool bSelect);	// 前の変更行へ
 
 	// 選択系
 	bool Command_SelectWord(const LayoutPoint* pptCaretPos = nullptr);		// 現在位置の単語選択
@@ -211,12 +211,12 @@ public:
 	void Command_PasteBox(int option);			// 矩形貼り付け（クリップボードから矩形貼り付け
 	//<< 2002/03/29 Azumaiya
 	// 矩形貼り付け（引数渡しでの張り付け）
-	void Command_PasteBox(const wchar_t* szPaste, int nPasteSize);
+	void Command_PasteBox(const wchar_t* szPaste, size_t nPasteSize);
 	//>> 2002/03/29 Azumaiya
 	void Command_InsBoxText(const wchar_t*, int); // 矩形貼り付け
-	void Command_InsText(bool bRedraw, const wchar_t*, LogicInt, bool bNoWaitCursor,
+	void Command_InsText(bool bRedraw, const wchar_t*, size_t, bool bNoWaitCursor,
 		bool bLinePaste = false, bool bFastMode = false, const LogicRange* psDelRangeLogicFast = nullptr); // 2004.05.14 Moca テキストを貼り付け '\0'対応
-	void Command_AddTail(const wchar_t* pszData, int nDataLen);	// 最後にテキストを追加
+	void Command_AddTail(const wchar_t* pszData, size_t nDataLen);	// 最後にテキストを追加
 	void Command_CopyFileName(void);				// このファイル名をクリップボードにコピー // 2002/2/3 aroka
 	void Command_CopyPath(void);					// このファイルのパス名をクリップボードにコピー
 	void Command_CopyTag(void);						// このファイルのパス名とカーソル位置をコピー
@@ -397,10 +397,10 @@ public:
 
 private:
 	void AlertNotFound(HWND hwnd, bool, LPCTSTR format, ...);
-	void DelCharForOverwrite(const wchar_t* pszInput, int nLen);	// 上書き用の一文字削除	// 2009.04.11 ryoji
-	bool Sub_PreProcTagJumpByTagsFile( TCHAR* szCurrentPath, int count ); // タグジャンプの前処理
+	void DelCharForOverwrite(const wchar_t* pszInput, size_t nLen);	// 上書き用の一文字削除	// 2009.04.11 ryoji
+	bool Sub_PreProcTagJumpByTagsFile( TCHAR* szCurrentPath, size_t count ); // タグジャンプの前処理
 public:
-	LogicInt ConvertEol(const wchar_t* pszText, LogicInt nTextLen, wchar_t* pszConvertedText);
+	size_t ConvertEol(const wchar_t* pszText, size_t nTextLen, wchar_t* pszConvertedText);
 	void Sub_BoxSelectLock(int flags);
 
 };

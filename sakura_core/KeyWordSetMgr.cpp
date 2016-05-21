@@ -315,7 +315,7 @@ int KeywordSetMgr::DelKeyword(int nIdx, int nIdx2)
 	if (0 >= nKeywordNumArr[nIdx]) {
 		return 3;	//	登録数が0なら上の条件で引っかかるのでここには来ない？
 	}
-	int nDelKeywordLen = wcslen( szKeywordArr[nStartIdx[nIdx] + nIdx2] );
+	size_t nDelKeywordLen = wcslen( szKeywordArr[nStartIdx[nIdx] + nIdx2] );
 	int endPos = nStartIdx[nIdx] + nKeywordNumArr[nIdx] - 1;
 	for (int i=nStartIdx[nIdx]+nIdx2; i<endPos; ++i) {
 		wcscpy(szKeywordArr[i], szKeywordArr[i + 1]);
@@ -366,10 +366,10 @@ void KeywordSetMgr::SortKeyword(int nIdx)
 
 void KeywordSetMgr::KeywordMaxLen(int nIdx)
 {
-	int nMaxLen = 0;
+	size_t nMaxLen = 0;
 	const int nEnd = nStartIdx[nIdx] + nKeywordNumArr[nIdx];
 	for (int i=nStartIdx[nIdx]; i<nEnd; ++i) {
-		int len = wcslen( szKeywordArr[i] );
+		size_t len = wcslen( szKeywordArr[i] );
 		if (nMaxLen < len) {
 			nMaxLen = len;
 		}
@@ -539,7 +539,7 @@ int KeywordSetMgr::CleanKeywords(int nIdx)
 		bool bDelKey = false;	// trueなら削除対象
 		// 重複するキーワードか
 		const wchar_t* r = GetKeyword(nIdx, i + 1);
-		unsigned int nKeywordLen = wcslen(p);
+		size_t nKeywordLen = wcslen(p);
 		if (nKeywordLen == wcslen(r)) {
 			if (bKeywordCaseArr[nIdx]) {
 				if (auto_memcmp(p, r, nKeywordLen) == 0) {

@@ -74,7 +74,7 @@ int Euc::EucjpToUni(const char* pSrc, const int nSrcLen, wchar_t* pDst, bool* pb
 CodeConvertResult Euc::EUCToUnicode(const Memory& src, NativeW* pDstMem)
 {
 	// É\Å[ÉXéÊìæ
-	int nSrcLen;
+	size_t nSrcLen;
 	const char* pSrc = reinterpret_cast<const char*>( src.GetRawPtr(&nSrcLen) );
 	if (nSrcLen == 0) {
 		pDstMem->Clear();
