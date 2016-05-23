@@ -152,7 +152,7 @@ void _DispWrap(
 		bool bTrans = view.IsBkBitmap();
 		if (wrapType.IsDisp()) {
 			EditView& activeView = view.editWnd.GetActiveView();
-			if (bgLineType.IsDisp() && view.GetCaret().GetCaretLayoutPos().GetY2() == nLineNum) {
+			if (bgLineType.IsDisp() && view.GetCaret().GetCaretLayoutPos().y == nLineNum) {
 				if (bBgcolor) {
 					bgColorOverwrite = COLORIDX_CARETLINEBG;
 					bTrans = bTrans && bgLineType.GetBackColor() == textType.GetBackColor();

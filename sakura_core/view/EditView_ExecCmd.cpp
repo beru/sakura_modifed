@@ -155,7 +155,7 @@ bool EditView::ExecCmd(
 	bool bCurDir = (nFlgOpt & 0x200) == 0x200;
 
 	// 編集中のウィンドウに出力する場合の選択範囲処理用	// 2007.04.29 maru
-	LayoutPoint ptFrom(0, 0);
+	Point ptFrom(0, 0);
 	bool bBeforeTextSelected = GetSelectionInfo().IsTextSelected();
 	if (bBeforeTextSelected) {
 		ptFrom = this->GetSelectionInfo().select.GetFrom();
@@ -281,9 +281,9 @@ bool EditView::ExecCmd(
 		&& bToEditWindow
 	) {
 		GetSelectionInfo().SetSelectArea(
-			LayoutRange(
-				LayoutPoint(0, 0),
-				LayoutPoint(0, pEditDoc->layoutMgr.GetLineCount())
+			Range(
+				Point(0, 0),
+				Point(0, pEditDoc->layoutMgr.GetLineCount())
 			)
 		);
 		DeleteData(true);
@@ -592,9 +592,9 @@ user_cancel:
 		if (bToEditWindow) {
 			if (bBeforeTextSelected) {	// 挿入された部分を選択状態に
 				GetSelectionInfo().SetSelectArea(
-					LayoutRange(
+					Range(
 						ptFrom,
-						GetCaret().GetCaretLayoutPos()// LayoutPoint(nCaretPosY, nCaretPosX)
+						GetCaret().GetCaretLayoutPos()// Point(nCaretPosY, nCaretPosX)
 					)
 				);
 				GetSelectionInfo().DrawSelectArea();

@@ -33,8 +33,8 @@
 // 2004/06/21 novice タグジャンプ機能追加
 // タグジャンプ情報
 struct TagJump {
-	HWND		hwndReferer;				// 参照元ウィンドウ
-	LogicPoint	point;						// ライン, カラム
+	HWND hwndReferer;	// 参照元ウィンドウ
+	Point point;		// ライン, カラム
 };
 
 

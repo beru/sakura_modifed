@@ -1123,7 +1123,7 @@ bool EditView::DrawLayoutLine(ColorStrategyInfo& csInfo)
 		TypeSupport selectType(*this, COLORIDX_SELECT);
 		if (GetSelectionInfo().IsTextSelected() && selectType.IsDisp()) {
 			// 選択範囲の指定色：必要ならテキストのない部分の矩形選択を作画
-			LayoutRange selectArea = GetSelectionInfo().GetSelectAreaLine(csInfo.pDispPos->GetLayoutLineRef(), pLayout);
+			Range selectArea = GetSelectionInfo().GetSelectAreaLine(csInfo.pDispPos->GetLayoutLineRef(), pLayout);
 			// 2010.10.04 スクロール分の足し忘れ
 			int nSelectFromPx = GetTextMetrics().GetHankakuDx() * (selectArea.GetFrom().x - textArea.GetViewLeftCol());
 			int nSelectToPx   = GetTextMetrics().GetHankakuDx() * (selectArea.GetTo().x - textArea.GetViewLeftCol());
@@ -1215,12 +1215,12 @@ void EditView::DispTextSelected(
 	int			nCharWidth = GetTextMetrics().GetHankakuDx();
 	HRGN		hrgnDraw;
 	const Layout* pLayout = pEditDoc->layoutMgr.SearchLineByLayoutY(nLineNum);
-	LayoutRange& select = GetSelectionInfo().select;
+	Range& select = GetSelectionInfo().select;
 
 	// 選択範囲内の行かな
 //	if (IsTextSelected()) {
 		if (nLineNum >= select.GetFrom().y && nLineNum <= select.GetTo().y) {
-			LayoutRange selectArea = GetSelectionInfo().GetSelectAreaLine(nLineNum, pLayout);
+			Range selectArea = GetSelectionInfo().GetSelectAreaLine(nLineNum, pLayout);
 			nSelectFrom = selectArea.GetFrom().x;
 			nSelectTo   = selectArea.GetTo().x;
 			if (nSelectFrom == INT_MAX) {

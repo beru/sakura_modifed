@@ -150,7 +150,7 @@ public:
 
 	// 計算
 	// ! クライアント座標からレイアウト位置に変換する
-	void ClientToLayout(Point ptClient, LayoutPoint* pptLayout) const;
+	void ClientToLayout(Point ptClient, Point* pptLayout) const;
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                           設定                              //

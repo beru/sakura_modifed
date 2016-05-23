@@ -365,10 +365,10 @@ void EditView::ISearchExec(bool bNext)
 			nLineP =  docLineMgr.GetLineCount() - 1;
 			DocLine* pDocLine = docLineMgr.GetLine(nLineP);
 			nIdxP = pDocLine->GetLengthWithEOL() -1;
-			LayoutPoint ptTmp;
-			pEditDoc->layoutMgr.LogicToLayout(LogicPoint(nIdxP, nLineP), &ptTmp);
-			nIdx1 = ptTmp.GetX2();
-			nLine = ptTmp.GetY2();
+			Point ptTmp;
+			pEditDoc->layoutMgr.LogicToLayout(Point(nIdxP, nLineP), &ptTmp);
+			nIdx1 = ptTmp.x;
+			nLine = ptTmp.y;
 		}
 	}else if (GetSelectionInfo().IsTextSelected()) {
 		auto& select = GetSelectionInfo().select;
@@ -376,20 +376,20 @@ void EditView::ISearchExec(bool bNext)
 		case 2 : // 前方検索で現在位置から検索のとき
 		case 1 : // 後方検索で次を検索のとき
 			// 選択範囲の先頭を検索開始位置に
-			nLine = select.GetFrom().GetY2();
-			nIdx1 = select.GetFrom().GetX2();
+			nLine = select.GetFrom().y;
+			nIdx1 = select.GetFrom().x;
 			break;
 		case 0 : // 前方検索で次を検索
 		case 3 : // 後方検索で現在位置から検索
 			// 選択範囲の後ろから
-			nLine = select.GetTo().GetY2();
-			nIdx1 = select.GetTo().GetX2();
+			nLine = select.GetTo().y;
+			nIdx1 = select.GetTo().x;
 			break;
 		}
 	}else {
 		auto& pos = GetCaret().GetCaretLayoutPos();
-		nLine = pos.GetY2();
-		nIdx1  = pos.GetX2();
+		nLine = pos.y;
+		nIdx1  = pos.x;
 	}
 
 	// 桁位置からindexに変換
@@ -410,7 +410,7 @@ void EditView::ISearchExec(bool bNext)
 	}
 	bISearchFlagHistory[nISearchHistoryCount] = bNext;
 
-	LayoutRange matchRange;
+	Range matchRange;
 
 	int nSearchResult = pEditDoc->layoutMgr.SearchWord(
 		nLine,						// 検索開始レイアウト行
@@ -482,7 +482,7 @@ void EditView::ISearchBack(void)
 	}
 	nISearchHistoryCount --;
 
-	LayoutRange range = searchHistory[nISearchHistoryCount];
+	Range range = searchHistory[nISearchHistoryCount];
 
 	if (nISearchHistoryCount == 0) {
 		GetSelectionInfo().DisableSelectArea(true);

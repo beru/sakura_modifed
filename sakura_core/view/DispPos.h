@@ -89,12 +89,12 @@ public:
 
 private:
 	// 固定要素
-	int				nDx;			// 半角文字の文字間隔。固定。
-	int				nDy;			// 半角文字の行間隔。固定。
-	POINT			ptDrawOrigin;	// 描画位置基準。単位はピクセル。固定。
+	int		nDx;			// 半角文字の文字間隔。固定。
+	int		nDy;			// 半角文字の行間隔。固定。
+	POINT	ptDrawOrigin;	// 描画位置基準。単位はピクセル。固定。
 
 	// 描画位置
-	LayoutPoint		ptDrawLayout;	// 描画位置。相対レイアウト単位。
+	Point	ptDrawLayout;	// 描画位置。相対レイアウト単位。
 
 	// テキスト参照位置
 	int				nLineRef;		// 絶対レイアウト単位。

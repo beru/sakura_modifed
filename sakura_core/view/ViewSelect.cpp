@@ -43,10 +43,10 @@ void ViewSelect::CopySelectStatus(ViewSelect* pSelect) const
 }
 
 // 現在のカーソル位置から選択を開始する
-void ViewSelect::BeginSelectArea(const LayoutPoint* po)
+void ViewSelect::BeginSelectArea(const Point* po)
 {
 	const EditView& view = GetEditView();
-	LayoutPoint temp;
+	Point temp;
 	if (!po) {
 		temp = view.GetCaret().GetCaretLayoutPos();
 		po = &temp;
@@ -84,7 +84,7 @@ void ViewSelect::DisableSelectArea(bool bDraw, bool bDrawBracketCursorLine)
 
 
 // 現在のカーソル位置によって選択範囲を変更
-void ViewSelect::ChangeSelectAreaByCurrentCursor(const LayoutPoint& ptCaretPos)
+void ViewSelect::ChangeSelectAreaByCurrentCursor(const Point& ptCaretPos)
 {
 	selectOld = select; // 範囲選択(Old)
 
@@ -103,8 +103,8 @@ void ViewSelect::ChangeSelectAreaByCurrentCursor(const LayoutPoint& ptCaretPos)
 
 // 現在のカーソル位置によって選択範囲を変更(テストのみ)
 void ViewSelect::ChangeSelectAreaByCurrentCursorTEST(
-	const LayoutPoint& ptCaretPos,
-	LayoutRange* pSelect
+	const Point& ptCaretPos,
+	Range* pSelect
 )
 {
 	if (selectBgn.GetFrom() == selectBgn.GetTo()) {
@@ -164,11 +164,11 @@ void ViewSelect::DrawSelectArea(bool bDrawBracketCursorLine)
 			// 選択色表示の時は、WM_PAINT経由で作画
 			const size_t nCharWidth = view.GetTextMetrics().GetHankakuDx();
 			const TextArea& area =  view.GetTextArea();
-			LayoutRect rcOld; // LayoutRect
+			Rect rcOld; // LayoutRect
 			TwoPointToRect(&rcOld, selectOld.GetFrom(), selectOld.GetTo());
-			LayoutRect rcNew; // LayoutRect
+			Rect rcNew; // LayoutRect
 			TwoPointToRect(&rcNew, select.GetFrom(), select.GetTo());
-			LayoutRect rc; // LayoutRect ただしtop,bottomだけ使う
+			Rect rc; // LayoutRect ただしtop,bottomだけ使う
 			int drawLeft = 0;
 			int drawRight = -1;
 			if (!select.IsValid()) {
@@ -184,20 +184,20 @@ void ViewSelect::DrawSelectArea(bool bDrawBracketCursorLine)
 					|| select.GetFrom().x != selectOld.GetFrom().x
 				)
 			) {
-				rc.UnionStrictRect(rcOld, rcNew);
+				rc.Union(rcOld, rcNew);
 			}else if (!IsBoxSelecting() && rcOld.top == rcNew.top && rcOld.bottom == rcNew.bottom) {
 				if (select.GetFrom() == selectOld.GetFrom() && select.GetTo().x != selectOld.GetTo().x) {
 					// GetToの行が対象
-					rc.top = rc.bottom = select.GetTo().GetY2();
+					rc.top = rc.bottom = select.GetTo().y;
 					drawLeft  = t_min(select.GetTo().x, selectOld.GetTo().x);
 					drawRight = t_max(select.GetTo().x, selectOld.GetTo().x) + 1;
 				}else if (select.GetTo() == selectOld.GetTo() && select.GetFrom().x != selectOld.GetFrom().x) {
 					// GetFromの行が対象
-					rc.top = rc.bottom = select.GetFrom().GetY2();
+					rc.top = rc.bottom = select.GetFrom().y;
 					drawLeft  = t_min(selectOld.GetFrom().x, select.GetFrom().x);
 					drawRight = t_max(selectOld.GetFrom().x, select.GetFrom().x) + 1;
 				}else {
-					rc.UnionStrictRect(rcOld, rcNew);
+					rc.Union(rcOld, rcNew);
 				}
 			}else if (rcOld.top == rcNew.top) {
 				rc.top    = t_min(rcOld.bottom, rcNew.bottom);
@@ -206,7 +206,7 @@ void ViewSelect::DrawSelectArea(bool bDrawBracketCursorLine)
 				rc.top    = t_min(rcOld.top, rcNew.top);
 				rc.bottom = t_max(rcOld.top, rcNew.top);
 			}else {
-				rc.UnionStrictRect(rcOld, rcNew);
+				rc.Union(rcOld, rcNew);
 			}
 			Rect rcPx;
 			if (view.IsBkBitmap() || drawRight == -1) {
@@ -306,18 +306,18 @@ void ViewSelect::DrawSelectArea2(HDC hdc) const
 		const size_t nCharHeight = view.GetTextMetrics().GetHankakuDy();
 
 		// 2点を対角とする矩形を求める
-		LayoutRect  rcOld;
+		Rect rcOld;
 		TwoPointToRect(
 			&rcOld,
 			selectOld.GetFrom(),	// 範囲選択開始
 			selectOld.GetTo()	// 範囲選択終了
 		);
-		rcOld.left   = t_max(rcOld.left  , (int)textArea.GetViewLeftCol() );
-		rcOld.right  = t_max(rcOld.right , (int)textArea.GetViewLeftCol() );
-		rcOld.right  = t_min(rcOld.right , (int)textArea.GetRightCol() + 1);
-		rcOld.top    = t_max(rcOld.top   , (int)textArea.GetViewTopLine() );
-		rcOld.bottom = t_max(rcOld.bottom, (int)textArea.GetViewTopLine() - 1);	// 2010.11.02 ryoji 追加（画面上端よりも上にある矩形選択を解除するとルーラーが反転表示になる問題の修正）
-		rcOld.bottom = t_min(rcOld.bottom, (int)textArea.GetBottomLine()  );
+		rcOld.left   = t_max((int)rcOld.left  , (int)textArea.GetViewLeftCol() );
+		rcOld.right  = t_max((int)rcOld.right , (int)textArea.GetViewLeftCol() );
+		rcOld.right  = t_min((int)rcOld.right , (int)textArea.GetRightCol() + 1);
+		rcOld.top    = t_max((int)rcOld.top   , (int)textArea.GetViewTopLine() );
+		rcOld.bottom = t_max((int)rcOld.bottom, (int)textArea.GetViewTopLine() - 1);	// 2010.11.02 ryoji 追加（画面上端よりも上にある矩形選択を解除するとルーラーが反転表示になる問題の修正）
+		rcOld.bottom = t_min((int)rcOld.bottom, (int)textArea.GetBottomLine()  );
 
 		RECT rcOld2;
 		rcOld2.left		= (textArea.GetAreaLeft() - textArea.GetViewLeftCol() * nCharWidth) + rcOld.left  * nCharWidth;
@@ -327,18 +327,18 @@ void ViewSelect::DrawSelectArea2(HDC hdc) const
 		HRGN hrgnOld = ::CreateRectRgnIndirect(&rcOld2);
 
 		// 2点を対角とする矩形を求める
-		LayoutRect  rcNew;
+		Rect rcNew;
 		TwoPointToRect(
 			&rcNew,
 			select.GetFrom(),	// 範囲選択開始
 			select.GetTo()		// 範囲選択終了
 		);
-		rcNew.left   = t_max(rcNew.left  , (int)textArea.GetViewLeftCol());
-		rcNew.right  = t_max(rcNew.right , (int)textArea.GetViewLeftCol());
-		rcNew.right  = t_min(rcNew.right , (int)textArea.GetRightCol() + 1);
-		rcNew.top    = t_max(rcNew.top   , (int)textArea.GetViewTopLine());
-		rcNew.bottom = t_max(rcNew.bottom, (int)textArea.GetViewTopLine() - 1);	// 2010.11.02 ryoji 追加（画面上端よりも上にある矩形選択を解除するとルーラーが反転表示になる問題の修正）
-		rcNew.bottom = t_min(rcNew.bottom, (int)textArea.GetBottomLine() );
+		rcNew.left   = t_max((int)rcNew.left  , (int)textArea.GetViewLeftCol());
+		rcNew.right  = t_max((int)rcNew.right , (int)textArea.GetViewLeftCol());
+		rcNew.right  = t_min((int)rcNew.right , (int)textArea.GetRightCol() + 1);
+		rcNew.top    = t_max((int)rcNew.top   , (int)textArea.GetViewTopLine());
+		rcNew.bottom = t_max((int)rcNew.bottom, (int)textArea.GetViewTopLine() - 1);	// 2010.11.02 ryoji 追加（画面上端よりも上にある矩形選択を解除するとルーラーが反転表示になる問題の修正）
+		rcNew.bottom = t_min((int)rcNew.bottom, (int)textArea.GetBottomLine() );
 
 		RECT rcNew2;
 		rcNew2.left		= (textArea.GetAreaLeft() - textArea.GetViewLeftCol() * nCharWidth) + rcNew.left  * nCharWidth;
@@ -361,7 +361,7 @@ void ViewSelect::DrawSelectArea2(HDC hdc) const
 				// 抑えるために EOF以降をリージョンから削除して1度の作画にする
 
 				// 2006.10.01 Moca Start EOF位置計算をGetEndLayoutPosに書き換え。
-				LayoutPoint ptLast;
+				Point ptLast;
 				view.pEditDoc->layoutMgr.GetEndLayoutPos(&ptLast);
 				// 2006.10.01 Moca End
 				// 2011.12.26 EOFのぶら下がり行は反転し、EOFのみの行は反転しない
@@ -414,7 +414,7 @@ void ViewSelect::DrawSelectArea2(HDC hdc) const
 			::DeleteObject(hrgnOld);
 		}
 	}else {
-		LayoutRange rangeA;
+		Range rangeA;
 		int nLineNum;
 
 		// 現在描画されている範囲と始点が同じ
@@ -427,7 +427,7 @@ void ViewSelect::DrawSelectArea2(HDC hdc) const
 				rangeA.SetFrom(select.GetTo());
 				rangeA.SetTo  (selectOld.GetTo());
 			}
-			for (nLineNum=rangeA.GetFrom().GetY2(); nLineNum<=rangeA.GetTo().GetY2(); ++nLineNum) {
+			for (nLineNum=rangeA.GetFrom().y; nLineNum<=rangeA.GetTo().y; ++nLineNum) {
 				if (nLineNum >= textArea.GetViewTopLine() && nLineNum <= textArea.GetBottomLine() + 1) {
 					DrawSelectAreaLine(	hdc, nLineNum, rangeA);
 				}
@@ -441,20 +441,20 @@ void ViewSelect::DrawSelectArea2(HDC hdc) const
 				rangeA.SetFrom(selectOld.GetFrom());
 				rangeA.SetTo  (select.GetFrom());
 			}
-			for (nLineNum=rangeA.GetFrom().GetY2(); nLineNum<=rangeA.GetTo().GetY2(); ++nLineNum) {
+			for (nLineNum=rangeA.GetFrom().y; nLineNum<=rangeA.GetTo().y; ++nLineNum) {
 				if (nLineNum >= textArea.GetViewTopLine() && nLineNum <= textArea.GetBottomLine() + 1) {
 					DrawSelectAreaLine(hdc, nLineNum, rangeA);
 				}
 			}
 		}else {
 			rangeA = selectOld;
-			for (nLineNum=rangeA.GetFrom().GetY2(); nLineNum<=rangeA.GetTo().GetY2(); ++nLineNum) {
+			for (nLineNum=rangeA.GetFrom().y; nLineNum<=rangeA.GetTo().y; ++nLineNum) {
 				if (nLineNum >= textArea.GetViewTopLine() && nLineNum <= textArea.GetBottomLine() + 1) {
 					DrawSelectAreaLine(hdc, nLineNum, rangeA);
 				}
 			}
 			rangeA = select;
-			for (nLineNum=rangeA.GetFrom().GetY2(); nLineNum<=rangeA.GetTo().GetY2(); ++nLineNum) {
+			for (nLineNum=rangeA.GetFrom().y; nLineNum<=rangeA.GetTo().y; ++nLineNum) {
 				if (nLineNum >= textArea.GetViewTopLine() && nLineNum <= textArea.GetBottomLine() + 1) {
 					DrawSelectAreaLine(hdc, nLineNum, rangeA);
 				}
@@ -484,9 +484,9 @@ void ViewSelect::DrawSelectArea2(HDC hdc) const
 	@date 2006.03.29 Moca 3000桁制限を撤廃．
 */
 void ViewSelect::DrawSelectAreaLine(
-	HDC					hdc,		// [in] 描画領域のDevice Context Handle
-	int					nLineNum,	// [in] 描画対象行(レイアウト行)
-	const LayoutRange&	range		// [in] 選択範囲(レイアウト単位)
+	HDC hdc,		// [in] 描画領域のDevice Context Handle
+	int nLineNum,	// [in] 描画対象行(レイアウト行)
+	const Range& range		// [in] 選択範囲(レイアウト単位)
 	) const
 {
 	auto& view = editView;
@@ -494,10 +494,10 @@ void ViewSelect::DrawSelectAreaLine(
 
 	auto& layoutMgr = view.pEditDoc->layoutMgr;
 	const Layout* pLayout = layoutMgr.SearchLineByLayoutY(nLineNum);
-	LayoutRange lineArea;
+	Range lineArea;
 	GetSelectAreaLineFromRange(lineArea, nLineNum, pLayout, range);
-	int nSelectFrom = lineArea.GetFrom().GetX2();
-	int nSelectTo = lineArea.GetTo().GetX2();
+	int nSelectFrom = lineArea.GetFrom().x;
+	int nSelectTo = lineArea.GetTo().x;
 	auto& textArea = view.GetTextArea();
 	if (nSelectFrom == INT_MAX || nSelectTo == INT_MAX) {
 		int nPosX = 0;
@@ -541,10 +541,10 @@ void ViewSelect::DrawSelectAreaLine(
 	}
 	//	必要なときだけ。
 	if (rcClip.right != rcClip.left) {
-		LayoutRange selectOld = select;
-		const_cast<LayoutRange*>(&select)->Clear(-1);
+		Range selectOld = select;
+		const_cast<Range*>(&select)->Clear(-1);
 		view.GetCaret().underLine.CaretUnderLineOFF(true, false, true);
-		*(const_cast<LayoutRange*>(&select)) = selectOld;
+		*(const_cast<Range*>(&select)) = selectOld;
 		
 		// 2006.03.28 Moca 表示域内のみ処理する
 		if (nSelectFrom <= textArea.GetRightCol() && textArea.GetViewLeftCol() < nSelectTo) {
@@ -561,21 +561,21 @@ void ViewSelect::DrawSelectAreaLine(
 }
 
 void ViewSelect::GetSelectAreaLineFromRange(
-	LayoutRange& ret,
+	Range& ret,
 	int nLineNum,
 	const Layout* pLayout,
-	const LayoutRange&	range
+	const Range& range
 	) const
 {
 	const EditView& view = GetEditView();
 	if (nLineNum >= range.GetFrom().y && nLineNum <= range.GetTo().y ||
 		nLineNum >= range.GetTo().y && nLineNum <= range.GetFrom().y
 	) {
-		int nSelectFrom = range.GetFrom().GetX2();
-		int nSelectTo   = range.GetTo().GetX2();
+		int nSelectFrom = range.GetFrom().x;
+		int nSelectTo   = range.GetTo().x;
 		if (IsBoxSelecting()) {		// 矩形範囲選択中
-			nSelectFrom = range.GetFrom().GetX2();
-			nSelectTo   = range.GetTo().GetX2();
+			nSelectFrom = range.GetFrom().x;
+			nSelectTo   = range.GetTo().x;
 			// 2006.09.30 Moca From 矩形選択時[EOF]とその右側は反転しないように修正。処理を追加
 			// 2011.12.26 [EOF]単独行以外なら反転する
 			if (view.pEditDoc->layoutMgr.GetLineCount() <= nLineNum) {
@@ -585,16 +585,16 @@ void ViewSelect::GetSelectAreaLineFromRange(
 			// 2006.09.30 Moca To
 		}else {
 			if (range.IsLineOne()) {
-				nSelectFrom = range.GetFrom().GetX2();
-				nSelectTo   = range.GetTo().GetX2();
+				nSelectFrom = range.GetFrom().x;
+				nSelectTo   = range.GetTo().x;
 			}else {
 				int nX_Layout = INT_MAX;
 				if (nLineNum == range.GetFrom().y) {
-					nSelectFrom = range.GetFrom().GetX2();
+					nSelectFrom = range.GetFrom().x;
 					nSelectTo   = nX_Layout;
-				}else if (nLineNum == range.GetTo().GetY2()) {
+				}else if (nLineNum == range.GetTo().y) {
 					nSelectFrom = pLayout ? pLayout->GetIndent() : 0;
-					nSelectTo   = range.GetTo().GetX2();
+					nSelectTo   = range.GetTo().x;
 				}else {
 					nSelectFrom = pLayout ? pLayout->GetIndent() : 0;
 					nSelectTo   = nX_Layout;
@@ -606,11 +606,11 @@ void ViewSelect::GetSelectAreaLineFromRange(
 		if (nSelectTo < nSelectFrom) {
 			t_swap(nSelectFrom, nSelectTo);
 		}
-		ret.SetFrom(LayoutPoint(nSelectFrom, nLineNum));
-		ret.SetTo(LayoutPoint(nSelectTo, nLineNum));
+		ret.SetFrom(Point(nSelectFrom, nLineNum));
+		ret.SetTo(Point(nSelectTo, nLineNum));
 	}else {
-		ret.SetFrom(LayoutPoint(-1, -1));
-		ret.SetTo(LayoutPoint(-1, -1));
+		ret.SetFrom(Point(-1, -1));
+		ret.SetTo(Point(-1, -1));
 	}
 }
 
@@ -677,7 +677,7 @@ void ViewSelect::PrintSelectionInfoMsg() const
 								view.editWnd.nSelectCountMode == SelectCountMode::ByByte);
 
 		//	1行目
-		pLine = view.pEditDoc->layoutMgr.GetLineStr(select.GetFrom().GetY2(), &nLineLen, &pLayout);
+		pLine = view.pEditDoc->layoutMgr.GetLineStr(select.GetFrom().y, &nLineLen, &pLayout);
 		if (pLine) {
 			if (bCountByByte) {
 				//  バイト数でカウント
@@ -689,13 +689,13 @@ void ViewSelect::PrintSelectionInfoMsg() const
 
 				// 増減分文字列の取得にEditView::GetSelectedDataを使いたいが、select限定のため、
 				// 呼び出し前にselectを書き換える。呼出し後に元に戻すので、constと言えないこともない。
-				LayoutRange rngSelect = select;		// 選択領域の退避
+				Range rngSelect = select;		// 選択領域の退避
 				bool bSelExtend;						// 選択領域拡大フラグ
 
 				// 最終行の処理
 				pLine = view.pEditDoc->layoutMgr.GetLineStr(select.GetTo().y, &nLineLen, &pLayout);
 				if (pLine) {
-					if (view.LineColumnToIndex(pLayout, select.GetTo().GetX2()) == 0) {
+					if (view.LineColumnToIndex(pLayout, select.GetTo().x) == 0) {
 						//	最終行の先頭にキャレットがある場合は
 						//	その行を行数に含めない
 						--select_line;
@@ -712,10 +712,10 @@ void ViewSelect::PrintSelectionInfoMsg() const
 					// 範囲が後方に拡大された
 					if (PointCompare(select.GetTo(), selectOld.GetTo()) < 0) {
 						bSelExtend = false;				// 縮小
-						thiz->select = LayoutRange(select.GetTo(), selectOld.GetTo());
+						thiz->select = Range(select.GetTo(), selectOld.GetTo());
 					}else {
 						bSelExtend = true;				// 拡大
-						thiz->select = LayoutRange(selectOld.GetTo(), select.GetTo());
+						thiz->select = Range(selectOld.GetTo(), select.GetTo());
 					}
 
 					const_cast<EditView&>(view).GetSelectedDataSimple(memW);
@@ -728,10 +728,10 @@ void ViewSelect::PrintSelectionInfoMsg() const
 					// 範囲が前方に拡大された
 					if (PointCompare(select.GetFrom(), selectOld.GetFrom()) < 0) {
 						bSelExtend = true;				// 拡大
-						thiz->select = LayoutRange(select.GetFrom(), selectOld.GetFrom());
+						thiz->select = Range(select.GetFrom(), selectOld.GetFrom());
 					}else {
 						bSelExtend = false;				// 縮小
-						thiz->select = LayoutRange(selectOld.GetFrom(), select.GetFrom());
+						thiz->select = Range(selectOld.GetFrom(), select.GetFrom());
 					}
 
 					const_cast<EditView&>(view).GetSelectedDataSimple(memW);
@@ -764,20 +764,20 @@ void ViewSelect::PrintSelectionInfoMsg() const
 				//	1行だけ選択されている場合
 				if (select.IsLineOne()) {
 					select_sum =
-						view.LineColumnToIndex(pLayout, select.GetTo().GetX2())
-						- view.LineColumnToIndex(pLayout, select.GetFrom().GetX2());
+						view.LineColumnToIndex(pLayout, select.GetTo().x)
+						- view.LineColumnToIndex(pLayout, select.GetFrom().x);
 				}else {	//	2行以上選択されている場合
 					select_sum =
 						pLayout->GetLengthWithoutEOL()
 						+ pLayout->GetLayoutEol().GetLen()
-						- view.LineColumnToIndex(pLayout, select.GetFrom().GetX2());
+						- view.LineColumnToIndex(pLayout, select.GetFrom().x);
 
 					//	GetSelectedDataと似ているが，先頭行と最終行は排除している
 					//	Aug. 16, 2005 aroka nLineNumはfor以降でも使われるのでforの前で宣言する
 					//	VC .NET以降でもMicrosoft拡張を有効にした標準動作はVC6と同じことに注意
 					int nLineNum;
-					for (nLineNum = select.GetFrom().GetY2() + 1;
-						nLineNum < select.GetTo().GetY2();
+					for (nLineNum = select.GetFrom().y + 1;
+						nLineNum < select.GetTo().y;
 						++nLineNum
 					) {
 						pLine = view.pEditDoc->layoutMgr.GetLineStr(nLineNum, &nLineLen, &pLayout);
@@ -790,7 +790,7 @@ void ViewSelect::PrintSelectionInfoMsg() const
 					//	最終行の処理
 					pLine = view.pEditDoc->layoutMgr.GetLineStr(nLineNum, &nLineLen, &pLayout);
 					if (pLine) {
-						int last_line_chars = view.LineColumnToIndex(pLayout, select.GetTo().GetX2());
+						int last_line_chars = view.LineColumnToIndex(pLayout, select.GetTo().x);
 						select_sum += last_line_chars;
 						if (last_line_chars == 0) {
 							//	最終行の先頭にキャレットがある場合は

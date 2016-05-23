@@ -25,7 +25,7 @@ void DocVisitor::SetAllEol(Eol eol)
 	auto& textArea = view.GetTextArea();
 	size_t		nViewTopLine = textArea.GetViewTopLine();
 	size_t		nViewLeftCol = textArea.GetViewLeftCol();
-	LayoutPoint		ptCaretPosXY = caret.GetCaretLayoutPos();
+	Point		ptCaretPosXY = caret.GetCaretLayoutPos();
 	size_t		nCaretPosX_Prev = caret.nCaretPosX_Prev;
 
 	bool bReplace = false;
@@ -40,9 +40,9 @@ void DocVisitor::SetAllEol(Eol eol)
 			}
 			// ‰üs‚ð’uŠ·
 			if (pDocLine->GetEol() != EolType::None && pDocLine->GetEol() != eol) {
-				LogicRange range;
-				range.SetFrom(LogicPoint(pDocLine->GetLengthWithoutEOL(), nLine));
-				range.SetTo(LogicPoint(pDocLine->GetLengthWithEOL(), nLine));
+				Range range;
+				range.SetFrom(Point(pDocLine->GetLengthWithoutEOL(), nLine));
+				range.SetTo(Point(pDocLine->GetLengthWithEOL(), nLine));
 				view.ReplaceData_CEditView2(
 					range,
 					eol.GetValue2(),

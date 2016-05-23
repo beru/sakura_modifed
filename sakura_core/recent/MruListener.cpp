@@ -152,13 +152,13 @@ void MruListener::OnAfterLoad(const LoadInfo& loadInfo)
 	// キャレット位置の復元
 	if (bIsExistInMRU && GetDllShareData().common.file.GetRestoreCurPosition()) {
 		// キャレット位置取得
-		LayoutPoint ptCaretPos;
+		Point ptCaretPos;
 		pDoc->layoutMgr.LogicToLayout(eiOld.ptCursor, &ptCaretPos);
 
 		// ビュー取得
 		EditView& view = pDoc->pEditWnd->GetActiveView();
 
-		if (ptCaretPos.GetY2() >= pDoc->layoutMgr.GetLineCount()) {
+		if (ptCaretPos.y >= pDoc->layoutMgr.GetLineCount()) {
 			// ファイルの最後に移動
 			view.GetCommander().HandleCommand(F_GOFILEEND, false, 0, 0, 0, 0);
 		}else {
@@ -166,7 +166,7 @@ void MruListener::OnAfterLoad(const LoadInfo& loadInfo)
 			view.GetTextArea().SetViewLeftCol(eiOld.nViewLeftCol); // 2001/10/20 novice
 			// From Here Mar. 28, 2003 MIK
 			// 改行の真ん中にカーソルが来ないように。
-			const DocLine *pTmpDocLine = pDoc->docLineMgr.GetLine(eiOld.ptCursor.GetY2());	// 2008.08.22 ryoji 改行単位の行番号を渡すように修正
+			const DocLine *pTmpDocLine = pDoc->docLineMgr.GetLine(eiOld.ptCursor.y);	// 2008.08.22 ryoji 改行単位の行番号を渡すように修正
 			if (pTmpDocLine) {
 				if (pTmpDocLine->GetLengthWithoutEOL() < eiOld.ptCursor.x) {
 					ptCaretPos.x--;
@@ -174,7 +174,7 @@ void MruListener::OnAfterLoad(const LoadInfo& loadInfo)
 			}
 			// To Here Mar. 28, 2003 MIK
 			view.GetCaret().MoveCursor(ptCaretPos, true);
-			view.GetCaret().nCaretPosX_Prev = view.GetCaret().GetCaretLayoutPos().GetX2();
+			view.GetCaret().nCaretPosX_Prev = view.GetCaret().GetCaretLayoutPos().x;
 		}
 	}
 

@@ -19,14 +19,14 @@ int ViewParser::GetLeftWord(NativeW* pMemWord, int nMaxWordLen) const
 	const Layout* pLayout;
 	auto& caret = editView.GetCaret();
 	auto& layoutMgr = editView.pEditDoc->layoutMgr;
-	int nCurLine = caret.GetCaretLayoutPos().GetY2();
+	int nCurLine = caret.GetCaretLayoutPos().y;
 	const wchar_t* pLine = layoutMgr.GetLineStr(nCurLine, &nLineLen, &pLayout);
 	if (!pLine) {
 //		return 0;
 		nIdxTo = 0;
 	}else {
 		// 指定された桁に対応する行のデータ内の位置を調べる Ver1
-		nIdxTo = editView.LineColumnToIndex(pLayout, caret.GetCaretLayoutPos().GetX2());
+		nIdxTo = editView.LineColumnToIndex(pLayout, caret.GetCaretLayoutPos().x);
 	}
 	if (nIdxTo == 0 || !pLine) {
 		if (nCurLine <= 0) {
@@ -64,7 +64,7 @@ int ViewParser::GetLeftWord(NativeW* pMemWord, int nMaxWordLen) const
 
 	// 現在位置の単語の範囲を調べる
 	NativeW memWord;
-	LayoutRange range;
+	Range range;
 	bool bResult = layoutMgr.WhereCurrentWord(
 		nCurLine,
 		nIdx,
@@ -96,18 +96,18 @@ bool ViewParser::GetCurrentWord(
 {
 	auto& layoutMgr = editView.pEditDoc->layoutMgr;
 	auto& caret = editView.GetCaret();
-	const Layout* pLayout = layoutMgr.SearchLineByLayoutY(caret.GetCaretLayoutPos().GetY2());
+	const Layout* pLayout = layoutMgr.SearchLineByLayoutY(caret.GetCaretLayoutPos().y);
 	if (!pLayout) {
 		return false;	// 単語選択に失敗
 	}
 	
 	// 指定された桁に対応する行のデータ内の位置を調べる
-	int nIdx = editView.LineColumnToIndex(pLayout, caret.GetCaretLayoutPos().GetX2());
+	int nIdx = editView.LineColumnToIndex(pLayout, caret.GetCaretLayoutPos().x);
 	
 	// 現在位置の単語の範囲を調べる
-	LayoutRange range;
+	Range range;
 	bool bResult = layoutMgr.WhereCurrentWord(
-		caret.GetCaretLayoutPos().GetY2(),
+		caret.GetCaretLayoutPos().y,
 		nIdx,
 		&range,
 		pMemWord,

@@ -98,7 +98,7 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                         実装補助                            //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-	POINT CalcCaretDrawPos(const LayoutPoint& ptCaretPos) const;
+	POINT CalcCaretDrawPos(const Point& ptCaretPos) const;
 
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -127,23 +127,23 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 	// 設定
-	int MoveCursorToClientPoint(const POINT& ptClientPos, bool = false, LayoutPoint* = nullptr);		// マウス等による座標指定によるカーソル移動
+	int MoveCursorToClientPoint(const POINT& ptClientPos, bool = false, Point* = nullptr);		// マウス等による座標指定によるカーソル移動
 	int Cursor_UPDOWN(int nMoveLines, bool bSelect);		// カーソル上下移動処理
 	int MoveCursor(												// 行桁指定によるカーソル移動
-		LayoutPoint		ptWk_CaretPos,									// [in] 移動先レイアウト位置
-		bool			bScroll,										// [in] true: 画面位置調整有り  false: 画面位置調整無し
-		int				nCaretMarginRate	= _CARETMARGINRATE,			// [in] 縦スクロール開始位置を決める値
-		bool			bUnderlineDoNotOFF	= false,					// [in] アンダーラインを消去しない
-		bool			bVertLineDoNotOFF	= false						// [in] カーソル位置縦線を消去しない
+		Point	ptWk_CaretPos,									// [in] 移動先レイアウト位置
+		bool	bScroll,										// [in] true: 画面位置調整有り  false: 画面位置調整無し
+		int		nCaretMarginRate	= _CARETMARGINRATE,			// [in] 縦スクロール開始位置を決める値
+		bool	bUnderlineDoNotOFF	= false,					// [in] アンダーラインを消去しない
+		bool	bVertLineDoNotOFF	= false						// [in] カーソル位置縦線を消去しない
 	);
 	int MoveCursorFastMode(
-		const LogicPoint&	pptWk_CaretPosLogic							// [in] 移動先ロジック位置
+		const Point&	pptWk_CaretPosLogic							// [in] 移動先ロジック位置
 	);
-	int MoveCursorProperly(LayoutPoint ptNewXY, bool, bool = false, LayoutPoint* = nullptr, int = _CARETMARGINRATE, int = 0);	// 行桁指定によるカーソル移動（座標調整付き）
+	int MoveCursorProperly(Point ptNewXY, bool, bool = false, Point* = nullptr, int = _CARETMARGINRATE, int = 0);	// 行桁指定によるカーソル移動（座標調整付き）
 
 	//$ 設計思想的に微妙
-	void SetCaretLayoutPos(const LayoutPoint& pt) { ptCaretPos_Layout = pt; }	// キャレット位置(レイアウト)を設定
-	void SetCaretLogicPos(const LogicPoint& pt) { ptCaretPos_Logic = pt; }		// キャレット位置(ロジック)を設定
+	void SetCaretLayoutPos(const Point& pt) { ptCaretPos_Layout = pt; }	// キャレット位置(レイアウト)を設定
+	void SetCaretLogicPos(const Point& pt) { ptCaretPos_Logic = pt; }		// キャレット位置(ロジック)を設定
 
 	
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -156,7 +156,7 @@ public:
 	//                           計算                              //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	// 計算
-	bool GetAdjustCursorPos(LayoutPoint* pptPosXY); // 正しいカーソル位置を算出する
+	bool GetAdjustCursorPos(Point* pptPosXY); // 正しいカーソル位置を算出する
 
 	void ClearCaretPosInfoCache();
 
@@ -177,10 +177,10 @@ public:
 	//                           取得                              //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-	LayoutPoint GetCaretLayoutPos() const	{ return ptCaretPos_Layout; }	// キャレット位置(レイアウト)を取得
+	Point GetCaretLayoutPos() const	{ return ptCaretPos_Layout; }	// キャレット位置(レイアウト)を取得
 	Size GetCaretSize() const				{ return sizeCaret; }			// キャレットサイズを取得。※正確には高さは違うらしい (この半分のこともある？)
 	bool ExistCaretFocus() const			{ return sizeCaret.cx > 0; }	// キャレットのフォーカスがあるか。※横幅値で判定してるらしい。
-	LogicPoint GetCaretLogicPos() const		{ return ptCaretPos_Logic; }	// キャレット位置(ロジック)を取得
+	Point GetCaretLogicPos() const		{ return ptCaretPos_Logic; }	// キャレット位置(ロジック)を取得
 
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -198,8 +198,8 @@ private:
 	const EditDoc&	editDoc;
 
 	// キャレット位置
-	LayoutPoint	ptCaretPos_Layout;		// ビュー左上端からのカーソル位置。レイアウト単位。
-	LogicPoint	ptCaretPos_Logic;		// カーソル位置。ロジック単位。データ内文字単位。
+	Point	ptCaretPos_Layout;		// ビュー左上端からのカーソル位置。レイアウト単位。
+	Point	ptCaretPos_Logic;		// カーソル位置。ロジック単位。データ内文字単位。
 
 	// カーソル位置計算キャッシュ
 	int nOffsetCache;

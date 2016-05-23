@@ -226,7 +226,7 @@ bool EditView::MiniMapCursorLineTip(POINT* po, RECT* rc, bool* pbHide)
 
 	Point ptClient(*po);
 	ScreenToClient(GetHwnd(), &ptClient);
-	LayoutPoint ptNew;
+	Point ptNew;
 	GetTextArea().ClientToLayout(ptClient, &ptNew);
 	// 同じ行ならなにもしない
 	if (dwTipTimer == 0 && tipWnd.nSearchLine == ptNew.y) {
@@ -311,15 +311,15 @@ void EditView::GetCurrentTextForSearch(NativeW& memCurText, bool bStripMaxPath /
 	}else {
 		size_t nLineLen;
 		const Layout* pLayout;
-		const wchar_t* pLine = pEditDoc->layoutMgr.GetLineStr(GetCaret().GetCaretLayoutPos().GetY2(), &nLineLen, &pLayout);
+		const wchar_t* pLine = pEditDoc->layoutMgr.GetLineStr(GetCaret().GetCaretLayoutPos().y, &nLineLen, &pLayout);
 		if (pLine) {
 			// 指定された桁に対応する行のデータ内の位置を調べる
-			int nIdx = LineColumnToIndex(pLayout, GetCaret().GetCaretLayoutPos().GetX2());
+			int nIdx = LineColumnToIndex(pLayout, GetCaret().GetCaretLayoutPos().x);
 
 			// 現在位置の単語の範囲を調べる
-			LayoutRange range;
+			Range range;
 			bool bWhere = pEditDoc->layoutMgr.WhereCurrentWord(
-				GetCaret().GetCaretLayoutPos().GetY2(),
+				GetCaret().GetCaretLayoutPos().y,
 				nIdx,
 				&range,
 				NULL,

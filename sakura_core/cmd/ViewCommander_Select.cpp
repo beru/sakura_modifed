@@ -20,7 +20,7 @@
 
 
 // 現在位置の単語選択
-bool ViewCommander::Command_SelectWord(const LayoutPoint* pptCaretPos)
+bool ViewCommander::Command_SelectWord(const Point* pptCaretPos)
 {
 	auto& si = view.GetSelectionInfo();
 	if (si.IsTextSelected()) {	// テキストが選択されているか
@@ -28,25 +28,25 @@ bool ViewCommander::Command_SelectWord(const LayoutPoint* pptCaretPos)
 		si.DisableSelectArea(true);
 	}
 	auto& caret = GetCaret();
-	LayoutPoint ptCaretPos = ((!pptCaretPos) ? caret.GetCaretLayoutPos() : *pptCaretPos);
+	Point ptCaretPos = ((!pptCaretPos) ? caret.GetCaretLayoutPos() : *pptCaretPos);
 	auto& layoutMgr = GetDocument().layoutMgr;
-	const Layout* pLayout = layoutMgr.SearchLineByLayoutY(ptCaretPos.GetY2());
+	const Layout* pLayout = layoutMgr.SearchLineByLayoutY(ptCaretPos.y);
 	if (!pLayout) {
 		return false;	// 単語選択に失敗
 	}
 	// 指定された桁に対応する行のデータ内の位置を調べる
-	int nIdx = view.LineColumnToIndex(pLayout, ptCaretPos.GetX2());
+	int nIdx = view.LineColumnToIndex(pLayout, ptCaretPos.x);
 
 	// 現在位置の単語の範囲を調べる
-	LayoutRange range;
-	if (layoutMgr.WhereCurrentWord(ptCaretPos.GetY2(), nIdx, &range, NULL, NULL)) {
+	Range range;
+	if (layoutMgr.WhereCurrentWord(ptCaretPos.y, nIdx, &range, NULL, NULL)) {
 
 		// 指定された行のデータ内の位置に対応する桁の位置を調べる
 		// 2007.10.15 kobake 既にレイアウト単位なので変換は不要
 		/*
-		pLayout = layoutMgr.SearchLineByLayoutY(range.GetFrom().GetY2());
+		pLayout = layoutMgr.SearchLineByLayoutY(range.GetFrom().y);
 		range.SetFromX(view.LineIndexToColumn(pLayout, range.GetFrom().x));
-		pLayout = layoutMgr.SearchLineByLayoutY(range.GetTo().GetY2());
+		pLayout = layoutMgr.SearchLineByLayoutY(range.GetTo().y);
 		range.SetToX(view.LineIndexToColumn(pLayout, range.GetTo().x));
 		*/
 
@@ -58,7 +58,7 @@ bool ViewCommander::Command_SelectWord(const LayoutPoint* pptCaretPos)
 
 		// 単語の先頭にカーソルを移動
 		caret.MoveCursor(range.GetTo(), true);
-		caret.nCaretPosX_Prev = caret.GetCaretLayoutPos().GetX2();
+		caret.nCaretPosX_Prev = caret.GetCaretLayoutPos().x;
 		return true;	// 単語選択に成功。
 	}else {
 		return false;	// 単語選択に失敗
@@ -78,13 +78,13 @@ void ViewCommander::Command_SelectAll(void)
 	// 先頭へカーソルを移動
 	// Sep. 8, 2000 genta
 	view.AddCurrentLineToHistory();
-	GetCaret().nCaretPosX_Prev = GetCaret().GetCaretLayoutPos().GetX2();
+	GetCaret().nCaretPosX_Prev = GetCaret().GetCaretLayoutPos().x;
 
 	// Jul. 29, 2006 genta 選択位置の末尾を正確に取得する
 	// マクロから取得した場合に正しい範囲が取得できないため
 	//int nX, nY;
-	LayoutRange range;
-	range.SetFrom(LayoutPoint(0, 0));
+	Range range;
+	range.SetFrom(Point(0, 0));
 	GetDocument().layoutMgr.GetEndLayoutPos(range.GetToPointer());
 	si.SetSelectArea(range);
 
@@ -109,14 +109,14 @@ void ViewCommander::Command_SelectLine(int lparam)
 	auto& si = view.GetSelectionInfo();
 	si.bBeginLineSelect = true;		// 行単位選択中
 
-	LayoutPoint ptCaret;
+	Point ptCaret;
 
 	auto& layoutMgr = GetDocument().layoutMgr;
 	auto& caret = GetCaret();
 	// 最下行（物理行）でない
 	if (caret.GetCaretLogicPos().y < GetDocument().docLineMgr.GetLineCount()) {
 		// 1行先の物理行からレイアウト行を求める
-		layoutMgr.LogicToLayout(LogicPoint(0, caret.GetCaretLogicPos().y + 1), &ptCaret);
+		layoutMgr.LogicToLayout(Point(0, caret.GetCaretLogicPos().y + 1), &ptCaret);
 
 		// カーソルを次の物理行頭へ移動する
 		view.MoveCursorSelecting(ptCaret, true);
@@ -125,7 +125,7 @@ void ViewCommander::Command_SelectLine(int lparam)
 		ptCaret = caret.GetCaretLayoutPos().Get();
 	}else {
 		// カーソルを最下行（レイアウト行）へ移動する
-		view.MoveCursorSelecting(LayoutPoint(0, layoutMgr.GetLineCount()), true);
+		view.MoveCursorSelecting(Point(0, layoutMgr.GetLineCount()), true);
 		Command_GoLineEnd(true, 0, 0);	// 行末に移動
 
 		// 選択するものが無い（[EOF]のみの行）時は選択状態としない

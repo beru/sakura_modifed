@@ -130,13 +130,13 @@ void DocOutline::MakeTopicList_tex(FuncInfoArr* pFuncInfoArr)
 				}
 				szTitle[k] = '\0';
 
-				LayoutPoint ptPos;
+				Point ptPos;
 
 				WCHAR tmpstr[256];
 				WCHAR secstr[4];
 
 				doc.layoutMgr.LogicToLayout(
-					LogicPoint(i, nLineCount),
+					Point(i, nLineCount),
 					&ptPos
 				);
 
@@ -163,7 +163,7 @@ void DocOutline::MakeTopicList_tex(FuncInfoArr* pFuncInfoArr)
 					wcscat(tmpstr, L" ");
 				}
 				wcscat(tmpstr, szTitle);
-				pFuncInfoArr->AppendData(nLineCount + 1, ptPos.GetY2() + 1, tmpstr, 0, nDepth);
+				pFuncInfoArr->AppendData(nLineCount + 1, ptPos.y + 1, tmpstr, 0, nDepth);
 				if (!bNoNumber) lastSection = thisSection;
 			}
 			i += j;

@@ -691,7 +691,7 @@ void EditDoc::OnChangeSetting(
 	// 共有データ構造体のアドレスを返す
 	FileNameManager::getInstance().TransformFileName_MakeCache();
 
-	LogicPointEx* posSaveAry = nullptr;
+	PointEx* posSaveAry = nullptr;
 	if (pEditWnd->posSaveAry) {
 		if (bDoLayout) {
 			posSaveAry = pEditWnd->posSaveAry;

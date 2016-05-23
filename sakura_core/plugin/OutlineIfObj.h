@@ -95,8 +95,8 @@ public:
 				if (!arguments[1]) return false;
 				if (!arguments[2]) return false;
 				if (!arguments[3]) return false;
-				LogicPoint ptLogic( _wtoi(arguments[1])-1, _wtoi(arguments[0])-1 );
-				LayoutPoint ptLayout;
+				Point ptLogic( _wtoi(arguments[1])-1, _wtoi(arguments[0])-1 );
+				Point ptLayout;
 				if (ptLogic.x < 0 || ptLogic.y < 0) {
 					ptLayout.x = ptLogic.x;
 					ptLayout.y = ptLogic.y;

@@ -203,7 +203,7 @@ void DocFileOperation::ReloadCurrentFile(
 	// カーソル位置保存
 	size_t nViewTopLine = textArea.GetViewTopLine();	// 表示域の一番上の行(0開始)
 	size_t nViewLeftCol = textArea.GetViewLeftCol();	// 表示域の一番左の桁(0開始)
-	LayoutPoint	ptCaretPosXY = caret.GetCaretLayoutPos();
+	Point	ptCaretPosXY = caret.GetCaretLayoutPos();
 
 	// ロード
 	LoadInfo loadInfo;
@@ -216,12 +216,12 @@ void DocFileOperation::ReloadCurrentFile(
 
 	// カーソル位置復元 (※ここではオプションのカーソル位置復元（＝改行単位）が指定されていない場合でも復元する)
 	// 2007.08.23 ryoji 表示領域復元
-	if (ptCaretPosXY.GetY2() < doc.layoutMgr.GetLineCount()) {
+	if (ptCaretPosXY.y < doc.layoutMgr.GetLineCount()) {
 		textArea.SetViewTopLine(nViewTopLine);
 		textArea.SetViewLeftCol(nViewLeftCol);
 	}
 	caret.MoveCursorProperly(ptCaretPosXY, true);	// 2007.08.23 ryoji MoveCursor()->MoveCursorProperly()
-	caret.nCaretPosX_Prev = caret.GetCaretLayoutPos().GetX2();
+	caret.nCaretPosX_Prev = caret.GetCaretLayoutPos().x;
 
 	// 2006.09.01 ryoji オープン後自動実行マクロを実行する
 	if (bRet) {

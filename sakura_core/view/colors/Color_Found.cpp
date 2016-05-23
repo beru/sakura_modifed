@@ -33,7 +33,7 @@ bool Color_Select::BeginColorEx(const StringRef& str, int nPos, int nLineNum, co
 		return (nSelectStart <= nPos && nPos < nSelectEnd);
 	}
 	nSelectLine = nLineNum;
-	LayoutRange selectArea = view.GetSelectionInfo().GetSelectAreaLine(nLineNum, pLayout);
+	Range selectArea = view.GetSelectionInfo().GetSelectAreaLine(nLineNum, pLayout);
 	int nSelectFrom = selectArea.GetFrom().x;
 	int nSelectTo = selectArea.GetTo().x;
 	if (nSelectFrom == nSelectTo || nSelectFrom == -1) {

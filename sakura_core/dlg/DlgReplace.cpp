@@ -623,7 +623,7 @@ BOOL DlgReplace::OnActivate(WPARAM wParam, LPARAM lParam)
 {
 	// 0文字幅マッチ描画のON/OFF	// 2009.11.29 ryoji
 	EditView*	pEditView = (EditView*)(this->lParam);
-	LayoutRange rangeSel = pEditView->GetSelectionInfo().select;
+	Range rangeSel = pEditView->GetSelectionInfo().select;
 	if (rangeSel.IsValid() && rangeSel.IsLineOne() && rangeSel.IsOne())
 		pEditView->InvalidateRect(NULL);	// アクティブ化／非アクティブ化が完了してから再描画
 

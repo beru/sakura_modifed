@@ -52,7 +52,7 @@ Layout* LayoutMgr::LayoutWork::_CreateLayout(LayoutMgr* mgr)
 {
 	return mgr->CreateLayout(
 		this->pDocLine,
-		LogicPoint(this->nBgn, this->nCurLine),
+		Point(this->nBgn, this->nCurLine),
 		this->nPos - this->nBgn,
 		this->colorPrev,
 		this->nIndent,
@@ -430,10 +430,10 @@ void LayoutMgr::_OnLine2(LayoutWork* pWork)
 	pWork->nPosX = pWork->nIndent = (this->*getIndentOffset)(pWork->pLayout);
 	if (0
 		|| (1
-			&& pWork->ptDelLogicalFrom.GetY2() == pWork->nCurLine
-			&& pWork->ptDelLogicalFrom.GetX2() < pWork->nPos
+			&& pWork->ptDelLogicalFrom.y == pWork->nCurLine
+			&& pWork->ptDelLogicalFrom.x < pWork->nPos
 			)
-		|| (pWork->ptDelLogicalFrom.GetY2() < pWork->nCurLine)
+		|| (pWork->ptDelLogicalFrom.y < pWork->nCurLine)
 	) {
 		(pWork->nModifyLayoutLinesNew)++;
 	}
@@ -456,7 +456,7 @@ void LayoutMgr::_OnLine2(LayoutWork* pWork)
 int LayoutMgr::DoLayout_Range(
 	Layout*				pLayoutPrev,
 	int					nLineNum,
-	LogicPoint			_ptDelLogicalFrom,
+	Point				_ptDelLogicalFrom,
 	EColorIndexType		nCurrentLineType,
 	LayoutColorInfo*	colorInfo,
 	const CalTextWidthArg&	ctwArg,

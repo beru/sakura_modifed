@@ -820,15 +820,15 @@ void DocOutline::MakeFuncList_C(
 						  →
 						  レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 						*/
-						LayoutPoint ptPosXY;
+						Point ptPosXY;
 						doc.layoutMgr.LogicToLayout(
-							LogicPoint(0, nItemLine - 1),
+							Point(0, nItemLine - 1),
 							&ptPosXY
 						);
 #ifdef TRACE_OUTLINE
 						DEBUG_TRACE(_T("AppendData %d %ls\n"), nItemLine, szNamespace);
 #endif
-						pFuncInfoArr->AppendData(nItemLine, ptPosXY.GetY2() + 1, szNamespace, nItemFuncId);
+						pFuncInfoArr->AppendData(nItemLine, ptPosXY.y + 1, szNamespace, nItemFuncId);
 						bDefinedTypedef = false;
 						nItemLine = -1;
 						//	Jan. 30, 2005 genta M2_KR_FUNC 追加
@@ -1047,15 +1047,15 @@ void DocOutline::MakeFuncList_C(
 						  →
 						  レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 						*/
-						LayoutPoint ptPosXY;
+						Point ptPosXY;
 						doc.layoutMgr.LogicToLayout(
-							LogicPoint(0, nItemLine - 1),
+							Point(0, nItemLine - 1),
 							&ptPosXY
 						);
 #ifdef TRACE_OUTLINE
 						DEBUG_TRACE(_T("AppendData %d %ls\n"), nItemLine, szNamespace);
 #endif
-						pFuncInfoArr->AppendData(nItemLine, ptPosXY.GetY2() + 1, szNamespace, nItemFuncId);
+						pFuncInfoArr->AppendData(nItemLine, ptPosXY.y + 1, szNamespace, nItemFuncId);
 					}
 					nItemLine = -1;
 					nNestLevel_template = 0;
@@ -1240,7 +1240,7 @@ void EditView::SmartIndent_CPP(wchar_t wcChar)
 	int j;
 
 	// 調整によって置換される箇所
-	LogicRange rangeA;
+	Range rangeA;
 	rangeA.Clear(-1);
 
 	wchar_t*	pszData = NULL;
@@ -1254,7 +1254,7 @@ void EditView::SmartIndent_CPP(wchar_t wcChar)
 
 	int			nCaretPosX_PHY;
 
-	LogicPoint	ptCP;
+	Point	ptCP;
 
 	if (wcChar == WCODE::CR || wcschr(L":{}()", wcChar) != NULL) {
 		// 次へ進む
@@ -1273,13 +1273,13 @@ void EditView::SmartIndent_CPP(wchar_t wcChar)
 		auto& caret = GetCaret();
 		nCaretPosX_PHY = caret.GetCaretLogicPos().x;
 
-		pLine = pEditDoc->docLineMgr.GetLine(caret.GetCaretLogicPos().GetY2())->GetDocLineStrWithEOL(&nLineLen);
+		pLine = pEditDoc->docLineMgr.GetLine(caret.GetCaretLogicPos().y)->GetDocLineStrWithEOL(&nLineLen);
 		if (!pLine) {
 			if (wcChar != WCODE::CR) {
 				return;
 			}
 			// 調整によって置換される箇所
-			rangeA.Set(LogicPoint(0, caret.GetCaretLogicPos().y));
+			rangeA.Set(Point(0, caret.GetCaretLogicPos().y));
 		}else {
 			//	nWorkに処理の基準桁位置を設定する
 			if (wcChar != WCODE::CR) {
@@ -1330,15 +1330,15 @@ void EditView::SmartIndent_CPP(wchar_t wcChar)
 				}
 			}
 			// 調整によって置換される箇所
-			rangeA.SetFrom(LogicPoint(0, caret.GetCaretLogicPos().GetY2()));
-			rangeA.SetTo(LogicPoint(i, caret.GetCaretLogicPos().GetY2()));
+			rangeA.SetFrom(Point(0, caret.GetCaretLogicPos().y));
+			rangeA.SetTo(Point(i, caret.GetCaretLogicPos().y));
 		}
 		
 		// 対応する括弧をさがす
 		nLevel = 0;	// {}の入れ子レベル
 		
 		nDataLen = 0;
-		for (j=caret.GetCaretLogicPos().GetY2(); j>=0; --j) {
+		for (j=caret.GetCaretLogicPos().y; j>=0; --j) {
 			pLine2 = pEditDoc->docLineMgr.GetLine(j)->GetDocLineStrWithEOL(&nLineLen2);
 			if (j == caret.GetCaretLogicPos().y) {
 				// 2005.10.11 ryoji EOF のみの行もスマートインデントの対象にする
@@ -1487,7 +1487,7 @@ void EditView::SmartIndent_CPP(wchar_t wcChar)
 		}
 		
 		// 調整によって置換される箇所
-		LayoutRange rangeLayout;
+		Range rangeLayout;
 		pEditDoc->layoutMgr.LogicToLayout(rangeA, &rangeLayout);
 
 		if (0
@@ -1509,7 +1509,7 @@ void EditView::SmartIndent_CPP(wchar_t wcChar)
 		}
 
 		// カーソル位置調整
-		LayoutPoint ptCP_Layout;
+		Point ptCP_Layout;
 		pEditDoc->layoutMgr.LogicToLayout(ptCP, &ptCP_Layout);
 
 		// 選択エリアの先頭へカーソルを移動

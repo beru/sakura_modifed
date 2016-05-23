@@ -627,7 +627,7 @@ DWORD GrepAgent::DoGrep(
 		AddTail(editWnd, viewDst, memOutput, grepOption.bGrepStdout);
 #endif
 	}
-	viewDst.GetCaret().MoveCursor(LayoutPoint(0, tmp_PosY_Layout), true);	// カーソルをGrep直前の位置に戻す。
+	viewDst.GetCaret().MoveCursor(Point(0, tmp_PosY_Layout), true);	// カーソルをGrep直前の位置に戻す。
 
 	dlgCancel.CloseDialog(0);
 
@@ -1720,7 +1720,7 @@ int GrepAgent::DoGrepReplaceFile(
 				) {
 					//	パターン発見
 					nIndex = regexp.GetIndex();
-					int matchlen = regexp.GetMatchLen();
+					ptrdiff_t matchlen = regexp.GetMatchLen();
 					if (bOutput) {
 						OutputPathInfo(
 							memMessage, grepOption,
@@ -1761,7 +1761,7 @@ int GrepAgent::DoGrepReplaceFile(
 					//	探し始める位置を補正
 					//	2003.06.10 Moca マッチした文字列の後ろから次の検索を開始する
 					if (matchlen <= 0) {
-						matchlen = NativeW::GetSizeOfChar( pLine, nLineLen, nIndex );
+						matchlen = NativeW::GetSizeOfChar(pLine, nLineLen, nIndex);
 						if (matchlen <= 0) {
 							matchlen = 1;
 						}
@@ -1786,8 +1786,8 @@ int GrepAgent::DoGrepReplaceFile(
 				*/
 				const wchar_t* pszRes;
 				int nMatchLen;
-				int nIdx = 0;
-				int nOutputPos = 0;
+				ptrdiff_t nIdx = 0;
+				ptrdiff_t nOutputPos = 0;
 				// Jun. 26, 2003 genta 無駄なwhileは削除
 				while (pszRes = SearchAgent::SearchStringWord(pLine, nLineLen, nIdx, searchWords, searchOption.bLoHiCase, &nMatchLen)) {
 					nIdx = pszRes - pLine + nMatchLen;
@@ -1826,9 +1826,9 @@ int GrepAgent::DoGrepReplaceFile(
 				outBuffer.AppendString( &pLine[nOutputPos], nLineLen - nOutputPos );
 			}else {
 				// 文字列検索
-				int nColumnPrev = 0;
+				size_t nColumnPrev = 0;
 				const wchar_t*	pCompareData = pLine;
-				int nCompareLen = nLineLen;
+				size_t nCompareLen = nLineLen;
 				//	Jun. 21, 2003 genta ループ条件見直し
 				//	マッチ箇所を1行から複数検出するケースを標準に，
 				//	マッチ箇所を1行から1つだけ検出する場合を例外ケースととらえ，
@@ -1839,7 +1839,7 @@ int GrepAgent::DoGrepReplaceFile(
 						break;
 					}
 	
-					int	nColumn = pszRes - pCompareData;
+					ptrdiff_t nColumn = pszRes - pCompareData;
 					if (bOutput) {
 						OutputPathInfo(
 							memMessage, grepOption,
@@ -1872,7 +1872,7 @@ int GrepAgent::DoGrepReplaceFile(
 					//	2003.06.10 Moca マッチした文字列の後ろから次の検索を開始する
 					//	nClom : マッチ位置
 					//	matchlen : マッチした文字列の長さ
-					int nPosDiff = nColumn + nKeyLen;
+					ptrdiff_t nPosDiff = nColumn + nKeyLen;
 					pCompareData += nPosDiff;
 					nCompareLen -= nPosDiff;
 					nColumnPrev += nPosDiff;

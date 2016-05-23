@@ -513,10 +513,10 @@ bool SearchAgent::PrevOrNextWord(
 */
 // 見つからない場合は０を返す
 int SearchAgent::SearchWord(
-	LogicPoint					ptSerachBegin,	// 検索開始位置
-	SearchDirection				eDirection,		// 検索方向
-	LogicRange*					pMatchRange,	// [out] マッチ範囲。ロジック単位。
-	const SearchStringPattern&	pattern			// 検索パターン
+	Point ptSerachBegin,	// 検索開始位置
+	SearchDirection eDirection,		// 検索方向
+	Range* pMatchRange,	// [out] マッチ範囲。ロジック単位。
+	const SearchStringPattern& pattern			// 検索パターン
 	)
 {
 	DocLine*	pDocLine;
@@ -539,7 +539,7 @@ int SearchAgent::SearchWord(
 
 	// 正規表現
 	if (searchOption.bRegularExp) {
-		nLinePos = ptSerachBegin.GetY2();		// 検索行＝検索開始行
+		nLinePos = ptSerachBegin.y;		// 検索行＝検索開始行
 		pDocLine = docLineMgr.GetLine(nLinePos);
 		// 前方検索
 		if (eDirection == SearchDirection::Backward) {
@@ -644,13 +644,13 @@ int SearchAgent::SearchWord(
 
 		// 前方検索
 		if (eDirection == SearchDirection::Backward) {
-			nLinePos = ptSerachBegin.GetY2();
+			nLinePos = ptSerachBegin.y;
 			pDocLine = docLineMgr.GetLine(nLinePos);
 			int nNextWordFrom;
 			int nNextWordFrom2;
 			int nNextWordTo2;
 			int nWork;
-			nNextWordFrom = ptSerachBegin.GetX2();
+			nNextWordFrom = ptSerachBegin.x;
 			while (pDocLine) {
 				if (PrevOrNextWord(nLinePos, nNextWordFrom, &nWork, true, false)) {
 					nNextWordFrom = nWork;
@@ -688,9 +688,9 @@ int SearchAgent::SearchWord(
 			}
 		// 後方検索
 		}else {
-			nLinePos = ptSerachBegin.GetY2();
+			nLinePos = ptSerachBegin.y;
 			pDocLine = docLineMgr.GetLine(nLinePos);
-			int nNextWordFrom = ptSerachBegin.GetX2();
+			int nNextWordFrom = ptSerachBegin.x;
 			while (pDocLine) {
 				pLine = pDocLine->GetDocLineStrWithEOL(&nLineLen);
 				int nMatchLen;
@@ -717,7 +717,7 @@ int SearchAgent::SearchWord(
 		const int nPatternLen = pattern.GetLen();
 		// 前方検索
 		if (eDirection == SearchDirection::Backward) {
-			nLinePos = ptSerachBegin.GetY2();
+			nLinePos = ptSerachBegin.y;
 			nHitTo = ptSerachBegin.x;
 
 			nIdxPos = 0;
@@ -774,7 +774,7 @@ int SearchAgent::SearchWord(
 		// 後方検索
 		}else {
 			nIdxPos = ptSerachBegin.x;
-			nLinePos = ptSerachBegin.GetY2();
+			nLinePos = ptSerachBegin.y;
 			pDocLine = docLineMgr.GetLine(nLinePos);
 			while (pDocLine) {
 				pLine = pDocLine->GetDocLineStrWithEOL(&nLineLen);
@@ -907,10 +907,10 @@ void SearchAgent::ReplaceData(DocLineReplaceArg* pArg)
 	}
 
 	// 現在行の情報を得る
-	pDocLine = docLineMgr.GetLine(pArg->delRange.GetTo().GetY2());
+	pDocLine = docLineMgr.GetLine(pArg->delRange.GetTo().y);
 	int i = pArg->delRange.GetTo().y;
 	if (0 < pArg->delRange.GetTo().y && !pDocLine) {
-		pDocLine = docLineMgr.GetLine(pArg->delRange.GetTo().GetY2() - 1);
+		pDocLine = docLineMgr.GetLine(pArg->delRange.GetTo().y - 1);
 		--i;
 	}
 	bool bFirstLine = true;
@@ -1141,7 +1141,7 @@ prev_line:;
 	pArg->ptNewPos.x = 0;	// 挿入された部分の次の位置のデータ位置
 
 	// 挿入データを行終端で区切った行数カウンタ
-	pDocLine = docLineMgr.GetLine(pArg->delRange.GetFrom().GetY2());
+	pDocLine = docLineMgr.GetLine(pArg->delRange.GetFrom().y);
 
 	size_t nInsSize = pArg->pInsData->size();
 	bool bInsertLineMode = false;

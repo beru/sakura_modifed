@@ -150,7 +150,7 @@ public:
 			}else {
 				keyDir = keyDirYen;
 			}
-			int nKeyDirLen = keyDir ? keyDir - key + 1 : 0;
+			ptrdiff_t nKeyDirLen = keyDir ? keyDir - key + 1 : 0;
 			name.resize(nKeyDirLen + 1);
 			LPTSTR lpName = &name[0];
 			_tcsncpy(lpName, key, nKeyDirLen);

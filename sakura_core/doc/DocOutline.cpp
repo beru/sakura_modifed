@@ -380,9 +380,9 @@ void DocOutline::MakeFuncList_RuleFile(
 		  →
 		  レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 		*/
-		LayoutPoint ptPos;
+		Point ptPos;
 		doc.layoutMgr.LogicToLayout(
-			LogicPoint(0, nLineCount),
+			Point(0, nLineCount),
 			&ptPos
 		);
 
@@ -421,7 +421,7 @@ void DocOutline::MakeFuncList_RuleFile(
 		}
 		
 		if (bAppend) {
-			pFuncInfoArr->AppendData(nLineCount + 1, ptPos.GetY2() + 1 , pszText, 0, nDepth);
+			pFuncInfoArr->AppendData(nLineCount + 1, ptPos.y + 1 , pszText, 0, nDepth);
 			++nDepth;
 		}
 		delete[] pszText;
@@ -502,10 +502,10 @@ void DocOutline::MakeFuncList_BookMark(FuncInfoArr* pFuncInfoArr)
 		wchar_t* pszText = &szText[0];
 		wmemcpy(pszText, &pLine[leftspace], nLen);
 		pszText[nLen] = L'\0';
-		LayoutPoint ptXY;
+		Point ptXY;
 		//int nX,nY
-		doc.layoutMgr.LogicToLayout(	LogicPoint(0, nLineCount), &ptXY);
-		pFuncInfoArr->AppendData(nLineCount + 1, ptXY.GetY2()+1 , pszText, 0);
+		doc.layoutMgr.LogicToLayout(Point(0, nLineCount), &ptXY);
+		pFuncInfoArr->AppendData(nLineCount + 1, ptXY.y+1 , pszText, 0);
 	}
 	return;
 }

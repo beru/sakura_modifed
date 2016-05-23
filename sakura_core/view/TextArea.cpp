@@ -280,7 +280,7 @@ int TextArea::GetDocumentLeftClientPointX() const
 }
 
 // クライアント座標からレイアウト位置に変換する
-void TextArea::ClientToLayout(Point ptClient, LayoutPoint* pptLayout) const
+void TextArea::ClientToLayout(Point ptClient, Point* pptLayout) const
 {
 	auto& view = editView;
 	auto& tm = view.GetTextMetrics();

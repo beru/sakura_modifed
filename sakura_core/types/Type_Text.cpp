@@ -203,9 +203,9 @@ void DocOutline::MakeTopicList_txt(FuncInfoArr* pFuncInfoArr)
 		  →
 		  レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 		*/
-		LayoutPoint ptPos;
+		Point ptPos;
 		doc.layoutMgr.LogicToLayout(
-			LogicPoint(0, nLineCount),
+			Point(0, nLineCount),
 			&ptPos
 		);
 
@@ -235,7 +235,7 @@ void DocOutline::MakeTopicList_txt(FuncInfoArr* pFuncInfoArr)
 		if (bAppend) {
 			pFuncInfoArr->AppendData(
 				nLineCount + 1,
-				ptPos.GetY2() + 1,
+				ptPos.y + 1,
 				pszText,
 				0,
 				nDepth
@@ -277,9 +277,9 @@ void DocOutline::MakeTopicList_wztxt(FuncInfoArr* pFuncInfoArr)
 			for (pPos=pLine+1; *pPos==L'.'; ++pPos)
 				;
 
-			LayoutPoint ptPos;
+			Point ptPos;
 			doc.layoutMgr.LogicToLayout(
-				LogicPoint(0, nLineCount),
+				Point(0, nLineCount),
 				&ptPos
 			);
 			
@@ -293,7 +293,7 @@ void DocOutline::MakeTopicList_wztxt(FuncInfoArr* pFuncInfoArr)
 				for (dummyLevel=levelPrev+1; dummyLevel<level; ++dummyLevel) {
 					pFuncInfoArr->AppendData(
 						nLineCount + 1,
-						ptPos.GetY2() + 1,
+						ptPos.y + 1,
 						LSW(STR_NO_TITLE1),
 						FUNCINFO_NOCLIPTEXT,
 						dummyLevel - 1
@@ -315,7 +315,7 @@ void DocOutline::MakeTopicList_wztxt(FuncInfoArr* pFuncInfoArr)
 				}
 			}
 			*pDest = L'\0';
-			pFuncInfoArr->AppendData(nLineCount + 1, ptPos.GetY2() + 1, szTitle, 0, level - 1);
+			pFuncInfoArr->AppendData(nLineCount + 1, ptPos.y + 1, szTitle, 0, level - 1);
 		}
 	}
 }

@@ -123,7 +123,7 @@ public:
 
 	bool PrevOrNextWord(int , int , int* , bool bLEFT, bool bStopsBothEnds);	// 現在位置の左右の単語の先頭位置を調べる
 	//	Jun. 26, 2001 genta	正規表現ライブラリの差し替え
-	int SearchWord(LogicPoint ptSerachBegin, SearchDirection eDirection, LogicRange* pMatchRange, const SearchStringPattern& pattern); // 単語検索
+	int SearchWord(Point ptSerachBegin, SearchDirection eDirection, Range* pMatchRange, const SearchStringPattern& pattern); // 単語検索
 
 	void ReplaceData(DocLineReplaceArg*);
 private:

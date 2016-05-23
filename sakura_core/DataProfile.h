@@ -95,6 +95,9 @@ protected:
 	void value_to_profile(const int& value, wstring* profile) {
 		*profile = _work_itow(value);
 	}
+	void profile_to_value(const wstring& profile, long* value) {
+		*value = _wtol(profile.c_str());
+	}
 
 	// int®“üo—ÍÀ‘•ƒ}ƒNƒ
 	#define AS_INT(TYPE) \

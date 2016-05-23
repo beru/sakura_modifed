@@ -2059,7 +2059,7 @@ BOOL DlgFuncList::OnBnClicked(int wID)
 		if (wID == IDC_CHECK_bMarkUpBlankLineEnable&&nListType == OutlineType::BookMark) {
 			EditView* pEditView = (EditView*)lParam;
 			pEditView->GetCommander().HandleCommand(F_BOOKMARK_VIEW, true, TRUE, 0, 0, 0);
-			nCurLine=pEditView->GetCaret().GetCaretLayoutPos().GetY2() + 1;
+			nCurLine=pEditView->GetCaret().GetCaretLayoutPos().y + 1;
 			DocTypeManager().GetTypeConfig(pEditView->GetDocument().docType.GetDocumentType(), type);
 			SetData();
 		}else
@@ -2481,7 +2481,7 @@ bool DlgFuncList::TagJumpTimer(
 		pView->GetCommander().Command_FileOpen( strFile.c_str(), CODE_AUTODETECT, AppMode::getInstance().IsViewMode(), NULL );
 		if (point.y != -1) {
 			if (pView->GetDocument().docFile.GetFilePathClass().IsValidPath()) {
-				LogicPoint pt;
+				Point pt;
 				pt.x = point.GetX() - 1;
 				pt.y = point.GetY() - 1;
 				if (pt.x < 0) {
@@ -2541,7 +2541,7 @@ BOOL DlgFuncList::OnJump(
 				nLineTo = funcInfo->nFuncLineCRLF;
 				nColTo = funcInfo->nFuncColCRLF;
 				// ƒJ[ƒ\ƒ‹‚ğˆÚ“®‚³‚¹‚é
-				LogicPoint	poCaret;
+				Point	poCaret;
 				poCaret.x = nColTo - 1;
 				poCaret.y = nLineTo - 1;
 

@@ -272,8 +272,8 @@ bool ViewCommander::HandleCommand(
 
 	// カーソル移動系
 	case F_IME_CHAR:			Command_IME_CHAR((WORD)lparam1); break;					// 全角文字入力
-	case F_MOVECURSOR:			Command_MoveCursor(LogicPoint((int)lparam2, (int)lparam1), (int)lparam3); break;
-	case F_MOVECURSORLAYOUT:	Command_MoveCursorLayout(LayoutPoint((int)lparam2, (int)lparam1), (int)lparam3); break;
+	case F_MOVECURSOR:			Command_MoveCursor(Point((int)lparam2, (int)lparam1), (int)lparam3); break;
+	case F_MOVECURSORLAYOUT:	Command_MoveCursorLayout(Point((int)lparam2, (int)lparam1), (int)lparam3); break;
 	case F_UP:					Command_Up(view.GetSelectionInfo().bSelectingLock, bRepeat); break;				// カーソル上移動
 	case F_DOWN:				Command_Down(view.GetSelectionInfo().bSelectingLock, bRepeat); break;			// カーソル下移動
 	case F_LEFT:				Command_Left(view.GetSelectionInfo().bSelectingLock, bRepeat); break;			// カーソル左移動

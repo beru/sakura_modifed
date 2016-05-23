@@ -158,7 +158,7 @@ inline BOOL FileLoad::GetFileTime(FILETIME* pftCreate, FILETIME* pftLastAccess, 
 // protected
 inline int FileLoad::Read(void* pBuf, size_t nSize) {
 	DWORD ReadSize;
-	if (!::ReadFile(hFile, pBuf, nSize, &ReadSize, NULL)) {
+	if (!::ReadFile(hFile, pBuf, (DWORD)nSize, &ReadSize, NULL)) {
 		throw Error_FileRead();
 	}
 	return (int)ReadSize;

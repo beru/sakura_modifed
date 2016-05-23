@@ -315,19 +315,19 @@ public:
 	bool GetSelectedDataSimple(NativeW&);// 選択範囲のデータを取得
 	bool GetSelectedDataOne(NativeW& memBuf, int nMaxLen);
 	bool GetSelectedData(NativeW*, bool, const wchar_t*, bool, bool bAddCRLFWhenCopy, EolType neweol = EolType::Unknown);	// 選択範囲のデータを取得
-	int IsCurrentPositionSelected(LayoutPoint ptCaretPos);					// 指定カーソル位置が選択エリア内にあるか
-	int IsCurrentPositionSelectedTEST(const LayoutPoint& ptCaretPos, const LayoutRange& select) const; // 指定カーソル位置が選択エリア内にあるか
+	int IsCurrentPositionSelected(Point ptCaretPos);					// 指定カーソル位置が選択エリア内にあるか
+	int IsCurrentPositionSelectedTEST(const Point& ptCaretPos, const Range& select) const; // 指定カーソル位置が選択エリア内にあるか
 	// 2006.07.09 genta 行桁指定によるカーソル移動(選択領域を考慮)
-	void MoveCursorSelecting(LayoutPoint ptWk_CaretPos, bool bSelect, int = _CARETMARGINRATE);
+	void MoveCursorSelecting(Point ptWk_CaretPos, bool bSelect, int = _CARETMARGINRATE);
 	void ConvSelectedArea(EFunctionCode);									// 選択エリアのテキストを指定方法で変換
 	// 指定位置または指定範囲がテキストの存在しないエリアかチェックする	// 2008.08.03 nasukoji
-	bool IsEmptyArea(LayoutPoint ptFrom, LayoutPoint ptTo = LayoutPoint(-1, -1), bool bSelect = false, bool bBoxSelect = false) const;
+	bool IsEmptyArea(Point ptFrom, Point ptTo = Point(-1, -1), bool bSelect = false, bool bBoxSelect = false) const;
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                         各種判定                            //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 public:
-	bool IsCurrentPositionURL(const LayoutPoint& ptCaretPos, LogicRange* pUrlRange, std::wstring* pwstrURL); // カーソル位置にURLが有る場合のその範囲を調べる
+	bool IsCurrentPositionURL(const Point& ptCaretPos, Range* pUrlRange, std::wstring* pwstrURL); // カーソル位置にURLが有る場合のその範囲を調べる
 	bool CheckTripleClick(Point ptMouse);							// トリプルクリックをチェックする	// 2007.10.02 nasukoji
 	
 	bool ExecCmd(const TCHAR*, int, const TCHAR*, OutputAdapter* = nullptr) ;			// 子プロセスの標準出力をリダイレクトする
@@ -362,9 +362,9 @@ public: // テスト用にアクセス属性を変更
 public:
 	// 指定位置の指定長データ削除
 	void DeleteData2(
-		const LayoutPoint&	ptCaretPos,
-		int					nDelLen,
-		NativeW*			pMem
+		const Point&	ptCaretPos,
+		int				nDelLen,
+		NativeW*		pMem
 	);
 
 	// 現在位置のデータ削除
@@ -372,33 +372,33 @@ public:
 
 	// 現在位置にデータを挿入
 	void InsertData_CEditView(
-		LayoutPoint	ptInsertPos,
+		Point	ptInsertPos,
 		const wchar_t*	pData,
 		size_t			nDataLen,
-		LayoutPoint*	pptNewPos,	// 挿入された部分の次の位置のデータ位置
+		Point*	pptNewPos,	// 挿入された部分の次の位置のデータ位置
 		bool			bRedraw
 	);
 
 	// データ置換 削除&挿入にも使える
 	void ReplaceData_CEditView(
-		const LayoutRange&	delRange,			// 削除範囲。レイアウト単位。
-		const wchar_t*		pInsData,			// 挿入するデータ
-		size_t				nInsDataLen,		// 挿入するデータの長さ
-		bool				bRedraw,
-		OpeBlk*				pOpeBlk,
-		bool				bFastMode = false,
-		const LogicRange*	psDelRangeLogicFast = nullptr
+		const Range&	delRange,			// 削除範囲。レイアウト単位。
+		const wchar_t*	pInsData,			// 挿入するデータ
+		size_t			nInsDataLen,		// 挿入するデータの長さ
+		bool			bRedraw,
+		OpeBlk*			pOpeBlk,
+		bool			bFastMode = false,
+		const Range*	psDelRangeLogicFast = nullptr
 	);
 	void ReplaceData_CEditView2(
-		const LogicRange&	delRange,			// 削除範囲。ロジック単位。
-		const wchar_t*		pInsData,			// 挿入するデータ
-		size_t				nInsDataLen,		// 挿入するデータの長さ
-		bool				bRedraw,
-		OpeBlk*				pOpeBlk,
-		bool				bFastMode = false
+		const Range&	delRange,			// 削除範囲。ロジック単位。
+		const wchar_t*	pInsData,			// 挿入するデータ
+		size_t			nInsDataLen,		// 挿入するデータの長さ
+		bool			bRedraw,
+		OpeBlk*			pOpeBlk,
+		bool			bFastMode = false
 	);
 	bool ReplaceData_CEditView3(
-		LayoutRange		delRange,			// 削除範囲。レイアウト単位。
+		Range		delRange,			// 削除範囲。レイアウト単位。
 		OpeLineData*	pMemCopyOfDeleted,	// 削除されたデータのコピー(nullptr可能)
 		OpeLineData*	pInsData,
 		bool			bRedraw,
@@ -406,7 +406,7 @@ public:
 		int				nDelSeq,
 		int*			pnInsSeq,
 		bool			bFastMode = false,
-		const LogicRange*	psDelRangeLogicFast = nullptr
+		const Range*	psDelRangeLogicFast = nullptr
 	);
 	void RTrimPrevLine(void);		// 2005.10.11 ryoji 前の行にある末尾の空白を削除
 
@@ -462,10 +462,10 @@ private:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 public:
 	//	Jun. 16, 2000 genta
-	bool  SearchBracket(const LayoutPoint& ptPos, LayoutPoint* pptLayoutNew, int* mode);	// 対括弧の検索		// modeの追加 02/09/18 ai
-	bool  SearchBracketForward(LogicPoint ptPos, LayoutPoint* pptLayoutNew,
+	bool  SearchBracket(const Point& ptPos, Point* pptLayoutNew, int* mode);	// 対括弧の検索		// modeの追加 02/09/18 ai
+	bool  SearchBracketForward(Point ptPos, Point* pptLayoutNew,
 						const wchar_t* upChar, const wchar_t* dnChar, int mode);	//	対括弧の前方検索	// modeの追加 02/09/19 ai
-	bool  SearchBracketBackward(LogicPoint ptPos, LayoutPoint* pptLayoutNew,
+	bool  SearchBracketBackward(Point ptPos, Point* pptLayoutNew,
 						const wchar_t* dnChar, const wchar_t* upChar, int mode);	//	対括弧の後方検索	// modeの追加 02/09/19 ai
 	void DrawBracketPair(bool);								// 対括弧の強調表示 02/09/18 ai
 	bool IsBracket(const wchar_t*, int, int);					// 括弧判定 03/01/09 ai
@@ -641,12 +641,12 @@ public:
 	bool			bDragMode;					// 選択テキストのドラッグ中か
 	CLIPFORMAT		cfDragData;					// ドラッグデータのクリップ形式	// 2008.06.20 ryoji
 	bool			bDragBoxData;				// ドラッグデータは矩形か
-	LayoutPoint		ptCaretPos_DragEnter;		// ドラッグ開始時のカーソル位置	// 2007.12.09 ryoji
+	Point			ptCaretPos_DragEnter;		// ドラッグ開始時のカーソル位置	// 2007.12.09 ryoji
 	int				nCaretPosX_Prev_DragEnter;	// ドラッグ開始時のX座標記憶	// 2007.12.09 ryoji
 
 	// 括弧
-	LogicPoint		ptBracketCaretPos_PHY;		// 前カーソル位置の括弧の位置 (改行単位行先頭からのバイト数(0開始), 改行単位行の行番号(0開始))
-	LogicPoint		ptBracketPairPos_PHY;		// 対括弧の位置 (改行単位行先頭からのバイト数(0開始), 改行単位行の行番号(0開始))
+	Point			ptBracketCaretPos_PHY;		// 前カーソル位置の括弧の位置 (改行単位行先頭からのバイト数(0開始), 改行単位行の行番号(0開始))
+	Point			ptBracketPairPos_PHY;		// 対括弧の位置 (改行単位行先頭からのバイト数(0開始), 改行単位行の行番号(0開始))
 	bool			bDrawBracketPairFlag;		// 対括弧の強調表示を行なうか						// 03/02/18 ai
 
 	// マウス
@@ -673,7 +673,7 @@ public:
 	int					nCurSearchKeySequence;	// 検索キーシーケンス
 	std::wstring		strCurSearchKey;		// 検索文字列
 	SearchOption		curSearchOption;		// 検索／置換  オプション
-	LogicPoint			ptSrchStartPos_PHY;		// 検索/置換開始時のカーソル位置 (改行単位行先頭からのバイト数(0開始), 改行単位行の行番号(0開始))
+	Point				ptSrchStartPos_PHY;		// 検索/置換開始時のカーソル位置 (改行単位行先頭からのバイト数(0開始), 改行単位行の行番号(0開始))
 	bool				bSearch;				// 検索/置換開始位置を登録するか											// 02/06/26 ai
 	SearchDirection		nISearchDirection;
 	int					nISearchMode;
@@ -681,7 +681,7 @@ public:
 	bool				bISearchFlagHistory[256];
 	int					nISearchHistoryCount;
 	bool				bISearchFirst;
-	LayoutRange			searchHistory[256];
+	Range				searchHistory[256];
 
 	// マクロ
 	bool			bExecutingKeyMacro;		// キーボードマクロの実行中

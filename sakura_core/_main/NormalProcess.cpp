@@ -108,7 +108,7 @@ bool NormalProcess::InitializeProcess()
 			// From Here Oct. 19, 2001 genta
 			// カーソル位置が引数に指定されていたら指定位置にジャンプ
 			if (fi.ptCursor.y >= 0) {	// 行の指定があるか
-				LogicPoint& pt = GetDllShareData().workBuffer.logicPoint;
+				Point& pt = GetDllShareData().workBuffer.logicPoint;
 				if (fi.ptCursor.x < 0) {
 					// 桁の指定が無い場合
 					::SendMessage(hwndOwner, MYWM_GETCARETPOS, 0, 0);
@@ -354,7 +354,7 @@ bool NormalProcess::InitializeProcess()
 				  →
 				  レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 				*/
-				LayoutPoint ptPos;
+				Point ptPos;
 				editDoc.layoutMgr.LogicToLayout(
 					fi.ptCursor,
 					&ptPos
@@ -363,7 +363,7 @@ bool NormalProcess::InitializeProcess()
 				// From Here Mar. 28, 2003 MIK
 				// 改行の真ん中にカーソルが来ないように。
 				// 2008.08.20 ryoji 改行単位の行番号を渡すように修正
-				const DocLine* pTmpDocLine = editDoc.docLineMgr.GetLine(fi.ptCursor.GetY2());
+				const DocLine* pTmpDocLine = editDoc.docLineMgr.GetLine(fi.ptCursor.y);
 				if (pTmpDocLine) {
 					if (pTmpDocLine->GetLengthWithoutEOL() < fi.ptCursor.x) {
 						ptPos.x--;
@@ -373,7 +373,7 @@ bool NormalProcess::InitializeProcess()
 
 				activeView.GetCaret().MoveCursor(ptPos, true);
 				activeView.GetCaret().nCaretPosX_Prev =
-					activeView.GetCaret().GetCaretLayoutPos().GetX2();
+					activeView.GetCaret().GetCaretLayoutPos().x;
 			}
 			activeView.RedrawAll();
 		}else {

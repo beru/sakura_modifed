@@ -27,7 +27,7 @@
 void ViewCommander::Command_Jump_SrchStartPos(void)
 {
 	if (view.ptSrchStartPos_PHY.BothNatural()) {
-		LayoutPoint pt;
+		Point pt;
 		// 範囲選択中か
 		GetDocument().layoutMgr.LogicToLayout(
 			view.ptSrchStartPos_PHY,
@@ -88,9 +88,9 @@ void ViewCommander::Command_Jump(void)
 			  →
 			  レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 			*/
-			LayoutPoint ptPosXY;
+			Point ptPosXY;
 			layoutMgr.LogicToLayout(
-				LogicPoint(0, nLineNum - 1),
+				Point(0, nLineNum - 1),
 				&ptPosXY
 			);
 			nLineNum = ptPosXY.y + 1;
@@ -106,7 +106,7 @@ void ViewCommander::Command_Jump(void)
 		view.AddCurrentLineToHistory();
 		// 2006.07.09 genta 選択状態を解除しないように
 		view.MoveCursorSelecting(
-			LayoutPoint(0, nLineNum - 1),
+			Point(0, nLineNum - 1),
 			view.GetSelectionInfo().bSelectingLock,
 			_CARETMARGINRATE / 3
 		);
@@ -129,9 +129,9 @@ void ViewCommander::Command_Jump(void)
 		  →
 		  物理位置(行頭からのバイト数、折り返し無し行位置)
 		*/
-		LogicPoint ptPosXY;
+		Point ptPosXY;
 		layoutMgr.LayoutToLogic(
-			LayoutPoint(0, nLineCount),
+			Point(0, nLineCount),
 			&ptPosXY
 		);
 		nLineCount = ptPosXY.y;
@@ -250,9 +250,9 @@ void ViewCommander::Command_Jump(void)
 	  →
 	  レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 	*/
-	LayoutPoint ptPos;
+	Point ptPos;
 	layoutMgr.LogicToLayout(
-		LogicPoint(0, nLineCount),
+		Point(0, nLineCount),
 		&ptPos
 	);
 	// Sep. 8, 2000 genta
@@ -273,18 +273,18 @@ void ViewCommander::Command_Bookmark_Set(void)
 	if (selInfo.IsTextSelected()
 		&& select.GetFrom().y < select.GetTo().y
 	) {
-		LogicPoint ptFrom;
-		LogicPoint ptTo;
+		Point ptFrom;
+		Point ptTo;
 		auto& layoutMgr = GetDocument().layoutMgr;
 		layoutMgr.LayoutToLogic(
-			LayoutPoint(0, select.GetFrom().y),
+			Point(0, select.GetFrom().y),
 			&ptFrom
 		);
 		layoutMgr.LayoutToLogic(
-			LayoutPoint(0, select.GetTo().y),
+			Point(0, select.GetTo().y),
 			&ptTo
 		);
-		for (int nY=ptFrom.GetY2(); nY<=ptTo.y; ++nY) {
+		for (int nY=ptFrom.y; nY<=ptTo.y; ++nY) {
 			pDocLine = lineMgr.GetLine(nY);
 			if (pDocLine) {
 				BookmarkSetter bookmark(pDocLine);
@@ -292,7 +292,7 @@ void ViewCommander::Command_Bookmark_Set(void)
 			}
 		}
 	}else {
-		pDocLine = lineMgr.GetLine(GetCaret().GetCaretLogicPos().GetY2());
+		pDocLine = lineMgr.GetLine(GetCaret().GetCaretLogicPos().y);
 		if (pDocLine) {
 			BookmarkSetter bookmark(pDocLine);
 			bookmark.SetBookmark(!bookmark.IsBookmarked());
@@ -312,16 +312,16 @@ void ViewCommander::Command_Bookmark_Next(void)
 	bool	bFound	=	false;	// hor
 	bool	bRedo	=	true;	// hor
 
-	LogicPoint	ptXY(0, GetCaret().GetCaretLogicPos().y);
+	Point ptXY(0, GetCaret().GetCaretLogicPos().y);
 	int tmp_y;
 
 	nYOld = ptXY.y;					// hor
 
 re_do:;								// hor
-	if (BookmarkManager(GetDocument().docLineMgr).SearchBookMark(ptXY.GetY2(), SearchDirection::Forward, &tmp_y)) {
+	if (BookmarkManager(GetDocument().docLineMgr).SearchBookMark(ptXY.y, SearchDirection::Forward, &tmp_y)) {
 		ptXY.y = tmp_y;
 		bFound = true;
-		LayoutPoint ptLayout;
+		Point ptLayout;
 		GetDocument().layoutMgr.LogicToLayout(ptXY, &ptLayout);
 		// 2006.07.09 genta 新規関数にまとめた
 		view.MoveCursorSelecting(ptLayout, view.GetSelectionInfo().bSelectingLock);
@@ -356,17 +356,17 @@ void ViewCommander::Command_Bookmark_Prev(void)
 	bool	bFound	=	false;	// hor
 	bool	bRedo	=	true;	// hor
 
-	LogicPoint	ptXY(0, GetCaret().GetCaretLogicPos().y);
+	Point ptXY(0, GetCaret().GetCaretLogicPos().y);
 	int tmp_y;
 
 	nYOld = ptXY.y;						// hor
 
 re_do:;								// hor
 	auto& docLineMgr = GetDocument().docLineMgr;
-	if (BookmarkManager(docLineMgr).SearchBookMark(ptXY.GetY2(), SearchDirection::Backward, &tmp_y)) {
+	if (BookmarkManager(docLineMgr).SearchBookMark(ptXY.y, SearchDirection::Backward, &tmp_y)) {
 		ptXY.y = tmp_y;
 		bFound = true;				// hor
-		LayoutPoint ptLayout;
+		Point ptLayout;
 		GetDocument().layoutMgr.LogicToLayout(ptXY, &ptLayout);
 		// 2006.07.09 genta 新規関数にまとめた
 		view.MoveCursorSelecting(ptLayout, view.GetSelectionInfo().bSelectingLock);
@@ -425,14 +425,14 @@ void ViewCommander::Command_Bookmark_Pattern(void)
 // 次の関数リストマークを探し，見つかったら移動する
 void ViewCommander::Command_FuncList_Next(void)
 {
-	LogicPoint	ptXY(0, GetCaret().GetCaretLogicPos().y);
+	Point ptXY(0, GetCaret().GetCaretLogicPos().y);
 	int nYOld = ptXY.y;
 
 	for (int n=0; n<2; ++n) {
 		if (FuncListManager().SearchFuncListMark(
 				GetDocument().docLineMgr,
-				ptXY.GetY2(), SearchDirection::Forward, &ptXY.y)) {
-			LayoutPoint ptLayout;
+				ptXY.y, SearchDirection::Forward, &ptXY.y)) {
+			Point ptLayout;
 			GetDocument().layoutMgr.LogicToLayout(ptXY,&ptLayout);
 			view.MoveCursorSelecting( ptLayout,
 				view.GetSelectionInfo().bSelectingLock );
@@ -457,18 +457,18 @@ void ViewCommander::Command_FuncList_Next(void)
 void ViewCommander::Command_FuncList_Prev(void)
 {
 
-	LogicPoint ptXY(0,GetCaret().GetCaretLogicPos().y);
+	Point ptXY(0,GetCaret().GetCaretLogicPos().y);
 	int nYOld = ptXY.y;
 	auto& docLineMgr = GetDocument().docLineMgr;
 	for (int n=0; n<2; ++n) {
 		if (FuncListManager().SearchFuncListMark(
 			docLineMgr,
-			ptXY.GetY2(),
+			ptXY.y,
 			SearchDirection::Backward,
 			&ptXY.y
 			)
 		) {
-			LayoutPoint ptLayout;
+			Point ptLayout;
 			GetDocument().layoutMgr.LogicToLayout(ptXY, &ptLayout);
 			view.MoveCursorSelecting(
 				ptLayout,

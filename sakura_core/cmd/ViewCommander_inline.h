@@ -56,7 +56,7 @@ inline void ViewCommander::SetOpeBlk(OpeBlk* p)
 	editor.nOpeBlkRedawCount = 0;
 }
 
-inline LayoutRange& ViewCommander::GetSelect()
+inline Range& ViewCommander::GetSelect()
 {
 	return view.GetSelectionInfo().select;
 }

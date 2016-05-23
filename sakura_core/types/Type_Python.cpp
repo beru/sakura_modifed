@@ -524,14 +524,14 @@ void DocOutline::MakeFuncList_python(FuncInfoArr* pFuncInfoArr)
 			  →
 			  レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 			*/
-			LayoutPoint ptPosXY;
+			Point ptPosXY;
 			doc.layoutMgr.LogicToLayout(
-				LogicPoint(0, nLineCount),
+				Point(0, nLineCount),
 				&ptPosXY
 			);
 			pFuncInfoArr->AppendData(
 				nLineCount + 1,
-				ptPosXY.GetY2() + 1,
+				ptPosXY.y + 1,
 				szWord,
 				nItemFuncId,
 				depth_index

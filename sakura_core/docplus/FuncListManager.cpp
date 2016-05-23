@@ -49,7 +49,7 @@ bool FuncListManager::SearchFuncListMark(
 	const DocLineMgr&	docLineMgr,
 	int					nLineNum,		// 検索開始行
 	SearchDirection		bPrevOrNext,
-	int*				pnLineNum 		// マッチ行
+	LONG*				pnLineNum 		// マッチ行
 	) const
 {
 	int nLinePos = nLineNum;

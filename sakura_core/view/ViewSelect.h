@@ -42,15 +42,15 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	void DisableSelectArea(bool bDraw, bool bDrawBracketCursorLine = true); // 現在の選択範囲を非選択状態に戻す
 
-	void BeginSelectArea(const LayoutPoint* po = nullptr);					// 現在のカーソル位置から選択を開始する
-	void ChangeSelectAreaByCurrentCursor(const LayoutPoint& ptCaretPos);	// 現在のカーソル位置によって選択範囲を変更
+	void BeginSelectArea(const Point* po = nullptr);					// 現在のカーソル位置から選択を開始する
+	void ChangeSelectAreaByCurrentCursor(const Point& ptCaretPos);	// 現在のカーソル位置によって選択範囲を変更
 	void ChangeSelectAreaByCurrentCursorTEST(
-		const LayoutPoint& ptCaretPos,
-		LayoutRange* pSelect);	// 現在のカーソル位置によって選択範囲を変更
+		const Point& ptCaretPos,
+		Range* pSelect);	// 現在のカーソル位置によって選択範囲を変更
 
 	// 選択範囲を指定する(原点未選択)
 	// 2005.06.24 Moca
-	void SetSelectArea(const LayoutRange& range) {
+	void SetSelectArea(const Range& range) {
 		selectBgn.Set(range.GetFrom());
 		select = range;
 	}
@@ -96,21 +96,21 @@ public:
 private:
 	void DrawSelectArea2(HDC) const;	// 指定範囲の選択領域の描画
 	void DrawSelectAreaLine(			// 指定行の選択領域の描画
-		HDC					hdc,		// [in] 描画領域のDevice Context Handle
-		int					nLineNum,	// [in] 描画対象行(レイアウト行)
-		const LayoutRange&	range		// [in] 選択範囲(レイアウト単位)
+		HDC hdc,		// [in] 描画領域のDevice Context Handle
+		int nLineNum,	// [in] 描画対象行(レイアウト行)
+		const Range& range		// [in] 選択範囲(レイアウト単位)
 	) const;
 public:
 	void GetSelectAreaLineFromRange(
-		LayoutRange& ret,
+		Range& ret,
 		int nLineNum,
 		const Layout* pLayout,
-		const LayoutRange& range) const;
-	void GetSelectAreaLine(LayoutRange& ret, int nLineNum, const Layout* pLayout) const {
+		const Range& range) const;
+	void GetSelectAreaLine(Range& ret, int nLineNum, const Layout* pLayout) const {
 		GetSelectAreaLineFromRange(ret, nLineNum, pLayout, select);
 	}
-	LayoutRange GetSelectAreaLine(int nLineNum, const Layout* pLayout) const {
-		LayoutRange ret;
+	Range GetSelectAreaLine(int nLineNum, const Layout* pLayout) const {
+		Range ret;
 		GetSelectAreaLineFromRange(ret, nLineNum, pLayout, select);
 		return ret;
 	}
@@ -168,9 +168,9 @@ public:
 
 	// 選択範囲を保持するための変数群
 	// これらはすべて折り返し行と、折り返し桁を保持している。
-	LayoutRange selectBgn; // 範囲選択(原点)
-	LayoutRange select;    // 範囲選択
-	LayoutRange selectOld; // 範囲選択Old
+	Range selectBgn; // 範囲選択(原点)
+	Range select;    // 範囲選択
+	Range selectOld; // 範囲選択Old
 
 	Point	ptMouseRollPosOld;	// マウス範囲選択前回位置(XY座標)
 };

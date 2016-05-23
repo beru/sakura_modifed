@@ -84,7 +84,7 @@ void EditView::ShowHokanMgr(NativeW& memData, bool bAutoDecided)
 	POINT		poWin;
 	// 補完ウィンドウの表示位置を算出
 	auto& textArea = GetTextArea();
-	int nX = GetCaret().GetCaretLayoutPos().GetX2() - textArea.GetViewLeftCol();
+	int nX = GetCaret().GetCaretLayoutPos().x - textArea.GetViewLeftCol();
 	if (nX < 0) {
 		poWin.x = 0;
 	}else if (textArea.nViewColNum < nX) {
@@ -92,7 +92,7 @@ void EditView::ShowHokanMgr(NativeW& memData, bool bAutoDecided)
 	}else {
 		poWin.x = textArea.GetAreaLeft() + nX * GetTextMetrics().GetHankakuDx();
 	}
-	int nY = GetCaret().GetCaretLayoutPos().GetY2() - textArea.GetViewTopLine();
+	int nY = GetCaret().GetCaretLayoutPos().y - textArea.GetViewTopLine();
 	if (nY < 0) {
 		poWin.y = 0;
 	}else if (textArea.nViewRowNum < nY) {
@@ -193,7 +193,7 @@ int EditView::HokanSearchByFile(
 	int nLines = pEditDoc->docLineMgr.GetLineCount();
 	int j, nWordLen, nLineLen, nRet, nCharSize, nWordBegin, nWordLenStop;
 
-	LogicPoint ptCur = GetCaret().GetCaretLogicPos(); // 物理カーソル位置
+	Point ptCur = GetCaret().GetCaretLogicPos(); // 物理カーソル位置
 
 	// キーが記号で始まるか
 	// キーの先頭が記号(#$@\)かどうか判定

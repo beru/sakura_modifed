@@ -484,7 +484,7 @@ int KeywordSetMgr::SetKeywordArr(
 		while (*ptr != L'\t' && *ptr != L'\0') {
 			++ptr;
 		}
-		int kwlen = ptr - pTop;
+		ptrdiff_t kwlen = ptr - pTop;
 		wmemcpy(szKeywordArr[i], pTop, kwlen);
 		szKeywordArr[i][kwlen] = L'\0';
 		++ptr;

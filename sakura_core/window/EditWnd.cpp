@@ -129,13 +129,13 @@ static void ShowCodeBox(HWND hWnd, EditDoc* pEditDoc)
 	const EditView* pView = &pEditDoc->pEditWnd->GetActiveView();
 	const Caret* pCaret = &pView->GetCaret();
 	const LayoutMgr* pLayoutMgr = &pEditDoc->layoutMgr;
-	const wchar_t* pLine = pLayoutMgr->GetLineStr(pCaret->GetCaretLayoutPos().GetY2(), &nLineLen, &pLayout);
+	const wchar_t* pLine = pLayoutMgr->GetLineStr(pCaret->GetCaretLayoutPos().y, &nLineLen, &pLayout);
 
 	// -- -- -- -- キャレット位置の文字情報 -> szCaretChar -- -- -- -- //
 	//
 	if (pLine) {
 		// 指定された桁に対応する行のデータ内の位置を調べる
-		int nIdx = pView->LineColumnToIndex(pLayout, pCaret->GetCaretLayoutPos().GetX2());
+		int nIdx = pView->LineColumnToIndex(pLayout, pCaret->GetCaretLayoutPos().x);
 		if (nIdx < nLineLen) {
 			if (nIdx < nLineLen - (pLayout->GetLayoutEol().GetLen() ? 1 : 0)) {
 				// 一時的に表示方法の設定を変更する
@@ -1874,8 +1874,8 @@ LRESULT EditWnd::DispatchEvent(
 			→
 			 レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 			*/
-			LogicPoint* ppoCaret = &(pShareData->workBuffer.logicPoint);
-			LayoutPoint ptCaretPos;
+			Point* ppoCaret = &(pShareData->workBuffer.logicPoint);
+			Point ptCaretPos;
 			GetDocument().layoutMgr.LogicToLayout(
 				*ppoCaret,
 				&ptCaretPos
@@ -1886,7 +1886,7 @@ LRESULT EditWnd::DispatchEvent(
 			//       2007.08.22現在ではアウトライン解析ダイアログから桁位置0で呼び出される
 			//       パターンしかないので実用上特に問題は無い。
 			if (!bSelect) {
-				const DocLine *pTmpDocLine = GetDocument().docLineMgr.GetLine(ppoCaret->GetY2());
+				const DocLine *pTmpDocLine = GetDocument().docLineMgr.GetLine(ppoCaret->y);
 				if (pTmpDocLine) {
 					if (pTmpDocLine->GetLengthWithoutEOL() < ppoCaret->x) ptCaretPos.x--;
 				}
@@ -1907,7 +1907,7 @@ LRESULT EditWnd::DispatchEvent(
 		物理位置(行頭からのバイト数、折り返し無し行位置)
 		*/
 		{
-			LogicPoint* ppoCaret = &(pShareData->workBuffer.logicPoint);
+			Point* ppoCaret = &(pShareData->workBuffer.logicPoint);
 			GetDocument().layoutMgr.LayoutToLogic(
 				GetActiveView().GetCaret().GetCaretLayoutPos(),
 				ppoCaret
@@ -4289,7 +4289,7 @@ void EditWnd::InitAllViews()
 		// 現在の選択範囲を非選択状態に戻す
 		view.GetSelectionInfo().DisableSelectArea(false);
 		view.OnChangeSetting();
-		view.GetCaret().MoveCursor(LayoutPoint(0, 0), true);
+		view.GetCaret().MoveCursor(Point(0, 0), true);
 		view.GetCaret().nCaretPosX_Prev = 0;
 	}
 	GetMiniMap().OnChangeSetting();
@@ -4528,7 +4528,7 @@ void EditWnd::ChangeLayoutParam(bool bShowProgress, int nTabSize, int nMaxLineKe
 	}
 
 	// 座標の保存
-	LogicPointEx* posSave = SavePhysPosOfAllView();
+	PointEx* posSave = SavePhysPosOfAllView();
 
 	// レイアウトの更新
 	GetDocument().layoutMgr.ChangeLayoutParam(nTabSize, nMaxLineKetas);
@@ -4570,17 +4570,17 @@ void EditWnd::ChangeLayoutParam(bool bShowProgress, int nTabSize, int nMaxLineKe
 	@date 2007.09.06 kobake 戻り値をLogicPoint*に変更
 	@date 2011.12.28 LogicPointをLogicPointExに変更。改行より右側でも復帰できるように
 */
-LogicPointEx* EditWnd::SavePhysPosOfAllView()
+PointEx* EditWnd::SavePhysPosOfAllView()
 {
 	const int numOfViews = GetAllViewCount();
 	const int numOfPositions = 6;
 	
-	LogicPointEx* pptPosArray = new LogicPointEx[numOfViews * numOfPositions];
+	PointEx* pptPosArray = new PointEx[numOfViews * numOfPositions];
 	auto& layoutMgr = GetDocument().layoutMgr;
 	for (int i=0; i<numOfViews; ++i) {
 		auto& view = GetView(i);
-		LayoutPoint tmp = LayoutPoint(0, view.pTextArea->GetViewTopLine());
-		const Layout* layoutLine = layoutMgr.SearchLineByLayoutY(tmp.GetY2());
+		Point tmp = Point(0, view.pTextArea->GetViewTopLine());
+		const Layout* layoutLine = layoutMgr.SearchLineByLayoutY(tmp.y);
 		if (layoutLine) {
 			int nLineCenter = layoutLine->GetLogicOffset() + layoutLine->GetLengthWithoutEOL() / 2;
 			pptPosArray[i * numOfPositions + 0].x = nLineCenter;
@@ -4632,20 +4632,20 @@ LogicPointEx* EditWnd::SavePhysPosOfAllView()
 	@date 2007.09.06 kobake 引数をLogicPoint*に変更
 	@date 2011.12.28 LogicPointをLogicPointExに変更。改行より右側でも復帰できるように
 */
-void EditWnd::RestorePhysPosOfAllView(LogicPointEx* pptPosArray)
+void EditWnd::RestorePhysPosOfAllView(PointEx* pptPosArray)
 {
 	const int numOfViews = GetAllViewCount();
 	const int numOfPositions = 6;
 
 	auto& layoutMgr = GetDocument().layoutMgr;
 	for (int i=0; i<numOfViews; ++i) {
-		LayoutPoint tmp;
+		Point tmp;
 		layoutMgr.LogicToLayoutEx(
 			pptPosArray[i * numOfPositions + 0],
 			&tmp
 		);
 		auto& view = GetView(i);
-		view.pTextArea->SetViewTopLine(tmp.GetY2());
+		view.pTextArea->SetViewTopLine(tmp.y);
 		auto& selInfo = view.GetSelectionInfo();
 		if (selInfo.selectBgn.GetFrom().y >= 0) {
 			layoutMgr.LogicToLayoutEx(
@@ -4671,14 +4671,14 @@ void EditWnd::RestorePhysPosOfAllView(LogicPointEx* pptPosArray)
 				selInfo.select.GetToPointer()
 			);
 		}
-		LayoutPoint ptPosXY;
+		Point ptPosXY;
 		layoutMgr.LogicToLayoutEx(
 			pptPosArray[i * numOfPositions + 5],
 			&ptPosXY
 		);
 		auto& caret = view.GetCaret();
 		caret.MoveCursor(ptPosXY, false); // 2013.06.05 bScrollをtrue=>falase
-		caret.nCaretPosX_Prev = caret.GetCaretLayoutPos().GetX2();
+		caret.nCaretPosX_Prev = caret.GetCaretLayoutPos().x;
 
 		int nLeft = 0;
 		auto& textArea = view.GetTextArea();

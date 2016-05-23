@@ -798,20 +798,20 @@ int EditView::GetRightEdgeForScrollBar(void)
 		if (GetSelectionInfo().IsTextSelected()) {
 			// 開始位置・終了位置のより右側にある方で比較
 			auto& select = GetSelectionInfo().select;
-			if (select.GetFrom().GetX2() < select.GetTo().GetX2()) {
-				if (nRightEdge < select.GetTo().GetX2()) {
-					nRightEdge = select.GetTo().GetX2();
+			if (select.GetFrom().x < select.GetTo().x) {
+				if (nRightEdge < select.GetTo().x) {
+					nRightEdge = select.GetTo().x;
 				}
 			}else {
-				if (nRightEdge < select.GetFrom().GetX2()) {
-					nRightEdge = select.GetFrom().GetX2();
+				if (nRightEdge < select.GetFrom().x) {
+					nRightEdge = select.GetFrom().x;
 				}
 			}
 		}
 
 		// フリーカーソルモード かつ キャレット位置がテキストの幅より右側
-		if (GetDllShareData().common.general.bIsFreeCursorMode && nRightEdge < GetCaret().GetCaretLayoutPos().GetX2())
-			nRightEdge = GetCaret().GetCaretLayoutPos().GetX2();
+		if (GetDllShareData().common.general.bIsFreeCursorMode && nRightEdge < GetCaret().GetCaretLayoutPos().x)
+			nRightEdge = GetCaret().GetCaretLayoutPos().x;
 
 		// 右マージン分（3桁）を考慮しつつnWidthを超えないようにする
 		nWidth = (nRightEdge + 3 < nWidth) ? (nRightEdge + 3) : nWidth;

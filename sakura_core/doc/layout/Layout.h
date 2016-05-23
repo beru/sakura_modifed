@@ -38,7 +38,7 @@ public:
 	// 2007.08.23 kobake コンストラクタでメンバ変数を初期化するようにした
 	Layout(
 		const DocLine*	pDocLine,		// 実データへの参照
-		LogicPoint		ptLogicPos,		// 実データ参照位置
+		Point			ptLogicPos,		// 実データ参照位置
 		size_t			nLength,		// 実データ内データ長
 		EColorIndexType	nTypePrev,
 		int				nTypeIndent,
@@ -65,9 +65,9 @@ public:
 	size_t GetIndent() const { return nIndent; }	// このレイアウト行のインデントサイズを取得。単位は半角文字。	CMemoryIterator用
 
 	// 取得インターフェース
-	int GetLogicLineNo() const { if (this) return ptLogicPos.GetY2(); else return -1; } //$$$高速化
-	int GetLogicOffset() const { return ptLogicPos.GetX2(); }
-	LogicPoint GetLogicPos() const { return ptLogicPos; }
+	int GetLogicLineNo() const { if (this) return ptLogicPos.y; else return -1; } //$$$高速化
+	int GetLogicOffset() const { return ptLogicPos.x; }
+	Point GetLogicPos() const { return ptLogicPos; }
 	EColorIndexType GetColorTypePrev() const { return nTypePrev; } //#########汚っ
 	size_t GetLayoutWidth() const { return nLayoutWidth; }		// 2009.08.28 nasukoji	このレイアウト行の改行を含むレイアウト長を返す
 
@@ -113,7 +113,7 @@ private:
 
 	// データ参照範囲
 	const DocLine*		pDocLine;		// 実データへの参照
-	LogicPoint			ptLogicPos;		// 対応するロジック参照位置
+	Point				ptLogicPos;		// 対応するロジック参照位置
 	size_t				nLength;		// このレイアウト行の長さ。文字単位。
 	
 	// その他属性

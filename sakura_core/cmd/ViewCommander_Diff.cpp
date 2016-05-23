@@ -39,8 +39,8 @@ static bool Commander_COMPARE_core(
 	ViewCommander& commander,
 	bool& bDifferent,
 	HWND hwnd,
-	LogicPoint& poSrc,
-	LogicPoint& poDes
+	Point& poSrc,
+	Point& poDes
 	)
 {
 	const wchar_t*	pLineSrc;
@@ -152,17 +152,17 @@ void ViewCommander::Command_Compare(void)
 	  →
 	  物理位置(行頭からのバイト数、折り返し無し行位置)
 	*/
-	LogicPoint	poSrc;
+	Point poSrc;
 	GetDocument().layoutMgr.LayoutToLogic(
 		GetCaret().GetCaretLayoutPos(),
 		&poSrc
 	);
 
 	// カーソル位置取得 -> poDes
-	LogicPoint	poDes;
+	Point poDes;
 	{
 		::SendMessage(hwndCompareWnd, MYWM_GETCARETPOS, 0, 0);
-		LogicPoint* ppoCaretDes = &(GetDllShareData().workBuffer.logicPoint);
+		Point* ppoCaretDes = &(GetDllShareData().workBuffer.logicPoint);
 		poDes.x = ppoCaretDes->x;
 		poDes.y = ppoCaretDes->y;
 	}
@@ -418,16 +418,16 @@ void ViewCommander::Command_Diff_Next(void)
 	bool bFound = false;
 	bool bRedo = true;
 
-	LogicPoint	ptXY(0, GetCaret().GetCaretLogicPos().y);
+	Point ptXY(0, GetCaret().GetCaretLogicPos().y);
 	int nYOld_Logic = ptXY.y;
 	size_t tmp_y;
 	auto& selInfo = view.GetSelectionInfo();
 
 re_do:;	
-	if (DiffLineMgr(GetDocument().docLineMgr).SearchDiffMark(ptXY.GetY2(), SearchDirection::Forward, &tmp_y)) {
+	if (DiffLineMgr(GetDocument().docLineMgr).SearchDiffMark(ptXY.y, SearchDirection::Forward, &tmp_y)) {
 		ptXY.y = tmp_y;
 		bFound = true;
-		LayoutPoint ptXY_Layout;
+		Point ptXY_Layout;
 		GetDocument().layoutMgr.LogicToLayout(ptXY, &ptXY_Layout);
 		if (selInfo.bSelectingLock) {
 			if (!selInfo.IsTextSelected()) {
@@ -473,16 +473,16 @@ void ViewCommander::Command_Diff_Prev(void)
 	bool bFound = false;
 	bool bRedo = true;
 
-	LogicPoint	ptXY(0, GetCaret().GetCaretLogicPos().y);
+	Point ptXY(0, GetCaret().GetCaretLogicPos().y);
 	int			nYOld_Logic = ptXY.y;
 	size_t		tmp_y;
 	auto& selInfo = view.GetSelectionInfo();
 
 re_do:;
-	if (DiffLineMgr(GetDocument().docLineMgr).SearchDiffMark(ptXY.GetY2(), SearchDirection::Backward, &tmp_y)) {
+	if (DiffLineMgr(GetDocument().docLineMgr).SearchDiffMark(ptXY.y, SearchDirection::Backward, &tmp_y)) {
 		ptXY.y = tmp_y;
 		bFound = true;
-		LayoutPoint ptXY_Layout;
+		Point ptXY_Layout;
 		GetDocument().layoutMgr.LogicToLayout(ptXY, &ptXY_Layout);
 		if (selInfo.bSelectingLock) {
 			if (!selInfo.IsTextSelected()) {

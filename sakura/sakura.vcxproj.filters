@@ -529,18 +529,6 @@
     <ClInclude Include="..\sakura_core\basis\MyString.h">
       <Filter>Cpp Source Files\basis</Filter>
     </ClInclude>
-    <ClInclude Include="..\sakura_core\basis\StrictInteger.h">
-      <Filter>Cpp Source Files\basis</Filter>
-    </ClInclude>
-    <ClInclude Include="..\sakura_core\basis\StrictPoint.h">
-      <Filter>Cpp Source Files\basis</Filter>
-    </ClInclude>
-    <ClInclude Include="..\sakura_core\basis\StrictRange.h">
-      <Filter>Cpp Source Files\basis</Filter>
-    </ClInclude>
-    <ClInclude Include="..\sakura_core\basis\StrictRect.h">
-      <Filter>Cpp Source Files\basis</Filter>
-    </ClInclude>
     <ClInclude Include="..\sakura_core\basis\primitive.h">
       <Filter>Cpp Source Files\basis</Filter>
     </ClInclude>
@@ -1081,6 +1069,9 @@
     <ClInclude Include="..\sakura_core\debug\trace.h">
       <Filter>Cpp Source Files\debug</Filter>
     </ClInclude>
+    <ClInclude Include="..\sakura_core\basis\MyRange.h">
+      <Filter>Cpp Source Files\basis</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\sakura_core\Funccode_x.hsrc">
@@ -1481,18 +1472,6 @@
       <Filter>Cpp Source Files\basis</Filter>
     </ClCompile>
     <ClCompile Include="..\sakura_core\basis\MyString.cpp">
-      <Filter>Cpp Source Files\basis</Filter>
-    </ClCompile>
-    <ClCompile Include="..\sakura_core\basis\StrictInteger.cpp">
-      <Filter>Cpp Source Files\basis</Filter>
-    </ClCompile>
-    <ClCompile Include="..\sakura_core\basis\StrictPoint.cpp">
-      <Filter>Cpp Source Files\basis</Filter>
-    </ClCompile>
-    <ClCompile Include="..\sakura_core\basis\StrictRange.cpp">
-      <Filter>Cpp Source Files\basis</Filter>
-    </ClCompile>
-    <ClCompile Include="..\sakura_core\basis\StrictRect.cpp">
       <Filter>Cpp Source Files\basis</Filter>
     </ClCompile>
     <ClCompile Include="..\sakura_core\basis\SakuraBasis.cpp">

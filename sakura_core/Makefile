@@ -84,10 +84,6 @@ basis/MyRect.o \
 basis/MySize.o \
 basis/MyString.o \
 basis/SakuraBasis.o \
-basis/StrictInteger.o \
-basis/StrictPoint.o \
-basis/StrictRange.o \
-basis/StrictRect.o \
 charset/Cesu8.o \
 charset/charcode.o \
 charset/charset.o \

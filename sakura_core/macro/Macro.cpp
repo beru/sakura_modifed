@@ -1551,7 +1551,7 @@ bool Macro::HandleFunction(
 				size_t nLength;
 				int nLine;
 				if (varCopy.data.lVal == 0) {
-					nLine = view.GetCaret().GetCaretLogicPos().GetY2();
+					nLine = view.GetCaret().GetCaretLogicPos().y;
 				}else {
 					nLine = varCopy.data.lVal - 1;
 				}
@@ -2092,8 +2092,8 @@ bool Macro::HandleFunction(
 				return false;
 			}
 
-			LayoutPoint nLayoutPos(nLineCol, nLineNum);
-			LogicPoint nLogicPos(0, 0);
+			Point nLayoutPos(nLineCol, nLineNum);
+			Point nLogicPos(0, 0);
 			view.pEditDoc->layoutMgr.LayoutToLogic(nLayoutPos, &nLogicPos);
 			int ret = nLogicPos.GetX() + 1;
 			Wrap(&result)->Receive(ret);
@@ -2119,10 +2119,10 @@ bool Macro::HandleFunction(
 				return false;
 			}
 
-			LogicPoint nLogicPos(nLineIdx, nLineNum);
-			LayoutPoint nLayoutPos(0, 0);
+			Point nLogicPos(nLineIdx, nLineNum);
+			Point nLayoutPos(0, 0);
 			view.pEditDoc->layoutMgr.LogicToLayout(nLogicPos, &nLayoutPos);
-			int ret = ((LOWORD(id) == F_LOGICTOLAYOUTLINENUM) ? nLayoutPos.GetY2() : nLayoutPos.GetX2()) + 1;
+			int ret = ((LOWORD(id) == F_LOGICTOLAYOUTLINENUM) ? nLayoutPos.y : nLayoutPos.x) + 1;
 			Wrap(&result)->Receive(ret);
 		}
 		return true;
@@ -2272,7 +2272,7 @@ bool Macro::HandleFunction(
 				const int offset(varCopy2.data.lVal - 1);
 				const Layout tmpLayout(
 					&tmpDocLine,
-					LogicPoint(0, 0),
+					Point(0, 0),
 					tmpLenWithEol1,
 					COLORIDX_TEXT,
 					offset,
@@ -2353,7 +2353,7 @@ bool Macro::HandleFunction(
 			if (!variant_to_int(args[1], nAttType)) return false;
 			int nLine;
 			if (nLineNum == 0) {
-				nLine = view.GetCaret().GetCaretLogicPos().GetY2();
+				nLine = view.GetCaret().GetCaretLogicPos().y;
 			}else if (nLineNum < 0) {
 				return false;
 			}else {

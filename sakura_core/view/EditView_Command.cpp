@@ -82,7 +82,7 @@ bool EditView::TagJumpSub(
 
 // 2004/06/21 novice タグジャンプ機能追加
 // 2004/07/05 みちばな
-// 同一ファイルだとSendMesssageで GetCaret().GetCaretLayoutPos().GetX2(),GetCaret().GetCaretLayoutPos().GetY2()が更新されてしまい、
+// 同一ファイルだとSendMesssageで GetCaret().GetCaretLayoutPos().GetX2(),GetCaret().GetCaretLayoutPos().yが更新されてしまい、
 // ジャンプ先の場所がジャンプ元として保存されてしまっているので、
 // その前で保存するように変更。
 

@@ -58,6 +58,7 @@ public:
 	void SetY(int _y) { y = _y; }
 	void Offset(int _x, int _y) { x += _x; y += _y; }
 	void Offset(const Point& pt) { x += pt.x; y += pt.y; }
+	void Clear() { x = y = 0; }
 
 	// æ“¾
 	int GetX() const { return x; }
@@ -86,35 +87,9 @@ public:
 	@return 0  pt1 == pt2
 	@return >0 pt1 >  pt2
 */
-template <class POINT_T>
-inline int PointCompare(const POINT_T& pt1, const POINT_T& pt2)
+inline int PointCompare(const Point& pt1, const Point& pt2)
 {
 	if (pt1.y != pt2.y) return pt1.y - pt2.y;
 	return pt1.x - pt2.x;
-}
-
-
-// 2“_‚ğ‘ÎŠp‚Æ‚·‚é‹éŒ`‚ğ‹‚ß‚é
-template <class POINT_T>
-inline void TwoPointToRect(
-	RECT*	pRect,
-	POINT_T	pt1,
-	POINT_T	pt2
-)
-{
-	if (pt1.y < pt2.y) {
-		pRect->top = pt1.y;
-		pRect->bottom = pt2.y;
-	}else {
-		pRect->top = pt2.y;
-		pRect->bottom = pt1.y;
-	}
-	if (pt1.x < pt2.x) {
-		pRect->left	= pt1.x;
-		pRect->right = pt2.x;
-	}else {
-		pRect->left = pt2.x;
-		pRect->right = pt1.x;
-	}
 }
 

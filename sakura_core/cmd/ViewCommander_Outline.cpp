@@ -162,22 +162,22 @@ bool ViewCommander::Command_FuncList(
 	_tcscpy(funcInfoArr.szFilePath, GetDocument().docFile.GetFilePath());
 
 	// アウトライン ダイアログの表示
-	LayoutPoint poCaret = GetCaret().GetCaretLayoutPos();
+	Point poCaret = GetCaret().GetCaretLayoutPos();
 	if (!dlgFuncList.GetHwnd()) {
 		dlgFuncList.DoModeless(
 			G_AppInstance(),
 			view.GetHwnd(),
 			(LPARAM)&view,
 			&funcInfoArr,
-			poCaret.GetY2() + 1,
-			poCaret.GetX2() + 1,
+			poCaret.y + 1,
+			poCaret.x + 1,
 			nOutlineType,
 			nListType,
 			view.pTypeData->bLineNumIsCRLF	// 行番号の表示 false=折り返し単位／true=改行単位
 		);
 	}else {
 		// アクティブにする
-		dlgFuncList.Redraw(nOutlineType, nListType, &funcInfoArr, poCaret.GetY2() + 1, poCaret.GetX2() + 1);
+		dlgFuncList.Redraw(nOutlineType, nListType, &funcInfoArr, poCaret.y + 1, poCaret.x + 1);
 		if (bForeground) {
 			::SetFocus(dlgFuncList.GetHwnd());
 		}

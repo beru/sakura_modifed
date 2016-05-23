@@ -97,7 +97,7 @@ bool ViewCommander::Command_TagJump(bool bClose)
 	  →
 	  物理位置(行頭からのバイト数、折り返し無し行位置)
 	*/
-	LogicPoint ptXY, ptXYOrg;
+	Point ptXY, ptXYOrg;
 	GetDocument().layoutMgr.LayoutToLogic(
 		GetCaret().GetCaretLayoutPos(),
 		&ptXY
@@ -107,7 +107,7 @@ bool ViewCommander::Command_TagJump(bool bClose)
 	// 現在行のデータを取得
 	size_t			nLineLen;
 	const wchar_t*	pLine;
-	pLine = GetDocument().docLineMgr.GetLine(ptXY.GetY2())->GetDocLineStrWithEOL(&nLineLen);
+	pLine = GetDocument().docLineMgr.GetLine(ptXY.y)->GetDocLineStrWithEOL(&nLineLen);
 	if (!pLine) {
 		goto can_not_tagjump;
 	}
@@ -240,7 +240,7 @@ bool ViewCommander::Command_TagJump(bool bClose)
 		ptXY.y--;
 
 		for (; 0<=ptXY.y; --ptXY.y) {
-			pLine = GetDocument().docLineMgr.GetLine(ptXY.GetY2())->GetDocLineStrWithEOL(&nLineLen);
+			pLine = GetDocument().docLineMgr.GetLine(ptXY.y)->GetDocLineStrWithEOL(&nLineLen);
 			if (!pLine) {
 				break;
 			}
@@ -304,7 +304,7 @@ bool ViewCommander::Command_TagJump(bool bClose)
 	}while (0);
 
 	if (szJumpToFile[0] == L'\0') {
-		pLine = GetDocument().docLineMgr.GetLine(ptXYOrg.GetY2())->GetDocLineStrWithEOL(&nLineLen);
+		pLine = GetDocument().docLineMgr.GetLine(ptXYOrg.y)->GetDocLineStrWithEOL(&nLineLen);
 		if (!pLine) {
 			goto can_not_tagjump;
 		}

@@ -46,7 +46,7 @@ public:
 	HWND GetMainWindow();
 	OpeBlk* GetOpeBlk();
 	void SetOpeBlk(OpeBlk* p);
-	LayoutRange& GetSelect();
+	Range& GetSelect();
 	Caret& GetCaret();
 
 private:
@@ -152,8 +152,8 @@ public:
 
 	// カーソル移動系
 	// Oct. 24, 2001 genta 機能拡張のため引数追加
-	void Command_MoveCursor(LogicPoint pos, int option);
-	void Command_MoveCursorLayout(LayoutPoint pos, int option);
+	void Command_MoveCursor(Point pos, int option);
+	void Command_MoveCursorLayout(Point pos, int option);
 	int Command_Up(bool bSelect, bool bRepeat, int line = 0);			// カーソル上移動
 	int Command_Down(bool bSelect, bool bRepeat);	// カーソル下移動
 	int Command_Left(bool, bool);					// カーソル左移動
@@ -194,7 +194,7 @@ public:
 	void Command_ModifyLine_Prev(bool bSelect);	// 前の変更行へ
 
 	// 選択系
-	bool Command_SelectWord(const LayoutPoint* pptCaretPos = nullptr);		// 現在位置の単語選択
+	bool Command_SelectWord(const Point* pptCaretPos = nullptr);		// 現在位置の単語選択
 	void Command_SelectAll(void);			// すべて選択
 	void Command_SelectLine(int lparam);	// 1行選択	// 2007.10.13 nasukoji
 	void Command_Begin_Select(void);		// 範囲選択開始
@@ -215,7 +215,7 @@ public:
 	//>> 2002/03/29 Azumaiya
 	void Command_InsBoxText(const wchar_t*, int); // 矩形貼り付け
 	void Command_InsText(bool bRedraw, const wchar_t*, size_t, bool bNoWaitCursor,
-		bool bLinePaste = false, bool bFastMode = false, const LogicRange* psDelRangeLogicFast = nullptr); // 2004.05.14 Moca テキストを貼り付け '\0'対応
+		bool bLinePaste = false, bool bFastMode = false, const Range* psDelRangeLogicFast = nullptr); // 2004.05.14 Moca テキストを貼り付け '\0'対応
 	void Command_AddTail(const wchar_t* pszData, size_t nDataLen);	// 最後にテキストを追加
 	void Command_CopyFileName(void);				// このファイル名をクリップボードにコピー // 2002/2/3 aroka
 	void Command_CopyPath(void);					// このファイルのパス名をクリップボードにコピー
@@ -262,7 +262,7 @@ public:
 	// 検索系
 	void Command_Search_Box(void);						// 検索(ボックス)	// 2006.06.04 yukihane
 	void Command_Search_Dialog(void);					// 検索(単語検索ダイアログ)
-	void Command_Search_Next(bool, bool, bool, HWND, const WCHAR*, LogicRange* = nullptr);// 次を検索
+	void Command_Search_Next(bool, bool, bool, HWND, const WCHAR*, Range* = nullptr);// 次を検索
 	void Command_Search_Prev(bool bReDraw, HWND);		// 前を検索
 	void Command_Replace_Dialog(void);					// 置換(置換ダイアログ)
 	void Command_Replace(HWND hwndParent);				// 置換(実行) 2002/04/08 YAZAKI 親ウィンドウを指定するように変更

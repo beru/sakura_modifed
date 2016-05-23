@@ -59,10 +59,10 @@ public:
 	class Mark {
 	public:
 		//	constructor
-		Mark(const LogicPoint& pt) : ptLogic(pt) { }
+		Mark(const Point& pt) : ptLogic(pt) { }
 
-		LogicPoint GetPosition() const { return ptLogic; }
-		void SetPosition(const LogicPoint& pt) { ptLogic = pt; }
+		Point GetPosition() const { return ptLogic; }
+		void SetPosition(const Point& pt) { ptLogic = pt; }
 
 		bool IsValid(void) const { return true; }
 
@@ -70,7 +70,7 @@ public:
 		bool operator != (Mark &r) const { return ptLogic.y != r.ptLogic.y; }
 
 	private:
-		LogicPoint ptLogic;
+		Point ptLogic;
 	};
 
 	// GENERATE_FACTORY(Mark, CMarkFactory);	//	Mark—pFactory class

@@ -113,28 +113,28 @@ public:
 	    検索に一致した文字列の先頭位置を返す(文字列先頭なら0)
 		@retval 検索に一致した文字列の先頭位置
 	*/
-	int GetIndex(void) {
+	ptrdiff_t GetIndex(void) {
 		return pRegExp->startp[0] - szTarget;
 	}
 	/*!
 	    検索に一致した文字列の次の位置を返す
 		@retval 検索に一致した文字列の次の位置
 	*/
-	int GetLastIndex(void) {
+	ptrdiff_t GetLastIndex(void) {
 		return pRegExp->endp[0] - szTarget;
 	}
 	/*!
 		検索に一致した文字列の長さを返す
 		@retval 検索に一致した文字列の長さ
 	*/
-	int GetMatchLen(void) {
+	ptrdiff_t GetMatchLen(void) {
 		return pRegExp->endp[0] - pRegExp->startp[0];
 	}
 	/*!
 		置換された文字列の長さを返す
 		@retval 置換された文字列の長さ
 	*/
-	int GetStringLen(void) {
+	ptrdiff_t GetStringLen(void) {
 		// 置換後文字列が０幅なら outp、outendpもNULLになる
 		// NULLポインタの引き算は問題なく０になる。
 		// outendpは '\0'なので、文字列長は +1不要

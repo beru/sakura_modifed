@@ -111,12 +111,12 @@ bool ColorStrategyInfo::CheckChangeColor(const StringRef& lineStr)
 	TypeSupport caretLineBg(view, COLORIDX_CARETLINEBG);
 	if (caretLineBg.IsDisp() && !view.bMiniMap) {
 		if (colorIdxBackLine == COLORIDX_CARETLINEBG) {
-			if (pDispPos->GetLayoutLineRef() != view.GetCaret().GetCaretLayoutPos().GetY2()) {
+			if (pDispPos->GetLayoutLineRef() != view.GetCaret().GetCaretLayoutPos().y) {
 				colorIdxBackLine = COLORIDX_TEXT;
 				bChange = true;
 			}
 		}else {
-			if (pDispPos->GetLayoutLineRef() == view.GetCaret().GetCaretLayoutPos().GetY2()) {
+			if (pDispPos->GetLayoutLineRef() == view.GetCaret().GetCaretLayoutPos().y) {
 				colorIdxBackLine = COLORIDX_CARETLINEBG;
 				bChange = true;
 			}

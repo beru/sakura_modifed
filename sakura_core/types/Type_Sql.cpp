@@ -174,12 +174,12 @@ void DocOutline::MakeFuncList_PLSQL(FuncInfoArr* pFuncInfoArr)
 							  →
 							  レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 							*/
-							LayoutPoint ptPos;
+							Point ptPos;
 							doc.layoutMgr.LogicToLayout(
-								LogicPoint(0, nFuncLine - 1),
+								Point(0, nFuncLine - 1),
 								&ptPos
 							);
-							pFuncInfoArr->AppendData(nFuncLine, ptPos.GetY2() + 1, szFuncName, nFuncId);
+							pFuncInfoArr->AppendData(nFuncLine, ptPos.y + 1, szFuncName, nFuncId);
 							nParseCnt = 0;
 						}
 						if (wcsicmp(szWord, L"AS") == 0) {
@@ -192,12 +192,12 @@ void DocOutline::MakeFuncList_PLSQL(FuncInfoArr* pFuncInfoArr)
 								  →
 								  レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 								*/
-								LayoutPoint ptPos;
+								Point ptPos;
 								doc.layoutMgr.LogicToLayout(
-									LogicPoint(0, nFuncLine - 1),
+									Point(0, nFuncLine - 1),
 									&ptPos
 								);
-								pFuncInfoArr->AppendData(nFuncLine, ptPos.GetY2() + 1 , szFuncName, nFuncId);
+								pFuncInfoArr->AppendData(nFuncLine, ptPos.y + 1 , szFuncName, nFuncId);
 								nParseCnt = 0;
 							}else if (nFuncOrProc == 4) {
 								nFuncId = 41;	// パッケージ本体
@@ -208,12 +208,12 @@ void DocOutline::MakeFuncList_PLSQL(FuncInfoArr* pFuncInfoArr)
 								  →
 								  レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 								*/
-								LayoutPoint ptPos;
+								Point ptPos;
 								doc.layoutMgr.LogicToLayout(
-									LogicPoint(0, nFuncLine - 1),
+									Point(0, nFuncLine - 1),
 									&ptPos
 								);
-								pFuncInfoArr->AppendData(nFuncLine, ptPos.GetY2() + 1 , szFuncName, nFuncId);
+								pFuncInfoArr->AppendData(nFuncLine, ptPos.y + 1 , szFuncName, nFuncId);
 								nParseCnt = 0;
 							}
 						}
@@ -306,12 +306,12 @@ void DocOutline::MakeFuncList_PLSQL(FuncInfoArr* pFuncInfoArr)
 						  →
 						  レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 						*/
-						LayoutPoint ptPos;
+						Point ptPos;
 						doc.layoutMgr.LogicToLayout(
-							LogicPoint(0, nFuncLine - 1),
+							Point(0, nFuncLine - 1),
 							&ptPos
 						);
-						pFuncInfoArr->AppendData(nFuncLine, ptPos.GetY2() + 1 , szFuncName, nFuncId);
+						pFuncInfoArr->AppendData(nFuncLine, ptPos.y + 1 , szFuncName, nFuncId);
 						nParseCnt = 0;
 					}
 					nMode = 0;

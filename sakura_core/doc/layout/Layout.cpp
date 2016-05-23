@@ -45,7 +45,7 @@ size_t Layout::CalcLayoutWidth(const LayoutMgr& layoutMgr) const
 
 	// ŒvŽZ
 	size_t nWidth = GetIndent();
-	for (int i=ptLogicPos.GetX2(); i<ptLogicPos.GetX2()+nLength; ++i) {
+	for (int i=ptLogicPos.x; i<ptLogicPos.x+nLength; ++i) {
 		if (pText[i] == WCODE::TAB) {
 			nWidth += layoutMgr.GetActualTabSpace(nWidth);
 		}else {

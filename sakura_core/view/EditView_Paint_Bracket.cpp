@@ -55,7 +55,7 @@ void EditView::SetBracketPairPos(bool flag)
 	*/
 	int	mode = 2;
 
-	LayoutPoint ptColLine;
+	Point ptColLine;
 	auto& caret = GetCaret();
 
 	if (1
@@ -146,8 +146,7 @@ void EditView::DrawBracketPair(bool bDraw)
 		//   ＃ { と } が異なる行にある場合に { を BS で消すと } の強調表示が解除されない問題（Wiki BugReport/89）の対策
 		//   ＃ この順序変更によりカーソル位置が括弧でなくなっていても対括弧があれば対括弧側の強調表示は解除される
 
-		LayoutPoint	ptColLine;
-
+		Point ptColLine;
 		if (i == 0) {
 			pEditDoc->layoutMgr.LogicToLayout(ptBracketPairPos_PHY,  &ptColLine);
 		}else {
@@ -169,10 +168,10 @@ void EditView::DrawBracketPair(bool bDraw)
 			}
 			const Layout* pLayout;
 			size_t nLineLen;
-			const wchar_t*	pLine = pEditDoc->layoutMgr.GetLineStr(ptColLine.GetY2(), &nLineLen, &pLayout);
+			const wchar_t*	pLine = pEditDoc->layoutMgr.GetLineStr(ptColLine.y, &nLineLen, &pLayout);
 			if (pLine) {
 				EColorIndexType nColorIndex;
-				int	OutputX = LineColumnToIndex(pLayout, ptColLine.GetX2());
+				int	OutputX = LineColumnToIndex(pLayout, ptColLine.x);
 				if (bDraw) {
 					nColorIndex = COLORIDX_BRACKET_PAIR;
 				}else {
@@ -183,7 +182,7 @@ void EditView::DrawBracketPair(bool bDraw)
 
 						// 03/10/24 ai 折り返し行のColorIndexが正しく取得できない問題に対応
 						// 2009.02.07 ryoji GetColorIndex に渡すインデックスの仕様変更（元はこっちの仕様だった模様）
-						Color3Setting cColor = GetColorIndex(pLayout, ptColLine.GetY2(), OutputX, csInfo);
+						Color3Setting cColor = GetColorIndex(pLayout, ptColLine.y, OutputX, csInfo);
 						nColorIndex = cColor.eColorIndex2;
 					}else {
 						SetBracketPairPos(false);
@@ -191,14 +190,14 @@ void EditView::DrawBracketPair(bool bDraw)
 					}
 				}
 				TypeSupport curetLineBg(*this, COLORIDX_CARETLINEBG);
-				EColorIndexType nColorIndexBg = (curetLineBg.IsDisp() && ptColLine.GetY2() == caret.GetCaretLayoutPos().GetY2()
+				EColorIndexType nColorIndexBg = (curetLineBg.IsDisp() && ptColLine.y == caret.GetCaretLayoutPos().y
 					? COLORIDX_CARETLINEBG
-					: TypeSupport(*this, COLORIDX_EVENLINEBG).IsDisp() && ptColLine.GetY2() % 2 == 1
+					: TypeSupport(*this, COLORIDX_EVENLINEBG).IsDisp() && ptColLine.y % 2 == 1
 						? COLORIDX_EVENLINEBG
 						: COLORIDX_TEXT);
 				// 03/03/03 ai カーソルの左に括弧があり括弧が強調表示されている状態でShift+←で選択開始すると
 				//             選択範囲内に反転表示されない部分がある問題の修正
-				int caretX = caret.GetCaretLayoutPos().GetX2();
+				int caretX = caret.GetCaretLayoutPos().x;
 				bool bCaretHide = (!bCaretChange && (ptColLine.x == caretX || ptColLine.x + 1 == caretX) && caret.GetCaretShowFlag());
 				if (bCaretHide) {
 					bCaretChange = true;
@@ -209,7 +208,7 @@ void EditView::DrawBracketPair(bool bDraw)
 					int nWidth  = GetTextMetrics().GetHankakuDx();
 					int nHeight = GetTextMetrics().GetHankakuDy();
 					int nLeft = (GetTextArea().GetDocumentLeftClientPointX()) + ptColLine.x * nWidth;
-					int nTop  = (ptColLine.GetY2() - GetTextArea().GetViewTopLine()) * nHeight + GetTextArea().GetAreaTop();
+					int nTop  = (ptColLine.y - GetTextArea().GetViewTopLine()) * nHeight + GetTextArea().GetAreaTop();
 					int charsWidth = NativeW::GetKetaOfChar(pLine, nLineLen, OutputX);
 
 					// 色設定
@@ -331,15 +330,15 @@ static const KAKKO_T g_aKakkos[] = {
 	@date Sep. 18, 2002 ai modeの追加
 */
 bool EditView::SearchBracket(
-	const LayoutPoint&	ptLayout,
-	LayoutPoint*		pptLayoutNew,
+	const Point&	ptLayout,
+	Point*		pptLayoutNew,
 	int*				mode
 	)
 {
 	size_t len;	//	行の長さ
-	LogicPoint ptPos;
+	Point ptPos;
 	pEditDoc->layoutMgr.LayoutToLogic(ptLayout, &ptPos);
-	const wchar_t* cline = pEditDoc->docLineMgr.GetLine(ptPos.GetY2())->GetDocLineStrWithEOL(&len);
+	const wchar_t* cline = pEditDoc->docLineMgr.GetLine(ptPos.y)->GetDocLineStrWithEOL(&len);
 
 	//	Jun. 19, 2000 genta
 	if (!cline)	//	最後の行に本文がない場合
@@ -402,8 +401,8 @@ bool EditView::SearchBracket(
 */
 // 03/01/08 ai
 bool EditView::SearchBracketForward(
-	LogicPoint		ptPos,
-	LayoutPoint*	pptLayoutNew,
+	Point	ptPos,
+	Point*	pptLayoutNew,
 	const wchar_t*	upChar,
 	const wchar_t*	dnChar,
 	int				mode
@@ -412,12 +411,12 @@ bool EditView::SearchBracketForward(
 	size_t len;
 	int level = 0;
 
-	LayoutPoint ptColLine;
+	Point ptColLine;
 
 	// 初期位置の設定
 	pEditDoc->layoutMgr.LogicToLayout(ptPos, &ptColLine);	// 02/09/19 ai
 	int nSearchNum = (GetTextArea().GetBottomLine()) - ptColLine.y;					// 02/09/19 ai
-	DocLine* ci = pEditDoc->docLineMgr.GetLine(ptPos.GetY2());
+	DocLine* ci = pEditDoc->docLineMgr.GetLine(ptPos.y);
 	const wchar_t* cline = ci->GetDocLineStrWithEOL(&len);
 	const wchar_t* lineend = cline + len;
 	const wchar_t* cPos = cline + ptPos.x;
@@ -489,8 +488,8 @@ bool EditView::SearchBracketForward(
 	@retval false 失敗
 */
 bool EditView::SearchBracketBackward(
-	LogicPoint		ptPos,
-	LayoutPoint*	pptLayoutNew,
+	Point	ptPos,
+	Point*	pptLayoutNew,
 	const wchar_t*	dnChar,
 	const wchar_t*	upChar,
 	int				mode
@@ -498,12 +497,12 @@ bool EditView::SearchBracketBackward(
 {
 	size_t len;
 	int level = 1;
-	LayoutPoint ptColLine;
+	Point ptColLine;
 
 	// 初期位置の設定
 	pEditDoc->layoutMgr.LogicToLayout(ptPos, &ptColLine);	// 02/09/19 ai
 	int nSearchNum = ptColLine.y - GetTextArea().GetViewTopLine();										// 02/09/19 ai
-	DocLine* ci = pEditDoc->docLineMgr.GetLine(ptPos.GetY2());
+	DocLine* ci = pEditDoc->docLineMgr.GetLine(ptPos.y);
 	const wchar_t* cline = ci->GetDocLineStrWithEOL(&len);
 	const wchar_t* cPos = cline + ptPos.x;
 

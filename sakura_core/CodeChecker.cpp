@@ -43,7 +43,7 @@ static bool _CheckSavingEolcode(
 static CodeConvertResult _CheckSavingCharcode(
 	const DocLineMgr& pcDocLineMgr,
 	EncodingType eCodeType,
-	LogicPoint& point,
+	Point& point,
 	NativeW& wc
 	)
 {
@@ -160,7 +160,7 @@ CallbackResultType CodeChecker::OnCheckSave(SaveInfo* pSaveInfo)
 	}
 
 	// 指定文字コードで安全に保存できるかどうか判定
-	LogicPoint point;
+	Point point;
 	NativeW memChar(L"", 0);
 	CodeConvertResult nTmpResult = _CheckSavingCharcode(
 		pDoc->docLineMgr, pSaveInfo->eCharCode,
@@ -199,7 +199,7 @@ CallbackResultType CodeChecker::OnCheckSave(SaveInfo* pSaveInfo)
 		case IDNO:		return CallbackResultType::Interrupt; // 中断
 		case IDCANCEL:
 			{
-				LogicPoint pt(point.x < 0 ? 0 : point.x, point.y);
+				Point pt(point.x < 0 ? 0 : point.x, point.y);
 				pDoc->pEditWnd->GetActiveView().GetCommander().Command_MoveCursor(pt, 0);
 			}
 			return CallbackResultType::Interrupt; //中断

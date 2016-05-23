@@ -46,7 +46,7 @@ struct EditInfo {
 	int nViewLeftCol;							// 表示域の一番左の桁(0開始)
 
 	// キャレット
-	LogicPoint ptCursor;								// キャレット位置
+	Point ptCursor;								// キャレット位置
 
 	// 各種状態
 	bool		bIsModified;							// 変更フラグ

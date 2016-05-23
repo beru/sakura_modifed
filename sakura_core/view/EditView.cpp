@@ -1076,10 +1076,10 @@ void EditView::OnSetFocus(void)
 	}
 	// 2004.04.02 Moca EOFのみのレイアウト行は、0桁目のみ有効.EOFより下の行のある場合は、EOF位置にする
 	{
-		LayoutPoint ptPos = GetCaret().GetCaretLayoutPos();
+		Point ptPos = GetCaret().GetCaretLayoutPos();
 		if (GetCaret().GetAdjustCursorPos(&ptPos)) {
 			GetCaret().MoveCursor(ptPos, false);
-			GetCaret().nCaretPosX_Prev = GetCaret().GetCaretLayoutPos().GetX2();
+			GetCaret().nCaretPosX_Prev = GetCaret().GetCaretLayoutPos().x;
 		}
 	}
 
@@ -1192,9 +1192,9 @@ void EditView::SetFont(void)
 	@date 2006.07.09 genta 新規作成
 */
 void EditView::MoveCursorSelecting(
-	LayoutPoint	ptWk_CaretPos,		// [in] 移動先レイアウト位置
-	bool		bSelect,			// true: 選択する  false: 選択解除
-	int			nCaretMarginRate	// 縦スクロール開始位置を決める値
+	Point	ptWk_CaretPos,		// [in] 移動先レイアウト位置
+	bool	bSelect,			// true: 選択する  false: 選択解除
+	int		nCaretMarginRate	// 縦スクロール開始位置を決める値
 	)
 {
 	if (bSelect) {
@@ -1220,7 +1220,7 @@ void EditView::MoveCursorSelecting(
 		GetSelectionInfo().ChangeSelectAreaByCurrentCursor(ptWk_CaretPos);
 	}
 	GetCaret().MoveCursor(ptWk_CaretPos, true, nCaretMarginRate);	// 2007.08.22 ryoji nCaretMarginRateが使われていなかった
-	GetCaret().nCaretPosX_Prev = GetCaret().GetCaretLayoutPos().GetX2();
+	GetCaret().nCaretPosX_Prev = GetCaret().GetCaretLayoutPos().x;
 }
 
 
@@ -1237,9 +1237,9 @@ void EditView::MoveCursorSelecting(
 	                 URLの強調表示OFFのチェックはこの関数内で行うように変更
 */
 bool EditView::IsCurrentPositionURL(
-	const LayoutPoint&	ptCaretPos,		// [in]  カーソル位置
-	LogicRange*			pUrlRange,		// [out] URL範囲。ロジック単位。
-	std::wstring*		pwstrURL		// [out] URL文字列受け取り先。NULLを指定した場合はURL文字列を受け取らない。
+	const Point& ptCaretPos,	// [in]  カーソル位置
+	Range* pUrlRange,			// [out] URL範囲。ロジック単位。
+	std::wstring* pwstrURL		// [out] URL文字列受け取り先。NULLを指定した場合はURL文字列を受け取らない。
 	)
 {
 	MY_RUNNINGTIMER(runningTimer, "EditView::IsCurrentPositionURL");
@@ -1275,19 +1275,19 @@ bool EditView::IsCurrentPositionURL(
 	  →
 	  物理位置(行頭からのバイト数、折り返し無し行位置)
 	*/
-	LogicPoint ptXY;
+	Point ptXY;
 	pEditDoc->layoutMgr.LayoutToLogic(
 		ptCaretPos,
 		&ptXY
 	);
 	size_t nLineLen;
-	const wchar_t* pLine = pEditDoc->docLineMgr.GetLine(ptXY.GetY2())->GetDocLineStrWithEOL(&nLineLen); // 2007.10.09 kobake レイアウト・ロジック混在バグ修正
+	const wchar_t* pLine = pEditDoc->docLineMgr.GetLine(ptXY.y)->GetDocLineStrWithEOL(&nLineLen); // 2007.10.09 kobake レイアウト・ロジック混在バグ修正
 
 	int nMatchColor;
 	int nUrlLen = 0;
-	int i = t_max(0, ptXY.GetX2() - _MAX_PATH);	// 2009.05.22 ryoji 200->_MAX_PATH
-	//nLineLen = __min(nLineLen, ptXY.GetX2() + _MAX_PATH);
-	while (i <= ptXY.GetX2() && i < nLineLen) {
+	int i = t_max(0, (int)ptXY.x - (int)_MAX_PATH);	// 2009.05.22 ryoji 200->_MAX_PATH
+	//nLineLen = __min(nLineLen, ptXY.x + _MAX_PATH);
+	while (i <= ptXY.x && i < nLineLen) {
 		bool bMatch = (bUseRegexKeyword
 					&& pRegexKeyword->RegexIsKeyword(StringRef(pLine, nLineLen), i, &nUrlLen, &nMatchColor)
 					&& nMatchColor == COLORIDX_URL);
@@ -1297,12 +1297,12 @@ bool EditView::IsCurrentPositionURL(
 						&& IsURL(&pLine[i], (nLineLen - i), &nUrlLen));	// 指定アドレスがURLの先頭ならばTRUEとその長さを返す
 		}
 		if (bMatch) {
-			if (i <= ptXY.GetX2() && ptXY.GetX2() < i + nUrlLen) {
+			if (i <= ptXY.x && ptXY.x < i + nUrlLen) {
 				// URLを返す場合
 				if (pwstrURL) {
 					pwstrURL->assign(&pLine[i], nUrlLen);
 				}
-				pUrlRange->SetLine(ptXY.GetY2());
+				pUrlRange->SetLine(ptXY.y);
 				pUrlRange->SetXs(i, i + nUrlLen);
 				return true;
 			}else {
@@ -1375,7 +1375,7 @@ void EditView::ConvSelectedArea(EFunctionCode nFuncCode)
 
 	NativeW memBuf;
 
-	LayoutPoint sPos;
+	Point sPos;
 
 	int	nIdxFrom;
 	int	nIdxTo;
@@ -1387,7 +1387,7 @@ void EditView::ConvSelectedArea(EFunctionCode nFuncCode)
 	size_t		nLineLen2;
 	WaitCursor waitCursor(GetHwnd());
 
-	LogicPoint ptFromLogic;	// 2009.07.18 ryoji Logicで記憶するように変更
+	Point ptFromLogic;	// 2009.07.18 ryoji Logicで記憶するように変更
 	pEditDoc->layoutMgr.LayoutToLogic(
 		GetSelectionInfo().select.GetFrom(),
 		&ptFromLogic
@@ -1397,7 +1397,7 @@ void EditView::ConvSelectedArea(EFunctionCode nFuncCode)
 	if (GetSelectionInfo().IsBoxSelecting()) {
 
 		// 2点を対角とする矩形を求める
-		LayoutRect	rcSelLayout;
+		Rect rcSelLayout;
 		TwoPointToRect(
 			&rcSelLayout,
 			GetSelectionInfo().select.GetFrom(),	// 範囲選択開始
@@ -1449,10 +1449,10 @@ void EditView::ConvSelectedArea(EFunctionCode nFuncCode)
 				
 				{
 					// 機能種別によるバッファの変換
-					ConvertMediator::ConvMemory(&memBuf, nFuncCode, pEditDoc->layoutMgr.GetTabSpace(), sPos.GetX2());
+					ConvertMediator::ConvMemory(&memBuf, nFuncCode, pEditDoc->layoutMgr.GetTabSpace(), sPos.x);
 
 					// 現在位置にデータを挿入
-					LayoutPoint ptLayoutNew;	// 挿入された部分の次の位置
+					Point ptLayoutNew;	// 挿入された部分の次の位置
 					InsertData_CEditView(
 						sPos,
 						memBuf.GetStringPtr(),
@@ -1463,13 +1463,13 @@ void EditView::ConvSelectedArea(EFunctionCode nFuncCode)
 
 					// カーソルを移動
 					GetCaret().MoveCursor(ptLayoutNew, false);
-					GetCaret().nCaretPosX_Prev = GetCaret().GetCaretLayoutPos().GetX2();
+					GetCaret().nCaretPosX_Prev = GetCaret().GetCaretLayoutPos().x;
 				}
 			}
 		}
 		// 挿入データの先頭位置へカーソルを移動
 		GetCaret().MoveCursor(rcSelLayout.UpperLeft(), true);
-		GetCaret().nCaretPosX_Prev = GetCaret().GetCaretLayoutPos().GetX2();
+		GetCaret().nCaretPosX_Prev = GetCaret().GetCaretLayoutPos().x;
 
 		if (!bDoing_UndoRedo) {	// Undo, Redoの実行中か
 			// 操作の追加
@@ -1485,7 +1485,7 @@ void EditView::ConvSelectedArea(EFunctionCode nFuncCode)
 		GetSelectedDataSimple(memBuf);
 
 		// 機能種別によるバッファの変換
-		ConvertMediator::ConvMemory(&memBuf, nFuncCode, pEditDoc->layoutMgr.GetTabSpace(), GetSelectionInfo().select.GetFrom().GetX2());
+		ConvertMediator::ConvMemory(&memBuf, nFuncCode, pEditDoc->layoutMgr.GetTabSpace(), GetSelectionInfo().select.GetFrom().x);
 
 		// データ置換 削除&挿入にも使える
 		ReplaceData_CEditView(
@@ -1498,14 +1498,14 @@ void EditView::ConvSelectedArea(EFunctionCode nFuncCode)
 
 		// From Here 2001.12.03 hor
 		//	選択エリアの復元
-		LayoutPoint ptFrom;	// 2009.07.18 ryoji LogicからLayoutに戻す
+		Point ptFrom;	// 2009.07.18 ryoji LogicからLayoutに戻す
 		pEditDoc->layoutMgr.LogicToLayout(
 			ptFromLogic,
 			&ptFrom
 		);
-		GetSelectionInfo().SetSelectArea(LayoutRange(ptFrom, GetCaret().GetCaretLayoutPos()));	// 2009.07.25 ryoji
+		GetSelectionInfo().SetSelectArea(Range(ptFrom, GetCaret().GetCaretLayoutPos()));	// 2009.07.25 ryoji
 		GetCaret().MoveCursor(GetSelectionInfo().select.GetTo(), true);
-		GetCaret().nCaretPosX_Prev = GetCaret().GetCaretLayoutPos().GetX2();
+		GetCaret().nCaretPosX_Prev = GetCaret().GetCaretLayoutPos().x;
 
 		if (!bDoing_UndoRedo) {	// Undo, Redoの実行中か
 			// 操作の追加
@@ -1882,7 +1882,7 @@ bool EditView::GetSelectedData(
 	}
 
 	if (GetSelectionInfo().IsBoxSelecting()) {	// 矩形範囲選択中
-		LayoutRect rcSel;
+		Rect rcSel;
 		// 2点を対角とする矩形を求める
 		TwoPointToRect(
 			&rcSel,
@@ -1954,7 +1954,7 @@ bool EditView::GetSelectedData(
 		//  無駄な容量確保が出ていますので、もう少し精度を上げたいところですが・・・。
 		//  とはいえ、逆に小さく見積もることになってしまうと、かなり速度をとられる要因になってしまうので
 		// 困ってしまうところですが・・・。
-		pEditDoc->layoutMgr.GetLineStr(GetSelectionInfo().select.GetFrom().GetY2(), &nLineLen, &pLayout);
+		pEditDoc->layoutMgr.GetLineStr(GetSelectionInfo().select.GetFrom().y, &nLineLen, &pLayout);
 		int nBufSize = 0;
 
 		int i = (GetSelectionInfo().select.GetTo().y - GetSelectionInfo().select.GetFrom().y);
@@ -1991,20 +1991,20 @@ bool EditView::GetSelectedData(
 		memBuf->AllocStringBuffer(nBufSize);
 		//>> 2002/04/18 Azumaiya
 
-		for (nLineNum=GetSelectionInfo().select.GetFrom().GetY2(); nLineNum<=GetSelectionInfo().select.GetTo().y; ++nLineNum) {
+		for (nLineNum=GetSelectionInfo().select.GetFrom().y; nLineNum<=GetSelectionInfo().select.GetTo().y; ++nLineNum) {
 			const wchar_t* pLine = pEditDoc->layoutMgr.GetLineStr(nLineNum, &nLineLen, &pLayout);
 			if (!pLine) {
 				break;
 			}
 			if (nLineNum == GetSelectionInfo().select.GetFrom().y) {
 				// 指定された桁に対応する行のデータ内の位置を調べる
-				nIdxFrom = LineColumnToIndex(pLayout, GetSelectionInfo().select.GetFrom().GetX2());
+				nIdxFrom = LineColumnToIndex(pLayout, GetSelectionInfo().select.GetFrom().x);
 			}else {
 				nIdxFrom = 0;
 			}
 			if (nLineNum == GetSelectionInfo().select.GetTo().y) {
 				// 指定された桁に対応する行のデータ内の位置を調べる
-				nIdxTo = LineColumnToIndex(pLayout, GetSelectionInfo().select.GetTo().GetX2());
+				nIdxTo = LineColumnToIndex(pLayout, GetSelectionInfo().select.GetTo().x);
 			}else {
 				nIdxTo = nLineLen;
 			}
@@ -2080,7 +2080,7 @@ bool EditView::GetSelectedDataOne(NativeW& memBuf, int nMaxLen)
 	if (selInfo.IsBoxSelecting()) {
 		// 矩形範囲選択(レイアウト処理)
 		const Layout* pLayout;
-		LayoutRect rcSel;
+		Rect rcSel;
 
 		// 2点を対角とする矩形を求める
 		TwoPointToRect(
@@ -2103,8 +2103,8 @@ bool EditView::GetSelectedDataOne(NativeW& memBuf, int nMaxLen)
 		}
 	}else {
 		// 線形選択(ロジック行処理)
-		LogicPoint ptFrom;
-		LogicPoint ptTo;
+		Point ptFrom;
+		Point ptTo;
 		layoutMgr.LayoutToLogic(select.GetFrom(), &ptFrom);
 		layoutMgr.LayoutToLogic(select.GetTo(),   &ptTo);
 		int targetY = ptFrom.y;
@@ -2135,15 +2135,15 @@ bool EditView::GetSelectedDataOne(NativeW& memBuf, int nMaxLen)
 	1	選択エリアより後方
 */
 int EditView::IsCurrentPositionSelected(
-	LayoutPoint	ptCaretPos		// カーソル位置
+	Point	ptCaretPos		// カーソル位置
 	)
 {
 	auto& selInfo = GetSelectionInfo();
 	if (!selInfo.IsTextSelected()) {	// テキストが選択されているか
 		return -1;
 	}
-	LayoutRect	rcSel;
-	LayoutPoint	po;
+	Rect	rcSel;
+	Point	po;
 	auto& select = selInfo.select;
 
 	// 矩形範囲選択中か
@@ -2228,8 +2228,8 @@ int EditView::IsCurrentPositionSelected(
 */
 // 2007.09.01 kobake 整理
 int EditView::IsCurrentPositionSelectedTEST(
-	const LayoutPoint& ptCaretPos,	// カーソル位置
-	const LayoutRange& select		//
+	const Point& ptCaretPos,	// カーソル位置
+	const Range& select		//
 	) const
 {
 	if (!GetSelectionInfo().IsTextSelected()) {	// テキストが選択されているか
@@ -2260,7 +2260,7 @@ void EditView::CopySelectedAllLines(
 		return;
 	}
 	{	// 選択範囲内の全行を選択状態にする
-		LayoutRange sSelect(GetSelectionInfo().select);
+		Range sSelect(GetSelectionInfo().select);
 		const Layout* pLayout = GetDocument().layoutMgr.SearchLineByLayoutY(sSelect.GetFrom().y);
 		if (!pLayout) return;
 		sSelect.SetFromX(pLayout->GetIndent());
@@ -2413,12 +2413,12 @@ void EditView::CaretUnderLineON(
 		&& bDraw
 		&& bCursorLineBg
 		&& GetDrawSwitch()
-		&& GetCaret().GetCaretLayoutPos().GetY2() >= textArea.GetViewTopLine()
+		&& GetCaret().GetCaretLayoutPos().y >= textArea.GetViewTopLine()
 		&& !bDoing_UndoRedo	// Undo, Redoの実行中か
 	) {
 		bCursorLineBgDraw = true;
 
-		nOldUnderLineY = GetCaret().GetCaretLayoutPos().GetY2();
+		nOldUnderLineY = GetCaret().GetCaretLayoutPos().y;
 		nOldUnderLineYBg = nOldUnderLineY;
 		nOldUnderLineYHeight = GetTextMetrics().GetHankakuDy();
 		if (bDrawPaint) {
@@ -2442,7 +2442,7 @@ void EditView::CaretUnderLineON(
 	// From Here 2007.09.09 Moca 互換BMPによる画面バッファ
 	if (bCursorVLine) {
 		// カーソル位置縦線。-1してキャレットの左に来るように。
-		nCursorVLineX = textArea.GetAreaLeft() + (GetCaret().GetCaretLayoutPos().GetX2() - textArea.GetViewLeftCol())
+		nCursorVLineX = textArea.GetAreaLeft() + (GetCaret().GetCaretLayoutPos().x - textArea.GetViewLeftCol())
 			* (pTypeData->nColumnSpace + GetTextMetrics().GetHankakuWidth()) - 1;
 	}
 
@@ -2481,7 +2481,7 @@ void EditView::CaretUnderLineON(
 	
 	int nUnderLineY = -1;
 	if (bUnderLine) {
-		nUnderLineY = textArea.GetAreaTop() + (GetCaret().GetCaretLayoutPos().GetY2() - textArea.GetViewTopLine())
+		nUnderLineY = textArea.GetAreaTop() + (GetCaret().GetCaretLayoutPos().y - textArea.GetViewTopLine())
 			 * GetTextMetrics().GetHankakuDy() + GetTextMetrics().GetHankakuHeight();
 	}
 	// To Here 2007.09.09 Moca
@@ -2495,7 +2495,7 @@ void EditView::CaretUnderLineON(
 		&& !DisalbeUnderLine
 	) {
 		if (!bCursorLineBgDraw || nOldUnderLineY == -1) {
-			nOldUnderLineY = GetCaret().GetCaretLayoutPos().GetY2();
+			nOldUnderLineY = GetCaret().GetCaretLayoutPos().y;
 			nOldUnderLineYBg = nOldUnderLineY;
 		}
 		nOldUnderLineYMargin = GetTextMetrics().GetHankakuHeight();
@@ -2574,7 +2574,7 @@ void EditView::CaretUnderLineOFF(
 			ps.rcPaint.bottom = ps.rcPaint.top + height;
 
 			//	不本意ながら選択情報をバックアップ。
-//			LayoutRange sSelectBackup = GetSelectionInfo().select;
+//			Range sSelectBackup = GetSelectionInfo().select;
 //			GetSelectionInfo().select.Clear(-1);
 
 			if (ps.rcPaint.bottom - ps.rcPaint.top) {
@@ -2618,7 +2618,7 @@ void EditView::CaretUnderLineOFF(
 			HDC hdc = ::GetDC(GetHwnd());
 			caret.underLine.Lock();
 			//	不本意ながら選択情報をバックアップ。
-			LayoutRange sSelectBackup = this->GetSelectionInfo().select;
+			Range sSelectBackup = this->GetSelectionInfo().select;
 			this->GetSelectionInfo().select.Clear(-1);
 			// 可能なら互換BMPからコピーして再作画
 			OnPaint(hdc, &ps, TRUE);
@@ -2685,7 +2685,7 @@ void EditView::OnAfterLoad(const LoadInfo& loadInfo)
 	GetSelectionInfo().DisableSelectArea(false);
 
 	OnChangeSetting();
-	GetCaret().MoveCursor(LayoutPoint(0, 0), true);
+	GetCaret().MoveCursor(Point(0, 0), true);
 	GetCaret().nCaretPosX_Prev = 0;
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
@@ -2702,7 +2702,7 @@ void EditView::OnAfterLoad(const LoadInfo& loadInfo)
 // 現在のカーソル行位置を履歴に登録する
 void EditView::AddCurrentLineToHistory(void)
 {
-	LogicPoint ptPos;
+	Point ptPos;
 
 	pEditDoc->layoutMgr.LayoutToLogic(GetCaret().GetCaretLayoutPos(), &ptPos);
 
@@ -2788,18 +2788,18 @@ bool EditView::ShowKeywordHelp(
 	@date 2008.08.03 nasukoji	新規作成
 */
 bool EditView::IsEmptyArea(
-	LayoutPoint ptFrom,
-	LayoutPoint ptTo,
+	Point ptFrom,
+	Point ptTo,
 	bool bSelect,
 	bool bBoxSelect
 	) const
 {
 	bool result;
 
-	int nColumnFrom = ptFrom.GetX2();
-	int nLineFrom = ptFrom.GetY2();
-	int nColumnTo = ptTo.GetX2();
-	int nLineTo = ptTo.GetY2();
+	int nColumnFrom = ptFrom.x;
+	int nLineFrom = ptFrom.y;
+	int nColumnTo = ptTo.x;
+	int nLineTo = ptTo.y;
 
 	if (bSelect && !bBoxSelect && nLineFrom != nLineTo) {	// 複数行の範囲指定
 		// 複数行通常選択した場合、必ずテキストを含む

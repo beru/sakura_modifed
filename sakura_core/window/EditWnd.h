@@ -255,8 +255,8 @@ public:
 	//	Aug. 14, 2005 genta TAB幅と折り返し位置の更新
 	void ChangeLayoutParam(bool bShowProgress, int nTabSize, int nMaxLineKetas);
 	//	Aug. 14, 2005 genta
-	LogicPointEx* SavePhysPosOfAllView();
-	void RestorePhysPosOfAllView(LogicPointEx* pptPosArray);
+	PointEx* SavePhysPosOfAllView();
+	void RestorePhysPosOfAllView(PointEx* pptPosArray);
 	// 互換BMPによる画面バッファ 2007.09.09 Moca
 	void Views_DeleteCompatibleBitmap(); // EditViewの画面バッファを削除
 	
@@ -396,7 +396,7 @@ private:
 	LPTSTR			pszMenubarMessage;		// メニューバー右端に表示するメッセージ
 public:
 	int				nTimerCount;			// OnTimer用 2003.08.29 wmlhq
-	LogicPointEx*	posSaveAry;
+	PointEx*		posSaveAry;
 private:
 	int				nCurrentFocus;				// 現在のフォーカス情報
 	int				nWinSizeType;				// サイズ変更のタイプ。SIZE_MAXIMIZED, SIZE_MINIMIZED 等。

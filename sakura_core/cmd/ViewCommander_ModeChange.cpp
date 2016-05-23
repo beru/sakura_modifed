@@ -103,12 +103,12 @@ void ViewCommander::Command_Cancel_Mode(int whereCursorIs)
 	auto& caret = GetCaret();
 	if (selInfo.IsTextSelected()) {
 		// 選択解除後のカーソル位置を決める。
-		LayoutPoint ptTo;
-		LayoutRange rcMoveTo = GetSelect();
+		Point ptTo;
+		Range rcMoveTo = GetSelect();
 		if (selInfo.IsBoxSelecting()) { // 矩形選択ではキャレットが改行の後ろに取り残されないように、左上。
 			bBoxSelect = true;
 			// 2点を対角とする矩形を求める
-			LayoutRange rcSel;
+			Range rcSel;
 			TwoPointToRange(
 				&rcSel,
 				GetSelect().GetFrom(),	// 範囲選択開始
@@ -138,12 +138,12 @@ void ViewCommander::Command_Cancel_Mode(int whereCursorIs)
 				// 2013.04.22 Moca 矩形選択のとき左上固定をやめたので代わりにEOLより右だった場合にEOLに補正する
 				const Layout* pLayout = layoutMgr.SearchLineByLayoutY(ptTo.y);
 				if (pLayout) {
-					ptTo.x = t_min(ptTo.x, (int)pLayout->CalcLayoutWidth(layoutMgr));
+					ptTo.x = t_min((int)ptTo.x, (int)pLayout->CalcLayoutWidth(layoutMgr));
 				}
 			}
 
 			caret.MoveCursor(ptTo, true);
-			caret.nCaretPosX_Prev = caret.GetCaretLayoutPos().GetX2();
+			caret.nCaretPosX_Prev = caret.GetCaretLayoutPos().x;
 		}
 	}else {
 		// 2011.12.05 Moca 選択中の未選択状態でもLockの解除と描画が必要

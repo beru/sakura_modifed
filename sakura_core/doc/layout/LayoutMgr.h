@@ -52,26 +52,26 @@ enum class KinsokuType {
 };
 
 struct LayoutReplaceArg {
-	LayoutRange	delRange;		// [in]削除範囲。レイアウト単位。
+	Range			delRange;		// [in]削除範囲。レイアウト単位。
 	OpeLineData*	pMemDeleted;	// [out]削除されたデータ
 	OpeLineData*	pInsData;		// [in/out]挿入するデータ
 	int		nAddLineNum;	// [out] 再描画ヒント レイアウト行の増減
 	int		nModLineFrom;	// [out] 再描画ヒント 変更されたレイアウト行From(レイアウト行の増減が0のとき使う)
 	int		nModLineTo;		// [out] 再描画ヒント 変更されたレイアウト行To(レイアウト行の増減が0のとき使う)
-	LayoutPoint	ptLayoutNew;	// [out]挿入された部分の次の位置の位置(レイアウト桁位置, レイアウト行)
+	Point	ptLayoutNew;	// [out]挿入された部分の次の位置の位置(レイアウト桁位置, レイアウト行)
 	int				nDelSeq;		// [in]削除行のOpeシーケンス
 	int				nInsSeq;		// [out]挿入行の元のシーケンス
 };
 
 // 編集時のテキスト最大幅算出用		// 2009.08.28 nasukoji
 struct CalTextWidthArg {
-	LayoutPoint	ptLayout;		// 編集開始位置
+	Point	ptLayout;		// 編集開始位置
 	int	nDelLines;		// 削除に関係する行数 - 1（負数の時削除なし）
 	int	nAllLinesOld;	// 編集前のテキスト行数
 	bool		bInsData;		// 追加文字列あり
 };
 
-class LogicPointEx: public LogicPoint {
+class PointEx: public Point {
 public:
 	size_t ext;
 };
@@ -125,10 +125,10 @@ public:
 	Layout*			SearchLineByLayoutY(int nLineLayout) { return const_cast<Layout*>(static_cast<const LayoutMgr*>(this)->SearchLineByLayoutY(nLineLayout)); }
 
 	// ワードを探す
-	bool			WhereCurrentWord(int , int , LayoutRange* pSelect, NativeW*, NativeW*);	// 現在位置の単語の範囲を調べる
+	bool			WhereCurrentWord(int , int , Range* pSelect, NativeW*, NativeW*);	// 現在位置の単語の範囲を調べる
 
 	// 判定
-	bool			IsEndOfLine(const LayoutPoint& ptLinePos);	// 指定位置が行末(改行文字の直前)か調べる	//@@@ 2002.04.18 MIK
+	bool			IsEndOfLine(const Point& ptLinePos);	// 指定位置が行末(改行文字の直前)か調べる	//@@@ 2002.04.18 MIK
 
 	/*! 次のTAB位置までの幅
 		@param pos [in] 現在の位置
@@ -144,7 +144,7 @@ public:
 	bool ChangeLayoutParam(size_t nTabSize, size_t nMaxLineKetas);
 
 	// Jul. 29, 2006 genta
-	void GetEndLayoutPos(LayoutPoint* ptLayoutEnd);
+	void GetEndLayoutPos(Point* ptLayoutEnd);
 
 	size_t GetMaxTextWidth(void) const { return nTextWidth; }		// 2009.08.28 nasukoji	テキスト最大幅を返す
 
@@ -153,32 +153,32 @@ public:
 	//                           検索                              //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 protected:
-	int PrevOrNextWord(int, int, LayoutPoint* pptLayoutNew, bool, bool bStopsBothEnds);	// 現在位置の左右の単語の先頭位置を調べる
+	int PrevOrNextWord(int, int, Point* pptLayoutNew, bool, bool bStopsBothEnds);	// 現在位置の左右の単語の先頭位置を調べる
 public:
-	int PrevWord(int nLineNum, int nIdx, LayoutPoint* pptLayoutNew, bool bStopsBothEnds) { return PrevOrNextWord(nLineNum, nIdx, pptLayoutNew, true, bStopsBothEnds); }	// 現在位置の左右の単語の先頭位置を調べる
-	int NextWord(int nLineNum, int nIdx, LayoutPoint* pptLayoutNew, bool bStopsBothEnds) { return PrevOrNextWord(nLineNum, nIdx, pptLayoutNew, false, bStopsBothEnds); }	// 現在位置の左右の単語の先頭位置を調べる
+	int PrevWord(int nLineNum, int nIdx, Point* pptLayoutNew, bool bStopsBothEnds) { return PrevOrNextWord(nLineNum, nIdx, pptLayoutNew, true, bStopsBothEnds); }	// 現在位置の左右の単語の先頭位置を調べる
+	int NextWord(int nLineNum, int nIdx, Point* pptLayoutNew, bool bStopsBothEnds) { return PrevOrNextWord(nLineNum, nIdx, pptLayoutNew, false, bStopsBothEnds); }	// 現在位置の左右の単語の先頭位置を調べる
 
-	int SearchWord(int nLine, int nIdx, SearchDirection SearchDirection, LayoutRange* pMatchRange, const SearchStringPattern&);	// 単語検索
+	int SearchWord(int nLine, int nIdx, SearchDirection SearchDirection, Range* pMatchRange, const SearchStringPattern&);	// 単語検索
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                        単位の変換                           //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 public:
 	// ロジック→レイアウト
-	void LogicToLayoutEx(const LogicPointEx& ptLogicEx, LayoutPoint* pptLayout, int nLineHint = 0) {
+	void LogicToLayoutEx(const PointEx& ptLogicEx, Point* pptLayout, int nLineHint = 0) {
 		LogicToLayout(ptLogicEx, pptLayout, nLineHint);
 		pptLayout->x += ptLogicEx.ext;
 	}
-	void LogicToLayout(const LogicPoint& ptLogic, LayoutPoint* pptLayout, int nLineHint = 0);
-	void LogicToLayout(const LogicRange& rangeLogic, LayoutRange* prangeLayout) {
+	void LogicToLayout(const Point& ptLogic, Point* pptLayout, int nLineHint = 0);
+	void LogicToLayout(const Range& rangeLogic, Range* prangeLayout) {
 		LogicToLayout(rangeLogic.GetFrom(), prangeLayout->GetFromPointer());
 		LogicToLayout(rangeLogic.GetTo(), prangeLayout->GetToPointer());
 	}
 	
 	// レイアウト→ロジック変換
-	void LayoutToLogicEx(const LayoutPoint& ptLayout, LogicPointEx* pptLogicEx) const;
-	void LayoutToLogic(const LayoutPoint& ptLayout, LogicPoint* pptLogic) const;
-	void LayoutToLogic(const LayoutRange& rangeLayout, LogicRange* prangeLogic) const {
+	void LayoutToLogicEx(const Point& ptLayout, PointEx* pptLogicEx) const;
+	void LayoutToLogic(const Point& ptLayout, Point* pptLogic) const;
+	void LayoutToLogic(const Range& rangeLayout, Range* prangeLogic) const {
 		LayoutToLogic(rangeLayout.GetFrom(), prangeLogic->GetFromPointer());
 		LayoutToLogic(rangeLayout.GetTo(), prangeLogic->GetToPointer());
 	}
@@ -232,9 +232,9 @@ public:
 protected:
 	// 2005.11.21 Moca 引用符の色分け情報を引数から除去
 	// 2009.08.28 nasukoji	テキスト最大幅算出用引数追加
-	int DoLayout_Range(Layout* , int, LogicPoint, EColorIndexType, LayoutColorInfo*, const CalTextWidthArg&, int*);	// 指定レイアウト行に対応する論理行の次の論理行から指定論理行数だけ再レイアウトする
+	int DoLayout_Range(Layout* , int, Point, EColorIndexType, LayoutColorInfo*, const CalTextWidthArg&, int*);	// 指定レイアウト行に対応する論理行の次の論理行から指定論理行数だけ再レイアウトする
 	void CalculateTextWidth_Range(const CalTextWidthArg& ctwArg);	// テキストが編集されたら最大幅を算出する	// 2009.08.28 nasukoji
-	Layout* DeleteLayoutAsLogical(Layout*, int, int , int, LogicPoint, int*);	// 論理行の指定範囲に該当するレイアウト情報を削除
+	Layout* DeleteLayoutAsLogical(Layout*, int, int , int, Point, int*);	// 論理行の指定範囲に該当するレイアウト情報を削除
 	void ShiftLogicalLineNum(Layout* , int);	// 指定行より後の行のレイアウト情報について、論理行番号を指定行数だけシフトする
 
 	// 部品
@@ -267,7 +267,7 @@ protected:
 		
 		// ループ外 (DoLayout_Range引数)
 		int*			pnExtInsLineNum;
-		LogicPoint		ptDelLogicalFrom;
+		Point			ptDelLogicalFrom;
 
 		// 関数
 		Layout* _CreateLayout(LayoutMgr* mgr);
@@ -315,7 +315,7 @@ protected:
 	*/
 	//@@@ 2002.09.23 YAZAKI
 	// 2009.08.28 nasukoji	nPosX引数追加
-	Layout* CreateLayout(DocLine* pDocLine, LogicPoint ptLogicPos, int nLength, EColorIndexType nTypePrev, int nIndent, int nPosX, LayoutColorInfo*);
+	Layout* CreateLayout(DocLine* pDocLine, Point ptLogicPos, int nLength, EColorIndexType nTypePrev, int nIndent, int nPosX, LayoutColorInfo*);
 	Layout* InsertLineNext(Layout*, Layout*);
 	void AddLineBottom(Layout*);
 

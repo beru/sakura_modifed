@@ -78,7 +78,7 @@ void ViewCommander::Command_Search_Next(
 	bool			bReplaceAll,
 	HWND			hwndParent,
 	const WCHAR*	pszNotFoundMessage,
-	LogicRange*		pSelectLogic		// [out] 選択範囲のロジック版。マッチ範囲を返す。すべて置換/高速モードで使用
+	Range*		pSelectLogic		// [out] 選択範囲のロジック版。マッチ範囲を返す。すべて置換/高速モードで使用
 	)
 {
 	bool		bSelecting;
@@ -90,11 +90,11 @@ void ViewCommander::Command_Search_Next(
 	int			nIdx(0);
 	int			nLineNum(0);
 
-	LayoutRange	rangeA;
+	Range	rangeA;
 	rangeA.Set(GetCaret().GetCaretLayoutPos());
 
-	LayoutRange	selectBgn_Old;
-	LayoutRange	select_Old;
+	Range	selectBgn_Old;
+	Range	select_Old;
 	int nLineNumOld(0);
 
 	// bFastMode
@@ -162,14 +162,14 @@ void ViewCommander::Command_Search_Next(
 		}
 	}
 	if (!pSelectLogic) {
-		nLineNum = caret.GetCaretLayoutPos().GetY2();
+		nLineNum = caret.GetCaretLayoutPos().y;
 		size_t nLineLen = 0; // 2004.03.17 Moca pLine == NULL のとき、nLineLenが未設定になり落ちるバグ対策
 		const Layout*	pLayout;
 		const wchar_t*	pLine = layoutMgr.GetLineStr(nLineNum, &nLineLen, &pLayout);
 
 		// 指定された桁に対応する行のデータ内の位置を調べる
 		// 2002.02.08 hor EOFのみの行からも次検索しても再検索可能に (2/2)
-		nIdx = pLayout ? view.LineColumnToIndex(pLayout, caret.GetCaretLayoutPos().GetX2()) : 0;
+		nIdx = pLayout ? view.LineColumnToIndex(pLayout, caret.GetCaretLayoutPos().x) : 0;
 		if (b0Match) {
 			// 現在、長さ０でマッチしている場合は物理行で１文字進める(無限マッチ対策)
 			if (nIdx < nLineLen) {
@@ -181,8 +181,8 @@ void ViewCommander::Command_Search_Next(
 			}
 		}
 	}else {
-		nLineNumLogic = caret.GetCaretLogicPos().GetY2();
-		nIdx = caret.GetCaretLogicPos().GetX2();
+		nLineNumLogic = caret.GetCaretLogicPos().y;
+		nIdx = caret.GetCaretLogicPos().x;
 	}
 
 	nLineNumOld = nLineNum;	// hor
@@ -203,7 +203,7 @@ re_do:;
 	}else {
 		auto& docLineMgr = GetDocument().docLineMgr;
 		nSearchResult = SearchAgent(docLineMgr).SearchWord(
-			LogicPoint(nIdx, nLineNumLogic),
+			Point(nIdx, nLineNumLogic),
 			SearchDirection::Forward,		// 0==前方検索 1==後方検索
 			pSelectLogic,
 			view.searchPattern
@@ -212,11 +212,11 @@ re_do:;
 	if (nSearchResult) {
 		// 指定された行のデータ内の位置に対応する桁の位置を調べる
 		if (bFlag1 && rangeA.GetFrom() == caret.GetCaretLayoutPos()) {
-			LogicRange logicRange;
+			Range logicRange;
 			layoutMgr.LayoutToLogic(rangeA, &logicRange);
 
-			nLineNum = rangeA.GetTo().GetY2();
-			nIdx     = logicRange.GetTo().GetX2();
+			nLineNum = rangeA.GetTo().y;
+			nIdx     = logicRange.GetTo().x;
 			if (logicRange.GetFrom() == logicRange.GetTo()) { // 幅0マッチでの無限ループ対策。
 				nIdx += 1; // wchar_t一個分進めるだけでは足りないかもしれないが。
 			}
@@ -243,7 +243,7 @@ re_do:;
 		if (!bReplaceAll) view.AddCurrentLineToHistory();	// 2002.02.16 hor すべて置換のときは不要
 		if (!pSelectLogic) {
 			caret.MoveCursor(rangeA.GetFrom(), bRedraw);
-			caret.nCaretPosX_Prev = caret.GetCaretLayoutPos().GetX2();
+			caret.nCaretPosX_Prev = caret.GetCaretLayoutPos().x;
 		}else {
 			caret.MoveCursorFastMode(pSelectLogic->GetFrom());
 		}
@@ -260,7 +260,7 @@ re_do:;
 
 			// カーソル移動
 			caret.MoveCursor(rangeA.GetFrom(), bRedraw);
-			caret.nCaretPosX_Prev = caret.GetCaretLayoutPos().GetX2();
+			caret.nCaretPosX_Prev = caret.GetCaretLayoutPos().x;
 
 			if (bRedraw) {
 				// 選択領域描画
@@ -269,7 +269,7 @@ re_do:;
 		}else {
 			if (bDisableSelect) {
 				// 2011.12.21 ロジックカーソル位置の修正/カーソル線・対括弧の表示
-				LogicPoint ptLogic;
+				Point ptLogic;
 				layoutMgr.LayoutToLogic(caret.GetCaretLayoutPos(), &ptLogic);
 				caret.SetCaretLogicPos(ptLogic);
 				view.DrawBracketCursorLine(bRedraw);
@@ -338,11 +338,11 @@ void ViewCommander::Command_Search_Prev(bool bReDraw, HWND hwndParent)
 	auto& caret = GetCaret();
 	auto& layoutMgr = GetDocument().layoutMgr;
 
-	LayoutRange rangeA;
+	Range rangeA;
 	rangeA.Set(caret.GetCaretLayoutPos());
 
-	LayoutRange selectBgn_Old;
-	LayoutRange select_Old;
+	Range selectBgn_Old;
+	Range select_Old;
 
 	bool bSelecting = false;
 	// 2002.01.16 hor
@@ -370,7 +370,7 @@ void ViewCommander::Command_Search_Prev(bool bReDraw, HWND hwndParent)
 		}
 	}
 
-	nLineNum = caret.GetCaretLayoutPos().GetY2();
+	nLineNum = caret.GetCaretLayoutPos().y;
 	const Layout* pLayout = layoutMgr.SearchLineByLayoutY(nLineNum);
 	if (!pLayout) {
 		// pLayoutはNULLとなるのは、[EOF]から前検索した場合
@@ -388,7 +388,7 @@ void ViewCommander::Command_Search_Prev(bool bReDraw, HWND hwndParent)
 		nIdx = pLayout->GetDocLineRef()->GetLengthWithEOL() + 1;		// 行末のヌル文字(\0)にマッチさせるために+1 2003.05.16 かろと
 	}else {
 		// 指定された桁に対応する行のデータ内の位置を調べる
-		nIdx = view.LineColumnToIndex(pLayout, caret.GetCaretLayoutPos().GetX2());
+		nIdx = view.LineColumnToIndex(pLayout, caret.GetCaretLayoutPos().x);
 	}
 
 	bRedo		=	true;		// hor
@@ -422,7 +422,7 @@ re_do:;							// hor
 		// Sep. 8, 2000 genta
 		view.AddCurrentLineToHistory();
 		caret.MoveCursor(rangeA.GetFrom(), bReDraw);
-		caret.nCaretPosX_Prev = caret.GetCaretLayoutPos().GetX2();
+		caret.nCaretPosX_Prev = caret.GetCaretLayoutPos().x;
 		bFound = true;
 	}else {
 		if (bSelecting) {
@@ -433,7 +433,7 @@ re_do:;							// hor
 
 			// カーソル移動
 			caret.MoveCursor(rangeA.GetFrom(), bReDraw);
-			caret.nCaretPosX_Prev = caret.GetCaretLayoutPos().GetX2();
+			caret.nCaretPosX_Prev = caret.GetCaretLayoutPos().x;
 			// 選択領域描画
 			si.DrawSelectArea();
 		}else {
@@ -588,7 +588,7 @@ void ViewCommander::Command_Replace(HWND hwndParent)
 	// テキストが選択されているか
 	if (view.GetSelectionInfo().IsTextSelected()) {
 		// From Here 2001.12.03 hor
-		LayoutPoint ptTmp(0, 0);
+		Point ptTmp(0, 0);
 		if (nPaste || !bRegularExp) {
 			// 正規表現時は 後方参照($&)で実現するので、正規表現は除外
 			if (nReplaceTarget == 1) {	// 挿入位置へ移動
@@ -605,10 +605,10 @@ void ViewCommander::Command_Replace(HWND hwndParent)
 		auto& layoutMgr = GetDocument().layoutMgr;
 		// 行削除 選択範囲を行全体に拡大。カーソル位置を行頭へ(正規表現でも実行)
 		if (nReplaceTarget == 3) {
-			LogicPoint lineHome;
+			Point lineHome;
 			layoutMgr.LayoutToLogic(GetSelect().GetFrom(), &lineHome);
 			lineHome.x = 0; // 行頭
-			LayoutRange selectFix;
+			Range selectFix;
 			layoutMgr.LogicToLayout(lineHome, selectFix.GetFromPointer());
 			lineHome.y++; // 次行の行頭
 			layoutMgr.LogicToLayout(lineHome, selectFix.GetToPointer());
@@ -616,7 +616,7 @@ void ViewCommander::Command_Replace(HWND hwndParent)
 			view.GetSelectionInfo().SetSelectArea(selectFix);
 			view.GetSelectionInfo().DrawSelectArea();
 			caret.MoveCursor(selectFix.GetFrom(), false);
-			caret.nCaretPosX_Prev = caret.GetCaretLayoutPos().GetX2();
+			caret.nCaretPosX_Prev = caret.GetCaretLayoutPos().x;
 		}
 		// コマンドコードによる処理振り分け
 		// テキストを貼り付け
@@ -635,9 +635,9 @@ void ViewCommander::Command_Replace(HWND hwndParent)
 			}
 
 			// 物理行、物理行長、物理行での検索マッチ位置
-			const Layout* pLayout = layoutMgr.SearchLineByLayoutY(GetSelect().GetFrom().GetY2());
+			const Layout* pLayout = layoutMgr.SearchLineByLayoutY(GetSelect().GetFrom().y);
 			const wchar_t* pLine = pLayout->GetDocLineRef()->GetPtr();
-			int nIdx = view.LineColumnToIndex(pLayout, GetSelect().GetFrom().GetX2()) + pLayout->GetLogicOffset();
+			int nIdx = view.LineColumnToIndex(pLayout, GetSelect().GetFrom().x) + pLayout->GetLogicOffset();
 			size_t nLen = pLayout->GetDocLineRef()->GetLengthWithEOL();
 			// 正規表現で選択始点・終点への挿入を記述
 			// Jun. 6, 2005 かろと
@@ -671,7 +671,7 @@ void ViewCommander::Command_Replace(HWND hwndParent)
 					}
 					// 無限置換しないように、１文字増やしたので１文字選択に変更
 					// 選択始点・終点への挿入の場合も０文字マッチ時は動作は同じになるので
-					layoutMgr.LogicToLayout(LogicPoint(nIdxTo, pLayout->GetLogicLineNo()), GetSelect().GetToPointer());	// 2007.01.19 ryoji 行位置も取得する
+					layoutMgr.LogicToLayout(Point(nIdxTo, pLayout->GetLogicLineNo()), GetSelect().GetToPointer());	// 2007.01.19 ryoji 行位置も取得する
 				}
 				// 行末から検索文字列末尾までの文字数
 				int colDiff = nLen - nIdxTo;
@@ -680,7 +680,7 @@ void ViewCommander::Command_Replace(HWND hwndParent)
 				if (colDiff < pLayout->GetDocLineRef()->GetEol().GetLen()) {
 					// 改行にかかっていたら、行全体をINSTEXTする。
 					colDiff = 0;
-					layoutMgr.LogicToLayout(LogicPoint(nLen, pLayout->GetLogicLineNo()), GetSelect().GetToPointer());	// 2007.01.19 ryoji 追加
+					layoutMgr.LogicToLayout(Point(nLen, pLayout->GetLogicLineNo()), GetSelect().GetToPointer());	// 2007.01.19 ryoji 追加
 				}
 				// 置換後文字列への書き換え(行末から検索文字列末尾までの文字を除く)
 				Command_InsText(false, regexp.GetString(), regexp.GetStringLen() - colDiff, true);
@@ -805,8 +805,8 @@ void ViewCommander::Command_Replace_All()
 	_itot(nReplaceNum, szLabel, 10);
 	::SendMessage(hwndStatic, WM_SETTEXT, 0, (LPARAM)szLabel);
 
-	LayoutRange rangeA;	// 選択範囲
-	LogicPoint ptColLineP;
+	Range rangeA;	// 選択範囲
+	Point ptColLineP;
 
 	// From Here 2001.12.03 hor
 	auto& caret = GetCaret();
@@ -836,14 +836,14 @@ void ViewCommander::Command_Replace_All()
 		Command_GoFileTop(bDisplayUpdate);
 	}
 
-	LayoutPoint ptLast = caret.GetCaretLayoutPos();
-	LogicPoint ptLastLogic = caret.GetCaretLogicPos();
+	Point ptLast = caret.GetCaretLayoutPos();
+	Point ptLastLogic = caret.GetCaretLogicPos();
 
 	// テキスト選択解除
 	// 現在の選択範囲を非選択状態に戻す
 	view.GetSelectionInfo().DisableSelectArea(bDisplayUpdate);
 
-	LogicRange selectLogic;	// 置換文字列GetSelect()のLogic単位版
+	Range selectLogic;	// 置換文字列GetSelect()のLogic単位版
 	// 次を検索
 	Command_Search_Next(true, bDisplayUpdate, true, 0, NULL, bFastMode ? &selectLogic : nullptr);
 	// To Here 2001.12.03 hor
@@ -956,7 +956,7 @@ void ViewCommander::Command_Replace_All()
 	}
 
 	//$$ 単位混在
-	LayoutPoint	ptOld;						// 検索後の選択範囲
+	Point	ptOld;						// 検索後の選択範囲
 	int	lineCnt = 0;		// 置換前の行数
 	int	linDif = (0);		// 置換後の行調整
 	int	colDif = (0);		// 置換後の桁調整
@@ -994,14 +994,14 @@ void ViewCommander::Command_Replace_All()
 			if (bFastMode) {
 				int nDiff = nAllLineNumOrg - docLineMgr.GetLineCount();
 				if (0 <= nDiff) {
-					nNewPos = (nDiff + selectLogic.GetFrom().GetY2()) >> nShiftCount;
+					nNewPos = (nDiff + selectLogic.GetFrom().y) >> nShiftCount;
 				}else {
 					nNewPos = ::MulDiv(selectLogic.GetFrom().GetY(), nAllLineNum, layoutMgr.GetLineCount());
 				}
 			}else {
 				int nDiff = nAllLineNumOrg - layoutMgr.GetLineCount();
 				if (0 <= nDiff) {
-					nNewPos = (nDiff + GetSelect().GetFrom().GetY2()) >> nShiftCount;
+					nNewPos = (nDiff + GetSelect().GetFrom().y) >> nShiftCount;
 				}else {
 					nNewPos = ::MulDiv(GetSelect().GetFrom().GetY(), nAllLineNum, layoutMgr.GetLineCount());
 				}
@@ -1031,23 +1031,23 @@ void ViewCommander::Command_Replace_All()
 				if (ptOld.y != linPrev) {
 					colDif = (0);
 				}
-				linPrev = ptOld.GetY2();
+				linPrev = ptOld.y;
 				// 行は範囲内？
 				if (
-					(rangeA.GetTo().y + linDif == ptOld.y && rangeA.GetTo().GetX2() + colDif < ptOld.x)
+					(rangeA.GetTo().y + linDif == ptOld.y && rangeA.GetTo().x + colDif < ptOld.x)
 					|| (rangeA.GetTo().y + linDif <  ptOld.y)
 				) {
 					break;
 				}
 				// 桁は範囲内？
-				if (!(rangeA.GetFrom().x <= GetSelect().GetFrom().x && ptOld.GetX2() <= rangeA.GetTo().GetX2() + colDif)) {
-					if (ptOld.x < rangeA.GetTo().GetX2() + colDif) {
-						linNext = GetSelect().GetTo().GetY2();
+				if (!(rangeA.GetFrom().x <= GetSelect().GetFrom().x && ptOld.x <= rangeA.GetTo().x + colDif)) {
+					if (ptOld.x < rangeA.GetTo().x + colDif) {
+						linNext = GetSelect().GetTo().y;
 					}else {
-						linNext = GetSelect().GetTo().GetY2() + 1;
+						linNext = GetSelect().GetTo().y + 1;
 					}
 					// 次の検索開始位置へシフト
-					caret.SetCaretLayoutPos(LayoutPoint(rangeA.GetFrom().x, linNext));
+					caret.SetCaretLayoutPos(Point(rangeA.GetFrom().x, linNext));
 					// 2004.05.30 Moca 現在の検索文字列を使って検索する
 					Command_Search_Next(false, bDisplayUpdate, true, 0, nullptr);
 					colDif = (0);
@@ -1062,7 +1062,7 @@ void ViewCommander::Command_Replace_All()
 				lineCnt = docLineMgr.GetLineCount();
 
 				// 検索後の範囲終端
-				LogicPoint ptOldTmp;
+				Point ptOldTmp;
 				if (bFastMode) {
 					ptOldTmp = selectLogic.GetTo();
 				}else {
@@ -1075,7 +1075,7 @@ void ViewCommander::Command_Replace_All()
 				ptOld.y = ptOldTmp.y;
 
 				// 置換前の行の長さ(改行は１文字と数える)を保存しておいて、置換前後で行位置が変わった場合に使用
-				linOldLen = docLineMgr.GetLine(ptOldTmp.GetY2())->GetLengthWithoutEOL() + 1;
+				linOldLen = docLineMgr.GetLine(ptOldTmp.y)->GetLengthWithoutEOL() + 1;
 
 				// 行は範囲内？
 				// 2007.01.19 ryoji 条件追加: 選択終点が行頭(ptColLineP.x == 0)になっている場合は前の行の行末までを選択範囲とみなす
@@ -1099,8 +1099,8 @@ void ViewCommander::Command_Replace_All()
 			}
 		}
 
-		LayoutPoint ptTmp(0, 0);
-		LogicPoint  ptTmpLogic(0, 0);
+		Point ptTmp(0, 0);
+		Point  ptTmpLogic(0, 0);
 
 		if (bPaste || !bRegularExp) {
 			// 正規表現時は 後方参照($&)で実現するので、正規表現は除外
@@ -1131,21 +1131,21 @@ void ViewCommander::Command_Replace_All()
 		if (nReplaceTarget == 3) {
 			if (bFastMode) {
 				const int y = selectLogic.GetFrom().y;
-				selectLogic.SetFrom(LogicPoint(0, y)); // 行頭
-				selectLogic.SetTo(LogicPoint(0, y + 1)); // 次行の行頭
+				selectLogic.SetFrom(Point(0, y)); // 行頭
+				selectLogic.SetTo(Point(0, y + 1)); // 次行の行頭
 				if (docLineMgr.GetLineCount() == y + 1) {
 					const DocLine* pLine = docLineMgr.GetLine(y);
 					if (pLine->GetEol() == EolType::None) {
 						// EOFは最終データ行にぶら下がりなので、選択終端は行末
-						selectLogic.SetTo(LogicPoint(pLine->GetLengthWithEOL(), y)); // 対象行の行末
+						selectLogic.SetTo(Point(pLine->GetLengthWithEOL(), y)); // 対象行の行末
 					}
 				}
 				caret.MoveCursorFastMode(selectLogic.GetFrom());
 			}else {
-				LogicPoint lineHome;
+				Point lineHome;
 				layoutMgr.LayoutToLogic(GetSelect().GetFrom(), &lineHome);
 				lineHome.x = 0; // 行頭
-				LayoutRange selectFix;
+				Range selectFix;
 				layoutMgr.LogicToLayout(lineHome, selectFix.GetFromPointer());
 				lineHome.y++; // 次行の行頭
 				layoutMgr.LogicToLayout(lineHome, selectFix.GetToPointer());
@@ -1185,17 +1185,17 @@ void ViewCommander::Command_Replace_All()
 			int nIdx;
 			int nLen;
 			if (bFastMode) {
-				pDocLine = docLineMgr.GetLine(selectLogic.GetFrom().GetY2());
+				pDocLine = docLineMgr.GetLine(selectLogic.GetFrom().y);
 				pLine = pDocLine->GetPtr();
-				nLogicLineNum = selectLogic.GetFrom().GetY2();
-				nIdx = selectLogic.GetFrom().GetX2();
+				nLogicLineNum = selectLogic.GetFrom().y;
+				nIdx = selectLogic.GetFrom().x;
 				nLen = pDocLine->GetLengthWithEOL();
 			}else {
-				const Layout* pLayout = layoutMgr.SearchLineByLayoutY(GetSelect().GetFrom().GetY2());
+				const Layout* pLayout = layoutMgr.SearchLineByLayoutY(GetSelect().GetFrom().y);
 				pDocLine = pLayout->GetDocLineRef();
 				pLine = pDocLine->GetPtr();
 				nLogicLineNum = pLayout->GetLogicLineNo();
-				nIdx = view.LineColumnToIndex(pLayout, GetSelect().GetFrom().GetX2()) + pLayout->GetLogicOffset();
+				nIdx = view.LineColumnToIndex(pLayout, GetSelect().GetFrom().x) + pLayout->GetLogicOffset();
 				nLen = pDocLine->GetLengthWithEOL();
 			}
 			int colDiff = 0;
@@ -1205,18 +1205,18 @@ void ViewCommander::Command_Replace_All()
 				// その位置を記憶する．
 				if (bSelectedArea) {
 					if (bBeginBoxSelect) {	// 矩形選択
-						LogicPoint ptWork;
+						Point ptWork;
 						layoutMgr.LayoutToLogic(
-							LayoutPoint(rangeA.GetTo().x, ptOld.y),
+							Point(rangeA.GetTo().x, ptOld.y),
 							&ptWork
 						);
 						ptColLineP.x = ptWork.x;
 						if (nLen - pDocLine->GetEol().GetLen() > ptColLineP.x + colDif)
-							nLen = ptColLineP.GetX2() + colDif;
+							nLen = ptColLineP.x + colDif;
 					}else {	// 通常の選択
 						if (ptColLineP.y + linDif == ptOld.y) { //$$ 単位混在
 							if (nLen - pDocLine->GetEol().GetLen() > ptColLineP.x + colDif)
-								nLen = ptColLineP.GetX2() + colDif;
+								nLen = ptColLineP.x + colDif;
 						}
 					}
 				}
@@ -1233,9 +1233,9 @@ void ViewCommander::Command_Replace_All()
 					// 行単位での置換処理
 					// 選択範囲を物理行末までにのばす
 					if (bFastMode) {
-						selectLogic.SetTo(LogicPoint(nLen, nLogicLineNum));
+						selectLogic.SetTo(Point(nLen, nLogicLineNum));
 					}else {
-						layoutMgr.LogicToLayout(LogicPoint(nLen, nLogicLineNum), GetSelect().GetToPointer());
+						layoutMgr.LogicToLayout(Point(nLen, nLogicLineNum), GetSelect().GetToPointer());
 					}
 				}else {
 				    // From Here Jun. 6, 2005 かろと
@@ -1253,9 +1253,9 @@ void ViewCommander::Command_Replace_All()
 					    // 無限置換しないように、１文字増やしたので１文字選択に変更
 					    // 選択始点・終点への挿入の場合も０文字マッチ時は動作は同じになるので
 						if (bFastMode) {
-							selectLogic.SetTo(LogicPoint(nIdxTo, nLogicLineNum));
+							selectLogic.SetTo(Point(nIdxTo, nLogicLineNum));
 						}else {
-							layoutMgr.LogicToLayout(LogicPoint(nIdxTo, nLogicLineNum), GetSelect().GetToPointer());	// 2007.01.19 ryoji 行位置も取得する
+							layoutMgr.LogicToLayout(Point(nIdxTo, nLogicLineNum), GetSelect().GetToPointer());	// 2007.01.19 ryoji 行位置も取得する
 						}
 				    }
 				    // 行末から検索文字列末尾までの文字数
@@ -1267,9 +1267,9 @@ void ViewCommander::Command_Replace_All()
 					    // 改行にかかっていたら、行全体をINSTEXTする。
 					    colDiff = 0;
 						if (bFastMode) {
-							selectLogic.SetTo(LogicPoint(nLen, nLogicLineNum));
+							selectLogic.SetTo(Point(nLen, nLogicLineNum));
 						}else {
-							layoutMgr.LogicToLayout(LogicPoint(nLen, nLogicLineNum), GetSelect().GetToPointer());	// 2007.01.19 ryoji 追加
+							layoutMgr.LogicToLayout(Point(nLen, nLogicLineNum), GetSelect().GetToPointer());	// 2007.01.19 ryoji 追加
 						}
 						ptOld.x = pDocLine->GetLengthWithoutEOL() + 1;	// 2007.01.19 ryoji 追加 //$$ 単位混在
 				    }
@@ -1293,7 +1293,7 @@ void ViewCommander::Command_Replace_All()
 			}else {
 				caret.SetCaretLayoutPos(caret.GetCaretLayoutPos() + ptTmp);
 				if (!bBeginBoxSelect) {
-					LogicPoint p;
+					Point p;
 					layoutMgr.LayoutToLogic(
 						caret.GetCaretLayoutPos(),
 						&p
@@ -1313,7 +1313,7 @@ void ViewCommander::Command_Replace_All()
 			Progress_SetRange( hwndProgress, 0, nAllLineNum + 1 );
 			int nDiff = nAllLineNumOrg - docLineMgr.GetLineCount();
 			if (0 <= nDiff) {
-				nNewPos = (nDiff + selectLogic.GetFrom().GetY2()) >> nShiftCount;
+				nNewPos = (nDiff + selectLogic.GetFrom().y) >> nShiftCount;
 			}else {
 				nNewPos = ::MulDiv(selectLogic.GetFrom().GetY(), nAllLineNum, docLineMgr.GetLineCount());
 			}
@@ -1331,18 +1331,18 @@ void ViewCommander::Command_Replace_All()
 		if (bSelectedArea) {
 			// 検索→置換の行補正値取得
 			if (bBeginBoxSelect) {
-				colDif += (ptLast.GetX2() - ptOld.GetX2());
+				colDif += ptLast.x - ptOld.x;
 				linDif += layoutMgr.GetLineCount() - lineCnt;
 			}else {
 				// 置換前の検索文字列の最終位置は ptOld
 				// 置換後のカーソル位置
-				LogicPoint ptTmp2 = caret.GetCaretLogicPos();
+				Point ptTmp2 = caret.GetCaretLogicPos();
 				int linDif_thistime = docLineMgr.GetLineCount() - lineCnt;	// 今回置換での行数変化
 				linDif += linDif_thistime;
 				if (ptColLineP.y + linDif == ptTmp2.y) {
 					// 最終行で置換した時、又は、置換の結果、選択エリア最終行まで到達した時
 					// 最終行なので、置換前後の文字数の増減で桁位置を調整する
-					colDif += ptTmp2.GetX2() - ptOld.GetX2(); //$$ 単位混在
+					colDif += ptTmp2.x - ptOld.x; //$$ 単位混在
 
 					// 但し、以下の場合は置換前後で行が異なってしまうので、行の長さで補正する必要がある
 					// １）最終行直前で行連結が起こり、行が減っている場合（行連結なので、桁位置は置換後のカーソル桁位置分増加する）
@@ -1375,7 +1375,7 @@ void ViewCommander::Command_Replace_All()
 		}
 		layoutMgr.LogicToLayout(ptLastLogic, &ptLast);
 		caret.MoveCursor(ptLast, true);
-		caret.nCaretPosX_Prev = caret.GetCaretLayoutPos().GetX2();	// 2009.07.25 ryoji
+		caret.nCaretPosX_Prev = caret.GetCaretLayoutPos().x;	// 2009.07.25 ryoji
 	}
 	//>> 2002/03/26 Azumaiya
 
@@ -1427,7 +1427,7 @@ void ViewCommander::Command_Replace_All()
 			view.GetSelectionInfo().SetSelectArea(rangeA);	// 2009.07.25 ryoji
 		}
 		caret.MoveCursor(rangeA.GetTo(), true);
-		caret.nCaretPosX_Prev = caret.GetCaretLayoutPos().GetX2();	// 2009.07.25 ryoji
+		caret.nCaretPosX_Prev = caret.GetCaretLayoutPos().x;	// 2009.07.25 ryoji
 	}
 	// To Here 2001.12.03 hor
 
@@ -1487,7 +1487,7 @@ void ViewCommander::Command_Search_ClearMark(void)
 // 対括弧の検索
 void ViewCommander::Command_BracketPair(void)
 {
-	LayoutPoint ptColLine;
+	Point ptColLine;
 	//int nLine, nCol;
 
 	int mode = 3;

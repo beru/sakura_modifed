@@ -250,6 +250,7 @@
     </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\sakura_core\basis\MyRange.h" />
     <ClInclude Include="..\sakura_core\charset\CodePage.h" />
     <ClInclude Include="..\sakura_core\debug\trace.h" />
     <ClInclude Include="..\sakura_core\dlg\DlgGrepReplace.h" />
@@ -396,10 +397,6 @@
     <ClInclude Include="..\sakura_core\basis\MyRect.h" />
     <ClInclude Include="..\sakura_core\basis\MySize.h" />
     <ClInclude Include="..\sakura_core\basis\MyString.h" />
-    <ClInclude Include="..\sakura_core\basis\StrictInteger.h" />
-    <ClInclude Include="..\sakura_core\basis\StrictPoint.h" />
-    <ClInclude Include="..\sakura_core\basis\StrictRange.h" />
-    <ClInclude Include="..\sakura_core\basis\StrictRect.h" />
     <ClInclude Include="..\sakura_core\basis\primitive.h" />
     <ClInclude Include="..\sakura_core\basis\SakuraBasis.h" />
     <ClInclude Include="..\sakura_core\typeprop\DlgKeywordSelect.h" />
@@ -723,10 +720,6 @@
     <ClCompile Include="..\sakura_core\basis\MyRect.cpp" />
     <ClCompile Include="..\sakura_core\basis\MySize.cpp" />
     <ClCompile Include="..\sakura_core\basis\MyString.cpp" />
-    <ClCompile Include="..\sakura_core\basis\StrictInteger.cpp" />
-    <ClCompile Include="..\sakura_core\basis\StrictPoint.cpp" />
-    <ClCompile Include="..\sakura_core\basis\StrictRange.cpp" />
-    <ClCompile Include="..\sakura_core\basis\StrictRect.cpp" />
     <ClCompile Include="..\sakura_core\basis\SakuraBasis.cpp" />
     <ClCompile Include="..\sakura_core\typeprop\DlgKeywordSelect.cpp" />
     <ClCompile Include="..\sakura_core\typeprop\DlgSameColor.cpp" />

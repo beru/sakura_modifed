@@ -104,9 +104,9 @@ public:
 	size_t GetWorkBufferCount() { return sizeof(pWork)/sizeof(T); }
 
 public:
-	EditInfo	editInfo_MYWM_GETFILEINFO;	// MYWM_GETFILEINFOデータ受け渡し用	####美しくない
-	LogicPoint	logicPoint;
-	TypeConfig	typeConfig;
+	EditInfo editInfo_MYWM_GETFILEINFO;	// MYWM_GETFILEINFOデータ受け渡し用	####美しくない
+	Point logicPoint;
+	TypeConfig typeConfig;
 };
 
 // 共有ハンドル

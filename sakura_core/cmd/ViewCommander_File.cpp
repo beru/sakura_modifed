@@ -747,7 +747,7 @@ bool ViewCommander::Command_InsFile(
 
 	// ”ÍˆÍ‘I‘ğ’†‚È‚ç‘}“üŒã‚à‘I‘ğó‘Ô‚É‚·‚é‚½‚ß	// 2007.04.29 maru
 	bool bBeforeTextSelected = view.GetSelectionInfo().IsTextSelected();
-	LayoutPoint ptFrom;
+	Point ptFrom;
 	if (bBeforeTextSelected) {
 		ptFrom = view.GetSelectionInfo().select.GetFrom();
 	}
@@ -833,7 +833,7 @@ bool ViewCommander::Command_InsFile(
 
 	if (bBeforeTextSelected) {	// ‘}“ü‚³‚ê‚½•”•ª‚ğ‘I‘ğó‘Ô‚É
 		view.GetSelectionInfo().SetSelectArea(
-			LayoutRange(
+			Range(
 				ptFrom,
 				GetCaret().GetCaretLayoutPos()
 				/*

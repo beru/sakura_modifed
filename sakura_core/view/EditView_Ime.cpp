@@ -141,8 +141,8 @@ LRESULT EditView::SetReconvertStruct(
 	//                      選択範囲を取得                         //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	// 選択範囲を取得 -> ptSelect, ptSelectTo, nSelectedLen
-	LogicPoint	ptSelect;
-	LogicPoint	ptSelectTo;
+	Point	ptSelect;
+	Point	ptSelectTo;
 	int			nSelectedLen;
 	auto& caret = GetCaret();
 	if (GetSelectionInfo().IsTextSelected()) {
@@ -201,7 +201,7 @@ LRESULT EditView::SetReconvertStruct(
 	// 以下 ptSelect.y ptSelect.x, nSelectedLen を使用
 
 	// ドキュメント行取得 -> pCurDocLine
-	DocLine* pCurDocLine = pEditDoc->docLineMgr.GetLine(ptSelect.GetY2());
+	DocLine* pCurDocLine = pEditDoc->docLineMgr.GetLine(ptSelect.y);
 	if (!pCurDocLine)
 		return 0;
 
@@ -489,13 +489,13 @@ LRESULT EditView::SetSelectionFromReonvert(
 	
 	// 選択開始の位置を取得
 	pEditDoc->layoutMgr.LogicToLayout(
-		LogicPoint(nLastReconvIndex + dwOffset, nLastReconvLine),
+		Point(nLastReconvIndex + dwOffset, nLastReconvLine),
 		GetSelectionInfo().select.GetFromPointer()
 	);
 
 	// 選択終了の位置を取得
 	pEditDoc->layoutMgr.LogicToLayout(
-		LogicPoint(nLastReconvIndex + dwOffset + dwLen, nLastReconvLine),
+		Point(nLastReconvIndex + dwOffset + dwLen, nLastReconvLine),
 		GetSelectionInfo().select.GetToPointer()
 	);
 
