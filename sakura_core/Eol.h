@@ -47,7 +47,7 @@ enum class EolType {
 	Unknown = -1	//
 };
 
-#define EOL_TYPE_NUM	(int)EolType::CodeMax // 8
+#define EOL_TYPE_NUM	(size_t)EolType::CodeMax // 8
 
 // 行終端子の配列
 extern const EolType g_pnEolTypeArr[EOL_TYPE_NUM];
@@ -89,7 +89,7 @@ public:
 
 	// 取得
 	EolType			GetType()	const { return eEolType; }		// 現在のTypeを取得
-	LogicInt		GetLen()	const;	// 現在のEOL長を取得。文字単位。
+	size_t			GetLen()	const;	// 現在のEOL長を取得。文字単位。
 	const TCHAR*	GetName()	const;	// 現在のEOLの名称取得
 	const wchar_t*	GetValue2()	const;	// 現在のEOL文字列先頭へのポインタを取得
 	//#####

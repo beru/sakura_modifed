@@ -100,13 +100,13 @@ DlgCtrlCode::DlgCtrlCode()
 }
 
 // モーダルダイアログの表示
-int DlgCtrlCode::DoModal(
+INT_PTR DlgCtrlCode::DoModal(
 	HINSTANCE	hInstance,
 	HWND		hwndParent,
 	LPARAM		lParam
 	)
 {
-	return (int)Dialog::DoModal(hInstance, hwndParent, IDD_CTRLCODE, lParam);
+	return Dialog::DoModal(hInstance, hwndParent, IDD_CTRLCODE, lParam);
 }
 
 // ダイアログデータの設定

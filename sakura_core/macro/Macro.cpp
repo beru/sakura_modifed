@@ -123,17 +123,17 @@ void Macro::AddLParam(
 				case F_HalfPageUp_BOX:
 				case F_HalfPageDown_BOX:
 					if (lParam == 0) {
-						AddIntParam( (Int)editView.GetTextArea().nViewRowNum / 2 );
+						AddIntParam(editView.GetTextArea().nViewRowNum / 2);
 					}else {
-						AddIntParam( lParam );
+						AddIntParam(lParam);
 					}
 					break;
 				case F_1PageUp_BOX:
 				case F_1PageDown_BOX:
 					if (lParam == 0) {
-						AddIntParam( (Int)editView.GetTextArea().nViewRowNum - 1 );
+						AddIntParam(editView.GetTextArea().nViewRowNum - 1);
 					}else {
-						AddIntParam( lParam );
+						AddIntParam(lParam);
 					}
 					break;
 				default:
@@ -299,7 +299,7 @@ void Macro::AddLParam(
 	case F_HalfPageDown:
 	case F_HalfPageDown_Sel:
 		if (lParam == 0) {
-			AddIntParam( (Int)editView.GetTextArea().nViewRowNum / 2 );
+			AddIntParam(editView.GetTextArea().nViewRowNum / 2);
 		}else {
 			AddIntParam( lParam );
 		}
@@ -309,7 +309,7 @@ void Macro::AddLParam(
 	case F_1PageDown:
 	case F_1PageDown_Sel:
 		if (lParam == 0) {
-			AddIntParam( (Int)editView.GetTextArea().nViewRowNum - 1 );
+			AddIntParam(editView.GetTextArea().nViewRowNum - 1);
 		}else {
 			AddIntParam( lParam );
 		}
@@ -1420,9 +1420,9 @@ bool Macro::HandleCommand(
 			if (!WCODE::Is09( arguments[0][0] )) {
 				return false;
 			}
-			LayoutYInt nLineNum = LayoutYInt(_wtoi(arguments[0]) - 1);
+			int nLineNum = _wtoi(arguments[0]) - 1;
 			if (nLineNum < 0) {
-				nLineNum = LayoutYInt(0);
+				nLineNum = 0;
 			}
 			editView.SyncScrollV( editView.ScrollAtV( nLineNum ));
 		}
@@ -1438,9 +1438,9 @@ bool Macro::HandleCommand(
 			if (!WCODE::Is09( arguments[0][0] )) {
 				return false;
 			}
-			LayoutXInt nColumn = LayoutXInt(_wtoi(arguments[0]) - 1);
+			int nColumn = _wtoi(arguments[0]) - 1;
 			if (nColumn < 0) {
-				nColumn = LayoutXInt(0);
+				nColumn = 0;
 			}
 			editView.SyncScrollH( editView.ScrollAtH( nColumn ) );
 		}
@@ -1548,12 +1548,12 @@ bool Macro::HandleFunction(
 			if (VariantChangeType(&varCopy.data, const_cast<VARIANTARG*>(&(args[0])), 0, VT_I4) != S_OK) return false;	// VT_I4として解釈
 			if (-1 < varCopy.data.lVal) {
 				const wchar_t* Buffer;
-				LogicInt nLength;
-				LogicInt nLine;
+				size_t nLength;
+				int nLine;
 				if (varCopy.data.lVal == 0) {
 					nLine = view.GetCaret().GetCaretLogicPos().GetY2();
 				}else {
-					nLine = LogicInt(varCopy.data.lVal - 1);
+					nLine = varCopy.data.lVal - 1;
 				}
 				Buffer = view.pEditDoc->docLineMgr.GetLine(nLine)->GetDocLineStrWithEOL(&nLength);
 				if (Buffer) {
@@ -1587,14 +1587,14 @@ bool Macro::HandleFunction(
 		{
 			if (numArgs != 1) return false;
 			if (VariantChangeType(&varCopy.data, const_cast<VARIANTARG*>(&(args[0])), 0, VT_I4) != S_OK) return false;	// VT_I4として解釈
-			int nTab = (Int)view.pEditDoc->layoutMgr.GetTabSpace();
+			int nTab = view.pEditDoc->layoutMgr.GetTabSpace();
 			Wrap(&result)->Receive(nTab);
 			// 2013.04.30 Moca 条件追加。不要な場合はChangeLayoutParamを呼ばない
 			if (0 < varCopy.data.iVal && nTab != varCopy.data.iVal) {
 				view.GetDocument().bTabSpaceCurTemp = true;
 				view.editWnd.ChangeLayoutParam(
 					false, 
-					LayoutInt(varCopy.data.iVal),
+					varCopy.data.iVal,
 					view.pEditDoc->layoutMgr.GetMaxLineKetas()
 				);
 
@@ -1624,25 +1624,25 @@ bool Macro::HandleFunction(
 	case F_GETSELLINEFROM:
 		// 2005.07.30 maru マクロ追加
 		{
-			Wrap(&result)->Receive((Int)view.GetSelectionInfo().select.GetFrom().y + 1);
+			Wrap(&result)->Receive(view.GetSelectionInfo().select.GetFrom().y + 1);
 		}
 		return true;
 	case F_GETSELCOLUMNFROM:
 		// 2005.07.30 maru マクロ追加
 		{
-			Wrap(&result)->Receive((Int)view.GetSelectionInfo().select.GetFrom().x + 1);
+			Wrap(&result)->Receive(view.GetSelectionInfo().select.GetFrom().x + 1);
 		}
 		return true;
 	case F_GETSELLINETO:
 		// 2005.07.30 maru マクロ追加
 		{
-			Wrap(&result)->Receive((Int)view.GetSelectionInfo().select.GetTo().y + 1);
+			Wrap(&result)->Receive(view.GetSelectionInfo().select.GetTo().y + 1);
 		}
 		return true;
 	case F_GETSELCOLUMNTO:
 		// 2005.07.30 maru マクロ追加
 		{
-			Wrap(&result)->Receive((Int)view.GetSelectionInfo().select.GetTo().x + 1);
+			Wrap(&result)->Receive(view.GetSelectionInfo().select.GetTo().x + 1);
 		}
 		return true;
 	case F_ISINSMODE:
@@ -1705,7 +1705,7 @@ bool Macro::HandleFunction(
 			if (VariantChangeType(&varCopy.data, const_cast<VARIANTARG*>(&(args[0])), 0, VT_I4) != S_OK) {
 				return false;	// VT_I4として解釈
 			}
-			Wrap(&result)->Receive((Int)view.pEditDoc->layoutMgr.GetMaxLineKetas());
+			Wrap(&result)->Receive(view.pEditDoc->layoutMgr.GetMaxLineKetas());
 			if (varCopy.data.iVal < MINLINEKETAS || varCopy.data.iVal > MAXLINEKETAS) {
 				return true;
 			}
@@ -1714,7 +1714,7 @@ bool Macro::HandleFunction(
 			view.editWnd.ChangeLayoutParam(
 				false, 
 				view.pEditDoc->layoutMgr.GetTabSpace(),
-				LayoutInt(varCopy.data.iVal)
+				varCopy.data.iVal
 			);
 		}
 		return true;
@@ -2058,10 +2058,10 @@ bool Macro::HandleFunction(
 			if (!VariantToI4(varCopy, args[0])) {
 				return false;
 			}
-			LayoutInt nLineNum = LayoutInt(varCopy.data.lVal - 1);
+			int nLineNum = varCopy.data.lVal - 1;
 			int ret = 0;
 			if (view.pEditDoc->layoutMgr.GetLineCount() == nLineNum) {
-				ret = (Int)view.pEditDoc->docLineMgr.GetLineCount() + 1;
+				ret = view.pEditDoc->docLineMgr.GetLineCount() + 1;
 			}else {
 				const Layout* pLayout = view.pEditDoc->layoutMgr.SearchLineByLayoutY(nLineNum);
 				if (pLayout) {
@@ -2083,17 +2083,17 @@ bool Macro::HandleFunction(
 			if (!VariantToI4(varCopy, args[0])) {
 				return false;
 			}
-			LayoutInt nLineNum = LayoutInt(varCopy.data.lVal - 1);
+			int nLineNum = varCopy.data.lVal - 1;
 			if (!VariantToI4(varCopy, args[1])) {
 				return false;
 			}
-			LayoutInt nLineCol = LayoutInt(varCopy.data.lVal - 1);
+			int nLineCol = varCopy.data.lVal - 1;
 			if (nLineNum < 0) {
 				return false;
 			}
 
 			LayoutPoint nLayoutPos(nLineCol, nLineNum);
-			LogicPoint nLogicPos(LogicInt(0), LogicInt(0));
+			LogicPoint nLogicPos(0, 0);
 			view.pEditDoc->layoutMgr.LayoutToLogic(nLayoutPos, &nLogicPos);
 			int ret = nLogicPos.GetX() + 1;
 			Wrap(&result)->Receive(ret);
@@ -2110,19 +2110,19 @@ bool Macro::HandleFunction(
 			if (!VariantToI4(varCopy, args[0])) {
 				return false;
 			}
-			LogicInt nLineNum = LogicInt(varCopy.data.lVal - 1);
+			int nLineNum = varCopy.data.lVal - 1;
 			if (!VariantToI4(varCopy, args[1])) {
 				return false;
 			}
-			LogicInt nLineIdx = LogicInt(varCopy.data.lVal - 1);
+			int nLineIdx = varCopy.data.lVal - 1;
 			if (nLineNum < 0) {
 				return false;
 			}
 
 			LogicPoint nLogicPos(nLineIdx, nLineNum);
-			LayoutPoint nLayoutPos(LayoutInt(0), LayoutInt(0));
+			LayoutPoint nLayoutPos(0, 0);
 			view.pEditDoc->layoutMgr.LogicToLayout(nLogicPos, &nLayoutPos);
-			int ret = ((LOWORD(id) == F_LOGICTOLAYOUTLINENUM) ? (Int)nLayoutPos.GetY2() : (Int)nLayoutPos.GetX2()) + 1;
+			int ret = ((LOWORD(id) == F_LOGICTOLAYOUTLINENUM) ? nLayoutPos.GetY2() : nLayoutPos.GetX2()) + 1;
 			Wrap(&result)->Receive(ret);
 		}
 		return true;
@@ -2240,15 +2240,15 @@ bool Macro::HandleFunction(
 						--nLen;
 					}
 				}
-				const int nTabWidth = (Int)view.GetDocument().layoutMgr.GetTabSpaceKetas();
+				const int nTabWidth = view.GetDocument().layoutMgr.GetTabSpaceKetas();
 				int nPosX = varCopy2.data.lVal - 1;
 				for (int i=0; i<nLen;) {
 					if (pLine[i] == WCODE::TAB) {
 						nPosX += nTabWidth - (nPosX % nTabWidth);
 					}else {
-						nPosX += (Int)NativeW::GetKetaOfChar(pLine, nLen, i);
+						nPosX += NativeW::GetKetaOfChar(pLine, nLen, i);
 					}
-					i += t_max(1, (int)(Int)NativeW::GetSizeOfChar(pLine, nLen, i));
+					i += t_max(1, (int)NativeW::GetSizeOfChar(pLine, nLen, i));
 				}
 				nPosX -=  varCopy2.data.lVal - 1;
 				Wrap(&result)->Receive(nPosX);
@@ -2269,25 +2269,25 @@ bool Macro::HandleFunction(
 				DocLine tmpDocLine;
 				tmpDocLine.SetDocLineString(varCopy.data.bstrVal, ::SysStringLen(varCopy.data.bstrVal));
 				const int tmpLenWithEol1 = tmpDocLine.GetLengthWithoutEOL() + (0 < tmpDocLine.GetEol().GetLen() ? 1: 0);
-				const LayoutXInt offset(varCopy2.data.lVal - 1);
+				const int offset(varCopy2.data.lVal - 1);
 				const Layout tmpLayout(
 					&tmpDocLine,
 					LogicPoint(0, 0),
-					LogicXInt(tmpLenWithEol1),
+					tmpLenWithEol1,
 					COLORIDX_TEXT,
 					offset,
 					NULL
 				);
-				LayoutXInt width = view.LineIndexToColumn(&tmpLayout, (LogicInt)tmpDocLine.GetLengthWithEOL()) - offset;
-				Wrap(&result)->Receive((Int)width);
+				int width = view.LineIndexToColumn(&tmpLayout, tmpDocLine.GetLengthWithEOL()) - offset;
+				Wrap(&result)->Receive(width);
 				return true;
 			}
 			return false;
 		}
 	case F_GETDEFAULTCHARLENGTH:
 		{
-			LayoutXInt width = view.GetTextMetrics().GetLayoutXDefault();
-			Wrap(&result)->Receive((Int)width);
+			int width = view.GetTextMetrics().GetLayoutXDefault();
+			Wrap(&result)->Receive(width);
 			return true;
 		}
 	case F_ISINCLUDECLIPBOARDFORMAT:
@@ -2351,13 +2351,13 @@ bool Macro::HandleFunction(
 			}
 			if (!variant_to_int(args[0], nLineNum)) return false;
 			if (!variant_to_int(args[1], nAttType)) return false;
-			LogicInt nLine;
+			int nLine;
 			if (nLineNum == 0) {
 				nLine = view.GetCaret().GetCaretLogicPos().GetY2();
 			}else if (nLineNum < 0) {
 				return false;
 			}else {
-				nLine = LogicInt(nLineNum - 1); // nLineNumは1開始
+				nLine = nLineNum - 1; // nLineNumは1開始
 			}
 			const DocLine* pDocLine = view.GetDocument().docLineMgr.GetLine(nLine);
 			if (!pDocLine) {
@@ -2401,13 +2401,13 @@ bool Macro::HandleFunction(
 		return true;
 	case F_GETVIEWLINES:
 		{
-			int nLines = (Int)view.GetTextArea().nViewRowNum;
+			int nLines = view.GetTextArea().nViewRowNum;
 			Wrap( &result )->Receive( nLines );
 			return true;
 		}
 	case F_GETVIEWCOLUMNS:
 		{
-			int nColumns = (Int)view.GetTextArea().nViewColNum;
+			int nColumns = view.GetTextArea().nViewColNum;
 			Wrap( &result )->Receive( nColumns );
 			return true;
 		}

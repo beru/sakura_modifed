@@ -49,9 +49,6 @@ public:
 	// コンストラクタ・デストラクタ
 	StrictPoint() { x = SuperIntType(0); y = SuperIntType(0); }
 	StrictPoint(int _x, int _y) { x = SuperIntType(_x); y = SuperIntType(_y); }
-#ifdef USE_STRICT_INT
-	StrictPoint(IntType _x, IntType _y) { x = SuperIntType(_x); y = SuperIntType(_y); }
-#endif
 	StrictPoint(const SUPER& rhs) { x = rhs.x; y = rhs.y; }
 
 	// 他の型からも、「明示的に指定すれば」変換が可能
@@ -105,7 +102,7 @@ public:
 
 	// 特殊
 	POINT GetPOINT() const {
-		POINT pt = {(Int)x, (Int)y};
+		POINT pt = {x, y};
 		return pt;
 	}
 };

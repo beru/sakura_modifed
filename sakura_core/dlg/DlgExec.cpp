@@ -58,11 +58,11 @@ static const int codeTable2[] = { 0x00, 0x10, 0x100 };
 
 
 // モーダルダイアログの表示
-int DlgExec::DoModal(HINSTANCE hInstance, HWND hwndParent, LPARAM lParam)
+INT_PTR DlgExec::DoModal(HINSTANCE hInstance, HWND hwndParent, LPARAM lParam)
 {
 	szCommand[0] = _T('\0');	// コマンドライン
 	bEditable = EditDoc::GetInstance(0)->IsEditable();
-	return (int)Dialog::DoModal(hInstance, hwndParent, IDD_EXEC, lParam);
+	return Dialog::DoModal(hInstance, hwndParent, IDD_EXEC, lParam);
 }
 
 

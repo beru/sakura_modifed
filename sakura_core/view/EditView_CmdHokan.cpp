@@ -84,21 +84,21 @@ void EditView::ShowHokanMgr(NativeW& memData, bool bAutoDecided)
 	POINT		poWin;
 	// 補完ウィンドウの表示位置を算出
 	auto& textArea = GetTextArea();
-	LayoutXInt nX = GetCaret().GetCaretLayoutPos().GetX2() - textArea.GetViewLeftCol();
+	int nX = GetCaret().GetCaretLayoutPos().GetX2() - textArea.GetViewLeftCol();
 	if (nX < 0) {
 		poWin.x = 0;
 	}else if (textArea.nViewColNum < nX) {
 		poWin.x = textArea.GetAreaRight();
 	}else {
-		poWin.x = textArea.GetAreaLeft() + (Int)(nX) * GetTextMetrics().GetHankakuDx();
+		poWin.x = textArea.GetAreaLeft() + nX * GetTextMetrics().GetHankakuDx();
 	}
-	LayoutYInt nY = GetCaret().GetCaretLayoutPos().GetY2() - textArea.GetViewTopLine();
+	int nY = GetCaret().GetCaretLayoutPos().GetY2() - textArea.GetViewTopLine();
 	if (nY < 0) {
 		poWin.y = 0;
 	}else if (textArea.nViewRowNum < nY) {
 		poWin.y = textArea.GetAreaBottom();
 	}else {
-		poWin.y = textArea.GetAreaTop() + (Int)(nY) * GetTextMetrics().GetHankakuDy();
+		poWin.y = textArea.GetAreaTop() + nY * GetTextMetrics().GetHankakuDy();
 	}
 	this->ClientToScreen(&poWin);
 	poWin.x -= memData.GetStringLength() * GetTextMetrics().GetHankakuDx();
@@ -199,7 +199,7 @@ int EditView::HokanSearchByFile(
 	// キーの先頭が記号(#$@\)かどうか判定
 	bool bKeyStartWithMark = wcschr(L"$@#\\", pszKey[0]) != NULL;
 
-	for (LogicInt i=LogicInt(0); i<nLines; ++i) {
+	for (int i=0; i<nLines; ++i) {
 		const wchar_t* pszLine = DocReader(pEditDoc->docLineMgr).GetLineStrWithoutEOL(i, &nLineLen);
 
 		for (j=0; j<nLineLen; j+=nCharSize) {

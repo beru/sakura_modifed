@@ -519,12 +519,12 @@ bool CheckUUHeader(const CHAR_TYPE* pSrc, const int nLen, TCHAR* pszFilename)
 	UU フッターを確認
 */
 template <class CHAR_TYPE>
-bool CheckUUFooter(const CHAR_TYPE *pS, const int nLen)
+bool CheckUUFooter(const CHAR_TYPE *pS, const size_t nLen)
 {
-	int nstartidx;
+	size_t nstartidx;
 	const CHAR_TYPE* psrc;
-	int nsrclen;
-	int i;
+	size_t nsrclen;
+	size_t i;
 
 	// フッターの構成
 	// end

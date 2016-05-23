@@ -197,7 +197,7 @@ public: //$$ 仮
 	bool	bGrepRunning;		// Grep処理中
 private:
 	ULONGLONG lastViewDstAddedTime;
-	std::vector<std::pair<const wchar_t*, LogicInt>> searchWords;
+	std::vector<std::pair<const wchar_t*, int>> searchWords;
 	NativeW memBuf;
 	NativeW unicodeBuffer;
 	FileLoad fl;	// 2012/12/18 Uchi 検査するファイルのデフォルトの文字コードを取得する様に

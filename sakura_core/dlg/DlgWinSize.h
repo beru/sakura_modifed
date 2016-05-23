@@ -42,7 +42,7 @@ class DlgWinSize : public Dialog {
 public:
 	DlgWinSize();
 	~DlgWinSize();
-	int DoModal(HINSTANCE, HWND, WinSizeMode&, WinSizeMode&, int&, RECT&);	// モーダルダイアログの表示
+	INT_PTR DoModal(HINSTANCE, HWND, WinSizeMode&, WinSizeMode&, int&, RECT&);	// モーダルダイアログの表示
 
 protected:
 

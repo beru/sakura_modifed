@@ -327,7 +327,7 @@ void PropGeneral::SetData(HWND hwndDlg)
 	::CheckDlgButton(hwndDlg, IDC_CHECK_EXITCONFIRM, csGeneral.bExitConfirm);
 
 	// キーリピート時のスクロール行数
-	::SetDlgItemInt(hwndDlg, IDC_EDIT_REPEATEDSCROLLLINENUM, (Int)csGeneral.nRepeatedScrollLineNum, FALSE);
+	::SetDlgItemInt(hwndDlg, IDC_EDIT_REPEATEDSCROLLLINENUM, csGeneral.nRepeatedScrollLineNum, FALSE);
 
 	// キーリピート時のスクロールを滑らかにするか
 	::CheckDlgButton(hwndDlg, IDC_CHECK_REPEATEDSCROLLSMOOTH, csGeneral.nRepeatedScroll_Smooth);
@@ -420,12 +420,12 @@ int PropGeneral::GetData(HWND hwndDlg)
 	csGeneral.bExitConfirm = DlgButton_IsChecked(hwndDlg, IDC_CHECK_EXITCONFIRM);
 
 	// キーリピート時のスクロール行数
-	csGeneral.nRepeatedScrollLineNum = (LayoutInt)::GetDlgItemInt(hwndDlg, IDC_EDIT_REPEATEDSCROLLLINENUM, NULL, FALSE);
-	if (csGeneral.nRepeatedScrollLineNum < LayoutInt(1)) {
-		csGeneral.nRepeatedScrollLineNum = LayoutInt(1);
+	csGeneral.nRepeatedScrollLineNum = ::GetDlgItemInt(hwndDlg, IDC_EDIT_REPEATEDSCROLLLINENUM, NULL, FALSE);
+	if (csGeneral.nRepeatedScrollLineNum < 1) {
+		csGeneral.nRepeatedScrollLineNum = 1;
 	}
-	if (csGeneral.nRepeatedScrollLineNum > LayoutInt(10)) {
-		csGeneral.nRepeatedScrollLineNum = LayoutInt(10);
+	if (csGeneral.nRepeatedScrollLineNum > 10) {
+		csGeneral.nRepeatedScrollLineNum = 10;
 	}
 
 	// キーリピート時のスクロールを滑らかにするか

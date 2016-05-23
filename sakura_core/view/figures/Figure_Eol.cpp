@@ -31,7 +31,7 @@
 #include "window/EditWnd.h"
 
 // Ü‚è•Ô‚µ•`‰æ
-void _DispWrap(Graphics& gr, DispPos* pDispPos, const EditView& view, LayoutYInt nLineNum);
+void _DispWrap(Graphics& gr, DispPos* pDispPos, const EditView& view, int nLineNum);
 
 // EOF•`‰æŠÖ”
 // ÀÛ‚É‚Í pX ‚Æ nX ‚ªXV‚³‚ê‚éB
@@ -136,7 +136,7 @@ void _DispWrap(
 	Graphics&		gr,
 	DispPos*		pDispPos,
 	const EditView&	view,
-	LayoutYInt		nLineNum
+	int				nLineNum
 	)
 {
 	RECT rcClip2;

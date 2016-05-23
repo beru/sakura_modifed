@@ -81,7 +81,7 @@ const uint16_t nsFuncCode::ppszFuncKind[] = {
 	STR_ERR_DLGFUNCLKUP17,	// _T("支援"),
 	STR_ERR_DLGFUNCLKUP18	// _T("その他")
 };
-const int nsFuncCode::nFuncKindNum = _countof(nsFuncCode::ppszFuncKind);
+const size_t nsFuncCode::nFuncKindNum = _countof(nsFuncCode::ppszFuncKind);
 
 
 // ファイル操作系
@@ -524,7 +524,7 @@ const EFunctionCode nsFuncCode::pnFuncList_Special[] = {
 	F_USERMACRO_LIST,
 	F_PLUGIN_LIST,
 };
-const int nsFuncCode::nFuncList_Special_Num = (int)_countof(nsFuncCode::pnFuncList_Special);
+const size_t nsFuncCode::nFuncList_Special_Num = _countof(nsFuncCode::pnFuncList_Special);
 
 
 
@@ -569,7 +569,7 @@ const EFunctionCode* nsFuncCode::ppnFuncListArr[] = {
 	pnFuncList_Support,	// 支援 				//Oct. 16, 2000 JEPRO 変数名変更(List11→List_Support)
 	pnFuncList_Others	// その他 				//Oct. 16, 2000 JEPRO 変数名変更(List12→List_Others)
 };
-const int nsFuncCode::nFincListNumArrNum = _countof(nsFuncCode::pnFuncListNumArr);
+const size_t nsFuncCode::nFincListNumArrNum = _countof(nsFuncCode::pnFuncListNumArr);
 
 
 // 機能番号に応じてヘルプトピック番号を返す

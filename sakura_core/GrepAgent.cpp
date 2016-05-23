@@ -198,7 +198,7 @@ DWORD GrepAgent::DoGrep(
 	//	Jun. 27, 2001 genta	正規表現ライブラリの差し替え
 	Bregexp		regexp;
 	NativeW		memMessage;
-	int			nWork;
+	size_t		nWork;
 	GrepOption	grepOption;
 
 	/*
@@ -541,7 +541,7 @@ DWORD GrepAgent::DoGrep(
 	memMessage.AppendStringLiteral(L"\r\n\r\n");
 	pszWork = memMessage.GetStringPtr(&nWork);
 //@@@ 2002.01.03 YAZAKI Grep直後はカーソルをGrep直前の位置に動かす
-	LayoutInt tmp_PosY_Layout = viewDst.pEditDoc->layoutMgr.GetLineCount();
+	size_t tmp_PosY_Layout = viewDst.pEditDoc->layoutMgr.GetLineCount();
 	if (0 < nWork && grepOption.bGrepHeader) {
 		AddTail(editWnd, viewDst, memMessage, grepOption.bGrepStdout);
 	}
@@ -627,7 +627,7 @@ DWORD GrepAgent::DoGrep(
 		AddTail(editWnd, viewDst, memOutput, grepOption.bGrepStdout);
 #endif
 	}
-	viewDst.GetCaret().MoveCursor(LayoutPoint(LayoutInt(0), tmp_PosY_Layout), true);	// カーソルをGrep直前の位置に戻す。
+	viewDst.GetCaret().MoveCursor(LayoutPoint(0, tmp_PosY_Layout), true);	// カーソルをGrep直前の位置に戻す。
 
 	dlgCancel.CloseDialog(0);
 

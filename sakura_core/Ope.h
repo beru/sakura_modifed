@@ -70,7 +70,7 @@ public:
 class DeleteOpe : public Ope {
 public:
 	DeleteOpe() : Ope(OpeCode::Delete) {
-		ptCaretPos_PHY_To.Set(LogicInt(0),LogicInt(0));
+		ptCaretPos_PHY_To.Set(0, 0);
 	}
 	virtual void DUMP(void);	// 編集操作要素のダンプ
 public:
@@ -96,7 +96,7 @@ public:
 		:
 		Ope(OpeCode::Replace)
 	{
-		ptCaretPos_PHY_To.Set(LogicInt(0), LogicInt(0));
+		ptCaretPos_PHY_To.Set(0, 0);
 	}
 public:
 	LogicPoint	ptCaretPos_PHY_To;	// 操作前のキャレット位置。文字単位。	[DELETE]

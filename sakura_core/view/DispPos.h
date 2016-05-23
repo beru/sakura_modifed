@@ -36,9 +36,9 @@ public:
 	{
 		ptDrawOrigin.x = 0;
 		ptDrawOrigin.y = 0;
-		ptDrawLayout.x = LayoutInt(0);
-		ptDrawLayout.y = LayoutInt(0);
-		nLineRef = LayoutInt(0);
+		ptDrawLayout.x = 0;
+		ptDrawLayout.y = 0;
+		nLineRef = 0;
 		// キャッシュ
 		pLayoutRef = EditDoc::GetInstance(0)->layoutMgr.GetTopLayout();
 	}
@@ -49,14 +49,14 @@ public:
 	// 固定値
 	void InitDrawPos(const POINT& pt) {
 		ptDrawOrigin = pt;
-		ptDrawLayout.x = ptDrawLayout.y = LayoutInt(0);
+		ptDrawLayout.x = ptDrawLayout.y = 0;
 	}
 
 	// 取得
 	Point GetDrawPos() const {
 		return Point(
-			ptDrawOrigin.x + (Int)ptDrawLayout.x * nDx,
-			ptDrawOrigin.y + (Int)ptDrawLayout.y * nDy
+			ptDrawOrigin.x + ptDrawLayout.x * nDx,
+			ptDrawOrigin.y + ptDrawLayout.y * nDy
 		);
 	}
 
@@ -65,18 +65,18 @@ public:
 	void ForwardDrawLine(int nOffsetLine) { ptDrawLayout.y += nOffsetLine; }
 
 	// リセット
-	void ResetDrawCol() { ptDrawLayout.x = LayoutInt(0); }
+	void ResetDrawCol() { ptDrawLayout.x = 0; }
 
 	// 取得
-	LayoutInt GetDrawCol() const { return ptDrawLayout.x; }
-	LayoutInt GetDrawLine() const { return ptDrawLayout.y; }
+	int GetDrawCol() const { return ptDrawLayout.x; }
+	int GetDrawLine() const { return ptDrawLayout.y; }
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                     テキスト参照位置                        //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 	// 変更
-	void SetLayoutLineRef(LayoutInt nOffsetLine) {
+	void SetLayoutLineRef(int nOffsetLine) {
 		nLineRef = nOffsetLine;
 		// キャッシュ更新
 		pLayoutRef = EditDoc::GetInstance(0)->layoutMgr.SearchLineByLayoutY(nLineRef);
@@ -84,7 +84,7 @@ public:
 	void ForwardLayoutLineRef(int nOffsetLine);
 
 	// 取得
-	LayoutInt		GetLayoutLineRef() const { return nLineRef; }
+	int				GetLayoutLineRef() const { return nLineRef; }
 	const Layout*	GetLayoutRef() const { return pLayoutRef; }
 
 private:
@@ -97,7 +97,7 @@ private:
 	LayoutPoint		ptDrawLayout;	// 描画位置。相対レイアウト単位。
 
 	// テキスト参照位置
-	LayoutInt		nLineRef;		// 絶対レイアウト単位。
+	int				nLineRef;		// 絶対レイアウト単位。
 
 	// キャッシュ############
 	const Layout*	pLayoutRef;

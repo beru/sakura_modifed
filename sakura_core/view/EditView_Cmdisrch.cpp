@@ -348,21 +348,21 @@ void EditView::ISearchExec(bool bNext)
 	
 	ISearchWordMake();
 	
-	LayoutInt nLine(0);
-	LayoutInt nIdx1(0);
+	int nLine(0);
+	int nIdx1(0);
 	
 	if (bNext && bISearchWrap) {
 		switch (nISearchDirection) {
 		case 1:
-			nLine = LayoutInt(0);
-			nIdx1 = LayoutInt(0);
+			nLine = 0;
+			nIdx1 = 0;
 			break;
 		case 0:
 			// ÅŒã‚©‚çŒŸõ
-			LogicInt nLineP;
+			int nLineP;
 			int nIdxP;
 			auto& docLineMgr = pEditDoc->docLineMgr;
-			nLineP =  docLineMgr.GetLineCount() - LogicInt(1);
+			nLineP =  docLineMgr.GetLineCount() - 1;
 			DocLine* pDocLine = docLineMgr.GetLine(nLineP);
 			nIdxP = pDocLine->GetLengthWithEOL() -1;
 			LayoutPoint ptTmp;
@@ -394,7 +394,7 @@ void EditView::ISearchExec(bool bNext)
 
 	// Œ…ˆÊ’u‚©‚çindex‚É•ÏŠ·
 	Layout* pLayout = pEditDoc->layoutMgr.SearchLineByLayoutY(nLine);
-	LogicInt nIdx = LineColumnToIndex(pLayout, nIdx1);
+	int nIdx = LineColumnToIndex(pLayout, nIdx1);
 
 	nISearchHistoryCount ++ ;
 

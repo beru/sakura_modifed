@@ -55,7 +55,7 @@ DlgTypeAscertain::DlgTypeAscertain()
 }
 
 // モーダルダイアログの表示
-int DlgTypeAscertain::DoModal(
+INT_PTR DlgTypeAscertain::DoModal(
 	HINSTANCE hInstance,
 	HWND hwndParent,
 	AscertainInfo* psAscertainInfo
@@ -65,7 +65,7 @@ int DlgTypeAscertain::DoModal(
 
 	psi->nColorType = -1;
 
-	return (int)Dialog::DoModal(hInstance, hwndParent, IDD_TYPE_ASCERTAIN, (LPARAM)NULL);
+	return Dialog::DoModal(hInstance, hwndParent, IDD_TYPE_ASCERTAIN, (LPARAM)NULL);
 }
 
 // ボタンクリック

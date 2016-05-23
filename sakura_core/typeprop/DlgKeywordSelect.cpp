@@ -80,7 +80,7 @@ DlgKeywordSelect::~DlgKeywordSelect()
 
 
 // モーダルダイアログの表示
-int DlgKeywordSelect::DoModal(HINSTANCE hInstance, HWND hwndParent, int* pnSet)
+INT_PTR DlgKeywordSelect::DoModal(HINSTANCE hInstance, HWND hwndParent, int* pnSet)
 {
 	for (int i=0; i<KEYWORD_SELECT_NUM; ++i) {
 		nSet[i] = pnSet[i];

@@ -66,14 +66,14 @@ void CType_Vb::InitTypeConfigImp(TypeConfig& type)
 void DocOutline::MakeFuncList_VisualBasic(FuncInfoArr* pFuncInfoArr)
 {
 	const int	nMaxWordLeng = 255;	// Aug 7, 2003 little YOSHI  VBの名前付け規則より255文字に拡張
-	LogicInt	nLineLen = LogicInt(0);//: 2002/2/3 aroka 警告対策：初期化
+	size_t		nLineLen = 0;//: 2002/2/3 aroka 警告対策：初期化
 	int			nCharChars;
 	wchar_t		szWordPrev[256];	// Aug 7, 2003 little YOSHI  VBの名前付け規則より255文字に拡張
 	wchar_t		szWord[256];		// Aug 7, 2003 little YOSHI  VBの名前付け規則より255文字に拡張
 	int			nWordIdx = 0;
 	int			nMode;
 	wchar_t		szFuncName[256];	// Aug 7, 2003 little YOSHI  VBの名前付け規則より255文字に拡張
-	LogicInt	nFuncLine(0);
+	int			nFuncLine(0);
 	int			nFuncId;
 	int			nParseCnt = 0;
 	bool		bClass;			// クラスモジュールフラグ
@@ -95,7 +95,7 @@ void DocOutline::MakeFuncList_VisualBasic(FuncInfoArr* pFuncInfoArr)
 	const wchar_t* pLine = NULL;
 	// プロシージャフラグ（プロシージャ内ではTrue）
 	bool bProcedure = false;
-	for (LogicInt nLineCount=LogicInt(0); nLineCount<doc.docLineMgr.GetLineCount(); ++nLineCount) {
+	for (int nLineCount=0; nLineCount<doc.docLineMgr.GetLineCount(); ++nLineCount) {
 		if (pLine) {
 			if (L'_' != pLine[nLineLen-1]) {
 				nParseCnt = 0;
@@ -164,7 +164,7 @@ void DocOutline::MakeFuncList_VisualBasic(FuncInfoArr* pFuncInfoArr)
 							}
 							nFuncId |= 0x01;		// 関数
 							nParseCnt = 1;
-							nFuncLine = nLineCount + LogicInt(1);
+							nFuncLine = nLineCount + 1;
 						}
 					}else if (nParseCnt == 0 && wcsicmp(szWord, L"Sub") == 0) {
 						if (wcsicmp(szWordPrev, L"End") == 0) {
@@ -178,7 +178,7 @@ void DocOutline::MakeFuncList_VisualBasic(FuncInfoArr* pFuncInfoArr)
 							}
 							nFuncId |= 0x02;		// 関数
 							nParseCnt = 1;
-							nFuncLine = nLineCount + LogicInt(1);
+							nFuncLine = nLineCount + 1;
 						}
 					}else if (1
 						&& nParseCnt == 0
@@ -188,7 +188,7 @@ void DocOutline::MakeFuncList_VisualBasic(FuncInfoArr* pFuncInfoArr)
 						bProcedure	= true;	// プロシージャフラグをセット
 						nFuncId	|= 0x03;		// プロパティ取得
 						nParseCnt = 1;
-						nFuncLine = nLineCount + LogicInt(1);
+						nFuncLine = nLineCount + 1;
 					}else if (1
 						&& nParseCnt == 0
 						&& wcsicmp(szWord, L"Let") == 0
@@ -197,7 +197,7 @@ void DocOutline::MakeFuncList_VisualBasic(FuncInfoArr* pFuncInfoArr)
 						bProcedure	= true;	// プロシージャフラグをセット
 						nFuncId |= 0x04;		// プロパティ設定
 						nParseCnt = 1;
-						nFuncLine = nLineCount + LogicInt(1);
+						nFuncLine = nLineCount + 1;
 					}else if (1
 						&& nParseCnt == 0
 						&& wcsicmp(szWord, L"Set") == 0
@@ -206,7 +206,7 @@ void DocOutline::MakeFuncList_VisualBasic(FuncInfoArr* pFuncInfoArr)
 						bProcedure	= true;	// プロシージャフラグをセット
 						nFuncId |= 0x05;		// プロパティ参照
 						nParseCnt = 1;
-						nFuncLine = nLineCount + LogicInt(1);
+						nFuncLine = nLineCount + 1;
 					}else if (1
 						&& nParseCnt == 0
 						&& wcsicmp(szWord, L"Const") == 0
@@ -221,14 +221,14 @@ void DocOutline::MakeFuncList_VisualBasic(FuncInfoArr* pFuncInfoArr)
 						}
 						nFuncId	|= 0x06;		// 定数
 						nParseCnt = 1;
-						nFuncLine = nLineCount + LogicInt(1);
+						nFuncLine = nLineCount + 1;
 					}else if (1
 						&& nParseCnt == 0
 						&& wcsicmp(szWord, L"Enum") == 0
 					) {
 						nFuncId	|= 0x207;		// 列挙型宣言
 						nParseCnt = 1;
-						nFuncLine = nLineCount + LogicInt(1);
+						nFuncLine = nLineCount + 1;
 					}else if (1
 						&& nParseCnt == 0
 						&& wcsicmp(szWord, L"Type") == 0
@@ -240,14 +240,14 @@ void DocOutline::MakeFuncList_VisualBasic(FuncInfoArr* pFuncInfoArr)
 						}
 						nFuncId	|= 0x208;		// ユーザ定義型宣言
 						nParseCnt = 1;
-						nFuncLine = nLineCount + LogicInt(1);
+						nFuncLine = nLineCount + 1;
 					}else if (1
 						&& nParseCnt == 0
 						&& wcsicmp(szWord, L"Event") == 0
 					) {
 						nFuncId	|= 0x209;		// イベント宣言
 						nParseCnt = 1;
-						nFuncLine = nLineCount + LogicInt(1);
+						nFuncLine = nLineCount + 1;
 					}else if (1
 						&& nParseCnt == 0
 						&& wcsicmp(szWord, L"Property") == 0
@@ -262,8 +262,8 @@ void DocOutline::MakeFuncList_VisualBasic(FuncInfoArr* pFuncInfoArr)
 						  → レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 						*/
 						LayoutPoint ptPosXY;
-						doc.layoutMgr.LogicToLayout(	LogicPoint(LogicInt(0), nFuncLine - LogicInt(1)), &ptPosXY);
-						pFuncInfoArr->AppendData(nFuncLine, ptPosXY.GetY2() + LayoutInt(1) , szFuncName, nFuncId);
+						doc.layoutMgr.LogicToLayout(	LogicPoint(0, nFuncLine - 1), &ptPosXY);
+						pFuncInfoArr->AppendData(nFuncLine, ptPosXY.GetY2() + 1 , szFuncName, nFuncId);
 						nParseCnt = 0;
 						nFuncId	= 0;	// Jul 10, 2003  little YOSHI  論理和を使用するため、必ず初期化
 					}

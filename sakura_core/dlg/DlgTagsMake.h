@@ -46,7 +46,7 @@ public:
 	/*
 	||  Attributes & Operations
 	*/
-	int DoModal(HINSTANCE, HWND, LPARAM, const TCHAR*);	// モーダルダイアログの表示
+	INT_PTR DoModal(HINSTANCE, HWND, LPARAM, const TCHAR*);	// モーダルダイアログの表示
 
 	TCHAR	szPath[_MAX_PATH + 1];	// フォルダ
 	TCHAR	szTagsCmdLine[_MAX_PATH];	// コマンドラインオプション(個別)

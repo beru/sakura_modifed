@@ -108,7 +108,7 @@ struct ColorStrategyInfo {
 
 	// スキャン位置
 	LPCWSTR			pLineOfLogic;
-	LogicInt		nPosInLogic;
+	int				nPosInLogic;
 
 	// 描画位置
 	DispPos*		pDispPos;
@@ -129,7 +129,7 @@ struct ColorStrategyInfo {
 	EColorIndexType GetCurrentColorBg() const { return index.eColorIndexBg; }
 
 	// 現在のスキャン位置
-	LogicInt GetPosInLogic() const {
+	int GetPosInLogic() const {
 		return nPosInLogic;
 	}
 	

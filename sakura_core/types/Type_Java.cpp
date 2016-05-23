@@ -64,7 +64,7 @@ enum class FuncListJavaMode {
 void DocOutline::MakeFuncList_Java(FuncInfoArr* pFuncInfoArr)
 {
 	const wchar_t*	pLine;
-	LogicInt	nLineLen;
+	size_t		nLineLen;
 	int			i;
 	int			nNestLevel;
 	int			nCharChars;
@@ -74,7 +74,7 @@ void DocOutline::MakeFuncList_Java(FuncInfoArr* pFuncInfoArr)
 	int			nMaxWordLeng = 70;
 	FuncListJavaMode	mode;
 	wchar_t		szFuncName[100];
-	LogicInt	nFuncLine = LogicInt(0);
+	int	nFuncLine = 0;
 	int			nFuncId;
 	int			nFuncNum;
 	wchar_t		szClass[1024];
@@ -91,11 +91,11 @@ void DocOutline::MakeFuncList_Java(FuncInfoArr* pFuncInfoArr)
 	nFuncNum = 0;
 	szClass[0] = L'\0';
 	nClassNestArrNum = 0;
-	LogicInt		nLineCount;
+	int		nLineCount;
 	const wchar_t*	szJavaKigou = L"!\"#%&'()=-^|\\`@[{+;*}]<,>?/";	// 識別子に使用できない半角記号。_:~.$は許可
 	bool bExtEol = GetDllShareData().common.edit.bEnableExtEol;
 
-	for (nLineCount=LogicInt(0); nLineCount<doc.docLineMgr.GetLineCount(); ++nLineCount) {
+	for (nLineCount=0; nLineCount<doc.docLineMgr.GetLineCount(); ++nLineCount) {
 		pLine = doc.docLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
 		for (i=0; i<nLineLen; i+=nCharChars) {
 			nCharChars = NativeW::GetSizeOfChar(pLine, nLineLen, i);
@@ -163,7 +163,7 @@ void DocOutline::MakeFuncList_Java(FuncInfoArr* pFuncInfoArr)
 						  →
 						  レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 						*/
-						LogicPoint  ptPosXY_Logic = LogicPoint(LogicInt(0), nLineCount);
+						LogicPoint  ptPosXY_Logic = LogicPoint(0, nLineCount);
 						LayoutPoint ptPosXY_Layout;
 						doc.layoutMgr.LogicToLayout(
 							ptPosXY_Logic,
@@ -171,7 +171,7 @@ void DocOutline::MakeFuncList_Java(FuncInfoArr* pFuncInfoArr)
 						);
 						wchar_t szWork[256];
 						if (0 < auto_snprintf_s(szWork, _countof(szWork), L"%ls::%ls", szClass, LSW(STR_OUTLINE_JAVA_DEFPOS))) {
-							pFuncInfoArr->AppendData(ptPosXY_Logic.GetY2() + LogicInt(1), ptPosXY_Layout.GetY2() + LayoutInt(1), szWork, nFuncId); //2007.10.09 kobake レイアウト・ロジックの混在バグ修正
+							pFuncInfoArr->AppendData(ptPosXY_Logic.GetY2() + 1, ptPosXY_Layout.GetY2() + 1, szWork, nFuncId); //2007.10.09 kobake レイアウト・ロジックの混在バグ修正
 						}
 					}
 
@@ -260,12 +260,12 @@ void DocOutline::MakeFuncList_Java(FuncInfoArr* pFuncInfoArr)
 							*/
 							LayoutPoint ptPosXY;
 							doc.layoutMgr.LogicToLayout(
-								LogicPoint(LogicInt(0), nFuncLine - LogicInt(1)),
+								LogicPoint(0, nFuncLine - 1),
 								&ptPosXY
 							);
 							wchar_t szWork[256];
 							if (0 < auto_snprintf_s(szWork, _countof(szWork), L"%ls::%ls", szClass, szFuncName)) {
-								pFuncInfoArr->AppendData(nFuncLine, ptPosXY.GetY2() + LayoutInt(1), szWork, nFuncId);
+								pFuncInfoArr->AppendData(nFuncLine, ptPosXY.GetY2() + 1, szWork, nFuncId);
 							}
 						}
 					}
@@ -304,7 +304,7 @@ void DocOutline::MakeFuncList_Java(FuncInfoArr* pFuncInfoArr)
 						wcscmp(L"new", szWordPrev) != 0
 					) {
 						wcscpy_s(szFuncName, szWord);
-						nFuncLine = nLineCount + LogicInt(1);
+						nFuncLine = nLineCount + 1;
 						if (0 < nClassNestArrNum) {
 							nNestLevel2Arr[nClassNestArrNum - 1] = 1;
 						}
@@ -314,8 +314,8 @@ void DocOutline::MakeFuncList_Java(FuncInfoArr* pFuncInfoArr)
 				}else if (L')' == pLine[i]) {
 					int			k;
 					const wchar_t*	pLine2;
-					LogicInt		nLineLen2;
-					LogicInt	nLineCount2;
+					size_t		nLineLen2;
+					int	nLineCount2;
 					nLineCount2 = nLineCount;
 					pLine2 = pLine;
 					nLineLen2 = nLineLen;
@@ -397,12 +397,12 @@ void DocOutline::MakeFuncList_Java(FuncInfoArr* pFuncInfoArr)
 							*/
 							LayoutPoint ptPosXY;
 							doc.layoutMgr.LogicToLayout(
-								LogicPoint(LogicInt(0), nFuncLine - LogicInt(1)),
+								LogicPoint(0, nFuncLine - 1),
 								&ptPosXY
 							);
 							wchar_t szWork[256];
 							if (0 < auto_snprintf_s(szWork, _countof(szWork), L"%ls::%ls", szClass, szFuncName)) {
-								pFuncInfoArr->AppendData(nFuncLine, ptPosXY.GetY2() + LayoutInt(1), szWork, nFuncId);
+								pFuncInfoArr->AppendData(nFuncLine, ptPosXY.GetY2() + 1, szWork, nFuncId);
 							}
 						}
 					}

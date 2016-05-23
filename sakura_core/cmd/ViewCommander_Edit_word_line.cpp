@@ -359,8 +359,8 @@ void ViewCommander::Command_Delete_Line(void)
 		ErrorBeep();
 		return;
 	}
-	GetSelect().SetFrom(LayoutPoint(LayoutInt(0), caret.GetCaretLayoutPos().GetY2()  ));	// 範囲選択開始位置
-	GetSelect().SetTo  (LayoutPoint(LayoutInt(0), caret.GetCaretLayoutPos().GetY2() + 1));	// 範囲選択終了位置
+	GetSelect().SetFrom(LayoutPoint(0, caret.GetCaretLayoutPos().GetY2()  ));	// 範囲選択開始位置
+	GetSelect().SetTo  (LayoutPoint(0, caret.GetCaretLayoutPos().GetY2() + 1));	// 範囲選択終了位置
 
 	LayoutPoint ptCaretPos_OLD = caret.GetCaretLayoutPos();
 
@@ -371,9 +371,9 @@ void ViewCommander::Command_Delete_Line(void)
 		// 行削除した後、フリーカーソルでないのにカーソル位置が行端より右になる不具合対応
 		// フリーカーソルモードでない場合は、カーソル位置を調整する
 		if (!GetDllShareData().common.general.bIsFreeCursorMode) {
-			LogicInt nIndex;
+			int nIndex;
 
-			LayoutInt tmp;
+			int tmp;
 			nIndex = view.LineColumnToIndex2(pLayout, ptCaretPos_OLD.GetX2(), &tmp);
 			ptCaretPos_OLD.x = tmp;
 

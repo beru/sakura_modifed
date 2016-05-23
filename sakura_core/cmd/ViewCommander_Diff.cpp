@@ -44,7 +44,7 @@ static bool Commander_COMPARE_core(
 	)
 {
 	const wchar_t*	pLineSrc;
-	LogicInt		nLineLenSrc;
+	size_t			nLineLenSrc;
 	const wchar_t*	pLineDes;
 	int nLineLenDes;
 	int max_size = (int)GetDllShareData().workBuffer.GetWorkBufferCount<EDIT_CHAR>();
@@ -420,7 +420,7 @@ void ViewCommander::Command_Diff_Next(void)
 
 	LogicPoint	ptXY(0, GetCaret().GetCaretLogicPos().y);
 	int nYOld_Logic = ptXY.y;
-	LogicInt tmp_y;
+	size_t tmp_y;
 	auto& selInfo = view.GetSelectionInfo();
 
 re_do:;	
@@ -475,7 +475,7 @@ void ViewCommander::Command_Diff_Prev(void)
 
 	LogicPoint	ptXY(0, GetCaret().GetCaretLogicPos().y);
 	int			nYOld_Logic = ptXY.y;
-	LogicInt tmp_y;
+	size_t		tmp_y;
 	auto& selInfo = view.GetSelectionInfo();
 
 re_do:;

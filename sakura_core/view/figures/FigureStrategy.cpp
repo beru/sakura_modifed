@@ -158,7 +158,7 @@ void FigureSpace::DrawImp_DrawUnderline(ColorStrategyInfo& csInfo, DispPos& pos)
 		font.hFont = csInfo.view.GetFontset().ChooseFontHandle(font.fontAttr);
 		csInfo.gr.PushMyFont(font);
 
-		int nLength = (Int)(csInfo.pDispPos->GetDrawCol() - pos.GetDrawCol());
+		int nLength = csInfo.pDispPos->GetDrawCol() - pos.GetDrawCol();
 		std::vector<wchar_t> szText(nLength);
 		wchar_t* pszText = &szText[0];
 		for (int i=0; i<nLength; ++i)

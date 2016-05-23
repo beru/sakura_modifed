@@ -80,7 +80,7 @@ public:
 	void SetCategory2Combo(HWND hComboBox) const ;
 	void SetListItem(HWND hListBox, int category) const;
 	
-	int GetCategoryCount(void) const {
+	size_t GetCategoryCount(void) const {
 		return nsFuncCode::nFuncKindNum + 3;	// 分類＋外部マクロ＋カスタムメニュー＋プラグイン
 	}
 	

@@ -81,7 +81,7 @@ void DocLine::SetDocLineStringMove(NativeW* pDataFrom)
 void DocLine::SetEol(const Eol& eol, OpeBlk* pOpeBlk)
 {
 	// 改行コードを削除
-	for (int i=0; i<(Int)eol.GetLen(); ++i) {
+	for (size_t i=0; i<eol.GetLen(); ++i) {
 		line.Chop();
 	}
 

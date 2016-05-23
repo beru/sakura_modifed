@@ -89,8 +89,8 @@ class DiffLineMgr {
 public:
 	DiffLineMgr(DocLineMgr& docLineMgr) : docLineMgr(docLineMgr) { }
 	void ResetAllDiffMark();															// ·•ª•\¦‚Ì‘S‰ğœ
-	bool SearchDiffMark(LogicInt , SearchDirection, LogicInt*);						// ·•ªŒŸõ
-	void SetDiffMarkRange(DiffMark nMode, LogicInt nStartLine, LogicInt nEndLine);	// ·•ª”ÍˆÍ‚Ì“o˜^
+	bool SearchDiffMark(size_t , SearchDirection, size_t*);						// ·•ªŒŸõ
+	void SetDiffMarkRange(DiffMark nMode, size_t nStartLine, size_t nEndLine);	// ·•ª”ÍˆÍ‚Ì“o˜^
 private:
 	DocLineMgr& docLineMgr;
 };

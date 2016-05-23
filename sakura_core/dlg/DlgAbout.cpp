@@ -126,9 +126,9 @@ INT_PTR DlgAbout::DispatchEvent(
 // To Here Nov. 7, 2000 genta
 
 // モーダルダイアログの表示
-int DlgAbout::DoModal(HINSTANCE hInstance, HWND hwndParent)
+INT_PTR DlgAbout::DoModal(HINSTANCE hInstance, HWND hwndParent)
 {
-	return (int)Dialog::DoModal(hInstance, hwndParent, IDD_ABOUT, (LPARAM)NULL);
+	return Dialog::DoModal(hInstance, hwndParent, IDD_ABOUT, (LPARAM)NULL);
 }
 
 /*! 初期化処理

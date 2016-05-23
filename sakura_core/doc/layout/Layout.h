@@ -39,9 +39,9 @@ public:
 	Layout(
 		const DocLine*	pDocLine,		// 実データへの参照
 		LogicPoint		ptLogicPos,		// 実データ参照位置
-		LogicInt		nLength,		// 実データ内データ長
+		size_t			nLength,		// 実データ内データ長
 		EColorIndexType	nTypePrev,
-		LayoutInt		nTypeIndent,
+		int				nTypeIndent,
 		LayoutColorInfo*	pColorInfo
 		)
 	{
@@ -59,32 +59,32 @@ public:
 	
 	// ptLogicPos.xで補正したあとの文字列を得る
 	const wchar_t* GetPtr() const { return pDocLine->GetPtr() + ptLogicPos.x; }
-	LogicInt GetLengthWithEOL() const { return nLength;	}	//	ただしEOLは常に1文字とカウント？？
-	LogicInt GetLengthWithoutEOL() const { return nLength - (eol.GetLen() ? 1 : 0);	}
-	//LogicInt GetLength() const { return nLength; }	// CMemoryIterator用（EOL含む）
-	LayoutInt GetIndent() const { return nIndent; }	// このレイアウト行のインデントサイズを取得。単位は半角文字。	CMemoryIterator用
+	size_t GetLengthWithEOL() const { return nLength;	}	//	ただしEOLは常に1文字とカウント？？
+	size_t GetLengthWithoutEOL() const { return nLength - (eol.GetLen() ? 1 : 0);	}
+	//int GetLength() const { return nLength; }	// CMemoryIterator用（EOL含む）
+	size_t GetIndent() const { return nIndent; }	// このレイアウト行のインデントサイズを取得。単位は半角文字。	CMemoryIterator用
 
 	// 取得インターフェース
-	LogicInt GetLogicLineNo() const { if (this) return ptLogicPos.GetY2(); else return LogicInt(-1); } //$$$高速化
-	LogicInt GetLogicOffset() const { return ptLogicPos.GetX2(); }
+	int GetLogicLineNo() const { if (this) return ptLogicPos.GetY2(); else return -1; } //$$$高速化
+	int GetLogicOffset() const { return ptLogicPos.GetX2(); }
 	LogicPoint GetLogicPos() const { return ptLogicPos; }
 	EColorIndexType GetColorTypePrev() const { return nTypePrev; } //#########汚っ
-	LayoutInt GetLayoutWidth() const { return nLayoutWidth; }		// 2009.08.28 nasukoji	このレイアウト行の改行を含むレイアウト長を返す
+	size_t GetLayoutWidth() const { return nLayoutWidth; }		// 2009.08.28 nasukoji	このレイアウト行の改行を含むレイアウト長を返す
 
 	// 変更インターフェース
-	void OffsetLogicLineNo(LogicInt n) { ptLogicPos.y += n; }
+	void OffsetLogicLineNo(int n) { ptLogicPos.y += n; }
 	void SetColorTypePrev(EColorIndexType n) {
 		nTypePrev = n;
 	}
-	void SetLayoutWidth(LayoutInt nWidth) { nLayoutWidth = nWidth; }
+	void SetLayoutWidth(size_t nWidth) { nLayoutWidth = nWidth; }
 
 	// レイアウト幅を計算。改行は含まない。2007.10.11 kobake
-	LayoutInt CalcLayoutWidth(const LayoutMgr& layoutMgr) const;
+	size_t CalcLayoutWidth(const LayoutMgr& layoutMgr) const;
 
 	// オフセット値をレイアウト単位に変換して取得。2007.10.17 kobake
-	LayoutInt CalcLayoutOffset(const LayoutMgr& layoutMgr,
-								LogicInt nStartPos = LogicInt(0),
-								LayoutInt nStartOffset = LayoutInt(0)) const;
+	int CalcLayoutOffset(const LayoutMgr& layoutMgr,
+							int nStartPos = 0,
+							int nStartOffset = 0) const;
 
 	// 文字列参照を取得
 	StringRef GetStringRef() const { return StringRef(GetPtr(), GetLengthWithEOL()); }
@@ -112,15 +112,15 @@ private:
 	Layout*			pNext;
 
 	// データ参照範囲
-	const DocLine*		pDocLine;			// 実データへの参照
+	const DocLine*		pDocLine;		// 実データへの参照
 	LogicPoint			ptLogicPos;		// 対応するロジック参照位置
-	LogicInt			nLength;			// このレイアウト行の長さ。文字単位。
+	size_t				nLength;		// このレイアウト行の長さ。文字単位。
 	
 	// その他属性
 	EColorIndexType		nTypePrev;		// タイプ 0=通常 1=行コメント 2=ブロックコメント 3=シングルクォーテーション文字列 4=ダブルクォーテーション文字列
-	LayoutInt			nIndent;			// このレイアウト行のインデント数 @@@ 2002.09.23 YAZAKI
+	size_t				nIndent;		// このレイアウト行のインデント数 @@@ 2002.09.23 YAZAKI
 	Eol					eol;
-	LayoutInt			nLayoutWidth;		// このレイアウト行の改行を含むレイアウト長（「折り返さない」選択時のみ）	// 2009.08.28 nasukoji
+	size_t				nLayoutWidth;	// このレイアウト行の改行を含むレイアウト長（「折り返さない」選択時のみ）	// 2009.08.28 nasukoji
 	LayoutExInfo		exInfo;			// 色分け詳細情報
 
 private:

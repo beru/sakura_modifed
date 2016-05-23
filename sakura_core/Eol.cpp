@@ -51,10 +51,10 @@ struct EolDefinition {
 	const TCHAR*	szName;
 	const WCHAR*	szDataW;
 	const ACHAR*	szDataA;
-	int				nLen;
+	size_t			nLen;
 
-	bool StartsWith(const WCHAR* pData, int nLen) const { return this->nLen <= nLen && auto_memcmp(pData, szDataW, this->nLen) == 0; }
-	bool StartsWith(const ACHAR* pData, int nLen) const { return this->nLen <= nLen && szDataA[0] != '\0' && auto_memcmp(pData, szDataA, this->nLen) == 0; }
+	bool StartsWith(const WCHAR* pData, size_t nLen) const { return this->nLen <= nLen && auto_memcmp(pData, szDataW, this->nLen) == 0; }
+	bool StartsWith(const ACHAR* pData, size_t nLen) const { return this->nLen <= nLen && szDataA[0] != '\0' && auto_memcmp(pData, szDataA, this->nLen) == 0; }
 };
 
 static const EolDefinition g_aEolTable[] = {
@@ -70,10 +70,10 @@ static const EolDefinition g_aEolTable[] = {
 struct EolDefinitionForUniFile {
 	const char*	szDataW;
 	const char* szDataWB;
-	int			nLen;
+	size_t		nLen;
 
-	bool StartsWithW(const char* pData, int nLen) const { return this->nLen <= nLen && memcmp(pData, szDataW, this->nLen) == 0; }
-	bool StartsWithWB(const char* pData, int nLen) const { return this->nLen <= nLen && memcmp(pData, szDataWB, this->nLen) == 0; }
+	bool StartsWithW(const char* pData, size_t nLen) const { return this->nLen <= nLen && memcmp(pData, szDataW, this->nLen) == 0; }
+	bool StartsWithWB(const char* pData, size_t nLen) const { return this->nLen <= nLen && memcmp(pData, szDataWB, this->nLen) == 0; }
 };
 static const EolDefinitionForUniFile g_aEolTable_uni_file[] = {
 	{ "",					"", 					0 },
@@ -97,9 +97,9 @@ static const EolDefinitionForUniFile g_aEolTable_uni_file[] = {
 	@return 改行コードの種類。終端子が見つからなかったときはEolType::Noneを返す。
 */
 template <class T>
-EolType GetEOLType(const T* pszData, int nDataLen)
+EolType GetEOLType(const T* pszData, size_t nDataLen)
 {
-	for (int i=1; i<EOL_TYPE_NUM; ++i) {
+	for (size_t i=1; i<EOL_TYPE_NUM; ++i) {
 		if (g_aEolTable[i].StartsWith(pszData, nDataLen)) {
 			return g_pnEolTypeArr[i];
 		}
@@ -138,9 +138,9 @@ EolType _GetEOLType_unibe(const char* pszData, int nDataLen)
 
 
 // 現在のEOL長を取得。文字単位。
-LogicInt Eol::GetLen() const
+size_t Eol::GetLen() const
 {
-	return LogicInt(g_aEolTable[(int)eEolType].nLen);
+	return g_aEolTable[(int)eEolType].nLen;
 }
 
 // 現在のEOLの名称取得

@@ -351,7 +351,7 @@ void PropTypesWindow::SetData(HWND hwndDlg)
 
 	{
 		// çsî‘çÜÇÃç≈è¨åÖêî	// í«â¡ 2014.08.02 katze
-		::SetDlgItemInt(hwndDlg, IDC_EDIT_LINENUMWIDTH, (Int)types.nLineNumWidth, FALSE);
+		::SetDlgItemInt(hwndDlg, IDC_EDIT_LINENUMWIDTH, types.nLineNumWidth, FALSE);
 	}
 
 	// îwåiâÊëú

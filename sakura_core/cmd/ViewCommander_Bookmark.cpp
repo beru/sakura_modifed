@@ -79,8 +79,8 @@ void ViewCommander::Command_Jump(void)
 	if (!dlgJump.bPLSQL) {	// PL/SQLソースの有効行か
 		// 行番号の表示 false=折り返し単位／true=改行単位
 		if (GetDllShareData().bLineNumIsCRLF_ForJump) {
-			if (LogicInt(0) >= nLineNum) {
-				nLineNum = LogicInt(1);
+			if (0 >= nLineNum) {
+				nLineNum = 1;
 			}
 			/*
 			  カーソル位置変換
@@ -93,13 +93,13 @@ void ViewCommander::Command_Jump(void)
 				LogicPoint(0, nLineNum - 1),
 				&ptPosXY
 			);
-			nLineNum = (Int)ptPosXY.y + 1;
+			nLineNum = ptPosXY.y + 1;
 		}else {
 			if (0 >= nLineNum) {
 				nLineNum = 1;
 			}
 			if (nLineNum > layoutMgr.GetLineCount()) {
-				nLineNum = (Int)layoutMgr.GetLineCount();
+				nLineNum = layoutMgr.GetLineCount();
 			}
 		}
 		// Sep. 8, 2000 genta
@@ -139,11 +139,11 @@ void ViewCommander::Command_Jump(void)
 
 	auto& lineMgr = GetDocument().docLineMgr;
 	for (; nLineCount<lineMgr.GetLineCount(); ++nLineCount) {
-		LogicInt nLineLen;
-		const wchar_t* pLine = lineMgr.GetLine(LogicInt(nLineCount))->GetDocLineStrWithEOL(&nLineLen);
+		size_t nLineLen;
+		const wchar_t* pLine = lineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
 		bValidLine = false;
-		LogicInt i;
-		for (i=LogicInt(0); i<nLineLen; ++i) {
+		size_t i;
+		for (i=0; i<nLineLen; ++i) {
 			wchar_t let = pLine[i];
 			if (1
 				&& let != L' '
@@ -152,7 +152,7 @@ void ViewCommander::Command_Jump(void)
 				break;
 			}
 		}
-		LogicInt nBgn = i;
+		int nBgn = i;
 		wchar_t let = 0;
 		wchar_t prevLet;
 		auto& csEdit = GetDllShareData().common.edit;
@@ -277,14 +277,14 @@ void ViewCommander::Command_Bookmark_Set(void)
 		LogicPoint ptTo;
 		auto& layoutMgr = GetDocument().layoutMgr;
 		layoutMgr.LayoutToLogic(
-			LayoutPoint(LayoutInt(0), select.GetFrom().y),
+			LayoutPoint(0, select.GetFrom().y),
 			&ptFrom
 		);
 		layoutMgr.LayoutToLogic(
-			LayoutPoint(LayoutInt(0), select.GetTo().y),
+			LayoutPoint(0, select.GetTo().y),
 			&ptTo
 		);
-		for (LogicInt nY=ptFrom.GetY2(); nY<=ptTo.y; ++nY) {
+		for (int nY=ptFrom.GetY2(); nY<=ptTo.y; ++nY) {
 			pDocLine = lineMgr.GetLine(nY);
 			if (pDocLine) {
 				BookmarkSetter bookmark(pDocLine);
@@ -313,7 +313,7 @@ void ViewCommander::Command_Bookmark_Next(void)
 	bool	bRedo	=	true;	// hor
 
 	LogicPoint	ptXY(0, GetCaret().GetCaretLogicPos().y);
-	LogicInt tmp_y;
+	int tmp_y;
 
 	nYOld = ptXY.y;					// hor
 
@@ -357,7 +357,7 @@ void ViewCommander::Command_Bookmark_Prev(void)
 	bool	bRedo	=	true;	// hor
 
 	LogicPoint	ptXY(0, GetCaret().GetCaretLogicPos().y);
-	LogicInt tmp_y;
+	int tmp_y;
 
 	nYOld = ptXY.y;						// hor
 

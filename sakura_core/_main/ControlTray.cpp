@@ -87,7 +87,7 @@ void ControlTray::DoGrep()
 	}
 
 	// Grepダイアログの表示
-	int nRet = dlgGrep.DoModal(hInstance, NULL, _T(""));
+	INT_PTR nRet = dlgGrep.DoModal(hInstance, NULL, _T(""));
 	if (!nRet || !GetTrayHwnd()) {
 		return;
 	}
@@ -1391,8 +1391,8 @@ bool ControlTray::OpenNewEditor2(
 	CommandLineString cmdLine;
 	if (editInfo.ptCursor.x >= 0			) cmdLine.AppendF(_T(" -X=%d"), editInfo.ptCursor.x + 1);
 	if (editInfo.ptCursor.y >= 0			) cmdLine.AppendF(_T(" -Y=%d"), editInfo.ptCursor.y + 1);
-	if (editInfo.nViewLeftCol >= LayoutInt(0)) cmdLine.AppendF(_T(" -VX=%d"), (Int)editInfo.nViewLeftCol + 1);
-	if (editInfo.nViewTopLine >= LayoutInt(0)) cmdLine.AppendF(_T(" -VY=%d"), (Int)editInfo.nViewTopLine + 1);
+	if (editInfo.nViewLeftCol >= 0) cmdLine.AppendF(_T(" -VX=%d"), editInfo.nViewLeftCol + 1);
+	if (editInfo.nViewTopLine >= 0) cmdLine.AppendF(_T(" -VY=%d"), editInfo.nViewTopLine + 1);
 	LoadInfo loadInfo;
 	loadInfo.filePath = editInfo.szPath;
 	loadInfo.eCharCode = editInfo.nCharCode;

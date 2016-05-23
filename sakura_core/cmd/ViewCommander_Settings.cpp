@@ -359,7 +359,7 @@ void ViewCommander::Command_WrapWindowWidth(void)	// Oct. 7, 2000 JEPRO WRAPWIND
 {
 	// Jan. 8, 2006 genta 判定処理をview.GetWrapMode()へ移動
 	EditView::TOGGLE_WRAP_ACTION nWrapMode;
-	LayoutInt newKetas;
+	int newKetas;
 	
 	nWrapMode = view.GetWrapMode(&newKetas);
 	auto& doc = GetDocument();
@@ -375,7 +375,7 @@ void ViewCommander::Command_WrapWindowWidth(void)	// Oct. 7, 2000 JEPRO WRAPWIND
 //	view.pTypeData->nMaxLineKetas = nViewColNum;
 
 // 2013.12.30 左隅に移動しないように
-//	view.GetTextArea().SetViewLeftCol(LayoutInt(0));		// 表示域の一番左の桁(0開始)
+//	view.GetTextArea().SetViewLeftCol(0);		// 表示域の一番左の桁(0開始)
 
 	// フォーカス移動時の再描画
 	view.RedrawAll();
@@ -430,12 +430,12 @@ void ViewCommander::Command_TextWrapMethod(TextWrappingMethod nWrapMethod)
 		break;
 
 	case TextWrappingMethod::SettingWidth:	// 指定桁で折り返す
-		nWidth = (Int)doc.docType.GetDocumentAttribute().nMaxLineKetas;
+		nWidth = doc.docType.GetDocumentAttribute().nMaxLineKetas;
 		break;
 
 	case TextWrappingMethod::WindowWidth:		// 右端で折り返す
 		// ウィンドウが左右に分割されている場合は左側のウィンドウ幅を使用する
-		nWidth = (Int)view.ViewColNumToWrapColNum(GetEditWindow().GetView(0).GetTextArea().nViewColNum);
+		nWidth = view.ViewColNumToWrapColNum(GetEditWindow().GetView(0).GetTextArea().nViewColNum);
 		break;
 
 	default:
@@ -448,7 +448,7 @@ void ViewCommander::Command_TextWrapMethod(TextWrappingMethod nWrapMethod)
 	doc.bTextWrapMethodCurTemp = (doc.docType.GetDocumentAttribute().nTextWrapMethod != nWrapMethod);
 
 	// 折り返し位置を変更
-	GetEditWindow().ChangeLayoutParam(false, doc.layoutMgr.GetTabSpace(), (LayoutInt)nWidth);
+	GetEditWindow().ChangeLayoutParam(false, doc.layoutMgr.GetTabSpace(), nWidth);
 
 	// 2009.08.28 nasukoji	「折り返さない」ならテキスト最大幅を算出、それ以外は変数をクリア
 	if (doc.nTextWrapMethodCur == TextWrappingMethod::NoWrapping) {

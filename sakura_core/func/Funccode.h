@@ -171,13 +171,13 @@ typedef UINT16 uint16_t;
 // 機能一覧に関するデータ宣言
 namespace nsFuncCode {
 	extern const uint16_t		ppszFuncKind[];
-	extern const int			nFuncKindNum;
+	extern const size_t			nFuncKindNum;
 	extern const int			pnFuncListNumArr[];
 	extern const EFunctionCode*	ppnFuncListArr[];
-	extern const int			nFincListNumArrNum;
+	extern const size_t			nFincListNumArrNum;
 
 	extern const EFunctionCode	pnFuncList_Special[];
-	extern const int			nFuncList_Special_Num;
+	extern const size_t			nFuncList_Special_Num;
 };
 ///////////////////////////////////////////////////////////////////////
 

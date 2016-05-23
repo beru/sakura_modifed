@@ -127,19 +127,19 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 	// 設定
-	LayoutInt MoveCursorToClientPoint(const POINT& ptClientPos, bool = false, LayoutPoint* = nullptr);		// マウス等による座標指定によるカーソル移動
-	LayoutInt Cursor_UPDOWN(LayoutInt nMoveLines, bool bSelect);		// カーソル上下移動処理
-	LayoutInt MoveCursor(												// 行桁指定によるカーソル移動
+	int MoveCursorToClientPoint(const POINT& ptClientPos, bool = false, LayoutPoint* = nullptr);		// マウス等による座標指定によるカーソル移動
+	int Cursor_UPDOWN(int nMoveLines, bool bSelect);		// カーソル上下移動処理
+	int MoveCursor(												// 行桁指定によるカーソル移動
 		LayoutPoint		ptWk_CaretPos,									// [in] 移動先レイアウト位置
 		bool			bScroll,										// [in] true: 画面位置調整有り  false: 画面位置調整無し
 		int				nCaretMarginRate	= _CARETMARGINRATE,			// [in] 縦スクロール開始位置を決める値
 		bool			bUnderlineDoNotOFF	= false,					// [in] アンダーラインを消去しない
 		bool			bVertLineDoNotOFF	= false						// [in] カーソル位置縦線を消去しない
 	);
-	LayoutInt MoveCursorFastMode(
+	int MoveCursorFastMode(
 		const LogicPoint&	pptWk_CaretPosLogic							// [in] 移動先ロジック位置
 	);
-	LayoutInt MoveCursorProperly(LayoutPoint ptNewXY, bool, bool = false, LayoutPoint* = nullptr, int = _CARETMARGINRATE, int = 0);	// 行桁指定によるカーソル移動（座標調整付き）
+	int MoveCursorProperly(LayoutPoint ptNewXY, bool, bool = false, LayoutPoint* = nullptr, int = _CARETMARGINRATE, int = 0);	// 行桁指定によるカーソル移動（座標調整付き）
 
 	//$ 設計思想的に微妙
 	void SetCaretLayoutPos(const LayoutPoint& pt) { ptCaretPos_Layout = pt; }	// キャレット位置(レイアウト)を設定
@@ -202,17 +202,17 @@ private:
 	LogicPoint	ptCaretPos_Logic;		// カーソル位置。ロジック単位。データ内文字単位。
 
 	// カーソル位置計算キャッシュ
-	LayoutInt nOffsetCache;
-	LayoutInt nLineNoCache;
-	LogicInt  nLogicOffsetCache;
-	LogicInt  nLineLogicNoCache;
-	LayoutInt nLineNo50Cache;
-	LayoutInt nOffset50Cache;
-	LogicInt  nLogicOffset50Cache;
+	int nOffsetCache;
+	int nLineNoCache;
+	int nLogicOffsetCache;
+	int nLineLogicNoCache;
+	int nLineNo50Cache;
+	int nOffset50Cache;
+	int nLogicOffset50Cache;
 	int nLineLogicModCache;
 	
 public:
-	LayoutInt	nCaretPosX_Prev;	// 直前のX座標記憶用。レイアウト単位。このソースの下部に詳細説明があります。
+	int	nCaretPosX_Prev;	// 直前のX座標記憶用。レイアウト単位。このソースの下部に詳細説明があります。
 
 	// キャレット見た目
 private:

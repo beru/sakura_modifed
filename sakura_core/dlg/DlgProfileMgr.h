@@ -52,7 +52,7 @@ public:
 	/*
 	||  Attributes & Operations
 	*/
-	int		DoModal(HINSTANCE, HWND, LPARAM);	// モーダルダイアログの表示
+	INT_PTR DoModal(HINSTANCE, HWND, LPARAM);	// モーダルダイアログの表示
 
 protected:
 

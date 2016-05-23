@@ -58,10 +58,10 @@ void CType_Tex::InitTypeConfigImp(TypeConfig& type)
 void DocOutline::MakeTopicList_tex(FuncInfoArr* pFuncInfoArr)
 {
 	const wchar_t*	pLine;
-	LogicInt		nLineLen;
-	int				i;
-	int				j;
-	int				k;
+	size_t		nLineLen;
+	int			i;
+	int			j;
+	int			k;
 
 	const int nMaxStack = 8;	//	ネストの最深
 	int nDepth = 0;				//	いまのアイテムの深さを表す数値。
@@ -72,8 +72,8 @@ void DocOutline::MakeTopicList_tex(FuncInfoArr* pFuncInfoArr)
 	int bNoNumber = 0;					// * 付の場合はセクション番号を付けない
 
 	// 一行ずつ
-	LogicInt	nLineCount;
-	for (nLineCount=LogicInt(0); nLineCount<doc.docLineMgr.GetLineCount(); ++nLineCount) {
+	size_t nLineCount;
+	for (nLineCount=0; nLineCount<doc.docLineMgr.GetLineCount(); ++nLineCount) {
 		pLine = doc.docLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
 		if (!pLine) break;
 		// 一文字ずつ
@@ -163,7 +163,7 @@ void DocOutline::MakeTopicList_tex(FuncInfoArr* pFuncInfoArr)
 					wcscat(tmpstr, L" ");
 				}
 				wcscat(tmpstr, szTitle);
-				pFuncInfoArr->AppendData(nLineCount + LogicInt(1), ptPos.GetY2() + LayoutInt(1), tmpstr, 0, nDepth);
+				pFuncInfoArr->AppendData(nLineCount + 1, ptPos.GetY2() + 1, tmpstr, 0, nDepth);
 				if (!bNoNumber) lastSection = thisSection;
 			}
 			i += j;

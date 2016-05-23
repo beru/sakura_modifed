@@ -229,14 +229,14 @@ bool EditView::MiniMapCursorLineTip(POINT* po, RECT* rc, bool* pbHide)
 	LayoutPoint ptNew;
 	GetTextArea().ClientToLayout(ptClient, &ptNew);
 	// 同じ行ならなにもしない
-	if (dwTipTimer == 0 && tipWnd.nSearchLine == (Int)ptNew.y) {
+	if (dwTipTimer == 0 && tipWnd.nSearchLine == ptNew.y) {
 		*pbHide = false; // 表示継続
 		return false;
 	}
 	NativeW memCurText;
-	LayoutYInt nTipBeginLine = ptNew.y;
-	LayoutYInt nTipEndLine = ptNew.y + LayoutYInt(4);
-	for (LayoutYInt nCurLine=nTipBeginLine; nCurLine<nTipEndLine; ++nCurLine) {
+	int nTipBeginLine = ptNew.y;
+	int nTipEndLine = ptNew.y + 4;
+	for (int nCurLine=nTipBeginLine; nCurLine<nTipEndLine; ++nCurLine) {
 		const Layout* pLayout = nullptr;
 		if (0 <= nCurLine) {
 			pLayout = GetDocument().layoutMgr.SearchLineByLayoutY( nCurLine );
@@ -244,18 +244,18 @@ bool EditView::MiniMapCursorLineTip(POINT* po, RECT* rc, bool* pbHide)
 		if (pLayout) {
 			NativeW memCurLine;
 			{
-				LogicInt nLineLen = pLayout->GetLengthWithoutEOL();
+				int nLineLen = pLayout->GetLengthWithoutEOL();
 				const wchar_t* pszData = pLayout->GetPtr();
 				int nLimitLength = 80;
 				int pre = 0;
 				int i = 0;
 				int k = 0;
 				int charSize = NativeW::GetSizeOfChar( pszData, nLineLen, i );
-				int charWidth = t_max(1, (int)(Int)NativeW::GetKetaOfChar( pszData, nLineLen, i ));
+				int charWidth = t_max(1, (int)NativeW::GetKetaOfChar( pszData, nLineLen, i ));
 				int charType = 0;
 				// 連続する"\t" " " を " "1つにする
 				// 左からnLimitLengthまでの幅を切り取り
-				while (i + charSize <= (Int)nLineLen && k + charWidth <= nLimitLength) {
+				while (i + charSize <= nLineLen && k + charWidth <= nLimitLength) {
 					if (pszData[i] == L'\t' || pszData[i] == L' ') {
 						if (charType == 0) {
 							memCurLine.AppendString( pszData + pre , i - pre );
@@ -270,7 +270,7 @@ bool EditView::MiniMapCursorLineTip(POINT* po, RECT* rc, bool* pbHide)
 					}
 					i += charSize;
 					charSize = NativeW::GetSizeOfChar( pszData, nLineLen, i );
-					charWidth = t_max(1, (int)(Int)NativeW::GetKetaOfChar( pszData, nLineLen, i ));
+					charWidth = t_max(1, (int)NativeW::GetKetaOfChar( pszData, nLineLen, i ));
 				}
 				memCurLine.AppendString( pszData + pre , i - pre );
 			}
@@ -286,10 +286,10 @@ bool EditView::MiniMapCursorLineTip(POINT* po, RECT* rc, bool* pbHide)
 	}
 	tipWnd.key = memCurText;
 	tipWnd.info = memCurText.GetStringT();
-	tipWnd.nSearchLine = (Int)ptNew.y;
+	tipWnd.nSearchLine = ptNew.y;
 	dwTipTimer = 0;		// 辞書Tipを表示している
 	poTipCurPos = *po;	// 現在のマウスカーソル位置
-	return true;			// ここまで来ていればヒット・ワード
+	return true;		// ここまで来ていればヒット・ワード
 }
 
 // 現在カーソル位置単語または選択範囲より検索等のキーを取得
@@ -309,12 +309,12 @@ void EditView::GetCurrentTextForSearch(NativeW& memCurText, bool bStripMaxPath /
 			}
 		}
 	}else {
-		LogicInt nLineLen;
+		size_t nLineLen;
 		const Layout* pLayout;
 		const wchar_t* pLine = pEditDoc->layoutMgr.GetLineStr(GetCaret().GetCaretLayoutPos().GetY2(), &nLineLen, &pLayout);
 		if (pLine) {
 			// 指定された桁に対応する行のデータ内の位置を調べる
-			LogicInt nIdx = LineColumnToIndex(pLayout, GetCaret().GetCaretLayoutPos().GetX2());
+			int nIdx = LineColumnToIndex(pLayout, GetCaret().GetCaretLayoutPos().GetX2());
 
 			// 現在位置の単語の範囲を調べる
 			LayoutRange range;
@@ -439,11 +439,11 @@ int EditView::IsSearchString(
 	const StringRef&	str,
 	/*
 	const wchar_t*	pszData,
-	CLogicInt		nDataLen,
+	int			nDataLen,
 	*/
-	LogicInt		nPos,
-	LogicInt*		pnSearchStart,
-	LogicInt*		pnSearchEnd
+	int			nPos,
+	int*		pnSearchStart,
+	int*		pnSearchEnd
 	) const
 {
 	*pnSearchStart = nPos;	// 2002.02.08 hor
@@ -466,14 +466,14 @@ int EditView::IsSearchString(
 		}
 	}else if (curSearchOption.bWordOnly) { // 単語検索
 		// 指定位置の単語の範囲を調べる
-		LogicInt posWordHead, posWordEnd;
-		if (!WordParse::WhereCurrentWord_2(str.GetPtr(), LogicInt(str.GetLength()), nPos, &posWordHead, &posWordEnd, NULL, NULL)) {
+		int posWordHead, posWordEnd;
+		if (!WordParse::WhereCurrentWord_2(str.GetPtr(), str.GetLength(), nPos, &posWordHead, &posWordEnd, NULL, NULL)) {
 			return 0; // 指定位置に単語が見つからなかった。
  		}
 		if (nPos != posWordHead) {
 			return 0; // 指定位置は単語の始まりではなかった。
 		}
-		const LogicInt wordLength = posWordEnd - posWordHead;
+		const int wordLength = posWordEnd - posWordHead;
 		const wchar_t* const pWordHead = str.GetPtr() + posWordHead;
 
 		// 比較関数
@@ -483,9 +483,9 @@ int EditView::IsSearchString(
 		int wordIndex = 0;
 		const wchar_t* const searchKeyEnd = strCurSearchKey.data() + strCurSearchKey.size();
 		for (const wchar_t* p=strCurSearchKey.data(); p<searchKeyEnd; ) {
-			LogicInt begin, end; // 検索語に含まれる単語?の位置。WhereCurrentWord_2()の仕様では空白文字列も単語に含まれる。
+			int begin, end; // 検索語に含まれる単語?の位置。WhereCurrentWord_2()の仕様では空白文字列も単語に含まれる。
 			if (1
-				&& WordParse::WhereCurrentWord_2(p, LogicInt(searchKeyEnd - p), LogicInt(0), &begin, &end, NULL, NULL)
+				&& WordParse::WhereCurrentWord_2(p, searchKeyEnd - p, 0, &begin, &end, NULL, NULL)
 				&& begin == 0
 				&& begin < end
 			) {

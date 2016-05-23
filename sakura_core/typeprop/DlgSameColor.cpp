@@ -110,7 +110,7 @@ INT_PTR DlgSameColor::DispatchEvent(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM 
 
 	@date 2006.04.26 ryoji V‹Kì¬
 */
-int DlgSameColor::DoModal(HINSTANCE hInstance, HWND hwndParent, WORD wID, TypeConfig* pTypes, COLORREF cr)
+INT_PTR DlgSameColor::DoModal(HINSTANCE hInstance, HWND hwndParent, WORD wID, TypeConfig* pTypes, COLORREF cr)
 {
 	wID = wID;
 	this->pTypes = pTypes;

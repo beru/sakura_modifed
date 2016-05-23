@@ -544,7 +544,7 @@ void MainToolBar::AcceptSharedSearchKey()
 	}
 }
 
-int MainToolBar::GetSearchKey(std::wstring& strText)
+size_t MainToolBar::GetSearchKey(std::wstring& strText)
 {
 	if (hwndSearchBox) {
 		int nBufferSize = ::GetWindowTextLength(hwndSearchBox) + 1;

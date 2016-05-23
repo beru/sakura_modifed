@@ -93,7 +93,7 @@ DlgFileTree::DlgFileTree()
 	結果の設定はDlgFileTreeが直接共通設定・タイプ別・設定ファイルに書き込みをして
 	呼び出し元は、再表示で設定される
 */
-int DlgFileTree::DoModal(
+INT_PTR DlgFileTree::DoModal(
 	HINSTANCE	hInstance,
 	HWND		hwndParent,
 	LPARAM		lParam
@@ -101,7 +101,7 @@ int DlgFileTree::DoModal(
 {
 	pDlgFuncList = reinterpret_cast<DlgFuncList*>(lParam);
 	nDocType = pDlgFuncList->nDocType;
-	return (int)Dialog::DoModal(hInstance, hwndParent, IDD_FILETREE, lParam);
+	return Dialog::DoModal(hInstance, hwndParent, IDD_FILETREE, lParam);
 }
 
 

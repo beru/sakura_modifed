@@ -106,14 +106,6 @@ protected:
 //	AS_INT(EOutlineType) 
 	AS_INT(WORD)
 
-#ifdef USE_STRICT_INT
-	// LayoutInt
-	void profile_to_value(const wstring& profile, LayoutInt* value) { *value = (LayoutInt)_wtoi(profile.c_str()); }
-	void value_to_profile(const LayoutInt& value, wstring* profile) { *profile = _work_itow((Int)value);    }
-	// LogicInt
-	void profile_to_value(const wstring& profile, LogicInt* value) { *value = (LogicInt)_wtoi(profile.c_str()); }
-	void value_to_profile(const LogicInt& value, wstring* profile) { *profile = _work_itow((Int)value);    }
-#endif
 	// ACHAR
 	void profile_to_value(const wstring& profile, ACHAR* value) {
 		if (profile.length() > 0) {

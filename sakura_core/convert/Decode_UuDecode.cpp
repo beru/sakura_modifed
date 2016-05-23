@@ -10,9 +10,9 @@
 bool Decode_UuDecode::DoDecode(const NativeW& pSrc, Memory* pDst)
 {
 	const WCHAR *psrc, *pline;
-	int nsrclen;
+	size_t nsrclen;
 	char *pw, *pw_base;
-	int nlinelen, ncuridx;
+	size_t nlinelen, ncuridx;
 	Eol eol;
 	bool bsuccess = false;
 

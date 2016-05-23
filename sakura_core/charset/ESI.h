@@ -96,7 +96,7 @@ public:
 	}
 
 	// 調査結果の情報を格納
-	void SetInformation(const char*, const int);
+	void SetInformation(const char*, const size_t);
 
 protected:
 
@@ -134,22 +134,22 @@ protected:
 	/*
 		文字列の文字コード情報を収集する
 	*/
-	void ScanCode(const char*, const int);
+	void ScanCode(const char*, const size_t);
 
-	void GetEncodingInfo_sjis(const char*, const int);
-	void GetEncodingInfo_jis(const char*, const int);
-	void GetEncodingInfo_eucjp(const char*, const int);
-	void GetEncodingInfo_utf8(const char*, const int);
-	void GetEncodingInfo_utf7(const char*, const int);
-	void GetEncodingInfo_cesu8(const char*, const int);
-	void GetEncodingInfo_uni(const char*, const int);
-	void GetEncodingInfo_latin1(const char*, const int);
-	void GetEncodingInfo_meta( const char *, const int );
+	void GetEncodingInfo_sjis(const char*, const size_t);
+	void GetEncodingInfo_jis(const char*, const size_t);
+	void GetEncodingInfo_eucjp(const char*, const size_t);
+	void GetEncodingInfo_utf8(const char*, const size_t);
+	void GetEncodingInfo_utf7(const char*, const size_t);
+	void GetEncodingInfo_cesu8(const char*, const size_t);
+	void GetEncodingInfo_uni(const char*, const size_t);
+	void GetEncodingInfo_latin1(const char*, const size_t);
+	void GetEncodingInfo_meta(const char *, const size_t);
 
 
-	bool _CheckUtf16Eol(const char* pS, const int nLen, const bool bbig_endian);
-	inline bool _CheckUtf16EolLE(const char* p, const int n) { return _CheckUtf16Eol(p, n, false); }
-	inline bool _CheckUtf16EolBE(const char* p, const int n) { return _CheckUtf16Eol(p, n, true); }
+	bool _CheckUtf16Eol(const char* pS, const size_t nLen, const bool bbig_endian);
+	inline bool _CheckUtf16EolLE(const char* p, const size_t n) { return _CheckUtf16Eol(p, n, false); }
+	inline bool _CheckUtf16EolBE(const char* p, const size_t n) { return _CheckUtf16Eol(p, n, true); }
 
 public:
 	//
@@ -206,9 +206,9 @@ public:
 protected:
 	// BOMの種類を推測して eWcBomType を設定
 	void GuessUtf16Bom(void);
-	EncodingType AutoDetectByXML( const char*, int );
-	EncodingType AutoDetectByHTML( const char*, int );
-	EncodingType AutoDetectByCoding( const char*, int );
+	EncodingType AutoDetectByXML( const char*, size_t );
+	EncodingType AutoDetectByHTML( const char*, size_t );
+	EncodingType AutoDetectByCoding( const char*, size_t );
 	
 public:
 	const EncodingConfig* pEncodingConfig;

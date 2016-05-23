@@ -42,8 +42,8 @@ struct EditInfo {
 	int 			nTypeId;							// 文書タイプ(MRU)
 
 	// 表示域
-	LayoutInt	nViewTopLine;							// 表示域の一番上の行(0開始)
-	LayoutInt	nViewLeftCol;							// 表示域の一番左の桁(0開始)
+	int nViewTopLine;							// 表示域の一番上の行(0開始)
+	int nViewLeftCol;							// 表示域の一番左の桁(0開始)
 
 	// キャレット
 	LogicPoint ptCursor;								// キャレット位置
@@ -76,7 +76,7 @@ struct EditInfo {
 		nTypeId(-1),
 		nViewTopLine(-1),
 		nViewLeftCol(-1),
-		ptCursor(LogicInt(-1), LogicInt(-1)),
+		ptCursor(-1, -1),
 		bIsModified(false),
 		bIsGrep(false),
 		bIsDebug(false),

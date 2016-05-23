@@ -48,8 +48,8 @@ public:
 	virtual bool Disp() const { return pTypeData->colorInfoArr[this->GetStrategyColor()].bDisp; }
 	
 	static bool IsCppRawString(const StringRef& str, int nPos);
-	static int Match_Quote(wchar_t wcQuote, int nPos, const StringRef& lineStr, StringLiteralType escapeType, bool* pbEscapeEnd = NULL);
-	static int Match_QuoteStr(const wchar_t* szQuote, int nQuoteLen, int nPos, const StringRef& lineStr, bool bEscape);
+	static size_t Match_Quote(wchar_t wcQuote, int nPos, const StringRef& lineStr, StringLiteralType escapeType, bool* pbEscapeEnd = NULL);
+	static size_t Match_QuoteStr(const wchar_t* szQuote, size_t nQuoteLen, size_t nPos, const StringRef& lineStr, bool bEscape);
 private:
 
 	wchar_t cQuote;

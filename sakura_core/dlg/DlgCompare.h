@@ -29,7 +29,7 @@ public:
 	/*
 	||  Attributes & Operations
 	*/
-	int DoModal(HINSTANCE, HWND, LPARAM, const TCHAR*, TCHAR*, HWND*);	// モーダルダイアログの表示
+	INT_PTR DoModal(HINSTANCE, HWND, LPARAM, const TCHAR*, TCHAR*, HWND*);	// モーダルダイアログの表示
 	
 	const TCHAR*	pszPath;
 	TCHAR*			pszCompareLabel;

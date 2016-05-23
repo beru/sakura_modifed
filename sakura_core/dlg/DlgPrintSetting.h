@@ -46,7 +46,7 @@ public:
 	/*
 	||  Attributes & Operations
 	*/
-	int DoModal(HINSTANCE, HWND, int*, PrintSetting*, int);	// モーダルダイアログの表示
+	INT_PTR DoModal(HINSTANCE, HWND, int*, PrintSetting*, int);	// モーダルダイアログの表示
 
 private:
 	int				nCurrentPrintSetting;

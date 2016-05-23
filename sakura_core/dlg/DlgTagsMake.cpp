@@ -59,7 +59,7 @@ DlgTagsMake::DlgTagsMake()
 }
 
 // モーダルダイアログの表示
-int DlgTagsMake::DoModal(
+INT_PTR DlgTagsMake::DoModal(
 	HINSTANCE		hInstance,
 	HWND			hwndParent,
 	LPARAM			lParam,
@@ -67,7 +67,7 @@ int DlgTagsMake::DoModal(
 	)
 {
 	_tcscpy( szPath, pszPath );
-	return (int)Dialog::DoModal(hInstance, hwndParent, IDD_TAG_MAKE, lParam);
+	return Dialog::DoModal(hInstance, hwndParent, IDD_TAG_MAKE, lParam);
 }
 
 BOOL DlgTagsMake::OnBnClicked(int wID)

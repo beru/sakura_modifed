@@ -271,7 +271,7 @@ bool NormalProcess::InitializeProcess()
 
 			
 			// Feb. 23, 2003 Moca Owner windowが正しく指定されていなかった
-			int nRet = pEditWnd->dlgGrep.DoModal(GetProcessInstance(), pEditWnd->GetHwnd(), NULL);
+			INT_PTR nRet = pEditWnd->dlgGrep.DoModal(GetProcessInstance(), pEditWnd->GetHwnd(), NULL);
 			if (nRet != FALSE) {
 				activeView.GetCommander().HandleCommand(F_GREP, true, 0, 0, 0, 0);
 			}else {
@@ -337,7 +337,7 @@ bool NormalProcess::InitializeProcess()
 			// 未設定＝-1になるようにしたので，安全のため両者が指定されたときだけ
 			// 移動するようにする． || → &&
 			if (
-				(LayoutInt(0) <= fi.nViewTopLine && LayoutInt(0) <= fi.nViewLeftCol)
+				(0 <= fi.nViewTopLine && 0 <= fi.nViewLeftCol)
 				&& fi.nViewTopLine < editDoc.layoutMgr.GetLineCount()
 			) {
 				activeView.GetTextArea().SetViewTopLine(fi.nViewTopLine);

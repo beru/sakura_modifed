@@ -40,7 +40,7 @@ DlgSetCharSet::DlgSetCharSet()
 
 
 // モーダルダイアログの表示
-int DlgSetCharSet::DoModal(
+INT_PTR DlgSetCharSet::DoModal(
 	HINSTANCE hInstance,
 	HWND hwndParent,
 	EncodingType* pnCharSet,
@@ -50,7 +50,7 @@ int DlgSetCharSet::DoModal(
 	pnCharSet = pnCharSet;	// 文字コードセット
 	pbBom = pbBom;			// BOM
 
-	return (int)Dialog::DoModal(hInstance, hwndParent, IDD_SETCHARSET, (LPARAM)NULL);
+	return Dialog::DoModal(hInstance, hwndParent, IDD_SETCHARSET, (LPARAM)NULL);
 }
 
 

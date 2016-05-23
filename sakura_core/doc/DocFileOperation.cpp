@@ -201,8 +201,8 @@ void DocFileOperation::ReloadCurrentFile(
 
 	auto& textArea = activeView.GetTextArea();
 	// カーソル位置保存
-	LayoutInt	nViewTopLine = textArea.GetViewTopLine();	// 表示域の一番上の行(0開始)
-	LayoutInt	nViewLeftCol = textArea.GetViewLeftCol();	// 表示域の一番左の桁(0開始)
+	size_t nViewTopLine = textArea.GetViewTopLine();	// 表示域の一番上の行(0開始)
+	size_t nViewLeftCol = textArea.GetViewLeftCol();	// 表示域の一番左の桁(0開始)
 	LayoutPoint	ptCaretPosXY = caret.GetCaretLayoutPos();
 
 	// ロード

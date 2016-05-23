@@ -206,7 +206,7 @@ STDMETHODIMP DropSource::GiveFeedback(DWORD dropEffect)
 
 	@date 2008.03.26 ryoji 複数フォーマット対応
 */
-void DataObject::SetText(LPCWSTR lpszText, int nTextLen, BOOL bColumnSelect)
+void DataObject::SetText(LPCWSTR lpszText, size_t nTextLen, BOOL bColumnSelect)
 {
 	// Feb. 26, 2001, fixed by yebisuya sugoroku
 	if (pData) {
@@ -267,28 +267,36 @@ DWORD DataObject::DragDrop(BOOL bLeft, DWORD dwEffects)
 STDMETHODIMP DataObject::GetData(LPFORMATETC lpfe, LPSTGMEDIUM lpsm)
 {
 	// Feb. 26, 2001, fixed by yebisuya sugoroku
-	if (!lpfe || !lpsm)
+	if (!lpfe || !lpsm) {
 		return E_INVALIDARG;
-	if (!pData)
+	}
+	if (!pData) {
 		return OLE_E_NOTRUNNING;
-	if (lpfe->lindex != -1)
+	}
+	if (lpfe->lindex != -1) {
 		return DV_E_LINDEX;
-	if ((lpfe->tymed & TYMED_HGLOBAL) == 0)
+	}
+	if ((lpfe->tymed & TYMED_HGLOBAL) == 0) {
 		return DV_E_TYMED;
-	if (lpfe->dwAspect != DVASPECT_CONTENT)
+	}
+	if (lpfe->dwAspect != DVASPECT_CONTENT) {
 		return DV_E_DVASPECT;
+	}
 	if (!(lpfe->tymed & TYMED_HGLOBAL)
 		|| lpfe->lindex != -1
-		|| lpfe->dwAspect != DVASPECT_CONTENT)
+		|| lpfe->dwAspect != DVASPECT_CONTENT) {
 		return DV_E_FORMATETC;
+	}
 
 	int i;
 	for (i=0; i<nFormat; ++i) {
-		if (lpfe->cfFormat == pData[i].cfFormat)
+		if (lpfe->cfFormat == pData[i].cfFormat) {
 			break;
+		}
 	}
-	if (i == nFormat)
+	if (i == nFormat) {
 		return DV_E_FORMATETC;
+	}
 
 	lpsm->tymed = TYMED_HGLOBAL;
 	lpsm->hGlobal = ::GlobalAlloc(GHND | GMEM_DDESHARE, pData[i].size);
@@ -305,28 +313,36 @@ STDMETHODIMP DataObject::GetData(LPFORMATETC lpfe, LPSTGMEDIUM lpsm)
 STDMETHODIMP DataObject::GetDataHere(LPFORMATETC lpfe, LPSTGMEDIUM lpsm)
 {
 	// Feb. 26, 2001, fixed by yebisuya sugoroku
-	if (!lpfe || !lpsm || !lpsm->hGlobal)
+	if (!lpfe || !lpsm || !lpsm->hGlobal) {
 		return E_INVALIDARG;
-	if (!pData)
+	}
+	if (!pData) {
 		return OLE_E_NOTRUNNING;
+	}
 
-	if (lpfe->lindex != -1)
+	if (lpfe->lindex != -1) {
 		return DV_E_LINDEX;
+	}
 	if (lpfe->tymed != TYMED_HGLOBAL
-		|| lpsm->tymed != TYMED_HGLOBAL)
+		|| lpsm->tymed != TYMED_HGLOBAL) {
 		return DV_E_TYMED;
-	if (lpfe->dwAspect != DVASPECT_CONTENT)
+	}
+	if (lpfe->dwAspect != DVASPECT_CONTENT) {
 		return DV_E_DVASPECT;
+	}
 
 	int i;
 	for (i=0; i<nFormat; ++i) {
-		if (lpfe->cfFormat == pData[i].cfFormat)
+		if (lpfe->cfFormat == pData[i].cfFormat) {
 			break;
+		}
 	}
-	if (i == nFormat)
+	if (i == nFormat) {
 		return DV_E_FORMATETC;
-	if (pData[i].size > ::GlobalSize(lpsm->hGlobal))
+	}
+	if (pData[i].size > ::GlobalSize(lpsm->hGlobal)) {
 		return STG_E_MEDIUMFULL;
+	}
 
 	memcpy_raw(::GlobalLock(lpsm->hGlobal), pData[i].data, pData[i].size);
 	::GlobalUnlock(lpsm->hGlobal);
@@ -339,25 +355,30 @@ STDMETHODIMP DataObject::GetDataHere(LPFORMATETC lpfe, LPSTGMEDIUM lpsm)
 */
 STDMETHODIMP DataObject::QueryGetData(LPFORMATETC lpfe)
 {
-	if (!lpfe)
+	if (!lpfe) {
 		return E_INVALIDARG;
+	}
 	// Feb. 26, 2001, fixed by yebisuya sugoroku
-	if (!pData)
+	if (!pData) {
 		return OLE_E_NOTRUNNING;
+	}
 
 	if (lpfe->ptd
 		|| lpfe->dwAspect != DVASPECT_CONTENT
 		|| lpfe->lindex != -1
-		|| !(lpfe->tymed & TYMED_HGLOBAL))
+		|| !(lpfe->tymed & TYMED_HGLOBAL)) {
 		return DATA_E_FORMATETC;
+	}
 
 	int i;
 	for (i=0; i<nFormat; ++i) {
-		if (lpfe->cfFormat == pData[i].cfFormat)
+		if (lpfe->cfFormat == pData[i].cfFormat) {
 			break;
+		}
 	}
-	if (i == nFormat)
+	if (i == nFormat) {
 		return DATA_E_FORMATETC;
+	}
 	return S_OK;
 }
 
@@ -376,8 +397,9 @@ STDMETHODIMP DataObject::SetData(LPFORMATETC, LPSTGMEDIUM, BOOL)
 */
 STDMETHODIMP DataObject::EnumFormatEtc(DWORD dwDirection, IEnumFORMATETC** ppenumFormatetc)
 {
-	if (dwDirection != DATADIR_GET)
+	if (dwDirection != DATADIR_GET) {
 		return S_FALSE;
+	}
 	*ppenumFormatetc = new EnumFORMATETC(this);
 	return *ppenumFormatetc? S_OK: S_FALSE;
 }
@@ -403,10 +425,12 @@ STDMETHODIMP DataObject::EnumDAdvise(LPENUMSTATDATA*)
 */
 STDMETHODIMP EnumFORMATETC::Next(ULONG celt, FORMATETC* rgelt, ULONG* pceltFetched)
 {
-	if (celt <= 0 || !rgelt || nIndex >= pDataObject->nFormat)
+	if (celt <= 0 || !rgelt || nIndex >= pDataObject->nFormat) {
 		return S_FALSE;
-	if (celt != 1 && !pceltFetched)
+	}
+	if (celt != 1 && !pceltFetched) {
 		return S_FALSE;
+	}
 
 	ULONG i = celt;
 	while (nIndex < pDataObject->nFormat && i > 0) {
@@ -419,8 +443,9 @@ STDMETHODIMP EnumFORMATETC::Next(ULONG celt, FORMATETC* rgelt, ULONG* pceltFetch
 		++nIndex;
 		--i;
 	}
-	if (pceltFetched)
+	if (pceltFetched) {
 		*pceltFetched = celt - i;
+	}
 
 	return (i == 0) ? S_OK : S_FALSE;
 }

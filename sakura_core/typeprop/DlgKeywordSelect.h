@@ -48,7 +48,7 @@ class DlgKeywordSelect : public Dialog {
 public:
 	DlgKeywordSelect();
 	~DlgKeywordSelect();
-	int DoModal(HINSTANCE, HWND, int* pnSet);
+	INT_PTR DoModal(HINSTANCE, HWND, int* pnSet);
 
 protected:
 

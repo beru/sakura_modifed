@@ -31,7 +31,7 @@ public:
 	/*
 	||  Attributes & Operations
 	*/
-	int DoModal(HINSTANCE, HWND, const TCHAR*, LPARAM);	// モーダルダイアログの表示
+	INT_PTR DoModal(HINSTANCE, HWND, const TCHAR*, LPARAM);	// モーダルダイアログの表示
 
 	bool		bPaste;
 	bool		bBackup;

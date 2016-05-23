@@ -97,19 +97,19 @@ private:
 	void DrawSelectArea2(HDC) const;	// 指定範囲の選択領域の描画
 	void DrawSelectAreaLine(			// 指定行の選択領域の描画
 		HDC					hdc,		// [in] 描画領域のDevice Context Handle
-		LayoutInt			nLineNum,	// [in] 描画対象行(レイアウト行)
+		int					nLineNum,	// [in] 描画対象行(レイアウト行)
 		const LayoutRange&	range		// [in] 選択範囲(レイアウト単位)
 	) const;
 public:
 	void GetSelectAreaLineFromRange(
 		LayoutRange& ret,
-		LayoutInt nLineNum,
+		int nLineNum,
 		const Layout* pLayout,
 		const LayoutRange& range) const;
-	void GetSelectAreaLine(LayoutRange& ret, LayoutInt nLineNum, const Layout* pLayout) const {
+	void GetSelectAreaLine(LayoutRange& ret, int nLineNum, const Layout* pLayout) const {
 		GetSelectAreaLineFromRange(ret, nLineNum, pLayout, select);
 	}
-	LayoutRange GetSelectAreaLine(LayoutInt nLineNum, const Layout* pLayout) const {
+	LayoutRange GetSelectAreaLine(int nLineNum, const Layout* pLayout) const {
 		LayoutRange ret;
 		GetSelectAreaLineFromRange(ret, nLineNum, pLayout, select);
 		return ret;
@@ -160,7 +160,7 @@ private:
 	bool	bBeginSelect;			// 範囲選択中
 	bool	bBeginBoxSelect;		// 矩形範囲選択中
 	bool	bSelectAreaChanging;	// 選択範囲変更中
-	int		nLastSelectedByteLen;	// 前回選択時の選択バイト数
+	size_t	nLastSelectedByteLen;	// 前回選択時の選択バイト数
 
 public:
 	bool	bBeginLineSelect;		// 行単位選択中

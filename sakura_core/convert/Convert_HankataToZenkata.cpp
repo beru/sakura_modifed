@@ -13,7 +13,7 @@ bool Converter_HankataToZenkata::DoConvert(NativeW* pData)
 	// •¶š”‚ªŒ¸‚é‚±‚Æ‚Í‚ ‚Á‚Ä‚à‘‚¦‚é‚±‚Æ‚Í–³‚¢‚Ì‚ÅA‚±‚ê‚Å‚n‚j
 	std::vector<wchar_t> buf(pData->GetStringLength() + 1);
 	wchar_t* pBuf = &buf[0];
-	int nDstLen = 0;
+	size_t nDstLen = 0;
 	Convert_HankataToZenkata(pData->GetStringPtr(), pData->GetStringLength(), pBuf, &nDstLen);
 	pData->SetString(pBuf, nDstLen);
 

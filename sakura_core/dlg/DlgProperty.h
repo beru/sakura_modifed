@@ -39,7 +39,7 @@ class DlgProperty;
 -----------------------------------------------------------------------*/
 class DlgProperty : public Dialog {
 public:
-	int DoModal(HINSTANCE, HWND, LPARAM);	// モーダルダイアログの表示
+	INT_PTR DoModal(HINSTANCE, HWND, LPARAM);	// モーダルダイアログの表示
 protected:
 	/*
 	||  実装ヘルパ関数

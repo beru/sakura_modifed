@@ -98,8 +98,8 @@ bool Color_KeywordSet::EndColor(const StringRef& str, int nPos)
 
 static inline int NextWordBreak(const StringRef& str, const int start)
 {
-	LogicInt nColumnNew;
-	if (WordParse::SearchNextWordPosition4KW(str.GetPtr(), LogicInt(str.GetLength()), LogicInt(start), &nColumnNew, true)) {
+	int nColumnNew;
+	if (WordParse::SearchNextWordPosition4KW(str.GetPtr(), str.GetLength(), start, &nColumnNew, true)) {
 		return nColumnNew;
 	}
 	return start;

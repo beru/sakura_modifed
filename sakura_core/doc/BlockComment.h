@@ -48,13 +48,13 @@ public:
 	// 取得
 	const wchar_t* getBlockCommentFrom() const { return szBlockCommentFrom; }
 	const wchar_t* getBlockCommentTo() const { return szBlockCommentTo; }
-	int getBlockFromLen() const { return nBlockFromLen; }
-	int getBlockToLen() const { return nBlockToLen; }
+	size_t getBlockFromLen() const { return nBlockFromLen; }
+	size_t getBlockToLen() const { return nBlockToLen; }
 
 private:
 	wchar_t	szBlockCommentFrom[BLOCKCOMMENT_BUFFERSIZE]; // ブロックコメントデリミタ(From)
 	wchar_t	szBlockCommentTo[BLOCKCOMMENT_BUFFERSIZE];   // ブロックコメントデリミタ(To)
-	int		nBlockFromLen;
-	int		nBlockToLen;
+	size_t	nBlockFromLen;
+	size_t	nBlockToLen;
 };
 

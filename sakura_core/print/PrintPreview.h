@@ -123,7 +123,7 @@ protected:
 		int				nDocLineLen,
 		int				nLineStart,
 		int				nLineLen,
-		LayoutInt		nIndent,	// 折り返しインデント桁数 // 2006.08.14 Moca
+		int				nIndent,	// 折り返しインデント桁数 // 2006.08.14 Moca
 		const Layout*	pLayout = nullptr,	// 色付用Layout
 		ColorStrategy*	pStrategyStart = nullptr
 	);
@@ -138,7 +138,7 @@ protected:
 		const Layout*	pLayout,	// 色設定用Layout
 		int				nColorIndex,
 		int				nBgnPhysical,
-		LayoutInt		nLayoutX,
+		int				nLayoutX,
 		int				nDx,
 		const int*		pDxArray
 	);
@@ -229,7 +229,7 @@ protected:
 	short			nPreview_PaperHeight;		// 用紙印刷有効高さ(1/10mm単位)
 	short			nPreview_PaperOffsetLeft;	// 用紙余白左端(1/10mm単位)
 	short			nPreview_PaperOffsetTop;	// 用紙余白上端(1/10mm単位)
-	LayoutInt		bPreview_EnableColumns;		// 印字可能桁数/ページ
+	int				bPreview_EnableColumns;		// 印字可能桁数/ページ
 	int				bPreview_EnableLines;		// 印字可能行数/ページ
 	int				nPreview_LineNumberColumns;	// 行番号エリアの幅（文字数）
 	WORD			nAllPageNum;				// 全ページ数

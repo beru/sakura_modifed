@@ -57,14 +57,14 @@ void DlgCancel::DeleteAsync(void)
 }
 
 // モーダルダイアログの表示
-int DlgCancel::DoModal(
+INT_PTR DlgCancel::DoModal(
 	HINSTANCE hInstance,
 	HWND hwndParent,
 	int nDlgTemplete
 	)
 {
 	bCANCEL = false;	// IDCANCELボタンが押された
-	return (int)Dialog::DoModal(hInstance, hwndParent, nDlgTemplete, (LPARAM)NULL);
+	return Dialog::DoModal(hInstance, hwndParent, nDlgTemplete, (LPARAM)NULL);
 }
 
 // モードレスダイアログの表示

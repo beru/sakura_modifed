@@ -45,7 +45,7 @@ void Figure_Tab::DispSpace(Graphics& gr, DispPos* pDispPos, EditView& view, bool
 	TypeSupport tabType(view, COLORIDX_TAB);
 
 	// これから描画するタブ幅
-	int tabDispWidth = (Int)view.pEditDoc->layoutMgr.GetActualTabSpace(sPos.GetDrawCol());
+	int tabDispWidth = view.pEditDoc->layoutMgr.GetActualTabSpace(sPos.GetDrawCol());
 
 	// タブ記号領域
 	RECT rcClip2;

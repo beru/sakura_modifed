@@ -9,7 +9,7 @@ BinaryInputStream::BinaryInputStream(LPCTSTR tszFilePath)
 }
 
 // ストリームの「残り」サイズを取得
-int BinaryInputStream::GetLength()
+size_t BinaryInputStream::GetLength()
 {
 	long nCur = ftell(GetFp());
 	fseek(GetFp(), 0, SEEK_END);
@@ -19,7 +19,7 @@ int BinaryInputStream::GetLength()
 }
 
 // データを無変換で読み込む。戻り値は読み込んだバイト数。
-int BinaryInputStream::Read(void* pBuffer, int nSizeInBytes)
+size_t BinaryInputStream::Read(void* pBuffer, size_t nSizeInBytes)
 {
 	return fread(pBuffer, 1, nSizeInBytes, GetFp());
 }

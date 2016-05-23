@@ -54,8 +54,8 @@ public:
 	void AllocBuffer(size_t);											// バッファサイズの調整。必要に応じて拡大する。
 	void SetRawData(const void* pData, size_t nDataLen);				// バッファの内容を置き換える
 	void SetRawData(const Memory&);										// バッファの内容を置き換える
-	void SetRawDataHoldBuffer( const void* pData, size_t nDataLen );	// バッファの内容を置き換える(バッファを保持)
-	void SetRawDataHoldBuffer( const Memory& );						// バッファの内容を置き換える(バッファを保持)
+	void SetRawDataHoldBuffer(const void* pData, size_t nDataLen);	// バッファの内容を置き換える(バッファを保持)
+	void SetRawDataHoldBuffer(const Memory&);						// バッファの内容を置き換える(バッファを保持)
 	void AppendRawData(const void* pData, size_t nDataLen);			// バッファの最後にデータを追加する
 	void AppendRawData(const Memory*);								// バッファの最後にデータを追加する
 	void Clean() { _Empty(); }

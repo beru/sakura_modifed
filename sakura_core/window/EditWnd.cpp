@@ -125,7 +125,7 @@ static void ShowCodeBox(HWND hWnd, EditDoc* pEditDoc)
 {
 	// カーソル位置の文字列を取得
 	const Layout*	pLayout;
-	LogicInt		nLineLen;
+	size_t nLineLen;
 	const EditView* pView = &pEditDoc->pEditWnd->GetActiveView();
 	const Caret* pCaret = &pView->GetCaret();
 	const LayoutMgr* pLayoutMgr = &pEditDoc->layoutMgr;
@@ -135,7 +135,7 @@ static void ShowCodeBox(HWND hWnd, EditDoc* pEditDoc)
 	//
 	if (pLine) {
 		// 指定された桁に対応する行のデータ内の位置を調べる
-		LogicInt nIdx = pView->LineColumnToIndex(pLayout, pCaret->GetCaretLayoutPos().GetX2());
+		int nIdx = pView->LineColumnToIndex(pLayout, pCaret->GetCaretLayoutPos().GetX2());
 		if (nIdx < nLineLen) {
 			if (nIdx < nLineLen - (pLayout->GetLayoutEol().GetLen() ? 1 : 0)) {
 				// 一時的に表示方法の設定を変更する
@@ -1920,12 +1920,12 @@ LRESULT EditWnd::DispatchEvent(
 		// 共有データ：自分Write→相手Read
 		// return 0以上：行データあり。wParamオフセットを除いた行データ長。0はEOFかOffsetがちょうどバッファ長だった
 		//       -1以下：エラー
-		LogicInt	nLineNum = LogicInt(wParam);
-		LogicInt	nLineOffset = LogicInt(lParam);
+		int	nLineNum = wParam;
+		int	nLineOffset = lParam;
 		if (nLineNum < 0 || GetDocument().docLineMgr.GetLineCount() < nLineNum) {
 			return -2; // 行番号不正。LineCount == nLineNum はEOF行として下で処理
 		}
-		LogicInt nLineLen = LogicInt(0);
+		size_t nLineLen = 0;
 		const wchar_t* pLine = GetDocument().docLineMgr.GetLine(nLineNum)->GetDocLineStrWithEOL( &nLineLen );
 		if (nLineOffset < 0 || nLineLen < nLineOffset) {
 			return -3; // オフセット位置不正
@@ -1939,7 +1939,7 @@ LRESULT EditWnd::DispatchEvent(
 		if (nLineLen == nLineOffset) {
  			return 0;
  		}
-		pLine = GetDocument().docLineMgr.GetLine(LogicInt(wParam))->GetDocLineStrWithEOL( &nLineLen );
+		pLine = GetDocument().docLineMgr.GetLine(wParam)->GetDocLineStrWithEOL( &nLineLen );
 		pLine += nLineOffset;
 		nLineLen -= nLineOffset;
 		size_t nEnd = t_min<size_t>(nLineLen, pShareData->workBuffer.GetWorkBufferCount<EDIT_CHAR>());
@@ -2511,7 +2511,7 @@ void EditWnd::InitMenu_Function(HMENU hMenu, EFunctionCode eFunc, const wchar_t*
 			break;
 		case F_WRAPWINDOWWIDTH:
 			{
-				LayoutInt ketas;
+				int ketas;
 				WCHAR*	pszLabel;
 				EditView::TOGGLE_WRAP_ACTION mode = GetActiveView().GetWrapMode(&ketas);
 				if (mode == EditView::TGWRAP_NONE) {
@@ -3530,7 +3530,7 @@ BOOL EditWnd::OnPrintPageSetting(void)
 {
 	// 印刷設定（CANCEL押したときに破棄するための領域）
 	DlgPrintSetting	dlgPrintSetting;
-	BOOL	bRes;
+	INT_PTR bRes;
 	int		nCurrentPrintSetting;
 	int		nLineNumberColumns;
 
@@ -4290,7 +4290,7 @@ void EditWnd::InitAllViews()
 		view.GetSelectionInfo().DisableSelectArea(false);
 		view.OnChangeSetting();
 		view.GetCaret().MoveCursor(LayoutPoint(0, 0), true);
-		view.GetCaret().nCaretPosX_Prev = LayoutInt(0);
+		view.GetCaret().nCaretPosX_Prev = 0;
 	}
 	GetMiniMap().OnChangeSetting();
 }
@@ -4474,7 +4474,7 @@ bool EditWnd::DetectWidthOfLineNumberAreaAllPane(bool bRedraw)
 bool EditWnd::WrapWindowWidth(int nPane)
 {
 	// 右端で折り返す
-	LayoutInt nWidth = GetView(nPane).ViewColNumToWrapColNum(GetView(nPane).GetTextArea().nViewColNum);
+	int nWidth = GetView(nPane).ViewColNumToWrapColNum(GetView(nPane).GetTextArea().nViewColNum);
 	if (GetDocument().layoutMgr.GetMaxLineKetas() != nWidth) {
 		ChangeLayoutParam(false, GetDocument().layoutMgr.GetTabSpace(), nWidth);
 		ClearViewCaretPosInfo();
@@ -4515,7 +4515,7 @@ bool EditWnd::UpdateTextWrap(void)
 	@date 2005.08.14 genta 新規作成
 	@date 2008.06.18 ryoji レイアウト変更途中はカーソル移動の画面スクロールを見せない（画面のちらつき抑止）
 */
-void EditWnd::ChangeLayoutParam(bool bShowProgress, LayoutInt nTabSize, LayoutInt nMaxLineKetas)
+void EditWnd::ChangeLayoutParam(bool bShowProgress, int nTabSize, int nMaxLineKetas)
 {
 	HWND hwndProgress = NULL;
 	if (bShowProgress && this) {
@@ -4579,17 +4579,17 @@ LogicPointEx* EditWnd::SavePhysPosOfAllView()
 	auto& layoutMgr = GetDocument().layoutMgr;
 	for (int i=0; i<numOfViews; ++i) {
 		auto& view = GetView(i);
-		LayoutPoint tmp = LayoutPoint(LayoutInt(0), view.pTextArea->GetViewTopLine());
+		LayoutPoint tmp = LayoutPoint(0, view.pTextArea->GetViewTopLine());
 		const Layout* layoutLine = layoutMgr.SearchLineByLayoutY(tmp.GetY2());
 		if (layoutLine) {
-			LogicInt nLineCenter = layoutLine->GetLogicOffset() + layoutLine->GetLengthWithoutEOL() / 2;
+			int nLineCenter = layoutLine->GetLogicOffset() + layoutLine->GetLengthWithoutEOL() / 2;
 			pptPosArray[i * numOfPositions + 0].x = nLineCenter;
 			pptPosArray[i * numOfPositions + 0].y = layoutLine->GetLogicLineNo();
 		}else {
-			pptPosArray[i * numOfPositions + 0].x = LogicInt(0);
-			pptPosArray[i * numOfPositions + 0].y = LogicInt(0);
+			pptPosArray[i * numOfPositions + 0].x = 0;
+			pptPosArray[i * numOfPositions + 0].y = 0;
 		}
-		pptPosArray[i * numOfPositions + 0].ext = LayoutInt(0);
+		pptPosArray[i * numOfPositions + 0].ext = 0;
 		auto& selInfo = view.GetSelectionInfo();
 		if (selInfo.selectBgn.GetFrom().y >= 0) {
 			layoutMgr.LayoutToLogicEx(
@@ -4680,7 +4680,7 @@ void EditWnd::RestorePhysPosOfAllView(LogicPointEx* pptPosArray)
 		caret.MoveCursor(ptPosXY, false); // 2013.06.05 bScrollをtrue=>falase
 		caret.nCaretPosX_Prev = caret.GetCaretLayoutPos().GetX2();
 
-		LayoutInt nLeft = LayoutInt(0);
+		int nLeft = 0;
 		auto& textArea = view.GetTextArea();
 		if (textArea.nViewColNum < view.GetRightEdgeForScrollBar()) {
 			nLeft = view.GetRightEdgeForScrollBar() - textArea.nViewColNum;

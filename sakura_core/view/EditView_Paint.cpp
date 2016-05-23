@@ -46,7 +46,7 @@
 #endif
 #endif
 
-void _DispWrap(Graphics& gr, DispPos* pDispPos, const EditView& view, LayoutYInt nLineNum);
+void _DispWrap(Graphics& gr, DispPos* pDispPos, const EditView& view, int nLineNum);
 
 /*
 	PaintAreaType::LineNumber = (1<<0), // 行番号
@@ -141,7 +141,7 @@ void EditView::Redraw()
 }
 // 2001/06/21 End
 
-void EditView::RedrawLines(LayoutYInt top, LayoutYInt bottom)
+void EditView::RedrawLines(int top, int bottom)
 {
 	if (!GetHwnd()) {
 		return;
@@ -239,12 +239,12 @@ void EditView::DrawBackImage(HDC hdc, RECT& rcPaint, HDC hdcBgImg)
 	// スクロール時の画面の端を作画するときの位置あたりへ移動
 	if (typeConfig.backImgScrollX) {
 		int tile = typeConfig.backImgRepeatX ? doc.nBackImgWidth : INT_MAX;
-		Int posX = (textArea.GetViewLeftCol() % tile) * GetTextMetrics().GetHankakuDx();
+		int posX = (textArea.GetViewLeftCol() % tile) * GetTextMetrics().GetHankakuDx();
 		rcImagePos.left -= posX % tile;
 	}
 	if (typeConfig.backImgScrollY) {
 		int tile = typeConfig.backImgRepeatY ? doc.nBackImgHeight : INT_MAX;
-		Int posY = (textArea.GetViewTopLine() % tile) * GetTextMetrics().GetHankakuDy();
+		int posY = (textArea.GetViewTopLine() % tile) * GetTextMetrics().GetHankakuDy();
 		rcImagePos.top -= posY % tile;
 	}
 	if (typeConfig.backImgRepeatX) {
@@ -344,7 +344,7 @@ void EditView::DrawBackImage(HDC hdc, RECT& rcPaint, HDC hdcBgImg)
 */
 Color3Setting EditView::GetColorIndex(
 	const Layout*			pLayout,
-	LayoutYInt				nLineNum,
+	int						nLineNum,
 	int						nIndex,
 	ColorStrategyInfo&	 	csInfo,			// 2010.03.31 ryoji 追加
 	bool					bPrev			// 指定位置の色変更直前まで	2010.06.19 ryoji 追加
@@ -364,7 +364,7 @@ Color3Setting EditView::GetColorIndex(
 
 	const LayoutColorInfo* colorInfo;
 	const Layout* pLayoutLineFirst = pLayout;
-	LayoutYInt nLineNumFirst = nLineNum;
+	int nLineNumFirst = nLineNum;
 	{
 		// 2002/2/10 aroka CMemory変更
 		csInfo.pLineOfLogic = pLayout->GetDocLineRef()->GetPtr();
@@ -405,7 +405,7 @@ Color3Setting EditView::GetColorIndex(
 		//		return n;
 		//	}
 		//};
-		//pInfo->pDispPos->SetLayoutLineRef(LayoutInt(TmpVisitor::CalcLayoutIndex(pLayout)));
+		//pInfo->pDispPos->SetLayoutLineRef(TmpVisitor::CalcLayoutIndex(pLayout));
 		// 2013.12.11 Moca カレント行の色替えで必要になりました
 		csInfo.pDispPos->SetLayoutLineRef(nLineNumFirst);
 	}
@@ -423,7 +423,7 @@ Color3Setting EditView::GetColorIndex(
 	}
 
 	const Layout* pLayoutNext = pLayoutLineFirst->GetNextLayout();
-	LayoutYInt nLineNumScan = nLineNumFirst;
+	int nLineNumScan = nLineNumFirst;
 	int nPosTo = pLayout->GetLogicOffset() + t_min(nIndex, (int)pLayout->GetLengthWithEOL() - 1);
 	while (csInfo.nPosInLogic <= nPosTo) {
 		if (bPrev && csInfo.nPosInLogic == nPosTo) {
@@ -724,11 +724,11 @@ void EditView::OnPaint2(HDC _hdc, PAINTSTRUCT* pPs, BOOL bDrawFromComptibleBmp)
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//           描画開始レイアウト絶対行 -> nLayoutLine             //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-	LayoutInt nLayoutLine;
+	int nLayoutLine;
 	if (0 > nTop - GetTextArea().GetAreaTop()) {
 		nLayoutLine = GetTextArea().GetViewTopLine(); // ビュー上部から描画
 	}else {
-		nLayoutLine = GetTextArea().GetViewTopLine() + LayoutInt((nTop - GetTextArea().GetAreaTop()) / nLineHeight); // ビュー途中から描画
+		nLayoutLine = GetTextArea().GetViewTopLine() + (nTop - GetTextArea().GetAreaTop()) / nLineHeight; // ビュー途中から描画
 	}
 
 	// ※ ここにあった描画範囲の 260 文字ロールバック処理は GetColorIndex() に吸収	// 2009.02.11 ryoji
@@ -736,8 +736,8 @@ void EditView::OnPaint2(HDC _hdc, PAINTSTRUCT* pPs, BOOL bDrawFromComptibleBmp)
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//          描画終了レイアウト絶対行 -> nLayoutLineTo            //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-	LayoutInt nLayoutLineTo = GetTextArea().GetViewTopLine()
-		+ LayoutInt((pPs->rcPaint.bottom - GetTextArea().GetAreaTop() + (nLineHeight - 1)) / nLineHeight) - 1;	// 2007.02.17 ryoji 計算を精密化
+	int nLayoutLineTo = GetTextArea().GetViewTopLine()
+		+ (pPs->rcPaint.bottom - GetTextArea().GetAreaTop() + (nLineHeight - 1)) / nLineHeight - 1;	// 2007.02.17 ryoji 計算を精密化
 
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -745,8 +745,8 @@ void EditView::OnPaint2(HDC _hdc, PAINTSTRUCT* pPs, BOOL bDrawFromComptibleBmp)
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	DispPos pos(GetTextMetrics().GetHankakuDx(), GetTextMetrics().GetHankakuDy());
 	pos.InitDrawPos(Point(
-		GetTextArea().GetAreaLeft() - (Int)GetTextArea().GetViewLeftCol() * nCharDx,
-		GetTextArea().GetAreaTop() + (Int)(nLayoutLine - GetTextArea().GetViewTopLine()) * nLineHeight
+		GetTextArea().GetAreaLeft() - GetTextArea().GetViewLeftCol() * nCharDx,
+		GetTextArea().GetAreaTop() + (nLayoutLine - GetTextArea().GetViewTopLine()) * nLineHeight
 	));
 	pos.SetLayoutLineRef(nLayoutLine);
 
@@ -809,7 +809,7 @@ void EditView::OnPaint2(HDC _hdc, PAINTSTRUCT* pPs, BOOL bDrawFromComptibleBmp)
 			GetTextDrawer().DispNoteLine(gr, pos.GetDrawPos().y, pPs->rcPaint.bottom, pPs->rcPaint.left, pPs->rcPaint.right);
 		}
 		// 2006.04.29 行部分は行ごとに作画し、ここでは縦線の残りを作画
-		GetTextDrawer().DispVerticalLines(gr, pos.GetDrawPos().y, pPs->rcPaint.bottom, LayoutInt(0), LayoutInt(-1));
+		GetTextDrawer().DispVerticalLines(gr, pos.GetDrawPos().y, pPs->rcPaint.bottom, 0, -1);
 		GetTextDrawer().DispWrapLine(gr, pos.GetDrawPos().y, pPs->rcPaint.bottom);	// 2009.10.24 ryoji
 	}
 
@@ -875,7 +875,7 @@ void EditView::OnPaint2(HDC _hdc, PAINTSTRUCT* pPs, BOOL bDrawFromComptibleBmp)
 bool EditView::DrawLogicLine(
 	HDC				_hdc,			// [in]     作画対象
 	DispPos*		_pDispPos,		// [in/out] 描画する箇所、描画元ソース
-	LayoutInt		nLineTo			// [in]     作画終了するレイアウト行番号
+	int				nLineTo			// [in]     作画終了するレイアウト行番号
 	)
 {
 //	MY_RUNNINGTIMER(runningTimer, "EditView::DrawLogicLine");
@@ -894,7 +894,7 @@ bool EditView::DrawLogicLine(
 	csInfo.dispPosBegin = *csInfo.pDispPos;
 
 	// 処理する文字位置
-	csInfo.nPosInLogic = LogicInt(0); // ☆開始
+	csInfo.nPosInLogic = 0; // ☆開始
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//          論理行データの取得 -> pLine, pLineLen              //
@@ -923,13 +923,13 @@ bool EditView::DrawLogicLine(
 	// 開始ロジック位置を算出
 	{
 		const Layout* pLayout = csInfo.pDispPos->GetLayoutRef();
-		csInfo.nPosInLogic = pLayout ? pLayout->GetLogicOffset() : LogicInt(0);
+		csInfo.nPosInLogic = pLayout ? pLayout->GetLogicOffset() : 0;
 	}
 
 	for (;;) {
 		// 対象行が描画範囲外だったら終了
 		if (GetTextArea().GetBottomLine() < csInfo.pDispPos->GetLayoutLineRef()) {
-			csInfo.pDispPos->SetLayoutLineRef(nLineTo + LayoutInt(1));
+			csInfo.pDispPos->SetLayoutLineRef(nLineTo + 1);
 			break;
 		}
 		if (nLineTo < csInfo.pDispPos->GetLayoutLineRef()) {
@@ -940,7 +940,7 @@ bool EditView::DrawLogicLine(
 		bDispEOF = DrawLayoutLine(csInfo);
 
 		// 行を進める
-		LogicInt nOldLogicLineNo = csInfo.pDispPos->GetLayoutRef()->GetLogicLineNo();
+		int nOldLogicLineNo = csInfo.pDispPos->GetLayoutRef()->GetLogicLineNo();
 		csInfo.pDispPos->ForwardDrawLine(1);		// 描画Y座標＋＋
 		csInfo.pDispPos->ForwardLayoutLineRef(1);	// レイアウト行＋＋
 
@@ -950,7 +950,7 @@ bool EditView::DrawLogicLine(
 		}
 
 		// nLineToを超えたら抜ける
-		if (csInfo.pDispPos->GetLayoutLineRef() >= nLineTo + LayoutInt(1)) {
+		if (csInfo.pDispPos->GetLayoutLineRef() >= nLineTo + 1) {
 			break;
 		}
 	}
@@ -1046,11 +1046,11 @@ bool EditView::DrawLayoutLine(ColorStrategyInfo& csInfo)
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	if (pLayout && pLayout->GetIndent() != 0) {
 		RECT rcClip;
-		if (!bTransText && textArea.GenerateClipRect(&rcClip, *csInfo.pDispPos,(Int)pLayout->GetIndent())) {
+		if (!bTransText && textArea.GenerateClipRect(&rcClip, *csInfo.pDispPos, pLayout->GetIndent())) {
 			backType.FillBack(csInfo.gr, rcClip);
 		}
 		// 描画位置進める
-		csInfo.pDispPos->ForwardDrawCol((Int)pLayout->GetIndent());
+		csInfo.pDispPos->ForwardDrawCol(pLayout->GetIndent());
 	}
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -1125,8 +1125,8 @@ bool EditView::DrawLayoutLine(ColorStrategyInfo& csInfo)
 			// 選択範囲の指定色：必要ならテキストのない部分の矩形選択を作画
 			LayoutRange selectArea = GetSelectionInfo().GetSelectAreaLine(csInfo.pDispPos->GetLayoutLineRef(), pLayout);
 			// 2010.10.04 スクロール分の足し忘れ
-			int nSelectFromPx = GetTextMetrics().GetHankakuDx() * (Int)(selectArea.GetFrom().x - textArea.GetViewLeftCol());
-			int nSelectToPx   = GetTextMetrics().GetHankakuDx() * (Int)(selectArea.GetTo().x - textArea.GetViewLeftCol());
+			int nSelectFromPx = GetTextMetrics().GetHankakuDx() * (selectArea.GetFrom().x - textArea.GetViewLeftCol());
+			int nSelectToPx   = GetTextMetrics().GetHankakuDx() * (selectArea.GetTo().x - textArea.GetViewLeftCol());
 			if (nSelectFromPx < nSelectToPx && selectArea.GetTo().x != INT_MAX) {
 				RECT rcSelect; // Pixel
 				rcSelect.top    = csInfo.pDispPos->GetDrawPos().y;
@@ -1160,8 +1160,8 @@ bool EditView::DrawLayoutLine(ColorStrategyInfo& csInfo)
 		csInfo.gr,
 		csInfo.pDispPos->GetDrawPos().y,
 		csInfo.pDispPos->GetDrawPos().y + nLineHeight,
-		LayoutInt(0),
-		LayoutInt(-1)
+		0,
+		-1
 	);
 
 	// 折り返し桁縦線描画
@@ -1179,7 +1179,7 @@ bool EditView::DrawLayoutLine(ColorStrategyInfo& csInfo)
 			csInfo.gr,
 			csInfo.pDispPos->GetLayoutLineRef(),
 			Point(csInfo.dispPosBegin.GetDrawPos().x, csInfo.pDispPos->GetDrawPos().y),
-			pLayout->CalcLayoutWidth(EditDoc::GetInstance(0)->layoutMgr) + LayoutInt(pLayout->GetLayoutEol().GetLen() ? 1 : 0)
+			pLayout->CalcLayoutWidth(EditDoc::GetInstance(0)->layoutMgr) + pLayout->GetLayoutEol().GetLen() ? 1 : 0
 		);
 	}
 
@@ -1203,13 +1203,13 @@ bool EditView::DrawLayoutLine(ColorStrategyInfo& csInfo)
 */
 void EditView::DispTextSelected(
 	HDC				hdc,		// 作画対象ビットマップを含むデバイス
-	LayoutInt		nLineNum,	// 反転処理対象レイアウト行番号(0開始)
+	int				nLineNum,	// 反転処理対象レイアウト行番号(0開始)
 	const Point&	ptXY,		// (相対レイアウト0桁目の左端座標, 対象行の上端座標)
-	LayoutInt		nX_Layout	// 対象行の終了桁位置。　[ABC\n]なら改行の後ろで4
+	int				nX_Layout	// 対象行の終了桁位置。　[ABC\n]なら改行の後ろで4
 )
 {
-	LayoutInt	nSelectFrom;
-	LayoutInt	nSelectTo;
+	int			nSelectFrom;
+	int			nSelectTo;
 	RECT		rcClip;
 	int			nLineHeight = GetTextMetrics().GetHankakuDy();
 	int			nCharWidth = GetTextMetrics().GetHankakuDx();
@@ -1241,8 +1241,8 @@ void EditView::DispTextSelected(
 			if (nSelectFrom < GetTextArea().GetViewLeftCol()) {
 				nSelectFrom = GetTextArea().GetViewLeftCol();
 			}
-			rcClip.left   = ptXY.x + (Int)nSelectFrom * nCharWidth;
-			rcClip.right  = ptXY.x + (Int)nSelectTo   * nCharWidth;
+			rcClip.left   = ptXY.x + nSelectFrom * nCharWidth;
+			rcClip.right  = ptXY.x + nSelectTo   * nCharWidth;
 			rcClip.top    = ptXY.y;
 			rcClip.bottom = ptXY.y + nLineHeight;
 

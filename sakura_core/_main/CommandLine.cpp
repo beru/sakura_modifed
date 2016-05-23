@@ -226,7 +226,7 @@ void CommandLine::ParseCommandLine(LPCTSTR pszCmdLineSrc, bool bResponse)
 	bool	bFind = false;				// ファイル名発見フラグ
 	bool	bParseOptDisabled = false;	// 2007.09.09 genta オプション解析を行わなず，ファイル名として扱う
 	int		nPos;
-	int		i = 0;
+	size_t	i = 0;
 	if (pszCmdLineSrc[0] != _T('-')) {
 		for (i=0; i<_countof(szPath); ++i) {
 			if (pszCmdLineSrc[i] == _T(' ') || pszCmdLineSrc[i] == _T('\0')) {
@@ -294,7 +294,7 @@ void CommandLine::ParseCommandLine(LPCTSTR pszCmdLineSrc, bool bResponse)
 				_tcscpy(szPath, &(szPath[8]));
 			}
 			size_t len = _tcslen(szPath);
-			for (int i=0; i<len; ) {
+			for (size_t i=0; i<len; ) {
 				if (!TCODE::IsValidFilenameChar(szPath, i)) {
 					TCHAR msg_str[_MAX_PATH + 1];
 					_stprintf(
@@ -342,11 +342,11 @@ void CommandLine::ParseCommandLine(LPCTSTR pszCmdLineSrc, bool bResponse)
 				break;
 			case CMDLINEOPT_VX:	// VX
 				// 行桁指定を1開始にした
-				fi.nViewLeftCol = LayoutInt(AtoiOptionInt(arg) - 1);
+				fi.nViewLeftCol = AtoiOptionInt(arg) - 1;
 				break;
 			case CMDLINEOPT_VY:	// VY
 				// 行桁指定を1開始にした
-				fi.nViewTopLine = LayoutInt(AtoiOptionInt(arg) - 1);
+				fi.nViewTopLine = AtoiOptionInt(arg) - 1;
 				break;
 			case CMDLINEOPT_SX: // SX
 				fi.nWindowSizeX = AtoiOptionInt(arg) - 1;

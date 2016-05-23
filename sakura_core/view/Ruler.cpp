@@ -137,8 +137,8 @@ void Ruler::DrawRulerBg(Graphics& gr)
 	// 下線 (ルーラーと本文の境界)
 	//	Aug. 14, 2005 genta 折り返し幅をLayoutMgrから取得するように
 	//	2005.11.10 Moca 1dot足りない
-	LayoutInt	nMaxLineKetas = editDoc.layoutMgr.GetMaxLineKetas();
-	int nToX = textArea.GetAreaLeft() + (Int)(nMaxLineKetas - textArea.GetViewLeftCol()) * editView.GetTextMetrics().GetHankakuDx() + 1;
+	int nMaxLineKetas = editDoc.layoutMgr.GetMaxLineKetas();
+	int nToX = textArea.GetAreaLeft() + (nMaxLineKetas - textArea.GetViewLeftCol()) * editView.GetTextMetrics().GetHankakuDx() + 1;
 	if (nToX > textArea.GetAreaRight()) {
 		nToX = textArea.GetAreaRight();
 	}
@@ -146,7 +146,7 @@ void Ruler::DrawRulerBg(Graphics& gr)
 	::LineTo(gr, nToX, nY + 1);
 
 	// 目盛を描画
-	LayoutInt i = textArea.GetViewLeftCol();
+	int i = textArea.GetViewLeftCol();
 	while (i <= textArea.GetRightCol() + 1 && i <= nMaxLineKetas) {
 		// ルーラー終端の区切り(大)
 		if (i == nMaxLineKetas) {
@@ -157,7 +157,7 @@ void Ruler::DrawRulerBg(Graphics& gr)
 			wchar_t szColumn[32];
 			::MoveToEx(gr, nX, nY, NULL);
 			::LineTo(gr, nX, 0);
-			_itow(((Int)i) / 10, szColumn, 10);
+			_itow(i / 10, szColumn, 10);
 			::TextOutW_AnyBuild(gr, nX + 2 + 0, -1 + 0, szColumn, wcslen(szColumn));
 		// 5目盛おきの区切り(中)
 		}else if (i % 5 == 0) {
@@ -169,7 +169,7 @@ void Ruler::DrawRulerBg(Graphics& gr)
 			::LineTo(gr, nX, nY - 3);
 		}
 
-		nX += editView.GetTextMetrics().GetHankakuDx();
+		nX += (int)editView.GetTextMetrics().GetHankakuDx();
 		++i;
 	}
 

@@ -80,7 +80,7 @@ int cescape(
 */
 int AddLastChar(
 	TCHAR* pszPath,
-	int nMaxLen,
+	size_t nMaxLen,
 	TCHAR c
 	)
 {
@@ -108,20 +108,20 @@ int AddLastChar(
 // CR0LF0,CRLF,LF,CRで区切られる「行」を返す。改行コードは行長に加えない
 const char* GetNextLine(
 	const char*		pData,
-	int				nDataLen,
-	int*			pnLineLen,
-	int*			pnBgn,
+	size_t			nDataLen,
+	size_t*			pnLineLen,
+	size_t*			pnBgn,
 	Eol*			pEol
 	)
 {
-	int nBgn = *pnBgn;
+	size_t nBgn = *pnBgn;
 
 	//	May 15, 2000 genta
 	pEol->SetType(EolType::None);
 	if (*pnBgn >= nDataLen) {
 		return NULL;
 	}
-	int i;
+	size_t i;
 	for (i=*pnBgn; i<nDataLen; ++i) {
 		// 改行コードがあった
 		if (pData[i] == '\n' || pData[i] == '\r') {
@@ -142,20 +142,20 @@ const char* GetNextLine(
 */
 const wchar_t* GetNextLineW(
 	const wchar_t*	pData,		// [in]		検索文字列
-	int				nDataLen,	// [in]		検索文字列の文字数
-	int*			pnLineLen,	// [out]	1行の文字数を返すただしEOLは含まない
-	int*			pnBgn,		// [i/o]	検索文字列のオフセット位置
+	size_t			nDataLen,	// [in]		検索文字列の文字数
+	size_t*			pnLineLen,	// [out]	1行の文字数を返すただしEOLは含まない
+	size_t*			pnBgn,		// [i/o]	検索文字列のオフセット位置
 	Eol*			pEol,		// [out]	EOL
 	bool			bExtEol
 	)
 {
-	int nBgn = *pnBgn;
+	size_t nBgn = *pnBgn;
 
 	pEol->SetType(EolType::None);
 	if (*pnBgn >= nDataLen) {
 		return NULL;
 	}
-	int i;
+	size_t i;
 	for (i=*pnBgn; i<nDataLen; ++i) {
 		// 改行コードがあった
 		if (WCODE::IsLineDelimiter(pData[i], bExtEol)) {
@@ -241,20 +241,20 @@ const wchar_t* GetNextLineWB(
 */
 const char* GetNextLimitedLengthText(
 	const char* pText,
-	int nTextLen,
-	int nLimitLen,
-	int* pnLineLen,
-	int* pnBgn
+	size_t nTextLen,
+	size_t nLimitLen,
+	size_t* pnLineLen,
+	size_t* pnBgn
 	)
 {
 	int nBgn = *pnBgn;
 	if (nBgn >= nTextLen) {
 		return NULL;
 	}
-	int i;
+	size_t i;
 	for (i=nBgn; i+1<nTextLen; ++i) {
 		// 2005-09-02 D.S.Koba GetSizeOfChar
-		int nCharChars = NativeA::GetSizeOfChar(pText, nTextLen, i);
+		size_t nCharChars = NativeA::GetSizeOfChar(pText, nTextLen, i);
 		if (nCharChars == 0) {
 			nCharChars = 1;
 		}
@@ -299,7 +299,7 @@ void GetLineColumn(
 	)
 {
 	size_t nLineLen = wcslen(pLine);
-	int i = 0;
+	size_t i = 0;
 	for (; i<nLineLen; ++i) {
 		if (pLine[i] >= L'0' &&
 			pLine[i] <= L'9'
@@ -312,7 +312,7 @@ void GetLineColumn(
 	if (i >= nLineLen) {
 	}else {
 		// 行位置 改行単位行番号(1起点)の抽出
-		int j = 0;
+		size_t j = 0;
 		for (; i<nLineLen && j+1<_countof(szNumber);) {
 			szNumber[j] = pLine[i];
 			++j;
@@ -329,7 +329,7 @@ void GetLineColumn(
 		// 桁位置 改行単位行先頭からのバイト数(1起点)の抽出
 		if (i < nLineLen && pLine[i] == ',') {
 			wmemset(szNumber, 0, _countof(szNumber));
-			int j = 0;
+			size_t j = 0;
 			++i;
 			for (; i<nLineLen && j+1<_countof(szNumber);) {
 				szNumber[j] = pLine[i];

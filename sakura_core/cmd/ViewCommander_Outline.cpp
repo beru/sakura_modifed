@@ -169,8 +169,8 @@ bool ViewCommander::Command_FuncList(
 			view.GetHwnd(),
 			(LPARAM)&view,
 			&funcInfoArr,
-			poCaret.GetY2() + LayoutInt(1),
-			poCaret.GetX2() + LayoutInt(1),
+			poCaret.GetY2() + 1,
+			poCaret.GetX2() + 1,
 			nOutlineType,
 			nListType,
 			view.pTypeData->bLineNumIsCRLF	// 行番号の表示 false=折り返し単位／true=改行単位

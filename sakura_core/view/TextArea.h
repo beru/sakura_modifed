@@ -42,28 +42,28 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 	// 表示される最初の行
-	LayoutInt GetViewTopLine() const {
+	int GetViewTopLine() const {
 		return nViewTopLine;
 	}
-	void SetViewTopLine(LayoutInt nLine) {
+	void SetViewTopLine(int nLine) {
 		nViewTopLine = nLine;
 	}
 
 	// 表示域の一番左の桁
-	LayoutInt GetViewLeftCol() const {
+	int GetViewLeftCol() const {
 		return nViewLeftCol;
 	}
-	void SetViewLeftCol(LayoutInt nLeftCol) {
+	void SetViewLeftCol(int nLeftCol) {
 		nViewLeftCol = nLeftCol;
 	}
 
 	// 右にはみ出した最初の列を返す
-	LayoutInt GetRightCol() const {
+	int GetRightCol() const {
 		return nViewLeftCol + nViewColNum;
 	}
 
 	// 下にはみ出した最初の行を返す
-	LayoutInt GetBottomLine() const {
+	int GetBottomLine() const {
 		return nViewTopLine + nViewRowNum;
 	}
 
@@ -162,7 +162,7 @@ public:
 	void SetAreaTop(int nAreaTop) {
 		nViewAlignTop = nAreaTop;
 	}
-	void OffsetViewTopLine(LayoutInt nOff) {
+	void OffsetViewTopLine(int nOff) {
 		nViewTopLine += nOff;
 	}
 protected:
@@ -182,16 +182,16 @@ public:
 	bool GenerateClipRectRight(RECT* rc, const DispPos& pos) const; // 右端まで全部
 	bool GenerateClipRectLine(RECT* rc, const DispPos& pos) const;  // 行全部
 
-	void GenerateTopRect   (RECT* rc, LayoutInt nLineCount) const;
-	void GenerateBottomRect(RECT* rc, LayoutInt nLineCount) const;
-	void GenerateLeftRect  (RECT* rc, LayoutInt nColCount) const;
-	void GenerateRightRect (RECT* rc, LayoutInt nColCount) const;
+	void GenerateTopRect   (RECT* rc, int nLineCount) const;
+	void GenerateBottomRect(RECT* rc, int nLineCount) const;
+	void GenerateLeftRect  (RECT* rc, int nColCount) const;
+	void GenerateRightRect (RECT* rc, int nColCount) const;
 
 	void GenerateLineNumberRect(RECT* rc) const;
 
 	void GenerateTextAreaRect(RECT* rc) const;
 
-	int GenerateYPx(LayoutYInt nLineNum) const;
+	int GenerateYPx(int nLineNum) const;
 
 private:
 	// 参照
@@ -212,14 +212,14 @@ private:
 
 	// テキスト
 private:
-	LayoutInt	nViewTopLine;		// 表示域の一番上の行(0開始)
+	int	nViewTopLine;		// 表示域の一番上の行(0開始)
 public:
-	LayoutInt	nViewRowNum;		// 表示域の行数
+	int	nViewRowNum;		// 表示域の行数
 
 private:
-	LayoutInt	nViewLeftCol;		// 表示域の一番左の桁(0開始)
+	int	nViewLeftCol;		// 表示域の一番左の桁(0開始)
 public:
-	LayoutInt	nViewColNum;		// 表示域の桁数
+	int	nViewColNum;		// 表示域の桁数
 
 	// その他
 	int		nViewAlignLeftCols;	// 行番号域の桁数

@@ -272,8 +272,8 @@ bool ViewCommander::HandleCommand(
 
 	// カーソル移動系
 	case F_IME_CHAR:			Command_IME_CHAR((WORD)lparam1); break;					// 全角文字入力
-	case F_MOVECURSOR:			Command_MoveCursor(LogicPoint(LogicInt((int)lparam2), LogicInt((int)lparam1)), (int)lparam3); break;
-	case F_MOVECURSORLAYOUT:	Command_MoveCursorLayout(LayoutPoint(LayoutInt((int)lparam2), LayoutInt((int)lparam1)), (int)lparam3); break;
+	case F_MOVECURSOR:			Command_MoveCursor(LogicPoint((int)lparam2, (int)lparam1), (int)lparam3); break;
+	case F_MOVECURSORLAYOUT:	Command_MoveCursorLayout(LayoutPoint((int)lparam2, (int)lparam1), (int)lparam3); break;
 	case F_UP:					Command_Up(view.GetSelectionInfo().bSelectingLock, bRepeat); break;				// カーソル上移動
 	case F_DOWN:				Command_Down(view.GetSelectionInfo().bSelectingLock, bRepeat); break;			// カーソル下移動
 	case F_LEFT:				Command_Left(view.GetSelectionInfo().bSelectingLock, bRepeat); break;			// カーソル左移動
@@ -283,14 +283,14 @@ bool ViewCommander::HandleCommand(
 	case F_WORDLEFT:			Command_WordLeft(view.GetSelectionInfo().bSelectingLock); break;					// 単語の左端に移動
 	case F_WORDRIGHT:			Command_WordRight(view.GetSelectionInfo().bSelectingLock); break;				// 単語の右端に移動
 	// 0ct. 29, 2001 genta マクロ向け機能拡張
-	case F_GOLINETOP:			Command_GoLineTop(view.GetSelectionInfo().bSelectingLock, lparam1); break;		// 行頭に移動(折り返し単位/改行単位)
-	case F_GOLINEEND:			Command_GoLineEnd(view.GetSelectionInfo().bSelectingLock, 0, lparam1); break;	// 行末に移動(折り返し単位)
+	case F_GOLINETOP:			Command_GoLineTop(view.GetSelectionInfo().bSelectingLock, (int)lparam1); break;		// 行頭に移動(折り返し単位/改行単位)
+	case F_GOLINEEND:			Command_GoLineEnd(view.GetSelectionInfo().bSelectingLock, 0, (int)lparam1); break;	// 行末に移動(折り返し単位)
 //	case F_ROLLDOWN:			Command_ROLLDOWN(view.GetSelectionInfo().bSelectingLock); break;					// Scroll Down
 //	case F_ROLLUP:				Command_ROLLUP(view.GetSelectionInfo().bSelectingLock); break;					// Scroll Up
-	case F_HalfPageUp:			Command_HalfPageUp( view.GetSelectionInfo().bSelectingLock, LayoutYInt(lparam1) ); break;				//半ページアップ	//Oct. 6, 2000 JEPRO 名称をPC-AT互換機系に変更(ROLL→PAGE) //Oct. 10, 2000 JEPRO 名称変更
-	case F_HalfPageDown:		Command_HalfPageDown( view.GetSelectionInfo().bSelectingLock, LayoutYInt(lparam1) ); break;			//半ページダウン	//Oct. 6, 2000 JEPRO 名称をPC-AT互換機系に変更(ROLL→PAGE) //Oct. 10, 2000 JEPRO 名称変更
-	case F_1PageUp:				Command_1PageUp( view.GetSelectionInfo().bSelectingLock, LayoutYInt(lparam1) ); break;					//１ページアップ	//Oct. 10, 2000 JEPRO 従来のページアップを半ページアップと名称変更し１ページアップを追加
-	case F_1PageDown:			Command_1PageDown( view.GetSelectionInfo().bSelectingLock, LayoutYInt(lparam1) ); break;				//１ページダウン	//Oct. 10, 2000 JEPRO 従来のページダウンを半ページダウンと名称変更し１ページダウンを追加
+	case F_HalfPageUp:			Command_HalfPageUp(view.GetSelectionInfo().bSelectingLock, (int)lparam1); break;				//半ページアップ	//Oct. 6, 2000 JEPRO 名称をPC-AT互換機系に変更(ROLL→PAGE) //Oct. 10, 2000 JEPRO 名称変更
+	case F_HalfPageDown:		Command_HalfPageDown(view.GetSelectionInfo().bSelectingLock, (int)lparam1); break;			//半ページダウン	//Oct. 6, 2000 JEPRO 名称をPC-AT互換機系に変更(ROLL→PAGE) //Oct. 10, 2000 JEPRO 名称変更
+	case F_1PageUp:				Command_1PageUp(view.GetSelectionInfo().bSelectingLock, (int)lparam1); break;					//１ページアップ	//Oct. 10, 2000 JEPRO 従来のページアップを半ページアップと名称変更し１ページアップを追加
+	case F_1PageDown:			Command_1PageDown(view.GetSelectionInfo().bSelectingLock, (int)lparam1); break;				//１ページダウン	//Oct. 10, 2000 JEPRO 従来のページダウンを半ページダウンと名称変更し１ページダウンを追加
 	case F_GOFILETOP:			Command_GoFileTop(view.GetSelectionInfo().bSelectingLock); break;				// ファイルの先頭に移動
 	case F_GOFILEEND:			Command_GoFileEnd(view.GetSelectionInfo().bSelectingLock); break;				// ファイルの最後に移動
 	case F_CURLINECENTER:		Command_CurLineCenter(); break;								// カーソル行をウィンドウ中央へ
@@ -302,23 +302,23 @@ bool ViewCommander::HandleCommand(
 	case F_GONEXTPARAGRAPH:		Command_GoNextParagraph(view.GetSelectionInfo().bSelectingLock); break;			// 次の段落へ進む
 	case F_GOPREVPARAGRAPH:		Command_GoPrevParagraph(view.GetSelectionInfo().bSelectingLock); break;			// 前の段落へ戻る
 	case F_AUTOSCROLL:			Command_AutoScroll(); break;									// Auto Scroll
-	case F_WHEELUP:				Command_WheelUp(lparam1); break;
-	case F_WHEELDOWN:			Command_WheelDown(lparam1); break;
-	case F_WHEELLEFT:			Command_WheelLeft(lparam1); break;
-	case F_WHEELRIGHT:			Command_WheelRight(lparam1); break;
-	case F_WHEELPAGEUP:			Command_WheelPageUp(lparam1); break;
-	case F_WHEELPAGEDOWN:		Command_WheelPageDown(lparam1); break;
-	case F_WHEELPAGELEFT:		Command_WheelPageLeft(lparam1); break;
-	case F_WHEELPAGERIGHT:		Command_WheelPageRight(lparam1); break;
+	case F_WHEELUP:				Command_WheelUp((int)lparam1); break;
+	case F_WHEELDOWN:			Command_WheelDown((int)lparam1); break;
+	case F_WHEELLEFT:			Command_WheelLeft((int)lparam1); break;
+	case F_WHEELRIGHT:			Command_WheelRight((int)lparam1); break;
+	case F_WHEELPAGEUP:			Command_WheelPageUp((int)lparam1); break;
+	case F_WHEELPAGEDOWN:		Command_WheelPageDown((int)lparam1); break;
+	case F_WHEELPAGELEFT:		Command_WheelPageLeft((int)lparam1); break;
+	case F_WHEELPAGERIGHT:		Command_WheelPageRight((int)lparam1); break;
 	case F_MODIFYLINE_NEXT:		Command_ModifyLine_Next( view.GetSelectionInfo().bSelectingLock ); break;	// 次の変更行へ
 	case F_MODIFYLINE_PREV:		Command_ModifyLine_Prev( view.GetSelectionInfo().bSelectingLock ); break;	// 前の変更行へ
 
 	// 選択系
 	case F_SELECTWORD:		Command_SelectWord(); break;					// 現在位置の単語選択
 	case F_SELECTALL:		Command_SelectAll(); break;						// すべて選択
-	case F_SELECTLINE:		Command_SelectLine(lparam1); break;				// 1行選択	// 2007.10.13 nasukoji
+	case F_SELECTLINE:		Command_SelectLine((int)lparam1); break;				// 1行選択	// 2007.10.13 nasukoji
 	case F_BEGIN_SEL:		Command_Begin_Select(); break;					// 範囲選択開始
-	case F_UP_SEL:			Command_Up(true, bRepeat, lparam1); break;		// (範囲選択)カーソル上移動
+	case F_UP_SEL:			Command_Up(true, bRepeat, (int)lparam1); break;		// (範囲選択)カーソル上移動
 	case F_DOWN_SEL:		Command_Down(true, bRepeat); break;				// (範囲選択)カーソル下移動
 	case F_LEFT_SEL:		Command_Left(true, bRepeat); break;				// (範囲選択)カーソル左移動
 	case F_RIGHT_SEL:		Command_Right(true, false, bRepeat); break;		// (範囲選択)カーソル右移動
@@ -326,14 +326,14 @@ bool ViewCommander::HandleCommand(
 	case F_DOWN2_SEL:		Command_Down2(true); break;						// (範囲選択)カーソル下移動(２行ごと)
 	case F_WORDLEFT_SEL:	Command_WordLeft(true); break;					// (範囲選択)単語の左端に移動
 	case F_WORDRIGHT_SEL:	Command_WordRight(true); break;					// (範囲選択)単語の右端に移動
-	case F_GOLINETOP_SEL:	Command_GoLineTop(true, lparam1); break;		// (範囲選択)行頭に移動(折り返し単位/改行単位)
-	case F_GOLINEEND_SEL:	Command_GoLineEnd(true, 0, lparam1); break;		// (範囲選択)行末に移動(折り返し単位)
+	case F_GOLINETOP_SEL:	Command_GoLineTop(true, (int)lparam1); break;		// (範囲選択)行頭に移動(折り返し単位/改行単位)
+	case F_GOLINEEND_SEL:	Command_GoLineEnd(true, 0, (int)lparam1); break;		// (範囲選択)行末に移動(折り返し単位)
 //	case F_ROLLDOWN_SEL:	Command_ROLLDOWN(TRUE); break;					// (範囲選択)Scroll Down
 //	case F_ROLLUP_SEL:		Command_ROLLUP(TRUE); break;					// (範囲選択)Scroll Up
-	case F_HalfPageUp_Sel:	Command_HalfPageUp( true, LayoutYInt(lparam1) ); break;				//(範囲選択)半ページアップ
-	case F_HalfPageDown_Sel:Command_HalfPageDown( true, LayoutYInt(lparam1) ); break;			//(範囲選択)半ページダウン
-	case F_1PageUp_Sel:		Command_1PageUp( true, LayoutYInt(lparam1) ); break;					//(範囲選択)１ページアップ
-	case F_1PageDown_Sel:	Command_1PageDown( true, LayoutYInt(lparam1) ); break;				//(範囲選択)１ページダウン
+	case F_HalfPageUp_Sel:	Command_HalfPageUp(true, (int)lparam1); break;				//(範囲選択)半ページアップ
+	case F_HalfPageDown_Sel:Command_HalfPageDown(true, (int)lparam1); break;			//(範囲選択)半ページダウン
+	case F_1PageUp_Sel:		Command_1PageUp(true, (int)lparam1); break;					//(範囲選択)１ページアップ
+	case F_1PageDown_Sel:	Command_1PageDown(true, (int)lparam1); break;				//(範囲選択)１ページダウン
 	case F_GOFILETOP_SEL:	Command_GoFileTop(true); break;					// (範囲選択)ファイルの先頭に移動
 	case F_GOFILEEND_SEL:	Command_GoFileEnd(true); break;					// (範囲選択)ファイルの最後に移動
 	case F_GONEXTPARAGRAPH_SEL:	Command_GoNextParagraph(true); break;		// 次の段落へ進む
@@ -344,24 +344,24 @@ bool ViewCommander::HandleCommand(
 	// 矩形選択系
 //	case F_BOXSELALL:		Command_BOXSELECTALL(); break;			// 矩形ですべて選択
 	case F_BEGIN_BOX:		Command_Begin_BoxSelect(true); break;	// 矩形範囲選択開始
-	case F_UP_BOX:			Sub_BoxSelectLock(lparam1); this->Command_Up(true, bRepeat); break;		// (矩形選択)カーソル上移動
-	case F_DOWN_BOX:		Sub_BoxSelectLock(lparam1); this->Command_Down(true, bRepeat); break;	// (矩形選択)カーソル下移動
-	case F_LEFT_BOX:		Sub_BoxSelectLock(lparam1); this->Command_Left(true, bRepeat); break;	// (矩形選択)カーソル左移動
-	case F_RIGHT_BOX:		Sub_BoxSelectLock(lparam1); this->Command_Right(true, false, bRepeat); break;	// (矩形選択)カーソル右移動
-	case F_UP2_BOX:			Sub_BoxSelectLock(lparam1); this->Command_Up2(true); break;				// (矩形選択)カーソル上移動(２行ごと)
-	case F_DOWN2_BOX:		Sub_BoxSelectLock(lparam1); this->Command_Down2(true);break;			// (矩形選択)カーソル下移動(２行ごと)
-	case F_WORDLEFT_BOX:	Sub_BoxSelectLock(lparam1); this->Command_WordLeft(true);break;			// (矩形選択)単語の左端に移動
-	case F_WORDRIGHT_BOX:	Sub_BoxSelectLock(lparam1); this->Command_WordRight(true);break;		// (矩形選択)単語の右端に移動
-	case F_GOLOGICALLINETOP_BOX:Sub_BoxSelectLock(lparam2); this->Command_GoLineTop(true, 8 | lparam1);break;	// (矩形選択)行頭に移動(改行単位)
+	case F_UP_BOX:			Sub_BoxSelectLock((int)lparam1); this->Command_Up(true, bRepeat); break;		// (矩形選択)カーソル上移動
+	case F_DOWN_BOX:		Sub_BoxSelectLock((int)lparam1); this->Command_Down(true, bRepeat); break;	// (矩形選択)カーソル下移動
+	case F_LEFT_BOX:		Sub_BoxSelectLock((int)lparam1); this->Command_Left(true, bRepeat); break;	// (矩形選択)カーソル左移動
+	case F_RIGHT_BOX:		Sub_BoxSelectLock((int)lparam1); this->Command_Right(true, false, bRepeat); break;	// (矩形選択)カーソル右移動
+	case F_UP2_BOX:			Sub_BoxSelectLock((int)lparam1); this->Command_Up2(true); break;				// (矩形選択)カーソル上移動(２行ごと)
+	case F_DOWN2_BOX:		Sub_BoxSelectLock((int)lparam1); this->Command_Down2(true);break;			// (矩形選択)カーソル下移動(２行ごと)
+	case F_WORDLEFT_BOX:	Sub_BoxSelectLock((int)lparam1); this->Command_WordLeft(true);break;			// (矩形選択)単語の左端に移動
+	case F_WORDRIGHT_BOX:	Sub_BoxSelectLock((int)lparam1); this->Command_WordRight(true);break;		// (矩形選択)単語の右端に移動
+	case F_GOLOGICALLINETOP_BOX:Sub_BoxSelectLock((int)lparam2); this->Command_GoLineTop(true, 8 | (int)lparam1);break;	// (矩形選択)行頭に移動(改行単位)
 //	case F_GOLOGICALLINEEND_BOX:Sub_BoxSelectLock(lparam2); this->Command_GoLineEnd(true, 0, 8 | lparam1);break;	// (矩形選択)行末に移動(改行単位)
-	case F_GOLINETOP_BOX:	Sub_BoxSelectLock(lparam2); this->Command_GoLineTop(true, lparam1);break;		// (矩形選択)行頭に移動(折り返し単位/改行単位)
-	case F_GOLINEEND_BOX:	Sub_BoxSelectLock(lparam2); this->Command_GoLineEnd(true, 0, lparam1);break;	// (矩形選択)行末に移動(折り返し単位/改行単位)
-	case F_HalfPageUp_BOX:	Sub_BoxSelectLock(lparam2); this->Command_HalfPageUp(true, LayoutYInt(lparam1)); break;		// (矩形選択)半ページアップ
-	case F_HalfPageDown_BOX:Sub_BoxSelectLock(lparam2); this->Command_HalfPageDown(true, LayoutYInt(lparam1)); break;		// (矩形選択)半ページダウン
-	case F_1PageUp_BOX:		Sub_BoxSelectLock(lparam2); this->Command_1PageUp(true, LayoutYInt(lparam1)); break;			// (矩形選択)１ページアップ
-	case F_1PageDown_BOX:	Sub_BoxSelectLock(lparam2); this->Command_1PageDown(true, LayoutYInt(lparam1)); break;			// (矩形選択)１ページダウン
-	case F_GOFILETOP_BOX:	Sub_BoxSelectLock(lparam1); this->Command_GoFileTop(true);break;			// (矩形選択)ファイルの先頭に移動
-	case F_GOFILEEND_BOX:	Sub_BoxSelectLock(lparam1); this->Command_GoFileEnd(true);break;			// (矩形選択)ファイルの最後に移動
+	case F_GOLINETOP_BOX:	Sub_BoxSelectLock((int)lparam2); this->Command_GoLineTop(true, (int)lparam1);break;		// (矩形選択)行頭に移動(折り返し単位/改行単位)
+	case F_GOLINEEND_BOX:	Sub_BoxSelectLock((int)lparam2); this->Command_GoLineEnd(true, 0, (int)lparam1);break;	// (矩形選択)行末に移動(折り返し単位/改行単位)
+	case F_HalfPageUp_BOX:	Sub_BoxSelectLock((int)lparam2); this->Command_HalfPageUp(true, (int)lparam1); break;		// (矩形選択)半ページアップ
+	case F_HalfPageDown_BOX:Sub_BoxSelectLock((int)lparam2); this->Command_HalfPageDown(true, (int)lparam1); break;		// (矩形選択)半ページダウン
+	case F_1PageUp_BOX:		Sub_BoxSelectLock((int)lparam2); this->Command_1PageUp(true, (int)lparam1); break;			// (矩形選択)１ページアップ
+	case F_1PageDown_BOX:	Sub_BoxSelectLock((int)lparam2); this->Command_1PageDown(true, (int)lparam1); break;			// (矩形選択)１ページダウン
+	case F_GOFILETOP_BOX:	Sub_BoxSelectLock((int)lparam1); this->Command_GoFileTop(true);break;			// (矩形選択)ファイルの先頭に移動
+	case F_GOFILEEND_BOX:	Sub_BoxSelectLock((int)lparam1); this->Command_GoFileEnd(true);break;			// (矩形選択)ファイルの最後に移動
 
 	// クリップボード系
 	case F_CUT:						Command_Cut(); break;					// 切り取り(選択範囲をクリップボードにコピーして削除)

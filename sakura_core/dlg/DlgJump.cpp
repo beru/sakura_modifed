@@ -54,7 +54,7 @@ DlgJump::DlgJump()
 }
 
 // モーダルダイアログの表示
-int DlgJump::DoModal(
+INT_PTR DlgJump::DoModal(
 	HINSTANCE	hInstance,
 	HWND		hwndParent,
 	LPARAM		lParam
@@ -229,9 +229,9 @@ void DlgJump::SetData(void)
 			}
 			nIndex = Combo_AddString(hwndCtrl, szText);
 			if (pShareData->bLineNumIsCRLF_ForJump) {	// 行番号の表示 false=折り返し単位／true=改行単位
-				Combo_SetItemData(hwndCtrl, nIndex, (Int)pFI->nFuncLineCRLF);
+				Combo_SetItemData(hwndCtrl, nIndex, pFI->nFuncLineCRLF);
 			}else {
-				Combo_SetItemData(hwndCtrl, nIndex, (Int)pFI->nFuncLineLAYOUT);
+				Combo_SetItemData(hwndCtrl, nIndex, pFI->nFuncLineLAYOUT);
 			}
 			nPLSQLBlockNum++;
 		}
@@ -249,11 +249,11 @@ void DlgJump::SetData(void)
 			}
 			nIndexCurSel = nIndex = Combo_AddString(hwndCtrl, szText);
 			if (pShareData->bLineNumIsCRLF_ForJump) {	// 行番号の表示 false=折り返し単位／true=改行単位
-				nWorkLine = (Int)pFI->nFuncLineCRLF;
-				Combo_SetItemData(hwndCtrl, nIndex, (Int)pFI->nFuncLineCRLF);
+				nWorkLine = pFI->nFuncLineCRLF;
+				Combo_SetItemData(hwndCtrl, nIndex, pFI->nFuncLineCRLF);
 			}else {
-				nWorkLine = (Int)pFI->nFuncLineLAYOUT;
-				Combo_SetItemData(hwndCtrl, nIndex, (Int)pFI->nFuncLineLAYOUT);
+				nWorkLine = pFI->nFuncLineLAYOUT;
+				Combo_SetItemData(hwndCtrl, nIndex, pFI->nFuncLineLAYOUT);
 			}
 			++nPLSQLBlockNum;
 		}

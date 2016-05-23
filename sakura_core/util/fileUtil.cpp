@@ -1162,8 +1162,8 @@ int FileMatchScore(
 			int tmpScore = 0;
 			for (int m=k; m<len2;) {
 				int pos1 = i + (m - k);
-				int chars1 = (Int)NativeT::GetSizeOfChar(file1, len1, pos1);
-				int chars2 = (Int)NativeT::GetSizeOfChar(file2, len2, m);
+				int chars1 = NativeT::GetSizeOfChar(file1, len1, pos1);
+				int chars2 = NativeT::GetSizeOfChar(file2, len2, m);
 				if (chars1 == chars2) {
 					if (chars1 == 1) {
 						if (_tcs_tolower(file1[pos1]) == _tcs_tolower(file2[m])) {
@@ -1186,9 +1186,9 @@ int FileMatchScore(
 			if (score < tmpScore) {
 				score = tmpScore;
 			}
-			k += t_max(1, (int)(Int)NativeT::GetSizeOfChar(file2, len2, k));
+			k += t_max(1, (int)NativeT::GetSizeOfChar(file2, len2, k));
 		}
-		i += t_max(1, (int)(Int)NativeT::GetSizeOfChar(file1, len1, i));
+		i += t_max(1, (int)NativeT::GetSizeOfChar(file1, len1, i));
 	}
 	return score;
 }
@@ -1226,7 +1226,7 @@ void GetStrTrancateWidth(
 			return;
 		}
 		strTempOld = strTemp;
-		nPos += t_max(1, (int)(Int)NativeT::GetSizeOfChar(path, nPathLen, nPos));
+		nPos += t_max(1, (int)NativeT::GetSizeOfChar(path, nPathLen, nPos));
 	}
 	// 全部表示(ここには来ないはず)
 	_tcsncpy_s(dest, nSize, path, _TRUNCATE);
@@ -1267,19 +1267,19 @@ void GetShortViewPath(
 		// http://server/ とか ftp://server/ とかを保持
 		int nTop = 0;
 		while (path[nTop] != _T('\0') && path[nTop] != _T('/')) {
-			nTop += t_max(1, (int)(Int)NativeT::GetSizeOfChar(path, nPathLen, nTop));
+			nTop += t_max(1, (int)NativeT::GetSizeOfChar(path, nPathLen, nTop));
 		}
 		if (0 < nTop && path[nTop - 1] == ':') {
 			// 「ほにゃらら:/」だった /が続いてる間飛ばす
 			while (path[nTop] == _T('/')) {
-				nTop += t_max(1, (int)(Int)NativeT::GetSizeOfChar(path, nPathLen, nTop));
+				nTop += t_max(1, (int)NativeT::GetSizeOfChar(path, nPathLen, nTop));
 			}
 			nLeft = nTop;
 		}
 	}
 	for (int i=0; i<nSkipLevel; ++i) {
 		while (path[nLeft] != _T('\0') && path[nLeft] != _T('\\') && path[nLeft] != _T('/')) {
-			nLeft += t_max(1, (int)(Int)NativeT::GetSizeOfChar(path, nPathLen, nLeft));
+			nLeft += t_max(1, (int)NativeT::GetSizeOfChar(path, nPathLen, nLeft));
 		}
 		if (path[nLeft] != _T('\0')) {
 			if (i + 1 < nSkipLevel) {
@@ -1300,7 +1300,7 @@ void GetShortViewPath(
 		int nNext = nRight;
 		++nNext;
 		while (path[nNext] != _T('\0') && path[nNext] != _T('\\') && path[nNext] != _T('/')) {
-			nNext += t_max(1, (int)(Int)NativeT::GetSizeOfChar(path, nPathLen, nNext));
+			nNext += t_max(1, (int)NativeT::GetSizeOfChar(path, nPathLen, nNext));
 		}
 		if (path[nNext] != _T('\0')) {
 			// サブフォルダ省略
@@ -1353,7 +1353,7 @@ void GetShortViewPath(
 				if (path[nExt] == _T('.')) {
 					nExtPos = nExt;
 				}
-				nExt += t_max(1, (int)(Int)NativeT::GetSizeOfChar(path, nPathLen, nExt));
+				nExt += t_max(1, (int)NativeT::GetSizeOfChar(path, nPathLen, nExt));
 			}
 		}
 		if (nExtPos != -1) {

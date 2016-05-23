@@ -252,13 +252,13 @@ DlgFavorite::~DlgFavorite()
 }
 
 // モーダルダイアログの表示
-int DlgFavorite::DoModal(
+INT_PTR DlgFavorite::DoModal(
 	HINSTANCE	hInstance,
 	HWND		hwndParent,
 	LPARAM		lParam
 )
 {
-	return (int)Dialog::DoModal(hInstance, hwndParent, IDD_FAVORITE, lParam);
+	return Dialog::DoModal(hInstance, hwndParent, IDD_FAVORITE, lParam);
 }
 
 // ダイアログデータの設定

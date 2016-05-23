@@ -386,8 +386,8 @@ void OutlinePython::DoScanLine(const wchar_t* data, int linelen, int start_offse
 */
 void DocOutline::MakeFuncList_python(FuncInfoArr* pFuncInfoArr)
 {
-	LogicInt	nLineLen;
-	LogicInt	nLineCount;
+	size_t nLineLen;
+	int nLineCount;
 
 	OutlinePython python_analyze_state;
 
@@ -398,10 +398,10 @@ void DocOutline::MakeFuncList_python(FuncInfoArr* pFuncInfoArr)
 	indent_level[0] = 0;	// do as python does.
 	int depth_index = 0;
 
-	for (nLineCount=LogicInt(0); nLineCount<doc.docLineMgr.GetLineCount(); ++nLineCount) {
+	for (nLineCount=0; nLineCount<doc.docLineMgr.GetLineCount(); ++nLineCount) {
 		const wchar_t*	pLine;
 		int depth;	//	indent depth
-		LogicInt col = LogicInt(0);	//	current working column position
+		int col = 0;	//	current working column position
 
 		pLine = doc.docLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
 		
@@ -409,7 +409,7 @@ void DocOutline::MakeFuncList_python(FuncInfoArr* pFuncInfoArr)
 			//	indent check
 			//	May 15, 2007 genta 桁位置colはデータオフセットdと独立にしないと
 			//	文字列比較がおかしくなる
-			for (depth=0, col=LogicInt(0); col<nLineLen; ++col) {
+			for (depth=0, col=0; col<nLineLen; ++col) {
 				//	calculate indent level
 				if (pLine[col] == L' ') {
 					++depth;
@@ -429,19 +429,19 @@ void DocOutline::MakeFuncList_python(FuncInfoArr* pFuncInfoArr)
 			
 			int nItemFuncId = 0;	// topic type
 			if (
-				nLineLen - col > LogicInt(3 + 1)
+				nLineLen - col > 3 + 1
 				&& wcsncmp_literal(pLine + col, L"def") == 0
 			) {
 				//	"def"
 				nItemFuncId = 1;
-				col += LogicInt(3); // strlen(def)
+				col += 3; // strlen(def)
 			}else if (
-				nLineLen - col > LogicInt(5 + 1)
+				nLineLen - col > 5 + 1
 				&& wcsncmp_literal(pLine + col, L"class") == 0
 			) {
 				// class
 				nItemFuncId = 4;
-				col += LogicInt(5); // strlen(class)
+				col += 5; // strlen(class)
 			}else {
 				python_analyze_state.DoScanLine(pLine, nLineLen, col);
 				continue;
@@ -526,17 +526,17 @@ void DocOutline::MakeFuncList_python(FuncInfoArr* pFuncInfoArr)
 			*/
 			LayoutPoint ptPosXY;
 			doc.layoutMgr.LogicToLayout(
-				LogicPoint(LogicInt(0), nLineCount),
+				LogicPoint(0, nLineCount),
 				&ptPosXY
 			);
 			pFuncInfoArr->AppendData(
-				nLineCount + LogicInt(1),
-				ptPosXY.GetY2() + LayoutInt(1),
+				nLineCount + 1,
+				ptPosXY.GetY2() + 1,
 				szWord,
 				nItemFuncId,
 				depth_index
 			);
-			col = LogicInt(w_end); // クラス・関数定義の続きはここから
+			col = w_end; // クラス・関数定義の続きはここから
 		}
 		python_analyze_state.DoScanLine(pLine, nLineLen, col);
 	}

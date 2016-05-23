@@ -231,13 +231,13 @@ void DlgTagJumpList::Empty(void)
 
 	@param[in] lParam 0=ダイレクトタグジャンプ, 1=キーワードを指定してタグジャンプ
 */
-int DlgTagJumpList::DoModal(
+INT_PTR DlgTagJumpList::DoModal(
 	HINSTANCE	hInstance,
 	HWND		hwndParent,
 	LPARAM		lParam
 	)
 {
-	int ret = (int)Dialog::DoModal(hInstance, hwndParent, IDD_TAGJUMPLIST, lParam);
+	INT_PTR ret = Dialog::DoModal(hInstance, hwndParent, IDD_TAGJUMPLIST, lParam);
 	StopTimer();
 	return ret;
 }

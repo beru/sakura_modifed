@@ -34,7 +34,7 @@ public:
 	/*
 	||  Attributes & Operations
 	*/
-	int DoModal(HINSTANCE, HWND, int);		// モードレスダイアログの表示
+	INT_PTR DoModal(HINSTANCE, HWND, int);		// モードレスダイアログの表示
 	HWND DoModeless(HINSTANCE, HWND, int);	// モードレスダイアログの表示
 
 //	HWND Open(LPCTSTR);

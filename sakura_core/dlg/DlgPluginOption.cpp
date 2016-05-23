@@ -90,7 +90,7 @@ DlgPluginOption::~DlgPluginOption()
 }
 
 // モーダルダイアログの表示
-int DlgPluginOption::DoModal(
+INT_PTR DlgPluginOption::DoModal(
 	HINSTANCE			hInstance,
 	HWND				hwndParent,
 	int 				ID
@@ -104,7 +104,7 @@ int DlgPluginOption::DoModal(
 		return 0;
 	}
 
-	return (int)Dialog::DoModal(hInstance, hwndParent, IDD_PLUGIN_OPTION, (LPARAM)NULL);
+	return Dialog::DoModal(hInstance, hwndParent, IDD_PLUGIN_OPTION, (LPARAM)NULL);
 }
 
 // ダイアログデータの設定

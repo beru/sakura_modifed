@@ -52,7 +52,7 @@ static CodeConvertResult _CheckSavingCharcode(
 	CodeBase* pCodeBase = CodeFactory::CreateCodeBase(eCodeType, 0);
 	Memory memTmp;	// バッファを再利用
 	NativeW memTmp2;
-	LogicInt nLine = LogicInt(0);
+	int nLine = 0;
 	while (pDocLine) {
 		// コード変換 pDocLine -> memTmp
 		CodeConvertResult e = IoBridge::ImplToFile(
@@ -68,8 +68,8 @@ static CodeConvertResult _CheckSavingCharcode(
 				pCodeBase,
 				0
 			);
-			const int nDocLineLen = (Int)pDocLine->GetLengthWithEOL();
-			const int nConvertLen = (Int)memTmp2.GetStringLength();
+			const int nDocLineLen = pDocLine->GetLengthWithEOL();
+			const int nConvertLen = memTmp2.GetStringLength();
 			const int nDataMinLen = t_min(nDocLineLen, nConvertLen);
 			const wchar_t* p = pDocLine->GetPtr();
 			const wchar_t* r = memTmp2.GetStringPtr();
@@ -85,9 +85,9 @@ static CodeConvertResult _CheckSavingCharcode(
 			}
 			if (nPos != -1) {
 				point.y = nLine;
-				point.x = LogicInt(nPos);
+				point.x = nPos;
 				// 変換できなかった位置の1文字取得
-				wc.SetString( p + nPos, (Int)NativeW::GetSizeOfChar( p, nDocLineLen, nPos ) );
+				wc.SetString( p + nPos, NativeW::GetSizeOfChar( p, nDocLineLen, nPos ) );
 				delete pCodeBase;
 				return CodeConvertResult::LoseSome;
 			}
@@ -96,11 +96,11 @@ static CodeConvertResult _CheckSavingCharcode(
 			if (e == CodeConvertResult::LoseSome) {
 				// 行内の位置を特定
 				point.y = nLine;
-				point.x = LogicInt(-1);
+				point.x = -1;
 				const WCHAR* pLine = pDocLine->GetPtr();
 				const size_t nLineLen = pDocLine->GetLengthWithEOL();
-				LogicInt chars = NativeW::GetSizeOfChar( pLine, nLineLen, 0 );
-				LogicInt nPos = LogicInt(0);
+				int chars = NativeW::GetSizeOfChar( pLine, nLineLen, 0 );
+				int nPos = 0;
 				NativeW mem;
 				while (0 < chars) {
 					mem.SetStringHoldBuffer( pLine + nPos, chars );
@@ -178,7 +178,7 @@ CallbackResultType CodeChecker::OnCheckSave(SaveInfo* pSaveInfo)
 		if (point.x == -1) {
 			memChar.SetString(LSW(STR_ERR_CSHAREDATA22));
 		}else {
-			auto_sprintf( szLineNum, _T("%d"), (int)((Int)point.x) + 1 );
+			auto_sprintf( szLineNum, _T("%d"), (int)point.x + 1 );
 			_tcscat( szLineNum, LS(STR_DLGFNCLST_LIST_COL) );
 			Unicode().UnicodeToHex( memChar.GetStringPtr(), memChar.GetStringLength(),
 				szCharCode, &GetDllShareData().common.statusBar );
@@ -189,7 +189,7 @@ CallbackResultType CodeChecker::OnCheckSave(SaveInfo* pSaveInfo)
 			GSTR_APPNAME,
 			LS(STR_CODECHECKER_CONFORM_LOSESOME),
 			szCpName,
-			(int)((Int)point.y + 1),
+			(int)(point.y + 1),
 			szLineNum,
 			memChar.GetStringPtr(),
 			szCharCode
@@ -199,7 +199,7 @@ CallbackResultType CodeChecker::OnCheckSave(SaveInfo* pSaveInfo)
 		case IDNO:		return CallbackResultType::Interrupt; // 中断
 		case IDCANCEL:
 			{
-				LogicPoint pt(point.x < 0 ? LogicInt(0) : point.x, point.y);
+				LogicPoint pt(point.x < 0 ? 0 : point.x, point.y);
 				pDoc->pEditWnd->GetActiveView().GetCommander().Command_MoveCursor(pt, 0);
 			}
 			return CallbackResultType::Interrupt; //中断

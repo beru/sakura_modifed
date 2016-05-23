@@ -6,7 +6,7 @@
 #include "doc/layout/Layout.h"
 
 // 外部依存
-LayoutInt ViewCalc::GetTabSpace() const
+int ViewCalc::GetTabSpace() const
 {
 	return owner.pEditDoc->layoutMgr.GetTabSpace();
 }
@@ -16,12 +16,12 @@ LayoutInt ViewCalc::GetTabSpace() const
 	
 	@@@ 2002.09.28 YAZAKI DocLine版
 */
-LogicInt ViewCalc::LineColumnToIndex(
+int ViewCalc::LineColumnToIndex(
 	const DocLine* pDocLine,
-	LayoutInt nColumn
+	int nColumn
 	) const
 {
-	LogicInt i2 = LogicInt(0);
+	int i2 = 0;
 	MemoryIterator it(pDocLine, GetTabSpace());
 	while (!it.end()) {
 		it.scanNext();
@@ -39,12 +39,12 @@ LogicInt ViewCalc::LineColumnToIndex(
 	
 	@@@ 2002.09.28 YAZAKI Layoutが必要になりました。
 */
-LogicInt ViewCalc::LineColumnToIndex(
+int ViewCalc::LineColumnToIndex(
 	const Layout* pLayout,
-	LayoutInt nColumn
+	int nColumn
 	) const
 {
-	LogicInt i2 = LogicInt(0);
+	int i2 = 0;
 	MemoryIterator it(pLayout, GetTabSpace());
 	while (!it.end()) {
 		it.scanNext();
@@ -64,16 +64,16 @@ LogicInt ViewCalc::LineColumnToIndex(
   それ以外の場合はpnLineAllColLenに０をセットする
   @@@ 2002.09.28 YAZAKI Layoutが必要になりました。
 */
-LogicInt ViewCalc::LineColumnToIndex2(
+int ViewCalc::LineColumnToIndex2(
 	const Layout* pLayout,
-	LayoutInt nColumn,
-	LayoutInt* pnLineAllColLen
+	int nColumn,
+	int* pnLineAllColLen
 	) const
 {
-	*pnLineAllColLen = LayoutInt(0);
+	*pnLineAllColLen = 0;
 
-	LogicInt i2 = LogicInt(0);
-	LayoutInt nPosX2 = LayoutInt(0);
+	int i2 = 0;
+	int nPosX2 = 0;
 	MemoryIterator it(pLayout, GetTabSpace());
 	while (!it.end()) {
 		it.scanNext();
@@ -96,13 +96,13 @@ LogicInt ViewCalc::LineColumnToIndex2(
 ||
 ||	@@@ 2002.09.28 YAZAKI Layoutが必要になりました。
 */
-LayoutInt ViewCalc::LineIndexToColumn(
+int ViewCalc::LineIndexToColumn(
 	const Layout* pLayout,
-	LogicInt nIndex
+	int nIndex
 	) const
 {
 	//	以下、iterator版
-	LayoutInt nPosX2 = LayoutInt(0);
+	int nPosX2 = 0;
 	MemoryIterator it(pLayout, GetTabSpace());
 	while (!it.end()) {
 		it.scanNext();
@@ -121,12 +121,12 @@ LayoutInt ViewCalc::LineIndexToColumn(
 ||
 ||	@@@ 2002.09.28 YAZAKI DocLine版
 */
-LayoutInt ViewCalc::LineIndexToColumn(
+int ViewCalc::LineIndexToColumn(
 	const DocLine* pDocLine,
-	LogicInt nIndex
+	int nIndex
 	) const
 {
-	LayoutInt nPosX2 = LayoutInt(0);
+	int nPosX2 = 0;
 	MemoryIterator it(pDocLine, GetTabSpace());
 	while (!it.end()) {
 		it.scanNext();

@@ -136,12 +136,12 @@ void DiffLineMgr::ResetAllDiffMark()
 	@date	2002.05.25
 */
 bool DiffLineMgr::SearchDiffMark(
-	LogicInt			nLineNum,		// 検索開始行
-	SearchDirection		bPrevOrNext,	// 0==前方検索 1==後方検索
-	LogicInt*			pnLineNum 		// マッチ行
+	size_t			nLineNum,		// 検索開始行
+	SearchDirection	bPrevOrNext,	// 0==前方検索 1==後方検索
+	size_t*			pnLineNum 		// マッチ行
 	)
 {
-	LogicInt nLinePos = nLineNum;
+	size_t nLinePos = nLineNum;
 
 	// 前方検索
 	if (bPrevOrNext == SearchDirection::Backward) {
@@ -175,17 +175,17 @@ bool DiffLineMgr::SearchDiffMark(
 	@author	MIK
 	@date	2002/05/25
 */
-void DiffLineMgr::SetDiffMarkRange(DiffMark nMode, LogicInt nStartLine, LogicInt nEndLine)
+void DiffLineMgr::SetDiffMarkRange(DiffMark nMode, size_t nStartLine, size_t nEndLine)
 {
 	DiffManager::getInstance().SetDiffUse(true);
 
-	if (nStartLine < LogicInt(0)) {
-		nStartLine = LogicInt(0);
+	if (nStartLine < 0) {
+		nStartLine = 0;
 	}
 	// 最終行より後に削除行あり
-	LogicInt nLines = docLineMgr.GetLineCount();
+	size_t nLines = docLineMgr.GetLineCount();
 	if (nLines <= nEndLine) {
-		nEndLine = nLines - LogicInt(1);
+		nEndLine = nLines - 1;
 		DocLine* pDocLine = docLineMgr.GetLine(nEndLine);
 		if (pDocLine) {
 			DiffLineSetter(pDocLine).SetLineDiffMark(DiffMark::DeleteEx);
@@ -193,7 +193,7 @@ void DiffLineMgr::SetDiffMarkRange(DiffMark nMode, LogicInt nStartLine, LogicInt
 	}
 
 	// 行範囲にマークをつける
-	for (LogicInt i=nStartLine; i<=nEndLine; ++i) {
+	for (size_t i=nStartLine; i<=nEndLine; ++i) {
 		DocLine* pDocLine = docLineMgr.GetLine(i);
 		if (pDocLine) {
 			DiffLineSetter(pDocLine).SetLineDiffMark(nMode);

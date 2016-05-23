@@ -10,9 +10,9 @@ bool Converter_TabToSpace::DoConvert(NativeW* pData)
 	using namespace WCODE;
 
 	const wchar_t* pLine;
-	int	nLineLen;
-	int	nBgn;
-	int	nPosDes;
+	size_t nLineLen;
+	size_t nBgn;
+	size_t nPosDes;
 	int	nPosX;
 	int	nWork;
 	Eol eol;

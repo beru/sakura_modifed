@@ -35,7 +35,7 @@ void ViewCommander::Command_Menu_RButton(void)
 	switch (nId) {
 	case IDM_COPYDICINFO:
 		{
-			int nLength;
+			size_t nLength;
 			const TCHAR* pszStr = view.tipWnd.info.GetStringPtr(&nLength);
 			std::vector<TCHAR> szWork(nLength + 1);
 			TCHAR* pszWork = &szWork[0];

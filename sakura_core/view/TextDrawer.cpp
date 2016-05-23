@@ -84,7 +84,7 @@ void TextDrawer::DispText(
 	}
 
 	// 文字間隔
-	int nDx = editView.GetTextMetrics().GetHankakuDx();
+	size_t nDx = editView.GetTextMetrics().GetHankakuDx();
 
 	if (textArea.IsRectIntersected(rcClip) && rcClip.top >= textArea.GetAreaTop()) {
 
@@ -97,7 +97,7 @@ void TextDrawer::DispText(
 		// 2007.09.08 kobake注 「ウィンドウの左」ではなく「クリップの左」を元に計算したほうが描画領域を節約できるが、
 		//                        バグが出るのが怖いのでとりあえずこのまま。
 		int nBeforeLogic = 0;
-		LayoutInt nBeforeLayout = LayoutInt(0);
+		int nBeforeLayout = 0;
 		if (x < 0) {
 			int nLeftLayout = (0 - x) / nDx - 1;
 			while (nBeforeLayout < nLeftLayout) {
@@ -116,7 +116,7 @@ void TextDrawer::DispText(
 		*/
 
 		// 描画開始位置
-		int nDrawX = x + (Int)nBeforeLayout * nDx;
+		int nDrawX = x + nBeforeLayout * nDx;
 
 		// 実際の描画文字列ポインタ
 		const wchar_t*	pDrawData			= &pData[nBeforeLogic];
@@ -175,8 +175,8 @@ void TextDrawer::DispVerticalLines(
 	Graphics&	gr,			// 作画するウィンドウのDC
 	int			nTop,		// 線を引く上端のクライアント座標y
 	int			nBottom,	// 線を引く下端のクライアント座標y
-	LayoutInt	nLeftCol,	// 線を引く範囲の左桁の指定
-	LayoutInt	nRightCol	// 線を引く範囲の右桁の指定(-1で未指定)
+	int			nLeftCol,	// 線を引く範囲の左桁の指定
+	int	nRightCol	// 線を引く範囲の右桁の指定(-1で未指定)
 	) const
 {
 	auto& view = editView;
@@ -191,18 +191,18 @@ void TextDrawer::DispVerticalLines(
 	}
 	
 	auto& textArea = view.GetTextArea();
-	nLeftCol = t_max(textArea.GetViewLeftCol(), nLeftCol);
+	nLeftCol = t_max((int)textArea.GetViewLeftCol(), nLeftCol);
 	
-	const LayoutInt nWrapKetas  = view.pEditDoc->layoutMgr.GetMaxLineKetas();
-	const int nCharDx  = view.GetTextMetrics().GetHankakuDx();
+	const int nWrapKetas  = view.pEditDoc->layoutMgr.GetMaxLineKetas();
+	const size_t nCharDx  = view.GetTextMetrics().GetHankakuDx();
 	if (nRightCol < 0) {
 		nRightCol = nWrapKetas;
 	}
 	const int nPosXOffset = GetDllShareData().common.window.nVertLineOffset + textArea.GetAreaLeft();
-	const int nPosXLeft   = t_max(textArea.GetAreaLeft() + (Int)(nLeftCol  - textArea.GetViewLeftCol()) * nCharDx, textArea.GetAreaLeft());
-	const int nPosXRight  = t_min(textArea.GetAreaLeft() + (Int)(nRightCol - textArea.GetViewLeftCol()) * nCharDx, textArea.GetAreaRight());
-	const int nLineHeight = view.GetTextMetrics().GetHankakuDy();
-	bool bOddLine = ((((nLineHeight % 2) ? (Int)textArea.GetViewTopLine() : 0) + textArea.GetAreaTop() + nTop) % 2 == 1);
+	const int nPosXLeft   = t_max(textArea.GetAreaLeft() + (nLeftCol - (int)textArea.GetViewLeftCol()) * (int)nCharDx, textArea.GetAreaLeft());
+	const int nPosXRight  = t_min(textArea.GetAreaLeft() + (nRightCol - (int)textArea.GetViewLeftCol()) * (int)nCharDx, textArea.GetAreaRight());
+	const size_t nLineHeight = view.GetTextMetrics().GetHankakuDy();
+	bool bOddLine = ((((nLineHeight % 2) ? textArea.GetViewTopLine() : 0) + textArea.GetAreaTop() + nTop) % 2 == 1);
 
 	// 太線
 	const bool bBold = vertType.IsBoldFont();
@@ -219,9 +219,9 @@ void TextDrawer::DispVerticalLines(
 
 	for (int k=0; k<MAX_VERTLINES && typeData.nVertLineIdx[k]!=0; ++k) {
 		// nXColは1開始。GetTextArea().GetViewLeftCol()は0開始なので注意。
-		LayoutInt nXCol = typeData.nVertLineIdx[k];
-		LayoutInt nXColEnd = nXCol;
-		LayoutInt nXColAdd = LayoutInt(1);
+		int nXCol = typeData.nVertLineIdx[k];
+		int nXColEnd = nXCol;
+		int nXColAdd = 1;
 		// nXColがマイナスだと繰り返し。k+1を終了値、k+2をステップ幅として利用する
 		if (nXCol < 0) {
 			if (k < MAX_VERTLINES - 2) {
@@ -244,7 +244,7 @@ void TextDrawer::DispVerticalLines(
 			if (nWrapKetas < nXCol) {
 				break;
 			}
-			int nPosX = nPosXOffset + (Int)(nXCol - 1 - textArea.GetViewLeftCol()) * nCharDx;
+			int nPosX = nPosXOffset + (nXCol - 1 - textArea.GetViewLeftCol()) * nCharDx;
 			// 2006.04.30 Moca 線の引く範囲・方法を変更
 			// 太線の場合、半分だけ作画する可能性がある。
 			int nPosXBold = nPosX;
@@ -303,7 +303,7 @@ void TextDrawer::DispNoteLine(
 	TypeSupport noteLine(view, COLORIDX_NOTELINE);
 	if (noteLine.IsDisp()) {
 		gr.SetPen(noteLine.GetTextColor());
-		const int nLineHeight = view.GetTextMetrics().GetHankakuDy();
+		const size_t nLineHeight = view.GetTextMetrics().GetHankakuDy();
 		const int left = nLeft;
 		const int right = nRight;
 		int userOffset = view.pTypeData->nNoteLineOffset;
@@ -342,9 +342,9 @@ void TextDrawer::DispWrapLine(
 	}
 
 	const TextArea& textArea = GetTextArea();
-	const LayoutInt nWrapKetas = view.pEditDoc->layoutMgr.GetMaxLineKetas();
-	const int nCharDx = view.GetTextMetrics().GetHankakuDx();
-	int nXPos = textArea.GetAreaLeft() + (Int)(nWrapKetas - textArea.GetViewLeftCol()) * nCharDx;
+	const int nWrapKetas = view.pEditDoc->layoutMgr.GetMaxLineKetas();
+	const size_t nCharDx = view.GetTextMetrics().GetHankakuDx();
+	int nXPos = textArea.GetAreaLeft() + (nWrapKetas - textArea.GetViewLeftCol()) * nCharDx;
 	//	2005.11.08 Moca 作画条件変更
 	if (textArea.GetAreaLeft() < nXPos && nXPos < textArea.GetAreaRight()) {
 		/// 折り返し記号の色のペンを設定
@@ -364,7 +364,7 @@ void TextDrawer::DispWrapLine(
 
 void TextDrawer::DispLineNumber(
 	Graphics&		gr,
-	LayoutInt		nLineNum,
+	int				nLineNum,
 	int				y
 	) const
 {
@@ -374,8 +374,8 @@ void TextDrawer::DispLineNumber(
 	auto& view = editView;
 	const TypeConfig& typeConfig = view.pEditDoc->docType.GetDocumentAttribute();
 
-	int nLineHeight = view.GetTextMetrics().GetHankakuDy();
-	int nCharWidth = view.GetTextMetrics().GetHankakuDx();
+	size_t nLineHeight = view.GetTextMetrics().GetHankakuDy();
+	size_t nCharWidth = view.GetTextMetrics().GetHankakuDx();
 	// 行番号表示部分X幅	Sep. 23, 2002 genta 共通式のくくりだし
 	//int nLineNumAreaWidth = pView->GetTextArea().nViewAlignLeftCols * nCharWidth;
 	int nLineNumAreaWidth = view.GetTextArea().GetAreaLeft() - GetDllShareData().common.window.nLineNumRightSpace;	// 2009.03.26 ryoji
@@ -494,8 +494,8 @@ void TextDrawer::DispLineNumber(
 
 		// 描画文字列
 		wchar_t szLineNum[18];
-		int nLineCols;
-		int nLineNumCols;
+		size_t nLineCols;
+		size_t nLineNumCols;
 		{
 			// 行番号の表示 false=折り返し単位／true=改行単位
 			if (typeConfig.bLineNumIsCRLF) {
@@ -509,7 +509,7 @@ void TextDrawer::DispLineNumber(
 				}
 			}else {
 				// 物理行（レイアウト行）番号表示モード
-				_itow((Int)nLineNum + 1, szLineNum, 10);
+				_itow(nLineNum + 1, szLineNum, 10);
 			}
 			nLineCols = wcslen(szLineNum);
 			nLineNumCols = nLineCols; // 2010.08.17 Moca 位置決定に行番号区切りは含めない

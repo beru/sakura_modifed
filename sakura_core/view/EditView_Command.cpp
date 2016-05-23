@@ -112,7 +112,7 @@ bool EditView::TagJumpSub(
 			}else {
 				poCaret.x = 0;
 			}
-			GetDllShareData().workBuffer.logicPoint.Set(LogicInt(poCaret.x), LogicInt(poCaret.y));
+			GetDllShareData().workBuffer.logicPoint.Set(poCaret.x, poCaret.y);
 			::SendMessage(hwndOwner, MYWM_SETCARETPOS, 0, 0);
 		}
 		// アクティブにする
@@ -126,9 +126,9 @@ bool EditView::TagJumpSub(
 		// 新しく開く
 		EditInfo inf;
 		_tcscpy(inf.szPath, szJumpToFile);
-		inf.ptCursor.Set(LogicInt(ptJumpTo.x - 1), LogicInt(ptJumpTo.y - 1));
-		inf.nViewLeftCol = LayoutInt(-1);
-		inf.nViewTopLine = LayoutInt(-1);
+		inf.ptCursor.Set(ptJumpTo.x - 1, ptJumpTo.y - 1);
+		inf.nViewLeftCol = -1;
+		inf.nViewTopLine = -1;
 		inf.nCharCode    = CODE_AUTODETECT;
 
 		bool bSuccess = ControlTray::OpenNewEditor2(
@@ -280,9 +280,9 @@ open_c:;
 	@date 2006.01.08 genta 判定条件を見直し
 	@date 2008.06.08 ryoji ウィンドウ幅設定にぶら下げ余白を追加
 */
-EditView::TOGGLE_WRAP_ACTION EditView::GetWrapMode(LayoutInt* _newKetas)
+EditView::TOGGLE_WRAP_ACTION EditView::GetWrapMode(int* _newKetas)
 {
-	LayoutInt& newKetas = *_newKetas;
+	int& newKetas = *_newKetas;
 	//@@@ 2002.01.14 YAZAKI 現在のウィンドウ幅で折り返されているときは、最大値にするコマンド。
 	// 2002/04/08 YAZAKI ときどきウィンドウ幅で折り返されないことがあるバグ修正。
 	// 20051022 aroka 現在のウィンドウ幅→最大値→文書タイプの初期値 をトグルにするコマンド
@@ -316,19 +316,19 @@ EditView::TOGGLE_WRAP_ACTION EditView::GetWrapMode(LayoutInt* _newKetas)
 	auto& layoutMgr = GetDocument().layoutMgr;
 	if (layoutMgr.GetMaxLineKetas() == ViewColNumToWrapColNum(GetTextArea().nViewColNum)) {
 		// a)
-		newKetas = LayoutInt(MAXLINEKETAS);
+		newKetas = MAXLINEKETAS;
 		return TGWRAP_FULL;
 	}else if (MINLINEKETAS > GetTextArea().nViewColNum - GetWrapOverhang()) { // 2)
 		// 3)
 		if (layoutMgr.GetMaxLineKetas() != MAXLINEKETAS) {
 			// 4)
-			newKetas = LayoutInt(MAXLINEKETAS);
+			newKetas = MAXLINEKETAS;
 			return TGWRAP_FULL;
 		}else if (pTypeData->nMaxLineKetas == MAXLINEKETAS) { // 5)
 			// 6)
 			return TGWRAP_NONE;
 		}else { // 7)
-			newKetas = LayoutInt(pTypeData->nMaxLineKetas);
+			newKetas = pTypeData->nMaxLineKetas;
 			return TGWRAP_PROP;
 		}
 	}else { // 8)
@@ -337,7 +337,7 @@ EditView::TOGGLE_WRAP_ACTION EditView::GetWrapMode(LayoutInt* _newKetas)
 			&& pTypeData->nMaxLineKetas != MAXLINEKETAS
 		) {
 			// a)
-			newKetas = LayoutInt(pTypeData->nMaxLineKetas);
+			newKetas = pTypeData->nMaxLineKetas;
 			return TGWRAP_PROP;
 			
 		}else {	// b) c)

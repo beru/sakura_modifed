@@ -75,16 +75,16 @@ Bregexp::~Bregexp()
 ** 
 ** @date 2005.03.20 かろと 関数に切り出し
 */
-int Bregexp::CheckPattern(const wchar_t* szPattern)
+size_t Bregexp::CheckPattern(const wchar_t* szPattern)
 {
 	static const wchar_t TOP_MATCH[] = L"/^\\(*\\^/k";							// 行頭パターンのチェック用パターン
 	static const wchar_t DOL_MATCH[] = L"/\\\\\\$$/k";							// \$(行末パターンでない)チェック用パターン
 	static const wchar_t BOT_MATCH[] = L"/\\$\\)*$/k";							// 行末パターンのチェック用パターン
 	static const wchar_t TAB_MATCH[] = L"/^\\(*\\^\\$\\)*$/k";					// "^$"パターンかをチェック用パターン
 	static const wchar_t LOOKAHEAD[] = L"/\\(\\?[=]/k";							// "(?=" 先読み の存在チェックパターン
-	BREGEXP_W* sReg = nullptr;						// コンパイル構造体
+	BREGEXP_W* sReg = nullptr;					// コンパイル構造体
 	wchar_t szMsg[80] = L"";					// エラーメッセージ
-	int nLen;									// 検索パターンの長さ
+	size_t nLen;								// 検索パターンの長さ
 	const wchar_t* szPatternEnd;				// 検索パターンの終端
 
 	ePatType = PAT_NORMAL;	//　ノーマルは確定
@@ -126,7 +126,7 @@ int Bregexp::CheckPattern(const wchar_t* szPattern)
 	}
 	BRegfree(sReg);
 	sReg = nullptr;
-	return (nLen);
+	return nLen;
 }
 
 /*! @brief ライブラリに渡すための検索・置換パターンを作成する

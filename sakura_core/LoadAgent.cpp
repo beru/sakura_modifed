@@ -181,14 +181,14 @@ LoadResultType LoadAgent::OnLoad(const LoadInfo& loadInfo)
 	pDoc->InitDoc(); //$$
 
 	// パスを確定
-	pDoc->SetFilePathAndIcon( loadInfo.filePath );
+	pDoc->SetFilePathAndIcon(loadInfo.filePath);
 
 	// 文書種別確定
-	pDoc->docType.SetDocumentType( loadInfo.nType, true );
+	pDoc->docType.SetDocumentType(loadInfo.nType, true);
 	pDoc->pEditWnd->pViewFontMiniMap->UpdateFont(&pDoc->pEditWnd->GetLogfont());
-	InitCharWidthCache( pDoc->pEditWnd->pViewFontMiniMap->GetLogfont(), CharWidthFontMode::MiniMap );
-	SelectCharWidthCache( CharWidthFontMode::Edit, pDoc->pEditWnd->GetLogfontCacheMode() );
-	InitCharWidthCache( pDoc->pEditWnd->GetLogfont() );
+	InitCharWidthCache(pDoc->pEditWnd->pViewFontMiniMap->GetLogfont(), CharWidthFontMode::MiniMap);
+	SelectCharWidthCache(CharWidthFontMode::Edit, pDoc->pEditWnd->GetLogfontCacheMode());
+	InitCharWidthCache(pDoc->pEditWnd->GetLogfont());
 	pDoc->pEditWnd->pViewFont->UpdateFont(&pDoc->pEditWnd->GetLogfont());
 
 	// 起動と同時に読む場合は予めアウトライン解析画面を配置しておく
@@ -230,13 +230,13 @@ LoadResultType LoadAgent::OnLoad(const LoadInfo& loadInfo)
 	// 「指定桁で折り返す」以外の時は折り返し幅をMAXLINEKETASで初期化する
 	// 「右端で折り返す」は、この後のOnSize()で再設定される
 	const TypeConfig& ref = pDoc->docType.GetDocumentAttribute();
-	LayoutInt nMaxLineKetas = ref.nMaxLineKetas;
+	size_t nMaxLineKetas = ref.nMaxLineKetas;
 	if (ref.nTextWrapMethod != TextWrappingMethod::SettingWidth) {
 		nMaxLineKetas = MAXLINEKETAS;
 	}
 
 	ProgressSubject* pOld = EditApp::getInstance().pVisualProgress->ProgressListener::Listen(&pDoc->layoutMgr);
-	pDoc->layoutMgr.SetLayoutInfo( true, ref, ref.nTabSpace, nMaxLineKetas );
+	pDoc->layoutMgr.SetLayoutInfo(true, ref, ref.nTabSpace, nMaxLineKetas);
 	pDoc->pEditWnd->ClearViewCaretPosInfo();
 	
 	EditApp::getInstance().pVisualProgress->ProgressListener::Listen(pOld);
@@ -288,7 +288,7 @@ void LoadAgent::OnFinalLoad(LoadResultType eLoadResult)
 	bool bDraw = editWnd.GetActiveView().GetDrawSwitch();
 	if (bDraw) {
 		editWnd.Views_RedrawAll(); // ビュー再描画
-		InvalidateRect( editWnd.GetHwnd(), NULL, TRUE );
+		InvalidateRect(editWnd.GetHwnd(), nullptr, TRUE);
 	}
 	Caret& caret = editWnd.GetActiveView().GetCaret();
 	caret.MoveCursor(caret.GetCaretLayoutPos(), true);

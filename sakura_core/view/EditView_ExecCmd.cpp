@@ -282,8 +282,8 @@ bool EditView::ExecCmd(
 	) {
 		GetSelectionInfo().SetSelectArea(
 			LayoutRange(
-				LayoutPoint(LayoutInt(0), LayoutInt(0)),
-				LayoutPoint(LayoutInt(0), pEditDoc->layoutMgr.GetLineCount())
+				LayoutPoint(0, 0),
+				LayoutPoint(0, pEditDoc->layoutMgr.GetLineCount())
 			)
 		);
 		DeleteData(true);

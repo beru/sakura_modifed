@@ -37,26 +37,26 @@ class FuncInfoArr {
 public:
 	FuncInfoArr();		// FuncInfoArrクラス構築
 	~FuncInfoArr();	// FuncInfoArrクラス消滅
-	FuncInfo* GetAt(int);		// 0<=の指定番号のデータを返す
+	FuncInfo* GetAt(size_t);		// 0<=の指定番号のデータを返す
 	void AppendData(FuncInfo*);	// 配列の最後にデータを追加する
-	void AppendData(LogicInt, LayoutInt, const TCHAR*, int, int nDepth = 0);		// 配列の最後にデータを追加する 2002.04.01 YAZAKI 深さ導入
-	void AppendData(LogicInt, LayoutInt, const NOT_TCHAR*, int, int nDepth = 0);	// 配列の最後にデータを追加する 2002.04.01 YAZAKI 深さ導入
-	void AppendData(LogicInt nLogicLine, LogicInt nLogicCol, LayoutInt nLayoutLine, LayoutInt nLayoutCol, const TCHAR*, const TCHAR*, int, int nDepth = 0);	/* 配列の最後にデータを追加する 2010.03.01 syat 桁導入*/
-	void AppendData(LogicInt nLogicLine, LogicInt nLogicCol, LayoutInt nLayoutLine, LayoutInt nLayoutCol, const NOT_TCHAR*, const NOT_TCHAR*, int, int nDepth = 0);	/* 配列の最後にデータを追加する 2010.03.01 syat 桁導入*/
-	int	GetNum(void) {	return nFuncInfoArrNum; }	// 配列要素数を返す
+	void AppendData(int, int, const TCHAR*, int, int nDepth = 0);		// 配列の最後にデータを追加する 2002.04.01 YAZAKI 深さ導入
+	void AppendData(int, int, const NOT_TCHAR*, int, int nDepth = 0);	// 配列の最後にデータを追加する 2002.04.01 YAZAKI 深さ導入
+	void AppendData(int nLogicLine, int nLogicCol, int nLayoutLine, int nLayoutCol, const TCHAR*, const TCHAR*, int, int nDepth = 0);	/* 配列の最後にデータを追加する 2010.03.01 syat 桁導入*/
+	void AppendData(int nLogicLine, int nLogicCol, int nLayoutLine, int nLayoutCol, const NOT_TCHAR*, const NOT_TCHAR*, int, int nDepth = 0);	/* 配列の最後にデータを追加する 2010.03.01 syat 桁導入*/
+	size_t	GetNum(void) {	return nFuncInfoArrNum; }	// 配列要素数を返す
 	void Empty(void);
 	void DUMP(void);
 	void SetAppendText(int info, const std::wstring& s, bool overwrite);
 	std::wstring GetAppendText(int info);
-	int AppendTextLenMax() { return nAppendTextLenMax; }
+	size_t AppendTextLenMax() { return nAppendTextLenMax; }
 
 public:
 	SFilePath	szFilePath;	// 解析対象ファイル名
 private:
-	int			nFuncInfoArrNum;	// 配列要素数
+	size_t		nFuncInfoArrNum;	// 配列要素数
 	FuncInfo**	ppcFuncInfoArr;	// 配列
 	std::map<int, std::wstring>	appendTextArr;	// 追加文字列のリスト
-	int			nAppendTextLenMax;
+	size_t		nAppendTextLenMax;
 
 private:
 	DISALLOW_COPY_AND_ASSIGN(FuncInfoArr);

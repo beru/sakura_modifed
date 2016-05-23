@@ -43,7 +43,7 @@ class DlgSameColor : public Dialog {
 public:
 	DlgSameColor();
 	~DlgSameColor();
-	int DoModal(HINSTANCE, HWND, WORD, TypeConfig*, COLORREF);		// モーダルダイアログの表示
+	INT_PTR DoModal(HINSTANCE, HWND, WORD, TypeConfig*, COLORREF);		// モーダルダイアログの表示
 
 protected:
 

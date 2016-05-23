@@ -22,8 +22,8 @@ Ope::Ope(OpeCode eCode)
 	assert( eCode != OpeCode::Unknown );
 	nOpe = eCode;		// 操作種別
 
-	ptCaretPos_PHY_Before.Set(LogicInt(-1), LogicInt(-1));	// カーソル位置
-	ptCaretPos_PHY_After.Set(LogicInt(-1), LogicInt(-1));	// カーソル位置
+	ptCaretPos_PHY_Before.Set(-1, -1);	// カーソル位置
+	ptCaretPos_PHY_After.Set(-1, -1);	// カーソル位置
 
 }
 

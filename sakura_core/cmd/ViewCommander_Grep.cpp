@@ -42,7 +42,7 @@ void ViewCommander::Command_Grep_Dialog(void)
 	}
 
 	// Grepダイアログの表示
-	int nRet = dlgGrep.DoModal(G_AppInstance(), view.GetHwnd(), GetDocument().docFile.GetFilePath());
+	INT_PTR nRet = dlgGrep.DoModal(G_AppInstance(), view.GetHwnd(), GetDocument().docFile.GetFilePath());
 //	MYTRACE(_T("nRet=%d\n"), nRet);
 	if (!nRet) {
 		return;
@@ -156,7 +156,7 @@ void ViewCommander::Command_Grep_Replace_Dlg( void )
 		}
 	}
 
-	int nRet = dlgGrepRep.DoModal( G_AppInstance(), view.GetHwnd(), GetDocument().docFile.GetFilePath(), (LPARAM)&view );
+	INT_PTR nRet = dlgGrepRep.DoModal( G_AppInstance(), view.GetHwnd(), GetDocument().docFile.GetFilePath(), (LPARAM)&view );
 	if (!nRet) {
 		return;
 	}

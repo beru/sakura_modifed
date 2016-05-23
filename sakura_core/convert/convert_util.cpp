@@ -93,7 +93,7 @@ bool wcschr_idx(const wchar_t* str, wchar_t c, int* idx)
 
 // 全角ひらがな→全角カタカナ (文字数は不変)
 inline wchar_t ZenhiraToZenkata_(wchar_t c) { return ((c >= L'ぁ' && c <= L'\u3096') || (c >= L'ゝ' && c <= L'ゞ')) ? L'ァ' + (c - L'ぁ') : c; }
-void Convert_ZenhiraToZenkata(wchar_t* pData, int nLength)
+void Convert_ZenhiraToZenkata(wchar_t* pData, size_t nLength)
 {
 	wchar_t* p = pData;
 	wchar_t* q = p + nLength;
@@ -106,7 +106,7 @@ void Convert_ZenhiraToZenkata(wchar_t* pData, int nLength)
 // 全角カタカナ→全角ひらがな (文字数は不変)
 // 2012.06.17 syat 「ヵ」「ヶ」を「か」「け」に変換しない
 inline wchar_t ZenkataToZenhira_(wchar_t c) { return ((c >= L'ァ' && c <= L'ヴ') || (c >= L'ヽ' && c <= L'ヾ')) ? L'ぁ' + (c - L'ァ') : c; }
-void Convert_ZenkataToZenhira(wchar_t* pData, int nLength)
+void Convert_ZenkataToZenhira(wchar_t* pData, size_t nLength)
 {
 	wchar_t* p = pData;
 	wchar_t* q = p + nLength;
@@ -130,10 +130,10 @@ inline wchar_t ZeneisuToHaneisu_(wchar_t c)
 
 	return c;
 }
-void Convert_ZeneisuToHaneisu(wchar_t* pData, int nLength)
+void Convert_ZeneisuToHaneisu(wchar_t* pData, size_t nLength)
 {
 	wchar_t* p = pData;
-	wchar_t* q = p +nLength;
+	wchar_t* q = p + nLength;
 	while (p < q) {
 		*p = ZeneisuToHaneisu_(*p);
 		++p;
@@ -153,7 +153,7 @@ inline wchar_t HaneisuToZeneisu_(wchar_t c)
 
 	return c;
 }
-void Convert_HaneisuToZeneisu(wchar_t* pData, int nLength)
+void Convert_HaneisuToZeneisu(wchar_t* pData, size_t nLength)
 {
 	wchar_t* p = pData;
 	wchar_t* q = p + nLength;
@@ -172,7 +172,7 @@ void Convert_HaneisuToZeneisu(wchar_t* pData, int nLength)
 	@date 2013.08.28 「ガー」等の濁点・半濁点に続く長音の変換ができていなかったのを修正。
 		ただし、ANSI版とは違い直前の文字がtableZenkata_Kigoの場合は変換しない。
 */
-void Convert_ZenkataToHankata(const wchar_t* pSrc, int nSrcLength, wchar_t* pDst, int* nDstLength)
+void Convert_ZenkataToHankata(const wchar_t* pSrc, size_t nSrcLength, wchar_t* pDst, size_t* nDstLength)
 {
 	const wchar_t* src = pSrc;
 	const wchar_t* src_end = src + nSrcLength;
@@ -203,7 +203,7 @@ void Convert_ZenkataToHankata(const wchar_t* pSrc, int nSrcLength, wchar_t* pDst
 	濁点の分だけ、文字数は増える可能性がある。最大で2倍になる。
 	pDstにはあらかじめ十分なメモリを確保しておくこと。
 */
-void Convert_ToHankaku(const wchar_t* pSrc, int nSrcLength, wchar_t* pDst, int* nDstLength)
+void Convert_ToHankaku(const wchar_t* pSrc, size_t nSrcLength, wchar_t* pDst, size_t* nDstLength)
 {
 	const wchar_t* src = pSrc;
 	const wchar_t* src_end = src + nSrcLength;
@@ -244,7 +244,7 @@ void Convert_ToHankaku(const wchar_t* pSrc, int nSrcLength, wchar_t* pDst, int* 
 	濁点の分だけ、文字数は減る可能性がある。最小で2分の1になる。
 	pDstにはあらかじめ十分なメモリを確保しておくこと。
 */
-void Convert_HankataToZenkata(const wchar_t* pSrc, int nSrcLength, wchar_t* pDst, int* nDstLength)
+void Convert_HankataToZenkata(const wchar_t* pSrc, size_t nSrcLength, wchar_t* pDst, size_t* nDstLength)
 {
 	const wchar_t* src = pSrc;
 	const wchar_t* src_end = src + nSrcLength;
@@ -275,7 +275,7 @@ void Convert_HankataToZenkata(const wchar_t* pSrc, int nSrcLength, wchar_t* pDst
 	濁点の分だけ、文字数は減る可能性がある。最小で2分の1になる。
 	pDstにはあらかじめ十分なメモリを確保しておくこと。
 */
-void Convert_HankataToZenhira(const wchar_t* pSrc, int nSrcLength, wchar_t* pDst, int* nDstLength)
+void Convert_HankataToZenhira(const wchar_t* pSrc, size_t nSrcLength, wchar_t* pDst, size_t* nDstLength)
 {
 	const wchar_t* src = pSrc;
 	const wchar_t* src_end = src + nSrcLength;

@@ -41,7 +41,7 @@ class DlgFileTree : public Dialog
 public:
 	DlgFileTree();
 
-	int DoModal(HINSTANCE, HWND, LPARAM);
+	INT_PTR DoModal(HINSTANCE, HWND, LPARAM);
 
 private:
 	BOOL	OnInitDialog(HWND, WPARAM, LPARAM);

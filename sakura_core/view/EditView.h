@@ -193,8 +193,8 @@ public:
 	void OnSetFocus(void);
 	void OnKillFocus(void);
 	// スクロール
-	LayoutInt OnVScroll(int, int);					// 垂直スクロールバーメッセージ処理
-	LayoutInt OnHScroll(int, int);					// 水平スクロールバーメッセージ処理
+	int OnVScroll(int, int);					// 垂直スクロールバーメッセージ処理
+	int OnHScroll(int, int);					// 水平スクロールバーメッセージ処理
 	// マウス
 	void OnLBUTTONDOWN(WPARAM, int, int);			// マウス左ボタン押下
 	void OnMOUSEMOVE(WPARAM, int, int);				// マウス移動のメッセージ処理
@@ -223,7 +223,7 @@ protected:
 	bool DrawLogicLine(
 		HDC				hdc,			// [in]     作画対象
 		DispPos*		pDispPos,		// [in/out] 描画する箇所、描画元ソース
-		LayoutInt		nLineTo			// [in]     作画終了するレイアウト行番号
+		int				nLineTo			// [in]     作画終了するレイアウト行番号
 	);
 
 	// レイアウト行を1行描画
@@ -231,7 +231,7 @@ protected:
 
 	// 色分け
 public:
-	Color3Setting GetColorIndex(const Layout* pLayout, LayoutYInt nLineNum, int nIndex, ColorStrategyInfo& csInfo, bool bPrev = false);	// 指定位置のColorIndexの取得 02/12/13 ai
+	Color3Setting GetColorIndex(const Layout* pLayout, int nLineNum, int nIndex, ColorStrategyInfo& csInfo, bool bPrev = false);	// 指定位置のColorIndexの取得 02/12/13 ai
 	void SetCurrentColor(Graphics& gr, EColorIndexType, EColorIndexType, EColorIndexType);
 	COLORREF GetTextColorByColorInfo2(const ColorInfo& info, const ColorInfo& info2);
 	COLORREF GetBackColorByColorInfo2(const ColorInfo& info, const ColorInfo& info2);
@@ -244,10 +244,10 @@ public:
 	void DeleteCompatibleBitmap();							// メモリBMPを削除
 
 public:
-	void DispTextSelected(HDC hdc, LayoutInt nLineNum, const Point& ptXY, LayoutInt nX_Layout);	// テキスト反転
+	void DispTextSelected(HDC hdc, int nLineNum, const Point& ptXY, int nX_Layout);	// テキスト反転
 	void RedrawAll();										// フォーカス移動時の再描画
 	void Redraw();											// 2001/06/21 asa-o 再描画
-	void RedrawLines( LayoutYInt top, LayoutYInt bottom );
+	void RedrawLines(int top, int bottom);
 	void CaretUnderLineON(bool, bool, bool);				// カーソル行アンダーラインのON
 	void CaretUnderLineOFF(bool, bool, bool, bool);			// カーソル行アンダーラインのOFF
 	bool GetDrawSwitch() const {
@@ -268,9 +268,9 @@ public:
 	void AdjustScrollBars();											// スクロールバーの状態を更新する
 	BOOL CreateScrollBar();												// スクロールバー作成	// 2006.12.19 ryoji
 	void DestroyScrollBar();											// スクロールバー破棄	// 2006.12.19 ryoji
-	LayoutInt GetWrapOverhang(void) const;								// 折り返し桁以後のぶら下げ余白計算	// 2008.06.08 ryoji
-	LayoutInt ViewColNumToWrapColNum(LayoutInt nViewColNum) const;		//「右端で折り返す」用にビューの桁数から折り返し桁数を計算する	// 2008.06.08 ryoji
-	LayoutInt GetRightEdgeForScrollBar(void);							// スクロールバー制御用に右端座標を取得する		// 2009.08.28 nasukoji
+	int GetWrapOverhang(void) const;								// 折り返し桁以後のぶら下げ余白計算	// 2008.06.08 ryoji
+	int ViewColNumToWrapColNum(int nViewColNum) const;		//「右端で折り返す」用にビューの桁数から折り返し桁数を計算する	// 2008.06.08 ryoji
+	int GetRightEdgeForScrollBar(void);							// スクロールバー制御用に右端座標を取得する		// 2009.08.28 nasukoji
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                           IME                               //
@@ -282,16 +282,16 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                        スクロール                           //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-	LayoutInt  ScrollAtV(LayoutInt);								// 指定上端行位置へスクロール
-	LayoutInt  ScrollAtH(LayoutInt);								// 指定左端桁位置へスクロール
+	int  ScrollAtV(int);								// 指定上端行位置へスクロール
+	int  ScrollAtH(int);								// 指定左端桁位置へスクロール
 	//	From Here Sep. 11, 2004 genta ずれ維持の同期スクロール
-	LayoutInt  ScrollByV(LayoutInt vl) {	return ScrollAtV(GetTextArea().GetViewTopLine() + vl);}	// 指定行スクロール
-	LayoutInt  ScrollByH(LayoutInt hl) {	return ScrollAtH(GetTextArea().GetViewLeftCol() + hl);}	// 指定桁スクロール
-	void ScrollDraw(LayoutInt, LayoutInt, const RECT&, const RECT&, const RECT&);
+	int  ScrollByV(int vl) { return ScrollAtV((int)GetTextArea().GetViewTopLine() + vl); }	// 指定行スクロール
+	int  ScrollByH(int hl) { return ScrollAtH((int)GetTextArea().GetViewLeftCol() + hl); }	// 指定桁スクロール
+	void ScrollDraw(int, int, const RECT&, const RECT&, const RECT&);
 	void MiniMapRedraw(bool);
 public:
-	void SyncScrollV(LayoutInt);										// 垂直同期スクロール
-	void SyncScrollH(LayoutInt);										// 水平同期スクロール
+	void SyncScrollV(int);										// 垂直同期スクロール
+	void SyncScrollH(int);										// 水平同期スクロール
 
 	void SetBracketPairPos(bool);										// 対括弧の強調表示位置設定 03/02/18 ai
 
@@ -321,7 +321,7 @@ public:
 	void MoveCursorSelecting(LayoutPoint ptWk_CaretPos, bool bSelect, int = _CARETMARGINRATE);
 	void ConvSelectedArea(EFunctionCode);									// 選択エリアのテキストを指定方法で変換
 	// 指定位置または指定範囲がテキストの存在しないエリアかチェックする	// 2008.08.03 nasukoji
-	bool IsEmptyArea(LayoutPoint ptFrom, LayoutPoint ptTo = LayoutPoint(LayoutInt(-1), LayoutInt(-1)), bool bSelect = false, bool bBoxSelect = false) const;
+	bool IsEmptyArea(LayoutPoint ptFrom, LayoutPoint ptTo = LayoutPoint(-1, -1), bool bSelect = false, bool bBoxSelect = false) const;
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                         各種判定                            //
@@ -363,7 +363,7 @@ public:
 	// 指定位置の指定長データ削除
 	void DeleteData2(
 		const LayoutPoint&	ptCaretPos,
-		LogicInt			nDelLen,
+		int					nDelLen,
 		NativeW*			pMem
 	);
 
@@ -374,7 +374,7 @@ public:
 	void InsertData_CEditView(
 		LayoutPoint	ptInsertPos,
 		const wchar_t*	pData,
-		int				nDataLen,
+		size_t			nDataLen,
 		LayoutPoint*	pptNewPos,	// 挿入された部分の次の位置のデータ位置
 		bool			bRedraw
 	);
@@ -440,7 +440,7 @@ public:
 	};
 	BOOL KeywordHelpSearchDict(LID_SKH nID, POINT* po, RECT* rc);	// 2006.04.10 fon
 
-	int IsSearchString(const StringRef& str, LogicInt, LogicInt*, LogicInt*) const;	// 現在位置が検索文字列に該当するか	// 2002.02.08 hor 引数追加
+	int IsSearchString(const StringRef& str, int, int*, int*) const;	// 現在位置が検索文字列に該当するか	// 2002.02.08 hor 引数追加
 
 	void GetCurrentTextForSearch(NativeW&, bool bStripMaxPath = true, bool bTrimSpaceTab = false);			// 現在カーソル位置単語または選択範囲より検索等のキーを取得
 	bool GetCurrentTextForSearchDlg(NativeW&, bool bGetHistory = false);		// 現在カーソル位置単語または選択範囲より検索等のキーを取得（ダイアログ用） 2006.08.23 ryoji
@@ -468,7 +468,7 @@ public:
 	bool  SearchBracketBackward(LogicPoint ptPos, LayoutPoint* pptLayoutNew,
 						const wchar_t* dnChar, const wchar_t* upChar, int mode);	//	対括弧の後方検索	// modeの追加 02/09/19 ai
 	void DrawBracketPair(bool);								// 対括弧の強調表示 02/09/18 ai
-	bool IsBracket(const wchar_t*, LogicInt, LogicInt);					// 括弧判定 03/01/09 ai
+	bool IsBracket(const wchar_t*, int, int);					// 括弧判定 03/01/09 ai
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                           補完                              //
@@ -538,7 +538,7 @@ public:
 		TGWRAP_WINDOW,
 		TGWRAP_PROP,
 	};
-	TOGGLE_WRAP_ACTION GetWrapMode(LayoutInt* newKetas);
+	TOGGLE_WRAP_ACTION GetWrapMode(int* newKetas);
 	void SmartIndent_CPP(wchar_t);				// C/C++スマートインデント処理
 	// コマンド操作
 	void SetFont(void);							// フォントの変更
@@ -619,8 +619,8 @@ public:
 	bool			bDrawSwitch;
 	COLORREF		crBack;				// テキストの背景色			// 2006.12.07 ryoji
 	COLORREF		crBack2;			// テキストの背景(キャレット用)
-	LayoutInt		nOldUnderLineY;		// 前回作画したカーソルアンダーラインの位置 0未満=非表示
-	LayoutInt		nOldUnderLineYBg;
+	int				nOldUnderLineY;		// 前回作画したカーソルアンダーラインの位置 0未満=非表示
+	int				nOldUnderLineYBg;
 	int				nOldUnderLineYMargin;
 	int				nOldUnderLineYHeight;
 	int				nOldUnderLineYHeightReal;
@@ -642,7 +642,7 @@ public:
 	CLIPFORMAT		cfDragData;					// ドラッグデータのクリップ形式	// 2008.06.20 ryoji
 	bool			bDragBoxData;				// ドラッグデータは矩形か
 	LayoutPoint		ptCaretPos_DragEnter;		// ドラッグ開始時のカーソル位置	// 2007.12.09 ryoji
-	LayoutInt		nCaretPosX_Prev_DragEnter;	// ドラッグ開始時のX座標記憶	// 2007.12.09 ryoji
+	int				nCaretPosX_Prev_DragEnter;	// ドラッグ開始時のX座標記憶	// 2007.12.09 ryoji
 
 	// 括弧
 	LogicPoint		ptBracketCaretPos_PHY;		// 前カーソル位置の括弧の位置 (改行単位行先頭からのバイト数(0開始), 改行単位行の行番号(0開始))
@@ -725,8 +725,8 @@ public:
 	Migemo*			pMigemo;
 	bool			bMiniMap;
 	bool			bMiniMapMouseDown;
-	LayoutInt		nPageViewTop;
-	LayoutInt		nPageViewBottom;
+	int				nPageViewTop;
+	int				nPageViewBottom;
 
 private:
 	DISALLOW_COPY_AND_ASSIGN(EditView);

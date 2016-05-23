@@ -291,12 +291,12 @@ void DocOutline::MakeFuncList_RuleFile(
 		}
 		NativeW mem;
 		mem.SetString(g, len);
-		pFuncInfoArr->AppendData(LogicInt(1), LayoutInt(1), mem.GetStringPtr(), FUNCINFO_NOCLIPTEXT, nDepth);
+		pFuncInfoArr->AppendData(1, 1, mem.GetStringPtr(), FUNCINFO_NOCLIPTEXT, nDepth);
 		nDepth = 1;
 	}
-	for (LogicInt nLineCount=LogicInt(0); nLineCount<doc.docLineMgr.GetLineCount(); ++nLineCount) {
+	for (int nLineCount=0; nLineCount<doc.docLineMgr.GetLineCount(); ++nLineCount) {
 		// 行取得
-		LogicInt nLineLen;
+		size_t nLineLen;
 		const wchar_t* pLine = doc.docLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
 		if (!pLine) {
 			break;
@@ -421,7 +421,7 @@ void DocOutline::MakeFuncList_RuleFile(
 		}
 		
 		if (bAppend) {
-			pFuncInfoArr->AppendData(nLineCount + LogicInt(1), ptPos.GetY2() + LayoutInt(1) , pszText, 0, nDepth);
+			pFuncInfoArr->AppendData(nLineCount + 1, ptPos.GetY2() + 1 , pszText, 0, nDepth);
 			++nDepth;
 		}
 		delete[] pszText;
@@ -441,14 +441,16 @@ void DocOutline::MakeFuncList_RuleFile(
 */
 void DocOutline::MakeFuncList_BookMark(FuncInfoArr* pFuncInfoArr)
 {
-	LogicInt nLineLen;
-	BOOL bMarkUpBlankLineEnable = GetDllShareData().common.outline.bMarkUpBlankLineEnable;	// 空行をマーク対象にするフラグ 20020119 aroka
-	int nNewLineLen	= doc.docEditor.newLineCode.GetLen();
-	LogicInt nLineLast	= doc.docLineMgr.GetLineCount();
+	size_t nLineLen;
+	bool bMarkUpBlankLineEnable = GetDllShareData().common.outline.bMarkUpBlankLineEnable;	// 空行をマーク対象にするフラグ 20020119 aroka
+	size_t nNewLineLen	= doc.docEditor.newLineCode.GetLen();
+	size_t nLineLast = doc.docLineMgr.GetLineCount();
 	int nCharChars;
 
-	for (LogicInt nLineCount=LogicInt(0); nLineCount<nLineLast; ++nLineCount) {
-		if (!BookmarkGetter(doc.docLineMgr.GetLine(nLineCount)).IsBookmarked()) continue;
+	for (size_t nLineCount=0; nLineCount<nLineLast; ++nLineCount) {
+		if (!BookmarkGetter(doc.docLineMgr.GetLine(nLineCount)).IsBookmarked()) {
+			continue;
+		}
 		const wchar_t* pLine = doc.docLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
 		if (!pLine) {
 			break;
@@ -502,8 +504,8 @@ void DocOutline::MakeFuncList_BookMark(FuncInfoArr* pFuncInfoArr)
 		pszText[nLen] = L'\0';
 		LayoutPoint ptXY;
 		//int nX,nY
-		doc.layoutMgr.LogicToLayout(	LogicPoint(LogicInt(0), nLineCount), &ptXY);
-		pFuncInfoArr->AppendData(nLineCount + LogicInt(1), ptXY.GetY2()+LayoutInt(1) , pszText, 0);
+		doc.layoutMgr.LogicToLayout(	LogicPoint(0, nLineCount), &ptXY);
+		pFuncInfoArr->AppendData(nLineCount + 1, ptXY.GetY2()+1 , pszText, 0);
 	}
 	return;
 }

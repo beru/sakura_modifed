@@ -123,7 +123,7 @@ void DocLineMgr::DeleteLine(DocLine* pDocLineDel)
 
 	// 行数減算
 	--nLines;
-	if (nLines == LogicInt(0)) {
+	if (nLines == 0) {
 		// データがなくなった
 		_Init();
 	}
@@ -140,19 +140,19 @@ void DocLineMgr::DeleteLine(DocLine* pDocLineDel)
 	@param nLine [in] 行番号
 	@return 行オブジェクトへのポインタ。該当行がない場合はNULL。
 */
-const DocLine* DocLineMgr::GetLine(LogicInt nLine) const
+const DocLine* DocLineMgr::GetLine(size_t nLine) const
 {
-	if (nLines == LogicInt(0)) {
+	if (nLines == 0) {
 		return nullptr;
 	}
 	// 2004.03.28 Moca nLineが負の場合のチェックを追加
-	if (nLine < LogicInt(0) || nLine >= nLines) {
+	if (nLine < 0 || nLine >= nLines) {
 		return nullptr;
 	}
-	LogicInt nCounter;
+	int nCounter;
 	DocLine* pDocLine;
 	// 2004.03.28 Moca pCodePrevReferより、Top,Botのほうが近い場合は、そちらを利用する
-	LogicInt nPrevToLineNumDiff = t_abs(nPrevReferLine - nLine);
+	int nPrevToLineNumDiff = t_abs(nPrevReferLine - nLine);
 	if (!pCodePrevRefer
 	  || nLine < nPrevToLineNumDiff
 	  || nLines - nLine < nPrevToLineNumDiff
@@ -162,7 +162,7 @@ const DocLine* DocLineMgr::GetLine(LogicInt nLine) const
 		}
 
 		if (nLine < (nLines / 2)) {
-			nCounter = LogicInt(0);
+			nCounter = 0;
 			pDocLine = pDocLineTop;
 			while (pDocLine) {
 				if (nLine == nCounter) {
@@ -175,7 +175,7 @@ const DocLine* DocLineMgr::GetLine(LogicInt nLine) const
 				++nCounter;
 			}
 		}else {
-			nCounter = nLines - LogicInt(1);
+			nCounter = nLines - 1;
 			pDocLine = pDocLineBot;
 			while (pDocLine) {
 				if (nLine == nCounter) {
@@ -195,7 +195,7 @@ const DocLine* DocLineMgr::GetLine(LogicInt nLine) const
 			pDocLineCurrent = pCodePrevRefer->GetNextLine();
 			return pCodePrevRefer;
 		}else if (nLine > nPrevReferLine) {
-			nCounter = nPrevReferLine + LogicInt(1);
+			nCounter = nPrevReferLine + 1;
 			pDocLine = pCodePrevRefer->GetNextLine();
 			while (pDocLine) {
 				if (nLine == nCounter) {
@@ -208,7 +208,7 @@ const DocLine* DocLineMgr::GetLine(LogicInt nLine) const
 				++nCounter;
 			}
 		}else {
-			nCounter = nPrevReferLine - LogicInt(1);
+			nCounter = nPrevReferLine - 1;
 			pDocLine = pCodePrevRefer->GetPrevLine();
 			while (pDocLine) {
 				if (nLine == nCounter) {
@@ -234,8 +234,8 @@ void DocLineMgr::_Init()
 {
 	pDocLineTop = nullptr;
 	pDocLineBot = nullptr;
-	nLines = LogicInt(0);
-	nPrevReferLine = LogicInt(0);
+	nLines = 0;
+	nPrevReferLine = 0;
 	pCodePrevRefer = nullptr;
 	pDocLineCurrent = nullptr;
 	DiffManager::getInstance().SetDiffUse(false);	// DIFF使用中	//@@@ 2002.05.25 MIK     //##後でCDocListener::OnClear (OnAfterClose) を作成し、そこに移動
@@ -334,7 +334,7 @@ void DocLineMgr::DUMP()
 	// 正当性を調べる
 	bool bIncludeCurrent = false;
 	bool bIncludePrevRefer = false;
-	LogicInt nNum = LogicInt(0);
+	int nNum = 0;
 	if (pDocLineTop->pPrev) {
 		MYTRACE(_T("error: pDocLineTop->m_pPrev != nullptr\n"));
 	}

@@ -59,13 +59,13 @@ DlgProfileMgr::DlgProfileMgr()
 }
 
 // モーダルダイアログの表示
-int DlgProfileMgr::DoModal(
+INT_PTR DlgProfileMgr::DoModal(
 	HINSTANCE hInstance,
 	HWND hwndParent,
 	LPARAM lParam
 	)
 {
-	return (int)Dialog::DoModal(hInstance, hwndParent, IDD_PROFILEMGR, lParam);
+	return Dialog::DoModal(hInstance, hwndParent, IDD_PROFILEMGR, lParam);
 }
 
 

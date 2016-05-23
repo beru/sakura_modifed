@@ -113,28 +113,28 @@ public:
 	    検索に一致した文字列の先頭位置を返す(文字列先頭なら0)
 		@retval 検索に一致した文字列の先頭位置
 	*/
-	LogicInt GetIndex(void) {
-		return LogicInt(pRegExp->startp[0] - szTarget);
+	int GetIndex(void) {
+		return pRegExp->startp[0] - szTarget;
 	}
 	/*!
 	    検索に一致した文字列の次の位置を返す
 		@retval 検索に一致した文字列の次の位置
 	*/
-	LogicInt GetLastIndex(void) {
-		return LogicInt(pRegExp->endp[0] - szTarget);
+	int GetLastIndex(void) {
+		return pRegExp->endp[0] - szTarget;
 	}
 	/*!
 		検索に一致した文字列の長さを返す
 		@retval 検索に一致した文字列の長さ
 	*/
-	LogicInt GetMatchLen(void) {
-		return LogicInt(pRegExp->endp[0] - pRegExp->startp[0]);
+	int GetMatchLen(void) {
+		return pRegExp->endp[0] - pRegExp->startp[0];
 	}
 	/*!
 		置換された文字列の長さを返す
 		@retval 置換された文字列の長さ
 	*/
-	LogicInt GetStringLen(void) {
+	int GetStringLen(void) {
 		// 置換後文字列が０幅なら outp、outendpもNULLになる
 		// NULLポインタの引き算は問題なく０になる。
 		// outendpは '\0'なので、文字列長は +1不要
@@ -144,9 +144,9 @@ public:
 		// outpのNULLチェックが必要
 
 		if (!pRegExp->outp) {
-			return LogicInt(0);
+			return 0;
 		} else {
-			return LogicInt(pRegExp->outendp - pRegExp->outp);
+			return pRegExp->outendp - pRegExp->outp;
 		}
 	}
 	/*!
@@ -202,7 +202,7 @@ private:
 	// 内部関数
 
 	// 検索パターン作成
-	int CheckPattern( const wchar_t* szPattern );
+	size_t CheckPattern( const wchar_t* szPattern );
 	wchar_t* MakePatternSub( const wchar_t* szPattern, const wchar_t* szPattern2, const wchar_t* szAdd2, int nOption );
 	wchar_t* MakePattern( const wchar_t* szPattern, const wchar_t* szPattern2, int nOption );
 	wchar_t* MakePatternAlternate( const wchar_t* const szSearch, const wchar_t* const szReplace, int nOption );

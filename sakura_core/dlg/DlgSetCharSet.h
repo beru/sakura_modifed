@@ -25,7 +25,7 @@ public:
 	/*
 	||  Attributes & Operations
 	*/
-	int DoModal(HINSTANCE, HWND, EncodingType*, bool*);	// モーダルダイアログの表示
+	INT_PTR DoModal(HINSTANCE, HWND, EncodingType*, bool*);	// モーダルダイアログの表示
 
 
 	EncodingType*	pnCharSet;			// 文字コードセット

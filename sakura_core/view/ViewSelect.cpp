@@ -162,15 +162,15 @@ void ViewSelect::DrawSelectArea(bool bDrawBracketCursorLine)
 	if (bDispText) {
 		if (select != selectOld) {
 			// 選択色表示の時は、WM_PAINT経由で作画
-			const int nCharWidth = view.GetTextMetrics().GetHankakuDx();
+			const size_t nCharWidth = view.GetTextMetrics().GetHankakuDx();
 			const TextArea& area =  view.GetTextArea();
 			LayoutRect rcOld; // LayoutRect
 			TwoPointToRect(&rcOld, selectOld.GetFrom(), selectOld.GetTo());
 			LayoutRect rcNew; // LayoutRect
 			TwoPointToRect(&rcNew, select.GetFrom(), select.GetTo());
 			LayoutRect rc; // LayoutRect ただしtop,bottomだけ使う
-			LayoutInt drawLeft = LayoutInt(0);
-			LayoutInt drawRight = LayoutInt(-1);
+			int drawLeft = 0;
+			int drawRight = -1;
 			if (!select.IsValid()) {
 				rc.top    = rcOld.top;
 				rc.bottom = rcOld.bottom;
@@ -214,8 +214,8 @@ void ViewSelect::DrawSelectArea(bool bDrawBracketCursorLine)
 				rcPx.left   =  0;
 				rcPx.right  = SHRT_MAX; 
 			}else {
-				rcPx.left   =  area.GetAreaLeft() + nCharWidth * (Int)(drawLeft - area.GetViewLeftCol());
-				rcPx.right  = area.GetAreaLeft() + nCharWidth * (Int)(drawRight- area.GetViewLeftCol());
+				rcPx.left   =  area.GetAreaLeft() + nCharWidth * (drawLeft - area.GetViewLeftCol());
+				rcPx.right  = area.GetAreaLeft() + nCharWidth * (drawRight- area.GetViewLeftCol());
 			}
 			rcPx.top    = area.GenerateYPx(rc.top);
 			rcPx.bottom = area.GenerateYPx(rc.bottom + 1);
@@ -302,8 +302,8 @@ void ViewSelect::DrawSelectArea2(HDC hdc) const
 		//	return;
 		//}
 
-		const int nCharWidth = view.GetTextMetrics().GetHankakuDx();
-		const int nCharHeight = view.GetTextMetrics().GetHankakuDy();
+		const size_t nCharWidth = view.GetTextMetrics().GetHankakuDx();
+		const size_t nCharHeight = view.GetTextMetrics().GetHankakuDy();
 
 		// 2点を対角とする矩形を求める
 		LayoutRect  rcOld;
@@ -312,16 +312,16 @@ void ViewSelect::DrawSelectArea2(HDC hdc) const
 			selectOld.GetFrom(),	// 範囲選択開始
 			selectOld.GetTo()	// 範囲選択終了
 		);
-		rcOld.left   = t_max(rcOld.left  , textArea.GetViewLeftCol() );
-		rcOld.right  = t_max(rcOld.right , textArea.GetViewLeftCol() );
-		rcOld.right  = t_min(rcOld.right , textArea.GetRightCol() + 1);
-		rcOld.top    = t_max(rcOld.top   , textArea.GetViewTopLine() );
-		rcOld.bottom = t_max(rcOld.bottom, textArea.GetViewTopLine() - 1);	// 2010.11.02 ryoji 追加（画面上端よりも上にある矩形選択を解除するとルーラーが反転表示になる問題の修正）
-		rcOld.bottom = t_min(rcOld.bottom, textArea.GetBottomLine()  );
+		rcOld.left   = t_max(rcOld.left  , (int)textArea.GetViewLeftCol() );
+		rcOld.right  = t_max(rcOld.right , (int)textArea.GetViewLeftCol() );
+		rcOld.right  = t_min(rcOld.right , (int)textArea.GetRightCol() + 1);
+		rcOld.top    = t_max(rcOld.top   , (int)textArea.GetViewTopLine() );
+		rcOld.bottom = t_max(rcOld.bottom, (int)textArea.GetViewTopLine() - 1);	// 2010.11.02 ryoji 追加（画面上端よりも上にある矩形選択を解除するとルーラーが反転表示になる問題の修正）
+		rcOld.bottom = t_min(rcOld.bottom, (int)textArea.GetBottomLine()  );
 
 		RECT rcOld2;
-		rcOld2.left		= (textArea.GetAreaLeft() - (Int)textArea.GetViewLeftCol() * nCharWidth) + (Int)rcOld.left  * nCharWidth;
-		rcOld2.right	= (textArea.GetAreaLeft() - (Int)textArea.GetViewLeftCol() * nCharWidth) + (Int)rcOld.right * nCharWidth;
+		rcOld2.left		= (textArea.GetAreaLeft() - textArea.GetViewLeftCol() * nCharWidth) + rcOld.left  * nCharWidth;
+		rcOld2.right	= (textArea.GetAreaLeft() - textArea.GetViewLeftCol() * nCharWidth) + rcOld.right * nCharWidth;
 		rcOld2.top		= textArea.GenerateYPx(rcOld.top);
 		rcOld2.bottom	= textArea.GenerateYPx(rcOld.bottom + 1);
 		HRGN hrgnOld = ::CreateRectRgnIndirect(&rcOld2);
@@ -333,16 +333,16 @@ void ViewSelect::DrawSelectArea2(HDC hdc) const
 			select.GetFrom(),	// 範囲選択開始
 			select.GetTo()		// 範囲選択終了
 		);
-		rcNew.left   = t_max(rcNew.left  , textArea.GetViewLeftCol());
-		rcNew.right  = t_max(rcNew.right , textArea.GetViewLeftCol());
-		rcNew.right  = t_min(rcNew.right , textArea.GetRightCol() + 1);
-		rcNew.top    = t_max(rcNew.top   , textArea.GetViewTopLine());
-		rcNew.bottom = t_max(rcNew.bottom, textArea.GetViewTopLine() - 1);	// 2010.11.02 ryoji 追加（画面上端よりも上にある矩形選択を解除するとルーラーが反転表示になる問題の修正）
-		rcNew.bottom = t_min(rcNew.bottom, textArea.GetBottomLine() );
+		rcNew.left   = t_max(rcNew.left  , (int)textArea.GetViewLeftCol());
+		rcNew.right  = t_max(rcNew.right , (int)textArea.GetViewLeftCol());
+		rcNew.right  = t_min(rcNew.right , (int)textArea.GetRightCol() + 1);
+		rcNew.top    = t_max(rcNew.top   , (int)textArea.GetViewTopLine());
+		rcNew.bottom = t_max(rcNew.bottom, (int)textArea.GetViewTopLine() - 1);	// 2010.11.02 ryoji 追加（画面上端よりも上にある矩形選択を解除するとルーラーが反転表示になる問題の修正）
+		rcNew.bottom = t_min(rcNew.bottom, (int)textArea.GetBottomLine() );
 
 		RECT rcNew2;
-		rcNew2.left		= (textArea.GetAreaLeft() - (Int)textArea.GetViewLeftCol() * nCharWidth) + (Int)rcNew.left  * nCharWidth;
-		rcNew2.right	= (textArea.GetAreaLeft() - (Int)textArea.GetViewLeftCol() * nCharWidth) + (Int)rcNew.right * nCharWidth;
+		rcNew2.left		= (textArea.GetAreaLeft() - textArea.GetViewLeftCol() * nCharWidth) + rcNew.left  * nCharWidth;
+		rcNew2.right	= (textArea.GetAreaLeft() - textArea.GetViewLeftCol() * nCharWidth) + rcNew.right * nCharWidth;
 		rcNew2.top		= textArea.GenerateYPx(rcNew.top);
 		rcNew2.bottom	= textArea.GenerateYPx(rcNew.bottom + 1);
 
@@ -380,7 +380,7 @@ void ViewSelect::DrawSelectArea2(HDC hdc) const
 					//	最終行にTABが入っていると反転範囲が不足する．
 					//	2006.10.01 Moca GetEndLayoutPosで処理するためColumnToIndexは不要に。
 					RECT rcNew;
-					rcNew.left   = textArea.GetAreaLeft() + (Int)(textArea.GetViewLeftCol() + ptLast.x) * nCharWidth;
+					rcNew.left   = textArea.GetAreaLeft() + (textArea.GetViewLeftCol() + ptLast.x) * nCharWidth;
 					rcNew.right  = textArea.GetAreaRight();
 					rcNew.top    = textArea.GenerateYPx(ptLast.y);
 					rcNew.bottom = rcNew.top + nCharHeight;
@@ -415,7 +415,7 @@ void ViewSelect::DrawSelectArea2(HDC hdc) const
 		}
 	}else {
 		LayoutRange rangeA;
-		LayoutInt nLineNum;
+		int nLineNum;
 
 		// 現在描画されている範囲と始点が同じ
 		if (select.GetFrom() == selectOld.GetFrom()) {
@@ -485,7 +485,7 @@ void ViewSelect::DrawSelectArea2(HDC hdc) const
 */
 void ViewSelect::DrawSelectAreaLine(
 	HDC					hdc,		// [in] 描画領域のDevice Context Handle
-	LayoutInt			nLineNum,	// [in] 描画対象行(レイアウト行)
+	int					nLineNum,	// [in] 描画対象行(レイアウト行)
 	const LayoutRange&	range		// [in] 選択範囲(レイアウト単位)
 	) const
 {
@@ -496,11 +496,11 @@ void ViewSelect::DrawSelectAreaLine(
 	const Layout* pLayout = layoutMgr.SearchLineByLayoutY(nLineNum);
 	LayoutRange lineArea;
 	GetSelectAreaLineFromRange(lineArea, nLineNum, pLayout, range);
-	LayoutInt nSelectFrom = lineArea.GetFrom().GetX2();
-	LayoutInt nSelectTo = lineArea.GetTo().GetX2();
+	int nSelectFrom = lineArea.GetFrom().GetX2();
+	int nSelectTo = lineArea.GetTo().GetX2();
 	auto& textArea = view.GetTextArea();
 	if (nSelectFrom == INT_MAX || nSelectTo == INT_MAX) {
-		LayoutInt nPosX = LayoutInt(0);
+		int nPosX = 0;
 		MemoryIterator it = MemoryIterator(pLayout, layoutMgr.GetTabSpace());
 		
 		while (!it.end()) {
@@ -529,11 +529,11 @@ void ViewSelect::DrawSelectAreaLine(
 	if (nSelectFrom < textArea.GetViewLeftCol()) {
 		nSelectFrom = textArea.GetViewLeftCol();
 	}
-	int		nLineHeight = view.GetTextMetrics().GetHankakuDy();
-	int		nCharWidth = view.GetTextMetrics().GetHankakuDx();
+	size_t nLineHeight = view.GetTextMetrics().GetHankakuDy();
+	size_t nCharWidth = view.GetTextMetrics().GetHankakuDx();
 	Rect	rcClip; // px
-	rcClip.left		= (textArea.GetAreaLeft() - (Int)textArea.GetViewLeftCol() * nCharWidth) + (Int)nSelectFrom * nCharWidth;
-	rcClip.right	= (textArea.GetAreaLeft() - (Int)textArea.GetViewLeftCol() * nCharWidth) + (Int)nSelectTo   * nCharWidth;
+	rcClip.left		= (textArea.GetAreaLeft() - textArea.GetViewLeftCol() * nCharWidth) + nSelectFrom * nCharWidth;
+	rcClip.right	= (textArea.GetAreaLeft() - textArea.GetViewLeftCol() * nCharWidth) + nSelectTo   * nCharWidth;
 	rcClip.top		= textArea.GenerateYPx(nLineNum);
 	rcClip.bottom	= rcClip.top + nLineHeight;
 	if (rcClip.right > textArea.GetAreaRight()) {
@@ -562,7 +562,7 @@ void ViewSelect::DrawSelectAreaLine(
 
 void ViewSelect::GetSelectAreaLineFromRange(
 	LayoutRange& ret,
-	LayoutInt nLineNum,
+	int nLineNum,
 	const Layout* pLayout,
 	const LayoutRange&	range
 	) const
@@ -571,8 +571,8 @@ void ViewSelect::GetSelectAreaLineFromRange(
 	if (nLineNum >= range.GetFrom().y && nLineNum <= range.GetTo().y ||
 		nLineNum >= range.GetTo().y && nLineNum <= range.GetFrom().y
 	) {
-		LayoutInt	nSelectFrom = range.GetFrom().GetX2();
-		LayoutInt	nSelectTo   = range.GetTo().GetX2();
+		int nSelectFrom = range.GetFrom().GetX2();
+		int nSelectTo   = range.GetTo().GetX2();
 		if (IsBoxSelecting()) {		// 矩形範囲選択中
 			nSelectFrom = range.GetFrom().GetX2();
 			nSelectTo   = range.GetTo().GetX2();
@@ -588,15 +588,15 @@ void ViewSelect::GetSelectAreaLineFromRange(
 				nSelectFrom = range.GetFrom().GetX2();
 				nSelectTo   = range.GetTo().GetX2();
 			}else {
-				LayoutInt nX_Layout = LayoutInt(INT_MAX);
+				int nX_Layout = INT_MAX;
 				if (nLineNum == range.GetFrom().y) {
 					nSelectFrom = range.GetFrom().GetX2();
 					nSelectTo   = nX_Layout;
 				}else if (nLineNum == range.GetTo().GetY2()) {
-					nSelectFrom = pLayout ? pLayout->GetIndent() : LayoutInt(0);
+					nSelectFrom = pLayout ? pLayout->GetIndent() : 0;
 					nSelectTo   = range.GetTo().GetX2();
 				}else {
-					nSelectFrom = pLayout ? pLayout->GetIndent() : LayoutInt(0);
+					nSelectFrom = pLayout ? pLayout->GetIndent() : 0;
 					nSelectTo   = nX_Layout;
 				}
 			}
@@ -629,7 +629,7 @@ void ViewSelect::PrintSelectionInfoMsg() const
 	if (!view.editWnd.statusBar.SendStatusMessage2IsEffective())
 		return;
 
-	LayoutInt nLineCount = view.pEditDoc->layoutMgr.GetLineCount();
+	int nLineCount = view.pEditDoc->layoutMgr.GetLineCount();
 	if (!IsTextSelected() || select.GetFrom().y >= nLineCount) { // 先頭行が実在しない
 		const_cast<EditView&>(view).GetCaret().bClearStatus = false;
 		if (IsBoxSelecting()) {
@@ -645,7 +645,7 @@ void ViewSelect::PrintSelectionInfoMsg() const
 	TCHAR msg[128];
 	//	From here 2006.06.06 ryoji 選択範囲の行が実在しない場合の対策
 
-	LayoutInt select_line;
+	int select_line;
 	if (select.GetTo().y >= nLineCount) {	// 最終行が実在しない
 		select_line = nLineCount - select.GetFrom().y + 1;
 	}else {
@@ -655,7 +655,7 @@ void ViewSelect::PrintSelectionInfoMsg() const
 	//	To here 2006.06.06 ryoji 選択範囲の行が実在しない場合の対策
 	if (IsBoxSelecting()) {
 		//	矩形の場合は幅と高さだけでごまかす
-		LayoutInt select_col = select.GetFrom().x - select.GetTo().x;
+		int select_col = select.GetFrom().x - select.GetTo().x;
 		if (select_col < 0) {
 			select_col = -select_col;
 		}
@@ -664,9 +664,9 @@ void ViewSelect::PrintSelectionInfoMsg() const
 			
 	}else {
 		//	通常の選択では選択範囲の中身を数える
-		int select_sum = 0;	//	バイト数合計
+		size_t select_sum = 0;	//	バイト数合計
 		const wchar_t* pLine;	//	データを受け取る
-		LogicInt	nLineLen;		//	行の長さ
+		size_t nLineLen;		//	行の長さ
 		const Layout*	pLayout;
 		ViewSelect* thiz = const_cast<ViewSelect*>(this);	// const外しthis
 
@@ -775,8 +775,8 @@ void ViewSelect::PrintSelectionInfoMsg() const
 					//	GetSelectedDataと似ているが，先頭行と最終行は排除している
 					//	Aug. 16, 2005 aroka nLineNumはfor以降でも使われるのでforの前で宣言する
 					//	VC .NET以降でもMicrosoft拡張を有効にした標準動作はVC6と同じことに注意
-					LayoutInt nLineNum;
-					for (nLineNum = select.GetFrom().GetY2() + LayoutInt(1);
+					int nLineNum;
+					for (nLineNum = select.GetFrom().GetY2() + 1;
 						nLineNum < select.GetTo().GetY2();
 						++nLineNum
 					) {

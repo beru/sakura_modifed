@@ -36,7 +36,7 @@ struct SysString {
 		data = ::SysAllocStringLen(source.data, SysStringLen(source.data));
 		return *this;
 	}
-	int Length()                        { return ::SysStringLen(data); }
+	UINT Length()						{ return ::SysStringLen(data); }
 	void Get(char** s, int* l) {
 		UINT len = ::SysStringLen(data);
 		*s = new char[len * 2 + 1];
@@ -58,15 +58,15 @@ struct SysString {
 		delete[] s;
 	}
 	void GetW(std::wstring* str) {
-		int len = ::SysStringLen(data);
+		UINT len = ::SysStringLen(data);
 		str->assign(data, len);
 	}
 #ifdef _UNICODE
-	void GetT(TCHAR** s, int* l) {GetW(s, l);}
-	void GetT(std::wstring* str) {GetW(str);}
+	void GetT(TCHAR** s, int* l) { GetW(s, l); }
+	void GetT(std::wstring* str) { GetW(str); }
 #else
-	void GetT(TCHAR** s, int* l) {Get(s, l);}
-	void GetT(std::string* str) {Get(str);}
+	void GetT(TCHAR** s, int* l) { Get(s, l); }
+	void GetT(std::string* str) { Get(str); }
 #endif
 };
 

@@ -70,11 +70,11 @@ void EditView::OnLBUTTONDOWN(WPARAM fwKeys, int _xPos , int _yPos)
 
 	NativeW	memCurText;
 	const wchar_t*	pLine;
-	LogicInt		nLineLen;
+	size_t			nLineLen;
 
 	LayoutRange range;
 
-	LogicInt	nIdx;
+	int			nIdx;
 	int			nWork;
 	int			nFuncID = 0;				// 2007.12.02 nasukoji	マウス左クリックに対応する機能コード
 
@@ -437,7 +437,7 @@ normal_action:;
 				if (pNext) {
 					ptCaret.x = pNext->GetIndent();
 				}else {
-					ptCaret.x = LayoutInt(0);
+					ptCaret.x = 0;
 				}
 				ptCaret.y = ptNewCaret.GetY2() + 1;	// 改行無しEOF行でも MoveCursor() が有効な座標に調整してくれる
 				caret.GetAdjustCursorPos(&ptCaret);
@@ -971,11 +971,11 @@ void EditView::OnMOUSEMOVE(WPARAM fwKeys, int xPos_, int yPos_)
 			textArea.ClientToLayout( ptMouse, &ptNew );
 			// ミニマップの上下スクロール
 			if (ptNew.y < 0) {
-				ptNew.y = LayoutYInt(0);
+				ptNew.y = 0;
 			}
-			LayoutYInt nScrollRow = LayoutYInt(0);
-			LayoutYInt nScrollMargin = LayoutYInt(15);
-			nScrollMargin  = t_min(nScrollMargin,  (textArea.nViewRowNum) / 2);
+			int nScrollRow = 0;
+			int nScrollMargin = 15;
+			nScrollMargin  = t_min(nScrollMargin,  (int)textArea.nViewRowNum / 2);
 			if (pEditDoc->layoutMgr.GetLineCount() > textArea.nViewRowNum
 				&& ptNew.y > textArea.GetViewTopLine() + textArea.nViewRowNum - nScrollMargin
 			) {
@@ -992,7 +992,7 @@ void EditView::OnMOUSEMOVE(WPARAM fwKeys, int xPos_, int yPos_)
 
 			textArea.ClientToLayout( ptMouse, &ptNew );
 			if (ptNew.y < 0) {
-				ptNew.y = LayoutYInt(0);
+				ptNew.y = 0;
 			}
 			EditView& view = editWnd.GetActiveView();
 			ptNew.x = 0;
@@ -1046,9 +1046,10 @@ void EditView::OnMOUSEMOVE(WPARAM fwKeys, int xPos_, int yPos_)
 
 		LogicRange	cUrlRange;	// URL範囲
 
+		auto& csEdit = GetDllShareData().common.edit;
 		// 選択テキストのドラッグ中か
 		if (bDragMode) {
-			if (GetDllShareData().common.edit.bUseOLE_DragDrop) {	// OLEによるドラッグ & ドロップを使う
+			if (csEdit.bUseOLE_DragDrop) {	// OLEによるドラッグ & ドロップを使う
 				// 座標指定によるカーソル移動
 				caret.MoveCursorToClientPoint(ptMouse);
 			}
@@ -1056,13 +1057,14 @@ void EditView::OnMOUSEMOVE(WPARAM fwKeys, int xPos_, int yPos_)
 			// 行選択エリア?
 			if (ptMouse.x < textArea.GetAreaLeft() || ptMouse.y < textArea.GetAreaTop()) {	//	2002/2/10 aroka
 				// 矢印カーソル
-				if (ptMouse.y >= textArea.GetAreaTop())
+				if (ptMouse.y >= textArea.GetAreaTop()) {
 					::SetCursor(::LoadCursor(G_AppInstance(), MAKEINTRESOURCE(IDC_CURSOR_RVARROW)));
-				else
+				}else {
 					::SetCursor(::LoadCursor(NULL, IDC_ARROW));
+				}
 			}else if (1
-				&& GetDllShareData().common.edit.bUseOLE_DragDrop		// OLEによるドラッグ & ドロップを使う
-				&& GetDllShareData().common.edit.bUseOLE_DropSource		// OLEによるドラッグ元にするか
+				&& csEdit.bUseOLE_DragDrop		// OLEによるドラッグ & ドロップを使う
+				&& csEdit.bUseOLE_DropSource		// OLEによるドラッグ元にするか
 				&& IsCurrentPositionSelected(ptNew) == 0				// 指定カーソル位置が選択エリア内にあるか
 			) {
 				// 矢印カーソル
@@ -1108,7 +1110,7 @@ void EditView::OnMOUSEMOVE(WPARAM fwKeys, int xPos_, int yPos_)
 	// 一度移動したら戻ってきたときも、移動とみなすように設定
 	mouseDownPos.Set(-INT_MAX, -INT_MAX);
 	
-	LayoutPoint ptNewCursor(LayoutInt(-1), LayoutInt(-1));
+	LayoutPoint ptNewCursor(-1, -1);
 	if (GetSelectionInfo().IsBoxSelecting()) {	// 矩形範囲選択中
 		// 座標指定によるカーソル移動
 		caret.MoveCursorToClientPoint(ptMouse, true, &ptNewCursor);
@@ -1126,11 +1128,12 @@ void EditView::OnMOUSEMOVE(WPARAM fwKeys, int xPos_, int yPos_)
 			int nLineHeight = GetTextMetrics().GetHankakuHeight() + pTypeData->nLineSpace;
 
 			// 選択開始行以下へのドラッグ時は1行下にカーソルを移動する
-			if (textArea.GetViewTopLine() + (ptMouse.y - textArea.GetAreaTop()) / nLineHeight >= GetSelectionInfo().selectBgn.GetTo().y)
+			if (textArea.GetViewTopLine() + (ptMouse.y - textArea.GetAreaTop()) / nLineHeight >= GetSelectionInfo().selectBgn.GetTo().y) {
 				nNewPos.y += nLineHeight;
+			}
 
 			// カーソルを移動
-			nNewPos.x = textArea.GetAreaLeft() - Int(textArea.GetViewLeftCol()) * (GetTextMetrics().GetHankakuWidth() + pTypeData->nColumnSpace);
+			nNewPos.x = textArea.GetAreaLeft() - textArea.GetViewLeftCol() * (int)(GetTextMetrics().GetHankakuWidth() + pTypeData->nColumnSpace);
 			caret.MoveCursorToClientPoint(nNewPos, false, &ptNewCursor);
 
 			// 2.5クリックによる行単位のドラッグ
@@ -1138,10 +1141,10 @@ void EditView::OnMOUSEMOVE(WPARAM fwKeys, int xPos_, int yPos_)
 				// 選択開始行以上にドラッグした
 				if (ptNewCursor.GetY() <= GetSelectionInfo().selectBgn.GetTo().y) {
 					// GetCommander().Command_GoLineTop(true, 0x09);		// 改行単位の行頭へ移動
-					LogicInt nLineLen;
+					size_t nLineLen;
 					const Layout*	pLayout;
 					const wchar_t*	pLine = pEditDoc->layoutMgr.GetLineStr(ptNewCursor.GetY2(), &nLineLen, &pLayout);
-					ptNewCursor.x = LayoutInt(0);
+					ptNewCursor.x = 0;
 					if (pLine) {
 						while (pLayout->GetLogicOffset()) {
 							ptNewCursor.y--;
@@ -1157,7 +1160,7 @@ void EditView::OnMOUSEMOVE(WPARAM fwKeys, int xPos_, int yPos_)
 					// 選択開始行にカーソルがある時はチェック不要
 					if (ptNewCursor.GetY() > GetSelectionInfo().selectBgn.GetTo().y) {
 						// 1行前の物理行を取得する
-						pEditDoc->layoutMgr.LayoutToLogic(LayoutPoint(LayoutInt(0), ptNewCursor.GetY() - 1), &ptCaretPrevLog);
+						pEditDoc->layoutMgr.LayoutToLogic(LayoutPoint(0, ptNewCursor.GetY() - 1), &ptCaretPrevLog);
 					}
 
 					LogicPoint ptNewCursorLogic;
@@ -1199,10 +1202,10 @@ void EditView::OnMOUSEMOVE(WPARAM fwKeys, int xPos_, int yPos_)
 				caret.MoveCursor(ptNewCursor, true, 1000);
 				return;
 			}
-			LogicInt nLineLen;
+			size_t nLineLen;
 			const Layout* pLayout;
 			if (pEditDoc->layoutMgr.GetLineStr(caret.GetCaretLayoutPos().GetY2(), &nLineLen, &pLayout)) {
-				LogicInt	nIdx = LineColumnToIndex(pLayout, caret.GetCaretLayoutPos().GetX2());
+				int	nIdx = LineColumnToIndex(pLayout, caret.GetCaretLayoutPos().GetX2());
 				LayoutRange range;
 
 				// 現在位置の単語の範囲を調べる
@@ -1399,9 +1402,9 @@ LRESULT EditView::OnMOUSEWHEEL2(
 		if (nRollLineNum == -1 || bKeyPageScroll) {
 			// 「1画面分スクロールする」
 			if (bHorizontal) {
-				nRollLineNum = (Int)GetTextArea().nViewColNum - 1;	// 表示域の桁数
+				nRollLineNum = GetTextArea().nViewColNum - 1;	// 表示域の桁数
 			}else {
-				nRollLineNum = (Int)GetTextArea().nViewRowNum - 1;	// 表示域の行数
+				nRollLineNum = GetTextArea().nViewRowNum - 1;	// 表示域の行数
 			}
 		}else {
 			if (nRollLineNum > 30) {	//@@@ YAZAKI 2001.12.31 10→30へ。
@@ -1454,7 +1457,7 @@ LRESULT EditView::OnMOUSEWHEEL2(
 
 		const bool bSmooth = !! GetDllShareData().common.general.nRepeatedScroll_Smooth;
 		const int nRollActions = bSmooth ? nRollNum : 1;
-		const LayoutInt nCount = LayoutInt(((nScrollCode == SB_LINEUP) ? -1 : 1) * (bSmooth ? 1 : nRollNum));
+		const int nCount = ((nScrollCode == SB_LINEUP) ? -1 : 1) * (bSmooth ? 1 : nRollNum);
 
 		for (i=0; i<nRollActions; ++i) {
 			//	Sep. 11, 2004 genta 同期スクロール行数
@@ -1968,15 +1971,15 @@ STDMETHODIMP EditView::Drop(LPDATAOBJECT pDataObject, DWORD dwKeyState, POINTL p
 		// （キャレットが行終端より右の場合は埋め込まれる空白分だけ桁位置をシフト）
 		LogicPoint ptCaretLogicPos_Old = caret.GetCaretLogicPos();
 		const Layout* pLayout;
-		LogicInt nLineLen;
+		size_t nLineLen;
 		LayoutPoint ptCaretLayoutPos_Old = caret.GetCaretLayoutPos();
 		if (pEditDoc->layoutMgr.GetLineStr(ptCaretLayoutPos_Old.GetY2(), &nLineLen, &pLayout)) {
-			LayoutInt nLineAllColLen;
+			int nLineAllColLen;
 			LineColumnToIndex2(pLayout, ptCaretLayoutPos_Old.GetX2(), &nLineAllColLen);
-			if (nLineAllColLen > LayoutInt(0)) {	// 行終端より右の場合には nLineAllColLen に行全体の表示桁数が入っている
+			if (nLineAllColLen > 0) {	// 行終端より右の場合には nLineAllColLen に行全体の表示桁数が入っている
 				ptCaretLogicPos_Old.SetX(
 					ptCaretLogicPos_Old.GetX2()
-					+ (Int)(ptCaretLayoutPos_Old.GetX2() - nLineAllColLen)
+					+ (ptCaretLayoutPos_Old.GetX2() - nLineAllColLen)
 				);
 			}
 		}
@@ -2208,15 +2211,15 @@ void EditView::OnMyDropFiles(HDROP hDrop)
 		// （キャレットが行終端より右の場合は埋め込まれる空白分だけ桁位置をシフト）
 		LogicPoint ptCaretLogicPos_Old = GetCaret().GetCaretLogicPos();
 		const Layout* pLayout;
-		LogicInt nLineLen;
+		size_t nLineLen;
 		LayoutPoint ptCaretLayoutPos_Old = GetCaret().GetCaretLayoutPos();
 		if (pEditDoc->layoutMgr.GetLineStr(ptCaretLayoutPos_Old.GetY2(), &nLineLen, &pLayout)) {
-			LayoutInt nLineAllColLen;
+			int nLineAllColLen;
 			LineColumnToIndex2(pLayout, ptCaretLayoutPos_Old.GetX2(), &nLineAllColLen);
-			if (nLineAllColLen > LayoutInt(0)) {	// 行終端より右の場合には nLineAllColLen に行全体の表示桁数が入っている
+			if (nLineAllColLen > 0) {	// 行終端より右の場合には nLineAllColLen に行全体の表示桁数が入っている
 				ptCaretLogicPos_Old.SetX(
 					ptCaretLogicPos_Old.GetX2()
-					+ (Int)(ptCaretLayoutPos_Old.GetX2() - nLineAllColLen)
+					+ (ptCaretLayoutPos_Old.GetX2() - nLineAllColLen)
 				);
 			}
 		}

@@ -8,9 +8,9 @@
 
 void Color_Select::OnStartScanLogic()
 {
-	nSelectLine	= LayoutInt(-1);
-	nSelectStart	= LogicInt(-1);
-	nSelectEnd	= LogicInt(-1);
+	nSelectLine	= -1;
+	nSelectStart = -1;
+	nSelectEnd = -1;
 }
 
 bool Color_Select::BeginColor(const StringRef& str, int nPos)
@@ -19,7 +19,7 @@ bool Color_Select::BeginColor(const StringRef& str, int nPos)
 	return false;
 }
 
-bool Color_Select::BeginColorEx(const StringRef& str, int nPos, LayoutInt nLineNum, const Layout* pLayout)
+bool Color_Select::BeginColorEx(const StringRef& str, int nPos, int nLineNum, const Layout* pLayout)
 {
 	if (!str.IsValid()) return false;
 
@@ -34,15 +34,15 @@ bool Color_Select::BeginColorEx(const StringRef& str, int nPos, LayoutInt nLineN
 	}
 	nSelectLine = nLineNum;
 	LayoutRange selectArea = view.GetSelectionInfo().GetSelectAreaLine(nLineNum, pLayout);
-	LayoutInt nSelectFrom = selectArea.GetFrom().x;
-	LayoutInt nSelectTo = selectArea.GetTo().x;
+	int nSelectFrom = selectArea.GetFrom().x;
+	int nSelectTo = selectArea.GetTo().x;
 	if (nSelectFrom == nSelectTo || nSelectFrom == -1) {
 		nSelectStart = -1;
 		nSelectEnd = -1;
 		return false;
 	}
-	LogicInt nIdxFrom = view.LineColumnToIndex(pLayout, nSelectFrom) + pLayout->GetLogicOffset();
-	LogicInt nIdxTo = view.LineColumnToIndex(pLayout, nSelectTo) + pLayout->GetLogicOffset();
+	int nIdxFrom = view.LineColumnToIndex(pLayout, nSelectFrom) + pLayout->GetLogicOffset();
+	int nIdxTo = view.LineColumnToIndex(pLayout, nSelectTo) + pLayout->GetLogicOffset();
 	nSelectStart = nIdxFrom;
 	nSelectEnd = nIdxTo;
 	if (nSelectStart <= nPos && nPos < nSelectEnd) {
@@ -66,9 +66,9 @@ Color_Found::Color_Found()
 
 void Color_Found::OnStartScanLogic()
 {
-	nSearchResult	= 1;
-	nSearchStart	= LogicInt(-1);
-	nSearchEnd	= LogicInt(-1);
+	nSearchResult = 1;
+	nSearchStart = -1;
+	nSearchEnd = -1;
 
 	this->validColorNum = 0;
 	for (int color=COLORIDX_SEARCH; color<=COLORIDX_SEARCHTAIL; ++color) {
@@ -93,7 +93,7 @@ bool Color_Found::BeginColor(const StringRef& str, int nPos)
 	if (pView->curSearchOption.bWordOnly || (nSearchResult && nSearchStart < nPos)) {
 		nSearchResult = pView->IsSearchString(
 			str,
-			LogicInt(nPos),
+			nPos,
 			&nSearchStart,
 			&nSearchEnd
 		);

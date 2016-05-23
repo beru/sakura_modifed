@@ -105,7 +105,7 @@ bool ViewCommander::Command_TagJump(bool bClose)
 	ptXYOrg = ptXY;
 
 	// 現在行のデータを取得
-	LogicInt		nLineLen;
+	size_t			nLineLen;
 	const wchar_t*	pLine;
 	pLine = GetDocument().docLineMgr.GetLine(ptXY.GetY2())->GetDocLineStrWithEOL(&nLineLen);
 	if (!pLine) {

@@ -213,7 +213,7 @@ EncodingType FileLoad::FileOpen(
 	pCodeBase->GetEol( &memEols[2], EolType::PS );
 	bool bEolEx = false;
 	size_t nMaxEolLen = 0;
-	for (int k=0; k<(int)_countof(memEols); ++k) {
+	for (size_t k=0; k<_countof(memEols); ++k) {
 		if (memEols[k].GetRawLength() != 0) {
 			bEolEx = true;
 			nMaxEolLen = t_max(nMaxEolLen, memEols[k].GetRawLength());
@@ -278,8 +278,8 @@ CodeConvertResult FileLoad::ReadLine(
 		nReadOffset2 = 0;
 		nTempResult = e;
 	}
-	int nOffsetTemp = nReadOffset2;
-	int nRetLineLen;
+	size_t nOffsetTemp = nReadOffset2;
+	size_t nRetLineLen;
 	Eol cEolTemp;
 	const wchar_t* pRet = GetNextLineW( lineTemp.GetStringPtr(),
 										lineTemp.GetStringLength(),
@@ -330,9 +330,9 @@ CodeConvertResult FileLoad::ReadLine_core(
 
 	// 1行取り出し ReadBuf -> memLine
 	// Oct. 19, 2002 genta while条件を整理
-	int	nBufLineLen;
-	int	nEolLen;
-	int	nBufferNext;
+	size_t	nBufLineLen;
+	size_t	nEolLen;
+	size_t	nBufferNext;
 	for (;;) {
 		const char* pLine = GetNextLineCharCode(
 			pReadBuf,
@@ -386,7 +386,7 @@ CodeConvertResult FileLoad::ReadLine_core(
 			}
 		}
 	}
-	if (pUnicodeBuffer->GetStringLength() == LogicInt(0)) {
+	if (pUnicodeBuffer->GetStringLength() == 0) {
 		eRet = CodeConvertResult::Failure;
 	}
 
@@ -425,7 +425,7 @@ void FileLoad::Buffering(void)
 		nReadDataLen = 0;
 	}
 	// ファイルの読み込み
-	DWORD readSize = Read(&pReadBuf[nReadDataLen], nReadBufSize - nReadDataLen);
+	size_t readSize = Read(&pReadBuf[nReadDataLen], nReadBufSize - nReadDataLen);
 	if (readSize == 0) {
 		mode = FileLoadMode::ReadBufEnd;	// ファイルなどの終わりに達したらしい
 	}
@@ -461,15 +461,15 @@ int FileLoad::GetPercent(void) {
 const char* FileLoad::GetNextLineCharCode(
 	const char*	pData,			// [in]		検索文字列
 	size_t		nDataLen,		// [in]		検索文字列のバイト数
-	int*		pnLineLen,		// [out]	1行のバイト数を返すただしEOLは含まない
-	int*		pnBgn,			// [i/o]	検索文字列のバイト単位のオフセット位置
+	size_t*		pnLineLen,		// [out]	1行のバイト数を返すただしEOLは含まない
+	size_t*		pnBgn,			// [i/o]	検索文字列のバイト単位のオフセット位置
 	Eol*		pEol,			// [i/o]	EOL
-	int*		pnEolLen,		// [out]	EOLのバイト数 (Unicodeで困らないように)
-	int*		pnBufferNext	// [out]	次回持越しバッファ長(EOLの断片)
+	size_t*		pnEolLen,		// [out]	EOLのバイト数 (Unicodeで困らないように)
+	size_t*		pnBufferNext	// [out]	次回持越しバッファ長(EOLの断片)
 	)
 {
 	int nbgn = *pnBgn;
-	int i;
+	size_t i;
 
 	pEol->SetType(EolType::None);
 	*pnBufferNext = 0;
@@ -518,10 +518,10 @@ const char* FileLoad::GetNextLineCharCode(
 			}
 			// UTF-8のNEL,PS,LS断片の検出
 			if (i == nDataLen && bEolEx) {
-				for (i=t_max(0, (int)nDataLen - nMaxEolLen - 1); i < nDataLen; ++i) {
+				for (i=t_max(0, (int)nDataLen - (int)nMaxEolLen - 1); i < nDataLen; ++i) {
 					bool bSet = false;
 					for (size_t k=0; k<_countof(eEolEx); ++k) {
-						int nCompLen = t_min(nDataLen-i, memEols[k].GetRawLength());
+						size_t nCompLen = t_min(nDataLen-i, memEols[k].GetRawLength());
 						if (nCompLen != 0
 							&& memcmp(memEols[k].GetRawPtr(), pData+i, nCompLen) == 0
 						) {
@@ -543,7 +543,7 @@ const char* FileLoad::GetNextLineCharCode(
 			wchar_t c = static_cast<wchar_t>((pUData[i + 1] << 8) | pUData[i]);
 			if (WCODE::IsLineDelimiter(c, bExtEol)) {
 				pEol->SetTypeByStringForFile_uni( &pData[i], nDataLen - i );
-				neollen = (Int)pEol->GetLen() * sizeof(wchar_t);
+				neollen = pEol->GetLen() * sizeof(wchar_t);
 				break;
 			}
 		}
@@ -554,7 +554,7 @@ const char* FileLoad::GetNextLineCharCode(
 			wchar_t c = static_cast<wchar_t>((pUData[i] << 8) | pUData[i + 1]);
 			if (WCODE::IsLineDelimiter(c, bExtEol)) {
 				pEol->SetTypeByStringForFile_unibe( &pData[i], nDataLen - i );
-				neollen = (Int)pEol->GetLen() * sizeof(wchar_t);
+				neollen = pEol->GetLen() * sizeof(wchar_t);
 				break;
 			}
 		}
@@ -581,7 +581,7 @@ const char* FileLoad::GetNextLineCharCode(
 				}
 				wchar_t pDataTmp[2] = {c, c2};
 				pEol->SetTypeByStringForFile_uni( reinterpret_cast<char *>(pDataTmp), eolTempLen );
-				neollen = (Int)pEol->GetLen() * 4;
+				neollen = pEol->GetLen() * 4;
 				break;
 			}
 		}
@@ -608,7 +608,7 @@ const char* FileLoad::GetNextLineCharCode(
 				}
 				wchar_t pDataTmp[2] = {c, c2};
 				pEol->SetTypeByStringForFile_uni( reinterpret_cast<char *>(pDataTmp), eolTempLen );
-				neollen = (Int)pEol->GetLen() * 4;
+				neollen = pEol->GetLen() * 4;
 				break;
 			}
 		}
@@ -632,8 +632,8 @@ const char* FileLoad::GetNextLineCharCode(
 							(i + 1 < nDataLen ? pData[i+1] : 0))),
 					0
 				};
-				pEol->SetTypeByStringForFile( szEof, t_min((int)nDataLen - i, 2) );
-				neollen = (Int)pEol->GetLen();
+				pEol->SetTypeByStringForFile( szEof, t_min(nDataLen - i, (size_t)2) );
+				neollen = pEol->GetLen();
 				break;
 			}
 		}

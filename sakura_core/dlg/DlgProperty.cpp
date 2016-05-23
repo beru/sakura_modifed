@@ -58,13 +58,13 @@ const DWORD p_helpids[] = {	//12600
 };	//@@@ 2002.01.07 add end MIK
 
 // モーダルダイアログの表示
-int DlgProperty::DoModal(
+INT_PTR DlgProperty::DoModal(
 	HINSTANCE hInstance,
 	HWND hwndParent,
 	LPARAM lParam
 	)
 {
-	return (int)Dialog::DoModal(hInstance, hwndParent, IDD_PROPERTY_FILE, lParam);
+	return Dialog::DoModal(hInstance, hwndParent, IDD_PROPERTY_FILE, lParam);
 }
 
 BOOL DlgProperty::OnBnClicked(int wID)
@@ -245,7 +245,7 @@ void DlgProperty::SetData(void)
 	if (!in) {
 		goto end_of_CodeTest;
 	}
-	int nBufLen = in.GetLength();
+	size_t nBufLen = in.GetLength();
 	if (nBufLen > CheckKanjiCode_MAXREADLENGTH) {
 		nBufLen = CheckKanjiCode_MAXREADLENGTH;
 	}

@@ -121,7 +121,7 @@ BOOL DlgGrep::OnCbnDropDown(HWND hwndCtl, int wID)
 }
 
 // モーダルダイアログの表示
-int DlgGrep::DoModal(
+INT_PTR DlgGrep::DoModal(
 	HINSTANCE hInstance,
 	HWND hwndParent,
 	const TCHAR* pszCurrentFilePath
@@ -151,7 +151,7 @@ int DlgGrep::DoModal(
 		_tcscpy(szCurrentFilePath, pszCurrentFilePath);
 	}
 
-	return (int)Dialog::DoModal(hInstance, hwndParent, IDD_GREP, (LPARAM)NULL);
+	return Dialog::DoModal(hInstance, hwndParent, IDD_GREP, (LPARAM)NULL);
 }
 
 // 2007.02.09 bosagami

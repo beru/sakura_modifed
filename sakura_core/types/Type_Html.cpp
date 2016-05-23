@@ -62,7 +62,7 @@ void DocOutline::MakeTopicList_html(FuncInfoArr* pFuncInfoArr)
 {
 	const wchar_t*	pLineBuf;	//	pLineBuf は行全体を指し、
 	const wchar_t*	pLine;		//	pLine は処理中の文字以降の部分を指します。
-	LogicInt		nLineLen;
+	size_t			nLineLen;
 	int				i;
 	int				j;
 	int				k;
@@ -89,7 +89,7 @@ void DocOutline::MakeTopicList_html(FuncInfoArr* pFuncInfoArr)
 		LT_HEADING,
 	};
 	ELabelType	nLabelType;				// ラベルの種別
-	LogicInt	nLineCount;
+	int nLineCount;
 	/*	同じ見出し要素（hy）を次に上位レベルの見出し(hx)が現れるまで同じ深さにそろえます。
 		このため、見出しの深さを記憶しておきます。
 		下位レベルの見出しの深さは現れるまで不定で、前の章節での深さは影響しません。 2008.08.15 aroka
@@ -98,7 +98,7 @@ void DocOutline::MakeTopicList_html(FuncInfoArr* pFuncInfoArr)
 	for (k=0; k<=6; ++k) {
 		nHeadDepth[k] = -1;
 	}
-	for (nLineCount=LogicInt(0); nLineCount<doc.docLineMgr.GetLineCount(); ++nLineCount) {
+	for (nLineCount=0; nLineCount<doc.docLineMgr.GetLineCount(); ++nLineCount) {
 		pLineBuf = doc.docLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
 		if (!pLineBuf) {
 			break;
@@ -267,7 +267,7 @@ void DocOutline::MakeTopicList_html(FuncInfoArr* pFuncInfoArr)
 							}
 						}
 						szTitle[k] = L'\0';
-						pFuncInfoArr->AppendData(nLineCount + LogicInt(1), ptPos.GetY2() + LayoutInt(1), szTitle, 0, ++nDepth);
+						pFuncInfoArr->AppendData(nLineCount + 1, ptPos.GetY2() + 1, szTitle, 0, ++nDepth);
 					}else {
 						for (; i+j<nLineLen && j<_countof(szTitle)-1; ++j) {
 							if (pLine[j] == L'>') {
@@ -276,7 +276,7 @@ void DocOutline::MakeTopicList_html(FuncInfoArr* pFuncInfoArr)
 							szTitle[j] = pLine[j];
 						}
 						szTitle[j]	=	L'\0';
-						pFuncInfoArr->AppendData(nLineCount + LogicInt(1), ptPos.GetY2() + LayoutInt(1), szTitle, 0, nDepth);
+						pFuncInfoArr->AppendData(nLineCount + 1, ptPos.GetY2() + 1, szTitle, 0, nDepth);
 					}
 				}
 			}

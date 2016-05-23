@@ -46,10 +46,10 @@ void CType_Cobol::InitTypeConfigImp(TypeConfig& type)
 	type.eDefaultOutline = OutlineType::Cobol;		// アウトライン解析方法
 	// 指定桁縦線	// 2005.11.08 Moca
 	type.colorInfoArr[COLORIDX_VERTLINE].bDisp = true;
-	type.nVertLineIdx[0] = LayoutInt(7);
-	type.nVertLineIdx[1] = LayoutInt(8);
-	type.nVertLineIdx[2] = LayoutInt(12);
-	type.nVertLineIdx[3] = LayoutInt(73);
+	type.nVertLineIdx[0] = 7;
+	type.nVertLineIdx[1] = 8;
+	type.nVertLineIdx[2] = 12;
+	type.nVertLineIdx[3] = 73;
 }
 
 
@@ -57,7 +57,7 @@ void CType_Cobol::InitTypeConfigImp(TypeConfig& type)
 void DocOutline::MakeTopicList_cobol(FuncInfoArr* pFuncInfoArr)
 {
 	const wchar_t*	pLine;
-	LogicInt		nLineLen;
+	size_t			nLineLen;
 	int				i;
 	int				k;
 	wchar_t			szDivision[1024];
@@ -71,8 +71,8 @@ void DocOutline::MakeTopicList_cobol(FuncInfoArr* pFuncInfoArr)
 	szLabel[0] =  L'\0';
 
 
-	LogicInt	nLineCount;
-	for (nLineCount=LogicInt(0); nLineCount<doc.docLineMgr.GetLineCount(); ++nLineCount) {
+	size_t nLineCount;
+	for (nLineCount=0; nLineCount<doc.docLineMgr.GetLineCount(); ++nLineCount) {
 		pLine = doc.docLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
 		if (!pLine) {
 			break;
@@ -133,7 +133,7 @@ void DocOutline::MakeTopicList_cobol(FuncInfoArr* pFuncInfoArr)
 				&ptPos
 			);
 			auto_sprintf_s(szWork, L"%ls::%ls", szDivision, szLabel);
-			pFuncInfoArr->AppendData(nLineCount + LogicInt(1), ptPos.GetY2() + LayoutInt(1) , szWork, 0);
+			pFuncInfoArr->AppendData(nLineCount + 1, ptPos.GetY2() + 1 , szWork, 0);
 		}
 	}
 	return;

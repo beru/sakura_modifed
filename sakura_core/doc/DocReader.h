@@ -31,10 +31,10 @@ public:
 	DocReader(const DocLineMgr& pcDocLineMgr) : pDocLineMgr(&pcDocLineMgr) { }
 
 	wchar_t* GetAllData(int* pnDataLen);	// 全行データを返す
-	const wchar_t* GetLineStr(LogicInt , LogicInt*);
-	const wchar_t* GetLineStrWithoutEOL(LogicInt , int*); // 2003.06.22 Moca
-	const wchar_t* GetFirstLinrStr(int*);	// 順アクセスモード：先頭行を得る
-	const wchar_t* GetNextLinrStr(int*);	// 順アクセスモード：次の行を得る
+	const wchar_t* GetLineStr(int , size_t*);
+	const wchar_t* GetLineStrWithoutEOL(int , int*); // 2003.06.22 Moca
+	const wchar_t* GetFirstLinrStr(size_t*);	// 順アクセスモード：先頭行を得る
+	const wchar_t* GetNextLinrStr(size_t*);	// 順アクセスモード：次の行を得る
 
 private:
 	const DocLineMgr* pDocLineMgr;

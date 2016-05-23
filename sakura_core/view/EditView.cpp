@@ -206,11 +206,11 @@ BOOL EditView::Create(
 	hwndHScrollBar = NULL;
 	hwndSizeBox = NULL;
 
-	ptSrchStartPos_PHY.Set(LogicInt(-1), LogicInt(-1));	// 検索/置換開始時のカーソル位置  (改行単位行先頭からのバイト数(0開始), 改行単位行の行番号(0開始))
+	ptSrchStartPos_PHY.Set(-1, -1);	// 検索/置換開始時のカーソル位置  (改行単位行先頭からのバイト数(0開始), 改行単位行の行番号(0開始))
 	bSearch = false;					// 検索/置換開始位置を登録するか											// 02/06/26 ai
 	
-	ptBracketPairPos_PHY.Set(LogicInt(-1), LogicInt(-1)); // 対括弧の位置 (改行単位行先頭からのバイト数(0開始), 改行単位行の行番号(0開始))
-	ptBracketCaretPos_PHY.Set(LogicInt(-1), LogicInt(-1));
+	ptBracketPairPos_PHY.Set(-1, -1); // 対括弧の位置 (改行単位行先頭からのバイト数(0開始), 改行単位行の行番号(0開始))
+	ptBracketCaretPos_PHY.Set(-1, -1);
 
 	bDrawBracketPairFlag = false;	// 03/02/18 ai
 	GetSelectionInfo().bDrawSelectArea = false;	// 選択範囲を描画したか		// 02/12/13 ai
@@ -717,7 +717,7 @@ LRESULT EditView::DispatchEvent(
 //		MYTRACE(_T("	WM_VSCROLL nPos=%d\n"), GetScrollPos(hwndVScrollBar, SB_CTL));
 		//	Sep. 11, 2004 genta 同期スクロールの関数化
 		{
-			LayoutInt Scroll = OnVScroll(
+			int Scroll = OnVScroll(
 				(int) LOWORD(wParam), ((int) HIWORD(wParam)) * nVScrollRate);
 
 			//	シフトキーが押されていないときだけ同期スクロール
@@ -732,7 +732,7 @@ LRESULT EditView::DispatchEvent(
 //		MYTRACE(_T("	WM_HSCROLL nPos=%d\n"), GetScrollPos(hwndHScrollBar, SB_CTL));
 		//	Sep. 11, 2004 genta 同期スクロールの関数化
 		{
-			LayoutInt Scroll = OnHScroll(
+			int Scroll = OnHScroll(
 				(int) LOWORD(wParam), ((int) HIWORD(wParam)));
 
 			//	シフトキーが押されていないときだけ同期スクロール
@@ -1280,13 +1280,13 @@ bool EditView::IsCurrentPositionURL(
 		ptCaretPos,
 		&ptXY
 	);
-	LogicInt nLineLen;
+	size_t nLineLen;
 	const wchar_t* pLine = pEditDoc->docLineMgr.GetLine(ptXY.GetY2())->GetDocLineStrWithEOL(&nLineLen); // 2007.10.09 kobake レイアウト・ロジック混在バグ修正
 
 	int nMatchColor;
 	int nUrlLen = 0;
-	LogicInt i = LogicInt(t_max(LogicInt(0), ptXY.GetX2() - _MAX_PATH));	// 2009.05.22 ryoji 200->_MAX_PATH
-	//nLineLen = LogicInt(__min(nLineLen, ptXY.GetX2() + _MAX_PATH));
+	int i = t_max(0, ptXY.GetX2() - _MAX_PATH);	// 2009.05.22 ryoji 200->_MAX_PATH
+	//nLineLen = __min(nLineLen, ptXY.GetX2() + _MAX_PATH);
 	while (i <= ptXY.GetX2() && i < nLineLen) {
 		bool bMatch = (bUseRegexKeyword
 					&& pRegexKeyword->RegexIsKeyword(StringRef(pLine, nLineLen), i, &nUrlLen, &nMatchColor)
@@ -1294,19 +1294,19 @@ bool EditView::IsCurrentPositionURL(
 		if (!bMatch) {
 			bMatch = (bDispUrl
 						&& (i == 0 || !IS_KEYWORD_CHAR(pLine[i - 1]))	// 2009.05.22 ryoji CColor_Url::BeginColor()と同条件に
-						&& IsURL(&pLine[i], (Int)(nLineLen - i), &nUrlLen));	// 指定アドレスがURLの先頭ならばTRUEとその長さを返す
+						&& IsURL(&pLine[i], (nLineLen - i), &nUrlLen));	// 指定アドレスがURLの先頭ならばTRUEとその長さを返す
 		}
 		if (bMatch) {
-			if (i <= ptXY.GetX2() && ptXY.GetX2() < i + LogicInt(nUrlLen)) {
+			if (i <= ptXY.GetX2() && ptXY.GetX2() < i + nUrlLen) {
 				// URLを返す場合
 				if (pwstrURL) {
 					pwstrURL->assign(&pLine[i], nUrlLen);
 				}
 				pUrlRange->SetLine(ptXY.GetY2());
-				pUrlRange->SetXs(i, i + LogicInt(nUrlLen));
+				pUrlRange->SetXs(i, i + nUrlLen);
 				return true;
 			}else {
-				i += LogicInt(nUrlLen);
+				i += nUrlLen;
 				continue;
 			}
 		}
@@ -1377,14 +1377,14 @@ void EditView::ConvSelectedArea(EFunctionCode nFuncCode)
 
 	LayoutPoint sPos;
 
-	LogicInt	nIdxFrom;
-	LogicInt	nIdxTo;
-	LayoutInt	nLineNum;
-	LogicInt	nDelLen;
-	LogicInt	nDelPosNext;
-	LogicInt	nDelLenNext;
-	LogicInt	nLineLen;
-	LogicInt	nLineLen2;
+	int	nIdxFrom;
+	int	nIdxTo;
+	int	nLineNum;
+	int	nDelLen;
+	int	nDelPosNext;
+	int	nDelLenNext;
+	size_t		nLineLen;
+	size_t		nLineLen2;
 	WaitCursor waitCursor(GetHwnd());
 
 	LogicPoint ptFromLogic;	// 2009.07.18 ryoji Logicで記憶するように変更
@@ -1407,8 +1407,8 @@ void EditView::ConvSelectedArea(EFunctionCode nFuncCode)
 		// 現在の選択範囲を非選択状態に戻す
 		GetSelectionInfo().DisableSelectArea(false);	// 2009.07.18 ryoji true -> false 各行にアンダーラインが残る問題の修正
 
-		nIdxFrom = LogicInt(0);
-		nIdxTo = LogicInt(0);
+		nIdxFrom = 0;
+		nIdxTo = 0;
 		for (nLineNum=rcSelLayout.bottom; nLineNum>=rcSelLayout.top-1; --nLineNum) {
 			const Layout* pLayout;
 			nDelPosNext = nIdxFrom;
@@ -1420,20 +1420,20 @@ void EditView::ConvSelectedArea(EFunctionCode nFuncCode)
 				nIdxTo		= LineColumnToIndex(pLayout, rcSelLayout.right);
 
 				bool bExtEol = GetDllShareData().common.edit.bEnableExtEol;
-				for (LogicInt i=nIdxFrom; i<=nIdxTo; ++i) {
+				for (int i=nIdxFrom; i<=nIdxTo; ++i) {
 					if (WCODE::IsLineDelimiter(pLine[i], bExtEol)) {
 						nIdxTo = i;
 						break;
 					}
 				}
 			}else {
-				nIdxFrom	= LogicInt(0);
-				nIdxTo		= LogicInt(0);
+				nIdxFrom = 0;
+				nIdxTo = 0;
 			}
-			LogicInt nDelPos = nDelPosNext;
+			size_t nDelPos = nDelPosNext;
 			nDelLen	= nDelLenNext;
 			if (nLineNum < rcSelLayout.bottom && 0 < nDelLen) {
-				pEditDoc->layoutMgr.GetLineStr(nLineNum + LayoutInt(1), &nLineLen2, &pLayout);
+				pEditDoc->layoutMgr.GetLineStr(nLineNum + 1, &nLineLen2, &pLayout);
 				sPos.Set(
 					LineIndexToColumn(pLayout, nDelPos),
 					nLineNum + 1
@@ -1449,7 +1449,7 @@ void EditView::ConvSelectedArea(EFunctionCode nFuncCode)
 				
 				{
 					// 機能種別によるバッファの変換
-					ConvertMediator::ConvMemory(&memBuf, nFuncCode, (Int)pEditDoc->layoutMgr.GetTabSpace(), (Int)sPos.GetX2());
+					ConvertMediator::ConvMemory(&memBuf, nFuncCode, pEditDoc->layoutMgr.GetTabSpace(), sPos.GetX2());
 
 					// 現在位置にデータを挿入
 					LayoutPoint ptLayoutNew;	// 挿入された部分の次の位置
@@ -1485,7 +1485,7 @@ void EditView::ConvSelectedArea(EFunctionCode nFuncCode)
 		GetSelectedDataSimple(memBuf);
 
 		// 機能種別によるバッファの変換
-		ConvertMediator::ConvMemory(&memBuf, nFuncCode, (Int)pEditDoc->layoutMgr.GetTabSpace(), (Int)GetSelectionInfo().select.GetFrom().GetX2());
+		ConvertMediator::ConvMemory(&memBuf, nFuncCode, pEditDoc->layoutMgr.GetTabSpace(), GetSelectionInfo().select.GetFrom().GetX2());
 
 		// データ置換 削除&挿入にも使える
 		ReplaceData_CEditView(
@@ -1858,12 +1858,12 @@ bool EditView::GetSelectedData(
 	EolType			neweol				// コピー後の改行コード EolType::Noneはコード保存
 	)
 {
-	LogicInt		nLineLen;
-	LayoutInt		nLineNum;
-	LogicInt		nIdxFrom;
-	LogicInt		nIdxTo;
-	int				nRowNum;
-	int				nLineNumCols = 0;
+	size_t			nLineLen;
+	size_t			nLineNum;
+	int				nIdxFrom;
+	int				nIdxTo;
+	size_t			nRowNum;
+	size_t			nLineNumCols = 0;
 	wchar_t*		pszLineNum = NULL;
 	const wchar_t*	pszSpaces = L"                    ";
 	const Layout*	pLayout;
@@ -1894,16 +1894,16 @@ bool EditView::GetSelectedData(
 		//<< 2002/04/18 Azumaiya
 		// サイズ分だけ要領をとっておく。
 		// 結構大まかに見ています。
-		LayoutInt i = rcSel.bottom - rcSel.top + 1; // 2013.05.06 「+1」
+		int i = rcSel.bottom - rcSel.top + 1; // 2013.05.06 「+1」
 
 		// 最初に行数分の改行量を計算してしまう。
-		size_t nBufSize = wcslen(WCODE::CRLF) * (Int)i;
+		size_t nBufSize = wcslen(WCODE::CRLF) * i;
 
 		// 実際の文字量。
 		const wchar_t* pLine = pEditDoc->layoutMgr.GetLineStr(rcSel.top, &nLineLen, &pLayout);
-		for (; i!=LayoutInt(0) && pLayout; --i, pLayout=pLayout->GetNextLayout()) {
+		for (; i!=0 && pLayout; --i, pLayout=pLayout->GetNextLayout()) {
 			pLine = pLayout->GetPtr() + pLayout->GetLogicOffset();
-			nLineLen = LogicInt(pLayout->GetLengthWithEOL());
+			nLineLen = pLayout->GetLengthWithEOL();
 			if (pLine) {
 				// 指定された桁に対応する行のデータ内の位置を調べる
 				nIdxFrom	= LineColumnToIndex(pLayout, rcSel.left );
@@ -1957,7 +1957,7 @@ bool EditView::GetSelectedData(
 		pEditDoc->layoutMgr.GetLineStr(GetSelectionInfo().select.GetFrom().GetY2(), &nLineLen, &pLayout);
 		int nBufSize = 0;
 
-		int i = (Int)(GetSelectionInfo().select.GetTo().y - GetSelectionInfo().select.GetFrom().y);
+		int i = (GetSelectionInfo().select.GetTo().y - GetSelectionInfo().select.GetFrom().y);
 
 		// 先頭に引用符を付けるとき。
 		if (pszQuote) {
@@ -1977,7 +1977,7 @@ bool EditView::GetSelectedData(
 		}
 
 		// すべての行について同様の操作をするので、行数倍する。
-		nBufSize *= (Int)i;
+		nBufSize *= i;
 
 		// 実際の各行の長さ。
 		for (; i!=0 && pLayout; --i, pLayout=pLayout->GetNextLayout()) {
@@ -2000,7 +2000,7 @@ bool EditView::GetSelectedData(
 				// 指定された桁に対応する行のデータ内の位置を調べる
 				nIdxFrom = LineColumnToIndex(pLayout, GetSelectionInfo().select.GetFrom().GetX2());
 			}else {
-				nIdxFrom = LogicInt(0);
+				nIdxFrom = 0;
 			}
 			if (nLineNum == GetSelectionInfo().select.GetTo().y) {
 				// 指定された桁に対応する行のデータ内の位置を調べる
@@ -2008,7 +2008,7 @@ bool EditView::GetSelectedData(
 			}else {
 				nIdxTo = nLineLen;
 			}
-			if (nIdxTo - nIdxFrom == LogicInt(0)) {
+			if (nIdxTo - nIdxFrom == 0) {
 				continue;
 			}
 
@@ -2063,10 +2063,10 @@ bool EditView::GetSelectedData(
 */
 bool EditView::GetSelectedDataOne(NativeW& memBuf, int nMaxLen)
 {
-	LogicInt		nLineLen;
-	LogicInt		nIdxFrom;
-	LogicInt		nIdxTo;
-	LogicInt		nSelectLen;
+	size_t			nLineLen;
+	int				nIdxFrom;
+	int				nIdxTo;
+	int				nSelectLen;
 	auto& layoutMgr = pEditDoc->layoutMgr;
 	auto& selInfo = GetSelectionInfo();
 
@@ -2107,7 +2107,7 @@ bool EditView::GetSelectedDataOne(NativeW& memBuf, int nMaxLen)
 		LogicPoint ptTo;
 		layoutMgr.LayoutToLogic(select.GetFrom(), &ptFrom);
 		layoutMgr.LayoutToLogic(select.GetTo(),   &ptTo);
-		LogicInt targetY = ptFrom.y;
+		int targetY = ptFrom.y;
 
 		const DocLine* pDocLine = pEditDoc->docLineMgr.GetLine(targetY);
 		if (pDocLine) {
@@ -2270,7 +2270,7 @@ void EditView::CopySelectedAllLines(
 			sSelect.SetToY(sSelect.GetTo().y + 1);
 			pLayout = pLayout->GetNextLayout();
 		}
-		sSelect.SetToX(pLayout? pLayout->GetIndent(): LayoutInt(0));
+		sSelect.SetToX(pLayout? pLayout->GetIndent(): 0);
 		GetCaret().GetAdjustCursorPos(sSelect.GetToPointer());	// EOF行を超えていたら座標修正
 
 		GetSelectionInfo().DisableSelectArea(false); // 2011.06.03 true →false
@@ -2442,7 +2442,7 @@ void EditView::CaretUnderLineON(
 	// From Here 2007.09.09 Moca 互換BMPによる画面バッファ
 	if (bCursorVLine) {
 		// カーソル位置縦線。-1してキャレットの左に来るように。
-		nCursorVLineX = textArea.GetAreaLeft() + (Int)(GetCaret().GetCaretLayoutPos().GetX2() - textArea.GetViewLeftCol())
+		nCursorVLineX = textArea.GetAreaLeft() + (GetCaret().GetCaretLayoutPos().GetX2() - textArea.GetViewLeftCol())
 			* (pTypeData->nColumnSpace + GetTextMetrics().GetHankakuWidth()) - 1;
 	}
 
@@ -2481,7 +2481,7 @@ void EditView::CaretUnderLineON(
 	
 	int nUnderLineY = -1;
 	if (bUnderLine) {
-		nUnderLineY = textArea.GetAreaTop() + (Int)(GetCaret().GetCaretLayoutPos().GetY2() - textArea.GetViewTopLine())
+		nUnderLineY = textArea.GetAreaTop() + (GetCaret().GetCaretLayoutPos().GetY2() - textArea.GetViewTopLine())
 			 * GetTextMetrics().GetHankakuDy() + GetTextMetrics().GetHankakuHeight();
 	}
 	// To Here 2007.09.09 Moca
@@ -2549,13 +2549,13 @@ void EditView::CaretUnderLineOFF(
 		) {
 			// -- -- カーソル行アンダーラインの消去（無理やり） -- -- //
 			int nUnderLineY; // client px
-			LayoutYInt nY = nOldUnderLineY - textArea.GetViewTopLine();
+			int nY = nOldUnderLineY - textArea.GetViewTopLine();
 			if (nY < 0) {
 				nUnderLineY = -1;
 			}else if (textArea.nViewRowNum < nY) {
 				nUnderLineY = textArea.GetAreaBottom() + 1;
 			}else {
-				nUnderLineY = textArea.GetAreaTop() + (Int)(nY) * GetTextMetrics().GetHankakuDy();
+				nUnderLineY = textArea.GetAreaTop() + nY * GetTextMetrics().GetHankakuDy();
 			}
 			
 			caret.underLine.Lock();
@@ -2686,7 +2686,7 @@ void EditView::OnAfterLoad(const LoadInfo& loadInfo)
 
 	OnChangeSetting();
 	GetCaret().MoveCursor(LayoutPoint(0, 0), true);
-	GetCaret().nCaretPosX_Prev = LayoutInt(0);
+	GetCaret().nCaretPosX_Prev = 0;
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 	//	2004.05.13 Moca 改行コードの設定内からここに移動
@@ -2796,10 +2796,10 @@ bool EditView::IsEmptyArea(
 {
 	bool result;
 
-	LayoutInt nColumnFrom = ptFrom.GetX2();
-	LayoutInt nLineFrom = ptFrom.GetY2();
-	LayoutInt nColumnTo = ptTo.GetX2();
-	LayoutInt nLineTo = ptTo.GetY2();
+	int nColumnFrom = ptFrom.GetX2();
+	int nLineFrom = ptFrom.GetY2();
+	int nColumnTo = ptTo.GetX2();
+	int nLineTo = ptTo.GetY2();
 
 	if (bSelect && !bBoxSelect && nLineFrom != nLineTo) {	// 複数行の範囲指定
 		// 複数行通常選択した場合、必ずテキストを含む
@@ -2819,10 +2819,10 @@ bool EditView::IsEmptyArea(
 		}
 
 		const Layout*	pLayout;
-		LayoutInt nLineLen;
+		int nLineLen;
 
 		result = true;
-		for (LayoutInt nLineNum=nLineFrom; nLineNum<=nLineTo; ++nLineNum) {
+		for (int nLineNum=nLineFrom; nLineNum<=nLineTo; ++nLineNum) {
 			if ((pLayout = pEditDoc->layoutMgr.SearchLineByLayoutY(nLineNum))) {
 				// 指定位置に対応する行のデータ内の位置
 				LineColumnToIndex2(pLayout, nColumnFrom, &nLineLen);

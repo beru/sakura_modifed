@@ -60,7 +60,7 @@ public:
 	/*
 	||  Attributes & Operations
 	*/
-	HWND DoModeless(HINSTANCE, HWND, LPARAM, FuncInfoArr*, LayoutInt, LayoutInt, OutlineType, OutlineType, bool); // モードレスダイアログの表示
+	HWND DoModeless(HINSTANCE, HWND, LPARAM, FuncInfoArr*, int, int, OutlineType, OutlineType, bool); // モードレスダイアログの表示
 	void ChangeView(LPARAM);	// モードレス時：検索対象となるビューの変更
 	bool IsDocking() { return eDockSide > DockSideType::Float; }
 	DockSideType GetDockSide() { return eDockSide; }
@@ -83,7 +83,7 @@ protected:
 public:
 	// 現在の種別と同じなら
 	bool CheckListType(OutlineType nOutLineType) const { return nOutLineType == nOutlineType; }
-	void Redraw(OutlineType nOutLineType, OutlineType nListType, FuncInfoArr*, LayoutInt nCurLine, LayoutInt nCurCol);
+	void Redraw(OutlineType nOutLineType, OutlineType nListType, FuncInfoArr*, int nCurLine, int nCurCol);
 	void Refresh(void);
 	bool ChangeLayout(int nId);
 	void OnOutlineNotify(WPARAM wParam, LPARAM lParam);
@@ -97,8 +97,8 @@ protected:
 	bool bInChangeLayout;
 
 	FuncInfoArr*	pFuncInfoArr;	// 関数情報配列
-	LayoutInt		nCurLine;		// 現在行
-	LayoutInt		nCurCol;		// 現在桁
+	int				nCurLine;		// 現在行
+	int				nCurCol;		// 現在桁
 	int				nSortCol;		// ソートする列番号
 	int				nSortColOld;	// ソートする列番号(OLD)
 	bool			bSortDesc;		// 降順

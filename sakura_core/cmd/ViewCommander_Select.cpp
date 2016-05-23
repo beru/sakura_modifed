@@ -35,7 +35,7 @@ bool ViewCommander::Command_SelectWord(const LayoutPoint* pptCaretPos)
 		return false;	// 単語選択に失敗
 	}
 	// 指定された桁に対応する行のデータ内の位置を調べる
-	LogicInt nIdx = view.LineColumnToIndex(pLayout, ptCaretPos.GetX2());
+	int nIdx = view.LineColumnToIndex(pLayout, ptCaretPos.GetX2());
 
 	// 現在位置の単語の範囲を調べる
 	LayoutRange range;
@@ -125,7 +125,7 @@ void ViewCommander::Command_SelectLine(int lparam)
 		ptCaret = caret.GetCaretLayoutPos().Get();
 	}else {
 		// カーソルを最下行（レイアウト行）へ移動する
-		view.MoveCursorSelecting(LayoutPoint(LayoutInt(0), layoutMgr.GetLineCount()), true);
+		view.MoveCursorSelecting(LayoutPoint(0, layoutMgr.GetLineCount()), true);
 		Command_GoLineEnd(true, 0, 0);	// 行末に移動
 
 		// 選択するものが無い（[EOF]のみの行）時は選択状態としない

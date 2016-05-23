@@ -55,9 +55,9 @@ struct LayoutReplaceArg {
 	LayoutRange	delRange;		// [in]削除範囲。レイアウト単位。
 	OpeLineData*	pMemDeleted;	// [out]削除されたデータ
 	OpeLineData*	pInsData;		// [in/out]挿入するデータ
-	LayoutInt		nAddLineNum;	// [out] 再描画ヒント レイアウト行の増減
-	LayoutInt		nModLineFrom;	// [out] 再描画ヒント 変更されたレイアウト行From(レイアウト行の増減が0のとき使う)
-	LayoutInt		nModLineTo;		// [out] 再描画ヒント 変更されたレイアウト行To(レイアウト行の増減が0のとき使う)
+	int		nAddLineNum;	// [out] 再描画ヒント レイアウト行の増減
+	int		nModLineFrom;	// [out] 再描画ヒント 変更されたレイアウト行From(レイアウト行の増減が0のとき使う)
+	int		nModLineTo;		// [out] 再描画ヒント 変更されたレイアウト行To(レイアウト行の増減が0のとき使う)
 	LayoutPoint	ptLayoutNew;	// [out]挿入された部分の次の位置の位置(レイアウト桁位置, レイアウト行)
 	int				nDelSeq;		// [in]削除行のOpeシーケンス
 	int				nInsSeq;		// [out]挿入行の元のシーケンス
@@ -66,14 +66,14 @@ struct LayoutReplaceArg {
 // 編集時のテキスト最大幅算出用		// 2009.08.28 nasukoji
 struct CalTextWidthArg {
 	LayoutPoint	ptLayout;		// 編集開始位置
-	LayoutInt	nDelLines;		// 削除に関係する行数 - 1（負数の時削除なし）
-	LayoutInt	nAllLinesOld;	// 編集前のテキスト行数
+	int	nDelLines;		// 削除に関係する行数 - 1（負数の時削除なし）
+	int	nAllLinesOld;	// 編集前のテキスト行数
 	bool		bInsData;		// 追加文字列あり
 };
 
 class LogicPointEx: public LogicPoint {
 public:
-	LayoutInt ext;
+	size_t ext;
 };
 
 /*-----------------------------------------------------------------------
@@ -86,7 +86,7 @@ public:
 // 2007.10.15 XYLogicalToLayoutを廃止。LogicToLayoutに統合。
 class LayoutMgr : public ProgressSubject {
 private:
-	typedef LayoutInt (LayoutMgr::*CalcIndentProc)(Layout*);
+	typedef size_t (LayoutMgr::*CalcIndentProc)(Layout*);
 
 public:
 	// 生成と破棄
@@ -102,17 +102,17 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 public:
 	// タブ幅の取得
-	KetaXInt GetTabSpaceKetas() const { return nTabSpace; }
-	LayoutInt GetTabSpace() const { return nTabSpace; }
+	size_t GetTabSpaceKetas() const { return nTabSpace; }
+	size_t GetTabSpace() const { return nTabSpace; }
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                          参照系                             //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 public:
 	//2007.10.09 kobake 関数名変更: Search → SearchLineByLayoutY
-	LayoutInt		GetLineCount() const { return nLines; }	// 全物理行数を返す
-	const wchar_t*	GetLineStr(LayoutInt nLine, LogicInt* pnLineLen) const;	// 指定された物理行のデータへのポインタとその長さを返す
-	const wchar_t*	GetLineStr(LayoutInt nLine, LogicInt* pnLineLen, const Layout** ppcLayoutDes) const;	// 指定された物理行のデータへのポインタとその長さを返す
+	size_t			GetLineCount() const { return nLines; }	// 全物理行数を返す
+	const wchar_t*	GetLineStr(size_t nLine, size_t* pnLineLen) const;	// 指定された物理行のデータへのポインタとその長さを返す
+	const wchar_t*	GetLineStr(size_t nLine, size_t* pnLineLen, const Layout** ppcLayoutDes) const;	// 指定された物理行のデータへのポインタとその長さを返す
 
 	// 先頭と末尾
 	Layout*			GetTopLayout()		{ return pLayoutTop; }
@@ -121,11 +121,11 @@ public:
 	const Layout*	GetBottomLayout() const { return pLayoutBot; }
 
 	// レイアウトを探す
-	const Layout*	SearchLineByLayoutY(LayoutInt nLineLayout) const;	// 指定された物理行のレイアウトデータ(Layout)へのポインタを返す
-	Layout*			SearchLineByLayoutY(LayoutInt nLineLayout) { return const_cast<Layout*>(static_cast<const LayoutMgr*>(this)->SearchLineByLayoutY(nLineLayout)); }
+	const Layout*	SearchLineByLayoutY(int nLineLayout) const;	// 指定された物理行のレイアウトデータ(Layout)へのポインタを返す
+	Layout*			SearchLineByLayoutY(int nLineLayout) { return const_cast<Layout*>(static_cast<const LayoutMgr*>(this)->SearchLineByLayoutY(nLineLayout)); }
 
 	// ワードを探す
-	bool			WhereCurrentWord(LayoutInt , LogicInt , LayoutRange* pSelect, NativeW*, NativeW*);	// 現在位置の単語の範囲を調べる
+	bool			WhereCurrentWord(int , int , LayoutRange* pSelect, NativeW*, NativeW*);	// 現在位置の単語の範囲を調べる
 
 	// 判定
 	bool			IsEndOfLine(const LayoutPoint& ptLinePos);	// 指定位置が行末(改行文字の直前)か調べる	//@@@ 2002.04.18 MIK
@@ -134,42 +134,42 @@ public:
 		@param pos [in] 現在の位置
 		@return 次のTAB位置までの文字数．1～TAB幅
 	 */
-	LayoutInt GetActualTabSpace(LayoutInt pos) const { return nTabSpace - pos % nTabSpace; }
+	size_t GetActualTabSpace(size_t pos) const { return nTabSpace - pos % nTabSpace; }
 
 	// Aug. 14, 2005 genta
 	// Sep. 07, 2007 kobake 関数名変更 GetMaxLineSize→GetMaxLineKetas
-	LayoutInt GetMaxLineKetas(void) const { return nMaxLineKetas; }
+	size_t GetMaxLineKetas(void) const { return nMaxLineKetas; }
 
 	// 2005.11.21 Moca 引用符の色分け情報を引数から除去
-	bool ChangeLayoutParam(LayoutInt nTabSize, LayoutInt nMaxLineKetas);
+	bool ChangeLayoutParam(size_t nTabSize, size_t nMaxLineKetas);
 
 	// Jul. 29, 2006 genta
 	void GetEndLayoutPos(LayoutPoint* ptLayoutEnd);
 
-	LayoutInt GetMaxTextWidth(void) const { return nTextWidth; }		// 2009.08.28 nasukoji	テキスト最大幅を返す
+	size_t GetMaxTextWidth(void) const { return nTextWidth; }		// 2009.08.28 nasukoji	テキスト最大幅を返す
 
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                           検索                              //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 protected:
-	int PrevOrNextWord(LayoutInt, LogicInt, LayoutPoint* pptLayoutNew, bool, bool bStopsBothEnds);	// 現在位置の左右の単語の先頭位置を調べる
+	int PrevOrNextWord(int, int, LayoutPoint* pptLayoutNew, bool, bool bStopsBothEnds);	// 現在位置の左右の単語の先頭位置を調べる
 public:
-	int PrevWord(LayoutInt nLineNum, LogicInt nIdx, LayoutPoint* pptLayoutNew, bool bStopsBothEnds) { return PrevOrNextWord(nLineNum, nIdx, pptLayoutNew, true, bStopsBothEnds); }	// 現在位置の左右の単語の先頭位置を調べる
-	int NextWord(LayoutInt nLineNum, LogicInt nIdx, LayoutPoint* pptLayoutNew, bool bStopsBothEnds) { return PrevOrNextWord(nLineNum, nIdx, pptLayoutNew, false, bStopsBothEnds); }	// 現在位置の左右の単語の先頭位置を調べる
+	int PrevWord(int nLineNum, int nIdx, LayoutPoint* pptLayoutNew, bool bStopsBothEnds) { return PrevOrNextWord(nLineNum, nIdx, pptLayoutNew, true, bStopsBothEnds); }	// 現在位置の左右の単語の先頭位置を調べる
+	int NextWord(int nLineNum, int nIdx, LayoutPoint* pptLayoutNew, bool bStopsBothEnds) { return PrevOrNextWord(nLineNum, nIdx, pptLayoutNew, false, bStopsBothEnds); }	// 現在位置の左右の単語の先頭位置を調べる
 
-	int SearchWord(LayoutInt nLine, LogicInt nIdx, SearchDirection SearchDirection, LayoutRange* pMatchRange, const SearchStringPattern&);	// 単語検索
+	int SearchWord(int nLine, int nIdx, SearchDirection SearchDirection, LayoutRange* pMatchRange, const SearchStringPattern&);	// 単語検索
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                        単位の変換                           //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 public:
 	// ロジック→レイアウト
-	void LogicToLayoutEx(const LogicPointEx& ptLogicEx, LayoutPoint* pptLayout, LayoutInt nLineHint = LayoutInt(0)) {
+	void LogicToLayoutEx(const LogicPointEx& ptLogicEx, LayoutPoint* pptLayout, int nLineHint = 0) {
 		LogicToLayout(ptLogicEx, pptLayout, nLineHint);
 		pptLayout->x += ptLogicEx.ext;
 	}
-	void LogicToLayout(const LogicPoint& ptLogic, LayoutPoint* pptLayout, LayoutInt nLineHint = LayoutInt(0));
+	void LogicToLayout(const LogicPoint& ptLogic, LayoutPoint* pptLayout, int nLineHint = 0);
 	void LogicToLayout(const LogicRange& rangeLogic, LayoutRange* prangeLayout) {
 		LogicToLayout(rangeLogic.GetFrom(), prangeLayout->GetFromPointer());
 		LogicToLayout(rangeLogic.GetTo(), prangeLayout->GetToPointer());
@@ -204,8 +204,8 @@ public:
 	void SetLayoutInfo(
 		bool			bDoLayout,
 		const TypeConfig&	refType,
-		LayoutInt		nTabSpace,
-		LayoutInt		nMaxLineKetas
+		size_t			nTabSpace,
+		size_t			nMaxLineKetas
 	);
 
 	// 文字列置換
@@ -213,7 +213,7 @@ public:
 		LayoutReplaceArg*	pArg
 	);
 
-	BOOL CalculateTextWidth(bool bCalLineLen = true, LayoutInt nStart = LayoutInt(-1), LayoutInt nEnd = LayoutInt(-1));	// テキスト最大幅を算出する		// 2009.08.28 nasukoji
+	BOOL CalculateTextWidth(bool bCalLineLen = true, int nStart = -1, int nEnd = -1);	// テキスト最大幅を算出する		// 2009.08.28 nasukoji
 	void ClearLayoutLineWidth(void);				// 各行のレイアウト行長の記憶をクリアする		// 2009.08.28 nasukoji
 
 protected:
@@ -232,23 +232,23 @@ public:
 protected:
 	// 2005.11.21 Moca 引用符の色分け情報を引数から除去
 	// 2009.08.28 nasukoji	テキスト最大幅算出用引数追加
-	LayoutInt DoLayout_Range(Layout* , LogicInt, LogicPoint, EColorIndexType, LayoutColorInfo*, const CalTextWidthArg&, LayoutInt*);	// 指定レイアウト行に対応する論理行の次の論理行から指定論理行数だけ再レイアウトする
+	int DoLayout_Range(Layout* , int, LogicPoint, EColorIndexType, LayoutColorInfo*, const CalTextWidthArg&, int*);	// 指定レイアウト行に対応する論理行の次の論理行から指定論理行数だけ再レイアウトする
 	void CalculateTextWidth_Range(const CalTextWidthArg& ctwArg);	// テキストが編集されたら最大幅を算出する	// 2009.08.28 nasukoji
-	Layout* DeleteLayoutAsLogical(Layout*, LayoutInt, LogicInt , LogicInt, LogicPoint, LayoutInt*);	// 論理行の指定範囲に該当するレイアウト情報を削除
-	void ShiftLogicalLineNum(Layout* , LogicInt);	// 指定行より後の行のレイアウト情報について、論理行番号を指定行数だけシフトする
+	Layout* DeleteLayoutAsLogical(Layout*, int, int , int, LogicPoint, int*);	// 論理行の指定範囲に該当するレイアウト情報を削除
+	void ShiftLogicalLineNum(Layout* , int);	// 指定行より後の行のレイアウト情報について、論理行番号を指定行数だけシフトする
 
 	// 部品
 	struct LayoutWork {
 		// 毎ループ初期化
 		KinsokuType	eKinsokuType;
-		LogicInt		nPos;
-		LogicInt		nBgn;
-		StringRef		lineStr;
-		LogicInt		nWordBgn;
-		LogicInt		nWordLen;
-		LayoutInt		nPosX;
-		LayoutInt		nIndent;
-		Layout*			pLayoutCalculated;
+		int			nPos;
+		int			nBgn;
+		StringRef	lineStr;
+		int			nWordBgn;
+		int			nWordLen;
+		int			nPosX;
+		int			nIndent;
+		Layout*		pLayoutCalculated;
 
 		// ループ外
 		DocLine*		pDocLine;
@@ -256,17 +256,17 @@ protected:
 		ColorStrategy*	pColorStrategy;
 		EColorIndexType	colorPrev;
 		LayoutExInfo	exInfoPrev;
-		LogicInt		nCurLine;
+		int				nCurLine;
 
 		// ループ外 (DoLayoutのみ)
-//		LogicInt		nLineNum;
+//		int		nLineNum;
 
 		// ループ外 (DoLayout_Rangeのみ)
 		bool			bNeedChangeCOMMENTMODE;
-		LayoutInt		nModifyLayoutLinesNew;
+		int				nModifyLayoutLinesNew;
 		
 		// ループ外 (DoLayout_Range引数)
-		LayoutInt*		pnExtInsLineNum;
+		int*			pnExtInsLineNum;
 		LogicPoint		ptDelLogicalFrom;
 
 		// 関数
@@ -298,16 +298,16 @@ private:
 		@date 2005-08-20 D.S.Koba
 		@date Sep. 3, 2005 genta 最適化
 	*/
-	bool IsKinsokuPosKuto(LayoutInt nRest, LayoutInt nCharChars) const {
+	bool IsKinsokuPosKuto(int nRest, int nCharChars) const {
 		return nRest < nCharChars;
 	}
-	bool IsKinsokuPosHead(LayoutInt, LayoutInt, LayoutInt);	// 行頭禁則の処理位置か
-	bool IsKinsokuPosTail(LayoutInt, LayoutInt, LayoutInt);	// 行末禁則の処理位置か
+	bool IsKinsokuPosHead(int, int, int);	// 行頭禁則の処理位置か
+	bool IsKinsokuPosTail(int, int, int);	// 行末禁則の処理位置か
 private:
 	// Oct. 1, 2002 genta インデント幅計算関数群
-	LayoutInt getIndentOffset_Normal(Layout* pLayoutPrev);
-	LayoutInt getIndentOffset_Tx2x(Layout* pLayoutPrev);
-	LayoutInt getIndentOffset_LeftSpace(Layout* pLayoutPrev);
+	size_t getIndentOffset_Normal(Layout* pLayoutPrev);
+	size_t getIndentOffset_Tx2x(Layout* pLayoutPrev);
+	size_t getIndentOffset_LeftSpace(Layout* pLayoutPrev);
 
 protected:
 	/*
@@ -315,7 +315,7 @@ protected:
 	*/
 	//@@@ 2002.09.23 YAZAKI
 	// 2009.08.28 nasukoji	nPosX引数追加
-	Layout* CreateLayout(DocLine* pDocLine, LogicPoint ptLogicPos, LogicInt nLength, EColorIndexType nTypePrev, LayoutInt nIndent, LayoutInt nPosX, LayoutColorInfo*);
+	Layout* CreateLayout(DocLine* pDocLine, LogicPoint ptLogicPos, int nLength, EColorIndexType nTypePrev, int nIndent, int nPosX, LayoutColorInfo*);
 	Layout* InsertLineNext(Layout*, Layout*);
 	void AddLineBottom(Layout*);
 
@@ -339,8 +339,8 @@ protected:
 
 	// タイプ別設定
 	const TypeConfig*		pTypeConfig;
-	LayoutInt				nMaxLineKetas;
-	LayoutInt				nTabSpace;
+	size_t					nMaxLineKetas;
+	size_t					nTabSpace;
 	vector_ex<wchar_t>		pszKinsokuHead_1;			// 行頭禁則文字	//@@@ 2002.04.08 MIK
 	vector_ex<wchar_t>		pszKinsokuTail_1;			// 行末禁則文字	//@@@ 2002.04.08 MIK
 	vector_ex<wchar_t>		pszKinsokuKuto_1;			// 句読点ぶらさげ文字	//@@@ 2002.04.17 MIK
@@ -349,18 +349,18 @@ protected:
 	// フラグ等
 	EColorIndexType			nLineTypeBot;				// タイプ 0=通常 1=行コメント 2=ブロックコメント 3=シングルクォーテーション文字列 4=ダブルクォーテーション文字列
 	LayoutExInfo			layoutExInfoBot;
-	LayoutInt				nLines;					// 全レイアウト行数
+	size_t					nLines;					// 全レイアウト行数
 
-	mutable LayoutInt		nPrevReferLine;
+	mutable int				nPrevReferLine;
 	mutable Layout*			pLayoutPrevRefer;
 	
 	// EOFカーソル位置を記憶する(_DoLayout/DoLayout_Rangeで無効にする)	//2006.10.01 Moca
-	LayoutInt				nEOFLine;		// EOF行数
-	LayoutInt				nEOFColumn;	// EOF幅位置
+	int						nEOFLine;		// EOF行数
+	int						nEOFColumn;	// EOF幅位置
 
 	// テキスト最大幅を記憶（折り返し位置算出に使用）	// 2009.08.28 nasukoji
-	LayoutInt				nTextWidth;				// テキスト最大幅の記憶
-	LayoutInt				nTextWidthMaxLine;		// 最大幅のレイアウト行
+	size_t					nTextWidth;				// テキスト最大幅の記憶
+	size_t					nTextWidthMaxLine;		// 最大幅のレイアウト行
 
 private:
 	DISALLOW_COPY_AND_ASSIGN(LayoutMgr);

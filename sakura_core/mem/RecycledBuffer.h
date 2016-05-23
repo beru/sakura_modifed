@@ -76,13 +76,13 @@ private:
 public:
 	RecycledBufferDynamic() {
 		current = 0;
-		for (int i=0; i<_countof(buf); ++i) {
+		for (size_t i=0; i<_countof(buf); ++i) {
 			buf[i] = NULL;
 		}
 	}
 	~RecycledBufferDynamic() {
-		for (int i=0; i<_countof(buf); ++i) {
-			if (buf[i])delete[] buf[i];
+		for (size_t i=0; i<_countof(buf); ++i) {
+			if (buf[i]) delete[] buf[i];
 		}
 	}
 
@@ -108,6 +108,6 @@ public:
 // ƒƒ“ƒo•Ï”
 private:
 	BYTE* buf[CHAIN_COUNT];
-	int   current;
+	size_t current;
 };
 

@@ -53,13 +53,13 @@ void CType_Asm::InitTypeConfigImp(TypeConfig& type)
 */
 void DocOutline::MakeTopicList_asm(FuncInfoArr* pFuncInfoArr)
 {
-	LogicInt nTotalLine;
+	int nTotalLine;
 
 	nTotalLine = doc.docLineMgr.GetLineCount();
 
-	for (LogicInt nLineCount=LogicInt(0); nLineCount<nTotalLine; ++nLineCount) {
+	for (int nLineCount=0; nLineCount<nTotalLine; ++nLineCount) {
 		const WCHAR* pLine;
-		LogicInt nLineLen;
+		size_t nLineLen;
 		WCHAR* pTmpLine;
 		int length;
 		int offset;
@@ -141,7 +141,7 @@ void DocOutline::MakeTopicList_asm(FuncInfoArr* pFuncInfoArr)
 					LogicPoint(0, nLineCount),
 					&ptPos
 				);
-				pFuncInfoArr->AppendData(nLineCount + LogicInt(1), ptPos.GetY2() + LayoutInt(1), entry_token, nFuncId);
+				pFuncInfoArr->AppendData(nLineCount + 1, ptPos.GetY2() + 1, entry_token, nFuncId);
 			}
 		}
 

@@ -139,7 +139,7 @@ public:
 	void Command_Indent(wchar_t cChar, IndentType = IndentType::None); // インデント ver 1
 // From Here 2001.12.03 hor
 //	void Command_Indent(const char*, int);// インデント ver0
-	void Command_Indent(const wchar_t*, LogicInt, IndentType = IndentType::None);// インデント ver0
+	void Command_Indent(const wchar_t*, int, IndentType = IndentType::None);// インデント ver0
 // To Here 2001.12.03 hor
 	void Command_Unindent(wchar_t wcChar);// 逆インデント
 //	void Command_WORDSREFERENCE(void);		// 単語リファレンス
@@ -167,10 +167,10 @@ public:
 	void Command_GoLineEnd(bool bSelect, int, int);	// 行末に移動（折り返し単位）
 //	void Command_ROLLDOWN(int);						// Scroll Down
 //	void Command_ROLLUP(int);						// Scroll Up
-	void Command_HalfPageUp(bool bSelect, LayoutYInt);		// 半ページアップ	//Oct. 6, 2000 JEPRO 名称をPC-AT互換機系に変更(ROLL→PAGE) //Oct. 10, 2000 JEPRO 名称変更
-	void Command_HalfPageDown(bool bSelect, LayoutYInt);		// 半ページダウン	//Oct. 6, 2000 JEPRO 名称をPC-AT互換機系に変更(ROLL→PAGE) //Oct. 10, 2000 JEPRO 名称変更
-	void Command_1PageUp(bool bSelect, LayoutYInt);			// １ページアップ	//Oct. 10, 2000 JEPRO 従来のページアップを半ページアップと名称変更し１ページアップを追加
-	void Command_1PageDown(bool bSelect, LayoutYInt);			// １ページダウン	//Oct. 10, 2000 JEPRO 従来のページダウンを半ページダウンと名称変更し１ページダウンを追加
+	void Command_HalfPageUp(bool bSelect, int);		// 半ページアップ	//Oct. 6, 2000 JEPRO 名称をPC-AT互換機系に変更(ROLL→PAGE) //Oct. 10, 2000 JEPRO 名称変更
+	void Command_HalfPageDown(bool bSelect, int);	// 半ページダウン	//Oct. 6, 2000 JEPRO 名称をPC-AT互換機系に変更(ROLL→PAGE) //Oct. 10, 2000 JEPRO 名称変更
+	void Command_1PageUp(bool bSelect, int);		// １ページアップ	//Oct. 10, 2000 JEPRO 従来のページアップを半ページアップと名称変更し１ページアップを追加
+	void Command_1PageDown(bool bSelect, int);		// １ページダウン	//Oct. 10, 2000 JEPRO 従来のページダウンを半ページダウンと名称変更し１ページダウンを追加
 	void Command_GoFileTop(bool bSelect);			// ファイルの先頭に移動
 	void Command_GoFileEnd(bool bSelect);			// ファイルの最後に移動
 	void Command_CurLineCenter(void);				// カーソル行をウィンドウ中央へ

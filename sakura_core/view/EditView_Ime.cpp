@@ -160,14 +160,14 @@ LRESULT EditView::SetReconvertStruct(
 			}else {
 				// 2010.04.06 対象をptSelect.yの行からカーソル行に変更
 				const DocLine* pDocLine = pEditDoc->docLineMgr.GetLine(caret.GetCaretLogicPos().y);
-				LogicInt targetY = caret.GetCaretLogicPos().y;
+				int targetY = caret.GetCaretLogicPos().y;
 				// カーソル行が実質無選択なら、直前・直後の行を選択
 				if (ptSelect.y == caret.GetCaretLogicPos().y
 					&& pDocLine && pDocLine->GetLengthWithoutEOL() == caret.GetCaretLogicPos().x
 				) {
 					// カーソルが上側行末 => 次の行。行末カーソルでのShift+Upなど
 					targetY = t_min(pEditDoc->docLineMgr.GetLineCount(),
-						caret.GetCaretLogicPos().y + 1);
+									(size_t)caret.GetCaretLogicPos().y + 1u);
 					pDocLine = pEditDoc->docLineMgr.GetLine(targetY);
 				}else if (1
 					&& ptSelectTo.y == caret.GetCaretLogicPos().y
@@ -215,7 +215,7 @@ LRESULT EditView::SetReconvertStruct(
 	// フリーカーソル選択でも行末より後ろにカーソルがある
 	if (nLineLen < ptSelect.x) {
 		// 改行直前をIMEに渡すカーソル位置ということにする
-		ptSelect.x = LogicInt(nLineLen);
+		ptSelect.x = nLineLen;
 		nSelectedLen = 0;
 	}
 	if (nLineLen <  ptSelect.x + nSelectedLen) {
@@ -306,7 +306,7 @@ LRESULT EditView::SetReconvertStruct(
 		dwReconvTextLen     = nReconvLen;
 		dwReconvTextInsLen  = dwReconvTextLen + nCompInsStr;                 // reconv文字列長。文字単位。
 		cbReconvLenWithNull = (dwReconvTextInsLen + 1) * sizeof(wchar_t);    // reconvデータ長。バイト単位。
-		dwCompStrOffset     = (Int)(ptSelect.x - nReconvIndex) * sizeof(wchar_t);    // compオフセット。バイト単位。
+		dwCompStrOffset     = (ptSelect.x - nReconvIndex) * sizeof(wchar_t);    // compオフセット。バイト単位。
 		dwCompStrLen        = nSelectedLen + nCompInsStr;                            // comp文字列長。文字単位。
 		pszReconv           = reinterpret_cast<const void*>(pLine + nReconvIndex);   // reconv文字列へのポインタ。
 		pszInsBuffer        = pszCompInsStr;

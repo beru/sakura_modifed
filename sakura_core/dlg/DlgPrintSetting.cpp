@@ -113,7 +113,7 @@ int CALLBACK SetData_EnumFontFamProc(
 }
 
 // モーダルダイアログの表示
-int DlgPrintSetting::DoModal(
+INT_PTR DlgPrintSetting::DoModal(
 	HINSTANCE		hInstance,
 	HWND			hwndParent,
 	int*			pnCurrentPrintSetting,
@@ -127,7 +127,7 @@ int DlgPrintSetting::DoModal(
 	}
 	nLineNumberColumns = nLineNumberColumns;
 
-	int nRet = (int)Dialog::DoModal(hInstance, hwndParent, IDD_PrintSetting, (LPARAM)NULL);
+	INT_PTR nRet = Dialog::DoModal(hInstance, hwndParent, IDD_PrintSetting, (LPARAM)NULL);
 	if (nRet != FALSE) {
 		*pnCurrentPrintSetting = nCurrentPrintSetting;
 		for (int i=0; i<MAX_PrintSettingARR; ++i) {

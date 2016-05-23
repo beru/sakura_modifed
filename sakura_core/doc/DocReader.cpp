@@ -42,11 +42,11 @@ wchar_t* DocReader::GetAllData(int* pnDataLen)
 	return pData;
 }
 
-const wchar_t* DocReader::GetLineStr(LogicInt nLine, LogicInt* pnLineLen)
+const wchar_t* DocReader::GetLineStr(int nLine, size_t* pnLineLen)
 {
 	const DocLine* pDocLine = pDocLineMgr->GetLine(nLine);
 	if (!pDocLine) {
-		*pnLineLen = LogicInt(0);
+		*pnLineLen = 0;
 		return NULL;
 	}
 	// 2002/2/10 aroka CMemory のメンバ変数に直接アクセスしない(inline化されているので速度的な問題はない)
@@ -59,7 +59,7 @@ const wchar_t* DocReader::GetLineStr(LogicInt nLine, LogicInt* pnLineLen)
 	@author Moca
 	@date 2003.06.22
 */
-const wchar_t* DocReader::GetLineStrWithoutEOL(LogicInt nLine, int* pnLineLen)
+const wchar_t* DocReader::GetLineStrWithoutEOL(int nLine, int* pnLineLen)
 {
 	const DocLine* pDocLine = pDocLineMgr->GetLine(nLine);
 	if (!pDocLine) {
@@ -78,10 +78,10 @@ const wchar_t* DocReader::GetLineStrWithoutEOL(LogicInt nLine, int* pnLineLen)
 	データが1行もないときは、長さ0、ポインタNULLが返る。
 
 */
-const wchar_t* DocReader::GetFirstLinrStr(int* pnLineLen)
+const wchar_t* DocReader::GetFirstLinrStr(size_t* pnLineLen)
 {
 	const wchar_t* pszLine;
-	if (pDocLineMgr->GetLineCount() == LogicInt(0)) {
+	if (pDocLineMgr->GetLineCount() == 0) {
 		pszLine = NULL;
 		*pnLineLen = 0;
 	}else {
@@ -100,7 +100,7 @@ const wchar_t* DocReader::GetFirstLinrStr(int* pnLineLen)
 	GetFirstLinrStr()が呼び出されていないとNULLが返る
 
 */
-const wchar_t* DocReader::GetNextLinrStr(int* pnLineLen)
+const wchar_t* DocReader::GetNextLinrStr(size_t* pnLineLen)
 {
 	const wchar_t* pszLine;
 	if (!pDocLineMgr->pDocLineCurrent) {

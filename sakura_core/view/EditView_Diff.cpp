@@ -353,13 +353,13 @@ void EditView::AnalyzeDiffInfo(
 
 	// 抽出したDIFF情報から行番号に差分マークを付ける
 	if (nFlgFile12 == 0) {	// 編集中ファイルは旧ファイル
-		if      (mode == 'a') DiffLineMgr(pEditDoc->docLineMgr).SetDiffMarkRange(DiffMark::Delete, LogicInt(s1   ), LogicInt(e1   ));
-		else if (mode == 'c') DiffLineMgr(pEditDoc->docLineMgr).SetDiffMarkRange(DiffMark::Change, LogicInt(s1 - 1), LogicInt(e1 - 1));
-		else if (mode == 'd') DiffLineMgr(pEditDoc->docLineMgr).SetDiffMarkRange(DiffMark::Append, LogicInt(s1 - 1), LogicInt(e1 - 1));
+		if      (mode == 'a') DiffLineMgr(pEditDoc->docLineMgr).SetDiffMarkRange(DiffMark::Delete, s1, e1);
+		else if (mode == 'c') DiffLineMgr(pEditDoc->docLineMgr).SetDiffMarkRange(DiffMark::Change, s1 - 1, e1 - 1);
+		else if (mode == 'd') DiffLineMgr(pEditDoc->docLineMgr).SetDiffMarkRange(DiffMark::Append, s1 - 1, e1 - 1);
 	}else {	// 編集中ファイルは新ファイル
-		if      (mode == 'a') DiffLineMgr(pEditDoc->docLineMgr).SetDiffMarkRange(DiffMark::Append, LogicInt(s2 - 1), LogicInt(e2 - 1));
-		else if (mode == 'c') DiffLineMgr(pEditDoc->docLineMgr).SetDiffMarkRange(DiffMark::Change, LogicInt(s2 - 1), LogicInt(e2 - 1));
-		else if (mode == 'd') DiffLineMgr(pEditDoc->docLineMgr).SetDiffMarkRange(DiffMark::Delete, LogicInt(s2   ), LogicInt(e2   ));
+		if      (mode == 'a') DiffLineMgr(pEditDoc->docLineMgr).SetDiffMarkRange(DiffMark::Append, s2 - 1, e2 - 1);
+		else if (mode == 'c') DiffLineMgr(pEditDoc->docLineMgr).SetDiffMarkRange(DiffMark::Change, s2 - 1, e2 - 1);
+		else if (mode == 'd') DiffLineMgr(pEditDoc->docLineMgr).SetDiffMarkRange(DiffMark::Delete, s2, e2);
 	}
 	
 	return;
@@ -373,12 +373,12 @@ bool MakeDiffTmpFile_core(
 	bool bBom
 	)
 {
-	LogicInt y = LogicInt(0);
+	int y = 0;
 	const wchar_t*	pLineData;
 	if (!hwnd) {
 		const DocLineMgr& docMgr = view.pEditDoc->docLineMgr;
 		for (;;){
-			LogicInt		nLineLen;
+			size_t nLineLen;
 			pLineData = docMgr.GetLine(y)->GetDocLineStrWithEOL(&nLineLen);
 			// 正常終了
 			if (nLineLen == 0 || !pLineData) {
@@ -542,7 +542,7 @@ bool EditView::MakeDiffTmpFile2(
 		Eol eol;
 		while (fl.ReadLine(&line, &eol) != CodeConvertResult::Failure) {
 			const wchar_t*	pLineData;
-			LogicInt		nLineLen;
+			size_t			nLineLen;
 			pLineData= line.GetStringPtr(&nLineLen);
 			if (nLineLen == 0 || !pLineData) {
 				break;

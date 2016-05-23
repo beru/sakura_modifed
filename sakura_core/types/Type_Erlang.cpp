@@ -49,13 +49,13 @@ struct OutlineErlang {
 	} state;
 
 	wchar_t func[64];			// 関数名(Arity含む) = 表示名
-	LogicInt lnum;			// 関数の行番号
+	int lnum;					// 関数の行番号
 	int argcount;				// 発見した引数の数
 	wchar_t parenthesis[32];	// 括弧のネストを管理するもの
 	int parenthesis_ptr;		// 括弧のネストレベル
 	
 	OutlineErlang();
-	bool parse(const wchar_t* buf, int linelen, LogicInt linenum);
+	bool parse(const wchar_t* buf, int linelen, int linenum);
 	
 	const wchar_t* ScanFuncName(const wchar_t* buf, const wchar_t* end, const wchar_t* p);
 	const wchar_t* EnterArgs(const wchar_t* end, const wchar_t* p);
@@ -63,7 +63,7 @@ struct OutlineErlang {
 	const wchar_t* ScanArgs(const wchar_t* end, const wchar_t* p);
 	const wchar_t* EnterCond(const wchar_t* end, const wchar_t* p);
 	const wchar_t* GetFuncName() const { return func; }
-	LogicInt GetFuncLine() const { return lnum; }
+	int GetFuncLine() const { return lnum; }
 
 private:
 	// helper functions
@@ -328,7 +328,7 @@ const wchar_t* OutlineErlang::EnterCond(const wchar_t* end, const wchar_t* p)
 	@param[in] linelen 行の長さ
 	@param[in] linenum 行番号
 */
-bool OutlineErlang::parse(const wchar_t* buf, int linelen, LogicInt linenum)
+bool OutlineErlang::parse(const wchar_t* buf, int linelen, int linenum)
 {
 	const wchar_t* pos = buf;
 	const wchar_t* const end = buf + linelen;
@@ -404,10 +404,10 @@ void DocOutline::MakeFuncList_Erlang(FuncInfoArr* pFuncInfoArr)
 {
 
 	OutlineErlang erl_state_machine;
-	LogicInt	nLineCount;
+	int nLineCount;
 
-	for (nLineCount=LogicInt(0); nLineCount<doc.docLineMgr.GetLineCount(); ++nLineCount) {
-		LogicInt nLineLen;
+	for (nLineCount=0; nLineCount<doc.docLineMgr.GetLineCount(); ++nLineCount) {
+		size_t nLineLen;
 
 		const wchar_t* pLine = doc.docLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
 		if (erl_state_machine.parse(pLine, nLineLen, nLineCount)) {
@@ -419,12 +419,12 @@ void DocOutline::MakeFuncList_Erlang(FuncInfoArr* pFuncInfoArr)
 			*/
 			LayoutPoint ptPosXY;
 			doc.layoutMgr.LogicToLayout(
-				LogicPoint(LogicInt(0), erl_state_machine.GetFuncLine()),
+				LogicPoint(0, erl_state_machine.GetFuncLine()),
 				&ptPosXY
 			);
 			pFuncInfoArr->AppendData(
-				erl_state_machine.GetFuncLine() + LogicInt(1),
-				ptPosXY.GetY2() + LayoutInt(1),
+				erl_state_machine.GetFuncLine() + 1,
+				ptPosXY.GetY2() + 1,
 				erl_state_machine.GetFuncName(),
 				0,
 				0

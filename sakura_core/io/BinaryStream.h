@@ -31,10 +31,10 @@ public:
 
 public:
 	// ストリームの「残り」サイズを取得
-	int GetLength();
+	size_t GetLength();
 
 	// データを無変換で読み込む。戻り値は読み込んだバイト数。
-	int Read(void* pBuffer, int nSizeInBytes);
+	size_t Read(void* pBuffer, size_t nSizeInBytes);
 };
 
 class BinaryOutputStream : public OutputStream {

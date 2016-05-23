@@ -5,7 +5,7 @@
 // $$$高速化
 void DispPos::ForwardLayoutLineRef(int nOffsetLine)
 {
-	nLineRef += LayoutInt(nOffsetLine);
+	nLineRef += nOffsetLine;
 	// キャッシュ更新
 	int n = nOffsetLine;
 	if (pLayoutRef) {

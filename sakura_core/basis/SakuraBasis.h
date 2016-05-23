@@ -26,62 +26,6 @@
 #include <Windows.h> // POINT, LONG
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-//                      １次元型の定義                         //
-// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-//
-#ifdef USE_STRICT_INT
-	// -- -- 厳格なintで単位型を定義 -- -- //
-
-	#include "StrictInteger.h"
-
-	// ロジック単位
-	typedef StrictInteger <
-		0,		// 型を分けるための数値。
-		true,	// intとの比較を許すかどうか
-		true,	// intとの加減算を許すかどうか
-		true,	// intへの暗黙の変換を許すかどうか
-		true	// intの代入を許すかどうか
-	>
-	LogicInt;
-
-	// レイアウト単位
-	typedef StrictInteger <
-		1,		// 型を分けるための数値。
-		true,	// intとの比較を許すかどうか
-		true,	// intとの加減算を許すかどうか
-		false,	// intへの暗黙の変換を許すかどうか
-		true	// intの代入を許すかどうか
-	>
-	LayoutInt;
-
-#else
-	// -- -- 通常のintで単位型を定義
-
-	// ロジック単位
-	typedef int LogicInt;
-
-	// レイアウト単位
-	typedef int LayoutInt;
-
-#endif
-
-typedef LogicInt  LogicXInt;
-typedef LogicInt  LogicYInt;
-typedef LayoutInt LayoutXInt;
-typedef LayoutInt LayoutYInt;
-typedef int PixelYInt;
-typedef int PixelXInt;
-
-#ifdef BUILD_OPT_ENALBE_PPFONT_SUPPORT
-typedef LayoutXInt HabaXInt;
-typedef int        KetaXInt;
-#else
-typedef PixelXInt  HabaXInt;
-typedef LayoutXInt KetaXInt;
-#endif
-
-
-// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                      ２次元型の定義                         //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //
@@ -90,16 +34,16 @@ typedef LayoutXInt KetaXInt;
 #include "StrictRect.h"
 
 // ロジック単位
-struct LogicIntXY { LogicInt x; LogicInt y; }; // 基底構造体
-typedef StrictPoint<LogicIntXY, LogicInt>	LogicPoint;
-typedef RangeBase<LogicPoint>				LogicRange;
-typedef StrictRect<LogicInt, LogicPoint>	LogicRect;
+struct LogicIntXY { int x; int y; }; // 基底構造体
+typedef StrictPoint<LogicIntXY, int>	LogicPoint;
+typedef RangeBase<LogicPoint>			LogicRange;
+typedef StrictRect<int, LogicPoint>		LogicRect;
 
 // レイアウト単位
-struct LayoutIntXY { LayoutInt x; LayoutInt y; }; // 基底構造体
-typedef StrictPoint<LayoutIntXY, LayoutInt>	LayoutPoint;
-typedef RangeBase<LayoutPoint>				LayoutRange;
-typedef StrictRect<LayoutInt, LayoutPoint>	LayoutRect;
+struct LayoutIntXY { int x; int y; }; // 基底構造体
+typedef StrictPoint<LayoutIntXY, int>	LayoutPoint;
+typedef RangeBase<LayoutPoint>			LayoutRange;
+typedef StrictRect<int, LayoutPoint>	LayoutRect;
 
 // ゆるい単位
 #include "MyPoint.h"

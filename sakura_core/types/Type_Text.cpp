@@ -46,7 +46,7 @@ void CType_Text::InitTypeConfigImp(TypeConfig& type)
 	_tcscpy(type.szTypeExts, _T("txt,log,1st,err,ps"));
 
 	// 設定
-	type.nMaxLineKetas = LayoutInt(120);					// 折り返し桁数
+	type.nMaxLineKetas = 120;					// 折り返し桁数
 	type.eDefaultOutline = OutlineType::Text;				// アウトライン解析方法
 	type.colorInfoArr[COLORIDX_SSTRING].bDisp = false;	// Oct. 17, 2000 JEPRO	シングルクォーテーション文字列を色分け表示しない
 	type.colorInfoArr[COLORIDX_WSTRING].bDisp = false;	// Sept. 4, 2000 JEPRO	ダブルクォーテーション文字列を色分け表示しない
@@ -103,18 +103,18 @@ void DocOutline::MakeTopicList_txt(FuncInfoArr* pFuncInfoArr)
 	int nDepth = 0;				//	いまのアイテムの深さを表す数値。
 	wchar_t pszStack[nMaxStack][32];
 	wchar_t szTitle[32];			//	一時領域
-	LogicInt				nLineCount;
+	size_t nLineCount;
 	bool b278a = false;
-	for (nLineCount=LogicInt(0); nLineCount<doc.docLineMgr.GetLineCount(); ++nLineCount) {
+	for (nLineCount=0; nLineCount<doc.docLineMgr.GetLineCount(); ++nLineCount) {
 		// 行取得
-		LogicInt nLineLen;
+		size_t nLineLen;
 		const wchar_t* pLine = doc.docLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
 		if (!pLine) {
 			break;
 		}
 
 		// 行頭の空白飛ばし
-		int i;
+		size_t i;
 		for (i=0; i<nLineLen; ++i) {
 			if (WCODE::IsBlank(pLine[i])) {
 				continue;
@@ -234,8 +234,8 @@ void DocOutline::MakeTopicList_txt(FuncInfoArr* pFuncInfoArr)
 		
 		if (bAppend) {
 			pFuncInfoArr->AppendData(
-				nLineCount + LogicInt(1),
-				ptPos.GetY2() + LayoutInt(1),
+				nLineCount + 1,
+				ptPos.GetY2() + 1,
 				pszText,
 				0,
 				nDepth
@@ -259,9 +259,9 @@ void DocOutline::MakeTopicList_wztxt(FuncInfoArr* pFuncInfoArr)
 	int levelPrev = 0;
 	bool bExtEol = GetDllShareData().common.edit.bEnableExtEol;
 
-	for (LogicInt nLineCount=LogicInt(0); nLineCount<doc.docLineMgr.GetLineCount(); ++nLineCount) {
+	for (int nLineCount=0; nLineCount<doc.docLineMgr.GetLineCount(); ++nLineCount) {
 		const wchar_t*	pLine;
-		LogicInt		nLineLen;
+		size_t nLineLen;
 
 		pLine = doc.docLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
 		if (!pLine) {
@@ -292,8 +292,8 @@ void DocOutline::MakeTopicList_wztxt(FuncInfoArr* pFuncInfoArr)
 				//	ただし，TAG一覧には出力されないように
 				for (dummyLevel=levelPrev+1; dummyLevel<level; ++dummyLevel) {
 					pFuncInfoArr->AppendData(
-						nLineCount + LogicInt(1),
-						ptPos.GetY2() + LayoutInt(1),
+						nLineCount + 1,
+						ptPos.GetY2() + 1,
 						LSW(STR_NO_TITLE1),
 						FUNCINFO_NOCLIPTEXT,
 						dummyLevel - 1
@@ -315,7 +315,7 @@ void DocOutline::MakeTopicList_wztxt(FuncInfoArr* pFuncInfoArr)
 				}
 			}
 			*pDest = L'\0';
-			pFuncInfoArr->AppendData(nLineCount + LogicInt(1), ptPos.GetY2() + LayoutInt(1), szTitle, 0, level - 1);
+			pFuncInfoArr->AppendData(nLineCount + 1, ptPos.GetY2() + 1, szTitle, 0, level - 1);
 		}
 	}
 }

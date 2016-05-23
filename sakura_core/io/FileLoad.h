@@ -100,7 +100,7 @@ protected:
 	void ReadBufEmpty(void);	// バッファを空にする
 
 	// GetLextLine の 文字コード考慮版
-	const char* GetNextLineCharCode( const char*, size_t, int*, int*, Eol*, int*, int* );
+	const char* GetNextLineCharCode( const char*, size_t, size_t*, size_t*, Eol*, size_t*, size_t* );
 	CodeConvertResult ReadLine_core( NativeW*, Eol* );
 
 	int Read(void*, size_t); // inline
@@ -120,7 +120,7 @@ protected:
 	EEncodingTrait	encodingTrait;
 	Memory			memEols[3];
 	bool	bEolEx;		// CR/LF以外のEOLが有効か
-	int		nMaxEolLen;	// EOLの長さ
+	size_t	nMaxEolLen;	// EOLの長さ
 	bool	bBomExist;	// ファイルのBOMが付いているか Jun. 08, 2003 Moca 
 	int		nFlag;		// 文字コードの変換オプション
 	// Jun. 13, 2003 Moca
@@ -135,13 +135,13 @@ protected:
 
 	// 読み込みバッファ系
 	char*	pReadBuf;			// 読み込みバッファへのポインタ
-	int		nReadBufSize;		// 読み込みバッファの実際に確保しているサイズ
+	size_t	nReadBufSize;		// 読み込みバッファの実際に確保しているサイズ
 	size_t	nReadDataLen;		// 読み込みバッファの有効データサイズ
-	int		nReadBufOffSet;		// 読み込みバッファ中のオフセット(次の行頭位置)
+	size_t	nReadBufOffSet;		// 読み込みバッファ中のオフセット(次の行頭位置)
 //	int		nReadBufSumSize;	// 今までにバッファに読み込んだデータの合計サイズ
 	Memory lineBuffer;
 	NativeW lineTemp;
-	int		nReadOffset2;
+	size_t nReadOffset2;
 	CodeConvertResult nTempResult;
 
 private:

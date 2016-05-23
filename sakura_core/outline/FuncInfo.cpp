@@ -16,10 +16,10 @@
 
 // FuncInfoクラス構築
 FuncInfo::FuncInfo(
-	LogicInt		nFuncLineCRLF,		// 関数のある行(CRLF単位)
-	LogicInt		nFuncColCRLF,		// 関数のある桁(CRLF単位)
-	LayoutInt		nFuncLineLAYOUT,	// 関数のある行(折り返し単位)
-	LayoutInt		nFuncColLAYOUT,		// 関数のある桁(折り返し単位)
+	int		nFuncLineCRLF,		// 関数のある行(CRLF単位)
+	int		nFuncColCRLF,		// 関数のある桁(CRLF単位)
+	int		nFuncLineLAYOUT,	// 関数のある行(折り返し単位)
+	int		nFuncColLAYOUT,		// 関数のある桁(折り返し単位)
 	const TCHAR*	pszFuncName,		// 関数名
 	const TCHAR*	pszFileName,
 	int				nInfo				// 付加情報

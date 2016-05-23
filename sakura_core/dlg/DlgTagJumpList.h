@@ -58,7 +58,7 @@ public:
 	/*
 	||  Attributes & Operations
 	*/
-	int DoModal(HINSTANCE, HWND, LPARAM);	// モーダルダイアログの表示 
+	INT_PTR DoModal(HINSTANCE, HWND, LPARAM);	// モーダルダイアログの表示 
 
 	// @@ 2005.03.31 MIK 階層パラメータを追加
 //	bool AddParamA(const ACHAR*, const ACHAR*, int, const ACHAR*, const ACHAR*, int depth, int baseDirId);	// 登録

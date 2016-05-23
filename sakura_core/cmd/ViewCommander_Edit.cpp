@@ -39,7 +39,7 @@ void ViewCommander::Command_WCHAR(
 		return;
 	}
 
-	LogicInt nPos;
+	int nPos;
 	auto& doc = GetDocument();
 	doc.docEditor.SetModified(true, true);	// Jan. 22, 2002 genta
 
@@ -67,7 +67,7 @@ void ViewCommander::Command_WCHAR(
 		}
 		if (typeData->bAutoIndent) {	// オートインデント
 			const Layout* pLayout;
-			LogicInt nLineLen;
+			size_t nLineLen;
 			auto& layoutMgr = doc.layoutMgr;
 			const wchar_t* pLine = layoutMgr.GetLineStr(caret.GetCaretLayoutPos().GetY2(), &nLineLen, &pLayout);
 			if (pLayout) {
@@ -87,9 +87,9 @@ void ViewCommander::Command_WCHAR(
 					);
 
 					// 指定された桁に対応する行のデータ内の位置を調べる
-					for (nPos=LogicInt(0); nPos<nLineLen && nPos<ptXY.GetX2();) {
+					for (nPos=0; nPos<nLineLen && nPos<ptXY.GetX2();) {
 						// 2005-09-02 D.S.Koba GetSizeOfChar
-						LogicInt nCharChars = NativeW::GetSizeOfChar(pLine, nLineLen, nPos);
+						int nCharChars = NativeW::GetSizeOfChar(pLine, nLineLen, nPos);
 
 						// その他のインデント文字
 						if (0 < nCharChars
@@ -257,7 +257,7 @@ void ViewCommander::Command_IME_CHAR(WORD wChar)
 	const wchar_t* pUniData = to_wchar(szAnsiWord);
 	wchar_t szWord[2] = {pUniData[0], 0};
 #endif
-	LogicInt nWord = LogicInt(1);
+	int nWord = 1;
 
 	// テキストが選択されているか
 	if (selInfo.IsTextSelected()) {
@@ -801,8 +801,8 @@ void ViewCommander::Command_Delete(void)
 		if (layoutMgr.GetLineCount() > caret.GetCaretLayoutPos().GetY2()) {
 			const Layout* pLayout = layoutMgr.SearchLineByLayoutY(caret.GetCaretLayoutPos().GetY2());
 			if (pLayout) {
-				LayoutInt nLineLen;
-				LogicInt nIndex;
+				int nLineLen;
+				int nIndex;
 				nIndex = view.LineColumnToIndex2(pLayout, caret.GetCaretLayoutPos().GetX2(), &nLineLen);
 				if (nLineLen != 0) {	// 折り返しや改行コードより右の場合には nLineLen に行全体の表示桁数が入る
 					if (pLayout->GetLayoutEol().GetType() != EolType::None) {	// 行終端は改行コードか?
@@ -858,8 +858,8 @@ void ViewCommander::Command_Delete_Back(void)
 		if (bBool) {
 			const Layout* pLayout = GetDocument().layoutMgr.SearchLineByLayoutY(caret.GetCaretLayoutPos().GetY2());
 			if (pLayout) {
-				LayoutInt nLineLen;
-				LogicInt nIdx = view.LineColumnToIndex2(pLayout, caret.GetCaretLayoutPos().GetX2(), &nLineLen);
+				int nLineLen;
+				int nIdx = view.LineColumnToIndex2(pLayout, caret.GetCaretLayoutPos().GetX2(), &nLineLen);
 				if (nLineLen == 0) {	// 折り返しや改行コードより右の場合には nLineLen に行全体の表示桁数が入る
 					// 右からの移動では折り返し末尾文字は削除するが改行は削除しない
 					// 下から（下の行の行頭から）の移動では改行も削除する
@@ -893,12 +893,12 @@ void ViewCommander::DelCharForOverwrite(
 	bool bDelete = true;
 	auto& caret = GetCaret();
 	const Layout* pLayout = GetDocument().layoutMgr.SearchLineByLayoutY(caret.GetCaretLayoutPos().GetY2());
-	int nDelLen = LogicInt(0);
-	LayoutInt nKetaDiff = LayoutInt(0);
-	LayoutInt nKetaAfterIns = LayoutInt(0);
+	int nDelLen = 0;
+	int nKetaDiff = 0;
+	int nKetaAfterIns = 0;
 	if (pLayout) {
 		// 指定された桁に対応する行のデータ内の位置を調べる
-		LogicInt nIdxTo = view.LineColumnToIndex(pLayout, caret.GetCaretLayoutPos().GetX2());
+		int nIdxTo = view.LineColumnToIndex(pLayout, caret.GetCaretLayoutPos().GetX2());
 		if (nIdxTo >= pLayout->GetLengthWithoutEOL()) {
 			bEol = true;	// 現在位置は改行または折り返し以後
 			if (pLayout->GetLayoutEol() != EolType::None) {
@@ -911,10 +911,10 @@ void ViewCommander::DelCharForOverwrite(
 			// 文字幅に合わせてスペースを詰める
 			if (GetDllShareData().common.edit.bOverWriteFixMode) {
 				const StringRef line = pLayout->GetDocLineRef()->GetStringRefWithEOL();
-				LogicInt nPos = caret.GetCaretLogicPos().GetX();
+				int nPos = caret.GetCaretLogicPos().GetX();
 				if (line.At(nPos) != WCODE::TAB) {
-					LayoutInt nKetaBefore = NativeW::GetKetaOfChar(line, nPos);
-					LayoutInt nKetaAfter = NativeW::GetKetaOfChar(pszInput, nLen, 0);
+					size_t nKetaBefore = NativeW::GetKetaOfChar(line, nPos);
+					size_t nKetaAfter = NativeW::GetKetaOfChar(pszInput, nLen, 0);
 					nKetaDiff = nKetaBefore - nKetaAfter;
 					nPos += NativeW::GetSizeOfChar(line.GetPtr(), line.GetLength(), nPos);
 					nDelLen = 1;
@@ -927,7 +927,7 @@ void ViewCommander::DelCharForOverwrite(
 							)
 						) {
 							nDelLen = 2;
-							LayoutInt nKetaBefore2 = NativeW::GetKetaOfChar(line, nPos);
+							int nKetaBefore2 = NativeW::GetKetaOfChar(line, nPos);
 							nKetaAfterIns = nKetaBefore + nKetaBefore2 - nKetaAfter;
 						}
 					}
@@ -950,10 +950,10 @@ void ViewCommander::DelCharForOverwrite(
 			}
 		}
 		NativeW tmp;
-		for (LayoutInt i=LayoutInt(0); i<nKetaDiff; ++i) {
+		for (int i=0; i<nKetaDiff; ++i) {
 			tmp.AppendStringLiteral(L" ");
 		}
-		for (LayoutInt i=LayoutInt(0); i<nKetaAfterIns; ++i) {
+		for (int i=0; i<nKetaAfterIns; ++i) {
 			tmp.AppendStringLiteral(L" ");
 		}
 		if (0 < tmp.GetStringLength()) {

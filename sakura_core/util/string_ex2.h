@@ -37,14 +37,14 @@ wchar_t* wcs_pushA(wchar_t* dst, size_t dst_count, const char* src);
 #define wcs_pushT wcs_pushA
 #endif
 
-int AddLastChar(TCHAR*, int, TCHAR); // 2003.06.24 Moca 最後の文字が指定された文字でないときは付加する
+int AddLastChar(TCHAR*, size_t, TCHAR); // 2003.06.24 Moca 最後の文字が指定された文字でないときは付加する
 int LimitStringLengthW(const WCHAR*, size_t, size_t, NativeW&); // データを指定「文字数」以内に切り詰める
 int LimitStringLengthT(const TCHAR*, size_t, size_t, NativeT&); // データを指定「文字数」以内に切り詰める
 #define LimitStringLengthT LimitStringLengthW
 
-const char* GetNextLimitedLengthText(const char*, int, int, int*, int*); // 指定長以下のテキストに切り分ける
-const char* GetNextLine(const char*   , int, int*, int*, Eol*); // CR0LF0,CRLF,LF,CRで区切られる「行」を返す。改行コードは行長に加えない
-const wchar_t* GetNextLineW(const wchar_t*, int, int*, int*, Eol*, bool); // GetNextLineのwchar_t版
+const char* GetNextLimitedLengthText(const char*, size_t, size_t, size_t*, size_t*); // 指定長以下のテキストに切り分ける
+const char* GetNextLine(const char*, size_t, size_t*, size_t*, Eol*); // CR0LF0,CRLF,LF,CRで区切られる「行」を返す。改行コードは行長に加えない
+const wchar_t* GetNextLineW(const wchar_t*, size_t, size_t*, size_t*, Eol*, bool); // GetNextLineのwchar_t版
 //wchar_t* GetNextLineWB(const wchar_t*, int, int*, int*, Eol*); // GetNextLineのwchar_t版(ビックエンディアン用)  // 未使用
 void GetLineColumn(const wchar_t*, int*, int*);
 

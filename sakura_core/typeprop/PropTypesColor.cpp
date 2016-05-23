@@ -684,9 +684,9 @@ void PropTypesColor::SetData(HWND hwndDlg)
 	WCHAR szVertLine[MAX_VERTLINES * 15] = L"";
 	int offset = 0;
 	for (int i=0; i<MAX_VERTLINES && types.nVertLineIdx[i]!=0; ++i) {
-		LayoutInt nXCol = types.nVertLineIdx[i];
-		LayoutInt nXColEnd = nXCol;
-		LayoutInt nXColAdd = LayoutInt(1);
+		int nXCol = types.nVertLineIdx[i];
+		int nXColEnd = nXCol;
+		int nXColAdd = 1;
 		if (nXCol < 0) {
 			if (i < MAX_VERTLINES - 2) {
 				nXCol = -nXCol;
@@ -828,14 +828,14 @@ int PropTypesColor::GetData(HWND hwndDlg)
 			}
 			++offset;
 			if (i + 2 < MAX_VERTLINES) {
-				types.nVertLineIdx[i++] = LayoutInt(-valueBegin);
-				types.nVertLineIdx[i++] = LayoutInt(valueEnd);
-				types.nVertLineIdx[i++] = LayoutInt(value);
+				types.nVertLineIdx[i++] = -valueBegin;
+				types.nVertLineIdx[i++] = valueEnd;
+				types.nVertLineIdx[i++] = value;
 			}else {
 				break;
 			}
 		}else {
-			types.nVertLineIdx[i++] = LayoutInt(value);
+			types.nVertLineIdx[i++] = value;
 		}
 		if (szVertLine[offset] != ',') {
 			break;
@@ -843,7 +843,7 @@ int PropTypesColor::GetData(HWND hwndDlg)
 		++offset;
 	}
 	if (i < MAX_VERTLINES) {
-		types.nVertLineIdx[i] = LayoutInt(0);
+		types.nVertLineIdx[i] = 0;
 	}
 	// to here 2005.11.30 Moca Žw’èˆÊ’ucü‚ÌÝ’è
 	return TRUE;

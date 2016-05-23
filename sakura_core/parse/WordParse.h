@@ -68,10 +68,10 @@ public:
 	*/
 	static bool WhereCurrentWord_2(
 		const wchar_t*	pLine,			// [in]  調べるメモリ全体の先頭アドレス
-		LogicInt		nLineLen,		// [in]  調べるメモリ全体の有効長
-		LogicInt		nIdx,			// [out] 調査開始地点:pLineからの相対的な位置
-		LogicInt*		pnIdxFrom,		// [out] 単語が見つかった場合は、単語の先頭インデックスを返す。
-		LogicInt*		pnIdxTo,		// [out] 単語が見つかった場合は、単語の終端の次のバイトの先頭インデックスを返す。
+		int				nLineLen,		// [in]  調べるメモリ全体の有効長
+		int				nIdx,			// [out] 調査開始地点:pLineからの相対的な位置
+		int*			pnIdxFrom,		// [out] 単語が見つかった場合は、単語の先頭インデックスを返す。
+		int*			pnIdxTo,		// [out] 単語が見つかった場合は、単語の終端の次のバイトの先頭インデックスを返す。
 		NativeW*		pcmcmWord,		// [out] 単語が見つかった場合は、現在単語を切り出して指定されたCMemoryオブジェクトに格納する。情報が不要な場合はNULLを指定する。
 		NativeW*		pcmcmWordLeft	// [out] 単語が見つかった場合は、現在単語の左に位置する単語を切り出して指定されたCMemoryオブジェクトに格納する。情報が不要な場合はNULLを指定する。
 	);
@@ -98,18 +98,18 @@ public:
 	//	pLine（長さ：nLineLen）の文字列から次の単語を探す。探し始める位置はnIdxで指定。
 	static bool SearchNextWordPosition(
 		const wchar_t*	pLine,
-		LogicInt		nLineLen,
-		LogicInt		nIdx,			//	桁数
-		LogicInt*		pnColumnNew,	//	見つかった位置
+		int				nLineLen,
+		int				nIdx,			//	桁数
+		int*			pnColumnNew,	//	見つかった位置
 		bool			bStopsBothEnds	//	単語の両端で止まる
 	);
 
 	//	pLine（長さ：nLineLen）の文字列から次の単語を探す。探し始める位置はnIdxで指定。 for 強調キーワード
 	static bool SearchNextWordPosition4KW(
 		const wchar_t*	pLine,
-		LogicInt		nLineLen,
-		LogicInt		nIdx,			//	桁数
-		LogicInt*		pnColumnNew,	//	見つかった位置
+		int				nLineLen,
+		int				nIdx,			//	桁数
+		int*			pnColumnNew,	//	見つかった位置
 		bool			bStopsBothEnds	//	単語の両端で止まる
 	);
 

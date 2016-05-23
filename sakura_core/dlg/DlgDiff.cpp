@@ -99,7 +99,7 @@ DlgDiff::DlgDiff()
 }
 
 // モーダルダイアログの表示
-int DlgDiff::DoModal(
+INT_PTR DlgDiff::DoModal(
 	HINSTANCE			hInstance,
 	HWND				hwndParent,
 	LPARAM				lParam,
@@ -107,7 +107,7 @@ int DlgDiff::DoModal(
 	)
 {
 	_tcscpy(szFile1, pszPath);
-	return (int)Dialog::DoModal(hInstance, hwndParent, IDD_DIFF, lParam);
+	return Dialog::DoModal(hInstance, hwndParent, IDD_DIFF, lParam);
 }
 
 BOOL DlgDiff::OnBnClicked(int wID)

@@ -96,8 +96,8 @@ void TextMetrics::SetHankakuHeight(int nHankakuHeight)
 void TextMetrics::SetHankakuDx(int nDxBasis)
 {
 	this->nDxBasis = nDxBasis;
-	for (int i=0; i<_countof(anHankakuDx); ++i) anHankakuDx[i] = GetHankakuDx();
-	for (int i=0; i<_countof(anZenkakuDx); ++i) anZenkakuDx[i] = GetZenkakuDx();
+	for (size_t i=0; i<_countof(anHankakuDx); ++i) anHankakuDx[i] = GetHankakuDx();
+	for (size_t i=0; i<_countof(anZenkakuDx); ++i) anZenkakuDx[i] = GetZenkakuDx();
 }
 
 void TextMetrics::SetHankakuDy(int nDyBasis)
@@ -113,7 +113,7 @@ void TextMetrics::SetHankakuDy(int nDyBasis)
 const int* TextMetrics::GenerateDxArray(
 	std::vector<int>* vResultArray, // [out] 文字間隔配列の受け取りコンテナ
 	const wchar_t* pText,           // [in]  文字列
-	int nLength,                    // [in]  文字列長
+	size_t nLength,                    // [in]  文字列長
 	int	nHankakuDx,					// [in]  半角文字の文字間隔
 	int	nTabSpace,					// [in]  TAB幅
 	int	nIndent						// [in]  インデント(TAB対応用)
@@ -128,7 +128,7 @@ const int* TextMetrics::GenerateDxArray(
 	int	 nLayoutCnt = nIndent;
 	const wchar_t* q = pText;
 	bHigh = false;
-	for (int i=0; i<nLength; ++i, ++p, ++q) {
+	for (size_t i=0; i<nLength; ++i, ++p, ++q) {
 		if (*q == WCODE::TAB) {
 			// TAB対応	2013/5/7 Uchi
 			if (i > 0 && *(q-1) == WCODE::TAB) {
@@ -170,17 +170,18 @@ const int* TextMetrics::GenerateDxArray(
 		}
 	}
 
-	if (vResultArray->size())
+	if (vResultArray->size()) {
 		return &(*vResultArray)[0];
-	else
-		return NULL;
+	}else {
+		return nullptr;
+	}
 }
 
 // 文字列のピクセル幅を返す。
 int TextMetrics::CalcTextWidth(
-	const wchar_t* pText, // 文字列
-	int nLength,          // 文字列長
-	const int* pnDx       // 文字間隔の入った配列
+	const wchar_t* pText,	// 文字列
+	size_t nLength,			// 文字列長
+	const int* pnDx			// 文字間隔の入った配列
 	)
 {
 	// ANSI時代の動作 ※pnDxにはすべて同じ値が入っていた
@@ -188,7 +189,7 @@ int TextMetrics::CalcTextWidth(
 
 	// UNICODE時代の動作
 	int w = 0;
-	for (int i=0; i<nLength; ++i) {
+	for (size_t i=0; i<nLength; ++i) {
 		w += pnDx[i];
 	}
 	return w;
@@ -196,9 +197,9 @@ int TextMetrics::CalcTextWidth(
 
 // 文字列のピクセル幅を返す。
 int TextMetrics::CalcTextWidth2(
-	const wchar_t* pText, // 文字列
-	int nLength,          // 文字列長
-	int nHankakuDx        // 半角文字の文字間隔
+	const wchar_t* pText,	// 文字列
+	size_t nLength,			// 文字列長
+	int nHankakuDx		// 半角文字の文字間隔
 	)
 {
 	// 文字間隔配列を生成

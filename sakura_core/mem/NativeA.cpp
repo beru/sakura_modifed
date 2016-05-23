@@ -426,11 +426,11 @@ void NativeA::TABToSPACE(int nTabSpace	/* TABの文字数 */)
 {
 	using namespace ACODE;
 	const char*	pLine;
-	int nLineLen;
+	size_t nLineLen;
 //	BOOL		bEOL;
 	Eol eol;
-	int nBgn = 0;
-	int nPosDes = 0;
+	size_t nBgn = 0;
+	size_t nPosDes = 0;
 	// CRLFで区切られる「行」を返す。CRLFは行長に加えない
 	while ((pLine = GetNextLine(GetStringPtr(), GetStringLength(), &nLineLen, &nBgn, &eol))) {
 		if (0 < nLineLen) {
@@ -496,14 +496,14 @@ void NativeA::SPACEToTAB(int nTabSpace)
 	using namespace ACODE;
 
 	const char*	pLine;
-	int			nLineLen;
-	int			nBgn;
-	int			nPosDes;
-	int			nPosX;
+	size_t nLineLen;
+	size_t nBgn;
+	size_t nPosDes;
+	size_t nPosX;
 	Eol		eol;
 
 	bool bSpace = false;	// スペースの処理中かどうか
-	int nStartPos;
+	size_t nStartPos;
 
 	nBgn = 0;
 	nPosDes = 0;

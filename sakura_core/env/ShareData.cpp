@@ -232,7 +232,7 @@ bool ShareData::InitShareData()
 
 			general.bCloseAllConfirm = false;		// [すべて閉じる]で他に編集用のウィンドウがあれば確認する		// 2006.12.25 ryoji
 			general.bExitConfirm = false;			// 終了時の確認をする
-			general.nRepeatedScrollLineNum = LayoutInt(3);	// キーリピート時のスクロール行数
+			general.nRepeatedScrollLineNum = 3;		// キーリピート時のスクロール行数
 			general.nRepeatedScroll_Smooth = false;	// キーリピート時のスクロールを滑らかにするか
 			general.nPageScrollByWheel = 0;			// キー/マウスボタン + ホイールスクロールでページスクロールする	// 2009.01.17 nasukoji
 			general.nHorizontalScrollByWheel = 0;	// キー/マウスボタン + ホイールスクロールで横スクロールする		// 2009.01.17 nasukoji

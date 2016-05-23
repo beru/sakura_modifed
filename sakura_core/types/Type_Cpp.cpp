@@ -103,7 +103,7 @@ bool C_IsWordChar(wchar_t c)
 	本質的には不要であるが、高速化のために既にある値を利用する。
 */
 static
-bool C_IsOperator(wchar_t* szStr, int nLen)
+bool C_IsOperator(wchar_t* szStr, size_t nLen)
 {
 	if (nLen >= 8 && szStr[nLen - 1] == L'r') {
 		if (nLen > 8 ?
@@ -190,7 +190,7 @@ public:
 		enablebuf(0)
 	{}
 
-	LogicInt ScanLine(const wchar_t*, LogicInt);
+	int ScanLine(const wchar_t*, int);
 
 private:
 	bool ismultiline; // 複数行のディレクティブ
@@ -234,9 +234,9 @@ private:
 	@date 2007.12.13 じゅうじ : ifの直後にスペースがない場合の対応
 
 */
-LogicInt CppPreprocessMng::ScanLine(
+int CppPreprocessMng::ScanLine(
 	const wchar_t* str,
-	LogicInt _length
+	int _length
 	)
 {
 	int length = _length;
@@ -249,18 +249,18 @@ LogicInt CppPreprocessMng::ScanLine(
 	for (p=str; C_IsSpace(*p, bExtEol) && p<lastptr; ++p)
 		;
 	if (lastptr <= p)
-		return LogicInt(length);	//	空行のため処理不要
+		return length;	//	空行のため処理不要
 
 	if (ismultiline) { // 複数行のディレクティブは無視
 		ismultiline = C_IsLineEsc(str, length); // 行末が \ で終わっていないか
-		return LogicInt(length);
+		return length;
 	}
 
 	if (*p != L'#') {	//	プリプロセッサ以外の処理はメイン部に任せる
 		if (enablebuf) {
-			return LogicInt(length);	//	1ビットでも1となっていたら無視
+			return length;	//	1ビットでも1となっていたら無視
 		}
-		return LogicInt(p - str);
+		return p - str;
 	}
 
 	++p; // #をスキップ
@@ -321,7 +321,7 @@ LogicInt CppPreprocessMng::ScanLine(
 		ismultiline = C_IsLineEsc(str, length); // 行末が \ で終わっていないか
 	}
 
-	return LogicInt(length);	//	基本的にプリプロセッサ指令は無視
+	return length;	//	基本的にプリプロセッサ指令は無視
 }
 
 /*!
@@ -361,8 +361,8 @@ void DocOutline::MakeFuncList_C(
 // #define TRACE_OUTLINE
 #endif
 	const wchar_t*	pLine;
-	LogicInt	nLineLen;
-	LogicInt	i;
+	size_t		nLineLen;
+	int	i;
 
 	// 2002/10/27 frozen　ここから
 	// nNestLevelを nNestLevel_global を nNestLevel_func に分割した。
@@ -448,11 +448,11 @@ void DocOutline::MakeFuncList_C(
 	//　←
 	//　}}
 	wchar_t		szRawStringTag[32];	// C++11 raw string litteral
-	int nRawStringTagLen = 0;
-	int nRawStringTagCompLen = 0;
+	size_t nRawStringTagLen = 0;
+	size_t nRawStringTagCompLen = 0;
 
-	LogicInt	nItemLine(0);		// すぐ前の 関数 or クラス or 構造体 or 共用体 or 列挙体 or ネームスペースのある行
-	int			nItemFuncId = 0;
+	int	nItemLine(0);		// すぐ前の 関数 or クラス or 構造体 or 共用体 or 列挙体 or ネームスペースのある行
+	int	nItemFuncId = 0;
 
 	szWordPrev[0] = L'\0';
 	szWord[nWordIdx] = L'\0';
@@ -466,8 +466,8 @@ void DocOutline::MakeFuncList_C(
 	CppPreprocessMng cppPMng;
 	bool bExtEol = GetDllShareData().common.edit.bEnableExtEol;
 	
-	LogicInt nLineCount;
-	for (nLineCount=LogicInt(0); nLineCount<doc.docLineMgr.GetLineCount(); ++nLineCount) {
+	size_t nLineCount;
+	for (nLineCount=0; nLineCount<doc.docLineMgr.GetLineCount(); ++nLineCount) {
 		pLine = doc.docLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
 
 		//	From Here Aug. 10, 2004 genta
@@ -476,7 +476,7 @@ void DocOutline::MakeFuncList_C(
 		if (nMode != 8 && nMode != 10) {	// chg 2005/12/6 じゅうじ 次の行が空白でもよい
 			i = cppPMng.ScanLine(pLine, nLineLen);
 		}else {
-			i = LogicInt(0);
+			i = 0;
 		}
 		//	C/C++としての処理が不要なケースでは i == nLineLenとなっているので
 		//	以下の解析処理はSKIPされる．
@@ -486,7 +486,7 @@ void DocOutline::MakeFuncList_C(
 #endif
 		for (; i<nLineLen; ++i) {
 #ifdef TRACE_OUTLINE
-			DEBUG_TRACE(_T("%2d [%lc] %d %x %d %d %d wd[%ls] pre[%ls] tmp[%ls] til[%ls] %d\n"), int((Int)i), pLine[i], nMode, nMode2,
+			DEBUG_TRACE(_T("%2d [%lc] %d %x %d %d %d wd[%ls] pre[%ls] tmp[%ls] til[%ls] %d\n"), i, pLine[i], nMode, nMode2,
 				nNestLevel_global, nNestLevel_func, nNestLevel_fparam, szWord, szWordPrev, szTemplateName, szItemName, nWordIdx);
 #endif
 // del start 2005/12/6 じゅうじ
@@ -619,7 +619,7 @@ void DocOutline::MakeFuncList_C(
 							bDefinedTypedef = true;
 						if (nItemFuncId != 0 && nItemFuncId != FL_OBJ_FUNCTION) {	//  2010.07.08 ryoji nMode2 == M2_FUNC_NAME_END のときは nItemFuncId == 2 のはず
 							nMode2 = M2_NAMESPACE_SAVE;
-							nItemLine = nLineCount + LogicInt(1);
+							nItemLine = nLineCount + 1;
 							wcscpy_s(szItemName, LSW(STR_OUTLINE_CPP_NONAME));
 						}
 					}
@@ -759,7 +759,7 @@ void DocOutline::MakeFuncList_C(
 							for (int k=i+1; k<nLineLen; ++k) {
 								if (pLine[k] == L'(') {
 									// i = 1, k = 5, len = 5-1-1=3
-									LogicInt tagLen = t_min(k - i - 1, LogicInt(_countof(szRawStringTag) - 1));
+									int tagLen = t_min(k - i - 1, (int)_countof(szRawStringTag) - 1);
 									nRawStringTagLen = tagLen + 1;
 									szRawStringTag[0] = L')';
 									wcsncpy(szRawStringTag + 1, &pLine[i + 1], tagLen);
@@ -828,7 +828,7 @@ void DocOutline::MakeFuncList_C(
 #ifdef TRACE_OUTLINE
 						DEBUG_TRACE(_T("AppendData %d %ls\n"), nItemLine, szNamespace);
 #endif
-						pFuncInfoArr->AppendData(nItemLine, ptPosXY.GetY2() + LayoutInt(1), szNamespace, nItemFuncId);
+						pFuncInfoArr->AppendData(nItemLine, ptPosXY.GetY2() + 1, szNamespace, nItemFuncId);
 						bDefinedTypedef = false;
 						nItemLine = -1;
 						//	Jan. 30, 2005 genta M2_KR_FUNC 追加
@@ -934,7 +934,7 @@ void DocOutline::MakeFuncList_C(
 								}else {
 									wcscpy_s(szItemName, szWordPrev);
 								}
-								nItemLine = nLineCount + LogicInt(1);
+								nItemLine = nLineCount + 1;
 							}
 						}
 						++nNestLevel_fparam;
@@ -1055,7 +1055,7 @@ void DocOutline::MakeFuncList_C(
 #ifdef TRACE_OUTLINE
 						DEBUG_TRACE(_T("AppendData %d %ls\n"), nItemLine, szNamespace);
 #endif
-						pFuncInfoArr->AppendData(nItemLine, ptPosXY.GetY2() + LayoutInt(1), szNamespace, nItemFuncId);
+						pFuncInfoArr->AppendData(nItemLine, ptPosXY.GetY2() + 1, szNamespace, nItemFuncId);
 					}
 					nItemLine = -1;
 					nNestLevel_template = 0;
@@ -1231,20 +1231,20 @@ void DocOutline::MakeFuncList_C(
 void EditView::SmartIndent_CPP(wchar_t wcChar)
 {
 	const wchar_t*	pLine;
-	LogicInt		nLineLen;
+	size_t			nLineLen;
 	int			k;
 	int			m;
 	const wchar_t*	pLine2;
-	LogicInt	nLineLen2;
+	size_t		nLineLen2;
 	int			nLevel;
-	LogicInt j;
+	int j;
 
 	// 調整によって置換される箇所
 	LogicRange rangeA;
 	rangeA.Clear(-1);
 
 	wchar_t*	pszData = NULL;
-	LogicInt	nDataLen;
+	int	nDataLen;
 
 	int			nWork = 0;
 	int			nCharChars;
@@ -1337,8 +1337,8 @@ void EditView::SmartIndent_CPP(wchar_t wcChar)
 		// 対応する括弧をさがす
 		nLevel = 0;	// {}の入れ子レベル
 		
-		nDataLen = LogicInt(0);
-		for (j=caret.GetCaretLogicPos().GetY2(); j>=LogicInt(0); --j) {
+		nDataLen = 0;
+		for (j=caret.GetCaretLogicPos().GetY2(); j>=0; --j) {
 			pLine2 = pEditDoc->docLineMgr.GetLine(j)->GetDocLineStrWithEOL(&nLineLen2);
 			if (j == caret.GetCaretLogicPos().y) {
 				// 2005.10.11 ryoji EOF のみの行もスマートインデントの対象にする
@@ -1347,12 +1347,12 @@ void EditView::SmartIndent_CPP(wchar_t wcChar)
 						continue;	// EOF のみの行
 					break;
 				}
-				nCharChars = LogicInt(&pLine2[nWork] - NativeW::GetCharPrev(pLine2, nLineLen2, &pLine2[nWork]));
+				nCharChars = &pLine2[nWork] - NativeW::GetCharPrev(pLine2, nLineLen2, &pLine2[nWork]);
 				k = nWork - nCharChars;
 			}else {
 				if (!pLine2)
 					break;
-				nCharChars = LogicInt(&pLine2[nLineLen2] - NativeW::GetCharPrev(pLine2, nLineLen2, &pLine2[nLineLen2]));
+				nCharChars = &pLine2[nLineLen2] - NativeW::GetCharPrev(pLine2, nLineLen2, &pLine2[nLineLen2]);
 				k = nLineLen2 - nCharChars;
 			}
 
@@ -1406,9 +1406,9 @@ void EditView::SmartIndent_CPP(wchar_t wcChar)
 						}
 					}
 				}
-				nCharChars = LogicInt(&pLine2[k] - NativeW::GetCharPrev(pLine2, nLineLen2, &pLine2[k]));
+				nCharChars = &pLine2[k] - NativeW::GetCharPrev(pLine2, nLineLen2, &pLine2[k]);
 				if (nCharChars == 0) {
-					nCharChars = LogicInt(1);
+					nCharChars = 1;
 				}
 				k -= nCharChars;
 			}
@@ -1423,8 +1423,8 @@ void EditView::SmartIndent_CPP(wchar_t wcChar)
 				}
 			}
 
-			nDataLen = LogicInt(m);
-			nCharChars = (pEditDoc->docType.GetDocumentAttribute().bInsSpace)? (Int)pEditDoc->layoutMgr.GetTabSpace(): 1;
+			nDataLen = m;
+			nCharChars = (pEditDoc->docType.GetDocumentAttribute().bInsSpace)? pEditDoc->layoutMgr.GetTabSpace(): 1;
 			pszData = new wchar_t[nDataLen + nCharChars + 1];
 			wmemcpy(pszData, pLine2, nDataLen);
 			if (wcChar == WCODE::CR || wcChar == L'{' || wcChar == L'(') {
@@ -1436,18 +1436,18 @@ void EditView::SmartIndent_CPP(wchar_t wcChar)
 					while (i < nDataLen) {
 						nCharChars = NativeW::GetSizeOfChar(pszData, nDataLen, i);
 						if (nCharChars == 1 && pszData[i] == WCODE::TAB) {
-							m += (Int)pEditDoc->layoutMgr.GetActualTabSpace(LayoutInt(m));
+							m += pEditDoc->layoutMgr.GetActualTabSpace(m);
 						}else {
 							m += nCharChars;
 						}
 						i += nCharChars;
 					}
-					nCharChars = (Int)pEditDoc->layoutMgr.GetActualTabSpace(LayoutInt(m));
+					nCharChars = pEditDoc->layoutMgr.GetActualTabSpace(m);
 					for (int i=0; i<nCharChars; ++i) {
 						pszData[nDataLen + i] = WCODE::SPACE;
 					}
 					pszData[nDataLen + nCharChars] = L'\0';
-					nDataLen += LogicInt(nCharChars);
+					nDataLen += nCharChars;
 				}else {
 					pszData[nDataLen] = WCODE::TAB;
 					pszData[nDataLen + 1] = L'\0';
@@ -1463,7 +1463,7 @@ void EditView::SmartIndent_CPP(wchar_t wcChar)
 			if (wcChar == WCODE::CR) {
 				return;
 			}else {
-				nDataLen = LogicInt(0);
+				nDataLen = 0;
 				pszData = new wchar_t[nDataLen + 1];
 				pszData[nDataLen] = L'\0';
 			}

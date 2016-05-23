@@ -35,7 +35,7 @@ public:
 
 public:
 	// インターフェース
-	int DoModal(HINSTANCE, HWND, Result*);	// モーダルダイアログの表示
+	INT_PTR DoModal(HINSTANCE, HWND, Result*);	// モーダルダイアログの表示
 
 protected:
 	// 実装ヘルパ関数

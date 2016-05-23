@@ -201,9 +201,9 @@ bool Color_Quote::BeginColor(const StringRef& str, int nPos)
 						&& str.At(str.GetLength() - 2) == WCODE::CR
 						&& str.At(str.GetLength() - 1) == WCODE::LF
 					) {
-						nCommentEnd = str.GetLength() - 2;
+						nCommentEnd = (int)str.GetLength() - 2;
 					}else {
-						nCommentEnd = str.GetLength() - 1;
+						nCommentEnd = (int)str.GetLength() - 1;
 					}
 				}
 				return true;
@@ -247,7 +247,7 @@ bool Color_Quote::EndColor(const StringRef& str, int nPos)
 	return false;
 }
 
-int Color_Quote::Match_Quote(
+size_t Color_Quote::Match_Quote(
 	wchar_t wcQuote,
 	int nPos,
 	const StringRef& lineStr,
@@ -255,10 +255,10 @@ int Color_Quote::Match_Quote(
 	bool* pbEscapeEnd
 	)
 {
-	int nCharChars;
-	for (int i=nPos; i<lineStr.GetLength(); ++i) {
+	size_t nCharChars;
+	for (size_t i=nPos; i<lineStr.GetLength(); ++i) {
 		// 2005-09-02 D.S.Koba GetSizeOfChar
-		nCharChars = (Int)t_max(LogicInt(1), NativeW::GetSizeOfChar(lineStr.GetPtr(), lineStr.GetLength(), i));
+		nCharChars = t_max((size_t)1, NativeW::GetSizeOfChar(lineStr.GetPtr(), lineStr.GetLength(), i));
 		if (escapeType == StringLiteralType::CPP) {
 			// エスケープ \"
 			if (nCharChars == 1 && lineStr.At(i) == L'\\') {
@@ -299,19 +299,19 @@ int Color_Quote::Match_Quote(
 	return lineStr.GetLength() + 1; // 終端なしはLength + 1
 }
 
-int Color_Quote::Match_QuoteStr(const wchar_t* pszQuote, int nQuoteLen, int nPos, const StringRef& lineStr, bool bEscape)
+size_t Color_Quote::Match_QuoteStr(const wchar_t* pszQuote, size_t nQuoteLen, size_t nPos, const StringRef& lineStr, bool bEscape)
 {
-	int nCharChars;
-	const int nCompLen = lineStr.GetLength() - nQuoteLen + 1;
+	size_t nCharChars;
+	const size_t nCompLen = lineStr.GetLength() - nQuoteLen + 1;
 	const WCHAR quote1 = pszQuote[0];
 	const WCHAR* pLine = lineStr.GetPtr();
-	for (int i=nPos; i<nCompLen; i+=nCharChars) {
+	for (size_t i=nPos; i<nCompLen; i+=nCharChars) {
 		if (quote1 == pLine[i] && wmemcmp(pszQuote + 1, pLine + i + 1, nQuoteLen - 1) == 0) {
 			return i + nQuoteLen;
 		}
-		nCharChars = (Int)t_max(LogicInt(1), NativeW::GetSizeOfChar(pLine, lineStr.GetLength(), i));
+		nCharChars = t_max((size_t)1, NativeW::GetSizeOfChar(pLine, lineStr.GetLength(), i));
 		if (bEscape && pLine[i] == L'\\') {
-			i += (Int)t_max(LogicInt(1), NativeW::GetSizeOfChar(pLine, lineStr.GetLength(), i + nCharChars));
+			i += t_max((size_t)1, NativeW::GetSizeOfChar(pLine, lineStr.GetLength(), i + nCharChars));
 		}
 	}
 	return lineStr.GetLength();

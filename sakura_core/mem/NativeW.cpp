@@ -130,7 +130,7 @@ void NativeW::AppendStringOld(const char* pszData)
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 // GetAt()と同機能
-wchar_t NativeW::operator[](int nIndex) const
+wchar_t NativeW::operator[](size_t nIndex) const
 {
 	if (nIndex < GetStringLength()) {
 		return GetStringPtr()[nIndex];
@@ -150,8 +150,8 @@ bool NativeW::IsEqual(
 		return true;
 	}
 
-	int nLen1;
-	int nLen2;
+	size_t nLen1;
+	size_t nLen2;
 	const wchar_t* psz1 = mem1.GetStringPtr(&nLen1);
 	const wchar_t* psz2 = mem2.GetStringPtr(&nLen2);
 	
@@ -222,29 +222,29 @@ void NativeW::Replace(
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 // 指定した位置の文字がwchar_t何個分かを返す
-LogicInt NativeW::GetSizeOfChar(
+size_t NativeW::GetSizeOfChar(
 	const wchar_t* pData,
 	size_t nDataLen,
 	size_t nIdx
 	)
 {
 	if (nIdx >= nDataLen) {
-		return LogicInt(0);
+		return 0;
 	}
 
 	// サロゲートチェック					2008/7/5 Uchi
 	if (IsUTF16High(pData[nIdx])) {
 		if (nIdx + 1 < nDataLen && IsUTF16Low(pData[nIdx + 1])) {
 			// サロゲートペア 2個分
-			return LogicInt(2);
+			return 2;
 		}
 	}
 
-	return LogicInt(1);
+	return 1;
 }
 
 // 指定した位置の文字が半角何個分かを返す
-LayoutInt NativeW::GetKetaOfChar(
+size_t NativeW::GetKetaOfChar(
 	const wchar_t* pData,
 	size_t nDataLen,
 	size_t nIdx
@@ -252,33 +252,33 @@ LayoutInt NativeW::GetKetaOfChar(
 {
 	// 文字列範囲外なら 0
 	if (nIdx >= nDataLen) {
-		return LayoutInt(0);
+		return 0;
 	}
 
 	// サロゲートチェック BMP 以外は全角扱い		2008/7/5 Uchi
 	if (IsUTF16High(pData[nIdx])) {
-		return LayoutInt(2);	// 仮
+		return 2;	// 仮
 	}
 	if (IsUTF16Low(pData[nIdx])) {
 		if (nIdx > 0 && IsUTF16High(pData[nIdx - 1])) {
 			// サロゲートペア（下位）
-			return LayoutInt(0);
+			return 0;
 		}
 		// 単独（ブロークンペア）
-		// return LayoutInt(2);
+		// return 2;
 		if (IsBinaryOnSurrogate(pData[nIdx])) {
-			return LayoutInt(1);
+			return 1;
 		}else {
-			return LayoutInt(2);
+			return 2;
 		}
 	}
 
 	// 半角文字なら 1
 	if (WCODE::IsHankaku(pData[nIdx])) {
-		return LayoutInt(1);
+		return 1;
 	// 全角文字なら 2
 	}else {
-		return LayoutInt(2);
+		return 2;
 	}
 }
 

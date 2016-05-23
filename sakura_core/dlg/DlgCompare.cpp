@@ -63,7 +63,7 @@ DlgCompare::DlgCompare()
 
 
 // モーダルダイアログの表示
-int DlgCompare::DoModal(
+INT_PTR DlgCompare::DoModal(
 	HINSTANCE		hInstance,
 	HWND			hwndParent,
 	LPARAM			lParam,

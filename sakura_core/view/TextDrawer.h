@@ -57,13 +57,13 @@ public:
 
 	// -- -- w’èŒ…cü•`‰æ -- -- //
 	// w’èŒ…cü•`‰æŠÖ”	// 2005.11.08 Moca
-	void DispVerticalLines(Graphics& gr, int nTop, int nBottom, LayoutInt nLeftCol, LayoutInt nRightCol) const;
+	void DispVerticalLines(Graphics& gr, int nTop, int nBottom, int nLeftCol, int nRightCol) const;
 
 	// -- -- Ü‚è•Ô‚µŒ…cü•`‰æ -- -- //
 	void DispWrapLine(Graphics& gr, int nTop, int nBottom) const;
 
 	// -- -- s”Ô† -- -- //
-	void DispLineNumber(Graphics& gr, LayoutInt nLineNum, int y) const;		// s”Ô†•\¦
+	void DispLineNumber(Graphics& gr, int nLineNum, int y) const;		// s”Ô†•\¦
 
 private:
 	const EditView& editView;

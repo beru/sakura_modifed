@@ -202,7 +202,7 @@ DlgFuncList::DlgFuncList() : Dialog(true)
 	assert(_countof(anchorList) == _countof(rcItems));
 
 	pFuncInfoArr = NULL;		// 関数情報配列
-	nCurLine = LayoutInt(0);	// 現在行
+	nCurLine = 0;	// 現在行
 	nOutlineType = OutlineType::Default;
 	nListType = OutlineType::Default;
 	//	Apr. 23, 2005 genta 行番号を左端へ
@@ -344,8 +344,8 @@ HWND DlgFuncList::DoModeless(
 	HWND			hwndParent,
 	LPARAM			lParam,
 	FuncInfoArr*	pFuncInfoArr,
-	LayoutInt		nCurLine,
-	LayoutInt		nCurCol,
+	int				nCurLine,
+	int				nCurCol,
 	OutlineType		nOutlineType,		
 	OutlineType		nListType,
 	bool			bLineNumIsCRLF		// 行番号の表示 false=折り返し単位／true=改行単位
@@ -553,10 +553,10 @@ void DlgFuncList::SetData()
 		const FuncInfo*	pFuncInfo;
 		LV_ITEM			item;
 		bool			bSelected;
-		LayoutInt		nFuncLineOld(-1);
-		LayoutInt		nFuncColOld(-1);
-		LayoutInt		nFuncLineTop(INT_MAX);
-		LayoutInt		nFuncColTop(INT_MAX);
+		int				nFuncLineOld(-1);
+		int				nFuncColOld(-1);
+		int				nFuncLineTop(INT_MAX);
+		int				nFuncColTop(INT_MAX);
 		int				nSelectedLineTop = 0;
 		int				nSelectedLine = 0;
 		RECT			rc;
@@ -564,8 +564,8 @@ void DlgFuncList::SetData()
 		memClipText.SetString(L"");	// クリップボードコピー用テキスト
 		{
 			const size_t nBuffLenTag = 13 + wcslen(to_wchar(pFuncInfoArr->szFilePath));
-			const int nNum = pFuncInfoArr->GetNum();
-			int nBuffLen = 0;
+			const size_t nNum = pFuncInfoArr->GetNum();
+			size_t nBuffLen = 0;
 			for (int i=0; i<nNum; ++i) {
 				const FuncInfo* pFuncInfo = pFuncInfoArr->GetAt(i);
 				nBuffLen += pFuncInfo->memFuncName.GetStringLength();
@@ -896,8 +896,8 @@ void DlgFuncList::SetTreeJava(
 	bool bAddClass
 	)
 {
-	LayoutInt		nFuncLineTop(INT_MAX);
-	LayoutInt		nFuncColTop(INT_MAX);
+	int				nFuncLineTop(INT_MAX);
+	int				nFuncColTop(INT_MAX);
 	TV_INSERTSTRUCT	tvis;
 	const TCHAR*	pPos;
     TCHAR           szLabel[64 + 6];  // Jan. 07, 2001 genta クラス名エリアの拡大
@@ -917,8 +917,8 @@ void DlgFuncList::SetTreeJava(
 	memClipText.SetString(L"");
 	{
 		const size_t nBuffLenTag = 13 + wcslen(to_wchar(pFuncInfoArr->szFilePath));
-		const int nNum = pFuncInfoArr->GetNum();
-		int nBuffLen = 0;
+		const size_t nNum = pFuncInfoArr->GetNum();
+		size_t nBuffLen = 0;
 		for (int i=0; i<nNum; ++i) {
 			const FuncInfo* pFuncInfo = pFuncInfoArr->GetAt(i);
 			nBuffLen += pFuncInfo->memFuncName.GetStringLength();
@@ -935,8 +935,8 @@ void DlgFuncList::SetTreeJava(
 	pFuncInfoArr->SetAppendText(FL_OBJ_INTERFACE,	LSW(STR_DLGFNCLST_APND_INTERFACE),	false);
 	pFuncInfoArr->SetAppendText(FL_OBJ_GLOBAL,		LSW(STR_DLGFNCLST_APND_GLOBAL),		false);
 	
-	LayoutInt nFuncLineOld = LayoutInt(-1);
-	LayoutInt nFuncColOld = LayoutInt(-1);
+	int nFuncLineOld = -1;
+	int nFuncColOld = -1;
 	int bSelected = FALSE;
 	for (int i=0; i<pFuncInfoArr->GetNum(); ++i) {
 		const FuncInfo* pFuncInfo = pFuncInfoArr->GetAt(i);
@@ -948,8 +948,8 @@ void DlgFuncList::SetTreeJava(
 			&& auto_strncmp(_T("operator "), pWork, 9) != 0
 		) {
 			// インナークラスのネストレベルを調べる
-			int	k;
-			int	nWorkLen;
+			size_t	k;
+			size_t nWorkLen;
 			int	nCharChars;
 			int	nNestTemplate = 0;
 			nWorkLen = _tcslen(pWork);
@@ -1197,8 +1197,8 @@ void DlgFuncList::SetListVB(void)
 	TCHAR			szOption[64];
 	LV_ITEM			item;
 	HWND			hwndList;
-	LayoutInt		nFuncLineOld;
-	LayoutInt		nFuncColOld;
+	int				nFuncLineOld;
+	int				nFuncColOld;
 	int				nSelectedLine = 0;
 	RECT			rc;
 
@@ -1209,19 +1209,19 @@ void DlgFuncList::SetListVB(void)
 	memClipText.SetString(L"");
 	{
 		const size_t nBuffLenTag = 17 + wcslen(to_wchar(pFuncInfoArr->szFilePath));
-		const int nNum = pFuncInfoArr->GetNum();
-		int nBuffLen = 0;
-		for (int i=0; i<nNum; ++i) {
+		const size_t nNum = pFuncInfoArr->GetNum();
+		size_t nBuffLen = 0;
+		for (size_t i=0; i<nNum; ++i) {
 			const FuncInfo* pFuncInfo = pFuncInfoArr->GetAt(i);
 			nBuffLen += pFuncInfo->memFuncName.GetStringLength();
 		}
 		memClipText.AllocStringBuffer(nBuffLen + nBuffLenTag * nNum);
 	}
 
-	nFuncLineOld = LayoutInt(-1);
-	nFuncColOld = LayoutInt(-1);
-	LayoutInt nFuncLineTop(INT_MAX);
-	LayoutInt nFuncColTop(INT_MAX);
+	nFuncLineOld = -1;
+	nFuncColOld = -1;
+	int nFuncLineTop(INT_MAX);
+	int nFuncColTop(INT_MAX);
 	int nSelectedLineTop = 0;
 	bool bSelected = false;
 	for (int i=0; i<pFuncInfoArr->GetNum(); ++i) {
@@ -1447,16 +1447,16 @@ void DlgFuncList::SetTree(bool tagjump, bool nolabel)
 	HTREEITEM hItemSelectedTop = NULL;
 	HWND hwndTree = GetItemHwnd(IDC_TREE_FL);
 
-	int nFuncInfoArrNum = pFuncInfoArr->GetNum();
+	size_t nFuncInfoArrNum = pFuncInfoArr->GetNum();
 	int nStackPointer = 0;
 	int nStackDepth = 32; // phParentStack の確保している数
 	HTREEITEM* phParentStack;
 	phParentStack = (HTREEITEM*)malloc(nStackDepth * sizeof(HTREEITEM));
 	phParentStack[nStackPointer] = TVI_ROOT;
-	LayoutInt nFuncLineOld(-1);
-	LayoutInt nFuncColOld(-1);
-	LayoutInt nFuncLineTop(INT_MAX);
-	LayoutInt nFuncColTop(INT_MAX);
+	int nFuncLineOld(-1);
+	int nFuncColOld(-1);
+	int nFuncLineTop(INT_MAX);
+	int nFuncColTop(INT_MAX);
 	bool bSelected = false;
 
 	memClipText.SetString(L"");
@@ -1613,7 +1613,7 @@ void DlgFuncList::SetDocLineFuncList()
 	auto& docLineMgr = pEditView->GetDocument().docLineMgr;
 	
 	FuncListManager().ResetAllFucListMark(docLineMgr, false);
-	int num = pFuncInfoArr->GetNum();
+	size_t num = pFuncInfoArr->GetNum();
 	for (int i=0; i<num; ++i) {
 		const FuncInfo* pFuncInfo = pFuncInfoArr->GetAt(i);
 		if (0 < pFuncInfo->nFuncLineCRLF) {
@@ -1684,14 +1684,14 @@ void DlgFuncList::SetTreeFile()
 		tvis.hParent = hParentTree.back();
 		tvis.item.mask = TVIF_TEXT | TVIF_PARAM;
 		if (item.eFileTreeItemType == FileTreeItemType::Grep) {
-			pFuncInfoArr->AppendData( LogicInt(-1), LogicInt(-1), LayoutInt(-1), LayoutInt(-1), _T(""), szPath, 0, 0 );
+			pFuncInfoArr->AppendData( -1, -1, -1, -1, _T(""), szPath, 0, 0 );
 			tvis.item.pszText = const_cast<TCHAR*>(pszLabel);
 			tvis.item.lParam  = -(nFuncInfo * 10 + 3);
 			HTREEITEM hParent = TreeView_InsertItem(hwndTree, &tvis);
 			++nFuncInfo;
 			SetTreeFileSub( hParent, NULL );
 		}else if (item.eFileTreeItemType == FileTreeItemType::File) {
-			pFuncInfoArr->AppendData( LogicInt(-1), LogicInt(-1), LayoutInt(-1), LayoutInt(-1), _T(""), szPath, 0, 0 );
+			pFuncInfoArr->AppendData( -1, -1, -1, -1, _T(""), szPath, 0, 0 );
 			tvis.item.pszText = const_cast<TCHAR*>(pszLabel);
 			tvis.item.lParam  = nFuncInfo;
 			TreeView_InsertItem(hwndTree, &tvis);
@@ -1729,7 +1729,7 @@ void DlgFuncList::SetTreeFileSub(
 		return; // error
 	}
 
-	int count = 0;
+	size_t count = 0;
 	GrepEnumKeys grepEnumKeys;
 	int errNo = grepEnumKeys.SetFileKeys( fileTreeSetting.items[nItem].szTargetFile );
 	if (errNo != 0) {
@@ -1753,9 +1753,9 @@ void DlgFuncList::SetTreeFileSub(
 	//フォルダ一覧作成
 	GrepEnumFilterFolders grepEnumFilterFolders;
 	grepEnumFilterFolders.Enumerates( basePath.c_str(), grepEnumKeys, grepEnumOptions, grepExceptAbsFolders );
-	int nItemCount = grepEnumFilterFolders.GetCount();
+	size_t nItemCount = grepEnumFilterFolders.GetCount();
 	count = nItemCount;
-	for (int i=0; i<nItemCount; ++i) {
+	for (size_t i=0; i<nItemCount; ++i) {
 		TVINSERTSTRUCT tvis;
 		tvis.hParent      = hParent;
 		tvis.item.mask    = TVIF_TEXT | TVIF_PARAM | TVIF_CHILDREN;
@@ -2059,7 +2059,7 @@ BOOL DlgFuncList::OnBnClicked(int wID)
 		if (wID == IDC_CHECK_bMarkUpBlankLineEnable&&nListType == OutlineType::BookMark) {
 			EditView* pEditView = (EditView*)lParam;
 			pEditView->GetCommander().HandleCommand(F_BOOKMARK_VIEW, true, TRUE, 0, 0, 0);
-			nCurLine=pEditView->GetCaret().GetCaretLayoutPos().GetY2() + LayoutInt(1);
+			nCurLine=pEditView->GetCaret().GetCaretLayoutPos().GetY2() + 1;
 			DocTypeManager().GetTypeConfig(pEditView->GetDocument().docType.GetDocumentType(), type);
 			SetData();
 		}else
@@ -2072,7 +2072,7 @@ BOOL DlgFuncList::OnBnClicked(int wID)
 	case IDC_BUTTON_SETTING:
 		{
 			DlgFileTree dlgFileTree;
-			int nRet = dlgFileTree.DoModal(G_AppInstance(), GetHwnd(), (LPARAM)this);
+			INT_PTR nRet = dlgFileTree.DoModal(G_AppInstance(), GetHwnd(), (LPARAM)this);
 			if (nRet == TRUE) {
 				EFunctionCode nFuncCode = GetFuncCodeRedraw(nOutlineType);
 				EditView* pEditView = (EditView*)lParam;
@@ -2482,8 +2482,8 @@ bool DlgFuncList::TagJumpTimer(
 		if (point.y != -1) {
 			if (pView->GetDocument().docFile.GetFilePathClass().IsValidPath()) {
 				LogicPoint pt;
-				pt.x = LogicInt(point.GetX() - 1);
-				pt.y = LogicInt(point.GetY() - 1);
+				pt.x = point.GetX() - 1;
+				pt.y = point.GetY() - 1;
 				if (pt.x < 0) {
 					pt.x = 0;
 				}
@@ -2620,8 +2620,8 @@ void DlgFuncList::Redraw(
 	OutlineType nOutLineType,
 	OutlineType nListType,
 	FuncInfoArr* pFuncInfoArr,
-	LayoutInt nCurLine,
-	LayoutInt nCurCol
+	int nCurLine,
+	int nCurCol
 	)
 {
 	EditView* pEditView = (EditView*)lParam;

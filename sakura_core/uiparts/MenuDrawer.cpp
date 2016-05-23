@@ -977,7 +977,7 @@ int MenuDrawer::MeasureItem(int nFuncID, int* pnItemHeight)
 void MenuDrawer::DrawItem(DRAWITEMSTRUCT* lpdis)
 {
 	int			j;
-	int			nItemStrLen;
+	size_t		nItemStrLen;
 	int			nIndentLeft;
 	int			nIndentRight;
 	HBRUSH		hBrush;

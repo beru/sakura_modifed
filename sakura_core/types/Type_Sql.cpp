@@ -50,7 +50,7 @@ void CType_Sql::InitTypeConfigImp(TypeConfig& type)
 void DocOutline::MakeFuncList_PLSQL(FuncInfoArr* pFuncInfoArr)
 {
 	const wchar_t*	pLine;
-	LogicInt		nLineLen;
+	size_t		nLineLen;
 	int			nCharChars;
 	wchar_t		szWordPrev[100];
 	wchar_t		szWord[100];
@@ -58,7 +58,7 @@ void DocOutline::MakeFuncList_PLSQL(FuncInfoArr* pFuncInfoArr)
 	int			nMaxWordLeng = 70;
 	int			nMode;
 	wchar_t		szFuncName[100];
-	LogicInt	nFuncLine(0);
+	int			nFuncLine(0);
 	int			nFuncId = 0;
 	int			nFuncNum;
 	int			nFuncOrProc = 0;
@@ -69,8 +69,8 @@ void DocOutline::MakeFuncList_PLSQL(FuncInfoArr* pFuncInfoArr)
 	szWord[nWordIdx] = L'\0';
 	nMode = 0;
 	nFuncNum = 0;
-	LogicInt nLineCount;
-	for (nLineCount=LogicInt(0); nLineCount<doc.docLineMgr.GetLineCount(); ++nLineCount) {
+	int nLineCount;
+	for (nLineCount=0; nLineCount<doc.docLineMgr.GetLineCount(); ++nLineCount) {
 		pLine = doc.docLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
 		for (int i=0; i<nLineLen; ++i) {
 			// 1バイト文字だけを処理する
@@ -132,15 +132,15 @@ void DocOutline::MakeFuncList_PLSQL(FuncInfoArr* pFuncInfoArr)
 					if (nParseCnt == 0 && wcsicmp(szWord, L"FUNCTION") == 0) {
 						nFuncOrProc = 1;
 						nParseCnt = 1;
-						nFuncLine = nLineCount + LogicInt(1);
+						nFuncLine = nLineCount + 1;
 					}else if (nParseCnt == 0 && wcsicmp(szWord, L"PROCEDURE") == 0) {
 						nFuncOrProc = 2;
 						nParseCnt = 1;
-						nFuncLine = nLineCount + LogicInt(1);
+						nFuncLine = nLineCount + 1;
 					}else if (nParseCnt == 0 && wcsicmp(szWord, L"PACKAGE") == 0) {
 						nFuncOrProc = 3;
 						nParseCnt = 1;
-						nFuncLine = nLineCount + LogicInt(1);
+						nFuncLine = nLineCount + 1;
 					}else if (nParseCnt == 1 && nFuncOrProc == 3 && wcsicmp(szWord, L"BODY") == 0) {
 						nFuncOrProc = 4;
 						nParseCnt = 1;
@@ -179,7 +179,7 @@ void DocOutline::MakeFuncList_PLSQL(FuncInfoArr* pFuncInfoArr)
 								LogicPoint(0, nFuncLine - 1),
 								&ptPos
 							);
-							pFuncInfoArr->AppendData(nFuncLine, ptPos.GetY2() + LayoutInt(1), szFuncName, nFuncId);
+							pFuncInfoArr->AppendData(nFuncLine, ptPos.GetY2() + 1, szFuncName, nFuncId);
 							nParseCnt = 0;
 						}
 						if (wcsicmp(szWord, L"AS") == 0) {
@@ -197,7 +197,7 @@ void DocOutline::MakeFuncList_PLSQL(FuncInfoArr* pFuncInfoArr)
 									LogicPoint(0, nFuncLine - 1),
 									&ptPos
 								);
-								pFuncInfoArr->AppendData(nFuncLine, ptPos.GetY2() + LayoutInt(1) , szFuncName, nFuncId);
+								pFuncInfoArr->AppendData(nFuncLine, ptPos.GetY2() + 1 , szFuncName, nFuncId);
 								nParseCnt = 0;
 							}else if (nFuncOrProc == 4) {
 								nFuncId = 41;	// パッケージ本体
@@ -213,7 +213,7 @@ void DocOutline::MakeFuncList_PLSQL(FuncInfoArr* pFuncInfoArr)
 									LogicPoint(0, nFuncLine - 1),
 									&ptPos
 								);
-								pFuncInfoArr->AppendData(nFuncLine, ptPos.GetY2() + LayoutInt(1) , szFuncName, nFuncId);
+								pFuncInfoArr->AppendData(nFuncLine, ptPos.GetY2() + 1 , szFuncName, nFuncId);
 								nParseCnt = 0;
 							}
 						}
@@ -311,7 +311,7 @@ void DocOutline::MakeFuncList_PLSQL(FuncInfoArr* pFuncInfoArr)
 							LogicPoint(0, nFuncLine - 1),
 							&ptPos
 						);
-						pFuncInfoArr->AppendData(nFuncLine, ptPos.GetY2() + LayoutInt(1) , szFuncName, nFuncId);
+						pFuncInfoArr->AppendData(nFuncLine, ptPos.GetY2() + 1 , szFuncName, nFuncId);
 						nParseCnt = 0;
 					}
 					nMode = 0;

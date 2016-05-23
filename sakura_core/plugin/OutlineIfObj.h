@@ -98,8 +98,8 @@ public:
 				LogicPoint ptLogic( _wtoi(arguments[1])-1, _wtoi(arguments[0])-1 );
 				LayoutPoint ptLayout;
 				if (ptLogic.x < 0 || ptLogic.y < 0) {
-					ptLayout.x = (Int)ptLogic.x;
-					ptLayout.y = (Int)ptLogic.y;
+					ptLayout.x = ptLogic.x;
+					ptLayout.y = ptLogic.y;
 				}else {
 					view.GetDocument().layoutMgr.LogicToLayout( ptLogic, &ptLayout );
 				}

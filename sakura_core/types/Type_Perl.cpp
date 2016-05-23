@@ -68,8 +68,8 @@ void CType_Perl::InitTypeConfigImp(TypeConfig& type)
 void DocOutline::MakeFuncList_Perl(FuncInfoArr* pFuncInfoArr)
 {
 	const wchar_t*	pLine;
-	LogicInt		nLineLen;
-	int			i;
+	size_t		nLineLen;
+	size_t		i;
 	int			nCharChars;
 	wchar_t		szWord[100];
 	int			nWordIdx = 0;
@@ -77,8 +77,8 @@ void DocOutline::MakeFuncList_Perl(FuncInfoArr* pFuncInfoArr)
 	int			nMode;
 	bool bExtEol = GetDllShareData().common.edit.bEnableExtEol;
 
-	LogicInt	nLineCount;
-	for (nLineCount=LogicInt(0); nLineCount<doc.docLineMgr.GetLineCount(); ++nLineCount) {
+	size_t nLineCount;
+	for (nLineCount=0; nLineCount<doc.docLineMgr.GetLineCount(); ++nLineCount) {
 		pLine = doc.docLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
 		nMode = 0;
 		for (i=0; i<nLineLen; ++i) {
@@ -158,11 +158,11 @@ void DocOutline::MakeFuncList_Perl(FuncInfoArr* pFuncInfoArr)
 					*/
 					LayoutPoint ptPosXY;
 					doc.layoutMgr.LogicToLayout(
-						LogicPoint(LogicInt(0), nLineCount),
+						LogicPoint(0, nLineCount),
 						&ptPosXY
 					);
 					//	Mar. 9, 2001
-					pFuncInfoArr->AppendData(nLineCount + LogicInt(1), ptPosXY.GetY2() + LayoutInt(1), szWord, 0);
+					pFuncInfoArr->AppendData(nLineCount + 1, ptPosXY.GetY2() + 1, szWord, 0);
 
 					break;
 				}

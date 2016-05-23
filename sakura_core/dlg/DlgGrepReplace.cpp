@@ -72,7 +72,7 @@ DlgGrepReplace::DlgGrepReplace()
 
 
 // モーダルダイアログの表示
-int DlgGrepReplace::DoModal(
+INT_PTR DlgGrepReplace::DoModal(
 	HINSTANCE hInstance,
 	HWND hwndParent,
 	const TCHAR* pszCurrentFilePath,
@@ -99,7 +99,7 @@ int DlgGrepReplace::DoModal(
 		_tcscpy(szCurrentFilePath, pszCurrentFilePath);
 	}
 
-	return (int)Dialog::DoModal( hInstance, hwndParent, IDD_GREP_REPLACE, lParam );
+	return Dialog::DoModal( hInstance, hwndParent, IDD_GREP_REPLACE, lParam );
 }
 
 BOOL DlgGrepReplace::OnInitDialog(

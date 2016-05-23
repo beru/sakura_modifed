@@ -123,14 +123,14 @@ private:
 	PDATA pData;
 
 public:
-	DataObject (LPCWSTR lpszText, int nTextLen, BOOL bColumnSelect ):
+	DataObject (LPCWSTR lpszText, size_t nTextLen, BOOL bColumnSelect ):
 		nFormat(0),
 		pData(nullptr)
 	{
 		SetText(lpszText, nTextLen, bColumnSelect);
 	}
 	~DataObject() { SetText(NULL, 0, FALSE); }
-	void	SetText(LPCWSTR lpszText, int nTextLen, BOOL bColumnSelect);
+	void	SetText(LPCWSTR lpszText, size_t nTextLen, BOOL bColumnSelect);
 	DWORD	DragDrop(BOOL bLeft, DWORD dwEffects);
 
 	STDMETHOD(GetData)(LPFORMATETC, LPSTGMEDIUM);

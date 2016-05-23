@@ -65,7 +65,7 @@ DlgWinSize::~DlgWinSize()
 
 
 // !モーダルダイアログの表示
-int DlgWinSize::DoModal(
+INT_PTR DlgWinSize::DoModal(
 	HINSTANCE		hInstance,
 	HWND			hwndParent,
 	WinSizeMode&	eSaveWinSize,	// [in/out] ウィンドウ位置継承

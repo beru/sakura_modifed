@@ -40,14 +40,14 @@ LayoutMgr::LayoutMgr()
 {
 	pDocLineMgr = nullptr;
 	pTypeConfig = nullptr;
-	nMaxLineKetas = LayoutInt(MAXLINEKETAS);
-	nTabSpace = LayoutInt(4);
+	nMaxLineKetas = MAXLINEKETAS;
+	nTabSpace = 4;
 	pszKinsokuHead_1.clear();				// 行頭禁則	//@@@ 2002.04.08 MIK
 	pszKinsokuTail_1.clear();				// 行末禁則	//@@@ 2002.04.08 MIK
 	pszKinsokuKuto_1.clear();				// 句読点ぶらさげ	//@@@ 2002.04.17 MIK
 
-	nTextWidth = LayoutInt(0);			// テキスト最大幅の記憶		// 2009.08.28 nasukoji
-	nTextWidthMaxLine = LayoutInt(0);	// 最大幅のレイアウト行		// 2009.08.28 nasukoji
+	nTextWidth = 0;			// テキスト最大幅の記憶		// 2009.08.28 nasukoji
+	nTextWidthMaxLine = 0;	// 最大幅のレイアウト行		// 2009.08.28 nasukoji
 
 	Init();
 }
@@ -85,14 +85,14 @@ void LayoutMgr::Init()
 {
 	pLayoutTop = nullptr;
 	pLayoutBot = nullptr;
-	nPrevReferLine = LayoutInt(0);
+	nPrevReferLine = 0;
 	pLayoutPrevRefer = nullptr;
-	nLines = LayoutInt(0);			// 全物理行数
+	nLines = 0;			// 全物理行数
 	nLineTypeBot = COLORIDX_DEFAULT;
 
 	// EOFレイアウト位置記憶	// 2006.10.07 Moca
-	nEOFLine = LayoutInt(-1);
-	nEOFColumn = LayoutInt(-1);
+	nEOFLine = -1;
+	nEOFColumn = -1;
 }
 
 
@@ -114,8 +114,8 @@ void LayoutMgr::_Empty()
 void LayoutMgr::SetLayoutInfo(
 	bool				bDoLayout,
 	const TypeConfig&	refType,
-	LayoutInt			nTabSpace,
-	LayoutInt			nMaxLineKetas
+	size_t				nTabSpace,
+	size_t				nMaxLineKetas
 	)
 {
 	MY_RUNNINGTIMER(runningTimer, "LayoutMgr::SetLayoutInfo");
@@ -183,20 +183,20 @@ void LayoutMgr::SetLayoutInfo(
 	@param nLineNum [in] 物理行番号 (0～)
 */
 const Layout* LayoutMgr::SearchLineByLayoutY(
-	LayoutInt nLineLayout
+	int nLineLayout
 	) const
 {
-	LayoutInt nLineNum = nLineLayout;
+	int nLineNum = nLineLayout;
 
 	Layout*	pLayout;
-	LayoutInt	nCount;
-	if (nLines == LayoutInt(0)) {
+	int	nCount;
+	if (nLines == 0) {
 		return nullptr;
 	}
 
 	// Mar. 19, 2003 Moca nLineNumが負の場合のチェックを追加
-	if (LayoutInt(0) > nLineNum || nLineNum >= nLines) {
-		if (LayoutInt(0) > nLineNum) {
+	if (0 > nLineNum || nLineNum >= nLines) {
+		if (0 > nLineNum) {
 			DEBUG_TRACE(_T("LayoutMgr::SearchLineByLayoutY() nLineNum = %d\n"), nLineNum);
 		}
 		return nullptr;
@@ -231,14 +231,14 @@ const Layout* LayoutMgr::SearchLineByLayoutY(
 
 	// +++++++わずかに高速版+++++++
 	// 2004.03.28 Moca pLayoutPrevReferより、Top,Botのほうが近い場合は、そちらを利用する
-	LayoutInt nPrevToLineNumDiff = t_abs(nPrevReferLine - nLineNum);
+	int nPrevToLineNumDiff = t_abs(nPrevReferLine - nLineNum);
 	if (0
 		|| !pLayoutPrevRefer
 		|| nLineNum < nPrevToLineNumDiff
 		|| nLines - nLineNum < nPrevToLineNumDiff
 	) {
 		if (nLineNum < (nLines / 2)) {
-			nCount = LayoutInt(0);
+			nCount = 0;
 			pLayout = pLayoutTop;
 			while (pLayout) {
 				if (nLineNum == nCount) {
@@ -250,7 +250,7 @@ const Layout* LayoutMgr::SearchLineByLayoutY(
 				++nCount;
 			}
 		}else {
-			nCount = nLines - LayoutInt(1);
+			nCount = nLines - 1;
 			pLayout = pLayoutBot;
 			while (pLayout) {
 				if (nLineNum == nCount) {
@@ -266,7 +266,7 @@ const Layout* LayoutMgr::SearchLineByLayoutY(
 		if (nLineNum == nPrevReferLine) {
 			return pLayoutPrevRefer;
 		}else if (nLineNum > nPrevReferLine) {
-			nCount = nPrevReferLine + LayoutInt(1);
+			nCount = nPrevReferLine + 1;
 			pLayout = pLayoutPrevRefer->GetNextLayout();
 			while (pLayout) {
 				if (nLineNum == nCount) {
@@ -278,7 +278,7 @@ const Layout* LayoutMgr::SearchLineByLayoutY(
 				++nCount;
 			}
 		}else {
-			nCount = nPrevReferLine - LayoutInt(1);
+			nCount = nPrevReferLine - 1;
 			pLayout = pLayoutPrevRefer->GetPrevLayout();
 			while (pLayout) {
 				if (nLineNum == nCount) {
@@ -298,7 +298,7 @@ const Layout* LayoutMgr::SearchLineByLayoutY(
 //@@@ 2002.09.23 YAZAKI Layout*を作成するところは分離して、InsertLineNext()と共通化
 void LayoutMgr::AddLineBottom(Layout* pLayout)
 {
-	if (nLines == LayoutInt(0)) {
+	if (nLines == 0) {
 		pLayoutBot = pLayoutTop = pLayout;
 		pLayoutTop->pPrev = nullptr;
 	}else {
@@ -317,7 +317,7 @@ Layout* LayoutMgr::InsertLineNext(
 	Layout* pLayout
 	)
 {
-	if (nLines == LayoutInt(0)) {
+	if (nLines == 0) {
 		// 初
 		pLayoutBot = pLayoutTop = pLayout;
 		pLayoutTop->pPrev = nullptr;
@@ -354,10 +354,10 @@ Layout* LayoutMgr::InsertLineNext(
 Layout* LayoutMgr::CreateLayout(
 	DocLine*		pDocLine,
 	LogicPoint		ptLogicPos,
-	LogicInt		nLength,
+	int				nLength,
 	EColorIndexType	nTypePrev,
-	LayoutInt		nIndent,
-	LayoutInt		nPosX,
+	int				nIndent,
+	int				nPosX,
 	LayoutColorInfo*	colorInfo
 	)
 {
@@ -387,7 +387,7 @@ Layout* LayoutMgr::CreateLayout(
 	// パフォーマンスの低下が気にならない程なら全ての折り返し方法で計算する
 	// ようにしても良いと思う。
 	// （その場合LayoutMgr::CalculateTextWidth()の呼び出し箇所をチェック）
-	pLayout->SetLayoutWidth((pEditDoc->nTextWrapMethodCur == TextWrappingMethod::NoWrapping) ? nPosX : LayoutInt(0));
+	pLayout->SetLayoutWidth((pEditDoc->nTextWrapMethodCur == TextWrappingMethod::NoWrapping) ? nPosX : 0);
 
 	return pLayout;
 }
@@ -399,15 +399,15 @@ Layout* LayoutMgr::CreateLayout(
 	@date 2002/2/10 aroka CMemory変更
 */
 const wchar_t* LayoutMgr::GetLineStr(
-	LayoutInt nLine,
-	LogicInt* pnLineLen
+	size_t nLine,
+	size_t* pnLineLen
 	) const //#####いらんやろ
 {
 	const Layout* pLayout;
 	if (!(pLayout = SearchLineByLayoutY(nLine))) {
 		return NULL;
 	}
-	*pnLineLen = LogicInt(pLayout->GetLengthWithEOL());
+	*pnLineLen = pLayout->GetLengthWithEOL();
 	return pLayout->GetDocLineRef()->GetPtr() + pLayout->GetLogicOffset();
 }
 
@@ -415,8 +415,8 @@ const wchar_t* LayoutMgr::GetLineStr(
 	@date 2002/03/24 YAZAKI GetLineStr(int nLine, int* pnLineLen)と同じ動作に変更。
 */
 const wchar_t* LayoutMgr::GetLineStr(
-	LayoutInt nLine,
-	LogicInt* pnLineLen,
+	size_t nLine,
+	size_t* pnLineLen,
 	const Layout** ppcLayoutDes
 	) const
 {
@@ -445,7 +445,7 @@ bool LayoutMgr::IsEndOfLine(
 	if (pLayout->GetLayoutEol().GetType() == EolType::None) {
 		// この行に改行はない
 		// この行の最後か？
-		if (ptLinePos.x == (Int)pLayout->GetLengthWithEOL()) {
+		if (ptLinePos.x == pLayout->GetLengthWithEOL()) {
 			return true; //$$ 単位混在
 		}
 	}
@@ -473,10 +473,10 @@ void LayoutMgr::GetEndLayoutPos(
 		return;
 	}
 
-	if (nLines == LayoutInt(0) || !pLayoutBot) {
+	if (nLines == 0 || !pLayoutBot) {
 		// データが空
-		ptLayoutEnd->x = LayoutInt(0);
-		ptLayoutEnd->y = LayoutInt(0);
+		ptLayoutEnd->x = 0;
+		ptLayoutEnd->y = 0;
 		nEOFColumn = ptLayoutEnd->x;
 		nEOFLine = ptLayoutEnd->y;
 		return;
@@ -485,18 +485,18 @@ void LayoutMgr::GetEndLayoutPos(
 	Layout* btm = pLayoutBot;
 	if (btm->eol != EolType::None) {
 		// 末尾に改行がある
-		ptLayoutEnd->Set(LayoutInt(0), GetLineCount());
+		ptLayoutEnd->Set(0, GetLineCount());
 	}else {
 		MemoryIterator it(btm, GetTabSpace());
 		while (!it.end()) {
 			it.scanNext();
 			it.addDelta();
 		}
-		ptLayoutEnd->Set(it.getColumn(), GetLineCount() - LayoutInt(1));
+		ptLayoutEnd->Set(it.getColumn(), GetLineCount() - 1);
 		// [EOF]のみ折り返すのはやめる	// 2009.02.17 ryoji
 		//// 2006.10.01 Moca Start [EOF]のみのレイアウト行処理が抜けていたバグを修正
 		//if (GetMaxLineKetas() <= ptLayoutEnd->GetX2()) {
-		//	ptLayoutEnd->SetX(LayoutInt(0));
+		//	ptLayoutEnd->SetX(0);
 		//	ptLayoutEnd->y++;
 		//}
 		//// 2006.10.01 Moca End
@@ -510,15 +510,15 @@ void LayoutMgr::GetEndLayoutPos(
 // 削除した範囲の直前のレイアウト情報のポインタを返す
 Layout* LayoutMgr::DeleteLayoutAsLogical(
 	Layout*	pLayoutInThisArea,
-	LayoutInt	nLineOf_pLayoutInThisArea,
-	LogicInt	nLineFrom,
-	LogicInt	nLineTo,
+	int			nLineOf_pLayoutInThisArea,
+	int			nLineFrom,
+	int			nLineTo,
 	LogicPoint	ptDelLogicalFrom,
-	LayoutInt*	pnDeleteLines
+	int*		pnDeleteLines
 	)
 {
-	*pnDeleteLines = LayoutInt(0);
-	if (nLines == LayoutInt(0)) {	// 全物理行数
+	*pnDeleteLines = 0;
+	if (nLines == 0) {	// 全物理行数
 		return nullptr;
 	}
 	if (!pLayoutInThisArea) {
@@ -527,7 +527,7 @@ Layout* LayoutMgr::DeleteLayoutAsLogical(
 
 	// 1999.11.22
 	pLayoutPrevRefer = pLayoutInThisArea->GetPrevLayout();
-	nPrevReferLine = nLineOf_pLayoutInThisArea - LayoutInt(1);
+	nPrevReferLine = nLineOf_pLayoutInThisArea - 1;
 
 	// 範囲内先頭に該当するレイアウト情報をサーチ
 	Layout* pLayoutWork = pLayoutInThisArea->GetPrevLayout();
@@ -592,7 +592,7 @@ Layout* LayoutMgr::DeleteLayoutAsLogical(
 // 論理行が挿入された場合は０より大きい行数
 void LayoutMgr::ShiftLogicalLineNum(
 	Layout* pLayoutPrev,
-	LogicInt nShiftLines
+	int nShiftLines
 	)
 {
 	MY_RUNNINGTIMER(runningTimer, "LayoutMgr::ShiftLogicalLineNum");
@@ -610,8 +610,8 @@ void LayoutMgr::ShiftLogicalLineNum(
 }
 
 bool LayoutMgr::ChangeLayoutParam(
-	LayoutInt	nTabSize,
-	LayoutInt	nMaxLineKetas
+	size_t nTabSize,
+	size_t nMaxLineKetas
 	)
 {
 	if (nTabSize < 1 || nTabSize > 64) {
@@ -632,8 +632,8 @@ bool LayoutMgr::ChangeLayoutParam(
 
 // 現在位置の単語の範囲を調べる
 bool LayoutMgr::WhereCurrentWord(
-	LayoutInt		nLineNum,
-	LogicInt		nIdx,
+	int				nLineNum,
+	int				nIdx,
 	LayoutRange*	pSelect,		// [out]
 	NativeW*		pcmcmWord,		// [out]
 	NativeW*		pcmcmWordLeft	// [out]
@@ -645,11 +645,11 @@ bool LayoutMgr::WhereCurrentWord(
 	}
 
 	// 現在位置の単語の範囲を調べる -> ロジック単位pSelect, pMemWord, pMemWordLeft
-	LogicInt nFromX;
-	LogicInt nToX;
+	int nFromX;
+	int nToX;
 	bool nRetCode = SearchAgent(*pDocLineMgr).WhereCurrentWord(
 		pLayout->GetLogicLineNo(),
-		pLayout->GetLogicOffset() + LogicInt(nIdx),
+		pLayout->GetLogicOffset() + nIdx,
 		&nFromX,
 		&nToX,
 		pcmcmWord,
@@ -673,8 +673,8 @@ bool LayoutMgr::WhereCurrentWord(
 
 // 現在位置の左右の単語の先頭位置を調べる
 int LayoutMgr::PrevOrNextWord(
-	LayoutInt		nLineNum,
-	LogicInt		nIdx,
+	int				nLineNum,
+	int				nIdx,
 	LayoutPoint*	pptLayoutNew,
 	bool			bLeft,
 	bool			bStopsBothEnds
@@ -686,7 +686,7 @@ int LayoutMgr::PrevOrNextWord(
 	}
 
 	// 現在位置の左右の単語の先頭位置を調べる
-	LogicInt nPosNew;
+	int nPosNew;
 	int nRetCode = SearchAgent(*pDocLineMgr).PrevOrNextWord(
 		pLayout->GetLogicLineNo(),
 		pLayout->GetLogicOffset() + nIdx,
@@ -712,8 +712,8 @@ int LayoutMgr::PrevOrNextWord(
 	@retval 0 見つからない
 */
 int LayoutMgr::SearchWord(
-	LayoutInt				nLine,				// [in] 検索開始レイアウト行
-	LogicInt				nIdx,				// [in] 検索開始データ位置
+	int						nLine,				// [in] 検索開始レイアウト行
+	int						nIdx,				// [in] 検索開始データ位置
 	SearchDirection			searchDirection,	// [in] 検索方向
 	LayoutRange*			pMatchRange,		// [out] マッチレイアウト範囲
 	const SearchStringPattern&	pattern
@@ -761,7 +761,7 @@ int LayoutMgr::SearchWord(
 void LayoutMgr::LogicToLayout(
 	const LogicPoint&	ptLogic,	// [in]  ロジック位置
 	LayoutPoint*		pptLayout,	// [out] レイアウト位置
-	LayoutInt			nLineHint	// [in]  レイアウトY値のヒント。求める値に近い値を渡すと高速に検索できる。
+	int					nLineHint	// [in]  レイアウトY値のヒント。求める値に近い値を渡すと高速に検索できる。
 	)
 {
 	pptLayout->Clear();
@@ -770,13 +770,13 @@ void LayoutMgr::LogicToLayout(
 		return; // 変換不可
 	}
 	// サーチ開始地点 -> pLayout, nCaretPosX, nCaretPosY
-	LayoutInt		nCaretPosX = LayoutInt(0);
-	LayoutInt		nCaretPosY;
+	int				nCaretPosX = 0;
+	int				nCaretPosY;
 	const Layout*	pLayout;
 	// 2013.05.15 ヒント、ありなしの処理を統合
 	{
-		nLineHint = t_min(GetLineCount() - 1, nLineHint);
-		nCaretPosY = t_max(LayoutInt(ptLogic.y), nLineHint);
+		nLineHint = t_min((int)GetLineCount() - 1, nLineHint);
+		nCaretPosY = t_max(ptLogic.y, nLineHint);
 
 		// 2013.05.12 pLayoutPrevReferを見る
 		if (1
@@ -785,7 +785,7 @@ void LayoutMgr::LogicToLayout(
 			&& pLayoutPrevRefer->GetLogicLineNo() <= ptLogic.y
 		) {
 			// ヒントより現在位置のほうが後ろか同じぐらいで近い
-			nCaretPosY = LayoutInt(ptLogic.y - pLayoutPrevRefer->GetLogicLineNo()) + nPrevReferLine;
+			nCaretPosY = ptLogic.y - pLayoutPrevRefer->GetLogicLineNo() + nPrevReferLine;
 			pLayout = SearchLineByLayoutY(nCaretPosY);
 		}else {
 			pLayout = SearchLineByLayoutY(nCaretPosY);
@@ -834,22 +834,22 @@ void LayoutMgr::LogicToLayout(
 			nCaretPosX = pLayout->GetIndent();
 			const wchar_t*	pData;
 			pData = pLayout->GetDocLineRef()->GetPtr() + pLayout->GetLogicOffset(); // 2002/2/10 aroka CMemory変更
-			LogicInt	nDataLen = (LogicInt)pLayout->GetLengthWithEOL();
+			int nDataLen = pLayout->GetLengthWithEOL();
 
-			LogicInt i;
-			for (i=LogicInt(0); i<nDataLen; ++i) {
+			int i;
+			for (i=0; i<nDataLen; ++i) {
 				if (pLayout->GetLogicOffset() + i >= ptLogic.x) {
 					break;
 				}
 
 				// 文字ロジック幅 -> nCharChars
-				LogicInt nCharChars = NativeW::GetSizeOfChar(pData, nDataLen, i);
+				int nCharChars = NativeW::GetSizeOfChar(pData, nDataLen, i);
 				if (nCharChars == 0) {
-					nCharChars = LogicInt(1);
+					nCharChars = 1;
 				}
 				
 				// 文字レイアウト幅 -> nCharKetas
-				LayoutInt nCharKetas;
+				int nCharKetas;
 				if (pData[i] == WCODE::TAB) {
 					// Sep. 23, 2002 genta メンバー関数を使うように
 					nCharKetas = GetActualTabSpace(nCaretPosX);
@@ -857,16 +857,16 @@ void LayoutMgr::LogicToLayout(
 					nCharKetas = NativeW::GetKetaOfChar(pData, nDataLen, i);
 				}
 //				if (nCharKetas == 0)				// 削除 サロゲートペア対策	2008/7/5 Uchi
-//					nCharKetas = LayoutInt(1);
+//					nCharKetas = 1;
 
 				// レイアウト加算
 				nCaretPosX += nCharKetas;
 
 				// ロジック加算
 				if (pData[i] == WCODE::TAB) {
-					nCharChars = LogicInt(1);
+					nCharChars = 1;
 				}
-				i += nCharChars - LogicInt(1);
+				i += nCharChars - 1;
 			}
 			if (i < nDataLen) {
 				// ptLogic.x, ptLogic.yがこの行の中に見つかったらループ打ち切り
@@ -875,13 +875,13 @@ void LayoutMgr::LogicToLayout(
 
 			if (!pLayout->GetNextLayout()) {
 				// 当該位置に達していなくても，レイアウト末尾ならデータ末尾のレイアウト位置を返す．
-				nCaretPosX = pLayout->CalcLayoutWidth(*this) + LayoutInt(pLayout->GetLayoutEol().GetLen() > 0 ? 1 : 0);
+				nCaretPosX = pLayout->CalcLayoutWidth(*this) + pLayout->GetLayoutEol().GetLen() > 0 ? 1 : 0;
 				break;
 			}
 
 			if (ptLogic.y < pLayout->pNext->GetLogicLineNo()) {
 				// 次のLayoutが当該物理行を過ぎてしまう場合はデータ末尾のレイアウト位置を返す．
-				nCaretPosX = pLayout->CalcLayoutWidth(*this) + LayoutInt(pLayout->GetLayoutEol().GetLen() > 0 ? 1 : 0);
+				nCaretPosX = pLayout->CalcLayoutWidth(*this) + pLayout->GetLayoutEol().GetLen() > 0 ? 1 : 0;
 				break;
 			}
 		}
@@ -898,7 +898,7 @@ void LayoutMgr::LogicToLayout(
 
 	// 2004.06.16 Moca インデント表示の際の位置ずれ修正
 	pptLayout->Set(
-		pLayout ? nCaretPosX : LayoutInt(0),
+		pLayout ? nCaretPosX : 0,
 		nCaretPosY
 	);
 }
@@ -916,39 +916,39 @@ void LayoutMgr::LayoutToLogicEx(
 	LogicPointEx*		pptLogic	// [out] ロジック位置
 	) const
 {
-	pptLogic->Set(LogicInt(0), LogicInt(0));
+	pptLogic->Set(0, 0);
 	pptLogic->ext = 0;
 	if (ptLayout.GetY2() > nLines) {
 		// 2007.10.11 kobake Y値が間違っていたので修正
 		//pptLogic->Set(0, nLines);
-		pptLogic->Set(LogicInt(0), pDocLineMgr->GetLineCount());
+		pptLogic->Set(0, pDocLineMgr->GetLineCount());
 		return;
 	}
 
-	LogicInt		nDataLen;
+	size_t nDataLen;
 	const wchar_t*	pData;
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                        Ｙ値の決定                           //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	bool bEOF = false;
-	LayoutInt nX;
+	int nX;
 	const Layout* pLayout = SearchLineByLayoutY(ptLayout.GetY2());
 	if (!pLayout) {
 		if (0 < ptLayout.y) {
-			pLayout = SearchLineByLayoutY(ptLayout.GetY2() - LayoutInt(1));
+			pLayout = SearchLineByLayoutY(ptLayout.GetY2() - 1);
 			if (!pLayout) {
-				pptLogic->Set(LogicInt(0), pDocLineMgr->GetLineCount());
+				pptLogic->Set(0, pDocLineMgr->GetLineCount());
 				return;
 			}else {
-				pData = GetLineStr(ptLayout.GetY2() - LayoutInt(1), &nDataLen);
+				pData = GetLineStr(ptLayout.GetY2() - 1, &nDataLen);
 				if (WCODE::IsLineDelimiter(pData[nDataLen - 1], GetDllShareData().common.edit.bEnableExtEol)) {
-					pptLogic->Set(LogicInt(0), pDocLineMgr->GetLineCount());
+					pptLogic->Set(0, pDocLineMgr->GetLineCount());
 					return;
 				}else {
 					pptLogic->y = pDocLineMgr->GetLineCount() - 1; // 2002/2/10 aroka DocLineMgr変更
 					bEOF = true;
-					// nX = LayoutInt(MAXLINEKETAS);
+					// nX = MAXLINEKETAS;
 					nX = pLayout->GetIndent();
 					goto checkloop;
 				}
@@ -956,7 +956,7 @@ void LayoutMgr::LayoutToLogicEx(
 		}
 		// 2007.10.11 kobake Y値が間違っていたので修正
 		//pptLogic->Set(0, nLines);
-		pptLogic->Set(LogicInt(0), pDocLineMgr->GetLineCount());
+		pptLogic->Set(0, pDocLineMgr->GetLineCount());
 		return;
 	}else {
 		pptLogic->y = pLayout->GetLogicLineNo();
@@ -966,26 +966,27 @@ void LayoutMgr::LayoutToLogicEx(
 	//                        Ｘ値の決定                           //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	pData = GetLineStr(ptLayout.GetY2(), &nDataLen);
-	nX = pLayout ? pLayout->GetIndent() : LayoutInt(0);
+	nX = pLayout ? pLayout->GetIndent() : 0;
 
 checkloop:;
-	LogicInt i;
-	for (i=LogicInt(0); i<nDataLen; ++i) {
+	int i;
+	for (i=0; i<nDataLen; ++i) {
 		// 文字ロジック幅 -> nCharChars
-		LogicInt	nCharChars;
+		int nCharChars;
 		nCharChars = NativeW::GetSizeOfChar(pData, nDataLen, i);
-		if (nCharChars == 0)
-			nCharChars = LogicInt(1);
+		if (nCharChars == 0) {
+			nCharChars = 1;
+		}
 		
 		// 文字レイアウト幅 -> nCharKetas
-		LayoutInt	nCharKetas;
+		int nCharKetas;
 		if (pData[i] == WCODE::TAB) {
 			nCharKetas = GetActualTabSpace(nX);
 		}else {
 			nCharKetas = NativeW::GetKetaOfChar(pData, nDataLen, i);
 		}
 //		if (nCharKetas == 0)				// 削除 サロゲートペア対策	2008/7/5 Uchi
-//			nCharKetas = LayoutInt(1);
+//			nCharKetas = 1;
 
 		// レイアウト加算
 		if (nX + nCharKetas > ptLayout.GetX2() && !bEOF) {
@@ -995,9 +996,9 @@ checkloop:;
 
 		// ロジック加算
 		if (pData[i] == WCODE::TAB) {
-			nCharChars = LogicInt(1);
+			nCharChars = 1;
 		}
-		i += nCharChars - LogicInt(1);
+		i += nCharChars - 1;
 	}
 	i += pLayout->GetLogicOffset();
 	pptLogic->x = i;
@@ -1025,7 +1026,7 @@ void LayoutMgr::LayoutToLogic(
 void LayoutMgr::DUMP()
 {
 #ifdef _DEBUG
-	LogicInt nDataLen;
+	size_t nDataLen;
 	MYTRACE(_T("------------------------\n"));
 	MYTRACE(_T("nLines=%d\n"), nLines);
 	MYTRACE(_T("pLayoutTop=%08lxh\n"), pLayoutTop);

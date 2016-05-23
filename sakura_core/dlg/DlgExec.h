@@ -28,7 +28,7 @@ public:
 	/*
 	||  Attributes & Operations
 	*/
-	int DoModal(HINSTANCE, HWND, LPARAM);	// モーダルダイアログの表示
+	INT_PTR DoModal(HINSTANCE, HWND, LPARAM);	// モーダルダイアログの表示
 
 	TCHAR		szCommand[1024 + 1];	// コマンドライン
 	SFilePath	szCurDir;				// カレントディレクトリ

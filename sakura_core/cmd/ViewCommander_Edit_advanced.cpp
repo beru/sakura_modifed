@@ -62,7 +62,7 @@ void ViewCommander::Command_Indent(wchar_t wcChar, IndentType eIndent)
 	}
 	// To Here 2001.12.03 hor
 #endif
-	Command_Indent(&wcChar, LogicInt(1), eIndent);
+	Command_Indent(&wcChar, 1, eIndent);
 	return;
 }
 
@@ -74,7 +74,7 @@ void ViewCommander::Command_Indent(wchar_t wcChar, IndentType eIndent)
 */
 void ViewCommander::Command_Indent(
 	const wchar_t* const pData,
-	const LogicInt nDataLen,
+	const int nDataLen,
 	IndentType eIndent
 	)
 {
@@ -90,7 +90,7 @@ void ViewCommander::Command_Indent(
 		{ return ch == WCODE::SPACE || ch == WCODE::TAB; }
 	} IsIndentChar;
 	struct SoftTabData {
-		SoftTabData(LayoutInt nTab) : szTab(NULL), nTab((Int)nTab) {}
+		SoftTabData(int nTab) : szTab(NULL), nTab(nTab) {}
 		~SoftTabData() { delete[] szTab; }
 		operator const wchar_t* ()
 		{
@@ -100,7 +100,7 @@ void ViewCommander::Command_Indent(
 			}
 			return szTab;
 		}
-		int Len(LayoutInt nCol) { return nTab - ((Int)nCol % nTab); }
+		int Len(int nCol) { return nTab - (nCol % nTab); }
 		wchar_t* szTab;
 		int nTab;
 	} stabData(layoutMgr.GetTabSpace());
@@ -162,7 +162,7 @@ void ViewCommander::Command_Indent(
 			文字を直前に挿入された文字が、それにより元の位置からどれだけ後ろにずれたか。
 			これに従い矩形選択範囲を後ろにずらす。
 		*/
-		LayoutInt minOffset(-1);
+		int minOffset = -1;
 		/*
 			■全角文字の左側の桁揃えについて
 			(1) eIndent == IndentType::Tab のとき
@@ -189,24 +189,24 @@ void ViewCommander::Command_Indent(
 			hwndProgress = view.StartProgress();
 		}
 		for (bool insertionWasDone=false; ; alignFullWidthChar=false) {
-			minOffset = LayoutInt(-1);
-			for (LayoutInt nLineNum=rcSel.GetFrom().y; nLineNum<=rcSel.GetTo().y; ++nLineNum) {
+			minOffset = -1;
+			for (int nLineNum=rcSel.GetFrom().y; nLineNum<=rcSel.GetTo().y; ++nLineNum) {
 				const Layout* pLayout = layoutMgr.SearchLineByLayoutY(nLineNum);
 				// Nov. 6, 2002 genta NULLチェック追加
 				// これがないとEOF行を含む矩形選択中の文字列入力で落ちる
-				LogicInt nIdxFrom, nIdxTo;
-				LayoutInt xLayoutFrom, xLayoutTo;
+				int nIdxFrom, nIdxTo;
+				int xLayoutFrom, xLayoutTo;
 				bool reachEndOfLayout = false;
 				if (pLayout) {
 					// 指定された桁に対応する行のデータ内の位置を調べる
 					const struct {
-						LayoutInt keta;
-						LogicInt* outLogicX;
-						LayoutInt* outLayoutX;
+						int keta;
+						int* outLogicX;
+						int* outLayoutX;
 					} sortedKetas[] = {
 						{ rcSel.GetFrom().x, &nIdxFrom, &xLayoutFrom },
 						{ rcSel.GetTo().x, &nIdxTo, &xLayoutTo },
-						{ LayoutInt(-1), 0, 0 }
+						{ -1, 0, 0 }
 					};
 					MemoryIterator it(pLayout, layoutMgr.GetTabSpace());
 					for (int i=0; 0<=sortedKetas[i].keta; ++i) {
@@ -224,8 +224,8 @@ void ViewCommander::Command_Indent(
 					}
 					reachEndOfLayout = it.end();
 				}else {
-					nIdxFrom = nIdxTo = LogicInt(0);
-					xLayoutFrom = xLayoutTo = LayoutInt(0);
+					nIdxFrom = nIdxTo = 0;
+					xLayoutFrom = xLayoutTo = 0;
 					reachEndOfLayout = true;
 				}
 				const bool emptyLine = ! pLayout || pLayout->GetLengthWithoutEOL() == 0;
@@ -256,7 +256,7 @@ void ViewCommander::Command_Indent(
 					if (alignFullWidthChar
 						&& (ptInsert.x == rcSel.GetFrom().x || (pLayout && IsIndentChar(pLayout->GetPtr()[nIdxFrom])))
 					) {	// 文字の左側が範囲にぴったり収まっている
-						minOffset = LayoutInt(0);
+						minOffset = 0;
 						continue;
 					}
 				}
@@ -271,15 +271,15 @@ void ViewCommander::Command_Indent(
 				);
 				insertionWasDone = true;
 				minOffset = t_min(
-					0 <= minOffset ? minOffset : layoutMgr.GetMaxLineKetas(),
-					ptInsert.x <= ptInserted.x ? ptInserted.x - ptInsert.x : t_max(LayoutInt(0), layoutMgr.GetMaxLineKetas() - ptInsert.x)
+					(0 <= minOffset) ? minOffset : (int)layoutMgr.GetMaxLineKetas(),
+					ptInsert.x <= ptInserted.x ? ptInserted.x - ptInsert.x : t_max(0, (int)layoutMgr.GetMaxLineKetas() - ptInsert.x)
 				);
 
 				caret.MoveCursor(ptInserted, false);
 				caret.nCaretPosX_Prev = caret.GetCaretLayoutPos().GetX2();
 
 				if (hwndProgress) {
-					int newPos = ::MulDiv((Int)nLineNum, 100, (Int)rcSel.GetTo().y);
+					int newPos = ::MulDiv(nLineNum, 100, rcSel.GetTo().y);
 					if (newPos != nProgressPos) {
 						nProgressPos = newPos;
 						Progress_SetPos(hwndProgress, newPos + 1);
@@ -298,8 +298,8 @@ void ViewCommander::Command_Indent(
 
 		// 挿入された文字の分だけ選択範囲を後ろにずらし、rcSelにセットする。
 		if (0 < minOffset) {
-			rcSel.GetFromPointer()->x = t_min(rcSel.GetFrom().x + minOffset, layoutMgr.GetMaxLineKetas());
-			rcSel.GetToPointer()->x = t_min(rcSel.GetTo().x + minOffset, layoutMgr.GetMaxLineKetas());
+			rcSel.GetFromPointer()->x = t_min(rcSel.GetFrom().x + minOffset, (int)layoutMgr.GetMaxLineKetas());
+			rcSel.GetToPointer()->x = t_min(rcSel.GetTo().x + minOffset, (int)layoutMgr.GetMaxLineKetas());
 		}
 
 		// カーソルを移動
@@ -336,8 +336,8 @@ void ViewCommander::Command_Indent(
 			caret.nCaretPosX_Prev = caret.GetCaretLayoutPos().GetX2();
 		}
 	}else {	// 通常選択(複数行)
-		selectOld.SetFrom(LayoutPoint(LayoutInt(0), GetSelect().GetFrom().y));
-		selectOld.SetTo  (LayoutPoint(LayoutInt(0), GetSelect().GetTo().y ));
+		selectOld.SetFrom(LayoutPoint(0, GetSelect().GetFrom().y));
+		selectOld.SetTo  (LayoutPoint(0, GetSelect().GetTo().y ));
 		if (GetSelect().GetTo().x > 0) {
 			selectOld.GetToPointer()->y++;
 		}
@@ -355,8 +355,8 @@ void ViewCommander::Command_Indent(
 			hwndProgress = view.StartProgress();
 		}
 
-		for (LayoutInt i=selectOld.GetFrom().GetY2(); i<selectOld.GetTo().GetY2(); ++i) {
-			LayoutInt nLineCountPrev = layoutMgr.GetLineCount();
+		for (int i=selectOld.GetFrom().GetY2(); i<selectOld.GetTo().GetY2(); ++i) {
+			int nLineCountPrev = layoutMgr.GetLineCount();
 			const Layout* pLayout = layoutMgr.SearchLineByLayoutY(i);
 			if (!pLayout ||						// テキストが無いEOLの行は無視
 				pLayout->GetLogicOffset() > 0 ||				// 折り返し行は無視
@@ -366,14 +366,14 @@ void ViewCommander::Command_Indent(
 			}
 
 			// カーソルを移動
-			caret.MoveCursor(LayoutPoint(LayoutInt(0), i), false);
+			caret.MoveCursor(LayoutPoint(0, i), false);
 			caret.nCaretPosX_Prev = caret.GetCaretLayoutPos().GetX2();
 
 			// 現在位置にデータを挿入
 			view.InsertData_CEditView(
-				LayoutPoint(LayoutInt(0), i),
+				LayoutPoint(0, i),
 				!bSoftTab? pData: stabData,
-				!bSoftTab? nDataLen: stabData.Len(LayoutInt(0)),
+				!bSoftTab? nDataLen: stabData.Len(0),
 				&ptInserted,
 				false
 			);
@@ -386,7 +386,7 @@ void ViewCommander::Command_Indent(
 				selectOld.GetToPointer()->y += layoutMgr.GetLineCount() - nLineCountPrev;
 			}
 			if (hwndProgress) {
-				int newPos = ::MulDiv((Int)i, 100, (Int)selectOld.GetTo().GetY());
+				int newPos = ::MulDiv(i, 100, selectOld.GetTo().GetY());
 				if (newPos != nProgressPos) {
 					nProgressPos = newPos;
 					Progress_SetPos(hwndProgress, newPos + 1);
@@ -454,8 +454,8 @@ void ViewCommander::Command_Unindent(wchar_t wcChar)
 		GetDocument().docEditor.SetModified(true, true);	// Jan. 22, 2002 genta
 
 		LayoutRange selectOld;	// 範囲選択
-		selectOld.SetFrom(LayoutPoint(LayoutInt(0), GetSelect().GetFrom().y));
-		selectOld.SetTo  (LayoutPoint(LayoutInt(0), GetSelect().GetTo().y ));
+		selectOld.SetFrom(LayoutPoint(0, GetSelect().GetFrom().y));
+		selectOld.SetTo  (LayoutPoint(0, GetSelect().GetTo().y ));
 		if (GetSelect().GetTo().x > 0) {
 			selectOld.GetToPointer()->y++;
 		}
@@ -472,12 +472,12 @@ void ViewCommander::Command_Unindent(wchar_t wcChar)
 
 		auto& caret = GetCaret();
 		auto& layoutMgr = GetDocument().layoutMgr;
-		LogicInt nDelLen;
-		for (LayoutInt i = selectOld.GetFrom().GetY2(); i < selectOld.GetTo().GetY2(); ++i) {
-			LayoutInt nLineCountPrev = layoutMgr.GetLineCount();
+		int nDelLen;
+		for (int i = selectOld.GetFrom().GetY2(); i < selectOld.GetTo().GetY2(); ++i) {
+			int nLineCountPrev = layoutMgr.GetLineCount();
 
 			const Layout*	pLayout;
-			LogicInt		nLineLen;
+			size_t nLineLen;
 			const wchar_t*	pLine = layoutMgr.GetLineStr(i, &nLineLen, &pLayout);
 			if (!pLayout || pLayout->GetLogicOffset() > 0) { // 折り返し以降の行はインデント処理を行わない
 				continue;
@@ -485,12 +485,12 @@ void ViewCommander::Command_Unindent(wchar_t wcChar)
 
 			if (wcChar == WCODE::TAB) {
 				if (pLine[0] == wcChar) {
-					nDelLen = LogicInt(1);
+					nDelLen = 1;
 				}else {
 					// 削り取る半角スペース数 (1～タブ幅分) -> nDelLen
-					LogicInt i;
-					LogicInt nTabSpaces = LogicInt((Int)layoutMgr.GetTabSpace());
-					for (i=LogicInt(0); i<nLineLen; ++i) {
+					int i;
+					int nTabSpaces = layoutMgr.GetTabSpace();
+					for (i=0; i<nLineLen; ++i) {
 						if (pLine[i] != WCODE::SPACE) {
 							break;
 						}
@@ -508,16 +508,16 @@ void ViewCommander::Command_Unindent(wchar_t wcChar)
 				if (pLine[0] != wcChar) {
 					continue;
 				}
-				nDelLen = LogicInt(1);
+				nDelLen = 1;
 			}
 
 			// カーソルを移動
-			caret.MoveCursor(LayoutPoint(LayoutInt(0), i), false);
+			caret.MoveCursor(LayoutPoint(0, i), false);
 			caret.nCaretPosX_Prev = caret.GetCaretLayoutPos().GetX2();
 			
 			// 指定位置の指定長データ削除
 			view.DeleteData2(
-				LayoutPoint(LayoutInt(0), i),
+				LayoutPoint(0, i),
 				nDelLen,	// 2001.12.03 hor
 				nullptr
 			);
@@ -526,7 +526,7 @@ void ViewCommander::Command_Unindent(wchar_t wcChar)
 				selectOld.GetToPointer()->y += layoutMgr.GetLineCount() - nLineCountPrev;
 			}
 			if (hwndProgress) {
-				int newPos = ::MulDiv((Int)i, 100, (Int)selectOld.GetTo().GetY());
+				int newPos = ::MulDiv(i, 100, selectOld.GetTo().GetY());
 				if (newPos != nProgressPos) {
 					nProgressPos = newPos;
 					Progress_SetPos(hwndProgress, newPos + 1);
@@ -573,7 +573,7 @@ void ViewCommander::Command_Trim(
 	if (!viewSelect.IsTextSelected()) {	// 非選択時は行選択に変更
 		viewSelect.select.SetFrom(
 			LayoutPoint(
-				LayoutInt(0),
+				0,
 				GetCaret().GetCaretLayoutPos().GetY()
 			)
 		);
@@ -662,10 +662,10 @@ void ViewCommander::Command_Sort(bool bAsc)	// bAsc:true=昇順, false=降順
 	LogicRange selectOld;
 
 	int			nColumnFrom, nColumnTo;
-	LayoutInt	nCF(0), nCT(0);
-	LayoutInt	nCaretPosYOLD;
+	int	nCF(0), nCT(0);
+	int	nCaretPosYOLD;
 	bool		bBeginBoxSelectOld;
-	LogicInt	nLineLen;
+	size_t	nLineLen;
 	std::vector<SortData*> sta;
 
 	auto& selInfo = view.GetSelectionInfo();
@@ -708,8 +708,8 @@ void ViewCommander::Command_Sort(bool bAsc)	// bAsc:true=昇順, false=降順
 			}
 		}
 	}
-	selectOld.SetFromX(LogicInt(0));
-	selectOld.SetToX(LogicInt(0));
+	selectOld.SetFromX(0);
+	selectOld.SetToX(0);
 
 	// 行選択されてない
 	if (selectOld.IsLineOne()) {
@@ -717,11 +717,11 @@ void ViewCommander::Command_Sort(bool bAsc)	// bAsc:true=昇順, false=降順
 	}
 	
 	sta.reserve(selectOld.GetTo().GetY2() - selectOld.GetFrom().GetY2());
-	for (LogicInt i=selectOld.GetFrom().GetY2(); i<selectOld.GetTo().y; ++i) {
+	for (int i=selectOld.GetFrom().GetY2(); i<selectOld.GetTo().y; ++i) {
 		const DocLine* pDocLine = GetDocument().docLineMgr.GetLine(i);
 		const NativeW& memLine = pDocLine->_GetDocLineDataWithEOL();
 		const wchar_t* pLine = memLine.GetStringPtr(&nLineLen);
-		LogicInt nLineLenWithoutEOL = pDocLine->GetLengthWithoutEOL();
+		int nLineLenWithoutEOL = pDocLine->GetLengthWithoutEOL();
 		if (!pLine) {
 			continue;
 		}
@@ -840,9 +840,9 @@ void ViewCommander::Command_Sort(bool bAsc)	// bAsc:true=昇順, false=降順
 */
 void ViewCommander::Command_Merge(void)
 {
-	LayoutInt	nCaretPosYOLD;
-	LogicInt	nLineLen;
-	LayoutInt	nMergeLayoutLines;
+	int	nCaretPosYOLD;
+	size_t		nLineLen;
+	int	nMergeLayoutLines;
 
 	auto& selInfo = view.GetSelectionInfo();
 	if (!selInfo.IsTextSelected()) {			// テキストが選択されているか
@@ -879,8 +879,8 @@ void ViewCommander::Command_Merge(void)
 #endif
 	}
 
-	sSelectOld.SetFromX(LogicInt(0));
-	sSelectOld.SetToX(LogicInt(0));
+	sSelectOld.SetFromX(0);
+	sSelectOld.SetToX(0);
 
 	// 行選択されてない
 	if (sSelectOld.IsLineOne()) {
@@ -899,7 +899,7 @@ void ViewCommander::Command_Merge(void)
 	int nLineLenw = 0;
 	bool bMerge = false;
 	lineArr.reserve(sSelectOld.GetTo().y - sSelectOld.GetFrom().GetY2());
-	for (LogicInt i=sSelectOld.GetFrom().GetY2(); i<sSelectOld.GetTo().y; ++i) {
+	for (int i=sSelectOld.GetFrom().GetY2(); i<sSelectOld.GetTo().y; ++i) {
 		const wchar_t* pLine = GetDocument().docLineMgr.GetLine(i)->GetDocLineStrWithEOL(&nLineLen);
 		if (!pLine) continue;
 		if (!pLinew || nLineLen != nLineLenw || wmemcmp(pLine, pLinew, nLineLen)) {

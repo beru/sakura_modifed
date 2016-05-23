@@ -43,18 +43,18 @@ public:
 	bool			IsEmptyLine() const;		// このDocLineが空行（スペース、タブ、改行記号のみの行）かどうか。
 
 	// データ取得
-	LogicInt		GetLengthWithoutEOL() const			{ return line.GetStringLength() - eol.GetLen(); } // 戻り値は文字単位。
+	size_t			GetLengthWithoutEOL() const			{ return line.GetStringLength() - eol.GetLen(); } // 戻り値は文字単位。
 	const wchar_t*	GetPtr() const						{ return line.GetStringPtr(); }
 	size_t			GetLengthWithEOL() const			{ return line.GetStringLength(); }	// CMemoryIterator用
 #ifdef USE_STRICT_INT
 	const wchar_t*	GetDocLineStrWithEOL(int* pnLen) const {	//###仮の名前、仮の対処
-		LogicInt n;
+		size_t n;
 		const wchar_t* p = GetDocLineStrWithEOL(&n);
 		*pnLen = n;
 		return p;
 	}
 #endif
-	const wchar_t*	GetDocLineStrWithEOL(LogicInt* pnLen) const {	//###仮の名前、仮の対処
+	const wchar_t*	GetDocLineStrWithEOL(size_t* pnLen) const {	//###仮の名前、仮の対処
 		if (this) {
 			*pnLen = GetLengthWithEOL();
 			return GetPtr();

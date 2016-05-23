@@ -57,13 +57,13 @@ FuncKeyWnd::FuncKeyWnd()
 	pEditDoc = nullptr;
 	// 共有データ構造体のアドレスを返す
 	nCurrentKeyState = -1;
-	for (int i=0; i<_countof(szFuncNameArr); ++i) {
+	for (size_t i=0; i<_countof(szFuncNameArr); ++i) {
 		szFuncNameArr[i][0] = 0;
 	}
 // 2002.11.04 Moca Open()側で設定
 //	nButtonGroupNum = 4;
 
-	for (int i=0; i<_countof(hwndButtonArr); ++i) {
+	for (size_t i=0; i<_countof(hwndButtonArr); ++i) {
 		hwndButtonArr[i] = NULL;
 	}
 

@@ -20,12 +20,12 @@
 bool Converter_Trim::DoConvert(NativeW* pData)
 {
 	const wchar_t*	pLine;
-	int			nLineLen;
-	int			nBgn;
-	int			i, j;
-	int			nPosDes;
+	size_t nLineLen;
+	size_t nBgn;
+	size_t i, j;
+	size_t nPosDes;
 	Eol			eol;
-	int			nCharChars;
+	size_t nCharChars;
 
 	nBgn = 0;
 	nPosDes = 0;

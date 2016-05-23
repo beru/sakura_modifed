@@ -79,7 +79,7 @@ static const int g_aMbcPriority[] =
 /*!
 	デフォルトコンストラクタ
 */
-void ESI::SetInformation(const char* pS, const int nLen)
+void ESI::SetInformation(const char* pS, const size_t nLen)
 {
 	// 文字情報を収集
 	ScanCode(pS, nLen);
@@ -188,7 +188,7 @@ void ESI::SortMBCInfo(void)
 /*!
 	SJIS の文字コード判定情報を収集する
 */
-void ESI::GetEncodingInfo_sjis(const char* pS, const int nLen)
+void ESI::GetEncodingInfo_sjis(const char* pS, const size_t nLen)
 {
 	if (nLen < 1 || !pS) {
 		SetEvaluation(CODE_SJIS, 0, 0);
@@ -238,7 +238,7 @@ void ESI::GetEncodingInfo_sjis(const char* pS, const int nLen)
 /*!
 	JIS の文字コード判定情報を収集する
 */
-void ESI::GetEncodingInfo_jis(const char* pS, const int nLen)
+void ESI::GetEncodingInfo_jis(const char* pS, const size_t nLen)
 {
 	if (nLen < 1 || !pS) {
 		SetEvaluation(CODE_JIS, 0, 0);
@@ -287,7 +287,7 @@ void ESI::GetEncodingInfo_jis(const char* pS, const int nLen)
 /*!
 	EUC-JP の文字コード判定情報を収集する
 */
-void ESI::GetEncodingInfo_eucjp(const char* pS, const int nLen)
+void ESI::GetEncodingInfo_eucjp(const char* pS, const size_t nLen)
 {
 	int nret;
 	ECharSet echarset;
@@ -347,7 +347,7 @@ void ESI::GetEncodingInfo_eucjp(const char* pS, const int nLen)
 	@note
 	　1 バイト以上のエラー（いわゆる ill-formed）が見つかれば UTF-7 と判定されない。
 */
-void ESI::GetEncodingInfo_utf7(const char* pS, const int nLen)
+void ESI::GetEncodingInfo_utf7(const char* pS, const size_t nLen)
 {
 	char* pr_next;
 	int nlen_setb;
@@ -411,7 +411,7 @@ void ESI::GetEncodingInfo_utf7(const char* pS, const int nLen)
 /*!
 	UTF-8 の文字コード判定情報を収集する
 */
-void ESI::GetEncodingInfo_utf8(const char* pS, const int nLen)
+void ESI::GetEncodingInfo_utf8(const char* pS, const size_t nLen)
 {
 	int nret;
 	ECharSet echarset;
@@ -449,7 +449,7 @@ void ESI::GetEncodingInfo_utf8(const char* pS, const int nLen)
 /*!
 	CESU-8 の文字コード判定情報を収集する
 */
-void ESI::GetEncodingInfo_cesu8(const char* pS, const int nLen)
+void ESI::GetEncodingInfo_cesu8(const char* pS, const size_t nLen)
 {
 	if (nLen < 1 || !pS) {
 		SetEvaluation(CODE_CESU8, 0, 0);
@@ -490,16 +490,16 @@ void ESI::GetEncodingInfo_cesu8(const char* pS, const int nLen)
 	@note
 	　必ずFalse。
 */
-void ESI::GetEncodingInfo_latin1(const char* pS, const int nLen)
+void ESI::GetEncodingInfo_latin1(const char* pS, const size_t nLen)
 {
-	SetEvaluation(CODE_LATIN1, 0, - nLen);
+	SetEvaluation(CODE_LATIN1, 0, - (int)nLen);
 	return;
 }
 
 
 
 
-void ESI::GetEncodingInfo_meta( const char* pS, const int nLen )
+void ESI::GetEncodingInfo_meta( const char* pS, const size_t nLen )
 {
 	// XML宣言は先頭にあるので、最初にチェック
 	EncodingType encoding = AutoDetectByXML( pS, nLen );
@@ -518,7 +518,7 @@ void ESI::GetEncodingInfo_meta( const char* pS, const int nLen )
 /*!
 	UTF-16 チェッカ内で使う改行コード確認関数
 */
-bool ESI::_CheckUtf16Eol(const char* pS, const int nLen, const bool bbig_endian)
+bool ESI::_CheckUtf16Eol(const char* pS, const size_t nLen, const bool bbig_endian)
 {
 	wchar_t wc0;
 	wchar_t wc1;
@@ -556,7 +556,7 @@ bool ESI::_CheckUtf16Eol(const char* pS, const int nLen, const bool bbig_endian)
 	@note 改行文字を数える。ついでに ASCII 版の改行コードも数える。
 	　nLen は２で割り切れるものが入ってくることを仮定。
 */
-void ESI::GetEncodingInfo_uni(const char* pS, const int nLen)
+void ESI::GetEncodingInfo_uni(const char* pS, const size_t nLen)
 {
 	const char *pr1, *pr2, *pr_end;
 	int nillbytes1, nillbytes2;
@@ -650,7 +650,7 @@ void ESI::GetEncodingInfo_uni(const char* pS, const int nLen)
 
 	@return 入力データがない時に false
 */
-void ESI::ScanCode(const char* pS, const int nLen)
+void ESI::ScanCode(const char* pS, const size_t nLen)
 {
 	// 対象となったデータ長を記録。
 	SetDataLen(nLen);
@@ -716,7 +716,7 @@ void ESI::GuessEucOrSjis(void)
 	 && static_cast<double>(nMbcEucZenHirakata) / nMbcEucZen >= 0.25
 	) { // 0.25 という値は適当です。
 		// EUC をトップに持ってくる
-		int i;
+		size_t i;
 		for (i=0; i<2; ++i) {
 			if (apMbcInfo[i]->eCodeID == CODE_EUC) {
 				break;
@@ -741,7 +741,7 @@ void ESI::GuessUtf8OrCesu8(void)
 {
 	if (IsAmbiguousUtf8AndCesu8()
 	 && pEncodingConfig->bPriorCesu8) {
-		int i;
+		size_t i;
 		for (i=0; i<2; ++i) {
 			if (apMbcInfo[i]->eCodeID == CODE_CESU8) {
 				break;
@@ -896,7 +896,7 @@ static bool IsXMLWhiteSpace( int c )
 /*!	ファイル中のエンコーディング指定を利用した文字コード自動選択
  *	@return	決定した文字コード。 未決定は-1を返す
 */
-EncodingType ESI::AutoDetectByXML( const char* pBuf, int nSize )
+EncodingType ESI::AutoDetectByXML( const char* pBuf, size_t nSize )
 {
 
 	// ASCII comportible encoding XML
@@ -905,7 +905,7 @@ EncodingType ESI::AutoDetectByXML( const char* pBuf, int nSize )
 			return CODE_NONE;
 		}
 		char quoteXML = '\0';
-		int i;
+		size_t i;
 		// xml規格ではencodingはverionに続いて現れる以外は許されない。ここではいいにする
 		for (i=5; i<nSize-12; ++i) {
 			// [ \t\r\n]encoding[ \t\r\n]*=[ \t\r\n]*[\"\']を探す
@@ -977,9 +977,9 @@ EncodingType ESI::AutoDetectByXML( const char* pBuf, int nSize )
 
 
 
-EncodingType ESI::AutoDetectByHTML( const char* pBuf, int nSize )
+EncodingType ESI::AutoDetectByHTML( const char* pBuf, size_t nSize )
 {
-	for (int i=0; i+14<nSize; ++i) {
+	for (size_t i=0; i+14<nSize; ++i) {
 		// 「<meta http-equiv="Content-Type" content="text/html; Charset=Shift_JIS">」
 		// 「<meta charset="utf-8">」
 		if (memicmp(pBuf + i, "<meta", 5) == 0 && IsXMLWhiteSpace(pBuf[i+5])) {
@@ -1026,9 +1026,9 @@ EncodingType ESI::AutoDetectByHTML( const char* pBuf, int nSize )
 					while (IsXMLWhiteSpace(pBuf[i]) && i < nSize) { ++i; }
 					if (nSize <= i) { return CODE_NONE; }
 					char quoteChar = '\0';
-					int nBeginAttVal = i;
-					int nEndAttVal;
-					int nNextPos;
+					size_t nBeginAttVal = i;
+					size_t nEndAttVal;
+					size_t nNextPos;
 					if (pBuf[i] == '\'' || pBuf[i] == '"') {
 						quoteChar = pBuf[i];
 						++i;
@@ -1066,7 +1066,7 @@ EncodingType ESI::AutoDetectByHTML( const char* pBuf, int nSize )
 							++i;
 							while (i < nEndAttVal && IsXMLWhiteSpace(pBuf[i])) { ++i; }
 							if (nEndAttVal <= i) { i = nNextPos; continue; }
-							int nCharsetBegin = i;
+							size_t nCharsetBegin = i;
 							while (i < nEndAttVal && !IsXMLWhiteSpace(pBuf[i])) { ++i; }
 							for (int k=0; encodingNameToCode[k].name; ++k) {
 								const int nLen = encodingNameToCode[k].nLen;
@@ -1123,11 +1123,11 @@ static bool IsEncodingNameChar( int c )
 /* コーディング文字列の識別
 「# coding: utf-8」等を取得する
 */
-EncodingType ESI::AutoDetectByCoding( const char* pBuf, int nSize )
+EncodingType ESI::AutoDetectByCoding( const char* pBuf, size_t nSize )
 {
 	bool bComment = false;
 	int nLineNum = 1;
-	for (int i=0; i+8<nSize; ++i) {
+	for (size_t i=0; i+8<nSize; ++i) {
 		if (bComment
 			&& memcmp(pBuf + i, "coding", 6) == 0
 			&& (pBuf[i+6] == '=' || pBuf[i+6] == ':')
@@ -1137,7 +1137,7 @@ EncodingType ESI::AutoDetectByCoding( const char* pBuf, int nSize )
 			if (nSize <= i) {
 				return CODE_NONE;
 			}
-			int nBegin = i;
+			size_t nBegin = i;
 			for (; i<nSize && IsEncodingNameChar(pBuf[i]); ++i) {}
 			if (nBegin == i) {
 				return CODE_NONE;

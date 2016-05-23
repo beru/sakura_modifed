@@ -66,7 +66,7 @@ struct CommonSetting_General {
 	bool	bNoCaretMoveByActivation;			// マウスクリックにてアクティベートされた時はカーソル位置を移動しない  2007.10.02 nasukoji (add by genta)
 
 	// スクロール
-	LayoutInt	nRepeatedScrollLineNum;		// キーリピート時のスクロール行数
+	int		nRepeatedScrollLineNum;			// キーリピート時のスクロール行数
 	bool	nRepeatedScroll_Smooth;			// キーリピート時のスクロールを滑らかにするか
 	int		nPageScrollByWheel;				// キー/マウスボタン + ホイールスクロールでページUP/DOWNする	// 2009.01.17 nasukoji
 	int		nHorizontalScrollByWheel;		// キー/マウスボタン + ホイールスクロールで横スクロールする		// 2009.01.17 nasukoji

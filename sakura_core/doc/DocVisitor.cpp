@@ -23,15 +23,15 @@ void DocVisitor::SetAllEol(Eol eol)
 	// カーソル位置記憶
 	auto& caret = view.GetCaret();
 	auto& textArea = view.GetTextArea();
-	LayoutInt		nViewTopLine = textArea.GetViewTopLine();
-	LayoutInt		nViewLeftCol = textArea.GetViewLeftCol();
+	size_t		nViewTopLine = textArea.GetViewTopLine();
+	size_t		nViewLeftCol = textArea.GetViewLeftCol();
 	LayoutPoint		ptCaretPosXY = caret.GetCaretLayoutPos();
-	LayoutInt		nCaretPosX_Prev = caret.nCaretPosX_Prev;
+	size_t		nCaretPosX_Prev = caret.nCaretPosX_Prev;
 
 	bool bReplace = false;
 	// 改行コードを統一する
 	if (eol.IsValid()) {
-		LogicInt nLine = LogicInt(0);
+		size_t nLine = 0;
 		OpeBlk* pOpeBlk = view.bDoing_UndoRedo ? NULL : view.commander.GetOpeBlk();
 		for (;;) {
 			DocLine* pDocLine = doc.docLineMgr.GetLine(nLine); //#######非効率

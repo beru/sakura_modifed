@@ -68,19 +68,19 @@ const DWORD p_helpids[] = {	//12700
 };	//@@@ 2002.01.07 add end MIK
 
 // モーダルダイアログの表示
-int DlgTypeList::DoModal(HINSTANCE hInstance, HWND hwndParent, Result* psResult)
+INT_PTR DlgTypeList::DoModal(HINSTANCE hInstance, HWND hwndParent, Result* psResult)
 {
-	int	nRet;
+	INT_PTR	nRet;
 	nSettingType = psResult->documentType;
 	bAlertFileAssociation = true;
 	bEnableTempChange = psResult->bTempChange;
-	nRet = (int)Dialog::DoModal(hInstance, hwndParent, IDD_TYPELIST, (LPARAM)NULL);
+	nRet = Dialog::DoModal(hInstance, hwndParent, IDD_TYPELIST, (LPARAM)NULL);
 	if (nRet == -1) {
 		return FALSE;
 	}else {
 		// 結果
 		psResult->documentType = TypeConfigNum(nRet & ~PROP_TEMPCHANGE_FLAG);
-		psResult->bTempChange   = ((nRet & PROP_TEMPCHANGE_FLAG) != 0);
+		psResult->bTempChange = ((nRet & PROP_TEMPCHANGE_FLAG) != 0);
 		return TRUE;
 	}
 }

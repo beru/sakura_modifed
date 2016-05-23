@@ -48,7 +48,7 @@ public:
 	/*
 	||  Attributes & Operations
 	*/
-	int DoModal( HINSTANCE, HWND, LPARAM, const TCHAR* );	// モーダルダイアログの表示
+	INT_PTR DoModal( HINSTANCE, HWND, LPARAM, const TCHAR* );	// モーダルダイアログの表示
 
 protected:
 	/*

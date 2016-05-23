@@ -214,9 +214,9 @@ void ShareData_IO::ShareData_IO_Mru(DataProfile& profile)
 		EditInfo	fiInit;
 		// 残りをfiInitで初期化しておく。
 		fiInit.nCharCode = CODE_DEFAULT;
-		fiInit.nViewLeftCol = LayoutInt(0);
-		fiInit.nViewTopLine = LayoutInt(0);
-		fiInit.ptCursor.Set(LogicInt(0), LogicInt(0));
+		fiInit.nViewLeftCol = 0;
+		fiInit.nViewTopLine = 0;
+		fiInit.ptCursor.Set(0, 0);
 		_tcscpy( fiInit.szPath, _T("") );
 		fiInit.szMarkLines[0] = L'\0';	// 2002.01.16 hor
 		for (; i<MAX_MRU; ++i) {
@@ -1360,8 +1360,8 @@ void ShareData_IO::ShareData_IO_Type_One(DataProfile& profile, TypeConfig& types
 			types.nCurrentPrintSetting	= buf[10];
 		}
 		// 折り返し幅の最小値は10。少なくとも４ないとハングアップする。 // 20050818 aroka
-		if (types.nMaxLineKetas < LayoutInt(MINLINEKETAS)) {
-			types.nMaxLineKetas = LayoutInt(MINLINEKETAS);
+		if (types.nMaxLineKetas < MINLINEKETAS) {
+			types.nMaxLineKetas = MINLINEKETAS;
 		}
 	}else {
 		auto_sprintf(szKeyData, pszForm,

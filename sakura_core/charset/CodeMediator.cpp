@@ -190,7 +190,7 @@ EncodingType CodeMediator::CheckKanjiCodeOfFile(const TCHAR* pszFile)
 	}
 
 	// ƒf[ƒ^’·Žæ“¾
-	int nBufLen = in.GetLength();
+	size_t nBufLen = in.GetLength();
 	if (nBufLen > CheckKanjiCode_MAXREADLENGTH) {
 		nBufLen = CheckKanjiCode_MAXREADLENGTH;
 	}

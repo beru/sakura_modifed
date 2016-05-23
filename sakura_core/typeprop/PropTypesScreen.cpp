@@ -453,10 +453,10 @@ void PropTypesScreen::SetData(HWND hwndDlg)
 		}
 		Combo_SetCurSel(hwndCombo, nSelPos);
 
-		::SetDlgItemInt(hwndDlg, IDC_EDIT_MAXLINELEN, (Int)types.nMaxLineKetas, FALSE);	// 折り返し文字数
+		::SetDlgItemInt(hwndDlg, IDC_EDIT_MAXLINELEN, types.nMaxLineKetas, FALSE);	// 折り返し文字数
 		::SetDlgItemInt(hwndDlg, IDC_EDIT_CHARSPACE, types.nColumnSpace, FALSE);			// 文字の間隔
 		::SetDlgItemInt(hwndDlg, IDC_EDIT_LINESPACE, types.nLineSpace, FALSE);			// 行の間隔
-		::SetDlgItemInt(hwndDlg, IDC_EDIT_TABSPACE, (Int)types.nTabSpace, FALSE);			// TAB幅	//	Sep. 22, 2002 genta
+		::SetDlgItemInt(hwndDlg, IDC_EDIT_TABSPACE, types.nTabSpace, FALSE);			// TAB幅	//	Sep. 22, 2002 genta
 		::DlgItem_SetText(hwndDlg, IDC_EDIT_TABVIEWSTRING, types.szTabViewString);		// TAB表示(8文字)
 		::EnableWindow(::GetDlgItem(hwndDlg, IDC_EDIT_TABVIEWSTRING), types.bTabArrow == TabArrowType::String);	// Mar. 31, 2003 genta 矢印表示のON/OFFをTAB文字列設定に連動させる
 
@@ -607,12 +607,12 @@ int PropTypesScreen::GetData(HWND hwndDlg)
 		types.nTextWrapMethod = WrapMethodArr[nSelPos].nMethod;		// テキストの折り返し方法
 
 		// 折り返し桁数
-		types.nMaxLineKetas = LayoutInt(::GetDlgItemInt(hwndDlg, IDC_EDIT_MAXLINELEN, NULL, FALSE));
-		if (types.nMaxLineKetas < LayoutInt(MINLINEKETAS)) {
-			types.nMaxLineKetas = LayoutInt(MINLINEKETAS);
+		types.nMaxLineKetas = ::GetDlgItemInt(hwndDlg, IDC_EDIT_MAXLINELEN, NULL, FALSE);
+		if (types.nMaxLineKetas < MINLINEKETAS) {
+			types.nMaxLineKetas = MINLINEKETAS;
 		}
-		if (types.nMaxLineKetas > LayoutInt(MAXLINEKETAS)) {
-			types.nMaxLineKetas = LayoutInt(MAXLINEKETAS);
+		if (types.nMaxLineKetas > MAXLINEKETAS) {
+			types.nMaxLineKetas = MAXLINEKETAS;
 		}
 
 		// 文字の間隔
@@ -634,12 +634,12 @@ int PropTypesScreen::GetData(HWND hwndDlg)
 		}
 
 		// TAB幅
-		types.nTabSpace = LayoutInt(::GetDlgItemInt(hwndDlg, IDC_EDIT_TABSPACE, NULL, FALSE));
-		if (types.nTabSpace < LayoutInt(1)) {
-			types.nTabSpace = LayoutInt(1);
+		types.nTabSpace = ::GetDlgItemInt(hwndDlg, IDC_EDIT_TABSPACE, NULL, FALSE);
+		if (types.nTabSpace < 1) {
+			types.nTabSpace = 1;
 		}
-		if (types.nTabSpace > LayoutInt(64)) {
-			types.nTabSpace = LayoutInt(64);
+		if (types.nTabSpace > 64) {
+			types.nTabSpace = 64;
 		}
 
 		// TAB表示文字列

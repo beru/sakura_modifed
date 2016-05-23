@@ -90,7 +90,7 @@ void ShareData::InitTypeConfigs(
 	};
 	types.clear();
 	assert(_countof(table) <= MAX_TYPES);
-	for (int i=0; i<_countof(table) && i<MAX_TYPES; ++i) {
+	for (size_t i=0; i<_countof(table) && i<MAX_TYPES; ++i) {
 		TypeConfig* type = new TypeConfig;
 		types.push_back(type);
 		table[i]->InitTypeConfig(i, *type);
@@ -158,11 +158,11 @@ void _DefaultConfig(TypeConfig* pType)
 /************************/
 
 	pType->nTextWrapMethod = TextWrappingMethod::SettingWidth;		// テキストの折り返し方法		// 2008.05.30 nasukoji
-	pType->nMaxLineKetas = LayoutInt(MAXLINEKETAS);	// 折り返し桁数
+	pType->nMaxLineKetas = MAXLINEKETAS;	// 折り返し桁数
 	pType->nColumnSpace = 0;							// 文字と文字の隙間
 	pType->nLineSpace = 1;							// 行間のすきま
-	pType->nTabSpace = LayoutInt(4);					// TABの文字数
-	for (int i=0; i<MAX_KEYWORDSET_PER_TYPE; ++i) {
+	pType->nTabSpace = 4;					// TABの文字数
+	for (size_t i=0; i<MAX_KEYWORDSET_PER_TYPE; ++i) {
 		pType->nKeywordSetIdx[i] = -1;
 	}
 	wcscpy_s(pType->szTabViewString, _EDITL("^       "));	// TAB表示文字列
@@ -216,7 +216,7 @@ void _DefaultConfig(TypeConfig* pType)
 	pType->nIndentLayout = 0;	// 折り返しは2行目以降を字下げ表示
 
 	assert(COLORIDX_LAST <= _countof(pType->colorInfoArr));
-	for (int i=0; i<COLORIDX_LAST; ++i) {
+	for (size_t i=0; i<COLORIDX_LAST; ++i) {
 		GetDefaultColorInfo(&pType->colorInfoArr[i], i);
 	}
 	pType->szBackImgPath[0] = '\0';
@@ -259,7 +259,7 @@ void _DefaultConfig(TypeConfig* pType)
 	pType->bUseDocumentIcon = false;				// 文書に関連づけられたアイコンを使う
 
 //@@@ 2001.11.17 add start MIK
-	for (int i=0; i<_countof(pType->regexKeywordArr); ++i) {
+	for (size_t i=0; i<_countof(pType->regexKeywordArr); ++i) {
 		pType->regexKeywordArr[i].nColorIndex = COLORIDX_REGEX1;
 	}
 	pType->regexKeywordList[0] = L'\0';
@@ -268,7 +268,7 @@ void _DefaultConfig(TypeConfig* pType)
 	pType->nRegexKeyMagicNumber = 0;
 
 //@@@ 2006.04.10 fon ADD-start
-	for (int i=0; i<MAX_KEYHELP_FILE; ++i) {
+	for (size_t i=0; i<MAX_KEYHELP_FILE; ++i) {
 		auto& attr = pType->keyHelpArr[i];
 		attr.bUse = false;
 		attr.szAbout[0] = _T('\0');
@@ -282,8 +282,8 @@ void _DefaultConfig(TypeConfig* pType)
 //@@@ 2006.04.10 fon ADD-end
 
 	// 2005.11.08 Moca 指定位置縦線の設定
-	for (int i=0; i<MAX_VERTLINES; ++i) {
-		pType->nVertLineIdx[i] = LayoutInt(0);
+	for (size_t i=0; i<MAX_VERTLINES; ++i) {
+		pType->nVertLineIdx[i] = 0;
 	}
 	pType->nNoteLineOffset = 0;
 

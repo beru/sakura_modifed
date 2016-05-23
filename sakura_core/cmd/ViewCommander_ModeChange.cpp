@@ -136,9 +136,9 @@ void ViewCommander::Command_Cancel_Mode(int whereCursorIs)
 		}else {
 			if (!GetDllShareData().common.general.bIsFreeCursorMode && bBoxSelect) {
 				// 2013.04.22 Moca ‹éŒ`‘I‘ð‚Ì‚Æ‚«¶ãŒÅ’è‚ð‚â‚ß‚½‚Ì‚Å‘ã‚í‚è‚ÉEOL‚æ‚è‰E‚¾‚Á‚½ê‡‚ÉEOL‚É•â³‚·‚é
-				const Layout*	pLayout = layoutMgr.SearchLineByLayoutY(ptTo.y);
+				const Layout* pLayout = layoutMgr.SearchLineByLayoutY(ptTo.y);
 				if (pLayout) {
-					ptTo.x = t_min(ptTo.x, pLayout->CalcLayoutWidth(layoutMgr));
+					ptTo.x = t_min(ptTo.x, (int)pLayout->CalcLayoutWidth(layoutMgr));
 				}
 			}
 

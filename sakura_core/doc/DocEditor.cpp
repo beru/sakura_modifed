@@ -84,7 +84,7 @@ void DocEditor::OnAfterLoad(const LoadInfo& loadInfo)
 		}else {
 			SetNewLineCode(EolType::CRLF);
 		}
-		DocLine* pFirstlineinfo = pDoc->docLineMgr.GetLine(LogicInt(0));
+		DocLine* pFirstlineinfo = pDoc->docLineMgr.GetLine(0);
 		if (pFirstlineinfo) {
 			EolType t = pFirstlineinfo->GetEol();
 			if (t != EolType::None && t != EolType::Unknown) {

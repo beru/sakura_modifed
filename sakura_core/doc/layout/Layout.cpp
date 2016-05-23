@@ -37,15 +37,15 @@ void Layout::DUMP(void)
 // 2007.10.11 kobake 作成
 // 2007.11.29 kobake タブ幅が計算されていなかったのを修正
 // 2011.12.26 Moca インデントは含むように変更(座標変換バグ修正)
-LayoutInt Layout::CalcLayoutWidth(const LayoutMgr& layoutMgr) const
+size_t Layout::CalcLayoutWidth(const LayoutMgr& layoutMgr) const
 {
 	// ソース
 	const wchar_t* pText    = pDocLine->GetPtr();
-	LogicInt      nTextLen = pDocLine->GetLengthWithoutEOL();
+	size_t nTextLen = pDocLine->GetLengthWithoutEOL();
 
 	// 計算
-	LayoutInt nWidth = GetIndent();
-	for (LogicInt i=ptLogicPos.GetX2(); i<ptLogicPos.GetX2()+nLength; ++i) {
+	size_t nWidth = GetIndent();
+	for (int i=ptLogicPos.GetX2(); i<ptLogicPos.GetX2()+nLength; ++i) {
 		if (pText[i] == WCODE::TAB) {
 			nWidth += layoutMgr.GetActualTabSpace(nWidth);
 		}else {
@@ -56,17 +56,17 @@ LayoutInt Layout::CalcLayoutWidth(const LayoutMgr& layoutMgr) const
 }
 
 // オフセット値をレイアウト単位に変換して取得。2007.10.17 kobake
-LayoutInt Layout::CalcLayoutOffset(
+int Layout::CalcLayoutOffset(
 	const LayoutMgr& layoutMgr,
-	LogicInt nStartPos,
-	LayoutInt nStartOffset) const
+	int nStartPos,
+	int nStartOffset) const
 {
-	LayoutInt nRet = nStartOffset;
+	int nRet = nStartOffset;
 	if (this->GetLogicOffset()) {
 		const wchar_t* pLine = this->pDocLine->GetPtr();
 		int nLineLen = this->pDocLine->GetLengthWithEOL();
 		const int nOffset = GetLogicOffset();
-		for (int i=(Int)nStartPos; i<nOffset; ++i) {
+		for (int i=nStartPos; i<nOffset; ++i) {
 			if (pLine[i] == WCODE::TAB) {
 				nRet += layoutMgr.GetActualTabSpace(nRet);
 			}else {

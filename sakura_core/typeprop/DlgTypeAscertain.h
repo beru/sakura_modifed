@@ -58,7 +58,7 @@ public:
 	// Constructors
 	DlgTypeAscertain();
 	// モーダルダイアログの表示
-	int DoModal(HINSTANCE, HWND, AscertainInfo*);	// モーダルダイアログの表示
+	INT_PTR DoModal(HINSTANCE, HWND, AscertainInfo*);	// モーダルダイアログの表示
 
 protected:
 	// 実装ヘルパ関数

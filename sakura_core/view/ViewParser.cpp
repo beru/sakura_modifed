@@ -11,19 +11,19 @@
 */
 int ViewParser::GetLeftWord(NativeW* pMemWord, int nMaxWordLen) const
 {
-	LogicInt	nLineLen;
-	LogicInt	nIdx;
-	LogicInt	nIdxTo;
+	size_t nLineLen;
+	int	nIdx;
+	int	nIdxTo;
 
-	int			nCharChars;
+	int nCharChars;
 	const Layout* pLayout;
 	auto& caret = editView.GetCaret();
 	auto& layoutMgr = editView.pEditDoc->layoutMgr;
-	LayoutInt nCurLine = caret.GetCaretLayoutPos().GetY2();
+	int nCurLine = caret.GetCaretLayoutPos().GetY2();
 	const wchar_t* pLine = layoutMgr.GetLineStr(nCurLine, &nLineLen, &pLayout);
 	if (!pLine) {
 //		return 0;
-		nIdxTo = LogicInt(0);
+		nIdxTo = 0;
 	}else {
 		// 指定された桁に対応する行のデータ内の位置を調べる Ver1
 		nIdxTo = editView.LineColumnToIndex(pLayout, caret.GetCaretLayoutPos().GetX2());
@@ -47,13 +47,13 @@ int ViewParser::GetLeftWord(NativeW* pMemWord, int nMaxWordLen) const
 			return 0;
 		}
 		nIdxTo = nLineLen;
-		nIdx = nIdxTo - LogicInt(nCharChars);
+		nIdx = nIdxTo - nCharChars;
 	}else {
 		nCharChars = &pLine[nIdxTo] - NativeW::GetCharPrev(pLine, nLineLen, &pLine[nIdxTo]);
 		if (nCharChars == 0) {
 			return 0;
 		}
-		nIdx = nIdxTo - LogicInt(nCharChars);
+		nIdx = nIdxTo - nCharChars;
 	}
 
 	if (nCharChars == 1) {
@@ -102,7 +102,7 @@ bool ViewParser::GetCurrentWord(
 	}
 	
 	// 指定された桁に対応する行のデータ内の位置を調べる
-	LogicInt nIdx = editView.LineColumnToIndex(pLayout, caret.GetCaretLayoutPos().GetX2());
+	int nIdx = editView.LineColumnToIndex(pLayout, caret.GetCaretLayoutPos().GetX2());
 	
 	// 現在位置の単語の範囲を調べる
 	LayoutRange range;

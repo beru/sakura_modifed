@@ -96,7 +96,7 @@ public:
 	}
 	bool IsProfileMgr() { return bProfileMgr; }
 	size_t GetFileNum(void) { return fileNames.size(); }
-	const TCHAR* GetFileName(int i) { return i < GetFileNum() ? fileNames[i].c_str() : NULL; }
+	const TCHAR* GetFileName(size_t i) { return i < GetFileNum() ? fileNames[i].c_str() : NULL; }
 	void ClearFile(void) { fileNames.clear(); }
 	void ParseCommandLine(LPCTSTR pszCmdLineSrc, bool bResponse = true);
 
