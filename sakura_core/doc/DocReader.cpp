@@ -28,7 +28,7 @@ wchar_t* DocReader::GetAllData(int* pnDataLen)
 	nDataLen = 0;
 	while (pDocLine) {
 		// Oct. 7, 2002 YAZAKI
-		int nLineLen = pDocLine->GetLengthWithoutEOL();
+		size_t nLineLen = pDocLine->GetLengthWithoutEOL();
 		if (0 < nLineLen) {
 			wmemcpy(&pData[nDataLen], pDocLine->GetPtr(), nLineLen);
 			nDataLen += nLineLen;

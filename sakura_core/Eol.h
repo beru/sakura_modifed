@@ -79,13 +79,13 @@ public:
 
 	// 設定
 	bool SetType(EolType t);	//	Typeの設定
-	void SetTypeByString(const wchar_t* pszData, int nDataLen);
-	void SetTypeByString(const char* pszData, int nDataLen);
+	void SetTypeByString(const wchar_t* pszData, size_t nDataLen);
+	void SetTypeByString(const char* pszData, size_t nDataLen);
 
 	// 設定（ファイル読み込み時に使用）
-	void SetTypeByStringForFile(const char* pszData, int nDataLen) { SetTypeByString(pszData, nDataLen); }
-	void SetTypeByStringForFile_uni(const char* pszData, int nDataLen);
-	void SetTypeByStringForFile_unibe(const char* pszData, int nDataLen);
+	void SetTypeByStringForFile(const char* pszData, size_t nDataLen) { SetTypeByString(pszData, nDataLen); }
+	void SetTypeByStringForFile_uni(const char* pszData, size_t nDataLen);
+	void SetTypeByStringForFile_unibe(const char* pszData, size_t nDataLen);
 
 	// 取得
 	EolType			GetType()	const { return eEolType; }		// 現在のTypeを取得

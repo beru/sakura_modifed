@@ -27,8 +27,8 @@ OpeBlk::OpeBlk()
 OpeBlk::~OpeBlk()
 {
 	// ‘€ì‚Ì”z—ñ‚ğíœ‚·‚é
-	int size = (int)ppCOpeArr.size();
-	for (int i=0; i<size; ++i) {
+	size_t size = ppCOpeArr.size();
+	for (size_t i=0; i<size; ++i) {
 		SAFE_DELETE(ppCOpeArr[i]);
 	}
 	ppCOpeArr.clear();
@@ -61,7 +61,7 @@ bool OpeBlk::AppendOpe(Ope* pOpe)
 
 
 // ‘€ì‚ğ•Ô‚·
-Ope* OpeBlk::GetOpe(int nIndex)
+Ope* OpeBlk::GetOpe(size_t nIndex)
 {
 	if (GetNum() <= nIndex) {
 		return nullptr;
@@ -77,8 +77,8 @@ Ope* OpeBlk::GetOpe(int nIndex)
 void OpeBlk::DUMP(void)
 {
 #ifdef _DEBUG
-	int size = GetNum();
-	for (int i=0; i<size; ++i) {
+	size_t size = GetNum();
+	for (size_t i=0; i<size; ++i) {
 		MYTRACE(_T("\tCOpeBlk.ppCOpeArr[%d]----\n"), i);
 		ppCOpeArr[i]->DUMP();
 	}

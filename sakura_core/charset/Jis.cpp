@@ -54,7 +54,7 @@ const char* Jis::TABLE_JISESCDATA[] = {
 
 	eMyJisesc は、MYJISESC_HANKATA か MYJISESC_ZENKAKU。
 */
-int Jis::_JisToUni_block(const unsigned char* pSrc, const int nSrcLen, unsigned short* pDst, const EMyJisEscseq eMyJisesc, bool* pbError)
+int Jis::_JisToUni_block(const unsigned char* pSrc, const size_t nSrcLen, unsigned short* pDst, const EMyJisEscseq eMyJisesc, bool* pbError)
 {
 	const unsigned char* pr;
 	unsigned short* pw;
@@ -168,7 +168,7 @@ int Jis::_JisToUni_block(const unsigned char* pSrc, const int nSrcLen, unsigned 
 /*
 	JIS → Unicode 変換
 */
-int Jis::JisToUni(const char* pSrc, const int nSrcLen, wchar_t* pDst, bool* pbError)
+int Jis::JisToUni(const char* pSrc, const size_t nSrcLen, wchar_t* pDst, bool* pbError)
 {
 	const unsigned char *pr, *pr_end;
 	const unsigned char* pr_next;
@@ -340,7 +340,7 @@ int Jis::_SjisToJis_char(const unsigned char* pSrc, unsigned char* pDst, ECharSe
 }
 
 
-int Jis::UniToJis(const wchar_t* pSrc, const int nSrcLen, char* pDst, bool* pbError)
+int Jis::UniToJis(const wchar_t* pSrc, const size_t nSrcLen, char* pDst, bool* pbError)
 {
 	ECharSet echarset, echarset_cur, echarset_tmp;
 	unsigned char cbuf[4];
@@ -449,7 +449,7 @@ CodeConvertResult Jis::UnicodeToJIS(const NativeW& src, Memory* pDstMem)
 {
 	// ソースを取得
 	const wchar_t* pSrc = src.GetStringPtr();
-	int nSrcLen = src.GetStringLength();
+	size_t nSrcLen = src.GetStringLength();
 	if (nSrcLen == 0) {
 		pDstMem->Clear();
 		return CodeConvertResult::Complete;

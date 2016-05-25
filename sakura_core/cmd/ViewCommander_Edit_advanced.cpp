@@ -356,7 +356,7 @@ void ViewCommander::Command_Indent(
 		}
 
 		for (int i=selectOld.GetFrom().y; i<selectOld.GetTo().y; ++i) {
-			int nLineCountPrev = layoutMgr.GetLineCount();
+			size_t nLineCountPrev = layoutMgr.GetLineCount();
 			const Layout* pLayout = layoutMgr.SearchLineByLayoutY(i);
 			if (!pLayout ||						// テキストが無いEOLの行は無視
 				pLayout->GetLogicOffset() > 0 ||				// 折り返し行は無視
@@ -472,9 +472,9 @@ void ViewCommander::Command_Unindent(wchar_t wcChar)
 
 		auto& caret = GetCaret();
 		auto& layoutMgr = GetDocument().layoutMgr;
-		int nDelLen;
+		size_t nDelLen;
 		for (int i = selectOld.GetFrom().y; i < selectOld.GetTo().y; ++i) {
-			int nLineCountPrev = layoutMgr.GetLineCount();
+			size_t nLineCountPrev = layoutMgr.GetLineCount();
 
 			const Layout*	pLayout;
 			size_t nLineLen;
@@ -488,8 +488,8 @@ void ViewCommander::Command_Unindent(wchar_t wcChar)
 					nDelLen = 1;
 				}else {
 					// 削り取る半角スペース数 (1～タブ幅分) -> nDelLen
-					int i;
-					int nTabSpaces = layoutMgr.GetTabSpace();
+					size_t i;
+					size_t nTabSpaces = layoutMgr.GetTabSpace();
 					for (i=0; i<nLineLen; ++i) {
 						if (pLine[i] != WCODE::SPACE) {
 							break;
@@ -622,7 +622,7 @@ bool SortByLineAsc (SortData* pst1, SortData* pst2) {return CNativeW_comp(*pst1-
 bool SortByLineDesc(SortData* pst1, SortData* pst2) {return CNativeW_comp(*pst1->pMemLine, *pst2->pMemLine) > 0;}
 
 inline
-int CStringRef_comp(
+int64_t CStringRef_comp(
 	const StringRef& c1,
 	const StringRef& c2
 	)
@@ -633,7 +633,7 @@ int CStringRef_comp(
 		t_min(c1.GetLength(), c2.GetLength())
 	);
 	if (ret == 0) {
-		return c1.GetLength() - c2.GetLength();
+		return (int64_t)c1.GetLength() - (int64_t)c2.GetLength();
 	}
 	return ret;
 }
@@ -721,7 +721,7 @@ void ViewCommander::Command_Sort(bool bAsc)	// bAsc:true=昇順, false=降順
 		const DocLine* pDocLine = GetDocument().docLineMgr.GetLine(i);
 		const NativeW& memLine = pDocLine->_GetDocLineDataWithEOL();
 		const wchar_t* pLine = memLine.GetStringPtr(&nLineLen);
-		int nLineLenWithoutEOL = pDocLine->GetLengthWithoutEOL();
+		size_t nLineLenWithoutEOL = pDocLine->GetLengthWithoutEOL();
 		if (!pLine) {
 			continue;
 		}
@@ -745,7 +745,7 @@ void ViewCommander::Command_Sort(bool bAsc)	// bAsc:true=昇順, false=降順
 	const wchar_t* pStrLast = NULL; // 最後の行に改行がなければそのポインタ
 	if (0 < sta.size()) {
 		pStrLast = sta[sta.size() - 1]->pMemLine->GetStringPtr();
-		int nlen = sta[sta.size() - 1]->pMemLine->GetStringLength();
+		size_t nlen = sta[sta.size() - 1]->pMemLine->GetStringLength();
 		if (0 < nlen) {
 			if (WCODE::IsLineDelimiter(pStrLast[nlen - 1], GetDllShareData().common.edit.bEnableExtEol)) {
 				pStrLast = NULL;
@@ -775,7 +775,7 @@ void ViewCommander::Command_Sort(bool bAsc)	// bAsc:true=昇順, false=降順
 	if (pStrLast) {
 		// 最終行の改行を削除
 		LineData& lastData = repData[repData.size() - 1];
-		int nLen = lastData.memLine.GetStringLength();
+		size_t nLen = lastData.memLine.GetStringLength();
 		bool bExtEol = GetDllShareData().common.edit.bEnableExtEol;
 		while (0 <nLen && WCODE::IsLineDelimiter(lastData.memLine[nLen-1], bExtEol)) {
 			--nLen;
@@ -841,8 +841,8 @@ void ViewCommander::Command_Sort(bool bAsc)	// bAsc:true=昇順, false=降順
 void ViewCommander::Command_Merge(void)
 {
 	int	nCaretPosYOLD;
-	size_t		nLineLen;
-	int	nMergeLayoutLines;
+	size_t	nLineLen;
+	int64_t	nMergeLayoutLines;
 
 	auto& selInfo = view.GetSelectionInfo();
 	if (!selInfo.IsTextSelected()) {			// テキストが選択されているか
@@ -887,7 +887,7 @@ void ViewCommander::Command_Merge(void)
 		return;
 	}
 
-	int j = GetDocument().docLineMgr.GetLineCount();
+	int64_t j = GetDocument().docLineMgr.GetLineCount();
 	nMergeLayoutLines = layoutMgr.GetLineCount();
 
 	Range selectOld_Layout;
@@ -896,7 +896,7 @@ void ViewCommander::Command_Merge(void)
 	// 2010.08.22 NUL対応修正
 	std::vector<StringRef> lineArr;
 	const wchar_t* pLinew = NULL;
-	int nLineLenw = 0;
+	size_t nLineLenw = 0;
 	bool bMerge = false;
 	lineArr.reserve(sSelectOld.GetTo().y - sSelectOld.GetFrom().y);
 	for (int i=sSelectOld.GetFrom().y; i<sSelectOld.GetTo().y; ++i) {

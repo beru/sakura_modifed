@@ -88,7 +88,7 @@ inline UINT CodePageExToMSCP(int codepageEx)
 	@param pbError NULL‹–—e
 	@return •ÏŠ·‚µ‚½•¶Žš—ñ‚Ì’·‚³(WCHAR’PˆÊ)
 */
-CodeConvertResult CodePage::CPToUni(const char* pSrc, const int nSrcLen, wchar_t* pDst, int nDstCchLen, int& nRetLen, UINT codepage)
+CodeConvertResult CodePage::CPToUni(const char* pSrc, const size_t nSrcLen, wchar_t* pDst, int nDstCchLen, int& nRetLen, UINT codepage)
 {
 	if (nSrcLen < 1) {
 		nRetLen = 0;
@@ -135,7 +135,7 @@ CodeConvertResult CodePage::CPToUnicode(const Memory& src, NativeW* pDst, int co
 
 
 
-CodeConvertResult CodePage::UniToCP(const wchar_t* pSrc, const int nSrcLen, char* pDst, int nDstByteLen, int& nRetLen, UINT codepage)
+CodeConvertResult CodePage::UniToCP(const wchar_t* pSrc, const size_t nSrcLen, char* pDst, int nDstByteLen, int& nRetLen, UINT codepage)
 {
 	if (nSrcLen < 1) {
 		nRetLen = 0;
@@ -173,7 +173,7 @@ CodeConvertResult CodePage::UniToCP(const wchar_t* pSrc, const int nSrcLen, char
 CodeConvertResult CodePage::UnicodeToCP(const NativeW& src, Memory* pDst, int codepageEx)
 {
 	const wchar_t* pSrc = src.GetStringPtr();
-	int nSrcLen = src.GetStringLength();
+	size_t nSrcLen = src.GetStringLength();
 	
 	if (nSrcLen == 0) {
 		return CodeConvertResult::Complete;
@@ -481,7 +481,7 @@ int CodePage::AddComboCodePages(HWND hwnd, HWND combo, int nSelCode)
 	return nSel;
 }
 
-int CodePage::MultiByteToWideChar2( UINT codepage, int flags, const char* pSrc, int nSrcLen, wchar_t* pDst, int nDstLen )
+int CodePage::MultiByteToWideChar2( UINT codepage, int flags, const char* pSrc, size_t nSrcLen, wchar_t* pDst, int nDstLen )
 {
 	if (codepage == 12000) {
 		return S_UTF32LEToUnicode(pSrc, nSrcLen, pDst, nDstLen);
@@ -490,7 +490,7 @@ int CodePage::MultiByteToWideChar2( UINT codepage, int flags, const char* pSrc, 
 	}
 	return MultiByteToWideChar(codepage, flags, pSrc, nSrcLen, pDst, nDstLen);
 }
-int CodePage::WideCharToMultiByte2( UINT codepage, int flags, const wchar_t* pSrc, int nSrcLen, char* pDst, int nDstLen )
+int CodePage::WideCharToMultiByte2( UINT codepage, int flags, const wchar_t* pSrc, size_t nSrcLen, char* pDst, int nDstLen )
 {
 	if (codepage == 12000) {
 		return S_UnicodeToUTF32LE(pSrc, nSrcLen, pDst, nDstLen);
@@ -508,7 +508,7 @@ int CodePage::WideCharToMultiByte2( UINT codepage, int flags, const wchar_t* pSr
 	return ret;
 }
 
-int CodePage::S_UTF32LEToUnicode( const char* pSrc, int nSrcLen, wchar_t* pDst, int nDstLen )
+int CodePage::S_UTF32LEToUnicode( const char* pSrc, size_t nSrcLen, wchar_t* pDst, int nDstLen )
 {
 	const unsigned char* pSrcByte = reinterpret_cast<const unsigned char*>(pSrc);
 	if (!pDst) {
@@ -599,7 +599,7 @@ int CodePage::S_UTF32LEToUnicode( const char* pSrc, int nSrcLen, wchar_t* pDst, 
 	return nDstUseLen;
 }
 
-int CodePage::S_UTF32BEToUnicode( const char* pSrc, int nSrcLen, wchar_t* pDst, int nDstLen )
+int CodePage::S_UTF32BEToUnicode( const char* pSrc, size_t nSrcLen, wchar_t* pDst, int nDstLen )
 {
 	const unsigned char* pSrcByte = reinterpret_cast<const unsigned char*>(pSrc);
 	if (!pDst) {
@@ -704,7 +704,7 @@ static bool BinToUTF32( const unsigned short* pSrc, int Len, char* pDst, int nDs
 	return true;
 }
 
-int CodePage::S_UnicodeToUTF32LE( const wchar_t* pSrc, int nSrcLen, char* pDst, int nDstLen )
+int CodePage::S_UnicodeToUTF32LE( const wchar_t* pSrc, size_t nSrcLen, char* pDst, int nDstLen )
 {
 	if (!pDst) {
 		int nDstUseLen = 0;
@@ -818,7 +818,7 @@ int CodePage::S_UnicodeToUTF32LE( const wchar_t* pSrc, int nSrcLen, char* pDst, 
 	return nDstUseLen;
 }
 
-int CodePage::S_UnicodeToUTF32BE( const wchar_t* pSrc, int nSrcLen, char* pDst, int nDstLen )
+int CodePage::S_UnicodeToUTF32BE( const wchar_t* pSrc, size_t nSrcLen, char* pDst, int nDstLen )
 {
 	if (!pDst) {
 		int nDstUseLen = 0;

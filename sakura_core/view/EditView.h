@@ -363,7 +363,7 @@ public:
 	// 指定位置の指定長データ削除
 	void DeleteData2(
 		const Point&	ptCaretPos,
-		int				nDelLen,
+		size_t			nDelLen,
 		NativeW*		pMem
 	);
 
@@ -710,7 +710,7 @@ public:
 	UINT			uWM_MSIME_RECONVERTREQUEST;
 private:
 	int				nLastReconvLine;		// 2002.04.09 minfu 再変換情報保存用;
-	int				nLastReconvIndex;		// 2002.04.09 minfu 再変換情報保存用;
+	ptrdiff_t		nLastReconvIndex;		// 2002.04.09 minfu 再変換情報保存用;
 
 public:
 	// ATOK専用再変換のAPI

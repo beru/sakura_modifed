@@ -716,7 +716,7 @@ MenuDrawer::MenuDrawer()
 	// 2010.06.25 Moca 専用アイコンのない外部マクロがあれば、同じアイコンを共有して登録
 	if (MAX_CUSTMACRO_ICO < MAX_CUSTMACRO) {
 		const int nAddFuncs = MAX_CUSTMACRO - MAX_CUSTMACRO_ICO;
-		const int nBaseIndex = tbMyButton.size();
+		const size_t nBaseIndex = tbMyButton.size();
 		tbMyButton.resize(tbMyButton.size() + nAddFuncs);
 		for (int k=0; k<nAddFuncs; ++k) {
 			const int macroFuncCode = F_USERMACRO_0 + MAX_CUSTMACRO_ICO + k;

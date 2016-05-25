@@ -42,7 +42,7 @@ CodeConvertResult CodeBase::UnicodeToHex(
 */
 bool CodeBase::MIMEHeaderDecode(
 	const char* pSrc,
-	const int nSrcLen,
+	const size_t nSrcLen,
 	Memory* pMem,
 	const EncodingType codetype
 	)
@@ -59,8 +59,8 @@ bool CodeBase::MIMEHeaderDecode(
 	}
 
 	Memory membuf;
-	int i = 0;
-	int j = 0;
+	size_t i = 0;
+	size_t j = 0;
 	while (i < nSrcLen) {
 		if (pSrc[i] != '=') {
 			pdst[j] = pSrc[i];
@@ -103,7 +103,7 @@ void CodeBase::S_GetEol(
 {
 	static const struct{
 		const char* szData;
-		int nLen;
+		size_t nLen;
 	}
 	aEolTable[EOL_TYPE_NUM] = {
 		{ "",			0 },	// EolType::None

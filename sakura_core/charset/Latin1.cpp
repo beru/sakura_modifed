@@ -63,7 +63,7 @@ size_t Latin1::GetSizeOfChar(const char* pData, size_t nDataLen, size_t nIdx)
 /*!
 	Latin1 ¨ Unicode •ÏŠ·
 */
-int Latin1::Latin1ToUni(const char* pSrc, const int nSrcLen, wchar_t* pDst, bool* pbError)
+int Latin1::Latin1ToUni(const char* pSrc, const size_t nSrcLen, wchar_t* pDst, bool* pbError)
 {
 	int nret;
 	const unsigned char *pr, *pr_end;
@@ -131,7 +131,7 @@ CodeConvertResult Latin1::Latin1ToUnicode( const Memory& src, NativeW* pDstMem )
 /*
 	Unicode -> Latin1
 */
-int Latin1::UniToLatin1(const wchar_t* pSrc, const int nSrcLen, char* pDst, bool* pbError)
+int Latin1::UniToLatin1(const wchar_t* pSrc, const size_t nSrcLen, char* pDst, bool* pbError)
 {
 	int nclen;
 	const unsigned short *pr, *pr_end;
@@ -197,7 +197,7 @@ CodeConvertResult Latin1::UnicodeToLatin1( const NativeW& src, Memory* pDstMem )
 {
 	// ƒ\[ƒXŽæ“¾
 	const wchar_t* pSrc = src.GetStringPtr();
-	int nSrcLen = src.GetStringLength();
+	size_t nSrcLen = src.GetStringLength();
 	if (nSrcLen == 0) {
 		pDstMem->Clear();
 		return CodeConvertResult::Complete;

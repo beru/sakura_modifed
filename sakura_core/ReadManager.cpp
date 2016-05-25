@@ -108,7 +108,7 @@ CodeConvertResult ReadManager::ReadFile_To_CDocLineMgr(
 				eRet = CodeConvertResult::LoseSome;
 			}
 			const wchar_t* pLine = unicodeBuffer.GetStringPtr();
-			int nLineLen = unicodeBuffer.GetStringLength();
+			size_t nLineLen = unicodeBuffer.GetStringLength();
 			++nLineNum;
 			DocEditAgent(docLineMgr).AddLineStrX( pLine, nLineLen );
 			// Œo‰ß’Ê’m

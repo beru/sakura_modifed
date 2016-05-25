@@ -91,7 +91,7 @@ int DocOutline::ReadRuleFile(
 		std::wstring strLine = file.ReadLineW();
 		const wchar_t* pszWork = wcsstr(strLine.c_str(), pszDelimit);
 		if (pszWork && 0 < strLine.length() && strLine[0] != cComment) {
-			int nLen = pszWork - strLine.c_str();
+			ptrdiff_t nLen = pszWork - strLine.c_str();
 			if (nLen < LINEREADBUFSIZE) {
 				// szLine == 「key1,key2」
 				wmemcpy(szLine, strLine.c_str(), nLen);
@@ -124,7 +124,7 @@ int DocOutline::ReadRuleFile(
 					if (pszGroupDel && 0 < pszWork[0] != L'\0') {
 						// pszWork = 「titleRep /// group」
 						// pszGroupDel = 「 /// group」
-						int nTitleLen = pszGroupDel - pszWork; // Len == 0 OK
+						ptrdiff_t nTitleLen = pszGroupDel - pszWork; // Len == 0 OK
 						if (nTitleLen < _countof(szText)) {
 							wcsncpy_s(szText, _countof(szText), pszWork, nTitleLen);
 						}else {
@@ -334,8 +334,8 @@ void DocOutline::MakeFuncList_RuleFile(
 						// GetString() = "ABC123456DEF"
 						// pszText = "123456"
 						int nIndex = pRegex[j].GetIndex();
-						int nMatchLen = pRegex[j].GetMatchLen();
-						int nTextLen = pRegex[j].GetStringLen() - nLineLen + nMatchLen;
+						size_t nMatchLen = pRegex[j].GetMatchLen();
+						size_t nTextLen = pRegex[j].GetStringLen() - nLineLen + nMatchLen;
 						pszText = new wchar_t[nTextLen + 1];
 						wmemcpy( pszText, pRegex[j].GetString() + nIndex, nTextLen );
 						pszText[nTextLen] = L'\0';

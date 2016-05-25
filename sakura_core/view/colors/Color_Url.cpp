@@ -15,8 +15,7 @@ bool Color_Url::BeginColor(const StringRef& str, int nPos)
 {
 	if (!str.IsValid()) return false;
 
-	int	nUrlLen;
-
+	size_t nUrlLen;
 	if (_IsPosKeywordHead(str, nPos) // URLを表示する
 		&& IsURL(str.GetPtr() + nPos, str.GetLength() - nPos, &nUrlLen)	// 指定アドレスがURLの先頭ならばTRUEとその長さを返す
 	) {

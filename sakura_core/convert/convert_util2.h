@@ -166,7 +166,7 @@ inline CHAR_TYPE ValToBase64(const char v) {
 	入力：BASE64 文字列。
 */
 template<class CHAR_TYPE>
-bool CheckBase64Padbit(const CHAR_TYPE *pSrc, const int nSrcLen)
+bool CheckBase64Padbit(const CHAR_TYPE *pSrc, const size_t nSrcLen)
 {
 	bool bret = true;
 
@@ -208,7 +208,7 @@ bool CheckBase64Padbit(const CHAR_TYPE *pSrc, const int nSrcLen)
 	正しい BASE64 入力文字列を仮定している。
 */
 template <class CHAR_TYPE>
-int _DecodeBase64(const CHAR_TYPE* pSrc, const int nSrcLen, char* pDest)
+int _DecodeBase64(const CHAR_TYPE* pSrc, const size_t nSrcLen, char* pDest)
 {
 	long lData;
 	int nDesLen;
@@ -261,7 +261,7 @@ int _DecodeBase64(const CHAR_TYPE* pSrc, const int nSrcLen, char* pDest)
 	パッド文字などは付加しない。エラーチェックなし。
 */
 template <class CHAR_TYPE>
-int _EncodeBase64(const char* pSrc, const int nSrcLen, CHAR_TYPE* pDest)
+int _EncodeBase64(const char* pSrc, const size_t nSrcLen, CHAR_TYPE* pDest)
 {
 	const unsigned char* psrc;
 	unsigned long lDataSrc;
@@ -364,7 +364,7 @@ inline BYTE _UUDECODE_CHAR(ACHAR c)
 	        書き込んだデータが戻り値よりも大きいときがあるので注意。
 */
 template <class CHAR_TYPE>
-int _DecodeUU_line(const CHAR_TYPE* pSrc, const int nSrcLen, char* pDest)
+int _DecodeUU_line(const CHAR_TYPE* pSrc, const size_t nSrcLen, char* pDest)
 {
 	unsigned long lDataDes;
 	const CHAR_TYPE *pr;
@@ -606,7 +606,7 @@ enum EEncodingMethod {
 	@return  Memory と置き換えられる入力文字列長 (nSkipLen)
 */
 template <class CHAR_TYPE>
-int _DecodeMimeHeader(const CHAR_TYPE* pSrc, const int nSrcLen, Memory* pMem_alt, EncodingType* peCodetype)
+int _DecodeMimeHeader(const CHAR_TYPE* pSrc, const size_t nSrcLen, Memory* pMem_alt, EncodingType* peCodetype)
 {
 	EncodingType ecode = CODE_NONE;
 	EEncodingMethod emethod = EM_NONE;

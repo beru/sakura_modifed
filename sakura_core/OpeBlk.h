@@ -35,9 +35,9 @@ public:
 	~OpeBlk();
 
 	// インターフェース
-	int GetNum() const { return (int)ppCOpeArr.size(); }	// 操作の数を返す
+	size_t GetNum() const { return ppCOpeArr.size(); }	// 操作の数を返す
 	bool AppendOpe(Ope* pOpe);							// 操作の追加
-	Ope* GetOpe(int nIndex);								// 操作を返す
+	Ope* GetOpe(size_t nIndex);								// 操作を返す
 	void AddRef() { ++refCount; }	// 参照カウンタ増加
 	int Release() { return refCount > 0 ? --refCount : 0; }	// 参照カウンタ減少
 	int GetRefCount() const { return refCount; }	// 参照カウンタ取得

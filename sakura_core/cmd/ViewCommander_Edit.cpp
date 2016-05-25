@@ -89,7 +89,7 @@ void ViewCommander::Command_WCHAR(
 					// 指定された桁に対応する行のデータ内の位置を調べる
 					for (nPos=0; nPos<nLineLen && nPos<ptXY.x;) {
 						// 2005-09-02 D.S.Koba GetSizeOfChar
-						int nCharChars = NativeW::GetSizeOfChar(pLine, nLineLen, nPos);
+						size_t nCharChars = NativeW::GetSizeOfChar(pLine, nLineLen, nPos);
 
 						// その他のインデント文字
 						if (0 < nCharChars

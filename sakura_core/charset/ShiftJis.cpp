@@ -43,7 +43,7 @@ size_t ShiftJis::GetSizeOfChar(const char* pData, size_t nDataLen, size_t nIdx)
 	SJIS Å® Unicode ïœä∑
 */
 int ShiftJis::SjisToUni(
-	const char* __restrict pSrc, const int nSrcLen,
+	const char* __restrict pSrc, const size_t nSrcLen,
 	wchar_t* __restrict pDst, bool* pbError
 	)
 {
@@ -141,7 +141,7 @@ CodeConvertResult ShiftJis::SJISToUnicode(
 /*
 	Unicode -> SJIS
 */
-int ShiftJis::UniToSjis(const wchar_t* pSrc, const int nSrcLen, char* pDst, bool* pbError)
+int ShiftJis::UniToSjis(const wchar_t* pSrc, const size_t nSrcLen, char* pDst, bool* pbError)
 {
 	int nclen;
 	const unsigned short *pr, *pr_end;
@@ -210,7 +210,7 @@ CodeConvertResult ShiftJis::UnicodeToSJIS( const NativeW& src, Memory* pDstMem )
 
 	// É\Å[ÉXéÊìæ
 	const wchar_t* pSrc = reinterpret_cast<const wchar_t*>(pMem->GetRawPtr());
-	int nSrcLen = pMem->GetRawLength() / sizeof(wchar_t);
+	size_t nSrcLen = pMem->GetRawLength() / sizeof(wchar_t);
 	if (nSrcLen == 0) {
 		pDstMem->Clear();
 		return CodeConvertResult::Complete;

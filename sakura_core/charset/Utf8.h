@@ -57,10 +57,10 @@ public:
 protected:
 	// 変換の実装
 	// 2008.11.10 変換ロジックを書き直す
-	inline static int _Utf8ToUni_char(const unsigned char*, const int, unsigned short*, bool bCESU8Mode);
-	static int Utf8ToUni(const char*, const int, wchar_t*, bool bCESU8Mode);
-	inline static int _UniToUtf8_char(const unsigned short*, const int, unsigned char*, const bool bCSU8Mode);
-	static int UniToUtf8(const wchar_t*, const int, char*, bool* pbError, bool bCSU8Mode);
+	inline static int _Utf8ToUni_char(const unsigned char*, const size_t, unsigned short*, bool bCESU8Mode);
+	static int Utf8ToUni(const char*, const size_t, wchar_t*, bool bCESU8Mode);
+	inline static int _UniToUtf8_char(const unsigned short*, const size_t, unsigned char*, const bool bCSU8Mode);
+	static int UniToUtf8(const wchar_t*, const size_t, char*, bool* pbError, bool bCSU8Mode);
 };
 
 /*!
@@ -71,7 +71,7 @@ protected:
 	高速化のため、インライン化
 
 */
-inline int Utf8::_Utf8ToUni_char( const unsigned char* pSrc, const int nSrcLen, unsigned short* pDst, bool bCESUMode )
+inline int Utf8::_Utf8ToUni_char( const unsigned char* pSrc, const size_t nSrcLen, unsigned short* pDst, bool bCESUMode )
 {
 	int nret;
 
@@ -123,7 +123,7 @@ inline int Utf8::_Utf8ToUni_char( const unsigned char* pSrc, const int nSrcLen, 
 
 	高速化のため、インライン化
 */
-inline int Utf8::_UniToUtf8_char( const unsigned short* pSrc, const int nSrcLen, unsigned char* pDst, bool bCESU8Mode )
+inline int Utf8::_UniToUtf8_char( const unsigned short* pSrc, const size_t nSrcLen, unsigned char* pDst, bool bCESU8Mode )
 {
 	int nret;
 

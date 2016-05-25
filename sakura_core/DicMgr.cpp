@@ -43,7 +43,7 @@ DicMgr::~DicMgr()
 */
 BOOL DicMgr::Search(
 	const wchar_t*	pszKey,				// 検索キーワード
-	const int		nCmpLen,			// 検索キーワードの長さ
+	const size_t	nCmpLen,			// 検索キーワードの長さ
 	NativeW**		ppMemKey,			// 見つかったキーワード．呼び出し元の責任で解放する．
 	NativeW**		ppMemMean,			// 見つかったキーワードに対応する辞書内容．呼び出し元の責任で解放する．
 	const TCHAR*	pszKeywordHelpFile,	// キーワードヘルプファイルのパス名

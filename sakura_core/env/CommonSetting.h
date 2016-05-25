@@ -30,16 +30,16 @@
 #include "io/File.h" // ShareMode
 
 // Apr. 05, 2003 genta WindowCaption用領域（変換前）の長さ
-static const int MAX_CAPTION_CONF_LEN = 256;
+static const uint32_t MAX_CAPTION_CONF_LEN = 256;
 
-static const int MAX_DATETIMEFOREMAT_LEN	= 100;
-static const int MAX_CUSTOM_MENU			=  25;
-static const int MAX_CUSTOM_MENU_NAME_LEN	=  32;
-static const int MAX_CUSTOM_MENU_ITEMS		=  48;
-static const int MAX_TOOLBAR_BUTTON_ITEMS	= 512;	// ツールバーに登録可能なボタン最大数	
-static const int MAX_TOOLBAR_ICON_X			=  32;	// アイコンBMPの桁数
-static const int MAX_TOOLBAR_ICON_Y			=  15;	// アイコンBMPの段数
-static const int MAX_TOOLBAR_ICON_COUNT		= MAX_TOOLBAR_ICON_X * MAX_TOOLBAR_ICON_Y; // =480
+static const uint32_t MAX_DATETIMEFOREMAT_LEN	= 100;
+static const uint32_t MAX_CUSTOM_MENU			=  25;
+static const uint32_t MAX_CUSTOM_MENU_NAME_LEN	=  32;
+static const uint32_t MAX_CUSTOM_MENU_ITEMS		=  48;
+static const uint32_t MAX_TOOLBAR_BUTTON_ITEMS	= 512;	// ツールバーに登録可能なボタン最大数	
+static const uint32_t MAX_TOOLBAR_ICON_X		=  32;	// アイコンBMPの桁数
+static const uint32_t MAX_TOOLBAR_ICON_Y		=  15;	// アイコンBMPの段数
+static const uint32_t MAX_TOOLBAR_ICON_COUNT	= MAX_TOOLBAR_ICON_X * MAX_TOOLBAR_ICON_Y; // =480
 // Oct. 22, 2000 JEPRO アイコンの最大登録数を128個増やした(256→384)	
 // 2010/3/14 Uchi アイコンの最大登録数を32個増やした(384→416)
 // 2010/6/26 syat アイコンの最大登録数を15段に増やした(416→480)

@@ -126,8 +126,8 @@ void DocOutline::MakeTopicList_txt(FuncInfoArr* pFuncInfoArr)
 		}
 
 		// 先頭文字が見出し記号のいずれかであれば、次へ進む
-		int nCharChars = NativeW::GetSizeOfChar(pLine, nLineLen, i);
-		int nCharChars2;
+		size_t nCharChars = NativeW::GetSizeOfChar(pLine, nLineLen, i);
+		size_t nCharChars2;
 		int j;
 		for (j=0; j<nStartsLen; j+=nCharChars2) {
 			// 2005-09-02 D.S.Koba GetSizeOfChar
@@ -283,7 +283,7 @@ void DocOutline::MakeTopicList_wztxt(FuncInfoArr* pFuncInfoArr)
 				&ptPos
 			);
 			
-			int level = pPos - pLine;
+			ptrdiff_t level = pPos - pLine;
 
 			// 2003.06.27 Moca 階層が2段位上深くなるときは、無題の要素を追加
 			if (levelPrev < level && level != levelPrev + 1) {

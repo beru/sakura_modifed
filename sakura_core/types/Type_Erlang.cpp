@@ -130,8 +130,8 @@ const wchar_t* OutlineErlang::ScanFuncName(const wchar_t* buf, const wchar_t* en
 		}while (IS_ALNUM(*p) && p < end);
 	}
 	
-	int buf_len = _countof(func);
-	int len = p - buf;
+	size_t buf_len = _countof(func);
+	ptrdiff_t len = p - buf;
 	if (buf[0] == L'\'') {
 		++buf;
 		len -= 2;

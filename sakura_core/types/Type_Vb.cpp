@@ -67,7 +67,7 @@ void DocOutline::MakeFuncList_VisualBasic(FuncInfoArr* pFuncInfoArr)
 {
 	const int	nMaxWordLeng = 255;	// Aug 7, 2003 little YOSHI  VBの名前付け規則より255文字に拡張
 	size_t		nLineLen = 0;//: 2002/2/3 aroka 警告対策：初期化
-	int			nCharChars;
+	size_t		nCharChars;
 	wchar_t		szWordPrev[256];	// Aug 7, 2003 little YOSHI  VBの名前付け規則より255文字に拡張
 	wchar_t		szWord[256];		// Aug 7, 2003 little YOSHI  VBの名前付け規則より255文字に拡張
 	int			nWordIdx = 0;

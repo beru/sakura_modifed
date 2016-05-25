@@ -1284,7 +1284,7 @@ bool EditView::IsCurrentPositionURL(
 	const wchar_t* pLine = pEditDoc->docLineMgr.GetLine(ptXY.y)->GetDocLineStrWithEOL(&nLineLen); // 2007.10.09 kobake レイアウト・ロジック混在バグ修正
 
 	int nMatchColor;
-	int nUrlLen = 0;
+	size_t nUrlLen = 0;
 	int i = t_max(0, (int)ptXY.x - (int)_MAX_PATH);	// 2009.05.22 ryoji 200->_MAX_PATH
 	//nLineLen = __min(nLineLen, ptXY.x + _MAX_PATH);
 	while (i <= ptXY.x && i < nLineLen) {

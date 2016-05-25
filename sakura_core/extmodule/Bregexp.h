@@ -127,14 +127,14 @@ public:
 		検索に一致した文字列の長さを返す
 		@retval 検索に一致した文字列の長さ
 	*/
-	ptrdiff_t GetMatchLen(void) {
+	size_t GetMatchLen(void) {
 		return pRegExp->endp[0] - pRegExp->startp[0];
 	}
 	/*!
 		置換された文字列の長さを返す
 		@retval 置換された文字列の長さ
 	*/
-	ptrdiff_t GetStringLen(void) {
+	size_t GetStringLen(void) {
 		// 置換後文字列が０幅なら outp、outendpもNULLになる
 		// NULLポインタの引き算は問題なく０になる。
 		// outendpは '\0'なので、文字列長は +1不要

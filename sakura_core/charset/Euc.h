@@ -45,9 +45,9 @@ public:
 	// 2008.11.10 •ÏŠ·ƒƒWƒbƒN‚ğ‘‚«’¼‚·
 	inline static int _EucjpToUni_char(const unsigned char*, unsigned short*, const ECharSet, bool* pbError, bool* pbHex);
 protected:
-	static int EucjpToUni(const char*, const int, wchar_t*, bool* pbError);
+	static int EucjpToUni(const char*, const size_t, wchar_t*, bool* pbError);
 	inline static int _UniToEucjp_char(const unsigned short*, unsigned char*, const ECharSet, bool* pbError);
-	static int UniToEucjp(const wchar_t*, const int, char*, bool* pbError);
+	static int UniToEucjp(const wchar_t*, const size_t, char*, bool* pbError);
 };
 
 

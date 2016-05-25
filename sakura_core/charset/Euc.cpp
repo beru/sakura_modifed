@@ -8,7 +8,7 @@
 /*!
 	EUCJP → Unicode 変換関数
 */
-int Euc::EucjpToUni(const char* pSrc, const int nSrcLen, wchar_t* pDst, bool* pbError)
+int Euc::EucjpToUni(const char* pSrc, const size_t nSrcLen, wchar_t* pDst, bool* pbError)
 {
 	int nclen;
 	ECharSet echarset;
@@ -102,7 +102,7 @@ CodeConvertResult Euc::EUCToUnicode(const Memory& src, NativeW* pDstMem)
 }
 
 
-int Euc::UniToEucjp(const wchar_t* pSrc, const int nSrcLen, char* pDst, bool* pbError)
+int Euc::UniToEucjp(const wchar_t* pSrc, const size_t nSrcLen, char* pDst, bool* pbError)
 {
 	int nclen;
 	bool berror = false, berror_tmp;
@@ -160,7 +160,7 @@ CodeConvertResult Euc::UnicodeToEUC(const NativeW& src, Memory* pDstMem)
 	bool bError = false;
 
 	const wchar_t* pSrc = src.GetStringPtr();
-	int nSrcLen = src.GetStringLength();
+	size_t nSrcLen = src.GetStringLength();
 
 	// 必要なバッファサイズを調べてメモリを確保
 	assert(nSrcLen != 0);

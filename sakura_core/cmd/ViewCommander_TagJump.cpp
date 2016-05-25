@@ -43,7 +43,7 @@ static
 bool GetQuoteFilePath(const wchar_t* pLine, wchar_t* pFile, size_t size) {
 	const wchar_t* pFileEnd = wcschr(pLine, L'\"');
 	if (pFileEnd) {
-		int nFileLen = pFileEnd - pLine;
+		ptrdiff_t nFileLen = pFileEnd - pLine;
 		if (0 < nFileLen && nFileLen < (int)size) {
 			wmemcpy(pFile, pLine, nFileLen);
 			pFile[nFileLen] = L'\0';
@@ -204,7 +204,7 @@ bool ViewCommander::Command_TagJump(bool bClose)
 				if (!pTagEnd) {
 					pTagEnd = wcsstr(pLine, L"]: ");
 					if (pTagEnd) {
-						int fileEnd = pTagEnd - pLine - 1;
+						ptrdiff_t fileEnd = pTagEnd - pLine - 1;
 						for (; 1<fileEnd; --fileEnd) {
 							if (L'[' == pLine[fileEnd]) {
 								--fileEnd;
@@ -220,7 +220,7 @@ bool ViewCommander::Command_TagJump(bool bClose)
 					}
 				}
 				if (pTagEnd) {
-					int fileEnd = pTagEnd - pLine - 1;
+					ptrdiff_t fileEnd = pTagEnd - pLine - 1;
 					for (; 1<fileEnd && (L'0' <= pLine[fileEnd] && pLine[fileEnd] <= L'9'); --fileEnd) {}
 					if (1 < fileEnd && (L',' == pLine[fileEnd])) { --fileEnd; }
 					for (; 1<fileEnd && (L'0' <= pLine[fileEnd] && pLine[fileEnd] <= L'9'); --fileEnd) {}

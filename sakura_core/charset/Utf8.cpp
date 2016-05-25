@@ -40,7 +40,7 @@ void Utf8::GetEol(Memory* pMemEol, EolType eolType){
 
 	@param[in] bCESU8Mode CESU-8 ÇèàóùÇ∑ÇÈèÍçá true
 */
-int Utf8::Utf8ToUni(const char* pSrc, const int nSrcLen, wchar_t* pDst, bool bCESU8Mode)
+int Utf8::Utf8ToUni(const char* pSrc, const size_t nSrcLen, wchar_t* pDst, bool bCESU8Mode)
 {
 	const unsigned char *pr, *pr_end;
 	unsigned short* pw;
@@ -129,7 +129,7 @@ CodeConvertResult Utf8::_UTF8ToUnicode( const Memory& src, NativeW* pDstMem, boo
 
 	@param[in] bCESU8Mode CESU-8 ÇèàóùÇ∑ÇÈèÍçá true
 */
-int Utf8::UniToUtf8(const wchar_t* pSrc, const int nSrcLen, char* pDst, bool* pbError, bool bCESU8Mode)
+int Utf8::UniToUtf8(const wchar_t* pSrc, const size_t nSrcLen, char* pDst, bool* pbError, bool bCESU8Mode)
 {
 	const unsigned short* pr = reinterpret_cast<const unsigned short*>(pSrc);
 	const unsigned short* pr_end = reinterpret_cast<const unsigned short*>(pSrc + nSrcLen);
@@ -180,7 +180,7 @@ CodeConvertResult Utf8::_UnicodeToUTF8( const NativeW& src, Memory* pDstMem, boo
 {
 	// É\Å[ÉXÇéÊìæ
 	const wchar_t* pSrc = src.GetStringPtr();
-	int nSrcLen = src.GetStringLength();
+	size_t nSrcLen = src.GetStringLength();
 	if (nSrcLen == 0) {
 		pDstMem->Clear();
 		return CodeConvertResult::Complete;

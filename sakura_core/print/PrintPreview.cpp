@@ -1504,7 +1504,7 @@ ColorStrategy* PrintPreview::DrawPageText(
 				);
 			}
 
-			const int nLineLen = pLayout->GetLengthWithoutEOL();
+			const size_t nLineLen = pLayout->GetLengthWithoutEOL();
 			if (nLineLen == 0) {
 				continue;
 			}

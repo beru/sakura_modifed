@@ -191,7 +191,8 @@ int EditView::HokanSearchByFile(
 ) {
 	const size_t nKeyLen = wcslen(pszKey);
 	int nLines = pEditDoc->docLineMgr.GetLineCount();
-	int j, nWordLen, nLineLen, nRet, nCharSize, nWordBegin, nWordLenStop;
+	int j, nWordLen, nLineLen, nRet, nWordBegin, nWordLenStop;
+	size_t nCharSize;
 
 	Point ptCur = GetCaret().GetCaretLogicPos(); // 物理カーソル位置
 

@@ -68,7 +68,7 @@ public:
 	*/
 	static bool WhereCurrentWord_2(
 		const wchar_t*	pLine,			// [in]  調べるメモリ全体の先頭アドレス
-		int				nLineLen,		// [in]  調べるメモリ全体の有効長
+		size_t			nLineLen,		// [in]  調べるメモリ全体の有効長
 		int				nIdx,			// [out] 調査開始地点:pLineからの相対的な位置
 		int*			pnIdxFrom,		// [out] 単語が見つかった場合は、単語の先頭インデックスを返す。
 		int*			pnIdxTo,		// [out] 単語が見つかった場合は、単語の終端の次のバイトの先頭インデックスを返す。
@@ -79,7 +79,7 @@ public:
 	// 現在位置の文字の種類を調べる
 	static ECharKind WhatKindOfChar(
 		const wchar_t*	pData,
-		int				pDataLen,
+		size_t			pDataLen,
 		int				nIdx
 	);
 
@@ -98,7 +98,7 @@ public:
 	//	pLine（長さ：nLineLen）の文字列から次の単語を探す。探し始める位置はnIdxで指定。
 	static bool SearchNextWordPosition(
 		const wchar_t*	pLine,
-		int				nLineLen,
+		size_t			nLineLen,
 		int				nIdx,			//	桁数
 		int*			pnColumnNew,	//	見つかった位置
 		bool			bStopsBothEnds	//	単語の両端で止まる
@@ -107,7 +107,7 @@ public:
 	//	pLine（長さ：nLineLen）の文字列から次の単語を探す。探し始める位置はnIdxで指定。 for 強調キーワード
 	static bool SearchNextWordPosition4KW(
 		const wchar_t*	pLine,
-		int				nLineLen,
+		size_t			nLineLen,
 		int				nIdx,			//	桁数
 		int*			pnColumnNew,	//	見つかった位置
 		bool			bStopsBothEnds	//	単語の両端で止まる
@@ -115,7 +115,7 @@ public:
 
 
 	template <class CHAR_TYPE>
-	static int GetWord(const CHAR_TYPE*, const int, const CHAR_TYPE* pszSplitCharList,
+	static size_t GetWord(const CHAR_TYPE*, const size_t, const CHAR_TYPE* pszSplitCharList,
 		CHAR_TYPE** ppWordStart, int* pnWordLen);
 
 protected:
@@ -124,8 +124,8 @@ protected:
 	static bool _match_charlist(const WCHAR c, const WCHAR* pszList);
 };
 
-bool IsURL(const wchar_t*, int, int*);			// 指定アドレスがURLの先頭ならばTRUEとその長さを返す
-bool IsMailAddress(const wchar_t*, int, int*);	// 現在位置がメールアドレスならば、NULL以外と、その長さを返す
+bool IsURL(const wchar_t*, size_t, size_t*);			// 指定アドレスがURLの先頭ならばTRUEとその長さを返す
+bool IsMailAddress(const wchar_t*, size_t, size_t*);	// 現在位置がメールアドレスならば、NULL以外と、その長さを返す
 
 
 // ACHAR 版
@@ -159,9 +159,9 @@ inline bool WordParse::_match_charlist(const WCHAR c, const WCHAR* pszList)
 	@return 読んだデータの長さ。
 */
 template <class CHAR_TYPE>
-int WordParse::GetWord(
+size_t WordParse::GetWord(
 	const CHAR_TYPE* pS,
-	const int nLen,
+	const size_t nLen,
 	const CHAR_TYPE* pszSplitCharList,
 	CHAR_TYPE** ppWordStart,
 	int* pnWordLen)

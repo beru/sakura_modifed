@@ -133,7 +133,7 @@ void DocOutline::MakeTopicList_html(FuncInfoArr* pFuncInfoArr)
 				) {
 					break;
 				}
-				int nCharSize = NativeW::GetSizeOfChar(pLine, nLineLen-i, j);
+				size_t nCharSize = NativeW::GetSizeOfChar(pLine, nLineLen-i, j);
 				memcpy(szTitle + j, pLine + j, nCharSize * sizeof(wchar_t));
 				j += nCharSize;
 			}

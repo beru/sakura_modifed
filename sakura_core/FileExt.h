@@ -60,7 +60,7 @@ private:
 		TCHAR	szExt[MAX_TYPES_EXTS * 3 + 1];	// ägí£éq(64ï∂éöà»â∫ÇÃÇÕÇ∏Å®szTypeExts) Ç»Ç® "*." Çí«â¡Ç∑ÇÈÇÃÇ≈ÇªÇÍÇ»ÇËÇ…ïKóv
 	};
 
-	int				nCount;
+	int nCount;
 	FileExtInfoTag*	puFileExtInfo;
 	std::vector<TCHAR>	vstrFilter;
 

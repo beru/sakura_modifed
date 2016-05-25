@@ -1247,7 +1247,7 @@ void EditView::SmartIndent_CPP(wchar_t wcChar)
 	int	nDataLen;
 
 	int			nWork = 0;
-	int			nCharChars;
+	ptrdiff_t	nCharChars;
 	int			nSrcLen;
 	wchar_t		pszSrc[1024];
 	bool		bChange;

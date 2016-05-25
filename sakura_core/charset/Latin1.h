@@ -47,9 +47,9 @@ public:
 
 protected:
 	// ŽÀ‘•
-	static int Latin1ToUni(const char*, const int, wchar_t*, bool* pbError);
+	static int Latin1ToUni(const char*, const size_t, wchar_t*, bool* pbError);
 	inline static int _UniToLatin1_char(const unsigned short*, unsigned char*, const ECharSet, bool* pbError);
-	static int UniToLatin1(const wchar_t*, const int, char*, bool* pbError);
+	static int UniToLatin1(const wchar_t*, const size_t, char*, bool* pbError);
 };
 
 /*!

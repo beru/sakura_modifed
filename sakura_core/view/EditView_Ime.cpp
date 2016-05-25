@@ -206,9 +206,10 @@ LRESULT EditView::SetReconvertStruct(
 		return 0;
 
 	// テキスト取得 -> pLine, nLineLen
-	const int nLineLen = pCurDocLine->GetLengthWithoutEOL();
-	if (nLineLen == 0)
+	const size_t nLineLen = pCurDocLine->GetLengthWithoutEOL();
+	if (nLineLen == 0) {
 		return 0;
+	}
 	const wchar_t* pLine = pCurDocLine->GetPtr();
 
 	// 2010.04.17 行頭から←選択だと「SelectToが改行の後ろの位置」にあるため範囲を調整する
@@ -228,7 +229,7 @@ LRESULT EditView::SetReconvertStruct(
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 	// 再変換考慮文字列開始  // 行の中で再変換のAPIにわたすとする文字列の開始位置
-	int nReconvIndex = 0;
+	ptrdiff_t nReconvIndex = 0;
 	int nInsertCompLen = 0; // DOCUMENTFEED用。変換中の文字列をdwStrに混ぜる
 	// Iはカーソル　[]が選択範囲=dwTargetStrLenだとして
 	// 行：日本語をIします。
@@ -238,7 +239,7 @@ LRESULT EditView::SetReconvertStruct(
 	// 選択開始位置より前後200(or 50)文字ずつを考慮文字列にする
 	const int nReconvMaxLen = (bDocumentFeed ? 50 : 200); //$$マジックナンバー注意
 	while (ptSelect.x - nReconvIndex > nReconvMaxLen) {
-		nReconvIndex = t_max<int>(nReconvIndex + 1, ::CharNextW_AnyBuild(pLine + nReconvIndex) - pLine);
+		nReconvIndex = t_max(nReconvIndex + 1, ::CharNextW_AnyBuild(pLine + nReconvIndex) - pLine);
 	}
 	
 	// 再変換考慮文字列終了  // 行の中で再変換のAPIにわたすとする文字列の長さ

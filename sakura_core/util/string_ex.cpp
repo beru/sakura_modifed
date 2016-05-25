@@ -258,7 +258,7 @@ wchar_t* mbstowcs_new(const char* src)
 	ret[new_length] = L'\0';
 	return ret;
 }
-wchar_t* mbstowcs_new(const char* pSrc, int nSrcLen, int* pnDstLen)
+wchar_t* mbstowcs_new(const char* pSrc, size_t nSrcLen, int* pnDstLen)
 {
 	// 必要な領域サイズ
 	int nNewLength = MultiByteToWideChar(
@@ -295,7 +295,7 @@ char* wcstombs_new(const wchar_t* src)
 	return wcstombs_new(src, wcslen(src));
 }
 // 戻り値はnew[]で確保して返す。
-char* wcstombs_new(const wchar_t* pSrc, int nSrcLen)
+char* wcstombs_new(const wchar_t* pSrc, size_t nSrcLen)
 {
 	// 必要な領域サイズ
 	int nNewLength = WideCharToMultiByte(
@@ -335,7 +335,7 @@ void mbstowcs_vector(const char* src, std::vector<wchar_t>* ret)
 }
 
 // ※戻り値retにおいて、ret->size()が文字列長ではないことに注意。正しくは、(ret->size()-1)が文字列長となる。
-void mbstowcs_vector(const char* pSrc, int nSrcLen, std::vector<wchar_t>* ret)
+void mbstowcs_vector(const char* pSrc, size_t nSrcLen, std::vector<wchar_t>* ret)
 {
 	// 必要な容量
 	int nNewLen = MultiByteToWideChar(
@@ -368,7 +368,7 @@ void wcstombs_vector(const wchar_t* src, std::vector<char>* ret)
 {
 	wcstombs_vector(src, wcslen(src), ret);
 }
-void wcstombs_vector(const wchar_t* pSrc, int nSrcLen, std::vector<char>* ret)
+void wcstombs_vector(const wchar_t* pSrc, size_t nSrcLen, std::vector<char>* ret)
 {
 	// 必要な容量
 	int nNewLen = WideCharToMultiByte(

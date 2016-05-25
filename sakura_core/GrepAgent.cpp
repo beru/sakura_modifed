@@ -240,7 +240,7 @@ DWORD GrepAgent::DoGrep(
 				return 0;
 			}
 			if (bLineSelect) {
-				int len = memReplace.GetStringLength();
+				size_t len = memReplace.GetStringLength();
 				if (memReplace[len - 1] != WCODE::CR && memReplace[len - 1] != WCODE::LF) {
 					memReplace.AppendString(viewDst.GetDocument().docEditor.GetNewLineCode().GetValue2());
 				}
@@ -968,7 +968,7 @@ static void OutputPathInfo(
 	{
 		// バッファを2^n 分確保する
 		int n = 1024;
-		int size = memMessage.GetStringLength() + 300;
+		size_t size = memMessage.GetStringLength() + 300;
 		while (n < size) {
 			n *= 2;
 		}
@@ -1184,7 +1184,7 @@ int GrepAgent::DoGrepFile(
 		// 注意 : fl.ReadLine が throw する可能性がある
 		while (fl.ReadLine(&unicodeBuffer, &eol) != CodeConvertResult::Failure) {
 			const wchar_t* pLine = unicodeBuffer.GetStringPtr();
-			int nLineLen = unicodeBuffer.GetStringLength();
+			size_t nLineLen = unicodeBuffer.GetStringLength();
 
 			nEolCodeLen = eol.GetLen();
 			++nLine;
@@ -1244,7 +1244,7 @@ int GrepAgent::DoGrepFile(
 
 					// パターン発見
 					nIndex = regexp.GetIndex();
-					int matchlen = regexp.GetMatchLen();
+					size_t matchlen = regexp.GetMatchLen();
 #ifdef _DEBUG
 					if (nIndex <= nIndexPrev) {
 						MYTRACE(_T("ERROR: EditView::DoGrepFile() nIndex <= nIndexPrev break \n"));
@@ -1662,7 +1662,7 @@ int GrepAgent::DoGrepReplaceFile(
 		// 注意 : fl.ReadLine が throw する可能性がある
 		while (fl.ReadLine(&unicodeBuffer, &cEol) != CodeConvertResult::Failure) {
 			const wchar_t*	pLine = unicodeBuffer.GetStringPtr();
-			int nLineLen = unicodeBuffer.GetStringLength();
+			size_t nLineLen = unicodeBuffer.GetStringLength();
 	
 			nEolCodeLen = cEol.GetLen();
 			++nLine;
@@ -1702,8 +1702,8 @@ int GrepAgent::DoGrepReplaceFile(
 	
 			// 正規表現検索
 			if (searchOption.bRegularExp) {
-				int nIndex = 0;
-				int nIndexOld = nIndex;
+				size_t nIndex = 0;
+				size_t nIndexOld = nIndex;
 				int nMatchNum = 0;
 				//	Jun. 21, 2003 genta ループ条件見直し
 				//	マッチ箇所を1行から複数検出するケースを標準に，
@@ -1720,7 +1720,7 @@ int GrepAgent::DoGrepReplaceFile(
 				) {
 					//	パターン発見
 					nIndex = regexp.GetIndex();
-					ptrdiff_t matchlen = regexp.GetMatchLen();
+					size_t matchlen = regexp.GetMatchLen();
 					if (bOutput) {
 						OutputPathInfo(
 							memMessage, grepOption,

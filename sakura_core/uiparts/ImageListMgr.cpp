@@ -25,8 +25,8 @@
 //  2010/06/29 syat MAX_X, MAX_Yの値をCommonSettings.hに移動
 //	Jul. 21, 2003 genta 他でも使うので関数の外に出した
 //	Oct. 21, 2000 JEPRO 設定
-const int MAX_X = MAX_TOOLBAR_ICON_X;
-const int MAX_Y = MAX_TOOLBAR_ICON_Y;	// 2002.01.17
+const uint32_t MAX_X = MAX_TOOLBAR_ICON_X;
+const uint32_t MAX_Y = MAX_TOOLBAR_ICON_Y;	// 2002.01.17
 
 // コンストラクタ
 ImageListMgr::ImageListMgr()
@@ -372,7 +372,7 @@ bool ImageListMgr::Draw(
 
 	@date 2003.07.21 genta 個数を自分で管理する必要がある．
 */
-int ImageListMgr::Count() const
+size_t ImageListMgr::Count() const
 {
 	return nIconCount;
 //	return MAX_X * MAX_Y;
@@ -384,7 +384,7 @@ int ImageListMgr::Add(const TCHAR* szPath)
 	if ((nIconCount % MAX_X) == 0) {
 		Extend();
 	}
-	int index = nIconCount;
+	size_t index = nIconCount;
 	++nIconCount;
 
 	// アイコンを読み込む
@@ -405,19 +405,24 @@ int ImageListMgr::Add(const TCHAR* szPath)
 	::SelectObject(hExtDC, hOldBmp);
 	::DeleteDC(hExtDC);
 
-	MyBitBlt(hDestDC, (index % MAX_X) * cx, (index / MAX_X) * cy, cx, cy, hExtBmp, 0, 0, cTrans);
+	MyBitBlt(
+		hDestDC,
+		(int)((index % MAX_X) * cx),
+		(int)((index / MAX_X) * cy),
+		cx, cy, hExtBmp, 0, 0, cTrans
+	);
 
 	::SelectObject(hDestDC, hOldDestBmp);
 	::DeleteDC(hDestDC);
 	::DeleteObject(hExtBmp);
 
-	return index;
+	return (int)index;
 }
 
 // ビットマップを一行（MAX_X個）拡張する
 void ImageListMgr::Extend(bool bExtend)
 {
-	int curY = nIconCount / MAX_X;
+	size_t curY = nIconCount / MAX_X;
 	if (curY < MAX_Y) {
 		curY = MAX_Y;
 	}
@@ -427,14 +432,14 @@ void ImageListMgr::Extend(bool bExtend)
 
 	// 1行拡張したビットマップを作成
 	HDC hDestDC = ::CreateCompatibleDC(hSrcDC);
-	HBITMAP hDestBmp = ::CreateCompatibleBitmap(hSrcDC, MAX_X * cx, (curY + (bExtend ? 1 : 0)) * cy);
+	HBITMAP hDestBmp = ::CreateCompatibleBitmap(hSrcDC, (int)(MAX_X * cx), (int)(curY + (bExtend ? 1 : 0)) * cy);
 	HBITMAP hDestBmpOld = (HBITMAP)::SelectObject(hDestDC, hDestBmp);
 
-	::BitBlt(hDestDC, 0, 0, MAX_X * cx, curY * cy, hSrcDC, 0, 0, SRCCOPY);
+	::BitBlt(hDestDC, 0, 0, (int)(MAX_X * cx), (int)(curY * cy), hSrcDC, 0, 0, SRCCOPY);
 
 	// 拡張した部分は透過色で塗る
 	if (bExtend) {
-		FillSolidRect(hDestDC, 0, curY * cy, MAX_X * cx, cy, cTrans);
+		FillSolidRect(hDestDC, 0, (int)(curY * cy), MAX_X * cx, cy, cTrans);
 	}
 
 	::SelectObject(hSrcDC, hSrcBmpOld);

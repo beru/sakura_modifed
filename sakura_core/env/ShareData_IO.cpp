@@ -497,7 +497,7 @@ void ShareData_IO::ShareData_IO_Common(DataProfile& profile)
 	if (!profile.IsReadingMode()) {
 		size_t nDummy = _tcslen(common.backup.szBackUpFolder);
 		// フォルダの最後が「半角かつ'\\'」でない場合は、付加する
-		int	nCharChars = &common.backup.szBackUpFolder[nDummy]
+		ptrdiff_t nCharChars = &common.backup.szBackUpFolder[nDummy]
 			- NativeT::GetCharPrev(common.backup.szBackUpFolder, nDummy, &common.backup.szBackUpFolder[nDummy]);
 		if (1
 			&& nCharChars == 1
@@ -510,7 +510,7 @@ void ShareData_IO::ShareData_IO_Common(DataProfile& profile)
 	profile.IOProfileData(pszSecName, LTEXT("szBackUpFolder"), common.backup.szBackUpFolder);
 	if (profile.IsReadingMode()) {
 		size_t	nDummy;
-		int	nCharChars;
+		ptrdiff_t nCharChars;
 		nDummy = _tcslen(common.backup.szBackUpFolder);
 		// フォルダの最後が「半角かつ'\\'」でない場合は、付加する
 		nCharChars = &common.backup.szBackUpFolder[nDummy]

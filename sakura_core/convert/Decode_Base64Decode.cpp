@@ -44,7 +44,7 @@ bool Decode_Base64Decode::DoDecode(const NativeW& src, Memory* pDst)
 	const int _BUFSIZE = ((BUFFER_SIZE + 3) / 4) * 4;
 
 	const wchar_t* pSrc;
-	int nSrcLen;
+	size_t nSrcLen;
 	char *pw, *pw_base;
 	wchar_t buffer[_BUFSIZE];
 	int i, j;

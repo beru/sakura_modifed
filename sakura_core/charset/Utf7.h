@@ -42,14 +42,12 @@ public:
 protected:
 
 	// 2008.11.10 ïœä∑ÉçÉWÉbÉNÇèëÇ´íºÇ∑
-	static int _Utf7SetDToUni_block(const char*, const int, wchar_t*);
-	static int _Utf7SetBToUni_block(const char*, const int, wchar_t*, bool*);
-	static int Utf7ToUni(const char*, const int, wchar_t*, bool* pbError);
+	static size_t _Utf7SetDToUni_block(const char*, const size_t, wchar_t*);
+	static size_t _Utf7SetBToUni_block(const char*, const size_t, wchar_t*, bool*);
+	static size_t Utf7ToUni(const char*, const size_t, wchar_t*, bool* pbError);
 
-	static int _UniToUtf7SetD_block(const wchar_t* pSrc, const int nSrcLen, char* pDst);
-	static int _UniToUtf7SetB_block(const wchar_t* pSrc, const int nSrcLen, char* pDst);
-	static int UniToUtf7(const wchar_t* pSrc, const int nSrcLen, char* pDst);
-
-
+	static size_t _UniToUtf7SetD_block(const wchar_t* pSrc, const size_t nSrcLen, char* pDst);
+	static size_t _UniToUtf7SetB_block(const wchar_t* pSrc, const size_t nSrcLen, char* pDst);
+	static size_t UniToUtf7(const wchar_t* pSrc, const size_t nSrcLen, char* pDst);
 };
 

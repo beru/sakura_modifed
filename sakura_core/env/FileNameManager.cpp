@@ -213,7 +213,7 @@ bool FileNameManager::ExpandMetaToFolder(LPCTSTR pszSrc, LPTSTR pszDes, int nDes
 		if (ps[1] != _T('\0')) {
 			TCHAR szMeta[_MAX_PATH];
 			TCHAR szPath[_MAX_PATH + 1];
-			int   nMetaLen;
+			ptrdiff_t nMetaLen;
 			size_t   nPathLen;
 			bool  bFolderPath;
 			LPCTSTR  pStr;

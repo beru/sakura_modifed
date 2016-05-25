@@ -30,7 +30,7 @@ class AppNodeGroupHandle;
 
 // 編集ウィンドウノード
 struct EditNode {
-	int				nIndex;
+	ptrdiff_t		nIndex;
 	int				nGroup;						// グループID							//@@@ 2007.06.20 ryoji
 	HWND			hWnd;
 	int				nId;						// 無題Id

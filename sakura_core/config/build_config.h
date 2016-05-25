@@ -41,12 +41,6 @@
 
 	@date 2007.10.18 kobake
 */
-#if defined(_MSC_VER) && _MSC_VER >= 1400 // VS2005以降なら
-#ifdef _DEBUG
-#define USE_STRICT_INT // ←これをコメントアウトすると厳格なintが無効になります。リリースビルドでは常に無効。
-#endif
-#endif
-
 
 // USE_UNFIXED_FONT を定義すると、フォント選択ダイアログで等幅フォント以外も選べるようになる
 //#define USE_UNFIXED_FONT

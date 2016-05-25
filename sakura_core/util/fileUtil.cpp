@@ -244,7 +244,7 @@ void CutLastYenFromDirectoryPath(TCHAR* pszFolder)
 		// フォルダの最後が半角かつ'\\'の場合は、取り除く
 		size_t nFolderLen = _tcslen(pszFolder);
 		if (0 < nFolderLen) {
-			int	nCharChars = &pszFolder[nFolderLen] - NativeT::GetCharPrev(pszFolder, nFolderLen, &pszFolder[nFolderLen]);
+			ptrdiff_t nCharChars = &pszFolder[nFolderLen] - NativeT::GetCharPrev(pszFolder, nFolderLen, &pszFolder[nFolderLen]);
 			if (nCharChars == 1 && pszFolder[nFolderLen - 1] == _T('\\')) {
 				pszFolder[nFolderLen - 1] = _T('\0');
 			}
@@ -318,7 +318,7 @@ void SplitPath_FolderAndFile(
 		// フォルダの最後が半角かつ'\\'の場合は、取り除く
 		size_t nFolderLen = _tcslen(pszFolder);
 		if (0 < nFolderLen) {
-			int nCharChars = &pszFolder[nFolderLen] - NativeT::GetCharPrev(pszFolder, nFolderLen, &pszFolder[nFolderLen]);
+			ptrdiff_t nCharChars = &pszFolder[nFolderLen] - NativeT::GetCharPrev(pszFolder, nFolderLen, &pszFolder[nFolderLen]);
 			if (nCharChars == 1 && pszFolder[nFolderLen - 1] == _T('\\')) {
 				pszFolder[nFolderLen - 1] = _T('\0');
 			}
@@ -1153,7 +1153,7 @@ int FileMatchScore(
 		const TCHAR* tmp = file1;
 		file1 = file2;
 		file2 = tmp;
-		int tmpLen = len1;
+		size_t tmpLen = len1;
 		len1 = len2;
 		len2 = tmpLen;
 	}
@@ -1162,8 +1162,8 @@ int FileMatchScore(
 			int tmpScore = 0;
 			for (int m=k; m<len2;) {
 				int pos1 = i + (m - k);
-				int chars1 = NativeT::GetSizeOfChar(file1, len1, pos1);
-				int chars2 = NativeT::GetSizeOfChar(file2, len2, m);
+				size_t chars1 = NativeT::GetSizeOfChar(file1, len1, pos1);
+				size_t chars2 = NativeT::GetSizeOfChar(file2, len2, m);
 				if (chars1 == chars2) {
 					if (chars1 == 1) {
 						if (_tcs_tolower(file1[pos1]) == _tcs_tolower(file2[m])) {
@@ -1181,7 +1181,7 @@ int FileMatchScore(
 				}else {
 					break;
 				}
-				m += t_max(1, chars1);
+				m += t_max((size_t)1, chars1);
 			}
 			if (score < tmpScore) {
 				score = tmpScore;

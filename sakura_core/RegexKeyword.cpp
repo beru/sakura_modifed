@@ -365,7 +365,7 @@ bool RegexKeyword::RegexIsKeyword(
 //	const wchar_t*		pLine,		// [in] １行のデータ
 	int					nPos,		// [in] 検索開始オフセット
 //	int					nLineLen,	// [in] １行の長さ
-	int*				nMatchLen,	// [out] マッチした長さ
+	size_t*				nMatchLen,	// [out] マッチした長さ
 	int*				nMatchColor	// [out] マッチした色番号
 	)
 {

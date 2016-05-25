@@ -62,7 +62,7 @@ public:
 	// 行検索開始
 	bool RegexKeyLineStart(void);
 	// 行検索
-	bool RegexIsKeyword(const StringRef& str, int nPos, int* nMatchLen, int* nMatchColor);
+	bool RegexIsKeyword(const StringRef& str, int nPos, size_t* nMatchLen, int* nMatchColor);
 	// タイプ設定
 	bool RegexKeySetTypes(const TypeConfig* pTypesPtr);
 

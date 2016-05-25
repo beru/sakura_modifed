@@ -1120,7 +1120,7 @@ int DlgTagJumpList::find_key_core(
 	// to_acharは一時バッファで破壊される可能性があるのでコピー
 	NativeA memKeyA = NativeA(to_achar(keyword));
 	const ACHAR* paszKeyword = memKeyA.GetStringPtr();
-	int	length = memKeyA.GetStringLength();
+	size_t	length = memKeyA.GetStringLength();
 
 	Empty();
 

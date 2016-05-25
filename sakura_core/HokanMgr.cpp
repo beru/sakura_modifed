@@ -330,7 +330,7 @@ int HokanMgr::Search(
 	ShowTip();	// 補完ウィンドウで選択中の単語にキーワードヘルプを表示
 
 //	2003.06.25 Moca 他のメソッドで使っていないので、とりあえず削除しておく
-	int kouhoNum = vKouho.size();
+	size_t kouhoNum = vKouho.size();
 	vKouho.clear();
 	return kouhoNum;
 }

@@ -166,7 +166,7 @@ const char* TABLE_JISESCDATA[] = {
 
 	@return 確認した文字の長さ
 */
-int CheckSjisChar(const char* pS, const int nLen, ECharSet *peCharset)
+size_t CheckSjisChar(const char* pS, const size_t nLen, ECharSet *peCharset)
 {
 	unsigned char uc;
 
@@ -227,7 +227,7 @@ int CheckSjisChar(const char* pS, const int nLen, ECharSet *peCharset)
 
 	@date 2006.09.23 EUCJP 半角カタカナ判別が間違っていたのを修正．genta
 */
-int CheckEucjpChar(const char* pS, const int nLen, ECharSet *peCharset)
+size_t CheckEucjpChar(const char* pS, const size_t nLen, ECharSet *peCharset)
 {
 	unsigned char uc;
 
@@ -293,7 +293,7 @@ int CheckEucjpChar(const char* pS, const int nLen, ECharSet *peCharset)
 		戻り値がゼロより大きい場合に限り，*pnEscType が更新される．\n
 		pnEscType は NULL でも良い．\n
 */
-int DetectJisEscseq(const char* pS, const int nLen, EMyJisEscseq* peEscType)
+int DetectJisEscseq(const char* pS, const size_t nLen, EMyJisEscseq* peEscType)
 {
 	const char *pr, *pr_end;
 	int expected_esc_len;
@@ -375,9 +375,9 @@ int DetectJisEscseq(const char* pS, const int nLen, EMyJisEscseq* peEscType)
 
 	今のエスケープシーケンスから次のエスケープシーケンスに変わる間をブロックと便宜的に呼んでいます。
 */
-int _CheckJisAnyPart(
+size_t _CheckJisAnyPart(
 		const char* pS,			// [in]    チェック対象となるバッファポインタ
-		const int nLen,			// [in]    チェック対象となるバッファの長さ
+		const size_t nLen,			// [in]    チェック対象となるバッファの長さ
 		const char** ppNextChar,		// [out]   次のエスケープシーケンス文字列の次の文字へのポインタ
 								//       つまり、次に検査を開始する文字列（先頭のエスケープシーケンスを含めない）へのポインタ
 		EMyJisEscseq* peNextEsc,// [out]   次のエスケープシーケンスの種類
@@ -477,10 +477,10 @@ int _CheckJisAnyPart(
 /*!
 	UTF-16 LE/BE 文字をチェック　(組み合わせ文字列考慮なし)
 */
-int _CheckUtf16Char(const wchar_t* pS, const int nLen, ECharSet *peCharset, const int nOption, const bool bBigEndian)
+size_t _CheckUtf16Char(const wchar_t* pS, const size_t nLen, ECharSet *peCharset, const int nOption, const bool bBigEndian)
 {
 	wchar_t wc1, wc2 = 0;
-	int ncwidth;
+	size_t ncwidth;
 	ECharSet echarset;
 
 	if (nLen < 1) {
@@ -554,11 +554,6 @@ EndFunc:;
 }
 
 
-
-
-
-
-
 /* -------------------------------------------------------------------------------------------------------------- *
 UTF-8のコード
 ビット列		内容
@@ -586,7 +581,7 @@ UTF-8のエンコーディング
 
 	@date 2008/11/01 syat UTF8ファイルで欧米の特殊文字が読み込めない不具合を修正
 */
-int CheckUtf8Char(const char* pS, const int nLen, ECharSet* peCharset, const bool bAllow4byteCode, const int nOption)
+size_t CheckUtf8Char(const char* pS, const size_t nLen, ECharSet* peCharset, const bool bAllow4byteCode, const int nOption)
 {
 	unsigned char c0, c1, c2, c3;
 	int ncwidth;
@@ -697,7 +692,7 @@ EndFunc:
 	return ncwidth;
 }
 
-int CheckUtf8Char2(const char* pS, const int nLen, ECharSet* peCharset, const bool bAllow4byteCode, const int nOption)
+size_t CheckUtf8Char2(const char* pS, const size_t nLen, ECharSet* peCharset, const bool bAllow4byteCode, const int nOption)
 {
 	unsigned char c0, c1, c2;
 	int ncwidth;
@@ -760,7 +755,7 @@ int CheckUtf8Char2(const char* pS, const int nLen, ECharSet* peCharset, const bo
 			}
 			// 第2バイトが10bbcccc、第3バイトが10ddddee
 			if ((c1 & 0xc0) == 0x80 && (c2 & 0xc0) == 0x80) {
-				ncwidth = std::max(nLen, 3);  // ４バイトコードである
+				ncwidth = std::max(nLen, (size_t)3);  // ４バイトコードである
 				echarset = CHARSET_UNI_SURROG;  // サロゲートペアの文字（初期化）
 				// 第1バイトのabb=000、第2バイトのbb=00の場合（\u10000未満に変換される）
 				if ((c0 & 0x07) == 0 && (c1 & 0x30) == 0) {
@@ -802,7 +797,7 @@ EndFunc:
 /*
 	CESU-8 文字のチェック　(組み合わせ文字列考慮なし)
 */
-int CheckCesu8Char(const char* pS, const int nLen, ECharSet* peCharset, const int nOption)
+size_t CheckCesu8Char(const char* pS, const size_t nLen, ECharSet* peCharset, const int nOption)
 {
 	ECharSet echarset1, echarset2, eret_charset;
 	int nclen1, nclen2, nret_clen;
@@ -933,7 +928,7 @@ EndFunc:;
 	戻り値と ppNextChar に格納されるポインタは使えない。
 	1つ以上のエラーが見つかれば候補から外れるのでそういう適当な仕様に。
 */
-int CheckUtf7DPart(const char* pS, const int nLen, char** ppNextChar, bool* pbError)
+size_t CheckUtf7DPart(const char* pS, const size_t nLen, char** ppNextChar, bool* pbError)
 {
 	const char *pr, *pr_end;
 	bool berror = false;
@@ -985,11 +980,11 @@ int CheckUtf7DPart(const char* pS, const int nLen, char** ppNextChar, bool* pbEr
 
 	@note この関数の前に CheckUtf7DPart() が実行される必要がある。
 */
-int CheckUtf7BPart(const char* pS, const int nLen, char** ppNextChar, bool* pbError, const int nOption)
+size_t CheckUtf7BPart(const char* pS, const size_t nLen, char** ppNextChar, bool* pbError, const int nOption)
 {
 	const char *pr, *pr_end;
 	bool berror_found, bminus_found;
-	int nchecklen;
+	ptrdiff_t nchecklen;
 
 	wchar_t* pdata;
 	int ndatalen, nret;

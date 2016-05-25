@@ -245,8 +245,8 @@ void ESI::GetEncodingInfo_jis(const char* pS, const size_t nLen)
 		return;
 	}
 
-	int nescbytes = 0;
-	int nillbytes = 0;
+	ptrdiff_t nescbytes = 0;
+	ptrdiff_t nillbytes = 0;
 	const char* pr = pS;
 	const char* pr_end = pS + nLen;
 	EMyJisEscseq emyjisesc = MYJISESC_ASCII7;

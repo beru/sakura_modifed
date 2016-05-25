@@ -112,7 +112,7 @@ EolType GetEOLType(const T* pszData, size_t nDataLen)
 	ファイルを読み込むときに使用するもの
 */
 
-EolType _GetEOLType_uni(const char* pszData, int nDataLen)
+EolType _GetEOLType_uni(const char* pszData, size_t nDataLen)
 {
 	for (int i=1; i<EOL_TYPE_NUM; ++i) {
 		if (g_aEolTable_uni_file[i].StartsWithW(pszData, nDataLen)) {
@@ -122,7 +122,7 @@ EolType _GetEOLType_uni(const char* pszData, int nDataLen)
 	return EolType::None;
 }
 
-EolType _GetEOLType_unibe(const char* pszData, int nDataLen)
+EolType _GetEOLType_unibe(const char* pszData, size_t nDataLen)
 {
 	for (int i=1; i<EOL_TYPE_NUM; ++i) {
 		if (g_aEolTable_uni_file[i].StartsWithWB(pszData, nDataLen)) {
@@ -173,22 +173,22 @@ bool Eol::SetType(EolType t)
 	return true;
 }
 
-void Eol::SetTypeByString(const wchar_t* pszData, int nDataLen)
+void Eol::SetTypeByString(const wchar_t* pszData, size_t nDataLen)
 {
 	SetType(GetEOLType(pszData, nDataLen));
 }
 
-void Eol::SetTypeByString(const char* pszData, int nDataLen)
+void Eol::SetTypeByString(const char* pszData, size_t nDataLen)
 {
 	SetType(GetEOLType(pszData, nDataLen));
 }
 
-void Eol::SetTypeByStringForFile_uni(const char* pszData, int nDataLen)
+void Eol::SetTypeByStringForFile_uni(const char* pszData, size_t nDataLen)
 {
 	SetType(_GetEOLType_uni(pszData, nDataLen));
 }
 
-void Eol::SetTypeByStringForFile_unibe(const char* pszData, int nDataLen)
+void Eol::SetTypeByStringForFile_unibe(const char* pszData, size_t nDataLen)
 {
 	SetType(_GetEOLType_unibe(pszData, nDataLen));
 }

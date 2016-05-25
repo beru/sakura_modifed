@@ -12,7 +12,7 @@
 */
 bool WordParse::WhereCurrentWord_2(
 	const wchar_t*	pLine,			// [in]  調べるメモリ全体の先頭アドレス
-	int				nLineLen,		// [in]  調べるメモリ全体の有効長
+	size_t			nLineLen,		// [in]  調べるメモリ全体の有効長
 	int				nIdx,			// [in]  調査開始地点:pLineからの相対的な位置
 	int*			pnIdxFrom,		// [out] 単語が見つかった場合は、単語の先頭インデックスを返す。
 	int*			pnIdxTo,		// [out] 単語が見つかった場合は、単語の終端の次のバイトの先頭インデックスを返す。
@@ -42,7 +42,7 @@ bool WordParse::WhereCurrentWord_2(
 
 	// 文字種類が変わるまで前方へサーチ
 	int nIdxNext = nIdx;
-	int nCharChars = &pLine[nIdxNext] - NativeW::GetCharPrev(pLine, nLineLen, &pLine[nIdxNext]);
+	ptrdiff_t nCharChars = &pLine[nIdxNext] - NativeW::GetCharPrev(pLine, nLineLen, &pLine[nIdxNext]);
 	while (nCharChars > 0) {
 		int nIdxNextPrev = nIdxNext;
 		nIdxNext -= nCharChars;
@@ -110,13 +110,13 @@ inline bool isCSymbolZen(wchar_t c)
 // 現在位置の文字の種類を調べる
 ECharKind WordParse::WhatKindOfChar(
 	const wchar_t*	pData,
-	int				pDataLen,
+	size_t			pDataLen,
 	int				nIdx
 	)
 {
 	using namespace WCODE;
 
-	int nCharChars = NativeW::GetSizeOfChar(pData, pDataLen, nIdx);
+	size_t nCharChars = NativeW::GetSizeOfChar(pData, pDataLen, nIdx);
 	if (nCharChars == 0) {
 		return CK_NULL;	// NULL
 	}else if (nCharChars == 1) {
@@ -258,7 +258,7 @@ ECharKind WordParse::WhatKindOfTwoChars4KW(
 */
 bool WordParse::SearchNextWordPosition(
 	const wchar_t*	pLine,
-	int				nLineLen,
+	size_t			nLineLen,
 	int				nIdx,			//	桁数
 	int*			pnColumnNew,	//	見つかった位置
 	bool			bStopsBothEnds	//	単語の両端で止まる
@@ -272,7 +272,7 @@ bool WordParse::SearchNextWordPosition(
 
 	int nIdxNext = nIdx;
 	// 2005-09-02 D.S.Koba GetSizeOfChar
-	int nCharChars = NativeW::GetSizeOfChar(pLine, nLineLen, nIdxNext);
+	size_t nCharChars = NativeW::GetSizeOfChar(pLine, nLineLen, nIdxNext);
 	while (nCharChars > 0) {
 		nIdxNext += nCharChars;
 		ECharKind nCharKindNext = WhatKindOfChar(pLine, nLineLen, nIdxNext);
@@ -304,7 +304,7 @@ bool WordParse::SearchNextWordPosition(
 */
 bool WordParse::SearchNextWordPosition4KW(
 	const wchar_t*	pLine,
-	int				nLineLen,
+	size_t			nLineLen,
 	int				nIdx,			//	桁数
 	int*			pnColumnNew,	//	見つかった位置
 	bool			bStopsBothEnds	//	単語の両端で止まる
@@ -318,7 +318,7 @@ bool WordParse::SearchNextWordPosition4KW(
 
 	int nIdxNext = nIdx;
 	// 2005-09-02 D.S.Koba GetSizeOfChar
-	int nCharChars = NativeW::GetSizeOfChar(pLine, nLineLen, nIdxNext);
+	size_t nCharChars = NativeW::GetSizeOfChar(pLine, nLineLen, nIdxNext);
 	while (nCharChars > 0) {
 		nIdxNext += nCharChars;
 		ECharKind nCharKindNext = WhatKindOfChar(pLine, nLineLen, nIdxNext);
@@ -378,8 +378,8 @@ uchar_t wc_to_c(wchar_t wc)
 */
 bool IsURL(
 	const wchar_t*	pszLine,	// [in]  文字列
-	int				nLineLen,	// [in]  文字列の長さ
-	int*			pnMatchLen	// [out] URLの長さ
+	size_t			nLineLen,	// [in]  文字列の長さ
+	size_t*			pnMatchLen	// [out] URLの長さ
 	)
 {
 	struct _url_table_t {
@@ -469,8 +469,8 @@ bool IsURL(
 // 現在位置がメールアドレスならば、NULL以外と、その長さを返す
 bool IsMailAddress(
 	const wchar_t* pszBuf,
-	int nBufLen,
-	int* pnAddressLenfth
+	size_t nBufLen,
+	size_t* pnAddressLenfth
 	)
 {
 	int j = 0;

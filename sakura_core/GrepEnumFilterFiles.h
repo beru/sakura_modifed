@@ -62,7 +62,7 @@ public:
 		GrepEnumFiles& pExcept
 		)
 	{
-		grepEnumExceptFiles.Enumerates(lpBaseFolder, grepEnumKeys.vecExceptFileKeys, option, NULL);
+		grepEnumExceptFiles.Enumerates(lpBaseFolder, grepEnumKeys.vecExceptFileKeys, option, nullptr);
 		return GrepEnumFiles::Enumerates(lpBaseFolder, grepEnumKeys.vecSearchFileKeys, option, &pExcept);
 	}
 };

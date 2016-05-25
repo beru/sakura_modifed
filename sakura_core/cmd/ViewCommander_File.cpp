@@ -792,8 +792,8 @@ bool ViewCommander::Command_InsFile(
 		NativeW buf;
 		while (CodeConvertResult::Failure != fl.ReadLine(&buf, &eol)) {
 
-			const wchar_t*	pLine = buf.GetStringPtr();
-			size_t			nLineLen = buf.GetStringLength();
+			const wchar_t* pLine = buf.GetStringPtr();
+			size_t nLineLen = buf.GetStringLength();
 
 			++nLineNum;
 			Command_InsText(false, pLine, nLineLen, true);

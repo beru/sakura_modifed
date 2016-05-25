@@ -33,11 +33,9 @@ bool Color_RegexKeyword::BeginColor(const StringRef& str, int nPos)
 		return false;
 	}
 
-	int nMatchLen;
+	size_t nMatchLen;
 	int nMatchColor;
-
 	const EditView* pView = ColorStrategyPool::getInstance().GetCurrentView();
-
 	// 正規表現キーワード
 	if (pView->pRegexKeyword->RegexIsKeyword(str, nPos, &nMatchLen, &nMatchColor)) {
 		this->nCommentEnd = nPos + nMatchLen;  // キーワード文字列の終端をセットする

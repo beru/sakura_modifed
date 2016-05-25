@@ -73,7 +73,7 @@ public:
 	;
 	
 	// アイコン数を返す
-	int  Count(void) const;	//	アイコン数
+	size_t Count(void) const;	//	アイコン数
 	
 	// アイコンの幅
 	int  GetCx(void) const { return cx; }
@@ -112,7 +112,7 @@ protected:
 	*/
 	HBITMAP hIconBitmap;
 
-	int nIconCount;	// アイコンの個数
+	size_t nIconCount;	// アイコンの個数
 
 	//	オリジナルテキストエディタからの描画関数
 	//	2003.08.27 Moca 背景を透過処理するので背景色の指定は不要に

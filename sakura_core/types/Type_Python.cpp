@@ -198,7 +198,7 @@ int OutlinePython::ScanNormal(const wchar_t* data, int linelen, int start_offset
 	bool bExtEol = GetDllShareData().common.edit.bEnableExtEol;
 
 	for (int col=start_offset; col<linelen; ++col) {
-		int nCharChars = NativeW::GetSizeOfChar(data, linelen, col);
+		size_t nCharChars = NativeW::GetSizeOfChar(data, linelen, col);
 		if (1 < nCharChars) {
 			col += (nCharChars - 1);
 			continue;
@@ -266,7 +266,7 @@ int OutlinePython::ScanString(const wchar_t* data, int linelen, int start_offset
 	bool bExtEol = GetDllShareData().common.edit.bEnableExtEol;
 
 	for (int col=start_offset; col<linelen; ++col) {
-		int nCharChars = NativeW::GetSizeOfChar(data, linelen, col);
+		size_t nCharChars = NativeW::GetSizeOfChar(data, linelen, col);
 		if (1 < nCharChars) {
 			col += (nCharChars - 1);
 			continue;

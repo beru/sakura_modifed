@@ -36,7 +36,7 @@ DocLine::~DocLine()
 bool DocLine::IsEmptyLine() const
 {
 	const wchar_t* pLine = GetPtr();
-	int nLineLen = GetLengthWithoutEOL();
+	size_t nLineLen = GetLengthWithoutEOL();
 	for (int i=0; i<nLineLen; ++i) {
 		if (pLine[i] != L' ' && pLine[i] != L'\t') {
 			return false;	// スペースでもタブでもない文字があったらfalse。
@@ -48,7 +48,7 @@ bool DocLine::IsEmptyLine() const
 void DocLine::SetEol()
 {
 	const wchar_t* pData = line.GetStringPtr();
-	int nLength = line.GetStringLength();
+	size_t nLength = line.GetStringLength();
 	// 改行コード設定
 	const wchar_t* p = &pData[nLength] - 1;
 	while (p >= pData && WCODE::IsLineDelimiter(*p, GetDllShareData().common.edit.bEnableExtEol)) --p;

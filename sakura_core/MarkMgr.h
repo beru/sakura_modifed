@@ -84,7 +84,7 @@ public:
 	MarkMgr() : nCurpos(0), nMaxitem(10) {}
 	// MarkMgr(const CDocLineMgr *p) : doc(p) {}
 
-	int Count(void) const { return (int)markChain.size(); }	//	€–Ú”‚ğ•Ô‚·
+	size_t Count(void) const { return markChain.size(); }	//	€–Ú”‚ğ•Ô‚·
 	int GetMax(void) const { return nMaxitem; }	//	Å‘å€–Ú”‚ğ•Ô‚·
 	void SetMax(int max);	//	Å‘å€–Ú”‚ğİ’è
 

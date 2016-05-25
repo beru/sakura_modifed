@@ -63,11 +63,11 @@ public:
 	virtual CodeConvertResult UnicodeToHex(const wchar_t* pSrc, const int iSLen, TCHAR* pDst, const CommonSetting_StatusBar* psStatusbar);			// UNICODE → Hex 変換
 
 	// 変換エラー処理（１バイト <-> U+D800 から U+D8FF）
-	static int BinToText(const unsigned char*, const int, unsigned short*);
+	static size_t BinToText(const unsigned char*, const size_t, unsigned short*);
 	static int TextToBin(const unsigned short);
 
 	// MIME Header デコーダ
-	static bool MIMEHeaderDecode(const char*, const int, Memory*, const EncodingType);
+	static bool MIMEHeaderDecode(const char*, const size_t, Memory*, const EncodingType);
 
 	// CShiftJisより移動 2010/6/13 Uchi
 	static void S_GetEol(Memory* pMemEol, EolType eEolType);	// 改行データ取得
@@ -79,9 +79,9 @@ protected:
 /*!
 	バイナリ１バイトを U+DC00 から U+DCFF までに対応付ける
 */
-inline int CodeBase::BinToText(const unsigned char* pSrc, const int nLen, unsigned short* pDst)
+inline size_t CodeBase::BinToText(const unsigned char* pSrc, const size_t nLen, unsigned short* pDst)
 {
-	int i;
+	size_t i;
 
 	for (i=0; i<nLen; ++i) {
 		pDst[i] = static_cast<unsigned short>(pSrc[i]) + 0xdc00;

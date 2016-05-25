@@ -95,7 +95,7 @@ inline int EncodeUtf8(const wchar32_t wc32, unsigned char* pDst)
 /*!
 	UTF-8 -> UTF-32
 */
-inline wchar32_t DecodeUtf8(const unsigned char* pSrc, const int nSrcLen)
+inline wchar32_t DecodeUtf8(const unsigned char* pSrc, const size_t nSrcLen)
 {
 	wchar32_t wc32 = 0;
 
@@ -155,9 +155,9 @@ inline bool IsWctombcNonroundtrip(const unsigned int wc) {
 
 	@param[in] nSrcLen  1 ‚© 2 ‚ð“n‚·
 */
-inline int MyWideCharToMultiByte_JP(const unsigned short* pSrc, const int nSrcLen, unsigned char* pDst) {
+inline int MyWideCharToMultiByte_JP(const unsigned short* pSrc, const size_t nSrcLen, unsigned char* pDst) {
 	int nret;
-	int nsrclen;
+	size_t nsrclen;
 
 	// •ÛŒìƒR[ƒh
 	if (nSrcLen > 2 || nSrcLen < 1) {
@@ -186,7 +186,7 @@ inline int MyWideCharToMultiByte_JP(const unsigned short* pSrc, const int nSrcLe
 
 	nSrcLen ‚Í 1 ‚© 2
 */
-inline int MyMultiByteToWideChar_JP(const unsigned char* pSrc, const int nSrcLen, unsigned short* pDst, bool bKeepRt = true)
+inline int MyMultiByteToWideChar_JP(const unsigned char* pSrc, const size_t nSrcLen, unsigned short* pDst, bool bKeepRt = true)
 {
 	int nret;
 	unsigned char czenkaku[4];

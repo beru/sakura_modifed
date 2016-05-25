@@ -288,7 +288,7 @@ void EditView::AdjustScrollBars()
 	if (hwndVScrollBar) {
 		// 垂直スクロールバー
 		const int nEofMargin = 2; // EOFとその下のマージン
-		const int nAllLines = pEditDoc->layoutMgr.GetLineCount() + nEofMargin;
+		const size_t nAllLines = pEditDoc->layoutMgr.GetLineCount() + nEofMargin;
 		int	nVScrollRate = 1;
 #ifdef _WIN64
 		// nAllLines / nVScrollRate < INT_MAX となる整数nVScrollRateを求める

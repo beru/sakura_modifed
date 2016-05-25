@@ -215,10 +215,10 @@ void NativeA::Replace_j(
 void NativeA::ToLower()
 {
 	unsigned char* pBuf = (unsigned char*)GetStringPtr();
-	int nBufLen = GetStringLength();
-	for (int i=0; i<nBufLen; ++i) {
+	size_t nBufLen = GetStringLength();
+	for (size_t i=0; i<nBufLen; ++i) {
 		// 2005-09-02 D.S.Koba GetSizeOfChar
-		int nCharChars = ShiftJis::GetSizeOfChar((const char*)pBuf, nBufLen, i);
+		size_t nCharChars = ShiftJis::GetSizeOfChar((const char*)pBuf, nBufLen, i);
 		if (nCharChars == 1) {
 			unsigned char uc = (unsigned char)tolower(pBuf[i]);
 			pBuf[i] = uc;
@@ -258,10 +258,10 @@ void NativeA::ToLower()
 void NativeA::ToUpper()
 {
 	unsigned char* pBuf = (unsigned char*)GetStringPtr();
-	int nBufLen = GetStringLength();
-	for (int i=0; i<nBufLen; ++i) {
+	size_t nBufLen = GetStringLength();
+	for (size_t i=0; i<nBufLen; ++i) {
 		// 2005-09-02 D.S.Koba GetSizeOfChar
-		int nCharChars = ShiftJis::GetSizeOfChar((const char*)pBuf, nBufLen, i);
+		size_t nCharChars = ShiftJis::GetSizeOfChar((const char*)pBuf, nBufLen, i);
 		if (nCharChars == 1) {
 			unsigned char uc = (unsigned char)toupper(pBuf[i]);
 			pBuf[i] = uc;
@@ -309,16 +309,16 @@ void NativeA::ToZenkaku(
 	static const unsigned char*	pszYouSet = (unsigned char*)"ﾊﾋﾌﾍﾎ";
 
 	unsigned char* pBuf = (unsigned char*)GetStringPtr();
-	int nBufLen = GetStringLength();
+	size_t nBufLen = GetStringLength();
 	std::vector<unsigned char> bufDes(nBufLen * 2 + 1);
 	unsigned char* pBufDes = &bufDes[0];
 //	unsigned char	uc;
 	unsigned short	usSrc;
 	unsigned short	usDes;
 	int nBufDesLen = 0;
-	for (int i=0; i<nBufLen; ++i) {
+	for (size_t i=0; i<nBufLen; ++i) {
 		// 2005-09-02 D.S.Koba GetSizeOfChar
-		int nCharChars = ShiftJis::GetSizeOfChar((const char*)pBuf, nBufLen, i);
+		size_t nCharChars = ShiftJis::GetSizeOfChar((const char*)pBuf, nBufLen, i);
 		if (nCharChars == 1) {
 			bool bHenkanOK = false;
 			if (bHanKataOnly) {	// 1== 半角カタカナにのみ作用する

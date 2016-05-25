@@ -33,7 +33,7 @@
 bool Figure_Text::DrawImp(ColorStrategyInfo& csInfo)
 {
 	int nIdx = csInfo.GetPosInLogic();
-	int nLength = NativeW::GetSizeOfChar(	// サロゲートペア対策	2008.10.12 ryoji
+	size_t nLength = NativeW::GetSizeOfChar(	// サロゲートペア対策	2008.10.12 ryoji
 						csInfo.pLineOfLogic,
 						csInfo.GetDocLine()->GetLengthWithoutEOL(),
 						nIdx

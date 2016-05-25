@@ -193,7 +193,7 @@ void TextDrawer::DispVerticalLines(
 	auto& textArea = view.GetTextArea();
 	nLeftCol = t_max((int)textArea.GetViewLeftCol(), nLeftCol);
 	
-	const int nWrapKetas  = view.pEditDoc->layoutMgr.GetMaxLineKetas();
+	const size_t nWrapKetas  = view.pEditDoc->layoutMgr.GetMaxLineKetas();
 	const size_t nCharDx  = view.GetTextMetrics().GetHankakuDx();
 	if (nRightCol < 0) {
 		nRightCol = nWrapKetas;
@@ -342,7 +342,7 @@ void TextDrawer::DispWrapLine(
 	}
 
 	const TextArea& textArea = GetTextArea();
-	const int nWrapKetas = view.pEditDoc->layoutMgr.GetMaxLineKetas();
+	const size_t nWrapKetas = view.pEditDoc->layoutMgr.GetMaxLineKetas();
 	const size_t nCharDx = view.GetTextMetrics().GetHankakuDx();
 	int nXPos = textArea.GetAreaLeft() + (nWrapKetas - textArea.GetViewLeftCol()) * nCharDx;
 	//	2005.11.08 Moca ì‰æğŒ•ÏX

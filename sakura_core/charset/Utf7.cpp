@@ -9,12 +9,10 @@
 #include "Eol.h"
 
 
-
-
 /*!
 	UTF-7 Set D 部分の読み込み。
 */
-int Utf7::_Utf7SetDToUni_block(const char* pSrc, const int nSrcLen, wchar_t* pDst)
+size_t Utf7::_Utf7SetDToUni_block(const char* pSrc, const size_t nSrcLen, wchar_t* pDst)
 {
 	const char* pr = pSrc;
 	wchar_t* pw = pDst;
@@ -33,7 +31,7 @@ int Utf7::_Utf7SetDToUni_block(const char* pSrc, const int nSrcLen, wchar_t* pDs
 /*!
 	UTF-7 Set B 部分の読み込み
 */
-int Utf7::_Utf7SetBToUni_block(const char* pSrc, const int nSrcLen, wchar_t* pDst, bool* pbError)
+size_t Utf7::_Utf7SetBToUni_block(const char* pSrc, const size_t nSrcLen, wchar_t* pDst, bool* pbError)
 {
 	if (nSrcLen == 0) {
 		return 0;
@@ -63,7 +61,7 @@ int Utf7::_Utf7SetBToUni_block(const char* pSrc, const int nSrcLen, wchar_t* pDs
 	return ndecoded_len / sizeof(wchar_t);
 }
 
-int Utf7::Utf7ToUni(const char* pSrc, const int nSrcLen, wchar_t* pDst, bool* pbError)
+size_t Utf7::Utf7ToUni(const char* pSrc, const size_t nSrcLen, wchar_t* pDst, bool* pbError)
 {
 	const char *pr, *pr_end;
 	char* pr_next;
@@ -149,7 +147,7 @@ CodeConvertResult Utf7::UTF7ToUnicode( const Memory& src, NativeW* pDstMem )
 
 
 
-int Utf7::_UniToUtf7SetD_block(const wchar_t* pSrc, const int nSrcLen, char* pDst)
+size_t Utf7::_UniToUtf7SetD_block(const wchar_t* pSrc, const size_t nSrcLen, char* pDst)
 {
 	if (nSrcLen < 1) {
 		return 0;
@@ -165,7 +163,7 @@ int Utf7::_UniToUtf7SetD_block(const wchar_t* pSrc, const int nSrcLen, char* pDs
 
 
 
-int Utf7::_UniToUtf7SetB_block(const wchar_t* pSrc, const int nSrcLen, char* pDst)
+size_t Utf7::_UniToUtf7SetB_block(const wchar_t* pSrc, const size_t nSrcLen, char* pDst)
 {
 	if (nSrcLen < 1) {
 		return 0;
@@ -190,9 +188,7 @@ int Utf7::_UniToUtf7SetB_block(const wchar_t* pSrc, const int nSrcLen, char* pDs
 }
 
 
-
-
-int Utf7::UniToUtf7(const wchar_t* pSrc, const int nSrcLen, char* pDst)
+size_t Utf7::UniToUtf7(const wchar_t* pSrc, const size_t nSrcLen, char* pDst)
 {
 	const wchar_t *pr, *pr_base;
 	const wchar_t* pr_end;
@@ -242,7 +238,7 @@ CodeConvertResult Utf7::UnicodeToUTF7(const NativeW& src, Memory* pDstMem)
 
 	// データ取得
 	const wchar_t* pSrc = src.GetStringPtr();
-	int nSrcLen = src.GetStringLength();
+	size_t nSrcLen = src.GetStringLength();
 	if (nSrcLen == 0) {
 		return CodeConvertResult::Failure;
 	}

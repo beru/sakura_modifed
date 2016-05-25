@@ -307,7 +307,7 @@ end_of_func:;
 			NativeW keyName;
 			auto& curSearchKey = view.strCurSearchKey;
 			LimitStringLengthW(curSearchKey.c_str(), curSearchKey.size(), _MAX_PATH, keyName);
-			if ((size_t)keyName.GetStringLength() < curSearchKey.size()) {
+			if (keyName.GetStringLength() < curSearchKey.size()) {
 				keyName.AppendStringLiteral(L"...");
 			}
 			AlertNotFound(
@@ -330,10 +330,10 @@ void ViewCommander::Command_Search_Prev(bool bReDraw, HWND hwndParent)
 	bool		bFound = false;
 	bool		bRedo = false;			// hor
 	bool		bDisableSelect = false;
-	int			nLineNumOld(0);
-	int			nIdxOld(0);
-	int			nLineNum(0);
-	int			nIdx(0);
+	size_t		nLineNumOld = 0;
+	size_t		nIdxOld = 0;
+	size_t		nLineNum = 0;
+	size_t		nIdx = 0;
 
 	auto& caret = GetCaret();
 	auto& layoutMgr = GetDocument().layoutMgr;
@@ -465,7 +465,7 @@ end_of_func:;
 		NativeW keyName;
 		auto& curSearchKey = view.strCurSearchKey;
 		LimitStringLengthW(curSearchKey.c_str(), curSearchKey.size(), _MAX_PATH, keyName);
-		if ((size_t)keyName.GetStringLength() < curSearchKey.size()) {
+		if (keyName.GetStringLength() < curSearchKey.size()) {
 			keyName.AppendStringLiteral(L"...");
 		}
 		AlertNotFound(
@@ -661,7 +661,7 @@ void ViewCommander::Command_Replace(HWND hwndParent)
 				// 物理行末までINSTEXTする方法は、キャレット位置を調整する必要があり、
 				// キャレット位置の計算が複雑になる。（置換後に改行がある場合に不具合発生）
 				// そこで、INSTEXTする文字列長を調整する方法に変更する（実はこっちの方がわかりやすい）
-				int matchLen = regexp.GetMatchLen();
+				size_t matchLen = regexp.GetMatchLen();
 				int nIdxTo = nIdx + matchLen;		// 検索文字列の末尾
 				if (matchLen == 0) {
 					// ０文字マッチの時(無限置換にならないように１文字進める)
@@ -768,14 +768,14 @@ void ViewCommander::Command_Replace_All()
 		// 1行あたり10レイアウト行以上で、選択・ペーストでない場合
 		bFastMode = true;
 	}
-	int	nAllLineNum; // $$単位混在
+	size_t nAllLineNum; // $$単位混在
 	if (bFastMode) {
 		nAllLineNum = layoutMgr.GetLineCount();
 	}else {
 		nAllLineNum = docLineMgr.GetLineCount();
 	}
-	int	nAllLineNumOrg = nAllLineNum;
-	int	nAllLineNumLogicOrg = docLineMgr.GetLineCount();
+	size_t	nAllLineNumOrg = nAllLineNum;
+	size_t	nAllLineNumLogicOrg = docLineMgr.GetLineCount();
 
 	// 進捗表示&中止ダイアログの作成
 	DlgCancel	dlgCancel;
@@ -956,12 +956,12 @@ void ViewCommander::Command_Replace_All()
 	}
 
 	//$$ 単位混在
-	Point	ptOld;						// 検索後の選択範囲
-	int	lineCnt = 0;		// 置換前の行数
-	int	linDif = (0);		// 置換後の行調整
-	int	colDif = (0);		// 置換後の桁調整
-	int	linPrev = (0);		// 前回の検索行(矩形) @@@2001.12.31 YAZAKI warning退治
-	int	linOldLen = (0);	// 検査後の行の長さ
+	Point ptOld;			// 検索後の選択範囲
+	size_t lineCnt = 0;		// 置換前の行数
+	int	linDif = 0;			// 置換後の行調整
+	int	colDif = 0;			// 置換後の桁調整
+	int	linPrev = 0;		// 前回の検索行(矩形) @@@2001.12.31 YAZAKI warning退治
+	size_t linOldLen = 0;	// 検査後の行の長さ
 	int	linNext;			// 次回の検索行(矩形)
 
 	int nLoopCnt = -1;
@@ -999,7 +999,7 @@ void ViewCommander::Command_Replace_All()
 					nNewPos = ::MulDiv(selectLogic.GetFrom().GetY(), nAllLineNum, layoutMgr.GetLineCount());
 				}
 			}else {
-				int nDiff = nAllLineNumOrg - layoutMgr.GetLineCount();
+				int64_t nDiff = (int64_t)nAllLineNumOrg - (int64_t)layoutMgr.GetLineCount();
 				if (0 <= nDiff) {
 					nNewPos = (nDiff + GetSelect().GetFrom().y) >> nShiftCount;
 				}else {
@@ -1183,7 +1183,7 @@ void ViewCommander::Command_Replace_All()
 			const wchar_t* pLine;
 			int nLogicLineNum;
 			int nIdx;
-			int nLen;
+			size_t nLen;
 			if (bFastMode) {
 				pDocLine = docLineMgr.GetLine(selectLogic.GetFrom().y);
 				pLine = pDocLine->GetPtr();
@@ -1242,7 +1242,7 @@ void ViewCommander::Command_Replace_All()
 				    // 物理行末までINSTEXTする方法は、キャレット位置を調整する必要があり、
 				    // キャレット位置の計算が複雑になる。（置換後に改行がある場合に不具合発生）
 				    // そこで、INSTEXTする文字列長を調整する方法に変更する（実はこっちの方がわかりやすい）
-				    int matchLen = regexp.GetMatchLen();
+				    size_t matchLen = regexp.GetMatchLen();
 				    int nIdxTo = nIdx + matchLen;		// 検索文字列の末尾
 				    if (matchLen == 0) {
 					    // ０文字マッチの時(無限置換にならないように１文字進める)
@@ -1259,7 +1259,7 @@ void ViewCommander::Command_Replace_All()
 						}
 				    }
 				    // 行末から検索文字列末尾までの文字数
-					colDiff =  nLen - nIdxTo;
+					colDiff = nLen - nIdxTo;
 					ptOld.x = nIdxTo;	// 2007.01.19 ryoji 追加  // $$ 単位混在
 				    // Oct. 22, 2005 Karoto
 				    // \rを置換するとその後ろの\nが消えてしまう問題の対応

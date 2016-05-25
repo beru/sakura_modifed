@@ -244,7 +244,7 @@ bool EditView::MiniMapCursorLineTip(POINT* po, RECT* rc, bool* pbHide)
 		if (pLayout) {
 			NativeW memCurLine;
 			{
-				int nLineLen = pLayout->GetLengthWithoutEOL();
+				size_t nLineLen = pLayout->GetLengthWithoutEOL();
 				const wchar_t* pszData = pLayout->GetPtr();
 				int nLimitLength = 80;
 				int pre = 0;

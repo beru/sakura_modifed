@@ -368,7 +368,7 @@ bool EditView::SearchBracket(
 	}
 
 	const wchar_t* bPos = NativeW::GetCharPrev(cline, ptPos.x, cline + ptPos.x);
-	int nCharSize = cline + ptPos.x - bPos;
+	ptrdiff_t nCharSize = cline + ptPos.x - bPos;
 	// äáå èàóù 2007.10.16 kobake
 	if (nCharSize == 1) {
 		ptPos.x = bPos - cline;

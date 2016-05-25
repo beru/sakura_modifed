@@ -280,7 +280,7 @@ int LimitStringLengthW(
 	int n = nDataLength;
 	if (n > nLimitLength) {
 		int i = 0;
-		int charSize = NativeW::GetSizeOfChar(pszData, nDataLength, i);
+		size_t charSize = NativeW::GetSizeOfChar(pszData, nDataLength, i);
 		for (; i+charSize<=nLimitLength;) {
 			i += charSize;
 			charSize = NativeW::GetSizeOfChar(pszData, nDataLength, i);

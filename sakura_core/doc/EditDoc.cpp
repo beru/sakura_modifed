@@ -179,7 +179,7 @@ EditDoc::EditDoc(EditApp& app)
 	// 「指定桁で折り返す」以外の時は折り返し幅をMAXLINEKETASで初期化する
 	// 「右端で折り返す」は、この後のOnSize()で再設定される
 	const TypeConfig& ref = docType.GetDocumentAttribute();
-	int nMaxLineKetas = ref.nMaxLineKetas;
+	size_t nMaxLineKetas = ref.nMaxLineKetas;
 	if (ref.nTextWrapMethod != TextWrappingMethod::SettingWidth) {
 		nMaxLineKetas = MAXLINEKETAS;
 	}
@@ -262,7 +262,7 @@ void EditDoc::Clear()
 
 	// 2008.06.07 nasukoji	折り返し方法の追加に対応
 	const TypeConfig& ref = docType.GetDocumentAttribute();
-	int nMaxLineKetas = ref.nMaxLineKetas;
+	size_t nMaxLineKetas = ref.nMaxLineKetas;
 	if (ref.nTextWrapMethod != TextWrappingMethod::SettingWidth) {
 		nMaxLineKetas = MAXLINEKETAS;
 	}
@@ -751,8 +751,8 @@ void EditDoc::OnChangeSetting(
 	SelectCharWidthCache(CharWidthFontMode::Edit, pEditWnd->GetLogfontCacheMode());
 	InitCharWidthCache(pEditWnd->GetLogfont());
 
-	int nMaxLineKetas = ref.nMaxLineKetas;
-	int nTabSpace = ref.nTabSpace;
+	size_t nMaxLineKetas = ref.nMaxLineKetas;
+	size_t nTabSpace = ref.nTabSpace;
 	if (bDoLayout) {
 		// 2008.06.07 nasukoji	折り返し方法の追加に対応
 		// 折り返し方法の一時設定とタイプ別設定が一致したら一時設定適用中は解除

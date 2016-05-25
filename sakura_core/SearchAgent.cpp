@@ -472,7 +472,7 @@ bool SearchAgent::PrevOrNextWord(
 		// 空白とタブは無視する
 		int			nCount = 0;
 		int	nIdxNext = nIdx;
-		int	nCharChars = &pLine[nIdxNext] - NativeW::GetCharPrev(pLine, nLineLen, &pLine[nIdxNext]);
+		ptrdiff_t nCharChars = &pLine[nIdxNext] - NativeW::GetCharPrev(pLine, nLineLen, &pLine[nIdxNext]);
 		while (nCharChars > 0) {
 			int nIdxNextPrev = nIdxNext;
 			nIdxNext -= nCharChars;
@@ -527,7 +527,7 @@ int SearchAgent::SearchWord(
 	size_t nLineLen;
 	const wchar_t*	pszRes;
 	int	nHitTo;
-	int	nHitPos;
+	ptrdiff_t	nHitPos;
 	int	nHitPosOld;
 	int			nRetVal = 0;
 	const SearchOption&	searchOption = pattern.GetSearchOption();
@@ -886,7 +886,7 @@ void SearchAgent::ReplaceData(DocLineReplaceArg* pArg)
 	bool bLastEOLReplace = false;	// 「最後改行」を「最後改行」で置換
 	if (pArg->pInsData && 0 < pArg->pInsData->size()) {
 		const NativeW& memLine = pArg->pInsData->back().memLine;
-		int nLen = memLine.GetStringLength();
+		size_t nLen = memLine.GetStringLength();
 		const wchar_t* pInsLine = memLine.GetStringPtr();
 		if (0 < nLen && WCODE::IsLineDelimiter(pInsLine[nLen - 1], GetDllShareData().common.edit.bEnableExtEol)) {
 			// 行挿入
@@ -898,7 +898,7 @@ void SearchAgent::ReplaceData(DocLineReplaceArg* pArg)
 		}
 	}
 	const wchar_t* pInsData = L"";
-	int nInsLen = 0;
+	size_t nInsLen = 0;
 	int nSetSeq = 0;
 	if (bChangeOneLine) {
 		nInsLen = pArg->pInsData->back().memLine.GetStringLength();
@@ -1148,7 +1148,7 @@ prev_line:;
 	bool bLastInsert = false;
 	{
 		NativeW& memLine = pArg->pInsData->back().memLine;
-		int nLen = memLine.GetStringLength();
+		size_t nLen = memLine.GetStringLength();
 		const wchar_t* pInsLine = memLine.GetStringPtr();
 		if (0 < nLen && WCODE::IsLineDelimiter(pInsLine[nLen - 1], GetDllShareData().common.edit.bEnableExtEol)) {
 			if (pArg->delRange.GetFrom().x == 0) {
@@ -1189,7 +1189,7 @@ prev_line:;
 	for (nCount=0; nCount<nInsSize; ++nCount) {
 		NativeW& memLine = (*pArg->pInsData)[nCount].memLine;
 #ifdef _DEBUG
-		int nLen = memLine.GetStringLength();
+		size_t nLen = memLine.GetStringLength();
 		const wchar_t* pInsLine = memLine.GetStringPtr();
 		assert( 0 < nLen && WCODE::IsLineDelimiter(pInsLine[nLen - 1], GetDllShareData().common.edit.bEnableExtEol) );
 #endif
@@ -1259,7 +1259,7 @@ prev_line:;
 		NativeW& memLine = bLastInsert ? pArg->pInsData->back().memLine : mNull;
 		const StringRef& prevLine2 = ((nCount == 0) ? prevLine: nullStr);
 		int nSeq = pArg->pInsData->back().nSeq;
-		int nLen = memLine.GetStringLength();
+		size_t nLen = memLine.GetStringLength();
 		NativeW tmp;
 		tmp.AllocStringBuffer(prevLine2.GetLength() + memLine.GetStringLength() + nextLine.GetLength());
 		tmp.AppendString(prevLine2.GetPtr(), prevLine2.GetLength());

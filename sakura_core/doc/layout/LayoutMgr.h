@@ -167,7 +167,7 @@ public:
 	// ロジック→レイアウト
 	void LogicToLayoutEx(const PointEx& ptLogicEx, Point* pptLayout, int nLineHint = 0) {
 		LogicToLayout(ptLogicEx, pptLayout, nLineHint);
-		pptLayout->x += ptLogicEx.ext;
+		pptLayout->x += (int)ptLogicEx.ext;
 	}
 	void LogicToLayout(const Point& ptLogic, Point* pptLayout, int nLineHint = 0);
 	void LogicToLayout(const Range& rangeLogic, Range* prangeLayout) {

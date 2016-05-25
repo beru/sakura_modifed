@@ -50,9 +50,9 @@ protected:
 	// À‘•
 	// 2008.11.10 •ÏŠ·ƒƒWƒbƒN‚ğ‘‚«’¼‚·
 	inline static int _SjisToUni_char(const unsigned char*, unsigned short*, const ECharSet, bool* pbError);
-	static int SjisToUni(const char*, const int, wchar_t*, bool* pbError);
+	static int SjisToUni(const char*, const size_t, wchar_t*, bool* pbError);
 	inline static int _UniToSjis_char(const unsigned short*, unsigned char*, const ECharSet, bool* pbError);
-	static int UniToSjis(const wchar_t*, const int, char*, bool* pbError);
+	static int UniToSjis(const wchar_t*, const size_t, char*, bool* pbError);
 };
 
 

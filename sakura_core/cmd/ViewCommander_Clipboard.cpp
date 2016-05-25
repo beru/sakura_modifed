@@ -902,7 +902,7 @@ void ViewCommander::Command_Copy_Color_HTML(bool bLineNumber)
 		) {
 			int nIdxFrom;
 			int nIdxTo;
-			const int nLineLen = pLayout->GetLengthWithoutEOL() + pLayout->GetLayoutEol().GetLen();
+			const size_t nLineLen = pLayout->GetLengthWithoutEOL() + pLayout->GetLayoutEol().GetLen();
 			if (nLayoutLineNum < rcSel.top) {
 				nIdxTo = nIdxFrom = -1;
 			}else {

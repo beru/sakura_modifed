@@ -81,18 +81,18 @@ public:
 	
 protected:
 	// ŽÀ‘•
-	static CodeConvertResult CPToUni( const char*, const int, wchar_t*, int, int&, UINT );
-	static CodeConvertResult UniToCP( const wchar_t*, const int, char*, int, int&, UINT );
+	static CodeConvertResult CPToUni( const char*, const size_t, wchar_t*, int, int&, UINT );
+	static CodeConvertResult UniToCP( const wchar_t*, const size_t, char*, int, int&, UINT );
 	
 	int nCodePageEx;
 	
 	static BOOL CALLBACK CallBackEnumCodePages( LPCTSTR );
 
-	static int MultiByteToWideChar2(UINT, int, const char*, int, wchar_t*, int);
-	static int WideCharToMultiByte2(UINT, int, const wchar_t*, int, char*, int);
-	static int S_UTF32LEToUnicode( const char*, int, wchar_t*, int );
-	static int S_UTF32BEToUnicode( const char*, int, wchar_t*, int );
-	static int S_UnicodeToUTF32LE( const wchar_t*, int, char*, int );
-	static int S_UnicodeToUTF32BE( const wchar_t*, int, char*, int );
+	static int MultiByteToWideChar2(UINT, int, const char*, size_t, wchar_t*, int);
+	static int WideCharToMultiByte2(UINT, int, const wchar_t*, size_t, char*, int);
+	static int S_UTF32LEToUnicode( const char*, size_t, wchar_t*, int );
+	static int S_UTF32BEToUnicode( const char*, size_t, wchar_t*, int );
+	static int S_UnicodeToUTF32LE( const wchar_t*, size_t, char*, int );
+	static int S_UnicodeToUTF32BE( const wchar_t*, size_t, char*, int );
 };
 

@@ -360,7 +360,7 @@ void EditView::InsertData_CEditView(
 */
 void EditView::DeleteData2(
 	const Point&	_ptCaretPos,
-	int				nDelLen,
+	size_t			nDelLen,
 	NativeW*		pMem
 	)
 {
@@ -412,14 +412,14 @@ void EditView::DeleteData2(
 	GetCaret().nCaretPosX_Prev = GetCaret().GetCaretLayoutPos().GetX();
 
 	if (pMem) {
-		int size = (int)memDeleted.size();
+		size_t size = memDeleted.size();
 		size_t bufSize = 0;
-		for (int i=0; i<size; ++i) {
+		for (size_t i=0; i<size; ++i) {
 			bufSize += memDeleted[i].memLine.GetStringLength();
 		}
 		pMem->SetString(L"");
 		pMem->AllocStringBuffer(bufSize);
-		for (int i=0; i<size; ++i) {
+		for (size_t i=0; i<size; ++i) {
 			pMem->AppendNativeData(memDeleted[i].memLine);
 		}
 	}
@@ -610,7 +610,7 @@ void EditView::DeleteData(
 		}
 
 		// 指定された桁の文字のバイト数を調べる
-		int nNxtIdx;
+		ptrdiff_t nNxtIdx;
 		int	nNxtPos;
 		bool bExtEol = GetDllShareData().common.edit.bEnableExtEol;
 		if (WCODE::IsLineDelimiter(pLine[nCurIdx], bExtEol)) {

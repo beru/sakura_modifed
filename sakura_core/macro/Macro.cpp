@@ -498,9 +498,9 @@ void Macro::Save(HINSTANCE hInstance, TextOutputStream& out) const
 				memWork.Replace( L"\u2028", L"\\u2028" );
 				memWork.Replace( L"\u2029", L"\\u2029" );
 				for (int c=0; c<0x20; ++c) {
-					int nLen = memWork.GetStringLength();
+					size_t nLen = memWork.GetStringLength();
 					const wchar_t* p = memWork.GetStringPtr();
-					for (int i=0; i<nLen; ++i) {
+					for (size_t i=0; i<nLen; ++i) {
 						if (p[i] == c) {
 							wchar_t from[2];
 							wchar_t to[7];
@@ -2268,7 +2268,7 @@ bool Macro::HandleFunction(
 				}
 				DocLine tmpDocLine;
 				tmpDocLine.SetDocLineString(varCopy.data.bstrVal, ::SysStringLen(varCopy.data.bstrVal));
-				const int tmpLenWithEol1 = tmpDocLine.GetLengthWithoutEOL() + (0 < tmpDocLine.GetEol().GetLen() ? 1: 0);
+				const size_t tmpLenWithEol1 = tmpDocLine.GetLengthWithoutEOL() + (0 < tmpDocLine.GetEol().GetLen() ? 1: 0);
 				const int offset(varCopy2.data.lVal - 1);
 				const Layout tmpLayout(
 					&tmpDocLine,
