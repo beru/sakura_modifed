@@ -66,7 +66,7 @@ public:
 	size_t GetIndent() const { return nIndent; }	// このレイアウト行のインデントサイズを取得。単位は半角文字。	CMemoryIterator用
 
 	// 取得インターフェース
-	int GetLogicLineNo() const { if (this) return ptLogicPos.y; else return -1; } //$$$高速化
+	int GetLogicLineNo() const { assert(this); return ptLogicPos.y; } //$$$高速化
 	int GetLogicOffset() const { return ptLogicPos.x; }
 	Point GetLogicPos() const { return ptLogicPos; }
 	EColorIndexType GetColorTypePrev() const { return nTypePrev; } //#########汚っ

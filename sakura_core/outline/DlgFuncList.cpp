@@ -1449,7 +1449,7 @@ void DlgFuncList::SetTree(bool tagjump, bool nolabel)
 
 	size_t nFuncInfoArrNum = pFuncInfoArr->GetNum();
 	int nStackPointer = 0;
-	int nStackDepth = 32; // phParentStack ‚ÌŠm•Û‚µ‚Ä‚¢‚é”
+	size_t nStackDepth = 32; // phParentStack ‚ÌŠm•Û‚µ‚Ä‚¢‚é”
 	HTREEITEM* phParentStack;
 	phParentStack = (HTREEITEM*)malloc(nStackDepth * sizeof(HTREEITEM));
 	phParentStack[nStackPointer] = TVI_ROOT;

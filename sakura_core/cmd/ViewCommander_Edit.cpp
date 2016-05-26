@@ -87,7 +87,8 @@ void ViewCommander::Command_WCHAR(
 					);
 
 					// 指定された桁に対応する行のデータ内の位置を調べる
-					for (nPos=0; nPos<nLineLen && nPos<ptXY.x;) {
+					ASSERT_GE(ptXY.x, 0);
+					for (nPos=0; nPos<nLineLen && nPos<(size_t)ptXY.x;) {
 						// 2005-09-02 D.S.Koba GetSizeOfChar
 						size_t nCharChars = NativeW::GetSizeOfChar(pLine, nLineLen, nPos);
 
@@ -602,7 +603,7 @@ void ViewCommander::Command_Redo(void)
 
 		const bool bFastMode = (100 < nOpeBlkNum);
 		auto& layoutMgr = GetDocument().layoutMgr;
-		for (int i=0; i<nOpeBlkNum; ++i) {
+		for (size_t i=0; i<nOpeBlkNum; ++i) {
 			pOpe = pOpeBlk->GetOpe(i);
 			if (bFastMode) {
 				if (i == 0) {

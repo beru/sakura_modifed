@@ -661,11 +661,11 @@ void ViewCommander::Command_Sort(bool bAsc)	// bAsc:true=昇順, false=降順
 	Range rangeA;
 	Range selectOld;
 
-	int			nColumnFrom, nColumnTo;
+	size_t nColumnFrom, nColumnTo;
 	int	nCF(0), nCT(0);
 	int	nCaretPosYOLD;
-	bool		bBeginBoxSelectOld;
-	size_t	nLineLen;
+	bool bBeginBoxSelectOld;
+	size_t nLineLen;
 	std::vector<SortData*> sta;
 
 	auto& selInfo = view.GetSelectionInfo();
@@ -728,7 +728,7 @@ void ViewCommander::Command_Sort(bool bAsc)	// bAsc:true=昇順, false=降順
 		SortData* pst = new SortData;
 		if (bBeginBoxSelectOld) {
 			nColumnFrom = view.LineColumnToIndex(pDocLine, nCF);
-			nColumnTo   = view.LineColumnToIndex(pDocLine, nCT);
+			nColumnTo = view.LineColumnToIndex(pDocLine, nCT);
 			if (nColumnTo < nLineLenWithoutEOL) {	// BOX選択範囲の右端が行内に収まっている場合
 				// 2006.03.31 genta std::string::assignを使って一時変数削除
 				pst->sKey = StringRef(&pLine[nColumnFrom], nColumnTo - nColumnFrom);

@@ -1243,7 +1243,6 @@ void EditView::SmartIndent_CPP(wchar_t wcChar)
 	rangeA.Clear(-1);
 
 	wchar_t*	pszData = NULL;
-	int	nDataLen;
 
 	int			nWork = 0;
 	ptrdiff_t	nCharChars;
@@ -1333,7 +1332,7 @@ void EditView::SmartIndent_CPP(wchar_t wcChar)
 		// 対応する括弧をさがす
 		nLevel = 0;	// {}の入れ子レベル
 		
-		nDataLen = 0;
+		size_t nDataLen = 0;
 		int j;
 		for (j=caret.GetCaretLogicPos().y; j>=0; --j) {
 			pLine2 = pEditDoc->docLineMgr.GetLine(j)->GetDocLineStrWithEOL(&nLineLen2);
@@ -1429,7 +1428,7 @@ void EditView::SmartIndent_CPP(wchar_t wcChar)
 				// 2005.10.11 ryoji TABキーがSPACE挿入の設定なら追加インデントもSPACEにする
 				//	既存文字列の右端の表示位置を求めた上で挿入するスペースの数を決定する
 				if (pEditDoc->docType.GetDocumentAttribute().bInsSpace) {	// SPACE挿入設定
-					int i;
+					size_t i;
 					i = m = 0;
 					while (i < nDataLen) {
 						nCharChars = NativeW::GetSizeOfChar(pszData, nDataLen, i);

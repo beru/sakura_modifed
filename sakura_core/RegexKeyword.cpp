@@ -453,9 +453,9 @@ bool RegexKeyword::RegexKeyCheckSyntax(const wchar_t* s)
 	};
 
 	size_t length = wcslen(s);
-	for (int i=0; kakomi[i]; i+=2) {
+	for (size_t i=0; kakomi[i]; i+=2) {
 		// 文字長を確かめる
-		if (length > (int)wcslen(kakomi[i]) + (int)wcslen(kakomi[i + 1])) {
+		if (length > wcslen(kakomi[i]) + wcslen(kakomi[i + 1])) {
 			// 始まりを確かめる
 			if (wcsncmp(kakomi[i], s, wcslen(kakomi[i])) == 0) {
 				// 終わりを確かめる

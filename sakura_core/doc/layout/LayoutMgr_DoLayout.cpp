@@ -14,10 +14,10 @@
 static
 bool _GetKeywordLength(
 	const StringRef&	lineStr,		// [in]
-	int					nPos,			// [in]
-	int*				p_nWordBgn,		// [out]
-	int*				p_nWordLen,		// [out]
-	int*				p_nWordKetas	// [out]
+	uint32_t			nPos,			// [in]
+	uint32_t*			p_nWordBgn,		// [out]
+	uint32_t*			p_nWordLen,		// [out]
+	uint32_t*			p_nWordKetas	// [out]
 	)
 {
 	// キーワード長をカウントする
@@ -106,7 +106,7 @@ void LayoutMgr::_DoWordWrap(LayoutWork* pWork, PF_OnLine pfOnLine)
 			&& IS_KEYWORD_CHAR(pWork->lineStr.At(pWork->nPos))
 		) {
 			// キーワード長を取得
-			int nWordKetas = 0;
+			uint32_t nWordKetas = 0;
 			_GetKeywordLength(
 				pWork->lineStr, pWork->nPos,
 				&pWork->nWordBgn, &pWork->nWordLen, &nWordKetas
@@ -199,7 +199,7 @@ void LayoutMgr::_DoGyomatsuKinsoku(LayoutWork* pWork, PF_OnLine pfOnLine)
 bool LayoutMgr::_DoTab(LayoutWork* pWork, PF_OnLine pfOnLine)
 {
 	// Sep. 23, 2002 genta せっかく作ったので関数を使う
-	int nCharKetas = GetActualTabSpace(pWork->nPosX);
+	size_t nCharKetas = GetActualTabSpace(pWork->nPosX);
 	if (pWork->nPosX + nCharKetas > GetMaxLineKetas()) {
 		(this->*pfOnLine)(pWork);
 		return true;
@@ -216,12 +216,10 @@ bool LayoutMgr::_DoTab(LayoutWork* pWork, PF_OnLine pfOnLine)
 
 void LayoutMgr::_MakeOneLine(LayoutWork* pWork, PF_OnLine pfOnLine)
 {
-	int	nEol = pWork->pDocLine->GetEol().GetLen(); //########そのうち不要になる
-	int nEol_1 = nEol - 1;
-	if (0 >	nEol_1) {
-		nEol_1 = 0;
-	}
-	int nLength = pWork->lineStr.GetLength() - nEol_1;
+	size_t nEol = pWork->pDocLine->GetEol().GetLen(); //########そのうち不要になる
+	size_t nEol_1 = (nEol == 0) ? 0 : (nEol - 1);
+	ASSERT_GE(pWork->lineStr.GetLength(), nEol_1);
+	size_t nLength = pWork->lineStr.GetLength() - nEol_1;
 
 	if (pWork->pColorStrategy) {
 		pWork->pColorStrategy->InitStrategyStatus();
@@ -268,7 +266,7 @@ void LayoutMgr::_MakeOneLine(LayoutWork* pWork, PF_OnLine pfOnLine)
 				break;
 			}
 			// 2007.09.07 kobake   ロジック幅とレイアウト幅を区別
-			int nCharKetas = NativeW::GetKetaOfChar(pWork->lineStr, pWork->nPos);
+			size_t nCharKetas = NativeW::GetKetaOfChar(pWork->lineStr, pWork->nPos);
 //			if (nCharKetas == 0) {				// 削除 サロゲートペア対策	2008/7/5 Uchi
 //				nCharKetas = 1;
 //			}

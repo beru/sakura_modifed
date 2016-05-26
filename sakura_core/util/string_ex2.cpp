@@ -247,7 +247,7 @@ const char* GetNextLimitedLengthText(
 	size_t* pnBgn
 	)
 {
-	int nBgn = *pnBgn;
+	size_t nBgn = *pnBgn;
 	if (nBgn >= nTextLen) {
 		return NULL;
 	}

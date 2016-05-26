@@ -19,7 +19,7 @@ int ViewParser::GetLeftWord(NativeW* pMemWord, int nMaxWordLen) const
 	const Layout* pLayout;
 	auto& caret = editView.GetCaret();
 	auto& layoutMgr = editView.pEditDoc->layoutMgr;
-	int nCurLine = caret.GetCaretLayoutPos().y;
+	size_t nCurLine = caret.GetCaretLayoutPos().y;
 	const wchar_t* pLine = layoutMgr.GetLineStr(nCurLine, &nLineLen, &pLayout);
 	if (!pLine) {
 //		return 0;

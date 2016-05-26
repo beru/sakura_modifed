@@ -271,7 +271,7 @@ int _EncodeBase64(const char* pSrc, const size_t nSrcLen, CHAR_TYPE* pDest)
 
 	psrc = reinterpret_cast<const unsigned char*>(pSrc);
 	nDesLen = 0;
-	for (int i=0; i<nSrcLen; i+=3) {
+	for (size_t i=0; i<nSrcLen; i+=3) {
 		lDataSrc = 0;
 		if (nSrcLen - i < 3) {
 			n = nSrcLen % 3;
@@ -374,9 +374,9 @@ int _DecodeUU_line(const CHAR_TYPE* pSrc, const size_t nSrcLen, char* pDest)
 	}
 
 	pr = pSrc + 1;  // æ“ª‚Ì•¶ŽšiM(0x20+45)‚È‚Çj‚ð”ò‚Î‚·
-	int i = 0;
-	int j = 0;
-	int k = 0;
+	size_t i = 0;
+	size_t j = 0;
+	size_t k = 0;
 	for (; i<nSrcLen; i+=4) {
 		lDataDes = 0;
 		for (j=0; j<4; ++j) {

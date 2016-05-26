@@ -206,7 +206,7 @@ UINT_PTR CALLBACK OFNHookProc(
 {
 	POINT		po;
 	RECT		rc;
-	int			i;
+	size_t		i;
 	OFNOTIFY*	pofn;
 	LRESULT		lRes;
 	WORD		wNotifyCode;
@@ -231,7 +231,6 @@ UINT_PTR CALLBACK OFNHookProc(
 		_T("LF (UNIX)"),
 		_T("CR (Mac)"),
 	};
-	int nEolNameArrNum = (int)_countof(pEolNameArr);
 
 // To Here	Feb. 9, 2001 genta
 	int	nRightMargin = 24;
@@ -291,7 +290,7 @@ UINT_PTR CALLBACK OFNHookProc(
 				// 値の設定
 				// 2013.05.27 初期値をSaveInfoから設定する
 				nIdxSel = 0;
-				for (i=0; i<nEolNameArrNum; ++i) {
+				for (i=0; i<_countof(pEolNameArr); ++i) {
 					if (i == 0) {
 						nIdx = Combo_AddString(pData->hwndComboEOL, LS(STR_DLGOPNFL1));
 					}else {
@@ -582,7 +581,7 @@ UINT_PTR CALLBACK OFNHookProc(
 					if (Combo_GetCount( pData->hwndComboMRU ) == 0) {
 						// 最近開いたファイル コンボボックス初期値設定
 						//	2003.06.22 Moca vMRU がNULLの場合を考慮する
-						int nSize = (int)pData->pDlgOpenFile->mem->vMRU.size();
+						size_t nSize = pData->pDlgOpenFile->mem->vMRU.size();
 						for (i=0; i<nSize; ++i) {
 							Combo_AddString(pData->hwndComboMRU, pData->pDlgOpenFile->mem->vMRU[i]);
 						}

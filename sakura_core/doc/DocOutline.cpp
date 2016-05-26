@@ -183,7 +183,7 @@ int DocOutline::ReadRuleFile(
 				}else if (strLine.length() > 13 && _wcsnicmp(strLine.c_str() + 1, L"RegexOption=", 12) == 0) {
 					int nCaseFlag = Bregexp::optCaseSensitive;
 					regexOption = 0;
-					for (int i=13; i<(int)strLine.length(); ++i) {
+					for (size_t i=13; i<strLine.length(); ++i) {
 						if (strLine[i] == L'i') {
 							nCaseFlag = 0;
 						}else if (strLine[i] == L'g') {
@@ -238,11 +238,11 @@ void DocOutline::MakeFuncList_RuleFile(
 	/*	ネストの深さは、32レベルまで、ひとつのヘッダは、最長256文字まで区別
 		（256文字まで同じだったら同じものとして扱います）
 	*/
-	const int	nMaxStack = 32;	// ネストの最深
-	int			nDepth = 0;				// いまのアイテムの深さを表す数値。
-	wchar_t		pszStack[nMaxStack][256];
-	wchar_t		nLvStack[nMaxStack];
-	wchar_t		szTitle[256];			// 一時領域
+	const int nMaxStack = 32;	// ネストの最深
+	size_t nDepth = 0;				// いまのアイテムの深さを表す数値。
+	wchar_t pszStack[nMaxStack][256];
+	wchar_t nLvStack[nMaxStack];
+	wchar_t szTitle[256];			// 一時領域
 	Bregexp* pRegex = nullptr;
 	if (bRegex) {
 		pRegex = new Bregexp[nCount];
@@ -294,7 +294,7 @@ void DocOutline::MakeFuncList_RuleFile(
 		pFuncInfoArr->AppendData(1, 1, mem.GetStringPtr(), FUNCINFO_NOCLIPTEXT, nDepth);
 		nDepth = 1;
 	}
-	for (int nLineCount=0; nLineCount<doc.docLineMgr.GetLineCount(); ++nLineCount) {
+	for (size_t nLineCount=0; nLineCount<doc.docLineMgr.GetLineCount(); ++nLineCount) {
 		// 行取得
 		size_t nLineLen;
 		const wchar_t* pLine = doc.docLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
@@ -303,7 +303,7 @@ void DocOutline::MakeFuncList_RuleFile(
 		}
 
 		// 行頭の空白飛ばし
-		int i = 0;
+		size_t i = 0;
 		if (!bRegex) {
 			for (i=0; i<nLineLen; ++i) {
 				if (pLine[i] == L' ' || pLine[i] == L'\t' || pLine[i] == L'　') {
@@ -387,8 +387,8 @@ void DocOutline::MakeFuncList_RuleFile(
 		);
 
 		// nDepthを計算
-		int k;
 		bool bAppend = true;
+		int k;
 		for (k=0; k<nDepth; ++k) {
 			int nResult = wcscmp(pszStack[k], szTitle);
 			if (nResult == 0) {

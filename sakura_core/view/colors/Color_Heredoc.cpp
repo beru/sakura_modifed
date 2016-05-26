@@ -135,7 +135,7 @@ bool Color_Heredoc::EndColor(const StringRef& str, int nPos)
 				this->nCommentEnd = nSize;
 				return false;
 			}else {
-				int i = nSize;
+				size_t i = nSize;
 				if (
 					i + 1 < str.GetLength()
 					&& str.At(i) == L';'

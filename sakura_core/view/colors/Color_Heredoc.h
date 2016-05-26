@@ -36,7 +36,7 @@ public:
 	virtual bool EndColor(const StringRef& str, int nPos);
 private:
 	std::wstring id;
-	int nSize;
+	size_t nSize;
 	const wchar_t* pszId;
 	int nCommentEnd;
 };

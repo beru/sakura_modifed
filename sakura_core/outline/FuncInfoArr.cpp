@@ -88,7 +88,7 @@ void FuncInfoArr::AppendData(
 	const TCHAR*	pszFuncName,		// 関数名
 	const TCHAR*	pszFileName,		// ファイル名
 	int				nInfo,				// 付加情報
-	int				nDepth				// 深さ
+	size_t			nDepth				// 深さ
 	)
 {
 	FuncInfo* pFuncInfo = new FuncInfo(nFuncLineCRLF,
@@ -111,7 +111,7 @@ void FuncInfoArr::AppendData(
 	const NOT_TCHAR*	pszFuncName,		// 関数名
 	const NOT_TCHAR*	pszFileName,		// ファイル名
 	int					nInfo,				// 付加情報
-	int					nDepth				// 深さ
+	size_t				nDepth				// 深さ
 	)
 {
 	AppendData(nFuncLineCRLF,
@@ -130,7 +130,7 @@ void FuncInfoArr::AppendData(
 	int				nFuncLineLAYOUT,	// 関数のある行(折り返し単位)
 	const TCHAR*	pszFuncName,		// 関数名
 	int				nInfo,				// 付加情報
-	int				nDepth				// 深さ
+	size_t			nDepth				// 深さ
 	)
 {
 	AppendData(nFuncLineCRLF,
@@ -149,7 +149,7 @@ void FuncInfoArr::AppendData(
 	int					nFuncLineLAYOUT,	// 関数のある行(折り返し単位)
 	const NOT_TCHAR*	pszFuncName,		// 関数名
 	int					nInfo,				// 付加情報
-	int					nDepth				// 深さ
+	size_t				nDepth				// 深さ
 	)
 {
 	AppendData(nFuncLineCRLF, nFuncLineLAYOUT, to_tchar(pszFuncName), nInfo, nDepth);

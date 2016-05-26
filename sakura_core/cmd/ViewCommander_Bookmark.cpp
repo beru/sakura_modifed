@@ -67,19 +67,15 @@ void ViewCommander::Command_Jump(void)
 
 	int nMode;
 	bool bValidLine;
-	int nCurrentLine;
 	int nCommentBegin = 0;
 
 	auto& dlgJump = GetEditWindow().dlgJump;
-
 	// 行番号
-	int	nLineNum; //$$ 単位混在
-	nLineNum = dlgJump.nLineNum;
-
+	size_t nLineNum = dlgJump.nLineNum; //$$ 単位混在
 	if (!dlgJump.bPLSQL) {	// PL/SQLソースの有効行か
 		// 行番号の表示 false=折り返し単位／true=改行単位
 		if (GetDllShareData().bLineNumIsCRLF_ForJump) {
-			if (0 >= nLineNum) {
+			if (0 == nLineNum) {
 				nLineNum = 1;
 			}
 			/*
@@ -95,7 +91,7 @@ void ViewCommander::Command_Jump(void)
 			);
 			nLineNum = ptPosXY.y + 1;
 		}else {
-			if (0 >= nLineNum) {
+			if (0 == nLineNum) {
 				nLineNum = 1;
 			}
 			if (nLineNum > layoutMgr.GetLineCount()) {
@@ -112,14 +108,14 @@ void ViewCommander::Command_Jump(void)
 		);
 		return;
 	}
-	if (0 >= nLineNum) {
+	if (0 == nLineNum) {
 		nLineNum = 1;
 	}
 	nMode = 0;
-	nCurrentLine = dlgJump.nPLSQL_E2 - 1;
-
-	int	nLineCount; //$$ 単位混在
-	nLineCount = dlgJump.nPLSQL_E1 - 1;
+	ASSERT_GE(dlgJump.nPLSQL_E2, 1);
+	size_t nCurrentLine = dlgJump.nPLSQL_E2 - 1;
+	ASSERT_GE(dlgJump.nPLSQL_E1, 1);
+	size_t nLineCount = dlgJump.nPLSQL_E1 - 1;; //$$ 単位混在
 
 	// 行番号の表示 false=折り返し単位／true=改行単位
 	if (!view.pTypeData->bLineNumIsCRLF) { // レイアウト単位

@@ -125,7 +125,7 @@ public:
 	Layout*			SearchLineByLayoutY(size_t nLineLayout) { return const_cast<Layout*>(static_cast<const LayoutMgr*>(this)->SearchLineByLayoutY(nLineLayout)); }
 
 	// ワードを探す
-	bool			WhereCurrentWord(int , size_t , Range* pSelect, NativeW*, NativeW*);	// 現在位置の単語の範囲を調べる
+	bool			WhereCurrentWord(size_t , size_t , Range* pSelect, NativeW*, NativeW*);	// 現在位置の単語の範囲を調べる
 
 	// 判定
 	bool			IsEndOfLine(const Point& ptLinePos);	// 指定位置が行末(改行文字の直前)か調べる	//@@@ 2002.04.18 MIK
@@ -153,12 +153,12 @@ public:
 	//                           検索                              //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 protected:
-	int PrevOrNextWord(int, int, Point* pptLayoutNew, bool, bool bStopsBothEnds);	// 現在位置の左右の単語の先頭位置を調べる
+	int PrevOrNextWord(size_t, size_t, Point* pptLayoutNew, bool, bool bStopsBothEnds);	// 現在位置の左右の単語の先頭位置を調べる
 public:
-	int PrevWord(int nLineNum, int nIdx, Point* pptLayoutNew, bool bStopsBothEnds) { return PrevOrNextWord(nLineNum, nIdx, pptLayoutNew, true, bStopsBothEnds); }	// 現在位置の左右の単語の先頭位置を調べる
-	int NextWord(int nLineNum, int nIdx, Point* pptLayoutNew, bool bStopsBothEnds) { return PrevOrNextWord(nLineNum, nIdx, pptLayoutNew, false, bStopsBothEnds); }	// 現在位置の左右の単語の先頭位置を調べる
+	int PrevWord(size_t nLineNum, size_t nIdx, Point* pptLayoutNew, bool bStopsBothEnds) { return PrevOrNextWord(nLineNum, nIdx, pptLayoutNew, true, bStopsBothEnds); }	// 現在位置の左右の単語の先頭位置を調べる
+	int NextWord(size_t nLineNum, size_t nIdx, Point* pptLayoutNew, bool bStopsBothEnds) { return PrevOrNextWord(nLineNum, nIdx, pptLayoutNew, false, bStopsBothEnds); }	// 現在位置の左右の単語の先頭位置を調べる
 
-	int SearchWord(int nLine, int nIdx, SearchDirection SearchDirection, Range* pMatchRange, const SearchStringPattern&);	// 単語検索
+	int SearchWord(size_t nLine, size_t nIdx, SearchDirection SearchDirection, Range* pMatchRange, const SearchStringPattern&);	// 単語検索
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                        単位の変換                           //
@@ -241,11 +241,11 @@ protected:
 	struct LayoutWork {
 		// 毎ループ初期化
 		KinsokuType	eKinsokuType;
-		int			nPos;
-		int			nBgn;
+		uint32_t	nPos;
+		uint32_t	nBgn;
 		StringRef	lineStr;
-		int			nWordBgn;
-		int			nWordLen;
+		uint32_t	nWordBgn;
+		uint32_t	nWordLen;
 		int			nPosX;
 		int			nIndent;
 		Layout*		pLayoutCalculated;

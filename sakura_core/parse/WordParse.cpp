@@ -13,9 +13,9 @@
 bool WordParse::WhereCurrentWord_2(
 	const wchar_t*	pLine,			// [in]  調べるメモリ全体の先頭アドレス
 	size_t			nLineLen,		// [in]  調べるメモリ全体の有効長
-	int				nIdx,			// [in]  調査開始地点:pLineからの相対的な位置
-	int*			pnIdxFrom,		// [out] 単語が見つかった場合は、単語の先頭インデックスを返す。
-	int*			pnIdxTo,		// [out] 単語が見つかった場合は、単語の終端の次のバイトの先頭インデックスを返す。
+	size_t			nIdx,			// [in]  調査開始地点:pLineからの相対的な位置
+	size_t*			pnIdxFrom,		// [out] 単語が見つかった場合は、単語の先頭インデックスを返す。
+	size_t*			pnIdxTo,		// [out] 単語が見つかった場合は、単語の終端の次のバイトの先頭インデックスを返す。
 	NativeW*		pcmcmWord,		// [out] 単語が見つかった場合は、現在単語を切り出して指定されたCMemoryオブジェクトに格納する。情報が不要な場合はNULLを指定する。
 	NativeW*		pcmcmWordLeft	// [out] 単語が見つかった場合は、現在単語の左に位置する単語を切り出して指定されたCMemoryオブジェクトに格納する。情報が不要な場合はNULLを指定する。
 	)
@@ -259,8 +259,8 @@ ECharKind WordParse::WhatKindOfTwoChars4KW(
 bool WordParse::SearchNextWordPosition(
 	const wchar_t*	pLine,
 	size_t			nLineLen,
-	int				nIdx,			//	桁数
-	int*			pnColumnNew,	//	見つかった位置
+	size_t			nIdx,			//	桁数
+	size_t*			pnColumnNew,	//	見つかった位置
 	bool			bStopsBothEnds	//	単語の両端で止まる
 	)
 {
@@ -305,8 +305,8 @@ bool WordParse::SearchNextWordPosition(
 bool WordParse::SearchNextWordPosition4KW(
 	const wchar_t*	pLine,
 	size_t			nLineLen,
-	int				nIdx,			//	桁数
-	int*			pnColumnNew,	//	見つかった位置
+	size_t			nIdx,			//	桁数
+	size_t*			pnColumnNew,	//	見つかった位置
 	bool			bStopsBothEnds	//	単語の両端で止まる
 	)
 {
@@ -316,7 +316,7 @@ bool WordParse::SearchNextWordPosition4KW(
 	// 現在位置の文字の種類を調べる
 	ECharKind nCharKind = WhatKindOfChar(pLine, nLineLen, nIdx);
 
-	int nIdxNext = nIdx;
+	size_t nIdxNext = nIdx;
 	// 2005-09-02 D.S.Koba GetSizeOfChar
 	size_t nCharChars = NativeW::GetSizeOfChar(pLine, nLineLen, nIdxNext);
 	while (nCharChars > 0) {

@@ -1888,7 +1888,9 @@ LRESULT EditWnd::DispatchEvent(
 			if (!bSelect) {
 				const DocLine *pTmpDocLine = GetDocument().docLineMgr.GetLine(ppoCaret->y);
 				if (pTmpDocLine) {
-					if (pTmpDocLine->GetLengthWithoutEOL() < ppoCaret->x) ptCaretPos.x--;
+					if (pTmpDocLine->GetLengthWithoutEOL() < ppoCaret->x) {
+						ptCaretPos.x--;
+					}
 				}
 			}
 			//	2006.07.09 genta ‘I‘ğ”ÍˆÍ‚ğl—¶‚µ‚ÄˆÚ“®

@@ -8,7 +8,7 @@
 /** startより後ろの語の境界の位置を返す。
 	startより前の文字は読まない。一番大きい戻り値は str.GetLength()と等しくなる。
 */
-static int NextWordBreak(const StringRef& str, const int start);
+static size_t NextWordBreak(const StringRef& str, const size_t start);
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                     キーワードセット                        //
@@ -34,7 +34,7 @@ bool Color_KeywordSet::BeginColor(const StringRef& str, int nPos)
 			現在位置からキーワードを抜き出し、そのキーワードが登録単語ならば、色を変える
 	*/
 
-	const ECharKind charKind = WordParse::WhatKindOfChar(str.GetPtr(), str.GetLength() , nPos);
+	const ECharKind charKind = WordParse::WhatKindOfChar(str.GetPtr(), str.GetLength(), nPos);
 	if (charKind <= CK_SPACE) {
 		return false; // この文字はキーワード対象文字ではない。
 	}
@@ -46,7 +46,7 @@ bool Color_KeywordSet::BeginColor(const StringRef& str, int nPos)
 		}
 	}
 
-	const int posNextWordHead = NextWordBreak(str, nPos);
+	const size_t posNextWordHead = NextWordBreak(str, nPos);
 	for (int i=0; i<MAX_KEYWORDSET_PER_TYPE; ++i) {
 		if (!pTypeData->colorInfoArr[COLORIDX_KEYWORD1 + i].bDisp) {
 			continue; // 色設定が非表示なのでスキップ。
@@ -55,8 +55,8 @@ bool Color_KeywordSet::BeginColor(const StringRef& str, int nPos)
 		if (iKwdSet == -1) {
 			continue; // キーワードセットが設定されていないのでスキップ。
 		}
-		int posWordEnd = nPos; ///< nPos...posWordEndがキーワード。
-		int posWordEndCandidate = posNextWordHead; ///< nPos...posWordEndCandidateはキーワード候補。
+		size_t posWordEnd = nPos; ///< nPos...posWordEndがキーワード。
+		size_t posWordEndCandidate = posNextWordHead; ///< nPos...posWordEndCandidateはキーワード候補。
 		do {
 			const int ret = GetDllShareData().common.specialKeyword.keywordSetMgr.SearchKeyword2(iKwdSet, str.GetPtr() + nPos, posWordEndCandidate - nPos);
 			if (0 <= ret) {
@@ -96,9 +96,9 @@ bool Color_KeywordSet::EndColor(const StringRef& str, int nPos)
 }
 
 
-static inline int NextWordBreak(const StringRef& str, const int start)
+static inline size_t NextWordBreak(const StringRef& str, const size_t start)
 {
-	int nColumnNew;
+	size_t nColumnNew;
 	if (WordParse::SearchNextWordPosition4KW(str.GetPtr(), str.GetLength(), start, &nColumnNew, true)) {
 		return nColumnNew;
 	}

@@ -230,7 +230,7 @@ bool Memory::SwabHLByte(const Memory& mem)
 		SwapHLByte();
 		return true;
 	}
-	int nSize = mem.GetRawLength();
+	size_t nSize = mem.GetRawLength();
 	if (pRawData && nSize + 2 <= nDataBufSize) {
 		// データが短い時はバッファの再利用
 		_SetRawLength(0);

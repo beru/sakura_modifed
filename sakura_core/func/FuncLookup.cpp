@@ -212,9 +212,8 @@ void FuncLookup::SetListItem(HWND hListBox, int category) const
 	WCHAR pszLabel[256];
 	// ƒŠƒXƒg‚ğ‰Šú‰»‚·‚é
 	List_ResetContent(hListBox);
-
-	int n = GetItemCount(category);
-	for (int i=0; i<n; ++i) {
+	size_t n = GetItemCount(category);
+	for (size_t i=0; i<n; ++i) {
 		if (Pos2FuncCode(category, i) == F_DISABLE) {
 			continue;
 		}

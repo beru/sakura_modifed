@@ -45,6 +45,6 @@ public:
 	NativeT		memFuncName;		// 関数名
 	NativeT		memFileName;		// ファイル名
 	int			nInfo;				// 付加情報
-	int			nDepth;				// 深さ
+	size_t		nDepth;				// 深さ
 };
 

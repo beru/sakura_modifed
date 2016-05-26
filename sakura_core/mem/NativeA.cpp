@@ -150,17 +150,18 @@ void NativeA::Replace(
 	)
 {
 	NativeA	memWork;
-	size_t		nFromLen = strlen(pszFrom);
-	size_t		nToLen = strlen(pszTo);
-	int			nBgnOld = 0;
-	int			nBgn = 0;
+	size_t nFromLen = strlen(pszFrom);
+	size_t nToLen = strlen(pszTo);
+	size_t nBgnOld = 0;
+	size_t nBgn = 0;
+	ASSERT_GE(GetStringLength(), nFromLen);
 	while (nBgn <= GetStringLength() - nFromLen) {
 		if (auto_memcmp(&GetStringPtr()[nBgn], pszFrom, nFromLen) == 0) {
-			if (0  < nBgn - nBgnOld) {
+			if (0 < nBgn - nBgnOld) {
 				memWork.AppendString(&GetStringPtr()[nBgnOld], nBgn - nBgnOld);
 			}
 			memWork.AppendString(pszTo, nToLen);
-			nBgn = nBgn + nFromLen;
+			nBgn += nFromLen;
 			nBgnOld = nBgn;
 		}else {
 			++nBgn;
@@ -180,17 +181,18 @@ void NativeA::Replace_j(
 	)
 {
 	NativeA	memWork;
-	int			nFromLen = strlen(pszFrom);
-	int			nToLen = strlen(pszTo);
-	int			nBgnOld = 0;
-	int			nBgn = 0;
+	size_t nFromLen = strlen(pszFrom);
+	size_t nToLen = strlen(pszTo);
+	size_t nBgnOld = 0;
+	size_t nBgn = 0;
+	ASSERT_GE(GetStringLength(), nFromLen);
 	while (nBgn <= GetStringLength() - nFromLen) {
 		if (memcmp(&GetStringPtr()[nBgn], pszFrom, nFromLen) == 0) {
 			if (0 < nBgn - nBgnOld) {
 				memWork.AppendString(&GetStringPtr()[nBgnOld], nBgn - nBgnOld);
 			}
 			memWork.AppendString(pszTo, nToLen);
-			nBgn = nBgn + nFromLen;
+			nBgn += nFromLen;
 			nBgnOld = nBgn;
 		}else {
 			if (_IS_SJIS_1((unsigned char)GetStringPtr()[nBgn])) {

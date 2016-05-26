@@ -246,13 +246,13 @@ bool EditView::MiniMapCursorLineTip(POINT* po, RECT* rc, bool* pbHide)
 			{
 				size_t nLineLen = pLayout->GetLengthWithoutEOL();
 				const wchar_t* pszData = pLayout->GetPtr();
-				int nLimitLength = 80;
+				size_t nLimitLength = 80;
 				int pre = 0;
-				int i = 0;
-				int k = 0;
-				int charSize = NativeW::GetSizeOfChar( pszData, nLineLen, i );
-				int charWidth = t_max(1, (int)NativeW::GetKetaOfChar( pszData, nLineLen, i ));
-				int charType = 0;
+				size_t i = 0;
+				size_t k = 0;
+				size_t charSize = NativeW::GetSizeOfChar( pszData, nLineLen, i );
+				size_t charWidth = t_max(1U, NativeW::GetKetaOfChar( pszData, nLineLen, i ));
+				size_t charType = 0;
 				// 連続する"\t" " " を " "1つにする
 				// 左からnLimitLengthまでの幅を切り取り
 				while (i + charSize <= nLineLen && k + charWidth <= nLimitLength) {
@@ -466,7 +466,7 @@ int EditView::IsSearchString(
 		}
 	}else if (curSearchOption.bWordOnly) { // 単語検索
 		// 指定位置の単語の範囲を調べる
-		int posWordHead, posWordEnd;
+		size_t posWordHead, posWordEnd;
 		if (!WordParse::WhereCurrentWord_2(str.GetPtr(), str.GetLength(), nPos, &posWordHead, &posWordEnd, NULL, NULL)) {
 			return 0; // 指定位置に単語が見つからなかった。
  		}
@@ -483,7 +483,7 @@ int EditView::IsSearchString(
 		int wordIndex = 0;
 		const wchar_t* const searchKeyEnd = strCurSearchKey.data() + strCurSearchKey.size();
 		for (const wchar_t* p=strCurSearchKey.data(); p<searchKeyEnd; ) {
-			int begin, end; // 検索語に含まれる単語?の位置。WhereCurrentWord_2()の仕様では空白文字列も単語に含まれる。
+			size_t begin, end; // 検索語に含まれる単語?の位置。WhereCurrentWord_2()の仕様では空白文字列も単語に含まれる。
 			if (1
 				&& WordParse::WhereCurrentWord_2(p, searchKeyEnd - p, 0, &begin, &end, NULL, NULL)
 				&& begin == 0

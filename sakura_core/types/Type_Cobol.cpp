@@ -64,7 +64,7 @@ void DocOutline::MakeTopicList_cobol(FuncInfoArr* pFuncInfoArr)
 	wchar_t			szLabel[1024];
 	const wchar_t*	pszKeyword;
 	int				nKeywordLen;
-	BOOL			bDivision;
+	bool			bDivision;
 	bool			bExtEol = GetDllShareData().common.edit.bEnableExtEol;
 
 	szDivision[0] = L'\0';
@@ -106,13 +106,13 @@ void DocOutline::MakeTopicList_cobol(FuncInfoArr* pFuncInfoArr)
 
 			pszKeyword = L"division";
 			nKeywordLen = wcslen(pszKeyword);
-			bDivision = FALSE;
-			int nLen = (int)wcslen(szLabel) - nKeywordLen;
+			bDivision = false;
+			size_t nLen = wcslen(szLabel) - nKeywordLen;
 			for (i=0; i<=nLen ; ++i) {
 				if (auto_memicmp(&szLabel[i], pszKeyword, nKeywordLen) == 0) {
 					szLabel[i + nKeywordLen] = L'\0';
 					wcscpy_s(szDivision, szLabel);
-					bDivision = TRUE;
+					bDivision = true;
 					break;
 				}
 			}

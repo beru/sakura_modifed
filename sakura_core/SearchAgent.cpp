@@ -326,14 +326,14 @@ void SearchAgent::CreateCharCharsArr(
 /*!	単語単位の単語リスト作成
 */
 void SearchAgent::CreateWordList(
-	std::vector<std::pair<const wchar_t*, int>>& searchWords,
+	std::vector<std::pair<const wchar_t*, size_t>>& searchWords,
 	const wchar_t* pszPattern,
 	size_t nPatternLen
 	)
 {
 	searchWords.clear();
 	for (size_t pos=0; pos<nPatternLen; ) {
-		int begin, end; // 検索語に含まれる単語?の posを基準とした相対位置。WhereCurrentWord_2()の仕様では空白文字列も単語に含まれる。
+		size_t begin, end; // 検索語に含まれる単語?の posを基準とした相対位置。WhereCurrentWord_2()の仕様では空白文字列も単語に含まれる。
 		if (WordParse::WhereCurrentWord_2(pszPattern+pos, nPatternLen-pos, 0, &begin, &end, nullptr, nullptr)
 			&& begin == 0 && begin < end
 		) {
@@ -353,22 +353,23 @@ void SearchAgent::CreateWordList(
 */
 const wchar_t* SearchAgent::SearchStringWord(
 	const wchar_t*	pLine,
-	int				nLineLen,
-	int				nIdxPos,
-	const std::vector<std::pair<const wchar_t*, int>>& searchWords,
+	size_t			nLineLen,
+	size_t			nIdxPos,
+	const std::vector<std::pair<const wchar_t*, size_t>>& searchWords,
 	bool	 bLoHiCase,
 	int*	 pnMatchLen
 	)
 {
-	int nNextWordFrom = nIdxPos;
-	int nNextWordFrom2;
-	int nNextWordTo2;
+	size_t nNextWordFrom = nIdxPos;
+	size_t nNextWordFrom2;
+	size_t nNextWordTo2;
 	// 処理が重複するけど分岐除去
 	size_t nSize = searchWords.size();
 	if (bLoHiCase) {
 		while (WordParse::WhereCurrentWord_2(pLine, nLineLen, nNextWordFrom, &nNextWordFrom2, &nNextWordTo2, nullptr, nullptr)) {
 			for (size_t iSW=0; iSW<nSize; ++iSW) {
 				auto& searchWord = searchWords[iSW];
+				ASSERT_GE(nNextWordTo2, nNextWordFrom2);
 				if (searchWord.second == nNextWordTo2 - nNextWordFrom2) {
 					if (auto_memcmp(&(pLine[nNextWordFrom2]), searchWord.first, searchWord.second) == 0) {
 						*pnMatchLen = searchWord.second;
@@ -404,10 +405,10 @@ const wchar_t* SearchAgent::SearchStringWord(
 // 現在位置の単語の範囲を調べる
 // 2001/06/23 N.Nakatani WhereCurrentWord()変更 WhereCurrentWord_2をコールするようにした
 bool SearchAgent::WhereCurrentWord(
-	int		nLineNum,
-	int		nIdx,
-	int*	pnIdxFrom,
-	int*	pnIdxTo,
+	size_t	nLineNum,
+	size_t	nIdx,
+	size_t*	pnIdxFrom,
+	size_t*	pnIdxTo,
 	NativeW* pcmcmWord,
 	NativeW* pcmcmWordLeft
 	)
@@ -430,16 +431,16 @@ bool SearchAgent::WhereCurrentWord(
 
 // 現在位置の左右の単語の先頭位置を調べる
 bool SearchAgent::PrevOrNextWord(
-	int		nLineNum,		// 行数
-	int		nIdx,			// 桁数
-	int*	pnColumnNew,	// 見つかった位置
+	size_t	nLineNum,		// 行数
+	size_t	nIdx,			// 桁数
+	size_t*	pnColumnNew,	// 見つかった位置
 	bool	bLeft,			// true : 前方（左）へ向かう。false : 後方（右）へ向かう。
 	bool	bStopsBothEnds	// 単語の両端で止まる
 	)
 {
 	using namespace WCODE;
 	
-	const DocLine*	pDocLine = docLineMgr.GetLine( nLineNum );
+	const DocLine* pDocLine = docLineMgr.GetLine(nLineNum);
 	if (!pDocLine) {
 		return false;
 	}
@@ -634,7 +635,7 @@ int SearchAgent::SearchWord(
 		// 検索語を単語に分割して searchWordsに格納する。
 		const wchar_t* pszPattern = pattern.GetKey();
 		const int	nPatternLen = pattern.GetLen();
-		std::vector<std::pair<const wchar_t*, int>> searchWords; // 単語の開始位置と長さの配列。
+		std::vector<std::pair<const wchar_t*, size_t>> searchWords; // 単語の開始位置と長さの配列。
 		CreateWordList(searchWords, pszPattern, nPatternLen);
 		/*
 			2001/06/23 Norio Nakatani
@@ -646,10 +647,10 @@ int SearchAgent::SearchWord(
 		if (eDirection == SearchDirection::Backward) {
 			nLinePos = ptSerachBegin.y;
 			pDocLine = docLineMgr.GetLine(nLinePos);
-			int nNextWordFrom;
-			int nNextWordFrom2;
-			int nNextWordTo2;
-			int nWork;
+			size_t nNextWordFrom;
+			size_t nNextWordFrom2;
+			size_t nNextWordTo2;
+			size_t nWork;
 			nNextWordFrom = ptSerachBegin.x;
 			while (pDocLine) {
 				if (PrevOrNextWord(nLinePos, nNextWordFrom, &nWork, true, false)) {

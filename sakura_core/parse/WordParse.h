@@ -69,9 +69,9 @@ public:
 	static bool WhereCurrentWord_2(
 		const wchar_t*	pLine,			// [in]  調べるメモリ全体の先頭アドレス
 		size_t			nLineLen,		// [in]  調べるメモリ全体の有効長
-		int				nIdx,			// [out] 調査開始地点:pLineからの相対的な位置
-		int*			pnIdxFrom,		// [out] 単語が見つかった場合は、単語の先頭インデックスを返す。
-		int*			pnIdxTo,		// [out] 単語が見つかった場合は、単語の終端の次のバイトの先頭インデックスを返す。
+		size_t			nIdx,			// [out] 調査開始地点:pLineからの相対的な位置
+		size_t*			pnIdxFrom,		// [out] 単語が見つかった場合は、単語の先頭インデックスを返す。
+		size_t*			pnIdxTo,		// [out] 単語が見つかった場合は、単語の終端の次のバイトの先頭インデックスを返す。
 		NativeW*		pcmcmWord,		// [out] 単語が見つかった場合は、現在単語を切り出して指定されたCMemoryオブジェクトに格納する。情報が不要な場合はNULLを指定する。
 		NativeW*		pcmcmWordLeft	// [out] 単語が見つかった場合は、現在単語の左に位置する単語を切り出して指定されたCMemoryオブジェクトに格納する。情報が不要な場合はNULLを指定する。
 	);
@@ -99,8 +99,8 @@ public:
 	static bool SearchNextWordPosition(
 		const wchar_t*	pLine,
 		size_t			nLineLen,
-		int				nIdx,			//	桁数
-		int*			pnColumnNew,	//	見つかった位置
+		size_t			nIdx,			//	桁数
+		size_t*			pnColumnNew,	//	見つかった位置
 		bool			bStopsBothEnds	//	単語の両端で止まる
 	);
 
@@ -108,8 +108,8 @@ public:
 	static bool SearchNextWordPosition4KW(
 		const wchar_t*	pLine,
 		size_t			nLineLen,
-		int				nIdx,			//	桁数
-		int*			pnColumnNew,	//	見つかった位置
+		size_t			nIdx,			//	桁数
+		size_t*			pnColumnNew,	//	見つかった位置
 		bool			bStopsBothEnds	//	単語の両端で止まる
 	);
 
@@ -131,7 +131,7 @@ bool IsMailAddress(const wchar_t*, size_t, size_t*);	// 現在位置がメールアドレス
 // ACHAR 版
 inline bool WordParse::_match_charlist(const ACHAR c, const ACHAR* pszList)
 {
-	for (int i=0; pszList[i]!='\0'; ++i) {
+	for (size_t i=0; pszList[i]!='\0'; ++i) {
 		if (pszList[i] == c) {
 			return true;
 		}
@@ -141,7 +141,7 @@ inline bool WordParse::_match_charlist(const ACHAR c, const ACHAR* pszList)
 // WCHAR 版
 inline bool WordParse::_match_charlist(const WCHAR c, const WCHAR* pszList)
 {
-	for (int i=0; pszList[i]!=L'\0'; ++i) {
+	for (size_t i=0; pszList[i]!=L'\0'; ++i) {
 		if (pszList[i] == c) {
 			return true;
 		}

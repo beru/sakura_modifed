@@ -224,11 +224,10 @@ const Layout* LayoutMgr::SearchLineByLayoutY(
 	// +++++++わずかに高速版+++++++
 	// 2004.03.28 Moca pLayoutPrevReferより、Top,Botのほうが近い場合は、そちらを利用する
 	int nPrevToLineNumDiff = t_abs(nPrevReferLine - (int)nLineNum);
-	ASSERT_GE(nLines, nLineNum);
 	if (0
 		|| !pLayoutPrevRefer
 		|| nLineNum < nPrevToLineNumDiff
-		|| nLines - nLineNum < nPrevToLineNumDiff
+		|| (int)nLines - (int)nLineNum < nPrevToLineNumDiff
 	) {
 		if (nLineNum < (nLines / 2)) {
 			nCount = 0;
@@ -625,7 +624,7 @@ bool LayoutMgr::ChangeLayoutParam(
 
 // 現在位置の単語の範囲を調べる
 bool LayoutMgr::WhereCurrentWord(
-	int			nLineNum,
+	size_t		nLineNum,
 	size_t		nIdx,
 	Range*		pSelect,		// [out]
 	NativeW*	pcmcmWord,		// [out]
@@ -638,8 +637,8 @@ bool LayoutMgr::WhereCurrentWord(
 	}
 
 	// 現在位置の単語の範囲を調べる -> ロジック単位pSelect, pMemWord, pMemWordLeft
-	int nFromX;
-	int nToX;
+	size_t nFromX;
+	size_t nToX;
 	bool nRetCode = SearchAgent(*pDocLineMgr).WhereCurrentWord(
 		pLayout->GetLogicLineNo(),
 		pLayout->GetLogicOffset() + nIdx,
@@ -666,8 +665,8 @@ bool LayoutMgr::WhereCurrentWord(
 
 // 現在位置の左右の単語の先頭位置を調べる
 int LayoutMgr::PrevOrNextWord(
-	int		nLineNum,
-	int		nIdx,
+	size_t	nLineNum,
+	size_t	nIdx,
 	Point*	pptLayoutNew,
 	bool	bLeft,
 	bool	bStopsBothEnds
@@ -679,7 +678,7 @@ int LayoutMgr::PrevOrNextWord(
 	}
 
 	// 現在位置の左右の単語の先頭位置を調べる
-	int nPosNew;
+	size_t nPosNew;
 	int nRetCode = SearchAgent(*pDocLineMgr).PrevOrNextWord(
 		pLayout->GetLogicLineNo(),
 		pLayout->GetLogicOffset() + nIdx,
@@ -705,11 +704,11 @@ int LayoutMgr::PrevOrNextWord(
 	@retval 0 見つからない
 */
 int LayoutMgr::SearchWord(
-	int						nLine,				// [in] 検索開始レイアウト行
-	int						nIdx,				// [in] 検索開始データ位置
-	SearchDirection			searchDirection,	// [in] 検索方向
-	Range*			pMatchRange,		// [out] マッチレイアウト範囲
-	const SearchStringPattern&	pattern
+	size_t nLine,						// [in] 検索開始レイアウト行
+	size_t nIdx,						// [in] 検索開始データ位置
+	SearchDirection searchDirection,	// [in] 検索方向
+	Range* pMatchRange,					// [out] マッチレイアウト範囲
+	const SearchStringPattern& pattern
 	)
 {
 	const Layout* pLayout = this->SearchLineByLayoutY(nLine);

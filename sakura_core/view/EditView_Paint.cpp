@@ -940,12 +940,13 @@ bool EditView::DrawLogicLine(
 		bDispEOF = DrawLayoutLine(csInfo);
 
 		// s‚ði‚ß‚é
-		int nOldLogicLineNo = csInfo.pDispPos->GetLayoutRef()->GetLogicLineNo();
+		auto layoutRef = csInfo.pDispPos->GetLayoutRef();
+		int nOldLogicLineNo = layoutRef ? layoutRef->GetLogicLineNo() : -1;
 		csInfo.pDispPos->ForwardDrawLine(1);		// •`‰æYÀ•W{{
 		csInfo.pDispPos->ForwardLayoutLineRef(1);	// ƒŒƒCƒAƒEƒgs{{
 
 		// ƒƒWƒbƒNs‚ð•`‰æ‚µI‚í‚Á‚½‚ç”²‚¯‚é
-		if (csInfo.pDispPos->GetLayoutRef()->GetLogicLineNo() != nOldLogicLineNo) {
+		if (layoutRef && layoutRef->GetLogicLineNo() != nOldLogicLineNo) {
 			break;
 		}
 

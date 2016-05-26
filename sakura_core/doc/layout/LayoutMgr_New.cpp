@@ -285,13 +285,13 @@ BOOL LayoutMgr::CalculateTextWidth(bool bCalLineLen, int nStart, int nEnd)
 	size_t nMaxLen = 0;
 	int nMaxLineNum = 0;
 
-	size_t nLines = GetLineCount();		// テキストのレイアウト行数
+	size_t nLines = GetLineCount();	// テキストのレイアウト行数
 
 	// 開始・終了位置がどちらも指定されていない
 	if (nStart < 0 && nEnd < 0) {
 		bOnlyExpansion = false;		// 最大幅の拡大・縮小をチェックする
 	}
-	if (nStart < 0) {			// 算出開始行の指定なし
+	if (nStart < 0) {				// 算出開始行の指定なし
 		nStart = 0;
 	}else if (nStart > nLines) {	// 範囲オーバー
 		nStart = (int)nLines;
@@ -299,7 +299,7 @@ BOOL LayoutMgr::CalculateTextWidth(bool bCalLineLen, int nStart, int nEnd)
 	if (nEnd < 0 || nEnd >= nLines) {	// 算出終了行の指定なし または 文書行数以上
 		nEnd = (int)nLines;
 	}else {
-		++nEnd;					// 算出終了行の次行
+		++nEnd;						// 算出終了行の次行
 	}
 	Layout* pLayout;
 	// 算出開始レイアウト行を探す

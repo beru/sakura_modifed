@@ -402,13 +402,9 @@ void OutlineErlang::build_arity(int arity)
 */
 void DocOutline::MakeFuncList_Erlang(FuncInfoArr* pFuncInfoArr)
 {
-
 	OutlineErlang erl_state_machine;
-	int nLineCount;
-
-	for (nLineCount=0; nLineCount<doc.docLineMgr.GetLineCount(); ++nLineCount) {
+	for (size_t nLineCount=0; nLineCount<doc.docLineMgr.GetLineCount(); ++nLineCount) {
 		size_t nLineLen;
-
 		const wchar_t* pLine = doc.docLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
 		if (erl_state_machine.parse(pLine, nLineLen, nLineCount)) {
 			/*

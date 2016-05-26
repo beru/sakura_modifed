@@ -94,9 +94,9 @@ public:
 	static
 	const wchar_t* SearchStringWord(
 		const wchar_t*	pLine,
-		int				nLineLen,
-		int				nIdxPos,
-		const std::vector<std::pair<const wchar_t*, int>>& searchWords,
+		size_t			nLineLen,
+		size_t			nIdxPos,
+		const std::vector<std::pair<const wchar_t*, size_t>>& searchWords,
 		bool	bLoHiCase,
 		int*	pnMatchLen
 	);
@@ -111,17 +111,17 @@ public:
 	
 	static
 	void CreateWordList(
-		std::vector<std::pair<const wchar_t*, int>>& searchWords,
-		const wchar_t*	pszPattern,
+		std::vector<std::pair<const wchar_t*, size_t>>& searchWords,
+		const wchar_t* pszPattern,
 		size_t nPatternLen
 	);
 
 public:
 	SearchAgent(DocLineMgr& docLineMgr) : docLineMgr(docLineMgr) { }
 
-	bool WhereCurrentWord(int , int , int* , int*, NativeW*, NativeW*);	// 現在位置の単語の範囲を調べる
+	bool WhereCurrentWord(size_t, size_t, size_t* , size_t*, NativeW*, NativeW*);	// 現在位置の単語の範囲を調べる
 
-	bool PrevOrNextWord(int , int , int* , bool bLEFT, bool bStopsBothEnds);	// 現在位置の左右の単語の先頭位置を調べる
+	bool PrevOrNextWord(size_t, size_t, size_t* , bool bLEFT, bool bStopsBothEnds);	// 現在位置の左右の単語の先頭位置を調べる
 	//	Jun. 26, 2001 genta	正規表現ライブラリの差し替え
 	int SearchWord(Point ptSerachBegin, SearchDirection eDirection, Range* pMatchRange, const SearchStringPattern& pattern); // 単語検索
 

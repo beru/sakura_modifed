@@ -81,14 +81,14 @@ void ViewCommander::Command_Search_Next(
 	Range*		pSelectLogic		// [out] 選択範囲のロジック版。マッチ範囲を返す。すべて置換/高速モードで使用
 	)
 {
-	bool		bSelecting;
-	bool		bFlag1 = false;
-	bool		bSelectingLock_Old = false;
-	bool		bFound = false;
-	bool		bDisableSelect = false;
-	bool		b0Match = false;		// 長さ０でマッチしているか？フラグ by かろと
-	int			nIdx(0);
-	int			nLineNum(0);
+	bool	bSelecting;
+	bool	bFlag1 = false;
+	bool	bSelectingLock_Old = false;
+	bool	bFound = false;
+	bool	bDisableSelect = false;
+	bool	b0Match = false;		// 長さ０でマッチしているか？フラグ by かろと
+	size_t	nIdx = 0;
+	int		nLineNum(0);
 
 	Range	rangeA;
 	rangeA.Set(GetCaret().GetCaretLayoutPos());
@@ -674,7 +674,8 @@ void ViewCommander::Command_Replace(HWND hwndParent)
 					layoutMgr.LogicToLayout(Point(nIdxTo, pLayout->GetLogicLineNo()), GetSelect().GetToPointer());	// 2007.01.19 ryoji 行位置も取得する
 				}
 				// 行末から検索文字列末尾までの文字数
-				int colDiff = nLen - nIdxTo;
+				ASSERT_GE(nLen, nIdxTo);
+				size_t colDiff = nLen - nIdxTo;
 				// Oct. 22, 2005 Karoto
 				// \rを置換するとその後ろの\nが消えてしまう問題の対応
 				if (colDiff < pLayout->GetDocLineRef()->GetEol().GetLen()) {
@@ -999,7 +1000,7 @@ void ViewCommander::Command_Replace_All()
 					nNewPos = ::MulDiv(selectLogic.GetFrom().GetY(), nAllLineNum, layoutMgr.GetLineCount());
 				}
 			}else {
-				int64_t nDiff = (int64_t)nAllLineNumOrg - (int64_t)layoutMgr.GetLineCount();
+				int nDiff = (int)nAllLineNumOrg - (int)layoutMgr.GetLineCount();
 				if (0 <= nDiff) {
 					nNewPos = (nDiff + GetSelect().GetFrom().y) >> nShiftCount;
 				}else {
@@ -1181,8 +1182,8 @@ void ViewCommander::Command_Replace_All()
 			// 物理行、物理行長、物理行での検索マッチ位置
 			const DocLine* pDocLine;
 			const wchar_t* pLine;
-			int nLogicLineNum;
-			int nIdx;
+			size_t nLogicLineNum;
+			size_t nIdx;
 			size_t nLen;
 			if (bFastMode) {
 				pDocLine = docLineMgr.GetLine(selectLogic.GetFrom().y);
@@ -1198,7 +1199,7 @@ void ViewCommander::Command_Replace_All()
 				nIdx = view.LineColumnToIndex(pLayout, GetSelect().GetFrom().x) + pLayout->GetLogicOffset();
 				nLen = pDocLine->GetLengthWithEOL();
 			}
-			int colDiff = 0;
+			size_t colDiff = 0;
 			if (!bConsecutiveAll) {	// 一括置換
 				// 2007.01.16 ryoji
 				// 選択範囲置換の場合は行内の選択範囲末尾まで置換範囲を縮め，
@@ -1211,6 +1212,7 @@ void ViewCommander::Command_Replace_All()
 							&ptWork
 						);
 						ptColLineP.x = ptWork.x;
+						ASSERT_GE(nLen, pDocLine->GetEol().GetLen());
 						if (nLen - pDocLine->GetEol().GetLen() > ptColLineP.x + colDif)
 							nLen = ptColLineP.x + colDif;
 					}else {	// 通常の選択
@@ -1243,7 +1245,7 @@ void ViewCommander::Command_Replace_All()
 				    // キャレット位置の計算が複雑になる。（置換後に改行がある場合に不具合発生）
 				    // そこで、INSTEXTする文字列長を調整する方法に変更する（実はこっちの方がわかりやすい）
 				    size_t matchLen = regexp.GetMatchLen();
-				    int nIdxTo = nIdx + matchLen;		// 検索文字列の末尾
+				    size_t nIdxTo = nIdx + matchLen;		// 検索文字列の末尾
 				    if (matchLen == 0) {
 					    // ０文字マッチの時(無限置換にならないように１文字進める)
 					    if (nIdxTo < nLen) {
@@ -1259,6 +1261,7 @@ void ViewCommander::Command_Replace_All()
 						}
 				    }
 				    // 行末から検索文字列末尾までの文字数
+					ASSERT_GE(nLen, nIdxTo);
 					colDiff = nLen - nIdxTo;
 					ptOld.x = nIdxTo;	// 2007.01.19 ryoji 追加  // $$ 単位混在
 				    // Oct. 22, 2005 Karoto

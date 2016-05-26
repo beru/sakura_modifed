@@ -298,14 +298,15 @@ void ViewCommander::Command_PasteBox(
 	// Jul. 10, 2005 genta 貼り付けデータの最後にCR/LFが無い場合の対策
 	// データの最後まで処理 i.e. nBgnがnPasteSizeを超えたら終了
 	//for (nPos = 0; nPos < nPasteSize;)
-	int nPos;
-	Point	ptLayoutNew;	// 挿入された部分の次の位置
-	for (int nBgn=nPos=0; nBgn<nPasteSize;) {
+	size_t nPos;
+	Point ptLayoutNew;	// 挿入された部分の次の位置
+	for (size_t nBgn=nPos=0; nBgn<nPasteSize;) {
 		// Jul. 10, 2005 genta 貼り付けデータの最後にCR/LFが無いと
 		// 最終行のPaste処理が動かないので，
 		// データの末尾に来た場合は強制的に処理するようにする
 		if (WCODE::IsLineDelimiter(szPaste[nPos], bExtEol) || nPos == nPasteSize) {
 			// 現在位置にデータを挿入
+			ASSERT_GE(nPos, nBgn);
 			if (nPos - nBgn > 0) {
 				view.InsertData_CEditView(
 					ptCurOld + Point(0, nCount),
@@ -499,8 +500,7 @@ void ViewCommander::Command_InsText(
 				size_t len;
 				const Layout* pLayout;
 				const wchar_t* line = GetDocument().layoutMgr.GetLineStr(GetSelect().GetFrom().y, &len, &pLayout);
-				int pos = (!line) ? 0 : view.LineColumnToIndex(pLayout, GetSelect().GetFrom().x);
-
+				size_t pos = (!line) ? 0 : view.LineColumnToIndex(pLayout, GetSelect().GetFrom().x);
 				// 開始位置が行末より後ろで、終了位置が同一行
 				if (pos >= len && GetSelect().IsLineOne()) {
 					caret.SetCaretLayoutPos(Point(GetSelect().GetFrom().x, caret.GetCaretLayoutPos().y)); // キャレットX変更

@@ -1165,7 +1165,7 @@ bool ShareData::IsPrivateSettings(void) {
 	
 	@note idxは正確なものでなければならない。(内部で正当性チェックを行っていない)
 */
-int ShareData::GetMacroFilename(int idx, TCHAR* pszPath, int nBufLen)
+int ShareData::GetMacroFilename(int idx, TCHAR* pszPath, size_t nBufLen)
 {
 	if (idx != -1 && !pShareData->common.macro.macroTable[idx].IsEnabled()) {
 		return 0;

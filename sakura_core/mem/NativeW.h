@@ -122,7 +122,7 @@ public:
 		_GetMemory()->swap(*left._GetMemory());
 	}
 	
-	int capacity() {
+	size_t capacity() {
 		return _GetMemory()->capacity() / sizeof(wchar_t);
 	}
 	
