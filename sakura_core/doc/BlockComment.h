@@ -43,7 +43,7 @@ public:
 
 	// 判定
 	bool Match_CommentFrom(int nPos, const StringRef& str) const;			// 行コメントに値するか確認する
-	int Match_CommentTo(int nPos, const StringRef& str) const;			// 行コメントに値するか確認する
+	size_t Match_CommentTo(int nPos, const StringRef& str) const;			// 行コメントに値するか確認する
 
 	// 取得
 	const wchar_t* getBlockCommentFrom() const { return szBlockCommentFrom; }

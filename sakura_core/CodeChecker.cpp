@@ -68,13 +68,13 @@ static CodeConvertResult _CheckSavingCharcode(
 				pCodeBase,
 				0
 			);
-			const int nDocLineLen = pDocLine->GetLengthWithEOL();
-			const int nConvertLen = memTmp2.GetStringLength();
-			const int nDataMinLen = t_min(nDocLineLen, nConvertLen);
+			const size_t nDocLineLen = pDocLine->GetLengthWithEOL();
+			const size_t nConvertLen = memTmp2.GetStringLength();
+			const size_t nDataMinLen = t_min(nDocLineLen, nConvertLen);
 			const wchar_t* p = pDocLine->GetPtr();
 			const wchar_t* r = memTmp2.GetStringPtr();
 			int nPos = -1;
-			for (int i=0; i<nDataMinLen; ++i) {
+			for (size_t i=0; i<nDataMinLen; ++i) {
 				if (p[i] != r[i]) {
 					nPos = i;
 					break;

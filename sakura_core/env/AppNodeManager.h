@@ -120,10 +120,10 @@ public:
 	HWND SeparateGroup(HWND hwndSrc, HWND hwndDst, bool bSrcIsTop, int notifygroups[]);	// タブ分離に伴うウィンドウ処理 2007.07.07 genta
 
 	// 総合情報
-	int GetOpenedWindowArr(EditNode** , bool, bool bGSort = false);				// 現在開いている編集ウィンドウの配列を返す
+	size_t GetOpenedWindowArr(EditNode** , bool, bool bGSort = false);				// 現在開いている編集ウィンドウの配列を返す
 
 protected:
-	int _GetOpenedWindowArrCore(EditNode** , bool, bool bGSort = false);			// 現在開いている編集ウィンドウの配列を返す（コア処理部）
+	size_t _GetOpenedWindowArrCore(EditNode** , bool, bool bGSort = false);			// 現在開いている編集ウィンドウの配列を返す（コア処理部）
 
 public:
 	static bool IsSameGroup(HWND hWnd1, HWND hWnd2);					// 同一グループかどうかを調べる

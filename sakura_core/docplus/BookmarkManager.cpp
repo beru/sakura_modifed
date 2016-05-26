@@ -227,7 +227,7 @@ void BookmarkManager::MarkSearchWord(
 	// 1 == 単語のみ検索
 	}else if (searchOption.bWordOnly) {
 		const wchar_t* pszPattern = pattern.GetKey();
-		const int nPatternLen = pattern.GetLen();
+		const size_t nPatternLen = pattern.GetLen();
 		// 検索語を単語に分割して searchWordsに格納する。
 		std::vector<std::pair<const wchar_t*, size_t>> searchWords; // 単語の開始位置と長さの配列。
 		SearchAgent::CreateWordList(searchWords, pszPattern, nPatternLen);

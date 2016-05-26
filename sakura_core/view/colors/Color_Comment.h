@@ -61,6 +61,6 @@ public:
 private:
 	EColorIndexType type;
 	const BlockComment* pBlockComment;
-	int nCommentEnd;
+	size_t nCommentEnd;
 };
 

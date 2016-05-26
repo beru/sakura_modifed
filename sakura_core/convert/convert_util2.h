@@ -82,7 +82,7 @@ inline int _HexToInt(WCHAR c)
 }
 
 template <class CHAR_TYPE>
-int _DecodeQP(const CHAR_TYPE* pS, const int nLen, char* pDst)
+size_t _DecodeQP(const CHAR_TYPE* pS, const int nLen, char* pDst)
 {
 	const CHAR_TYPE* pr;
 	char* pw;
@@ -208,12 +208,12 @@ bool CheckBase64Padbit(const CHAR_TYPE *pSrc, const size_t nSrcLen)
 	正しい BASE64 入力文字列を仮定している。
 */
 template <class CHAR_TYPE>
-int _DecodeBase64(const CHAR_TYPE* pSrc, const size_t nSrcLen, char* pDest)
+size_t _DecodeBase64(const CHAR_TYPE* pSrc, const size_t nSrcLen, char* pDest)
 {
 	long lData;
-	int nDesLen;
+	size_t nDesLen;
 	int sMax;
-	int nsrclen = nSrcLen;
+	size_t nsrclen = nSrcLen;
 
 	// 文字列の最後のパッド文字 '=' を文字列長に含めないようにする処理
 	{
@@ -615,7 +615,7 @@ int _DecodeMimeHeader(const CHAR_TYPE* pSrc, const size_t nSrcLen, Memory* pMem_
 
 	const CHAR_TYPE *pr, *pr_base;
 	char* pdst;
-	int ndecoded_len;
+	size_t ndecoded_len;
 
 
 	// MIME の該当部分を検出。----------------------------------------

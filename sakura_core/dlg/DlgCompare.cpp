@@ -137,14 +137,14 @@ void DlgCompare::SetData(void)
 //	setlocale (LC_ALL, "C");
 
 	// 現在開いている編集窓のリストをメニューにする
-	int nRowNum = AppNodeManager::getInstance().GetOpenedWindowArr(&pEditNodeArr, true);
+	size_t nRowNum = AppNodeManager::getInstance().GetOpenedWindowArr(&pEditNodeArr, true);
 	if (nRowNum > 0) {
 		// 水平スクロール幅は実際に表示する文字列の幅を計測して決める	// 2009.09.26 ryoji
 		TextWidthCalc calc(hwndList);
 		int score = 0;
 		TCHAR szFile1[_MAX_PATH];
 		SplitPath_FolderAndFile(pszPath, NULL, szFile1);
-		for (int i=0; i<nRowNum; ++i) {
+		for (size_t i=0; i<nRowNum; ++i) {
 			// トレイからエディタへの編集ファイル名要求通知
 			::SendMessage(pEditNodeArr[i].GetHwnd(), MYWM_GETFILEINFO, 0, 0);
 			EditInfo* pfi = (EditInfo*)&pShareData->workBuffer.editInfo_MYWM_GETFILEINFO;

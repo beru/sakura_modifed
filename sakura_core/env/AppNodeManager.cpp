@@ -68,7 +68,7 @@ static bool s_bGSort;	// グループ指定
 static Mutex g_editArrMutex(FALSE, GSTR_MUTEX_SAKURA_EDITARR);
 
 // GetOpenedWindowArr用ソート関数
-static int __cdecl cmpGetOpenedWindowArr(const void *e1, const void *e2)
+static ptrdiff_t __cdecl cmpGetOpenedWindowArr(const EditNodeEx& e1, const EditNodeEx& e2)
 {
 	// 異なるグループのときはグループ比較する
 	int nGroup1;
@@ -76,12 +76,12 @@ static int __cdecl cmpGetOpenedWindowArr(const void *e1, const void *e2)
 
 	if (s_bGSort) {
 		// オリジナルのグループ番号のほうを見る
-		nGroup1 = ((EditNodeEx*)e1)->p->nGroup;
-		nGroup2 = ((EditNodeEx*)e2)->p->nGroup;
+		nGroup1 = e1.p->nGroup;
+		nGroup2 = e2.p->nGroup;
 	}else {
 		// グループのMRU番号のほうを見る
-		nGroup1 = ((EditNodeEx*)e1)->nGroupMru;
-		nGroup2 = ((EditNodeEx*)e2)->nGroupMru;
+		nGroup1 = e1.nGroupMru;
+		nGroup2 = e2.nGroupMru;
 	}
 	if (nGroup1 != nGroup2) {
 		return nGroup1 - nGroup2;	// グループ比較
@@ -89,9 +89,9 @@ static int __cdecl cmpGetOpenedWindowArr(const void *e1, const void *e2)
 
 	// グループ比較が行われなかったときはウィンドウ比較する
 	if (s_bSort) {
-		return (((EditNodeEx*)e1)->p->nIndex - ((EditNodeEx*)e2)->p->nIndex);	// ウィンドウ番号比較
+		return e1.p->nIndex - e2.p->nIndex;	// ウィンドウ番号比較
 	}
-	return (((EditNodeEx*)e1)->p - ((EditNodeEx*)e2)->p);	// ウィンドウMRU比較（ソートしない）
+	return e1.p - e2.p;	// ウィンドウMRU比較（ソートしない）
 }
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -371,13 +371,13 @@ bool relayMessageToAllEditors(
 	)
 {
 	EditNode* pWndArr;
-	int n = AppNodeManager::getInstance().GetOpenedWindowArr(&pWndArr, false);
+	size_t n = AppNodeManager::getInstance().GetOpenedWindowArr(&pWndArr, false);
 	if (n == 0) {
 		return true;
 	}
 
 	// hWndLast以外へのメッセージ
-	for (int i=0; i<n; ++i) {
+	for (size_t i=0; i<n; ++i) {
 		// Jan. 24, 2005 genta hWndLast == NULLのときにメッセージが送られるように
 		auto& node = pWndArr[i];
 		if (!hWndLast || node.hWnd != hWndLast) {
@@ -391,7 +391,7 @@ bool relayMessageToAllEditors(
 	}
 
 	// hWndLastへのメッセージ
-	for (int i=0; i<n; ++i) {
+	for (size_t i=0; i<n; ++i) {
 		auto& node = pWndArr[i];
 		if (hWndLast == node.hWnd) {
 			if (nGroup == 0 || nGroup == node.nGroup) {
@@ -537,15 +537,15 @@ int AppNodeManager::GetNoNameNumber(HWND hWnd)
 	@date 2003.06.28 MIK CRecent利用で書き換え
 	@date 2007.06.20 ryoji bGroup引数追加、ソート処理を自前のものからqsortに変更
 */
-int AppNodeManager::GetOpenedWindowArr(EditNode** ppEditNode, bool bSort, bool bGSort/* = false */)
+size_t AppNodeManager::GetOpenedWindowArr(EditNode** ppEditNode, bool bSort, bool bGSort/* = false */)
 {
 	LockGuard<Mutex> guard(g_editArrMutex);
-	int nRet = _GetOpenedWindowArrCore(ppEditNode, bSort, bGSort);
+	size_t nRet = _GetOpenedWindowArrCore(ppEditNode, bSort, bGSort);
 	return nRet;
 }
 
 // GetOpenedWindowArr関数コア処理部
-int AppNodeManager::_GetOpenedWindowArrCore(EditNode** ppEditNode, bool bSort, bool bGSort/* = false */)
+size_t AppNodeManager::_GetOpenedWindowArrCore(EditNode** ppEditNode, bool bSort, bool bGSort/* = false */)
 {
 	DllSharedData* pShare = &GetDllShareData();
 	auto& nodes = pShare->nodes;
@@ -568,7 +568,7 @@ int AppNodeManager::_GetOpenedWindowArrCore(EditNode** ppEditNode, bool bSort, b
 	EditNodeEx*	pNode = &nodesEx[0];
 
 	// 拡張リストの各要素に編集ウィンドウリストの各要素へのポインタを格納する
-	int nRowNum = 0;	// 編集ウィンドウ数
+	size_t nRowNum = 0;	// 編集ウィンドウ数
 	for (int i=0; i<nodes.nEditArrNum; ++i) {
 		auto& node = nodes.pEditArr[i];
 		if (IsSakuraMainWindow(node.hWnd)) {
@@ -577,7 +577,7 @@ int AppNodeManager::_GetOpenedWindowArrCore(EditNode** ppEditNode, bool bSort, b
 			++nRowNum;
 		}
 	}
-	if (nRowNum <= 0) {
+	if (nRowNum == 0) {
 		delete[] (*ppEditNode);
 		*ppEditNode = nullptr;
 		return 0;
@@ -587,7 +587,7 @@ int AppNodeManager::_GetOpenedWindowArrCore(EditNode** ppEditNode, bool bSort, b
 	if (!bGSort) {
 		int iGroupMru = 0;	// グループ単位のMRU番号
 		int nGroup = -1;
-		for (int i=0; i<nRowNum; ++i) {
+		for (size_t i=0; i<nRowNum; ++i) {
 			if (pNode[i].nGroupMru == -1
 				&& nGroup != pNode[i].p->nGroup
 			) {
@@ -595,7 +595,7 @@ int AppNodeManager::_GetOpenedWindowArrCore(EditNode** ppEditNode, bool bSort, b
 				++iGroupMru;
 				pNode[i].nGroupMru = iGroupMru;	// MRU番号付与
 				// 同一グループのウィンドウに同じMRU番号をつける
-				for (int j=i+1; j<nRowNum; ++j) {
+				for (size_t j=i+1; j<nRowNum; ++j) {
 					if (pNode[j].p->nGroup == nGroup)
 						pNode[j].nGroupMru = iGroupMru;
 				}
@@ -608,10 +608,10 @@ int AppNodeManager::_GetOpenedWindowArrCore(EditNode** ppEditNode, bool bSort, b
 	//       （グループ化する設定でなければグループは１個）
 	s_bSort = bSort;
 	s_bGSort = bGSort;
-	qsort(pNode, nRowNum, sizeof(EditNodeEx), cmpGetOpenedWindowArr);
+	std::sort(pNode, pNode+nRowNum, cmpGetOpenedWindowArr);
 
 	// 拡張リストのソート結果をもとに編集ウィンドウリスト格納領域に結果を格納する
-	for (int i=0; i<nRowNum; ++i) {
+	for (size_t i=0; i<nRowNum; ++i) {
 		(*ppEditNode)[i] = *pNode[i].p;
 
 		// インデックスを付ける。
@@ -637,8 +637,8 @@ bool AppNodeManager::ReorderTab(HWND hwndSrc, HWND hwndDst)
 	int nSrcTab = -1;
 	int nDstTab = -1;
 	LockGuard<Mutex> guard(g_editArrMutex);
-	int nCount = _GetOpenedWindowArrCore(&p, true);	// ロックは自分でやっているので直接コア部呼び出し
-	for (int i=0; i<nCount; ++i) {
+	size_t nCount = _GetOpenedWindowArrCore(&p, true);	// ロックは自分でやっているので直接コア部呼び出し
+	for (size_t i=0; i<nCount; ++i) {
 		if (hwndSrc == p[i].hWnd) {
 			nSrcTab = i;
 		}
@@ -655,8 +655,8 @@ bool AppNodeManager::ReorderTab(HWND hwndSrc, HWND hwndDst)
 	}
 
 	// タブの順序を入れ替えるためにウィンドウのインデックスを入れ替える
-	int nArr0, nArr1;
-	int	nIndex;
+	ptrdiff_t nArr0, nArr1;
+	ptrdiff_t nIndex;
 
 	nArr0 = p[nDstTab].nIndex;
 	auto& nodes = pShare->nodes;
@@ -782,10 +782,10 @@ HWND AppNodeManager::GetNextTab(HWND hWndCur)
 		&& tabBar.bDispTabWnd
 		&& !tabBar.bDispTabWndMultiWin
 	) {
-		int			nGroup = 0;
-		bool		bFound = false;
-		EditNode*	p = nullptr;
-		int			nCount = AppNodeManager::getInstance().GetOpenedWindowArr(&p, false, false);
+		int nGroup = 0;
+		bool bFound = false;
+		EditNode* p = nullptr;
+		size_t nCount = AppNodeManager::getInstance().GetOpenedWindowArr(&p, false, false);
 		if (nCount > 1) {
 			// search Group No.
 			for (int i=0; i<nCount; ++i) {

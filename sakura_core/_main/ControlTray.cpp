@@ -403,7 +403,6 @@ LRESULT ControlTray::DispatchEvent(
 	HWND		hwndWork;
 	LPHELPINFO	lphi;
 
-	int			nRowNum;
 	EditNode*	pEditNodeArr;
 	static HWND	hwndHtmlHelp;
 
@@ -545,7 +544,7 @@ LRESULT ControlTray::DispatchEvent(
 			// タスクトレイのアイコンを常駐しない、または、トレイにアイコンを作っていない
 			if (!(csGeneral.bStayTaskTray && csGeneral.bUseTaskTray) || !bCreatedTrayIcon) {
 				// 現在開いている編集窓のリスト
-				nRowNum = AppNodeManager::getInstance().GetOpenedWindowArr(&pEditNodeArr, true);
+				size_t nRowNum = AppNodeManager::getInstance().GetOpenedWindowArr(&pEditNodeArr, true);
 				if (0 < nRowNum) {
 					delete[] pEditNodeArr;
 				}
@@ -1415,11 +1414,11 @@ void ControlTray::ActiveNextWindow(HWND hwndParent)
 {
 	// 現在開いている編集窓のリストを得る
 	EditNode*	pEditNodeArr;
-	int			nRowNum = AppNodeManager::getInstance().GetOpenedWindowArr(&pEditNodeArr, true);
+	size_t nRowNum = AppNodeManager::getInstance().GetOpenedWindowArr(&pEditNodeArr, true);
 	if (nRowNum > 0) {
 		// 自分のウィンドウを調べる
 		int nGroup = 0;
-		int i;
+		size_t i;
 		for (i=0; i<nRowNum; ++i) {
 			if (hwndParent == pEditNodeArr[i].GetHwnd()) {
 				nGroup = pEditNodeArr[i].nGroup;
@@ -1429,7 +1428,7 @@ void ControlTray::ActiveNextWindow(HWND hwndParent)
 		if (i < nRowNum) {
 			// 前のウィンドウ
 			int j;
-			for (j=i-1; j>=0; --j) {
+			for (j=(int)i-1; j>=0; --j) {
 				if (nGroup == pEditNodeArr[j].nGroup) {
 					break;
 				}
@@ -1455,11 +1454,11 @@ void ControlTray::ActivePrevWindow(HWND hwndParent)
 {
 	// 現在開いている編集窓のリストを得る
 	EditNode* pEditNodeArr;
-	int nRowNum = AppNodeManager::getInstance().GetOpenedWindowArr(&pEditNodeArr, true);
+	size_t nRowNum = AppNodeManager::getInstance().GetOpenedWindowArr(&pEditNodeArr, true);
 	if (nRowNum > 0) {
 		// 自分のウィンドウを調べる
 		int nGroup = 0;
-		int	i;
+		size_t i;
 		for (i=0; i<nRowNum; ++i) {
 			if (hwndParent == pEditNodeArr[i].GetHwnd()) {
 				nGroup = pEditNodeArr[i].nGroup;
@@ -1468,7 +1467,7 @@ void ControlTray::ActivePrevWindow(HWND hwndParent)
 		}
 		if (i < nRowNum) {
 			// 次のウィンドウ
-			int j;
+			size_t j;
 			for (j=i+1; j<nRowNum; ++j) {
 				if (nGroup == pEditNodeArr[j].nGroup) {
 					break;
@@ -1543,7 +1542,7 @@ bool ControlTray::CloseAllEditor(
 	)
 {
 	EditNode* pWndArr;
-	int n = AppNodeManager::getInstance().GetOpenedWindowArr(&pWndArr, false);
+	size_t n = AppNodeManager::getInstance().GetOpenedWindowArr(&pWndArr, false);
 	if (n == 0) {
 		return true;
 	}

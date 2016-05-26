@@ -40,11 +40,11 @@ void Utf8::GetEol(Memory* pMemEol, EolType eolType){
 
 	@param[in] bCESU8Mode CESU-8 を処理する場合 true
 */
-int Utf8::Utf8ToUni(const char* pSrc, const size_t nSrcLen, wchar_t* pDst, bool bCESU8Mode)
+size_t Utf8::Utf8ToUni(const char* pSrc, const size_t nSrcLen, wchar_t* pDst, bool bCESU8Mode)
 {
 	const unsigned char *pr, *pr_end;
 	unsigned short* pw;
-	int nclen;
+	size_t nclen;
 	ECharSet echarset;
 
 	if (nSrcLen < 1) {
@@ -98,7 +98,7 @@ CodeConvertResult Utf8::_UTF8ToUnicode( const Memory& src, NativeW* pDstMem, boo
 	}
 	
 	const char* psrc = pSrc;
-	int nsrclen = nSrcLen;
+	size_t nsrclen = nSrcLen;
 
 //	Memory mem;
 //	// MIME ヘッダーデコード
@@ -115,10 +115,10 @@ CodeConvertResult Utf8::_UTF8ToUnicode( const Memory& src, NativeW* pDstMem, boo
 	wchar_t* pDst = &dst[0];
 
 	// 変換
-	int nDstLen = Utf8ToUni(psrc, nsrclen, pDst, bCESU8Mode);
+	size_t nDstLen = Utf8ToUni(psrc, nsrclen, pDst, bCESU8Mode);
 
 	// pDstMem を更新
-	pDstMem->_GetMemory()->SetRawDataHoldBuffer( pDst, nDstLen*sizeof(wchar_t) );
+	pDstMem->_GetMemory()->SetRawDataHoldBuffer(pDst, nDstLen*sizeof(wchar_t));
 
 	return CodeConvertResult::Complete;
 }
@@ -129,13 +129,13 @@ CodeConvertResult Utf8::_UTF8ToUnicode( const Memory& src, NativeW* pDstMem, boo
 
 	@param[in] bCESU8Mode CESU-8 を処理する場合 true
 */
-int Utf8::UniToUtf8(const wchar_t* pSrc, const size_t nSrcLen, char* pDst, bool* pbError, bool bCESU8Mode)
+size_t Utf8::UniToUtf8(const wchar_t* pSrc, const size_t nSrcLen, char* pDst, bool* pbError, bool bCESU8Mode)
 {
 	const unsigned short* pr = reinterpret_cast<const unsigned short*>(pSrc);
 	const unsigned short* pr_end = reinterpret_cast<const unsigned short*>(pSrc + nSrcLen);
 	unsigned char* pw = reinterpret_cast<unsigned char*>(pDst);
-	int nclen;
-	bool berror=false;
+	size_t nclen;
+	bool berror = false;
 	ECharSet echarset;
 
 	while ((nclen = CheckUtf16leChar(reinterpret_cast<const wchar_t*>(pr), pr_end - pr, &echarset, 0)) > 0) {
@@ -192,10 +192,10 @@ CodeConvertResult Utf8::_UnicodeToUTF8( const NativeW& src, Memory* pDstMem, boo
 
 	// 変換
 	bool bError = false;
-	int nDstLen = UniToUtf8(pSrc, nSrcLen, pDst, &bError, bCesu8Mode);
+	size_t nDstLen = UniToUtf8(pSrc, nSrcLen, pDst, &bError, bCesu8Mode);
 
 	// pDstMem を更新
-	pDstMem->SetRawDataHoldBuffer( pDst, nDstLen );
+	pDstMem->SetRawDataHoldBuffer(pDst, nDstLen);
 
 	if (!bError) {
 		return CodeConvertResult::Complete;
@@ -209,7 +209,6 @@ CodeConvertResult Utf8::_UnicodeToHex(const wchar_t* src, const int iSLen, TCHAR
 {
 	NativeW		buff;
 	CodeConvertResult	res;
-	int				i;
 	TCHAR*			pd;
 	unsigned char*	ps;
 	bool			bbinary=false;
@@ -243,7 +242,7 @@ CodeConvertResult Utf8::_UnicodeToHex(const wchar_t* src, const int iSLen, TCHAR
 	ps = reinterpret_cast<unsigned char*>( buff._GetMemory()->GetRawPtr() );
 	pd = pDst;
 	if (!bbinary) {
-		for (i=buff._GetMemory()->GetRawLength(); i>0; --i, ++ps, pd+=2) {
+		for (size_t i=buff._GetMemory()->GetRawLength(); i>0; --i, ++ps, pd+=2) {
 			auto_sprintf(pd, _T("%02X"), *ps);
 		}
 	}else {

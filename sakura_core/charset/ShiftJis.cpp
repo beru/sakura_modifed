@@ -42,7 +42,7 @@ size_t ShiftJis::GetSizeOfChar(const char* pData, size_t nDataLen, size_t nIdx)
 /*!
 	SJIS ¨ Unicode •ÏŠ·
 */
-int ShiftJis::SjisToUni(
+size_t ShiftJis::SjisToUni(
 	const char* __restrict pSrc, const size_t nSrcLen,
 	wchar_t* __restrict pDst, bool* pbError
 	)
@@ -127,7 +127,7 @@ CodeConvertResult ShiftJis::SJISToUnicode(
 	
 	// •ÏŠ·
 	bool bError;
-	int nDstLen = SjisToUni(pSrc, nSrcLen, pDst, &bError);
+	size_t nDstLen = SjisToUni(pSrc, nSrcLen, pDst, &bError);
 	pDstMem->_SetStringLength(nDstLen);
 
 	if (!bError) {
@@ -141,7 +141,7 @@ CodeConvertResult ShiftJis::SJISToUnicode(
 /*
 	Unicode -> SJIS
 */
-int ShiftJis::UniToSjis(const wchar_t* pSrc, const size_t nSrcLen, char* pDst, bool* pbError)
+size_t ShiftJis::UniToSjis(const wchar_t* pSrc, const size_t nSrcLen, char* pDst, bool* pbError)
 {
 	size_t nclen;
 	const unsigned short *pr, *pr_end;
@@ -222,10 +222,10 @@ CodeConvertResult ShiftJis::UnicodeToSJIS( const NativeW& src, Memory* pDstMem )
 
 	// •ÏŠ·
 	bool berror;
-	int nDstLen = UniToSjis(pSrc, nSrcLen, pDst, &berror);
+	size_t nDstLen = UniToSjis(pSrc, nSrcLen, pDst, &berror);
 
 	// pMem‚ðXV
-	pDstMem->SetRawDataHoldBuffer( pDst, nDstLen );
+	pDstMem->SetRawDataHoldBuffer(pDst, nDstLen);
 
 	// Œ‹‰Ê
 	if (berror) {

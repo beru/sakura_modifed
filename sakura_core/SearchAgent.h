@@ -85,9 +85,9 @@ public:
 	// •¶š—ñŒŸõ
 	static
 	const wchar_t* SearchString(
-		const wchar_t*	pLine,
-		int				nLineLen,
-		int				nIdxPos,
+		const wchar_t* pLine,
+		size_t nLineLen,
+		int nIdxPos,
 		const SearchStringPattern& pattern
 	);
 	// ’PŒê’PˆÊ‚Å•¶š—ñŒŸõ

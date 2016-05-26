@@ -695,11 +695,11 @@ EndFunc:
 size_t CheckUtf8Char2(const char* pS, const size_t nLen, ECharSet* peCharset, const bool bAllow4byteCode, const int nOption)
 {
 	unsigned char c0, c1, c2;
-	int ncwidth;
+	size_t ncwidth;
 	ECharSet echarset;
 
 	ECharSet echarset1;
-	int nclen1;
+	size_t nclen1;
 
 	if (nLen < 1) {
 		return 0;
@@ -800,7 +800,7 @@ EndFunc:
 size_t CheckCesu8Char(const char* pS, const size_t nLen, ECharSet* peCharset, const int nOption)
 {
 	ECharSet echarset1, echarset2, eret_charset;
-	int nclen1, nclen2, nret_clen;
+	size_t nclen1, nclen2, nret_clen;
 
 	if (nLen < 1) {
 		return 0;
@@ -987,7 +987,7 @@ size_t CheckUtf7BPart(const char* pS, const size_t nLen, char** ppNextChar, bool
 	ptrdiff_t nchecklen;
 
 	wchar_t* pdata;
-	int ndatalen, nret;
+	size_t ndatalen, nret;
 	ECharSet echarset;
 	Memory mbuffer;
 
@@ -1086,7 +1086,7 @@ size_t CheckUtf7BPart(const char* pS, const size_t nLen, char** ppNextChar, bool
 	}
 	ndatalen = _DecodeBase64(pS, nchecklen, reinterpret_cast<char*>(pdata)) / sizeof(wchar_t);
 	Memory::SwapHLByte(reinterpret_cast<char*>(pdata), ndatalen * sizeof(wchar_t));
-	for (int i=0; i<ndatalen; i+=nret) {
+	for (size_t i=0; i<ndatalen; i+=nret) {
 		nret = CheckUtf16leChar(&pdata[i], ndatalen - i, &echarset, nOption & UC_NONCHARACTER);
 		if (echarset == CHARSET_BINARY) {
 			berror_found = true;

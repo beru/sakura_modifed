@@ -81,10 +81,10 @@ void ViewCommander::Command_Tab_CloseOther(void)
 
 	// ウィンドウ一覧を取得する
 	EditNode* pEditNode;
-	int nCount = AppNodeManager::getInstance().GetOpenedWindowArr(&pEditNode, true);
+	size_t nCount = AppNodeManager::getInstance().GetOpenedWindowArr(&pEditNode, true);
 	if (0 >= nCount) return;
 
-	for (int i=0; i<nCount; ++i) {
+	for (size_t i=0; i<nCount; ++i) {
 		auto& node = pEditNode[i];
 		if (node.hWnd == GetMainWindow()) {
 			node.hWnd = NULL;		// 自分自身は閉じない
@@ -126,7 +126,7 @@ void ViewCommander::Command_Cascade(void)
 {
 	// 現在開いている編集窓のリストを取得する
 	EditNode* pEditNodeArr;
-	int nRowNum = AppNodeManager::getInstance().GetOpenedWindowArr(&pEditNodeArr, true/*false*/, true);
+	size_t nRowNum = AppNodeManager::getInstance().GetOpenedWindowArr(&pEditNodeArr, true/*false*/, true);
 
 	if (nRowNum > 0) {
 		struct WNDARR {
@@ -136,15 +136,15 @@ void ViewCommander::Command_Cascade(void)
 		};
 		std::vector<WNDARR> wndArr(nRowNum);
 		WNDARR*	pWndArr = &wndArr[0];
-		int count = 0;	// 処理対象ウィンドウカウント
+		size_t count = 0;	// 処理対象ウィンドウカウント
 		// Mar. 20, 2004 genta 現在のウィンドウを末尾に持っていくのに使う
-		int		current_win_index = -1;
+		int	current_win_index = -1;
 
 		// -----------------------------------------
 		// ウィンドウ(ハンドル)リストの作成
 		// -----------------------------------------
 
-		for (int i=0; i<nRowNum; ++i) {
+		for (size_t i=0; i<nRowNum; ++i) {
 			auto editNodeHWnd = pEditNodeArr[i].GetHwnd();
 			if (::IsIconic(editNodeHWnd)) {	// 最小化しているウィンドウは無視。
 				continue;
@@ -195,7 +195,7 @@ void ViewCommander::Command_Cascade(void)
 		int roundtrip = 0; // ２度目の描画以降で使用するカウント
 		int sw_offset = w_delta; // 右スライドの幅
 
-		for (int i=0; i<count; ++i) {
+		for (size_t i=0; i<count; ++i) {
 			if (w_offset + width > rcDesktop.right || h_offset + height > rcDesktop.bottom) {
 				++roundtrip;
 				if ((rcDesktop.right - rcDesktop.left) - sw_offset * roundtrip < width) {
@@ -222,7 +222,7 @@ void ViewCommander::Command_Cascade(void)
 		//
 		// Sep. 04, 2004 genta
 		// -----------------------------------------
-		for (int i=0; i<count; ++i) {
+		for (size_t i=0; i<count; ++i) {
 			::ShowWindow(pWndArr[i].hWnd, SW_RESTORE | SW_SHOWNA);
 		}
 
@@ -263,17 +263,17 @@ void ViewCommander::Command_Tile_V(void)
 {
 	// 現在開いている編集窓のリストを取得する
 	EditNode* pEditNodeArr;
-	int nRowNum = AppNodeManager::getInstance().GetOpenedWindowArr(&pEditNodeArr, true/*false*/, true);
+	size_t nRowNum = AppNodeManager::getInstance().GetOpenedWindowArr(&pEditNodeArr, true/*false*/, true);
 
 	if (nRowNum > 0) {
 		std::vector<HWND> hWnds(nRowNum);
 		HWND* phwndArr = &hWnds[0];
-		int count = 0;
+		size_t count = 0;
 		// デスクトップサイズを得る
 		RECT rcDesktop;
 		// May 01, 2004 genta マルチモニタ対応
 		::GetMonitorWorkRect(view.GetHwnd(), &rcDesktop);
-		for (int i=0; i<nRowNum; ++i) {
+		for (size_t i=0; i<nRowNum; ++i) {
 			auto editNodeHWnd = pEditNodeArr[i].GetHwnd();
 			if (::IsIconic(editNodeHWnd)) {	// 最小化しているウィンドウは無視。
 				continue;
@@ -293,7 +293,7 @@ void ViewCommander::Command_Tile_V(void)
 			++count;
 		}
 		int height = (rcDesktop.bottom - rcDesktop.top) / count;
-		for (int i=0; i<count; ++i) {
+		for (size_t i=0; i<count; ++i) {
 			// Jul. 21, 2002 genta
 			::ShowWindow(phwndArr[i], SW_RESTORE);
 			::SetWindowPos(
@@ -316,17 +316,17 @@ void ViewCommander::Command_Tile_H(void)
 {
 	// 現在開いている編集窓のリストを取得する
 	EditNode* pEditNodeArr;
-	int nRowNum = AppNodeManager::getInstance().GetOpenedWindowArr(&pEditNodeArr, true/*false*/, true);
+	size_t nRowNum = AppNodeManager::getInstance().GetOpenedWindowArr(&pEditNodeArr, true/*false*/, true);
 
 	if (nRowNum > 0) {
 		std::vector<HWND> hWnds(nRowNum);
 		HWND* phwndArr = &hWnds[0];
-		int count = 0;
+		size_t count = 0;
 		// デスクトップサイズを得る
 		RECT rcDesktop;
 		// May 01, 2004 genta マルチモニタ対応
 		::GetMonitorWorkRect(view.GetHwnd(), &rcDesktop);
-		for (int i=0; i<nRowNum; ++i) {
+		for (size_t i=0; i<nRowNum; ++i) {
 			auto editNodeHWnd = pEditNodeArr[i].GetHwnd();
 			if (::IsIconic(editNodeHWnd)) {	// 最小化しているウィンドウは無視。
 				continue;
@@ -346,7 +346,7 @@ void ViewCommander::Command_Tile_H(void)
 			++count;
 		}
 		int width = (rcDesktop.right - rcDesktop.left) / count;
-		for (int i=0; i<count; ++i) {
+		for (size_t i=0; i<count; ++i) {
 			// Jul. 21, 2002 genta
 			::ShowWindow(phwndArr[i], SW_RESTORE);
 			::SetWindowPos(
@@ -511,11 +511,11 @@ void ViewCommander::Command_Tab_CloseLeft(void)
 
 		// ウィンドウ一覧を取得する
 		EditNode* pEditNode;
-		int nCount = AppNodeManager::getInstance().GetOpenedWindowArr(&pEditNode, true);
+		size_t nCount = AppNodeManager::getInstance().GetOpenedWindowArr(&pEditNode, true);
 		bool bSelfFound = false;
 		if (0 >= nCount) return;
 
-		for (int i=0; i<nCount; ++i) {
+		for (size_t i=0; i<nCount; ++i) {
 			if (pEditNode[i].hWnd == GetMainWindow()) {
 				pEditNode[i].hWnd = NULL;		// 自分自身は閉じない
 				nGroup = pEditNode[i].nGroup;
@@ -541,11 +541,11 @@ void ViewCommander::Command_Tab_CloseRight(void)
 
 		// ウィンドウ一覧を取得する
 		EditNode* pEditNode;
-		int nCount = AppNodeManager::getInstance().GetOpenedWindowArr(&pEditNode, true);
+		size_t nCount = AppNodeManager::getInstance().GetOpenedWindowArr(&pEditNode, true);
 		bool bSelfFound = false;
 		if (0 >= nCount) return;
 
-		for (int i=0; i<nCount; ++i) {
+		for (size_t i=0; i<nCount; ++i) {
 			if (pEditNode[i].hWnd == GetMainWindow()) {
 				pEditNode[i].hWnd = NULL;		// 自分自身は閉じない
 				nGroup = pEditNode[i].nGroup;

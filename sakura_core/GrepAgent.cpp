@@ -1834,7 +1834,7 @@ int GrepAgent::DoGrepReplaceFile(
 				//	マッチ箇所を1行から1つだけ検出する場合を例外ケースととらえ，
 				//	ループ継続・打ち切り条件(bGrepOutputLine)を逆にした．
 				for (;;) {
-					const wchar_t* pszRes = SearchAgent::SearchString( pCompareData, nCompareLen, 0, pattern );
+					const wchar_t* pszRes = SearchAgent::SearchString(pCompareData, nCompareLen, 0, pattern);
 					if (!pszRes) {
 						break;
 					}

@@ -177,9 +177,9 @@ bool SearchStringPattern::SetPattern(
 	@return 見つかった場所のポインタ。見つからなかったらNULL。
 */
 const wchar_t* SearchAgent::SearchString(
-	const wchar_t*	pLine,
-	int				nLineLen,
-	int				nIdxPos,
+	const wchar_t* pLine,
+	size_t nLineLen,
+	int nIdxPos,
 	const SearchStringPattern& pattern
 	)
 {

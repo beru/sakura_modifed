@@ -29,7 +29,7 @@
 #include "parse/WordParse.h"
 #include "util/string_ex2.h"
 
-const int STRNCMP_MAX = 100;	// MAXキーワード長：strnicmp文字列比較最大値(EditView::KeySearchCore) 	// 2006.04.10 fon
+const size_t STRNCMP_MAX = 100;	// MAXキーワード長：strnicmp文字列比較最大値(EditView::KeySearchCore) 	// 2006.04.10 fon
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                           検索                              //
@@ -112,7 +112,7 @@ end_of_search:
 bool EditView::KeySearchCore(const NativeW* pMemCurText)
 {
 	NativeW*	pMemRefKey;
-	int			nCmpLen = STRNCMP_MAX; // 2006.04.10 fon
+	size_t		nCmpLen = STRNCMP_MAX; // 2006.04.10 fon
 	int			nLine; // 2006.04.10 fon
 	
 	tipWnd.info.SetString(_T(""));	// tooltipバッファ初期化
@@ -123,8 +123,9 @@ bool EditView::KeySearchCore(const NativeW* pMemCurText)
 		tipWnd.info.AppendStringLiteral(_T("]"));
 	}
 	// 途中まで一致を使う場合
-	if (pTypeData->bUseKeyHelpPrefix)
+	if (pTypeData->bUseKeyHelpPrefix) {
 		nCmpLen = wcslen(pMemCurText->GetStringPtr());	// 2006.04.10 fon
+	}
 	tipWnd.KeyWasHit = false;
 	for (int i=0; i<pTypeData->nKeyHelpNum; ++i) {	// 最大数：MAX_KEYHELP_FILE
 		auto& keyHelpInfo = pTypeData->keyHelpArr[i];
@@ -251,7 +252,7 @@ bool EditView::MiniMapCursorLineTip(POINT* po, RECT* rc, bool* pbHide)
 				size_t i = 0;
 				size_t k = 0;
 				size_t charSize = NativeW::GetSizeOfChar( pszData, nLineLen, i );
-				size_t charWidth = t_max(1U, NativeW::GetKetaOfChar( pszData, nLineLen, i ));
+				size_t charWidth = t_max((size_t)1, NativeW::GetKetaOfChar( pszData, nLineLen, i ));
 				size_t charType = 0;
 				// 連続する"\t" " " を " "1つにする
 				// 左からnLimitLengthまでの幅を切り取り
@@ -473,7 +474,8 @@ int EditView::IsSearchString(
 		if (nPos != posWordHead) {
 			return 0; // 指定位置は単語の始まりではなかった。
 		}
-		const int wordLength = posWordEnd - posWordHead;
+		ASSERT_GE(posWordEnd, posWordHead);
+		const size_t wordLength = posWordEnd - posWordHead;
 		const wchar_t* const pWordHead = str.GetPtr() + posWordHead;
 
 		// 比較関数

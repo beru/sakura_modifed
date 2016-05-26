@@ -168,7 +168,7 @@ inline size_t MyWideCharToMultiByte_JP(const unsigned short* pSrc, const size_t 
 
 	if (!IsWctombcNonroundtrip(pSrc[0])) {
 		BOOL blost;
-		nret = ::WideCharToMultiByte(932, 0, reinterpret_cast<const wchar_t*>(pSrc), nsrclen, reinterpret_cast<char*>(pDst), 4, NULL, &blost);
+		nret = ::WideCharToMultiByte(932, 0, reinterpret_cast<const wchar_t*>(pSrc), (int)nsrclen, reinterpret_cast<char*>(pDst), 4, NULL, &blost);
 		if (blost == TRUE) {
 			nret = 0;
 		}
@@ -193,7 +193,7 @@ inline size_t MyMultiByteToWideChar_JP(const unsigned char* pSrc, const size_t n
 		932,
 		0,
 		reinterpret_cast<const char*>(pSrc),
-		nSrcLen,
+		(int)nSrcLen,
 		reinterpret_cast<wchar_t*>(pDst),
 		4
 	);
