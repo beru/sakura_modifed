@@ -626,9 +626,8 @@ void ViewCommander::Command_GoLineTop(
 	if (!bLineTopOnly) {
 		// 目的行のデータを取得
 		// 改行単位指定で、先頭から空白が1折り返し行以上続いている場合は次の行データを取得
-		size_t nPosY_Layout;
+		int nPosY_Layout;
 		size_t nPosX_Logic;
-		ASSERT_GE(ptCaretPos.y, 1);
 		nPosY_Layout = ptCaretPos.y - 1;
 		const Layout* pLayout;
 		bool bZenSpace = view.pTypeData->bAutoIndent_ZENSPACE;
@@ -636,6 +635,7 @@ void ViewCommander::Command_GoLineTop(
 		size_t nLineLen;
 		do {
 			++nPosY_Layout;
+			ASSERT_GE(nPosY_Layout, 0);
 			const wchar_t*	pLine = layoutMgr.GetLineStr(nPosY_Layout, &nLineLen, &pLayout);
 			if (!pLine) {
 				return;

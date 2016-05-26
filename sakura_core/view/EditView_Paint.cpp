@@ -940,13 +940,12 @@ bool EditView::DrawLogicLine(
 		bDispEOF = DrawLayoutLine(csInfo);
 
 		// 行を進める
-		auto layoutRef = csInfo.pDispPos->GetLayoutRef();
-		int nOldLogicLineNo = layoutRef ? layoutRef->GetLogicLineNo() : -1;
+		int nOldLogicLineNo = csInfo.pDispPos->GetLayoutRef()->GetLogicLineNo();
 		csInfo.pDispPos->ForwardDrawLine(1);		// 描画Y座標＋＋
 		csInfo.pDispPos->ForwardLayoutLineRef(1);	// レイアウト行＋＋
 
 		// ロジック行を描画し終わったら抜ける
-		if (layoutRef && layoutRef->GetLogicLineNo() != nOldLogicLineNo) {
+		if (csInfo.pDispPos->GetLayoutRef()->GetLogicLineNo() != nOldLogicLineNo) {
 			break;
 		}
 
@@ -1083,7 +1082,7 @@ bool EditView::DrawLayoutLine(ColorStrategyInfo& csInfo)
 
 			// 1文字情報取得 $$高速化可能
 			Figure& figure = figureManager.GetFigure(&lineStr.GetPtr()[csInfo.GetPosInLogic()],
-				lineStr.GetLength() - csInfo.GetPosInLogic());
+				(int)lineStr.GetLength() - csInfo.GetPosInLogic());
 
 			// 1文字描画
 			figure.DrawImp(csInfo);
