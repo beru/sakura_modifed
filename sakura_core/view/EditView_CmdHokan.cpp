@@ -191,7 +191,9 @@ int EditView::HokanSearchByFile(
 ) {
 	const size_t nKeyLen = wcslen(pszKey);
 	int nLines = pEditDoc->docLineMgr.GetLineCount();
-	int j, nWordLen, nLineLen, nRet, nWordBegin, nWordLenStop;
+	int j, nLineLen, nRet, nWordBegin;
+	int nWordLenStop;
+	size_t nWordLen;
 	size_t nCharSize;
 
 	Point ptCur = GetCaret().GetCaretLogicPos(); // 物理カーソル位置
@@ -267,9 +269,8 @@ int EditView::HokanSearchByFile(
 			}
 
 			if (0 < nWordLenStop) {
-				nWordLen  = nWordLenStop;
+				nWordLen = nWordLenStop;
 			}
-
 
 			// CDicMgr等の制限により長すぎる単語は無視する
 			if (nWordLen > 1020) {

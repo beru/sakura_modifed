@@ -461,7 +461,7 @@ void DocOutline::MakeFuncList_BookMark(FuncInfoArr* pFuncInfoArr)
 			  continue;
 			}
 		}// LTrim
-		int leftspace;
+		size_t leftspace;
 		for (leftspace=0; leftspace<nLineLen; ++leftspace) {
 			if (WCODE::IsBlank(pLine[leftspace])) {
 				continue;
@@ -470,6 +470,7 @@ void DocOutline::MakeFuncList_BookMark(FuncInfoArr* pFuncInfoArr)
 		}
 		
 		if (bMarkUpBlankLineEnable) {// 20020119 aroka
+			ASSERT_GE(nLineLen, nNewLineLen);
 			if ((leftspace >= nLineLen - nNewLineLen && nLineCount < nLineLast)||
 				(leftspace >= nLineLen)
 			) {
@@ -477,8 +478,8 @@ void DocOutline::MakeFuncList_BookMark(FuncInfoArr* pFuncInfoArr)
 			}
 		}// RTrim
 		// 2005.10.11 ryoji 右から遡るのではなく左から探すように修正（"ａ@" の右２バイトが全角空白と判定される問題の対処）
-		int	k;
-		int pos_wo_space;
+		size_t k;
+		size_t pos_wo_space;
 		k = pos_wo_space = leftspace;
 		bool bExtEol = GetDllShareData().common.edit.bEnableExtEol;
 		while (k < nLineLen) {
@@ -497,7 +498,8 @@ void DocOutline::MakeFuncList_BookMark(FuncInfoArr* pFuncInfoArr)
 			k += nCharChars;
 		}
 		// Nov. 3, 2005 genta 文字列長計算式の修正
-		int nLen = pos_wo_space - leftspace;
+		ASSERT_GE(pos_wo_space, leftspace);
+		size_t nLen = pos_wo_space - leftspace;
 		std::vector<wchar_t> szText(nLen + 1);
 		wchar_t* pszText = &szText[0];
 		wmemcpy(pszText, &pLine[leftspace], nLen);

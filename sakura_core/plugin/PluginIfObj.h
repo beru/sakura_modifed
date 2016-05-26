@@ -93,8 +93,8 @@ public:
 		switch (LOWORD(index)) {
 		case F_PL_GETPLUGINDIR:			// プラグインフォルダパスを取得する
 			{
-				SysString S(plugin.sBaseDir.c_str(), plugin.sBaseDir.size());
-				Wrap(&result)->Receive(S);
+				SysString s(plugin.sBaseDir.c_str(), plugin.sBaseDir.size());
+				Wrap(&result)->Receive(s);
 			}
 			return true;
 		case F_PL_GETDEF:				// 設定ファイルから値を読む

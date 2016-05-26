@@ -289,11 +289,11 @@ void PropTypesWindow::SetData(HWND hwndDlg)
 		::CheckDlgButton(hwndDlg, IDC_CHECK_PRIOR_CESU8, types.encoding.bPriorCesu8);
 
 		// デフォルトコードタイプのコンボボックス設定
-		int		nSel= 0;
-		int		j = 0;
+		size_t nSel= 0;
+		size_t j = 0;
 		hCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_DEFAULT_CODETYPE);
 		CodeTypesForCombobox codeTypes;
-		for (int i=0; i<codeTypes.GetCount(); ++i) {
+		for (size_t i=0; i<codeTypes.GetCount(); ++i) {
 			if (CodeTypeName(codeTypes.GetCode(i)).CanDefault()) {
 				int idx = Combo_AddString(hCombo, codeTypes.GetName(i));
 				Combo_SetItemData(hCombo, idx, codeTypes.GetCode(i));

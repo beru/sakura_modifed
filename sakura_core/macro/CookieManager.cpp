@@ -48,7 +48,7 @@ SysString CookieManager::GetCookieDefault(
 	LPCWSTR scope,
 	LPCWSTR cookieName,
 	LPCWSTR defVal,
-	int len
+	size_t len
 	) const
 {
 	auto cookies = SelectCookieType(scope);

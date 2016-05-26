@@ -50,8 +50,8 @@ public:
 		aElements[nCount-1] = e;
 	}
 	void resize(int nNewSize) {
-		assert(0 <= nNewSize);
-		assert(nNewSize <= MAX_SIZE);
+		ASSERT_GE(nNewSize, 0);
+		ASSERT_GE(MAX_SIZE, nNewSize);
 		nCount = nNewSize;
 	}
 	

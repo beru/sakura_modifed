@@ -72,7 +72,7 @@ public:
 
 	// 文字列のピクセル幅を返す。
 	static
-	int CalcTextWidth(
+	size_t CalcTextWidth(
 		const wchar_t*	pText,		// 文字列
 		size_t			nLength,	// 文字列長
 		const int*		pnDx		// 文字間隔の入った配列
@@ -80,7 +80,7 @@ public:
 
 	// 文字列のピクセル幅を返す。
 	static
-	int CalcTextWidth2(
+	size_t CalcTextWidth2(
 		const wchar_t*	pText,		// 文字列
 		size_t			nLength,	// 文字列長
 		int				nHankakuDx	// 半角文字の文字間隔

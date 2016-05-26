@@ -37,7 +37,7 @@ class CookieManager {
 
 public:
 	SysString GetCookie(LPCWSTR scope, LPCWSTR cookieName) const;
-	SysString GetCookieDefault(LPCWSTR scope, LPCWSTR cookieName, LPCWSTR defVal, int len) const;
+	SysString GetCookieDefault(LPCWSTR scope, LPCWSTR cookieName, LPCWSTR defVal, size_t len) const;
 	int SetCookie(LPCWSTR scope, LPCWSTR cookieName, LPCWSTR val, int len);
 	int DeleteCookie(LPCWSTR scope, LPCWSTR cookieName);
 	SysString GetCookieNames(LPCWSTR scope) const;

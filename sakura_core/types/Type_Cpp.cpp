@@ -123,7 +123,7 @@ bool C_IsOperator(wchar_t* szStr, size_t nLen)
 	@date 2005.12.06 じゅうじ 最後の1文字しか見ないと2バイトコードの後半がバックスラッシュの場合に誤認する
 */
 static
-bool C_IsLineEsc(const wchar_t* s, int len)
+bool C_IsLineEsc(const wchar_t* s, size_t len)
 {
 	if (
 		len > 0
@@ -140,18 +140,18 @@ bool C_IsLineEsc(const wchar_t* s, int len)
 
 	if (len > 0 && s[len-1] == L'\\') {
 		if (len == 1) {
-			return(true);
+			return true;
 		}else if (len == 2) {
 			if (NativeW::GetSizeOfChar(s, 2 , 0) == 1)
-				return(true);
+				return true;
 		}else { // 残り３バイト以上
 			if (NativeW::GetSizeOfChar(s, len , len-2) == 1)
-				return(true);
+				return true;
 			if (NativeW::GetSizeOfChar(s, len , len-3) == 2)
-				return(true);
+				return true;
 		}
 	}
-	return(false);
+	return false;
 }
 
 static
@@ -190,11 +190,11 @@ public:
 		enablebuf(0)
 	{}
 
-	int ScanLine(const wchar_t*, int);
+	size_t ScanLine(const wchar_t*, size_t);
 
 private:
 	bool ismultiline; // 複数行のディレクティブ
-	int maxnestlevel;	// ネストレベルの最大値
+	size_t maxnestlevel;	// ネストレベルの最大値
 
 	int stackptr;	// ネストレベル
 	/*!
@@ -234,12 +234,12 @@ private:
 	@date 2007.12.13 じゅうじ : ifの直後にスペースがない場合の対応
 
 */
-int CppPreprocessMng::ScanLine(
+size_t CppPreprocessMng::ScanLine(
 	const wchar_t* str,
-	int _length
+	size_t _length
 	)
 {
-	int length = _length;
+	size_t length = _length;
 
 	const wchar_t* lastptr = str + length;	//	処理文字列末尾
 	const wchar_t* p;	//	処理中の位置
@@ -315,6 +315,7 @@ int CppPreprocessMng::ScanLine(
 		if (stackptr > 0) {
 			--stackptr;
 			enablebuf &= ~bitpattern;
+			assert(stackptr > 0);
 			bitpattern = (1 << (stackptr - 1));
 		}
 	}else {
@@ -362,7 +363,6 @@ void DocOutline::MakeFuncList_C(
 #endif
 	const wchar_t*	pLine;
 	size_t		nLineLen;
-	int	i;
 
 	// 2002/10/27 frozen　ここから
 	// nNestLevelを nNestLevel_global を nNestLevel_func に分割した。
@@ -379,7 +379,7 @@ void DocOutline::MakeFuncList_C(
 	wchar_t		szWordPrev[256];	//	1つ前のword
 	wchar_t		szWord[256];		//	現在解読中のwordを入れるところ
 	size_t		nWordIdx = 0;
-	int			nMaxWordLeng = 100;	//	許容されるwordの最大長さ
+	size_t		nMaxWordLeng = 100;	//	許容されるwordの最大長さ
 	int			nMode;				//	現在のstate
 	/*
 		nMode
@@ -473,6 +473,7 @@ void DocOutline::MakeFuncList_C(
 		//	From Here Aug. 10, 2004 genta
 		//	プリプロセス処理
 		//	コメント中でなければプリプロセッサ指令を先に判定させる
+		size_t i;
 		if (nMode != 8 && nMode != 10) {	// chg 2005/12/6 じゅうじ 次の行が空白でもよい
 			i = cppPMng.ScanLine(pLine, nLineLen);
 		}else {
@@ -756,10 +757,10 @@ void DocOutline::MakeFuncList_C(
 						) {
 							// C++11 raw string
 							// R"abc(string)abc"
-							for (int k=i+1; k<nLineLen; ++k) {
+							for (size_t k=i+1; k<nLineLen; ++k) {
 								if (pLine[k] == L'(') {
 									// i = 1, k = 5, len = 5-1-1=3
-									int tagLen = t_min(k - i - 1, (int)_countof(szRawStringTag) - 1);
+									size_t tagLen = t_min(k - i - 1, _countof(szRawStringTag) - 1);
 									nRawStringTagLen = tagLen + 1;
 									szRawStringTag[0] = L')';
 									wcsncpy(szRawStringTag + 1, &pLine[i + 1], tagLen);
@@ -884,7 +885,7 @@ void DocOutline::MakeFuncList_C(
 					size_t nLen = (int)wcslen(szWordPrev);
 					bool bOperator = false;
 					if (nMode2 == M2_NORMAL && nNestLevel_fparam == 0 && C_IsOperator(szWordPrev, nLen)) {
-						int k;
+						size_t k;
 						for (k=i+1; k<nLineLen && C_IsSpace(pLine[k], bExtEol); ++k) {}
 						if (k < nLineLen && pLine[k] == L')') {
 							for (++k; k<nLineLen && C_IsSpace(pLine[k], bExtEol); ++k) {}
@@ -1233,11 +1234,9 @@ void EditView::SmartIndent_CPP(wchar_t wcChar)
 	const wchar_t*	pLine;
 	size_t			nLineLen;
 	int			k;
-	int			m;
 	const wchar_t*	pLine2;
 	size_t		nLineLen2;
 	int			nLevel;
-	int j;
 
 	// 調整によって置換される箇所
 	Range rangeA;
@@ -1248,11 +1247,8 @@ void EditView::SmartIndent_CPP(wchar_t wcChar)
 
 	int			nWork = 0;
 	ptrdiff_t	nCharChars;
-	int			nSrcLen;
 	wchar_t		pszSrc[1024];
 	bool		bChange;
-
-	int			nCaretPosX_PHY;
 
 	Point	ptCP;
 
@@ -1271,8 +1267,8 @@ void EditView::SmartIndent_CPP(wchar_t wcChar)
 	case L'(':
 
 		auto& caret = GetCaret();
-		nCaretPosX_PHY = caret.GetCaretLogicPos().x;
-
+		assert(caret.GetCaretLogicPos().x >= 0);
+		size_t nCaretPosX_PHY = caret.GetCaretLogicPos().x;
 		pLine = pEditDoc->docLineMgr.GetLine(caret.GetCaretLogicPos().y)->GetDocLineStrWithEOL(&nLineLen);
 		if (!pLine) {
 			if (wcChar != WCODE::CR) {
@@ -1291,7 +1287,7 @@ void EditView::SmartIndent_CPP(wchar_t wcChar)
 				|| '}'や')'が入力された時と同じ処理をする
 				*/
 
-				int i;
+				size_t i;
 				for (i=nCaretPosX_PHY; i<nLineLen; ++i) {
 					if (pLine[i] != WCODE::TAB && pLine[i] != WCODE::SPACE) {
 						break;
@@ -1338,6 +1334,7 @@ void EditView::SmartIndent_CPP(wchar_t wcChar)
 		nLevel = 0;	// {}の入れ子レベル
 		
 		nDataLen = 0;
+		int j;
 		for (j=caret.GetCaretLogicPos().y; j>=0; --j) {
 			pLine2 = pEditDoc->docLineMgr.GetLine(j)->GetDocLineStrWithEOL(&nLineLen2);
 			if (j == caret.GetCaretLogicPos().y) {
@@ -1417,6 +1414,7 @@ void EditView::SmartIndent_CPP(wchar_t wcChar)
 				continue;
 			}
 
+			size_t m;
 			for (m=0; m<nLineLen2; ++m) {
 				if (pLine2[m] != WCODE::TAB && pLine2[m] != WCODE::SPACE) {
 					break;
@@ -1473,7 +1471,7 @@ void EditView::SmartIndent_CPP(wchar_t wcChar)
 		ptCP.x = nCaretPosX_PHY - rangeA.GetTo().x + nDataLen;
 		ptCP.y = caret.GetCaretLogicPos().y;
 
-		nSrcLen = rangeA.GetTo().x - rangeA.GetFrom().x;
+		int nSrcLen = rangeA.GetTo().x - rangeA.GetFrom().x;
 		if (nSrcLen >= _countof(pszSrc) - 1) {
 			//	Sep. 18, 2002 genta メモリリーク対策
 			delete[] pszData;

@@ -459,11 +459,9 @@ int LayoutMgr::DoLayout_Range(
 	Point				_ptDelLogicalFrom,
 	EColorIndexType		nCurrentLineType,
 	LayoutColorInfo*	colorInfo,
-	const CalTextWidthArg&	ctwArg,
-	int*				_pnExtInsLineNum
+	const CalTextWidthArg&	ctwArg
 	)
 {
-	*_pnExtInsLineNum = 0;
 
 	int nLineNumWork = 0;
 
@@ -488,7 +486,7 @@ int LayoutMgr::DoLayout_Range(
 	pWork->nModifyLayoutLinesNew	= 0;
 	// ˆø”
 	pWork->ptDelLogicalFrom		= _ptDelLogicalFrom;
-	pWork->pnExtInsLineNum		= _pnExtInsLineNum;
+	pWork->pnExtInsLineNum		= 0;
 
 	if (pWork->pColorStrategy) {
 		pWork->pColorStrategy->InitStrategyStatus();

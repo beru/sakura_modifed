@@ -314,7 +314,7 @@ void EditView::GetCurrentTextForSearch(NativeW& memCurText, bool bStripMaxPath /
 		const wchar_t* pLine = pEditDoc->layoutMgr.GetLineStr(GetCaret().GetCaretLayoutPos().y, &nLineLen, &pLayout);
 		if (pLine) {
 			// 指定された桁に対応する行のデータ内の位置を調べる
-			int nIdx = LineColumnToIndex(pLayout, GetCaret().GetCaretLayoutPos().x);
+			size_t nIdx = LineColumnToIndex(pLayout, GetCaret().GetCaretLayoutPos().x);
 
 			// 現在位置の単語の範囲を調べる
 			Range range;

@@ -277,9 +277,9 @@ int LimitStringLengthW(
 	NativeW&		memDes			// [out]
 	)
 {
-	int n = nDataLength;
+	size_t n = nDataLength;
 	if (n > nLimitLength) {
-		int i = 0;
+		size_t i = 0;
 		size_t charSize = NativeW::GetSizeOfChar(pszData, nDataLength, i);
 		for (; i+charSize<=nLimitLength;) {
 			i += charSize;

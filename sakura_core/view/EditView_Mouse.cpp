@@ -74,7 +74,7 @@ void EditView::OnLBUTTONDOWN(WPARAM fwKeys, int _xPos , int _yPos)
 
 	Range range;
 
-	int			nIdx;
+	size_t		nIdx;
 	int			nWork;
 	int			nFuncID = 0;				// 2007.12.02 nasukoji	マウス左クリックに対応する機能コード
 
@@ -1202,7 +1202,7 @@ void EditView::OnMOUSEMOVE(WPARAM fwKeys, int xPos_, int yPos_)
 			size_t nLineLen;
 			const Layout* pLayout;
 			if (pEditDoc->layoutMgr.GetLineStr(caret.GetCaretLayoutPos().y, &nLineLen, &pLayout)) {
-				int	nIdx = LineColumnToIndex(pLayout, caret.GetCaretLayoutPos().x);
+				size_t nIdx = LineColumnToIndex(pLayout, caret.GetCaretLayoutPos().x);
 				Range range;
 				// 現在位置の単語の範囲を調べる
 				bool bResult = pEditDoc->layoutMgr.WhereCurrentWord(
@@ -1969,7 +1969,7 @@ STDMETHODIMP EditView::Drop(LPDATAOBJECT pDataObject, DWORD dwKeyState, POINTL p
 		size_t nLineLen;
 		Point ptCaretLayoutPos_Old = caret.GetCaretLayoutPos();
 		if (pEditDoc->layoutMgr.GetLineStr(ptCaretLayoutPos_Old.y, &nLineLen, &pLayout)) {
-			int nLineAllColLen;
+			size_t nLineAllColLen;
 			LineColumnToIndex2(pLayout, ptCaretLayoutPos_Old.x, &nLineAllColLen);
 			if (nLineAllColLen > 0) {	// 行終端より右の場合には nLineAllColLen に行全体の表示桁数が入っている
 				ptCaretLogicPos_Old.SetX(
@@ -2209,7 +2209,7 @@ void EditView::OnMyDropFiles(HDROP hDrop)
 		size_t nLineLen;
 		Point ptCaretLayoutPos_Old = GetCaret().GetCaretLayoutPos();
 		if (pEditDoc->layoutMgr.GetLineStr(ptCaretLayoutPos_Old.y, &nLineLen, &pLayout)) {
-			int nLineAllColLen;
+			size_t nLineAllColLen;
 			LineColumnToIndex2(pLayout, ptCaretLayoutPos_Old.x, &nLineAllColLen);
 			if (nLineAllColLen > 0) {	// 行終端より右の場合には nLineAllColLen に行全体の表示桁数が入っている
 				ptCaretLogicPos_Old.SetX(

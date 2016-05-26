@@ -28,7 +28,7 @@ struct SysString {
 	SysString(const wchar_t* s, size_t l)  { data = ::SysAllocStringLen(s, (UINT)l); }
 	SysString(const char* s, size_t l) { 
 		auto buf = std::make_unique<wchar_t[]>(l + 1);
-		int l2 = ::MultiByteToWideChar(CP_ACP, 0, s, l, &buf[0], l);
+		int l2 = ::MultiByteToWideChar(CP_ACP, 0, s, (int)l, &buf[0], (int)l);
 		data = ::SysAllocStringLen(&buf[0], l2); 
 	}
 	~SysString()                        { ::SysFreeString(data); }

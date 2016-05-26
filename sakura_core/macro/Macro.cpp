@@ -325,7 +325,7 @@ void Macro::AddLParam(
 void MacroParam::SetStringParam( const WCHAR* szParam, int nLength )
 {
 	Clear();
-	int nLen;
+	size_t nLen;
 	if (nLength == -1) {
 		nLen = auto_strlen( szParam );
 	}else {
@@ -466,7 +466,7 @@ void Macro::Save(HINSTANCE hInstance, TextOutputStream& out) const
 {
 	WCHAR			szFuncName[1024];
 	WCHAR			szFuncNameJapanese[500];
-	int				nTextLen;
+	size_t			nTextLen;
 	const WCHAR*	pText;
 	NativeW			memWork;
 
@@ -1276,8 +1276,8 @@ bool Macro::HandleCommand(
 			if (!arguments[0]) {
 				break;
 			}
-			SysString S(arguments[0], wcslen(arguments[0]));
-			Wrap(&vArg[0])->Receive(S);
+			SysString s(arguments[0], wcslen(arguments[0]));
+			Wrap(&vArg[0])->Receive(s);
 			int nArgSize = 1;
 			// 2つ目の引数が数値。
 			if (LOWORD(index) == F_MESSAGEBOX) {
@@ -1495,16 +1495,16 @@ bool Macro::HandleFunction(
 	case F_GETFILENAME:
 		{
 			const TCHAR* FileName = view.pEditDoc->docFile.GetFilePath();
-			SysString S(FileName, _tcslen(FileName));
-			Wrap(&result)->Receive(S);
+			SysString s(FileName, _tcslen(FileName));
+			Wrap(&result)->Receive(s);
 		}
 		return true;
 	case F_GETSAVEFILENAME:
 		// 2006.09.04 ryoji 保存時のファイルのパス
 		{
 			const TCHAR* FileName = view.pEditDoc->docFile.GetSaveFilePath();
-			SysString S(FileName, lstrlen(FileName));
-			Wrap(&result)->Receive(S);
+			SysString s(FileName, lstrlen(FileName));
+			Wrap(&result)->Receive(s);
 		}
 		return true;
 	case F_GETSELECTED:
@@ -1512,8 +1512,8 @@ bool Macro::HandleFunction(
 			if (view.GetSelectionInfo().IsTextSelected()) {
 				NativeW mem;
 				if (!view.GetSelectedDataSimple(mem)) return false;
-				SysString S(mem.GetStringPtr(), mem.GetStringLength());
-				Wrap(&result)->Receive(S);
+				SysString s(mem.GetStringPtr(), mem.GetStringLength());
+				Wrap(&result)->Receive(s);
 			}else {
 				result.vt = VT_BSTR;
 				result.bstrVal = SysAllocString(L"");
@@ -1557,8 +1557,8 @@ bool Macro::HandleFunction(
 				}
 				Buffer = view.pEditDoc->docLineMgr.GetLine(nLine)->GetDocLineStrWithEOL(&nLength);
 				if (Buffer) {
-					SysString S(Buffer, nLength);
-					Wrap(&result)->Receive(S);
+					SysString s(Buffer, nLength);
+					Wrap(&result)->Receive(s);
 				}else {
 					result.vt = VT_BSTR;
 					result.bstrVal = SysAllocString(L"");
@@ -1809,8 +1809,8 @@ bool Macro::HandleFunction(
 			_tcscpy( pBuffer, sDefaultValue.c_str() );
 			DlgInput1 dlgInput1;
 			if (dlgInput1.DoModal(G_AppInstance(), view.GetHwnd(), _T("sakura macro"), sMessage.c_str(), nMaxLen, pBuffer)) {
-				SysString S(pBuffer, _tcslen(pBuffer));
-				Wrap(&result)->Receive(S);
+				SysString s(pBuffer, _tcslen(pBuffer));
+				Wrap(&result)->Receive(s);
 			}else {
 				result.vt = VT_BSTR;
 				result.bstrVal = SysAllocString(L"");
@@ -1951,8 +1951,8 @@ bool Macro::HandleFunction(
 				bRet = dlgOpenFile.DoModal_GetSaveFileName(szPath);
 			}
 			if (bRet) {
-				SysString S(szPath, _tcslen(szPath));
-				Wrap(&result)->Receive(S);
+				SysString s(szPath, _tcslen(szPath));
+				Wrap(&result)->Receive(s);
 			}else {
 				result.vt = VT_BSTR;
 				result.bstrVal = SysAllocString(L"");
@@ -1988,8 +1988,8 @@ bool Macro::HandleFunction(
 			TCHAR szPath[_MAX_PATH];
 			int nRet = SelectDir(view.GetHwnd(), sMessage.c_str(), sDefault.c_str(), szPath);
 			if (nRet == IDOK) {
-				SysString S(szPath, _tcslen(szPath));
-				Wrap(&result)->Receive(S);
+				SysString s(szPath, _tcslen(szPath));
+				Wrap(&result)->Receive(s);
 			}else {
 				result.vt = VT_BSTR;
 				result.bstrVal = SysAllocString(L"");
@@ -2013,8 +2013,8 @@ bool Macro::HandleFunction(
 			bool bLineSelect = false;
 			bool bRet = view.MyGetClipboardData(memBuff, &bColumnSelect, &bLineSelect);
 			if (bRet) {
-				SysString S(memBuff.GetStringPtr(), memBuff.GetStringLength());
-				Wrap(&result)->Receive(S);
+				SysString s(memBuff.GetStringPtr(), memBuff.GetStringLength());
+				Wrap(&result)->Receive(s);
 			}else {
 				result.vt = VT_BSTR;
 				result.bstrVal = SysAllocString(L"");
@@ -2316,7 +2316,7 @@ bool Macro::HandleFunction(
 				NativeW mem;
 				Eol eol = view.pEditDoc->docEditor.GetNewLineCode();
 				clipboard.GetClipboradByFormat(mem, varCopy.data.bstrVal, varCopy2.data.lVal, varCopy3.data.lVal, eol);
-				SysString ret = SysString(mem.GetStringPtr(), mem.GetStringLength());
+				SysString ret(mem.GetStringPtr(), mem.GetStringLength());
 				Wrap(&result)->Receive(ret);
 				return true;
 			}

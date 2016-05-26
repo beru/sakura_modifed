@@ -188,7 +188,7 @@ void FuncLookup::SetCategory2Combo(HWND hComboBox) const
 	Combo_ResetContent(hComboBox);
 
 	// 固定機能リスト
-	for (int i=0; i<nsFuncCode::nFuncKindNum; ++i) {
+	for (size_t i=0; i<nsFuncCode::nFuncKindNum; ++i) {
 		Combo_AddString(hComboBox, LS(nsFuncCode::ppszFuncKind[i]));
 	}
 
@@ -228,7 +228,7 @@ void FuncLookup::SetListItem(HWND hListBox, int category) const
 	
 	@param category [in] 機能分類番号
 */
-int FuncLookup::GetItemCount(int category) const
+size_t FuncLookup::GetItemCount(int category) const
 {
 	if (category < 0) {
 		return 0;

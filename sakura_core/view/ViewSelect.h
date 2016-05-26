@@ -96,8 +96,8 @@ public:
 private:
 	void DrawSelectArea2(HDC) const;	// 指定範囲の選択領域の描画
 	void DrawSelectAreaLine(			// 指定行の選択領域の描画
-		HDC hdc,		// [in] 描画領域のDevice Context Handle
-		int nLineNum,	// [in] 描画対象行(レイアウト行)
+		HDC hdc,				// [in] 描画領域のDevice Context Handle
+		int nLineNum,			// [in] 描画対象行(レイアウト行)
 		const Range& range		// [in] 選択範囲(レイアウト単位)
 	) const;
 public:

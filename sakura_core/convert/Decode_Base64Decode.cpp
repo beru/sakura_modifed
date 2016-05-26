@@ -40,14 +40,14 @@ bool Decode_Base64Decode::DoDecode(const NativeW& src, Memory* pDst)
 {
 	using namespace WCODE;
 
-	const int BUFFER_SIZE = 1024;  // バッファサイズ。１以上の整数かつ４の倍数で。
-	const int _BUFSIZE = ((BUFFER_SIZE + 3) / 4) * 4;
+	const size_t BUFFER_SIZE = 1024;  // バッファサイズ。１以上の整数かつ４の倍数で。
+	const size_t _BUFSIZE = ((BUFFER_SIZE + 3) / 4) * 4;
 
 	const wchar_t* pSrc;
 	size_t nSrcLen;
 	char *pw, *pw_base;
 	wchar_t buffer[_BUFSIZE];
-	int i, j;
+	size_t i, j;
 	wchar_t c = 0;
 
 	pSrc = src.GetStringPtr();

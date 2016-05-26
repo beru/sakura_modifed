@@ -967,7 +967,7 @@ static void OutputPathInfo(
 {
 	{
 		// バッファを2^n 分確保する
-		int n = 1024;
+		size_t n = 1024;
 		size_t size = memMessage.GetStringLength() + 300;
 		while (n < size) {
 			n *= 2;
@@ -1228,7 +1228,7 @@ int GrepAgent::DoGrepFile(
 
 			// 正規表現検索
 			if (searchOption.bRegularExp) {
-				int nIndex = 0;
+				size_t nIndex = 0;
 	#ifdef _DEBUG
 				int nIndexPrev = -1;
 	#endif

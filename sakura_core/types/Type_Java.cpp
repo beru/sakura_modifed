@@ -65,7 +65,7 @@ void DocOutline::MakeFuncList_Java(FuncInfoArr* pFuncInfoArr)
 {
 	const wchar_t*	pLine;
 	size_t		nLineLen;
-	int			i;
+	size_t		i;
 	int			nNestLevel;
 	int			nCharChars;
 	wchar_t		szWordPrev[100];
@@ -91,11 +91,10 @@ void DocOutline::MakeFuncList_Java(FuncInfoArr* pFuncInfoArr)
 	nFuncNum = 0;
 	szClass[0] = L'\0';
 	nClassNestArrNum = 0;
-	int		nLineCount;
 	const wchar_t*	szJavaKigou = L"!\"#%&'()=-^|\\`@[{+;*}]<,>?/";	// 識別子に使用できない半角記号。_:~.$は許可
 	bool bExtEol = GetDllShareData().common.edit.bEnableExtEol;
 
-	for (nLineCount=0; nLineCount<doc.docLineMgr.GetLineCount(); ++nLineCount) {
+	for (size_t nLineCount=0; nLineCount<doc.docLineMgr.GetLineCount(); ++nLineCount) {
 		pLine = doc.docLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
 		for (i=0; i<nLineLen; i+=nCharChars) {
 			nCharChars = NativeW::GetSizeOfChar(pLine, nLineLen, i);
@@ -312,7 +311,7 @@ void DocOutline::MakeFuncList_Java(FuncInfoArr* pFuncInfoArr)
 					mode = FuncListJavaMode::Normal;
 					continue;
 				}else if (L')' == pLine[i]) {
-					int			k;
+					size_t k;
 					const wchar_t*	pLine2;
 					size_t		nLineLen2;
 					int	nLineCount2;

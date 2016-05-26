@@ -373,7 +373,7 @@ void ViewCommander::Command_Delete_Line(void)
 		if (!GetDllShareData().common.general.bIsFreeCursorMode) {
 			int nIndex;
 
-			int tmp;
+			size_t tmp;
 			nIndex = view.LineColumnToIndex2(pLayout, ptCaretPos_OLD.x, &tmp);
 			ptCaretPos_OLD.x = tmp;
 

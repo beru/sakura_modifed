@@ -25,7 +25,7 @@ void LayoutMgr::ReplaceData_CLayoutMgr(
 	LayoutReplaceArg* pArg
 	)
 {
-	int nWork_nLines = nLines;	// 変更前の全行数の保存	@@@ 2002.04.19 MIK
+	size_t nWork_nLines = nLines;	// 変更前の全行数の保存	@@@ 2002.04.19 MIK
 
 	// 置換先頭位置のレイアウト情報
 	EColorIndexType	nCurrentLineType = COLORIDX_DEFAULT;
@@ -75,7 +75,7 @@ void LayoutMgr::ReplaceData_CLayoutMgr(
 	// 論理行の指定範囲に該当するレイアウト情報を削除して
 	// 削除した範囲の直前のレイアウト情報のポインタを返す
 
-	int	nModifyLayoutLinesOld = 0;
+	size_t nModifyLayoutLinesOld = 0;
 	Layout* pLayoutPrev;
 	int nWork = t_max(dlra.nDeletedLineNum, dlra.nInsLineNum);
 
@@ -112,13 +112,9 @@ void LayoutMgr::ReplaceData_CLayoutMgr(
 		}
 	}else {
 		if (!pLayoutPrev->GetNextLayout()) {
-			nRowNum =
-				pDocLineMgr->GetLineCount() -
-				pLayoutPrev->GetLogicLineNo() - 1;
+			nRowNum = pDocLineMgr->GetLineCount() - pLayoutPrev->GetLogicLineNo() - 1;
 		}else {
-			nRowNum =
-				pLayoutPrev->pNext->GetLogicLineNo() -
-				pLayoutPrev->GetLogicLineNo() - 1;
+			nRowNum = pLayoutPrev->pNext->GetLogicLineNo() - pLayoutPrev->GetLogicLineNo() - 1;
 		}
 	}
 
@@ -130,18 +126,15 @@ void LayoutMgr::ReplaceData_CLayoutMgr(
 	ctwArg.bInsData     = (pArg->pInsData && pArg->pInsData->size());			// 追加文字列の有無
 
 	// 指定レイアウト行に対応する論理行の次の論理行から指定論理行数だけ再レイアウトする
-	int nAddInsLineNum;
 	pArg->nModLineTo = DoLayout_Range(
 		pLayoutPrev,
 		nRowNum,
 		ptFrom,
 		nCurrentLineType,
 		colorInfo,
-		ctwArg,
-		&nAddInsLineNum
+		ctwArg
 	);
-
-	pArg->nAddLineNum = nLines - nWork_nLines;	// 変更後の全行数との差分	@@@ 2002.04.19 MIK
+	pArg->nAddLineNum = (int)nLines - (int)nWork_nLines;	// 変更後の全行数との差分	@@@ 2002.04.19 MIK
 	if (pArg->nAddLineNum == 0) {
 		pArg->nAddLineNum = nModifyLayoutLinesOld - pArg->nModLineTo;	// 再描画ヒント レイアウト行の増減
 	}

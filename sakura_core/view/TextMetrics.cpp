@@ -178,7 +178,7 @@ const int* TextMetrics::GenerateDxArray(
 }
 
 // 文字列のピクセル幅を返す。
-int TextMetrics::CalcTextWidth(
+size_t TextMetrics::CalcTextWidth(
 	const wchar_t* pText,	// 文字列
 	size_t nLength,			// 文字列長
 	const int* pnDx			// 文字間隔の入った配列
@@ -192,11 +192,11 @@ int TextMetrics::CalcTextWidth(
 	for (size_t i=0; i<nLength; ++i) {
 		w += pnDx[i];
 	}
-	return w;
+	return (size_t)w;
 }
 
 // 文字列のピクセル幅を返す。
-int TextMetrics::CalcTextWidth2(
+size_t TextMetrics::CalcTextWidth2(
 	const wchar_t* pText,	// 文字列
 	size_t nLength,			// 文字列長
 	int nHankakuDx		// 半角文字の文字間隔

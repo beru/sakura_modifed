@@ -74,11 +74,11 @@ void ViewCommander::Command_Indent(wchar_t wcChar, IndentType eIndent)
 */
 void ViewCommander::Command_Indent(
 	const wchar_t* const pData,
-	const int nDataLen,
+	const size_t nDataLen,
 	IndentType eIndent
 	)
 {
-	if (nDataLen <= 0) {
+	if (nDataLen == 0) {
 		return;
 	}
 	auto& layoutMgr = GetDocument().layoutMgr;

@@ -482,7 +482,7 @@ void ViewCommander::Command_InsText(
 		// 矩形範囲選択中か
 		if (selInfo.IsBoxSelecting()) {
 			// 改行までを抜き出す
-			int i;
+			size_t i;
 			bool bExtEol = GetDllShareData().common.edit.bEnableExtEol;
 			for (i=0; i<nTextLen; ++i) {
 				if (WCODE::IsLineDelimiter(pszText[i], bExtEol)) {

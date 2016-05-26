@@ -84,7 +84,7 @@ public:
 		return nsFuncCode::nFuncKindNum + 3;	// 分類＋外部マクロ＋カスタムメニュー＋プラグイン
 	}
 	
-	int GetItemCount(int category) const;
+	size_t GetItemCount(int category) const;
 
 
 private:

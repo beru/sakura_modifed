@@ -662,7 +662,7 @@ void ViewCommander::Command_Replace(HWND hwndParent)
 				// キャレット位置の計算が複雑になる。（置換後に改行がある場合に不具合発生）
 				// そこで、INSTEXTする文字列長を調整する方法に変更する（実はこっちの方がわかりやすい）
 				size_t matchLen = regexp.GetMatchLen();
-				int nIdxTo = nIdx + matchLen;		// 検索文字列の末尾
+				size_t nIdxTo = nIdx + matchLen;		// 検索文字列の末尾
 				if (matchLen == 0) {
 					// ０文字マッチの時(無限置換にならないように１文字進める)
 					if (nIdxTo < nLen) {

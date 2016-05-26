@@ -43,11 +43,11 @@ public:
 public:
 	// 実装
 	// 2008.11.10 変換ロジックを書き直す
-	inline static int _EucjpToUni_char(const unsigned char*, unsigned short*, const ECharSet, bool* pbError, bool* pbHex);
+	inline static size_t _EucjpToUni_char(const unsigned char*, unsigned short*, const ECharSet, bool* pbError, bool* pbHex);
 protected:
-	static int EucjpToUni(const char*, const size_t, wchar_t*, bool* pbError);
-	inline static int _UniToEucjp_char(const unsigned short*, unsigned char*, const ECharSet, bool* pbError);
-	static int UniToEucjp(const wchar_t*, const size_t, char*, bool* pbError);
+	static size_t EucjpToUni(const char*, const size_t, wchar_t*, bool* pbError);
+	inline static size_t _UniToEucjp_char(const unsigned short*, unsigned char*, const ECharSet, bool* pbError);
+	static size_t UniToEucjp(const wchar_t*, const size_t, char*, bool* pbError);
 };
 
 
@@ -58,9 +58,9 @@ protected:
 
 	高速化のため、インライン化
 */
-inline int Euc::_EucjpToUni_char(const unsigned char* pSrc, unsigned short* pDst, const ECharSet eCharset, bool* pbError, bool* pbHex = nullptr)
+inline size_t Euc::_EucjpToUni_char(const unsigned char* pSrc, unsigned short* pDst, const ECharSet eCharset, bool* pbError, bool* pbHex = nullptr)
 {
-	int nret;
+	size_t nret;
 	unsigned char czenkaku[2];
 	unsigned int ctemp;
 	bool berror = false;
@@ -123,9 +123,9 @@ inline int Euc::_EucjpToUni_char(const unsigned char* pSrc, unsigned short* pDst
 
 	高速化のため、インライン化
 */
-inline int Euc::_UniToEucjp_char(const unsigned short* pSrc, unsigned char* pDst, const ECharSet eCharset, bool* pbError)
+inline size_t Euc::_UniToEucjp_char(const unsigned short* pSrc, unsigned char* pDst, const ECharSet eCharset, bool* pbError)
 {
-	int nret = 0, nclen;
+	int nret = 0;
 	unsigned char cbuf[4];
 	unsigned int ctemp;
 	bool berror = false;
@@ -136,7 +136,7 @@ inline int Euc::_UniToEucjp_char(const unsigned short* pSrc, unsigned char* pDst
 		pDst[0] = '?';
 		nret = 1;
 	}else if (eCharset == CHARSET_UNI_NORMAL) {
-		nclen = MyWideCharToMultiByte_JP(pSrc, 1, cbuf);
+		size_t nclen = MyWideCharToMultiByte_JP(pSrc, 1, cbuf);
 		if (nclen < 1) {
 			// Uni -> SJIS で変換エラー
 			berror = true;

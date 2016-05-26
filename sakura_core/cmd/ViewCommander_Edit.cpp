@@ -39,7 +39,7 @@ void ViewCommander::Command_WCHAR(
 		return;
 	}
 
-	int nPos;
+	size_t nPos;
 	auto& doc = GetDocument();
 	doc.docEditor.SetModified(true, true);	// Jan. 22, 2002 genta
 
@@ -257,8 +257,7 @@ void ViewCommander::Command_IME_CHAR(WORD wChar)
 	const wchar_t* pUniData = to_wchar(szAnsiWord);
 	wchar_t szWord[2] = {pUniData[0], 0};
 #endif
-	int nWord = 1;
-
+	size_t nWord = 1;
 	// テキストが選択されているか
 	if (selInfo.IsTextSelected()) {
 		// 矩形範囲選択中か
@@ -319,7 +318,7 @@ void ViewCommander::Command_Undo(void)
 	Ope* pOpe = nullptr;
 
 	OpeBlk*	pOpeBlk;
-	int nOpeBlkNum;
+	size_t nOpeBlkNum;
 	bool bIsModified;
 //	int nNewLine;	// 挿入された部分の次の位置の行
 //	int nNewPos;	// 挿入された部分の次の位置のデータ位置
@@ -351,7 +350,7 @@ void ViewCommander::Command_Undo(void)
 
 		const bool bFastMode = (100 < nOpeBlkNum);
 		auto& layoutMgr = GetDocument().layoutMgr;
-		for (int i=nOpeBlkNum-1; i>=0; --i) {
+		for (int i=(int)nOpeBlkNum-1; i>=0; --i) {
 			pOpe = pOpeBlk->GetOpe(i);
 			if (bFastMode) {
 				caret.MoveCursorFastMode(pOpe->ptCaretPos_PHY_After);
@@ -492,7 +491,7 @@ void ViewCommander::Command_Undo(void)
 				caret.MoveCursor(ptCaretPos_Before, (i == 0));
 			}
 			if (hwndProgress && (i % 100) == 0) {
-				int newPos = ::MulDiv(nOpeBlkNum - i, 100, nOpeBlkNum);
+				int newPos = ::MulDiv((int)nOpeBlkNum - i, 100, (int)nOpeBlkNum);
 				if (newPos != nProgressPos) {
 					nProgressPos = newPos;
 					Progress_SetPos(hwndProgress, newPos + 1);
@@ -572,7 +571,7 @@ void ViewCommander::Command_Redo(void)
 
 	Ope*		pOpe = nullptr;
 	OpeBlk*	pOpeBlk;
-	int			nOpeBlkNum;
+	size_t		nOpeBlkNum;
 //	int			nNewLine;	// 挿入された部分の次の位置の行
 //	int			nNewPos;	// 挿入された部分の次の位置のデータ位置
 	bool		bIsModified;
@@ -733,7 +732,7 @@ void ViewCommander::Command_Redo(void)
 				caret.MoveCursor(ptCaretPos_After, (i == nOpeBlkNum - 1));
 			}
 			if (hwndProgress && (i % 100) == 0) {
-				int newPos = ::MulDiv(i + 1, 100, nOpeBlkNum);
+				int newPos = ::MulDiv(i + 1, 100, (int)nOpeBlkNum);
 				if (newPos != nProgressPos) {
 					nProgressPos = newPos;
 					Progress_SetPos(hwndProgress, newPos + 1);
@@ -801,9 +800,8 @@ void ViewCommander::Command_Delete(void)
 		if (layoutMgr.GetLineCount() > caret.GetCaretLayoutPos().y) {
 			const Layout* pLayout = layoutMgr.SearchLineByLayoutY(caret.GetCaretLayoutPos().y);
 			if (pLayout) {
-				int nLineLen;
-				int nIndex;
-				nIndex = view.LineColumnToIndex2(pLayout, caret.GetCaretLayoutPos().x, &nLineLen);
+				size_t nLineLen;
+				size_t nIndex = view.LineColumnToIndex2(pLayout, caret.GetCaretLayoutPos().x, &nLineLen);
 				if (nLineLen != 0) {	// 折り返しや改行コードより右の場合には nLineLen に行全体の表示桁数が入る
 					if (pLayout->GetLayoutEol().GetType() != EolType::None) {	// 行終端は改行コードか?
 						Command_InsText(true, L"", 0, false);	// カーソル位置まで半角スペース挿入
@@ -821,7 +819,7 @@ void ViewCommander::Command_Delete(void)
 						if (nLineLen != 0) {	// （スペース挿入後も）折り返し行末なら次文字を削除するために次行の先頭に移動する必要がある
 							if (pLayout->GetNextLayout()) {	// 最終行末ではない
 								Point ptLay;
-								Point ptLog(pLayout->GetLogicOffset() + nIndex, pLayout->GetLogicLineNo());
+								Point ptLog(pLayout->GetLogicOffset() + (int)nIndex, pLayout->GetLogicLineNo());
 								layoutMgr.LogicToLayout(ptLog, &ptLay);
 								caret.MoveCursor(ptLay, true);
 								caret.nCaretPosX_Prev = caret.GetCaretLayoutPos().x;
@@ -858,8 +856,8 @@ void ViewCommander::Command_Delete_Back(void)
 		if (bBool) {
 			const Layout* pLayout = GetDocument().layoutMgr.SearchLineByLayoutY(caret.GetCaretLayoutPos().y);
 			if (pLayout) {
-				int nLineLen;
-				int nIdx = view.LineColumnToIndex2(pLayout, caret.GetCaretLayoutPos().x, &nLineLen);
+				size_t nLineLen;
+				size_t nIdx = view.LineColumnToIndex2(pLayout, caret.GetCaretLayoutPos().x, &nLineLen);
 				if (nLineLen == 0) {	// 折り返しや改行コードより右の場合には nLineLen に行全体の表示桁数が入る
 					// 右からの移動では折り返し末尾文字は削除するが改行は削除しない
 					// 下から（下の行の行頭から）の移動では改行も削除する
@@ -898,7 +896,7 @@ void ViewCommander::DelCharForOverwrite(
 	int nKetaAfterIns = 0;
 	if (pLayout) {
 		// 指定された桁に対応する行のデータ内の位置を調べる
-		int nIdxTo = view.LineColumnToIndex(pLayout, caret.GetCaretLayoutPos().x);
+		size_t nIdxTo = view.LineColumnToIndex(pLayout, caret.GetCaretLayoutPos().x);
 		if (nIdxTo >= pLayout->GetLengthWithoutEOL()) {
 			bEol = true;	// 現在位置は改行または折り返し以後
 			if (pLayout->GetLayoutEol() != EolType::None) {
@@ -911,11 +909,11 @@ void ViewCommander::DelCharForOverwrite(
 			// 文字幅に合わせてスペースを詰める
 			if (GetDllShareData().common.edit.bOverWriteFixMode) {
 				const StringRef line = pLayout->GetDocLineRef()->GetStringRefWithEOL();
-				int nPos = caret.GetCaretLogicPos().GetX();
+				size_t nPos = caret.GetCaretLogicPos().GetX();
 				if (line.At(nPos) != WCODE::TAB) {
 					size_t nKetaBefore = NativeW::GetKetaOfChar(line, nPos);
 					size_t nKetaAfter = NativeW::GetKetaOfChar(pszInput, nLen, 0);
-					nKetaDiff = nKetaBefore - nKetaAfter;
+					nKetaDiff = (int)nKetaBefore - (int)nKetaAfter;
 					nPos += NativeW::GetSizeOfChar(line.GetPtr(), line.GetLength(), nPos);
 					nDelLen = 1;
 					if (nKetaDiff < 0 && nPos < line.GetLength()) {
@@ -927,8 +925,8 @@ void ViewCommander::DelCharForOverwrite(
 							)
 						) {
 							nDelLen = 2;
-							int nKetaBefore2 = NativeW::GetKetaOfChar(line, nPos);
-							nKetaAfterIns = nKetaBefore + nKetaBefore2 - nKetaAfter;
+							size_t nKetaBefore2 = NativeW::GetKetaOfChar(line, nPos);
+							nKetaAfterIns = (int)nKetaBefore + (int)nKetaBefore2 - (int)nKetaAfter;
 						}
 					}
 				}

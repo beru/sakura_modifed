@@ -12,7 +12,6 @@ bool Converter_SpaceToTab::DoConvert(NativeW* pData)
 	const wchar_t* pLine;
 	size_t nLineLen;
 	size_t nBgn;
-	int		i;
 	size_t nPosDes;
 	int		nPosX;
 	Eol	eol;
@@ -44,6 +43,7 @@ bool Converter_SpaceToTab::DoConvert(NativeW* pData)
 			nPosX = (pData->GetStringPtr() == pLine)? nStartColumn: 0;	// 処理中のiに対応する表示桁位置
 			bSpace = false;	// 直前がスペースか
 			nStartPos = 0;	// スペースの先頭
+			size_t i;
 			for (i=0; i<nLineLen; ++i) {
 				if (pLine[i] == SPACE || pLine[i] == TAB) {
 					if (!bSpace) {

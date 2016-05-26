@@ -484,9 +484,9 @@ void ViewSelect::DrawSelectArea2(HDC hdc) const
 	@date 2006.03.29 Moca 3000桁制限を撤廃．
 */
 void ViewSelect::DrawSelectAreaLine(
-	HDC hdc,		// [in] 描画領域のDevice Context Handle
-	int nLineNum,	// [in] 描画対象行(レイアウト行)
-	const Range& range		// [in] 選択範囲(レイアウト単位)
+	HDC hdc,			// [in] 描画領域のDevice Context Handle
+	int nLineNum,		// [in] 描画対象行(レイアウト行)
+	const Range& range	// [in] 選択範囲(レイアウト単位)
 	) const
 {
 	auto& view = editView;

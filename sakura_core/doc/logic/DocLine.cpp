@@ -37,7 +37,7 @@ bool DocLine::IsEmptyLine() const
 {
 	const wchar_t* pLine = GetPtr();
 	size_t nLineLen = GetLengthWithoutEOL();
-	for (int i=0; i<nLineLen; ++i) {
+	for (size_t i=0; i<nLineLen; ++i) {
 		if (pLine[i] != L' ' && pLine[i] != L'\t') {
 			return false;	// スペースでもタブでもない文字があったらfalse。
 		}

@@ -267,7 +267,7 @@ int DlgFileTree::GetData()
 		DlgItem_GetText(hwndDlg, IDC_EDIT_DEFINI, pFileTree->szProjectIni, pFileTree->szProjectIni.GetBufferCount());
 		if (bSaveShareData) {
 			pFileTree->nItemCount = (int)items.size();
-			assert(pFileTree->nItemCount <= _countof(pFileTree->items));
+			ASSERT_GE(_countof(pFileTree->items), pFileTree->nItemCount);
 			for (int i=0; i<pFileTree->nItemCount; ++i) {
 				pFileTree->items[i] = items[i];
 			}

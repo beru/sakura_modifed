@@ -128,7 +128,7 @@ void DocOutline::MakeTopicList_txt(FuncInfoArr* pFuncInfoArr)
 		// 先頭文字が見出し記号のいずれかであれば、次へ進む
 		size_t nCharChars = NativeW::GetSizeOfChar(pLine, nLineLen, i);
 		size_t nCharChars2;
-		int j;
+		size_t j;
 		for (j=0; j<nStartsLen; j+=nCharChars2) {
 			// 2005-09-02 D.S.Koba GetSizeOfChar
 			nCharChars2 = NativeW::GetSizeOfChar(pszStarts, nStartsLen, j);
@@ -259,7 +259,7 @@ void DocOutline::MakeTopicList_wztxt(FuncInfoArr* pFuncInfoArr)
 	int levelPrev = 0;
 	bool bExtEol = GetDllShareData().common.edit.bEnableExtEol;
 
-	for (int nLineCount=0; nLineCount<doc.docLineMgr.GetLineCount(); ++nLineCount) {
+	for (size_t nLineCount=0; nLineCount<doc.docLineMgr.GetLineCount(); ++nLineCount) {
 		const wchar_t*	pLine;
 		size_t nLineLen;
 

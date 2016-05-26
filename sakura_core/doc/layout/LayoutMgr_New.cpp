@@ -70,8 +70,8 @@ bool LayoutMgr::IsKinsokuKuto(wchar_t wc)
 */
 bool LayoutMgr::IsKinsokuPosHead(
 	int nRest,		// [in] 行の残り文字数
-	int nCharKetas,	// [in] 現在位置の文字サイズ
-	int nCharKetas2	// [in] 現在位置の次の文字サイズ
+	size_t nCharKetas,	// [in] 現在位置の文字サイズ
+	size_t nCharKetas2	// [in] 現在位置の次の文字サイズ
 	)
 {
 	switch (nRest) {
@@ -110,8 +110,8 @@ bool LayoutMgr::IsKinsokuPosHead(
 */
 bool LayoutMgr::IsKinsokuPosTail(
 	int nRest,		// [in] 行の残り文字数
-	int nCharKetas,	// [in] 現在位置の文字サイズ
-	int nCharKetas2	// [in] 現在位置の次の文字サイズ
+	size_t nCharKetas,	// [in] 現在位置の文字サイズ
+	size_t nCharKetas2	// [in] 現在位置の次の文字サイズ
 	)
 {
 	switch (nRest) {
@@ -282,10 +282,10 @@ BOOL LayoutMgr::CalculateTextWidth(bool bCalLineLen, int nStart, int nEnd)
 {
 	bool bRet = false;
 	bool bOnlyExpansion = true;		// 最大幅の拡大のみをチェックする
-	int nMaxLen = 0;
+	size_t nMaxLen = 0;
 	int nMaxLineNum = 0;
 
-	int nLines = GetLineCount();		// テキストのレイアウト行数
+	size_t nLines = GetLineCount();		// テキストのレイアウト行数
 
 	// 開始・終了位置がどちらも指定されていない
 	if (nStart < 0 && nEnd < 0) {
@@ -294,10 +294,10 @@ BOOL LayoutMgr::CalculateTextWidth(bool bCalLineLen, int nStart, int nEnd)
 	if (nStart < 0) {			// 算出開始行の指定なし
 		nStart = 0;
 	}else if (nStart > nLines) {	// 範囲オーバー
-		nStart = nLines;
+		nStart = (int)nLines;
 	}
 	if (nEnd < 0 || nEnd >= nLines) {	// 算出終了行の指定なし または 文書行数以上
-		nEnd = nLines;
+		nEnd = (int)nLines;
 	}else {
 		++nEnd;					// 算出終了行の次行
 	}

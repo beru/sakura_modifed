@@ -257,7 +257,7 @@ void Memory::AllocBuffer(size_t nNewDataLen)
 	char* pWork = NULL;
 
 	// 2バイト多くメモリ確保しておく('\0'またはL'\0'を入れるため) 2007.08.13 kobake 変更
-	int nWorkLen = ((nNewDataLen + 2) + 7) & (~7); // 8Byteごとに整列
+	size_t nWorkLen = ((nNewDataLen + 2) + 7) & (~7); // 8Byteごとに整列
 
 	if (nDataBufSize == 0) {
 		// 未確保の状態

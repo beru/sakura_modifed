@@ -95,7 +95,7 @@ void DocOutline::MakeFuncList_VisualBasic(FuncInfoArr* pFuncInfoArr)
 	const wchar_t* pLine = NULL;
 	// プロシージャフラグ（プロシージャ内ではTrue）
 	bool bProcedure = false;
-	for (int nLineCount=0; nLineCount<doc.docLineMgr.GetLineCount(); ++nLineCount) {
+	for (size_t nLineCount=0; nLineCount<doc.docLineMgr.GetLineCount(); ++nLineCount) {
 		if (pLine) {
 			if (L'_' != pLine[nLineLen-1]) {
 				nParseCnt = 0;
@@ -104,7 +104,7 @@ void DocOutline::MakeFuncList_VisualBasic(FuncInfoArr* pFuncInfoArr)
 		pLine = doc.docLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
 		nFuncId = 0;
 		bDQuote	= false;
-		for (int i=0; i<nLineLen; ++i) {
+		for (size_t i=0; i<nLineLen; ++i) {
 			// 2005-09-02 D.S.Koba GetSizeOfChar
 			nCharChars = NativeW::GetSizeOfChar(pLine, nLineLen, i);
 			if (nCharChars == 0) {

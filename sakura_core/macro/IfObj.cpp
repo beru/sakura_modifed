@@ -386,7 +386,7 @@ void IfObj::AddMethod(
 	info->Desc.cParams = (SHORT)ArgumentCount + 1; // –ß‚è’l‚Ì•ª
 	info->Desc.lprgelemdescParam = info->Arguments;
 	// Nov. 10, 2003 FILE Win9X‚Å‚ÍA[lstrcpyW]‚ª–³Œø‚Ì‚½‚ßA[wcscpy]‚ÉC³
-	assert(auto_strlen(Name)<_countof(info->Name));
+	assert(auto_strlen(Name) < _countof(info->Name));
 	wcscpy(info->Name, Name);
 	info->Method = Method;
 	info->ID = ID;

@@ -8,9 +8,8 @@
 /*!
 	EUCJP Å® Unicode ïœä∑ä÷êî
 */
-int Euc::EucjpToUni(const char* pSrc, const size_t nSrcLen, wchar_t* pDst, bool* pbError)
+size_t Euc::EucjpToUni(const char* pSrc, const size_t nSrcLen, wchar_t* pDst, bool* pbError)
 {
-	int nclen;
 	ECharSet echarset;
 	bool berror_tmp, berror = false;
 
@@ -24,7 +23,7 @@ int Euc::EucjpToUni(const char* pSrc, const size_t nSrcLen, wchar_t* pDst, bool*
 	auto pr = reinterpret_cast<const unsigned char*>(pSrc);
 	auto pr_end = reinterpret_cast<const unsigned char*>(pSrc + nSrcLen);
 	auto pw = reinterpret_cast<unsigned short*>(pDst);
-
+	size_t nclen;
 	for (; (nclen = CheckEucjpChar(reinterpret_cast<const char*>(pr), pr_end - pr, &echarset)) != 0; pr += nclen) {
 		switch (echarset) {
 		case CHARSET_ASCII7:
@@ -102,9 +101,8 @@ CodeConvertResult Euc::EUCToUnicode(const Memory& src, NativeW* pDstMem)
 }
 
 
-int Euc::UniToEucjp(const wchar_t* pSrc, const size_t nSrcLen, char* pDst, bool* pbError)
+size_t Euc::UniToEucjp(const wchar_t* pSrc, const size_t nSrcLen, char* pDst, bool* pbError)
 {
-	int nclen;
 	bool berror = false, berror_tmp;
 	ECharSet echarset;
 
@@ -112,6 +110,7 @@ int Euc::UniToEucjp(const wchar_t* pSrc, const size_t nSrcLen, char* pDst, bool*
 	auto pr_end = reinterpret_cast<const unsigned short*>(pSrc + nSrcLen);
 	auto pw = reinterpret_cast<unsigned char*>(pDst);
 
+	size_t nclen;
 	while ((nclen = CheckUtf16leChar(reinterpret_cast<const wchar_t*>(pr), pr_end - pr, &echarset, 0)) > 0) {
 		// ï€åÏÉRÅ[Éh
 		switch (echarset) {
@@ -208,7 +207,7 @@ CodeConvertResult Euc::UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR*
 	unsigned char* ps = reinterpret_cast<unsigned char*>(charBuffer._GetMemory()->GetRawPtr());
 	TCHAR* pd = pDst;
 	if (!bbinary) {
-		for (int i=charBuffer._GetMemory()->GetRawLength(); i>0; --i, ++ps, pd+=2) {
+		for (size_t i=charBuffer._GetMemory()->GetRawLength(); i>0; --i, ++ps, pd+=2) {
 			auto_sprintf(pd, _T("%02X"), *ps);
 		}
 	}else {

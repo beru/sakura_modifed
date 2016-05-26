@@ -567,8 +567,8 @@ bool PPA::CallHandleFunction(
 		}
 		case VT_BSTR:
 		{
-			SysString S(args[i], lstrlenA(args[i]));
-			Wrap(&vtArg[i])->Receive(S);
+			SysString s(args[i], lstrlenA(args[i]));
+			Wrap(&vtArg[i])->Receive(s);
 			break;
 		}
 		default:

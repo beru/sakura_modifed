@@ -34,20 +34,20 @@ class EditView;
 class ViewCalc {
 protected:
 	// 外部依存
-	int GetTabSpace() const;
+	size_t GetTabSpace() const;
 
 public:
 	ViewCalc(const EditView& owner) : owner(owner) { }
 	virtual ~ViewCalc() {}
 
 	// 単位変換: レイアウト→ロジック
-	int LineColumnToIndex (const Layout*  pLayout,  int nColumn) const;		// 指定された桁に対応する行のデータ内の位置を調べる Ver1		// @@@ 2002.09.28 YAZAKI
-	int LineColumnToIndex (const DocLine* pDocLine, int nColumn) const;		// 指定された桁に対応する行のデータ内の位置を調べる Ver1		// @@@ 2002.09.28 YAZAKI
-	int LineColumnToIndex2(const Layout*  pLayout,  int nColumn, int* pnLineAllColLen) const;	// 指定された桁に対応する行のデータ内の位置を調べる Ver0		// @@@ 2002.09.28 YAZAKI
+	size_t LineColumnToIndex (const Layout*  pLayout,  size_t nColumn) const;		// 指定された桁に対応する行のデータ内の位置を調べる Ver1		// @@@ 2002.09.28 YAZAKI
+	size_t LineColumnToIndex (const DocLine* pDocLine, size_t nColumn) const;		// 指定された桁に対応する行のデータ内の位置を調べる Ver1		// @@@ 2002.09.28 YAZAKI
+	size_t LineColumnToIndex2(const Layout*  pLayout,  size_t nColumn, size_t* pnLineAllColLen) const;	// 指定された桁に対応する行のデータ内の位置を調べる Ver0		// @@@ 2002.09.28 YAZAKI
 
 	// 単位変換: ロジック→レイアウト
-	int LineIndexToColumn (const Layout*  pLayout,  int nIndex) const;		// 指定された行のデータ内の位置に対応する桁の位置を調べる	// @@@ 2002.09.28 YAZAKI
-	int LineIndexToColumn (const DocLine* pLayout,  int nIndex) const;		// 指定された行のデータ内の位置に対応する桁の位置を調べる	// @@@ 2002.09.28 YAZAKI
+	size_t LineIndexToColumn (const Layout*  pLayout,  size_t nIndex) const;		// 指定された行のデータ内の位置に対応する桁の位置を調べる	// @@@ 2002.09.28 YAZAKI
+	size_t LineIndexToColumn (const DocLine* pLayout,  size_t nIndex) const;		// 指定された行のデータ内の位置に対応する桁の位置を調べる	// @@@ 2002.09.28 YAZAKI
 
 private:
 	const EditView& owner;

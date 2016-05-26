@@ -49,7 +49,7 @@ public:
 protected:
 	// 実装
 	// 2008.11.10 変換ロジックを書き直す
-	inline static int _SjisToUni_char(const unsigned char*, unsigned short*, const ECharSet, bool* pbError);
+	inline static size_t _SjisToUni_char(const unsigned char*, unsigned short*, const ECharSet, bool* pbError);
 	static int SjisToUni(const char*, const size_t, wchar_t*, bool* pbError);
 	inline static int _UniToSjis_char(const unsigned short*, unsigned char*, const ECharSet, bool* pbError);
 	static int UniToSjis(const wchar_t*, const size_t, char*, bool* pbError);
@@ -64,9 +64,9 @@ protected:
 
 	高速化のため、インライン化
 */
-inline int ShiftJis::_SjisToUni_char(const unsigned char* pSrc, unsigned short* pDst, const ECharSet eCharset, bool* pbError)
+inline size_t ShiftJis::_SjisToUni_char(const unsigned char* pSrc, unsigned short* pDst, const ECharSet eCharset, bool* pbError)
 {
-	int nret;
+	size_t nret;
 	bool berror = false;
 
 	switch (eCharset) {

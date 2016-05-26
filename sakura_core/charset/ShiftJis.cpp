@@ -48,7 +48,7 @@ int ShiftJis::SjisToUni(
 	)
 {
 	ECharSet echarset;
-	int nclen;
+	size_t nclen;
 	const unsigned char *pr, *pr_end;
 	unsigned short* pw;
 	bool berror_tmp, berror = false;
@@ -143,7 +143,7 @@ CodeConvertResult ShiftJis::SJISToUnicode(
 */
 int ShiftJis::UniToSjis(const wchar_t* pSrc, const size_t nSrcLen, char* pDst, bool* pbError)
 {
-	int nclen;
+	size_t nclen;
 	const unsigned short *pr, *pr_end;
 	unsigned char* pw;
 	ECharSet echarset;
@@ -241,7 +241,6 @@ CodeConvertResult ShiftJis::UnicodeToHex(const wchar_t* cSrc, const int iSLen, T
 {
 	NativeW		cCharBuffer;
 	CodeConvertResult	res;
-	int				i;
 	unsigned char*	ps;
 	TCHAR*			pd;
 	bool			bbinary = false;
@@ -268,7 +267,7 @@ CodeConvertResult ShiftJis::UnicodeToHex(const wchar_t* cSrc, const int iSLen, T
 	ps = reinterpret_cast<unsigned char*>( cCharBuffer._GetMemory()->GetRawPtr() );
 	pd = pDst;
 	if (!bbinary) {
-		for (i=cCharBuffer._GetMemory()->GetRawLength(); i>0; --i, ++ps, pd+=2) {
+		for (size_t i=cCharBuffer._GetMemory()->GetRawLength(); i>0; --i, ++ps, pd+=2) {
 			auto_sprintf(pd, _T("%02X"), *ps);
 		}
 	}else {

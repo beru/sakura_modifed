@@ -208,7 +208,7 @@ void SakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszBu
 				met.cbSize = CCSIZEOF_STRUCT(NONCLIENTMETRICS, lfMessageFont);
 				::SystemParametersInfo(SPI_GETNONCLIENTMETRICS, met.cbSize, &met, 0);
 				DCFont dcFont(met.lfCaptionFont, GetMainWindow().GetHwnd());
-				FileNameManager::getInstance().GetTransformFileNameFast( pDoc->docFile.GetFilePath(), szText, 1023, dcFont.GetHDC(), true );
+				FileNameManager::getInstance().GetTransformFileNameFast( pDoc->docFile.GetFilePath(), szText, _countof(szText)-1, dcFont.GetHDC(), true );
 				q = wcs_pushT(q, q_max - q, szText);
 				++p;
 			}

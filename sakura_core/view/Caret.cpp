@@ -788,6 +788,7 @@ void Caret::ShowCaretPosInfo()
 	TCHAR szCaretChar[32] = _T("");
 	if (pLine) {
 		// 指定された桁に対応する行のデータ内の位置を調べる
+		ASSERT_GE(GetCaretLogicPos().x, pLayout->GetLogicOffset());
 		int nIdx = GetCaretLogicPos().x - pLayout->GetLogicOffset();
 		if (nIdx < nLineLen) {
 			if (nIdx < nLineLen - (pLayout->GetLayoutEol().GetLen() ? 1 : 0)) {
@@ -961,7 +962,7 @@ int Caret::Cursor_UPDOWN(int nMoveLines, bool bSelect)
 	// 移動先の行のデータを取得
 	const Layout* const pLayout = layoutMgr.SearchLineByLayoutY(ptTo.y);
 	const size_t nLineLen = pLayout ? pLayout->GetLengthWithEOL() : 0;
-	int i = 0; ///< 何？
+	size_t i = 0; ///< 何？
 	if (pLayout) {
 		MemoryIterator it(pLayout, layoutMgr.GetTabSpace());
 		while (!it.end()) {
@@ -1174,7 +1175,7 @@ int Caret::MoveCursorProperly(
 
 		size_t nColWidth = editView.GetTextMetrics().GetHankakuDx();
 		int nPosX = 0;
-		int i = 0;
+		size_t i = 0;
 		MemoryIterator it(pLayout, layoutMgr.GetTabSpace());
 		while (!it.end()) {
 			it.scanNext();

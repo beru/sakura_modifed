@@ -2679,7 +2679,7 @@ void TabWnd::GetTabCloseBtnRect(const LPRECT lprcTab, LPRECT lprc, bool selected
 
 	@date 2007.06.28 ryoji êVãKçÏê¨
 */
-void TabWnd::GetTabName(EditNode* pEditNode, bool bFull, bool bDupamp, LPTSTR pszName, int nLen)
+void TabWnd::GetTabName(EditNode* pEditNode, bool bFull, bool bDupamp, LPTSTR pszName, size_t nLen)
 {
 	std::vector<TCHAR> szText(nLen);
 	LPTSTR pszText = &szText[0];

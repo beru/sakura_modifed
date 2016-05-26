@@ -93,7 +93,12 @@ public:
 		std::swap(pRawData, left.pRawData);
 		std::swap(nRawLen, left.nRawLen);
 	}
-	int capacity() const { return nDataBufSize ? nDataBufSize - 2: 0; }
+	size_t capacity() const {
+		if (nDataBufSize) {
+			assert(nDataBufSize >= 2);
+		}
+		return nDataBufSize ? nDataBufSize - 2: 0;
+	}
 
 #ifdef _DEBUG
 protected:

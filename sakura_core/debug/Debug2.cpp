@@ -21,8 +21,8 @@ void debug_output(const char* str, ...)
 // ‹­§I—¹
 void debug_exit()
 {
-	MessageBox(NULL, _T("assert‚Æ‚©‚Éˆø‚ÁŠ|‚©‚Á‚½‚Û‚¢‚Å‚·"), GSTR_APPNAME, MB_OK);
-	exit(1);
+//	MessageBox(NULL, _T("assert‚Æ‚©‚Éˆø‚ÁŠ|‚©‚Á‚½‚Û‚¢‚Å‚·"), GSTR_APPNAME, MB_OK);
+	__debugbreak();
 }
 
 void warning_point()

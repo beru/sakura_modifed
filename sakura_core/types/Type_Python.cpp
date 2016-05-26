@@ -386,9 +386,6 @@ void OutlinePython::DoScanLine(const wchar_t* data, int linelen, int start_offse
 */
 void DocOutline::MakeFuncList_python(FuncInfoArr* pFuncInfoArr)
 {
-	size_t nLineLen;
-	int nLineCount;
-
 	OutlinePython python_analyze_state;
 
 	const int MAX_DEPTH = 10;
@@ -398,11 +395,12 @@ void DocOutline::MakeFuncList_python(FuncInfoArr* pFuncInfoArr)
 	indent_level[0] = 0;	// do as python does.
 	int depth_index = 0;
 
-	for (nLineCount=0; nLineCount<doc.docLineMgr.GetLineCount(); ++nLineCount) {
+	for (size_t nLineCount=0; nLineCount<doc.docLineMgr.GetLineCount(); ++nLineCount) {
 		const wchar_t*	pLine;
 		int depth;	//	indent depth
-		int col = 0;	//	current working column position
+		size_t col = 0;	//	current working column position
 
+		size_t nLineLen;
 		pLine = doc.docLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
 		
 		if (python_analyze_state.IsLogicalLineTop()) {
@@ -478,10 +476,11 @@ void DocOutline::MakeFuncList_python(FuncInfoArr* pFuncInfoArr)
 			//	そんなレアなケースは考慮しない
 			
 			//	skip whitespace
-			while (col < nLineLen && C_IsSpace(pLine[col], bExtEol))
+			while (col < nLineLen && C_IsSpace(pLine[col], bExtEol)) {
 				++col;
+			}
 
-			int w_end;
+			size_t w_end;
 			for (w_end=col;
 				w_end<nLineLen && Python_IsWordChar(pLine[w_end]);
 				++w_end)

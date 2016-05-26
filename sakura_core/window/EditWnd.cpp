@@ -135,7 +135,7 @@ static void ShowCodeBox(HWND hWnd, EditDoc* pEditDoc)
 	//
 	if (pLine) {
 		// 指定された桁に対応する行のデータ内の位置を調べる
-		int nIdx = pView->LineColumnToIndex(pLayout, pCaret->GetCaretLayoutPos().x);
+		size_t nIdx = pView->LineColumnToIndex(pLayout, pCaret->GetCaretLayoutPos().x);
 		if (nIdx < nLineLen) {
 			if (nIdx < nLineLen - (pLayout->GetLayoutEol().GetLen() ? 1 : 0)) {
 				// 一時的に表示方法の設定を変更する
@@ -149,7 +149,7 @@ static void ShowCodeBox(HWND hWnd, EditDoc* pEditDoc)
 				TCHAR szMsg[128];
 				TCHAR szCode[CODE_CODEMAX][32];
 				wchar_t szChar[3];
-				int nCharChars = NativeW::GetSizeOfChar(pLine, nLineLen, nIdx);
+				size_t nCharChars = NativeW::GetSizeOfChar(pLine, nLineLen, nIdx);
 				memcpy(szChar, &pLine[nIdx], nCharChars * sizeof(wchar_t));
 				szChar[nCharChars] = L'\0';
 				for (int i=0; i<CODE_CODEMAX; ++i) {
@@ -4515,7 +4515,7 @@ bool EditWnd::UpdateTextWrap(void)
 	@date 2005.08.14 genta 新規作成
 	@date 2008.06.18 ryoji レイアウト変更途中はカーソル移動の画面スクロールを見せない（画面のちらつき抑止）
 */
-void EditWnd::ChangeLayoutParam(bool bShowProgress, int nTabSize, int nMaxLineKetas)
+void EditWnd::ChangeLayoutParam(bool bShowProgress, size_t nTabSize, size_t nMaxLineKetas)
 {
 	HWND hwndProgress = NULL;
 	if (bShowProgress && this) {

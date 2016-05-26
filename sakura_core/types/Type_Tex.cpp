@@ -59,9 +59,9 @@ void DocOutline::MakeTopicList_tex(FuncInfoArr* pFuncInfoArr)
 {
 	const wchar_t*	pLine;
 	size_t		nLineLen;
-	int			i;
-	int			j;
-	int			k;
+	size_t		i;
+	size_t		j;
+	size_t		k;
 
 	const int nMaxStack = 8;	//	ネストの最深
 	int nDepth = 0;				//	いまのアイテムの深さを表す数値。

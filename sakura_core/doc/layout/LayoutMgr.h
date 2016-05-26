@@ -121,11 +121,11 @@ public:
 	const Layout*	GetBottomLayout() const { return pLayoutBot; }
 
 	// レイアウトを探す
-	const Layout*	SearchLineByLayoutY(int nLineLayout) const;	// 指定された物理行のレイアウトデータ(Layout)へのポインタを返す
-	Layout*			SearchLineByLayoutY(int nLineLayout) { return const_cast<Layout*>(static_cast<const LayoutMgr*>(this)->SearchLineByLayoutY(nLineLayout)); }
+	const Layout*	SearchLineByLayoutY(size_t nLineLayout) const;	// 指定された物理行のレイアウトデータ(Layout)へのポインタを返す
+	Layout*			SearchLineByLayoutY(size_t nLineLayout) { return const_cast<Layout*>(static_cast<const LayoutMgr*>(this)->SearchLineByLayoutY(nLineLayout)); }
 
 	// ワードを探す
-	bool			WhereCurrentWord(int , int , Range* pSelect, NativeW*, NativeW*);	// 現在位置の単語の範囲を調べる
+	bool			WhereCurrentWord(int , size_t , Range* pSelect, NativeW*, NativeW*);	// 現在位置の単語の範囲を調べる
 
 	// 判定
 	bool			IsEndOfLine(const Point& ptLinePos);	// 指定位置が行末(改行文字の直前)か調べる	//@@@ 2002.04.18 MIK
@@ -232,9 +232,9 @@ public:
 protected:
 	// 2005.11.21 Moca 引用符の色分け情報を引数から除去
 	// 2009.08.28 nasukoji	テキスト最大幅算出用引数追加
-	int DoLayout_Range(Layout* , int, Point, EColorIndexType, LayoutColorInfo*, const CalTextWidthArg&, int*);	// 指定レイアウト行に対応する論理行の次の論理行から指定論理行数だけ再レイアウトする
+	int DoLayout_Range(Layout* , int, Point, EColorIndexType, LayoutColorInfo*, const CalTextWidthArg&);	// 指定レイアウト行に対応する論理行の次の論理行から指定論理行数だけ再レイアウトする
 	void CalculateTextWidth_Range(const CalTextWidthArg& ctwArg);	// テキストが編集されたら最大幅を算出する	// 2009.08.28 nasukoji
-	Layout* DeleteLayoutAsLogical(Layout*, int, int , int, Point, int*);	// 論理行の指定範囲に該当するレイアウト情報を削除
+	Layout* DeleteLayoutAsLogical(Layout*, int, int , int, Point, size_t*);	// 論理行の指定範囲に該当するレイアウト情報を削除
 	void ShiftLogicalLineNum(Layout* , int);	// 指定行より後の行のレイアウト情報について、論理行番号を指定行数だけシフトする
 
 	// 部品
@@ -301,8 +301,8 @@ private:
 	bool IsKinsokuPosKuto(int nRest, int nCharChars) const {
 		return nRest < nCharChars;
 	}
-	bool IsKinsokuPosHead(int, int, int);	// 行頭禁則の処理位置か
-	bool IsKinsokuPosTail(int, int, int);	// 行末禁則の処理位置か
+	bool IsKinsokuPosHead(int, size_t, size_t);	// 行頭禁則の処理位置か
+	bool IsKinsokuPosTail(int, size_t, size_t);	// 行末禁則の処理位置か
 private:
 	// Oct. 1, 2002 genta インデント幅計算関数群
 	size_t getIndentOffset_Normal(Layout* pLayoutPrev);

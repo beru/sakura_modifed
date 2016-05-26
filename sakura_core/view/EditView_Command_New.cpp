@@ -120,9 +120,9 @@ void EditView::InsertData_CEditView(
 			|| pTypeData->bKinsokuRet		//@@@ 2002.04.19 MIK
 			|| pTypeData->bKinsokuKuto);	//@@@ 2002.04.19 MIK
 
-	int	nLineAllColLen;
-	int			nIdxFrom = 0;
-	int			nColumnFrom = ptInsertPos.x;
+	size_t nLineAllColLen;
+	int nIdxFrom = 0;
+	int nColumnFrom = ptInsertPos.x;
 	NativeW	mem(L"");
 	OpeLineData insData;
 	if (pLine) {

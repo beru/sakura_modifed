@@ -49,7 +49,7 @@ enum class MacroParamType {
 struct MacroParam {
 	WCHAR*			pData;
 	MacroParam*		pNext;
-	int				nDataLen;
+	size_t			nDataLen;
 	MacroParamType type;
 
 	MacroParam():pData(NULL), pNext(NULL), nDataLen(0), type(MacroParamType::Null){}

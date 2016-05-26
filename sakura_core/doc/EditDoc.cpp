@@ -870,7 +870,7 @@ BOOL EditDoc::OnFileClose(bool bGrepNoConfirm)
 	LPCTSTR pszTitle = docFile.GetFilePathClass().IsValidPath() ? docFile.GetFilePath() : NULL;
 	if (EditApp::getInstance().pGrepAgent->bGrepMode) {
 		LPCWSTR		pszGrepKey = AppMode::getInstance().szGrepKey;
-		int			nLen = (int)wcslen(pszGrepKey);
+		size_t nLen = wcslen(pszGrepKey);
 		NativeW	memDes;
 		LimitStringLengthW(pszGrepKey , nLen, 64, memDes);
 		auto_sprintf(szGrepTitle, LS(STR_TITLE_GREP),

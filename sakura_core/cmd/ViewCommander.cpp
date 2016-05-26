@@ -61,9 +61,9 @@ bool ViewCommander::HandleCommand(
 	LPARAM			lparam4
 	)
 {
-	bool	bRet = true;
-	bool	bRepeat = false;
-	int		nFuncID;
+	bool bRet = true;
+	bool bRepeat = false;
+	int nFuncID;
 
 	// May. 19, 2006 genta 上位16bitに送信元の識別子が入るように変更したので
 	// 下位16ビットのみを取り出す
@@ -745,7 +745,7 @@ size_t ViewCommander::ConvertEol(
 			}
 		}
 	}else {
-		for (int i=0; i<nTextLen; ++i) {
+		for (size_t i=0; i<nTextLen; ++i) {
 			if (WCODE::IsLineDelimiter(pszText[i], bExtEol)) {
 				if (pszText[i] == WCODE::CR) {
 					if (i + 1 < nTextLen && pszText[i + 1] == WCODE::LF) {

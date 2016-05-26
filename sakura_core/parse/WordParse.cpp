@@ -384,7 +384,7 @@ bool IsURL(
 {
 	struct _url_table_t {
 		wchar_t	name[12];
-		int		length;
+		uint16_t length;
 		bool	is_mail;
 	};
 	static const struct _url_table_t url_table[] = {
@@ -449,7 +449,7 @@ bool IsURL(
 					}
 					return false;
 				}
-				int i;
+				size_t i;
 				for (i=urlp->length; i<nLineLen; ++i, ++p) {	// ’Êí‚Ì‰ðÍ‚Ö
 					if (wc_to_c(*p) == 0 || (!(url_char[wc_to_c(*p)]))) {
 						break;	// I’[‚É’B‚µ‚½
@@ -473,7 +473,7 @@ bool IsMailAddress(
 	size_t* pnAddressLenfth
 	)
 {
-	int j = 0;
+	size_t j = 0;
 	if ((pszBuf[j] >= L'a' && pszBuf[j] <= L'z')
 	 || (pszBuf[j] >= L'A' && pszBuf[j] <= L'Z')
 	 || (pszBuf[j] >= L'0' && pszBuf[j] <= L'9')

@@ -178,9 +178,9 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 	Point GetCaretLayoutPos() const	{ return ptCaretPos_Layout; }	// キャレット位置(レイアウト)を取得
-	Size GetCaretSize() const				{ return sizeCaret; }			// キャレットサイズを取得。※正確には高さは違うらしい (この半分のこともある？)
-	bool ExistCaretFocus() const			{ return sizeCaret.cx > 0; }	// キャレットのフォーカスがあるか。※横幅値で判定してるらしい。
-	Point GetCaretLogicPos() const		{ return ptCaretPos_Logic; }	// キャレット位置(ロジック)を取得
+	Size GetCaretSize() const		{ return sizeCaret; }			// キャレットサイズを取得。※正確には高さは違うらしい (この半分のこともある？)
+	bool ExistCaretFocus() const	{ return sizeCaret.cx > 0; }	// キャレットのフォーカスがあるか。※横幅値で判定してるらしい。
+	Point GetCaretLogicPos() const	{ return ptCaretPos_Logic; }	// キャレット位置(ロジック)を取得
 
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //

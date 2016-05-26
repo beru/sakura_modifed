@@ -71,7 +71,7 @@ BOOL DlgSetCharSet::OnInitDialog(
 	// 文字コードセット選択コンボボックス初期化
 	CodeTypesForCombobox codeTypes;
 	Combo_ResetContent(hwndCharSet);
-	for (int i=1; i<codeTypes.GetCount(); ++i) {
+	for (size_t i=1; i<codeTypes.GetCount(); ++i) {
 		int idx = Combo_AddString(hwndCharSet, codeTypes.GetName(i));
 		Combo_SetItemData(hwndCharSet, idx, codeTypes.GetCode(i));
 	}

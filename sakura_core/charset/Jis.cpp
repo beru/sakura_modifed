@@ -62,7 +62,7 @@ int Jis::_JisToUni_block(const unsigned char* pSrc, const size_t nSrcLen, unsign
 	unsigned char czenkaku[2];
 	unsigned int ctemp;
 	bool berror = false;
-	int nret;
+	size_t nret;
 
 	if (nSrcLen < 1) {
 		if (pbError) {

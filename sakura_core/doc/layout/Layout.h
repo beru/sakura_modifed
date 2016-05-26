@@ -44,14 +44,15 @@ public:
 		int				nTypeIndent,
 		LayoutColorInfo*	pColorInfo
 		)
+		:
+		pPrev(nullptr),
+		pNext(nullptr),
+		pDocLine(pDocLine),
+		ptLogicPos(ptLogicPos),
+		nLength(nLength),
+		nTypePrev(nTypePrev),
+		nIndent(nTypeIndent)
 	{
-		this->pPrev			= nullptr;
-		this->pNext			= nullptr;
-		this->pDocLine		= pDocLine;
-		this->ptLogicPos	= ptLogicPos;	// 実データ参照位置
-		this->nLength		= nLength;		// 実データ内データ長
-		this->nTypePrev		= nTypePrev;	// タイプ 0=通常 1=行コメント 2=ブロックコメント 3=シングルクォーテーション文字列 4=ダブルクォーテーション文字列
-		nIndent		= nTypeIndent;	// このレイアウト行のインデント数 @@@ 2002.09.23 YAZAKI
 		exInfo.SetColorInfo(pColorInfo);
 	}
 	~Layout();

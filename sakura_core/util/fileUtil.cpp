@@ -70,7 +70,7 @@ bool IsFilePath(
 	size_t	nLineLen = wcslen(pLine);
 
 	// 先頭の空白を読み飛ばす
-	int i;
+	size_t i;
 	for (i=0; i<nLineLen; ++i) {
 		wchar_t c = pLine[i];
 		if (L' ' != c && L'\t' != c && L'\"' != c) {
@@ -1093,7 +1093,7 @@ void my_splitpath_w(
 //
 //
 // -----------------------------------------------------------------------------
-int FileMatchScore(const TCHAR* file1, const TCHAR* file2);
+static size_t FileMatchScore(const TCHAR* file1, const TCHAR* file2);
 
 // フルパスからファイル名の.以降を分離する
 // 2014.06.15 フォルダ名に.が含まれた場合、フォルダが分離されたのを修正
@@ -1141,12 +1141,12 @@ int FileMatchScoreSepExt(
 }
 
 // 2つのファイル名の最長一致部分の長さを返す
-int FileMatchScore(
+size_t FileMatchScore(
 	const TCHAR* file1,
 	const TCHAR* file2
 	)
 {
-	int score = 0;
+	size_t score = 0;
 	size_t len1 = auto_strlen(file1);
 	size_t len2 = auto_strlen(file2);
 	if (len1 < len2) {
@@ -1157,11 +1157,11 @@ int FileMatchScore(
 		len1 = len2;
 		len2 = tmpLen;
 	}
-	for (int i=0; i<len1; ) {
-		for (int k=0; k<len2 && score<(len2 - k);) {
-			int tmpScore = 0;
-			for (int m=k; m<len2;) {
-				int pos1 = i + (m - k);
+	for (size_t i=0; i<len1; ) {
+		for (size_t k=0; k<len2 && score<(len2 - k);) {
+			size_t tmpScore = 0;
+			for (size_t m=k; m<len2;) {
+				size_t pos1 = i + (m - k);
 				size_t chars1 = NativeT::GetSizeOfChar(file1, len1, pos1);
 				size_t chars2 = NativeT::GetSizeOfChar(file2, len2, m);
 				if (chars1 == chars2) {

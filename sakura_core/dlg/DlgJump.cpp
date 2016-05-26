@@ -211,7 +211,7 @@ void DlgJump::SetData(void)
 	int nWorkLine = -1;
 	int nIndex = 0;
 	int nPLSQLBlockNum = 0;
-	for (int i=0; i<funcInfoArr.GetNum(); ++i) {
+	for (size_t i=0; i<funcInfoArr.GetNum(); ++i) {
 		FuncInfo* pFI = funcInfoArr.GetAt(i);
 		if (pFI->nInfo == 31 || pFI->nInfo == 41) {
 		}

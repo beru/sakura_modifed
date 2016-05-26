@@ -159,7 +159,7 @@ bool KeyMacroMgr::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
 	WCHAR	szFuncName[100];
 	WCHAR	szFuncNameJapanese[256];
 	EFunctionCode	nFuncID;
-	int		i;
+	size_t	i;
 	int		nBgn, nEnd;
 	Macro* macro = nullptr;
 

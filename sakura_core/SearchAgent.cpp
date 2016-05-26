@@ -128,7 +128,7 @@ bool SearchStringPattern::SetPattern(
 			pszPatternCase = new wchar_t[nPatternLen + 1];
 			pszCaseKeyRef = pszPatternCase;
 			// note: 合成文字,サロゲートの「大文字小文字同一視」未対応
-			for (int i=0; i<nPatternLen; ++i) {
+			for (size_t i=0; i<nPatternLen; ++i) {
 				pszPatternCase[i] = (wchar_t)skr_towlower(pszPattern[i]);
 			}
 			pszPatternCase[nPatternLen] = L'\0';
@@ -153,14 +153,14 @@ bool SearchStringPattern::SetPattern(
 #endif
 
 #ifdef SEARCH_STRING_SUNDAY_QUICK
-		const int BM_MAPSIZE = 0x200;
+		const size_t BM_MAPSIZE = 0x200;
 		// 64KB も作らないで、ISO-8859-1 それ以外(包括) の2つの情報のみ記録する
 		// 「あ」と「乂」　「ぅ」と「居」は値を共有している
 		pnUseCharSkipArr = new int[BM_MAPSIZE];
-		for (int n=0; n<BM_MAPSIZE; ++n) {
+		for (size_t n=0; n<BM_MAPSIZE; ++n) {
 			pnUseCharSkipArr[n] = nPatternLen + 1;
 		}
-		for (int n=0; n<nPatternLen; ++n) {
+		for (size_t n=0; n<nPatternLen; ++n) {
 			const int index = GetMapIndex(pszCaseKeyRef[n]);
 			pnUseCharSkipArr[index] = nPatternLen - n;
 		}
@@ -863,7 +863,7 @@ void SearchAgent::ReplaceData(DocLineReplaceArg* pArg)
 	};
 	DlgCancelCloser closer(pDlgCancel);
 	const int nDelLines = pArg->delRange.GetTo().y - pArg->delRange.GetFrom().y;
-	const int nEditLines = std::max(1, (nDelLines + pArg->pInsData) ? (int)pArg->pInsData->size(): 0);
+	const int nEditLines = std::max(1, nDelLines + (pArg->pInsData ? (int)pArg->pInsData->size(): 0));
 	if (3000 < nEditLines) {
 		// 進捗ダイアログの表示
 		pDlgCancel = new DlgCancel;
@@ -1185,7 +1185,7 @@ prev_line:;
 			pArg->nInsSeq = 0;
 		}
 	}
-	int nCount;
+	size_t nCount;
 	for (nCount=0; nCount<nInsSize; ++nCount) {
 		NativeW& memLine = (*pArg->pInsData)[nCount].memLine;
 #ifdef _DEBUG

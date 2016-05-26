@@ -52,7 +52,7 @@
 	@date 2003.01.27 Moca 新規作成
 	@note 連続して呼び出す場合のため、展開済みメタ文字列をキャッシュして高速化している。
 */
-LPTSTR FileNameManager::GetTransformFileNameFast( LPCTSTR pszSrc, LPTSTR pszDest, int nDestLen, HDC hDC, bool bFitMode, int cchMaxWidth )
+LPTSTR FileNameManager::GetTransformFileNameFast( LPCTSTR pszSrc, LPTSTR pszDest, size_t nDestLen, HDC hDC, bool bFitMode, int cchMaxWidth )
 {
 	TCHAR szBuf[_MAX_PATH + 1];
 
@@ -126,12 +126,13 @@ int FileNameManager::TransformFileName_MakeCache(void) {
 	@date 2002.11.27 Moca 新規作成
 	@note 大小文字を区別しない。nDestLenに達したときは後ろを切り捨てられる
 */
-LPCTSTR FileNameManager::GetFilePathFormat(LPCTSTR pszSrc, LPTSTR pszDest, int nDestLen, LPCTSTR pszFrom, LPCTSTR pszTo)
+LPCTSTR FileNameManager::GetFilePathFormat(LPCTSTR pszSrc, LPTSTR pszDest, size_t nDestLen, LPCTSTR pszFrom, LPCTSTR pszTo)
 {
 	size_t nSrcLen  = _tcslen(pszSrc);
 	size_t nFromLen = _tcslen(pszFrom);
 	size_t nToLen   = _tcslen(pszTo);
 
+	assert(nDestLen > 0);
 	--nDestLen;
 
 	size_t j = 0;

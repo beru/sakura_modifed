@@ -113,7 +113,7 @@ protected:
 	void GetEvaluation(const EncodingType, int*, int *) const;
 
 	// 調査対象となったデータの長さ（8bit 単位）
-	int nTargetDataLen;
+	size_t nTargetDataLen;
 
 	// 判定結果を格納するもの
 	unsigned int dwStatus;
@@ -126,7 +126,7 @@ public:
 
 	// nTargetDataLen のセッター／ゲッター
 protected:
-	void SetDataLen(const int n) { if (n < 1) { nTargetDataLen = 0; }else { nTargetDataLen = n; } }
+	void SetDataLen(size_t n) { nTargetDataLen = n; }
 public:
 	int GetDataLen(void) const { return nTargetDataLen; }
 

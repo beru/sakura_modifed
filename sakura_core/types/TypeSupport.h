@@ -43,7 +43,7 @@ public:
 		pFontset(&editView.GetFontset()),
 		nColorIdx(ToColorInfoArrIndex(eColorIdx))
 	{
-		assert(0 <= nColorIdx);
+		ASSERT_GE(nColorIdx, 0);
 		pTypes = &editView.pEditDoc->docType.GetDocumentAttribute();
 		pColorInfoArr = &pTypes->colorInfoArr[nColorIdx];
 

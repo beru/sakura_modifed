@@ -153,7 +153,7 @@ size_t Utf7::_UniToUtf7SetD_block(const wchar_t* pSrc, const size_t nSrcLen, cha
 		return 0;
 	}
 
-	int i;
+	size_t i;
 	for (i=0; i<nSrcLen; ++i) {
 		pDst[i] = static_cast<char>(pSrc[i] & 0x00ff);
 	}

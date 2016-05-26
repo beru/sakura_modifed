@@ -109,7 +109,7 @@ bool ProcessFactory::ProfileSelect(
 	}else if (settings.nDefaultIndex == -1) {
 		bDialog = true;
 	}else {
-		assert(0 <= settings.nDefaultIndex);
+		ASSERT_GE(settings.nDefaultIndex, 0);
 		if (0 < settings.nDefaultIndex) {
 			cmdLine.SetProfileName(
 				settings.profList[settings.nDefaultIndex - 1].c_str()

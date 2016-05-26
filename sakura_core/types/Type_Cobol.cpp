@@ -58,7 +58,7 @@ void DocOutline::MakeTopicList_cobol(FuncInfoArr* pFuncInfoArr)
 {
 	const wchar_t*	pLine;
 	size_t			nLineLen;
-	int				i;
+	size_t			i;
 	int				k;
 	wchar_t			szDivision[1024];
 	wchar_t			szLabel[1024];

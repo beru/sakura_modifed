@@ -153,6 +153,7 @@ const DocLine* DocLineMgr::GetLine(size_t nLine) const
 	DocLine* pDocLine;
 	// 2004.03.28 Moca pCodePrevRefer‚æ‚èATop,Bot‚Ì‚Ù‚¤‚ª‹ß‚¢ê‡‚ÍA‚»‚¿‚ç‚ğ—˜—p‚·‚é
 	int nPrevToLineNumDiff = t_abs(nPrevReferLine - nLine);
+	ASSERT_GE(nLines, nLine);
 	if (!pCodePrevRefer
 	  || nLine < nPrevToLineNumDiff
 	  || nLines - nLine < nPrevToLineNumDiff

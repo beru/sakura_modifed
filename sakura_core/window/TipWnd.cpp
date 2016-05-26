@@ -143,9 +143,9 @@ void TipWnd::ComputeWindowSize(
 	int nCurHeight = 0;
 	size_t nTextLength = _tcslen(pszText);
 	int nBgn = 0;
-	for (int i=0; i<=nTextLength; ++i) {
+	for (size_t i=0; i<=nTextLength; ++i) {
 		// 2005-09-02 D.S.Koba GetSizeOfChar
-		int nCharChars = NativeT::GetSizeOfChar(pszText, nTextLength, i);
+		size_t nCharChars = NativeT::GetSizeOfChar(pszText, nTextLength, i);
 		if ((nCharChars == 1 && _T('\\') == pszText[i] && _T('n') == pszText[i + 1]) || _T('\0') == pszText[i]) {
 			if (0 < i - nBgn) {
 				std::vector<TCHAR> szWork(i - nBgn + 1);
@@ -204,10 +204,10 @@ void TipWnd::DrawTipText(
 	int nCurHeight = 0;
 	size_t nTextLength = _tcslen(pszText);
 	int nBgn = 0;
-	for (int i=0; i<=nTextLength; ++i) {
+	for (size_t i=0; i<=nTextLength; ++i) {
 //		int nCharChars = &pszText[i] - CMemory::MemCharPrev(pszText, nTextLength, &pszText[i]);
 		// 2005-09-02 D.S.Koba GetSizeOfChar
-		int nCharChars = NativeT::GetSizeOfChar(pszText, nTextLength, i);
+		size_t nCharChars = NativeT::GetSizeOfChar(pszText, nTextLength, i);
 		if ((nCharChars == 1 && _T('\\') == pszText[i] && _T('n') == pszText[i + 1]) || _T('\0') == pszText[i]) {
 			if (0 < i - nBgn) {
 				std::vector<TCHAR> szWork(i - nBgn + 1);

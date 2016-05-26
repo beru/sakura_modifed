@@ -89,7 +89,7 @@ void ShareData::InitTypeConfigs(
 		new CType_Ini(),	// İ’èƒtƒ@ƒCƒ‹
 	};
 	types.clear();
-	assert(_countof(table) <= MAX_TYPES);
+	ASSERT_GE(MAX_TYPES, _countof(table));
 	for (size_t i=0; i<_countof(table) && i<MAX_TYPES; ++i) {
 		TypeConfig* type = new TypeConfig;
 		types.push_back(type);

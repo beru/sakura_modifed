@@ -23,7 +23,7 @@ bool Converter_TabToSpace::DoConvert(NativeW* pData)
 		if (0 < nLineLen) {
 			// 先頭行については開始桁位置を考慮する（さらに折り返し関連の対策が必要？）
 			nPosX = (pData->GetStringPtr() == pLine)? nStartColumn: 0;
-			for (int i=0; i<nLineLen; ++i) {
+			for (size_t i=0; i<nLineLen; ++i) {
 				if (pLine[i] == TAB) {
 					nWork = nTabWidth - (nPosX % nTabWidth);
 					nPosDes += nWork;
@@ -49,7 +49,7 @@ bool Converter_TabToSpace::DoConvert(NativeW* pData)
 		if (0 < nLineLen) {
 			// 先頭行については開始桁位置を考慮する（さらに折り返し関連の対策が必要？）
 			nPosX = (pData->GetStringPtr() == pLine)? nStartColumn: 0;
-			for (int i=0; i<nLineLen; ++i) {
+			for (size_t i=0; i<nLineLen; ++i) {
 				if (pLine[i] == TAB) {
 					nWork = nTabWidth - (nPosX % nTabWidth);
 					auto_memset(&pDes[nPosDes], L' ', nWork);

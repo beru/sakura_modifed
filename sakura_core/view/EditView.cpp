@@ -1860,8 +1860,8 @@ bool EditView::GetSelectedData(
 {
 	size_t			nLineLen;
 	size_t			nLineNum;
-	int				nIdxFrom;
-	int				nIdxTo;
+	size_t			nIdxFrom;
+	size_t			nIdxTo;
 	size_t			nRowNum;
 	size_t			nLineNumCols = 0;
 	wchar_t*		pszLineNum = NULL;
@@ -1908,7 +1908,7 @@ bool EditView::GetSelectedData(
 				// 指定された桁に対応する行のデータ内の位置を調べる
 				nIdxFrom	= LineColumnToIndex(pLayout, rcSel.left );
 				nIdxTo		= LineColumnToIndex(pLayout, rcSel.right);
-
+				ASSERT_GE(nIdxTo, nIdxFrom);
 				nBufSize += nIdxTo - nIdxFrom;
 			}
 			if (bLineOnly) {	// 複数行選択の場合は先頭の行のみ
@@ -1930,6 +1930,7 @@ bool EditView::GetSelectedData(
 				nIdxTo		= LineColumnToIndex(pLayout, rcSel.right);
 				// 2002.02.08 hor
 				// pLineがNULLのとき(矩形エリアの端がEOFのみの行を含むとき)は以下を処理しない
+				ASSERT_GE(nIdxTo, nIdxFrom);
 				if (nIdxTo - nIdxFrom > 0) {
 					if (WCODE::IsLineDelimiter(pLine[nIdxTo - 1], bExtEol)) {
 						memBuf->AppendString(&pLine[nIdxFrom], nIdxTo - nIdxFrom - 1);
@@ -2008,6 +2009,7 @@ bool EditView::GetSelectedData(
 			}else {
 				nIdxTo = nLineLen;
 			}
+			ASSERT_GE(nIdxTo, nIdxFrom);
 			if (nIdxTo - nIdxFrom == 0) {
 				continue;
 			}
@@ -2061,12 +2063,12 @@ bool EditView::GetSelectedData(
 	通常選択ならロジック行、矩形なら選択範囲内のレイアウト行１行を選択
 	2010.09.04 Moca 新規作成
 */
-bool EditView::GetSelectedDataOne(NativeW& memBuf, int nMaxLen)
+bool EditView::GetSelectedDataOne(NativeW& memBuf, size_t nMaxLen)
 {
-	size_t			nLineLen;
-	int				nIdxFrom;
-	int				nIdxTo;
-	int				nSelectLen;
+	size_t	nLineLen;
+	size_t	nIdxFrom;
+	size_t	nIdxTo;
+	size_t	nSelectLen;
 	auto& layoutMgr = pEditDoc->layoutMgr;
 	auto& selInfo = GetSelectionInfo();
 
@@ -2096,9 +2098,11 @@ bool EditView::GetSelectedDataOne(NativeW& memBuf, int nMaxLen)
 				nIdxFrom	= LineColumnToIndex(pLayout, rcSel.left );
 				nIdxTo		= LineColumnToIndex(pLayout, rcSel.right);
 			}
+			ASSERT_GE(nIdxTo, nIdxFrom);
+			ASSERT_GE(nLineLen, nIdxFrom);
 			nSelectLen = nIdxTo - nIdxFrom;
 			if (0 < nSelectLen) {
-				memBuf.AppendString(&pLine[nIdxFrom], t_min<int>(nMaxLen, t_min<int>(nSelectLen, nLineLen - nIdxFrom)));
+				memBuf.AppendString(&pLine[nIdxFrom], t_min(nMaxLen, t_min(nSelectLen, nLineLen - nIdxFrom)));
 			}
 		}
 	}else {
@@ -2119,9 +2123,11 @@ bool EditView::GetSelectedDataOne(NativeW& memBuf, int nMaxLen)
 			}else {
 				nIdxTo = nLineLen;
 			}
+			ASSERT_GE(nIdxTo, nIdxFrom);
+			ASSERT_GE(nLineLen, nIdxFrom);
 			nSelectLen = nIdxTo - nIdxFrom;
 			if (0 < nSelectLen) {
-				memBuf.AppendString(&pLine[nIdxFrom], t_min<int>(nMaxLen, t_min<int>(nSelectLen, nLineLen - nIdxFrom)));
+				memBuf.AppendString(&pLine[nIdxFrom], t_min(nMaxLen, t_min(nSelectLen, nLineLen - nIdxFrom)));
 			}
 		}
 	}
@@ -2819,7 +2825,7 @@ bool EditView::IsEmptyArea(
 		}
 
 		const Layout*	pLayout;
-		int nLineLen;
+		size_t nLineLen;
 
 		result = true;
 		for (int nLineNum=nLineFrom; nLineNum<=nLineTo; ++nLineNum) {

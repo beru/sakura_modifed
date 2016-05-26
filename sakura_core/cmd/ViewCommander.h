@@ -139,7 +139,7 @@ public:
 	void Command_Indent(wchar_t cChar, IndentType = IndentType::None); // インデント ver 1
 // From Here 2001.12.03 hor
 //	void Command_Indent(const char*, int);// インデント ver0
-	void Command_Indent(const wchar_t*, int, IndentType = IndentType::None);// インデント ver0
+	void Command_Indent(const wchar_t*, size_t, IndentType = IndentType::None);// インデント ver0
 // To Here 2001.12.03 hor
 	void Command_Unindent(wchar_t wcChar);// 逆インデント
 //	void Command_WORDSREFERENCE(void);		// 単語リファレンス

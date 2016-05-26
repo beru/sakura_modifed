@@ -153,7 +153,6 @@ INT_PTR PropToolbar::DispatchEvent(
 	int					nIndex1;
 	int					nIndex2;
 //	int					nIndex3;
-	int					nNum;
 	int					i;
 	int					j;
 	static int			nListItemHeight;
@@ -240,8 +239,8 @@ INT_PTR PropToolbar::DispatchEvent(
 				List_ResetContent(hwndFuncList);
 				// 機能一覧に文字列をセット (リストボックス)
 				//	From Here Oct. 15, 2001 genta Lookupを使うように変更
-				nNum = lookup.GetItemCount(nIndex2);
-				for (i=0; i<nNum; ++i) {
+				size_t nNum = lookup.GetItemCount(nIndex2);
+				for (size_t i=0; i<nNum; ++i) {
 					nIndex1 = lookup.Pos2FuncCode(nIndex2, i);
 					int nbarNo = pMenuDrawer->FindToolbarNoFromCommandId(nIndex1);
 					if (nbarNo >= 0) {

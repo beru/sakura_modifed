@@ -202,7 +202,7 @@ void ESI::GetEncodingInfo_sjis(const char* pS, const size_t nLen)
 	const char* pr = pS;
 	const char* pr_end = pr + nLen;
 
-	int nret;
+	size_t nret;
 	ECharSet echarset;
 	for (; 0!=(nret = CheckSjisChar(pr, pr_end - pr, &echarset)); pr+=nret) {
 		if (echarset != CHARSET_BINARY) {
@@ -252,7 +252,8 @@ void ESI::GetEncodingInfo_jis(const char* pS, const size_t nLen)
 	EMyJisEscseq emyjisesc = MYJISESC_ASCII7;
 
 	const char* pr_next;
-	int nlen, nerror;
+	size_t nlen;
+	int nerror;
 	do {
 		switch (emyjisesc) {
 		case MYJISESC_ASCII7:

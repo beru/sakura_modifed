@@ -566,7 +566,7 @@ void DlgFuncList::SetData()
 			const size_t nBuffLenTag = 13 + wcslen(to_wchar(pFuncInfoArr->szFilePath));
 			const size_t nNum = pFuncInfoArr->GetNum();
 			size_t nBuffLen = 0;
-			for (int i=0; i<nNum; ++i) {
+			for (size_t i=0; i<nNum; ++i) {
 				const FuncInfo* pFuncInfo = pFuncInfoArr->GetAt(i);
 				nBuffLen += pFuncInfo->memFuncName.GetStringLength();
 			}
@@ -575,7 +575,7 @@ void DlgFuncList::SetData()
 
 		EnableItem(IDC_BUTTON_COPY, TRUE);
 		bSelected = false;
-		for (int i=0; i<pFuncInfoArr->GetNum(); ++i) {
+		for (size_t i=0; i<pFuncInfoArr->GetNum(); ++i) {
 			pFuncInfo = pFuncInfoArr->GetAt(i);
 			if (!bSelected) {
 				if (pFuncInfo->nFuncLineLAYOUT < nFuncLineTop
@@ -608,7 +608,7 @@ void DlgFuncList::SetData()
 			bSelected = true;
 			nSelectedLine =  nSelectedLineTop;
 		}
-		for (int i=0; i<pFuncInfoArr->GetNum(); ++i) {
+		for (size_t i=0; i<pFuncInfoArr->GetNum(); ++i) {
 			// 現在の解析結果要素
 			pFuncInfo = pFuncInfoArr->GetAt(i);
 
@@ -919,7 +919,7 @@ void DlgFuncList::SetTreeJava(
 		const size_t nBuffLenTag = 13 + wcslen(to_wchar(pFuncInfoArr->szFilePath));
 		const size_t nNum = pFuncInfoArr->GetNum();
 		size_t nBuffLen = 0;
-		for (int i=0; i<nNum; ++i) {
+		for (size_t i=0; i<nNum; ++i) {
 			const FuncInfo* pFuncInfo = pFuncInfoArr->GetAt(i);
 			nBuffLen += pFuncInfo->memFuncName.GetStringLength();
 		}
@@ -938,7 +938,7 @@ void DlgFuncList::SetTreeJava(
 	int nFuncLineOld = -1;
 	int nFuncColOld = -1;
 	int bSelected = FALSE;
-	for (int i=0; i<pFuncInfoArr->GetNum(); ++i) {
+	for (size_t i=0; i<pFuncInfoArr->GetNum(); ++i) {
 		const FuncInfo* pFuncInfo = pFuncInfoArr->GetAt(i);
 		const TCHAR* pWork = pFuncInfo->memFuncName.GetStringPtr();
 		int m = 0;
@@ -1224,7 +1224,7 @@ void DlgFuncList::SetListVB(void)
 	int nFuncColTop(INT_MAX);
 	int nSelectedLineTop = 0;
 	bool bSelected = false;
-	for (int i=0; i<pFuncInfoArr->GetNum(); ++i) {
+	for (size_t i=0; i<pFuncInfoArr->GetNum(); ++i) {
 		const FuncInfo* pFuncInfo = pFuncInfoArr->GetAt(i);
 		if (!bSelected) {
 			if (pFuncInfo->nFuncLineLAYOUT < nFuncLineTop
@@ -1254,7 +1254,7 @@ void DlgFuncList::SetListVB(void)
 	}
 
 	TCHAR szText[2048];
-	for (int i=0; i<pFuncInfoArr->GetNum(); ++i) {
+	for (size_t i=0; i<pFuncInfoArr->GetNum(); ++i) {
 		// 現在の解析結果要素
 		const FuncInfo* pFuncInfo = pFuncInfoArr->GetAt(i);
 
@@ -1467,7 +1467,7 @@ void DlgFuncList::SetTree(bool tagjump, bool nolabel)
 		if (tagjump) {
 			nBuffLenTag = 10 + wcslen(to_wchar(pFuncInfoArr->szFilePath));
 		}
-		for (int i=0; i<nFuncInfoArrNum; ++i) {
+		for (size_t i=0; i<nFuncInfoArrNum; ++i) {
 			const FuncInfo* pFuncInfo = pFuncInfoArr->GetAt(i);
 			if (pFuncInfo->IsAddClipText()) {
 				nBuffLen += pFuncInfo->memFuncName.GetStringLength() + pFuncInfo->nDepth * 2;
@@ -1477,7 +1477,7 @@ void DlgFuncList::SetTree(bool tagjump, bool nolabel)
 		memClipText.AllocStringBuffer(nBuffLen + nBuffLenTag * nCount);
 	}
 
-	for (int i=0; i<nFuncInfoArrNum; ++i) {
+	for (size_t i=0; i<nFuncInfoArrNum; ++i) {
 		FuncInfo* pFuncInfo = pFuncInfoArr->GetAt(i);
 
 		/*	新しいアイテムを作成
@@ -1614,7 +1614,7 @@ void DlgFuncList::SetDocLineFuncList()
 	
 	FuncListManager().ResetAllFucListMark(docLineMgr, false);
 	size_t num = pFuncInfoArr->GetNum();
-	for (int i=0; i<num; ++i) {
+	for (size_t i=0; i<num; ++i) {
 		const FuncInfo* pFuncInfo = pFuncInfoArr->GetAt(i);
 		if (0 < pFuncInfo->nFuncLineCRLF) {
 			DocLine* pDocLine = docLineMgr.GetLine( pFuncInfo->nFuncLineCRLF - 1 );
@@ -1770,7 +1770,7 @@ void DlgFuncList::SetTreeFileSub(
 	grepEnumFilterFiles.Enumerates( basePath.c_str(), grepEnumKeys, grepEnumOptions, grepExceptAbsFiles );
 	nItemCount = grepEnumFilterFiles.GetCount();
 	count += nItemCount;
-	for (int i=0; i<nItemCount; ++i) {
+	for (size_t i=0; i<nItemCount; ++i) {
 		const TCHAR* pFile = grepEnumFilterFiles.GetFileName(i);
 		TVINSERTSTRUCT tvis;
 		tvis.hParent      = hParent;

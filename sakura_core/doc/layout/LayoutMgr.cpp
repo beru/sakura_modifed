@@ -183,24 +183,16 @@ void LayoutMgr::SetLayoutInfo(
 	@param nLineNum [in] 物理行番号 (0～)
 */
 const Layout* LayoutMgr::SearchLineByLayoutY(
-	int nLineLayout
+	size_t nLineLayout
 	) const
 {
-	int nLineNum = nLineLayout;
-
-	Layout*	pLayout;
-	int	nCount;
 	if (nLines == 0) {
 		return nullptr;
 	}
+	size_t nLineNum = nLineLayout;
+	Layout*	pLayout;
+	size_t nCount;
 
-	// Mar. 19, 2003 Moca nLineNumが負の場合のチェックを追加
-	if (0 > nLineNum || nLineNum >= nLines) {
-		if (0 > nLineNum) {
-			DEBUG_TRACE(_T("LayoutMgr::SearchLineByLayoutY() nLineNum = %d\n"), nLineNum);
-		}
-		return nullptr;
-	}
 //	// +++++++ 低速版 +++++++++
 //	if (nLineNum < (nLines / 2)) {
 //		nCount = 0;
@@ -231,7 +223,8 @@ const Layout* LayoutMgr::SearchLineByLayoutY(
 
 	// +++++++わずかに高速版+++++++
 	// 2004.03.28 Moca pLayoutPrevReferより、Top,Botのほうが近い場合は、そちらを利用する
-	int nPrevToLineNumDiff = t_abs(nPrevReferLine - nLineNum);
+	int nPrevToLineNumDiff = t_abs(nPrevReferLine - (int)nLineNum);
+	ASSERT_GE(nLines, nLineNum);
 	if (0
 		|| !pLayoutPrevRefer
 		|| nLineNum < nPrevToLineNumDiff
@@ -369,14 +362,14 @@ Layout* LayoutMgr::CreateLayout(
 		nIndent,
 		colorInfo
 	);
-
-	if (pDocLine->GetEol() == EolType::None) {
+	auto& eol = pDocLine->GetEol();
+	if (eol == EolType::None) {
 		pLayout->eol.SetType(EolType::None);	// 改行コードの種類
 	}else {
 		if (pLayout->GetLogicOffset() + pLayout->GetLengthWithEOL() >
-			pDocLine->GetLengthWithEOL() - pDocLine->GetEol().GetLen()
+			pDocLine->GetLengthWithEOL() - eol.GetLen()
 		) {
-			pLayout->eol = pDocLine->GetEol();	// 改行コードの種類
+			pLayout->eol = eol;	// 改行コードの種類
 		}else {
 			pLayout->eol = EolType::None;	// 改行コードの種類
 		}
@@ -477,8 +470,8 @@ void LayoutMgr::GetEndLayoutPos(
 		// データが空
 		ptLayoutEnd->x = 0;
 		ptLayoutEnd->y = 0;
-		nEOFColumn = ptLayoutEnd->x;
-		nEOFLine = ptLayoutEnd->y;
+		nEOFColumn = 0;
+		nEOFLine = 0;
 		return;
 	}
 
@@ -514,7 +507,7 @@ Layout* LayoutMgr::DeleteLayoutAsLogical(
 	int			nLineFrom,
 	int			nLineTo,
 	Point		ptDelLogicalFrom,
-	int*		pnDeleteLines
+	size_t*		pnDeleteLines
 	)
 {
 	*pnDeleteLines = 0;
@@ -632,11 +625,11 @@ bool LayoutMgr::ChangeLayoutParam(
 
 // 現在位置の単語の範囲を調べる
 bool LayoutMgr::WhereCurrentWord(
-	int				nLineNum,
-	int				nIdx,
-	Range*	pSelect,		// [out]
-	NativeW*		pcmcmWord,		// [out]
-	NativeW*		pcmcmWordLeft	// [out]
+	int			nLineNum,
+	size_t		nIdx,
+	Range*		pSelect,		// [out]
+	NativeW*	pcmcmWord,		// [out]
+	NativeW*	pcmcmWordLeft	// [out]
 	)
 {
 	const Layout* pLayout = SearchLineByLayoutY(nLineNum);
@@ -770,8 +763,8 @@ void LayoutMgr::LogicToLayout(
 		return; // 変換不可
 	}
 	// サーチ開始地点 -> pLayout, nCaretPosX, nCaretPosY
-	int				nCaretPosX = 0;
-	int				nCaretPosY;
+	size_t nCaretPosX = 0;
+	size_t nCaretPosY;
 	const Layout*	pLayout;
 	// 2013.05.15 ヒント、ありなしの処理を統合
 	{
@@ -834,16 +827,16 @@ void LayoutMgr::LogicToLayout(
 			nCaretPosX = pLayout->GetIndent();
 			const wchar_t*	pData;
 			pData = pLayout->GetDocLineRef()->GetPtr() + pLayout->GetLogicOffset(); // 2002/2/10 aroka CMemory変更
-			int nDataLen = pLayout->GetLengthWithEOL();
+			size_t nDataLen = pLayout->GetLengthWithEOL();
 
-			int i;
+			size_t i;
 			for (i=0; i<nDataLen; ++i) {
 				if (pLayout->GetLogicOffset() + i >= ptLogic.x) {
 					break;
 				}
 
 				// 文字ロジック幅 -> nCharChars
-				int nCharChars = NativeW::GetSizeOfChar(pData, nDataLen, i);
+				size_t nCharChars = NativeW::GetSizeOfChar(pData, nDataLen, i);
 				if (nCharChars == 0) {
 					nCharChars = 1;
 				}
@@ -932,7 +925,7 @@ void LayoutMgr::LayoutToLogicEx(
 	//                        Ｙ値の決定                           //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	bool bEOF = false;
-	int nX;
+	size_t nX;
 	const Layout* pLayout = SearchLineByLayoutY(ptLayout.y);
 	if (!pLayout) {
 		if (0 < ptLayout.y) {
@@ -969,17 +962,17 @@ void LayoutMgr::LayoutToLogicEx(
 	nX = pLayout ? pLayout->GetIndent() : 0;
 
 checkloop:;
-	int i;
+	size_t i;
 	for (i=0; i<nDataLen; ++i) {
 		// 文字ロジック幅 -> nCharChars
-		int nCharChars;
+		size_t nCharChars;
 		nCharChars = NativeW::GetSizeOfChar(pData, nDataLen, i);
 		if (nCharChars == 0) {
 			nCharChars = 1;
 		}
 		
 		// 文字レイアウト幅 -> nCharKetas
-		int nCharKetas;
+		size_t nCharKetas;
 		if (pData[i] == WCODE::TAB) {
 			nCharKetas = GetActualTabSpace(nX);
 		}else {

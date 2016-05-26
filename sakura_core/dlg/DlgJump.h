@@ -31,7 +31,7 @@ public:
 	*/
 	INT_PTR DoModal(HINSTANCE, HWND, LPARAM);	// モーダルダイアログの表示
 
-	int		nLineNum;		// 行番号
+	UINT	nLineNum;		// 行番号
 	bool	bPLSQL;		// PL/SQLソースの有効行か
 	int		nPLSQL_E1;
 	int		nPLSQL_E2;

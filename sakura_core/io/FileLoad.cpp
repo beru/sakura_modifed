@@ -468,7 +468,7 @@ const char* FileLoad::GetNextLineCharCode(
 	size_t*		pnBufferNext	// [out]	次回持越しバッファ長(EOLの断片)
 	)
 {
-	int nbgn = *pnBgn;
+	size_t nbgn = *pnBgn;
 	size_t i;
 
 	pEol->SetType(EolType::None);
@@ -481,7 +481,7 @@ const char* FileLoad::GetNextLineCharCode(
 	}
 	const unsigned char* pUData = (const unsigned char*)pData; // signedだと符号拡張でNELがおかしくなるので
 	bool bExtEol = GetDllShareData().common.edit.bEnableExtEol;
-	int nLen = nDataLen;
+	size_t nLen = nDataLen;
 	int neollen = 0;
 	switch (encodingTrait) {
 	case ENCODING_TRAIT_ERROR://

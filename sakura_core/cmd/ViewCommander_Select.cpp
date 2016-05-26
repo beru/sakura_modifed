@@ -35,7 +35,7 @@ bool ViewCommander::Command_SelectWord(const Point* pptCaretPos)
 		return false;	// 単語選択に失敗
 	}
 	// 指定された桁に対応する行のデータ内の位置を調べる
-	int nIdx = view.LineColumnToIndex(pLayout, ptCaretPos.x);
+	size_t nIdx = view.LineColumnToIndex(pLayout, ptCaretPos.x);
 
 	// 現在位置の単語の範囲を調べる
 	Range range;

@@ -38,7 +38,7 @@ FuncInfoArr::~FuncInfoArr()
 void FuncInfoArr::Empty(void)
 {
 	if (nFuncInfoArrNum > 0 && ppcFuncInfoArr) {
-		for (int i=0; i<nFuncInfoArrNum; ++i) {
+		for (size_t i=0; i<nFuncInfoArrNum; ++i) {
 			delete ppcFuncInfoArr[i];
 			ppcFuncInfoArr[i] = nullptr;
 		}
@@ -160,7 +160,7 @@ void FuncInfoArr::DUMP(void)
 {
 #ifdef _DEBUG
 	MYTRACE(_T("=============================\n"));
-	for (int i=0; i<nFuncInfoArrNum; ++i) {
+	for (size_t i=0; i<nFuncInfoArrNum; ++i) {
 		MYTRACE(_T("[%d]------------------\n"), i);
 		MYTRACE(_T("nFuncLineCRLF	=%d\n"), ppcFuncInfoArr[i]->nFuncLineCRLF);
 		MYTRACE(_T("nFuncLineLAYOUT	=%d\n"), ppcFuncInfoArr[i]->nFuncLineLAYOUT);

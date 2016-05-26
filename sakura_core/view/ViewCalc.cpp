@@ -6,7 +6,7 @@
 #include "doc/layout/Layout.h"
 
 // 外部依存
-int ViewCalc::GetTabSpace() const
+size_t ViewCalc::GetTabSpace() const
 {
 	return owner.pEditDoc->layoutMgr.GetTabSpace();
 }
@@ -16,12 +16,12 @@ int ViewCalc::GetTabSpace() const
 	
 	@@@ 2002.09.28 YAZAKI DocLine版
 */
-int ViewCalc::LineColumnToIndex(
+size_t ViewCalc::LineColumnToIndex(
 	const DocLine* pDocLine,
-	int nColumn
+	size_t nColumn
 	) const
 {
-	int i2 = 0;
+	size_t i2 = 0;
 	MemoryIterator it(pDocLine, GetTabSpace());
 	while (!it.end()) {
 		it.scanNext();
@@ -39,12 +39,12 @@ int ViewCalc::LineColumnToIndex(
 	
 	@@@ 2002.09.28 YAZAKI Layoutが必要になりました。
 */
-int ViewCalc::LineColumnToIndex(
+size_t ViewCalc::LineColumnToIndex(
 	const Layout* pLayout,
-	int nColumn
+	size_t nColumn
 	) const
 {
-	int i2 = 0;
+	size_t i2 = 0;
 	MemoryIterator it(pLayout, GetTabSpace());
 	while (!it.end()) {
 		it.scanNext();
@@ -64,16 +64,16 @@ int ViewCalc::LineColumnToIndex(
   それ以外の場合はpnLineAllColLenに０をセットする
   @@@ 2002.09.28 YAZAKI Layoutが必要になりました。
 */
-int ViewCalc::LineColumnToIndex2(
+size_t ViewCalc::LineColumnToIndex2(
 	const Layout* pLayout,
-	int nColumn,
-	int* pnLineAllColLen
+	size_t nColumn,
+	size_t* pnLineAllColLen
 	) const
 {
 	*pnLineAllColLen = 0;
 
-	int i2 = 0;
-	int nPosX2 = 0;
+	size_t i2 = 0;
+	size_t nPosX2 = 0;
 	MemoryIterator it(pLayout, GetTabSpace());
 	while (!it.end()) {
 		it.scanNext();
@@ -96,13 +96,13 @@ int ViewCalc::LineColumnToIndex2(
 ||
 ||	@@@ 2002.09.28 YAZAKI Layoutが必要になりました。
 */
-int ViewCalc::LineIndexToColumn(
+size_t ViewCalc::LineIndexToColumn(
 	const Layout* pLayout,
-	int nIndex
+	size_t nIndex
 	) const
 {
 	//	以下、iterator版
-	int nPosX2 = 0;
+	size_t nPosX2 = 0;
 	MemoryIterator it(pLayout, GetTabSpace());
 	while (!it.end()) {
 		it.scanNext();
@@ -121,12 +121,12 @@ int ViewCalc::LineIndexToColumn(
 ||
 ||	@@@ 2002.09.28 YAZAKI DocLine版
 */
-int ViewCalc::LineIndexToColumn(
+size_t ViewCalc::LineIndexToColumn(
 	const DocLine* pDocLine,
-	int nIndex
+	size_t nIndex
 	) const
 {
-	int nPosX2 = 0;
+	size_t nPosX2 = 0;
 	MemoryIterator it(pDocLine, GetTabSpace());
 	while (!it.end()) {
 		it.scanNext();

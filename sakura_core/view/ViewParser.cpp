@@ -12,8 +12,8 @@
 int ViewParser::GetLeftWord(NativeW* pMemWord, int nMaxWordLen) const
 {
 	size_t nLineLen;
-	int	nIdx;
-	int	nIdxTo;
+	size_t nIdx;
+	size_t nIdxTo;
 
 	ptrdiff_t nCharChars;
 	const Layout* pLayout;
@@ -47,12 +47,14 @@ int ViewParser::GetLeftWord(NativeW* pMemWord, int nMaxWordLen) const
 			return 0;
 		}
 		nIdxTo = nLineLen;
+		ASSERT_GE(nIdxTo, nCharChars);
 		nIdx = nIdxTo - nCharChars;
 	}else {
 		nCharChars = &pLine[nIdxTo] - NativeW::GetCharPrev(pLine, nLineLen, &pLine[nIdxTo]);
 		if (nCharChars == 0) {
 			return 0;
 		}
+		ASSERT_GE(nIdxTo, nCharChars);
 		nIdx = nIdxTo - nCharChars;
 	}
 

@@ -186,7 +186,7 @@ BOOL DlgGrep::OnInitDialog(
 
 	// 文字コードセット選択コンボボックス初期化
 	CodeTypesForCombobox codeTypes;
-	for (int i=0; i<codeTypes.GetCount(); ++i) {
+	for (size_t i=0; i<codeTypes.GetCount(); ++i) {
 		int idx = Combo_AddString(GetItemHwnd(IDC_COMBO_CHARSET), codeTypes.GetName(i));
 		Combo_SetItemData(GetItemHwnd(IDC_COMBO_CHARSET), idx, codeTypes.GetCode(i));
 	}
@@ -465,12 +465,12 @@ void DlgGrep::SetData(void)
 	// 2002/09/22 Moca Add
 	// 文字コードセット
 	{
-		int	nIdx, nCurIdx = -1;
+		int	nCurIdx = -1;
 		EncodingType nCharSet;
 		HWND hWndCombo = GetItemHwnd(IDC_COMBO_CHARSET);
 		nCurIdx = Combo_GetCurSel(hWndCombo);
 		CodeTypesForCombobox codeTypes;
-		for (nIdx=0; nIdx<codeTypes.GetCount(); ++nIdx) {
+		for (size_t nIdx=0; nIdx<codeTypes.GetCount(); ++nIdx) {
 			nCharSet = (EncodingType)Combo_GetItemData(hWndCombo, nIdx);
 			if (nCharSet == nGrepCharSet) {
 				nCurIdx = nIdx;

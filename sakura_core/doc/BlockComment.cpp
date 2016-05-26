@@ -80,7 +80,7 @@ bool BlockComment::Match_CommentFrom(
 	@return 当てはまった位置を返すが、当てはまらなかったときは、nLineLenをそのまま返す。
 */
 int BlockComment::Match_CommentTo(
-	int					nPos,		// [in] 探索開始位置
+	int					nPos,	// [in] 探索開始位置
 	const StringRef&	str		// [in] 探索対象文字列 ※探索開始位置のポインタではないことに注意
 	/*
 	int				nLineLen,	// [in] pLineの長さ

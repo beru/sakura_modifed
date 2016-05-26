@@ -40,7 +40,7 @@ void Layout::DUMP(void)
 size_t Layout::CalcLayoutWidth(const LayoutMgr& layoutMgr) const
 {
 	// ソース
-	const wchar_t* pText    = pDocLine->GetPtr();
+	const wchar_t* pText = pDocLine->GetPtr();
 	size_t nTextLen = pDocLine->GetLengthWithoutEOL();
 
 	// 計算

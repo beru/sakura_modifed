@@ -63,9 +63,9 @@ void DocOutline::MakeTopicList_html(FuncInfoArr* pFuncInfoArr)
 	const wchar_t*	pLineBuf;	//	pLineBuf は行全体を指し、
 	const wchar_t*	pLine;		//	pLine は処理中の文字以降の部分を指します。
 	size_t			nLineLen;
-	int				i;
-	int				j;
-	int				k;
+	size_t			i;
+	size_t			j;
+	size_t			k;
 	bool			bEndTag;
 	bool			bCommentTag = false;
 	bool			bParaTag = false;	//	2008.08.15 aroka
@@ -89,7 +89,7 @@ void DocOutline::MakeTopicList_html(FuncInfoArr* pFuncInfoArr)
 		LT_HEADING,
 	};
 	ELabelType	nLabelType;				// ラベルの種別
-	int nLineCount;
+	size_t nLineCount;
 	/*	同じ見出し要素（hy）を次に上位レベルの見出し(hx)が現れるまで同じ深さにそろえます。
 		このため、見出しの深さを記憶しておきます。
 		下位レベルの見出しの深さは現れるまで不定で、前の章節での深さは影響しません。 2008.08.15 aroka
