@@ -1210,9 +1210,9 @@ int ShareData::GetMacroFilename(int idx, TCHAR* pszPath, size_t nBufLen)
 		}
 
 		size_t nDirLen = _tcslen(pszDir);
-		int nAllLen = nDirLen + nLen + (nFolderSep == -1 ? 1 : 0);
+		size_t nAllLen = nDirLen + nLen + (nFolderSep == -1 ? 1 : 0);
 		if (!pszPath || nBufLen <= nAllLen) {
-			return -nAllLen;
+			return -(int)nAllLen;
 		}
 
 		_tcscpy(pszPath, pszDir);

@@ -955,7 +955,7 @@ void ViewCommander::Command_Copy_Color_HTML(bool bLineNumber)
 			int nBgnLogic = nIdxFrom + nLineStart;
 			int iLogic = nLineStart;
 			bool bAddCRLF = false;
-			for (; iLogic<nLineStart+nLineLen; ++iLogic) {
+			for (; iLogic<nLineStart+(int)nLineLen; ++iLogic) {
 				bool bChange = false;
 				pStrategy = GetColorStrategyHTML(cStringLine, iLogic, &pool, &pStrategyNormal, &pStrategyFound, bChange);
 				if (bChange) {
@@ -1082,7 +1082,7 @@ ColorStrategy* ViewCommander::GetColorStrategyHTML(
 
 	// 検索色開始
 	if (!*ppStrategyFound) {
-		Color_Found*  pcFound  = pool->GetFoundStrategy();
+		Color_Found* pcFound  = pool->GetFoundStrategy();
 		if (pcFound->BeginColor(stringLine, iLogic)) {
 			*ppStrategyFound = pcFound;
 			bChange = true;
@@ -1099,8 +1099,8 @@ ColorStrategy* ViewCommander::GetColorStrategyHTML(
 
 	// 色開始
 	if (!*ppStrategy) {
-		int size = pool->GetStrategyCount();
-		for (int i=0; i<size; ++i) {
+		size_t size = pool->GetStrategyCount();
+		for (size_t i=0; i<size; ++i) {
 			if (pool->GetStrategy(i)->BeginColor(stringLine, iLogic)) {
 				*ppStrategy = pool->GetStrategy(i);
 				bChange = true;

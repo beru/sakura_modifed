@@ -145,12 +145,14 @@ void EditView::InsertData_CEditView(
 			if (EolType::None != pLayout->GetLayoutEol()) {
 				nIdxFrom = nLineLen - 1;
 				mem.AllocStringBuffer((ptInsertPos.x - nLineAllColLen + 1) + nDataLen);
+				ASSERT_GE(ptInsertPos.x, nLineAllColLen);
 				for (int i=0; i<ptInsertPos.x-nLineAllColLen+1; ++i) {
 					mem += L' ';
 				}
 				mem.AppendString(pData, nDataLen);
 			}else {
 				nIdxFrom = nLineLen;
+				ASSERT_GE(ptInsertPos.x, nLineAllColLen);
 				mem.AllocStringBuffer((ptInsertPos.x - nLineAllColLen) + nDataLen);
 				for (int i=0; i<ptInsertPos.x-nLineAllColLen; ++i) {
 					mem += L' ';
@@ -218,7 +220,7 @@ void EditView::InsertData_CEditView(
 	}
 
 	//	Aug. 14, 2005 genta 折り返し幅をLayoutMgrから取得するように
-	if (pptNewPos->x >= pEditDoc->layoutMgr.GetMaxLineKetas()) {
+	if (pptNewPos->x >= (int)pEditDoc->layoutMgr.GetMaxLineKetas()) {
 		if (pTypeData->bKinsokuRet
 		 || pTypeData->bKinsokuKuto
 		) {	//@@@ 2002.04.16 MIK
@@ -563,7 +565,7 @@ void EditView::DeleteData(
 			
 			Point caretOld(rcSel.left, rcSel.top);
 			pEditDoc->layoutMgr.GetLineStr(rcSel.top, &nLineLen, &pLayout);
-			if (rcSel.left <= pLayout->CalcLayoutWidth(pEditDoc->layoutMgr)) {
+			if (rcSel.left <= (LONG)pLayout->CalcLayoutWidth(pEditDoc->layoutMgr)) {
 				// EOLより左なら文字の単位にそろえる
 				int nIdxCaret = LineColumnToIndex(pLayout, rcSel.left);
 				caretOld.SetX(LineIndexToColumn(pLayout, nIdxCaret));
@@ -644,7 +646,7 @@ void EditView::DeleteData(
 	pEditDoc->docEditor.SetModified(true, bRedraw);	//	Jan. 22, 2002 genta
 
 	if (pEditDoc->layoutMgr.GetLineCount() > 0) {
-		if (caret.GetCaretLayoutPos().GetY() > pEditDoc->layoutMgr.GetLineCount() - 1) {
+		if (caret.GetCaretLayoutPos().GetY() > (int)pEditDoc->layoutMgr.GetLineCount() - 1) {
 			// 現在行のデータを取得
 			const Layout*	pLayout;
 			const wchar_t* pLine = pEditDoc->layoutMgr.GetLineStr(pEditDoc->layoutMgr.GetLineCount() - 1, &nLineLen, &pLayout);
@@ -738,14 +740,14 @@ bool EditView::ReplaceData_CEditView3(
 		}
 		bLineModifiedChange = (line)? !ModifyVisitor().IsLineModified(pLayout->GetDocLineRef(), GetDocument().docEditor.opeBuf.GetNoModifiedSeq()): true;
 		if (line) {
-			int pos = LineColumnToIndex(pLayout, delRange.GetFrom().x);
+			size_t pos = LineColumnToIndex(pLayout, delRange.GetFrom().x);
 			//	Jun. 1, 2000 genta
 			//	同一行の行末以降のみが選択されている場合を考慮する
 
 			//	Aug. 22, 2000 genta
 			//	開始位置がEOFの後ろのときは次行に送る処理を行わない
 			//	これをやってしまうと存在しない行をPointして落ちる．
-			if (delRange.GetFrom().y < layoutMgr.GetLineCount() - 1 && pos >= len) {
+			if (delRange.GetFrom().y < (int)layoutMgr.GetLineCount() - 1 && pos >= len) {
 				if (delRange.GetFrom().y == delRange.GetTo().y) {
 					//	GetSelectionInfo().select.GetFrom().y <= GetSelectionInfo().select.GetTo().y はチェックしない
 					Point tmp = delRange.GetFrom();

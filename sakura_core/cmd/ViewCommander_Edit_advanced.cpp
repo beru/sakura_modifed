@@ -215,7 +215,7 @@ void ViewCommander::Command_Indent(
 								break;
 							}
 							it.scanNext();
-							if (sortedKetas[i].keta < it.getColumn() + it.getColumnDelta()) {
+							if (sortedKetas[i].keta < (int)(it.getColumn() + it.getColumnDelta())) {
 								break;
 							}
 						}
@@ -760,10 +760,10 @@ void ViewCommander::Command_Sort(bool bAsc)	// bAsc:true=昇順, false=降順
 		);
 	}
 	OpeLineData repData;
-	int j = (int)sta.size();
 	repData.resize(sta.size());
 	int opeSeq = GetDocument().docEditor.opeBuf.GetNextSeq();
-	for (int i=0; i<j; ++i) {
+	size_t sz = sta.size();
+	for (size_t i=0; i<sz; ++i) {
 		repData[i].nSeq = opeSeq;
 		repData[i].memLine.SetString(sta[i]->pMemLine->GetStringPtr(), sta[i]->pMemLine->GetStringLength());
 		if (pStrLast == sta[i]->pMemLine->GetStringPtr()) {
@@ -842,7 +842,6 @@ void ViewCommander::Command_Merge(void)
 {
 	int	nCaretPosYOLD;
 	size_t	nLineLen;
-	int64_t	nMergeLayoutLines;
 
 	auto& selInfo = view.GetSelectionInfo();
 	if (!selInfo.IsTextSelected()) {			// テキストが選択されているか
@@ -887,8 +886,8 @@ void ViewCommander::Command_Merge(void)
 		return;
 	}
 
-	int64_t j = GetDocument().docLineMgr.GetLineCount();
-	nMergeLayoutLines = layoutMgr.GetLineCount();
+	size_t j = GetDocument().docLineMgr.GetLineCount();
+	size_t nMergeLayoutLines = layoutMgr.GetLineCount();
 
 	Range selectOld_Layout;
 	layoutMgr.LogicToLayout(sSelectOld, &selectOld_Layout);
@@ -932,13 +931,15 @@ void ViewCommander::Command_Merge(void)
 		// 2010.08.23 未変更なら変更しない
 	}
 
+	ASSERT_GE(j, GetDocument().docLineMgr.GetLineCount());
+	ASSERT_GE(nMergeLayoutLines, layoutMgr.GetLineCount());
 	j -= GetDocument().docLineMgr.GetLineCount();
 	nMergeLayoutLines -= layoutMgr.GetLineCount();
 
 	// 選択エリアの復元
 	selInfo.select = selectOld_Layout;
 	// 2010.08.22 座標混在バグ
-	selInfo.select.GetToPointer()->y -= nMergeLayoutLines;
+	selInfo.select.GetToPointer()->y -= (int)nMergeLayoutLines;
 
 	if (nCaretPosYOLD == selInfo.select.GetFrom().y) {
 		caret.MoveCursor(selInfo.select.GetFrom(), true);

@@ -388,7 +388,7 @@ void DocOutline::MakeFuncList_RuleFile(
 
 		// nDepth‚ðŒvŽZ
 		bool bAppend = true;
-		int k;
+		size_t k;
 		for (k=0; k<nDepth; ++k) {
 			int nResult = wcscmp(pszStack[k], szTitle);
 			if (nResult == 0) {

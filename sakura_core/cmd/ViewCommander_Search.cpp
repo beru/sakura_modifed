@@ -292,7 +292,7 @@ end_of_func:;
 	}
 
 	if (bFound) {
-		if (!pSelectLogic && ((nLineNumOld > nLineNum)||(nLineNumOld == nLineNum && nIdxOld > nIdx)))
+		if (!pSelectLogic && ((nLineNumOld > nLineNum) || (nLineNumOld == nLineNum && nIdxOld > (int)nIdx)))
 			view.SendStatusMessage(LS(STR_ERR_SRNEXT1));
 	}else {
 		caret.ShowEditCaret();	// 2002/04/18 YAZAKI
@@ -1030,7 +1030,7 @@ void ViewCommander::Command_Replace_All()
 				ptOld = GetSelect().GetTo();
 				// 前回の検索行と違う？
 				if (ptOld.y != linPrev) {
-					colDif = (0);
+					colDif = 0;
 				}
 				linPrev = ptOld.y;
 				// 行は範囲内？
@@ -1051,7 +1051,7 @@ void ViewCommander::Command_Replace_All()
 					caret.SetCaretLayoutPos(Point(rangeA.GetFrom().x, linNext));
 					// 2004.05.30 Moca 現在の検索文字列を使って検索する
 					Command_Search_Next(false, bDisplayUpdate, true, 0, nullptr);
-					colDif = (0);
+					colDif = 0;
 					continue;
 				}
 			}else {
@@ -1213,12 +1213,15 @@ void ViewCommander::Command_Replace_All()
 						);
 						ptColLineP.x = ptWork.x;
 						ASSERT_GE(nLen, pDocLine->GetEol().GetLen());
-						if (nLen - pDocLine->GetEol().GetLen() > ptColLineP.x + colDif)
+						if ((int)(nLen - pDocLine->GetEol().GetLen()) > ptColLineP.x + colDif) {
 							nLen = ptColLineP.x + colDif;
+						}
 					}else {	// 通常の選択
 						if (ptColLineP.y + linDif == ptOld.y) { //$$ 単位混在
-							if (nLen - pDocLine->GetEol().GetLen() > ptColLineP.x + colDif)
+							ASSERT_GE(nLen, pDocLine->GetEol().GetLen());
+							if ((int)(nLen - pDocLine->GetEol().GetLen()) > ptColLineP.x + colDif) {
 								nLen = ptColLineP.x + colDif;
+							}
 						}
 					}
 				}

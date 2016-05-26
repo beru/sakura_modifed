@@ -57,7 +57,7 @@ void BlockComment::SetBlockCommentRule(
 	@retval false 一致しなかった
 */
 bool BlockComment::Match_CommentFrom(
-	int					nPos,		// [in] 探索開始位置
+	int					nPos,	// [in] 探索開始位置
 	const StringRef&	str		// [in] 探索対象文字列 ※探索開始位置のポインタではないことに注意
 	/*
 	int				nLineLen,	// [in] pLineの長さ
@@ -88,7 +88,8 @@ int BlockComment::Match_CommentTo(
 	*/
 	) const
 {
-	for (int i=nPos; i<=str.GetLength()-nBlockToLen; ++i) {
+	ASSERT_GE(str.GetLength(), nBlockToLen);
+	for (size_t i=nPos; i<=str.GetLength()-nBlockToLen; ++i) {
 		//if (auto_memicmp(&str.GetPtr()[i], szBlockCommentTo, nBlockToLen) == 0) {	// 非ASCIIも大文字小文字を区別しない	//###locale 依存
 		if (wmemicmp_ascii(&str.GetPtr()[i], szBlockCommentTo, nBlockToLen) == 0) {	// ASCIIのみ大文字小文字を区別しない（高速）
 			return i + nBlockToLen;

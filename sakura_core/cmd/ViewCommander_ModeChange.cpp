@@ -130,7 +130,7 @@ void ViewCommander::Command_Cancel_Mode(int whereCursorIs)
 
 		// カーソルを移動
 		auto& layoutMgr = GetDocument().layoutMgr;
-		if (ptTo.y >= layoutMgr.GetLineCount()) {
+		if (ptTo.y >= (int)layoutMgr.GetLineCount()) {
 			// ファイルの最後に移動
 			Command_GoFileEnd(false);
 		}else {

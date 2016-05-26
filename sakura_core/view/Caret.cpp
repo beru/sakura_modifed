@@ -217,7 +217,7 @@ int Caret::MoveCursor(
 	}
 	
 	//	Aug. 14, 2005 genta 折り返し幅をLayoutMgrから取得するように
-	if (editDoc.layoutMgr.GetMaxLineKetas() > textArea.nViewColNum
+	if ((int)editDoc.layoutMgr.GetMaxLineKetas() > textArea.nViewColNum
 		&& ptWk_CaretPos.GetX() > textArea.GetViewLeftCol() + textArea.nViewColNum - nScrollMarginRight
 	) {
 		nScrollColNum = (textArea.GetViewLeftCol() + textArea.nViewColNum - nScrollMarginRight) - ptWk_CaretPos.x;
@@ -259,7 +259,7 @@ int Caret::MoveCursor(
 			}
 		// 移動先は、画面の最大行数－２より下か？（down キー）
 		}else if (ptWk_CaretPos.y - textArea.GetViewTopLine() >= (textArea.nViewRowNum - nCaretMarginY - 2)) {
-			size_t ii = editDoc.layoutMgr.GetLineCount();
+			int ii = (int)editDoc.layoutMgr.GetLineCount();
 			if (1
 				&& ii - ptWk_CaretPos.y < nCaretMarginY + 1
 				&& ii - textArea.GetViewTopLine() < textArea.nViewRowNum
@@ -275,7 +275,7 @@ int Caret::MoveCursor(
 		if (ptWk_CaretPos.y < nCaretMarginY) {	// １行目に移動
 			nScrollRowNum = textArea.GetViewTopLine();
 		}else {
-			nScrollRowNum = -(ptWk_CaretPos.y - textArea.GetViewTopLine()) + nCaretMarginY;
+			nScrollRowNum = -(ptWk_CaretPos.y - (int)textArea.GetViewTopLine()) + nCaretMarginY;
 		}
 	// 移動先は、画面の最大行数－２より下か？（down キー）
 	}else if (ptWk_CaretPos.y - textArea.GetViewTopLine() >= textArea.nViewRowNum - nCaretMarginY - 2) {

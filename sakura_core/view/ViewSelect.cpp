@@ -510,7 +510,7 @@ void ViewSelect::DrawSelectAreaLine(
 				break;
 			}
 			// 2006.03.28 Moca 画面外まで求めたら打ち切る
-			if (it.getColumn() > textArea.GetRightCol()) {
+			if ((int)it.getColumn() > textArea.GetRightCol()) {
 				break;
 			}
 			it.addDelta();
@@ -578,7 +578,7 @@ void ViewSelect::GetSelectAreaLineFromRange(
 			nSelectTo   = range.GetTo().x;
 			// 2006.09.30 Moca From 矩形選択時[EOF]とその右側は反転しないように修正。処理を追加
 			// 2011.12.26 [EOF]単独行以外なら反転する
-			if (view.pEditDoc->layoutMgr.GetLineCount() <= nLineNum) {
+			if ((int)view.pEditDoc->layoutMgr.GetLineCount() <= nLineNum) {
 				nSelectFrom = -1;
 				nSelectTo = -1;
 			}

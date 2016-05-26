@@ -97,8 +97,8 @@ bool ColorStrategyInfo::CheckChangeColor(const StringRef& lineStr)
 
 	// êFäJén
 	if (!pStrategy) {
-		int size = pool.GetStrategyCount();
-		for (int i=0; i<size; ++i) {
+		size_t size = pool.GetStrategyCount();
+		for (size_t i=0; i<size; ++i) {
 			if (pool.GetStrategy(i)->BeginColor(lineStr, this->GetPosInLogic())) {
 				pStrategy = pool.GetStrategy(i);
 				bChange = true;
@@ -243,8 +243,8 @@ void ColorStrategyPool::NotifyOnStartScanLogic()
 {
 	pcSelectStrategy->OnStartScanLogic();
 	pcFoundStrategy->OnStartScanLogic();
-	int size = GetStrategyCount();
-	for (int i=0; i<size; ++i) {
+	size_t size = GetStrategyCount();
+	for (size_t i=0; i<size; ++i) {
 		GetStrategy(i)->OnStartScanLogic();
 	}
 }

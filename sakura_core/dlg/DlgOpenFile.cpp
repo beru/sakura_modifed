@@ -593,7 +593,7 @@ UINT_PTR CALLBACK OFNHookProc(
 					if (Combo_GetCount( pData->hwndComboOPENFOLDER ) == 0) {
 						// 最近開いたフォルダ コンボボックス初期値設定
 						//	2003.06.22 Moca vOPENFOLDER がNULLの場合を考慮する
-						int nSize = (int)pData->pDlgOpenFile->mem->vOPENFOLDER.size();
+						size_t nSize = pData->pDlgOpenFile->mem->vOPENFOLDER.size();
 						for (i=0; i<nSize; ++i) {
 							Combo_AddString(pData->hwndComboOPENFOLDER, pData->pDlgOpenFile->mem->vOPENFOLDER[i]);
 						}

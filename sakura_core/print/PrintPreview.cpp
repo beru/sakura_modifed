@@ -1844,7 +1844,7 @@ ColorStrategy* PrintPreview::GetColorStrategy(
 		}
 	}
 	if (!pStrategy) {
-		for (int i=0; i<pool->GetStrategyCount(); ++i) {
+		for (size_t i=0; i<pool->GetStrategyCount(); ++i) {
 			if (pool->GetStrategy(i)->BeginColor(stringLine, iLogic)) {
 				pStrategy = pool->GetStrategy(i);
 				bChange = true;

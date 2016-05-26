@@ -197,7 +197,7 @@ public:
 
 	// Žæ“¾
 	ColorStrategy*	GetStrategy(int nIndex) const { return vStrategiesDisp[nIndex]; }
-	int				GetStrategyCount() const { return (int)vStrategiesDisp.size(); }
+	size_t			GetStrategyCount() const { return vStrategiesDisp.size(); }
 	ColorStrategy*	GetStrategyByColor(EColorIndexType eColor) const;
 
 	// “Á’èŽæ“¾

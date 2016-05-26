@@ -227,7 +227,7 @@ int ViewCommander::Command_Left(bool bSelect, bool bRepeat)
 			MemoryIterator it(pLayout, layoutMgr.GetTabSpace());
 			while (!it.end()) {
 				it.scanNext();
-				if ( it.getColumn() + it.getColumnDelta() > ptCaretMove.x - 1 ){
+				if ((int)(it.getColumn() + it.getColumnDelta()) > ptCaretMove.x - 1){
 					ptPos.x += it.getColumnDelta();
 					break;
 				}
@@ -315,7 +315,7 @@ void ViewCommander::Command_Right(
 			// 現在のキャレットの右の位置(to_x)を求める。
 			MemoryIterator it(pcLayout, layoutMgr.GetTabSpace());
 			for (; !it.end(); it.scanNext(), it.addDelta()) {
-				if (ptCaret.x < it.getColumn()) {
+				if (ptCaret.x < (int)it.getColumn()) {
 					break;
 				}
 			}
@@ -649,7 +649,7 @@ void ViewCommander::Command_GoLineTop(
 				break;
 			}
 		}
-		while ((lparam & 8) && (nPosX_Logic >= nLineLen) && (layoutMgr.GetLineCount() - 1 > nPosY_Layout));
+		while ((lparam & 8) && (nPosX_Logic >= nLineLen) && ((int)layoutMgr.GetLineCount() - 1 > nPosY_Layout));
 		
 		if (nPosX_Logic >= nLineLen) {
 			/* 折り返し単位の行頭を探して物理行末まで到達した
@@ -983,7 +983,7 @@ void ViewCommander::Command_WndScrollDown(void)
 	if (!view.GetSelectionInfo().IsTextSelected()) {
 		// カーソルが画面外に出た
 		if (caret.GetCaretLayoutPos().GetY() > textArea.nViewRowNum + textArea.GetViewTopLine() - nCaretMarginY) {
-			if (caret.GetCaretLayoutPos().GetY() > GetDocument().layoutMgr.GetLineCount() - nCaretMarginY) {
+			if (caret.GetCaretLayoutPos().GetY() > (int)GetDocument().layoutMgr.GetLineCount() - nCaretMarginY) {
 				caret.Cursor_UPDOWN((GetDocument().layoutMgr.GetLineCount() - nCaretMarginY) - caret.GetCaretLayoutPos().y, false);
 			}else {
 				caret.Cursor_UPDOWN(-1, false);

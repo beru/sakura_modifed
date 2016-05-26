@@ -798,7 +798,7 @@ void ViewCommander::Command_Delete(void)
 		auto& layoutMgr = GetDocument().layoutMgr;
 		// 2008.08.03 nasukoji	選択範囲なしでDELETEを実行した場合、カーソル位置まで半角スペースを挿入した後改行を削除して次行と連結する
 		auto& caret = GetCaret();
-		if (layoutMgr.GetLineCount() > caret.GetCaretLayoutPos().y) {
+		if ((int)layoutMgr.GetLineCount() > caret.GetCaretLayoutPos().y) {
 			const Layout* pLayout = layoutMgr.SearchLineByLayoutY(caret.GetCaretLayoutPos().y);
 			if (pLayout) {
 				size_t nLineLen;
@@ -812,7 +812,7 @@ void ViewCommander::Command_Delete(void)
 						// フリーカーソル時の折り返し越え位置での削除はどうするのが妥当かよくわからないが
 						// 非フリーカーソル時（ちょうどカーソルが折り返し位置にある）には次の行の先頭文字を削除したい
 
-						if (nLineLen < caret.GetCaretLayoutPos().x) {	// 折り返し行末とカーソルの間に隙間がある
+						if (nLineLen < (int)caret.GetCaretLayoutPos().x) {	// 折り返し行末とカーソルの間に隙間がある
 							Command_InsText(true, L"", 0, false);	// カーソル位置まで半角スペース挿入
 							pLayout = layoutMgr.SearchLineByLayoutY(caret.GetCaretLayoutPos().y);
 							nIndex = view.LineColumnToIndex2(pLayout, caret.GetCaretLayoutPos().x, &nLineLen);

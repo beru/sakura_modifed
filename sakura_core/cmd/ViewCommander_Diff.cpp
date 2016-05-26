@@ -44,7 +44,6 @@ static bool Commander_COMPARE_core(
 	)
 {
 	const wchar_t*	pLineSrc;
-	size_t			nLineLenSrc;
 	const wchar_t*	pLineDes;
 	int nLineLenDes;
 	int max_size = (int)GetDllShareData().workBuffer.GetWorkBufferCount<EDIT_CHAR>();
@@ -55,6 +54,7 @@ static bool Commander_COMPARE_core(
 		pLineDes = GetDllShareData().workBuffer.GetWorkBuffer<const EDIT_CHAR>();
 		int nLineOffset = 0;
 		for (;;) {
+			size_t nLineLenSrc;
 			pLineSrc = docMgr.GetLine(poSrc.y)->GetDocLineStrWithEOL(&nLineLenSrc);
 			do {
 				// workBuffer#Workの排他制御。外部コマンド出力/TraceOut/Diffが対象
@@ -84,7 +84,7 @@ static bool Commander_COMPARE_core(
 				}else {
 					// Note: サロゲート/改行の途中にカーソルがくることがある
 					while (poDes.x < nDstEndPos) {
-						if (nLineLenSrc <= poSrc.x) {
+						if ((int)nLineLenSrc <= poSrc.x) {
 							return true;
 						}
 						if (pLineSrc[poSrc.x] != pLineDes[poDes.x - nLineOffset]) {
@@ -97,7 +97,7 @@ static bool Commander_COMPARE_core(
 				nLineOffset += max_size;
 			}while (max_size < nLineLenDes);
 
-			if (poSrc.x < nLineLenSrc) {
+			if (poSrc.x < (int)nLineLenSrc) {
 				return true;
 			}
 			poSrc.x = 0;

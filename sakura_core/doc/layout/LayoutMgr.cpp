@@ -226,7 +226,7 @@ const Layout* LayoutMgr::SearchLineByLayoutY(
 	int nPrevToLineNumDiff = t_abs(nPrevReferLine - (int)nLineNum);
 	if (0
 		|| !pLayoutPrevRefer
-		|| nLineNum < nPrevToLineNumDiff
+		|| (int)nLineNum < nPrevToLineNumDiff
 		|| (int)nLines - (int)nLineNum < nPrevToLineNumDiff
 	) {
 		if (nLineNum < (nLines / 2)) {
@@ -257,7 +257,7 @@ const Layout* LayoutMgr::SearchLineByLayoutY(
 	}else {
 		if (nLineNum == nPrevReferLine) {
 			return pLayoutPrevRefer;
-		}else if (nLineNum > nPrevReferLine) {
+		}else if ((int)nLineNum > nPrevReferLine) {
 			nCount = nPrevReferLine + 1;
 			pLayout = pLayoutPrevRefer->GetNextLayout();
 			while (pLayout) {
@@ -554,7 +554,7 @@ Layout* LayoutMgr::DeleteLayoutAsLogical(
 		if (0
 			|| (1
 				&& ptDelLogicalFrom.y == pLayout->GetLogicLineNo()
-				&& ptDelLogicalFrom.x < pLayout->GetLogicOffset() + pLayout->GetLengthWithEOL()
+				&& ptDelLogicalFrom.x < pLayout->GetLogicOffset() + (int)pLayout->GetLengthWithEOL()
 			)
 			|| (ptDelLogicalFrom.y < pLayout->GetLogicLineNo())
 		) {
@@ -772,7 +772,7 @@ void LayoutMgr::LogicToLayout(
 
 		// 2013.05.12 pLayoutPrevReferを見る
 		if (1
-			&& nCaretPosY <= nPrevReferLine
+			&& (int)nCaretPosY <= nPrevReferLine
 			&& pLayoutPrevRefer
 			&& pLayoutPrevRefer->GetLogicLineNo() <= ptLogic.y
 		) {
@@ -830,7 +830,7 @@ void LayoutMgr::LogicToLayout(
 
 			size_t i;
 			for (i=0; i<nDataLen; ++i) {
-				if (pLayout->GetLogicOffset() + i >= ptLogic.x) {
+				if (pLayout->GetLogicOffset() + (int)i >= ptLogic.x) {
 					break;
 				}
 
@@ -910,7 +910,7 @@ void LayoutMgr::LayoutToLogicEx(
 {
 	pptLogic->Set(0, 0);
 	pptLogic->ext = 0;
-	if (ptLayout.y > nLines) {
+	if (ptLayout.y > (int)nLines) {
 		// 2007.10.11 kobake Y値が間違っていたので修正
 		//pptLogic->Set(0, nLines);
 		pptLogic->Set(0, pDocLineMgr->GetLineCount());
@@ -981,7 +981,7 @@ checkloop:;
 //			nCharKetas = 1;
 
 		// レイアウト加算
-		if (nX + nCharKetas > ptLayout.x && !bEOF) {
+		if ((int)(nX + nCharKetas) > ptLayout.x && !bEOF) {
 			break;
 		}
 		nX += nCharKetas;
