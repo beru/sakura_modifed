@@ -125,8 +125,8 @@ inline char* stristr_j(char* s1, const char* s2) { return const_cast<char*>(stri
 template <class CHAR_TYPE>
 CHAR_TYPE* my_strtok(
 	CHAR_TYPE*			pBuffer,	// [in] 文字列バッファ(終端があること)
-	int					nLen,		// [in] 文字列の長さ
-	int*				pnOffset,	// [in/out] オフセット
+	size_t				nLen,		// [in] 文字列の長さ
+	size_t*				pnOffset,	// [in/out] オフセット
 	const CHAR_TYPE*	pDelimiter	// [in] 区切り文字
 );
 

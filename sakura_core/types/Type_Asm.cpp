@@ -61,8 +61,8 @@ void DocOutline::MakeTopicList_asm(FuncInfoArr* pFuncInfoArr)
 		const WCHAR* pLine;
 		size_t nLineLen;
 		WCHAR* pTmpLine;
-		int length;
-		int offset;
+		size_t length;
+		size_t offset;
 #define MAX_ASM_TOKEN 2
 		WCHAR* token[MAX_ASM_TOKEN];
 		WCHAR* p;
@@ -86,8 +86,8 @@ void DocOutline::MakeTopicList_asm(FuncInfoArr* pFuncInfoArr)
 		offset = 0;
 
 		// トークンに分割
-		for (int j=0; j<MAX_ASM_TOKEN; ++j) token[j] = NULL;
-		for (int j=0; j<MAX_ASM_TOKEN; ++j) {
+		for (size_t j=0; j<MAX_ASM_TOKEN; ++j) token[j] = NULL;
+		for (size_t j=0; j<MAX_ASM_TOKEN; ++j) {
 			token[j] = my_strtok<WCHAR>(pTmpLine, length, &offset, L" \t\r\n");
 			if (!token[j]) break;
 			// トークンに含まれるべき文字でないか？

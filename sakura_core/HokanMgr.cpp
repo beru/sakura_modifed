@@ -333,7 +333,7 @@ int HokanMgr::Search(
 	size_t kouhoNum = vKouho.size();
 	vKouho.clear();
 	return kouhoNum;
-}
+}																				
 
 void HokanMgr::HokanSearchByKeyword(
 	const wchar_t*	pszCurWord,

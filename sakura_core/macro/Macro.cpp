@@ -2429,7 +2429,7 @@ bool Macro::HandleFunction(
 				std::vector<HMENU> vHmenu;
 				vHmenu.push_back( hMenu );
 				HMENU hMenuCurrent = hMenu;
-				int nPos = 0;
+				size_t nPos = 0;
 				wchar_t* p;
 				int i = 1;
 				while (p = my_strtok( &vStrMenu[0], nLen, &nPos, L"," )) {
@@ -2439,7 +2439,7 @@ bool Macro::HandleFunction(
 					bool bSpecial = false;
 					bool bRadio = false;
 					bool bSubMenu = false;
-					int nBreakNum = 0;
+					size_t nBreakNum = 0;
 					if (p[0] == L'[') {
 						++r;
 						while (*r != L']' && *r != L'\0') {
@@ -2496,7 +2496,7 @@ bool Macro::HandleFunction(
 						}
 						++i;
 					}
-					for (int n=0; n<nBreakNum; ++n) {
+					for (size_t n=0; n<nBreakNum; ++n) {
 						if (1 < vHmenu.size()) {
 							vHmenu.resize( vHmenu.size() - 1 );
 						}

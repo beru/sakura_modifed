@@ -11,7 +11,7 @@ int GrepEnumKeys::SetFileKeys(LPCTSTR lpKeys)
 	_tcscpy(pWildCard, lpKeys);
 	ClearItems();
 		
-	int nPos = 0;
+	size_t nPos = 0;
 	TCHAR* token;
 	while ((token = my_strtok<TCHAR>(pWildCard, nWildCardLen, &nPos, wildcard_delimiter))) {	// トークン毎に繰り返す。
 		// フィルタを種類ごとに振り分ける

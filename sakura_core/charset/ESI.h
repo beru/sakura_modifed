@@ -128,7 +128,7 @@ public:
 protected:
 	void SetDataLen(size_t n) { nTargetDataLen = n; }
 public:
-	int GetDataLen(void) const { return nTargetDataLen; }
+	size_t GetDataLen(void) const { return nTargetDataLen; }
 
 protected:
 	/*

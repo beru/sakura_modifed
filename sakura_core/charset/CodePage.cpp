@@ -454,18 +454,18 @@ BOOL CALLBACK CodePage::CallBackEnumCodePages( LPCTSTR pCodePageString )
 int CodePage::AddComboCodePages(HWND hwnd, HWND combo, int nSelCode)
 {
 	int nSel = -1;
-	int nIdx = Combo_AddString( combo, _T("CP_ACP") );
+	int nIdx = Combo_AddString(combo, _T("CP_ACP"));
 	Combo_SetItemData( combo, nIdx, CODE_CPACP );
 	if (nSelCode == CODE_CPACP) {
 		Combo_SetCurSel(combo, nIdx);
 		nSel = nIdx;
 	}
-	nIdx = Combo_AddString( combo, _T("CP_OEM") );
+	nIdx = Combo_AddString(combo, _T("CP_OEM"));
 	if (nSelCode == CODE_CPOEM) {
 		Combo_SetCurSel(combo, nIdx);
 		nSel = nIdx;
 	}
-	Combo_SetItemData( combo, nIdx, CODE_CPOEM );
+	Combo_SetItemData(combo, nIdx, CODE_CPOEM);
 	CodePage::CodePageList& cpList = CodePage::GetCodePageList();
 	for (auto it=cpList.begin(); it!=cpList.end(); ++it) {
 		nIdx = Combo_AddString(combo, it->second.c_str());
@@ -487,7 +487,7 @@ size_t CodePage::MultiByteToWideChar2(UINT codepage, int flags, const char* pSrc
 	}else if (codepage == 12001) {
 		return S_UTF32BEToUnicode(pSrc, nSrcLen, pDst, nDstLen);
 	}
-	return MultiByteToWideChar(codepage, flags, pSrc, nSrcLen, pDst, nDstLen);
+	return MultiByteToWideChar(codepage, flags, pSrc, (int)nSrcLen, pDst, (int)nDstLen);
 }
 size_t CodePage::WideCharToMultiByte2(UINT codepage, int flags, const wchar_t* pSrc, size_t nSrcLen, char* pDst, size_t nDstLen)
 {
@@ -496,12 +496,12 @@ size_t CodePage::WideCharToMultiByte2(UINT codepage, int flags, const wchar_t* p
 	}else if (codepage == 12001) {
 		return S_UnicodeToUTF32BE(pSrc, nSrcLen, pDst, nDstLen);
 	}
-	int ret = ::WideCharToMultiByte(codepage, flags, pSrc, nSrcLen, pDst, nDstLen, NULL, NULL);
+	int ret = ::WideCharToMultiByte(codepage, flags, pSrc, (int)nSrcLen, pDst, (int)nDstLen, NULL, NULL);
 	if (ret == 0 && nSrcLen != 0) {
 		DWORD errorCd = GetLastError();
 		if (errorCd == ERROR_INVALID_FLAGS) {
 			// flagsを0にして再挑戦
-			ret = ::WideCharToMultiByte(codepage, 0, pSrc, nSrcLen, pDst, nDstLen, NULL, NULL);
+			ret = ::WideCharToMultiByte(codepage, 0, pSrc, (int)nSrcLen, pDst, (int)nDstLen, NULL, NULL);
 		}
 	}
 	return ret;
@@ -528,7 +528,7 @@ size_t CodePage::S_UTF32LEToUnicode(const char* pSrc, size_t nSrcLen, wchar_t* p
 					// UCS-4(UTF-16範囲外。バイトごとに出力する)
 					nDstUseLen += 4;
 				}
-				i+=4;
+				i += 4;
 			}else {
 				nDstUseLen += nSrcLen - i;
 				i += nSrcLen - i;
@@ -559,7 +559,7 @@ size_t CodePage::S_UTF32LEToUnicode(const char* pSrc, size_t nSrcLen, wchar_t* p
 					}
 				}
 				nDstUseLen += nDstUseCharLen;
-				i+=4;
+				i += 4;
 			}else if (pSrcByte[i+3] == 0x00 && pSrcByte[i+2] <= 0x10) {
 				nDstUseCharLen = 2;
 				if (nDstUseLen + nDstUseCharLen <= nDstLen) {
@@ -686,13 +686,13 @@ size_t CodePage::S_UTF32BEToUnicode(const char* pSrc, size_t nSrcLen, wchar_t* p
 	return nDstUseLen;
 }
 
-static bool BinToUTF32( const unsigned short* pSrc, int Len, char* pDst, int nDstLen )
+static bool BinToUTF32(const unsigned short* pSrc, size_t len, char* pDst, size_t nDstLen)
 {
 	if (4 <= nDstLen) {
-		for (int i=0; i<Len; ++i) {
+		for (size_t i=0; i<len; ++i) {
 			pDst[i] = CodeBase::TextToBin(pSrc[i]);
 		}
-		for (int k=Len; k<4; ++k) {
+		for (size_t k=len; k<4; ++k) {
 			pDst[k] = 0;
 		}
 	}else {

@@ -62,7 +62,7 @@ void GrepAgent::CreateFolders(const TCHAR* pszPath, std::vector<std::tstring>& v
 	auto szTmp = std::make_unique<TCHAR[]>(nPathLen + 1);
 	auto_strcpy(&szPath[0], pszPath);
 	TCHAR* token;
-	int nPathPos = 0;
+	size_t nPathPos = 0;
 	while (token = my_strtok<TCHAR>(&szPath[0], nPathLen, &nPathPos, _T(";"))) {
 		auto_strcpy(&szTmp[0], token);
 		TCHAR* p;
@@ -627,7 +627,7 @@ DWORD GrepAgent::DoGrep(
 		AddTail(editWnd, viewDst, memOutput, grepOption.bGrepStdout);
 #endif
 	}
-	viewDst.GetCaret().MoveCursor(Point(0, tmp_PosY_Layout), true);	// カーソルをGrep直前の位置に戻す。
+	viewDst.GetCaret().MoveCursor(Point(0, (int)tmp_PosY_Layout), true);	// カーソルをGrep直前の位置に戻す。
 
 	dlgCancel.CloseDialog(0);
 
@@ -883,7 +883,7 @@ void GrepAgent::SetGrepResult(
 	int			nColumn,				// [in] マッチした桁番号(1～)
 	const wchar_t*	pCompareData,		// [in] 行の文字列
 	int			nLineLen,				// [in] 行の文字列の長さ
-	int			nEolCodeLen,			// [in] EOLの長さ
+	size_t		nEolCodeLen,			// [in] EOLの長さ
 	// マッチした文字列の情報
 	const wchar_t*	pMatchData,			// [in] マッチした文字列
 	int			nMatchLen,				// [in] マッチした文字列の長さ
@@ -1054,7 +1054,7 @@ int GrepAgent::DoGrepFile(
 	bool	bOutFileName;
 	bOutFileName = false;
 	Eol	eol;
-	int nEolCodeLen;
+	size_t nEolCodeLen;
 	const TypeConfigMini* type;
 	DocTypeManager().GetTypeConfigMini(DocTypeManager().GetDocumentTypeOfPath(pszFile), &type);
 	int nOldPercent = 0;

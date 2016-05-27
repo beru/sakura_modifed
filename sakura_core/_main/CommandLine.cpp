@@ -225,7 +225,7 @@ void CommandLine::ParseCommandLine(LPCTSTR pszCmdLineSrc, bool bResponse)
 	TCHAR	szPath[_MAX_PATH];
 	bool	bFind = false;				// ファイル名発見フラグ
 	bool	bParseOptDisabled = false;	// 2007.09.09 genta オプション解析を行わなず，ファイル名として扱う
-	int		nPos;
+	size_t	nPos;
 	size_t	i = 0;
 	if (pszCmdLineSrc[0] != _T('-')) {
 		for (i=0; i<_countof(szPath); ++i) {
@@ -257,7 +257,7 @@ void CommandLine::ParseCommandLine(LPCTSTR pszCmdLineSrc, bool bResponse)
 	std::vector<TCHAR> szCmdLineWork(lstrlen(pszCmdLineSrc) + 1);
 	LPTSTR pszCmdLineWork = &szCmdLineWork[0];
 	_tcscpy(pszCmdLineWork, pszCmdLineSrc);
-	int nCmdLineWorkLen = lstrlen(pszCmdLineWork);
+	size_t nCmdLineWorkLen = lstrlen(pszCmdLineWork);
 	LPTSTR pszToken = my_strtok<TCHAR>(pszCmdLineWork, nCmdLineWorkLen, &nPos, _T(" "));
 	while (pszToken) {
 		DEBUG_TRACE(_T("OPT=[%ts]\n"), pszToken);

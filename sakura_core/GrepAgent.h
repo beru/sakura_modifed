@@ -178,7 +178,7 @@ private:
 		int				nColumn,		//	マッチした桁番号
 		const wchar_t*	pCompareData,	//	行の文字列
 		int				nLineLen,		//	行の文字列の長さ
-		int				nEolCodeLen,	//	EOLの長さ
+		size_t			nEolCodeLen,	//	EOLの長さ
 		// マッチした文字列の情報
 		const wchar_t*	pMatchData,		//	マッチした文字列
 		int				nMatchLen,		//	マッチした文字列の長さ

@@ -100,7 +100,7 @@ static CodeConvertResult _CheckSavingCharcode(
 				const WCHAR* pLine = pDocLine->GetPtr();
 				const size_t nLineLen = pDocLine->GetLengthWithEOL();
 				size_t chars = NativeW::GetSizeOfChar( pLine, nLineLen, 0 );
-				int nPos = 0;
+				size_t nPos = 0;
 				NativeW mem;
 				while (0 < chars) {
 					mem.SetStringHoldBuffer( pLine + nPos, chars );
@@ -115,7 +115,7 @@ static CodeConvertResult _CheckSavingCharcode(
 						break;
 					}
 					nPos += chars;
-					chars = NativeW::GetSizeOfChar( pLine, nLineLen, nPos );
+					chars = NativeW::GetSizeOfChar(pLine, nLineLen, nPos);
 				}
 			}
 			delete pCodeBase;
@@ -180,8 +180,12 @@ CallbackResultType CodeChecker::OnCheckSave(SaveInfo* pSaveInfo)
 		}else {
 			auto_sprintf( szLineNum, _T("%d"), (int)point.x + 1 );
 			_tcscat( szLineNum, LS(STR_DLGFNCLST_LIST_COL) );
-			Unicode().UnicodeToHex( memChar.GetStringPtr(), memChar.GetStringLength(),
-				szCharCode, &GetDllShareData().common.statusBar );
+			Unicode().UnicodeToHex(
+				memChar.GetStringPtr(),
+				memChar.GetStringLength(),
+				szCharCode,
+				&GetDllShareData().common.statusBar
+			);
 		}
 		int nDlgResult = MYMESSAGEBOX(
 			EditWnd::getInstance().GetHwnd(),
