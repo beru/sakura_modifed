@@ -13,7 +13,7 @@ void Color_Select::OnStartScanLogic()
 	nSelectEnd = -1;
 }
 
-bool Color_Select::BeginColor(const StringRef& str, int nPos)
+bool Color_Select::BeginColor(const StringRef& str, size_t nPos)
 {
 	assert(0);
 	return false;
@@ -51,10 +51,10 @@ bool Color_Select::BeginColorEx(const StringRef& str, int nPos, int nLineNum, co
 	return false;
 }
 
-bool Color_Select::EndColor(const StringRef& str, int nPos)
+bool Color_Select::EndColor(const StringRef& str, size_t nPos)
 {
 	// マッチ文字列終了検出
-	return (nSelectEnd <= nPos);
+	return (nSelectEnd <= (int)nPos);
 }
 
 
@@ -78,7 +78,7 @@ void Color_Found::OnStartScanLogic()
 	}
 }
 
-bool Color_Found::BeginColor(const StringRef& str, int nPos)
+bool Color_Found::BeginColor(const StringRef& str, size_t nPos)
 {
 	if (!str.IsValid()) return false;
 	const EditView* pView = ColorStrategyPool::getInstance().GetCurrentView();
@@ -90,7 +90,7 @@ bool Color_Found::BeginColor(const StringRef& str, int nPos)
 	//        検索ヒットフラグ設定 -> bSearchStringMode            //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	// 2002.02.08 hor 正規表現の検索文字列マークを少し高速化
-	if (pView->curSearchOption.bWordOnly || (nSearchResult && nSearchStart < nPos)) {
+	if (pView->curSearchOption.bWordOnly || (nSearchResult && nSearchStart < (int)nPos)) {
 		nSearchResult = pView->IsSearchString(
 			str,
 			nPos,
@@ -102,9 +102,9 @@ bool Color_Found::BeginColor(const StringRef& str, int nPos)
 	return (nSearchResult && nSearchStart == nPos);
 }
 
-bool Color_Found::EndColor(const StringRef& str, int nPos)
+bool Color_Found::EndColor(const StringRef& str, size_t nPos)
 {
 	// マッチ文字列終了検出
-	return (nSearchEnd <= nPos); //+ == では行頭文字の場合、nSearchEndも０であるために文字色の解除ができないバグを修正 2003.05.03 かろと
+	return (nSearchEnd <= (int)nPos); //+ == では行頭文字の場合、nSearchEndも０であるために文字色の解除ができないバグを修正 2003.05.03 かろと
 }
 

@@ -60,7 +60,7 @@ LayoutColorInfo* Color_Heredoc::GetStrategyColorInfo() const
 	return info;
 }
 
-bool Color_Heredoc::BeginColor(const StringRef& str, int nPos)
+bool Color_Heredoc::BeginColor(const StringRef& str, size_t nPos)
 {
 	if (!str.IsValid()) return false;
 
@@ -75,7 +75,7 @@ bool Color_Heredoc::BeginColor(const StringRef& str, int nPos)
 	) {
 		// <<<[\t]*((['"][_A-Za-z0-9]+['"])|[_A-Za-z0-9]+)[\r\n]+
 		const size_t length = str.GetLength();
-		int nPosIdStart = nPos + 3;
+		size_t nPosIdStart = nPos + 3;
 		for (; nPosIdStart<length; ++nPosIdStart) {
 			if (str.At(nPosIdStart) != L'\t' && str.At(nPosIdStart) != L' ') {
 				break;
@@ -89,7 +89,7 @@ bool Color_Heredoc::BeginColor(const StringRef& str, int nPos)
 			quote = str.At(nPosIdStart);
 			++nPosIdStart;
 		}
-		int i = nPosIdStart;
+		size_t i = nPosIdStart;
 		for (; i<length; ++i) {
 			if (!(WCODE::IsAZ(str.At(i)) || WCODE::Is09(str.At(i)) || str.At(i) == L'_')) {
 				break;
@@ -98,7 +98,7 @@ bool Color_Heredoc::BeginColor(const StringRef& str, int nPos)
 		if (nPosIdStart == i) {
 			return false;
 		}
-		const int k = i;
+		const size_t k = i;
 		if (quote != L'\0') {
 			if (i < length && str.At(i) == quote) {
 				++i;
@@ -123,7 +123,7 @@ bool Color_Heredoc::BeginColor(const StringRef& str, int nPos)
 	return false;
 }
 
-bool Color_Heredoc::EndColor(const StringRef& str, int nPos)
+bool Color_Heredoc::EndColor(const StringRef& str, size_t nPos)
 {
 	if (this->nCommentEnd == 0) {
 		if (1

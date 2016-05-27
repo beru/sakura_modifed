@@ -214,12 +214,12 @@ LRESULT EditView::SetReconvertStruct(
 
 	// 2010.04.17 行頭から←選択だと「SelectToが改行の後ろの位置」にあるため範囲を調整する
 	// フリーカーソル選択でも行末より後ろにカーソルがある
-	if (nLineLen < ptSelect.x) {
+	if ((int)nLineLen < ptSelect.x) {
 		// 改行直前をIMEに渡すカーソル位置ということにする
 		ptSelect.x = nLineLen;
 		nSelectedLen = 0;
 	}
-	if (nLineLen <  ptSelect.x + nSelectedLen) {
+	if ((int)nLineLen < ptSelect.x + nSelectedLen) {
 		nSelectedLen = nLineLen - ptSelect.x;
 	}
 

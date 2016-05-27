@@ -23,7 +23,7 @@ Color_KeywordSet::Color_KeywordSet()
 
 
 // 2005.01.13 MIK 強調キーワード数追加に伴う配列化
-bool Color_KeywordSet::BeginColor(const StringRef& str, int nPos)
+bool Color_KeywordSet::BeginColor(const StringRef& str, size_t nPos)
 {
 	if (!str.IsValid()) {
 		return false; // どうにもできない。
@@ -90,7 +90,7 @@ bool Color_KeywordSet::BeginColor(const StringRef& str, int nPos)
 	return false;
 }
 
-bool Color_KeywordSet::EndColor(const StringRef& str, int nPos)
+bool Color_KeywordSet::EndColor(const StringRef& str, size_t nPos)
 {
 	return nPos == this->nCommentEnd;
 }

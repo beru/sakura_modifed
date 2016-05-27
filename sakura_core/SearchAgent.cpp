@@ -183,7 +183,7 @@ const wchar_t* SearchAgent::SearchString(
 	const SearchStringPattern& pattern
 	)
 {
-	const int      nPatternLen = pattern.GetLen();
+	const size_t nPatternLen = pattern.GetLen();
 	const wchar_t* pszPattern  = pattern.GetCaseKey();
 #ifdef SEARCH_STRING_SUNDAY_QUICK
 	const int* const useSkipMap = pattern.GetUseCharSkipMap();
@@ -206,7 +206,7 @@ const wchar_t* SearchAgent::SearchString(
 #if 1
 		if (bLoHiCase) {
 			for (int nPos=nIdxPos; nPos<=nCompareTo;) {
-				int i;
+				size_t i;
 				for (i = 0; i < nPatternLen && (pLine[nPos + i] == pszPattern[i]); ++i) {
 				}
 				if (i >= nPatternLen) {
@@ -217,7 +217,7 @@ const wchar_t* SearchAgent::SearchString(
 			}
 		}else {
 			for (int nPos=nIdxPos; nPos<=nCompareTo;) {
-				int i;
+				size_t i;
 				for (i = 0; i < nPatternLen && ((wchar_t)skr_towlower(pLine[nPos + i]) == pszPattern[i]); ++i) {
 				}
 				if (i >= nPatternLen) {
@@ -561,7 +561,7 @@ int SearchAgent::SearchWord(
 						nIdxPos += (NativeW::GetSizeOfChar(pLine, nLineLen, nIdxPos) == 2 ? 2 : 1);
 					}
 					if (1
-						&& nIdxPos <= pDocLine->GetLengthWithoutEOL() 
+						&& nIdxPos <= (int)pDocLine->GetLengthWithoutEOL() 
 						&& pRegexp->Match(pLine, nLineLen, nIdxPos)
 					) {
 						// 検索にマッチした！
@@ -603,7 +603,7 @@ int SearchAgent::SearchWord(
 			while (pDocLine) {
 				pLine = pDocLine->GetDocLineStrWithEOL(&nLineLen);
 				if (1
-					&& nIdxPos <= pDocLine->GetLengthWithoutEOL() 
+					&& nIdxPos <= (int)pDocLine->GetLengthWithoutEOL() 
 					&& pRegexp->Match(pLine, nLineLen, nIdxPos)
 				) {
 					// マッチした
@@ -624,7 +624,7 @@ int SearchAgent::SearchWord(
 			pMatchRange->SetToY  (nLinePos); // マッチ行
 			nRetVal = 1;
 			// レイアウト行では改行文字内の位置を表現できないため、マッチ開始位置を補正
-			if (pMatchRange->GetFrom().x > pDocLine->GetLengthWithoutEOL()) {
+			if (pMatchRange->GetFrom().x > (int)pDocLine->GetLengthWithoutEOL()) {
 				// \r\n改行時に\nにマッチすると置換できない不具合となるため
 				// 改行文字内でマッチした場合、改行文字の始めからマッチしたことにする
 				pMatchRange->SetFromX(pDocLine->GetLengthWithoutEOL());
@@ -833,8 +833,8 @@ void SearchAgent::ReplaceData(DocLineReplaceArg* pArg)
 	DocLine* pDocLine;
 	DocLine* pDocLinePrev;
 	DocLine* pDocLineNext;
-	int nWorkPos;
-	int nWorkLen;
+	size_t nWorkPos;
+	size_t nWorkLen;
 	const wchar_t* pLine;
 	size_t nLineLen;
 	int	nAllLinesOld;
@@ -940,8 +940,9 @@ void SearchAgent::ReplaceData(DocLineReplaceArg* pArg)
 			goto prev_line;
 		}
 		// 改行も削除するんかぃのぉ・・・？
+		ASSERT_GE(nLineLen, pDocLine->GetEol().GetLen());
 		if (pDocLine->GetEol() != EolType::None &&
-			nWorkPos + nWorkLen > nLineLen - pDocLine->GetEol().GetLen() // 2002/2/10 aroka CMemory変更
+			nWorkPos + nWorkLen > (int)(nLineLen - pDocLine->GetEol().GetLen()) // 2002/2/10 aroka CMemory変更
 		) {
 			// 削除する長さに改行も含める
 			nWorkLen = nLineLen - nWorkPos; // 2002/2/10 aroka CMemory変更
@@ -984,7 +985,7 @@ void SearchAgent::ReplaceData(DocLineReplaceArg* pArg)
 			if (pDocLineNext) {
 				// 次の行のデータを最後に追加
 				// 改行を削除するような置換
-				int nNewLen = nWorkPos + pDocLineNext->GetLengthWithEOL() + nInsLen;
+				size_t nNewLen = nWorkPos + pDocLineNext->GetLengthWithEOL() + nInsLen;
 				if (nWorkLen <= nWorkPos && nLineLen <= nNewLen + 10) {
 					// 行を連結して1行にするような操作の高速化
 					// 削除が元データの有効長以下で行の長さが伸びるか少し減る場合reallocを試みる
@@ -994,7 +995,7 @@ void SearchAgent::ReplaceData(DocLineReplaceArg* pArg)
 					if (pDocLinePrevAccess == pDocLine) {
 						if (100 < nAccessCount) {
 							if (1000 < nNewLen) {
-								int n = 1000;
+								size_t n = 1000;
 								while (n < nNewLen) {
 									n += n / 5; // 20%づつ伸ばす
 								}
@@ -1058,8 +1059,8 @@ void SearchAgent::ReplaceData(DocLineReplaceArg* pArg)
 			}
 			{// 20020119 aroka ブロック内に pWork を閉じ込めた
 				// 2002/2/10 aroka CMemory変更 何度も GetLength,GetPtr をよばない。
-				int nNewLen = nLineLen - nWorkLen + nInsLen;
-				int nAfterLen = nLineLen - (nWorkPos + nWorkLen);
+				size_t nNewLen = nLineLen - nWorkLen + nInsLen;
+				size_t nAfterLen = nLineLen - (nWorkPos + nWorkLen);
 				if (1
 					&& pDocLine->_GetDocLineData().capacity() * 9 / 10 < nNewLen
 					&& nNewLen <= pDocLine->_GetDocLineData().capacity()
@@ -1072,7 +1073,7 @@ void SearchAgent::ReplaceData(DocLineReplaceArg* pArg)
 					wmemcpy(&pBuf[nWorkPos], pInsData, nInsLen);
 					ref._SetStringLength(nNewLen);
 				}else {
-					int nBufferSize = 16;
+					size_t nBufferSize = 16;
 					if (1000 < nNewLen) {
 						nBufferSize = 1000;
 						while (nBufferSize < nNewLen) {

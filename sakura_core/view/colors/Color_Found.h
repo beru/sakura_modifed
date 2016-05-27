@@ -30,9 +30,9 @@ public:
 	virtual EColorIndexType GetStrategyColor() const { return COLORIDX_SELECT; }
 	// 色替え
 	virtual void InitStrategyStatus() { }
-	virtual bool BeginColor(const StringRef& str, int nPos);
+	virtual bool BeginColor(const StringRef& str, size_t nPos);
 	virtual bool Disp() const { return true; }
-	virtual bool EndColor(const StringRef& str, int nPos);
+	virtual bool EndColor(const StringRef& str, size_t nPos);
 
 	virtual bool BeginColorEx(const StringRef& str, int nPos, int, const Layout*);
 
@@ -57,9 +57,9 @@ public:
 	}
 	// 色替え
 	virtual void InitStrategyStatus() { } //############要検証
-	virtual bool BeginColor(const StringRef& str, int nPos);
+	virtual bool BeginColor(const StringRef& str, size_t nPos);
 	virtual bool Disp() const { return true; }
-	virtual bool EndColor(const StringRef& str, int nPos);
+	virtual bool EndColor(const StringRef& str, size_t nPos);
 	// イベント
 	virtual void OnStartScanLogic();
 

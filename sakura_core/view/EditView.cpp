@@ -1287,7 +1287,7 @@ bool EditView::IsCurrentPositionURL(
 	size_t nUrlLen = 0;
 	int i = t_max(0, (int)ptXY.x - (int)_MAX_PATH);	// 2009.05.22 ryoji 200->_MAX_PATH
 	//nLineLen = __min(nLineLen, ptXY.x + _MAX_PATH);
-	while (i <= ptXY.x && i < nLineLen) {
+	while (i <= ptXY.x && i < (int)nLineLen) {
 		bool bMatch = (bUseRegexKeyword
 					&& pRegexKeyword->RegexIsKeyword(StringRef(pLine, nLineLen), i, &nUrlLen, &nMatchColor)
 					&& nMatchColor == COLORIDX_URL);
@@ -1297,7 +1297,7 @@ bool EditView::IsCurrentPositionURL(
 						&& IsURL(&pLine[i], (nLineLen - i), &nUrlLen));	// 指定アドレスがURLの先頭ならばTRUEとその長さを返す
 		}
 		if (bMatch) {
-			if (i <= ptXY.x && ptXY.x < i + nUrlLen) {
+			if (i <= ptXY.x && ptXY.x < i + (int)nUrlLen) {
 				// URLを返す場合
 				if (pwstrURL) {
 					pwstrURL->assign(&pLine[i], nUrlLen);
@@ -1922,7 +1922,7 @@ bool EditView::GetSelectedData(
 
 		bool bExtEol = GetDllShareData().common.edit.bEnableExtEol;
 		nRowNum = 0;
-		for (nLineNum=rcSel.top; nLineNum<=rcSel.bottom; ++nLineNum) {
+		for (nLineNum=rcSel.top; (int)nLineNum<=rcSel.bottom; ++nLineNum) {
 			const wchar_t* pLine = pEditDoc->layoutMgr.GetLineStr(nLineNum, &nLineLen, &pLayout);
 			if (pLine) {
 				// 指定された桁に対応する行のデータ内の位置を調べる
@@ -1992,7 +1992,7 @@ bool EditView::GetSelectedData(
 		memBuf->AllocStringBuffer(nBufSize);
 		//>> 2002/04/18 Azumaiya
 
-		for (nLineNum=GetSelectionInfo().select.GetFrom().y; nLineNum<=GetSelectionInfo().select.GetTo().y; ++nLineNum) {
+		for (nLineNum=GetSelectionInfo().select.GetFrom().y; (int)nLineNum<=GetSelectionInfo().select.GetTo().y; ++nLineNum) {
 			const wchar_t* pLine = pEditDoc->layoutMgr.GetLineStr(nLineNum, &nLineLen, &pLayout);
 			if (!pLine) {
 				break;
@@ -2271,7 +2271,7 @@ void EditView::CopySelectedAllLines(
 		if (!pLayout) return;
 		sSelect.SetFromX(pLayout->GetIndent());
 		pLayout = GetDocument().layoutMgr.SearchLineByLayoutY(sSelect.GetTo().y);
-		if (pLayout && (GetSelectionInfo().IsBoxSelecting() || sSelect.GetTo().x > pLayout->GetIndent())) {
+		if (pLayout && (GetSelectionInfo().IsBoxSelecting() || sSelect.GetTo().x > (int)pLayout->GetIndent())) {
 			// 選択範囲を次行頭まで拡大する
 			sSelect.SetToY(sSelect.GetTo().y + 1);
 			pLayout = pLayout->GetNextLayout();

@@ -11,7 +11,7 @@
 //                           URL                               //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-bool Color_Url::BeginColor(const StringRef& str, int nPos)
+bool Color_Url::BeginColor(const StringRef& str, size_t nPos)
 {
 	if (!str.IsValid()) return false;
 
@@ -25,7 +25,7 @@ bool Color_Url::BeginColor(const StringRef& str, int nPos)
 	return false;
 }
 
-bool Color_Url::EndColor(const StringRef& str, int nPos)
+bool Color_Url::EndColor(const StringRef& str, size_t nPos)
 {
 	return (nPos == this->nCommentEnd);
 }

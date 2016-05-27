@@ -788,14 +788,14 @@ HWND AppNodeManager::GetNextTab(HWND hWndCur)
 		size_t nCount = AppNodeManager::getInstance().GetOpenedWindowArr(&p, false, false);
 		if (nCount > 1) {
 			// search Group No.
-			for (int i=0; i<nCount; ++i) {
+			for (size_t i=0; i<nCount; ++i) {
 				if (p[i].GetHwnd() == hWndCur) {
 					nGroup = p[i].nGroup;
 					break;
 				}
 			}
 			// Search Next Window
-			for (int i=0; i<nCount; ++i) {
+			for (size_t i=0; i<nCount; ++i) {
 				if (p[i].nGroup == nGroup) {
 					if (p[i].GetHwnd() == hWndCur) {
 						bFound= true;

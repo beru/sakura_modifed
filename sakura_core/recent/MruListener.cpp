@@ -158,7 +158,7 @@ void MruListener::OnAfterLoad(const LoadInfo& loadInfo)
 		// ビュー取得
 		EditView& view = pDoc->pEditWnd->GetActiveView();
 
-		if (ptCaretPos.y >= pDoc->layoutMgr.GetLineCount()) {
+		if (ptCaretPos.y >= (int)pDoc->layoutMgr.GetLineCount()) {
 			// ファイルの最後に移動
 			view.GetCommander().HandleCommand(F_GOFILEEND, false, 0, 0, 0, 0);
 		}else {
@@ -168,7 +168,7 @@ void MruListener::OnAfterLoad(const LoadInfo& loadInfo)
 			// 改行の真ん中にカーソルが来ないように。
 			const DocLine *pTmpDocLine = pDoc->docLineMgr.GetLine(eiOld.ptCursor.y);	// 2008.08.22 ryoji 改行単位の行番号を渡すように修正
 			if (pTmpDocLine) {
-				if (pTmpDocLine->GetLengthWithoutEOL() < eiOld.ptCursor.x) {
+				if ((int)pTmpDocLine->GetLengthWithoutEOL() < eiOld.ptCursor.x) {
 					ptCaretPos.x--;
 				}
 			}

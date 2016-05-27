@@ -27,7 +27,7 @@
 #include "Color_RegexKeyword.h"
 
 
-bool Color_RegexKeyword::BeginColor(const StringRef& str, int nPos)
+bool Color_RegexKeyword::BeginColor(const StringRef& str, size_t nPos)
 {
 	if (!str.IsValid()) {
 		return false;
@@ -46,7 +46,7 @@ bool Color_RegexKeyword::BeginColor(const StringRef& str, int nPos)
 }
 
 
-bool Color_RegexKeyword::EndColor(const StringRef& str, int nPos)
+bool Color_RegexKeyword::EndColor(const StringRef& str, size_t nPos)
 {
 	return (nPos == this->nCommentEnd);
 }

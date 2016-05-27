@@ -293,10 +293,10 @@ BOOL LayoutMgr::CalculateTextWidth(bool bCalLineLen, int nStart, int nEnd)
 	}
 	if (nStart < 0) {				// 算出開始行の指定なし
 		nStart = 0;
-	}else if (nStart > nLines) {	// 範囲オーバー
+	}else if (nStart > (int)nLines) {	// 範囲オーバー
 		nStart = (int)nLines;
 	}
-	if (nEnd < 0 || nEnd >= nLines) {	// 算出終了行の指定なし または 文書行数以上
+	if (nEnd < 0 || nEnd >= (int)nLines) {	// 算出終了行の指定なし または 文書行数以上
 		nEnd = (int)nLines;
 	}else {
 		++nEnd;						// 算出終了行の次行

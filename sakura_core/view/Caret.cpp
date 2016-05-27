@@ -279,7 +279,7 @@ int Caret::MoveCursor(
 		}
 	// 移動先は、画面の最大行数－２より下か？（down キー）
 	}else if (ptWk_CaretPos.y - textArea.GetViewTopLine() >= textArea.nViewRowNum - nCaretMarginY - 2) {
-		size_t ii = editDoc.layoutMgr.GetLineCount();
+		int ii = (int)editDoc.layoutMgr.GetLineCount();
 		if (1
 			&& ii - ptWk_CaretPos.y < nCaretMarginY + 1
 			&& ii - textArea.GetViewTopLine() < textArea.nViewRowNum
@@ -429,7 +429,7 @@ bool Caret::GetAdjustCursorPos(
 
 	Point ptPosXY2 = *pptPosXY;
 	bool ret = false;
-	if (ptPosXY2.y >= nLayoutLineCount) {
+	if (ptPosXY2.y >= (int)nLayoutLineCount) {
 		if (0 < nLayoutLineCount) {
 			ptPosXY2.y = nLayoutLineCount - 1;
 			const Layout* pLayout = editDoc.layoutMgr.SearchLineByLayoutY(ptPosXY2.y);
@@ -554,7 +554,7 @@ void Caret::ShowEditCaret()
 				// 指定された桁に対応する行のデータ内の位置を調べる
 				int nIdxFrom = GetCaretLogicPos().GetX() - pLayout->GetLogicOffset();
 				if (0
-					|| nIdxFrom >= nLineLen
+					|| nIdxFrom >= (int)nLineLen
 					|| WCODE::IsLineDelimiter(pLine[nIdxFrom], GetDllShareData().common.edit.bEnableExtEol)
 					|| pLine[nIdxFrom] == TAB
 				) {
@@ -587,7 +587,7 @@ void Caret::ShowEditCaret()
 			// 指定された桁に対応する行のデータ内の位置を調べる
 			int nIdxFrom = editView.LineColumnToIndex(pLayout, GetCaretLayoutPos().x);
 			if (0
-				|| nIdxFrom >= nLineLen
+				|| nIdxFrom >= (int)nLineLen
 				|| WCODE::IsLineDelimiter(pLine[nIdxFrom], GetDllShareData().common.edit.bEnableExtEol)
 				|| pLine[nIdxFrom] == TAB
 			) {
@@ -672,8 +672,8 @@ void Caret::ShowCaretPosInfo()
 	HWND hwndStatusBar = editDoc.pEditWnd->statusBar.GetStatusHwnd();
 
 	// カーソル位置の文字列を取得
-	const Layout*	pLayout;
-	size_t			nLineLen;
+	const Layout* pLayout;
+	size_t nLineLen;
 	const wchar_t*	pLine = layoutMgr.GetLineStr(GetCaretLayoutPos().y, &nLineLen, &pLayout);
 
 	// -- -- -- -- 文字コード情報 -> pszCodeName -- -- -- -- //
@@ -790,8 +790,8 @@ void Caret::ShowCaretPosInfo()
 		// 指定された桁に対応する行のデータ内の位置を調べる
 		ASSERT_GE(GetCaretLogicPos().x, pLayout->GetLogicOffset());
 		int nIdx = GetCaretLogicPos().x - pLayout->GetLogicOffset();
-		if (nIdx < nLineLen) {
-			if (nIdx < nLineLen - (pLayout->GetLayoutEol().GetLen() ? 1 : 0)) {
+		if (nIdx < (int)nLineLen) {
+			if (nIdx < (int)nLineLen - (pLayout->GetLayoutEol().GetLen() ? 1 : 0)) {
 				//auto_sprintf(szCaretChar, _T("%04x"),);
 				// 任意の文字コードからUnicodeへ変換する		2008/6/9 Uchi
 				CodeBase* pCode = CodeFactory::CreateCodeBase(editDoc.GetDocumentEncoding(), false);
@@ -971,7 +971,7 @@ int Caret::Cursor_UPDOWN(int nMoveLines, bool bSelect)
 				i = nLineLen;
 				break;
 			}
-			if (it.getColumn() + it.getColumnDelta() > nCaretPosX_Prev) {
+			if ((int)(it.getColumn() + it.getColumnDelta()) > nCaretPosX_Prev) {
 				i = it.getIndex();
 				break;
 			}
@@ -1148,7 +1148,7 @@ int Caret::MoveCursorProperly(
 	auto& layoutMgr = editDoc.layoutMgr;
 	auto& selectionInfo = editView.GetSelectionInfo();
 	if (1
-		&& ptNewXY.y >= layoutMgr.GetLineCount()
+		&& ptNewXY.y >= (int)layoutMgr.GetLineCount()
 		&& (selectionInfo.IsMouseSelecting() && selectionInfo.IsBoxSelecting())
 	) {
 		const Layout* layoutEnd = layoutMgr.GetBottomLayout();
@@ -1183,9 +1183,9 @@ int Caret::MoveCursorProperly(
 				i = nLineLen;
 				break;
 			}
-			if (it.getColumn() + it.getColumnDelta() > ptNewXY.x) {
+			if ((int)(it.getColumn() + it.getColumnDelta()) > ptNewXY.x) {
 				if (1
-					&& ptNewXY.x >= (pLayout ? pLayout->GetIndent() : 0)
+					&& ptNewXY.x >= (int)(pLayout ? pLayout->GetIndent() : 0)
 					&& ((ptNewXY.x - it.getColumn()) * nColWidth + dx) * 2 >= it.getColumnDelta() * nColWidth
 				) {
 				//if (ptNewXY.x >= (pLayout ? pLayout->GetIndent() : 0) && (it.getColumnDelta() > 1) && ((it.getColumn() + it.getColumnDelta() - ptNewXY.x) <= it.getColumnDelta() / 2)) {

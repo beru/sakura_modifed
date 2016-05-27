@@ -57,7 +57,7 @@ EFunctionCode FuncLookup::Pos2FuncCode(int category, int position, bool bGetUnav
 		return F_DISABLE;
 	}
 	
-	if (category < nsFuncCode::nFuncKindNum) {
+	if (category < (int)nsFuncCode::nFuncKindNum) {
 		if (position < nsFuncCode::pnFuncListNumArr[category]) {
 			return nsFuncCode::ppnFuncListArr[category][position];
 		}
@@ -166,7 +166,7 @@ const TCHAR* FuncLookup::Category2Name(int category) const
 	if (category < 0) {
 		return NULL;
 	}
-	if (category < nsFuncCode::nFuncKindNum) {
+	if (category < (int)nsFuncCode::nFuncKindNum) {
 		return LS(nsFuncCode::ppszFuncKind[category]);
 	}else if (category == nsFuncCode::nFuncKindNum + LUOFFSET_MACRO) {
 		return LS(STR_ERR_DLGFUNCLKUP01);
@@ -232,7 +232,7 @@ size_t FuncLookup::GetItemCount(int category) const
 	if (category < 0) {
 		return 0;
 	}
-	if (category < nsFuncCode::nFuncKindNum) {
+	if (category < (int)nsFuncCode::nFuncKindNum) {
 		return nsFuncCode::pnFuncListNumArr[category];
 	}else if (category == nsFuncCode::nFuncKindNum + LUOFFSET_MACRO) {
 		// ƒ}ƒNƒ

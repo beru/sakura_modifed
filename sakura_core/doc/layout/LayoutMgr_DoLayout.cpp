@@ -429,7 +429,7 @@ void LayoutMgr::_OnLine2(LayoutWork* pWork)
 	if (0
 		|| (1
 			&& pWork->ptDelLogicalFrom.y == pWork->nCurLine
-			&& pWork->ptDelLogicalFrom.x < pWork->nPos
+			&& pWork->ptDelLogicalFrom.x < (int)pWork->nPos
 			)
 		|| (pWork->ptDelLogicalFrom.y < pWork->nCurLine)
 	) {
@@ -598,8 +598,8 @@ void LayoutMgr::CalculateTextWidth_Range(const CalTextWidthArg& ctwArg)
 			|| (1
 				&& ctwArg.nDelLines >= 0
 				&& nTextWidth
-				&& ctwArg.ptLayout.y <= nTextWidthMaxLine
-				&& nTextWidthMaxLine <= ctwArg.ptLayout.y + ctwArg.nDelLines 
+				&& ctwArg.ptLayout.y <= (int)nTextWidthMaxLine
+				&& (int)nTextWidthMaxLine <= ctwArg.ptLayout.y + ctwArg.nDelLines 
 			)
 		) {
 			// ‘Sƒ‰ƒCƒ“‚ð‘–¸‚·‚é
@@ -620,7 +620,7 @@ void LayoutMgr::CalculateTextWidth_Range(const CalTextWidthArg& ctwArg)
 			if (1
 				&& nTextWidth
 				&& nInsLineNum
-				&& nTextWidthMaxLine >= ctwArg.ptLayout.y
+				&& (int)nTextWidthMaxLine >= ctwArg.ptLayout.y
 			) {
 				nTextWidthMaxLine += nInsLineNum;
 			}

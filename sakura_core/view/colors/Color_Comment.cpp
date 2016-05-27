@@ -7,7 +7,7 @@
 //                        行コメント                           //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-bool Color_LineComment::BeginColor(const StringRef& str, int nPos)
+bool Color_LineComment::BeginColor(const StringRef& str, size_t nPos)
 {
 	if (!str.IsValid()) return false;
 
@@ -15,10 +15,10 @@ bool Color_LineComment::BeginColor(const StringRef& str, int nPos)
 	return pTypeData->lineComment.Match(nPos, str);	//@@@ 2002.09.22 YAZAKI
 }
 
-bool Color_LineComment::EndColor(const StringRef& str, int nPos)
+bool Color_LineComment::EndColor(const StringRef& str, size_t nPos)
 {
 	// 文字列終端
-	if (nPos >= str.GetLength()) {
+	if (nPos >= (int)str.GetLength()) {
 		return true;
 	}
 
@@ -35,7 +35,7 @@ bool Color_LineComment::EndColor(const StringRef& str, int nPos)
 //                    ブロックコメント１                       //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-bool Color_BlockComment::BeginColor(const StringRef& str, int nPos)
+bool Color_BlockComment::BeginColor(const StringRef& str, size_t nPos)
 {
 	if (!str.IsValid()) return false;
 
@@ -53,7 +53,7 @@ bool Color_BlockComment::BeginColor(const StringRef& str, int nPos)
 	return false;
 }
 
-bool Color_BlockComment::EndColor(const StringRef& str, int nPos)
+bool Color_BlockComment::EndColor(const StringRef& str, size_t nPos)
 {
 	if (this->nCommentEnd == 0) {
 		// この物理行にブロックコメントの終端があるか

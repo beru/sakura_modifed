@@ -48,7 +48,7 @@ bool LineComment::Match(int pos, const StringRef& str) const
 		if (1
 			&& pszLineComment[i][0] != L'\0'	// 行コメントデリミタ
 			&& (lineCommentPos[i] < 0 || lineCommentPos[i] == pos)	// 位置指定ON.
-			&& pos <= str.GetLength() - lineCommentLen[i]	// 行コメントデリミタ
+			&& pos <= (int)str.GetLength() - lineCommentLen[i]	// 行コメントデリミタ
 			//&& auto_memicmp(&str.GetPtr()[pos], pszLineComment[i], lineCommentLen[i]) == 0	// 非ASCIIも大文字小文字を区別しない	//###locale 依存
 			&& wmemicmp_ascii(&str.GetPtr()[pos], pszLineComment[i], lineCommentLen[i]) == 0	// ASCIIのみ大文字小文字を区別しない（高速）
 		) {

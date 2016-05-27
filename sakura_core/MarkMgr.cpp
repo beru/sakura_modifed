@@ -57,7 +57,7 @@ void MarkMgr::SetMax(int max)
 */
 bool MarkMgr::CheckCurrent(void) const
 {
-	if (nCurpos < Count()) {
+	if (nCurpos < (int)Count()) {
 		return markChain[nCurpos].IsValid();
 	}
 
@@ -88,7 +88,7 @@ bool MarkMgr::CheckPrev(void) const
 */
 bool MarkMgr::CheckNext(void) const
 {
-	for (int i=nCurpos+1; i<Count(); ++i) {
+	for (int i=nCurpos+1; i<(int)Count(); ++i) {
 		if (markChain[i].IsValid()) {
 			return true;
 		}
@@ -121,7 +121,7 @@ bool MarkMgr::PrevValid(void)
 */
 bool MarkMgr::NextValid(void)
 {
-	for (int i=nCurpos+1; i<Count(); ++i) {
+	for (int i=nCurpos+1; i<(int)Count(); ++i) {
 		if (markChain[i].IsValid()) {
 			nCurpos = i;
 			return true;

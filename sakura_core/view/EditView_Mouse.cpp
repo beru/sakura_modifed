@@ -267,7 +267,7 @@ normal_action:;
 			// 選択するものが無い（[EOF]のみの行）時は通常クリックと同じ処理
 			if (1
 				&& !GetSelectionInfo().IsTextSelected()
-				&& caret.GetCaretLogicPos().y >= pEditDoc->docLineMgr.GetLineCount()
+				&& caret.GetCaretLogicPos().y >= (int)pEditDoc->docLineMgr.GetLineCount()
 			) {
 				GetSelectionInfo().BeginSelectArea();				// 現在のカーソル位置から選択を開始する
 				GetSelectionInfo().bBeginLineSelect = false;		// 行単位選択中 OFF
@@ -709,7 +709,7 @@ void CALLBACK AutoScrollTimerProc(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD 
 
 void EditView::AutoScrollEnter()
 {
-	bAutoScrollVertical = GetTextArea().nViewRowNum < pEditDoc->layoutMgr.GetLineCount() + 2;
+	bAutoScrollVertical = GetTextArea().nViewRowNum < (int)pEditDoc->layoutMgr.GetLineCount() + 2;
 	bAutoScrollHorizontal = GetTextArea().nViewColNum < GetRightEdgeForScrollBar();
 	if (bMiniMap) {
 		bAutoScrollHorizontal = false;
@@ -976,7 +976,7 @@ void EditView::OnMOUSEMOVE(WPARAM fwKeys, int xPos_, int yPos_)
 			int nScrollRow = 0;
 			int nScrollMargin = 15;
 			nScrollMargin  = t_min(nScrollMargin,  (int)textArea.nViewRowNum / 2);
-			if (pEditDoc->layoutMgr.GetLineCount() > textArea.nViewRowNum
+			if ((int)pEditDoc->layoutMgr.GetLineCount() > textArea.nViewRowNum
 				&& ptNew.y > textArea.GetViewTopLine() + textArea.nViewRowNum - nScrollMargin
 			) {
 				nScrollRow = (textArea.GetViewTopLine() + textArea.nViewRowNum - nScrollMargin) - ptNew.y;

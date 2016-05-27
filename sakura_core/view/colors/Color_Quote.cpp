@@ -69,47 +69,7 @@ LayoutColorInfo* Color_Quote::GetStrategyColorInfo() const
 	return NULL;
 }
 
-// nPos "‚ÌˆÊ’u
-//staic
-bool Color_Quote::IsCppRawString(const StringRef& str, int nPos)
-{
-	if (
-		0 < nPos
-		&& str.At(nPos-1) == 'R'
-		&& str.At(nPos) == '"'
-		&& nPos + 1 < str.GetLength()
-	) {
-		// \b(u8|u|U|L|)R"[^(]*\(
-		// \b = ^|[\s!"#$%&'()=@{};:<>?,.*/\-\+\[\]\]
-		wchar_t c1 = L' ';
-		if (2 <= nPos) {
-			c1 = str.At(nPos-2);
-		}
-		wchar_t c2 = L' ';
-		if (3 <= nPos) {
-			c2 = str.At(nPos-3);
-		}
-		const wchar_t* pszSep = L" \t!\"#$%&'()=@{};:<>?,.*/-+[]";
-		if ((c1 == 'u' || c1 == 'U' || c1 == 'L')) {
-			if (wcschr(pszSep, c2)) {
-				return true;
-			}
-		}else if (c1 == '8' && c2 == 'u') {
-			wchar_t c3 = L'\0';
-			if (4 <= nPos) {
-				c3 = str.At(nPos-4);
-			}
-			if (wcschr(pszSep, c3)) {
-				return true;
-			}
-		}else if (wcschr(pszSep, c1)) {
-			return true;
-		}
-	}
-	return false;
-}
-
-bool Color_Quote::BeginColor(const StringRef& str, int nPos)
+bool Color_Quote::BeginColor(const StringRef& str, size_t nPos)
 {
 	if (!str.IsValid()) return false;
 
@@ -126,7 +86,7 @@ bool Color_Quote::BeginColor(const StringRef& str, int nPos)
 				&& str.At(nPos) == '"'
 				&& nPos + 1 < str.GetLength()
 			) {
-				for (int i=nPos+1; i<str.GetLength(); ++i) {
+				for (size_t i=nPos+1; i<str.GetLength(); ++i) {
 					if (str.At(i) == '(') {
 						if (nPos + 1 < i) {
 							tag = L')';
@@ -219,7 +179,7 @@ bool Color_Quote::BeginColor(const StringRef& str, int nPos)
 	return false;
 }
 
-bool Color_Quote::EndColor(const StringRef& str, int nPos)
+bool Color_Quote::EndColor(const StringRef& str, size_t nPos)
 {
 	if (nCommentEnd == -1) {
 		// ‚±‚±‚É‚­‚é‚Ì‚Ís“ª‚Ì‚Í‚¸

@@ -338,7 +338,7 @@ bool NormalProcess::InitializeProcess()
 			// 移動するようにする． || → &&
 			if (
 				(0 <= fi.nViewTopLine && 0 <= fi.nViewLeftCol)
-				&& fi.nViewTopLine < editDoc.layoutMgr.GetLineCount()
+				&& fi.nViewTopLine < (int)editDoc.layoutMgr.GetLineCount()
 			) {
 				activeView.GetTextArea().SetViewTopLine(fi.nViewTopLine);
 				activeView.GetTextArea().SetViewLeftCol(fi.nViewLeftCol);
@@ -365,7 +365,7 @@ bool NormalProcess::InitializeProcess()
 				// 2008.08.20 ryoji 改行単位の行番号を渡すように修正
 				const DocLine* pTmpDocLine = editDoc.docLineMgr.GetLine(fi.ptCursor.y);
 				if (pTmpDocLine) {
-					if (pTmpDocLine->GetLengthWithoutEOL() < fi.ptCursor.x) {
+					if ((int)pTmpDocLine->GetLengthWithoutEOL() < fi.ptCursor.x) {
 						ptPos.x--;
 					}
 				}

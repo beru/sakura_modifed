@@ -1246,7 +1246,7 @@ int GrepAgent::DoGrepFile(
 					nIndex = regexp.GetIndex();
 					size_t matchlen = regexp.GetMatchLen();
 #ifdef _DEBUG
-					if (nIndex <= nIndexPrev) {
+					if ((int)nIndex <= nIndexPrev) {
 						MYTRACE(_T("ERROR: EditView::DoGrepFile() nIndex <= nIndexPrev break \n"));
 						break;
 					}

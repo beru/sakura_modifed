@@ -152,11 +152,11 @@ const DocLine* DocLineMgr::GetLine(size_t nLine) const
 	int nCounter;
 	DocLine* pDocLine;
 	// 2004.03.28 Moca pCodePrevRefer‚æ‚èATop,Bot‚Ì‚Ù‚¤‚ª‹ß‚¢ê‡‚ÍA‚»‚¿‚ç‚ğ—˜—p‚·‚é
-	int nPrevToLineNumDiff = t_abs(nPrevReferLine - nLine);
+	int nPrevToLineNumDiff = t_abs(nPrevReferLine - (int)nLine);
 	ASSERT_GE(nLines, nLine);
 	if (!pCodePrevRefer
-	  || nLine < nPrevToLineNumDiff
-	  || nLines - nLine < nPrevToLineNumDiff
+	  || (int)nLine < nPrevToLineNumDiff
+	  || (int)(nLines - nLine) < nPrevToLineNumDiff
 	) {
 		if (!pCodePrevRefer) {
 			MY_RUNNINGTIMER(runningTimer, "DocLineMgr::GetLine() 	pCodePrevRefer == nullptr");
@@ -195,7 +195,7 @@ const DocLine* DocLineMgr::GetLine(size_t nLine) const
 			nPrevReferLine = nLine;
 			pDocLineCurrent = pCodePrevRefer->GetNextLine();
 			return pCodePrevRefer;
-		}else if (nLine > nPrevReferLine) {
+		}else if ((int)nLine > nPrevReferLine) {
 			nCounter = nPrevReferLine + 1;
 			pDocLine = pCodePrevRefer->GetNextLine();
 			while (pDocLine) {

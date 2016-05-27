@@ -311,7 +311,7 @@ void EditView::AdjustScrollBars()
 		//	縦スクロールバーがDisableになったときは必ず全体が画面内に収まるように
 		//	スクロールさせる
 		//	2005.11.01 aroka 判定条件誤り修正 (バーが消えてもスクロールしない)
-		bool bEnable = (GetTextArea().nViewRowNum < nAllLines);
+		bool bEnable = (GetTextArea().nViewRowNum < (int)nAllLines);
 		if (bEnable != (::IsWindowEnabled(hwndVScrollBar) != 0)) {
 			::EnableWindow(hwndVScrollBar, bEnable? TRUE: FALSE);	// SIF_DISABLENOSCROLL 誤動作時の強制切替
 		}
@@ -353,7 +353,7 @@ int EditView::ScrollAtV(int nPos)
 	int nScrollRowNum;
 	if (nPos < 0) {
 		nPos = 0;
-	}else if ((pEditDoc->layoutMgr.GetLineCount() + 2) - GetTextArea().nViewRowNum < nPos) {
+	}else if (((int)pEditDoc->layoutMgr.GetLineCount() + 2) - GetTextArea().nViewRowNum < nPos) {
 		nPos = ((int)pEditDoc->layoutMgr.GetLineCount() + 2) - (int)GetTextArea().nViewRowNum;
 		if (nPos < 0) {
 			nPos = 0;

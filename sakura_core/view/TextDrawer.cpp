@@ -241,7 +241,7 @@ void TextDrawer::DispVerticalLines(
 			}
 		}
 		for (; nXCol<=nXColEnd; nXCol+=nXColAdd) {
-			if (nWrapKetas < nXCol) {
+			if ((int)nWrapKetas < nXCol) {
 				break;
 			}
 			int nPosX = nPosXOffset + (nXCol - 1 - textArea.GetViewLeftCol()) * nCharDx;

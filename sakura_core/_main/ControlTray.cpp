@@ -1434,7 +1434,7 @@ void ControlTray::ActiveNextWindow(HWND hwndParent)
 				}
 			}
 			if (j < 0) {
-				for (j=nRowNum-1; j>i; --j) {
+				for (j=(int)nRowNum-1; j>(int)i; --j) {
 					if (nGroup == pEditNodeArr[j].nGroup) {
 						break;
 					}

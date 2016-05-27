@@ -217,7 +217,7 @@ size_t _DecodeBase64(const CHAR_TYPE* pSrc, const size_t nSrcLen, char* pDest)
 
 	// •¶š—ñ‚ÌÅŒã‚Ìƒpƒbƒh•¶š '=' ‚ğ•¶š—ñ’·‚ÉŠÜ‚ß‚È‚¢‚æ‚¤‚É‚·‚éˆ—
 	{
-		int i = 0;
+		size_t i = 0;
 		bool bret;
 		for (; i<nsrclen; ++i) {
 			if (sizeof(CHAR_TYPE) == 2) {
@@ -233,7 +233,7 @@ size_t _DecodeBase64(const CHAR_TYPE* pSrc, const size_t nSrcLen, char* pDest)
 	}
 
 	nDesLen = 0;
-	for (int i=0; i<nsrclen; ++i) {
+	for (size_t i=0; i<nsrclen; ++i) {
 		if (i < nsrclen - (nsrclen % 4)) {
 			sMax = 4;
 		}else {

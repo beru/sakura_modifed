@@ -12,7 +12,7 @@ static int IsNumber(const StringRef& str, int offset);	// ”’l‚È‚ç‚»‚Ì’·‚³‚ð•Ô‚·
 //                         ”¼Šp”’l                            //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-bool Color_Numeric::BeginColor(const StringRef& str, int nPos)
+bool Color_Numeric::BeginColor(const StringRef& str, size_t nPos)
 {
 	if (!str.IsValid()) return false;
 
@@ -30,7 +30,7 @@ bool Color_Numeric::BeginColor(const StringRef& str, int nPos)
 }
 
 
-bool Color_Numeric::EndColor(const StringRef& str, int nPos)
+bool Color_Numeric::EndColor(const StringRef& str, size_t nPos)
 {
 	return (nPos == this->nCommentEnd);
 }

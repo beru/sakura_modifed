@@ -308,7 +308,7 @@ size_t CppPreprocessMng::ScanLine(
 		}
 	}else if (p+4 < lastptr && wcsncmp_literal(p, L"else") == 0) {
 		//	2007.12.14 genta : #ifÇ™ñ≥Ç≠#elseÇ™èoÇΩÇ∆Ç´ÇÃÉKÅ[Éhí«â¡
-		if (0 < stackptr && stackptr < maxnestlevel) {
+		if (0 < stackptr && stackptr < (int)maxnestlevel) {
 			enablebuf ^= bitpattern;
 		}
 	}else if (p+5 < lastptr && wcsncmp_literal(p, L"endif") == 0) {
@@ -1357,7 +1357,7 @@ void EditView::SmartIndent_CPP(wchar_t wcChar)
 					if (1
 						&& 0 < k
 						&& pLine2[k - 1] == L'\''
-						&& nLineLen2 - 1 > k
+						&& (int)nLineLen2 - 1 > k
 						&& pLine2[k + 1] == L'\''
 					) {
 //						MYTRACE(_T("Å•[%ls]\n"), pLine2);
@@ -1381,7 +1381,7 @@ void EditView::SmartIndent_CPP(wchar_t wcChar)
 					if (1
 						&& 0 < k
 						&& pLine2[k - 1] == L'\''
-						&& nLineLen2 - 1 > k
+						&& (int)nLineLen2 - 1 > k
 						&& pLine2[k + 1] == L'\''
 					) {
 //						MYTRACE(_T("Å•[%ls]\n"), pLine2);

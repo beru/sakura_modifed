@@ -1888,7 +1888,7 @@ LRESULT EditWnd::DispatchEvent(
 			if (!bSelect) {
 				const DocLine *pTmpDocLine = GetDocument().docLineMgr.GetLine(ppoCaret->y);
 				if (pTmpDocLine) {
-					if (pTmpDocLine->GetLengthWithoutEOL() < ppoCaret->x) {
+					if ((int)pTmpDocLine->GetLengthWithoutEOL() < ppoCaret->x) {
 						ptCaretPos.x--;
 					}
 				}
@@ -1924,12 +1924,12 @@ LRESULT EditWnd::DispatchEvent(
 		//       -1以下：エラー
 		int	nLineNum = wParam;
 		int	nLineOffset = lParam;
-		if (nLineNum < 0 || GetDocument().docLineMgr.GetLineCount() < nLineNum) {
+		if (nLineNum < 0 || (int)GetDocument().docLineMgr.GetLineCount() < nLineNum) {
 			return -2; // 行番号不正。LineCount == nLineNum はEOF行として下で処理
 		}
 		size_t nLineLen = 0;
 		const wchar_t* pLine = GetDocument().docLineMgr.GetLine(nLineNum)->GetDocLineStrWithEOL( &nLineLen );
-		if (nLineOffset < 0 || nLineLen < nLineOffset) {
+		if (nLineOffset < 0 || (int)nLineLen < nLineOffset) {
 			return -3; // オフセット位置不正
 		}
 		if (nLineNum == GetDocument().docLineMgr.GetLineCount()) {

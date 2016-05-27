@@ -68,7 +68,7 @@ bool BlockComment::Match_CommentFrom(
 	return (1
 		&& szBlockCommentFrom[0] != L'\0'
 		&& szBlockCommentTo[0] != L'\0'
-		&& nPos <= str.GetLength() - nBlockFromLen 	// ブロックコメントデリミタ(From)
+		&& nPos <= (int)str.GetLength() - (int)nBlockFromLen 	// ブロックコメントデリミタ(From)
 		//&& auto_memicmp(&str.GetPtr()[nPos], szBlockCommentFrom, nBlockFromLen) == 0	// 非ASCIIも大文字小文字を区別しない	//###locale 依存
 		&& wmemicmp_ascii(&str.GetPtr()[nPos], szBlockCommentFrom, nBlockFromLen) == 0	// ASCIIのみ大文字小文字を区別しない（高速）
 	);
@@ -88,8 +88,7 @@ size_t BlockComment::Match_CommentTo(
 	*/
 	) const
 {
-	ASSERT_GE(str.GetLength(), nBlockToLen);
-	for (size_t i=nPos; i<=str.GetLength()-nBlockToLen; ++i) {
+	for (int i=nPos; i<=(int)str.GetLength()-(int)nBlockToLen; ++i) {
 		//if (auto_memicmp(&str.GetPtr()[i], szBlockCommentTo, nBlockToLen) == 0) {	// 非ASCIIも大文字小文字を区別しない	//###locale 依存
 		if (wmemicmp_ascii(&str.GetPtr()[i], szBlockCommentTo, nBlockToLen) == 0) {	// ASCIIのみ大文字小文字を区別しない（高速）
 			return i + nBlockToLen;

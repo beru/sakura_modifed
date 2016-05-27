@@ -251,7 +251,7 @@ void DlgDiff::SetData(void)
 			int score = 0;
 			TCHAR szFile1[_MAX_PATH];
 			SplitPath_FolderAndFile(szFile1, NULL, szFile1);
-			for (int i=0; i<nRowNum; ++i) {
+			for (size_t i=0; i<nRowNum; ++i) {
 				// トレイからエディタへの編集ファイル名要求通知
 				::SendMessage(pEditNode[i].GetHwnd(), MYWM_GETFILEINFO, 0, 0);
 				pFileInfo = (EditInfo*)&pShareData->workBuffer.editInfo_MYWM_GETFILEINFO;

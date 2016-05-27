@@ -242,7 +242,7 @@ wchar_t* Bregexp::MakePattern(const wchar_t* szPattern, const wchar_t* szPattern
 	int nParens = 0;							// 検索パターン(szPattern)中の括弧の数(行末時に使用)
 
 	// szPatternの長さ
-	int nLen = CheckPattern(szPattern);
+	size_t nLen = CheckPattern(szPattern);
 	if ((ePatType & PAT_BOTTOM) != 0) {
 		bool bJustDollar = false;			// 行末指定の$のみであるフラグ($の前に \r\nが指定されていない)
 		// 検索パターン

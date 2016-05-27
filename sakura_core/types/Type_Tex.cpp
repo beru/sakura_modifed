@@ -156,7 +156,8 @@ void DocOutline::MakeTopicList_tex(FuncInfoArr* pFuncInfoArr)
 				}
 				tmpstr[0] = L'\0';
 				if (!bNoNumber) {
-					for (k=0; k<=nDepth; ++k) {
+					ASSERT_GE(nDepth, 0);
+					for (k=0; k<=(size_t)nDepth; ++k) {
 						auto_sprintf_s(secstr, L"%d.", stackSection[k]);
 						wcscat(tmpstr, secstr);
 					}

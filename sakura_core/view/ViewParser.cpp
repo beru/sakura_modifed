@@ -47,14 +47,14 @@ int ViewParser::GetLeftWord(NativeW* pMemWord, int nMaxWordLen) const
 			return 0;
 		}
 		nIdxTo = nLineLen;
-		ASSERT_GE(nIdxTo, nCharChars);
+		ASSERT_GE((int)nIdxTo, nCharChars);
 		nIdx = nIdxTo - nCharChars;
 	}else {
 		nCharChars = &pLine[nIdxTo] - NativeW::GetCharPrev(pLine, nLineLen, &pLine[nIdxTo]);
 		if (nCharChars == 0) {
 			return 0;
 		}
-		ASSERT_GE(nIdxTo, nCharChars);
+		ASSERT_GE((int)nIdxTo, nCharChars);
 		nIdx = nIdxTo - nCharChars;
 	}
 

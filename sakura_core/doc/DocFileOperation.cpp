@@ -216,7 +216,7 @@ void DocFileOperation::ReloadCurrentFile(
 
 	// カーソル位置復元 (※ここではオプションのカーソル位置復元（＝改行単位）が指定されていない場合でも復元する)
 	// 2007.08.23 ryoji 表示領域復元
-	if (ptCaretPosXY.y < doc.layoutMgr.GetLineCount()) {
+	if (ptCaretPosXY.y < (int)doc.layoutMgr.GetLineCount()) {
 		textArea.SetViewTopLine(nViewTopLine);
 		textArea.SetViewLeftCol(nViewLeftCol);
 	}

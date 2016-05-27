@@ -154,8 +154,8 @@ public:
 	// 色切り替え開始を検出したら、その直前までの描画を行い、さらに色設定を行う。
 	virtual void InitStrategyStatus() = 0;
 	virtual void SetStrategyColorInfo(const LayoutColorInfo* = nullptr) {};
-	virtual bool BeginColor(const StringRef& str, int nPos) { return false; }
-	virtual bool EndColor(const StringRef& str, int nPos) { return true; }
+	virtual bool BeginColor(const StringRef& str, size_t nPos) { return false; }
+	virtual bool EndColor(const StringRef& str, size_t nPos) { return true; }
 	virtual bool Disp() const = 0;
 	// イベント
 	virtual void OnStartScanLogic() {}

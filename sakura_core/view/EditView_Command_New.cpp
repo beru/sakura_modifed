@@ -145,16 +145,16 @@ void EditView::InsertData_CEditView(
 			if (EolType::None != pLayout->GetLayoutEol()) {
 				nIdxFrom = nLineLen - 1;
 				mem.AllocStringBuffer((ptInsertPos.x - nLineAllColLen + 1) + nDataLen);
-				ASSERT_GE(ptInsertPos.x, nLineAllColLen);
-				for (int i=0; i<ptInsertPos.x-nLineAllColLen+1; ++i) {
+				ASSERT_GE(ptInsertPos.x, (int)nLineAllColLen);
+				for (int i=0; i<ptInsertPos.x-(int)nLineAllColLen+1; ++i) {
 					mem += L' ';
 				}
 				mem.AppendString(pData, nDataLen);
 			}else {
 				nIdxFrom = nLineLen;
-				ASSERT_GE(ptInsertPos.x, nLineAllColLen);
+				ASSERT_GE(ptInsertPos.x, (int)nLineAllColLen);
 				mem.AllocStringBuffer((ptInsertPos.x - nLineAllColLen) + nDataLen);
-				for (int i=0; i<ptInsertPos.x-nLineAllColLen; ++i) {
+				for (int i=0; i<ptInsertPos.x-(int)nLineAllColLen; ++i) {
 					mem += L' ';
 				}
 				mem.AppendString(pData, nDataLen);
