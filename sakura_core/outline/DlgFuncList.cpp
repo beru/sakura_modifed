@@ -551,15 +551,15 @@ void DlgFuncList::SetData()
 //		::ShowWindow(hwndTree, SW_HIDE);
 		TCHAR			szText[2048];
 		const FuncInfo*	pFuncInfo;
-		LV_ITEM			item;
-		bool			bSelected;
-		int				nFuncLineOld(-1);
-		int				nFuncColOld(-1);
-		int				nFuncLineTop(INT_MAX);
-		int				nFuncColTop(INT_MAX);
-		int				nSelectedLineTop = 0;
-		int				nSelectedLine = 0;
-		RECT			rc;
+		LV_ITEM item;
+		bool bSelected;
+		int nFuncLineOld(-1);
+		int nFuncColOld(-1);
+		int nFuncLineTop(INT_MAX);
+		int nFuncColTop(INT_MAX);
+		size_t nSelectedLineTop = 0;
+		size_t nSelectedLine = 0;
+		RECT rc;
 
 		memClipText.SetString(L"");	// クリップボードコピー用テキスト
 		{
@@ -606,7 +606,7 @@ void DlgFuncList::SetData()
 		}
 		if (0 < pFuncInfoArr->GetNum() && !bSelected) {
 			bSelected = true;
-			nSelectedLine =  nSelectedLineTop;
+			nSelectedLine = nSelectedLineTop;
 		}
 		for (size_t i=0; i<pFuncInfoArr->GetNum(); ++i) {
 			// 現在の解析結果要素
@@ -948,9 +948,9 @@ void DlgFuncList::SetTreeJava(
 			&& auto_strncmp(_T("operator "), pWork, 9) != 0
 		) {
 			// インナークラスのネストレベルを調べる
-			size_t	k;
+			size_t k;
 			size_t nWorkLen;
-			int	nCharChars;
+			size_t nCharChars;
 			int	nNestTemplate = 0;
 			nWorkLen = _tcslen(pWork);
 			for (k=0; k<nWorkLen; ++k) {
@@ -1193,14 +1193,14 @@ void DlgFuncList::SetTreeJava(
 */
 void DlgFuncList::SetListVB(void)
 {
-	TCHAR			szType[64];
-	TCHAR			szOption[64];
-	LV_ITEM			item;
-	HWND			hwndList;
-	int				nFuncLineOld;
-	int				nFuncColOld;
-	int				nSelectedLine = 0;
-	RECT			rc;
+	TCHAR	szType[64];
+	TCHAR	szOption[64];
+	LV_ITEM	item;
+	HWND	hwndList;
+	int		nFuncLineOld;
+	int		nFuncColOld;
+	size_t	nSelectedLine = 0;
+	RECT	rc;
 
 	EnableItem(IDC_BUTTON_COPY, true);
 
@@ -1222,7 +1222,7 @@ void DlgFuncList::SetListVB(void)
 	nFuncColOld = -1;
 	int nFuncLineTop(INT_MAX);
 	int nFuncColTop(INT_MAX);
-	int nSelectedLineTop = 0;
+	size_t nSelectedLineTop = 0;
 	bool bSelected = false;
 	for (size_t i=0; i<pFuncInfoArr->GetNum(); ++i) {
 		const FuncInfo* pFuncInfo = pFuncInfoArr->GetAt(i);
@@ -1250,7 +1250,7 @@ void DlgFuncList::SetListVB(void)
 	}
 	if (0 < pFuncInfoArr->GetNum() && !bSelected) {
 		bSelected = true;
-		nSelectedLine =  nSelectedLineTop;
+		nSelectedLine = nSelectedLineTop;
 	}
 
 	TCHAR szText[2048];

@@ -71,7 +71,7 @@ void Clipboard::Close()
 
 bool Clipboard::SetText(
 	const wchar_t*	pData,			// コピーするUNICODE文字列
-	int				nDataLen,		// pDataの長さ（文字単位）
+	size_t			nDataLen,		// pDataの長さ（文字単位）
 	bool			bColumnSelect,
 	bool			bLineSelect,
 	UINT			uFormat
@@ -545,7 +545,7 @@ bool Clipboard::SetClipboradByFormat(
 	return true;
 }
 
-static int GetLengthByMode(
+static size_t GetLengthByMode(
 	HGLOBAL hClipData,
 	const BYTE* pData,
 	int nMode,

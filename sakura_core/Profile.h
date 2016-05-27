@@ -69,13 +69,13 @@ public:
 	void SetReadingMode(void) { bRead = true; }
 	void SetWritingMode(void) { bRead = false; }
 	bool ReadProfile(const TCHAR*);
-	bool ReadProfileRes( const TCHAR*, const TCHAR*, std::vector<std::wstring>* = NULL );				// 200/5/19 Uchi
+	bool ReadProfileRes(const TCHAR*, const TCHAR*, std::vector<std::wstring>* = nullptr);				// 200/5/19 Uchi
 	bool WriteProfile(const TCHAR*, const WCHAR* pszComment);
 
 	void Dump(void);
 
 protected:
-	void ReadOneline( const wstring& line );
+	void ReadOneline(const wstring& line);
 	void ReadOneline(const wchar_t* line, size_t length);
 	bool _WriteFile(const tstring& strFilename, const std::vector<wstring>& vecLine);
 

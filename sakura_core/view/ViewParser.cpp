@@ -104,7 +104,7 @@ bool ViewParser::GetCurrentWord(
 	}
 	
 	// 指定された桁に対応する行のデータ内の位置を調べる
-	int nIdx = editView.LineColumnToIndex(pLayout, caret.GetCaretLayoutPos().x);
+	size_t nIdx = editView.LineColumnToIndex(pLayout, caret.GetCaretLayoutPos().x);
 	
 	// 現在位置の単語の範囲を調べる
 	Range range;

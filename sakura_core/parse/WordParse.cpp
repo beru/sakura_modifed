@@ -111,7 +111,7 @@ inline bool isCSymbolZen(wchar_t c)
 ECharKind WordParse::WhatKindOfChar(
 	const wchar_t*	pData,
 	size_t			pDataLen,
-	int				nIdx
+	size_t			nIdx
 	)
 {
 	using namespace WCODE;
@@ -270,7 +270,7 @@ bool WordParse::SearchNextWordPosition(
 	// Œ»ÝˆÊ’u‚Ì•¶Žš‚ÌŽí—Þ‚ð’²‚×‚é
 	ECharKind nCharKind = WhatKindOfChar(pLine, nLineLen, nIdx);
 
-	int nIdxNext = nIdx;
+	size_t nIdxNext = nIdx;
 	// 2005-09-02 D.S.Koba GetSizeOfChar
 	size_t nCharChars = NativeW::GetSizeOfChar(pLine, nLineLen, nIdxNext);
 	while (nCharChars > 0) {
@@ -507,7 +507,7 @@ bool IsMailAddress(
 //	nAlphaCount = 0;
 	
 	for (;;) {
-		int nBgn = j;
+		size_t nBgn = j;
 		while (
 			j < nBufLen
 			&& (

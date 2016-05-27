@@ -395,13 +395,13 @@ int _DecodeUU_line(const CHAR_TYPE* pSrc, const size_t nSrcLen, char* pDest)
 	UUエンコードのヘッダー部分を解析
 */
 template <class CHAR_TYPE>
-bool CheckUUHeader(const CHAR_TYPE* pSrc, const int nLen, TCHAR* pszFilename)
+bool CheckUUHeader(const CHAR_TYPE* pSrc, size_t nLen, TCHAR* pszFilename)
 {
 //	using namespace WCODE;
 
 	const CHAR_TYPE *pr, *pr_end;
 	CHAR_TYPE *pwstart;
-	int nwlen, nstartidx;
+	size_t nwlen, nstartidx;
 	CHAR_TYPE pszSplitChars[16];
 
 	if (sizeof(CHAR_TYPE) == 2) {
@@ -469,7 +469,7 @@ bool CheckUUHeader(const CHAR_TYPE* pSrc, const int nLen, TCHAR* pszFilename)
 		// error.
 		return false;
 	}
-	for (int i=0; i<nwlen; ++i) {
+	for (size_t i=0; i<nwlen; ++i) {
 		if (sizeof(CHAR_TYPE) == 2) {
 			// WCHAR の場合の処理
 			if (!iswdigit(pwstart[i]) || (pwstart[i] == L'8' || pwstart[i] == L'9')) {

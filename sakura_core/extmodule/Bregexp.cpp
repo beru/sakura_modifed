@@ -236,7 +236,7 @@ wchar_t* Bregexp::MakePattern(const wchar_t* szPattern, const wchar_t* szPattern
 	static const wchar_t szCR[] = {CR, 0};		// 復帰
 	static const wchar_t szLF[] = {LF, 0};		// 改行
 	static const wchar_t BOT_SUBST[] = L"s/\\$(\\)*)$/([\\\\r\\\\n]+)\\$$1/k";	// 行末パターンの置換用パターン
-	BREGEXP_W* sReg = NULL;						// コンパイル構造体
+	BREGEXP_W* sReg = nullptr;						// コンパイル構造体
 	wchar_t szMsg[80] = L"";					// エラーメッセージ
 	wchar_t szAdd2[5] = L"";					// 行末あり置換の $数字 格納用
 	int nParens = 0;							// 検索パターン(szPattern)中の括弧の数(行末時に使用)

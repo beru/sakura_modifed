@@ -11,7 +11,7 @@
 wchar_t* DocReader::GetAllData(int* pnDataLen)
 {
 	const DocLine* pDocLine = pDocLineMgr->GetDocLineTop();
-	int nDataLen = 0;
+	size_t nDataLen = 0;
 	while (pDocLine) {
 		// Oct. 7, 2002 YAZAKI
 		nDataLen += pDocLine->GetLengthWithoutEOL() + 2;	// \r\n‚ğ’Ç‰Á‚µ‚Ä•Ô‚·‚½‚ß + 2‚·‚éB

@@ -77,7 +77,7 @@ void WSHIfObj::ReadyCommands(
 				}
 			}
 		}
-		VARTYPE* varArgTmp = NULL;
+		VARTYPE* varArgTmp = nullptr;
 		VARTYPE* varArg = Info->varArguments;
 		if (4 < ArgCount) {
 			varArgTmp = varArg = new VARTYPE[ArgCount];

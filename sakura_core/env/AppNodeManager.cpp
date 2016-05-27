@@ -233,13 +233,13 @@ void AppNodeGroupHandle::DeleteEditWndList(HWND hWnd)
 	@date 2008.11.22 syat 全て→いくつかに変更。複数ウィンドウを閉じる時の警告メッセージを追加
 	@date 2013.03.09 Uchi 終了要求に要求元のウィンドウを渡す
 */
-bool AppNodeGroupHandle::RequestCloseEditor(EditNode* pWndArr, int nArrCnt, bool bExit, bool bCheckConfirm, HWND hWndFrom)
+bool AppNodeGroupHandle::RequestCloseEditor(EditNode* pWndArr, size_t nArrCnt, bool bExit, bool bCheckConfirm, HWND hWndFrom)
 {
 	// クローズ対象ウィンドウを調べる
 	int iGroup = -1;
 	HWND hWndLast = NULL;
 	int nCloseCount = 0;
-	for (int i=0; i<nArrCnt; ++i) {
+	for (size_t i=0; i<nArrCnt; ++i) {
 		auto& wnd = pWndArr[i];
 		if (nGroup == 0 || nGroup == wnd.nGroup) {
 			if (IsSakuraMainWindow(wnd.hWnd)) {
@@ -288,7 +288,7 @@ bool AppNodeGroupHandle::RequestCloseEditor(EditNode* pWndArr, int nArrCnt, bool
 	}
 
 	// エディタへの終了要求
-	for (int i=0; i<nArrCnt; ++i) {
+	for (size_t i=0; i<nArrCnt; ++i) {
 		auto& wnd = pWndArr[i];
 		if (nGroup == 0 || nGroup == wnd.nGroup) {
 			if (IsSakuraMainWindow(wnd.hWnd)) {
@@ -297,7 +297,7 @@ bool AppNodeGroupHandle::RequestCloseEditor(EditNode* pWndArr, int nArrCnt, bool
 				if (bTabGroup && wnd.hWnd == hWndActive) {
 					iGroup = -1;
 					hWndActive = IsSakuraMainWindow(hWndFrom) ? hWndFrom: NULL;	// 一番最後用
-					for (int j=i+1; j<nArrCnt; ++j) {
+					for (size_t j=i+1; j<nArrCnt; ++j) {
 						auto& wnd2 = pWndArr[j];
 						if (nGroup == 0 || nGroup == wnd2.nGroup) {
 							if (IsSakuraMainWindow(wnd2.hWnd)) {
@@ -632,7 +632,7 @@ size_t AppNodeManager::_GetOpenedWindowArrCore(EditNode** ppEditNode, bool bSort
 bool AppNodeManager::ReorderTab(HWND hwndSrc, HWND hwndDst)
 {
 	DllSharedData* pShare = &GetDllShareData();
-	EditNode* p = NULL;
+	EditNode* p = nullptr;
 	int nSrcTab = -1;
 	int nDstTab = -1;
 	LockGuard<Mutex> guard(g_editArrMutex);

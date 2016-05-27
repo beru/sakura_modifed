@@ -1486,7 +1486,7 @@ ColorStrategy* PrintPreview::DrawPageText(
 				}
 
 				// 文字列長
-				const int nLineCols = wcslen(szLineNum);
+				const size_t nLineCols = wcslen(szLineNum);
 
 				// 文字間隔配列を生成
 				vector<int> vDxArray;
@@ -1647,7 +1647,7 @@ ColorStrategy* PrintPreview::Print_DrawLine(
 	int nDx = pPrintSetting->nPrintFontWidth;
 
 	// タブ幅取得
-	int nTabSpace = parentWnd.GetDocument().layoutMgr.GetTabSpace(); //	Sep. 23, 2002 genta LayoutMgrの値を使う
+	size_t nTabSpace = parentWnd.GetDocument().layoutMgr.GetTabSpace(); //	Sep. 23, 2002 genta LayoutMgrの値を使う
 
 	// 文字間隔配列を生成
 	vector<int> vDxArray;

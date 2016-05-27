@@ -80,7 +80,7 @@ public:
 	static ECharKind WhatKindOfChar(
 		const wchar_t*	pData,
 		size_t			pDataLen,
-		int				nIdx
+		size_t			nIdx
 	);
 
 	// “ñ‚Â‚Ì•¶š‚ğŒ‹‡‚µ‚½‚à‚Ì‚Ìí—Ş‚ğ’²‚×‚é
@@ -116,7 +116,7 @@ public:
 
 	template <class CHAR_TYPE>
 	static size_t GetWord(const CHAR_TYPE*, const size_t, const CHAR_TYPE* pszSplitCharList,
-		CHAR_TYPE** ppWordStart, int* pnWordLen);
+		CHAR_TYPE** ppWordStart, size_t* pnWordLen);
 
 protected:
 
@@ -164,11 +164,11 @@ size_t WordParse::GetWord(
 	const size_t nLen,
 	const CHAR_TYPE* pszSplitCharList,
 	CHAR_TYPE** ppWordStart,
-	int* pnWordLen)
+	size_t* pnWordLen)
 {
 	const CHAR_TYPE* pr = pS;
 	CHAR_TYPE* pwordstart;
-	int nwordlen;
+	size_t nwordlen;
 
 	if (nLen < 1) {
 		pwordstart = const_cast<CHAR_TYPE *>(pS);

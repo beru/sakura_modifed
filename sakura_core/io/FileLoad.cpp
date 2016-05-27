@@ -336,9 +336,9 @@ CodeConvertResult FileLoad::ReadLine_core(
 	for (;;) {
 		const char* pLine = GetNextLineCharCode(
 			pReadBuf,
-			nReadDataLen,    // [in] バッファの有効データサイズ
-			&nBufLineLen,      // [out] 改行を含まない長さ
-			&nReadBufOffSet, // [i/o] オフセット
+			nReadDataLen,		// [in] バッファの有効データサイズ
+			&nBufLineLen,		// [out] 改行を含まない長さ
+			&nReadBufOffSet,	// [i/o] オフセット
 			pEol,
 			&nEolLen,
 			&nBufferNext
@@ -349,8 +349,8 @@ CodeConvertResult FileLoad::ReadLine_core(
 
 		// ReadBufから1行を取得するとき、改行コードが欠ける可能性があるため
 		if (nReadDataLen <= nReadBufOffSet && FileLoadMode::Ready == mode) {// From Here Jun. 13, 2003 Moca
-			int n = 128;
-			int nMinAllocSize = lineBuffer.GetRawLength() + nEolLen - nBufferNext + 100;
+			size_t n = 128;
+			size_t nMinAllocSize = lineBuffer.GetRawLength() + nEolLen - nBufferNext + 100;
 			while (n < nMinAllocSize) {
 				n *= 2;
 			}
@@ -482,7 +482,7 @@ const char* FileLoad::GetNextLineCharCode(
 	const unsigned char* pUData = (const unsigned char*)pData; // signedだと符号拡張でNELがおかしくなるので
 	bool bExtEol = GetDllShareData().common.edit.bEnableExtEol;
 	size_t nLen = nDataLen;
-	int neollen = 0;
+	size_t neollen = 0;
 	switch (encodingTrait) {
 	case ENCODING_TRAIT_ERROR://
 	case ENCODING_TRAIT_ASCII:

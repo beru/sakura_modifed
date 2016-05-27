@@ -196,7 +196,7 @@ class ColorStrategyPool : public TSingleton<ColorStrategyPool> {
 public:
 
 	// Žæ“¾
-	ColorStrategy*	GetStrategy(int nIndex) const { return vStrategiesDisp[nIndex]; }
+	ColorStrategy*	GetStrategy(size_t nIndex) const { return vStrategiesDisp[nIndex]; }
 	size_t			GetStrategyCount() const { return vStrategiesDisp.size(); }
 	ColorStrategy*	GetStrategyByColor(EColorIndexType eColor) const;
 

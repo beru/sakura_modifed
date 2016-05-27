@@ -33,7 +33,7 @@ public:
 	*/
 	LineComment();
 
-	void CopyTo(const int n, const wchar_t* buffer, int commentPos);	// 行コメントデリミタをコピーする
+	void CopyTo(size_t n, const wchar_t* buffer, int commentPos);	// 行コメントデリミタをコピーする
 	bool Match(int pos, const StringRef& str) const;				// 行コメントに値するか確認する
 
 	const wchar_t* getLineComment(const int n) {

@@ -626,10 +626,11 @@ void ViewSelect::PrintSelectionInfoMsg() const
 	auto& view = GetEditView();
 
 	//	o—Í‚³‚ê‚È‚¢‚È‚çŒvZ‚ğÈ—ª
-	if (!view.editWnd.statusBar.SendStatusMessage2IsEffective())
+	if (!view.editWnd.statusBar.SendStatusMessage2IsEffective()) {
 		return;
+	}
 
-	int nLineCount = view.pEditDoc->layoutMgr.GetLineCount();
+	size_t nLineCount = view.pEditDoc->layoutMgr.GetLineCount();
 	if (!IsTextSelected() || select.GetFrom().y >= nLineCount) { // æ“ªs‚ªÀİ‚µ‚È‚¢
 		const_cast<EditView&>(view).GetCaret().bClearStatus = false;
 		if (IsBoxSelecting()) {

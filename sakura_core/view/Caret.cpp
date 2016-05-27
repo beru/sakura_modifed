@@ -544,7 +544,7 @@ void Caret::ShowEditCaret()
 
 			const wchar_t*	pLine = NULL;
 			size_t			nLineLen = 0;
-			const Layout*	pLayout = NULL;
+			const Layout*	pLayout = nullptr;
 			if (bShowCaret) {
 				// 画面外のときはGetLineStrを呼ばない
 				pLine = layoutMgr.GetLineStr(GetCaretLayoutPos().y, &nLineLen, &pLayout);
@@ -585,9 +585,9 @@ void Caret::ShowEditCaret()
 
 		if (pLine) {
 			// 指定された桁に対応する行のデータ内の位置を調べる
-			int nIdxFrom = editView.LineColumnToIndex(pLayout, GetCaretLayoutPos().x);
+			size_t nIdxFrom = editView.LineColumnToIndex(pLayout, GetCaretLayoutPos().x);
 			if (0
-				|| nIdxFrom >= (int)nLineLen
+				|| nIdxFrom >= nLineLen
 				|| WCODE::IsLineDelimiter(pLine[nIdxFrom], GetDllShareData().common.edit.bEnableExtEol)
 				|| pLine[nIdxFrom] == TAB
 			) {

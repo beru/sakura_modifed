@@ -1127,7 +1127,7 @@ void DlgFavorite::ListViewSort(
 	
 	// ヘッダ書き換え
 	TCHAR szHeader[200];
-	LV_COLUMN	col;
+	LV_COLUMN col;
 	if (info.nSortColumn != -1) {
 		// 元のソートの「 ▼」を取り除く
 		col.mask = LVCF_TEXT;

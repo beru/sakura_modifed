@@ -16,7 +16,7 @@
 
 LineComment::LineComment()
 {
-	for (int i=0; i<COMMENT_DELIMITER_NUM; ++i) {
+	for (size_t i=0; i<COMMENT_DELIMITER_NUM; ++i) {
 		pszLineComment[i][0] = '\0';
 		lineCommentPos[i] = -1;
 	}
@@ -28,7 +28,7 @@ LineComment::LineComment()
 	@param buffer [in]      コメント文字列
 	@param commentPos [in] コメント位置．-1のときは指定無し．
 */
-void LineComment::CopyTo(const int n, const wchar_t* buffer, int commentPos)
+void LineComment::CopyTo(size_t n, const wchar_t* buffer, int commentPos)
 {
 	size_t nStrLen = wcslen(buffer);
 	if (0 < nStrLen && nStrLen < COMMENT_DELIMITER_BUFFERSIZE) {
@@ -44,7 +44,7 @@ void LineComment::CopyTo(const int n, const wchar_t* buffer, int commentPos)
 
 bool LineComment::Match(int pos, const StringRef& str) const
 {
-	for (int i=0; i<COMMENT_DELIMITER_NUM; ++i) {
+	for (size_t i=0; i<COMMENT_DELIMITER_NUM; ++i) {
 		if (1
 			&& pszLineComment[i][0] != L'\0'	// 行コメントデリミタ
 			&& (lineCommentPos[i] < 0 || lineCommentPos[i] == pos)	// 位置指定ON.

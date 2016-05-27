@@ -16,7 +16,7 @@
 
 	@date 2007.08.11 charcode.cpp ‚©‚çˆÚ“®
 */
-EncodingType CodeMediator::DetectUnicodeBom(const char* pS, const int nLen)
+EncodingType CodeMediator::DetectUnicodeBom(const char* pS, size_t nLen)
 {
 	uchar_t* pBuf;
 
@@ -96,7 +96,7 @@ EncodingType CodeMediator::DetectUnicode(ESI* pEsi)
 	}
 
 	// 1s‚Ì•½‹ÏŒ…”‚ª200‚ğ’´‚¦‚Ä‚¢‚éê‡‚ÍUnicode–¢ŒŸo‚Æ‚·‚é
-	int nDataLen = pEsi->GetDataLen();
+	size_t nDataLen = pEsi->GetDataLen();
 	int nLineBreak = pEsi->aWcInfo[(int)bomType].nSpecific;  // ‰üs”‚ğ nLineBreak‚Éæ“¾
 	if (static_cast<double>(nDataLen) / nLineBreak > 200) {
 		pEsi->SetStatus(ESI_NODETECTED);
@@ -152,7 +152,7 @@ EncodingType CodeMediator::CheckKanjiCode(ESI* pEsi)
 	UTF-7		CODE_UTF7
 	UnicodeBE	CODE_UNICODEBE
 */
-EncodingType CodeMediator::CheckKanjiCode(const char* pBuf, int nBufLen)
+EncodingType CodeMediator::CheckKanjiCode(const char* pBuf, size_t nBufLen)
 {
 	ESI esi(*pEncodingConfig);
 
