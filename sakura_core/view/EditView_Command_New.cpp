@@ -68,11 +68,11 @@ static void StringToOpeLineData(const wchar_t* pLineData, int nLineDataLen, OpeL
 	@date 2002/03/24 YAZAKI bUndo削除
 */
 void EditView::InsertData_CEditView(
-	Point		ptInsertPos,	// [in] 挿入位置
-	const wchar_t*	pData,			// [in] 挿入テキスト
-	size_t			nDataLen,		// [in] 挿入テキスト長。文字単位。
-	Point*	pptNewPos,		// [out] 挿入された部分の次の位置のレイアウト位置
-	bool			bRedraw
+	Point ptInsertPos,		// [in] 挿入位置
+	const wchar_t* pData,	// [in] 挿入テキスト
+	size_t nDataLen,		// [in] 挿入テキスト長。文字単位。
+	Point* pptNewPos,		// [out] 挿入された部分の次の位置のレイアウト位置
+	bool bRedraw
 )
 {
 #ifdef _DEBUG
@@ -103,22 +103,22 @@ void EditView::InsertData_CEditView(
 	}
 
 	// テキスト取得 -> pLine, nLineLen, pLayout
-	bool			bHintPrev = false;	// 更新が前行からになる可能性があることを示唆する
-	bool			bHintNext = false;	// 更新が次行からになる可能性があることを示唆する
-	size_t			nLineLen;
-	const Layout*	pLayout;
+	bool bHintPrev = false;	// 更新が前行からになる可能性があることを示唆する
+	bool bHintNext = false;	// 更新が次行からになる可能性があることを示唆する
+	size_t nLineLen;
+	const Layout* pLayout;
 	const wchar_t*	pLine = pEditDoc->layoutMgr.GetLineStr(ptInsertPos.y, &nLineLen, &pLayout);
-	bool			bLineModifiedChange = (pLine)? !ModifyVisitor().IsLineModified(pLayout->GetDocLineRef(),
+	bool bLineModifiedChange = (pLine)? !ModifyVisitor().IsLineModified(pLayout->GetDocLineRef(),
 		GetDocument().docEditor.opeBuf.GetNoModifiedSeq()): true;
 
 	// 禁則の有無
 	// 禁則がある場合は1行前から再描画を行う	@@@ 2002.04.19 MIK
 	bool bKinsoku = 0
-			|| (pTypeData->bWordWrap
+			|| pTypeData->bWordWrap
 			|| pTypeData->bKinsokuHead	//@@@ 2002.04.19 MIK
 			|| pTypeData->bKinsokuTail	//@@@ 2002.04.19 MIK
-			|| pTypeData->bKinsokuRet		//@@@ 2002.04.19 MIK
-			|| pTypeData->bKinsokuKuto);	//@@@ 2002.04.19 MIK
+			|| pTypeData->bKinsokuRet	//@@@ 2002.04.19 MIK
+			|| pTypeData->bKinsokuKuto;	//@@@ 2002.04.19 MIK
 
 	size_t nLineAllColLen;
 	int nIdxFrom = 0;

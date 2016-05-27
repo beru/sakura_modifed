@@ -421,12 +421,8 @@ int PropGeneral::GetData(HWND hwndDlg)
 
 	// キーリピート時のスクロール行数
 	csGeneral.nRepeatedScrollLineNum = ::GetDlgItemInt(hwndDlg, IDC_EDIT_REPEATEDSCROLLLINENUM, NULL, FALSE);
-	if (csGeneral.nRepeatedScrollLineNum < 1) {
-		csGeneral.nRepeatedScrollLineNum = 1;
-	}
-	if (csGeneral.nRepeatedScrollLineNum > 10) {
-		csGeneral.nRepeatedScrollLineNum = 10;
-	}
+	csGeneral.nRepeatedScrollLineNum = std::max(1, csGeneral.nRepeatedScrollLineNum);
+	csGeneral.nRepeatedScrollLineNum = std::min(10, csGeneral.nRepeatedScrollLineNum);
 
 	// キーリピート時のスクロールを滑らかにするか
 	csGeneral.nRepeatedScroll_Smooth = DlgButton_IsChecked(hwndDlg, IDC_CHECK_REPEATEDSCROLLSMOOTH);

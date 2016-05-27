@@ -68,7 +68,7 @@ static bool s_bGSort;	// グループ指定
 static Mutex g_editArrMutex(FALSE, GSTR_MUTEX_SAKURA_EDITARR);
 
 // GetOpenedWindowArr用ソート関数
-static ptrdiff_t __cdecl cmpGetOpenedWindowArr(const EditNodeEx& e1, const EditNodeEx& e2)
+static bool __cdecl cmpGetOpenedWindowArr(const EditNodeEx& e1, const EditNodeEx& e2)
 {
 	// 異なるグループのときはグループ比較する
 	int nGroup1;
@@ -84,14 +84,14 @@ static ptrdiff_t __cdecl cmpGetOpenedWindowArr(const EditNodeEx& e1, const EditN
 		nGroup2 = e2.nGroupMru;
 	}
 	if (nGroup1 != nGroup2) {
-		return nGroup1 - nGroup2;	// グループ比較
+		return nGroup1 < nGroup2;	// グループ比較
 	}
 
 	// グループ比較が行われなかったときはウィンドウ比較する
 	if (s_bSort) {
-		return e1.p->nIndex - e2.p->nIndex;	// ウィンドウ番号比較
+		return e1.p->nIndex < e2.p->nIndex;	// ウィンドウ番号比較
 	}
-	return e1.p - e2.p;	// ウィンドウMRU比較（ソートしない）
+	return e1.p < e2.p;	// ウィンドウMRU比較（ソートしない）
 }
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -566,7 +566,6 @@ size_t AppNodeManager::_GetOpenedWindowArrCore(EditNode** ppEditNode, bool bSort
 	// ソート処理用の拡張リスト
 	std::vector<EditNodeEx> nodesEx(nodes.nEditArrNum);
 	EditNodeEx*	pNode = &nodesEx[0];
-
 	// 拡張リストの各要素に編集ウィンドウリストの各要素へのポインタを格納する
 	size_t nRowNum = 0;	// 編集ウィンドウ数
 	for (int i=0; i<nodes.nEditArrNum; ++i) {
@@ -608,7 +607,7 @@ size_t AppNodeManager::_GetOpenedWindowArrCore(EditNode** ppEditNode, bool bSort
 	//       （グループ化する設定でなければグループは１個）
 	s_bSort = bSort;
 	s_bGSort = bGSort;
-	std::sort(pNode, pNode+nRowNum, cmpGetOpenedWindowArr);
+	std::sort(nodesEx.begin(), nodesEx.begin()+nRowNum, cmpGetOpenedWindowArr);
 
 	// 拡張リストのソート結果をもとに編集ウィンドウリスト格納領域に結果を格納する
 	for (size_t i=0; i<nRowNum; ++i) {

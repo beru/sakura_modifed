@@ -841,8 +841,8 @@ void SearchAgent::ReplaceData(DocLineReplaceArg* pArg)
 	int nProgress;
 	DocLine::MarkType	markNext;
 	//	May 15, 2000
-	HWND		hwndCancel = NULL;	//	‰Šú‰»
-	HWND		hwndProgress = NULL;	//	‰Šú‰»
+	HWND hwndCancel = NULL;	//	‰Šú‰»
+	HWND hwndProgress = NULL;	//	‰Šú‰»
 
 	pArg->ptNewPos = pArg->delRange.GetFrom();
 

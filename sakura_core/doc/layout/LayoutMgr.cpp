@@ -764,11 +764,11 @@ void LayoutMgr::LogicToLayout(
 	// サーチ開始地点 -> pLayout, nCaretPosX, nCaretPosY
 	size_t nCaretPosX = 0;
 	size_t nCaretPosY;
-	const Layout*	pLayout;
+	const Layout* pLayout;
 	// 2013.05.15 ヒント、ありなしの処理を統合
 	{
 		nLineHint = t_min((int)GetLineCount() - 1, nLineHint);
-		nCaretPosY = t_max((int)ptLogic.y, nLineHint);
+		nCaretPosY = t_max<int>(ptLogic.y, nLineHint);
 
 		// 2013.05.12 pLayoutPrevReferを見る
 		if (1
@@ -788,7 +788,7 @@ void LayoutMgr::LogicToLayout(
 		}
 		
 		// ロジックYがでかすぎる場合は、一致するまでデクリメント (
-		while (pLayout->GetLogicLineNo() > ptLogic.y) {
+		while (pLayout && pLayout->GetLogicLineNo() > ptLogic.y) {
 			pLayout = pLayout->GetPrevLayout();
 			--nCaretPosY;
 		}
@@ -867,13 +867,13 @@ void LayoutMgr::LogicToLayout(
 
 			if (!pLayout->GetNextLayout()) {
 				// 当該位置に達していなくても，レイアウト末尾ならデータ末尾のレイアウト位置を返す．
-				nCaretPosX = pLayout->CalcLayoutWidth(*this) + pLayout->GetLayoutEol().GetLen() > 0 ? 1 : 0;
+				nCaretPosX = pLayout->CalcLayoutWidth(*this) + ((pLayout->GetLayoutEol().GetLen() > 0) ? 1 : 0);
 				break;
 			}
 
 			if (ptLogic.y < pLayout->pNext->GetLogicLineNo()) {
 				// 次のLayoutが当該物理行を過ぎてしまう場合はデータ末尾のレイアウト位置を返す．
-				nCaretPosX = pLayout->CalcLayoutWidth(*this) + pLayout->GetLayoutEol().GetLen() > 0 ? 1 : 0;
+				nCaretPosX = pLayout->CalcLayoutWidth(*this) + ((pLayout->GetLayoutEol().GetLen() > 0) ? 1 : 0);
 				break;
 			}
 		}

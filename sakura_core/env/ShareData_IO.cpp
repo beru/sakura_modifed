@@ -455,10 +455,14 @@ void ShareData_IO::ShareData_IO_Common(DataProfile& profile)
 	profile.IOProfileData(pszSecName, LTEXT("szOpenDialogSelDir")		, StringBufferT(common.edit.openDialogSelDir,_countof2(common.edit.openDialogSelDir)));
 	profile.IOProfileData( pszSecName, LTEXT("bBoxSelectLock")	, common.edit.bBoxSelectLock );
 	profile.IOProfileData(pszSecName, LTEXT("nRepeatedScrollLineNum")	, common.general.nRepeatedScrollLineNum);
+	if (profile.IsReadingMode()) {
+		common.general.nRepeatedScrollLineNum = std::max(1, common.general.nRepeatedScrollLineNum);
+		common.general.nRepeatedScrollLineNum = std::min(10, common.general.nRepeatedScrollLineNum);
+	}
 	profile.IOProfileData(pszSecName, LTEXT("nRepeatedScroll_Smooth")	, common.general.nRepeatedScroll_Smooth);
 	profile.IOProfileData(pszSecName, LTEXT("nPageScrollByWheel")	, common.general.nPageScrollByWheel);					// 2009.01.17 nasukoji
 	profile.IOProfileData(pszSecName, LTEXT("nHorizontalScrollByWheel")	, common.general.nHorizontalScrollByWheel);	// 2009.01.17 nasukoji
-	profile.IOProfileData(pszSecName, LTEXT("bCloseAllConfirm")		, common.general.bCloseAllConfirm);	// [すべて閉じる]で他に編集用のウィンドウがあれば確認する	// 2006.12.25 ryoji
+		profile.IOProfileData(pszSecName, LTEXT("bCloseAllConfirm")		, common.general.bCloseAllConfirm);	// [すべて閉じる]で他に編集用のウィンドウがあれば確認する	// 2006.12.25 ryoji
 	profile.IOProfileData(pszSecName, LTEXT("bExitConfirm")			, common.general.bExitConfirm);
 	profile.IOProfileData(pszSecName, LTEXT("bSearchRegularExp")	, common.search.searchOption.bRegularExp);
 	profile.IOProfileData(pszSecName, LTEXT("bSearchLoHiCase")		, common.search.searchOption.bLoHiCase);
