@@ -45,7 +45,7 @@ public:
 	void OnFinalSave(SaveResultType eSaveResult);
 
 	// プログレス受信
-	void OnProgress(int nPer);
+	void OnProgress(size_t nPer);
 
 protected:
 	// 実装補助

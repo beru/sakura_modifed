@@ -48,7 +48,7 @@ CodeConvertResult WriteManager::WriteFile_From_CDocLineMgr(
 		BinaryOutputStream out(saveInfo.filePath, true);
 
 		// 各行出力
-		int nLineNumber = 0;
+		size_t nLineNumber = 0;
 		const DocLine*	pDocLine = pcDocLineMgr.GetDocLineTop();
 		// 1行目
 		{

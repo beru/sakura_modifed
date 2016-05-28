@@ -1193,7 +1193,7 @@ int ShareData::GetMacroFilename(int idx, TCHAR* pszPath, size_t nBufLen)
 			return -(int)nLen;
 		}
 		_tcscpy(pszPath, pszFile);
-		return nLen;
+		return (int)nLen;
 	}else {	// フォルダ指定あり
 		// 相対パス→絶対パス
 		int nFolderSep = AddLastChar(pShareData->common.macro.szMACROFOLDER, _countof2(pShareData->common.macro.szMACROFOLDER), _T('\\'));
@@ -1221,7 +1221,7 @@ int ShareData::GetMacroFilename(int idx, TCHAR* pszPath, size_t nBufLen)
 			*ptr++ = _T('\\');
 		}
 		_tcscpy(ptr, pszFile);
-		return nAllLen;
+		return (int)nAllLen;
 	}
 
 }

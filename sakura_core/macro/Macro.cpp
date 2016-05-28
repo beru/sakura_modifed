@@ -1574,8 +1574,7 @@ bool Macro::HandleFunction(
 			if (numArgs != 1) return false;
 			if (VariantChangeType(&varCopy.data, const_cast<VARIANTARG*>(&(args[0])), 0, VT_I4) != S_OK) return false;	// VT_I4‚Æ‚µ‚Ä‰ğß
 			if (varCopy.data.lVal == 0) {
-				int nLineCount;
-				nLineCount = view.pEditDoc->docLineMgr.GetLineCount();
+				size_t nLineCount = view.pEditDoc->docLineMgr.GetLineCount();
 				Wrap(&result)->Receive(nLineCount);
 			}else {
 				return false;
@@ -1587,7 +1586,7 @@ bool Macro::HandleFunction(
 		{
 			if (numArgs != 1) return false;
 			if (VariantChangeType(&varCopy.data, const_cast<VARIANTARG*>(&(args[0])), 0, VT_I4) != S_OK) return false;	// VT_I4‚Æ‚µ‚Ä‰ğß
-			int nTab = view.pEditDoc->layoutMgr.GetTabSpace();
+			size_t nTab = view.pEditDoc->layoutMgr.GetTabSpace();
 			Wrap(&result)->Receive(nTab);
 			// 2013.04.30 Moca ğŒ’Ç‰ÁB•s—v‚Èê‡‚ÍChangeLayoutParam‚ğŒÄ‚Î‚È‚¢
 			if (0 < varCopy.data.iVal && nTab != varCopy.data.iVal) {
@@ -2234,15 +2233,15 @@ bool Macro::HandleFunction(
 					varCopy2.data.lVal = 1;
 				}
 				const wchar_t* pLine = varCopy.data.bstrVal;
-				int nLen = ::SysStringLen(varCopy.data.bstrVal);
+				size_t nLen = ::SysStringLen(varCopy.data.bstrVal);
 				if (2 <= nLen) {
 					if (pLine[nLen-2] == WCODE::CR && pLine[nLen-1] == WCODE::LF) {
 						--nLen;
 					}
 				}
-				const int nTabWidth = view.GetDocument().layoutMgr.GetTabSpaceKetas();
+				const size_t nTabWidth = view.GetDocument().layoutMgr.GetTabSpaceKetas();
 				int nPosX = varCopy2.data.lVal - 1;
-				for (int i=0; i<nLen;) {
+				for (size_t i=0; i<nLen;) {
 					if (pLine[i] == WCODE::TAB) {
 						nPosX += nTabWidth - (nPosX % nTabWidth);
 					}else {
@@ -2250,7 +2249,7 @@ bool Macro::HandleFunction(
 					}
 					i += t_max(1, (int)NativeW::GetSizeOfChar(pLine, nLen, i));
 				}
-				nPosX -=  varCopy2.data.lVal - 1;
+				nPosX -= varCopy2.data.lVal - 1;
 				Wrap(&result)->Receive(nPosX);
 				return true;
 			}
@@ -2269,7 +2268,7 @@ bool Macro::HandleFunction(
 				DocLine tmpDocLine;
 				tmpDocLine.SetDocLineString(varCopy.data.bstrVal, ::SysStringLen(varCopy.data.bstrVal));
 				const size_t tmpLenWithEol1 = tmpDocLine.GetLengthWithoutEOL() + (0 < tmpDocLine.GetEol().GetLen() ? 1: 0);
-				const int offset(varCopy2.data.lVal - 1);
+				const int offset = varCopy2.data.lVal - 1;
 				const Layout tmpLayout(
 					&tmpDocLine,
 					Point(0, 0),
@@ -2278,7 +2277,7 @@ bool Macro::HandleFunction(
 					offset,
 					NULL
 				);
-				int width = view.LineIndexToColumn(&tmpLayout, tmpDocLine.GetLengthWithEOL()) - offset;
+				size_t width = view.LineIndexToColumn(&tmpLayout, tmpDocLine.GetLengthWithEOL()) - offset;
 				Wrap(&result)->Receive(width);
 				return true;
 			}

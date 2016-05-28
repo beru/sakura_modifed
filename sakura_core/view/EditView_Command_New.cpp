@@ -973,7 +973,7 @@ void EditView::RTrimPrevLine(void)
 	Point ptCaretPos_PHY = caret.GetCaretLogicPos();
 
 	if (caret.GetCaretLogicPos().y > 0) {
-		int nLineLen;
+		size_t nLineLen;
 		const wchar_t*	pLine = DocReader(pEditDoc->docLineMgr).GetLineStrWithoutEOL(caret.GetCaretLogicPos().y - 1, &nLineLen);
 		if (pLine && nLineLen > 0) {
 			int i = 0;

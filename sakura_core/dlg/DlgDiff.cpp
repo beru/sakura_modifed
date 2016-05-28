@@ -259,13 +259,13 @@ void DlgDiff::SetData(void)
 				// 自分ならスキップ
 				if (pEditNode[i].GetHwnd() == EditWnd::getInstance().GetHwnd()) {
 					// 同じ形式にしておく。ただしアクセスキー番号はなし
-					FileNameManager::getInstance().GetMenuFullLabel_WinListNoEscape( szName, _countof(szName), pFileInfo, pEditNode[i].nId, -1, calc.GetDC() );
+					FileNameManager::getInstance().GetMenuFullLabel_WinListNoEscape(szName, _countof(szName), pFileInfo, pEditNode[i].nId, -1, calc.GetDC());
 					SetItemText(IDC_STATIC_DIFF_SRC, szName);
 					continue;
 				}
 
 				// 番号はウィンドウ一覧と同じ番号を使う
-				FileNameManager::getInstance().GetMenuFullLabel_WinListNoEscape( szName, _countof(szName), pFileInfo, pEditNode[i].nId, i, calc.GetDC() );
+				FileNameManager::getInstance().GetMenuFullLabel_WinListNoEscape(szName, _countof(szName), pFileInfo, pEditNode[i].nId, i, calc.GetDC());
 
 
 				// リストに登録する

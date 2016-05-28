@@ -42,7 +42,7 @@ class AppMode
 
 public:
 	// インターフェース
-	bool	IsViewMode() const				{ return bViewMode; }			// ビューモードを取得
+	bool	IsViewMode() const				{ return bViewMode; }				// ビューモードを取得
 	void	SetViewMode(bool bViewMode)		{ this->bViewMode = bViewMode; }	// ビューモードを設定
 	bool	IsDebugMode() const				{ return bDebugMode; }
 	void	SetDebugModeON();	// デバッグモニタモード設定
@@ -58,6 +58,6 @@ private:
 	bool	bViewMode;				// ビューモード
 	bool	bDebugMode;				// デバッグモニタモード
 public:
-	wchar_t	szGrepKey[1024];			// Grepモードの場合、その検索キー
+	wchar_t	szGrepKey[1024];		// Grepモードの場合、その検索キー
 };
 

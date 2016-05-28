@@ -161,14 +161,14 @@ class ProgressListener;
 class ProgressSubject : public SubjectT<ProgressListener> {
 public:
 	virtual ~ProgressSubject() {}
-	void NotifyProgress(int nPer);
+	void NotifyProgress(size_t nPer);
 };
 
 // 1つのProgressSubjectをウォッチする
 class ProgressListener : public ListenerT<ProgressSubject> {
 public:
 	virtual ~ProgressListener() {}
-	virtual void OnProgress(int nPer) = 0;
+	virtual void OnProgress(size_t nPer) = 0;
 };
 
 // Subjectは複数のListenerから観察される
@@ -211,7 +211,7 @@ public:
 	virtual CallbackResultType	OnCheckLoad	(LoadInfo* pLoadInfo)		{ return CallbackResultType::Continue; }	// 本当にロードを行うかの判定を行う
 	virtual void				OnBeforeLoad(LoadInfo* loadInfo)		{ return ; }	// ロード事前処理
 	virtual LoadResultType		OnLoad		(const LoadInfo& loadInfo)	{ return LoadResultType::NoImplement; }	// ロード処理
-	virtual void			OnLoading	(int nPer)						{ return ; }	// ロード処理の経過情報を受信
+	virtual void			OnLoading	(size_t nPer)						{ return ; }	// ロード処理の経過情報を受信
 	virtual void			OnAfterLoad	(const LoadInfo& loadInfo) 		{ return ; }	// ロード事後処理
 	virtual void			OnFinalLoad	(LoadResultType eLoadResult)	{ return ; }	// ロードフローの最後に必ず呼ばれる
 
@@ -220,7 +220,7 @@ public:
 	virtual CallbackResultType OnPreBeforeSave	(SaveInfo* pSaveInfo)	{ return CallbackResultType::Continue; }	// セーブ事前おまけ処理 ($$ 仮)
 	virtual void			OnBeforeSave(const SaveInfo& saveInfo)		{ return ; }	// セーブ事前処理
 	virtual void			OnSave		(const SaveInfo& saveInfo)		{ return ; }	// セーブ処理
-	virtual void			OnSaving	(int nPer)						{ return ; }	// セーブ処理の経過情報を受信
+	virtual void			OnSaving	(size_t nPer)						{ return ; }	// セーブ処理の経過情報を受信
 	virtual void			OnAfterSave	(const SaveInfo& saveInfo)		{ return ; }	// セーブ事後処理
 	virtual void			OnFinalSave	(SaveResultType eSaveResult)	{ return ; }	// セーブフローの最後に必ず呼ばれる
 

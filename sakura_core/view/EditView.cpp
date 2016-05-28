@@ -2350,7 +2350,7 @@ bool EditView::MyGetClipboardData(
  */
 bool EditView::MySetClipboardData(
 	const ACHAR* pszText,
-	int nTextLen,
+	size_t nTextLen,
 	bool bColumnSelect,
 	bool bLineSelect /*= false*/
 	)
@@ -2363,7 +2363,7 @@ bool EditView::MySetClipboardData(
 
 bool EditView::MySetClipboardData(
 	const WCHAR* pszText,
-	int nTextLen,
+	size_t nTextLen,
 	bool bColumnSelect,
 	bool bLineSelect /*= false*/
 	)

@@ -991,7 +991,7 @@ void SearchAgent::ReplaceData(DocLineReplaceArg* pArg)
 					// 削除が元データの有効長以下で行の長さが伸びるか少し減る場合reallocを試みる
 					static DocLine* pDocLinePrevAccess = nullptr;
 					static int nAccessCount = 0;
-					int nBufferReserve = nNewLen;
+					size_t nBufferReserve = nNewLen;
 					if (pDocLinePrevAccess == pDocLine) {
 						if (100 < nAccessCount) {
 							if (1000 < nNewLen) {

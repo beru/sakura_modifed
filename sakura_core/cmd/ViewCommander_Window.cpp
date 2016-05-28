@@ -233,7 +233,7 @@ void ViewCommander::Command_Cascade(void)
 		// -----------------------------------------
 
 		// Ç‹Ç∏ÉJÉåÉìÉgÇç≈ëOñ Ç…
-		int i = count - 1;
+		size_t i = count - 1;
 		
 		::SetWindowPos(
 			pWndArr[i].hWnd, HWND_TOP,
@@ -292,7 +292,7 @@ void ViewCommander::Command_Tile_V(void)
 			// To Here Jul. 28, 2002 genta
 			++count;
 		}
-		int height = (rcDesktop.bottom - rcDesktop.top) / count;
+		size_t height = (rcDesktop.bottom - rcDesktop.top) / count;
 		for (size_t i=0; i<count; ++i) {
 			// Jul. 21, 2002 genta
 			::ShowWindow(phwndArr[i], SW_RESTORE);
@@ -345,7 +345,7 @@ void ViewCommander::Command_Tile_H(void)
 			// To Here Jul. 28, 2002 genta
 			++count;
 		}
-		int width = (rcDesktop.right - rcDesktop.left) / count;
+		size_t width = (rcDesktop.right - rcDesktop.left) / count;
 		for (size_t i=0; i<count; ++i) {
 			// Jul. 21, 2002 genta
 			::ShowWindow(phwndArr[i], SW_RESTORE);

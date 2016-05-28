@@ -56,8 +56,8 @@ DocSubject::~DocSubject()
 
 #define DEF_NOTIFY(NAME) CallbackResultType DocSubject::Notify##NAME() \
 { \
-	int n = GetListenerCount(); \
-	for (int i=0; i<n; ++i) { \
+	size_t n = GetListenerCount(); \
+	for (size_t i=0; i<n; ++i) { \
 		CallbackResultType eRet = GetListener(i)->On##NAME(); \
 		if (eRet != CallbackResultType::Continue) return eRet; \
 	} \
@@ -66,8 +66,8 @@ DocSubject::~DocSubject()
 
 #define DEF_NOTIFY2(NAME, ARGTYPE) CallbackResultType DocSubject::Notify##NAME(ARGTYPE a) \
 { \
-	int n = GetListenerCount(); \
-	for (int i=0; i<n; ++i) { \
+	size_t n = GetListenerCount(); \
+	for (size_t i=0; i<n; ++i) { \
 		CallbackResultType eRet = GetListener(i)->On##NAME(a); \
 		if (eRet != CallbackResultType::Continue) return eRet; \
 	} \
@@ -76,16 +76,16 @@ DocSubject::~DocSubject()
 
 #define VOID_NOTIFY(NAME) void DocSubject::Notify##NAME() \
 { \
-	int n = GetListenerCount(); \
-	for (int i=0; i<n; ++i) { \
+	size_t n = GetListenerCount(); \
+	for (size_t i=0; i<n; ++i) { \
 		GetListener(i)->On##NAME(); \
 	} \
 }
 
 #define VOID_NOTIFY2(NAME, ARGTYPE) void DocSubject::Notify##NAME(ARGTYPE a) \
 { \
-	int n = GetListenerCount(); \
-	for (int i=0; i<n; ++i) { \
+	size_t n = GetListenerCount(); \
+	for (size_t i=0; i<n; ++i) { \
 		GetListener(i)->On##NAME(a); \
 	} \
 }
@@ -93,9 +93,9 @@ DocSubject::~DocSubject()
 //######‰¼
 #define CORE_NOTIFY2(NAME, ARGTYPE) LoadResultType DocSubject::Notify##NAME(ARGTYPE a) \
 { \
-	int n = GetListenerCount(); \
+	size_t n = GetListenerCount(); \
 	LoadResultType eRet = LoadResultType::Failure; \
-	for (int i=0; i<n; ++i) { \
+	for (size_t i=0; i<n; ++i) { \
 		LoadResultType e = GetListener(i)->On##NAME(a); \
 		if (e == LoadResultType::NoImplement) continue; \
 		if (e == LoadResultType::Failure) return e; \
@@ -155,10 +155,10 @@ EditDoc* DocListenerEx::GetListeningDoc() const
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                     ProgressSubject                        //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-void ProgressSubject::NotifyProgress(int nPer)
+void ProgressSubject::NotifyProgress(size_t nPer)
 {
-	int n = GetListenerCount();
-	for (int i=0; i<n; ++i) {
+	size_t n = GetListenerCount();
+	for (size_t i=0; i<n; ++i) {
 		GetListener(i)->OnProgress(nPer);
 	}
 }

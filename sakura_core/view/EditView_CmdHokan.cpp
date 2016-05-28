@@ -183,18 +183,19 @@ void EditView::ShowHokanMgr(NativeW& memData, bool bAutoDecided)
 	@date 2008.10.11 syat 日本語の補完
 	@date 2010.06.16 Moca ひらがなで続行する場合、直前を漢字に制限
 */
-int EditView::HokanSearchByFile(
+size_t EditView::HokanSearchByFile(
 	const wchar_t*	pszKey,					// [in]
 	bool			bHokanLoHiCase,			// [in] 英大文字小文字を同一視する
 	vector_ex<std::wstring>& candidates,	// [in,out] 候補
 	int				nMaxKouho				// [in] Max候補数(0 == 無制限)
 ) {
 	const size_t nKeyLen = wcslen(pszKey);
-	int nLines = pEditDoc->docLineMgr.GetLineCount();
-	int j, nLineLen, nRet, nWordBegin;
+	size_t nLines = pEditDoc->docLineMgr.GetLineCount();
+	int nRet, nWordBegin;
 	int nWordLenStop;
 	size_t nWordLen;
 	size_t nCharSize;
+	size_t nLineLen;
 
 	Point ptCur = GetCaret().GetCaretLogicPos(); // 物理カーソル位置
 
@@ -202,10 +203,10 @@ int EditView::HokanSearchByFile(
 	// キーの先頭が記号(#$@\)かどうか判定
 	bool bKeyStartWithMark = wcschr(L"$@#\\", pszKey[0]) != NULL;
 
-	for (int i=0; i<nLines; ++i) {
+	for (size_t i=0; i<nLines; ++i) {
 		const wchar_t* pszLine = DocReader(pEditDoc->docLineMgr).GetLineStrWithoutEOL(i, &nLineLen);
 
-		for (j=0; j<nLineLen; j+=nCharSize) {
+		for (size_t j=0; j<nLineLen; j+=nCharSize) {
 			nCharSize = NativeW::GetSizeOfChar(pszLine, nLineLen, j);
 
 			// 半角記号は候補に含めない

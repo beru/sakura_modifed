@@ -4,11 +4,11 @@
 #include "logic/DocLineMgr.h"
 
 /* 全行データを返す
-	改行コードは、CFLF統一される。
+	改行コードは、CRLFに統一される。
 	@retval 全行データ。freeで開放しなければならない。
 	@note   Debug版のテストにのみ使用している。
 */
-wchar_t* DocReader::GetAllData(int* pnDataLen)
+wchar_t* DocReader::GetAllData(size_t* pnDataLen)
 {
 	const DocLine* pDocLine = pDocLineMgr->GetDocLineTop();
 	size_t nDataLen = 0;
@@ -42,7 +42,7 @@ wchar_t* DocReader::GetAllData(int* pnDataLen)
 	return pData;
 }
 
-const wchar_t* DocReader::GetLineStr(int nLine, size_t* pnLineLen)
+const wchar_t* DocReader::GetLineStr(size_t nLine, size_t* pnLineLen)
 {
 	const DocLine* pDocLine = pDocLineMgr->GetLine(nLine);
 	if (!pDocLine) {
@@ -59,7 +59,7 @@ const wchar_t* DocReader::GetLineStr(int nLine, size_t* pnLineLen)
 	@author Moca
 	@date 2003.06.22
 */
-const wchar_t* DocReader::GetLineStrWithoutEOL(int nLine, int* pnLineLen)
+const wchar_t* DocReader::GetLineStrWithoutEOL(size_t nLine, size_t* pnLineLen)
 {
 	const DocLine* pDocLine = pDocLineMgr->GetLine(nLine);
 	if (!pDocLine) {

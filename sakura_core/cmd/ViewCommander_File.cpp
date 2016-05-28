@@ -537,11 +537,10 @@ void ViewCommander::Command_Property_File(void)
 #ifdef _DEBUG
 	{
 		// 全行データを返すテスト
-		wchar_t*	pDataAll;
-		int		nDataAllLen;
+		size_t nDataAllLen;
 		RunningTimer runningTimer("ViewCommander::Command_Property_File 全行データを返すテスト");
 		runningTimer.Reset();
-		pDataAll = DocReader(GetDocument().docLineMgr).GetAllData(&nDataAllLen);
+		wchar_t* pDataAll = DocReader(GetDocument().docLineMgr).GetAllData(&nDataAllLen);
 //		MYTRACE(_T("全データ取得             (%dバイト) 所要時間(ミリ秒) = %d\n"), nDataAllLen, runningTimer.Read());
 		free(pDataAll);
 		pDataAll = NULL;

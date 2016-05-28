@@ -38,8 +38,8 @@ public:
 	virtual ~Subject();
 
 	// 公開インターフェース
-	int GetListenerCount() const { return (int)vListenersRef.size(); }
-	Listener* GetListener(int nIndex) const { return vListenersRef[nIndex]; }
+	size_t GetListenerCount() const { return vListenersRef.size(); }
+	Listener* GetListener(size_t nIndex) const { return vListenersRef[nIndex]; }
 
 public:
 	// 管理用
@@ -68,7 +68,7 @@ private:
 template <class LISTENER>
 class SubjectT : public Subject {
 public:
-	LISTENER* GetListener(int nIndex) const {
+	LISTENER* GetListener(size_t nIndex) const {
 		return static_cast<LISTENER*>(Subject::GetListener(nIndex));
 	}
 };

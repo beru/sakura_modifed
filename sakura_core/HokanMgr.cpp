@@ -130,7 +130,7 @@ void HokanMgr::Hide(void)
 
 	@date 2002.2.17 YAZAKI CShareDataのインスタンスは、CProcessにひとつあるのみ。
 */
-int HokanMgr::Search(
+size_t HokanMgr::Search(
 	POINT*			pPt,
 	int				nWinHeight,
 	int				nColumnWidth,
@@ -333,7 +333,7 @@ int HokanMgr::Search(
 	size_t kouhoNum = vKouho.size();
 	vKouho.clear();
 	return kouhoNum;
-}																				
+}
 
 void HokanMgr::HokanSearchByKeyword(
 	const wchar_t*	pszCurWord,

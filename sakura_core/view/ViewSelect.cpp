@@ -791,7 +791,7 @@ void ViewSelect::PrintSelectionInfoMsg() const
 					//	最終行の処理
 					pLine = view.pEditDoc->layoutMgr.GetLineStr(nLineNum, &nLineLen, &pLayout);
 					if (pLine) {
-						int last_line_chars = view.LineColumnToIndex(pLayout, select.GetTo().x);
+						size_t last_line_chars = view.LineColumnToIndex(pLayout, select.GetTo().x);
 						select_sum += last_line_chars;
 						if (last_line_chars == 0) {
 							//	最終行の先頭にキャレットがある場合は

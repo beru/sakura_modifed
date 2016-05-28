@@ -164,8 +164,8 @@ public:
 	bool MyGetClipboardData(NativeW&, bool*, bool* = nullptr);			// クリップボードからデータを取得
 
 	// 設定
-	bool MySetClipboardData(const ACHAR*, int, bool bColumnSelect, bool = false);	// クリップボードにデータを設定
-	bool MySetClipboardData(const WCHAR*, int, bool bColumnSelect, bool = false);	// クリップボードにデータを設定
+	bool MySetClipboardData(const ACHAR*, size_t, bool bColumnSelect, bool = false);	// クリップボードにデータを設定
+	bool MySetClipboardData(const WCHAR*, size_t, bool bColumnSelect, bool = false);	// クリップボードにデータを設定
 
 	// 利用
 	void CopyCurLine(bool bAddCRLFWhenCopy, EolType neweol, bool bEnableLineModePaste);	// カーソル行をクリップボードにコピーする	// 2007.10.08 ryoji
@@ -482,7 +482,7 @@ public:
 	// 補完ウィンドウを表示する。Ctrl+Spaceや、文字の入力/削除時に呼び出されます。 YAZAKI 2002/03/11
 	void ShowHokanMgr(NativeW& memData, bool bAutoDecided);
 
-	int HokanSearchByFile(const wchar_t*, bool, vector_ex<std::wstring>&, int); // 2003.06.25 Moca
+	size_t HokanSearchByFile(const wchar_t*, bool, vector_ex<std::wstring>&, int); // 2003.06.25 Moca
 
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //

@@ -56,7 +56,7 @@ void VisualProgress::OnFinalSave(SaveResultType eSaveResult)
 //                      プログレス受信                         //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-void VisualProgress::OnProgress(int nPer)
+void VisualProgress::OnProgress(size_t nPer)
 {
 	_Doing(nPer);
 }
