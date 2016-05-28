@@ -182,14 +182,14 @@ void ViewCommander::Command_LineCutToEnd(void)
 	if (docLineRef.GetEol() == EolType::None) {	// 改行コードの種類
 		ptPos = layoutMgr.LogicToLayout(
 			Point(
-				docLineRef.GetLengthWithEOL(),
+				(int)docLineRef.GetLengthWithEOL(),
 				pLayout->GetLogicLineNo()
 			)
 		);
 	}else {
 		ptPos = layoutMgr.LogicToLayout(
 			Point(
-				docLineRef.GetLengthWithEOL() - docLineRef.GetEol().GetLen(),
+				(int)docLineRef.GetLengthWithEOL() - (int)docLineRef.GetEol().GetLen(),
 				pLayout->GetLogicLineNo()
 			)
 		);
@@ -266,14 +266,14 @@ void ViewCommander::Command_LineDeleteToEnd(void)
 	if (docLineRef.GetEol() == EolType::None) {	// 改行コードの種類
 		ptPos = GetDocument().layoutMgr.LogicToLayout(
 			Point(
-				docLineRef.GetLengthWithEOL(),
+				(int)docLineRef.GetLengthWithEOL(),
 				pLayout->GetLogicLineNo()
 			)
 		);
 	}else {
 		ptPos = GetDocument().layoutMgr.LogicToLayout(
 			Point(
-				docLineRef.GetLengthWithEOL() - docLineRef.GetEol().GetLen(),
+				(int)docLineRef.GetLengthWithEOL() - (int)docLineRef.GetEol().GetLen(),
 				pLayout->GetLogicLineNo()
 			)
 		);
@@ -358,16 +358,15 @@ void ViewCommander::Command_Delete_Line(void)
 		// 行削除した後、フリーカーソルでないのにカーソル位置が行端より右になる不具合対応
 		// フリーカーソルモードでない場合は、カーソル位置を調整する
 		if (!GetDllShareData().common.general.bIsFreeCursorMode) {
-			int nIndex;
 
 			size_t tmp;
-			nIndex = view.LineColumnToIndex2(pLayout, ptCaretPos_OLD.x, &tmp);
-			ptCaretPos_OLD.x = tmp;
+			size_t nIndex = view.LineColumnToIndex2(pLayout, ptCaretPos_OLD.x, &tmp);
+			ptCaretPos_OLD.x = (LONG)tmp;
 
 			if (ptCaretPos_OLD.x > 0) {
 				ptCaretPos_OLD.x--;
 			}else {
-				ptCaretPos_OLD.x = view.LineIndexToColumn(pLayout, nIndex);
+				ptCaretPos_OLD.x = (LONG)view.LineIndexToColumn(pLayout, nIndex);
 			}
 		}
 		// 操作前の位置へカーソルを移動

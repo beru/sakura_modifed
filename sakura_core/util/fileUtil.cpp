@@ -59,7 +59,7 @@ bool fexist(LPCTSTR pszPath)
 */
 bool IsFilePath(
 	const wchar_t*	pLine,		// [in]  探査対象文字列
-	int*			pnBgn,		// [out] 先頭offset。pLine + *pnBgnがファイル名先頭へのポインタ。
+	size_t*			pnBgn,		// [out] 先頭offset。pLine + *pnBgnがファイル名先頭へのポインタ。
 	int*			pnPathLen,	// [out] ファイル名の長さ
 	bool			bFileOnly	// [in]  true: ファイルのみ対象 / false: ディレクトリも対象
 	)
@@ -266,7 +266,7 @@ void AddLastYenFromDirectoryPath(CHAR* pszFolder)
 		// フォルダの最後が半角かつ'\\'でない場合は、付加する
 		size_t	nFolderLen = auto_strlen(pszFolder);
 		if (0 < nFolderLen) {
-			int	nCharChars = &pszFolder[nFolderLen] - NativeA::GetCharPrev(pszFolder, nFolderLen, &pszFolder[nFolderLen]);
+			ptrdiff_t nCharChars = &pszFolder[nFolderLen] - NativeA::GetCharPrev(pszFolder, nFolderLen, &pszFolder[nFolderLen]);
 			if (nCharChars == 1 && ('\\' == pszFolder[nFolderLen - 1] || '/' == pszFolder[nFolderLen - 1])) {
 			}else {
 				pszFolder[nFolderLen] = '\\';
@@ -1124,7 +1124,7 @@ void FileNameSepExt(
 	}
 }
 
-int FileMatchScoreSepExt(
+size_t FileMatchScoreSepExt(
 	const TCHAR* file1,
 	const TCHAR* file2
 	)
@@ -1135,7 +1135,7 @@ int FileMatchScoreSepExt(
 	TCHAR szFileExt2[_MAX_PATH];
 	FileNameSepExt(file1, szFile1, szFileExt1);
 	FileNameSepExt(file2, szFile2, szFileExt2);
-	int score = FileMatchScore(szFile1, szFile2);
+	size_t score = FileMatchScore(szFile1, szFile2);
 	score += FileMatchScore(szFileExt1, szFileExt2);
 	return score;
 }
@@ -1198,7 +1198,7 @@ size_t FileMatchScore(
 */
 void GetStrTrancateWidth(
 	TCHAR* dest,
-	int nSize,
+	size_t nSize,
 	const TCHAR* path,
 	HDC hDC,
 	int nPxWidth
@@ -1221,7 +1221,7 @@ void GetStrTrancateWidth(
 		strTemp2 += _T("...");
 		if (nPxWidth < calc.GetTextWidth(strTemp2.c_str())) {
 			// 入りきらなかったので1文字前までをコピー
-			_tcsncpy_s(dest, t_max(0, nSize - 3), strTempOld.c_str(), _TRUNCATE);
+			_tcsncpy_s(dest, t_max(0, (int)nSize - 3), strTempOld.c_str(), _TRUNCATE);
 			_tcscat_s(dest, nSize, _T("..."));
 			return;
 		}
@@ -1239,7 +1239,7 @@ void GetStrTrancateWidth(
 */
 void GetShortViewPath(
 	TCHAR* dest,
-	int nSize,
+	size_t nSize,
 	const TCHAR* path,
 	HDC hDC,
 	int nPxWidth,
@@ -1368,8 +1368,8 @@ void GetShortViewPath(
 				// 拡張子は省略しない(ファイルタイトルを省略)
 				std::tstring strFile(&path[nRight], nExtPos - nRight); // \longfilename
 				strLeftFile += strFile; // C:\...\longfilename
-				int nExtLen = nPathLen - nExtPos;
-				GetStrTrancateWidth(dest, t_max(0, nSize - nExtLen), strLeftFile.c_str(), hDC, nPxWidth - nExtWidth);
+				size_t nExtLen = nPathLen - nExtPos;
+				GetStrTrancateWidth(dest, t_max(0, (int)nSize - (int)nExtLen), strLeftFile.c_str(), hDC, nPxWidth - nExtWidth);
 				_tcscat_s(dest, nSize, &path[nExtPos+1]); // 拡張子連結 C:\...\longf...ext
 			}else {
 				// ファイル名が置けないくらい拡張子か左側が長い。パスの左側を優先して残す
@@ -1427,7 +1427,7 @@ bool ReadFileAndUnicodify(const wchar_t* path, std::vector<wchar_t>& buffW)
 
 	buffW.resize(buffSize);
 	wchar_t* pBuffW = &buffW[0];
-	int ret = MultiByteToWideChar(codePage, 0, pBuffM, buffSize, pBuffW, buffSize);
+	int ret = MultiByteToWideChar(codePage, 0, pBuffM, (int)buffSize, pBuffW, (int)buffSize);
 	if (ret <= 0) {
 		return false;
 	}

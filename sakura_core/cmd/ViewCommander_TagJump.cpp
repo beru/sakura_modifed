@@ -87,7 +87,7 @@ bool ViewCommander::Command_TagJump(bool bClose)
 	// ファイル名バッファ
 	wchar_t		szJumpToFile[1024];
 	wchar_t		szFile[_MAX_PATH] = {L'\0'};
-	int			nBgn;
+	size_t		nBgn;
 	int			nPathLen;
 	wmemset(szJumpToFile, 0, _countof(szJumpToFile));
 

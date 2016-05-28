@@ -53,7 +53,7 @@ public:
 	const int* GetKMPNextTable() const { return pnNextPossArr; }
 #endif
 #ifdef SEARCH_STRING_SUNDAY_QUICK
-	const int* GetUseCharSkipMap() const { return pnUseCharSkipArr; }
+	const uint16_t* GetUseCharSkipMap() const { return pnUseCharSkipArr; }
 
 	static int GetMapIndex(wchar_t c);
 #endif
@@ -73,7 +73,7 @@ private:
 	int* pnNextPossArr;
 #endif
 #ifdef SEARCH_STRING_SUNDAY_QUICK
-	int* pnUseCharSkipArr;
+	uint16_t* pnUseCharSkipArr;
 #endif
 
 private:

@@ -9,8 +9,9 @@
 
 bool Color_LineComment::BeginColor(const StringRef& str, size_t nPos)
 {
-	if (!str.IsValid()) return false;
-
+	if (!str.IsValid()) {
+		return false;
+	}
 	// 行コメント
 	return pTypeData->lineComment.Match(nPos, str);	//@@@ 2002.09.22 YAZAKI
 }
@@ -37,8 +38,9 @@ bool Color_LineComment::EndColor(const StringRef& str, size_t nPos)
 
 bool Color_BlockComment::BeginColor(const StringRef& str, size_t nPos)
 {
-	if (!str.IsValid()) return false;
-
+	if (!str.IsValid()) {
+		return false;
+	}
 	// ブロックコメント
 	if (pBlockComment->Match_CommentFrom(nPos, str)	//@@@ 2002.09.22 YAZAKI
 	) {

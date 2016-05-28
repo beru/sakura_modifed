@@ -366,7 +366,7 @@ static void GetAccessKeyLabelByIndex(TCHAR* pszLabel, bool bEspaceAmp, int index
 	@param bZeroOrigin   アクセスキーを0から振る
 */
 bool FileNameManager::GetMenuFullLabel(
-	TCHAR* pszOutput, int nBuffSize, bool bEspaceAmp,
+	TCHAR* pszOutput, size_t nBuffSize, bool bEspaceAmp,
 	const EditInfo* editInfo, int nId, bool bFavorite,
 	int index, bool bAccKeyZeroOrigin, HDC hDC
 ) {
@@ -416,7 +416,7 @@ bool FileNameManager::GetMenuFullLabel(
 }
 
 bool FileNameManager::GetMenuFullLabel(
-	TCHAR* pszOutput, int nBuffSize, bool bEspaceAmp,
+	TCHAR* pszOutput, size_t nBuffSize, bool bEspaceAmp,
 	const TCHAR* pszFile, int nId, bool bModified, EncodingType nCharCode, bool bFavorite,
 	int index, bool bAccKeyZeroOrigin, HDC hDC
 ) {

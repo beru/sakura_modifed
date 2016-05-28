@@ -153,12 +153,12 @@ void DlgCompare::SetData(void)
 //@@@ 2001.12.26 YAZAKI ファイル名で比較すると(無題)だったときに問題同士の比較ができない
 			if (pEditNodeArr[i].GetHwnd() == EditWnd::getInstance().GetHwnd()) {
 				// 2010.07.30 自分の名前もここから設定する
-				FileNameManager::getInstance().GetMenuFullLabel_WinListNoEscape( szMenu, _countof(szMenu), pfi, pEditNodeArr[i].nId, -1, calc.GetDC() );
+				FileNameManager::getInstance().GetMenuFullLabel_WinListNoEscape(szMenu, _countof(szMenu), pfi, pEditNodeArr[i].nId, -1, calc.GetDC());
 				SetItemText(IDC_STATIC_COMPARESRC, szMenu);
 				continue;
 			}
 			// 番号は ウィンドウリストと同じになるようにする
-			FileNameManager::getInstance().GetMenuFullLabel_WinListNoEscape( szMenu, _countof(szMenu), pfi, pEditNodeArr[i].nId, i, calc.GetDC() );
+			FileNameManager::getInstance().GetMenuFullLabel_WinListNoEscape(szMenu, _countof(szMenu), pfi, pEditNodeArr[i].nId, i, calc.GetDC());
 
 			int nItem = ::List_AddString(hwndList, szMenu);
 			List_SetItemData(hwndList, nItem, pEditNodeArr[i].GetHwnd());
@@ -213,7 +213,7 @@ int DlgCompare::GetData(void)
 		// 2010.07.30 パス名はやめて表示名に変更
 		int nId = AppNodeManager::getInstance().GetEditNode(*phwndCompareWnd)->GetId();
 		TextWidthCalc calc(hwndList);
-		FileNameManager::getInstance().GetMenuFullLabel_WinListNoEscape( pszCompareLabel, _MAX_PATH/*長さ不明*/, pfi, nId, -1, calc.GetDC() );
+		FileNameManager::getInstance().GetMenuFullLabel_WinListNoEscape(pszCompareLabel, _MAX_PATH/*長さ不明*/, pfi, nId, -1, calc.GetDC());
 
 		// 左右に並べて表示
 		bCompareAndTileHorz = IsButtonChecked(IDC_CHECK_TILE_H);

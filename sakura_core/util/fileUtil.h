@@ -26,7 +26,7 @@
 
 bool fexist(LPCTSTR pszPath); // ファイルまたはディレクトリが存在すればtrue
 
-bool IsFilePath(const wchar_t*, int*, int*, bool = true);
+bool IsFilePath(const wchar_t*, size_t*, int*, bool = true);
 bool IsFileExists(const TCHAR* path, bool bFileOnly = false);
 bool IsDirectory(LPCTSTR pszPath);	// 2009.08.20 ryoji
 
@@ -105,10 +105,10 @@ void my_splitpath_t (const TCHAR* comln, TCHAR* drv, TCHAR* dir, TCHAR* fnm, TCH
 #define my_splitpath_t my_splitpath
 #endif
 
-int FileMatchScoreSepExt(const TCHAR* file1, const TCHAR* file2);
+size_t FileMatchScoreSepExt(const TCHAR* file1, const TCHAR* file2);
 
-void GetStrTrancateWidth(TCHAR* dest, int nSize, const TCHAR* path, HDC hDC, int nPxWidth);
-void GetShortViewPath(TCHAR* dest, int nSize, const TCHAR* path, HDC hDC, int nPxWidth, bool bFitMode);
+void GetStrTrancateWidth(TCHAR* dest, size_t nSize, const TCHAR* path, HDC hDC, int nPxWidth);
+void GetShortViewPath(TCHAR* dest, size_t nSize, const TCHAR* path, HDC hDC, int nPxWidth, bool bFitMode);
 
 bool ReadFile(const wchar_t* path, std::vector<char>& buff);
 bool ReadFileAndUnicodify(const wchar_t* path, std::vector<wchar_t>& buff);

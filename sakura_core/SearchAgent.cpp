@@ -99,6 +99,10 @@ bool SearchStringPattern::SetPattern(
 	Bregexp* regexp
 	)
 {
+	if (nPatternLen + 1 > USHRT_MAX) {
+		return false;
+	}
+
 	Reset();
 	pszCaseKeyRef = pszKey = pszPattern;
 	this->nPatternLen = nPatternLen;
@@ -156,13 +160,13 @@ bool SearchStringPattern::SetPattern(
 		const size_t BM_MAPSIZE = 0x200;
 		// 64KB も作らないで、ISO-8859-1 それ以外(包括) の2つの情報のみ記録する
 		// 「あ」と「乂」　「ぅ」と「居」は値を共有している
-		pnUseCharSkipArr = new int[BM_MAPSIZE];
+		pnUseCharSkipArr = new uint16_t[BM_MAPSIZE];
 		for (size_t n=0; n<BM_MAPSIZE; ++n) {
-			pnUseCharSkipArr[n] = nPatternLen + 1;
+			pnUseCharSkipArr[n] = (uint16_t)(nPatternLen + 1);
 		}
 		for (size_t n=0; n<nPatternLen; ++n) {
 			const int index = GetMapIndex(pszCaseKeyRef[n]);
-			pnUseCharSkipArr[index] = nPatternLen - n;
+			pnUseCharSkipArr[index] = (uint16_t)(nPatternLen - n);
 		}
 #endif
 	}
@@ -186,7 +190,7 @@ const wchar_t* SearchAgent::SearchString(
 	const size_t nPatternLen = pattern.GetLen();
 	const wchar_t* pszPattern  = pattern.GetCaseKey();
 #ifdef SEARCH_STRING_SUNDAY_QUICK
-	const int* const useSkipMap = pattern.GetUseCharSkipMap();
+	const uint16_t* const useSkipMap = pattern.GetUseCharSkipMap();
 #endif
 	bool bLoHiCase = pattern.GetLoHiCase();
 
