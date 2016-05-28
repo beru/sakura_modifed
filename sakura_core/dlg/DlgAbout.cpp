@@ -407,7 +407,7 @@ LRESULT CALLBACK UrlWnd::UrlWndProc(
 		SetBkMode(hdc, TRANSPARENT);
 		SetTextColor(hdc, pUrlWnd->bHilighted ? RGB(0x84, 0, 0): RGB(0, 0, 0xff));
 		hFontOld = (HFONT)SelectObject(hdc, (HGDIOBJ)hFont);
-		TextOut(hdc, 2, 0, szText, _tcslen(szText));
+		TextOut(hdc, 2, 0, szText, (int)_tcslen(szText));
 		SelectObject(hdc, (HGDIOBJ)hFontOld);
 
 		// フォーカス枠描画

@@ -1254,7 +1254,7 @@ void MenuDrawer::DrawItem(DRAWITEMSTRUCT* lpdis)
 	::DrawText(
 		hdc,
 		pszItemStr,
-		j,
+		(int)j,
 		&rcText,
 		DT_SINGLELINE | DT_VCENTER | DT_EXPANDTABS | DT_LEFT
 	);
@@ -1690,8 +1690,7 @@ typedef struct _TBBUTTON {
 void MenuDrawer::AddToolButton(int iBitmap, int iCommand)
 {
 	TBBUTTON tbb;
-	int 	iCmdNo;
-	int 	i;
+	int iCmdNo;
 	
 	if (pShareData->maxToolBarButtonNum < nMyButtonNum) {
 		pShareData->maxToolBarButtonNum = nMyButtonNum;
@@ -1705,7 +1704,7 @@ void MenuDrawer::AddToolButton(int iBitmap, int iCommand)
 				// このウィンドウで未登録
 				// 空きを詰め込む
 				SetTBBUTTONVal(&tbb, TOOLBAR_ICON_PLUGCOMMAND_DEFAULT - 1, 0, 0, TBSTYLE_BUTTON, 0, 0);
-				for (i=tbMyButton.size(); i<cmdIcons[iCmdNo]; ++i) {
+				for (size_t i=tbMyButton.size(); i<cmdIcons[iCmdNo]; ++i) {
 					tbMyButton.push_back(tbb);
 					++nMyButtonNum;
 				}
@@ -1725,7 +1724,7 @@ void MenuDrawer::AddToolButton(int iBitmap, int iCommand)
 			if (tbMyButton.size() < (size_t)pShareData->maxToolBarButtonNum) {
 				// 空きを詰め込む
 				SetTBBUTTONVal(&tbb, TOOLBAR_ICON_PLUGCOMMAND_DEFAULT-1, 0, 0, TBSTYLE_BUTTON, 0, 0);
-				for (i=tbMyButton.size(); i<pShareData->maxToolBarButtonNum; ++i) {
+				for (size_t i=tbMyButton.size(); i<pShareData->maxToolBarButtonNum; ++i) {
 					tbMyButton.push_back(tbb);
 					++nMyButtonNum;
 				}

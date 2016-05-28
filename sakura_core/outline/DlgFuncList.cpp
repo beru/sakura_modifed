@@ -941,7 +941,7 @@ void DlgFuncList::SetTreeJava(
 	for (size_t i=0; i<pFuncInfoArr->GetNum(); ++i) {
 		const FuncInfo* pFuncInfo = pFuncInfoArr->GetAt(i);
 		const TCHAR* pWork = pFuncInfo->memFuncName.GetStringPtr();
-		int m = 0;
+		size_t m = 0;
 		int nClassNest = 0;
 		// クラス名::メソッドの場合
 		if ((pPos = _tcsstr(pWork, _T("::")))

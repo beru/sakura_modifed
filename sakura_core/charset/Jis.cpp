@@ -54,7 +54,7 @@ const char* Jis::TABLE_JISESCDATA[] = {
 
 	eMyJisesc は、MYJISESC_HANKATA か MYJISESC_ZENKAKU。
 */
-int Jis::_JisToUni_block(const unsigned char* pSrc, const size_t nSrcLen, unsigned short* pDst, const EMyJisEscseq eMyJisesc, bool* pbError)
+size_t Jis::_JisToUni_block(const unsigned char* pSrc, const size_t nSrcLen, unsigned short* pDst, const EMyJisEscseq eMyJisesc, bool* pbError)
 {
 	const unsigned char* pr;
 	unsigned short* pw;
@@ -168,13 +168,12 @@ int Jis::_JisToUni_block(const unsigned char* pSrc, const size_t nSrcLen, unsign
 /*
 	JIS → Unicode 変換
 */
-int Jis::JisToUni(const char* pSrc, const size_t nSrcLen, wchar_t* pDst, bool* pbError)
+size_t Jis::JisToUni(const char* pSrc, const size_t nSrcLen, wchar_t* pDst, bool* pbError)
 {
 	const unsigned char *pr, *pr_end;
 	const unsigned char* pr_next;
 	unsigned short* pw;
 	bool berror = false, berror_tmp;
-	int nblocklen;
 	EMyJisEscseq esctype, next_esctype;
 
 	if (nSrcLen < 1) {
@@ -197,6 +196,7 @@ int Jis::JisToUni(const char* pSrc, const size_t nSrcLen, wchar_t* pDst, bool* p
 //		MYJISESC_UNKNOWN,
 //	};
 
+	size_t nblocklen;
 	do {
 		// シーケンスのチェック
 		switch (esctype) {
@@ -257,7 +257,7 @@ CodeConvertResult Jis::JISToUnicode(const Memory& src, NativeW* pDstMem, bool ba
 
 	// ソースバッファポインタとソースの長さ
 	const char* psrc = pSrc;
-	int nsrclen = nSrcLen;
+	size_t nsrclen = nSrcLen;
 	Memory mem;
 
 	if (base64decode) {
@@ -275,7 +275,7 @@ CodeConvertResult Jis::JISToUnicode(const Memory& src, NativeW* pDstMem, bool ba
 
 	// 変換
 	bool berror; // エラー状態
-	int nDstLen = JisToUni(psrc, nsrclen, pDst, &berror);
+	size_t nDstLen = JisToUni(psrc, nsrclen, pDst, &berror);
 	
 	// pDstMem にセット
 	pDstMem->_GetMemory()->SetRawDataHoldBuffer( pDst, nDstLen * sizeof(wchar_t) );
@@ -291,7 +291,7 @@ CodeConvertResult Jis::JISToUnicode(const Memory& src, NativeW* pDstMem, bool ba
 /*!
 	SJIS -> JIS 変換
 */
-int Jis::_SjisToJis_char(const unsigned char* pSrc, unsigned char* pDst, ECharSet eCharset, bool* pbError)
+size_t Jis::_SjisToJis_char(const unsigned char* pSrc, unsigned char* pDst, ECharSet eCharset, bool* pbError)
 {
 	int nret;
 	bool berror = false;
@@ -340,11 +340,11 @@ int Jis::_SjisToJis_char(const unsigned char* pSrc, unsigned char* pDst, ECharSe
 }
 
 
-int Jis::UniToJis(const wchar_t* pSrc, const size_t nSrcLen, char* pDst, bool* pbError)
+size_t Jis::UniToJis(const wchar_t* pSrc, const size_t nSrcLen, char* pDst, bool* pbError)
 {
 	ECharSet echarset, echarset_cur, echarset_tmp;
 	unsigned char cbuf[4];
-	int nlen, nclen;
+	size_t nlen, nclen;
 	bool berror = false, berror_tmp;
 
 	if (nSrcLen < 1) {
@@ -461,7 +461,7 @@ CodeConvertResult Jis::UnicodeToJIS(const NativeW& src, Memory* pDstMem)
 
 	// 変換
 	bool berror = false;
-	int nDstLen = UniToJis(pSrc, nSrcLen, pDst, &berror);
+	size_t nDstLen = UniToJis(pSrc, nSrcLen, pDst, &berror);
 
 	// pDstMem をセット
 	pDstMem->SetRawDataHoldBuffer( pDst, nDstLen );
@@ -497,7 +497,7 @@ CodeConvertResult Jis::UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR*
 	// Hex変換
 	bool bInEsc = false;
 	TCHAR* pd = pDst;
-	int	i = cCharBuffer._GetMemory()->GetRawLength();
+	size_t i = cCharBuffer._GetMemory()->GetRawLength();
 	unsigned char* ps = (unsigned char*)cCharBuffer._GetMemory()->GetRawPtr();
 	for (; i>0; --i, ++ps) {
 		if (*ps == 0x1B) {

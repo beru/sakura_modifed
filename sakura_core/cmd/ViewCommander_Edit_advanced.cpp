@@ -911,10 +911,10 @@ void ViewCommander::Command_Merge(void)
 	}
 	if (bMerge) {
 		OpeLineData repData;
-		int nSize = (int)lineArr.size();
+		size_t nSize = lineArr.size();
 		repData.resize(nSize);
 		int opeSeq = GetDocument().docEditor.opeBuf.GetNextSeq();
-		for (int idx=0; idx<nSize; ++idx) {
+		for (size_t idx=0; idx<nSize; ++idx) {
 			repData[idx].nSeq = opeSeq;
 			repData[idx].memLine.SetString(lineArr[idx].GetPtr(), lineArr[idx].GetLength());
 		}

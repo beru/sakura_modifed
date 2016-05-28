@@ -1383,8 +1383,8 @@ void EditView::ConvSelectedArea(EFunctionCode nFuncCode)
 	int	nDelLen;
 	int	nDelPosNext;
 	int	nDelLenNext;
-	size_t		nLineLen;
-	size_t		nLineLen2;
+	size_t nLineLen;
+	size_t nLineLen2;
 	WaitCursor waitCursor(GetHwnd());
 
 	Point ptFromLogic;	// 2009.07.18 ryoji LogicÇ≈ãLâØÇ∑ÇÈÇÊÇ§Ç…ïœçX

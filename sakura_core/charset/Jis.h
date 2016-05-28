@@ -42,10 +42,10 @@ public:
 
 protected:
 	// 2008.11.10  •ÏŠ·ƒƒWƒbƒN‚ğ‘‚«’¼‚·
-	static int _JisToUni_block(const unsigned char*, const size_t, unsigned short*, const EMyJisEscseq, bool* pbError);
-	static int JisToUni(const char*, const size_t, wchar_t*, bool* pbError);
-	static int _SjisToJis_char(const unsigned char*, unsigned char*, const ECharSet, bool* pbError);
-	static int UniToJis(const wchar_t*, const size_t, char*, bool* pbError);
+	static size_t _JisToUni_block(const unsigned char*, const size_t, unsigned short*, const EMyJisEscseq, bool* pbError);
+	static size_t JisToUni(const char*, const size_t, wchar_t*, bool* pbError);
+	static size_t _SjisToJis_char(const unsigned char*, unsigned char*, const ECharSet, bool* pbError);
+	static size_t UniToJis(const wchar_t*, const size_t, char*, bool* pbError);
 
 private:
 	// •ÏŠ·•ûj

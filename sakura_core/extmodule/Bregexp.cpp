@@ -478,7 +478,7 @@ bool Bregexp::Compile(const wchar_t* szPattern0, const wchar_t* szPattern1, int 
 	@retval false No Match または エラー。エラーは GetLastMessage()により判定可能。
 
 */
-bool Bregexp::Match(const wchar_t* target, size_t len, int nStart)
+bool Bregexp::Match(const wchar_t* target, size_t len, size_t nStart)
 {
 	int matched;		// 検索一致したか? >0:Match, 0:NoMatch, <0:Error
 
@@ -533,7 +533,7 @@ bool Bregexp::Match(const wchar_t* target, size_t len, int nStart)
 
 	@date	2007.01.16 ryoji 戻り値を置換個数に変更
 */
-int Bregexp::Replace(const wchar_t* szTarget, size_t nLen, int nStart)
+int Bregexp::Replace(const wchar_t* szTarget, size_t nLen, size_t nStart)
 {
 	// DLLが利用可能でないとき、または構造体が未設定の時はエラー終了
 	if (!IsAvailable() || !pRegExp) {

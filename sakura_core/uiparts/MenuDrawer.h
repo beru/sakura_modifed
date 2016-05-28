@@ -105,8 +105,8 @@ private:
 //@@@ 2002.01.03 YAZAKI tbMyButtonなどをCShareDataからMenuDrawerへ移動したことによる修正。
 // 2009.11.14 syat プラグインコマンド動的追加のためvector化
 	std::vector<TBBUTTON>	tbMyButton;	// ツールバーのボタン
-	int				nMyButtonNum;
-	int				nMyButtonFixSize;	// 固定部分の最大数
+	size_t nMyButtonNum;
+	size_t nMyButtonFixSize;	// 固定部分の最大数
 	
 	// 2011.11.18 MenuItemのvector化
 	struct MyMenuItemInfo {

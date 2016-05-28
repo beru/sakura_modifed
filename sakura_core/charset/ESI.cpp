@@ -79,7 +79,7 @@ static const int g_aMbcPriority[] =
 /*!
 	デフォルトコンストラクタ
 */
-void ESI::SetInformation(const char* pS, const size_t nLen)
+void ESI::SetInformation(const char* pS, size_t nLen)
 {
 	// 文字情報を収集
 	ScanCode(pS, nLen);
@@ -188,7 +188,7 @@ void ESI::SortMBCInfo(void)
 /*!
 	SJIS の文字コード判定情報を収集する
 */
-void ESI::GetEncodingInfo_sjis(const char* pS, const size_t nLen)
+void ESI::GetEncodingInfo_sjis(const char* pS, size_t nLen)
 {
 	if (nLen < 1 || !pS) {
 		SetEvaluation(CODE_SJIS, 0, 0);
@@ -196,8 +196,8 @@ void ESI::GetEncodingInfo_sjis(const char* pS, const size_t nLen)
 		return;
 	}
 
-	int nillbytes = 0;
-	int num_of_sjis_encoded_bytes = 0;
+	size_t nillbytes = 0;
+	size_t num_of_sjis_encoded_bytes = 0;
 	int num_of_sjis_hankata = 0;
 	const char* pr = pS;
 	const char* pr_end = pr + nLen;
@@ -238,7 +238,7 @@ void ESI::GetEncodingInfo_sjis(const char* pS, const size_t nLen)
 /*!
 	JIS の文字コード判定情報を収集する
 */
-void ESI::GetEncodingInfo_jis(const char* pS, const size_t nLen)
+void ESI::GetEncodingInfo_jis(const char* pS, size_t nLen)
 {
 	if (nLen < 1 || !pS) {
 		SetEvaluation(CODE_JIS, 0, 0);
@@ -288,9 +288,8 @@ void ESI::GetEncodingInfo_jis(const char* pS, const size_t nLen)
 /*!
 	EUC-JP の文字コード判定情報を収集する
 */
-void ESI::GetEncodingInfo_eucjp(const char* pS, const size_t nLen)
+void ESI::GetEncodingInfo_eucjp(const char* pS, size_t nLen)
 {
-	int nret;
 	ECharSet echarset;
 
 	if (nLen < 1 || !pS) {
@@ -300,14 +299,15 @@ void ESI::GetEncodingInfo_eucjp(const char* pS, const size_t nLen)
 		return;
 	}
 
-	int nillbytes = 0;
-	int num_of_eucjp_encoded_bytes = 0;
+	size_t nillbytes = 0;
+	size_t num_of_eucjp_encoded_bytes = 0;
 	const char* pr = pS;
 	const char* pr_end = pr + nLen;
 
-	int num_of_euc_zen_hirakata = 0;
-	int num_of_euc_zen = 0;
+	size_t num_of_euc_zen_hirakata = 0;
+	size_t num_of_euc_zen = 0;
 
+	size_t nret;
 	for (; 0!=(nret = CheckEucjpChar(pr, pr_end - pr, &echarset)); pr+=nret) {
 		if (echarset != CHARSET_BINARY) {
 			if (1 < nret) {
@@ -348,10 +348,9 @@ void ESI::GetEncodingInfo_eucjp(const char* pS, const size_t nLen)
 	@note
 	　1 バイト以上のエラー（いわゆる ill-formed）が見つかれば UTF-7 と判定されない。
 */
-void ESI::GetEncodingInfo_utf7(const char* pS, const size_t nLen)
+void ESI::GetEncodingInfo_utf7(const char* pS, size_t nLen)
 {
 	char* pr_next;
-	int nlen_setb;
 
 	if (nLen < 1 || !pS) {
 		SetEvaluation(CODE_UTF7, 0, 0);
@@ -375,7 +374,7 @@ void ESI::GetEncodingInfo_utf7(const char* pS, const size_t nLen)
 		pr = pr_next;
 
 		// セットB 文字列の検査
-		nlen_setb = CheckUtf7BPart(pr, pr_end - pr, &pr_next, &berror, 0);
+		size_t nlen_setb = CheckUtf7BPart(pr, pr_end - pr, &pr_next, &berror, 0);
 		if (pr + nlen_setb == pr_next && pr_next == pr_end) {
 			// セットＢ文字列の終端文字 '-' が無い、かつ、
 			// 次の読み込み位置が調査データの終端文字上にある場合、エラーを取り消して検査終了
@@ -412,9 +411,8 @@ void ESI::GetEncodingInfo_utf7(const char* pS, const size_t nLen)
 /*!
 	UTF-8 の文字コード判定情報を収集する
 */
-void ESI::GetEncodingInfo_utf8(const char* pS, const size_t nLen)
+void ESI::GetEncodingInfo_utf8(const char* pS, size_t nLen)
 {
-	int nret;
 	ECharSet echarset;
 
 	if (nLen < 1 || !pS) {
@@ -422,11 +420,12 @@ void ESI::GetEncodingInfo_utf8(const char* pS, const size_t nLen)
 		return;
 	}
 
-	int nillbytes = 0;
-	int num_of_utf8_encoded_bytes = 0;
+	size_t nillbytes = 0;
+	size_t num_of_utf8_encoded_bytes = 0;
 	const char* pr = pS;
 	const char* pr_end = pS + nLen;
 
+	size_t nret;
 	for (; 0!=(nret = CheckUtf8Char(pr, pr_end - pr, &echarset, true, 0)); pr+=nret) {
 		if (echarset != CHARSET_BINARY) {
 			if (1 < nret) {
@@ -450,19 +449,19 @@ void ESI::GetEncodingInfo_utf8(const char* pS, const size_t nLen)
 /*!
 	CESU-8 の文字コード判定情報を収集する
 */
-void ESI::GetEncodingInfo_cesu8(const char* pS, const size_t nLen)
+void ESI::GetEncodingInfo_cesu8(const char* pS, size_t nLen)
 {
 	if (nLen < 1 || !pS) {
 		SetEvaluation(CODE_CESU8, 0, 0);
 		return;
 	}
 
-	int nillbytes = 0;
-	int num_of_cesu8_encoded_bytes = 0;
+	size_t nillbytes = 0;
+	size_t num_of_cesu8_encoded_bytes = 0;
 	const char* pr = pS;
 	const char* pr_end = pS + nLen;
 
-	int nret;
+	size_t nret;
 	ECharSet echarset;
 	for (; 0!=(nret = CheckCesu8Char(pr, pr_end - pr, &echarset, 0)); pr+=nret) {
 		if (echarset != CHARSET_BINARY) {
@@ -491,7 +490,7 @@ void ESI::GetEncodingInfo_cesu8(const char* pS, const size_t nLen)
 	@note
 	　必ずFalse。
 */
-void ESI::GetEncodingInfo_latin1(const char* pS, const size_t nLen)
+void ESI::GetEncodingInfo_latin1(const char* pS, size_t nLen)
 {
 	SetEvaluation(CODE_LATIN1, 0, - (int)nLen);
 	return;
@@ -500,7 +499,7 @@ void ESI::GetEncodingInfo_latin1(const char* pS, const size_t nLen)
 
 
 
-void ESI::GetEncodingInfo_meta( const char* pS, const size_t nLen )
+void ESI::GetEncodingInfo_meta( const char* pS, size_t nLen )
 {
 	// XML宣言は先頭にあるので、最初にチェック
 	EncodingType encoding = AutoDetectByXML( pS, nLen );
@@ -519,7 +518,7 @@ void ESI::GetEncodingInfo_meta( const char* pS, const size_t nLen )
 /*!
 	UTF-16 チェッカ内で使う改行コード確認関数
 */
-bool ESI::_CheckUtf16Eol(const char* pS, const size_t nLen, const bool bbig_endian)
+bool ESI::_CheckUtf16Eol(const char* pS, size_t nLen, bool bbig_endian)
 {
 	wchar_t wc0;
 	wchar_t wc1;
@@ -557,12 +556,10 @@ bool ESI::_CheckUtf16Eol(const char* pS, const size_t nLen, const bool bbig_endi
 	@note 改行文字を数える。ついでに ASCII 版の改行コードも数える。
 	　nLen は２で割り切れるものが入ってくることを仮定。
 */
-void ESI::GetEncodingInfo_uni(const char* pS, const size_t nLen)
+void ESI::GetEncodingInfo_uni(const char* pS, size_t nLen)
 {
 	const char *pr1, *pr2, *pr_end;
-	int nillbytes1, nillbytes2;
 	int nnewlinew1, nnewlinew2;
-	register int nret1, nret2;
 	ECharSet echarset1, echarset2;
 
 	if (nLen < 1 || !pS) {
@@ -578,6 +575,7 @@ void ESI::GetEncodingInfo_uni(const char* pS, const size_t nLen)
 		return;
 	}
 
+	size_t nillbytes1, nillbytes2;
 	nillbytes1 = nillbytes2 = 0;
 	nnewlinew1 = nnewlinew2 = 0;
 	pr1 = pr2 = pS;
@@ -585,8 +583,8 @@ void ESI::GetEncodingInfo_uni(const char* pS, const size_t nLen)
 
 	for (;;) {
 
-		nret1 = CheckUtf16leChar(reinterpret_cast<const wchar_t*>(pr1), (pr_end - pr1)/sizeof(wchar_t), &echarset1, 0);
-		nret2 = CheckUtf16beChar(reinterpret_cast<const wchar_t*>(pr2), (pr_end - pr2)/sizeof(wchar_t), &echarset2, 0);
+		size_t nret1 = CheckUtf16leChar(reinterpret_cast<const wchar_t*>(pr1), (pr_end - pr1)/sizeof(wchar_t), &echarset1, 0);
+		size_t nret2 = CheckUtf16beChar(reinterpret_cast<const wchar_t*>(pr2), (pr_end - pr2)/sizeof(wchar_t), &echarset2, 0);
 		if (nret1 == 0 && nret2 == 0) {
 			// LE BE 両方共のチェックが終了した。
 			break;
@@ -651,7 +649,7 @@ void ESI::GetEncodingInfo_uni(const char* pS, const size_t nLen)
 
 	@return 入力データがない時に false
 */
-void ESI::ScanCode(const char* pS, const size_t nLen)
+void ESI::ScanCode(const char* pS, size_t nLen)
 {
 	// 対象となったデータ長を記録。
 	SetDataLen(nLen);

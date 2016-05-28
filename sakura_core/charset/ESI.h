@@ -136,20 +136,20 @@ protected:
 	*/
 	void ScanCode(const char*, const size_t);
 
-	void GetEncodingInfo_sjis(const char*, const size_t);
-	void GetEncodingInfo_jis(const char*, const size_t);
-	void GetEncodingInfo_eucjp(const char*, const size_t);
-	void GetEncodingInfo_utf8(const char*, const size_t);
-	void GetEncodingInfo_utf7(const char*, const size_t);
-	void GetEncodingInfo_cesu8(const char*, const size_t);
-	void GetEncodingInfo_uni(const char*, const size_t);
-	void GetEncodingInfo_latin1(const char*, const size_t);
-	void GetEncodingInfo_meta(const char *, const size_t);
+	void GetEncodingInfo_sjis(const char*, size_t);
+	void GetEncodingInfo_jis(const char*, size_t);
+	void GetEncodingInfo_eucjp(const char*, size_t);
+	void GetEncodingInfo_utf8(const char*, size_t);
+	void GetEncodingInfo_utf7(const char*, size_t);
+	void GetEncodingInfo_cesu8(const char*, size_t);
+	void GetEncodingInfo_uni(const char*, size_t);
+	void GetEncodingInfo_latin1(const char*, size_t);
+	void GetEncodingInfo_meta(const char *, size_t);
 
 
-	bool _CheckUtf16Eol(const char* pS, const size_t nLen, const bool bbig_endian);
-	inline bool _CheckUtf16EolLE(const char* p, const size_t n) { return _CheckUtf16Eol(p, n, false); }
-	inline bool _CheckUtf16EolBE(const char* p, const size_t n) { return _CheckUtf16Eol(p, n, true); }
+	bool _CheckUtf16Eol(const char* pS, size_t nLen, bool bbig_endian);
+	inline bool _CheckUtf16EolLE(const char* p, size_t n) { return _CheckUtf16Eol(p, n, false); }
+	inline bool _CheckUtf16EolBE(const char* p, size_t n) { return _CheckUtf16Eol(p, n, true); }
 
 public:
 	//
@@ -158,9 +158,9 @@ public:
 	static const int NUM_OF_MBCODE = (CODE_CODEMAX - 2);
 	MBCODE_INFO aMbcInfo[NUM_OF_MBCODE];   // SJIS, JIS, EUCJP, UTF8, UTF7 情報（優先度に従って格納される）
 	MBCODE_INFO* apMbcInfo[NUM_OF_MBCODE]; // 評価順にソートされた SJIS, JIS, EUCJP, UTF8, UTF7, CESU8 の情報
-	int nMbcSjisHankata;                   // SJIS 半角カタカナのバイト数
-	int nMbcEucZenHirakata;                // EUC 全角ひらがなカタカナのバイト数
-	int nMbcEucZen;                        // EUC 全角のバイト数
+	size_t nMbcSjisHankata;                   // SJIS 半角カタカナのバイト数
+	size_t nMbcEucZenHirakata;                // EUC 全角ひらがなカタカナのバイト数
+	size_t nMbcEucZen;                        // EUC 全角のバイト数
 
 	// マルチバイト系の捜査結果を、ポイントが大きい順にソート。 ソートした結果は、apMbcInfo に格納
 	void SortMBCInfo(void);

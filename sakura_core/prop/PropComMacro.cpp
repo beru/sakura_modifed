@@ -443,7 +443,7 @@ void PropMacro::InitDialog(HWND hwndDlg)
 	for (pos=0; pos<MAX_CUSTMACRO; ++pos) {
 		wchar_t buf[10];
 		auto_sprintf(buf, L"%d", pos);
-		int result = Combo_AddString(hNumCombo, buf);
+		LRESULT result = Combo_AddString(hNumCombo, buf);
 		if (result == CB_ERR) {
 			PleaseReportToAuthor(hwndDlg, _T("PropComMacro::InitDlg::AddMacroId"));
 			return;	//	‚æ‚­‚í‚©‚ç‚ñ‚¯‚ÇŽ¸”s‚µ‚½
