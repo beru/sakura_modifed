@@ -2092,8 +2092,7 @@ bool Macro::HandleFunction(
 			}
 
 			Point nLayoutPos(nLineCol, nLineNum);
-			Point nLogicPos(0, 0);
-			view.pEditDoc->layoutMgr.LayoutToLogic(nLayoutPos, &nLogicPos);
+			Point nLogicPos = view.pEditDoc->layoutMgr.LayoutToLogic(nLayoutPos);
 			int ret = nLogicPos.GetX() + 1;
 			Wrap(&result)->Receive(ret);
 		}
@@ -2119,8 +2118,7 @@ bool Macro::HandleFunction(
 			}
 
 			Point nLogicPos(nLineIdx, nLineNum);
-			Point nLayoutPos(0, 0);
-			view.pEditDoc->layoutMgr.LogicToLayout(nLogicPos, &nLayoutPos);
+			Point nLayoutPos = view.pEditDoc->layoutMgr.LogicToLayout(nLogicPos);
 			int ret = ((LOWORD(id) == F_LOGICTOLAYOUTLINENUM) ? nLayoutPos.y : nLayoutPos.x) + 1;
 			Wrap(&result)->Receive(ret);
 		}

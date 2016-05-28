@@ -136,11 +136,7 @@ void DocOutline::MakeTopicList_asm(FuncInfoArr* pFuncInfoArr)
 				  →
 				  レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 				*/
-				Point ptPos;
-				doc.layoutMgr.LogicToLayout(
-					Point(0, nLineCount),
-					&ptPos
-				);
+				Point ptPos = doc.layoutMgr.LogicToLayout(Point(0, nLineCount));
 				pFuncInfoArr->AppendData(nLineCount + 1, ptPos.y + 1, entry_token, nFuncId);
 			}
 		}

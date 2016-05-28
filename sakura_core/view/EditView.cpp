@@ -1275,11 +1275,7 @@ bool EditView::IsCurrentPositionURL(
 	  →
 	  物理位置(行頭からのバイト数、折り返し無し行位置)
 	*/
-	Point ptXY;
-	pEditDoc->layoutMgr.LayoutToLogic(
-		ptCaretPos,
-		&ptXY
-	);
+	Point ptXY = pEditDoc->layoutMgr.LayoutToLogic(ptCaretPos);
 	size_t nLineLen;
 	const wchar_t* pLine = pEditDoc->docLineMgr.GetLine(ptXY.y)->GetDocLineStrWithEOL(&nLineLen); // 2007.10.09 kobake レイアウト・ロジック混在バグ修正
 
@@ -1383,11 +1379,8 @@ void EditView::ConvSelectedArea(EFunctionCode nFuncCode)
 	size_t nLineLen2;
 	WaitCursor waitCursor(GetHwnd());
 
-	Point ptFromLogic;	// 2009.07.18 ryoji Logicで記憶するように変更
-	pEditDoc->layoutMgr.LayoutToLogic(
-		GetSelectionInfo().select.GetFrom(),
-		&ptFromLogic
-	);
+	// 2009.07.18 ryoji Logicで記憶するように変更
+	Point ptFromLogic = pEditDoc->layoutMgr.LayoutToLogic(GetSelectionInfo().select.GetFrom());
 
 	// 矩形範囲選択中か
 	if (GetSelectionInfo().IsBoxSelecting()) {
@@ -1416,7 +1409,7 @@ void EditView::ConvSelectedArea(EFunctionCode nFuncCode)
 				nIdxTo		= LineColumnToIndex(pLayout, rcSelLayout.right);
 
 				bool bExtEol = GetDllShareData().common.edit.bEnableExtEol;
-				for (int i=nIdxFrom; i<=nIdxTo; ++i) {
+				for (size_t i=nIdxFrom; i<=nIdxTo; ++i) {
 					if (WCODE::IsLineDelimiter(pLine[i], bExtEol)) {
 						nIdxTo = i;
 						break;
@@ -1493,12 +1486,9 @@ void EditView::ConvSelectedArea(EFunctionCode nFuncCode)
 		);
 
 		// From Here 2001.12.03 hor
-		//	選択エリアの復元
-		Point ptFrom;	// 2009.07.18 ryoji LogicからLayoutに戻す
-		pEditDoc->layoutMgr.LogicToLayout(
-			ptFromLogic,
-			&ptFrom
-		);
+		// 選択エリアの復元
+		// 2009.07.18 ryoji LogicからLayoutに戻す
+		Point ptFrom = pEditDoc->layoutMgr.LogicToLayout(ptFromLogic);
 		GetSelectionInfo().SetSelectArea(Range(ptFrom, GetCaret().GetCaretLayoutPos()));	// 2009.07.25 ryoji
 		GetCaret().MoveCursor(GetSelectionInfo().select.GetTo(), true);
 		GetCaret().nCaretPosX_Prev = GetCaret().GetCaretLayoutPos().x;
@@ -2089,11 +2079,9 @@ bool EditView::GetSelectedDataOne(NativeW& memBuf, size_t nMaxLen)
 		const wchar_t* pLine = layoutMgr.GetLineStr(rcSel.top, &nLineLen, &pLayout);
 		if (pLine && pLayout) {
 			nLineLen = pLayout->GetLengthWithoutEOL();
-			if (pLine) {
-				// 指定された桁に対応する行のデータ内の位置を調べる
-				nIdxFrom	= LineColumnToIndex(pLayout, rcSel.left );
-				nIdxTo		= LineColumnToIndex(pLayout, rcSel.right);
-			}
+			// 指定された桁に対応する行のデータ内の位置を調べる
+			nIdxFrom = LineColumnToIndex(pLayout, rcSel.left );
+			nIdxTo = LineColumnToIndex(pLayout, rcSel.right);
 			ASSERT_GE(nIdxTo, nIdxFrom);
 			ASSERT_GE(nLineLen, nIdxFrom);
 			nSelectLen = nIdxTo - nIdxFrom;
@@ -2103,10 +2091,8 @@ bool EditView::GetSelectedDataOne(NativeW& memBuf, size_t nMaxLen)
 		}
 	}else {
 		// 線形選択(ロジック行処理)
-		Point ptFrom;
-		Point ptTo;
-		layoutMgr.LayoutToLogic(select.GetFrom(), &ptFrom);
-		layoutMgr.LayoutToLogic(select.GetTo(),   &ptTo);
+		Point ptFrom = layoutMgr.LayoutToLogic(select.GetFrom());
+		Point ptTo = layoutMgr.LayoutToLogic(select.GetTo());
 		int targetY = ptFrom.y;
 
 		const DocLine* pDocLine = pEditDoc->docLineMgr.GetLine(targetY);
@@ -2273,7 +2259,7 @@ void EditView::CopySelectedAllLines(
 			pLayout = pLayout->GetNextLayout();
 		}
 		sSelect.SetToX(pLayout? pLayout->GetIndent(): 0);
-		GetCaret().GetAdjustCursorPos(sSelect.GetToPointer());	// EOF行を超えていたら座標修正
+		GetCaret().GetAdjustCursorPos(&sSelect.GetTo());	// EOF行を超えていたら座標修正
 
 		GetSelectionInfo().DisableSelectArea(false); // 2011.06.03 true →false
 		GetSelectionInfo().SetSelectArea(sSelect);
@@ -2704,9 +2690,7 @@ void EditView::OnAfterLoad(const LoadInfo& loadInfo)
 // 現在のカーソル行位置を履歴に登録する
 void EditView::AddCurrentLineToHistory(void)
 {
-	Point ptPos;
-
-	pEditDoc->layoutMgr.LayoutToLogic(GetCaret().GetCaretLayoutPos(), &ptPos);
+	Point ptPos = pEditDoc->layoutMgr.LayoutToLogic(GetCaret().GetCaretLayoutPos());
 
 	MarkMgr::Mark m(ptPos);
 	pHistory->Add(m);

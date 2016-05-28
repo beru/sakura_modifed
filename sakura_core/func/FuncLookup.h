@@ -78,13 +78,13 @@ public:
 	const WCHAR* Custmenu2Name(int index, WCHAR buf[], int bufSize) const;
 
 	void SetCategory2Combo(HWND hComboBox) const ;
-	void SetListItem(HWND hListBox, int category) const;
+	void SetListItem(HWND hListBox, size_t category) const;
 	
 	size_t GetCategoryCount(void) const {
 		return nsFuncCode::nFuncKindNum + 3;	// 分類＋外部マクロ＋カスタムメニュー＋プラグイン
 	}
 	
-	size_t GetItemCount(int category) const;
+	size_t GetItemCount(size_t category) const;
 
 
 private:

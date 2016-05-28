@@ -650,12 +650,9 @@ bool LayoutMgr::WhereCurrentWord(
 
 	if (nRetCode) {
 		// 論理位置→レイアウト位置変換
-		Point ptFrom;
-		LogicToLayout(Point(nFromX, pLayout->GetLogicLineNo()), &ptFrom, nLineNum);
+		Point ptFrom = LogicToLayout(Point(nFromX, pLayout->GetLogicLineNo()), nLineNum);
+		Point ptTo = LogicToLayout(Point(nToX, pLayout->GetLogicLineNo()), nLineNum);
 		pSelect->SetFrom(ptFrom);
-
-		Point ptTo;
-		LogicToLayout(Point(nToX, pLayout->GetLogicLineNo()), &ptTo, nLineNum);
 		pSelect->SetTo(ptTo);
 	}
 	return nRetCode;
@@ -689,9 +686,8 @@ int LayoutMgr::PrevOrNextWord(
 
 	if (nRetCode) {
 		// 論理位置→レイアウト位置変換
-		LogicToLayout(
+		*pptLayoutNew = LogicToLayout(
 			Point(nPosNew, pLayout->GetLogicLineNo()),
-			pptLayoutNew,
 			nLineNum
 		);
 	}
@@ -750,16 +746,14 @@ int LayoutMgr::SearchWord(
 	@date 2004.06.16 Moca インデント表示の際のTABを含む行の座標ずれ修正
 	@date 2007.09.06 kobake 関数名をCaretPos_Phys2LogからLogicToLayoutに変更
 */
-void LayoutMgr::LogicToLayout(
+Point LayoutMgr::LogicToLayout(
 	const Point&	ptLogic,	// [in]  ロジック位置
-	Point*			pptLayout,	// [out] レイアウト位置
 	int				nLineHint	// [in]  レイアウトY値のヒント。求める値に近い値を渡すと高速に検索できる。
 	)
 {
-	pptLayout->Clear();
-
+	Point ptLayout;	// レイアウト位置
 	if (GetLineCount() == 0) {
-		return; // 変換不可
+		return ptLayout; // 変換不可
 	}
 	// サーチ開始地点 -> pLayout, nCaretPosX, nCaretPosY
 	size_t nCaretPosX = 0;
@@ -783,8 +777,8 @@ void LayoutMgr::LogicToLayout(
 			pLayout = SearchLineByLayoutY(nCaretPosY);
 		}
 		if (!pLayout) {
-			pptLayout->SetY(nLines);
-			return;
+			ptLayout.SetY(nLines);
+			return ptLayout;
 		}
 		
 		// ロジックYがでかすぎる場合は、一致するまでデクリメント (
@@ -889,10 +883,11 @@ void LayoutMgr::LogicToLayout(
 	} while (pLayout);
 
 	// 2004.06.16 Moca インデント表示の際の位置ずれ修正
-	pptLayout->Set(
+	ptLayout.Set(
 		pLayout ? nCaretPosX : 0,
 		nCaretPosY
 	);
+	return ptLayout;
 }
 
 /*!
@@ -903,18 +898,17 @@ void LayoutMgr::LogicToLayout(
 
 	@date 2007.09.06 kobake 関数名をCaretPos_Log2Phys→LayoutToLogicに変更
 */
-void LayoutMgr::LayoutToLogicEx(
-	const Point&	ptLayout,	// [in]  レイアウト位置
-	PointEx*		pptLogic	// [out] ロジック位置
+PointEx LayoutMgr::LayoutToLogicEx(
+	const Point& ptLayout	// [in]  レイアウト位置
 	) const
 {
-	pptLogic->Set(0, 0);
-	pptLogic->ext = 0;
+	PointEx ptLogic;	// [out] ロジック位置
+	ptLogic.ext = 0;
 	if (ptLayout.y > (int)nLines) {
 		// 2007.10.11 kobake Y値が間違っていたので修正
 		//pptLogic->Set(0, nLines);
-		pptLogic->Set(0, pDocLineMgr->GetLineCount());
-		return;
+		ptLogic.Set(0, pDocLineMgr->GetLineCount());
+		return ptLogic;
 	}
 
 	size_t nDataLen;
@@ -930,15 +924,15 @@ void LayoutMgr::LayoutToLogicEx(
 		if (0 < ptLayout.y) {
 			pLayout = SearchLineByLayoutY(ptLayout.y - 1);
 			if (!pLayout) {
-				pptLogic->Set(0, pDocLineMgr->GetLineCount());
-				return;
+				ptLogic.Set(0, pDocLineMgr->GetLineCount());
+				return ptLogic;
 			}else {
 				pData = GetLineStr(ptLayout.y - 1, &nDataLen);
 				if (WCODE::IsLineDelimiter(pData[nDataLen - 1], GetDllShareData().common.edit.bEnableExtEol)) {
-					pptLogic->Set(0, pDocLineMgr->GetLineCount());
-					return;
+					ptLogic.Set(0, pDocLineMgr->GetLineCount());
+					return ptLogic;
 				}else {
-					pptLogic->y = pDocLineMgr->GetLineCount() - 1; // 2002/2/10 aroka DocLineMgr変更
+					ptLogic.y = pDocLineMgr->GetLineCount() - 1; // 2002/2/10 aroka DocLineMgr変更
 					bEOF = true;
 					// nX = MAXLINEKETAS;
 					nX = pLayout->GetIndent();
@@ -948,10 +942,10 @@ void LayoutMgr::LayoutToLogicEx(
 		}
 		// 2007.10.11 kobake Y値が間違っていたので修正
 		//pptLogic->Set(0, nLines);
-		pptLogic->Set(0, pDocLineMgr->GetLineCount());
-		return;
+		ptLogic.Set(0, pDocLineMgr->GetLineCount());
+		return ptLogic;
 	}else {
-		pptLogic->y = pLayout->GetLogicLineNo();
+		ptLogic.y = pLayout->GetLogicLineNo();
 	}
 	
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -993,20 +987,17 @@ checkloop:;
 		i += nCharChars - 1;
 	}
 	i += pLayout->GetLogicOffset();
-	pptLogic->x = i;
-	pptLogic->ext = ptLayout.x - nX;
-	return;
+	ptLogic.x = i;
+	ptLogic.ext = ptLayout.x - nX;
+	return ptLogic;
 }
 
 
-void LayoutMgr::LayoutToLogic(
-	const Point& ptLayout,
-	Point* pptLogic
+Point LayoutMgr::LayoutToLogic(
+	const Point& ptLayout
 	) const
 {
-	PointEx ptEx;
-	LayoutToLogicEx(ptLayout, &ptEx);
-	*pptLogic = ptEx;
+	return LayoutToLogicEx(ptLayout);
 }
 
 

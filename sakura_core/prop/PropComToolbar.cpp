@@ -236,6 +236,9 @@ INT_PTR PropToolbar::DispatchEvent(
 			switch (wNotifyCode) {
 			case CBN_SELCHANGE:
 				nIndex2 = Combo_GetCurSel(hwndCombo);
+				if (nIndex2 == CB_ERR) {
+					return TRUE;
+				}
 				List_ResetContent(hwndFuncList);
 				// 機能一覧に文字列をセット (リストボックス)
 				//	From Here Oct. 15, 2001 genta Lookupを使うように変更

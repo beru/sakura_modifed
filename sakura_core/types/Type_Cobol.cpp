@@ -126,12 +126,8 @@ void DocOutline::MakeTopicList_cobol(FuncInfoArr* pFuncInfoArr)
 			  レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 			*/
 
-			Point ptPos;
 			wchar_t	szWork[1024];
-			doc.layoutMgr.LogicToLayout(
-				Point(0, nLineCount),
-				&ptPos
-			);
+			Point ptPos = doc.layoutMgr.LogicToLayout(Point(0, nLineCount));
 			auto_sprintf_s(szWork, L"%ls::%ls", szDivision, szLabel);
 			pFuncInfoArr->AppendData(nLineCount + 1, ptPos.y + 1 , szWork, 0);
 		}

@@ -90,7 +90,7 @@ void ViewCommander::Command_Indent(
 		{ return ch == WCODE::SPACE || ch == WCODE::TAB; }
 	} IsIndentChar;
 	struct SoftTabData {
-		SoftTabData(int nTab) : szTab(NULL), nTab(nTab) {}
+		SoftTabData(size_t nTab) : szTab(NULL), nTab(nTab) {}
 		~SoftTabData() { delete[] szTab; }
 		operator const wchar_t* ()
 		{
@@ -100,9 +100,9 @@ void ViewCommander::Command_Indent(
 			}
 			return szTab;
 		}
-		int Len(int nCol) { return nTab - (nCol % nTab); }
+		size_t Len(size_t nCol) { return nTab - (nCol % nTab); }
 		wchar_t* szTab;
-		int nTab;
+		size_t nTab;
 	} stabData(layoutMgr.GetTabSpace());
 
 	const bool bSoftTab = (eIndent == IndentType::Tab && view.pTypeData->bInsSpace);
@@ -298,8 +298,8 @@ void ViewCommander::Command_Indent(
 
 		// 挿入された文字の分だけ選択範囲を後ろにずらし、rcSelにセットする。
 		if (0 < minOffset) {
-			rcSel.GetFromPointer()->x = t_min((int)rcSel.GetFrom().x + minOffset, (int)layoutMgr.GetMaxLineKetas());
-			rcSel.GetToPointer()->x = t_min((int)rcSel.GetTo().x + minOffset, (int)layoutMgr.GetMaxLineKetas());
+			rcSel.GetFrom().x = t_min((int)rcSel.GetFrom().x + minOffset, (int)layoutMgr.GetMaxLineKetas());
+			rcSel.GetTo().x = t_min((int)rcSel.GetTo().x + minOffset, (int)layoutMgr.GetMaxLineKetas());
 		}
 
 		// カーソルを移動
@@ -339,7 +339,7 @@ void ViewCommander::Command_Indent(
 		selectOld.SetFrom(Point(0, GetSelect().GetFrom().y));
 		selectOld.SetTo  (Point(0, GetSelect().GetTo().y ));
 		if (GetSelect().GetTo().x > 0) {
-			selectOld.GetToPointer()->y++;
+			selectOld.GetTo().y++;
 		}
 
 		// 現在の選択範囲を非選択状態に戻す
@@ -383,7 +383,7 @@ void ViewCommander::Command_Indent(
 
 			if (nLineCountPrev != layoutMgr.GetLineCount()) {
 				// 行数が変化した!!
-				selectOld.GetToPointer()->y += layoutMgr.GetLineCount() - nLineCountPrev;
+				selectOld.GetTo().y += layoutMgr.GetLineCount() - nLineCountPrev;
 			}
 			if (hwndProgress) {
 				int newPos = ::MulDiv(i, 100, selectOld.GetTo().GetY());
@@ -457,7 +457,7 @@ void ViewCommander::Command_Unindent(wchar_t wcChar)
 		selectOld.SetFrom(Point(0, GetSelect().GetFrom().y));
 		selectOld.SetTo  (Point(0, GetSelect().GetTo().y ));
 		if (GetSelect().GetTo().x > 0) {
-			selectOld.GetToPointer()->y++;
+			selectOld.GetTo().y++;
 		}
 
 		// 現在の選択範囲を非選択状態に戻す
@@ -523,7 +523,7 @@ void ViewCommander::Command_Unindent(wchar_t wcChar)
 			);
 			if (nLineCountPrev != layoutMgr.GetLineCount()) {
 				// 行数が変化した!!
-				selectOld.GetToPointer()->y += layoutMgr.GetLineCount() - nLineCountPrev;
+				selectOld.GetTo().y += layoutMgr.GetLineCount() - nLineCountPrev;
 			}
 			if (hwndProgress) {
 				int newPos = ::MulDiv(i, 100, selectOld.GetTo().GetY());
@@ -579,7 +579,7 @@ void ViewCommander::Command_Trim(
 		);
 		viewSelect.select.SetTo(
 			Point(
-				GetDocument().layoutMgr.GetMaxLineKetas(),
+				(int)GetDocument().layoutMgr.GetMaxLineKetas(),
 				GetCaret().GetCaretLayoutPos().GetY()
 			)
 		);
@@ -696,7 +696,7 @@ void ViewCommander::Command_Sort(bool bAsc)	// bAsc:true=昇順, false=降順
 	);
 
 	if (bBeginBoxSelectOld) {
-		selectOld.GetToPointer()->y++;
+		selectOld.GetTo().y++;
 	}else {
 		// カーソル位置が行頭じゃない ＆ 選択範囲の終端に改行コードがある場合は
 		// その行も選択範囲に加える
@@ -704,7 +704,7 @@ void ViewCommander::Command_Sort(bool bAsc)	// bAsc:true=昇順, false=降順
 			// 2006.03.31 Moca nSelectLineToOldは、物理行なのでLayout系からDocLine系に修正
 			const DocLine* pDocLine = GetDocument().docLineMgr.GetLine(selectOld.GetTo().y);
 			if (pDocLine && EolType::None != pDocLine->GetEol()) {
-				selectOld.GetToPointer()->y++;
+				selectOld.GetTo().y++;
 			}
 		}
 	}
@@ -873,7 +873,7 @@ void ViewCommander::Command_Merge(void)
 		// 2010.08.22 Moca ソートと仕様を合わせる
 		const DocLine* pDocLine = GetDocument().docLineMgr.GetLine(sSelectOld.GetTo().y);
 		if (pDocLine && EolType::None != pDocLine->GetEol()) {
-			sSelectOld.GetToPointer()->y++;
+			sSelectOld.GetTo().y++;
 		}
 #endif
 	}
@@ -939,7 +939,7 @@ void ViewCommander::Command_Merge(void)
 	// 選択エリアの復元
 	selInfo.select = selectOld_Layout;
 	// 2010.08.22 座標混在バグ
-	selInfo.select.GetToPointer()->y -= (int)nMergeLayoutLines;
+	selInfo.select.GetTo().y -= (int)nMergeLayoutLines;
 
 	if (nCaretPosYOLD == selInfo.select.GetFrom().y) {
 		caret.MoveCursor(selInfo.select.GetFrom(), true);
@@ -976,7 +976,7 @@ void ViewCommander::Command_Reconvert(void)
 	const int ATRECONVERTSTRING_SET = 1;
 
 	// サイズを取得
-	int nSize = view.SetReconvertStruct(NULL, UNICODE_BOOL);
+	LRESULT nSize = view.SetReconvertStruct(NULL, UNICODE_BOOL);
 	if (nSize == 0)  // サイズ０の時は何もしない
 		return ;
 
@@ -1012,8 +1012,9 @@ void ViewCommander::Command_Reconvert(void)
 	// サイズ取得し直し
 	if (!UNICODE_BOOL && bUseUnicodeATOK) {
 		nSize = view.SetReconvertStruct(NULL, UNICODE_BOOL || bUseUnicodeATOK);
-		if (nSize == 0)  // サイズ０の時は何もしない
+		if (nSize == 0) { // サイズ０の時は何もしない
 			return;
+		}
 	}
 
 	// IMEのコンテキスト取得

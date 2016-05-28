@@ -165,22 +165,23 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 public:
 	// ロジック→レイアウト
-	void LogicToLayoutEx(const PointEx& ptLogicEx, Point* pptLayout, int nLineHint = 0) {
-		LogicToLayout(ptLogicEx, pptLayout, nLineHint);
-		pptLayout->x += (int)ptLogicEx.ext;
+	Point LogicToLayoutEx(const PointEx& ptLogicEx, int nLineHint = 0) {
+		Point ptLayout = LogicToLayout(ptLogicEx, nLineHint);
+		ptLayout.x += (int)ptLogicEx.ext;
+		return ptLayout;
 	}
-	void LogicToLayout(const Point& ptLogic, Point* pptLayout, int nLineHint = 0);
+	Point LogicToLayout(const Point& ptLogic, int nLineHint = 0);
 	void LogicToLayout(const Range& rangeLogic, Range* prangeLayout) {
-		LogicToLayout(rangeLogic.GetFrom(), prangeLayout->GetFromPointer());
-		LogicToLayout(rangeLogic.GetTo(), prangeLayout->GetToPointer());
+		prangeLayout->SetFrom(LogicToLayout(rangeLogic.GetFrom()));
+		prangeLayout->SetTo(LogicToLayout(rangeLogic.GetTo()));
 	}
 	
 	// レイアウト→ロジック変換
-	void LayoutToLogicEx(const Point& ptLayout, PointEx* pptLogicEx) const;
-	void LayoutToLogic(const Point& ptLayout, Point* pptLogic) const;
+	PointEx LayoutToLogicEx(const Point& ptLayout) const;
+	Point LayoutToLogic(const Point& ptLayout) const;
 	void LayoutToLogic(const Range& rangeLayout, Range* prangeLogic) const {
-		LayoutToLogic(rangeLayout.GetFrom(), prangeLogic->GetFromPointer());
-		LayoutToLogic(rangeLayout.GetTo(), prangeLogic->GetToPointer());
+		prangeLogic->SetFrom(LayoutToLogic(rangeLayout.GetFrom()));
+		prangeLogic->SetTo(LayoutToLogic(rangeLayout.GetTo()));
 	}
 	
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //

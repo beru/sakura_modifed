@@ -130,16 +130,11 @@ void DocOutline::MakeTopicList_tex(FuncInfoArr* pFuncInfoArr)
 				}
 				szTitle[k] = '\0';
 
-				Point ptPos;
 
 				WCHAR tmpstr[256];
 				WCHAR secstr[4];
 
-				doc.layoutMgr.LogicToLayout(
-					Point(i, nLineCount),
-					&ptPos
-				);
-
+				Point ptPos = doc.layoutMgr.LogicToLayout(Point(i, nLineCount));
 				int sabunSection = thisSection - lastSection;
 				if (lastSection == 0) {
 					nDepth = 0;

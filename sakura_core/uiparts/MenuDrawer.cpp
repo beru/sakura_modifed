@@ -1500,7 +1500,7 @@ int MenuDrawer::FindIndexFromCommandId(int idCommand, bool bOnlyFunc) const
 	}
 
 	int nIndex = -1;
-	for (int i=0; i<nMyButtonNum; ++i) {
+	for (size_t i=0; i<nMyButtonNum; ++i) {
 		if (tbMyButton[i].idCommand == idCommand) {
 			nIndex = i;
 			break;

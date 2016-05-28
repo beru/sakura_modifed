@@ -403,7 +403,6 @@ void ViewCommander::Command_PLSQL_Compile_On_SQLPlus(void)
 	int			nRet;
 	BOOL		nBool;
 	TCHAR		szPath[MAX_PATH + 2];
-	BOOL		bResult;
 
 	HWND hwndSQLPLUS = ::FindWindow(_T("SqlplusWClass"), _T("Oracle SQL*Plus"));
 	if (!hwndSQLPLUS) {
@@ -455,8 +454,8 @@ void ViewCommander::Command_PLSQL_Compile_On_SQLPlus(void)
 		ActivateFrameWindow(hwndSQLPLUS);
 
 		// Oracle SQL*Plusにペーストのコマンドを送る
-		DWORD_PTR	dwResult;
-		bResult = ::SendMessageTimeout(
+		DWORD_PTR dwResult;
+		LRESULT bResult = ::SendMessageTimeout(
 			hwndSQLPLUS,
 			WM_COMMAND,
 			MAKELONG(201, 0),

@@ -84,10 +84,7 @@ void EditView::InsertData_CEditView(
 	int opeSeq;
 	if (!bDoing_UndoRedo) {	// Undo, Redoの実行中か
 		pOpe = new InsertOpe();
-		pEditDoc->layoutMgr.LayoutToLogic(
-			ptInsertPos,
-			&pOpe->ptCaretPos_PHY_Before
-		);
+		pOpe->ptCaretPos_PHY_Before = pEditDoc->layoutMgr.LayoutToLogic(ptInsertPos);
 		opeSeq = GetDocument().docEditor.opeBuf.GetNextSeq();
 	}else {
 		opeSeq = 0;
@@ -188,10 +185,7 @@ void EditView::InsertData_CEditView(
 	}
 
 	if (!bDoing_UndoRedo && pOpe) {	// Undo, Redoの実行中か
-		pEditDoc->layoutMgr.LayoutToLogic(
-			Point(nColumnFrom, ptInsertPos.y),
-			&pOpe->ptCaretPos_PHY_Before
-		);
+		pOpe->ptCaretPos_PHY_Before = pEditDoc->layoutMgr.LayoutToLogic(Point(nColumnFrom, ptInsertPos.y));
 	}
 
 	// 文字列挿入
@@ -337,10 +331,7 @@ void EditView::InsertData_CEditView(
 
 	// 2007.10.18 kobake ここでCOpe処理をまとめる
 	if (!bDoing_UndoRedo) {
-		pEditDoc->layoutMgr.LayoutToLogic(
-			*pptNewPos,
-			&pOpe->ptCaretPos_PHY_After
-		);
+		pOpe->ptCaretPos_PHY_After = pEditDoc->layoutMgr.LayoutToLogic(*pptNewPos);
 		pOpe->nOrgSeq = nInsSeq;
 
 		// 操作の追加
@@ -383,14 +374,8 @@ void EditView::DeleteData2(
 	int columnTo = LineIndexToColumn(pLayout, nIdxFrom + nDelLen);
 	if (!bDoing_UndoRedo) {
 		pOpe = new DeleteOpe();
-		pEditDoc->layoutMgr.LayoutToLogic(
-			Point(columnFrom, _ptCaretPos.y),
-			&pOpe->ptCaretPos_PHY_Before
-		);
-		pEditDoc->layoutMgr.LayoutToLogic(
-			Point(columnTo, _ptCaretPos.y),
-			&pOpe->ptCaretPos_PHY_To
-		);
+		pOpe->ptCaretPos_PHY_Before = pEditDoc->layoutMgr.LayoutToLogic(Point(columnFrom, _ptCaretPos.y));
+		pOpe->ptCaretPos_PHY_To = pEditDoc->layoutMgr.LayoutToLogic(Point(columnTo, _ptCaretPos.y));
 	}
 	OpeLineData memDeleted;
 	OpeLineData* pmemDeleted = nullptr;
@@ -428,10 +413,7 @@ void EditView::DeleteData2(
 	// 2007.10.18 kobake COpeの追加をここにまとめる
 	if (pOpe) {
 		pOpe->opeLineData.swap(memDeleted);
-		pEditDoc->layoutMgr.LayoutToLogic(
-			_ptCaretPos,
-			&pOpe->ptCaretPos_PHY_After
-		);
+		pOpe->ptCaretPos_PHY_After = pEditDoc->layoutMgr.LayoutToLogic(_ptCaretPos);
 		// 操作の追加
 		commander.GetOpeBlk()->AppendOpe(pOpe);
 	}
@@ -573,12 +555,8 @@ void EditView::DeleteData(
 			caret.MoveCursor(caretOld, bRedraw);
 			caret.nCaretPosX_Prev = caret.GetCaretLayoutPos().GetX();
 			if (!bDoing_UndoRedo) {	// Undo, Redoの実行中か
-				MoveCaretOpe*		pOpe = new MoveCaretOpe();
-				pEditDoc->layoutMgr.LayoutToLogic(
-					ptCaretPosOld,
-					&pOpe->ptCaretPos_PHY_Before
-				);
-
+				MoveCaretOpe* pOpe = new MoveCaretOpe();
+				pOpe->ptCaretPos_PHY_Before = pEditDoc->layoutMgr.LayoutToLogic(ptCaretPosOld);
 				pOpe->ptCaretPos_PHY_After = caret.GetCaretLogicPos();	// 操作後のキャレット位置
 				// 操作の追加
 				commander.GetOpeBlk()->AppendOpe(pOpe);
@@ -755,7 +733,7 @@ bool EditView::ReplaceData_CEditView3(
 					tmp.x = 0;
 					delRange.Set(tmp);
 				}else {
-					delRange.GetFromPointer()->y++;
+					delRange.GetFrom().y++;
 					delRange.SetFromX(0);
 				}
 				bDelRangeUpdate = true;
@@ -936,7 +914,7 @@ bool EditView::ReplaceData_CEditView3(
 			pReplaceOpe->ptCaretPos_PHY_After = DLRArg.ptNewPos;
 			pReplaceOpe->nOrgInsSeq = DLRArg.nInsSeq;
 		}else {
-			layoutMgr.LayoutToLogic(LRArg.ptLayoutNew,   &pReplaceOpe->ptCaretPos_PHY_After);
+			pReplaceOpe->ptCaretPos_PHY_After = layoutMgr.LayoutToLogic(LRArg.ptLayoutNew);
 			pReplaceOpe->nOrgInsSeq = LRArg.nInsSeq;
 		}
 		// 操作の追加
@@ -970,49 +948,51 @@ bool EditView::ReplaceData_CEditView3(
 void EditView::RTrimPrevLine(void)
 {
 	auto& caret = GetCaret();
-	Point ptCaretPos_PHY = caret.GetCaretLogicPos();
-
-	if (caret.GetCaretLogicPos().y > 0) {
-		size_t nLineLen;
-		const wchar_t*	pLine = DocReader(pEditDoc->docLineMgr).GetLineStrWithoutEOL(caret.GetCaretLogicPos().y - 1, &nLineLen);
-		if (pLine && nLineLen > 0) {
-			int i = 0;
-			int j = 0;
-			while (i < nLineLen) {
-				int nCharChars = NativeW::GetSizeOfChar(pLine, nLineLen, i);
-				if (!WCODE::IsBlank(pLine[i])) {
-					j = i + nCharChars;
-				}
-				i += nCharChars;
-			}
-			auto& layoutMgr = pEditDoc->layoutMgr;
-			if (j < nLineLen) {
-				Range rangeA;
-				layoutMgr.LogicToLayout(Point(j, caret.GetCaretLogicPos().y - 1), rangeA.GetFromPointer());
-				layoutMgr.LogicToLayout(Point(nLineLen, caret.GetCaretLogicPos().y - 1), rangeA.GetToPointer());
-				if (!(rangeA.GetFrom().x >= rangeA.GetTo().x && rangeA.GetFrom().y == rangeA.GetTo().y)) {
-					ReplaceData_CEditView(
-						rangeA,
-						nullptr,			// 挿入するデータ
-						0,	// 挿入するデータの長さ
-						true,
-						bDoing_UndoRedo ? nullptr : commander.GetOpeBlk()
-					);
-					Point ptCP;
-					layoutMgr.LogicToLayout(ptCaretPos_PHY, &ptCP);
-					caret.MoveCursor(ptCP, true);
-
-					if (!bDoing_UndoRedo) {	// Undo, Redoの実行中か
-						// 操作の追加
-						commander.GetOpeBlk()->AppendOpe(
-							new MoveCaretOpe(
-								caret.GetCaretLogicPos()	// 操作前後のキャレット位置
-							)
-						);
-					}
-				}
-			}
+	if (caret.GetCaretLogicPos().y <= 0) {
+		return;
+	}
+	size_t nLineLen;
+	const wchar_t* pLine = DocReader(pEditDoc->docLineMgr).GetLineStrWithoutEOL(caret.GetCaretLogicPos().y - 1, &nLineLen);
+	if (!pLine || nLineLen == 0) {
+		return;
+	}
+	size_t i = 0;
+	size_t j = 0;
+	while (i < nLineLen) {
+		size_t nCharChars = NativeW::GetSizeOfChar(pLine, nLineLen, i);
+		if (!WCODE::IsBlank(pLine[i])) {
+			j = i + nCharChars;
 		}
+		i += nCharChars;
+	}
+	if (j >= nLineLen) {
+		return;
+	}
+	Range rangeA;
+	auto& layoutMgr = pEditDoc->layoutMgr;
+	rangeA.SetFrom(layoutMgr.LogicToLayout(Point(j, caret.GetCaretLogicPos().y - 1)));
+	rangeA.SetTo(layoutMgr.LogicToLayout(Point(nLineLen, caret.GetCaretLogicPos().y - 1)));
+	if (rangeA.GetFrom().x < rangeA.GetTo().x || rangeA.GetFrom().y != rangeA.GetTo().y) {
+		return;
+	}
+	ReplaceData_CEditView(
+		rangeA,
+		nullptr,			// 挿入するデータ
+		0,	// 挿入するデータの長さ
+		true,
+		bDoing_UndoRedo ? nullptr : commander.GetOpeBlk()
+	);
+	Point ptCaretPos_PHY = caret.GetCaretLogicPos();
+	Point ptCP = layoutMgr.LogicToLayout(ptCaretPos_PHY);
+	caret.MoveCursor(ptCP, true);
+
+	if (!bDoing_UndoRedo) {	// Undo, Redoの実行中か
+		// 操作の追加
+		commander.GetOpeBlk()->AppendOpe(
+			new MoveCaretOpe(
+				caret.GetCaretLogicPos()	// 操作前後のキャレット位置
+			)
+		);
 	}
 }
 

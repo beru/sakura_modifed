@@ -51,10 +51,8 @@ void LayoutMgr::ReplaceData_CLayoutMgr(
 	||  レイアウト位置(行頭からの表示桁位置、折り返しあり行位置) →
 	||  物理位置(行頭からのバイト数、折り返し無し行位置)
 	*/
-	Point ptFrom;
-	Point ptTo;
-	LayoutToLogic(pArg->delRange.GetFrom(), &ptFrom);
-	LayoutToLogic(pArg->delRange.GetTo(), &ptTo);
+	Point ptFrom = LayoutToLogic(pArg->delRange.GetFrom());
+	Point ptTo = LayoutToLogic(pArg->delRange.GetTo());
 
 	/* 指定範囲のデータを置換(削除 & データを挿入)
 	  Fromを含む位置からToの直前を含むデータを削除する
@@ -142,6 +140,6 @@ void LayoutMgr::ReplaceData_CLayoutMgr(
 	pArg->nModLineTo += (pArg->nModLineFrom - 1) ;	// 再描画ヒント 変更されたレイアウト行To
 
 	// 2007.10.18 kobake LayoutReplaceArg::ptLayoutNewはここで算出するのが正しい
-	LogicToLayout(dlra.ptNewPos, &pArg->ptLayoutNew); // 挿入された部分の次の位置
+	pArg->ptLayoutNew = LogicToLayout(dlra.ptNewPos); // 挿入された部分の次の位置
 }
 

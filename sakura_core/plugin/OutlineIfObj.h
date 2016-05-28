@@ -101,7 +101,7 @@ public:
 					ptLayout.x = ptLogic.x;
 					ptLayout.y = ptLogic.y;
 				}else {
-					view.GetDocument().layoutMgr.LogicToLayout( ptLogic, &ptLayout );
+					ptLayout = view.GetDocument().layoutMgr.LogicToLayout(ptLogic);
 				}
 				int nParam = _wtoi(arguments[3]);
 				if (index == F_OL_ADDFUNCINFO) {

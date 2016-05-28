@@ -49,15 +49,12 @@ EncodingType CodeMediator::DetectUnicodeBom(const char* pS, size_t nLen)
 
 /*!
 	SJIS, JIS, EUCJP, UTF-8, UTF-7 を判定 (改)
-
 	@return SJIS, JIS, EUCJP, UTF-8, UTF-7 の何れかの ID を返す．
-
 	@note 適切な検出が行われた場合は、dwStatus に CESI_MB_DETECTED フラグが格納される。
 */
 EncodingType CodeMediator::DetectMBCode(ESI* pEsi)
 {
 //	pEsi->dwStatus = ESI_NOINFORMATION;
-
 	if (pEsi->GetDataLen() < (pEsi->apMbcInfo[0]->nSpecific - pEsi->apMbcInfo[0]->nPoints) * 2000) {
 		// 不正バイトの割合が、全体の 0.05% 未満であることを確認。
 		// 全体の0.05%ほどの不正バイトは、無視する。
@@ -69,9 +66,7 @@ EncodingType CodeMediator::DetectMBCode(ESI* pEsi)
 		return CODE_NONE;
 	}
 
-	/*
-		判定状況を確認
-	*/
+	// 判定状況を確認
 	pEsi->SetStatus(ESI_MBC_DETECTED);
 	return pEsi->apMbcInfo[0]->eCodeID;
 }
@@ -83,7 +78,6 @@ EncodingType CodeMediator::DetectMBCode(ESI* pEsi)
 	@retval CODE_UNICODE    UTF-16 LE が検出された
 	@retval CODE_UNICODEBE  UTF-16 BE が検出された
 	@retval 0               UTF-16 LE/BE ともに検出されなかった
-
 */
 EncodingType CodeMediator::DetectUnicode(ESI* pEsi)
 {

@@ -97,17 +97,11 @@ bool ViewCommander::Command_TagJump(bool bClose)
 	  →
 	  物理位置(行頭からのバイト数、折り返し無し行位置)
 	*/
-	Point ptXY, ptXYOrg;
-	GetDocument().layoutMgr.LayoutToLogic(
-		GetCaret().GetCaretLayoutPos(),
-		&ptXY
-	);
-	ptXYOrg = ptXY;
-
+	Point ptXY = GetDocument().layoutMgr.LayoutToLogic(GetCaret().GetCaretLayoutPos());
+	Point ptXYOrg = ptXY;
 	// 現在行のデータを取得
-	size_t			nLineLen;
-	const wchar_t*	pLine;
-	pLine = GetDocument().docLineMgr.GetLine(ptXY.y)->GetDocLineStrWithEOL(&nLineLen);
+	size_t nLineLen;
+	const wchar_t* pLine = GetDocument().docLineMgr.GetLine(ptXY.y)->GetDocLineStrWithEOL(&nLineLen);
 	if (!pLine) {
 		goto can_not_tagjump;
 	}

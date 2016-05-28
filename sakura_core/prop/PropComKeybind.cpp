@@ -320,7 +320,9 @@ INT_PTR PropKeybind::DispatchEvent(
 			case CBN_SELCHANGE:
 				nIndex2 = Combo_GetCurSel(hwndCombo);
 				// 機能一覧に文字列をセット（リストボックス）
-				lookup.SetListItem(hwndFuncList, nIndex2);	//	Oct. 2, 2001 genta
+				if (nIndex2 != CB_ERR) {
+					lookup.SetListItem(hwndFuncList, nIndex2);	//	Oct. 2, 2001 genta
+				}
 				return TRUE;
 			}
 

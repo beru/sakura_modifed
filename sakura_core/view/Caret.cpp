@@ -186,10 +186,8 @@ int Caret::MoveCursor(
 	}
 	// 2004.04.02 Moca 行だけ有効な座標に修正するのを厳密に処理する
 	GetAdjustCursorPos(&ptWk_CaretPos);
-	editDoc.layoutMgr.LayoutToLogic(
-		ptWk_CaretPos,
-		&ptCaretPos_Logic	// カーソル位置。ロジック単位。
-	);
+	// カーソル位置。ロジック単位。
+	ptCaretPos_Logic = editDoc.layoutMgr.LayoutToLogic(ptWk_CaretPos);
 	// キャレット移動
 	SetCaretLayoutPos(ptWk_CaretPos);
 

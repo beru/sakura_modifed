@@ -85,7 +85,7 @@ void ViewCommander::Command_SelectAll(void)
 	//int nX, nY;
 	Range range;
 	range.SetFrom(Point(0, 0));
-	GetDocument().layoutMgr.GetEndLayoutPos(range.GetToPointer());
+	GetDocument().layoutMgr.GetEndLayoutPos(&range.GetTo());
 	si.SetSelectArea(range);
 
 	// 選択領域描画
@@ -116,7 +116,7 @@ void ViewCommander::Command_SelectLine(int lparam)
 	// 最下行（物理行）でない
 	if (caret.GetCaretLogicPos().y < (int)GetDocument().docLineMgr.GetLineCount()) {
 		// 1行先の物理行からレイアウト行を求める
-		layoutMgr.LogicToLayout(Point(0, caret.GetCaretLogicPos().y + 1), &ptCaret);
+		ptCaret = layoutMgr.LogicToLayout(Point(0, caret.GetCaretLogicPos().y + 1));
 
 		// カーソルを次の物理行頭へ移動する
 		view.MoveCursorSelecting(ptCaret, true);

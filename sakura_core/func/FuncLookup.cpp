@@ -37,9 +37,9 @@
 #include "plugin/JackManager.h"
 
 // オフセット値
-const int LUOFFSET_MACRO = 0;
-const int LUOFFSET_CUSTMENU = 1;
-const int LUOFFSET_PLUGIN = 2;
+const size_t LUOFFSET_MACRO = 0;
+const size_t LUOFFSET_CUSTMENU = 1;
+const size_t LUOFFSET_PLUGIN = 2;
 
 /*!	@brief 分類中の位置に対応する機能番号を返す．
 
@@ -207,7 +207,7 @@ void FuncLookup::SetCategory2Combo(HWND hComboBox) const
 
 	@date 2007.11.02 ryoji 未定義コマンドは除外．処理も簡素化．
 */
-void FuncLookup::SetListItem(HWND hListBox, int category) const
+void FuncLookup::SetListItem(HWND hListBox, size_t category) const
 {
 	WCHAR pszLabel[256];
 	// リストを初期化する
@@ -227,12 +227,9 @@ void FuncLookup::SetListItem(HWND hListBox, int category) const
 	
 	@param category [in] 機能分類番号
 */
-size_t FuncLookup::GetItemCount(int category) const
+size_t FuncLookup::GetItemCount(size_t category) const
 {
-	if (category < 0) {
-		return 0;
-	}
-	if (category < (int)nsFuncCode::nFuncKindNum) {
+	if (category < nsFuncCode::nFuncKindNum) {
 		return nsFuncCode::pnFuncListNumArr[category];
 	}else if (category == nsFuncCode::nFuncKindNum + LUOFFSET_MACRO) {
 		// マクロ

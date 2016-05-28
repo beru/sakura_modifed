@@ -40,10 +40,7 @@ void ViewCommander::Command_WordDeleteToStart(void)
 
 	if (!view.bDoing_UndoRedo) {	// Undo, Redoの実行中か
 		MoveCaretOpe* pOpe = new MoveCaretOpe();
-		GetDocument().layoutMgr.LayoutToLogic(
-			GetSelect().GetTo(),
-			&pOpe->ptCaretPos_PHY_Before
-		);
+		pOpe->ptCaretPos_PHY_Before = GetDocument().layoutMgr.LayoutToLogic(GetSelect().GetTo());
 		pOpe->ptCaretPos_PHY_After = pOpe->ptCaretPos_PHY_Before;	// 操作後のキャレット位置
 
 		// 操作の追加
@@ -77,10 +74,7 @@ void ViewCommander::Command_WordDeleteToEnd(void)
 	}
 	if (!view.bDoing_UndoRedo) {	// Undo, Redoの実行中か
 		MoveCaretOpe* pOpe = new MoveCaretOpe();
-		GetDocument().layoutMgr.LayoutToLogic(
-			GetSelect().GetFrom(),
-			&pOpe->ptCaretPos_PHY_Before
-		);
+		pOpe->ptCaretPos_PHY_Before = GetDocument().layoutMgr.LayoutToLogic(GetSelect().GetFrom());
 		pOpe->ptCaretPos_PHY_After = pOpe->ptCaretPos_PHY_Before;	// 操作後のキャレット位置
 		// 操作の追加
 		GetOpeBlk()->AppendOpe(pOpe);
@@ -145,8 +139,7 @@ void ViewCommander::Command_LineCutToStart(void)
 		return;
 	}
 
-	Point ptPos;
-	layoutMgr.LogicToLayout(Point(0, pLayout->GetLogicLineNo()), &ptPos);
+	Point ptPos = layoutMgr.LogicToLayout(Point(0, pLayout->GetLogicLineNo()));
 	if (caret.GetCaretLayoutPos() == ptPos) {
 		ErrorBeep();
 		return;
@@ -187,20 +180,18 @@ void ViewCommander::Command_LineCutToEnd(void)
 	Point ptPos;
 	auto& docLineRef = *pLayout->GetDocLineRef();
 	if (docLineRef.GetEol() == EolType::None) {	// 改行コードの種類
-		layoutMgr.LogicToLayout(
+		ptPos = layoutMgr.LogicToLayout(
 			Point(
 				docLineRef.GetLengthWithEOL(),
 				pLayout->GetLogicLineNo()
-			),
-			&ptPos
+			)
 		);
 	}else {
-		layoutMgr.LogicToLayout(
+		ptPos = layoutMgr.LogicToLayout(
 			Point(
 				docLineRef.GetLengthWithEOL() - docLineRef.GetEol().GetLen(),
 				pLayout->GetLogicLineNo()
-			),
-			&ptPos
+			)
 		);
 	}
 
@@ -236,9 +227,7 @@ void ViewCommander::Command_LineDeleteToStart(void)
 		return;
 	}
 
-	Point ptPos;
-
-	layoutMgr.LogicToLayout(Point(0, pLayout->GetLogicLineNo()), &ptPos);
+	Point ptPos = layoutMgr.LogicToLayout(Point(0, pLayout->GetLogicLineNo()));
 	if (caret.GetCaretLayoutPos() == ptPos) {
 		ErrorBeep();
 		return;
@@ -275,20 +264,18 @@ void ViewCommander::Command_LineDeleteToEnd(void)
 
 	auto& docLineRef = *pLayout->GetDocLineRef();
 	if (docLineRef.GetEol() == EolType::None) {	// 改行コードの種類
-		GetDocument().layoutMgr.LogicToLayout(
+		ptPos = GetDocument().layoutMgr.LogicToLayout(
 			Point(
 				docLineRef.GetLengthWithEOL(),
 				pLayout->GetLogicLineNo()
-			),
-			&ptPos
+			)
 		);
 	}else {
-		GetDocument().layoutMgr.LogicToLayout(
+		ptPos = GetDocument().layoutMgr.LogicToLayout(
 			Point(
 				docLineRef.GetLengthWithEOL() - docLineRef.GetEol().GetLen(),
 				pLayout->GetLogicLineNo()
-			),
-			&ptPos
+			)
 		);
 	}
 

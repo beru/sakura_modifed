@@ -821,11 +821,7 @@ void DocOutline::MakeFuncList_C(
 						  →
 						  レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 						*/
-						Point ptPosXY;
-						doc.layoutMgr.LogicToLayout(
-							Point(0, nItemLine - 1),
-							&ptPosXY
-						);
+						Point ptPosXY = doc.layoutMgr.LogicToLayout(Point(0, nItemLine - 1));
 #ifdef TRACE_OUTLINE
 						DEBUG_TRACE(_T("AppendData %d %ls\n"), nItemLine, szNamespace);
 #endif
@@ -1048,11 +1044,7 @@ void DocOutline::MakeFuncList_C(
 						  →
 						  レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 						*/
-						Point ptPosXY;
-						doc.layoutMgr.LogicToLayout(
-							Point(0, nItemLine - 1),
-							&ptPosXY
-						);
+						Point ptPosXY = doc.layoutMgr.LogicToLayout(Point(0, nItemLine - 1));
 #ifdef TRACE_OUTLINE
 						DEBUG_TRACE(_T("AppendData %d %ls\n"), nItemLine, szNamespace);
 #endif
@@ -1506,9 +1498,7 @@ void EditView::SmartIndent_CPP(wchar_t wcChar)
 		}
 
 		// カーソル位置調整
-		Point ptCP_Layout;
-		pEditDoc->layoutMgr.LogicToLayout(ptCP, &ptCP_Layout);
-
+		Point ptCP_Layout = pEditDoc->layoutMgr.LogicToLayout(ptCP);
 		// 選択エリアの先頭へカーソルを移動
 		caret.MoveCursor(ptCP_Layout, true);
 		caret.nCaretPosX_Prev = caret.GetCaretLayoutPos().GetX();

@@ -354,12 +354,7 @@ bool NormalProcess::InitializeProcess()
 				  →
 				  レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 				*/
-				Point ptPos;
-				editDoc.layoutMgr.LogicToLayout(
-					fi.ptCursor,
-					&ptPos
-				);
-
+				Point ptPos = editDoc.layoutMgr.LogicToLayout(fi.ptCursor);
 				// From Here Mar. 28, 2003 MIK
 				// 改行の真ん中にカーソルが来ないように。
 				// 2008.08.20 ryoji 改行単位の行番号を渡すように修正

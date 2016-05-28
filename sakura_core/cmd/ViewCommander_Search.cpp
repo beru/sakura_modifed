@@ -269,8 +269,7 @@ re_do:;
 		}else {
 			if (bDisableSelect) {
 				// 2011.12.21 ロジックカーソル位置の修正/カーソル線・対括弧の表示
-				Point ptLogic;
-				layoutMgr.LayoutToLogic(caret.GetCaretLayoutPos(), &ptLogic);
+				Point ptLogic = layoutMgr.LayoutToLogic(caret.GetCaretLayoutPos());
 				caret.SetCaretLogicPos(ptLogic);
 				view.DrawBracketCursorLine(bRedraw);
 			}
@@ -605,14 +604,13 @@ void ViewCommander::Command_Replace(HWND hwndParent)
 		auto& layoutMgr = GetDocument().layoutMgr;
 		// 行削除 選択範囲を行全体に拡大。カーソル位置を行頭へ(正規表現でも実行)
 		if (nReplaceTarget == 3) {
-			Point lineHome;
-			layoutMgr.LayoutToLogic(GetSelect().GetFrom(), &lineHome);
+			Point lineHome = layoutMgr.LayoutToLogic(GetSelect().GetFrom());
 			lineHome.x = 0; // 行頭
 			Range selectFix;
-			layoutMgr.LogicToLayout(lineHome, selectFix.GetFromPointer());
+			selectFix.SetFrom(layoutMgr.LogicToLayout(lineHome));
 			lineHome.y++; // 次行の行頭
-			layoutMgr.LogicToLayout(lineHome, selectFix.GetToPointer());
-			caret.GetAdjustCursorPos(selectFix.GetToPointer());
+			selectFix.SetTo(layoutMgr.LogicToLayout(lineHome));
+			caret.GetAdjustCursorPos(&selectFix.GetTo());
 			view.GetSelectionInfo().SetSelectArea(selectFix);
 			view.GetSelectionInfo().DrawSelectArea();
 			caret.MoveCursor(selectFix.GetFrom(), false);
@@ -671,7 +669,7 @@ void ViewCommander::Command_Replace(HWND hwndParent)
 					}
 					// 無限置換しないように、１文字増やしたので１文字選択に変更
 					// 選択始点・終点への挿入の場合も０文字マッチ時は動作は同じになるので
-					layoutMgr.LogicToLayout(Point(nIdxTo, pLayout->GetLogicLineNo()), GetSelect().GetToPointer());	// 2007.01.19 ryoji 行位置も取得する
+					GetSelect().SetTo(layoutMgr.LogicToLayout(Point(nIdxTo, pLayout->GetLogicLineNo())));	// 2007.01.19 ryoji 行位置も取得する
 				}
 				// 行末から検索文字列末尾までの文字数
 				ASSERT_GE(nLen, nIdxTo);
@@ -681,7 +679,7 @@ void ViewCommander::Command_Replace(HWND hwndParent)
 				if (colDiff < pLayout->GetDocLineRef()->GetEol().GetLen()) {
 					// 改行にかかっていたら、行全体をINSTEXTする。
 					colDiff = 0;
-					layoutMgr.LogicToLayout(Point(nLen, pLayout->GetLogicLineNo()), GetSelect().GetToPointer());	// 2007.01.19 ryoji 追加
+					GetSelect().SetTo(layoutMgr.LogicToLayout(Point(nLen, pLayout->GetLogicLineNo())));	// 2007.01.19 ryoji 追加
 				}
 				// 置換後文字列への書き換え(行末から検索文字列末尾までの文字を除く)
 				Command_InsText(false, regexp.GetString(), regexp.GetStringLen() - colDiff, true);
@@ -821,13 +819,10 @@ void ViewCommander::Command_Replace_All()
 		// 範囲チェックで colFrom < colTo を仮定しているので，
 		// 矩形選択の場合は左上～右下指定になるよう桁を入れ換える．
 		if (bBeginBoxSelect && rangeA.GetTo().x < rangeA.GetFrom().x)
-			t_swap(rangeA.GetFromPointer()->x, rangeA.GetToPointer()->x);
+			t_swap(rangeA.GetFrom().x, rangeA.GetTo().x);
 		// To Here 2007.09.20 genta 矩形範囲の選択置換ができない
 
-		layoutMgr.LayoutToLogic(
-			rangeA.GetTo(),
-			&ptColLineP
-		);
+		ptColLineP = layoutMgr.LayoutToLogic(rangeA.GetTo());
 		// 選択範囲開始位置へ移動
 		caret.MoveCursor(rangeA.GetFrom(), bDisplayUpdate);
 	}else {
@@ -1067,10 +1062,7 @@ void ViewCommander::Command_Replace_All()
 				if (bFastMode) {
 					ptOldTmp = selectLogic.GetTo();
 				}else {
-					layoutMgr.LayoutToLogic(
-						GetSelect().GetTo(),
-						&ptOldTmp
-					);
+					ptOldTmp = layoutMgr.LayoutToLogic(GetSelect().GetTo());
 				}
 				ptOld.x = ptOldTmp.x; //$$ レイアウト型に無理やりロジック型を代入。気持ち悪い
 				ptOld.y = ptOldTmp.y;
@@ -1143,14 +1135,13 @@ void ViewCommander::Command_Replace_All()
 				}
 				caret.MoveCursorFastMode(selectLogic.GetFrom());
 			}else {
-				Point lineHome;
-				layoutMgr.LayoutToLogic(GetSelect().GetFrom(), &lineHome);
+				Point lineHome = layoutMgr.LayoutToLogic(GetSelect().GetFrom());
 				lineHome.x = 0; // 行頭
 				Range selectFix;
-				layoutMgr.LogicToLayout(lineHome, selectFix.GetFromPointer());
+				selectFix.SetFrom(layoutMgr.LogicToLayout(lineHome));
 				lineHome.y++; // 次行の行頭
-				layoutMgr.LogicToLayout(lineHome, selectFix.GetToPointer());
-				caret.GetAdjustCursorPos(selectFix.GetToPointer());
+				selectFix.SetTo(layoutMgr.LogicToLayout(lineHome));
+				caret.GetAdjustCursorPos(&selectFix.GetTo());
 				view.GetSelectionInfo().SetSelectArea(selectFix);
 				caret.MoveCursor(selectFix.GetFrom(), false);
 			}
@@ -1206,11 +1197,7 @@ void ViewCommander::Command_Replace_All()
 				// その位置を記憶する．
 				if (bSelectedArea) {
 					if (bBeginBoxSelect) {	// 矩形選択
-						Point ptWork;
-						layoutMgr.LayoutToLogic(
-							Point(rangeA.GetTo().x, ptOld.y),
-							&ptWork
-						);
+						Point ptWork = layoutMgr.LayoutToLogic(Point(rangeA.GetTo().x, ptOld.y));
 						ptColLineP.x = ptWork.x;
 						ASSERT_GE(nLen, pDocLine->GetEol().GetLen());
 						if ((int)(nLen - pDocLine->GetEol().GetLen()) > ptColLineP.x + colDif) {
@@ -1240,7 +1227,7 @@ void ViewCommander::Command_Replace_All()
 					if (bFastMode) {
 						selectLogic.SetTo(Point(nLen, nLogicLineNum));
 					}else {
-						layoutMgr.LogicToLayout(Point(nLen, nLogicLineNum), GetSelect().GetToPointer());
+						GetSelect().SetTo(layoutMgr.LogicToLayout(Point(nLen, nLogicLineNum)));
 					}
 				}else {
 				    // From Here Jun. 6, 2005 かろと
@@ -1260,7 +1247,8 @@ void ViewCommander::Command_Replace_All()
 						if (bFastMode) {
 							selectLogic.SetTo(Point(nIdxTo, nLogicLineNum));
 						}else {
-							layoutMgr.LogicToLayout(Point(nIdxTo, nLogicLineNum), GetSelect().GetToPointer());	// 2007.01.19 ryoji 行位置も取得する
+							// 2007.01.19 ryoji 行位置も取得する
+							GetSelect().SetTo(layoutMgr.LogicToLayout(Point(nIdxTo, nLogicLineNum)));
 						}
 				    }
 				    // 行末から検索文字列末尾までの文字数
@@ -1275,7 +1263,8 @@ void ViewCommander::Command_Replace_All()
 						if (bFastMode) {
 							selectLogic.SetTo(Point(nLen, nLogicLineNum));
 						}else {
-							layoutMgr.LogicToLayout(Point(nLen, nLogicLineNum), GetSelect().GetToPointer());	// 2007.01.19 ryoji 追加
+							// 2007.01.19 ryoji 追加
+							GetSelect().SetTo(layoutMgr.LogicToLayout(Point(nLen, nLogicLineNum)));
 						}
 						ptOld.x = pDocLine->GetLengthWithoutEOL() + 1;	// 2007.01.19 ryoji 追加 //$$ 単位混在
 				    }
@@ -1299,11 +1288,7 @@ void ViewCommander::Command_Replace_All()
 			}else {
 				caret.SetCaretLayoutPos(caret.GetCaretLayoutPos() + ptTmp);
 				if (!bBeginBoxSelect) {
-					Point p;
-					layoutMgr.LayoutToLogic(
-						caret.GetCaretLayoutPos(),
-						&p
-					);
+					Point p = layoutMgr.LayoutToLogic(caret.GetCaretLayoutPos());
 					caret.SetCaretLogicPos(p);
 				}
 			}
@@ -1379,7 +1364,7 @@ void ViewCommander::Command_Replace_All()
 				layoutMgr.CalculateTextWidth();
 			}
 		}
-		layoutMgr.LogicToLayout(ptLastLogic, &ptLast);
+		ptLast = layoutMgr.LogicToLayout(ptLastLogic);
 		caret.MoveCursor(ptLast, true);
 		caret.nCaretPosX_Prev = caret.GetCaretLayoutPos().x;	// 2009.07.25 ryoji
 	}
@@ -1416,7 +1401,7 @@ void ViewCommander::Command_Replace_All()
 		if (bBeginBoxSelect) {
 			// 矩形選択
 			view.GetSelectionInfo().SetBoxSelect(bBeginBoxSelect);
-			rangeA.GetToPointer()->y += linDif;
+			rangeA.GetTo().y += linDif;
 			if (rangeA.GetTo().y < 0) rangeA.SetToY(0);
 		}else {
 			// 普通の選択
@@ -1424,10 +1409,7 @@ void ViewCommander::Command_Replace_All()
 			if (ptColLineP.x < 0) ptColLineP.x = 0;
 			ptColLineP.y += linDif;
 			if (ptColLineP.y < 0) ptColLineP.y = 0;
-			layoutMgr.LogicToLayout(
-				ptColLineP,
-				rangeA.GetToPointer()
-			);
+			rangeA.SetTo(layoutMgr.LogicToLayout(ptColLineP));
 		}
 		if (rangeA.GetFrom().y<rangeA.GetTo().y || rangeA.GetFrom().x<rangeA.GetTo().x) {
 			view.GetSelectionInfo().SetSelectArea(rangeA);	// 2009.07.25 ryoji

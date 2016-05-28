@@ -77,7 +77,7 @@ void EditView::SetBracketPairPos(bool flag)
 			// 表示領域内の場合
 
 			// レイアウト位置から物理位置へ変換(強調表示位置を登録)
-			pEditDoc->layoutMgr.LayoutToLogic(ptColLine, &ptBracketPairPos_PHY);
+			ptBracketPairPos_PHY = pEditDoc->layoutMgr.LayoutToLogic(ptColLine);
 			ptBracketCaretPos_PHY.y = caret.GetCaretLogicPos().y;
 			if ((mode & 4) == 0) {
 				// カーソルの後方文字位置
@@ -148,9 +148,9 @@ void EditView::DrawBracketPair(bool bDraw)
 
 		Point ptColLine;
 		if (i == 0) {
-			pEditDoc->layoutMgr.LogicToLayout(ptBracketPairPos_PHY,  &ptColLine);
+			ptColLine = pEditDoc->layoutMgr.LogicToLayout(ptBracketPairPos_PHY);
 		}else {
-			pEditDoc->layoutMgr.LogicToLayout(ptBracketCaretPos_PHY, &ptColLine);
+			ptColLine = pEditDoc->layoutMgr.LogicToLayout(ptBracketCaretPos_PHY);
 		}
 
 		if (1
@@ -336,8 +336,7 @@ bool EditView::SearchBracket(
 	)
 {
 	size_t len;	//	行の長さ
-	Point ptPos;
-	pEditDoc->layoutMgr.LayoutToLogic(ptLayout, &ptPos);
+	Point ptPos = pEditDoc->layoutMgr.LayoutToLogic(ptLayout);
 	const wchar_t* cline = pEditDoc->docLineMgr.GetLine(ptPos.y)->GetDocLineStrWithEOL(&len);
 
 	//	Jun. 19, 2000 genta
@@ -411,10 +410,9 @@ bool EditView::SearchBracketForward(
 	size_t len;
 	int level = 0;
 
-	Point ptColLine;
 
 	// 初期位置の設定
-	pEditDoc->layoutMgr.LogicToLayout(ptPos, &ptColLine);	// 02/09/19 ai
+	Point ptColLine = pEditDoc->layoutMgr.LogicToLayout(ptPos);	// 02/09/19 ai
 	int nSearchNum = (GetTextArea().GetBottomLine()) - ptColLine.y;					// 02/09/19 ai
 	DocLine* ci = pEditDoc->docLineMgr.GetLine(ptPos.y);
 	const wchar_t* cline = ci->GetDocLineStrWithEOL(&len);
@@ -441,7 +439,7 @@ bool EditView::SearchBracketForward(
 
 			if (level == 0) {	// 見つかった！
 				ptPos.x = cPos - cline;
-				pEditDoc->layoutMgr.LogicToLayout(ptPos, pptLayoutNew);
+				*pptLayoutNew = pEditDoc->layoutMgr.LogicToLayout(ptPos);
 				return true;
 				// Happy Ending
 			}
@@ -497,10 +495,9 @@ bool EditView::SearchBracketBackward(
 {
 	size_t len;
 	int level = 1;
-	Point ptColLine;
 
 	// 初期位置の設定
-	pEditDoc->layoutMgr.LogicToLayout(ptPos, &ptColLine);	// 02/09/19 ai
+	Point ptColLine = pEditDoc->layoutMgr.LogicToLayout(ptPos);	// 02/09/19 ai
 	int nSearchNum = ptColLine.y - GetTextArea().GetViewTopLine();										// 02/09/19 ai
 	DocLine* ci = pEditDoc->docLineMgr.GetLine(ptPos.y);
 	const wchar_t* cline = ci->GetDocLineStrWithEOL(&len);
@@ -523,7 +520,7 @@ bool EditView::SearchBracketBackward(
 
 			if (level == 0) {	// 見つかった！
 				ptPos.x = pPos - cline;
-				pEditDoc->layoutMgr.LogicToLayout(ptPos, pptLayoutNew);
+				*pptLayoutNew = pEditDoc->layoutMgr.LogicToLayout(ptPos);
 				return true;
 				// Happy Ending
 			}

@@ -315,7 +315,7 @@ INT_PTR PropCustmenu::DispatchEvent(
 					for (i=0; i<gSpecialFuncsCount; ++i) {
 						List_AddString(hwndLIST_FUNC, LS(gSpecialFuncs[i].nNameId));
 					}
-				}else {
+				}else if (nIdx3 != CB_ERR) {
 					// Oct. 3, 2001 genta
 					// 専用ルーチンに置き換え
 					lookup.SetListItem(hwndLIST_FUNC, nIdx3);

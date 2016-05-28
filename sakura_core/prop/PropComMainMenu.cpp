@@ -394,14 +394,13 @@ INT_PTR PropMainMenu::DispatchEvent(
 			switch (wNotifyCode) {
 			case CBN_SELCHANGE:
 				nIdxFIdx = Combo_GetCurSel(hwndComboFunkKind);
-
 				if (nIdxFIdx == nSpecialFuncsNum) {
 					// 機能一覧に特殊機能をセット
 					List_ResetContent(hwndListFunk);
-					for (int i=0; i<_countof(gSpecialFuncs); ++i) {
+					for (size_t i=0; i<_countof(gSpecialFuncs); ++i) {
 						List_AddString(hwndListFunk, LSW(gSpecialFuncs[i].nNameId));
 					}
-				}else {
+				}else if (nIdxFIdx != CB_ERR) {
 					// 機能一覧に文字列をセット（リストボックス）
 					lookup.SetListItem(hwndListFunk, nIdxFIdx);
 				}

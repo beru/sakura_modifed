@@ -261,8 +261,7 @@ void DocOutline::MakeFuncList_VisualBasic(FuncInfoArr* pFuncInfoArr)
 						  物理位置(行頭からのバイト数、折り返し無し行位置)
 						  → レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 						*/
-						Point ptPosXY;
-						doc.layoutMgr.LogicToLayout(Point(0, (int)nFuncLine - 1), &ptPosXY);
+						Point ptPosXY = doc.layoutMgr.LogicToLayout(Point(0, (int)nFuncLine - 1));
 						pFuncInfoArr->AppendData((int)nFuncLine, ptPosXY.y + 1 , szFuncName, nFuncId);
 						nParseCnt = 0;
 						nFuncId	= 0;	// Jul 10, 2003  little YOSHI  論理和を使用するため、必ず初期化

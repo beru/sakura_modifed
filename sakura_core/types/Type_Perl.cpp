@@ -156,14 +156,9 @@ void DocOutline::MakeFuncList_Perl(FuncInfoArr* pFuncInfoArr)
 					  →
 					  レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 					*/
-					Point ptPosXY;
-					doc.layoutMgr.LogicToLayout(
-						Point(0, nLineCount),
-						&ptPosXY
-					);
+					Point ptPosXY = doc.layoutMgr.LogicToLayout(Point(0, nLineCount));
 					//	Mar. 9, 2001
 					pFuncInfoArr->AppendData(nLineCount + 1, ptPosXY.y + 1, szWord, 0);
-
 					break;
 				}
 			}

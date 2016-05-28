@@ -998,8 +998,8 @@ void EditView::OnMOUSEMOVE(WPARAM fwKeys, int xPos_, int yPos_)
 			ptNew.x = 0;
 			Point ptNewLogic;
 			view.GetCaret().GetAdjustCursorPos(&ptNew);
-			GetDocument().layoutMgr.LayoutToLogic(ptNew, &ptNewLogic);
-			GetDocument().layoutMgr.LogicToLayout(ptNewLogic, &ptNew, ptNew.y);
+			ptNewLogic = GetDocument().layoutMgr.LayoutToLogic(ptNew);
+			ptNew = GetDocument().layoutMgr.LogicToLayout(ptNewLogic, ptNew.y);
 			if (GetKeyState_Shift()) {
 				if (view.GetSelectionInfo().IsTextSelected()) {
 					if (view.GetSelectionInfo().IsBoxSelecting()) {
@@ -1158,16 +1158,14 @@ void EditView::OnMOUSEMOVE(WPARAM fwKeys, int xPos_, int yPos_)
 					// 選択開始行にカーソルがある時はチェック不要
 					if (ptNewCursor.GetY() > GetSelectionInfo().selectBgn.GetTo().y) {
 						// 1行前の物理行を取得する
-						pEditDoc->layoutMgr.LayoutToLogic(Point(0, ptNewCursor.GetY() - 1), &ptCaretPrevLog);
+						ptCaretPrevLog - pEditDoc->layoutMgr.LayoutToLogic(Point(0, ptNewCursor.GetY() - 1));
 					}
 
-					Point ptNewCursorLogic;
-					pEditDoc->layoutMgr.LayoutToLogic(ptNewCursor, &ptNewCursorLogic);
+					Point ptNewCursorLogic = pEditDoc->layoutMgr.LayoutToLogic(ptNewCursor);
 					// 前の行と同じ物理行
 					if (ptCaretPrevLog.y == ptNewCursorLogic.y) {
 						// 1行先の物理行からレイアウト行を求める
-						pEditDoc->layoutMgr.LogicToLayout(Point(0, caret.GetCaretLogicPos().y + 1), &ptCaret);
-
+						ptCaret = pEditDoc->layoutMgr.LogicToLayout(Point(0, caret.GetCaretLogicPos().y + 1));
 						// カーソルを次の物理行頭へ移動する
 						ptNewCursor = ptCaret;
 					}
@@ -1982,11 +1980,7 @@ STDMETHODIMP EditView::Drop(LPDATAOBJECT pDataObject, DWORD dwKeyState, POINTL p
 		GetCommander().Command_InsText(true, memBuf.GetStringPtr(), memBuf.GetStringLength(), false);
 
 		// 挿入前のキャレット位置から挿入後のキャレット位置までを選択範囲にする
-		Point ptSelectFrom;
-		pEditDoc->layoutMgr.LogicToLayout(
-			ptCaretLogicPos_Old,
-			&ptSelectFrom
-		);
+		Point ptSelectFrom = pEditDoc->layoutMgr.LogicToLayout(ptCaretLogicPos_Old);
 		GetSelectionInfo().SetSelectArea(Range(ptSelectFrom, caret.GetCaretLayoutPos()));	// 2009.07.25 ryoji
 	}else {
 		// 2004.07.12 Moca クリップボードを書き換えないように
@@ -2065,11 +2059,7 @@ STDMETHODIMP EditView::Drop(LPDATAOBJECT pDataObject, DWORD dwKeyState, POINTL p
 			caret.nCaretPosX_Prev = caret.GetCaretLayoutPos().x;
 
 			// 削除位置から移動先へのカーソル移動をUndo操作に追加する	// 2008.03.26 ryoji
-			Point ptBefore;
-			pEditDoc->layoutMgr.LayoutToLogic(
-				GetSelectionInfo().select.GetFrom(),
-				&ptBefore
-			);
+			Point ptBefore = pEditDoc->layoutMgr.LayoutToLogic(GetSelectionInfo().select.GetFrom());
 			commander.GetOpeBlk()->AppendOpe(
 				new MoveCaretOpe(
 					delLogic.GetFrom(),
@@ -2223,11 +2213,7 @@ void EditView::OnMyDropFiles(HDROP hDrop)
 		GetCommander().HandleCommand(F_INSTEXT_W, true, (LPARAM)memBuf.GetStringPtr(), memBuf.GetStringLength(), TRUE, 0);
 
 		// 挿入前のキャレット位置から挿入後のキャレット位置までを選択範囲にする
-		Point ptSelectFrom;
-		pEditDoc->layoutMgr.LogicToLayout(
-			ptCaretLogicPos_Old,
-			&ptSelectFrom
-		);
+		Point ptSelectFrom = pEditDoc->layoutMgr.LogicToLayout(ptCaretLogicPos_Old);
 		GetSelectionInfo().SetSelectArea(Range(ptSelectFrom, GetCaret().GetCaretLayoutPos()));	// 2009.07.25 ryoji
 		GetSelectionInfo().DrawSelectArea();
 		break;

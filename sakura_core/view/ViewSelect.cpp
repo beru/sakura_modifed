@@ -500,13 +500,13 @@ void ViewSelect::DrawSelectAreaLine(
 	int nSelectTo = lineArea.GetTo().x;
 	auto& textArea = view.GetTextArea();
 	if (nSelectFrom == INT_MAX || nSelectTo == INT_MAX) {
-		int nPosX = 0;
+		size_t nPosX = 0;
 		MemoryIterator it = MemoryIterator(pLayout, layoutMgr.GetTabSpace());
 		
 		while (!it.end()) {
 			it.scanNext();
 			if (it.getIndex() + it.getIndexDelta() > pLayout->GetLengthWithoutEOL()) {
-				nPosX ++;
+				nPosX++;
 				break;
 			}
 			// 2006.03.28 Moca ‰æ–ÊŠO‚Ü‚Å‹‚ß‚½‚ç‘Å‚¿Ø‚é
@@ -518,10 +518,10 @@ void ViewSelect::DrawSelectAreaLine(
 		nPosX += it.getColumn();
 
 		if (nSelectFrom == INT_MAX) {
-			nSelectFrom = nPosX;
+			nSelectFrom = (int)nPosX;
 		}
 		if (nSelectTo == INT_MAX) {
-			nSelectTo = nPosX;
+			nSelectTo = (int)nPosX;
 		}
 	}
 	
@@ -593,10 +593,10 @@ void ViewSelect::GetSelectAreaLineFromRange(
 					nSelectFrom = range.GetFrom().x;
 					nSelectTo   = nX_Layout;
 				}else if (nLineNum == range.GetTo().y) {
-					nSelectFrom = pLayout ? pLayout->GetIndent() : 0;
+					nSelectFrom = pLayout ? (int)pLayout->GetIndent() : 0;
 					nSelectTo   = range.GetTo().x;
 				}else {
-					nSelectFrom = pLayout ? pLayout->GetIndent() : 0;
+					nSelectFrom = pLayout ? (int)pLayout->GetIndent() : 0;
 					nSelectTo   = nX_Layout;
 				}
 			}
@@ -648,7 +648,7 @@ void ViewSelect::PrintSelectionInfoMsg() const
 
 	int select_line;
 	if (select.GetTo().y >= nLineCount) {	// ÅIs‚ªÀİ‚µ‚È‚¢
-		select_line = nLineCount - select.GetFrom().y + 1;
+		select_line = (int)nLineCount - select.GetFrom().y + 1;
 	}else {
 		select_line = select.GetTo().y - select.GetFrom().y + 1;
 	}

@@ -43,20 +43,10 @@ public:
 	}
 
 	// æ“¾
-	Point GetFrom() const {
-		return ptFrom;
-	}
-	Point GetTo() const {
-		return ptTo;
-	}
-
-	// “Áê
-	Point* GetFromPointer() {
-		return &ptFrom;
-	}
-	Point* GetToPointer() {
-		return &ptTo;
-	}
+	Point& GetFrom() { return ptFrom; }
+	Point& GetTo() { return ptTo; }
+	const Point& GetFrom() const { return ptFrom; }
+	const Point& GetTo() const { return ptTo; }
 
 	// İ’è
 	void Clear(int n) {

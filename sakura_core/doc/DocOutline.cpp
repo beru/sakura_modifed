@@ -380,11 +380,7 @@ void DocOutline::MakeFuncList_RuleFile(
 		  →
 		  レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 		*/
-		Point ptPos;
-		doc.layoutMgr.LogicToLayout(
-			Point(0, nLineCount),
-			&ptPos
-		);
+		Point ptPos = doc.layoutMgr.LogicToLayout(Point(0, nLineCount));
 
 		// nDepthを計算
 		bool bAppend = true;
@@ -503,9 +499,7 @@ void DocOutline::MakeFuncList_BookMark(FuncInfoArr* pFuncInfoArr)
 		wchar_t* pszText = &szText[0];
 		wmemcpy(pszText, &pLine[leftspace], nLen);
 		pszText[nLen] = L'\0';
-		Point ptXY;
-		//int nX,nY
-		doc.layoutMgr.LogicToLayout(Point(0, nLineCount), &ptXY);
+		Point ptXY = doc.layoutMgr.LogicToLayout(Point(0, nLineCount));
 		pFuncInfoArr->AppendData(nLineCount + 1, ptXY.y+1 , pszText, 0);
 	}
 	return;

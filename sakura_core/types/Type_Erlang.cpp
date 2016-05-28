@@ -413,11 +413,7 @@ void DocOutline::MakeFuncList_Erlang(FuncInfoArr* pFuncInfoArr)
 			  →
 			  レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 			*/
-			Point ptPosXY;
-			doc.layoutMgr.LogicToLayout(
-				Point(0, erl_state_machine.GetFuncLine()),
-				&ptPosXY
-			);
+			Point ptPosXY = doc.layoutMgr.LogicToLayout(Point(0, erl_state_machine.GetFuncLine()));
 			pFuncInfoArr->AppendData(
 				erl_state_machine.GetFuncLine() + 1,
 				ptPosXY.y + 1,

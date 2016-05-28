@@ -170,13 +170,12 @@ public:
 	*/
 	void SetPrintSetting(PrintSetting* pPrintSetting) {
 		sPrintSetting = *pPrintSetting;
-		pPrintSetting = &sPrintSetting;
-		pPrintSettingOrg = pPrintSetting;
+		this->pPrintSetting = &sPrintSetting;
+		this->pPrintSettingOrg = pPrintSetting;
 	}
 	BOOL GetDefaultPrinterInfo() { return print.GetDefaultPrinter(&pPrintSetting->mdmDevMode); }
 	int  GetCurPageNum() { return nCurPageNum; }	// 現在のページ
 	int  GetAllPageNum() { return nAllPageNum; }	// 現在のページ
-
 	
 	/*
 	||	ヘッダ・フッタ

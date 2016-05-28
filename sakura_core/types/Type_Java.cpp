@@ -163,11 +163,7 @@ void DocOutline::MakeFuncList_Java(FuncInfoArr* pFuncInfoArr)
 						  レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 						*/
 						Point ptPosXY_Logic(0, nLineCount);
-						Point ptPosXY_Layout;
-						doc.layoutMgr.LogicToLayout(
-							ptPosXY_Logic,
-							&ptPosXY_Layout
-						);
+						Point ptPosXY_Layout = doc.layoutMgr.LogicToLayout(ptPosXY_Logic);
 						wchar_t szWork[256];
 						if (0 < auto_snprintf_s(szWork, _countof(szWork), L"%ls::%ls", szClass, LSW(STR_OUTLINE_JAVA_DEFPOS))) {
 							pFuncInfoArr->AppendData(ptPosXY_Logic.y + 1, ptPosXY_Layout.y + 1, szWork, nFuncId); //2007.10.09 kobake レイアウト・ロジックの混在バグ修正
@@ -257,11 +253,7 @@ void DocOutline::MakeFuncList_Java(FuncInfoArr* pFuncInfoArr)
 							  →
 							  レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 							*/
-							Point ptPosXY;
-							doc.layoutMgr.LogicToLayout(
-								Point(0, nFuncLine - 1),
-								&ptPosXY
-							);
+							Point ptPosXY = doc.layoutMgr.LogicToLayout(Point(0, nFuncLine - 1));
 							wchar_t szWork[256];
 							if (0 < auto_snprintf_s(szWork, _countof(szWork), L"%ls::%ls", szClass, szFuncName)) {
 								pFuncInfoArr->AppendData(nFuncLine, ptPosXY.y + 1, szWork, nFuncId);
@@ -394,11 +386,7 @@ void DocOutline::MakeFuncList_Java(FuncInfoArr* pFuncInfoArr)
 							  →
 							  レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 							*/
-							Point ptPosXY;
-							doc.layoutMgr.LogicToLayout(
-								Point(0, nFuncLine - 1),
-								&ptPosXY
-							);
+							Point ptPosXY = doc.layoutMgr.LogicToLayout(Point(0, nFuncLine - 1));
 							wchar_t szWork[256];
 							if (0 < auto_snprintf_s(szWork, _countof(szWork), L"%ls::%ls", szClass, szFuncName)) {
 								pFuncInfoArr->AppendData(nFuncLine, ptPosXY.y + 1, szWork, nFuncId);

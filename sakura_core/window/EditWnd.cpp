@@ -1875,11 +1875,7 @@ LRESULT EditWnd::DispatchEvent(
 			 レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 			*/
 			Point* ppoCaret = &(pShareData->workBuffer.logicPoint);
-			Point ptCaretPos;
-			GetDocument().layoutMgr.LogicToLayout(
-				*ppoCaret,
-				&ptCaretPos
-			);
+			Point ptCaretPos = GetDocument().layoutMgr.LogicToLayout(*ppoCaret);
 			// 改行の真ん中にカーソルが来ないように	// 2007.08.22 ryoji
 			// Note. もとが改行単位の桁位置なのでレイアウト折り返しの桁位置を超えることはない。
 			//       選択指定(bSelect==TRUE)の場合にはどうするのが妥当かよくわからないが、
@@ -1909,10 +1905,8 @@ LRESULT EditWnd::DispatchEvent(
 		物理位置(行頭からのバイト数、折り返し無し行位置)
 		*/
 		{
-			Point* ppoCaret = &(pShareData->workBuffer.logicPoint);
-			GetDocument().layoutMgr.LayoutToLogic(
-				GetActiveView().GetCaret().GetCaretLayoutPos(),
-				ppoCaret
+			pShareData->workBuffer.logicPoint = GetDocument().layoutMgr.LayoutToLogic(
+				GetActiveView().GetCaret().GetCaretLayoutPos()
 			);
 		}
 		return 0L;
@@ -4594,32 +4588,27 @@ PointEx* EditWnd::SavePhysPosOfAllView()
 		pptPosArray[i * numOfPositions + 0].ext = 0;
 		auto& selInfo = view.GetSelectionInfo();
 		if (selInfo.selectBgn.GetFrom().y >= 0) {
-			layoutMgr.LayoutToLogicEx(
-				selInfo.selectBgn.GetFrom(),
-				&pptPosArray[i * numOfPositions + 1]
+			pptPosArray[i * numOfPositions + 1] = layoutMgr.LayoutToLogicEx(
+				selInfo.selectBgn.GetFrom()
 			);
 		}
 		if (selInfo.selectBgn.GetTo().y >= 0) {
-			layoutMgr.LayoutToLogicEx(
-				selInfo.selectBgn.GetTo(),
-				&pptPosArray[i * numOfPositions + 2]
+			pptPosArray[i * numOfPositions + 2] = layoutMgr.LayoutToLogicEx(
+				selInfo.selectBgn.GetTo()
 			);
 		}
 		if (selInfo.select.GetFrom().y >= 0) {
-			layoutMgr.LayoutToLogicEx(
-				selInfo.select.GetFrom(),
-				&pptPosArray[i * numOfPositions + 3]
+			pptPosArray[i * numOfPositions + 3] = layoutMgr.LayoutToLogicEx(
+				selInfo.select.GetFrom()
 			);
 		}
 		if (selInfo.select.GetTo().y >= 0) {
-			layoutMgr.LayoutToLogicEx(
-				selInfo.select.GetTo(),
-				&pptPosArray[i * numOfPositions + 4]
+			pptPosArray[i * numOfPositions + 4] = layoutMgr.LayoutToLogicEx(
+				selInfo.select.GetTo()
 			);
 		}
-		layoutMgr.LayoutToLogicEx(
-			view.GetCaret().GetCaretLayoutPos(),
-			&pptPosArray[i * numOfPositions + 5]
+		pptPosArray[i * numOfPositions + 5] = layoutMgr.LayoutToLogicEx(
+			view.GetCaret().GetCaretLayoutPos()
 		);
 	}
 	return pptPosArray;
@@ -4641,43 +4630,25 @@ void EditWnd::RestorePhysPosOfAllView(PointEx* pptPosArray)
 
 	auto& layoutMgr = GetDocument().layoutMgr;
 	for (int i=0; i<numOfViews; ++i) {
-		Point tmp;
-		layoutMgr.LogicToLayoutEx(
-			pptPosArray[i * numOfPositions + 0],
-			&tmp
+		Point tmp = layoutMgr.LogicToLayoutEx(
+			pptPosArray[i * numOfPositions + 0]
 		);
 		auto& view = GetView(i);
 		view.pTextArea->SetViewTopLine(tmp.y);
 		auto& selInfo = view.GetSelectionInfo();
 		if (selInfo.selectBgn.GetFrom().y >= 0) {
-			layoutMgr.LogicToLayoutEx(
-				pptPosArray[i * numOfPositions + 1],
-				selInfo.selectBgn.GetFromPointer()
-			);
+			selInfo.selectBgn.SetFrom(layoutMgr.LogicToLayoutEx(pptPosArray[i * numOfPositions + 1]));
 		}
 		if (selInfo.selectBgn.GetTo().y >= 0) {
-			layoutMgr.LogicToLayoutEx(
-				pptPosArray[i * numOfPositions + 2],
-				selInfo.selectBgn.GetToPointer()
-			);
+			selInfo.selectBgn.SetTo(layoutMgr.LogicToLayoutEx(pptPosArray[i * numOfPositions + 2]));
 		}
 		if (selInfo.select.GetFrom().y >= 0) {
-			layoutMgr.LogicToLayoutEx(
-				pptPosArray[i * numOfPositions + 3],
-				selInfo.select.GetFromPointer()
-			);
+			selInfo.select.SetFrom(layoutMgr.LogicToLayoutEx(pptPosArray[i * numOfPositions + 3]));
 		}
 		if (selInfo.select.GetTo().y >= 0) {
-			layoutMgr.LogicToLayoutEx(
-				pptPosArray[i * numOfPositions + 4],
-				selInfo.select.GetToPointer()
-			);
+			selInfo.select.SetTo(layoutMgr.LogicToLayoutEx(pptPosArray[i * numOfPositions + 4]));
 		}
-		Point ptPosXY;
-		layoutMgr.LogicToLayoutEx(
-			pptPosArray[i * numOfPositions + 5],
-			&ptPosXY
-		);
+		Point ptPosXY = layoutMgr.LogicToLayoutEx(pptPosArray[i * numOfPositions + 5]);
 		auto& caret = view.GetCaret();
 		caret.MoveCursor(ptPosXY, false); // 2013.06.05 bScrollをtrue=>falase
 		caret.nCaretPosX_Prev = caret.GetCaretLayoutPos().x;

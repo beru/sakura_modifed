@@ -565,10 +565,8 @@ void ViewCommander::Command_InsText(
 		if (bLinePaste) {	// 2007.10.04 ryoji
 			// 元の位置へカーソルを移動
 			Point ptCaretBefore = caret.GetCaretLogicPos();	// 操作前のキャレット位置
-			Point ptLayout;
-			GetDocument().layoutMgr.LogicToLayout(
-				ptCaretBefore + Point(nPosX_PHY_Delta, 0),
-				&ptLayout
+			Point ptLayout = GetDocument().layoutMgr.LogicToLayout(
+				ptCaretBefore + Point(nPosX_PHY_Delta, 0)
 			);
 			caret.MoveCursor(ptLayout, bRedraw);					// カーソル移動
 			Point ptCaretAfter = caret.GetCaretLogicPos();	// 操作後のキャレット位置
@@ -1156,10 +1154,8 @@ void ViewCommander::Command_CopyTag(void)
 	if (GetDocument().docFile.GetFilePathClass().IsValidPath()) {
 		wchar_t	buf[MAX_PATH + 20];
 
-		Point ptColLine;
-
 		// 論理行番号を得る
-		GetDocument().layoutMgr.LayoutToLogic(GetCaret().GetCaretLayoutPos(), &ptColLine);
+		Point ptColLine = GetDocument().layoutMgr.LayoutToLogic(GetCaret().GetCaretLayoutPos());
 
 		// クリップボードにデータを設定
 		auto_sprintf( buf, L"%ts (%d,%d): ", GetDocument().docFile.GetFilePath(), ptColLine.y+1, ptColLine.x+1 );

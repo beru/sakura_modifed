@@ -365,8 +365,7 @@ void EditView::ISearchExec(bool bNext)
 			nLineP =  docLineMgr.GetLineCount() - 1;
 			DocLine* pDocLine = docLineMgr.GetLine(nLineP);
 			nIdxP = pDocLine->GetLengthWithEOL() -1;
-			Point ptTmp;
-			pEditDoc->layoutMgr.LogicToLayout(Point(nIdxP, nLineP), &ptTmp);
+			Point ptTmp = pEditDoc->layoutMgr.LogicToLayout(Point(nIdxP, nLineP));
 			nIdx1 = ptTmp.x;
 			nLine = ptTmp.y;
 		}

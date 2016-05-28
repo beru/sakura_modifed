@@ -80,11 +80,7 @@ void ViewCommander::Command_WCHAR(
 					  →
 					  物理位置(行頭からのバイト数、折り返し無し行位置)
 					*/
-					Point ptXY;
-					layoutMgr.LayoutToLogic(
-						caret.GetCaretLayoutPos(),
-						&ptXY
-					);
+					Point ptXY = layoutMgr.LayoutToLogic(caret.GetCaretLayoutPos());
 
 					// 指定された桁に対応する行のデータ内の位置を調べる
 					ASSERT_GE(ptXY.x, 0);
@@ -356,15 +352,8 @@ void ViewCommander::Command_Undo(void)
 			if (bFastMode) {
 				caret.MoveCursorFastMode(pOpe->ptCaretPos_PHY_After);
 			}else {
-				layoutMgr.LogicToLayout(
-					pOpe->ptCaretPos_PHY_After,
-					&ptCaretPos_After
-				);
-				layoutMgr.LogicToLayout(
-					pOpe->ptCaretPos_PHY_Before,
-					&ptCaretPos_Before
-				);
-
+				ptCaretPos_After = layoutMgr.LogicToLayout(pOpe->ptCaretPos_PHY_After);
+				ptCaretPos_Before = layoutMgr.LogicToLayout(pOpe->ptCaretPos_PHY_Before);
 				// カーソルを移動
 				caret.MoveCursor(ptCaretPos_After, false);
 			}
@@ -473,10 +462,7 @@ void ViewCommander::Command_Undo(void)
 					if (GetDocument().nTextWrapMethodCur == TextWrappingMethod::NoWrapping) {
 						layoutMgr.CalculateTextWidth();
 					}
-					layoutMgr.LogicToLayout(
-						pOpe->ptCaretPos_PHY_Before,
-						&ptCaretPos_Before
-					);
+					ptCaretPos_Before = layoutMgr.LogicToLayout(pOpe->ptCaretPos_PHY_Before);
 					caret.MoveCursor(ptCaretPos_Before, true);
 					// 通常モードではReplaceData_CEditViewの中で設定される
 					caret.nCaretPosX_Prev = caret.GetCaretLayoutPos().GetX();
@@ -484,10 +470,7 @@ void ViewCommander::Command_Undo(void)
 					caret.MoveCursorFastMode(pOpe->ptCaretPos_PHY_Before);
 				}
 			}else {
-				layoutMgr.LogicToLayout(
-					pOpe->ptCaretPos_PHY_Before,
-					&ptCaretPos_Before
-				);
+				ptCaretPos_Before = layoutMgr.LogicToLayout(pOpe->ptCaretPos_PHY_Before);
 				// カーソルを移動
 				caret.MoveCursor(ptCaretPos_Before, (i == 0));
 			}
@@ -607,19 +590,13 @@ void ViewCommander::Command_Redo(void)
 			pOpe = pOpeBlk->GetOpe(i);
 			if (bFastMode) {
 				if (i == 0) {
-					layoutMgr.LogicToLayout(
-						pOpe->ptCaretPos_PHY_Before,
-						&ptCaretPos_Before
-					);
+					ptCaretPos_Before = layoutMgr.LogicToLayout(pOpe->ptCaretPos_PHY_Before);
 					caret.MoveCursor(ptCaretPos_Before, true);
 				}else {
 					caret.MoveCursorFastMode(pOpe->ptCaretPos_PHY_Before);
 				}
 			}else {
-				layoutMgr.LogicToLayout(
-					pOpe->ptCaretPos_PHY_Before,
-					&ptCaretPos_Before
-				);
+				ptCaretPos_Before = layoutMgr.LogicToLayout(pOpe->ptCaretPos_PHY_Before);
 				caret.MoveCursor(ptCaretPos_Before, (i == 0));
 			}
 			switch (pOpe->GetCode()) {
@@ -656,10 +633,7 @@ void ViewCommander::Command_Redo(void)
 
 					if (bFastMode) {
 					}else {
-						layoutMgr.LogicToLayout(
-							pDeleteOpe->ptCaretPos_PHY_To,
-							&ptCaretPos_To
-						);
+						ptCaretPos_To = layoutMgr.LogicToLayout(pDeleteOpe->ptCaretPos_PHY_To);
 					}
 					Range cSelectLogic;
 					cSelectLogic.SetFrom(pOpe->ptCaretPos_PHY_Before);
@@ -685,10 +659,7 @@ void ViewCommander::Command_Redo(void)
 
 					if (bFastMode) {
 					}else {
-						layoutMgr.LogicToLayout(
-							pReplaceOpe->ptCaretPos_PHY_To,
-							&ptCaretPos_To
-						);
+						ptCaretPos_To = layoutMgr.LogicToLayout(pReplaceOpe->ptCaretPos_PHY_To);
 					}
 					Range cSelectLogic;
 					cSelectLogic.SetFrom(pOpe->ptCaretPos_PHY_Before);
@@ -719,8 +690,7 @@ void ViewCommander::Command_Redo(void)
 					if (GetDocument().nTextWrapMethodCur == TextWrappingMethod::NoWrapping) {
 						layoutMgr.CalculateTextWidth();
 					}
-					layoutMgr.LogicToLayout(
-						pOpe->ptCaretPos_PHY_After, &ptCaretPos_After);
+					ptCaretPos_After = layoutMgr.LogicToLayout(pOpe->ptCaretPos_PHY_After);
 					caret.MoveCursor(ptCaretPos_After, true);
 					// 通常モードではReplaceData_CEditViewの中で設定される
 					caret.nCaretPosX_Prev = caret.GetCaretLayoutPos().GetX();
@@ -728,8 +698,7 @@ void ViewCommander::Command_Redo(void)
 					caret.MoveCursorFastMode(pOpe->ptCaretPos_PHY_After);
 				}
 			}else {
-				layoutMgr.LogicToLayout(
-					pOpe->ptCaretPos_PHY_After, &ptCaretPos_After);
+				ptCaretPos_After = layoutMgr.LogicToLayout(pOpe->ptCaretPos_PHY_After);
 				caret.MoveCursor(ptCaretPos_After, (i == nOpeBlkNum - 1));
 			}
 			if (hwndProgress && (i % 100) == 0) {
@@ -819,9 +788,8 @@ void ViewCommander::Command_Delete(void)
 						}
 						if (nLineLen != 0) {	// （スペース挿入後も）折り返し行末なら次文字を削除するために次行の先頭に移動する必要がある
 							if (pLayout->GetNextLayout()) {	// 最終行末ではない
-								Point ptLay;
 								Point ptLog(pLayout->GetLogicOffset() + (int)nIndex, pLayout->GetLogicLineNo());
-								layoutMgr.LogicToLayout(ptLog, &ptLay);
+								Point ptLay = layoutMgr.LogicToLayout(ptLog);
 								caret.MoveCursor(ptLay, true);
 								caret.nCaretPosX_Prev = caret.GetCaretLayoutPos().x;
 							}

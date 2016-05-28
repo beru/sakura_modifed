@@ -147,8 +147,8 @@ LRESULT EditView::SetReconvertStruct(
 	auto& caret = GetCaret();
 	if (GetSelectionInfo().IsTextSelected()) {
 		// テキストが選択されているとき
-		pEditDoc->layoutMgr.LayoutToLogic(GetSelectionInfo().select.GetFrom(), &ptSelect);
-		pEditDoc->layoutMgr.LayoutToLogic(GetSelectionInfo().select.GetTo(), &ptSelectTo);
+		ptSelect = pEditDoc->layoutMgr.LayoutToLogic(GetSelectionInfo().select.GetFrom());
+		ptSelectTo = pEditDoc->layoutMgr.LayoutToLogic(GetSelectionInfo().select.GetTo());
 		
 		// 選択範囲が複数行の時、１ロジック行以内に制限
 		if (ptSelectTo.y != ptSelect.y) {
@@ -194,7 +194,7 @@ LRESULT EditView::SetReconvertStruct(
 		}
 	}else {
 		// テキストが選択されていないとき
-		pEditDoc->layoutMgr.LayoutToLogic(caret.GetCaretLayoutPos(), &ptSelect);
+		ptSelect = pEditDoc->layoutMgr.LayoutToLogic(caret.GetCaretLayoutPos());
 		ptSelectTo = ptSelect;
 	}
 	nSelectedLen = ptSelectTo.x - ptSelect.x;
@@ -489,16 +489,14 @@ LRESULT EditView::SetSelectionFromReonvert(
 	}
 	
 	// 選択開始の位置を取得
-	pEditDoc->layoutMgr.LogicToLayout(
-		Point(nLastReconvIndex + dwOffset, nLastReconvLine),
-		GetSelectionInfo().select.GetFromPointer()
-	);
+	GetSelectionInfo().select.SetFrom(pEditDoc->layoutMgr.LogicToLayout(
+		Point(nLastReconvIndex + dwOffset, nLastReconvLine)
+	));
 
 	// 選択終了の位置を取得
-	pEditDoc->layoutMgr.LogicToLayout(
-		Point(nLastReconvIndex + dwOffset + dwLen, nLastReconvLine),
-		GetSelectionInfo().select.GetToPointer()
-	);
+	GetSelectionInfo().select.SetTo(pEditDoc->layoutMgr.LogicToLayout(
+		Point(nLastReconvIndex + dwOffset + dwLen, nLastReconvLine)
+	));
 
 	// 単語の先頭にカーソルを移動
 	GetCaret().MoveCursor(GetSelectionInfo().select.GetFrom(), true);

@@ -152,12 +152,7 @@ void ViewCommander::Command_Compare(void)
 	  →
 	  物理位置(行頭からのバイト数、折り返し無し行位置)
 	*/
-	Point poSrc;
-	GetDocument().layoutMgr.LayoutToLogic(
-		GetCaret().GetCaretLayoutPos(),
-		&poSrc
-	);
-
+	Point poSrc = GetDocument().layoutMgr.LayoutToLogic(GetCaret().GetCaretLayoutPos());
 	// カーソル位置取得 -> poDes
 	Point poDes;
 	{
@@ -427,8 +422,7 @@ re_do:;
 	if (DiffLineMgr(GetDocument().docLineMgr).SearchDiffMark(ptXY.y, SearchDirection::Forward, &tmp_y)) {
 		ptXY.y = tmp_y;
 		bFound = true;
-		Point ptXY_Layout;
-		GetDocument().layoutMgr.LogicToLayout(ptXY, &ptXY_Layout);
+		Point ptXY_Layout = GetDocument().layoutMgr.LogicToLayout(ptXY);
 		if (selInfo.bSelectingLock) {
 			if (!selInfo.IsTextSelected()) {
 				selInfo.BeginSelectArea();
@@ -482,8 +476,7 @@ re_do:;
 	if (DiffLineMgr(GetDocument().docLineMgr).SearchDiffMark(ptXY.y, SearchDirection::Backward, &tmp_y)) {
 		ptXY.y = tmp_y;
 		bFound = true;
-		Point ptXY_Layout;
-		GetDocument().layoutMgr.LogicToLayout(ptXY, &ptXY_Layout);
+		Point ptXY_Layout = GetDocument().layoutMgr.LogicToLayout(ptXY);
 		if (selInfo.bSelectingLock) {
 			if (!selInfo.IsTextSelected()) {
 				selInfo.BeginSelectArea();

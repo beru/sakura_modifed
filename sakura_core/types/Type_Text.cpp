@@ -203,12 +203,7 @@ void DocOutline::MakeTopicList_txt(FuncInfoArr* pFuncInfoArr)
 		  →
 		  レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 		*/
-		Point ptPos;
-		doc.layoutMgr.LogicToLayout(
-			Point(0, nLineCount),
-			&ptPos
-		);
-
+		Point ptPos = doc.layoutMgr.LogicToLayout(Point(0, nLineCount));
 		// nDepthを計算
 		int k;
 		bool bAppend = true;
@@ -277,12 +272,7 @@ void DocOutline::MakeTopicList_wztxt(FuncInfoArr* pFuncInfoArr)
 			for (pPos=pLine+1; *pPos==L'.'; ++pPos)
 				;
 
-			Point ptPos;
-			doc.layoutMgr.LogicToLayout(
-				Point(0, nLineCount),
-				&ptPos
-			);
-			
+			Point ptPos = doc.layoutMgr.LogicToLayout(Point(0, nLineCount));
 			ptrdiff_t level = pPos - pLine;
 
 			// 2003.06.27 Moca 階層が2段位上深くなるときは、無題の要素を追加

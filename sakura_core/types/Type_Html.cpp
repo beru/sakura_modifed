@@ -235,11 +235,7 @@ void DocOutline::MakeTopicList_html(FuncInfoArr* pFuncInfoArr)
 						bParaTag = false;
 					}
 
-					Point ptPos;
-					doc.layoutMgr.LogicToLayout(
-						Point(i, nLineCount),
-						&ptPos
-					);
+					Point ptPos = doc.layoutMgr.LogicToLayout(Point(i, nLineCount));
 
 					if (nLabelType != LT_EMPTY) {
 						// 終了タグなしを除く全てのタグらしきものを判定

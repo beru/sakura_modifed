@@ -89,10 +89,7 @@ bool EditView::TagJumpSub(
 	// カーソル位置変換
 	EditDoc& doc = GetDocument();
 	Caret& caret = GetCaret();
-	doc.layoutMgr.LayoutToLogic(
-		caret.GetCaretLayoutPos(),
-		&tagJump.point
-	);
+	tagJump.point = doc.layoutMgr.LayoutToLogic(caret.GetCaretLayoutPos());
 
 	// タグジャンプ情報の保存
 	TagJumpManager().PushTagJump(&tagJump);
@@ -256,10 +253,7 @@ open_c:;
 	  →
 	  物理位置(行頭からのバイト数、折り返し無し行位置)
 	*/
-	GetDocument().layoutMgr.LayoutToLogic(
-		GetCaret().GetCaretLayoutPos(),
-		&tagJump.point
-	);
+	tagJump.point = GetDocument().layoutMgr.LayoutToLogic(GetCaret().GetCaretLayoutPos());
 	tagJump.hwndReferer = EditWnd::getInstance().GetHwnd();
 	// タグジャンプ情報の保存
 	TagJumpManager().PushTagJump(&tagJump);

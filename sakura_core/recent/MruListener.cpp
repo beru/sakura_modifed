@@ -152,8 +152,7 @@ void MruListener::OnAfterLoad(const LoadInfo& loadInfo)
 	// キャレット位置の復元
 	if (bIsExistInMRU && GetDllShareData().common.file.GetRestoreCurPosition()) {
 		// キャレット位置取得
-		Point ptCaretPos;
-		pDoc->layoutMgr.LogicToLayout(eiOld.ptCursor, &ptCaretPos);
+		Point ptCaretPos = pDoc->layoutMgr.LogicToLayout(eiOld.ptCursor);
 
 		// ビュー取得
 		EditView& view = pDoc->pEditWnd->GetActiveView();
