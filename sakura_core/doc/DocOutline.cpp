@@ -283,7 +283,7 @@ void DocOutline::MakeFuncList_RuleFile(
 		wcscpy(pszStack[0], g);
 		nLvStack[0] = test[0].nLv;
 		const wchar_t* p = wcschr(g, L',');
-		int len;
+		size_t len;
 		if (p) {
 			len = p - g;
 		}else {
@@ -445,7 +445,6 @@ void DocOutline::MakeFuncList_BookMark(FuncInfoArr* pFuncInfoArr)
 	bool bMarkUpBlankLineEnable = GetDllShareData().common.outline.bMarkUpBlankLineEnable;	// 空行をマーク対象にするフラグ 20020119 aroka
 	size_t nNewLineLen	= doc.docEditor.newLineCode.GetLen();
 	size_t nLineLast = doc.docLineMgr.GetLineCount();
-	int nCharChars;
 
 	for (size_t nLineCount=0; nLineCount<nLineLast; ++nLineCount) {
 		if (!BookmarkGetter(doc.docLineMgr.GetLine(nLineCount)).IsBookmarked()) {
@@ -483,7 +482,7 @@ void DocOutline::MakeFuncList_BookMark(FuncInfoArr* pFuncInfoArr)
 		k = pos_wo_space = leftspace;
 		bool bExtEol = GetDllShareData().common.edit.bEnableExtEol;
 		while (k < nLineLen) {
-			nCharChars = NativeW::GetSizeOfChar(pLine, nLineLen, k);
+			size_t nCharChars = NativeW::GetSizeOfChar(pLine, nLineLen, k);
 			if (nCharChars == 1) {
 				if (!(
 						WCODE::IsLineDelimiter(pLine[k], bExtEol) ||

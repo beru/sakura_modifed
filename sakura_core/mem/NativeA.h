@@ -34,7 +34,7 @@ public:
 
 	// ネイティブ設定
 	void SetString(const char* pszData);					// バッファの内容を置き換える
-	void SetString(const char* pData, int nDataLen);		// バッファの内容を置き換える。nDataLenは文字単位。
+	void SetString(const char* pData, size_t nDataLen);		// バッファの内容を置き換える。nDataLenは文字単位。
 	void SetNativeData(const NativeA& pcNative);			// バッファの内容を置き換える
 	void AppendString(const char* pszData);					// バッファの最後にデータを追加する
 	void AppendString(const char* pszData, size_t nLength);	// バッファの最後にデータを追加する。nLengthは文字単位。

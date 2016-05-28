@@ -1377,12 +1377,8 @@ void EditView::ConvSelectedArea(EFunctionCode nFuncCode)
 
 	Point sPos;
 
-	int	nIdxFrom;
-	int	nIdxTo;
 	int	nLineNum;
 	int	nDelLen;
-	int	nDelPosNext;
-	int	nDelLenNext;
 	size_t nLineLen;
 	size_t nLineLen2;
 	WaitCursor waitCursor(GetHwnd());
@@ -1407,12 +1403,12 @@ void EditView::ConvSelectedArea(EFunctionCode nFuncCode)
 		// 現在の選択範囲を非選択状態に戻す
 		GetSelectionInfo().DisableSelectArea(false);	// 2009.07.18 ryoji true -> false 各行にアンダーラインが残る問題の修正
 
-		nIdxFrom = 0;
-		nIdxTo = 0;
+		size_t nIdxFrom = 0;
+		size_t nIdxTo = 0;
 		for (nLineNum=rcSelLayout.bottom; nLineNum>=rcSelLayout.top-1; --nLineNum) {
 			const Layout* pLayout;
-			nDelPosNext = nIdxFrom;
-			nDelLenNext	= nIdxTo - nIdxFrom;
+			size_t nDelPosNext = nIdxFrom;
+			size_t nDelLenNext = nIdxTo - nIdxFrom;
 			const wchar_t* pLine = pEditDoc->layoutMgr.GetLineStr(nLineNum, &nLineLen, &pLayout);
 			if (pLine) {
 				// 指定された桁に対応する行のデータ内の位置を調べる

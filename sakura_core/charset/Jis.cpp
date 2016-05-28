@@ -475,7 +475,7 @@ CodeConvertResult Jis::UnicodeToJIS(const NativeW& src, Memory* pDstMem)
 
 
 // 文字コード表示用	UNICODE → Hex 変換	2008/6/9 Uchi
-CodeConvertResult Jis::UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR* pDst, const CommonSetting_StatusBar* psStatusbar)
+CodeConvertResult Jis::UnicodeToHex(const wchar_t* cSrc, size_t iSLen, TCHAR* pDst, const CommonSetting_StatusBar* psStatusbar)
 {
 
 	// 2008/6/21 Uchi

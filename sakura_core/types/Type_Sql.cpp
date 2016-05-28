@@ -51,10 +51,9 @@ void DocOutline::MakeFuncList_PLSQL(FuncInfoArr* pFuncInfoArr)
 {
 	const wchar_t*	pLine;
 	size_t		nLineLen;
-	int			nCharChars;
 	wchar_t		szWordPrev[100];
 	wchar_t		szWord[100];
-	int			nWordIdx = 0;
+	size_t		nWordIdx = 0;
 	int			nMaxWordLeng = 70;
 	int			nMode;
 	wchar_t		szFuncName[100];
@@ -74,7 +73,7 @@ void DocOutline::MakeFuncList_PLSQL(FuncInfoArr* pFuncInfoArr)
 		for (size_t i=0; i<nLineLen; ++i) {
 			// 1ƒoƒCƒg•¶Žš‚¾‚¯‚ðˆ—‚·‚é
 			// 2005-09-02 D.S.Koba GetSizeOfChar
-			nCharChars = NativeW::GetSizeOfChar(pLine, nLineLen, i);
+			size_t nCharChars = NativeW::GetSizeOfChar(pLine, nLineLen, i);
 			if (nCharChars == 0) {
 				nCharChars = 1;
 			}
@@ -125,7 +124,7 @@ void DocOutline::MakeFuncList_PLSQL(FuncInfoArr* pFuncInfoArr)
 //						szWord[nWordIdx + 1] = '\0';
 						wmemcpy(&szWord[nWordIdx], &pLine[i], nCharChars);
 						szWord[nWordIdx + nCharChars] = L'\0';
-						nWordIdx += (nCharChars);
+						nWordIdx += nCharChars;
 					}
 				}else {
 					if (nParseCnt == 0 && wcsicmp(szWord, L"FUNCTION") == 0) {
@@ -442,5 +441,5 @@ const wchar_t* g_ppszKeywordsPLSQL[] = {
 	L"OTHERS",
 	L"SQLCODE"
 };
-int g_nKeywordsPLSQL = _countof(g_ppszKeywordsPLSQL);
+size_t g_nKeywordsPLSQL = _countof(g_ppszKeywordsPLSQL);
 

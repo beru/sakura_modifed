@@ -97,10 +97,10 @@ struct OutlinePython {
 		ある状態から別の状態に移るところまでを扱う．
 		別の状態に移る判定がややこしいばあいは，Enter*として関数にする．
 	*/	
-	int ScanNormal(const wchar_t* data, int linelen, int start_offset);
-	int ScanString(const wchar_t* data, int linelen, int start_offset);
-	int EnterString(const wchar_t* data, int linelen, int start_offset);
-	void DoScanLine(const wchar_t* data, int linelen, int start_offset);
+	size_t ScanNormal(const wchar_t* data, size_t linelen, size_t start_offset);
+	size_t ScanString(const wchar_t* data, size_t linelen, size_t start_offset);
+	size_t EnterString(const wchar_t* data, size_t linelen, size_t start_offset);
+	void DoScanLine(const wchar_t* data, size_t linelen, size_t start_offset);
 	
 	bool IsLogicalLineTop(void) const { return state == STATE_NORMAL; }
 };
@@ -138,11 +138,11 @@ OutlinePython::OutlinePython()
 	@note 引用符の位置で呼びだせば，抜けた後は必ずSTATE_STRINGになっているはず．
 		引用符以外の位置で呼びだした場合は何もしないで抜ける．
 */
-int OutlinePython::EnterString(const wchar_t* data, int linelen, int start_offset)
+size_t OutlinePython::EnterString(const wchar_t* data, size_t linelen, size_t start_offset)
 {
 	assert(state != STATE_STRING);
 
-	int col = start_offset;
+	size_t col = start_offset;
 	//	文字列開始チェック
 	if (data[col] == '\"' || data[col] == '\'') {
 		int quote_char = data[col];
@@ -192,12 +192,12 @@ int OutlinePython::EnterString(const wchar_t* data, int linelen, int start_offse
 	
 	@return 調査後の位置
 */
-int OutlinePython::ScanNormal(const wchar_t* data, int linelen, int start_offset)
+size_t OutlinePython::ScanNormal(const wchar_t* data, size_t linelen, size_t start_offset)
 {
 	assert(state == STATE_NORMAL || state == STATE_CONTINUE);
 	bool bExtEol = GetDllShareData().common.edit.bEnableExtEol;
 
-	for (int col=start_offset; col<linelen; ++col) {
+	for (size_t col=start_offset; col<linelen; ++col) {
 		size_t nCharChars = NativeW::GetSizeOfChar(data, linelen, col);
 		if (1 < nCharChars) {
 			col += (nCharChars - 1);
@@ -260,12 +260,12 @@ int OutlinePython::ScanNormal(const wchar_t* data, int linelen, int start_offset
 	@date 2007.03.23 genta 文字列の継続行の処理を追加
 
 */
-int OutlinePython::ScanString(const wchar_t* data, int linelen, int start_offset)
+size_t OutlinePython::ScanString(const wchar_t* data, size_t linelen, size_t start_offset)
 {
 	assert(state == STATE_STRING);
 	bool bExtEol = GetDllShareData().common.edit.bEnableExtEol;
 
-	for (int col=start_offset; col<linelen; ++col) {
+	for (size_t col=start_offset; col<linelen; ++col) {
 		size_t nCharChars = NativeW::GetSizeOfChar(data, linelen, col);
 		if (1 < nCharChars) {
 			col += (nCharChars - 1);
@@ -341,9 +341,9 @@ int OutlinePython::ScanString(const wchar_t* data, int linelen, int start_offset
 	@param[in] start_offset 調査開始位置
 
 */
-void OutlinePython::DoScanLine(const wchar_t* data, int linelen, int start_offset)
+void OutlinePython::DoScanLine(const wchar_t* data, size_t linelen, size_t start_offset)
 {
-	int col = start_offset;
+	size_t col = start_offset;
 	while (col < linelen) {
 		if (state == STATE_NORMAL || state == STATE_CONTINUE) {
 			col = ScanNormal(data, linelen, col);
@@ -496,7 +496,7 @@ void DocOutline::MakeFuncList_python(FuncInfoArr* pFuncInfoArr)
 			//	このあたりは暫定
 
 			wchar_t szWord[512];	// 適当に大きな数(pythonでは名前の長さの上限があるのか？)
-			int len = w_end - col;
+			size_t len = w_end - col;
 			
 			if (len > 0) {
 				if (len > _countof(szWord) - 1) {
@@ -525,7 +525,7 @@ void DocOutline::MakeFuncList_python(FuncInfoArr* pFuncInfoArr)
 			*/
 			Point ptPosXY;
 			doc.layoutMgr.LogicToLayout(
-				Point(0, nLineCount),
+				Point(0, (int)nLineCount),
 				&ptPosXY
 			);
 			pFuncInfoArr->AppendData(

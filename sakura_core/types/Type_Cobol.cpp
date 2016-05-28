@@ -244,5 +244,5 @@ const wchar_t* g_ppszKeywordsCOBOL[] = {
 	L"WRITTEN",
 	L"ZERO"
 };
-int g_nKeywordsCOBOL = _countof(g_ppszKeywordsCOBOL);
+size_t g_nKeywordsCOBOL = _countof(g_ppszKeywordsCOBOL);
 

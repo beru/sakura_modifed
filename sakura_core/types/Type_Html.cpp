@@ -562,5 +562,5 @@ const wchar_t* g_ppszKeywordsHTML[] = {
 	L"WRAP",
 	L"XMP"
 };
-int g_nKeywordsHTML = _countof(g_ppszKeywordsHTML);
+size_t g_nKeywordsHTML = _countof(g_ppszKeywordsHTML);
 

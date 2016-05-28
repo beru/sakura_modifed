@@ -67,7 +67,7 @@ void ViewCommander::Command_Jump(void)
 
 	int nMode;
 	bool bValidLine;
-	int nCommentBegin = 0;
+	size_t nCommentBegin = 0;
 
 	auto& dlgJump = GetEditWindow().dlgJump;
 	// çsî‘çÜ
@@ -148,7 +148,7 @@ void ViewCommander::Command_Jump(void)
 				break;
 			}
 		}
-		int nBgn = i;
+		size_t nBgn = i;
 		wchar_t let = 0;
 		wchar_t prevLet;
 		auto& csEdit = GetDllShareData().common.edit;
@@ -478,7 +478,7 @@ void ViewCommander::Command_FuncList_Prev(void)
 		if (!GetDllShareData().common.search.bSearchAll) {
 			break;
 		}
-		ptXY.y= docLineMgr.GetLineCount();
+		ptXY.y = docLineMgr.GetLineCount();
 	}
 	view.SendStatusMessage(LS(STR_ERR_SRPREV2));
 	AlertNotFound( view.GetHwnd(), false, LS(STR_FUCLIST_PREV_NOT_FOUND) );

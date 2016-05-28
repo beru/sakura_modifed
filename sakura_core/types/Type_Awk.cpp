@@ -126,5 +126,5 @@ const wchar_t* g_ppszKeywordsAWK[] = {
 	L"strftime",
 	L"systime"
 };
-int g_nKeywordsAWK = _countof(g_ppszKeywordsAWK);
+size_t g_nKeywordsAWK = _countof(g_ppszKeywordsAWK);
 

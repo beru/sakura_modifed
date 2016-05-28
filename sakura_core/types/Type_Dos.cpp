@@ -112,5 +112,5 @@ const wchar_t* g_ppszKeywordsBAT[] = {
 	L"CLOCK$",
 	L"CONFIG$"
 };
-int g_nKeywordsBAT = _countof(g_ppszKeywordsBAT);
+size_t g_nKeywordsBAT = _countof(g_ppszKeywordsBAT);
 

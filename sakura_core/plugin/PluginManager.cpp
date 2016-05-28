@@ -495,8 +495,8 @@ bool PluginManager::LoadAllPlugin(CommonSetting* common)
 			szLangName = _T("ja_JP");
 		}else {
 			// "sakura_lang_*.dll"
-			int nStartPos = 0;
-			int nEndPos = szDllName.length();
+			size_t nStartPos = 0;
+			size_t nEndPos = szDllName.length();
 			if (szDllName.substr(0, 12) == _T("sakura_lang_")) {
 				nStartPos = 12;
 			}

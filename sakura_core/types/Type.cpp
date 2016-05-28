@@ -121,7 +121,7 @@ void ShareData::InitKeyword(DllSharedData& shareData)
 
 #define PopulateKeyword(name, case_sensitive, aryname) \
 	extern const wchar_t* g_ppszKeywords##aryname[]; \
-	extern int g_nKeywords##aryname; \
+	extern size_t g_nKeywords##aryname; \
 	shareData.common.specialKeyword.keywordSetMgr.AddKeywordSet((name), (case_sensitive));	\
 	shareData.common.specialKeyword.keywordSetMgr.SetKeywordArr(++nSetCount, g_nKeywords##aryname, g_ppszKeywords##aryname);
 	

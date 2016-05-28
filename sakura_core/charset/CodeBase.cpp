@@ -15,7 +15,7 @@ void CodeBase::GetBom(Memory* pMemBom) { pMemBom->Clear(); }					// BOMÉfÅ[É^éÊì
 // ï\é¶óp16ï\é¶	UNICODE Å® Hex ïœä∑	2008/6/9 Uchi
 CodeConvertResult CodeBase::UnicodeToHex(
 	const wchar_t* pSrc,
-	const int iSLen,
+	size_t iSLen,
 	TCHAR* pDst,
 	const CommonSetting_StatusBar* psStatusbar
 	)

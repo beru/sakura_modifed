@@ -60,7 +60,7 @@ public:
 	void GetEol(Memory* pMemEol, EolType eEolType) { S_GetEol(pMemEol, eEolType); }	// 改行データ取得 virtualから実体へ	2010/6/13 Uchi
 
 	// 文字コード表示用		2008/6/9 Uchi
-	virtual CodeConvertResult UnicodeToHex(const wchar_t* pSrc, const int iSLen, TCHAR* pDst, const CommonSetting_StatusBar* psStatusbar);			// UNICODE → Hex 変換
+	virtual CodeConvertResult UnicodeToHex(const wchar_t* pSrc, size_t iSLen, TCHAR* pDst, const CommonSetting_StatusBar* psStatusbar);			// UNICODE → Hex 変換
 
 	// 変換エラー処理（１バイト <-> U+D800 から U+D8FF）
 	static size_t BinToText(const unsigned char*, const size_t, unsigned short*);

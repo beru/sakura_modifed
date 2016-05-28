@@ -550,7 +550,7 @@ size_t MainToolBar::GetSearchKey(std::wstring& strText)
 		int nBufferSize = ::GetWindowTextLength(hwndSearchBox) + 1;
 		std::vector<TCHAR> vText(nBufferSize);
 
-		::GetWindowText(hwndSearchBox, &vText[0], vText.size());
+		::GetWindowText(hwndSearchBox, &vText[0], (int)vText.size());
 		strText = to_wchar(&vText[0]);
 	}else {
 		strText = L"";

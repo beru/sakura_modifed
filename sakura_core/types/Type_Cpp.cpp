@@ -1660,5 +1660,5 @@ const wchar_t* g_ppszKeywordsCPP[] = {
 	L"xor",
 	L"xor_eq",
 };
-int g_nKeywordsCPP = _countof(g_ppszKeywordsCPP);
+size_t g_nKeywordsCPP = _countof(g_ppszKeywordsCPP);
 

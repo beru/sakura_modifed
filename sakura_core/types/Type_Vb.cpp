@@ -70,10 +70,10 @@ void DocOutline::MakeFuncList_VisualBasic(FuncInfoArr* pFuncInfoArr)
 	size_t		nCharChars;
 	wchar_t		szWordPrev[256];	// Aug 7, 2003 little YOSHI  VBの名前付け規則より255文字に拡張
 	wchar_t		szWord[256];		// Aug 7, 2003 little YOSHI  VBの名前付け規則より255文字に拡張
-	int			nWordIdx = 0;
+	size_t		nWordIdx = 0;
 	int			nMode;
 	wchar_t		szFuncName[256];	// Aug 7, 2003 little YOSHI  VBの名前付け規則より255文字に拡張
-	int			nFuncLine(0);
+	size_t		nFuncLine = 0;
 	int			nFuncId;
 	int			nParseCnt = 0;
 	bool		bClass;			// クラスモジュールフラグ
@@ -82,7 +82,7 @@ void DocOutline::MakeFuncList_VisualBasic(FuncInfoArr* pFuncInfoArr)
 	
 	// 調べるファイルがクラスモジュールのときはType、Constの挙動が異なるのでフラグを立てる
 	bClass = false;
-	int filelen = _tcslen(doc.docFile.GetFilePath());
+	size_t filelen = _tcslen(doc.docFile.GetFilePath());
 	if (4 < filelen) {
 		if (_tcsicmp((doc.docFile.GetFilePath() + filelen - 4), _FT(".cls")) == 0) {
 			bClass = true;
@@ -133,7 +133,7 @@ void DocOutline::MakeFuncList_VisualBasic(FuncInfoArr* pFuncInfoArr)
 					}else {
 						auto_memcpy(&szWord[nWordIdx], &pLine[i], nCharChars);
 						szWord[nWordIdx + nCharChars] = L'\0';
-						nWordIdx += (nCharChars);
+						nWordIdx += nCharChars;
 					}
 				}else if (nCharChars == 1 && pLine[i] == '"') {
 					// Aug 7, 2003 little YOSHI  追加
@@ -262,8 +262,8 @@ void DocOutline::MakeFuncList_VisualBasic(FuncInfoArr* pFuncInfoArr)
 						  → レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 						*/
 						Point ptPosXY;
-						doc.layoutMgr.LogicToLayout(Point(0, nFuncLine - 1), &ptPosXY);
-						pFuncInfoArr->AppendData(nFuncLine, ptPosXY.y + 1 , szFuncName, nFuncId);
+						doc.layoutMgr.LogicToLayout(Point(0, (int)nFuncLine - 1), &ptPosXY);
+						pFuncInfoArr->AppendData((int)nFuncLine, ptPosXY.y + 1 , szFuncName, nFuncId);
 						nParseCnt = 0;
 						nFuncId	= 0;	// Jul 10, 2003  little YOSHI  論理和を使用するため、必ず初期化
 					}
@@ -316,7 +316,7 @@ void DocOutline::MakeFuncList_VisualBasic(FuncInfoArr* pFuncInfoArr)
 					}else {
 						wmemcpy(&szWord[nWordIdx], &pLine[i], nCharChars);
 						szWord[nWordIdx + nCharChars] = L'\0';
-						nWordIdx += (nCharChars);
+						nWordIdx += nCharChars;
 					}
 				}
 			/* 長過ぎる単語無視中 */
@@ -516,7 +516,7 @@ const wchar_t* g_ppszKeywordsVB[] = {
 	// Short
 	// Structure
 };
-int g_nKeywordsVB = _countof(g_ppszKeywordsVB);
+size_t g_nKeywordsVB = _countof(g_ppszKeywordsVB);
 
 // Jul. 10, 2001 JEPRO 追加
 const wchar_t* g_ppszKeywordsVB2[] = {
@@ -716,5 +716,5 @@ const wchar_t* g_ppszKeywordsVB2[] = {
 	L"VarPrtArray",
 	L"VarPtrStringArray"
 };
-int g_nKeywordsVB2 = _countof(g_ppszKeywordsVB2);
+size_t g_nKeywordsVB2 = _countof(g_ppszKeywordsVB2);
 

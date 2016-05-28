@@ -36,14 +36,12 @@ size_t Utf7::_Utf7SetBToUni_block(const char* pSrc, const size_t nSrcLen, wchar_
 	if (nSrcLen == 0) {
 		return 0;
 	}
-	
-	int ndecoded_len = 0;
 
 	std::vector<char> buf(nSrcLen);
 	char* pbuf = &buf[0];
 
-	ndecoded_len = _DecodeBase64(pSrc, nSrcLen, pbuf);
-	int nModLen = ndecoded_len % sizeof(wchar_t);
+	size_t ndecoded_len = _DecodeBase64(pSrc, nSrcLen, pbuf);
+	size_t nModLen = ndecoded_len % sizeof(wchar_t);
 	ndecoded_len = ndecoded_len - nModLen;
 	Memory::SwapHLByte(pbuf, ndecoded_len);  // UTF-16 BE を UTF-16 LE に直す
 	memcpy(reinterpret_cast<char*>(pDst), pbuf, ndecoded_len);
@@ -66,7 +64,6 @@ size_t Utf7::Utf7ToUni(const char* pSrc, const size_t nSrcLen, wchar_t* pDst, bo
 	const char *pr, *pr_end;
 	char* pr_next;
 	wchar_t* pw;
-	int nblocklen = 0;
 	bool berror_tmp, berror = false;
 
 	pr = pSrc;
@@ -75,7 +72,7 @@ size_t Utf7::Utf7ToUni(const char* pSrc, const size_t nSrcLen, wchar_t* pDst, bo
 
 	do {
 		// UTF-7 Set D 部分のチェック
-		nblocklen = CheckUtf7DPart(pr, pr_end - pr, &pr_next, &berror_tmp);
+		size_t nblocklen = CheckUtf7DPart(pr, pr_end - pr, &pr_next, &berror_tmp);
 		if (berror_tmp) {
 			berror = true;
 		}
@@ -133,7 +130,7 @@ CodeConvertResult Utf7::UTF7ToUnicode( const Memory& src, NativeW* pDstMem )
 
 	// 変換
 	bool bError;
-	int nDstLen = Utf7ToUni(pData, nDataLen, pDst, &bError);
+	size_t nDstLen = Utf7ToUni(pData, nDataLen, pDst, &bError);
 
 	// pDstMem を設定
 	pDstMem->_GetMemory()->SetRawDataHoldBuffer( pDst, nDstLen*sizeof(wchar_t) );
@@ -249,7 +246,7 @@ CodeConvertResult Utf7::UnicodeToUTF7(const NativeW& src, Memory* pDstMem)
 	char* pDst = &dst[0];
 
 	// 変換
-	int nDstLen = UniToUtf7(pSrc, nSrcLen, pDst);
+	size_t nDstLen = UniToUtf7(pSrc, nSrcLen, pDst);
 
 	// pMem にデータをセット
 	pDstMem->SetRawDataHoldBuffer( pDst, nDstLen );

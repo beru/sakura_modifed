@@ -319,10 +319,11 @@ void ViewCommander::Command_Right(
 					break;
 				}
 			}
-			const int to_x = t_max((int)it.getColumn(), (int)ptCaret.x + 1);
+			ASSERT_GE(ptCaret.x, -2);
+			const size_t to_x = t_max(it.getColumn(), (size_t)ptCaret.x + 1);
 
 			// キャレットの右端(x_max)と、そこでの扱い(on_x_max)を決める。
-			int x_max;
+			size_t x_max;
 			enum {
 				STOP,
 				MOVE_NEXTLINE_IMMEDIATELY, // 右端に止まらず次の行頭に移動する。(折り返しなど)
@@ -374,7 +375,7 @@ void ViewCommander::Command_Right(
 				bMoveCaretLine = true;
 			}else {
 				ptTo.y = ptCaret.y;
-				ptTo.x = t_min(to_x, x_max);
+				ptTo.x = (int)t_min(to_x, x_max);
 			}
 		}else {
 			// pLayoutがNULLの場合はptPos.x=0に調整
@@ -421,7 +422,6 @@ void ViewCommander::Command_WordLeft(bool bSelect)
 	if (bSelect) {
 		bUnderlineDoNotOFF = false;		// 選択状態ならアンダーライン消去を行う
 	}
-	int nIdx;
 	auto& si = view.GetSelectionInfo();
 	if (bSelect) {
 		if (!si.IsTextSelected()) {		// テキストが選択されているか
@@ -451,8 +451,7 @@ void ViewCommander::Command_WordLeft(bool bSelect)
 	}
 
 	// 指定された桁に対応する行のデータ内の位置を調べる
-	nIdx = view.LineColumnToIndex(pLayout, caret.GetCaretLayoutPos().x);
-
+	size_t nIdx = view.LineColumnToIndex(pLayout, caret.GetCaretLayoutPos().x);
 	// 現在位置の左の単語の先頭位置を調べる
 	Point ptLayoutNew;
 	int nResult = layoutMgr.PrevWord(
@@ -503,7 +502,6 @@ void ViewCommander::Command_WordRight(bool bSelect)
 	if (bSelect) {
 		bUnderlineDoNotOFF = false;		// 選択状態ならアンダーライン消去を行う
 	}
-	int nIdx;
 	int nCurLine;
 	auto& si = view.GetSelectionInfo();
 	if (bSelect) {
@@ -536,8 +534,7 @@ try_again:;
 		}
 	}
 	// 指定された桁に対応する行のデータ内の位置を調べる
-	nIdx = view.LineColumnToIndex(pLayout, caret.GetCaretLayoutPos().x);
-
+	size_t nIdx = view.LineColumnToIndex(pLayout, caret.GetCaretLayoutPos().x);
 	auto& csGeneral = GetDllShareData().common.general;	
 	// 現在位置の右の単語の先頭位置を調べる
 	Point ptLayoutNew;
@@ -660,8 +657,8 @@ void ViewCommander::Command_GoLineTop(
 		if (nPosX_Logic == 0) nPosY_Layout = ptCaretPos.y;	// 物理行の移動なし
 		
 		// 指定された行のデータ内の位置に対応する桁の位置を調べる
-		int nPosX_Layout = view.LineIndexToColumn(pLayout, nPosX_Logic);
-		Point ptPos(nPosX_Layout, nPosY_Layout);
+		size_t nPosX_Layout = view.LineIndexToColumn(pLayout, nPosX_Logic);
+		Point ptPos((int)nPosX_Layout, nPosY_Layout);
 		if (caret.GetCaretLayoutPos() != ptPos) {
 			ptCaretPos = ptPos;
 		}
@@ -716,9 +713,10 @@ void ViewCommander::Command_GoLineEnd(
 		}
 	}
 	nPosXY.x = 0;
-	const Layout*	pLayout = layoutMgr.SearchLineByLayoutY(nPosXY.y);
-	if (pLayout)
+	const Layout* pLayout = layoutMgr.SearchLineByLayoutY(nPosXY.y);
+	if (pLayout) {
 		nPosXY.x = pLayout->CalcLayoutWidth(layoutMgr);
+	}
 
 	// キャレット移動
 	caret.GetAdjustCursorPos(&nPosXY);
@@ -857,7 +855,7 @@ void ViewCommander::Command_GoFileEnd(bool bSelect)
 	}
 	view.AddCurrentLineToHistory();
 	auto& caret = GetCaret();
-	caret.Cursor_UPDOWN(GetDocument().layoutMgr.GetLineCount() , bSelect);
+	caret.Cursor_UPDOWN((int)GetDocument().layoutMgr.GetLineCount() , bSelect);
 	Command_Down(bSelect, true);
 	if (!si.IsBoxSelecting()) {							// 2002/04/18 YAZAKI
 		/*	2004.04.19 fotomo

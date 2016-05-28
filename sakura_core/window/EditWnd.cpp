@@ -152,7 +152,7 @@ static void ShowCodeBox(HWND hWnd, EditDoc* pEditDoc)
 				size_t nCharChars = NativeW::GetSizeOfChar(pLine, nLineLen, nIdx);
 				memcpy(szChar, &pLine[nIdx], nCharChars * sizeof(wchar_t));
 				szChar[nCharChars] = L'\0';
-				for (int i=0; i<CODE_CODEMAX; ++i) {
+				for (size_t i=0; i<CODE_CODEMAX; ++i) {
 					if (i == CODE_SJIS || i == CODE_JIS || i == CODE_EUC || i == CODE_LATIN1 || i == CODE_UNICODE || i == CODE_UTF8 || i == CODE_CESU8) {
 						//auto_sprintf(szCaretChar, _T("%04x"),);
 						// ”CˆÓ‚Ì•¶ŽšƒR[ƒh‚©‚çUnicode‚Ö•ÏŠ·‚·‚é		2008/6/9 Uchi
