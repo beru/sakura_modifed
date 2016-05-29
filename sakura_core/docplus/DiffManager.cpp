@@ -53,7 +53,7 @@ bool DiffLineGetter::GetDiffColor(EColorIndexType* pColorIndex) const
 bool DiffLineGetter::DrawDiffMark(
 	Graphics& gr,
 	int y,
-	int nLineHeight,
+	unsigned int nLineHeight,
 	COLORREF color
 	) const
 {

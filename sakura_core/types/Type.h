@@ -121,7 +121,7 @@ enum class StringLiteralType {
 // タイプ別設定
 struct TypeConfig {
 	// 2007.09.07 変数名変更: nMaxLineSize→nMaxLineKetas
-	int					nIdx;
+	size_t				nIdx;
 	int					id;
 	TCHAR				szTypeName[64];				// タイプ属性：名称
 	TCHAR				szTypeExts[MAX_TYPES_EXTS];	// タイプ属性：拡張子リスト
@@ -296,7 +296,7 @@ private:
 class Type {
 public:
 	virtual ~Type() { }
-	void InitTypeConfig(int nIdx, TypeConfig&);
+	void InitTypeConfig(size_t nIdx, TypeConfig&);
 protected:
 	virtual void InitTypeConfigImp(TypeConfig& type) = 0;
 };
@@ -334,7 +334,7 @@ GEN_CTYPE(CType_Other)
 	スペースの判定
 */
 inline
-bool C_IsSpace( wchar_t c, bool bExtEol )
+bool C_IsSpace(wchar_t c, bool bExtEol)
 {
 	return (
 		L'\t' == c ||

@@ -178,12 +178,12 @@ size_t CodeTypesForCombobox::GetCount() const
 	return vDispIdx.size();
 }
 
-EncodingType CodeTypesForCombobox::GetCode(int nIndex) const
+EncodingType CodeTypesForCombobox::GetCode(size_t nIndex) const
 {
 	return vDispIdx[nIndex];
 }
 
-LPCTSTR CodeTypesForCombobox::GetName(int nIndex) const
+LPCTSTR CodeTypesForCombobox::GetName(size_t nIndex) const
 {
 	if (nIndex == 0) {
 		return LS(STR_ERR_GLOBAL01);

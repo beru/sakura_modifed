@@ -87,10 +87,10 @@ public:
 	void SortKeyword(int);						// ｎ番目のセットのキーワードをソートする			//MIK
 
 	// From Here 2004.07.29 Moca 追加 可変長記憶
-	int SetKeywordArr(int, int, const wchar_t*);			// iniからキーワードを設定する
+	int SetKeywordArr(int, size_t, const wchar_t*);			// iniからキーワードを設定する
 	int SetKeywordArr(						// キーワードの配列から設定する
 		int				nIdx,				// [in] キーワードセット番号
-		int				nSize,				// [in] ppszKeywordArrの要素数
+		size_t			nSize,				// [in] ppszKeywordArrの要素数
 		const wchar_t*	ppszKeywordArr[]	// [in] キーワードの配列(重複・長さ制限等、考慮済みであること)
 	);
 	// To Here 2004.07.29 Moca

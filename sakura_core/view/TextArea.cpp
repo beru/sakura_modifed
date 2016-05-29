@@ -72,7 +72,7 @@ void TextArea::UpdateAreaMetrics(HDC hdc)
 		textMetrics.SetHankakuDy(textMetrics.GetHankakuHeight());
 	}else {
 		// 文字間隔
-		textMetrics.SetHankakuDx(textMetrics.GetHankakuWidth() + view.pTypeData->nColumnSpace);
+		textMetrics.SetHankakuDx(textMetrics.GetHankakuWidth() + (int)view.pTypeData->nColumnSpace);
 	
 		// 行間隔
 		textMetrics.SetHankakuDy(textMetrics.GetHankakuHeight() + view.pTypeData->nLineSpace);
@@ -216,8 +216,7 @@ int TextArea::DetectWidthOfLineNumberArea_calculate(const LayoutMgr* pLayoutMgr,
 {
 	auto& view = editView;
 
-	int nAllLines; //$$ 単位混在
-
+	size_t nAllLines; //$$ 単位混在
 	// 行番号の表示 false=折り返し単位／true=改行単位
 	if (view.pTypeData->bLineNumIsCRLF && !bLayout) {
 		nAllLines = view.pEditDoc->docLineMgr.GetLineCount();
@@ -226,7 +225,6 @@ int TextArea::DetectWidthOfLineNumberArea_calculate(const LayoutMgr* pLayoutMgr,
 	}
 	
 	if (0 < nAllLines) {
-		int nWork;
 		int i;
 
 		// 行番号の桁数を決める 2014.07.26 katze
@@ -241,7 +239,7 @@ int TextArea::DetectWidthOfLineNumberArea_calculate(const LayoutMgr* pLayoutMgr,
 		return (i +1);
 #else
 		// 設定から行数を求める
-		nWork = 10;
+		size_t nWork = 10;
 		for (i=1; i<view.pTypeData->nLineNumWidth; ++i) {
 			nWork *= 10;
 		}

@@ -466,7 +466,7 @@ bool KeywordSetMgr::GetKeywordCase(int nIdx)
 */
 int KeywordSetMgr::SetKeywordArr(
 	int				nIdx,			// [in] キーワードセット番号
-	int				nSize,			// [in] キーワード数
+	size_t			nSize,			// [in] キーワード数
 	const wchar_t*	pszKeywordArr	// [in]「key\\tword\\t\\0」又は「key\\0word\\0\\0」の形式
 	)
 {
@@ -500,7 +500,7 @@ int KeywordSetMgr::SetKeywordArr(
 */
 int KeywordSetMgr::SetKeywordArr(
 	int				nIdx,				// [in] キーワードセット番号
-	int				nSize,				// [in] ppszKeywordArrの要素数
+	size_t			nSize,				// [in] ppszKeywordArrの要素数
 	const wchar_t*	ppszKeywordArr[]	// [in] キーワードの配列(重複・長さ制限等、考慮済みであること)
 	)
 {

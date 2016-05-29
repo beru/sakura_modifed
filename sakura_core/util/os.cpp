@@ -187,7 +187,7 @@ template <class T>
 bool SetClipboardTextImp(
 	HWND hwnd,
 	const T* pszText,
-	int nLength
+	size_t nLength
 	)
 {
 	HGLOBAL	hgClip = ::GlobalAlloc(GMEM_MOVEABLE | GMEM_DDESHARE, (nLength + 1) * sizeof(T));
@@ -219,12 +219,12 @@ bool SetClipboardTextImp(
 	return true;
 }
 
-bool SetClipboardText(HWND hwnd, const ACHAR* pszText, int nLength)
+bool SetClipboardText(HWND hwnd, const ACHAR* pszText, size_t nLength)
 {
 	return SetClipboardTextImp<ACHAR>(hwnd, pszText, nLength);
 }
 
-bool SetClipboardText(HWND hwnd, const WCHAR* pszText, int nLength)
+bool SetClipboardText(HWND hwnd, const WCHAR* pszText, size_t nLength)
 {
 	return SetClipboardTextImp<WCHAR>(hwnd, pszText, nLength);
 }

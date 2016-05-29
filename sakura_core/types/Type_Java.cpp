@@ -67,11 +67,11 @@ void DocOutline::MakeFuncList_Java(FuncInfoArr* pFuncInfoArr)
 	size_t		nLineLen;
 	size_t		i;
 	int			nNestLevel;
-	int			nCharChars;
+	size_t		nCharChars;
 	wchar_t		szWordPrev[100];
 	wchar_t		szWord[100];
-	int			nWordIdx = 0;
-	int			nMaxWordLeng = 70;
+	size_t		nWordIdx = 0;
+	size_t		nMaxWordLeng = 70;
 	FuncListJavaMode	mode;
 	wchar_t		szFuncName[100];
 	int	nFuncLine = 0;
@@ -162,7 +162,7 @@ void DocOutline::MakeFuncList_Java(FuncInfoArr* pFuncInfoArr)
 						  →
 						  レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 						*/
-						Point ptPosXY_Logic(0, nLineCount);
+						Point ptPosXY_Logic(0, (int)nLineCount);
 						Point ptPosXY_Layout = doc.layoutMgr.LogicToLayout(ptPosXY_Logic);
 						wchar_t szWork[256];
 						if (0 < auto_snprintf_s(szWork, _countof(szWork), L"%ls::%ls", szClass, LSW(STR_OUTLINE_JAVA_DEFPOS))) {
@@ -305,8 +305,8 @@ void DocOutline::MakeFuncList_Java(FuncInfoArr* pFuncInfoArr)
 				}else if (L')' == pLine[i]) {
 					size_t k;
 					const wchar_t*	pLine2;
-					size_t		nLineLen2;
-					int	nLineCount2;
+					size_t nLineLen2;
+					size_t nLineCount2;
 					nLineCount2 = nLineCount;
 					pLine2 = pLine;
 					nLineLen2 = nLineLen;

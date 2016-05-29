@@ -54,7 +54,7 @@ void DocOutline::MakeFuncList_PLSQL(FuncInfoArr* pFuncInfoArr)
 	wchar_t		szWordPrev[100];
 	wchar_t		szWord[100];
 	size_t		nWordIdx = 0;
-	int			nMaxWordLeng = 70;
+	size_t 		nMaxWordLeng = 70;
 	int			nMode;
 	wchar_t		szFuncName[100];
 	int			nFuncLine(0);

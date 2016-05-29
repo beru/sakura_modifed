@@ -70,7 +70,7 @@ void DocOutline::MakeFuncList_Perl(FuncInfoArr* pFuncInfoArr)
 	const wchar_t*	pLine;
 	size_t		nLineLen;
 	size_t		i;
-	int			nCharChars;
+	size_t		nCharChars;
 	wchar_t		szWord[100];
 	int			nWordIdx = 0;
 	int			nMaxWordLeng = 70;

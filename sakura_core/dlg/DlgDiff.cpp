@@ -267,7 +267,6 @@ void DlgDiff::SetData(void)
 				// 番号はウィンドウ一覧と同じ番号を使う
 				FileNameManager::getInstance().GetMenuFullLabel_WinListNoEscape(szName, _countof(szName), pFileInfo, pEditNode[i].nId, i, calc.GetDC());
 
-
 				// リストに登録する
 				nItem = ::List_AddString(hwndList, szName);
 				List_SetItemData(hwndList, nItem, pEditNode[i].GetHwnd());

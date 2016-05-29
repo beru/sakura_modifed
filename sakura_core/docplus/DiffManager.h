@@ -70,7 +70,7 @@ public:
 	DiffLineGetter(const DocLine* pDocLine) : pDocLine(pDocLine) { }
 	DiffMark GetLineDiffMark() const;
 	bool GetDiffColor(EColorIndexType* nColor) const;
-	bool DrawDiffMark(Graphics& gr, int y, int nLineHeight, COLORREF color) const;
+	bool DrawDiffMark(Graphics& gr, int y, unsigned int nLineHeight, COLORREF color) const;
 private:
 	const DocLine* pDocLine;
 };

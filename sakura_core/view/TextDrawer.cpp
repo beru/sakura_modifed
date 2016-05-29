@@ -71,12 +71,12 @@ void TextDrawer::DispText(
 	const int* pDxArray = pMetrics->GenerateDxArray(&vDxArray, pData, nLength, editView.GetTextMetrics().GetHankakuDx());
 
 	// 文字列のピクセル幅
-	int nTextWidth = pMetrics->CalcTextWidth(pData, nLength, pDxArray);
+	size_t nTextWidth = pMetrics->CalcTextWidth(pData, nLength, pDxArray);
 
 	// テキストの描画範囲の矩形を求める -> rcClip
 	Rect rcClip;
 	rcClip.left   = x;
-	rcClip.right  = x + nTextWidth;
+	rcClip.right  = x + (int)nTextWidth;
 	rcClip.top    = y;
 	rcClip.bottom = y + editView.GetTextMetrics().GetHankakuDy();
 	if (rcClip.left < textArea.GetAreaLeft()) {
@@ -96,10 +96,10 @@ void TextDrawer::DispText(
 		// ウィンドウの左にあふれた文字数 -> nBefore
 		// 2007.09.08 kobake注 「ウィンドウの左」ではなく「クリップの左」を元に計算したほうが描画領域を節約できるが、
 		//                        バグが出るのが怖いのでとりあえずこのまま。
-		int nBeforeLogic = 0;
-		int nBeforeLayout = 0;
+		size_t nBeforeLogic = 0;
+		size_t nBeforeLayout = 0;
 		if (x < 0) {
-			int nLeftLayout = (0 - x) / nDx - 1;
+			size_t nLeftLayout = (0 - x) / nDx - 1;
 			while (nBeforeLayout < nLeftLayout) {
 				nBeforeLayout += NativeW::GetKetaOfChar(pData, nLength, nBeforeLogic);
 				nBeforeLogic  += NativeW::GetSizeOfChar(pData, nLength, nBeforeLogic);
@@ -374,7 +374,7 @@ void TextDrawer::DispLineNumber(
 	auto& view = editView;
 	const TypeConfig& typeConfig = view.pEditDoc->docType.GetDocumentAttribute();
 
-	size_t nLineHeight = view.GetTextMetrics().GetHankakuDy();
+	unsigned int nLineHeight = (unsigned int)view.GetTextMetrics().GetHankakuDy();
 	size_t nCharWidth = view.GetTextMetrics().GetHankakuDx();
 	// 行番号表示部分X幅	Sep. 23, 2002 genta 共通式のくくりだし
 	//int nLineNumAreaWidth = pView->GetTextArea().nViewAlignLeftCols * nCharWidth;
@@ -562,7 +562,7 @@ void TextDrawer::DispLineNumber(
 		if (BookmarkGetter(pDocLine).IsBookmarked() && !markType.IsDisp()) {
 			gr.PushPen(colorType.GetTextColor(), 2);
 			::MoveToEx(gr, 1, y, NULL);
-			::LineTo(gr, 1, y + nLineHeight);
+			::LineTo(gr, 1, y + (int)nLineHeight);
 			gr.PopPen();
 		}
 

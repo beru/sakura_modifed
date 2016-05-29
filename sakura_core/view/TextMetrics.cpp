@@ -47,8 +47,8 @@ TextMetrics::~TextMetrics()
 
 void TextMetrics::CopyTextMetricsStatus(TextMetrics* pDst) const
 {
-	pDst->SetHankakuWidth	(GetHankakuWidth());		// ”¼Šp•¶š‚Ì•
-	pDst->SetHankakuHeight	(GetHankakuHeight());		// •¶š‚Ì‚‚³
+	pDst->SetHankakuWidth(GetHankakuWidth());		// ”¼Šp•¶š‚Ì•
+	pDst->SetHankakuHeight(GetHankakuHeight());		// •¶š‚Ì‚‚³
 }
 
 /*

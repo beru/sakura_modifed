@@ -631,7 +631,7 @@ void ViewSelect::PrintSelectionInfoMsg() const
 	}
 
 	size_t nLineCount = view.pEditDoc->layoutMgr.GetLineCount();
-	if (!IsTextSelected() || select.GetFrom().y >= nLineCount) { // 先頭行が実在しない
+	if (!IsTextSelected() || select.GetFrom().y >= (int)nLineCount) { // 先頭行が実在しない
 		const_cast<EditView&>(view).GetCaret().bClearStatus = false;
 		if (IsBoxSelecting()) {
 			view.editWnd.statusBar.SendStatusMessage2(_T("box selecting"));
@@ -647,7 +647,7 @@ void ViewSelect::PrintSelectionInfoMsg() const
 	//	From here 2006.06.06 ryoji 選択範囲の行が実在しない場合の対策
 
 	int select_line;
-	if (select.GetTo().y >= nLineCount) {	// 最終行が実在しない
+	if (select.GetTo().y >= (int)nLineCount) {	// 最終行が実在しない
 		select_line = (int)nLineCount - select.GetFrom().y + 1;
 	}else {
 		select_line = select.GetTo().y - select.GetFrom().y + 1;

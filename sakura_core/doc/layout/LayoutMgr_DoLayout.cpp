@@ -21,11 +21,11 @@ bool _GetKeywordLength(
 	)
 {
 	// キーワード長をカウントする
-	int nWordBgn = nPos;
-	int nWordLen = 0;
-	int nWordKetas = 0;
+	size_t nWordBgn = nPos;
+	size_t nWordLen = 0;
+	size_t nWordKetas = 0;
 	while (nPos < lineStr.GetLength() && IS_KEYWORD_CHAR(lineStr.At(nPos))) {
-		int k = NativeW::GetKetaOfChar(lineStr, nPos);
+		size_t k = NativeW::GetKetaOfChar(lineStr, nPos);
 		if (k == 0) {
 			k = 1;
 		}
@@ -131,8 +131,7 @@ void LayoutMgr::_DoKutoBurasage(LayoutWork* pWork)
 		&& (pWork->eKinsokuType == KinsokuType::None)
 	) {
 		// 2007.09.07 kobake   レイアウトとロジックの区別
-		int nCharKetas = NativeW::GetKetaOfChar(pWork->lineStr, pWork->nPos);
-
+		size_t nCharKetas = NativeW::GetKetaOfChar(pWork->lineStr, pWork->nPos);
 		if (1
 			&& IsKinsokuPosKuto(GetMaxLineKetas() - pWork->nPosX, nCharKetas)
 			&& IsKinsokuKuto(pWork->lineStr.At(pWork->nPos))
@@ -153,8 +152,8 @@ void LayoutMgr::_DoGyotoKinsoku(LayoutWork* pWork, PF_OnLine pfOnLine)
 		&& (pWork->eKinsokuType == KinsokuType::None)
 	) {
 		// 2007.09.07 kobake   レイアウトとロジックの区別
-		int nCharKetas2 = NativeW::GetKetaOfChar(pWork->lineStr, pWork->nPos);
-		int nCharKetas3 = NativeW::GetKetaOfChar(pWork->lineStr, pWork->nPos + 1);
+		size_t nCharKetas2 = NativeW::GetKetaOfChar(pWork->lineStr, pWork->nPos);
+		size_t nCharKetas3 = NativeW::GetKetaOfChar(pWork->lineStr, pWork->nPos + 1);
 
 		if (1
 			&& IsKinsokuPosHead(GetMaxLineKetas() - pWork->nPosX, nCharKetas2, nCharKetas3)
@@ -320,7 +319,6 @@ void LayoutMgr::_DoLayout()
 	/*	表示上のX位置
 		2004.03.28 Moca nPosXはインデント幅を含むように変更(TAB位置調整のため)
 	*/
-	int nAllLineNum;
 
 	if (GetListenerCount() != 0) {
 		NotifyProgress(0);
@@ -340,9 +338,7 @@ void LayoutMgr::_DoLayout()
 	if (GetTabSpace() >= GetMaxLineKetas()) {
 		nTabSpace = 4;
 	}
-
-	nAllLineNum = pDocLineMgr->GetLineCount();
-
+	size_t nAllLineNum = pDocLineMgr->GetLineCount();
 	LayoutWork	work;
 	LayoutWork* pWork = &work;
 	pWork->pDocLine		= pDocLineMgr->GetDocLineTop(); // 2002/2/10 aroka CDocLineMgr変更

@@ -35,7 +35,7 @@ void _DefaultConfig(TypeConfig* pType);
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                          Type                              //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-void Type::InitTypeConfig(int nIdx, TypeConfig& type)
+void Type::InitTypeConfig(size_t nIdx, TypeConfig& type)
 {
 	// 規定値をコピー
 	static TypeConfig sDefault;

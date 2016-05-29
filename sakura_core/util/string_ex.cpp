@@ -265,7 +265,7 @@ wchar_t* mbstowcs_new(const char* pSrc, size_t nSrcLen, int* pnDstLen)
 		CP_SJIS,				// 2008/5/12 Uchi
 		0,
 		pSrc,
-		nSrcLen,
+		(int)nSrcLen,
 		NULL,
 		0
 	);
@@ -278,7 +278,7 @@ wchar_t* mbstowcs_new(const char* pSrc, size_t nSrcLen, int* pnDstLen)
 		CP_SJIS,				// 2008/5/12 Uchi
 		0,
 		pSrc,
-		nSrcLen,
+		(int)nSrcLen,
 		pNew,
 		nNewLength
 	);
@@ -302,7 +302,7 @@ char* wcstombs_new(const wchar_t* pSrc, size_t nSrcLen)
 		CP_SJIS,				// 2008/5/12 Uchi
 		0,
 		pSrc,
-		nSrcLen,
+		(int)nSrcLen,
 		NULL,
 		0,
 		NULL,
@@ -317,7 +317,7 @@ char* wcstombs_new(const wchar_t* pSrc, size_t nSrcLen)
 		CP_SJIS,				// 2008/5/12 Uchi
 		0,
 		pSrc,
-		nSrcLen,
+		(int)nSrcLen,
 		pNew,
 		nNewLength,
 		NULL,
@@ -342,7 +342,7 @@ void mbstowcs_vector(const char* pSrc, size_t nSrcLen, std::vector<wchar_t>* ret
 		CP_SJIS,				// 2008/5/12 Uchi
 		0,
 		pSrc,
-		nSrcLen,
+		(int)nSrcLen,
 		NULL,
 		0
 	);
@@ -355,7 +355,7 @@ void mbstowcs_vector(const char* pSrc, size_t nSrcLen, std::vector<wchar_t>* ret
 		CP_SJIS,				// 2008/5/12 Uchi
 		0,
 		pSrc,
-		nSrcLen,
+		(int)nSrcLen,
 		&(*ret)[0],
 		nNewLen
 	);
@@ -375,7 +375,7 @@ void wcstombs_vector(const wchar_t* pSrc, size_t nSrcLen, std::vector<char>* ret
 		CP_SJIS,				// 2008/5/12 Uchi
 		0,
 		pSrc,
-		nSrcLen,
+		(int)nSrcLen,
 		NULL,
 		0,
 		NULL,
@@ -390,7 +390,7 @@ void wcstombs_vector(const wchar_t* pSrc, size_t nSrcLen, std::vector<char>* ret
 		CP_SJIS,				// 2008/5/12 Uchi
 		0,
 		pSrc,
-		nSrcLen,
+		(int)nSrcLen,
 		&(*ret)[0],
 		nNewLen,
 		NULL,

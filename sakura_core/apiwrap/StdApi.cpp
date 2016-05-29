@@ -225,7 +225,7 @@ namespace ApiWrap {
 		return GetTextExtentPoint32A(
 			hdc,
 			&buf[0],
-			buf.size() - 1,
+			(int)buf.size() - 1,
 			lpSize
 		);
 	}

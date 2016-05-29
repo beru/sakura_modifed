@@ -30,8 +30,8 @@ BOOL GetSystemResources(int*, int*, int*);	// システムリソースを調べる
 BOOL CheckSystemResources(const TCHAR*);		// システムリソースのチェック
 
 // クリップボード
-bool SetClipboardText(HWND hwnd, const ACHAR* pszText, int nLength);	// クリープボードにText形式でコピーする。ANSI版。nLengthは文字単位。
-bool SetClipboardText(HWND hwnd, const WCHAR* pszText, int nLength);	// クリープボードにText形式でコピーする。UNICODE版。nLengthは文字単位。
+bool SetClipboardText(HWND hwnd, const ACHAR* pszText, size_t nLength);	// クリープボードにText形式でコピーする。ANSI版。nLengthは文字単位。
+bool SetClipboardText(HWND hwnd, const WCHAR* pszText, size_t nLength);	// クリープボードにText形式でコピーする。UNICODE版。nLengthは文字単位。
 bool IsDataAvailable(LPDATAOBJECT pDataObject, CLIPFORMAT cfFormat);
 HGLOBAL GetGlobalData(LPDATAOBJECT pDataObject, CLIPFORMAT cfFormat);
 
@@ -44,14 +44,12 @@ bool GetMonitorWorkRect(LPCRECT  prc,  LPRECT prcWork, LPRECT prcMonitor = NULL)
 bool GetMonitorWorkRect(POINT    pt,   LPRECT prcWork, LPRECT prcMonitor = NULL);	// 2006.04.21 ryoji
 bool GetMonitorWorkRect(HMONITOR hMon, LPRECT prcWork, LPRECT prcMonitor = NULL);	// 2006.04.21 ryoji
 
-
 // 2006.06.17 ryoji
 #define PACKVERSION(major, minor) MAKELONG(minor, major)
 DWORD GetComctl32Version();					// Comctl32.dll のバージョン番号を取得						// 2006.06.17 ryoji
 bool IsVisualStyle();						// 自分が現在ビジュアルスタイル表示状態かどうかを示す		// 2006.06.17 ryoji
 void PreventVisualStyle(HWND hWnd);		// 指定ウィンドウでビジュアルスタイルを使わないようにする	// 2006.06.23 ryoji
 void MyInitCommonControls();				// コモンコントロールを初期化する							// 2006.06.21 ryoji
-
 
 // カレントディレクトリユーティリティ。
 // コンストラクタでカレントディレクトリを保存し、デストラクタでカレントディレクトリを復元するモノ。
@@ -63,7 +61,6 @@ public:
 private:
 	TCHAR szCurDir[_MAX_PATH];
 };
-
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                      メッセージ定数                         //
@@ -85,14 +82,12 @@ private:
 	#define XBUTTON2 0x0002
 #endif
 
-
 // -- -- テーマ -- -- //
 
 // 2006.06.17 ryoji WM_THEMECHANGED
 #ifndef	WM_THEMECHANGED
 #define WM_THEMECHANGED		0x031A
 #endif
-
 
 // -- -- IME (imm.h) -- -- //
 
@@ -104,4 +99,3 @@ private:
 #ifndef IMR_CONFIRMRECONVERTSTRING
 #define IMR_CONFIRMRECONVERTSTRING             0x0005
 #endif // IMR_CONFIRMRECONVERTSTRING
-
