@@ -429,10 +429,10 @@ bool Caret::GetAdjustCursorPos(
 	bool ret = false;
 	if (ptPosXY2.y >= (int)nLayoutLineCount) {
 		if (0 < nLayoutLineCount) {
-			ptPosXY2.y = nLayoutLineCount - 1;
+			ptPosXY2.y = (int)nLayoutLineCount - 1;
 			const Layout* pLayout = editDoc.layoutMgr.SearchLineByLayoutY(ptPosXY2.y);
 			if (pLayout->GetLayoutEol() == EolType::None) {
-				ptPosXY2.x = editView.LineIndexToColumn(pLayout, pLayout->GetLengthWithEOL());
+				ptPosXY2.x = (int)editView.LineIndexToColumn(pLayout, pLayout->GetLengthWithEOL());
 				// [EOF]のみ折り返すのはやめる	// 2009.02.17 ryoji
 				// 復活するなら ptPosXY2.x に折り返し行インデントを適用するのがよい
 
@@ -560,7 +560,7 @@ void Caret::ShowEditCaret()
 				}else {
 					size_t nKeta = NativeW::GetKetaOfChar(pLine, nLineLen, nIdxFrom);
 					if (0 < nKeta) {
-						nCaretWidth = GetHankakuDx() * nKeta;
+						nCaretWidth = GetHankakuDx() * (int)nKeta;
 					}
 				}
 			}
@@ -593,7 +593,7 @@ void Caret::ShowEditCaret()
 			}else {
 				size_t nKeta = NativeW::GetKetaOfChar(pLine, nLineLen, nIdxFrom);
 				if (0 < nKeta) {
-					nCaretWidth = GetHankakuDx() * nKeta;
+					nCaretWidth = GetHankakuDx() * (int)nKeta;
 				}
 			}
 		}
@@ -769,7 +769,7 @@ void Caret::ShowCaretPosInfo()
 				offset,
 				nullptr
 			);
-			ptCaret.x = editView.LineIndexToColumn(&layout, GetCaretLogicPos().x - pLayout->GetLogicPos().x);
+			ptCaret.x = (int)editView.LineIndexToColumn(&layout, GetCaretLogicPos().x - pLayout->GetLogicPos().x);
 		}
 	// 行番号をレイアウト単位で表示
 	}else {
@@ -974,7 +974,7 @@ int Caret::Cursor_UPDOWN(int nMoveLines, bool bSelect)
 			}
 			it.addDelta();
 		}
-		ptTo.x += it.getColumn();
+		ptTo.x += (int)it.getColumn();
 		if (it.end()) {
 			i = it.getIndex();
 		}
@@ -1186,14 +1186,14 @@ int Caret::MoveCursorProperly(
 					&& ((ptNewXY.x - it.getColumn()) * nColWidth + dx) * 2 >= it.getColumnDelta() * nColWidth
 				) {
 				//if (ptNewXY.x >= (pLayout ? pLayout->GetIndent() : 0) && (it.getColumnDelta() > 1) && ((it.getColumn() + it.getColumnDelta() - ptNewXY.x) <= it.getColumnDelta() / 2)) {
-					nPosX += it.getColumnDelta();
+					nPosX += (int)it.getColumnDelta();
 				}
 				i = it.getIndex();
 				break;
 			}
 			it.addDelta();
 		}
-		nPosX += it.getColumn();
+		nPosX += (int)it.getColumn();
 		if (it.end()) {
 			i = it.getIndex();
 			//nPosX -= it.getColumnDelta();	// 2009.02.17 ryoji コメントアウト（末尾文字の後に移動する）
