@@ -516,7 +516,7 @@ int PropToolbar::GetData(HWND hwndDlg)
 	int k = 0;
 	for (int i=0; i<csToolBar.nToolBarButtonNum; ++i) {
 		int j = List_GetItemData(hwndResList, i);
-		if (LB_ERR != j) {
+		if (j != LB_ERR) {
 			csToolBar.nToolBarButtonIdxArr[k] = j;
 			++k;
 		}

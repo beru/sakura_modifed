@@ -78,8 +78,8 @@ struct CommonSetting_General {
 	WORD	wTrayMenuHotKeyMods;			// タスクトレイ左クリックメニュー キー
 
 	// 履歴
-	int		nMRUArrNum_MAX;					// ファイルの履歴MAX
-	int		nOPENFOLDERArrNum_MAX;			// フォルダの履歴MAX
+	size_t	nMRUArrNum_MAX;					// ファイルの履歴MAX
+	size_t	nOPENFOLDERArrNum_MAX;			// フォルダの履歴MAX
 
 	// ノーカテゴリ
 	bool	bCloseAllConfirm;				// [すべて閉じる]で他に編集用のウィンドウがあれば確認する	// 2006.12.25 ryoji

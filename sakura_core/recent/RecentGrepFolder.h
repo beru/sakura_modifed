@@ -37,7 +37,7 @@ public:
 	// オーバーライド
 	int				CompareItem(const GrepFolderString* p1, LPCTSTR p2) const;
 	void			CopyItem(GrepFolderString* dst, LPCTSTR src) const;
-	const TCHAR*	GetItemText(int nIndex) const;
+	const TCHAR*	GetItemText(size_t nIndex) const;
 	bool			DataToReceiveType(LPCTSTR* dst, const GrepFolderString* src) const;
 	bool			TextToDataType(GrepFolderString* dst, LPCTSTR pszText) const;
 };

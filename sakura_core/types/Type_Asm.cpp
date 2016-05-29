@@ -53,11 +53,8 @@ void CType_Asm::InitTypeConfigImp(TypeConfig& type)
 */
 void DocOutline::MakeTopicList_asm(FuncInfoArr* pFuncInfoArr)
 {
-	int nTotalLine;
-
-	nTotalLine = doc.docLineMgr.GetLineCount();
-
-	for (int nLineCount=0; nLineCount<nTotalLine; ++nLineCount) {
+	size_t nTotalLine = doc.docLineMgr.GetLineCount();
+	for (size_t nLineCount=0; nLineCount<nTotalLine; ++nLineCount) {
 		const WCHAR* pLine;
 		size_t nLineLen;
 		WCHAR* pTmpLine;
@@ -136,7 +133,7 @@ void DocOutline::MakeTopicList_asm(FuncInfoArr* pFuncInfoArr)
 				  →
 				  レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 				*/
-				Point ptPos = doc.layoutMgr.LogicToLayout(Point(0, nLineCount));
+				Point ptPos = doc.layoutMgr.LogicToLayout(Point(0, (int)nLineCount));
 				pFuncInfoArr->AppendData(nLineCount + 1, ptPos.y + 1, entry_token, nFuncId);
 			}
 		}

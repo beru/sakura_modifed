@@ -557,7 +557,7 @@ UINT_PTR CALLBACK OFNHookProc(
 					TCHAR	szWork[_MAX_PATH + 1];
 					nIdx = Combo_GetCurSel((HWND) lParam);
 
-					if (CB_ERR != Combo_GetLBText((HWND) lParam, nIdx, szWork)) {
+					if (Combo_GetLBText((HWND) lParam, nIdx, szWork) != CB_ERR) {
 						// 2005.11.02 ryoji ファイル名指定のコントロールを確認する
 						HWND hwndFilebox = ::GetDlgItem( pData->hwndOpenDlg, cmb13 );		// ファイル名コンボ（Windows 2000タイプ）
 						if (!::IsWindow(hwndFilebox))

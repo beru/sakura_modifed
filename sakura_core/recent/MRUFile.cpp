@@ -133,7 +133,7 @@ std::vector<LPCTSTR> MruFile::GetPathList() const
 }
 
 // アイテム数を返す
-int MruFile::Length(void) const
+size_t MruFile::Length(void) const
 {
 	return recentFile.GetItemCount();
 }
@@ -155,7 +155,7 @@ void MruFile::ClearAll(void)
 	@retval TRUE データが格納された
 	@retval FALSE 正しくない番号が指定された．データは格納されなかった．
 */
-bool MruFile::GetEditInfo(int num, EditInfo* pfi) const
+bool MruFile::GetEditInfo(size_t num, EditInfo* pfi) const
 {
 	const EditInfo*	p = recentFile.GetItem(num);
 	if (!p) {
@@ -208,8 +208,8 @@ void MruFile::Add(EditInfo* pEditInfo)
 	
 	// すでに登録されている場合は、除外指定を無視する
 	if (recentFile.FindItemByPath(pEditInfo->szPath) == -1) {
-		int nSize = pShareData->history.aExceptMRU.size();
-		for (int i=0; i<nSize; ++i) {
+		size_t nSize = pShareData->history.aExceptMRU.size();
+		for (size_t i=0; i<nSize; ++i) {
 			TCHAR szExceptMRU[_MAX_PATH];
 			FileNameManager::ExpandMetaToFolder(pShareData->history.aExceptMRU[i], szExceptMRU, _countof(szExceptMRU));
 			if (_tcsistr(pEditInfo->szPath,  szExceptMRU)) {

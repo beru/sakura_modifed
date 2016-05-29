@@ -92,7 +92,13 @@ protected:
 	void profile_to_value(const wstring& profile, int* value) {
 		*value = _wtoi(profile.c_str());
 	}
+	void profile_to_value(const wstring& profile, size_t* value) {
+		*value = _wtoi(profile.c_str());
+	}
 	void value_to_profile(const int& value, wstring* profile) {
+		*profile = _work_itow(value);
+	}
+	void value_to_profile(const size_t& value, wstring* profile) {
 		*profile = _work_itow(value);
 	}
 	void profile_to_value(const wstring& profile, long* value) {

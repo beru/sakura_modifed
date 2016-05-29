@@ -74,7 +74,7 @@ void DocOutline::MakeFuncList_Java(FuncInfoArr* pFuncInfoArr)
 	size_t		nMaxWordLeng = 70;
 	FuncListJavaMode	mode;
 	wchar_t		szFuncName[100];
-	int	nFuncLine = 0;
+	size_t		nFuncLine = 0;
 	int			nFuncId;
 	int			nFuncNum;
 	wchar_t		szClass[1024];
@@ -253,7 +253,7 @@ void DocOutline::MakeFuncList_Java(FuncInfoArr* pFuncInfoArr)
 							  →
 							  レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 							*/
-							Point ptPosXY = doc.layoutMgr.LogicToLayout(Point(0, nFuncLine - 1));
+							Point ptPosXY = doc.layoutMgr.LogicToLayout(Point(0, (int)nFuncLine - 1));
 							wchar_t szWork[256];
 							if (0 < auto_snprintf_s(szWork, _countof(szWork), L"%ls::%ls", szClass, szFuncName)) {
 								pFuncInfoArr->AppendData(nFuncLine, ptPosXY.y + 1, szWork, nFuncId);
@@ -278,7 +278,7 @@ void DocOutline::MakeFuncList_Java(FuncInfoArr* pFuncInfoArr)
 						nNestLevel2Arr.pop_back();
 						--nClassNestArrNum;
 						int k;
-						for (k=wcslen(szClass)-1; k>=0; --k) {
+						for (k=(int)wcslen(szClass)-1; k>=0; --k) {
 							if (L'\\' == szClass[k]) {
 								break;
 							}
@@ -386,7 +386,7 @@ void DocOutline::MakeFuncList_Java(FuncInfoArr* pFuncInfoArr)
 							  →
 							  レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 							*/
-							Point ptPosXY = doc.layoutMgr.LogicToLayout(Point(0, nFuncLine - 1));
+							Point ptPosXY = doc.layoutMgr.LogicToLayout(Point(0, (int)nFuncLine - 1));
 							wchar_t szWork[256];
 							if (0 < auto_snprintf_s(szWork, _countof(szWork), L"%ls::%ls", szClass, szFuncName)) {
 								pFuncInfoArr->AppendData(nFuncLine, ptPosXY.y + 1, szWork, nFuncId);

@@ -57,7 +57,7 @@ struct EditNodeEx {
 
 // 共有メモリ内構造体
 struct Share_Nodes {
-	int			nEditArrNum;		// short->intに修正	//@@@ 2003.05.31 MIK
+	size_t		nEditArrNum;		// short->intに修正	//@@@ 2003.05.31 MIK
 	EditNode	pEditArr[MAX_EDITWINDOWS];	// 最大値修正	@@@ 2003.05.31 MIK
 	LONG		nSequences;			// ウィンドウ連番
 	LONG		nNonameSequences;	// 無題連番

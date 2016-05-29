@@ -52,7 +52,7 @@ RecentReplace::RecentReplace()
 
 	@note	取得後のポインタはユーザ管理の構造体にキャストして参照してください。
 */
-const TCHAR* RecentReplace::GetItemText(int nIndex) const
+const TCHAR* RecentReplace::GetItemText(size_t nIndex) const
 {
 	return to_tchar(*GetItem(nIndex));
 }

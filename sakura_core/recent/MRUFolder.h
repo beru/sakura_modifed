@@ -54,8 +54,8 @@ public:
 	std::vector<LPCTSTR> GetPathList() const;
 
 	// アクセス関数
-	int Length() const;	// アイテムの数。
-	int MenuLength(void) const { return t_min(Length(), recentFolder.GetViewCount()); }	// メニューに表示されるアイテムの数
+	size_t Length() const;	// アイテムの数。
+	size_t MenuLength(void) const { return t_min(Length(), recentFolder.GetViewCount()); }	// メニューに表示されるアイテムの数
 	void ClearAll();					// アイテムを削除～。
 	void Add(const TCHAR* pszFolder);	// pszFolderを追加する。
 	const TCHAR* GetPath(int num) const;

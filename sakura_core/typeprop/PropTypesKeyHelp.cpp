@@ -572,7 +572,7 @@ void PropTypesKeyHelp::SetData(HWND hwndDlg)
 	ListView_SetExtendedListViewStyle(hwndWork, dwStyle);
 	// データ表示
 	LV_ITEM	lvi;
-	for (int i=0; i<MAX_KEYHELP_FILE; ++i) {
+	for (size_t i=0; i<MAX_KEYHELP_FILE; ++i) {
 		if (types.keyHelpArr[i].szPath[0] == _T('\0')) {
 			break;
 		}

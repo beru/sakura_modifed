@@ -63,7 +63,6 @@ void DocOutline::MakeTopicList_cobol(FuncInfoArr* pFuncInfoArr)
 	wchar_t			szDivision[1024];
 	wchar_t			szLabel[1024];
 	const wchar_t*	pszKeyword;
-	int				nKeywordLen;
 	bool			bDivision;
 	bool			bExtEol = GetDllShareData().common.edit.bEnableExtEol;
 
@@ -105,7 +104,7 @@ void DocOutline::MakeTopicList_cobol(FuncInfoArr* pFuncInfoArr)
 //			MYTRACE(_T("szLabel=[%ls]\n"), szLabel);
 
 			pszKeyword = L"division";
-			nKeywordLen = wcslen(pszKeyword);
+			size_t nKeywordLen = wcslen(pszKeyword);
 			bDivision = false;
 			size_t nLen = wcslen(szLabel) - nKeywordLen;
 			for (i=0; i<=nLen ; ++i) {
@@ -127,9 +126,9 @@ void DocOutline::MakeTopicList_cobol(FuncInfoArr* pFuncInfoArr)
 			*/
 
 			wchar_t	szWork[1024];
-			Point ptPos = doc.layoutMgr.LogicToLayout(Point(0, nLineCount));
+			Point ptPos = doc.layoutMgr.LogicToLayout(Point(0, (int)nLineCount));
 			auto_sprintf_s(szWork, L"%ls::%ls", szDivision, szLabel);
-			pFuncInfoArr->AppendData(nLineCount + 1, ptPos.y + 1 , szWork, 0);
+			pFuncInfoArr->AppendData((int)nLineCount + 1, ptPos.y + 1 , szWork, 0);
 		}
 	}
 	return;

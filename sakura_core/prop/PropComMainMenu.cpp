@@ -773,8 +773,8 @@ INT_PTR PropMainMenu::DispatchEvent(
 		if (0
 			|| nIdxFunc == LB_ERR
 			|| (1
-				&& CB_ERR != nIdxFIdx
-				&& LB_ERR != nIdxFunc
+				&& nIdxFIdx != CB_ERR
+				&& nIdxFunc != LB_ERR
 				&& lookup.Pos2FuncCode(nIdxFIdx, nIdxFunc) == 0
 				&& nIdxFIdx != nSpecialFuncsNum
 			)

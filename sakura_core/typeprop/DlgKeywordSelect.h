@@ -42,7 +42,7 @@ class KeywordSetMgr;
 */
 
 //	2005.01.13 genta ShareData‚Ì’è‹`‚Æ˜A“®‚³‚¹‚é
-const int KEYWORD_SELECT_NUM = MAX_KEYWORDSET_PER_TYPE;
+const size_t KEYWORD_SELECT_NUM = MAX_KEYWORDSET_PER_TYPE;
 
 class DlgKeywordSelect : public Dialog {
 public:

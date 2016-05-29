@@ -36,7 +36,6 @@
 #include "env/CommonSetting.h"
 
 
-
 // 指定した位置の文字が何バイト文字かを返す
 /*!
 	@param[in] pData 位置を求めたい文字列の先頭
@@ -58,17 +57,11 @@ size_t Latin1::GetSizeOfChar(const char* pData, size_t nDataLen, size_t nIdx)
 }
 
 
-
-
 /*!
 	Latin1 → Unicode 変換
 */
-int Latin1::Latin1ToUni(const char* pSrc, const size_t nSrcLen, wchar_t* pDst, bool* pbError)
+size_t Latin1::Latin1ToUni(const char* pSrc, const size_t nSrcLen, wchar_t* pDst, bool* pbError)
 {
-	int nret;
-	const unsigned char *pr, *pr_end;
-	unsigned short* pw;
-
 	if (pbError) {
 		*pbError = false;
 	}
@@ -76,14 +69,13 @@ int Latin1::Latin1ToUni(const char* pSrc, const size_t nSrcLen, wchar_t* pDst, b
 		return 0;
 	}
 
-	pr = reinterpret_cast<const unsigned char*>(pSrc);
-	pr_end = reinterpret_cast<const unsigned char*>(pSrc + nSrcLen);
-	pw = reinterpret_cast<unsigned short*>(pDst);
-
+	const unsigned char* pr = reinterpret_cast<const unsigned char*>(pSrc);
+	const unsigned char* pr_end = reinterpret_cast<const unsigned char*>(pSrc + nSrcLen);
+	unsigned short* pw = reinterpret_cast<unsigned short*>(pDst);
 	for (; pr<pr_end; ++pr) {
 		if (*pr >= 0x80 && *pr <= 0x9f) {
 			// Windows 拡張部
-			nret = ::MultiByteToWideChar(1252, 0, reinterpret_cast<const char*>(pr), 1, reinterpret_cast<wchar_t*>(pw), 4);
+			int nret = ::MultiByteToWideChar(1252, 0, reinterpret_cast<const char*>(pr), 1, reinterpret_cast<wchar_t*>(pw), 4);
 			if (nret == 0) {
 				*pw = static_cast<unsigned short>(*pr);
 			}
@@ -95,8 +87,6 @@ int Latin1::Latin1ToUni(const char* pSrc, const size_t nSrcLen, wchar_t* pDst, b
 
 	return pw - reinterpret_cast<unsigned short*>(pDst);
 }
-
-
 
 // コード変換 Latin1→Unicode
 CodeConvertResult Latin1::Latin1ToUnicode( const Memory& src, NativeW* pDstMem )
@@ -115,7 +105,7 @@ CodeConvertResult Latin1::Latin1ToUnicode( const Memory& src, NativeW* pDstMem )
 
 	// 変換
 	bool bError;
-	int nDstLen = Latin1ToUni(pSrc, nSrcLen, pDst, &bError);
+	size_t nDstLen = Latin1ToUni(pSrc, nSrcLen, pDst, &bError);
 
 	// pDstMemを更新
 	pDstMem->_GetMemory()->SetRawDataHoldBuffer( pDst, nDstLen*sizeof(wchar_t) );
@@ -131,13 +121,8 @@ CodeConvertResult Latin1::Latin1ToUnicode( const Memory& src, NativeW* pDstMem )
 /*
 	Unicode -> Latin1
 */
-int Latin1::UniToLatin1(const wchar_t* pSrc, const size_t nSrcLen, char* pDst, bool* pbError)
+size_t Latin1::UniToLatin1(const wchar_t* pSrc, const size_t nSrcLen, char* pDst, bool* pbError)
 {
-	int nclen;
-	const unsigned short *pr, *pr_end;
-	unsigned char* pw;
-	ECharSet echarset;
-	bool berror = false, berror_tmp;
 
 	if (nSrcLen < 1) {
 		if (pbError) {
@@ -146,10 +131,12 @@ int Latin1::UniToLatin1(const wchar_t* pSrc, const size_t nSrcLen, char* pDst, b
 		return 0;
 	}
 
-	pr = reinterpret_cast<const unsigned short*>(pSrc);
-	pr_end = reinterpret_cast<const unsigned short*>(pSrc + nSrcLen);
-	pw = reinterpret_cast<unsigned char*>(pDst);
-
+	bool berror = false, berror_tmp;
+	const unsigned short* pr = reinterpret_cast<const unsigned short*>(pSrc);
+	const unsigned short* pr_end = reinterpret_cast<const unsigned short*>(pSrc + nSrcLen);
+	unsigned char* pw = reinterpret_cast<unsigned char*>(pDst);
+	size_t nclen;
+	ECharSet echarset;
 	while ((nclen = CheckUtf16leChar(reinterpret_cast<const wchar_t*>(pr), pr_end - pr, &echarset, 0)) > 0) {
 		// 保護コード
 		switch (echarset) {
@@ -209,7 +196,7 @@ CodeConvertResult Latin1::UnicodeToLatin1( const NativeW& src, Memory* pDstMem )
 
 	// 変換
 	bool berror;
-	int nDstLen = UniToLatin1(pSrc, nSrcLen, pDst, &berror);
+	size_t nDstLen = UniToLatin1(pSrc, nSrcLen, pDst, &berror);
 
 	// pDstMemを更新
 	pDstMem->SetRawDataHoldBuffer( pDst, nDstLen );
@@ -251,7 +238,7 @@ CodeConvertResult Latin1::UnicodeToHex(const wchar_t* cSrc, size_t iSLen, TCHAR*
 	unsigned char* ps = reinterpret_cast<unsigned char*>( cCharBuffer._GetMemory()->GetRawPtr() );
 	TCHAR* pd = pDst;
 	if (!bbinary) {
-		for (int i=cCharBuffer._GetMemory()->GetRawLength(); i>0; --i, ++ps, pd+=2) {
+		for (size_t i=cCharBuffer._GetMemory()->GetRawLength(); i>0; --i, ++ps, pd+=2) {
 			auto_sprintf(pd, _T("%02x"), *ps);
 		}
 	}else {

@@ -174,7 +174,7 @@ public:
 	void InitMenu_Function(HMENU , EFunctionCode, const wchar_t*, const wchar_t*);
 	bool InitMenu_Special(HMENU , EFunctionCode);
 	void InitMenubarMessageFont(void);			//	メニューバーへのメッセージ表示機能をEditWndより移管	//	Dec. 4, 2002 genta
-	LRESULT WinListMenu(HMENU hMenu, EditNode* pEditNodeArr, int nRowNum, bool bFull);	// ウィンドウ一覧メニュー作成処理		2006.03.23 fon
+	LRESULT WinListMenu(HMENU hMenu, EditNode* pEditNodeArr, size_t nRowNum, bool bFull);	// ウィンドウ一覧メニュー作成処理		2006.03.23 fon
 	LRESULT PopupWinList(bool bMousePos);		// ウィンドウ一覧ポップアップ表示処理		2006.03.23 fon	// 2007.02.28 ryoji フルパス指定のパラメータを削除
 	void RegisterPluginCommand();				// プラグインコマンドをエディタに登録する
 	void RegisterPluginCommand(int id);			// プラグインコマンドをエディタに登録する

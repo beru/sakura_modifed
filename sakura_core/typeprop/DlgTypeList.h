@@ -59,9 +59,9 @@ protected:
 private:
 	TypeConfigNum nSettingType;
 	// 関連付け状態
-	bool bRegistryChecked[ MAX_TYPES ];	// レジストリ確認 未／済
-	bool bExtRMenu[ MAX_TYPES ];		// 右クリック登録 未／済
-	bool bExtDblClick[ MAX_TYPES ];		// ダブルクリック 未／済
+	bool bRegistryChecked[MAX_TYPES];	// レジストリ確認 未／済
+	bool bExtRMenu[MAX_TYPES];			// 右クリック登録 未／済
+	bool bExtDblClick[MAX_TYPES];		// ダブルクリック 未／済
 	bool bAlertFileAssociation;			// 関連付け警告の表示フラグ
 	bool bEnableTempChange;				// 一時適用の有効化
 };

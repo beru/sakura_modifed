@@ -53,7 +53,7 @@ RecentExceptMRU::RecentExceptMRU()
 
 	@note	取得後のポインタはユーザ管理の構造体にキャストして参照してください。
 */
-const TCHAR* RecentExceptMRU::GetItemText(int nIndex) const
+const TCHAR* RecentExceptMRU::GetItemText(size_t nIndex) const
 {
 	return *GetItem(nIndex);
 }

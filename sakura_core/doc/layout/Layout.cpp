@@ -64,7 +64,7 @@ int Layout::CalcLayoutOffset(
 	int nRet = nStartOffset;
 	if (this->GetLogicOffset()) {
 		const wchar_t* pLine = this->pDocLine->GetPtr();
-		int nLineLen = this->pDocLine->GetLengthWithEOL();
+		size_t nLineLen = this->pDocLine->GetLengthWithEOL();
 		const int nOffset = GetLogicOffset();
 		for (int i=nStartPos; i<nOffset; ++i) {
 			if (pLine[i] == WCODE::TAB) {

@@ -53,7 +53,7 @@ public:
 		return to_wchar(GetDllShareData().history.szIMPORTFOLDER) + sFileName;
 	}
 	// ファイル名を取得
-	inline wstring GetFileName()	{ return sOriginName; }
+	inline wstring GetFileName() { return sOriginName; }
 
 protected:
 	// Import Folderの設定
@@ -82,9 +82,10 @@ class ImpExpType : public ImpExpManager {
 public:
 	// Constructor
 	ImpExpType(int nIdx, TypeConfig& types, HWND hwndList)
-		: nIdx(nIdx)
-		, types(types)
-		, hwndList(hwndList)
+		:
+		nIdx(nIdx),
+		types(types),
+		hwndList(hwndList)
 	{
 		// 共有データ構造体のアドレスを返す
 		pShareData = &GetDllShareData();

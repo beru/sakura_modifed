@@ -33,7 +33,7 @@
 
 	@note	取得後のポインタはユーザ管理の構造体にキャストして参照してください。
 */
-const TCHAR* RecentFile::GetItemText(int nIndex) const
+const TCHAR* RecentFile::GetItemText(size_t nIndex) const
 {
 	return GetItem(nIndex)->szPath;
 }
@@ -85,10 +85,10 @@ void RecentFile::CopyItem(EditInfo* dst, const EditInfo* src) const
 
 int RecentFile::FindItemByPath(const TCHAR* pszPath) const
 {
-	int n = GetItemCount();
-	for (int i=0; i<n; ++i) {
+	size_t n = GetItemCount();
+	for (size_t i=0; i<n; ++i) {
 		if (_tcsicmp(GetItem(i)->szPath, pszPath) == 0) {
-			return i;
+			return (int)i;
 		}
 	}
 	return -1;

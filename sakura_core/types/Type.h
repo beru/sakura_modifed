@@ -145,7 +145,7 @@ struct TypeConfig {
 	HereDocType			nHeredocType;
 	wchar_t				szIndentChars[64];				// その他のインデント対象文字
 
-	int					nColorInfoArrNum;				// 色設定配列の有効数
+	size_t				nColorInfoArrNum;				// 色設定配列の有効数
 	ColorInfo			colorInfoArr[64];				// 色設定配列
 
 	SFilePath			szBackImgPath;					// 背景画像

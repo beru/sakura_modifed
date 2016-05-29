@@ -1263,7 +1263,7 @@ void PrintPreview::DrawHeaderFooter(HDC hdc, const Rect& rect, bool bHeader)
 		Tab2Space(szWork);
 		SIZE size;
 		nLen = wcslen(szWork);
-		::GetTextExtentPoint32W(hdc, szWork, nLen, &size);		// テキスト幅
+		::GetTextExtentPoint32W(hdc, szWork, (int)nLen, &size);		// テキスト幅
 		::ExtTextOutW_AnyBuild(
 			hdc,
 			(rect.right + rect.left - size.cx) / 2,
@@ -1281,7 +1281,7 @@ void PrintPreview::DrawHeaderFooter(HDC hdc, const Rect& rect, bool bHeader)
 			szWork, nWorkLen);
 		Tab2Space(szWork);
 		nLen = wcslen(szWork);
-		::GetTextExtentPoint32W(hdc, szWork, nLen, &size);		// テキスト幅
+		::GetTextExtentPoint32W(hdc, szWork, (int)nLen, &size);		// テキスト幅
 		::ExtTextOutW_AnyBuild(
 			hdc,
 			rect.right - size.cx,
@@ -1329,7 +1329,7 @@ void PrintPreview::DrawHeaderFooter(HDC hdc, const Rect& rect, bool bHeader)
 		Print_DrawLine(
 			hdc,
 			Point(
-				(rect.right + rect.left - nTextWidth) / 2,
+				(rect.right + rect.left - (int)nTextWidth) / 2,
 				nY
 			),
 			szWork,
@@ -1711,10 +1711,9 @@ ColorStrategy* PrintPreview::Print_DrawLine(
 
 				// 桁進め
 				if (nKindLast == 2) {
-					nLayoutX += (nTabSpace - nLayoutX % nTabSpace)
-						+ nTabSpace * (iLogic - nBgnLogic - 1);
+					nLayoutX += (nTabSpace - nLayoutX % nTabSpace) + nTabSpace * (iLogic - nBgnLogic - 1);
 				}else {
-					int		nIncrement = 0;
+					int nIncrement = 0;
 					for (int i=nBgnLogic-nLineStart; i<iLogic-nLineStart; ++i) {
 						nIncrement += pDxArray[i];
 					}

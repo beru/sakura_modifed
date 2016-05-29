@@ -110,7 +110,7 @@ std::vector<LPCTSTR> MruFolder::GetPathList() const
 	return ret;
 }
 
-int MruFolder::Length() const
+size_t MruFolder::Length() const
 {
 	return recentFolder.GetItemCount();
 }
@@ -134,8 +134,8 @@ void MruFolder::Add(const TCHAR* pszFolder)
 
 	// ‚·‚Å‚É“o˜^‚³‚ê‚Ä‚¢‚éê‡‚ÍAœŠOŽw’è‚ð–³Ž‹‚·‚é
 	if (recentFolder.FindItemByText(pszFolder) == -1) {
-		int nSize = pShareData->history.aExceptMRU.size();
-		for (int i=0; i<nSize; ++i) {
+		size_t nSize = pShareData->history.aExceptMRU.size();
+		for (size_t i=0; i<nSize; ++i) {
 			TCHAR szExceptMRU[_MAX_PATH];
 			FileNameManager::ExpandMetaToFolder(pShareData->history.aExceptMRU[i], szExceptMRU, _countof(szExceptMRU));
 			if (_tcsistr(pszFolder, szExceptMRU)) {

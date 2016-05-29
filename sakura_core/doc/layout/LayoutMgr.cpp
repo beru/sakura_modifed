@@ -835,7 +835,7 @@ Point LayoutMgr::LogicToLayout(
 				}
 				
 				// 文字レイアウト幅 -> nCharKetas
-				int nCharKetas;
+				size_t nCharKetas;
 				if (pData[i] == WCODE::TAB) {
 					// Sep. 23, 2002 genta メンバー関数を使うように
 					nCharKetas = GetActualTabSpace(nCaretPosX);

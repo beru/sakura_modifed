@@ -49,13 +49,13 @@ struct OutlineErlang {
 	} state;
 
 	wchar_t func[64];			// 関数名(Arity含む) = 表示名
-	int lnum;					// 関数の行番号
+	size_t lnum;					// 関数の行番号
 	int argcount;				// 発見した引数の数
 	wchar_t parenthesis[32];	// 括弧のネストを管理するもの
 	int parenthesis_ptr;		// 括弧のネストレベル
 	
 	OutlineErlang();
-	bool parse(const wchar_t* buf, int linelen, int linenum);
+	bool Parse(const wchar_t* buf, size_t linelen, size_t linenum);
 	
 	const wchar_t* ScanFuncName(const wchar_t* buf, const wchar_t* end, const wchar_t* p);
 	const wchar_t* EnterArgs(const wchar_t* end, const wchar_t* p);
@@ -63,27 +63,27 @@ struct OutlineErlang {
 	const wchar_t* ScanArgs(const wchar_t* end, const wchar_t* p);
 	const wchar_t* EnterCond(const wchar_t* end, const wchar_t* p);
 	const wchar_t* GetFuncName() const { return func; }
-	int GetFuncLine() const { return lnum; }
+	size_t GetFuncLine() const { return lnum; }
 
 private:
 	// helper functions
-	bool IS_ATOM_HEAD(wchar_t wc)
+	bool IsAtomHead(wchar_t wc)
 	{
 		return (L'a' <= wc && wc <= L'z')
 			|| (wc == L'_') || (wc == L'@');
 	}
 
-	bool IS_ALNUM(wchar_t wc)
+	bool IsAlNum(wchar_t wc)
 	{
-		return IS_ATOM_HEAD(wc) || (L'A' <= wc && wc <= L'Z') || (L'0' <= wc && wc <= L'9');
+		return IsAtomHead(wc) || (L'A' <= wc && wc <= L'Z') || (L'0' <= wc && wc <= L'9');
 	}
 
-	bool IS_COMMENT(wchar_t wc)
+	bool IsComment(wchar_t wc)
 	{
 		return (wc == L'%');
 	}
 
-	bool IS_SPACE(wchar_t wc)
+	bool IsSpace(wchar_t wc)
 	{
 		return (wcschr(L" \t\r\n", wc) != 0);
 	}
@@ -111,7 +111,7 @@ const wchar_t* OutlineErlang::ScanFuncName(const wchar_t* buf, const wchar_t* en
 {
 	assert(state == STATE_NORMAL);
 
-	if (p > buf || ! (IS_ATOM_HEAD(*p) || *p == L'\'')) {
+	if (p > buf || ! (IsAtomHead(*p) || *p == L'\'')) {
 		return end;
 	}
 	
@@ -127,7 +127,7 @@ const wchar_t* OutlineErlang::ScanFuncName(const wchar_t* buf, const wchar_t* en
 	}else {
 		do {
 			++p;
-		}while (IS_ALNUM(*p) && p < end);
+		}while (IsAlNum(*p) && p < end);
 	}
 	
 	size_t buf_len = _countof(func);
@@ -155,13 +155,13 @@ const wchar_t* OutlineErlang::EnterArgs(const wchar_t* end, const wchar_t* p)
 {
 	assert(state == STATE_FUNC_CANDIDATE_FIN);
 
-	while (IS_SPACE(*p) && p < end)
+	while (IsSpace(*p) && p < end)
 		++p;
 	
 	if (p >= end)
 		return end;
 
-	if (IS_COMMENT(*p)) {
+	if (IsComment(*p)) {
 		return end;
 	}else if (*p == L'(') { //)
 		state = STATE_FUNC_ARGS1;
@@ -187,7 +187,7 @@ const wchar_t* OutlineErlang::ScanArgs1(const wchar_t* end, const wchar_t* p)
 {
 	assert(state == STATE_FUNC_ARGS1);
 	
-	while (IS_SPACE(*p) && p < end)
+	while (IsSpace(*p) && p < end)
 		++p;
 
 	if (p >= end)
@@ -197,7 +197,7 @@ const wchar_t* OutlineErlang::ScanArgs1(const wchar_t* end, const wchar_t* p)
 		// no argument
 		state = STATE_FUNC_ARGS_FIN;
 		++p;
-	}else if (IS_COMMENT(*p)) {
+	}else if (IsComment(*p)) {
 		return end;
 	}else {
 		// argument found
@@ -283,7 +283,7 @@ const wchar_t* OutlineErlang::ScanArgs(const wchar_t* end, const wchar_t* p)
 				quote = L'"';
 			}else if (*p == L'\'') {
 				quote = L'\'';
-			}else if (IS_COMMENT(*p)) {
+			}else if (IsComment(*p)) {
 				return end;
 			}
 		}
@@ -302,7 +302,7 @@ const wchar_t* OutlineErlang::ScanArgs(const wchar_t* end, const wchar_t* p)
 */
 const wchar_t* OutlineErlang::EnterCond(const wchar_t* end, const wchar_t* p)
 {
-	while (IS_SPACE(*p) && p < end)
+	while (IsSpace(*p) && p < end)
 		++p;
 
 	if (p >= end)
@@ -314,7 +314,7 @@ const wchar_t* OutlineErlang::EnterCond(const wchar_t* end, const wchar_t* p)
 	}else if (p + 3 < end && wcsncmp(p, L"when", 4) == 0) {
 		state = STATE_FUNC_FOUND;
 		p += 4;
-	}else if (IS_COMMENT(*p)) {
+	}else if (IsComment(*p)) {
 		return end;
 	}else {
 		state = STATE_NORMAL;
@@ -328,7 +328,7 @@ const wchar_t* OutlineErlang::EnterCond(const wchar_t* end, const wchar_t* p)
 	@param[in] linelen 行の長さ
 	@param[in] linenum 行番号
 */
-bool OutlineErlang::parse(const wchar_t* buf, int linelen, int linenum)
+bool OutlineErlang::Parse(const wchar_t* buf, size_t linelen, size_t linenum)
 {
 	const wchar_t* pos = buf;
 	const wchar_t* const end = buf + linelen;
@@ -352,7 +352,7 @@ bool OutlineErlang::parse(const wchar_t* buf, int linelen, int linenum)
 		case STATE_FUNC_ARGS_FIN:
 			pos = EnterCond(end, pos); break;
 		default:
-			PleaseReportToAuthor(NULL, _T("OutlineErlang::parse Unknown State: %d"), state);
+			PleaseReportToAuthor(NULL, _T("OutlineErlang::Parse Unknown State: %d"), state);
 			break;
 		}
 		if (state == STATE_FUNC_FOUND) {
@@ -374,7 +374,7 @@ bool OutlineErlang::parse(const wchar_t* buf, int linelen, int linenum)
 void OutlineErlang::build_arity(int arity)
 {
 	size_t len = wcslen(func);
-	const int buf_size = _countof(func);
+	const size_t buf_size = _countof(func);
 	wchar_t* p = &func[len];
 	wchar_t numstr[12];
 	
@@ -406,16 +406,16 @@ void DocOutline::MakeFuncList_Erlang(FuncInfoArr* pFuncInfoArr)
 	for (size_t nLineCount=0; nLineCount<doc.docLineMgr.GetLineCount(); ++nLineCount) {
 		size_t nLineLen;
 		const wchar_t* pLine = doc.docLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
-		if (erl_state_machine.parse(pLine, nLineLen, nLineCount)) {
+		if (erl_state_machine.Parse(pLine, nLineLen, nLineCount)) {
 			/*
 			  カーソル位置変換
 			  物理位置(行頭からのバイト数、折り返し無し行位置)
 			  →
 			  レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 			*/
-			Point ptPosXY = doc.layoutMgr.LogicToLayout(Point(0, erl_state_machine.GetFuncLine()));
+			Point ptPosXY = doc.layoutMgr.LogicToLayout(Point(0, (int)erl_state_machine.GetFuncLine()));
 			pFuncInfoArr->AppendData(
-				erl_state_machine.GetFuncLine() + 1,
+				(int)erl_state_machine.GetFuncLine() + 1,
 				ptPosXY.y + 1,
 				erl_state_machine.GetFuncName(),
 				0,

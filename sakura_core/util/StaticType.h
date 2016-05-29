@@ -27,7 +27,7 @@
 
 // ヒープを用いないvector
 // 2007.09.23 kobake 作成。
-template <class ELEMENT_TYPE, int MAX_SIZE, class SET_TYPE = const ELEMENT_TYPE&>
+template <class ELEMENT_TYPE, size_t MAX_SIZE, class SET_TYPE = const ELEMENT_TYPE&>
 class StaticVector {
 public:
 	// 型
@@ -35,12 +35,12 @@ public:
 
 public:
 	// 属性
-	int size() const { return nCount; }
-	int max_size() const { return MAX_SIZE; }
+	size_t size() const { return nCount; }
+	size_t max_size() const { return MAX_SIZE; }
 
 	// 要素アクセス
-	ElementType&       operator[](int nIndex)		{ assert(nIndex<MAX_SIZE); assert_warning(nIndex<nCount); return aElements[nIndex]; }
-	const ElementType& operator[](int nIndex) const	{ assert(nIndex<MAX_SIZE); assert_warning(nIndex<nCount); return aElements[nIndex]; }
+	ElementType&       operator[](size_t nIndex)		{ assert(nIndex<MAX_SIZE); assert_warning(nIndex<nCount); return aElements[nIndex]; }
+	const ElementType& operator[](size_t nIndex) const	{ assert(nIndex<MAX_SIZE); assert_warning(nIndex<nCount); return aElements[nIndex]; }
 
 	// 操作
 	void clear() { nCount = 0; }
@@ -49,17 +49,17 @@ public:
 		++nCount;
 		aElements[nCount-1] = e;
 	}
-	void resize(int nNewSize) {
+	void resize(size_t nNewSize) {
 		ASSERT_GE(nNewSize, 0);
 		ASSERT_GE(MAX_SIZE, nNewSize);
 		nCount = nNewSize;
 	}
 	
 	// 要素数が0でも要素へのポインタを取得
-	ElementType*  dataPtr() { return aElements;}
+	ElementType* dataPtr() { return aElements;}
 
 	// 特殊
-	int& _GetSizeRef() { return nCount; }
+	size_t& _GetSizeRef() { return nCount; }
 	void SetSizeLimit() {
 		if (MAX_SIZE < nCount) {
 			nCount = MAX_SIZE;
@@ -69,18 +69,18 @@ public:
 	}
 	
 private:
-	int         nCount;
+	size_t nCount;
 	ElementType aElements[MAX_SIZE];
 };
 
 // ヒープを用いない文字列クラス
 // 2007.09.23 kobake 作成。
-template <class CHAR_TYPE, int N_BUFFER_COUNT>
+template <class CHAR_TYPE, size_t N_BUFFER_COUNT>
 class StaticString {
 private:
 	typedef StaticString<CHAR_TYPE, N_BUFFER_COUNT> Me;
 public:
-	static const int BUFFER_COUNT = N_BUFFER_COUNT;
+	static const size_t BUFFER_COUNT = N_BUFFER_COUNT;
 public:
 	// コンストラクタ・デストラクタ
 	StaticString() { szData[0] = 0; }
@@ -98,7 +98,7 @@ public:
 	operator       CHAR_TYPE*()			{ return szData; }
 	operator const CHAR_TYPE*() const	{ return szData; }
 
-	CHAR_TYPE At(int nIndex) const	{ return szData[nIndex]; }
+	CHAR_TYPE At(size_t nIndex) const	{ return szData[nIndex]; }
 
 	// 簡易コピー
 	void Assign(const CHAR_TYPE* src)	{ if (!src) szData[0] = 0; else auto_strcpy_s(szData, _countof(szData), src); }

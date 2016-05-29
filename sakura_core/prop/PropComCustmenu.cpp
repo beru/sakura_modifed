@@ -601,7 +601,7 @@ INT_PTR PropCustmenu::DispatchEvent(
 			::EnableWindow(::GetDlgItem(hwndDlg, IDC_BUTTON_INSERT), FALSE);
 			::EnableWindow(::GetDlgItem(hwndDlg, IDC_BUTTON_ADD), FALSE);
 		}
-		if (CB_ERR != nIdx3 && LB_ERR != nIdx4 &&
+		if (nIdx3 != CB_ERR && nIdx4 != LB_ERR &&
 		 	lookup.Pos2FuncCode(nIdx3, nIdx4) == 0 &&
 			!(nIdx3 == nSpecialFuncsNum && 0 <= nIdx4 && nIdx4 < gSpecialFuncsCount)
 		) {

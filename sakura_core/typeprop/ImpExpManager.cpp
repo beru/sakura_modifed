@@ -344,7 +344,7 @@ bool ImpExpType::Import(const wstring& sFileName, wstring& sErrMsg)
 	wchar_t	szKeyData[1024];
 	int		nIdx;
 	int		nPlug = 0;
-	int		nDataLen;
+	size_t	nDataLen;
 	wchar_t* pSlashPos;
 	wchar_t	szFileName[_MAX_PATH + 1];
 	bool	bCase;
@@ -353,7 +353,7 @@ bool ImpExpType::Import(const wstring& sFileName, wstring& sErrMsg)
 
 	// 強調キーワード
 	KeywordSetMgr&	keywordSetMgr = common.specialKeyword.keywordSetMgr;
-	for (int i=0; i<MAX_KEYWORDSET_PER_TYPE; ++i) {
+	for (size_t i=0; i<MAX_KEYWORDSET_PER_TYPE; ++i) {
 		//types.nKeywordSetIdx[i] = -1;
 		auto_sprintf_s(szKeyName, szKeyKeywordTemp, i + 1);
 		if (profile.IOProfileData(szSecTypeEx, szKeyName, MakeStringBufferW(szKeyData))) {
@@ -611,9 +611,9 @@ bool ImpExpRegex::Import(const wstring& sFileName, wstring& sErrMsg)
 	RegexKeywordInfo regexKeyArr[MAX_REGEX_KEYWORD];
 	auto szKeywordList = std::make_unique<wchar_t[]>(MAX_REGEX_KEYWORDLISTLEN);
 	wchar_t* pKeyword = &szKeywordList[0];
-	int	keywordPos = 0;
+	size_t keywordPos = 0;
 	TCHAR buff[MAX_REGEX_KEYWORDLEN + 20];
-	int count = 0;
+	size_t count = 0;
 	while (in) {
 		// 1行読み込み
 		wstring line = in.ReadLineW();
@@ -653,7 +653,7 @@ bool ImpExpRegex::Import(const wstring& sFileName, wstring& sErrMsg)
 				if (k != -1) {	// 3文字カラー名からインデックス番号に変換
 					if (0 < MAX_REGEX_KEYWORDLISTLEN - keywordPos - 1) {
 						regexKeyArr[count].nColorIndex = k;
-						_tcstowcs(&pKeyword[keywordPos], p, t_min<int>(MAX_REGEX_KEYWORDLEN, MAX_REGEX_KEYWORDLISTLEN - keywordPos - 1));
+						_tcstowcs(&pKeyword[keywordPos], p, t_min<size_t>(MAX_REGEX_KEYWORDLEN, MAX_REGEX_KEYWORDLISTLEN - keywordPos - 1));
 						++count;
 						keywordPos += auto_strlen(&pKeyword[keywordPos]) + 1;
 					}else {
@@ -669,10 +669,10 @@ bool ImpExpRegex::Import(const wstring& sFileName, wstring& sErrMsg)
 
 	in.Close();
 
-	for (int i=0; i<count; ++i) {
+	for (size_t i=0; i<count; ++i) {
 		types.regexKeywordArr[i] = regexKeyArr[i];
 	}
-	for (int i=0; i<=keywordPos; ++i) {
+	for (size_t i=0; i<=keywordPos; ++i) {
 		types.regexKeywordList[i] = pKeyword[i];
 	}
 

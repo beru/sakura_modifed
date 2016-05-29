@@ -53,7 +53,7 @@ RecentSearch::RecentSearch()
 
 	@note	取得後のポインタはユーザ管理の構造体にキャストして参照してください。
 */
-const TCHAR* RecentSearch::GetItemText(int nIndex) const
+const TCHAR* RecentSearch::GetItemText(size_t nIndex) const
 {
 	return to_tchar(*GetItem(nIndex));
 }

@@ -68,7 +68,7 @@ void DocOutline::MakeTopicList_tex(FuncInfoArr* pFuncInfoArr)
 	wchar_t szTag[32], szTitle[256];			//	一時領域
 	int thisSection = 0, lastSection = 0;	// 現在のセクション種類と一つ前のセクション種類
 	int stackSection[nMaxStack];		// 各深さでのセクションの番号
-	int nStartTitlePos = 0;				// \section{dddd} の dddd の部分の始まる番号
+	size_t nStartTitlePos = 0;				// \section{dddd} の dddd の部分の始まる番号
 	int bNoNumber = 0;					// * 付の場合はセクション番号を付けない
 
 	// 一行ずつ
@@ -134,7 +134,7 @@ void DocOutline::MakeTopicList_tex(FuncInfoArr* pFuncInfoArr)
 				WCHAR tmpstr[256];
 				WCHAR secstr[4];
 
-				Point ptPos = doc.layoutMgr.LogicToLayout(Point(i, nLineCount));
+				Point ptPos = doc.layoutMgr.LogicToLayout(Point((int)i, (int)nLineCount));
 				int sabunSection = thisSection - lastSection;
 				if (lastSection == 0) {
 					nDepth = 0;

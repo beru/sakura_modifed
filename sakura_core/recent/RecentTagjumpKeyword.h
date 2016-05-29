@@ -37,7 +37,7 @@ public:
 	// オーバーライド
 	int				CompareItem(const TagJumpKeywordString* p1, LPCWSTR p2) const;
 	void			CopyItem(TagJumpKeywordString* dst, LPCWSTR src) const;
-	const TCHAR*	GetItemText(int nIndex) const;
+	const TCHAR*	GetItemText(size_t nIndex) const;
 	bool			DataToReceiveType(LPCWSTR* dst, const TagJumpKeywordString* src) const;
 	bool			TextToDataType(TagJumpKeywordString* dst, LPCTSTR pszText) const;
 };

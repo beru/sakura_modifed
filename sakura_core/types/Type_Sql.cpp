@@ -57,7 +57,7 @@ void DocOutline::MakeFuncList_PLSQL(FuncInfoArr* pFuncInfoArr)
 	size_t 		nMaxWordLeng = 70;
 	int			nMode;
 	wchar_t		szFuncName[100];
-	int			nFuncLine(0);
+	size_t		nFuncLine = 0;
 	int			nFuncId = 0;
 	int			nFuncNum;
 	int			nFuncOrProc = 0;
@@ -172,7 +172,7 @@ void DocOutline::MakeFuncList_PLSQL(FuncInfoArr* pFuncInfoArr)
 							  →
 							  レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 							*/
-							Point ptPos = doc.layoutMgr.LogicToLayout(Point(0, nFuncLine - 1));
+							Point ptPos = doc.layoutMgr.LogicToLayout(Point(0, (int)nFuncLine - 1));
 							pFuncInfoArr->AppendData(nFuncLine, ptPos.y + 1, szFuncName, nFuncId);
 							nParseCnt = 0;
 						}
@@ -186,7 +186,7 @@ void DocOutline::MakeFuncList_PLSQL(FuncInfoArr* pFuncInfoArr)
 								  →
 								  レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 								*/
-								Point ptPos = doc.layoutMgr.LogicToLayout(Point(0, nFuncLine - 1));
+								Point ptPos = doc.layoutMgr.LogicToLayout(Point(0, (int)nFuncLine - 1));
 								pFuncInfoArr->AppendData(nFuncLine, ptPos.y + 1 , szFuncName, nFuncId);
 								nParseCnt = 0;
 							}else if (nFuncOrProc == 4) {
@@ -198,7 +198,7 @@ void DocOutline::MakeFuncList_PLSQL(FuncInfoArr* pFuncInfoArr)
 								  →
 								  レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 								*/
-								Point ptPos = doc.layoutMgr.LogicToLayout(Point(0, nFuncLine - 1));
+								Point ptPos = doc.layoutMgr.LogicToLayout(Point(0, (int)nFuncLine - 1));
 								pFuncInfoArr->AppendData(nFuncLine, ptPos.y + 1 , szFuncName, nFuncId);
 								nParseCnt = 0;
 							}
@@ -292,7 +292,7 @@ void DocOutline::MakeFuncList_PLSQL(FuncInfoArr* pFuncInfoArr)
 						  →
 						  レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 						*/
-						Point ptPos = doc.layoutMgr.LogicToLayout(Point(0, nFuncLine - 1));
+						Point ptPos = doc.layoutMgr.LogicToLayout(Point(0, (int)nFuncLine - 1));
 						pFuncInfoArr->AppendData(nFuncLine, ptPos.y + 1 , szFuncName, nFuncId);
 						nParseCnt = 0;
 					}

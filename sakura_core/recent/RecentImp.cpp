@@ -45,10 +45,10 @@
 template <class T, class S>
 bool RecentImp<T, S>::Create(
 	DataType*	pszItemArray,	// アイテム配列へのポインタ
-	int*		pnItemCount,	// アイテム個数へのポインタ
+	size_t*		pnItemCount,	// アイテム個数へのポインタ
 	bool*		pbItemFavorite,	// お気に入りへのポインタ(NULL許可)
-	int			nArrayCount,	// 最大管理可能なアイテム数
-	int*		pnViewCount		// 表示個数(NULL許可)
+	size_t		nArrayCount,	// 最大管理可能なアイテム数
+	size_t*		pnViewCount		// 表示個数(NULL許可)
 	)
 {
 	Terminate();
@@ -56,8 +56,8 @@ bool RecentImp<T, S>::Create(
 	// パラメータチェック
 	if (!pszItemArray) return false;
 	if (!pnItemCount) return false;
-	if (nArrayCount <= 0) return false;
-	if (pnViewCount && (*pnViewCount < 0 || nArrayCount < *pnViewCount)) return false;
+	if (nArrayCount == 0) return false;
+	if (pnViewCount && (nArrayCount < *pnViewCount)) return false;
 
 	// 各パラメータ格納
 	this->puUserItemData		= pszItemArray;
@@ -131,10 +131,10 @@ void RecentImp<T, S>::_Recovery()
 	false	解除
 */
 template <class T, class S>
-bool RecentImp<T, S>::SetFavorite(int nIndex, bool bFavorite)
+bool RecentImp<T, S>::SetFavorite(size_t nIndex, bool bFavorite)
 {
 	if (! IsAvailable()) return false;
-	if (nIndex < 0 || nIndex >= *pnUserItemCount) return false;
+	if (nIndex >= *pnUserItemCount) return false;
 	if (!pbUserItemFavorite) return false;
 
 	pbUserItemFavorite[nIndex] = bFavorite;
@@ -152,7 +152,7 @@ void RecentImp<T, S>::ResetAllFavorite()
 		return;
 	}
 
-	for (int i=0; i<*pnUserItemCount; ++i) {
+	for (size_t i=0; i<*pnUserItemCount; ++i) {
 		SetFavorite(i, false);
 	}
 }
@@ -164,10 +164,10 @@ void RecentImp<T, S>::ResetAllFavorite()
 	false	通常
 */
 template <class T, class S>
-bool RecentImp<T, S>::IsFavorite(int nIndex) const
+bool RecentImp<T, S>::IsFavorite(size_t nIndex) const
 {
 	if (! IsAvailable()) return false;
-	if (nIndex < 0 || nIndex >= *pnUserItemCount) return false;
+	if (nIndex >= *pnUserItemCount) return false;
 	if (!pbUserItemFavorite) return false;
 
 	return pbUserItemFavorite[nIndex];
@@ -210,7 +210,7 @@ bool RecentImp<T, S>::AppendItem(ReceiveType pItemData)
 		DeleteItem(nIndex);
 	}
 
-	for (int i=*pnUserItemCount; i>0; --i) {
+	for (size_t i=*pnUserItemCount; i>0; --i) {
 		CopyItem(i - 1, i);
 	}
 
@@ -253,7 +253,7 @@ bool RecentImp<T, S>::AppendItemText(LPCTSTR pText)
 }
 
 template <class T, class S>
-bool RecentImp<T, S>::EditItemText(int nIndex, LPCTSTR pText)
+bool RecentImp<T, S>::EditItemText(size_t nIndex, LPCTSTR pText)
 {
 	DataType data;
 	ReceiveType receiveData;
@@ -278,12 +278,12 @@ bool RecentImp<T, S>::EditItemText(int nIndex, LPCTSTR pText)
 	アイテムをゼロクリアする。
 */
 template <class T, class S>
-void RecentImp<T, S>::ZeroItem(int nIndex)
+void RecentImp<T, S>::ZeroItem(size_t nIndex)
 {
 	if (! IsAvailable()) {
 		return;
 	}
-	if (nIndex < 0 || nIndex >= nArrayCount) {
+	if (nIndex >= nArrayCount) {
 		return;
 	}
 
@@ -300,19 +300,19 @@ void RecentImp<T, S>::ZeroItem(int nIndex)
 	アイテムを削除する。
 */
 template <class T, class S>
-bool RecentImp<T, S>::DeleteItem(int nIndex)
+bool RecentImp<T, S>::DeleteItem(size_t nIndex)
 {
 	if (!IsAvailable()) {
 		return false;
 	}
-	if (nIndex < 0 || nIndex >= *pnUserItemCount) {
+	if (nIndex >= *pnUserItemCount) {
 		return false;
 	}
 
 	ZeroItem(nIndex);
 
 	// 以降のアイテムを前に詰める。
-	int i;
+	size_t i;
 	for (i=nIndex; i<*pnUserItemCount-1; ++i) {
 		CopyItem(i + 1, i);
 	}
@@ -334,7 +334,7 @@ bool RecentImp<T, S>::DeleteItemsNoFavorite()
 	}
 
 	bool bDeleted = false;
-	for (int i=*pnUserItemCount-1; 0<=i; --i) {
+	for (int i=(int)(*pnUserItemCount)-1; 0<=i; --i) {
 		if (!IsFavorite(i)) {
 			if (DeleteItem(i)) {
 				bDeleted = true;
@@ -353,13 +353,11 @@ bool RecentImp<T, S>::DeleteItemsNoFavorite()
 template <class T, class S>
 void RecentImp<T, S>::DeleteAllItem()
 {
-	int	i;
-
 	if (!IsAvailable()) {
 		return;
 	}
 	
-	for (i=0; i<nArrayCount; ++i) {
+	for (size_t i=0; i<nArrayCount; ++i) {
 		ZeroItem(i);
 	}
 	
@@ -372,13 +370,13 @@ void RecentImp<T, S>::DeleteAllItem()
 	アイテムを移動する。
 */
 template <class T, class S>
-bool RecentImp<T, S>::MoveItem(int nSrcIndex, int nDstIndex)
+bool RecentImp<T, S>::MoveItem(size_t nSrcIndex, size_t nDstIndex)
 {
 	bool	bFavorite;
 
 	if (! IsAvailable()) return false;
-	if (nSrcIndex < 0 || nSrcIndex >= *pnUserItemCount) return false;
-	if (nDstIndex < 0 || nDstIndex >= *pnUserItemCount) return false;
+	if (nSrcIndex >= *pnUserItemCount) return false;
+	if (nDstIndex >= *pnUserItemCount) return false;
 
 	if (nSrcIndex == nDstIndex) return true;
 
@@ -389,11 +387,11 @@ bool RecentImp<T, S>::MoveItem(int nSrcIndex, int nDstIndex)
 	bFavorite = IsFavorite(nSrcIndex);
 
 	if (nSrcIndex < nDstIndex) {
-		for (int i=nSrcIndex; i<nDstIndex; ++i) {
+		for (size_t i=nSrcIndex; i<nDstIndex; ++i) {
 			CopyItem(i + 1, i);
 		}
 	}else {
-		for (int i=nSrcIndex; i>nDstIndex; --i) {
+		for (size_t i=nSrcIndex; i>nDstIndex; --i) {
 			CopyItem(i - 1, i);
 		}
 	}
@@ -405,11 +403,11 @@ bool RecentImp<T, S>::MoveItem(int nSrcIndex, int nDstIndex)
 }
 
 template <class T, class S>
-bool RecentImp<T, S>::CopyItem(int nSrcIndex, int nDstIndex)
+bool RecentImp<T, S>::CopyItem(size_t nSrcIndex, size_t nDstIndex)
 {
-	if (! IsAvailable()) return false;
-	if (nSrcIndex < 0 || nSrcIndex >= nArrayCount) return false;
-	if (nDstIndex < 0 || nDstIndex >= nArrayCount) return false;
+	if (!IsAvailable()) return false;
+	if (nSrcIndex >= nArrayCount) return false;
+	if (nDstIndex >= nArrayCount) return false;
 
 	if (nSrcIndex == nDstIndex) return true;
 
@@ -428,16 +426,16 @@ bool RecentImp<T, S>::CopyItem(int nSrcIndex, int nDstIndex)
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 template <class T, class S>
-const T* RecentImp<T, S>::GetItem(int nIndex) const
+const T* RecentImp<T, S>::GetItem(size_t nIndex) const
 {
-	if (!IsAvailable() || nIndex<0 || nIndex >= *pnUserItemCount) return nullptr;
+	if (!IsAvailable() || nIndex >= *pnUserItemCount) return nullptr;
 	return &puUserItemData[nIndex];
 }
 
 template <class T, class S>
-const T* RecentImp<T, S>::GetItemPointer(int nIndex) const
+const T* RecentImp<T, S>::GetItemPointer(size_t nIndex) const
 {
-	if (!IsAvailable() || nIndex < 0 || nIndex >= nArrayCount) return nullptr;
+	if (!IsAvailable() || nIndex >= nArrayCount) return nullptr;
 	return &puUserItemData[nIndex];
 }
 
@@ -464,12 +462,12 @@ int RecentImp<T, S>::FindItem(ReceiveType pItemData) const
 	bFavorite=false	通常の中から探す
 */
 template <class T, class S>
-int RecentImp<T, S>::GetOldestItem(int nIndex, bool bFavorite)
+int RecentImp<T, S>::GetOldestItem(size_t nIndex, bool bFavorite)
 {
 	if (!IsAvailable()) return -1;
 	if (nIndex >= *pnUserItemCount) nIndex = *pnUserItemCount - 1;
 
-	for (int i=nIndex; i>=0; --i) {
+	for (int i=(int)nIndex; i>=0; --i) {
 		if (IsFavorite(i) == bFavorite) return i;
 	}
 
@@ -487,14 +485,11 @@ int RecentImp<T, S>::GetOldestItem(int nIndex, bool bFavorite)
 	@note	お気に入りは可能な限り表示内に移動させる。
 */
 template <class T, class S>
-bool RecentImp<T, S>::ChangeViewCount(int nViewCount)
+bool RecentImp<T, S>::ChangeViewCount(size_t nViewCount)
 {
-	int	i;
-	int	nIndex;
-
 	// 範囲外ならエラー
 	if (!IsAvailable()) return false;
-	if (nViewCount < 0 || nViewCount > nArrayCount) return false;
+	if (nViewCount > nArrayCount) return false;
 
 	// 表示個数を更新する。
 	if (pnUserViewCount) {
@@ -505,14 +500,14 @@ bool RecentImp<T, S>::ChangeViewCount(int nViewCount)
 	if (nViewCount >= *pnUserItemCount) return true;
 
 	// 最も古いお気に入りを探す。
-	i = GetOldestItem(*pnUserItemCount - 1, true);
+	int	i = GetOldestItem(*pnUserItemCount - 1, true);
 	if (i == -1) return true;	// ないので何もしないで終了
 
 	// 表示外アイテムを表示内に移動する。
 	for (; i>=nViewCount; --i) {
 		if (IsFavorite(i)) {
 			// カレント位置から上に通常アイテムを探す
-			nIndex = GetOldestItem(i - 1, false);
+			int	nIndex = GetOldestItem(i - 1, false);
 			if (nIndex == -1) break;	// もう1個もない
 
 			// 見つかったアイテムをカレント位置に移動する
@@ -529,13 +524,10 @@ bool RecentImp<T, S>::ChangeViewCount(int nViewCount)
 template <class T, class S>
 bool RecentImp<T, S>::UpdateView()
 {
-	int	nViewCount;
-
 	// 範囲外ならエラー
 	if (!IsAvailable()) return false;
 
-	nViewCount = pnUserViewCount ? *pnUserViewCount : nArrayCount;
-
+	size_t nViewCount = pnUserViewCount ? *pnUserViewCount : nArrayCount;
 	return ChangeViewCount(nViewCount);
 }
 

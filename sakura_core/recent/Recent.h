@@ -46,31 +46,31 @@ public:
 	virtual void Terminate() = 0;
 
 	// アイテム
-	virtual const TCHAR*	GetItemText(int nIndex) const = 0;
-	virtual int				GetArrayCount() const = 0;
-	virtual int				GetItemCount() const = 0;
+	virtual const TCHAR*	GetItemText(size_t nIndex) const = 0;
+	virtual size_t			GetArrayCount() const = 0;
+	virtual size_t			GetItemCount() const = 0;
 	virtual void			DeleteAllItem() = 0;
 	virtual bool			DeleteItemsNoFavorite() = 0;
-	virtual bool			DeleteItem(int nIndex) = 0;	// アイテムをクリア
+	virtual bool			DeleteItem(size_t nIndex) = 0;	// アイテムをクリア
 	virtual bool			AppendItemText(const TCHAR* pszText) = 0;
-	virtual bool			EditItemText(int nIndex, const TCHAR* pszText) = 0;
+	virtual bool			EditItemText(size_t nIndex, const TCHAR* pszText) = 0;
 
 	int FindItemByText(const TCHAR* pszText) const {
-		int n = GetItemCount();
-		for (int i=0; i<n; ++i) {
+		size_t n = GetItemCount();
+		for (size_t i=0; i<n; ++i) {
 			if (_tcscmp(GetItemText(i), pszText) == 0) {
-				return i;
+				return (int)i;
 			}
 		}
 		return -1;
 	}
 
 	// お気に入り
-	virtual bool	SetFavorite(int nIndex, bool bFavorite = true) = 0;		// お気に入りに設定
-	virtual bool	IsFavorite(int nIndex) const = 0;						// お気に入りか調べる
+	virtual bool	SetFavorite(size_t nIndex, bool bFavorite = true) = 0;		// お気に入りに設定
+	virtual bool	IsFavorite(size_t nIndex) const = 0;						// お気に入りか調べる
 
 	// その他
-	virtual int		GetViewCount() const = 0;
+	virtual size_t	GetViewCount() const = 0;
 	virtual bool	UpdateView() = 0;
 
 	// 共有メモリアクセス

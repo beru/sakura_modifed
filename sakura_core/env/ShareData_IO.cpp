@@ -1774,12 +1774,12 @@ void ShareData_IO::ShareData_IO_Keywords(DataProfile& profile)
 			auto_sprintf(szKeyName, LTEXT("nKWN[%02d]"), i);
 			profile.IOProfileData(pszSecName, szKeyName, pKeywordSetMgr->nKeywordNumArr[i]);
 			
-			int nMemLen = 0;
+			size_t nMemLen = 0;
 			for (int j=0; j<pKeywordSetMgr->nKeywordNumArr[i]; ++j) {
 				nMemLen += wcslen(pKeywordSetMgr->GetKeyword(i, j));
-				nMemLen ++;
+				nMemLen++;
 			}
-			nMemLen ++;
+			nMemLen++;
 			auto_sprintf(szKeyName, LTEXT("szKW[%02d].Size"), i);
 			profile.IOProfileData(pszSecName, szKeyName, nMemLen);
 			std::vector<wchar_t> szMem(nMemLen + 1); // May 25, 2003 genta ‹æØ‚è‚ğTAB‚É•ÏX‚µ‚½‚Ì‚ÅCÅŒã‚Ì\0‚Ì•ª‚ğ’Ç‰Á

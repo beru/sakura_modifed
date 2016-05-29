@@ -53,7 +53,7 @@ RecentCmd::RecentCmd()
 
 	@note	取得後のポインタはユーザ管理の構造体にキャストして参照してください。
 */
-const TCHAR* RecentCmd::GetItemText(int nIndex) const
+const TCHAR* RecentCmd::GetItemText(size_t nIndex) const
 {
 	return *GetItem(nIndex);
 }

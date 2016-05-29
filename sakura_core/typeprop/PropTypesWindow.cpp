@@ -123,7 +123,7 @@ INT_PTR PropTypesWindow::DispatchEvent(
 				case IDC_COMBO_DEFAULT_CODETYPE:
 					// 文字コードの変更をBOMチェックボックスに反映
 					i = Combo_GetCurSel((HWND) lParam);
-					if (CB_ERR != i) {
+					if (i != CB_ERR) {
 						CodeTypeName	codeTypeName(Combo_GetItemData((HWND)lParam, i));
 						::CheckDlgButton(hwndDlg, IDC_CHECK_DEFAULT_BOM, (codeTypeName.IsBomDefOn() ?  BST_CHECKED : BST_UNCHECKED));
 						::EnableWindow(::GetDlgItem(hwndDlg, IDC_CHECK_DEFAULT_BOM), codeTypeName.UseBom());
@@ -447,7 +447,7 @@ int PropTypesWindow::GetData(HWND hwndDlg)
 		// types.eDefaultCodetype を設定
 		HWND hCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_DEFAULT_CODETYPE);
 		int i = Combo_GetCurSel(hCombo);
-		if (CB_ERR != i) {
+		if (i != CB_ERR) {
 			types.encoding.eDefaultCodetype = EncodingType(Combo_GetItemData(hCombo, i));
 		}
 
@@ -457,7 +457,7 @@ int PropTypesWindow::GetData(HWND hwndDlg)
 		// types.eDefaultEoltype を設定
 		hCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_DEFAULT_EOLTYPE);
 		i = Combo_GetCurSel(hCombo);
-		if (CB_ERR != i) {
+		if (i != CB_ERR) {
 			types.encoding.eDefaultEoltype = aeEolType[i];
 		}
 	}

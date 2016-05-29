@@ -203,7 +203,7 @@ void DocOutline::MakeTopicList_txt(FuncInfoArr* pFuncInfoArr)
 		  →
 		  レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 		*/
-		Point ptPos = doc.layoutMgr.LogicToLayout(Point(0, nLineCount));
+		Point ptPos = doc.layoutMgr.LogicToLayout(Point(0, (int)nLineCount));
 		// nDepthを計算
 		int k;
 		bool bAppend = true;
@@ -251,7 +251,7 @@ void DocOutline::MakeTopicList_txt(FuncInfoArr* pFuncInfoArr)
 */
 void DocOutline::MakeTopicList_wztxt(FuncInfoArr* pFuncInfoArr)
 {
-	int levelPrev = 0;
+	size_t levelPrev = 0;
 	bool bExtEol = GetDllShareData().common.edit.bEnableExtEol;
 
 	for (size_t nLineCount=0; nLineCount<doc.docLineMgr.GetLineCount(); ++nLineCount) {
@@ -272,15 +272,14 @@ void DocOutline::MakeTopicList_wztxt(FuncInfoArr* pFuncInfoArr)
 			for (pPos=pLine+1; *pPos==L'.'; ++pPos)
 				;
 
-			Point ptPos = doc.layoutMgr.LogicToLayout(Point(0, nLineCount));
-			ptrdiff_t level = pPos - pLine;
+			Point ptPos = doc.layoutMgr.LogicToLayout(Point(0, (int)nLineCount));
+			size_t level = pPos - pLine;
 
 			// 2003.06.27 Moca 階層が2段位上深くなるときは、無題の要素を追加
 			if (levelPrev < level && level != levelPrev + 1) {
-				int dummyLevel;
 				// (無題)を挿入
 				//	ただし，TAG一覧には出力されないように
-				for (dummyLevel=levelPrev+1; dummyLevel<level; ++dummyLevel) {
+				for (size_t dummyLevel=levelPrev+1; dummyLevel<level; ++dummyLevel) {
 					pFuncInfoArr->AppendData(
 						nLineCount + 1,
 						ptPos.y + 1,

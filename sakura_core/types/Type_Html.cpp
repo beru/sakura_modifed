@@ -235,7 +235,7 @@ void DocOutline::MakeTopicList_html(FuncInfoArr* pFuncInfoArr)
 						bParaTag = false;
 					}
 
-					Point ptPos = doc.layoutMgr.LogicToLayout(Point(i, nLineCount));
+					Point ptPos = doc.layoutMgr.LogicToLayout(Point((int)i, (int)nLineCount));
 
 					if (nLabelType != LT_EMPTY) {
 						// 終了タグなしを除く全てのタグらしきものを判定
@@ -263,7 +263,7 @@ void DocOutline::MakeTopicList_html(FuncInfoArr* pFuncInfoArr)
 							}
 						}
 						szTitle[k] = L'\0';
-						pFuncInfoArr->AppendData(nLineCount + 1, ptPos.y + 1, szTitle, 0, ++nDepth);
+						pFuncInfoArr->AppendData(nLineCount + 1, (size_t)ptPos.y + 1, szTitle, 0, ++nDepth);
 					}else {
 						for (; i+j<nLineLen && j<_countof(szTitle)-1; ++j) {
 							if (pLine[j] == L'>') {
@@ -272,7 +272,7 @@ void DocOutline::MakeTopicList_html(FuncInfoArr* pFuncInfoArr)
 							szTitle[j] = pLine[j];
 						}
 						szTitle[j]	=	L'\0';
-						pFuncInfoArr->AppendData(nLineCount + 1, ptPos.y + 1, szTitle, 0, nDepth);
+						pFuncInfoArr->AppendData(nLineCount + 1, (size_t)ptPos.y + 1, szTitle, 0, nDepth);
 					}
 				}
 			}

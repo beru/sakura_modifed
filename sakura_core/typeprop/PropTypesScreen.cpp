@@ -694,8 +694,8 @@ int PropTypesScreen::GetData(HWND hwndDlg)
 	{
 		// 標準ルール
 		if (!IsDlgButtonChecked(hwndDlg, IDC_RADIO_OUTLINERULEFILE)) {
-			HWND	hwndCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_OUTLINES);
-			int		nSelPos = Combo_GetCurSel(hwndCombo);
+			HWND hwndCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_OUTLINES);
+			int nSelPos = Combo_GetCurSel(hwndCombo);
 			if (nSelPos >= 0) {
 				types.eDefaultOutline = OlmArr[nSelPos].nMethod;	// アウトライン解析方法
 			}

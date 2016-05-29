@@ -475,8 +475,8 @@ bool SearchAgent::PrevOrNextWord(
 
 		// 文字種類が変わるまで前方へサーチ
 		// 空白とタブは無視する
-		int			nCount = 0;
-		int	nIdxNext = nIdx;
+		int nCount = 0;
+		int nIdxNext = nIdx;
 		ptrdiff_t nCharChars = &pLine[nIdxNext] - NativeW::GetCharPrev(pLine, nLineLen, &pLine[nIdxNext]);
 		while (nCharChars > 0) {
 			int nIdxNextPrev = nIdxNext;
@@ -612,7 +612,7 @@ int SearchAgent::SearchWord(
 				) {
 					// マッチした
 					pMatchRange->SetFromX(pRegexp->GetIndex());			// マッチ位置from
-					pMatchRange->SetToX  (pRegexp->GetLastIndex());		// マッチ位置to
+					pMatchRange->SetToX(pRegexp->GetLastIndex());		// マッチ位置to
 					break;
 				}
 				++nLinePos;
@@ -638,7 +638,7 @@ int SearchAgent::SearchWord(
 	}else if (searchOption.bWordOnly) {
 		// 検索語を単語に分割して searchWordsに格納する。
 		const wchar_t* pszPattern = pattern.GetKey();
-		const int	nPatternLen = pattern.GetLen();
+		const size_t nPatternLen = pattern.GetLen();
 		std::vector<std::pair<const wchar_t*, size_t>> searchWords; // 単語の開始位置と長さの配列。
 		CreateWordList(searchWords, pszPattern, nPatternLen);
 		/*
@@ -719,7 +719,7 @@ int SearchAgent::SearchWord(
 		goto end_of_func;
 	// 普通の検索 (正規表現でも単語単位でもない)
 	}else {
-		const int nPatternLen = pattern.GetLen();
+		const size_t nPatternLen = pattern.GetLen();
 		// 前方検索
 		if (eDirection == SearchDirection::Backward) {
 			nLinePos = ptSerachBegin.y;
@@ -1142,7 +1142,7 @@ prev_line:;
 		pArg->nInsSeq = 0;
 		return;
 	}
-	nAllLinesOld= docLineMgr.GetLineCount();
+	nAllLinesOld = docLineMgr.GetLineCount();
 	pArg->ptNewPos.y = pArg->delRange.GetFrom().y;	// 挿入された部分の次の位置の行
 	pArg->ptNewPos.x = 0;	// 挿入された部分の次の位置のデータ位置
 

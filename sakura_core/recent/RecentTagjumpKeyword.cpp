@@ -52,7 +52,7 @@ RecentTagJumpKeyword::RecentTagJumpKeyword()
 
 	@note	取得後のポインタはユーザ管理の構造体にキャストして参照してください。
 */
-const TCHAR* RecentTagJumpKeyword::GetItemText(int nIndex) const
+const TCHAR* RecentTagJumpKeyword::GetItemText(size_t nIndex) const
 {
 	return to_tchar(*GetItem(nIndex));
 }

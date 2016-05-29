@@ -37,7 +37,7 @@ public:
 	// オーバーライド
 	int				CompareItem(const ReplaceString* p1, LPCWSTR p2) const;
 	void			CopyItem(ReplaceString* dst, LPCWSTR src) const;
-	const TCHAR*	GetItemText(int nIndex) const;
+	const TCHAR*	GetItemText(size_t nIndex) const;
 	bool			DataToReceiveType(LPCWSTR* dst, const ReplaceString* src) const;
 	bool			TextToDataType(ReplaceString* dst, LPCTSTR pszText) const;
 };

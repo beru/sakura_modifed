@@ -103,7 +103,7 @@ bool PropTypesColor::Import(HWND hwndDlg)
 	ImpExpColors cImpExpColors(colorInfoArr);
 
 	// 色設定 I/O
-	for (int i=0; i<types.nColorInfoArrNum; ++i) {
+	for (size_t i=0; i<types.nColorInfoArrNum; ++i) {
 		colorInfoArr[i] = types.colorInfoArr[i];
 		_tcscpy(colorInfoArr[i].szName, types.colorInfoArr[i].szName);
 	}
@@ -116,7 +116,7 @@ bool PropTypesColor::Import(HWND hwndDlg)
 
 	// データのコピー
 	types.nColorInfoArrNum = COLORIDX_LAST;
-	for (int i=0; i<types.nColorInfoArrNum; ++i) {
+	for (size_t i=0; i<types.nColorInfoArrNum; ++i) {
 		types.colorInfoArr[i] = colorInfoArr[i];
 		_tcscpy(types.colorInfoArr[i].szName, colorInfoArr[i].szName);
 	}
@@ -1080,13 +1080,13 @@ void PropTypesColor::DrawColorListItem(DRAWITEMSTRUCT* pDis)
 	gr.FillMyRect(rc1);
 	// テキスト
 	::SetBkMode(gr, TRANSPARENT);
-	::TextOut(gr, rc1.left, rc1.top, pColorInfo->szName, _tcslen(pColorInfo->szName));
+	::TextOut(gr, rc1.left, rc1.top, pColorInfo->szName, (int)_tcslen(pColorInfo->szName));
 	if (pColorInfo->fontAttr.bBoldFont) {	// 太字か
-		::TextOut(gr, rc1.left + 1, rc1.top, pColorInfo->szName, _tcslen(pColorInfo->szName));
+		::TextOut(gr, rc1.left + 1, rc1.top, pColorInfo->szName, (int)_tcslen(pColorInfo->szName));
 	}
 	if (pColorInfo->fontAttr.bUnderLine) {	// 下線か
 		SIZE	sz;
-		::GetTextExtentPoint32(gr, pColorInfo->szName, _tcslen(pColorInfo->szName), &sz);
+		::GetTextExtentPoint32(gr, pColorInfo->szName, (int)_tcslen(pColorInfo->szName), &sz);
 		::MoveToEx(gr, rc1.left,		rc1.bottom - 2, NULL);
 		::LineTo(gr, rc1.left + sz.cx,	rc1.bottom - 2);
 		::MoveToEx(gr, rc1.left,		rc1.bottom - 1, NULL);

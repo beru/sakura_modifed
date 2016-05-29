@@ -52,7 +52,7 @@ RecentEditNode::RecentEditNode()
 
 	@note	取得後のポインタはユーザ管理の構造体にキャストして参照してください。
 */
-const TCHAR* RecentEditNode::GetItemText(int nIndex) const
+const TCHAR* RecentEditNode::GetItemText(size_t nIndex) const
 {
 	return _T("WIN"); // ※テキスト情報は無い (GetWindowTextしてあげても良いけど、この関数は実行されないので、意味は無い)
 }
@@ -84,10 +84,10 @@ void RecentEditNode::CopyItem(EditNode* dst, const EditNode* src) const
 
 int RecentEditNode::FindItemByHwnd(HWND hwnd) const
 {
-	int n = GetItemCount();
-	for (int i=0; i<n; ++i) {
+	size_t n = GetItemCount();
+	for (size_t i=0; i<n; ++i) {
 		if (GetItem(i)->hWnd == hwnd) {
-			return i;
+			return (int)i;
 		}
 	}
 	return -1;

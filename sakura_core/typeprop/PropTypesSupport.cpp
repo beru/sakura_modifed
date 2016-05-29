@@ -270,7 +270,7 @@ int PropTypesSupport::GetData(HWND hwndDlg)
 		int i = Combo_GetCurSel(hCombo);
 		if (i == 0) {
 			types.nHokanType = 0;
-		}else if (CB_ERR != i) {
+		}else if (i != CB_ERR) {
 			types.nHokanType = (*GetHokanMethodList())[i - 1].nMethod;
 		}
 	}

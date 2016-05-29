@@ -28,7 +28,7 @@ class FuncInfo;
 //@date 2002.04.01 YAZAKI 深さ導入
 class FuncInfo {
 public:
-	FuncInfo(int, int, int, int, const TCHAR*, const TCHAR*, int);	// FuncInfoクラス構築
+	FuncInfo(size_t, size_t, size_t, size_t, const TCHAR*, const TCHAR*, int);	// FuncInfoクラス構築
 	~FuncInfo();	// FuncInfoクラス消滅
 
 	// クリップボードに追加する要素か？
@@ -38,10 +38,10 @@ public:
 	}
 
 //	private:
-	int			nFuncLineCRLF;		// 関数のある行(CRLF単位)
-	int			nFuncLineLAYOUT;	// 関数のある行(折り返し単位)
-	int			nFuncColCRLF;		// 関数のある桁(CRLF単位)
-	int			nFuncColLAYOUT;		// 関数のある桁(折り返し単位)
+	size_t		nFuncLineCRLF;		// 関数のある行(CRLF単位)
+	size_t		nFuncLineLAYOUT;	// 関数のある行(折り返し単位)
+	size_t		nFuncColCRLF;		// 関数のある桁(CRLF単位)
+	size_t		nFuncColLAYOUT;		// 関数のある桁(折り返し単位)
 	NativeT		memFuncName;		// 関数名
 	NativeT		memFileName;		// ファイル名
 	int			nInfo;				// 付加情報

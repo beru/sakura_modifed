@@ -2558,7 +2558,7 @@ bool EditWnd::InitMenu_Special(HMENU hMenu, EFunctionCode eFunc)
 	case F_WINDOW_LIST:				// ウィンドウリスト
 		{
 			EditNode* pEditNodeArr;
-			int nRowNum = AppNodeManager::getInstance().GetOpenedWindowArr(&pEditNodeArr, true);
+			size_t nRowNum = AppNodeManager::getInstance().GetOpenedWindowArr(&pEditNodeArr, true);
 			WinListMenu(hMenu, pEditNodeArr, nRowNum, false);
 			bInList = (nRowNum > 0);
 			delete[] pEditNodeArr;
@@ -4110,7 +4110,7 @@ LRESULT EditWnd::PopupWinList(bool bMousePos)
 	@date  2006.03.23 fon EditWnd::InitMenuから移動。////が元からあるコメント。//>は追加コメントアウト。
 	@date 2009.06.02 ryoji アイテム数が多いときはアクセスキーを 1-9,A-Z の範囲で再使用する（従来は36個未満を仮定）
 */
-LRESULT EditWnd::WinListMenu(HMENU hMenu, EditNode* pEditNodeArr, int nRowNum, bool bFull)
+LRESULT EditWnd::WinListMenu(HMENU hMenu, EditNode* pEditNodeArr, size_t nRowNum, bool bFull)
 {
 	if (nRowNum > 0) {
 		TCHAR szMenu[_MAX_PATH * 2 + 3];
@@ -4120,7 +4120,7 @@ LRESULT EditWnd::WinListMenu(HMENU hMenu, EditNode* pEditNodeArr, int nRowNum, b
 		met.cbSize = CCSIZEOF_STRUCT(NONCLIENTMETRICS, lfMessageFont);
 		::SystemParametersInfo(SPI_GETNONCLIENTMETRICS, met.cbSize, &met, 0);
 		DCFont dcFont(met.lfMenuFont, GetHwnd());
-		for (int i=0; i<nRowNum; ++i) {
+		for (size_t i=0; i<nRowNum; ++i) {
 			// トレイからエディタへの編集ファイル名要求通知
 			::SendMessage(pEditNodeArr[i].GetHwnd(), MYWM_GETFILEINFO, 0, 0);
 ////	From Here Oct. 4, 2000 JEPRO commented out & modified	開いているファイル数がわかるように履歴とは違って1から数える

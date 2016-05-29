@@ -464,7 +464,7 @@ bool KeywordSetMgr::GetKeywordCase(int nIdx)
 	@author Moca
 	@date 2004.07.29 Moca CShareData::ShareData_IO_2内のコードを元に移築・作成
 */
-int KeywordSetMgr::SetKeywordArr(
+size_t KeywordSetMgr::SetKeywordArr(
 	int				nIdx,			// [in] キーワードセット番号
 	size_t			nSize,			// [in] キーワード数
 	const wchar_t*	pszKeywordArr	// [in]「key\\tword\\t\\0」又は「key\\0word\\0\\0」の形式
@@ -498,7 +498,7 @@ int KeywordSetMgr::SetKeywordArr(
 
 	@return 登録したキーワード数．0は失敗．
 */
-int KeywordSetMgr::SetKeywordArr(
+size_t KeywordSetMgr::SetKeywordArr(
 	int				nIdx,				// [in] キーワードセット番号
 	size_t			nSize,				// [in] ppszKeywordArrの要素数
 	const wchar_t*	ppszKeywordArr[]	// [in] キーワードの配列(重複・長さ制限等、考慮済みであること)

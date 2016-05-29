@@ -701,7 +701,6 @@ void Caret::ShowCaretPosInfo()
 	Eol cNlType = editDoc.docEditor.GetNewLineCode();
 	const TCHAR* szEolMode = cNlType.GetName();
 
-
 	// -- -- -- -- キャレット位置 -> ptCaret -- -- -- -- //
 	//
 	Point ptCaret;
