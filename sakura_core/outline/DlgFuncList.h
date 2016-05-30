@@ -97,8 +97,8 @@ protected:
 	bool bInChangeLayout;
 
 	FuncInfoArr*	pFuncInfoArr;	// 関数情報配列
-	int				nCurLine;		// 現在行
-	int				nCurCol;		// 現在桁
+	size_t			nCurLine;		// 現在行
+	size_t			nCurCol;		// 現在桁
 	int				nSortCol;		// ソートする列番号
 	int				nSortColOld;	// ソートする列番号(OLD)
 	bool			bSortDesc;		// 降順

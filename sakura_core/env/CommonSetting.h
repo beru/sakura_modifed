@@ -275,7 +275,7 @@ public:
 
 	// ファイルオープン
 	bool	bDropFileAndClose;				// ファイルをドロップしたときは閉じて開く
-	int		nDropFileNumMax;				// 一度にドロップ可能なファイル数
+	size_t	nDropFileNumMax;				// 一度にドロップ可能なファイル数
 	bool	bRestoreCurPosition;			// ファイルを開いたときカーソル位置を復元するか
 	bool	bRestoreBookmarks;				// ブックマークを復元するかどうか 2002.01.16 hor
 	bool	bAutoMimeDecode;				// ファイル読み込み時にMIMEのdecodeを行うか

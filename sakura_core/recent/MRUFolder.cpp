@@ -72,7 +72,7 @@ HMENU MruFolder::CreateMenu(HMENU	hMenuPopUp, MenuDrawer& menuDrawer) const
 	DCFont dcFont(met.lfMenuFont);
 
 	FileNameManager::getInstance().TransformFileName_MakeCache();
-	for (int i=0; i<recentFolder.GetItemCount(); ++i) {
+	for (size_t i=0; i<recentFolder.GetItemCount(); ++i) {
 		//	「共通設定」→「全般」→「ファイルの履歴MAX」を反映
 		if (i >= recentFolder.GetViewCount()) {
 			break;
@@ -100,7 +100,7 @@ HMENU MruFolder::CreateMenu(HMENU	hMenuPopUp, MenuDrawer& menuDrawer) const
 std::vector<LPCTSTR> MruFolder::GetPathList() const
 {
 	std::vector<LPCTSTR> ret;
-	for (int i=0; i<recentFolder.GetItemCount(); ++i) {
+	for (size_t i=0; i<recentFolder.GetItemCount(); ++i) {
 		// 「共通設定」→「全般」→「フォルダの履歴MAX」を反映
 		if (i >= recentFolder.GetViewCount()) {
 			break;

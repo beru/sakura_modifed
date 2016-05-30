@@ -85,7 +85,7 @@ const PaperInfo Print::paperInfoArr[] = {
 	{DMPAPER_FANFOLD_LGL_GERMAN,  2159,  3302, _T("German Legal Fanfold (8 1/2 x 13 inch)")},
 };
 
-const int Print::nPaperInfoArrNum = _countof(paperInfoArr);
+const size_t Print::nPaperInfoArrNum = _countof(paperInfoArr);
 
 
 

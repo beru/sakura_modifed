@@ -553,10 +553,10 @@ void DlgFuncList::SetData()
 		const FuncInfo*	pFuncInfo;
 		LV_ITEM item;
 		bool bSelected;
-		int nFuncLineOld(-1);
-		int nFuncColOld(-1);
-		int nFuncLineTop(INT_MAX);
-		int nFuncColTop(INT_MAX);
+		size_t nFuncLineOld(INT_MAX);
+		size_t nFuncColOld(INT_MAX);
+		size_t nFuncLineTop(INT_MAX);
+		size_t nFuncColTop(INT_MAX);
 		size_t nSelectedLineTop = 0;
 		size_t nSelectedLine = 0;
 		RECT rc;
@@ -896,8 +896,8 @@ void DlgFuncList::SetTreeJava(
 	bool bAddClass
 	)
 {
-	int				nFuncLineTop(INT_MAX);
-	int				nFuncColTop(INT_MAX);
+	size_t nFuncLineTop(INT_MAX);
+	size_t nFuncColTop(INT_MAX);
 	TV_INSERTSTRUCT	tvis;
 	const TCHAR*	pPos;
     TCHAR           szLabel[64 + 6];  // Jan. 07, 2001 genta クラス名エリアの拡大
@@ -935,8 +935,8 @@ void DlgFuncList::SetTreeJava(
 	pFuncInfoArr->SetAppendText(FL_OBJ_INTERFACE,	LSW(STR_DLGFNCLST_APND_INTERFACE),	false);
 	pFuncInfoArr->SetAppendText(FL_OBJ_GLOBAL,		LSW(STR_DLGFNCLST_APND_GLOBAL),		false);
 	
-	int nFuncLineOld = -1;
-	int nFuncColOld = -1;
+	size_t nFuncLineOld = INT_MAX;
+	size_t nFuncColOld = INT_MAX;
 	int bSelected = FALSE;
 	for (size_t i=0; i<pFuncInfoArr->GetNum(); ++i) {
 		const FuncInfo* pFuncInfo = pFuncInfoArr->GetAt(i);
@@ -1197,8 +1197,8 @@ void DlgFuncList::SetListVB(void)
 	TCHAR	szOption[64];
 	LV_ITEM	item;
 	HWND	hwndList;
-	int		nFuncLineOld;
-	int		nFuncColOld;
+	size_t	nFuncLineOld;
+	size_t	nFuncColOld;
 	size_t	nSelectedLine = 0;
 	RECT	rc;
 
@@ -1220,8 +1220,8 @@ void DlgFuncList::SetListVB(void)
 
 	nFuncLineOld = -1;
 	nFuncColOld = -1;
-	int nFuncLineTop(INT_MAX);
-	int nFuncColTop(INT_MAX);
+	size_t nFuncLineTop(INT_MAX);
+	size_t nFuncColTop(INT_MAX);
 	size_t nSelectedLineTop = 0;
 	bool bSelected = false;
 	for (size_t i=0; i<pFuncInfoArr->GetNum(); ++i) {
@@ -1453,10 +1453,10 @@ void DlgFuncList::SetTree(bool tagjump, bool nolabel)
 	HTREEITEM* phParentStack;
 	phParentStack = (HTREEITEM*)malloc(nStackDepth * sizeof(HTREEITEM));
 	phParentStack[nStackPointer] = TVI_ROOT;
-	int nFuncLineOld(-1);
-	int nFuncColOld(-1);
-	int nFuncLineTop(INT_MAX);
-	int nFuncColTop(INT_MAX);
+	size_t nFuncLineOld(INT_MAX);
+	size_t nFuncColOld(INT_MAX);
+	size_t nFuncLineTop(INT_MAX);
+	size_t nFuncColTop(INT_MAX);
 	bool bSelected = false;
 
 	memClipText.SetString(L"");
@@ -2059,7 +2059,7 @@ BOOL DlgFuncList::OnBnClicked(int wID)
 		if (wID == IDC_CHECK_bMarkUpBlankLineEnable&&nListType == OutlineType::BookMark) {
 			EditView* pEditView = (EditView*)lParam;
 			pEditView->GetCommander().HandleCommand(F_BOOKMARK_VIEW, true, TRUE, 0, 0, 0);
-			nCurLine=pEditView->GetCaret().GetCaretLayoutPos().y + 1;
+			nCurLine = pEditView->GetCaret().GetCaretLayoutPos().y + 1;
 			DocTypeManager().GetTypeConfig(pEditView->GetDocument().docType.GetDocumentType(), type);
 			SetData();
 		}else

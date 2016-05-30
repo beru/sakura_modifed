@@ -160,7 +160,7 @@ void DlgCompare::SetData(void)
 			// 番号は ウィンドウリストと同じになるようにする
 			FileNameManager::getInstance().GetMenuFullLabel_WinListNoEscape(szMenu, _countof(szMenu), pfi, pEditNodeArr[i].nId, i, calc.GetDC());
 
-			int nItem = ::List_AddString(hwndList, szMenu);
+			LRESULT nItem = ::List_AddString(hwndList, szMenu);
 			List_SetItemData(hwndList, nItem, pEditNodeArr[i].GetHwnd());
 
 			// 横幅を計算する
@@ -169,7 +169,7 @@ void DlgCompare::SetData(void)
 			// ファイル名一致のスコアを計算する
 			TCHAR szFile2[_MAX_PATH];
 			SplitPath_FolderAndFile(pfi->szPath, NULL, szFile2);
-			int scoreTemp = FileMatchScoreSepExt(szFile1, szFile2);
+			size_t scoreTemp = FileMatchScoreSepExt(szFile1, szFile2);
 			if (score < scoreTemp) {
 				// スコアのいいものを選択
 				score = scoreTemp;

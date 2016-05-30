@@ -4,10 +4,6 @@
     <Filter Include="Other Files">
       <UniqueIdentifier>{d8827879-bf17-4873-bd78-aa4485e499b7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{fe4ec4ec-aa2d-459c-a39d-bddbf929752a}</UniqueIdentifier>
-      <Extensions>ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe</Extensions>
-    </Filter>
     <Filter Include="Cpp Source Files">
       <UniqueIdentifier>{a8100ec7-8444-4a2e-8f67-44ddaecceded}</UniqueIdentifier>
     </Filter>
@@ -115,6 +111,10 @@
     </Filter>
     <Filter Include="Cpp Source Files\uiparts">
       <UniqueIdentifier>{da0f000f-1aed-42ab-ba31-f7d1f5ec407f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Other Files\Resource Files">
+      <UniqueIdentifier>{fe4ec4ec-aa2d-459c-a39d-bddbf929752a}</UniqueIdentifier>
+      <Extensions>ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe</Extensions>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1078,64 +1078,64 @@
       <Filter>Other Files</Filter>
     </None>
     <None Include="..\resource\auto_scroll_center.cur">
-      <Filter>Resource Files</Filter>
+      <Filter>Other Files\Resource Files</Filter>
     </None>
     <None Include="..\resource\auto_scroll_down.cur">
-      <Filter>Resource Files</Filter>
+      <Filter>Other Files\Resource Files</Filter>
     </None>
     <None Include="..\resource\auto_scroll_down_left.cur">
-      <Filter>Resource Files</Filter>
+      <Filter>Other Files\Resource Files</Filter>
     </None>
     <None Include="..\resource\auto_scroll_down_right.cur">
-      <Filter>Resource Files</Filter>
+      <Filter>Other Files\Resource Files</Filter>
     </None>
     <None Include="..\resource\auto_scroll_horizontal.cur">
-      <Filter>Resource Files</Filter>
+      <Filter>Other Files\Resource Files</Filter>
     </None>
     <None Include="..\resource\auto_scroll_left.cur">
-      <Filter>Resource Files</Filter>
+      <Filter>Other Files\Resource Files</Filter>
     </None>
     <None Include="..\resource\auto_scroll_right.cur">
-      <Filter>Resource Files</Filter>
+      <Filter>Other Files\Resource Files</Filter>
     </None>
     <None Include="..\resource\auto_scroll_up.cur">
-      <Filter>Resource Files</Filter>
+      <Filter>Other Files\Resource Files</Filter>
     </None>
     <None Include="..\resource\auto_scroll_up_left.cur">
-      <Filter>Resource Files</Filter>
+      <Filter>Other Files\Resource Files</Filter>
     </None>
     <None Include="..\resource\auto_scroll_up_right.cur">
-      <Filter>Resource Files</Filter>
+      <Filter>Other Files\Resource Files</Filter>
     </None>
     <None Include="..\resource\auto_scroll_vertical.cur">
-      <Filter>Resource Files</Filter>
+      <Filter>Other Files\Resource Files</Filter>
     </None>
     <None Include="..\resource\cursor_copy.cur">
-      <Filter>Resource Files</Filter>
+      <Filter>Other Files\Resource Files</Filter>
     </None>
     <None Include="..\resource\cursor_hand.cur">
-      <Filter>Resource Files</Filter>
+      <Filter>Other Files\Resource Files</Filter>
     </None>
     <None Include="..\resource\cursor_isb.cur">
-      <Filter>Resource Files</Filter>
+      <Filter>Other Files\Resource Files</Filter>
     </None>
     <None Include="..\resource\cursor_isf.cur">
-      <Filter>Resource Files</Filter>
+      <Filter>Other Files\Resource Files</Filter>
     </None>
     <None Include="..\resource\cursor_move.cur">
-      <Filter>Resource Files</Filter>
+      <Filter>Other Files\Resource Files</Filter>
     </None>
     <None Include="..\resource\cursor_rvarrow.cur">
-      <Filter>Resource Files</Filter>
+      <Filter>Other Files\Resource Files</Filter>
     </None>
     <None Include="..\resource\cursor_tab_join.cur">
-      <Filter>Resource Files</Filter>
+      <Filter>Other Files\Resource Files</Filter>
     </None>
     <None Include="..\resource\cursor_tab_separate.cur">
-      <Filter>Resource Files</Filter>
+      <Filter>Other Files\Resource Files</Filter>
     </None>
     <None Include="..\resource\MainMenu.ini">
-      <Filter>Resource Files</Filter>
+      <Filter>Other Files\Resource Files</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -2230,28 +2230,28 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\resource\auto_scroll_center.bmp">
-      <Filter>Resource Files</Filter>
+      <Filter>Other Files\Resource Files</Filter>
     </Image>
     <Image Include="..\resource\auto_scroll_horizontal.bmp">
-      <Filter>Resource Files</Filter>
+      <Filter>Other Files\Resource Files</Filter>
     </Image>
     <Image Include="..\resource\auto_scroll_vertical.bmp">
-      <Filter>Resource Files</Filter>
+      <Filter>Other Files\Resource Files</Filter>
     </Image>
     <Image Include="..\resource\icon_debug.ico">
-      <Filter>Resource Files</Filter>
+      <Filter>Other Files\Resource Files</Filter>
     </Image>
     <Image Include="..\resource\icon_grep.ico">
-      <Filter>Resource Files</Filter>
+      <Filter>Other Files\Resource Files</Filter>
     </Image>
     <Image Include="..\resource\icon_std.ico">
-      <Filter>Resource Files</Filter>
+      <Filter>Other Files\Resource Files</Filter>
     </Image>
     <Image Include="..\resource\mytool.bmp">
-      <Filter>Resource Files</Filter>
+      <Filter>Other Files\Resource Files</Filter>
     </Image>
     <Image Include="..\resource\printer.ico">
-      <Filter>Resource Files</Filter>
+      <Filter>Other Files\Resource Files</Filter>
     </Image>
   </ItemGroup>
   <ItemGroup>

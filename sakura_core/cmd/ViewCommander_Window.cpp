@@ -614,10 +614,10 @@ void ViewCommander::Command_Minimize_All(void)
 	}
 	std::vector<HWND> wnds(j);
 	HWND* phWndArr = &wnds[0];
-	for (int i=0; i<j; ++i) {
+	for (size_t i=0; i<j; ++i) {
 		phWndArr[i] = GetDllShareData().nodes.pEditArr[i].GetHwnd();
 	}
-	for (int i=0; i<j; ++i) {
+	for (size_t i=0; i<j; ++i) {
 		if (IsSakuraMainWindow(phWndArr[i])) {
 			if (::IsWindowVisible(phWndArr[i]))
 				::ShowWindow(phWndArr[i], SW_MINIMIZE);

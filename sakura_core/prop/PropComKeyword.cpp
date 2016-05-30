@@ -253,7 +253,11 @@ INT_PTR PropKeyword::DispatchEvent(
 			case CBN_SELCHANGE:
 				nIndex1 = Combo_GetCurSel(hwndCOMBO_SET);
 				// ダイアログデータの設定 Keyword 指定キーワードセットの設定
-				SetKeywordSet(hwndDlg, nIndex1);
+				if (nIndex1 < 0) {
+					ClearKeywordSet(hwndDlg);
+				}else {
+					SetKeywordSet(hwndDlg, nIndex1);
+				}
 				return TRUE;
 			}
 		}else {
@@ -601,7 +605,7 @@ void PropKeyword::SetData(HWND hwndDlg)
 	Combo_ResetContent(hwndWork);  // コンボボックスを空にする
 	auto& keywordSetMgr = common.specialKeyword.keywordSetMgr;
 	if (0 < keywordSetMgr.nKeywordSetNum) {
-		for (int i=0; i<keywordSetMgr.nKeywordSetNum; ++i) {
+		for (size_t i=0; i<keywordSetMgr.nKeywordSetNum; ++i) {
 			Combo_AddString(hwndWork, keywordSetMgr.GetTypeName(i));
 		}
 		// セット名コンボボックスのデフォルト選択
@@ -611,46 +615,40 @@ void PropKeyword::SetData(HWND hwndDlg)
 		SetKeywordSet(hwndDlg, keywordSetMgr.nCurrentKeywordSetIdx);
 	}else {
 		// ダイアログデータの設定 Keyword 指定キーワードセットの設定
-		SetKeywordSet(hwndDlg, -1);
+		ClearKeywordSet(hwndDlg);
 	}
 	return;
 }
 
+void PropKeyword::ClearKeywordSet(HWND hwndDlg)
+{
+	::CheckDlgButton(hwndDlg, IDC_CHECK_KEYWORDCASE, FALSE);
+
+	::EnableWindow(::GetDlgItem(hwndDlg, IDC_BUTTON_DELSET), FALSE);
+	::EnableWindow(::GetDlgItem(hwndDlg, IDC_CHECK_KEYWORDCASE), FALSE);
+	::EnableWindow(::GetDlgItem(hwndDlg, IDC_LIST_KEYWORD), FALSE);
+	::EnableWindow(::GetDlgItem(hwndDlg, IDC_BUTTON_ADDKEYWORD), FALSE);
+	::EnableWindow(::GetDlgItem(hwndDlg, IDC_BUTTON_EDITKEYWORD), FALSE);
+	::EnableWindow(::GetDlgItem(hwndDlg, IDC_BUTTON_DELKEYWORD), FALSE);
+	::EnableWindow(::GetDlgItem(hwndDlg, IDC_BUTTON_IMPORT), FALSE);
+	::EnableWindow(::GetDlgItem(hwndDlg, IDC_BUTTON_EXPORT), FALSE);
+}
 
 // ダイアログデータの設定 Keyword 指定キーワードセットの設定
-void PropKeyword::SetKeywordSet(HWND hwndDlg, int nIdx)
+void PropKeyword::SetKeywordSet(HWND hwndDlg, size_t nIdx)
 {
-	int		i;
-	int		nNum;
-	HWND	hwndList;
-	LV_ITEM	lvi;
-
 	ListView_DeleteAllItems(::GetDlgItem(hwndDlg, IDC_LIST_KEYWORD));
-	if (0 <= nIdx) {
-		::EnableWindow(::GetDlgItem(hwndDlg, IDC_BUTTON_DELSET), TRUE);
-		::EnableWindow(::GetDlgItem(hwndDlg, IDC_CHECK_KEYWORDCASE), TRUE);
-		::EnableWindow(::GetDlgItem(hwndDlg, IDC_LIST_KEYWORD), TRUE);
-		::EnableWindow(::GetDlgItem(hwndDlg, IDC_BUTTON_ADDKEYWORD), TRUE);
-		//	Jan. 29, 2005 genta キーワードセット切り替え直後はキーワードは未選択
-		//	そのため有効にしてすぐにタイマーで無効になる．
-		//	なのでここで無効にしておく．
-		::EnableWindow(::GetDlgItem(hwndDlg, IDC_BUTTON_EDITKEYWORD), FALSE);
-		::EnableWindow(::GetDlgItem(hwndDlg, IDC_BUTTON_DELKEYWORD), FALSE);
-		::EnableWindow(::GetDlgItem(hwndDlg, IDC_BUTTON_IMPORT), TRUE);
-		::EnableWindow(::GetDlgItem(hwndDlg, IDC_BUTTON_EXPORT), TRUE);
-	}else {
-		::CheckDlgButton(hwndDlg, IDC_CHECK_KEYWORDCASE, FALSE);
-
-		::EnableWindow(::GetDlgItem(hwndDlg, IDC_BUTTON_DELSET), FALSE);
-		::EnableWindow(::GetDlgItem(hwndDlg, IDC_CHECK_KEYWORDCASE), FALSE);
-		::EnableWindow(::GetDlgItem(hwndDlg, IDC_LIST_KEYWORD), FALSE);
-		::EnableWindow(::GetDlgItem(hwndDlg, IDC_BUTTON_ADDKEYWORD), FALSE);
-		::EnableWindow(::GetDlgItem(hwndDlg, IDC_BUTTON_EDITKEYWORD), FALSE);
-		::EnableWindow(::GetDlgItem(hwndDlg, IDC_BUTTON_DELKEYWORD), FALSE);
-		::EnableWindow(::GetDlgItem(hwndDlg, IDC_BUTTON_IMPORT), FALSE);
-		::EnableWindow(::GetDlgItem(hwndDlg, IDC_BUTTON_EXPORT), FALSE);
-		return;
-	}
+	::EnableWindow(::GetDlgItem(hwndDlg, IDC_BUTTON_DELSET), TRUE);
+	::EnableWindow(::GetDlgItem(hwndDlg, IDC_CHECK_KEYWORDCASE), TRUE);
+	::EnableWindow(::GetDlgItem(hwndDlg, IDC_LIST_KEYWORD), TRUE);
+	::EnableWindow(::GetDlgItem(hwndDlg, IDC_BUTTON_ADDKEYWORD), TRUE);
+	//	Jan. 29, 2005 genta キーワードセット切り替え直後はキーワードは未選択
+	//	そのため有効にしてすぐにタイマーで無効になる．
+	//	なのでここで無効にしておく．
+	::EnableWindow(::GetDlgItem(hwndDlg, IDC_BUTTON_EDITKEYWORD), FALSE);
+	::EnableWindow(::GetDlgItem(hwndDlg, IDC_BUTTON_DELKEYWORD), FALSE);
+	::EnableWindow(::GetDlgItem(hwndDlg, IDC_BUTTON_IMPORT), TRUE);
+	::EnableWindow(::GetDlgItem(hwndDlg, IDC_BUTTON_EXPORT), TRUE);
 
 	auto& keywordSetMgr = common.specialKeyword.keywordSetMgr;
 	// キーワードの英大文字小文字区別
@@ -658,13 +656,14 @@ void PropKeyword::SetKeywordSet(HWND hwndDlg, int nIdx)
 	::CheckDlgButton(hwndDlg, IDC_CHECK_KEYWORDCASE, keywordSetMgr.GetKeywordCase(nIdx));
 
 	// ｎ番目のセットのキーワードの数を返す
-	nNum = keywordSetMgr.GetKeywordNum(nIdx);
-	hwndList = ::GetDlgItem(hwndDlg, IDC_LIST_KEYWORD);
+	size_t nNum = keywordSetMgr.GetKeywordNum(nIdx);
+	HWND hwndList = ::GetDlgItem(hwndDlg, IDC_LIST_KEYWORD);
+	LV_ITEM	lvi;
 
 	// 2005.01.25 Moca/genta リスト追加中は再描画を抑制してすばやく表示
 	::SendMessage(hwndList, WM_SETREDRAW, FALSE, 0);
 
-	for (i=0; i<nNum; ++i) {
+	for (size_t i=0; i<nNum; ++i) {
 		// ｎ番目のセットのｍ番目のキーワードを返す
 		const TCHAR* pszKeyword = to_tchar(keywordSetMgr.GetKeyword(nIdx, i));
 		lvi.mask = LVIF_TEXT | LVIF_PARAM;
@@ -690,11 +689,6 @@ void PropKeyword::SetKeywordSet(HWND hwndDlg, int nIdx)
 int PropKeyword::GetData(HWND hwndDlg)
 {
 	return TRUE;
-}
-
-// ダイアログデータの取得 Keyword 指定キーワードセットの取得
-void PropKeyword::GetKeywordSet(HWND hwndDlg, int nIdx)
-{
 }
 
 // キーワード数を表示する。

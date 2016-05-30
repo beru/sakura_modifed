@@ -920,7 +920,7 @@ bool ShareData::IsPathOpened(const TCHAR* pszPath, HWND* phwndOwner)
 		return false;
 	}
 	
-	for (int i=0; i<pShareData->nodes.nEditArrNum; ++i) {
+	for (size_t i=0; i<pShareData->nodes.nEditArrNum; ++i) {
 		if (IsSakuraMainWindow(pShareData->nodes.pEditArr[i].hWnd)) {
 			// トレイからエディタへの編集ファイル名要求通知
 			::SendMessage(pShareData->nodes.pEditArr[i].hWnd, MYWM_GETFILEINFO, 1, 0);

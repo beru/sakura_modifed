@@ -228,7 +228,6 @@ void DlgDiff::SetData(void)
 	// 編集中のファイル一覧を作成する
 	{
 		EditNode*	pEditNode;
-		int			nItem;
 		WIN_CHAR	szName[_MAX_PATH];
 		int			count = 0;
 		int			selIndex = 0;
@@ -248,7 +247,7 @@ void DlgDiff::SetData(void)
 		if (nRowNum > 0) {
 			// 水平スクロール幅は実際に表示する文字列の幅を計測して決める	// 2009.09.26 ryoji
 			TextWidthCalc calc(hwndList);
-			int score = 0;
+			size_t score = 0;
 			TCHAR szFile1[_MAX_PATH];
 			SplitPath_FolderAndFile(szFile1, NULL, szFile1);
 			for (size_t i=0; i<nRowNum; ++i) {
@@ -268,7 +267,7 @@ void DlgDiff::SetData(void)
 				FileNameManager::getInstance().GetMenuFullLabel_WinListNoEscape(szName, _countof(szName), pFileInfo, pEditNode[i].nId, i, calc.GetDC());
 
 				// リストに登録する
-				nItem = ::List_AddString(hwndList, szName);
+				LRESULT nItem = ::List_AddString(hwndList, szName);
 				List_SetItemData(hwndList, nItem, pEditNode[i].GetHwnd());
 				++count;
 

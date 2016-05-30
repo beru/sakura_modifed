@@ -150,7 +150,7 @@ void DlgExec::SetData(void)
 	hwndCombo = GetItemHwnd(IDC_COMBO_CUR_DIR);
 	Combo_ResetContent(hwndCombo);
 	SetItemText(IDC_COMBO_TEXT, szCurDir);
-	for (int i=0; i<pShareData->history.aCurDirs.size(); ++i) {
+	for (size_t i=0; i<pShareData->history.aCurDirs.size(); ++i) {
 		Combo_AddString(hwndCombo, pShareData->history.aCurDirs[i]);
 	}
 	Combo_SetCurSel(hwndCombo, 0);
@@ -158,7 +158,7 @@ void DlgExec::SetData(void)
 	int nOpt;
 	hwndCombo = GetItemHwnd(IDC_COMBO_CODE_GET);
 	nOpt = pShareData->nExecFlgOpt & 0x88;
-	for (int i=0; _countof(codeTable1); ++i) {
+	for (size_t i=0; _countof(codeTable1); ++i) {
 		if (codeTable1[i] == nOpt) {
 			Combo_SetCurSel(hwndCombo, i);
 			break;
@@ -166,7 +166,7 @@ void DlgExec::SetData(void)
 	}
 	hwndCombo = GetItemHwnd(IDC_COMBO_CODE_SEND);
 	nOpt = pShareData->nExecFlgOpt & 0x110;
-	for (int i=0; _countof(codeTable2); ++i) {
+	for (size_t i=0; _countof(codeTable2); ++i) {
 		if (codeTable2[i] == nOpt) {
 			Combo_SetCurSel(hwndCombo, i);
 			break;

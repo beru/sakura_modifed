@@ -267,7 +267,7 @@ void DlgTagJumpList::SetData(void)
 		bTagJumpExactMatch = FALSE;
 		Combo_LimitText(hwndKey, _MAX_PATH-1);
 		RecentTagJumpKeyword cRecentTagJump;
-		for (int i=0; i<cRecentTagJump.GetItemCount(); ++i) {
+		for (size_t i=0; i<cRecentTagJump.GetItemCount(); ++i) {
 			Combo_AddString(hwndKey, cRecentTagJump.GetItemText(i));
 		}
 		if (pszKeyword) {

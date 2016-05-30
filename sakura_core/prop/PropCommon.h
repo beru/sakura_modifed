@@ -271,8 +271,8 @@ protected:
 	int  GetData(HWND);	// ダイアログデータの取得
 
 private:
-	void SetKeywordSet(HWND, int);	// 指定キーワードセットの設定
-	void GetKeywordSet(HWND, int);	// 指定キーワードセットの取得
+	void SetKeywordSet(HWND, size_t);	// 指定キーワードセットの設定
+	void ClearKeywordSet(HWND);
 	void DispKeywordCount(HWND hwndDlg);
 
 	void Edit_List_Keyword(HWND, HWND);		// リスト中で選択されているキーワードを編集する

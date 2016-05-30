@@ -904,7 +904,7 @@ inline int MenuDrawer::ToolbarNoToIndex(int nToolbarNo) const
 		return -1;
 	}
 	// 固定アクセス分のみ直接番号でアクセスさせる。nMyButtonNum は使わない
-	if (0 <= nToolbarNo && nToolbarNo < nMyButtonFixSize) {
+	if (0 <= nToolbarNo && nToolbarNo < (int)nMyButtonFixSize) {
 		return nToolbarNo;
 	}
 	int nFuncID = nToolbarNo;
@@ -1469,9 +1469,9 @@ int MenuDrawer::FindToolbarNoFromCommandId(int idCommand, bool bOnlyFunc) const
 	int index = FindIndexFromCommandId(idCommand, bOnlyFunc);
 	if (-1 < index) {
 		// 固定部分以外(プラグインなど)はindexではなくidCommandのままにする
-		if (nMyButtonFixSize <= index) {
+		if ((int)nMyButtonFixSize <= index) {
 			// もし コマンド番号が明らかに小さいと区別がつかない
-			assert_warning(idCommand < nMyButtonFixSize);
+			assert_warning(idCommand < (int)nMyButtonFixSize);
 			return idCommand;
 		}
 	}
@@ -1521,7 +1521,7 @@ int MenuDrawer::FindIndexFromCommandId(int idCommand, bool bOnlyFunc) const
 TBBUTTON MenuDrawer::getButton(int nToolbarNo) const
 {
 	int index = ToolbarNoToIndex(nToolbarNo);
-	if (0 <= index && index < nMyButtonNum) {
+	if (0 <= index && index < (int)nMyButtonNum) {
 		return tbMyButton[index];
 	}
 
@@ -1700,7 +1700,7 @@ void MenuDrawer::AddToolButton(int iBitmap, int iCommand)
 		auto& cmdIcons = pShareData->plugCmdIcons;
 		iCmdNo = iCommand - F_PLUGCOMMAND_FIRST;
 		if (cmdIcons[iCmdNo] != 0) {
-			if (tbMyButton.size() <= (size_t)(int)cmdIcons[iCmdNo]) {
+			if (tbMyButton.size() <= cmdIcons[iCmdNo]) {
 				// このウィンドウで未登録
 				// 空きを詰め込む
 				SetTBBUTTONVal(&tbb, TOOLBAR_ICON_PLUGCOMMAND_DEFAULT - 1, 0, 0, TBSTYLE_BUTTON, 0, 0);

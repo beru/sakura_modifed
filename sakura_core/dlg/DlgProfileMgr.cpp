@@ -129,8 +129,8 @@ void DlgProfileMgr::SetData( int nSelIndex )
 	List_AddString(hwndList, strdef.c_str());
 	TextWidthCalc calc(hwndList);
 	calc.SetDefaultExtend(TextWidthCalc::WIDTH_MARGIN_SCROLLBER);
-	int count = (int)settings.profList.size();
-	for (int i=0; i<count; ++i) {
+	size_t count = settings.profList.size();
+	for (size_t i=0; i<count; ++i) {
 		std::tstring str = settings.profList[i];
 		if (settings.nDefaultIndex == i + 1) {
 			str += _T("*");
@@ -288,9 +288,9 @@ void DlgProfileMgr::UpdateIni()
 	HWND hwndList = GetItemHwnd(IDC_LIST_PROFILE);
 	ProfileSettings settings;
 	ReadProfSettings(settings);
-	int nCount = List_GetCount(hwndList);
 	settings.profList.clear();
 	settings.nDefaultIndex = -1;
+	int nCount = List_GetCount(hwndList);
 	for (int i=0; i<nCount; ++i) {
 		TCHAR szProfileName[_MAX_PATH];
 		if (MyList_GetText(hwndList, i, szProfileName)) {

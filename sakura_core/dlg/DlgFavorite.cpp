@@ -234,7 +234,7 @@ DlgFavorite::DlgFavorite()
 		// これ以上増やすときはテーブルサイズも書き換えてね
 		assert((pFavInfo - aFavoriteInfo) < _countof(aFavoriteInfo));
 	}
-	for (int i=0; i<FAVORITE_INFO_MAX; ++i) {
+	for (size_t i=0; i<FAVORITE_INFO_MAX; ++i) {
 		auto& info = aListViewInfo[i];
 		info.hListView   = 0;
 		info.nSortColumn = -1;
@@ -323,7 +323,7 @@ void DlgFavorite::SetDataOne(int nIndex, int nLvItemIndex)
 		ListViewSort(aListViewInfo[nIndex], pRecent, aListViewInfo[nIndex].nSortColumn, false);
 	}
 
-	if (nLvItemIndex != -1 && nLvItemIndex < nItemCount) {
+	if (nLvItemIndex != -1 && nLvItemIndex < (int)nItemCount) {
 		nNewFocus = nLvItemIndex;
 	}
 
@@ -798,8 +798,8 @@ void DlgFavorite::GetFavorite(int nIndex)
 	Recent* const pRecent = aFavoriteInfo[nIndex].pRecent;
 	const HWND hwndList = aListViewInfo[nIndex].hListView;
 	if (aFavoriteInfo[nIndex].bHaveFavorite) {
-		const int nCount = ListView_GetItemCount(hwndList);
-		for (int i=0; i<nCount; ++i) {
+		const size_t nCount = ListView_GetItemCount(hwndList);
+		for (size_t i=0; i<nCount; ++i) {
 			const int  recIndex = ListView_GetLParamInt(hwndList, i);
 			const BOOL bret = ListView_GetCheckState(hwndList, i);
 			pRecent->SetFavorite(recIndex, bret ? true : false);
@@ -848,7 +848,7 @@ int DlgFavorite::DeleteSelected()
 				if (nItem != -1) {
 					nItem += 1; // 削除したアイテムの次のアイテム
 					nItem -= nDelItemCount; // 新しい位置は、削除した分だけずれる
-					if (pRecent->GetItemCount() <= nItem) {
+					if ((int)pRecent->GetItemCount() <= nItem) {
 						// 旧データの最後の要素が削除されているときは、
 						// 新データの最後を選択
 						nItem = pRecent->GetItemCount() -1;
@@ -1212,7 +1212,7 @@ BOOL DlgFavorite::OnSize(WPARAM wParam, LPARAM lParam)
 		ResizeItem(GetItemHwnd(anchorList[i].id), ptDefaultSize, ptNew, rcItems[i], anchorList[i].anchor);
 	}
 
-	for (int i=0; i<FAVORITE_INFO_MAX; ++i) {
+	for (size_t i=0; i<FAVORITE_INFO_MAX; ++i) {
 		HWND hwndList = GetItemHwnd(aFavoriteInfo[i].nId);
 		ResizeItem(hwndList, ptDefaultSize, ptNew, rcListDefault, AnchorStyle::All, (i == nCurrentTab));
 	}

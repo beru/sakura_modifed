@@ -481,7 +481,7 @@ LRESULT ControlTray::DispatchEvent(
 			auto& nodes = pShareData->nodes;
 			do {
 				bDelFound = false;
-				for (int i=0; i<nodes.nEditArrNum; ++i) {
+				for (size_t i=0; i<nodes.nEditArrNum; ++i) {
 					HWND target = nodes.pEditArr[i].GetHwnd();
 					if (!IsSakuraMainWindow(target)) {
 						AppNodeGroupHandle(nodes.pEditArr[i].nGroup).DeleteEditWndList(target);
@@ -937,7 +937,7 @@ LRESULT ControlTray::DispatchEvent(
 				break;
 			default:
 				if (nId - IDM_SELWINDOW >= 0
-					&& nId - IDM_SELWINDOW < pShareData->nodes.nEditArrNum
+					&& nId - IDM_SELWINDOW < (int)pShareData->nodes.nEditArrNum
 				) {
 					hwndWork = pShareData->nodes.pEditArr[nId - IDM_SELWINDOW].GetHwnd();
 
@@ -1334,7 +1334,7 @@ bool ControlTray::OpenNewEditor(
 	// Note. 起動先プロセスが初期化処理中に COM 関数（SHGetFileInfo API なども含む）を実行すると、
 	//       その時点で COM の同期機構が動いて WaitForInputIdle は終了してしまう可能性がある（らしい）。
 	if (sync && bRet) {
-		for (int i=0; i<200; ++i) {
+		for (size_t i=0; i<200; ++i) {
 			MSG msg;
 			DWORD dwExitCode;
 			if (::PeekMessage(&msg, 0, MYWM_FIRST_IDLE, MYWM_FIRST_IDLE, PM_REMOVE)) {
@@ -1595,8 +1595,8 @@ int	ControlTray::CreatePopUpMenu_L(void)
 	menuDrawer.MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING, F_FILESAVEALL, _T(""), _T("Z"), false);	// Jan. 24, 2005 genta
 
 	// 現在開いている編集窓のリストをメニューにする
-	int j = 0;
-	for (int i=0; i<pShareData->nodes.nEditArrNum; ++i) {
+	size_t j = 0;
+	for (size_t i=0; i<pShareData->nodes.nEditArrNum; ++i) {
 		if (IsSakuraMainWindow(pShareData->nodes.pEditArr[i].GetHwnd())) {
 			++j;
 		}
@@ -1612,7 +1612,7 @@ int	ControlTray::CreatePopUpMenu_L(void)
 
 		j = 0;
 		TCHAR szMenu[100 + MAX_PATH * 2];	// Jan. 19, 2001 genta
-		for (int i=0; i<pShareData->nodes.nEditArrNum; ++i) {
+		for (size_t i=0; i<pShareData->nodes.nEditArrNum; ++i) {
 			if (IsSakuraMainWindow(pShareData->nodes.pEditArr[i].GetHwnd())) {
 				// トレイからエディタへの編集ファイル名要求通知
 				::SendMessage(pShareData->nodes.pEditArr[i].GetHwnd(), MYWM_GETFILEINFO, 0, 0);

@@ -102,12 +102,12 @@ static bool __cdecl cmpGetOpenedWindowArr(const EditNodeEx& e1, const EditNodeEx
 
 	@date 2007.06.20 ryoji
 */
-EditNode* AppNodeGroupHandle::GetEditNodeAt(int nIndex)
+EditNode* AppNodeGroupHandle::GetEditNodeAt(size_t nIndex)
 {
 	DllSharedData* pShare = &GetDllShareData();
 
-	int iIndex = 0;
-	for (int i=0; i<pShare->nodes.nEditArrNum; ++i) {
+	size_t iIndex = 0;
+	for (size_t i=0; i<pShare->nodes.nEditArrNum; ++i) {
 		if (nGroup == 0 || nGroup == pShare->nodes.pEditArr[i].nGroup) {
 			if (IsSakuraMainWindow(pShare->nodes.pEditArr[i].hWnd)) {
 				if (iIndex == nIndex) {
@@ -339,7 +339,7 @@ int AppNodeGroupHandle::GetEditorWindowsNum(bool bExcludeClosing/* = true */)
 	DllSharedData* pShare = &GetDllShareData();
 	int cnt = 0;
 	auto& appNodeMgr = AppNodeManager::getInstance();
-	for (int i=0; i<pShare->nodes.nEditArrNum; ++i) {
+	for (size_t i=0; i<pShare->nodes.nEditArrNum; ++i) {
 		auto& node = pShare->nodes.pEditArr[i];
 		if (IsSakuraMainWindow(node.hWnd)) {
 			if (1
@@ -464,7 +464,7 @@ void AppNodeManager::ResetGroupId()
 	DllSharedData* pShare = &GetDllShareData();
 	auto& nodes = pShare->nodes;
 	int nGroup = ++nodes.nGroupSequences;
-	for (int i=0; i<nodes.nEditArrNum; ++i) {
+	for (size_t i=0; i<nodes.nEditArrNum; ++i) {
 		auto& node = nodes.pEditArr[i];
 		if (IsSakuraMainWindow(node.hWnd)) {
 			node.nGroup = nGroup;
@@ -485,7 +485,7 @@ EditNode* AppNodeManager::GetEditNode(HWND hWnd)
 {
 	DllSharedData* pShare = &GetDllShareData();
 	auto& nodes = pShare->nodes;
-	for (int i=0; i<nodes.nEditArrNum; ++i) {
+	for (size_t i=0; i<nodes.nEditArrNum; ++i) {
 		auto& node = nodes.pEditArr[i];
 		if (hWnd == node.hWnd) {
 			if (IsSakuraMainWindow(node.hWnd)) {
@@ -568,7 +568,7 @@ size_t AppNodeManager::_GetOpenedWindowArrCore(EditNode** ppEditNode, bool bSort
 	EditNodeEx*	pNode = &nodesEx[0];
 	// 拡張リストの各要素に編集ウィンドウリストの各要素へのポインタを格納する
 	size_t nRowNum = 0;	// 編集ウィンドウ数
-	for (int i=0; i<nodes.nEditArrNum; ++i) {
+	for (size_t i=0; i<nodes.nEditArrNum; ++i) {
 		auto& node = nodes.pEditArr[i];
 		if (IsSakuraMainWindow(node.hWnd)) {
 			pNode[nRowNum].p = &node;	// ポインタ格納

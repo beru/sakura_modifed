@@ -165,7 +165,7 @@ void DlgGrepReplace::SetData(void)
 	SetItemText(IDC_COMBO_TEXT2, strText2.c_str() );
 	HWND hwndCombo = GetItemHwnd(IDC_COMBO_TEXT2);
 	auto& replaceKeys = pShareData->searchKeywords.replaceKeys;
-	for (int i=0; i<replaceKeys.size(); ++i) {
+	for (size_t i=0; i<replaceKeys.size(); ++i) {
 		Combo_AddString(hwndCombo, replaceKeys[i]);
 	}
 	CheckButton(IDC_CHK_BACKUP, bBackup);

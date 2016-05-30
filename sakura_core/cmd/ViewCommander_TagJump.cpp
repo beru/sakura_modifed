@@ -56,7 +56,7 @@ bool GetQuoteFilePath(const wchar_t* pLine, wchar_t* pFile, size_t size) {
 static
 bool IsFileExists2(const wchar_t* pszFile)
 {
-	for (int i=0; pszFile[i]; ++i) {
+	for (size_t i=0; pszFile[i]; ++i) {
 		if (!WCODE::IsValidFilenameChar(pszFile, i)) {
 			return false;
 		}

@@ -648,7 +648,7 @@ void PropTypesColor::SetData(HWND hwndDlg)
 	Combo_AddString(hwndWork, L" ");
 	//	Mar. 31, 2003 genta KeywordSetMgr‚ðƒ|ƒCƒ“ƒ^‚É
 	if (0 < pKeywordSetMgr->nKeywordSetNum) {
-		for (int i=0; i<pKeywordSetMgr->nKeywordSetNum; ++i) {
+		for (size_t i=0; i<pKeywordSetMgr->nKeywordSetNum; ++i) {
 			Combo_AddString(hwndWork, pKeywordSetMgr->GetTypeName(i));
 		}
 		if (types.nKeywordSetIdx[0] == -1) {

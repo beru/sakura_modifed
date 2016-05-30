@@ -448,8 +448,10 @@ int RecentImp<T, S>::FindItem(ReceiveType pItemData) const
 	if (!IsAvailable()) return -1;
 	if (!pItemData) return -1;
 
-	for (int i=0; i<*pnUserItemCount; ++i) {
-		if (CompareItem(GetItemPointer(i), pItemData) == 0) return i;
+	for (size_t i=0; i<*pnUserItemCount; ++i) {
+		if (CompareItem(GetItemPointer(i), pItemData) == 0) {
+			return (int)i;
+		}
 	}
 
 	return -1;
@@ -504,7 +506,7 @@ bool RecentImp<T, S>::ChangeViewCount(size_t nViewCount)
 	if (i == -1) return true;	// ないので何もしないで終了
 
 	// 表示外アイテムを表示内に移動する。
-	for (; i>=nViewCount; --i) {
+	for (; i>=(int)nViewCount; --i) {
 		if (IsFavorite(i)) {
 			// カレント位置から上に通常アイテムを探す
 			int	nIndex = GetOldestItem(i - 1, false);

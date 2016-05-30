@@ -710,7 +710,7 @@ void CALLBACK AutoScrollTimerProc(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD 
 void EditView::AutoScrollEnter()
 {
 	bAutoScrollVertical = GetTextArea().nViewRowNum < (int)pEditDoc->layoutMgr.GetLineCount() + 2;
-	bAutoScrollHorizontal = GetTextArea().nViewColNum < GetRightEdgeForScrollBar();
+	bAutoScrollHorizontal = GetTextArea().nViewColNum < (int)GetRightEdgeForScrollBar();
 	if (bMiniMap) {
 		bAutoScrollHorizontal = false;
 	}

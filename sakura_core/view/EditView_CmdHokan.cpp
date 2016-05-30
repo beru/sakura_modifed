@@ -191,8 +191,9 @@ size_t EditView::HokanSearchByFile(
 ) {
 	const size_t nKeyLen = wcslen(pszKey);
 	size_t nLines = pEditDoc->docLineMgr.GetLineCount();
-	int nRet, nWordBegin;
+	int nRet;
 	int nWordLenStop;
+	size_t nWordBegin;
 	size_t nWordLen;
 	size_t nCharSize;
 	size_t nLineLen;
@@ -255,7 +256,7 @@ size_t EditView::HokanSearchByFile(
 						kindMerge = kindCur;		// ひらがななら続行
 						// 2010.06.16 Moca 漢字のみ送り仮名を候補に含める
 						if (kindPre != CK_ZEN_ETC) {
-							nWordLenStop = nWordLen;
+							nWordLenStop = (int)nWordLen;
 						}
 					}else if (bKeyStartWithMark && bWordStartWithMark && kindPre == CK_UDEF) {
 						kindMerge = kindCur;		// 記号で始まる単語は制限を緩める

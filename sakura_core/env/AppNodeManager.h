@@ -81,7 +81,7 @@ public:
 	AppNodeGroupHandle(HWND hwnd) { nGroup = AppNodeHandle(hwnd)->GetGroup(); }
 
 	EditNode* GetTopEditNode() { return GetEditNodeAt(0); }	//
-	EditNode* GetEditNodeAt(int nIndex);					// 指定位置の編集ウィンドウ情報を取得する
+	EditNode* GetEditNodeAt(size_t nIndex);					// 指定位置の編集ウィンドウ情報を取得する
 	bool AddEditWndList(HWND);								// 編集ウィンドウの登録	// 2007.06.26 ryoji nGroup引数追加
 	void DeleteEditWndList(HWND);							// 編集ウィンドウリストからの削除
 	bool RequestCloseEditor(EditNode* pWndArr, size_t nArrCnt, bool bExit, bool bCheckConfirm, HWND hWndFrom);

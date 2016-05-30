@@ -674,12 +674,12 @@ size_t KeywordSetMgr::GetFreeSize(void) const
 
 // キーワードセット名からセット番号を取得。見つからなければ -1
 //	Uchi 2010/4/14
-int  KeywordSetMgr::SearchKeywordSet(const wchar_t* pszKeyword)
+int KeywordSetMgr::SearchKeywordSet(const wchar_t* pszKeyword)
 {
 	int nIdx = -1;
-	for (int i=0; i<nKeywordSetNum; ++i) {
+	for (size_t i=0; i<nKeywordSetNum; ++i) {
 		if (wcscmp(szSetNameArr[i], pszKeyword) == 0) {
-			nIdx = i;
+			nIdx = (int)i;
 			break;
 		}
 	}

@@ -127,7 +127,7 @@ struct PrintSetting {
 class Print {
 public:
 	static const PaperInfo paperInfoArr[];	// 用紙情報一覧
-	static const int nPaperInfoArrNum; // 用紙情報一覧の要素数
+	static const size_t nPaperInfoArrNum; // 用紙情報一覧の要素数
 
 	/*
 	||	static関数群

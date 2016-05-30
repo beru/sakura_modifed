@@ -331,7 +331,7 @@ void EditView::AdjustScrollBars()
 		::SetScrollInfo(hwndHScrollBar, SB_CTL, &si, TRUE);
 
 		//	2006.1.28 aroka 判定条件誤り修正 (バーが消えてもスクロールしない)
-		bool bEnable = (GetTextArea().nViewColNum < GetRightEdgeForScrollBar());
+		bool bEnable = (GetTextArea().nViewColNum < (int)GetRightEdgeForScrollBar());
 		if (bEnable != (::IsWindowEnabled(hwndHScrollBar) != 0)) {
 			::EnableWindow(hwndHScrollBar, bEnable? TRUE: FALSE);	// SIF_DISABLENOSCROLL 誤動作時の強制切替
 		}
@@ -795,7 +795,7 @@ size_t EditView::GetRightEdgeForScrollBar(void)
 	size_t nWidth = pEditDoc->layoutMgr.GetMaxLineKetas() + GetWrapOverhang();
 	
 	if (pEditDoc->nTextWrapMethodCur == TextWrappingMethod::NoWrapping) {
-		size_t nRightEdge = pEditDoc->layoutMgr.GetMaxTextWidth();	// テキストの最大幅
+		int nRightEdge = (int)pEditDoc->layoutMgr.GetMaxTextWidth();	// テキストの最大幅
 		// 選択範囲あり かつ 範囲の右端がテキストの幅より右側
 		if (GetSelectionInfo().IsTextSelected()) {
 			// 開始位置・終了位置のより右側にある方で比較
@@ -816,7 +816,7 @@ size_t EditView::GetRightEdgeForScrollBar(void)
 			nRightEdge = GetCaret().GetCaretLayoutPos().x;
 
 		// 右マージン分（3桁）を考慮しつつnWidthを超えないようにする
-		nWidth = (nRightEdge + 3 < nWidth) ? (nRightEdge + 3) : nWidth;
+		nWidth = (nRightEdge + 3 < (int)nWidth) ? (nRightEdge + 3) : nWidth;
 	}
 
 	return nWidth;

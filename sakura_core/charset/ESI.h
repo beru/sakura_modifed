@@ -155,7 +155,7 @@ public:
 	//
 	// **** マルチバイト判定関係の変数その他
 	//
-	static const int NUM_OF_MBCODE = (CODE_CODEMAX - 2);
+	static const size_t NUM_OF_MBCODE = (CODE_CODEMAX - 2);
 	MBCODE_INFO aMbcInfo[NUM_OF_MBCODE];   // SJIS, JIS, EUCJP, UTF8, UTF7 情報（優先度に従って格納される）
 	MBCODE_INFO* apMbcInfo[NUM_OF_MBCODE]; // 評価順にソートされた SJIS, JIS, EUCJP, UTF8, UTF7, CESU8 の情報
 	size_t nMbcSjisHankata;                   // SJIS 半角カタカナのバイト数

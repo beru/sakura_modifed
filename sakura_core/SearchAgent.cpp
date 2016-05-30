@@ -202,8 +202,8 @@ const wchar_t* SearchAgent::SearchString(
 	}
 
 	// 線形探索
-	const int nCompareTo = nLineLen - nPatternLen;	//	Mar. 4, 2001 genta
-
+	ASSERT_GE(nLineLen, nPatternLen);
+	const size_t nCompareTo = nLineLen - nPatternLen;	//	Mar. 4, 2001 genta
 #if defined(SEARCH_STRING_SUNDAY_QUICK) && !defined(SEARCH_STRING_KMP)
 	// SUNDAY_QUICKのみ版
 	if (!bLoHiCase || nPatternLen > 5) {
@@ -680,7 +680,7 @@ int SearchAgent::SearchWord(
 				if (pszRes) {
 					pMatchRange->SetFromY(nLinePos);	// マッチ行
 					pMatchRange->SetToY  (nLinePos);	// マッチ行
-					pMatchRange->SetFromX(pszRes - pLine);						// マッチ位置from
+					pMatchRange->SetFromX((int)(pszRes - pLine));						// マッチ位置from
 					pMatchRange->SetToX  (pMatchRange->GetFrom().x + nMatchLen);// マッチ位置to
 					nRetVal = 1;
 					goto end_of_func;
@@ -1267,7 +1267,7 @@ prev_line:;
 			if (!bLastEOLReplace || !bSetMark) {
 				ModifyVisitor().SetLineModified(pDocLine, nSeq);
 			}
-			pArg->ptNewPos.x = prevLine2.GetLength() + nLen;	// 挿入された部分の次の位置のデータ位置
+			pArg->ptNewPos.x = (int)(prevLine2.GetLength() + nLen);	// 挿入された部分の次の位置のデータ位置
 		}
 	}
 	ASSERT_GE(docLineMgr.GetLineCount(), nAllLinesOld);

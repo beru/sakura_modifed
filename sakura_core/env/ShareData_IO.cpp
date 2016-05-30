@@ -276,7 +276,7 @@ void ShareData_IO::ShareData_IO_Keys(DataProfile& profile)
 	profile.IOProfileData(pszSecName, LTEXT("_REPLACEKEY_Counts"), pShare->searchKeywords.replaceKeys._GetSizeRef());
 	pShare->searchKeywords.replaceKeys.SetSizeLimit();
 	nSize = pShare->searchKeywords.replaceKeys.size();
-	for (int i=0; i<nSize; ++i) {
+	for (size_t i=0; i<nSize; ++i) {
 		auto_sprintf(szKeyName, LTEXT("REPLACEKEY[%02d]"), i);
 		profile.IOProfileData(pszSecName, szKeyName, pShare->searchKeywords.replaceKeys[i]);
 	}
@@ -306,7 +306,7 @@ void ShareData_IO::ShareData_IO_Grep(DataProfile& profile)
 	profile.IOProfileData(pszSecName, LTEXT("_GREPFOLDER_Counts"), pShare->searchKeywords.grepFolders._GetSizeRef());
 	pShare->searchKeywords.grepFolders.SetSizeLimit();
 	nSize = pShare->searchKeywords.grepFolders.size();
-	for (int i=0; i<nSize; ++i) {
+	for (size_t i=0; i<nSize; ++i) {
 		auto_sprintf(szKeyName, LTEXT("GREPFOLDER[%02d]"), i);
 		profile.IOProfileData(pszSecName, szKeyName, pShare->searchKeywords.grepFolders[i]);
 	}
@@ -353,7 +353,7 @@ void ShareData_IO::ShareData_IO_Cmd(DataProfile& profile)
 	profile.IOProfileData(pszSecName, LTEXT("nCurDirArrNum"), pShare->history.aCurDirs._GetSizeRef());
 	pShare->history.aCurDirs.SetSizeLimit();
 	nSize = pShare->history.aCurDirs.size();
-	for (int i=0; i<nSize; ++i) {
+	for (size_t i=0; i<nSize; ++i) {
 		auto_sprintf(szKeyName, LTEXT("szCurDirArr[%02d]"), i);
 		profile.IOProfileData(pszSecName, szKeyName, pShare->history.aCurDirs[i]);
 	}
@@ -1742,7 +1742,7 @@ void ShareData_IO::ShareData_IO_Keywords(DataProfile& profile)
 			// 2004.11.25 Moca キーワードセットの情報は、直接書き換えないで関数を利用する
 			// 初期設定されているため、先に削除しないと固定メモリの確保に失敗する可能性がある
 			pKeywordSetMgr->ResetAllKeywordSet();
-			for (int i=0; i<nKeywordSetNum; ++i) {
+			for (size_t i=0; i<nKeywordSetNum; ++i) {
 				bool bKeywordCase = false;
 				int nKeywordNum = 0;
 				// 値の取得
@@ -1773,7 +1773,7 @@ void ShareData_IO::ShareData_IO_Keywords(DataProfile& profile)
 			profile.IOProfileData(pszSecName, szKeyName, pKeywordSetMgr->nKeywordNumArr[i]);
 			
 			size_t nMemLen = 0;
-			for (int j=0; j<pKeywordSetMgr->nKeywordNumArr[i]; ++j) {
+			for (size_t j=0; j<pKeywordSetMgr->nKeywordNumArr[i]; ++j) {
 				nMemLen += wcslen(pKeywordSetMgr->GetKeyword(i, j));
 				nMemLen++;
 			}
@@ -1783,7 +1783,7 @@ void ShareData_IO::ShareData_IO_Keywords(DataProfile& profile)
 			std::vector<wchar_t> szMem(nMemLen + 1); // May 25, 2003 genta 区切りをTABに変更したので，最後の\0の分を追加
 			wchar_t* pszMem = &szMem[0];
 			wchar_t* pMem = pszMem;
-			for (int j=0; j<pKeywordSetMgr->nKeywordNumArr[i]; ++j) {
+			for (size_t j=0; j<pKeywordSetMgr->nKeywordNumArr[i]; ++j) {
 				// May 25, 2003 genta 区切りをTABに変更
 				size_t kwlen = wcslen(pKeywordSetMgr->GetKeyword(i, j));
 				auto_memcpy(pMem, pKeywordSetMgr->GetKeyword(i, j), kwlen);

@@ -2100,7 +2100,7 @@ void TabWnd::HideOtherWindows(HWND hwndExclude)
 	auto& csTabBar = pShareData->common.tabBar;
 	if (csTabBar.bDispTabWnd && !csTabBar.bDispTabWndMultiWin) {
 		HWND hwnd;
-		for (int i=0; i<pShareData->nodes.nEditArrNum; ++i) {
+		for (size_t i=0; i<pShareData->nodes.nEditArrNum; ++i) {
 			hwnd = pShareData->nodes.pEditArr[i].hWnd;
 			if (IsSakuraMainWindow(hwnd)) {
 				if (!AppNodeManager::IsSameGroup(hwndExclude, hwnd))

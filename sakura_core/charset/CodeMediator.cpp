@@ -55,7 +55,7 @@ EncodingType CodeMediator::DetectUnicodeBom(const char* pS, size_t nLen)
 EncodingType CodeMediator::DetectMBCode(ESI* pEsi)
 {
 //	pEsi->dwStatus = ESI_NOINFORMATION;
-	if (pEsi->GetDataLen() < (pEsi->apMbcInfo[0]->nSpecific - pEsi->apMbcInfo[0]->nPoints) * 2000) {
+	if ((int)pEsi->GetDataLen() < (pEsi->apMbcInfo[0]->nSpecific - pEsi->apMbcInfo[0]->nPoints) * 2000) {
 		// 不正バイトの割合が、全体の 0.05% 未満であることを確認。
 		// 全体の0.05%ほどの不正バイトは、無視する。
 		pEsi->SetStatus(ESI_NODETECTED);

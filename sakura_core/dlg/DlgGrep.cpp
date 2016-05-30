@@ -300,7 +300,7 @@ BOOL DlgGrep::OnBnClicked(int wID)
 				if (DirectoryUp(szFolder)) {
 					*(vPaths.rbegin()) = szFolder;
 					szFolder[0] = _T('\0');
-					for (int i=0; i<(int)vPaths.size(); ++i) {
+					for (size_t i=0; i<vPaths.size(); ++i) {
 						TCHAR szFolderItem[_MAX_PATH];
 						auto_strncpy(szFolderItem, vPaths[i].c_str(), _MAX_PATH);
 						szFolderItem[_MAX_PATH-1] = _T('\0');
@@ -687,7 +687,7 @@ int DlgGrep::GetData(void)
 		size_t nFolderLen = 0;
 		TCHAR szFolder[_MAX_PATH];
 		szFolder[0] = _T('\0');
-		for (int i=0; i<(int)paths.size(); ++i) {
+		for (size_t i=0; i<paths.size(); ++i) {
 			// 相対パス→絶対パス
 			if (!::SetCurrentDirectory(paths[i].c_str())) {
 				WarningMessage(	GetHwnd(), LS(STR_DLGGREP5));

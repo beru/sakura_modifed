@@ -80,7 +80,7 @@ HMENU MruFile::CreateMenu(HMENU hMenuPopUp, MenuDrawer& menuDrawer) const
 	::SystemParametersInfo(SPI_GETNONCLIENTMETRICS, met.cbSize, &met, 0);
 	DCFont dcFont(met.lfMenuFont);
 
-	for (int i=0; i<recentFile.GetItemCount(); ++i) {
+	for (size_t i=0; i<recentFile.GetItemCount(); ++i) {
 		//	「共通設定」→「全般」→「ファイルの履歴MAX」を反映
 		if (i >= recentFile.GetViewCount()) {
 			break;
@@ -122,7 +122,7 @@ BOOL MruFile::DestroyMenu(HMENU hMenuPopUp) const
 std::vector<LPCTSTR> MruFile::GetPathList() const
 {
 	std::vector<LPCTSTR> ret;
-	for (int i=0; i<recentFile.GetItemCount(); ++i) {
+	for (size_t i=0; i<recentFile.GetItemCount(); ++i) {
 		//「共通設定」→「全般」→「ファイルの履歴MAX」を反映
 		if (i >= recentFile.GetViewCount()) {
 			break;

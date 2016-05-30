@@ -172,7 +172,7 @@ void ViewCommander::Command_Compare(void)
 		HWND hWndArr[2];
 		hWndArr[0] = GetMainWindow();
 		hWndArr[1] = hwndCompareWnd;
-		for (int i=0; i<2; ++i) {
+		for (size_t i=0; i<2; ++i) {
 			if (::IsZoomed( hWndArr[i] )) {
 				::ShowWindow( hWndArr[i], SW_RESTORE );
 			}

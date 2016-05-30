@@ -178,14 +178,14 @@ namespace WCODE
 		LocalCacheSelector()
 		{
 			pCache = &localCache[0];
-			for (int i=0; i<(int)CharWidthFontMode::Max; ++i) {
+			for (size_t i=0; i<(size_t)CharWidthFontMode::Max; ++i) {
 				parCache[i] = 0;
 			}
 			lastEditCacheMode = CharWidthCacheMode::Neutral;
 		}
 		~LocalCacheSelector()
 		{
-			for (int i=0; i<(int)CharWidthFontMode::Max; ++i) {
+			for (size_t i=0; i<(size_t)CharWidthFontMode::Max; ++i) {
 				delete parCache[i];
 				parCache[i] = 0;
 			}

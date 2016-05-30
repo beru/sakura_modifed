@@ -496,7 +496,7 @@ void EditView::DeleteData(
 
 			nIdxFrom = 0;
 			nIdxTo = 0;
-			for (nLineNum=rcSel.bottom; nLineNum>=rcSel.top-1; --nLineNum) {
+			for (nLineNum=rcSel.bottom; (int)nLineNum>=rcSel.top-1; --nLineNum) {
 				nDelLenNext	= nIdxTo - nIdxFrom;
 				const wchar_t* pLine = pEditDoc->layoutMgr.GetLineStr(nLineNum, &nLineLen, &pLayout);
 				if (pLine) {
@@ -518,7 +518,7 @@ void EditView::DeleteData(
 					nIdxTo	 = 0;
 				}
 				nDelLen	= nDelLenNext;
-				if (nLineNum < rcSel.bottom && 0 < nDelLen) {
+				if ((int)nLineNum < rcSel.bottom && 0 < nDelLen) {
 					// 指定位置の指定長データ削除
 					DeleteData2(
 						Point(rcSel.left, (int)nLineNum + 1),

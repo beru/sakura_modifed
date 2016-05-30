@@ -2179,7 +2179,7 @@ void EditWnd::OnCommand(WORD wNotifyCode, WORD wID , HWND hwndCtl)
 	case 0:
 	case CMD_FROM_MOUSE: // 2006.05.19 genta マウスから呼びだされた場合
 		// ウィンドウ切り替え
-		if (wID - IDM_SELWINDOW >= 0 && wID - IDM_SELWINDOW < pShareData->nodes.nEditArrNum) {
+		if (wID - IDM_SELWINDOW >= 0 && wID - IDM_SELWINDOW < (int)pShareData->nodes.nEditArrNum) {
 			ActivateFrameWindow(pShareData->nodes.pEditArr[wID - IDM_SELWINDOW].GetHwnd());
 		}
 		// 最近使ったファイル
@@ -2741,7 +2741,7 @@ void EditWnd::OnDropFiles(HDROP hDrop)
 {
 	POINT pt;
 	::DragQueryPoint(hDrop, &pt);
-	int cFiles = (int)::DragQueryFile(hDrop, 0xFFFFFFFF, NULL, 0);
+	UINT cFiles = ::DragQueryFile(hDrop, 0xFFFFFFFF, NULL, 0);
 	// ファイルをドロップしたときは閉じて開く
 	auto& csFile = pShareData->common.file;
 	if (csFile.bDropFileAndClose) {
@@ -2755,7 +2755,7 @@ void EditWnd::OnDropFiles(HDROP hDrop)
 	// アクティブにする	// 2009.08.20 ryoji 処理開始前に無条件でアクティブ化
 	ActivateFrameWindow(GetHwnd());
 
-	for (int i=0; i<cFiles; ++i) {
+	for (size_t i=0; i<cFiles; ++i) {
 		// ファイルパス取得、解決。
 		TCHAR szFile[_MAX_PATH + 1];
 		::DragQueryFile(hDrop, i, szFile, _countof(szFile));
@@ -4021,7 +4021,7 @@ void EditWnd::WindowTopMost(int top)
 	auto& csTabBar = pShareData->common.tabBar;
 	if (pShareData->common.tabBar.bDispTabWnd && !pShareData->common.tabBar.bDispTabWndMultiWin) {
 		hwndInsertAfter = GetHwnd();
-		for (int i=0; i<pShareData->nodes.nEditArrNum; ++i) {
+		for (size_t i=0; i<pShareData->nodes.nEditArrNum; ++i) {
 			HWND hwnd = pShareData->nodes.pEditArr[i].GetHwnd();
 			if (hwnd != GetHwnd() && IsSakuraMainWindow(hwnd)) {
 				if (!AppNodeManager::IsSameGroup(GetHwnd(), hwnd)) {
@@ -4655,7 +4655,7 @@ void EditWnd::RestorePhysPosOfAllView(PointEx* pptPosArray)
 
 		int nLeft = 0;
 		auto& textArea = view.GetTextArea();
-		if (textArea.nViewColNum < view.GetRightEdgeForScrollBar()) {
+		if (textArea.nViewColNum < (int)view.GetRightEdgeForScrollBar()) {
 			nLeft = view.GetRightEdgeForScrollBar() - textArea.nViewColNum;
 		}
 		if (nLeft < textArea.GetViewLeftCol()) {

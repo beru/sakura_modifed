@@ -621,7 +621,7 @@ bool ViewCommander::HandleCommand(
 			auto sd = &GetDllShareData();
 			HWND hActiveWnd = GetActiveWindow();
 			int activeWndGroup = -1;
-			for (int i=0; i<sd->nodes.nEditArrNum; ++i) {
+			for (size_t i=0; i<sd->nodes.nEditArrNum; ++i) {
 				auto& editNode = sd->nodes.pEditArr[i];
 				if (editNode.GetHwnd() == hActiveWnd) {
 					activeWndGroup = editNode.nGroup;
@@ -630,7 +630,7 @@ bool ViewCommander::HandleCommand(
 			}
 			if (activeWndGroup != -1) {
 				std::vector<int> indices;
-				for (int i=0; i<sd->nodes.nEditArrNum; ++i) {
+				for (size_t i=0; i<sd->nodes.nEditArrNum; ++i) {
 					auto& editNode = sd->nodes.pEditArr[i];
 					if (editNode.nGroup == activeWndGroup) {
 						indices.push_back(editNode.nIndex);
@@ -640,7 +640,7 @@ bool ViewCommander::HandleCommand(
 				int idx = nCommand - F_TAB_1;
 				if (idx < (int)indices.size()) {
 					int nodeIdx = indices[idx];
-					for (int i=0; i<sd->nodes.nEditArrNum; ++i) {
+					for (size_t i=0; i<sd->nodes.nEditArrNum; ++i) {
 						auto& editNode = sd->nodes.pEditArr[i];
 						if (editNode.nIndex == nodeIdx) {
 							ActivateFrameWindow(editNode.hWnd);

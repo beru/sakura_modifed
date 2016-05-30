@@ -122,7 +122,7 @@ INT_PTR DlgPrintSetting::DoModal(
 	)
 {
 	nCurrentPrintSetting = *pnCurrentPrintSetting;
-	for (int i=0; i<MAX_PrintSettingARR; ++i) {
+	for (size_t i=0; i<MAX_PrintSettingARR; ++i) {
 		printSettingArr[i] = pPrintSettingArr[i];
 	}
 	nLineNumberColumns = nLineNumberColumns;
@@ -130,7 +130,7 @@ INT_PTR DlgPrintSetting::DoModal(
 	INT_PTR nRet = Dialog::DoModal(hInstance, hwndParent, IDD_PrintSetting, (LPARAM)NULL);
 	if (nRet != FALSE) {
 		*pnCurrentPrintSetting = nCurrentPrintSetting;
-		for (int i=0; i<MAX_PrintSettingARR; ++i) {
+		for (size_t i=0; i<MAX_PrintSettingARR; ++i) {
 			pPrintSettingArr[i] = printSettingArr[i];
 		}
 	}
@@ -268,7 +268,7 @@ BOOL DlgPrintSetting::OnBnClicked(int wID)
 			hwndComboSettingName = GetItemHwnd(IDC_COMBO_SETTINGNAME);
 			Combo_ResetContent(hwndComboSettingName);
 			int nSelectIdx = 0;
-			for (int i=0; i<MAX_PrintSettingARR; ++i) {
+			for (size_t i=0; i<MAX_PrintSettingARR; ++i) {
 				int nItemIdx = Combo_AddString(
 					hwndComboSettingName,
 					printSettingArr[i].szPrintSettingName
@@ -456,7 +456,7 @@ void DlgPrintSetting::SetData(void)
 	HWND hwndComboPaper = GetItemHwnd(IDC_COMBO_PAPER);
 	Combo_ResetContent(hwndComboPaper);
 	// 2006.08.14 Moca 用紙名一覧の重複削除
-	for (int i=0; i<Print::nPaperInfoArrNum; ++i) {
+	for (size_t i=0; i<Print::nPaperInfoArrNum; ++i) {
 		int nItemIdx = Combo_AddString(hwndComboPaper, Print::paperInfoArr[i].pszName);
 		Combo_SetItemData(hwndComboPaper, nItemIdx, Print::paperInfoArr[i].nId);
 	}
@@ -465,7 +465,7 @@ void DlgPrintSetting::SetData(void)
 	HWND hwndComboSettingName = GetItemHwnd(IDC_COMBO_SETTINGNAME);
 	Combo_ResetContent(hwndComboSettingName);
 	int nSelectIdx = 0;
-	for (int i=0; i<MAX_PrintSettingARR; ++i) {
+	for (size_t i=0; i<MAX_PrintSettingARR; ++i) {
 		int nItemIdx = Combo_AddString(hwndComboSettingName, printSettingArr[i].szPrintSettingName);
 		Combo_SetItemData(hwndComboSettingName, nItemIdx, i);
 		if (i == nCurrentPrintSetting) {
@@ -621,7 +621,6 @@ void DlgPrintSetting::OnChangeSettingType(BOOL bGetData)
 
 	HWND	hwndCtrl;
 	int		nIdx1;
-	int		nItemNum;
 	auto& curPS = printSettingArr[nCurrentPrintSetting];
 
 	HWND hwndComboSettingName = GetItemHwnd(IDC_COMBO_SETTINGNAME);
@@ -648,8 +647,8 @@ void DlgPrintSetting::OnChangeSettingType(BOOL bGetData)
 
 	// 用紙サイズ一覧
 	hwndCtrl = GetItemHwnd(IDC_COMBO_PAPER);
-	nItemNum = Combo_GetCount(hwndCtrl);
-	for (int i=0; i<nItemNum; ++i) {
+	size_t nItemNum = Combo_GetCount(hwndCtrl);
+	for (size_t i=0; i<nItemNum; ++i) {
 		int nItemData = Combo_GetItemData(hwndCtrl, i);
 		if (curPS.nPrintPaperSize == nItemData) {
 			Combo_SetCurSel(hwndCtrl, i);

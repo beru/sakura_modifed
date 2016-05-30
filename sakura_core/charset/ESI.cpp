@@ -169,11 +169,11 @@ void ESI::SortMBCInfo(void)
 	/*
 		「特有バイト数 － 不正バイト数＝ポイント数 (.nPoints)」の数の大きい順にソート（バブルソート）
 	*/
-	for (int i=0; i<NUM_OF_MBCODE; ++i) {
+	for (size_t i=0; i<NUM_OF_MBCODE; ++i) {
 		apMbcInfo[i] = &aMbcInfo[i];
 	}
-	for (int i=1; i<NUM_OF_MBCODE; ++i) {
-		for (int j=0; j<NUM_OF_MBCODE-i; ++j) {
+	for (size_t i=1; i<NUM_OF_MBCODE; ++i) {
+		for (size_t j=0; j<NUM_OF_MBCODE-i; ++j) {
 			if (apMbcInfo[j]->nPoints < apMbcInfo[j + 1]->nPoints) {
 				MBCODE_INFO* pei_tmp = apMbcInfo[j + 1];
 				apMbcInfo[j + 1] = apMbcInfo[j];
@@ -1240,7 +1240,7 @@ void ESI::GetDebugInfo(const char* pS, const int nLen, NativeT* pcmtxtOut)
 	}
 	pcmtxtOut->AppendString(szWork);
 	pcmtxtOut->AppendString(LS(STR_ESI_MBC_OTHER_UNICODE));
-	for (int i=0; i<NUM_OF_MBCODE; ++i) {
+	for (size_t i=0; i<NUM_OF_MBCODE; ++i) {
 		if (!IsValidCodeType(esi.apMbcInfo[i]->eCodeID)) {
 			esi.apMbcInfo[i]->eCodeID = CODE_SJIS;
 		}

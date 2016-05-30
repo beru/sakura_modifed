@@ -422,7 +422,7 @@ static CLIPFORMAT GetClipFormat(const wchar_t* pFormatName)
 	}
 	if (uFormat == (CLIPFORMAT)-1) {
 		bool bNumber = true;
-		for (int i=0; pFormatName[i]; ++i) {
+		for (size_t i=0; pFormatName[i]; ++i) {
 			if (!WCODE::Is09(pFormatName[i])) {
 				bNumber = false;
 			}
