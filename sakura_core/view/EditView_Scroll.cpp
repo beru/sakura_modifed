@@ -325,7 +325,7 @@ void EditView::AdjustScrollBars()
 		si.fMask = SIF_ALL | SIF_DISABLENOSCROLL;
 		si.nMin  = 0;
 		si.nMax  = GetRightEdgeForScrollBar() - 1;		// 2009.08.28 nasukoji	スクロールバー制御用の右端座標を取得
-		si.nPage = GetTextArea().nViewColNum;		// 表示域の桁数
+		si.nPage = GetTextArea().nViewColNum;			// 表示域の桁数
 		si.nPos  = GetTextArea().GetViewLeftCol();		// 表示域の一番左の桁(0開始)
 		si.nTrackPos = 1;
 		::SetScrollInfo(hwndHScrollBar, SB_CTL, &si, TRUE);
@@ -736,14 +736,16 @@ void EditView::SyncScrollH(int col)
 /** 折り返し桁以後のぶら下げ余白計算
 	@date 2008.06.08 ryoji 新規作成
 */
-int EditView::GetWrapOverhang(void) const
+size_t EditView::GetWrapOverhang(void) const
 {
-	int nMargin = 1;	// 折り返し記号
+	size_t nMargin = 1;	// 折り返し記号
 	if (!pTypeData->bKinsokuHide) {	// ぶら下げを隠す時はスキップ	2012/11/30 Uchi
-		if (pTypeData->bKinsokuRet)
+		if (pTypeData->bKinsokuRet) {
 			nMargin += 1;	// 改行ぶら下げ
-		if (pTypeData->bKinsokuKuto)
+		}
+		if (pTypeData->bKinsokuKuto) {
 			nMargin += 2;	// 句読点ぶら下げ
+		}
 	}
 	return nMargin;
 }
@@ -759,9 +761,9 @@ int EditView::ViewColNumToWrapColNum(int nViewColNum) const
 	int nWidth = nViewColNum - GetWrapOverhang();
 
 	// MINLINEKETAS未満の時はMINLINEKETASで折り返しとする
-	if (nWidth < MINLINEKETAS)
+	if (nWidth < MINLINEKETAS) {
 		nWidth = MINLINEKETAS;		// 折り返し幅の最小桁数に設定
-
+	}
 	return nWidth;
 }
 
@@ -787,13 +789,13 @@ int EditView::ViewColNumToWrapColNum(int nViewColNum) const
 
 	@date 2009.08.28 nasukoji	新規作成
 */
-int EditView::GetRightEdgeForScrollBar(void)
+size_t EditView::GetRightEdgeForScrollBar(void)
 {
 	// 折り返し桁以後のぶら下げ余白計算
-	int nWidth = pEditDoc->layoutMgr.GetMaxLineKetas() + GetWrapOverhang();
+	size_t nWidth = pEditDoc->layoutMgr.GetMaxLineKetas() + GetWrapOverhang();
 	
 	if (pEditDoc->nTextWrapMethodCur == TextWrappingMethod::NoWrapping) {
-		int nRightEdge = pEditDoc->layoutMgr.GetMaxTextWidth();	// テキストの最大幅
+		size_t nRightEdge = pEditDoc->layoutMgr.GetMaxTextWidth();	// テキストの最大幅
 		// 選択範囲あり かつ 範囲の右端がテキストの幅より右側
 		if (GetSelectionInfo().IsTextSelected()) {
 			// 開始位置・終了位置のより右側にある方で比較

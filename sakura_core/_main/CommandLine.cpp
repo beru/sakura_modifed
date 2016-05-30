@@ -201,8 +201,7 @@ void CommandLine::ParseCommandLine(LPCTSTR pszCmdLineSrc, bool bResponse)
 		auto_strcpy( wexename, to_wchar(exename) );
 
 		size_t len = wcslen( wexename );
-
-		for (int i=len-1; 0<=i; --i) {
+		for (int i=(int)len-1; 0<=i; --i) {
 			if (wexename[i] == L'.' ) {
 				wexename[i] = L'\0';
 				int k = i - 1;

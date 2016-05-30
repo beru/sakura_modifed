@@ -79,16 +79,16 @@ BOOL DlgInput1::DoModal(
 	HWND			hwndParent,
 	const TCHAR*	pszTitle,
 	const TCHAR*	pszMessage,
-	int				nMaxTextLen,
+	size_t			nMaxTextLen,
 	TCHAR*			pszText
 	)
 {
 	BOOL bRet;
 	hInstance = hInstApp;			// アプリケーションインスタンスのハンドル
-	hwndParent = hwndParent;		// オーナーウィンドウのハンドル
-	pszTitle = pszTitle;			// ダイアログタイトル
-	pszMessage = pszMessage;		// メッセージ
-	nMaxTextLen = nMaxTextLen;	// 入力サイズ上限
+	this->hwndParent = hwndParent;		// オーナーウィンドウのハンドル
+	this->pszTitle = pszTitle;			// ダイアログタイトル
+	this->pszMessage = pszMessage;		// メッセージ
+	this->nMaxTextLen = nMaxTextLen;	// 入力サイズ上限
 //	pszText = pszText;			// テキスト
 	memText.SetString(pszText);
 	bRet = (BOOL)::DialogBoxParam(
@@ -107,7 +107,7 @@ BOOL DlgInput1::DoModal(
 	HWND			hwndParent,
 	const TCHAR*	pszTitle,
 	const TCHAR*	pszMessage,
-	int				nMaxTextLen,
+	size_t			nMaxTextLen,
 	NOT_TCHAR*		pszText
 	)
 {

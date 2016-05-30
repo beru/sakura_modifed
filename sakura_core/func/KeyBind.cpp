@@ -821,7 +821,7 @@ bool ShareData::InitKeyAssign(DllSharedData& shareData)
 	// インデックス用ダミー作成
 	SetKeyNameArrVal(shareData, KEYNAME_SIZE, &dummy[0]);
 	// インデックス作成 重複した場合は先頭にあるものを優先
-	for (int ii=0; ii<_countof(shareData.common.keyBind.keyToKeyNameArr); ++ii) {
+	for (size_t ii=0; ii<_countof(shareData.common.keyBind.keyToKeyNameArr); ++ii) {
 		shareData.common.keyBind.keyToKeyNameArr[ii] = KEYNAME_SIZE;
 	}
 	for (int i=nKeyDataInitNum-1; i>=0; --i) {

@@ -268,9 +268,9 @@ public:
 	void AdjustScrollBars();											// スクロールバーの状態を更新する
 	BOOL CreateScrollBar();												// スクロールバー作成	// 2006.12.19 ryoji
 	void DestroyScrollBar();											// スクロールバー破棄	// 2006.12.19 ryoji
-	int GetWrapOverhang(void) const;								// 折り返し桁以後のぶら下げ余白計算	// 2008.06.08 ryoji
-	int ViewColNumToWrapColNum(int nViewColNum) const;		//「右端で折り返す」用にビューの桁数から折り返し桁数を計算する	// 2008.06.08 ryoji
-	int GetRightEdgeForScrollBar(void);							// スクロールバー制御用に右端座標を取得する		// 2009.08.28 nasukoji
+	size_t GetWrapOverhang(void) const;								// 折り返し桁以後のぶら下げ余白計算	// 2008.06.08 ryoji
+	int ViewColNumToWrapColNum(int nViewColNum) const;				//「右端で折り返す」用にビューの桁数から折り返し桁数を計算する	// 2008.06.08 ryoji
+	size_t GetRightEdgeForScrollBar(void);							// スクロールバー制御用に右端座標を取得する		// 2009.08.28 nasukoji
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                           IME                               //
@@ -440,7 +440,7 @@ public:
 	};
 	BOOL KeywordHelpSearchDict(LID_SKH nID, POINT* po, RECT* rc);	// 2006.04.10 fon
 
-	int IsSearchString(const StringRef& str, int, int*, int*) const;	// 現在位置が検索文字列に該当するか	// 2002.02.08 hor 引数追加
+	int IsSearchString(const StringRef& str, size_t, int*, int*) const;	// 現在位置が検索文字列に該当するか	// 2002.02.08 hor 引数追加
 
 	void GetCurrentTextForSearch(NativeW&, bool bStripMaxPath = true, bool bTrimSpaceTab = false);			// 現在カーソル位置単語または選択範囲より検索等のキーを取得
 	bool GetCurrentTextForSearchDlg(NativeW&, bool bGetHistory = false);		// 現在カーソル位置単語または選択範囲より検索等のキーを取得（ダイアログ用） 2006.08.23 ryoji

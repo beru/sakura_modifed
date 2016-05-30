@@ -336,7 +336,7 @@ BOOL GetSystemResources(
 
 CurrentDirectoryBackupPoint::CurrentDirectoryBackupPoint()
 {
-	int n = ::GetCurrentDirectory(_countof(szCurDir), szCurDir);
+	size_t n = ::GetCurrentDirectory(_countof(szCurDir), szCurDir);
 	if (n>0 && n<_countof(szCurDir)) {
 		// ok
 	}else {

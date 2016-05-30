@@ -713,7 +713,7 @@ bool TabWnd::SeparateGroup(HWND hwndSrc, HWND hwndDst, POINT ptDrag, POINT ptDro
 
 	// 再表示メッセージをブロードキャストする。
 	//	2007.07.07 genta 2回ループに
-	for (int group=0; group<_countof(notifygroups); ++group) {
+	for (size_t group=0; group<_countof(notifygroups); ++group) {
 		AppNodeGroupHandle(notifygroups[group]).PostMessageToAllEditors(
 			MYWM_TAB_WINDOW_NOTIFY,
 			(WPARAM)TabWndNotifyType::Refresh,
@@ -2512,7 +2512,7 @@ void TabWnd::DrawListBtn(Graphics& gr, const LPRECT lprcClient)
 	int nIndex = bListBtnHilighted? COLOR_MENUTEXT: COLOR_BTNTEXT;
 	gr.SetPen(::GetSysColor(nIndex));
 	gr.SetBrushColor(::GetSysColor(nIndex)); //$$ GetSysColorBrushを用いた実装のほうが効率は良い
-	for (int i=0; i<_countof(ptBase); ++i) {
+	for (size_t i=0; i<_countof(ptBase); ++i) {
 		pt[i].x = ptBase[i].x + rcBtn.left;
 		pt[i].y = ptBase[i].y + rcBtn.top;
 	}
@@ -2533,7 +2533,7 @@ void TabWnd::DrawCloseFigure(Graphics& gr, const RECT& rcBtn)
 	};
 	POINT pt[2];
 	// [x]を描画（直線6本）
-	for (int i=0; i<_countof(ptBase1); ++i) {
+	for (size_t i=0; i<_countof(ptBase1); ++i) {
 		pt[0].x = ptBase1[i][0].x + rcBtn.left;
 		pt[0].y = ptBase1[i][0].y + rcBtn.top;
 		pt[1].x = ptBase1[i][1].x + rcBtn.left;
@@ -2593,7 +2593,7 @@ void TabWnd::DrawCloseBtn(Graphics& gr, const LPRECT lprcClient)
 		DrawCloseFigure(gr, rcBtn);
 	}else {
 		// [xx]を描画（矩形10個）
-		for (int i=0; i<_countof(ptBase2); ++i) {
+		for (size_t i=0; i<_countof(ptBase2); ++i) {
 			pt[0].x = ptBase2[i][0].x + rcBtn.left;
 			pt[0].y = ptBase2[i][0].y + rcBtn.top;
 			pt[1].x = ptBase2[i][1].x + rcBtn.left;

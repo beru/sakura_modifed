@@ -39,7 +39,7 @@
 #include "types/TypeSupport.h"
 
 
-bool _IsPosKeywordHead(const StringRef& str, int nPos)
+bool _IsPosKeywordHead(const StringRef& str, size_t nPos)
 {
 	return (nPos == 0 || !IS_KEYWORD_CHAR(str.At(nPos - 1)));
 }
@@ -324,9 +324,9 @@ void ColorStrategyPool::OnChangeSetting(void)
 		COLORIDX_KEYWORD10,
 	};
 	bSkipBeforeLayoutGeneral = true;
-	int nKeyword1;
-	int bUnuseKeyword = false;
-	for (int n=0; n<_countof(bSkipColorTypeTable); ++n) {
+	size_t nKeyword1;
+	bool bUnuseKeyword = false;
+	for (size_t n=0; n<_countof(bSkipColorTypeTable); ++n) {
 		if (bSkipColorTypeTable[n] == COLORIDX_KEYWORD1) {
 			nKeyword1 = n;
 		}
@@ -351,7 +351,7 @@ void ColorStrategyPool::OnChangeSetting(void)
 		}
 	}
 	bSkipBeforeLayoutFound = true;
-	for (int n=COLORIDX_SEARCH; n<=COLORIDX_SEARCHTAIL; ++n) {
+	for (size_t n=COLORIDX_SEARCH; n<=COLORIDX_SEARCHTAIL; ++n) {
 		if (type.colorInfoArr[n].bDisp) {
 			bSkipBeforeLayoutFound = false;
 			break;

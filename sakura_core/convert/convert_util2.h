@@ -82,11 +82,11 @@ inline int _HexToInt(WCHAR c)
 }
 
 template <class CHAR_TYPE>
-size_t _DecodeQP(const CHAR_TYPE* pS, const int nLen, char* pDst)
+size_t _DecodeQP(const CHAR_TYPE* pS, size_t nLen, char* pDst)
 {
 	const CHAR_TYPE* pr;
 	char* pw;
-	int ninc_len;
+	uint32_t ninc_len;
 
 	pr = pS;
 	pw = pDst;
@@ -606,11 +606,11 @@ enum EEncodingMethod {
 	@return  Memory ‚Æ’u‚«Š·‚¦‚ç‚ê‚é“ü—Í•¶Žš—ñ’· (nSkipLen)
 */
 template <class CHAR_TYPE>
-int _DecodeMimeHeader(const CHAR_TYPE* pSrc, const size_t nSrcLen, Memory* pMem_alt, EncodingType* peCodetype)
+size_t _DecodeMimeHeader(const CHAR_TYPE* pSrc, const size_t nSrcLen, Memory* pMem_alt, EncodingType* peCodetype)
 {
 	EncodingType ecode = CODE_NONE;
 	EEncodingMethod emethod = EM_NONE;
-	int nLen_part1, nLen_part2, nskipped_len;
+	size_t nLen_part1, nLen_part2, nskipped_len;
 	int ncmpresult1, ncmpresult2, ncmpresult;
 
 	const CHAR_TYPE *pr, *pr_base;

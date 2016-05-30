@@ -453,9 +453,10 @@ BOOL CALLBACK CodePage::CallBackEnumCodePages( LPCTSTR pCodePageString )
 
 int CodePage::AddComboCodePages(HWND hwnd, HWND combo, int nSelCode)
 {
-	int nSel = -1;
-	int nIdx = Combo_AddString(combo, _T("CP_ACP"));
-	Combo_SetItemData( combo, nIdx, CODE_CPACP );
+	LRESULT nSel = -1;
+	LRESULT nIdx = Combo_AddString(combo, _T("CP_ACP"));
+	ASSERT_GE(nIdx, 0);
+	Combo_SetItemData(combo, nIdx, CODE_CPACP);
 	if (nSelCode == CODE_CPACP) {
 		Combo_SetCurSel(combo, nIdx);
 		nSel = nIdx;
@@ -477,7 +478,7 @@ int CodePage::AddComboCodePages(HWND hwnd, HWND combo, int nSelCode)
 	}
 	// ïùÇïœçX
 	Dialog::OnCbnDropDown(combo, true);
-	return nSel;
+	return (int)nSel;
 }
 
 size_t CodePage::MultiByteToWideChar2(UINT codepage, int flags, const char* pSrc, size_t nSrcLen, wchar_t* pDst, size_t nDstLen)

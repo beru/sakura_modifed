@@ -30,7 +30,7 @@
 
 class EditView;
 
-bool _IsPosKeywordHead(const StringRef& str, int nPos);
+bool _IsPosKeywordHead(const StringRef& str, size_t nPos);
 
 // 正規表現キーワードのEColorIndexType値を作る関数
 inline

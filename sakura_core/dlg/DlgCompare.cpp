@@ -254,7 +254,7 @@ BOOL DlgCompare::OnInitDialog(
 	ptDefaultSize.x = rc.right - rc.left;
 	ptDefaultSize.y = rc.bottom - rc.top;
 
-	for (int i=0; i<_countof(anchorList); ++i) {
+	for (size_t i=0; i<_countof(anchorList); ++i) {
 		GetItemClientRect(anchorList[i].id, rcItems[i]);
 	}
 
@@ -283,7 +283,7 @@ BOOL DlgCompare::OnSize(WPARAM wParam, LPARAM lParam)
 	POINT ptNew;
 	ptNew.x = rc.right - rc.left;
 	ptNew.y = rc.bottom - rc.top;
-	for (int i=0; i<_countof(anchorList); ++i) {
+	for (size_t i=0; i<_countof(anchorList); ++i) {
 		ResizeItem(GetItemHwnd(anchorList[i].id), ptDefaultSize, ptNew, rcItems[i], anchorList[i].anchor);
 	}
 	::InvalidateRect(GetHwnd(), NULL, TRUE);

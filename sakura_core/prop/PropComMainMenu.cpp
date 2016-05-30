@@ -922,7 +922,7 @@ void PropMainMenu::SetData(HWND hwndDlg)
 		case MainMenuType::Special:
 			pFuncWk->sName = pFunc->sName;
 			if (pFuncWk->sName.empty()) {
-				for (int j=0; j<_countof(gSpecialFuncs); ++j) {
+				for (size_t j=0; j<_countof(gSpecialFuncs); ++j) {
 					if (pFunc->nFunc == gSpecialFuncs[j].nFunc) {
 						pFuncWk->sName = RemoveAmpersand(LSW(gSpecialFuncs[j].nNameId));
 						break;

@@ -37,10 +37,10 @@
 
 using namespace std; // 2002/2/3 aroka
 
-static void StringToOpeLineData(const wchar_t* pLineData, int nLineDataLen, OpeLineData& lineData, int opeSeq)
+static void StringToOpeLineData(const wchar_t* pLineData, size_t nLineDataLen, OpeLineData& lineData, int opeSeq)
 {
-	int nBegin = 0;
-	int i;
+	size_t nBegin = 0;
+	size_t i;
 	bool bExtEol = GetDllShareData().common.edit.bEnableExtEol;
 	for (i=0; i<nLineDataLen; ++i) {
 		if (WCODE::IsLineDelimiter(pLineData[i], bExtEol)) {
@@ -118,8 +118,8 @@ void EditView::InsertData_CEditView(
 			|| pTypeData->bKinsokuKuto;	//@@@ 2002.04.19 MIK
 
 	size_t nLineAllColLen;
-	int nIdxFrom = 0;
-	int nColumnFrom = ptInsertPos.x;
+	ASSERT_GE(ptInsertPos.x, 0);
+	size_t nColumnFrom = (size_t)ptInsertPos.x;
 	NativeW	mem(L"");
 	OpeLineData insData;
 	if (pLine) {
@@ -133,7 +133,7 @@ void EditView::InsertData_CEditView(
 		// 更新が次行からになる可能性を調べる	// 2009.02.17 ryoji
 		// ※折り返し行末への文字入力や文字列貼り付けで現在行は更新されず次行以後が更新される場合もある
 		// 指定された桁に対応する行のデータ内の位置を調べる
-		nIdxFrom = LineColumnToIndex2(pLayout, ptInsertPos.x, &nLineAllColLen);
+		size_t nIdxFrom = LineColumnToIndex2(pLayout, ptInsertPos.x, &nLineAllColLen);
 
 		// 行終端より右に挿入しようとした
 		if (nLineAllColLen > 0) {
@@ -185,16 +185,16 @@ void EditView::InsertData_CEditView(
 	}
 
 	if (!bDoing_UndoRedo && pOpe) {	// Undo, Redoの実行中か
-		pOpe->ptCaretPos_PHY_Before = pEditDoc->layoutMgr.LayoutToLogic(Point(nColumnFrom, ptInsertPos.y));
+		pOpe->ptCaretPos_PHY_Before = pEditDoc->layoutMgr.LayoutToLogic(Point((int)nColumnFrom, ptInsertPos.y));
 	}
 
 	// 文字列挿入
 	int nModifyLayoutLinesOld = 0;
-	int	nInsLineNum;		// 挿入によって増えたレイアウト行の数
+	size_t nInsLineNum;		// 挿入によって増えたレイアウト行の数
 	int	nInsSeq;
 	{
 		LayoutReplaceArg arg;
-		arg.delRange.Set(Point(nColumnFrom, ptInsertPos.y));
+		arg.delRange.Set(Point((int)nColumnFrom, ptInsertPos.y));
 		arg.pMemDeleted = nullptr;
 		arg.pInsData = &insData;
 		arg.nDelSeq = opeSeq;
@@ -224,7 +224,7 @@ void EditView::InsertData_CEditView(
 			}
 		}else {
 			// Oct. 7, 2002 YAZAKI
-			pptNewPos->x = pLayout->GetNextLayout() ? pLayout->GetNextLayout()->GetIndent() : 0;
+			pptNewPos->x = (int)(pLayout->GetNextLayout() ? pLayout->GetNextLayout()->GetIndent() : 0);
 			pptNewPos->y++;
 		}
 	}
@@ -366,16 +366,16 @@ void EditView::DeleteData2(
 	if (!pLine) {
 		return;
 	}
-	int nIdxFrom = LineColumnToIndex(pLayout, _ptCaretPos.x);
+	size_t nIdxFrom = LineColumnToIndex(pLayout, _ptCaretPos.x);
 
 	// 2007.10.18 kobake COpeの生成をここにまとめる
 	DeleteOpe*	pOpe = nullptr;
-	int columnFrom = LineIndexToColumn(pLayout, nIdxFrom);
-	int columnTo = LineIndexToColumn(pLayout, nIdxFrom + nDelLen);
+	size_t columnFrom = LineIndexToColumn(pLayout, nIdxFrom);
+	size_t columnTo = LineIndexToColumn(pLayout, nIdxFrom + nDelLen);
 	if (!bDoing_UndoRedo) {
 		pOpe = new DeleteOpe();
-		pOpe->ptCaretPos_PHY_Before = pEditDoc->layoutMgr.LayoutToLogic(Point(columnFrom, _ptCaretPos.y));
-		pOpe->ptCaretPos_PHY_To = pEditDoc->layoutMgr.LayoutToLogic(Point(columnTo, _ptCaretPos.y));
+		pOpe->ptCaretPos_PHY_Before = pEditDoc->layoutMgr.LayoutToLogic(Point((int)columnFrom, _ptCaretPos.y));
+		pOpe->ptCaretPos_PHY_To = pEditDoc->layoutMgr.LayoutToLogic(Point((int)columnTo, _ptCaretPos.y));
 	}
 	OpeLineData memDeleted;
 	OpeLineData* pmemDeleted = nullptr;
@@ -387,7 +387,7 @@ void EditView::DeleteData2(
 	{
 		LayoutReplaceArg arg;
 		arg.delRange.SetFrom(_ptCaretPos);
-		arg.delRange.SetTo(Point(columnTo, _ptCaretPos.y));
+		arg.delRange.SetTo(Point((int)columnTo, _ptCaretPos.y));
 		arg.pMemDeleted = pmemDeleted;
 		arg.pInsData = nullptr;
 		arg.nDelSeq = GetDocument().docEditor.opeBuf.GetNextSeq();
@@ -433,13 +433,12 @@ void EditView::DeleteData(
 #ifdef _DEBUG
 	MY_RUNNINGTIMER(runningTimer, "EditView::DeleteData(2)");
 #endif
-	size_t		nLineLen;
-	int	nLineNum;
-	int	nCurIdx;
-	int	nIdxFrom;
-	int	nIdxTo;
-	int	nDelLen;
-	int	nDelLenNext;
+	size_t nLineLen;
+	size_t nLineNum;
+	size_t nIdxFrom;
+	size_t nIdxTo;
+	size_t nDelLen;
+	size_t nDelLenNext;
 	Rect rcSel;
 	const Layout*	pLayout;
 
@@ -504,11 +503,11 @@ void EditView::DeleteData(
 					using namespace WCODE;
 
 					// 指定された桁に対応する行のデータ内の位置を調べる
-					nIdxFrom = LineColumnToIndex(pLayout, rcSel.left);
-					nIdxTo	 = LineColumnToIndex(pLayout, rcSel.right);
+					nIdxFrom = LineColumnToIndex(pLayout, (size_t)rcSel.left);
+					nIdxTo	 = LineColumnToIndex(pLayout, (size_t)rcSel.right);
 
 					bool bExtEol = GetDllShareData().common.edit.bEnableExtEol;
-					for (int i=nIdxFrom; i<=nIdxTo; ++i) {
+					for (size_t i=nIdxFrom; i<=nIdxTo; ++i) {
 						if (WCODE::IsLineDelimiter(pLine[i], bExtEol)) {
 							nIdxTo = i;
 							break;
@@ -522,7 +521,7 @@ void EditView::DeleteData(
 				if (nLineNum < rcSel.bottom && 0 < nDelLen) {
 					// 指定位置の指定長データ削除
 					DeleteData2(
-						Point(rcSel.left, nLineNum + 1),
+						Point(rcSel.left, (int)nLineNum + 1),
 						nDelLen,
 						nullptr
 					);
@@ -549,8 +548,8 @@ void EditView::DeleteData(
 			pEditDoc->layoutMgr.GetLineStr(rcSel.top, &nLineLen, &pLayout);
 			if (rcSel.left <= (LONG)pLayout->CalcLayoutWidth(pEditDoc->layoutMgr)) {
 				// EOLより左なら文字の単位にそろえる
-				int nIdxCaret = LineColumnToIndex(pLayout, rcSel.left);
-				caretOld.SetX(LineIndexToColumn(pLayout, nIdxCaret));
+				size_t nIdxCaret = LineColumnToIndex(pLayout, rcSel.left);
+				caretOld.SetX((int)LineIndexToColumn(pLayout, nIdxCaret));
 			}
 			caret.MoveCursor(caretOld, bRedraw);
 			caret.nCaretPosX_Prev = caret.GetCaretLayoutPos().GetX();
@@ -582,7 +581,7 @@ void EditView::DeleteData(
 		bool bLastLine = (caret.GetCaretLayoutPos().GetY() == pEditDoc->layoutMgr.GetLineCount() - 1);
 
 		// 指定された桁に対応する行のデータ内の位置を調べる
-		nCurIdx = LineColumnToIndex(pLayout, caret.GetCaretLayoutPos().x);
+		size_t nCurIdx = LineColumnToIndex(pLayout, caret.GetCaretLayoutPos().x);
 //		MYTRACE(_T("nLineLen=%d nCurIdx=%d \n"), nLineLen, nCurIdx);
 		if (nCurIdx == nLineLen && bLastLine) {	// 全テキストの最後
 			goto end_of_func;
@@ -590,8 +589,8 @@ void EditView::DeleteData(
 		}
 
 		// 指定された桁の文字のバイト数を調べる
-		ptrdiff_t nNxtIdx;
-		int	nNxtPos;
+		size_t nNxtIdx;
+		size_t nNxtPos;
 		bool bExtEol = GetDllShareData().common.edit.bEnableExtEol;
 		if (WCODE::IsLineDelimiter(pLine[nCurIdx], bExtEol)) {
 			// 改行
@@ -606,10 +605,10 @@ void EditView::DeleteData(
 		// データ置換 削除&挿入にも使える
 		Range delRange;
 		delRange.SetFrom(caret.GetCaretLayoutPos());
-		delRange.SetTo(Point(nNxtPos, caret.GetCaretLayoutPos().GetY()));
+		delRange.SetTo(Point((int)nNxtPos, caret.GetCaretLayoutPos().GetY()));
 		Range delRangeLogic;
 		delRangeLogic.SetFrom(caret.GetCaretLogicPos());
-		delRangeLogic.SetTo(Point(nNxtIdx + pLayout->GetLogicOffset(), caret.GetCaretLogicPos().GetY()));
+		delRangeLogic.SetTo(Point((int)nNxtIdx + pLayout->GetLogicOffset(), caret.GetCaretLogicPos().GetY()));
 		ReplaceData_CEditView(
 			delRange,
 			L"",		// 挿入するデータ
@@ -744,7 +743,7 @@ bool EditView::ReplaceData_CEditView3(
 		if (!bFastMode) {
 			line = layoutMgr.GetLineStr(delRange.GetTo().y, &len, &pLayout);
 			if (line) {
-				int p = LineIndexToColumn(pLayout, len);
+				int p = (int)LineIndexToColumn(pLayout, len);
 				if (delRange.GetTo().x > p) {
 					delRange.SetToX(p);
 					bDelRangeUpdate = true;
@@ -970,8 +969,8 @@ void EditView::RTrimPrevLine(void)
 	}
 	Range rangeA;
 	auto& layoutMgr = pEditDoc->layoutMgr;
-	rangeA.SetFrom(layoutMgr.LogicToLayout(Point(j, caret.GetCaretLogicPos().y - 1)));
-	rangeA.SetTo(layoutMgr.LogicToLayout(Point(nLineLen, caret.GetCaretLogicPos().y - 1)));
+	rangeA.SetFrom(layoutMgr.LogicToLayout(Point((int)j, caret.GetCaretLogicPos().y - 1)));
+	rangeA.SetTo(layoutMgr.LogicToLayout(Point((int)nLineLen, caret.GetCaretLogicPos().y - 1)));
 	if (rangeA.GetFrom().x < rangeA.GetTo().x || rangeA.GetFrom().y != rangeA.GetTo().y) {
 		return;
 	}

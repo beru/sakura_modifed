@@ -1991,7 +1991,7 @@ BOOL DlgFuncList::OnInitDialog(
 	ptDefaultSizeClient.x = rc.right;
 	ptDefaultSizeClient.y = rc.bottom;
 
-	for (int i=0; i<_countof(anchorList); ++i) {
+	for (size_t i=0; i<_countof(anchorList); ++i) {
 		GetItemClientRect(anchorList[i].id, rcItems[i]);
 		// ドッキング中はウィンドウ幅いっぱいまで伸ばす
 		if (IsDocking()) {
@@ -2330,7 +2330,7 @@ BOOL DlgFuncList::OnSize(WPARAM wParam, LPARAM lParam)
 	ptNew.x = rcDlg.right - rcDlg.left;
 	ptNew.y = rcDlg.bottom - rcDlg.top;
 
-	for (int i=0; i<_countof(anchorList); ++i) {
+	for (size_t i=0; i<_countof(anchorList); ++i) {
 		HWND hwndCtrl = GetItemHwnd(anchorList[i].id);
 		ResizeItem(hwndCtrl, ptDefaultSizeClient, ptNew, rcItems[i], anchorList[i].anchor, (anchorList[i].anchor != AnchorStyle::All));
 //	2013.2.6 aroka ちらつき防止用の試行錯誤

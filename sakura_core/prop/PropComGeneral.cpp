@@ -339,7 +339,7 @@ void PropGeneral::SetData(HWND hwndDlg)
 	hwndCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_WHEEL_PAGESCROLL);
 	Combo_ResetContent(hwndCombo);
 	nSelPos = 0;
-	for (int i=0; i<_countof(SpecialScrollModeArr); ++i) {
+	for (size_t i=0; i<_countof(SpecialScrollModeArr); ++i) {
 		Combo_InsertString(hwndCombo, i, LS(SpecialScrollModeArr[i].nNameId));
 		if (SpecialScrollModeArr[i].nMethod == csGeneral.nPageScrollByWheel) {	// ページスクロールとする組み合わせ操作
 			nSelPos = i;
@@ -351,7 +351,7 @@ void PropGeneral::SetData(HWND hwndDlg)
 	hwndCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_WHEEL_HSCROLL);
 	Combo_ResetContent(hwndCombo);
 	nSelPos = 0;
-	for (int i=0; i<_countof(SpecialScrollModeArr); ++i) {
+	for (size_t i=0; i<_countof(SpecialScrollModeArr); ++i) {
 		Combo_InsertString(hwndCombo, i, LS(SpecialScrollModeArr[i].nNameId));
 		if (SpecialScrollModeArr[i].nMethod == csGeneral.nHorizontalScrollByWheel) {	// 横スクロールとする組み合わせ操作
 			nSelPos = i;

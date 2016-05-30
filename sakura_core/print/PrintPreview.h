@@ -120,10 +120,10 @@ protected:
 		HDC				hdc,
 		POINT			ptDraw,		// 描画座標。HDC内部単位。
 		const wchar_t*	pLine,
-		int				nDocLineLen,
-		int				nLineStart,
-		int				nLineLen,
-		int				nIndent,	// 折り返しインデント桁数 // 2006.08.14 Moca
+		size_t			nDocLineLen,
+		size_t			nLineStart,
+		size_t			nLineLen,
+		size_t			nIndent,	// 折り返しインデント桁数 // 2006.08.14 Moca
 		const Layout*	pLayout = nullptr,	// 色付用Layout
 		ColorStrategy*	pStrategyStart = nullptr
 	);
@@ -146,7 +146,7 @@ protected:
 	// 指定ロジック位置のColorStrategyを取得
 	ColorStrategy* GetColorStrategy(
 		const StringRef&	stringLine,
-		int					iLogic,
+		size_t				iLogic,
 		ColorStrategy*		pStrategy,
 		bool&				bChange
 	);

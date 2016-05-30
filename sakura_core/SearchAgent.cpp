@@ -183,7 +183,7 @@ bool SearchStringPattern::SetPattern(
 const wchar_t* SearchAgent::SearchString(
 	const wchar_t* pLine,
 	size_t nLineLen,
-	int nIdxPos,
+	size_t nIdxPos,
 	const SearchStringPattern& pattern
 	)
 {
@@ -209,7 +209,7 @@ const wchar_t* SearchAgent::SearchString(
 	if (!bLoHiCase || nPatternLen > 5) {
 #if 1
 		if (bLoHiCase) {
-			for (int nPos=nIdxPos; nPos<=nCompareTo;) {
+			for (size_t nPos=nIdxPos; nPos<=nCompareTo;) {
 				size_t i;
 				for (i = 0; i < nPatternLen && (pLine[nPos + i] == pszPattern[i]); ++i) {
 				}
@@ -220,7 +220,7 @@ const wchar_t* SearchAgent::SearchString(
 				nPos += useSkipMap[index];
 			}
 		}else {
-			for (int nPos=nIdxPos; nPos<=nCompareTo;) {
+			for (size_t nPos=nIdxPos; nPos<=nCompareTo;) {
 				size_t i;
 				for (i = 0; i < nPatternLen && ((wchar_t)skr_towlower(pLine[nPos + i]) == pszPattern[i]); ++i) {
 				}
@@ -232,7 +232,7 @@ const wchar_t* SearchAgent::SearchString(
 			}
 		}
 #else
-		for (int nPos=nIdxPos; nPos<=nCompareTo;) {
+		for (size_t nPos=nIdxPos; nPos<=nCompareTo;) {
 			int i;
 			for (i = 0; i < nPatternLen && toLoHiLower(bLoHiCase, pLine[nPos + i]) == pszPattern[i]; ++i) {
 			}
@@ -244,7 +244,7 @@ const wchar_t* SearchAgent::SearchString(
 		}
 #endif
 	}else {
-		for (int nPos=nIdxPos; nPos<=nCompareTo;) {
+		for (size_t nPos=nIdxPos; nPos<=nCompareTo;) {
 			int n = wmemcmp(&pLine[nPos], pszPattern, nPatternLen);
 			if (n == 0) {
 				return &pLine[nPos];
@@ -260,7 +260,7 @@ const wchar_t* SearchAgent::SearchString(
 	if (!bLoHiCase || nPatternLen > 5) {
 		const wchar_t pattern0 = pszPattern[0];
 		const int* const nextTable = pattern.GetKMPNextTable();
-		for (int nPos=nIdxPos; nPos<=nCompareTo;) {
+		for (size_t nPos=nIdxPos; nPos<=nCompareTo;) {
 			if (toLoHiLower(bLoHiCase, pLine[nPos]) != pattern0) {
 #ifdef SEARCH_STRING_SUNDAY_QUICK
 				int index = SearchStringPattern::GetMapIndex((wchar_t)toLoHiLower(bLoHiCase, pLine[nPos + nPatternLen]));
@@ -288,7 +288,7 @@ const wchar_t* SearchAgent::SearchString(
 	}else {
 #endif
 		// 通常版
-		int	nPos;
+		size_t	nPos;
 		for (nPos = nIdxPos; nPos <= nCompareTo; nPos += NativeW::GetSizeOfChar(pLine, nLineLen, nPos)) {
 			int n = bLoHiCase ?
 						wmemcmp(&pLine[nPos], pszPattern, nPatternLen):
@@ -302,29 +302,6 @@ const wchar_t* SearchAgent::SearchString(
 #endif
 #endif // defined(SEARCH_STRING_) && !defined(SEARCH_STRING_KMP)
 	return NULL;
-}
-
-// 検索条件の情報(キー文字列の全角か半角かの配列)作成
-void SearchAgent::CreateCharCharsArr(
-	const wchar_t*	pszPattern,
-	int				nSrcLen,
-	int**			ppnCharCharsArr
-	)
-{
-	int* pnCharCharsArr = new int[nSrcLen];
-	for (int i=0; i<nSrcLen; /*++i*/) {
-		// 2005-09-02 D.S.Koba GetSizeOfChar
-		pnCharCharsArr[i] = NativeW::GetSizeOfChar(pszPattern, nSrcLen, i);
-		if (pnCharCharsArr[i] == 0) {
-			pnCharCharsArr[i] = 1;
-		}
-		if (pnCharCharsArr[i] == 2) {
-			pnCharCharsArr[i + 1] = pnCharCharsArr[i];
-		}
-		i += pnCharCharsArr[i];
-	}
-	*ppnCharCharsArr = pnCharCharsArr;
-	return;
 }
 
 /*!	単語単位の単語リスト作成
@@ -841,7 +818,6 @@ void SearchAgent::ReplaceData(DocLineReplaceArg* pArg)
 	size_t nWorkLen;
 	const wchar_t* pLine;
 	size_t nLineLen;
-	int	nAllLinesOld;
 	int nProgress;
 	DocLine::MarkType	markNext;
 	//	May 15, 2000
@@ -1142,7 +1118,7 @@ prev_line:;
 		pArg->nInsSeq = 0;
 		return;
 	}
-	nAllLinesOld = docLineMgr.GetLineCount();
+	size_t nAllLinesOld = docLineMgr.GetLineCount();
 	pArg->ptNewPos.y = pArg->delRange.GetFrom().y;	// 挿入された部分の次の位置の行
 	pArg->ptNewPos.x = 0;	// 挿入された部分の次の位置のデータ位置
 
@@ -1294,6 +1270,7 @@ prev_line:;
 			pArg->ptNewPos.x = prevLine2.GetLength() + nLen;	// 挿入された部分の次の位置のデータ位置
 		}
 	}
+	ASSERT_GE(docLineMgr.GetLineCount(), nAllLinesOld);
 	pArg->nInsLineNum = docLineMgr.GetLineCount() - nAllLinesOld;
 	return;
 }

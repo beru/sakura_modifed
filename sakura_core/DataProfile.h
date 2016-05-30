@@ -99,7 +99,8 @@ protected:
 		*profile = _work_itow(value);
 	}
 	void value_to_profile(const size_t& value, wstring* profile) {
-		*profile = _work_itow(value);
+		ASSERT_GE(INT32_MAX, value);
+		*profile = _work_itow((int)value);
 	}
 	void profile_to_value(const wstring& profile, long* value) {
 		*value = _wtol(profile.c_str());

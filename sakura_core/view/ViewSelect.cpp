@@ -162,7 +162,7 @@ void ViewSelect::DrawSelectArea(bool bDrawBracketCursorLine)
 	if (bDispText) {
 		if (select != selectOld) {
 			// 選択色表示の時は、WM_PAINT経由で作画
-			const size_t nCharWidth = view.GetTextMetrics().GetHankakuDx();
+			const int nCharWidth = view.GetTextMetrics().GetHankakuDx();
 			const TextArea& area =  view.GetTextArea();
 			Rect rcOld; // LayoutRect
 			TwoPointToRect(&rcOld, selectOld.GetFrom(), selectOld.GetTo());
@@ -302,8 +302,8 @@ void ViewSelect::DrawSelectArea2(HDC hdc) const
 		//	return;
 		//}
 
-		const size_t nCharWidth = view.GetTextMetrics().GetHankakuDx();
-		const size_t nCharHeight = view.GetTextMetrics().GetHankakuDy();
+		const int nCharWidth = view.GetTextMetrics().GetHankakuDx();
+		const int nCharHeight = view.GetTextMetrics().GetHankakuDy();
 
 		// 2点を対角とする矩形を求める
 		Rect rcOld;
@@ -529,9 +529,9 @@ void ViewSelect::DrawSelectAreaLine(
 	if (nSelectFrom < textArea.GetViewLeftCol()) {
 		nSelectFrom = textArea.GetViewLeftCol();
 	}
-	size_t nLineHeight = view.GetTextMetrics().GetHankakuDy();
-	size_t nCharWidth = view.GetTextMetrics().GetHankakuDx();
-	Rect	rcClip; // px
+	int nLineHeight = view.GetTextMetrics().GetHankakuDy();
+	int nCharWidth = view.GetTextMetrics().GetHankakuDx();
+	Rect rcClip; // px
 	rcClip.left		= (textArea.GetAreaLeft() - textArea.GetViewLeftCol() * nCharWidth) + nSelectFrom * nCharWidth;
 	rcClip.right	= (textArea.GetAreaLeft() - textArea.GetViewLeftCol() * nCharWidth) + nSelectTo   * nCharWidth;
 	rcClip.top		= textArea.GenerateYPx(nLineNum);

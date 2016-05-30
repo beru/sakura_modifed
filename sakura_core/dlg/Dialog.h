@@ -139,7 +139,7 @@ public:
 	void _SetHwnd(HWND hwnd) { hWnd = hwnd; }
 	bool IsButtonChecked(int id) { return DlgButton_IsChecked(hWnd, id); }
 	bool CheckButton(int id, bool bCheck) { return ::CheckDlgButton(hWnd, id, bCheck ? BST_CHECKED : BST_UNCHECKED) != 0; }
-	UINT GetItemText(int nIDDlgItem, TCHAR* str, int nMaxCount) { return ::GetDlgItemText(hWnd, nIDDlgItem, str, nMaxCount); }
+	UINT GetItemText(int nIDDlgItem, TCHAR* str, size_t nMaxCount) { ASSERT_GE(INT32_MAX, nMaxCount); return ::GetDlgItemText(hWnd, nIDDlgItem, str, (int)nMaxCount); }
 	BOOL SetItemText(int nIDDlgItem, const TCHAR* str) { return ::SetDlgItemText(hWnd, nIDDlgItem, str); }
 	UINT GetItemInt(int nIDDlgItem, BOOL *lpTranslated, BOOL bSigned) { return ::GetDlgItemInt(hWnd, nIDDlgItem, lpTranslated, bSigned); }
 	bool SetItemInt(int nIDDlgItem, UINT uValue, BOOL bSigned) { return ::SetDlgItemInt(hWnd, nIDDlgItem, uValue, bSigned) != 0; }

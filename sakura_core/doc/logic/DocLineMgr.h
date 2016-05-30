@@ -32,8 +32,8 @@ struct DocLineReplaceArg {
 	Range			delRange;			// [in] 削除範囲。ロジック単位。
 	OpeLineData*	pMemDeleted;		// [out] 削除されたデータを保存
 	OpeLineData*	pInsData;			// [in/out] 挿入するデータ(中身が移動する)
-	int				nDeletedLineNum;	// [out] 削除した行の総数
-	int				nInsLineNum;		// [out] 挿入によって増えた行の数
+	size_t			nDeletedLineNum;	// [out] 削除した行の総数
+	size_t			nInsLineNum;		// [out] 挿入によって増えた行の数
 	Point			ptNewPos;			// [out] 挿入された部分の次の位置
 	int				nDelSeq;			// [in] 削除行のOpeシーケンス
 	int				nInsSeq;			// [out] 挿入行の元のシーケンス

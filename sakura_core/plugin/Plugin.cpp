@@ -278,8 +278,7 @@ std::vector<std::wstring> wstring_split(
 	)
 {
     std::vector<std::wstring> splitVec;
-    int idx;
-
+    size_t idx;
     while ((idx = sTrg.find(cSep)) != std::wstring::npos) {
         splitVec.emplace_back(sTrg.substr(0, idx));
         sTrg = sTrg.substr(++idx);

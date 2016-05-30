@@ -84,7 +84,7 @@ public:
 	const wchar_t* SetTypeName(int, const wchar_t*);	// ｎ番目のセット名を設定する // 2005.01.26 Moca
 	void SetKeywordCase(int, bool);				// ｎ番目のセットの大文字小文字判断をセットする		//MIK
 	bool GetKeywordCase(int);					// ｎ番目のセットの大文字小文字判断を取得する		//MIK
-	void SortKeyword(int);						// ｎ番目のセットのキーワードをソートする			//MIK
+	void SortKeyword(size_t);						// ｎ番目のセットのキーワードをソートする			//MIK
 
 	// From Here 2004.07.29 Moca 追加 可変長記憶
 	size_t SetKeywordArr(int, size_t, const wchar_t*);			// iniからキーワードを設定する
@@ -110,13 +110,13 @@ public:
 	///	@name 検索
 	//int SearchKeyword(int , const char*, int);				// ｎ番目のセットから指定キーワードをサーチ 無いときは-1を返す
 //	BOOL IsModify(KeywordSetMgr&, BOOL* pnModifyFlagArr);	// 変更状況を調査	// Uchi 2010/4/14 実体が無いので削除
-	int SearchKeyword2(int nIdx , const wchar_t* pszKeyword, int nKeywordLen);	// ｎ番目のセットから指定キーワードをバイナリサーチ。見つかれば 0以上を返す	//MIK
+	int SearchKeyword2(size_t nIdx , const wchar_t* pszKeyword, size_t nKeywordLen);	// ｎ番目のセットから指定キーワードをバイナリサーチ。見つかれば 0以上を返す	//MIK
 	int SearchKeywordSet(const wchar_t* pszKeyword);		// キーワードセット名からセット番号を取得。見つからなければ -1を返す	// Uchi 2010/4/14
 	//@}
 
 	// From Here 2004.07.29 Moca 追加 可変長記憶
-	int CleanKeywords(int);				// キーワードの整頓・利用できないキーワードの削除
-	int GetAllocSize(int) const;		// 確保している数を返す
+	int CleanKeywords(size_t);			// キーワードの整頓・利用できないキーワードの削除
+	int GetAllocSize(size_t) const;		// 確保している数を返す
 	int GetFreeSize() const;			// 未割り当てブロックのキーワード数を返す
 	void ResetAllKeywordSet(void);		// 全キーワードセットの削除と初期化
 	// To Here 2004.07.29 Moca
@@ -135,7 +135,7 @@ public:
 		別のウィンドウの設定画面にも引き継がれるようにするため．
 	*/
 	int		nCurrentKeywordSetIdx;
-	int		nKeywordSetNum;				// キーワードセット数
+	size_t	nKeywordSetNum;				// キーワードセット数
 	wchar_t	szSetNameArr[MAX_SETNUM][MAX_SETNAMELEN + 1];	// キーワードセット名
 	bool	bKeywordCaseArr[MAX_SETNUM];	// キーワードの英大文字小文字区別
 	int		nKeywordNumArr[MAX_SETNUM];	// キーワードセットに登録されているキーワード数
@@ -151,14 +151,14 @@ protected:
 		+1しているのは最後が0で終わるようにするため．
 	*/
 	int		nStartIdx[MAX_SETNUM + 1];
-	int		nKeywordMaxLenArr[MAX_SETNUM]; // 一番長いキーワードの長さ(ソート後のみ有効)(INI未保存)
+	size_t	nKeywordMaxLenArr[MAX_SETNUM]; // 一番長いキーワードの長さ(ソート後のみ有効)(INI未保存)
 
 protected:
 	/*
 	||  実装ヘルパ関数
 	*/
 	//bool KeywordAlloc(int);
-	bool KeywordReAlloc(int, int);
-	void KeywordMaxLen( int );
+	bool KeywordReAlloc(size_t, size_t);
+	void KeywordMaxLen( size_t );
 };
 

@@ -482,12 +482,11 @@ void PropPlugin::InitDialog(HWND hwndDlg)
 	HWND hListView = ::GetDlgItem(hwndDlg, IDC_PLUGINLIST);
 
 	LVCOLUMN sColumn;
-	int pos;
 	RECT rc;
 	::GetWindowRect(hListView, &rc);
 	int width = rc.right - rc.left;
 	
-	for (pos=0; pos<_countof(ColumnList); ++pos) {
+	for (size_t pos=0; pos<_countof(ColumnList); ++pos) {
 		
 		memset_raw(&sColumn, 0, sizeof(sColumn));
 		sColumn.mask = LVCF_TEXT | LVCF_WIDTH | LVCF_SUBITEM | LVCF_FMT;

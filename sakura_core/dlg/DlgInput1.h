@@ -28,8 +28,8 @@ public:
 	*/
 	DlgInput1();
 	~DlgInput1();
-	BOOL DoModal(HINSTANCE, HWND, const TCHAR*, const TCHAR*, int, TCHAR*);		// モードレスダイアログの表示
-	BOOL DoModal(HINSTANCE, HWND, const TCHAR*, const TCHAR*, int, NOT_TCHAR*);	// モードレスダイアログの表示
+	BOOL DoModal(HINSTANCE, HWND, const TCHAR*, const TCHAR*, size_t, TCHAR*);		// モードレスダイアログの表示
+	BOOL DoModal(HINSTANCE, HWND, const TCHAR*, const TCHAR*, size_t, NOT_TCHAR*);	// モードレスダイアログの表示
 	/*
 	||  Attributes & Operations
 	*/
@@ -40,8 +40,8 @@ public:
 	HWND		hWnd;			// このダイアログのハンドル
 
 	const TCHAR*	pszTitle;		// ダイアログタイトル
-	const TCHAR*	pszMessage;	// メッセージ
-	int			nMaxTextLen;		// 入力サイズ上限
+	const TCHAR*	pszMessage;		// メッセージ
+	size_t			nMaxTextLen;	// 入力サイズ上限
 //	char*		pszText;			// テキスト
 	NativeT	memText;			// テキスト
 protected:

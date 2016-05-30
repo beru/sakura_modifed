@@ -57,18 +57,14 @@ void BlockComment::SetBlockCommentRule(
 	@retval false 一致しなかった
 */
 bool BlockComment::Match_CommentFrom(
-	int					nPos,	// [in] 探索開始位置
+	size_t				nPos,	// [in] 探索開始位置
 	const StringRef&	str		// [in] 探索対象文字列 ※探索開始位置のポインタではないことに注意
-	/*
-	int				nLineLen,	// [in] pLineの長さ
-	const wchar_t*	pLine		// [in] 探索行の先頭．
-	*/
 	) const
 {
 	return (1
 		&& szBlockCommentFrom[0] != L'\0'
 		&& szBlockCommentTo[0] != L'\0'
-		&& nPos <= (int)str.GetLength() - (int)nBlockFromLen 	// ブロックコメントデリミタ(From)
+		&& (int)nPos <= (int)str.GetLength() - (int)nBlockFromLen 	// ブロックコメントデリミタ(From)
 		//&& auto_memicmp(&str.GetPtr()[nPos], szBlockCommentFrom, nBlockFromLen) == 0	// 非ASCIIも大文字小文字を区別しない	//###locale 依存
 		&& wmemicmp_ascii(&str.GetPtr()[nPos], szBlockCommentFrom, nBlockFromLen) == 0	// ASCIIのみ大文字小文字を区別しない（高速）
 	);
@@ -80,15 +76,11 @@ bool BlockComment::Match_CommentFrom(
 	@return 当てはまった位置を返すが、当てはまらなかったときは、nLineLenをそのまま返す。
 */
 size_t BlockComment::Match_CommentTo(
-	int					nPos,	// [in] 探索開始位置
+	size_t				nPos,	// [in] 探索開始位置
 	const StringRef&	str		// [in] 探索対象文字列 ※探索開始位置のポインタではないことに注意
-	/*
-	int				nLineLen,	// [in] pLineの長さ
-	const wchar_t*	pLine		// [in] 探索行の先頭．探索開始位置のポインタではないことに注意
-	*/
 	) const
 {
-	for (int i=nPos; i<=(int)str.GetLength()-(int)nBlockToLen; ++i) {
+	for (int i=(int)nPos; i<=(int)str.GetLength()-(int)nBlockToLen; ++i) {
 		//if (auto_memicmp(&str.GetPtr()[i], szBlockCommentTo, nBlockToLen) == 0) {	// 非ASCIIも大文字小文字を区別しない	//###locale 依存
 		if (wmemicmp_ascii(&str.GetPtr()[i], szBlockCommentTo, nBlockToLen) == 0) {	// ASCIIのみ大文字小文字を区別しない（高速）
 			return i + nBlockToLen;

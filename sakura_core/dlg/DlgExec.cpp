@@ -77,11 +77,11 @@ BOOL DlgExec::OnInitDialog(
 	EncodingType codes[] = { CODE_SJIS, CODE_UNICODE, CODE_UTF8 };
 	HWND hwndCombo;
 	hwndCombo = GetItemHwnd(IDC_COMBO_CODE_GET);
-	for (int i=0; i<_countof(codes); ++i) {
+	for (size_t i=0; i<_countof(codes); ++i) {
 		Combo_AddString(hwndCombo, CodeTypeName(codes[i]).Normal());
 	}
 	hwndCombo = GetItemHwnd(IDC_COMBO_CODE_SEND);
-	for (int i=0; i<_countof(codes); ++i) {
+	for (size_t i=0; i<_countof(codes); ++i) {
 		Combo_AddString(hwndCombo, CodeTypeName(codes[i]).Normal());
 	}
 
@@ -140,8 +140,8 @@ void DlgExec::SetData(void)
 	HWND hwndCombo = GetItemHwnd(IDC_COMBO_m_szCommand);
 	Combo_ResetContent(hwndCombo);
 	SetItemText(IDC_COMBO_TEXT, szCommand);
-	int nSize = pShareData->history.aCommands.size();
-	for (int i=0; i<nSize; ++i) {
+	size_t nSize = pShareData->history.aCommands.size();
+	for (size_t i=0; i<nSize; ++i) {
 		Combo_AddString(hwndCombo, pShareData->history.aCommands[i]);
 	}
 	Combo_SetCurSel(hwndCombo, 0);

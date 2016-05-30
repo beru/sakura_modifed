@@ -76,12 +76,12 @@ static CodeConvertResult _CheckSavingCharcode(
 			int nPos = -1;
 			for (size_t i=0; i<nDataMinLen; ++i) {
 				if (p[i] != r[i]) {
-					nPos = i;
+					nPos = (int)i;
 					break;
 				}
 			}
 			if (nPos == -1 && nDocLineLen != nConvertLen) {
-				nPos = nDataMinLen;
+				nPos = (int)nDataMinLen;
 			}
 			if (nPos != -1) {
 				point.y = nLine;
@@ -110,7 +110,7 @@ static CodeConvertResult _CheckSavingCharcode(
 						pCodeBase
 					);
 					if (e2 == CodeConvertResult::LoseSome) {
-						point.x = nPos;
+						point.x = (int)nPos;
 						wc = mem;
 						break;
 					}

@@ -78,7 +78,7 @@ void ViewCommander::Command_Chg_Charset(
 		// 文字コードの確認
 		eCharSet = GetDocument().GetDocumentEncoding();	// 設定する文字コードセット
 		bBom     = GetDocument().GetDocumentBomExist();	// 設定するBOM
-		int nRet = GetEditWindow().dlgSetCharSet.DoModal(G_AppInstance(), view.GetHwnd(), 
+		INT_PTR nRet = GetEditWindow().dlgSetCharSet.DoModal(G_AppInstance(), view.GetHwnd(), 
 						&eCharSet, &bBom);
 		if (!nRet) {
 			return;

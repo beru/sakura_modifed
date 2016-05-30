@@ -48,7 +48,6 @@ bool CodeBase::MIMEHeaderDecode(
 	)
 {
 	EncodingType ecodetype;
-	int nskip_bytes;
 
 	// ƒ\[ƒX‚ðŽæ“¾
 	pMem->AllocBuffer(nSrcLen);
@@ -68,7 +67,7 @@ bool CodeBase::MIMEHeaderDecode(
 			++j;
 			continue;
 		}
-		nskip_bytes = _DecodeMimeHeader(&pSrc[i], nSrcLen - i, &membuf, &ecodetype);
+		size_t nskip_bytes = _DecodeMimeHeader(&pSrc[i], nSrcLen - i, &membuf, &ecodetype);
 		if (nskip_bytes < 1) {
 			pdst[j] = pSrc[i];
 			++i;

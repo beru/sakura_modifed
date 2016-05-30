@@ -122,7 +122,7 @@ void ViewCommander::Command_Compare(void)
 	auto& csCompare = commonSetting.compare;
 	// 比較後、左右に並べて表示
 	dlgCompare.bCompareAndTileHorz = csCompare.bCompareAndTileHorz;
-	BOOL bDlgCompareResult = dlgCompare.DoModal(
+	INT_PTR bDlgCompareResult = dlgCompare.DoModal(
 		G_AppInstance(),
 		view.GetHwnd(),
 		(LPARAM)&GetDocument(),
@@ -323,7 +323,7 @@ void ViewCommander::Command_Diff_Dialog(void)
 	auto& docFile = GetDocument().docFile;
 	auto& docEditor = GetDocument().docEditor;
 	// DIFF差分表示ダイアログを表示する
-	int nDiffDlgResult = dlgDiff.DoModal(
+	INT_PTR nDiffDlgResult = dlgDiff.DoModal(
 		G_AppInstance(),
 		view.GetHwnd(),
 		(LPARAM)&GetDocument(),
@@ -420,7 +420,7 @@ void ViewCommander::Command_Diff_Next(void)
 
 re_do:;	
 	if (DiffLineMgr(GetDocument().docLineMgr).SearchDiffMark(ptXY.y, SearchDirection::Forward, &tmp_y)) {
-		ptXY.y = tmp_y;
+		ptXY.y = (int)tmp_y;
 		bFound = true;
 		Point ptXY_Layout = GetDocument().layoutMgr.LogicToLayout(ptXY);
 		if (selInfo.bSelectingLock) {
@@ -474,7 +474,7 @@ void ViewCommander::Command_Diff_Prev(void)
 
 re_do:;
 	if (DiffLineMgr(GetDocument().docLineMgr).SearchDiffMark(ptXY.y, SearchDirection::Backward, &tmp_y)) {
-		ptXY.y = tmp_y;
+		ptXY.y = (int)tmp_y;
 		bFound = true;
 		Point ptXY_Layout = GetDocument().layoutMgr.LogicToLayout(ptXY);
 		if (selInfo.bSelectingLock) {
@@ -497,7 +497,7 @@ re_do:;
 		// 見つからなかった、かつ、最初の検索
 		if (!bFound	&& bRedo) {
 			// 2011.02.02 layoutMgr→docLineMgr
-			ptXY.y = GetDocument().docLineMgr.GetLineCount();	// 1個手前を指定
+			ptXY.y = (int)GetDocument().docLineMgr.GetLineCount();	// 1個手前を指定
 			bRedo = false;
 			goto re_do;	// 末尾から再検索
 		}

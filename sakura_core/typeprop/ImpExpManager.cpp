@@ -332,7 +332,7 @@ bool ImpExpType::Import(const wstring& sFileName, wstring& sErrMsg)
 	// 色の設定
 	if (nColorType >= 0) {
 		// 色指定あり
-		for (int i=0; i<_countof(colorInfoArr); ++i) {
+		for (size_t i=0; i<_countof(colorInfoArr); ++i) {
 			bool bDisp = types.colorInfoArr[i].bDisp;
 			types.colorInfoArr[i] = colorInfoArr[i];
 			types.colorInfoArr[i].bDisp = bDisp;		// 表示フラグはファイルのものを使用する

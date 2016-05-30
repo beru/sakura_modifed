@@ -127,7 +127,7 @@ void DlgCtrlCode::SetData(void)
 	// データ表示
 	TCHAR tmp[10];
 	int count = 0;
-	for (int i=0; i<_countof(p_ctrl_list); ++i) {
+	for (size_t i=0; i<_countof(p_ctrl_list); ++i) {
 		if (!p_ctrl_list[i].jname) {
 			continue;
 		}
@@ -280,10 +280,10 @@ BOOL DlgCtrlCode::OnNotify(WPARAM wParam, LPARAM lParam)
 			{
 				NMKEY* p = (NMKEY*)lParam;
 				unsigned int c;
-				for (int i=0; i<_countof(p_ctrl_list); ++i) {
+				for (size_t i=0; i<_countof(p_ctrl_list); ++i) {
 					c = p_ctrl_list[i].vKey;
 					if (c == (p->nVKey & 0xffff)) {
-						for (int j=0; j<_countof(p_ctrl_list); ++j) {
+						for (size_t j=0; j<_countof(p_ctrl_list); ++j) {
 							if (p_ctrl_list[i].code == p_ctrl_list[j].code) {
 								HWND hwndList = GetItemHwnd(IDC_LIST_CTRLCODE);
 								ListView_SetItemState(hwndList, j, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED);

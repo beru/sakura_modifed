@@ -87,26 +87,18 @@ public:
 	const wchar_t* SearchString(
 		const wchar_t* pLine,
 		size_t nLineLen,
-		int nIdxPos,
+		size_t nIdxPos,
 		const SearchStringPattern& pattern
 	);
 	// ’PŒê’PˆÊ‚Å•¶š—ñŒŸõ
 	static
 	const wchar_t* SearchStringWord(
 		const wchar_t*	pLine,
-		size_t			nLineLen,
-		size_t			nIdxPos,
+		size_t	nLineLen,
+		size_t	nIdxPos,
 		const std::vector<std::pair<const wchar_t*, size_t>>& searchWords,
 		bool	bLoHiCase,
 		int*	pnMatchLen
-	);
-	
-	// ŒŸõğŒ‚Ìî•ñ
-	static
-	void CreateCharCharsArr(
-		const wchar_t*	pszPattern,
-		int				nSrcLen,
-		int**			ppnCharCharsArr
 	);
 	
 	static

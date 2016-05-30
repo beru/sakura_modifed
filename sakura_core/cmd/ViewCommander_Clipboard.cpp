@@ -337,10 +337,10 @@ void ViewCommander::Command_PasteBox(
 
 			if (bAddLastCR) {
 //				MYTRACE(_T(" カーソル行が最後の行かつ行末に改行が無く、\n挿入すべきデータがまだある場合は行末に改行を挿入。\n"));
-				int nInsPosX = view.LineIndexToColumn(pLayout, nLineLen);
+				size_t nInsPosX = view.LineIndexToColumn(pLayout, nLineLen);
 
 				view.InsertData_CEditView(
-					Point(nInsPosX, caret.GetCaretLayoutPos().y),
+					Point((int)nInsPosX, caret.GetCaretLayoutPos().y),
 					GetDocument().docEditor.GetNewLineCode().GetValue2(),
 					GetDocument().docEditor.GetNewLineCode().GetLen(),
 					&ptLayoutNew,
@@ -363,7 +363,7 @@ void ViewCommander::Command_PasteBox(
 			++nPos;
 		}
 		if ((nPos % 100) == 0 && hwndProgress) {
-			int newPos = ::MulDiv(nPos, 100, nPasteSize);
+			int newPos = ::MulDiv((int)nPos, 100, (int)nPasteSize);
 			if (newPos != nProgressPos) {
 				nProgressPos = newPos;
 				Progress_SetPos(hwndProgress, newPos + 1);
@@ -751,7 +751,7 @@ void ViewCommander::Command_Copy_Color_HTML(bool bLineNumber)
 	// 修飾分を除いたバッファの長さをだいたいで計算
 	Range sSelectLogic;
 	sSelectLogic.Clear(-1);
-	int nBuffSize = 0;
+	size_t nBuffSize = 0;
 	const Layout* pLayoutTop = nullptr;
 	{
 		const Layout* pLayout;
@@ -763,8 +763,8 @@ void ViewCommander::Command_Copy_Color_HTML(bool bLineNumber)
 		int i = rcSel.top;
 		for (; pLayout && i <= rcSel.bottom; ++i, pLayout = pLayout->GetNextLayout()) {
 			// 指定された桁に対応する行のデータ内の位置を調べる
-			int nIdxFrom;
-			int nIdxTo;
+			size_t nIdxFrom;
+			size_t nIdxTo;
 			if (selInfo.IsBoxSelecting()) {
 				nIdxFrom = view.LineColumnToIndex(pLayout, rcSel.left);
 				nIdxTo   = view.LineColumnToIndex(pLayout, rcSel.right);
@@ -777,24 +777,24 @@ void ViewCommander::Command_Copy_Color_HTML(bool bLineNumber)
 				}
 				if (i == rcSel.top) {
 					sSelectLogic.SetFromY(pLayout->GetLogicLineNo());
-					sSelectLogic.SetFromX(nIdxFrom);
+					sSelectLogic.SetFromX((int)nIdxFrom);
 				}
 				if (i == rcSel.bottom) {
 					sSelectLogic.SetToY(pLayout->GetLogicLineNo());
-					sSelectLogic.SetToX(nIdxTo);
+					sSelectLogic.SetToX((int)nIdxTo);
 				}
 			}else {
 				if (i == rcSel.top) {
 					nIdxFrom = view.LineColumnToIndex(pLayout, rcSel.left);
 					sSelectLogic.SetFromY(pLayout->GetLogicLineNo());
-					sSelectLogic.SetFromX(nIdxFrom);
+					sSelectLogic.SetFromX((int)nIdxFrom);
 				}else {
 					nIdxFrom = 0;
 				}
 				if (i == rcSel.bottom) {
 					nIdxTo = view.LineColumnToIndex(pLayout, rcSel.right);
 					sSelectLogic.SetToY(pLayout->GetLogicLineNo());
-					sSelectLogic.SetToX(nIdxTo);
+					sSelectLogic.SetToX((int)nIdxTo);
 				}else {
 					nIdxTo = pLayout->GetLengthWithoutEOL();
 				}
@@ -807,7 +807,7 @@ void ViewCommander::Command_Copy_Color_HTML(bool bLineNumber)
 			}
 		}
 		if (sSelectLogic.GetTo().x == -1) {
-			sSelectLogic.SetToY(GetDocument().docLineMgr.GetLineCount());
+			sSelectLogic.SetToY((int)GetDocument().docLineMgr.GetLineCount());
 			sSelectLogic.SetToX(0);
 		}
 	}
@@ -905,8 +905,8 @@ void ViewCommander::Command_Copy_Color_HTML(bool bLineNumber)
 				nIdxTo = nIdxFrom = -1;
 			}else {
 				if (selInfo.IsBoxSelecting()) {
-					nIdxFrom = view.LineColumnToIndex(pLayout, rcSel.left);
-					nIdxTo   = view.LineColumnToIndex(pLayout, rcSel.right);
+					nIdxFrom = (int)view.LineColumnToIndex(pLayout, rcSel.left);
+					nIdxTo   = (int)view.LineColumnToIndex(pLayout, rcSel.right);
 					// 改行は除く
 					if (nIdxTo - nIdxFrom > 0) {
 						const WCHAR* pLine = pLayout->GetPtr();
@@ -923,7 +923,7 @@ void ViewCommander::Command_Copy_Color_HTML(bool bLineNumber)
 					if (nLayoutLineNum == rcSel.bottom) {
 						nIdxTo = sSelectLogic.GetTo().x;
 					}else {
-						nIdxTo = nLineLen;
+						nIdxTo = (int)nLineLen;
 					}
 				}
 			}

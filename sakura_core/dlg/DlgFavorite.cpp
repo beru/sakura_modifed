@@ -90,7 +90,7 @@ static const AnchorListItem anchorList[] = {
 //#endif
 #endif
 
-static int FormatFavoriteColumn(TCHAR*, int, int , bool);
+static int FormatFavoriteColumn(TCHAR*, size_t, size_t, bool);
 static int ListView_GetLParamInt(HWND, int);
 static int CALLBACK CompareListViewFunc(LPARAM, LPARAM, LPARAM);
 
@@ -290,12 +290,12 @@ void DlgFavorite::SetDataOne(int nIndex, int nLvItemIndex)
 	HWND hwndList = GetItemHwnd(aFavoriteInfo[nIndex].nId);
 	ListView_DeleteAllItems(hwndList);  // リストを空にする
 
-	const int nViewCount = pRecent->GetViewCount();
-	const int nItemCount = pRecent->GetItemCount();
+	size_t nViewCount = pRecent->GetViewCount();
+	size_t nItemCount = pRecent->GetItemCount();
 	aFavoriteInfo[nIndex].nViewCount = nViewCount;
 
 	TCHAR tmp[1024];
-	for (int i=0; i<nItemCount; ++i) {
+	for (size_t i=0; i<nItemCount; ++i) {
 		FormatFavoriteColumn(tmp, _countof(tmp), i, i < nViewCount);
 		lvi.mask     = LVIF_TEXT | LVIF_PARAM;
 		lvi.pszText  = tmp;
@@ -329,7 +329,7 @@ void DlgFavorite::SetDataOne(int nIndex, int nLvItemIndex)
 
 	// アイテムがあってどれも非選択なら、要求に近いアイテム(先頭か末尾)を選択
 	if (nItemCount > 0 && nLvItemIndex != -1 && nNewFocus == -1) {
-		nNewFocus = (0 < nLvItemIndex ? nItemCount - 1: 0);
+		nNewFocus = (0 < nLvItemIndex ? ((int)nItemCount - 1): 0);
 	}
 
 	if (nNewFocus != -1) {
@@ -376,7 +376,7 @@ BOOL DlgFavorite::OnInitDialog(
 	ptDefaultSize.x = rc.right - rc.left;
 	ptDefaultSize.y = rc.bottom - rc.top;
 
-	for (int i=0; i<_countof(anchorList); ++i) {
+	for (size_t i=0; i<_countof(anchorList); ++i) {
 		GetItemClientRect(anchorList[i].id, rcItems[i]);
 	}
 
@@ -425,7 +425,7 @@ BOOL DlgFavorite::OnInitDialog(
 		TextWidthCalc calc(hwndBaseList);
 		calc.SetTextWidthIfMax(pszFAVORITE_TEXT, TextWidthCalc::WIDTH_LV_HEADER);
 		TCHAR szBuf[200];
-		for (int i=0; i<40; ++i) {
+		for (size_t i=0; i<40; ++i) {
 			//「M (非表示)」等の幅を求める
 			FormatFavoriteColumn(szBuf, _countof(szBuf), i, false);
 			calc.SetTextWidthIfMax(szBuf, TextWidthCalc::WIDTH_LV_ITEM_CHECKBOX);
@@ -548,7 +548,7 @@ BOOL DlgFavorite::OnBnClicked(int wID)
 					GetFavorite(nCurrentTab);
 
 					// 存在しないパスの削除
-					for (int i=pRecent->GetItemCount()-1; i>=0; --i) {
+					for (int i=(int)pRecent->GetItemCount()-1; i>=0; --i) {
 						TCHAR szPath[_MAX_PATH];
 						auto_strcpy(szPath, pRecent->GetItemText(i));
 						CutLastYenFromDirectoryPath(szPath);
@@ -753,19 +753,14 @@ bool DlgFavorite::RefreshList(void)
 */
 bool DlgFavorite::RefreshListOne(int nIndex)
 {
-	HWND	hwndList;
-	int		nCount;
-	int		nCurrentIndex;
-	int		nItemCount;
-	int		i;
 	BOOL	bret;
 	LVITEM	lvitem;
 
 	Recent*	pRecent = aFavoriteInfo[nIndex].pRecent;
-	nItemCount    = pRecent->GetItemCount();
-	hwndList      = GetItemHwnd(aFavoriteInfo[nIndex].nId);
-	nCount        = ListView_GetItemCount(hwndList);
-	nCurrentIndex = ListView_GetNextItem(hwndList, -1, LVNI_SELECTED);
+	size_t nItemCount = pRecent->GetItemCount();
+	HWND hwndList = GetItemHwnd(aFavoriteInfo[nIndex].nId);
+	size_t nCount = (size_t)ListView_GetItemCount(hwndList);
+	int nCurrentIndex = ListView_GetNextItem(hwndList, -1, LVNI_SELECTED);
 	if (nCurrentIndex == -1) nCurrentIndex = ListView_GetNextItem(hwndList, -1, LVNI_FOCUSED);
 
 	if (nItemCount != nCount) goto changed;	// 個数が変わったので再構築
@@ -773,7 +768,7 @@ bool DlgFavorite::RefreshListOne(int nIndex)
 	// お気に入り数が変わったので再構築
 	if (aFavoriteInfo[nIndex].nViewCount != pRecent->GetViewCount()) goto changed;
 
-	for (i=0; i<nCount; ++i) {
+	for (size_t i=0; i<nCount; ++i) {
 		TCHAR	szText[1024];
 		auto_memset(szText, 0, _countof(szText));
 		memset_raw(&lvitem, 0, sizeof(lvitem));
@@ -1072,8 +1067,8 @@ void DlgFavorite::RightMenu(POINT& menuPos)
 
 int FormatFavoriteColumn(
 	TCHAR* buf,
-	int size,
-	int index,
+	size_t size,
+	size_t index,
 	bool view
 	)
 {
@@ -1135,7 +1130,7 @@ void DlgFavorite::ListViewSort(
 		col.cchTextMax = _countof(szHeader);
 		col.iSubItem = 0;
 		ListView_GetColumn(info.hListView, info.nSortColumn, &col);
-		int nLen = (int)_tcslen(szHeader) - _tcslen(_T("▼"));
+		int nLen = (int)_tcslen(szHeader) - (int)_tcslen(_T("▼"));
 		if (0 <= nLen) {
 			szHeader[nLen] = _T('\0');
 		}
@@ -1213,7 +1208,7 @@ BOOL DlgFavorite::OnSize(WPARAM wParam, LPARAM lParam)
 	ptNew.x = rc.right - rc.left;
 	ptNew.y = rc.bottom - rc.top;
 
-	for (int i=0 ; i<_countof(anchorList); ++i) {
+	for (size_t i=0 ; i<_countof(anchorList); ++i) {
 		ResizeItem(GetItemHwnd(anchorList[i].id), ptDefaultSize, ptNew, rcItems[i], anchorList[i].anchor);
 	}
 

@@ -248,7 +248,7 @@ LRESULT FuncKeyWnd::OnCommand(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	HWND hwndCtl = (HWND) lParam;		// handle of control
 //	switch (wNotifyCode) {
 //	case BN_PUSHED:
-		for (int i=0; i<_countof(hwndButtonArr); ++i) {
+		for (size_t i=0; i<_countof(hwndButtonArr); ++i) {
 			if (hwndCtl == hwndButtonArr[i]) {
 				if (nFuncCodeArr[i] != 0) {
 					::SendMessage(GetParentHwnd(), WM_COMMAND, MAKELONG(nFuncCodeArr[i], 0),  (LPARAM)hwnd);
@@ -284,7 +284,7 @@ LRESULT FuncKeyWnd::OnTimer(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 		// ファンクションキーの機能名を取得
 		auto& csKeyBind = shareData.common.keyBind;
-		for (int i=0; i<_countof(szFuncNameArr); ++i) {
+		for (size_t i=0; i<_countof(szFuncNameArr); ++i) {
 			// 2007.02.22 ryoji KeyBind::GetFuncCode()を使う
 			EFunctionCode nFuncCode = KeyBind::GetFuncCode(
 				(WORD)(((VK_F1 + i) | ((WORD)((BYTE)(nIdx))) << 8)),
@@ -313,7 +313,7 @@ LRESULT FuncKeyWnd::OnTimer(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	) {
 		nTimerCount = 0;
 		// 機能が利用可能か調べる
-		for (int i=0; i<_countof(szFuncNameArr); ++i) {
+		for (size_t i=0; i<_countof(szFuncNameArr); ++i) {
 			::EnableWindow(
 				hwndButtonArr[i],
 				IsFuncEnable(*pEditDoc, shareData, nFuncCodeArr[i] ) ? TRUE : FALSE
@@ -332,7 +332,7 @@ LRESULT FuncKeyWnd::OnDestroy(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam
 	Timer_ONOFF(false); // 20060126 aroka
 	
 	// ボタンを削除
-	for (int i=0; i<_countof(hwndButtonArr); ++i) {
+	for (size_t i=0; i<_countof(hwndButtonArr); ++i) {
 		if (hwndButtonArr[i]) {
 			::DestroyWindow(hwndButtonArr[i]	);
 			hwndButtonArr[i] = NULL;
@@ -383,11 +383,11 @@ void FuncKeyWnd::CreateButtons(void)
 	GetWindowRect(&rcParent);
 	int nButtonHeight = rcParent.bottom - rcParent.top - 2;
 
-	for (int i=0; i<_countof(nFuncCodeArr); ++i) {
+	for (size_t i=0; i<_countof(nFuncCodeArr); ++i) {
 		nFuncCodeArr[i] = F_0;
 	}
 
-	for (int i=0; i<_countof(hwndButtonArr); ++i) {
+	for (size_t i=0; i<_countof(hwndButtonArr); ++i) {
 		hwndButtonArr[i] = ::CreateWindow(
 			_T("BUTTON"),						// predefined class
 			_T(""),								// button text

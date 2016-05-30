@@ -338,7 +338,8 @@ bool BackupAgent::FormatBackUpPath(
 		wchar_t	szForm[64];
 
 		TCHAR* pBase = szNewPath + _tcslen(szNewPath);
-		int nBaseCount = newPathCount - _tcslen(szNewPath);
+		ASSERT_GE(newPathCount, _tcslen(szNewPath));
+		size_t nBaseCount = newPathCount - _tcslen(szNewPath);
 
 		// バックアップファイル名のタイプ 1=(.bak) 2=*_日付.*
 		switch (bup_setting.GetBackupType()) {

@@ -582,17 +582,14 @@ void DlgPluginOption::SetToEdit(int iLine)
 			HWND hwndCombo = GetItemHwnd(IDC_COMBO_PLUGIN_OPTION);
 			Combo_ResetContent(hwndCombo);
 
-			int		nSelIdx;
-			int		i;
-			int		nItemIdx;
 			wstring	sView;
 			wstring	sValue;
 			wstring	sWbuf = to_wchar(buf);
-			nSelIdx = -1;		// ‘I‘ð
-			i = 0;
+			int nSelIdx = -1;		// ‘I‘ð
+			int i = 0;
 			for (auto it=selects.begin(); it!=selects.end(); ++it) {
 				SepSelect(*it, &sView, &sValue);
-				nItemIdx = Combo_AddString(hwndCombo, sView.c_str());
+				LONG_PTR nItemIdx = Combo_AddString(hwndCombo, sView.c_str());
 				if (sView == sWbuf) {
 					nSelIdx = i;
 				}
@@ -678,8 +675,8 @@ void DlgPluginOption::SepSelect(
 	wstring* spValue
 	)
 {
-	int ix = sTrg.find(L':');
-	if ((std::wstring::size_type)ix == std::wstring::npos) {
+	auto ix = sTrg.find(L':');
+	if (ix == std::wstring::npos) {
 		*spView = *spValue = sTrg;
 	}else {
 #ifdef _DEBUG

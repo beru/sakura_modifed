@@ -69,7 +69,7 @@ bool LayoutMgr::IsKinsokuKuto(wchar_t wc)
 	@date 2005-08-20 D.S.Koba _DoLayout()とDoLayout_Range()から分離
 */
 bool LayoutMgr::IsKinsokuPosHead(
-	int nRest,		// [in] 行の残り文字数
+	size_t nRest,		// [in] 行の残り文字数
 	size_t nCharKetas,	// [in] 現在位置の文字サイズ
 	size_t nCharKetas2	// [in] 現在位置の次の文字サイズ
 	)
@@ -109,7 +109,7 @@ bool LayoutMgr::IsKinsokuPosHead(
 	@date 2005-08-20 D.S.Koba _DoLayout()とDoLayout_Range()から分離
 */
 bool LayoutMgr::IsKinsokuPosTail(
-	int nRest,		// [in] 行の残り文字数
+	size_t nRest,		// [in] 行の残り文字数
 	size_t nCharKetas,	// [in] 現在位置の文字サイズ
 	size_t nCharKetas2	// [in] 現在位置の次の文字サイズ
 	)

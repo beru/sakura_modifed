@@ -77,7 +77,7 @@ static std::vector<EncodingType>	vDispIdx;
 void InitCodeSet()
 {
 	if (msCodeSet.empty()) {
-		for (int i=0; i<_countof(ASCodeSet); ++i) {
+		for (size_t i=0; i<_countof(ASCodeSet); ++i) {
 			vDispIdx.push_back(ASCodeSet[i].eCodeSet);
 			if (i > 0) {
 				msCodeSet[ASCodeSet[i].eCodeSet] = ASCodeSet[i];

@@ -1600,7 +1600,7 @@ void ShareData_IO::ShareData_IO_Type_One(DataProfile& profile, TypeConfig& types
 		wchar_t* pKeyword = types.regexKeywordList;
 		int nPos = 0;
 		int nKeywordSize = _countof(types.regexKeywordList);
-		for (int j=0; j<_countof(types.regexKeywordArr); ++j) {
+		for (size_t j=0; j<_countof(types.regexKeywordArr); ++j) {
 			auto_sprintf(szKeyName, LTEXT("RxKey[%03d]"), j);
 			if (profile.IsReadingMode()) {
 				types.regexKeywordArr[j].nColorIndex = COLORIDX_REGEX1;
@@ -1946,7 +1946,7 @@ void ShareData_IO::ShareData_IO_MainMenu(DataProfile& profile)
 			{1, F_MODIFYLINE_NEXT_SEL, F_GOFILEEND_SEL, L'\0', true, false}, 	// (選択)次の変更行へ
 			{1, F_MODIFYLINE_PREV_SEL, F_MODIFYLINE_NEXT_SEL, L'\0', false, false}, 	// (選択)前の変更行へ
 		};
-		for (int i=0; i<_countof(addInfos); ++i) {
+		for (size_t i=0; i<_countof(addInfos); ++i) {
 			MainMenuAddItemInfo& item = addInfos[i];
 			if (item.nVer <= nVersion) {
 				continue;

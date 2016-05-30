@@ -1054,7 +1054,6 @@ int GrepAgent::DoGrepFile(
 	bool	bOutFileName;
 	bOutFileName = false;
 	Eol	eol;
-	size_t nEolCodeLen;
 	const TypeConfigMini* type;
 	DocTypeManager().GetTypeConfigMini(DocTypeManager().GetDocumentTypeOfPath(pszFile), &type);
 	int nOldPercent = 0;
@@ -1186,7 +1185,7 @@ int GrepAgent::DoGrepFile(
 			const wchar_t* pLine = unicodeBuffer.GetStringPtr();
 			size_t nLineLen = unicodeBuffer.GetStringLength();
 
-			nEolCodeLen = eol.GetLen();
+			size_t nEolCodeLen = eol.GetLen();
 			++nLine;
 			pCompareData = pLine;
 
@@ -1618,7 +1617,6 @@ int GrepAgent::DoGrepReplaceFile(
 	EncodingType	nCharCode;
 	bool	bOutFileName = false;
 	Eol		cEol;
-	int		nEolCodeLen;
 	int		nOldPercent = 0;
 	const TCHAR*	pszCodeName = _T("");
 	auto& editWnd = EditWnd::getInstance();
@@ -1663,8 +1661,7 @@ int GrepAgent::DoGrepReplaceFile(
 		while (fl.ReadLine(&unicodeBuffer, &cEol) != CodeConvertResult::Failure) {
 			const wchar_t*	pLine = unicodeBuffer.GetStringPtr();
 			size_t nLineLen = unicodeBuffer.GetStringLength();
-	
-			nEolCodeLen = cEol.GetLen();
+			size_t nEolCodeLen = cEol.GetLen();
 			++nLine;
 	
 			// 処理中のユーザー操作を可能にする

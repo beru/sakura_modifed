@@ -38,10 +38,10 @@
 #include <limits>
 
 // 1ブロック当たりのキーワード数
-static const int nKeywordSetBlockSize = 50;
+static const size_t nKeywordSetBlockSize = 50;
 
 // ブロックサイズで整列
-inline int GetAlignmentSize(int nSize)
+inline size_t GetAlignmentSize(size_t nSize)
 {
 	return (nKeywordSetBlockSize - 1 + nSize) / nKeywordSetBlockSize * nKeywordSetBlockSize;
 }
@@ -76,10 +76,10 @@ KeywordSetMgr::~KeywordSetMgr(void)
 void KeywordSetMgr::ResetAllKeywordSet(void)
 {
 	nKeywordSetNum = 0;
-	for (int i=0; i<MAX_SETNUM+1; ++i) {
+	for (size_t i=0; i<MAX_SETNUM+1; ++i) {
 		nStartIdx[i] = 0;
 	}
-	for (int i=0; i<MAX_SETNUM; ++i) {
+	for (size_t i=0; i<MAX_SETNUM; ++i) {
 		nKeywordNumArr[i] = 0;
 	}
 }
@@ -98,7 +98,7 @@ const KeywordSetMgr& KeywordSetMgr::operator = (KeywordSetMgr& KeywordSetMgr)
 	memcpy_raw(szSetNameArr   , KeywordSetMgr.szSetNameArr   , sizeof(szSetNameArr)		);
 	memcpy_raw(bKeywordCaseArr, KeywordSetMgr.bKeywordCaseArr, sizeof(bKeywordCaseArr)	);
 	memcpy_raw(nStartIdx      , KeywordSetMgr.nStartIdx      , sizeof(nStartIdx	)		); // 2004.07.29 Moca
-	memcpy_raw(nKeywordNumArr , KeywordSetMgr.nKeywordNumArr , sizeof(nKeywordNumArr)		);
+	memcpy_raw(nKeywordNumArr , KeywordSetMgr.nKeywordNumArr , sizeof(nKeywordNumArr)	);
 	memcpy_raw(szKeywordArr   , KeywordSetMgr.szKeywordArr   , sizeof(szKeywordArr)		);
 	memcpy_raw(isSorted       , KeywordSetMgr.isSorted       , sizeof(isSorted)			); // MIK 2000.12.01 binary search
 	memcpy_raw(nKeywordMaxLenArr, KeywordSetMgr.nKeywordMaxLenArr, sizeof(nKeywordMaxLenArr) ); //2014.05.04 Moca
@@ -123,7 +123,7 @@ bool KeywordSetMgr::AddKeywordSet(
 	if (MAX_SETNUM <= nKeywordSetNum) {
 		return false;
 	}
-	int nIdx = nKeywordSetNum;	// 追加位置
+	size_t nIdx = nKeywordSetNum;	// 追加位置
 	nStartIdx[++nKeywordSetNum] = nStartIdx[nIdx];// サイズ0でセット追加
 
 	if (!KeywordReAlloc(nIdx, nSize)) {
@@ -341,7 +341,7 @@ int KeywordSetMgr::DelKeyword(int nIdx, int nIdx2)
 
 */
 typedef int (__cdecl *qsort_callback)(const void *, const void *);
-void KeywordSetMgr::SortKeyword(int nIdx)
+void KeywordSetMgr::SortKeyword(size_t nIdx)
 {
 	// nIdxのセットをソートする。
 	if (bKeywordCaseArr[nIdx]) {
@@ -364,7 +364,7 @@ void KeywordSetMgr::SortKeyword(int nIdx)
 	return;
 }
 
-void KeywordSetMgr::KeywordMaxLen(int nIdx)
+void KeywordSetMgr::KeywordMaxLen(size_t nIdx)
 {
 	size_t nMaxLen = 0;
 	const int nEnd = nStartIdx[nIdx] + nKeywordNumArr[nIdx];
@@ -386,9 +386,9 @@ void KeywordSetMgr::KeywordMaxLen(int nIdx)
 	@retval intmax 見つかったが、pszKeywordから始まる、より長いキーワードが存在している。
 */
 int KeywordSetMgr::SearchKeyword2(
-	int nIdx,
+	size_t nIdx,
 	const wchar_t* pszKeyword,
-	int nKeywordLen
+	size_t nKeywordLen
 	)
 {
 	// sort
@@ -525,7 +525,7 @@ size_t KeywordSetMgr::SetKeywordArr(
 	
 	@return 削除したキーワード数
 */
-int KeywordSetMgr::CleanKeywords(int nIdx)
+int KeywordSetMgr::CleanKeywords(size_t nIdx)
 {
 	// 先にソートしておかないと、後で順番が変わると都合が悪い
 	if (isSorted[nIdx] == 0) {
@@ -598,7 +598,7 @@ bool KeywordSetMgr::KeywordAlloc(int nSize)
 	// assert(0 <= nSize);
 
 	// ブロックのサイズで整列
-	int nAllocSize = GetAlignmentSize(nSize);
+	size_t nAllocSize = GetAlignmentSize(nSize);
 
 	if (GetFreeSize() < nAllocSize) {
 		// メモリ不足
@@ -617,12 +617,12 @@ bool KeywordSetMgr::KeywordAlloc(int nSize)
 	@param nIdx [in] キーワードセット番号
 	@param nSize [in] 必要なキーワード数 (0～)
 */
-bool KeywordSetMgr::KeywordReAlloc(int nIdx, int nSize)
+bool KeywordSetMgr::KeywordReAlloc(size_t nIdx, size_t nSize)
 {
 	// assert(0 <= nIdx && nIdx < nKeywordSetNum);
 
 	// ブロックのサイズで整列
-	int nAllocSize = GetAlignmentSize(nSize);
+	size_t nAllocSize = GetAlignmentSize(nSize);
 	int nSizeOld = GetAllocSize(nIdx);
 
 	if (nSize < 0) {
@@ -659,7 +659,7 @@ bool KeywordSetMgr::KeywordReAlloc(int nIdx, int nSize)
 	@param nIdx [in] キーワードセット番号
 	@return キーワードセットに割り当て済みのキーワード数
 */
-int KeywordSetMgr::GetAllocSize(int nIdx) const
+int KeywordSetMgr::GetAllocSize(size_t nIdx) const
 {
 	return nStartIdx[nIdx + 1] - nStartIdx[nIdx];
 }

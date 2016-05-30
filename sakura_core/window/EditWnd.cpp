@@ -618,7 +618,7 @@ HWND EditWnd::Create(
 
 	this->pEditDoc = pEditDoc;
 
-	for (int i=0; i<_countof(pEditViewArr); ++i) {
+	for (size_t i=0; i<_countof(pEditViewArr); ++i) {
 		pEditViewArr[i] = nullptr;
 	}
 	// [0] - [3] まで作成・初期化していたものを[0]だけ作る。ほかは分割されるまで何もしない
@@ -2679,7 +2679,7 @@ void EditWnd::CheckFreeSubMenuSub(HMENU hMenu, int nLv)
 void EditWnd::SetMenuFuncSel(HMENU hMenu, EFunctionCode nFunc, const WCHAR* sKey, bool flag)
 {
 	const WCHAR* sName = L"";
-	for (int i=0; i<_countof(gFuncMenuName); ++i) {
+	for (size_t i=0; i<_countof(gFuncMenuName); ++i) {
 		if (gFuncMenuName[i].eFunc == nFunc) {
 			sName = flag ? LSW(gFuncMenuName[i].nNameId[0]) : LSW(gFuncMenuName[i].nNameId[1]);
 		}
@@ -4089,7 +4089,7 @@ LRESULT EditWnd::PopupWinList(bool bMousePos)
 		menuDrawer.ResetContents();	// 2009.06.02 ryoji 追加
 		EditNode* pEditNodeArr;
 		HMENU hMenu = ::CreatePopupMenu();	// 2006.03.23 fon
-		int nRowNum = AppNodeManager::getInstance().GetOpenedWindowArr(&pEditNodeArr, true);
+		size_t nRowNum = AppNodeManager::getInstance().GetOpenedWindowArr(&pEditNodeArr, true);
 		WinListMenu(hMenu, pEditNodeArr, nRowNum, true);
 		// メニューを表示する
 		RECT rcWork;

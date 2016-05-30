@@ -702,7 +702,7 @@ void ViewCommander::Command_Redo(void)
 				caret.MoveCursor(ptCaretPos_After, (i == nOpeBlkNum - 1));
 			}
 			if (hwndProgress && (i % 100) == 0) {
-				int newPos = ::MulDiv(i + 1, 100, (int)nOpeBlkNum);
+				int newPos = ::MulDiv((int)i + 1, 100, (int)nOpeBlkNum);
 				if (newPos != nProgressPos) {
 					nProgressPos = newPos;
 					Progress_SetPos(hwndProgress, newPos + 1);

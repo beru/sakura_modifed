@@ -127,7 +127,6 @@ struct TypePropSheetInfo {
 INT_PTR PropTypes::DoPropertySheet(int nPageNum)
 {
 	INT_PTR	nRet;
-	int		nIdx;
 
 	// 2001/06/14 Start by asa-o: タイプ別設定に支援タブ追加
 	// 2001.11.17 add start MIK タイプ別設定に正規表現キーワードタブ追加
@@ -151,6 +150,7 @@ INT_PTR PropTypes::DoPropertySheet(int nPageNum)
 	std::tstring sTabname[_countof(TypePropSheetInfoList)];
 	bChangeKeywordSet = false;
 	PROPSHEETPAGE psp[_countof(TypePropSheetInfoList)];
+	size_t nIdx;
 	for (nIdx=0; nIdx<_countof(TypePropSheetInfoList); ++nIdx) {
 		sTabname[nIdx] = LS(TypePropSheetInfoList[nIdx].nTabNameId);
 

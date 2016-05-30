@@ -158,7 +158,7 @@ void ViewCommander::Command_Cascade(void)
 		// Mar. 20, 2004 genta
 		// 現在のウィンドウを末尾に持っていくためここではスキップ
 		if (editNodeHWnd == EditWnd::getInstance().GetHwnd()) {
-			current_win_index = i;
+			current_win_index = (int)i;
 			continue;
 		}
 		pWndArr[count].hWnd = editNodeHWnd;
@@ -301,8 +301,8 @@ void ViewCommander::Command_Tile_V(void)
 		::ShowWindow(phwndArr[i], SW_RESTORE);
 		::SetWindowPos(
 			phwndArr[i], 0,
-			rcDesktop.left, rcDesktop.top + height * i, // Mar. 19, 2004 crayonzen 上端調整
-			rcDesktop.right - rcDesktop.left, height,
+			rcDesktop.left, rcDesktop.top + (int)(height * i), // Mar. 19, 2004 crayonzen 上端調整
+			rcDesktop.right - rcDesktop.left, (int)height,
 			SWP_NOOWNERZORDER | SWP_NOZORDER
 		);
 	}
@@ -353,8 +353,8 @@ void ViewCommander::Command_Tile_H(void)
 		::ShowWindow(phwndArr[i], SW_RESTORE);
 		::SetWindowPos(
 			phwndArr[i], 0,
-			width * i + rcDesktop.left, rcDesktop.top, // Oct. 18, 2003 genta タスクバーが左にある場合を考慮
-			width, rcDesktop.bottom - rcDesktop.top,
+			(int)(width * i) + rcDesktop.left, rcDesktop.top, // Oct. 18, 2003 genta タスクバーが左にある場合を考慮
+			(int)width, rcDesktop.bottom - rcDesktop.top,
 			SWP_NOOWNERZORDER | SWP_NOZORDER
 		);
 	}
@@ -608,7 +608,7 @@ void ViewCommander::Command_Maximize_H(void)
 // すべて最小化		// Sept. 17, 2000 jepro 説明の「全て」を「すべて」に統一
 void ViewCommander::Command_Minimize_All(void)
 {
-	int j = GetDllShareData().nodes.nEditArrNum;
+	size_t j = GetDllShareData().nodes.nEditArrNum;
 	if (j == 0) {
 		return;
 	}

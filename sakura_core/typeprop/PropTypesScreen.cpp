@@ -444,8 +444,8 @@ void PropTypesScreen::SetData(HWND hwndDlg)
 		// 2008.05.30 nasukoji	テキストの折り返し方法
 		HWND	hwndCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_WRAPMETHOD);
 		Combo_ResetContent(hwndCombo);
-		int		nSelPos = 0;
-		for (int i=0; i<_countof(WrapMethodArr); ++i) {
+		int nSelPos = 0;
+		for (size_t i=0; i<_countof(WrapMethodArr); ++i) {
 			Combo_InsertString(hwndCombo, i, LS(WrapMethodArr[i].nNameId));
 			if (WrapMethodArr[i].nMethod == types.nTextWrapMethod) {		// テキストの折り返し方法
 				nSelPos = i;
@@ -464,7 +464,7 @@ void PropTypesScreen::SetData(HWND hwndDlg)
 		hwndCombo = ::GetDlgItem(hwndDlg, IDC_CHECK_TAB_ARROW);
 		Combo_ResetContent(hwndCombo);
 		nSelPos = 0;
-		for (int i=0; i<_countof(TabArrowArr); ++i) {
+		for (size_t i=0; i<_countof(TabArrowArr); ++i) {
 			Combo_InsertString(hwndCombo, i, LS(TabArrowArr[i].nNameId));
 			if (TabArrowArr[i].nMethod == types.bTabArrow) {
 				nSelPos = i;
@@ -507,7 +507,7 @@ void PropTypesScreen::SetData(HWND hwndDlg)
 		hwndCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_INDENTLAYOUT);
 		Combo_ResetContent(hwndCombo);
 		nSelPos = 0;
-		for (int i=0; i<_countof(IndentTypeArr); ++i) {
+		for (size_t i=0; i<_countof(IndentTypeArr); ++i) {
 			Combo_InsertString(hwndCombo, i, LS(IndentTypeArr[i].nNameId));
 			if (IndentTypeArr[i].nMethod == types.nIndentLayout) {	// 折り返しインデント種別
 				nSelPos = i;

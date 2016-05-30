@@ -438,11 +438,7 @@ bool EditView::GetCurrentTextForSearchDlg(NativeW& memCurText, bool bGetHistory)
 */
 int EditView::IsSearchString(
 	const StringRef&	str,
-	/*
-	const wchar_t*	pszData,
-	int			nDataLen,
-	*/
-	int			nPos,
+	size_t		nPos,
 	int*		pnSearchStart,
 	int*		pnSearchEnd
 	) const

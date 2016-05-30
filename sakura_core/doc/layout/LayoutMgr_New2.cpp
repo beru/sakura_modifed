@@ -75,7 +75,7 @@ void LayoutMgr::ReplaceData_CLayoutMgr(
 
 	size_t nModifyLayoutLinesOld = 0;
 	Layout* pLayoutPrev;
-	int nWork = t_max(dlra.nDeletedLineNum, dlra.nInsLineNum);
+	size_t nWork = t_max(dlra.nDeletedLineNum, dlra.nInsLineNum);
 
 	if (pLayoutWork) {
 		pLayoutPrev = DeleteLayoutAsLogical(
@@ -93,7 +93,7 @@ void LayoutMgr::ReplaceData_CLayoutMgr(
 		if (dlra.nInsLineNum - dlra.nDeletedLineNum != 0) {
 			ShiftLogicalLineNum(
 				pLayoutPrev,
-				dlra.nInsLineNum - dlra.nDeletedLineNum
+				(int)dlra.nInsLineNum - (int)dlra.nDeletedLineNum
 			);
 		}
 	}else {
@@ -132,7 +132,8 @@ void LayoutMgr::ReplaceData_CLayoutMgr(
 		colorInfo,
 		ctwArg
 	);
-	pArg->nAddLineNum = (int)nLines - (int)nWork_nLines;	// 変更後の全行数との差分	@@@ 2002.04.19 MIK
+	ASSERT_GE(nLines, nWork_nLines);
+	pArg->nAddLineNum = nLines - nWork_nLines;	// 変更後の全行数との差分	@@@ 2002.04.19 MIK
 	if (pArg->nAddLineNum == 0) {
 		pArg->nAddLineNum = nModifyLayoutLinesOld - pArg->nModLineTo;	// 再描画ヒント レイアウト行の増減
 	}

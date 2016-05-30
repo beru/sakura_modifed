@@ -275,7 +275,7 @@ void PropFile::SetData(HWND hwndDlg)
 	HWND hwndCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_FILESHAREMODE);
 	Combo_ResetContent(hwndCombo);
 	int nSelPos = 0;
-	for (int i=0; i<_countof(ShareModeArr); ++i) {
+	for (size_t i=0; i<_countof(ShareModeArr); ++i) {
 		Combo_InsertString(hwndCombo, i, LS(ShareModeArr[i].nNameId));
 		if (ShareModeArr[i].nMethod == csFile.nFileShareMode) {
 			nSelPos = i;

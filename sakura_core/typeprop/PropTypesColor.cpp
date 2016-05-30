@@ -629,7 +629,7 @@ void PropTypesColor::SetData(HWND hwndDlg)
 	HWND	hwndCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_STRINGLITERAL);
 	Combo_ResetContent(hwndCombo);
 	int		nSelPos = 0;
-	for (int i=0; i<_countof(StringLitteralArr); ++i) {
+	for (size_t i=0; i<_countof(StringLitteralArr); ++i) {
 		Combo_InsertString(hwndCombo, i, LS(StringLitteralArr[i].nNameId));
 		if (StringLitteralArr[i].nMethod == types.stringType) {		// テキストの折り返し方法
 			nSelPos = i;

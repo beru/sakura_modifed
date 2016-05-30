@@ -94,24 +94,24 @@ BOOL DlgGrep::OnCbnDropDown(HWND hwndCtl, int wID)
 	switch (wID) {
 	case IDC_COMBO_TEXT:
 		if (::SendMessage(hwndCtl, CB_GETCOUNT, 0L, 0L) == 0) {
-			int nSize = searchKeywords.searchKeys.size();
-			for (int i=0; i<nSize; ++i) {
+			size_t nSize = searchKeywords.searchKeys.size();
+			for (size_t i=0; i<nSize; ++i) {
 				Combo_AddString( hwndCtl, searchKeywords.searchKeys[i] );
 			}
 		}
 		break;
 	case IDC_COMBO_FILE:
 		if (::SendMessage(hwndCtl, CB_GETCOUNT, 0L, 0L) == 0) {
-			int nSize = searchKeywords.grepFiles.size();
-			for (int i=0; i<nSize; ++i) {
+			size_t nSize = searchKeywords.grepFiles.size();
+			for (size_t i=0; i<nSize; ++i) {
 				Combo_AddString( hwndCtl, searchKeywords.grepFiles[i] );
 			}
 		}
 		break;
 	case IDC_COMBO_FOLDER:
 		if (::SendMessage(hwndCtl, CB_GETCOUNT, 0L, 0L) == 0) {
-			int nSize = searchKeywords.grepFolders.size();
-			for (int i=0; i<nSize; ++i) {
+			size_t nSize = searchKeywords.grepFolders.size();
+			for (size_t i=0; i<nSize; ++i) {
 				Combo_AddString( hwndCtl, searchKeywords.grepFolders[i] );
 			}
 		}
@@ -187,7 +187,7 @@ BOOL DlgGrep::OnInitDialog(
 	// 文字コードセット選択コンボボックス初期化
 	CodeTypesForCombobox codeTypes;
 	for (size_t i=0; i<codeTypes.GetCount(); ++i) {
-		int idx = Combo_AddString(GetItemHwnd(IDC_COMBO_CHARSET), codeTypes.GetName(i));
+		LONG_PTR idx = Combo_AddString(GetItemHwnd(IDC_COMBO_CHARSET), codeTypes.GetName(i));
 		Combo_SetItemData(GetItemHwnd(IDC_COMBO_CHARSET), idx, codeTypes.GetCode(i));
 	}
 	// 2007.02.09 bosagami
@@ -473,7 +473,7 @@ void DlgGrep::SetData(void)
 		for (size_t nIdx=0; nIdx<codeTypes.GetCount(); ++nIdx) {
 			nCharSet = (EncodingType)Combo_GetItemData(hWndCombo, nIdx);
 			if (nCharSet == nGrepCharSet) {
-				nCurIdx = nIdx;
+				nCurIdx = (int)nIdx;
 			}
 		}
 		if (nCurIdx != -1) {
@@ -684,7 +684,7 @@ int DlgGrep::GetData(void)
 		// 2011.11.24 Moca 複数フォルダ指定
 		std::vector<std::tstring> paths;
 		GrepAgent::CreateFolders(szFolder, paths);
-		int nFolderLen = 0;
+		size_t nFolderLen = 0;
 		TCHAR szFolder[_MAX_PATH];
 		szFolder[0] = _T('\0');
 		for (int i=0; i<(int)paths.size(); ++i) {

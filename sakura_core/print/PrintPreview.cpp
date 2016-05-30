@@ -1238,7 +1238,7 @@ void PrintPreview::DrawHeaderFooter(HDC hdc, const Rect& rect, bool bHeader)
 		::GetTextMetrics(hdc, &tm);
 
 		// Y座標基準
-		int nY = bHeader ? rect.top : rect.bottom + tm.tmHeight;
+		int nY = bHeader ? rect.top : (rect.bottom + tm.tmHeight);
 
 		// 左寄せ
 		SakuraEnvironment::ExpandParameter(
@@ -1300,7 +1300,7 @@ void PrintPreview::DrawHeaderFooter(HDC hdc, const Rect& rect, bool bHeader)
 		int nDx = pPrintSetting->nPrintFontWidth;
 
 		// Y座標基準
-		int nY = bHeader ? rect.top : rect.bottom + pPrintSetting->nPrintFontHeight;
+		int nY = bHeader ? rect.top : (rect.bottom + pPrintSetting->nPrintFontHeight);
 
 		// 左寄せ
 		SakuraEnvironment::ExpandParameter(
@@ -1348,7 +1348,7 @@ void PrintPreview::DrawHeaderFooter(HDC hdc, const Rect& rect, bool bHeader)
 		Print_DrawLine(
 			hdc,
 			Point(
-				rect.right - nTextWidth,
+				rect.right - (int)nTextWidth,
 				nY
 			),
 			szWork,
@@ -1628,10 +1628,10 @@ ColorStrategy* PrintPreview::Print_DrawLine(
 	HDC				hdc,
 	POINT			ptDraw,		// 描画座標。HDC内部単位。
 	const wchar_t*	pLine,
-	int				nDocLineLen,
-	int				nLineStart,
-	int				nLineLen,
-	int				nIndent,	// 2006.08.14 Moca 追加
+	size_t			nDocLineLen,
+	size_t			nLineStart,
+	size_t			nLineLen,
+	size_t			nIndent,	// 2006.08.14 Moca 追加
 	const Layout*	pLayout,	// 色付用Layout
 	ColorStrategy*	pStrategyStart
 	)
@@ -1660,16 +1660,16 @@ ColorStrategy* PrintPreview::Print_DrawLine(
 		nIndent
 	);
 
-	int nBgnLogic = nLineStart;	// TABを展開する前のバイト数で、pLineの何バイト目まで描画したか？
-	int iLogic;					// pLineの何文字目をスキャン？
-	int nLayoutX = nIndent;	// TABを展開した後のバイト数で、テキストの何バイト目まで描画したか？
+	size_t nBgnLogic = nLineStart;	// TABを展開する前のバイト数で、pLineの何バイト目まで描画したか？
+	size_t iLogic;					// pLineの何文字目をスキャン？
+	size_t nLayoutX = nIndent;	// TABを展開した後のバイト数で、テキストの何バイト目まで描画したか？
 
 	// 文字種判定フラグ
 	int nKind     = 0; // 0:半角 1:全角 2:タブ
 	int nKindLast = 2; // 直前のnKind状態
 
 	// 色設定	2012-03-07 ossan
-	StringRef cStringLine( pLine, nDocLineLen );
+	StringRef cStringLine(pLine, nDocLineLen);
 	ColorStrategy* pStrategy = pStrategyStart;
 	// 2014.12.30 色はGetColorStrategyで次の色になる前に取得する必要がある
 	int nColorIdx = ToColorInfoArrIndex( pStrategy ? pStrategy->GetStrategyColor() : COLORIDX_TEXT );
@@ -1694,7 +1694,9 @@ ColorStrategy* PrintPreview::Print_DrawLine(
 		// タブ文字出現 or 文字種(全角／半角)の境界 or 色指定の境界
 		if (nKind != nKindLast || bChange) {
 			// iLogicの直前までを描画
+			ASSERT_GE(iLogic, nBgnLogic);
 			if (0 < iLogic - nBgnLogic) {
+				ASSERT_GE(nBgnLogic, nLineStart);
 				Print_DrawBlock(
 					hdc,
 					ptDraw,		// 描画座標。HDC内部単位。
@@ -1711,10 +1713,13 @@ ColorStrategy* PrintPreview::Print_DrawLine(
 
 				// 桁進め
 				if (nKindLast == 2) {
-					nLayoutX += (nTabSpace - nLayoutX % nTabSpace) + nTabSpace * (iLogic - nBgnLogic - 1);
+					ASSERT_GE(iLogic, nBgnLogic);
+					nLayoutX += (nTabSpace - (nLayoutX % nTabSpace)) + nTabSpace * (iLogic - nBgnLogic - 1);
 				}else {
 					int nIncrement = 0;
-					for (int i=nBgnLogic-nLineStart; i<iLogic-nLineStart; ++i) {
+					ASSERT_GE(nBgnLogic, nLineStart);
+					ASSERT_GE(iLogic, nLineStart);
+					for (size_t i=nBgnLogic-nLineStart; i<iLogic-nLineStart; ++i) {
 						nIncrement += pDxArray[i];
 					}
 					nLayoutX += nIncrement / nDx;
@@ -1831,7 +1836,7 @@ void PrintPreview::Print_DrawBlock(
 */
 ColorStrategy* PrintPreview::GetColorStrategy(
 	const StringRef&	stringLine,
-	int					iLogic,
+	size_t				iLogic,
 	ColorStrategy*		pStrategy,
 	bool&				bChange
 	)

@@ -212,7 +212,7 @@ EditDoc::EditDoc(EditApp& app)
 #ifdef _DEBUG
 	{
 		// 編集禁止コマンドの並びをチェック
-		for (int i=0; i<_countof(EIsModificationForbidden)-1; ++i){
+		for (size_t i=0; i<_countof(EIsModificationForbidden)-1; ++i){
 			assert( EIsModificationForbidden[i] <  EIsModificationForbidden[i+1] );
 		}
 	}

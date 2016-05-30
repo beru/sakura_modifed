@@ -287,7 +287,7 @@ void ViewCommander::Command_SetFontSize(int fontSize, int shift, int mode)
 			: GetEditWindow().GetFontPointSize(mode == 2));
 
 		// フォントの拡大or縮小するためのサイズ検索
-		for (int i=0; i<_countof(sizeTable); ++i) {
+		for (size_t i=0; i<_countof(sizeTable); ++i) {
 			if (nPointSize <= sizeTable[i]) {
 				int index = t_max(0, t_min((int)_countof(sizeTable) - 1, (int)(i + shift)));
 				nPointSize = sizeTable[index];
@@ -422,7 +422,7 @@ void ViewCommander::Command_TextWrapMethod(TextWrappingMethod nWrapMethod)
 	if (doc.nTextWrapMethodCur == nWrapMethod)
 		return;
 
-	int nWidth;
+	size_t nWidth;
 
 	switch (nWrapMethod) {
 	case TextWrappingMethod::NoWrapping:		// 折り返さない

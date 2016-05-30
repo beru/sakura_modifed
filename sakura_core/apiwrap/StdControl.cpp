@@ -20,14 +20,16 @@ namespace ApiWrap {
 		return SendMessage(hwndList, LB_GETTEXT, (WPARAM)nIndex, (LPARAM)(TCHAR*)TcharReceiver<WCHAR>(str, nCount + 1));	// +1: NULL •¶Žš•ª
 	}
 
-	UINT DlgItem_GetText(HWND hwndDlg, int nIDDlgItem, ACHAR* str, int nMaxCount)
+	UINT DlgItem_GetText(HWND hwndDlg, int nIDDlgItem, ACHAR* str, size_t nMaxCount)
 	{
-		return GetDlgItemText(hwndDlg, nIDDlgItem, TcharReceiver<ACHAR>(str, nMaxCount), nMaxCount);
+		ASSERT_GE(INT32_MAX, nMaxCount);
+		return GetDlgItemText(hwndDlg, nIDDlgItem, TcharReceiver<ACHAR>(str, nMaxCount), (int)nMaxCount);
 	}
 
-	UINT DlgItem_GetText(HWND hwndDlg, int nIDDlgItem, WCHAR* str, int nMaxCount)
+	UINT DlgItem_GetText(HWND hwndDlg, int nIDDlgItem, WCHAR* str, size_t nMaxCount)
 	{
-		return GetDlgItemText(hwndDlg, nIDDlgItem, str, nMaxCount);
+		ASSERT_GE(INT32_MAX, nMaxCount);
+		return GetDlgItemText(hwndDlg, nIDDlgItem, str, (int)nMaxCount);
 	}
 
 }

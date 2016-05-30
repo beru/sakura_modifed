@@ -514,13 +514,12 @@ void MainToolBar::UpdateToolbar(void)
 void MainToolBar::AcceptSharedSearchKey()
 {
 	if (hwndSearchBox) {
-		int	i;
 		// 2013.05.28 Combo_ResetContent‚¾‚Æ‚¿‚ç‚Â‚­‚Ì‚ÅDeleteString‚ÅƒŠƒXƒg‚¾‚¯íœ
 		while (Combo_GetCount(hwndSearchBox) > 0) {
 			Combo_DeleteString(hwndSearchBox, 0);
 		}
-		int nSize = GetDllShareData().searchKeywords.searchKeys.size();
-		for (i=0; i<nSize; ++i) {
+		size_t nSize = GetDllShareData().searchKeywords.searchKeys.size();
+		for (size_t i=0; i<nSize; ++i) {
 			Combo_AddString(hwndSearchBox, GetDllShareData().searchKeywords.searchKeys[i]);
 		}
 		const wchar_t* pszText;

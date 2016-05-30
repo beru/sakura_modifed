@@ -344,7 +344,7 @@ void DlgProfileMgr::CreateProf()
 	}
 	std::wstring strText = to_wchar(szText);
 	static const WCHAR szReservedChars[] = L"/\\*?<>&|:\"'\t";
-	for (int x=0; x<_countof(szReservedChars); ++x) {
+	for (size_t x=0; x<_countof(szReservedChars); ++x) {
 		if (strText.npos != strText.find(szReservedChars[x])) {
 			ErrorMessage(GetHwnd(), LS(STR_DLGPROFILE_ERR_INVALID_CHAR));
 			return;
@@ -408,7 +408,7 @@ void DlgProfileMgr::RenameProf()
 	}
 	std::wstring strText = to_wchar(szText);
 	static const WCHAR szReservedChars[] = L"/\\*?<>&|:\"'\t";
-	for (int x=0; x<_countof(szReservedChars); ++x) {
+	for (size_t x=0; x<_countof(szReservedChars); ++x) {
 		if (strText.npos != strText.find(szReservedChars[x])) {
 			ErrorMessage(GetHwnd(), LS(STR_DLGPROFILE_ERR_INVALID_CHAR));
 			return;

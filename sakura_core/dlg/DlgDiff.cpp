@@ -278,7 +278,7 @@ void DlgDiff::SetData(void)
 				// ファイル名一致のスコアを計算する
 				TCHAR szFile2[_MAX_PATH];
 				SplitPath_FolderAndFile(pFileInfo->szPath, NULL, szFile2);
-				int scoreTemp = FileMatchScoreSepExt(szFile1, szFile2);
+				size_t scoreTemp = FileMatchScoreSepExt(szFile1, szFile2);
 				if (score < scoreTemp
 					|| (selCode != code && code == pFileInfo->nCharCode && score == scoreTemp) 
 				) {
@@ -458,7 +458,7 @@ BOOL DlgDiff::OnInitDialog(
 	ptDefaultSize.x = rc.right - rc.left;
 	ptDefaultSize.y = rc.bottom - rc.top;
 
-	for (int i=0; i<_countof(anchorList); ++i) {
+	for (size_t i=0; i<_countof(anchorList); ++i) {
 		GetItemClientRect(anchorList[i].id, rcItems[i]);
 	}
 
@@ -488,7 +488,7 @@ BOOL DlgDiff::OnSize(WPARAM wParam, LPARAM lParam)
 	ptNew.x = rc.right - rc.left;
 	ptNew.y = rc.bottom - rc.top;
 
-	for (int i=0; i<_countof(anchorList); ++i) {
+	for (size_t i=0; i<_countof(anchorList); ++i) {
 		ResizeItem(GetItemHwnd(anchorList[i].id), ptDefaultSize, ptNew, rcItems[i], anchorList[i].anchor);
 	}
 	::InvalidateRect(GetHwnd(), NULL, TRUE);

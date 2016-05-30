@@ -62,9 +62,9 @@ BOOL DlgFind::OnCbnDropDown(HWND hwndCtl, int wID)
 	case IDC_COMBO_TEXT:
 		if (::SendMessage(hwndCtl, CB_GETCOUNT, 0L, 0L) == 0) {
 			auto& keywords = pShareData->searchKeywords.searchKeys;
-			int nSize = keywords.size();
-			for (int i=0; i<nSize; ++i) {
-				Combo_AddString( hwndCtl, keywords[i] );
+			size_t nSize = keywords.size();
+			for (size_t i=0; i<nSize; ++i) {
+				Combo_AddString(hwndCtl, keywords[i]);
 			}
 		}
 		break;

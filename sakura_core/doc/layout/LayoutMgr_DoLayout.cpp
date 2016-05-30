@@ -14,10 +14,10 @@
 static
 bool _GetKeywordLength(
 	const StringRef&	lineStr,		// [in]
-	uint32_t			nPos,			// [in]
-	uint32_t*			p_nWordBgn,		// [out]
-	uint32_t*			p_nWordLen,		// [out]
-	uint32_t*			p_nWordKetas	// [out]
+	size_t				nPos,			// [in]
+	size_t*				p_nWordBgn,		// [out]
+	size_t*				p_nWordLen,		// [out]
+	size_t*				p_nWordKetas	// [out]
 	)
 {
 	// キーワード長をカウントする
@@ -74,8 +74,7 @@ bool LayoutMgr::_DoKinsokuSkip(LayoutWork* pWork, PF_OnLine pfOnLine)
 				&& pWork->eKinsokuType == KinsokuType::Kuto
 				&& pWork->nPos == pWork->nWordBgn + pWork->nWordLen
 			) {
-				int	nEol = pWork->pDocLine->GetEol().GetLen();
-
+				size_t nEol = pWork->pDocLine->GetEol().GetLen();
 				// 改行文字をぶら下げる		//@@@ 2002.04.14 MIK
 				if (
 					!(1
@@ -106,7 +105,7 @@ void LayoutMgr::_DoWordWrap(LayoutWork* pWork, PF_OnLine pfOnLine)
 			&& IS_KEYWORD_CHAR(pWork->lineStr.At(pWork->nPos))
 		) {
 			// キーワード長を取得
-			uint32_t nWordKetas = 0;
+			size_t nWordKetas = 0;
 			_GetKeywordLength(
 				pWork->lineStr, pWork->nPos,
 				&pWork->nWordBgn, &pWork->nWordLen, &nWordKetas
@@ -178,9 +177,8 @@ void LayoutMgr::_DoGyomatsuKinsoku(LayoutWork* pWork, PF_OnLine pfOnLine)
 		&& (pWork->nPosX > pWork->nIndent)	// 2004.04.09 pWork->nPosXの解釈変更のため，行頭チェックも変更
 		&& (pWork->eKinsokuType == KinsokuType::None)
 	) {	// 行末禁則する && 行末付近 && 行頭でないこと(無限に禁則してしまいそう)
-		int nCharKetas2 = NativeW::GetKetaOfChar(pWork->lineStr, pWork->nPos);
-		int nCharKetas3 = NativeW::GetKetaOfChar(pWork->lineStr, pWork->nPos + 1);
-
+		size_t nCharKetas2 = NativeW::GetKetaOfChar(pWork->lineStr, pWork->nPos);
+		size_t nCharKetas3 = NativeW::GetKetaOfChar(pWork->lineStr, pWork->nPos + 1);
 		if (1
 			&& IsKinsokuPosTail(GetMaxLineKetas() - pWork->nPosX, nCharKetas2, nCharKetas3)
 			&& IsKinsokuTail(pWork->lineStr.At(pWork->nPos))
@@ -575,10 +573,11 @@ int LayoutMgr::DoLayout_Range(
 void LayoutMgr::CalculateTextWidth_Range(const CalTextWidthArg& ctwArg)
 {
 	if (pEditDoc->nTextWrapMethodCur == TextWrappingMethod::NoWrapping) {	// 「折り返さない」
-		int nCalTextWidthLinesFrom(0);	// テキスト最大幅の算出開始レイアウト行
-		int nCalTextWidthLinesTo(0);	// テキスト最大幅の算出終了レイアウト行
+		int nCalTextWidthLinesFrom = 0;	// テキスト最大幅の算出開始レイアウト行
+		int nCalTextWidthLinesTo = 0;	// テキスト最大幅の算出終了レイアウト行
 		bool bCalTextWidth = true;		// テキスト最大幅の算出要求をON
-		int nInsLineNum = nLines - ctwArg.nAllLinesOld;		// 追加削除行数
+		ASSERT_GE(nLines, ctwArg.nAllLinesOld);
+		size_t nInsLineNum = nLines - ctwArg.nAllLinesOld;		// 追加削除行数
 
 		// 削除行なし時：最大幅の行を行頭以外にて改行付きで編集した
 		// 削除行あり時：最大幅の行を含んで編集した
@@ -609,8 +608,8 @@ void LayoutMgr::CalculateTextWidth_Range(const CalTextWidthArg& ctwArg)
 			// 最終的に編集された行数（3行削除2行追加なら2行追加）
 			// 1行がMAXLINEKETASを超える場合行数が合わなくなるが、超える場合はその先の計算自体が
 			// 不要なので計算を省くためこのままとする。
-			int nEditLines = nInsLineNum + ((ctwArg.nDelLines > 0) ? ctwArg.nDelLines : 0);
-			nCalTextWidthLinesTo   = ctwArg.ptLayout.y + ((nEditLines > 0) ? nEditLines : 0);
+			size_t nEditLines = nInsLineNum + ((ctwArg.nDelLines > 0) ? ctwArg.nDelLines : 0);
+			nCalTextWidthLinesTo = ctwArg.ptLayout.y + ((nEditLines > 0) ? nEditLines : 0);
 
 			// 最大幅の行が上下するのを計算
 			if (1

@@ -639,10 +639,10 @@ bool AppNodeManager::ReorderTab(HWND hwndSrc, HWND hwndDst)
 	size_t nCount = _GetOpenedWindowArrCore(&p, true);	// ロックは自分でやっているので直接コア部呼び出し
 	for (size_t i=0; i<nCount; ++i) {
 		if (hwndSrc == p[i].hWnd) {
-			nSrcTab = i;
+			nSrcTab = (int)i;
 		}
 		if (hwndDst == p[i].hWnd) {
-			nDstTab = i;
+			nDstTab = (int)i;
 		}
 	}
 

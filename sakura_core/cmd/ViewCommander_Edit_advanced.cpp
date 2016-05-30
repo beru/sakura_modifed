@@ -56,7 +56,7 @@ void ViewCommander::Command_Indent(wchar_t wcChar, IndentType eIndent)
 		&& selInfo.IsBoxSelecting()
 		&& GetSelect().GetFrom().x == GetSelect().GetTo().x
 	) {
-		GetSelect().SetToX(GetDocument().layoutMgr.GetMaxLineKetas());
+		GetSelect().SetToX((int)GetDocument().layoutMgr.GetMaxLineKetas());
 		view.RedrawAll();
 		return;
 	}

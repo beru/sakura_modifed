@@ -43,8 +43,8 @@ bool Color_Select::BeginColorEx(const StringRef& str, int nPos, int nLineNum, co
 	}
 	size_t nIdxFrom = view.LineColumnToIndex(pLayout, nSelectFrom) + pLayout->GetLogicOffset();
 	size_t nIdxTo = view.LineColumnToIndex(pLayout, nSelectTo) + pLayout->GetLogicOffset();
-	nSelectStart = nIdxFrom;
-	nSelectEnd = nIdxTo;
+	nSelectStart = (int)nIdxFrom;
+	nSelectEnd = (int)nIdxTo;
 	if (nSelectStart <= nPos && nPos < nSelectEnd) {
 		return true;
 	}

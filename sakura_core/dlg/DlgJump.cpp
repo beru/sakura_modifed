@@ -189,7 +189,7 @@ void DlgJump::SetData(void)
 	EditDoc* pEditDoc = (EditDoc*)lParam;
 	FuncInfoArr funcInfoArr;
 	wchar_t szText[1024];
-	int nIndexCurSel = 0;	// Sep. 11, 2004 genta 初期化
+	LONG_PTR nIndexCurSel = 0;	// Sep. 11, 2004 genta 初期化
 
 //	GetHwnd() = hwndDlg;
 // From Here Oct. 7, 2000 JEPRO 前回入力した行番号を保持するように下行を変更
@@ -209,7 +209,7 @@ void DlgJump::SetData(void)
 	}
 	//$$ 条件により、レイアウト・ロジックの単位が混在するため、ミスの原因になりやすい
 	int nWorkLine = -1;
-	int nIndex = 0;
+	LONG_PTR nIndex = 0;
 	int nPLSQLBlockNum = 0;
 	for (size_t i=0; i<funcInfoArr.GetNum(); ++i) {
 		FuncInfo* pFI = funcInfoArr.GetAt(i);
@@ -249,10 +249,10 @@ void DlgJump::SetData(void)
 			}
 			nIndexCurSel = nIndex = Combo_AddString(hwndCtrl, szText);
 			if (pShareData->bLineNumIsCRLF_ForJump) {	// 行番号の表示 false=折り返し単位／true=改行単位
-				nWorkLine = pFI->nFuncLineCRLF;
+				nWorkLine = (int)pFI->nFuncLineCRLF;
 				Combo_SetItemData(hwndCtrl, nIndex, pFI->nFuncLineCRLF);
 			}else {
-				nWorkLine = pFI->nFuncLineLAYOUT;
+				nWorkLine = (int)pFI->nFuncLineLAYOUT;
 				Combo_SetItemData(hwndCtrl, nIndex, pFI->nFuncLineLAYOUT);
 			}
 			++nPLSQLBlockNum;

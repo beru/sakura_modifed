@@ -200,7 +200,7 @@ struct ComPropSheetInfo {
 INT_PTR PropCommon::DoPropertySheet(int nPageNum, bool bTrayProc)
 {
 	INT_PTR	nRet;
-	int		nIdx;
+	size_t nIdx;
 
 	this->bTrayProc = bTrayProc;
 

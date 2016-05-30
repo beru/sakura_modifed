@@ -61,7 +61,7 @@ namespace ApiWrap {
 		return ::SendMessage(hwndCombo, CB_ADDSTRING, 0, (LPARAM)to_tchar(str));
 	}
 
-	inline LRESULT Combo_AddString(HWND hwndCombo, const WCHAR* str) {
+	inline LONG_PTR Combo_AddString(HWND hwndCombo, const WCHAR* str) {
 		return ::SendMessage(hwndCombo, CB_ADDSTRING, 0, (LPARAM)to_tchar(str));
 	}
 
@@ -79,10 +79,9 @@ namespace ApiWrap {
 	
 	inline int Combo_GetCount(HWND hwndCtl)								{ return (int)(DWORD)::SendMessage(hwndCtl, CB_GETCOUNT, 0L, 0L); }
 	inline int Combo_GetCurSel(HWND hwndCtl)							{ return (int)(DWORD)::SendMessage(hwndCtl, CB_GETCURSEL, 0L, 0L); }
-	inline int Combo_SetCurSel(HWND hwndCtl, int index)					{ return (int)(DWORD)::SendMessage(hwndCtl, CB_SETCURSEL, (WPARAM)index, 0L); }
-	inline LRESULT Combo_GetItemData(HWND hwndCtl, int index)			{ return ((LRESULT)(ULONG_PTR)::SendMessage(hwndCtl, CB_GETITEMDATA, (WPARAM)index, 0L)); }
-	inline int Combo_SetItemData(HWND hwndCtl, int index, int data)		{ return (int)(DWORD)::SendMessage(hwndCtl, CB_SETITEMDATA, (WPARAM)index, (LPARAM)data); }
-	inline int Combo_SetItemData(HWND hwndCtl, int index, void* data)	{ return (int)(DWORD)::SendMessage(hwndCtl, CB_SETITEMDATA, (WPARAM)index, (LPARAM)data); }
+	inline int Combo_SetCurSel(HWND hwndCtl, LONG_PTR index)				{ return (int)(DWORD)::SendMessage(hwndCtl, CB_SETCURSEL, (WPARAM)index, 0L); }
+	inline LRESULT Combo_GetItemData(HWND hwndCtl, size_t index)			{ return ((LRESULT)(ULONG_PTR)::SendMessage(hwndCtl, CB_GETITEMDATA, (WPARAM)index, 0L)); }
+	inline bool Combo_SetItemData(HWND hwndCtl, size_t index, LPARAM data)	{ return ::SendMessage(hwndCtl, CB_SETITEMDATA, (WPARAM)index, data) != CB_ERR; }
 	inline int Combo_GetLBTextLen(HWND hwndCtl, int index)				{ return (int)(DWORD)::SendMessage(hwndCtl, CB_GETLBTEXTLEN, (WPARAM)index, 0L); }
 	inline int Combo_InsertString(HWND hwndCtl, int index, const ACHAR* lpsz)	{ return (int)(DWORD)::SendMessage(hwndCtl, CB_INSERTSTRING, (WPARAM)index, (LPARAM)to_tchar(lpsz)); }
 	inline int Combo_InsertString(HWND hwndCtl, int index, const WCHAR* lpsz)	{ return (int)(DWORD)::SendMessage(hwndCtl, CB_INSERTSTRING, (WPARAM)index, (LPARAM)to_tchar(lpsz)); }
@@ -134,7 +133,7 @@ namespace ApiWrap {
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                      エディット コントロール                //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-	inline void EditCtl_LimitText(HWND hwndCtl, int cchLimit)			{ ::SendMessage(hwndCtl, EM_LIMITTEXT, (WPARAM)(cchLimit), 0L); }
+	inline void EditCtl_LimitText(HWND hwndCtl, size_t cchLimit)			{ ::SendMessage(hwndCtl, EM_LIMITTEXT, (WPARAM)cchLimit, 0L); }
 	inline void EditCtl_SetSel(HWND hwndCtl, int ichStart, int ichEnd)	{ ::SendMessage(hwndCtl, EM_SETSEL, ichStart, ichEnd); }
 
 	inline void EditCtl_ReplaceSel(HWND hwndCtl, const TCHAR* lpsz)		{ ::SendMessage(hwndCtl, EM_REPLACESEL, 0, (LPARAM)lpsz); }
@@ -143,7 +142,7 @@ namespace ApiWrap {
 	//                      ボタン コントロール                    //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	inline int BtnCtl_GetCheck(HWND hwndCtl)							{ return (int)(DWORD)::SendMessage(hwndCtl, BM_GETCHECK, 0L, 0L); }
-	inline void BtnCtl_SetCheck(HWND hwndCtl, int check)				{ ::SendMessage(hwndCtl, BM_SETCHECK, (WPARAM)check, 0L); }
+	inline void BtnCtl_SetCheck(HWND hwndCtl, WPARAM check)				{ ::SendMessage(hwndCtl, BM_SETCHECK, check, 0L); }
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                      スタティック コントロール              //
@@ -160,8 +159,8 @@ namespace ApiWrap {
 		return SetDlgItemText(hwndDlg, nIDDlgItem, to_tchar(str));
 	}
 
-	UINT DlgItem_GetText(HWND hwndDlg, int nIDDlgItem, ACHAR* str, int nMaxCount);
-	UINT DlgItem_GetText(HWND hwndDlg, int nIDDlgItem, WCHAR* str, int nMaxCount);
+	UINT DlgItem_GetText(HWND hwndDlg, int nIDDlgItem, ACHAR* str, size_t nMaxCount);
+	UINT DlgItem_GetText(HWND hwndDlg, int nIDDlgItem, WCHAR* str, size_t nMaxCount);
 	// GetDlgItemText
 
 	inline bool DlgButton_IsChecked(HWND hDlg, int nIDButton)	{ return ::IsDlgButtonChecked(hDlg, nIDButton) == BST_CHECKED; }

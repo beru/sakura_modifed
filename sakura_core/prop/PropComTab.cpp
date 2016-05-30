@@ -217,7 +217,7 @@ void PropTab::SetData(HWND hwndDlg)
 	HWND hwndCombo = ::GetDlgItem(hwndDlg, IDC_CHECK_DispTabClose);
 	Combo_ResetContent(hwndCombo);
 	int nSelPos = 0;
-	for (int i=0; i<_countof(DispTabCloseArr); ++i) {
+	for (size_t i=0; i<_countof(DispTabCloseArr); ++i) {
 		Combo_InsertString(hwndCombo, i, LS(DispTabCloseArr[i].nNameId));
 		if (DispTabCloseArr[i].nMethod == common.tabBar.dispTabClose) {
 			nSelPos = i;
@@ -228,7 +228,7 @@ void PropTab::SetData(HWND hwndDlg)
 	hwndCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_TAB_POSITION);
 	Combo_ResetContent(hwndCombo);
 	nSelPos = 0;
-	for (int i=0; i<_countof(TabPosArr); ++i) {
+	for (size_t i=0; i<_countof(TabPosArr); ++i) {
 		Combo_InsertString(hwndCombo, i, LS(TabPosArr[i].nNameId));
 		if (TabPosArr[i].nMethod == common.tabBar.eTabPosition) {
 			nSelPos = i;

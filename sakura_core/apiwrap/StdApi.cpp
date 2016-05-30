@@ -152,7 +152,7 @@ namespace ApiWrap {
 			else nHankakuDx = lpDx[0] / 2;
 			static int aDx[1024] = {0}; // 1024”¼Šp•¶Žš‚Ü‚Å
 			if (aDx[0] != nHankakuDx) {
-				for (int i=0; i<_countof(aDx); ++i) {
+				for (size_t i=0; i<_countof(aDx); ++i) {
 					aDx[i] = nHankakuDx;
 				}
 			}

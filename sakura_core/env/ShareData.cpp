@@ -171,7 +171,7 @@ bool ShareData::InitShareData()
 		pShareData->handles.hAccel = NULL;
 		pShareData->handles.hwndDebug = NULL;
 
-		for (int i=0; i<_countof(pShareData->dwCustColors); ++i) {
+		for (size_t i=0; i<_countof(pShareData->dwCustColors); ++i) {
 			pShareData->dwCustColors[i] = RGB( 255, 255, 255 );
 		}
 

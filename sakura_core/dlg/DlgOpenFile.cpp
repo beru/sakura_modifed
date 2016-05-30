@@ -212,8 +212,8 @@ UINT_PTR CALLBACK OFNHookProc(
 	WORD		wNotifyCode;
 	WORD		wID;
 	HWND		hwndCtl;
-	int			nIdx;
-	int			nIdxSel;
+	LONG_PTR	nIdx;
+	LONG_PTR	nIdxSel;
 	int			nWidth;
 	WPARAM		fCheck;	// Jul. 26, 2003 ryoji BOM状態用
 
@@ -543,10 +543,10 @@ UINT_PTR CALLBACK OFNHookProc(
 							fCheck = codeTypeName.IsBomDefOn() ? BST_CHECKED : BST_UNCHECKED;
 						}
 					}else {
-						::EnableWindow( pData->hwndCheckBOM, FALSE );
+						::EnableWindow(pData->hwndCheckBOM, FALSE);
 						fCheck = BST_UNCHECKED;
 					}
-					BtnCtl_SetCheck( pData->hwndCheckBOM, fCheck );
+					BtnCtl_SetCheck(pData->hwndCheckBOM, fCheck);
 				}
 				break;
 			// To Here Jul. 26, 2003 ryoji
@@ -554,9 +554,8 @@ UINT_PTR CALLBACK OFNHookProc(
 			case IDC_COMBO_OPENFOLDER:
 				{
 					DlgOpenFileData* pData = (DlgOpenFileData*)::GetWindowLongPtr(hdlg, DWLP_USER);
-					TCHAR	szWork[_MAX_PATH + 1];
+					TCHAR szWork[_MAX_PATH + 1];
 					nIdx = Combo_GetCurSel((HWND) lParam);
-
 					if (Combo_GetLBText((HWND) lParam, nIdx, szWork) != CB_ERR) {
 						// 2005.11.02 ryoji ファイル名指定のコントロールを確認する
 						HWND hwndFilebox = ::GetDlgItem( pData->hwndOpenDlg, cmb13 );		// ファイル名コンボ（Windows 2000タイプ）

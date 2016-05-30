@@ -55,7 +55,7 @@ struct LayoutReplaceArg {
 	Range			delRange;		// [in]削除範囲。レイアウト単位。
 	OpeLineData*	pMemDeleted;	// [out]削除されたデータ
 	OpeLineData*	pInsData;		// [in/out]挿入するデータ
-	int		nAddLineNum;	// [out] 再描画ヒント レイアウト行の増減
+	size_t	nAddLineNum;	// [out] 再描画ヒント レイアウト行の増減
 	int		nModLineFrom;	// [out] 再描画ヒント 変更されたレイアウト行From(レイアウト行の増減が0のとき使う)
 	int		nModLineTo;		// [out] 再描画ヒント 変更されたレイアウト行To(レイアウト行の増減が0のとき使う)
 	Point	ptLayoutNew;	// [out]挿入された部分の次の位置の位置(レイアウト桁位置, レイアウト行)
@@ -65,10 +65,10 @@ struct LayoutReplaceArg {
 
 // 編集時のテキスト最大幅算出用		// 2009.08.28 nasukoji
 struct CalTextWidthArg {
-	Point	ptLayout;		// 編集開始位置
+	Point ptLayout;		// 編集開始位置
 	int	nDelLines;		// 削除に関係する行数 - 1（負数の時削除なし）
-	int	nAllLinesOld;	// 編集前のテキスト行数
-	bool		bInsData;		// 追加文字列あり
+	size_t nAllLinesOld;	// 編集前のテキスト行数
+	bool bInsData;		// 追加文字列あり
 };
 
 class PointEx: public Point {
@@ -222,7 +222,7 @@ protected:
 	||  参照系
 	*/
 	const char* GetFirstLinrStr(int*);	// 順アクセスモード：先頭行を得る
-	const char* GetNextLinrStr(int*);		// 順アクセスモード：次の行を得る
+	const char* GetNextLinrStr(int*);	// 順アクセスモード：次の行を得る
 
 	/*
 	|| 更新系
@@ -242,11 +242,11 @@ protected:
 	struct LayoutWork {
 		// 毎ループ初期化
 		KinsokuType	eKinsokuType;
-		uint32_t	nPos;
-		uint32_t	nBgn;
+		size_t		nPos;
+		size_t		nBgn;
 		StringRef	lineStr;
-		uint32_t	nWordBgn;
-		uint32_t	nWordLen;
+		size_t		nWordBgn;
+		size_t		nWordLen;
 		int			nPosX;
 		int			nIndent;
 		Layout*		pLayoutCalculated;
@@ -299,11 +299,11 @@ private:
 		@date 2005-08-20 D.S.Koba
 		@date Sep. 3, 2005 genta 最適化
 	*/
-	bool IsKinsokuPosKuto(int nRest, int nCharChars) const {
+	bool IsKinsokuPosKuto(size_t nRest, size_t nCharChars) const {
 		return nRest < nCharChars;
 	}
-	bool IsKinsokuPosHead(int, size_t, size_t);	// 行頭禁則の処理位置か
-	bool IsKinsokuPosTail(int, size_t, size_t);	// 行末禁則の処理位置か
+	bool IsKinsokuPosHead(size_t, size_t, size_t);	// 行頭禁則の処理位置か
+	bool IsKinsokuPosTail(size_t, size_t, size_t);	// 行末禁則の処理位置か
 private:
 	// Oct. 1, 2002 genta インデント幅計算関数群
 	size_t getIndentOffset_Normal(Layout* pLayoutPrev);

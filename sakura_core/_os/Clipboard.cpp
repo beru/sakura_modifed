@@ -415,7 +415,7 @@ static CLIPFORMAT GetClipFormat(const wchar_t* pFormatName)
 	if (pFormatName[0] == L'\0') {
 		return uFormat;
 	}
-	for (int i=0; i<_countof(sClipFormatNames); ++i) {
+	for (size_t i=0; i<_countof(sClipFormatNames); ++i) {
 		if (wcsicmp(pFormatName, sClipFormatNames[i].pszName) == 0) {
 			uFormat = sClipFormatNames[i].nClipFormat;
 		}
