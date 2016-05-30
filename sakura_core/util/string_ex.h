@@ -91,7 +91,7 @@ int skr_towlower(int c);
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 // 文字数の上限付きコピー
-LPWSTR wcscpyn(LPWSTR lpString1, LPCWSTR lpString2, int iMaxLength); // iMaxLengthは文字単位。
+LPWSTR wcscpyn(LPWSTR lpString1, LPCWSTR lpString2, size_t iMaxLength); // iMaxLengthは文字単位。
 
 // Apr. 03, 2003 genta
 char* strncpy_ex(char* dst, size_t dst_count, const char* src, size_t src_count);

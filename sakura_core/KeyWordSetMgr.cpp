@@ -139,17 +139,15 @@ bool KeywordSetMgr::AddKeywordSet(
 }
 
 // ｎ番目のセットを削除
-bool KeywordSetMgr::DelKeywordSet(int nIdx)
+bool KeywordSetMgr::DelKeywordSet(size_t nIdx)
 {
-	if (nKeywordSetNum <= nIdx ||
-		0 > nIdx
-	) {
+	if (nKeywordSetNum <= nIdx) {
 		return false;
 	}
 	// キーワード領域を開放
 	KeywordReAlloc(nIdx, 0);
 	
-	for (int i=nIdx; i<nKeywordSetNum-1; ++i) {
+	for (size_t i=nIdx; i<nKeywordSetNum-1; ++i) {
 		// 配列まるごとコピー
 		memcpy_raw(szSetNameArr[i], szSetNameArr[i + 1], sizeof(szSetNameArr[0]));
 		bKeywordCaseArr[i] = bKeywordCaseArr[i + 1];
@@ -176,9 +174,9 @@ bool KeywordSetMgr::DelKeywordSet(int nIdx)
 
 	@param nIdx [in] セット番号 0～キーワードセット数-1
 */
-const wchar_t* KeywordSetMgr::GetTypeName(int nIdx)
+const wchar_t* KeywordSetMgr::GetTypeName(size_t nIdx)
 {
-	if (nIdx < 0 || nKeywordSetNum <= nIdx) {
+	if (nKeywordSetNum <= nIdx) {
 		return NULL;
 	}
 	return szSetNameArr[nIdx];
@@ -188,9 +186,9 @@ const wchar_t* KeywordSetMgr::GetTypeName(int nIdx)
 
 	@date 2005.01.26 Moca 新規作成
 */
-const wchar_t* KeywordSetMgr::SetTypeName(int nIdx, const wchar_t* name)
+const wchar_t* KeywordSetMgr::SetTypeName(size_t nIdx, const wchar_t* name)
 {
-	if (!name || nIdx < 0 || nKeywordSetNum <= nIdx) {
+	if (!name || nKeywordSetNum <= nIdx) {
 		return NULL;
 	}
 	wcsncpy(szSetNameArr[nIdx], name, MAX_SETNAMELEN);
@@ -199,9 +197,9 @@ const wchar_t* KeywordSetMgr::SetTypeName(int nIdx, const wchar_t* name)
 }
 
 // ｎ番目のセットのキーワードの数を返す
-int KeywordSetMgr::GetKeywordNum(int nIdx)
+size_t KeywordSetMgr::GetKeywordNum(size_t nIdx)
 {
-	if (nIdx < 0 || nKeywordSetNum <= nIdx) {
+	if (nKeywordSetNum <= nIdx) {
 		return 0;
 	}
 	return nKeywordNumArr[nIdx];
@@ -212,12 +210,12 @@ int KeywordSetMgr::GetKeywordNum(int nIdx)
 	@param nIdx [in] キーワードセット番号
 	@param nIdx2 [in] キーワード番号
 */
-const wchar_t* KeywordSetMgr::GetKeyword(int nIdx, int nIdx2)
+const wchar_t* KeywordSetMgr::GetKeyword(size_t nIdx, size_t nIdx2)
 {
-	if (nIdx < 0 || nKeywordSetNum <= nIdx) {
+	if (nKeywordSetNum <= nIdx) {
 		return NULL;
 	}
-	if (nIdx2 < 0 || nKeywordNumArr[nIdx] <= nIdx2) {
+	if (nKeywordNumArr[nIdx] <= nIdx2) {
 		return NULL;
 	}
 	return szKeywordArr[nStartIdx[nIdx] + nIdx2];
@@ -225,15 +223,15 @@ const wchar_t* KeywordSetMgr::GetKeyword(int nIdx, int nIdx2)
 
 // ｎ番目のセットのｍ番目のキーワードを編集
 const wchar_t* KeywordSetMgr::UpdateKeyword(
-	int				nIdx,		// [in] キーワードセット番号
-	int				nIdx2,		// [in] キーワード番号
+	size_t			nIdx,		// [in] キーワードセット番号
+	size_t			nIdx2,		// [in] キーワード番号
 	const WCHAR*	pszKeyword	// [in] 設定するキーワード
 	)
 {
-	if (nIdx < 0 || nKeywordSetNum <= nIdx) {
+	if (nKeywordSetNum <= nIdx) {
 		return NULL;
 	}
-	if (nIdx2 < 0 || nKeywordNumArr[nIdx] <= nIdx2) {
+	if (nKeywordNumArr[nIdx] <= nIdx2) {
 		return NULL;
 	}
 	// 0バイトの長さのキーワードは編集しない
@@ -241,7 +239,7 @@ const wchar_t* KeywordSetMgr::UpdateKeyword(
 		return NULL;
 	}
 	// 重複したキーワードは編集しない
-	for (int i=nStartIdx[nIdx]; i<nStartIdx[nIdx]+nKeywordNumArr[nIdx]; ++i) {
+	for (size_t i=nStartIdx[nIdx]; i<nStartIdx[nIdx]+nKeywordNumArr[nIdx]; ++i) {
 		if (wcscmp(szKeywordArr[i], pszKeyword) == 0) {
 			return NULL;
 		}
@@ -263,7 +261,7 @@ const wchar_t* KeywordSetMgr::UpdateKeyword(
 		3: キーワード不正，4: キーワード重複
 
 */
-int KeywordSetMgr::AddKeyword(int nIdx, const wchar_t* pszKeyword)
+size_t KeywordSetMgr::AddKeyword(size_t nIdx, const wchar_t* pszKeyword)
 {
 	if (nKeywordSetNum <= nIdx) {
 		return 1;
@@ -281,7 +279,7 @@ int KeywordSetMgr::AddKeyword(int nIdx, const wchar_t* pszKeyword)
 		return 3;
 	}
 	// 重複したキーワードは登録しない
-	for (int i=nStartIdx[nIdx]; i<nStartIdx[nIdx]+nKeywordNumArr[nIdx]; ++i) {
+	for (size_t i=nStartIdx[nIdx]; i<nStartIdx[nIdx]+nKeywordNumArr[nIdx]; ++i) {
 		if (wcscmp(szKeywordArr[i], pszKeyword) == 0) {
 			return 4;
 		}
@@ -304,20 +302,20 @@ int KeywordSetMgr::AddKeyword(int nIdx, const wchar_t* pszKeyword)
 	@param nIdx [in] キーワードセット番号
 	@param nIdx2 [in] キーワード番号
 */
-int KeywordSetMgr::DelKeyword(int nIdx, int nIdx2)
+size_t KeywordSetMgr::DelKeyword(size_t nIdx, size_t nIdx2)
 {
-	if (nIdx < 0 || nKeywordSetNum <= nIdx) {
+	if (nKeywordSetNum <= nIdx) {
 		return 1;
 	}
-	if (nIdx2 < 0 ||  nKeywordNumArr[nIdx] <= nIdx2) {
+	if (nKeywordNumArr[nIdx] <= nIdx2) {
 		return 2;
 	}
-	if (0 >= nKeywordNumArr[nIdx]) {
+	if (nKeywordNumArr[nIdx] == 0) {
 		return 3;	//	登録数が0なら上の条件で引っかかるのでここには来ない？
 	}
 	size_t nDelKeywordLen = wcslen( szKeywordArr[nStartIdx[nIdx] + nIdx2] );
-	int endPos = nStartIdx[nIdx] + nKeywordNumArr[nIdx] - 1;
-	for (int i=nStartIdx[nIdx]+nIdx2; i<endPos; ++i) {
+	size_t endPos = nStartIdx[nIdx] + nKeywordNumArr[nIdx] - 1;
+	for (size_t i=nStartIdx[nIdx]+nIdx2; i<endPos; ++i) {
 		wcscpy(szKeywordArr[i], szKeywordArr[i + 1]);
 	}
 	nKeywordNumArr[nIdx]--;
@@ -367,8 +365,8 @@ void KeywordSetMgr::SortKeyword(size_t nIdx)
 void KeywordSetMgr::KeywordMaxLen(size_t nIdx)
 {
 	size_t nMaxLen = 0;
-	const int nEnd = nStartIdx[nIdx] + nKeywordNumArr[nIdx];
-	for (int i=nStartIdx[nIdx]; i<nEnd; ++i) {
+	const size_t nEnd = nStartIdx[nIdx] + nKeywordNumArr[nIdx];
+	for (size_t i=nStartIdx[nIdx]; i<nEnd; ++i) {
 		size_t len = wcslen( szKeywordArr[i] );
 		if (nMaxLen < len) {
 			nMaxLen = len;
@@ -401,9 +399,9 @@ int KeywordSetMgr::SearchKeyword2(
 	}
 
 	int result = -1;
-	int pl = nStartIdx[nIdx];
-	int pr = nStartIdx[nIdx] + nKeywordNumArr[nIdx] - 1;
-	int pc = (pr + 1 - pl) / 2 + pl;
+	size_t pl = nStartIdx[nIdx];
+	size_t pr = nStartIdx[nIdx] + nKeywordNumArr[nIdx] - 1;
+	size_t pc = (pr + 1 - pl) / 2 + pl;
 	int (*const cmp)(const wchar_t*, const wchar_t*, size_t) = bKeywordCaseArr[nIdx] ? wcsncmp : wcsnicmp;
 	while (pl <= pr) {
 		const int ret = cmp(pszKeyword, szKeywordArr[pc], nKeywordLen);
@@ -427,7 +425,7 @@ int KeywordSetMgr::SearchKeyword2(
 					result = std::numeric_limits<int>::max();
 					break;
 				}
-				result = pc - nStartIdx[nIdx];
+				result = (int)(pc - nStartIdx[nIdx]);
 				// より長いキーワードを探すために続ける。
 				pl = pc + 1;
 			}
@@ -439,7 +437,7 @@ int KeywordSetMgr::SearchKeyword2(
 // MIK END
 
 // MIK START 2000.12.01 START
-void KeywordSetMgr::SetKeywordCase(int nIdx, bool bCase)
+void KeywordSetMgr::SetKeywordCase(size_t nIdx, bool bCase)
 {
 	// 大文字小文字判断は１ビットあれば実現できる。
 	// 今はint型(sizeof(int) * セット数 = 4 * 100 = 400)だが,
@@ -450,7 +448,7 @@ void KeywordSetMgr::SetKeywordCase(int nIdx, bool bCase)
 	return;
 }
 
-bool KeywordSetMgr::GetKeywordCase(int nIdx)
+bool KeywordSetMgr::GetKeywordCase(size_t nIdx)
 {
 	return bKeywordCaseArr[nIdx];
 }
@@ -465,7 +463,7 @@ bool KeywordSetMgr::GetKeywordCase(int nIdx)
 	@date 2004.07.29 Moca CShareData::ShareData_IO_2内のコードを元に移築・作成
 */
 size_t KeywordSetMgr::SetKeywordArr(
-	int				nIdx,			// [in] キーワードセット番号
+	size_t			nIdx,			// [in] キーワードセット番号
 	size_t			nSize,			// [in] キーワード数
 	const wchar_t*	pszKeywordArr	// [in]「key\\tword\\t\\0」又は「key\\0word\\0\\0」の形式
 	)
@@ -473,7 +471,7 @@ size_t KeywordSetMgr::SetKeywordArr(
 	if (!KeywordReAlloc(nIdx, nSize)) {
 		return 0;
 	}
-	int cnt, i;
+	size_t cnt, i;
 	const wchar_t* ptr = pszKeywordArr;
 	for (cnt = 0, i = nStartIdx[nIdx];
 		i < nStartIdx[nIdx] + nSize && *ptr != L'\0';
@@ -499,7 +497,7 @@ size_t KeywordSetMgr::SetKeywordArr(
 	@return 登録したキーワード数．0は失敗．
 */
 size_t KeywordSetMgr::SetKeywordArr(
-	int				nIdx,				// [in] キーワードセット番号
+	size_t			nIdx,				// [in] キーワードセット番号
 	size_t			nSize,				// [in] ppszKeywordArrの要素数
 	const wchar_t*	ppszKeywordArr[]	// [in] キーワードの配列(重複・長さ制限等、考慮済みであること)
 	)
@@ -507,7 +505,7 @@ size_t KeywordSetMgr::SetKeywordArr(
 	if (!KeywordReAlloc(nIdx, nSize)) {
 		return 0;
 	}
-	for (int cnt = 0, i = nStartIdx[nIdx];
+	for (size_t cnt=0, i=nStartIdx[nIdx];
 		i < nStartIdx[nIdx] + nSize;
 		++cnt, ++i
 	) {
@@ -525,15 +523,15 @@ size_t KeywordSetMgr::SetKeywordArr(
 	
 	@return 削除したキーワード数
 */
-int KeywordSetMgr::CleanKeywords(size_t nIdx)
+size_t KeywordSetMgr::CleanKeywords(size_t nIdx)
 {
 	// 先にソートしておかないと、後で順番が変わると都合が悪い
 	if (isSorted[nIdx] == 0) {
 		SortKeyword(nIdx);
 	}
 
-	int nDelCount = 0;	// 削除キーワード数
-	int i = 0;
+	size_t nDelCount = 0;	// 削除キーワード数
+	size_t i = 0;
 	while (i < GetKeywordNum(nIdx) - 1) {
 		const wchar_t* p = GetKeyword(nIdx, i);
 		bool bDelKey = false;	// trueなら削除対象
@@ -573,7 +571,7 @@ int KeywordSetMgr::CleanKeywords(size_t nIdx)
 bool KeywordSetMgr::CanAddKeyword(int nIdx)
 {
 	//	割り当て済みの領域の空きをまず調べる
-	int nSizeOld = GetAllocSize(nIdx);
+	size_t nSizeOld = GetAllocSize(nIdx);
 	if (nKeywordNumArr[nIdx] < nSizeOld) {
 		return true;
 	}
@@ -623,32 +621,29 @@ bool KeywordSetMgr::KeywordReAlloc(size_t nIdx, size_t nSize)
 
 	// ブロックのサイズで整列
 	size_t nAllocSize = GetAlignmentSize(nSize);
-	int nSizeOld = GetAllocSize(nIdx);
+	size_t nSizeOld = GetAllocSize(nIdx);
 
-	if (nSize < 0) {
-		return false;
-	}
 	if (nAllocSize == nSizeOld) {
 		// サイズ変更なし
 		return true;
 	}
 
-	int nDiffSize = nAllocSize - nSizeOld;
+	size_t nDiffSize = nAllocSize - nSizeOld;
 	if (GetFreeSize() < nDiffSize) {
 		// メモリ不足
 		return false;
 	}
 	// 後ろのキーワードセットのキーワードをすべて移動する
 	if (nIdx + 1 < nKeywordSetNum) {
-		int nKeywordIdx = nStartIdx[nIdx + 1];
-		int nKeywordNum = nStartIdx[nKeywordSetNum] - nStartIdx[nIdx + 1];
+		size_t nKeywordIdx = nStartIdx[nIdx + 1];
+		size_t nKeywordNum = nStartIdx[nKeywordSetNum] - nStartIdx[nIdx + 1];
 		memmove(
 			szKeywordArr[nKeywordIdx + nDiffSize],
 			szKeywordArr[nKeywordIdx],
 			nKeywordNum * sizeof(szKeywordArr[0])
 		);
 	}
-	for (int i=nIdx+1; i<=nKeywordSetNum; ++i) {
+	for (size_t i=nIdx+1; i<=nKeywordSetNum; ++i) {
 		nStartIdx[i] += nDiffSize;
 	}
 	return true;
@@ -659,7 +654,7 @@ bool KeywordSetMgr::KeywordReAlloc(size_t nIdx, size_t nSize)
 	@param nIdx [in] キーワードセット番号
 	@return キーワードセットに割り当て済みのキーワード数
 */
-int KeywordSetMgr::GetAllocSize(size_t nIdx) const
+size_t KeywordSetMgr::GetAllocSize(size_t nIdx) const
 {
 	return nStartIdx[nIdx + 1] - nStartIdx[nIdx];
 }
@@ -670,7 +665,7 @@ int KeywordSetMgr::GetAllocSize(size_t nIdx) const
 	
 	@return 共有空き領域(キーワード数)
 */
-int KeywordSetMgr::GetFreeSize(void) const 
+size_t KeywordSetMgr::GetFreeSize(void) const 
 {
 	return MAX_KEYWORDNUM - nStartIdx[nKeywordSetNum];
 }

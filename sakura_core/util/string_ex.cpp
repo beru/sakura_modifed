@@ -42,10 +42,11 @@ int __cdecl my_strnicmp(const char* s1, const char* s2, size_t n)
 	return my_internal_icmp(s1, s2, (unsigned int)n, 1, true);
 }
 
-LPWSTR wcscpyn(LPWSTR lpString1, LPCWSTR lpString2, int iMaxLength)
+LPWSTR wcscpyn(LPWSTR lpString1, LPCWSTR lpString2, size_t iMaxLength)
 {
+	ASSERT_GE(iMaxLength, 1);
 	size_t len2 = wcslen(lpString2);
-	if ((int)len2 > iMaxLength-1) len2 = iMaxLength-1;
+	if (len2 > iMaxLength-1) len2 = iMaxLength-1;
 	wmemcpy(lpString1, lpString2, len2);
 	lpString1[len2] = L'\0';
 	return lpString1;

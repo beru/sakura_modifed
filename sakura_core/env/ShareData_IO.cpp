@@ -171,14 +171,13 @@ void ShareData_IO::ShareData_IO_Mru(DataProfile& profile)
 	DllSharedData* pShare = &GetDllShareData();
 
 	const WCHAR* pszSecName = LTEXT("MRU");
-	int			i;
-	int			nSize;
 	EditInfo*	pfiWork;
 	WCHAR		szKeyName[64];
 
 	profile.IOProfileData(pszSecName, LTEXT("_MRU_Counts"), pShare->history.nMRUArrNum);
 	SetValueLimit(pShare->history.nMRUArrNum, MAX_MRU);
-	nSize = pShare->history.nMRUArrNum;
+	size_t i;
+	size_t nSize = pShare->history.nMRUArrNum;
 	for (i=0; i<nSize; ++i) {
 		pfiWork = &pShare->history.fiMRUArr[i];
 		if (profile.IsReadingMode()) {
@@ -268,8 +267,8 @@ void ShareData_IO::ShareData_IO_Keys(DataProfile& profile)
 
 	profile.IOProfileData(pszSecName, LTEXT("_SEARCHKEY_Counts"), pShare->searchKeywords.searchKeys._GetSizeRef());
 	pShare->searchKeywords.searchKeys.SetSizeLimit();
-	int nSize = pShare->searchKeywords.searchKeys.size();
-	for (int i=0; i<nSize; ++i) {
+	size_t nSize = pShare->searchKeywords.searchKeys.size();
+	for (size_t i=0; i<nSize; ++i) {
 		auto_sprintf(szKeyName, LTEXT("SEARCHKEY[%02d]"), i);
 		profile.IOProfileData(pszSecName, szKeyName, pShare->searchKeywords.searchKeys[i]);
 	}
@@ -294,13 +293,12 @@ void ShareData_IO::ShareData_IO_Grep(DataProfile& profile)
 	DllSharedData* pShare = &GetDllShareData();
 
 	static const WCHAR* pszSecName = LTEXT("Grep");
-	int		nSize;
 	WCHAR	szKeyName[64];
 
 	profile.IOProfileData(pszSecName, LTEXT("_GREPFILE_Counts"), pShare->searchKeywords.grepFiles._GetSizeRef());
 	pShare->searchKeywords.grepFiles.SetSizeLimit();
-	nSize = pShare->searchKeywords.grepFiles.size();
-	for (int i=0; i<nSize; ++i) {
+	size_t nSize = pShare->searchKeywords.grepFiles.size();
+	for (size_t i=0; i<nSize; ++i) {
 		auto_sprintf(szKeyName, LTEXT("GREPFILE[%02d]"), i);
 		profile.IOProfileData(pszSecName, szKeyName, pShare->searchKeywords.grepFiles[i]);
 	}
@@ -346,8 +344,8 @@ void ShareData_IO::ShareData_IO_Cmd(DataProfile& profile)
 
 	profile.IOProfileData(pszSecName, LTEXT("nCmdArrNum"), pShare->history.aCommands._GetSizeRef());
 	pShare->history.aCommands.SetSizeLimit();
-	int nSize = pShare->history.aCommands.size();
-	for (int i=0; i<nSize; ++i) {
+	size_t nSize = pShare->history.aCommands.size();
+	for (size_t i=0; i<nSize; ++i) {
 		auto_sprintf(szKeyName, LTEXT("szCmdArr[%02d]"), i);
 		profile.IOProfileData(pszSecName, szKeyName, pShare->history.aCommands[i]);
 	}
@@ -1598,8 +1596,8 @@ void ShareData_IO::ShareData_IO_Type_One(DataProfile& profile, TypeConfig& types
 		WCHAR* p;
 		profile.IOProfileData(pszSecName, LTEXT("bUseRegexKeyword"), types.bUseRegexKeyword);	// 正規表現キーワード使用するか？
 		wchar_t* pKeyword = types.regexKeywordList;
-		int nPos = 0;
-		int nKeywordSize = _countof(types.regexKeywordList);
+		size_t nPos = 0;
+		size_t nKeywordSize = _countof(types.regexKeywordList);
 		for (size_t j=0; j<_countof(types.regexKeywordArr); ++j) {
 			auto_sprintf(szKeyName, LTEXT("RxKey[%03d]"), j);
 			if (profile.IsReadingMode()) {
@@ -1731,10 +1729,10 @@ void ShareData_IO::ShareData_IO_Keywords(DataProfile& profile)
 	DllSharedData* pShare = &GetDllShareData();
 
 	static const WCHAR* pszSecName = LTEXT("Keywords");
-	WCHAR			szKeyName[64];
-	WCHAR			szKeyData[1024];
-	KeywordSetMgr*	pKeywordSetMgr = &pShare->common.specialKeyword.keywordSetMgr;
-	int				nKeywordSetNum = pKeywordSetMgr->nKeywordSetNum;
+	WCHAR szKeyName[64];
+	WCHAR szKeyData[1024];
+	KeywordSetMgr* pKeywordSetMgr = &pShare->common.specialKeyword.keywordSetMgr;
+	size_t nKeywordSetNum = pKeywordSetMgr->nKeywordSetNum;
 
 	profile.IOProfileData(pszSecName, LTEXT("nCurrentKeywordSetIdx")	, pKeywordSetMgr->nCurrentKeywordSetIdx);
 	bool bIOSuccess = profile.IOProfileData(pszSecName, LTEXT("nKeywordSetNum"), nKeywordSetNum);
@@ -1765,8 +1763,8 @@ void ShareData_IO::ShareData_IO_Keywords(DataProfile& profile)
 			}
 		}
 	}else {
-		int nSize = pKeywordSetMgr->nKeywordSetNum;
-		for (int i=0; i<nSize; ++i) {
+		size_t nSize = pKeywordSetMgr->nKeywordSetNum;
+		for (size_t i=0; i<nSize; ++i) {
 			auto_sprintf(szKeyName, LTEXT("szSN[%02d]"), i);
 			profile.IOProfileData(pszSecName, szKeyName, MakeStringBufferW(pKeywordSetMgr->szSetNameArr[i]));
 			auto_sprintf(szKeyName, LTEXT("nCASE[%02d]"), i);
@@ -2217,8 +2215,8 @@ void ShareData_IO::ShareData_IO_Other(DataProfile& profile)
 	// From Here 2005.04.03 MIK キーワード指定タグジャンプ
 	profile.IOProfileData(pszSecName, LTEXT("_TagJumpKeyword_Counts"), pShare->tagJump.aTagJumpKeywords._GetSizeRef());
 	pShare->history.aCommands.SetSizeLimit();
-	int nSize = pShare->tagJump.aTagJumpKeywords.size();
-	for (int i=0; i<nSize; ++i) {
+	size_t nSize = pShare->tagJump.aTagJumpKeywords.size();
+	for (size_t i=0; i<nSize; ++i) {
 		auto_sprintf(szKeyName, LTEXT("TagJumpKeyword[%02d]"), i);
 		if (i >= nSize) {
 			pShare->tagJump.aTagJumpKeywords[i][0] = 0;

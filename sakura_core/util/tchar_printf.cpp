@@ -317,7 +317,7 @@ int tchar_vsprintf_s_imp(T* buf, size_t nBufCount, const T* format, va_list& v, 
 	if (truncate && *src != '\0') {		// Ø‚è‹l‚ß‚ ‚è‚ÅAsrc‚Ìˆ—‚ªŠ®—¹‚µ‚Ä‚¢‚È‚¢ê‡
 		return -1;						// Ø‚è‹l‚ß‚ç‚ê‚½
 	}
-	return dst - buf;
+	return (int)(dst - buf);
 }
 
 

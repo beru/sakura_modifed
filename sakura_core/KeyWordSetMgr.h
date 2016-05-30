@@ -79,17 +79,17 @@ public:
 		bool			bKeywordCase,			// [in] 大文字小文字の区別．true:あり, false:無し
 		int				nSize			= -1	// [in] 最初に領域を確保するサイズ．
 	);
-	bool DelKeywordSet(int);			// ｎ番目のセットを削除
-	const wchar_t* GetTypeName(int);	// ｎ番目のセット名を返す
-	const wchar_t* SetTypeName(int, const wchar_t*);	// ｎ番目のセット名を設定する // 2005.01.26 Moca
-	void SetKeywordCase(int, bool);				// ｎ番目のセットの大文字小文字判断をセットする		//MIK
-	bool GetKeywordCase(int);					// ｎ番目のセットの大文字小文字判断を取得する		//MIK
+	bool DelKeywordSet(size_t);			// ｎ番目のセットを削除
+	const wchar_t* GetTypeName(size_t);	// ｎ番目のセット名を返す
+	const wchar_t* SetTypeName(size_t, const wchar_t*);	// ｎ番目のセット名を設定する // 2005.01.26 Moca
+	void SetKeywordCase(size_t, bool);				// ｎ番目のセットの大文字小文字判断をセットする		//MIK
+	bool GetKeywordCase(size_t);					// ｎ番目のセットの大文字小文字判断を取得する		//MIK
 	void SortKeyword(size_t);						// ｎ番目のセットのキーワードをソートする			//MIK
 
 	// From Here 2004.07.29 Moca 追加 可変長記憶
-	size_t SetKeywordArr(int, size_t, const wchar_t*);			// iniからキーワードを設定する
+	size_t SetKeywordArr(size_t, size_t, const wchar_t*);			// iniからキーワードを設定する
 	size_t SetKeywordArr(						// キーワードの配列から設定する
-		int				nIdx,				// [in] キーワードセット番号
+		size_t			nIdx,				// [in] キーワードセット番号
 		size_t			nSize,				// [in] ppszKeywordArrの要素数
 		const wchar_t*	ppszKeywordArr[]	// [in] キーワードの配列(重複・長さ制限等、考慮済みであること)
 	);
@@ -98,11 +98,11 @@ public:
 
 	//@{
 	///	@name キーワード操作
-	int GetKeywordNum(int);				// ｎ番目のセットのキーワードの数を返す
-	const wchar_t* GetKeyword(int , int);	// ｎ番目のセットのｍ番目のキーワードを返す
-	const wchar_t* UpdateKeyword(int , int , const WCHAR*);	// ｎ番目のセットのｍ番目のキーワードを編集
-	int AddKeyword(int, const wchar_t*);	// ｎ番目のセットにキーワードを追加
-	int DelKeyword(int , int);			// ｎ番目のセットのｍ番目のキーワードを削除
+	size_t GetKeywordNum(size_t);				// ｎ番目のセットのキーワードの数を返す
+	const wchar_t* GetKeyword(size_t, size_t);	// ｎ番目のセットのｍ番目のキーワードを返す
+	const wchar_t* UpdateKeyword(size_t, size_t, const WCHAR*);	// ｎ番目のセットのｍ番目のキーワードを編集
+	size_t AddKeyword(size_t, const wchar_t*);	// ｎ番目のセットにキーワードを追加
+	size_t DelKeyword(size_t, size_t);			// ｎ番目のセットのｍ番目のキーワードを削除
 	bool CanAddKeyword(int);	// キーワードが追加可能か
 	//@}
 	
@@ -115,9 +115,9 @@ public:
 	//@}
 
 	// From Here 2004.07.29 Moca 追加 可変長記憶
-	int CleanKeywords(size_t);			// キーワードの整頓・利用できないキーワードの削除
-	int GetAllocSize(size_t) const;		// 確保している数を返す
-	int GetFreeSize() const;			// 未割り当てブロックのキーワード数を返す
+	size_t CleanKeywords(size_t);			// キーワードの整頓・利用できないキーワードの削除
+	size_t GetAllocSize(size_t) const;		// 確保している数を返す
+	size_t GetFreeSize() const;			// 未割り当てブロックのキーワード数を返す
 	void ResetAllKeywordSet(void);		// 全キーワードセットの削除と初期化
 	// To Here 2004.07.29 Moca
 
@@ -134,11 +134,11 @@ public:
 		本来の処理とは無関係だが，あるウィンドウで選択したセットが
 		別のウィンドウの設定画面にも引き継がれるようにするため．
 	*/
-	int		nCurrentKeywordSetIdx;
+	size_t	nCurrentKeywordSetIdx;
 	size_t	nKeywordSetNum;				// キーワードセット数
 	wchar_t	szSetNameArr[MAX_SETNUM][MAX_SETNAMELEN + 1];	// キーワードセット名
 	bool	bKeywordCaseArr[MAX_SETNUM];	// キーワードの英大文字小文字区別
-	int		nKeywordNumArr[MAX_SETNUM];	// キーワードセットに登録されているキーワード数
+	size_t	nKeywordNumArr[MAX_SETNUM];	// キーワードセットに登録されているキーワード数
 private:
 	// キーワード格納領域
 	wchar_t	szKeywordArr[MAX_KEYWORDNUM][MAX_KEYWORDLEN + 1];	
@@ -150,7 +150,7 @@ protected:
 		次の開始位置までが確保済みの領域．
 		+1しているのは最後が0で終わるようにするため．
 	*/
-	int		nStartIdx[MAX_SETNUM + 1];
+	size_t	nStartIdx[MAX_SETNUM + 1];
 	size_t	nKeywordMaxLenArr[MAX_SETNUM]; // 一番長いキーワードの長さ(ソート後のみ有効)(INI未保存)
 
 protected:

@@ -1067,10 +1067,10 @@ void DocOutline::MakeFuncList_C(
 						//	直前のwordの最後が::か，あるいは直後のwordの先頭が::なら
 						//	クラス限定子と考えて両者を接続する．
 						{
-							int pos = wcslen(szWordPrev) - 2;
+							int pos = (int)wcslen(szWordPrev) - 2;
 							if (0
 								//	前の文字列の末尾チェック
-								|| (pos > 0 &&	szWordPrev[pos] == L':' && szWordPrev[pos + 1] == L':')
+								|| (pos > 0 && szWordPrev[pos] == L':' && szWordPrev[pos + 1] == L':')
 								//	次の文字列の先頭チェック
 								|| (i < nLineLen - 1 && pLine[i] == L':' && pLine[i + 1] == L':')
 							) {
@@ -1225,7 +1225,7 @@ void EditView::SmartIndent_CPP(wchar_t wcChar)
 {
 	const wchar_t*	pLine;
 	size_t			nLineLen;
-	int			k;
+	ptrdiff_t		k;
 	const wchar_t*	pLine2;
 	size_t		nLineLen2;
 	int			nLevel;
