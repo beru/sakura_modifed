@@ -86,7 +86,7 @@ CodeConvertResult Euc::EUCToUnicode(const Memory& src, NativeW* pDstMem)
 
 	// 変換
 	bool bError = false;
-	int nDstLen = EucjpToUni(pSrc, nSrcLen, pDst, &bError);
+	size_t nDstLen = EucjpToUni(pSrc, nSrcLen, pDst, &bError);
 
 	// pMem を更新
 	pDstMem->_GetMemory()->SetRawDataHoldBuffer( pDst, nDstLen*sizeof(wchar_t) );
@@ -167,7 +167,7 @@ CodeConvertResult Euc::UnicodeToEUC(const NativeW& src, Memory* pDstMem)
 	char* pDst = &dst[0];
 
 	// 変換
-	int nDstLen = UniToEucjp(pSrc, nSrcLen, pDst, &bError);
+	size_t nDstLen = UniToEucjp(pSrc, nSrcLen, pDst, &bError);
 
 	// pMem を更新
 	pDstMem->SetRawDataHoldBuffer( pDst, nDstLen );

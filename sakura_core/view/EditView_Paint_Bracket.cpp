@@ -168,10 +168,10 @@ void EditView::DrawBracketPair(bool bDraw)
 			}
 			const Layout* pLayout;
 			size_t nLineLen;
-			const wchar_t*	pLine = pEditDoc->layoutMgr.GetLineStr(ptColLine.y, &nLineLen, &pLayout);
+			const wchar_t* pLine = pEditDoc->layoutMgr.GetLineStr(ptColLine.y, &nLineLen, &pLayout);
 			if (pLine) {
 				EColorIndexType nColorIndex;
-				int	OutputX = LineColumnToIndex(pLayout, ptColLine.x);
+				size_t OutputX = LineColumnToIndex(pLayout, ptColLine.x);
 				if (bDraw) {
 					nColorIndex = COLORIDX_BRACKET_PAIR;
 				}else {
@@ -209,7 +209,7 @@ void EditView::DrawBracketPair(bool bDraw)
 					int nHeight = GetTextMetrics().GetHankakuDy();
 					int nLeft = (GetTextArea().GetDocumentLeftClientPointX()) + ptColLine.x * nWidth;
 					int nTop  = (ptColLine.y - GetTextArea().GetViewTopLine()) * nHeight + GetTextArea().GetAreaTop();
-					int charsWidth = NativeW::GetKetaOfChar(pLine, nLineLen, OutputX);
+					size_t charsWidth = NativeW::GetKetaOfChar(pLine, nLineLen, OutputX);
 
 					// êFê›íË
 					TypeSupport textType(*this, COLORIDX_TEXT);

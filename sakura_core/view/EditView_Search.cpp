@@ -248,7 +248,7 @@ bool EditView::MiniMapCursorLineTip(POINT* po, RECT* rc, bool* pbHide)
 				size_t nLineLen = pLayout->GetLengthWithoutEOL();
 				const wchar_t* pszData = pLayout->GetPtr();
 				size_t nLimitLength = 80;
-				int pre = 0;
+				size_t pre = 0;
 				size_t i = 0;
 				size_t k = 0;
 				size_t charSize = NativeW::GetSizeOfChar( pszData, nLineLen, i );
@@ -436,7 +436,7 @@ bool EditView::GetCurrentTextForSearchDlg(NativeW& memCurText, bool bGetHistory)
 		(単語検索時) 指定位置が検索文字列に含まれる何番目の単語の始まりであるか。
 		(それ以外) 指定位置が検索文字列の始まりだった。
 */
-int EditView::IsSearchString(
+size_t EditView::IsSearchString(
 	const StringRef&	str,
 	size_t		nPos,
 	int*		pnSearchStart,

@@ -219,8 +219,8 @@ void ViewCommander::Command_Indent(
 								break;
 							}
 						}
-						*sortedKetas[i].outLogicX = it.getIndex();
-						*sortedKetas[i].outLayoutX = it.getColumn();
+						*sortedKetas[i].outLogicX = (int)it.getIndex();
+						*sortedKetas[i].outLayoutX = (int)it.getColumn();
 					}
 					reachEndOfLayout = it.end();
 				}else {
@@ -383,7 +383,7 @@ void ViewCommander::Command_Indent(
 
 			if (nLineCountPrev != layoutMgr.GetLineCount()) {
 				// s”‚ª•Ï‰»‚µ‚½!!
-				selectOld.GetTo().y += layoutMgr.GetLineCount() - nLineCountPrev;
+				selectOld.GetTo().y += (int)layoutMgr.GetLineCount() - (int)nLineCountPrev;
 			}
 			if (hwndProgress) {
 				int newPos = ::MulDiv(i, 100, selectOld.GetTo().GetY());
@@ -523,7 +523,7 @@ void ViewCommander::Command_Unindent(wchar_t wcChar)
 			);
 			if (nLineCountPrev != layoutMgr.GetLineCount()) {
 				// s”‚ª•Ï‰»‚µ‚½!!
-				selectOld.GetTo().y += layoutMgr.GetLineCount() - nLineCountPrev;
+				selectOld.GetTo().y += (int)layoutMgr.GetLineCount() - (int)nLineCountPrev;
 			}
 			if (hwndProgress) {
 				int newPos = ::MulDiv(i, 100, selectOld.GetTo().GetY());
@@ -677,7 +677,7 @@ void ViewCommander::Command_Sort(bool bAsc)	// bAsc:true=¸‡, false=~‡
 		rangeA = selInfo.select;
 		if (selInfo.select.GetFrom().x == selInfo.select.GetTo().x) {
 			// Aug. 14, 2005 genta Ü‚è•Ô‚µ•‚ğLayoutMgr‚©‚çæ“¾‚·‚é‚æ‚¤‚É
-			selInfo.select.SetToX(layoutMgr.GetMaxLineKetas());
+			selInfo.select.SetToX((int)layoutMgr.GetMaxLineKetas());
 		}
 		if (selInfo.select.GetFrom().x<selInfo.select.GetTo().x) {
 			nCF = selInfo.select.GetFrom().x;

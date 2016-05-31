@@ -153,12 +153,12 @@ public:
 	//                           検索                              //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 protected:
-	int PrevOrNextWord(size_t, size_t, Point* pptLayoutNew, bool, bool bStopsBothEnds);	// 現在位置の左右の単語の先頭位置を調べる
+	bool PrevOrNextWord(size_t, size_t, Point* pptLayoutNew, bool, bool bStopsBothEnds);	// 現在位置の左右の単語の先頭位置を調べる
 public:
-	int PrevWord(size_t nLineNum, size_t nIdx, Point* pptLayoutNew, bool bStopsBothEnds) { return PrevOrNextWord(nLineNum, nIdx, pptLayoutNew, true, bStopsBothEnds); }	// 現在位置の左右の単語の先頭位置を調べる
-	int NextWord(size_t nLineNum, size_t nIdx, Point* pptLayoutNew, bool bStopsBothEnds) { return PrevOrNextWord(nLineNum, nIdx, pptLayoutNew, false, bStopsBothEnds); }	// 現在位置の左右の単語の先頭位置を調べる
+	bool PrevWord(size_t nLineNum, size_t nIdx, Point* pptLayoutNew, bool bStopsBothEnds) { return PrevOrNextWord(nLineNum, nIdx, pptLayoutNew, true, bStopsBothEnds); }	// 現在位置の左右の単語の先頭位置を調べる
+	bool NextWord(size_t nLineNum, size_t nIdx, Point* pptLayoutNew, bool bStopsBothEnds) { return PrevOrNextWord(nLineNum, nIdx, pptLayoutNew, false, bStopsBothEnds); }	// 現在位置の左右の単語の先頭位置を調べる
 
-	int SearchWord(size_t nLine, size_t nIdx, SearchDirection SearchDirection, Range* pMatchRange, const SearchStringPattern&);	// 単語検索
+	bool SearchWord(size_t nLine, size_t nIdx, SearchDirection SearchDirection, Range* pMatchRange, const SearchStringPattern&);	// 単語検索
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                        単位の変換                           //

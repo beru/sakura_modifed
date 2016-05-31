@@ -98,6 +98,7 @@ bool Color_Found::BeginColor(const StringRef& str, size_t nPos)
 			&nSearchEnd
 		);
 	}
+	
 	// マッチ文字列検出
 	return (nSearchResult && nSearchStart == nPos);
 }

@@ -98,7 +98,7 @@ public:
 		size_t	nIdxPos,
 		const std::vector<std::pair<const wchar_t*, size_t>>& searchWords,
 		bool	bLoHiCase,
-		int*	pnMatchLen
+		size_t*	pnMatchLen
 	);
 	
 	static
@@ -115,7 +115,7 @@ public:
 
 	bool PrevOrNextWord(size_t, size_t, size_t* , bool bLEFT, bool bStopsBothEnds);	// 現在位置の左右の単語の先頭位置を調べる
 	//	Jun. 26, 2001 genta	正規表現ライブラリの差し替え
-	int SearchWord(Point ptSerachBegin, SearchDirection eDirection, Range* pMatchRange, const SearchStringPattern& pattern); // 単語検索
+	bool SearchWord(Point ptSerachBegin, SearchDirection eDirection, Range* pMatchRange, const SearchStringPattern& pattern); // 単語検索
 
 	void ReplaceData(DocLineReplaceArg*);
 private:

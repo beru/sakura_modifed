@@ -100,9 +100,8 @@ void ViewCommander::Command_Search_Next(
 	// bFastMode
 	int nLineNumLogic(0);
 
-	bool	bRedo = false;	// hor
-	int		nIdxOld = 0;	// hor
-	int		nSearchResult;
+	bool bRedo = false;	// hor
+	int nIdxOld = 0;	// hor
 	auto& layoutMgr = GetDocument().layoutMgr;
 
 	if (pSelectLogic) {
@@ -192,8 +191,9 @@ void ViewCommander::Command_Search_Next(
 re_do:;
 	// 現在位置より後ろの位置を検索する
 	// 2004.05.30 Moca 引数をGetShareData()からメンバ変数に変更。他のプロセス/スレッドに書き換えられてしまわないように。
+	bool bSearchResult;
 	if (!pSelectLogic) {
-		nSearchResult = layoutMgr.SearchWord(
+		bSearchResult = layoutMgr.SearchWord(
 			nLineNum,						// 検索開始レイアウト行
 			nIdx,							// 検索開始データ位置
 			SearchDirection::Forward,		// 0==前方検索 1==後方検索
@@ -202,14 +202,14 @@ re_do:;
 		);
 	}else {
 		auto& docLineMgr = GetDocument().docLineMgr;
-		nSearchResult = SearchAgent(docLineMgr).SearchWord(
+		bSearchResult = SearchAgent(docLineMgr).SearchWord(
 			Point((int)nIdx, nLineNumLogic),
 			SearchDirection::Forward,		// 0==前方検索 1==後方検索
 			pSelectLogic,
 			view.searchPattern
 		);
 	}
-	if (nSearchResult) {
+	if (bSearchResult) {
 		// 指定された行のデータ内の位置に対応する桁の位置を調べる
 		if (bFlag1 && rangeA.GetFrom() == caret.GetCaretLayoutPos()) {
 			Range logicRange;

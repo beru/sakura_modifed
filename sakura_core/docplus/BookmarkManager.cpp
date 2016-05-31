@@ -235,7 +235,7 @@ void BookmarkManager::MarkSearchWord(
 		while (pDocLine) {
 			if (!BookmarkGetter(pDocLine).IsBookmarked()) {
 				const wchar_t* pLine = pDocLine->GetDocLineStrWithEOL(&nLineLen);
-				int nMatchLen;
+				size_t nMatchLen;
 				if (SearchAgent::SearchStringWord(pLine, nLineLen, 0, searchWords, searchOption.bLoHiCase, &nMatchLen)) {
 					BookmarkSetter(pDocLine).SetBookmark(true);
 				}

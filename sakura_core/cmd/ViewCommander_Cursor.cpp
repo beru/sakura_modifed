@@ -453,13 +453,13 @@ void ViewCommander::Command_WordLeft(bool bSelect)
 	size_t nIdx = view.LineColumnToIndex(pLayout, caret.GetCaretLayoutPos().x);
 	// 現在位置の左の単語の先頭位置を調べる
 	Point ptLayoutNew;
-	int nResult = layoutMgr.PrevWord(
+	bool bResult = layoutMgr.PrevWord(
 		caret.GetCaretLayoutPos().y,
 		nIdx,
 		&ptLayoutNew,
 		csGeneral.bStopsBothEndsWhenSearchWord
 	);
-	if (nResult) {
+	if (bResult) {
 		// 行が変わった
 		if (ptLayoutNew.y != caret.GetCaretLayoutPos().y) {
 			pLayout = layoutMgr.SearchLineByLayoutY(ptLayoutNew.y);
@@ -537,13 +537,13 @@ try_again:;
 	auto& csGeneral = GetDllShareData().common.general;	
 	// 現在位置の右の単語の先頭位置を調べる
 	Point ptLayoutNew;
-	int nResult = layoutMgr.NextWord(
+	bool bResult = layoutMgr.NextWord(
 		nCurLine,
 		nIdx,
 		&ptLayoutNew,
 		csGeneral.bStopsBothEndsWhenSearchWord
 	);
-	if (nResult) {
+	if (bResult) {
 		// 行が変わった
 		if (ptLayoutNew.y != nCurLine) {
 			pLayout = layoutMgr.SearchLineByLayoutY(ptLayoutNew.y);
@@ -1282,8 +1282,8 @@ void ViewCommander::Command_ModifyLine_Next( bool bSelect )
 			if (pDocLineLast) {
 				if (pDocLineLast->GetEol() == EolType::None) {
 					// ぶら下がり[EOF]
-					pos.x = pDocLineLast->GetLengthWithoutEOL();
-					pos.y = docLineMgr.GetLineCount() - 1;
+					pos.x = (int)pDocLineLast->GetLengthWithoutEOL();
+					pos.y = (int)docLineMgr.GetLineCount() - 1;
 					if (GetCaret().GetCaretLogicPos() == pos) {
 						bSkip = true;
 					}
@@ -1343,8 +1343,8 @@ void ViewCommander::Command_ModifyLine_Prev( bool bSelect )
 		const DocLine* pDocLineLast = docLineMgr.GetDocLineBottom();
 		if (pDocLineLast && pDocLineLast->GetEol() == EolType::None) {
 			Point pos;
-			pos.x = pDocLine->GetLengthWithoutEOL();
-			pos.y = docLineMgr.GetLineCount() - 1;
+			pos.x = (int)pDocLine->GetLengthWithoutEOL();
+			pos.y = (int)docLineMgr.GetLineCount() - 1;
 			if (GetCaret().GetCaretLogicPos() == pos) {
 				// ぶら下がり[EOF]の位置だった
 				bLast = true;
@@ -1392,7 +1392,7 @@ void ViewCommander::Command_ModifyLine_Prev( bool bSelect )
 					return;
 				}
 			}
-			ptXY.y = docLineMgr.GetLineCount() - 1;
+			ptXY.y = (int)docLineMgr.GetLineCount() - 1;
 			nYOld2 = ptXY.y;
 			pDocLine = docLineMgr.GetLine(ptXY.y);
 			bModified = false;
@@ -1408,11 +1408,11 @@ void ViewCommander::Command_ModifyLine_Prev( bool bSelect )
 				Point pos;
 				if (pDocLineTemp->GetEol() != EolType::None) {
 					pos.x = 0;
-					pos.y = docLineMgr.GetLineCount();
+					pos.y = (int)docLineMgr.GetLineCount();
 					pos.y++;
 				}else {
-					pos.x = pDocLine->GetLengthWithoutEOL();
-					pos.y = docLineMgr.GetLineCount() - 1;
+					pos.x = (int)pDocLine->GetLengthWithoutEOL();
+					pos.y = (int)docLineMgr.GetLineCount() - 1;
 				}
 				if (GetCaret().GetCaretLogicPos() != pos) {
 					ptXY = pos;

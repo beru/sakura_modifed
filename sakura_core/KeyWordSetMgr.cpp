@@ -399,9 +399,9 @@ int KeywordSetMgr::SearchKeyword2(
 	}
 
 	int result = -1;
-	size_t pl = nStartIdx[nIdx];
-	size_t pr = nStartIdx[nIdx] + nKeywordNumArr[nIdx] - 1;
-	size_t pc = (pr + 1 - pl) / 2 + pl;
+	int pl = (int)nStartIdx[nIdx];
+	int pr = (int)(nStartIdx[nIdx] + nKeywordNumArr[nIdx] - 1);
+	int pc = (pr + 1 - pl) / 2 + pl;
 	int (*const cmp)(const wchar_t*, const wchar_t*, size_t) = bKeywordCaseArr[nIdx] ? wcsncmp : wcsnicmp;
 	while (pl <= pr) {
 		const int ret = cmp(pszKeyword, szKeywordArr[pc], nKeywordLen);

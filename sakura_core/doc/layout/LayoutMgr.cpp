@@ -639,7 +639,7 @@ bool LayoutMgr::WhereCurrentWord(
 	// 現在位置の単語の範囲を調べる -> ロジック単位pSelect, pMemWord, pMemWordLeft
 	size_t nFromX;
 	size_t nToX;
-	bool nRetCode = SearchAgent(*pDocLineMgr).WhereCurrentWord(
+	bool ret = SearchAgent(*pDocLineMgr).WhereCurrentWord(
 		pLayout->GetLogicLineNo(),
 		pLayout->GetLogicOffset() + nIdx,
 		&nFromX,
@@ -648,20 +648,20 @@ bool LayoutMgr::WhereCurrentWord(
 		pcmcmWordLeft
 	);
 
-	if (nRetCode) {
+	if (ret) {
 		// 論理位置→レイアウト位置変換
 		Point ptFrom = LogicToLayout(Point((int)nFromX, pLayout->GetLogicLineNo()), nLineNum);
 		Point ptTo = LogicToLayout(Point((int)nToX, pLayout->GetLogicLineNo()), nLineNum);
 		pSelect->SetFrom(ptFrom);
 		pSelect->SetTo(ptTo);
 	}
-	return nRetCode;
+	return ret;
 
 }
 
 
 // 現在位置の左右の単語の先頭位置を調べる
-int LayoutMgr::PrevOrNextWord(
+bool LayoutMgr::PrevOrNextWord(
 	size_t	nLineNum,
 	size_t	nIdx,
 	Point*	pptLayoutNew,
@@ -671,12 +671,12 @@ int LayoutMgr::PrevOrNextWord(
 {
 	const Layout* pLayout = SearchLineByLayoutY(nLineNum);
 	if (!pLayout) {
-		return FALSE;
+		return false;
 	}
 
 	// 現在位置の左右の単語の先頭位置を調べる
 	size_t nPosNew;
-	int nRetCode = SearchAgent(*pDocLineMgr).PrevOrNextWord(
+	bool ret = SearchAgent(*pDocLineMgr).PrevOrNextWord(
 		pLayout->GetLogicLineNo(),
 		pLayout->GetLogicOffset() + nIdx,
 		&nPosNew,
@@ -684,14 +684,14 @@ int LayoutMgr::PrevOrNextWord(
 		bStopsBothEnds
 	);
 
-	if (nRetCode) {
+	if (ret) {
 		// 論理位置→レイアウト位置変換
 		*pptLayoutNew = LogicToLayout(
 			Point((int)nPosNew, pLayout->GetLogicLineNo()),
 			nLineNum
 		);
 	}
-	return nRetCode;
+	return ret;
 }
 
 
@@ -699,7 +699,7 @@ int LayoutMgr::PrevOrNextWord(
 /*
 	@retval 0 見つからない
 */
-int LayoutMgr::SearchWord(
+bool LayoutMgr::SearchWord(
 	size_t nLine,						// [in] 検索開始レイアウト行
 	size_t nIdx,						// [in] 検索開始データ位置
 	SearchDirection searchDirection,	// [in] 検索方向
@@ -709,12 +709,12 @@ int LayoutMgr::SearchWord(
 {
 	const Layout* pLayout = this->SearchLineByLayoutY(nLine);
 	if (!pLayout) {
-		return FALSE;
+		return false;
 	}
 
 	// 単語検索 -> logicRange (データ位置)
 	Range logicRange;
-	int nRetCode = SearchAgent(*pDocLineMgr).SearchWord(
+	bool ret = SearchAgent(*pDocLineMgr).SearchWord(
 		Point(pLayout->GetLogicOffset() + (int)nIdx, pLayout->GetLogicLineNo()),
 		searchDirection,
 		&logicRange, //pMatchRange,
@@ -723,13 +723,13 @@ int LayoutMgr::SearchWord(
 
 	// 論理位置→レイアウト位置変換
 	// logicRange -> pMatchRange
-	if (nRetCode) {
+	if (ret) {
 		LogicToLayout(
 			logicRange,
 			pMatchRange
 		);
 	}
-	return nRetCode;
+	return ret;
 }
 
 

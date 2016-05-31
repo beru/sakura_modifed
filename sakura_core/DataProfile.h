@@ -115,6 +115,7 @@ protected:
 // Type.h‚ðinclude‚µ‚È‚¢‚Æ‚¢‚¯‚È‚¢‚©‚ç”pŽ~
 //	AS_INT(EOutlineType) 
 	AS_INT(WORD)
+	AS_INT(UINT)
 
 	// ACHAR
 	void profile_to_value(const wstring& profile, ACHAR* value) {

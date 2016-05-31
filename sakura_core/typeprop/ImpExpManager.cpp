@@ -1169,8 +1169,6 @@ bool ImpExpKeyword::Import(const wstring& sFileName, wstring& sErrMsg)
 // エクスポート
 bool ImpExpKeyword::Export(const wstring& sFileName, wstring& sErrMsg)
 {
-	int nKeywordNum;
-
 	TextOutputStream out(to_tchar(sFileName.c_str()));
 	if (!out) {
 		sErrMsg = std::wstring(LSW(STR_IMPEXP_ERR_FILEOPEN)) + sFileName;
@@ -1188,8 +1186,8 @@ bool ImpExpKeyword::Export(const wstring& sFileName, wstring& sErrMsg)
 	common.specialKeyword.keywordSetMgr.SortKeyword(nIdx);	// MIK 2000.12.01 sort keyword
 
 	// ｎ番目のセットのキーワードの数を返す
-	nKeywordNum = common.specialKeyword.keywordSetMgr.GetKeywordNum(nIdx);
-	for (int i=0; i<nKeywordNum; ++i) {
+	size_t nKeywordNum = common.specialKeyword.keywordSetMgr.GetKeywordNum(nIdx);
+	for (size_t i=0; i<nKeywordNum; ++i) {
 		// ｎ番目のセットのｍ番目のキーワードを返す
 		// 2012.03.10 syat キーワードに「%」を含む場合にエクスポート結果が不正
 		out.WriteString(common.specialKeyword.keywordSetMgr.GetKeyword(nIdx, i));

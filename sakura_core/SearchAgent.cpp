@@ -338,7 +338,7 @@ const wchar_t* SearchAgent::SearchStringWord(
 	size_t			nIdxPos,
 	const std::vector<std::pair<const wchar_t*, size_t>>& searchWords,
 	bool	 bLoHiCase,
-	int*	 pnMatchLen
+	size_t*	 pnMatchLen
 	)
 {
 	size_t nNextWordFrom = nIdxPos;
@@ -403,7 +403,7 @@ bool SearchAgent::WhereCurrentWord(
 	}
 	
 	size_t nLineLen;
-	const wchar_t*	pLine = pDocLine->GetDocLineStrWithEOL(&nLineLen);
+	const wchar_t* pLine = pDocLine->GetDocLineStrWithEOL(&nLineLen);
 	
 	// 現在位置の単語の範囲を調べる
 	return WordParse::WhereCurrentWord_2(pLine, nLineLen, nIdx, pnIdxFrom, pnIdxTo, pcmcmWord, pcmcmWordLeft);
@@ -494,7 +494,7 @@ bool SearchAgent::PrevOrNextWord(
 	@date 2005.11.26 かろと \rや.が\r\nにヒットしないように
 */
 // 見つからない場合は０を返す
-int SearchAgent::SearchWord(
+bool SearchAgent::SearchWord(
 	Point ptSerachBegin,	// 検索開始位置
 	SearchDirection eDirection,		// 検索方向
 	Range* pMatchRange,	// [out] マッチ範囲。ロジック単位。
@@ -503,7 +503,7 @@ int SearchAgent::SearchWord(
 {
 	int	nIdxPosOld;
 	int	nHitPosOld;
-	int nRetVal = 0;
+	bool ret = false;
 	const SearchOption&	searchOption = pattern.GetSearchOption();
 	Bregexp* pRegexp = pattern.GetRegexp();
 #ifdef MEASURE_SEARCH_TIME
@@ -597,7 +597,7 @@ int SearchAgent::SearchWord(
 			// マッチした行がある
 			pMatchRange->SetFromY(nLinePos); // マッチ行
 			pMatchRange->SetToY  (nLinePos); // マッチ行
-			nRetVal = 1;
+			ret = true;
 			// レイアウト行では改行文字内の位置を表現できないため、マッチ開始位置を補正
 			if (pMatchRange->GetFrom().x > (int)pDocLine->GetLengthWithoutEOL()) {
 				// \r\n改行時に\nにマッチすると置換できない不具合となるため
@@ -644,7 +644,7 @@ int SearchAgent::SearchWord(
 									pMatchRange->SetToY  (nLinePos);	// マッチ行
 									pMatchRange->SetFromX(nNextWordFrom2);						// マッチ位置from
 									pMatchRange->SetToX  (pMatchRange->GetFrom().x + searchWord.second);// マッチ位置to
-									nRetVal = 1;
+									ret = true;
 									goto end_of_func;
 								}
 							}
@@ -670,14 +670,14 @@ int SearchAgent::SearchWord(
 			while (pDocLine) {
 				size_t nLineLen;
 				const wchar_t* pLine = pDocLine->GetDocLineStrWithEOL(&nLineLen);
-				int nMatchLen;
+				size_t nMatchLen;
 				const wchar_t* pszRes = SearchStringWord(pLine, nLineLen, nNextWordFrom, searchWords, searchOption.bLoHiCase, &nMatchLen);
 				if (pszRes) {
 					pMatchRange->SetFromY(nLinePos);	// マッチ行
 					pMatchRange->SetToY  (nLinePos);	// マッチ行
 					pMatchRange->SetFromX((int)(pszRes - pLine));						// マッチ位置from
 					pMatchRange->SetToX  (pMatchRange->GetFrom().x + nMatchLen);// マッチ位置to
-					nRetVal = 1;
+					ret = true;
 					goto end_of_func;
 				}
 				// 次の行を見に行く
@@ -687,7 +687,7 @@ int SearchAgent::SearchWord(
 			}
 		}
 
-		nRetVal = 0;
+		ret = false;
 		goto end_of_func;
 	// 普通の検索 (正規表現でも単語単位でもない)
 	}else {
@@ -720,7 +720,7 @@ int SearchAgent::SearchWord(
 								pMatchRange->SetToY  (nLinePos);	// マッチ行
 								pMatchRange->SetFromX(nHitPosOld);	// マッチ位置from
  								pMatchRange->SetToX  (nIdxPosOld);	// マッチ位置to
-								nRetVal = 1;
+								ret = true;
 								goto end_of_func;
 							}else {
 								break;
@@ -732,7 +732,7 @@ int SearchAgent::SearchWord(
 							pMatchRange->SetToY  (nLinePos);	// マッチ行
 							pMatchRange->SetFromX(nHitPosOld);	// マッチ位置from
 							pMatchRange->SetToX  (nIdxPosOld);	// マッチ位置to
-							nRetVal = 1;
+							ret = true;
 							goto end_of_func;
 						}else {
 							break;
@@ -746,7 +746,7 @@ int SearchAgent::SearchWord(
 					nHitTo = pDocLine->GetLengthWithEOL();
 				}
 			}
-			nRetVal = 0;
+			ret = false;
 			goto end_of_func;
 		// 後方検索
 		}else {
@@ -767,14 +767,14 @@ int SearchAgent::SearchWord(
 					pMatchRange->SetToY  (nLinePos);	// マッチ行
 					pMatchRange->SetFromX(pszRes - pLine);							// マッチ位置from (文字単位)
 					pMatchRange->SetToX  (pMatchRange->GetFrom().x + nPatternLen);	// マッチ位置to   (文字単位)
-					nRetVal = 1;
+					ret = true;
 					goto end_of_func;
 				}
 				++nLinePos;
 				pDocLine = pDocLine->GetNextLine();
 				nIdxPos = 0;
 			}
-			nRetVal = 0;
+			ret = false;
 			goto end_of_func;
 		}
 	}
@@ -786,7 +786,7 @@ end_of_func:;
 	::MessageBox(NULL, buf, GSTR_APPNAME, MB_OK);
 #endif
 	
-	return nRetVal;
+	return ret;
 }
 
 

@@ -1916,8 +1916,8 @@ LRESULT EditWnd::DispatchEvent(
 		// 共有データ：自分Write→相手Read
 		// return 0以上：行データあり。wParamオフセットを除いた行データ長。0はEOFかOffsetがちょうどバッファ長だった
 		//       -1以下：エラー
-		int	nLineNum = wParam;
-		int	nLineOffset = lParam;
+		int	nLineNum = (int)wParam;
+		int	nLineOffset = (int)lParam;
 		if (nLineNum < 0 || (int)GetDocument().docLineMgr.GetLineCount() < nLineNum) {
 			return -2; // 行番号不正。LineCount == nLineNum はEOF行として下で処理
 		}
@@ -2998,7 +2998,7 @@ LRESULT EditWnd::OnSize2( WPARAM wParam, LPARAM lParam, bool bUpdateStatus )
 		if (csWindow.eSaveWindowSize == WinSizeMode::Save) {		// ウィンドウサイズ継承をするか
 			if (wParam == SIZE_MAXIMIZED) {					// 最大化はサイズを記録しない
 				if (csWindow.nWinSizeType != (int)wParam) {
-					csWindow.nWinSizeType = wParam;
+					csWindow.nWinSizeType = (int)wParam;
 				}
 			}else {
 				// Aero Snapの縦方向最大化状態で終了して次回起動するときは元のサイズにする必要があるので、
@@ -3015,7 +3015,7 @@ LRESULT EditWnd::OnSize2( WPARAM wParam, LPARAM lParam, bool bUpdateStatus )
 					csWindow.nWinSizeCX != rcWin.right - rcWin.left ||
 					csWindow.nWinSizeCY != rcWin.bottom - rcWin.top
 				) {
-					csWindow.nWinSizeType = wParam;
+					csWindow.nWinSizeType = (int)wParam;
 					csWindow.nWinSizeCX = rcWin.right - rcWin.left;
 					csWindow.nWinSizeCY = rcWin.bottom - rcWin.top;
 				}
@@ -3029,7 +3029,7 @@ LRESULT EditWnd::OnSize2( WPARAM wParam, LPARAM lParam, bool bUpdateStatus )
 		}
 	}
 
-	nWinSizeType = wParam;	// サイズ変更のタイプ
+	nWinSizeType = (int)wParam;	// サイズ変更のタイプ
 
 	// 2006.06.17 ryoji Rebar があればそれをツールバー扱いする
 	HWND hwndToolBar = toolbar.GetRebarHwnd() ? toolbar.GetRebarHwnd(): toolbar.GetToolbarHwnd();
@@ -3466,7 +3466,7 @@ BOOL EditWnd::DoMouseWheel(WPARAM wParam, LPARAM lParam)
 			if ((hwnd == tabWnd.hwndTab || hwnd == tabWnd.GetHwnd())) {
 				// 現在開いている編集窓のリストを得る
 				EditNode* pEditNodeArr;
-				int nRowNum = AppNodeManager::getInstance().GetOpenedWindowArr(&pEditNodeArr, true);
+				size_t nRowNum = AppNodeManager::getInstance().GetOpenedWindowArr(&pEditNodeArr, true);
 				if (nRowNum > 0) {
 					// 自分のウィンドウを調べる
 					int i, j;
@@ -3497,7 +3497,7 @@ BOOL EditWnd::DoMouseWheel(WPARAM wParam, LPARAM lParam)
 									break;
 							}
 							if (j < 0) {
-								for (j=nRowNum-1; j>i; --j) {
+								for (j=(int)nRowNum-1; j>i; --j) {
 									if (nGroup == pEditNodeArr[j].nGroup)
 										break;
 								}
@@ -4578,7 +4578,7 @@ PointEx* EditWnd::SavePhysPosOfAllView()
 		Point tmp = Point(0, view.pTextArea->GetViewTopLine());
 		const Layout* layoutLine = layoutMgr.SearchLineByLayoutY(tmp.y);
 		if (layoutLine) {
-			int nLineCenter = layoutLine->GetLogicOffset() + layoutLine->GetLengthWithoutEOL() / 2;
+			int nLineCenter = layoutLine->GetLogicOffset() + (int)layoutLine->GetLengthWithoutEOL() / 2;
 			pptPosArray[i * numOfPositions + 0].x = nLineCenter;
 			pptPosArray[i * numOfPositions + 0].y = layoutLine->GetLogicLineNo();
 		}else {

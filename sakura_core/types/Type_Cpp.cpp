@@ -315,7 +315,6 @@ size_t CppPreprocessMng::ScanLine(
 		if (stackptr > 0) {
 			--stackptr;
 			enablebuf &= ~bitpattern;
-			assert(stackptr > 0);
 			bitpattern = (1 << (stackptr - 1));
 		}
 	}else {
@@ -432,7 +431,7 @@ void DocOutline::MakeFuncList_C(
 	bool  bNoFunction = true; // fparamだけど関数定義でない可能性の場合
 
 	const int	nNamespaceNestMax	= 32;				// ネスト可能なネームスペース、クラス等の最大数
-	int			nNamespaceLen[nNamespaceNestMax + 1];	// ネームスペース全体の長さ
+	size_t		nNamespaceLen[nNamespaceNestMax + 1];	// ネームスペース全体の長さ
 	const int	nNamespaceLenMax 	= 512;				// 最大のネームスペース全体の長さ
 	wchar_t		szNamespace[nNamespaceLenMax];			// 現在のネームスペース(終端が\0になっているとは限らないので注意)
 	const int 	nItemNameLenMax	 	= 256;
@@ -447,11 +446,11 @@ void DocOutline::MakeFuncList_C(
 	//　class ClassName {
 	//　←
 	//　}}
-	wchar_t		szRawStringTag[32];	// C++11 raw string litteral
+	wchar_t szRawStringTag[32];	// C++11 raw string litteral
 	size_t nRawStringTagLen = 0;
 	size_t nRawStringTagCompLen = 0;
 
-	int	nItemLine(0);		// すぐ前の 関数 or クラス or 構造体 or 共用体 or 列挙体 or ネームスペースのある行
+	size_t nItemLine = 0;		// すぐ前の 関数 or クラス or 構造体 or 共用体 or 列挙体 or ネームスペースのある行
 	int	nItemFuncId = 0;
 
 	szWordPrev[0] = L'\0';
@@ -779,14 +778,14 @@ void DocOutline::MakeFuncList_C(
 					if (nMode2 == M2_FUNC_NAME_END || nMode2 == M2_KR_FUNC) {
 						bAddFunction = true;
 					}
-					int nItemNameLen = 0;
+					size_t nItemNameLen = 0;
 					size_t nLenDefPos = wcslen(LSW(STR_OUTLINE_CPP_DEFPOS));
 					if (nNestLevel_func !=0 || (szWordPrev[0] == L'=' && szWordPrev[1] == L'\0') || nMode2 == M2_AFTER_EQUAL)
 						++nNestLevel_func;
 					else if (1
 						&& (nMode2 & M2_AFTER_ITEM) != 0
 						&& nNestLevel_global < nNamespaceNestMax
-						&& (nNamespaceLen[nNestLevel_global] +  (nItemNameLen = wcslen(szItemName)) + nLenDefPos + 1) < nNamespaceLenMax
+						&& (nNamespaceLen[nNestLevel_global] + (nItemNameLen = wcslen(szItemName)) + nLenDefPos + 1) < nNamespaceLenMax
 						&& (nItemLine > 0)
 					) {
 						// ３番目の(&&の後の)条件
@@ -821,7 +820,7 @@ void DocOutline::MakeFuncList_C(
 						  →
 						  レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 						*/
-						Point ptPosXY = doc.layoutMgr.LogicToLayout(Point(0, nItemLine - 1));
+						Point ptPosXY = doc.layoutMgr.LogicToLayout(Point(0, (int)(nItemLine - 1)));
 #ifdef TRACE_OUTLINE
 						DEBUG_TRACE(_T("AppendData %d %ls\n"), nItemLine, szNamespace);
 #endif
@@ -1044,7 +1043,7 @@ void DocOutline::MakeFuncList_C(
 						  →
 						  レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 						*/
-						Point ptPosXY = doc.layoutMgr.LogicToLayout(Point(0, nItemLine - 1));
+						Point ptPosXY = doc.layoutMgr.LogicToLayout(Point(0, (int)nItemLine - 1));
 #ifdef TRACE_OUTLINE
 						DEBUG_TRACE(_T("AppendData %d %ls\n"), nItemLine, szNamespace);
 #endif
@@ -1236,7 +1235,7 @@ void EditView::SmartIndent_CPP(wchar_t wcChar)
 
 	wchar_t*	pszData = NULL;
 
-	int			nWork = 0;
+	size_t		nWork = 0;
 	ptrdiff_t	nCharChars;
 	wchar_t		pszSrc[1024];
 	bool		bChange;
@@ -1296,7 +1295,7 @@ void EditView::SmartIndent_CPP(wchar_t wcChar)
 					nWork = nCaretPosX_PHY;
 				}
 			}
-			int i;
+			size_t i;
 			for (i=0; i<nWork; ++i) {
 				if (pLine[i] != WCODE::TAB && pLine[i] != WCODE::SPACE) {
 					break;
@@ -1318,7 +1317,7 @@ void EditView::SmartIndent_CPP(wchar_t wcChar)
 			}
 			// 調整によって置換される箇所
 			rangeA.SetFrom(Point(0, caret.GetCaretLogicPos().y));
-			rangeA.SetTo(Point(i, caret.GetCaretLogicPos().y));
+			rangeA.SetTo(Point((int)i, caret.GetCaretLogicPos().y));
 		}
 		
 		// 対応する括弧をさがす
@@ -1459,7 +1458,7 @@ void EditView::SmartIndent_CPP(wchar_t wcChar)
 		}
 
 		// 調整後のカーソル位置を計算しておく
-		ptCP.x = nCaretPosX_PHY - rangeA.GetTo().x + nDataLen;
+		ptCP.x = (int)nCaretPosX_PHY - rangeA.GetTo().x + (int)nDataLen;
 		ptCP.y = caret.GetCaretLogicPos().y;
 
 		int nSrcLen = rangeA.GetTo().x - rangeA.GetFrom().x;

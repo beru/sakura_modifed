@@ -882,11 +882,11 @@ void GrepAgent::SetGrepResult(
 	LONGLONG	nLine,					// [in] マッチした行番号(1～)
 	int			nColumn,				// [in] マッチした桁番号(1～)
 	const wchar_t*	pCompareData,		// [in] 行の文字列
-	int			nLineLen,				// [in] 行の文字列の長さ
+	size_t		nLineLen,				// [in] 行の文字列の長さ
 	size_t		nEolCodeLen,			// [in] EOLの長さ
 	// マッチした文字列の情報
 	const wchar_t*	pMatchData,			// [in] マッチした文字列
-	int			nMatchLen,				// [in] マッチした文字列の長さ
+	size_t			nMatchLen,				// [in] マッチした文字列の長さ
 	// オプション
 	const GrepOption&	grepOption
 	)
@@ -894,9 +894,8 @@ void GrepAgent::SetGrepResult(
 	memBuf._SetStringLength(0);
 	wchar_t strWork[64];
 	const wchar_t* pDispData;
-	int k;
 	bool bEOL = true;
-	int nMaxOutStr = 0;
+	size_t nMaxOutStr = 0;
 
 	switch (grepOption.nGrepOutputStyle) {
 	// ノーマル
@@ -923,6 +922,7 @@ void GrepAgent::SetGrepResult(
 		break;
 	}
 
+	size_t k;
 	// 該当行
 	if (grepOption.nGrepOutputLineType != 0) {
 		pDispData = pCompareData;
@@ -1050,7 +1050,6 @@ int GrepAgent::DoGrepFile(
 	const wchar_t*	pszRes; // 2002/08/29 const付加
 	EncodingType	nCharCode;
 	const wchar_t*	pCompareData; // 2002/08/29 const付加
-	int		nColumn;
 	bool	bOutFileName;
 	bOutFileName = false;
 	Eol	eol;
@@ -1300,7 +1299,7 @@ int GrepAgent::DoGrepFile(
 					Grepにも試験導入。
 					WhereCurrentWordで単語を抽出して、その単語が検索語とあっているか比較する。
 				*/
-				int nMatchLen;
+				size_t nMatchLen;
 				int nIdx = 0;
 				// Jun. 26, 2003 genta 無駄なwhileは削除
 				while ((pszRes = SearchAgent::SearchStringWord(pLine, nLineLen, nIdx, searchWords, searchOption.bLoHiCase, &nMatchLen))) {
@@ -1353,7 +1352,7 @@ int GrepAgent::DoGrepFile(
 						break;
 					}
 
-					nColumn = pszRes - pCompareData + 1;
+					size_t nColumn = pszRes - pCompareData + 1;
 	
 					++nHitCount;
 					++(*pnHitCount);
@@ -1782,7 +1781,7 @@ int GrepAgent::DoGrepReplaceFile(
 					WhereCurrentWordで単語を抽出して、その単語が検索語とあっているか比較する。
 				*/
 				const wchar_t* pszRes;
-				int nMatchLen;
+				size_t nMatchLen;
 				ptrdiff_t nIdx = 0;
 				ptrdiff_t nOutputPos = 0;
 				// Jun. 26, 2003 genta 無駄なwhileは削除

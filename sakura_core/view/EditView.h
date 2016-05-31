@@ -440,7 +440,7 @@ public:
 	};
 	BOOL KeywordHelpSearchDict(LID_SKH nID, POINT* po, RECT* rc);	// 2006.04.10 fon
 
-	int IsSearchString(const StringRef& str, size_t, int*, int*) const;	// 現在位置が検索文字列に該当するか	// 2002.02.08 hor 引数追加
+	size_t IsSearchString(const StringRef& str, size_t, int*, int*) const;	// 現在位置が検索文字列に該当するか	// 2002.02.08 hor 引数追加
 
 	void GetCurrentTextForSearch(NativeW&, bool bStripMaxPath = true, bool bTrimSpaceTab = false);			// 現在カーソル位置単語または選択範囲より検索等のキーを取得
 	bool GetCurrentTextForSearchDlg(NativeW&, bool bGetHistory = false);		// 現在カーソル位置単語または選択範囲より検索等のキーを取得（ダイアログ用） 2006.08.23 ryoji
