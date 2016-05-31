@@ -872,7 +872,7 @@ BOOL EditDoc::OnFileClose(bool bGrepNoConfirm)
 		LPCWSTR		pszGrepKey = AppMode::getInstance().szGrepKey;
 		size_t nLen = wcslen(pszGrepKey);
 		NativeW	memDes;
-		LimitStringLengthW(pszGrepKey , nLen, 64, memDes);
+		LimitStringLength(pszGrepKey , nLen, 64, memDes);
 		auto_sprintf(szGrepTitle, LS(STR_TITLE_GREP),
 			memDes.GetStringPtr(),
 			(nLen > memDes.GetStringLength()) ? _T("...") : _T("")

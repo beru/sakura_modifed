@@ -47,7 +47,7 @@ wchar_t* wcs_pushA(wchar_t* dst, size_t dst_count, const char* src)
 	@date 2002/02/01 genta bugfix エスケープする文字とされる文字の出力順序が逆だった
 	@date 2004/06/19 genta Generic mapping対応
 */
-int cescape(
+size_t cescape(
 	const TCHAR* org,
 	TCHAR* buf,
 	TCHAR cesc,
@@ -270,7 +270,7 @@ const char* GetNextLimitedLengthText(
 
 
 // データを指定「文字数」以内に切り詰める。戻り値は結果の文字数。
-int LimitStringLengthW(
+size_t LimitStringLength(
 	const wchar_t*	pszData,		// [in]
 	size_t			nDataLength,	// [in]
 	size_t			nLimitLength,	// [in]

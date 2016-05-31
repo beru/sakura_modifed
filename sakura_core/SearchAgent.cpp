@@ -452,7 +452,7 @@ bool SearchAgent::PrevOrNextWord(
 
 		// 文字種類が変わるまで前方へサーチ
 		// 空白とタブは無視する
-		int nCount = 0;
+		size_t nCount = 0;
 		int nIdxNext = nIdx;
 		ptrdiff_t nCharChars = &pLine[nIdxNext] - NativeW::GetCharPrev(pLine, nLineLen, &pLine[nIdxNext]);
 		while (nCharChars > 0) {
@@ -501,19 +501,11 @@ int SearchAgent::SearchWord(
 	const SearchStringPattern& pattern			// 検索パターン
 	)
 {
-	DocLine*	pDocLine;
-	int	nLinePos;
-	int	nIdxPos;
 	int	nIdxPosOld;
-	const wchar_t*	pLine;
-	size_t nLineLen;
-	const wchar_t*	pszRes;
-	int	nHitTo;
-	ptrdiff_t	nHitPos;
 	int	nHitPosOld;
-	int			nRetVal = 0;
+	int nRetVal = 0;
 	const SearchOption&	searchOption = pattern.GetSearchOption();
-	Bregexp*	pRegexp = pattern.GetRegexp();
+	Bregexp* pRegexp = pattern.GetRegexp();
 #ifdef MEASURE_SEARCH_TIME
 	long clockStart, clockEnd;
 	clockStart = clock();
@@ -521,18 +513,19 @@ int SearchAgent::SearchWord(
 
 	// 正規表現
 	if (searchOption.bRegularExp) {
-		nLinePos = ptSerachBegin.y;		// 検索行＝検索開始行
-		pDocLine = docLineMgr.GetLine(nLinePos);
+		int nLinePos = ptSerachBegin.y;		// 検索行＝検索開始行
+		DocLine* pDocLine = docLineMgr.GetLine(nLinePos);
 		// 前方検索
 		if (eDirection == SearchDirection::Backward) {
 			//
 			// 前方(↑)検索(正規表現)
 			//
-			nHitTo = ptSerachBegin.x;				// 検索開始位置
-			nIdxPos = 0;
+			int nHitTo = ptSerachBegin.x;				// 検索開始位置
+			int nIdxPos = 0;
 			while (pDocLine) {
-				pLine = pDocLine->GetDocLineStrWithEOL(&nLineLen);
-				nHitPos = -1;	// -1:この行でマッチ位置なし
+				size_t nLineLen;
+				const wchar_t* pLine = pDocLine->GetDocLineStrWithEOL(&nLineLen);
+				ptrdiff_t nHitPos = -1;	// -1:この行でマッチ位置なし
 				for (;;) {
 					nHitPosOld = nHitPos;
 					nIdxPosOld = nIdxPos;
@@ -563,7 +556,7 @@ int SearchAgent::SearchWord(
 				if (nHitPosOld != -1) {
 					// この行でマッチした位置が存在するので、この行で検索終了
 					pMatchRange->SetFromX(nHitPosOld);	// マッチ位置from
-					pMatchRange->SetToX  (nIdxPosOld);	// マッチ位置to
+					pMatchRange->SetToX(nIdxPosOld);	// マッチ位置to
 					break;
 				}else {
 					// この行でマッチした位置が存在しないので、前の行を検索へ
@@ -580,9 +573,10 @@ int SearchAgent::SearchWord(
 			//
 			// 後方検索(正規表現)
 			//
-			nIdxPos = ptSerachBegin.x;
+			int nIdxPos = ptSerachBegin.x;
 			while (pDocLine) {
-				pLine = pDocLine->GetDocLineStrWithEOL(&nLineLen);
+				size_t nLineLen;
+				const wchar_t* pLine = pDocLine->GetDocLineStrWithEOL(&nLineLen);
 				if (1
 					&& nIdxPos <= (int)pDocLine->GetLengthWithoutEOL() 
 					&& pRegexp->Match(pLine, nLineLen, nIdxPos)
@@ -626,8 +620,8 @@ int SearchAgent::SearchWord(
 
 		// 前方検索
 		if (eDirection == SearchDirection::Backward) {
-			nLinePos = ptSerachBegin.y;
-			pDocLine = docLineMgr.GetLine(nLinePos);
+			int nLinePos = ptSerachBegin.y;
+			DocLine* pDocLine = docLineMgr.GetLine(nLinePos);
 			size_t nNextWordFrom;
 			size_t nNextWordFrom2;
 			size_t nNextWordTo2;
@@ -670,13 +664,14 @@ int SearchAgent::SearchWord(
 			}
 		// 後方検索
 		}else {
-			nLinePos = ptSerachBegin.y;
-			pDocLine = docLineMgr.GetLine(nLinePos);
+			int nLinePos = ptSerachBegin.y;
+			DocLine* pDocLine = docLineMgr.GetLine(nLinePos);
 			int nNextWordFrom = ptSerachBegin.x;
 			while (pDocLine) {
-				pLine = pDocLine->GetDocLineStrWithEOL(&nLineLen);
+				size_t nLineLen;
+				const wchar_t* pLine = pDocLine->GetDocLineStrWithEOL(&nLineLen);
 				int nMatchLen;
-				pszRes = SearchStringWord(pLine, nLineLen, nNextWordFrom, searchWords, searchOption.bLoHiCase, &nMatchLen);
+				const wchar_t* pszRes = SearchStringWord(pLine, nLineLen, nNextWordFrom, searchWords, searchOption.bLoHiCase, &nMatchLen);
 				if (pszRes) {
 					pMatchRange->SetFromY(nLinePos);	// マッチ行
 					pMatchRange->SetToY  (nLinePos);	// マッチ行
@@ -699,18 +694,18 @@ int SearchAgent::SearchWord(
 		const size_t nPatternLen = pattern.GetLen();
 		// 前方検索
 		if (eDirection == SearchDirection::Backward) {
-			nLinePos = ptSerachBegin.y;
-			nHitTo = ptSerachBegin.x;
-
-			nIdxPos = 0;
-			pDocLine = docLineMgr.GetLine(nLinePos);
+			int nLinePos = ptSerachBegin.y;
+			int nHitTo = ptSerachBegin.x;
+			int nIdxPos = 0;
+			DocLine* pDocLine = docLineMgr.GetLine(nLinePos);
 			while (pDocLine) {
-				pLine = pDocLine->GetDocLineStrWithEOL(&nLineLen);
-				nHitPos = -1;
+				size_t nLineLen;
+				const wchar_t* pLine = pDocLine->GetDocLineStrWithEOL(&nLineLen);
+				ptrdiff_t nHitPos = -1;
 				for (;;) {
 					nHitPosOld = nHitPos;
 					nIdxPosOld = nIdxPos;
-					pszRes = SearchString(
+					const wchar_t* pszRes = SearchString(
 						pLine,
 						nLineLen,
 						nIdxPos,
@@ -755,12 +750,13 @@ int SearchAgent::SearchWord(
 			goto end_of_func;
 		// 後方検索
 		}else {
-			nIdxPos = ptSerachBegin.x;
-			nLinePos = ptSerachBegin.y;
-			pDocLine = docLineMgr.GetLine(nLinePos);
+			int nIdxPos = ptSerachBegin.x;
+			int nLinePos = ptSerachBegin.y;
+			DocLine* pDocLine = docLineMgr.GetLine(nLinePos);
 			while (pDocLine) {
-				pLine = pDocLine->GetDocLineStrWithEOL(&nLineLen);
-				pszRes = SearchString(
+				size_t nLineLen;
+				const wchar_t* pLine = pDocLine->GetDocLineStrWithEOL(&nLineLen);
+				const wchar_t* pszRes = SearchString(
 					pLine,
 					nLineLen,
 					nIdxPos,
@@ -811,15 +807,9 @@ void SearchAgent::ReplaceData(DocLineReplaceArg* pArg)
 		pArg->pMemDeleted->clear();
 	}
 	
-	DocLine* pDocLine;
-	DocLine* pDocLinePrev;
-	DocLine* pDocLineNext;
 	size_t nWorkPos;
 	size_t nWorkLen;
-	const wchar_t* pLine;
-	size_t nLineLen;
-	int nProgress;
-	DocLine::MarkType	markNext;
+	DocLine::MarkType markNext;
 	//	May 15, 2000
 	HWND hwndCancel = NULL;	//	初期化
 	HWND hwndProgress = NULL;	//	初期化
@@ -827,7 +817,7 @@ void SearchAgent::ReplaceData(DocLineReplaceArg* pArg)
 	pArg->ptNewPos = pArg->delRange.GetFrom();
 
 	// 大量のデータを操作するとき
-	DlgCancel*	pDlgCancel = nullptr;
+	DlgCancel* pDlgCancel = nullptr;
 	class DlgCancelCloser {
 		DlgCancel*& pDlg;
 	public:
@@ -888,7 +878,7 @@ void SearchAgent::ReplaceData(DocLineReplaceArg* pArg)
 	}
 
 	// 現在行の情報を得る
-	pDocLine = docLineMgr.GetLine(pArg->delRange.GetTo().y);
+	DocLine* pDocLine = docLineMgr.GetLine(pArg->delRange.GetTo().y);
 	int i = pArg->delRange.GetTo().y;
 	if (0 < pArg->delRange.GetTo().y && !pDocLine) {
 		pDocLine = docLineMgr.GetLine(pArg->delRange.GetTo().y - 1);
@@ -898,10 +888,10 @@ void SearchAgent::ReplaceData(DocLineReplaceArg* pArg)
 	bool bSetMark = false;
 	// 後ろから処理していく
 	for (; i >= pArg->delRange.GetFrom().y && pDocLine; --i) {
-		pLine = pDocLine->GetPtr(); // 2002/2/10 aroka CMemory変更
-		nLineLen = pDocLine->GetLengthWithEOL(); // 2002/2/10 aroka CMemory変更
-		pDocLinePrev = pDocLine->GetPrevLine();
-		pDocLineNext = pDocLine->GetNextLine();
+		const wchar_t* pLine = pDocLine->GetPtr(); // 2002/2/10 aroka CMemory変更
+		size_t nLineLen = pDocLine->GetLengthWithEOL(); // 2002/2/10 aroka CMemory変更
+		DocLine* pDocLinePrev = pDocLine->GetPrevLine();
+		DocLine* pDocLineNext = pDocLine->GetNextLine();
 		// 現在行の削除開始位置を調べる
 		if (i == pArg->delRange.GetFrom().y) {
 			nWorkPos = pArg->delRange.GetFrom().x;
@@ -1094,7 +1084,7 @@ prev_line:;
 		if (hwndCancel) {
 			int nLines = pArg->delRange.GetTo().y - i;
 			if ((nLines % 32) == 0) {
-				nProgress = ::MulDiv(nLines, 100, nEditLines);
+				int nProgress = ::MulDiv(nLines, 100, nEditLines);
 				if (nProgressOld != nProgress) {
 					nProgressOld = nProgress;
 					Progress_SetPos(hwndProgress, nProgress + 1);
@@ -1148,8 +1138,8 @@ prev_line:;
 			nInsSize--;
 		}
 	}
-	StringRef	prevLine;
-	StringRef	nextLine;
+	StringRef prevLine;
+	StringRef nextLine;
 	NativeW	memCurLine;
 	if (!pDocLine) {
 		// ここでNULLが帰ってくるということは、
@@ -1159,7 +1149,8 @@ prev_line:;
 		// 2002/2/10 aroka 何度も GetPtr を呼ばない
 		if (!bInsertLineMode) {
 			memCurLine.swap(pDocLine->_GetDocLineData());
-			pLine = memCurLine.GetStringPtr(&nLineLen);
+			size_t nLineLen;
+			const wchar_t* pLine = memCurLine.GetStringPtr(&nLineLen);
 			prevLine = StringRef(pLine, pArg->delRange.GetFrom().x);
 			nextLine = StringRef(&pLine[pArg->delRange.GetFrom().x], nLineLen - pArg->delRange.GetFrom().x);
 			pArg->nInsSeq = ModifyVisitor().GetLineModifiedSeq(pDocLine);
@@ -1225,7 +1216,7 @@ prev_line:;
 			++(pArg->ptNewPos.y);	// 挿入された部分の次の位置の行
 			if (hwndCancel) {
 				if ((nCount % 32) == 0) {
-					nProgress = ::MulDiv(nCount + nDelLines, 100, nEditLines);
+					int nProgress = ::MulDiv(nCount + nDelLines, 100, nEditLines);
 					if (nProgressOld != nProgress) {
 						nProgressOld = nProgress;
 						Progress_SetPos(hwndProgress, nProgress + 1);

@@ -304,7 +304,7 @@ void EditView::GetCurrentTextForSearch(NativeW& memCurText, bool bStripMaxPath /
 		if (GetSelectedDataOne(memCurText, INT_MAX)) {
 			// 検索文字列を現在位置の単語で初期化
 			if (bStripMaxPath) {
-				LimitStringLengthW(memCurText.GetStringPtr(), memCurText.GetStringLength(), _MAX_PATH - 1, memTopic);
+				LimitStringLength(memCurText.GetStringPtr(), memCurText.GetStringLength(), _MAX_PATH - 1, memTopic);
 			}else {
 				memTopic = memCurText;
 			}
@@ -335,7 +335,7 @@ void EditView::GetCurrentTextForSearch(NativeW& memCurText, bool bStripMaxPath /
 				if (GetSelectedDataOne(memCurText, INT_MAX)) {
 					// 検索文字列を現在位置の単語で初期化
 					if (bStripMaxPath) {
-						LimitStringLengthW(memCurText.GetStringPtr(), memCurText.GetStringLength(), _MAX_PATH - 1, memTopic);
+						LimitStringLength(memCurText.GetStringPtr(), memCurText.GetStringLength(), _MAX_PATH - 1, memTopic);
 					}else {
 						memTopic = memCurText;
 					}

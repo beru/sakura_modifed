@@ -46,7 +46,7 @@ bool Figure_Text::DrawImp(ColorStrategyInfo& csInfo)
 		nLength,
 		bTrans
 	);
-	csInfo.nPosInLogic += nLength;
+	csInfo.nPosInLogic += (int)nLength;
 	return true;
 }
 
@@ -66,7 +66,7 @@ bool FigureSpace::DrawImp(ColorStrategyInfo& csInfo)
 	DrawImp_StylePop(csInfo);
 	DrawImp_DrawUnderline(csInfo, sPos);
 	// 1文字前提
-	csInfo.nPosInLogic += NativeW::GetSizeOfChar(	// 行末以外はここでスキャン位置を１字進める
+	csInfo.nPosInLogic += (int)NativeW::GetSizeOfChar(	// 行末以外はここでスキャン位置を１字進める
 		csInfo.pLineOfLogic,
 		csInfo.GetDocLine()->GetLengthWithoutEOL(),
 		csInfo.GetPosInLogic()
@@ -158,11 +158,13 @@ void FigureSpace::DrawImp_DrawUnderline(ColorStrategyInfo& csInfo, DispPos& pos)
 		font.hFont = csInfo.view.GetFontset().ChooseFontHandle(font.fontAttr);
 		csInfo.gr.PushMyFont(font);
 
-		int nLength = csInfo.pDispPos->GetDrawCol() - pos.GetDrawCol();
+		ASSERT_GE(csInfo.pDispPos->GetDrawCol(), (int)pos.GetDrawCol());
+		size_t nLength = csInfo.pDispPos->GetDrawCol() - pos.GetDrawCol();
 		std::vector<wchar_t> szText(nLength);
 		wchar_t* pszText = &szText[0];
-		for (int i=0; i<nLength; ++i)
+		for (size_t i=0; i<nLength; ++i) {
 			pszText[i] = L' ';
+		}
 		csInfo.view.GetTextDrawer().DispText(
 			csInfo.gr,
 			&pos,

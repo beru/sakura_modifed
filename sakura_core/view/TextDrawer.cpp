@@ -52,11 +52,11 @@ void TextDrawer::DispText(
 	HDC			hdc,
 	DispPos*	pDispPos,
 	const wchar_t* pData,
-	int			nLength,
+	size_t		nLength,
 	bool		bTransparent
 	) const
 {
-	if (0 >= nLength) {
+	if (nLength == 0) {
 		return;
 	}
 	int x = pDispPos->GetDrawPos().x;

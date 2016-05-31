@@ -80,7 +80,7 @@ void ViewCommander::Command_Jump(void)
 			  →
 			  レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 			*/
-			Point ptPosXY = layoutMgr.LogicToLayout(Point(0, nLineNum - 1));
+			Point ptPosXY = layoutMgr.LogicToLayout(Point(0, (int)nLineNum - 1));
 			nLineNum = ptPosXY.y + 1;
 		}else {
 			if (0 == nLineNum) {
@@ -94,7 +94,7 @@ void ViewCommander::Command_Jump(void)
 		view.AddCurrentLineToHistory();
 		// 2006.07.09 genta 選択状態を解除しないように
 		view.MoveCursorSelecting(
-			Point(0, nLineNum - 1),
+			Point(0, (int)nLineNum - 1),
 			view.GetSelectionInfo().bSelectingLock,
 			_CARETMARGINRATE / 3
 		);
@@ -117,7 +117,7 @@ void ViewCommander::Command_Jump(void)
 		  →
 		  物理位置(行頭からのバイト数、折り返し無し行位置)
 		*/
-		Point ptPosXY = layoutMgr.LayoutToLogic(Point(0, nLineCount));
+		Point ptPosXY = layoutMgr.LayoutToLogic(Point(0, (int)nLineCount));
 		nLineCount = ptPosXY.y;
 	}
 
@@ -234,7 +234,7 @@ void ViewCommander::Command_Jump(void)
 	  →
 	  レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 	*/
-	Point ptPos = layoutMgr.LogicToLayout(Point(0, nLineCount));
+	Point ptPos = layoutMgr.LogicToLayout(Point(0, (int)nLineCount));
 	// Sep. 8, 2000 genta
 	view.AddCurrentLineToHistory();
 	// 2006.07.09 genta 選択状態を解除しないように
@@ -347,7 +347,7 @@ re_do:;								// hor
 			&& bRedo	// 最初の検索
 		) {
 			// 2011.02.02 layoutMgr→docLineMgr
-			ptXY.y = docLineMgr.GetLineCount();	// 2002/06/01 MIK
+			ptXY.y = (int)docLineMgr.GetLineCount();	// 2002/06/01 MIK
 			bRedo = false;
 			goto re_do;	// 末尾から再検索
 		}
@@ -450,7 +450,7 @@ void ViewCommander::Command_FuncList_Prev(void)
 		if (!GetDllShareData().common.search.bSearchAll) {
 			break;
 		}
-		ptXY.y = docLineMgr.GetLineCount();
+		ptXY.y = (int)docLineMgr.GetLineCount();
 	}
 	view.SendStatusMessage(LS(STR_ERR_SRPREV2));
 	AlertNotFound( view.GetHwnd(), false, LS(STR_FUCLIST_PREV_NOT_FOUND) );

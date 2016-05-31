@@ -349,8 +349,8 @@ void HokanMgr::HokanSearchByKeyword(
 		if (kwdset == -1) {
 			continue;
 		}
-		const int keyCount = keywordMgr.GetKeywordNum(kwdset);
-		for (int i=0; i<keyCount; ++i) {
+		const size_t keyCount = keywordMgr.GetKeywordNum(kwdset);
+		for (size_t i=0; i<keyCount; ++i) {
 			const wchar_t* word = keywordMgr.GetKeyword(kwdset, i);
 			int nRet;
 			if (bHokanLoHiCase) {

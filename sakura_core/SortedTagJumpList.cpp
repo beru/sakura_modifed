@@ -89,7 +89,7 @@ void SortedTagJumpList::Empty(void)
 int SortedTagJumpList::AddBaseDir(const TCHAR* baseDir)
 {
 	baseDirArr.push_back(baseDir);
-	return baseDirArr.size() -1;
+	return baseDirArr.size() - 1;
 }
 
 /*

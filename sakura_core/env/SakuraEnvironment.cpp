@@ -442,7 +442,7 @@ void SakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszBu
 			{
 				NativeW memDes;
 				// szGrepKey ¨ memDes
-				LimitStringLengthW(AppMode::getInstance().szGrepKey, wcslen(AppMode::getInstance().szGrepKey), (q_max - q > 32 ? 32 : q_max - q - 3), memDes);
+				LimitStringLength(AppMode::getInstance().szGrepKey, wcslen(AppMode::getInstance().szGrepKey), (q_max - q > 32 ? 32 : q_max - q - 3), memDes);
 				if ((int)wcslen(AppMode::getInstance().szGrepKey) > memDes.GetStringLength()) {
 					memDes.AppendStringLiteral(L"...");
 				}
@@ -723,8 +723,8 @@ std::tstring SakuraEnvironment::GetDlgInitialDir(bool bControlProcess)
 		{
 			const MruFolder mru;
 			auto& vMRU = mru.GetPathList();
-			int nCount = mru.Length();
-			for (int i=0; i<nCount ; ++i) {
+			size_t nCount = mru.Length();
+			for (size_t i=0; i<nCount ; ++i) {
 				DWORD attr = GetFileAttributes(vMRU[i]);
 				if ((attr != -1) && (attr & FILE_ATTRIBUTE_DIRECTORY) != 0) {
 					return vMRU[i];

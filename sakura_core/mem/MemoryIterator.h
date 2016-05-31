@@ -110,8 +110,8 @@ public:
 
 private:
 	// コンストラクタで受け取ったパラメータ (固定)
-	const wchar_t*		pLine;
-	const size_t		nLineLen;  // データ長。文字単位。
+	const wchar_t*	pLine;
+	const size_t	nLineLen;  // データ長。文字単位。
 	const size_t	nTabSpace;
 	const size_t	nIndent;
 

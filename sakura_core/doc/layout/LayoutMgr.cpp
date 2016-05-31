@@ -477,14 +477,14 @@ void LayoutMgr::GetEndLayoutPos(
 	Layout* btm = pLayoutBot;
 	if (btm->eol != EolType::None) {
 		// 末尾に改行がある
-		ptLayoutEnd->Set(0, GetLineCount());
+		ptLayoutEnd->Set(0, (int)GetLineCount());
 	}else {
 		MemoryIterator it(btm, GetTabSpace());
 		while (!it.end()) {
 			it.scanNext();
 			it.addDelta();
 		}
-		ptLayoutEnd->Set(it.getColumn(), GetLineCount() - 1);
+		ptLayoutEnd->Set((int)it.getColumn(), (int)GetLineCount() - 1);
 		// [EOF]のみ折り返すのはやめる	// 2009.02.17 ryoji
 		//// 2006.10.01 Moca Start [EOF]のみのレイアウト行処理が抜けていたバグを修正
 		//if (GetMaxLineKetas() <= ptLayoutEnd->x) {
@@ -650,8 +650,8 @@ bool LayoutMgr::WhereCurrentWord(
 
 	if (nRetCode) {
 		// 論理位置→レイアウト位置変換
-		Point ptFrom = LogicToLayout(Point(nFromX, pLayout->GetLogicLineNo()), nLineNum);
-		Point ptTo = LogicToLayout(Point(nToX, pLayout->GetLogicLineNo()), nLineNum);
+		Point ptFrom = LogicToLayout(Point((int)nFromX, pLayout->GetLogicLineNo()), nLineNum);
+		Point ptTo = LogicToLayout(Point((int)nToX, pLayout->GetLogicLineNo()), nLineNum);
 		pSelect->SetFrom(ptFrom);
 		pSelect->SetTo(ptTo);
 	}
@@ -687,7 +687,7 @@ int LayoutMgr::PrevOrNextWord(
 	if (nRetCode) {
 		// 論理位置→レイアウト位置変換
 		*pptLayoutNew = LogicToLayout(
-			Point(nPosNew, pLayout->GetLogicLineNo()),
+			Point((int)nPosNew, pLayout->GetLogicLineNo()),
 			nLineNum
 		);
 	}
@@ -715,7 +715,7 @@ int LayoutMgr::SearchWord(
 	// 単語検索 -> logicRange (データ位置)
 	Range logicRange;
 	int nRetCode = SearchAgent(*pDocLineMgr).SearchWord(
-		Point(pLayout->GetLogicOffset() + nIdx, pLayout->GetLogicLineNo()),
+		Point(pLayout->GetLogicOffset() + (int)nIdx, pLayout->GetLogicLineNo()),
 		searchDirection,
 		&logicRange, //pMatchRange,
 		pattern
@@ -777,7 +777,7 @@ Point LayoutMgr::LogicToLayout(
 			pLayout = SearchLineByLayoutY(nCaretPosY);
 		}
 		if (!pLayout) {
-			ptLayout.SetY(nLines);
+			ptLayout.SetY((int)nLines);
 			return ptLayout;
 		}
 		
@@ -884,8 +884,8 @@ Point LayoutMgr::LogicToLayout(
 
 	// 2004.06.16 Moca インデント表示の際の位置ずれ修正
 	ptLayout.Set(
-		pLayout ? nCaretPosX : 0,
-		nCaretPosY
+		pLayout ? (int)nCaretPosX : 0,
+		(int)nCaretPosY
 	);
 	return ptLayout;
 }
@@ -907,7 +907,7 @@ PointEx LayoutMgr::LayoutToLogicEx(
 	if (ptLayout.y > (int)nLines) {
 		// 2007.10.11 kobake Y値が間違っていたので修正
 		//pptLogic->Set(0, nLines);
-		ptLogic.Set(0, pDocLineMgr->GetLineCount());
+		ptLogic.Set(0, (int)pDocLineMgr->GetLineCount());
 		return ptLogic;
 	}
 
@@ -924,12 +924,12 @@ PointEx LayoutMgr::LayoutToLogicEx(
 		if (0 < ptLayout.y) {
 			pLayout = SearchLineByLayoutY(ptLayout.y - 1);
 			if (!pLayout) {
-				ptLogic.Set(0, pDocLineMgr->GetLineCount());
+				ptLogic.Set(0, (int)pDocLineMgr->GetLineCount());
 				return ptLogic;
 			}else {
 				pData = GetLineStr(ptLayout.y - 1, &nDataLen);
 				if (WCODE::IsLineDelimiter(pData[nDataLen - 1], GetDllShareData().common.edit.bEnableExtEol)) {
-					ptLogic.Set(0, pDocLineMgr->GetLineCount());
+					ptLogic.Set(0, (int)pDocLineMgr->GetLineCount());
 					return ptLogic;
 				}else {
 					ptLogic.y = pDocLineMgr->GetLineCount() - 1; // 2002/2/10 aroka DocLineMgr変更
@@ -942,7 +942,7 @@ PointEx LayoutMgr::LayoutToLogicEx(
 		}
 		// 2007.10.11 kobake Y値が間違っていたので修正
 		//pptLogic->Set(0, nLines);
-		ptLogic.Set(0, pDocLineMgr->GetLineCount());
+		ptLogic.Set(0, (int)pDocLineMgr->GetLineCount());
 		return ptLogic;
 	}else {
 		ptLogic.y = pLayout->GetLogicLineNo();

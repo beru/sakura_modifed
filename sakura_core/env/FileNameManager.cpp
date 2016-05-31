@@ -386,7 +386,7 @@ bool FileNameManager::GetMenuFullLabel(
 		const int GREPKEY_LIMIT_LEN = 64;
 		// CSakuraEnvironment::ExpandParameter Ç≈ÇÕ 32ï∂éöêßå¿
 		// ÉÅÉjÉÖÅ[ÇÕ 64ï∂éöêßå¿
-		LimitStringLengthW(pfi->szGrepKey, nGrepKeyLen, GREPKEY_LIMIT_LEN, memDes);
+		LimitStringLength(pfi->szGrepKey, nGrepKeyLen, GREPKEY_LIMIT_LEN, memDes);
 		
 		const TCHAR* pszKey;
 		TCHAR szMenu2[GREPKEY_LIMIT_LEN * 2 * 2 + 1]; // WCHAR=>ACHARÇ≈2î{ÅA&Ç≈2î{

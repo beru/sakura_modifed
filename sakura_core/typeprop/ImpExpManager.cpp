@@ -1147,7 +1147,7 @@ bool ImpExpKeyword::Import(const wstring& sFileName, wstring& sErrMsg)
 		// 解析
 		if (0 < szLine.length()) {
 			// ｎ番目のセットにキーワードを追加
-			int nRetValue = common.specialKeyword.keywordSetMgr.AddKeyword(nIdx, szLine.c_str());
+			size_t nRetValue = common.specialKeyword.keywordSetMgr.AddKeyword(nIdx, szLine.c_str());
 			if (nRetValue == 2) {
 				bAddError = true;
 				break;

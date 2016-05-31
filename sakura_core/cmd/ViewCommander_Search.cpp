@@ -305,7 +305,7 @@ end_of_func:;
 		if (!pszNotFoundMessage) {
 			NativeW keyName;
 			auto& curSearchKey = view.strCurSearchKey;
-			LimitStringLengthW(curSearchKey.c_str(), curSearchKey.size(), _MAX_PATH, keyName);
+			LimitStringLength(curSearchKey.c_str(), curSearchKey.size(), _MAX_PATH, keyName);
 			if (keyName.GetStringLength() < curSearchKey.size()) {
 				keyName.AppendStringLiteral(L"...");
 			}
@@ -463,7 +463,7 @@ end_of_func:;
 		// 検索／置換  見つからないときメッセージを表示
 		NativeW keyName;
 		auto& curSearchKey = view.strCurSearchKey;
-		LimitStringLengthW(curSearchKey.c_str(), curSearchKey.size(), _MAX_PATH, keyName);
+		LimitStringLength(curSearchKey.c_str(), curSearchKey.size(), _MAX_PATH, keyName);
 		if (keyName.GetStringLength() < curSearchKey.size()) {
 			keyName.AppendStringLiteral(L"...");
 		}

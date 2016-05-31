@@ -572,7 +572,7 @@ bool DlgTypeList::CopyType()
 			size_t nTempLen = auto_strlen( szTemp );
 			NativeT mem;
 			// バッファをはみ出さないように
-			LimitStringLengthT( szTemp, nTempLen, _countof(type.szTypeName) - nLen - 1, mem );
+			LimitStringLength( szTemp, nTempLen, _countof(type.szTypeName) - nLen - 1, mem );
 			auto_strcpy( type.szTypeName, mem.GetStringPtr() );
 			auto_strcat(type.szTypeName, szNum);
 			bUpdate = false;
