@@ -151,14 +151,14 @@ HRESULT WSHIfObj::MacroCommand(
 			strArgs[i] = NULL;
 			strLengths[i] = 0;
 		}
-		WCHAR* s = NULL;							// 初期化必須
+		wchar_t* s = NULL;							// 初期化必須
 		Variant varCopy;							// VT_BYREFだと困るのでコピー用
 		int Len;
 		for (int i=0; i<argCount; ++i) {
 			if (VariantChangeType(&varCopy.data, &(arguments->rgvarg[i]), 0, VT_BSTR) == S_OK) {
 				Wrap(&varCopy.data.bstrVal)->GetW(&s, &Len);
 			}else {
-				s = new WCHAR[1];
+				s = new wchar_t[1];
 				s[0] = 0;
 				Len = 0;
 			}
@@ -167,7 +167,7 @@ HRESULT WSHIfObj::MacroCommand(
 		}
 
 		// 2009.10.29 syat HandleCommandはサブクラスでオーバーライドする
-		HandleCommand(*pView, id, const_cast<WCHAR const **>(&strArgs[0]), &strLengths[0], argCount);
+		HandleCommand(*pView, id, const_cast<wchar_t const **>(&strArgs[0]), &strLengths[0], argCount);
 
 		//	Nov. 29, 2005 FILE 配列の破棄なので、[括弧]を追加
 		for (int j=0; j<argCount; ++j) {

@@ -295,10 +295,10 @@ void EditView::ISearchExec(DWORD wChar)
 	}
 
 	if (wChar <= 0xffff) {
-		strCurSearchKey.append(1, (WCHAR)wChar);
+		strCurSearchKey.append(1, (wchar_t)wChar);
 	}else {
-		strCurSearchKey.append(1, (WCHAR)(wChar>>16));
-		strCurSearchKey.append(1, (WCHAR)wChar);
+		strCurSearchKey.append(1, (wchar_t)(wChar>>16));
+		strCurSearchKey.append(1, (wchar_t)wChar);
 	}
 	
 	ISearchExec(false);
@@ -314,7 +314,7 @@ void EditView::ISearchExec(LPCWSTR pszText)
 {
 	// ˆê•¶š‚¸‚Â•ª‰ğ‚µ‚ÄÀs
 
-	const WCHAR* p = pszText;
+	const wchar_t* p = pszText;
 	DWORD c;
 	while (*p != L'\0') {
 		if (IsUtf16SurrogHi(*p) && IsUtf16SurrogLow(*(p + 1))) {

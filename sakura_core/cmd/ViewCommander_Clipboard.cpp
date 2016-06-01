@@ -663,7 +663,7 @@ void ViewCommander::Command_CopyLinesWithLineNumber(void)
 static bool AppendHTMLColor(
 	const ColorAttr& colorAttrLast, ColorAttr& colorAttrLast2,
 	const FontAttr& fontAttrLast, FontAttr& fontAttrLast2,
-	const WCHAR* pAppendStr, int nLen,
+	const wchar_t* pAppendStr, int nLen,
 	NativeW& memClip
 	)
 {
@@ -693,7 +693,7 @@ static bool AppendHTMLColor(
 				if (colorAttrLast.cTEXT != colorAttrLast2.cTEXT
 					|| colorAttrLast.cBACK != colorAttrLast2.cBACK
 				) {
-					WCHAR szColor[60];
+					wchar_t szColor[60];
 					DWORD dwTEXTColor = (GetRValue(colorAttrLast.cTEXT) << 16) + (GetGValue(colorAttrLast.cTEXT) << 8) + GetBValue(colorAttrLast.cTEXT);
 					DWORD dwBACKColor = (GetRValue(colorAttrLast.cBACK) << 16) + (GetGValue(colorAttrLast.cBACK) << 8) + GetBValue(colorAttrLast.cBACK);
 					swprintf(szColor, L"<span style=\"color:#%06x;background-color:#%06x\">", dwTEXTColor, dwBACKColor);
@@ -770,7 +770,7 @@ void ViewCommander::Command_Copy_Color_HTML(bool bLineNumber)
 				nIdxTo   = view.LineColumnToIndex(pLayout, rcSel.right);
 				// 改行は除く
 				if (nIdxTo - nIdxFrom > 0) {
-					const WCHAR* pLine = pLayout->GetPtr();
+					const wchar_t* pLine = pLayout->GetPtr();
 					if (pLine[nIdxTo - 1] == L'\n' || pLine[nIdxTo - 1] == L'\r') {
 						--nIdxTo;
 					}
@@ -813,7 +813,7 @@ void ViewCommander::Command_Copy_Color_HTML(bool bLineNumber)
 	}
 	// 行番号の幅を計算
 	int nLineNumberMaxLen = 0;
-	WCHAR szLineFormat[10];
+	wchar_t szLineFormat[10];
 	szLineFormat[0] = L'\0';
 	NativeW memNullLine;
 	if (bLineNumber) {
@@ -847,7 +847,7 @@ void ViewCommander::Command_Copy_Color_HTML(bool bLineNumber)
 	{
 		COLORREF cBACK = type.colorInfoArr[COLORIDX_TEXT].colorAttr.cBACK;
 		DWORD dwBACKColor = (GetRValue(cBACK) << 16) + (GetGValue(cBACK) << 8) + GetBValue(cBACK);
-		WCHAR szBuf[50];
+		wchar_t szBuf[50];
 		swprintf(szBuf, L"<pre style=\"background-color:#%06x\">", dwBACKColor);
 		memClip.AppendString(szBuf);
 	}
@@ -893,7 +893,7 @@ void ViewCommander::Command_Copy_Color_HTML(bool bLineNumber)
 				colorAttr = info.colorAttr;
 			}
 		}
-		const WCHAR* pLine = pDocLine->GetPtr();
+		const wchar_t* pLine = pDocLine->GetPtr();
 		for (;
 			pLayout->GetLogicLineNo() == nLineNum;
 			++nLayoutLineNum, pLayout = pLayout->GetNextLayout()
@@ -909,7 +909,7 @@ void ViewCommander::Command_Copy_Color_HTML(bool bLineNumber)
 					nIdxTo   = (int)view.LineColumnToIndex(pLayout, rcSel.right);
 					// 改行は除く
 					if (nIdxTo - nIdxFrom > 0) {
-						const WCHAR* pLine = pLayout->GetPtr();
+						const wchar_t* pLine = pLayout->GetPtr();
 						if (pLine[nIdxTo - 1] == L'\n' || pLine[nIdxTo - 1] == L'\r') {
 							--nIdxTo;
 						}
@@ -932,7 +932,7 @@ void ViewCommander::Command_Copy_Color_HTML(bool bLineNumber)
 				break;
 			}
 			if (bLineNumber) {
-				WCHAR szLineNum[14];
+				wchar_t szLineNum[14];
 				if (type.bLineNumIsCRLF) {
 					if (pLayout->GetLogicOffset() != 0) {
 						if (bLineNumLayout) {
@@ -1126,7 +1126,7 @@ void ViewCommander::Command_CopyFileName(void)
 {
 	if (GetDocument().docFile.GetFilePathClass().IsValidPath()) {
 		// クリップボードにデータを設定
-		const WCHAR* pszFile = to_wchar(GetDocument().docFile.GetFileName());
+		const wchar_t* pszFile = to_wchar(GetDocument().docFile.GetFileName());
 		view.MySetClipboardData(pszFile , wcslen(pszFile), false);
 	}else {
 		ErrorBeep();

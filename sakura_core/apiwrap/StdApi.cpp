@@ -16,7 +16,7 @@ using namespace std;
 */
 static
 ACHAR* CreateMbString(
-	const WCHAR*	pWideString,	// [in]  元のWCHAR文字列
+	const wchar_t*	pWideString,	// [in]  元のWCHAR文字列
 	int				nWideLength,	// [in]  元のWCHAR文字列の長さ。文字単位。
 	int*			pnMbLength		// [out] 変換されたACHAR文字列の長さの受け取り先。文字単位。
 )

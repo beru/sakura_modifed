@@ -326,9 +326,9 @@ int tchar_vsprintf_s(ACHAR* buf, size_t nBufCount, const ACHAR* format, va_list&
 	return tchar_vsprintf_s_imp<ACHAR>(buf, nBufCount, format, v, false);
 }
 
-int tchar_vsprintf_s(WCHAR* buf, size_t nBufCount, const WCHAR* format, va_list& v)
+int tchar_vsprintf_s(wchar_t* buf, size_t nBufCount, const wchar_t* format, va_list& v)
 {
-	return tchar_vsprintf_s_imp<WCHAR>(buf, nBufCount, format, v, false);
+	return tchar_vsprintf_s_imp<wchar_t>(buf, nBufCount, format, v, false);
 }
 
 
@@ -339,7 +339,7 @@ int tchar_vsprintf(ACHAR* buf, const ACHAR* format, va_list& v)
 {
 	return tchar_vsprintf_s(buf, MAX_BUF, format, v);
 }
-int tchar_vsprintf(WCHAR* buf, const WCHAR* format, va_list& v)
+int tchar_vsprintf(wchar_t* buf, const wchar_t* format, va_list& v)
 {
 	return tchar_vsprintf_s(buf, MAX_BUF, format, v);
 }
@@ -352,9 +352,9 @@ int tchar_vsnprintf_s(ACHAR* buf, size_t nBufCount, const ACHAR* format, va_list
 {
 	return tchar_vsprintf_s_imp<ACHAR>(buf, nBufCount, format, v, true);
 }
-int tchar_vsnprintf_s(WCHAR* buf, size_t nBufCount, const WCHAR* format, va_list& v)
+int tchar_vsnprintf_s(wchar_t* buf, size_t nBufCount, const wchar_t* format, va_list& v)
 {
-	return tchar_vsprintf_s_imp<WCHAR>(buf, nBufCount, format, v, true);
+	return tchar_vsprintf_s_imp<wchar_t>(buf, nBufCount, format, v, true);
 }
 
 
@@ -362,9 +362,9 @@ int tchar_vsnprintf_s(WCHAR* buf, size_t nBufCount, const WCHAR* format, va_list
 //
 // (実装について)
 //     内容が同じなので、templateでも良かったのですが、
-//     そうすると、ACHAR, WCHAR 以外の型からの暗黙で安全なキャストが
+//     そうすると、ACHAR, wchar_t 以外の型からの暗黙で安全なキャストが
 //     効かなくなり、コーディングが不便になるため、
-//     あえて、ACHAR, WCHAR で関数をひとつずつ定義しています。
+//     あえて、ACHAR, wchar_t で関数をひとつずつ定義しています。
 //
 int tchar_sprintf_s(ACHAR* buf, size_t nBufCount, const ACHAR* format, ...)
 {
@@ -374,7 +374,7 @@ int tchar_sprintf_s(ACHAR* buf, size_t nBufCount, const ACHAR* format, ...)
 	va_end(v);
 	return ret;
 }
-int tchar_sprintf_s(WCHAR* buf, size_t nBufCount, const WCHAR* format, ...)
+int tchar_sprintf_s(wchar_t* buf, size_t nBufCount, const wchar_t* format, ...)
 {
 	va_list v;
 	va_start(v, format);
@@ -389,9 +389,9 @@ int tchar_sprintf_s(WCHAR* buf, size_t nBufCount, const WCHAR* format, ...)
 //
 // (実装について)
 //     内容が同じなので、templateでも良かったのですが、
-//     そうすると、ACHAR, WCHAR 以外の型からの暗黙で安全なキャストが
+//     そうすると、ACHAR, wchar_t 以外の型からの暗黙で安全なキャストが
 //     効かなくなり、コーディングが不便になるため、
-//     あえて、ACHAR, WCHAR で関数をひとつずつ定義しています。
+//     あえて、ACHAR, wchar_t で関数をひとつずつ定義しています。
 //
 int tchar_sprintf(ACHAR* buf, const ACHAR* format, ...)
 {
@@ -402,7 +402,7 @@ int tchar_sprintf(ACHAR* buf, const ACHAR* format, ...)
 	return ret;
 }
 
-int tchar_sprintf(WCHAR* buf, const WCHAR* format, ...)
+int tchar_sprintf(wchar_t* buf, const wchar_t* format, ...)
 {
 	va_list v;
 	va_start(v, format);
@@ -422,7 +422,7 @@ int tchar_snprintf_s(ACHAR* buf, size_t count, const ACHAR* format, ...)
 	va_end(v);
 	return ret;
 }
-int tchar_snprintf_s(WCHAR* buf, size_t count, const WCHAR* format, ...)
+int tchar_snprintf_s(wchar_t* buf, size_t count, const wchar_t* format, ...)
 {
 	va_list v;
 	va_start(v, format);

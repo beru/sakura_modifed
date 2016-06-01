@@ -70,7 +70,7 @@ protected:
 
 	// 非実装提供
 	virtual bool HandleFunction(EditView& view, EFunctionCode index, const VARIANT* arguments, const int argSize, VARIANT& result) = 0;		// 関数を処理する
-	virtual bool HandleCommand(EditView& view, EFunctionCode index, const WCHAR* arguments[], const int argLengths[], const int argSize) = 0;	// コマンドを処理する
+	virtual bool HandleCommand(EditView& view, EFunctionCode index, const wchar_t* arguments[], const int argLengths[], const int argSize) = 0;	// コマンドを処理する
 	virtual MacroFuncInfoArray GetMacroCommandInfo() const = 0;	// コマンド情報を取得する
 	virtual MacroFuncInfoArray GetMacroFuncInfo() const = 0;	// 関数情報を取得する
 

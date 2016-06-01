@@ -121,7 +121,7 @@ public:
 protected:
 
 	static bool _match_charlist(const ACHAR c, const ACHAR* pszList);
-	static bool _match_charlist(const WCHAR c, const WCHAR* pszList);
+	static bool _match_charlist(const wchar_t c, const wchar_t* pszList);
 };
 
 bool IsURL(const wchar_t*, size_t, size_t*);			// 指定アドレスがURLの先頭ならばTRUEとその長さを返す
@@ -138,8 +138,8 @@ inline bool WordParse::_match_charlist(const ACHAR c, const ACHAR* pszList)
 	}
 	return false;
 }
-// WCHAR 版
-inline bool WordParse::_match_charlist(const WCHAR c, const WCHAR* pszList)
+// wchar_t 版
+inline bool WordParse::_match_charlist(const wchar_t c, const wchar_t* pszList)
 {
 	for (size_t i=0; pszList[i]!=L'\0'; ++i) {
 		if (pszList[i] == c) {

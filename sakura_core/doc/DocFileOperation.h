@@ -65,7 +65,7 @@ public:
 	// セーブフロー
 	bool DoSaveFlow(SaveInfo* pSaveInfo);
 	bool FileSaveAs(
-		const WCHAR*	filename = NULL,
+		const wchar_t*	filename = NULL,
 		EncodingType	eCodeType = CODE_NONE,
 		EolType			eEolType = EolType::None,
 		bool			bDialog = true

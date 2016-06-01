@@ -74,7 +74,7 @@ public:
 	// ひとつはオーバーヘッドを抑える意味で。
 	// ひとつは変換によるデータ喪失を抑える意味で。
 
-	// WCHAR
+	// wchar_t
 	void SetStringNew(const wchar_t* wszData, size_t nDataLen);
 	void SetStringNew(const wchar_t* wszData);
 	void AppendStringNew(const wchar_t* pszData);               // バッファの最後にデータを追加する

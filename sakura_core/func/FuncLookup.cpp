@@ -92,7 +92,7 @@ EFunctionCode FuncLookup::Pos2FuncCode(int category, int position, bool bGetUnav
 bool FuncLookup::Pos2FuncName(
 	int		category,	// [in]  分類番号 (0-)
 	int		position,	// [in]  分類中のindex (0-)
-	WCHAR*	ptr,		// [out] 文字列を格納するバッファの先頭
+	wchar_t*	ptr,		// [out] 文字列を格納するバッファの先頭
 	int		bufsize		// [in]  文字列を格納するバッファのサイズ
 	) const
 {
@@ -111,7 +111,7 @@ bool FuncLookup::Pos2FuncName(
 
 	@date 2007.11.02 ryoji 未登録マクロも文字列を格納．戻り値の意味を変更（文字列は必ず格納）．
 */
-bool FuncLookup::Funccode2Name(int funccode, WCHAR* ptr, int bufsize) const
+bool FuncLookup::Funccode2Name(int funccode, wchar_t* ptr, int bufsize) const
 {
 	LPCWSTR pszStr = NULL;
 
@@ -209,7 +209,7 @@ void FuncLookup::SetCategory2Combo(HWND hComboBox) const
 */
 void FuncLookup::SetListItem(HWND hListBox, size_t category) const
 {
-	WCHAR pszLabel[256];
+	wchar_t pszLabel[256];
 	// リストを初期化する
 	List_ResetContent(hListBox);
 	size_t n = GetItemCount(category);
@@ -250,7 +250,7 @@ size_t FuncLookup::GetItemCount(size_t category) const
 	
 	@return NULL 分類名称．取得に失敗したらNULL．
 */
-const WCHAR* FuncLookup::Custmenu2Name(int index, WCHAR buf[], int bufSize) const
+const wchar_t* FuncLookup::Custmenu2Name(int index, wchar_t buf[], int bufSize) const
 {
 	if (index < 0 || CUSTMENU_INDEX_FOR_TABWND < index) {
 		return NULL;

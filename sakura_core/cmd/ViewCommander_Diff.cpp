@@ -243,7 +243,7 @@ EncodingType GetDiffCreateTempFileCode(EncodingType code)
 	@author	maru
 	@date	2005/10/28 Ç±ÇÍÇ‹Ç≈ÇÃCommand_DiffÇÕview.ViewDiffInfoÇ…ñºèÃïœçX
 */
-void ViewCommander::Command_Diff(const WCHAR* _szDiffFile2, int nFlgOpt)
+void ViewCommander::Command_Diff(const wchar_t* _szDiffFile2, int nFlgOpt)
 {
 	const std::tstring strDiffFile2 = to_tchar(_szDiffFile2);
 	const TCHAR* szDiffFile2 = strDiffFile2.c_str();

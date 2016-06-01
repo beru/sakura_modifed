@@ -26,7 +26,7 @@
 #include "RecentImp.h"
 #include "util/StaticType.h"
 
-typedef StaticString<WCHAR, _MAX_PATH> ReplaceString;
+typedef StaticString<wchar_t, _MAX_PATH> ReplaceString;
 
 // ’uŠ·‚Ì—š—ğ‚ğŠÇ— (RECENT_FOR_REPLACE)
 class RecentReplace : public RecentImp<ReplaceString, LPCWSTR> {

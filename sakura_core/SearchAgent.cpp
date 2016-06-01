@@ -1036,7 +1036,7 @@ void SearchAgent::ReplaceData(DocLineReplaceArg* pArg)
 					&& nNewLen <= pDocLine->_GetDocLineData().capacity()
 				) {
 					NativeW& ref = pDocLine->_GetDocLineData();
-					WCHAR* pBuf = const_cast<WCHAR*>(ref.GetStringPtr());
+					wchar_t* pBuf = const_cast<wchar_t*>(ref.GetStringPtr());
 					if (nWorkLen != nInsLen) {
 						wmemmove(&pBuf[nWorkPos + nInsLen], &pLine[nWorkPos + nWorkLen], nAfterLen);
 					}

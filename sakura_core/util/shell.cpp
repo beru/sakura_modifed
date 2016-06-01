@@ -206,12 +206,12 @@ LRESULT CALLBACK PropSheetWndProc(
 					LPMALLOC pMalloc;
 					if (SUCCEEDED(::SHGetMalloc(&pMalloc))) {
 						LPITEMIDLIST pIDL;
-						WCHAR pwszDisplayName[_MAX_PATH];
+						wchar_t pwszDisplayName[_MAX_PATH];
 						_tcstowcs(pwszDisplayName, szPath, _countof(pwszDisplayName));
 //#ifdef _UNICODE
 //						pwszDisplayName = szPath;
 //#else
-//						WCHAR wszPath[_MAX_PATH];
+//						wchar_t wszPath[_MAX_PATH];
 //						::MultiByteToWideChar(CP_ACP, 0, szPath, -1, wszPath, _MAX_PATH);
 //						pwszDisplayName = wszPath;
 //#endif
@@ -429,7 +429,7 @@ BOOL ResolveShortcutLink(
 		// Get a pointer to the IPersistFile interface.
 		if (SUCCEEDED(hRes = pIShellLink->QueryInterface(IID_IPersistFile, (void**)&pIPersistFile))) {
 			// Ensure that the string is Unicode.
-			WCHAR wsz[MAX_PATH];
+			wchar_t wsz[MAX_PATH];
 			_tcstowcs(wsz, szAbsLongPath, _countof(wsz));
 //			MultiByteToWideChar(CP_ACP, 0, lpszLinkFile, -1, wsz, MAX_PATH);
 			// Load the shortcut.

@@ -31,9 +31,9 @@
 class String {
 public:
 	// コンストラクタ・デストラクタ
-	String(WCHAR wc)								: wstr(1, wc),		str_cache(NULL) { }
-	String(const WCHAR* szData = L"")				: wstr(szData),		str_cache(NULL) { }
-	String(const WCHAR* pData, size_t nLength)		: wstr(pData, nLength), str_cache(NULL) { }
+	String(wchar_t wc)								: wstr(1, wc),		str_cache(NULL) { }
+	String(const wchar_t* szData = L"")				: wstr(szData),		str_cache(NULL) { }
+	String(const wchar_t* pData, size_t nLength)		: wstr(pData, nLength), str_cache(NULL) { }
 	String(const ACHAR* szData)						: wstr(L""), str_cache(NULL) { set(szData); }
 	String(const ACHAR* pData, size_t nLength)		: wstr(L""), str_cache(NULL) { set(pData, nLength); }
 	String(ACHAR wc)								: wstr(L""), str_cache(NULL) { ACHAR buf[2] = {wc, 0}; set(buf); }

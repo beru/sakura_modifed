@@ -80,7 +80,7 @@ public:
 	bool HandleCommand(
 		EditView& view,
 		EFunctionCode index,
-		const WCHAR* arguments[],
+		const wchar_t* arguments[],
 		const int argLengths[],
 		const int argSize
 		)

@@ -6,10 +6,10 @@
 // ラテンアルファベットの拡張対応(ラテン補助、拡張AB、拡張追加)	2010/6/5 Uchi
 bool Converter_ToLower::DoConvert(NativeW* pData)
 {
-	WCHAR* p = pData->GetStringPtr();
-	WCHAR* end = p + pData->GetStringLength();
+	wchar_t* p = pData->GetStringPtr();
+	wchar_t* end = p + pData->GetStringLength();
 	while (p < end) {
-		WCHAR& c = *p++;
+		wchar_t& c = *p++;
 		// A-Z → a-z
 		if (c >= 0x0041 && c <= 0x005A) {
 			c = 0x0061 + (c-0x0041);

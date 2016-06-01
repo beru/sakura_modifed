@@ -404,7 +404,7 @@ void __stdcall PPA::stdProc(
 	*err_CD = 0;
 
 	// Argument‚ðwchar_t[]‚É•ÏŠ· -> tmpArguments
-	WCHAR** tmpArguments2 = new WCHAR*[numArgs];
+	wchar_t** tmpArguments2 = new wchar_t*[numArgs];
 	int* tmpArgLengths = new int[numArgs];
 	for (int i=0; i<numArgs; ++i) {
 		if (args[i]) {
@@ -415,7 +415,7 @@ void __stdcall PPA::stdProc(
 			tmpArgLengths[i] = 0;
 		}
 	}
-	const WCHAR** tmpArguments = (const WCHAR**)tmpArguments2;
+	const wchar_t** tmpArguments = (const wchar_t**)tmpArguments2;
 
 	// ˆ—
 	bool bRet = Macro::HandleCommand(
@@ -432,7 +432,7 @@ void __stdcall PPA::stdProc(
 	// tmpArguments‚ð‰ð•ú
 	for (int i=0; i<numArgs; ++i) {
 		if (tmpArguments2[i]) {
-			WCHAR* p = const_cast<WCHAR*>(tmpArguments2[i]);
+			wchar_t* p = const_cast<wchar_t*>(tmpArguments2[i]);
 			delete[] p;
 		}
 	}

@@ -432,7 +432,7 @@ struct CommonSetting_KeyBind {
 //                     カスタムメニュー                        //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 struct CommonSetting_CustomMenu {
-	WCHAR			szCustMenuNameArr   [MAX_CUSTOM_MENU][MAX_CUSTOM_MENU_NAME_LEN + 1];
+	wchar_t			szCustMenuNameArr   [MAX_CUSTOM_MENU][MAX_CUSTOM_MENU_NAME_LEN + 1];
 	int				nCustMenuItemNumArr [MAX_CUSTOM_MENU];
 	EFunctionCode	nCustMenuItemFuncArr[MAX_CUSTOM_MENU][MAX_CUSTOM_MENU_ITEMS];
 	KEYCODE			nCustMenuItemKeyArr [MAX_CUSTOM_MENU][MAX_CUSTOM_MENU_ITEMS];
@@ -648,8 +648,8 @@ enum EPluginState {
 };
 
 struct PluginRec {
-	WCHAR			szId[MAX_PLUGIN_ID];		// プラグインID
-	WCHAR			szName[MAX_PLUGIN_NAME];	// プラグインフォルダ/設定ファイル名
+	wchar_t			szId[MAX_PLUGIN_ID];		// プラグインID
+	wchar_t			szName[MAX_PLUGIN_NAME];	// プラグインフォルダ/設定ファイル名
 	EPluginState	state;						// プラグイン状態。設定ファイルに保存せずメモリ上のみ。
 	int 			nCmdNum;					// プラグイン コマンドの数	// 2010/7/3 Uchi
 };
@@ -674,8 +674,8 @@ class MainMenu {
 public:
 	MainMenuType	type;		// 種類
 	EFunctionCode	nFunc;		// Function
-	WCHAR			sKey[2];	// アクセスキー
-	WCHAR			sName[MAX_MAIN_MENU_NAME_LEN + 1];	// 名前
+	wchar_t			sKey[2];	// アクセスキー
+	wchar_t			sName[MAX_MAIN_MENU_NAME_LEN + 1];	// 名前
 	int 			nLevel;		// レベル
 };
 

@@ -69,7 +69,7 @@ static const DWORD p_helpids[] = {
 struct MainMenuWork {
 	wstring			sName;		// 名前
 	EFunctionCode	nFunc;		// Function
-	WCHAR			sKey[2];		// アクセスキー
+	wchar_t			sKey[2];		// アクセスキー
 	bool			bDupErr;		// アクセスキー重複エラー
 	bool			bIsNode;		// ノードか否か（ノードでもnFuncがF_NODE(0)でないものがあるため）
 };
@@ -136,7 +136,7 @@ static LRESULT CALLBACK TreeViewProc(
 {
 	HTREEITEM		htiItem;
 	TV_ITEM			tvi;		// 取得用
-	WCHAR			cKey;
+	wchar_t			cKey;
 	MainMenuWork*	pFuncWk;	// 機能
 
 	switch (uMsg) {
@@ -152,7 +152,7 @@ static LRESULT CALLBACK TreeViewProc(
 		return DLGC_WANTALLKEYS;
 	case WM_KEYDOWN:
 		htiItem = TreeView_GetSelection(hwndTree);
-		cKey = (WCHAR)MapVirtualKey(wParam, 2);
+		cKey = (wchar_t)MapVirtualKey(wParam, 2);
 		if (cKey > ' ') {
 			// アクセスキー設定
 			tvi.mask = TVIF_HANDLE | TVIF_PARAM;
@@ -225,7 +225,7 @@ INT_PTR PropMainMenu::DispatchEvent(
 	HTREEITEM	nIdxMenu;
 	int			nIdxFIdx;
 	int			nIdxFunc;
-	WCHAR		szLabel[MAX_MAIN_MENU_NAME_LEN + 10];
+	wchar_t		szLabel[MAX_MAIN_MENU_NAME_LEN + 10];
 
 	EFunctionCode	eFuncCode;
 	MainMenuWork*	pFuncWk;	// 機能
@@ -856,7 +856,7 @@ void PropMainMenu::SetData(HWND hwndDlg)
 	HWND		hwndCheck;
 	HWND		hwndTreeRes;
 	const int	MAX_LABEL_CCH = 256 + 10;
-	WCHAR		szLabel[MAX_LABEL_CCH];
+	wchar_t		szLabel[MAX_LABEL_CCH];
 	int			nCurLevel;
 	HTREEITEM	htiItem;
 	HTREEITEM	htiParent;
@@ -1238,7 +1238,7 @@ static void TreeView_ExpandAll(HWND hwndTree, bool bExpand)
 // 表示用データの作成（アクセスキー付加）
 static const TCHAR* MakeDispLabel(MainMenuWork* pFunc)
 {
-	static WCHAR szLabel[MAX_MAIN_MENU_NAME_LEN + 10];
+	static wchar_t szLabel[MAX_MAIN_MENU_NAME_LEN + 10];
 
 	if (pFunc->sKey[0]) {
 		auto_sprintf_s(szLabel, MAX_MAIN_MENU_NAME_LEN + 10, L"%ls%ls(%ls)",
@@ -1291,7 +1291,7 @@ bool PropMainMenu::Check_MainMenu_Sub(
 	HTREEITEM		ts;
 	TV_ITEM			tvi;							// 取得用
 	MainMenuWork*	pFuncWk;						// 機能(work)
-	std::map< WCHAR, HTREEITEM >	mKey;			// 重複エラー検出用
+	std::map< wchar_t, HTREEITEM >	mKey;			// 重複エラー検出用
 
 	if (nLevel == 0) {
 		bOptionOk = false;

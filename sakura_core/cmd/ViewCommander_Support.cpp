@@ -153,7 +153,7 @@ void ViewCommander::Command_Menu_AllFunc(void)
 			// Oct. 3, 2001 genta
 			int code = FuncLookup.Pos2FuncCode(i, j, false);	// 2007.11.02 ryoji 未登録マクロ非表示を明示指定
 			if (code != 0) {
-				WCHAR	szLabel[300];
+				wchar_t szLabel[300];
 				FuncLookup.Pos2FuncName(i, j, szLabel, 256);
 				UINT uFlags = MF_BYPOSITION | MF_STRING | MF_ENABLED;
 				// Oct. 3, 2001 genta
@@ -250,7 +250,7 @@ retry:;
 	@param kwd [in] 検索キーワード．NULLのときはカーソル位置or選択されたワード
 	@date 2002.07.05 genta 任意のファイル・キーワードの指定ができるよう引数追加
 */
-void ViewCommander::Command_ExtHTMLHelp(const WCHAR* _helpfile, const WCHAR* kwd)
+void ViewCommander::Command_ExtHTMLHelp(const wchar_t* _helpfile, const wchar_t* kwd)
 {
 	std::tstring helpfile;
 	if (_helpfile) {

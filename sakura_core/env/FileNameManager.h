@@ -66,13 +66,13 @@ public:
 	static bool ExpandMetaToFolder(LPCTSTR, LPTSTR, int);
 
 	// メニュー類のファイル名作成
-	bool GetMenuFullLabel_WinList(TCHAR* pszOutput, size_t nBuffSize, const EditInfo* editInfo, int id, int index, HDC hDC){
+	bool GetMenuFullLabel_WinList(TCHAR* pszOutput, size_t nBuffSize, const EditInfo* editInfo, int id, size_t index, HDC hDC){
 		return GetMenuFullLabel(pszOutput, nBuffSize, true, editInfo, id, false, index, false, hDC);
 	}
-	bool GetMenuFullLabel_MRU(TCHAR* pszOutput, size_t nBuffSize, const EditInfo* editInfo, int id, bool bFavorite, int index, HDC hDC){
+	bool GetMenuFullLabel_MRU(TCHAR* pszOutput, size_t nBuffSize, const EditInfo* editInfo, int id, bool bFavorite, size_t index, HDC hDC){
 		return GetMenuFullLabel(pszOutput, nBuffSize, true, editInfo, id, bFavorite, index, true, hDC);
 	}
-	bool GetMenuFullLabel_WinListNoEscape(TCHAR* pszOutput, size_t nBuffSize, const EditInfo* editInfo, int id, int index, HDC hDC){
+	bool GetMenuFullLabel_WinListNoEscape(TCHAR* pszOutput, size_t nBuffSize, const EditInfo* editInfo, int id, size_t index, HDC hDC){
 		return GetMenuFullLabel(pszOutput, nBuffSize, false, editInfo, id, false, index, false, hDC);
 	}
 	bool GetMenuFullLabel_File(TCHAR* pszOutput, size_t nBuffSize, const TCHAR* pszFile, int id, HDC hDC, bool bModified = false, EncodingType nCharCode = CODE_NONE){
@@ -82,13 +82,13 @@ public:
 		return GetMenuFullLabel(pszOutput, nBuffSize, false, pszFile, id, false, nCharCode, false, -1, false, hDC);
 	}
 
-	bool GetMenuFullLabel(TCHAR* pszOutput, size_t nBuffSize, bool bEspaceAmp, const EditInfo* editInfo, int id, bool bFavorite, int index, bool bAccKeyZeroOrigin, HDC hDC);
-	bool GetMenuFullLabel(TCHAR* pszOutput, size_t nBuffSize, bool bEspaceAmp, const TCHAR* pszFile, int id, bool bModified, EncodingType nCharCode, bool bFavorite, int index, bool bAccKeyZeroOrigin, HDC hDC);
+	bool GetMenuFullLabel(TCHAR* pszOutput, size_t nBuffSize, bool bEspaceAmp, const EditInfo* editInfo, int id, bool bFavorite, size_t index, bool bAccKeyZeroOrigin, HDC hDC);
+	bool GetMenuFullLabel(TCHAR* pszOutput, size_t nBuffSize, bool bEspaceAmp, const TCHAR* pszFile, int id, bool bModified, EncodingType nCharCode, bool bFavorite, size_t index, bool bAccKeyZeroOrigin, HDC hDC);
 	
-	static TCHAR GetAccessKeyByIndex(int index, bool bZeroOrigin);
+	static TCHAR GetAccessKeyByIndex(size_t index, bool bZeroOrigin);
 
 	static void GetIniFileNameDirect( LPTSTR pszPrivateIniFile, LPTSTR pszIniFile, LPCTSTR pszProfName );	// 構成設定ファイルからiniファイル名を取得する		// 2007.09.04 ryoji
-	void GetIniFileName( LPTSTR pszIniFileName, LPCTSTR pszProfName, BOOL bRead = FALSE );	// iniファイル名の取得		// 2007.05.19 ryoji
+	void GetIniFileName( LPTSTR pszIniFileName, LPCTSTR pszProfName, bool bRead = false );	// iniファイル名の取得		// 2007.05.19 ryoji
 
 private:
 	DllSharedData* pShareData;

@@ -742,7 +742,7 @@ int PropTypesScreen::GetData(HWND hwndDlg)
 }
 
 // アウトライン解析ルールの追加
-void PropTypesScreen::AddOutlineMethod(OutlineType nMethod, const WCHAR* szName)
+void PropTypesScreen::AddOutlineMethod(OutlineType nMethod, const wchar_t* szName)
 {
 	if (OlmArr.empty()) {
 		InitTypeNameId2(PropTypesScreen::OlmArr, ::OlmArr, _countof(::OlmArr));	// アウトライン解析ルール
@@ -757,7 +757,7 @@ void PropTypesScreen::AddOutlineMethod(OutlineType nMethod, const WCHAR* szName)
 	OlmArr.push_back(method);
 }
 
-void PropTypesScreen::RemoveOutlineMethod(OutlineType nMethod, const WCHAR* szName)
+void PropTypesScreen::RemoveOutlineMethod(OutlineType nMethod, const wchar_t* szName)
 {
 	int nSize = (int)OlmArr.size();
 	for (int i=0; i<nSize; ++i) {
@@ -770,7 +770,7 @@ void PropTypesScreen::RemoveOutlineMethod(OutlineType nMethod, const WCHAR* szNa
 }
 
 // スマートインデントルールの追加
-void PropTypesScreen::AddSIndentMethod(SmartIndentType nMethod, const WCHAR* szName)
+void PropTypesScreen::AddSIndentMethod(SmartIndentType nMethod, const wchar_t* szName)
 {
 	if (SIndentArr.empty()) {
 		InitTypeNameId2(SIndentArr, SmartIndentArr, _countof(SmartIndentArr));	// スマートインデントルール
@@ -785,7 +785,7 @@ void PropTypesScreen::AddSIndentMethod(SmartIndentType nMethod, const WCHAR* szN
 	SIndentArr.push_back(method);
 }
 
-void PropTypesScreen::RemoveSIndentMethod(SmartIndentType nMethod, const WCHAR* szName)
+void PropTypesScreen::RemoveSIndentMethod(SmartIndentType nMethod, const wchar_t* szName)
 {
 	int nSize = (int)SIndentArr.size();
 	for (int i=0; i<nSize; ++i) {

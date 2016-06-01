@@ -224,9 +224,9 @@ bool SetClipboardText(HWND hwnd, const ACHAR* pszText, size_t nLength)
 	return SetClipboardTextImp<ACHAR>(hwnd, pszText, nLength);
 }
 
-bool SetClipboardText(HWND hwnd, const WCHAR* pszText, size_t nLength)
+bool SetClipboardText(HWND hwnd, const wchar_t* pszText, size_t nLength)
 {
-	return SetClipboardTextImp<WCHAR>(hwnd, pszText, nLength);
+	return SetClipboardTextImp<wchar_t>(hwnd, pszText, nLength);
 }
 
 /*
@@ -267,7 +267,7 @@ HGLOBAL GetGlobalData(LPDATAOBJECT pDataObject, CLIPFORMAT cfFormat)
 				hDest = stgMedium.hGlobal;
 		}else {
 			if (stgMedium.tymed == TYMED_HGLOBAL) {
-				DWORD nSize = ::GlobalSize(stgMedium.hGlobal);
+				SIZE_T nSize = ::GlobalSize(stgMedium.hGlobal);
 				hDest = ::GlobalAlloc(GMEM_SHARE|GMEM_MOVEABLE, nSize);
 				if (hDest) {
 					// copy the bits

@@ -320,7 +320,7 @@ bool Profile::ReadProfileRes(
 */
 bool Profile::WriteProfile(
 	const TCHAR* pszProfileName,
-	const WCHAR* pszComment
+	const wchar_t* pszComment
 	)
 {
 	Timer t;

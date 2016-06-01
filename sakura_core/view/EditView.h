@@ -165,7 +165,7 @@ public:
 
 	// 設定
 	bool MySetClipboardData(const ACHAR*, size_t, bool bColumnSelect, bool = false);	// クリップボードにデータを設定
-	bool MySetClipboardData(const WCHAR*, size_t, bool bColumnSelect, bool = false);	// クリップボードにデータを設定
+	bool MySetClipboardData(const wchar_t*, size_t, bool bColumnSelect, bool = false);	// クリップボードにデータを設定
 
 	// 利用
 	void CopyCurLine(bool bAddCRLFWhenCopy, EolType neweol, bool bEnableLineModePaste);	// カーソル行をクリップボードにコピーする	// 2007.10.08 ryoji
@@ -738,7 +738,7 @@ public:
 	OutputAdapter(){};
 	virtual  ~OutputAdapter(){};
 
-	virtual bool OutputW(const WCHAR* pBuf, int size = -1) = 0;
+	virtual bool OutputW(const wchar_t* pBuf, int size = -1) = 0;
 	virtual bool OutputA(const ACHAR* pBuf, int size = -1) = 0;
 	virtual bool IsEnableRunningDlg(){ return true; }
 	virtual bool IsActiveDebugWindow(){ return true; }

@@ -74,7 +74,7 @@ public:
 	}
 	~OutputAdapterDiff(){};
 
-	bool OutputW(const WCHAR* pBuf, int size = -1){ return true; };
+	bool OutputW(const wchar_t* pBuf, int size = -1){ return true; };
 	bool OutputA(const ACHAR* pBuf, int size = -1);
 	bool IsEnableRunningDlg(){ return false; }
 	bool IsActiveDebugWindow(){ return false; }

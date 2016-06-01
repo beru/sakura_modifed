@@ -1015,13 +1015,13 @@ void ShareData::TraceOut(LPCTSTR lpFmt, ...)
 	
 	va_list argList;
 	va_start(argList, lpFmt);
-	int ret = tchar_vsnprintf_s(pShareData->workBuffer.GetWorkBuffer<WCHAR>(), 
-		pShareData->workBuffer.GetWorkBufferCount<WCHAR>(),
+	int ret = tchar_vsnprintf_s(pShareData->workBuffer.GetWorkBuffer<wchar_t>(), 
+		pShareData->workBuffer.GetWorkBufferCount<wchar_t>(),
 		to_wchar(lpFmt), argList);
 	va_end(argList);
 	if (ret == -1) {
 		// 切り詰められた
-		ret = auto_strlen(pShareData->workBuffer.GetWorkBuffer<WCHAR>());
+		ret = auto_strlen(pShareData->workBuffer.GetWorkBuffer<wchar_t>());
 	}else if (ret < 0) {
 		// 保護コード:受け側はwParam→size_tで符号なしのため
 		ret = 0;
@@ -1050,8 +1050,8 @@ void ShareData::TraceOutString(const wchar_t* pStr, int len)
 	}
 	// workBufferぎりぎりでも問題ないけれど、念のため\0終端にするために余裕をとる
 	// -1 より 8,4バイト境界のほうがコピーが早いはずなので、-4にする
-	const int buffLen = (int)pShareData->workBuffer.GetWorkBufferCount<WCHAR>() - 4;
-	wchar_t*  pOutBuffer = pShareData->workBuffer.GetWorkBuffer<WCHAR>();
+	const int buffLen = (int)pShareData->workBuffer.GetWorkBufferCount<wchar_t>() - 4;
+	wchar_t*  pOutBuffer = pShareData->workBuffer.GetWorkBuffer<wchar_t>();
 	int outPos = 0;
 	if (len == 0) {
 		// 0のときは何も追加しないが、カーソル移動が発生する

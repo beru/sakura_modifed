@@ -408,7 +408,7 @@ int PluginManager::InstallPlugin(
 	}
 	// 2010.08.04 ID使用不可の文字を確認
 	//  後々ファイル名やiniで使うことを考えていくつか拒否する
-	static const WCHAR szReservedChars[] = L"/\\,[]*?<>&|;:=\" \t";
+	static const wchar_t szReservedChars[] = L"/\\,[]*?<>&|;:=\" \t";
 	for (size_t x=0; x<_countof(szReservedChars); ++x) {
 		if (sId.npos != sId.find(szReservedChars[x])) {
 			errorMsg = std::wstring(LSW(STR_PLGMGR_INST_RESERVE1)) + szReservedChars + LSW(STR_PLGMGR_INST_RESERVE2);
@@ -434,7 +434,7 @@ int PluginManager::InstallPlugin(
 				const TCHAR* msg = LS(STR_PLGMGR_INST_NAME);
 				// 2010.08.04 削除中のIDは元の位置へ追加(復活させる)
 				if (pluginTable[iNo].state != PLS_DELETED &&
-					ConfirmMessage(hWndOwner, msg, static_cast<const TCHAR*>(pszPluginName), static_cast<const WCHAR*>(pluginTable[iNo].szName)) != IDYES
+					ConfirmMessage(hWndOwner, msg, static_cast<const TCHAR*>(pszPluginName), static_cast<const wchar_t*>(pluginTable[iNo].szName)) != IDYES
 				) {
 					errorMsg = LSW(STR_PLGMGR_INST_USERCANCEL);
 					return -1;
@@ -459,7 +459,7 @@ int PluginManager::InstallPlugin(
 
 	// コマンド数の設定	2010/7/11 Uchi
 	int			i;
-	WCHAR		szPlugKey[10];
+	wchar_t		szPlugKey[10];
 	wstring		sPlugCmd;
 
 	pluginTable[nEmpty].nCmdNum = 0;

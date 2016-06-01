@@ -55,14 +55,14 @@ void DocOutline::MakeTopicList_asm(FuncInfoArr* pFuncInfoArr)
 {
 	size_t nTotalLine = doc.docLineMgr.GetLineCount();
 	for (size_t nLineCount=0; nLineCount<nTotalLine; ++nLineCount) {
-		const WCHAR* pLine;
+		const wchar_t* pLine;
 		size_t nLineLen;
-		WCHAR* pTmpLine;
+		wchar_t* pTmpLine;
 		size_t length;
 		size_t offset;
 #define MAX_ASM_TOKEN 2
-		WCHAR* token[MAX_ASM_TOKEN];
-		WCHAR* p;
+		wchar_t* token[MAX_ASM_TOKEN];
+		wchar_t* p;
 
 		// 1行取得する。
 		pLine = doc.docLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
@@ -85,7 +85,7 @@ void DocOutline::MakeTopicList_asm(FuncInfoArr* pFuncInfoArr)
 		// トークンに分割
 		for (size_t j=0; j<MAX_ASM_TOKEN; ++j) token[j] = NULL;
 		for (size_t j=0; j<MAX_ASM_TOKEN; ++j) {
-			token[j] = my_strtok<WCHAR>(pTmpLine, length, &offset, L" \t\r\n");
+			token[j] = my_strtok<wchar_t>(pTmpLine, length, &offset, L" \t\r\n");
 			if (!token[j]) break;
 			// トークンに含まれるべき文字でないか？
 			if (wcsstr(token[j], L"\"")
@@ -99,7 +99,7 @@ void DocOutline::MakeTopicList_asm(FuncInfoArr* pFuncInfoArr)
 
 		if (token[0]) {	// トークンが1個以上ある
 			int nFuncId = -1;
-			WCHAR* entry_token = NULL;
+			wchar_t* entry_token = NULL;
 
 			length = wcslen(token[0]);
 			if (length >= 2

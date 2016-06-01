@@ -219,7 +219,7 @@ void SakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszBu
 				if (EditApp::getInstance().pGrepAgent->bGrepMode) {
 				}else if (AppMode::getInstance().IsDebugMode()) {
 				}else {
-					WCHAR szText[10];
+					wchar_t szText[10];
 					const EditNode* node = AppNodeManager::getInstance().GetEditNode(GetMainWindow().GetHwnd());
 					if (0 < node->nId) {
 						swprintf(szText, L"%d", node->nId);
@@ -233,9 +233,9 @@ void SakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszBu
 			if (!pDoc->docFile.GetFilePathClass().IsValidPath()) {
 				q = wcs_pushW(q, q_max - q, NO_TITLE.c_str(), NO_TITLE_LEN);
 			}else {
-				WCHAR	buff[_MAX_PATH];		// \‚Ìˆ—‚ð‚·‚éˆ×WCHAR
-				WCHAR*	pEnd;
-				WCHAR*	p;
+				wchar_t buff[_MAX_PATH];		// \‚Ìˆ—‚ð‚·‚éˆ×wchar_t
+				wchar_t* pEnd;
+				wchar_t* p;
 
 				wcscpy_s(buff, _MAX_PATH, to_wchar(pDoc->docFile.GetFilePath()));
 				pEnd = NULL;
@@ -264,9 +264,9 @@ void SakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszBu
 			if (!pDoc->docFile.GetFilePathClass().IsValidPath()) {
 				q = wcs_pushW(q, q_max - q, NO_TITLE.c_str(), NO_TITLE_LEN);
 			}else {
-				const WCHAR* pStr;
-				const WCHAR* pEnd;
-				const WCHAR* p;
+				const wchar_t* pStr;
+				const wchar_t* pEnd;
+				const wchar_t* p;
 				
 				pStr = to_wchar(pDoc->docFile.GetFilePath());
 				pEnd = pStr - auto_strlen(pStr) - 1;

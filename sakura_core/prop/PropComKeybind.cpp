@@ -123,7 +123,7 @@ INT_PTR PropKeybind::DispatchEvent(
 	int			i;
 	int			j;
 	EFunctionCode	nFuncCode;
-	static WCHAR szLabel[256];
+	static wchar_t szLabel[256];
 	auto& csKeybind = common.keyBind;
 
 	switch (uMsg) {

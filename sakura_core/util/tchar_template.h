@@ -14,7 +14,6 @@
 */
 
 typedef char ACHAR;
-typedef wchar_t WCHAR;
 
 template <class CHAR_TYPE, int CHAR_VALUE>
 CHAR_TYPE _TextTemplate();
@@ -22,7 +21,7 @@ CHAR_TYPE _TextTemplate();
 // 文字定義マクロ
 #define DEFINE_T2(CHAR_VALUE) \
 template <> ACHAR _TextTemplate<ACHAR,CHAR_VALUE>() { return ATEXT(CHAR_VALUE); } \
-template <> WCHAR _TextTemplate<WCHAR,CHAR_VALUE>() { return LTEXT(CHAR_VALUE); }
+template <> wchar_t _TextTemplate<wchar_t,CHAR_VALUE>() { return LTEXT(CHAR_VALUE); }
 
 // 使用マクロ
 #define _T2(CHAR_TYPE, CHAR_VALUE) _TextTemplate<CHAR_TYPE,CHAR_VALUE>()

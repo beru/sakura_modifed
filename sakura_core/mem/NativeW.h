@@ -66,7 +66,7 @@ public:
 	// 管理
 	void AllocStringBuffer(size_t nDataLen);                    // (重要：nDataLenは文字単位) バッファサイズの調整。必要に応じて拡大する。
 
-	// WCHAR
+	// wchar_t
 	void SetString(const wchar_t* pData, size_t nDataLen);      // バッファの内容を置き換える。nDataLenは文字単位。
 	void SetString(const wchar_t* pszData);                  // バッファの内容を置き換える
 	void SetStringHoldBuffer( const wchar_t* pData, size_t nDataLen );
@@ -158,7 +158,7 @@ public:
 	void AppendStringOld(const char* pszData);             // バッファの最後にデータを追加する。pszDataはSJIS。
 	const char* GetStringPtrOld() const; // ShiftJISに変換して返す
 
-	// WCHAR
+	// wchar_t
 	void SetStringW(const wchar_t* pszData)					{ return SetString(pszData); }
 	void SetStringW(const wchar_t* pData, size_t nLength)	{ return SetString(pData, nLength); }
 	void AppendStringW(const wchar_t* pszData)				{ return AppendString(pszData); }

@@ -44,7 +44,7 @@ private:
 	EditDoc*		pEditDoc;
 	DllSharedData&	shareData;
 	int				nCurrentKeyState;
-	WCHAR			szFuncNameArr[12][256];
+	wchar_t			szFuncNameArr[12][256];
 	HWND			hwndButtonArr[12];
 	HFONT			hFont;	// 表示用フォント
 	bool			bSizeBox;

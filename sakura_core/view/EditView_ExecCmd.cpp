@@ -51,12 +51,12 @@ public:
 	}
 	~OutputAdapterDefault(){};
 
-	bool OutputW(const WCHAR* pBuf, int size = -1);
+	bool OutputW(const wchar_t* pBuf, int size = -1);
 	bool OutputA(const ACHAR* pBuf, int size = -1);
 	bool IsActiveDebugWindow(){ return !bWindow; }
 
 protected:
-	void OutputBuf(const WCHAR* pBuf, int size);
+	void OutputBuf(const wchar_t* pBuf, int size);
 
 	BOOL			bWindow;
 	EditView*		view;
@@ -322,7 +322,7 @@ bool EditView::ExecCmd(
 			::GetLocalTime(&systime);
 			FormatManager().MyGetDateFormat(systime, szTextDate, _countof(szTextDate) - 1);
 			FormatManager().MyGetTimeFormat(systime, szTextTime, _countof(szTextTime) - 1);
-			WCHAR szOutTemp[1024 * 2 + 100];
+			wchar_t szOutTemp[1024 * 2 + 100];
 			oa.OutputW(L"\r\n");
 			oa.OutputW(L"#============================================================\r\n");
 			int len = auto_snprintf_s(szOutTemp, _countof(szOutTemp),
@@ -580,7 +580,7 @@ user_cancel:
 			DWORD result;
 			::GetExitCodeProcess(pi.hProcess, &result);
 			if (bOutputExtInfo) {
-				WCHAR endCode[128];
+				wchar_t endCode[128];
 				auto_sprintf_s(endCode, LSW(STR_EDITVIEW_EXECCMD_RET), result);
 				oa.OutputW(endCode);
 			}
@@ -623,9 +623,9 @@ finish:
 
 /*!
 	@param pBuf size未指定なら要NUL終端
-	@param size WCHAR単位 
+	@param size wchar_t単位 
 */
-void OutputAdapterDefault::OutputBuf(const WCHAR* pBuf, int size)
+void OutputAdapterDefault::OutputBuf(const wchar_t* pBuf, int size)
 {
 	if (bWindow) {
 		commander.Command_InsText(false, pBuf, size, true);
@@ -634,7 +634,7 @@ void OutputAdapterDefault::OutputBuf(const WCHAR* pBuf, int size)
 	}
 }
 
-bool OutputAdapterDefault::OutputW(const WCHAR* pBuf, int size)
+bool OutputAdapterDefault::OutputW(const wchar_t* pBuf, int size)
 {
 	OutputBuf(pBuf, size);
 	return true;

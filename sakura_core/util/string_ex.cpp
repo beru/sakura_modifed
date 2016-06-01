@@ -54,7 +54,7 @@ LPWSTR wcscpyn(LPWSTR lpString1, LPCWSTR lpString2, size_t iMaxLength)
 
 
 /*
-	TCHAR と WCHAR または ACHAR の変換関数
+	TCHAR と wchar_t または ACHAR の変換関数
 */
 
 ACHAR* tcstostr(ACHAR* dest, const TCHAR* src, size_t count) {
@@ -66,11 +66,11 @@ ACHAR* tcstostr(ACHAR* dest, const TCHAR* src, size_t count) {
 	}
 	return pw;
 }
-WCHAR* tcstostr(WCHAR* dest, const TCHAR* src, size_t count) {
+wchar_t* tcstostr(wchar_t* dest, const TCHAR* src, size_t count) {
 	TCHAR* pr = const_cast<TCHAR*>(src);
-	WCHAR* pw = dest;
+	wchar_t* pw = dest;
 	for (; pr<src+count; ++pr) {
-		*pw = static_cast<WCHAR>(*pr);
+		*pw = static_cast<wchar_t>(*pr);
 		++pw;
 	}
 	return pw;
@@ -87,9 +87,9 @@ TCHAR* strtotcs(TCHAR* dest, const ACHAR* src, size_t count)
 	return pw;
 }
 
-TCHAR* strtotcs(TCHAR* dest, const WCHAR* src, size_t count)
+TCHAR* strtotcs(TCHAR* dest, const wchar_t* src, size_t count)
 {
-	WCHAR* pr = const_cast<WCHAR*>(src);
+	wchar_t* pr = const_cast<wchar_t*>(src);
 	TCHAR* pw = dest;
 	for (; pr<src+count; ++pr) {
 		*pw = static_cast<TCHAR>(*pr);
@@ -402,7 +402,7 @@ void wcstombs_vector(const wchar_t* pSrc, size_t nSrcLen, std::vector<char>* ret
 
 #ifdef _UNICODE
 
-size_t _tcstowcs(WCHAR* wszDst, const TCHAR* tszSrc, size_t nDstCount)
+size_t _tcstowcs(wchar_t* wszDst, const TCHAR* tszSrc, size_t nDstCount)
 {
 	wcsncpy_s(wszDst, nDstCount, tszSrc, _TRUNCATE);
 	return wcslen(wszDst);
@@ -411,7 +411,7 @@ size_t _tcstombs(CHAR*  szDst,  const TCHAR* tszSrc, size_t nDstCount)
 {
 	return wcstombs2(szDst, tszSrc, nDstCount);
 }
-size_t _wcstotcs(TCHAR* tszDst, const WCHAR* wszSrc, size_t nDstCount)
+size_t _wcstotcs(TCHAR* tszDst, const wchar_t* wszSrc, size_t nDstCount)
 {
 	wcsncpy_s(tszDst, nDstCount, wszSrc, _TRUNCATE);
 	return wcslen(tszDst);
@@ -424,7 +424,7 @@ int _tctomb(const TCHAR* p, ACHAR* mb)
 {
 	return wctomb(mb, *p);
 }
-int _tctowc(const TCHAR* p, WCHAR* wc)
+int _tctowc(const TCHAR* p, wchar_t* wc)
 {
 	*wc = *p;
 	return 1;
@@ -432,7 +432,7 @@ int _tctowc(const TCHAR* p, WCHAR* wc)
 
 #else
 
-size_t _tcstowcs(WCHAR* wszDst, const TCHAR* tszSrc, size_t nDstCount)
+size_t _tcstowcs(wchar_t* wszDst, const TCHAR* tszSrc, size_t nDstCount)
 {
 	return mbstowcs2(wszDst, tszSrc, nDstCount);
 }
@@ -441,7 +441,7 @@ size_t _tcstombs(CHAR*  szDst,  const TCHAR* tszSrc, size_t nDstCount)
 	strncpy_s(szDst, nDstCount, tszSrc, _TRUNCATE);
 	return strlen(szDst);
 }
-size_t _wcstotcs(TCHAR* tszDst, const WCHAR* wszSrc, size_t nDstCount)
+size_t _wcstotcs(TCHAR* tszDst, const wchar_t* wszSrc, size_t nDstCount)
 {
 	return wcstombs2(tszDst, wszSrc, nDstCount);
 }
@@ -459,7 +459,7 @@ int _tctomb(const TCHAR* tc, ACHAR* mb)
 	}
 	return 1;
 }
-int _tctowc(const TCHAR* tc, WCHAR* wc)
+int _tctowc(const TCHAR* tc, wchar_t* wc)
 {
 	return mbtowc(wc, tc, _IS_SJIS_1(tc[0]) ? 2 : 1);
 }
@@ -470,7 +470,7 @@ int _tctowc(const TCHAR* tc, WCHAR* wc)
 //                          メモリ                             //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-int wmemicmp(const WCHAR* p1, const WCHAR* p2, size_t count)
+int wmemicmp(const wchar_t* p1, const wchar_t* p2, size_t count)
 {
 	for (size_t i=0; i<count; ++i) {
 		int n = skr_towlower(*p1++) - skr_towlower(*p2++);	// 非ASCIIも変換
@@ -479,12 +479,12 @@ int wmemicmp(const WCHAR* p1, const WCHAR* p2, size_t count)
 	return 0;
 }
 
-int wmemicmp(const WCHAR* p1, const WCHAR* p2)
+int wmemicmp(const wchar_t* p1, const wchar_t* p2)
 {
 	return wmemicmp(p1, p2, t_max(wcslen(p1), wcslen(p2)));
 }
 
-int wmemicmp_ascii(const WCHAR* p1, const WCHAR* p2, size_t count)
+int wmemicmp_ascii(const wchar_t* p1, const wchar_t* p2, size_t count)
 {
 	for (size_t i=0; i<count; ++i) {
 		int n = my_towlower(*p1++) - my_towlower(*p2++);	// ASCIIのみ変換（高速）
@@ -508,7 +508,7 @@ int wmemicmp_ascii(const WCHAR* p1, const WCHAR* p2, size_t count)
 namespace {
 	template <class T> struct Charset {};
 	template <> struct Charset<ACHAR>{ static const ACHAR QUOT = '"'; };
-	template <> struct Charset<WCHAR>{ static const WCHAR QUOT = L'"'; };
+	template <> struct Charset<wchar_t>{ static const wchar_t QUOT = L'"'; };
 }
 template <class CHAR_TYPE>
 CHAR_TYPE* my_strtok(
@@ -540,7 +540,7 @@ CHAR_TYPE* my_strtok(
 }
 // インスタンス化
 template ACHAR* my_strtok(ACHAR*, size_t, size_t*, const ACHAR*);
-template WCHAR* my_strtok(WCHAR*, size_t, size_t*, const WCHAR*);
+template wchar_t* my_strtok(wchar_t*, size_t, size_t*, const wchar_t*);
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                         実装補助                            //

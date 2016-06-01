@@ -58,7 +58,7 @@ struct MacroFuncInfoEx {
 // 関数名はSMacroMgrが持つ
 struct MacroFuncInfo {
 	int				nFuncID;
-	const WCHAR*	pszFuncName;
+	const wchar_t*	pszFuncName;
 	VARTYPE			varArguments[4];	// 引数の型の配列
 	VARTYPE			varResult;		// 戻り値の型 VT_EMPTYならprocedureということで
 	MacroFuncInfoEx*	pData;
@@ -137,8 +137,8 @@ public:
 	/*
 	||  Attributes & Operations
 	*/
-	static WCHAR* GetFuncInfoByID(HINSTANCE , int , WCHAR* , WCHAR*);	// 機能ID→関数名，機能名日本語
-	static EFunctionCode GetFuncInfoByName(HINSTANCE , const WCHAR* , WCHAR*);	// 関数名→機能ID，機能名日本語
+	static wchar_t* GetFuncInfoByID(HINSTANCE , int , wchar_t* , wchar_t*);	// 機能ID→関数名，機能名日本語
+	static EFunctionCode GetFuncInfoByName(HINSTANCE , const wchar_t* , wchar_t*);	// 関数名→機能ID，機能名日本語
 	static bool CanFuncIsKeyMacro(int);	// キーマクロに記録可能な機能かどうかを調べる
 	
 	// Jun. 16, 2002 genta

@@ -186,12 +186,12 @@ bool ViewCommander::HandleCommand(
 	case F_FILENEW:				Command_FileNew(); break;			// 新規作成
 	case F_FILENEW_NEWWINDOW:	Command_FileNew_NewWindow(); break;
 	// Oct. 2, 2001 genta マクロ用機能拡張
-	case F_FILEOPEN:			Command_FileOpen((const WCHAR*)lparam1); break;			// ファイルを開く
-	case F_FILEOPEN2:			Command_FileOpen((const WCHAR*)lparam1, (EncodingType)lparam2, lparam3 != 0, (const WCHAR*)lparam4); break;	// ファイルを開く2
-	case F_FILEOPEN_DROPDOWN:	Command_FileOpen((const WCHAR*)lparam1); break;			// ファイルを開く(ドロップダウン)	//@@@ 2002.06.15 MIK
+	case F_FILEOPEN:			Command_FileOpen((const wchar_t*)lparam1); break;			// ファイルを開く
+	case F_FILEOPEN2:			Command_FileOpen((const wchar_t*)lparam1, (EncodingType)lparam2, lparam3 != 0, (const wchar_t*)lparam4); break;	// ファイルを開く2
+	case F_FILEOPEN_DROPDOWN:	Command_FileOpen((const wchar_t*)lparam1); break;			// ファイルを開く(ドロップダウン)	//@@@ 2002.06.15 MIK
 	case F_FILESAVE:			bRet = Command_FileSave(); break;	// 上書き保存
-	case F_FILESAVEAS_DIALOG:	bRet = Command_FileSaveAs_Dialog((const WCHAR*)lparam1, (EncodingType)lparam2, (EolType)lparam3); break;	// 名前を付けて保存
-	case F_FILESAVEAS:			bRet = Command_FileSaveAs((const WCHAR*)lparam1, (EolType)lparam3); break;	// 名前を付けて保存
+	case F_FILESAVEAS_DIALOG:	bRet = Command_FileSaveAs_Dialog((const wchar_t*)lparam1, (EncodingType)lparam2, (EolType)lparam3); break;	// 名前を付けて保存
+	case F_FILESAVEAS:			bRet = Command_FileSaveAs((const wchar_t*)lparam1, (EolType)lparam3); break;	// 名前を付けて保存
 	case F_FILESAVEALL:			bRet = Command_FileSaveAll(); break;	// 全ての編集ウィンドウで上書き保存 // Jan. 23, 2005 genta
 	case F_FILESAVE_QUIET:		bRet = Command_FileSave(false, false); break;	// 静かに上書き保存 // Jan. 24, 2005 genta
 	case F_FILESAVECLOSE:
@@ -420,7 +420,7 @@ bool ViewCommander::HandleCommand(
 	// 検索系
 	case F_SEARCH_DIALOG:		Command_Search_Dialog(); break;				// 検索(単語検索ダイアログ)
 	case F_SEARCH_BOX:			Command_Search_Box(); break;		// Jan. 13, 2003 MIK	// 検索(ボックス)	// 2006.06.04 yukihane Command_SEARCH_BOX()
-	case F_SEARCH_NEXT:			Command_Search_Next(true, bRedraw, false, (HWND)lparam1, (const WCHAR*)lparam2); break;	// 次を検索
+	case F_SEARCH_NEXT:			Command_Search_Next(true, bRedraw, false, (HWND)lparam1, (const wchar_t*)lparam2); break;	// 次を検索
 	case F_SEARCH_PREV:			Command_Search_Prev(bRedraw, (HWND)lparam1); break;						// 前を検索
 	case F_REPLACE_DIALOG:	// 置換(置換ダイアログ)
 		Command_Replace_Dialog();	//@@@ 2002.2.2 YAZAKI ダイアログ呼び出しと、実行を分離
@@ -453,7 +453,7 @@ bool ViewCommander::HandleCommand(
 	case F_TAGJUMP_KEYWORD:	Command_TagJumpByTagsFileKeyword((const wchar_t*)lparam1); break;	// @@ 2005.03.31 MIK キーワードを指定してダイレクトタグジャンプ機能
 	case F_COMPARE:			Command_Compare(); break;						// ファイル内容比較
 	case F_DIFF_DIALOG:		Command_Diff_Dialog(); break;					// DIFF差分表示(ダイアログ)		//@@@ 2002.05.25 MIK
-	case F_DIFF:			Command_Diff((const WCHAR*)lparam1, (int)lparam2); break;		// DIFF差分表示	//@@@ 2002.05.25 MIK	// 2005.10.03 maru
+	case F_DIFF:			Command_Diff((const wchar_t*)lparam1, (int)lparam2); break;		// DIFF差分表示	//@@@ 2002.05.25 MIK	// 2005.10.03 maru
 	case F_DIFF_NEXT:		Command_Diff_Next(); break;						// DIFF差分表示(次へ)			//@@@ 2002.05.25 MIK
 	case F_DIFF_PREV:		Command_Diff_Prev(); break;						// DIFF差分表示(前へ)			//@@@ 2002.05.25 MIK
 	case F_DIFF_RESET:		Command_Diff_Reset(); break;					// DIFF差分表示(全解除)			//@@@ 2002.05.25 MIK
@@ -500,7 +500,7 @@ bool ViewCommander::HandleCommand(
 	case F_WRAPWINDOWWIDTH:	Command_WrapWindowWidth(); break;// 現在のウィンドウ幅で折り返し	// Oct. 7, 2000 JEPRO WRAPWINDIWWIDTH を WRAPWINDOWWIDTH に変更
 	case F_FAVORITE:		Command_Favorite(); break;		// 履歴の管理	//@@@ 2003.04.08 MIK
 	// Jan. 29, 2005 genta 引用符の設定
-	case F_SET_QUOTESTRING:	Command_Set_QuoteString((const WCHAR*)lparam1);	break;
+	case F_SET_QUOTESTRING:	Command_Set_QuoteString((const wchar_t*)lparam1);	break;
 	case F_TMPWRAPNOWRAP:	HandleCommand(F_TEXTWRAPMETHOD, bRedraw, (LPARAM)TextWrappingMethod::NoWrapping, 0, 0, 0); break;	// 折り返さない（一時設定）			// 2008.05.30 nasukoji
 	case F_TMPWRAPSETTING:	HandleCommand(F_TEXTWRAPMETHOD, bRedraw, (LPARAM)TextWrappingMethod::SettingWidth, 0, 0, 0); break;	// 指定桁で折り返す（一時設定）		// 2008.05.30 nasukoji
 	case F_TMPWRAPWINDOW:	HandleCommand(F_TEXTWRAPMETHOD, bRedraw, (LPARAM)TextWrappingMethod::WindowWidth, 0, 0, 0); break;	// 右端で折り返す（一時設定）		// 2008.05.30 nasukoji
@@ -519,7 +519,7 @@ bool ViewCommander::HandleCommand(
 		// 再帰処理対策
 		view.SetUndoBuffer(true);
 		// 名前を指定してマクロ実行
-		Command_ExecExtMacro((const WCHAR*)lparam1, (const WCHAR*)lparam2);
+		Command_ExecExtMacro((const wchar_t*)lparam1, (const wchar_t*)lparam2);
 		return bRet;
 	//	From Here Sept. 20, 2000 JEPRO 名称CMMANDをCOMMANDに変更
 	//	case F_EXECCMMAND:		Command_ExecCmmand(); break;	// 外部コマンド実行
@@ -665,7 +665,7 @@ bool ViewCommander::HandleCommand(
 	case F_EXTHELP1:	Command_ExtHelp1(); break;		// 外部ヘルプ１
 	case F_EXTHTMLHELP:	// 外部HTMLヘルプ
 		// Jul. 5, 2002 genta
-		Command_ExtHTMLHelp((const WCHAR*)lparam1, (const WCHAR*)lparam2);
+		Command_ExtHTMLHelp((const wchar_t*)lparam1, (const wchar_t*)lparam2);
 		break;
 	case F_ABOUT:	Command_About(); break;				// バージョン情報	// Dec. 24, 2000 JEPRO 追加
 

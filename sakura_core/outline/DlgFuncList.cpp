@@ -621,7 +621,7 @@ void DlgFuncList::SetData()
 			}
 			item.mask = LVIF_TEXT | LVIF_PARAM;
 			item.pszText = szText;
-			item.iItem = i;
+			item.iItem = (int)i;
 			item.lParam	= i;
 			item.iSubItem = FL_COL_ROW;
 			ListView_InsertItem(hwndList, &item);
@@ -635,13 +635,13 @@ void DlgFuncList::SetData()
 			}
 			item.mask = LVIF_TEXT;
 			item.pszText = szText;
-			item.iItem = i;
+			item.iItem = (int)i;
 			item.iSubItem = FL_COL_COL;
 			ListView_SetItem(hwndList, &item);
 
 			item.mask = LVIF_TEXT;
 			item.pszText = const_cast<TCHAR*>(pFuncInfo->memFuncName.GetStringPtr());
-			item.iItem = i;
+			item.iItem = (int)i;
 			item.iSubItem = FL_COL_NAME;
 			ListView_SetItem(hwndList, &item);
 			//	To Here Apr. 23, 2005 genta 行番号を左端へ
@@ -662,7 +662,7 @@ void DlgFuncList::SetData()
 
 				item.pszText = const_cast<TCHAR*>(_T(""));
 			}
-			item.iItem = i;
+			item.iItem = (int)i;
 			item.iSubItem = FL_COL_REMARK;
 			ListView_SetItem(hwndList, &item);
 
@@ -815,7 +815,7 @@ bool DlgFuncList::GetTreeFileFullName(
 		tvItem.hItem = target;
 		TreeView_GetItem( hwndTree, &tvItem );
 		if (((-tvItem.lParam) % 10) == 3) {
-			*pnItem = (-tvItem.lParam) / 10;
+			*pnItem = (int)(-tvItem.lParam) / 10;
 			*pPath = std::tstring(pFuncInfoArr->GetAt(*pnItem)->memFileName.GetStringPtr()) + _T("\\") + *pPath;
 			return true;
 		}
@@ -1127,7 +1127,7 @@ void DlgFuncList::SetTreeJava(
 		htiItem = TreeView_InsertItem(hwndTree, &tvis);
 
 		// クリップボードにコピーするテキストを編集
-		WCHAR szText[2048];
+		wchar_t szText[2048];
 		auto_sprintf(
 			szText,
 			L"%ts(%d,%d): ",
@@ -1267,7 +1267,7 @@ void DlgFuncList::SetListVB(void)
 		}
 		item.mask = LVIF_TEXT | LVIF_PARAM;
 		item.pszText = szText;
-		item.iItem = i;
+		item.iItem = (int)i;
 		item.iSubItem = FL_COL_ROW;
 		item.lParam	= i;
 		ListView_InsertItem(hwndList, &item);
@@ -1281,13 +1281,13 @@ void DlgFuncList::SetListVB(void)
 		}
 		item.mask = LVIF_TEXT;
 		item.pszText = szText;
-		item.iItem = i;
+		item.iItem = (int)i;
 		item.iSubItem = FL_COL_COL;
 		ListView_SetItem(hwndList, &item);
 
 		item.mask = LVIF_TEXT;
 		item.pszText = const_cast<TCHAR*>(pFuncInfo->memFuncName.GetStringPtr());
-		item.iItem = i;
+		item.iItem = (int)i;
 		item.iSubItem = FL_COL_NAME;
 		ListView_SetItem(hwndList, &item);
 		//	To Here Apr. 23, 2005 genta 行番号を左端へ
@@ -1374,7 +1374,7 @@ void DlgFuncList::SetListVB(void)
 			auto_sprintf(szTypeOption, _T("%ts（%ts）"), szType, szOption);
 		}
 		item.pszText = szTypeOption;
-		item.iItem = i;
+		item.iItem = (int)i;
 		item.iSubItem = FL_COL_REMARK;
 		ListView_SetItem(hwndList, &item);
 
@@ -1448,7 +1448,7 @@ void DlgFuncList::SetTree(bool tagjump, bool nolabel)
 	HWND hwndTree = GetItemHwnd(IDC_TREE_FL);
 
 	size_t nFuncInfoArrNum = pFuncInfoArr->GetNum();
-	int nStackPointer = 0;
+	size_t nStackPointer = 0;
 	size_t nStackDepth = 32; // phParentStack の確保している数
 	HTREEITEM* phParentStack;
 	phParentStack = (HTREEITEM*)malloc(nStackDepth * sizeof(HTREEITEM));
@@ -2092,9 +2092,6 @@ BOOL DlgFuncList::OnNotify(WPARAM wParam, LPARAM lParam)
 	HWND			hwndList;
 	HWND			hwndTree;
 	NM_TREEVIEW*	pnmtv;
-//	int				nLineTo;
-
-//	idCtrl = (int) wParam;
 	pnmh = (LPNMHDR) lParam;
 	pnlv = (NM_LISTVIEW*)lParam;
 
@@ -2505,8 +2502,8 @@ BOOL DlgFuncList::OnJump(
 	bool bFileJump
 	)	// 2002.02.08 hor 引数追加
 {
-	int nLineTo;
-	int nColTo;
+	size_t nLineTo;
+	size_t nColTo;
 	// ダイアログデータの取得
 	if (0 < GetData() && (funcInfo || 0 < sJumpFile.size() )) {
 		if (bModal) {		// モーダル ダイアログか
@@ -2533,8 +2530,8 @@ BOOL DlgFuncList::OnJump(
 					nColTo = funcInfo->nFuncColCRLF;
 					// 別のファイルへジャンプ
 					Point poCaret; // TagJumpSubも1開始
-					poCaret.x = nColTo;
-					poCaret.y = nLineTo;
+					poCaret.x = (int)nColTo;
+					poCaret.y = (int)nLineTo;
 					bFileJumpSelf = TagJumpTimer(funcInfo->memFileName.GetStringPtr(), poCaret, bCheckAutoClose);
 				}
 			}else {
@@ -2542,8 +2539,8 @@ BOOL DlgFuncList::OnJump(
 				nColTo = funcInfo->nFuncColCRLF;
 				// カーソルを移動させる
 				Point	poCaret;
-				poCaret.x = nColTo - 1;
-				poCaret.y = nLineTo - 1;
+				poCaret.x = (int)nColTo - 1;
+				poCaret.y = (int)nLineTo - 1;
 
 				pShareData->workBuffer.logicPoint = poCaret;
 

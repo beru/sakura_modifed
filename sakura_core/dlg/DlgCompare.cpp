@@ -142,7 +142,7 @@ void DlgCompare::SetData(void)
 	if (nRowNum > 0) {
 		// 水平スクロール幅は実際に表示する文字列の幅を計測して決める	// 2009.09.26 ryoji
 		TextWidthCalc calc(hwndList);
-		int score = 0;
+		size_t score = 0;
 		TCHAR szFile1[_MAX_PATH];
 		SplitPath_FolderAndFile(pszPath, NULL, szFile1);
 		for (size_t i=0; i<nRowNum; ++i) {

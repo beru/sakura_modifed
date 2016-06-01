@@ -277,7 +277,7 @@ void AddLastYenFromDirectoryPath(CHAR* pszFolder)
 	return;
 }
 
-void AddLastYenFromDirectoryPath(WCHAR* pszFolder)
+void AddLastYenFromDirectoryPath(wchar_t* pszFolder)
 {
 	if (auto_strlen(pszFolder) == 3
 	 && pszFolder[1] == L':'

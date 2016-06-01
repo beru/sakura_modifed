@@ -822,18 +822,18 @@ const MacroFuncInfo* SMacroMgr::GetFuncInfoByID(int nFuncID)
 	@date 2002.06.16 genta 新設のGetFuncInfoById(int)を内部で使うように．
 	@date 2011.04.10 nasukoji 各国語メッセージリソース対応
 */
-WCHAR* SMacroMgr::GetFuncInfoByID(
+wchar_t* SMacroMgr::GetFuncInfoByID(
 	HINSTANCE	hInstance,			// [in] リソース取得のためのInstance Handle
 	int			nFuncID,			// [in] 機能番号
-	WCHAR*		pszFuncName,		// [out] 関数名．この先には最長関数名＋1バイトのメモリが必要．
-	WCHAR*		pszFuncNameJapanese	// [out] 機能名日本語．NULL許容. この先には256バイトのメモリが必要．
+	wchar_t*	pszFuncName,		// [out] 関数名．この先には最長関数名＋1バイトのメモリが必要．
+	wchar_t*	pszFuncNameJapanese	// [out] 機能名日本語．NULL許容. この先には256バイトのメモリが必要．
 )
 {
 	const MacroFuncInfo* MacroInfo = GetFuncInfoByID(nFuncID);
 	if (MacroInfo) {
 		if (pszFuncName) {
 			auto_strcpy(pszFuncName, MacroInfo->pszFuncName);
-			WCHAR* p = pszFuncName;
+			wchar_t* p = pszFuncName;
 			while (*p) {
 				if (*p == LTEXT('(')) {
 					*p = LTEXT('\0');
@@ -864,12 +864,12 @@ WCHAR* SMacroMgr::GetFuncInfoByID(
 */
 EFunctionCode SMacroMgr::GetFuncInfoByName(
 	HINSTANCE		hInstance,				// [in]  リソース取得のためのInstance Handle
-	const WCHAR*	pszFuncName,			// [in]  関数名
-	WCHAR*			pszFuncNameJapanese		// [out] 機能名日本語．この先には256バイトのメモリが必要．
-)
+	const wchar_t*	pszFuncName,			// [in]  関数名
+	wchar_t*		pszFuncNameJapanese		// [out] 機能名日本語．この先には256バイトのメモリが必要．
+	)
 {
 	// Jun. 16, 2002 genta
-	const WCHAR* normalizedFuncName;
+	const wchar_t* normalizedFuncName;
 	
 	// S_で始まっているか
 	if (!pszFuncName) {

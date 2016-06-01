@@ -154,17 +154,17 @@ int KeyBind::CreateKeyBindList(
 	bool			bGetDefFuncCode // [in] ON:デフォルト機能割り当てを使う/OFF:使わない デフォルト:true
 	)
 {
-	WCHAR	szStr[256];
-	WCHAR	szFuncName[256];
-	WCHAR	szFuncNameJapanese[256];
+	wchar_t	szStr[256];
+	wchar_t	szFuncName[256];
+	wchar_t	szFuncNameJapanese[256];
 
 	int nValidKeys = 0;
 	memList.SetString(LTEXT(""));
-	const WCHAR*	pszSHIFT = LTEXT("Shift+");
-	const WCHAR*	pszCTRL  = LTEXT("Ctrl+");
-	const WCHAR*	pszALT   = LTEXT("Alt+");
-	const WCHAR*	pszTAB   = LTEXT("\t");
-	const WCHAR*	pszCR    = LTEXT("\r\n");	// \r=0x0d=CRを追加
+	const wchar_t* pszSHIFT = LTEXT("Shift+");
+	const wchar_t* pszCTRL  = LTEXT("Ctrl+");
+	const wchar_t* pszALT   = LTEXT("Alt+");
+	const wchar_t* pszTAB   = LTEXT("\t");
+	const wchar_t* pszCR    = LTEXT("\r\n");	// \r=0x0d=CRを追加
 
 	memList.AppendString(LSW(STR_ERR_DLGKEYBIND1));
 	memList.AppendString(pszCR);

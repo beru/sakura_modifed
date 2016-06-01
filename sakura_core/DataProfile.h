@@ -45,7 +45,7 @@ struct StringBuffer {
 };
 
 typedef const StringBuffer<ACHAR> StringBufferA;
-typedef const StringBuffer<WCHAR> StringBufferW;
+typedef const StringBuffer<wchar_t> StringBufferW;
 #ifdef _UNICODE
 	typedef StringBufferW StringBufferT;
 #else
@@ -130,15 +130,15 @@ protected:
 		}
 	}
 	void value_to_profile(const ACHAR& value, wstring* profile) {
-		WCHAR buf[2] = {0};
+		wchar_t buf[2] = {0};
 		mbtowc(buf, &value, 1);
 		profile->assign(1, buf[0]);
 	}
-	// WCHAR
-	void profile_to_value(const wstring& profile, WCHAR* value) {
+	// wchar_t
+	void profile_to_value(const wstring& profile, wchar_t* value) {
 		*value = profile[0];
 	}
-	void value_to_profile(const WCHAR& value, wstring* profile) {
+	void value_to_profile(const wchar_t& value, wstring* profile) {
 		profile->assign(1, value);
 	}
 	// StringBufferW
@@ -155,13 +155,13 @@ protected:
 	void value_to_profile(const StringBufferA& value, wstring* profile) {
 		*profile = to_wchar(value. pData);
 	}
-	// StaticString<WCHAR, N>
+	// StaticString<wchar_t, N>
 	template <int N>
-	void profile_to_value(const wstring& profile, StaticString<WCHAR, N>* value) {
+	void profile_to_value(const wstring& profile, StaticString<wchar_t, N>* value) {
 		wcscpy_s(value->GetBufferPointer(), value->GetBufferCount(), profile.c_str());
 	}
 	template <int N>
-	void value_to_profile(const StaticString<WCHAR, N>& value, wstring* profile) {
+	void value_to_profile(const StaticString<wchar_t, N>& value, wstring* profile) {
 		*profile = value.GetBufferPointer();
 	}
 	// StaticString<ACHAR, N>
@@ -187,7 +187,7 @@ protected:
 public:
 	// 注意：StringBuffer系はバッファが足りないとabortします
 	template <class T> //T=={bool, int, WORD, wchar_t, char, wstring, StringBufferA, StringBufferW, StaticString}
-	bool IOProfileData(const WCHAR* pszSectionName, const WCHAR* pszEntryKey, T& tEntryValue) {
+	bool IOProfileData(const wchar_t* pszSectionName, const wchar_t* pszEntryKey, T& tEntryValue) {
 		// 読み込み
 		if (bRead) {
 			// 文字列読み込み
@@ -211,7 +211,7 @@ public:
 	// 2007.08.14 kobake 追加
 	// intを介して任意型の入出力を行う
 	template <class T>
-	bool IOProfileData_WrapInt(const WCHAR* pszSectionName, const WCHAR* pszEntryKey, T& nEntryValue) {
+	bool IOProfileData_WrapInt(const wchar_t* pszSectionName, const wchar_t* pszEntryKey, T& nEntryValue) {
 		int n = (int)nEntryValue;
 		bool ret = this->IOProfileData(pszSectionName, pszEntryKey, n);
 		nEntryValue = (T)n;

@@ -109,10 +109,10 @@ void ViewCommander::Command_FileNew_NewWindow(void)
 	@date 2004.10.09 genta 実装をEditDocへ移動
 */
 void ViewCommander::Command_FileOpen(
-	const WCHAR* filename,
+	const wchar_t* filename,
 	EncodingType nCharCode,
 	bool bViewMode,
-	const WCHAR* defaultName
+	const wchar_t* defaultName
 	)
 {
 	if (!IsValidCodeType(nCharCode) && nCharCode != CODE_AUTODETECT) {
@@ -211,7 +211,7 @@ bool ViewCommander::Command_FileSave(bool warnbeep, bool askname)
 
 // 名前を付けて保存ダイアログ
 bool ViewCommander::Command_FileSaveAs_Dialog(
-	const WCHAR* fileNameDef,
+	const wchar_t* fileNameDef,
 	EncodingType eCodeType,
 	EolType eEolType
 	)
@@ -224,7 +224,7 @@ bool ViewCommander::Command_FileSaveAs_Dialog(
 	filenameで保存。NULLは厳禁。
 */
 bool ViewCommander::Command_FileSaveAs(
-	const WCHAR* filename,
+	const wchar_t* filename,
 	EolType eEolType
 	)
 {

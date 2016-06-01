@@ -40,6 +40,6 @@ public:
 	MacroFuncInfoArray GetMacroCommandInfo() const;	// コマンド情報を取得する
 	MacroFuncInfoArray GetMacroFuncInfo() const;	// 関数情報を取得する
 	bool HandleFunction(EditView& view, EFunctionCode index, const VARIANT* arguments, const int argSize, VARIANT& result);	// 関数を処理する
-	bool HandleCommand(EditView& view, EFunctionCode index, const WCHAR* arguments[], const int argLengths[], const int argSize);	// コマンドを処理する
+	bool HandleCommand(EditView& view, EFunctionCode index, const wchar_t* arguments[], const int argLengths[], const int argSize);	// コマンドを処理する
 };
 

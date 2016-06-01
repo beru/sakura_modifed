@@ -297,7 +297,7 @@ LRESULT EditView::SetReconvertStruct(
 
 	// UNICODE→UNICODE
 	if (bUnicode) {
-		const WCHAR* pszCompInsStr = L"";
+		const wchar_t* pszCompInsStr = L"";
 		size_t nCompInsStr = 0;
 		if (nInsertCompLen) {
 			pszCompInsStr = to_wchar(szComposition);
@@ -376,7 +376,7 @@ LRESULT EditView::SetReconvertStruct(
 		
 		// 2004.01.28 Moca ヌル終端の修正
 		if (bUnicode) {
-			WCHAR* p = (WCHAR*)(pReconv + 1);
+			wchar_t* p = (wchar_t*)(pReconv + 1);
 			if (dwInsByteCount) {
 				// カーソル位置に、入力中IMEデータを挿入
 				CHAR* pb = (CHAR*)p;
@@ -451,7 +451,7 @@ LRESULT EditView::SetSelectionFromReonvert(
 
 	// UNICODE→UNICODE
 	if (bUnicode) {
-		dwOffset = pReconv->dwCompStrOffset/sizeof(WCHAR);	// 0またはデータ長。バイト単位。→文字単位
+		dwOffset = pReconv->dwCompStrOffset/sizeof(wchar_t);	// 0またはデータ長。バイト単位。→文字単位
 		dwLen    = pReconv->dwCompStrLen;					// 0または文字列長。文字単位。
 	}else {
 	// ANSI→UNICODE

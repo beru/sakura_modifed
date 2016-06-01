@@ -612,7 +612,7 @@ DWORD GrepAgent::DoGrep(
 		AddTail(editWnd, viewDst, memSuspend, grepOption.bGrepStdout);
 	}
 	if (grepOption.bGrepHeader) {
-		WCHAR szBuffer[128];
+		wchar_t szBuffer[128];
 		if (bGrepReplace) {
 			auto_sprintf( szBuffer, LSW(STR_GREP_REPLACE_COUNT), nHitCount );
 		}else {

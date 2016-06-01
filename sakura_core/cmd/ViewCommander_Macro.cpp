@@ -210,7 +210,7 @@ void ViewCommander::Command_ExecKeyMacro(void)
 	@date 2008.10.23 syat V‹Kì¬
 	@date 2008.12.21 syat ˆø”uí•Êv‚ğ’Ç‰Á
  */
-void ViewCommander::Command_ExecExtMacro(const WCHAR* pszPathW, const WCHAR* pszTypeW)
+void ViewCommander::Command_ExecExtMacro(const wchar_t* pszPathW, const wchar_t* pszTypeW)
 {
 	TCHAR			szPath[_MAX_PATH + 1];
 	const TCHAR*	pszPath = NULL;				// ‘æ1ˆø”‚ğTCHAR*‚É•ÏŠ·‚µ‚½•¶š—ñ
@@ -304,9 +304,9 @@ void ViewCommander::Command_ExecCommand_Dialog(void)
 	}
 
 	view.AddToCmdArr(dlgExec.szCommand);
-	const WCHAR* cmd_string = to_wchar(dlgExec.szCommand);
-	const WCHAR* curDir = to_wchar(dlgExec.szCurDir);
-	const WCHAR* pszDir = curDir;
+	const wchar_t* cmd_string = to_wchar(dlgExec.szCommand);
+	const wchar_t* curDir = to_wchar(dlgExec.szCurDir);
+	const wchar_t* pszDir = curDir;
 	if (curDir[0] == L'\0') {
 		pszDir = NULL;
 	}else {

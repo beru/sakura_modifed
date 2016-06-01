@@ -557,7 +557,7 @@ void PropToolbar::DrawToolBarItemList(DRAWITEMSTRUCT* pDis)
 		tbb = pMenuDrawer->getButton(pDis->itemData);
 
 		// ボタンとセパレータとで処理を分ける	2007.11.02 ryoji
-		WCHAR	szLabel[256];
+		wchar_t	szLabel[256];
 		if (tbb.fsStyle & TBSTYLE_SEP) {
 			// テキストだけ表示する
 			if (tbb.idCommand == F_SEPARATOR) {

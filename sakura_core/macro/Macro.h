@@ -47,7 +47,7 @@ enum class MacroParamType {
 };
 
 struct MacroParam {
-	WCHAR*			pData;
+	wchar_t*		pData;
 	MacroParam*		pNext;
 	size_t			nDataLen;
 	MacroParamType type;
@@ -55,7 +55,7 @@ struct MacroParam {
 	MacroParam():pData(NULL), pNext(NULL), nDataLen(0), type(MacroParamType::Null){}
 	MacroParam( const MacroParam& obj ){
 		if (obj.pData) {
-			pData = new WCHAR[obj.nDataLen + 1];
+			pData = new wchar_t[obj.nDataLen + 1];
 		}else {
 			pData = NULL;
 		}
@@ -72,7 +72,7 @@ struct MacroParam {
 		nDataLen = 0;
 		type = MacroParamType::Null;
 	}
-	void SetStringParam( const WCHAR* szParam, int nLength = -1 );
+	void SetStringParam( const wchar_t* szParam, int nLength = -1 );
 	void SetStringParam( const ACHAR* lParam ){ SetStringParam(to_wchar(lParam)); }
 	void SetIntParam( const int nParam );
 };
@@ -107,12 +107,12 @@ public:
 	void Save(HINSTANCE hInstance, TextOutputStream& out) const; // 2007.09.30 kobake constí«â¡
 	
 	void AddLParam(const LPARAM* lParam, const EditView& editView );	//@@@ 2002.2.2 YAZAKI pEditViewÇ‡ìnÇ∑
-	void AddStringParam( const WCHAR* szParam, int nLength = -1 );
+	void AddStringParam( const wchar_t* szParam, int nLength = -1 );
 	void AddStringParam(const ACHAR* lParam) { return AddStringParam(to_wchar(lParam)); }
 	void AddIntParam( const int nParam );
 	int GetParamCount() const;
 
-	static bool HandleCommand(EditView& view, EFunctionCode index, const WCHAR* arguments[], const int argLengths[], const int argSize);
+	static bool HandleCommand(EditView& view, EFunctionCode index, const wchar_t* arguments[], const int argLengths[], const int argSize);
 	static bool HandleFunction(EditView& view, EFunctionCode index, const VARIANT* argumentss, const int argSize, VARIANT& result);
 	// 2009.10.29 syat HandleCommandÇ∆HandleFunctionÇÃà¯êîÇè≠ÇµÇªÇÎÇ¶ÇΩ
 #if 0
@@ -125,7 +125,7 @@ public:
 #endif
 
 protected:
-	static WCHAR* GetParamAt(MacroParam*, int);
+	static wchar_t* GetParamAt(MacroParam*, int);
 
 	/*
 	||  é¿ëïÉwÉãÉpä÷êî

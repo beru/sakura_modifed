@@ -100,10 +100,10 @@ public:
 	///	@name キーワード操作
 	size_t GetKeywordNum(size_t);				// ｎ番目のセットのキーワードの数を返す
 	const wchar_t* GetKeyword(size_t, size_t);	// ｎ番目のセットのｍ番目のキーワードを返す
-	const wchar_t* UpdateKeyword(size_t, size_t, const WCHAR*);	// ｎ番目のセットのｍ番目のキーワードを編集
+	const wchar_t* UpdateKeyword(size_t, size_t, const wchar_t*);	// ｎ番目のセットのｍ番目のキーワードを編集
 	size_t AddKeyword(size_t, const wchar_t*);	// ｎ番目のセットにキーワードを追加
 	size_t DelKeyword(size_t, size_t);			// ｎ番目のセットのｍ番目のキーワードを削除
-	bool CanAddKeyword(int);	// キーワードが追加可能か
+	bool CanAddKeyword(size_t);	// キーワードが追加可能か
 	//@}
 	
 	//@{

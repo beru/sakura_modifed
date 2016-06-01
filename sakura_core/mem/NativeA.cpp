@@ -41,7 +41,7 @@ void NativeA::SetString(const char* pszData)
 // バッファの内容を置き換える。nLenは文字単位。
 void NativeA::SetString(const char* pData, size_t nDataLen)
 {
-	int nDataLenBytes = nDataLen * sizeof(char);
+	size_t nDataLenBytes = nDataLen * sizeof(char);
 	Native::SetRawData(pData, nDataLenBytes);
 }
 

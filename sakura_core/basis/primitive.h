@@ -66,7 +66,6 @@ typedef TCHAR WIN_CHAR;
 
 
 // EDIT_CHAR
-typedef wchar_t WChar;      // エディタで用いるテキスト管理データ型
 typedef wchar_t EDIT_CHAR;
 #define _EDITL(A) LTEXT(A)
 

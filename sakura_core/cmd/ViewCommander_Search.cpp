@@ -77,7 +77,7 @@ void ViewCommander::Command_Search_Next(
 	bool			bRedraw,
 	bool			bReplaceAll,
 	HWND			hwndParent,
-	const WCHAR*	pszNotFoundMessage,
+	const wchar_t*	pszNotFoundMessage,
 	Range*		pSelectLogic		// [out] 選択範囲のロジック版。マッチ範囲を返す。すべて置換/高速モードで使用
 	)
 {

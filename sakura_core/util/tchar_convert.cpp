@@ -6,14 +6,14 @@ static RecycledBuffer        g_bufSmall;
 static RecycledBufferDynamic g_bufBig;
 
 
-const WCHAR* to_wchar(const ACHAR* src)
+const wchar_t* to_wchar(const ACHAR* src)
 {
 	if (!src) return NULL;
 
 	return to_wchar(src, strlen(src));
 }
 
-const WCHAR* to_wchar(const ACHAR* pSrc, int nSrcLength)
+const wchar_t* to_wchar(const ACHAR* pSrc, size_t nSrcLength)
 {
 	if (!pSrc) return NULL;
 
@@ -22,18 +22,18 @@ const WCHAR* to_wchar(const ACHAR* pSrc, int nSrcLength)
 		CP_SJIS,				// 2008/5/12 Uchi
 		0,
 		pSrc,
-		nSrcLength,
+		(int)nSrcLength,
 		NULL,
 		0
 	);
 	size_t nDstCnt = (size_t)nDstLen + 1;
 
 	// バッファ取得
-	WCHAR* pDst;
-	if (nDstCnt < g_bufSmall.GetMaxCount<WCHAR>()) {
-		pDst = g_bufSmall.GetBuffer<WCHAR>(&nDstCnt);
+	wchar_t* pDst;
+	if (nDstCnt < g_bufSmall.GetMaxCount<wchar_t>()) {
+		pDst = g_bufSmall.GetBuffer<wchar_t>(&nDstCnt);
 	}else {
-		pDst = g_bufBig.GetBuffer<WCHAR>(nDstCnt);
+		pDst = g_bufBig.GetBuffer<wchar_t>(nDstCnt);
 	}
 
 	// 変換
@@ -41,7 +41,7 @@ const WCHAR* to_wchar(const ACHAR* pSrc, int nSrcLength)
 		CP_SJIS,				// 2008/5/12 Uchi
 		0,
 		pSrc,
-		nSrcLength,
+		(int)nSrcLength,
 		pDst,
 		nDstLen
 	);
@@ -51,14 +51,14 @@ const WCHAR* to_wchar(const ACHAR* pSrc, int nSrcLength)
 }
 
 
-const ACHAR* to_achar(const WCHAR* src)
+const ACHAR* to_achar(const wchar_t* src)
 {
 	if (!src) return NULL;
 
 	return to_achar(src, wcslen(src));
 }
 
-const ACHAR* to_achar(const WCHAR* pSrc, int nSrcLength)
+const ACHAR* to_achar(const wchar_t* pSrc, size_t nSrcLength)
 {
 	if (!pSrc) return NULL;
 
@@ -67,7 +67,7 @@ const ACHAR* to_achar(const WCHAR* pSrc, int nSrcLength)
 		CP_SJIS,				// 2008/5/12 Uchi
 		0,
 		pSrc,
-		nSrcLength,
+		(int)nSrcLength,
 		NULL,
 		0,
 		NULL,
@@ -88,7 +88,7 @@ const ACHAR* to_achar(const WCHAR* pSrc, int nSrcLength)
 		CP_SJIS,				// 2008/5/12 Uchi
 		0,
 		pSrc,
-		nSrcLength,
+		(int)nSrcLength,
 		pDst,
 		nDstLen,
 		NULL,
@@ -99,9 +99,9 @@ const ACHAR* to_achar(const WCHAR* pSrc, int nSrcLength)
 	return pDst;
 }
 
-const WCHAR* easy_format(const WCHAR* format, ...)
+const wchar_t* easy_format(const wchar_t* format, ...)
 {
-	WCHAR* buf = g_bufBig.GetBuffer<WCHAR>(1024);
+	wchar_t* buf = g_bufBig.GetBuffer<wchar_t>(1024);
 	va_list v;
 	va_start(v, format);
 	tchar_vsprintf(buf, format, v);

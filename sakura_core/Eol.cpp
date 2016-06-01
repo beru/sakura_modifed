@@ -49,11 +49,11 @@ const EolType g_pnEolTypeArr[EOL_TYPE_NUM] = {
 
 struct EolDefinition {
 	const TCHAR*	szName;
-	const WCHAR*	szDataW;
+	const wchar_t*	szDataW;
 	const ACHAR*	szDataA;
 	size_t			nLen;
 
-	bool StartsWith(const WCHAR* pData, size_t nLen) const { return this->nLen <= nLen && auto_memcmp(pData, szDataW, this->nLen) == 0; }
+	bool StartsWith(const wchar_t* pData, size_t nLen) const { return this->nLen <= nLen && auto_memcmp(pData, szDataW, this->nLen) == 0; }
 	bool StartsWith(const ACHAR* pData, size_t nLen) const { return this->nLen <= nLen && szDataA[0] != '\0' && auto_memcmp(pData, szDataA, this->nLen) == 0; }
 };
 

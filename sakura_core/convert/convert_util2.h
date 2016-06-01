@@ -50,7 +50,7 @@ inline ACHAR _GetHexChar(ACHAR c)
 		return '\0';
 	}
 }
-inline WCHAR _GetHexChar(WCHAR c)
+inline wchar_t _GetHexChar(wchar_t c)
 {
 	if ((c >= L'0' && c <= L'9') || (c >= L'A' && c <= L'F')) {
 		return c;
@@ -72,7 +72,7 @@ inline int _HexToInt(ACHAR c)
 		return c - 'A' + 10;
 	}
 }
-inline int _HexToInt(WCHAR c)
+inline int _HexToInt(wchar_t c)
 {
 	if (c <= L'9') {
 		return c - L'0';
@@ -336,7 +336,7 @@ end
 */
 
 
-inline BYTE _UUDECODE_CHAR(WCHAR c)
+inline BYTE _UUDECODE_CHAR(wchar_t c)
 {
 	BYTE c_ = (c & 0xff);
 	if (c_ == L'`' || c_ == L'~') {
@@ -471,7 +471,7 @@ bool CheckUUHeader(const CHAR_TYPE* pSrc, size_t nLen, TCHAR* pszFilename)
 	}
 	for (size_t i=0; i<nwlen; ++i) {
 		if (sizeof(CHAR_TYPE) == 2) {
-			// WCHAR ‚Ìê‡‚Ìˆ—
+			// wchar_t ‚Ìê‡‚Ìˆ—
 			if (!iswdigit(pwstart[i]) || (pwstart[i] == L'8' || pwstart[i] == L'9')) {
 				// error.
 				return false;
@@ -534,7 +534,7 @@ bool CheckUUFooter(const CHAR_TYPE *pS, const size_t nLen)
 	for (nstartidx=0; nstartidx<nLen; ++nstartidx) {
 		CHAR_TYPE c = pS[nstartidx];
 		if (sizeof(CHAR_TYPE) == 2) {
-			// WCHAR ‚Ìê‡‚Ìˆ—
+			// wchar_t ‚Ìê‡‚Ìˆ—
 			if (c != L'\r' && c != L'\n' && c != L' ' && c != L'\t') {
 				break;
 			}
@@ -570,7 +570,7 @@ bool CheckUUFooter(const CHAR_TYPE *pS, const size_t nLen)
 	for (; i<nsrclen; ++i) {
 		CHAR_TYPE c = psrc[i];
 		if (sizeof(CHAR_TYPE) == 2) {
-			// WCHAR ‚Ìê‡‚Ìˆ—
+			// wchar_t ‚Ìê‡‚Ìˆ—
 			if (!WCODE::IsLineDelimiterBasic(c) && c != L' ' && c != L'\t') {
 				return false;
 			}

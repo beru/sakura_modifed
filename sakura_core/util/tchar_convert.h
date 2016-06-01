@@ -23,17 +23,17 @@
 */
 #pragma once
 
-// WCHAR‚É•ÏŠ·
-const WCHAR* to_wchar(const ACHAR* src);
-const WCHAR* to_wchar(const ACHAR* pSrcData, int nSrcLength);
+// wchar_t‚É•ÏŠ·
+const wchar_t* to_wchar(const ACHAR* src);
+const wchar_t* to_wchar(const ACHAR* pSrcData, size_t nSrcLength);
 inline
-const WCHAR* to_wchar(const WCHAR* src) { return src; }
+const wchar_t* to_wchar(const wchar_t* src) { return src; }
 
 // ACHAR‚É•ÏŠ·
 inline
 const ACHAR* to_achar(const ACHAR* src) { return src; }
-const ACHAR* to_achar(const WCHAR* src);
-const ACHAR* to_achar(const WCHAR* pSrc, int nSrcLength);
+const ACHAR* to_achar(const wchar_t* src);
+const ACHAR* to_achar(const wchar_t* pSrc, size_t nSrcLength);
 
 // TCHAR‚É•ÏŠ·
 #ifdef _UNICODE
@@ -45,5 +45,5 @@ const ACHAR* to_achar(const WCHAR* pSrc, int nSrcLength);
 #endif
 
 // ‚»‚Ì‘¼
-const WCHAR* easy_format(const WCHAR* format, ...);
+const wchar_t* easy_format(const wchar_t* format, ...);
 

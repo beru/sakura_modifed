@@ -330,6 +330,7 @@ void ESI::GetEncodingInfo_eucjp(const char* pS, size_t nLen)
 		}
 	}
 
+	ASSERT_GE(num_of_eucjp_encoded_bytes, nillbytes);
 	SetEvaluation(CODE_EUC,
 		num_of_eucjp_encoded_bytes,
 		num_of_eucjp_encoded_bytes - nillbytes

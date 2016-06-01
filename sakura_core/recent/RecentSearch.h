@@ -26,7 +26,7 @@
 #include "RecentImp.h"
 #include "util/StaticType.h"
 
-typedef StaticString<WCHAR, _MAX_PATH> SearchString;
+typedef StaticString<wchar_t, _MAX_PATH> SearchString;
 
 // ŒŸõ‚Ì—š—ğ‚ğŠÇ— (RECENT_FOR_SEARCH)
 class RecentSearch : public RecentImp<SearchString, LPCWSTR> {

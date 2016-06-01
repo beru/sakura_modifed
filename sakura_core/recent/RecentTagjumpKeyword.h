@@ -26,7 +26,7 @@
 #include "RecentImp.h"
 #include "util/StaticType.h"
 
-typedef StaticString<WCHAR, _MAX_PATH> TagJumpKeywordString;
+typedef StaticString<wchar_t, _MAX_PATH> TagJumpKeywordString;
 
 // タグジャンプキーワードの履歴を管理 (RECENT_FOR_TAGJUMP_KEYWORD)
 class RecentTagJumpKeyword : public RecentImp<TagJumpKeywordString, LPCWSTR> {

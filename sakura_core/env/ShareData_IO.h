@@ -65,9 +65,9 @@ protected:
 	static void ShareData_IO_Other(DataProfile&);
 
 public:
-	static void ShareData_IO_FileTree(DataProfile&, FileTree&, const WCHAR*);
-	static void ShareData_IO_FileTreeItem(DataProfile&, FileTreeItem&, const WCHAR*, int i);
-	static void ShareData_IO_Type_One(DataProfile&, TypeConfig& , const WCHAR*);	// 2010/04/12 Uchi ï™ó£
+	static void ShareData_IO_FileTree(DataProfile&, FileTree&, const wchar_t*);
+	static void ShareData_IO_FileTreeItem(DataProfile&, FileTreeItem&, const wchar_t*, int i);
+	static void ShareData_IO_Type_One(DataProfile&, TypeConfig& , const wchar_t*);	// 2010/04/12 Uchi ï™ó£
 
 public:
 	static void IO_CustMenu(DataProfile&, CommonSetting_CustomMenu&, bool);
@@ -79,6 +79,6 @@ public:
 		std::vector<std::wstring>* pData,
 		CommonSetting_MainMenu& mainmenu,
 		bool bOutCmdName);
-	static void IO_ColorSet(DataProfile*, const WCHAR*, ColorInfo*);		// êFê›íË I/O // Feb. 12, 2006 D.S.Koba
+	static void IO_ColorSet(DataProfile*, const wchar_t*, ColorInfo*);		// êFê›íË I/O // Feb. 12, 2006 D.S.Koba
 };
 

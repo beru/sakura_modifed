@@ -225,7 +225,7 @@ const wchar_t* KeywordSetMgr::GetKeyword(size_t nIdx, size_t nIdx2)
 const wchar_t* KeywordSetMgr::UpdateKeyword(
 	size_t			nIdx,		// [in] キーワードセット番号
 	size_t			nIdx2,		// [in] キーワード番号
-	const WCHAR*	pszKeyword	// [in] 設定するキーワード
+	const wchar_t*	pszKeyword	// [in] 設定するキーワード
 	)
 {
 	if (nKeywordSetNum <= nIdx) {
@@ -568,7 +568,7 @@ size_t KeywordSetMgr::CleanKeywords(size_t nIdx)
 	@date 2005.01.26 Moca 新規作成
 	@date 2005.01.29 genta 割り当て済みの領域に空きがあれば拡張不能でも追加可能
 */
-bool KeywordSetMgr::CanAddKeyword(int nIdx)
+bool KeywordSetMgr::CanAddKeyword(size_t nIdx)
 {
 	//	割り当て済みの領域の空きをまず調べる
 	size_t nSizeOld = GetAllocSize(nIdx);

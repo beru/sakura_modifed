@@ -263,8 +263,8 @@ size_t Color_Quote::Match_QuoteStr(const wchar_t* pszQuote, size_t nQuoteLen, si
 {
 	size_t nCharChars;
 	const size_t nCompLen = lineStr.GetLength() - nQuoteLen + 1;
-	const WCHAR quote1 = pszQuote[0];
-	const WCHAR* pLine = lineStr.GetPtr();
+	const wchar_t quote1 = pszQuote[0];
+	const wchar_t* pLine = lineStr.GetPtr();
 	for (size_t i=nPos; i<nCompLen; i+=nCharChars) {
 		if (quote1 == pLine[i] && wmemcmp(pszQuote + 1, pLine + i + 1, nQuoteLen - 1) == 0) {
 			return i + nQuoteLen;

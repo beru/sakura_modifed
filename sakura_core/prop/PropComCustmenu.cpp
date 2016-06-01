@@ -117,8 +117,8 @@ INT_PTR PropCustmenu::DispatchEvent(
 	int			nNum2;
 	int			nIdx3;
 	int			nIdx4;
-	WCHAR		szLabel[300];
-	WCHAR		szLabel2[300];
+	wchar_t		szLabel[300];
+	wchar_t		szLabel2[300];
 
 	DlgInput1	dlgInput1;
 	auto& csCustomMenu = common.customMenu;
@@ -195,7 +195,7 @@ INT_PTR PropCustmenu::DispatchEvent(
 				Export(hwndDlg);
 				return TRUE;
 			case IDC_BUTTON_MENUNAME:
-				WCHAR buf[MAX_CUSTOM_MENU_NAME_LEN + 1];
+				wchar_t buf[MAX_CUSTOM_MENU_NAME_LEN + 1];
 				//	メニュー文字列の設定
 				nIdx1 = Combo_GetCurSel(hwndCOMBO_MENU);
 				if (nIdx1 == CB_ERR) {
@@ -650,7 +650,7 @@ void PropCustmenu::SetData(HWND hwndDlg)
 
 	// メニュー一覧に文字列をセット（コンボボックス）
 	HWND hwndCOMBO_MENU = ::GetDlgItem(hwndDlg, IDC_COMBO_MENU);
-	WCHAR buf[MAX_CUSTOM_MENU_NAME_LEN + 1];
+	wchar_t buf[MAX_CUSTOM_MENU_NAME_LEN + 1];
 	for (int i=0; i<MAX_CUSTOM_MENU; ++i) {
 		Combo_AddString(hwndCOMBO_MENU, lookup.Custmenu2Name(i, buf, _countof(buf)));
 	}
@@ -665,8 +665,8 @@ void PropCustmenu::SetData(HWND hwndDlg)
 
 void PropCustmenu::SetDataMenuList(HWND hwndDlg, int nIdx)
 {
-	WCHAR szLabel[300];
-	WCHAR szLabel2[300];
+	wchar_t szLabel[300];
+	wchar_t szLabel2[300];
 	auto& csCustomMenu = common.customMenu;
 
 	// メニュー項目一覧に文字列をセット（リストボックス）

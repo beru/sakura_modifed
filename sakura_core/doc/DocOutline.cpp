@@ -39,7 +39,7 @@
 */
 struct OneRule {
 	wchar_t szMatch[256];
-	int		nLength;
+	size_t	nLength;
 	wchar_t szText[256]; // RegexReplaceŽž‚Ì’uŠ·Œã•¶Žš—ñ
 	wchar_t szGroupName[256];
 	int		nLv;
@@ -142,7 +142,7 @@ int DocOutline::ReadRuleFile(
 					bTopDummy = true;
 				}
 			}
-			const WCHAR* p = wcsstr(pszWork, L",Lv=");
+			const wchar_t* p = wcsstr(pszWork, L",Lv=");
 			int nLv = 0;
 			if (p) {
 				nLv = _wtoi(p + 4);

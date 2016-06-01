@@ -156,8 +156,8 @@ bool KeyMacroMgr::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
 		return false;
 	}
 
-	WCHAR	szFuncName[100];
-	WCHAR	szFuncNameJapanese[256];
+	wchar_t szFuncName[100];
+	wchar_t szFuncNameJapanese[256];
 	EFunctionCode	nFuncID;
 	size_t i;
 	size_t nBgn;
@@ -172,7 +172,7 @@ bool KeyMacroMgr::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
 	int line = 1;	// エラー時に行番号を通知するため．1始まり．
 	for (; in.Good(); ++line) {
 		std::wstring strLine = in.ReadLineW();
-		const WCHAR* szLine = strLine.c_str(); // '\0'終端文字列を取得
+		const wchar_t* szLine = strLine.c_str(); // '\0'終端文字列を取得
 		using namespace WCODE;
 
 		size_t nLineLen = strLine.length();
@@ -266,7 +266,7 @@ bool KeyMacroMgr::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
 						nReady = false;
 						break;
 					}
-					WCHAR cQuote = szLine[i];
+					wchar_t cQuote = szLine[i];
 					++i;
 					nBgn = nEnd = i;	// nBgnは引数の先頭の文字
 					// Jun. 16, 2002 genta

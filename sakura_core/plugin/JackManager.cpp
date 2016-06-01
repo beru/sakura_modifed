@@ -37,7 +37,7 @@ JackManager::JackManager()
 	// 添え字がEJackの値と同じであること。
 	struct JackEntry {
 		EJack id;
-		const WCHAR* name;
+		const wchar_t* name;
 	} jackNames[] = {
 		{ PP_COMMAND				, PP_COMMAND_STR		},
 //		{ PP_INSTALL				, L"Install"			},
@@ -169,7 +169,7 @@ bool JackManager::UnRegisterPlug(
 // ジャック名をジャック番号に変換する
 EJack JackManager::GetJackFromName(wstring sName)
 {
-	const WCHAR* szName = sName.c_str();
+	const wchar_t* szName = sName.c_str();
 	const size_t jackSize = jacks.size();
 	for (size_t i=0; i<jackSize; ++i) {
 		auto& jack = jacks[i];
@@ -212,7 +212,7 @@ EFunctionCode JackManager::GetCommandCode(int index) const
 // プラグインコマンドの名前を返す
 int JackManager::GetCommandName(
 	int funccode,
-	WCHAR* buf,
+	wchar_t* buf,
 	int size
 	) const
 {

@@ -442,7 +442,7 @@ bool DocFileOperation::FileSave()
 	@date 2006.12.30 ryoji CEditView::Command_FileSaveAs_Dialog()‚©‚çˆ—–{‘Ì‚ğØ‚èo‚µ
 */
 bool DocFileOperation::FileSaveAs(
-	const WCHAR* filename,
+	const wchar_t* filename,
 	EncodingType eCodeType,
 	EolType eEolType,
 	bool bDialog

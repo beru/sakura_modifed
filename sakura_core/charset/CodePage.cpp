@@ -86,7 +86,7 @@ inline UINT CodePageExToMSCP(int codepageEx)
 /*!
 	CODEPAGE ¨ Unicode •ÏŠ·ŠÖ”
 	@param pbError NULL‹–—e
-	@return •ÏŠ·‚µ‚½•¶š—ñ‚Ì’·‚³(WCHAR’PˆÊ)
+	@return •ÏŠ·‚µ‚½•¶š—ñ‚Ì’·‚³(wchar_t’PˆÊ)
 */
 CodeConvertResult CodePage::CPToUni(const char* pSrc, const size_t nSrcLen, wchar_t* pDst, size_t nDstCchLen, size_t& nRetLen, UINT codepage)
 {
@@ -366,7 +366,7 @@ EEncodingTrait CodePage::GetEncodingTrait(int charcodeEx)
 	switch (nRet) {
 	case 2:
 		if (memcmp(testCrlf, "\x0d\x25", 2) == 0) {
-			WCHAR nel[1] = {0x0085};
+			wchar_t nel[1] = {0x0085};
 			CHAR testNel[10];
 			int nRetNel = ::WideCharToMultiByte(codepage, 0, nel, 1, testNel, sizeof(testNel), NULL, NULL);
 			if (nRetNel && memcmp(testNel, "\x15", 1) == 0) {

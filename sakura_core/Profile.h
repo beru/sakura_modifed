@@ -70,7 +70,7 @@ public:
 	void SetWritingMode(void) { bRead = false; }
 	bool ReadProfile(const TCHAR*);
 	bool ReadProfileRes(const TCHAR*, const TCHAR*, std::vector<std::wstring>* = nullptr);				// 200/5/19 Uchi
-	bool WriteProfile(const TCHAR*, const WCHAR* pszComment);
+	bool WriteProfile(const TCHAR*, const wchar_t* pszComment);
 
 	void Dump(void);
 

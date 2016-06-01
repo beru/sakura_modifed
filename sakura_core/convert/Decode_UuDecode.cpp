@@ -9,7 +9,7 @@
 // Uudecode (デコード）
 bool Decode_UuDecode::DoDecode(const NativeW& pSrc, Memory* pDst)
 {
-	const WCHAR *psrc, *pline;
+	const wchar_t *psrc, *pline;
 	size_t nsrclen;
 	char *pw, *pw_base;
 	size_t nlinelen, ncuridx;
@@ -29,7 +29,7 @@ bool Decode_UuDecode::DoDecode(const NativeW& pSrc, Memory* pDst)
 
 	// 先頭の改行・空白文字をスキップ
 	for (ncuridx=0; ncuridx<nsrclen; ++ncuridx) {
-		WCHAR c = psrc[ncuridx];
+		wchar_t c = psrc[ncuridx];
 		if (!WCODE::IsLineDelimiterBasic(c) && c != L' ' && c != L'\t') {
 			break;
 		}

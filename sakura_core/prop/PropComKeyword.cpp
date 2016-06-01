@@ -548,9 +548,9 @@ void PropKeyword::Import_List_Keyword(HWND hwndDlg, HWND hwndLIST_KEYWORD)
 	auto& keywordSetMgr = common.specialKeyword.keywordSetMgr;
 	
 	bool bCase = false;
-	int nIdx = keywordSetMgr.nCurrentKeywordSetIdx;
+	size_t nIdx = keywordSetMgr.nCurrentKeywordSetIdx;
 	keywordSetMgr.SetKeywordCase(nIdx, bCase);
-	ImpExpKeyword	impExpKeyword(common, nIdx, bCase);
+	ImpExpKeyword impExpKeyword(common, nIdx, bCase);
 
 	// インポート
 	if (!impExpKeyword.ImportUI(G_AppInstance(), hwndDlg)) {
@@ -572,7 +572,7 @@ void PropKeyword::Export_List_Keyword(HWND hwndDlg, HWND hwndLIST_KEYWORD)
 	SetKeywordSet(hwndDlg, keywordSetMgr.nCurrentKeywordSetIdx);
 
 	bool	bCase;
-	ImpExpKeyword	impExpKeyword(common, keywordSetMgr.nCurrentKeywordSetIdx, bCase);
+	ImpExpKeyword impExpKeyword(common, keywordSetMgr.nCurrentKeywordSetIdx, bCase);
 
 	// エクスポート
 	if (!impExpKeyword.ExportUI(G_AppInstance(), hwndDlg)) {
@@ -668,7 +668,7 @@ void PropKeyword::SetKeywordSet(HWND hwndDlg, size_t nIdx)
 		const TCHAR* pszKeyword = to_tchar(keywordSetMgr.GetKeyword(nIdx, i));
 		lvi.mask = LVIF_TEXT | LVIF_PARAM;
 		lvi.pszText = const_cast<TCHAR*>(pszKeyword);
-		lvi.iItem = i;
+		lvi.iItem = (int)i;
 		lvi.iSubItem = 0;
 		lvi.lParam	= i;
 		ListView_InsertItem(hwndList, &lvi);
@@ -702,7 +702,7 @@ void PropKeyword::DispKeywordCount(HWND hwndDlg)
 
 	auto& keywordSetMgr = common.specialKeyword.keywordSetMgr;
 
-	int nAlloc
+	size_t nAlloc
 		= keywordSetMgr.GetAllocSize(keywordSetMgr.nCurrentKeywordSetIdx)
 		- keywordSetMgr.GetKeywordNum(keywordSetMgr.nCurrentKeywordSetIdx)
 		+ keywordSetMgr.GetFreeSize()

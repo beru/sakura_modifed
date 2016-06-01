@@ -681,7 +681,7 @@ void PropTypesColor::SetData(HWND hwndDlg)
 	::SendMessage(hwndDlg, WM_COMMAND, MAKELONG(IDC_LIST_COLORS, LBN_SELCHANGE), (LPARAM)hwndWork);
 
 	// from here 2005.11.30 Moca 指定位置縦線の設定
-	WCHAR szVertLine[MAX_VERTLINES * 15] = L"";
+	wchar_t szVertLine[MAX_VERTLINES * 15] = L"";
 	int offset = 0;
 	for (int i=0; i<MAX_VERTLINES && types.nVertLineIdx[i]!=0; ++i) {
 		int nXCol = types.nVertLineIdx[i];
@@ -789,7 +789,7 @@ int PropTypesColor::GetData(HWND hwndDlg)
 	}
 
 	// from here 2005.11.30 Moca 指定位置縦線の設定
-	WCHAR szVertLine[MAX_VERTLINES * 15];
+	wchar_t szVertLine[MAX_VERTLINES * 15];
 	::DlgItem_GetText(hwndDlg, IDC_EDIT_VERTLINE, szVertLine, MAX_VERTLINES * 15);
 
 	int offset = 0;

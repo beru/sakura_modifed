@@ -342,7 +342,6 @@ bool ImpExpType::Import(const wstring& sFileName, wstring& sErrMsg)
 	// 共通設定との連結部
 	wchar_t	szKeyName[64];
 	wchar_t	szKeyData[1024];
-	int		nIdx;
 	int		nPlug = 0;
 	size_t	nDataLen;
 	wchar_t* pSlashPos;
@@ -357,7 +356,7 @@ bool ImpExpType::Import(const wstring& sFileName, wstring& sErrMsg)
 		//types.nKeywordSetIdx[i] = -1;
 		auto_sprintf_s(szKeyName, szKeyKeywordTemp, i + 1);
 		if (profile.IOProfileData(szSecTypeEx, szKeyName, MakeStringBufferW(szKeyData))) {
-			nIdx = keywordSetMgr.SearchKeywordSet(szKeyData);
+			int nIdx = keywordSetMgr.SearchKeywordSet(szKeyData);
 			if (nIdx < 0) {
 				// エントリ作成
 				keywordSetMgr.AddKeywordSet(szKeyData, false);
@@ -391,7 +390,7 @@ bool ImpExpType::Import(const wstring& sFileName, wstring& sErrMsg)
 	if (profile.IOProfileData(szSecTypeEx, szKeyPluginOutlineId, MakeStringBufferW(szKeyData))) {
 		nDataLen = wcslen(szKeyData);
 		pSlashPos = wcschr(szKeyData, L'/');
-		nIdx = -1;
+		int nIdx = -1;
 		for (int i=0; i<MAX_PLUGIN; ++i) {
 			if (auto_strncmp(szKeyData, plugin.pluginTable[i].szId, pSlashPos ? pSlashPos-szKeyData : nDataLen) == 0) {
 				nIdx = i;
@@ -412,7 +411,7 @@ bool ImpExpType::Import(const wstring& sFileName, wstring& sErrMsg)
 	if (profile.IOProfileData(szSecTypeEx, szKeyPluginSmartIndentId, MakeStringBufferW(szKeyData))) {
 		nDataLen = wcslen(szKeyData);
 		pSlashPos = wcschr(szKeyData, L'/');
-		nIdx = -1;
+		int nIdx = -1;
 		for (int i=0; i<MAX_PLUGIN; ++i) {
 			if (auto_strncmp(szKeyData, plugin.pluginTable[i].szId, pSlashPos ? pSlashPos-szKeyData : nDataLen) == 0) {
 				nIdx = i;
@@ -450,12 +449,11 @@ bool ImpExpType::Export(const wstring& sFileName, wstring& sErrMsg)
 	wchar_t buff[64];
 	wchar_t	szFileName[_MAX_PATH + 1];
 	wstring	files = L"";
-	wstring	sTmpMsg;
 	CommonSetting& common = pShareData->common;
 
 	// 強調キーワード
 	auto& keywordSetMgr = common.specialKeyword.keywordSetMgr;
-	for (int i=0; i<MAX_KEYWORDSET_PER_TYPE; ++i) {
+	for (size_t i=0; i<MAX_KEYWORDSET_PER_TYPE; ++i) {
 		if (types.nKeywordSetIdx[i] >= 0) {
 			int nIdx = types.nKeywordSetIdx[i];
 			auto_sprintf_s(szKeyName, szKeyKeywordTemp, i + 1);
@@ -466,9 +464,10 @@ bool ImpExpType::Export(const wstring& sFileName, wstring& sErrMsg)
 			bool bCase = keywordSetMgr.GetKeywordCase(nIdx);
 
 			// キーワード定義ファイル出力
-			ImpExpKeyword	impExpKeyword(common, types.nKeywordSetIdx[i], bCase);
+			ImpExpKeyword impExpKeyword(common, types.nKeywordSetIdx[i], bCase);
 			impExpKeyword.SetBaseName(keywordSetMgr.GetTypeName(nIdx));
 
+			wstring	sTmpMsg;
 			if (impExpKeyword.Export(impExpKeyword.GetFullPath(), sTmpMsg)) {
 				auto_strcpy(szFileName, impExpKeyword.GetFileName().c_str());
 				auto_sprintf_s(szKeyName, szKeyKeywordFileTemp, i + 1);
@@ -752,7 +751,7 @@ bool ImpExpKeyHelp::Import(const wstring& sFileName, wstring& sErrMsg)
 			continue;
 		}
 
-		WCHAR *p1, *p2, *p3;
+		wchar_t *p1, *p2, *p3;
 		p1 = &buff[9];
 		p3 = p1;					// 結果確認用に初期化
 		if ((p2 = wcsstr(p1, LTEXT(",")))) {
@@ -781,7 +780,7 @@ bool ImpExpKeyHelp::Import(const wstring& sFileName, wstring& sErrMsg)
 		}
 		// Path
 		FILE* fp2;
-		const WCHAR* p4 = p2;
+		const wchar_t* p4 = p2;
 		if (!(fp2=_tfopen_absini(to_tchar(p3), _T("r")))) {	// 2007.02.03 genta 相対パスはsakura.exe基準で開く	// 2007.05.19 ryoji 相対パスは設定ファイルからのパスを優先
 			// 2007.02.03 genta 辞書が見つからない場合の措置．警告を出すが取り込む
 			p4 = LSW(STR_IMPEXP_DIC_NOTFOUND);
@@ -856,7 +855,7 @@ bool ImpExpKeyHelp::Export(const wstring& sFileName, wstring& sErrMsg)
 bool ImpExpKeybind::Import(const wstring& sFileName, wstring& sErrMsg)
 {
 	const tstring strPath = to_tchar(sFileName.c_str());
-	const int KEYNAME_SIZE = _countof(common.keyBind.pKeyNameArr) - 1; // 最後の１要素はダミー用に予約 2012.11.25 aroka
+	const size_t keyNameSize = _countof(common.keyBind.pKeyNameArr) - 1; // 最後の１要素はダミー用に予約 2012.11.25 aroka
 	CommonSetting_KeyBind sKeyBind = common.keyBind;
 
 	// オープン
@@ -871,7 +870,7 @@ bool ImpExpKeybind::Import(const wstring& sFileName, wstring& sErrMsg)
 	bool bVer4;			// 新バージョン（多言語対応）のファイル
 	bool bVer3;			// 新バージョンのファイル
 	bool bVer2;
-	WCHAR szHeader[256];
+	wchar_t szHeader[256];
 	bVer4 = false;
 	bVer3 = false;
 	bVer2 = false;
@@ -886,7 +885,7 @@ bool ImpExpKeybind::Import(const wstring& sFileName, wstring& sErrMsg)
 	if (bVer3 || bVer4) {
 		// Count取得 -> nKeyNameArrNum
 		in.IOProfileData(szSecInfo, L"KEYBIND_COUNT", sKeyBind.nKeyNameArrNum);
-		if (sKeyBind.nKeyNameArrNum < 0 || sKeyBind.nKeyNameArrNum > KEYNAME_SIZE) {	bVer3=false; bVer4=false; } // 範囲チェック
+		if (sKeyBind.nKeyNameArrNum < 0 || sKeyBind.nKeyNameArrNum > keyNameSize) {	bVer3=false; bVer4=false; } // 範囲チェック
 
 		ShareData_IO::IO_KeyBind(in, sKeyBind, true);	// 2008/5/25 Uchi
 	}
@@ -910,7 +909,7 @@ bool ImpExpKeybind::Import(const wstring& sFileName, wstring& sErrMsg)
 			int	an;
 			szLine = in.ReadLineW();
 			cnt = swscanf(szLine.c_str(), L"Count=%d", &an);
-			if (cnt != 1 || an < 0 || an > KEYNAME_SIZE) {
+			if (cnt != 1 || an < 0 || an > keyNameSize) {
 				bVer2 = false;
 			}else {
 				sKeyBind.nKeyNameArrNum = an;
@@ -918,7 +917,7 @@ bool ImpExpKeybind::Import(const wstring& sFileName, wstring& sErrMsg)
 		}
 		if (bVer2) {
 			// 各要素取得
-			for (int i=0; i<KEYNAME_SIZE; ++i) {
+			for (int i=0; i<keyNameSize; ++i) {
 				int n, kc, nc;
 				// 値 -> szData
 				wchar_t szData[1024];
@@ -984,7 +983,7 @@ bool ImpExpKeybind::Import(const wstring& sFileName, wstring& sErrMsg)
 		}else {
 			// 割り当て済みキーコードは上書き
 			int idx = sKeyBind.keyToKeyNameArr[sKeyBind.pKeyNameArr[j].nKeyCode];
-			if (idx != KEYNAME_SIZE) {
+			if (idx != keyNameSize) {
 				common.keyBind.pKeyNameArr[idx] = sKeyBind.pKeyNameArr[j];
 			}
 		}
@@ -992,8 +991,8 @@ bool ImpExpKeybind::Import(const wstring& sFileName, wstring& sErrMsg)
 	// 未割り当てのキーコードは空き領域が一杯になるまで追加
 	for (int j2=0; j2<sKeyBind.nKeyNameArrNum; ++j2) {
 		int idx = sKeyBind.keyToKeyNameArr[sKeyBind.pKeyNameArr[j2].nKeyCode];
-		if (idx == KEYNAME_SIZE) { // not assigned
-			if (nKeyNameArrUsed >= KEYNAME_SIZE) {
+		if (idx == keyNameSize) { // not assigned
+			if (nKeyNameArrUsed >= keyNameSize) {
 				continue;
 			}
 			common.keyBind.pKeyNameArr[nKeyNameArrUsed] = sKeyBind.pKeyNameArr[j2];
@@ -1063,7 +1062,7 @@ bool ImpExpCustMenu::Import(const wstring& sFileName, wstring& sErrMsg)
 	profile.ReadProfile(strPath.c_str());
 
 	// バージョン確認
-	WCHAR szHeader[256];
+	wchar_t szHeader[256];
 	profile.IOProfileData(szSecInfo, L"MENU_VERSION", MakeStringBufferW(szHeader));
 	if (wcscmp(szHeader, WSTR_CUSTMENU_HEAD_V2) != 0) {
 		sErrMsg = wstring(LSW(STR_IMPEXP_CUSTMENU_FORMAT)) + sFileName;
@@ -1220,7 +1219,7 @@ bool ImpExpMainMenu::Import(const wstring& sFileName, wstring& sErrMsg)
 	profile.ReadProfile(strPath.c_str());
 
 	// バージョン確認
-	WCHAR szHeader[256];
+	wchar_t szHeader[256];
 	profile.IOProfileData(szSecInfo, L"MENU_VERSION", MakeStringBufferW(szHeader));
 	if (wcscmp(szHeader, WSTR_MAINMENU_HEAD_V1) != 0) {
 		sErrMsg = wstring(LSW(STR_IMPEXP_MEINMENU)) + sFileName;
@@ -1310,7 +1309,7 @@ bool ImpExpFileTree::Export(const wstring& sFileName, wstring& sErrMsg)
 
 void ImpExpFileTree::IO_FileTreeIni( DataProfile& profile, std::vector<FileTreeItem>& data )
 {
-	const WCHAR* pszSecName = L"FileTree";
+	const wchar_t* pszSecName = L"FileTree";
 	int nItemCount = (int)data.size();
 	profile.IOProfileData(pszSecName, L"nFileTreeItemCount", nItemCount);
 	if (nItemCount < 0) {

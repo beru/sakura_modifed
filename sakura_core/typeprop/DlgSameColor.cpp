@@ -138,7 +138,7 @@ BOOL DlgSameColor::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
 	wpColorListProc = (WNDPROC)::SetWindowLongPtr(hwndList, GWLP_WNDPROC, (LONG_PTR)ColorList_SubclassProc);
 
 
-	WCHAR szText[30];
+	wchar_t szText[30];
 	int nItem;
 
 	switch (wID) {	// タイプ別設定ダイアログで押されたボタンID
@@ -216,7 +216,7 @@ BOOL DlgSameColor::OnBnClicked(int wID)
 
 	case IDOK:
 		// タイプ別設定から選択色と同色のものを取り出して指定色に一括変更する
-		WCHAR szText[30];
+		wchar_t szText[30];
 		LPWSTR pszStop;
 		COLORREF cr;
 
@@ -275,7 +275,7 @@ BOOL DlgSameColor::OnDrawItem(WPARAM wParam, LPARAM lParam)
 	// 色選択リストの描画処理
 	//
 	RECT		rc;
-	WCHAR		szText[30];
+	wchar_t		szText[30];
 	LPWSTR		pszStop;
 	COLORREF	cr;
 
@@ -336,7 +336,7 @@ BOOL DlgSameColor::OnSelChangeListColors(HWND hwndCtl)
 
 	int i = List_GetCaretIndex(hwndCtl);
 	if (i != LB_ERR) {
-		WCHAR szText[30];
+		wchar_t szText[30];
 		List_GetText(hwndCtl, i, szText);
 		LPWSTR pszStop;
 		COLORREF cr = wcstoul(szText, &pszStop, 10);

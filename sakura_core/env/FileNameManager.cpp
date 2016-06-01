@@ -331,17 +331,14 @@ bool FileNameManager::ExpandMetaToFolder(LPCTSTR pszSrc, LPTSTR pszDes, int nDes
 
 
 // static
-TCHAR FileNameManager::GetAccessKeyByIndex(int index, bool bZeroOrigin)
+TCHAR FileNameManager::GetAccessKeyByIndex(size_t index, bool bZeroOrigin)
 {
-	if (index < 0) {
-		return 0;
-	}
-	int accKeyIndex = ((bZeroOrigin? index: index + 1) % 36);
+	size_t accKeyIndex = ((bZeroOrigin? index: index + 1) % 36);
 	TCHAR c = (TCHAR)((accKeyIndex < 10) ? (_T('0') + accKeyIndex) : (_T('A') + accKeyIndex - 10));
 	return c;
 }
 
-static void GetAccessKeyLabelByIndex(TCHAR* pszLabel, bool bEspaceAmp, int index, bool bZeroOrigin)
+static void GetAccessKeyLabelByIndex(TCHAR* pszLabel, bool bEspaceAmp, size_t index, bool bZeroOrigin)
 {
 	TCHAR c = FileNameManager::GetAccessKeyByIndex(index, bZeroOrigin);
 	if (c) {
@@ -368,7 +365,7 @@ static void GetAccessKeyLabelByIndex(TCHAR* pszLabel, bool bEspaceAmp, int index
 bool FileNameManager::GetMenuFullLabel(
 	TCHAR* pszOutput, size_t nBuffSize, bool bEspaceAmp,
 	const EditInfo* editInfo, int nId, bool bFavorite,
-	int index, bool bAccKeyZeroOrigin, HDC hDC
+	size_t index, bool bAccKeyZeroOrigin, HDC hDC
 ) {
 	const EditInfo* pfi = editInfo;
 	TCHAR szAccKey[4];
@@ -389,7 +386,7 @@ bool FileNameManager::GetMenuFullLabel(
 		LimitStringLength(pfi->szGrepKey, nGrepKeyLen, GREPKEY_LIMIT_LEN, memDes);
 		
 		const TCHAR* pszKey;
-		TCHAR szMenu2[GREPKEY_LIMIT_LEN * 2 * 2 + 1]; // WCHAR=>ACHAR‚Å2”{A&‚Å2”{
+		TCHAR szMenu2[GREPKEY_LIMIT_LEN * 2 * 2 + 1]; // wchar_t=>ACHAR‚Å2”{A&‚Å2”{
 		if (bEspaceAmp) {
 			dupamp(memDes.GetStringT(), szMenu2);
 			pszKey = szMenu2;
@@ -418,7 +415,7 @@ bool FileNameManager::GetMenuFullLabel(
 bool FileNameManager::GetMenuFullLabel(
 	TCHAR* pszOutput, size_t nBuffSize, bool bEspaceAmp,
 	const TCHAR* pszFile, int nId, bool bModified, EncodingType nCharCode, bool bFavorite,
-	int index, bool bAccKeyZeroOrigin, HDC hDC
+	size_t index, bool bAccKeyZeroOrigin, HDC hDC
 ) {
 	TCHAR szAccKey[4];
 	TCHAR szFileName[_MAX_PATH];
@@ -544,7 +541,7 @@ void FileNameManager::GetIniFileNameDirect( LPTSTR pszPrivateIniFile, LPTSTR psz
 	@author ryoji
 	@date 2007.05.19 ryoji V‹Kì¬
 */
-void FileNameManager::GetIniFileName( LPTSTR pszIniFileName, LPCTSTR pszProfName, BOOL bRead/*=FALSE*/ )
+void FileNameManager::GetIniFileName( LPTSTR pszIniFileName, LPCTSTR pszProfName, bool bRead/*=false*/ )
 {
 	auto& iniFolder = pShareData->fileNameManagement.iniFolder;
 	if (!iniFolder.bInit) {

@@ -26,16 +26,16 @@
 #include "DllHandler.h"
 
 typedef struct bregexp {
-	const WCHAR* outp;		// result string start ptr
-	const WCHAR* outendp;	// result string end ptr
+	const wchar_t* outp;	// result string start ptr
+	const wchar_t* outendp;	// result string end ptr
 	const int   splitctr;	// split result counter
-	const WCHAR** splitp;	// split result pointer ptr
+	const wchar_t** splitp;	// split result pointer ptr
 	int rsv1;				// reserved for external use
-	WCHAR* parap;			// parameter start ptr ie. "s/xxxxx/yy/gi"
-	WCHAR* paraendp;		// parameter end ptr
-	WCHAR* transtblp;		// translate table ptr
-	WCHAR** startp;			// match string start ptr
-	WCHAR** endp;			// match string end ptr
+	wchar_t* parap;			// parameter start ptr ie. "s/xxxxx/yy/gi"
+	wchar_t* paraendp;		// parameter end ptr
+	wchar_t* transtblp;		// translate table ptr
+	wchar_t** startp;		// match string start ptr
+	wchar_t** endp;			// match string end ptr
 	int nparens;			// number of parentheses
 } BREGEXP_W;
 

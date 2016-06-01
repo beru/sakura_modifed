@@ -136,7 +136,7 @@ bool Plugin::ReadPluginDefCommand(
 	)
 {
 	wstring sHandler;
-	WCHAR bufKey[64];
+	wchar_t bufKey[64];
 
 	for (int nCount=1; nCount<MAX_PLUG_CMD; ++nCount) {	// “Y‚¦Žš‚Í‚P‚©‚çŽn‚ß‚é
 		swprintf(bufKey, L"C[%d]", nCount);
@@ -182,7 +182,7 @@ bool Plugin::ReadPluginDefOption(
 	wstring sType;
 	wstring sSelect;
 	wstring sDefaultVal;
-	WCHAR bufKey[64];
+	wchar_t bufKey[64];
 
 	sSection = L"";
 	for (int nCount=1; nCount<MAX_PLUG_OPTION; ++nCount) {	// “Y‚¦Žš‚Í‚P‚©‚çŽn‚ß‚é
@@ -246,9 +246,9 @@ Plugin::tstring Plugin::GetFolderName() const
 
 // ƒRƒ}ƒ“ƒh‚ð’Ç‰Á‚·‚é
 int Plugin::AddCommand(
-	const WCHAR* handler,
-	const WCHAR* label,
-	const WCHAR* icon,
+	const wchar_t* handler,
+	const wchar_t* label,
+	const wchar_t* icon,
 	bool doRegister
 	)
 {
@@ -296,7 +296,7 @@ bool Plugin::ReadPluginDefString(
 	DataProfile* profileMlang
 	)
 {
-	WCHAR bufKey[64];
+	wchar_t bufKey[64];
 	aStrings.clear();
 	aStrings.emplace_back(); // 0”Ô–Úƒ_ƒ~[
 	for (int nCount=1; nCount<MAX_PLUG_STRING; ++nCount) {	// “Y‚¦Žš‚Í‚P‚©‚çŽn‚ß‚é

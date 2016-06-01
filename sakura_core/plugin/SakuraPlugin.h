@@ -67,7 +67,7 @@ typedef struct tagMACRO_FUNC_INFO {
 } MACRO_FUNC_INFO;
 
 typedef struct tagSAKURA_DLL_PLUGIN_IF_OBJ {
-	WCHAR				szName[64];			// 識別子
+	wchar_t				szName[64];			// 識別子
 	LPVOID				lpIfObj;				// プラグイン情報
 	MACRO_FUNC_INFO*	pFunctionInfo;			// マクロ関数情報
 	MACRO_FUNC_INFO*	pCommandInfo;			// マクロコマンド情報

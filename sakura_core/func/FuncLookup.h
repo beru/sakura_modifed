@@ -72,10 +72,10 @@ public:
 	}
 
 	EFunctionCode Pos2FuncCode(int category, int position, bool bGetUnavailable = true) const;	// 2007.10.31 ryoji bGetUnavailableÉpÉâÉÅÅ[É^í«â¡
-	bool Pos2FuncName(int category, int position, WCHAR* ptr, int bufsize) const;
-	bool Funccode2Name(int funccode, WCHAR* ptr, int bufsize) const ;
+	bool Pos2FuncName(int category, int position, wchar_t* ptr, int bufsize) const;
+	bool Funccode2Name(int funccode, wchar_t* ptr, int bufsize) const ;
 	const TCHAR* Category2Name(int category) const;
-	const WCHAR* Custmenu2Name(int index, WCHAR buf[], int bufSize) const;
+	const wchar_t* Custmenu2Name(int index, wchar_t buf[], int bufSize) const;
 
 	void SetCategory2Combo(HWND hComboBox) const ;
 	void SetListItem(HWND hListBox, size_t category) const;

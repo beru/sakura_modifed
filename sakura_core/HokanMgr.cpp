@@ -514,7 +514,7 @@ BOOL HokanMgr::DoHokan(int nVKey)
 		return FALSE;
 	}
 	int nLabelLen = List_GetTextLen( hwndList, nItem );
-	auto wszLabel = std::make_unique<WCHAR[]>(nLabelLen + 1);
+	auto wszLabel = std::make_unique<wchar_t[]>(nLabelLen + 1);
 	List_GetText( hwndList, nItem, &wszLabel[0] );
 
  	// テキストを貼り付け
@@ -618,7 +618,7 @@ void HokanMgr::ShowTip()
 	}
 
 	int nLabelLen = List_GetTextLen( hwndCtrl, nItem );
-	auto szLabel = std::make_unique<WCHAR[]>(nLabelLen + 1);
+	auto szLabel = std::make_unique<wchar_t[]>(nLabelLen + 1);
 	List_GetText( hwndCtrl, nItem, &szLabel[0] );	// 選択中の単語を取得
 
 	EditView* pEditView = reinterpret_cast<EditView*>(lParam);

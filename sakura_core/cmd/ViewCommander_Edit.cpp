@@ -246,7 +246,7 @@ void ViewCommander::Command_IME_CHAR(WORD wChar)
 	}
 
 	// Oct. 6 ,2002 genta バッファに格納する
-	// Aug. 15, 2007 kobake WCHARバッファに変換する
+	// Aug. 15, 2007 kobake wchar_tバッファに変換する
 #ifdef _UNICODE
 	wchar_t szWord[2] = {wChar, 0};
 #else

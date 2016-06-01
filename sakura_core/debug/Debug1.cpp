@@ -50,7 +50,7 @@ void Test()
 void DebugOutW(LPCWSTR lpFmt, ...)
 {
 	// êÆå`
-	static WCHAR szText[16000];
+	static wchar_t szText[16000];
 	va_list argList;
 	va_start(argList, lpFmt);
 	int ret = tchar_vsnprintf_s(szText, _countof(szText), lpFmt, argList);

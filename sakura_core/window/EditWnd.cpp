@@ -876,7 +876,7 @@ void EditWnd::LayoutMainMenu()
 			// メニューラベルの作成
 			// 2014.05.04 Moca プラグイン/マクロ等を置けるようにFunccode2Nameを使うように
 			{
-				WCHAR szLabelW[256];
+				wchar_t szLabelW[256];
 				GetDocument().funcLookup.Funccode2Name(mainMenu->nFunc, szLabelW, 256);
 				auto_strncpy(szLabel, to_tchar(szLabelW), _countof(szLabel) - 1);
 				szLabel[_countof(szLabel) - 1] = _T('\0');
@@ -2414,7 +2414,7 @@ void EditWnd::InitMenu_Function(HMENU hMenu, EFunctionCode eFunc, const wchar_t*
 		if (pShareData->common.customMenu.nCustMenuItemNumArr[j] > 0) {
 			nFlag = MF_BYPOSITION | MF_STRING;
 		}
-		WCHAR buf[MAX_CUSTOM_MENU_NAME_LEN + 1];
+		wchar_t buf[MAX_CUSTOM_MENU_NAME_LEN + 1];
 		menuDrawer.MyAppendMenu(hMenu, nFlag,
 			eFunc, GetDocument().funcLookup.Custmenu2Name(j, buf, _countof(buf)), pszKey);
 	}
@@ -2433,7 +2433,7 @@ void EditWnd::InitMenu_Function(HMENU hMenu, EFunctionCode eFunc, const wchar_t*
 	}
 	// プラグインコマンド
 	else if (eFunc >= F_PLUGCOMMAND_FIRST && eFunc < F_PLUGCOMMAND_LAST) {
-		WCHAR szLabel[256];
+		wchar_t szLabel[256];
 		if (0 < JackManager::getInstance().GetCommandName( eFunc, szLabel, _countof(szLabel) )) {
 			menuDrawer.MyAppendMenu(
 				hMenu, MF_BYPOSITION | MF_STRING,
@@ -2508,12 +2508,12 @@ void EditWnd::InitMenu_Function(HMENU hMenu, EFunctionCode eFunc, const wchar_t*
 		case F_WRAPWINDOWWIDTH:
 			{
 				int ketas;
-				WCHAR*	pszLabel;
+				wchar_t*	pszLabel;
 				EditView::TOGGLE_WRAP_ACTION mode = GetActiveView().GetWrapMode(&ketas);
 				if (mode == EditView::TGWRAP_NONE) {
 					menuDrawer.MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING | MF_GRAYED, F_WRAPWINDOWWIDTH , L"", pszKey);
 				}else {
-					WCHAR szBuf[60];
+					wchar_t szBuf[60];
 					pszLabel = szBuf;
 					if (mode == EditView::TGWRAP_FULL) {
 						auto_sprintf_s(
@@ -2583,7 +2583,7 @@ bool EditWnd::InitMenu_Special(HMENU hMenu, EFunctionCode eFunc)
 		}
 		break;
 	case F_CUSTMENU_LIST:			// カスタムメニューリスト
-		WCHAR buf[MAX_CUSTOM_MENU_NAME_LEN + 1];
+		wchar_t buf[MAX_CUSTOM_MENU_NAME_LEN + 1];
 		//	右クリックメニュー
 		if (pShareData->common.customMenu.nCustMenuItemNumArr[0] > 0) {
 			 menuDrawer.MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING,
@@ -2676,9 +2676,9 @@ void EditWnd::CheckFreeSubMenuSub(HMENU hMenu, int nLv)
 
 //	フラグにより表示文字列の選択をする。
 //		2010/5/19	Uchi
-void EditWnd::SetMenuFuncSel(HMENU hMenu, EFunctionCode nFunc, const WCHAR* sKey, bool flag)
+void EditWnd::SetMenuFuncSel(HMENU hMenu, EFunctionCode nFunc, const wchar_t* sKey, bool flag)
 {
-	const WCHAR* sName = L"";
+	const wchar_t* sName = L"";
 	for (size_t i=0; i<_countof(gFuncMenuName); ++i) {
 		if (gFuncMenuName[i].eFunc == nFunc) {
 			sName = flag ? LSW(gFuncMenuName[i].nNameId[0]) : LSW(gFuncMenuName[i].nNameId[1]);
@@ -4140,7 +4140,7 @@ LRESULT EditWnd::WinListMenu(HMENU hMenu, EditNode* pEditNodeArr, size_t nRowNum
 void EditWnd::GetTooltipText(TCHAR* wszBuf, size_t nBufCount, int nID) const
 {
 	// 機能文字列の取得 -> tmp -> wszBuf
-	WCHAR tmp[256];
+	wchar_t tmp[256];
 	size_t nLen;
 	GetDocument().funcLookup.Funccode2Name(nID, tmp, _countof(tmp));
 	nLen = _wcstotcs(wszBuf, tmp, nBufCount);

@@ -146,10 +146,10 @@ protected:
 	int  GetData(HWND);											// ダイアログデータの取得
 
 public:
-	static void AddOutlineMethod(OutlineType nMethod, const WCHAR* szName);		// アウトライン解析ルールの追加
-	static void AddSIndentMethod(SmartIndentType nMethod, const WCHAR* szName);		// スマートインデントルールの追加
-	static void RemoveOutlineMethod(OutlineType nMethod, const WCHAR* szName);	// アウトライン解析ルールの追加
-	static void RemoveSIndentMethod(SmartIndentType nMethod, const WCHAR* szName);	// スマートインデントルールの追加
+	static void AddOutlineMethod(OutlineType nMethod, const wchar_t* szName);		// アウトライン解析ルールの追加
+	static void AddSIndentMethod(SmartIndentType nMethod, const wchar_t* szName);		// スマートインデントルールの追加
+	static void RemoveOutlineMethod(OutlineType nMethod, const wchar_t* szName);	// アウトライン解析ルールの追加
+	static void RemoveSIndentMethod(SmartIndentType nMethod, const wchar_t* szName);	// スマートインデントルールの追加
 	void CPropTypes_Screen();											// スクリーンタブのコンストラクタ
 };
 
@@ -202,8 +202,8 @@ protected:
 	void SetData(HWND);												// ダイアログデータの設定
 	int  GetData(HWND);												// ダイアログデータの取得
 public:
-	static void AddHokanMethod(int nMethod, const WCHAR* szName);		// 補完種別の追加
-	static void RemoveHokanMethod(int nMethod, const WCHAR* szName);	// 補完種別の追加
+	static void AddHokanMethod(int nMethod, const wchar_t* szName);		// 補完種別の追加
+	static void RemoveHokanMethod(int nMethod, const wchar_t* szName);	// 補完種別の追加
 };
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //

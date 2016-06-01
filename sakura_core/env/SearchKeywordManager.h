@@ -32,8 +32,8 @@
 // 共有メモリ内構造体
 struct Share_SearchKeywords {
 	// -- -- 検索キー -- -- //
-	StaticVector< StaticString<WCHAR, _MAX_PATH>, MAX_SEARCHKEY,  const WCHAR*>	searchKeys;
-	StaticVector< StaticString<WCHAR, _MAX_PATH>, MAX_REPLACEKEY, const WCHAR*>	replaceKeys;
+	StaticVector< StaticString<wchar_t, _MAX_PATH>, MAX_SEARCHKEY,  const wchar_t*>	searchKeys;
+	StaticVector< StaticString<wchar_t, _MAX_PATH>, MAX_REPLACEKEY, const wchar_t*>	replaceKeys;
 	StaticVector< StaticString<TCHAR, _MAX_PATH>, MAX_GREPFILE,   const TCHAR*>	grepFiles;
 	StaticVector< StaticString<TCHAR, _MAX_PATH>, MAX_GREPFOLDER, const TCHAR*>	grepFolders;
 };

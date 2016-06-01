@@ -39,7 +39,7 @@ class EditView;
 // Plugin macro manager
 class PluginMacroManager: public MacroManagerBase {
 public:
-	PluginMacroManager(const WCHAR* Ext, Plug* plug);
+	PluginMacroManager(const wchar_t* Ext, Plug* plug);
 	virtual ~PluginMacroManager();
 
 	virtual bool ExecKeyMacro(class EditView& editView, int flags) const;

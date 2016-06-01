@@ -82,16 +82,16 @@ public:
 	// Oct. 2, 2001 genta マクロ用に機能拡張
 	// Mar. 30, 2003 genta 引数追加
 	void Command_FileOpen(
-		const WCHAR*	filename	= NULL,
+		const wchar_t*	filename	= NULL,
 		EncodingType	nCharCode	= CODE_AUTODETECT,
 		bool			bViewMode	= false,
-		const WCHAR*	defaultName	= NULL
+		const wchar_t*	defaultName	= NULL
 	);
 
 	// 上書き保存 // Feb. 28, 2004 genta 引数追加, Jan. 24, 2005 genta 引数追加
 	bool Command_FileSave(bool warnbeep = true, bool askname = true);
-	bool Command_FileSaveAs_Dialog(const WCHAR*, EncodingType, EolType);		// 名前を付けて保存
-	bool Command_FileSaveAs(const WCHAR* filename, EolType eEolType);		// 名前を付けて保存
+	bool Command_FileSaveAs_Dialog(const wchar_t*, EncodingType, EolType);		// 名前を付けて保存
+	bool Command_FileSaveAs(const wchar_t* filename, EolType eEolType);		// 名前を付けて保存
 	bool Command_FileSaveAll(void);				// 全て上書き保存 // Jan. 23, 2005 genta
 	void Command_FileClose(void);				// 開じて(無題)	// Oct. 17, 2000 jepro 「ファイルを閉じる」というキャプションを変更
 	// 閉じて開く
@@ -262,7 +262,7 @@ public:
 	// 検索系
 	void Command_Search_Box(void);						// 検索(ボックス)	// 2006.06.04 yukihane
 	void Command_Search_Dialog(void);					// 検索(単語検索ダイアログ)
-	void Command_Search_Next(bool, bool, bool, HWND, const WCHAR*, Range* = nullptr);// 次を検索
+	void Command_Search_Next(bool, bool, bool, HWND, const wchar_t*, Range* = nullptr);// 次を検索
 	void Command_Search_Prev(bool bReDraw, HWND);		// 前を検索
 	void Command_Replace_Dialog(void);					// 置換(置換ダイアログ)
 	void Command_Replace(HWND hwndParent);				// 置換(実行) 2002/04/08 YAZAKI 親ウィンドウを指定するように変更
@@ -290,7 +290,7 @@ public:
 	bool Command_TagJumpByTagsFileKeyword(const wchar_t* keyword);	//	@@ 2005.03.31 MIK
 	void Command_Compare(void);							// ファイル内容比較
 	void Command_Diff_Dialog(void);						// DIFF差分表示ダイアログ	//@@@ 2002.05.25 MIK
-	void Command_Diff(const WCHAR* szTmpFile2, int nFlgOpt);	// DIFF差分表示	//@@@ 2002.05.25 MIK	// 2005.10.03 maru
+	void Command_Diff(const wchar_t* szTmpFile2, int nFlgOpt);	// DIFF差分表示	//@@@ 2002.05.25 MIK	// 2005.10.03 maru
 	void Command_Diff_Next(void);						// 次の差分へ	//@@@ 2002.05.25 MIK
 	void Command_Diff_Prev(void);						// 前の差分へ	//@@@ 2002.05.25 MIK
 	void Command_Diff_Reset(void);						// 差分の全解除	//@@@ 2002.05.25 MIK
@@ -334,13 +334,13 @@ public:
 	void Command_SaveKeyMacro(void);	// キーマクロの保存
 	void Command_LoadKeyMacro(void);	// キーマクロの読み込み
 	void Command_ExecKeyMacro(void);	// キーマクロの実行
-	void Command_ExecExtMacro(const WCHAR* path, const WCHAR* type);	// 名前を指定してマクロ実行
+	void Command_ExecExtMacro(const wchar_t* path, const wchar_t* type);	// 名前を指定してマクロ実行
 // From Here 2006.12.03 maru 引数の拡張．
 // From Here Sept. 20, 2000 JEPRO 名称CMMANDをCOMMANDに変更
 //	void Command_ExecCmmand(void);	// 外部コマンド実行
 	// Oct. 9, 2001 genta マクロ対応のため機能拡張
-//	void Command_ExecCommand_Dialog(const WCHAR* cmd);	// 外部コマンド実行ダイアログ表示
-//	void Command_ExecCommand(const WCHAR* cmd);	// 外部コマンド実行
+//	void Command_ExecCommand_Dialog(const wchar_t* cmd);	// 外部コマンド実行ダイアログ表示
+//	void Command_ExecCommand(const wchar_t* cmd);	// 外部コマンド実行
 	void Command_ExecCommand_Dialog(void);		// 外部コマンド実行ダイアログ表示	// 引数使ってないみたいなので
 	// マクロからの呼び出しではオプションを保存させないため、Command_ExecCommand_Dialog内で処理しておく．
 	void Command_ExecCommand(LPCWSTR cmd, const int nFlgOpt, LPCWSTR);	// 外部コマンド実行
@@ -390,7 +390,7 @@ public:
 	void Command_Menu_AllFunc(void);	// コマンド一覧
 	void Command_ExtHelp1(void);		// 外部ヘルプ１
 	// Jul. 5, 2002 genta
-	void Command_ExtHTMLHelp(const WCHAR* helpfile = NULL, const WCHAR* kwd = NULL);	// 外部HTMLヘルプ
+	void Command_ExtHTMLHelp(const wchar_t* helpfile = NULL, const wchar_t* kwd = NULL);	// 外部HTMLヘルプ
 	void Command_About(void);			// バージョン情報	// Dec. 24, 2000 JEPRO 追加
 
 	// その他

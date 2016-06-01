@@ -164,7 +164,7 @@ struct VS_VERSION_INFO_HEAD {
 	WORD	wLength;
 	WORD	wValueLength;
 	WORD	bText;
-	WCHAR	szKey[16];
+	wchar_t	szKey[16];
 	VS_FIXEDFILEINFO Value;
 };
 

@@ -439,13 +439,13 @@ void EditView::Close()
 //                         イベント                            //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-// TCHAR→WCHAR変換。
+// TCHAR→wchar_t変換。
 inline wchar_t tchar_to_wchar(TCHAR tc)
 {
 #ifdef _UNICODE
 	return tc;
 #else
-	WCHAR wc = 0;
+	wchar_t wc = 0;
 	mbtowc(&wc, &tc, sizeof(tc));
 	return wc;
 #endif
@@ -507,7 +507,7 @@ LRESULT EditView::DispatchEvent(
 		if (WCODE::IsControlCode((wchar_t)wParam)) {
 			ErrorBeep();
 		}else {
-			GetCommander().HandleCommand(F_WCHAR, true, WCHAR(wParam), 0, 0, 0);
+			GetCommander().HandleCommand(F_WCHAR, true, (wchar_t)wParam, 0, 0, 0);
 		}
 #else
 		// SJIS固有
@@ -558,7 +558,7 @@ LRESULT EditView::DispatchEvent(
 
 			// increase buffer size for NULL terminator,
 			//	maybe it is in Unicode
-			dwSize += sizeof(WCHAR);
+			dwSize += sizeof(wchar_t);
 
 			hstr = GlobalAlloc(GHND, dwSize);
 			if (!hstr) {
@@ -1543,7 +1543,7 @@ int	EditView::CreatePopUpMenu_R(void)
 */
 int	EditView::CreatePopUpMenuSub(HMENU hMenu, int nMenuIdx, int* pParentMenus)
 {
-	WCHAR szLabel[300];
+	wchar_t szLabel[300];
 
 	MenuDrawer& menuDrawer = editWnd.GetMenuDrawer();
 	FuncLookup& funcLookup = pEditDoc->funcLookup;
@@ -1594,7 +1594,7 @@ int	EditView::CreatePopUpMenuSub(HMENU hMenu, int nMenuIdx, int* pParentMenus)
 				}
 			}
 			if (!bMenuLoop) {
-				WCHAR buf[MAX_CUSTOM_MENU_NAME_LEN + 1];
+				wchar_t buf[MAX_CUSTOM_MENU_NAME_LEN + 1];
 				LPCWSTR p = GetDocument().funcLookup.Custmenu2Name(nCustIdx, buf, _countof(buf));
 				wchar_t keys[2];
 				keys[0] = csCustomMenu.nCustMenuItemKeyArr[nMenuIdx][i];
@@ -2337,14 +2337,14 @@ bool EditView::MySetClipboardData(
 	bool bLineSelect /*= false*/
 	)
 {
-	// WCHARに変換
+	// wchar_tに変換
 	std::vector<wchar_t> buf;
 	mbstowcs_vector(pszText, nTextLen, &buf);
 	return MySetClipboardData(&buf[0], buf.size()-1, bColumnSelect, bLineSelect);
 }
 
 bool EditView::MySetClipboardData(
-	const WCHAR* pszText,
+	const wchar_t* pszText,
 	size_t nTextLen,
 	bool bColumnSelect,
 	bool bLineSelect /*= false*/

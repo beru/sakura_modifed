@@ -289,13 +289,13 @@ int PropTypesSupport::GetData(HWND hwndDlg)
 // 2001/06/13 End
 
 // •âŠ®Ží•Ê‚Ì’Ç‰Á
-void PropTypesSupport::AddHokanMethod(int nMethod, const WCHAR* szName)
+void PropTypesSupport::AddHokanMethod(int nMethod, const wchar_t* szName)
 {
 	HokanMethod item = { nMethod, std::wstring(szName) };
 	GetHokanMethodList()->push_back(item);
 }
 
-void PropTypesSupport::RemoveHokanMethod(int nMethod, const WCHAR* szName)
+void PropTypesSupport::RemoveHokanMethod(int nMethod, const wchar_t* szName)
 {
 	int nSize = GetHokanMethodList()->size();
 	for (int i=0; i<nSize; ++i) {

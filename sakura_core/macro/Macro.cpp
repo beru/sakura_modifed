@@ -322,7 +322,7 @@ void Macro::AddLParam(
 	}
 }
 
-void MacroParam::SetStringParam( const WCHAR* szParam, int nLength )
+void MacroParam::SetStringParam( const wchar_t* szParam, int nLength )
 {
 	Clear();
 	size_t nLen;
@@ -331,7 +331,7 @@ void MacroParam::SetStringParam( const WCHAR* szParam, int nLength )
 	}else {
 		nLen = nLength;
 	}
-	pData = new WCHAR[nLen + 1];
+	pData = new wchar_t[nLen + 1];
 	auto_memcpy( pData, szParam, nLen );
 	pData[nLen] = LTEXT('\0');
 	nDataLen = nLen;
@@ -341,14 +341,14 @@ void MacroParam::SetStringParam( const WCHAR* szParam, int nLength )
 void MacroParam::SetIntParam(const int nParam)
 {
 	Clear();
-	pData = new WCHAR[16];	//	数値格納（最大16桁）用
+	pData = new wchar_t[16];	//	数値格納（最大16桁）用
 	_itow(nParam, pData, 10);
 	nDataLen = auto_strlen(pData);
 	type = MacroParamType::Int;
 }
 
 // 引数に文字列を追加。
-void Macro::AddStringParam(const WCHAR* szParam, int nLength)
+void Macro::AddStringParam(const wchar_t* szParam, int nLength)
 {
 	MacroParam* param = new MacroParam();
 
@@ -398,7 +398,7 @@ void Macro::AddIntParam(const int nParam)
 bool Macro::Exec(EditView& editView, int flags) const
 {
 	const int maxArg = 8;
-	const WCHAR* paramArr[maxArg] = {NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
+	const wchar_t* paramArr[maxArg] = {NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
 	int paramLenArr[maxArg] = {0, 0, 0, 0, 0, 0, 0, 0};
 
 	MacroParam* p = pParamTop;
@@ -412,7 +412,7 @@ bool Macro::Exec(EditView& editView, int flags) const
 	return Macro::HandleCommand(editView, (EFunctionCode)(nFuncID | flags), paramArr, paramLenArr, i);
 }
 
-WCHAR* Macro::GetParamAt(MacroParam* p, int index)
+wchar_t* Macro::GetParamAt(MacroParam* p, int index)
 {
 	MacroParam* x = p;
 	int i = 0;
@@ -441,16 +441,16 @@ int Macro::GetParamCount() const
 }
 
 static inline int wtoi_def(
-	const WCHAR* arg,
+	const wchar_t* arg,
 	int def_val
 	)
 {
 	return (!arg ? def_val: _wtoi(arg));
 }
 
-static inline const WCHAR* wtow_def(
-	const WCHAR* arg,
-	const WCHAR* def_val
+static inline const wchar_t* wtow_def(
+	const wchar_t* arg,
+	const wchar_t* def_val
 	)
 {
 	return (!arg ? def_val: arg);
@@ -464,10 +464,10 @@ static inline const WCHAR* wtow_def(
 */
 void Macro::Save(HINSTANCE hInstance, TextOutputStream& out) const
 {
-	WCHAR			szFuncName[1024];
-	WCHAR			szFuncNameJapanese[500];
+	wchar_t			szFuncName[1024];
+	wchar_t			szFuncNameJapanese[500];
 	size_t			nTextLen;
-	const WCHAR*	pText;
+	const wchar_t*	pText;
 	NativeW			memWork;
 
 	// 2002.2.2 YAZAKI SMacroMgrに頼む
@@ -542,7 +542,7 @@ void Macro::Save(HINSTANCE hInstance, TextOutputStream& out) const
 bool Macro::HandleCommand(
 	EditView&			editView,
 	const EFunctionCode	index,
-	const WCHAR*		arguments[],
+	const wchar_t*		arguments[],
 	const int			argLengths[],
 	const int			argSize
 	)
@@ -776,7 +776,7 @@ bool Macro::HandleCommand(
 				nBackupSearchKeySequence = editView.nCurSearchKeySequence;
 				bAddHistory = false;
 			}
-			const WCHAR* pszSearchKey = wtow_def(arguments[0], L"");
+			const wchar_t* pszSearchKey = wtow_def(arguments[0], L"");
 			size_t nLen = wcslen( pszSearchKey );
 			if (0 < nLen) {
 				// 正規表現
@@ -1178,7 +1178,7 @@ bool Macro::HandleCommand(
 		{
 			int  nCharCode = wtoi_def(arguments[1], CODE_AUTODETECT);
 			BOOL nViewMode = wtoi_def(arguments[2], FALSE);
-			const WCHAR* pDefFileName = wtow_def(arguments[3], L"");
+			const wchar_t* pDefFileName = wtow_def(arguments[3], L"");
 			editView.GetCommander().HandleCommand(index, true, (LPARAM)arguments[0], (LPARAM)nCharCode, (LPARAM)nViewMode, (LPARAM)pDefFileName);
 		}
 		break;

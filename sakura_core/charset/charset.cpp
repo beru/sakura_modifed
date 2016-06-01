@@ -41,9 +41,9 @@
 
 struct CodeSet {
 	EncodingType	eCodeSet;
-	const WCHAR*	sNormal;
-	const WCHAR*	sShort;
-	const WCHAR*	sLong;			// for Combo
+	const wchar_t*	sNormal;
+	const wchar_t*	sShort;
+	const wchar_t*	sLong;			// for Combo
 	bool			bUseBom;		// BOMが使えるか
 	bool			bIsBomDefOn;	// BOMのデフォルトがOnか
 	bool			bCanDefault;	// デフォルト文字コードになれるか

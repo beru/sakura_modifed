@@ -197,7 +197,7 @@ void CommandLine::ParseCommandLine(LPCTSTR pszCmdLineSrc, bool bResponse)
 	{
 		TCHAR exename[512];
 		::GetModuleFileName(NULL, exename, _countof(exename));
-		WCHAR wexename[512];
+		wchar_t wexename[512];
 		auto_strcpy( wexename, to_wchar(exename) );
 
 		size_t len = wcslen( wexename );
