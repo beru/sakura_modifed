@@ -2784,9 +2784,6 @@ BEGIN
 #ifdef _DEBUG
                 " Debug version"
 #endif
-#ifndef _UNICODE
-                " ANSI"
-#endif
         END
     END
     BLOCK "VarFileInfo"

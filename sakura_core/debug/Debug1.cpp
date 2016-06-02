@@ -46,7 +46,6 @@ void Test()
 
 	ˆø”‚Å—^‚¦‚ç‚ê‚½î•ñ‚ğDebugString‚Æ‚µ‚Äo—Í‚·‚éD
 */
-#ifdef _UNICODE
 void DebugOutW(LPCWSTR lpFmt, ...)
 {
 	// ®Œ`
@@ -70,7 +69,6 @@ void DebugOutW(LPCWSTR lpFmt, ...)
 	va_end(argList);
 	return;
 }
-#endif
 
 void DebugOutA(LPCSTR lpFmt, ...)
 {

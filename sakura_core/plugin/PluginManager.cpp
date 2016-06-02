@@ -74,9 +74,7 @@ bool PluginManager::SearchNewPlugin(
 	HWND hWndOwner
 	)
 {
-#ifdef _UNICODE
 	DEBUG_TRACE(_T("Enter SearchNewPlugin\n"));
-#endif
 
 	HANDLE hFind;
 	ZipFile	zipFile;
@@ -124,9 +122,7 @@ bool PluginManager::SearchNewPluginDir(
 	bool& bCancel
 	)
 {
-#ifdef _UNICODE
 	DEBUG_TRACE(_T("Enter SearchNewPluginDir\n"));
-#endif
 
 	PluginRec* pluginTable = common.plugin.pluginTable;
 	HANDLE hFind;
@@ -191,9 +187,7 @@ bool PluginManager::SearchNewPluginZip(
 	bool& bCancel
 	)
 {
-#ifdef _UNICODE
 	DEBUG_TRACE(_T("Enter SearchNewPluginZip\n"));
-#endif
 
 	HANDLE hFind;
 
@@ -231,9 +225,7 @@ bool PluginManager::InstZipPlugin(
 	bool bInSearch
 	)
 {
-#ifdef _UNICODE
 	DEBUG_TRACE(_T("Entry InstZipPlugin\n"));
-#endif
 
 	ZipFile	zipFile;
 	TCHAR	msg[512];
@@ -479,9 +471,7 @@ int PluginManager::InstallPlugin(
 // 全プラグインを読み込む
 bool PluginManager::LoadAllPlugin(CommonSetting* common)
 {
-#ifdef _UNICODE
 	DEBUG_TRACE(_T("Enter LoadAllPlugin\n"));
-#endif
 	CommonSetting_Plugin& pluginSetting = (common ? common->plugin : GetDllShareData().common.plugin);
 
 	if (!pluginSetting.bEnablePlugin) {
@@ -557,9 +547,7 @@ Plugin* PluginManager::LoadPlugin(
 	DataProfile profOption;			// オプションファイル
 	Plugin* plugin = nullptr;
 
-#ifdef _UNICODE
 	DEBUG_TRACE(_T("Load Plugin %ts\n"),  pszPluginName );
-#endif
 	// プラグイン定義ファイルを読み込む
 	Concat_FolderAndFile(pszPluginDir, pszPluginName, pszBasePath);
 	Concat_FolderAndFile(pszBasePath, PII_FILENAME, pszPath);
@@ -568,9 +556,7 @@ Plugin* PluginManager::LoadPlugin(
 		// プラグイン定義ファイルが存在しない
 		return nullptr;
 	}
-#ifdef _UNICODE
 	DEBUG_TRACE(_T("  定義ファイル読込 %ts\n"),  pszPath );
-#endif
 
 	// L10N定義ファイルを読む
 	// プラグイン定義ファイルを読み込む base\pluginname\local\plugin_en_us.def
@@ -579,13 +565,9 @@ Plugin* PluginManager::LoadPlugin(
 	if (!profDefMLang.ReadProfile(strMlang.c_str())) {
 		// プラグイン定義ファイルが存在しない
 		pProfDefMLang = nullptr;
-#ifdef _UNICODE
 		DEBUG_TRACE(_T("  L10N定義ファイル読込 %ts Not Found\n"),  strMlang.c_str() );
-#endif
 	}else {
-#ifdef _UNICODE
 		DEBUG_TRACE(_T("  L10N定義ファイル読込 %ts\n"),  strMlang.c_str() );
-#endif
 	}
 
 	std::wstring sPlugType;
@@ -601,9 +583,7 @@ Plugin* PluginManager::LoadPlugin(
 	plugin->sOptionDir = sBaseDir + pszPluginName;
 	plugin->sLangName = pszLangName;
 	plugin->ReadPluginDef(profDef, pProfDefMLang);
-#ifdef _UNICODE
 	DEBUG_TRACE(_T("  プラグインタイプ %ls\n"), sPlugType.c_str() );
-#endif
 
 	// オプションファイルを読み込む
 	profOption.SetReadingMode();
@@ -611,9 +591,7 @@ Plugin* PluginManager::LoadPlugin(
 		// オプションファイルが存在する場合、読み込む
 		plugin->ReadPluginOption(profOption);
 	}
-#ifdef _UNICODE
 	DEBUG_TRACE(_T("  オプションファイル読込 %ts\n"),  plugin->GetOptionPath().c_str() );
-#endif
 
 	return plugin;
 }

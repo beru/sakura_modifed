@@ -49,11 +49,7 @@ bool HtmlHelpDll::InitDllImp()
 {
 	HtmlHelp = (Proc_HtmlHelp) ::GetProcAddress(
 		GetInstance(),
-#ifdef _UNICODE
 		"HtmlHelpW"
-#else
-		"HtmlHelpA"
-#endif
 	);
 	return HtmlHelp != nullptr; 
 }

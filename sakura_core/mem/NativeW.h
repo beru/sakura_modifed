@@ -166,21 +166,12 @@ public:
 	const wchar_t* GetStringW() const						{ return GetStringPtr(); }
 
 	// TCHAR
-#ifdef _UNICODE
 	void SetStringT(const TCHAR* pData, size_t nDataLen)	{ return SetString(pData, nDataLen); }
 	void SetStringT(const TCHAR* pszData)					{ return SetString(pszData); }
 	void AppendStringT(const TCHAR* pszData)				{ return AppendString(pszData); }
 	void AppendStringT(const TCHAR* pData, size_t nLength)	{ return AppendString(pData, nLength); }
 	void AppendNativeDataT(const NativeT& rhs)				{ return AppendNativeData(rhs); }
 	const TCHAR* GetStringT() const							{ return GetStringPtr(); }
-#else
-	void SetStringT(const TCHAR* pData, size_t nDataLen)	{ return SetStringOld(pData, nDataLen); }
-	void SetStringT(const TCHAR* pszData)					{ return SetStringOld(pszData); }
-	void AppendStringT(const TCHAR* pszData)				{ return AppendStringOld(pszData); }
-	void AppendStringT(const TCHAR* pData, size_t nLength)	{ return AppendStringOld(pData, nLength); }
-	void AppendNativeDataT(const NativeT& rhs)				{ return AppendStringOld(rhs.GetStringPtr(), rhs.GetStringLength()); }
-	const TCHAR* GetStringT() const							{ return GetStringPtrOld(); }
-#endif
 
 #if _DEBUG
 private:

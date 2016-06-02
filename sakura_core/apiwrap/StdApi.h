@@ -40,22 +40,15 @@ namespace ApiWrap {
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	// W版が無いので、自作
 	BOOL MakeSureDirectoryPathExistsW(LPCWSTR wszDirPath);
-#ifdef _UNICODE
 	#define MakeSureDirectoryPathExistsT MakeSureDirectoryPathExistsW
-#else
-	#define MakeSureDirectoryPathExistsT MakeSureDirectoryPathExists
-#endif
-
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//              W系描画API (ANSI版でも利用可能)                //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 	/*!
-		ANSI版でも使えるExtTextOutW_AnyBuild。
 		文字数制限1024半角文字。(文字間隔配列を1024半角文字分しか用意していないため)
 	*/
-#ifdef _UNICODE
 	inline BOOL ExtTextOutW_AnyBuild(
 		HDC				hdc,
 		int				x,
@@ -71,20 +64,7 @@ namespace ApiWrap {
 		DEBUG_SETPIXEL(hdc);
 		return ret;
 	}
-#else
-	BOOL ExtTextOutW_AnyBuild(
-		HDC				hdc,
-		int				x,
-		int				y,
-		UINT			fuOptions,
-		const RECT*		lprc,
-		LPCWSTR			lpwString,
-		UINT			cbCount,
-		const int*		lpDx
-	);
-#endif
 
-#ifdef _UNICODE
 	inline BOOL TextOutW_AnyBuild(
 		HDC		hdc,
 		int		nXStart,
@@ -97,15 +77,6 @@ namespace ApiWrap {
 		DEBUG_SETPIXEL(hdc);
 		return ret;
 	}
-#else
-	BOOL TextOutW_AnyBuild(
-		HDC		hdc,
-		int		nXStart,
-		int		nYStart,
-		LPCWSTR	lpwString,
-		int		cbString
-	);
-#endif
 
 	LPWSTR CharNextW_AnyBuild(
 		LPCWSTR lpsz
@@ -116,22 +87,12 @@ namespace ApiWrap {
 		LPCWSTR lpszCurrent
 	);
 
-#ifdef _UNICODE
 	#define GetTextExtentPoint32W_AnyBuild GetTextExtentPoint32
-#else
-	BOOL GetTextExtentPoint32W_AnyBuild(
-		HDC		hdc, 
-		LPCWSTR	lpString, 
-		int		cbString, 
-		LPSIZE	lpSize
-	);
-#endif
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//             その他W系API (ANSI版でも利用可能)               //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-#ifdef _UNICODE
 	inline int LoadStringW_AnyBuild(
 		HINSTANCE	hInstance,
 		UINT		uID,
@@ -141,15 +102,6 @@ namespace ApiWrap {
 	{
 		return ::LoadStringW(hInstance, uID, lpBuffer, nBufferCount);
 	}
-#else
-	int LoadStringW_AnyBuild(
-		HINSTANCE	hInstance,
-		UINT		uID,
-		LPWSTR		lpBuffer,
-		int			nBufferCount	// バッファのサイズ。文字単位。
-	);
-#endif
-
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                    描画API 不具合ラップ                     //

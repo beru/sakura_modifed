@@ -103,10 +103,5 @@ private:
 	const wchar_t* p;
 };
 
-
-#ifdef _UNICODE
 typedef CharPointerW CharPointerT;
-#else
-typedef CharPointerA CharPointerT;
-#endif
 

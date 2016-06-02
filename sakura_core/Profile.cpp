@@ -367,11 +367,7 @@ bool Profile::WriteProfile(
 		BOOL (__stdcall *pfnReplaceFile)(LPCTSTR, LPCTSTR, LPCTSTR, DWORD, LPVOID, LPVOID);
 		HMODULE hModule = ::GetModuleHandle(_T("KERNEL32"));
 		pfnReplaceFile = (BOOL (__stdcall *)(LPCTSTR, LPCTSTR, LPCTSTR, DWORD, LPVOID, LPVOID))
-#ifndef _UNICODE
-			::GetProcAddress(hModule, "ReplaceFileA");
-#else
 			::GetProcAddress(hModule, "ReplaceFileW");
-#endif
 		if (!pfnReplaceFile || !pfnReplaceFile(strProfileName.c_str(), szMirrorFile, NULL, 0, NULL, NULL)) {
 			if (fexist(strProfileName.c_str())) {
 				if (!::DeleteFile(strProfileName.c_str())) {

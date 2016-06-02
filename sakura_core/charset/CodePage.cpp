@@ -294,11 +294,7 @@ int CodePage::GetNameLong(LPTSTR outName, int charcodeEx)
 	}else {
 		HMODULE hDLLkernel = ::GetModuleHandleA( "kernel32" );
 		
-#ifdef UNICODE
 		const char* strFunc_GetCPInfoEx = "GetCPInfoExW";
-#else
-		const char* strFunc_GetCPInfoEx = "GetCPInfoExA";
-#endif
 		pfn_GetCPInfoExT_t pfn_GetCPInfoExT = (pfn_GetCPInfoExT_t)::GetProcAddress(hDLLkernel, strFunc_GetCPInfoEx);
 		CPINFOEX cpInfo;
 		cpInfo.CodePageName[0] = _T('\0');
@@ -416,11 +412,7 @@ CodePage::CodePageList& CodePage::GetCodePageList()
 	// GetCPInfoEx 98, 2000à»è„
 	HMODULE hDLLkernel = ::GetModuleHandleA("kernel32");
 	
-#ifdef UNICODE
 	const char* strFunc_GetCPInfoEx = "GetCPInfoExW";
-#else
-	const char* strFunc_GetCPInfoEx = "GetCPInfoExA";
-#endif
 	pfn_GetCPInfoExT_t pfn_GetCPInfoExT = (pfn_GetCPInfoExT_t)::GetProcAddress(hDLLkernel, strFunc_GetCPInfoEx);
 	CPINFOEX cpInfo;
 	for (auto it=result.begin(); it!=result.end(); ++it) {

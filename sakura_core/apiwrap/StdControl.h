@@ -46,11 +46,7 @@ namespace ApiWrap {
 		return SetWindowTextA(hwnd, str);
 	}
 	inline BOOL Wnd_SetText(HWND hwnd, const wchar_t* str) {
-#ifdef _UNICODE
 		return SetWindowTextW(hwnd, str);
-#else
-		return SetWindowTextA(hwnd, to_achar(str));
-#endif
 	}
 
 

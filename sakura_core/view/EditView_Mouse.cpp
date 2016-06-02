@@ -2176,11 +2176,7 @@ void EditView::OnMyDropFiles(HDROP hDrop)
 				_tsplitpath(szWork, NULL, NULL, szPath, szExt);
 				::lstrcat(szPath, szExt);
 			}
-#ifdef _UNICODE
 			memBuf.AppendString(szPath);
-#else
-			memBuf.AppendStringOld(szPath);
-#endif
 			if (nFiles > 1) {
 				memBuf.AppendString(pEditDoc->docEditor.GetNewLineCode().GetValue2());
 			}

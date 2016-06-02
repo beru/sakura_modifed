@@ -47,12 +47,7 @@
 
 
 // UNICODE BOOL’è”
-#ifdef _UNICODE
 static const bool UNICODE_BOOL = true;
-#else
-static const bool UNICODE_BOOL = false;
-#endif
-
 
 // DebugMonitorLib(‰¼)‚ğg‚¤‚©‚Ç‚¤‚©
 //#define USE_DEBUGMON

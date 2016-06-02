@@ -1138,11 +1138,7 @@ HTREEITEM TreeCopy(
 	TV_INSERTSTRUCT	tvis;		// ‘}“ü—p
 	TV_ITEM			tvi;		// Žæ“¾—p
 	int				n = 0;
-#ifdef _UNICODE
 	const int		MAX_LABEL_CCH = 256+10;
-#else
-	const int		MAX_LABEL_CCH = (256+10)*2;
-#endif
 	TCHAR			szLabel[MAX_LABEL_CCH];
 
 	for (s=src; s; s = fOnryOne ? NULL:TreeView_GetNextSibling(hwndTree, s)) {

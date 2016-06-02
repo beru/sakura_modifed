@@ -61,13 +61,8 @@ struct SysString {
 		UINT len = ::SysStringLen(data);
 		str->assign(data, len);
 	}
-#ifdef _UNICODE
 	void GetT(TCHAR** s, int* l) { GetW(s, l); }
 	void GetT(std::wstring* str) { GetW(str); }
-#else
-	void GetT(TCHAR** s, int* l) { Get(s, l); }
-	void GetT(std::string* str) { Get(str); }
-#endif
 };
 
 /*! VARIANT‚ÌWrapper class

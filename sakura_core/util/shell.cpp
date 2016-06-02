@@ -208,13 +208,6 @@ LRESULT CALLBACK PropSheetWndProc(
 						LPITEMIDLIST pIDL;
 						wchar_t pwszDisplayName[_MAX_PATH];
 						_tcstowcs(pwszDisplayName, szPath, _countof(pwszDisplayName));
-//#ifdef _UNICODE
-//						pwszDisplayName = szPath;
-//#else
-//						wchar_t wszPath[_MAX_PATH];
-//						::MultiByteToWideChar(CP_ACP, 0, szPath, -1, wszPath, _MAX_PATH);
-//						pwszDisplayName = wszPath;
-//#endif
 						if (SUCCEEDED(pDesktopFolder->ParseDisplayName(NULL, NULL, pwszDisplayName, NULL, &pIDL, NULL))) {
 							SHELLEXECUTEINFO si = {0};
 							si.cbSize   = sizeof(si);

@@ -94,12 +94,7 @@ bool PluginMacroManager::LoadKeyMacroStr(HINSTANCE hInstance, const TCHAR* Code)
 MacroManagerBase* PluginMacroManager::Creator(EditView& view, const TCHAR* ext)
 {
 	WSHIfObj::List params;
-#ifdef _UNICODE
 	MacroIfObj* objMacro = new MacroIfObj(MacroIfObj::MACRO_MODE_CREATOR, ext, 0, L"");
-#else
-	NativeW szWideExt(to_wchar(Ext));
-	MacroIfObj* objMacro = new MacroIfObj(MacroIfObj::MACRO_MODE_CREATOR, szWideExt.GetStringPtr(), 0, L"");
-#endif
 	objMacro->AddRef();
 	params.push_back(objMacro);
 
@@ -110,11 +105,7 @@ MacroManagerBase* PluginMacroManager::Creator(EditView& view, const TCHAR* ext)
 		(*it)->Invoke(view, params);
 		if (objMacro->IsMatch()) {
 			objMacro->Release();
-#ifdef _UNICODE
 			return new PluginMacroManager(ext, *it);
-#else
-			return new PluginMacroManager(szWideExt.GetStringPtr(), *it);
-#endif
 		}
 	}
 	objMacro->Release();

@@ -400,8 +400,6 @@ void wcstombs_vector(const wchar_t* pSrc, size_t nSrcLen, std::vector<char>* ret
 	(*ret)[nNewLen] = '\0';
 }
 
-#ifdef _UNICODE
-
 size_t _tcstowcs(wchar_t* wszDst, const TCHAR* tszSrc, size_t nDstCount)
 {
 	wcsncpy_s(wszDst, nDstCount, tszSrc, _TRUNCATE);
@@ -429,42 +427,6 @@ int _tctowc(const TCHAR* p, wchar_t* wc)
 	*wc = *p;
 	return 1;
 }
-
-#else
-
-size_t _tcstowcs(wchar_t* wszDst, const TCHAR* tszSrc, size_t nDstCount)
-{
-	return mbstowcs2(wszDst, tszSrc, nDstCount);
-}
-size_t _tcstombs(CHAR*  szDst,  const TCHAR* tszSrc, size_t nDstCount)
-{
-	strncpy_s(szDst, nDstCount, tszSrc, _TRUNCATE);
-	return strlen(szDst);
-}
-size_t _wcstotcs(TCHAR* tszDst, const wchar_t* wszSrc, size_t nDstCount)
-{
-	return wcstombs2(tszDst, wszSrc, nDstCount);
-}
-size_t _mbstotcs(TCHAR* tszDst, const CHAR*  szSrc,  size_t nDstCount)
-{
-	strncpy_s(tszDst, nDstCount, szSrc, _TRUNCATE);
-	return strlen(tszDst);
-}
-int _tctomb(const TCHAR* tc, ACHAR* mb)
-{
-	mb[0] = tc[0];
-	if (_IS_SJIS_1(tc[0])) {
-		mb[1] = tc[1];
-		return 2;
-	}
-	return 1;
-}
-int _tctowc(const TCHAR* tc, wchar_t* wc)
-{
-	return mbtowc(wc, tc, _IS_SJIS_1(tc[0]) ? 2 : 1);
-}
-
-#endif
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                          ÉÅÉÇÉä                             //

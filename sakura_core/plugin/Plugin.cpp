@@ -76,13 +76,11 @@ bool Plugin::ReadPluginDefCommon(
 		profileMlang->IOProfileData(PII_PLUGIN, PII_PLUGIN_URL, sUrl);
 	}
 
-#ifdef _UNICODE
 	DEBUG_TRACE(_T("    Name:%ls\n"), sName.c_str());
 	DEBUG_TRACE(_T("    Description:%ls\n"), sDescription.c_str());
 	DEBUG_TRACE(_T("    Author:%ls\n"), sAuthor.c_str());
 	DEBUG_TRACE(_T("    Version:%ls\n"), sVersion.c_str());
 	DEBUG_TRACE(_T("    Url:%ls\n"), sUrl.c_str());
-#endif
 
 	return true;
 }

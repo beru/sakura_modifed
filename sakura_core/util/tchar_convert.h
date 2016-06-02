@@ -36,13 +36,8 @@ const ACHAR* to_achar(const wchar_t* src);
 const ACHAR* to_achar(const wchar_t* pSrc, size_t nSrcLength);
 
 // TCHAR‚É•ÏŠ·
-#ifdef _UNICODE
-	#define to_tchar     to_wchar
-	#define to_not_tchar to_achar
-#else
-	#define to_tchar     to_achar
-	#define to_not_tchar to_wchar
-#endif
+#define to_tchar     to_wchar
+#define to_not_tchar to_achar
 
 // ‚»‚Ì‘¼
 const wchar_t* easy_format(const wchar_t* format, ...);

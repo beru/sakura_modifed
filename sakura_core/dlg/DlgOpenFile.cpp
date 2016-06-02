@@ -494,11 +494,7 @@ UINT_PTR CALLBACK OFNHookProc(
 				if (1
 					&& (pData->ofn.Flags & OFN_ALLOWMULTISELECT)
 					&&
-#ifdef _UNICODE
 						IsWin32NT()
-#else
-						!IsWin32NT()
-#endif
 				) {
 					DWORD nLength = CommDlg_OpenSave_GetSpec(pData->hwndOpenDlg, NULL, 0);
 					nLength += _MAX_PATH + 2;

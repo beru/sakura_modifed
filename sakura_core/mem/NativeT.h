@@ -26,12 +26,7 @@
 class NativeW;
 class NativeA;
 
-#ifdef _UNICODE
 typedef NativeW NativeT;
-#else
-typedef NativeA NativeT;
-#endif
-
 
 #include "mem/NativeA.h"
 #include "mem/NativeW.h"

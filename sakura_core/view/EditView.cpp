@@ -442,13 +442,7 @@ void EditView::Close()
 // TCHAR→wchar_t変換。
 inline wchar_t tchar_to_wchar(TCHAR tc)
 {
-#ifdef _UNICODE
 	return tc;
-#else
-	wchar_t wc = 0;
-	mbtowc(&wc, &tc, sizeof(tc));
-	return wc;
-#endif
 }
 
 /*
@@ -502,35 +496,12 @@ LRESULT EditView::DispatchEvent(
 		editWnd.ClearMouseState();
 		return 0L;
 	case WM_CHAR:
-#ifdef _UNICODE
 		// コントロールコード入力禁止
 		if (WCODE::IsControlCode((wchar_t)wParam)) {
 			ErrorBeep();
 		}else {
 			GetCommander().HandleCommand(F_WCHAR, true, (wchar_t)wParam, 0, 0, 0);
 		}
-#else
-		// SJIS固有
-		{
-			static BYTE preChar = 0;
-			if (preChar == 0 && ! _IS_SJIS_1((unsigned char)wParam)) {
-				// ASCII , 半角カタカナ
-				if (ACODE::IsControlCode((char)wParam)) {
-					ErrorBeep();
-				}else {
-					GetCommander().HandleCommand(F_WCHAR, true, tchar_to_wchar((ACHAR)wParam), 0, 0, 0);
-				}
-			}else {
-				if (preChar) {
-					WORD wordData = MAKEWORD((BYTE)wParam, preChar);
-					GetCommander().HandleCommand(F_IME_CHAR, true, wordData, 0, 0, 0);
-					preChar = 0;
-				}else {
-					preChar = (BYTE)wParam;
-				}
-			}
-		}
-#endif
 		return 0L;
 
 	case WM_IME_NOTIFY:	// Nov. 26, 2006 genta
@@ -580,12 +551,7 @@ LRESULT EditView::DispatchEvent(
 				nMousePouse = -1;
 				::SetCursor(NULL);
 			}
-#ifdef _UNICODE
 			GetCommander().HandleCommand(F_INSTEXT_W, true, (LPARAM)lptstr, wcslen(lptstr), TRUE, 0);
-#else
-			std::wstring wstr = to_wchar(lptstr);
-			GetCommander().HandleCommand(F_INSTEXT_W, true, (LPARAM)wstr.c_str(), wstr.length(), TRUE, 0);
-#endif
 			ImmReleaseContext(hwnd, hIMC);
 
 			// add this string into text buffer of application
@@ -897,12 +863,7 @@ LRESULT EditView::DispatchEvent(
 	{
 		// wParam RedoUndoフラグは無視する
 		if (lParam) {
-#ifdef _UNICODE
 			GetCommander().HandleCommand(F_INSTEXT_W, true, lParam, wcslen((wchar_t*)lParam), TRUE, 0);
-#else
-			std::wstring text = to_wchar((LPCTSTR)lParam);
-			GetCommander().HandleCommand(F_INSTEXT_W, true, (LPARAM)text.c_str(), text.length(), TRUE, 0);
-#endif
 		}
 		return 0L; // not use.
 	}
