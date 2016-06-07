@@ -61,7 +61,7 @@ public:
 	INT_PTR DoModal(HINSTANCE, HWND, LPARAM);	// モーダルダイアログの表示 
 
 	// @@ 2005.03.31 MIK 階層パラメータを追加
-//	bool AddParamA(const ACHAR*, const ACHAR*, int, const ACHAR*, const ACHAR*, int depth, int baseDirId);	// 登録
+//	bool AddParamA(const char*, const char*, int, const char*, const char*, int depth, int baseDirId);	// 登録
 	bool GetSelectedParam(TCHAR* s0, TCHAR* s1, int* n2, TCHAR* s3, TCHAR* s4, int* depth, TCHAR* fileBase);	// 取得
 	void SetFileName(const TCHAR* pszFileName);
 	void SetKeyword(const wchar_t* pszKeyword);	// @@ 2005.03.31 MIK

@@ -219,9 +219,9 @@ bool SetClipboardTextImp(
 	return true;
 }
 
-bool SetClipboardText(HWND hwnd, const ACHAR* pszText, size_t nLength)
+bool SetClipboardText(HWND hwnd, const char* pszText, size_t nLength)
 {
-	return SetClipboardTextImp<ACHAR>(hwnd, pszText, nLength);
+	return SetClipboardTextImp<char>(hwnd, pszText, nLength);
 }
 
 bool SetClipboardText(HWND hwnd, const wchar_t* pszText, size_t nLength)

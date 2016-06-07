@@ -47,26 +47,26 @@
 #pragma once
 
 // vsprintf_sラップ
-int tchar_vsprintf_s(ACHAR* buf, size_t nBufCount, const ACHAR* format, va_list& v);
+int tchar_vsprintf_s(char* buf, size_t nBufCount, const char* format, va_list& v);
 int tchar_vsprintf_s(wchar_t* buf, size_t nBufCount, const wchar_t* format, va_list& v);
 
 // vsprintfラップ
-int tchar_vsprintf(ACHAR* buf, const ACHAR* format, va_list& v);
+int tchar_vsprintf(char* buf, const char* format, va_list& v);
 int tchar_vsprintf(wchar_t* buf, const wchar_t* format, va_list& v);
 
 // vsnprintf_sラップ
-int tchar_vsnprintf_s(ACHAR* buf, size_t nBufCount, const ACHAR* format, va_list& v);
+int tchar_vsnprintf_s(char* buf, size_t nBufCount, const char* format, va_list& v);
 int tchar_vsnprintf_s(wchar_t* buf, size_t nBufCount, const wchar_t* format, va_list& v);
 
 // sprintf_sラップ
-int tchar_sprintf_s(ACHAR* buf, size_t nBufCount, const ACHAR* format, ...);
+int tchar_sprintf_s(char* buf, size_t nBufCount, const char* format, ...);
 int tchar_sprintf_s(wchar_t* buf, size_t nBufCount, const wchar_t* format, ...);
 
 // sprintfラップ
-int tchar_sprintf(ACHAR* buf, const ACHAR* format, ...);
+int tchar_sprintf(char* buf, const char* format, ...);
 int tchar_sprintf(wchar_t* buf, const wchar_t* format, ...);
 
 // _snprintf_sラップ
-int tchar_snprintf_s(ACHAR* buf, size_t count, const ACHAR* format, ...);
+int tchar_snprintf_s(char* buf, size_t count, const char* format, ...);
 int tchar_snprintf_s(wchar_t* buf, size_t count, const wchar_t* format, ...);
 

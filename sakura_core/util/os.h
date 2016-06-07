@@ -30,7 +30,7 @@ BOOL GetSystemResources(int*, int*, int*);	// システムリソースを調べる
 BOOL CheckSystemResources(const TCHAR*);		// システムリソースのチェック
 
 // クリップボード
-bool SetClipboardText(HWND hwnd, const ACHAR* pszText, size_t nLength);	// クリープボードにText形式でコピーする。ANSI版。nLengthは文字単位。
+bool SetClipboardText(HWND hwnd, const char* pszText, size_t nLength);	// クリープボードにText形式でコピーする。ANSI版。nLengthは文字単位。
 bool SetClipboardText(HWND hwnd, const wchar_t* pszText, size_t nLength);	// クリープボードにText形式でコピーする。UNICODE版。nLengthは文字単位。
 bool IsDataAvailable(LPDATAOBJECT pDataObject, CLIPFORMAT cfFormat);
 HGLOBAL GetGlobalData(LPDATAOBJECT pDataObject, CLIPFORMAT cfFormat);

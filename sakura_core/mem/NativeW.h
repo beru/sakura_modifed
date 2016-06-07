@@ -151,7 +151,7 @@ public:
 	// ひとつはオーバーヘッドを抑える意味で。
 	// ひとつは変換によるデータ喪失を抑える意味で。
 
-	// ACHAR
+	// char
 	void SetStringOld(const char* pData, size_t nDataLen);    // バッファの内容を置き換える。pDataはSJIS。nDataLenは文字単位。
 	void SetStringOld(const char* pszData);                // バッファの内容を置き換える。pszDataはSJIS。
 	void AppendStringOld(const char* pData, size_t nDataLen); // バッファの最後にデータを追加する。pszDataはSJIS。

@@ -164,7 +164,7 @@ public:
 	bool MyGetClipboardData(NativeW&, bool*, bool* = nullptr);			// クリップボードからデータを取得
 
 	// 設定
-	bool MySetClipboardData(const ACHAR*, size_t, bool bColumnSelect, bool = false);	// クリップボードにデータを設定
+	bool MySetClipboardData(const char*, size_t, bool bColumnSelect, bool = false);	// クリップボードにデータを設定
 	bool MySetClipboardData(const wchar_t*, size_t, bool bColumnSelect, bool = false);	// クリップボードにデータを設定
 
 	// 利用
@@ -739,7 +739,7 @@ public:
 	virtual  ~OutputAdapter(){};
 
 	virtual bool OutputW(const wchar_t* pBuf, int size = -1) = 0;
-	virtual bool OutputA(const ACHAR* pBuf, int size = -1) = 0;
+	virtual bool OutputA(const char* pBuf, int size = -1) = 0;
 	virtual bool IsEnableRunningDlg(){ return true; }
 	virtual bool IsActiveDebugWindow(){ return true; }
 };

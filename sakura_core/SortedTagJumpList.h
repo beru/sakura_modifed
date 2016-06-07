@@ -43,7 +43,7 @@ public:
 	~SortedTagJumpList();
 
 	int AddBaseDir(const TCHAR* baseDir);
-	bool AddParamA(const ACHAR* keyword, const ACHAR* filename, int no, ACHAR type, const ACHAR* note, int depth, const int baseDirId);
+	bool AddParamA(const char* keyword, const char* filename, int no, char type, const char* note, int depth, const int baseDirId);
 	bool GetParam(int index, TCHAR* keyword, TCHAR* filename, int* no, TCHAR* type, TCHAR* note, int* depth, TCHAR* baseDir);
 	int GetCount(void) { return nCount; }
 	void Empty(void);

@@ -313,9 +313,9 @@ int tchar_vsprintf_s_imp(T* buf, size_t nBufCount, const T* format, va_list& v, 
 }
 
 
-int tchar_vsprintf_s(ACHAR* buf, size_t nBufCount, const ACHAR* format, va_list& v)
+int tchar_vsprintf_s(char* buf, size_t nBufCount, const char* format, va_list& v)
 {
-	return tchar_vsprintf_s_imp<ACHAR>(buf, nBufCount, format, v, false);
+	return tchar_vsprintf_s_imp<char>(buf, nBufCount, format, v, false);
 }
 
 int tchar_vsprintf_s(wchar_t* buf, size_t nBufCount, const wchar_t* format, va_list& v)
@@ -327,7 +327,7 @@ int tchar_vsprintf_s(wchar_t* buf, size_t nBufCount, const wchar_t* format, va_l
 // vsprintfラップ
 // ※bufに十分な容量があることに自信があるときだけ、使ってください。
 //
-int tchar_vsprintf(ACHAR* buf, const ACHAR* format, va_list& v)
+int tchar_vsprintf(char* buf, const char* format, va_list& v)
 {
 	return tchar_vsprintf_s(buf, MAX_BUF, format, v);
 }
@@ -340,9 +340,9 @@ int tchar_vsprintf(wchar_t* buf, const wchar_t* format, va_list& v)
 // vsnprintf_sラップ
 // バッファが出力文字列より小さい場合は可能な限り出力して末尾に\0を付け、戻り値-1で返ります。
 //
-int tchar_vsnprintf_s(ACHAR* buf, size_t nBufCount, const ACHAR* format, va_list& v)
+int tchar_vsnprintf_s(char* buf, size_t nBufCount, const char* format, va_list& v)
 {
-	return tchar_vsprintf_s_imp<ACHAR>(buf, nBufCount, format, v, true);
+	return tchar_vsprintf_s_imp<char>(buf, nBufCount, format, v, true);
 }
 int tchar_vsnprintf_s(wchar_t* buf, size_t nBufCount, const wchar_t* format, va_list& v)
 {
@@ -354,11 +354,11 @@ int tchar_vsnprintf_s(wchar_t* buf, size_t nBufCount, const wchar_t* format, va_
 //
 // (実装について)
 //     内容が同じなので、templateでも良かったのですが、
-//     そうすると、ACHAR, wchar_t 以外の型からの暗黙で安全なキャストが
+//     そうすると、char, wchar_t 以外の型からの暗黙で安全なキャストが
 //     効かなくなり、コーディングが不便になるため、
-//     あえて、ACHAR, wchar_t で関数をひとつずつ定義しています。
+//     あえて、char, wchar_t で関数をひとつずつ定義しています。
 //
-int tchar_sprintf_s(ACHAR* buf, size_t nBufCount, const ACHAR* format, ...)
+int tchar_sprintf_s(char* buf, size_t nBufCount, const char* format, ...)
 {
 	va_list v;
 	va_start(v, format);
@@ -381,11 +381,11 @@ int tchar_sprintf_s(wchar_t* buf, size_t nBufCount, const wchar_t* format, ...)
 //
 // (実装について)
 //     内容が同じなので、templateでも良かったのですが、
-//     そうすると、ACHAR, wchar_t 以外の型からの暗黙で安全なキャストが
+//     そうすると、char, wchar_t 以外の型からの暗黙で安全なキャストが
 //     効かなくなり、コーディングが不便になるため、
-//     あえて、ACHAR, wchar_t で関数をひとつずつ定義しています。
+//     あえて、char, wchar_t で関数をひとつずつ定義しています。
 //
-int tchar_sprintf(ACHAR* buf, const ACHAR* format, ...)
+int tchar_sprintf(char* buf, const char* format, ...)
 {
 	va_list v;
 	va_start(v, format);
@@ -406,7 +406,7 @@ int tchar_sprintf(wchar_t* buf, const wchar_t* format, ...)
 // snprintf_sラップ
 // バッファが出力文字列より小さい場合は可能な限り出力して末尾に\0を付け、戻り値-1で返ります。
 //
-int tchar_snprintf_s(ACHAR* buf, size_t count, const ACHAR* format, ...) 
+int tchar_snprintf_s(char* buf, size_t count, const char* format, ...) 
 {
 	va_list v;
 	va_start(v, format);

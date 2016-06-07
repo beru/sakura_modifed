@@ -386,7 +386,7 @@ bool FileNameManager::GetMenuFullLabel(
 		LimitStringLength(pfi->szGrepKey, nGrepKeyLen, GREPKEY_LIMIT_LEN, memDes);
 		
 		const TCHAR* pszKey;
-		TCHAR szMenu2[GREPKEY_LIMIT_LEN * 2 * 2 + 1]; // wchar_t=>ACHARÇ≈2î{ÅA&Ç≈2î{
+		TCHAR szMenu2[GREPKEY_LIMIT_LEN * 2 * 2 + 1]; // wchar_t=>charÇ≈2î{ÅA&Ç≈2î{
 		if (bEspaceAmp) {
 			dupamp(memDes.GetStringT(), szMenu2);
 			pszKey = szMenu2;

@@ -6,14 +6,14 @@ static RecycledBuffer        g_bufSmall;
 static RecycledBufferDynamic g_bufBig;
 
 
-const wchar_t* to_wchar(const ACHAR* src)
+const wchar_t* to_wchar(const char* src)
 {
 	if (!src) return NULL;
 
 	return to_wchar(src, strlen(src));
 }
 
-const wchar_t* to_wchar(const ACHAR* pSrc, size_t nSrcLength)
+const wchar_t* to_wchar(const char* pSrc, size_t nSrcLength)
 {
 	if (!pSrc) return NULL;
 
@@ -51,14 +51,14 @@ const wchar_t* to_wchar(const ACHAR* pSrc, size_t nSrcLength)
 }
 
 
-const ACHAR* to_achar(const wchar_t* src)
+const char* to_achar(const wchar_t* src)
 {
 	if (!src) return NULL;
 
 	return to_achar(src, wcslen(src));
 }
 
-const ACHAR* to_achar(const wchar_t* pSrc, size_t nSrcLength)
+const char* to_achar(const wchar_t* pSrc, size_t nSrcLength)
 {
 	if (!pSrc) return NULL;
 
@@ -76,11 +76,11 @@ const ACHAR* to_achar(const wchar_t* pSrc, size_t nSrcLength)
 	size_t nDstCnt = (size_t)nDstLen + 1;
 
 	// バッファ取得
-	ACHAR* pDst;
-	if (nDstCnt < g_bufSmall.GetMaxCount<ACHAR>()) {
-		pDst = g_bufSmall.GetBuffer<ACHAR>(&nDstCnt);
+	char* pDst;
+	if (nDstCnt < g_bufSmall.GetMaxCount<char>()) {
+		pDst = g_bufSmall.GetBuffer<char>(&nDstCnt);
 	}else {
-		pDst = g_bufBig.GetBuffer<ACHAR>(nDstCnt);
+		pDst = g_bufBig.GetBuffer<char>(nDstCnt);
 	}
 
 	// 変換

@@ -332,7 +332,7 @@ LRESULT EditView::SetReconvertStruct(
 			dwCompStrLen = memBuf2._GetMemory()->GetRawLength();					// comp文字列長。文字単位。
 		}else if (nInsertCompLen > 0) {
 			// nSelectedLen と nInsertCompLen が両方指定されることはないはず
-			const ACHAR* pComp = to_achar(szComposition);
+			const char* pComp = to_achar(szComposition);
 			pszInsBuffer = pComp;
 			dwInsByteCount = strlen(pComp);
 			dwCompStrLen = dwInsByteCount;
@@ -397,7 +397,7 @@ LRESULT EditView::SetReconvertStruct(
 			}
 			p[dwReconvTextInsLen] = L'\0';
 		}else {
-			ACHAR* p = (ACHAR*)(pReconv + 1);
+			char* p = (char*)(pReconv + 1);
 			if (dwInsByteCount) {
 				CHAR* pb = p;
 				CopyMemory(p, pszReconv, dwCompStrOffset);

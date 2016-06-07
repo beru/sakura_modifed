@@ -48,9 +48,6 @@
 
 // -- -- -- -- 文字 -- -- -- -- //
 
-// char,wchar_t の変わりに、別名の ACHAR,WCHAR を使うと、ソース整形がしやすいケースがある。
-typedef char ACHAR;
-
 // TCHAR追加機能
 // TCHARと逆の文字型をNOT_TCHARとして定義する
 typedef char NOT_TCHAR;

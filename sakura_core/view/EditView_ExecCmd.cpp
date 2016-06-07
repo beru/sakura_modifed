@@ -52,7 +52,7 @@ public:
 	~OutputAdapterDefault(){};
 
 	bool OutputW(const wchar_t* pBuf, int size = -1);
-	bool OutputA(const ACHAR* pBuf, int size = -1);
+	bool OutputA(const char* pBuf, int size = -1);
 	bool IsActiveDebugWindow(){ return !bWindow; }
 
 protected:
@@ -72,7 +72,7 @@ public:
 	{}
 	~OutputAdapterUTF8(){};
 
-	bool OutputA(const ACHAR* pBuf, int size = -1);
+	bool OutputA(const char* pBuf, int size = -1);
 
 protected:
 	std::unique_ptr<CodeBase> pCodeBase;
@@ -642,9 +642,9 @@ bool OutputAdapterDefault::OutputW(const wchar_t* pBuf, int size)
 
 /*
 	@param pBuf size未指定なら要NUL終端
-	@param size ACHAR単位 
+	@param size char単位 
 */
-bool OutputAdapterDefault::OutputA(const ACHAR* pBuf, int size)
+bool OutputAdapterDefault::OutputA(const char* pBuf, int size)
 {
 	NativeW buf;
 	if (size == -1) {
@@ -658,9 +658,9 @@ bool OutputAdapterDefault::OutputA(const ACHAR* pBuf, int size)
 
 /*
 	@param pBuf size未指定なら要NUL終端
-	@param size ACHAR単位 
+	@param size char単位 
 */
-bool OutputAdapterUTF8::OutputA(const ACHAR* pBuf, int size)
+bool OutputAdapterUTF8::OutputA(const char* pBuf, int size)
 {
 	Memory input;
 	NativeW buf;

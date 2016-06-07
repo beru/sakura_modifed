@@ -24,16 +24,16 @@
 #pragma once
 
 // wchar_t‚É•ÏŠ·
-const wchar_t* to_wchar(const ACHAR* src);
-const wchar_t* to_wchar(const ACHAR* pSrcData, size_t nSrcLength);
+const wchar_t* to_wchar(const char* src);
+const wchar_t* to_wchar(const char* pSrcData, size_t nSrcLength);
 inline
 const wchar_t* to_wchar(const wchar_t* src) { return src; }
 
-// ACHAR‚É•ÏŠ·
+// char‚É•ÏŠ·
 inline
-const ACHAR* to_achar(const ACHAR* src) { return src; }
-const ACHAR* to_achar(const wchar_t* src);
-const ACHAR* to_achar(const wchar_t* pSrc, size_t nSrcLength);
+const char* to_achar(const char* src) { return src; }
+const char* to_achar(const wchar_t* src);
+const char* to_achar(const wchar_t* pSrc, size_t nSrcLength);
 
 // TCHAR‚É•ÏŠ·
 #define to_tchar     to_wchar

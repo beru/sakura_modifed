@@ -40,7 +40,7 @@
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 //
 
-inline ACHAR _GetHexChar(ACHAR c)
+inline char _GetHexChar(char c)
 {
 	if ((c >= '0' && c <= '9') || (c >= 'A' && c <= 'F')) {
 		return c;
@@ -64,7 +64,7 @@ inline wchar_t _GetHexChar(wchar_t c)
 /*
 	c ‚Ì“ü—Í’lF 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, A, B, C, D, E, F
 */
-inline int _HexToInt(ACHAR c)
+inline int _HexToInt(char c)
 {
 	if (c <= '9') {
 		return c - '0';
@@ -345,7 +345,7 @@ inline BYTE _UUDECODE_CHAR(wchar_t c)
 	return static_cast<BYTE>((static_cast<BYTE>(c_) - 0x20) & 0x3f);
 }
 
-inline BYTE _UUDECODE_CHAR(ACHAR c)
+inline BYTE _UUDECODE_CHAR(char c)
 {
 	if (c == '`' || c == '~') {
 		c = ' ';
@@ -477,7 +477,7 @@ bool CheckUUHeader(const CHAR_TYPE* pSrc, size_t nLen, TCHAR* pszFilename)
 				return false;
 			}
 		}else {
-			// ACHAR ‚Ìê‡‚Ìˆ—
+			// char ‚Ìê‡‚Ìˆ—
 			if (!isdigit(pwstart[i]) || (pwstart[i] == '8' || pwstart[i] == '9')) {
 				// error.
 				return false;
@@ -539,7 +539,7 @@ bool CheckUUFooter(const CHAR_TYPE *pS, const size_t nLen)
 				break;
 			}
 		}else {
-			// ACHAR ‚Ìê‡‚Ìˆ—
+			// char ‚Ìê‡‚Ìˆ—
 			if (c != '\r' && c != '\n' && c != ' ' && c != '\t') {
 				break;
 			}
@@ -575,7 +575,7 @@ bool CheckUUFooter(const CHAR_TYPE *pS, const size_t nLen)
 				return false;
 			}
 		}else {
-			// ACHAR ‚Ìê‡‚Ìˆ—
+			// char ‚Ìê‡‚Ìˆ—
 			if (c != '\r' && c != '\n' && c != ' ' && c != '\t') {
 				return false;
 			}

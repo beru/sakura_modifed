@@ -75,7 +75,7 @@ public:
 	~OutputAdapterDiff(){};
 
 	bool OutputW(const wchar_t* pBuf, int size = -1){ return true; };
-	bool OutputA(const ACHAR* pBuf, int size = -1);
+	bool OutputA(const char* pBuf, int size = -1);
 	bool IsEnableRunningDlg(){ return false; }
 	bool IsActiveDebugWindow(){ return false; }
 
@@ -208,7 +208,7 @@ void EditView::ViewDiffInfo(
 	return;
 					}
 
-bool OutputAdapterDiff::OutputA(const ACHAR* pBuf, int size)
+bool OutputAdapterDiff::OutputA(const char* pBuf, int size)
 {
 	if (size == -1) {
 		size = auto_strlen(pBuf);

@@ -109,11 +109,11 @@ int SortedTagJumpList::AddBaseDir(const TCHAR* baseDir)
 	@date 2010.07.23 Moca baseDirId 追加
 */
 bool SortedTagJumpList::AddParamA(
-	const ACHAR* keyword,
-	const ACHAR* filename,
+	const char* keyword,
+	const char* filename,
 	int no,
-	ACHAR type,
-	const ACHAR* note,
+	char type,
+	const char* note,
 	int depth,
 	int baseDirId
 	)
@@ -122,7 +122,7 @@ bool SortedTagJumpList::AddParamA(
 	TagJumpInfo*	prev;
 	TagJumpInfo*	item;
 	// 3つめはSJIS用保険
-	ACHAR typeStr[] = {type, '\0', '\0'};
+	char typeStr[] = {type, '\0', '\0'};
 
 	// アイテムを作成する。
 	item = (TagJumpInfo*)malloc(sizeof(TagJumpInfo));

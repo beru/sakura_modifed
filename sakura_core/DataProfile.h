@@ -44,7 +44,7 @@ struct StringBuffer {
 	}
 };
 
-typedef const StringBuffer<ACHAR> StringBufferA;
+typedef const StringBuffer<char> StringBufferA;
 typedef const StringBuffer<wchar_t> StringBufferW;
 typedef StringBufferW StringBufferT;
 
@@ -110,10 +110,10 @@ protected:
 	AS_INT(WORD)
 	AS_INT(UINT)
 
-	// ACHAR
-	void profile_to_value(const wstring& profile, ACHAR* value) {
+	// char
+	void profile_to_value(const wstring& profile, char* value) {
 		if (profile.length() > 0) {
-			ACHAR buf[2] = {0};
+			char buf[2] = {0};
 			int ret = wctomb(buf, profile[0]);
 			assert_warning(ret == 1);
 			(void)ret;
@@ -122,7 +122,7 @@ protected:
 			*value = '\0';
 		}
 	}
-	void value_to_profile(const ACHAR& value, wstring* profile) {
+	void value_to_profile(const char& value, wstring* profile) {
 		wchar_t buf[2] = {0};
 		mbtowc(buf, &value, 1);
 		profile->assign(1, buf[0]);
@@ -157,13 +157,13 @@ protected:
 	void value_to_profile(const StaticString<wchar_t, N>& value, wstring* profile) {
 		*profile = value.GetBufferPointer();
 	}
-	// StaticString<ACHAR, N>
+	// StaticString<char, N>
 	template <int N>
-	void profile_to_value(const wstring& profile, StaticString<ACHAR, N>* value) {
+	void profile_to_value(const wstring& profile, StaticString<char, N>* value) {
 		strcpy_s(value->GetBufferPointer(), value->GetBufferCount(), to_achar(profile.c_str()));
 	}
 	template <int N>
-	void value_to_profile(const StaticString<ACHAR, N>& value, wstring* profile) {
+	void value_to_profile(const StaticString<char, N>& value, wstring* profile) {
 		*profile = to_wchar(value. GetBufferPointer());
 	}
 	// wstring

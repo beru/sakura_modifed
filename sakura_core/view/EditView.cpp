@@ -2292,7 +2292,7 @@ bool EditView::MyGetClipboardData(
 	@date 2004.02.17 Moca エラーチェックするように
  */
 bool EditView::MySetClipboardData(
-	const ACHAR* pszText,
+	const char* pszText,
 	size_t nTextLen,
 	bool bColumnSelect,
 	bool bLineSelect /*= false*/

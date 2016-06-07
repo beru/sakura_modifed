@@ -54,14 +54,14 @@ LPWSTR wcscpyn(LPWSTR lpString1, LPCWSTR lpString2, size_t iMaxLength)
 
 
 /*
-	TCHAR と wchar_t または ACHAR の変換関数
+	TCHAR と wchar_t または char の変換関数
 */
 
-ACHAR* tcstostr(ACHAR* dest, const TCHAR* src, size_t count) {
+char* tcstostr(char* dest, const TCHAR* src, size_t count) {
 	TCHAR* pr = const_cast<TCHAR*>(src);
-	ACHAR* pw = dest;
+	char* pw = dest;
 	for (; pr<src+count; ++pr) {
-		*pw = static_cast<ACHAR>(*pr);
+		*pw = static_cast<char>(*pr);
 		++pw;
 	}
 	return pw;
@@ -76,9 +76,9 @@ wchar_t* tcstostr(wchar_t* dest, const TCHAR* src, size_t count) {
 	return pw;
 }
 
-TCHAR* strtotcs(TCHAR* dest, const ACHAR* src, size_t count)
+TCHAR* strtotcs(TCHAR* dest, const char* src, size_t count)
 {
-	ACHAR* pr = const_cast<ACHAR*>(src);
+	char* pr = const_cast<char*>(src);
 	TCHAR* pw = dest;
 	for (; pr<src+count; ++pr) {
 		*pw = static_cast<TCHAR>(*pr);
@@ -418,7 +418,7 @@ size_t _mbstotcs(TCHAR* tszDst, const CHAR*  szSrc,  size_t nDstCount)
 {
 	return mbstowcs2(tszDst, szSrc, nDstCount);
 }
-int _tctomb(const TCHAR* p, ACHAR* mb)
+int _tctomb(const TCHAR* p, char* mb)
 {
 	return wctomb(mb, *p);
 }
@@ -469,7 +469,7 @@ int wmemicmp_ascii(const wchar_t* p1, const wchar_t* p2, size_t count)
 //$ いちいち手間かかる。。
 namespace {
 	template <class T> struct Charset {};
-	template <> struct Charset<ACHAR>{ static const ACHAR QUOT = '"'; };
+	template <> struct Charset<char>{ static const char QUOT = '"'; };
 	template <> struct Charset<wchar_t>{ static const wchar_t QUOT = L'"'; };
 }
 template <class CHAR_TYPE>
@@ -501,7 +501,7 @@ CHAR_TYPE* my_strtok(
 	return p;
 }
 // インスタンス化
-template ACHAR* my_strtok(ACHAR*, size_t, size_t*, const ACHAR*);
+template char* my_strtok(char*, size_t, size_t*, const char*);
 template wchar_t* my_strtok(wchar_t*, size_t, size_t*, const wchar_t*);
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //

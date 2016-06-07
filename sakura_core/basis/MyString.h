@@ -34,9 +34,9 @@ public:
 	String(wchar_t wc)								: wstr(1, wc),		str_cache(NULL) { }
 	String(const wchar_t* szData = L"")				: wstr(szData),		str_cache(NULL) { }
 	String(const wchar_t* pData, size_t nLength)		: wstr(pData, nLength), str_cache(NULL) { }
-	String(const ACHAR* szData)						: wstr(L""), str_cache(NULL) { set(szData); }
-	String(const ACHAR* pData, size_t nLength)		: wstr(L""), str_cache(NULL) { set(pData, nLength); }
-	String(ACHAR wc)								: wstr(L""), str_cache(NULL) { ACHAR buf[2] = {wc, 0}; set(buf); }
+	String(const char* szData)						: wstr(L""), str_cache(NULL) { set(szData); }
+	String(const char* pData, size_t nLength)		: wstr(L""), str_cache(NULL) { set(pData, nLength); }
+	String(char wc)									: wstr(L""), str_cache(NULL) { char buf[2] = {wc, 0}; set(buf); }
 	String(const String& rhs) : wstr(rhs.c_wstr()), str_cache(NULL) { }
 	~String();
 

@@ -719,11 +719,11 @@ LPVOID DlgTagJumpList::GetHelpIdTable(void)
 
 #if 0
 bool DlgTagJumpList::AddParamA(
-	const ACHAR* s0,
-	const ACHAR* s1,
+	const char* s0,
+	const char* s1,
 	int n2,
-	const ACHAR* s3,
-	const ACHAR* s4,
+	const char* s3,
+	const char* s4,
 	int depth,
 	int fileBase
 	)
@@ -1119,7 +1119,7 @@ int DlgTagJumpList::find_key_core(
 
 	// to_acharは一時バッファで破壊される可能性があるのでコピー
 	NativeA memKeyA = NativeA(to_achar(keyword));
-	const ACHAR* paszKeyword = memKeyA.GetStringPtr();
+	const char* paszKeyword = memKeyA.GetStringPtr();
 	size_t	length = memKeyA.GetStringLength();
 
 	Empty();
@@ -1168,8 +1168,8 @@ int DlgTagJumpList::find_key_core(
 	
 	TCHAR	szTagFile[1024];		// タグファイル
 	TCHAR	szNextPath[1024];		// 次検索フォルダ
-	ACHAR	szLineData[1024];		// 行バッファ
-	ACHAR	s[4][1024];
+	char	szLineData[1024];		// 行バッファ
+	char	s[4][1024];
 	int		n2;
 	szNextPath[0] = _T('\0');
 	vector_ex<std::tstring> seachDirs;
@@ -1240,7 +1240,7 @@ int DlgTagJumpList::find_key_core(
 							s[0], s[1], s[2]
 						);
 						if (nRet < 2) goto next_line;
-						const ACHAR* pTag = s[0] + 6;
+						const char* pTag = s[0] + 6;
 						if (strncmp_literal(pTag , "FILE_FORMAT") == 0) {
 							n2 = atoi(s[1]);
 							if (1 <= n2 && n2 <= 2) {

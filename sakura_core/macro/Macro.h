@@ -73,7 +73,7 @@ struct MacroParam {
 		type = MacroParamType::Null;
 	}
 	void SetStringParam( const wchar_t* szParam, int nLength = -1 );
-	void SetStringParam( const ACHAR* lParam ){ SetStringParam(to_wchar(lParam)); }
+	void SetStringParam( const char* lParam ){ SetStringParam(to_wchar(lParam)); }
 	void SetIntParam( const int nParam );
 };
 /*! @brief キーボードマクロの1コマンド
@@ -108,7 +108,7 @@ public:
 	
 	void AddLParam(const LPARAM* lParam, const EditView& editView );	//@@@ 2002.2.2 YAZAKI pEditViewも渡す
 	void AddStringParam( const wchar_t* szParam, int nLength = -1 );
-	void AddStringParam(const ACHAR* lParam) { return AddStringParam(to_wchar(lParam)); }
+	void AddStringParam(const char* lParam) { return AddStringParam(to_wchar(lParam)); }
 	void AddIntParam( const int nParam );
 	int GetParamCount() const;
 
