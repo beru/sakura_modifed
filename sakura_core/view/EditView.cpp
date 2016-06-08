@@ -1903,7 +1903,7 @@ bool EditView::GetSelectedData(
 		//  とはいえ、逆に小さく見積もることになってしまうと、かなり速度をとられる要因になってしまうので
 		// 困ってしまうところですが・・・。
 		pEditDoc->layoutMgr.GetLineStr(GetSelectionInfo().select.GetFrom().y, &nLineLen, &pLayout);
-		int nBufSize = 0;
+		size_t nBufSize = 0;
 
 		int i = (GetSelectionInfo().select.GetTo().y - GetSelectionInfo().select.GetFrom().y);
 

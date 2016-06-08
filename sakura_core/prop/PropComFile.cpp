@@ -274,9 +274,9 @@ void PropFile::SetData(HWND hwndDlg)
 	// ファイルの排他制御モード
 	HWND hwndCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_FILESHAREMODE);
 	Combo_ResetContent(hwndCombo);
-	int nSelPos = 0;
+	size_t nSelPos = 0;
 	for (size_t i=0; i<_countof(ShareModeArr); ++i) {
-		Combo_InsertString(hwndCombo, i, LS(ShareModeArr[i].nNameId));
+		Combo_InsertString(hwndCombo, (int)i, LS(ShareModeArr[i].nNameId));
 		if (ShareModeArr[i].nMethod == csFile.nFileShareMode) {
 			nSelPos = i;
 		}

@@ -578,19 +578,19 @@ void PropTypesKeyHelp::SetData(HWND hwndDlg)
 		}
 		// ON-OFF
 		lvi.mask     = LVIF_TEXT;
-		lvi.iItem    = i;
+		lvi.iItem    = (int)i;
 		lvi.iSubItem = 0;
 		lvi.pszText = GetFileName(types.keyHelpArr[i].szPath);
 		ListView_InsertItem(hwndWork, &lvi);
 		// 辞書の説明
 		lvi.mask     = LVIF_TEXT;
-		lvi.iItem    = i;
+		lvi.iItem    = (int)i;
 		lvi.iSubItem = 1;
 		lvi.pszText  = types.keyHelpArr[i].szAbout;
 		ListView_SetItem(hwndWork, &lvi);
 		// 辞書ファイルパス
 		lvi.mask     = LVIF_TEXT;
-		lvi.iItem    = i;
+		lvi.iItem    = (int)i;
 		lvi.iSubItem = 2;
 		lvi.pszText  = types.keyHelpArr[i].szPath;
 		ListView_SetItem(hwndWork, &lvi);

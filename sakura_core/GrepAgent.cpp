@@ -136,7 +136,7 @@ void GrepAgent::AddTail(
 					editView.GetDocument().GetDocumentEncoding(), 0) );
 			pCodeBase->UnicodeToCode( mem, &memOut );
 			DWORD dwWrite = 0;
-			::WriteFile(out, memOut.GetRawPtr(), memOut.GetRawLength(), &dwWrite, NULL);
+			::WriteFile(out, memOut.GetRawPtr(), (DWORD)memOut.GetRawLength(), &dwWrite, NULL);
 		}
 	}else {
 		lastViewDstAddedTime = GetTickCount64();
@@ -879,14 +879,14 @@ void GrepAgent::SetGrepResult(
 	const TCHAR*	pszFilePath,		// [in] フルパス or 相対パス
 	const TCHAR*	pszCodeName,		// [in] 文字コード情報．" [SJIS]"とか
 	// マッチした行の情報
-	LONGLONG	nLine,					// [in] マッチした行番号(1～)
-	int			nColumn,				// [in] マッチした桁番号(1～)
+	LONGLONG		nLine,				// [in] マッチした行番号(1～)
+	size_t			nColumn,			// [in] マッチした桁番号(1～)
 	const wchar_t*	pCompareData,		// [in] 行の文字列
-	size_t		nLineLen,				// [in] 行の文字列の長さ
-	size_t		nEolCodeLen,			// [in] EOLの長さ
+	size_t			nLineLen,			// [in] 行の文字列の長さ
+	size_t			nEolCodeLen,		// [in] EOLの長さ
 	// マッチした文字列の情報
 	const wchar_t*	pMatchData,			// [in] マッチした文字列
-	size_t			nMatchLen,				// [in] マッチした文字列の長さ
+	size_t			nMatchLen,			// [in] マッチした文字列の長さ
 	// オプション
 	const GrepOption&	grepOption
 	)
@@ -1227,9 +1227,9 @@ int GrepAgent::DoGrepFile(
 			// 正規表現検索
 			if (searchOption.bRegularExp) {
 				size_t nIndex = 0;
-	#ifdef _DEBUG
+#ifdef _DEBUG
 				int nIndexPrev = -1;
-	#endif
+#endif
 
 				//	Jun. 21, 2003 genta ループ条件見直し
 				//	マッチ箇所を1行から複数検出するケースを標準に，
@@ -1385,7 +1385,7 @@ int GrepAgent::DoGrepFile(
 					//	2003.06.10 Moca マッチした文字列の後ろから次の検索を開始する
 					//	nClom : マッチ位置
 					//	matchlen : マッチした文字列の長さ
-					int nPosDiff = nColumn += nKeyLen - 1;
+					size_t nPosDiff = nColumn += nKeyLen - 1;
 					pCompareData += nPosDiff;
 					nLineLen -= nPosDiff;
 					nColumnPrev += nPosDiff;

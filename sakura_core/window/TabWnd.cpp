@@ -1856,13 +1856,11 @@ void TabWnd::Refresh(bool bEnsureVisible/* = true*/, bool bRebuild/* = false*/)
 {
 	TCITEM		tcitem;
 	EditNode*	pEditNode;
-	int			nCount;
 	int			nGroup = 0;
 	int			nTab;
 	int			nSel = 0;
 	int			nCurTab;
 	int			nCurSel;
-	int			i;
 	int			j;
 
 	if (!hwndTab) {
@@ -1870,9 +1868,10 @@ void TabWnd::Refresh(bool bEnsureVisible/* = true*/, bool bRebuild/* = false*/)
 	}
 
 	pEditNode = nullptr;
-	nCount = AppNodeManager::getInstance().GetOpenedWindowArr(&pEditNode, true);
+	size_t nCount = AppNodeManager::getInstance().GetOpenedWindowArr(&pEditNode, true);
 
 	// 自ウィンドウのグループ番号を調べる
+	size_t i;
 	for (i=0; i<nCount; ++i) {
 		auto& node = pEditNode[i];
 		if (node.hWnd == GetParentHwnd()) {
@@ -2744,8 +2743,8 @@ LRESULT TabWnd::TabListMenu(POINT pt, bool bSel/* = true*/, bool bFull/* = false
 		EditNode* pEditNode;
 
 		// タブメニュー用の情報を取得する
-		int nCount = AppNodeManager::getInstance().GetOpenedWindowArr(&pEditNode, true);
-		if (nCount <= 0)
+		size_t nCount = AppNodeManager::getInstance().GetOpenedWindowArr(&pEditNode, true);
+		if (nCount == 0)
 			return 0L;
 
 		int nGroup = 0;
@@ -2881,7 +2880,7 @@ HWND TabWnd::GetNextGroupWnd(void)
 	auto& csTabBar = pShareData->common.tabBar;
 	if (csTabBar.bDispTabWnd && !csTabBar.bDispTabWndMultiWin) {
 		EditNode* pWndArr;
-		int n = AppNodeManager::getInstance().GetOpenedWindowArr(&pWndArr, false, true);	// グループ番号順ソート
+		size_t n = AppNodeManager::getInstance().GetOpenedWindowArr(&pWndArr, false, true);	// グループ番号順ソート
 		if (n == 0)
 			return NULL;
 		int i;
@@ -2922,16 +2921,16 @@ HWND TabWnd::GetPrevGroupWnd(void)
 	if (csTabBar.bDispTabWnd && !csTabBar.bDispTabWndMultiWin) {
 		EditNode* pWndArr;
 		auto& appNodeMgr = AppNodeManager::getInstance();
-		int n = appNodeMgr.GetOpenedWindowArr(&pWndArr, false, true);	// グループ番号順ソート
+		size_t n = appNodeMgr.GetOpenedWindowArr(&pWndArr, false, true);	// グループ番号順ソート
 		if (n == 0)
 			return NULL;
-		int i;
+		size_t i;
 		for (i=0; i<n; ++i) {
 			if (pWndArr[i].hWnd == GetParentHwnd())
 				break;
 		}
 		if (i < n) {
-			int j;
+			size_t j;
 			for (j=i-1; j>=0; --j) {
 				if (pWndArr[j].nGroup != pWndArr[i].nGroup) {
 					hwndRet = appNodeMgr.GetEditNode(pWndArr[j].hWnd)->GetGroup().GetTopEditNode()->GetHwnd();

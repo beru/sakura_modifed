@@ -144,7 +144,7 @@ bool Clipboard::SetText(
 
 		// 確保した領域にデータをコピー
 		BYTE* pClip = GlobalLockBYTE(hgClipSakura);
-		*((int*)pClip) = nDataLen; pClip += sizeof(int);									// データの長さ
+		*((int*)pClip) = (int)nDataLen; pClip += sizeof(int);									// データの長さ
 		wmemcpy((wchar_t*)pClip, pData, nDataLen ); pClip += nDataLen * sizeof(wchar_t);	// データ
 		*((wchar_t*)pClip) = L'\0'; pClip += sizeof(wchar_t);								// 終端Null
 		::GlobalUnlock(hgClipSakura);
@@ -368,8 +368,8 @@ bool Clipboard::GetText(NativeW* pMemBuf, bool* pbColumnSelect, bool* pbLineSele
 		HDROP hDrop = (HDROP)::GetClipboardData(CF_HDROP);
 		if (hDrop) {
 			TCHAR sTmpPath[_MAX_PATH + 1] = {0};
-			const size_t nMaxCnt = DragQueryFile(hDrop, 0xFFFFFFFF, NULL, 0);
-			for (size_t nLoop=0; nLoop<nMaxCnt; ++nLoop) {
+			const UINT nMaxCnt = DragQueryFile(hDrop, 0xFFFFFFFF, NULL, 0);
+			for (UINT nLoop=0; nLoop<nMaxCnt; ++nLoop) {
 				DragQueryFile(hDrop, nLoop, sTmpPath, _countof(sTmpPath) - 1);
 				// 2012.10.05 Moca ANSI版に合わせて最終行にも改行コードをつける
 				pMemBuf->AppendStringT(sTmpPath);

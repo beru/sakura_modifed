@@ -201,7 +201,7 @@ int EditView::OnVScroll(int nScrollCode, int nPos)
 		nScrollVal = ScrollAtV(0);
 		break;
 	case SB_BOTTOM:
-		nScrollVal = ScrollAtV((pEditDoc->layoutMgr.GetLineCount()) - GetTextArea().nViewRowNum);
+		nScrollVal = ScrollAtV((int)pEditDoc->layoutMgr.GetLineCount() - GetTextArea().nViewRowNum);
 		break;
 	default:
 		break;
@@ -262,7 +262,7 @@ int EditView::OnHScroll(int nScrollCode, int nPos)
 		break;
 	case SB_RIGHT:
 		//	Aug. 14, 2005 genta 折り返し幅をLayoutMgrから取得するように
-		nScrollVal = ScrollAtH(pEditDoc->layoutMgr.GetMaxLineKetas() - GetTextArea().nViewColNum);
+		nScrollVal = ScrollAtH((int)pEditDoc->layoutMgr.GetMaxLineKetas() - GetTextArea().nViewColNum);
 		break;
 	}
 	return nScrollVal;
@@ -300,7 +300,7 @@ void EditView::AdjustScrollBars()
 		si.cbSize = sizeof(si);
 		si.fMask = SIF_ALL | SIF_DISABLENOSCROLL;
 		si.nMin  = 0;
-		si.nMax  = nAllLines / nVScrollRate - 1;	// 全行数
+		si.nMax  = (int)nAllLines / nVScrollRate - 1;	// 全行数
 		si.nPage = GetTextArea().nViewRowNum / nVScrollRate;	// 表示域の行数
 		si.nPos  = GetTextArea().GetViewTopLine() / nVScrollRate;	// 表示域の一番上の行(0開始)
 		si.nTrackPos = 0;
@@ -324,7 +324,7 @@ void EditView::AdjustScrollBars()
 		si.cbSize = sizeof(si);
 		si.fMask = SIF_ALL | SIF_DISABLENOSCROLL;
 		si.nMin  = 0;
-		si.nMax  = GetRightEdgeForScrollBar() - 1;		// 2009.08.28 nasukoji	スクロールバー制御用の右端座標を取得
+		si.nMax  = (int)GetRightEdgeForScrollBar() - 1;		// 2009.08.28 nasukoji	スクロールバー制御用の右端座標を取得
 		si.nPage = GetTextArea().nViewColNum;			// 表示域の桁数
 		si.nPos  = GetTextArea().GetViewLeftCol();		// 表示域の一番左の桁(0開始)
 		si.nTrackPos = 1;
@@ -434,7 +434,7 @@ int EditView::ScrollAtH(int nPos)
 	//	ウィンドウの幅をきわめて狭くしたときに編集領域が行番号から離れてしまうことがあった．
 	//	Aug. 14, 2005 genta 折り返し幅をLayoutMgrから取得するように
 	else {
-		int nPos2 = GetRightEdgeForScrollBar() + GetWrapOverhang() - GetTextArea().nViewColNum;
+		int nPos2 = (int)(GetRightEdgeForScrollBar() + GetWrapOverhang()) - GetTextArea().nViewColNum;
 		if (nPos2 < nPos) {
 			nPos = nPos2;
 			//	May 29, 2004 genta 折り返し幅よりウィンドウ幅が大きいときにWM_HSCROLLが来ると
@@ -758,7 +758,7 @@ size_t EditView::GetWrapOverhang(void) const
 int EditView::ViewColNumToWrapColNum(int nViewColNum) const
 {
 	// ぶら下げ余白を差し引く
-	int nWidth = nViewColNum - GetWrapOverhang();
+	int nWidth = nViewColNum - (int)GetWrapOverhang();
 
 	// MINLINEKETAS未満の時はMINLINEKETASで折り返しとする
 	if (nWidth < MINLINEKETAS) {

@@ -70,10 +70,10 @@ namespace ApiWrap {
 		int		nXStart,
 		int		nYStart,
 		LPCWSTR	lpwString,
-		int		cbString
+		size_t	cbString
 	)
 	{
-		BOOL ret = ::TextOut(hdc, nXStart, nYStart, lpwString, cbString);
+		BOOL ret = ::TextOut(hdc, nXStart, nYStart, lpwString, (int)cbString);
 		DEBUG_SETPIXEL(hdc);
 		return ret;
 	}

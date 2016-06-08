@@ -75,16 +75,16 @@ BOOL DlgReplace::OnCbnDropDown(HWND hwndCtl, int wID)
 	switch (wID) {
 	case IDC_COMBO_TEXT:
 		if (::SendMessage(hwndCtl, CB_GETCOUNT, 0L, 0L) == 0) {
-			int nSize = pShareData->searchKeywords.searchKeys.size();
-			for (int i=0; i<nSize; ++i) {
+			size_t nSize = pShareData->searchKeywords.searchKeys.size();
+			for (size_t i=0; i<nSize; ++i) {
 				Combo_AddString( hwndCtl, pShareData->searchKeywords.searchKeys[i] );
 			}
 		}
 		break;
 	case IDC_COMBO_TEXT2:
 		if (::SendMessage(hwndCtl, CB_GETCOUNT, 0L, 0L) == 0) {
-			int nSize = pShareData->searchKeywords.replaceKeys.size();
-			for (int i=0; i<nSize; ++i) {
+			size_t nSize = pShareData->searchKeywords.replaceKeys.size();
+			for (size_t i=0; i<nSize; ++i) {
 				Combo_AddString( hwndCtl, pShareData->searchKeywords.replaceKeys[i] );
 			}
 		}

@@ -175,7 +175,7 @@ private:
 		const TCHAR*	pszCodeName,	//	文字コード情報"[SJIS]"とか
 		// マッチした行の情報
 		LONGLONG		nLine,			//	マッチした行番号
-		int				nColumn,		//	マッチした桁番号
+		size_t			nColumn,		//	マッチした桁番号
 		const wchar_t*	pCompareData,	//	行の文字列
 		size_t			nLineLen,		//	行の文字列の長さ
 		size_t			nEolCodeLen,	//	EOLの長さ

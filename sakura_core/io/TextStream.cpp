@@ -126,10 +126,7 @@ void TextOutputStream::WriteString(
 {
 	//$$メモ: 文字変換時にいちいちコピーを作ってるので効率が悪い。後々効率改善予定。
 
-	int nDataLen = nLen;
-	if (nDataLen < 0) {
-		nDataLen = wcslen(szData);
-	}
+	size_t nDataLen = (nLen < 0) ? wcslen(szData) : nLen;
 	const wchar_t* pData = szData;
 	const wchar_t* pEnd = szData + nDataLen;
 

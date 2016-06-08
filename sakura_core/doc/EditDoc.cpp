@@ -993,8 +993,8 @@ void EditDoc::SetCurDirNotitle()
 	if (eOpenDialogDir == OPENDIALOGDIR_MRU) {
 		const MruFolder mru;
 		std::vector<LPCTSTR> vMRU = mru.GetPathList();
-		int nCount = mru.Length();
-		for (int i=0; i<nCount ; ++i) {
+		size_t nCount = mru.Length();
+		for (size_t i=0; i<nCount ; ++i) {
 			DWORD attr = ::GetFileAttributes( vMRU[i] );
 			if ((attr != -1) && (attr & FILE_ATTRIBUTE_DIRECTORY) != 0) {
 				pszDir = vMRU[i];
