@@ -72,7 +72,7 @@ public:
 	void OnPreviewGoDirectPage(void);
 	void OnPreviewZoom(BOOL bZoomUp);
 	void OnPrint(void);	// àÛç¸é¿çs
-	BOOL OnPrintPageSetting(void);
+	bool OnPrintPageSetting(void);
 	void OnCheckAntialias(void);
 
 	/*

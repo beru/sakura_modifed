@@ -145,12 +145,12 @@ public:
 	LRESULT OnLButtonDown(WPARAM, LPARAM);
 	LRESULT OnMouseMove(WPARAM, LPARAM);
 	LRESULT OnMouseWheel(WPARAM, LPARAM);
-	BOOL DoMouseWheel(WPARAM wParam, LPARAM lParam);	// マウスホイール処理	// 2007.10.16 ryoji
+	bool DoMouseWheel(WPARAM wParam, LPARAM lParam);	// マウスホイール処理	// 2007.10.16 ryoji
 	LRESULT OnHScroll(WPARAM, LPARAM);
 	LRESULT OnVScroll(WPARAM, LPARAM);
 	int	OnClose(HWND hWndFrom, bool);	// 終了時の処理
 	void OnDropFiles(HDROP);			// ファイルがドロップされた
-	BOOL OnPrintPageSetting(void);		// 印刷ページ設定
+	bool OnPrintPageSetting(void);		// 印刷ページ設定
 	LRESULT OnTimer(WPARAM, LPARAM);	// WM_TIMER 処理	// 2007.04.03 ryoji
 	void OnEditTimer(void);				// タイマーの処理
 	void OnCaptionTimer(void);

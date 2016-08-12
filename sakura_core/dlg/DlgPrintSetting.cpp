@@ -128,7 +128,7 @@ INT_PTR DlgPrintSetting::DoModal(
 	nLineNumberColumns = nLineNumberColumns;
 
 	INT_PTR nRet = Dialog::DoModal(hInstance, hwndParent, IDD_PrintSetting, (LPARAM)NULL);
-	if (nRet != FALSE) {
+	if (nRet != 0 && nRet != -1) {
 		*pnCurrentPrintSetting = nCurrentPrintSetting;
 		for (size_t i=0; i<MAX_PrintSettingARR; ++i) {
 			pPrintSettingArr[i] = printSettingArr[i];

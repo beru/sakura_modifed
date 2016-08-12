@@ -3451,7 +3451,7 @@ LRESULT EditWnd::OnMouseWheel(WPARAM wParam, LPARAM lParam)
 
 	@date 2007.10.16 ryoji OnMouseWheel()から処理抜き出し
 */
-BOOL EditWnd::DoMouseWheel(WPARAM wParam, LPARAM lParam)
+bool EditWnd::DoMouseWheel(WPARAM wParam, LPARAM lParam)
 {
 //@@@ 2002.01.14 YAZAKI 印刷PreviewをPrintPreviewに独立させたことによる変更
 	// 印刷Previewモードか
@@ -3511,41 +3511,39 @@ BOOL EditWnd::DoMouseWheel(WPARAM wParam, LPARAM lParam)
 					}
 					delete[] pEditNodeArr;
 				}
-				return TRUE;	// 処理した
+				return true;	// 処理した
 			}
 		}
-		return FALSE;	// 処理しなかった
+		return false;	// 処理しなかった
 	}
-	return FALSE;	// 処理しなかった
+	return false;	// 処理しなかった
 }
 
 /* 印刷ページ設定
 	印刷Preview時にも、そうでないときでも呼ばれる可能性がある。
 */
-BOOL EditWnd::OnPrintPageSetting(void)
+bool EditWnd::OnPrintPageSetting(void)
 {
 	// 印刷設定（CANCEL押したときに破棄するための領域）
-	DlgPrintSetting	dlgPrintSetting;
-	INT_PTR bRes;
-	int		nCurrentPrintSetting;
-	int		nLineNumberColumns;
 
 	auto& docType = GetDocument().docType;
-	nCurrentPrintSetting = docType.GetDocumentAttribute().nCurrentPrintSetting;
+	int nCurrentPrintSetting = docType.GetDocumentAttribute().nCurrentPrintSetting;
+	int nLineNumberColumns;
 	if (pPrintPreview) {
 		nLineNumberColumns = GetActiveView().GetTextArea().DetectWidthOfLineNumberArea_calculate(pPrintPreview->pLayoutMgr_Print); // 印刷Preview時は文書の桁数 2013.5.10 aroka
 	}else {
 		nLineNumberColumns = 3; // ファイルメニューからの設定時は最小値 2013.5.10 aroka
 	}
 
-	bRes = dlgPrintSetting.DoModal(
+	DlgPrintSetting	dlgPrintSetting;
+	bool bRes = dlgPrintSetting.DoModal(
 		G_AppInstance(),
 //@@@ 2002.01.14 YAZAKI 印刷PreviewをPrintPreviewに独立させたことによる変更
 		GetHwnd(),
 		&nCurrentPrintSetting, // 現在選択している印刷設定
 		pShareData->printSettingArr, // 現在の設定はダイアログ側で保持する 2013.5.1 aroka
 		nLineNumberColumns // 行番号表示用に桁数を渡す 2013.5.10 aroka
-	);
+	) > 0;
 
 	if (bRes) {
 		bool bChangePrintSettingNo = false;
@@ -3653,22 +3651,17 @@ LRESULT EditWnd::OnLButtonDblClk(WPARAM wp, LPARAM lp) // by 鬼(2)
 // ドロップダウンメニュー(開く)	@@@ 2002.06.15 MIK
 int	EditWnd::CreateFileDropDownMenu(HWND hwnd)
 {
-	int		nId;
-	HMENU	hMenu;
-	HMENU	hMenuPopUp;
-	POINT	po;
-	RECT	rc;
-	int		nIndex;
-
 	// メニュー表示位置を決める	// 2007.03.25 ryoji
 	// ※ TBN_DROPDOWN 時の NMTOOLBAR::iItem や NMTOOLBAR::rcButton にはドロップダウンメニュー(開く)ボタンが
 	//    複数あるときはどれを押した時も１個目のボタン情報が入るようなのでマウス位置からボタン位置を求める
+	POINT po;
 	::GetCursorPos(&po);
 	::ScreenToClient(hwnd, &po);
-	nIndex = Toolbar_Hittest(hwnd, &po);
+	int nIndex = Toolbar_Hittest(hwnd, &po);
 	if (nIndex < 0) {
 		return 0;
 	}
+	RECT rc;
 	Toolbar_GetItemRect(hwnd, nIndex, &rc);
 	po.x = rc.left;
 	po.y = rc.bottom;
@@ -3685,7 +3678,7 @@ int	EditWnd::CreateFileDropDownMenu(HWND hwnd)
 
 	// MRUリストのファイルのリストをメニューにする
 	const MruFile mru;
-	hMenu = mru.CreateMenu(menuDrawer);
+	HMENU hMenu = mru.CreateMenu(menuDrawer);
 	if (mru.MenuLength() > 0) {
 		menuDrawer.MyAppendMenuSep(
 			hMenu,
@@ -3698,7 +3691,7 @@ int	EditWnd::CreateFileDropDownMenu(HWND hwnd)
 
 	// 最近使ったフォルダのメニューを作成
 	const MruFolder mruFolder;
-	hMenuPopUp = mruFolder.CreateMenu(menuDrawer);
+	HMENU hMenuPopUp = mruFolder.CreateMenu(menuDrawer);
 	if (mruFolder.MenuLength() > 0) {
 		// アクティブ
 		menuDrawer.MyAppendMenu(
@@ -3725,7 +3718,7 @@ int	EditWnd::CreateFileDropDownMenu(HWND hwnd)
 	menuDrawer.MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING, F_FILENEW_NEWWINDOW, _T(""), _T("medium"), false);
 	menuDrawer.MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING, F_FILEOPEN, _T(""), _T("O"), false);
 
-	nId = ::TrackPopupMenu(
+	int nId = ::TrackPopupMenu(
 		hMenu,
 		TPM_TOPALIGN
 		| TPM_LEFTALIGN
@@ -4128,7 +4121,7 @@ LRESULT EditWnd::WinListMenu(HMENU hMenu, EditNode* pEditNodeArr, size_t nRowNum
 			FileNameManager::getInstance().GetMenuFullLabel_WinList(szMenu, _countof(szMenu), pfi, pEditNodeArr[i].nId, i, dcFont.GetHDC());
 			menuDrawer.MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING, IDM_SELWINDOW + pEditNodeArr[i].nIndex, szMenu, _T(""));
 			if (GetHwnd() == pEditNodeArr[i].GetHwnd()) {
-				::CheckMenuItem(hMenu, IDM_SELWINDOW + pEditNodeArr[i].nIndex, MF_BYCOMMAND | MF_CHECKED);
+				::CheckMenuItem(hMenu, UINT(IDM_SELWINDOW + pEditNodeArr[i].nIndex), MF_BYCOMMAND | MF_CHECKED);
 			}
 		}
 	}
