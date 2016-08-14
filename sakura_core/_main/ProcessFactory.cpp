@@ -94,9 +94,9 @@ bool ProcessFactory::ProfileSelect(
 {
 	ProfileSettings settings;
 
-	DlgProfileMgr::ReadProfSettings( settings );
+	DlgProfileMgr::ReadProfSettings(settings);
 	SelectLang::InitializeLanguageEnvironment();
-	SelectLang::ChangeLang( settings.szDllLanguage );
+	SelectLang::ChangeLang(settings.szDllLanguage);
 
 	auto& cmdLine = CommandLine::getInstance();
 	cmdLine.ParseCommandLine(lpCmdLine);
@@ -230,9 +230,7 @@ bool ProcessFactory::StartControlProcess()
 	MY_RUNNINGTIMER(runningTimer, "StartControlProcess" );
 
 	// プロセスの起動
-	PROCESS_INFORMATION p;
 	STARTUPINFO s;
-
 	s.cb          = sizeof(s);
 	s.lpReserved  = NULL;
 	s.lpDesktop   = NULL;
@@ -258,6 +256,7 @@ bool ProcessFactory::StartControlProcess()
 #ifdef _DEBUG
 //	dwCreationFlag |= DEBUG_PROCESS; // 2007.09.22 kobake デバッグ用フラグ
 #endif
+	PROCESS_INFORMATION p;
 	BOOL bCreateResult = ::CreateProcess(
 		szEXE,				// 実行可能モジュールの名前
 		szCmdLineBuf,		// コマンドラインの文字列

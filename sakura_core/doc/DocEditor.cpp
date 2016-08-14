@@ -56,8 +56,9 @@ DocEditor::DocEditor(EditDoc& doc)
 */
 void DocEditor::SetModified(bool flag, bool redraw)
 {
-	if (bIsDocModified == flag)	// •ÏX‚ª‚È‚¯‚ê‚Î‰½‚à‚µ‚È‚¢
+	if (bIsDocModified == flag)	{ // •ÏX‚ª‚È‚¯‚ê‚Î‰½‚à‚µ‚È‚¢
 		return;
+    }
 
 	bIsDocModified = flag;
 	if (redraw) {

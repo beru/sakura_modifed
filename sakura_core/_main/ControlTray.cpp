@@ -400,7 +400,6 @@ LRESULT ControlTray::DispatchEvent(
 	)
 {
 	int			nId;
-	HWND		hwndWork;
 	LPHELPINFO	lphi;
 
 	EditNode*	pEditNodeArr;
@@ -453,7 +452,7 @@ LRESULT ControlTray::DispatchEvent(
 			TCHAR	szClassName[100];
 			TCHAR	szText[256];
 
-			hwndWork = ::GetForegroundWindow();
+			HWND hwndWork = ::GetForegroundWindow();
 			szClassName[0] = L'\0';
 			::GetClassName(hwndWork, szClassName, _countof(szClassName) - 1);
 			::GetWindowText(hwndWork, szText, _countof(szText) - 1);
@@ -939,8 +938,7 @@ LRESULT ControlTray::DispatchEvent(
 				if (nId - IDM_SELWINDOW >= 0
 					&& nId - IDM_SELWINDOW < (int)pShareData->nodes.nEditArrNum
 				) {
-					hwndWork = pShareData->nodes.pEditArr[nId - IDM_SELWINDOW].GetHwnd();
-
+					HWND hwndWork = pShareData->nodes.pEditArr[nId - IDM_SELWINDOW].GetHwnd();
 					// アクティブにする
 					ActivateFrameWindow(hwndWork);
 				}else if (nId - IDM_SELMRU >= 0 && nId-IDM_SELMRU < 999) {
@@ -1388,8 +1386,8 @@ bool ControlTray::OpenNewEditor2(
 
 	// 追加のコマンドラインオプション
 	CommandLineString cmdLine;
-	if (editInfo.ptCursor.x >= 0			) cmdLine.AppendF(_T(" -X=%d"), editInfo.ptCursor.x + 1);
-	if (editInfo.ptCursor.y >= 0			) cmdLine.AppendF(_T(" -Y=%d"), editInfo.ptCursor.y + 1);
+	if (editInfo.ptCursor.x >= 0)   cmdLine.AppendF(_T(" -X=%d"), editInfo.ptCursor.x + 1);
+	if (editInfo.ptCursor.y >= 0)   cmdLine.AppendF(_T(" -Y=%d"), editInfo.ptCursor.y + 1);
 	if (editInfo.nViewLeftCol >= 0) cmdLine.AppendF(_T(" -VX=%d"), editInfo.nViewLeftCol + 1);
 	if (editInfo.nViewTopLine >= 0) cmdLine.AppendF(_T(" -VY=%d"), editInfo.nViewTopLine + 1);
 	LoadInfo loadInfo;
@@ -1413,7 +1411,7 @@ bool ControlTray::OpenNewEditor2(
 void ControlTray::ActiveNextWindow(HWND hwndParent)
 {
 	// 現在開いている編集窓のリストを得る
-	EditNode*	pEditNodeArr;
+	EditNode* pEditNodeArr;
 	size_t nRowNum = AppNodeManager::getInstance().GetOpenedWindowArr(&pEditNodeArr, true);
 	if (nRowNum > 0) {
 		// 自分のウィンドウを調べる

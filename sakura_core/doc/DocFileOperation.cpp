@@ -310,7 +310,7 @@ bool DocFileOperation::SaveFileDialog(
 		MruFile().GetPathList(),	// 最近のファイル
 		MruFolder().GetPathList()	// 最近のフォルダ
 	);
-	return dlgOpenFile.DoModalSaveDlg( pSaveInfo, pSaveInfo->eCharCode == CODE_CODEMAX );
+	return dlgOpenFile.DoModalSaveDlg(pSaveInfo, pSaveInfo->eCharCode == CODE_CODEMAX);
 }
 
 //「ファイル名を付けて保存」ダイアログ

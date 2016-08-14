@@ -449,17 +449,17 @@ static int GetEndModeByMode(int nMode, int nEndMode)
 {
 	if (nEndMode == -1) {
 		switch (nMode) {
-		case -1: nEndMode = 0; break;
-		case CODE_AUTODETECT: nEndMode = 0; break;
-		case CODE_SJIS: nEndMode = 1; break;
-		case CODE_EUC: nEndMode = 1; break;
-		case CODE_LATIN1: nEndMode = 1; break;
-		case CODE_UNICODE: nEndMode = 2; break;
-		case CODE_UNICODEBE: nEndMode = 2; break;
-		case CODE_UTF8: nEndMode = 1; break;
-		case CODE_CESU8: nEndMode = 1; break;
-		case CODE_UTF7: nEndMode = 1; break;
-		default: nEndMode = 0; break;
+		case -1:                nEndMode = 0; break;
+		case CODE_AUTODETECT:   nEndMode = 0; break;
+		case CODE_SJIS:         nEndMode = 1; break;
+		case CODE_EUC:          nEndMode = 1; break;
+		case CODE_LATIN1:       nEndMode = 1; break;
+		case CODE_UNICODE:      nEndMode = 2; break;
+		case CODE_UNICODEBE:    nEndMode = 2; break;
+		case CODE_UTF8:         nEndMode = 1; break;
+		case CODE_CESU8:        nEndMode = 1; break;
+		case CODE_UTF7:         nEndMode = 1; break;
+		default:                nEndMode = 0; break;
 		}
 	}
 	return nEndMode;
@@ -666,7 +666,6 @@ bool Clipboard::GetClipboradByFormat(
 	}
 	return false;
 }
-
 
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //

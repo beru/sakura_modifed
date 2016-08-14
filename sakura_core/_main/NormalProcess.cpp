@@ -73,7 +73,7 @@ bool NormalProcess::InitializeProcess()
 	MY_RUNNINGTIMER(runningTimer, "NormalProcess::Init");
 
 	// プロセス初期化の目印
-	HANDLE	hMutex = _GetInitializeMutex();	// 2002/2/8 aroka 込み入っていたので分離
+	HANDLE hMutex = _GetInitializeMutex();	// 2002/2/8 aroka 込み入っていたので分離
 	if (!hMutex) {
 		return false;
 	}
@@ -87,10 +87,7 @@ bool NormalProcess::InitializeProcess()
 	SelectLang::ChangeLang(GetDllShareData().common.window.szLanguageDll);
 
 	// コマンドラインオプション
-	bool		bViewMode = false;
-	bool		bDebugMode;
-	bool		bGrepMode;
-	bool		bGrepDlg;
+	bool bViewMode = false;
 	
 	auto& cmdLine = CommandLine::getInstance();
 	// コマンドラインで受け取ったファイルが開かれている場合は
@@ -157,9 +154,9 @@ bool NormalProcess::InitializeProcess()
 	}
 
 	// コマンドラインの解析		2002/2/8 aroka ここに移動
-	bDebugMode = cmdLine.IsDebugMode();
-	bGrepMode  = cmdLine.IsGrepMode();
-	bGrepDlg   = cmdLine.IsGrepDlg();
+	bool bDebugMode = cmdLine.IsDebugMode();
+	bool bGrepMode = cmdLine.IsGrepMode();
+	bool bGrepDlg = cmdLine.IsGrepDlg();
 
 	MY_TRACETIME(runningTimer, "CheckFile");
 
