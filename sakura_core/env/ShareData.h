@@ -1,10 +1,9 @@
 #pragma once
 
-#include "SelectLang.h"		// 2011.04.10 nasukoji
+#include "SelectLang.h"
 
 class ShareData;
 
-// 2010.04.19 Moca DllSharedData関連はDllSharedData.h等最低限必要な場所へ移動
 // ShareData.hは、自分のInterfaceしか提供しません。別にDllSharedData.hをincludeすること。
 struct DllSharedData;
 struct TypeConfig;
@@ -21,8 +20,6 @@ class Mutex;
 	公開されていますが，ShareDataによってMap/Unmapされるために
 	ChareDataの消滅によってポインタpShareDataも無効になることに
 	注意してください．
-
-	@date 2002.01.03 YAZAKI m_tbMyButtonなどをShareDataからCMenuDrawerへ移動したことによる修正。
 */
 class ShareData : public TSingleton<ShareData> {
 	friend class TSingleton<ShareData>;
@@ -66,9 +63,8 @@ protected:
 	||  実装ヘルパ関数
 	*/
 
-	// Jan. 30, 2005 genta 初期化関数の分割
 	void InitKeyword(DllSharedData&);
-	bool InitKeyAssign(DllSharedData&); // 2007.11.04 genta 起動中止のため値を返す
+	bool InitKeyAssign(DllSharedData&);
 	void RefreshKeyAssignString(DllSharedData&);
 	void InitToolButtons(DllSharedData&);
 	void InitTypeConfigs(DllSharedData&, std::vector<TypeConfig*>&);
@@ -78,7 +74,7 @@ public:
 	static void InitFileTree(FileTree*);
 
 private:
-	SelectLang		selectLang;			// メッセージリソースDLL読み込み用（プロセスに1個）		// 2011.04.10 nasukoji
+	SelectLang		selectLang;			// メッセージリソースDLL読み込み用（プロセスに1個）
 	HANDLE			hFileMap;
 	DllSharedData*	pShareData;
 	std::vector<TypeConfig*>* 	pvTypeSettings;	// (コントロールプロセスのみ)

@@ -7,7 +7,7 @@
 #include "PropTypes.h"
 #include "env/ShareData.h"
 #include "RegexKeyword.h"
-#include "typeprop/ImpExpManager.h"	// 2010/4/23 Uchi
+#include "typeprop/ImpExpManager.h"
 #include "util/shell.h"
 #include "view/colors/EColorIndexType.h"
 #include "sakura_rc.h"

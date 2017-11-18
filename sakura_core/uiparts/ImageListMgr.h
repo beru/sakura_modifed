@@ -6,11 +6,6 @@
 
 	アイコンイメージを管理する
 
-	@author genta
-
-	@date 2003.07.21 genta イメージリストの使用をやめた．代わりにTool BarのOwner Drawを使う．
-		アクセスメソッドの大部分に於いて実装が変更されている．
-
 	@note イメージリストへのビットマップの登録でBitbltを行う部分が
 		VAIOと相性が悪くブルースクリーンが発生していた．
 		またイメージリストがIE3以前のcommon componentに含まれていないために
@@ -35,8 +30,6 @@ public:
 		@param x [in] 描画するX座標
 		@param y [in] 描画するY座標
 		@param fstyle [in] 描画スタイル
-		
-		@date 2003.09.06 genta 背景の透過処理に伴い背景色指定削除
 	*/
 	bool Draw(int index, HDC dc, int x, int y, int fstyle) const	//	描画
 	;
@@ -60,9 +53,6 @@ public:
 	
 		@param hToolBar [in] 登録するToolBar
 		@param id [in] 登録する先頭アイコン番号
-
-		@date 2003.07.21 genta ここでは何も行わないが，受け皿だけ残しておく
-		@date 2003.07.21 genta 戻り型をvoidに変更
 	*/
 	void  SetToolBarImages(HWND hToolBar, int id = 0) const {}
 
@@ -72,19 +62,15 @@ protected:
 	/*!	@brief 透過色
 	
 		描画を自前で行うため，透過色を覚えておく必要がある．
-		@date 2003.07.21 genta
 	*/
 	COLORREF cTrans;
 	
-	/*! アイコン用ビットマップを保持する
-		@date 2003.07.21 genta
-	*/
+	/*! アイコン用ビットマップを保持する	*/
 	HBITMAP hIconBitmap;
 
 	size_t nIconCount;	// アイコンの個数
 
 	//	オリジナルテキストエディタからの描画関数
-	//	2003.08.27 Moca 背景を透過処理するので背景色の指定は不要に
 	void MyBitBlt(HDC drawdc, int nXDest, int nYDest, 
 					int nWidth, int nHeight, HBITMAP bmp,
 					int nXSrc, int nYSrc, COLORREF colToTransParent) const;

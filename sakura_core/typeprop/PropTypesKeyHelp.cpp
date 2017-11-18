@@ -3,7 +3,7 @@
 #include "StdAfx.h"
 #include "PropTypes.h"
 #include "env/ShareData.h"
-#include "typeprop/ImpExpManager.h"	// 2010/4/23 Uchi
+#include "typeprop/ImpExpManager.h"
 #include "dlg/DlgOpenFile.h"
 #include "charset/CharPointer.h"
 #include "io/TextStream.h"

@@ -22,7 +22,6 @@
 	@param pszSrc   [in]  ファイル名
 	@param pszDest  [out] 変換後のファイル名の格納先
 	@param nDestLen [in]  終端のNULLを含むpszDestのTCHAR単位の長さ _MAX_PATH まで
-	@date 2003.01.27 Moca 新規作成
 	@note 連続して呼び出す場合のため、展開済みメタ文字列をキャッシュして高速化している。
 */
 LPTSTR FileNameManager::GetTransformFileNameFast( LPCTSTR pszSrc, LPTSTR pszDest, size_t nDestLen, HDC hDC, bool bFitMode, int cchMaxWidth )
@@ -70,8 +69,6 @@ LPTSTR FileNameManager::GetTransformFileNameFast( LPCTSTR pszSrc, LPTSTR pszDest
 
 /*!	展開済みメタ文字列のキャッシュを作成・更新する
 	@retval 有効な展開済み置換前文字列の数
-	@date 2003.01.27 Moca 新規作成
-	@date 2003.06.23 Moca 関数名変更
 */
 int FileNameManager::TransformFileName_MakeCache(void) {
 	int nCount = 0;
@@ -96,7 +93,6 @@ int FileNameManager::TransformFileName_MakeCache(void) {
 
 
 /*!	ファイル・フォルダ名を置換して、簡易表示名を取得する
-	@date 2002.11.27 Moca 新規作成
 	@note 大小文字を区別しない。nDestLenに達したときは後ろを切り捨てられる
 */
 LPCTSTR FileNameManager::GetFilePathFormat(LPCTSTR pszSrc, LPTSTR pszDest, size_t nDestLen, LPCTSTR pszFrom, LPCTSTR pszTo)
@@ -134,7 +130,6 @@ LPCTSTR FileNameManager::GetFilePathFormat(LPCTSTR pszSrc, LPTSTR pszDest, size_
 	@param nDesLen [in]  pszDesのNULLを含むTCHAR単位の長さ
 	@retval true  正常に変換できた
 	@retval false バッファが足りなかった，またはエラー。pszDesは不定
-	@date 2002.11.27 Moca 作成開始
 */
 bool FileNameManager::ExpandMetaToFolder(LPCTSTR pszSrc, LPTSTR pszDes, int nDesLen)
 {
@@ -368,9 +363,6 @@ bool FileNameManager::GetMenuFullLabel(
 		}
 
 		// szMenuを作る
-		// Jan. 19, 2002 genta
-		// &の重複処理を追加したため継続判定を若干変更
-		// 20100729 ExpandParameterにあわせて、・・・を...に変更
 		ret = auto_snprintf_s(pszOutput, nBuffSize, LS(STR_MENU_GREP),
 			szAccKey, pszKey,
 			(nGrepKeyLen > memDes.GetStringLength()) ? _T("..."):_T("")
@@ -399,8 +391,6 @@ bool FileNameManager::GetMenuFullLabel(
 	if (pszFile[0]) {
 		this->GetTransformFileNameFast( pszFile, szFileName, _MAX_PATH, hDC );
 
-		// szFileName → szMenu2
-		// Jan. 19, 2002 genta
 		// メニュー文字列の&を考慮
 		if (bEspaceAmp) {
 			dupamp(szFileName, szMenu2);
@@ -440,10 +430,6 @@ bool FileNameManager::GetMenuFullLabel(
 
 	@param[out] pszPrivateIniFile マルチユーザ用のiniファイルパス
 	@param[out] pszIniFile EXE基準のiniファイルパス
-
-	@author ryoji
-	@date 2007.09.04 ryoji 新規作成
-	@date 2008.05.05 novice GetModuleHandle(NULL)→NULLに変更
 */
 void FileNameManager::GetIniFileNameDirect( LPTSTR pszPrivateIniFile, LPTSTR pszIniFile, LPCTSTR pszProfName )
 {
@@ -510,9 +496,6 @@ void FileNameManager::GetIniFileNameDirect( LPTSTR pszPrivateIniFile, LPTSTR psz
 
 	@param[out] pszIniFileName iniファイル名（フルパス）
 	@param[in] bRead true: 読み込み / false: 書き込み
-
-	@author ryoji
-	@date 2007.05.19 ryoji 新規作成
 */
 void FileNameManager::GetIniFileName( LPTSTR pszIniFileName, LPCTSTR pszProfName, bool bRead/*=false*/ )
 {

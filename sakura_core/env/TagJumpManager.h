@@ -3,8 +3,6 @@
 // 要先行定義
 // #define DllSharedData.h
 
-
-// 2004/06/21 novice タグジャンプ機能追加
 // タグジャンプ情報
 struct TagJump {
 	HWND hwndReferer;	// 参照元ウィンドウ
@@ -13,8 +11,6 @@ struct TagJump {
 
 
 // 共有メモリ内構造体
-// 2004/06/21 タグジャンプ機能追加
-// 2005.04.03 MIK キーワード指定タグジャンプ
 struct Share_TagJump {
 	// 型
 	typedef StaticVector<
@@ -37,7 +33,7 @@ public:
 	TagJumpManager() {
 		pShareData = &GetDllShareData();
 	}
-	// タグジャンプ関連	// 2004/06/21 novice タグジャンプ機能追加
+	// タグジャンプ関連
 	void PushTagJump(const TagJump*);		// タグジャンプ情報の保存
 	bool PopTagJump(TagJump*);				// タグジャンプ情報の参照
 private:

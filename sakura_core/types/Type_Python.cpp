@@ -8,8 +8,6 @@
 /*!
 	関数に用いることができる文字かどうかの判定
 	
-	@date 2007.02.08 genta
-
 	@note 厳密には1文字目に数字を使うことは出来ないが，
 		それは実行してみれば明らかにわかることなので
 		そこまで厳密にチェックしない
@@ -46,8 +44,6 @@ inline bool Python_IsWordChar(wchar_t c) {
 	STATE_STRING→STATE_NORMALの遷移
 	- 規定の文字列終了記号
 	- short stringで文字列の終了を示す引用符も継続行マークもなく行末に達した
-
-	@date 2007.02.12 genta
 */
 struct OutlinePython {
 	enum {

@@ -5,21 +5,21 @@
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                       定数命名補助                          //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-// 数値定数の文字列化 2009.02.11 ryoji
+// 数値定数の文字列化
 #define _NUM_TO_STR(n) #n
 #define NUM_TO_STR(n) _NUM_TO_STR(n)
 
-// デバッグ判別、定数サフィックス 2007.09.20 kobake
+// デバッグ判別、定数サフィックス
 #ifdef _DEBUG
 	#define _DEBUG_SUFFIX_ "_DEBUG"
 #else
 	#define _DEBUG_SUFFIX_ ""
 #endif
 
-// ビルドコード判別、定数サフィックス 2007.09.20 kobake
+// ビルドコード判別、定数サフィックス
 	#define _CODE_SUFFIX_ "W"
 
-// ターゲットマシン判別 2010.08.21 Moca 追加
+// ターゲットマシン判別
 #ifdef _WIN64
 	#define CON_SKR_MACHINE_SUFFIX_ "M64"
 #else
@@ -491,7 +491,6 @@
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                         リソース                            //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-// Dec. 2, 2002 genta
 // 固定ファイル名
 #define FN_APP_ICON  _T("my_appicon.ico")
 #define FN_GREP_ICON _T("my_grepicon.ico")
@@ -589,7 +588,6 @@ enum e_PM_SETCARETPOS_SELECTSTATE {
 	@retval 0：行なし正常終了。EOF最終行
 	@retval 1以上：行データあり。行データ長
 	@retval -1以下：エラー
-	@date 2014.05.07 仕様変更。戻り値のマイナス lParamに意味を追加
 */
 #define	MYWM_GETLINEDATA	(WM_APP+208)
 
@@ -604,31 +602,30 @@ enum e_PM_SETCARETPOS_SELECTSTATE {
 #define	MYWM_HTMLHELP			(WM_APP+212)
 
 // タブウィンドウ用メッセージ
-#define	MYWM_TAB_WINDOW_NOTIFY	(WM_APP+213)	//@@@ 2003.05.31 MIK
+#define	MYWM_TAB_WINDOW_NOTIFY	(WM_APP+213)
 
 // バーの表示・非表示変更メッセージ
-#define	MYWM_BAR_CHANGE_NOTIFY	(WM_APP+214)	//@@@ 2003.06.10 MIK
+#define	MYWM_BAR_CHANGE_NOTIFY	(WM_APP+214)
 
 // エディタ－トレイ間でのUI特権分離の確認メッセージ
-#define	MYWM_UIPI_CHECK	(WM_APP+215)	//@@@ 2007.06.07 ryoji
+#define	MYWM_UIPI_CHECK	(WM_APP+215)
 
 // ポップアップウィンドウの表示切替指示
-#define MYWM_SHOWOWNEDPOPUPS (WM_APP+216)	//@@@ 2007.10.22 ryoji
+#define MYWM_SHOWOWNEDPOPUPS (WM_APP+216)
 
 // プロセスの初回アイドリング通知
-#define MYWM_FIRST_IDLE (WM_APP+217)	//@@@ 2008.04.19 ryoji
+#define MYWM_FIRST_IDLE (WM_APP+217)
 
 // 独自のドロップファイル通知
-#define MYWM_DROPFILES (WM_APP+218)	//@@@ 2008.06.18 ryoji
+#define MYWM_DROPFILES (WM_APP+218)
 
 // テキスト追加通知(共有データ経由)
 // wParam:追加する文字数(WCHAR単位)
 // lParam:未使用
-// @2010.05.11 Moca メッセージ追加
 #define	MYWM_ADDSTRINGLEN_W (WM_APP+219)
 
 // アウトライン解析画面の通知
-#define MYWM_OUTLINE_NOTIFY (WM_APP+220)	//@@@ 2010.06.06 ryoji
+#define MYWM_OUTLINE_NOTIFY (WM_APP+220)
 
 // タイプ別を設定
 // wParam:タイプ別番号
@@ -641,7 +638,7 @@ enum e_PM_SETCARETPOS_SELECTSTATE {
 // タイプ別を削除
 #define MYWM_DEL_TYPESETTING (WM_APP+224)
 
-// 再変換対応 // 20020331 aroka
+// 再変換対応
 #ifndef WM_IME_REQUEST
 #define MYWM_IME_REQUEST 0x288  // ==WM_IME_REQUEST
 #else
@@ -651,8 +648,8 @@ enum e_PM_SETCARETPOS_SELECTSTATE {
 #define RWM_RECONVERT TEXT("MSIMEReconvert")
 
 #ifndef VK_XBUTTON1
-#define	VK_XBUTTON1		0x05	// マウスサイドボタン1（Windows2000以降で使用可能）	// 2009.01.17 nasukoji
-#define	VK_XBUTTON2		0x06    // マウスサイドボタン2（Windows2000以降で使用可能）	// 2009.01.17 nasukoji
+#define	VK_XBUTTON1		0x05	// マウスサイドボタン1（Windows2000以降で使用可能）
+#define	VK_XBUTTON2		0x06    // マウスサイドボタン2（Windows2000以降で使用可能）
 #endif
 
 #ifndef WM_MOUSEHWHEEL

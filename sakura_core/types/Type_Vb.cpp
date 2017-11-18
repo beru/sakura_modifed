@@ -7,8 +7,6 @@
 #include "view/Colors/EColorIndexType.h"
 
 // Visual Basic
-// JUl. 10, 2001 JEPRO VB   ユーザに贈る
-// Jul. 09, 2001 JEPRO 追加 //Dec. 16, 2002 MIK追加 // Feb. 19, 2006 genta .vb追加
 void CType_Vb::InitTypeConfigImp(TypeConfig& type)
 {
 	// 名前と拡張子
@@ -26,29 +24,20 @@ void CType_Vb::InitTypeConfigImp(TypeConfig& type)
 	type.bStringLineOnly = true; // 文字列は行内のみ
 }
 
-// From Here June 23, 2001 N.Nakatani
 // Visual Basic関数リスト作成（簡易版）
 /*!
 	Visual Basicのコードから単純にユーザー定義の関数やステートメントを取り出す動作を行う。
-
-    Jul 10, 2003 little YOSHI  細かく解析するように変更
-                               すべてのキーワードは自動的に成形されるので、大文字小文字は完全に一致する。
-                               フォームやモジュールだけではなく、クラスにも対応。
-							   ただし、Constの「,」で連続宣言には未対応
-	Jul. 21, 2003 genta キーワードの大文字・小文字を同一視するようにした
-	Aug  7, 2003 little YOSHI  ダブルクォーテーションで囲まれたテキストを無視するようにした
-	                           関数名などをVBの名前付け規則より255文字に拡張
 */
 void DocOutline::MakeFuncList_VisualBasic(FuncInfoArr* pFuncInfoArr)
 {
-	const int	nMaxWordLeng = 255;	// Aug 7, 2003 little YOSHI  VBの名前付け規則より255文字に拡張
-	size_t		nLineLen = 0;//: 2002/2/3 aroka 警告対策：初期化
+	const int	nMaxWordLeng = 255;
+	size_t		nLineLen = 0;
 	size_t		nCharChars;
-	wchar_t		szWordPrev[256];	// Aug 7, 2003 little YOSHI  VBの名前付け規則より255文字に拡張
-	wchar_t		szWord[256];		// Aug 7, 2003 little YOSHI  VBの名前付け規則より255文字に拡張
+	wchar_t		szWordPrev[256];
+	wchar_t		szWord[256];
 	size_t		nWordIdx = 0;
 	int			nMode;
-	wchar_t		szFuncName[256];	// Aug 7, 2003 little YOSHI  VBの名前付け規則より255文字に拡張
+	wchar_t		szFuncName[256];
 	size_t		nFuncLine = 0;
 	int			nFuncId;
 	int			nParseCnt = 0;
@@ -240,7 +229,7 @@ void DocOutline::MakeFuncList_VisualBasic(FuncInfoArr* pFuncInfoArr)
 						Point ptPosXY = doc.layoutMgr.LogicToLayout(Point(0, (int)nFuncLine - 1));
 						pFuncInfoArr->AppendData((int)nFuncLine, ptPosXY.y + 1 , szFuncName, nFuncId);
 						nParseCnt = 0;
-						nFuncId	= 0;	// Jul 10, 2003  little YOSHI  論理和を使用するため、必ず初期化
+						nFuncId	= 0;	// 論理和を使用するため、必ず初期化
 					}
 
 					wcscpy_s(szWordPrev, szWord);
@@ -252,14 +241,13 @@ void DocOutline::MakeFuncList_VisualBasic(FuncInfoArr* pFuncInfoArr)
 				}
 			/* 記号列読み込み中 */
 			}else if (nMode == 2) {
-				// Jul 10, 2003  little YOSHI
 				// 「#Const」と「Const」を区別するために、「#」も識別するように変更
 				if (L'_' == pLine[i] ||
 					L'~' == pLine[i] ||
 					(L'a' <= pLine[i] &&	pLine[i] <= L'z')||
 					(L'A' <= pLine[i] &&	pLine[i] <= L'Z')||
 					(L'0' <= pLine[i] &&	pLine[i] <= L'9')||
-					(L'\u00a1' <= pLine[i] && !iswcntrl(pLine[i]) && !iswspace(pLine[i]))|| // 2013.05.08 日本語対応
+					(L'\u00a1' <= pLine[i] && !iswcntrl(pLine[i]) && !iswspace(pLine[i]))|| // 日本語対応
 					L'\t' == pLine[i] ||
 					L' ' == pLine[i] ||
 					WCODE::IsLineDelimiter(pLine[i], bExtEol) ||
@@ -281,7 +269,6 @@ void DocOutline::MakeFuncList_VisualBasic(FuncInfoArr* pFuncInfoArr)
 					--i;
 					continue;
 				}else if (nCharChars == 1 && L'"' == pLine[i]) {
-					// Aug 7, 2003 little YOSHI  追加
 					// テキストの中は無視します。
 					nMode	= 3;
 				}else {
@@ -315,7 +302,6 @@ void DocOutline::MakeFuncList_VisualBasic(FuncInfoArr* pFuncInfoArr)
 				}else if (i < nLineLen && L'\'' == pLine[i]) {
 					break;
 				}else if (nCharChars == 1 && L'"' == pLine[i]) {
-					// Aug 7, 2003 little YOSHI  追加
 					// テキストの中は無視します。
 					nMode = 3;
 				}else {
@@ -325,7 +311,7 @@ void DocOutline::MakeFuncList_VisualBasic(FuncInfoArr* pFuncInfoArr)
 						(L'a' <= pLine[i] && pLine[i] <= L'z')||
 						(L'A' <= pLine[i] && pLine[i] <= L'Z')||
 						(L'0' <= pLine[i] && pLine[i] <= L'9')||
-						(L'\u00a1' <= pLine[i] && !iswcntrl(pLine[i]) && !iswspace(pLine[i])) // 2013.05.08 日本語対応
+						(L'\u00a1' <= pLine[i] && !iswcntrl(pLine[i]) && !iswspace(pLine[i])) // 日本語対応
 						))
 					 || nCharChars == 2
 					) {
@@ -344,7 +330,7 @@ void DocOutline::MakeFuncList_VisualBasic(FuncInfoArr* pFuncInfoArr)
 						nMode = 2;
 					}
 				}
-			/* テキストが閉じるまで読み飛ばす */	// Aug 7, 2003 little YOSHI  追加
+			/* テキストが閉じるまで読み飛ばす */
 			}else if (nMode == 3) {
 				// 連続するダブルクォーテーションは無視する
 				if (nCharChars == 1 && pLine[i] == L'"') {
@@ -364,10 +350,7 @@ void DocOutline::MakeFuncList_VisualBasic(FuncInfoArr* pFuncInfoArr)
 	}
 	return;
 }
-//	To Here June 23, 2001 N.Nakatani
 
-
-// Jul. 10, 2001 JEPRO 追加
 const wchar_t* g_ppszKeywordsVB[] = {
 	L"And",
 	L"As",
@@ -493,7 +476,6 @@ const wchar_t* g_ppszKeywordsVB[] = {
 };
 size_t g_nKeywordsVB = _countof(g_ppszKeywordsVB);
 
-// Jul. 10, 2001 JEPRO 追加
 const wchar_t* g_ppszKeywordsVB2[] = {
 	L"AppActivate",
 	L"Beep",

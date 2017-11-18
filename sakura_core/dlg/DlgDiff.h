@@ -10,7 +10,6 @@ class DlgDiff;
 /*!
 	@brief DIFF差分表示ダイアログボックス
 */
-// Feb. 28, 2004 genta 最後に選択されていた番号を保存する
 class DlgDiff : public Dialog {
 public:
 	/*

@@ -15,7 +15,6 @@ static Mutex g_docTypeMutex(FALSE, GSTR_MUTEX_SAKURA_DOCTYPE);
 	@param pszFilePath [in] ファイル名
 	
 	拡張子を切り出して GetDocumentTypeOfExt に渡すだけ．
-	@date 2014.12.06 syat ワイルドカード対応。２重拡張子対応をやめる
 */
 TypeConfigNum DocTypeManager::GetDocumentTypeOfPath(const TCHAR* pszFilePath)
 {
@@ -45,8 +44,6 @@ TypeConfigNum DocTypeManager::GetDocumentTypeOfPath(const TCHAR* pszFilePath)
 	指定された拡張子の属する文書タイプ番号を返す．
 	とりあえず今のところはタイプは拡張子のみに依存すると仮定している．
 	ファイル全体の形式に対応させるときは，また考え直す．
-	@date 2012.10.22 Moca ２重拡張子, 拡張子なしに対応
-	@date 2014.12.06 syat GetDocumentTypeOfPathに統合
 */
 TypeConfigNum DocTypeManager::GetDocumentTypeOfExt(const TCHAR* pszExt)
 {
@@ -179,15 +176,12 @@ void DocTypeManager::GetFirstExt(const TCHAR* pszTypeExts, TCHAR szFirstExt[], i
 	@param pszSrcExt [in]  拡張子リスト 例「.c .cpp;.h」
 	@param pszDstExt [out] 拡張子リスト 例「*.c;*.cpp;*.h」
 	@param szExt [in] リストの先頭にする拡張子 例「.h」
-
-	@date 2014.12.06 syat CFileExtから移動
 */
 bool DocTypeManager::ConvertTypesExtToDlgExt( const TCHAR *pszSrcExt, const TCHAR* szExt, TCHAR *pszDstExt )
 {
 	TCHAR* token;
 	TCHAR* p;
 
-	//	2003.08.14 MIK NULLじゃなくてfalse
 	if (!pszSrcExt) return false;
 	if (!pszDstExt) return false;
 
@@ -214,6 +208,6 @@ bool DocTypeManager::ConvertTypesExtToDlgExt( const TCHAR *pszSrcExt, const TCHA
 
 		token = _tcstok( NULL, typeExtSeps );
 	}
-	free( p );	// 2003.05.20 MIK メモリ解放漏れ
+	free( p );
 	return true;
 }

@@ -7,8 +7,6 @@
 #include "view/Colors/EColorIndexType.h"
 
 // Perl
-// Jul. 08, 2001 JEPRO Perl ユーザに贈る
-// Jul. 08, 2001 JEPRO 追加
 void CType_Perl::InitTypeConfigImp(TypeConfig& type)
 {
 	// 名前と拡張子
@@ -21,13 +19,11 @@ void CType_Perl::InitTypeConfigImp(TypeConfig& type)
 	type.nKeywordSetIdx[0]  = 11;								// キーワードセット
 	type.nKeywordSetIdx[1] = 12;								// キーワードセット2
 	type.colorInfoArr[COLORIDX_DIGIT].bDisp = true;			// 半角数値を色分け表示
-	type.colorInfoArr[COLORIDX_BRACKET_PAIR].bDisp = true;	// 対括弧の強調をデフォルトON	//Sep. 21, 2002 genta
+	type.colorInfoArr[COLORIDX_BRACKET_PAIR].bDisp = true;	// 対括弧の強調をデフォルトON
 	type.bStringLineOnly = true; // 文字列は行内のみ
 }
 
 
-// From Here Sep 8, 2000 genta
-//
 // Perl用アウトライン解析機能（簡易版）
 /*!
 	単純に /^\\s*sub\\s+(\\w+)/ に一致したら $1を取り出す動作を行う。
@@ -38,8 +34,6 @@ void CType_Perl::InitTypeConfigImp(TypeConfig& type)
 	@li 0: はじめ
 	@li 2: subを見つけた後
 	@li 1: 単語読み出し中
-
-	@date 2005.06.18 genta パッケージ区切りを表す ::と'を考慮するように
 */
 void DocOutline::MakeFuncList_Perl(FuncInfoArr* pFuncInfoArr)
 {
@@ -59,7 +53,6 @@ void DocOutline::MakeFuncList_Perl(FuncInfoArr* pFuncInfoArr)
 		nMode = 0;
 		for (i=0; i<nLineLen; ++i) {
 			/* 1バイト文字だけを処理する */
-			// 2005-09-02 D.S.Koba GetSizeOfChar
 			nCharChars = NativeW::GetSizeOfChar(pLine, nLineLen, i);
 			if (1 < nCharChars) {
 				break;
@@ -113,8 +106,8 @@ void DocOutline::MakeFuncList_Perl(FuncInfoArr* pFuncInfoArr)
 					(L'a' <= pLine[i] &&	pLine[i] <= L'z')||
 					(L'A' <= pLine[i] &&	pLine[i] <= L'Z')||
 					(L'0' <= pLine[i] &&	pLine[i] <= L'9')||
-					//	Jun. 18, 2005 genta パッケージ修飾子を考慮
-					//	コロンは2つ連続しないといけないのだが，そこは手抜き
+					// パッケージ修飾子を考慮
+					// コロンは2つ連続しないといけないのだが，そこは手抜き
 					L':' == pLine[i] || L'\'' == pLine[i]
 				) {
 					++nWordIdx;
@@ -133,7 +126,6 @@ void DocOutline::MakeFuncList_Perl(FuncInfoArr* pFuncInfoArr)
 					  レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 					*/
 					Point ptPosXY = doc.layoutMgr.LogicToLayout(Point(0, (int)nLineCount));
-					//	Mar. 9, 2001
 					pFuncInfoArr->AppendData(nLineCount + 1, ptPosXY.y + 1, szWord, 0);
 					break;
 				}
@@ -149,7 +141,6 @@ void DocOutline::MakeFuncList_Perl(FuncInfoArr* pFuncInfoArr)
 
 
 const wchar_t* g_ppszKeywordsPERL[] = {
-	// Jul. 10, 2001 JEPRO	変数を第２強調キーワードとして分離した
 	L"break",
 	L"continue",
 	L"do",
@@ -282,7 +273,7 @@ const wchar_t* g_ppszKeywordsPERL[] = {
 	L"open",
 	L"opendir",
 	L"ord",
-	L"our",	// 2006.04.20 genta
+	L"our",
 	L"pack",
 	L"package",
 	L"pipe",
@@ -382,8 +373,6 @@ const wchar_t* g_ppszKeywordsPERL[] = {
 };
 size_t g_nKeywordsPERL = _countof(g_ppszKeywordsPERL);
 
-// Jul. 10, 2001 JEPRO	変数を第２強調キーワードとして分離した
-// 2008/05/05 novice 重複文字列削除
 const wchar_t* g_ppszKeywordsPERL2[] = {
 	L"$ARGV",
 	L"$_",

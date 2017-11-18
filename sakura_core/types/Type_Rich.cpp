@@ -3,8 +3,6 @@
 #include "view/colors/EColorIndexType.h"
 
 // リッチテキスト
-// JUl. 10, 2001 JEPRO WinHelp作るのにいるケンね
-// Jul. 10, 2001 JEPRO 追加
 void CType_Rich::InitTypeConfigImp(TypeConfig& type)
 {
 	// 名前と拡張子
@@ -20,8 +18,6 @@ void CType_Rich::InitTypeConfigImp(TypeConfig& type)
 	type.colorInfoArr[COLORIDX_URL].bDisp = false;		// URLにアンダーラインを引かない
 }
 
-
-// Jul. 10, 2001 JEPRO 追加
 const wchar_t* g_ppszKeywordsRTF[] = {
 	L"\\ansi",
 	L"\\b",

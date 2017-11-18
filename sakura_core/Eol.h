@@ -4,7 +4,6 @@
 
 #include "_main/global.h"
 
-// 2002/09/22 Moca EOL_CRLF_UNICODEを廃止
 // 行終端子の種類
 enum class EolType {
 	None,			// 

@@ -10,7 +10,6 @@ class DlgCtrlCode;
 /*!
 	@brief コントロールコード入力ダイアログボックス
 */
-// 2007.10.18 kobake GetCharCode()を作成。
 class DlgCtrlCode : public Dialog {
 public:
 	/*

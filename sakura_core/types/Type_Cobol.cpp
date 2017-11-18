@@ -11,23 +11,22 @@ void CType_Cobol::InitTypeConfigImp(TypeConfig& type)
 {
 	// 名前と拡張子
 	_tcscpy(type.szTypeName, _T("COBOL"));
-	_tcscpy(type.szTypeExts, _T("cbl,cpy,pco,cob"));	// Jun. 04, 2001 JEPRO KENCH氏の助言に従い追加
+	_tcscpy(type.szTypeExts, _T("cbl,cpy,pco,cob"));
 
 	// 設定
-	type.lineComment.CopyTo(0, L"*", 6);				// Jun. 02, 2001 JEPRO 修正
-	type.lineComment.CopyTo(1, L"D", 6);				// Jun. 04, 2001 JEPRO 追加
+	type.lineComment.CopyTo(0, L"*", 6);
+	type.lineComment.CopyTo(1, L"D", 6);
 	type.stringType = StringLiteralType::PLSQL;		// 文字列区切り記号エスケープ方法  0=[\"][\'] 1=[""]['']
 	wcscpy_s(type.szIndentChars, L"*");				// その他のインデント対象文字
-	type.nKeywordSetIdx[0] = 3;						// キーワードセット		// Jul. 10, 2001 JEPRO
+	type.nKeywordSetIdx[0] = 3;						// キーワードセット	
 	type.eDefaultOutline = OutlineType::Cobol;		// アウトライン解析方法
-	// 指定桁縦線	// 2005.11.08 Moca
+	// 指定桁縦線
 	type.colorInfoArr[COLORIDX_VERTLINE].bDisp = true;
 	type.nVertLineIdx[0] = 7;
 	type.nVertLineIdx[1] = 8;
 	type.nVertLineIdx[2] = 12;
 	type.nVertLineIdx[3] = 73;
 }
-
 
 // COBOL アウトライン解析
 void DocOutline::MakeTopicList_cobol(FuncInfoArr* pFuncInfoArr)
@@ -110,7 +109,6 @@ void DocOutline::MakeTopicList_cobol(FuncInfoArr* pFuncInfoArr)
 	return;
 }
 
-// Jul. 10, 2001 JEPRO 追加
 const wchar_t* g_ppszKeywordsCOBOL[] = {
 	L"ACCEPT",
 	L"ADD",

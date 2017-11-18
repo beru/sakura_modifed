@@ -3,7 +3,6 @@
 #include "view/colors/EColorIndexType.h"
 
 // Pascal
-// Mar. 10, 2001 JEPRO	半角数値を色分け表示
 void CType_Pascal::InitTypeConfigImp(TypeConfig& type)
 {
 	// 名前と拡張子
@@ -11,12 +10,12 @@ void CType_Pascal::InitTypeConfigImp(TypeConfig& type)
 	_tcscpy(type.szTypeExts, _T("dpr,pas"));
 
 	// 設定
-	type.lineComment.CopyTo(0, L"//", -1);						// 行コメントデリミタ			//Nov. 5, 2000 JEPRO 追加
-	type.blockComments[0].SetBlockCommentRule(L"{", L"}");		// ブロックコメントデリミタ 	//Nov. 5, 2000 JEPRO 追加
-	type.blockComments[1].SetBlockCommentRule(L"(*", L"*)");	// ブロックコメントデリミタ2 	//@@@ 2001.03.10 by MIK
-	type.stringType = StringLiteralType::PLSQL;				// 文字列区切り記号エスケープ方法  0=[\"][\'] 1=[""][''] //Nov. 5, 2000 JEPRO 追加
+	type.lineComment.CopyTo(0, L"//", -1);						// 行コメントデリミタ
+	type.blockComments[0].SetBlockCommentRule(L"{", L"}");		// ブロックコメントデリミタ
+	type.blockComments[1].SetBlockCommentRule(L"(*", L"*)");	// ブロックコメントデリミタ2
+	type.stringType = StringLiteralType::PLSQL;				// 文字列区切り記号エスケープ方法  0=[\"][\'] 1=[""]['']
 	type.nKeywordSetIdx[0] = 8;									// キーワードセット
-	type.colorInfoArr[COLORIDX_DIGIT].bDisp = true;			//@@@ 2001.11.11 upd MIK
+	type.colorInfoArr[COLORIDX_DIGIT].bDisp = true;
 	type.bStringLineOnly = true; // 文字列は行内のみ
 }
 

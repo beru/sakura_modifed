@@ -19,7 +19,7 @@ const wchar_t Bregexp::tmpBuf[2] = L"\0";
 
 Bregexp::Bregexp()
 	: pRegExp(nullptr)
-	, ePatType(PAT_NORMAL)	// Jul, 25, 2002 genta
+	, ePatType(PAT_NORMAL)
 {
 	szMsg[0] = L'\0';
 }
@@ -99,8 +99,6 @@ size_t Bregexp::CheckPattern(const wchar_t* szPattern)
 **
 ** @retval ライブラリに渡す検索パターンへのポインタを返す
 ** @note 返すポインタは、呼び出し側で delete すること
-** 
-** @date 2003.05.03 かろと 関数に切り出し
 */
 wchar_t* Bregexp::MakePatternSub(
 	const wchar_t*	szPattern,	// 検索パターン
@@ -142,11 +140,9 @@ wchar_t* Bregexp::MakePatternSub(
 	}
 	*pPat++ = L'k';			// 漢字対応
 	*pPat++ = L'm';			// 複数行対応(但し、呼び出し側が複数行対応でない)
-	// 2006.01.22 かろと 論理逆なので bIgnoreCase -> optCaseSensitiveに変更
-	if (!(nOption & optCaseSensitive)) {		// 2002/2/1 hor IgnoreCase オプション追加 マージ：aroka
+	if (!(nOption & optCaseSensitive)) {
 		*pPat++ = L'i';		// 大文字小文字を同一視(無視)する
 	}
-	// 2006.01.22 かろと 行単位置換のために、全域オプション追加
 	if ((nOption & optGlobal)) {
 		*pPat++ = L'g';		// 全域(global)オプション、行単位の置換をする時に使用する
 	}
@@ -190,8 +186,6 @@ wchar_t* Bregexp::MakePatternSub(
 **
 ** @retval ライブラリに渡す検索パターンへのポインタを返す
 ** @note 返すポインタは、呼び出し側で delete すること
-**
-** @date 2003.05.03 かろと 関数に切り出し
 */
 wchar_t* Bregexp::MakePattern(const wchar_t* szPattern, const wchar_t* szPattern2, int nOption) 
 {
@@ -399,7 +393,6 @@ bool Bregexp::Compile(const wchar_t* szPattern0, const wchar_t* szPattern1, int 
 	ReleaseCompileBuffer();
 
 	// ライブラリに渡す検索パターンを作成
-	// 別関数で共通処理に変更 2003.05.03 by かろと
 	wchar_t* szNPattern = NULL;
 	const wchar_t* pszNPattern = NULL;
 	if (bKakomi) {
@@ -425,7 +418,7 @@ bool Bregexp::Compile(const wchar_t* szPattern0, const wchar_t* szPattern1, int 
 		return false;
 	}
 	
-	// 行頭条件チェックは、MakePatternに取り込み 2003.05.03 by かろと
+	// 行頭条件チェックは、MakePatternに取り込み
 
 	return true;
 }
@@ -482,8 +475,6 @@ bool Bregexp::Match(const wchar_t* target, size_t len, size_t nStart)
 	return true;
 }
 
-
-//<< 2002/03/27 Azumaiya
 /*!
 	正規表現による文字列置換
 	既にあるコンパイル構造体を利用して置換（1行）を
@@ -494,8 +485,6 @@ bool Bregexp::Match(const wchar_t* target, size_t len, size_t nStart)
 	@param[in] nStart 置換開始位置(0からnLen未満)
 
 	@retval 置換個数
-
-	@date	2007.01.16 ryoji 戻り値を置換個数に変更
 */
 int Bregexp::Replace(const wchar_t* szTarget, size_t nLen, size_t nStart)
 {
@@ -503,19 +492,6 @@ int Bregexp::Replace(const wchar_t* szTarget, size_t nLen, size_t nStart)
 	if (!IsAvailable() || !pRegExp) {
 		return false;
 	}
-
-	// From Here 2003.05.03 かろと
-	// nLenが０だと、BSubst()が置換に失敗してしまうので、代用データ(tmpBuf)を使う
-	//
-	// 2007.01.19 ryoji 代用データ使用をコメントアウト
-	// 使用すると現状では結果に１バイト余分なゴミが付加される
-	// 置換に失敗するのはnLenが０に限らず nLen = nStart のとき（行頭マッチだけ対策しても．．．）
-	//
-	//if (nLen == 0) {
-	//	szTarget = tmpBuf;
-	//	nLen = 1;
-	//}
-	// To Here 2003.05.03 かろと
 
 	int result;
 	szMsg[0] = '\0';		// エラー解除
@@ -538,24 +514,18 @@ int Bregexp::Replace(const wchar_t* szTarget, size_t nLen, size_t nStart)
 	}
 	return result;
 }
-//>> 2002/03/27 Azumaiya
-
 
 const TCHAR* Bregexp::GetLastMessage() const
 {
 	return to_tchar(szMsg);
 }
 
-
-// From Here Jun. 26, 2001 genta
 /*!
 	与えられた正規表現ライブラリの初期化を行う．
 	メッセージフラグがONで初期化に失敗したときはメッセージを表示する．
 
 	@retval true 初期化成功
 	@retval false 初期化に失敗
-
-	@date 2007.08.12 genta 共通設定からDLL名を取得する
 */
 bool InitRegexp(
 	HWND		hWnd,			// [in] ダイアログボックスのウィンドウハンドル。バージョン番号の設定が不要であればNULL。
@@ -563,11 +533,9 @@ bool InitRegexp(
 	bool		bShowMessage	// [in] 初期化失敗時にエラーメッセージを出すフラグ
 	)
 {
-	// From Here 2007.08.12 genta
 	DllSharedData* pShareData = &GetDllShareData();
 
 	LPCTSTR RegexpDll = pShareData->common.search.szRegexpLib;
-	// To Here 2007.08.12 genta
 
 	InitDllResultType dllResult = rRegexp.InitDll(RegexpDll);
 	if (dllResult != InitDllResultType::Success) {
@@ -642,7 +610,7 @@ bool CheckRegexpSyntax(
 	if (nOption == -1) {
 		nOption = Bregexp::optCaseSensitive;
 	}
-	if (!regexp.Compile(szPattern, NULL, nOption, bKakomi)) {	// 2002/2/1 hor追加
+	if (!regexp.Compile(szPattern, NULL, nOption, bKakomi)) {
 		if (bShowMessage) {
 			::MessageBox(hWnd, regexp.GetLastMessage(),
 				LS(STR_BREGONIG_TITLE), MB_OK | MB_ICONEXCLAMATION);
@@ -651,5 +619,4 @@ bool CheckRegexpSyntax(
 	}
 	return true;
 }
-// To Here Jun. 26, 2001 genta
 

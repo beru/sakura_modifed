@@ -3,7 +3,7 @@
 #include "view/colors/EColorIndexType.h"
 
 // 設定ファイル
-// Nov. 9, 2000 JEPRO Windows標準のini, inf, cnfファイルとsakuraキーワード設定ファイル.kwd, 色設定ファイル.col も読めるようにする
+// Windows標準のini, inf, cnfファイルとsakuraキーワード設定ファイル.kwd, 色設定ファイル.col も読めるようにする
 void CType_Ini::InitTypeConfigImp(TypeConfig& type)
 {
 	// 名前と拡張子

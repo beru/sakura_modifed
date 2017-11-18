@@ -29,13 +29,12 @@ protected:
 class DlgAbout : public Dialog {
 public:
 	INT_PTR DoModal(HINSTANCE, HWND);	// モーダルダイアログの表示
-	// Nov. 7, 2000 genta	標準以外のメッセージを捕捉する
 	INT_PTR DispatchEvent(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM lParam);
 protected:
 	BOOL OnInitDialog(HWND, WPARAM, LPARAM);
 	BOOL OnBnClicked(int);
 	BOOL OnStnClicked(int);
-	LPVOID GetHelpIdTable(void);	//@@@ 2002.01.18 add
+	LPVOID GetHelpIdTable(void);
 private:
 	UrlWnd UrlUrWnd;
 	UrlWnd UrlOrgWnd;

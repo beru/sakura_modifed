@@ -11,7 +11,7 @@
 #include "sakura_rc.h"
 #include "sakura.hh"
 
-// ファイル内容比較 DlgCompare.cpp	//@@@ 2002.01.07 add start MIK
+// ファイル内容比較 DlgCompare.cpp
 const DWORD p_helpids[] = {	//12300
 //	IDC_STATIC,						-1,
 	IDOK,							HIDOK_CMP,					// OK
@@ -21,7 +21,7 @@ const DWORD p_helpids[] = {	//12300
 	IDC_LIST_FILES,					HIDC_CMP_LIST_FILES,		// ファイル一覧
 	IDC_STATIC_COMPARESRC,			HIDC_CMP_STATIC_COMPARESRC,	// ソースファイル
 	0, 0
-};	//@@@ 2002.01.07 add end MIK
+};
 
 static const AnchorListItem anchorList[] = {
 	{IDOK,					AnchorStyle::Bottom},
@@ -69,10 +69,8 @@ BOOL DlgCompare::OnBnClicked(int wID)
 	switch (wID) {
 	case IDC_BUTTON_HELP:
 		//「内容比較」のヘルプ
-		// Stonee, 2001/03/12 第四引数を、機能番号からヘルプトピック番号を調べるようにした
-		MyWinHelp(GetHwnd(), HELP_CONTEXT, ::FuncID_To_HelpContextID(F_COMPARE));	// 2006.10.10 ryoji MyWinHelpに変更に変更
+		MyWinHelp(GetHwnd(), HELP_CONTEXT, ::FuncID_To_HelpContextID(F_COMPARE));
 		return TRUE;
-// From Here Oct. 10, 2000 JEPRO added  Ref. code はCDlgFind.cpp の OnBnClicked
 // チェックボックスをボタン化してDlgCompare.cppに直接書き込んでみたが失敗
 // ダイアログのボタンは下に不可視化しておいてあります。
 // 以下の追加コードは全部消して結構ですから誰か作ってください。水平スクロールも入れてくれるとなおうれしいです。
@@ -96,7 +94,6 @@ BOOL DlgCompare::OnBnClicked(int wID)
 //		delete[] phwndArr;
 //		CloseDialog(0);
 //		return TRUE;
-// To Here Oct. 10, 2000
 	case IDOK:			// 左右に表示
 		// ダイアログデータの取得
 		::EndDialog(GetHwnd(), GetData());
@@ -118,14 +115,11 @@ void DlgCompare::SetData(void)
 	int			selIndex = 0;
 
 	HWND hwndList = GetItemHwnd(IDC_LIST_FILES);
-// 2002/2/10 aroka ファイル名で比較しないため不用 (2001.12.26 YAZAKIさん)
-//	//	Oct. 15, 2001 genta ファイル名判定の stricmpをbccでも期待通り動かすため
-//	setlocale (LC_ALL, "C");
 
 	// 現在開いている編集窓のリストをメニューにする
 	size_t nRowNum = AppNodeManager::getInstance().GetOpenedWindowArr(&pEditNodeArr, true);
 	if (nRowNum > 0) {
-		// 水平スクロール幅は実際に表示する文字列の幅を計測して決める	// 2009.09.26 ryoji
+		// 水平スクロール幅は実際に表示する文字列の幅を計測して決める
 		TextWidthCalc calc(hwndList);
 		size_t score = 0;
 		TCHAR szFile1[_MAX_PATH];
@@ -135,9 +129,8 @@ void DlgCompare::SetData(void)
 			::SendMessage(pEditNodeArr[i].GetHwnd(), MYWM_GETFILEINFO, 0, 0);
 			EditInfo* pfi = (EditInfo*)&pShareData->workBuffer.editInfo_MYWM_GETFILEINFO;
 
-//@@@ 2001.12.26 YAZAKI ファイル名で比較すると(無題)だったときに問題同士の比較ができない
 			if (pEditNodeArr[i].GetHwnd() == EditWnd::getInstance().GetHwnd()) {
-				// 2010.07.30 自分の名前もここから設定する
+				// 自分の名前もここから設定する
 				FileNameManager::getInstance().GetMenuFullLabel_WinListNoEscape(szMenu, _countof(szMenu), pfi, pEditNodeArr[i].nId, -1, calc.GetDC());
 				SetItemText(IDC_STATIC_COMPARESRC, szMenu);
 				continue;
@@ -162,13 +155,12 @@ void DlgCompare::SetData(void)
 			}
 		}
 		delete[] pEditNodeArr;
-		// 2002/11/01 Moca 追加 リストビューの横幅を設定。これをやらないと水平スクロールバーが使えない
+		// リストビューの横幅を設定。これをやらないと水平スクロールバーが使えない
 		List_SetHorizontalExtent( hwndList, calc.GetCx() );
 	}
 	List_SetCurSel(hwndList, selIndex);
 
 	// 左右に並べて表示
-	//@@@ 2003.06.12 MIK
 	// TAB 1ウィンドウ表示のときは並べて比較できなくする
 	if (pShareData->common.tabBar.bDispTabWnd
 		&& !pShareData->common.tabBar.bDispTabWndMultiWin
@@ -195,7 +187,6 @@ int DlgCompare::GetData(void)
 		::SendMessage(*phwndCompareWnd, MYWM_GETFILEINFO, 0, 0);
 		EditInfo* pfi = (EditInfo*)&pShareData->workBuffer.editInfo_MYWM_GETFILEINFO;
 
-		// 2010.07.30 パス名はやめて表示名に変更
 		int nId = AppNodeManager::getInstance().GetEditNode(*phwndCompareWnd)->GetId();
 		TextWidthCalc calc(hwndList);
 		FileNameManager::getInstance().GetMenuFullLabel_WinListNoEscape(pszCompareLabel, _MAX_PATH/*長さ不明*/, pfi, nId, -1, calc.GetDC());
@@ -207,12 +198,10 @@ int DlgCompare::GetData(void)
 	}
 }
 
-//@@@ 2002.01.18 add start
 LPVOID DlgCompare::GetHelpIdTable(void)
 {
 	return (LPVOID)p_helpids;
 }
-//@@@ 2002.01.18 add end
 
 INT_PTR DlgCompare::DispatchEvent(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM lParam)
 {

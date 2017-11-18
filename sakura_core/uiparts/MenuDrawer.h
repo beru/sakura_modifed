@@ -4,15 +4,10 @@
 
 class MenuDrawer;
 
-class ImageListMgr;// 2002/2/10 aroka
+class ImageListMgr;
 struct DllSharedData;
 
-//#define MAX_MENUPOS	10
-//	Jul. 2, 2005 genta : マクロをたくさん登録すると上限を超えてしまうので
-//	初期値の300から増やす
-// #define MAX_MENUITEMS	400 // 2011.11.23 Moca 上限撤廃
-
-// ツールバーの拡張	//@@@ 2002.06.15 MIK
+// ツールバーの拡張
 #define TBSTYLE_COMBOBOX	((BYTE)0x40)	// ツールバーにコンボボックス
 #ifndef TBSTYLE_DROPDOWN	// IE3以上
 	#define TBSTYLE_DROPDOWN	0x0008
@@ -29,9 +24,6 @@ struct DllSharedData;
 -----------------------------------------------------------------------*/
 /*!
 	@brief メニュー表示＆管理
-
-	@date 2002.2.17 YAZAKI CShareDataのインスタンスは、CProcessにひとつあるのみ。
-	@date 20050809 aroka クラス外部からアクセスされないメンバはprivateにした。
 */
 class MenuDrawer {
 public:
@@ -61,8 +53,8 @@ public:
 	int FindToolbarNoFromCommandId(int idCommand, bool bOnlyFunc = true)const; // ツールバーNoの取得
 	int GetIconIdByFuncId(int nIndex) const;
 
-	TBBUTTON getButton(int nToolBarNo) const; // 20050809 aroka
-	void AddToolButton(int iBitmap, int iCommand);	// ツールバーボタンを追加する 2009.11.14 syat
+	TBBUTTON getButton(int nToolBarNo) const;
+	void AddToolButton(int iBitmap, int iCommand);	// ツールバーボタンを追加する
 	
 	// iBitmapに対応する定数
 	static const int TOOLBAR_ICON_MACRO_INTERNAL = 384;		// 外部マクロ既定アイコン
@@ -73,7 +65,7 @@ public:
 
 private:
 	void DeleteCompDC();
-	int FindIndexFromCommandId(int idCommand, bool bOnlyFunc = true) const;  /* ツールバーIndexの取得 */// 20050809 aroka
+	int FindIndexFromCommandId(int idCommand, bool bOnlyFunc = true) const;  /* ツールバーIndexの取得 */
 	int Find(int nFuncID);
 	const TCHAR* GetLabel(int nFuncID);
 	TCHAR GetAccelCharFromLabel(const TCHAR* pszLabel);
@@ -85,13 +77,10 @@ private:
 	HINSTANCE		hInstance;
 	HWND			hWndOwner;
 
-//@@@ 2002.01.03 YAZAKI tbMyButtonなどをCShareDataからMenuDrawerへ移動したことによる修正。
-// 2009.11.14 syat プラグインコマンド動的追加のためvector化
 	std::vector<TBBUTTON>	tbMyButton;	// ツールバーのボタン
 	size_t nMyButtonNum;
 	size_t nMyButtonFixSize;	// 固定部分の最大数
 	
-	// 2011.11.18 MenuItemのvector化
 	struct MyMenuItemInfo {
 		int				nBitmapIdx;
 		int				nFuncId;
@@ -108,8 +97,6 @@ private:
 	int				nCompBitmapWidth;
 
 public:
-	// 2010.01.30 syat アイコンイメージリストをprivate->public
-	//	Oct. 16, 2000 genta
 	ImageListMgr* pIcons;	//	Image List
 
 protected:
@@ -118,7 +105,6 @@ protected:
 	*/
 	int GetData(void);	/* ダイアログデータの取得 */
 
-//@@@ 2002.01.03 YAZAKI tbMyButtonなどをCShareDataからMenuDrawerへ移動したことによる修正。
 	void SetTBBUTTONVal(TBBUTTON*, int, int, BYTE, BYTE, DWORD_PTR, INT_PTR) const;	/* TBBUTTON構造体にデータをセット */
 };
 

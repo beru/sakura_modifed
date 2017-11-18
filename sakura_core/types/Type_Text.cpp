@@ -9,12 +9,6 @@
 #include "view/colors/EColorIndexType.h"
 
 // テキスト
-// Sep. 20, 2000 JEPRO テキストの規定値を80→120に変更(不具合一覧.txtがある程度読みやすい桁数)
-// Nov. 15, 2000 JEPRO PostScriptファイルも読めるようにする
-// Jan. 12, 2001 JEPRO readme.1st も読めるようにする
-// Feb. 12, 2001 JEPRO .err エラーメッセージ
-// Nov.  6, 2002 genta docはMS Wordに譲ってここからは外す（関連づけ防止のため）
-// Nov.  6, 2002 genta log を追加
 void CType_Text::InitTypeConfigImp(TypeConfig& type)
 {
 	// 名前と拡張子
@@ -24,15 +18,15 @@ void CType_Text::InitTypeConfigImp(TypeConfig& type)
 	// 設定
 	type.nMaxLineKetas = 120;					// 折り返し桁数
 	type.eDefaultOutline = OutlineType::Text;				// アウトライン解析方法
-	type.colorInfoArr[COLORIDX_SSTRING].bDisp = false;	// Oct. 17, 2000 JEPRO	シングルクォーテーション文字列を色分け表示しない
-	type.colorInfoArr[COLORIDX_WSTRING].bDisp = false;	// Sept. 4, 2000 JEPRO	ダブルクォーテーション文字列を色分け表示しない
-	type.bKinsokuHead = false;								// 行頭禁則				//@@@ 2002.04.08 MIK
-	type.bKinsokuTail = false;								// 行末禁則				//@@@ 2002.04.08 MIK
-	type.bKinsokuRet  = false;								// 改行文字をぶら下げる	//@@@ 2002.04.13 MIK
-	type.bKinsokuKuto = false;								// 句読点をぶら下げる	//@@@ 2002.04.17 MIK
-	wcscpy_s(type.szKinsokuHead, L"!%),.:;?]}￠°’”‰′″℃、。々〉》」』】〕゛゜ゝゞ・ヽヾ！％），．：；？］｝｡｣､･ﾞﾟ￠");		/* 行頭禁則 */	//@@@ 2002.04.13 MIK 
-	wcscpy_s(type.szKinsokuTail, L"$([{￡\\‘“〈《「『【〔＄（［｛｢￡￥");		/* 行末禁則 */	//@@@ 2002.04.08 MIK 
-	// type.szKinsokuKuto（句読点ぶら下げ文字）はここではなく全タイプにデフォルト設定	// 2009.08.07 ryoji 
+	type.colorInfoArr[COLORIDX_SSTRING].bDisp = false;	// シングルクォーテーション文字列を色分け表示しない
+	type.colorInfoArr[COLORIDX_WSTRING].bDisp = false;	// ダブルクォーテーション文字列を色分け表示しない
+	type.bKinsokuHead = false;								// 行頭禁則
+	type.bKinsokuTail = false;								// 行末禁則
+	type.bKinsokuRet  = false;								// 改行文字をぶら下げる
+	type.bKinsokuKuto = false;								// 句読点をぶら下げる
+	wcscpy_s(type.szKinsokuHead, L"!%),.:;?]}￠°’”‰′″℃、。々〉》」』】〕゛゜ゝゞ・ヽヾ！％），．：；？］｝｡｣､･ﾞﾟ￠");		/* 行頭禁則 */
+	wcscpy_s(type.szKinsokuTail, L"$([{￡\\‘“〈《「『【〔＄（［｛｢￡￥");		/* 行末禁則 */
+	// type.szKinsokuKuto（句読点ぶら下げ文字）はここではなく全タイプにデフォルト設定
 
 	// ※小さな親切として、C:\～～ や \\～～ などのファイルパスをクリッカブルにする設定を「テキスト」に既定で仕込む
 	// ※""で挟まれる設定は挟まれない設定よりも上に無ければならない
@@ -56,14 +50,7 @@ void CType_Text::InitTypeConfigImp(TypeConfig& type)
 }
 
 
-/*!	テキスト・トピックリスト作成
-	
-	@date 2002.04.01 YAZAKI CDlgFuncList::SetText()を使用するように改訂。
-	@date 2002.11.03 Moca	階層が最大値を超えるとバッファオーバーランするのを修正
-							最大値以上は追加せずに無視する
-	@date 2007.8頃   kobake 機械的にUNICODE化
-	@date 2007.11.29 kobake UNICODE対応できてなかったので修正
-*/
+/*!	テキスト・トピックリスト作成 */
 void DocOutline::MakeTopicList_txt(FuncInfoArr* pFuncInfoArr)
 {
 	using namespace WCODE;
@@ -218,13 +205,7 @@ void DocOutline::MakeTopicList_txt(FuncInfoArr* pFuncInfoArr)
 }
 
 
-/*! 階層付きテキスト アウトライン解析
-
-	@author zenryaku
-	@date 2003.05.20 zenryaku 新規作成
-	@date 2003.05.25 genta 実装方法一部修正
-	@date 2003.06.21 Moca 階層が2段以上深くなる場合を考慮
-*/
+/*! 階層付きテキスト アウトライン解析 */
 void DocOutline::MakeTopicList_wztxt(FuncInfoArr* pFuncInfoArr)
 {
 	size_t levelPrev = 0;
@@ -238,9 +219,8 @@ void DocOutline::MakeTopicList_wztxt(FuncInfoArr* pFuncInfoArr)
 		if (!pLine) {
 			break;
 		}
-		//	May 25, 2003 genta 判定順序変更
 		if (*pLine == L'.') {
-			const wchar_t* pPos;	//	May 25, 2003 genta
+			const wchar_t* pPos;
 			int			nLength;
 			wchar_t		szTitle[1024];
 
@@ -251,7 +231,7 @@ void DocOutline::MakeTopicList_wztxt(FuncInfoArr* pFuncInfoArr)
 			Point ptPos = doc.layoutMgr.LogicToLayout(Point(0, (int)nLineCount));
 			size_t level = pPos - pLine;
 
-			// 2003.06.27 Moca 階層が2段位上深くなるときは、無題の要素を追加
+			// 階層が2段位上深くなるときは、無題の要素を追加
 			if (levelPrev < level && level != levelPrev + 1) {
 				// (無題)を挿入
 				//	ただし，TAG一覧には出力されないように

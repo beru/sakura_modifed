@@ -10,7 +10,7 @@ public:
 	HelpManager() {
 		pShareData = &GetDllShareData();
 	}
-	// ヘルプ関連	//@@@ 2002.2.3 YAZAKI
+	// ヘルプ関連
 	bool			ExtWinHelpIsSet(const TypeConfig* pType = nullptr);		// タイプがnTypeのときに、外部ヘルプが設定されているか。
 	const TCHAR*	GetExtWinHelp(const TypeConfig* pType = nullptr);		// タイプがnTypeのときの、外部ヘルプファイル名を取得。
 	bool			ExtHTMLHelpIsSet(const TypeConfig* pType = nullptr);	// タイプがnTypeのときに、外部HTMLヘルプが設定されているか。

@@ -4,7 +4,7 @@
 //                         アクセサ                            //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-// どこからでもアクセスできる、共有データアクセサ。2007.10.30 kobake
+// どこからでもアクセスできる、共有データアクセサ
 struct DllSharedData;
 
 // DllSharedDataへの簡易アクセサ
@@ -39,12 +39,9 @@ void SetDllShareData(DllSharedData* pShareData)
 //                    共有メモリ構成要素                       //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-// 2010.04.19 Moca CShareDataからDllSharedDataメンバのincludeをDllSharedData.hに移動
-
 #include "config/maxdata.h"
 
 #include "env/AppNodeManager.h"	// Share_Nodes
-// 2007.09.28 kobake Common構造体をShareData.hから分離
 #include "env/CommonSetting.h"
 #include "env/SearchKeywordManager.h"	// Share_SearchKeywords
 #include "env/TagJumpManager.h"		// Share_TagJump
@@ -58,8 +55,8 @@ void SetDllShareData(DllSharedData* pShareData)
 
 // 共有フラグ
 struct Share_Flags {
-	bool	bEditWndChanging;		// 編集ウィンドウ切替中	// 2007.04.03 ryoji
-	/*	@@@ 2002.1.24 YAZAKI
+	bool	bEditWndChanging;		// 編集ウィンドウ切替中
+	/*
 		キーボードマクロは、記録終了した時点でファイル「szKeyMacroFileName」に書き出すことにする。
 		bRecordingKeyMacroがtrueのときは、キーボードマクロの記録中なので、szKeyMacroFileNameにアクセスしてはならない。
 	*/
@@ -69,7 +66,6 @@ struct Share_Flags {
 
 // 共有ワークバッファ
 struct Share_WorkBuffer {
-	// 2007.09.16 kobake char型だと、常に文字列であるという誤解を招くので、BYTE型に変更。変数名も変更。
 	//           UNICODE版では、余分に領域を使うことが予想されるため、ANSI版の2倍確保。
 private:
 	BYTE pWork[32000 * sizeof(TCHAR)];
@@ -107,7 +103,7 @@ struct Share_Version {
 struct DllSharedData {
 	// -- -- バージョン -- -- //
 	/*!
-		データ構造 Version	// Oct. 27, 2000 genta
+		データ構造 Version
 		データ構造の異なるバージョンの同時起動を防ぐため
 		必ず先頭になくてはならない．
 	*/
@@ -125,8 +121,8 @@ struct DllSharedData {
 	DWORD						dwCustColors[16];						// フォントDialogカスタムパレット
 
 	// プラグイン
-	uint16_t					plugCmdIcons[MAX_PLUGIN*MAX_PLUG_CMD];	// プラグイン コマンド ICON 番号	// 2010/7/3 Uchi
-	size_t						maxToolBarButtonNum;					// ツールバーボタン 最大値			// 2010/7/5 Uchi
+	uint16_t					plugCmdIcons[MAX_PLUGIN*MAX_PLUG_CMD];	// プラグイン コマンド ICON 番号
+	size_t						maxToolBarButtonNum;					// ツールバーボタン 最大値
 
 	// -- -- 保存対象 -- -- //
 	// 設定
@@ -144,12 +140,12 @@ struct DllSharedData {
 	Share_History				history;
 
 	// 外部コマンド実行ダイアログのオプション
-	int							nExecFlgOpt;				// 外部コマンド実行オプション	// 2006.12.03 maru オプションの拡張のため
+	int							nExecFlgOpt;				// 外部コマンド実行オプション
 	// DIFF差分表示ダイアログのオプション
-	int							nDiffFlgOpt;				// DIFF差分表示	//@@@ 2002.05.27 MIK
+	int							nDiffFlgOpt;				// DIFF差分表示
 	// タグファイルの作成ダイアログのオプション
-	TCHAR						szTagsCmdLine[_MAX_PATH];	// TAGSコマンドラインオプション	//@@@ 2003.05.12 MIK
-	int							nTagsOpt;					// TAGSオプション(チェック)	//@@@ 2003.05.12 MIK
+	TCHAR						szTagsCmdLine[_MAX_PATH];	// TAGSコマンドラインオプション
+	int							nTagsOpt;					// TAGSオプション(チェック)
 
 	// -- -- テンポラリ -- -- //
 	// 指定行へジャンプダイアログのオプション

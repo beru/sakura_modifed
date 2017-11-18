@@ -7,8 +7,7 @@
 #include "view/Colors/EColorIndexType.h"
 
 // アセンブラ
-//	2004.05.01 MIK/genta
-// Mar. 10, 2001 JEPRO	半角数値を色分け表示
+// 半角数値を色分け表示
 void CType_Asm::InitTypeConfigImp(TypeConfig& type)
 {
 	// 名前と拡張子
@@ -22,11 +21,7 @@ void CType_Asm::InitTypeConfigImp(TypeConfig& type)
 }
 
 
-/*! アセンブラ アウトライン解析
-
-	@author MIK
-	@date 2004.04.12 作り直し
-*/
+/*! アセンブラ アウトライン解析 */
 void DocOutline::MakeTopicList_asm(FuncInfoArr* pFuncInfoArr)
 {
 	size_t nTotalLine = doc.docLineMgr.GetLineCount();

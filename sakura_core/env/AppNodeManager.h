@@ -11,11 +11,11 @@ struct EditNode {
 	int				nGroup;						// グループID							//@@@ 2007.06.20 ryoji
 	HWND			hWnd;
 	int				nId;						// 無題Id
-	WIN_CHAR		szTabCaption[_MAX_PATH];	// タブウィンドウ用：キャプション名		//@@@ 2003.05.31 MIK
-	SFilePath		szFilePath;					// タブウィンドウ用：ファイル名			//@@@ 2006.01.28 ryoji
-	bool			bIsGrep;					// Grepのウィンドウか					//@@@ 2006.01.28 ryoji
-	UINT			showCmdRestore;				// 元のサイズに戻すときのサイズ種別		//@@@ 2007.06.20 ryoji
-	bool			bClosing;					// 終了中か（「最後のファイルを閉じても(無題)を残す」用）	//@@@ 2007.06.20 ryoji
+	WIN_CHAR		szTabCaption[_MAX_PATH];	// タブウィンドウ用：キャプション名
+	SFilePath		szFilePath;					// タブウィンドウ用：ファイル名
+	bool			bIsGrep;					// Grepのウィンドウか
+	UINT			showCmdRestore;				// 元のサイズに戻すときのサイズ種別
+	bool			bClosing;					// 終了中か（「最後のファイルを閉じても(無題)を残す」用）
 
 	HWND GetHwnd() const { return GetSafeHwnd(); }
 	HWND GetSafeHwnd() const { if (this) return hWnd; else return NULL; }
@@ -34,11 +34,11 @@ struct EditNodeEx {
 
 // 共有メモリ内構造体
 struct Share_Nodes {
-	size_t		nEditArrNum;		// short->intに修正	//@@@ 2003.05.31 MIK
-	EditNode	pEditArr[MAX_EDITWINDOWS];	// 最大値修正	@@@ 2003.05.31 MIK
+	size_t		nEditArrNum;
+	EditNode	pEditArr[MAX_EDITWINDOWS];
 	LONG		nSequences;			// ウィンドウ連番
 	LONG		nNonameSequences;	// 無題連番
-	LONG		nGroupSequences;	// タブグループ連番	// 2007.06.20 ryoji
+	LONG		nGroupSequences;	// タブグループ連番
 };
 
 
@@ -59,16 +59,16 @@ public:
 
 	EditNode* GetTopEditNode() { return GetEditNodeAt(0); }	//
 	EditNode* GetEditNodeAt(size_t nIndex);					// 指定位置の編集ウィンドウ情報を取得する
-	bool AddEditWndList(HWND);								// 編集ウィンドウの登録	// 2007.06.26 ryoji nGroup引数追加
+	bool AddEditWndList(HWND);								// 編集ウィンドウの登録
 	void DeleteEditWndList(HWND);							// 編集ウィンドウリストからの削除
 	bool RequestCloseEditor(EditNode* pWndArr, size_t nArrCnt, bool bExit, bool bCheckConfirm, HWND hWndFrom);
-															// いくつかのウィンドウへ終了要求を出す	// 2007.02.13 ryoji 「編集の全終了」を示す引数(bExit)を追加	// 2007.06.20 ryoji nGroup引数追加
+															// いくつかのウィンドウへ終了要求を出す
 
-	int GetEditorWindowsNum(bool bExcludeClosing = true);				// 現在の編集ウィンドウの数を調べる		// 2007.06.20 ryoji nGroup引数追加	// 2008.04.19 ryoji bExcludeClosing引数追加
+	int GetEditorWindowsNum(bool bExcludeClosing = true);				// 現在の編集ウィンドウの数を調べる
 
 	// 全ウィンドウ一括操作
-	bool PostMessageToAllEditors(UINT uMsg, WPARAM wParam, LPARAM lParam, HWND hWndLast);	// 全編集ウィンドウへメッセージをポストする	// 2007.06.20 ryoji nGroup引数追加
-	bool SendMessageToAllEditors(UINT uMsg, WPARAM wParam, LPARAM lParam, HWND hWndLast);	// 全編集ウィンドウへメッセージを送る		// 2007.06.20 ryoji nGroup引数追加
+	bool PostMessageToAllEditors(UINT uMsg, WPARAM wParam, LPARAM lParam, HWND hWndLast);	// 全編集ウィンドウへメッセージをポストする
+	bool SendMessageToAllEditors(UINT uMsg, WPARAM wParam, LPARAM lParam, HWND hWndLast);	// 全編集ウィンドウへメッセージを送る
 
 public:
 	bool operator == (const AppNodeGroupHandle& rhs) const { return nGroup == rhs.nGroup; }
@@ -93,8 +93,8 @@ public:
 	int GetNoNameNumber(HWND);
 
 	// タブ
-	bool ReorderTab(HWND hSrcTab, HWND hDstTab);				// タブ移動に伴うウィンドウの並び替え 2007.07.07 genta
-	HWND SeparateGroup(HWND hwndSrc, HWND hwndDst, bool bSrcIsTop, int notifygroups[]);	// タブ分離に伴うウィンドウ処理 2007.07.07 genta
+	bool ReorderTab(HWND hSrcTab, HWND hDstTab);				// タブ移動に伴うウィンドウの並び替え
+	HWND SeparateGroup(HWND hwndSrc, HWND hwndDst, bool bSrcIsTop, int notifygroups[]);	// タブ分離に伴うウィンドウ処理
 
 	// 総合情報
 	size_t GetOpenedWindowArr(EditNode** , bool, bool bGSort = false);				// 現在開いている編集ウィンドウの配列を返す
@@ -105,7 +105,7 @@ protected:
 public:
 	static bool IsSameGroup(HWND hWnd1, HWND hWnd2);					// 同一グループかどうかを調べる
 	int GetFreeGroupId(void);											// 空いているグループ番号を取得する
-	HWND GetNextTab(HWND hWndCur);										// Close した時の次のWindowを取得する(タブまとめ表示の場合)	2013/4/10 Uchi
+	HWND GetNextTab(HWND hWndCur);										// Close した時の次のWindowを取得する(タブまとめ表示の場合)
 };
 
 

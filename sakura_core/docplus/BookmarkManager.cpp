@@ -10,9 +10,6 @@ bool BookmarkGetter::IsBookmarked() const { return pDocLine->mark.bookmarked; }
 void BookmarkSetter::SetBookmark(bool bFlag) { pDocLine->mark.bookmarked = bFlag; }
 
 // ブックマークの全解除
-/*
-	@date 2001.12.03 hor
-*/
 void BookmarkManager::ResetAllBookMark(void)
 {
 	DocLine* pDocLine = docLineMgr.GetDocLineTop();
@@ -24,9 +21,6 @@ void BookmarkManager::ResetAllBookMark(void)
 
 
 // ブックマーク検索
-/*
-	@date 2001.12.03 hor
-*/
 bool BookmarkManager::SearchBookMark(
 	int					nLineNum,		// 検索開始行
 	SearchDirection		bPrevOrNext,	// 0==前方検索 1==後方検索
@@ -64,9 +58,6 @@ bool BookmarkManager::SearchBookMark(
 }
 
 // 物理行番号のリストからまとめて行マーク
-/*
-	@date 2002.01.16 hor
-*/
 void BookmarkManager::SetBookMarks(wchar_t* pMarkLines)
 {
 	DocLine* pDocLine;
@@ -133,13 +124,9 @@ void BookmarkManager::SetBookMarks(wchar_t* pMarkLines)
 
 
 // 行マークされてる物理行番号のリストを作る
-/*
-	@date 2002.01.16 hor
-	@date 2014.04.24 Moca ver2 差分32進数方式に変更
-*/
 LPCWSTR BookmarkManager::GetBookMarks()
 {
-	static wchar_t szText[MAX_MARKLINES_LEN + 1];	// 2002.01.17 // Feb. 17, 2003 genta staticに
+	static wchar_t szText[MAX_MARKLINES_LEN + 1];
 	wchar_t szBuff[10];
 	wchar_t szBuff2[10];
 	int nLinePos = 0;

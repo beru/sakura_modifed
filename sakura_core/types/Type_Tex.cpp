@@ -7,8 +7,6 @@
 #include "view/Colors/EColorIndexType.h"
 
 /* TeX */
-// Oct. 31, 2000 JEPRO TeX  ユーザに贈る
-// Oct. 31, 2000 JEPRO TeX ユーザに贈る	//Mar. 10, 2001 JEPRO 追加
 void CType_Tex::InitTypeConfigImp(TypeConfig& type)
 {
 	// 名前と拡張子
@@ -19,18 +17,13 @@ void CType_Tex::InitTypeConfigImp(TypeConfig& type)
 	type.lineComment.CopyTo(0, L"%", -1);					// 行コメントデリミタ
 	type.eDefaultOutline = OutlineType::TeX;				// アウトライン解析方法
 	type.nKeywordSetIdx[0] = 9;							// キーワードセット
-	type.nKeywordSetIdx[1] = 10;							// キーワードセット2 	// Jan. 19, 2001 JEPRO
+	type.nKeywordSetIdx[1] = 10;							// キーワードセット2
 	type.colorInfoArr[COLORIDX_SSTRING].bDisp = false;	// シングルクォーテーション文字列を色分け表示しない
 	type.colorInfoArr[COLORIDX_WSTRING].bDisp = false;	// ダブルクォーテーション文字列を色分け表示しない
 }
 
 
-/*! TeX アウトライン解析
-
-	@author naoh
-	@date 2003.07.21 naoh 新規作成
-	@date 2005.01.03 naoh 「マ」などの"}"を含む文字に対する修正、prosperのslideに対応
-*/
+/*! TeX アウトライン解析 */
 void DocOutline::MakeTopicList_tex(FuncInfoArr* pFuncInfoArr)
 {
 	const wchar_t*	pLine;
@@ -145,7 +138,6 @@ void DocOutline::MakeTopicList_tex(FuncInfoArr* pFuncInfoArr)
 
 
 const wchar_t* g_ppszKeywordsTEX[] = {
-// Nov. 20, 2000 JEPRO	大幅追加 & 若干修正・削除 --ほとんどコマンドのみ
 	L"error",
 	L"Warning",
 //			"center",
@@ -678,10 +670,8 @@ const wchar_t* g_ppszKeywordsTEX[] = {
 };
 size_t g_nKeywordsTEX = _countof(g_ppszKeywordsTEX);
 
-// Jan. 19, 2001 JEPRO	TeX のキーワード2として新規追加 & 一部復活 --環境コマンドとオプション名が中心
 const wchar_t* g_ppszKeywordsTEX2[] = {
 	//	環境コマンド
-	// Jan. 19, 2001 JEPRO 本当は{}付きでキーワードにしたかったが単語として認識してくれないので止めた
 	L"abstract",
 	L"array"
 	L"center",

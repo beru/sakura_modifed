@@ -3,7 +3,7 @@
 #include "StdAfx.h"
 #include "PropTypes.h"
 #include "env/ShareData.h"
-#include "typeprop/ImpExpManager.h"	// 2010/4/23 Uchi
+#include "typeprop/ImpExpManager.h"
 #include "DlgSameColor.h"
 #include "DlgKeywordSelect.h"
 #include "view/colors/EColorIndexType.h"
@@ -16,15 +16,15 @@
 using namespace std;
 
 static const DWORD p_helpids2[] = {	//11400
-	IDC_CHECK_DOCICON,				HIDC_CHECK_DOCICON,				// 文書アイコンを使う	// 2006.08.06 ryoji
+	IDC_CHECK_DOCICON,				HIDC_CHECK_DOCICON,				// 文書アイコンを使う
 
 	IDC_COMBO_IMESWITCH,			HIDC_COMBO_IMESWITCH,			// IMEのON/OFF状態
 	IDC_COMBO_IMESTATE,				HIDC_COMBO_IMESTATE,			// IMEの入力モード
 
 	IDC_COMBO_DEFAULT_CODETYPE,		HIDC_COMBO_DEFAULT_CODETYPE,	// デフォルト文字コード
 	IDC_CHECK_CP,					HIDC_CHECK_TYPE_SUPPORT_CP,		// コードページ
-	IDC_COMBO_DEFAULT_EOLTYPE,		HIDC_COMBO_DEFAULT_EOLTYPE,		// デフォルト改行コード	// 2011.01.24 ryoji
-	IDC_CHECK_DEFAULT_BOM,			HIDC_CHECK_DEFAULT_BOM,			// デフォルトBOM	// 2011.01.24 ryoji
+	IDC_COMBO_DEFAULT_EOLTYPE,		HIDC_COMBO_DEFAULT_EOLTYPE,		// デフォルト改行コード
+	IDC_CHECK_DEFAULT_BOM,			HIDC_CHECK_DEFAULT_BOM,			// デフォルトBOM
 	IDC_CHECK_PRIOR_CESU8,			HIDC_CHECK_PRIOR_CESU8,			// 自動判別時にCESU-8を優先する
 
 	IDC_EDIT_BACKIMG_PATH,			HIDC_EDIT_BACKIMG_PATH,			// 背景画像
@@ -42,7 +42,7 @@ static const DWORD p_helpids2[] = {	//11400
 	IDC_RADIO_LINETERMTYPE1,		HIDC_RADIO_LINETERMTYPE1,		// 行番号区切り（縦線）
 	IDC_RADIO_LINETERMTYPE2,		HIDC_RADIO_LINETERMTYPE2,		// 行番号区切り（任意）
 	IDC_EDIT_LINETERMCHAR,			HIDC_EDIT_LINETERMCHAR,			// 行番号区切り
-	IDC_EDIT_LINENUMWIDTH,			HIDC_EDIT_LINENUMWIDTH,			// 行番号の最小桁数 2014.08.02 katze
+	IDC_EDIT_LINENUMWIDTH,			HIDC_EDIT_LINENUMWIDTH,			// 行番号の最小桁数
 //	IDC_STATIC,						-1,
 	0, 0
 };
@@ -92,11 +92,10 @@ INT_PTR PropTypesWindow::DispatchEvent(
 	WORD	wNotifyCode;
 	WORD	wID;
 	NMHDR*	pNMHDR;
-	NM_UPDOWN* pMNUD;		// 追加 2014.08.02 katze
+	NM_UPDOWN* pMNUD;
 
 	switch (uMsg) {
 	case WM_INITDIALOG:
-		// Modified by KEITA for WIN64 2003.9.6
 		::SetWindowLongPtr(hwndDlg, DWLP_USER, lParam);
 
 		// ダイアログデータの設定 color
@@ -138,15 +137,12 @@ INT_PTR PropTypesWindow::DispatchEvent(
 						_T("*.bmp;*.jpg;*.jpeg"), true);
 				}
 				return TRUE;
-			//	From Here Sept. 10, 2000 JEPRO
 			//	行番号区切りを任意の半角文字にするときだけ指定文字入力をEnableに設定
 			case IDC_RADIO_LINETERMTYPE0: // 行番号区切り 0=なし 1=縦線 2=任意
 			case IDC_RADIO_LINETERMTYPE1:
 			case IDC_RADIO_LINETERMTYPE2:
 				EnableTypesPropInput(hwndDlg);
 				return TRUE;
-			//	To Here Sept. 10, 2000
-
 			}
 			case IDC_CHECK_CP:
 				{
@@ -162,8 +158,6 @@ INT_PTR PropTypesWindow::DispatchEvent(
 		pNMHDR = (NMHDR*)lParam;
 		switch (pNMHDR->code) {
 		case PSN_HELP:
-//	Sept. 10, 2000 JEPRO ID名を実際の名前に変更するため以下の行はコメントアウト
-//				OnHelp(hwndDlg, IDD_PROP1P3);
 			OnHelp(hwndDlg, IDD_PROP_WINDOW);
 			return TRUE;
 		case PSN_KILLACTIVE:
@@ -171,13 +165,11 @@ INT_PTR PropTypesWindow::DispatchEvent(
 			// ダイアログデータの取得 window
 			GetData(hwndDlg);
 			return TRUE;
-//@@@ 2002.01.03 YAZAKI 最後に表示していたシートを正しく覚えていないバグ修正
 		case PSN_SETACTIVE:
 			nPageNum = ID_PROPTYPE_PAGENUM_WINDOW;
 			return TRUE;
 		}
 
-		// switch文追加 2014.08.02 katze
 		pMNUD  = (NM_UPDOWN*)lParam;
 		switch ((int)wParam) {
 		case IDC_SPIN_LINENUMWIDTH:
@@ -201,23 +193,19 @@ INT_PTR PropTypesWindow::DispatchEvent(
 
 		break;	// WM_NOTIFY
 
-//@@@ 2001.02.04 Start by MIK: Popup Help
 	case WM_HELP:
 		{
 			HELPINFO* p = (HELPINFO*) lParam;
-			MyWinHelp((HWND)p->hItemHandle, HELP_WM_HELP, (ULONG_PTR)(LPVOID)p_helpids2);	// 2006.10.10 ryoji MyWinHelpに変更に変更
+			MyWinHelp((HWND)p->hItemHandle, HELP_WM_HELP, (ULONG_PTR)(LPVOID)p_helpids2);
 		}
 		return TRUE;
 		// NOTREACHED
 //		break;
-//@@@ 2001.02.04 End
 
-//@@@ 2001.11.17 add start MIK
 	// Context Menu
 	case WM_CONTEXTMENU:
-		MyWinHelp(hwndDlg, HELP_CONTEXTMENU, (ULONG_PTR)(LPVOID)p_helpids2);	// 2006.10.10 ryoji MyWinHelpに変更に変更
+		MyWinHelp(hwndDlg, HELP_CONTEXTMENU, (ULONG_PTR)(LPVOID)p_helpids2);
 		return TRUE;
-//@@@ 2001.11.17 add end MIK
 
 	}
 	return FALSE;
@@ -243,11 +231,11 @@ void PropTypesWindow::SetCombobox(
 void PropTypesWindow::SetData(HWND hwndDlg)
 {
 	{
-		// 文書アイコンを使う	// Sep. 10, 2002 genta
+		// 文書アイコンを使う
 		::CheckDlgButtonBool(hwndDlg, IDC_CHECK_DOCICON, types.bUseDocumentIcon);
 	}
 
-	// 起動時のIME(日本語入力変換)	// Nov. 20, 2000 genta
+	// 起動時のIME(日本語入力変換)
 	{
 		int ime;
 		// ON/OFF状態
@@ -346,7 +334,7 @@ void PropTypesWindow::SetData(HWND hwndDlg)
 	}
 
 	{
-		// 行番号の最小桁数	// 追加 2014.08.02 katze
+		// 行番号の最小桁数	
 		::SetDlgItemInt(hwndDlg, IDC_EDIT_LINENUMWIDTH, types.nLineNumWidth, FALSE);
 	}
 
@@ -401,10 +389,8 @@ void PropTypesWindow::SetData(HWND hwndDlg)
 	auto_sprintf_s(szLineTermChar, L"%lc", types.cLineTermChar);
 	::DlgItem_SetText(hwndDlg, IDC_EDIT_LINETERMCHAR, szLineTermChar);
 
-	//	From Here Sept. 10, 2000 JEPRO
 	//	行番号区切りを任意の半角文字にするときだけ指定文字入力をEnableに設定
 	EnableTypesPropInput(hwndDlg);
-	//	To Here Sept. 10, 2000
 
 	return;
 }
@@ -418,11 +404,11 @@ void PropTypesWindow::SetData(HWND hwndDlg)
 int PropTypesWindow::GetData(HWND hwndDlg)
 {
 	{
-		// 文書アイコンを使う	// Sep. 10, 2002 genta
+		// 文書アイコンを使う
 		types.bUseDocumentIcon = DlgButton_IsChecked(hwndDlg, IDC_CHECK_DOCICON);
 	}
 
-	// 起動時のIME(日本語入力変換)	Nov. 20, 2000 genta
+	// 起動時のIME(日本語入力変換)
 	{
 		// 入力モード
 		HWND	hwndCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_IMESTATE);
@@ -499,7 +485,6 @@ int PropTypesWindow::GetData(HWND hwndDlg)
 }
 
 
-//	From Here Sept. 10, 2000 JEPRO
 //	チェック状態に応じてダイアログボックス要素のEnable/Disableを
 //	適切に設定する
 void PropTypesWindow::EnableTypesPropInput(HWND hwndDlg)
@@ -513,5 +498,4 @@ void PropTypesWindow::EnableTypesPropInput(HWND hwndDlg)
 		::EnableWindow(::GetDlgItem(hwndDlg, IDC_EDIT_LINETERMCHAR), FALSE);
 	}
 }
-//	To Here Sept. 10, 2000
 

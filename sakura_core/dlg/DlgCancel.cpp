@@ -9,9 +9,7 @@ DlgCancel::DlgCancel()
 	bAutoCleanup = false;
 }
 
-/** 標準以外のメッセージを捕捉する
-	@date 2008.05.28 ryoji 新規作成
-*/
+/** 標準以外のメッセージを捕捉する */
 INT_PTR DlgCancel::DispatchEvent(
 	HWND hWnd,
 	UINT wMsg,
@@ -37,9 +35,7 @@ INT_PTR DlgCancel::DispatchEvent(
 	return result;
 }
 
-/** 自動破棄を遅延実行する
-	@date 2008.05.28 ryoji 新規作成
-*/
+/** 自動破棄を遅延実行する */
 void DlgCancel::DeleteAsync(void)
 {
 	bAutoCleanup = true;
@@ -100,7 +96,6 @@ BOOL DlgCancel::OnBnClicked(int wID)
 	return FALSE;
 }
 
-//@@@ 2002.01.18 add start
 const DWORD p_helpids[] = {
 	0, 0
 };
@@ -109,6 +104,5 @@ LPVOID DlgCancel::GetHelpIdTable(void)
 {
 	return (LPVOID)p_helpids;
 }
-//@@@ 2002.01.18 add end
 
 

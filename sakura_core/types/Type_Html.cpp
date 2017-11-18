@@ -7,10 +7,6 @@
 #include "view/Colors/EColorIndexType.h"
 
 // HTML
-// Oct. 31, 2000 JEPRO VC++の生成するテキストファイルも読み込めるようにする
-// Feb. 7, 2001 JEPRO .cc/cp/c++/.hpp/hxx/hh/hp/h++を追加	//Mar. 15, 2001 JEPRO .hmを追加
-// Feb. 2, 2005 genta 苦情が多いのでシングルクォートの色分けはHTMLでは行わない
-// 2012.01.03 シングルクォートの色分けをする
 void CType_Html::InitTypeConfigImp(TypeConfig& type)
 {
 	_tcscpy(type.szTypeName, _T("HTML"));
@@ -26,14 +22,7 @@ void CType_Html::InitTypeConfigImp(TypeConfig& type)
 }
 
 
-/*! HTML アウトライン解析
-
-	@author zenryaku
-	@date 2003.05.20 zenryaku 新規作成
-	@date 2004.04.19 zenryaku 空要素を判定
-	@date 2004.04.20 Moca コメント処理と、不明な終了タグを無視する処理を追加
-	@date 2008.08.15 aroka 見出しと段落の深さ制御を追加 2008.09.07修正
-*/
+/*! HTML アウトライン解析 */
 void DocOutline::MakeTopicList_html(FuncInfoArr* pFuncInfoArr)
 {
 	const wchar_t*	pLineBuf;	//	pLineBuf は行全体を指し、
@@ -44,7 +33,7 @@ void DocOutline::MakeTopicList_html(FuncInfoArr* pFuncInfoArr)
 	size_t			k;
 	bool			bEndTag;
 	bool			bCommentTag = false;
-	bool			bParaTag = false;	//	2008.08.15 aroka
+	bool			bParaTag = false;
 
 	/*	ネストの深さは、nMaxStackレベルまで、ひとつのヘッダは、最長32文字まで区別
 		（32文字まで同じだったら同じものとして扱います）
@@ -81,7 +70,6 @@ void DocOutline::MakeTopicList_html(FuncInfoArr* pFuncInfoArr)
 		}
 		for (i=0; i<nLineLen-1; ++i) {
 			pLine = &pLineBuf[i];
-			// 2004.04.20 Moca コメントを処理する
 			if (bCommentTag) {
 				if (i < nLineLen - 3 && wmemcmp(L"-->", pLine, 3) == 0) {
 					bCommentTag = false;
@@ -90,7 +78,6 @@ void DocOutline::MakeTopicList_html(FuncInfoArr* pFuncInfoArr)
 				}
 				continue;
 			}
-			// 2004.04.20 Moca To Here
 			if (*pLine != L'<' || nDepth >= nMaxStack) {
 				continue;
 			}
@@ -114,18 +101,16 @@ void DocOutline::MakeTopicList_html(FuncInfoArr* pFuncInfoArr)
 				j += nCharSize;
 			}
 			if (j == 0) {
-				// 2004.04.20 Moca From Here コメントを処理する
 				if (i < nLineLen - 3 && wmemcmp(L"!--", pLine, 3) == 0) {
 					bCommentTag = true;
 					i += 3;
 					pLine += 3;
 				}
-				// 2004.04.20 Moca To Here
 				continue;
 			}
 			szTitle[j] = '\0';
 			/*	タグの種類ごとに処理を変える必要があるが、
-				都度比較するのはコストが高いので、最初に分類しておく。 2008.08.15 aroka
+				都度比較するのはコストが高いので、最初に分類しておく。
 				比較の回数が多いため、小文字に変換しておいてstrcmpを使う。
 			*/
 			wcscpy_s(szTag, szTitle);
@@ -184,11 +169,11 @@ void DocOutline::MakeTopicList_html(FuncInfoArr* pFuncInfoArr)
 			if ((szTag[0] == L'h') && (L'1' <= szTitle[1] && szTitle[1] <= L'6')) {
 				nLabelType = LT_HEADING;
 			}
-			// 2009.08.13 syat 「/>」で終わるタグの判定のため、終了タグ処理を開始タグ処理の後にした。
-			//                  （開始タグ処理の中で、bEndTagをtrueにしている所がある。）
+			// 「/>」で終わるタグの判定のため、終了タグ処理を開始タグ処理の後にした。
+			// （開始タグ処理の中で、bEndTagをtrueにしている所がある。）
 			if (!bEndTag) { // 開始タグ
 				if (nLabelType != LT_INLINE && nLabelType != LT_IGNORE) {
-					// pの中でブロック要素がきたら、自動的にpを閉じる。 2008.09.07 aroka
+					// pの中でブロック要素がきたら、自動的にpを閉じる。
 					if (bParaTag) {
 						if (nLabelType == LT_HEADING || nLabelType == LT_PARAGRAPH || nLabelType == LT_BLOCK) {
 							--nDepth;
@@ -253,14 +238,14 @@ void DocOutline::MakeTopicList_html(FuncInfoArr* pFuncInfoArr)
 				}
 			}
 			if (bEndTag) { // 終了タグ
-				int nDepthOrg = nDepth; // 2004.04.20 Moca 追加
+				int nDepthOrg = nDepth;
 				while (nDepth > 0) {
 					--nDepth;
 					if (!wcsicmp(pszStack[nDepth], szTitle)) {
 						break;
 					}
 				}
-				// 2004.04.20 Moca ツリー中と一致しないときは、この終了タグは無視
+				// ツリー中と一致しないときは、この終了タグは無視
 				if (nDepth == 0) {
 					if (wcsicmp(pszStack[nDepth], szTitle)) {
 						nDepth = nDepthOrg;

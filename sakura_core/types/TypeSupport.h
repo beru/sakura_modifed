@@ -6,7 +6,6 @@
 #include "view/ViewFont.h"
 #include "view/colors/ColorStrategy.h"
 
-// 2007.08.28 kobake 追加
 /*!タイプサポートクラス
 	今のところタイプ別設定の色情報取得の補助
 */

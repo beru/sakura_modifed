@@ -4,8 +4,8 @@
 
 #include "StdAfx.h"
 #include "dlg/DlgExec.h"
-#include "dlg/DlgOpenFile.h"	// Mar. 28, 2001 JEPRO
-#include "func/Funccode.h"		// Stonee, 2001/03/12  コメントアウトされてたのを有効にした
+#include "dlg/DlgOpenFile.h"
+#include "func/Funccode.h"
 #include "util/shell.h"
 #include "util/window.h"
 #include "_main/AppMode.h"
@@ -13,7 +13,7 @@
 #include "sakura_rc.h"
 #include "sakura.hh"
 
-// 外部コマンド CDlgExec.cpp	//@@@ 2002.01.07 add start MIK
+// 外部コマンド CDlgExec.cpp
 const DWORD p_helpids[] = {	//12100
 	IDC_BUTTON_REFERENCE,			HIDC_EXEC_BUTTON_REFERENCE,		// 参照
 	IDOK,							HIDOK_EXEC,						// 実行
@@ -31,7 +31,7 @@ const DWORD p_helpids[] = {	//12100
 	IDC_BUTTON_REFERENCE2,			HIDC_COMBO_CUR_DIR,				// カレントディレクトリ指定(参照)
 //	IDC_STATIC,						-1,
 	0, 0
-};	//@@@ 2002.01.07 add end MIK
+};
 
 DlgExec::DlgExec()
 {
@@ -100,7 +100,7 @@ void DlgExec::SetData(void)
 		int nExecFlgOpt;
 		nExecFlgOpt = pShareData->nExecFlgOpt;
 		
-		// ビューモードや上書き禁止のときは編集中ウィンドウへは出力しない	// 2009.02.21 ryoji
+		// ビューモードや上書き禁止のときは編集中ウィンドウへは出力しない	
 		if (!bEditable) {
 			nExecFlgOpt &= ~0x02;
 		}
@@ -117,7 +117,7 @@ void DlgExec::SetData(void)
 		EnableItem(IDC_COMBO_CODE_SEND,		(nExecFlgOpt & 0x04) ? true : false);		// 標準入力Off時、Unicodeを使用するをDesableする	2008/6/20 Uchi
 		EnableItem(IDC_COMBO_CUR_DIR,		(nExecFlgOpt & 0x200) ? true : false);
 		EnableItem(IDC_BUTTON_REFERENCE2,	(nExecFlgOpt & 0x200) ? true : false);
-	}	// To Here 2007.01.02 maru 引数を拡張のため
+	}
 
 	/*****************************
 	*         データ設定         *
@@ -172,7 +172,7 @@ int DlgExec::GetData(void)
 		szCurDir[0] = _T('\0');
 	}
 	
-	{	// From Here 2007.01.02 maru 引数を拡張のため
+	{
 		// マクロからの呼び出しではShareDataに保存させないように，ShareDataとの受け渡しはExecCmdの外で
 		int nFlgOpt = 0;
 		nFlgOpt |= (IsButtonChecked(IDC_CHECK_GETSTDOUT)) ? 0x01 : 0;	// 標準出力を得る
@@ -185,7 +185,7 @@ int DlgExec::GetData(void)
 		sel = Combo_GetCurSel(GetItemHwnd(IDC_COMBO_CODE_SEND));
 		nFlgOpt |= codeTable2[sel];
 		pShareData->nExecFlgOpt = nFlgOpt;
-	}	// To Here 2007.01.02 maru 引数を拡張のため
+	}
 	return 1;
 }
 
@@ -194,16 +194,16 @@ BOOL DlgExec::OnBnClicked(int wID)
 {
 	switch (wID) {
 	case IDC_CHECK_GETSTDOUT:
-		{	// From Here 2007.01.02 maru 引数を拡張のため
+		{
 			bool bEnabled = IsButtonChecked(IDC_CHECK_GETSTDOUT);
 			EnableItem(IDC_RADIO_OUTPUT, bEnabled);
 			EnableItem(IDC_RADIO_EDITWINDOW, bEnabled && bEditable);	// ビューモードや上書き禁止の条件追加	// 2009.02.21 ryoji
-		}	// To Here 2007.01.02 maru 引数を拡張のため
+		}
 
-		// 標準出力Off時、Unicodeを使用するをDesableする	2008/6/20 Uchi
+		// 標準出力Off時、Unicodeを使用するをDesableする	
 		EnableItem(IDC_COMBO_CODE_GET, IsButtonChecked(IDC_CHECK_GETSTDOUT));
 		break;
-	case IDC_CHECK_SENDSTDIN:	// 標準入力Off時、Unicodeを使用するをDesableする	2008/6/20 Uchi
+	case IDC_CHECK_SENDSTDIN:	// 標準入力Off時、Unicodeを使用するをDesableする
 		EnableItem(IDC_COMBO_CODE_SEND, IsButtonChecked(IDC_CHECK_SENDSTDIN));
 		break;
 	case IDC_CHECK_CUR_DIR:
@@ -213,11 +213,9 @@ BOOL DlgExec::OnBnClicked(int wID)
 
 	case IDC_BUTTON_HELP:
 		//「検索」のヘルプ
-		// Stonee, 2001/03/12 第四引数を、機能番号からヘルプトピック番号を調べるようにした
-		MyWinHelp(GetHwnd(), HELP_CONTEXT, ::FuncID_To_HelpContextID(F_EXECMD_DIALOG));	// 2006.10.10 ryoji MyWinHelpに変更に変更
+		MyWinHelp(GetHwnd(), HELP_CONTEXT, ::FuncID_To_HelpContextID(F_EXECMD_DIALOG));
 		break;
 
-	// From Here Mar. 28, 2001 JEPRO
 	case IDC_BUTTON_REFERENCE:	// ファイル名の「参照...」ボタン
 		{
 			DlgOpenFile	dlgOpenFile;
@@ -238,7 +236,6 @@ BOOL DlgExec::OnBnClicked(int wID)
 			}
 		}
 		return TRUE;
-	// To Here Mar. 28, 2001
 
 	case IDC_BUTTON_REFERENCE2:
 		{
@@ -260,11 +257,9 @@ BOOL DlgExec::OnBnClicked(int wID)
 	return FALSE;
 }
 
-//@@@ 2002.01.18 add start
 LPVOID DlgExec::GetHelpIdTable(void)
 {
 	return (LPVOID)p_helpids;
 }
-//@@@ 2002.01.18 add end
 
 

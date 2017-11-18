@@ -17,10 +17,7 @@ void FuncListManager::SetLineFuncList(DocLine* pDocLine, bool bFlag)
 	pDocLine->mark.funcList = bFlag;
 }
 
-/*! ·•ªŒŸõ
-	@author	MIK
-	@date	2002.05.25
-*/
+/*! ·•ªŒŸõ */
 bool FuncListManager::SearchFuncListMark(
 	const DocLineMgr&	docLineMgr,
 	int					nLineNum,		// ŒŸõŠJns

@@ -12,9 +12,6 @@
 	@param[in] pTagJump 保存するタグジャンプ情報
 	@retval true	保存成功
 	@retval false	保存失敗
-
-	@date 2004/06/21 新規作成
-	@date 2004/06/22 Moca 一杯になったら一番古い情報を削除しそこに新しい情報を入れる
 */
 void TagJumpManager::PushTagJump(const TagJump* pTagJump)
 {
@@ -38,9 +35,6 @@ void TagJumpManager::PushTagJump(const TagJump* pTagJump)
 	@param[out] pTagJump 参照するタグジャンプ情報
 	@retval true	参照成功
 	@retval false	参照失敗
-
-	@date 2004/06/21 新規作成
-	@date 2004/06/22 Moca SetTagJump変更による修正
 */
 bool TagJumpManager::PopTagJump(TagJump *pTagJump)
 {

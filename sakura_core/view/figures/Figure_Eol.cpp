@@ -1,27 +1,3 @@
-/*
-	Copyright (C) 2008, kobake
-
-	This software is provided 'as-is', without any express or implied
-	warranty. In no event will the authors be held liable for any damages
-	arising from the use of this software.
-
-	Permission is granted to anyone to use this software for any purpose,
-	including commercial applications, and to alter it and redistribute it
-	freely, subject to the following restrictions:
-
-		1. The origin of this software must not be misrepresented;
-		   you must not claim that you wrote the original software.
-		   If you use this software in a product, an acknowledgment
-		   in the product documentation would be appreciated but is
-		   not required.
-
-		2. Altered source versions must be plainly marked as such,
-		   and must not be misrepresented as being the original software.
-
-		3. This notice may not be removed or altered from any source
-		   distribution.
-*/
-
 #include "StdAfx.h"
 #include "view/EditView.h" // SColorStrategyInfo
 #include "Figure_Eol.h"
@@ -35,14 +11,9 @@ void _DispWrap(Graphics& gr, DispPos* pDispPos, const EditView& view, int nLineN
 
 // EOF描画関数
 // 実際には pX と nX が更新される。
-// 2004.05.29 genta
-// 2007.08.25 kobake 戻り値を void に変更。引数 x, y を DispPos に変更
-// 2007.08.25 kobake 引数から nCharWidth, nLineHeight を削除
-// 2007.08.28 kobake 引数 fuOptions を削除
 //void _DispEOF(Graphics& gr, DispPos* pDispPos, const EditView* pView, bool bTrans);
 
 // 改行記号描画
-// 2007.08.30 kobake 追加
 void _DispEOL(Graphics& gr, DispPos* pDispPos, Eol eol, const EditView& view, bool bTrans);
 
 
@@ -52,14 +23,13 @@ void _DispEOL(Graphics& gr, DispPos* pDispPos, Eol eol, const EditView& view, bo
 
 bool Figure_Eol::Match(const wchar_t* pText, int nTextLen) const
 {
-	// 2014.06.18 折り返し・最終行だとDrawImpでeol.GetLen()==0になり無限ループするので
+	// 折り返し・最終行だとDrawImpでeol.GetLen()==0になり無限ループするので
 	// もしも行の途中に改行コードがあった場合はMatchさせない
 	if (nTextLen == 2 && pText[0] == L'\r' && pText[1] == L'\n') return true;
 	if (nTextLen == 1 && WCODE::IsLineDelimiterExt(pText[0])) return true;
 	return false;
 }
 
-// 2006.04.29 Moca 選択処理のため縦線処理を追加
 //$$ 高速化可能。
 bool Figure_Eol::DrawImp(ColorStrategyInfo& csInfo)
 {
@@ -209,10 +179,6 @@ void _DispWrap(
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 /*!
 EOF記号の描画
-@date 2004.05.29 genta  MIKさんのアドバイスにより関数にくくりだし
-@date 2007.08.28 kobake 引数 nCharWidth 削除
-@date 2007.08.28 kobake 引数 fuOptions 削除
-@date 2007.08.30 kobake 引数 EofColInfo 削除
 */
 void _DispEOF(
 	Graphics&			gr,			// [in] 描画対象のDevice Context
@@ -265,8 +231,6 @@ void _DispEOF(
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 // 画面描画補助関数
-// May 23, 2000 genta
-//@@@ 2001.12.21 YAZAKI 改行記号の書きかたが変だったので修正
 void _DrawEOL(
 	Graphics&		gr,
 	const Rect&		rcEol,
@@ -275,12 +239,10 @@ void _DrawEOL(
 	COLORREF		pColor
 );
 
-// 2007.08.30 kobake 追加
 void _DispEOL(Graphics& gr, DispPos* pDispPos, Eol eol, const EditView& view, bool bTrans)
 {
 	RECT rcClip2;
 	if (view.GetTextArea().GenerateClipRect(&rcClip2, *pDispPos, 2)) {
-		// 2003.08.17 ryoji 改行文字が欠けないように
 		::ExtTextOutW_AnyBuild(
 			gr,
 			pDispPos->GetDrawPos().x,
@@ -294,8 +256,6 @@ void _DispEOL(Graphics& gr, DispPos* pDispPos, Eol eol, const EditView& view, bo
 
 		// 改行記号の表示
 		if (TypeSupport(view, COLORIDX_EOL).IsDisp()) {
-			// From Here 2003.08.17 ryoji 改行文字が欠けないように
-
 			// リージョン作成、選択。
 			gr.SetClipping(rcClip2);
 			
@@ -305,15 +265,12 @@ void _DispEOL(Graphics& gr, DispPos* pDispPos, Eol eol, const EditView& view, bo
 			rcEol.SetSize(view.GetTextMetrics().GetHankakuWidth(), view.GetTextMetrics().GetHankakuHeight());
 
 			// 描画
-			// 文字色や太字かどうかを現在の DC から調べる	// 2009.05.29 ryoji 
+			// 文字色や太字かどうかを現在の DC から調べる	
 			// （検索マッチ等の状況に柔軟に対応するため、ここは記号の色指定には決め打ちしない）
-			// 2013.06.21 novice 文字色、太字をGraphicsから取得
 			_DrawEOL(gr, rcEol, eol, gr.GetCurrentMyFontBold(), gr.GetCurrentTextForeColor());
 
 			// リージョン破棄
 			gr.ClearClipping();
-
-			// To Here 2003.08.17 ryoji 改行文字が欠けないように
 		}
 	}
 
@@ -322,16 +279,12 @@ void _DispEOL(Graphics& gr, DispPos* pDispPos, Eol eol, const EditView& view, bo
 }
 
 
-//	May 23, 2000 genta
 /*!
 画面描画補助関数:
 行末の改行マークを改行コードによって書き分ける（メイン）
 
 @note bBoldがtrueの時は横に1ドットずらして重ね書きを行うが、
 あまり太く見えない。
-
-@date 2001.12.21 YAZAKI 改行記号の描きかたを変更。ペンはこの関数内で作るようにした。
-						矢印の先頭を、sx, syにして描画ルーチン書き直し。
 */
 void _DrawEOL(
 	Graphics&		gr,			// Device Context Handle
@@ -382,7 +335,7 @@ void _DrawEOL(
 			}
 		}
 		break;
-	case EolType::CR:	// 左向き矢印	// 2007.08.17 ryoji EolType::LF -> EolType::CR
+	case EolType::CR:	// 左向き矢印
 		{
 			sx = rcEol.left;
 			sy = rcEol.top + (rcEol.Height() / 2);
@@ -415,8 +368,7 @@ void _DrawEOL(
 			}
 		}
 		break;
-	case EolType::LF:	// 下向き矢印	// 2007.08.17 ryoji EolType::CR -> EolType::LF
-	// 2013.04.22 Moca NEL,LS,PS対応。暫定でLFと同じにする
+	case EolType::LF:	// 下向き矢印
 		{
 			sx = rcEol.left + (rcEol.Width() / 2);
 			sy = rcEol.top + (rcEol.Height() * 3 / 4);

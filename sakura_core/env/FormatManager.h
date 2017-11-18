@@ -9,7 +9,7 @@ public:
 	FormatManager() {
 		pShareData = &GetDllShareData();
 	}
-	// ‘® //@@@ 2002.2.9 YAZAKI
+	// ‘®
 	// ‹¤—LDllSharedDataˆË‘¶
 	const TCHAR* MyGetDateFormat(const SYSTEMTIME& systime, TCHAR* pszDest, int nDestLen);
 	const TCHAR* MyGetTimeFormat(const SYSTEMTIME& systime, TCHAR* pszDest, int nDestLen);

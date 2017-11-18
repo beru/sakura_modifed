@@ -3,7 +3,7 @@
 #include "StdAfx.h"
 #include "PropTypes.h"
 #include "env/ShareData.h"
-#include "typeprop/ImpExpManager.h"	// 2010/4/23 Uchi
+#include "typeprop/ImpExpManager.h"
 #include "DlgSameColor.h"
 #include "DlgKeywordSelect.h"
 #include "view/colors/EColorIndexType.h"

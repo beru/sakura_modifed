@@ -5,7 +5,7 @@
 #include "func/FuncLookup.h" // MacroRec
 #include "io/File.h" // ShareMode
 
-// Apr. 05, 2003 genta WindowCaption—p—Ìˆæi•ÏŠ·‘Oj‚Ì’·‚³
+// WindowCaption—p—Ìˆæi•ÏŠ·‘Oj‚Ì’·‚³
 static const uint32_t MAX_CAPTION_CONF_LEN = 256;
 
 static const uint32_t MAX_DATETIMEFOREMAT_LEN	= 100;
@@ -16,17 +16,11 @@ static const uint32_t MAX_TOOLBAR_BUTTON_ITEMS	= 512;	// ƒc[ƒ‹ƒo[‚É“o˜^‰Â”\‚Èƒ
 static const uint32_t MAX_TOOLBAR_ICON_X		=  32;	// ƒAƒCƒRƒ“BMP‚ÌŒ…”
 static const uint32_t MAX_TOOLBAR_ICON_Y		=  15;	// ƒAƒCƒRƒ“BMP‚Ì’i”
 static const uint32_t MAX_TOOLBAR_ICON_COUNT	= MAX_TOOLBAR_ICON_X * MAX_TOOLBAR_ICON_Y; // =480
-// Oct. 22, 2000 JEPRO ƒAƒCƒRƒ“‚ÌÅ‘å“o˜^”‚ð128ŒÂ‘‚â‚µ‚½(256¨384)	
-// 2010/3/14 Uchi ƒAƒCƒRƒ“‚ÌÅ‘å“o˜^”‚ð32ŒÂ‘‚â‚µ‚½(384¨416)
-// 2010/6/26 syat ƒAƒCƒRƒ“‚ÌÅ‘å“o˜^”‚ð15’i‚É‘‚â‚µ‚½(416¨480)
-
-// ‹Œ”Å‚Æˆá‚¢AboolŒ^Žg‚¦‚é‚æ‚¤‚É‚µ‚Ä‚ ‚è‚Ü‚· by kobake
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                           ‘S”Ê                              //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 struct CommonSetting_General {
-	// Jul. 3, 2000 genta
 	// ƒAƒNƒZƒXŠÖ”(ŠÈˆÕ)
 	// int‚ðƒrƒbƒg’PˆÊ‚É•ªŠ„‚µ‚ÄŽg‚¤
 	// ‰º4bit‚ðCaretType‚É“–‚Ä‚Ä‚¨‚­(«—ˆ‚Ì—\–ñ‚Å‘½‚ß‚ÉŽæ‚Á‚Ä‚¨‚­)
@@ -39,13 +33,13 @@ struct CommonSetting_General {
 	bool	bIsFreeCursorMode;					// ƒtƒŠ[ƒJ[ƒ\ƒ‹ƒ‚[ƒh‚©
 	bool	bStopsBothEndsWhenSearchWord;		// ’PŒê’PˆÊ‚ÅˆÚ“®‚·‚é‚Æ‚«‚ÉA’PŒê‚Ì—¼’[‚ÅŽ~‚Ü‚é‚©
 	bool	bStopsBothEndsWhenSearchParagraph;	// ’i—Ž’PˆÊ‚ÅˆÚ“®‚·‚é‚Æ‚«‚ÉA’i—Ž‚Ì—¼’[‚ÅŽ~‚Ü‚é‚©
-	bool	bNoCaretMoveByActivation;			// ƒ}ƒEƒXƒNƒŠƒbƒN‚É‚ÄƒAƒNƒeƒBƒx[ƒg‚³‚ê‚½Žž‚ÍƒJ[ƒ\ƒ‹ˆÊ’u‚ðˆÚ“®‚µ‚È‚¢  2007.10.02 nasukoji (add by genta)
+	bool	bNoCaretMoveByActivation;			// ƒ}ƒEƒXƒNƒŠƒbƒN‚É‚ÄƒAƒNƒeƒBƒx[ƒg‚³‚ê‚½Žž‚ÍƒJ[ƒ\ƒ‹ˆÊ’u‚ðˆÚ“®‚µ‚È‚¢
 
 	// ƒXƒNƒ[ƒ‹
 	int		nRepeatedScrollLineNum;			// ƒL[ƒŠƒs[ƒgŽž‚ÌƒXƒNƒ[ƒ‹s”
 	bool	nRepeatedScroll_Smooth;			// ƒL[ƒŠƒs[ƒgŽž‚ÌƒXƒNƒ[ƒ‹‚ðŠŠ‚ç‚©‚É‚·‚é‚©
-	int		nPageScrollByWheel;				// ƒL[/ƒ}ƒEƒXƒ{ƒ^ƒ“ + ƒzƒC[ƒ‹ƒXƒNƒ[ƒ‹‚Åƒy[ƒWUP/DOWN‚·‚é	// 2009.01.17 nasukoji
-	int		nHorizontalScrollByWheel;		// ƒL[/ƒ}ƒEƒXƒ{ƒ^ƒ“ + ƒzƒC[ƒ‹ƒXƒNƒ[ƒ‹‚Å‰¡ƒXƒNƒ[ƒ‹‚·‚é		// 2009.01.17 nasukoji
+	int		nPageScrollByWheel;				// ƒL[/ƒ}ƒEƒXƒ{ƒ^ƒ“ + ƒzƒC[ƒ‹ƒXƒNƒ[ƒ‹‚Åƒy[ƒWUP/DOWN‚·‚é
+	int		nHorizontalScrollByWheel;		// ƒL[/ƒ}ƒEƒXƒ{ƒ^ƒ“ + ƒzƒC[ƒ‹ƒXƒNƒ[ƒ‹‚Å‰¡ƒXƒNƒ[ƒ‹‚·‚é
 
 	// ƒ^ƒXƒNƒgƒŒƒC
 	bool	bUseTaskTray;					// ƒ^ƒXƒNƒgƒŒƒC‚ÌƒAƒCƒRƒ“‚ðŽg‚¤
@@ -58,7 +52,7 @@ struct CommonSetting_General {
 	size_t	nOPENFOLDERArrNum_MAX;			// ƒtƒHƒ‹ƒ_‚Ì—š—ðMAX
 
 	// ƒm[ƒJƒeƒSƒŠ
-	bool	bCloseAllConfirm;				// [‚·‚×‚Ä•Â‚¶‚é]‚Å‘¼‚É•ÒW—p‚ÌƒEƒBƒ“ƒhƒE‚ª‚ ‚ê‚ÎŠm”F‚·‚é	// 2006.12.25 ryoji
+	bool	bCloseAllConfirm;				// [‚·‚×‚Ä•Â‚¶‚é]‚Å‘¼‚É•ÒW—p‚ÌƒEƒBƒ“ƒhƒE‚ª‚ ‚ê‚ÎŠm”F‚·‚é
 	bool	bExitConfirm;					// I—¹Žž‚ÌŠm”F‚ð‚·‚é
 
 	// INI“àÝ’è‚Ì‚Ý
@@ -68,7 +62,6 @@ struct CommonSetting_General {
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                        ƒEƒBƒ“ƒhƒE                           //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-// 2004.05.13 Moca
 // ƒEƒBƒ“ƒhƒEƒTƒCƒYEˆÊ’u‚Ì§Œä•û–@
 enum class WinSizeMode {
 	Default		= 0,	// Žw’è‚È‚µ
@@ -87,34 +80,34 @@ struct CommonSetting_Window {
 	bool			bUseCompatibleBMP;			// Äì‰æ—pŒÝŠ·ƒrƒbƒgƒ}ƒbƒv‚ðŽg‚¤ 2007.09.09 Moca
 
 	// ˆÊ’u‚Æ‘å‚«‚³‚ÌÝ’è
-	WinSizeMode		eSaveWindowSize;			// ƒEƒBƒ“ƒhƒEƒTƒCƒYŒp³EŒÅ’è WinSizeMode‚É‡‚¸‚é 2004.05.13 Moca
+	WinSizeMode		eSaveWindowSize;			// ƒEƒBƒ“ƒhƒEƒTƒCƒYŒp³EŒÅ’è WinSizeMode‚É‡‚¸‚é
 	int				nWinSizeType;				// ‘å‚«‚³‚ÌŽw’è
 	int				nWinSizeCX;					// ’¼ÚŽw’è •
 	int				nWinSizeCY;					// ’¼ÚŽw’è ‚‚³
-	WinSizeMode		eSaveWindowPos;				// ƒEƒBƒ“ƒhƒEˆÊ’uŒp³EŒÅ’è WinSizeMode‚É‡‚¸‚é 2004.05.13 Moca
+	WinSizeMode		eSaveWindowPos;				// ƒEƒBƒ“ƒhƒEˆÊ’uŒp³EŒÅ’è WinSizeMode‚É‡‚¸‚é
 	int				nWinPosX;					// ’¼ÚŽw’è XÀ•W
 	int				nWinPosY;					// ’¼ÚŽw’è YÀ•W
 
 	// ƒtƒ@ƒ“ƒNƒVƒ‡ƒ“ƒL[
 	int				nFuncKeyWnd_Place;			// ƒtƒ@ƒ“ƒNƒVƒ‡ƒ“ƒL[•\Ž¦ˆÊ’u^0:ã 1:‰º
-	int				nFuncKeyWnd_GroupNum;		// 2002/11/04 Moca ƒtƒ@ƒ“ƒNƒVƒ‡ƒ“ƒL[‚ÌƒOƒ‹[ƒvƒ{ƒ^ƒ“”
+	int				nFuncKeyWnd_GroupNum;		// ƒtƒ@ƒ“ƒNƒVƒ‡ƒ“ƒL[‚ÌƒOƒ‹[ƒvƒ{ƒ^ƒ“”
 
 	// ƒ‹[ƒ‰[Es”Ô†
 	int				nRulerHeight;				// ƒ‹[ƒ‰[‚‚³
 	int				nRulerBottomSpace;			// ƒ‹[ƒ‰[‚ÆƒeƒLƒXƒg‚ÌŒ„ŠÔ
 	int				nRulerType;					// ƒ‹[ƒ‰[‚Ìƒ^ƒCƒv $$$–¢Žg—p‚Á‚Û‚¢
-	int				nLineNumRightSpace;			// s”Ô†‚Ì‰E‚ÌƒXƒy[ƒX Sep. 18, 2002 genta
+	int				nLineNumRightSpace;			// s”Ô†‚Ì‰E‚ÌƒXƒy[ƒX
 
 	// •ªŠ„ƒEƒBƒ“ƒhƒE
-	bool			bSplitterWndHScroll;		// •ªŠ„ƒEƒBƒ“ƒhƒE‚Ì…•½ƒXƒNƒ[ƒ‹‚Ì“¯Šú‚ð‚Æ‚é 2001/06/20 asa-o
-	bool			bSplitterWndVScroll;		// •ªŠ„ƒEƒBƒ“ƒhƒE‚Ì‚’¼ƒXƒNƒ[ƒ‹‚Ì“¯Šú‚ð‚Æ‚é 2001/06/20 asa-o
+	bool			bSplitterWndHScroll;		// •ªŠ„ƒEƒBƒ“ƒhƒE‚Ì…•½ƒXƒNƒ[ƒ‹‚Ì“¯Šú‚ð‚Æ‚é
+	bool			bSplitterWndVScroll;		// •ªŠ„ƒEƒBƒ“ƒhƒE‚Ì‚’¼ƒXƒNƒ[ƒ‹‚Ì“¯Šú‚ð‚Æ‚é
 
 	// ƒ^ƒCƒgƒ‹ƒo[
 	TCHAR			szWindowCaptionActive[MAX_CAPTION_CONF_LEN];	// ƒ^ƒCƒgƒ‹ƒo[(ƒAƒNƒeƒBƒuŽž)
 	TCHAR			szWindowCaptionInactive[MAX_CAPTION_CONF_LEN];	// ƒ^ƒCƒgƒ‹ƒo[(”ñƒAƒNƒeƒBƒuŽž)
 
 	// INI“àÝ’è‚Ì‚Ý
-	int				nVertLineOffset;			// cü‚Ì•`‰æÀ•WƒIƒtƒZƒbƒg 2005.11.10 Moca
+	int				nVertLineOffset;			// cü‚Ì•`‰æÀ•WƒIƒtƒZƒbƒg
 
 	// Œ¾Œê‘I‘ð
 	TCHAR			szLanguageDll[MAX_PATH];	// Œ¾ŒêDLLƒtƒ@ƒCƒ‹–¼
@@ -144,24 +137,24 @@ enum class TabPosition {
 };
 
 struct CommonSetting_TabBar {
-	bool		bDispTabWnd;					// ƒ^ƒuƒEƒBƒ“ƒhƒE•\Ž¦‚·‚é	//@@@ 2003.05.31 MIK
-	bool		bDispTabWndMultiWin;			// ƒ^ƒu‚ð‚Ü‚Æ‚ß‚È‚¢	//@@@ 2003.05.31 MIK
+	bool		bDispTabWnd;					// ƒ^ƒuƒEƒBƒ“ƒhƒE•\Ž¦‚·‚é
+	bool		bDispTabWndMultiWin;			// ƒ^ƒu‚ð‚Ü‚Æ‚ß‚È‚¢
 	bool		bTab_RetainEmptyWin;			// ÅŒã‚Ì•¶‘‚ª•Â‚¶‚ç‚ê‚½‚Æ‚«(–³‘è)‚ðŽc‚·
 	bool		bTab_CloseOneWin;				// ƒ^ƒuƒ‚[ƒh‚Å‚àƒEƒBƒ“ƒhƒE‚Ì•Â‚¶‚éƒ{ƒ^ƒ“‚ÅŒ»Ý‚Ìƒtƒ@ƒCƒ‹‚Ì‚Ý•Â‚¶‚é
 	bool		bNewWindow;						// ŠO•”‚©‚ç‹N“®‚·‚é‚Æ‚«‚ÍV‚µ‚¢ƒEƒBƒ“ƒhƒE‚ÅŠJ‚­
 	bool		bTabMultiLine;					// ƒ^ƒu‘½’i
 	TabPosition	eTabPosition;					// ƒ^ƒuˆÊ’u
 
-	wchar_t		szTabWndCaption[MAX_CAPTION_CONF_LEN];	// ƒ^ƒuƒEƒBƒ“ƒhƒEƒLƒƒƒvƒVƒ‡ƒ“	//@@@ 2003.06.13 MIK
-	bool		bSameTabWidth;					// ƒ^ƒu‚ð“™•‚É‚·‚é			//@@@ 2006.01.28 ryoji
-	bool		bDispTabIcon;					// ƒ^ƒu‚ÉƒAƒCƒRƒ“‚ð•\Ž¦‚·‚é	//@@@ 2006.01.28 ryoji
-	DispTabCloseType	dispTabClose;			// ƒ^ƒu‚É•Â‚¶‚éƒ{ƒ^ƒ“‚ð•\Ž¦‚·‚é	//@@@ 2012.04.14 syat
-	bool		bSortTabList;					// ƒ^ƒuˆê——‚ðƒ\[ƒg‚·‚é	//@@@ 2006.03.23 fon
-	bool		bTab_ListFull;					// ƒ^ƒuˆê——‚ðƒtƒ‹ƒpƒX•\Ž¦‚·‚é	//@@@ 2007.02.28 ryoji
+	wchar_t		szTabWndCaption[MAX_CAPTION_CONF_LEN];	// ƒ^ƒuƒEƒBƒ“ƒhƒEƒLƒƒƒvƒVƒ‡ƒ“
+	bool		bSameTabWidth;					// ƒ^ƒu‚ð“™•‚É‚·‚é
+	bool		bDispTabIcon;					// ƒ^ƒu‚ÉƒAƒCƒRƒ“‚ð•\Ž¦‚·‚é
+	DispTabCloseType	dispTabClose;			// ƒ^ƒu‚É•Â‚¶‚éƒ{ƒ^ƒ“‚ð•\Ž¦‚·‚é
+	bool		bSortTabList;					// ƒ^ƒuˆê——‚ðƒ\[ƒg‚·‚é
+	bool		bTab_ListFull;					// ƒ^ƒuˆê——‚ðƒtƒ‹ƒpƒX•\Ž¦‚·‚é
 
-	bool		bChgWndByWheel;					// ƒ}ƒEƒXƒzƒC[ƒ‹‚ÅƒEƒBƒ“ƒhƒEØ‚è‘Ö‚¦	//@@@ 2006.03.26 ryoji
+	bool		bChgWndByWheel;					// ƒ}ƒEƒXƒzƒC[ƒ‹‚ÅƒEƒBƒ“ƒhƒEØ‚è‘Ö‚¦
 
-	LOGFONT		lf;								// ƒ^ƒuƒtƒHƒ“ƒg // 2011.12.01 Moca
+	LOGFONT		lf;								// ƒ^ƒuƒtƒHƒ“ƒg
 	INT			nPointSize;						// ƒtƒHƒ“ƒgƒTƒCƒYi1/10ƒ|ƒCƒ“ƒg’PˆÊj
 	int			nTabMaxWidth;					// ƒ^ƒu•‚ÌÅ‘å’l
 	int			nTabMinWidth;					// ƒ^ƒu•‚ÌÅ¬’l
@@ -181,10 +174,10 @@ enum EOpenDialogDir {
 struct CommonSetting_Edit {
 	// ƒRƒs[
 	bool	bAddCRLFWhenCopy;			// Ü‚è•Ô‚µs‚É‰üs‚ð•t‚¯‚ÄƒRƒs[
-	bool	bEnableNoSelectCopy;		// ‘I‘ð‚È‚µ‚ÅƒRƒs[‚ð‰Â”\‚É‚·‚é 2007.11.18 ryoji
+	bool	bEnableNoSelectCopy;		// ‘I‘ð‚È‚µ‚ÅƒRƒs[‚ð‰Â”\‚É‚·‚é
 	bool	bCopyAndDisablSelection;	// ƒRƒs[‚µ‚½‚ç‘I‘ð‰ðœ
-	bool	bEnableLineModePaste;		// ƒ‰ƒCƒ“ƒ‚[ƒh“\‚è•t‚¯‚ð‰Â”\‚É‚·‚é  2007.10.08 ryoji
-	bool	bConvertEOLPaste;			// ‰üsƒR[ƒh‚ð•ÏŠ·‚µ‚Ä“\‚è•t‚¯‚é  2009.2.28 salarm
+	bool	bEnableLineModePaste;		// ƒ‰ƒCƒ“ƒ‚[ƒh“\‚è•t‚¯‚ð‰Â”\‚É‚·‚é
+	bool	bConvertEOLPaste;			// ‰üsƒR[ƒh‚ð•ÏŠ·‚µ‚Ä“\‚è•t‚¯‚é
 
 	// ƒhƒ‰ƒbƒO•ƒhƒƒbƒv
 	bool	bUseOLE_DragDrop;			// OLE‚É‚æ‚éƒhƒ‰ƒbƒO & ƒhƒƒbƒv‚ðŽg‚¤
@@ -214,23 +207,23 @@ struct CommonSetting_Edit {
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 struct CommonSetting_File {
 public:
-	// ƒJ[ƒ\ƒ‹ˆÊ’u‚ð•œŒ³‚·‚é‚©‚Ç‚¤‚©  Oct. 27, 2000 genta
+	// ƒJ[ƒ\ƒ‹ˆÊ’u‚ð•œŒ³‚·‚é‚©‚Ç‚¤‚©
 	bool	GetRestoreCurPosition() const		{ return bRestoreCurPosition; }
 	void	SetRestoreCurPosition(bool i)		{ bRestoreCurPosition = i; }
 
-	// ƒuƒbƒNƒ}[ƒN‚ð•œŒ³‚·‚é‚©‚Ç‚¤‚©  2002.01.16 hor
+	// ƒuƒbƒNƒ}[ƒN‚ð•œŒ³‚·‚é‚©‚Ç‚¤‚©
 	bool	GetRestoreBookmarks() const			{ return bRestoreBookmarks; }
 	void	SetRestoreBookmarks(bool i)			{ bRestoreBookmarks = i; }
 
-	// ƒtƒ@ƒCƒ‹“Ç‚Ýž‚ÝŽž‚ÉMIME‚Ìdecode‚ðs‚¤‚©  Nov. 12, 2000 genta
+	// ƒtƒ@ƒCƒ‹“Ç‚Ýž‚ÝŽž‚ÉMIME‚Ìdecode‚ðs‚¤‚©
 	bool	GetAutoMIMEdecode() const			{ return bAutoMimeDecode; }
 	void	SetAutoMIMEdecode(bool i)			{ bAutoMimeDecode = i; }
 
-	// ‘O‰ñ‚Æ•¶ŽšƒR[ƒh‚ªˆÙ‚È‚é‚Æ‚«‚É–â‚¢‡‚í‚¹‚ðs‚¤  Oct. 03, 2004 genta
+	// ‘O‰ñ‚Æ•¶ŽšƒR[ƒh‚ªˆÙ‚È‚é‚Æ‚«‚É–â‚¢‡‚í‚¹‚ðs‚¤
 	bool	GetQueryIfCodeChange() const		{ return bQueryIfCodeChange; }
 	void	SetQueryIfCodeChange(bool i)		{ bQueryIfCodeChange = i; }
 	
-	// ŠJ‚±‚¤‚Æ‚µ‚½ƒtƒ@ƒCƒ‹‚ª‘¶Ý‚µ‚È‚¢‚Æ‚«Œx‚·‚é  Oct. 09, 2004 genta
+	// ŠJ‚±‚¤‚Æ‚µ‚½ƒtƒ@ƒCƒ‹‚ª‘¶Ý‚µ‚È‚¢‚Æ‚«Œx‚·‚é
 	bool	GetAlertIfFileNotExist() const		{ return bAlertIfFileNotExist; }
 	void	SetAlertIfFileNotExist(bool i)		{ bAlertIfFileNotExist = i; }
 
@@ -245,7 +238,7 @@ public:
 	bool	bEnableUnmodifiedOverwrite;		// –³•ÏX‚Å‚àã‘‚«‚·‚é‚©
 
 	//u–¼‘O‚ð•t‚¯‚Ä•Û‘¶v‚Åƒtƒ@ƒCƒ‹‚ÌŽí—Þ‚ª[ƒ†[ƒU[Žw’è]‚Ì‚Æ‚«‚Ìƒtƒ@ƒCƒ‹ˆê——•\Ž¦
-	// ƒtƒ@ƒCƒ‹•Û‘¶ƒ_ƒCƒAƒƒO‚ÌƒtƒBƒ‹ƒ^Ý’è	// 2006.11.16 ryoji
+	// ƒtƒ@ƒCƒ‹•Û‘¶ƒ_ƒCƒAƒƒO‚ÌƒtƒBƒ‹ƒ^Ý’è
 	bool	bNoFilterSaveNew;				// V‹K‚©‚ç•Û‘¶Žž‚Í‘Sƒtƒ@ƒCƒ‹•\Ž¦
 	bool	bNoFilterSaveFile;				// V‹KˆÈŠO‚©‚ç•Û‘¶Žž‚Í‘Sƒtƒ@ƒCƒ‹•\Ž¦
 
@@ -253,10 +246,10 @@ public:
 	bool	bDropFileAndClose;				// ƒtƒ@ƒCƒ‹‚ðƒhƒƒbƒv‚µ‚½‚Æ‚«‚Í•Â‚¶‚ÄŠJ‚­
 	UINT	nDropFileNumMax;				// ˆê“x‚Éƒhƒƒbƒv‰Â”\‚Èƒtƒ@ƒCƒ‹”
 	bool	bRestoreCurPosition;			// ƒtƒ@ƒCƒ‹‚ðŠJ‚¢‚½‚Æ‚«ƒJ[ƒ\ƒ‹ˆÊ’u‚ð•œŒ³‚·‚é‚©
-	bool	bRestoreBookmarks;				// ƒuƒbƒNƒ}[ƒN‚ð•œŒ³‚·‚é‚©‚Ç‚¤‚© 2002.01.16 hor
+	bool	bRestoreBookmarks;				// ƒuƒbƒNƒ}[ƒN‚ð•œŒ³‚·‚é‚©‚Ç‚¤‚©
 	bool	bAutoMimeDecode;				// ƒtƒ@ƒCƒ‹“Ç‚Ýž‚ÝŽž‚ÉMIME‚Ìdecode‚ðs‚¤‚©
-	bool	bQueryIfCodeChange;				// ‘O‰ñ‚Æ•¶ŽšƒR[ƒh‚ªˆÙ‚È‚é‚Æ‚«‚É–â‚¢‡‚í‚¹‚ðs‚¤ Oct. 03, 2004 genta
-	bool	bAlertIfFileNotExist;			// ŠJ‚±‚¤‚Æ‚µ‚½ƒtƒ@ƒCƒ‹‚ª‘¶Ý‚µ‚È‚¢‚Æ‚«Œx‚·‚é Oct. 09, 2004 genta
+	bool	bQueryIfCodeChange;				// ‘O‰ñ‚Æ•¶ŽšƒR[ƒh‚ªˆÙ‚È‚é‚Æ‚«‚É–â‚¢‡‚í‚¹‚ðs‚¤
+	bool	bAlertIfFileNotExist;			// ŠJ‚±‚¤‚Æ‚µ‚½ƒtƒ@ƒCƒ‹‚ª‘¶Ý‚µ‚È‚¢‚Æ‚«Œx‚·‚é
 	bool	bAlertIfLargeFile;				// ŠJ‚±‚¤‚Æ‚µ‚½ƒtƒ@ƒCƒ‹ƒTƒCƒY‚ª‘å‚«‚¢ê‡‚ÉŒx‚·‚é
 	int		nAlertFileSize;					// Œx‚ðŽn‚ß‚éƒtƒ@ƒCƒ‹ƒTƒCƒY(MB)
 };
@@ -265,7 +258,6 @@ public:
 //                       ƒoƒbƒNƒAƒbƒv                          //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-// Aug. 15, 2000 genta
 // Backup Flags
 enum EBackupOptionFlag {
 	BKUP_YEAR		= 32,
@@ -275,13 +267,11 @@ enum EBackupOptionFlag {
 	BKUP_MIN		= 2,
 	BKUP_SEC		= 1,
 
-	// Aug. 21, 2000 genta
 	BKUP_AUTO		= 64,
 };
 
 struct CommonSetting_Backup {
 public:
-	// Aug. 15, 2000 genta
 	// BackupÝ’è‚ÌƒAƒNƒZƒXŠÖ”
 	int		GetBackupType(void) const			{ return nBackUpType; }
 	void	SetBackupType(int n)				{ nBackUpType = n; }
@@ -297,7 +287,6 @@ public:
 	TCHAR	GetBackupExtChar(void) const		{ return (TCHAR)((nBackUpType_Opt2 >> 16) & 0xff) ; }
 	void	SetBackupExtChar(int value)			{ nBackUpType_Opt2 = (nBackUpType_Opt2 & 0xff00ffff) | ((value & 0xff) << 16); }
 
-	// Aug. 21, 2000 genta
 	// Ž©“®Backup
 	bool	IsAutoBackupEnabled(void) const		{ return GetBackupOpt(BKUP_AUTO); }
 	void	EnableAutoBackup(bool flag)			{ SetBackupOpt(BKUP_AUTO, flag); }
@@ -322,9 +311,9 @@ public:
 	int 		nBackUpType_Opt4;			// ƒoƒbƒNƒAƒbƒvƒtƒ@ƒCƒ‹–¼FƒIƒvƒVƒ‡ƒ“4
 	int 		nBackUpType_Opt5;			// ƒoƒbƒNƒAƒbƒvƒtƒ@ƒCƒ‹–¼FƒIƒvƒVƒ‡ƒ“5
 	int 		nBackUpType_Opt6;			// ƒoƒbƒNƒAƒbƒvƒtƒ@ƒCƒ‹–¼FƒIƒvƒVƒ‡ƒ“6
-	bool		bBackUpDustBox;				// ƒoƒbƒNƒAƒbƒvƒtƒ@ƒCƒ‹‚ð‚²‚Ý” ‚É•ú‚èž‚Þ	//@@@ 2001.12.11 add MIK
-	bool		bBackUpPathAdvanced;		// ƒoƒbƒNƒAƒbƒvæƒtƒHƒ‹ƒ_‚ðÚ×Ý’è‚·‚é 20051107 aroka
-	SFilePath	szBackUpPathAdvanced;		// ƒoƒbƒNƒAƒbƒv‚ðì¬‚·‚éƒtƒHƒ‹ƒ_‚ÌÚ×Ý’è 20051107 aroka
+	bool		bBackUpDustBox;				// ƒoƒbƒNƒAƒbƒvƒtƒ@ƒCƒ‹‚ð‚²‚Ý” ‚É•ú‚èž‚Þ
+	bool		bBackUpPathAdvanced;		// ƒoƒbƒNƒAƒbƒvæƒtƒHƒ‹ƒ_‚ðÚ×Ý’è‚·‚é
+	SFilePath	szBackUpPathAdvanced;		// ƒoƒbƒNƒAƒbƒv‚ðì¬‚·‚éƒtƒHƒ‹ƒ_‚ÌÚ×Ý’è
 };
 
 
@@ -356,7 +345,7 @@ struct CommonSetting_Search {
 	SearchOption	searchOption;				// ŒŸõ^’uŠ·  ðŒ
 
 	int				nReplaceKeySequence;		// ’uŠ·ŒãƒV[ƒPƒ“ƒX(–¢•Û‘¶)
-	bool			bConsecutiveAll;			//u‚·‚×‚Ä’uŠ·v‚Í’uŠ·‚ÌŒJ•Ô‚µ	// 2007.01.16 ryoji
+	bool			bConsecutiveAll;			//u‚·‚×‚Ä’uŠ·v‚Í’uŠ·‚ÌŒJ•Ô‚µ
 	bool			bNotifyNotFound;			// ŒŸõ^’uŠ·  Œ©‚Â‚©‚ç‚È‚¢‚Æ‚«ƒƒbƒZ[ƒW‚ð•\Ž¦
 	bool			bSelectedArea;				// ’uŠ·  ‘I‘ð”ÍˆÍ“à’uŠ·
 
@@ -364,19 +353,19 @@ struct CommonSetting_Search {
 	int				nGrepOutputLineType;		// Grep: s‚ðo—Í/ŠY“–•”•ª/”Ûƒ}ƒbƒ`s ‚ðo—Í
 	int				nGrepOutputStyle;			// Grep: o—ÍŒ`Ž®
 	bool			bGrepDefaultFolder;			// Grep: ƒtƒHƒ‹ƒ_‚Ì‰Šú’l‚ðƒJƒŒƒ“ƒgƒtƒHƒ‹ƒ_‚É‚·‚é
-	EncodingType	nGrepCharSet;				// Grep: •¶ŽšƒR[ƒhƒZƒbƒg // 2002/09/20 Moca Add
+	EncodingType	nGrepCharSet;				// Grep: •¶ŽšƒR[ƒhƒZƒbƒg
 	bool			bGrepOutputFileOnly;		// Grep: ƒtƒ@ƒCƒ‹–ˆÅ‰‚Ì‚ÝŒŸõ
 	bool			bGrepOutputBaseFolder;		// Grep: ƒx[ƒXƒtƒHƒ‹ƒ_•\Ž¦
 	bool			bGrepSeparateFolder;		// Grep: ƒtƒHƒ‹ƒ_–ˆ‚É•\Ž¦
 	bool			bGrepBackup;				// Grep: ƒoƒbƒNƒAƒbƒvì¬
 	
-	bool			bCaretTextForSearch;		// ƒJ[ƒ\ƒ‹ˆÊ’u‚Ì•¶Žš—ñ‚ðƒfƒtƒHƒ‹ƒg‚ÌŒŸõ•¶Žš—ñ‚É‚·‚é 2006.08.23 ryoji
+	bool			bCaretTextForSearch;		// ƒJ[ƒ\ƒ‹ˆÊ’u‚Ì•¶Žš—ñ‚ðƒfƒtƒHƒ‹ƒg‚ÌŒŸõ•¶Žš—ñ‚É‚·‚é
 	bool			bInheritKeyOtherView;		// ŽŸE‘OŒŸõ‚Å‘¼‚Ìƒrƒ…[‚ÌŒŸõðŒ‚ðˆø‚«Œp‚®
-	TCHAR			szRegexpLib[_MAX_PATH];		// Žg—p‚·‚é³‹K•\Œ»DLL  2007.08.22 genta
+	TCHAR			szRegexpLib[_MAX_PATH];		// Žg—p‚·‚é³‹K•\Œ»DLL
 
 	// Grep
 	bool			bGrepExitConfirm;			// Grepƒ‚[ƒh‚Å•Û‘¶Šm”F‚·‚é‚©
-	bool			bGrepRealTimeView;			// GrepŒ‹‰Ê‚ÌƒŠƒAƒ‹ƒ^ƒCƒ€•\Ž¦ 2003.06.16 Moca
+	bool			bGrepRealTimeView;			// GrepŒ‹‰Ê‚ÌƒŠƒAƒ‹ƒ^ƒCƒ€•\Ž¦
 
 	bool			bGTJW_Return;				// ƒGƒ“ƒ^[ƒL[‚Åƒ^ƒOƒWƒƒƒ“ƒv
 	bool			bGTJW_DoubleClick;			// ƒ_ƒuƒ‹ƒNƒŠƒbƒN‚Åƒ^ƒOƒWƒƒƒ“ƒv
@@ -384,13 +373,13 @@ struct CommonSetting_Search {
 	// ŒŸõE’uŠ·ƒ_ƒCƒAƒƒO
 	bool			bAutoCloseDlgFind;			// ŒŸõƒ_ƒCƒAƒƒO‚ðŽ©“®“I‚É•Â‚¶‚é
 	bool			bAutoCloseDlgReplace;		// ’uŠ· ƒ_ƒCƒAƒƒO‚ðŽ©“®“I‚É•Â‚¶‚é
-	bool			bSearchAll;					// æ“ªi––”öj‚©‚çÄŒŸõ 2002.01.26 hor
+	bool			bSearchAll;					// æ“ªi––”öj‚©‚çÄŒŸõ
 
 	int				nTagJumpMode;				// ƒ^ƒOƒWƒƒƒ“ƒvƒ‚[ƒh(0-3)
 	int				nTagJumpModeKeyword;		// ƒ^ƒOƒWƒƒƒ“ƒvƒ‚[ƒh(0-3)
 
 	// INI“àÝ’è‚Ì‚Ý
-	bool			bUseCaretKeyword;			// ƒLƒƒƒŒƒbƒgˆÊ’u‚Ì’PŒê‚ðŽ«‘ŒŸõ		// 2006.03.24 fon
+	bool			bUseCaretKeyword;			// ƒLƒƒƒŒƒbƒgˆÊ’u‚Ì’PŒê‚ðŽ«‘ŒŸõ
 };
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -400,7 +389,7 @@ struct CommonSetting_KeyBind {
 	// ƒL[Š„‚è“–‚Ä
 	int					nKeyNameArrNum;					// ƒL[Š„‚è“–‚Ä•\‚Ì—LŒøƒf[ƒ^”
 	KeyData				pKeyNameArr[100 + 1];			// ƒL[Š„‚è“–‚Ä•\ –¢Š„‚è“–‚ÄƒL[ƒR[ƒh—p‚Éƒ_ƒ~[‚ð’Ç‰Á
-	BYTE				keyToKeyNameArr[256 + 10];		// ƒL[ƒR[ƒh¨Š„‚è“–‚Ä•\ƒCƒ“ƒfƒbƒNƒX // 2012.11.25 aroka
+	BYTE				keyToKeyNameArr[256 + 10];		// ƒL[ƒR[ƒh¨Š„‚è“–‚Ä•\ƒCƒ“ƒfƒbƒNƒX
 };
 
 
@@ -456,8 +445,8 @@ struct CommonSetting_Helper {
 	TCHAR		szMigemoDict[_MAX_PATH];		// migemo dict
 
 	// ƒL[ƒ[ƒhƒwƒ‹ƒv
-	LOGFONT		lf;								// ƒL[ƒ[ƒhƒwƒ‹ƒv‚ÌƒtƒHƒ“ƒgî•ñ		// ai 02/05/21 Add
-	INT			nPointSize;						// ƒL[ƒ[ƒhƒwƒ‹ƒv‚ÌƒtƒHƒ“ƒgƒTƒCƒYi1/10ƒ|ƒCƒ“ƒg’PˆÊj	// 2009.10.01 ryoji
+	LOGFONT		lf;								// ƒL[ƒ[ƒhƒwƒ‹ƒv‚ÌƒtƒHƒ“ƒgî•ñ
+	INT			nPointSize;						// ƒL[ƒ[ƒhƒwƒ‹ƒv‚ÌƒtƒHƒ“ƒgƒTƒCƒYi1/10ƒ|ƒCƒ“ƒg’PˆÊj
 
 	// INI“àÝ’è‚Ì‚Ý
 	bool		bUseHokan;						// “ü—Í•âŠ®‹@”\‚ðŽg—p‚·‚é
@@ -468,12 +457,12 @@ struct CommonSetting_Helper {
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 struct CommonSetting_Macro {
 	TCHAR		szKeyMacroFileName[MAX_PATH];	// ƒL[ƒ{[ƒhƒ}ƒNƒ‚Ìƒtƒ@ƒCƒ‹–¼
-	MacroRec	macroTable[MAX_CUSTMACRO];		// ƒL[Š„‚è“–‚Ä—pƒ}ƒNƒƒe[ƒuƒ‹	 Sep. 14, 2001 genta
+	MacroRec	macroTable[MAX_CUSTMACRO];		// ƒL[Š„‚è“–‚Ä—pƒ}ƒNƒƒe[ƒuƒ‹
 	SFilePath	szMACROFOLDER;					// ƒ}ƒNƒ—pƒtƒHƒ‹ƒ_
-	int			nMacroOnOpened;					// ƒI[ƒvƒ“ŒãŽ©“®ŽÀsƒ}ƒNƒ”Ô†		@@@ 2006.09.01 ryoji
-	int			nMacroOnTypeChanged;			// ƒ^ƒCƒv•ÏXŒãŽ©“®ŽÀsƒ}ƒNƒ”Ô†	@@@ 2006.09.01 ryoji
-	int			nMacroOnSave;					// •Û‘¶‘OŽ©“®ŽÀsƒ}ƒNƒ”Ô†			@@@ 2006.09.01 ryoji
-	int			nMacroCancelTimer;				// ƒ}ƒNƒ’âŽ~ƒ_ƒCƒAƒƒO•\Ž¦‘Ò‚¿ŽžŠÔ	@@@ 2011.08.04 syat
+	int			nMacroOnOpened;					// ƒI[ƒvƒ“ŒãŽ©“®ŽÀsƒ}ƒNƒ”Ô†
+	int			nMacroOnTypeChanged;			// ƒ^ƒCƒv•ÏXŒãŽ©“®ŽÀsƒ}ƒNƒ”Ô†
+	int			nMacroOnSave;					// •Û‘¶‘OŽ©“®ŽÀsƒ}ƒNƒ”Ô†
+	int			nMacroCancelTimer;				// ƒ}ƒNƒ’âŽ~ƒ_ƒCƒAƒƒO•\Ž¦‘Ò‚¿ŽžŠÔ
 };
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -484,7 +473,7 @@ struct CommonSetting_FileName {
 	int		nTransformShortMaxWidth;										// ƒtƒ@ƒCƒ‹–¼‚ÌÈ—ª•\‹L‚ÌÅ‘å’·
 	int		nTransformFileNameArrNum;										// ƒtƒ@ƒCƒ‹–¼‚ÌŠÈˆÕ•\Ž¦“o˜^”
 	TCHAR	szTransformFileNameFrom[MAX_TRANSFORM_FILENAME][_MAX_PATH];		// ƒtƒ@ƒCƒ‹–¼‚ÌŠÈˆÕ•\Ž¦•ÏŠ·‘O•¶Žš—ñ
-	TCHAR	szTransformFileNameTo[MAX_TRANSFORM_FILENAME][_MAX_PATH];		// ƒtƒ@ƒCƒ‹–¼‚ÌŠÈˆÕ•\Ž¦•ÏŠ·Œã•¶Žš—ñ	//@@@ 2003.04.08 MIK
+	TCHAR	szTransformFileNameTo[MAX_TRANSFORM_FILENAME][_MAX_PATH];		// ƒtƒ@ƒCƒ‹–¼‚ÌŠÈˆÕ•\Ž¦•ÏŠ·Œã•¶Žš—ñ
 };
 
 
@@ -558,8 +547,8 @@ struct CommonSetting_OutLine {
 
 	// IDD_FUNCLIST (ƒc[ƒ‹ - ƒAƒEƒgƒ‰ƒCƒ“‰ðÍ)
 	bool		bAutoCloseDlgFuncList;		// ƒAƒEƒgƒ‰ƒCƒ“ƒ_ƒCƒAƒƒO‚ðŽ©“®“I‚É•Â‚¶‚é
-	bool		bFunclistSetFocusOnJump;	// ƒtƒH[ƒJƒX‚ðˆÚ‚· 2002.02.08 hor
-	bool		bMarkUpBlankLineEnable;	// ‹ós‚ð–³Ž‹‚·‚é 2002.02.08 aroka,hor
+	bool		bFunclistSetFocusOnJump;	// ƒtƒH[ƒJƒX‚ðˆÚ‚·
+	bool		bMarkUpBlankLineEnable;	// ‹ós‚ð–³Ž‹‚·‚é
 
 	FileTree	fileTree;					// ƒtƒ@ƒCƒ‹ƒcƒŠ[Ý’è
 	SFilePath	fileTreeDefIniName;			// ƒtƒ@ƒCƒ‹ƒcƒŠ[Ý’è‚ÌƒfƒtƒHƒ‹ƒgƒtƒ@ƒCƒ‹–¼(GUI‚È‚µ)
@@ -580,7 +569,7 @@ struct CommonSetting_View {
 	// INI“àÝ’è‚Ì‚Ý
 	LOGFONT		lf;						// Œ»Ý‚ÌƒtƒHƒ“ƒgî•ñ
 	bool		bFontIs_FixedPitch;		// Œ»Ý‚ÌƒtƒHƒ“ƒg‚ÍŒÅ’è•ƒtƒHƒ“ƒg‚Å‚ ‚é
-	INT			nPointSize;				// ƒtƒHƒ“ƒgƒTƒCƒYi1/10ƒ|ƒCƒ“ƒg’PˆÊj	// 2009.10.01 ryoji
+	INT			nPointSize;				// ƒtƒHƒ“ƒgƒTƒCƒYi1/10ƒ|ƒCƒ“ƒg’PˆÊj
 };
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -627,7 +616,7 @@ struct PluginRec {
 	wchar_t			szId[MAX_PLUGIN_ID];		// ƒvƒ‰ƒOƒCƒ“ID
 	wchar_t			szName[MAX_PLUGIN_NAME];	// ƒvƒ‰ƒOƒCƒ“ƒtƒHƒ‹ƒ_/Ý’èƒtƒ@ƒCƒ‹–¼
 	EPluginState	state;						// ƒvƒ‰ƒOƒCƒ“ó‘ÔBÝ’èƒtƒ@ƒCƒ‹‚É•Û‘¶‚¹‚¸ƒƒ‚ƒŠã‚Ì‚ÝB
-	int 			nCmdNum;					// ƒvƒ‰ƒOƒCƒ“ ƒRƒ}ƒ“ƒh‚Ì”	// 2010/7/3 Uchi
+	int 			nCmdNum;					// ƒvƒ‰ƒOƒCƒ“ ƒRƒ}ƒ“ƒh‚Ì”
 };
 
 struct CommonSetting_Plugin {
@@ -695,8 +684,8 @@ struct CommonSetting {
 	CommonSetting_Others			others;				// ‚»‚Ì‘¼
 
 	//
-	CommonSetting_StatusBar			statusBar;			// ƒXƒe[ƒ^ƒXƒo[		// 2008/6/21 Uchi
-	CommonSetting_Plugin			plugin;				// ƒvƒ‰ƒOƒCƒ“ 2009/11/30 syat
-	CommonSetting_MainMenu			mainMenu;			// ƒƒCƒ“ƒƒjƒ…[		// 2010/5/15 Uchi
+	CommonSetting_StatusBar			statusBar;			// ƒXƒe[ƒ^ƒXƒo[
+	CommonSetting_Plugin			plugin;				// ƒvƒ‰ƒOƒCƒ“
+	CommonSetting_MainMenu			mainMenu;			// ƒƒCƒ“ƒƒjƒ…[
 };
 

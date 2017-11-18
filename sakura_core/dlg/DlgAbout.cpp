@@ -5,12 +5,11 @@
 #include "util/fileUtil.h"
 #include "util/module.h"
 #include "svnrev.h"
-#include "sakura_rc.h" // 2002/2/10 aroka 復帰
+#include "sakura_rc.h"
 #include "sakura.hh"
 
 // バージョン情報ダイアログ
 
-// バージョン情報 DlgAbout.cpp	//@@@ 2002.01.07 add start MIK
 const DWORD p_helpids[] = {	//12900
 	IDOK,					HIDOK_ABOUT,
 	IDC_EDIT_ABOUT,			HIDC_ABOUT_EDIT_ABOUT,
@@ -20,11 +19,8 @@ const DWORD p_helpids[] = {	//12900
 //	IDC_STATIC_VER,			12973,
 //	IDC_STATIC,				-1,
 	0, 0
-};	//@@@ 2002.01.07 add end MIK
+};
 
-// From Here Feb. 7, 2002 genta
-// 2006.01.17 Moca COMPILER_VERを追加
-// 2010.04.15 Moca icc/dmcを追加しCPUを分離
 #if defined(_M_IA64)
 #  define TARGET_M_SUFFIX "_I64"
 #elif defined(_M_AMD64)
@@ -52,7 +48,6 @@ const DWORD p_helpids[] = {	//12900
 #  define COMPILER_TYPE "U"
 #  define COMPILER_VER 0
 #endif
-// To Here Feb. 7, 2002 genta
 
 	#define TARGET_STRING_MODEL "W"
 
@@ -76,7 +71,6 @@ const DWORD p_helpids[] = {	//12900
 	#define MY_WIN32_WINNT 0
 #endif
 
-// From Here Nov. 7, 2000 genta
 /*!
 	標準以外のメッセージを捕捉する
 */
@@ -101,7 +95,6 @@ INT_PTR DlgAbout::DispatchEvent(
 	}
 	return result;
 }
-// To Here Nov. 7, 2000 genta
 
 // モーダルダイアログの表示
 INT_PTR DlgAbout::DoModal(HINSTANCE hInstance, HWND hwndParent)
@@ -109,11 +102,7 @@ INT_PTR DlgAbout::DoModal(HINSTANCE hInstance, HWND hwndParent)
 	return Dialog::DoModal(hInstance, hwndParent, IDD_ABOUT, (LPARAM)NULL);
 }
 
-/*! 初期化処理
-	@date 2008.05.05 novice GetModuleHandle(NULL)→NULLに変更
-	@date 2011.04.10 nasukoji	各国語メッセージリソース対応
-	@date 2013.04.07 novice svn revision 情報追加
-*/
+/*! 初期化処理 */
 BOOL DlgAbout::OnInitDialog(
 	HWND hwndDlg,
 	WPARAM wParam,
@@ -128,15 +117,6 @@ BOOL DlgAbout::OnInitDialog(
 	// この実行ファイルの情報
 	::GetModuleFileName(NULL, szFile, _countof(szFile));
 	
-	// Oct. 22, 2005 genta タイムスタンプ取得の共通関数利用
-
-	// バージョン情報
-	// Nov. 6, 2000 genta	Unofficial Releaseのバージョンとして設定
-	// Jun. 8, 2001 genta	GPL化に伴い、OfficialなReleaseとしての道を歩み始める
-	// Feb. 7, 2002 genta コンパイラ情報追加
-	// 2004.05.13 Moca バージョン番号は、プロセスごとに取得する
-	// 2010.04.15 Moca コンパイラ情報を分離/WINヘッダ,N_SHAREDATA_VERSION追加
-
 	// 以下の形式で出力
 	// サクラエディタ   Ver. 2.0.0.0 (Rev.9999)
 	//
@@ -205,18 +185,12 @@ BOOL DlgAbout::OnInitDialog(
 
 	SetItemText(IDC_EDIT_VER, memMsg.GetStringPtr());
 
-	// From Here Jun. 8, 2001 genta
-	// Edit Boxにメッセージを追加する．
-	// 2011.06.01 nasukoji	各国語メッセージリソース対応
 	LPCTSTR pszDesc = LS(IDS_ABOUT_DESCRIPTION);
 	if (_tcslen(pszDesc) > 0) {
 		_tcsncpy(szMsg, pszDesc, _countof(szMsg) - 1);
 		szMsg[_countof(szMsg) - 1] = 0;
 		SetItemText(IDC_EDIT_ABOUT, szMsg);
 	}
-	// To Here Jun. 8, 2001 genta
-
-	// From Here Dec. 2, 2002 genta
 	// アイコンをカスタマイズアイコンに合わせる
 	HICON hIcon = GetAppIcon(hInstance, ICON_DEFAULT_APP, FN_APP_ICON, false);
 	HWND hIconWnd = GetItemHwnd(IDC_STATIC_MYICON);
@@ -224,13 +198,9 @@ BOOL DlgAbout::OnInitDialog(
 	if (hIconWnd && hIcon) {
 		StCtl_SetIcon(hIconWnd, hIcon);
 	}
-	// To Here Dec. 2, 2002 genta
 
 	// URLウィンドウをサブクラス化する
 	UrlUrWnd.SetSubclassWindow(GetItemHwnd(IDC_STATIC_URL_UR));
-
-	// Oct. 22, 2005 genta 原作者ホームページが無くなったので削除
-	//UrlOrgWnd.SubclassWindow(GetItemHwnd(IDC_STATIC_URL_ORG));
 
 	// 基底クラスメンバ
 	return Dialog::OnInitDialog(GetHwnd(), wParam, lParam);
@@ -255,9 +225,7 @@ BOOL DlgAbout::OnBnClicked(int wID)
 BOOL DlgAbout::OnStnClicked(int wID)
 {
 	switch (wID) {
-	// 2006.07.27 genta 原作者連絡先のボタンを削除 (ヘルプから削除されているため)
 	case IDC_STATIC_URL_UR:
-//	case IDC_STATIC_URL_ORG:	del 2008/7/4 Uchi
 		// Web Browserの起動
 		{
 			TCHAR buf[512];
@@ -270,7 +238,6 @@ BOOL DlgAbout::OnStnClicked(int wID)
 	return Dialog::OnStnClicked(wID);
 }
 
-//@@@ 2002.01.18 add start
 LPVOID DlgAbout::GetHelpIdTable(void)
 {
 	return (LPVOID)p_helpids;
@@ -325,7 +292,7 @@ LRESULT CALLBACK UrlWnd::UrlWndProc(
 	switch (msg) {
 	case WM_SETCURSOR:
 		// カーソル形状変更
-		SetHandCursor();		// Hand Cursorを設定 2013/1/29 Uchi
+		SetHandCursor();
 		return (LRESULT)0;
 	case WM_LBUTTONDOWN:
 		// キーボードフォーカスを自分に当てる
@@ -426,6 +393,5 @@ LRESULT CALLBACK UrlWnd::UrlWndProc(
 
 	return CallWindowProc(pUrlWnd->pOldProc, hWnd, msg, wParam, lParam);
 }
-//@@@ 2002.01.18 add end
 
 

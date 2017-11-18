@@ -8,7 +8,7 @@
 
 struct EditInfo;
 
-// iniフォルダ設定	// 2007.05.31 ryoji
+// iniフォルダ設定
 struct IniFolder {
 	bool bInit;							// 初期化済フラグ
 	bool bReadPrivate;					// マルチユーザ用iniからの読み出しフラグ

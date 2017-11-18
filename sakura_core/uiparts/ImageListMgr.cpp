@@ -5,13 +5,9 @@
 #include "debug/RunningTimer.h"
 #include "sakura_rc.h"
 
-//  2010/06/29 syat MAX_X, MAX_Yの値をCommonSettings.hに移動
-//	Jul. 21, 2003 genta 他でも使うので関数の外に出した
-//	Oct. 21, 2000 JEPRO 設定
 const uint32_t MAX_X = MAX_TOOLBAR_ICON_X;
-const uint32_t MAX_Y = MAX_TOOLBAR_ICON_Y;	// 2002.01.17
+const uint32_t MAX_Y = MAX_TOOLBAR_ICON_Y;
 
-// コンストラクタ
 ImageListMgr::ImageListMgr()
 	:
 	cx(16),
@@ -22,10 +18,7 @@ ImageListMgr::ImageListMgr()
 {
 }
 
-/*!	領域を指定色で塗りつぶす
-
-	@author Nakatani
-*/
+/*!	領域を指定色で塗りつぶす */
 static
 void FillSolidRect(
 	HDC hdc,
@@ -61,8 +54,6 @@ ImageListMgr::~ImageListMgr()
 	描画用に保持する．
 	
 	@param hInstance [in] bitmapリソースを持つインスタンス
-	
-	@date 2003.07.21 genta ImageListの構築は行わない．代わりにbitmapをそのまま保持する．
 */
 bool ImageListMgr::Create(HINSTANCE hInstance)
 {
@@ -79,9 +70,6 @@ bool ImageListMgr::Create(HINSTANCE hInstance)
 
 	nRetPos = 0;
 	do {
-		//	From Here 2001.7.1 GAE
-		//	2001.7.1 GAE リソースをローカルファイル(sakuraディレクトリ) my_icons.bmp から読めるように
-		// 2007.05.19 ryoji 設定ファイル優先に変更
 		TCHAR szPath[_MAX_PATH];
 		GetInidirOrExedir(szPath, FN_TOOL_BMP);
 		hRscbmp = (HBITMAP)::LoadImage(NULL, szPath, IMAGE_BITMAP, 0, 0,
@@ -90,22 +78,17 @@ bool ImageListMgr::Create(HINSTANCE hInstance)
 		if (!hRscbmp) {	// ローカルファイルの読み込み失敗時はリソースから取得
 			//	このブロック内は従来の処理
 			//	リソースからBitmapを読み込む
-			//	2003.09.29 wmlhq 環境によってアイコンがつぶれる
-			//hRscbmp = ::LoadBitmap(hInstance, MAKEINTRESOURCE(IDB_MYTOOL));
 			hRscbmp = (HBITMAP)::LoadImage(hInstance, MAKEINTRESOURCE(IDB_MYTOOL), IMAGE_BITMAP, 0, 0,
 				LR_CREATEDIBSECTION | LR_LOADMAP3DCOLORS );
 			if (!hRscbmp) {
-				//	Oct. 4, 2003 genta エラーコード追加
 				//	正常終了と同じコードだとdcFromを不正に解放してしまう
 				nRetPos = 2;
 				break;
 			}
 		}
-		//	To Here 2001.7.1 GAE
 		hIconBitmap = hRscbmp;
 
 		//	透過色を得るためにDCにマップする
-		//	2003.07.21 genta 透過色を得る以外の目的では使わなくなった
 		dcFrom = CreateCompatibleDC(0);	//	転送元用
 		if (!dcFrom) {
 			nRetPos = 1;
@@ -126,9 +109,6 @@ bool ImageListMgr::Create(HINSTANCE hInstance)
 
 		cTrans = GetPixel(dcFrom, 0, 0);//	取得した画像の(0,0)の色を背景色として使う
 		
-		//	2003.07.21 genta
-		//	ImageListへの登録部分は当然ばっさり削除
-		
 		//	もはや処理とは無関係だが，後学のためにコメントのみ残しておこう
 		//---------------------------------------------------------
 		//	BitmapがMemoryDCにAssignされている間はbitmapハンドルを
@@ -147,14 +127,14 @@ bool ImageListMgr::Create(HINSTANCE hInstance)
 	//	後処理
 	switch (nRetPos) {
 	case 0:
-		//	Oct. 4, 2003 genta hRscBmpをdcFromから切り離しておく必要がある
+		//	hRscBmpをdcFromから切り離しておく必要がある
 		//	アイコン描画変更時に過って削除されていた
 		SelectObject(dcFrom, hFOldbmp);
 	case 4:
 		DeleteDC(dcFrom);
 	case 2:
 	case 1:
-		//	2003.07.21 genta hRscbmpは hIconBitmap としてオブジェクトと
+		//	hRscbmpは hIconBitmap としてオブジェクトと
 		//	同じだけ保持されるので解放してはならない
 		break;
 	}
@@ -163,13 +143,7 @@ bool ImageListMgr::Create(HINSTANCE hInstance)
 }
 
 
-/*! ビットマップの表示 灰色を透明描画
-
-	@author Nakatani
-	@date 2003.07.21 genta 以前のCMenuDrawerより移転復活
-	@date 2003.08.27 Moca 背景は透過処理に変更し、colBkColorを削除
-	@date 2010.01.30 syat 透明にする色を引数に移動
-*/
+/*! ビットマップの表示 灰色を透明描画 */
 void ImageListMgr::MyBitBlt(
 	HDC drawdc, 
 	int nXDest, 
@@ -196,15 +170,12 @@ void ImageListMgr::MyBitBlt(
 	HBITMAP bmpMem2Old = (HBITMAP)SelectObject(hdcMem2, bmpMem2);
 	
 	// build a mask
-//	2003.09.04 Moca bmpMaskとbmpの転送する大きさが同じなので不要
-//	PatBlt(hdcMask, 0, 0, nWidth, nHeight, WHITENESS);
 	SetBkColor(hdcMem, colToTransParent);
 	BitBlt(hdcMask, 0, 0, nWidth, nHeight, hdcMem, nXSrc, nYSrc, SRCCOPY);
 
 	// マスク描画(透明にしない部分だけ黒く描画)
-	::SetBkColor(drawdc, RGB(255, 255, 255) /* colBkColor */); // 2003.08.27 Moca 作画方法変更
+	::SetBkColor(drawdc, RGB(255, 255, 255) /* colBkColor */);
 	::SetTextColor(drawdc, RGB(0, 0, 0));
-	// 2003.08.27 Moca 作画方法変更
 	::BitBlt(drawdc, nXDest, nYDest, nWidth, nHeight, hdcMask, 0, 0, SRCAND /* SRCCOPY */); 
 
 	// ビットマップ描画(透明にする色を黒くしてマスクとOR描画)
@@ -225,13 +196,7 @@ void ImageListMgr::MyBitBlt(
 	return;
 }
 
-/*! メニューアイコンの淡色表示
-
-	@author Nakatani
-	
-	@date 2003.07.21 genta 以前のCMenuDrawerより移転復活
-	@date 2003.08.27 Moca 背景色は透過処理する
-*/
+/*! メニューアイコンの淡色表示 */
 void ImageListMgr::DitherBlt2(
 	HDC drawdc,
 	int nXDest,
@@ -255,15 +220,12 @@ void ImageListMgr::DitherBlt2(
 	HDC hdcMem = CreateCompatibleDC(drawdc);
 	HBITMAP bmpMemOld = (HBITMAP)SelectObject(hdcMem, bmp);
 
-	//	Jul. 21, 2003 genta
 	//	hdcMemに書き込むと元のbitmapを破壊してしまう
 	HDC hdcMem2 = ::CreateCompatibleDC(drawdc);
 	HBITMAP bmpMem2 = CreateCompatibleBitmap(drawdc, nWidth, nHeight);
 	HBITMAP bmpMem2Old = (HBITMAP)SelectObject(hdcMem2, bmpMem2);
 
 	// build a mask
-	//	2003.09.04 Moca bmpMaskとbmpの転送する大きさが同じなので不要
-	//PatBlt(hdcMask, 0, 0, nWidth, nHeight, WHITENESS);
 	SetBkColor(hdcMem, colToTransParent);
 	BitBlt(hdcMask, 0, 0, nWidth, nHeight, hdcMem, nXSrc, nYSrc, SRCCOPY);
 	SetBkColor(hdcMem, RGB(255, 255, 255));
@@ -272,7 +234,6 @@ void ImageListMgr::DitherBlt2(
 	// Copy the image from the toolbar into the memory DC
 	// and draw it (grayed) back into the toolbar.
     // SK: Looks better on the old shell
-	// 2003.08.29 Moca 作画方法を変更
 	COLORREF coltxOld = ::SetTextColor(drawdc, RGB(0, 0, 0));
 	COLORREF colbkOld = ::SetBkColor(drawdc, RGB(255, 255, 255));
 	::SetBkColor(hdcMem2, RGB(0, 0, 0));
@@ -320,11 +281,6 @@ void ImageListMgr::DitherBlt2(
 	@param bgColor [in] 背景色(透明部分の描画用)
 
 	@note 描画スタイルとして有効なのは，ILD_NORMAL, ILD_MASK
-	
-	@date 2003.07.21 genta 独自描画ルーチンを使う
-	@date 2003.08.30 genta 背景色を指定する引数を追加
-	@date 2003.09.06 genta Mocaさんの背景色透過処理に伴い，背景色引数削除
-	@date 2007.11.02 ryoji アイコン番号が負の場合は描画しない
 */
 bool ImageListMgr::Draw(
 	int index,
@@ -351,10 +307,7 @@ bool ImageListMgr::Draw(
 	return true;
 }
 
-/*!	アイコン数を返す
-
-	@date 2003.07.21 genta 個数を自分で管理する必要がある．
-*/
+/*!	アイコン数を返す */
 size_t ImageListMgr::Count() const
 {
 	return nIconCount;
