@@ -6,9 +6,9 @@
 #include <limits.h>
 #include "outline/DlgFuncList.h"
 #include "outline/FuncInfo.h"
-#include "outline/FuncInfoArr.h"// 2002/2/3 aroka
+#include "outline/FuncInfoArr.h"
 #include "outline/DlgFileTree.h"
-#include "window/EditWnd.h"	//	2006/2/11 aroka 追加
+#include "window/EditWnd.h"
 #include "doc/EditDoc.h"
 #include "uiparts/Graphics.h"
 #include "util/shell.h"
@@ -30,7 +30,7 @@
 #include "sakura_rc.h"
 #include "sakura.hh"
 
-// 画面ドッキング用の定義	// 2010.06.05 ryoji
+// 画面ドッキング用の定義
 #define DEFINE_SYNCCOLOR
 #define DOCK_SPLITTER_WIDTH		DpiScaleX(5)
 #define DOCK_MIN_SIZE			DpiScaleX(60)
@@ -40,24 +40,24 @@
 #define VIEWTYPE_LIST	0
 #define VIEWTYPE_TREE	1
 
-// アウトライン解析 CDlgFuncList.cpp	//@@@ 2002.01.07 add start MIK
+// アウトライン解析 CDlgFuncList.cpp
 const DWORD p_helpids[] = {	//12200
 	IDC_BUTTON_COPY,					HIDC_FL_BUTTON_COPY,	// コピー
 	IDOK,								HIDOK_FL,				// ジャンプ
 	IDCANCEL,							HIDCANCEL_FL,			// キャンセル
 	IDC_BUTTON_HELP,					HIDC_FL_BUTTON_HELP,	// ヘルプ
 	IDC_CHECK_bAutoCloseDlgFuncList,	HIDC_FL_CHECK_bAutoCloseDlgFuncList,	// 自動的に閉じる
-	IDC_LIST_FL,						HIDC_FL_LIST1,			// トピックリスト	IDC_LIST1->IDC_LIST_FL	2008/7/3 Uchi
-	IDC_TREE_FL,						HIDC_FL_TREE1,			// トピックツリー	IDC_TREE1->IDC_TREE_FL	2008/7/3 Uchi
+	IDC_LIST_FL,						HIDC_FL_LIST1,			// トピックリスト	IDC_LIST1->IDC_LIST_FL
+	IDC_TREE_FL,						HIDC_FL_TREE1,			// トピックツリー	IDC_TREE1->IDC_TREE_FL
 	IDC_CHECK_bFunclistSetFocusOnJump,	HIDC_FL_CHECK_bFunclistSetFocusOnJump,	// ジャンプでフォーカス移動する
 	IDC_CHECK_bMarkUpBlankLineEnable,	HIDC_FL_CHECK_bMarkUpBlankLineEnable,	// 空行を無視する
 	IDC_COMBO_nSortType,				HIDC_COMBO_nSortType,	// 順序
-	IDC_BUTTON_WINSIZE,					HIDC_FL_BUTTON_WINSIZE,	// ウィンドウ位置保存	// 2006.08.06 ryoji
+	IDC_BUTTON_WINSIZE,					HIDC_FL_BUTTON_WINSIZE,	// ウィンドウ位置保存
 	IDC_BUTTON_MENU,					HIDC_FL_BUTTON_MENU,	// ウィンドウの位置メニュー
 	IDC_BUTTON_SETTING,					HIDC_FL_BUTTON_SETTING,	// 設定
 //	IDC_STATIC,							-1,
 	0, 0
-};	//@@@ 2002.01.07 add end MIK
+};
 
 static const AnchorListItem anchorList[] = {
 	{IDC_BUTTON_COPY,		AnchorStyle::Bottom},
@@ -70,7 +70,7 @@ static const AnchorListItem anchorList[] = {
 	{IDC_CHECK_bFunclistSetFocusOnJump, AnchorStyle::Bottom},
 	{IDC_CHECK_bMarkUpBlankLineEnable , AnchorStyle::Bottom},
 	{IDC_COMBO_nSortType,	AnchorStyle::Top},
-	{IDC_BUTTON_WINSIZE,	AnchorStyle::Bottom}, // 20060201 aroka
+	{IDC_BUTTON_WINSIZE,	AnchorStyle::Bottom},
 	{IDC_BUTTON_MENU,		AnchorStyle::Bottom},
 };
 
@@ -131,7 +131,6 @@ int CALLBACK DlgFuncList::CompareFunc_Asc(
 			return 1;
 		}
 	}
-	// From Here 2001.12.07 hor
 	if (pDlgFuncList->nSortCol == FL_COL_REMARK) {	// 備考でソート
 		if (pFuncInfo1->nInfo < pFuncInfo2->nInfo) {
 			return -1;
@@ -142,7 +141,6 @@ int CALLBACK DlgFuncList::CompareFunc_Asc(
 			return 1;
 		}
 	}
-	// To Here 2001.12.07 hor
 	return -1;
 }
 
@@ -185,11 +183,11 @@ DlgFuncList::DlgFuncList() : Dialog(true)
 	nCurLine = 0;	// 現在行
 	nOutlineType = OutlineType::Default;
 	nListType = OutlineType::Default;
-	//	Apr. 23, 2005 genta 行番号を左端へ
-	nSortCol = 0;				// ソートする列番号 2004.04.06 zenryaku 標準は行番号(1列目)
+	// 行番号を左端へ
+	nSortCol = 0;				// ソートする列番号 標準は行番号(1列目)
 	nSortColOld = -1;
 	bLineNumIsCRLF = false;		// 行番号の表示 false=折り返し単位／true=改行単位
-	bWaitTreeProcess = false;	// 2002.02.16 hor Treeのダブルクリックでフォーカス移動できるように 2/4
+	bWaitTreeProcess = false;	// Treeのダブルクリックでフォーカス移動できるように 2/4
 	nSortType = 0;
 	funcInfo = NULL;			// 現在の関数情報
 	bEditWndReady = false;		// エディタ画面の準備完了
@@ -202,8 +200,6 @@ DlgFuncList::DlgFuncList() : Dialog(true)
 
 /*!
 	標準以外のメッセージを捕捉する
-
-	@date 2007.11.07 ryoji 新規
 */
 INT_PTR DlgFuncList::DispatchEvent(
 	HWND hWnd,
@@ -315,7 +311,6 @@ INT_PTR DlgFuncList::DispatchEvent(
 
 // モードレスダイアログの表示
 /*
- * @note 2011.06.25 syat nOutlineTypeを追加
  *   nOutlineTypeとnListTypeはほとんどの場合同じ値だが、プラグインの場合は例外で、
  *   nOutlineTypeはアウトライン解析のID、nListTypeはプラグイン内で指定するリスト形式となる。
  */
@@ -408,7 +403,7 @@ void DlgFuncList::SetData()
 	HWND hwndList = GetItemHwnd(IDC_LIST_FL);
 	HWND hwndTree = GetItemHwnd(IDC_TREE_FL);
 
-	// 2002.02.08 hor 隠しといてアイテム削除→あとで表示
+	// 隠しといてアイテム削除→あとで表示
 	::ShowWindow(hwndList, SW_HIDE);
 	::ShowWindow(hwndTree, SW_HIDE);
 	ListView_DeleteAllItems(hwndList);
@@ -420,32 +415,32 @@ void DlgFuncList::SetData()
 	switch (nListType) {
 	case OutlineType::CPP:	// C++メソッドリスト
 		nViewType = VIEWTYPE_TREE;
-		SetTreeJava(GetHwnd(), true);	// Jan. 04, 2002 genta Java Method Treeに統合
+		SetTreeJava(GetHwnd(), true);	// Java Method Treeに統合
 		::SetWindowText(GetHwnd(), LS(STR_DLGFNCLST_TITLE_CPP));
 		break;
-	case OutlineType::RuleFile:	//@@@ 2002.04.01 YAZAKI アウトライン解析にルールファイル導入
+	case OutlineType::RuleFile:
 		nViewType = VIEWTYPE_TREE;
 		SetTree();
 		::SetWindowText(GetHwnd(), LS(STR_DLGFNCLST_TITLE_RULE));
 		break;
-	case OutlineType::WZText: //@@@ 2003.05.20 zenryaku 階層付テキストアウトライン解析
+	case OutlineType::WZText:
 		nViewType = VIEWTYPE_TREE;
 		SetTree();
-		::SetWindowText(GetHwnd(), LS(STR_DLGFNCLST_TITLE_WZ)); //	2003.06.22 Moca 名前変更
+		::SetWindowText(GetHwnd(), LS(STR_DLGFNCLST_TITLE_WZ));
 		break;
-	case OutlineType::HTML: //@@@ 2003.05.20 zenryaku HTMLアウトライン解析
+	case OutlineType::HTML:
 		nViewType = VIEWTYPE_TREE;
 		SetTree();
 		::SetWindowText(GetHwnd(), _T("HTML"));
 		break;
-	case OutlineType::TeX: //@@@ 2003.07.20 naoh TeXアウトライン解析
+	case OutlineType::TeX:
 		nViewType = VIEWTYPE_TREE;
 		SetTree();
 		::SetWindowText(GetHwnd(), _T("TeX"));
 		break;
 	case OutlineType::Text: // テキスト・トピックリスト
 		nViewType = VIEWTYPE_TREE;
-		SetTree();	//@@@ 2002.04.01 YAZAKI テキストトピックツリーも、汎用SetTreeを呼ぶように変更。
+		SetTree();
 		::SetWindowText(GetHwnd(), LS(STR_DLGFNCLST_TITLE_TEXT));
 		break;
 	case OutlineType::Java: // Javaメソッドツリー
@@ -453,7 +448,6 @@ void DlgFuncList::SetData()
 		SetTreeJava(GetHwnd(), true);
 		::SetWindowText(GetHwnd(), LS(STR_DLGFNCLST_TITLE_JAVA));
 		break;
-	//	2007.02.08 genta Python追加
 	case OutlineType::Python: // Python メソッドツリー
 		nViewType = VIEWTYPE_TREE;
 		SetTree(true);
@@ -501,15 +495,10 @@ void DlgFuncList::SetData()
 		case OutlineType::Asm:
 			::SetWindowText(GetHwnd(), LS(STR_DLGFNCLST_TITLE_ASM));
 			break;
-		case OutlineType::Perl:	//	Sep. 8, 2000 genta
+		case OutlineType::Perl:
 			::SetWindowText(GetHwnd(), LS(STR_DLGFNCLST_TITLE_PERL));
 			break;
-// Jul 10, 2003  little YOSHI  上に移動しました--->>
-//		case OutlineType::VisualBasic:	// 2001/06/23 N.Nakatani for Visual Basic
-//			::SetWindowText(GetHwnd(), "Visual Basic アウトライン");
-//			break;
-// <<---ここまで
-		case OutlineType::Erlang:	//	2009.08.10 genta
+		case OutlineType::Erlang:
 			::SetWindowText(GetHwnd(), LS(STR_DLGFNCLST_TITLE_ERLANG));
 			break;
 		case OutlineType::BookMark:
@@ -517,15 +506,14 @@ void DlgFuncList::SetData()
 			col.mask = LVCF_TEXT;
 			col.pszText = const_cast<TCHAR*>(LS(STR_DLGFNCLST_LIST_TEXT));
 			col.iSubItem = 0;
-			//	Apr. 23, 2005 genta 行番号を左端へ
+			// 行番号を左端へ
 			ListView_SetColumn(hwndList, FL_COL_NAME, &col);
 			::SetWindowText(GetHwnd(), LS(STR_DLGFNCLST_TITLE_BOOK));
 			break;
-		case OutlineType::List:	// 汎用リスト 2010.03.28 syat
+		case OutlineType::List:	// 汎用リスト
 			::SetWindowText(GetHwnd(), _T(""));
 			break;
 		}
-		//	May 18, 2001 genta
 		//	Windowがいなくなると後で都合が悪いので、表示しないだけにしておく
 		//::DestroyWindow(hwndTree);
 //		::ShowWindow(hwndTree, SW_HIDE);
@@ -592,7 +580,7 @@ void DlgFuncList::SetData()
 			// 現在の解析結果要素
 			pFuncInfo = pFuncInfoArr->GetAt(i);
 
-			//	From Here Apr. 23, 2005 genta 行番号を左端へ
+			// 行番号を左端へ
 			// 行番号の表示 false=折り返し単位／true=改行単位
 			if (bLineNumIsCRLF) {
 				auto_sprintf(szText, _T("%d"), pFuncInfo->nFuncLineCRLF);
@@ -606,7 +594,6 @@ void DlgFuncList::SetData()
 			item.iSubItem = FL_COL_ROW;
 			ListView_InsertItem(hwndList, &item);
 
-			// 2010.03.17 syat 桁追加
 			// 行番号の表示 false=折り返し単位／true=改行単位
 			if (bLineNumIsCRLF) {
 				auto_sprintf(szText, _T("%d"), pFuncInfo->nFuncColCRLF);
@@ -3781,9 +3768,7 @@ DockSideType DlgFuncList::GetDropRect(
 	return DockSideType::Float;	// フローティング位置だった
 }
 
-/** タイトルバーのドラッグ＆ドロップでドッキング配置を変更する
-	@date 2010.06.17 ryoji 新規作成
-*/
+/** タイトルバーのドラッグ＆ドロップでドッキング配置を変更する */
 BOOL DlgFuncList::Track(POINT ptDrag)
 {
 	if (::GetCapture()) {

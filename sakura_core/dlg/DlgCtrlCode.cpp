@@ -61,9 +61,7 @@ struct ctrl_info_t {
 	// internal data
 	{ 0x001f, 0x00df, _T("US"),  NULL }	// PC98 "_"  // unit separator (US)
 };
-// Feb. 12, 2003 MIK longが抜けていた
 
-// LMP: Added, nasukoji changed
 static ResourceString cLabel_jname[_countof(p_ctrl_list)];
 
 DlgCtrlCode::DlgCtrlCode()
@@ -103,9 +101,7 @@ void DlgCtrlCode::SetData(void)
 		if (!p_ctrl_list[i].jname) {
 			continue;
 		}
-		// 2011.06.01 nasukoji	元のjnameがNULLのものはそのまま残す
 		if (p_ctrl_list[i].jname) {
-			// LMP: Added, nasukoji changed
 			p_ctrl_list[i].jname = (LPTSTR)cLabel_jname[i].Load(STR_ERR_DLGCTL5 + i);
 		}
 
@@ -210,7 +206,7 @@ BOOL DlgCtrlCode::OnBnClicked(int wID)
 	switch (wID) {
 	case IDC_BUTTON_HELP:
 		// ヘルプ
-		MyWinHelp(GetHwnd(), HELP_CONTEXT, ::FuncID_To_HelpContextID(F_CTRL_CODE_DIALOG));	// 2006.10.10 ryoji MyWinHelpに変更に変更
+		MyWinHelp(GetHwnd(), HELP_CONTEXT, ::FuncID_To_HelpContextID(F_CTRL_CODE_DIALOG));
 		return TRUE;
 
 	case IDOK:			// 左右に表示

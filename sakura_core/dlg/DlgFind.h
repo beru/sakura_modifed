@@ -7,9 +7,6 @@
 
 #pragma once
 
-/*-----------------------------------------------------------------------
-クラスの宣言
------------------------------------------------------------------------*/
 class DlgFind : public Dialog {
 public:
 	/*
@@ -35,8 +32,6 @@ public:
 	FontAutoDeleter		fontText;
 
 protected:
-//@@@ 2002.2.2 YAZAKI CShareDataに移動
-//	void AddToSearchKeys(const char*);
 	// オーバーライド?
 	BOOL OnCbnDropDown(HWND hwndCtl, int wID);
 	int GetData(void);		// ダイアログデータの取得
@@ -45,9 +40,9 @@ protected:
 	BOOL OnInitDialog(HWND, WPARAM, LPARAM);
 	BOOL OnDestroy();
 	BOOL OnBnClicked(int);
-	BOOL OnActivate(WPARAM wParam, LPARAM lParam);	// 2009.11.29 ryoji
+	BOOL OnActivate(WPARAM wParam, LPARAM lParam);
 
 	// virtual BOOL OnKeyDown(WPARAM wParam, LPARAM lParam);
-	LPVOID GetHelpIdTable(void);	//@@@ 2002.01.18 add
+	LPVOID GetHelpIdTable(void);
 };
 

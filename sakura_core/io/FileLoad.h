@@ -28,7 +28,6 @@ public:
 	FileLoad();
 	~FileLoad(void);
 
-	// Jul. 26, 2003 ryoji BOM引数追加
 	EncodingType FileOpen(
 		const EncodingConfig& encode,
 		LPCTSTR pFileName,
@@ -53,7 +52,6 @@ public:
 	// ファイルの日時を取得する
 	BOOL GetFileTime(FILETIME*, FILETIME*, FILETIME*); // inline
 
-	// Jun. 08, 2003 Moca
 	// 開いたファイルにはBOMがあるか？
 	bool IsBomExist(void) { return bBomExist; }
 
@@ -67,7 +65,6 @@ public:
 //	static const int g_nBufSizeMin; // ロード用バッファサイズの設定可能な最低値
 
 protected:
-	// Oct. 19, 2002 genta スペルミス修正
 //	void SeekBegin(void);		// ファイルの先頭位置に移動する(BOMを考慮する)
 	void Buffering(void);		// バッファにデータをロードする
 	void ReadBufEmpty(void);	// バッファを空にする

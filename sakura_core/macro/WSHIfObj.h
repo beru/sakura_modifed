@@ -36,8 +36,6 @@ public:
 
 protected:
 	// ‘€ì
-	//	2007.07.20 genta : flags’Ç‰Á
-	//  2009.09.05 syat CWSHManager‚©‚çˆÚ“®
 	void ReadyCommands(MacroFuncInfo* info, int flags);
 	HRESULT MacroCommand(int index, DISPPARAMS* arguments, VARIANT* result, void* data);
 

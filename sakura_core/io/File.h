@@ -3,7 +3,7 @@
 #include "basis/MyString.h" //FilePath
 #include "util/fileUtil.h"
 
-// ファイルの排他制御モード  2007.10.11 kobake 作成
+// ファイルの排他制御モード
 enum class FileShareMode {
 	NonExclusive,	// 排他制御しない
 	DenyWrite,		// 他プロセスからの上書きを禁止

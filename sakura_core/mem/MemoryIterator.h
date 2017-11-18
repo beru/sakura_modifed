@@ -10,7 +10,6 @@
 /*-----------------------------------------------------------------------
 クラスの宣言
 -----------------------------------------------------------------------*/
-// 2007.10.23 kobake テンプレートである必要も無いので、非テンプレートに変更。
 
 #include "doc/layout/Layout.h"
 #include "doc/logic/DocLine.h"
@@ -57,8 +56,6 @@ public:
 
 	// 次の文字を確認して次の文字との差を求める
 	void scanNext() {
-		// 2005-09-02 D.S.Koba GetSizeOfChar
-		// 2007.09.04 kobake UNICODE化：データ増分と桁増分を別々の値として計算する。
 
 		// データ増分を計算
 		nIndex_Delta = NativeW::GetSizeOfChar(pLine, nLineLen, nIndex);
@@ -71,9 +68,6 @@ public:
 			nColumn_Delta = nTabSpace - (nColumn % nTabSpace);
 		}else {
 			nColumn_Delta = NativeW::GetKetaOfChar(pLine, nLineLen, nIndex);
-//			if (nColumn_Delta == 0) {				// 削除 サロゲートペア対策	2008/7/5 Uchi
-//				nColumn_Delta = 1;
-//			}
 		}
 	}
 	
@@ -90,10 +84,7 @@ public:
 	size_t	getIndexDelta()		const {	return nIndex_Delta;	}
 	size_t	getColumnDelta()	const {	return nColumn_Delta;	}
 
-	// 2002.10.07 YAZAKI
 	const wchar_t getCurrentChar() {	return pLine[nIndex];	}
-	// Jul. 20, 2003 genta 追加
-	// memcpyをするのにポインタがとれないと面倒
 	const wchar_t* getCurrentPos() {	return pLine + nIndex;	}
 
 

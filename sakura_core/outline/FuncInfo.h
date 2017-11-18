@@ -10,18 +10,15 @@ class FuncInfo;
 
 // CDlgFuncList::SetTree()用 Info
 #define FUNCINFO_INFOMASK	0xFFFF
-//	2003.06.27 Moca
 #define FUNCINFO_NOCLIPTEXT 0x10000
 
 // アウトライン解析  データ要素
-//@date 2002.04.01 YAZAKI 深さ導入
 class FuncInfo {
 public:
 	FuncInfo(size_t, size_t, size_t, size_t, const TCHAR*, const TCHAR*, int);	// FuncInfoクラス構築
 	~FuncInfo();	// FuncInfoクラス消滅
 
 	// クリップボードに追加する要素か？
-	//	2003.06.27 Moca
 	inline bool IsAddClipText(void) const {
 		return (FUNCINFO_NOCLIPTEXT != (nInfo & FUNCINFO_NOCLIPTEXT));
 	}

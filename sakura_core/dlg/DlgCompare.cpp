@@ -4,7 +4,7 @@
 #include "StdAfx.h"
 #include "dlg/DlgCompare.h"
 #include "window/EditWnd.h"
-#include "func/Funccode.h"		// Stonee, 2001/03/12
+#include "func/Funccode.h"
 #include "util/shell.h"
 #include "util/fileUtil.h"
 #include "util/string_ex2.h"

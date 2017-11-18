@@ -64,14 +64,14 @@ public:
 	*/
 	static HACCEL CreateAccerelator(int, KeyData*);
 	static EFunctionCode GetFuncCode(WORD nAccelCmd, int nKeyNameArrNum, KeyData* pKeyNameArr, bool bGetDefFuncCode = true);
-	static EFunctionCode GetFuncCodeAt(KeyData& KeyData, int nState, bool bGetDefFuncCode = true);	// 特定のキー情報から機能コードを取得する	// 2007.02.24 ryoji
-	static EFunctionCode GetDefFuncCode(int nKeyCode, int nState);	// キーのデフォルト機能を取得する	// 2007.02.22 ryoji
+	static EFunctionCode GetFuncCodeAt(KeyData& KeyData, int nState, bool bGetDefFuncCode = true);	// 特定のキー情報から機能コードを取得する
+	static EFunctionCode GetDefFuncCode(int nKeyCode, int nState);	// キーのデフォルト機能を取得する
 
 	// キー割り当て一覧を作成する
 	static int CreateKeyBindList(HINSTANCE hInstance, int nKeyNameArrNum, KeyData* pKeyNameArr, NativeW& memList, FuncLookup* pFuncLookup, bool bGetDefFuncCode = true);
 	static int GetKeyStr(HINSTANCE hInstance, int nKeyNameArrNum, KeyData* pKeyNameArr, NativeT& memList, int nFuncId, bool bGetDefFuncCode = true);	// 機能に対応するキー名の取得
 	static int GetKeyStrList(HINSTANCE	hInstance, int nKeyNameArrNum, KeyData* pKeyNameArr, NativeT*** pppMemList, int nFuncId, bool bGetDefFuncCode = true);	// 機能に対応するキー名の取得(複数)
-	static TCHAR* GetMenuLabel(HINSTANCE hInstance, int nKeyNameArrNum, KeyData* pKeyNameArr, int nFuncId, TCHAR* pszLabel, const TCHAR* pszKey, bool bKeyStr, int nLabelSize, bool bGetDefFuncCode = true);	// メニューラベルの作成	// add pszKey	2010/5/17 Uchi
+	static TCHAR* GetMenuLabel(HINSTANCE hInstance, int nKeyNameArrNum, KeyData* pKeyNameArr, int nFuncId, TCHAR* pszLabel, const TCHAR* pszKey, bool bKeyStr, int nLabelSize, bool bGetDefFuncCode = true);	// メニューラベルの作成
 
 	static TCHAR* MakeMenuLabel(const TCHAR* sName, const TCHAR* sKey);
 

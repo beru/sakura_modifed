@@ -17,23 +17,20 @@ void WSHIfObj::ReadyMethods(
 	)
 {
 	this->pView = &view;
-	// 2007.07.20 genta : コマンドに混ぜ込むフラグを渡す
+	// コマンドに混ぜ込むフラグを渡す
 	ReadyCommands(GetMacroCommandInfo(), flags | FA_FROMMACRO);
 	ReadyCommands(GetMacroFuncInfo(), 0);
 	/* WSHIfObjを継承したサブクラスからReadyMethodsを呼び出した場合、
 	 * サブクラスのGetMacroCommandInfo,GetMacroFuncInfoが呼び出される。 */
 }
 
-/** WSHマクロエンジンへコマンド登録を行う
-
-	@date 2007.07.20 genta flags追加．flagはコマンド登録段階で混ぜておく．
-*/
+/** WSHマクロエンジンへコマンド登録を行う */
 void WSHIfObj::ReadyCommands(
 	MacroFuncInfo* Info,
 	int flags
 	)
 {
-	while (Info->nFuncID != -1) {	// Aug. 29, 2002 genta 番人の値が変更されたのでここも変更
+	while (Info->nFuncID != -1) {
 		wchar_t FuncName[256];
 		wcscpy(FuncName, Info->pszFuncName);
 
@@ -59,7 +56,7 @@ void WSHIfObj::ReadyCommands(
 				}
 			}
 		}
-		// 2007.07.21 genta : flagを加えた値を登録する
+		// flagを加えた値を登録する
 		this->AddMethod(
 			FuncName,
 			(Info->nFuncID | flags),
@@ -77,9 +74,6 @@ void WSHIfObj::ReadyCommands(
 
 /*!
 	マクロコマンドの実行
-
-	@date 2005.06.27 zenryaku 戻り値の受け取りが無くてもエラーにせずに関数を実行する
-	@date 2013.06.07 Moca 5つ以上の引数の時ずれるのを修正。NULを含む文字列対応
 */
 HRESULT WSHIfObj::MacroCommand(
 	int index,
@@ -91,19 +85,18 @@ HRESULT WSHIfObj::MacroCommand(
 	int argCount = arguments->cArgs;
 
 	const EFunctionCode id = static_cast<EFunctionCode>(index);
-	//	2007.07.22 genta : コマンドは下位16ビットのみ
+	// コマンドは下位16ビットのみ
 	if (LOWORD(id) >= F_FUNCTION_FIRST) {
-		VARIANT ret; // 2005.06.27 zenryaku 戻り値の受け取りが無くても関数を実行する
+		VARIANT ret; // 戻り値の受け取りが無くても関数を実行する
 		VariantInit(&ret);
 
-		// 2011.3.18 syat 引数の順序を正しい順にする
 		auto rgvargParam = std::make_unique<VARIANTARG[]>(argCount);
 		for (int i=0; i<argCount; ++i) {
 			::VariantInit(&rgvargParam[argCount - i - 1]);
 			::VariantCopy(&rgvargParam[argCount - i - 1], &arguments->rgvarg[i]);
 		}
 
-		// 2009.9.5 syat HandleFunctionはサブクラスでオーバーライドする
+		// HandleFunctionはサブクラスでオーバーライドする
 		bool r = HandleFunction(*pView, id, &rgvargParam[0], argCount, ret);
 		if (result) {::VariantCopyInd(result, &ret);}
 		VariantClear(&ret);
@@ -114,7 +107,7 @@ HRESULT WSHIfObj::MacroCommand(
 	}else {
 		// 最低4つは確保
 		int argCountMin = t_max(4, argCount);
-		//	Nov. 29, 2005 FILE 引数を文字列で取得する
+		// 引数を文字列で取得する
 		auto strArgs = std::make_unique<LPWSTR[]>(argCountMin);
 		auto strLengths = std::make_unique<int[]>(argCountMin);
 		for (int i=argCount; i<argCountMin; ++i) {
@@ -136,10 +129,8 @@ HRESULT WSHIfObj::MacroCommand(
 			strLengths[argCount - i - 1] = Len;
 		}
 
-		// 2009.10.29 syat HandleCommandはサブクラスでオーバーライドする
 		HandleCommand(*pView, id, const_cast<wchar_t const **>(&strArgs[0]), &strLengths[0], argCount);
 
-		//	Nov. 29, 2005 FILE 配列の破棄なので、[括弧]を追加
 		for (int j=0; j<argCount; ++j) {
 			delete[] strArgs[j];
 		}

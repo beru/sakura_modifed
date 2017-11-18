@@ -22,7 +22,7 @@ public:
 
 	TCHAR		szCommand[1024 + 1];	// コマンドライン
 	SFilePath	szCurDir;				// カレントディレクトリ
-	bool		bEditable;				// 編集ウィンドウへの入力可能	// 2009.02.21 ryoji
+	bool		bEditable;				// 編集ウィンドウへの入力可能
 
 protected:
 	ComboBoxItemDeleter comboDel;
@@ -35,7 +35,7 @@ protected:
 	void SetData(void);	// ダイアログデータの設定
 	BOOL OnInitDialog(HWND, WPARAM, LPARAM);
 	BOOL OnBnClicked(int);
-	LPVOID GetHelpIdTable(void);	//@@@ 2002.01.18 add
+	LPVOID GetHelpIdTable(void);
 
 };
 

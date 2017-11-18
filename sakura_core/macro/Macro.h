@@ -74,11 +74,10 @@ public:
 
 	void SetNext(Macro* pNext) { this->pNext = pNext; }
 	Macro* GetNext() { return pNext; }
-	// 2007.07.20 genta : flagsí«â¡
-	bool Exec(EditView& editView, int flags) const; // 2007.09.30 kobake constí«â¡
-	void Save(HINSTANCE hInstance, TextOutputStream& out) const; // 2007.09.30 kobake constí«â¡
+	bool Exec(EditView& editView, int flags) const;
+	void Save(HINSTANCE hInstance, TextOutputStream& out) const;
 	
-	void AddLParam(const LPARAM* lParam, const EditView& editView );	//@@@ 2002.2.2 YAZAKI pEditViewÇ‡ìnÇ∑
+	void AddLParam(const LPARAM* lParam, const EditView& editView );
 	void AddStringParam( const wchar_t* szParam, int nLength = -1 );
 	void AddStringParam(const char* lParam) { return AddStringParam(to_wchar(lParam)); }
 	void AddIntParam( const int nParam );
@@ -86,7 +85,6 @@ public:
 
 	static bool HandleCommand(EditView& view, EFunctionCode index, const wchar_t* arguments[], const int argLengths[], const int argSize);
 	static bool HandleFunction(EditView& view, EFunctionCode index, const VARIANT* argumentss, const int argSize, VARIANT& result);
-	// 2009.10.29 syat HandleCommandÇ∆HandleFunctionÇÃà¯êîÇè≠ÇµÇªÇÎÇ¶ÇΩ
 #if 0
 	/*
 	||  Attributes & Operations

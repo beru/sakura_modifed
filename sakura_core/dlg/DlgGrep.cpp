@@ -6,7 +6,7 @@
 #include "dlg/DlgGrep.h"
 #include "GrepAgent.h"
 #include "GrepEnumKeys.h"
-#include "func/Funccode.h"		// Stonee, 2001/03/12
+#include "func/Funccode.h"
 #include "charset/CodePage.h"
 #include "util/module.h"
 #include "util/shell.h"
@@ -17,7 +17,6 @@
 #include "sakura_rc.h"
 #include "sakura.hh"
 
-//GREP CDlgGrep.cpp	//@@@ 2002.01.07 add start MIK
 const DWORD p_helpids[] = {	//12000
 	IDC_BUTTON_FOLDER,				HIDC_GREP_BUTTON_FOLDER,			// フォルダ
 	IDC_BUTTON_CURRENTFOLDER,		HIDC_GREP_BUTTON_CURRENTFOLDER,		// 現フォルダ
@@ -47,7 +46,7 @@ const DWORD p_helpids[] = {	//12000
 	IDC_CHECK_SEP_FOLDER,			HIDC_CHECK_SEP_FOLDER,				// フォルダ毎に表示
 //	IDC_STATIC,						-1,
 	0, 0
-};	//@@@ 2002.01.07 add end MIK
+};
 
 static void SetGrepFolder(HWND hwndCtrl, LPCTSTR folder);
 
@@ -71,8 +70,6 @@ DlgGrep::DlgGrep()
 
 /*!
 	コンボボックスのドロップダウンメッセージを捕捉する
-
-	@date 2013.03.24 novice 新規作成
 */
 BOOL DlgGrep::OnCbnDropDown(HWND hwndCtl, int wID)
 {
@@ -123,7 +120,6 @@ INT_PTR DlgGrep::DoModal(
 	bGrepOutputBaseFolder = csSearch.bGrepOutputBaseFolder;
 	bGrepSeparateFolder = csSearch.bGrepSeparateFolder;
 
-	// 2013.05.21 コンストラクタからDoModalに移動
 	// strText は呼び出し元で設定済み
 	auto& searchKeywords = pShareData->searchKeywords;
 	if (szFile[0] == _T('\0') && searchKeywords.grepFiles.size()) {
@@ -133,14 +129,13 @@ INT_PTR DlgGrep::DoModal(
 		_tcscpy(szFolder, searchKeywords.grepFolders[0]);	// 検索フォルダ
 	}
 
-	if (pszCurrentFilePath) {	// 2010.01.10 ryoji
+	if (pszCurrentFilePath) {
 		_tcscpy(szCurrentFilePath, pszCurrentFilePath);
 	}
 
 	return Dialog::DoModal(hInstance, hwndParent, IDD_GREP, (LPARAM)NULL);
 }
 
-// 2007.02.09 bosagami
 LRESULT CALLBACK OnFolderProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
 WNDPROC g_pOnFolderProc;
 
@@ -163,8 +158,7 @@ BOOL DlgGrep::OnInitDialog(
 	Combo_SetExtendedUI(GetItemHwnd(IDC_COMBO_FOLDER), TRUE);
 
 	// ダイアログのアイコン
-// 2002.02.08 Grepアイコンも大きいアイコンと小さいアイコンを別々にする。
-	// Dec, 2, 2002 genta アイコン読み込み方法変更
+// Grepアイコンも大きいアイコンと小さいアイコンを別々にする。
 	HICON hIconBig   = GetAppIcon(hInstance, ICON_DEFAULT_GREP, FN_GREP_ICON, false);
 	HICON hIconSmall = GetAppIcon(hInstance, ICON_DEFAULT_GREP, FN_GREP_ICON, true);
 	::SendMessage(GetHwnd(), WM_SETICON, ICON_SMALL, (LPARAM)hIconSmall);
@@ -176,7 +170,6 @@ BOOL DlgGrep::OnInitDialog(
 		LONG_PTR idx = Combo_AddString(GetItemHwnd(IDC_COMBO_CHARSET), codeTypes.GetName(i));
 		Combo_SetItemData(GetItemHwnd(IDC_COMBO_CHARSET), idx, codeTypes.GetCode(i));
 	}
-	// 2007.02.09 bosagami
 	HWND hFolder = GetItemHwnd(IDC_COMBO_FOLDER);
 	DragAcceptFiles(hFolder, true);
 	g_pOnFolderProc = (WNDPROC)GetWindowLongPtr(hFolder, GWLP_WNDPROC);
@@ -192,7 +185,7 @@ BOOL DlgGrep::OnInitDialog(
 	comboDelFolder.pRecent = &recentGrepFolder;
 	SetComboBoxDeleter(GetItemHwnd(IDC_COMBO_FOLDER), &comboDelFolder);
 
-	// フォント設定	2012/11/27 Uchi
+	// フォント設定
 	HFONT hFontOld = (HFONT)::SendMessage(GetItemHwnd(IDC_COMBO_TEXT), WM_GETFONT, 0, 0);
 	HFONT hFont = SetMainFont(GetItemHwnd(IDC_COMBO_TEXT));
 	fontText.SetFont(hFontOld, hFont, GetItemHwnd(IDC_COMBO_TEXT));
@@ -202,11 +195,7 @@ BOOL DlgGrep::OnInitDialog(
 	return Dialog::OnInitDialog(hwndDlg, wParam, lParam);
 }
 
-/*! @brief フォルダ指定EditBoxのコールバック関数
-
-	@date 2007.02.09 bosagami 新規作成
-	@date 2007.09.02 genta ディレクトリチェックを強化
-*/
+/*! @brief フォルダ指定EditBoxのコールバック関数　*/
 LRESULT CALLBACK OnFolderProc(
 	HWND hwnd,
 	UINT msg,
@@ -215,7 +204,6 @@ LRESULT CALLBACK OnFolderProc(
 	)
 {
 	if (msg == WM_DROPFILES) do {
-		// From Here 2007.09.02 genta 
 		SFilePath path;
 		if (DragQueryFile((HDROP)wparam, 0, NULL, 0) > _countof2(path) - 1) {
 			// skip if the length of the path exceeds buffer capacity
@@ -251,11 +239,9 @@ BOOL DlgGrep::OnBnClicked(int wID)
 	switch (wID) {
 	case IDC_BUTTON_HELP:
 		//「Grep」のヘルプ
-		// Stonee, 2001/03/12 第四引数を、機能番号からヘルプトピック番号を調べるようにした
-		MyWinHelp(GetHwnd(), HELP_CONTEXT, ::FuncID_To_HelpContextID(F_GREP_DIALOG));	// 2006.10.10 ryoji MyWinHelpに変更に変更
+		MyWinHelp(GetHwnd(), HELP_CONTEXT, ::FuncID_To_HelpContextID(F_GREP_DIALOG));
 		return TRUE;
 	case IDC_CHK_FROMTHISTEXT:	// この編集中のテキストから検索する
-		// 2010.05.30 関数化
 		SetDataFromThisText(IsButtonChecked(IDC_CHK_FROMTHISTEXT));
 		return TRUE;
 	case IDC_BUTTON_CURRENTFOLDER:	// 現在編集中のファイルのフォルダ
@@ -315,31 +301,13 @@ BOOL DlgGrep::OnBnClicked(int wID)
 	case IDC_CHK_REGULAREXP:	// 正規表現
 //		MYTRACE(_T("IDC_CHK_REGULAREXP ::IsDlgButtonChecked(GetHwnd(), IDC_CHK_REGULAREXP) = %d\n"), ::IsDlgButtonChecked(GetHwnd(), IDC_CHK_REGULAREXP));
 		if (IsButtonChecked(IDC_CHK_REGULAREXP)) {
-			// From Here Jun. 26, 2001 genta
-			// 正規表現ライブラリの差し替えに伴う処理の見直し
 			if (!CheckRegexpVersion(GetHwnd(), IDC_STATIC_JRE32VER, true)) {
 				CheckButton(IDC_CHK_REGULAREXP, false);
 			}else {
-				// To Here Jun. 26, 2001 genta
-				// 英大文字と英小文字を区別する
-				// 正規表現のときも選択できるように。
-//				CheckButton(IDC_CHK_LOHICASE, true);
-//				EnableItem(IDC_CHK_LOHICASE), false);
-
-				// 2001/06/23 N.Nakatani
 				// 単語単位で検索
 				EnableItem(IDC_CHK_WORD, false);
 			}
 		}else {
-			// 英大文字と英小文字を区別する
-			// 正規表現のときも選択できるように。
-//			EnableItem(IDC_CHK_LOHICASE), true);
-//			CheckButton(IDC_CHK_LOHICASE, false);
-
-
-// 2001/06/23 N.Nakatani
-// 単語単位のgrepが実装されたらコメントを外すと思います
-// 2002/03/07実装してみた。
 			// 単語単位で検索
 			EnableItem(IDC_CHK_WORD, true);
 		}
@@ -433,22 +401,14 @@ void DlgGrep::SetData(void)
 
 	// この編集中のテキストから検索する
 	CheckButton(IDC_CHK_FROMTHISTEXT, bFromThisText);
-	// 2010.05.30 関数化
 	SetDataFromThisText(bFromThisText);
 
 	// 英大文字と英小文字を区別する
 	CheckButton(IDC_CHK_LOHICASE, searchOption.bLoHiCase);
 
-	// 2001/06/23 N.Nakatani 現時点ではGrepでは単語単位の検索はサポートできていません
-	// 2002/03/07 テストサポート
 	// 一致する単語のみ検索する
 	CheckButton(IDC_CHK_WORD, searchOption.bWordOnly);
-//	EnableItem(IDC_CHK_WORD) , false);	// チェックボックスを使用不可にすも
 
-	// 文字コード自動判別
-//	CheckButton(IDC_CHK_KANJICODEAUTODETECT, bKanjiCode_AutoDetect);
-
-	// 2002/09/22 Moca Add
 	// 文字コードセット
 	{
 		int	nCurIdx = -1;
@@ -498,7 +458,6 @@ void DlgGrep::SetData(void)
 		CheckButton(IDC_RADIO_OUTPUTSTYLE1, true);
 	}
 
-	// From Here Jun. 29, 2001 genta
 	// 正規表現ライブラリの差し替えに伴う処理の見直し
 	// 処理フロー及び判定条件の見直し。必ず正規表現のチェックと
 	// 無関係にCheckRegexpVersionを通過するようにした。
@@ -508,17 +467,12 @@ void DlgGrep::SetData(void)
 	) {
 		// 英大文字と英小文字を区別する
 		CheckButton(IDC_CHK_REGULAREXP, true);
-		// 正規表現のときも選択できるように。
-//		CheckButton(IDC_CHK_LOHICASE, true);
-//		EnableItem(IDC_CHK_LOHICASE), false);
 
-		// 2001/06/23 N.Nakatani
 		// 単語単位で探す
 		EnableItem(IDC_CHK_WORD, false);
 	}else {
 		CheckButton(IDC_CHK_REGULAREXP, false);
 	}
-	// To Here Jun. 29, 2001 genta
 
 	EnableItem(IDC_CHK_FROMTHISTEXT, szCurrentFilePath[0] != _T('\0'));
 
@@ -542,10 +496,10 @@ void DlgGrep::SetDataFromThisText(bool bChecked)
 	if (szCurrentFilePath[0] != 0 && bChecked) {
 		TCHAR szWorkFolder[MAX_PATH];
 		TCHAR szWorkFile[MAX_PATH];
-		// 2003.08.01 Moca ファイル名はスペースなどは区切り記号になるので、""で囲い、エスケープする
+		// ファイル名はスペースなどは区切り記号になるので、""で囲い、エスケープする
 		szWorkFile[0] = _T('"');
 		SplitPath_FolderAndFile(szCurrentFilePath, szWorkFolder, szWorkFile + 1);
-		_tcscat(szWorkFile, _T("\"")); // 2003.08.01 Moca
+		_tcscat(szWorkFile, _T("\""));
 		SetItemText(IDC_COMBO_FILE, szWorkFile);
 		SetGrepFolder(GetItemHwnd(IDC_COMBO_FOLDER), szWorkFolder);
 
@@ -574,7 +528,6 @@ int DlgGrep::GetData(void)
 	// 英大文字と英小文字を区別する
 	searchOption.bLoHiCase = IsButtonChecked(IDC_CHK_LOHICASE);
 
-	// 2001/06/23 N.Nakatani
 	// 単語単位で検索
 	searchOption.bWordOnly = IsButtonChecked(IDC_CHK_WORD);
 
@@ -635,11 +588,6 @@ int DlgGrep::GetData(void)
 	csSearch.bGrepOutputBaseFolder = bGrepOutputBaseFolder;
 	csSearch.bGrepSeparateFolder = bGrepSeparateFolder;
 
-// やめました
-//	if (wcslen(szText) == 0) {
-//		WarningMessage(	GetHwnd(), _T("検索のキーワードを指定してください。"));
-//		return FALSE;
-//	}
 	if (auto_strlen(szFile) != 0) {
 		GrepEnumKeys enumKeys;
 		int nErrorNo = enumKeys.SetFileKeys(szFile);
@@ -653,7 +601,6 @@ int DlgGrep::GetData(void)
 	}
 	// この編集中のテキストから検索する
 	if (szFile[0] == _T('\0')) {
-		// Jun. 16, 2003 Moca
 		// 検索パターンが指定されていない場合のメッセージ表示をやめ、
 		//「*.*」が指定されたものと見なす．
 		_tcscpy(szFile, _T("*.*"));
@@ -667,7 +614,7 @@ int DlgGrep::GetData(void)
 		// カレントディレクトリを保存。このブロックから抜けるときに自動でカレントディレクトリは復元される。
 		CurrentDirectoryBackupPoint cCurDirBackup;
 
-		// 2011.11.24 Moca 複数フォルダ指定
+		// 複数フォルダ指定
 		std::vector<std::tstring> paths;
 		GrepAgent::CreateFolders(szFolder, paths);
 		size_t nFolderLen = 0;
@@ -701,27 +648,23 @@ int DlgGrep::GetData(void)
 		auto_strcpy(szFolder, szFolder);
 	}
 
-//@@@ 2002.2.2 YAZAKI CShareData.AddToSearchKeys()追加に伴う変更
 	// 検索文字列
 	if (0 < strText.size()) {
-		// From Here Jun. 26, 2001 genta
-		// 正規表現ライブラリの差し替えに伴う処理の見直し
 		int nFlag = 0;
 		nFlag |= searchOption.bLoHiCase ? 0x01 : 0x00;
 		if (searchOption.bRegularExp  && !CheckRegexpSyntax(strText.c_str(), GetHwnd(), true, nFlag)) {
 			return FALSE;
 		}
-		// To Here Jun. 26, 2001 genta 正規表現ライブラリ差し替え
 		if (strText.size() < _MAX_PATH) {
 			SearchKeywordManager().AddToSearchKeys(strText.c_str());
 			csSearch.searchOption = searchOption;		// 検索オプション
 		}
 	}else {
-		// 2014.07.01 空キーも登録する
+		// 空キーも登録する
 		SearchKeywordManager().AddToSearchKeys( L"" );
 	}
 
-	// この編集中のテキストから検索する場合、履歴に残さない	Uchi 2008/5/23
+	// この編集中のテキストから検索する場合、履歴に残さない
 	if (!bFromThisText) {
 		// 検索ファイル
 		SearchKeywordManager().AddToGrepFiles(szFile);
@@ -733,13 +676,10 @@ int DlgGrep::GetData(void)
 	return TRUE;
 }
 
-//@@@ 2002.01.18 add start
 LPVOID DlgGrep::GetHelpIdTable(void)
 {
 	return (LPVOID)p_helpids;
 }
-//@@@ 2002.01.18 add end
-
 
 static void SetGrepFolder(HWND hwndCtrl, LPCTSTR folder)
 {

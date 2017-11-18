@@ -30,7 +30,6 @@ INT_PTR CALLBACK MyDialogProc(
 			return FALSE;
 		}
 	default:
-		// Modified by KEITA for WIN64 2003.9.6
 		pDialog = (Dialog*)::GetWindowLongPtr(hwndDlg, DWLP_USER);
 		if (pDialog) {
 			return pDialog->DispatchEvent(hwndDlg, uMsg, wParam, lParam);
@@ -40,11 +39,6 @@ INT_PTR CALLBACK MyDialogProc(
 	}
 }
 
-
-/*!	コンストラクタ
-
-	@date 2002.2.17 YAZAKI CShareDataのインスタンスは、CProcessにひとつあるのみ。
-*/
 Dialog::Dialog(bool bSizable, bool bCheckShareData)
 {
 //	MYTRACE(_T("Dialog::Dialog()\n"));
@@ -77,8 +71,6 @@ Dialog::~Dialog()
 /*!
 	@param hInstance [in] アプリケーションインスタンスのハンドル
 	@param hwndParent [in] オーナーウィンドウのハンドル
-
-	@date 2011.04.10 nasukoji	各国語メッセージリソース対応
 */
 INT_PTR Dialog::DoModal(
 	HINSTANCE hInstance,
@@ -106,8 +98,6 @@ INT_PTR Dialog::DoModal(
 /*!
 	@param hInstance [in] アプリケーションインスタンスのハンドル
 	@param hwndParent [in] オーナーウィンドウのハンドル
-
-	@date 2011.04.10 nasukoji	各国語メッセージリソース対応
 */
 HWND Dialog::DoModeless(
 	HINSTANCE hInstance,
@@ -183,7 +173,6 @@ BOOL Dialog::OnInitDialog(
 	)
 {
 	hWnd = hwndDlg;
-	// Modified by KEITA for WIN64 2003.9.6
 	::SetWindowLongPtr(hWnd, DWLP_USER, lParam);
 
 	// ダイアログデータの設定
@@ -210,7 +199,6 @@ void Dialog::SetDialogPosSize()
 
 	if (xPos != -1 && yPos != -1) {
 		// ウィンドウ位置・サイズを再現
-		// 2014.11.28 フォント変更対応
 		if (nWidth == -1) {
 			RECT rc;
 			::GetWindowRect(hWnd, &rc);
@@ -219,7 +207,6 @@ void Dialog::SetDialogPosSize()
 		}
 
 		if (!(::GetWindowLongPtr(hWnd, GWL_STYLE) & WS_CHILD)) {
-			// 2006.06.09 ryoji
 			// モニタのワーク領域よりも左右上下に１ドット小さい領域内に全体が収まるように位置調整する
 			//
 			// note: ダイアログをワーク領域境界にぴったり合わせようとすると、
@@ -282,7 +269,6 @@ BOOL Dialog::OnDestroy(void)
 		yPos = windowPlacement.rcNormalPosition.top;
 		nWidth = windowPlacement.rcNormalPosition.right - windowPlacement.rcNormalPosition.left;
 		nHeight = windowPlacement.rcNormalPosition.bottom - windowPlacement.rcNormalPosition.top;
-		// 2014.11.28 フォント変更によるサイズ変更対応
 		if (!bSizable) {
 			nWidth = -1;
 			nHeight = -1;
@@ -328,23 +314,11 @@ BOOL Dialog::OnSize(WPARAM wParam, LPARAM lParam)
 	// サイズボックスの移動
 	if (hwndSizeBox) {
 		::GetClientRect(hWnd, &rc);
-//		::SetWindowPos(hwndSizeBox, NULL,
-// Sept. 17, 2000 JEPRO_16thdot アイコンの16dot目が表示されるように次行を変更する必要ある？
-// Jan. 12, 2001 JEPRO (directed by stonee) 15を16に変更するとアウトライン解析のダイアログの右下にある
-// グリップサイズに`遊び'ができてしまい(移動する！)、ダイアログを大きくできないという障害が発生するので
-// 変更しないことにした(要するに原作版に戻しただけ)
-//			rc.right - rc.left - 15, rc.bottom - rc.top - 15,
-//			13, 13,
-//			SWP_NOOWNERZORDER | SWP_NOZORDER
-//		);
-
-// Jan. 12, 2001 Stonee (suggested by genta)
-//		"13"という固定値ではなくシステムから取得したスクロールバーサイズを使うように修正
 		::SetWindowPos(hwndSizeBox, NULL,
-			rc.right - rc.left - GetSystemMetrics(SM_CXVSCROLL), //<-- stonee
-			rc.bottom - rc.top - GetSystemMetrics(SM_CYHSCROLL), //<-- stonee
-			GetSystemMetrics(SM_CXVSCROLL), //<-- stonee
-			GetSystemMetrics(SM_CYHSCROLL), //<-- stonee
+			rc.right - rc.left - GetSystemMetrics(SM_CXVSCROLL),
+			rc.bottom - rc.top - GetSystemMetrics(SM_CYHSCROLL),
+			GetSystemMetrics(SM_CXVSCROLL),
+			GetSystemMetrics(SM_CYHSCROLL),
 			SWP_NOOWNERZORDER | SWP_NOZORDER
 		);
 
@@ -425,11 +399,11 @@ INT_PTR Dialog::DispatchEvent(
 	case WM_TIMER:		return OnTimer(wParam);
 	case WM_KEYDOWN:	return OnKeyDown(wParam, lParam);
 	case WM_KILLFOCUS:	return OnKillFocus(wParam, lParam);
-	case WM_ACTIVATE:	return OnActivate(wParam, lParam);	//@@@ 2003.04.08 MIK
+	case WM_ACTIVATE:	return OnActivate(wParam, lParam);
 	case WM_VKEYTOITEM:	return OnVKeyToItem(wParam, lParam);
 	case WM_CHARTOITEM:	return OnCharToItem(wParam, lParam);
-	case WM_HELP:		return OnPopupHelp(wParam, lParam);	//@@@ 2002.01.18 add
-	case WM_CONTEXTMENU:return OnContextMenu(wParam, lParam);	//@@@ 2002.01.18 add
+	case WM_HELP:		return OnPopupHelp(wParam, lParam);
+	case WM_CONTEXTMENU:return OnContextMenu(wParam, lParam);
 	}
 	return FALSE;
 }
@@ -476,7 +450,6 @@ BOOL Dialog::OnCommand(WPARAM wParam, LPARAM lParam)
 			switch (wNotifyCode) {
 			// コンボボックス用メッセージ
 			case CBN_SELCHANGE:	return OnCbnSelChange(hwndCtl, wID);
-			// @@2005.03.31 MIK タグジャンプDialogで使うので追加
 			case CBN_EDITCHANGE:	return OnCbnEditChange(hwndCtl, wID);
 			case CBN_DROPDOWN:	return OnCbnDropDown(hwndCtl, wID);
 		//	case CBN_CLOSEUP:	return OnCbnCloseUp(hwndCtl, wID);
@@ -488,17 +461,16 @@ BOOL Dialog::OnCommand(WPARAM wParam, LPARAM lParam)
 	return FALSE;
 }
 
-//@@@ 2002.01.18 add start
 BOOL Dialog::OnPopupHelp(WPARAM wPara, LPARAM lParam)
 {
 	HELPINFO* p = (HELPINFO*) lParam;
-	MyWinHelp((HWND)p->hItemHandle, HELP_WM_HELP, (ULONG_PTR)GetHelpIdTable());	// 2006.10.10 ryoji MyWinHelpに変更に変更
+	MyWinHelp((HWND)p->hItemHandle, HELP_WM_HELP, (ULONG_PTR)GetHelpIdTable());
 	return TRUE;
 }
 
 BOOL Dialog::OnContextMenu(WPARAM wPara, LPARAM lParam)
 {
-	MyWinHelp(hWnd, HELP_CONTEXTMENU, (ULONG_PTR)GetHelpIdTable());	// 2006.10.10 ryoji MyWinHelpに変更に変更
+	MyWinHelp(hWnd, HELP_CONTEXTMENU, (ULONG_PTR)GetHelpIdTable());
 	return TRUE;
 }
 
@@ -510,7 +482,6 @@ LPVOID Dialog::GetHelpIdTable(void)
 {
 	return (LPVOID)p_helpids;
 }
-//@@@ 2002.01.18 add end
 
 BOOL Dialog::OnCbnSelEndOk(HWND hwndCtl, int wID)
 {
@@ -550,9 +521,6 @@ BOOL Dialog::OnCbnDropDown(HWND hwndCtl, int wID)
 
 	@param hwndCtl [in]		コンボボックスのウィンドウハンドル
 	@param wID [in]			コンボボックスのID
-
-	@author ryoji
-	@date 2009.03.29 新規作成
 */
 BOOL Dialog::OnCbnDropDown(HWND hwndCtl, bool scrollBar)
 {
@@ -600,8 +568,8 @@ BOOL Dialog::SelectFile(
 	TCHAR szFilePath[_MAX_PATH + 1];
 	TCHAR szPath[_MAX_PATH + 1];
 	::GetWindowText(hwndCtl, szFilePath, _countof(szFilePath));
-	// 2003.06.23 Moca 相対パスは実行ファイルからのパスとして開く
-	// 2007.05.19 ryoji 相対パスは設定ファイルからのパスを優先
+	// 相対パスは実行ファイルからのパスとして開く
+	// 相対パスは設定ファイルからのパスを優先
 	if (resolvePath && _IS_REL_PATH(szFilePath)) {
 		GetInidirOrExedir(szPath, szFilePath);
 	}else {
@@ -649,7 +617,7 @@ bool Dialog::DirectoryUp(TCHAR* szDir)
 	return false;
 }
 
-// コントロールに画面のフォントを設定	2012/11/27 Uchi
+// コントロールに画面のフォントを設定
 HFONT Dialog::SetMainFont(HWND hTarget)
 {
 	if (!hTarget) {
@@ -674,10 +642,6 @@ HFONT Dialog::SetMainFont(HWND hTarget)
 	lf.lfStrikeOut		= FALSE;
 	//lf.lfCharSet		= lf.lfCharSet;
 	lf.lfOutPrecision	= OUT_TT_ONLY_PRECIS;		// Raster Font を使わないように
-	//lf.lfClipPrecision	= lf.lfClipPrecision;
-	//lf.lfQuality		= lf.lfQuality;
-	//lf.lfPitchAndFamily	= lf.lfPitchAndFamily;
-	//_tcsncpy(lf.lfFaceName, lf.lfFaceName, _countof(lf.lfFaceName));	// 画面のフォントに設定	2012/11/27 Uchi
 
 	// フォントを作成
 	hFont = ::CreateFontIndirect(&lf);

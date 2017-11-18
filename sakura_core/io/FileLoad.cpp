@@ -39,10 +39,10 @@ FileLoad::FileLoad()
 	CharCode		= CODE_DEFAULT;
 	pCodeBase		= nullptr;////
 	encodingTrait = ENCODING_TRAIT_ASCII;
-	bBomExist		= false;	// Jun. 08, 2003 Moca
+	bBomExist		= false;
 	nFlag 		= 0;
 	nReadLength	= 0;
-	mode			= FileLoadMode::Close;	// Jun. 08, 2003 Moca
+	mode			= FileLoadMode::Close;
 
 	nLineIndex	= -1;
 
@@ -73,8 +73,6 @@ FileLoad::~FileLoad(void)
 	@param CharCode  [in] ファイルの文字コード．
 	@param nFlag [in] 文字コードのオプション
 	@param pbBomExist [out] BOMの有無
-	@date 2003.06.08 Moca CODE_AUTODETECTを指定できるように変更
-	@date 2003.07.26 ryoji BOM引数追加
 */
 EncodingType FileLoad::FileOpen(
 	const EncodingConfig& encode,
@@ -94,7 +92,6 @@ EncodingType FileLoad::FileOpen(
 	HANDLE hFile = ::CreateFile(
 		pFileName,
 		GENERIC_READ,
-		// Oct. 18, 2002 genta FILE_SHARE_WRITE 追加
 		// 他プロセスが書き込み中のファイルを開けるように
 		FILE_SHARE_READ | FILE_SHARE_WRITE,	// 共有
 		NULL,						// セキュリティ記述子
@@ -125,7 +122,6 @@ EncodingType FileLoad::FileOpen(
 
 //	mode = FLMODE_OPEN;
 
-	// From Here Jun. 08, 2003 Moca 文字コード判定
 	// データ読み込み
 	Buffering();
 
@@ -138,7 +134,6 @@ EncodingType FileLoad::FileOpen(
 			charCode = mediator.CheckKanjiCode(pReadBuf, nReadDataLen);
 		}
 	}
-	// To Here Jun. 08, 2003
 	// 不正な文字コードのときはデフォルト(SJIS:無変換)を設定
 	if (!IsValidCodeType(charCode)) {
 		charCode = CODE_DEFAULT;
@@ -164,19 +159,18 @@ EncodingType FileLoad::FileOpen(
 		}
 	}
 	if (bBom) {
-		// Jul. 26, 2003 ryoji BOMの有無をパラメータで返す
+		// BOMの有無をパラメータで返す
 		bBomExist = true;
 		if (pbBomExist) {
 			*pbBomExist = true;
 		}
 	}else {
-		// Jul. 26, 2003 ryoji BOMの有無をパラメータで返す
 		if (pbBomExist) {
 			*pbBomExist = false;
 		}
 	}
 	
-	// To Here Jun. 13, 2003 Moca BOMの除去
+	// BOMの除去
 	mode = FileLoadMode::Ready;
 //	memLine.AllocBuffer(256);
 	pCodeBase->GetEol( &memEols[0], EolType::NEL );
@@ -300,7 +294,6 @@ CodeConvertResult FileLoad::ReadLine_core(
 	lineBuffer.SetRawDataHoldBuffer("", 0);
 
 	// 1行取り出し ReadBuf -> memLine
-	// Oct. 19, 2002 genta while条件を整理
 	size_t	nBufLineLen;
 	size_t	nEolLen;
 	size_t	nBufferNext;
@@ -319,7 +312,7 @@ CodeConvertResult FileLoad::ReadLine_core(
 		}
 
 		// ReadBufから1行を取得するとき、改行コードが欠ける可能性があるため
-		if (nReadDataLen <= nReadBufOffSet && FileLoadMode::Ready == mode) {// From Here Jun. 13, 2003 Moca
+		if (nReadDataLen <= nReadBufOffSet && FileLoadMode::Ready == mode) {
 			size_t n = 128;
 			size_t nMinAllocSize = lineBuffer.GetRawLength() + nEolLen - nBufferNext + 100;
 			while (n < nMinAllocSize) {
@@ -349,7 +342,7 @@ CodeConvertResult FileLoad::ReadLine_core(
 
 	++nLineIndex;
 
-	// 2012.10.21 Moca BOMの除去(UTF-7対応)
+	// BOMの除去(UTF-7対応)
 	if (nLineIndex == 0) {
 		if (bBomExist && 1 <= pUnicodeBuffer->GetStringLength()) {
 			if (pUnicodeBuffer->GetStringPtr()[0] == 0xfeff) {
@@ -376,7 +369,7 @@ void FileLoad::Buffering(void)
 		// Borland C++では0バイトのmallocを獲得失敗と見なすため
 		// 最低1バイトは取得することで0バイトのファイルを開けるようにする
 		if (0 >= nBufSize) {
-			nBufSize = 1; // Jun. 08, 2003  BCCのmalloc(0)がNULLを返す仕様に対処
+			nBufSize = 1; // BCCのmalloc(0)がNULLを返す仕様に対処
 		}
 
 		pReadBuf = (char*) malloc(nBufSize);

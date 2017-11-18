@@ -6,8 +6,8 @@
 #include "uiparts/HandCursor.h"
 #include "doc/layout/Layout.h"
 #include "window/EditWnd.h"
-#include "dlg/DlgCancel.h" /// 2002/2/3 aroka from here
-#include "dlg/DlgInput1.h" /// 2007.02.11 Moca
+#include "dlg/DlgCancel.h"
+#include "dlg/DlgInput1.h"
 #include "EditApp.h"
 #include "util/window.h"
 #include "util/shell.h"
@@ -30,7 +30,7 @@ using namespace std;
 #define		COMPAT_BMP_BASE     1   // COMPAT_BMP_SCALEピクセル幅を複写する画面ピクセル幅
 #define		COMPAT_BMP_SCALE    2   // 互換BMPのCOMPAT_BMP_BASEに対する倍率(1以上の整数倍)
 
-Print PrintPreview::print;		// 現在のプリンタ情報 2003.05.02 かろと
+Print PrintPreview::print;		// 現在のプリンタ情報
 
 /*! コンストラクタ
 	印刷Previewを表示するために必要な情報を初期化、領域確保。
@@ -73,7 +73,6 @@ PrintPreview::~PrintPreview()
 	// フォント幅キャッシュを編集モードに戻す
 	SelectCharWidthCache(CharWidthFontMode::Edit, CharWidthCacheMode::Neutral);
 
-	// 2006.08.17 Moca CompatDC削除。EditWndから移設
 	// 再描画用メモリBMP
 	if (hbmpCompatBMP) {
 		// 再描画用メモリBMP(OLD)
@@ -87,8 +86,6 @@ PrintPreview::~PrintPreview()
 }
 
 /*!	印刷Preview時の、WM_PAINTを処理
-
-	@date 2007.02.11 Moca Previewを滑らかにする機能．
 		拡大描画してから縮小することでアンチエイリアス効果を出す．
 */
 LRESULT PrintPreview::OnPaint(
@@ -358,7 +355,6 @@ LRESULT PrintPreview::OnSize(WPARAM wParam, LPARAM lParam)
 		::SelectObject(hdcCompatDC, hbmpCompatBMPOld);	// 再描画用メモリＢＭＰ(OLD)
 		::DeleteObject(hbmpCompatBMP);
 	}
-	// 2007.02.11 Moca Previewを滑らかにする
 	// Win9xでは 巨大なBMPは作成できないことと
 	// StretchBltでSTRETCH_HALFTONEが未サポートであるので Win2K 以上のみで有効にする。
 	if (IsDlgButtonChecked( hwndPrintPreviewBar, IDC_CHECK_ANTIALIAS )
@@ -411,9 +407,6 @@ LRESULT PrintPreview::OnSize(WPARAM wParam, LPARAM lParam)
 	return 0L;
 }
 
-/*!
-	@date 2006.08.14 Moca SB_TOP, SB_BOTTOMへの対応
-*/
 LRESULT PrintPreview::OnVScroll(WPARAM wParam, LPARAM lParam)
 {
 	int nScrollCode = (int) LOWORD(wParam);
@@ -423,7 +416,7 @@ LRESULT PrintPreview::OnVScroll(WPARAM wParam, LPARAM lParam)
 	si.cbSize = sizeof(si);
 	si.fMask = SIF_PAGE | SIF_POS | SIF_RANGE | SIF_TRACKPOS;
 	::GetScrollInfo(hwndScrollBar, SB_CTL, &si);
-	int nPos = si.nTrackPos; // 2013.05.30 32bit対応
+	int nPos = si.nTrackPos;
 	int nNowPos = -1 * nPreviewVScrollPos;
 	int nNewPos = 0;
 	int nMove = 0;
@@ -444,7 +437,6 @@ LRESULT PrintPreview::OnVScroll(WPARAM wParam, LPARAM lParam)
 	case SB_THUMBTRACK:
 		nMove = nPos - nNowPos;
 		break;
-	// 2006.08.14 Moca SB_TOP, SB_BOTTOMへの対応
 	case SB_TOP:
 		nMove = -1 * nNowPos;
 		break;
@@ -474,9 +466,6 @@ LRESULT PrintPreview::OnVScroll(WPARAM wParam, LPARAM lParam)
 	return 0;
 }
 
-/*!
-	@date 2006.08.14 Moca SB_LEFT, SB_RIGHTへの対応
-*/
 LRESULT PrintPreview::OnHScroll(WPARAM wParam, LPARAM lParam)
 {
 	int nScrollCode = (int) LOWORD(wParam);
@@ -486,7 +475,7 @@ LRESULT PrintPreview::OnHScroll(WPARAM wParam, LPARAM lParam)
 	si.cbSize = sizeof(si);
 	si.fMask = SIF_PAGE | SIF_POS | SIF_RANGE | SIF_TRACKPOS;
 	::GetScrollInfo(hwndScrollBar, SB_CTL, &si);
-	int nPos = si.nTrackPos; // 2013.05.30 32bit対応
+	int nPos = si.nTrackPos;
 	//nNowPos = GetScrollPosだとロジクールのSetPointで不具合があり、nPos == nNowPosになってしまう
 	int nNowPos = nPreviewHScrollPos;
 	int nMove = 0;
@@ -507,7 +496,6 @@ LRESULT PrintPreview::OnHScroll(WPARAM wParam, LPARAM lParam)
 	case SB_THUMBTRACK:
 		nMove = nPos - nNowPos;
 		break;
-	// 2006.08.14 Moca SB_LEFT, SB_RIGHTへの対応
 	case SB_LEFT:
 		nMove = -1 * nNowPos;
 		break;
@@ -540,7 +528,7 @@ LRESULT PrintPreview::OnHScroll(WPARAM wParam, LPARAM lParam)
 LRESULT PrintPreview::OnMouseMove(WPARAM wParam, LPARAM lParam)
 {
 	// 手カーソル
-	SetHandCursor();		// Hand Cursorを設定 2013/1/29 Uchi
+	SetHandCursor();		// Hand Cursorを設定
 	if (!parentWnd.GetDragMode()) {
 		return 0;
 	}
@@ -667,7 +655,7 @@ void PrintPreview::OnChangePrintSetting(void)
 	bool bLockOld = bLockSetting;
 	bLockSetting = true;
 
-	// 2009.08.08 印刷で用紙サイズ、横指定が効かない問題対応 syat
+	// 印刷で用紙サイズ、横指定が効かない問題対応
 	// DEVMODE構造体が設定されていなかったら既定のプリンタを設定
 	if (pPrintSetting->mdmDevMode.szPrinterDeviceName[0] == L'\0') {
 		GetDefaultPrinterInfo();
@@ -733,9 +721,9 @@ void PrintPreview::OnChangePrintSetting(void)
 			);
 		}
 	}
-	// 現在のページ設定の、用紙サイズと用紙方向を反映させる(エラーでA4縦になった場合も考慮してif文の外へ移動 2003.07.03 かろと)
+	// 現在のページ設定の、用紙サイズと用紙方向を反映させる
 	pPrintSetting->nPrintPaperSize = pPrintSetting->mdmDevMode.dmPaperSize;
-	pPrintSetting->nPrintPaperOrientation = pPrintSetting->mdmDevMode.dmOrientation;	// 用紙方向の反映忘れを修正 2003/07/03 かろと
+	pPrintSetting->nPrintPaperOrientation = pPrintSetting->mdmDevMode.dmOrientation;	// 用紙方向の反映
 
 	// プリンタ設定はここで変更されるがそれぞれのウィンドウで再設定するので更新メッセージは投げない
 	*pPrintSettingOrg = *pPrintSetting;
@@ -748,7 +736,7 @@ void PrintPreview::OnChangePrintSetting(void)
 	// 縦方向の行数
 	bPreview_EnableLines = Print::CalculatePrintableLines(*pPrintSetting, nPreview_PaperAllHeight);			// 印字可能行数/ページ
 
-	// 印字可能領域がない場合は印刷Previewを終了する 2013.5.10 aroka
+	// 印字可能領域がない場合は印刷Previewを終了する
 	if (bPreview_EnableColumns == 0 || bPreview_EnableLines == 0) {
 		parentWnd.PrintPreviewModeONOFF();
 		parentWnd.SendStatusMessage(LS(STR_ERR_DLGPRNPRVW3_1));
@@ -1148,7 +1136,7 @@ void PrintPreview::OnPrint(void)
 			break;
 		}
 	}
-	//	印刷前のフォントに戻す 2003.05.02 かろと hdc解放の前に処理順序を変更
+	//	印刷前のフォントに戻す
 	::SelectObject(hdc, hFontOld);
 
 	// 印刷 ジョブ終了
@@ -1164,7 +1152,7 @@ void PrintPreview::OnPrint(void)
 
 	bLockSetting = false;
 
-	// 印刷が終わったら、Previewから抜ける 2003.05.02 かろと
+	// 印刷が終わったら、Previewから抜ける
 	parentWnd.PrintPreviewModeONOFF();
 	return;
 }

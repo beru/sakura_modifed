@@ -21,15 +21,6 @@
 #define	SCRIPT_E_REPORTED	0x80020101L	// ActivScp.h(VS2012)と同じ様な形に変更
 #endif
 
-/* 2009.10.29 syat インタフェースオブジェクト部分をWSHIfObj.hに分離
-class InterfaceObjectTypeInfo: public ImplementsIUnknown<ITypeInfo>
- */
-
-//IActiveScriptSite, IActiveScriptSiteWindow
-/*!
-	@date Sep. 15, 2005 FILE IActiveScriptSiteWindow実装．
-		マクロでMsgBoxを使用可能にする．
-*/
 class WSHSite :
 	public IActiveScriptSite,
 	public IActiveScriptSiteWindow
@@ -137,8 +128,6 @@ public:
 		return S_OK; 
 	}
 
-	// Nov. 3, 2002 鬼
-	// エラー行番号表示対応
 	virtual HRESULT STDMETHODCALLTYPE OnScriptError(
 	  /* [in] */ IActiveScriptError* pscripterror
 		)
@@ -154,7 +143,6 @@ public:
 			if (pscripterror->GetSourcePosition(&Context, &Line, &Pos) == S_OK) {
 				std::vector<wchar_t> msgBuf(SysStringLen(Info.bstrDescription) + 128);
 				wchar_t* message = &msgBuf[0];
-				// Nov. 10, 2003 FILE Win9Xでは、[wsprintfW]が無効のため、[auto_sprintf]に修正
 				const wchar_t* szDesc = Info.bstrDescription;
 				auto_sprintf(message, L"[Line %d] %ls", Line + 1, szDesc);
 				SysReAllocString(&Info.bstrDescription, message);
@@ -181,7 +169,6 @@ public:
 		return S_OK; 
 	}
 
-	// Sep. 15, 2005 FILE IActiveScriptSiteWindow実装
 	virtual HRESULT __stdcall GetWindow(
 	    /* [out] */ HWND *phwnd)
 	{
@@ -189,7 +176,6 @@ public:
 		return S_OK;
 	}
 
-	// Sep. 15, 2005 FILE IActiveScriptSiteWindow実装
 	virtual HRESULT __stdcall EnableModeless(
 	    /* [in] */ BOOL fEnable)
 	{
@@ -210,7 +196,7 @@ WSHClient::WSHClient(
 	isValid(false),
 	engine(NULL)
 { 
-	// 2010.08.28 DLL インジェクション対策としてEXEのフォルダに移動する
+	// インジェクション対策としてEXEのフォルダに移動する
 	CurrentDirectoryBackupPoint dirBack;
 	ChangeCurrentDirectoryToExeDir();
 	
@@ -404,12 +390,4 @@ void WSHClient::AddInterfaceObject(IfObj* obj)
 	obj->owner = this;
 	obj->AddRef();
 }
-
-
-/////////////////////////////////////////////
-/*!
-	MacroCommand→CWSHIfObj.cppへ移動
-	CWSHMacroManager →　CWSHManager.cppへ移動
-
-*/
 

@@ -7,7 +7,7 @@
 #include "env/DllSharedData.h"
 
 struct DllSharedData;
-class EditDoc; // 2002/2/10 aroka
+class EditDoc;
 
 // ファンクションキーウィンドウ
 // @date 2002.2.17 YAZAKI CShareDataのインスタンスは、CProcessにひとつあるのみ。
@@ -24,12 +24,12 @@ public:
 	HWND Open(HINSTANCE, HWND, EditDoc*, bool);	// ウィンドウ オープン
 	void Close(void);	// ウィンドウ クローズ
 	void SizeBox_ONOFF(bool);	// サイズボックスの表示／非表示切り替え
-	void Timer_ONOFF(bool); // 更新の開始／停止 20060126 aroka
+	void Timer_ONOFF(bool); // 更新の開始／停止
 	/*
 	|| メンバ変数
 	*/
 private:
-	// 20060126 aroka すべてPrivateにして、初期化順序に合わせて並べ替え
+	// すべてPrivateにして、初期化順序に合わせて並べ替え
 	EditDoc*		pEditDoc;
 	DllSharedData&	shareData;
 	int				nCurrentKeyState;
@@ -49,7 +49,7 @@ protected:
 	int CalcButtonSize(void);	// ボタンのサイズを計算
 	
 	// 仮想関数
-	virtual void AfterCreateWindow(void) {}	// ウィンドウ作成後の処理	// 2007.03.13 ryoji 可視化しない
+	virtual void AfterCreateWindow(void) {}	// ウィンドウ作成後の処理
 	
 	// 仮想関数 メッセージ処理 詳しくは実装を参照
 	virtual LRESULT OnTimer(HWND, UINT, WPARAM, LPARAM);	// WM_TIMERタイマーの処理

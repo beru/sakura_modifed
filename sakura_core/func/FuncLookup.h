@@ -11,8 +11,8 @@
 #include "config/maxdata.h"
 #include "func/Funccode.h"
 
-struct MacroRec;// 2007.11.02 ryoji
-struct CommonSetting;// 2002/2/10 aroka
+struct MacroRec;
+struct CommonSetting;
 
 // マクロ情報
 struct MacroRec {
@@ -21,7 +21,7 @@ struct MacroRec {
 	bool	bReloadWhenExecute;		// 実行時に読み込みなおすか（デフォルトon）
 	
 	bool IsEnabled() const { return szFile[0] != _T('\0'); }
-	const TCHAR* GetTitle() const { return szName[0] == _T('\0') ? szFile: szName; }	// 2007.11.02 ryoji 追加
+	const TCHAR* GetTitle() const { return szName[0] == _T('\0') ? szFile: szName; }
 };
 
 /*!
@@ -32,10 +32,6 @@ struct MacroRec {
 class FuncLookup {
 
 public:
-	// Oct. 15, 2001 genta 引数追加
-	// 2007.11.02 ryoji 引数変更（CSMacroMgr->MacroRec）
-//	FuncLookup(HINSTANCE hInst, MacroRec* pMacroRec, CommonSetting* pCom)
-//		: pMacroRec(pMacroRec), pCommon(pCom) {}
 	FuncLookup() : pMacroRec(nullptr) {}
 
 	void Init(MacroRec* pMacroRec, CommonSetting* pCom) {
@@ -43,7 +39,7 @@ public:
 		pCommon = pCom;
 	}
 
-	EFunctionCode Pos2FuncCode(int category, int position, bool bGetUnavailable = true) const;	// 2007.10.31 ryoji bGetUnavailableパラメータ追加
+	EFunctionCode Pos2FuncCode(int category, int position, bool bGetUnavailable = true) const;
 	bool Pos2FuncName(int category, int position, wchar_t* ptr, int bufsize) const;
 	bool Funccode2Name(int funccode, wchar_t* ptr, int bufsize) const ;
 	const TCHAR* Category2Name(int category) const;
@@ -60,7 +56,7 @@ public:
 
 
 private:
-	MacroRec* pMacroRec;	// マクロ情報	// 2007.11.02 ryoji メンバ変更（CSMacroMgr->MacroRec）
+	MacroRec* pMacroRec;	// マクロ情報
 	CommonSetting* pCommon;	// 共通設定データ領域へのポインタ
 
 };

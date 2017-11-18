@@ -4,7 +4,7 @@
 #include "StdAfx.h"
 #include "func/KeyBind.h"
 #include "env/ShareData.h"
-#include "macro/SMacroMgr.h"// 2002/2/10 aroka
+#include "macro/SMacroMgr.h"
 
 // KeyDataとほぼ同じ
 struct KEYDATAINIT {
@@ -32,20 +32,15 @@ static void SetKeyNameArrVal(
 	const KEYDATAINIT*	pKeydata
 );
 
-
 KeyBind::KeyBind()
 {
 }
-
 
 KeyBind::~KeyBind()
 {
 }
 
-
-/*! Windows アクセラレータの作成
-	@date 2007.02.22 ryoji デフォルト機能割り当てに関する処理を追加
-*/
+/*! Windows アクセラレータの作成 */
 HACCEL KeyBind::CreateAccerelator(
 	int			nKeyNameArrNum,
 	KeyData*	pKeyNameArr
@@ -96,8 +91,6 @@ HACCEL KeyBind::CreateAccerelator(
 
 /*! アクラセレータ識別子に対応するコマンド識別子を返す．
 	対応するアクラセレータ識別子がない場合または機能未割り当ての場合は0を返す．
-
-	@date 2007.02.22 ryoji デフォルト機能割り当てに関する処理を追加
 */
 EFunctionCode KeyBind::GetFuncCode(
 	WORD		nAccelCmd,
@@ -116,7 +109,6 @@ EFunctionCode KeyBind::GetFuncCode(
 			}
 		}
 	}else {
-		// 2012.12.10 aroka キーコード検索時のループを除去
 		DllSharedData& shareData = GetDllShareData();
 		return GetFuncCodeAt(pKeyNameArr[shareData.common.keyBind.keyToKeyNameArr[nCmd]], nSts, bGetDefFuncCode);
 	}
@@ -126,9 +118,6 @@ EFunctionCode KeyBind::GetFuncCode(
 
 /*!
 	@return 機能が割り当てられているキーストロークの数
-	
-	@date Oct. 31, 2001 genta 動的な機能名に対応するため引数追加
-	@date 2007.02.22 ryoji デフォルト機能割り当てに関する処理を追加
 */
 int KeyBind::CreateKeyBindList(
 	HINSTANCE		hInstance,		// [in] インスタンスハンドル
@@ -192,7 +181,6 @@ int KeyBind::CreateKeyBindList(
 				memList.AppendString(szFuncNameJapanese);
 
 				// 機能ID→関数名，機能名日本語
-				//@@@ 2002.2.2 YAZAKI マクロをSMacroMgrに統一
 				SMacroMgr::GetFuncInfoByID(
 					hInstance,
 					iFunc,
@@ -211,7 +199,6 @@ int KeyBind::CreateKeyBindList(
 
 				// キーマクロに記録可能な機能かどうかを調べる
 				memList.AppendString(pszTAB);
-				//@@@ 2002.2.2 YAZAKI マクロをSMacroMgrに統一
 				if (SMacroMgr::CanFuncIsKeyMacro(iFunc)) {
 					memList.AppendStringLiteral(LTEXT("○"));
 				}else {
@@ -279,11 +266,7 @@ bool KeyBind::GetKeyStrSub(
 }
 
 
-/** 機能に対応するキー名の取得
-	@date 2007.02.22 ryoji デフォルト機能割り当てに関する処理を追加
-	@date 2007.11.04 genta マウスクリックよりキー割り当ての優先度を上げる
-	@date 2007.11.04 genta 共通機能のサブルーチン化
-*/
+/** 機能に対応するキー名の取得 */
 int KeyBind::GetKeyStr(
 	HINSTANCE	hInstance,
 	int			nKeyNameArrNum,
@@ -316,10 +299,7 @@ int KeyBind::GetKeyStr(
 }
 
 
-/** 機能に対応するキー名の取得(複数)
-	@date 2007.02.22 ryoji デフォルト機能割り当てに関する処理を追加
-	@date 2007.11.04 genta 共通機能のサブルーチン化
-*/
+/** 機能に対応するキー名の取得(複数) */
 int KeyBind::GetKeyStrList(
 	HINSTANCE	hInstance,
 	int			nKeyNameArrNum,
@@ -353,7 +333,6 @@ int KeyBind::GetKeyStrList(
 	nAssignedKeysNum = 0;
 	for (int j=0; j<8; ++j) {
 		for (int i=0; i<nKeyNameArrNum; /* 1を加えてはいけない */) {
-			// 2007.11.04 genta 共通機能のサブルーチン化
 			if (GetKeyStrSub(
 				i,
 				nKeyNameArrNum,
@@ -376,7 +355,6 @@ int KeyBind::GetKeyStrList(
 	@param name ラベル
 	@param sKey アクセスキー
 	@return アクセスキー付きの文字列
-	@data 2013.12.09 novice アクセスキーと文字列の比較で小文字も有効にする
 */
 TCHAR* KeyBind::MakeMenuLabel(const TCHAR* sName, const TCHAR* sKey)
 {
@@ -419,11 +397,7 @@ TCHAR* KeyBind::MakeMenuLabel(const TCHAR* sName, const TCHAR* sKey)
 	}
 }
 
-/*! メニューラベルの作成
-	@date 2007.02.22 ryoji デフォルト機能割り当てに関する処理を追加
-	2010/5/17	アクセスキーの追加
-	@date 2014.05.04 Moca LABEL_MAX=256 => nLabelSize
-*/
+/*! メニューラベルの作成 */
 TCHAR* KeyBind::GetMenuLabel(
 	HINSTANCE		hInstance,
 	int				nKeyNameArrNum,
@@ -450,7 +424,6 @@ TCHAR* KeyBind::GetMenuLabel(
 	// 機能に対応するキー名を追加するか
 	if (bKeyStr) {
 		NativeT memAccessKey;
-		// 2010.07.11 Moca メニューラベルの「\t」の付加条件変更
 		// [ファイル/フォルダ/ウィンドウ一覧以外]から[アクセスキーがあるときのみ]に付加するように変更
 		// 機能に対応するキー名の取得
 		if (GetKeyStr(hInstance, nKeyNameArrNum, pKeyNameArr, memAccessKey, nFuncId, bGetDefFuncCode)) {
@@ -471,8 +444,6 @@ TCHAR* KeyBind::GetMenuLabel(
 	@param nState [in] Shift,Ctrl,Altキー状態
 
 	@return 機能番号
-
-	@date 2007.02.22 ryoji 新規作成
 */
 EFunctionCode KeyBind::GetDefFuncCode(int nKeyCode, int nState)
 {
@@ -488,7 +459,7 @@ EFunctionCode KeyBind::GetDefFuncCode(int nKeyCode, int nState)
 			nDefFuncCode = F_WINCLOSE;	// 閉じる
 			if (csTabBar.bDispTabWnd && !csTabBar.bDispTabWndMultiWin) {
 				if (!csTabBar.bTab_CloseOneWin) {
-					nDefFuncCode = F_GROUPCLOSE;	// グループを閉じる	// 2007.06.20 ryoji
+					nDefFuncCode = F_GROUPCLOSE;	// グループを閉じる
 				}
 			}
 		}
@@ -504,8 +475,6 @@ EFunctionCode KeyBind::GetDefFuncCode(int nKeyCode, int nState)
 	@param bGetDefFuncCode [in] デフォルト機能を取得するかどうか
 
 	@return 機能番号
-
-	@date 2007.03.07 ryoji インライン関数から通常の関数に変更（BCCの最適化バグ対策）
 */
 EFunctionCode KeyBind::GetFuncCodeAt(KeyData& keyData, int nState, bool bGetDefFuncCode)
 {
@@ -519,127 +488,11 @@ EFunctionCode KeyBind::GetFuncCodeAt(KeyData& keyData, int nState, bool bGetDefF
 }
 
 
-// Sep. 14, 2000 JEPRO
-//	Shift+F1 に「コマンド一覧」, Alt+F1 に「ヘルプ目次」, Shift+Alt+F1 に「キーワード検索」を追加	//Nov. 25, 2000 JEPRO 殺していたのを修正・復活
-// Dec. 25, 2000 JEPRO Shift+Ctrl+F1 に「バージョン情報」を追加
-// 2001.12.03 hor F2にブックマーク関連を割当
-// Sept. 21, 2000 JEPRO	Ctrl+F3 に「検索マークのクリア」を追加
-// Aug. 12, 2002 ai	Ctrl+Shift+F3 に「検索開始位置へ戻る」を追加
-// Oct. 7, 2000 JEPRO	Alt+F4 に「ウィンドウを閉じる」, Shift+Alt+F4 に「すべてのウィンドウを閉じる」を追加
-//	Ctrl+F4に割り当てられていた「縦横に分割」を「閉じて(無題)」に変更し Shift+Ctrl+F4 に「閉じて開く」を追加
-// Jan. 14, 2001 Ctrl+Alt+F4 に「テキストエディタの全終了」を追加
-// Jun. 2001「サクラエディタの全終了」に改称
-// 2006.10.21 ryoji Alt+F4 には何も割り当てない（デフォルトのシステムコマンド「閉じる」が実行されるように）
-// 2007.02.13 ryoji Shift+Ctrl+F4をF_WIN_CLOSEALLからF_EXITALLEDITORSに変更
-// 2007.02.22 ryoji Ctrl+F4 への割り当てを削除（デフォルトのコマンドを実行）
-// Sep. 20, 2000 JEPRO Ctrl+F5 に「外部コマンド実行」を追加  なおマクロ名はCMMAND からCOMMAND に変更済み
-// Oct. 28, 2000 F5 は「再描画」に変更	//Jan. 14, 2001 Alt+F5 に「uudecodeして保存」, Ctrl+ Alt+F5 に「TAB→空白」を追加
-// May 28, 2001 genta	S-C-A-F5にSPACE-to-TABを追加
-// Jan. 14, 2001 JEPRO	Ctrl+F6 に「小文字」, Alt+F6 に「Base64デコードして保存」を追加
-// 2007.11.15 nasukoji	トリプルクリック・クアドラプルクリック対応
-// Jan. 14, 2001 JEPRO	Ctrl+F7 に「大文字」, Alt+F7 に「UTF-7→SJISコード変換」, Shift+Alt+F7 に「SJIS→UTF-7コード変換」, Ctrl+Alt+F7 に「UTF-7で開き直す」を追加
-// Nov. 9, 2000 JEPRO	Shift+F8 に「CRLF改行でコピー」を追加
-// Jan. 14, 2001 JEPRO	Ctrl+F8 に「全角→半角」, Alt+F8 に「UTF-8→SJISコード変換」, Shift+Alt+F8 に「SJIS→UTF-8コード変換」, Ctrl+Alt+F8 に「UTF-8で開き直す」を追加
-// Jan. 14, 2001 JEPRO	Ctrl+F9 に「半角＋全ひら→全角・カタカナ」, Alt+F9 に「Unicode→SJISコード変換」, Ctrl+Alt+F9 に「Unicodeで開き直す」を追加
-// Oct. 28, 2000 JEPRO F10 に「SQL*Plusで実行」を追加(F5からの移動)
-// Jan. 14, 2001 JEPRO	Ctrl+F10 に「半角＋全カタ→全角・ひらがな」, Alt+F10 に「EUC→SJISコード変換」, Shift+Alt+F10 に「SJIS→EUCコード変換」, Ctrl+Alt+F10 に「EUCで開き直す」を追加
-// Jan. 14, 2001 JEPRO	Shift+F11 に「SQL*Plusをアクティブ表示」, Ctrl+F11 に「半角カタカナ→全角カタカナ」, Alt+F11 に「E-Mail(JIS→SJIS)コード変換」, Shift+Alt+F11 に「SJIS→JISコード変換」, Ctrl+Alt+F11 に「JISで開き直す」を追加
-// Jan. 14, 2001 JEPRO	Ctrl+F12 に「半角カタカナ→全角ひらがな」, Alt+F12 に「自動判別→SJISコード変換」, Ctrl+Alt+F11 に「SJISで開き直す」を追加
-// Sept. 1, 2000 JEPRO	Alt+Enter に「ファイルのプロパティ」を追加	//Oct. 15, 2000 JEPRO Ctrl+Enter に「ファイル内容比較」を追加
-// Oct. 7, 2000 JEPRO 長いので名称を簡略形に変更(BackSpace→BkSp)
-// Oct. 7, 2000 JEPRO 名称をVC++に合わせ簡略形に変更(Insert→Ins)
-// Oct. 7, 2000 JEPRO 名称をVC++に合わせ簡略形に変更(Delete→Del)
-// Jun. 26, 2001 JEPRO	Shift+Del に「切り取り」を追加
-// Oct. 7, 2000 JEPRO	Shift+Ctrl+Alt+↑に「縦方向に最大化」を追加
-// Jun. 27, 2001 JEPRO
-//	Ctrl+↑に割り当てられていた「カーソル上移動(２行ごと)」を「テキストを１行下へスクロール」に変更
-// 2001.02.10 by MIK Shift+Ctrl+Alt+→に「横方向に最大化」を追加
-// Sept. 14, 2000 JEPRO
-//	Ctrl+↓に割り当てられていた「右クリックメニュー」を「カーソル下移動(２行ごと)」に変更
-//	それに付随してさらに「右クリックメニュー」をCtrl＋Alt＋↓に変更
-// Jun. 27, 2001 JEPRO
-//	Ctrl+↓に割り当てられていた「カーソル下移動(２行ごと)」を「テキストを１行上へスクロール」に変更
-// Oct. 15, 2000 JEPRO Ctrl+PgUp, Shift+Ctrl+PgDn にそれぞれ「１ページダウン」, 「(選択)１ページダウン」を追加
-// Oct. 6, 2000 JEPRO 名称をPC-AT互換機系に交換(RollUp→PgDn) //Oct. 10, 2000 JEPRO 名称変更
-// 2001.12.03 hor 1Page/HalfPage 入替え
-// Oct. 15, 2000 JEPRO Ctrl+PgUp, Shift+Ctrl+PgDn にそれぞれ「１ページアップ」, 「(選択)１ページアップ」を追加
-// Oct. 6, 2000 JEPRO 名称をPC-AT互換機系に交換(RollDown→PgUp) //Oct. 10, 2000 JEPRO 名称変更
-// 2001.12.03 hor 1Page/HalfPage 入替え
-// Oct. 7, 2000 JEPRO 名称をVC++に合わせ簡略形に変更(SpaceBar→Space)
-// Oct. 7, 2000 JEPRO	Ctrl+0 を「タイプ別設定一覧」→「未定義」に変更
-// Jan. 13, 2001 JEPRO	Alt+0 に「カスタムメニュー10」, Shift+Alt+0 に「カスタムメニュー20」を追加
-// Oct. 7, 2000 JEPRO	Ctrl+1 を「タイプ別設定」→「ツールバーの表示」に変更
-// Jan. 13, 2001 JEPRO	Alt+1 に「カスタムメニュー1」, Shift+Alt+1 に「カスタムメニュー11」を追加
-// Jan. 19, 2001 JEPRO	Shift+Ctrl+1 に「カスタムメニュー21」を追加
-// Oct. 7, 2000 JEPRO	Ctrl+2 を「共通設定」→「ファンクションキーの表示」に変更
-// Jan. 13, 2001 JEPRO	Alt+2 を「アウトプット」→「カスタムメニュー2」に変更し「アウトプット」は Alt+O に移動, Shift+Alt+2 に「カスタムメニュー12」を追加
-// Jan. 19, 2001 JEPRO	Shift+Ctrl+2 に「カスタムメニュー22」を追加
-// Oct. 7, 2000 JEPRO	Ctrl+3 を「フォント設定」→「ステータスバーの表示」に変更
-// Jan. 13, 2001 JEPRO	Alt+3 に「カスタムメニュー3」, Shift+Alt+3 に「カスタムメニュー13」を追加
-// Jan. 19, 2001 JEPRO	Shift+Ctrl+3 に「カスタムメニュー23」を追加
-// Oct. 7, 2000 JEPRO	Ctrl+4 を「ツールバーの表示」→「タイプ別設定一覧」に変更
-// Jan. 13, 2001 JEPRO	Alt+4 に「カスタムメニュー4」, Shift+Alt+4 に「カスタムメニュー14」を追加
-// Jan. 19, 2001 JEPRO	Shift+Ctrl+4 に「カスタムメニュー24」を追加
-// Oct. 7, 2000 JEPRO	Ctrl+5 を「ファンクションキーの表示」→「タイプ別設定」に変更
-// Jan. 13, 2001 JEPRO	Alt+5 に「カスタムメニュー5」, Shift+Alt+5 に「カスタムメニュー15」を追加
-// Oct. 7, 2000 JEPRO	Ctrl+6 を「ステータスバーの表示」→「共通設定」に変更
-// Jan. 13, 2001 JEPRO	Alt+6 に「カスタムメニュー6」, Shift+Alt+6 に「カスタムメニュー16」を追加
-// Oct. 7, 2000 JEPRO	Ctrl+7 に「フォント設定」を追加
-// Jan. 13, 2001 JEPRO	Alt+7 に「カスタムメニュー7」, Shift+Alt+7 に「カスタムメニュー17」を追加
-// Jan. 13, 2001 JEPRO	Alt+8 に「カスタムメニュー8」, Shift+Alt+8 に「カスタムメニュー18」を追加
-// Jan. 13, 2001 JEPRO	Alt+9 に「カスタムメニュー9」, Shift+Alt+9 に「カスタムメニュー19」を追加
-// 2001.12.06 hor Alt+A を「SORT_ASC」に割当
-// Jan. 13, 2001 JEPRO	Ctrl+B に「ブラウズ」を追加
-// Jan. 16, 2001 JEPRO	SHift+Ctrl+C に「.hと同名の.c(なければ.cpp)を開く」を追加
-// Feb. 07, 2001 JEPRO	SHift+Ctrl+C を「.hと同名の.c(なければ.cpp)を開く」→「同名のC/C++ヘッダ(ソース)を開く」に変更
-// Jan. 16, 2001 JEPRO	Ctrl+D に「単語切り取り」, Shift+Ctrl+D に「単語削除」を追加
-// 2001.12.06 hor Alt+D を「SORT_DESC」に割当
-// Oct. 7, 2000 JEPRO	Ctrl+Alt+E に「重ねて表示」を追加
-// Jan. 16, 2001	JEPRO	Ctrl+E に「行切り取り(折り返し単位)」, Shift+Ctrl+E に「行削除(折り返し単位)」を追加
-// Oct. 07, 2000 JEPRO	Ctrl+Alt+H に「上下に並べて表示」を追加
-// Jan. 16, 2001 JEPRO	Ctrl+H を「カーソル前を削除」→「カーソル行をウィンドウ中央へ」に変更し	Shift+Ctrl+H に「.cまたは.cppと同名の.hを開く」を追加
-// Feb. 07, 2001 JEPRO	SHift+Ctrl+H を「.cまたは.cppと同名の.hを開く」→「同名のC/C++ヘッダ(ソース)を開く」に変更
-// Jan. 21, 2001	JEPRO	Ctrl+I に「行の二重化」を追加
-// Jan. 16, 2001	JEPRO	Ctrl+K に「行末まで切り取り(改行単位)」, Shift+Ctrl+E に「行末まで削除(改行単位)」を追加
-// Jan. 14, 2001 JEPRO	Ctrl+Alt+L に「小文字」, Shift+Ctrl+Alt+L に「大文字」を追加
-// Jan. 16, 2001 Ctrl+L を「カーソル行をウィンドウ中央へ」→「キーマクロの読み込み」に変更し「カーソル行をウィンドウ中央へ」は Ctrl+H に移動
-// 2001.12.03 hor Alt+L を「LTRIM」に割当
-// Jan. 16, 2001 JEPRO	Ctrl+M に「キーマクロの保存」を追加
-// 2001.12.06 hor Alt+M を「MERGE」に割当
-// Oct. 20, 2000 JEPRO	Alt+N に「移動履歴: 次へ」を追加
-// Jan. 13, 2001 JEPRO	Alt+O に「アウトプット」を追加
-// Oct. 7, 2000 JEPRO	Ctrl+P に「印刷」, Shift+Ctrl+P に「印刷プレビュー」, Ctrl+Alt+P に「ページ設定」を追加
-// Oct. 20, 2000 JEPRO	Alt+P に「移動履歴: 前へ」を追加
-// Jan. 24, 2001	JEPRO	Ctrl+Q に「キー割り当て一覧をコピー」を追加
-// 2001.12.03 hor Alt+R を「RTRIM」に割当
-// Oct. 7, 2000 JEPRO	Shift+Ctrl+S に「名前を付けて保存」を追加
-// Oct. 7, 2000 JEPRO	Ctrl+Alt+T に「左右に並べて表示」を追加
-// Jan. 21, 2001	JEPRO	Ctrl+T に「タグジャンプ」, Shift+Ctrl+T に「タグジャンプバック」を追加
-// Oct. 7, 2000 JEPRO	Ctrl+Alt+U に「現在のウィンドウ幅で折り返し」を追加
-// Jan. 16, 2001	JEPRO	Ctrl+U に「行頭まで切り取り(改行単位)」, Shift+Ctrl+U に「行頭まで削除(改行単位)」を追加
-// Jan. 13, 2001 JEPRO	Alt+X を「カスタムメニュー1」→「未定義」に変更し「カスタムメニュー1」は Alt+1 に移動
-// Oct. 7, 2000 JEPRO	Shift+Ctrl+- に「上下に分割」を追加
-// 2002.02.08 hor Ctrl+-にファイル名をコピーを追加
-// Oct. 7, 2000 JEPRO	Shift+Ctrl+\ に「左右に分割」を追加
-// Sept. 20, 2000 JEPRO	Ctrl+@ に「ファイル内容比較」を追加  //Oct. 15, 2000 JEPRO「選択範囲内全行コピー」に変更
-// Aug. 16, 2000 genta
-//	反対向きの括弧にも括弧検索を追加
-// Oct. 7, 2000 JEPRO	Shift+Ctrl+; に「縦横に分割」を追加	//Jan. 16, 2001	Alt+; に「日付挿入」を追加
-// Sept. 14, 2000 JEPRO	Ctrl+: に「選択範囲内全行行番号付きコピー」を追加	//Jan. 16, 2001	Alt+: に「時刻挿入」を追加
-// Sept. 14, 2000 JEPRO	Ctrl+. に「選択範囲内全行引用符付きコピー」を追加
-// Nov. 15, 2000 genta PC/ATキーボードに合わせてキーコードを変更
-//	PC98救済のため，従来のキーコードに対応する項目を追加．
-// Oct. 7, 2000 JEPRO	長くて表示しきれない所がでてきてしまうのでアプリケーションキー→アプリキーに短縮
-// 2008.05.03 kobake 可読性が著しく低下していたので、書式を整理。
-// 2008.05.30 nasukoji	Ctrl+Alt+S に「指定桁で折り返す」を追加
-// 2008.05.30 nasukoji	Ctrl+Alt+W に「右端で折り返す」を追加
-// 2008.05.30 nasukoji	Ctrl+Alt+X に「折り返さない」を追加
-
 #define _SQL_RUN	F_PLSQL_COMPILE_ON_SQLPLUS
 #define _COPYWITHLINENUM	F_COPYLINESWITHLINENUMBER
 	static const KEYDATAINIT	KeyDataInit[] = {
-	// Sept. 1, 2000 Jepro note: key binding
-	// Feb. 17, 2001 jepro note 2: 順番は2進で下位3ビット[Alt][Ctrl][Shift]の組合せの順(それに2を加えた値)
+	// note: key binding
+	// note 2: 順番は2進で下位3ビット[Alt][Ctrl][Shift]の組合せの順(それに2を加えた値)
 	//		0,		1,		 2(000), 3(001),4(010),	5(011),		6(100),	7(101),		8(110),		9(111)
 
 		// マウスボタン
@@ -779,9 +632,6 @@ const int jpVKEXNamesLen = _countof( jpVKEXNames );
 /*!	@brief 共有メモリ初期化/キー割り当て
 
 	デフォルトキー割り当て関連の初期化処理
-
-	@date 2005.01.30 genta ShareData::Init()から分離
-	@date 2007.11.04 genta キー設定数がDLLSHAREの領域を超えたら起動できないように
 */
 bool ShareData::InitKeyAssign(DllSharedData& shareData)
 {
@@ -790,15 +640,13 @@ bool ShareData::InitKeyAssign(DllSharedData& shareData)
 	/********************/
 	const int nKeyDataInitNum = _countof(KeyDataInit);
 	const int KEYNAME_SIZE = _countof(shareData.common.keyBind.pKeyNameArr) -1;// 最後の１要素はダミー用に予約 2012.11.25 aroka
-	// From Here 2007.11.04 genta バッファオーバーラン防止
 	assert(!(nKeyDataInitNum > KEYNAME_SIZE));
 //	if (nKeyDataInitNum > KEYNAME_SIZE) {
 //		PleaseReportToAuthor(NULL, _T("キー設定数に対してDLLSHARE::nKeyNameArr[]のサイズが不足しています"));
 //		return false;
 //	}
-	// To Here 2007.11.04 genta バッファオーバーラン防止
 
-	// マウスコードの固定と重複排除 2012.11.25 aroka
+	// マウスコードの固定と重複排除
 	static const KEYDATAINIT dummy[] = {
 		{ 0,		_T(""),				{ F_0,				F_0,				F_0,					F_0,				F_0,					F_0,				F_0,					F_0 } }
 	};

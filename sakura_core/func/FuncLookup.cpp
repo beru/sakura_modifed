@@ -20,8 +20,6 @@ const size_t LUOFFSET_PLUGIN = 2;
 	@param bGetUnavailable [in] 未登録マクロでも機能番号を返す
 
 	@retval 機能番号
-
-	@date 2007.11.02 ryoji bGetUnavailableパラメータ追加
 */
 EFunctionCode FuncLookup::Pos2FuncCode(int category, int position, bool bGetUnavailable) const
 {
@@ -58,8 +56,6 @@ EFunctionCode FuncLookup::Pos2FuncCode(int category, int position, bool bGetUnav
 
 	@retval true 指定された機能番号は定義されている
 	@retval false 指定された機能番号は未定義
-
-	@date 2007.11.02 ryoji 処理を簡素化
 */
 bool FuncLookup::Pos2FuncName(
 	int		category,	// [in]  分類番号 (0-)
@@ -80,8 +76,6 @@ bool FuncLookup::Pos2FuncName(
 	
 	@retval true 指定された機能番号は定義されている
 	@retval false 指定された機能番号は未定義
-
-	@date 2007.11.02 ryoji 未登録マクロも文字列を格納．戻り値の意味を変更（文字列は必ず格納）．
 */
 bool FuncLookup::Funccode2Name(int funccode, wchar_t* ptr, int bufsize) const
 {
@@ -176,8 +170,6 @@ void FuncLookup::SetCategory2Combo(HWND hComboBox) const
 	
 	@param hListBox [in(out)] 値を設定するリストボックス
 	@param category [in] 機能分類番号
-
-	@date 2007.11.02 ryoji 未定義コマンドは除外．処理も簡素化．
 */
 void FuncLookup::SetListItem(HWND hListBox, size_t category) const
 {

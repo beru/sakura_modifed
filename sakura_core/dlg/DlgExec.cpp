@@ -95,7 +95,7 @@ void DlgExec::SetData(void)
 	// コンボボックスのユーザー インターフェイスを拡張インターフェースにする
 	Combo_SetExtendedUI(GetItemHwnd(IDC_COMBO_m_szCommand), TRUE);
 
-	{	// From Here 2007.01.02 maru 引数を拡張のため
+	{	// 引数を拡張のため
 		// マクロからの呼び出しではShareDataに保存させないように，ShareDataとの受け渡しはExecCmdの外で
 		int nExecFlgOpt;
 		nExecFlgOpt = pShareData->nExecFlgOpt;
@@ -197,7 +197,7 @@ BOOL DlgExec::OnBnClicked(int wID)
 		{
 			bool bEnabled = IsButtonChecked(IDC_CHECK_GETSTDOUT);
 			EnableItem(IDC_RADIO_OUTPUT, bEnabled);
-			EnableItem(IDC_RADIO_EDITWINDOW, bEnabled && bEditable);	// ビューモードや上書き禁止の条件追加	// 2009.02.21 ryoji
+			EnableItem(IDC_RADIO_EDITWINDOW, bEnabled && bEditable);	// ビューモードや上書き禁止の条件追加
 		}
 
 		// 標準出力Off時、Unicodeを使用するをDesableする	

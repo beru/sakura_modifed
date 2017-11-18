@@ -32,7 +32,7 @@ protected:
 	||  実装ヘルパ関数
 	*/
 	BOOL OnBnClicked(int);
-	LPVOID GetHelpIdTable(void);	//@@@ 2002.01.18 add
+	LPVOID GetHelpIdTable(void);
 	
 	INT_PTR DispatchEvent(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM lParam);	// 標準以外のメッセージを捕捉する
 	BOOL OnInitDialog(HWND, WPARAM, LPARAM);

@@ -7,7 +7,7 @@
 #include <string.h>
 #include "KeyMacroMgr.h"
 #include "Macro.h"
-#include "macro/SMacroMgr.h"// 2002/2/10 aroka
+#include "macro/SMacroMgr.h"
 #include "charset/charcode.h"
 #include "mem/Memory.h"
 #include "MacroFactory.h"
@@ -17,9 +17,6 @@ KeyMacroMgr::KeyMacroMgr()
 {
 	pTop = nullptr;
 	pBot = nullptr;
-//	nKeyMacroDataArrNum = 0;	2002.2.2 YAZAKI
-	// Apr. 29, 2002 genta
-	// nReadyはMacroManagerBaseへ
 	return;
 }
 
@@ -41,7 +38,6 @@ void KeyMacroMgr::ClearAll(void)
 		p = p->GetNext();
 		delete del_p;
 	}
-//	nKeyMacroDataArrNum = 0;	2002.2.2 YAZAKI
 	pTop = nullptr;
 	pBot = nullptr;
 	return;
@@ -50,7 +46,6 @@ void KeyMacroMgr::ClearAll(void)
 
 /*! キーマクロのバッファにデータ追加
 	機能番号と、引数ひとつを追加版。
-	@date 2002.2.2 YAZAKI pEditViewも渡すようにした。
 */
 void KeyMacroMgr::Append(
 	EFunctionCode	nFuncID,
@@ -75,7 +70,6 @@ void KeyMacroMgr::Append(Macro* macro)
 		pTop = macro;
 		pBot = pTop;
 	}
-//	nKeyMacroDataArrNum++;	2002.2.2 YAZAKI
 	return;
 }
 
@@ -109,9 +103,6 @@ bool KeyMacroMgr::SaveKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath) const
 
 /** キーボードマクロの実行
 	Macroに委譲。
-	
-	@date 2007.07.20 genta flags追加．Macro::Exec()に
-		FA_FROMMACROを含めた値を渡す．
 */
 bool KeyMacroMgr::ExecKeyMacro(EditView& editView, int flags) const
 {
@@ -150,7 +141,6 @@ bool KeyMacroMgr::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
 	size_t nEnd;
 	Macro* macro = nullptr;
 
-	// Jun. 16, 2002 genta
 	nReady = true;	// エラーがあればfalseになる
 	std::tstring MACRO_ERROR_TITLE_string = LS(STR_ERR_DLGKEYMACMGR2);
 	const TCHAR* MACRO_ERROR_TITLE = MACRO_ERROR_TITLE_string.c_str();
@@ -169,7 +159,7 @@ bool KeyMacroMgr::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
 			}
 		}
 		nBgn = i;
-		// Jun. 16, 2002 genta 空行を無視する
+		// 空行を無視する
 		if (nBgn == nLineLen || szLine[nBgn] == LTEXT('\0')) {
 			continue;
 		}
@@ -194,11 +184,10 @@ bool KeyMacroMgr::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
 		// 関数名にS_が付いていたら
 
 		// 関数名→機能ID，機能名日本語
-		//@@@ 2002.2.2 YAZAKI マクロをSMacroMgrに統一
 		nFuncID = SMacroMgr::GetFuncInfoByName(hInstance, szFuncName, szFuncNameJapanese);
 		if (nFuncID != -1) {
 			macro = new Macro(nFuncID);
-			// Jun. 16, 2002 genta プロトタイプチェック用に追加
+			// プロトタイプチェック用に追加
 			int nArgs;
 			const MacroFuncInfo* mInfo= SMacroMgr::GetFuncInfoByID(nFuncID);
 			int nArgSizeMax = _countof(mInfo->varArguments);
@@ -206,7 +195,7 @@ bool KeyMacroMgr::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
 				nArgSizeMax = mInfo->pData->nArgMaxSize;
 			}
 			for (nArgs=0; szLine[i]; ++nArgs) {
-				// Jun. 16, 2002 genta プロトタイプチェック
+				// プロトタイプチェック
 				if (nArgs >= nArgSizeMax) {
 					::MYMESSAGEBOX(
 						NULL,
@@ -231,11 +220,11 @@ bool KeyMacroMgr::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
 				while (szLine[i] == LTEXT(' ') || szLine[i] == LTEXT('\t')) {
 					++i;
 				}
-				//@@@ 2002.2.2 YAZAKI PPA.DLLマクロにあわせて仕様変更。文字列は''で囲む。
-				// Jun. 16, 2002 genta double quotationも許容する
+				// PPA.DLLマクロにあわせて仕様変更。文字列は''で囲む。
+				// double quotationも許容する
 				if (LTEXT('\'') == szLine[i] || LTEXT('\"') == szLine[i]) {	// 'で始まったら文字列だよきっと。
-					// Jun. 16, 2002 genta プロトタイプチェック
-					// Jun. 27, 2002 genta 余分な引数を無視するよう，VT_EMPTYを許容する．
+					// プロトタイプチェック
+					// 余分な引数を無視するよう，VT_EMPTYを許容する．
 					if (type != VT_BSTR && 
 						type != VT_EMPTY
 					) {
@@ -255,7 +244,6 @@ bool KeyMacroMgr::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
 					wchar_t cQuote = szLine[i];
 					++i;
 					nBgn = nEnd = i;	// nBgnは引数の先頭の文字
-					// Jun. 16, 2002 genta
 					// 行末の検出のため，ループ回数を1増やした
 					for (; i<=nLineLen; ++i) {		// 最後の文字+1までスキャン
 						if (szLine[i] == LTEXT('\\')) {	// エスケープのスキップ
@@ -282,18 +270,16 @@ bool KeyMacroMgr::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
 							break;
 						}
 					}
-					// Jun. 16, 2002 genta
 					if (!nReady) {
 						break;
 					}
 
 					NativeW memWork;
 					memWork.SetString(strLine.c_str() + nBgn, nEnd - nBgn);
-					// 2014.01.28 「"\\'"」のような場合の不具合を修正
 					memWork.Replace( L"\\\\", L"\\\1" ); // 一時置換(最初に必要)
 					memWork.Replace(LTEXT("\\\'"), LTEXT("\'"));
 
-					// Jun. 16, 2002 genta double quotationもエスケープ解除
+					// double quotationもエスケープ解除
 					memWork.Replace(LTEXT("\\\""), LTEXT("\""));
 					memWork.Replace( L"\\r", L"\r" );
 					memWork.Replace( L"\\n", L"\n" );
@@ -339,8 +325,7 @@ bool KeyMacroMgr::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
 					memWork.Replace( L"\\\1", L"\\" ); // 一時置換を\に戻す(最後でないといけない)
 					macro->AddStringParam( memWork.GetStringPtr(), memWork.GetStringLength() );	//	引数を文字列として追加
 				}else if (Is09(szLine[i]) || szLine[i] == L'-') {	// 数字で始まったら数字列だ(-記号も含む)。
-					// Jun. 16, 2002 genta プロトタイプチェック
-					// Jun. 27, 2002 genta 余分な引数を無視するよう，VT_EMPTYを許容する．
+					// 余分な引数を無視するよう，VT_EMPTYを許容する．
 					if (type != VT_I4 &&
 						type != VT_EMPTY
 					) {
@@ -372,18 +357,15 @@ bool KeyMacroMgr::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
 
 					NativeW memWork;
 					memWork.SetString(strLine.c_str() + nBgn, nEnd - nBgn);
-					// Jun. 16, 2002 genta
 					// 数字の中にquotationは入っていないよ
 					//memWork.Replace(L"\\\'", L"\'");
 					//memWork.Replace(L"\\\\", L"\\");
 					macro->AddIntParam( _wtoi(memWork.GetStringPtr()) );	//	引数を数字として追加
-				// Jun. 16, 2002 genta
 				}else if (szLine[i] == LTEXT(')')) {
 					// 引数無し
 					break;
 				}else {
 					// Parse Error:文法エラーっぽい。
-					// Jun. 16, 2002 genta
 					nBgn = nEnd = i;
 					::MYMESSAGEBOX(NULL, MB_OK | MB_ICONSTOP | MB_TOPMOST, MACRO_ERROR_TITLE,
 						LS(STR_ERR_DLGKEYMACMGR7), line, i + 1);
@@ -400,7 +382,6 @@ bool KeyMacroMgr::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
 					break;
 				}
 			}
-			// Jun. 16, 2002 genta
 			if (!nReady) {
 				// どこかでエラーがあったらしい
 				delete macro;
@@ -411,14 +392,12 @@ bool KeyMacroMgr::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
 		}else {
 			::MYMESSAGEBOX(NULL, MB_OK | MB_ICONSTOP | MB_TOPMOST, MACRO_ERROR_TITLE,
 				LS(STR_ERR_DLGKEYMACMGR8), line, szFuncName);
-			// Jun. 16, 2002 genta
 			nReady = false;
 			break;
 		}
 	}
 	in.Close();
 
-	// Jun. 16, 2002 genta
 	// マクロ中にエラーがあったら異常終了できるようにする．
 	return nReady;
 }
@@ -444,14 +423,9 @@ bool KeyMacroMgr::LoadKeyMacroStr(HINSTANCE hInstance, const TCHAR* pszCode)
 	return bRet;
 }
 
-// From Here Apr. 29, 2002 genta
 /*!
 	Factory
-
 	@param ext [in] オブジェクト生成の判定に使う拡張子(小文字)
-
-	@date 2004-01-31 genta RegisterExtの廃止のためRegisterCreatorに置き換え
-		そのため，過ったオブジェクト生成を行わないために拡張子チェックは必須．
 */
 MacroManagerBase* KeyMacroMgr::Creator(EditView& view, const TCHAR* ext)
 {
@@ -461,14 +435,10 @@ MacroManagerBase* KeyMacroMgr::Creator(EditView& view, const TCHAR* ext)
 	return nullptr;
 }
 
-/*!	CKeyMacroManagerの登録
-
-	@date 2004.01.31 genta RegisterExtの廃止のためRegisterCreatorに置き換え
-*/
+/*!	CKeyMacroManagerの登録 */
 void KeyMacroMgr::Declare(void)
 {
 	// 常に実行
 	MacroFactory::getInstance().RegisterCreator(Creator);
 }
-// To Here Apr. 29, 2002 genta
 

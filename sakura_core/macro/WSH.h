@@ -7,12 +7,6 @@
 // ↑Microsoft Platform SDK より
 #include "macro/IfObj.h"
 
-/* 2009.10.29 syat インタフェースオブジェクト部分をWSHIfObj.hに分離
-template <class Base>
-class ImplementsIUnknown: public Base
-
-class InterfaceObject: public ImplementsIUnknown<IDispatch>
- */
 typedef void (*ScriptErrorHandler)(BSTR Description, BSTR Source, void *Data);
 
 class WSHClient : IWSHClient {

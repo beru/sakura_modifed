@@ -34,8 +34,6 @@ enum ECharKind {
 
 class WordParse {
 public:
-	// 2001.06.23 N.Nakatani
-	// 2007.09.30 kobake     CDocLineMgr‚©‚çˆÚ“®
 	/*!
 		@brief Œ»İˆÊ’u‚Ì’PŒê‚Ì”ÍˆÍ‚ğ’²‚×‚é staticƒƒ“ƒo
 		@author N.Nakatani

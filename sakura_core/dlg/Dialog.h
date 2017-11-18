@@ -49,8 +49,6 @@ struct ComboBoxItemDeleter
 	@brief ダイアログウィンドウを扱うクラス
 
 	ダイアログボックスを作るときにはここから継承させる．
-
-	@date 2002.2.17 YAZAKI CShareDataのインスタンスは、Processにひとつあるのみ。
 */
 class Dialog {
 public:
@@ -88,19 +86,19 @@ public:
 	virtual BOOL OnLbnSelChange(HWND hwndCtl, int wID) {return FALSE;}
 	virtual BOOL OnLbnDblclk(int wID) {return FALSE;}
 	virtual BOOL OnCbnSelChange(HWND hwndCtl, int wID) {return FALSE;}
-	virtual BOOL OnCbnEditChange(HWND hwndCtl, int wID) {return FALSE;} // @@2005.03.31 MIK タグジャンプDialog
+	virtual BOOL OnCbnEditChange(HWND hwndCtl, int wID) {return FALSE;}
 	virtual BOOL OnCbnDropDown(HWND hwndCtl, int wID);
 	static BOOL OnCbnDropDown( HWND hwndCtl, bool scrollBar );
 //	virtual BOOL OnCbnCloseUp(HWND hwndCtl, int wID) {return FALSE;}
 	virtual BOOL OnCbnSelEndOk(HWND hwndCtl, int wID);
 
 	virtual BOOL OnKillFocus(WPARAM wParam, LPARAM lParam) {return FALSE;}
-	virtual BOOL OnActivate(WPARAM wParam, LPARAM lParam) {return FALSE;}	//@@@ 2003.04.08 MIK
+	virtual BOOL OnActivate(WPARAM wParam, LPARAM lParam) {return FALSE;}
 	virtual int OnVKeyToItem(WPARAM wParam, LPARAM lParam) { return -1; }
 	virtual LRESULT OnCharToItem(WPARAM wParam, LPARAM lParam) { return -1; }
-	virtual BOOL OnPopupHelp(WPARAM, LPARAM);	//@@@ 2002.01.18 add
-	virtual BOOL OnContextMenu(WPARAM, LPARAM);	//@@@ 2002.01.18 add
-	virtual LPVOID GetHelpIdTable(void);	//@@@ 2002.01.18 add
+	virtual BOOL OnPopupHelp(WPARAM, LPARAM);
+	virtual BOOL OnContextMenu(WPARAM, LPARAM);
+	virtual LPVOID GetHelpIdTable(void);
 
 	void ResizeItem(
 		HWND hTarget,
@@ -151,13 +149,13 @@ public:
 //	void*			pcEditView;
 	DllSharedData*	pShareData;
 	bool			bInited;
-	HINSTANCE		hLangRsrcInstance;		// メッセージリソースDLLのインスタンスハンドル	// 2011.04.10 nasukoji
+	HINSTANCE		hLangRsrcInstance;		// メッセージリソースDLLのインスタンスハンドル
 
 protected:
 	void CreateSizeBox(void);
 	BOOL OnCommand(WPARAM, LPARAM);
 
-	// コントロールに画面のフォントを設定	2012/11/27 Uchi
+	// コントロールに画面のフォントを設定
 	HFONT SetMainFont(HWND hTarget);
 };
 

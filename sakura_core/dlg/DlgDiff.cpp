@@ -32,9 +32,9 @@ const DWORD p_helpids[] = {	//13200
 	IDOK,						HIDC_DIFF_IDOK,
 	IDCANCEL,					HIDC_DIFF_IDCANCEL,
 	IDC_BUTTON_HELP,			HIDC_BUTTON_DIFF_HELP,
-	IDC_CHECK_DIFF_EXEC_STATE,	HIDC_CHECK_DIFF_EXEC_STATE,		// DIFF差分が見つからないときにメッセージを表示  2003.05.12 MIK
-	IDC_CHECK_NOTIFYNOTFOUND,	HIDC_CHECK_DIFF_NOTIFYNOTFOUND,	// 見つからないときにメッセージを表示	// 2006.10.10 ryoji
-	IDC_CHECK_SEARCHALL,		HIDC_CHECK_DIFF_SEARCHALL,		// 先頭（末尾）から再検索する	// 2006.10.10 ryoji
+	IDC_CHECK_DIFF_EXEC_STATE,	HIDC_CHECK_DIFF_EXEC_STATE,		// DIFF差分が見つからないときにメッセージを表示
+	IDC_CHECK_NOTIFYNOTFOUND,	HIDC_CHECK_DIFF_NOTIFYNOTFOUND,	// 見つからないときにメッセージを表示
+	IDC_CHECK_SEARCHALL,		HIDC_CHECK_DIFF_SEARCHALL,		// 先頭（末尾）から再検索する
 //	IDC_FRAME_SEARCH_MSG,		HIDC_FRAME_DIFF_SEARCH_MSG,
 //	IDC_STATIC,					-1,
 	0, 0
@@ -100,7 +100,7 @@ BOOL DlgDiff::OnBnClicked(int wID)
 	switch (wID) {
 	case IDC_BUTTON_HELP:
 		// ヘルプ
-		MyWinHelp(GetHwnd(), HELP_CONTEXT, ::FuncID_To_HelpContextID(F_DIFF_DIALOG));	// 2006.10.10 ryoji MyWinHelpに変更に変更
+		MyWinHelp(GetHwnd(), HELP_CONTEXT, ::FuncID_To_HelpContextID(F_DIFF_DIALOG));
 		return TRUE;
 
 	case IDC_BUTTON_DIFF_DST:	// 参照
@@ -140,7 +140,6 @@ BOOL DlgDiff::OnBnClicked(int wID)
 		//EnableItem(IDC_EDIT_DIFF_DST), true);
 		//EnableItem(IDC_BUTTON_DIFF_DST), true);
 		//EnableItem(IDC_LIST_DIFF_FILES), false);
-		// Feb. 28, 2004 genta 選択解除前に前回の位置を記憶
 		{
 			int n = List_GetCurSel(GetItemHwnd(IDC_LIST_DIFF_FILES));
 			if (n != LB_ERR) {
@@ -156,7 +155,6 @@ BOOL DlgDiff::OnBnClicked(int wID)
 		//EnableItem(IDC_BUTTON_DIFF_DST), false);
 		//EnableItem(IDC_LIST_DIFF_FILES), true);
 		{
-			// Aug. 9, 2003 genta
 			// ListBoxが選択されていなかったら，先頭のファイルを選択する．
 			HWND hwndList = GetItemHwnd(IDC_LIST_DIFF_FILES);
 			if (List_GetCurSel(hwndList) == LB_ERR) {
@@ -201,7 +199,7 @@ void DlgDiff::SetData(void)
 	//EnableItem(IDC_RADIO_DIFF_FILE1), false);
 	//EnableItem(IDC_RADIO_DIFF_FILE2), false);
 
-	// DIFF差分が見つからないときにメッセージを表示 2003.05.12 MIK
+	// DIFF差分が見つからないときにメッセージを表示
 	if (nDiffFlgOpt & 0x0040) CheckButton(IDC_CHECK_DIFF_EXEC_STATE, true);
 
 	// 見つからないときメッセージを表示
@@ -230,7 +228,7 @@ void DlgDiff::SetData(void)
 		// 現在開いている編集窓のリストをメニューにする
 		size_t nRowNum = AppNodeManager::getInstance().GetOpenedWindowArr(&pEditNode, true);
 		if (nRowNum > 0) {
-			// 水平スクロール幅は実際に表示する文字列の幅を計測して決める	// 2009.09.26 ryoji
+			// 水平スクロール幅は実際に表示する文字列の幅を計測して決める
 			TextWidthCalc calc(hwndList);
 			size_t score = 0;
 			TCHAR szFile1[_MAX_PATH];
@@ -274,14 +272,13 @@ void DlgDiff::SetData(void)
 			}
 
 			delete[] pEditNode;
-			// 2002/11/01 Moca 追加 リストビューの横幅を設定。これをやらないと水平スクロールバーが使えない
+			// リストビューの横幅を設定。これをやらないと水平スクロールバーが使えない
 			List_SetHorizontalExtent( hwndList, calc.GetCx() + 8 );
 
 			// 最初を選択
 			//List_SetCurSel(hwndList, 0);
 		}
 
-		// From Here 2004.02.22 じゅうじ
 		// 開いているファイルがある場合には初期状態でそちらを優先
 		if (count == 0) {
 			// 相手ファイルの選択
@@ -300,8 +297,7 @@ void DlgDiff::SetData(void)
 			    List_SetCurSel(hwndList, selIndex);
 			}
 		}
-		// To Here 2004.02.22 じゅうじ
-		// Feb. 28, 2004 genta 一番上を選択位置とする．
+		// 一番上を選択位置とする．
 		nIndexSave = selIndex;
 	}
 
@@ -323,7 +319,7 @@ int DlgDiff::GetData(void)
 	if (IsButtonChecked(IDC_CHECK_DIFF_OPT_TABSPC)) nDiffFlgOpt |= 0x0010;
 	// ファイル新旧
 	if (IsButtonChecked(IDC_RADIO_DIFF_FILE2)) nDiffFlgOpt |= 0x0020;
-	// DIFF差分が見つからないときにメッセージを表示 2003.05.12 MIK
+	// DIFF差分が見つからないときにメッセージを表示
 	if (IsButtonChecked(IDC_CHECK_DIFF_EXEC_STATE)) nDiffFlgOpt |= 0x0040;
 	pShareData->nDiffFlgOpt = nDiffFlgOpt;
 
@@ -333,7 +329,7 @@ int DlgDiff::GetData(void)
 	bIsModifiedDst = false;
 	if (IsButtonChecked(IDC_RADIO_DIFF_DST1)) {
 		GetItemText(IDC_EDIT_DIFF_DST, szFile2, _countof2(szFile2));
-		// 2004.05.19 MIK 外部ファイルが指定されていない場合はキャンセル
+		// 外部ファイルが指定されていない場合はキャンセル
 		// 相手ファイルが指定されてなければキャンセル
 		if (szFile2[0] == '\0') ret = FALSE;
 
@@ -364,10 +360,6 @@ int DlgDiff::GetData(void)
 	// 先頭（末尾）から再検索
 	pShareData->common.search.bSearchAll = IsButtonChecked(IDC_CHECK_SEARCHALL);
 
-	// 相手ファイルが指定されてなければキャンセル
-	// 2004.02.21 MIK 相手が無題だと比較できないので判定削除
-	//if (szFile2[0] == '\0') ret = FALSE;
-
 	return ret;
 }
 
@@ -390,7 +382,7 @@ BOOL DlgDiff::OnEnChange(HWND hwndCtl, int wID)
 	if (hwndEdit == hwndCtl) {
 		CheckButton(IDC_RADIO_DIFF_DST1, true);
 		CheckButton(IDC_RADIO_DIFF_DST2, false);
-		// Feb. 28, 2004 genta 選択解除前に前回の位置を記憶して選択解除
+		// 選択解除前に前回の位置を記憶して選択解除
 		int n = List_GetCurSel(GetItemHwnd(IDC_LIST_DIFF_FILES));
 		if (n != LB_ERR) {
 			nIndexSave = n;

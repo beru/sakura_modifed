@@ -24,13 +24,11 @@
 //using namespace nsFuncCode;
 
 const uint16_t nsFuncCode::ppszFuncKind[] = {
-// "--未定義--",	//Oct. 14, 2000 JEPRO 「--未定義--」を表示させないように変更
-// Oct. 16, 2000 JEPRO 表示の順番をメニューバーのそれに合わせるように少し入れ替えた(下の個別のものも全部)
 	STR_ERR_DLGFUNCLKUP04,	// _T("ファイル操作系"),
 	STR_ERR_DLGFUNCLKUP05,	// _T("編集系"),
 	STR_ERR_DLGFUNCLKUP06,	// _T("カーソル移動系"),
-	STR_ERR_DLGFUNCLKUP07,	// _T("選択系"),		//Oct. 15, 2000 JEPRO 「カーソル移動系」が多くなったので「選択系」として独立化(サブメニュー化は構造上できないので)
-	STR_ERR_DLGFUNCLKUP08,	// _T("矩形選択系"),	//Oct. 17, 2000 JEPRO 「選択系」に一緒にすると多くなりすぎるので「矩形選択系」も独立させた
+	STR_ERR_DLGFUNCLKUP07,	// _T("選択系"),
+	STR_ERR_DLGFUNCLKUP08,	// _T("矩形選択系"),
 	STR_ERR_DLGFUNCLKUP09,	// _T("クリップボード系"),
 	STR_ERR_DLGFUNCLKUP10,	// _T("挿入系"),
 	STR_ERR_DLGFUNCLKUP11,	// _T("変換系"),
@@ -38,8 +36,6 @@ const uint16_t nsFuncCode::ppszFuncKind[] = {
 	STR_ERR_DLGFUNCLKUP13,	// _T("モード切り替え系"),
 	STR_ERR_DLGFUNCLKUP14,	// _T("設定系"),
 	STR_ERR_DLGFUNCLKUP15,	// ("マクロ系"),
-	// Oct. 15, 2001 genta カスタムメニューの文字列をは動的に変更可能にするためここからは外す．
-	// _T("カスタムメニュー"),	//Oct. 21, 2000 JEPRO 「その他」から独立分離化
 	STR_ERR_DLGFUNCLKUP16,	// _T("ウィンドウ系"),
 	STR_ERR_DLGFUNCLKUP17,	// _T("支援"),
 	STR_ERR_DLGFUNCLKUP18	// _T("その他")
@@ -48,23 +44,23 @@ const size_t nsFuncCode::nFuncKindNum = _countof(nsFuncCode::ppszFuncKind);
 
 
 // ファイル操作系
-const EFunctionCode pnFuncList_File[] = {	// Oct. 16, 2000 JEPRO 変数名変更(List5→List_File)
+const EFunctionCode pnFuncList_File[] = {
 	F_FILENEW			,	// 新規作成
 	F_FILENEW_NEWWINDOW	,	// 新規ウィンドウを開く
 	F_FILEOPEN			,	// 開く
 	F_FILEOPEN_DROPDOWN	,	// 開く(ドロップダウン)
 	F_FILESAVE			,	// 上書き保存
 	F_FILESAVEAS_DIALOG	,	// 名前を付けて保存
-	F_FILESAVEALL		,	// 全て上書き保存	// Jan. 24, 2005 genta
-	F_FILECLOSE			,	// 閉じて(無題)	//Oct. 17, 2000 jepro 「ファイルを閉じる」というキャプションを変更
+	F_FILESAVEALL		,	// 全て上書き保存
+	F_FILECLOSE			,	// 閉じて(無題)
 	F_FILECLOSE_OPEN	,	// 閉じて開く
-	F_WINCLOSE			,	// ウィンドウを閉じる	//Oct.17,2000 コマンド本家は「ウィンドウ系」	//Feb. 18, 2001	JEPRO 下から移動した
-	F_FILESAVECLOSE		,	// 保存して閉じる Feb. 28, 2004 genta
-	F_FILE_REOPEN		,	// 開き直す	//Dec. 4, 2002 genta
+	F_WINCLOSE			,	// ウィンドウを閉じる
+	F_FILESAVECLOSE		,	// 保存して閉じる
+	F_FILE_REOPEN		,	// 開き直す
 	F_FILE_REOPEN_SJIS	,	// SJISで開き直す
 	F_FILE_REOPEN_JIS	,	// JISで開き直す
 	F_FILE_REOPEN_EUC	,	// EUCで開き直す
-	F_FILE_REOPEN_LATIN1,	// Latin1で開き直す	// 2010/3/20 Uchi
+	F_FILE_REOPEN_LATIN1,	// Latin1で開き直す
 	F_FILE_REOPEN_UNICODE,	// Unicodeで開き直す
 	F_FILE_REOPEN_UNICODEBE,// UnicodeBEで開き直す
 	F_FILE_REOPEN_UTF8	,	// UTF-8で開き直す
@@ -72,22 +68,22 @@ const EFunctionCode pnFuncList_File[] = {	// Oct. 16, 2000 JEPRO 変数名変更(List
 	F_FILE_REOPEN_UTF7	,	// UTF-7で開き直す
 	F_PRINT				,	// 印刷
 	F_PRINT_PREVIEW		,	// 印刷Preview
-	F_PRINT_PAGESETUP	,	// 印刷ページ設定	//Sept. 14, 2000 jepro 「印刷のページレイアウトの設定」から変更
-	F_OPEN_HfromtoC		,	// 同名のC/C++ヘッダ(ソース)を開く	//Feb. 7, 2001 JEPRO 追加
-//	F_OPEN_HHPP			,	// 同名のC/C++ヘッダファイルを開く	//Feb. 9, 2001 jepro「.cまたは.cppと同名の.hを開く」から変更		del 2008/6/23 Uchi
-//	F_OPEN_CCPP			,	// 同名のC/C++ソースファイルを開く	//Feb. 9, 2001 jepro「.hと同名の.c(なければ.cpp)を開く」から変更	del 2008/6/23 Uchi
-	F_ACTIVATE_SQLPLUS	,	// Oracle SQL*Plusをアクティブ表示	//Sept. 20, 2000 「コンパイル」JEPRO アクティブ表示を上に移動した
-	F_PLSQL_COMPILE_ON_SQLPLUS,	// Oracle SQL*Plusで実行	//Sept. 20, 2000 jepro 説明の「コンパイル」を「実行」に統一
+	F_PRINT_PAGESETUP	,	// 印刷ページ設定
+	F_OPEN_HfromtoC		,	// 同名のC/C++ヘッダ(ソース)を開く
+//	F_OPEN_HHPP			,	// 同名のC/C++ヘッダファイルを開く
+//	F_OPEN_CCPP			,	// 同名のC/C++ソースファイルを開く
+	F_ACTIVATE_SQLPLUS	,	// Oracle SQL*Plusをアクティブ表示
+	F_PLSQL_COMPILE_ON_SQLPLUS,	// Oracle SQL*Plusで実行
 	F_BROWSE			,	// ブラウズ
 	F_VIEWMODE			,	// ビューモード
 	F_PROPERTY_FILE		,	// ファイルのプロパティ
-	F_EXITALLEDITORS	,	// 編集の全終了	// 2007.02.13 ryoji F_WIN_CLOSEALL→F_EXITALLEDITORS
-	F_EXITALL				// サクラエディタの全終了	//Dec. 27, 2000 JEPRO 追加
+	F_EXITALLEDITORS	,	// 編集の全終了
+	F_EXITALL				// サクラエディタの全終了
 };
-const int nFincList_File_Num = _countof(pnFuncList_File);	// Oct. 16, 2000 JEPRO 配列名変更(FuncList5→FuncList_File)
+const int nFincList_File_Num = _countof(pnFuncList_File);
 
 // 編集系
-const EFunctionCode pnFuncList_Edit[] = {	// Oct. 16, 2000 JEPRO 変数名変更(List3→List_Edit)
+const EFunctionCode pnFuncList_Edit[] = {
 	F_UNDO				,	// 元に戻す(Undo)
 	F_REDO				,	// やり直し(Redo)
 	F_DELETE			,	// 削除
@@ -107,19 +103,19 @@ const EFunctionCode pnFuncList_Edit[] = {	// Oct. 16, 2000 JEPRO 変数名変更(List
 	F_UNINDENT_TAB		,	// 逆TABインデント
 	F_INDENT_SPACE		,	// SPACEインデント
 	F_UNINDENT_SPACE	,	// 逆SPACEインデント
-	F_LTRIM				,	// 左(先頭)の空白を削除	2001.12.03 hor
-	F_RTRIM				,	// 右(末尾)の空白を削除	2001.12.03 hor
-	F_SORT_ASC			,	// 選択行の昇順ソート	2001.12.06 hor
-	F_SORT_DESC			,	// 選択行の降順ソート	2001.12.06 hor
-	F_MERGE				,	// 選択行のマージ		2001.12.06 hor
-	F_RECONVERT				// 再変換 				2002.04.09 minfu
+	F_LTRIM				,	// 左(先頭)の空白を削除
+	F_RTRIM				,	// 右(末尾)の空白を削除
+	F_SORT_ASC			,	// 選択行の昇順ソート
+	F_SORT_DESC			,	// 選択行の降順ソート
+	F_MERGE				,	// 選択行のマージ	
+	F_RECONVERT				// 再変換
 //	F_WORDSREFERENCE		// 単語リファレンス
 };
-const int nFincList_Edit_Num = _countof(pnFuncList_Edit);	// Oct. 16, 2000 JEPRO 変数名変更(List3→List_Edit)
+const int nFincList_Edit_Num = _countof(pnFuncList_Edit);
 
 
 // カーソル移動系
-const EFunctionCode pnFuncList_Move[] = {	// Oct. 16, 2000 JEPRO 変数名変更(List1→List_Move)
+const EFunctionCode pnFuncList_Move[] = {
 	F_UP				,	// カーソル上移動
 	F_DOWN				,	// カーソル下移動
 	F_LEFT				,	// カーソル左移動
@@ -132,20 +128,20 @@ const EFunctionCode pnFuncList_Move[] = {	// Oct. 16, 2000 JEPRO 変数名変更(List
 	F_GOLINEEND			,	// 行末に移動(折り返し単位)
 //	F_ROLLDOWN			,	// スクロールダウン
 //	F_ROLLUP			,	// スクロールアップ
-	F_HalfPageUp		,	// 半ページアップ	//Oct. 6, 2000 JEPRO 名称をPC-AT互換機系に変更(ROLL→PAGE) //Oct. 10, 2000 JEPRO 名称変更
-	F_HalfPageDown		,	// 半ページダウン	//Oct. 6, 2000 JEPRO 名称をPC-AT互換機系に変更(ROLL→PAGE) //Oct. 10, 2000 JEPRO 名称変更
-	F_1PageUp			,	// １ページアップ	//Oct. 10, 2000 JEPRO 従来のページアップを半ページアップと名称変更し１ページアップを追加
-	F_1PageDown			,	// １ページダウン	//Oct. 10, 2000 JEPRO 従来のページダウンを半ページダウンと名称変更し１ページダウンを追加
+	F_HalfPageUp		,	// 半ページアップ
+	F_HalfPageDown		,	// 半ページダウン
+	F_1PageUp			,	// １ページアップ
+	F_1PageDown			,	// １ページダウン
 	F_GOFILETOP			,	// ファイルの先頭に移動
 	F_GOFILEEND			,	// ファイルの最後に移動
 	F_CURLINECENTER		,	// カーソル行をウィンドウ中央へ
-	F_JUMP_DIALOG		,	// 指定行ヘジャンプ	//Sept. 17, 2000 JEPRO コマンド本家は「検索系」
-	F_JUMP_SRCHSTARTPOS	,	// 検索開始位置へ戻る	// 02/06/26 ai コマンド本家は｢検索系｣
+	F_JUMP_DIALOG		,	// 指定行ヘジャンプ
+	F_JUMP_SRCHSTARTPOS	,	// 検索開始位置へ戻る
 	F_JUMPHIST_PREV		,	// 移動履歴: 前へ
 	F_JUMPHIST_NEXT		,	// 移動履歴: 次へ
 	F_JUMPHIST_SET		,	// 現在位置を移動履歴に登録
-	F_WndScrollDown		,	// テキストを１行下へスクロール	// 2001/06/20 asa-o
-	F_WndScrollUp		,	// テキストを１行上へスクロール	// 2001/06/20 asa-o
+	F_WndScrollDown		,	// テキストを１行下へスクロール
+	F_WndScrollUp		,	// テキストを１行上へスクロール
 	F_GONEXTPARAGRAPH	,	// 次の段落へ移動
 	F_GOPREVPARAGRAPH	,	// 前の段落へ移動
 	F_AUTOSCROLL		,	// オートスクロール
@@ -158,14 +154,14 @@ const EFunctionCode pnFuncList_Move[] = {	// Oct. 16, 2000 JEPRO 変数名変更(List
 	F_WHEELPAGELEFT		,	// ホイールページ左
 	F_WHEELPAGERIGHT	,	// ホイールページ右
 };
-const int nFincList_Move_Num = _countof(pnFuncList_Move);	// Oct. 16, 2000 JEPRO 変数名変更(List1→List_Move)
+const int nFincList_Move_Num = _countof(pnFuncList_Move);
 
 
-// 選択系	//Oct. 15, 2000 JEPRO 「カーソル移動系」から(選択)を移動
+// 選択系
 const EFunctionCode pnFuncList_Select[] = {
 	F_SELECTWORD			,	// 現在位置の単語選択
 	F_SELECTALL				,	// すべて選択
-	F_SELECTLINE			,	// 1行選択	// 2007.10.06 nasukoji
+	F_SELECTLINE			,	// 1行選択
 	F_BEGIN_SEL				,	// 範囲選択開始
 	F_UP_SEL				,	// (範囲選択)カーソル上移動
 	F_DOWN_SEL				,	// (範囲選択)カーソル下移動
@@ -179,10 +175,10 @@ const EFunctionCode pnFuncList_Select[] = {
 	F_GOLINEEND_SEL			,	// (範囲選択)行末に移動(折り返し単位)
 //	F_ROLLDOWN_SEL			,	// (範囲選択)スクロールダウン
 //	F_ROLLUP_SEL			,	// (範囲選択)スクロールアップ
-	F_HalfPageUp_Sel		,	// (範囲選択)半ページアップ	//Oct. 6, 2000 JEPRO 名称をPC-AT互換機系に変更(ROLL→PAGE) //Oct. 10, 2000 JEPRO 名称変更
-	F_HalfPageDown_Sel		,	// (範囲選択)半ページダウン	//Oct. 6, 2000 JEPRO 名称をPC-AT互換機系に変更(ROLL→PAGE) //Oct. 10, 2000 JEPRO 名称変更
-	F_1PageUp_Sel			,	// (範囲選択)１ページアップ	//Oct. 10, 2000 JEPRO 従来のページアップを半ページアップと名称変更し１ページアップを追加
-	F_1PageDown_Sel			,	// (範囲選択)１ページダウン	//Oct. 10, 2000 JEPRO 従来のページダウンを半ページダウンと名称変更し１ページダウンを追加
+	F_HalfPageUp_Sel		,	// (範囲選択)半ページアップ
+	F_HalfPageDown_Sel		,	// (範囲選択)半ページダウン
+	F_1PageUp_Sel			,	// (範囲選択)１ページアップ
+	F_1PageDown_Sel			,	// (範囲選択)１ページダウン
 	F_GOFILETOP_SEL			,	// (範囲選択)ファイルの先頭に移動
 	F_GOFILEEND_SEL			,	// (範囲選択)ファイルの最後に移動
 	F_GONEXTPARAGRAPH_SEL	,	// (範囲選択)次の段落へ移動
@@ -191,7 +187,7 @@ const EFunctionCode pnFuncList_Select[] = {
 const int nFincList_Select_Num = _countof(pnFuncList_Select);
 
 
-// 矩形選択系	//Oct. 17, 2000 JEPRO (矩形選択)が新設され次第ここにおく
+// 矩形選択系
 const EFunctionCode pnFuncList_Box[] = {
 //	F_BOXSELALL			,	// 矩形ですべて選択
 	F_BEGIN_BOX			,	// 矩形範囲選択開始
@@ -217,26 +213,26 @@ const int nFincList_Box_Num = _countof(pnFuncList_Box);
 
 
 // クリップボード系
-const EFunctionCode pnFuncList_Clip[] = {	// Oct. 16, 2000 JEPRO 変数名変更(List2→List_Clip)
+const EFunctionCode pnFuncList_Clip[] = {
 	F_CUT						,	// 切り取り(選択範囲をクリップボードにコピーして削除)
 	F_COPY						,	// コピー(選択範囲をクリップボードにコピー)
 	F_COPY_ADDCRLF				,	// 折り返し位置に改行をつけてコピー(選択範囲をクリップボードにコピー)
 	F_COPY_CRLF					,	// CRLF改行でコピー
 	F_PASTE						,	// 貼り付け(クリップボードから貼り付け)
 	F_PASTEBOX					,	// 矩形貼り付け(クリップボードから矩形貼り付け)
-//	F_INSTEXT_W					,	// テキストを貼り付け		//Oct. 22, 2000 JEPRO ここに追加したが非公式機能なのか不明なのでコメントアウトにしておく
-//	F_ADDTAIL_W					,	// 最後にテキストを追加		//Oct. 22, 2000 JEPRO ここに追加したが非公式機能なのか不明なのでコメントアウトにしておく
+//	F_INSTEXT_W					,	// テキストを貼り付け
+//	F_ADDTAIL_W					,	// 最後にテキストを追加
 	F_COPYLINES					,	// 選択範囲内全行コピー
 	F_COPYLINESASPASSAGE		,	// 選択範囲内全行引用符付きコピー
 	F_COPYLINESWITHLINENUMBER	,	// 選択範囲内全行行番号付きコピー
 	F_COPY_COLOR_HTML			,	// 選択範囲内色付きHTMLコピー
 	F_COPY_COLOR_HTML_LINENUMBER,	// 選択範囲内行番号色付きHTMLコピー
-	F_COPYFNAME					,	// このファイル名をクリップボードにコピー //2002/2/3 aroka
+	F_COPYFNAME					,	// このファイル名をクリップボードにコピー
 	F_COPYPATH					,	// このファイルのパス名をクリップボードにコピー
-	F_COPYTAG					,	// このファイルのパス名とカーソル位置をコピー	//Sept. 14, 2000 JEPRO メニューに合わせて下に移動
-	F_CREATEKEYBINDLIST				// キー割り当て一覧をコピー	//Sept. 15, 2000 JEPRO IDM_TESTのままではうまくいかないのでFに変えて登録	//Dec. 25, 2000 復活
+	F_COPYTAG					,	// このファイルのパス名とカーソル位置をコピー
+	F_CREATEKEYBINDLIST				// キー割り当て一覧をコピー
 };
-const int nFincList_Clip_Num = _countof(pnFuncList_Clip);	//Oct. 16, 2000 JEPRO 変数名変更(List1→List_Move)
+const int nFincList_Clip_Num = _countof(pnFuncList_Clip);
 
 
 // 挿入系

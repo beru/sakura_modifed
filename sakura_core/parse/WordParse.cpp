@@ -151,7 +151,7 @@ ECharKind WordParse::WhatKindOfChar(
 		if (IsHankaku(c)) return CK_ETC;	// 半角のその他
 		else return CK_ZEN_ETC;				// 全角のその他(漢字など)
 	}else if (nCharChars == 2) {
-		// サロゲートペア 2008/7/8 Uchi
+		// サロゲートペア
 		if (IsUTF16High(pData[nIdx]) && IsUTF16Low(pData[nIdx + 1])) {
 			int nCode = 0x10000 + ((pData[nIdx] & 0x3FF)<<10) + (pData[nIdx + 1] & 0x3FF);	// コードポイント
 			if (nCode >= 0x20000 && nCode <= 0x2FFFF) {	// CJKV 拡張予約域 Ext-B/Ext-C...
@@ -269,7 +269,6 @@ bool WordParse::SearchNextWordPosition(
 	ECharKind nCharKind = WhatKindOfChar(pLine, nLineLen, nIdx);
 
 	size_t nIdxNext = nIdx;
-	// 2005-09-02 D.S.Koba GetSizeOfChar
 	size_t nCharChars = NativeW::GetSizeOfChar(pLine, nLineLen, nIdxNext);
 	while (nCharChars > 0) {
 		nIdxNext += nCharChars;
@@ -315,7 +314,6 @@ bool WordParse::SearchNextWordPosition4KW(
 	ECharKind nCharKind = WhatKindOfChar(pLine, nLineLen, nIdx);
 
 	size_t nIdxNext = nIdx;
-	// 2005-09-02 D.S.Koba GetSizeOfChar
 	size_t nCharChars = NativeW::GetSizeOfChar(pLine, nLineLen, nIdxNext);
 	while (nCharChars > 0) {
 		nIdxNext += nCharChars;
@@ -353,7 +351,7 @@ uchar_t wc_to_c(wchar_t wc)
 	if (buf[1] != 0) return 0; // エラー扱い
 	return buf[0] <= 0x7F ? buf[0]: 0; // 1バイトで表せたので、これを返す  2011.12.17 バッファオーバーランの修正
 #endif
-	// 2011.12.15 wctombを使わない版
+	// wctombを使わない版
 	if (wc <= 0x7F) {
 		return (uchar_t)wc;
 	}
@@ -372,7 +370,7 @@ uchar_t wc_to_c(wchar_t wc)
 		新しい URL を追加する場合は #define 値を修正してください。
 		url_table は頭文字がアルファベット順になるように並べてください。
 
-	2007.10.23 kobake UNICODE対応。//$ wchar_t専用のテーブル(または判定ルーチン)を用意したほうが効率は上がるはずです。
+	UNICODE対応。//$ wchar_t専用のテーブル(または判定ルーチン)を用意したほうが効率は上がるはずです。
 */
 bool IsURL(
 	const wchar_t*	pszLine,	// [in]  文字列
