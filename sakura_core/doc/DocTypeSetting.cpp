@@ -1,33 +1,3 @@
-/*
-	Copyright (C) 2008, kobake
-
-	This software is provided 'as-is', without any express or implied
-	warranty. In no event will the authors be held liable for any damages
-	arising from the use of this software.
-
-	Permission is granted to anyone to use this software for any purpose,
-	including commercial applications, and to alter it and redistribute it
-	freely, subject to the following restrictions:
-
-		1. The origin of this software must not be misrepresented;
-		   you must not claim that you wrote the original software.
-		   If you use this software in a product, an acknowledgment
-		   in the product documentation would be appreciated but is
-		   not required.
-
-		2. Altered source versions must be plainly marked as such,
-		   and must not be misrepresented as being the original software.
-
-		3. This notice may not be removed or altered from any source
-		   distribution.
-*/
-
-// 2000.10.08 JEPRO  背景色を真っ白RGB(255,255,255)→(255,251,240)に変更(眩しさを押さえた)
-// 2000.12.09 Jepro  note: color setting (詳細は ShareData.h を参照のこと)
-// 2000.09.04 JEPRO  シングルクォーテーション文字列に色を割り当てるが色分け表示はしない
-// 2000.10.17 JEPRO  色分け表示するように変更(最初のFALSE→TRUE)
-// 2008.03.27 kobake 大整理
-
 #include "StdAfx.h"
 #include "DocTypeSetting.h"
 

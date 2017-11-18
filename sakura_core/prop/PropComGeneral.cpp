@@ -1,14 +1,5 @@
 /*!	@file
 	@brief 共通設定ダイアログボックス、「全般」ページ
-
-	@author Uchi
-	@date 2010/5/9 CPropCommon.cより分離
-*/
-/*
-	Copyright (C) 2010, Uchi
-
-	This source code is designed for sakura editor.
-	Please contact the copyright holders to use this code for other purpose.
 */
 
 #include "StdAfx.h"

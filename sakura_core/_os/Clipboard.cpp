@@ -1,27 +1,3 @@
-/*
-	Copyright (C) 2008, kobake
-
-	This software is provided 'as-is', without any express or implied
-	warranty. In no event will the authors be held liable for any damages
-	arising from the use of this software.
-
-	Permission is granted to anyone to use this software for any purpose,
-	including commercial applications, and to alter it and redistribute it
-	freely, subject to the following restrictions:
-
-		1. The origin of this software must not be misrepresented;
-		   you must not claim that you wrote the original software.
-		   If you use this software in a product, an acknowledgment
-		   in the product documentation would be appreciated but is
-		   not required.
-
-		2. Altered source versions must be plainly marked as such,
-		   and must not be misrepresented as being the original software.
-
-		3. This notice may not be removed or altered from any source
-		   distribution.
-*/
-
 #include "StdAfx.h"
 #include <ShellAPI.h>// HDROP
 #include "Clipboard.h"
@@ -326,7 +302,6 @@ bool Clipboard::GetText(NativeW* pMemBuf, bool* pbColumnSelect, bool* pbLineSele
 	}
 
 	// UNICODE形式のデータがあれば取得
-	// From Here 2005/05/29 novice UNICODE TEXT 対応処理を追加
 	HGLOBAL hUnicode = NULL;
 	if (uGetFormat == -1 || uGetFormat == CF_UNICODETEXT) {
 		hUnicode = ::GetClipboardData(CF_UNICODETEXT);
@@ -338,7 +313,6 @@ bool Clipboard::GetText(NativeW* pMemBuf, bool* pbColumnSelect, bool* pbLineSele
 		::GlobalUnlock(hUnicode);
 		return true;
 	}
-	// To Here 2005/05/29 novice
 
 	// OEMTEXT形式のデータがあれば取得
 	HGLOBAL hText = NULL;
@@ -359,7 +333,6 @@ bool Clipboard::GetText(NativeW* pMemBuf, bool* pbColumnSelect, bool* pbLineSele
 		return true;
 	}
 
-	// 2008.09.10 bosagami パス貼り付け対応
 	// HDROP形式のデータがあれば取得
 	if (
 		(uGetFormat == -1 || uGetFormat == CF_HDROP)
@@ -371,7 +344,7 @@ bool Clipboard::GetText(NativeW* pMemBuf, bool* pbColumnSelect, bool* pbLineSele
 			const UINT nMaxCnt = DragQueryFile(hDrop, 0xFFFFFFFF, NULL, 0);
 			for (UINT nLoop=0; nLoop<nMaxCnt; ++nLoop) {
 				DragQueryFile(hDrop, nLoop, sTmpPath, _countof(sTmpPath) - 1);
-				// 2012.10.05 Moca ANSI版に合わせて最終行にも改行コードをつける
+				// ANSI版に合わせて最終行にも改行コードをつける
 				pMemBuf->AppendStringT(sTmpPath);
 				if (nMaxCnt > 1) {
 					pMemBuf->AppendString(eol.GetValue2());
@@ -578,7 +551,6 @@ static size_t GetLengthByMode(
 	
 	@param nMode -2:通常のサクラの処理, -1:バイナリモード, それ以外:文字コード
 	@param nEndMode -1:文字コードに依存 0:GlobalSize 1:strlen 2:wcslen 4:wchar32_tの文字列
-	@date 2013.06.12 Moca 新規作成
 */
 bool Clipboard::GetClipboradByFormat(
 	NativeW& mem,
@@ -680,7 +652,6 @@ bool Clipboard::HasValidData()
 	if (::IsClipboardFormatAvailable(CF_OEMTEXT)) return true;
 	if (::IsClipboardFormatAvailable(CF_UNICODETEXT)) return true;
 	if (::IsClipboardFormatAvailable(GetSakuraFormat())) return true;
-	// 2008.09.10 bosagami パス貼り付け対応
 	if (::IsClipboardFormatAvailable(CF_HDROP)) return true;
 	return false;
 }
@@ -689,8 +660,6 @@ bool Clipboard::HasValidData()
 CLIPFORMAT Clipboard::GetSakuraFormat()
 {
 	/*
-		2007.09.30 kobake
-
 		UNICODE形式でクリップボードデータを保持するよう変更したため、
 		以前のバージョンのクリップボードデータと競合しないように
 		フォーマット名を変更
@@ -702,7 +671,7 @@ CLIPFORMAT Clipboard::GetSakuraFormat()
 int Clipboard::GetDataType()
 {
 	// 扱える形式が１つでもあればtrue
-	// 2013.06.11 GetTextの取得順に変更
+	// GetTextの取得順に
 	if (::IsClipboardFormatAvailable(GetSakuraFormat())) return GetSakuraFormat();
 	if (::IsClipboardFormatAvailable(CF_UNICODETEXT)) return CF_UNICODETEXT;
 	if (::IsClipboardFormatAvailable(CF_OEMTEXT)) return CF_OEMTEXT;

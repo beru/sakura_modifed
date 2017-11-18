@@ -1,28 +1,7 @@
-/*!	@file
-@brief ViewCommanderクラスのコマンド(マクロ系)関数群
-
-	2012/12/20	ViewCommander.cppから分離
-*/
-/*
-	Copyright (C) 1998-2001, Norio Nakatani
-	Copyright (C) 2000-2001, jepro, genta
-	Copyright (C) 2001, MIK, Stonee, Misaka, asa-o, novice, hor, YAZAKI
-	Copyright (C) 2002, YAZAKI, genta
-	Copyright (C) 2003, Moca
-	Copyright (C) 2005, novice
-	Copyright (C) 2006, maru
-	Copyright (C) 2007, ryoji, genta
-	Copyright (C) 2008, syat
-
-	This source code is designed for sakura editor.
-	Please contact the copyright holders to use this code for other purpose.
-*/
-
 #include "StdAfx.h"
 #include "ViewCommander.h"
 #include "ViewCommander_inline.h"
 
-//@@@ 2002.2.2 YAZAKI マクロはCSMacroMgrに統一
 #include "macro/SMacroMgr.h"
 #include "dlg/DlgExec.h"
 #include "dlg/DlgOpenFile.h"
@@ -32,6 +11,7 @@
 #include "env/ShareData.h"
 #include "env/SakuraEnvironment.h"
 
+// ViewCommanderクラスのコマンド(マクロ系)関数群
 
 // キーマクロの記録開始／終了
 void ViewCommander::Command_RecKeyMacro(void)

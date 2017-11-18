@@ -1,19 +1,5 @@
 /*!	@file
 	@brief 指定行へのジャンプダイアログボックス
-
-	@author Norio Nakatani
-	@date	1998/05/31 作成
-*/
-/*
-	Copyright (C) 1998-2001, Norio Nakatani
-	Copyright (C) 2000, jepro
-	Copyright (C) 2001, jepro, Stonee
-	Copyright (C) 2002, aroka, MIK, YAZAKI
-	Copyright (C) 2004, genta
-	Copyright (C) 2006, ryoji
-
-	This source code is designed for sakura editor.
-	Please contact the copyright holder to use this code for other purpose.
 */
 #include "StdAfx.h"
 #include "dlg/DlgJump.h"

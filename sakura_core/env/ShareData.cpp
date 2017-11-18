@@ -1,28 +1,3 @@
-/*!	@file
-	@brief プロセス間共有データへのアクセス
-
-	@author Norio Nakatani
-	@date 1998/05/26  新規作成
-*/
-/*
-	Copyright (C) 1998-2001, Norio Nakatani
-	Copyright (C) 2000, jepro, genta, MIK
-	Copyright (C) 2001, jepro, genta, asa-o, MIK, YAZAKI, hor
-	Copyright (C) 2002, genta, ai, Moca, MIK, YAZAKI, hor, KK, aroka
-	Copyright (C) 2003, Moca, aroka, MIK, genta, wmlhq, sui
-	Copyright (C) 2004, Moca, novice, genta, isearch, MIK
-	Copyright (C) 2005, Moca, MIK, genta, ryoji, りんご, aroka
-	Copyright (C) 2006, aroka, ryoji, genta
-	Copyright (C) 2007, ryoji, genta, maru
-	Copyright (C) 2008, ryoji, Uchi, nasukoji
-	Copyright (C) 2009, nasukoji, ryoji
-	Copyright (C) 2011, nasukoji
-	Copyright (C) 2012, Moca, ryoji
-
-	This source code is designed for sakura editor.
-	Please contact the copyright holder to use this code for other purpose.
-*/
-
 #include "StdAfx.h"
 #include "env/ShareData.h"
 #include "env/DllSharedData.h"

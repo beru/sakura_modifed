@@ -1,14 +1,5 @@
 /*!	@file
 	@brief 文字コードセット設定ダイアログボックス
-
-	@author Uchi
-	@date 2010/6/14  新規作成
-*/
-/*
-	Copyright (C) 2010, Uchi
-
-	This source code is designed for sakura editor.
-	Please contact the copyright holder to use this code for other purpose.
 */
 #include "StdAfx.h"
 #include "dlg/DlgSetCharSet.h"

@@ -1,16 +1,3 @@
-/*!	@file
-	@brief テキストのレイアウト情報
-
-	@author Norio Nakatani
-	@date 1998/3/11 新規作成
-*/
-/*
-	Copyright (C) 1998-2001, Norio Nakatani
-	Copyright (C) 2002, YAZAKI
-
-	This source code is designed for sakura editor.
-	Please contact the copyright holder to use this code for other purpose.
-*/
 #include "StdAfx.h"
 #include "Layout.h"
 #include "LayoutMgr.h"

@@ -1,35 +1,3 @@
-/*!	@file
-	@brief 文字コードを調査する時に使うインターフェースクラス
-
-	@author Sakura-Editor collaborators
-	@date 2006/12/10 新規作成
-	@date 2007/10/26 クラスの説明変更 (旧：文字コード調査情報保持クラス)
-*/
-/*
-	Copyright (C) 2006
-	Copyright (C) 2007
-
-	This software is provided 'as-is', without any express or implied
-	warranty. In no event will the authors be held liable for any damages
-	arising from the use of this software.
-
-	Permission is granted to anyone to use this software for any purpose,
-	including commercial applications, and to alter it and redistribute it
-	freely, subject to the following restrictions:
-
-		1. The origin of this software must not be misrepresented;
-		   you must not claim that you wrote the original software.
-		   If you use this software in a product, an acknowledgment
-		   in the product documentation would be appreciated but is
-		   not required.
-
-		2. Altered source versions must be plainly marked as such,
-		   and must not be misrepresented as being the original software.
-
-		3. This notice may not be removed or altered from any source
-		   distribution.
-*/
-
 #include "StdAfx.h"
 
 #include <limits.h>
@@ -45,6 +13,7 @@
 #include "window/EditWnd.h"
 #include "env/ShareData.h"
 
+// 文字コードを調査する時に使うインターフェースクラス
 
 /*!
 	マルチバイト文字コードの優先順位表（既定値）

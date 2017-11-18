@@ -1,14 +1,5 @@
 /*!	@file
 	@brief 1行入力ダイアログボックス
-
-	@author Norio Nakatani
-	@date	1998/05/31 作成
-*/
-/*
-	Copyright (C) 1998-2001, Norio Nakatani
-
-	This source code is designed for sakura editor.
-	Please contact the copyright holder to use this code for other purpose.
 */
 
 class DlgInput1;

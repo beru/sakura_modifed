@@ -1,19 +1,5 @@
-// この行は文字化け対策用です．消さないでください
 /*!	@file
 	@brief プロセス生成クラス
-
-	@author aroka
-	@date 2002/01/03 Create
-*/
-/*
-	Copyright (C) 1998-2001, Norio Nakatani
-	Copyright (C) 2000-2001, genta
-	Copyright (C) 2001, masami shoji
-	Copyright (C) 2002, aroka WinMainより分離
-	Copyright (C) 2006, ryoji
-
-	This source code is designed for sakura editor.
-	Please contact the copyright holder to use this code for other purpose.
 */
 
 #include "StdAfx.h"
@@ -40,10 +26,6 @@ class Process;
 	
 	@param[in] hInstance インスタンスハンドル
 	@param[in] lpCmdLine コマンドライン文字列
-	
-	@author aroka
-	@date 2002/01/08
-	@date 2006/04/10 ryoji
 */
 Process* ProcessFactory::Create(
 	HINSTANCE hInstance,
@@ -69,7 +51,7 @@ Process* ProcessFactory::Create(
 	// しかし、そのような場合でもミューテックスを最初に確保したコントロールプロセスが唯一生き残る。
 	//
 	if (IsStartingControlProcess()) {
-		if (TestWriteQuit()) {	// 2007.09.04 ryoji「設定を保存して終了する」オプション処理（sakuext連携用）
+		if (TestWriteQuit()) {
 			return 0;
 		}
 		if (!IsExistControlProcess()) {
@@ -79,7 +61,7 @@ Process* ProcessFactory::Create(
 		if (!IsExistControlProcess()) {
 			StartControlProcess();
 		}
-		if (WaitForInitializedControlProcess()) {	// 2006.04.10 ryoji コントロールプロセスの初期化完了待ち
+		if (WaitForInitializedControlProcess()) {
 			process = new NormalProcess(hInstance, lpCmdLine);
 		}
 	}
@@ -135,9 +117,6 @@ bool ProcessFactory::ProfileSelect(
 	
 	Windows 95以上，Windows NT4.0以上であることを確認する．
 	Windows 95系では残りリソースのチェックも行う．
-	
-	@author aroka
-	@date 2002/01/03
 */
 bool ProcessFactory::IsValidVersion()
 {
@@ -184,9 +163,6 @@ bool ProcessFactory::IsValidVersion()
 
 /*!
 	@brief コマンドラインに -NOWIN があるかを判定する。
-	
-	@author aroka
-	@date 2002/01/03 作成 2002/01/18 変更
 */
 bool ProcessFactory::IsStartingControlProcess()
 {
@@ -195,10 +171,6 @@ bool ProcessFactory::IsStartingControlProcess()
 
 /*!
 	コントロールプロセスの有無を調べる。
-	
-	@author aroka
-	@date 2002/01/03
-	@date 2006/04/10 ryoji
 */
 bool ProcessFactory::IsExistControlProcess()
 {
@@ -206,7 +178,7 @@ bool ProcessFactory::IsExistControlProcess()
 	std::tstring strMutexSakuraCp = GSTR_MUTEX_SAKURA_CP;
 	strMutexSakuraCp += strProfileName;
  	HANDLE hMutexCP;
-	hMutexCP = ::OpenMutex( MUTEX_ALL_ACCESS, FALSE, strMutexSakuraCp.c_str() );	// 2006.04.10 ryoji ::CreateMutex() を ::OpenMutex()に変更
+	hMutexCP = ::OpenMutex( MUTEX_ALL_ACCESS, FALSE, strMutexSakuraCp.c_str() );
 	if (hMutexCP) {
 		::CloseHandle(hMutexCP);
 		return true;	// コントロールプロセスが見つかった
@@ -214,16 +186,11 @@ bool ProcessFactory::IsExistControlProcess()
 	return false;	// コントロールプロセスは存在していないか、まだ CreateMutex() してない
 }
 
-// From Here Aug. 28, 2001 genta
 /*!
 	@brief コントロールプロセスを起動する
 	
 	自分自身に -NOWIN オプションを付けて起動する．
 	共有メモリをチェックしてはいけないので，残念ながらCControlTray::OpenNewEditorは使えない．
-	
-	@author genta
-	@date Aug. 28, 2001
-	@date 2008.05.05 novice GetModuleHandle(NULL)→NULLに変更
 */
 bool ProcessFactory::StartControlProcess()
 {
@@ -234,7 +201,7 @@ bool ProcessFactory::StartControlProcess()
 	s.cb          = sizeof(s);
 	s.lpReserved  = NULL;
 	s.lpDesktop   = NULL;
-	s.lpTitle     = const_cast<TCHAR*>(_T("sakura control process")); // 2007.09.21 kobake デバッグしやすいように、名前を付ける
+	s.lpTitle     = const_cast<TCHAR*>(_T("sakura control process"));
 	s.dwFlags     = STARTF_USESHOWWINDOW;
 	s.wShowWindow = SW_SHOWDEFAULT;
 	s.cbReserved2 = 0;
@@ -254,7 +221,7 @@ bool ProcessFactory::StartControlProcess()
 	// 常駐プロセス起動
 	DWORD dwCreationFlag = CREATE_DEFAULT_ERROR_MODE;
 #ifdef _DEBUG
-//	dwCreationFlag |= DEBUG_PROCESS; // 2007.09.22 kobake デバッグ用フラグ
+//	dwCreationFlag |= DEBUG_PROCESS;
 #endif
 	PROCESS_INFORMATION p;
 	BOOL bCreateResult = ::CreateProcess(
@@ -305,13 +272,9 @@ bool ProcessFactory::StartControlProcess()
 	
 	return true;
 }
-// To Here Aug. 28, 2001 genta
 
 /*!
 	@brief コントロールプロセスの初期化完了イベントを待つ。
-
-	@author ryoji by assitance with karoto
-	@date 2006/04/10
 */
 bool ProcessFactory::WaitForInitializedControlProcess()
 {
@@ -354,9 +317,6 @@ bool ProcessFactory::WaitForInitializedControlProcess()
 
 /*!
 	@brief 「設定を保存して終了する」オプション処理（sakuext連携用）
-
-	@author ryoji
-	@date 2007.09.04
 */
 bool ProcessFactory::TestWriteQuit()
 {

@@ -1,23 +1,3 @@
-/*!	@file
-@brief ViewCommanderクラスのコマンド(検索系 アウトライン解析)関数群
-
-	2012/12/17	ViewCommander.cppから分離
-*/
-/*
-	Copyright (C) 1998-2001, Norio Nakatani
-	Copyright (C) 2000-2001, jepro, genta
-	Copyright (C) 2001, hor
-	Copyright (C) 2002, YAZAKI
-	Copyright (C) 2003, zenryaku
-	Copyright (C) 2006, aroka
-	Copyright (C) 2007, genta, kobake
-	Copyright (C) 2009, genta
-	Copyright (C) 2011, syat
-
-	This source code is designed for sakura editor.
-	Please contact the copyright holders to use this code for other purpose.
-*/
-
 #include "StdAfx.h"
 #include "ViewCommander.h"
 #include "ViewCommander_inline.h"
@@ -27,6 +7,7 @@
 #include "plugin/OutlineIfObj.h"
 #include "sakura_rc.h"
 
+// ViewCommanderクラスのコマンド(検索系 アウトライン解析)関数群
 
 /*!	アウトライン解析
 	

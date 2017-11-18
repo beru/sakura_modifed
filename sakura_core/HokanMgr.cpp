@@ -1,20 +1,3 @@
-/*!	@file
-	@brief キーワード補完
-
-	@author Norio Nakatani
-*/
-/*
-	Copyright (C) 1998-2001, Norio Nakatani
-	Copyright (C) 2000, jepro, genta
-	Copyright (C) 2001, asa-o
-	Copyright (C) 2002, YAZAKI
-	Copyright (C) 2003, Moca, KEITA
-	Copyright (C) 2004, genta, Moca, novice
-	Copyright (C) 2007, ryoji
-
-	This source code is designed for sakura editor.
-	Please contact the copyright holders to use this code for other purpose.
-*/
 #include "StdAfx.h"
 
 #include <memory>

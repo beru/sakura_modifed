@@ -25,12 +25,6 @@ namespace ApiWrap {
 		@note
 			指定された各ディレクトリがまだ存在しない場合、それらのディレクトリを順に作成します。
 			一部のディレクトリのみを作成した場合、この関数は FALSE を返します。
-
-		@author
-			kobake
-
-		@date
-			2007.10.15
 	*/
 	BOOL MakeSureDirectoryPathExistsW(LPCWSTR szDirPath)
 	{

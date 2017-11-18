@@ -1,21 +1,9 @@
-/*!	@file
-	@brief バージョン情報ダイアログ
-
-	@author Norio Nakatani
-	@date 1998/05/22 作成
-	@date 1999/12/05 再作成
-*/
-/*
-	Copyright (C) 1998-2001, Norio Nakatani
-	Copyright (C) 2000, genta
-
-	This source code is designed for sakura editor.
-	Please contact the copyright holder to use this code for other purpose.
-*/
-
 #pragma once
 
 #include "dlg/Dialog.h"
+
+// バージョン情報ダイアログ
+
 /*!
 	@brief About Box管理
 	

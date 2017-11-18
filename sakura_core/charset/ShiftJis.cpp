@@ -17,8 +17,6 @@
 	@retval 2  2バイト文字
 	@retval 0  エラー
 
-	@date 2005-09-02 D.S.Koba 作成
-
 	@note nIdxは予め文字の先頭位置とわかっていなければならない．
 	2バイト文字の2バイト目をnIdxに与えると正しい結果が得られない．
 */
@@ -236,7 +234,7 @@ CodeConvertResult ShiftJis::UnicodeToSJIS( const NativeW& src, Memory* pDstMem )
 }
 
 
-// 文字コード表示用	UNICODE → Hex 変換	2008/6/9 Uchi
+// 文字コード表示用	UNICODE → Hex 変換
 CodeConvertResult ShiftJis::UnicodeToHex(const wchar_t* cSrc, size_t iSLen, TCHAR* pDst, const CommonSetting_StatusBar* psStatusbar)
 {
 	NativeW		cCharBuffer;

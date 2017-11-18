@@ -1,4 +1,3 @@
-// この行は文字化け対策のためのものです。
 #include "StdAfx.h"
 #include "CodeBase.h"
 #include "charcode.h"
@@ -12,7 +11,7 @@
 
 void CodeBase::GetBom(Memory* pMemBom) { pMemBom->Clear(); }					// BOMデータ取得
 
-// 表示用16表示	UNICODE → Hex 変換	2008/6/9 Uchi
+// 表示用16表示	UNICODE → Hex 変換
 CodeConvertResult CodeBase::UnicodeToHex(
 	const wchar_t* pSrc,
 	size_t iSLen,
@@ -94,7 +93,6 @@ bool CodeBase::MIMEHeaderDecode(
 /*!
 	改行データ取得
 */
-// CShiftJisより移動 2010/6/13 Uchi
 void CodeBase::S_GetEol(
 	Memory* pMemEol,
 	EolType eolType

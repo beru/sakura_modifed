@@ -1,23 +1,3 @@
-/*!	@file
-@brief ViewCommanderクラスのコマンド(設定系)関数群
-
-	2012/12/15	ViewCommander.cpp,ViewCommander_New.cppから分離
-*/
-/*
-	Copyright (C) 1998-2001, Norio Nakatani
-	Copyright (C) 2000-2001, jepro, genta
-	Copyright (C) 2002, YAZAKI, genta
-	Copyright (C) 2003, MIK
-	Copyright (C) 2005, genta, aroka
-	Copyright (C) 2006, genta, ryoji
-	Copyright (C) 2007, ryoji
-	Copyright (C) 2008, ryoji, nasukoji
-	Copyright (C) 2009, nasukoji
-
-	This source code is designed for sakura editor.
-	Please contact the copyright holders to use this code for other purpose.
-*/
-
 #include "StdAfx.h"
 #include "ViewCommander.h"
 #include "ViewCommander_inline.h"
@@ -29,6 +9,7 @@
 #include "PropertyManager.h"
 #include "util/window.h"
 
+// ViewCommanderクラスのコマンド(設定系)関数群
 
 /*! ツールバーの表示/非表示
 

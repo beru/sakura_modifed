@@ -1,32 +1,3 @@
-/*!	@file
-	@brief Latin1 (Latin1, 欧文, Windows-1252, Windows Codepage 1252 West European) 対応クラス
-
-	@author Uchi
-	@date 20010/03/20 新規作成
-*/
-/*
-	Copyright (C) 20010, Uchi
-
-	This software is provided 'as-is', without any express or implied
-	warranty. In no event will the authors be held liable for any damages
-	arising from the use of this software.
-
-	Permission is granted to anyone to use this software for any purpose, 
-	including commercial applications, and to alter it and redistribute it 
-	freely, subject to the following restrictions:
-
-		1. The origin of this software must not be misrepresented;
-		   you must not claim that you wrote the original software.
-		   If you use this software in a product, an acknowledgment
-		   in the product documentation would be appreciated but is
-		   not required.
-
-		2. Altered source versions must be plainly marked as such, 
-		   and must not be misrepresented as being the original software.
-
-		3. This notice may not be removed or altered from any source
-		   distribution.
-*/
 #include "StdAfx.h"
 #include "Latin1.h"
 #include "charset/charcode.h"
@@ -43,8 +14,6 @@
 	@param[in] nIdx 位置(0オリジン)
 	@retval 1  1バイト文字
 	@retval 0  エラー
-
-	@date 2010/3/20 Uchi 作成
 
 	エラーでなければ1を返す
 */
@@ -210,11 +179,9 @@ CodeConvertResult Latin1::UnicodeToLatin1( const NativeW& src, Memory* pDstMem )
 }
 
 
-// 文字コード表示用	UNICODE → Hex 変換	2008/6/9 Uchi
+// 文字コード表示用	UNICODE → Hex 変換
 CodeConvertResult Latin1::UnicodeToHex(const wchar_t* cSrc, size_t iSLen, TCHAR* pDst, const CommonSetting_StatusBar* psStatusbar)
 {
-
-	// 2008/6/21 Uchi
 	if (psStatusbar->bDispUniInSjis) {
 		// Unicodeで表示
 		return CodeBase::UnicodeToHex(cSrc, iSLen, pDst, psStatusbar);

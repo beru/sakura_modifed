@@ -1,7 +1,3 @@
-/*
-2008.05.20 kobake ì¬
-*/
-
 #include "StdAfx.h"
 #include "Graphics.h"
 #include "util/std_macro.h"

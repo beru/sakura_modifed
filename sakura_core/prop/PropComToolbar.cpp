@@ -1,21 +1,6 @@
 /*!	@file
 	@brief 共通設定ダイアログボックス、「ツールバー」ページ
-
-	@author Norio Nakatani
 */
-/*
-	Copyright (C) 1998-2001, Norio Nakatani
-	Copyright (C) 2000-2001, genta, jepro, MIK
-	Copyright (C) 2002, genta, MIK, YAZAKI, aroka
-	Copyright (C) 2003, Moca, KEITA
-	Copyright (C) 2005, aroka
-	Copyright (C) 2006, ryoji
-	Copyright (C) 2007, ryoji
-
-	This source code is designed for sakura editor.
-	Please contact the copyright holders to use this code for other purpose.
-*/
-
 #include "StdAfx.h"
 #include "prop/PropCommon.h"
 #include "uiparts/MenuDrawer.h" // 2002/2/10 aroka

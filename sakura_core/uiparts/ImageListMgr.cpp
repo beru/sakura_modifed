@@ -1,20 +1,3 @@
-/*!	@file
-	@brief ImageList‚ÌŽæ‚èˆµ‚¢
-
-	@author genta
-	@date Oct. 11, 2000 genta
-*/
-/*
-	Copyright (C) 2000-2001, genta
-	Copyright (C) 2000, jepro
-	Copyright (C) 2001, GAE, jepro
-	Copyright (C) 2003, Moca, genta, wmlhq
-	Copyright (C) 2007, ryoji
-	Copyright (C) 2010, syat
-
-	This source code is designed for sakura editor.
-	Please contact the copyright holders to use this code for other purpose.
-*/
 #include "StdAfx.h"
 #include "ImageListMgr.h"
 #include "env/CommonSetting.h"

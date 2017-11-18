@@ -1,24 +1,6 @@
 /*!	@file
 	@brief WSH Manager
-
-	@author 鬼, genta
-	@date 2002年4月28日,5月3日,5月5日,5月6日,5月13日,5月16日
-	@date 2002.08.25 genta WSH.hより分離
-
-	@par TODO
-	@li 未知のエンジンに対応できるようCMacroFactoryを変更 → 要議論
-	@li EditView::HandleCommandを使う → CMacro::HandleCommandでもなにかやってるようなのでいじらない方が？
-	@li vector::reserveを使う → CSMacroMgrで個数が宣言されて無いので見送り
-	@li 再描画の代わりにShowEditCaret → protectedですよー
 */
-/*
-	Copyright (C) 2002, 鬼, genta
-
-	This source code is designed for sakura editor.
-	Please contact the copyright holder to use this code for other purpose.
-
-*/
-
 #pragma once
 
 #include <Windows.h>

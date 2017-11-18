@@ -1,19 +1,8 @@
-/*!	@file
-	@brief Undo, Redoバッファ
-
-	@author Norio Nakatani
-	@date 1998/06/09 新規作成
-*/
-/*
-	Copyright (C) 1998-2001, Norio Nakatani
-
-	This source code is designed for sakura editor.
-	Please contact the copyright holder to use this code for other purpose.
-*/
+#pragma once
 
 class OpeBuf;
 
-#pragma once
+// Undo, Redoバッファ
 
 #include <vector>
 #include "_main/global.h"

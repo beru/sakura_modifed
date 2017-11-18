@@ -1,25 +1,10 @@
-/*!	@file
-	@brief デバッグ用関数
-
-	@author Norio Nakatani
-
-	@date 2001/06/23 N.Nakatani DebugOut()に微妙～な修正
-	@date 2002/01/17 aroka 型の修正
-	@date 2013/03/03 Uchi MessageBox用関数を分離
-*/
-/*
-	Copyright (C) 1998-2001, Norio Nakatani
-	Copyright (C) 2002, aroka
-
-	This source code is designed for sakura editor.
-	Please contact the copyright holder to use this code for other purpose.
-*/
-
 #include "StdAfx.h"
 #include <stdarg.h>
 #include <tchar.h>
 #include "debug/Debug1.h"
 #include "debug/Debug3.h"
+
+// デバッグ用関数
 
 #if 0
 // デバッグウォッチ用の型

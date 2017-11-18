@@ -1,27 +1,3 @@
-/*
-	Copyright (C) 2007, kobake
-
-	This software is provided 'as-is', without any express or implied
-	warranty. In no event will the authors be held liable for any damages
-	arising from the use of this software.
-
-	Permission is granted to anyone to use this software for any purpose,
-	including commercial applications, and to alter it and redistribute it
-	freely, subject to the following restrictions:
-
-		1. The origin of this software must not be misrepresented;
-		   you must not claim that you wrote the original software.
-		   If you use this software in a product, an acknowledgment
-		   in the product documentation would be appreciated but is
-		   not required.
-
-		2. Altered source versions must be plainly marked as such,
-		   and must not be misrepresented as being the original software.
-
-		3. This notice may not be removed or altered from any source
-		   distribution.
-*/
-
 #include "StdAfx.h"
 #include "charset/charcode.h"
 
@@ -169,7 +145,7 @@ namespace WCODE
 		HFONT				hFontOld;
 		HFONT				hFont;
 		SIZE				han_size;
-		LOGFONT				lf;				// 2008/5/15 Uchi
+		LOGFONT				lf;
 		CharWidthCache*	pCache;
 	};
 
@@ -192,7 +168,7 @@ namespace WCODE
 		}
 		void Init(const LOGFONT& lf, CharWidthFontMode fMode)
 	 	{
-			// Fontfaceが変更されていたらキャッシュをクリアする	2013.04.08 aroka
+			// Fontfaceが変更されていたらキャッシュをクリアする
 			localCache[(int)fMode].Init(lf);
 			if (!localCache[(int)fMode].IsSameFontFace(lf)) {
 				localCache[(int)fMode].Clear();
@@ -246,13 +222,13 @@ namespace WCODE
 	}
 }
 
-// 文字幅の動的計算用キャッシュの初期化。	2007/5/18 Uchi
+// 文字幅の動的計算用キャッシュの初期化。
 void InitCharWidthCache(const LOGFONT& lf, CharWidthFontMode fMode)
 {
 	WCODE::selector.Init(lf, fMode);
 }
 
-// 文字幅の動的計算用キャッシュの選択	2013.04.08 aroka
+// 文字幅の動的計算用キャッシュの選択
 void SelectCharWidthCache(CharWidthFontMode fMode, CharWidthCacheMode cMode)
 {
 	assert(fMode == CharWidthFontMode::Edit || cMode == CharWidthCacheMode::Local);

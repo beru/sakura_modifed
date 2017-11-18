@@ -1,20 +1,4 @@
-/*!	@file
-	@brief テキストのレイアウト情報管理
-
-	@author Norio Nakatani
-*/
-/*
-	Copyright (C) 1998-2001, Norio Nakatani
-	Copyright (C) 2001, MIK
-	Copyright (C) 2002, MIK, aroka, genta, YAZAKI, novice
-	Copyright (C) 2003, genta
-	Copyright (C) 2004, Moca, genta
-	Copyright (C) 2005, D.S.Koba, Moca
-	Copyright (C) 2009, nasukoji
-
-	This source code is designed for sakura editor.
-	Please contact the copyright holder to use this code for other purpose.
-*/
+// テキストのレイアウト情報管理
 
 #include "StdAfx.h"
 #include "doc/EditDoc.h" /// 2003/07/20 genta

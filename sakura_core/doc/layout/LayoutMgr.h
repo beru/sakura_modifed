@@ -1,23 +1,4 @@
-/*!	@file
-	@brief テキストのレイアウト情報管理
-
-	@author Norio Nakatani
-	@date 1998/03/06 新規作成
-	@date 1998/04/14 データの削除を実装
-	@date 1999/12/20 データの置換を実装
-	@date 2009/08/28 nasukoji	CalTextWidthArg定義追加、DoLayout_Range()の引数変更
-*/
-/*
-	Copyright (C) 1998-2001, Norio Nakatani
-	Copyright (C) 2001, jepro
-	Copyright (C) 2002, MIK, aroka, genta, YAZAKI
-	Copyright (C) 2003, genta
-	Copyright (C) 2005, Moca, genta, D.S.Koba
-	Copyright (C) 2009, nasukoji
-
-	This source code is designed for sakura editor.
-	Please contact the copyright holder to use this code for other purpose.
-*/
+// テキストのレイアウト情報管理
 
 #pragma once
 

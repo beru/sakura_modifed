@@ -2,17 +2,6 @@
 	@brief Migemo関連
 
 	C/Migemoアクセス関数
-
-	@author isearch
-	@date 2004.09.14 新規作成
-*/
-/*
-	Copyright (C) 2004, isearch
-	Copyright (C) 2005, aroka
-	Copyright (C) 2009, miau
-
-	This source code is designed for sakura editor.
-	Please contact the copyright holder to use this code for other purpose.
 */
 /*
 Migemo はローマ字のまま日本語をインクリメンタル検索するためのツールです。

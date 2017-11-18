@@ -1,19 +1,5 @@
 /*!	@file
 	@brief 外部コマンド実行ダイアログ
-
-	@author Norio Nakatani
-*/
-/*
-	Copyright (C) 1998-2001, Norio Nakatani
-	Copyright (C) 2000, jepro
-	Copyright (C) 2001, jepro, Stonee
-	Copyright (C) 2002, aroka, YAZAKI, MIK
-	Copyright (C) 2006, ryoji
-	Copyright (C) 2007, maru
-	Copyright (C) 2009, ryoji
-
-	This source code is designed for sakura editor.
-	Please contact the copyright holder to use this code for other purpose.
 */
 
 #include "StdAfx.h"

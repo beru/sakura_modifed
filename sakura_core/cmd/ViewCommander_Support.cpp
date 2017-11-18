@@ -1,24 +1,3 @@
-/*!	@file
-@brief ViewCommanderクラスのコマンド(支援)関数群
-
-	2012/12/16	ViewCommander_Hokan.cppにcpp,ViewCommander.cppから支援関連を分離しViewCommander_Support.cppに名称変更
-*/
-/*
-	Copyright (C) 1998-2001, Norio Nakatani
-	Copyright (C) 2000-2001, jepro, genta
-	Copyright (C) 2001, asa-o
-	Copyright (C) 2002, genta, aroka
-	Copyright (C) 2003, Moca
-	Copyright (C) 2005, genta
-	Copyright (C) 2006, ryoji, fon
-	Copyright (C) 2007, kobake, ryoji
-	Copyright (C) 2011, Moca
-	Copyright (C) 2012, Moca
-
-	This source code is designed for sakura editor.
-	Please contact the copyright holders to use this code for other purpose.
-*/
-
 #include "StdAfx.h"
 #include <HtmlHelp.h>
 #include "ViewCommander.h"
@@ -30,6 +9,8 @@
 #include "env/HelpManager.h"
 #include "util/module.h"
 #include "util/shell.h"
+
+// ViewCommanderクラスのコマンド(支援)関数群
 
 /*!	入力補完
 	Ctrl+Spaceでここに到着。

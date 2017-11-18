@@ -13,8 +13,6 @@
 	@retval CODE_UTF8      UTF-8
 	@retval CODE_UNICODEBE UTF-16 BE
 	@retval CODE_NONE      –¢ŒŸo
-
-	@date 2007.08.11 charcode.cpp ‚©‚çˆÚ“®
 */
 EncodingType CodeMediator::DetectUnicodeBom(const char* pS, size_t nLen)
 {

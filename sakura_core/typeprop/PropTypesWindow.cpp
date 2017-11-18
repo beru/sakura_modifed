@@ -1,9 +1,5 @@
-/*
-	タイプ別設定 - ウィンドウ
+// タイプ別設定 - ウィンドウ
 
-	2008.04.12 kobake CPropTypes.cppから分離
-	2009.02.22 ryoji
-*/
 #include "StdAfx.h"
 #include "PropTypes.h"
 #include "env/ShareData.h"

@@ -1,21 +1,6 @@
 /*!	@file
 	@brief 共通設定ダイアログボックス、「編集」ページ
-
-	@author Norio Nakatani
 */
-/*
-	Copyright (C) 1998-2001, Norio Nakatani
-	Copyright (C) 2000, jepro
-	Copyright (C) 2001, MIK, jepro, genta
-	Copyright (C) 2002, YAZAKI, MIK, aroka
-	Copyright (C) 2003, KEITA
-	Copyright (C) 2006, ryoji
-	Copyright (C) 2007, genta, ryoji
-
-	This source code is designed for sakura editor.
-	Please contact the copyright holders to use this code for other purpose.
-*/
-
 #include "StdAfx.h"
 #include "prop/PropCommon.h"
 #include "env/DllSharedData.h"

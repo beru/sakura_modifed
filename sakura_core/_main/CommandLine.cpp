@@ -1,23 +1,3 @@
-/*!	@file
-	@brief コマンドラインパーサ
-
-	@author aroka
-	@date	2002/01/08 作成
-*/
-/*
-	Copyright (C) 1998-2001, Norio Nakatani
-	Copyright (C) 2000-2001, genta
-	Copyright (C) 2002, aroka CControlTrayより分離
-	Copyright (C) 2002, genta, Moca
-	Copyright (C) 2005, D.S.Koba, genta, susu
-	Copyright (C) 2006, ryoji
-	Copyright (C) 2007, ryoji
-
-	This source code is designed for sakura editor.
-	Please contact the copyright holder to use this code for other purpose.
-*/
-
-
 #include "StdAfx.h"
 #include "CommandLine.h"
 #include "mem/Memory.h"
@@ -25,7 +5,7 @@
 #include <io.h>
 #include <string.h>
 #include "debug/RunningTimer.h"
-#include "charset/charcode.h"  // 2006.06.28 rastiv
+#include "charset/charcode.h"
 #include "io/TextStream.h"
 #include "util/shell.h"
 #include "util/fileUtil.h"
@@ -68,10 +48,6 @@
 	CommandLine::ParseCommandLine()で使われる。
 
 	@return オプションの番号。どれにも該当しないときは0を返す。
-
-	@author genta
-	@date Apr. 6, 2001
-	@date 2006.10.25 ryoji オプション文字列の大文字小文字を区別しない
 */
 int CommandLine::CheckCommandLine(
 	LPTSTR	str,		// [in] 検証する文字列（先頭の-は含まない）
@@ -97,7 +73,7 @@ int CommandLine::CheckCommandLine(
 		{_T("R"),			1,	CMDLINEOPT_R, false},
 		{_T("-"),			1,	CMDLINEOPT_NOMOREOPT, false},
 		{_T("NOWIN"),		5,	CMDLINEOPT_NOWIN, false},
-		{_T("WQ"),			2,	CMDLINEOPT_WRITEQUIT, false},	// 2007.05.19 ryoji sakuext用に追加
+		{_T("WQ"),			2,	CMDLINEOPT_WRITEQUIT, false},
 		{_T("GREPMODE"),	8,	CMDLINEOPT_GREPMODE, false},
 		{_T("GREPDLG"),		7,	CMDLINEOPT_GREPDLG, false},
 		{_T("DEBUGMODE"),	9,	CMDLINEOPT_DEBUGMODE, false},
@@ -119,18 +95,18 @@ int CommandLine::CheckCommandLine(
 		{_T("SY"),		2,			CMDLINEOPT_SY, false},
 		{_T("WX"),		2,			CMDLINEOPT_WX, false},
 		{_T("WY"),		2,			CMDLINEOPT_WY, false},
-		{_T("CODE"),	4,			CMDLINEOPT_CODE, false},	// 2002/09/20 Moca _COptWoAから移動
-		{_T("TYPE"),	4,			CMDLINEOPT_TYPE, false},	// タイプ別設定 Mar. 7, 2002 genta
+		{_T("CODE"),	4,			CMDLINEOPT_CODE, false},
+		{_T("TYPE"),	4,			CMDLINEOPT_TYPE, false},
 		{_T("GKEY"),	4,			CMDLINEOPT_GKEY, false},
 		{_T("GREPR"),	5,			CMDLINEOPT_GREPR, true},
 		{_T("GFILE"),	5,			CMDLINEOPT_GFILE, false},
 		{_T("GFOLDER"),	7,			CMDLINEOPT_GFOLDER, false},
 		{_T("GOPT"),	4,			CMDLINEOPT_GOPT, false},
-		{_T("GCODE"),	5,			CMDLINEOPT_GCODE, false},	// 2002/09/21 Moca 追加
-		{_T("GROUP"),	5,			CMDLINEOPT_GROUP, false},	// 2007.06.26 ryoji
-		{_T("M"),		1,			CMDLINEOPT_M, false},		// 2009.06.14 syat
-		{_T("MTYPE"),	5,			CMDLINEOPT_MTYPE, false},	// 2009.06.14 syat
-		{_T("PROF"),	4,			CMDLINEOPT_PROF, true},	// 2013.12.20 Moca
+		{_T("GCODE"),	5,			CMDLINEOPT_GCODE, false},
+		{_T("GROUP"),	5,			CMDLINEOPT_GROUP, false},
+		{_T("M"),		1,			CMDLINEOPT_M, false},
+		{_T("MTYPE"),	5,			CMDLINEOPT_MTYPE, false},
+		{_T("PROF"),	4,			CMDLINEOPT_PROF, true},
 		{NULL, 0, 0}
 	};
 
@@ -141,7 +117,7 @@ int CommandLine::CheckCommandLine(
 		if (
 			len >= ptr->len		// 長さが足りているか
 			&& (str[ptr->len] == '=' || str[ptr->len] == ':')	// オプション部分の長さチェック
-			&& auto_memicmp(str, ptr->opt, ptr->len) == 0		// 文字列の比較	// 2006.10.25 ryoji memcmp() -> _memicmp()
+			&& auto_memicmp(str, ptr->opt, ptr->len) == 0		// 文字列の比較
 		) {
 			*arg = str + ptr->len + 1;				// 引数開始位置
 			*arglen = len - ptr->len - 1;
@@ -154,7 +130,7 @@ int CommandLine::CheckCommandLine(
 				}
 			}
 			if (*arglen <= 0 && !(ptr->bLen0)) {
-				return 0;		// 2010.06.12 syat 値なしはオプションとして認めない
+				return 0;		// 値なしはオプションとして認めない
 			}
 			return ptr->value;
 		}
@@ -177,13 +153,6 @@ int CommandLine::CheckCommandLine(
 
 	WinMain()から呼び出される。
 	
-	@date 2005-08-24 D.S.Koba 関数のstaticをやめ，メンバ変数を引数で渡すのをやめる
-	@date 2007.09.09 genta Visual Studioが各々の引数をお節介にも""で囲む問題に対応．
-		オプションが""で囲まれた場合に対応する．
-		そうすると-で始まるファイル名を指定できなくなるので，
-		それ以降オプション解析をしないという "--" オプションを新設する．
-	@date 2012.02.25 novice 複数ファイル読み込み
-
 	@note
 	これが呼び出された時点では共有メモリの初期化が完了していないため，
 	共有メモリにアクセスしてはならない．
@@ -192,7 +161,6 @@ void CommandLine::ParseCommandLine(LPCTSTR pszCmdLineSrc, bool bResponse)
 {
 	MY_RUNNINGTIMER(runningTimer, "CommandLine::Parse");
 
-	// May 30, 2000 genta
 	// 実行ファイル名をもとに漢字コードを固定する．
 	{
 		TCHAR exename[512];
@@ -223,7 +191,7 @@ void CommandLine::ParseCommandLine(LPCTSTR pszCmdLineSrc, bool bResponse)
 
 	TCHAR	szPath[_MAX_PATH];
 	bool	bFind = false;				// ファイル名発見フラグ
-	bool	bParseOptDisabled = false;	// 2007.09.09 genta オプション解析を行わなず，ファイル名として扱う
+	bool	bParseOptDisabled = false;	// オプション解析を行わなず，ファイル名として扱う
 	size_t	nPos;
 	size_t	i = 0;
 	if (pszCmdLineSrc[0] != _T('-')) {
@@ -261,16 +229,13 @@ void CommandLine::ParseCommandLine(LPCTSTR pszCmdLineSrc, bool bResponse)
 	while (pszToken) {
 		DEBUG_TRACE(_T("OPT=[%ts]\n"), pszToken);
 
-		// 2007.09.09 genta オプション判定ルール変更．オプション解析停止と""で囲まれたオプションを考慮
 		if (bParseOptDisabled || !(pszToken[0] == '-' || pszToken[0] == '"' && pszToken[1] == '-' )) {
 			if (pszToken[0] == _T('\"')) {
 				NativeT work;
-				// Nov. 3, 2005 genta
 				// 末尾のクォーテーションが無い場合を考慮して，
 				// 最後がダブルクォートの場合のみ取り除く
 				// ファイル名には使えない文字なのでファイル名に含まれている場合は考慮不要
 				// またSHIFT-JISの2バイト目の考慮も不要
-				// Nov. 27, 2005 genta
 				// 引数がダブルクォート1つの場合に，その1つを最初と最後の1つずつと
 				// 見間違えて，インデックス-1にアクセスしてしまうのを防ぐために長さをチェックする
 				// ファイル名の後ろにあるOptionを解析するため，ループは継続
@@ -286,7 +251,6 @@ void CommandLine::ParseCommandLine(LPCTSTR pszCmdLineSrc, bool bResponse)
 				_tcscpy_s(szPath, pszToken);		// ファイル名
 			}
 
-			// Nov. 11, 2005 susu
 			// 不正なファイル名のままだとファイル保存時ダイアログが出なくなるので
 			// 簡単なファイルチェックを行うように修正
 			if (_tcsncmp_literal(szPath, _T("file:///")) == 0) {
@@ -319,9 +283,9 @@ void CommandLine::ParseCommandLine(LPCTSTR pszCmdLineSrc, bool bResponse)
 			}
 		}else {
 			if (*pszToken == '"') {
-				++pszToken;	// 2007.09.09 genta 先頭の"はスキップ
+				++pszToken;	// 先頭の"はスキップ
 				size_t tokenlen = _tcslen(pszToken);
-				if (pszToken[tokenlen - 1] == '"') {	// 2009.06.14 syat 末尾の"を取り除く
+				if (pszToken[tokenlen - 1] == '"') {	// 末尾の"を取り除く
 					pszToken[tokenlen - 1] = '\0';
 				}
 			}
@@ -360,7 +324,6 @@ void CommandLine::ParseCommandLine(LPCTSTR pszCmdLineSrc, bool bResponse)
 				fi.nWindowOriginY = AtoiOptionInt(arg);
 				break;
 			case CMDLINEOPT_TYPE:	// TYPE
-				// Mar. 7, 2002 genta
 				// ファイルタイプの強制指定
 				{
 					_tcsncpy(fi.szDocType, arg, MAX_DOCTYPE_LEN);
@@ -376,9 +339,9 @@ void CommandLine::ParseCommandLine(LPCTSTR pszCmdLineSrc, bool bResponse)
 			case CMDLINEOPT_NOWIN:	// NOWIN
 				bNoWindow = true;
 				break;
-			case CMDLINEOPT_WRITEQUIT:	// WRITEQUIT	// 2007.05.19 ryoji sakuext用に追加
+			case CMDLINEOPT_WRITEQUIT:	// WRITEQUIT
 				bWriteQuit = true;
-				bNoWindow = true;	// 2007.09.05 ryoji -WQを指定されたら-NOWINも指定されたとして扱う
+				bNoWindow = true;	// -WQを指定されたら-NOWINも指定されたとして扱う
 				break;
 			case CMDLINEOPT_GREPMODE:	// GREPMODE
 				bGrepMode = true;
@@ -429,7 +392,6 @@ void CommandLine::ParseCommandLine(LPCTSTR pszCmdLineSrc, bool bResponse)
 						gi.grepSearchOption.bRegularExp = true;	break;
 					case 'K':
 						// 文字コード自動判別
-						// 2002/09/21 Moca 互換性保持のための処理
 						gi.charEncoding = CODE_AUTODETECT;	break;
 					case 'P':
 						// 結果出力：[行を出力]/該当部分/否マッチ行
@@ -462,7 +424,6 @@ void CommandLine::ParseCommandLine(LPCTSTR pszCmdLineSrc, bool bResponse)
 					}
 				}
 				break;
-			// 2002/09/21 Moca Grepでの文字コードセット 追加
 			case CMDLINEOPT_GCODE:
 				gi.charEncoding = (EncodingType)AtoiOptionInt(arg);	break;
 			case CMDLINEOPT_GROUP:	// GROUP	// 2007.06.26 ryoji
@@ -470,22 +431,21 @@ void CommandLine::ParseCommandLine(LPCTSTR pszCmdLineSrc, bool bResponse)
 				break;
 			case CMDLINEOPT_DEBUGMODE:
 				bDebugMode = true;
-				// 2010.06.16 Moca -TYPE=output 扱いとする
 				if (fi.szDocType[0] == _T('\0')) {
 					auto_strcpy(fi.szDocType , _T("output"));
 				}
 				break;
-			case CMDLINEOPT_NOMOREOPT:	// 2007.09.09 genta これ以降引数無効
+			case CMDLINEOPT_NOMOREOPT:
 				bParseOptDisabled = true;
 				break;
-			case CMDLINEOPT_M:			// 2009.06.14 syat 追加
+			case CMDLINEOPT_M:
 				mMacro.SetStringT(arg);
 				mMacro.Replace(L"\"\"", L"\"");
 				break;
-			case CMDLINEOPT_MTYPE:		// 2009.06.14 syat 追加
+			case CMDLINEOPT_MTYPE:
 				mMacroType.SetStringT(arg);
 				break;
-			case CMDLINEOPT_PROF:		// 2013.12.20 Moca 追加
+			case CMDLINEOPT_PROF:
 				mProfile.SetStringT( arg );
 				bSetProfile = true;
 				break;
@@ -513,11 +473,6 @@ void CommandLine::ParseCommandLine(LPCTSTR pszCmdLineSrc, bool bResponse)
 	return;
 }
 
-/*! 
-	コンストラクタ
-	
-	@date 2005-08-24 D.S.Koba ParseCommandLine()変更によりメンバ変数に初期値代入
-*/
 CommandLine::CommandLine()
 {
 	bGrepMode				= false;
@@ -547,7 +502,7 @@ CommandLine::CommandLine()
 	gi.bGrepPaste			= false;
 	gi.bGrepBackup		= false;
 	bViewMode				= false;
-	nGroup				= -1;		// 2007.06.26 ryoji
+	nGroup				= -1;
 	mProfile.SetString(L"");
 }
 

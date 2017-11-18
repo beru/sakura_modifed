@@ -1,16 +1,5 @@
 /*!	@file
 	@brief PPA.DLLÉ}ÉNÉç
-
-	@author YAZAKI
-	@date 2002îN1åé26ì˙
-*/
-/*
-	Copyright (C) 1998-2001, Norio Nakatani
-	Copyright (C) 2001, aroka
-	Copyright (C) 2002, YAZAKI, genta
-
-	This source code is designed for sakura editor.
-	Please contact the copyright holder to use this code for other purpose.
 */
 
 #pragma once

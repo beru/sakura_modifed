@@ -1,15 +1,5 @@
 /*!	@file
 	@brief キーボードマクロ
-
-	@author YAZAKI
-	@date 2002年1月26日
-*/
-/*
-	Copyright (C) 2002, YAZAKI, genta
-	Copyright (C) 2004, genta
-
-	This source code is designed for sakura editor.
-	Please contact the copyright holder to use this code for other purpose.
 */
 #include "StdAfx.h"
 #include "PPAMacroMgr.h"

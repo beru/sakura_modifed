@@ -1,21 +1,6 @@
 /*!	@file
 	@brief WSH Handler
-
-	@author 鬼
-	@date 2002年4月28日,5月3日,5月5日,5月6日,5月13日,5月16日
-	@date 2002.08.25 genta リンクエラー回避のためWSHManager.hにエディタの
-		マクロインターフェース部を分離．
-	@date 2009.10.29 syat インタフェースオブジェクト部分をWSHIfObj.hに分離
 */
-/*
-	Copyright (C) 2002, 鬼, genta
-	Copyright (C) 2009, syat
-
-	This source code is designed for sakura editor.
-	Please contact the copyright holder to use this code for other purpose.
-
-*/
-
 #pragma once
 
 #include <ActivScp.h>

@@ -1,20 +1,5 @@
 /*!	@file
 	@brief DIFF差分表示ダイアログボックス
-
-	@author MIK
-	@date 2002.5.27
-*/
-/*
-	Copyright (C) 1998-2001, Norio Nakatani
-	Copyright (C) 2001, Stonee, genta, JEPRO, YAZAKI
-	Copyright (C) 2002, aroka, MIK, Moca
-	Copyright (C) 2003, MIK, genta
-	Copyright (C) 2004, MIK, genta, じゅうじ
-	Copyright (C) 2006, ryoji
-	Copyright (C) 2009, ryoji
-
-	This source code is designed for sakura editor.
-	Please contact the copyright holder to use this code for other purpose.
 */
 
 #include "StdAfx.h"

@@ -1,21 +1,3 @@
-/*!	@file
-	@brief RegexKeyword Library
-
-	正規表現キーワードを扱う。
-	BREGEXP.DLLを利用する。
-
-	@author MIK
-	@date Nov. 17, 2001
-*/
-/*
-	Copyright (C) 2001, MIK
-
-	This source code is designed for sakura editor.
-	Please contact the copyright holder to use this code for other purpose.
-*/
-
-//@@@ 2001.11.17 add start MIK
-
 #pragma once
 
 #include "_main/global.h"

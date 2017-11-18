@@ -1,20 +1,4 @@
-/*!	@file
-	@brief 文書データ1行
-
-	@author Norio Nakatani
-
-	@date 2001/12/03 hor しおり(bookmark)機能追加に伴うメンバー追加
-	@date 2001/12/18 hor bookmark, 修正フラグのアクセス関数化
-*/
-/*
-	Copyright (C) 1998-2001, Norio Nakatani
-	Copyright (C) 2001, hor
-	Copyright (C) 2002, MIK
-
-	This source code is designed for sakura editor.
-	Please contact the copyright holder to use this code for other purpose.
-*/
-
+// 文書データ1行
 
 #pragma once
 

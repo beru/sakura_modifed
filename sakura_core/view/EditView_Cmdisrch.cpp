@@ -1,16 +1,4 @@
-/*!	@file
-	@brief EditViewクラスのインクリメンタルサーチ関連コマンド処理系関数群
-
-	@author genta
-	@date	2005/01/10 作成
-*/
-/*
-	Copyright (C) 2004, isearch
-	Copyright (C) 2005, genta, Moca
-
-	This source code is designed for sakura editor.
-	Please contact the copyright holders to use this code for other purpose.
-*/
+// EditViewクラスのインクリメンタルサーチ関連コマンド処理系関数群
 #include "StdAfx.h"
 #include "view/EditView.h"
 #include "window/EditWnd.h"

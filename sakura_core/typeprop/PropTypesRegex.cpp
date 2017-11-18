@@ -1,20 +1,4 @@
-/*!	@file
-	タイプ別設定 - 正規表現キーワード ダイアログボックス
-
-	@author MIK
-	@date 2001/11/17  新規作成
-*/
-/*
-	Copyright (C) 2001, MIK, Stonee
-	Copyright (C) 2002, MIK
-	Copyright (C) 2003, MIK, KEITA
-	Copyright (C) 2006, ryoji
-
-	This source code is designed for sakura editor.
-	Please contact the copyright holder to use this code for other purpose.
-*/
-
-//@@@ 2001.11.17 add start MIK
+// タイプ別設定 - 正規表現キーワード ダイアログボックス
 
 #include "StdAfx.h"
 

@@ -1,40 +1,3 @@
-/*!	@file
-	@brief OsVersionInfo
-
-	OSVERSIONINFOをラッピング
-
-	@author YAZAKI
-	@date 2002年3月3日
-*/
-/*
-	Copyright (C) 2001, YAZAKI, shoji masami
-	Copyright (C) 2002, YAZAKI, minfu
-	Copyright (C) 2003, genta
-	Copyright (C) 2005, ryoji
-	Copyright (C) 2006, ryoji
-	Copyright (C) 2007, ryoji
-
-	This software is provided 'as-is', without any express or implied
-	warranty. In no event will the authors be held liable for any damages
-	arising from the use of this software.
-
-	Permission is granted to anyone to use this software for any purpose, 
-	including commercial applications, and to alter it and redistribute it 
-	freely, subject to the following restrictions:
-
-		1. The origin of this software must not be misrepresented;
-		   you must not claim that you wrote the original software.
-		   If you use this software in a product, an acknowledgment
-		   in the product documentation would be appreciated but is
-		   not required.
-
-		2. Altered source versions must be plainly marked as such, 
-		   and must not be misrepresented as being the original software.
-
-		3. This notice may not be removed or altered from any source
-		   distribution.
-*/
-
 #pragma once
 
 #ifndef _WIN32_WINNT_WIN2K
@@ -89,7 +52,6 @@ public:
 	}
 
 
-	// From Here Jul. 5, 2001 shoji masami
 	/*! NTプラットフォームかどうか調べる
 
 		@retval true NT platform
@@ -99,7 +61,6 @@ public:
 		return (osVersionInfo.dwPlatformId == VER_PLATFORM_WIN32_NT);
 	}
 
-	// 2005.10.31 ryoji
 	/*! Windowsプラットフォームかどうか調べる
 
 		@retval true Windows platform
@@ -128,7 +89,6 @@ public:
 		return !((osVersionInfo.dwMajorVersion == 4) && (osVersionInfo.dwMinorVersion == 0));
 	}
 
-	// 2005.10.29 ryoji
 	// Windows 2000 version of OPENFILENAME.
 	// The new version has three extra members.
 	// See CommDlg.h
@@ -139,8 +99,6 @@ public:
 	/*! Windows Vista以上か調べる
 
 		@retval true Windows Vista or later
-
-		@date 2007.05.19 ryoji
 	*/
 	bool _IsWinVista_or_later()
 	{
@@ -150,8 +108,6 @@ public:
 	/*! Windows XP以上か調べる
 
 		@retval true Windows XP or later
-
-		@date 2003.09.06 genta
 	*/
 	bool _IsWinXP_or_later() {
 		return (osVersionInfo.dwMajorVersion >= 6 ||	// 2006.06.17 ryoji Ver 6.0, 7.0,...も含める
@@ -161,8 +117,6 @@ public:
 	/*! Windows 2000以上か調べる
 
 		@retval true Windows 2000 or later
-
-		@date 2005.10.26 ryoji
 	*/
 	bool _IsWin2000_or_later() {
 		return (_IsWin32NT() && (5 <= osVersionInfo.dwMajorVersion));
@@ -171,8 +125,6 @@ public:
 	/*! Windows Meか調べる
 
 		@retval true Windows Me
-
-		@date 2005.10.26 ryoji
 	*/
 	bool _IsWinMe() {
 		return (IsWin32Windows() && (osVersionInfo.dwMajorVersion == 4) && (osVersionInfo.dwMinorVersion == 90));
@@ -191,8 +143,6 @@ public:
 	/*! Wine上で実行されているかを調べる
 
 		@retval true run in Wine
-
-		@date 2013.10.19 novice
 	*/
 	bool _IsWine() {
 		return bWine;

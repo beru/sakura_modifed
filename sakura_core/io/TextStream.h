@@ -1,33 +1,9 @@
-// 2007.09.24 kobake 作成
 // 設定ファイル等のテキスト入出力を行うためのクラス群。
 // .ini や .mac の入出力を扱うときに使うと良いです。
 // ※「編集テキスト」を扱うためではなく、あくまでも、.iniや.macのような「設定ファイル」を扱う目的のクラス群です。
 //
 // 今のところはShiftJISで入出力を行うが、
 // 将来はUTF-8等にすることにより、UNICODEデータの欠落が起こらないようにしたい。
-/*
-	Copyright (C) 2008, kobake
-
-	This software is provided 'as-is', without any express or implied
-	warranty. In no event will the authors be held liable for any damages
-	arising from the use of this software.
-
-	Permission is granted to anyone to use this software for any purpose,
-	including commercial applications, and to alter it and redistribute it
-	freely, subject to the following restrictions:
-
-		1. The origin of this software must not be misrepresented;
-		   you must not claim that you wrote the original software.
-		   If you use this software in a product, an acknowledgment
-		   in the product documentation would be appreciated but is
-		   not required.
-
-		2. Altered source versions must be plainly marked as such,
-		   and must not be misrepresented as being the original software.
-
-		3. This notice may not be removed or altered from any source
-		   distribution.
-*/
 #pragma once
 
 #include <string>

@@ -1,6 +1,3 @@
-// 2008.11.10 変換ロジックを書き直す
-
-
 #include "StdAfx.h"
 #include "Utf7.h"
 #include "charset/charcode.h"
@@ -113,7 +110,6 @@ size_t Utf7::Utf7ToUni(const char* pSrc, const size_t nSrcLen, wchar_t* pDst, bo
 
 
 // UTF-7→Unicodeコード変換
-// 2007.08.13 kobake 作成
 CodeConvertResult Utf7::UTF7ToUnicode( const Memory& src, NativeW* pDstMem )
 {
 	// データ取得
@@ -227,9 +223,7 @@ size_t Utf7::UniToUtf7(const wchar_t* pSrc, const size_t nSrcLen, char* pDst)
 
 
 
-/*! コード変換 Unicode→UTF-7
-	@date 2002.10.25 Moca UTF-7で直接エンコードできる文字をRFCに合わせて制限した
-*/
+/*! コード変換 Unicode→UTF-7 */
 CodeConvertResult Utf7::UnicodeToUTF7(const NativeW& src, Memory* pDstMem)
 {
 

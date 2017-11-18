@@ -1,21 +1,4 @@
-/*!	@file
-	@brief 行データの管理
-
-	@author Norio Nakatani
-	@date 1998/3/5  新規作成
-	@date 2001/06/23 N.Nakatani WhereCurrentWord_2()追加 staticメンバ
-	@date 2001/12/03 hor しおり(bookmark)機能追加に伴う関数追加
-*/
-/*
-	Copyright (C) 1998-2001, Norio Nakatani
-	Copyright (C) 2000, genta
-	Copyright (C) 2001, hor, genta
-	Copyright (C) 2002, aroka, MIK, hor
-	Copyright (C) 2003, Moca, ryoji
-
-	This source code is designed for sakura editor.
-	Please contact the copyright holder to use this code for other purpose.
-*/
+// 行データの管理
 
 #pragma once
 

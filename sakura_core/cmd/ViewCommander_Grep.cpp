@@ -1,16 +1,3 @@
-/*!	@file
-@brief ViewCommanderクラスのコマンド(Grep)関数群
-
-*/
-/*
-	Copyright (C) 1998-2001, Norio Nakatani
-	Copyright (C) 2003, MIK
-	Copyright (C) 2005, genta
-	Copyright (C) 2006, ryoji
-
-	This source code is designed for sakura editor.
-	Please contact the copyright holders to use this code for other purpose.
-*/
 #include "StdAfx.h"
 #include "ViewCommander.h"
 #include "ViewCommander_inline.h"
@@ -20,6 +7,8 @@
 #include "GrepAgent.h"
 #include "plugin/Plugin.h"
 #include "plugin/JackManager.h"
+
+// ViewCommanderクラスのコマンド(Grep)関数群
 
 /*! GREPダイアログの表示
 

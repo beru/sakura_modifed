@@ -1,26 +1,3 @@
-/*
-	Copyright (C) 2008, kobake
-
-	This software is provided 'as-is', without any express or implied
-	warranty. In no event will the authors be held liable for any damages
-	arising from the use of this software.
-
-	Permission is granted to anyone to use this software for any purpose,
-	including commercial applications, and to alter it and redistribute it
-	freely, subject to the following restrictions:
-
-		1. The origin of this software must not be misrepresented;
-		   you must not claim that you wrote the original software.
-		   If you use this software in a product, an acknowledgment
-		   in the product documentation would be appreciated but is
-		   not required.
-
-		2. Altered source versions must be plainly marked as such,
-		   and must not be misrepresented as being the original software.
-
-		3. This notice may not be removed or altered from any source
-		   distribution.
-*/
 #pragma once
 
 // 定数
@@ -57,9 +34,9 @@ public:
 
 	// ファイル形式
 	virtual void GetBom(Memory* pMemBom);											// BOMデータ取得
-	void GetEol(Memory* pMemEol, EolType eEolType) { S_GetEol(pMemEol, eEolType); }	// 改行データ取得 virtualから実体へ	2010/6/13 Uchi
+	void GetEol(Memory* pMemEol, EolType eEolType) { S_GetEol(pMemEol, eEolType); }	// 改行データ取得
 
-	// 文字コード表示用		2008/6/9 Uchi
+	// 文字コード表示用
 	virtual CodeConvertResult UnicodeToHex(const wchar_t* pSrc, size_t iSLen, TCHAR* pDst, const CommonSetting_StatusBar* psStatusbar);			// UNICODE → Hex 変換
 
 	// 変換エラー処理（１バイト <-> U+D800 から U+D8FF）
@@ -69,7 +46,6 @@ public:
 	// MIME Header デコーダ
 	static bool MIMEHeaderDecode(const char*, const size_t, Memory*, const EncodingType);
 
-	// CShiftJisより移動 2010/6/13 Uchi
 	static void S_GetEol(Memory* pMemEol, EolType eEolType);	// 改行データ取得
 	
 protected:

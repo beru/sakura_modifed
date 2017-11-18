@@ -1,20 +1,5 @@
 /*!	@file
 	@brief ファンクションキーウィンドウ
-
-	@author Norio Nakatani
-*/
-/*
-	Copyright (C) 1998-2001, Norio Nakatani
-	Copyright (C) 2001, genta
-	Copyright (C) 2002, YAZAKI, MIK, Moca
-	Copyright (C) 2003, MIK, KEITA
-	Copyright (C) 2004, novice
-	Copyright (C) 2006, aroka, ryoji
-	Copyright (C) 2007, ryoji
-	Copyright (C) 2009, ryoji
-
-	This source code is designed for sakura editor.
-	Please contact the copyright holder to use this code for other purpose.
 */
 #include "StdAfx.h"
 #include "_main/global.h"

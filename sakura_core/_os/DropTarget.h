@@ -1,18 +1,3 @@
-/*!	@file
-	@brief Drag & Drop
-
-	@author Norio Nakatani
-*/
-/*
-	Copyright (C) 1998-2001, Norio Nakatani, Yebisuya Sugoroku
-	Copyright (C) 2002, aroka
-	Copyright (C) 2008, ryoji
-	Copyright (C) 2009, ryoji
-
-	This source code is designed for sakura editor.
-	Please contact the copyright holder to use this code for other purpose.
-*/
-
 #pragma once
 
 #include <Unknwn.h>
@@ -20,8 +5,8 @@
 
 class DropTarget;
 class CYbInterfaceBase;
-class EditWnd;	// 2008.06.20 ryoji
-class EditView;// 2002/2/3 aroka ヘッダ軽量化
+class EditWnd;
+class EditView;
 
 /*-----------------------------------------------------------------------
 クラスの宣言
@@ -72,14 +57,14 @@ public:
 	/*
 	||  Constructors
 	*/
-	DropTarget(EditWnd*);	// 2008.06.20 ryoji
+	DropTarget(EditWnd*);
 	DropTarget(EditView*);
 	~DropTarget();
 	/*
 	||  Attributes & Operations
 	*/
-private: // 2002/2/10 aroka アクセス権変更
-	EditWnd*		pEditWnd;	// 2008.06.20 ryoji
+private:
+	EditWnd*		pEditWnd;
 	HWND			hWnd_DropTarget;
 	EditView*		pEditView;
 	//	static REFIID	owniid;
@@ -110,11 +95,10 @@ public:
 
 class DataObject : public CYbInterfaceImpl<IDataObject> {
 private:
-	friend class EnumFORMATETC;	// 2008.03.26 ryoji
+	friend class EnumFORMATETC;
 
 	typedef struct {
 		CLIPFORMAT cfFormat;
-		// Feb. 26, 2001, fixed by yebisuya sugoroku
 		LPBYTE			data;	// データ
 		unsigned int	size;	// データサイズ。バイト単位。
 	} DATA, *PDATA;
@@ -149,7 +133,6 @@ private:
 
 
 // EnumFORMATETC クラス
-// 2008.03.26 ryoji 新規作成
 class EnumFORMATETC : public CYbInterfaceImpl<IEnumFORMATETC> {
 private:
 	LONG lRef;

@@ -1,16 +1,4 @@
-/*!	@file
-	@brief ファイルタイプ一覧ダイアログ
-
-	@author Norio Nakatani
-	@date 1998/12/23 新規作成
-	@date 1999/12/05 再作成
-*/
-/*
-	Copyright (C) 1998-2001, Norio Nakatani
-
-	This source code is designed for sakura editor.
-	Please contact the copyright holder to use this code for other purpose.
-*/
+// ファイルタイプ一覧ダイアログ
 
 class DlgTypeList;
 

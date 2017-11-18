@@ -1,4 +1,3 @@
-// ‚±‚Ìs‚Í•¶š‰»‚¯‘Îô‚Ì‚à‚Ì‚Å‚·B
 #include "StdAfx.h"
 #include "Decode_UuDecode.h"
 #include "charset/charcode.h"

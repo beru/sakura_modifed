@@ -1,38 +1,12 @@
-/*!	@file
-	@brief EditViewクラスのコマンド処理系関数群
-
-	@author Norio Nakatani
-	@date	1998/07/17 作成
-*/
-/*
-	Copyright (C) 1998-2001, Norio Nakatani
-	Copyright (C) 2000-2001, jepro, genta, みつ
-	Copyright (C) 2001, MIK, Stonee, Misaka, asa-o, novice, hor, YAZAKI
-	Copyright (C) 2002, hor, YAZAKI, novice, genta, aroka, Azumaiya, minfu, MIK, oak, すなふき, Moca, ai
-	Copyright (C) 2003, MIK, genta, かろと, zenryaku, Moca, ryoji, naoh, KEITA, じゅうじ
-	Copyright (C) 2004, isearch, Moca, gis_dur, genta, crayonzen, fotomo, MIK, novice, みちばな, Kazika
-	Copyright (C) 2005, genta, novice, かろと, MIK, Moca, D.S.Koba, aroka, ryoji, maru
-	Copyright (C) 2006, genta, aroka, ryoji, かろと, fon, yukihane, Moca
-	Copyright (C) 2007, ryoji, maru, Uchi
-	Copyright (C) 2008, ryoji, nasukoji
-	Copyright (C) 2009, ryoji, nasukoji
-	Copyright (C) 2010, ryoji
-	Copyright (C) 2011, ryoji, nasukoji
-	Copyright (C) 2012, Moca, ryoji
-
-	This source code is designed for sakura editor.
-	Please contact the copyright holders to use this code for other purpose.
-*/
-// 2007.10.25 kobake ViewCommanderクラスに分離
-
 #include "StdAfx.h"
 #include "ViewCommander.h"
 #include "ViewCommander_inline.h"
 
-//@@@ 2002.2.2 YAZAKI マクロはSMacroMgrに統一
 #include "macro/SMacroMgr.h"
 #include "EditApp.h"
 #include "plugin/JackManager.h"
+
+// EditViewクラスのコマンド処理系関数群
 
 ViewCommander::ViewCommander(EditView& editView)
 	:
@@ -65,9 +39,8 @@ bool ViewCommander::HandleCommand(
 	bool bRepeat = false;
 	int nFuncID;
 
-	// May. 19, 2006 genta 上位16bitに送信元の識別子が入るように変更したので
-	// 下位16ビットのみを取り出す
-	// Jul.  7, 2007 genta 定数と比較するためにシフトしないで使う
+	// 上位16bitに送信元の識別子が入るように変更したので下位16ビットのみを取り出す
+	// 定数と比較するためにシフトしないで使う
 	int nCommandFrom = nCommand & ~0xffff;
 	nCommand = (EFunctionCode)LOWORD(nCommand);
 
@@ -76,14 +49,10 @@ bool ViewCommander::HandleCommand(
 		view.AutoScrollExit();
 	}
 	view.GetCaret().bClearStatus = true;
-	// -------------------------------------
-	// Jan. 10, 2005 genta
-	// Call message translators
-	// -------------------------------------
 	view.TranslateCommand_grep(nCommand, bRedraw, lparam1, lparam2, lparam3, lparam4);
 	view.TranslateCommand_isearch(nCommand, bRedraw, lparam1, lparam2, lparam3, lparam4);
 
-	// 2013.09.23 novice 機能が利用可能か調べる
+	// 機能が利用可能か調べる
 	if (!IsFuncEnable(GetDocument(), GetDllShareData(), nCommand)) {
 		return true;
 	}
@@ -95,7 +64,6 @@ bool ViewCommander::HandleCommand(
 		view.dwTipTimer = ::GetTickCount();	// 辞書Tip起動タイマー
 //	}
 	// 印刷Previewモードか
-//@@@ 2002.01.14 YAZAKI 印刷PreviewをPrintPreviewに独立させたことによる変更
 	if (GetEditWindow().pPrintPreview && nCommand != F_PRINT_PREVIEW) {
 		ErrorBeep();
 		return true;
@@ -107,24 +75,22 @@ bool ViewCommander::HandleCommand(
 	bPrevCommand = nCommand;
 	if (GetDllShareData().flags.bRecordingKeyMacro &&									// キーボードマクロの記録中
 		GetDllShareData().flags.hwndRecordingKeyMacro == GetMainWindow() &&	// キーボードマクロを記録中のウィンドウ
-		(nCommandFrom & FA_NONRECORD) != FA_NONRECORD	// 2007.07.07 genta 記録抑制フラグ off
+		(nCommandFrom & FA_NONRECORD) != FA_NONRECORD	// 記録抑制フラグ off
 	) {
 		// キーリピート状態をなくする
 		bRepeat = false;
 		// キーマクロに記録可能な機能かどうかを調べる
-		//@@@ 2002.2.2 YAZAKI マクロをSMacroMgrに統一
 		// F_EXECEXTMACROコマンドはファイルを選択した後にマクロ文が確定するため個別に記録する。
 		if (SMacroMgr::CanFuncIsKeyMacro(nCommand) &&
 			nCommand != F_EXECEXTMACRO	// F_EXECEXTMACROは個別で記録します
 		) {
 			// キーマクロのバッファにデータ追加
-			//@@@ 2002.1.24 CKeyMacroMgrをCEditDocへ移動
 			LPARAM lparams[] = {lparam1, lparam2, lparam3, lparam4};
 			pSMacroMgr->Append(STAND_KEYMACRO, nCommand, lparams, view);
 		}
 	}
 
-	// 2007.07.07 genta マクロ実行中フラグの設定
+	// マクロ実行中フラグの設定
 	// マクロからのコマンドかどうかはnCommandFromでわかるが
 	// nCommandFromを引数で浸透させるのが大変なので，従来のフラグにも値をコピーする
 	view.bExecutingKeyMacro = (nCommandFrom & FA_FROMMACRO) ? true : false;
@@ -135,9 +101,8 @@ bool ViewCommander::HandleCommand(
 		bRepeat = false;
 	}
 
-	// From Here Sep. 29, 2001 genta マクロの実行機能追加
+	// マクロの実行機能追加
 	if (F_USERMACRO_0 <= nCommand && nCommand < F_USERMACRO_0 + MAX_CUSTMACRO) {
-		//@@@ 2002.2.2 YAZAKI マクロをSMacroMgrに統一（インターフェースの変更）
 		if (!pSMacroMgr->Exec(nCommand - F_USERMACRO_0, G_AppInstance(), view,
 			nCommandFrom & FA_NONRECORD)
 		) {
@@ -150,27 +115,19 @@ bool ViewCommander::HandleCommand(
 		}
 		return true;
 	}
-	// To Here Sep. 29, 2001 genta マクロの実行機能追加
 
-	// -------------------------------------
-	// Jan. 10, 2005 genta
-	// Call mode basis message handler
-	// -------------------------------------
 	view.PreprocessCommand_hokan(nCommand);
 	if (view.ProcessCommand_isearch(nCommand, bRedraw, lparam1, lparam2, lparam3, lparam4))
 		return true;
 
 	// -------------------------------------
-	// Jan. 10, 2005 genta コメント
 	// ここより前ではUndoバッファの準備ができていないので
 	// 文書の操作を行ってはいけない
-	//@@@ 2002.2.2 YAZAKI HandleCommand内でHandleCommandを呼び出せない問題に対処（何か副作用がある？）
 	if (!GetOpeBlk()) {	// 操作ブロック
 		SetOpeBlk(new OpeBlk);
 	}
 	GetOpeBlk()->AddRef();	// 参照カウンタ増加
 
-	// Jan. 10, 2005 genta コメント
 	// ここより後ではswitchの後ろでUndoを正しく登録するため，
 	// 途中で処理の打ち切りを行ってはいけない
 	// -------------------------------------
@@ -185,17 +142,16 @@ bool ViewCommander::HandleCommand(
 	// ファイル操作系
 	case F_FILENEW:				Command_FileNew(); break;			// 新規作成
 	case F_FILENEW_NEWWINDOW:	Command_FileNew_NewWindow(); break;
-	// Oct. 2, 2001 genta マクロ用機能拡張
 	case F_FILEOPEN:			Command_FileOpen((const wchar_t*)lparam1); break;			// ファイルを開く
 	case F_FILEOPEN2:			Command_FileOpen((const wchar_t*)lparam1, (EncodingType)lparam2, lparam3 != 0, (const wchar_t*)lparam4); break;	// ファイルを開く2
-	case F_FILEOPEN_DROPDOWN:	Command_FileOpen((const wchar_t*)lparam1); break;			// ファイルを開く(ドロップダウン)	//@@@ 2002.06.15 MIK
+	case F_FILEOPEN_DROPDOWN:	Command_FileOpen((const wchar_t*)lparam1); break;			// ファイルを開く(ドロップダウン)
 	case F_FILESAVE:			bRet = Command_FileSave(); break;	// 上書き保存
 	case F_FILESAVEAS_DIALOG:	bRet = Command_FileSaveAs_Dialog((const wchar_t*)lparam1, (EncodingType)lparam2, (EolType)lparam3); break;	// 名前を付けて保存
 	case F_FILESAVEAS:			bRet = Command_FileSaveAs((const wchar_t*)lparam1, (EolType)lparam3); break;	// 名前を付けて保存
-	case F_FILESAVEALL:			bRet = Command_FileSaveAll(); break;	// 全ての編集ウィンドウで上書き保存 // Jan. 23, 2005 genta
-	case F_FILESAVE_QUIET:		bRet = Command_FileSave(false, false); break;	// 静かに上書き保存 // Jan. 24, 2005 genta
+	case F_FILESAVEALL:			bRet = Command_FileSaveAll(); break;	// 全ての編集ウィンドウで上書き保存
+	case F_FILESAVE_QUIET:		bRet = Command_FileSave(false, false); break;	// 静かに上書き保存
 	case F_FILESAVECLOSE:
-		// Feb. 28, 2004 genta 保存＆閉じる
+		// 保存＆閉じる
 		// 保存が不要なら単に閉じる
 		{	// Command_FileSave()とは別に保存不要をチェック	//### Command_FileSave() は実際に保存した場合だけ true を返すようになった（仕様変更？）
 			if (!GetDllShareData().common.file.bEnableUnmodifiedOverwrite && !GetDocument().docEditor.IsModified()) {
@@ -207,7 +163,7 @@ bool ViewCommander::HandleCommand(
 			Command_WinClose();
 		}
 		break;
-	case F_FILECLOSE:										// 閉じて(無題)	// Oct. 17, 2000 jepro 「ファイルを閉じる」というキャプションを変更
+	case F_FILECLOSE:										// 閉じて(無題)
 		Command_FileClose();
 		break;
 	case F_FILECLOSE_OPEN:	// 閉じて開く
@@ -765,8 +721,6 @@ size_t ViewCommander::ConvertEol(
 
 /*!
 	@brief 検索で見つからないときの警告（メッセージボックス／サウンド）
-
-	@date 2010.04.21 ryoji	新規作成（数カ所で用いられていた類似コードの共通化）
 */
 void ViewCommander::AlertNotFound(
 	HWND hwnd,

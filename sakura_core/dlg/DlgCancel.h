@@ -1,23 +1,11 @@
-/*!	@file
-	@brief キャンセルボタンダイアログ
-
-	@author Norio Nakatani
-	@date 1998/09/09 作成
-    @date 1999/12/02 再作成
-*/
-/*
-	Copyright (C) 1998-2001, Norio Nakatani
-	Copyright (C) 2008, ryoji
-
-	This source code is designed for sakura editor.
-	Please contact the copyright holder to use this code for other purpose.
-*/
-
-class DlgCancel;
-
 #pragma once
 
 #include "dlg/Dialog.h"
+
+class DlgCancel;
+
+// キャンセルボタンダイアログ
+
 
 
 /*!

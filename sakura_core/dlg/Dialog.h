@@ -1,22 +1,6 @@
-/*!	@file
-	@brief Dialog Box基底クラスヘッダファイル
-
-	@author Norio Nakatani
-*/
-/*
-	Copyright (C) 1998-2001, Norio Nakatani
-	Copyright (C) 2002, YAZAKI
-	Copyright (C) 2003, MIK
-	Copyright (C) 2005, MIK
-	Copyright (C) 2006, ryoji
-	Copyright (C) 2011, nasukoji
-	Copyright (C) 2012, Uchi
-
-	This source code is designed for sakura editor.
-	Please contact the copyright holder to use this code for other purpose.
-*/
-
 #pragma once
+
+// Dialog Box基底クラスヘッダファイル
 
 class Dialog;
 

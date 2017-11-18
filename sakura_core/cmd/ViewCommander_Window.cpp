@@ -1,25 +1,3 @@
-/*!	@file
-@brief ViewCommanderクラスのコマンド(ウィンドウ系)関数群
-
-	2012/12/15	ViewCommander.cpp,ViewCommander_New.cppから分離
-*/
-/*
-	Copyright (C) 1998-2001, Norio Nakatani
-	Copyright (C) 2000-2001, jepro
-	Copyright (C) 2001, MIK
-	Copyright (C) 2002, YAZAKI, genta, MIK
-	Copyright (C) 2003, MIK, genta
-	Copyright (C) 2004, Moca, genta, crayonzen, Kazika
-	Copyright (C) 2006, genta, ryoji, maru
-	Copyright (C) 2007, ryoji, genta
-	Copyright (C) 2008, syat
-	Copyright (C) 2009, syat
-	Copyright (C) 2010, Moca
-
-	This source code is designed for sakura editor.
-	Please contact the copyright holders to use this code for other purpose.
-*/
-
 #include "StdAfx.h"
 #include "ViewCommander.h"
 #include "ViewCommander_inline.h"
@@ -29,6 +7,7 @@
 #include "env/SakuraEnvironment.h"
 #include "env/ShareData.h"
 
+// ViewCommanderクラスのコマンド(ウィンドウ系)関数群
 
 // 上下に分割	// Sept. 17, 2000 jepro 説明の「縦」を「上下に」に変更
 void ViewCommander::Command_Split_V(void)

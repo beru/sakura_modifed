@@ -1,22 +1,5 @@
 /*!	@file
 	@brief Entry Point
-
-	@author Norio Nakatani
-	@date	1998/03/13 作成
-	@date	2001/06/26 genta ワード単位のGrepのためのコマンドライン処理追加
-	@date	2002/01/08 aroka 処理の流れを整理、未使用コードを削除
-	@date	2002/01/18 aroka 虫取り＆リリース
-	@date	2009/01/07 ryoji WinMainにOleInitialize/OleUninitializeを追加
-*/
-/*
-	Copyright (C) 1998-2001, Norio Nakatani
-	Copyright (C) 2001, genta
-	Copyright (C) 2002, aroka
-	Copyright (C) 2007, kobake
-	Copyright (C) 2009, ryoji
-
-	This source code is designed for sakura editor.
-	Please contact the copyright holder to use this code for other purpose.
 */
 
 #include "StdAfx.h"
@@ -54,18 +37,17 @@ int WINAPI _tWinMain(
 #endif
 {
 #ifdef USE_LEAK_CHECK_WITH_CRTDBG
-	// 2009.9.10 syat メモリリークチェックを追加
 	::_CrtSetDbgFlag(_CRTDBG_LEAK_CHECK_DF | _CRTDBG_ALLOC_MEM_DF);
 #endif
 
 	MY_RUNNINGTIMER(runningTimer, "WinMain" );
 	{
-		// 2010.08.28 Moca DLLインジェクション対策
+		// DLLインジェクション対策
 		CurrentDirectoryBackupPoint dirBack;
 		ChangeCurrentDirectoryToExeDir();
 		
-		setlocale(LC_ALL, "Japanese");	// 2007.08.16 kobake 追加
-		::OleInitialize(NULL);			// 2009.01.07 ryoji 追加
+		setlocale(LC_ALL, "Japanese");
+		::OleInitialize(NULL);
 	}
 	
 	// 開発情報
@@ -122,7 +104,7 @@ int WINAPI _tWinMain(
 		delete process;
 	}
 
-	::OleUninitialize();	// 2009.01.07 ryoji 追加
+	::OleUninitialize();
 	return 0;
 }
 

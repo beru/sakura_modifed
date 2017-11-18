@@ -1,23 +1,3 @@
-/*!	@file
-@brief ViewCommanderクラスのコマンド(Diff)関数群
-
-	2007.10.25 kobake CEditView_Diffから分離
-*/
-/*
-	Copyright (C) 1998-2001, Norio Nakatani
-	Copyright (C) 2000-2001, jepro
-	Copyright (C) 2002, YAZAKI, genta, MIK
-	Copyright (C) 2003, MIK, genta
-	Copyright (C) 2004, genta
-	Copyright (C) 2005, maru
-	Copyright (C) 2007, kobake
-	Copyright (C) 2008, kobake
-	Copyright (C) 2008, Uchi
-
-	This source code is designed for sakura editor.
-	Please contact the copyright holders to use this code for other purpose.
-*/
-
 #include "StdAfx.h"
 #include "ViewCommander.h"
 #include "ViewCommander_inline.h"
@@ -31,6 +11,7 @@
 #include "util/os.h"
 #include "_main/Mutex.h"
 
+// ViewCommanderクラスのコマンド(Diff)関数群
 
 /*!
 	@return true:正常終了 / false:エラー終了

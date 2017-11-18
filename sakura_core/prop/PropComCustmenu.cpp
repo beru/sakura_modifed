@@ -1,21 +1,6 @@
 /*!	@file
 	共通設定ダイアログボックス、「カスタムメニュー」ページ
-
-	@author Norio Nakatani
 */
-/*
-	Copyright (C) 1998-2001, Norio Nakatani
-	Copyright (C) 2000-2001, genta, MIK, jepro
-	Copyright (C) 2002, YAZAKI, MIK, aroka
-	Copyright (C) 2003, KEITA
-	Copyright (C) 2006, ryoji
-	Copyright (C) 2007, ryoji
-	Copyright (C) 2009, ryoji
-
-	This source code is designed for sakura editor.
-	Please contact the copyright holder to use this code for other purpose.
-*/
-
 #include "StdAfx.h"
 #include "prop/PropCommon.h"
 #include "dlg/DlgInput1.h"

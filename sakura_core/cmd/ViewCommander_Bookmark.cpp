@@ -1,35 +1,17 @@
-/*!	@file
-@brief ViewCommanderクラスのコマンド(ジャンプ&ブックマーク)関数群
-
-	2012/12/17	ViewCommander.cpp,ViewCommander_New.cppから分離
-*/
-/*
-	Copyright (C) 1998-2001, Norio Nakatani
-	Copyright (C) 2000-2001, genta
-	Copyright (C) 2002, hor, YAZAKI, MIK
-	Copyright (C) 2006, genta
-
-	This source code is designed for sakura editor.
-	Please contact the copyright holders to use this code for other purpose.
-*/
-
 #include "StdAfx.h"
 #include "ViewCommander.h"
 #include "ViewCommander_inline.h"
 #include "docplus/FuncListManager.h"
 
+// ViewCommanderクラスのコマンド(ジャンプ&ブックマーク)関数群
 
-// from ViewCommander_New.cpp
-/*!	検索開始位置へ戻る
-	@author	ai
-	@date	02/06/26
-*/
+/*!	検索開始位置へ戻る */
 void ViewCommander::Command_Jump_SrchStartPos(void)
 {
 	if (view.ptSrchStartPos_PHY.BothNatural()) {
 		// 範囲選択中か
 		Point pt = GetDocument().layoutMgr.LogicToLayout(view.ptSrchStartPos_PHY);
-		// 2006.07.09 genta 選択状態を保つ
+		// 選択状態を保つ
 		view.MoveCursorSelecting(pt, view.GetSelectionInfo().bSelectingLock);
 	}else {
 		ErrorBeep();
@@ -37,10 +19,7 @@ void ViewCommander::Command_Jump_SrchStartPos(void)
 	return;
 }
 
-
-/*! 指定行へジャンプダイアログの表示
-	2002.2.2 YAZAKI
-*/
+/*! 指定行へジャンプダイアログの表示 */
 void ViewCommander::Command_Jump_Dialog(void)
 {
 	if (!GetEditWindow().dlgJump.DoModal(
@@ -90,9 +69,8 @@ void ViewCommander::Command_Jump(void)
 				nLineNum = layoutMgr.GetLineCount();
 			}
 		}
-		// Sep. 8, 2000 genta
 		view.AddCurrentLineToHistory();
-		// 2006.07.09 genta 選択状態を解除しないように
+		// 選択状態を解除しないように
 		view.MoveCursorSelecting(
 			Point(0, (int)nLineNum - 1),
 			view.GetSelectionInfo().bSelectingLock,
@@ -235,9 +213,8 @@ void ViewCommander::Command_Jump(void)
 	  レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 	*/
 	Point ptPos = layoutMgr.LogicToLayout(Point(0, (int)nLineCount));
-	// Sep. 8, 2000 genta
 	view.AddCurrentLineToHistory();
-	// 2006.07.09 genta 選択状態を解除しないように
+	// 選択状態を解除しないように
 	view.MoveCursorSelecting(ptPos, view.GetSelectionInfo().bSelectingLock, _CARETMARGINRATE / 3);
 }
 
@@ -271,7 +248,7 @@ void ViewCommander::Command_Bookmark_Set(void)
 		}
 	}
 
-	// 2002.01.16 hor 分割したビューも更新
+	// 分割したビューも更新
 	GetEditWindow().Views_Redraw();
 }
 
@@ -294,15 +271,13 @@ re_do:;								// hor
 		ptXY.y = tmp_y;
 		bFound = true;
 		Point ptLayout = GetDocument().layoutMgr.LogicToLayout(ptXY);
-		// 2006.07.09 genta 新規関数にまとめた
 		view.MoveCursorSelecting(ptLayout, view.GetSelectionInfo().bSelectingLock);
 	}
-    // 2002.01.26 hor
 	if (GetDllShareData().common.search.bSearchAll) {
 		if (!bFound		// 見つからなかった
 			&& bRedo	// 最初の検索
 		) {
-			ptXY.y = -1;	// 2002/06/01 MIK
+			ptXY.y = -1;
 			bRedo = false;
 			goto re_do;		// 先頭から再検索
 		}
@@ -318,8 +293,6 @@ re_do:;								// hor
 	return;
 }
 
-
-// from ViewCommander_New.cpp
 // 前のブックマークを探し，見つかったら移動する．
 void ViewCommander::Command_Bookmark_Prev(void)
 {
@@ -338,15 +311,12 @@ re_do:;								// hor
 		ptXY.y = tmp_y;
 		bFound = true;				// hor
 		Point ptLayout = GetDocument().layoutMgr.LogicToLayout(ptXY);
-		// 2006.07.09 genta 新規関数にまとめた
 		view.MoveCursorSelecting(ptLayout, view.GetSelectionInfo().bSelectingLock);
 	}
-    // 2002.01.26 hor
 	if (GetDllShareData().common.search.bSearchAll) {
 		if (!bFound		// 見つからなかった
 			&& bRedo	// 最初の検索
 		) {
-			// 2011.02.02 layoutMgr→docLineMgr
 			ptXY.y = (int)docLineMgr.GetLineCount();	// 2002/06/01 MIK
 			bRedo = false;
 			goto re_do;	// 末尾から再検索
@@ -373,10 +343,6 @@ void ViewCommander::Command_Bookmark_Reset(void)
 	GetEditWindow().Views_Redraw();
 }
 
-
-// from ViewCommander_New.cpp
-// 指定パターンに一致する行をマーク 2002.01.16 hor
-// キーマクロで記録できるように	2002.02.08 hor
 void ViewCommander::Command_Bookmark_Pattern(void)
 {
 	// 検索or置換ダイアログから呼び出された
@@ -386,11 +352,9 @@ void ViewCommander::Command_Bookmark_Pattern(void)
 	BookmarkManager(GetDocument().docLineMgr).MarkSearchWord(
 		view.searchPattern
 	);
-	// 2002.01.16 hor 分割したビューも更新
+	// 分割したビューも更新
 	GetEditWindow().Views_Redraw();
 }
-
-
 
 // 次の関数リストマークを探し，見つかったら移動する
 void ViewCommander::Command_FuncList_Next(void)
@@ -419,8 +383,6 @@ void ViewCommander::Command_FuncList_Next(void)
 	AlertNotFound( view.GetHwnd(), false, LS(STR_FUCLIST_NEXT_NOT_FOUND));
 	return;
 }
-
-
 
 // 前のブックマークを探し，見つかったら移動する．
 void ViewCommander::Command_FuncList_Prev(void)

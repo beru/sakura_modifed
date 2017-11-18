@@ -1,5 +1,3 @@
-// 2008.11.10 変換ロジックを書き直す
-
 #include "StdAfx.h"
 #include "Utf8.h"
 #include "charset/codecheck.h"
@@ -86,7 +84,6 @@ size_t Utf8::Utf8ToUni(const char* pSrc, const size_t nSrcLen, wchar_t* pDst, bo
 
 
 // UTF-8→Unicodeコード変換
-// 2007.08.13 kobake 作成
 CodeConvertResult Utf8::_UTF8ToUnicode( const Memory& src, NativeW* pDstMem, bool bCESU8Mode/*, bool decodeMime*/ )
 {
 	// データ取得

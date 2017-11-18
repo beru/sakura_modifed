@@ -1,15 +1,5 @@
 /*!	@file
 	@brief プロセス基底クラスヘッダファイル
-
-	@author aroka
-	@date	2002/01/08 作成
-*/
-/*
-	Copyright (C) 2002, aroka 新規作成
-	Copyright (C) 2009, ryoji
-
-	This source code is designed for sakura editor.
-	Please contact the copyright holder to use this code for other purpose.
 */
 
 #pragma once

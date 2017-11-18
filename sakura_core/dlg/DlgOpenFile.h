@@ -1,22 +1,6 @@
 /*!	@file
 	@brief ファイルオープンダイアログボックス
-
-	@author Norio Nakatani
-	@date	1998/08/10 作成
 */
-/*
-	Copyright (C) 1998-2001, Norio Nakatani
-	Copyright (C) 2001, genta
-	Copyright (C) 2002, YAZAKI, Moca
-	Copyright (C) 2003, ryoji
-	Copyright (C) 2004, genta, MIK
-	Copyright (C) 2005, ryoji
-	Copyright (C) 2006, Moca, ryoji
-
-	This source code is designed for sakura editor.
-	Please contact the copyright holder to use this code for other purpose.
-*/
-
 #pragma once
 
 #include <CommDlg.h>

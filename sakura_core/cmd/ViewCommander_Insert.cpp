@@ -1,22 +1,11 @@
-/*!	@file
-@brief ViewCommanderクラスのコマンド(挿入系)関数群
-
-	2012/12/15	ViewCommander.cpp,ViewCommander_New.cppから分離
-*/
-/*
-	Copyright (C) 1998-2001, Norio Nakatani
-	Copyright (C) 2002, MIK
-
-	This source code is designed for sakura editor.
-	Please contact the copyright holders to use this code for other purpose.
-*/
-
 #include "StdAfx.h"
 #include "ViewCommander.h"
 #include "ViewCommander_inline.h"
 
 #include "dlg/DlgCtrlCode.h"	// コントロールコードの入力(ダイアログ)
 #include "env/FormatManager.h"
+
+// ViewCommanderクラスのコマンド(挿入系)関数群
 
 // 日付挿入
 void ViewCommander::Command_Ins_Date(void)

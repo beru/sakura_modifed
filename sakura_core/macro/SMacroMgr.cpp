@@ -1,26 +1,5 @@
 /*!	@file
 	@brief マクロ
-
-	@author Norio Nakatani
-	@author genta
-	@date Sep. 29, 2001 作成
-	@date 20011229 aroka バグ修正、コメント追加
-*/
-/*
-	Copyright (C) 1998-2001, Norio Nakatani
-	Copyright (C) 2000, jepro
-	Copyright (C) 2001, genta, aroka, MIK, asa-o, hor, Misaka, jepro, Stonee
-	Copyright (C) 2002, YAZAKI, MIK, aroka, hor, genta, ai
-	Copyright (C) 2003, MIK, genta, Moca
-	Copyright (C) 2004, genta, zenryaku
-	Copyright (C) 2005, MIK, genta, maru, FILE
-	Copyright (C) 2006, かろと, fon, ryoji
-	Copyright (C) 2007, ryoji, maru
-	Copyright (C) 2008, nasukoji, ryoji
-	Copyright (C) 2011, nasukoji
-
-	This source code is designed for sakura editor.
-	Please contact the copyright holder to use this code for other purpose.
 */
 #include "StdAfx.h"
 #include "macro/SMacroMgr.h"

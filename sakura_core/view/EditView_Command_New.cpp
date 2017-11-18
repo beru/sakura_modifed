@@ -1,23 +1,4 @@
-/*!	@file
-	@brief EditViewクラスのコマンド処理系関数群
-
-	@author Norio Nakatani
-*/
-/*
-	Copyright (C) 1998-2001, Norio Nakatani
-	Copyright (C) 2000, genta
-	Copyright (C) 2001, genta, asa-o, hor
-	Copyright (C) 2002, YAZAKI, hor, genta. aroka, MIK, minfu, KK, かろと
-	Copyright (C) 2003, MIK, Moca
-	Copyright (C) 2004, genta, Moca
-	Copyright (C) 2005, ryoji, genta, D.S.Koba
-	Copyright (C) 2006, genta, Moca, fon
-	Copyright (C) 2007, ryoji, maru
-	Copyright (C) 2009, ryoji
-
-	This source code is designed for sakura editor.
-	Please contact the copyright holder to use this code for other purpose.
-*/
+// EditViewクラスのコマンド処理系関数群
 #include "StdAfx.h"
 #include "view/EditView.h"
 #include "SearchAgent.h"

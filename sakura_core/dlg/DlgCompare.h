@@ -1,14 +1,5 @@
 /*!	@file
 	@brief ファイル比較ダイアログボックス
-
-	@author Norio Nakatani
-*/
-/*
-	Copyright (C) 1998-2001, Norio Nakatani
-	Copyright (C) 2000, jepro
-
-	This source code is designed for sakura editor.
-	Please contact the copyright holder to use this code for other purpose.
 */
 
 class DlgCompare;

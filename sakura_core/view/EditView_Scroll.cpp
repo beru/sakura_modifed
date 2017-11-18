@@ -1,27 +1,3 @@
-/*!	@file
-	@brief 文書ウィンドウの管理
-
-	@author kobake
-	@date	2008/04/14 作成
-*/
-/*
-	Copyright (C) 1998-2001, Norio Nakatani
-	Copyright (C) 2000-2001, genta, jepro
-	Copyright (C) 2001, asa-o, MIK, hor, Misaka, Stonee, YAZAKI
-	Copyright (C) 2002, genta, hor, YAZAKI, Azumaiya, KK, novice, minfu, ai, aroka, MIK
-	Copyright (C) 2003, genta, MIK, Moca
-	Copyright (C) 2004, genta, Moca, novice, Kazika, isearch
-	Copyright (C) 2005, genta, Moca, MIK, ryoji, maru
-	Copyright (C) 2006, genta, aroka, fon, yukihane, ryoji
-	Copyright (C) 2007, ryoji, maru
-	Copyright (C) 2008, ryoji
-	Copyright (C) 2009, nasukoji
-	Copyright (C) 2010, Moca
-	Copyright (C) 2012, ryoji, Uchi
-
-	This source code is designed for sakura editor.
-	Please contact the copyright holder to use this code for other purpose.
-*/
 #include "StdAfx.h"
 #include "EditView.h"
 #include "Ruler.h"

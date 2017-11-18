@@ -1,36 +1,3 @@
-/*!	@file
-	@brief 文字コード認識・判別支援関数ライブラリ
-
-	@author Sakura-Editor collaborators
-	@date 1998/03/06 新規作成
-	@date 2006/03/06 名称変更（旧名：文字コード定数の定義）
-	@date 2007/03/19 名称改定（旧名：文字コード認識ライブラリ）
-*/
-/*
-	Copyright (C) 1998-2001, Norio Nakatani
-	Copyright (C) 2006, D. S. Koba, genta
-	Copyright (C) 2007
-
-	This software is provided 'as-is', without any express or implied
-	warranty. In no event will the authors be held liable for any damages
-	arising from the use of this software.
-
-	Permission is granted to anyone to use this software for any purpose,
-	including commercial applications, and to alter it and redistribute it
-	freely, subject to the following restrictions:
-
-		1. The origin of this software must not be misrepresented;
-		   you must not claim that you wrote the original software.
-		   If you use this software in a product, an acknowledgment
-		   in the product documentation would be appreciated but is
-		   not required.
-
-		2. Altered source versions must be plainly marked as such,
-		   and must not be misrepresented as being the original software.
-
-		3. This notice may not be removed or altered from any source
-		   distribution.
-*/
 #pragma once
 
 #include "_main/global.h"
@@ -360,11 +327,11 @@ inline bool IsBinaryOnSurrogate(const wchar_t wc) {
 	return (0xdc00 <= wc_ && wc_ <= 0xdcff);
 }
 
-// 高位サロゲートエリアか？	from ssrc_2004-06-05wchar00703b	2008/5/15 Uchi
+// 高位サロゲートエリアか？	from ssrc_2004-06-05wchar00703b
 inline bool IsUTF16High(wchar_t c) {
 	return IsUtf16SurrogHi(c);
 }
-// 下位サロゲートエリアか？	from ssrc_2004-06-05wchar00703b	2008/5/15 Uchi
+// 下位サロゲートエリアか？	from ssrc_2004-06-05wchar00703b
 inline bool IsUTF16Low(wchar_t c) {
 	return IsUtf16SurrogLow(c);
 }

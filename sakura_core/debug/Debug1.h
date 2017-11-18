@@ -1,17 +1,3 @@
-/*!	@file
-	@brief デバッグ用関数
-
-	@author Norio Nakatani
-
-	@date 2013/03/03 Uchi MessageBox用関数を分離
-*/
-/*
-	Copyright (C) 1998-2001, Norio Nakatani
-
-	This source code is designed for sakura editor.
-	Please contact the copyright holder to use this code for other purpose.
-*/
-
 #pragma once
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //

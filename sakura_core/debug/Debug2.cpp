@@ -1,8 +1,6 @@
 #include "StdAfx.h"
 #include "debug/Debug2.h"
 
-// 2007.08.30 kobake 追加
-
 #ifdef _DEBUG
 // デバッグメッセージ出力
 void debug_output(const char* str, ...)

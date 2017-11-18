@@ -1,14 +1,5 @@
 /*!	@file
 	@brief アウトライン解析  データ要素
-
-	@author Norio Nakatani
-	@date	1998/06/23 作成
-*/
-/*
-	Copyright (C) 1998-2001, Norio Nakatani
-
-	This source code is designed for sakura editor.
-	Please contact the copyright holder to use this code for other purpose.
 */
 
 #include "StdAfx.h"

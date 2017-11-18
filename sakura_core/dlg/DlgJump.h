@@ -1,17 +1,5 @@
 /*!	@file
 	@brief 指定行へのジャンプダイアログボックス
-
-	@author Norio Nakatani
-	@date 1998/05/31 作成
-	@date 1999/12/05 再作成
-*/
-/*
-	Copyright (C) 1998-2001, Norio Nakatani
-	Copyright (C) 2000, jepro
-	Copyright (C) 2002, YAZAKI
-
-	This source code is designed for sakura editor.
-	Please contact the copyright holder to use this code for other purpose.
 */
 
 class DlgJump;

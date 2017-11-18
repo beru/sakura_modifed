@@ -1,21 +1,3 @@
-/*!	@file
-	@brief コマンドラインパーサ ヘッダファイル
-
-	@author aroka
-	@date	2002/01/08 作成
-*/
-/*
-	Copyright (C) 1998-2001, Norio Nakatani
-	Copyright (C) 2000-2001, genta
-	Copyright (C) 2002, aroka CControlTrayより分離
-	Copyright (C) 2002, genta
-	Copyright (C) 2005, D.S.Koba
-	Copyright (C) 2007, ryoji
-
-	This source code is designed for sakura editor.
-	Please contact the copyright holder to use this code for other purpose.
-*/
-
 #pragma once
 
 #include "global.h"
@@ -24,9 +6,6 @@
 
 class Memory;
 
-/*!	検索オプション
-	20020118 aroka
-*/
 struct GrepInfo {
 	NativeW			mGrepKey;				// 検索キー
 	NativeW			mGrepRep;				// 置換キー
@@ -49,10 +28,6 @@ struct GrepInfo {
 };
 
 
-/*-----------------------------------------------------------------------
-クラスの宣言
------------------------------------------------------------------------*/
-
 /*!
 	@brief コマンドラインパーサ クラス
 */
@@ -68,7 +43,6 @@ class CommandLine : public TSingleton<CommandLine> {
 
 	/*!
 		引用符で囲まれている数値を認識するようにする
-		@date 2002.12.05 genta
 	*/
 	static int AtoiOptionInt(const TCHAR* arg) {
 		return (arg[0] == _T('"') || arg[0] == _T('\'')) ?
@@ -78,14 +52,14 @@ class CommandLine : public TSingleton<CommandLine> {
 // member accessor method
 public:
 	bool IsNoWindow() const {return bNoWindow;}
-	bool IsWriteQuit() const {return bWriteQuit;}	// 2007.05.19 ryoji sakuext用に追加
+	bool IsWriteQuit() const {return bWriteQuit;}
 	bool IsGrepMode() const {return bGrepMode;}
 	bool IsGrepDlg() const {return bGrepDlg;}
 	bool IsDebugMode() const {return bDebugMode;}
 	bool IsViewMode() const {return bViewMode;}
 	const EditInfo& GetEditInfo() const { return fi; }
 	const GrepInfo& GetGrepInfo() const { return gi; }
-	int GetGroupId() const {return nGroup;}	// 2007.06.26 ryoji
+	int GetGroupId() const {return nGroup;}
 	LPCWSTR GetMacro() const { return mMacro.GetStringPtr(); }
 	LPCWSTR GetMacroType() const { return mMacroType.GetStringPtr(); }
 	LPCWSTR GetProfileName() const{ return mProfile.GetStringPtr(); }
@@ -106,13 +80,13 @@ private:
 	bool		bGrepDlg;		// Grepダイアログ
 	bool		bDebugMode;		
 	bool		bNoWindow;		// [out] true: 編集Windowを開かない
-	bool		bWriteQuit;		// [out] true: 設定を保存して終了	// 2007.05.19 ryoji sakuext用に追加
+	bool		bWriteQuit;		// [out] true: 設定を保存して終了
 	bool		bProfileMgr;
 	bool		bSetProfile;
 	EditInfo	fi;				//
 	GrepInfo	gi;				//
 	bool		bViewMode;		// [out] true: Read Only
-	int			nGroup;			// グループID	// 2007.06.26 ryoji
+	int			nGroup;			// グループID
 	NativeW	mMacro;				// [out] マクロファイル名／マクロ文
 	NativeW	mMacroType;			// [out] マクロ種別
 	NativeW	mProfile;			// プロファイル名

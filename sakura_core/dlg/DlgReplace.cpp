@@ -1,20 +1,5 @@
 /*!	@file
 	@brief 置換ダイアログ
-
-	@author Norio Nakatani
-	@date 2001/06/23 N.Nakatani 単語単位で検索する機能を実装
-*/
-/*
-	Copyright (C) 1998-2001, Norio Nakatani
-	Copyright (C) 2001, genta, Stonee, hor, YAZAKI
-	Copyright (C) 2002, MIK, hor, novice, genta, aroka, YAZAKI
-	Copyright (C) 2006, かろと, ryoji
-	Copyright (C) 2007, ryoji
-	Copyright (C) 2009, ryoji
-	Copyright (C) 2012, Uchi
-
-	This source code is designed for sakura editor.
-	Please contact the copyright holder to use this code for other purpose.
 */
 #include "StdAfx.h"
 #include "dlg/DlgReplace.h"

@@ -3,7 +3,6 @@
 #include "CodeMediator.h"
 #include "CodePage.h"
 
-// move start	from CodeMediator.h	2012/12/02 Uchi
 #include "Euc.h"
 #include "Jis.h"
 #include "ShiftJis.h"
@@ -12,7 +11,6 @@
 #include "Utf7.h"
 #include "Utf8.h"
 #include "Cesu8.h"
-// move end
 #include "Latin1.h"
 
 // codeTypeに適合する CodeBaseインスタンス を生成

@@ -1,19 +1,5 @@
-/*!	@file
-	@brief ファイルタイプ一覧ダイアログ
+// ファイルタイプ一覧ダイアログ
 
-	@author Norio Nakatani
-*/
-/*
-	Copyright (C) 1998-2001, Norio Nakatani
-	Copyright (C) 2000-2001, genta
-	Copyright (C) 2001, Stonee
-	Copyright (C) 2002, MIK
-	Copyright (C) 2006, ryoji
-	Copyright (C) 2010, Uchi, Beta.Ito, syat
-
-	This source code is designed for sakura editor.
-	Please contact the copyright holder to use this code for other purpose.
-*/
 #include "StdAfx.h"
 #include "types/Type.h" // use DlgTypeList定義
 #include "window/EditWnd.h"

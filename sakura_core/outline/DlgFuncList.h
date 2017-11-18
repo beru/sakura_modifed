@@ -1,23 +1,6 @@
 /*!	@file
 	@brief アウトライン解析ダイアログボックス
-
-	@author Norio Nakatani
-	@date 1998/06/23 新規作成
-	@date 1998/12/04 再作成
 */
-/*
-	Copyright (C) 1998-2001, Norio Nakatani
-	Copyright (C) 2001, genta, hor
-	Copyright (C) 2002, aroka, hor, YAZAKI, frozen
-	Copyright (C) 2003, little YOSHI
-	Copyright (C) 2005, genta
-	Copyright (C) 2006, aroka
-	Copyright (C) 2007, ryoji
-
-	This source code is designed for sakura editor.
-	Please contact the copyright holder to use this code for other purpose.
-*/
-
 #pragma once
 
 #include <Windows.h>

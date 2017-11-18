@@ -1,19 +1,5 @@
-/*!	@file
-	@brief EditViewクラスのgrep関連コマンド処理系関数群
+// EditViewクラスのgrep関連コマンド処理系関数群
 
-	@author genta
-	@date	2005/01/10 作成
-*/
-/*
-	Copyright (C) 1998-2001, Norio Nakatani
-	Copyright (C) 2002, Moca
-	Copyright (C) 2003, MIK
-	Copyright (C) 2005, genta
-	Copyright (C) 2006, ryoji
-
-	This source code is designed for sakura editor.
-	Please contact the copyright holders to use this code for other purpose.
-*/
 #include "StdAfx.h"
 #include "view/EditView.h"
 #include "doc/EditDoc.h"

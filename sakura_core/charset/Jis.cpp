@@ -1,5 +1,3 @@
-// 2008.11.10  変換ロジックを書き直す
-
 #include "StdAfx.h"
 #include <mbstring.h>
 #include "charset/Jis.h"
@@ -16,7 +14,6 @@
 //                       各種判定定数                          //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-// @author D. S. Koba
 // 星マークを添えてあるものは、書き込みで使われる。
 const char Jis::JISESCDATA_ASCII7[]				= "\x1b" "(B";  // ☆
 const char Jis::JISESCDATA_JISX0201Latin[]		= "\x1b" "(J";
@@ -244,7 +241,6 @@ size_t Jis::JisToUni(const char* pSrc, const size_t nSrcLen, wchar_t* pDst, bool
 
 
 // E-Mail(JIS→Unicode)コード変換
-// 2007.08.13 kobake 追加
 CodeConvertResult Jis::JISToUnicode(const Memory& src, NativeW* pDstMem, bool base64decode)
 {
 	// ソースを取得

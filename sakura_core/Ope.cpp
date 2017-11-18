@@ -1,16 +1,3 @@
-/*!	@file
-	@brief •ÒW‘€ì—v‘f
-
-	@author Norio Nakatani
-	@date 1998/06/09 V‹Kì¬
-*/
-/*
-	Copyright (C) 1998-2001, Norio Nakatani
-
-	This source code is designed for sakura editor.
-	Please contact the copyright holder to use this code for other purpose.
-*/
-
 #include "StdAfx.h"
 #include "Ope.h"
 #include "mem/Memory.h"// 2002/2/10 aroka

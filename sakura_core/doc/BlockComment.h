@@ -1,17 +1,6 @@
 /*!	@file
 	@brief ブロックコメントデリミタを管理する
-
-	@author Yazaki
-	@date 2002/09/17 新規作成
 */
-/*
-	Copyright (C) 2002, Yazaki
-	Copyright (C) 2005, Moca
-
-	This source code is designed for sakura editor.
-	Please contact the copyright holder to use this code for other purpose.
-*/
-
 #pragma once
 
 // sakura

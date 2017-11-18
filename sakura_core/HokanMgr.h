@@ -1,18 +1,6 @@
-/*!	@file
-	@brief キーワード補完
-
-	@author Norio Nakatani
-*/
-/*
-	Copyright (C) 1998-2001, Norio Nakatani
-	Copyright (C) 2001, asa-o
-	Copyright (C) 2003, Moca
-
-	This source code is designed for sakura editor.
-	Please contact the copyright holder to use this code for other purpose.
-*/
-
 #pragma once
+
+// キーワード補完
 
 #include <Windows.h>
 #include "dlg/Dialog.h"

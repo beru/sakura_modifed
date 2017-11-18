@@ -1,28 +1,3 @@
-/*!	@file
-@brief ViewCommanderクラスのコマンド(編集系 高度な操作(除単語/行操作))関数群
-
-	2012/12/17	ViewCommander.cpp,ViewCommander_New.cppから分離
-*/
-/*
-	Copyright (C) 1998-2001, Norio Nakatani
-	Copyright (C) 2000-2001, jepro, genta, みつ
-	Copyright (C) 2001, MIK, Stonee, Misaka, asa-o, novice, hor, YAZAKI
-	Copyright (C) 2002, hor, YAZAKI, novice, genta, aroka, Azumaiya, minfu, MIK, oak, すなふき, Moca, ai
-	Copyright (C) 2003, MIK, genta, かろと, zenryaku, Moca, ryoji, naoh, KEITA, じゅうじ
-	Copyright (C) 2004, isearch, Moca, gis_dur, genta, crayonzen, fotomo, MIK, novice, みちばな, Kazika
-	Copyright (C) 2005, genta, novice, かろと, MIK, Moca, D.S.Koba, aroka, ryoji, maru
-	Copyright (C) 2006, genta, aroka, ryoji, かろと, fon, yukihane, Moca
-	Copyright (C) 2007, ryoji, maru, Uchi
-	Copyright (C) 2008, ryoji, nasukoji
-	Copyright (C) 2009, ryoji, nasukoji
-	Copyright (C) 2010, ryoji
-	Copyright (C) 2011, ryoji
-	Copyright (C) 2012, Moca, ryoji
-
-	This source code is designed for sakura editor.
-	Please contact the copyright holders to use this code for other purpose.
-*/
-
 #include "StdAfx.h"
 #include "ViewCommander.h"
 #include "ViewCommander_inline.h"
@@ -30,6 +5,8 @@
 #include "uiparts/WaitCursor.h"
 #include "mem/MemoryIterator.h"	// @@@ 2002.09.28 YAZAKI
 #include "_os/OsVersionInfo.h"
+
+// ViewCommanderクラスのコマンド(編集系 高度な操作(除単語/行操作))関数群
 
 using namespace std; // 2002/2/3 aroka to here
 

@@ -1,33 +1,15 @@
 /*!	@file
 	@brief エディタプロセスクラス
-
-	@author aroka
-	@date 2002/01/07 Create
 */
-/*
-	Copyright (C) 1998-2001, Norio Nakatani
-	Copyright (C) 2000-2001, genta
-	Copyright (C) 2002, aroka Processより分離
-	Copyright (C) 2002, YAZAKI, Moca, genta
-	Copyright (C) 2003, genta, Moca, MIK
-	Copyright (C) 2004, Moca, naoh
-	Copyright (C) 2007, ryoji
-	Copyright (C) 2008, Uchi
-	Copyright (C) 2009, syat, ryoji
-
-	This source code is designed for sakura editor.
-	Please contact the copyright holder to use this code for other purpose.
-*/
-
 
 #include "StdAfx.h"
 #include "NormalProcess.h"
 #include "CommandLine.h"
 #include "ControlTray.h"
-#include "window/EditWnd.h" // 2002/2/3 aroka
+#include "window/EditWnd.h"
 #include "GrepAgent.h"
 #include "doc/EditDoc.h"
-#include "doc/logic/DocLine.h" // 2003/03/28 MIK
+#include "doc/logic/DocLine.h"
 #include "debug/RunningTimer.h"
 #include "util/window.h"
 #include "util/fileUtil.h"
@@ -59,21 +41,13 @@ NormalProcess::~NormalProcess()
 	@brief エディタプロセスを初期化する
 	
 	EditWndを作成する。
-	
-	@author aroka
-	@date 2002/01/07
-
-	@date 2002.2.17 YAZAKI CShareDataのインスタンスは、Processにひとつあるのみ。
-	@date 2004.05.13 Moca EditWnd::Create()に失敗した場合にfalseを返すように．
-	@date 2007.06.26 ryoji グループIDを指定して編集ウィンドウを作成する
-	@date 2012.02.25 novice 複数ファイル読み込み
 */
 bool NormalProcess::InitializeProcess()
 {
 	MY_RUNNINGTIMER(runningTimer, "NormalProcess::Init");
 
 	// プロセス初期化の目印
-	HANDLE hMutex = _GetInitializeMutex();	// 2002/2/8 aroka 込み入っていたので分離
+	HANDLE hMutex = _GetInitializeMutex();
 	if (!hMutex) {
 		return false;
 	}
@@ -92,17 +66,15 @@ bool NormalProcess::InitializeProcess()
 	auto& cmdLine = CommandLine::getInstance();
 	// コマンドラインで受け取ったファイルが開かれている場合は
 	// その編集ウィンドウをアクティブにする
-	EditInfo fi = cmdLine.GetEditInfo(); // 2002/2/8 aroka ここに移動
+	EditInfo fi = cmdLine.GetEditInfo();
 	if (fi.szPath[0] != _T('\0')) {
-		// Oct. 27, 2000 genta
 		// MRUからカーソル位置を復元する操作はCEditDoc::FileLoadで
 		// 行われるのでここでは必要なし．
 
 		// 指定ファイルが開かれているか調べる
-		// 2007.03.13 maru 文字コードが異なるときはワーニングを出すように
+		// 文字コードが異なるときはワーニングを出すように
 		HWND hwndOwner;
 		if (GetShareData().ActiveAlreadyOpenedWindow(fi.szPath, &hwndOwner, fi.nCharCode)) {
-			// From Here Oct. 19, 2001 genta
 			// カーソル位置が引数に指定されていたら指定位置にジャンプ
 			if (fi.ptCursor.y >= 0) {	// 行の指定があるか
 				Point& pt = GetDllShareData().workBuffer.logicPoint;
@@ -115,7 +87,6 @@ bool NormalProcess::InitializeProcess()
 				pt.y = fi.ptCursor.y;
 				::SendMessage(hwndOwner, MYWM_SETCARETPOS, 0, 0);
 			}
-			// To Here Oct. 19, 2001 genta
 			// アクティブにする
 			ActivateFrameWindow(hwndOwner);
 			::ReleaseMutex(hMutex);
@@ -136,7 +107,7 @@ bool NormalProcess::InitializeProcess()
 	PluginManager::getInstance().LoadAllPlugin();
 	MY_TRACETIME(runningTimer, "After Load Plugins");
 
-	// エディタアプリケーションを作成。2007.10.23 kobake
+	// エディタアプリケーションを作成
 	// グループIDを取得
 	int nGroupId = cmdLine.GetGroupId();
 	if (GetDllShareData().common.tabBar.bNewWindow && nGroupId == -1) {
@@ -150,10 +121,10 @@ bool NormalProcess::InitializeProcess()
 	if (!pEditWnd->GetHwnd()) {
 		::ReleaseMutex(hMutex);
 		::CloseHandle(hMutex);
-		return false;	// 2009.06.23 ryoji EditWnd::Create()失敗のため終了
+		return false;	// EditWnd::Create()失敗のため終了
 	}
 
-	// コマンドラインの解析		2002/2/8 aroka ここに移動
+	// コマンドラインの解析
 	bool bDebugMode = cmdLine.IsDebugMode();
 	bool bGrepMode = cmdLine.IsGrepMode();
 	bool bGrepDlg = cmdLine.IsGrepDlg();
@@ -173,14 +144,11 @@ bool NormalProcess::InitializeProcess()
 			AppNodeManager::getInstance().GetNoNameNumber(pEditWnd->GetHwnd());
 			pEditWnd->UpdateCaption();
 		}
-		// 2004.09.20 naoh アウトプット用タイプ別設定
-		// 文字コードを有効とする Uchi 2008/6/8
-		// 2010.06.16 Moca アウトプットは CCommnadLineで -TYPE=output 扱いとする
+		// アウトプット用タイプ別設定
 		pEditWnd->SetDocumentTypeWhenCreate(fi.nCharCode, false, nType);
 		pEditWnd->dlgFuncList.Refresh();	// アウトラインを表示する
 	}else if (bGrepMode) {
 		// GREP
-		// 2010.06.16 Moca Grepでもオプション指定を適用
 		pEditWnd->SetDocumentTypeWhenCreate(fi.nCharCode, false, nType);
 		pEditWnd->dlgFuncList.Refresh();	// アウトラインを予め表示しておく
 		HWND hEditWnd = pEditWnd->GetHwnd();
@@ -191,10 +159,6 @@ bool NormalProcess::InitializeProcess()
 		}
 		GrepInfo gi = cmdLine.GetGrepInfo(); // 2002/2/8 aroka ここに移動
 		if (!bGrepDlg) {
-			// Grepでは対象パス解析に現在のカレントディレクトリを必要とする
-			// editDoc->SetCurDirNotitle();
-			// 2003.06.23 Moca GREP実行前にMutexを開放
-			// こうしないとGrepが終わるまで新しいウィンドウを開けない
 			SetMainWindow(pEditWnd->GetHwnd());
 			::ReleaseMutex(hMutex);
 			::CloseHandle(hMutex);
@@ -220,12 +184,10 @@ bool NormalProcess::InitializeProcess()
 				gi.bGrepBackup
 			);
 			pEditWnd->dlgFuncList.Refresh();	// アウトラインを再解析する
-			//return true; // 2003.06.23 Moca
 		}else {
 			AppNodeManager::getInstance().GetNoNameNumber(pEditWnd->GetHwnd());
 			pEditWnd->UpdateCaption();
 			
-			//-GREPDLGでダイアログを出す。　引数も反映（2002/03/24 YAZAKI）
 			if (gi.mGrepKey.GetStringLength() < _MAX_PATH) {
 				SearchKeywordManager().AddToSearchKeys(gi.mGrepKey.GetStringPtr());
 			}
@@ -235,7 +197,7 @@ bool NormalProcess::InitializeProcess()
 			NativeT memGrepFolder = gi.mGrepFolder;
 			if (gi.mGrepFolder.GetStringLength() < _MAX_PATH) {
 				SearchKeywordManager().AddToGrepFolders(gi.mGrepFolder.GetStringPtr());
-				// 2013.05.21 指定なしの場合はカレントフォルダにする
+				// 指定なしの場合はカレントフォルダにする
 				if (memGrepFolder.GetStringLength() == 0) {
 					TCHAR szCurDir[_MAX_PATH];
 					::GetCurrentDirectory(_countof(szCurDir), szCurDir);
@@ -248,15 +210,11 @@ bool NormalProcess::InitializeProcess()
 			csSearch.nGrepCharSet = gi.charEncoding;
 			csSearch.nGrepOutputLineType = gi.nGrepOutputLineType;
 			csSearch.nGrepOutputStyle = gi.nGrepOutputStyle;
-			// 2003.06.23 Moca GREPダイアログ表示前にMutexを開放
-			// こうしないとGrepが終わるまで新しいウィンドウを開けない
 			SetMainWindow(pEditWnd->GetHwnd());
 			::ReleaseMutex(hMutex);
 			::CloseHandle(hMutex);
 			hMutex = NULL;
 			
-			// Oct. 9, 2003 genta コマンドラインからGERPダイアログを表示させた場合に
-			// 引数の設定がBOXに反映されない
 			pEditWnd->dlgGrep.strText = gi.mGrepKey.GetStringPtr();		// 検索文字列
 			pEditWnd->dlgGrep.bSetText = true;
 			int nSize = _countof2(pEditWnd->dlgGrep.szFile);
@@ -266,8 +224,6 @@ bool NormalProcess::InitializeProcess()
 			_tcsncpy(pEditWnd->dlgGrep.szFolder, memGrepFolder.GetStringPtr(), nSize);	// 検索フォルダ
 			pEditWnd->dlgGrep.szFolder[nSize - 1] = _T('\0');
 
-			
-			// Feb. 23, 2003 Moca Owner windowが正しく指定されていなかった
 			INT_PTR nRet = pEditWnd->dlgGrep.DoModal(GetProcessInstance(), pEditWnd->GetHwnd(), NULL);
 			if (nRet != FALSE) {
 				activeView.GetCommander().HandleCommand(F_GREP, true, 0, 0, 0, 0);
@@ -276,7 +232,6 @@ bool NormalProcess::InitializeProcess()
 				editDoc.SetCurDirNotitle();
 			}
 			pEditWnd->dlgFuncList.Refresh();	// アウトラインを再解析する
-			//return true; // 2003.06.23 Moca
 		}
 
 		// プラグイン：EditorStartイベント実行
@@ -299,13 +254,11 @@ bool NormalProcess::InitializeProcess()
 			PostMessage( pEditWnd->GetHwnd(), MYWM_CLOSE, PM_CLOSE_GREPNOCONFIRM | PM_CLOSE_EXIT, (LPARAM)NULL );
 		}
 
-		return true; // 2003.06.23 Moca
+		return true;
 	}else {
-		// 2004.05.13 Moca さらにif分の中から前に移動
-		// ファイル名が与えられなくてもReadOnly指定を有効にするため．
-		bViewMode = cmdLine.IsViewMode(); // 2002/2/8 aroka ここに移動
+		bViewMode = cmdLine.IsViewMode();
 		if (fi.szPath[0] != _T('\0')) {
-			// Mar. 9, 2002 genta 文書タイプ指定
+			// 文書タイプ指定
 			pEditWnd->OpenDocumentWhenStart(
 				LoadInfo(
 					fi.szPath,
@@ -327,12 +280,6 @@ bool NormalProcess::InitializeProcess()
 					nType
 				);
 			}
-			// Nov. 6, 2000 genta
-			// キャレット位置の復元のため
-			// オプション指定がないときは画面移動を行わないようにする
-			// Oct. 19, 2001 genta
-			// 未設定＝-1になるようにしたので，安全のため両者が指定されたときだけ
-			// 移動するようにする． || → &&
 			if (
 				(0 <= fi.nViewTopLine && 0 <= fi.nViewLeftCol)
 				&& fi.nViewTopLine < (int)editDoc.layoutMgr.GetLineCount()
@@ -342,7 +289,6 @@ bool NormalProcess::InitializeProcess()
 			}
 
 			// オプション指定がないときはカーソル位置設定を行わないようにする
-			// Oct. 19, 2001 genta
 			// 0も位置としては有効な値なので判定に含めなくてはならない
 			if (0 <= fi.ptCursor.x || 0 <= fi.ptCursor.y) {
 				/*
@@ -352,16 +298,13 @@ bool NormalProcess::InitializeProcess()
 				  レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 				*/
 				Point ptPos = editDoc.layoutMgr.LogicToLayout(fi.ptCursor);
-				// From Here Mar. 28, 2003 MIK
 				// 改行の真ん中にカーソルが来ないように。
-				// 2008.08.20 ryoji 改行単位の行番号を渡すように修正
 				const DocLine* pTmpDocLine = editDoc.docLineMgr.GetLine(fi.ptCursor.y);
 				if (pTmpDocLine) {
 					if ((int)pTmpDocLine->GetLengthWithoutEOL() < fi.ptCursor.x) {
 						ptPos.x--;
 					}
 				}
-				// To Here Mar. 28, 2003 MIK
 
 				activeView.GetCaret().MoveCursor(ptPos, true);
 				activeView.GetCaret().nCaretPosX_Prev =
@@ -370,7 +313,7 @@ bool NormalProcess::InitializeProcess()
 			activeView.RedrawAll();
 		}else {
 			editDoc.SetCurDirNotitle();	// (無題)ウィンドウ
-			// 2004.05.13 Moca ファイル名が与えられなくてもReadOnlyとタイプ指定を有効にする
+			// ファイル名が与えられなくてもReadOnlyとタイプ指定を有効にする
 			pEditWnd->SetDocumentTypeWhenCreate(
 				fi.nCharCode,
 				bViewMode,	// ビューモードか
@@ -386,7 +329,6 @@ bool NormalProcess::InitializeProcess()
 
 	SetMainWindow(pEditWnd->GetHwnd());
 
-	// YAZAKI 2002/05/30 IMEウィンドウの位置がおかしいのを修正。
 	activeView.SetIMECompFormPos();
 
 	// WM_SIZEをポスト
@@ -419,7 +361,7 @@ bool NormalProcess::InitializeProcess()
 		(*it)->Invoke(activeView, params);
 	}
 
-	// 2006.09.03 ryoji オープン後自動実行マクロを実行する
+	// オープン後自動実行マクロを実行する
 	if (!(bDebugMode || bGrepMode)) {
 		editDoc.RunAutoMacro(GetDllShareData().common.macro.nMacroOnOpened);
 	}
@@ -467,9 +409,6 @@ bool NormalProcess::InitializeProcess()
 
 /*!
 	@brief エディタプロセスのメッセージループ
-	
-	@author aroka
-	@date 2002/01/07
 */
 bool NormalProcess::MainLoop()
 {
@@ -482,15 +421,12 @@ bool NormalProcess::MainLoop()
 
 /*!
 	@brief エディタプロセスを終了する
-	
-	@author aroka
-	@date 2002/01/07
 	こいつはなにもしない。後始末はdtorで。
 */
 void NormalProcess::OnExitProcess()
 {
 	// プラグイン解放
-	PluginManager::getInstance().UnloadAllPlugin();		// Mpve here	2010/7/11 Uchi
+	PluginManager::getInstance().UnloadAllPlugin();
 }
 
 
@@ -502,10 +438,6 @@ void NormalProcess::OnExitProcess()
 	@brief Mutex(プロセス初期化の目印)を取得する
 
 	多数同時に起動するとウィンドウが表に出てこないことがある。
-	
-	@date 2002/2/8 aroka InitializeProcessから移動
-	@retval Mutex のハンドルを返す
-	@retval 失敗した時はリリースしてから NULL を返す
 */
 HANDLE NormalProcess::_GetInitializeMutex() const
 {
@@ -521,7 +453,7 @@ HANDLE NormalProcess::_GetInitializeMutex() const
 		return NULL;
 	}
 	if (::GetLastError() == ERROR_ALREADY_EXISTS) {
-		DWORD dwRet = ::WaitForSingleObject(hMutex, 15000);	// 2002/2/8 aroka 少し長くした
+		DWORD dwRet = ::WaitForSingleObject(hMutex, 15000);
 		if (dwRet == WAIT_TIMEOUT) { // 別の誰かが起動中
 			TopErrorMessage(NULL, _T("エディタまたはシステムがビジー状態です。\nしばらく待って開きなおしてください。"));
 			::CloseHandle(hMutex);

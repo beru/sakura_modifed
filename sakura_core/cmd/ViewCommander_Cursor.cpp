@@ -1,30 +1,11 @@
-/*!	@file
-@brief ViewCommanderクラスのコマンド(カーソル移動系)関数群
-
-	2012/12/17	ViewCommander.cpp,ViewCommander_New.cppから分離
-*/
-/*
-	Copyright (C) 1998-2001, Norio Nakatani
-	Copyright (C) 2000-2001, jepro, genta
-	Copyright (C) 2001, asa-o, hor
-	Copyright (C) 2002, hor, YAZAKI, oak
-	Copyright (C) 2003, Moca
-	Copyright (C) 2004, Moca, genta, fotomo
-	Copyright (C) 2006, genta
-	Copyright (C) 2007, kobake, maru
-	Copyright (C) 2009, ryoji
-
-	This source code is designed for sakura editor.
-	Please contact the copyright holders to use this code for other purpose.
-*/
-
 #include "StdAfx.h"
 #include "ViewCommander.h"
 #include "ViewCommander_inline.h"
 
-#include "MarkMgr.h"/// 2002/2/3 aroka 追加
-#include "mem/MemoryIterator.h"	// @@@ 2002.09.28 YAZAKI
+#include "MarkMgr.h"
+#include "mem/MemoryIterator.h"
 
+// ViewCommanderクラスのコマンド(カーソル移動系)関数群
 
 void ViewCommander::Command_MoveCursor(Point pos, int option)
 {
@@ -56,7 +37,6 @@ void ViewCommander::Command_MoveCursorLayout(Point pos, int option)
 				si.BeginSelectArea();
 			}
 		}else {
-			// 2014.01.08 追加
 			if (bBoxSelect && !si.IsBoxSelecting()) {
 				// 通常選択→矩形選択に変更。他のコマンドに合わせる
 				Command_Begin_BoxSelect();
@@ -79,20 +59,14 @@ void ViewCommander::Command_MoveCursorLayout(Point pos, int option)
 	caret.nCaretPosX_Prev = caret.GetCaretLayoutPos().x;
 }
 
-
-/////////////////////////////////// 以下はコマンド群 (Oct. 17, 2000 jepro note) ///////////////////////////////////////////
-
 // カーソル上移動
 int ViewCommander::Command_Up(bool bSelect, bool bRepeat, int lines)
 {
 	auto& caret = GetCaret();
-	// From Here Oct. 24, 2001 genta
 	if (lines != 0) {
 		caret.Cursor_UPDOWN(lines, false);
 		return 1;
 	}
-	// To Here Oct. 24, 2001 genta
-
 
 	int nRepeat = 0;
 
@@ -154,11 +128,11 @@ int ViewCommander::Command_Down(bool bSelect, bool bRepeat)
 
 /*! @brief カーソル左移動
 
-	@date 2004.03.28 Moca EOFだけの行以降の途中にカーソルがあると落ちるバグ修正．
+	EOFだけの行以降の途中にカーソルがあると落ちるバグ修正．
 			pLayout == NULLかつキャレット位置が行頭以外の場合は
 			2つのifのどちらにも当てはまらないが，そのあとのMoveCursorにて適正な
 			位置に移動させられる．
-	@date 2014.01.10 Moca キーリピート時、MoveCursorを一度にまとめる
+	キーリピート時、MoveCursorを一度にまとめる
 */
 int ViewCommander::Command_Left(bool bSelect, bool bRepeat)
 {
@@ -221,7 +195,6 @@ int ViewCommander::Command_Left(bool bSelect, bool bRepeat)
 			bUnderlineDoNotOFF = false;	// 行が変わるのでアンダーラインを消去する
 			bMoveCaretLine = true;
 		}
-		//  2004.03.28 Moca EOFだけの行以降の途中にカーソルがあると落ちるバグ修正
 		else if (pLayout) {
 			MemoryIterator it(pLayout, layoutMgr.GetTabSpace());
 			while (!it.end()) {
@@ -233,7 +206,6 @@ int ViewCommander::Command_Left(bool bSelect, bool bRepeat)
 				it.addDelta();
 			}
 			ptPos.x += it.getColumn() - it.getColumnDelta();
-			// Oct. 18, 2002 YAZAKI
 			if (it.getIndex() >= pLayout->GetLengthWithEOL()) {
 				ptPos.x = ptCaretMove.x - 1;
 			}
@@ -242,7 +214,6 @@ int ViewCommander::Command_Left(bool bSelect, bool bRepeat)
 		caret.GetAdjustCursorPos( &ptPos );
 		if (bSelect) {
 			/*	現在のカーソル位置によって選択範囲を変更．
-				2004.04.02 Moca 
 				キャレット位置が不正だった場合にMoveCursorの移動結果が
 				引数で与えた座標とは異なることがあるため，
 				ptPosの代わりに実際の移動結果を使うように．
@@ -261,7 +232,7 @@ int ViewCommander::Command_Left(bool bSelect, bool bRepeat)
 
 
 /* カーソル右移動
-	@date 2014.01.10 Moca キーリピート時、MoveCursorを一度にまとめる
+	キーリピート時、MoveCursorを一度にまとめる
 */
 void ViewCommander::Command_Right(
 	bool bSelect,
@@ -279,7 +250,7 @@ void ViewCommander::Command_Right(
 	Point ptCaretMove = caret.GetCaretLayoutPos();
 	auto& selInfo = view.GetSelectionInfo();
 	for (int nRepCount=0; nRepCount<nRepeat; ++nRepCount) {
-		// 2003.06.28 Moca [EOF]のみの行にカーソルがあるときに右を押しても選択を解除できない問題に
+		// [EOF]のみの行にカーソルがあるときに右を押しても選択を解除できない問題に
 		// 対応するため、現在行のデータを取得を移動
 		if (!bIgnoreCurrentSelection) {
 			if (bSelect && ! selInfo.IsTextSelected()) {
@@ -295,8 +266,6 @@ void ViewCommander::Command_Right(
 				}
 			}
 		}
-//		2003.06.28 Moca [EOF]のみの行にカーソルがあるときに右を押しても選択を解除できない問題に対応
-
 		// (これから求める)カーソルの移動先。
 		Point ptTo(0, 0);
 		const Point ptCaret = ptCaretMove;
@@ -304,7 +273,7 @@ void ViewCommander::Command_Right(
 		auto& layoutMgr = GetDocument().layoutMgr;
 		// 現在行のデータを取得
 		const Layout* const pcLayout = layoutMgr.SearchLineByLayoutY(ptCaret.y);
-		// 2004.04.02 EOF以降にカーソルがあったときに右を押しても何も起きなかったのを、EOFに移動するように
+		// EOF以降にカーソルがあったときに右を押しても何も起きなかったのを、EOFに移動するように
 		if (pcLayout) {
 			// キャレット位置のレイアウト行について。
 			const size_t x_wrap = pcLayout->CalcLayoutWidth(layoutMgr); // 改行文字、または折り返しの位置。
@@ -580,13 +549,7 @@ try_again:;
 }
 
 
-/*! @brief 行頭に移動
-
-	@date Oct. 29, 2001 genta マクロ用機能拡張(パラメータ追加) + goto排除
-	@date May. 15, 2002 oak   改行単位移動
-	@date Oct.  7, 2002 YAZAKI 冗長な引数 bLineTopOnly を削除
-	@date Jun. 18, 2007 maru 行頭判定に全角空白のインデント設定も考慮する
-*/
+/*! @brief 行頭に移動 */
 void ViewCommander::Command_GoLineTop(
 	bool	bSelect,	// [in] 選択の有無。true: 選択しながら移動。false: 選択しないで移動。
 	int		lparam		/* [in] マクロから使用する拡張フラグ
@@ -659,8 +622,6 @@ void ViewCommander::Command_GoLineTop(
 			ptCaretPos = ptPos;
 		}
 	}
-
-	// 2006.07.09 genta 新規関数にまとめた
 	view.MoveCursorSelecting(ptCaretPos, bSelect);
 }
 
@@ -725,7 +686,7 @@ void ViewCommander::Command_GoLineEnd(
 }
 
 
-// 半ページアップ		// Oct. 6, 2000 JEPRO added (実は従来のScroll Downそのもの)
+// 半ページアップ
 void ViewCommander::Command_HalfPageUp(
 	bool bSelect,
 	int nScrollNum
@@ -739,7 +700,7 @@ void ViewCommander::Command_HalfPageUp(
 }
 
 
-// 半ページダウン		// Oct. 6, 2000 JEPRO added (実は従来のScroll Upそのもの)
+// 半ページダウン
 void ViewCommander::Command_HalfPageDown(
 	bool bSelect,
 	int nScrollNum

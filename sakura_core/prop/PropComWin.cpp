@@ -1,22 +1,6 @@
 /*!	@file
 	@brief 共通設定ダイアログボックス、「ウィンドウ」ページ
-
-	@author Norio Nakatani
 */
-/*
-	Copyright (C) 1998-2001, Norio Nakatani
-	Copyright (C) 2000-2001, jepro
-	Copyright (C) 2001, genta, MIK, asa-o
-	Copyright (C) 2002, YAZAKI, genta, Moca, aroka
-	Copyright (C) 2003, MIK, KEITA, genta
-	Copyright (C) 2004, Moca
-	Copyright (C) 2006, ryoji, fon
-	Copyright (C) 2007, genta
-
-	This source code is designed for sakura editor.
-	Please contact the copyright holders to use this code for other purpose.
-*/
-
 #include "StdAfx.h"
 #include "prop/PropCommon.h"
 #include "dlg/DlgWinSize.h"	//	2004.05.13 Moca

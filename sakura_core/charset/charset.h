@@ -1,26 +1,3 @@
-/*
-	Copyright (C) 2008, kobake
-
-	This software is provided 'as-is', without any express or implied
-	warranty. In no event will the authors be held liable for any damages
-	arising from the use of this software.
-
-	Permission is granted to anyone to use this software for any purpose,
-	including commercial applications, and to alter it and redistribute it
-	freely, subject to the following restrictions:
-
-		1. The origin of this software must not be misrepresented;
-		   you must not claim that you wrote the original software.
-		   If you use this software in a product, an acknowledgment
-		   in the product documentation would be appreciated but is
-		   not required.
-
-		2. Altered source versions must be plainly marked as such,
-		   and must not be misrepresented as being the original software.
-
-		3. This notice may not be removed or altered from any source
-		   distribution.
-*/
 #pragma once
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -28,7 +5,6 @@
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 // 文字コードセット種別
-// 2007.08.14 kobake CODE_ERROR, CODE_DEFAULT 追加
 enum EncodingType {
 	CODE_SJIS,						// SJIS				(MS-CP932(Windows-31J), シフトJIS(Shift_JIS))
 	CODE_JIS,						// JIS				(MS-CP5022x(ISO-2022-JP-MS)ではない)
@@ -67,31 +43,15 @@ enum EncodingType {
 //                           判定                              //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-// 2007.08.14 kobake 追加
 // 有効な文字コードセットならtrue
-// 2010/6/21	inlineをはずす
 bool IsValidCodeType(int code);
 
-// 2007.08.14 kobake 追加
 // 有効な文字コードセットならtrue。ただし、SJISは除く(ファイル一覧に文字コードを[]付きで表示のため)
 inline bool IsValidCodeTypeExceptSJIS(int code)
 {
 	return IsValidCodeType(code) && code != CODE_SJIS;
 }
 
-// 2010/6/21 Uchi 削除
-// 2007.08.14 kobake 追加
-// EncodingType型で表せる値ならtrue
-//inline bool IsInEncodingType(int code)
-//{
-//	return (code >= 0 && code < CODE_CODEMAX) || code == CODE_ERROR || code == CODE_AUTODETECT;
-//}
-
-// 2010/6/21 Uchi 削除
-//inline bool IsConcreteCodeType(EncodingType eCodeType)
-//{
-//	return IsValidCodeType(eCodeType) && eCodeType != CODE_AUTODETECT;
-//}
 inline bool IsValidCodePageEx(int code)
 {
 	return code == 12000

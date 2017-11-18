@@ -1,24 +1,7 @@
-/*!	@file
-	@brief DicMgrクラス
-
-	@author Norio Nakatani
-	@date	1998/11/05 作成
-*/
-/*
-	Copyright (C) 1998-2001, Norio Nakatani
-	Copyright (C) 2002, aroka, Moca
-	Copyright (C) 2003, Moca
-	Copyright (C) 2006, fon
-	Copyright (C) 2007, ryoji
-
-	This source code is designed for sakura editor.
-	Please contact the copyright holder to use this code for other purpose.
-*/
-
 #include "StdAfx.h"
 #include <stdio.h>
 #include "DicMgr.h"
-#include "mem/Memory.h" // 2002/2/10 aroka ヘッダ整理
+#include "mem/Memory.h"
 #include "debug/RunningTimer.h"
 #include "io/TextStream.h"
 using namespace std;
@@ -38,8 +21,6 @@ DicMgr::~DicMgr()
 /*!
 	キーワードの検索
 	最初に見つかったキーワードの意味を返す
-
-	@date 2006.04.10 fon 検索ヒット行を返す引数pLineを追加
 */
 BOOL DicMgr::Search(
 	const wchar_t*	pszKey,				// 検索キーワード

@@ -1,15 +1,3 @@
-/*!	@file
-	@brief OLE Type wrapper
-
-	@author ‹S
-	@date 2003.0221
-*/
-/*
-	Copyright (C) 2003, ‹S, Moca
-	This source code is designed for sakura editor.
-	Please contact the copyright holder to use this code for other purpose.
-
-*/
 #pragma once
 
 #include <Windows.h>
@@ -87,7 +75,6 @@ struct Variant {
 		Source.data = NULL; 
 	}
 
-	// 2003.06.25 Moca
 	// int‚ğ–ß‚è’l‚Æ‚µ‚Ä•Ô‚·ê‡‚É‘Î‰
 	int Receive(int i) {
 		::VariantClear(&data); 

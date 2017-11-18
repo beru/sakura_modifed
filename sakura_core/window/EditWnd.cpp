@@ -1,44 +1,4 @@
-/*!	@file
-	@brief 編集ウィンドウ（外枠）管理クラス
-
-	@author Norio Nakatani
-*/
-/*
-	Copyright (C) 1998-2001, Norio Nakatani
-	Copyright (C) 2000-2001, genta, jepro, ao
-	Copyright (C) 2001, MIK, Stonee, Misaka, hor, YAZAKI
-	Copyright (C) 2002, YAZAKI, genta, hor, aroka, minfu, 鬼, MIK, ai
-	Copyright (C) 2003, genta, MIK, Moca, wmlhq, ryoji, KEITA
-	Copyright (C) 2004, genta, Moca, yasu, MIK, novice, Kazika
-	Copyright (C) 2005, genta, MIK, Moca, aroka, ryoji
-	Copyright (C) 2006, genta, ryoji, aroka, fon, yukihane
-	Copyright (C) 2007, ryoji
-	Copyright (C) 2008, ryoji, nasukoji
-	Copyright (C) 2009, ryoji, nasukoji, Hidetaka Sakai
-	Copyright (C) 2010, ryoji, Moca、Uchi
-	Copyright (C) 2011, ryoji
-	Copyright (C) 2013, Uchi
-
-	This software is provided 'as-is', without any express or implied
-	warranty. In no event will the authors be held liable for any damages
-	arising from the use of this software.
-
-	Permission is granted to anyone to use this software for any purpose,
-	including commercial applications, and to alter it and redistribute it
-	freely, subject to the following restrictions:
-
-		1. The origin of this software must not be misrepresented;
-		   you must not claim that you wrote the original software.
-		   If you use this software in a product, an acknowledgment
-		   in the product documentation would be appreciated but is
-		   not required.
-
-		2. Altered source versions must be plainly marked as such,
-		   and must not be misrepresented as being the original software.
-
-		3. This notice may not be removed or altered from any source
-		   distribution.
-*/
+// 編集ウィンドウ（外枠）管理クラス
 
 #include "StdAfx.h"
 #include <ShlObj.h>

@@ -1,20 +1,4 @@
-/*!	@file
-	@brief EditViewクラスの補完関連コマンド処理系関数群
-
-	@author genta
-	@date	2005/01/10 作成
-*/
-/*
-	Copyright (C) 1998-2001, Norio Nakatani
-	Copyright (C) 2000, jepro
-	Copyright (C) 2001, asa-o
-	Copyright (C) 2003, Moca
-	Copyright (C) 2004, Moca
-	Copyright (C) 2005, genta
-
-	This source code is designed for sakura editor.
-	Please contact the copyright holders to use this code for other purpose.
-*/
+// EditViewクラスの補完関連コマンド処理系関数群
 #include "StdAfx.h"
 #include "view/EditView.h"
 #include "doc/EditDoc.h"

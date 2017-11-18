@@ -1,22 +1,3 @@
-/*!	@file
-@brief ViewCommanderクラスのコマンド(編集系 基本形)関数群
-
-	2012/12/16	ViewCommander.cpp,ViewCommander_New.cppから分離
-*/
-/*
-	Copyright (C) 1998-2001, Norio Nakatani
-	Copyright (C) 2002, genta
-	Copyright (C) 2003, MIK, genta, かろと, zenryaku, Moca, ryoji, naoh, KEITA, じゅうじ
-	Copyright (C) 2005, genta, D.S.Koba, ryoji
-	Copyright (C) 2007, ryoji, kobake
-	Copyright (C) 2008, ryoji, nasukoji
-	Copyright (C) 2009, ryoji
-	Copyright (C) 2010, ryoji
-
-	This source code is designed for sakura editor.
-	Please contact the copyright holders to use this code for other purpose.
-*/
-
 #include "StdAfx.h"
 #include "ViewCommander.h"
 #include "ViewCommander_inline.h"
@@ -26,6 +7,8 @@
 #include "plugin/JackManager.h"
 #include "plugin/SmartIndentIfObj.h"
 #include "debug/RunningTimer.h"
+
+// ViewCommanderクラスのコマンド(編集系 基本形)関数群
 
 // wchar_t1個分の文字を入力
 void ViewCommander::Command_WCHAR(

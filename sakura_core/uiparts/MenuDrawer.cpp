@@ -1,23 +1,3 @@
-/*!	@file
-	@brief ÉÅÉjÉÖÅ[ä«óùÅïï\é¶
-
-	@author Norio Nakatani
-*/
-/*
-	Copyright (C) 1998-2001, Norio Nakatani
-	Copyright (C) 2000, genta, Jepro
-	Copyright (C) 2001, jepro, MIK, Misaka, YAZAKI, hor, genta
-	Copyright (C) 2002, MIK, genta, YAZAKI, ai, Moca, hor, aroka
-	Copyright (C) 2003, MIK, genta, Moca
-	Copyright (C) 2004, Kazika, genta, Moca, isearch
-	Copyright (C) 2005, genta, MIK, aroka
-	Copyright (C) 2006, aroka, fon
-	Copyright (C) 2007, ryoji
-	Copyright (C) 2008, nasukoji
-
-	This source code is designed for sakura editor.
-	Please contact the copyright holder to use this code for other purpose.
-*/
 #include "StdAfx.h"
 #include "MenuDrawer.h"
 #include "env/ShareData.h"

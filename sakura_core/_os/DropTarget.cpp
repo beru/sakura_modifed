@@ -1,22 +1,7 @@
-/*!	@file
-	@brief Drag & Drop
-
-	@author Norio Nakatani
-*/
-/*
-	Copyright (C) 1998-2001, Norio Nakatani, Yebisuya Sugoroku
-	Copyright (C) 2002, aroka
-	Copyright (C) 2008, ryoji
-	Copyright (C) 2009, ryoji
-
-	This source code is designed for sakura editor.
-	Please contact the copyright holders to use this code for other purpose.
-*/
-
 #include "StdAfx.h"
 #include "DropTarget.h"
-#include "window/EditWnd.h"	// 2008.06.20 ryoji
-#include "view/EditView.h"// 2002/2/3 aroka
+#include "window/EditWnd.h"
+#include "view/EditView.h"
 #include "_main/global.h"
 #include "Clipboard.h"
 
@@ -52,33 +37,24 @@ HRESULT CYbInterfaceBase::QueryInterfaceImpl(
 
 /////////////////////////////////////////
 
-OleLibrary::OleLibrary()//:dwCount(0)	// 2009.01.08 ryoji dwCount削除
+OleLibrary::OleLibrary()
 {
 	return;
 }
 
 OleLibrary::~OleLibrary()
 {
-// 2009.01.08 ryoji OleUninitialize削除（WinMainにOleInitialize/OleUninitialize追加）
-//	if (dwCount > 0)
-//		::OleUninitialize();
 	return;
 }
 
 
 void OleLibrary::Initialize()
 {
-// 2009.01.08 ryoji OleInitialize削除（WinMainにOleInitialize/OleUninitialize追加）
-//	if (dwCount++ == 0)
-//		::OleInitialize(NULL);
 	return;
 }
 
 void OleLibrary::UnInitialize()
 {
-// 2009.01.08 ryoji OleUninitialize削除（WinMainにOleInitialize/OleUninitialize追加）
-//	if (dwCount > 0 && --dwCount == 0)
-//		::OleUninitialize();
 	return;
 }
 
@@ -94,7 +70,7 @@ DECLARE_YB_INTERFACEIMPL(IEnumFORMATETC)
 
 DropTarget::DropTarget(EditWnd* pEditWnd)
 {
-	this->pEditWnd = pEditWnd;	// 2008.06.20 ryoji
+	this->pEditWnd = pEditWnd;
 	this->pEditView = nullptr;
 	hWnd_DropTarget = NULL;
 	return;
@@ -102,7 +78,7 @@ DropTarget::DropTarget(EditWnd* pEditWnd)
 
 DropTarget::DropTarget(EditView* pEditView)
 {
-	this->pEditWnd = nullptr;	// 2008.06.20 ryoji
+	this->pEditWnd = nullptr;
 	this->pEditView = pEditView;
 	hWnd_DropTarget = NULL;
 	return;
@@ -145,7 +121,7 @@ STDMETHODIMP DropTarget::DragEnter(
 	)
 {
 	DEBUG_TRACE(_T("DropTarget::DragEnter()\n"));
-	if (pEditWnd) {	// 2008.06.20 ryoji
+	if (pEditWnd) {
 		return pEditWnd->DragEnter(pDataObject, dwKeyState, pt, pdwEffect);
 	}
 	return pEditView->DragEnter(pDataObject, dwKeyState, pt, pdwEffect);
@@ -153,7 +129,7 @@ STDMETHODIMP DropTarget::DragEnter(
 
 STDMETHODIMP DropTarget::DragOver(DWORD dwKeyState, POINTL pt, LPDWORD pdwEffect)
 {
-	if (pEditWnd) {	// 2008.06.20 ryoji
+	if (pEditWnd) {
 		return pEditWnd->DragOver(dwKeyState, pt, pdwEffect);
 	}
 	return pEditView->DragOver(dwKeyState, pt, pdwEffect);
@@ -161,7 +137,7 @@ STDMETHODIMP DropTarget::DragOver(DWORD dwKeyState, POINTL pt, LPDWORD pdwEffect
 
 STDMETHODIMP DropTarget::DragLeave(void)
 {
-	if (pEditWnd) {	// 2008.06.20 ryoji
+	if (pEditWnd) {
 		return pEditWnd->DragLeave();
 	}
 	return pEditView->DragLeave();
@@ -175,7 +151,7 @@ STDMETHODIMP DropTarget::Drop(
 	LPDWORD pdwEffect
 	)
 {
-	if (pEditWnd) {	// 2008.06.20 ryoji
+	if (pEditWnd) {
 		return pEditWnd->Drop(pDataObject, dwKeyState, pt, pdwEffect);
 	}
 	return pEditView->Drop(pDataObject, dwKeyState, pt, pdwEffect);
@@ -203,12 +179,9 @@ STDMETHODIMP DropSource::GiveFeedback(DWORD dropEffect)
 	@param lpszText [in] 文字列
 	@param nTextLen [in] pszTextの長さ
 	@param bColumnSelect [in] 矩形選択か
-
-	@date 2008.03.26 ryoji 複数フォーマット対応
 */
 void DataObject::SetText(LPCWSTR lpszText, size_t nTextLen, BOOL bColumnSelect)
 {
-	// Feb. 26, 2001, fixed by yebisuya sugoroku
 	if (pData) {
 		for (int i=0; i<nFormat; ++i) {
 			delete[] (pData[i].data);
@@ -261,12 +234,9 @@ DWORD DataObject::DragDrop(BOOL bLeft, DWORD dwEffects)
 	return DROPEFFECT_NONE;
 }
 
-/** IDataObject::GetData
-	@date 2008.03.26 ryoji 複数フォーマット対応
-*/
+/** IDataObject::GetData */
 STDMETHODIMP DataObject::GetData(LPFORMATETC lpfe, LPSTGMEDIUM lpsm)
 {
-	// Feb. 26, 2001, fixed by yebisuya sugoroku
 	if (!lpfe || !lpsm) {
 		return E_INVALIDARG;
 	}
@@ -307,12 +277,9 @@ STDMETHODIMP DataObject::GetData(LPFORMATETC lpfe, LPSTGMEDIUM lpsm)
 	return S_OK;
 }
 
-/** IDataObject::GetDataHere
-	@date 2008.03.26 ryoji 複数フォーマット対応
-*/
+/** IDataObject::GetDataHere */
 STDMETHODIMP DataObject::GetDataHere(LPFORMATETC lpfe, LPSTGMEDIUM lpsm)
 {
-	// Feb. 26, 2001, fixed by yebisuya sugoroku
 	if (!lpfe || !lpsm || !lpsm->hGlobal) {
 		return E_INVALIDARG;
 	}
@@ -350,15 +317,12 @@ STDMETHODIMP DataObject::GetDataHere(LPFORMATETC lpfe, LPSTGMEDIUM lpsm)
 	return S_OK;
 }
 
-/** IDataObject::QueryGetData
-	@date 2008.03.26 ryoji 複数フォーマット対応
-*/
+/** IDataObject::QueryGetData */
 STDMETHODIMP DataObject::QueryGetData(LPFORMATETC lpfe)
 {
 	if (!lpfe) {
 		return E_INVALIDARG;
 	}
-	// Feb. 26, 2001, fixed by yebisuya sugoroku
 	if (!pData) {
 		return OLE_E_NOTRUNNING;
 	}
@@ -392,9 +356,7 @@ STDMETHODIMP DataObject::SetData(LPFORMATETC, LPSTGMEDIUM, BOOL)
 	return E_NOTIMPL;
 }
 
-/** IDataObject::EnumFormatEtc
-	@date 2008.03.26 ryoji IEnumFORMATETCをサポート
-*/
+/** IDataObject::EnumFormatEtc */
 STDMETHODIMP DataObject::EnumFormatEtc(DWORD dwDirection, IEnumFORMATETC** ppenumFormatetc)
 {
 	if (dwDirection != DATADIR_GET) {
@@ -420,9 +382,7 @@ STDMETHODIMP DataObject::EnumDAdvise(LPENUMSTATDATA*)
 }
 
 
-/** IEnumFORMATETC::Next
-	@date 2008.03.26 ryoji 新規作成
-*/
+/** IEnumFORMATETC::Next */
 STDMETHODIMP EnumFORMATETC::Next(ULONG celt, FORMATETC* rgelt, ULONG* pceltFetched)
 {
 	if (celt <= 0 || !rgelt || nIndex >= pDataObject->nFormat) {
@@ -450,9 +410,7 @@ STDMETHODIMP EnumFORMATETC::Next(ULONG celt, FORMATETC* rgelt, ULONG* pceltFetch
 	return (i == 0) ? S_OK : S_FALSE;
 }
 
-/** IEnumFORMATETC::Skip
-	@date 2008.03.26 ryoji 新規作成
-*/
+/** IEnumFORMATETC::Skip */
 STDMETHODIMP EnumFORMATETC::Skip(ULONG celt)
 {
 	while (nIndex < pDataObject->nFormat && celt > 0) {
@@ -463,18 +421,14 @@ STDMETHODIMP EnumFORMATETC::Skip(ULONG celt)
 	return (celt == 0) ? S_OK : S_FALSE;
 }
 
-/** IEnumFORMATETC::Reset
-	@date 2008.03.26 ryoji 新規作成
-*/
+/** IEnumFORMATETC::Reset */
 STDMETHODIMP EnumFORMATETC::Reset(void)
 {
 	nIndex = 0;
 	return S_OK;
 }
 
-/** IEnumFORMATETC::Clone
-	@date 2008.03.26 ryoji 新規作成
-*/
+/** IEnumFORMATETC::Clone */
 STDMETHODIMP EnumFORMATETC::Clone(IEnumFORMATETC** ppenum)
 {
 	return E_NOTIMPL;

@@ -1,25 +1,4 @@
-/*!	@file
-	@brief タイプ別設定ダイアログボックス
-
-	@author Norio Nakatani
-	@date 1998/12/24  新規作成
-*/
-/*
-	Copyright (C) 1998-2002, Norio Nakatani
-	Copyright (C) 2000, jepro, genta
-	Copyright (C) 2001, jepro, genta, MIK, hor, Stonee, asa-o
-	Copyright (C) 2002, YAZAKI, aroka, MIK, genta, こおり, Moca
-	Copyright (C) 2003, MIK, zenryaku, Moca, naoh, KEITA, genta
-	Copyright (C) 2005, MIK, genta, Moca, ryoji
-	Copyright (C) 2006, ryoji, fon, novice
-	Copyright (C) 2007, ryoji, genta
-	Copyright (C) 2008, nasukoji
-	Copyright (C) 2009, ryoji, genta
-	Copyright (C) 2010, Uchi
-
-	This source code is designed for sakura editor.
-	Please contact the copyright holder to use this code for other purpose.
-*/
+// タイプ別設定ダイアログボックス
 
 #include "StdAfx.h"
 #include "PropTypes.h"

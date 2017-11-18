@@ -1,22 +1,6 @@
-/*!	@file
-	@brief ツールチップ
-
-	@author Norio Nakatani
-	@date 1998/10/30 新規作成
-*/
-/*
-	Copyright (C) 1998-2001, Norio Nakatani
-	Copyright (C) 2001, asa-o
-	Copyright (C) 2002, aroka
-	Copyright (C) 2006, genta, fon
-
-	This source code is designed for sakura editor.
-	Please contact the copyright holder to use this code for other purpose.
-*/
+#pragma once
 
 class TipWnd;
-
-#pragma once
 
 #include "Wnd.h"
 #include "mem/Memory.h"

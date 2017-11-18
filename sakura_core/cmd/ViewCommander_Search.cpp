@@ -1,26 +1,3 @@
-/*!	@file
-@brief ViewCommanderクラスのコマンド(検索系 基本形)関数群
-
-	2012/12/17	ViewCommander.cpp,ViewCommander_New.cppから分離
-*/
-/*
-	Copyright (C) 1998-2001, Norio Nakatani
-	Copyright (C) 2000-2001, jepro, genta
-	Copyright (C) 2001, hor, YAZAKI
-	Copyright (C) 2002, hor, YAZAKI, novice, Azumaiya, Moca
-	Copyright (C) 2003, かろと
-	Copyright (C) 2004, Moca
-	Copyright (C) 2005, かろと, Moca, D.S.Koba
-	Copyright (C) 2006, genta, ryoji, かろと, yukihane
-	Copyright (C) 2007, ryoji, genta
-	Copyright (C) 2009, ryoji, genta
-	Copyright (C) 2010, ryoji
-	Copyright (C) 2011, Moca
-
-	This source code is designed for sakura editor.
-	Please contact the copyright holders to use this code for other purpose.
-*/
-
 #include "StdAfx.h"
 #include "ViewCommander.h"
 #include "ViewCommander_inline.h"
@@ -31,6 +8,8 @@
 #include "util/string_ex2.h"
 #include <limits.h>
 #include "sakura_rc.h"
+
+// ViewCommanderクラスのコマンド(検索系 基本形)関数群
 
 /*!
 検索(ボックス)コマンド実行.

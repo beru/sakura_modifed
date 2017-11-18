@@ -1,24 +1,4 @@
-/*!	@file
-	@brief 行データの管理
-
-	@author Norio Nakatani
-	@date 1998/03/05  新規作成
-	@date 2001/06/23 N.Nakatani 単語単位で検索する機能を実装
-	@date 2001/06/23 N.Nakatani WhereCurrentWord()変更 WhereCurrentWord_2をコールするようにした
-	@date 2005/09/25 D.S.Koba GetSizeOfCharで書き換え
-*/
-/*
-	Copyright (C) 1998-2001, Norio Nakatani
-	Copyright (C) 2000, genta, ao
-	Copyright (C) 2001, genta, jepro, hor
-	Copyright (C) 2002, hor, aroka, MIK, Moca, genta, frozen, Azumaiya, YAZAKI
-	Copyright (C) 2003, Moca, ryoji, genta, かろと
-	Copyright (C) 2004, genta, Moca
-	Copyright (C) 2005, D.S.Koba, ryoji, かろと
-
-	This source code is designed for sakura editor.
-	Please contact the copyright holder to use this code for other purpose.
-*/
+// 行データの管理
 
 #include "StdAfx.h"
 // Oct 6, 2000 ao

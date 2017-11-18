@@ -1,19 +1,6 @@
 /*!	@file
 	@brief プロセス基底クラス
-
-	@author aroka
-	@date 2002/01/07 作成
-	@date 2002/01/17 修正
 */
-/*
-	Copyright (C) 2002, aroka 新規作成
-	Copyright (C) 2004, Moca
-	Copyright (C) 2009, ryoji
-
-	This source code is designed for sakura editor.
-	Please contact the copyright holder to use this code for other purpose.
-*/
-
 
 #include "StdAfx.h"
 #include "Process.h"
@@ -21,9 +8,6 @@
 
 /*!
 	@brief プロセス基底クラス
-	
-	@author aroka
-	@date 2002/01/07
 */
 Process::Process(
 	HINSTANCE	hInstance,		// handle to process instance
@@ -54,18 +38,11 @@ bool Process::InitializeProcess()
 		return false;
 	}
 
-	// リソースから製品バージョンの取得
-	// 2004.05.13 Moca 共有データのバージョン情報はコントロールプロセスだけが
-	// ShareDataで設定するように変更したのでここからは削除
-
 	return true;
 }
 
 /*!
 	@brief プロセス実行
-	
-	@author aroka
-	@date 2002/01/16
 */
 bool Process::Run()
 {
@@ -99,9 +76,6 @@ bool Process::Run()
 #ifdef USE_CRASHDUMP
 /*!
 	@brief クラッシュダンプ
-	
-	@author ryoji
-	@date 2009.01.21
 */
 int Process::WriteDump(PEXCEPTION_POINTERS pExceptPtrs)
 {

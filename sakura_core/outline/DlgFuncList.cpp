@@ -1,25 +1,5 @@
 /*!	@file
 	@brief アウトライン解析ダイアログボックス
-
-	@author Norio Nakatani
-
-	@date 2001/06/23 N.Nakatani Visual Basicのアウトライン解析
-*/
-/*
-	Copyright (C) 1998-2001, Norio Nakatani
-	Copyright (C) 2000, genta
-	Copyright (C) 2001, Stonee, JEPRO, genta, hor
-	Copyright (C) 2002, MIK, aroka, hor, genta, YAZAKI, Moca, frozen
-	Copyright (C) 2003, zenryaku, Moca, naoh, little YOSHI, genta,
-	Copyright (C) 2004, zenryaku, Moca, novice
-	Copyright (C) 2005, genta, zenryaku, ぜっと, D.S.Koba
-	Copyright (C) 2006, genta, aroka, ryoji, Moca
-	Copyright (C) 2006, genta, ryoji
-	Copyright (C) 2007, ryoji
-	Copyright (C) 2010, ryoji
-
-	This source code is designed for sakura editor.
-	Please contact the copyright holder to use this code for other purpose.
 */
 
 #include "StdAfx.h"

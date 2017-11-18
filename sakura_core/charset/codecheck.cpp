@@ -1,36 +1,3 @@
-/*!	@file
-	@brief 文字コード認識・判別支援関数ライブラリ
-
-	@author Sakura-Editor collaborators
-	@date 1998/03/06 新規作成
-	@date 2006/03/06 名称変更（旧名：文字コード定数の定義）
-	@date 2007/03/19 名称改定（旧名：文字コード認識ライブラリ）
-*/
-/*
-	Copyright (C) 2006, D. S. Koba, genta
-	Copyright (C) 2007
-
-	This software is provided 'as-is', without any express or implied
-	warranty. In no event will the authors be held liable for any damages
-	arising from the use of this software.
-
-	Permission is granted to anyone to use this software for any purpose,
-	including commercial applications, and to alter it and redistribute it
-	freely, subject to the following restrictions:
-
-		1. The origin of this software must not be misrepresented;
-		   you must not claim that you wrote the original software.
-		   If you use this software in a product, an acknowledgment
-		   in the product documentation would be appreciated but is
-		   not required.
-
-		2. Altered source versions must be plainly marked as such,
-		   and must not be misrepresented as being the original software.
-
-		3. This notice may not be removed or altered from any source
-		   distribution.
-*/
-
 #include "StdAfx.h"
 #include "charset/codecheck.h"
 #include "mem/Memory.h"
@@ -55,9 +22,6 @@
 
 /*
 	判別テーブル  UTF-7 のどのセットの文字か
-
-	@author D. S. Koba
-	@date 2007.04.29 UTF-7 セット O の情報を追加 by rastiv.
 */
 // !"#$%&*;<=>@[]^_`{|}
 const char TABLE_IsUtf7Direct[] = {
@@ -224,8 +188,6 @@ size_t CheckSjisChar(const char* pS, const size_t nLen, ECharSet *peCharset)
 	EUC-JP 文字をチェック
 
 	@sa CheckSjisChar()
-
-	@date 2006.09.23 EUCJP 半角カタカナ判別が間違っていたのを修正．genta
 */
 size_t CheckEucjpChar(const char* pS, const size_t nLen, ECharSet *peCharset)
 {
@@ -578,8 +540,6 @@ UTF-8のエンコーディング
 	UTF-8 文字をチェック　(組み合わせ文字列考慮なし)
 
 	@sa CheckSjisChar()
-
-	@date 2008/11/01 syat UTF8ファイルで欧米の特殊文字が読み込めない不具合を修正
 */
 size_t CheckUtf8Char(const char* pS, const size_t nLen, ECharSet* peCharset, const bool bAllow4byteCode, const int nOption)
 {

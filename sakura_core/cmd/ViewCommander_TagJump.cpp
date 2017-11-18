@@ -1,25 +1,3 @@
-/*!	@file
-@brief ViewCommanderクラスのコマンド(タグジャンプ)関数群
-
-	2012/12/17	ViewCommander.cppから分離
-*/
-/*
-	Copyright (C) 1998-2001, Norio Nakatani
-	Copyright (C) 2000-2001, genta
-	Copyright (C) 2001, YAZAKI
-	Copyright (C) 2002, MIK
-	Copyright (C) 2003, MIK, genta, じゅうじ
-	Copyright (C) 2004, Moca, novice
-	Copyright (C) 2005, MIK
-	Copyright (C) 2006, genta
-	Copyright (C) 2007, ryoji, maru, Uchi
-	Copyright (C) 2008, MIK
-	Copyright (C) 2010, Moca
-
-	This source code is designed for sakura editor.
-	Please contact the copyright holders to use this code for other purpose.
-*/
-
 #include "StdAfx.h"
 #include "ViewCommander.h"
 #include "ViewCommander_inline.h"
@@ -37,6 +15,7 @@
 #include "GrepAgent.h"
 #include "sakura_rc.h"
 
+// ViewCommanderクラスのコマンド(タグジャンプ)関数群
 
 // "までを切り取る
 static

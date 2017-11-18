@@ -1,18 +1,3 @@
-/*!	@file
-@brief ViewCommanderクラスのコマンド(変換系)関数群
-
-	2012/12/20	ViewCommander.cppから分離
-*/
-/*
-	Copyright (C) 1998-2001, Norio Nakatani
-	Copyright (C) 2000-2001, jepro
-	Copyright (C) 2001, Stonee, Misaka
-	Copyright (C) 2002, ai
-
-	This source code is designed for sakura editor.
-	Please contact the copyright holders to use this code for other purpose.
-*/
-
 #include "StdAfx.h"
 #include "ViewCommander.h"
 #include "ViewCommander_inline.h"
@@ -21,6 +6,7 @@
 #include "convert/Decode_UuDecode.h"
 #include "io/BinaryStream.h"
 
+// ViewCommanderクラスのコマンド(変換系)関数群
 
 // 小文字
 void ViewCommander::Command_ToLower(void)
@@ -49,7 +35,7 @@ void ViewCommander::Command_ToHankaku(void)
 }
 
 
-// 半角＋全ひら→全角・カタカナ		// Sept. 17, 2000 jepro 説明を「半角→全角カタカナ」から変更
+// 半角＋全ひら→全角・カタカナ
 void ViewCommander::Command_ToZenkakuKata(void)
 {
 	// 選択エリアのテキストを指定方法で変換
@@ -58,7 +44,7 @@ void ViewCommander::Command_ToZenkakuKata(void)
 }
 
 
-// 半角＋全カタ→全角・ひらがな		// Sept. 17, 2000 jepro 説明を「半角→全角ひらがな」から変更
+// 半角＋全カタ→全角・ひらがな
 void ViewCommander::Command_ToZenkakuHira(void)
 {
 	// 選択エリアのテキストを指定方法で変換
@@ -67,7 +53,7 @@ void ViewCommander::Command_ToZenkakuHira(void)
 }
 
 
-// 半角英数→全角英数				// July. 30, 2001 Misaka
+// 半角英数→全角英数
 void ViewCommander::Command_ToZenEi(void)
 {
 	// 選択エリアのテキストを指定方法で変換
@@ -85,7 +71,7 @@ void ViewCommander::Command_ToHanEi(void)
 }
 
 
-// 全角カタカナ→半角カタカナ		// Aug. 29, 2002 ai
+// 全角カタカナ→半角カタカナ
 void ViewCommander::Command_ToHankata(void)
 {
 	// 選択エリアのテキストを指定方法で変換
@@ -120,7 +106,7 @@ void ViewCommander::Command_TabToSpace(void)
 	return;
 }
 
-// 空白→TAB	 //---- Stonee, 2001/05/27
+// 空白→TAB
 void ViewCommander::Command_SpaceToTab(void)
 {
 	// 選択エリアのテキストを指定方法で変換

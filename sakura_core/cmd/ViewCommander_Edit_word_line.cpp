@@ -1,22 +1,8 @@
-/*!	@file
-@brief ViewCommanderクラスのコマンド(編集系 単語/行単位)関数群
-
-	2012/12/16	ViewCommander.cppから分離
-*/
-/*
-	Copyright (C) 1998-2001, Norio Nakatani
-	Copyright (C) 2003, かろと
-	Copyright (C) 2005, Moca
-	Copyright (C) 2007, ryoji
-
-	This source code is designed for sakura editor.
-	Please contact the copyright holders to use this code for other purpose.
-*/
-
 #include "StdAfx.h"
 #include "ViewCommander.h"
 #include "ViewCommander_inline.h"
 
+// ViewCommanderクラスのコマンド(編集系 単語/行単位)関数群
 
 // 単語の左端まで削除
 void ViewCommander::Command_WordDeleteToStart(void)

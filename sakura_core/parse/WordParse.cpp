@@ -3,7 +3,6 @@
 #include "charset/charcode.h"
 
 
-//@@@ 2001.06.23 N.Nakatani
 /*!
 	@brief Œ»İˆÊ’u‚Ì’PŒê‚Ì”ÍˆÍ‚ğ’²‚×‚é staticƒƒ“ƒo
 	@author N.Nakatani

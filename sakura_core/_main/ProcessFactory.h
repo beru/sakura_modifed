@@ -1,15 +1,5 @@
 /*!	@file
 	@brief プロセス生成クラスヘッダファイル
-
-	@author aroka
-	@date	2002/01/08 作成
-*/
-/*
-	Copyright (C) 2002, aroka 新規作成
-	Copyright (C) 2006, ryoji
-
-	This source code is designed for sakura editor.
-	Please contact the copyright holder to use this code for other purpose.
 */
 
 #pragma once
@@ -40,7 +30,7 @@ private:
 	bool IsStartingControlProcess();
 	bool IsExistControlProcess();
 	bool StartControlProcess();
-	bool WaitForInitializedControlProcess();	// 2006.04.10 ryoji コントロールプロセスの初期化完了イベントを待つ
-	bool TestWriteQuit();	// 2007.09.04 ryoji 「設定を保存して終了する」オプション処理（sakuext連携用）
+	bool WaitForInitializedControlProcess();
+	bool TestWriteQuit();
 };
 

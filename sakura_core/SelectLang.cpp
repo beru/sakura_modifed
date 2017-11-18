@@ -1,16 +1,3 @@
-/*!	@file
-	@brief 各国語メッセージリソース対応
-
-	@author nasukoji
-	@date 2011.04.10	新規作成
-*/
-/*
-	Copyright (C) 2011, nasukoji
-
-	This source code is designed for sakura editor.
-	Please contact the copyright holder to use this code for other purpose.
-*/
-
 #include "stdafx.h"
 #include "SelectLang.h"
 #include "util/os.h"

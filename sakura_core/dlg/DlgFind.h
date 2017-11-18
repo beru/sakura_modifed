@@ -1,16 +1,5 @@
 /*!	@file
 	@brief 検索ダイアログボックス
-
-	@author Norio Nakatani
-	@date	1998/12/02 再作成
-*/
-/*
-	Copyright (C) 1998-2001, Norio Nakatani
-	Copyright (C) 2002, YAZAKI
-	Copyright (C) 2009, ryoji
-
-	This source code is designed for sakura editor.
-	Please contact the copyright holder to use this code for other purpose.
 */
 #include "dlg/Dialog.h"
 #include "recent/RecentSearch.h"

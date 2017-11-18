@@ -1,23 +1,3 @@
-/*!	@file
-	@brief バージョン情報ダイアログ
-
-	@author Norio Nakatani
-	@date	1998/3/13 作成
-*/
-/*
-	Copyright (C) 1998-2001, Norio Nakatani
-	Copyright (C) 2000, genta, jepro
-	Copyright (C) 2001, genta, jepro
-	Copyright (C) 2002, MIK, genta, aroka
-	Copyright (C) 2003, Moca
-	Copyright (C) 2004, Moca
-	Copyright (C) 2005, genta
-	Copyright (C) 2006, Moca
-
-	This source code is designed for sakura editor.
-	Please contact the copyright holder to use this code for other purpose.
-*/
-
 #include "StdAfx.h"
 #include <ShellAPI.h>
 #include "dlg/DlgAbout.h"
@@ -27,6 +7,8 @@
 #include "svnrev.h"
 #include "sakura_rc.h" // 2002/2/10 aroka 復帰
 #include "sakura.hh"
+
+// バージョン情報ダイアログ
 
 // バージョン情報 DlgAbout.cpp	//@@@ 2002.01.07 add start MIK
 const DWORD p_helpids[] = {	//12900

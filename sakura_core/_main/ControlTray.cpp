@@ -4,25 +4,6 @@
 	
 	タスクトレイアイコンの管理，タスクトレイメニューのアクション，
 	MRU、キー割り当て、共通設定、編集ウィンドウの管理など
-
-	@author Norio Nakatani
-	@date 1998/05/13 新規作成
-	@date 2001/06/03 N.Nakatani grep単語単位で検索を実装するときのためにコマンドラインオプションの処理追加
-*/
-/*
-	Copyright (C) 1998-2001, Norio Nakatani
-	Copyright (C) 2000, jepro, genta
-	Copyright (C) 2001, Stonee, jepro, genta, aroka, hor, YAZAKI
-	Copyright (C) 2002, MIK, Moca, genta, YAZAKI, towest
-	Copyright (C) 2003, MIK, Moca, KEITA, genta, aroka
-	Copyright (C) 2004, Moca
-	Copyright (C) 2005, genta
-	Copyright (C) 2006, ryoji
-	Copyright (C) 2007, ryoji
-	Copyright (C) 2008, ryoji
-
-	This source code is designed for sakura editor.
-	Please contact the copyright holders to use this code for other purpose.
 */
 
 #include "StdAfx.h"
@@ -34,7 +15,7 @@
 #include "typeprop/DlgTypeList.h"
 #include "debug/RunningTimer.h"
 #include "dlg/DlgOpenFile.h"
-#include "dlg/DlgAbout.h"		// Nov. 21, 2000 JEPROtest
+#include "dlg/DlgAbout.h"
 #include "plugin/PluginManager.h"
 #include "plugin/JackManager.h"
 #include "io/TextStream.h"
@@ -60,12 +41,9 @@ static LRESULT CALLBACK ControlTrayWndProc(HWND, UINT, WPARAM, LPARAM);
 
 static ControlTray* g_pControlTray;
 
-// Stonee, 2001/03/21
-// Stonee, 2001/07/01  多重起動された場合は前回のダイアログを前面に出すようにした。
 void ControlTray::DoGrep()
 {
-	// Stonee, 2001/06/30
-	// 前回のダイアログがあれば前面に (suggested by genta)
+	// 前回のダイアログがあれば前面に
 	if (::IsWindow(dlgGrep.GetHwnd())) {
 		::OpenIcon(dlgGrep.GetHwnd());
 		::BringWindowToTop(dlgGrep.GetHwnd());
@@ -129,7 +107,7 @@ void ControlTray::DoGrepCreateWindow(HINSTANCE hinst, HWND msgParent, DlgGrep& d
 	if (dlgGrep.searchOption.bLoHiCase	) _tcscat(pOpt, _T("L"));	// 英大文字と英小文字を区別する
 	if (dlgGrep.searchOption.bRegularExp) _tcscat(pOpt, _T("R"));	// 正規表現
 	if (dlgGrep.nGrepOutputLineType == 1) _tcscat(pOpt, _T("P"));	// 行を出力する
-	if (dlgGrep.nGrepOutputLineType == 2) _tcscat(pOpt, _T("N"));	// 否ヒット行を出力する 2014.09.23
+	if (dlgGrep.nGrepOutputLineType == 2) _tcscat(pOpt, _T("N"));	// 否ヒット行を出力する
 	if (dlgGrep.searchOption.bWordOnly	) _tcscat(pOpt, _T("W"));	// 単語単位で探す
 	if (dlgGrep.nGrepOutputStyle == 1	) _tcscat(pOpt, _T("1"));	// Grep: 出力形式
 	if (dlgGrep.nGrepOutputStyle == 2	) _tcscat(pOpt, _T("2"));	// Grep: 出力形式
@@ -159,7 +137,6 @@ void ControlTray::DoGrepCreateWindow(HINSTANCE hinst, HWND msgParent, DlgGrep& d
 }
 
 
-// ウィンドウプロシージャじゃ
 static LRESULT CALLBACK ControlTrayWndProc(
 	HWND	hwnd,	// handle of window
 	UINT	uMsg,	// message identifier
@@ -173,7 +150,6 @@ static LRESULT CALLBACK ControlTrayWndProc(
 		pApp = (ControlTray*)g_pControlTray;
 		return pApp->DispatchEvent(hwnd, uMsg, wParam, lParam);
 	default:
-		// Modified by KEITA for WIN64 2003.9.6
 		// RELPRINT(_T("dispatch\n"));
 		pApp = (ControlTray*)::GetWindowLongPtr(hwnd, GWLP_USERDATA);
 		if (pApp) {
@@ -184,11 +160,7 @@ static LRESULT CALLBACK ControlTrayWndProc(
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// ControlTray
-// @date 2002.2.17 YAZAKI ShareDataのインスタンスは、Processにひとつあるのみ。
 ControlTray::ControlTray()
-// Apr. 24, 2001 genta
 	:
 	pPropertyManager(nullptr),
 	hInstance(NULL),
@@ -282,7 +254,7 @@ HWND ControlTray::Create(HINSTANCE hInstance)
 	);
 	
 	// タスクトレイアイコン作成
-	hIcons.Create(hInstance);	// Oct. 16, 2000 genta
+	hIcons.Create(hInstance);
 	menuDrawer.Create(SelectLang::getLangRsrcInstance(), GetTrayHwnd(), &hIcons);
 	if (GetTrayHwnd()) {
 		CreateTrayIcon(GetTrayHwnd());
@@ -301,14 +273,11 @@ bool ControlTray::CreateTrayIcon(HWND hWnd)
 {
 	// タスクトレイのアイコンを作る
 	if (pShareData->common.general.bUseTaskTray) {	// タスクトレイのアイコンを使う
-		// Dec. 02, 2002 genta
 		HICON hIcon = GetAppIcon(hInstance, ICON_DEFAULT_APP, FN_APP_ICON, true);
-// From Here Jan. 12, 2001 JEPRO トレイアイコンにポイントするとバージョンno.が表示されるように修正
-//			TrayMessage(GetTrayHwnd(), NIM_ADD, 0,  hIcon, GSTR_APPNAME);
 		// バージョン情報
 		// UR version no.を設定 (cf. dlgAbout.cpp)
 		TCHAR	pszTips[64 + _MAX_PATH];
-		// 2004.05.13 Moca バージョン番号は、プロセスごとに取得する
+		// バージョン番号は、プロセスごとに取得する
 		DWORD dwVersionMS, dwVersionLS;
 		GetAppVersionInfo(
 			NULL,
@@ -325,7 +294,7 @@ bool ControlTray::CreateTrayIcon(HWND hWnd)
 		auto_snprintf_s(
 			pszTips,
 			_countof(pszTips),
-			_T("%ts %d.%d.%d.%d%ls"),		//Jul. 06, 2001 jepro UR はもう付けなくなったのを忘れていた
+			_T("%ts %d.%d.%d.%d%ls"),
 			GSTR_APPNAME,
 			HIWORD(dwVersionMS),
 			LOWORD(dwVersionMS),
@@ -334,8 +303,7 @@ bool ControlTray::CreateTrayIcon(HWND hWnd)
 			profname.c_str()
 		);
 		TrayMessage(GetTrayHwnd(), NIM_ADD, 0,  hIcon, pszTips);
-// To Here Jan. 12, 2001
-		bCreatedTrayIcon = true;	// トレイにアイコンを作った
+		bCreatedTrayIcon = true;
 	}
 	return true;
 }
@@ -348,7 +316,6 @@ void ControlTray::MessageLoop(void)
 	MSG	msg;
 	int ret;
 	
-	// 2004.02.17 Moca GetMessageのエラーチェック
 	while (GetTrayHwnd() && (ret = ::GetMessage(&msg, NULL, 0, 0 )) != 0) {
 		if (ret == -1) {
 			break;
@@ -391,7 +358,7 @@ BOOL ControlTray::TrayMessage(
 
 
 // メッセージ処理
-// @@@ 2001.12.26 YAZAKI MRUリストは、CMRUに依頼する
+// MRUリストは、CMRUに依頼する
 LRESULT ControlTray::DispatchEvent(
 	HWND	hwnd,	// handle of window
 	UINT	uMsg,	// message identifier
@@ -411,7 +378,7 @@ LRESULT ControlTray::DispatchEvent(
 	LPDRAWITEMSTRUCT	lpdis;	// 項目描画情報
 	int					nItemWidth;
 	int					nItemHeight;
-	static bool			bLDClick = false;	// 左ダブルクリックをしたか 03/02/20 ai
+	static bool			bLDClick = false;	// 左ダブルクリックをしたか
 
 	switch (uMsg) {
 	case WM_MENUCHAR:
@@ -464,8 +431,6 @@ LRESULT ControlTray::DispatchEvent(
 				&& (wHotKeyMods) == fuModifiers
 				&& wHotKeyCode == uVirtKey
 			) {
-				// Jan. 1, 2003 AROKA
-				// タスクトレイメニューの表示タイミングをLBUTTONDOWN→LBUTTONUPに変更したことによる
 				::PostMessage(GetTrayHwnd(), MYWM_NOTIFYICON, 0, WM_LBUTTONUP);
 			}
 		}
@@ -474,7 +439,7 @@ LRESULT ControlTray::DispatchEvent(
 	case WM_TIMER:
 		// タイマメッセージ
 		if (wParam == IDT_EDITCHECK) {
-			// 2010.08.26 ウィンドウ存在確認。消えたウィンドウを抹消する
+			// ウィンドウ存在確認。消えたウィンドウを抹消する
 			bool bDelete = false;
 			bool bDelFound;
 			auto& nodes = pShareData->nodes;
@@ -497,7 +462,7 @@ LRESULT ControlTray::DispatchEvent(
 		return 0;
 
 	case MYWM_UIPI_CHECK:
-		// エディタ－トレイ間でのUI特権分離の確認メッセージ 	 2007.06.07 ryoji
+		// エディタ－トレイ間でのUI特権分離の確認メッセージ
 		::SendMessage((HWND)lParam, MYWM_UIPI_CHECK,  (WPARAM)0, (LPARAM)0);	// 返事を返す
 		return 0L;
 
@@ -508,7 +473,6 @@ LRESULT ControlTray::DispatchEvent(
 			TCHAR szHtmlHelpFile[1024];
 			_tcscpy_s(szHtmlHelpFile, pWork);
 			size_t nLen = _tcslen(szHtmlHelpFile);
-			// Jul. 6, 2001 genta HtmlHelpの呼び出し方法変更
 			hwndHtmlHelp = OpenHtmlHelp(
 				NULL,
 				szHtmlHelpFile,
@@ -525,7 +489,6 @@ LRESULT ControlTray::DispatchEvent(
 			link.pszMsgTitle	= NULL;
 			link.pszWindow		= NULL;
 			link.fIndexOnFail	= TRUE;
-			// Jul. 6, 2001 genta HtmlHelpの呼び出し方法変更
 			hwndHtmlHelp = OpenHtmlHelp(
 				NULL,
 				szHtmlHelpFile,
@@ -560,7 +523,6 @@ LRESULT ControlTray::DispatchEvent(
 			auto& csGeneral = pShareData->common.general;
 			hWnd = hwnd;
 			hwndHtmlHelp = NULL;
-			// Modified by KEITA for WIN64 2003.9.6
 			::SetWindowLongPtr(GetTrayHwnd(), GWLP_USERDATA, (LONG_PTR)this);
 
 			// タスクトレイ左クリックメニューへのショートカットキー登録
@@ -584,7 +546,7 @@ LRESULT ControlTray::DispatchEvent(
 				);
 			}
 
-			// 2006.07.09 ryoji 最後の方でシャットダウンするアプリケーションにする
+			// 最後の方でシャットダウンするアプリケーションにする
 			BOOL (WINAPI *pfnSetProcessShutdownParameters)(DWORD dwLevel, DWORD dwFlags);
 			HINSTANCE hDll = ::GetModuleHandle(_T("KERNEL32"));
 			if (hDll) {
@@ -594,7 +556,7 @@ LRESULT ControlTray::DispatchEvent(
 				}
 			}
 
-			// 2010.08.26 ウィンドウ存在確認
+			// ウィンドウ存在確認
 			::SetTimer(hwnd, IDT_EDITCHECK, IDT_EDITCHECK_INTERVAL, NULL);
 		}
 		return 0L;
@@ -762,8 +724,7 @@ LRESULT ControlTray::DispatchEvent(
 //			MYTRACE(_T("MYWM_NOTIFYICON\n"));
 		switch (lParam) {
 // キーワード：トレイ右クリックメニュー設定
-// From Here Oct. 12, 2000 JEPRO 左右とも同一処理になっていたのを別々に処理するように変更
-		case WM_RBUTTONUP:	// Dec. 24, 2002 towest UPに変更
+		case WM_RBUTTONUP:
 			::SetActiveWindow(GetTrayHwnd());
 			::SetForegroundWindow(GetTrayHwnd());
 			// ポップアップメニュー(トレイ右ボタン)
@@ -775,7 +736,7 @@ LRESULT ControlTray::DispatchEvent(
 				break;
 			case F_HELP_SEARCH:
 				// ヘルプキーワード検索
-				MyWinHelp(GetTrayHwnd(), HELP_KEY, (ULONG_PTR)_T(""));	// 2006.10.10 ryoji MyWinHelpに変更に変更
+				MyWinHelp(GetTrayHwnd(), HELP_KEY, (ULONG_PTR)_T(""));
 				break;
 			case F_EXTHELP1:
 				// 外部ヘルプ１
@@ -842,28 +803,24 @@ LRESULT ControlTray::DispatchEvent(
 				}
 				break;
 //				case IDM_EXITALL:
-			case F_EXITALL:	// Dec. 26, 2000 JEPRO F_に変更
+			case F_EXITALL:
 				// サクラエディタの全終了
-				ControlTray::TerminateApplication(GetTrayHwnd());	// 2006.12.25 ryoji 引数追加
+				ControlTray::TerminateApplication(GetTrayHwnd());
 				break;
 			default:
 				break;
 			}
 			return 0L;
-// To Here Oct. 12, 2000
 
 		case WM_LBUTTONDOWN:
-			// Mar. 29, 2003 genta 念のためフラグクリア
 			bLDClick = false;
 			return 0L;
-		case WM_LBUTTONUP:	// Dec. 24, 2002 towest UPに変更
+		case WM_LBUTTONUP:
 //				MYTRACE(_T("WM_LBUTTONDOWN\n"));
-			// 03/02/20 左ダブルクリック後はメニューを表示しない ai Start
 			if (bLDClick) {
 				bLDClick = false;
 				return 0L;
 			}
-			// 03/02/20 ai End
 			::SetActiveWindow(GetTrayHwnd());
 			::SetForegroundWindow(GetTrayHwnd());
 			// ポップアップメニュー(トレイ左ボタン)
@@ -880,7 +837,6 @@ LRESULT ControlTray::DispatchEvent(
 					loadInfo.filePath = _T("");
 					loadInfo.eCharCode = CODE_AUTODETECT;	// 文字コード自動判別
 					loadInfo.bViewMode = false;
-					// 2013.03.21 novice カレントディレクトリ変更(MRUは使用しない)
 					DlgOpenFile dlgOpenFile;
 					dlgOpenFile.Create(
 						hInstance,
@@ -916,9 +872,9 @@ LRESULT ControlTray::DispatchEvent(
 				break;
 			case F_GREP_DIALOG:
 				// Grep
-				DoGrep();  // Stonee, 2001/03/21  Grepを別関数に
+				DoGrep();
 				break;
-			case F_FILESAVEALL:	// Jan. 24, 2005 genta 全て上書き保存
+			case F_FILESAVEALL:
 				AppNodeGroupHandle(0).PostMessageToAllEditors(
 					WM_COMMAND,
 					MAKELONG(F_FILESAVE_QUIET, 0),
@@ -926,13 +882,13 @@ LRESULT ControlTray::DispatchEvent(
 					NULL
 				);
 				break;
-			case F_EXITALLEDITORS:	// Oct. 17, 2000 JEPRO 名前を変更(F_FILECLOSEALL→F_WIN_CLOSEALL)	// 2007.02.13 ryoji →F_EXITALLEDITORS
+			case F_EXITALLEDITORS:
 				// 編集の全終了
-				ControlTray::CloseAllEditor(true, GetTrayHwnd(), true, 0);	// 2006.12.25, 2007.02.13 ryoji 引数追加
+				ControlTray::CloseAllEditor(true, GetTrayHwnd(), true, 0);
 				break;
-			case F_EXITALL:	// Dec. 26, 2000 JEPRO F_に変更
+			case F_EXITALL:
 				// サクラエディタの全終了
-				ControlTray::TerminateApplication(GetTrayHwnd());	// 2006.12.25 ryoji 引数追加
+				ControlTray::TerminateApplication(GetTrayHwnd());
 				break;
 			default:
 				if (nId - IDM_SELWINDOW >= 0
@@ -944,7 +900,6 @@ LRESULT ControlTray::DispatchEvent(
 				}else if (nId - IDM_SELMRU >= 0 && nId-IDM_SELMRU < 999) {
 
 					// 新しい編集ウィンドウを開く
-					// From Here Oct. 27, 2000 genta	カーソル位置を復元しない機能
 					const MruFile mru;
 					EditInfo openEditInfo;
 					mru.GetEditInfo(nId - IDM_SELMRU, &openEditInfo);
@@ -967,7 +922,6 @@ LRESULT ControlTray::DispatchEvent(
 						);
 
 					}
-					// To Here Oct. 27, 2000 genta
 				}else if (
 					nId - IDM_SELOPENFOLDER >= 0
 					&& nId - IDM_SELOPENFOLDER  < 999
@@ -980,7 +934,7 @@ LRESULT ControlTray::DispatchEvent(
 					const MruFolder mruFolder;
 					std::vector<LPCTSTR> vOPENFOLDER = mruFolder.GetPathList();
 
-					// Stonee, 2001/12/21 UNCであれば接続を試みる
+					// UNCであれば接続を試みる
 					NetConnect(mruFolder.GetPath(nId - IDM_SELOPENFOLDER));
 
 					// ファイルオープンダイアログの初期化
@@ -1021,10 +975,10 @@ LRESULT ControlTray::DispatchEvent(
 			}
 			return 0L;
 		case WM_LBUTTONDBLCLK:
-			bLDClick = true;		// 03/02/20 ai
+			bLDClick = true;
 			// 新規編集ウィンドウの追加
 			OnNewEditor(pShareData->common.tabBar.bNewWindow);
-			// Apr. 1, 2003 genta この後で表示されたメニューは閉じる
+			// この後で表示されたメニューは閉じる
 			::PostMessage(GetTrayHwnd(), WM_CANCELMODE, 0, 0);
 			return 0L;
 		case WM_RBUTTONDBLCLK:
@@ -1033,33 +987,29 @@ LRESULT ControlTray::DispatchEvent(
 		break;
 
 	case WM_QUERYENDSESSION:
-		// すべてのウィンドウを閉じる // Oct. 7, 2000 jepro 「編集ウィンドウの全終了」という説明を左記のように変更
-		if (CloseAllEditor(false, GetTrayHwnd(), true, 0)) {	// 2006.12.25, 2007.02.13 ryoji 引数追加
-			// Jan. 31, 2000 genta
-			// この時点ではWindowsの終了が確定していないので常駐解除すべきではない．
-			//::DestroyWindow(hwnd);
+		// すべてのウィンドウを閉じる
+		if (CloseAllEditor(false, GetTrayHwnd(), true, 0)) {
 			return TRUE;
 		}else {
 			return FALSE;
 		}
 	case WM_CLOSE:
-		// すべてのウィンドウを閉じる 	Oct. 7, 2000 jepro 「編集ウィンドウの全終了」という説明を左記のように変更
-		if (CloseAllEditor(false, GetTrayHwnd(), true, 0)) {	// 2006.12.25, 2007.02.13 ryoji 引数追加
+		// すべてのウィンドウを閉じる
+		if (CloseAllEditor(false, GetTrayHwnd(), true, 0)) {
 			::DestroyWindow(hwnd);
 		}
 		return 0L;
 
-	// From Here Jan. 31, 2000 genta	Windows終了時の後処理．
+	// Windows終了時の後処理．
 	// Windows終了時はWM_CLOSEが呼ばれない上，DestroyWindowを
 	// 呼び出す必要もない．また，メッセージループに戻らないので
 	// メッセージループの後ろの処理をここで完了させる必要がある．
 	case WM_ENDSESSION:
 		// もしWindowsの終了が中断されたのなら何もしない
 		if (wParam != FALSE) {
-			OnDestroy();	// 2006.07.09 ryoji WM_DESTROY と同じ処理をする（トレイアイコンの破棄などもNT系では必要）
+			OnDestroy();	// WM_DESTROY と同じ処理をする（トレイアイコンの破棄などもNT系では必要）
 		}
 		return 0;	// もうこのプロセスに制御が戻ることはない
-	// To Here Jan. 31, 2000 genta
 	case WM_DESTROY:
 		OnDestroy();
 
@@ -1070,19 +1020,15 @@ LRESULT ControlTray::DispatchEvent(
 		::AllowSetForegroundWindow((DWORD)wParam);
 		return 0L;
 	default:
-// << 20010412 by aroka
-// Apr. 24, 2001 genta RegisterWindowMessageを使うように修正
 		if (uMsg == uCreateTaskBarMsg) {
 			/* TaskTray Iconの再登録を要求するメッセージ．
 				Explorerが再起動したときに送出される．*/
 			CreateTrayIcon(GetTrayHwnd()) ;
 		}
 		break;	// default
-// >> by aroka
 	}
 	return DefWindowProc(hwnd, uMsg, wParam, lParam);
 }
-
 
 // WM_COMMANDメッセージ処理
 void ControlTray::OnCommand(WORD wNotifyCode, WORD wID , HWND hwndCtl)
@@ -1095,13 +1041,6 @@ void ControlTray::OnCommand(WORD wNotifyCode, WORD wID , HWND hwndCtl)
 	return;
 }
 
-/*!
-	@brief 新規ウィンドウを作成する
-
-	@author genta
-	@date 2003.05.30 新規作成
-	@date 2013.03.21 novice MRUは使用しない
-*/
 void ControlTray::OnNewEditor(bool bNewWindow)
 {
 	// 新規ウィンドウで開くオプションは、タブバー＆グループ化を前提とする
@@ -1129,13 +1068,6 @@ void ControlTray::OnNewEditor(bool bNewWindow)
 
 /*!
 	新規編集ウィンドウの追加 ver 0
-
-	@date 2000.10.24 genta WinExec -> CreateProcess．同期機能を付加
-	@date 2002.02.17 YAZAKI ShareDataのインスタンスは、Processにひとつあるのみ。
-	@date 2003.05.30 genta 外部プロセス起動時のカレントディレクトリ指定を可能に．
-	@date 2007.06.26 ryoji 新規編集ウィンドウは hWndParent と同じグループを指定して起動する
-	@date 2008.04.19 ryoji MYWM_FIRST_IDLE 待ちを追加
-	@date 2008.05.05 novice GetModuleHandle(NULL)→NULLに変更
 */
 bool ControlTray::OpenNewEditor(
 	HINSTANCE			hInstance,			// [in] インスタンスID (実は未使用)
@@ -1151,7 +1083,7 @@ bool ControlTray::OpenNewEditor(
 	DllSharedData& shareData = GetDllShareData();
 
 	// 編集ウィンドウの上限チェック
-	if (shareData.nodes.nEditArrNum >= MAX_EDITWINDOWS) {	// 最大値修正	//@@@ 2003.05.31 MIK
+	if (shareData.nodes.nEditArrNum >= MAX_EDITWINDOWS) {	// 最大値修正
 		OkMessage(NULL, LS(STR_MAXWINDOW), MAX_EDITWINDOWS);
 		return false;
 	}
@@ -1182,7 +1114,7 @@ bool ControlTray::OpenNewEditor(
 	// グループID
 	if (!bNewWindow) {	// 新規エディタをウィンドウで開く
 		// グループIDを親ウィンドウから取得
-		HWND hwndAncestor = MyGetAncestor(hWndParent, GA_ROOTOWNER2);	// 2007.10.22 ryoji GA_ROOTOWNER -> GA_ROOTOWNER2
+		HWND hwndAncestor = MyGetAncestor(hWndParent, GA_ROOTOWNER2);
 		int nGroup = AppNodeManager::getInstance().GetEditNode(hwndAncestor)->GetGroup();
 		if (nGroup > 0) {
 			cmdLineBuf.AppendF(_T(" -GROUP=%d"), nGroup);
@@ -1264,11 +1196,10 @@ bool ControlTray::OpenNewEditor(
 	s.cbReserved2 = 0;
 	s.lpReserved2 = NULL;
 
-	// May 30, 2003 genta カレントディレクトリ指定を可能に
 	// エディタプロセスを起動
 	DWORD dwCreationFlag = CREATE_DEFAULT_ERROR_MODE;
 #ifdef _DEBUG
-//	dwCreationFlag |= DEBUG_PROCESS; // 2007.09.22 kobake デバッグ用フラグ
+//	dwCreationFlag |= DEBUG_PROCESS;
 #endif
 	TCHAR szCmdLine[1024]; _tcscpy_s(szCmdLine, cmdLineBuf.c_str());
 	BOOL bCreateResult = CreateProcess(
@@ -1319,7 +1250,7 @@ bool ControlTray::OpenNewEditor(
 			bRet = false;
 		}
 	}else {
-		// タブまとめ時は起動したプロセスが立ち上がるまでしばらくタイトルバーをアクティブに保つ	// 2007.02.03 ryoji
+		// タブまとめ時は起動したプロセスが立ち上がるまでしばらくタイトルバーをアクティブに保つ
 		if (shareData.common.tabBar.bDispTabWnd
 			&& !shareData.common.tabBar.bDispTabWndMultiWin
 		) {
@@ -1328,7 +1259,7 @@ bool ControlTray::OpenNewEditor(
 		}
 	}
 
-	// MYWM_FIRST_IDLE が届くまでちょっとだけ余分に待つ	// 2008.04.19 ryoji
+	// MYWM_FIRST_IDLE が届くまでちょっとだけ余分に待つ
 	// Note. 起動先プロセスが初期化処理中に COM 関数（SHGetFileInfo API なども含む）を実行すると、
 	//       その時点で COM の同期機構が動いて WaitForInputIdle は終了してしまう可能性がある（らしい）。
 	if (sync && bRet) {
@@ -1360,11 +1291,7 @@ bool ControlTray::OpenNewEditor(
 }
 
 
-/*!	新規編集ウィンドウの追加 ver 2:
-
-	@date Oct. 24, 2000 genta create.
-	@date Feb. 25, 2012 novice -CODE/-RはOpenNewEditor側で処理するので削除
-*/
+/*!	新規編集ウィンドウの追加 ver 2: */
 bool ControlTray::OpenNewEditor2(
 	HINSTANCE		hInstance,
 	HWND			hWndParent,
@@ -1379,7 +1306,7 @@ bool ControlTray::OpenNewEditor2(
 	DllSharedData& shareData = GetDllShareData();
 
 	// 編集ウィンドウの上限チェック
-	if (shareData.nodes.nEditArrNum >= MAX_EDITWINDOWS) {	// 最大値修正	//@@@ 2003.05.31 MIK
+	if (shareData.nodes.nEditArrNum >= MAX_EDITWINDOWS) {	// 最大値修正
 		OkMessage(NULL, LS(STR_MAXWINDOW), MAX_EDITWINDOWS);
 		return false;
 	}
@@ -1404,9 +1331,6 @@ bool ControlTray::OpenNewEditor2(
 		bNewWindow
 	);
 }
-// To Here Oct. 24, 2000 genta
-
-
 
 void ControlTray::ActiveNextWindow(HWND hwndParent)
 {
@@ -1488,13 +1412,7 @@ void ControlTray::ActivePrevWindow(HWND hwndParent)
 	}
 }
 
-
-
-/*!	サクラエディタの全終了
-
-	@date 2002.2.17 YAZAKI ShareDataのインスタンスは、Processにひとつあるのみ。
-	@date 2006.12.25 ryoji 複数の編集ウィンドウを閉じるときの確認（引数追加）
-*/
+/*!	サクラエディタの全終了 */
 void ControlTray::TerminateApplication(
 	HWND hWndFrom	// [in] 呼び出し元のウィンドウハンドル
 	)
@@ -1515,23 +1433,16 @@ void ControlTray::TerminateApplication(
 			}
 		}
 	}
-	// 「すべてのウィンドウを閉じる」要求	// Oct. 7, 2000 jepro 「編集ウィンドウの全終了」という説明を左記のように変更
-	bool bCheckConfirm = shareData.common.general.bExitConfirm;	// 2006.12.25 ryoji 終了確認済みならそれ以上は確認しない
-	if (CloseAllEditor(bCheckConfirm, hWndFrom, true, 0)) {	// 2006.12.25, 2007.02.13 ryoji 引数追加
+	// 「すべてのウィンドウを閉じる」要求
+	bool bCheckConfirm = shareData.common.general.bExitConfirm;
+	if (CloseAllEditor(bCheckConfirm, hWndFrom, true, 0)) {
 		::PostMessage(shareData.handles.hwndTray, WM_CLOSE, 0, 0);
 	}
 	return;
 }
 
 
-/*!	すべてのウィンドウを閉じる
-
-	@date Oct. 7, 2000 jepro 「編集ウィンドウの全終了」という説明を左記のように変更
-	@date 2002.2.17 YAZAKI ShareDataのインスタンスは、Processにひとつあるのみ。
-	@date 2006.12.25 ryoji 複数の編集ウィンドウを閉じるときの確認（引数追加）
-	@date 2007.02.13 ryoji 「編集の全終了」を示す引数(bExit)を追加
-	@date 2007.06.20 ryoji nGroup引数を追加
-*/
+/*!	すべてのウィンドウを閉じる */
 bool ControlTray::CloseAllEditor(
 	bool	bCheckConfirm,	// [in] [すべて閉じる]確認オプションに従って問い合わせをするかどうか
 	HWND	hWndFrom,		// [in] 呼び出し元のウィンドウハンドル
@@ -1546,7 +1457,7 @@ bool ControlTray::CloseAllEditor(
 	}
 	
 	// 全編集ウィンドウへ終了要求を出す
-	bool bRes = AppNodeGroupHandle(nGroup).RequestCloseEditor(pWndArr, n, bExit, bCheckConfirm, hWndFrom);	// 2007.02.13 ryoji bExitを引き継ぐ
+	bool bRes = AppNodeGroupHandle(nGroup).RequestCloseEditor(pWndArr, n, bExit, bCheckConfirm, hWndFrom);
 	delete[] pWndArr;
 	return bRes;
 }
@@ -1576,21 +1487,19 @@ int	ControlTray::CreatePopUpMenu_L(void)
 	menuDrawer.MyAppendMenuSep(hMenu, MF_BYPOSITION | MF_SEPARATOR, 0, NULL, false);
 
 	// MRUリストのファイルのリストをメニューにする
-//@@@ 2001.12.26 YAZAKI MRUリストは、CMRUに依頼する
 	const MruFile mru;
 	HMENU hMenuPopUp = mru.CreateMenu(menuDrawer);	// ファイルメニュー
 	int nEnable = (mru.MenuLength() > 0 ? 0 : MF_GRAYED);
 	menuDrawer.MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING | MF_POPUP | nEnable, (UINT_PTR)hMenuPopUp , LS(F_FILE_RCNTFILE_SUBMENU), _T("F"));
 
 	// 最近使ったフォルダのメニューを作成
-//@@@ 2001.12.26 YAZAKI OPENFOLDERリストは、MruFolderにすべて依頼する
 	const MruFolder mruFolder;
 	hMenuPopUp = mruFolder.CreateMenu(menuDrawer);
 	nEnable = (mruFolder.MenuLength() > 0 ? 0 : MF_GRAYED);
 	menuDrawer.MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING | MF_POPUP| nEnable, (UINT_PTR)hMenuPopUp, LS(F_FILE_RCNTFLDR_SUBMENU), _T("D"));
 
 	menuDrawer.MyAppendMenuSep(hMenu, MF_BYPOSITION | MF_SEPARATOR, 0, NULL, false);
-	menuDrawer.MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING, F_FILESAVEALL, _T(""), _T("Z"), false);	// Jan. 24, 2005 genta
+	menuDrawer.MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING, F_FILESAVEALL, _T(""), _T("Z"), false);
 
 	// 現在開いている編集窓のリストをメニューにする
 	size_t j = 0;
@@ -1609,7 +1518,7 @@ int	ControlTray::CreatePopUpMenu_L(void)
 		DCFont dcFont(met.lfMenuFont);
 
 		j = 0;
-		TCHAR szMenu[100 + MAX_PATH * 2];	// Jan. 19, 2001 genta
+		TCHAR szMenu[100 + MAX_PATH * 2];
 		for (size_t i=0; i<pShareData->nodes.nEditArrNum; ++i) {
 			if (IsSakuraMainWindow(pShareData->nodes.pEditArr[i].GetHwnd())) {
 				// トレイからエディタへの編集ファイル名要求通知
@@ -1631,14 +1540,13 @@ int	ControlTray::CreatePopUpMenu_L(void)
 		}
 	}
 	menuDrawer.MyAppendMenuSep(hMenu, MF_BYPOSITION | MF_SEPARATOR, 0, NULL, false);
-	menuDrawer.MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING, F_EXITALLEDITORS, _T(""), _T("Q"), false);	// Oct. 17, 2000 JEPRO 名前を変更(F_FILECLOSEALL→F_WIN_CLOSEALL)	//Feb. 18, 2001 JEPRO アクセスキー変更(L→Q)	// 2006.10.21 ryoji 表示文字列変更	// 2007.02.13 ryoji →F_EXITALLEDITORS
+	menuDrawer.MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING, F_EXITALLEDITORS, _T(""), _T("Q"), false);
 	if (j == 0) {
-		::EnableMenuItem(hMenu, F_EXITALLEDITORS, MF_BYCOMMAND | MF_GRAYED);	// Oct. 17, 2000 JEPRO 名前を変更(F_FILECLOSEALL→F_WIN_CLOSEALL)	// 2007.02.13 ryoji →F_EXITALLEDITORS
-		::EnableMenuItem(hMenu, F_FILESAVEALL, MF_BYCOMMAND | MF_GRAYED);	// Jan. 24, 2005 genta
+		::EnableMenuItem(hMenu, F_EXITALLEDITORS, MF_BYCOMMAND | MF_GRAYED);
+		::EnableMenuItem(hMenu, F_FILESAVEALL, MF_BYCOMMAND | MF_GRAYED);
 	}
 
-	// Jun. 9, 2001 genta ソフトウェア名改称
-	menuDrawer.MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING, F_EXITALL, _T(""), _T("X"), false);	// Dec. 26, 2000 JEPRO F_に変更
+	menuDrawer.MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING, F_EXITALL, _T(""), _T("X"), false);
 
 	POINT po;
 	po.x = 0;
@@ -1677,7 +1585,6 @@ int	ControlTray::CreatePopUpMenu_L(void)
 }
 
 // キーワード：トレイ右クリックメニュー順序
-// Oct. 12, 2000 JEPRO ポップアップメニュー(トレイ左ボタン) を参考にして新たに追加した部分
 
 // ポップアップメニュー(トレイ右ボタン)
 int	ControlTray::CreatePopUpMenu_R(void)
@@ -1697,12 +1604,12 @@ int	ControlTray::CreatePopUpMenu_R(void)
 
 	// トレイ右クリックの「ヘルプ」メニュー
 	menuDrawer.MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING, F_HELP_CONTENTS , _T(""), _T("O"), false);
-	menuDrawer.MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING, F_HELP_SEARCH , _T(""), _T("S"), false);	// Nov. 25, 2000 JEPRO 「トピックの」→「キーワード」に変更
+	menuDrawer.MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING, F_HELP_SEARCH , _T(""), _T("S"), false);
 	menuDrawer.MyAppendMenuSep(hMenu, MF_BYPOSITION | MF_SEPARATOR, 0, NULL, false);
 	menuDrawer.MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING, F_TYPE_LIST, _T(""), _T("L"), false);
 	menuDrawer.MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING, F_OPTION, _T(""), _T("C"), false);
 	menuDrawer.MyAppendMenuSep(hMenu, MF_BYPOSITION | MF_SEPARATOR, 0, NULL, false);
-	menuDrawer.MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING, F_ABOUT, _T(""), _T("A"), false);	// Dec. 25, 2000 JEPRO F_に変更
+	menuDrawer.MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING, F_ABOUT, _T(""), _T("A"), false);
 	menuDrawer.MyAppendMenuSep(hMenu, MF_BYPOSITION | MF_SEPARATOR, 0, NULL, false);
 	// Jun. 18, 2001 genta ソフトウェア名改称
 	menuDrawer.MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING, F_EXITALL, _T(""), _T("X"), false);
@@ -1743,9 +1650,7 @@ int	ControlTray::CreatePopUpMenu_R(void)
 	return nId;
 }
 
-/*! アクセラレータテーブル作成
-	@date 2013.04.20 novice 共通処理を関数化
-*/
+/*! アクセラレータテーブル作成 */
 void ControlTray::CreateAccelTbl(void)
 {
 	auto& csKeyBind = pShareData->common.keyBind;
@@ -1762,9 +1667,7 @@ void ControlTray::CreateAccelTbl(void)
 	}
 }
 
-/*! アクセラレータテーブル破棄
-	@date 2013.04.20 novice 共通処理を関数化
-*/
+/*! アクセラレータテーブル破棄 */
 void ControlTray::DeleteAccelTbl(void)
 {
 	if (pShareData->handles.hAccel) {
@@ -1775,7 +1678,6 @@ void ControlTray::DeleteAccelTbl(void)
 
 /*!
 	@brief WM_DESTROY 処理
-	@date 2006.07.09 ryoji 新規作成
 */
 void ControlTray::OnDestroy()
 {
@@ -1788,8 +1690,6 @@ void ControlTray::OnDestroy()
 	// ホットキーの破棄
 	::UnregisterHotKey(GetTrayHwnd(), ID_HOTKEY_TRAYMENU);
 
-	// 2006.07.09 ryoji 共有データ保存を CControlProcess::Terminate() から移動
-	//
 	// 「タスクトレイに常駐しない」設定でエディタ画面（Normal Process）を立ち上げたまま
 	// セッション終了するような場合でも共有データ保存が行われなかったり中断されることが
 	// 無いよう、ここでウィンドウが破棄される前に保存する
@@ -1828,7 +1728,6 @@ void ControlTray::OnDestroy()
 
 /*!
 	@brief 終了ダイアログ用プロシージャ
-	@date 2006.07.02 ryoji CControlProcess から移動
 */
 INT_PTR CALLBACK ControlTray::ExitingDlgProc(
 	HWND	hwndDlg,	// handle to dialog box

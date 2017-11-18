@@ -1,23 +1,8 @@
-/*!	@file
-@brief ViewCommanderクラスのコマンド(選択系/矩形選択系)関数群
-
-	2012/12/20	ViewCommander.cppから分離
-*/
-/*
-	Copyright (C) 1998-2001, Norio Nakatani
-	Copyright (C) 2000-2001, genta
-	Copyright (C) 2002, YAZAKI
-	Copyright (C) 2005, Moca
-	Copyright (C) 2007, kobake, nasukoji
-
-	This source code is designed for sakura editor.
-	Please contact the copyright holders to use this code for other purpose.
-*/
-
 #include "StdAfx.h"
 #include "ViewCommander.h"
 #include "ViewCommander_inline.h"
 
+// ViewCommanderクラスのコマンド(選択系/矩形選択系)関数群
 
 // 現在位置の単語選択
 bool ViewCommander::Command_SelectWord(const Point* pptCaretPos)

@@ -1,5 +1,3 @@
-// ‚±‚Ìs‚Í•¶š‰»‚¯‘Îô—p‚Å‚·DÁ‚³‚È‚¢‚Å‚­‚¾‚³‚¢
-
 #include "StdAfx.h"
 #include "Unicode.h"
 #include "codechecker.h"

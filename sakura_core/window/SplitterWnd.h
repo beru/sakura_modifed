@@ -1,16 +1,3 @@
-/*!	@file
-	@brief 分割線ウィンドウクラス
-
-	@author Norio Nakatani
-	@date 1998/07/07 新規作成
-*/
-/*
-	Copyright (C) 1998-2001, Norio Nakatani
-	Copyright (C) 2002, aroka, YAZAKI
-
-	This source code is designed for sakura editor.
-	Please contact the copyright holder to use this code for other purpose.
-*/
 #pragma once
 
 #include "Wnd.h"

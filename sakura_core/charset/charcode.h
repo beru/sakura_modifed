@@ -1,29 +1,5 @@
-/*
-	Copyright (C) 2007, kobake
-
-	This software is provided 'as-is', without any express or implied
-	warranty. In no event will the authors be held liable for any damages
-	arising from the use of this software.
-
-	Permission is granted to anyone to use this software for any purpose,
-	including commercial applications, and to alter it and redistribute it
-	freely, subject to the following restrictions:
-
-		1. The origin of this software must not be misrepresented;
-		   you must not claim that you wrote the original software.
-		   If you use this software in a product, an acknowledgment
-		   in the product documentation would be appreciated but is
-		   not required.
-
-		2. Altered source versions must be plainly marked as such,
-		   and must not be misrepresented as being the original software.
-
-		3. This notice may not be removed or altered from any source
-		   distribution.
-*/
 #pragma once
 
-// 2007.09.13 kobake 作成
 #include "parse/WordParse.h"
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -35,7 +11,7 @@
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                           定数                              //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-// SJISのコードページ(CP_ACP では無くこれを使えばおそらく英語版Winでも動くはず。)	2008/5/12 Uchi
+// SJISのコードページ(CP_ACP では無くこれを使えばおそらく英語版Winでも動くはず。)
 #define CP_SJIS		932
 
 
@@ -90,10 +66,6 @@ namespace WCODE {
 // キーワードキャラクタ
 extern const unsigned char g_keyword_char[128];
 
-// Oct. 31, 2000 JEPRO  TeX Keyword のために'\'を追加
-// Nov.  9, 2000 JEPRO  HSP Keyword のために'@'を追加
-// Oct. 18, 2007 kobake UNICODE用に書き直し
-// Nov. 27, 2010 syat   速度改善のためテーブルに変更
 inline bool IS_KEYWORD_CHAR(wchar_t wc)
 {
 	return (1
@@ -136,19 +108,19 @@ namespace WCODE {
 		// http://ja.wikipedia.org/wiki/Unicode%E4%B8%80%E8%A6%A7_0000-0FFF を見て、なんとなく
 		if (wc >= 0x007F && wc <= 0x00A0) return true;	// Control Code ISO/IEC 6429
 
-		// 漢字はすべて同一幅とみなす	// 2013.04.07 aroka
+		// 漢字はすべて同一幅とみなす
 		if (wc >= 0x4E00 && wc <= 0x9FBB		// Unified Ideographs, CJK
 		  || wc>= 0x3400 && wc <= 0x4DB5		// Unified Ideographs Extension A, CJK
 		) {
 			wc = 0x4E00; // '一'(0x4E00)の幅で代用
 		}
 		else
-		// ハングルはすべて同一幅とみなす	// 2013.04.08 aroka
+		// ハングルはすべて同一幅とみなす
 		if (wc >= 0xAC00 && wc <= 0xD7A3) {		// Hangul Syllables
 			wc = 0xAC00; // (0xAC00)の幅で代用
 		}
 		else
-		// 外字はすべて同一幅とみなす	// 2013.04.08 aroka
+		// 外字はすべて同一幅とみなす
 		if (wc >= 0xE000 && wc <= 0xE8FF) { // Private Use Area
 			wc = 0xE000; // (0xE000)の幅で代用
 		}
@@ -235,21 +207,21 @@ namespace WCODE {
 	// 全角記号かどうか
 	inline bool IsZenkakuKigou(wchar_t c) {
 		//$ 他にも全角記号はあると思うけど、とりあえずANSI版時代の判定を踏襲。パフォーマンス悪し。
-		// 2009.06.26 syat 「ゝゞ（ひらがな）」「ヽヾ（カタカナ）」「゛゜（全角濁点）」「仝々〇（漢字）」「ー（長音）」を除外
-		// 2009.10.10 syat ANSI版の修正にあわせて「〆」を記号→漢字にする
+		// 「ゝゞ（ひらがな）」「ヽヾ（カタカナ）」「゛゜（全角濁点）」「仝々〇（漢字）」「ー（長音）」を除外
+		// ANSI版の修正にあわせて「〆」を記号→漢字にする
 		static const wchar_t* table = L"　、。，．・：；？！´｀¨＾￣＿〃―‐／＼～∥｜…‥‘’“”（）〔〕［］｛｝〈〉《》「」『』【】＋－±×÷＝≠＜＞≦≧∞∴♂♀°′″℃￥＄￠￡％＃＆＊＠§☆★○●◎◇◆□■△▲▽▼※〒→←↑↓〓∈∋⊆⊇⊂⊃∪∩∧∨￢⇒⇔∀∃∠⊥⌒∂∇≡≒≪≫√∽∝∵∫∬Å‰♯♭♪†‡¶◯";
 		return wcschr(table, c) != NULL;
 	}
 
 	// ひらがなかどうか
 	inline bool IsHiragana(wchar_t c) {
-		// 2009.06.26 syat 「ゝゞ」を追加
+		// 「ゝゞ」を追加
 		return (c >= 0x3041 && c <= 0x3096) || (c >= 0x309D && c <= 0x309E);
 	}
 
 	// カタカナかどうか
 	inline bool IsZenkakuKatakana(wchar_t c) {
-		// 2009.06.26 syat 「ヽヾ」を追加
+		// 「ヽヾ」を追加
 		return (c >= 0x30A1 && c <= 0x30FA) || (c >= 0x30FD && c <= 0x30FE);
 	}
 
@@ -271,16 +243,6 @@ namespace WCODE {
 	// 句読点か
 	//bool IsKutoten(wchar_t wc);
 
-/* codechecker.h へ移動
-	// 高位サロゲートエリアか？	from ssrc_2004-06-05wchar00703b	2008/5/15 Uchi
-	inline bool IsUTF16High(wchar_t c) {
-		return (0xd800 == (0xfc00 & c));
-	}
-	// 下位サロゲートエリアか？	from ssrc_2004-06-05wchar00703b	2008/5/15 Uchi
-	inline bool IsUTF16Low(wchar_t c) {
-		return (0xdc00 == (0xfc00 & c));
-	}
-*/
 }
 
 
@@ -329,7 +291,7 @@ namespace TCODE {
 struct CharWidthCache {
 	// 文字半角全角キャッシュ
 	TCHAR		lfFaceName[LF_FACESIZE];
-	BYTE		bCharWidthCache[0x10000/4];		// 16KB 文字半角全角キャッシュ 2008/5/16 Uchi
+	BYTE		bCharWidthCache[0x10000/4];		// 16KB 文字半角全角キャッシュ
 	int			nCharWidthCacheTest;				// cache溢れ検出
 };
 

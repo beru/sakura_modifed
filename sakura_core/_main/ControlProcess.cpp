@@ -1,20 +1,3 @@
-/*!	@file
-	@brief コントロールプロセスクラス
-
-	@author aroka
-	@date 2002/01/07 Create
-*/
-/*
-	Copyright (C) 1998-2001, Norio Nakatani
-	Copyright (C) 2002, aroka Processより分離, YAZAKI
-	Copyright (C) 2006, ryoji
-	Copyright (C) 2007, ryoji
-
-	This source code is designed for sakura editor.
-	Please contact the copyright holder to use this code for other purpose.
-*/
-
-
 #include "StdAfx.h"
 #include "ControlProcess.h"
 #include "ControlTray.h"
@@ -22,8 +5,7 @@
 #include "CommandLine.h"
 #include "env/ShareData_IO.h"
 #include "debug/RunningTimer.h"
-#include "sakura_rc.h" /// IDD_EXITTING 2002/2/10 aroka ヘッダ整理
-
+#include "sakura_rc.h"
 
 //-------------------------------------------------
 
@@ -33,12 +15,6 @@
 	
 	MutexCPを作成・ロックする。
 	ControlTrayを作成する。
-	
-	@author aroka
-	@date 2002/01/07
-	@date 2002/02/17 YAZAKI 共有メモリを初期化するのはProcessに移動。
-	@date 2006/04/10 ryoji 初期化完了イベントの処理を追加、異常時の後始末はデストラクタに任せる
-	@date 2013.03.20 novice コントロールプロセスのカレントディレクトリをシステムディレクトリに変更
 */
 bool ControlProcess::InitializeProcess()
 {
@@ -88,7 +64,7 @@ bool ControlProcess::InitializeProcess()
 	::SetCurrentDirectory(szDir);
 
 	// 共有データのロード
-	// 2007.05.19 ryoji 「設定を保存して終了する」オプション処理（sakuext連携用）を追加
+	// 「設定を保存して終了する」オプション処理（sakuext連携用）を追加
 	TCHAR szIniFile[_MAX_PATH];
 	ShareData_IO::LoadShareData();
 	FileNameManager::getInstance().GetIniFileName( szIniFile, strProfileName.c_str() );	// 出力iniファイル名
@@ -131,9 +107,6 @@ bool ControlProcess::InitializeProcess()
 
 /*!
 	@brief コントロールプロセスのメッセージループ
-	
-	@author aroka
-	@date 2002/01/07
 */
 bool ControlProcess::MainLoop()
 {
@@ -146,10 +119,6 @@ bool ControlProcess::MainLoop()
 
 /*!
 	@brief コントロールプロセスを終了する
-	
-	@author aroka
-	@date 2002/01/07
-	@date 2006/07/02 ryoji 共有データ保存を ControlTray へ移動
 */
 void ControlProcess::OnExitProcess()
 {

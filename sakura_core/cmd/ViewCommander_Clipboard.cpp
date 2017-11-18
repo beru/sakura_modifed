@@ -1,22 +1,3 @@
-/*!	@file
-@brief ViewCommanderクラスのコマンド(クリップボード系)関数群
-
-	2012/12/20	ViewCommander.cppから分離
-*/
-/*
-	Copyright (C) 1998-2001, Norio Nakatani
-	Copyright (C) 2000-2001, jepro, genta
-	Copyright (C) 2001, novice
-	Copyright (C) 2002, hor, genta, Azumaiya, すなふき
-	Copyright (C) 2004, Moca
-	Copyright (C) 2005, genta
-	Copyright (C) 2007, ryoji
-	Copyright (C) 2010, ryoji
-
-	This source code is designed for sakura editor.
-	Please contact the copyright holders to use this code for other purpose.
-*/
-
 #include "StdAfx.h"
 #include "ViewCommander.h"
 #include "ViewCommander_inline.h"
@@ -25,11 +6,9 @@
 #include "uiparts/WaitCursor.h"
 #include "util/os.h"
 
+// ViewCommanderクラスのコマンド(クリップボード系)関数群
 
-/** 切り取り(選択範囲をクリップボードにコピーして削除)
-
-	@date 2007.11.18 ryoji 「選択なしでコピーを可能にする」オプション処理追加
-*/
+/** 切り取り(選択範囲をクリップボードにコピーして削除) */
 void ViewCommander::Command_Cut(void)
 {
 	auto& selInfo = view.GetSelectionInfo();
@@ -43,7 +22,7 @@ void ViewCommander::Command_Cut(void)
 	// 範囲選択がされていない
 	if (!selInfo.IsTextSelected()) {
 		// 非選択時は、カーソル行を切り取り
-		if (!csEdit.bEnableNoSelectCopy) {	// 2007.11.18 ryoji
+		if (!csEdit.bEnableNoSelectCopy) {
 			return;	// 何もしない（音も鳴らさない）
 		}
 		// 行切り取り(折り返し単位)
@@ -72,10 +51,7 @@ void ViewCommander::Command_Cut(void)
 }
 
 
-/**	選択範囲をクリップボードにコピー
-
-	@date 2007.11.18 ryoji 「選択なしでコピーを可能にする」オプション処理追加
-*/
+/**	選択範囲をクリップボードにコピー */
 void ViewCommander::Command_Copy(
 	bool	bIgnoreLockAndDisable,	// [in] 選択範囲を解除するか？
 	bool	bAddCRLFWhenCopy,		// [in] 折り返し位置に改行コードを挿入するか？
@@ -88,7 +64,7 @@ void ViewCommander::Command_Copy(
 	// クリップボードに入れるべきテキストデータを、memBufに格納する
 	if (!selInfo.IsTextSelected()) {
 		// 非選択時は、カーソル行をコピーする
-		if (!csEdit.bEnableNoSelectCopy) {	// 2007.11.18 ryoji
+		if (!csEdit.bEnableNoSelectCopy) {
 			return;	// 何もしない（音も鳴らさない）
 		}
 		view.CopyCurLine(
@@ -150,8 +126,6 @@ void ViewCommander::Command_Copy(
 	@li 0x08 ラインモード貼り付け無効
 	@li 0x10 矩形コピーは常に矩形貼り付け
 	@li 0x20 矩形コピーは常に通常貼り付け
-
-	@date 2007.10.04 ryoji MSDEVLineSelect形式の行コピー対応処理を追加（VS2003/2005のエディタと類似の挙動に）
 */
 void ViewCommander::Command_Paste(int option)
 {
@@ -209,7 +183,6 @@ void ViewCommander::Command_Paste(int option)
 		}
 	}
 
-	// 2007.10.04 ryoji
 	// 行コピー（MSDEVLineSelect形式）のテキストで末尾が改行になっていなければ改行を追加する
 	// ※レイアウト折り返しの行コピーだった場合は末尾が改行になっていない
 	if (bLineSelect) {
@@ -225,36 +198,16 @@ void ViewCommander::Command_Paste(int option)
 		wchar_t* pszConvertedText = &szConvertedText[0];
 		ConvertEol(pszText, nTextLen, pszConvertedText);
 		// テキストを貼り付け
-		Command_InsText(true, pszConvertedText, nConvertedTextLen, true, bLineSelect);	// 2010.09.17 ryoji
+		Command_InsText(true, pszConvertedText, nConvertedTextLen, true, bLineSelect);
 	}else {
 		// テキストを貼り付け
-		Command_InsText(true, pszText, nTextLen, true, bLineSelect);	// 2010.09.17 ryoji
+		Command_InsText(true, pszText, nTextLen, true, bLineSelect);
 	}
 
 	return;
 }
 
-
-
-//<< 2002/03/28 Azumaiya
 // メモリデータを矩形貼り付け用のデータと解釈して処理する。
-//  なお、この関数は Command_PasteBox(void) と、
-// 2769 : GetDocument().docEditor.SetModified(true, true);	// Jan. 22, 2002 genta
-// から、
-// 3057 : view.SetDrawSwitch(true);	// 2002.01.25 hor
-// 間まで、一緒です。
-//  ですが、コメントを削ったり、#if 0 のところを削ったりしていますので、Command_PasteBox(void) は
-// 残すようにしました(下にこの関数を使った使ったバージョンをコメントで書いておきました)。
-//  なお、以下にあげるように Command_PasteBox(void) と違うところがあるので注意してください。
-// > 呼び出し側が責任を持って、
-// ・マウスによる範囲選択中である。
-// ・現在のフォントは固定幅フォントである。
-// の 2 点をチェックする。
-// > 再描画を行わない
-// です。
-//  なお、これらを呼び出し側に期待するわけは、「すべて置換」のような何回も連続で呼び出す
-// ときに、最初に一回チェックすればよいものを何回もチェックするのは無駄と判断したためです。
-// @note 2004.06.30 現在、すべて置換では使用していない
 void ViewCommander::Command_PasteBox(
 	const wchar_t* szPaste,
 	size_t nPasteSize
@@ -272,14 +225,13 @@ void ViewCommander::Command_PasteBox(
 	}
 	*/
 
-	GetDocument().docEditor.SetModified(true, true);	// Jan. 22, 2002 genta
+	GetDocument().docEditor.SetModified(true, true);
 
-	bool bDrawSwitchOld = view.SetDrawSwitch(false);	// 2002.01.25 hor
+	bool bDrawSwitchOld = view.SetDrawSwitch(false);
 
 	// とりあえず選択範囲を削除
-	// 2004.06.30 Moca view.GetSelectionInfo().IsTextSelected()がないと未選択時、一文字消えてしまう
 	if (view.GetSelectionInfo().IsTextSelected()) {
-		view.DeleteData(false/*true 2002.01.25 hor*/);
+		view.DeleteData(false);
 	}
 
 	WaitCursor waitCursor(view.GetHwnd(), 10000 < nPasteSize);
@@ -295,13 +247,13 @@ void ViewCommander::Command_PasteBox(
 	int nCount = 0;
 	bool bExtEol = GetDllShareData().common.edit.bEnableExtEol;
 
-	// Jul. 10, 2005 genta 貼り付けデータの最後にCR/LFが無い場合の対策
+	// 貼り付けデータの最後にCR/LFが無い場合の対策
 	// データの最後まで処理 i.e. nBgnがnPasteSizeを超えたら終了
 	//for (nPos = 0; nPos < nPasteSize;)
 	size_t nPos;
 	Point ptLayoutNew;	// 挿入された部分の次の位置
 	for (size_t nBgn=nPos=0; nBgn<nPasteSize;) {
-		// Jul. 10, 2005 genta 貼り付けデータの最後にCR/LFが無いと
+		// 貼り付けデータの最後にCR/LFが無いと
 		// 最終行のPaste処理が動かないので，
 		// データの末尾に来た場合は強制的に処理するようにする
 		if (WCODE::IsLineDelimiter(szPaste[nPos], bExtEol) || nPos == nPasteSize) {
@@ -331,7 +283,7 @@ void ViewCommander::Command_PasteBox(
 				}else {
 					bAddLastCR = true;
 				}
-			}else { // 2001/10/02 novice
+			}else {
 				bAddLastCR = true;
 			}
 
@@ -396,9 +348,6 @@ void ViewCommander::Command_PasteBox(
 
 /** 矩形貼り付け(クリップボードから矩形貼り付け)
 	@param [in] option 未使用
-
-	@date 2004.06.29 Moca 未使用だったものを有効にする
-	オリジナルのCommand_PasteBox(void)はばっさり削除 (genta)
 */
 void ViewCommander::Command_PasteBox(int option)
 {
@@ -443,16 +392,12 @@ void ViewCommander::Command_InsBoxText(
 	}
 
 	Command_PasteBox(pszPaste, nPasteSize);
-	view.AdjustScrollBars(); // 2007.07.22 ryoji
-	view.Redraw();			// 2002.01.25 hor
+	view.AdjustScrollBars();
+	view.Redraw();
 }
 
 
-/*! テキストを貼り付け
-	@date 2004.05.14 Moca '\\0'を受け入れるように、引数に長さを追加
-	@date 2010.09.17 ryoji ラインモード貼り付けオプションを追加して以前の Command_Paste() との重複部を整理・統合
-	@date 2013.05.10 Moca 高速モード
-*/
+/*! テキストを貼り付け */
 void ViewCommander::Command_InsText(
 	bool			bRedraw,		// 
 	const wchar_t*	pszText,		// [in] 貼り付ける文字列。
@@ -474,7 +419,7 @@ void ViewCommander::Command_InsText(
 		10000 < nTextLen && !selInfo.IsBoxSelecting()
 	);
 
-	GetDocument().docEditor.SetModified(true, bRedraw);	// Jan. 22, 2002 genta
+	GetDocument().docEditor.SetModified(true, bRedraw);
 
 	auto& caret = GetCaret();
 
@@ -493,7 +438,6 @@ void ViewCommander::Command_InsText(
 			Command_Indent(pszText, i);
 			goto end_of_func;
 		}else {
-			// Jun. 23, 2000 genta
 			// 同一行の行末以降のみが選択されている場合には選択無しと見なす
 			bool bAfterEOLSelect = false;
 			if (!bFastMode) {
@@ -510,7 +454,7 @@ void ViewCommander::Command_InsText(
 			}
 			if (!bAfterEOLSelect) {
 				// データ置換 削除&挿入にも使える
-				// 行コピーの貼り付けでは選択範囲は削除（後で行頭に貼り付ける）	// 2007.10.04 ryoji
+				// 行コピーの貼り付けでは選択範囲は削除（後で行頭に貼り付ける）
 				view.ReplaceData_CEditView(
 					GetSelect(),				// 選択範囲
 					bLinePaste? L"": pszText,	// 挿入するデータ
@@ -520,7 +464,7 @@ void ViewCommander::Command_InsText(
 					bFastMode,
 					pSelectLogic
 				);
-				if (!bLinePaste)	// 2007.10.04 ryoji
+				if (!bLinePaste)
 					goto end_of_func;
 			}
 		}
@@ -528,7 +472,7 @@ void ViewCommander::Command_InsText(
 
 	{	// 非選択時の処理 or ラインモード貼り付け時の残りの処理
 		int nPosX_PHY_Delta(0);
-		if (bLinePaste) {	// 2007.10.04 ryoji
+		if (bLinePaste) {
 			// 挿入ポイント（折り返し単位行頭）にカーソルを移動
 			Point ptCaretBefore = caret.GetCaretLogicPos();	// 操作前のキャレット位置
 			Command_GoLineTop(false, 1);								// 行頭に移動(折り返し単位)
@@ -562,7 +506,7 @@ void ViewCommander::Command_InsText(
 		caret.MoveCursor(ptLayoutNew, bRedraw);
 		caret.nCaretPosX_Prev = caret.GetCaretLayoutPos().x;
 
-		if (bLinePaste) {	// 2007.10.04 ryoji
+		if (bLinePaste) {
 			// 元の位置へカーソルを移動
 			Point ptCaretBefore = caret.GetCaretLogicPos();	// 操作前のキャレット位置
 			Point ptLayout = GetDocument().layoutMgr.LogicToLayout(
@@ -1030,7 +974,6 @@ void ViewCommander::Command_Copy_Color_HTML(bool bLineNumber)
 			if (bLineNumLayout && !bAddCRLF) {
 				memClip.AppendStringLiteral(WCODE::CRLF);
 			}
-			// 2014.06.25 バッファ拡張
 			if (memClip.capacity() < memClip.GetStringLength() + 100) {
 				memClip.AllocStringBuffer( memClip.capacity() + memClip.capacity() / 2 );
 			}
@@ -1056,11 +999,6 @@ void ViewCommander::Command_Copy_Color_HTML(bool bLineNumber)
 	clipboard.SetText(memClip.GetStringPtr(), memClip.GetStringLength(), false, false);
 }
 
-
-
-/*!
-	@date 2014.12.30 Moca 同じColorStrategyで違う色に切り替わったときに対応
-*/
 ColorStrategy* ViewCommander::GetColorStrategyHTML(
 	const StringRef&	stringLine,
 	int					iLogic,
@@ -1119,9 +1057,7 @@ void ViewCommander::Command_Copy_Color_HTML_LineNumber()
 }
 
 
-/*!	現在編集中のファイル名をクリップボードにコピー
-	2002/2/3 aroka
-*/
+/*!	現在編集中のファイル名をクリップボードにコピー */
 void ViewCommander::Command_CopyFileName(void)
 {
 	if (GetDocument().docFile.GetFilePathClass().IsValidPath()) {
@@ -1167,7 +1103,6 @@ void ViewCommander::Command_CopyTag(void)
 
 
 //// キー割り当て一覧をコピー
-// Dec. 26, 2000 JEPRO // Jan. 24, 2001 JEPRO debug version (directed by genta)
 void ViewCommander::Command_CreateKeyBindList(void)
 {
 	NativeW memKeyList;
@@ -1177,12 +1112,11 @@ void ViewCommander::Command_CreateKeyBindList(void)
 		csKeyBind.nKeyNameArrNum,
 		csKeyBind.pKeyNameArr,
 		memKeyList,
-		&GetDocument().funcLookup,	// Oct. 31, 2001 genta 追加
-		false	// 2007.02.22 ryoji 追加
+		&GetDocument().funcLookup,
+		false
 	);
 
 	// Windowsクリップボードにコピー
-	// 2004.02.17 Moca 関数化
 	SetClipboardText(
 		EditWnd::getInstance().splitterWnd.GetHwnd(),
 		memKeyList.GetStringPtr(),

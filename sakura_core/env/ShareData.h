@@ -1,33 +1,3 @@
-/*!	@file
-	@brief プロセス間共有データへのアクセス
-
-	@author Norio Nakatani
-	@date 1998/05/26  新規作成
-*/
-/*
-	Copyright (C) 1998-2001, Norio Nakatani
-	Copyright (C) 2000, jepro, genta
-	Copyright (C) 2001, jepro, genta, asa-o, MIK, YAZAKI, hor
-	Copyright (C) 2002, genta, aroka, Moca, MIK, YAZAKI, hor
-	Copyright (C) 2003, Moca, aroka, MIK, genta
-	Copyright (C) 2004, Moca, novice, genta
-	Copyright (C) 2005, MIK, genta, ryoji, aroka, Moca
-	Copyright (C) 2006, aroka, ryoji, D.S.Koba, fon
-	Copyright (C) 2007, ryoji, maru
-	Copyright (C) 2008, ryoji, Uchi
-	Copyright (C) 2011, nasukoji
-
-	This source code is designed for sakura editor.
-	Please contact the copyright holder to use this code for other purpose.
-*/
-// 2007.09.23 kobake m_nSEARCHKEYArrNum,      m_szSEARCHKEYArr      を searchKeys      にまとめました
-// 2007.09.23 kobake m_nREPLACEKEYArrNum,     m_szREPLACEKEYArr     を replaceKeys     にまとめました
-// 2007.09.23 kobake m_nGREPFILEArrNum,       m_szGREPFILEArr       を grepFiles       にまとめました
-// 2007.09.23 kobake m_nGREPFOLDERArrNum,     m_szGREPFOLDERArr     を grepFolders     にまとめました
-// 2007.09.23 kobake m_szCmdArr,              m_nCmdArrNum          を m_aCommands        にまとめました
-// 2007.09.23 kobake m_nTagJumpKeywordArrNum, m_szTagJumpKeywordArr を aTagJumpKeywords にまとめました
-// 2007.12.13 kobake DllSharedDataへの簡易アクセサを用意
-
 #pragma once
 
 #include "SelectLang.h"		// 2011.04.10 nasukoji
