@@ -44,15 +44,13 @@ static const AnchorListItem anchorList[] = {
 };
 
 
-// タグファイルのフォーマット	//	@@ 2005.03.31 MIK 定数化
-// @@ 2005.04.03 MIK キーワードに空白が含まれる場合の考慮
+// タグファイルのフォーマット
 #define TAG_FORMAT_2_A       "%[^\t\r\n]\t%[^\t\r\n]\t%d;\"\t%s\t%s"
 #define TAG_FORMAT_1_A       "%[^\t\r\n]\t%[^\t\r\n]\t%d"
 #define TAG_FILE_INFO_A      "%[^\t\r\n]\t%[^\t\r\n]\t%[^\t\r\n]"
 // #define TAG_FORMAT_E_FILE_A  "%[^\t\r\n,],%d"
 // #define TAG_FORMAT_E_NAME_A  "%[^\x7f\r\n]\x7f%[^\x7ff\r\n\x01]\x01%d,%d"
 
-// @@ 2005.03.31 MIK
 // キーワードを入力して該当する情報を表示するまでの時間(ミリ秒)
 #define TAGJUMP_TIMER_DELAY 700
 #define TAGJUMP_TIMER_DELAY_SHORT 50
@@ -156,9 +154,6 @@ DlgTagJumpList::~DlgTagJumpList()
 
 /*!
 	タイマー停止
-
-	@author MIK
-	@date 2005.03.31 新規作成
 */
 void DlgTagJumpList::StopTimer(void)
 {
@@ -173,9 +168,6 @@ void DlgTagJumpList::StopTimer(void)
 	
 	キーワード指定時，一定期間文字入力がなければリストを更新するため
 	「一定期間」を計るタイマーが必要
-
-	@author MIK
-	@date 2005.03.31 新規作成
 */
 void DlgTagJumpList::StartTimer(int nDelay = TAGJUMP_TIMER_DELAY)
 {
@@ -185,9 +177,6 @@ void DlgTagJumpList::StartTimer(int nDelay = TAGJUMP_TIMER_DELAY)
 
 /*!
 	リストのクリア
-
-	@author MIK
-	@date 2005.03.31 新規作成
 */
 void DlgTagJumpList::Empty(void)
 {
@@ -246,7 +235,6 @@ void DlgTagJumpList::SetData(void)
 		}
 		cRecentTagJump.Terminate();
 	}
-	// To Here 2005.04.03 MIK 設定値の読み込み
 	
 	SetTextDir();
 
@@ -258,11 +246,7 @@ void DlgTagJumpList::SetData(void)
 	}
 }
 
-/*! @brief Jump候補の更新
-
-	@date 2005.03.31 MIK 
-		ダイアログOpen時以外にも更新が必要なためSetData()より分離
-*/
+/*! @brief Jump候補の更新 */
 void DlgTagJumpList::UpdateData(bool bInit)
 {
 	HWND	hwndList;
@@ -309,11 +293,6 @@ void DlgTagJumpList::UpdateData(bool bInit)
 
 	const TCHAR* pszMsgText = NULL;
 
-	// 数が多すぎる場合は切り捨てた旨を末尾に挿入
-//	if (pList->IsOverflow()) {
-		// 2010.04.03 「次」「前」ボタン追加して Overflowしなくなった
-//		pszMsgText = _T("(これ以降は切り捨てました)");
-//	}
 	if (!bInit && pList->GetCount() == 0) {
 		pszMsgText = LS(STR_DLGTAGJMP2);
 	}
@@ -352,19 +331,16 @@ void DlgTagJumpList::UpdateData(bool bInit)
 /*!	ダイアログデータの取得
 
 	@return TRUE: 正常, FALSE: 入力エラー
-
-	@date 2005.04.03 MIK 設定値の保存処理追加
 */
 int DlgTagJumpList::GetData(void)
 {
 	HWND hwndList = GetItemHwnd(IDC_LIST_TAGJUMP);
 	nIndex = ListView_GetNextItem(hwndList, -1, LVIS_SELECTED);
 
-	// From Here 2005.04.03 MIK 設定値の保存
 	if (!IsDirectTagJump()) {
 		pShareData->tagJump.bTagJumpICase = bTagJumpICase;
 		pShareData->tagJump.bTagJumpAnyWhere = bTagJumpAnyWhere;
-		// 2010.07.22 候補が空でもジャンプで閉じたときは、オプションを保存する
+		// 候補が空でもジャンプで閉じたときは、オプションを保存する
 		if (nIndex == -1 || nIndex >= pList->GetCapacity()) {
 			return FALSE;
 		}
@@ -385,8 +361,7 @@ int DlgTagJumpList::GetData(void)
 }
 
 /*!
-	@date 2005.03.31 MIK
-		階層カラムの追加．キーワード指定欄の追加
+	階層カラムの追加．キーワード指定欄の追加
 */
 BOOL DlgTagJumpList::OnInitDialog(
 	HWND hwndDlg,
@@ -514,7 +489,7 @@ BOOL DlgTagJumpList::OnBnClicked(int wID)
 	switch (wID) {
 	case IDC_BUTTON_HELP:
 		// ヘルプ
-		MyWinHelp(GetHwnd(), HELP_CONTEXT, ::FuncID_To_HelpContextID(F_TAGJUMP_LIST));	// 2006.10.10 ryoji MyWinHelpに変更に変更
+		MyWinHelp(GetHwnd(), HELP_CONTEXT, ::FuncID_To_HelpContextID(F_TAGJUMP_LIST));
 		return TRUE;
 
 	case IDOK:			// 左右に表示
@@ -528,7 +503,7 @@ BOOL DlgTagJumpList::OnBnClicked(int wID)
 		::EndDialog(GetHwnd(), FALSE);
 		return TRUE;
 
-	// From Here 2005.04.03 MIK 検索条件設定
+	// 検索条件設定
 	case IDC_CHECK_ICASE:
 		bTagJumpICase = IsButtonChecked(IDC_CHECK_ICASE);
 		StartTimer(TAGJUMP_TIMER_DELAY_SHORT);
@@ -538,7 +513,6 @@ BOOL DlgTagJumpList::OnBnClicked(int wID)
 		bTagJumpAnyWhere = IsButtonChecked(IDC_CHECK_ANYWHERE);
 		StartTimer(TAGJUMP_TIMER_DELAY_SHORT);
 		return TRUE;
-	// To Here 2005.04.03 MIK 検索条件設定
 
 	case IDC_BUTTON_NEXTTAG:
 		nTop += pList->GetCapacity();
@@ -785,7 +759,6 @@ TCHAR* DlgTagJumpList::GetNameByType(const TCHAR type, const TCHAR* name)
 {
 	const TCHAR* p;
 	TCHAR*	token;
-	// 2005.03.31 MIK
 	TCHAR	tmp[MAX_TAG_STRING_LENGTH];
 
 	p = _tcsrchr(name, _T('.'));
@@ -1068,11 +1041,6 @@ void DlgTagJumpList::find_key(const wchar_t* keyword)
 
 /*!
 	タグファイルからキーワードにマッチするデータを抽出し，m_cListに設定する
-
-	@date 2007.03.13 genta バッファオーバーラン暫定対処でバッファサイズ変更
-	@date 2010.04.02 Moca いろいろ変更。SJISで読む。ページング, format=1の解釈、タグファイル情報の利用
-		「全tagsの検索結果をソートして先頭からCapaticyまで」を「tagsファイル順(=depth)順、キーワード順」に変更
-	@date 2010.07.21 find_key→find_key_coreにして、ViewCommander::Command_TagJumpByTagsFileと統合
 */
 int DlgTagJumpList::find_key_core(
 	int nTop,
@@ -1263,14 +1231,13 @@ int DlgTagJumpList::find_key_core(
 
 				s[0][0] = s[1][0] = s[2][0] = s[3][0] = '\0';
 				n2 = 0;
-				// @@ 2005.03.31 MIK TAG_FORMAT定数化
+				// TAG_FORMAT定数化
 				if (nTagFormat == 2) {
 					nRet = sscanf(
 						szLineData, 
 						TAG_FORMAT_2_A,	// 拡張tagsフォーマット
 						s[0], s[1], &n2, s[2], s[3]
 						);
-					// 2010.04.02 nRet < 4 を3に変更。標準フォーマットも読み込む
 					if (nRet < 3) goto next_line;
 					if (n2 <= 0) goto next_line;	// 行番号不正(-excmd=nが指定されてないかも)
 				}else {
@@ -1321,9 +1288,8 @@ int DlgTagJumpList::find_key_core(
 				}else if (0 < cmp) {
 					// tagsはソートされているので，先頭からのcase sensitiveな
 					// 比較結果によって検索の時は処理の打ち切りが可能
-					// 2005.04.05 MIK バグ修正
 					if ((!bTagJumpICase) && bSorted && (!bTagJumpAnyWhere)) break;
-					// 2010.07.21 Foldcase時も打ち切る。ただしtagsとサクラ側のソート順が同じでなければならない
+					// Foldcase時も打ち切る。ただしtagsとサクラ側のソート順が同じでなければならない
 					if (bTagJumpICase  && bFoldcase && (!bTagJumpAnyWhere)) break;
 				}
 next_line:
@@ -1401,8 +1367,6 @@ int DlgTagJumpList::CalcMaxUpDirectory(const TCHAR* p)
 }
 
 /*!
-	
-	@date 2010.04.02 Moca Command_TagJumpByTagsFileKeywordから分離・移動
 	@param basePath [in,out] \付ディレクトリパス絶対パス推奨。書き換わるのに注意
 	@param fileName [in] 相対・絶対ファイル名パス
 	@param depth    [in] fineNameが絶対パスの時無視。1==1つ上のディレクトリ

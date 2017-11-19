@@ -70,7 +70,7 @@ private: //####
 	DocLine*	pPrev;	// 一つ前の要素
 	DocLine*	pNext;	// 一つ後の要素
 private:
-	NativeW	line;	// データ  2007.10.11 kobake ポインタではなく、実体を持つように変更
+	NativeW	line;	// データ
 	Eol		eol;		// 行末コード
 public:
 	// 拡張情報 $$分離中

@@ -48,7 +48,7 @@ BOOL DlgTagsMake::OnBnClicked(int wID)
 	switch (wID) {
 	case IDC_BUTTON_HELP:
 		// ヘルプ
-		MyWinHelp(GetHwnd(), HELP_CONTEXT, ::FuncID_To_HelpContextID(F_TAGS_MAKE));	// 2006.10.10 ryoji MyWinHelpに変更に変更
+		MyWinHelp(GetHwnd(), HELP_CONTEXT, ::FuncID_To_HelpContextID(F_TAGS_MAKE));
 		return TRUE;
 
 	case IDC_BUTTON_TAG_MAKE_REF:	// 参照

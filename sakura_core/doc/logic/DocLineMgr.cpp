@@ -1,25 +1,23 @@
 // 行データの管理
 
 #include "StdAfx.h"
-// Oct 6, 2000 ao
 #include <stdio.h>
 #include <io.h>
 #include <list>
 #include "DocLineMgr.h"
-#include "DocLine.h"// 2002/2/10 aroka ヘッダ整理
+#include "DocLine.h"
 #include "charset/charcode.h"
 #include "charset/CodeFactory.h"
 #include "charset/CodeBase.h"
 #include "charset/CodeMediator.h"
-// Jun. 26, 2001 genta	正規表現ライブラリの差し替え
+// 正規表現ライブラリの差し替え
 #include "extmodule/Bregexp.h"
 #include "_main/global.h"
 
-// May 15, 2000 genta
 #include "Eol.h"
-#include "mem/Memory.h"// 2002/2/10 aroka
+#include "mem/Memory.h"
 
-#include "io/FileLoad.h" // 2002/08/30 Moca
+#include "io/FileLoad.h"
 #include "io/IoBridge.h"
 #include "basis/SakuraBasis.h"
 #include "parse/WordParse.h"
@@ -219,10 +217,10 @@ void DocLineMgr::_Init()
 	nPrevReferLine = 0;
 	pCodePrevRefer = nullptr;
 	pDocLineCurrent = nullptr;
-	DiffManager::getInstance().SetDiffUse(false);	// DIFF使用中	//@@@ 2002.05.25 MIK     //##後でCDocListener::OnClear (OnAfterClose) を作成し、そこに移動
+	DiffManager::getInstance().SetDiffUse(false);	// DIFF使用中
 }
 
-// -- -- チェーン関数 -- -- // 2007.10.11 kobake 作成
+// -- -- チェーン関数 -- --
 // 最下部に挿入
 void DocLineMgr::_PushBottom(DocLine* pDocLineNew)
 {
@@ -297,13 +295,7 @@ void DocLineMgr::_InsertAfterPos(DocLine* pDocLineNew, DocLine* pPos)
 //                         デバッグ                            //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-/*!	@brief CDocLineMgrDEBUG用
-
-	@date 2004.03.18 Moca
-		pDocLineCurrentとpCodePrevReferがデータチェーンの
-		要素を指しているかの検証機能を追加．
-
-*/
+/*!	@brief CDocLineMgrDEBUG用 */
 void DocLineMgr::DUMP()
 {
 #ifdef _DEBUG

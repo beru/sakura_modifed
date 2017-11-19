@@ -62,7 +62,7 @@ bool WordParse::WhereCurrentWord_2(
 
 	// 文字種類が変わるまで後方へサーチ
 	nIdxNext = nIdx;
-	nCharChars = NativeW::GetSizeOfChar(pLine, nLineLen, nIdxNext); // 2005-09-02 D.S.Koba GetSizeOfChar
+	nCharChars = NativeW::GetSizeOfChar(pLine, nLineLen, nIdxNext);
 	while (nCharChars > 0) {
 		nIdxNext += nCharChars;
 		ECharKind	nCharKindNext = WhatKindOfChar(pLine, nLineLen, nIdxNext);
@@ -72,7 +72,7 @@ bool WordParse::WhereCurrentWord_2(
 			break;
 		}
 		nCharKind = nCharKindMerge;
-		nCharChars = NativeW::GetSizeOfChar(pLine, nLineLen, nIdxNext); // 2005-09-02 D.S.Koba GetSizeOfChar
+		nCharChars = NativeW::GetSizeOfChar(pLine, nLineLen, nIdxNext);
 	}
 	*pnIdxTo = nIdxNext;
 
@@ -349,7 +349,7 @@ uchar_t wc_to_c(wchar_t wc)
 	int ret=wctomb(buf, wc);
 	if (ret == -1) return 0;   // エラー
 	if (buf[1] != 0) return 0; // エラー扱い
-	return buf[0] <= 0x7F ? buf[0]: 0; // 1バイトで表せたので、これを返す  2011.12.17 バッファオーバーランの修正
+	return buf[0] <= 0x7F ? buf[0]: 0; // 1バイトで表せたので、これを返す
 #endif
 	// wctombを使わない版
 	if (wc <= 0x7F) {
@@ -358,7 +358,6 @@ uchar_t wc_to_c(wchar_t wc)
 	return 0;
 }
 
-//@@@ 2002.01.24 Start by MIK
 /*!
 	文字列がURLかどうかを検査する。
 	

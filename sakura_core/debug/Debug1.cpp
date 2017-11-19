@@ -49,7 +49,7 @@ void DebugOutW(LPCWSTR lpFmt, ...)
 #endif
 
 	// ウェイト
-	::Sleep(1);	// Norio Nakatani, 2001/06/23 大量にトレースするときのために
+	::Sleep(1);	// 大量にトレースするときのために
 
 	va_end(argList);
 	return;
@@ -73,7 +73,7 @@ void DebugOutA(LPCSTR lpFmt, ...)
 #endif
 
 	// ウェイト
-	::Sleep(1);	// Norio Nakatani, 2001/06/23 大量にトレースするときのために
+	::Sleep(1);	// 大量にトレースするときのために
 
 	va_end(argList);
 	return;

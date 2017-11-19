@@ -4,28 +4,26 @@
 #include "StdAfx.h"
 #include "dlg/DlgProperty.h"
 #include "doc/EditDoc.h"
-#include "func/Funccode.h"		// Stonee, 2001/03/12
-#include "_main/global.h"		// Moca, 2002/05/26
+#include "func/Funccode.h"
+#include "_main/global.h"
 #include "_main/AppMode.h"
 #include "env/ShareData.h"
 #include "env/DllSharedData.h"
-#include "charset/charcode.h"	// rastiv, 2006/06/28
+#include "charset/charcode.h"
 #include "charset/CodePage.h"
 #include "charset/ESI.h"
 #include "io/BinaryStream.h"
 #include "util/shell.h"
 #include "sakura_rc.h"
 
-// プロパティ CDlgProperty.cpp	//@@@ 2002.01.07 add start MIK
 #include "sakura.hh"
 const DWORD p_helpids[] = {	//12600
 	IDOK,					HIDOK_PROP,
-//	IDCANCEL,				HIDCANCEL_PROP,			// 未使用 del 2008/7/4 Uchi
 	IDC_BUTTON_HELP,		HIDC_PROP_BUTTON_HELP,
-	IDC_EDIT_PROPERTY,		HIDC_PROP_EDIT1,		// IDC_EDIT1->IDC_EDIT_PROPERTY	2008/7/3 Uchi
+	IDC_EDIT_PROPERTY,		HIDC_PROP_EDIT1,
 //	IDC_STATIC,				-1,
 	0, 0
-};	//@@@ 2002.01.07 add end MIK
+};
 
 // モーダルダイアログの表示
 INT_PTR DlgProperty::DoModal(
@@ -42,26 +40,19 @@ BOOL DlgProperty::OnBnClicked(int wID)
 	switch (wID) {
 	case IDC_BUTTON_HELP:
 		//「ファイルのプロパティ」のヘルプ
-		// Stonee, 2001/03/12 第四引数を、機能番号からヘルプトピック番号を調べるようにした
-		MyWinHelp(GetHwnd(), HELP_CONTEXT, ::FuncID_To_HelpContextID(F_PROPERTY_FILE));	// 2006.10.10 ryoji MyWinHelpに変更に変更
+		MyWinHelp(GetHwnd(), HELP_CONTEXT, ::FuncID_To_HelpContextID(F_PROPERTY_FILE));
 		return TRUE;
 	case IDOK:			// 下検索
 		// ダイアログデータの取得
 		::EndDialog(GetHwnd(), FALSE);
 		return TRUE;
-//	case IDCANCEL:							// 未使用 del 2008/7/4 Uchi
-//		::EndDialog(GetHwnd(), FALSE);
-//		return TRUE;
 	}
 	// 基底クラスメンバ
 	return Dialog::OnBnClicked(wID);
 }
 
 
-/*! ダイアログデータの設定
-
-	@date 2002.2.17 YAZAKI CShareDataのインスタンスは、CProcessにひとつあるのみ。
-*/
+/*! ダイアログデータの設定 */
 void DlgProperty::SetData(void)
 {
 	EditDoc* pEditDoc = (EditDoc*)lParam;
@@ -99,7 +90,7 @@ void DlgProperty::SetData(void)
 	memProp.AppendString(szWork);
 
 	if (AppMode::getInstance().IsViewMode()) {
-		memProp.AppendString(LS(STR_DLGFLPROP_VIEW_MODE));	// 2009.04.11 ryoji 「上書き禁止モード」→「ビューモード」
+		memProp.AppendString(LS(STR_DLGFLPROP_VIEW_MODE));
 	}
 	if (pEditDoc->docEditor.IsModified()) {
 		memProp.AppendString(LS(STR_DLGFLPROP_MODIFIED));
@@ -244,10 +235,8 @@ end_of_CodeTest:;
 	return;
 }
 
-//@@@ 2002.01.18 add start
 LPVOID DlgProperty::GetHelpIdTable(void)
 {
 	return (LPVOID)p_helpids;
 }
-//@@@ 2002.01.18 add end
 

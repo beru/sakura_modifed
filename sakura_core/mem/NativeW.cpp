@@ -319,7 +319,7 @@ const wchar_t* NativeW::GetCharPrev(
 		return pData;
 	}
 
-	// サロゲートペア対応	2008/7/6 Uchi
+	// サロゲートペア対応
 	if (IsUTF16Low(*pPrev)) {
 		if (IsUTF16High(*(pPrev-1))) {
 			pPrev -= 1;

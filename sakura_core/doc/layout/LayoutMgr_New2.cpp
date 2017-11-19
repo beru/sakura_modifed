@@ -1,8 +1,8 @@
 #include "StdAfx.h"
 #include <stdlib.h>
 #include "LayoutMgr.h"
-#include "Layout.h" // 2002/2/10 aroka
-#include "doc/logic/DocLineMgr.h" // 2002/2/10 aroka
+#include "Layout.h"
+#include "doc/logic/DocLineMgr.h"
 #include "charset/charcode.h"
 #include "SearchAgent.h"
 
@@ -12,7 +12,7 @@ void LayoutMgr::ReplaceData_CLayoutMgr(
 	LayoutReplaceArg* pArg
 	)
 {
-	size_t nWork_nLines = nLines;	// 変更前の全行数の保存	@@@ 2002.04.19 MIK
+	size_t nWork_nLines = nLines;	// 変更前の全行数の保存
 
 	// 置換先頭位置のレイアウト情報
 	EColorIndexType	nCurrentLineType = COLORIDX_DEFAULT;
@@ -28,7 +28,7 @@ void LayoutMgr::ReplaceData_CLayoutMgr(
 		nCurrentLineType = pLayoutWork->GetColorTypePrev();
 		colorInfo = pLayoutWork->GetLayoutExInfo()->DetachColorInfo();
 	}else if (GetLineCount() == pArg->delRange.GetFrom().y) {
-		// 2012.01.05 最終行のRedo/Undoでの色分けが正しくないのを修正
+		// 最終行のRedo/Undoでの色分けが正しくないのを修正
 		nCurrentLineType = nLineTypeBot;
 		colorInfo = layoutExInfoBot.DetachColorInfo();
 	}
@@ -103,7 +103,7 @@ void LayoutMgr::ReplaceData_CLayoutMgr(
 		}
 	}
 
-	// 2009.08.28 nasukoji	テキスト最大幅算出用の引数を設定
+	// テキスト最大幅算出用の引数を設定
 	CalTextWidthArg ctwArg;
 	ctwArg.ptLayout     = pArg->delRange.GetFrom();		// 編集開始位置
 	ctwArg.nDelLines    = pArg->delRange.GetTo().y - pArg->delRange.GetFrom().y;	// 削除行数 - 1
@@ -120,14 +120,14 @@ void LayoutMgr::ReplaceData_CLayoutMgr(
 		ctwArg
 	);
 	ASSERT_GE(nLines, nWork_nLines);
-	pArg->nAddLineNum = nLines - nWork_nLines;	// 変更後の全行数との差分	@@@ 2002.04.19 MIK
+	pArg->nAddLineNum = nLines - nWork_nLines;	// 変更後の全行数との差分
 	if (pArg->nAddLineNum == 0) {
 		pArg->nAddLineNum = nModifyLayoutLinesOld - pArg->nModLineTo;	// 再描画ヒント レイアウト行の増減
 	}
 	pArg->nModLineFrom = pArg->delRange.GetFrom().y;	// 再描画ヒント 変更されたレイアウト行From
 	pArg->nModLineTo += (pArg->nModLineFrom - 1) ;	// 再描画ヒント 変更されたレイアウト行To
 
-	// 2007.10.18 kobake LayoutReplaceArg::ptLayoutNewはここで算出するのが正しい
+	// LayoutReplaceArg::ptLayoutNewはここで算出するのが正しい
 	pArg->ptLayoutNew = LogicToLayout(dlra.ptNewPos); // 挿入された部分の次の位置
 }
 

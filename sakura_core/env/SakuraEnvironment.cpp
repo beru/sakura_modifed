@@ -76,12 +76,6 @@ wchar_t* ExParam_LongName( wchar_t* q, wchar_t* q_max, EExpParamName eLongParam 
 	@li I  iniファイルのフルパス
 	@li M  現在実行しているマクロファイルパス
 	@li <profile> プロファイル名
-
-	@date 2003.04.03 genta wcsncpy_ex導入によるfor文の削減
-	@date 2005.09.15 FILE 特殊文字S, M追加
-	@date 2007.09.21 kobake 特殊文字A(アプリ名)を追加
-	@date 2008.05.05 novice GetModuleHandle(NULL)→NULLに変更
-	@date 2012.10.11 Moca 特殊文字n追加
 */
 void SakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszBuffer, int nBufferLen)
 {
@@ -121,7 +115,6 @@ void SakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszBu
 			}
 			break;
 		case L'f':	// 開いているファイルの名前（ファイル名+拡張子のみ）
-			// Oct. 28, 2001 genta
 			// ファイル名のみを渡すバージョン
 			// ポインタを末尾に
 			if (!pDoc->docFile.GetFilePathClass().IsValidPath()) {
@@ -135,7 +128,6 @@ void SakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszBu
 			}
 			break;
 		case L'g':	// 開いているファイルの名前（拡張子を除くファイル名のみ）
-			// From Here Sep. 16, 2002 genta
 			if (!pDoc->docFile.GetFilePathClass().IsValidPath()) {
 				q = wcs_pushW(q, q_max - q, NO_TITLE.c_str(), NO_TITLE_LEN);
 				++p;
@@ -612,7 +604,7 @@ int SakuraEnvironment::_ExParam_Evaluate(const wchar_t* pCond)
 		}else {
 			return 1;
 		}
-	case L'N': // $N 新規/(無題)		2012/12/2 Uchi
+	case L'N': // $N 新規/(無題)
 		if (!pDoc->docFile.GetFilePathClass().IsValidPath()) {
 			return 0;
 		}else {
@@ -743,7 +735,7 @@ void SakuraEnvironment::ResolvePath(TCHAR* pszPath)
 bool IsSakuraMainWindow(HWND hWnd)
 {
 	TCHAR szClassName[64];
-	if (hWnd == NULL) {	// 2007.06.20 ryoji 条件追加
+	if (hWnd == NULL) {
 		return false;
 	}
 	if (!::IsWindow(hWnd)) {

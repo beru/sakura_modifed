@@ -1741,8 +1741,6 @@ void ShareData_IO::ShareData_IO_Macro(DataProfile& profile)
 /*!
 	@brief 共有データのStatusbarセクションの入出力
 	@param[in,out]	profile	INIファイル入出力クラス
-
-	@date 2008/6/21 Uchi
 */
 void ShareData_IO::ShareData_IO_Statusbar(DataProfile& profile)
 {
@@ -1761,8 +1759,6 @@ void ShareData_IO::ShareData_IO_Statusbar(DataProfile& profile)
 /*!
 	@brief 共有データのPluginセクションの入出力
 	@param[in,out]	profile	INIファイル入出力クラス
-
-	@date 2009/11/30 syat
 */
 void ShareData_IO::ShareData_IO_Plugin(DataProfile& profile, MenuDrawer* pMenuDrawer)
 {
@@ -1812,7 +1808,7 @@ void ShareData_IO::ShareData_IO_MainMenu(DataProfile& profile)
 {
 	IO_MainMenu(profile, GetDllShareData().common.mainMenu, false);		// 2010/5/15 Uchi
 
-	// 2015.02.26 Moca メインメニュー自動更新
+	// メインメニュー自動更新
 	const wchar_t* pszSecName = LTEXT("MainMenu");
 	int& nVersion = GetDllShareData().common.mainMenu.nVersion;
 	// ※メニュー定義を追加したらnCurrentVerを修正
@@ -1930,9 +1926,6 @@ void ShareData_IO::ShareData_IO_MainMenu(DataProfile& profile)
 	@param[in,out]	profile	INIファイル入出力クラス
 	@param[in,out]	mainmenu	共通設定MainMenuクラス
 	@param[in]		bOutCmdName	出力時、名前で出力
-
-	@date 2010/5/15 Uchi
-	@date 2014.11.21 Moca pData追加。データのみのタイプを追加
 */
 void ShareData_IO::IO_MainMenu(
 	DataProfile& profile,

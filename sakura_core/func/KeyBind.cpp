@@ -639,7 +639,7 @@ bool ShareData::InitKeyAssign(DllSharedData& shareData)
 	/* 共通設定の規定値 */
 	/********************/
 	const int nKeyDataInitNum = _countof(KeyDataInit);
-	const int KEYNAME_SIZE = _countof(shareData.common.keyBind.pKeyNameArr) -1;// 最後の１要素はダミー用に予約 2012.11.25 aroka
+	const int KEYNAME_SIZE = _countof(shareData.common.keyBind.pKeyNameArr) -1;// 最後の１要素はダミー用に予約
 	assert(!(nKeyDataInitNum > KEYNAME_SIZE));
 //	if (nKeyDataInitNum > KEYNAME_SIZE) {
 //		PleaseReportToAuthor(NULL, _T("キー設定数に対してDLLSHARE::nKeyNameArr[]のサイズが不足しています"));

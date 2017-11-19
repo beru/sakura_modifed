@@ -9,7 +9,6 @@
 #include "sakura_rc.h"
 #include "sakura.hh"
 
-// 置換 CDlgReplace.cpp	//@@@ 2002.01.07 add start MIK
 const DWORD p_helpids[] = {	//11900
 	IDC_BUTTON_SEARCHNEXT,			HIDC_REP_BUTTON_SEARCHNEXT,			// 下検索
 	IDC_BUTTON_SEARCHPREV,			HIDC_REP_BUTTON_SEARCHPREV,			// 上検索
@@ -32,28 +31,26 @@ const DWORD p_helpids[] = {	//11900
 	IDC_RADIO_SELECTEDAREA,			HIDC_REP_RADIO_SELECTEDAREA,		// 範囲：全体
 	IDC_RADIO_ALLAREA,				HIDC_REP_RADIO_ALLAREA,				// 範囲：選択範囲
 	IDC_STATIC_JRE32VER,			HIDC_REP_STATIC_JRE32VER,			// 正規表現バージョン
-	IDC_BUTTON_SETMARK,				HIDC_REP_BUTTON_SETMARK,			// 2002.01.16 hor 検索該当行をマーク
-	IDC_CHECK_SEARCHALL,			HIDC_REP_CHECK_SEARCHALL,			// 2002.01.26 hor 先頭（末尾）から再検索
-	IDC_CHECK_CONSECUTIVEALL,		HIDC_REP_CHECK_CONSECUTIVEALL,		//「すべて置換」は置換の繰返し	// 2007.01.16 ryoji
+	IDC_BUTTON_SETMARK,				HIDC_REP_BUTTON_SETMARK,			// 検索該当行をマーク
+	IDC_CHECK_SEARCHALL,			HIDC_REP_CHECK_SEARCHALL,			// 先頭（末尾）から再検索
+	IDC_CHECK_CONSECUTIVEALL,		HIDC_REP_CHECK_CONSECUTIVEALL,		//「すべて置換」は置換の繰返し
 //	IDC_STATIC,						-1,
 	0, 0
-};	//@@@ 2002.01.07 add end MIK
+};
 
 DlgReplace::DlgReplace()
 {
 	searchOption.Reset();	// 検索オプション
-	bConsecutiveAll = false;	//「すべて置換」は置換の繰返し	// 2007.01.16 ryoji
+	bConsecutiveAll = false;	//「すべて置換」は置換の繰返し
 	bSelectedArea = false;	// 選択範囲内置換
-	nReplaceTarget = 0;		// 置換対象		// 2001.12.03 hor
-	bPaste = false;			// 貼り付ける？	// 2001.12.03 hor
-	nReplaceCnt = 0;			// すべて置換の実行結果		// 2002.02.08 hor
-	bCanceled = false;		// すべて置換を中断したか	// 2002.02.08 hor
+	nReplaceTarget = 0;		// 置換対象
+	bPaste = false;			// 貼り付ける？
+	nReplaceCnt = 0;			// すべて置換の実行結果
+	bCanceled = false;		// すべて置換を中断したか
 }
 
 /*!
 	コンボボックスのドロップダウンメッセージを捕捉する
-
-	@date 2013.03.24 novice 新規作成
 */
 BOOL DlgReplace::OnCbnDropDown(HWND hwndCtl, int wID)
 {
@@ -88,12 +85,12 @@ HWND DlgReplace::DoModeless(
 {
 	auto& csSearch = pShareData->common.search;
 	searchOption = csSearch.searchOption;		// 検索オプション
-	bConsecutiveAll = csSearch.bConsecutiveAll;	//「すべて置換」は置換の繰返し	// 2007.01.16 ryoji
+	bConsecutiveAll = csSearch.bConsecutiveAll;	//「すべて置換」は置換の繰返し
 	bSelectedArea = csSearch.bSelectedArea;		// 選択範囲内置換
 	bNotifyNotFound = csSearch.bNotifyNotFound;	// 検索／置換  見つからないときメッセージを表示
 	bSelected = bSelected;
 	ptEscCaretPos_PHY = ((EditView*)lParam)->GetCaret().GetCaretLogicPos();	// 検索/置換開始時のカーソル位置退避
-	((EditView*)lParam)->bSearch = true;			// 検索/置換開始位置の登録有無			02/07/28 ai
+	((EditView*)lParam)->bSearch = true;			// 検索/置換開始位置の登録有無
 	return Dialog::DoModeless(hInstance, hwndParent, IDD_REPLACE, lParam, SW_SHOW);
 }
 
@@ -110,20 +107,18 @@ void DlgReplace::SetData(void)
 {
 	auto& csSearch = pShareData->common.search;
 
-	// 検索文字列/置換後文字列リストの設定(関数化)	2010/5/26 Uchi
+	// 検索文字列/置換後文字列リストの設定(関数化)
 	SetCombosList();
 
 	// 英大文字と英小文字を区別する
 	CheckButton(IDC_CHK_LOHICASE, searchOption.bLoHiCase);
 
-	// 2001/06/23 N.Nakatani
 	// 単語単位で探す
 	CheckButton(IDC_CHK_WORD, searchOption.bWordOnly);
 
-	//「すべて置換」は置換の繰返し  2007.01.16 ryoji
+	//「すべて置換」は置換の繰返し
 	CheckButton(IDC_CHECK_CONSECUTIVEALL, bConsecutiveAll);
 
-	// From Here Jun. 29, 2001 genta
 	// 正規表現ライブラリの差し替えに伴う処理の見直し
 	// 処理フロー及び判定条件の見直し。必ず正規表現のチェックと
 	// 無関係にCheckRegexpVersionを通過するようにした。
@@ -133,16 +128,14 @@ void DlgReplace::SetData(void)
 		// 英大文字と英小文字を区別する
 		CheckButton(IDC_CHK_REGULAREXP, true);
 
-		// 2001/06/23 N.Nakatani
 		// 単語単位で探す
 		EnableItem(IDC_CHK_WORD, false);
 	}else {
 		CheckButton(IDC_CHK_REGULAREXP, false);
 
 		//「すべて置換」は置換の繰返し
-		EnableItem(IDC_CHECK_CONSECUTIVEALL, false);	// 2007.01.16 ryoji
+		EnableItem(IDC_CHECK_CONSECUTIVEALL, false);
 	}
-	// To Here Jun. 29, 2001 genta
 
 	// 検索／置換  見つからないときメッセージを表示
 	CheckButton(IDC_CHECK_NOTIFYNOTFOUND, bNotifyNotFound);
@@ -153,7 +146,6 @@ void DlgReplace::SetData(void)
 	// 先頭（末尾）から再検索 2002.01.26 hor
 	CheckButton(IDC_CHECK_SEARCHALL, csSearch.bSearchAll);
 
-	// From Here 2001.12.03 hor
 	// クリップボードから貼り付ける？
 	CheckButton(IDC_CHK_PASTE, bPaste);
 	// 置換対象
@@ -168,14 +160,12 @@ void DlgReplace::SetData(void)
 		EnableItem(IDC_COMBO_TEXT2, false);
 		EnableItem(IDC_CHK_PASTE, false);
 	}
-	// To Here 2001.12.03 hor
 
 	return;
 }
 
 
 // 検索文字列/置換後文字列リストの設定
-// 2010/5/26 Uchi
 void DlgReplace::SetCombosList(void)
 {
 	// 検索文字列
@@ -218,7 +208,7 @@ int DlgReplace::GetData(void)
 	// 単語単位で探す
 	searchOption.bWordOnly = IsButtonChecked(IDC_CHK_WORD);
 
-	//「すべて置換」は置換の繰返し  2007.01.16 ryoji
+	//「すべて置換」は置換の繰返し
 	bConsecutiveAll = IsButtonChecked(IDC_CHECK_CONSECUTIVEALL);
 
 	// 正規表現
@@ -228,7 +218,7 @@ int DlgReplace::GetData(void)
 	// 検索／置換  見つからないときメッセージを表示
 	bNotifyNotFound = IsButtonChecked(IDC_CHECK_NOTIFYNOTFOUND);
 
-	csSearch.bConsecutiveAll = bConsecutiveAll;	// 1==「すべて置換」は置換の繰返し	// 2007.01.16 ryoji
+	csSearch.bConsecutiveAll = bConsecutiveAll;	// 1==「すべて置換」は置換の繰返し
 	csSearch.bSelectedArea = bSelectedArea;		// 選択範囲内置換
 	csSearch.bNotifyNotFound = bNotifyNotFound;	// 検索／置換  見つからないときメッセージを表示
 
@@ -250,13 +240,11 @@ int DlgReplace::GetData(void)
 	// 置換 ダイアログを自動的に閉じる
 	csSearch.bAutoCloseDlgReplace = IsButtonChecked(IDC_CHECK_bAutoCloseDlgReplace);
 
-	// 先頭（末尾）から再検索 2002.01.26 hor
+	// 先頭（末尾）から再検索
 	csSearch.bSearchAll = IsButtonChecked(IDC_CHECK_SEARCHALL);
 
 	if (0 < strText.size()) {
 		// 正規表現？
-		// From Here Jun. 26, 2001 genta
-		// 正規表現ライブラリの差し替えに伴う処理の見直し
 		int nFlag = 0x00;
 		nFlag |= searchOption.bLoHiCase ? 0x01 : 0x00;
 		if (searchOption.bRegularExp
@@ -264,15 +252,13 @@ int DlgReplace::GetData(void)
 		) {
 			return -1;
 		}
-		// To Here Jun. 26, 2001 genta 正規表現ライブラリ差し替え
 
 		// 検索文字列
-		//@@@ 2002.2.2 YAZAKI CShareData.AddToSearchKeys()追加に伴う変更
 		if (strText.size() < _MAX_PATH) {
 			SearchKeywordManager().AddToSearchKeys(strText.c_str());
 			csSearch.searchOption = searchOption;		// 検索オプション
 		}
-		// 2011.12.18 viewに直接設定
+		// viewに直接設定
 		EditView* pEditView = (EditView*)lParam;
 		if (pEditView->strCurSearchKey == strText && pEditView->curSearchOption == searchOption) {
 		}else {
@@ -283,13 +269,11 @@ int DlgReplace::GetData(void)
 		pEditView->nCurSearchKeySequence = GetDllShareData().common.search.nSearchKeySequence;
 
 		// 置換後文字列
-		//@@@ 2002.2.2 YAZAKI CShareData.AddToReplaceKeys()追加に伴う変更
 		if (strText2.size() < _MAX_PATH) {
 			SearchKeywordManager().AddToReplaceKeys(strText2.c_str());
 		}
 		nReplaceKeySequence = GetDllShareData().common.search.nReplaceKeySequence;
 
-		// From Here 2001.12.03 hor
 		// クリップボードから貼り付ける？
 		bPaste = IsButtonChecked(IDC_CHK_PASTE);
 		EnableItem(IDC_COMBO_TEXT2, !bPaste);
@@ -304,9 +288,7 @@ int DlgReplace::GetData(void)
 			bPaste = false;
 			EnableItem(IDC_COMBO_TEXT2, false);
 		}
-		// To Here 2001.12.03 hor
-
-		// 検索文字列/置換後文字列リストの設定	2010/5/26 Uchi
+		// 検索文字列/置換後文字列リストの設定
 		if (!bModal) {
 			SetCombosList();
 		}
@@ -324,28 +306,17 @@ BOOL DlgReplace::OnInitDialog(
 	)
 {
 	_SetHwnd(hwndDlg);
-	// Jun. 26, 2001 genta
-	// この位置で正規表現の初期化をする必要はない
-	// 他との一貫性を保つため削除
-
-	// ユーザーがコンボ ボックスのエディット コントロールに入力できるテキストの長さを制限する
-	// Combo_LimitText(GetItemHwnd(IDC_COMBO_TEXT), _MAX_PATH - 1);
-	// Combo_LimitText(GetItemHwnd(IDC_COMBO_TEXT2), _MAX_PATH - 1);
-
 	// コンボボックスのユーザー インターフェイスを拡張インターフェースにする
 	Combo_SetExtendedUI(GetItemHwnd(IDC_COMBO_TEXT), TRUE);
 	Combo_SetExtendedUI(GetItemHwnd(IDC_COMBO_TEXT2), TRUE);
 
 	// テキスト選択中か
 	if (bSelected) {
-		EnableItem(IDC_BUTTON_SEARCHPREV, false);	// 2001.12.03 hor コメント解除
-		EnableItem(IDC_BUTTON_SEARCHNEXT, false);	// 2001.12.03 hor コメント解除
-		EnableItem(IDC_BUTTON_REPALCE, false);		// 2001.12.03 hor コメント解除
+		EnableItem(IDC_BUTTON_SEARCHPREV, false);
+		EnableItem(IDC_BUTTON_SEARCHNEXT, false);
+		EnableItem(IDC_BUTTON_REPALCE, false);
 		CheckButton(IDC_RADIO_SELECTEDAREA, true);
-//		CheckButton(IDC_RADIO_ALLAREA, false);					// 2001.12.03 hor コメント
 	}else {
-//		EnableItem(IDC_RADIO_SELECTEDAREA), false);	// 2001.12.03 hor コメント
-//		CheckButton(IDC_RADIO_SELECTEDAREA, false);				// 2001.12.03 hor コメント
 		CheckButton(IDC_RADIO_ALLAREA, true);
 	}
 
@@ -356,7 +327,7 @@ BOOL DlgReplace::OnInitDialog(
 	comboDelText2.pRecent = &recentReplace;
 	SetComboBoxDeleter(GetItemHwnd(IDC_COMBO_TEXT2), &comboDelText2);
 
-	// フォント設定	2012/11/27 Uchi
+	// フォント設定
 	HFONT hFontOld = (HFONT)::SendMessage(GetItemHwnd(IDC_COMBO_TEXT), WM_GETFONT, 0, 0);
 	HFONT hFont = SetMainFont(GetItemHwnd(IDC_COMBO_TEXT));
 	fontText.SetFont(hFontOld, hFont, GetItemHwnd(IDC_COMBO_TEXT));
@@ -432,11 +403,9 @@ BOOL DlgReplace::OnBnClicked(int wID)
 			EnableItem(IDC_BUTTON_REPALCE, false);
 		}
 		return TRUE;
-// To Here 2001.12.03 hor
 	case IDC_BUTTON_HELP:
 		//「置換」のヘルプ
-		// Stonee, 2001/03/12 第四引数を、機能番号からヘルプトピック番号を調べるようにした
-		MyWinHelp(GetHwnd(), HELP_CONTEXT, ::FuncID_To_HelpContextID(F_REPLACE_DIALOG));	// 2006.10.10 ryoji MyWinHelpに変更に変更
+		MyWinHelp(GetHwnd(), HELP_CONTEXT, ::FuncID_To_HelpContextID(F_REPLACE_DIALOG));
 		return TRUE;
 //	case IDC_CHK_LOHICASE:	// 大文字と小文字を区別する
 //		MYTRACE(_T("IDC_CHK_LOHICASE\n"));
@@ -452,34 +421,18 @@ BOOL DlgReplace::OnBnClicked(int wID)
 			if (!CheckRegexpVersion(GetHwnd(), IDC_STATIC_JRE32VER, true)) {
 				CheckButton(IDC_CHK_REGULAREXP, false);
 			}else {
-			// To Here Jun. 26, 2001 genta
-
-				// 英大文字と英小文字を区別する
-				// Jan. 31, 2002 genta
-				// 大文字・小文字の区別は正規表現の設定に関わらず保存する
-				//CheckButton(IDC_CHK_LOHICASE, true);
-				//EnableItem(IDC_CHK_LOHICASE, false);
-
-				// 2001/06/23 N.Nakatani
 				// 単語単位で探す
 				EnableItem(IDC_CHK_WORD, false);
 
 				//「すべて置換」は置換の繰返し
-				EnableItem(IDC_CHECK_CONSECUTIVEALL, true);	// 2007.01.16 ryoji
+				EnableItem(IDC_CHECK_CONSECUTIVEALL, true);
 			}
 		}else {
-			// 英大文字と英小文字を区別する
-			//EnableItem(IDC_CHK_LOHICASE, true);
-			// Jan. 31, 2002 genta
-			// 大文字・小文字の区別は正規表現の設定に関わらず保存する
-			//CheckButton(IDC_CHK_LOHICASE, false);
-
-			// 2001/06/23 N.Nakatani
 			// 単語単位で探す
 			EnableItem(IDC_CHK_WORD, true);
 
 			//「すべて置換」は置換の繰返し
-			EnableItem(IDC_CHECK_CONSECUTIVEALL, false);	// 2007.01.16 ryoji
+			EnableItem(IDC_CHECK_CONSECUTIVEALL, false);
 		}
 		return TRUE;
 //	case IDOK:			// 下検索
@@ -498,11 +451,11 @@ BOOL DlgReplace::OnBnClicked(int wID)
 		nRet = GetData();
 		if (0 < nRet) {
 
-			// 検索開始位置を登録 02/07/28 ai start
+			// 検索開始位置を登録
 			if (pEditView->bSearch != FALSE) {
 				pEditView->ptSrchStartPos_PHY = ptEscCaretPos_PHY;
 				pEditView->bSearch = FALSE;
-			}// 02/07/28 ai end
+			}
 
 			// コマンドコードによる処理振り分け
 			// 前を検索
@@ -517,11 +470,11 @@ BOOL DlgReplace::OnBnClicked(int wID)
 		nRet = GetData();
 		if (0 < nRet) {
 
-			// 検索開始位置を登録 02/07/28 ai start
+			// 検索開始位置を登録
 			if (pEditView->bSearch) {
 				pEditView->ptSrchStartPos_PHY = ptEscCaretPos_PHY;
 				pEditView->bSearch = false;
-			}// 02/07/28 ai end
+			}
 
 			// コマンドコードによる処理振り分け
 			// 次を検索
@@ -533,7 +486,7 @@ BOOL DlgReplace::OnBnClicked(int wID)
 		}
 		return TRUE;
 
-	case IDC_BUTTON_SETMARK:	// 2002.01.16 hor 該当行マーク
+	case IDC_BUTTON_SETMARK:	// 該当行マーク
 		nRet = GetData();
 		if (0 < nRet) {
 			pEditView->GetCommander().HandleCommand(F_BOOKMARK_PATTERN, false, 0, 0, 0, 0);
@@ -545,11 +498,11 @@ BOOL DlgReplace::OnBnClicked(int wID)
 		nRet = GetData();
 		if (0 < nRet) {
 
-			// 置換開始位置を登録 02/07/28 ai start
+			// 置換開始位置を登録
 			if (pEditView->bSearch) {
 				pEditView->ptSrchStartPos_PHY = ptEscCaretPos_PHY;
 				pEditView->bSearch = false;
-			}// 02/07/28 ai end
+			}
 
 			// 置換
 			//@@@ 2002.2.2 YAZAKI 置換コマンドをEditViewに新設
@@ -564,11 +517,11 @@ BOOL DlgReplace::OnBnClicked(int wID)
 	case IDC_BUTTON_REPALCEALL:	// すべて置換
 		nRet = GetData();
 		if (0 < nRet) {
-			// 置換開始位置を登録 02/07/28 ai start
+			// 置換開始位置を登録
 			if (pEditView->bSearch) {
 				pEditView->ptSrchStartPos_PHY = ptEscCaretPos_PHY;
 				pEditView->bSearch = false;
-			}// 02/07/28 ai end
+			}
 
 			// すべて行置換時の処置は「すべて置換」は置換の繰返しオプションOFFの場合にして削除 2007.01.16 ryoji
 			pEditView->GetCommander().HandleCommand(F_REPLACE_ALL, true, 0, 0, 0, 0);
@@ -606,7 +559,7 @@ BOOL DlgReplace::OnBnClicked(int wID)
 
 BOOL DlgReplace::OnActivate(WPARAM wParam, LPARAM lParam)
 {
-	// 0文字幅マッチ描画のON/OFF	// 2009.11.29 ryoji
+	// 0文字幅マッチ描画のON/OFF
 	EditView*	pEditView = (EditView*)(this->lParam);
 	Range rangeSel = pEditView->GetSelectionInfo().select;
 	if (rangeSel.IsValid() && rangeSel.IsLineOne() && rangeSel.IsOne())
@@ -615,11 +568,9 @@ BOOL DlgReplace::OnActivate(WPARAM wParam, LPARAM lParam)
 	return Dialog::OnActivate(wParam, lParam);
 }
 
-//@@@ 2002.01.18 add start
 LPVOID DlgReplace::GetHelpIdTable(void)
 {
 	return (LPVOID)p_helpids;
 }
-//@@@ 2002.01.18 add end
 
 

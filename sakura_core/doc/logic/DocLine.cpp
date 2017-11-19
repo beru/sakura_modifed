@@ -18,8 +18,6 @@ DocLine::~DocLine()
 /* 空行（スペース、タブ、改行記号のみの行）かどうかを取得する
 	true：空行だ。
 	false：空行じゃないぞ。
-
-	2002/04/26 YAZAKI
 */
 bool DocLine::IsEmptyLine() const
 {

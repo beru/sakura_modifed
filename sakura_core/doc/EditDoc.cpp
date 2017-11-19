@@ -212,7 +212,6 @@ void EditDoc::Clear()
 	InitCharWidthCache(pEditWnd->GetLogfont());
 	pEditWnd->pViewFont->UpdateFont(&pEditWnd->GetLogfont());
 
-	// 2008.06.07 nasukoji	折り返し方法の追加に対応
 	const TypeConfig& ref = docType.GetDocumentAttribute();
 	size_t nMaxLineKetas = ref.nMaxLineKetas;
 	if (ref.nTextWrapMethod != TextWrappingMethod::SettingWidth) {
@@ -679,13 +678,12 @@ void EditDoc::OnChangeSetting(
 	size_t nMaxLineKetas = ref.nMaxLineKetas;
 	size_t nTabSpace = ref.nTabSpace;
 	if (bDoLayout) {
-		// 2008.06.07 nasukoji	折り返し方法の追加に対応
 		// 折り返し方法の一時設定とタイプ別設定が一致したら一時設定適用中は解除
 		if (nTextWrapMethodCur == ref.nTextWrapMethod) {
 			if (nTextWrapMethodCur == TextWrappingMethod::SettingWidth
 				&& layoutMgr.GetMaxLineKetas() != ref.nMaxLineKetas
 			) {
-				// 2013.05.29 折り返し幅が違うのでそのままにする
+				// 折り返し幅が違うのでそのままにする
 			}else if (bDoLayout) {
 				bTextWrapMethodCurTemp = false;		// 一時設定適用中を解除
 			}

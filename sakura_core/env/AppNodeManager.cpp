@@ -150,7 +150,7 @@ bool AppNodeGroupHandle::AddEditWndList(HWND hWnd)
 		// 追加または先頭に移動する。
 		recentEditNode.AppendItem(&editNode);
 		recentEditNode.Terminate();
-	}	// 2007.07.07 genta Lock領域終わり
+	}	// Lock領域終わり
 
 	// ウィンドウ登録メッセージをブロードキャストする。
 	AppNodeGroupHandle(hWnd).PostMessageToAllEditors(MYWM_TAB_WINDOW_NOTIFY, (WPARAM)subCommand, (LPARAM)hWnd, hWnd);
@@ -266,7 +266,7 @@ bool AppNodeGroupHandle::RequestCloseEditor(EditNode* pWndArr, size_t nArrCnt, b
 				DWORD dwPid;
 				::GetWindowThreadProcessId(wnd.hWnd, &dwPid);
 				::SendMessage(hWndActive, MYWM_ALLOWACTIVATE, dwPid, 0);	// アクティブ化の許可を依頼する
-				if (!::SendMessage(wnd.hWnd, MYWM_CLOSE, bExit ? PM_CLOSE_EXIT : 0, (LPARAM)hWndActive)) {	// 2007.02.13 ryoji bExitを引き継ぐ
+				if (!::SendMessage(wnd.hWnd, MYWM_CLOSE, bExit ? PM_CLOSE_EXIT : 0, (LPARAM)hWndActive)) {
 					return false;
 				}
 			}
@@ -325,7 +325,6 @@ bool relayMessageToAllEditors(
 
 	// hWndLast以外へのメッセージ
 	for (size_t i=0; i<n; ++i) {
-		// Jan. 24, 2005 genta hWndLast == NULLのときにメッセージが送られるように
 		auto& node = pWndArr[i];
 		if (!hWndLast || node.hWnd != hWndLast) {
 			if (nGroup == 0 || nGroup == node.nGroup) {

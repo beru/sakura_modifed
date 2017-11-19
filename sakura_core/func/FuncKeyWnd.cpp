@@ -33,7 +33,6 @@ LRESULT CALLBACK CFuncKeyWndProc(
 ***/
 
 
-// @date 2002.2.17 YAZAKI CShareDataのインスタンスは、CProcessにひとつあるのみ。
 FuncKeyWnd::FuncKeyWnd()
 	:
 	Wnd(_T("::FuncKeyWnd")),
@@ -45,9 +44,6 @@ FuncKeyWnd::FuncKeyWnd()
 	for (size_t i=0; i<_countof(szFuncNameArr); ++i) {
 		szFuncNameArr[i][0] = 0;
 	}
-// 2002.11.04 Moca Open()側で設定
-//	nButtonGroupNum = 4;
-
 	for (size_t i=0; i<_countof(hwndButtonArr); ++i) {
 		hwndButtonArr[i] = NULL;
 	}
@@ -55,7 +51,7 @@ FuncKeyWnd::FuncKeyWnd()
 	// 表示用フォント
 	// LOGFONTの初期化
 	LOGFONT	lf = {0};
-	lf.lfHeight			= DpiPointsToPixels(-9);	// 2009.10.01 ryoji 高DPI対応（ポイント数から算出）
+	lf.lfHeight			= DpiPointsToPixels(-9);	// 高DPI対応（ポイント数から算出）
 	lf.lfWidth			= 0;
 	lf.lfEscapement		= 0;
 	lf.lfOrientation	= 0;
@@ -101,7 +97,6 @@ HWND FuncKeyWnd::Open(
 	hwndSizeBox = NULL;
 	nCurrentKeyState = -1;
 
-	// 2002.11.04 Moca 変更できるように
 	nButtonGroupNum = shareData.common.window.nFuncKeyWnd_GroupNum;
 	if (nButtonGroupNum < 1 || 12 < nButtonGroupNum) {
 		nButtonGroupNum = 4;
@@ -124,10 +119,10 @@ HWND FuncKeyWnd::Open(
 		0,								// extended window style
 		pszClassName,					// Pointer to a null-terminated string or is an atom.
 		pszClassName,					// pointer to window name
-		WS_CHILD/* | WS_VISIBLE*/ | WS_CLIPCHILDREN, // window style	// 2006.06.17 ryoji WS_CLIPCHILDREN 追加	// 2007.03.08 ryoji WS_VISIBLE 除去
+		WS_CHILD/* | WS_VISIBLE*/ | WS_CLIPCHILDREN, // window style
 		CW_USEDEFAULT,					// horizontal position of window
 		0,								// vertical position of window
-		0,								// window width	// 2007.02.05 ryoji 100->0（半端なサイズで一瞬表示されるより見えないほうがいい）
+		0,								// window width
 		::GetSystemMetrics(SM_CYMENU),	// window height
 		NULL							// handle to menu, or child-window identifier
 	);
@@ -154,8 +149,8 @@ HWND FuncKeyWnd::Open(
 	// ボタンの生成
 	CreateButtons();
 
-	Timer_ONOFF(true); // 20060126 aroka
-	OnTimer(GetHwnd(), WM_TIMER, IDT_FUNCWND, ::GetTickCount());	// 初回更新	// 2006.12.20 ryoji
+	Timer_ONOFF(true);
+	OnTimer(GetHwnd(), WM_TIMER, IDT_FUNCWND, ::GetTickCount());
 
 	return GetHwnd();
 }
@@ -199,7 +194,7 @@ LRESULT FuncKeyWnd::OnSize(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		::MoveWindow(hwndButtonArr[i], nX, 1, nButtonWidth, nButtonHeight, TRUE);
 		nX += nButtonWidth + 1;
 	}
-	::InvalidateRect(GetHwnd(), NULL, TRUE);	// 再描画してね。	//@@@ 2003.06.11 MIK
+	::InvalidateRect(GetHwnd(), NULL, TRUE);	// 再描画してね
 	return 0L;
 }
 
@@ -256,11 +251,10 @@ LRESULT FuncKeyWnd::OnTimer(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		return 0;
 	}
 
-	if (::GetActiveWindow() != GetParentHwnd() && nCurrentKeyState != -1) {	// 2002/06/02 MIK	// 2006.12.20 ryoji 初回更新は処理する
+	if (::GetActiveWindow() != GetParentHwnd() && nCurrentKeyState != -1) {
 		return 0;
 	}
 
-// novice 2004/10/10
 	// Shift,Ctrl,Altキーが押されていたか
 	int nIdx = GetCtrlKeyState();
 	// ALT,Shift,Ctrlキーの状態が変化したか
@@ -270,7 +264,6 @@ LRESULT FuncKeyWnd::OnTimer(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		// ファンクションキーの機能名を取得
 		auto& csKeyBind = shareData.common.keyBind;
 		for (size_t i=0; i<_countof(szFuncNameArr); ++i) {
-			// 2007.02.22 ryoji KeyBind::GetFuncCode()を使う
 			EFunctionCode nFuncCode = KeyBind::GetFuncCode(
 				(WORD)(((VK_F1 + i) | ((WORD)((BYTE)(nIdx))) << 8)),
 				csKeyBind.nKeyNameArrNum,
@@ -281,7 +274,6 @@ LRESULT FuncKeyWnd::OnTimer(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				if (nFuncCodeArr[i] == 0) {
 					szFuncNameArr[i][0] = 0;
 				}else {
-					// Oct. 2, 2001 genta
 					pEditDoc->funcLookup.Funccode2Name(
 						nFuncCodeArr[i],
 						szFuncNameArr[i],
@@ -314,7 +306,7 @@ LRESULT FuncKeyWnd::OnTimer(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 LRESULT FuncKeyWnd::OnDestroy(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	// タイマーを削除
-	Timer_ONOFF(false); // 20060126 aroka
+	Timer_ONOFF(false);
 	
 	// ボタンを削除
 	for (size_t i=0; i<_countof(hwndButtonArr); ++i) {
@@ -359,9 +351,7 @@ int FuncKeyWnd::CalcButtonSize(void)
 }
 
 
-/*! ボタンの生成
-	@date 2007.02.05 ryoji ボタンの水平位置・幅の設定処理を削除（OnSizeで再配置されるので不要）
-*/
+/*! ボタンの生成 */
 void FuncKeyWnd::CreateButtons(void)
 {
 	RECT rcParent;
@@ -385,7 +375,7 @@ void FuncKeyWnd::CreateButtons(void)
 			nButtonHeight,		// button height
 			GetHwnd(),			// parent window
 			NULL,				// No menu
-			(HINSTANCE) GetWindowLongPtr(GetHwnd(), GWLP_HINSTANCE),	// Modified by KEITA for WIN64 2003.9.6
+			(HINSTANCE) GetWindowLongPtr(GetHwnd(), GWLP_HINSTANCE),
 			NULL				// pointer not needed
 		);
 		// フォント変更
@@ -432,7 +422,7 @@ void FuncKeyWnd::SizeBox_ONOFF(bool bSizeBox)
 }
 
 
-// タイマーの更新を開始／停止する。 20060126 aroka
+// タイマーの更新を開始／停止する。
 // ファンクションキー表示はタイマーにより更新しているが、
 // アプリのフォーカスが外れたときに親ウィンドウからON/OFFを
 // 呼び出してもらうことにより、余計な負荷を停止したい。

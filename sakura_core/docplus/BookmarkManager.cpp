@@ -182,14 +182,11 @@ LPCWSTR BookmarkManager::GetBookMarks()
 		++nLinePos;
 		pDocLine = pDocLine->GetNextLine();
 	}
-	return szText; // Feb. 17, 2003 genta
+	return szText;
 }
 
 
 // 検索条件に該当する行にブックマークをセットする
-/*
-	@date 2002.01.16 hor
-*/
 void BookmarkManager::MarkSearchWord(
 	const SearchStringPattern& pattern
 	)
@@ -204,7 +201,6 @@ void BookmarkManager::MarkSearchWord(
 		while (pDocLine) {
 			if (!BookmarkGetter(pDocLine).IsBookmarked()) {
 				const wchar_t* pLine = pDocLine->GetDocLineStrWithEOL(&nLineLen);
-				// 2005.03.19 かろと 前方一致サポートのためのメソッド変更
 				if (pRegexp->Match(pLine, nLineLen, 0)) {
 					BookmarkSetter(pDocLine).SetBookmark(true);
 				}

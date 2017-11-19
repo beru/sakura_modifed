@@ -31,7 +31,7 @@ bool Converter_TabToSpace::DoConvert(NativeW* pData)
 				}else {
 					++nPosDes;
 					++nPosX;
-					if (WCODE::IsZenkaku(pLine[i])) ++nPosX;		// ‘SŠp•¶Žš‚¸‚ê‘Î‰ž 2008.10.15 matsumo
+					if (WCODE::IsZenkaku(pLine[i])) ++nPosX;		// ‘SŠp•¶Žš‚¸‚ê‘Î‰ž
 				}
 			}
 		}
@@ -59,7 +59,7 @@ bool Converter_TabToSpace::DoConvert(NativeW* pData)
 					pDes[nPosDes] = pLine[i];
 					++nPosDes;
 					++nPosX;
-					if (WCODE::IsZenkaku(pLine[i])) ++nPosX;		// ‘SŠp•¶Žš‚¸‚ê‘Î‰ž 2008.10.15 matsumo
+					if (WCODE::IsZenkaku(pLine[i])) ++nPosX;		// ‘SŠp•¶Žš‚¸‚ê‘Î‰ž
 				}
 			}
 		}

@@ -8,7 +8,7 @@
 // 全角カナ
 static const wchar_t tableZenkata_Normal[] =
 	L"アイウエオカキクケコサシスセソタチツテトナニヌネノ"	// 普通
-	L"ハヒフヘホマミムメモヤユヨラリルレロワヰヱヲン"		//       ※「ヰ」「ヱ」は「イ」「エ」に変換。(ANSI版を踏襲) 2012.06.09 syat
+	L"ハヒフヘホマミムメモヤユヨラリルレロワヰヱヲン"		//       ※「ヰ」「ヱ」は「イ」「エ」に変換。(ANSI版を踏襲)
 	L"ァィゥェォッャュョ" L"\u30ee\u30f5\u30f6"				// 小    ※後半3文字は「ヮ」「ヵ」「ヶ」
 ;
 static const wchar_t tableZenkata_Dakuten[] =

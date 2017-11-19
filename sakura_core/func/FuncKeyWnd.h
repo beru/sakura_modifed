@@ -10,7 +10,6 @@ struct DllSharedData;
 class EditDoc;
 
 // ファンクションキーウィンドウ
-// @date 2002.2.17 YAZAKI CShareDataのインスタンスは、CProcessにひとつあるのみ。
 class FuncKeyWnd : public Wnd {
 public:
 	/*

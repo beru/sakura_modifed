@@ -4,13 +4,12 @@
 #include "StdAfx.h"
 #include "dlg/DlgPrintSetting.h"
 #include "dlg/DlgInput1.h"
-#include "func/Funccode.h"		// Stonee, 2001/03/12
+#include "func/Funccode.h"
 #include "util/shell.h"
 #include "util/window.h"
-#include "sakura_rc.h"	// 2002/2/10 aroka
+#include "sakura_rc.h"
 #include "sakura.hh"
 
-// 印刷設定 CDlgPrintSetting.cpp	//@@@ 2002.01.07 add start MIK
 const DWORD p_helpids[] = {	//12500
 	IDC_COMBO_SETTINGNAME,			HIDC_PS_COMBO_SETTINGNAME,		// ページ設定
 	IDC_BUTTON_EDITSETTINGNAME,		HIDC_PS_BUTTON_EDITSETTINGNAME,	// 設定名変更
@@ -37,26 +36,26 @@ const DWORD p_helpids[] = {	//12500
 	IDC_SPIN_MARGINRX,				HIDC_PS_EDIT_MARGINRX,		// 12577,
 	IDC_CHECK_WORDWRAP,				HIDC_PS_CHECK_WORDWRAP,		// ワードラップ
 	IDC_CHECK_LINENUMBER,			HIDC_PS_CHECK_LINENUMBER,	// 行番号
-	IDC_CHECK_PS_KINSOKUHEAD,		HIDC_PS_CHECK_KINSOKUHEAD,	// 行頭禁則	//@@@ 2002.04.09 MIK
-	IDC_CHECK_PS_KINSOKUTAIL,		HIDC_PS_CHECK_KINSOKUTAIL,	// 行末禁則	//@@@ 2002.04.09 MIK
-	IDC_CHECK_PS_KINSOKURET,		HIDC_PS_CHECK_KINSOKURET,	// 改行文字をぶら下げる	//@@@ 2002.04.14 MIK
-	IDC_CHECK_PS_KINSOKUKUTO,		HIDC_PS_CHECK_KINSOKUKUTO,	// 句読点をぶら下げる	//@@@ 2002.04.17 MIK
-	IDC_CHECK_COLORPRINT,			HIDC_PS_CHECK_COLORPRINT,	// カラー印刷			// 2013/4/26 Uchi
-	IDC_EDIT_HEAD1,					HIDC_PS_EDIT_HEAD1,			// ヘッダー(左寄せ)		// 2006.10.11 ryoji
-	IDC_EDIT_HEAD2,					HIDC_PS_EDIT_HEAD2,			// ヘッダー(中央寄せ)	// 2006.10.11 ryoji
-	IDC_EDIT_HEAD3,					HIDC_PS_EDIT_HEAD3,			// ヘッダー(右寄せ)		// 2006.10.11 ryoji
-	IDC_EDIT_FOOT1,					HIDC_PS_EDIT_FOOT1,			// フッター(左寄せ)		// 2006.10.11 ryoji
-	IDC_EDIT_FOOT2,					HIDC_PS_EDIT_FOOT2,			// フッター(中央寄せ)	// 2006.10.11 ryoji
-	IDC_EDIT_FOOT3,					HIDC_PS_EDIT_FOOT3,			// フッター(右寄せ)		// 2006.10.11 ryoji
-	IDC_CHECK_USE_FONT_HEAD,		HIDC_PS_FONT_HEAD,			// ヘッダー(フォント)	// 2013.05.16 Uchi
-	IDC_BUTTON_FONT_HEAD,			HIDC_PS_FONT_HEAD,			// ヘッダー(フォント)	// 2013.05.16 Uchi
-	IDC_CHECK_USE_FONT_FOOT,		HIDC_PS_FONT_FOOT,			// フッター(フォント)	// 2013/5/16 Uchi
-	IDC_BUTTON_FONT_FOOT,			HIDC_PS_FONT_FOOT,			// フッター(フォント)	// 2013/5/16 Uchi
+	IDC_CHECK_PS_KINSOKUHEAD,		HIDC_PS_CHECK_KINSOKUHEAD,	// 行頭禁則
+	IDC_CHECK_PS_KINSOKUTAIL,		HIDC_PS_CHECK_KINSOKUTAIL,	// 行末禁則
+	IDC_CHECK_PS_KINSOKURET,		HIDC_PS_CHECK_KINSOKURET,	// 改行文字をぶら下げる
+	IDC_CHECK_PS_KINSOKUKUTO,		HIDC_PS_CHECK_KINSOKUKUTO,	// 句読点をぶら下げる
+	IDC_CHECK_COLORPRINT,			HIDC_PS_CHECK_COLORPRINT,	// カラー印刷
+	IDC_EDIT_HEAD1,					HIDC_PS_EDIT_HEAD1,			// ヘッダー(左寄せ)
+	IDC_EDIT_HEAD2,					HIDC_PS_EDIT_HEAD2,			// ヘッダー(中央寄せ)
+	IDC_EDIT_HEAD3,					HIDC_PS_EDIT_HEAD3,			// ヘッダー(右寄せ)
+	IDC_EDIT_FOOT1,					HIDC_PS_EDIT_FOOT1,			// フッター(左寄せ)
+	IDC_EDIT_FOOT2,					HIDC_PS_EDIT_FOOT2,			// フッター(中央寄せ)
+	IDC_EDIT_FOOT3,					HIDC_PS_EDIT_FOOT3,			// フッター(右寄せ)
+	IDC_CHECK_USE_FONT_HEAD,		HIDC_PS_FONT_HEAD,			// ヘッダー(フォント)
+	IDC_BUTTON_FONT_HEAD,			HIDC_PS_FONT_HEAD,			// ヘッダー(フォント)
+	IDC_CHECK_USE_FONT_FOOT,		HIDC_PS_FONT_FOOT,			// フッター(フォント)
+	IDC_BUTTON_FONT_FOOT,			HIDC_PS_FONT_FOOT,			// フッター(フォント)
 	IDOK,							HIDOK_PS,					// OK
 	IDCANCEL,						HIDCANCEL_PS,				// キャンセル
 	IDC_BUTTON_HELP,				HIDC_PS_BUTTON_HELP,		// ヘルプ
 	0, 0
-};	//@@@ 2002.01.07 add end MIK
+};
 
 #define IDT_PrintSetting 1467
 
@@ -210,8 +209,7 @@ BOOL DlgPrintSetting::OnBnClicked(int wID)
 	switch (wID) {
 	case IDC_BUTTON_HELP:
 		//「印刷ページ設定」のヘルプ
-		// Stonee, 2001/03/12 第四引数を、機能番号からヘルプトピック番号を調べるようにした
-		MyWinHelp(GetHwnd(), HELP_CONTEXT, ::FuncID_To_HelpContextID(F_PRINT_PAGESETUP));	// 2006.10.10 ryoji MyWinHelpに変更に変更
+		MyWinHelp(GetHwnd(), HELP_CONTEXT, ::FuncID_To_HelpContextID(F_PRINT_PAGESETUP));
 		return TRUE;
 	case IDC_BUTTON_EDITSETTINGNAME:
 		_tcscpy(szWork, curPS.szPrintSettingName);
@@ -342,8 +340,8 @@ BOOL DlgPrintSetting::OnStnClicked(int wID)
 	switch (wID) {
 	case IDC_STATIC_ENABLECOLUMNS:
 	case IDC_STATIC_ENABLELINES:
-		// 現状クリックは受け付けていないが、メッセージ処理したいのでここに配置 2013.5.5 aroka
-		// メッセージが連続して送られたときは一回だけ対応する 2013.5.5 aroka
+		// 現状クリックは受け付けていないが、メッセージ処理したいのでここに配置
+		// メッセージが連続して送られたときは一回だけ対応する
 		if (bPrintableLinesAndColumnInvalid) {
 			bPrintableLinesAndColumnInvalid = false;
 			CalcPrintableLineAndColumn();
@@ -358,8 +356,8 @@ BOOL DlgPrintSetting::OnStnClicked(int wID)
 BOOL DlgPrintSetting::OnEnChange(HWND hwndCtl, int wID)
 {
 	switch (wID) {
-	case IDC_EDIT_FONTHEIGHT:	// フォント幅の最小値が非０のため'12'と入力すると'1'のところで蹴られてしまう 2013.5.5 aroka
-		if (GetItemInt(IDC_EDIT_FONTHEIGHT, NULL, FALSE) >= 10) {	// 二桁以上の場合は領域チェック 2013.5.20 aroka
+	case IDC_EDIT_FONTHEIGHT:	// フォント幅の最小値が非０のため'12'と入力すると'1'のところで蹴られてしまう
+		if (GetItemInt(IDC_EDIT_FONTHEIGHT, NULL, FALSE) >= 10) {	// 二桁以上の場合は領域チェック
 			UpdatePrintableLineAndColumn();
 		}
 		break;	// ここでは行と桁の更新要求のみ。後の処理はDialogに任せる。
@@ -382,14 +380,14 @@ BOOL DlgPrintSetting::OnEnKillFocus(HWND hwndCtl, int wID)
 {
 	switch (wID) {
 	case IDC_EDIT_FONTHEIGHT:
-	//case IDC_EDIT_LINESPACE:	// EN_CHANGE で計算しているので冗長かな、と思いコメントアウト 2013.5.5 aroka
+	//case IDC_EDIT_LINESPACE:	// EN_CHANGE で計算しているので冗長かな、と思いコメントアウト
 	//case IDC_EDIT_DANSUU:
 	//case IDC_EDIT_DANSPACE:
 	//case IDC_EDIT_MARGINTY:
 	//case IDC_EDIT_MARGINBY:
 	//case IDC_EDIT_MARGINLX:
 	//case IDC_EDIT_MARGINRX:
-	case IDC_EDIT_HEAD1:	// テキスト編集のたびにチェックすると遅いのでフォーカス移動時のみ 2013.5.12 aroka
+	case IDC_EDIT_HEAD1:	// テキスト編集のたびにチェックすると遅いのでフォーカス移動時のみ
 	case IDC_EDIT_HEAD2:
 	case IDC_EDIT_HEAD3:
 	case IDC_EDIT_FOOT1:
@@ -423,7 +421,7 @@ void DlgPrintSetting::SetData(void)
 	// 用紙サイズ一覧
 	HWND hwndComboPaper = GetItemHwnd(IDC_COMBO_PAPER);
 	Combo_ResetContent(hwndComboPaper);
-	// 2006.08.14 Moca 用紙名一覧の重複削除
+	// 用紙名一覧の重複削除
 	for (size_t i=0; i<Print::nPaperInfoArrNum; ++i) {
 		int nItemIdx = Combo_AddString(hwndComboPaper, Print::paperInfoArr[i].pszName);
 		Combo_SetItemData(hwndComboPaper, nItemIdx, Print::paperInfoArr[i].nId);
@@ -506,7 +504,7 @@ int DlgPrintSetting::GetData(void)
 		(short)Combo_GetItemData(hwndCtrl, nIdx1);
 
 	// 用紙の向き
-	// 2006.08.14 Moca 用紙方向コンボボックスを廃止し、ボタンを有効化
+	// 用紙方向コンボボックスを廃止し、ボタンを有効化
 	if (IsButtonChecked(IDC_RADIO_PORTRAIT)) {
 		curPS.nPrintPaperOrientation = DMORIENT_PORTRAIT;
 	}else {
@@ -545,19 +543,18 @@ int DlgPrintSetting::GetData(void)
 	// 英文ワードラップ
 	curPS.bPrintWordWrap = IsButtonChecked(IDC_CHECK_WORDWRAP);
 
-	// 行頭禁則	//@@@ 2002.04.09 MIK
+	// 行頭禁則
 	curPS.bPrintKinsokuHead = IsButtonChecked(IDC_CHECK_PS_KINSOKUHEAD);
-	// 行末禁則	//@@@ 2002.04.09 MIK
+	// 行末禁則
 	curPS.bPrintKinsokuTail = IsButtonChecked(IDC_CHECK_PS_KINSOKUTAIL);
-	// 改行文字をぶら下げる	//@@@ 2002.04.13 MIK
+	// 改行文字をぶら下げる
 	curPS.bPrintKinsokuRet = IsButtonChecked(IDC_CHECK_PS_KINSOKURET);
-	// 句読点をぶら下げる	//@@@ 2002.04.17 MIK
+	// 句読点をぶら下げる
 	curPS.bPrintKinsokuKuto = IsButtonChecked(IDC_CHECK_PS_KINSOKUKUTO);
 
 	// カラー印刷
 	curPS.bColorPrint = IsButtonChecked(IDC_CHECK_COLORPRINT);
 
-	//@@@ 2002.2.4 YAZAKI
 	// ヘッダー
 	GetItemText(IDC_EDIT_HEAD1, curPS.szHeaderForm[0], HEADER_MAX);	// 100文字で制限しないと。。。
 	GetItemText(IDC_EDIT_HEAD2, curPS.szHeaderForm[1], HEADER_MAX);	// 100文字で制限しないと。。。
@@ -625,7 +622,7 @@ void DlgPrintSetting::OnChangeSettingType(BOOL bGetData)
 	}
 
 	// 用紙の向き
-	// 2006.08.14 Moca 用紙方向コンボボックスを廃止し、ボタンを有効化
+	// 用紙方向コンボボックスを廃止し、ボタンを有効化
 	bool bIsPortrait = (curPS.nPrintPaperOrientation == DMORIENT_PORTRAIT);
 	CheckButton(IDC_RADIO_PORTRAIT, bIsPortrait);
 	CheckButton(IDC_RADIO_LANDSCAPE, !bIsPortrait);
@@ -753,14 +750,13 @@ int DlgPrintSetting::DataCheckAndCorrect(int nCtrlId, int nData)
 
 /*!
 	印字可能行数と桁数を計算
-	@date 2013.05.05 aroka OnTimerから移動
-	@retval 印字可能領域があれば TRUE  // 2013.05.20 aroka
+	@retval 印字可能領域があれば TRUE
 */
 bool DlgPrintSetting::CalcPrintableLineAndColumn()
 {
 	int			nEnableColumns;		// 行あたりの文字数
 	int			nEnableLines;		// 縦方向の行数
-	MYDEVMODE	dmDummy;			// 2003.05.18 かろと 型変更
+	MYDEVMODE	dmDummy;			// 
 	short		nPaperAllWidth;		// 用紙幅
 	short		nPaperAllHeight;	// 用紙高さ
 
@@ -778,9 +774,7 @@ bool DlgPrintSetting::CalcPrintableLineAndColumn()
 			&dmDummy
 		)
 	) {
-	// 2001.12.21 hor GetPaperSize失敗時はそのまま終了
-	// nPaperAllWidth = 210 * 10;		// 用紙幅
-	// nPaperAllHeight = 297 * 10;		// 用紙高さ
+		// GetPaperSize失敗時はそのまま終了
 		return false;
 	}
 	// 行あたりの文字数(行番号込み)
@@ -791,14 +785,14 @@ bool DlgPrintSetting::CalcPrintableLineAndColumn()
 	SetItemInt(IDC_STATIC_ENABLECOLUMNS, nEnableColumns, FALSE);
 	SetItemInt(IDC_STATIC_ENABLELINES, nEnableLines, FALSE);
 
-	// フォントのポイント数	2013/5/9 Uchi
+	// フォントのポイント数
 	// 1pt = 1/72in = 25.4/72mm
 	int nFontPoints = ps.nPrintFontHeight * 720 / 254;
 	TCHAR szFontPoints[20];
 	auto_sprintf_s(szFontPoints, _countof(szFontPoints), _T("%d.%dpt"), nFontPoints/10, nFontPoints%10);
 	SetItemText(IDC_STATIC_FONTSIZE, szFontPoints);
 
-	// 印字可能領域がない場合は OK を押せなくする 2013.5.10 aroka
+	// 印字可能領域がない場合は OK を押せなくする
 	if (nEnableColumns == 0 || nEnableLines == 0) {
 		EnableItem(IDOK, false);
 		return false;
@@ -810,7 +804,7 @@ bool DlgPrintSetting::CalcPrintableLineAndColumn()
 
 
 // 行数と桁数の更新を要求（メッセージキューにポストする）
-// ダイアログ初期化の途中で EN_CHANGE に反応すると計算がおかしくなるため、関数呼び出しではなくPostMessageで処理 2013.5.5 aroka
+// ダイアログ初期化の途中で EN_CHANGE に反応すると計算がおかしくなるため、関数呼び出しではなくPostMessageで処理
 void DlgPrintSetting::UpdatePrintableLineAndColumn()
 {
 	bPrintableLinesAndColumnInvalid = true;
@@ -818,12 +812,10 @@ void DlgPrintSetting::UpdatePrintableLineAndColumn()
 }
 
 
-//@@@ 2002.01.18 add start
 LPVOID DlgPrintSetting::GetHelpIdTable(void)
 {
 	return (LPVOID)p_helpids;
 }
-//@@@ 2002.01.18 add end
 
 
 // フォント名/使用ボタンの設定

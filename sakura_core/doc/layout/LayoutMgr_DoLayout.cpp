@@ -1,16 +1,15 @@
 #include "StdAfx.h"
-#include "doc/EditDoc.h" /// 2003/07/20 genta
+#include "doc/EditDoc.h"
 #include "doc/layout/LayoutMgr.h"
-#include "doc/layout/Layout.h"/// 2002/2/10 aroka
-#include "doc/logic/DocLine.h"/// 2002/2/10 aroka
-#include "doc/logic/DocLineMgr.h"// 2002/2/10 aroka
+#include "doc/layout/Layout.h"
+#include "doc/logic/DocLine.h"
+#include "doc/logic/DocLineMgr.h"
 #include "charset/charcode.h"
-#include "view/EditView.h" // SColorStrategyInfo
+#include "view/EditView.h"
 #include "view/colors/ColorStrategy.h"
 #include "util/window.h"
 #include "debug/RunningTimer.h"
 
-// 2008.07.27 kobake
 static
 bool _GetKeywordLength(
 	const StringRef&	lineStr,		// [in]
@@ -75,7 +74,7 @@ bool LayoutMgr::_DoKinsokuSkip(LayoutWork* pWork, PF_OnLine pfOnLine)
 				&& pWork->nPos == pWork->nWordBgn + pWork->nWordLen
 			) {
 				size_t nEol = pWork->pDocLine->GetEol().GetLen();
-				// 改行文字をぶら下げる		//@@@ 2002.04.14 MIK
+				// 改行文字をぶら下げる
 				if (
 					!(1
 						&& pTypeConfig->bKinsokuRet
@@ -88,7 +87,7 @@ bool LayoutMgr::_DoKinsokuSkip(LayoutWork* pWork, PF_OnLine pfOnLine)
 				}
 			}
 			pWork->nWordLen = 0;
-			pWork->eKinsokuType = KinsokuType::None;	//@@@ 2002.04.20 MIK
+			pWork->eKinsokuType = KinsokuType::None;
 		}
 		return true;
 	}else {
@@ -111,7 +110,7 @@ void LayoutMgr::_DoWordWrap(LayoutWork* pWork, PF_OnLine pfOnLine)
 				&pWork->nWordBgn, &pWork->nWordLen, &nWordKetas
 			);
 
-			pWork->eKinsokuType = KinsokuType::WordWrap;	//@@@ 2002.04.20 MIK
+			pWork->eKinsokuType = KinsokuType::WordWrap;
 
 			if (1
 				&& pWork->nPosX + nWordKetas >= GetMaxLineKetas()
@@ -129,7 +128,7 @@ void LayoutMgr::_DoKutoBurasage(LayoutWork* pWork)
 		&& (GetMaxLineKetas() - pWork->nPosX < 2)
 		&& (pWork->eKinsokuType == KinsokuType::None)
 	) {
-		// 2007.09.07 kobake   レイアウトとロジックの区別
+		// レイアウトとロジックの区別
 		size_t nCharKetas = NativeW::GetKetaOfChar(pWork->lineStr, pWork->nPos);
 		if (1
 			&& IsKinsokuPosKuto(GetMaxLineKetas() - pWork->nPosX, nCharKetas)
@@ -145,12 +144,12 @@ void LayoutMgr::_DoKutoBurasage(LayoutWork* pWork)
 void LayoutMgr::_DoGyotoKinsoku(LayoutWork* pWork, PF_OnLine pfOnLine)
 {
 	if (1
-		&& (pWork->nPos + 1 < pWork->lineStr.GetLength())	// 2007.02.17 ryoji 追加
+		&& (pWork->nPos + 1 < pWork->lineStr.GetLength())
 		&& (GetMaxLineKetas() - pWork->nPosX < 4)
-		&& (pWork->nPosX > pWork->nIndent)	// 2004.04.09 pWork->nPosXの解釈変更のため，行頭チェックも変更
+		&& (pWork->nPosX > pWork->nIndent)	// pWork->nPosXの解釈変更のため，行頭チェックも変更
 		&& (pWork->eKinsokuType == KinsokuType::None)
 	) {
-		// 2007.09.07 kobake   レイアウトとロジックの区別
+		// レイアウトとロジックの区別
 		size_t nCharKetas2 = NativeW::GetKetaOfChar(pWork->lineStr, pWork->nPos);
 		size_t nCharKetas3 = NativeW::GetKetaOfChar(pWork->lineStr, pWork->nPos + 1);
 
@@ -172,9 +171,9 @@ void LayoutMgr::_DoGyotoKinsoku(LayoutWork* pWork, PF_OnLine pfOnLine)
 void LayoutMgr::_DoGyomatsuKinsoku(LayoutWork* pWork, PF_OnLine pfOnLine)
 {
 	if (1
-		&& (pWork->nPos + 1 < pWork->lineStr.GetLength())	// 2007.02.17 ryoji 追加
+		&& (pWork->nPos + 1 < pWork->lineStr.GetLength())
 		&& (GetMaxLineKetas() - pWork->nPosX < 4)
-		&& (pWork->nPosX > pWork->nIndent)	// 2004.04.09 pWork->nPosXの解釈変更のため，行頭チェックも変更
+		&& (pWork->nPosX > pWork->nIndent)	// pWork->nPosXの解釈変更のため，行頭チェックも変更
 		&& (pWork->eKinsokuType == KinsokuType::None)
 	) {	// 行末禁則する && 行末付近 && 行頭でないこと(無限に禁則してしまいそう)
 		size_t nCharKetas2 = NativeW::GetKetaOfChar(pWork->lineStr, pWork->nPos);
@@ -195,7 +194,7 @@ void LayoutMgr::_DoGyomatsuKinsoku(LayoutWork* pWork, PF_OnLine pfOnLine)
 // 折り返す場合はtrueを返す
 bool LayoutMgr::_DoTab(LayoutWork* pWork, PF_OnLine pfOnLine)
 {
-	// Sep. 23, 2002 genta せっかく作ったので関数を使う
+	// せっかく作ったので関数を使う
 	size_t nCharKetas = GetActualTabSpace(pWork->nPosX);
 	if (pWork->nPosX + nCharKetas > GetMaxLineKetas()) {
 		(this->*pfOnLine)(pWork);
@@ -227,7 +226,7 @@ void LayoutMgr::_MakeOneLine(LayoutWork* pWork, PF_OnLine pfOnLine)
 	while (pWork->nPos < nLength) {
 		// インデント幅は_OnLineで計算済みなのでここからは削除
 
-		// 禁則処理中ならスキップする	@@@ 2002.04.20 MIK
+		// 禁則処理中ならスキップする
 		if (_DoKinsokuSkip(pWork, pfOnLine)) {
 		}else {
 			// 英文ワードラップをする
@@ -251,7 +250,6 @@ void LayoutMgr::_MakeOneLine(LayoutWork* pWork, PF_OnLine pfOnLine)
 			}
 		}
 
-		//@@@ 2002.09.22 YAZAKI
 		color.CheckColorMODE(&pWork->pColorStrategy, pWork->nPos, pWork->lineStr);
 
 		if (pWork->lineStr.At(pWork->nPos) == WCODE::TAB) {
@@ -262,15 +260,11 @@ void LayoutMgr::_MakeOneLine(LayoutWork* pWork, PF_OnLine pfOnLine)
 			if (pWork->nPos >= pWork->lineStr.GetLength()) {
 				break;
 			}
-			// 2007.09.07 kobake   ロジック幅とレイアウト幅を区別
+			// ロジック幅とレイアウト幅を区別
 			size_t nCharKetas = NativeW::GetKetaOfChar(pWork->lineStr, pWork->nPos);
-//			if (nCharKetas == 0) {				// 削除 サロゲートペア対策	2008/7/5 Uchi
-//				nCharKetas = 1;
-//			}
-
 			if (pWork->nPosX + nCharKetas > GetMaxLineKetas()) {
 				if (pWork->eKinsokuType != KinsokuType::Kuto) {
-					// 改行文字をぶら下げる		//@@@ 2002.04.14 MIK
+					// 改行文字をぶら下げる
 					if (!(1
 						&& pTypeConfig->bKinsokuRet
 						&& (pWork->nPos == pWork->lineStr.GetLength() - nEol)
@@ -299,25 +293,24 @@ void LayoutMgr::_OnLine1(LayoutWork* pWork)
 	pWork->colorPrev = pWork->pColorStrategy->GetStrategyColorSafe();
 	pWork->exInfoPrev.SetColorInfo(pWork->pColorStrategy->GetStrategyColorInfoSafe());
 	pWork->nBgn = pWork->nPos;
-	// 2004.03.28 Moca pWork->nPosXはインデント幅を含むように変更(TAB位置調整のため)
+	// pWork->nPosXはインデント幅を含むように変更(TAB位置調整のため)
 	pWork->nPosX = pWork->nIndent = (this->*getIndentOffset)(pWork->pLayout);
 }
 
 /*!
 	現在の折り返し文字数に合わせて全データのレイアウト情報を再生成します
 
-	@date 2004.04.03 Moca TABが使われると折り返し位置がずれるのを防ぐため，
-		nPosXがインデントを含む幅を保持するように変更．m_nMaxLineKetasは
-		固定値となったが，既存コードの置き換えは避けて最初に値を代入するようにした．
+	TABが使われると折り返し位置がずれるのを防ぐため，
+	nPosXがインデントを含む幅を保持するように変更．m_nMaxLineKetasは
+	固定値となったが，既存コードの置き換えは避けて最初に値を代入するようにした．
 */
 void LayoutMgr::_DoLayout()
 {
 	MY_RUNNINGTIMER(runningTimer, "LayoutMgr::_DoLayout");
 
 	/*	表示上のX位置
-		2004.03.28 Moca nPosXはインデント幅を含むように変更(TAB位置調整のため)
+		nPosXはインデント幅を含むように変更(TAB位置調整のため)
 	*/
-
 	if (GetListenerCount() != 0) {
 		NotifyProgress(0);
 		// 処理中のユーザー操作を可能にする
@@ -329,7 +322,6 @@ void LayoutMgr::_DoLayout()
 	_Empty();
 	Init();
 	
-	// Nov. 16, 2002 genta
 	// 折り返し幅 <= TAB幅のとき無限ループするのを避けるため，
 	// TABが折り返し幅以上の時はTAB=4としてしまう
 	// 折り返し幅の最小値=10なのでこの値は問題ない
@@ -339,7 +331,7 @@ void LayoutMgr::_DoLayout()
 	size_t nAllLineNum = pDocLineMgr->GetLineCount();
 	LayoutWork	work;
 	LayoutWork* pWork = &work;
-	pWork->pDocLine		= pDocLineMgr->GetDocLineTop(); // 2002/2/10 aroka CDocLineMgr変更
+	pWork->pDocLine		= pDocLineMgr->GetDocLineTop();
 	pWork->pLayout			= nullptr;
 	pWork->pColorStrategy	= nullptr;
 	pWork->colorPrev		= COLORIDX_DEFAULT;
@@ -347,7 +339,7 @@ void LayoutMgr::_DoLayout()
 
 	while (pWork->pDocLine) {
 		pWork->lineStr		= pWork->pDocLine->GetStringRefWithEOL();
-		pWork->eKinsokuType	= KinsokuType::None;	//@@@ 2002.04.20 MIK
+		pWork->eKinsokuType	= KinsokuType::None;
 		pWork->nBgn			= 0;
 		pWork->nPos			= 0;
 		pWork->nWordBgn		= 0;
@@ -358,7 +350,6 @@ void LayoutMgr::_DoLayout()
 		_MakeOneLine(pWork, &LayoutMgr::_OnLine1);
 
 		if (pWork->nPos - pWork->nBgn > 0) {
-// 2002/03/13 novice
 			AddLineBottom(pWork->_CreateLayout(this));
 			pWork->colorPrev = pWork->pColorStrategy->GetStrategyColorSafe();
 			pWork->exInfoPrev.SetColorInfo(pWork->pColorStrategy->GetStrategyColorInfoSafe());
@@ -377,11 +368,9 @@ void LayoutMgr::_DoLayout()
 			NotifyProgress(pWork->nCurLine * 100 / nAllLineNum);
 			if (!::BlockingHook(NULL)) return;
 		}
-
-// 2002/03/13 novice
 	}
 
-	// 2011.12.31 Botの色分け情報は最後に設定
+	// Botの色分け情報は最後に設定
 	nLineTypeBot = pWork->pColorStrategy->GetStrategyColorSafe();
 	layoutExInfoBot.SetColorInfo(pWork->pColorStrategy->GetStrategyColorInfoSafe());
 
@@ -405,7 +394,6 @@ void LayoutMgr::_DoLayout()
 
 void LayoutMgr::_OnLine2(LayoutWork* pWork)
 {
-	//@@@ 2002.09.23 YAZAKI 最適化
 	if (pWork->bNeedChangeCOMMENTMODE) {
 		pWork->pLayout = pWork->pLayout->GetNextLayout();
 		pWork->pLayout->SetColorTypePrev(pWork->colorPrev);
@@ -418,7 +406,7 @@ void LayoutMgr::_OnLine2(LayoutWork* pWork)
 	pWork->exInfoPrev.SetColorInfo(pWork->pColorStrategy->GetStrategyColorInfoSafe());
 
 	pWork->nBgn = pWork->nPos;
-	// 2004.03.28 Moca pWork->nPosXはインデント幅を含むように変更(TAB位置調整のため)
+	// pWork->nPosXはインデント幅を含むように変更(TAB位置調整のため)
 	pWork->nPosX = pWork->nIndent = (this->*getIndentOffset)(pWork->pLayout);
 	if (0
 		|| (1
@@ -434,13 +422,6 @@ void LayoutMgr::_OnLine2(LayoutWork* pWork)
 /*!
 	指定レイアウト行に対応する論理行の次の論理行から指定論理行数だけ再レイアウトする
 	
-	@date 2002.10.07 YAZAKI rename from "DoLayout3_New"
-	@date 2004.04.03 Moca TABが使われると折り返し位置がずれるのを防ぐため，
-		pWork->nPosXがインデントを含む幅を保持するように変更．m_nMaxLineKetasは
-		固定値となったが，既存コードの置き換えは避けて最初に値を代入するようにした．
-	@date 2009.08.28 nasukoji	テキスト最大幅の算出に対応
-
-	@note 2004.04.03 Moca
 		_DoLayoutとは違ってレイアウト情報がリスト中間に挿入されるため，
 		挿入後にnLineTypeBotへコメントモードを指定してはならない
 		代わりに最終行のコメントモードを終了間際に確認している．
@@ -457,7 +438,7 @@ int LayoutMgr::DoLayout_Range(
 
 	int nLineNumWork = 0;
 
-	// 2006.12.01 Moca 途中にまで再構築した場合にEOF位置がずれたまま
+	// Moca 途中にまで再構築した場合にEOF位置がずれたまま
 	// 更新されないので，範囲にかかわらず必ずリセットする．
 	nEOFColumn = -1;
 	nEOFLine = -1;
@@ -498,8 +479,6 @@ int LayoutMgr::DoLayout_Range(
 		_MakeOneLine(pWork, &LayoutMgr::_OnLine2);
 
 		if (pWork->nPos - pWork->nBgn > 0) {
-// 2002/03/13 novice
-			//@@@ 2002.09.23 YAZAKI 最適化
 			_OnLine2(pWork);
 		}
 
@@ -507,7 +486,6 @@ int LayoutMgr::DoLayout_Range(
 		pWork->nCurLine++;
 
 		// 目的の行数(nLineNum)に達したか、または通り過ぎた（＝行数が増えた）か確認
-		//@@@ 2002.09.23 YAZAKI 最適化
 		if (nLineNumWork >= nLineNum) {
 			if (pWork->pLayout && pWork->pLayout->GetNextLayout()) {
 				if (pWork->colorPrev != pWork->pLayout->GetNextLayout()->GetColorTypePrev()) {
@@ -537,22 +515,16 @@ int LayoutMgr::DoLayout_Range(
 			}
 		}
 		pWork->pDocLine = pWork->pDocLine->GetNextLine();
-// 2002/03/13 novice
 	}
 
-	// 2004.03.28 Moca EOFだけの論理行の直前の行の色分けが確認・更新された
+	// EOFだけの論理行の直前の行の色分けが確認・更新された
 	if (pWork->nCurLine == pDocLineMgr->GetLineCount()) {
 		nLineTypeBot = pWork->pColorStrategy->GetStrategyColorSafe();
 		layoutExInfoBot.SetColorInfo(pWork->pColorStrategy->GetStrategyColorInfoSafe());
 	}
 
-	// 2009.08.28 nasukoji	テキストが編集されたら最大幅を算出する
+	// テキストが編集されたら最大幅を算出する
 	CalculateTextWidth_Range(ctwArg);
-
-// 1999.12.22 レイアウト情報がなくなる訳ではないので
-// nPrevReferLine = 0;
-// pLayoutPrevRefer = nullptr;
-// pLayoutCurrent = nullptr;
 
 	return pWork->nModifyLayoutLinesNew;
 }
@@ -567,8 +539,6 @@ int LayoutMgr::DoLayout_Range(
 	      　削除行なし時：最大幅の行を行頭以外にて改行付きで編集した
 	      　削除行あり時：最大幅の行を含んで編集した
 	      ctwArg.nDelLines が負数の時は削除行なし．
-
-	@date 2009.08.28 nasukoji	新規作成
 */
 void LayoutMgr::CalculateTextWidth_Range(const CalTextWidthArg& ctwArg)
 {

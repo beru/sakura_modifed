@@ -116,10 +116,7 @@ void DiffLineSetter::SetLineDiffMark(DiffMark mark) { pDocLine->mark.diffMarked 
 //                       DiffLineMgr                          //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-/*!	差分表示の全解除
-	@author	MIK
-	@date	2002.05.25
-*/
+/*!	差分表示の全解除 */
 void DiffLineMgr::ResetAllDiffMark()
 {
 	DocLine* pDocLine = docLineMgr.GetDocLineTop();
@@ -131,10 +128,7 @@ void DiffLineMgr::ResetAllDiffMark()
 	DiffManager::getInstance().SetDiffUse(false);
 }
 
-/*! 差分検索
-	@author	MIK
-	@date	2002.05.25
-*/
+/*! 差分検索 */
 bool DiffLineMgr::SearchDiffMark(
 	size_t			nLineNum,		// 検索開始行
 	SearchDirection	bPrevOrNext,	// 0==前方検索 1==後方検索
@@ -171,10 +165,7 @@ bool DiffLineMgr::SearchDiffMark(
 	return false;
 }
 
-/*!	差分情報を行範囲指定で登録する。
-	@author	MIK
-	@date	2002/05/25
-*/
+/*!	差分情報を行範囲指定で登録する */
 void DiffLineMgr::SetDiffMarkRange(DiffMark nMode, size_t nStartLine, size_t nEndLine)
 {
 	DiffManager::getInstance().SetDiffUse(true);

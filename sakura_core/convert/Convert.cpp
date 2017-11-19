@@ -35,7 +35,7 @@ void ConvertMediator::ConvMemory(
 	int nStartColumn
 	)
 {
-	// コード変換はできるだけANSI版のsakuraと互換の結果が得られるように実装する	// 2009.03.26 ryoji
+	// コード変換はできるだけANSI版のsakuraと互換の結果が得られるように実装する
 	// xxx2SJIS:
 	//   1. バッファの内容がANSI版相当になるよう Unicode→SJIS 変換する
 	//   2. xxx→SJIS 変換後にバッファ内容をUNICODE版相当に戻す（SJIS→Unicode）のと等価な結果を得るために xxx→Unicode 変換する

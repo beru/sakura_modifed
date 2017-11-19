@@ -66,7 +66,6 @@ bool Converter_SpaceToTab::DoConvert(NativeW* pData)
 								++nPosDes;
 								nStartPos += nTabWidth - (nStartPos % nTabWidth);
 							}
-							// 2003.08.05 Moca
 							// 変換後にTABが1つも入らない場合にスペースを詰めすぎて
 							// バッファをはみ出すのを修正
 							for (j=nStartPos; j<nPosX; ++j) {
@@ -76,7 +75,7 @@ bool Converter_SpaceToTab::DoConvert(NativeW* pData)
 						}
 					}
 					++nPosX;
-					if (WCODE::IsZenkaku(pLine[i])) ++nPosX;		// 全角文字ずれ対応 2008.10.17 matsumo
+					if (WCODE::IsZenkaku(pLine[i])) ++nPosX;		// 全角文字ずれ対応
 					pDes[nPosDes] = pLine[i];
 					++nPosDes;
 					bSpace = false;

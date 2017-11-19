@@ -73,7 +73,7 @@ void Memory::_AddData(const void* pData, size_t nDataLen)
 	memcpy(&pRawData[nRawLen], pData, nDataLen);
 	nRawLen += nDataLen;
 	pRawData[nRawLen] = '\0';
-	pRawData[nRawLen+1] = '\0'; // 終端'\0'を2つ付加する('\0''\0' == L'\0')。 2007.08.13 kobake 追加
+	pRawData[nRawLen+1] = '\0'; // 終端'\0'を2つ付加する('\0''\0' == L'\0')
 	return;
 }
 
@@ -96,9 +96,6 @@ int Memory::IsEqual(Memory& mem1, Memory& mem2)
 
 /* !上位バイトと下位バイトを交換する
 
-	@author Moca
-	@date 2002/5/27
-	
 	@note	nBufLen が2の倍数でないときは、最後の1バイトは交換されない
 */
 void Memory::SwapHLByte(char* pData, const size_t nDataLen) {
@@ -139,9 +136,6 @@ void Memory::SwapHLByte(char* pData, const size_t nDataLen) {
 
 /* !上位バイトと下位バイトを交換する
 
-	@author Moca
-	@date 2002/5/27
-	
 	@note	nBufLen が2の倍数でないときは、最後の1バイトは交換されない
 */
 void Memory::SwapHLByte(void) {

@@ -2,10 +2,10 @@
 
 #pragma once
 
-#include <Windows.h>// 2002/2/10 aroka
+#include <Windows.h>
 #include <vector>
 #include "doc/DocListener.h"
-#include "_main/global.h"// 2002/2/10 aroka
+#include "_main/global.h"
 #include "basis/SakuraBasis.h"
 #include "types/Type.h"
 #include "LayoutExInfo.h"

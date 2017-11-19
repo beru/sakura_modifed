@@ -2,8 +2,8 @@
 #include "Convert_ToUpper.h"
 
 // 大文字へ変換
-// 変換できないキリル文字ёの修正	2010/6/5 Uchi
-// ラテンアルファベットの拡張対応(ラテン補助、拡張AB、拡張追加)	2010/6/5 Uchi
+// 変換できないキリル文字ёの修正
+// ラテンアルファベットの拡張対応(ラテン補助、拡張AB、拡張追加)
 bool Converter_ToUpper::DoConvert(NativeW* pData)
 {
 	wchar_t* p = pData->GetStringPtr();

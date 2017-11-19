@@ -7,10 +7,8 @@
 #include "dlg/Dialog.h"
 #include "recent/RecentTagjumpKeyword.h"
 
-// タグファイル名	// @@ 2005.03.31 MIK 定数化
+// タグファイル名
 #define TAG_FILENAME_T _T("tags")
-
-// 2010.07.22 いくつかcppへ移動
 
 class SortedTagJumpList;
 
@@ -32,11 +30,10 @@ public:
 	*/
 	INT_PTR DoModal(HINSTANCE, HWND, LPARAM);	// モーダルダイアログの表示 
 
-	// @@ 2005.03.31 MIK 階層パラメータを追加
 //	bool AddParamA(const char*, const char*, int, const char*, const char*, int depth, int baseDirId);	// 登録
 	bool GetSelectedParam(TCHAR* s0, TCHAR* s1, int* n2, TCHAR* s3, TCHAR* s4, int* depth, TCHAR* fileBase);	// 取得
 	void SetFileName(const TCHAR* pszFileName);
-	void SetKeyword(const wchar_t* pszKeyword);	// @@ 2005.03.31 MIK
+	void SetKeyword(const wchar_t* pszKeyword);
 	int  FindDirectTagJump();
 
 	bool GetSelectedFullPathAndLine(TCHAR* fullPath, int count, int* lineNum, int* depth);
@@ -65,11 +62,10 @@ private:
 
 	void	SetData(void);	// ダイアログデータの設定
 	int		GetData(void);	// ダイアログデータの取得
-	void	UpdateData(bool);	// @@ 2005.03.31 MIK
+	void	UpdateData(bool);
 
 	TCHAR*	GetNameByType(const TCHAR type, const TCHAR* name);	// タイプを名前に変換する。
 	int		SearchBestTag(void);	// もっとも確率の高そうなインデックスを返す。
-	// @@ 2005.03.31 MIK
 	const TCHAR* GetFileName(void);
 	const TCHAR* GetFilePath(void) { return pszFileName ? pszFileName : _T(""); }
 	void Empty(void);

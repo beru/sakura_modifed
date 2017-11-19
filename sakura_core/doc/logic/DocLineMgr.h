@@ -3,13 +3,13 @@
 #pragma once
 
 #include <Windows.h>
-#include "_main/global.h" // 2002/2/10 aroka
+#include "_main/global.h"
 #include "basis/SakuraBasis.h"
 #include "util/design_template.h"
 #include "Ope.h"
 
-class DocLine; // 2002/2/10 aroka
-class Bregexp; // 2002/2/10 aroka
+class DocLine;
+class Bregexp;
 
 struct DocLineReplaceArg {
 	Range			delRange;			// [in] 削除範囲。ロジック単位。
@@ -25,7 +25,6 @@ struct DocLineReplaceArg {
 /*-----------------------------------------------------------------------
 クラスの宣言
 -----------------------------------------------------------------------*/
-// 2007.09.30 kobake WhereCurrentWord_2 を CWordParse に移動
 class DocLineMgr {
 public:
 	// コンストラクタ・デストラクタ
@@ -59,7 +58,7 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 protected:
 	void _Init();
-	// -- -- チェーン関数 -- -- // 2007.10.11 kobake 作成
+	// -- -- チェーン関数 -- --
 	void _PushBottom(DocLine* pDocLineNew);						// 最下部に挿入
 	void _InsertBeforePos(DocLine* pDocLineNew, DocLine* pPos);	// pPosの直前に挿入
 	void _InsertAfterPos(DocLine* pDocLineNew, DocLine* pPos);	// pPosの直後に挿入

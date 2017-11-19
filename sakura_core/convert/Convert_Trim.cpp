@@ -12,10 +12,6 @@
 /*! TRIM Step2
 	ConvMemory から 戻ってきた後の処理．
 	CMemory.cppのなかに置かないほうが良いかなと思ってこちらに置きました．
-	
-	@author hor
-	@date 2001.12.03 hor    新規作成
-	@date 2007.10.18 kobake Converter_Trimに移動
 */
 bool Converter_Trim::DoConvert(NativeW* pData)
 {
@@ -45,7 +41,7 @@ bool Converter_Trim::DoConvert(NativeW* pData)
 	nPosDes = 0;
 	// LTRIM
 	if (bLeft) {
-		while ((pLine = GetNextLineW(pData->GetStringPtr(), pData->GetStringLength(), &nLineLen, &nBgn, &eol, bExtEol))) { // 2002/2/10 aroka CMemory変更
+		while ((pLine = GetNextLineW(pData->GetStringPtr(), pData->GetStringLength(), &nLineLen, &nBgn, &eol, bExtEol))) {
 			if (0 < nLineLen) {
 				for (i=0; i<=nLineLen; ++i) {
 					if (WCODE::IsBlank(pLine[i])) {
@@ -64,9 +60,9 @@ bool Converter_Trim::DoConvert(NativeW* pData)
 		}
 	}else {
 		// RTRIM
-		while ((pLine = GetNextLineW(pData->GetStringPtr(), pData->GetStringLength(), &nLineLen, &nBgn, &eol, bExtEol))) { // 2002/2/10 aroka CMemory変更
+		while ((pLine = GetNextLineW(pData->GetStringPtr(), pData->GetStringLength(), &nLineLen, &nBgn, &eol, bExtEol))) {
 			if (0 < nLineLen) {
-				// 2005.10.11 ryoji 右から遡るのではなく左から探すように修正（"ａ@" の右２バイトが全角空白と判定される問題の対処）
+				// 右から遡るのではなく左から探す（"ａ@" の右２バイトが全角空白と判定される問題の対処）
 				i = j = 0;
 				while (i < nLineLen) {
 					nCharChars = NativeW::GetSizeOfChar(pLine, nLineLen, i);

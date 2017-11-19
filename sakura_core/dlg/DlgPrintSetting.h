@@ -7,10 +7,7 @@
 #include "config/maxdata.h"	// MAX_PrintSettingARR
 #include "print/Print.h"	// PrintSetting
 
-/*!	印刷設定ダイアログ
-
-	@date 2002.2.17 YAZAKI CShareDataのインスタンスは、CProcessにひとつあるのみ。
-*/
+/*!	印刷設定ダイアログ */
 class DlgPrintSetting : public Dialog {
 public:
 	/*
@@ -44,7 +41,7 @@ protected:
 	BOOL OnStnClicked(int);
 	BOOL OnEnChange(HWND hwndCtl, int wID);
 	BOOL OnEnKillFocus(HWND hwndCtl, int wID);
-	LPVOID GetHelpIdTable(void);	//@@@ 2002.01.18 add
+	LPVOID GetHelpIdTable(void);
 
 	void OnChangeSettingType(BOOL);	// 設定のタイプが変わった
 	void OnSpin(int , BOOL);			// スピンコントロールの処理

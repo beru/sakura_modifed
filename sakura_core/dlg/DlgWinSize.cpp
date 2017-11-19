@@ -8,7 +8,7 @@
 #include "sakura_rc.h"
 #include "sakura.hh"
 
-static const DWORD p_helpids[] = {	// 2006.10.10 ryoji
+static const DWORD p_helpids[] = {
 	IDOK,						HIDOK_WINSIZE,				// ï¬Ç∂ÇÈ
 	IDC_BUTTON_HELP,			HIDC_BUTTON_WINSIZE_HELP,	// ÉwÉãÉv
 	IDC_EDIT_WX,				HIDC_EDIT_WX,				// ïù
@@ -82,8 +82,8 @@ BOOL DlgWinSize::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
 BOOL DlgWinSize::OnBnClicked(int wID)
 {
 	switch (wID) {
-	case IDC_BUTTON_HELP:	// 2006/09/09 novice idèCê≥
-		MyWinHelp(GetHwnd(), HELP_CONTEXT, HLP000286);	// 2006.10.10 ryoji MyWinHelpÇ…ïœçXÇ…ïœçX
+	case IDC_BUTTON_HELP:
+		MyWinHelp(GetHwnd(), HELP_CONTEXT, HLP000286);
 		return TRUE;
 	case IDC_RADIO_WINPOS_DEF:
 	case IDC_RADIO_WINPOS_SAVE:

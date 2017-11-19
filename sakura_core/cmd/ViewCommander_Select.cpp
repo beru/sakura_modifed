@@ -26,15 +26,6 @@ bool ViewCommander::Command_SelectWord(const Point* pptCaretPos)
 	Range range;
 	if (layoutMgr.WhereCurrentWord(ptCaretPos.y, nIdx, &range, NULL, NULL)) {
 
-		// 指定された行のデータ内の位置に対応する桁の位置を調べる
-		// 2007.10.15 kobake 既にレイアウト単位なので変換は不要
-		/*
-		pLayout = layoutMgr.SearchLineByLayoutY(range.GetFrom().y);
-		range.SetFromX(view.LineIndexToColumn(pLayout, range.GetFrom().x));
-		pLayout = layoutMgr.SearchLineByLayoutY(range.GetTo().y);
-		range.SetToX(view.LineIndexToColumn(pLayout, range.GetTo().x));
-		*/
-
 		// 選択範囲の変更
 		si.SetSelectArea(range);
 		// 選択領域描画
