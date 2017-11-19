@@ -96,7 +96,7 @@ bool FuncLookup::Funccode2Name(int funccode, wchar_t* ptr, int bufsize) const
 		Custmenu2Name(0, ptr, bufsize);
 		ptr[bufsize-1] = LTEXT('\0');
 		return true;
-	}else if (F_CUSTMENU_1 <= funccode && funccode < F_CUSTMENU_BASE + MAX_CUSTOM_MENU) {	// MAX_CUSTMACRO->MAX_CUSTOM_MENU	2010/3/14 Uchi
+	}else if (F_CUSTMENU_1 <= funccode && funccode < F_CUSTMENU_BASE + MAX_CUSTOM_MENU) {
 		Custmenu2Name(funccode - F_CUSTMENU_BASE, ptr, bufsize);
 		ptr[bufsize-1] = LTEXT('\0');
 		return true;

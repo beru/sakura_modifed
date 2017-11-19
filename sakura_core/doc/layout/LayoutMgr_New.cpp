@@ -1,9 +1,9 @@
 // テキストのレイアウト情報管理
 
 #include "StdAfx.h"
-#include "doc/EditDoc.h" /// 2003/07/20 genta
+#include "doc/EditDoc.h"
 #include "doc/layout/LayoutMgr.h"
-#include "doc/layout/Layout.h"/// 2002/2/10 aroka
+#include "doc/layout/Layout.h"
 #include "charset/charcode.h"
 #include "mem/MemoryIterator.h"
 #include "util/window.h"
@@ -49,9 +49,6 @@ bool LayoutMgr::IsKinsokuKuto(wchar_t wc)
 	return pszKinsokuKuto_1.exist(wc);
 }
 
-/*!
-	@date 2005-08-20 D.S.Koba _DoLayout()とDoLayout_Range()から分離
-*/
 bool LayoutMgr::IsKinsokuPosHead(
 	size_t nRest,		// [in] 行の残り文字数
 	size_t nCharKetas,	// [in] 現在位置の文字サイズ
@@ -89,9 +86,6 @@ bool LayoutMgr::IsKinsokuPosHead(
 	return false;
 }
 
-/*!
-	@date 2005-08-20 D.S.Koba _DoLayout()とDoLayout_Range()から分離
-*/
 bool LayoutMgr::IsKinsokuPosTail(
 	size_t nRest,		// [in] 行の残り文字数
 	size_t nCharKetas,	// [in] 現在位置の文字サイズ
@@ -132,9 +126,6 @@ bool LayoutMgr::IsKinsokuPosTail(
 	引数は使わない．
 	
 	@return 1行の表示文字数 (常に0)
-	
-	@author genta
-	@date 2002.10.01
 */
 size_t LayoutMgr::getIndentOffset_Normal(Layout*)
 {
@@ -149,9 +140,6 @@ size_t LayoutMgr::getIndentOffset_Normal(Layout*)
 	
 	@author Yazaki
 	@return インデントすべき文字数
-	
-	@date 2002.10.01 
-	@date 2002.10.07 YAZAKI 名称変更, 処理見直し
 */
 size_t LayoutMgr::getIndentOffset_Tx2x(Layout* pLayoutPrev)
 {
@@ -174,9 +162,8 @@ size_t LayoutMgr::getIndentOffset_Tx2x(Layout* pLayoutPrev)
 		}
 		it.addDelta();
 	}
-	// 2010.07.06 Moca TAB=8などの場合に折り返すと無限ループする不具合の修正. 6固定を nTabSpace + 2に変更
 	if (GetMaxLineKetas() - nIpos < GetTabSpace() + 2) {
-		nIpos = t_max((size_t)0, GetMaxLineKetas() - (GetTabSpace() + 2)); // 2013.05.12 Chg:0だったのを最大幅に変更
+		nIpos = t_max((size_t)0, GetMaxLineKetas() - (GetTabSpace() + 2));
 	}
 	return nIpos;	// インデント
 }
@@ -186,11 +173,7 @@ size_t LayoutMgr::getIndentOffset_Tx2x(Layout* pLayoutPrev)
 	
 	論理行行頭のホワイトスペースの終わりインデント位置として返す．
 	ただし，残り幅が6文字未満の場合はインデントを行わない．
-	
-	@author genta
 	@return インデントすべき文字数
-	
-	@date 2002.10.01 
 */
 size_t LayoutMgr::getIndentOffset_LeftSpace(Layout* pLayoutPrev)
 {
@@ -201,23 +184,22 @@ size_t LayoutMgr::getIndentOffset_LeftSpace(Layout* pLayoutPrev)
 	// インデントの計算
 	size_t nIpos = pLayoutPrev->GetIndent();
 	
-	// Oct. 5, 2002 genta
 	// 折り返しの3行目以降は1つ前の行のインデントに合わせる．
 	if (pLayoutPrev->GetLogicOffset() > 0) {
 		return nIpos;
 	}
 	
-	// 2002.10.07 YAZAKI インデントの計算
+	// インデントの計算
 	MemoryIterator it(pLayoutPrev, GetTabSpace());
 
-	// Jul. 20, 2003 genta 自動インデントに準じた動作にする
+	// 自動インデントに準じた動作にする
 	bool bZenSpace = pTypeConfig->bAutoIndent_ZENSPACE;
 	const wchar_t* szSpecialIndentChar = pTypeConfig->szIndentChars;
 	while (!it.end()) {
 		it.scanNext();
 		if (it.getIndexDelta() == 1 && WCODE::IsIndentChar(it.getCurrentChar(), bZenSpace)) {
 			// インデントのカウントを継続する
-		// Jul. 20, 2003 genta インデント対象文字
+		// インデント対象文字
 		}else if (szSpecialIndentChar[0] != L'\0') {
 			wchar_t buf[3]; // 文字の長さは1 or 2
 			wmemcpy(buf, it.getCurrentPos(), it.getIndexDelta());
@@ -237,9 +219,9 @@ size_t LayoutMgr::getIndentOffset_LeftSpace(Layout* pLayoutPrev)
 	if (it.end()) {
 		nIpos = it.getColumn();	// 終了
 	}
-	// 2010.07.06 Moca TAB=8などの場合に折り返すと無限ループする不具合の修正. 6固定を nTabSpace + 2に変更
+	// TAB=8などの場合に折り返すと無限ループする不具合の修正. 6固定を nTabSpace + 2に変更
 	if (GetMaxLineKetas() - nIpos < GetTabSpace() + 2) {
-		nIpos = t_max((size_t)0, GetMaxLineKetas() - (GetTabSpace() + 2)); // 2013.05.12 Chg:0だったのを最大幅に変更
+		nIpos = t_max((size_t)0, GetMaxLineKetas() - (GetTabSpace() + 2)); // Chg:0だったのを最大幅に変更
 	}
 	return nIpos;	// インデント
 }
@@ -259,8 +241,6 @@ size_t LayoutMgr::getIndentOffset_LeftSpace(Layout* pLayoutPrev)
 
 	@note nStart, nEndが両方とも-1の時、全ラインを走査する
 		  範囲が指定されている場合は最大幅の拡大のみチェックする
-
-	@date 2009.08.28 nasukoji	新規作成
 */
 BOOL LayoutMgr::CalculateTextWidth(bool bCalLineLen, int nStart, int nEnd)
 {
@@ -287,7 +267,7 @@ BOOL LayoutMgr::CalculateTextWidth(bool bCalLineLen, int nStart, int nEnd)
 	}
 	Layout* pLayout;
 	// 算出開始レイアウト行を探す
-	// 2013.05.13 SearchLineByLayoutYを使う
+	// SearchLineByLayoutYを使う
 	if (nStart == 0) {
 		pLayout = pLayoutTop;
 	}else {
@@ -374,8 +354,6 @@ BOOL LayoutMgr::CalculateTextWidth(bool bCalLineLen, int nStart, int nEnd)
 		  以外の時はクリアしておく。
 		  パフォーマンスの低下が気にならない程なら、全ての折り返し方法で計算
 		  するようにしても良いと思う。
-
-	@date 2009.08.28 nasukoji	新規作成
 */
 void LayoutMgr::ClearLayoutLineWidth(void)
 {

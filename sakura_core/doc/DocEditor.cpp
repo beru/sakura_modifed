@@ -14,10 +14,10 @@ DocEditor::DocEditor(EditDoc& doc)
 	doc(doc),
 	newLineCode(EolType::CRLF),	// New Line Type
 	pOpeBlk(nullptr),
-	bInsMode(true),			// Oct. 2, 2005 genta
-	bIsDocModified(false)	// 変更フラグ // Jan. 22, 2002 genta 型変更
+	bInsMode(true),
+	bIsDocModified(false)	// 変更フラグ
 {
-	// Oct. 2, 2005 genta 挿入モード
+	// 挿入モード
 	this->SetInsMode(GetDllShareData().common.general.bIsINSMode);
 }
 
@@ -26,9 +26,6 @@ DocEditor::DocEditor(EditDoc& doc)
 
 	@param flag [in] 設定する値．true: 変更有り / false: 変更無し
 	@param redraw [in] true: タイトルの再描画を行う / false: 行わない
-	
-	@author genta
-	@date 2002.01.22 新規作成
 */
 void DocEditor::SetModified(bool flag, bool redraw)
 {
@@ -52,12 +49,11 @@ void DocEditor::OnAfterLoad(const LoadInfo& loadInfo)
 {
 	EditDoc* pDoc = GetListeningDoc();
 
-	// May 12, 2000 genta
 	// 編集用改行コードの設定
 	{
 		const TypeConfig& type = pDoc->docType.GetDocumentAttribute();
 		if (pDoc->docFile.GetCodeSet() == type.encoding.eDefaultCodetype) {
-			SetNewLineCode(type.encoding.eDefaultEoltype);	// 2011.01.24 ryoji デフォルトEOL
+			SetNewLineCode(type.encoding.eDefaultEoltype);
 		}else {
 			SetNewLineCode(EolType::CRLF);
 		}
@@ -70,7 +66,6 @@ void DocEditor::OnAfterLoad(const LoadInfo& loadInfo)
 		}
 	}
 
-	// Nov. 20, 2000 genta
 	// IME状態の設定
 	this->SetImeMode(pDoc->docType.GetDocumentAttribute().nImeState);
 
@@ -83,7 +78,7 @@ void DocEditor::OnAfterSave(const SaveInfo& saveInfo)
 {
 	EditDoc* pDoc = GetListeningDoc();
 
-	this->SetModified(false, false);	// Jan. 22, 2002 genta 関数化 更新フラグのクリア
+	this->SetModified(false, false);	// 関数化 更新フラグのクリア
 
 	// 現在位置で無変更な状態になったことを通知
 	this->opeBuf.SetNoModified();
@@ -92,17 +87,14 @@ void DocEditor::OnAfterSave(const SaveInfo& saveInfo)
 	::SetCurrentDirectory(pDoc->docFile.GetFilePathClass().GetDirPath().c_str());
 }
 
-// From Here Nov. 20, 2000 genta
 /*!	IME状態の設定
 	
 	@param mode [in] IMEのモード
-	
-	@date Nov 20, 2000 genta
 */
 void DocEditor::SetImeMode(int mode)
 {
 	HWND hwnd = doc.pEditWnd->GetActiveView().GetHwnd();
-	HIMC hIme = ImmGetContext(hwnd); //######大丈夫？ // 2013.06.04 EditWndからViewに変更
+	HIMC hIme = ImmGetContext(hwnd); //######大丈夫？
 
 	// 最下位ビットはIME自身のOn/Off制御
 	if ((mode & 3) == 2) {
@@ -136,17 +128,13 @@ void DocEditor::SetImeMode(int mode)
 	}
 	ImmReleaseContext(hwnd, hIme); //######大丈夫？
 }
-// To Here Nov. 20, 2000 genta
 
 /*!
 	末尾に行を追加
 
-	@version 1.5
-
 	@param pData    [in] 追加する文字列へのポインタ
 	@param nDataLen [in] 文字列の長さ。文字単位。
 	@param eol     [in] 行末コード
-
 */
 void DocEditAgent::AddLineStrX(const wchar_t* pData, int nDataLen)
 {

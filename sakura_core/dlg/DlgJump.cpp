@@ -4,15 +4,14 @@
 #include "StdAfx.h"
 #include "dlg/DlgJump.h"
 #include "doc/EditDoc.h"
-#include "func/Funccode.h"		// Stonee, 2001/03/12
+#include "func/Funccode.h"
 #include "outline/FuncInfo.h"
-#include "outline/FuncInfoArr.h"// 2002/2/10 aroka ヘッダ整理
+#include "outline/FuncInfoArr.h"
 #include "util/shell.h"
 #include "window/EditWnd.h"
 #include "sakura_rc.h"
 #include "sakura.hh"
 
-// ジャンプ CDlgJump.cpp	//@@@ 2002.01.07 add start MIK
 const DWORD p_helpids[] = {	//12800
 	IDC_BUTTON_JUMP,				HIDC_JUMP_BUTTON_JUMP,			// ジャンプ
 	IDCANCEL,						HIDCANCEL_JUMP,					// キャンセル
@@ -27,7 +26,7 @@ const DWORD p_helpids[] = {	//12800
 	IDC_SPIN_PLSQL_E1,				HIDC_JUMP_EDIT_PLSQL_E1,		// 12871,	//
 //	IDC_STATIC,						-1,
 	0, 0
-};	//@@@ 2002.01.07 add end MIK
+};
 
 DlgJump::DlgJump()
 {
@@ -50,7 +49,7 @@ INT_PTR DlgJump::DoModal(
 }
 
 
-// From Here Oct. 6, 2000 JEPRO added 行番号入力ボックスにスピンコントロールを付けるため
+// 行番号入力ボックスにスピンコントロールを付けるため
 // CDlgPrintSetting.cppのOnNotifyとOnSpin及びCpropComFile.cppのDispatchEvent_p2内のcase WM_NOTIFYを参考にした
 BOOL DlgJump::OnNotify(WPARAM wParam, LPARAM lParam)
 {
@@ -89,7 +88,6 @@ BOOL DlgJump::OnNotify(WPARAM wParam, LPARAM lParam)
 	}
 	return TRUE;
 }
-// To Here Oct. 6, 2000
 
 
 BOOL DlgJump::OnCbnSelChange(HWND hwndCtl, int wID)
@@ -111,26 +109,25 @@ BOOL DlgJump::OnBnClicked(int wID)
 	switch (wID) {
 	case IDC_BUTTON_HELP:
 		//「指定行へジャンプ」のヘルプ
-		// Stonee, 2001/03/12 第四引数を、機能番号からヘルプトピック番号を調べるようにした
-		MyWinHelp(GetHwnd(), HELP_CONTEXT, ::FuncID_To_HelpContextID(F_JUMP_DIALOG));	// 2006.10.10 ryoji MyWinHelpに変更に変更
+		MyWinHelp(GetHwnd(), HELP_CONTEXT, ::FuncID_To_HelpContextID(F_JUMP_DIALOG));
 		return TRUE;
 	case IDC_CHECK_PLSQL:		// PL/SQLソースの有効行か
 		if (IsButtonChecked(IDC_CHECK_PLSQL)) {
-			EnableItem(IDC_LABEL_PLSQL1, true);	// Sept. 12, 2000 JEPRO
-			EnableItem(IDC_LABEL_PLSQL2, true);	// Sept. 12, 2000 JEPRO
-			EnableItem(IDC_LABEL_PLSQL3, true);	// Sept. 12, 2000 JEPRO
+			EnableItem(IDC_LABEL_PLSQL1, true);
+			EnableItem(IDC_LABEL_PLSQL2, true);
+			EnableItem(IDC_LABEL_PLSQL3, true);
 			EnableItem(IDC_EDIT_PLSQL_E1, true);
-			EnableItem(IDC_SPIN_PLSQL_E1, true);	// Oct. 6, 2000 JEPRO
+			EnableItem(IDC_SPIN_PLSQL_E1, true);
 			EnableItem(IDC_COMBO_PLSQLBLOCKS, true);
 			pShareData->bLineNumIsCRLF_ForJump = true;
 			EnableItem(IDC_RADIO_LINENUM_LAYOUT, false);
 			EnableItem(IDC_RADIO_LINENUM_CRLF, false);
 		}else {
-			EnableItem(IDC_LABEL_PLSQL1, false);	// Sept. 12, 2000 JEPRO
-			EnableItem(IDC_LABEL_PLSQL2, false);	// Sept. 12, 2000 JEPRO
-			EnableItem(IDC_LABEL_PLSQL3, false);	// Sept. 12, 2000 JEPRO
+			EnableItem(IDC_LABEL_PLSQL1, false);
+			EnableItem(IDC_LABEL_PLSQL2, false);
+			EnableItem(IDC_LABEL_PLSQL3, false);
 			EnableItem(IDC_EDIT_PLSQL_E1, false);
-			EnableItem(IDC_SPIN_PLSQL_E1, false);	// Oct. 6, 2000 JEPRO
+			EnableItem(IDC_SPIN_PLSQL_E1, false);
 			EnableItem(IDC_COMBO_PLSQLBLOCKS, false);
 			EnableItem(IDC_RADIO_LINENUM_LAYOUT, true);
 			EnableItem(IDC_RADIO_LINENUM_CRLF, true);
@@ -144,18 +141,15 @@ BOOL DlgJump::OnBnClicked(int wID)
 			CheckButton(IDC_RADIO_LINENUM_CRLF, false);
 		}
 		return TRUE;
-	case IDC_BUTTON_JUMP:			// 指定行へジャンプ	// Feb. 20, 2001 JEPRO ボタン名を[IDOK]→[IDC_BUTTON_JUMP]に変更
+	case IDC_BUTTON_JUMP:			// 指定行へジャンプ
 		// ダイアログデータの取得
-		// From Here Feb. 20, 2001 JEPRO 次行をコメントアウト (CEditView_Command.cpp の Command_Jump も関係しているので参照のこと)
-//		::EndDialog(GetHwnd(), GetData());
 //		次行から追加
 		if (0 < GetData()) {
 			CloseDialog(1);
 		}else {
 			OkMessage(GetHwnd(), LS(STR_DLGJUMP1));
 		}
-// To Here Feb. 20, 2001
-		{	//@@@ 2002.2.2 YAZAKI 指定行へジャンプを、ダイアログを表示するコマンドと、実際にジャンプするコマンドに分離。
+		{
 			EditDoc* pEditDoc = (EditDoc*)lParam;
 			pEditDoc->pEditWnd->GetActiveView().GetCommander().HandleCommand(F_JUMP, true, 0, 0, 0, 0);	// ジャンプコマンド発行
 		}
@@ -175,17 +169,13 @@ void DlgJump::SetData(void)
 	EditDoc* pEditDoc = (EditDoc*)lParam;
 	FuncInfoArr funcInfoArr;
 	wchar_t szText[1024];
-	LONG_PTR nIndexCurSel = 0;	// Sep. 11, 2004 genta 初期化
+	LONG_PTR nIndexCurSel = 0;
 
-//	GetHwnd() = hwndDlg;
-// From Here Oct. 7, 2000 JEPRO 前回入力した行番号を保持するように下行を変更
-//	::DlgItem_SetText(GetHwnd(), IDC_EDIT_LINENUM, "");	// 行番号
 	if (nLineNum == 0) {
 		SetItemText(IDC_EDIT_LINENUM, _T(""));	// 行番号
 	}else {
 		SetItemInt(IDC_EDIT_LINENUM, nLineNum, FALSE);	// 前回の行番号
 	}
-// To Here Oct. 7, 2000
 	SetItemInt(IDC_EDIT_PLSQL_E1, nPLSQL_E1, FALSE);
 	// PL/SQL関数リスト作成
 	HWND hwndCtrl = GetItemHwnd(IDC_COMBO_PLSQLBLOCKS);
@@ -257,21 +247,21 @@ void DlgJump::SetData(void)
 	}
 	CheckButton(IDC_CHECK_PLSQL, bPLSQL);	// PL/SQLソースの有効行か
 	if (IsButtonChecked(IDC_CHECK_PLSQL)) {
-		EnableItem(IDC_LABEL_PLSQL1, true);	// Sept. 12, 2000 JEPRO
-		EnableItem(IDC_LABEL_PLSQL2, true);	// Sept. 12, 2000 JEPRO
-		EnableItem(IDC_LABEL_PLSQL3, true);	// Sept. 12, 2000 JEPRO
+		EnableItem(IDC_LABEL_PLSQL1, true);
+		EnableItem(IDC_LABEL_PLSQL2, true);
+		EnableItem(IDC_LABEL_PLSQL3, true);
 		EnableItem(IDC_EDIT_PLSQL_E1, true);
-		EnableItem(IDC_SPIN_PLSQL_E1, true);	// Oct. 6, 2000 JEPRO
+		EnableItem(IDC_SPIN_PLSQL_E1, true);
 		EnableItem(IDC_COMBO_PLSQLBLOCKS, true);
 		pShareData->bLineNumIsCRLF_ForJump = true;
 		EnableItem(IDC_RADIO_LINENUM_LAYOUT, false);
 		EnableItem(IDC_RADIO_LINENUM_CRLF, false);
 	}else {
-		EnableItem(IDC_LABEL_PLSQL1, false);	// Sept. 12, 2000 JEPRO
-		EnableItem(IDC_LABEL_PLSQL2, false);	// Sept. 12, 2000 JEPRO
-		EnableItem(IDC_LABEL_PLSQL3, false);	// Sept. 12, 2000 JEPRO
+		EnableItem(IDC_LABEL_PLSQL1, false);
+		EnableItem(IDC_LABEL_PLSQL2, false);
+		EnableItem(IDC_LABEL_PLSQL3, false);
 		EnableItem(IDC_EDIT_PLSQL_E1, false);
-		EnableItem(IDC_SPIN_PLSQL_E1, false);	// Oct. 6, 2000 JEPRO
+		EnableItem(IDC_SPIN_PLSQL_E1, false);
 		EnableItem(IDC_COMBO_PLSQLBLOCKS, false);
 		EnableItem(IDC_RADIO_LINENUM_LAYOUT, true);
 		EnableItem(IDC_RADIO_LINENUM_CRLF, true);
@@ -304,11 +294,6 @@ int DlgJump::GetData(void)
 		nPLSQL_E1 = 1;
 	}
 
-//	nPLSQL_E2 = GetItemInt(IDC_EDIT_PLSQL_E2, &pTranslated, FALSE);
-//	if (nPLSQL_E2 == 0 && !pTranslated) {
-//		nPLSQL_E2 = 1;
-//	}
-
 	// 行番号
 	nLineNum = GetItemInt(IDC_EDIT_LINENUM, &pTranslated, FALSE);
 	if (nLineNum == 0 && !pTranslated) {
@@ -317,10 +302,8 @@ int DlgJump::GetData(void)
 	return TRUE;
 }
 
-//@@@ 2002.01.18 add start
 LPVOID DlgJump::GetHelpIdTable(void)
 {
 	return (LPVOID)p_helpids;
 }
-//@@@ 2002.01.18 add end
 

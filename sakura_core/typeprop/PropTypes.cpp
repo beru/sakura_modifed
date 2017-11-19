@@ -73,7 +73,6 @@ PropTypes::PropTypes()
 	// 共有データ構造体のアドレスを返す
 	pShareData = &GetDllShareData();
 
-	// Mar. 31, 2003 genta メモリ削減のためポインタに変更
 	pKeywordSetMgr = &pShareData->common.specialKeyword.keywordSetMgr;
 
 	hInstance = NULL;		// アプリケーションインスタンスのハンドル
@@ -107,10 +106,6 @@ INT_PTR PropTypes::DoPropertySheet(int nPageNum)
 {
 	INT_PTR	nRet;
 
-	// 2001/06/14 Start by asa-o: タイプ別設定に支援タブ追加
-	// 2001.11.17 add start MIK タイプ別設定に正規表現キーワードタブ追加
-	// 2006.04.10 fon ADD-start タイプ別設定に「キーワードヘルプ」タブを追加
-	// 2013.03.10 aroka ADD-start タイプ別設定に「ウィンドウ」タブを追加
 	static const TypePropSheetInfo TypePropSheetInfoList[] = {
 		{ STR_PROPTYPE_SCREEN,			IDD_PROP_SCREEN,	PropTypesScreenDlgProc },
 		{ STR_PROPTYPE_COLOR,			IDD_PROP_COLOR,		PropTypesColorDlgProc },
@@ -122,7 +117,7 @@ INT_PTR PropTypes::DoPropertySheet(int nPageNum)
 
 	// カスタム色を共有メモリから取得
 	memcpy_raw( dwCustColors, pShareData->dwCustColors, sizeof(dwCustColors) );
-	// 2005.11.30 Moca カスタム色の先頭にテキスト色を設定しておく
+	// カスタム色の先頭にテキスト色を設定しておく
 	dwCustColors[0] = types.colorInfoArr[COLORIDX_TEXT].colorAttr.cTEXT;
 	dwCustColors[1] = types.colorInfoArr[COLORIDX_TEXT].colorAttr.cBACK;
 
@@ -148,22 +143,21 @@ INT_PTR PropTypes::DoPropertySheet(int nPageNum)
 
 	PROPSHEETHEADER	psh = {0};
 
-	//	Jun. 29, 2002 こおり
 	//	Windows 95対策．Property SheetのサイズをWindows95が認識できる物に固定する．
 	psh.dwSize = sizeof_old_PROPSHEETHEADER;
 
-	// JEPROtest Sept. 30, 2000 タイプ別設定の隠れ[適用]ボタンの正体はここ。行頭のコメントアウトを入れ替えてみればわかる
+	// タイプ別設定の隠れ[適用]ボタンの正体はここ。行頭のコメントアウトを入れ替えてみればわかる
 	psh.dwFlags    = /*PSH_USEICONID |*/ PSH_NOAPPLYNOW | PSH_PROPSHEETPAGE/* | PSH_HASHELP*/ | PSH_USEPAGELANG;
 	psh.hwndParent = hwndParent;
 	psh.hInstance  = SelectLang::getLangRsrcInstance();
 	psh.pszIcon    = NULL;
-	psh.pszCaption = LS(STR_PROPTYPE);	// _T("タイプ別設定");	// Sept. 8, 2000 jepro 単なる「設定」から変更
+	psh.pszCaption = LS(STR_PROPTYPE);
 	psh.nPages     = nIdx;
 
-	//- 20020106 aroka # psh.nStartPage は unsigned なので負にならない
+	// psh.nStartPage は unsigned なので負にならない
 	if (nPageNum == -1) {
 		psh.nStartPage = nPageNum;
-	}else if (0 > nPageNum) {			//- 20020106 aroka
+	}else if (0 > nPageNum) {
 		psh.nStartPage = 0;
 	}else {
 		psh.nStartPage = nPageNum;
@@ -175,7 +169,7 @@ INT_PTR PropTypes::DoPropertySheet(int nPageNum)
 	psh.ppsp = psp;
 	psh.pfnCallback = nullptr;
 
-	nRet = MyPropertySheet(&psh);	// 2007.05.24 ryoji 独自拡張プロパティシート
+	nRet = MyPropertySheet(&psh);	// 独自拡張プロパティシート
 
 	if (nRet == -1) {
 		TCHAR* pszMsgBuf;
@@ -211,9 +205,6 @@ INT_PTR PropTypes::DoPropertySheet(int nPageNum)
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 // ヘルプ
-// 2001.05.18 Stonee 機能番号からヘルプトピック番号を調べるようにした
-// 2001.07.03 JEPRO  支援タブのヘルプを有効化
-// 2001.11.17 MIK    IDD_PROP_REGEX
 void PropTypes::OnHelp(HWND hwndParent, int nPageID)
 {
 	int nContextID;
@@ -227,14 +218,12 @@ void PropTypes::OnHelp(HWND hwndParent, int nPageID)
 	default:				nContextID = -1;												break;
 	}
 	if (nContextID != -1) {
-		MyWinHelp(hwndParent, HELP_CONTEXT, nContextID);	// 2006.10.10 ryoji MyWinHelpに変更に変更
+		MyWinHelp(hwndParent, HELP_CONTEXT, nContextID);
 	}
 }
 
 
-/*!	コントロールにフォント設定する
-	@date 2013.04.24 Uchi
-*/
+/*!	コントロールにフォント設定する */
 HFONT PropTypes::SetCtrlFont(HWND hwndDlg, int idc_ctrl, const LOGFONT& lf)
 {
 
@@ -250,9 +239,7 @@ HFONT PropTypes::SetCtrlFont(HWND hwndDlg, int idc_ctrl, const LOGFONT& lf)
 }
 
 
-/*!	フォントラベルにフォントとフォント名設定する
-	@date 2013.04.24 Uchi
-*/
+/*!	フォントラベルにフォントとフォント名設定する */
 HFONT PropTypes::SetFontLabel(HWND hwndDlg, int idc_static, const LOGFONT& lf, int nps, bool bUse)
 {
 	HFONT	hFont;

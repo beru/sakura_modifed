@@ -60,7 +60,6 @@ void DocFileOperation::DoFileUnlock()
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 //「ファイルを開く」ダイアログ
-// Mar. 30, 2003 genta	ファイル名未定時の初期ディレクトリをカレントフォルダに
 bool DocFileOperation::OpenFileDialog(
 	HWND			hwndParent,		// [in]
 	const TCHAR*	pszOpenFolder,	// [in]     NULL以外を指定すると初期フォルダを指定できる
@@ -124,7 +123,7 @@ bool DocFileOperation::FileLoad(
 	Timer t;
 
 	bool bRet = DoLoadFlow(pLoadInfo);
-	// 2006.09.01 ryoji オープン後自動実行マクロを実行する
+	// オープン後自動実行マクロを実行する
 	if (bRet) {
 		doc.RunAutoMacro(GetDllShareData().common.macro.nMacroOnOpened);
 
@@ -143,7 +142,6 @@ bool DocFileOperation::FileLoad(
 }
 
 // ファイルを開く（自動実行マクロを実行しない）
-// 2009.08.11 ryoji FileLoadへのパラメータ追加にしてもいいがANSI版と整合がとりやすいので当面は別関数にしておく
 bool DocFileOperation::FileLoadWithoutAutoMacro(
 	LoadInfo* pLoadInfo		// [in/out]
 	)
@@ -169,9 +167,8 @@ void DocFileOperation::ReloadCurrentFile(
 	auto& caret = activeView.GetCaret();
 	if (!fexist(doc.docFile.GetFilePath())) {
 		// ファイルが存在しない
-		// Jul. 26, 2003 ryoji BOMを標準設定に	// IsBomDefOn使用 2013/5/17	Uchi
 		doc.docFile.SetCodeSet(nCharCode,  CodeTypeName(nCharCode).IsBomDefOn());
-		// カーソル位置表示を更新する	// 2008.07.22 ryoji
+		// カーソル位置表示を更新する
 		caret.ShowCaretPosInfo();
 		return;
 	}
@@ -186,21 +183,20 @@ void DocFileOperation::ReloadCurrentFile(
 	LoadInfo loadInfo;
 	loadInfo.filePath = doc.docFile.GetFilePath();
 	loadInfo.eCharCode = nCharCode;
-	loadInfo.bViewMode = AppMode::getInstance().IsViewMode(); // 2014.06.13 IsEditable->IsViewModeに戻す。かわりに bForceNoMsgを追加
+	loadInfo.bViewMode = AppMode::getInstance().IsViewMode();
 	loadInfo.bWritableNoMsg = !doc.IsEditable(); // すでに編集できない状態ならファイルロックのメッセージを表示しない
 	loadInfo.bRequestReload = true;
 	bool bRet = this->DoLoadFlow(&loadInfo);
 
 	// カーソル位置復元 (※ここではオプションのカーソル位置復元（＝改行単位）が指定されていない場合でも復元する)
-	// 2007.08.23 ryoji 表示領域復元
 	if (ptCaretPosXY.y < (int)doc.layoutMgr.GetLineCount()) {
 		textArea.SetViewTopLine(nViewTopLine);
 		textArea.SetViewLeftCol(nViewLeftCol);
 	}
-	caret.MoveCursorProperly(ptCaretPosXY, true);	// 2007.08.23 ryoji MoveCursor()->MoveCursorProperly()
+	caret.MoveCursorProperly(ptCaretPosXY, true);
 	caret.nCaretPosX_Prev = caret.GetCaretLayoutPos().x;
 
-	// 2006.09.01 ryoji オープン後自動実行マクロを実行する
+	// オープン後自動実行マクロを実行する
 	if (bRet) {
 		doc.RunAutoMacro(GetDllShareData().common.macro.nMacroOnOpened);
 		// プラグイン：DocumentOpenイベント実行
@@ -218,19 +214,13 @@ void DocFileOperation::ReloadCurrentFile(
 //                         セーブUI                            //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-/*! 「ファイル名を付けて保存」ダイアログ
-	@date 2001.02.09 genta	改行コードを示す引数追加
-	@date 2003.03.30 genta	ファイル名未定時の初期ディレクトリをカレントフォルダに
-	@date 2003.07.20 ryoji	BOMの有無を示す引数追加
-	@date 2006.11.10 ryoji	ユーザー指定の拡張子を状況依存で変化させる
-*/
+/*! 「ファイル名を付けて保存」ダイアログ */
 bool DocFileOperation::SaveFileDialog(
 	SaveInfo*	pSaveInfo	// [out]
 	)
 {
 	// 拡張子指定
 	// 一時適用や拡張子なしの場合の拡張子をタイプ別設定から持ってくる
-	// 2008/6/14 大きく改造 Uchi
 	TCHAR szDefaultWildCard[_MAX_PATH + 10];	// ユーザー指定拡張子
 	{
 		LPCTSTR	szExt;
@@ -257,7 +247,7 @@ bool DocFileOperation::SaveFileDialog(
 		}
 
 		if (!this->doc.docFile.GetFilePathClass().IsValidPath()) {
-			//「新規から保存時は全ファイル表示」オプション	// 2008/6/15 バグフィックス Uchi
+			//「新規から保存時は全ファイル表示」オプション
 			if (GetDllShareData().common.file.bNoFilterSaveNew)
 				_tcscat(szDefaultWildCard, _T(";*.*"));	// 全ファイル表示
 		}else {
@@ -311,7 +301,6 @@ bool DocFileOperation::DoSaveFlow(SaveInfo* pSaveInfo)
 	SaveResultType eSaveResult = SaveResultType::Failure;
 	try {
 		// オプション：無変更でも上書きするか
-		// 2009.04.12 ryoji CSaveAgent::OnCheckSave()から移動
 		// ### 無変更なら上書きしないで抜ける処理はどの CDocListener の OnCheckSave() よりも前に
 		// ### （保存するかどうか問い合わせたりするよりも前に）やるぺきことなので、
 		// ### スマートじゃない？かもしれないけど、とりあえずここに配置しておく
@@ -339,7 +328,7 @@ bool DocFileOperation::DoSaveFlow(SaveInfo* pSaveInfo)
 			throw FlowInterruption();
 		}
 
-		// 2006.09.01 ryoji 保存前自動実行マクロを実行する
+		// 保存前自動実行マクロを実行する
 		doc.RunAutoMacro(GetDllShareData().common.macro.nMacroOnSave, pSaveInfo->filePath);
 
 		// プラグイン：DocumentBeforeSaveイベント実行
@@ -391,10 +380,6 @@ bool DocFileOperation::DoSaveFlow(SaveInfo* pSaveInfo)
 /*! 上書き保存
 
 	@return 保存が行われたor保存不要のため何も行わなかったときにtrueを返す
-
-	@date 2004.06.05 genta  ビューモードのチェックをCEditDocから上書き保存処理に移動
-	@date 2006.12.30 ryoji  CEditView::Command_FileSave()から処理本体を切り出し
-	@date 2008.03.20 kobake 戻り値の仕様を定義
 */
 bool DocFileOperation::FileSave()
 {
@@ -414,10 +399,7 @@ bool DocFileOperation::FileSave()
 }
 
 
-/*! 名前を付けて保存フロー
-
-	@date 2006.12.30 ryoji CEditView::Command_FileSaveAs_Dialog()から処理本体を切り出し
-*/
+/*! 名前を付けて保存フロー */
 bool DocFileOperation::FileSaveAs(
 	const wchar_t* filename,
 	EncodingType eCodeType,
@@ -480,8 +462,6 @@ bool DocFileOperation::FileSaveAs(
 /*
 	閉じて(無題)。
 	ユーザキャンセル操作等によりクローズされなかった場合は false を返す。
-
-	@date 2006.12.30 ryoji CEditView::Command_FileSaveAs()から処理本体を切り出し
 */
 bool DocFileOperation::FileClose()
 {
@@ -512,7 +492,7 @@ bool DocFileOperation::FileClose()
 	// 親ウィンドウのタイトルを更新
 	doc.pEditWnd->UpdateCaption();
 
-	// 2006.09.01 ryoji オープン後自動実行マクロを実行する
+	// オープン後自動実行マクロを実行する
 	doc.RunAutoMacro(GetDllShareData().common.macro.nMacroOnOpened);
 
 	return true;
@@ -523,9 +503,7 @@ bool DocFileOperation::FileClose()
 //                          その他                             //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-/* 閉じて開く
-	@date 2006.12.30 ryoji CEditView::Command_FileSaveAs()から処理本体を切り出し
-*/
+/* 閉じて開く */
 void DocFileOperation::FileCloseOpen(const LoadInfo& argLoadInfo)
 {
 	// ファイルを閉じるときのMRU登録 & 保存確認 & 保存実行

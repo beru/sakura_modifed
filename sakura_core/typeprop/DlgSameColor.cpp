@@ -9,7 +9,7 @@
 #include "sakura_rc.h"
 #include "sakura.hh"
 
-static const DWORD p_helpids[] = {	// 2006.10.10 ryoji
+static const DWORD p_helpids[] = {
 	IDOK,						HIDOK_SAMECOLOR,						// OK
 	IDCANCEL,					HIDCANCEL_SAMECOLOR,					// キャンセル
 	IDC_BUTTON_HELP,			HIDC_BUTTON_SAMECOLOR_HELP,				// ヘルプ
@@ -79,8 +79,6 @@ INT_PTR DlgSameColor::DispatchEvent(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM 
 	@param wID [in] タイプ別設定ダイアログで押されたボタンID
 	@param pTypes  [in/out] タイプ別設定データ
 	@param cr [in] 指定色
-
-	@date 2006.04.26 ryoji 新規作成
 */
 INT_PTR DlgSameColor::DoModal(HINSTANCE hInstance, HWND hwndParent, WORD wID, TypeConfig* pTypes, COLORREF cr)
 {
@@ -93,9 +91,7 @@ INT_PTR DlgSameColor::DoModal(HINSTANCE hInstance, HWND hwndParent, WORD wID, Ty
 	return TRUE;
 }
 
-/*! WM_INITDIALOG 処理
-	@date 2006.04.26 ryoji 新規作成
-*/
+/*! WM_INITDIALOG 処理 */
 BOOL DlgSameColor::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
 {
 	BOOL bRet = Dialog::OnInitDialog(hwndDlg, wParam, lParam);
@@ -135,7 +131,7 @@ BOOL DlgSameColor::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
 		// タイプ別設定から背景色を重複しないように取り出す
 		::SetWindowText(GetHwnd(), LS(STR_DLGSMCLR_BTN2));
 		for (int i=0; i<COLORIDX_LAST; ++i) {
-			if ((g_ColorAttributeArr[i].fAttribute & COLOR_ATTRIB_NO_BACK) != 0) {	// 2006.12.18 ryoji フラグ利用で簡素化
+			if ((g_ColorAttributeArr[i].fAttribute & COLOR_ATTRIB_NO_BACK) != 0) {
 				continue;
 			}
 			if (cr != pTypes->colorInfoArr[i].colorAttr.cBACK) {
@@ -161,9 +157,7 @@ BOOL DlgSameColor::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
 	return bRet;
 }
 
-/*! BN_CLICKED 処理
-	@date 2006.04.26 ryoji 新規作成
-*/
+/*! BN_CLICKED 処理 */
 BOOL DlgSameColor::OnBnClicked(int wID)
 {
 	HWND hwndList = GetItemHwnd(IDC_LIST_COLORS);
@@ -172,8 +166,8 @@ BOOL DlgSameColor::OnBnClicked(int wID)
 
 	switch (wID) {
 	case IDC_BUTTON_HELP:
-		// ヘルプ	// 2006.10.07 ryoji
-		MyWinHelp(GetHwnd(), HELP_CONTEXT, HLP000316);	// 2006.10.10 ryoji MyWinHelpに変更に変更
+		// ヘルプ
+		MyWinHelp(GetHwnd(), HELP_CONTEXT, HLP000316);
 		return TRUE;
 
 	case IDC_BUTTON_SELALL:
@@ -230,9 +224,7 @@ BOOL DlgSameColor::OnBnClicked(int wID)
 	return Dialog::OnBnClicked(wID);
 }
 
-/*! WM_DRAWITEM 処理
-	@date 2006.04.26 ryoji 新規作成
-*/
+/*! WM_DRAWITEM 処理 */
 BOOL DlgSameColor::OnDrawItem(WPARAM wParam, LPARAM lParam)
 {
 	LPDRAWITEMSTRUCT pDis = (LPDRAWITEMSTRUCT)lParam;	// 項目描画情報
@@ -296,9 +288,7 @@ BOOL DlgSameColor::OnDrawItem(WPARAM wParam, LPARAM lParam)
 	return TRUE;
 }
 
-/*! 色選択リストの LBN_SELCHANGE 処理
-	@date 2006.05.01 ryoji 新規作成
-*/
+/*! 色選択リストの LBN_SELCHANGE 処理 */
 BOOL DlgSameColor::OnSelChangeListColors(HWND hwndCtl)
 {
 	// 色選択リストで現在フォーカスのある色について
@@ -344,9 +334,7 @@ BOOL DlgSameColor::OnSelChangeListColors(HWND hwndCtl)
 	return TRUE;
 }
 
-/*! サブクラス化された指定色スタティックのウィンドウプロシージャ
-	@date 2006.04.26 ryoji 新規作成
-*/
+/*! サブクラス化された指定色スタティックのウィンドウプロシージャ */
 LRESULT CALLBACK DlgSameColor::ColorStatic_SubclassProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	HDC		hDC;
@@ -403,9 +391,7 @@ LRESULT CALLBACK DlgSameColor::ColorStatic_SubclassProc(HWND hwnd, UINT uMsg, WP
 	return CallWindowProc(pDlgSameColor->wpColorStaticProc, hwnd, uMsg, wParam, lParam);
 }
 
-/*! サブクラス化された色選択リストのウィンドウプロシージャ
-	@date 2006.04.26 ryoji 新規作成
-*/
+/*! サブクラス化された色選択リストのウィンドウプロシージャ */
 LRESULT CALLBACK DlgSameColor::ColorList_SubclassProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	POINT po;

@@ -7,7 +7,7 @@
 #include "sakura_rc.h"
 #include "sakura.hh"
 
-static const DWORD p_helpids[] = {	// 2006.10.10 ryoji
+static const DWORD p_helpids[] = {
 	IDOK,				HIDOK_KEYWORD_SELECT,
 	IDCANCEL,			HIDCANCEL_KEYWORD_SELECT,
 	IDC_COMBO1,			HIDC_COMBO_KEYWORD_SELECT,

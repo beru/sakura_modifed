@@ -463,7 +463,7 @@ bool Bregexp::Match(const wchar_t* target, size_t len, size_t nStart)
 	if (matched < 0 || szMsg[0]) {
 		// BMatchエラー
 		// エラー処理をしていなかったので、nStart >= lenのような場合に、マッチ扱いになり
-		// 無限置換等の不具合になっていた 2003.05.03 by かろと
+		// 無限置換等の不具合になっていた
 		return false;
 	}else if (matched == 0) {
 		// 一致しなかった

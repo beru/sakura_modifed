@@ -14,7 +14,7 @@
 
 using namespace std;
 
-static const DWORD p_helpids[] = {	// 2006.10.10 ryoji
+static const DWORD p_helpids[] = {
 	IDC_CHECK_KEYHELP,				HIDC_CHECK_KEYHELP,				// キーワードヘルプ機能を使う
 	IDC_LIST_KEYHELP,				HIDC_LIST_KEYHELP,				// SysListView32
 	IDC_BUTTON_KEYHELP_UPD,			HIDC_BUTTON_KEYHELP_UPD,		// 更新(&E)
@@ -37,10 +37,7 @@ static const DWORD p_helpids[] = {	// 2006.10.10 ryoji
 static TCHAR* strcnv(TCHAR* str);
 static TCHAR* GetFileName(const TCHAR* fullpath);
 
-/*! キーワード辞書ファイル設定 メッセージ処理
-
-	@date 2006.04.10 fon 新規作成
-*/
+/*! キーワード辞書ファイル設定 メッセージ処理 */
 INT_PTR PropTypesKeyHelp::DispatchEvent(
 	HWND		hwndDlg,	// handle to dialog box
 	UINT		uMsg,		// message
@@ -439,7 +436,7 @@ INT_PTR PropTypesKeyHelp::DispatchEvent(
 				{
 					DlgOpenFile	dlgOpenFile;
 					// ファイルオープンダイアログの初期化
-					// 2007.05.19 ryoji 相対パスは設定ファイルからのパスを優先
+					// 相対パスは設定ファイルからのパスを優先
 					TCHAR szWk[_MAX_PATH];
 					::DlgItem_GetText(hwndDlg, IDC_EDIT_KEYHELP, szWk, _MAX_PATH);
 					if (_IS_REL_PATH(szWk)) {
@@ -480,7 +477,6 @@ INT_PTR PropTypesKeyHelp::DispatchEvent(
 			GetData(hwndDlg);
 			return TRUE;
 
-//@@@ 2002.01.03 YAZAKI 最後に表示していたシートを正しく覚えていないバグ修正
 		case PSN_SETACTIVE:
 			nPageNum = ID_PROPTYPE_PAGENUM_KEYHELP;
 			return TRUE;
@@ -488,7 +484,7 @@ INT_PTR PropTypesKeyHelp::DispatchEvent(
 		case LVN_ITEMCHANGED:	// リストの項目が変更された際の処理
 			if (pNMHDR->hwndFrom == hwndList) {
 				nIndex = ListView_GetNextItem(hwndList, -1, LVNI_ALL | LVNI_SELECTED);
-				if (nIndex == -1) {	// 削除、範囲外でクリック時反映されないバグ修正	//@@@ 2003.06.17 MIK
+				if (nIndex == -1) {	// 削除、範囲外でクリック時反映されないバグ修正
 					nIndex = ListView_GetNextItem(hwndList, -1, LVNI_ALL | LVNI_FOCUSED);
 					return FALSE;
 				}
@@ -519,10 +515,7 @@ void CheckDlgButtonBOOL(HWND hwnd, int id, BOOL bState) {
 	CheckDlgButton(hwnd, id, (bState ? BST_CHECKED : BST_UNCHECKED));
 }
 
-/*! ダイアログデータの設定 キーワード辞書ファイル設定
-
-	@date 2006.04.10 fon 新規作成
-*/
+/*! ダイアログデータの設定 キーワード辞書ファイル設定 */
 void PropTypesKeyHelp::SetData(HWND hwndDlg)
 {
 	// ユーザーがエディット コントロールに入力できるテキストの長さを制限する
@@ -576,10 +569,7 @@ void PropTypesKeyHelp::SetData(HWND hwndDlg)
 	return;
 }
 
-/*! ダイアログデータの取得 キーワード辞書ファイル設定
-
-	@date 2006.04.10 fon 新規作成
-*/
+/*! ダイアログデータの取得 キーワード辞書ファイル設定 */
 int PropTypesKeyHelp::GetData(HWND hwndDlg)
 {
 	TCHAR	szAbout[DICT_ABOUT_LEN];	// 辞書の説明(辞書ファイルの1行目から生成)
@@ -616,10 +606,7 @@ int PropTypesKeyHelp::GetData(HWND hwndDlg)
 	return TRUE;
 }
 
-/*! キーワードヘルプファイルリストのインポート
-
-	@date 2006.04.10 fon 新規作成
-*/
+/*! キーワードヘルプファイルリストのインポート */
 bool PropTypesKeyHelp::Import(HWND hwndDlg)
 {
 	// インポート
@@ -636,10 +623,7 @@ bool PropTypesKeyHelp::Import(HWND hwndDlg)
 }
 
 
-/*! キーワードヘルプファイルリストのインポートエクスポート
-
-	@date 2006.04.10 fon 新規作成
-*/
+/*! キーワードヘルプファイルリストのインポートエクスポート */
 bool PropTypesKeyHelp::Export(HWND hwndDlg)
 {
 	GetData(hwndDlg);
@@ -650,10 +634,7 @@ bool PropTypesKeyHelp::Export(HWND hwndDlg)
 }
 
 
-/*! 辞書の説明のフォーマット揃え
-
-	@date 2006.04.10 fon 新規作成
-*/
+/*! 辞書の説明のフォーマット揃え */
 static TCHAR* strcnv(TCHAR* str)
 {
 	TCHAR* p = str;
@@ -673,11 +654,7 @@ static TCHAR* strcnv(TCHAR* str)
 	return str;
 }
 
-/*! フルパスからファイル名を返す
-
-	@date 2006.04.10 fon 新規作成
-	@date 2006.09.14 genta ディレクトリがない場合に最初の1文字が切れないように
-*/
+/*! フルパスからファイル名を返す */
 static TCHAR* GetFileName(const TCHAR* fullpath)
 {
 	const TCHAR* pszName = fullpath;

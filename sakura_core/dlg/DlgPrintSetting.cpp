@@ -638,14 +638,14 @@ void DlgPrintSetting::OnChangeSettingType(BOOL bGetData)
 	// 英文ワードラップ
 	CheckButton(IDC_CHECK_WORDWRAP, curPS.bPrintWordWrap);
 
-	// 行頭禁則	//@@@ 2002.04.09 MIK
+	// 行頭禁則
 	CheckButton(IDC_CHECK_PS_KINSOKUHEAD, curPS.bPrintKinsokuHead);
-	// 行末禁則	//@@@ 2002.04.09 MIK
+	// 行末禁則
 	CheckButton(IDC_CHECK_PS_KINSOKUTAIL, curPS.bPrintKinsokuTail);
 
-	// 改行文字をぶら下げる	//@@@ 2002.04.13 MIK
+	// 改行文字をぶら下げる
 	CheckButton(IDC_CHECK_PS_KINSOKURET, curPS.bPrintKinsokuRet);
-	// 句読点をぶら下げる	//@@@ 2002.04.17 MIK
+	// 句読点をぶら下げる
 	CheckButton(IDC_CHECK_PS_KINSOKUKUTO, curPS.bPrintKinsokuKuto);
 
 	// カラー印刷

@@ -4,7 +4,7 @@
 #include "StdAfx.h"
 #include "dlg/DlgGrepReplace.h"
 #include "View/EditView.h"
-#include "func/Funccode.h"		// Stonee, 2001/03/12
+#include "func/Funccode.h"
 #include "util/module.h"
 #include "util/shell.h"
 #include "util/os.h"
@@ -81,7 +81,7 @@ INT_PTR DlgGrepReplace::DoModal(
 	if (szFolder[0] == _T('\0') && searchKeywords.grepFolders.size()) {
 		_tcscpy(szFolder, searchKeywords.grepFolders[0]);	// åüçıÉtÉHÉãÉ_
 	}
-	if (pszCurrentFilePath) {	// 2010.01.10 ryoji
+	if (pszCurrentFilePath) {
 		_tcscpy(szCurrentFilePath, pszCurrentFilePath);
 	}
 

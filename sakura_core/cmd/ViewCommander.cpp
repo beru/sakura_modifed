@@ -414,13 +414,11 @@ bool ViewCommander::HandleCommand(
 	case F_DIFF_PREV:		Command_Diff_Prev(); break;						// DIFF差分表示(前へ)
 	case F_DIFF_RESET:		Command_Diff_Reset(); break;					// DIFF差分表示(全解除)
 	case F_BRACKETPAIR:		Command_BracketPair(); break;					// 対括弧の検索
-// From Here 2001.12.03 hor
 	case F_BOOKMARK_SET:	Command_Bookmark_Set(); break;					// ブックマーク設定・解除
 	case F_BOOKMARK_NEXT:	Command_Bookmark_Next(); break;					// 次のブックマークへ
 	case F_BOOKMARK_PREV:	Command_Bookmark_Prev(); break;					// 前のブックマークへ
 	case F_BOOKMARK_RESET:	Command_Bookmark_Reset(); break;				// ブックマークの全解除
 	case F_BOOKMARK_VIEW:	bRet = Command_FuncList((ShowDialogType)lparam1 , OutlineType::BookMark); break;	// アウトライン解析
-// To Here 2001.12.03 hor
 	case F_BOOKMARK_PATTERN:Command_Bookmark_Pattern(); break;				// 指定パターンに一致する行をマーク
 	case F_JUMP_SRCHSTARTPOS:	Command_Jump_SrchStartPos(); break;			// 検索開始位置へ戻る
 	case F_FUNCLIST_NEXT:	Command_FuncList_Next();break;					// 次の関数リストマーク
@@ -648,10 +646,6 @@ bool ViewCommander::HandleCommand(
 }
 
 
-
-/*!
-	@date 2014.07.11 新規追加
-*/
 void ViewCommander::Sub_BoxSelectLock( int flags )
 {
 	bool bSelLock;

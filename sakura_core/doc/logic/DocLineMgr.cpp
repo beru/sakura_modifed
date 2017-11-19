@@ -123,13 +123,13 @@ const DocLine* DocLineMgr::GetLine(size_t nLine) const
 	if (nLines == 0) {
 		return nullptr;
 	}
-	// 2004.03.28 Moca nLineが負の場合のチェックを追加
+	// nLineが負の場合のチェックを追加
 	if (nLine < 0 || nLine >= nLines) {
 		return nullptr;
 	}
 	int nCounter;
 	DocLine* pDocLine;
-	// 2004.03.28 Moca pCodePrevReferより、Top,Botのほうが近い場合は、そちらを利用する
+	// pCodePrevReferより、Top,Botのほうが近い場合は、そちらを利用する
 	int nPrevToLineNumDiff = t_abs(nPrevReferLine - (int)nLine);
 	ASSERT_GE(nLines, nLine);
 	if (!pCodePrevRefer

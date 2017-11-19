@@ -39,7 +39,6 @@ static const DWORD p_helpids[] = {	//11600
 };
 
 // Import
-// 2010/4/23 Uchi Importの外出し
 bool PropTypesRegex::Import(HWND hwndDlg)
 {
 	ImpExpRegex impExpRegex(types);
@@ -53,7 +52,6 @@ bool PropTypesRegex::Import(HWND hwndDlg)
 }
 
 // Export
-// 2010/4/23 Uchi Exportの外出し
 bool PropTypesRegex::Export(HWND hwndDlg)
 {
 	GetData(hwndDlg);
@@ -78,7 +76,7 @@ INT_PTR PropTypesRegex::DispatchEvent(
 	LV_ITEM	lvi;
 	LV_COLUMN	col;
 	RECT		rc;
-	static int nPrevIndex = -1;	// 更新時におかしくなるバグ修正 @@@ 2003.03.26 MIK
+	static int nPrevIndex = -1;	// 更新時におかしくなるバグ修正
 
 	HWND hwndList = GetDlgItem(hwndDlg, IDC_LIST_REGEX);
 
@@ -437,7 +435,7 @@ INT_PTR PropTypesRegex::DispatchEvent(
 
 			case IDC_BUTTON_REGEX_IMPORT:	// インポート
 				Import(hwndDlg);
-				types.nRegexKeyMagicNumber = RegexKeyword::GetNewMagicNumber();	// Need Compile	//@@@ 2001.11.17 add MIK 正規表現キーワードのため
+				types.nRegexKeyMagicNumber = RegexKeyword::GetNewMagicNumber();
 				return TRUE;
 
 			case IDC_BUTTON_REGEX_EXPORT:	// エクスポート
@@ -458,7 +456,6 @@ INT_PTR PropTypesRegex::DispatchEvent(
 			// ダイアログデータの取得 正規表現キーワード
 			GetData(hwndDlg);
 			return TRUE;
-//@@@ 2002.01.03 YAZAKI 最後に表示していたシートを正しく覚えていないバグ修正
 		case PSN_SETACTIVE:
 			nPageNum = ID_PROPTYPE_PAGENUM_REGEX;
 			return TRUE;
@@ -466,7 +463,7 @@ INT_PTR PropTypesRegex::DispatchEvent(
 			if (pNMHDR->hwndFrom == hwndList) {
 				HWND	hwndCombo;
 				nIndex = ListView_GetNextItem(hwndList, -1, LVNI_ALL | LVNI_SELECTED);
-				if (nIndex == -1) {	// 削除、範囲外でクリック時反映されないバグ修正	//@@@ 2003.06.17 MIK
+				if (nIndex == -1) {
 					nIndex = ListView_GetNextItem(hwndList, -1, LVNI_ALL | LVNI_FOCUSED);
 				}
 				if (nIndex == -1) {
@@ -476,7 +473,7 @@ INT_PTR PropTypesRegex::DispatchEvent(
 					for (i=0, j=0; i<COLORIDX_LAST; ++i) {
 						if ((g_ColorAttributeArr[i].fAttribute & COLOR_ATTRIB_NO_TEXT) == 0 &&
 							(g_ColorAttributeArr[i].fAttribute & COLOR_ATTRIB_NO_BACK) == 0
-						) {	// 2006.12.18 ryoji フラグ利用で簡素化
+						) {
 							if (types.colorInfoArr[i].nColorIdx == COLORIDX_REGEX1) {
 								Combo_SetCurSel(hwndCombo, j);	// コンボボックスのデフォルト選択
 								break;
@@ -486,7 +483,7 @@ INT_PTR PropTypesRegex::DispatchEvent(
 					}
 					return FALSE;
 				}
-				if (nPrevIndex != nIndex) {	//@@@ 2003.03.26 MIK
+				if (nPrevIndex != nIndex) {
 					// 更新時にListViewのSubItemを正しく取得できないので、その対策
 					auto szKeyword = std::make_unique<TCHAR[]>(nKeywordSize);
 					szKeyword[0] = _T('\0');
@@ -497,7 +494,7 @@ INT_PTR PropTypesRegex::DispatchEvent(
 					for (i=0, j=0; i<COLORIDX_LAST; ++i) {
 						if ((g_ColorAttributeArr[i].fAttribute & COLOR_ATTRIB_NO_TEXT) == 0 &&
 							(g_ColorAttributeArr[i].fAttribute & COLOR_ATTRIB_NO_BACK) == 0
-						) {	// 2006.12.18 ryoji フラグ利用で簡素化
+						) {
 							if (_tcscmp(types.colorInfoArr[i].szName, szColorIndex) == 0) {
 								Combo_SetCurSel(hwndCombo, j);
 								break;
@@ -515,7 +512,7 @@ INT_PTR PropTypesRegex::DispatchEvent(
 	case WM_HELP:
 		{
 			HELPINFO* p = (HELPINFO*) lParam;
-			MyWinHelp((HWND)p->hItemHandle, HELP_WM_HELP, (ULONG_PTR)(LPVOID)p_helpids);	// 2006.10.10 ryoji MyWinHelpに変更に変更
+			MyWinHelp((HWND)p->hItemHandle, HELP_WM_HELP, (ULONG_PTR)(LPVOID)p_helpids);
 		}
 		return TRUE;
 		// NOTREACHED
@@ -523,7 +520,7 @@ INT_PTR PropTypesRegex::DispatchEvent(
 
 	// Context Menu
 	case WM_CONTEXTMENU:
-		MyWinHelp(hwndDlg, HELP_CONTEXTMENU, (ULONG_PTR)(LPVOID)p_helpids);	// 2006.10.10 ryoji MyWinHelpに変更に変更
+		MyWinHelp(hwndDlg, HELP_CONTEXTMENU, (ULONG_PTR)(LPVOID)p_helpids);
 		return TRUE;
 
 	}
@@ -544,7 +541,7 @@ void PropTypesRegex::SetData(HWND hwndDlg)
 		GetDefaultColorInfoName(&types.colorInfoArr[i], i);
 		if ((g_ColorAttributeArr[i].fAttribute & COLOR_ATTRIB_NO_TEXT) == 0 &&
 			(g_ColorAttributeArr[i].fAttribute & COLOR_ATTRIB_NO_BACK) == 0
-		) {	// 2006.12.18 ryoji フラグ利用で簡素化
+		) {
 			int j = Combo_AddString(hwndWork, types.colorInfoArr[i].szName);
 			if (types.colorInfoArr[i].nColorIdx == COLORIDX_REGEX1) {
 				Combo_SetCurSel(hwndWork, j);	// コンボボックスのデフォルト選択
@@ -661,14 +658,10 @@ int PropTypesRegex::GetData(HWND hwndDlg)
 	return TRUE;
 }
 
-/*!
-	@date 2010.07.11 Moca 今のところRegexKeyword::RegexKeyCheckSyntaxと同一なので、中身を削除して転送関数に変更
-*/
 BOOL PropTypesRegex::RegexKakomiCheck(const wchar_t* s)
 {
 	return RegexKeyword::RegexKeyCheckSyntax(s);
 }
-//@@@ 2001.11.17 add end MIK
 
 bool PropTypesRegex::CheckKeywordList(
 	HWND hwndDlg,

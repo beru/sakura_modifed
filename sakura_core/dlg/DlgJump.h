@@ -27,10 +27,10 @@ protected:
 	/*
 	||  実装ヘルパ関数
 	*/
-	BOOL OnNotify(WPARAM, LPARAM);	// Oct. 6, 2000 JEPRO added for Spin control
+	BOOL OnNotify(WPARAM, LPARAM);
 	BOOL OnCbnSelChange(HWND, int);
 	BOOL OnBnClicked(int);
-	LPVOID GetHelpIdTable(void);	//@@@ 2002.01.18 add
+	LPVOID GetHelpIdTable(void);
 	void SetData(void);	// ダイアログデータの設定
 	int GetData(void);	// ダイアログデータの取得
 };

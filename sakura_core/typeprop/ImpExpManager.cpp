@@ -374,7 +374,6 @@ bool ImpExpType::Import(const wstring& sFileName, wstring& sErrMsg)
 				break;
 			}
 		}
-		// 2010.08.21 0が範囲から漏れていた
 		if (nIdx >= 0) {
 			types.eDefaultOutline = Plug::GetOutlineType(Plug::GetPluginFunctionCode(nIdx, nPlug));
 		}
@@ -395,7 +394,6 @@ bool ImpExpType::Import(const wstring& sFileName, wstring& sErrMsg)
 				break;
 			}
 		}
-		// 2010.08.21 0が範囲から漏れていた
 		if (nIdx >= 0) {
 			types.eSmartIndent = Plug::GetSmartIndentType(Plug::GetPluginFunctionCode(nIdx, nPlug));
 		}
@@ -531,7 +529,7 @@ bool ImpExpColors::Import(const wstring& sFileName, wstring& sErrMsg)
 	// 比較
 	if (szHeader != WSTR_COLORDATA_HEAD3) {
 		in.Close();
-		sErrMsg = std::wstring(LSW(STR_IMPEXP_ERR_COLOR_OLD))	// 旧バージョンの説明の削除 2010/4/22 Uchi
+		sErrMsg = std::wstring(LSW(STR_IMPEXP_ERR_COLOR_OLD))	// 旧バージョンの説明の削除
 			+ sFileName;
 		return false;
 	}
@@ -558,7 +556,7 @@ bool ImpExpColors::Export(const wstring& sFileName, wstring& sErrMsg)
 	DataProfile profile;
 	profile.SetWritingMode();
 	ShareData_IO::IO_ColorSet(&profile, szSecColor, colorInfoArr);
-	if (!profile.WriteProfile(to_tchar(sFileName.c_str()), WSTR_COLORDATA_HEAD3)) { // Jan. 15, 2001 Stonee
+	if (!profile.WriteProfile(to_tchar(sFileName.c_str()), WSTR_COLORDATA_HEAD3)) {
 		sErrMsg = std::wstring(LSW(STR_IMPEXP_ERR_EXPORT)) + sFileName;
 		return false;
 	}
@@ -611,7 +609,7 @@ bool ImpExpRegex::Import(const wstring& sFileName, wstring& sErrMsg)
 			++p;
 			if (p[0] && RegexKeyword::RegexKeyCheckSyntax(to_wchar(p))) {	// 囲みがある
 				// 色指定名に対応する番号を探す
-				int k = GetColorIndexByName(&buff[11]);	//@@@ 2002.04.30
+				int k = GetColorIndexByName(&buff[11]);
 				if (k == -1) {
 					// 日本語名からインデックス番号に変換する
 					for (int m=0; m<COLORIDX_LAST; ++m) {

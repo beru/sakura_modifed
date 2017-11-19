@@ -14,16 +14,16 @@
 #include "util/container.h"
 #include "util/design_template.h"
 
-class Bregexp;// 2002/2/10 aroka
-class Layout;// 2002/2/10 aroka
-class DocLineMgr;// 2002/2/10 aroka
-class DocLine;// 2002/2/10 aroka
-class Memory;// 2002/2/10 aroka
-class EditDoc;// 2003/07/20 genta
+class Bregexp;
+class Layout;
+class DocLineMgr;
+class DocLine;
+class Memory;
+class EditDoc;
 class SearchStringPattern;
 class ColorStrategy;
 
-// レイアウト中の禁則タイプ	//@@@ 2002.04.20 MIK
+// レイアウト中の禁則タイプ
 enum class KinsokuType {
 	None = 0,	// なし
 	WordWrap,	// 英文ワードラップ中
@@ -44,7 +44,7 @@ struct LayoutReplaceArg {
 	int				nInsSeq;		// [out]挿入行の元のシーケンス
 };
 
-// 編集時のテキスト最大幅算出用		// 2009.08.28 nasukoji
+// 編集時のテキスト最大幅算出用
 struct CalTextWidthArg {
 	Point ptLayout;		// 編集開始位置
 	int	nDelLines;		// 削除に関係する行数 - 1（負数の時削除なし）
@@ -60,11 +60,7 @@ public:
 /*-----------------------------------------------------------------------
 クラスの宣言
 -----------------------------------------------------------------------*/
-/*!	@brief テキストのレイアウト情報管理
-
-	@date 2005.11.21 Moca 色分け情報をメンバーへ移動．不要となった引数をメンバ関数から削除．
-*/
-// 2007.10.15 XYLogicalToLayoutを廃止。LogicToLayoutに統合。
+/*!	@brief テキストのレイアウト情報管理 */
 class LayoutMgr : public ProgressSubject {
 private:
 	typedef size_t (LayoutMgr::*CalcIndentProc)(Layout*);
@@ -89,8 +85,7 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                          参照系                             //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-public:
-	//2007.10.09 kobake 関数名変更: Search → SearchLineByLayoutY
+public:	
 	size_t			GetLineCount() const { return nLines; }	// 全物理行数を返す
 	const wchar_t*	GetLineStr(size_t nLine, size_t* pnLineLen) const;	// 指定された物理行のデータへのポインタとその長さを返す
 	const wchar_t*	GetLineStr(size_t nLine, size_t* pnLineLen, const Layout** ppcLayoutDes) const;	// 指定された物理行のデータへのポインタとその長さを返す
@@ -109,7 +104,7 @@ public:
 	bool			WhereCurrentWord(size_t , size_t , Range* pSelect, NativeW*, NativeW*);	// 現在位置の単語の範囲を調べる
 
 	// 判定
-	bool			IsEndOfLine(const Point& ptLinePos);	// 指定位置が行末(改行文字の直前)か調べる	//@@@ 2002.04.18 MIK
+	bool			IsEndOfLine(const Point& ptLinePos);	// 指定位置が行末(改行文字の直前)か調べる
 
 	/*! 次のTAB位置までの幅
 		@param pos [in] 現在の位置
@@ -117,17 +112,13 @@ public:
 	 */
 	size_t GetActualTabSpace(size_t pos) const { return nTabSpace - pos % nTabSpace; }
 
-	// Aug. 14, 2005 genta
-	// Sep. 07, 2007 kobake 関数名変更 GetMaxLineSize→GetMaxLineKetas
 	size_t GetMaxLineKetas(void) const { return nMaxLineKetas; }
 
-	// 2005.11.21 Moca 引用符の色分け情報を引数から除去
 	bool ChangeLayoutParam(size_t nTabSize, size_t nMaxLineKetas);
 
-	// Jul. 29, 2006 genta
 	void GetEndLayoutPos(Point* ptLayoutEnd);
 
-	size_t GetMaxTextWidth(void) const { return nTextWidth; }		// 2009.08.28 nasukoji	テキスト最大幅を返す
+	size_t GetMaxTextWidth(void) const { return nTextWidth; }		// テキスト最大幅を返す
 
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -178,11 +169,7 @@ public:
 	/*
 	|| 更新系
 	*/
-	/* レイアウト情報の変更
-		@date Jun. 01, 2001 JEPRO char* (行コメントデリミタ3用)を1つ追加
-		@date 2002.04.13 MIK 禁則,改行文字をぶら下げる,句読点ぶらさげを追加
-		@date 2002/04/27 YAZAKI TypeConfigを渡すように変更。
-	*/
+	/* レイアウト情報の変更 */
 	void SetLayoutInfo(
 		bool			bDoLayout,
 		const TypeConfig&	refType,
@@ -195,8 +182,8 @@ public:
 		LayoutReplaceArg*	pArg
 	);
 
-	BOOL CalculateTextWidth(bool bCalLineLen = true, int nStart = -1, int nEnd = -1);	// テキスト最大幅を算出する		// 2009.08.28 nasukoji
-	void ClearLayoutLineWidth(void);				// 各行のレイアウト行長の記憶をクリアする		// 2009.08.28 nasukoji
+	BOOL CalculateTextWidth(bool bCalLineLen = true, int nStart = -1, int nEnd = -1);	// テキスト最大幅を算出する
+	void ClearLayoutLineWidth(void);				// 各行のレイアウト行長の記憶をクリアする
 
 protected:
 	/*
@@ -208,14 +195,11 @@ protected:
 	/*
 	|| 更新系
 	*/
-	// 2005.11.21 Moca 引用符の色分け情報を引数から除去
 public:
 	void _DoLayout();	// 現在の折り返し文字数に合わせて全データのレイアウト情報を再生成します
 protected:
-	// 2005.11.21 Moca 引用符の色分け情報を引数から除去
-	// 2009.08.28 nasukoji	テキスト最大幅算出用引数追加
 	int DoLayout_Range(Layout* , int, Point, EColorIndexType, LayoutColorInfo*, const CalTextWidthArg&);	// 指定レイアウト行に対応する論理行の次の論理行から指定論理行数だけ再レイアウトする
-	void CalculateTextWidth_Range(const CalTextWidthArg& ctwArg);	// テキストが編集されたら最大幅を算出する	// 2009.08.28 nasukoji
+	void CalculateTextWidth_Range(const CalTextWidthArg& ctwArg);	// テキストが編集されたら最大幅を算出する
 	Layout* DeleteLayoutAsLogical(Layout*, int, int , int, Point, size_t*);	// 論理行の指定範囲に該当するレイアウト情報を削除
 	void ShiftLogicalLineNum(Layout* , int);	// 指定行より後の行のレイアウト情報について、論理行番号を指定行数だけシフトする
 
@@ -272,21 +256,17 @@ protected:
 private:
 	bool _ExistKinsokuKuto(wchar_t wc) const { return pszKinsokuKuto_1.exist(wc); }
 	bool _ExistKinsokuHead(wchar_t wc) const { return pszKinsokuHead_1.exist(wc); }
-	bool IsKinsokuHead(wchar_t wc);	// 行頭禁則文字をチェックする	//@@@ 2002.04.08 MIK
-	bool IsKinsokuTail(wchar_t wc);	// 行末禁則文字をチェックする	//@@@ 2002.04.08 MIK
-	bool IsKinsokuKuto(wchar_t wc);	// 句読点文字をチェックする	//@@@ 2002.04.17 MIK
-	// 2005-08-20 D.S.Koba 禁則関連処理の関数化
-	/*! 句読点ぶら下げの処理位置か
-		@date 2005-08-20 D.S.Koba
-		@date Sep. 3, 2005 genta 最適化
-	*/
+	bool IsKinsokuHead(wchar_t wc);	// 行頭禁則文字をチェックする
+	bool IsKinsokuTail(wchar_t wc);	// 行末禁則文字をチェックする
+	bool IsKinsokuKuto(wchar_t wc);	// 句読点文字をチェックする
+	/*! 句読点ぶら下げの処理位置か */
 	bool IsKinsokuPosKuto(size_t nRest, size_t nCharChars) const {
 		return nRest < nCharChars;
 	}
 	bool IsKinsokuPosHead(size_t, size_t, size_t);	// 行頭禁則の処理位置か
 	bool IsKinsokuPosTail(size_t, size_t, size_t);	// 行末禁則の処理位置か
 private:
-	// Oct. 1, 2002 genta インデント幅計算関数群
+	// インデント幅計算関数群
 	size_t getIndentOffset_Normal(Layout* pLayoutPrev);
 	size_t getIndentOffset_Tx2x(Layout* pLayoutPrev);
 	size_t getIndentOffset_LeftSpace(Layout* pLayoutPrev);
@@ -295,8 +275,6 @@ protected:
 	/*
 	|| 実装ヘルパ系
 	*/
-	//@@@ 2002.09.23 YAZAKI
-	// 2009.08.28 nasukoji	nPosX引数追加
 	Layout* CreateLayout(DocLine* pDocLine, Point ptLogicPos, int nLength, EColorIndexType nTypePrev, int nIndent, int nPosX, LayoutColorInfo*);
 	Layout* InsertLineNext(Layout*, Layout*);
 	void AddLineBottom(Layout*);
@@ -308,10 +286,6 @@ public:
 	DocLineMgr*			pDocLineMgr;	// 行バッファ管理マネージャ
 
 protected:
-	// 2002.10.07 YAZAKI add nLineTypeBot
-	// 2007.09.07 kobake 変数名変更: nMaxLineSize→nMaxLineKetas
-	// 2007.10.08 kobake 変数名変更: getIndentOffset→getIndentOffset
-
 	// 参照
 	EditDoc*			pEditDoc;
 
@@ -323,10 +297,10 @@ protected:
 	const TypeConfig*		pTypeConfig;
 	size_t					nMaxLineKetas;
 	size_t					nTabSpace;
-	vector_ex<wchar_t>		pszKinsokuHead_1;			// 行頭禁則文字	//@@@ 2002.04.08 MIK
-	vector_ex<wchar_t>		pszKinsokuTail_1;			// 行末禁則文字	//@@@ 2002.04.08 MIK
-	vector_ex<wchar_t>		pszKinsokuKuto_1;			// 句読点ぶらさげ文字	//@@@ 2002.04.17 MIK
-	CalcIndentProc			getIndentOffset;			// Oct. 1, 2002 genta インデント幅計算関数を保持
+	vector_ex<wchar_t>		pszKinsokuHead_1;			// 行頭禁則文字
+	vector_ex<wchar_t>		pszKinsokuTail_1;			// 行末禁則文字
+	vector_ex<wchar_t>		pszKinsokuKuto_1;			// 句読点ぶらさげ文字
+	CalcIndentProc			getIndentOffset;			// インデント幅計算関数を保持
 
 	// フラグ等
 	EColorIndexType			nLineTypeBot;				// タイプ 0=通常 1=行コメント 2=ブロックコメント 3=シングルクォーテーション文字列 4=ダブルクォーテーション文字列
@@ -336,11 +310,11 @@ protected:
 	mutable int				nPrevReferLine;
 	mutable Layout*			pLayoutPrevRefer;
 	
-	// EOFカーソル位置を記憶する(_DoLayout/DoLayout_Rangeで無効にする)	//2006.10.01 Moca
+	// EOFカーソル位置を記憶する(_DoLayout/DoLayout_Rangeで無効にする)
 	int						nEOFLine;		// EOF行数
 	int						nEOFColumn;	// EOF幅位置
 
-	// テキスト最大幅を記憶（折り返し位置算出に使用）	// 2009.08.28 nasukoji
+	// テキスト最大幅を記憶（折り返し位置算出に使用）
 	size_t					nTextWidth;				// テキスト最大幅の記憶
 	size_t					nTextWidthMaxLine;		// 最大幅のレイアウト行
 

@@ -42,9 +42,6 @@ void ShareData_IO::SaveShareData()
 	共有データの読み込み/保存 2
 
 	@param[in] bRead true: 読み込み / false: 書き込み
-
-	@date 2004-01-11 D.S.Koba Profile変更によるコード簡略化
-	@date 2005-04-05 D.S.Koba 各セクションの入出力を関数として分離
 */
 bool ShareData_IO::ShareData_IO_2(bool bRead)
 {
@@ -53,7 +50,6 @@ bool ShareData_IO::ShareData_IO_2(bool bRead)
 
 	DataProfile	profile;
 
-	// Feb. 12, 2006 D.S.Koba
 	if (bRead) {
 		profile.SetReadingMode();
 	}else {
@@ -62,7 +58,7 @@ bool ShareData_IO::ShareData_IO_2(bool bRead)
 
 	std::tstring strProfileName = to_tchar(CommandLine::getInstance().GetProfileName());
 	TCHAR szIniFileName[_MAX_PATH + 1];
-	FileNameManager::getInstance().GetIniFileName( szIniFileName, strProfileName.c_str(), bRead );	// 2007.05.19 ryoji iniファイル名を取得する
+	FileNameManager::getInstance().GetIniFileName( szIniFileName, strProfileName.c_str(), bRead );	// iniファイル名を取得する
 
 //	MYTRACE(_T("Iniファイル処理-1 所要時間(ミリ秒) = %d\n"), runningTimer.Read());
 
@@ -72,7 +68,7 @@ bool ShareData_IO::ShareData_IO_2(bool bRead)
 			return false;
 		}
 
-		// バージョンアップ時はバックアップファイルを作成する	// 2011.01.28 ryoji
+		// バージョンアップ時はバックアップファイルを作成する
 		TCHAR iniVer[256];
 		DWORD mH, mL, lH, lL;
 		mH = mL = lH = lL = 0;	// ※ 古～い ini だと "szVersion" は無い
@@ -96,7 +92,7 @@ bool ShareData_IO::ShareData_IO_2(bool bRead)
 	}
 //	MYTRACE(_T("Iniファイル処理 0 所要時間(ミリ秒) = %d\n"), runningTimer.Read());
 
-	auto menuDrawer = std::make_unique<MenuDrawer>(); // 2010/7/4 Uchi
+	auto menuDrawer = std::make_unique<MenuDrawer>();
 
 	if (bRead) {
 		DllSharedData* pShareData = &GetDllShareData();
@@ -105,7 +101,6 @@ bool ShareData_IO::ShareData_IO_2(bool bRead)
 		shareData.RefreshString();
 	}
 
-	// Feb. 12, 2006 D.S.Koba
 	ShareData_IO_Mru(profile);
 	ShareData_IO_Keys(profile);
 	ShareData_IO_Grep(profile);
@@ -113,7 +108,7 @@ bool ShareData_IO::ShareData_IO_2(bool bRead)
 	ShareData_IO_Cmd(profile);
 	ShareData_IO_Nickname(profile);
 	ShareData_IO_Common(profile);
-	ShareData_IO_Plugin(profile, menuDrawer.get());		// Move here	2010/6/24 Uchi
+	ShareData_IO_Plugin(profile, menuDrawer.get());
 	ShareData_IO_Toolbar(profile, menuDrawer.get());
 	ShareData_IO_CustMenu(profile);
 	ShareData_IO_Font(profile);
@@ -122,8 +117,8 @@ bool ShareData_IO::ShareData_IO_2(bool bRead)
 	ShareData_IO_Types(profile);
 	ShareData_IO_Keywords(profile);
 	ShareData_IO_Macro(profile);
-	ShareData_IO_Statusbar(profile);		// 2008/6/21 Uchi
-	ShareData_IO_MainMenu(profile);		// 2010/5/15 Uchi
+	ShareData_IO_Statusbar(profile);
+	ShareData_IO_MainMenu(profile);
 	ShareData_IO_Other(profile);
 
 	if (!bRead) {
@@ -138,8 +133,6 @@ bool ShareData_IO::ShareData_IO_2(bool bRead)
 /*!
 	@brief 共有データのMruセクションの入出力
 	@param[in,out]	profile	INIファイル入出力クラス
-
-	@date 2005-04-07 D.S.Koba ShareData_IO_2から分離。読み込み時の初期化を修正
 */
 void ShareData_IO::ShareData_IO_Mru(DataProfile& profile)
 {
@@ -179,11 +172,11 @@ void ShareData_IO::ShareData_IO_Mru(DataProfile& profile)
 		}
 		auto_sprintf( szKeyName, LTEXT("MRU[%02d].nType"), i );
 		profile.IOProfileData(pszSecName, szKeyName, pfiWork->nTypeId);
-		// お気に入り	//@@@ 2003.04.08 MIK
+		// お気に入り
 		auto_sprintf( szKeyName, LTEXT("MRU[%02d].bFavorite"), i );
 		profile.IOProfileData(pszSecName, szKeyName, pShare->history.bMRUArrFavorite[i]);
 	}
-	//@@@ 2001.12.26 YAZAKI 残りのfiMRUArrを初期化。
+	// 残りのfiMRUArrを初期化。
 	if (profile.IsReadingMode()) {
 		EditInfo	fiInit;
 		// 残りをfiInitで初期化しておく。
@@ -192,10 +185,10 @@ void ShareData_IO::ShareData_IO_Mru(DataProfile& profile)
 		fiInit.nViewTopLine = 0;
 		fiInit.ptCursor.Set(0, 0);
 		_tcscpy( fiInit.szPath, _T("") );
-		fiInit.szMarkLines[0] = L'\0';	// 2002.01.16 hor
+		fiInit.szMarkLines[0] = L'\0';
 		for (; i<MAX_MRU; ++i) {
 			pShare->history.fiMRUArr[i] = fiInit;
-			pShare->history.bMRUArrFavorite[i] = false;	// お気に入り	//@@@ 2003.04.08 MIK
+			pShare->history.bMRUArrFavorite[i] = false;	// お気に入り
 		}
 	}
 
@@ -212,9 +205,8 @@ void ShareData_IO::ShareData_IO_Mru(DataProfile& profile)
 	// 読み込み時は残りを初期化
 	if (profile.IsReadingMode()) {
 		for (; i<MAX_OPENFOLDER; ++i) {
-			// 2005.04.05 D.S.Koba
 			pShare->history.szOPENFOLDERArr[i][0] = L'\0';
-			pShare->history.bOPENFOLDERArrFavorite[i] = false;	// お気に入り	//@@@ 2003.04.08 MIK
+			pShare->history.bOPENFOLDERArrFavorite[i] = false;	// お気に入り
 		}
 	}
 	
@@ -230,8 +222,6 @@ void ShareData_IO::ShareData_IO_Mru(DataProfile& profile)
 /*!
 	@brief 共有データのKeysセクションの入出力
 	@param[in,out]	profile	INIファイル入出力クラス
-
-	@date 2005-04-07 D.S.Koba ShareData_IO_2から分離。読み込み時の初期化を修正
 */
 void ShareData_IO::ShareData_IO_Keys(DataProfile& profile)
 {
@@ -260,8 +250,6 @@ void ShareData_IO::ShareData_IO_Keys(DataProfile& profile)
 /*!
 	@brief 共有データのGrepセクションの入出力
 	@param[in,out]	profile	INIファイル入出力クラス
-
-	@date 2005-04-07 D.S.Koba ShareData_IO_2から分離。読み込み時の初期化を修正
 */
 void ShareData_IO::ShareData_IO_Grep(DataProfile& profile)
 {
@@ -290,8 +278,6 @@ void ShareData_IO::ShareData_IO_Grep(DataProfile& profile)
 /*!
 	@brief 共有データのFoldersセクションの入出力
 	@param[in,out]	profile	INIファイル入出力クラス
-
-	@date 2005-04-07 D.S.Koba ShareData_IO_2から分離。
 */
 void ShareData_IO::ShareData_IO_Folders(DataProfile& profile)
 {
@@ -307,8 +293,6 @@ void ShareData_IO::ShareData_IO_Folders(DataProfile& profile)
 /*!
 	@brief 共有データのCmdセクションの入出力
 	@param[in,out]	profile	INIファイル入出力クラス
-
-	@date 2005-04-07 D.S.Koba ShareData_IO_2から分離。読み込み時の初期化を修正
 */
 void ShareData_IO::ShareData_IO_Cmd(DataProfile& profile)
 {
@@ -337,8 +321,6 @@ void ShareData_IO::ShareData_IO_Cmd(DataProfile& profile)
 /*!
 	@brief 共有データのNicknameセクションの入出力
 	@param[in,out]	profile	INIファイル入出力クラス
-
-	@date 2005-04-07 D.S.Koba ShareData_IO_2から分離。読み込み時の初期化を修正
 */
 void ShareData_IO::ShareData_IO_Nickname(DataProfile& profile)
 {
@@ -400,8 +382,6 @@ static bool ShareData_IO_RECT(DataProfile& profile, const wchar_t* pszSecName, c
 /*!
 	@brief 共有データのCommonセクションの入出力
 	@param[in,out]	profile	INIファイル入出力クラス
-
-	@date 2005-04-07 D.S.Koba ShareData_IO_2から分離。
 */
 void ShareData_IO::ShareData_IO_Common(DataProfile& profile)
 {
@@ -1732,10 +1712,10 @@ void ShareData_IO::ShareData_IO_Macro(DataProfile& profile)
 		auto_sprintf(szKeyName, LTEXT("ReloadWhenExecute[%03d]"), i);
 		profile.IOProfileData(pszSecName, szKeyName, macrorec.bReloadWhenExecute);
 	}
-	profile.IOProfileData(pszSecName, LTEXT("nMacroOnOpened"), pShare->common.macro.nMacroOnOpened);			// オープン後自動実行マクロ番号			//@@@ 2006.09.01 ryoji
-	profile.IOProfileData(pszSecName, LTEXT("nMacroOnTypeChanged"), pShare->common.macro.nMacroOnTypeChanged);// タイプ変更後自動実行マクロ番号		//@@@ 2006.09.01 ryoji
-	profile.IOProfileData(pszSecName, LTEXT("nMacroOnSave"), pShare->common.macro.nMacroOnSave);				// 保存前自動実行マクロ番号				//@@@ 2006.09.01 ryoji
-	profile.IOProfileData(pszSecName, LTEXT("nMacroCancelTimer"), pShare->common.macro.nMacroCancelTimer);	// マクロ停止ダイアログ表示待ち時間		// 2011.08.04 syat
+	profile.IOProfileData(pszSecName, LTEXT("nMacroOnOpened"), pShare->common.macro.nMacroOnOpened);			// オープン後自動実行マクロ番号
+	profile.IOProfileData(pszSecName, LTEXT("nMacroOnTypeChanged"), pShare->common.macro.nMacroOnTypeChanged);// タイプ変更後自動実行マクロ番号
+	profile.IOProfileData(pszSecName, LTEXT("nMacroOnSave"), pShare->common.macro.nMacroOnSave);				// 保存前自動実行マクロ番号
+	profile.IOProfileData(pszSecName, LTEXT("nMacroCancelTimer"), pShare->common.macro.nMacroCancelTimer);	// マクロ停止ダイアログ表示待ち時間
 }
 
 /*!
@@ -1806,7 +1786,7 @@ struct MainMenuAddItemInfo
 
 void ShareData_IO::ShareData_IO_MainMenu(DataProfile& profile)
 {
-	IO_MainMenu(profile, GetDllShareData().common.mainMenu, false);		// 2010/5/15 Uchi
+	IO_MainMenu(profile, GetDllShareData().common.mainMenu, false);
 
 	// メインメニュー自動更新
 	const wchar_t* pszSecName = LTEXT("MainMenu");
@@ -2160,7 +2140,7 @@ void ShareData_IO::IO_ColorSet(DataProfile* pProfile, const wchar_t* pszSecName,
 	wchar_t	szKeyData[1024];
 	for (int j=0; j<COLORIDX_LAST; ++j) {
 		static const wchar_t* pszForm = LTEXT("%d,%d,%06x,%06x,%d");
-		auto_sprintf(szKeyName, LTEXT("C[%ts]"), g_ColorAttributeArr[j].szName);	// Stonee, 2001/01/12, 2001/01/15
+		auto_sprintf(szKeyName, LTEXT("C[%ts]"), g_ColorAttributeArr[j].szName);
 		if (pProfile->IsReadingMode()) {
 			if (pProfile->IOProfileData(pszSecName, szKeyName, MakeStringBufferW(szKeyData))) {
 				int buf[5];

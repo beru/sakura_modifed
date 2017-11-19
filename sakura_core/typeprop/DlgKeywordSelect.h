@@ -13,7 +13,6 @@ class KeywordSetMgr;
 	ただし、ソースの修正は必要です。
 */
 
-//	2005.01.13 genta ShareDataの定義と連動させる
 const size_t KEYWORD_SELECT_NUM = MAX_KEYWORDSET_PER_TYPE;
 
 class DlgKeywordSelect : public Dialog {

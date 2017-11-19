@@ -410,8 +410,7 @@ void DocOutline::MakeFuncList_BookMark(FuncInfoArr* pFuncInfoArr)
 		if (!pLine) {
 			break;
 		}
-		// Jan, 16, 2002 hor
-		if (bMarkUpBlankLineEnable) {// 20020119 aroka
+		if (bMarkUpBlankLineEnable) {
 			if (nLineLen<=nNewLineLen && nLineCount< nLineLast) {
 			  continue;
 			}
@@ -424,7 +423,7 @@ void DocOutline::MakeFuncList_BookMark(FuncInfoArr* pFuncInfoArr)
 			break;
 		}
 		
-		if (bMarkUpBlankLineEnable) {// 20020119 aroka
+		if (bMarkUpBlankLineEnable) {
 			ASSERT_GE(nLineLen, nNewLineLen);
 			if ((leftspace >= nLineLen - nNewLineLen && nLineCount < nLineLast)||
 				(leftspace >= nLineLen)

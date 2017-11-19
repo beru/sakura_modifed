@@ -17,7 +17,7 @@
  @return 出力された文字列のバイト数。
   0を返せばデフォルトのプロシージャが実行される。
 */
-static int __cdecl pcre_int2char(unsigned int in, unsigned char* out);	// 2009.04.30 miau
+static int __cdecl pcre_int2char(unsigned int in, unsigned char* out);
 
 int __cdecl pcre_char2int_sjis(const unsigned char*, unsigned int*);
 int __cdecl pcre_char2int_utf8(const unsigned char*, unsigned int*);

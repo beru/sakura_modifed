@@ -24,7 +24,7 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                           状態                              //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-	// Jan. 22, 2002 genta Modified Flagの設定
+	// Modified Flagの設定
 	void SetModified(bool flag, bool redraw);
 	// ファイルが修正中かどうか
 	bool IsModified() const { return bIsDocModified; }
@@ -32,14 +32,12 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                           設定                              //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-	// Nov. 20, 2000 genta
 	void SetImeMode(int mode);	// IME状態の設定
 
-	// May 15, 2000 genta
 	Eol  GetNewLineCode() const { return newLineCode; }
 	void  SetNewLineCode(const Eol& t) { newLineCode = t; }
 
-	// Oct. 2, 2005 genta 挿入モードの設定
+	// 挿入モードの設定
 	bool IsInsMode() const { return bInsMode; }
 	void SetInsMode(bool mode) { bInsMode = mode; }
 
@@ -64,7 +62,7 @@ public:
 	OpeBuf		opeBuf;					// アンドゥバッファ
 	OpeBlk*		pOpeBlk;				// 操作ブロック
 	int			nOpeBlkRedawCount;		// OpeBlkの再描画非対象数
-	bool		bInsMode;				// 挿入・上書きモード Oct. 2, 2005 genta
+	bool		bInsMode;				// 挿入・上書きモード
 	bool		bIsDocModified;
 };
 
@@ -76,7 +74,6 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                           操作                              //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-	// May 15, 2000 genta
 	void AddLineStrX(const wchar_t*, int);	// 末尾に行を追加 Ver1.5
 
 private:

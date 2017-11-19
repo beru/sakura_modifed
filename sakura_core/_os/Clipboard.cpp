@@ -265,7 +265,7 @@ bool Clipboard::GetText(NativeW* pMemBuf, bool* pbColumnSelect, bool* pbLineSele
 	if (pbColumnSelect || pbLineSelect) {
 		UINT uFormat = 0;
 		while ((uFormat = ::EnumClipboardFormats(uFormat)) != 0) {
-			// Jul. 2, 2005 genta : check return value of GetClipboardFormatName
+			// check return value of GetClipboardFormatName
 			TCHAR szFormatName[128];
 			if (::GetClipboardFormatName(uFormat, szFormatName, _countof(szFormatName) - 1)) {
 				if (pbColumnSelect && lstrcmpi(_T("MSDEVColumnSelect"), szFormatName) == 0) {

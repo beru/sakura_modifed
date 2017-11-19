@@ -87,7 +87,7 @@ bool ShareData::InitShareData()
 		std::tstring strShareDataName = GSTR_SHAREDATA;
 		strShareDataName += strProfileName;
 		hFileMap = ::CreateFileMapping(
-			INVALID_HANDLE_VALUE,	// Sep. 6, 2003 wmlhq
+			INVALID_HANDLE_VALUE,
 			NULL,
 			PAGE_READWRITE | SEC_COMMIT,
 			0,
@@ -126,7 +126,7 @@ bool ShareData::InitShareData()
 		pShareData->vStructureVersion = uShareDataVersion;
 		pShareData->nSize = sizeof(*pShareData);
 
-		// 2004.05.13 Moca リソースから製品バージョンの取得
+		// リソースから製品バージョンの取得
 		GetAppVersionInfo(NULL, VS_VERSION_INFO,
 			&pShareData->version.dwProductVersionMS, &pShareData->version.dwProductVersionLS);
 
@@ -391,7 +391,7 @@ bool ShareData::InitShareData()
 			CommonSetting_Search& search = pShareData->common.search;
 
 			search.searchOption.Reset();			// 検索オプション
-			search.bConsecutiveAll = 0;				// 「すべて置換」は置換の繰返し	// 2007.01.16 ryoji
+			search.bConsecutiveAll = 0;				// 「すべて置換」は置換の繰返し
 			search.bSelectedArea = false;			// 選択範囲内置換
 			search.bNotifyNotFound = true;			// 検索／置換  見つからないときメッセージを表示
 
@@ -962,7 +962,6 @@ bool ShareData::ActiveAlreadyOpenedWindow(const TCHAR* pszPath, HWND* phwndOwner
 
 	アウトプットウィンドウが無ければオープンする
 	@param lpFmt [in] 書式指定文字列(wchar_t版)
-	@date 2010.02.22 Moca auto_vsprintfから tchar_vsnprintf_s に変更.長すぎるときは切り詰められる
 */
 void ShareData::TraceOut(LPCTSTR lpFmt, ...)
 {

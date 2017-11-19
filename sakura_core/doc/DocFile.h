@@ -49,6 +49,6 @@ public:
 public: //####
 	EditDoc&	doc;
 	FileInfo	fileInfo;
-	FilePath	szSaveFilePath;	// 保存時のファイルのパス（マクロ用）	// 2006.09.04 ryoji
+	FilePath	szSaveFilePath;	// 保存時のファイルのパス（マクロ用）
 };
 

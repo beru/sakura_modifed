@@ -5,7 +5,7 @@
 #include <CdErr.h>
 #include <Dlgs.h>
 #include "dlg/DlgOpenFile.h"
-#include "func/Funccode.h"	// Stonee, 2001/05/18
+#include "func/Funccode.h"
 #include "FileExt.h"
 #include "env/DocTypeManager.h"
 #include "env/ShareData.h"
@@ -23,7 +23,6 @@
 #include "sakura_rc.h"
 #include "sakura.hh"
 
-// オープンファイル CDlgOpenFile.cpp	//@@@ 2002.01.07 add start MIK
 static const DWORD p_helpids[] = {	//13100
 //	IDOK,					HIDOK_OPENDLG,					// Winのヘルプで勝手に出てくる
 //	IDCANCEL,				HIDCANCEL_OPENDLG,				// Winのヘルプで勝手に出てくる
@@ -32,13 +31,12 @@ static const DWORD p_helpids[] = {	//13100
 	IDC_COMBO_MRU,			HIDC_OPENDLG_COMBO_MRU,			// 最近のファイル
 	IDC_COMBO_OPENFOLDER,	HIDC_OPENDLG_COMBO_OPENFOLDER,	// 最近のフォルダ
 	IDC_COMBO_EOL,			HIDC_OPENDLG_COMBO_EOL,			// 改行コード
-	IDC_CHECK_BOM,			HIDC_OPENDLG_CHECK_BOM,			// BOM	// 2006.08.06 ryoji
+	IDC_CHECK_BOM,			HIDC_OPENDLG_CHECK_BOM,			// BOM
 	IDC_CHECK_CP,			HIDC_OPENDLG_CHECK_CP,			//CP
 //	IDC_STATIC,				-1,
 	0, 0
-};	//@@@ 2002.01.07 add end MIK
+};
 
-// 2005.10.29 ryoji
 // Windows 2000 version of OPENFILENAME.
 // The new version has three extra members.
 // See CommDlg.h
@@ -60,7 +58,6 @@ struct OPENFILENAMEZ : public OPENFILENAME {
 
 static int AddComboCodePages(HWND hdlg, HWND combo, int nSelCode, bool& bInit);
 
-// 2014.05.22 Moca FileDialogの再入サポート
 class DlgOpenFileMem {
 public:
 	HINSTANCE		hInstance;	// アプリケーションインスタンスのハンドル
@@ -88,9 +85,9 @@ public:
 	Eol				eol;
 	bool			bUseCharCode;
 	bool			bUseEol;
-	bool			bBom;		// BOMを付けるかどうか	//	Jul. 26, 2003 ryoji BOM
+	bool			bBom;		// BOMを付けるかどうか
 	bool			bUseBom;	// BOMの有無を選択する機能を利用するかどうか
-	SFilePath		szPath;	// 拡張子の補完を自前で行ったときのファイルパス	// 2006.11.10 ryoji
+	SFilePath		szPath;	// 拡張子の補完を自前で行ったときのファイルパス
 
 	bool			bInitCodePage;
 
@@ -100,13 +97,13 @@ public:
 	RecentFolder			recentFolder;
 
 	OPENFILENAME*	pOf;
-	OPENFILENAMEZ	ofn;		// 2005.10.29 ryoji OPENFILENAMEZ「ファイルを開く」ダイアログ用構造体
+	OPENFILENAMEZ	ofn;		// OPENFILENAMEZ「ファイルを開く」ダイアログ用構造体
 	HWND			hwndOpenDlg;
 	HWND			hwndComboMRU;
 	HWND			hwndComboOPENFOLDER;
 	HWND			hwndComboCODES;
-	HWND			hwndComboEOL;	//	Feb. 9, 2001 genta
-	HWND			hwndCheckBOM;	//	Jul. 26, 2003 ryoji BOMチェックボックス
+	HWND			hwndComboEOL;
+	HWND			hwndCheckBOM;	// BOMチェックボックス
 
 	DlgOpenFileData()
 		:
@@ -120,8 +117,6 @@ static const TCHAR* s_pszOpenFileDataName = _T("FileOpenData");
 
 /*
 || 	開くダイアログのサブクラスプロシージャ
-
-	@date 2002.2.17 YAZAKI CShareDataのインスタンスは、CProcessにひとつあるのみ。
 */
 LRESULT APIENTRY OFNHookProcMain(
 	HWND hwnd,
@@ -152,7 +147,7 @@ LRESULT APIENTRY OFNHookProcMain(
 			switch (wID) {
 			case pshHelp:
 				// ヘルプ
-				MyWinHelp(hwnd, HELP_CONTEXT, pData->nHelpTopicID);	// 2006.10.10 ryoji MyWinHelpに変更に変更
+				MyWinHelp(hwnd, HELP_CONTEXT, pData->nHelpTopicID);
 				break;
 			case chx1:	// The read-only check box
 				pData->bViewMode = DlgButton_IsChecked(hwnd , chx1);
@@ -178,9 +173,6 @@ LRESULT APIENTRY OFNHookProcMain(
 /*!
 	開くダイアログのフックプロシージャ
 */
-// Modified by KEITA for WIN64 2003.9.6
-// APIENTRY -> CALLBACK Moca 2003.09.09
-//UINT APIENTRY OFNHookProc(
 UINT_PTR CALLBACK OFNHookProc(
 	HWND hdlg,		// handle to child dialog window
 	UINT uiMsg,		// message identifier
@@ -199,9 +191,8 @@ UINT_PTR CALLBACK OFNHookProc(
 	LONG_PTR	nIdx;
 	LONG_PTR	nIdxSel;
 	int			nWidth;
-	WPARAM		fCheck;	// Jul. 26, 2003 ryoji BOM状態用
+	WPARAM		fCheck;
 
-	// From Here	Feb. 9, 2001 genta
 	static const EolType nEolValueArr[] = {
 		EolType::None,
 		EolType::CRLF,
@@ -216,7 +207,6 @@ UINT_PTR CALLBACK OFNHookProc(
 		_T("CR (Mac)"),
 	};
 
-// To Here	Feb. 9, 2001 genta
 	int	nRightMargin = 24;
 
 	switch (uiMsg) {
@@ -230,7 +220,7 @@ UINT_PTR CALLBACK OFNHookProc(
 			DlgOpenFileData* pData = (DlgOpenFileData*)::GetWindowLongPtr(hdlg, DWLP_USER);
 			HWND hwndFrame = ::GetParent(hdlg);
 			::GetWindowRect(hwndFrame, &pData->pDlgOpenFile->mem->pShareData->common.others.rcOpenDialog);
-			// 2005.10.29 ryoji 最近のファイル／フォルダ コンボの右端を子ダイアログの右端に合わせる
+			// 最近のファイル／フォルダ コンボの右端を子ダイアログの右端に合わせる
 			::GetWindowRect(pData->hwndComboMRU, &rc);
 			po.x = rc.left;
 			po.y = rc.top;
@@ -242,7 +232,6 @@ UINT_PTR CALLBACK OFNHookProc(
 	case WM_INITDIALOG:
 		{
 			// Save off the long pointer to the OPENFILENAME structure.
-			// Modified by KEITA for WIN64 2003.9.6
 			OPENFILENAME* pOfn = (OPENFILENAME*)lParam;
 			DlgOpenFileData* pData = reinterpret_cast<DlgOpenFileData*>(pOfn->lCustData);
 			::SetWindowLongPtr(hdlg, DWLP_USER, (LONG_PTR)pData);
@@ -255,10 +244,10 @@ UINT_PTR CALLBACK OFNHookProc(
 			pData->hwndComboMRU = ::GetDlgItem(hdlg, IDC_COMBO_MRU);
 			pData->hwndComboOPENFOLDER = ::GetDlgItem(hdlg, IDC_COMBO_OPENFOLDER);
 			pData->hwndComboEOL = ::GetDlgItem(hdlg, IDC_COMBO_EOL);
-			pData->hwndCheckBOM = ::GetDlgItem(hdlg, IDC_CHECK_BOM);//	Jul. 26, 2003 ryoji BOMチェックボックス
+			pData->hwndCheckBOM = ::GetDlgItem(hdlg, IDC_CHECK_BOM);
 			pData->bInitCodePage = false;
 
-			// 2005.11.02 ryoji 初期レイアウト設定
+			// 初期レイアウト設定
 			DlgOpenFile::InitLayout( pData->hwndOpenDlg, hdlg, pData->hwndComboCODES );
 
 			// コンボボックスのユーザー インターフェイスを拡張インターフェースにする
@@ -267,12 +256,11 @@ UINT_PTR CALLBACK OFNHookProc(
 			Combo_SetExtendedUI(pData->hwndComboOPENFOLDER, TRUE);
 			Combo_SetExtendedUI(pData->hwndComboEOL, TRUE);
 
-			// From Here Feb. 9, 2001 genta
 			// 改行コードの選択コンボボックス初期化
 			// 必要なときのみ利用する
 			if (pData->bUseEol) {
 				// 値の設定
-				// 2013.05.27 初期値をSaveInfoから設定する
+				// 初期値をSaveInfoから設定する
 				nIdxSel = 0;
 				for (i=0; i<_countof(pEolNameArr); ++i) {
 					if (i == 0) {
@@ -291,9 +279,8 @@ UINT_PTR CALLBACK OFNHookProc(
 				::ShowWindow(::GetDlgItem(hdlg, IDC_STATIC_EOL), SW_HIDE);
 				::ShowWindow(pData->hwndComboEOL, SW_HIDE);
 			}
-			// To Here Feb. 9, 2001 genta
 
-			// From Here Jul. 26, 2003 ryoji BOMチェックボックスの初期化
+			// BOMチェックボックスの初期化
 			if (pData->bUseBom) {
 				// 使うときは有効／無効を切り替え、チェック状態を初期値に設定する
 				if (CodeTypeName(pData->nCharCode).UseBom()) {
@@ -308,11 +295,9 @@ UINT_PTR CALLBACK OFNHookProc(
 				// 使わないときは隠す
 				::ShowWindow(pData->hwndCheckBOM, SW_HIDE);
 			}
-			// To Here Jul. 26, 2003 ryoji BOMチェックボックスの初期化
 
 			// Explorerスタイルの「開く」ダイアログをフック
 			::SetProp(pData->hwndOpenDlg, s_pszOpenFileDataName, (HANDLE)pData);
-			// Modified by KEITA for WIN64 2003.9.6
 			pData->wpOpenDialogProc = (WNDPROC) ::SetWindowLongPtr(pData->hwndOpenDlg, GWLP_WNDPROC, (LONG_PTR) OFNHookProcMain);
 
 			// 文字コード選択コンボボックス初期化
@@ -358,7 +343,6 @@ UINT_PTR CALLBACK OFNHookProc(
 		// フック解除
 		{
 			DlgOpenFileData* pData = (DlgOpenFileData*)::GetWindowLongPtr(hdlg, DWLP_USER);
-			// Modified by KEITA for WIN64 2003.9.6
 			::SetWindowLongPtr(pData->hwndOpenDlg, GWLP_WNDPROC, (LONG_PTR)pData->wpOpenDialogProc);
 			::RemoveProp(pData->hwndOpenDlg, s_pszOpenFileDataName);
 		}
@@ -373,7 +357,7 @@ UINT_PTR CALLBACK OFNHookProc(
 
 		switch (pofn->hdr.code) {
 		case CDN_FILEOK:
-			// 拡張子の補完を自前で行う	// 2006.11.10 ryoji
+			// 拡張子の補完を自前で行う
 			{
 				DlgOpenFileData* pData = (DlgOpenFileData*)::GetWindowLongPtr(hdlg, DWLP_USER);
 				if (pData->bIsSaveDialog) {
@@ -426,7 +410,7 @@ UINT_PTR CALLBACK OFNHookProc(
 						}
 					}
 
-					// ファイルの上書き確認を自前で行う	// 2006.11.10 ryoji
+					// ファイルの上書き確認を自前で行う
 					if (IsFileExists(pData->szPath, true)) {
 						TCHAR szText[_MAX_PATH + 100];
 						lstrcpyn(szText, pData->szPath, _MAX_PATH);
@@ -442,19 +426,16 @@ UINT_PTR CALLBACK OFNHookProc(
 				nIdx = Combo_GetCurSel(pData->hwndComboCODES);
 				lRes = Combo_GetItemData(pData->hwndComboCODES, nIdx);
 				pData->nCharCode = (EncodingType)lRes;	// 文字コード
-				// Feb. 9, 2001 genta
 				if (pData->bUseEol) {
 					nIdx = Combo_GetCurSel(pData->hwndComboEOL);
 					lRes = Combo_GetItemData(pData->hwndComboEOL, nIdx);
 					pData->eol = (EolType)lRes;	// 文字コード
 				}
-				// From Here Jul. 26, 2003 ryoji
 				// BOMチェックボックスの状態を取得
 				if (pData->bUseBom) {
 					lRes = BtnCtl_GetCheck(pData->hwndCheckBOM);
 					pData->bBom = (lRes == BST_CHECKED);	// BOM
 				}
-				// To Here Jul. 26, 2003 ryoji
 
 //			MYTRACE(_T("文字コード  lRes=%d\n"), lRes);
 //			MYTRACE(_T("pofn->hdr.code=CDN_FILEOK        \n"));break;
@@ -507,7 +488,6 @@ UINT_PTR CALLBACK OFNHookProc(
 		switch (wNotifyCode) {
 		case CBN_SELCHANGE:
 			switch ((int) LOWORD(wParam)) {
-			// From Here Jul. 26, 2003 ryoji
 			// 文字コードの変更をBOMチェックボックスに反映
 			case IDC_COMBO_CODE:
 				{
@@ -529,7 +509,6 @@ UINT_PTR CALLBACK OFNHookProc(
 					BtnCtl_SetCheck(pData->hwndCheckBOM, fCheck);
 				}
 				break;
-			// To Here Jul. 26, 2003 ryoji
 			case IDC_COMBO_MRU:
 			case IDC_COMBO_OPENFOLDER:
 				{
@@ -537,7 +516,7 @@ UINT_PTR CALLBACK OFNHookProc(
 					TCHAR szWork[_MAX_PATH + 1];
 					nIdx = Combo_GetCurSel((HWND) lParam);
 					if (Combo_GetLBText((HWND) lParam, nIdx, szWork) != CB_ERR) {
-						// 2005.11.02 ryoji ファイル名指定のコントロールを確認する
+						// ファイル名指定のコントロールを確認する
 						HWND hwndFilebox = ::GetDlgItem( pData->hwndOpenDlg, cmb13 );		// ファイル名コンボ（Windows 2000タイプ）
 						if (!::IsWindow(hwndFilebox))
 							hwndFilebox = ::GetDlgItem( pData->hwndOpenDlg, edt1 );	// ファイル名エディット（レガシータイプ）
@@ -559,7 +538,6 @@ UINT_PTR CALLBACK OFNHookProc(
 				case IDC_COMBO_MRU:
 					if (Combo_GetCount( pData->hwndComboMRU ) == 0) {
 						// 最近開いたファイル コンボボックス初期値設定
-						//	2003.06.22 Moca vMRU がNULLの場合を考慮する
 						size_t nSize = pData->pDlgOpenFile->mem->vMRU.size();
 						for (i=0; i<nSize; ++i) {
 							Combo_AddString(pData->hwndComboMRU, pData->pDlgOpenFile->mem->vMRU[i]);
@@ -571,7 +549,6 @@ UINT_PTR CALLBACK OFNHookProc(
 				case IDC_COMBO_OPENFOLDER:
 					if (Combo_GetCount( pData->hwndComboOPENFOLDER ) == 0) {
 						// 最近開いたフォルダ コンボボックス初期値設定
-						//	2003.06.22 Moca vOPENFOLDER がNULLの場合を考慮する
 						size_t nSize = pData->pDlgOpenFile->mem->vOPENFOLDER.size();
 						for (i=0; i<nSize; ++i) {
 							Combo_AddString(pData->hwndComboOPENFOLDER, pData->pDlgOpenFile->mem->vOPENFOLDER[i]);
@@ -597,19 +574,17 @@ UINT_PTR CALLBACK OFNHookProc(
 		}
 		break;	// WM_COMMAND
 
-	//@@@ 2002.01.08 add start
 	case WM_HELP:
 		{
 			HELPINFO* p = (HELPINFO*) lParam;
-			MyWinHelp((HWND)p->hItemHandle, HELP_WM_HELP, (ULONG_PTR)(LPVOID)p_helpids);	// 2006.10.10 ryoji MyWinHelpに変更に変更
+			MyWinHelp((HWND)p->hItemHandle, HELP_WM_HELP, (ULONG_PTR)(LPVOID)p_helpids);
 		}
 		return TRUE;
 
 	// Context Menu
 	case WM_CONTEXTMENU:
-		MyWinHelp(hdlg, HELP_CONTEXTMENU, (ULONG_PTR)(LPVOID)p_helpids);	// 2006.10.10 ryoji MyWinHelpに変更に変更
+		MyWinHelp(hdlg, HELP_CONTEXTMENU, (ULONG_PTR)(LPVOID)p_helpids);
 		return TRUE;
-	//@@@ 2002.01.08 add end
 
 	default:
 		return FALSE;
@@ -630,9 +605,6 @@ int AddComboCodePages(HWND hdlg, HWND combo, int nSelCode, bool& bInit)
 }
 
 
-/*! コンストラクタ
-	@date 2008.05.05 novice GetModuleHandle(NULL) → NULLに変更
-*/
 DlgOpenFile::DlgOpenFile()
 {
 	// メンバの初期化
@@ -688,12 +660,11 @@ void DlgOpenFile::Create(
 	}
 
 	//「開く」での初期フォルダ
-	if (pszDefaultPath && pszDefaultPath[0] != _T('\0')) {	// 現在編集中のファイルのパス	//@@@ 2002.04.18
+	if (pszDefaultPath && pszDefaultPath[0] != _T('\0')) {	// 現在編集中のファイルのパス
 		TCHAR szDrive[_MAX_DRIVE];
 		TCHAR szDir[_MAX_DIR];
-		// Jun. 23, 2002 genta
 		my_splitpath_t(pszDefaultPath, szDrive, szDir, NULL, NULL);
-		// 2010.08.28 相対パス解決
+		// 相対パス解決
 		TCHAR szRelPath[_MAX_PATH];
 		auto_sprintf(szRelPath, _T("%ts%ts"), szDrive, szDir);
 		const TCHAR* p = szRelPath;
@@ -708,20 +679,14 @@ void DlgOpenFile::Create(
 
 
 /*! 「開く」ダイアログ モーダルダイアログの表示
-
 	@param[in,out] pszPath 初期ファイル名．選択されたファイル名の格納場所
 	@param[in] bSetCurDir カレントディレクトリを変更するか デフォルト: false
-	@date 2002/08/21 カレントディレクトリを変更するかどうかのオプションを追加
-	@date 2003.05.12 MIK 拡張子フィルタでタイプ別設定の拡張子を使うように。
-		拡張子フィルタの管理をFileExtクラスで行う。
-	@date 2005.02.20 novice 拡張子を省略したら補完する
 */
 bool DlgOpenFile::DoModal_GetOpenFileName(TCHAR* pszPath, bool bSetCurDir)
 {
 	// カレントディレクトリを保存。関数から抜けるときに自動でカレントディレクトリは復元される。
 	CurrentDirectoryBackupPoint curDirBackup;
 
-	// 2003.05.12 MIK
 	FileExt fileExt;
 	fileExt.AppendExtRaw(LS(STR_DLGOPNFL_EXTNAME1), mem->szDefaultWildCard);
 	fileExt.AppendExtRaw(LS(STR_DLGOPNFL_EXTNAME2), _T("*.txt"));
@@ -729,23 +694,20 @@ bool DlgOpenFile::DoModal_GetOpenFileName(TCHAR* pszPath, bool bSetCurDir)
 
 	// 構造体の初期化
 	auto pData = std::make_unique<DlgOpenFileData>();
-	InitOfn(&pData->ofn);		// 2005.10.29 ryoji
+	InitOfn(&pData->ofn);
 	pData->pDlgOpenFile = this;
 	pData->ofn.lCustData = (LPARAM)(pData.get());
 
 	pData->ofn.hwndOwner = mem->hwndParent;
 	pData->ofn.hInstance = SelectLang::getLangRsrcInstance();
 	pData->ofn.lpstrFilter = fileExt.GetExtFilter();
-	// From Here Jun. 23, 2002 genta
 	//「開く」での初期フォルダチェック強化
-// 2005/02/20 novice デフォルトのファイル名は何も設定しない
 	{
 		TCHAR szDrive[_MAX_DRIVE];
 		TCHAR szDir[_MAX_DIR];
 		TCHAR szName[_MAX_FNAME];
 		TCHAR szExt[_MAX_EXT];
 
-		// Jun. 23, 2002 Thanks to sui
 		my_splitpath_t(pszPath, szDrive, szDir, szName, szExt);
 	
 		// 指定されたファイルが存在しないとき szName == NULL
@@ -763,18 +725,17 @@ bool DlgOpenFile::DoModal_GetOpenFileName(TCHAR* pszPath, bool bSetCurDir)
 		}
 	}
 	pData->ofn.lpstrFile = pszPath;
-	// To Here Jun. 23, 2002 genta
 	pData->ofn.nMaxFile = _MAX_PATH;
 	pData->ofn.lpstrInitialDir = mem->szInitialDir;
 	pData->ofn.Flags = OFN_EXPLORER | OFN_FILEMUSTEXIST | OFN_HIDEREADONLY;
-	pData->ofn.lpstrDefExt = _T(""); // 2005/02/20 novice 拡張子を省略したら補完する
+	pData->ofn.lpstrDefExt = _T(""); // 拡張子を省略したら補完する
 
-	// 2010.08.28 Moca DLLが読み込まれるので移動
+	// DLLが読み込まれるので移動
 	ChangeCurrentDirectoryToExeDir();
 	if (_GetOpenFileNameRecover( &pData->ofn )) {
 		return true;
 	}else {
-		// May 29, 2004 genta 関数にまとめた
+		// 関数にまとめた
 		DlgOpenFail();
 		return false;
 	}
@@ -784,23 +745,18 @@ bool DlgOpenFile::DoModal_GetOpenFileName(TCHAR* pszPath, bool bSetCurDir)
 /*! 保存ダイアログ モーダルダイアログの表示
 	@param pszPath [i/o] 初期ファイル名．選択されたファイル名の格納場所
 	@param bSetCurDir [in] カレントディレクトリを変更するか デフォルト: false
-	@date 2002/08/21 カレントディレクトリを変更するかどうかのオプションを追加
-	@date 2003.05.12 MIK 拡張子フィルタでタイプ別設定の拡張子を使うように。
-		拡張子フィルタの管理をFileExtクラスで行う。
-	@date 2005.02.20 novice 拡張子を省略したら補完する
 */
 bool DlgOpenFile::DoModal_GetSaveFileName(TCHAR* pszPath, bool bSetCurDir)
 {
 	// カレントディレクトリを保存。関数から抜けるときに自動でカレントディレクトリは復元される。
 	CurrentDirectoryBackupPoint curDirBackup;
 
-	// 2003.05.12 MIK
 	FileExt fileExt;
 	fileExt.AppendExtRaw(LS(STR_DLGOPNFL_EXTNAME1), mem->szDefaultWildCard);
 	fileExt.AppendExtRaw(LS(STR_DLGOPNFL_EXTNAME2), _T("*.txt"));
 	fileExt.AppendExtRaw(LS(STR_DLGOPNFL_EXTNAME3), _T("*.*"));
 	
-	// 2010.08.28 カレントディレクトリを移動するのでパス解決する
+	// カレントディレクトリを移動するのでパス解決する
 	if (pszPath[0]) {
 		TCHAR szFullPath[_MAX_PATH];
 		const TCHAR* pOrg = pszPath;
@@ -812,37 +768,31 @@ bool DlgOpenFile::DoModal_GetSaveFileName(TCHAR* pszPath, bool bSetCurDir)
 
 	// 構造体の初期化
 	auto pData = std::make_unique<DlgOpenFileData>();
-	InitOfn(&pData->ofn);		// 2005.10.29 ryoji
+	InitOfn(&pData->ofn);
 	pData->pDlgOpenFile = this;
 	pData->ofn.lCustData = (LPARAM)(pData.get());
 	pData->ofn.hwndOwner = mem->hwndParent;
 	pData->ofn.hInstance = SelectLang::getLangRsrcInstance();
 	pData->ofn.lpstrFilter = fileExt.GetExtFilter();
-	pData->ofn.lpstrFile = pszPath; // 2005/02/20 novice デフォルトのファイル名は何も設定しない
+	pData->ofn.lpstrFile = pszPath; // デフォルトのファイル名は何も設定しない
 	pData->ofn.nMaxFile = _MAX_PATH;
 	pData->ofn.lpstrInitialDir = mem->szInitialDir;
 	pData->ofn.Flags = OFN_CREATEPROMPT | OFN_EXPLORER | OFN_FILEMUSTEXIST | OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT;
 	
-	pData->ofn.lpstrDefExt = _T("");	// 2005/02/20 novice 拡張子を省略したら補完する
+	pData->ofn.lpstrDefExt = _T("");	// 拡張子を省略したら補完する
 	
-	// 2010.08.28 Moca DLLが読み込まれるので移動
 	ChangeCurrentDirectoryToExeDir();
 
 	if (GetSaveFileNameRecover( &pData->ofn )) {
 		return true;
 	}else {
-		// May 29, 2004 genta 関数にまとめた
 		DlgOpenFail();
 		return false;
 	}
 }
 
 
-/*! 「開く」ダイアログ モーダルダイアログの表示
-	@date 2003.05.12 MIK 拡張子フィルタでタイプ別設定の拡張子を使うように。
-		拡張子フィルタの管理をFileExtクラスで行う。
-	@date 2005.02.20 novice 拡張子を省略したら補完する
-*/
+/*! 「開く」ダイアログ モーダルダイアログの表示 */
 bool DlgOpenFile::DoModalOpenDlg(
 	LoadInfo* pLoadInfo,
 	std::vector<std::tstring>* pFileNames,
@@ -854,7 +804,7 @@ bool DlgOpenFile::DoModalOpenDlg(
 
 	bool bMultiSelect = pFileNames != NULL;
 
-	// ファイルの種類	2003.05.12 MIK
+	// ファイルの種類	
 	FileExt fileExt;
 	fileExt.AppendExtRaw(LS(STR_DLGOPNFL_EXTNAME3), _T("*.*"));
 	fileExt.AppendExtRaw(LS(STR_DLGOPNFL_EXTNAME2), _T("*.txt"));
@@ -867,17 +817,17 @@ bool DlgOpenFile::DoModalOpenDlg(
 	// メンバの初期化
 	pData->bViewMode = pLoadInfo->bViewMode;
 	pData->nCharCode = pLoadInfo->eCharCode;	// 文字コード自動判別
-	pData->nHelpTopicID = ::FuncID_To_HelpContextID(F_FILEOPEN);	//Stonee, 2001/05/18 機能番号からヘルプトピック番号を調べるようにした
+	pData->nHelpTopicID = ::FuncID_To_HelpContextID(F_FILEOPEN);
 	pData->bUseCharCode = true;
-	pData->bUseEol = false;	//	Feb. 9, 2001 genta
-	pData->bUseBom = false;	//	Jul. 26, 2003 ryoji
+	pData->bUseEol = false;
+	pData->bUseBom = false;
 
 	// ファイルパス受け取りバッファ
 	TCHAR* pszPathBuf = new TCHAR[2000];
-	auto_strcpy(pszPathBuf, pLoadInfo->filePath); // 2013.05.27 デフォルトファイル名を設定する
+	auto_strcpy(pszPathBuf, pLoadInfo->filePath); // デフォルトファイル名を設定する
 
 	// OPENFILENAME構造体の初期化
-	InitOfn( &pData->ofn );		// 2005.10.29 ryoji
+	InitOfn( &pData->ofn );
 	pData->pDlgOpenFile = this;
 	pData->ofn.lCustData = (LPARAM)(pData.get());
 	pData->ofn.hwndOwner = mem->hwndParent;
@@ -891,7 +841,7 @@ bool DlgOpenFile::DoModalOpenDlg(
 	if (bMultiSelect) {
 		pData->ofn.Flags |= OFN_ALLOWMULTISELECT;
 	}
-	pData->ofn.lpstrDefExt = _T("");	// 2005/02/20 novice 拡張子を省略したら補完する
+	pData->ofn.lpstrDefExt = _T("");	// 拡張子を省略したら補完する
 	if (!bOptions) {
 		pData->ofn.Flags |= OFN_HIDEREADONLY;
 		pData->bUseCharCode = false;
@@ -900,7 +850,6 @@ bool DlgOpenFile::DoModalOpenDlg(
 	// カレントディレクトリを保存。関数を抜けるときに自動でカレントディレクトリは復元されます。
 	CurrentDirectoryBackupPoint curDirBackup;
 
-	// 2010.08.28 Moca DLLが読み込まれるので移動
 	ChangeCurrentDirectoryToExeDir();
 
 	// ダイアログ表示
@@ -935,13 +884,9 @@ bool DlgOpenFile::DoModalOpenDlg(
 }
 
 /*! 保存ダイアログ モーダルダイアログの表示
-
-	@date 2001.02.09 genta	引数追加
-	@date 2003.05.12 MIK 拡張子フィルタでタイプ別設定の拡張子を使うように。
+	拡張子フィルタでタイプ別設定の拡張子を使うように。
 		拡張子フィルタの管理をFileExtクラスで行う。
-	@date 2003.07.26 ryoji BOMパラメータ追加
-	@date 2005.02.20 novice 拡張子を省略したら補完する
-	@date 2006.11.10 ryoji フックを使う場合は拡張子の補完を自前で行う
+	フックを使う場合は拡張子の補完を自前で行う
 		Windowsで関連付けが無いような拡張子を指定して保存すると、明示的に
 		拡張子入力してあるのにデフォルト拡張子が補完されてしまうことがある。
 			例）hoge.abc -> hoge.abc.txt
@@ -955,54 +900,48 @@ bool DlgOpenFile::DoModalSaveDlg(
 	auto pData = std::make_unique<DlgOpenFileData>();
 	pData->bIsSaveDialog = true;	// 保存のダイアログか
 
-	// 2003.05.12 MIK
 	FileExt fileExt;
 	fileExt.AppendExtRaw(LS(STR_DLGOPNFL_EXTNAME1), mem->szDefaultWildCard);
 	fileExt.AppendExtRaw(LS(STR_DLGOPNFL_EXTNAME2), _T("*.txt"));
 	fileExt.AppendExtRaw(LS(STR_DLGOPNFL_EXTNAME3), _T("*.*"));
 
-	// ファイル名の初期設定	// 2006.11.10 ryoji
+	// ファイル名の初期設定
 	if (pSaveInfo->filePath[0] == _T('\0')) {
 		lstrcpyn(pSaveInfo->filePath, LS(STR_NO_TITLE2), _MAX_PATH);	// 無題
 	}
 	// OPENFILENAME構造体の初期化
-	InitOfn(&pData->ofn);		// 2005.10.29 ryoji
+	InitOfn(&pData->ofn);
 	pData->pDlgOpenFile = this;
 	pData->ofn.lCustData = (LPARAM)(pData.get());
 	pData->ofn.hwndOwner = mem->hwndParent;
 	pData->ofn.hInstance = SelectLang::getLangRsrcInstance();
 	pData->ofn.lpstrFilter = fileExt.GetExtFilter();
-	pData->ofn.lpstrFile = pSaveInfo->filePath;	// 2005/02/20 novice デフォルトのファイル名は何も設定しない
+	pData->ofn.lpstrFile = pSaveInfo->filePath;	// デフォルトのファイル名は何も設定しない
 	pData->ofn.nMaxFile = _MAX_PATH;
 	pData->ofn.lpstrInitialDir = mem->szInitialDir;
 	pData->ofn.Flags = OFN_CREATEPROMPT | OFN_EXPLORER | OFN_FILEMUSTEXIST | OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_SHOWHELP | OFN_ENABLESIZING;
 	if (!bSimpleMode) {
 		pData->ofn.Flags = pData->ofn.Flags | OFN_ENABLETEMPLATE | OFN_ENABLEHOOK;
-		pData->ofn.Flags &= ~OFN_OVERWRITEPROMPT;	// 2006.11.10 ryoji 上書き確認もフックの中で自前で処理する
+		pData->ofn.Flags &= ~OFN_OVERWRITEPROMPT;	// 上書き確認もフックの中で自前で処理する
 	}
 
-// 2005/02/20 novice 拡張子を省略したら補完する
-//	pData->ofn.lpstrDefExt = _T("");
-	pData->ofn.lpstrDefExt = (pData->ofn.Flags & OFN_ENABLEHOOK) ? NULL: _T("");	// 2006.11.10 ryoji フックを使うときは自前で拡張子を補完する
+	pData->ofn.lpstrDefExt = (pData->ofn.Flags & OFN_ENABLEHOOK) ? NULL: _T("");	// フックを使うときは自前で拡張子を補完する
 
 	// カレントディレクトリを保存。関数から抜けるときに自動でカレントディレクトリは復元される。
 	CurrentDirectoryBackupPoint curDirBackup;
 
-	// 2010.08.28 Moca DLLが読み込まれるので移動
 	ChangeCurrentDirectoryToExeDir();
 
 	pData->nCharCode = pSaveInfo->eCharCode;
 
-	// From Here Feb. 9, 2001 genta
 	if (!bSimpleMode) {
-		pData->eol = pSaveInfo->eol;	//	初期値は「改行コードを保存」に固定 // 2013.05.27 初期値を指定
+		pData->eol = pSaveInfo->eol;	//	初期値は「改行コードを保存」に固定
 		pData->bUseEol = true;
 	}else {
 		pData->bUseEol = false;
 	}
 
-	// To Here Feb. 9, 2001 genta
-	// Jul. 26, 2003 ryoji BOM設定
+	// BOM設定
 	if (!bSimpleMode) {
 		pData->bBom = pSaveInfo->bBomExist;
 		pData->bUseBom = true;
@@ -1012,25 +951,23 @@ bool DlgOpenFile::DoModalSaveDlg(
 		pData->bUseCharCode = false;
 	}
 
-	pData->nHelpTopicID = ::FuncID_To_HelpContextID(F_FILESAVEAS_DIALOG);	//Stonee, 2001/05/18 機能番号からヘルプトピック番号を調べるようにした
+	pData->nHelpTopicID = ::FuncID_To_HelpContextID(F_FILESAVEAS_DIALOG);
 	if (GetSaveFileNameRecover(&pData->ofn)) {
 		pSaveInfo->filePath = pData->ofn.lpstrFile;
 		if (pData->ofn.Flags & OFN_ENABLEHOOK) {
-			lstrcpyn(pSaveInfo->filePath, pData->szPath, _MAX_PATH);	// 自前で拡張子の補完を行ったときのファイルパス	// 2006.11.10 ryoji
+			lstrcpyn(pSaveInfo->filePath, pData->szPath, _MAX_PATH);	// 自前で拡張子の補完を行ったときのファイルパス
 		}
 		pSaveInfo->eCharCode = pData->nCharCode;
 
-		// Feb. 9, 2001 genta
 		if (pData->bUseEol) {
 			pSaveInfo->eol = pData->eol;
 		}
-		// Jul. 26, 2003 ryoji BOM設定
+		// BOM設定
 		if (pData->bUseBom) {
 			pSaveInfo->bBomExist = pData->bBom;
 		}
 		return true;
 	}else {
-		// May 29, 2004 genta 関数にまとめた
 		DlgOpenFail();
 		return false;
 	}
@@ -1040,9 +977,6 @@ bool DlgOpenFile::DoModalSaveDlg(
 
 	コモンダイアログボックスからFALSEが返された場合に
 	エラー原因を調べてエラーならメッセージを出す．
-	
-	@author genta
-	@date 2004.05.29 genta 元々あった部分をまとめた
 */
 void DlgOpenFile::DlgOpenFail(void)
 {
@@ -1082,9 +1016,6 @@ void DlgOpenFile::DlgOpenFail(void)
 /*! OPENFILENAME 初期化
 
 	OPENFILENAME に DlgOpenFile クラス用の初期規定値を設定する
-
-	@author ryoji
-	@date 2005.10.29
 */
 void DlgOpenFile::InitOfn(OPENFILENAMEZ* ofn)
 {
@@ -1092,8 +1023,8 @@ void DlgOpenFile::InitOfn(OPENFILENAMEZ* ofn)
 
 	ofn->lStructSize = IsWinV5forOfn() ? sizeof(OPENFILENAMEZ): OPENFILENAME_SIZE_VERSION_400;
 	ofn->lpfnHook = OFNHookProc;
-	ofn->lpTemplateName = MAKEINTRESOURCE(IDD_FILEOPEN);	// <-_T("IDD_FILEOPEN"); 2008/7/26 Uchi
-	ofn->nFilterIndex = 1;	//Jul. 09, 2001 JEPRO		// 「開く」での最初のワイルドカード
+	ofn->lpTemplateName = MAKEINTRESOURCE(IDD_FILEOPEN);
+	ofn->nFilterIndex = 1;	// 「開く」での最初のワイルドカード
 }
 
 /*! 初期レイアウト設定処理
@@ -1103,9 +1034,6 @@ void DlgOpenFile::InitOfn(OPENFILENAMEZ* ofn)
 	@param hwndOpenDlg [in]		ファイルダイアログのウィンドウハンドル
 	@param hwndDlg [in]			子ダイアログのウィンドウハンドル
 	@param hwndBaseCtrl [in]	移動基準コントロール（ファイル名ボックスと左端を合わせるコントロール）のウィンドウハンドル
-
-	@author ryoji
-	@date 2005.11.02
 */
 void DlgOpenFile::InitLayout(
 	HWND hwndOpenDlg,
@@ -1169,10 +1097,7 @@ void DlgOpenFile::InitLayout(
 }
 
 
-/*! リトライ機能付き GetOpenFileName
-	@author Moca
-	@date 2006.09.03 新規作成
-*/
+/*! リトライ機能付き GetOpenFileName */
 bool DlgOpenFile::_GetOpenFileNameRecover(OPENFILENAMEZ* ofn)
 {
 	BOOL bRet = ::GetOpenFileName(ofn);
@@ -1186,10 +1111,7 @@ bool DlgOpenFile::_GetOpenFileNameRecover(OPENFILENAMEZ* ofn)
 	return bRet != FALSE;
 }
 
-/*! リトライ機能付き GetSaveFileName
-	@author Moca
-	@date 2006.09.03 新規作成
-*/
+/*! リトライ機能付き GetSaveFileName */
 bool DlgOpenFile::GetSaveFileNameRecover(OPENFILENAMEZ* ofn)
 {
 	BOOL bRet = ::GetSaveFileName(ofn);

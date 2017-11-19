@@ -318,7 +318,7 @@ BOOL DlgPluginOption::OnNotify(WPARAM wParam, LPARAM lParam)
 			ChangeListPosition();
 			break;
 		case NM_DBLCLK:
-			// リストビューへのダブルクリックで編集領域へ移動	2013/5/23 Uchi
+			// リストビューへのダブルクリックで編集領域へ移動
 			MoveFocusToEdit();
 			break;
 		}
@@ -357,12 +357,12 @@ BOOL DlgPluginOption::OnBnClicked(int wID)
 		SetFromEdit(line);
 		return TRUE;
 
-	case IDC_BUTTON_PLUGIN_OPTION_DIR:	// 2013/05/22 Uchi
+	case IDC_BUTTON_PLUGIN_OPTION_DIR:
 		// ディレクトリ選択
 		SelectDirectory(line);
 		return TRUE;
 
-	case IDC_PLUGIN_README:		// 2012/12/22 Uchi
+	case IDC_PLUGIN_README:
 		// ReadMe
 		{
 			if (!sReadMeName.empty()) {
@@ -377,7 +377,7 @@ BOOL DlgPluginOption::OnBnClicked(int wID)
 
 	case IDC_BUTTON_HELP:
 		// ヘルプ
-		MyWinHelp(GetHwnd(), HELP_CONTEXT, HLP000153);	// 『プラグイン設定』Helpの指定 	2011/11/26 Uchi
+		MyWinHelp(GetHwnd(), HELP_CONTEXT, HLP000153);	// 『プラグイン設定』Helpの指定
 		return TRUE;
 
 	case IDOK:
