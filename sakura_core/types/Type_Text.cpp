@@ -185,7 +185,7 @@ void DocOutline::MakeTopicList_txt(FuncInfoArr* pFuncInfoArr)
 			//	ので、pszStackにコピーしてAppendData.
 			wcscpy_s(pszStack[nDepth], szTitle);
 		}else {
-			// 2002.11.03 Moca 最大値を超えるとバッファオーバーラン
+			// 最大値を超えるとバッファオーバーラン
 			// nDepth = nMaxStack;
 			bAppend = false;
 		}

@@ -2,7 +2,7 @@
 #include <HtmlHelp.h>
 #include <ShlObj.h>
 #include <ShellAPI.h>
-#include <CdErr.h> // Nov. 3, 2005 genta	// CDERR_FINDRESFAILURE等
+#include <CdErr.h>
 #include "util/shell.h"
 #include "util/string_ex2.h"
 #include "util/fileUtil.h"
@@ -45,7 +45,7 @@ BOOL SelectDir(
 	// フォルダの最後が半角かつ'\\'の場合は、取り除く "c:\\"等のルートは取り除かない
 	CutLastYenFromDirectoryPath(szInitFolder);
 
-	// 2010.08.28 フォルダを開くとフックも含めて色々DLLが読み込まれるので移動
+	// フォルダを開くとフックも含めて色々DLLが読み込まれるので移動
 	CurrentDirectoryBackupPoint dirBack;
 	ChangeCurrentDirectoryToExeDir();
 
@@ -79,9 +79,6 @@ BOOL SelectDir(
 
 /*!	特殊フォルダのパスを取得する
 	SHGetSpecialFolderPath API（shell32.dll version 4.71以上が必要）と同等の処理をする
-
-	@author ryoji
-	@date 2007.05.19 新規
 */
 BOOL GetSpecialFolderPath(
 	int nFolder,
@@ -109,14 +106,11 @@ BOOL GetSpecialFolderPath(
 
 
 ///////////////////////////////////////////////////////////////////////
-// From Here 2007.05.25 ryoji 独自拡張のプロパティシート関数群
+// 独自拡張のプロパティシート関数群
 
 static WNDPROC s_pOldPropSheetWndProc;	// プロパティシートの元のウィンドウプロシージャ
 
-/*!	独自拡張プロパティシートのウィンドウプロシージャ
-	@author ryoji
-	@date 2007.05.25 新規
-*/
+/*!	独自拡張プロパティシートのウィンドウプロシージャ */
 static
 LRESULT CALLBACK PropSheetWndProc(
 	HWND hwnd,
@@ -224,10 +218,7 @@ LRESULT CALLBACK PropSheetWndProc(
 	return ::CallWindowProc(s_pOldPropSheetWndProc, hwnd, uMsg, wParam, lParam);
 }
 
-/*!	独自拡張プロパティシートのコールバック関数
-	@author ryoji
-	@date 2007.05.25 新規
-*/
+/*!	独自拡張プロパティシートのコールバック関数 */
 static
 int CALLBACK PropSheetProc(
 	HWND hwndDlg,
@@ -247,10 +238,7 @@ int CALLBACK PropSheetProc(
 }
 
 
-/*!	独自拡張プロパティシート（共通設定／タイプ別設定画面用）
-	@author ryoji
-	@date 2007.05.25 新規
-*/
+/*!	独自拡張プロパティシート（共通設定／タイプ別設定画面用） */
 INT_PTR MyPropertySheet(LPPROPSHEETHEADER lppsph)
 {
 	// 個人設定フォルダを使用するときは「設定フォルダ」ボタンを追加する
@@ -261,8 +249,6 @@ INT_PTR MyPropertySheet(LPPROPSHEETHEADER lppsph)
 	return ::PropertySheet(lppsph);
 }
 
-
-// To Here 2007.05.25 ryoji 独自拡張のプロパティシート関数群
 ///////////////////////////////////////////////////////////////////////
 
 
@@ -273,16 +259,14 @@ void ShowWinHelpContents(HWND hwnd)
 {
 	if (HasWinHelpContentsProblem()) {
 		// 目次ページを表示する
-		MyWinHelp(hwnd, HELP_CONTENTS , 0);	// 2006.10.10 ryoji MyWinHelpに変更
+		MyWinHelp(hwnd, HELP_CONTENTS , 0);
 		return;
 	}
 	// 目次タブを表示する
-	MyWinHelp(hwnd, HELP_COMMAND, (ULONG_PTR)"CONTENTS()");	// 2006.10.10 ryoji MyWinHelpに変更
+	MyWinHelp(hwnd, HELP_COMMAND, (ULONG_PTR)"CONTENTS()");
 	return;
 }
 
-
-// Stonee, 2001/12/21
 // NetWork上のリソースに接続するためのダイアログを出現させる
 // NO_ERROR:成功 ERROR_CANCELLED:キャンセル それ以外:失敗
 // プロジェクトの設定でリンクモジュールにMpr.libを追加のこと
@@ -324,7 +308,6 @@ DWORD NetConnect (const TCHAR strNetWorkPass[])
 }
 
 
-//	From Here Jun. 26, 2001 genta
 /*!
 	HTML Helpコンポーネントのアクセスを提供する。
 	内部で保持すべきデータは特になく、至る所から使われるのでGlobal変数にするが、
@@ -362,12 +345,7 @@ HWND OpenHtmlHelp(
 	return NULL;
 }
 
-//	To Here Jun. 26, 2001 genta
-
-
-/*! ショートカット(.lnk)の解決
-	@date 2009.01.08 ryoji CoInitialize/CoUninitializeを削除（WinMainにOleInitialize/OleUninitializeを追加）
-*/
+/*! ショートカット(.lnk)の解決 */
 BOOL ResolveShortcutLink(
 	HWND hwnd,
 	LPCTSTR lpszLinkFile,
@@ -377,8 +355,6 @@ BOOL ResolveShortcutLink(
 	// 初期化
 	*lpszPath = 0; // assume failure
 
-// 2009.01.08 ryoji CoInitializeを削除（WinMainにOleInitialize追加）
-
 	// Get a pointer to the IShellLink interface.
 //	hRes = 0;
 	TCHAR szAbsLongPath[_MAX_PATH];
@@ -387,7 +363,6 @@ BOOL ResolveShortcutLink(
 	}
 
 	BOOL bRes = FALSE;
-	// 2010.08.28 DLL インジェクション対策としてEXEのフォルダに移動する
 	CurrentDirectoryBackupPoint dirBack;
 	ChangeCurrentDirectoryToExeDir();
 
@@ -434,7 +409,6 @@ BOOL ResolveShortcutLink(
 		pIShellLink->Release();
 		pIShellLink = nullptr;
 	}
-// 2009.01.08 ryoji CoUninitializeを削除（WinMainにOleUninitialize追加）
 	return bRes;
 }
 
@@ -445,11 +419,6 @@ BOOL ResolveShortcutLink(
  
     @note 実行ファイルと同じ位置の sakura.chm ファイルを返す。
         パスが UNC のときは _MAX_PATH に収まらない可能性がある。
- 
-    @date 2002/01/19 aroka ；nMaxLen 引数追加
-	@date 2007/10/23 kobake 引数説明の誤りを修正(in→out)
-	@date 2007/10/23 kobake CEditAppのメンバ関数に変更
-	@date 2007/10/23 kobake シグニチャ変更。constポインタを返すだけのインターフェースにしました。
 */
 static
 LPCTSTR GetHelpFilePath()
@@ -461,11 +430,7 @@ LPCTSTR GetHelpFilePath()
 	return szHelpFile;
 }
 
-/*!	WinHelp のかわりに HtmlHelp を呼び出す
-
-	@author ryoji
-	@date 2006.07.22 ryoji 新規
-*/
+/*!	WinHelp のかわりに HtmlHelp を呼び出す */
 BOOL MyWinHelp(
 	HWND hwndCaller,
 	UINT uCommand,
@@ -572,9 +537,6 @@ BOOL MyWinHelp(
 /*フォント選択ダイアログ
 	@param plf [in/out]
 	@param piPointSize [in/out] 1/10ポイント単位
-	
-	2008.04.27 kobake CEditDoc::SelectFont から分離
-	2009.10.01 ryoji ポイントサイズ（1/10ポイント単位）引数追加
 */
 BOOL MySelectFont(
 	LOGFONT* plf,
@@ -583,7 +545,6 @@ BOOL MySelectFont(
 	bool FixedFontOnly
 	)
 {
-	// 2004.02.16 Moca CHOOSEFONTをメンバから外す
 	CHOOSEFONT cf = {0};
 	// CHOOSEFONTの初期化
 	cf.lStructSize = sizeof(cf);

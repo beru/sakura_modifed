@@ -21,15 +21,6 @@ bool fexist(LPCTSTR pszPath)
 	
 	@retval true ファイル名発見
 	@retval false ファイル名は見つからなかった
-	
-	@date 2002.01.04 genta ファイル存在確認方法変更
-	@date 2002.01.04 genta ディレクトリを検査対象外にする機能を追加
-	@date 2003.01.15 matsumo gccのエラーメッセージ(:区切り)でもファイルを検出可能に
-	@date 2004.05.29 genta C:\からファイルCが切り出されるのを防止
-	@date 2004.11.13 genta/Moca ファイル名先頭の*?を考慮
-	@date 2005.01.10 genta 変数名変更 j -> cur_pos
-	@date 2005.01.23 genta 警告抑制のため，gotoをreturnに変更
-	@date 2013.05.27 Moca 最長一致に変更
 */
 bool IsFilePath(
 	const wchar_t*	pLine,		// [in]  探査対象文字列
@@ -80,10 +71,10 @@ bool IsFilePath(
 		// ファイル名終端を検知する
 		if ((i == nLineLen    ||
 			  pLine[i] == L' ' ||
-			  pLine[i] == L'\t'||	//@@@ 2002.01.08 YAZAKI タブ文字も。
+			  pLine[i] == L'\t'||
 			  pLine[i] == L'(' ||
 			  pLine[i] == L'"' ||
-			  wcschr(L")'`[]{};#!@&%$", pLine[i]) // 2013.05.27 Moca 文字種追加
+			  wcschr(L")'`[]{};#!@&%$", pLine[i])
 			) &&
 			szJumpToFile[0] != L'\0'
 		) {
@@ -93,8 +84,8 @@ bool IsFilePath(
 			}
 		}
 
-		// May 29, 2004 genta C:\の:はファイル区切りと見なして欲しくない
-		if (cur_pos > 1 && pLine[i] == L':') {   //@@@ 2003/1/15/ matsumo (for gcc)
+		// C:\の:はファイル区切りと見なして欲しくない
+		if (cur_pos > 1 && pLine[i] == L':') {
 			break;
 		}
 		// ファイル名に使えない文字が含まれていたら、即ループ終了
@@ -106,7 +97,6 @@ bool IsFilePath(
 		++cur_pos;
 	}
 
-	// Jan. 04, 2002 genta
 	// ファイル存在確認方法変更
 	if (szJumpToFile[0] != L'\0' && IsFileExists(to_tchar(szJumpToFile), bFileOnly)) {
 		tmp_end = cur_pos;
@@ -127,14 +117,6 @@ bool IsFilePath(
 	
 	@retval true ローカルドライブ
 	@retval false リムーバブルドライブ．ネットワークドライブ．
-	
-	@author MIK
-	@date 2001.03.29 MIK 新規作成
-	@date 2001.12.23 YAZAKI MRUの別クラス化に伴う関数化
-	@date 2002.01.28 genta 戻り値の型をBOOLからboolに変更．
-	@date 2005.11.12 aroka 文字判定部変更
-	@date 2006.01.08 genta CMRU::IsRemovableDriveとCEditDoc::IsLocalDriveが
-		実質的に同じものだった
 */
 bool IsLocalDrive(const TCHAR* pszDrive)
 {
@@ -148,7 +130,7 @@ bool IsLocalDrive(const TCHAR* pszDrive)
 			return false;
 		}
 	}else if (pszDrive[0] == _T('\\') && pszDrive[1] == _T('\\')) {
-		// ネットワークパス	2010/5/27 Uchi
+		// ネットワークパス
 		return false;
 	}
 	return true;
@@ -172,11 +154,7 @@ const TCHAR* GetFileTitlePointer(const TCHAR* tszPath)
 }
 
 
-/*! fnameが相対パスの場合は、実行ファイルのパスからの相対パスとして開く
-	@author Moca
-	@date 2003.06.23
-	@date 2007.05.20 ryoji 関数名変更（旧：fopen_absexe）、汎用テキストマッピング化
-*/
+/*! fnameが相対パスの場合は、実行ファイルのパスからの相対パスとして開く */
 FILE* _tfopen_absexe(LPCTSTR fname, LPCTSTR mode)
 {
 	if (_IS_REL_PATH(fname)) {
@@ -187,10 +165,7 @@ FILE* _tfopen_absexe(LPCTSTR fname, LPCTSTR mode)
 	return _tfopen(fname, mode);
 }
 
-/*! fnameが相対パスの場合は、INIファイルのパスからの相対パスとして開く
-	@author ryoji
-	@date 2007.05.19 新規作成（_tfopen_absexeベース）
-*/
+/*! fnameが相対パスの場合は、INIファイルのパスからの相対パスとして開く */
 FILE* _tfopen_absini(LPCTSTR fname, LPCTSTR mode, bool bOrExedir/*=true*/)
 {
 	if (_IS_REL_PATH(fname)) {
@@ -343,10 +318,6 @@ void Concat_FolderAndFile(
 
 	@param[in] pszFilePathSrc 変換元パス名
 	@param[out] pszFilePathDes 結果書き込み先 (長さMAX_PATHの領域が必要)
-
-	@date Oct. 2, 2005 genta GetFilePath APIを使って書き換え
-	@date Oct. 4, 2005 genta 相対パスが絶対パスに直されなかった
-	@date Oct. 5, 2005 Moca  相対パスを絶対パスに変換するように
 */
 BOOL GetLongFileName(
 	const TCHAR* pszFilePathSrc,
@@ -390,10 +361,7 @@ BOOL CheckEXT(
 	}
 }
 
-/*! 相対パスか判定する
-	@author Moca
-	@date 2003.06.23
-*/
+/*! 相対パスか判定する */
 bool _IS_REL_PATH(const TCHAR* path)
 {
 	bool ret = true;
@@ -412,8 +380,6 @@ bool _IS_REL_PATH(const TCHAR* path)
 	与えられたパス名からディレクトリの深さを計算する．
 	パスの区切りは\．ルートディレクトリが深さ0で，サブディレクトリ毎に
 	深さが1ずつ上がっていく．
- 
-	@date 2003.04.30 genta 新規作成
 */
 int CalcDirectoryDepth(
 	const TCHAR* path	// [in] 深さを調べたいファイル/ディレクトリのフルパス
@@ -456,11 +422,6 @@ int CalcDirectoryDepth(
 
 /*!
 	@brief exeファイルのあるディレクトリ，または指定されたファイル名のフルパスを返す．
-	
-	@author genta
-	@date 2002.12.02 genta
-	@date 2007.05.20 ryoji 関数名変更（旧：GetExecutableDir）、汎用テキストマッピング化
-	@date 2008.05.05 novice GetModuleHandle(NULL)→NULLに変更
 */
 void GetExedir(
 	LPTSTR	pDir,	// [out] EXEファイルのあるディレクトリを返す場所．予め_MAX_PATHのバッファを用意しておくこと．
@@ -484,9 +445,6 @@ void GetExedir(
 
 /*!
 	@brief INIファイルのあるディレクトリ，または指定されたファイル名のフルパスを返す．
-	
-	@author ryoji
-	@date 2007.05.19 新規作成（GetExedirベース）
 */
 void GetInidir(
 	LPTSTR	pDir,				// [out] INIファイルのあるディレクトリを返す場所．予め_MAX_PATHのバッファを用意しておくこと．
@@ -513,9 +471,6 @@ void GetInidir(
 
 /*!
 	@brief INIファイルまたはEXEファイルのあるディレクトリ，または指定されたファイル名のフルパスを返す（INIを優先）．
-	
-	@author ryoji
-	@date 2007.05.22 新規作成
 */
 void GetInidirOrExedir(
 	LPTSTR	pDir,								// [out] INIファイルまたはEXEファイルのあるディレクトリを返す場所．
@@ -557,7 +512,6 @@ void GetInidirOrExedir(
 /*!
 	@brief INIファイルまたはEXEファイルのあるディレクトリの相対パスを返す（INIを優先）．
 	@param pszPath [in] 対象パス
-	@date 2013.06.26 novice 新規作成
 */
 LPCTSTR GetRelPath(LPCTSTR pszPath)
 {
@@ -589,9 +543,6 @@ LPCTSTR GetRelPath(LPCTSTR pszPath)
 	
 	@retval true  ファイルは存在する
 	@retval false ファイルは存在しない
-	
-	@author genta
-	@date 2002.01.04 新規作成
 */
 bool IsFileExists(const TCHAR* path, bool bFileOnly)
 {
@@ -613,9 +564,6 @@ bool IsFileExists(const TCHAR* path, bool bFileOnly)
 
 	@retval true  ディレクトリ
 	@retval false ディレクトリではない
-	
-	@author ryoji
-	@date 2009.08.20 新規作成
 */
 bool IsDirectory(LPCTSTR pszPath)
 {
@@ -632,9 +580,6 @@ bool IsDirectory(LPCTSTR pszPath)
 /*!	ファイルの更新日時を取得
 
 	@return true: 成功, false: FindFirstFile失敗
-
-	@author genta by assitance with ryoji
-	@date 2005.10.22 new
 
 	@note 書き込み後にファイルを再オープンしてタイムスタンプを得ようとすると
 	ファイルがまだロックされていることがあり，上書き禁止と誤認されることがある．
@@ -1084,9 +1029,7 @@ size_t FileMatchScore(
 	return score;
 }
 
-/*! 指定幅までに文字列を省略
-	@date 2014.06.12 新規作成 Moca
-*/
+/*! 指定幅までに文字列を省略 */
 void GetStrTrancateWidth(
 	TCHAR* dest,
 	size_t nSize,
@@ -1126,7 +1069,6 @@ void GetStrTrancateWidth(
 /*! パスの省略表示
 	in  C:\sub1\sub2\sub3\file.ext
 	out C:\...\sub3\file.ext
-	@date 2014.06.12 新規作成 Moca
 */
 void GetShortViewPath(
 	TCHAR* dest,

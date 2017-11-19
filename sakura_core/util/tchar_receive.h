@@ -18,11 +18,6 @@
 	operator TCHAR* が GetWindowText に渡すポインタを提供し、
 	~TcharReceiver において、必要であれば (ビルド種と受け取り型が異なれば)、
 	TCHAR→wchar_t変換が発生します。
-
-	2007.10.27 kobake 作成
-	2009.02.21 ryoji		標準文字列以外を扱う場合（UNICODEビルドでchar、ANSIビルドでwchar_t）に
-							512文字のサイズ制限付き静的バッファを使用していたのを、
-							サイズ制限の無い動的バッファを使うように変更。（負荷はどのみち変換のほうにがかかる）
 */
 template <class RECEIVE_CHAR_TYPE>
 class TcharReceiver {

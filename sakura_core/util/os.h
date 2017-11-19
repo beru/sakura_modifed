@@ -12,25 +12,22 @@ bool SetClipboardText(HWND hwnd, const wchar_t* pszText, size_t nLength);	// ƒNƒ
 bool IsDataAvailable(LPDATAOBJECT pDataObject, CLIPFORMAT cfFormat);
 HGLOBAL GetGlobalData(LPDATAOBJECT pDataObject, CLIPFORMAT cfFormat);
 
-//	Sep. 10, 2002 genta CWSH.cpp‚©‚ç‚ÌˆÚ“®‚É”º‚¤’Ç‰Á
 bool ReadRegistry(HKEY Hive, const TCHAR* Path, const TCHAR* Item, TCHAR* Buffer, unsigned BufferCount);
 
-//	May 01, 2004 genta ƒ}ƒ‹ƒ`ƒ‚ƒjƒ^‘Î‰‚ÌƒfƒXƒNƒgƒbƒv—Ìˆææ“¾
-bool GetMonitorWorkRect(HWND     hWnd, LPRECT prcWork, LPRECT prcMonitor = NULL);	// 2006.04.21 ryoji ƒpƒ‰ƒ[ƒ^ prcMonitor ‚ğ’Ç‰Á
-bool GetMonitorWorkRect(LPCRECT  prc,  LPRECT prcWork, LPRECT prcMonitor = NULL);	// 2006.04.21 ryoji
-bool GetMonitorWorkRect(POINT    pt,   LPRECT prcWork, LPRECT prcMonitor = NULL);	// 2006.04.21 ryoji
-bool GetMonitorWorkRect(HMONITOR hMon, LPRECT prcWork, LPRECT prcMonitor = NULL);	// 2006.04.21 ryoji
+//	ƒ}ƒ‹ƒ`ƒ‚ƒjƒ^‘Î‰‚ÌƒfƒXƒNƒgƒbƒv—Ìˆææ“¾
+bool GetMonitorWorkRect(HWND     hWnd, LPRECT prcWork, LPRECT prcMonitor = NULL);
+bool GetMonitorWorkRect(LPCRECT  prc,  LPRECT prcWork, LPRECT prcMonitor = NULL);
+bool GetMonitorWorkRect(POINT    pt,   LPRECT prcWork, LPRECT prcMonitor = NULL);
+bool GetMonitorWorkRect(HMONITOR hMon, LPRECT prcWork, LPRECT prcMonitor = NULL);
 
-// 2006.06.17 ryoji
 #define PACKVERSION(major, minor) MAKELONG(minor, major)
-DWORD GetComctl32Version();					// Comctl32.dll ‚Ìƒo[ƒWƒ‡ƒ“”Ô†‚ğæ“¾						// 2006.06.17 ryoji
-bool IsVisualStyle();						// ©•ª‚ªŒ»İƒrƒWƒ…ƒAƒ‹ƒXƒ^ƒCƒ‹•\¦ó‘Ô‚©‚Ç‚¤‚©‚ğ¦‚·		// 2006.06.17 ryoji
-void PreventVisualStyle(HWND hWnd);		// w’èƒEƒBƒ“ƒhƒE‚ÅƒrƒWƒ…ƒAƒ‹ƒXƒ^ƒCƒ‹‚ğg‚í‚È‚¢‚æ‚¤‚É‚·‚é	// 2006.06.23 ryoji
-void MyInitCommonControls();				// ƒRƒ‚ƒ“ƒRƒ“ƒgƒ[ƒ‹‚ğ‰Šú‰»‚·‚é							// 2006.06.21 ryoji
+DWORD GetComctl32Version();					// Comctl32.dll ‚Ìƒo[ƒWƒ‡ƒ“”Ô†‚ğæ“¾
+bool IsVisualStyle();						// ©•ª‚ªŒ»İƒrƒWƒ…ƒAƒ‹ƒXƒ^ƒCƒ‹•\¦ó‘Ô‚©‚Ç‚¤‚©‚ğ¦‚·
+void PreventVisualStyle(HWND hWnd);		// w’èƒEƒBƒ“ƒhƒE‚ÅƒrƒWƒ…ƒAƒ‹ƒXƒ^ƒCƒ‹‚ğg‚í‚È‚¢‚æ‚¤‚É‚·‚é
+void MyInitCommonControls();				// ƒRƒ‚ƒ“ƒRƒ“ƒgƒ[ƒ‹‚ğ‰Šú‰»‚·‚é
 
 // ƒJƒŒƒ“ƒgƒfƒBƒŒƒNƒgƒŠƒ†[ƒeƒBƒŠƒeƒBB
 // ƒRƒ“ƒXƒgƒ‰ƒNƒ^‚ÅƒJƒŒƒ“ƒgƒfƒBƒŒƒNƒgƒŠ‚ğ•Û‘¶‚µAƒfƒXƒgƒ‰ƒNƒ^‚ÅƒJƒŒƒ“ƒgƒfƒBƒŒƒNƒgƒŠ‚ğ•œŒ³‚·‚éƒ‚ƒmB
-// 2008.03.01 kobake ì¬
 class CurrentDirectoryBackupPoint {
 public:
 	CurrentDirectoryBackupPoint();
@@ -48,7 +45,7 @@ private:
 #ifndef WM_MOUSEWHEEL
 	#define WM_MOUSEWHEEL	0x020A
 #endif
-// novice 2004/10/10 ƒ}ƒEƒXƒTƒCƒhƒ{ƒ^ƒ“‘Î‰
+// ƒ}ƒEƒXƒTƒCƒhƒ{ƒ^ƒ“‘Î‰
 #ifndef WM_XBUTTONDOWN
 	#define WM_XBUTTONDOWN   0x020B
 	#define WM_XBUTTONUP     0x020C
@@ -61,7 +58,6 @@ private:
 
 // -- -- ƒe[ƒ} -- -- //
 
-// 2006.06.17 ryoji WM_THEMECHANGED
 #ifndef	WM_THEMECHANGED
 #define WM_THEMECHANGED		0x031A
 #endif
@@ -72,7 +68,6 @@ private:
 #define IMR_RECONVERTSTRING             0x0004
 #endif // IMR_RECONVERTSTRING
 
-// 2002.04.09 minfu Ä•ÏŠ·’²®
 #ifndef IMR_CONFIRMRECONVERTSTRING
 #define IMR_CONFIRMRECONVERTSTRING             0x0005
 #endif // IMR_CONFIRMRECONVERTSTRING

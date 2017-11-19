@@ -6,9 +6,6 @@
 /*!	Comctl32.dll のバージョン番号を取得
 
 	@return Comctl32.dll のバージョン番号（失敗時は 0）
-
-	@author ryoji
-	@date 2006.06.17 ryoji 新規
 */
 static DWORD s_dwComctl32Version = PACKVERSION(0, 0);
 
@@ -23,9 +20,6 @@ DWORD GetComctl32Version()
 	Win32 API の IsAppThemed() はこれとは一致しない（IsAppThemed() と IsThemeActive() との差異は不明）
 
 	@return ビジュアルスタイル表示状態(TRUE)／クラッシック表示状態(FALSE)
-
-	@author ryoji
-	@date 2006.06.17 ryoji 新規
 */
 bool IsVisualStyle()
 {
@@ -38,9 +32,6 @@ bool IsVisualStyle()
 /*!	指定ウィンドウでビジュアルスタイルを使わないようにする
 
 	@param[in] hWnd ウィンドウ
-
-	@author ryoji
-	@date 2006.06.23 ryoji 新規
 */
 void PreventVisualStyle(HWND hWnd)
 {
@@ -49,11 +40,7 @@ void PreventVisualStyle(HWND hWnd)
 }
 
 
-/*!	コモンコントロールを初期化する
-
-	@author ryoji
-	@date 2006.06.21 ryoji 新規
-*/
+/*!	コモンコントロールを初期化する */
 void MyInitCommonControls()
 {
 	BOOL (WINAPI *pfnInitCommonControlsEx)(LPINITCOMMONCONTROLSEX);
@@ -91,16 +78,12 @@ void MyInitCommonControls()
 	@note 出力パラメータの prcWork や prcMonior に NULL を指定した場合、
 	該当する領域情報は出力しない。呼び出し元は欲しいものだけを指定すればよい。
 */
-//	From Here May 01, 2004 genta MutiMonitor
 bool GetMonitorWorkRect(HWND hWnd, LPRECT prcWork, LPRECT prcMonitor/* = NULL*/)
 {
-	// 2006.04.21 ryoji Windows API 形式の関数呼び出しに変更（スタブに PSDK の MultiMon.h を利用）
 	HMONITOR hMon = ::MonitorFromWindow(hWnd, MONITOR_DEFAULTTONEAREST);
 	return GetMonitorWorkRect(hMon, prcWork, prcMonitor);
 }
-//	To Here May 01, 2004 genta
 
-//	From Here 2006.04.21 ryoji MutiMonitor
 bool GetMonitorWorkRect(LPCRECT prc, LPRECT prcWork, LPRECT prcMonitor/* = NULL*/)
 {
 	HMONITOR hMon = ::MonitorFromRect(prc, MONITOR_DEFAULTTONEAREST);
@@ -124,8 +107,6 @@ bool GetMonitorWorkRect(HMONITOR hMon, LPRECT prcWork, LPRECT prcMonitor/* = NUL
 		*prcMonitor = mi.rcMonitor;	// display monitor rectangle
 	return (mi.dwFlags == MONITORINFOF_PRIMARY);
 }
-//	To Here 2006.04.21 ryoji MutiMonitor
-
 
 /*!
 	@brief レジストリから文字列を読み出す．
@@ -138,9 +119,6 @@ bool GetMonitorWorkRect(HMONITOR hMon, LPRECT prcWork, LPRECT prcMonitor/* = NUL
 	
 	@retval true 値の取得に成功
 	@retval false 値の取得に失敗
-	
-	@author 鬼
-	@date 2002.09.10 genta CWSH.cppから移動
 */
 bool ReadRegistry(
 	HKEY hive,
@@ -172,7 +150,6 @@ bool ReadRegistry(
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 // SetClipboardTextA,SetClipboardTextT 実装用テンプレート
-// 2007.08.14 kobake UNICODE用に改造
 //
 /*! クリープボードにText形式でコピーする
 	@param hwnd    [in] クリップボードのオーナー
@@ -181,7 +158,6 @@ bool ReadRegistry(
 	
 	@retval true コピー成功
 	@retval false コピー失敗。場合によってはクリップボードに元の内容が残る
-	@date 2004.02.17 Moca 各所のソースを統合
 */
 template <class T>
 bool SetClipboardTextImp(
@@ -230,21 +206,19 @@ bool SetClipboardText(HWND hwnd, const wchar_t* pszText, size_t nLength)
 }
 
 /*
-	@date 2006.01.16 Moca 他のTYMEDが利用可能でも、取得できるように変更。
 	@note IDataObject::GetData() で tymed = TYMED_HGLOBAL を指定すること。
 */
 bool IsDataAvailable(LPDATAOBJECT pDataObject, CLIPFORMAT cfFormat)
 {
 	FORMATETC	fe;
 
-	// 2006.01.16 Moca 他のTYMEDが利用可能でも、IDataObject::GetData()で
+	// 他のTYMEDが利用可能でも、IDataObject::GetData()で
 	//  tymed = TYMED_HGLOBALを指定すれば問題ない
 	fe.cfFormat = cfFormat;
 	fe.ptd = NULL;
 	fe.dwAspect = DVASPECT_CONTENT;
 	fe.lindex = -1;
 	fe.tymed = TYMED_HGLOBAL;
-	// 2006.03.16 Moca S_FALSEでも受け入れてしまうバグを修正(ファイルのドロップ等)
 	return pDataObject->QueryGetData(&fe) == S_OK;
 }
 
@@ -260,7 +234,6 @@ HGLOBAL GetGlobalData(LPDATAOBJECT pDataObject, CLIPFORMAT cfFormat)
 
 	HGLOBAL hDest = NULL;
 	STGMEDIUM stgMedium;
-	// 2006.03.16 Moca SUCCEEDEDマクロではS_FALSEのとき困るので、S_OKに変更
 	if (pDataObject->GetData(&fe, &stgMedium) == S_OK) {
 		if (!stgMedium.pUnkForRelease) {
 			if (stgMedium.tymed == TYMED_HGLOBAL)

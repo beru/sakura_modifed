@@ -4,18 +4,16 @@ bool fexist(LPCTSTR pszPath); // ƒtƒ@ƒCƒ‹‚Ü‚½‚ÍƒfƒBƒŒƒNƒgƒŠ‚ª‘¶İ‚·‚ê‚Îtrue
 
 bool IsFilePath(const wchar_t*, size_t*, int*, bool = true);
 bool IsFileExists(const TCHAR* path, bool bFileOnly = false);
-bool IsDirectory(LPCTSTR pszPath);	// 2009.08.20 ryoji
+bool IsDirectory(LPCTSTR pszPath);
 
-// Apr. 30, 2003 genta
 // ƒfƒBƒŒƒNƒgƒŠ‚Ì[‚³‚ğ’²‚×‚é
 int CalcDirectoryDepth(const TCHAR* path);
 
-// 2005.11.26 aroka
 bool IsLocalDrive(const TCHAR* pszDrive);
 
 // ¦ƒTƒNƒ‰ˆË‘¶
-FILE* _tfopen_absexe(LPCTSTR fname, LPCTSTR mode); // 2003.06.23 Moca
-FILE* _tfopen_absini(LPCTSTR fname, LPCTSTR mode, bool bOrExedir = true); // 2007.05.19 ryoji
+FILE* _tfopen_absexe(LPCTSTR fname, LPCTSTR mode);
+FILE* _tfopen_absini(LPCTSTR fname, LPCTSTR mode, bool bOrExedir = true);
 
 // ƒpƒX•¶š—ñˆ—
 void CutLastYenFromDirectoryPath(TCHAR*);						// ƒtƒHƒ‹ƒ_‚ÌÅŒã‚ª”¼Šp‚©‚Â'\\'‚Ìê‡‚ÍAæ‚èœ‚­ "c:\\"“™‚Ìƒ‹[ƒg‚Íæ‚èœ‚©‚È‚¢
@@ -25,13 +23,13 @@ void SplitPath_FolderAndFile(const TCHAR*, TCHAR*, TCHAR*);	// ƒtƒ@ƒCƒ‹‚Ìƒtƒ‹ƒpƒ
 void Concat_FolderAndFile(const TCHAR*, const TCHAR*, TCHAR*);// ƒtƒHƒ‹ƒ_Aƒtƒ@ƒCƒ‹–¼‚©‚çAŒ‹‡‚µ‚½ƒpƒX‚ğì¬
 BOOL GetLongFileName(const TCHAR*, TCHAR*);					// ƒƒ“ƒOƒtƒ@ƒCƒ‹–¼‚ğæ“¾‚·‚é
 BOOL CheckEXT(const TCHAR*, const TCHAR*);					// Šg’£q‚ğ’²‚×‚é
-const TCHAR* GetFileTitlePointer(const TCHAR* tszPath);			// ƒtƒ@ƒCƒ‹ƒtƒ‹ƒpƒX“à‚Ìƒtƒ@ƒCƒ‹–¼‚ğw‚·ƒ|ƒCƒ“ƒ^‚ğæ“¾B2007.09.20 kobake ì¬
-bool _IS_REL_PATH(const TCHAR* path);							// ‘Š‘ÎƒpƒX‚©”»’è‚·‚éB2003.06.23 Moca
+const TCHAR* GetFileTitlePointer(const TCHAR* tszPath);			// ƒtƒ@ƒCƒ‹ƒtƒ‹ƒpƒX“à‚Ìƒtƒ@ƒCƒ‹–¼‚ğw‚·ƒ|ƒCƒ“ƒ^‚ğæ“¾
+bool _IS_REL_PATH(const TCHAR* path);							// ‘Š‘ÎƒpƒX‚©”»’è‚·‚é
 
 // ¦ƒTƒNƒ‰ˆË‘¶
 void GetExedir(LPTSTR pDir, LPCTSTR szFile = NULL);
-void GetInidir(LPTSTR pDir, LPCTSTR szFile = NULL); // 2007.05.19 ryoji
-void GetInidirOrExedir(LPTSTR pDir, LPCTSTR szFile = NULL, bool bRetExedirIfFileEmpty = false); // 2007.05.22 ryoji
+void GetInidir(LPTSTR pDir, LPCTSTR szFile = NULL);
+void GetInidirOrExedir(LPTSTR pDir, LPCTSTR szFile = NULL, bool bRetExedirIfFileEmpty = false);
 
 LPCTSTR GetRelPath(LPCTSTR pszPath);
 
@@ -69,7 +67,7 @@ private:
 	mutable bool		bModified;
 };
 
-bool GetLastWriteTimestamp(const TCHAR* filename, FileTime* pFileTime); //	Oct. 22, 2005 genta
+bool GetLastWriteTimestamp(const TCHAR* filename, FileTime* pFileTime);
 
 // •¶š—ñ•ªŠ„
 void my_splitpath (const char* comln , char* drv, char* dir, char* fnm, char* ext);

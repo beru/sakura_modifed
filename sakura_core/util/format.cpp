@@ -12,9 +12,6 @@
 
 	@note  %Y %y %m %d %H %M %S の変換に対応
 
-	@author aroka
-	@date 2005.11.21 新規
-	
 	@todo 出力バッファのサイズチェックを行う
 */
 bool GetDateTimeFormat(
@@ -86,8 +83,6 @@ bool GetDateTimeFormat(
 	@param[in] バージョン番号文字列
 	@return UINT32 8bit（符号1bit+数値7bit）ずつメジャー、マイナー、ビルド、リビジョンを格納
 
-	@author syat
-	@date 2011.03.18 新規
 	@note 参考 PHP version_compare http://php.s3.to/man/function.version-compare.html
 */
 UINT32 ParseVersion(const TCHAR* sVer)
@@ -148,9 +143,6 @@ UINT32 ParseVersion(const TCHAR* sVer)
 	@param[in] バージョンA
 	@param[in] バージョンB
 	@return int 0: バージョンは等しい、1以上: Aが新しい、-1以下: Bが新しい
-
-	@author syat
-	@date 2011.03.18 新規
 */
 int CompareVersion(const TCHAR* verA, const TCHAR* verB)
 {

@@ -39,13 +39,6 @@ wchar_t* wcs_pushA(wchar_t* dst, size_t dst_count, const char* src)
 
 	@note 変換後のデータは最大で元の文字列の2倍になる
 	@note この関数は2バイト文字の考慮を行っていない
-
-	@author genta
-	@date 2002/01/04 新規作成
-	@date 2002/01/30 genta &専用(dupamp)から一般の文字を扱えるように拡張．
-		dupampはinline関数にした．
-	@date 2002/02/01 genta bugfix エスケープする文字とされる文字の出力順序が逆だった
-	@date 2004/06/19 genta Generic mapping対応
 */
 size_t cescape(
 	const TCHAR* org,
@@ -76,7 +69,6 @@ size_t cescape(
 	@retval  0 \が元から付いていた
 	@retval  1 \を付加した
 	@retval -1 バッファが足りず、\を付加できなかった
-	@date 2003.06.24 Moca 新規作成
 */
 int AddLastChar(
 	TCHAR* pszPath,
@@ -236,8 +228,6 @@ const wchar_t* GetNextLineWB(
 	@param nLimitLen [in] 切り分ける長さ
 	@param pnLineLen [out] 実際に取り出された文字列の長さ
 	@param pnBgn     [i/o] 入力: 切り分け開始位置, 出力: 取り出された文字列の次の位置
-
-	@note 2003.05.25 未使用のようだ
 */
 const char* GetNextLimitedLengthText(
 	const char* pText,

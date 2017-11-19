@@ -1,12 +1,10 @@
 #include "StdAfx.h"
 #include "input.h"
 
-// novice 2004/10/10 マウスサイドボタン対応
 /*!
 	Shift,Ctrl,Altキー状態の取得
 
 	@retval nIdx Shift,Ctrl,Altキー状態
-	@date 2004.10.10 関数化
 */
 int GetCtrlKeyState()
 {

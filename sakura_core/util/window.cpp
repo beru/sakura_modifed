@@ -16,11 +16,6 @@ bool DPI::bInitialized = false;
 	WS_POPUPスタイルを持たないウィンドウ（ex.CDlgFuncListダイアログ）だと、
 	GA_ROOTOWNERでは編集ウィンドウまで遡れないみたい。GetAncestor() APIでも同様。
 	本関数固有に用意したGA_ROOTOWNER2では遡ることができる。
-
-	@author ryoji
-	@date 2007.07.01 ryoji 新規
-	@date 2007.10.22 ryoji フラグ値としてGA_ROOTOWNER2（本関数固有）を追加
-	@date 2008.04.09 ryoji GA_ROOTOWNER2 は可能な限り祖先を遡るように動作修正
 */
 HWND MyGetAncestor(HWND hWnd, UINT gaFlags)
 {
@@ -72,14 +67,12 @@ HWND MyGetAncestor(HWND hWnd, UINT gaFlags)
 /*!
 	処理中のユーザー操作を可能にする
 	ブロッキングフック(?)（メッセージ配送
-
-	@date 2003.07.04 genta 一回の呼び出しで複数メッセージを処理するように
 */
 BOOL BlockingHook(HWND hwndDlgCancel)
 {
 	MSG msg;
 	BOOL ret;
-	// Jun. 04, 2003 genta メッセージをあるだけ処理するように
+	// メッセージをあるだけ処理するように
 	while ((ret = (BOOL)::PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) != 0) {
 		if (msg.message == WM_QUIT) {
 			return FALSE;
@@ -95,7 +88,7 @@ BOOL BlockingHook(HWND hwndDlgCancel)
 
 
 /** フレームウィンドウをアクティブにする
-	@date 2007.11.07 ryoji 対象がdisableのときは最近のポップアップをフォアグラウンド化する．
+	対象がdisableのときは最近のポップアップをフォアグラウンド化する．
 		（モーダルダイアログやメッセージボックスを表示しているようなとき）
 */
 void ActivateFrameWindow(HWND hwnd)
@@ -107,9 +100,9 @@ void ActivateFrameWindow(HWND hwnd)
 			if (pShareData->flags.bEditWndChanging) {
 				return;	// 切替の最中(busy)は要求を無視する
 			}
-			pShareData->flags.bEditWndChanging = true;	// 編集ウィンドウ切替中ON	2007.04.03 ryoji
+			pShareData->flags.bEditWndChanging = true;	// 編集ウィンドウ切替中ON
 
-			// 対象ウィンドウのスレッドに位置合わせを依頼する	// 2007.04.03 ryoji
+			// 対象ウィンドウのスレッドに位置合わせを依頼する
 			DWORD_PTR dwResult;
 			::SendMessageTimeout(
 				hwnd,

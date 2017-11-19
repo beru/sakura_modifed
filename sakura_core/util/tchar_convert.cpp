@@ -19,7 +19,7 @@ const wchar_t* to_wchar(const char* pSrc, size_t nSrcLength)
 
 	// 必要なサイズを計算
 	int nDstLen = MultiByteToWideChar(
-		CP_SJIS,				// 2008/5/12 Uchi
+		CP_SJIS,
 		0,
 		pSrc,
 		(int)nSrcLength,
@@ -38,7 +38,7 @@ const wchar_t* to_wchar(const char* pSrc, size_t nSrcLength)
 
 	// 変換
 	nDstLen = MultiByteToWideChar(
-		CP_SJIS,				// 2008/5/12 Uchi
+		CP_SJIS,
 		0,
 		pSrc,
 		(int)nSrcLength,
@@ -64,7 +64,7 @@ const char* to_achar(const wchar_t* pSrc, size_t nSrcLength)
 
 	// 必要なサイズを計算
 	int nDstLen = WideCharToMultiByte(
-		CP_SJIS,				// 2008/5/12 Uchi
+		CP_SJIS,
 		0,
 		pSrc,
 		(int)nSrcLength,
@@ -85,7 +85,7 @@ const char* to_achar(const wchar_t* pSrc, size_t nSrcLength)
 
 	// 変換
 	nDstLen = WideCharToMultiByte(
-		CP_SJIS,				// 2008/5/12 Uchi
+		CP_SJIS,
 		0,
 		pSrc,
 		(int)nSrcLength,

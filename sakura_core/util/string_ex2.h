@@ -2,7 +2,6 @@
 
 class Eol;
 
-// Aug. 16, 2007 kobake
 wchar_t* wcsncpy_ex(wchar_t* dst, size_t dst_count, const wchar_t* src, size_t src_count);
 wchar_t* wcs_pushW(wchar_t* dst, size_t dst_count, const wchar_t* src, size_t src_count);
 wchar_t* wcs_pushW(wchar_t* dst, size_t dst_count, const wchar_t* src);
@@ -10,7 +9,7 @@ wchar_t* wcs_pushA(wchar_t* dst, size_t dst_count, const char* src, size_t src_c
 wchar_t* wcs_pushA(wchar_t* dst, size_t dst_count, const char* src);
 #define wcs_pushT wcs_pushW
 
-int AddLastChar(TCHAR*, size_t, TCHAR); // 2003.06.24 Moca 最後の文字が指定された文字でないときは付加する
+int AddLastChar(TCHAR*, size_t, TCHAR); // 最後の文字が指定された文字でないときは付加する
 size_t LimitStringLength(const wchar_t*, size_t, size_t, NativeW&); // データを指定「文字数」以内に切り詰める
 
 const char* GetNextLimitedLengthText(const char*, size_t, size_t, size_t*, size_t*); // 指定長以下のテキストに切り分ける
@@ -23,9 +22,6 @@ size_t cescape(const TCHAR* org, TCHAR* buf, TCHAR cesc, TCHAR cwith);
 
 /*!	&の二重化
 	メニューに含まれる&を&&に置き換える
-	@author genta
-	@date 2002/01/30 cescapeに拡張し，
-	@date 2004/06/19 genta Generic mapping
 */
 inline void dupamp(const TCHAR* org, TCHAR* out)
 { cescape(org, out, _T('&'), _T('&')); }

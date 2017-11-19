@@ -137,7 +137,6 @@ void DocOutline::MakeFuncList_Perl(FuncInfoArr* pFuncInfoArr)
 #endif
 	return;
 }
-//	To HERE Sep. 8, 2000 genta
 
 
 const wchar_t* g_ppszKeywordsPERL[] = {

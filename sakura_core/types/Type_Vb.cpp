@@ -70,7 +70,6 @@ void DocOutline::MakeFuncList_VisualBasic(FuncInfoArr* pFuncInfoArr)
 		nFuncId = 0;
 		bDQuote	= false;
 		for (size_t i=0; i<nLineLen; ++i) {
-			// 2005-09-02 D.S.Koba GetSizeOfChar
 			nCharChars = NativeW::GetSizeOfChar(pLine, nLineLen, i);
 			if (nCharChars == 0) {
 				nCharChars = 1;
