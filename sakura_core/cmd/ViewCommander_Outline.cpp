@@ -9,11 +9,7 @@
 
 // ViewCommanderクラスのコマンド(検索系 アウトライン解析)関数群
 
-/*!	アウトライン解析
-	
-	2002/3/13 YAZAKI nOutlineTypeとnListTypeを統合。
-*/
-// トグル用のフラグに変更 20060201 aroka
+/*!	アウトライン解析 */
 bool ViewCommander::Command_FuncList(
 	ShowDialogType nAction,
 	OutlineType _nOutlineType = OutlineType::Default
@@ -32,7 +28,7 @@ bool ViewCommander::Command_FuncList(
 	::GetWindowThreadProcessId(::GetForegroundWindow(), &dwPid2);
 	bool bForeground = (dwPid1 == dwPid2);
 
-	OutlineType nOutlineType = _nOutlineType; // 2007.11.29 kobake
+	OutlineType nOutlineType = _nOutlineType;
 
 //	if (bCheckOnly) {
 //		return TRUE;
@@ -43,7 +39,6 @@ bool ViewCommander::Command_FuncList(
 //	int		nListType;
 	std::tstring titleOverride;				// プラグインによるダイアログタイトル上書き
 
-	// 2001.12.03 hor & 2002.3.13 YAZAKI
 	if (nOutlineType == OutlineType::Default) {
 		// タイプ別に設定されたアウトライン解析方法
 		nOutlineType = view.pTypeData->eDefaultOutline;
@@ -86,7 +81,7 @@ bool ViewCommander::Command_FuncList(
 
 	// 解析結果データを空にする
 	funcInfoArr.Empty();
-	OutlineType nListType = nOutlineType;			// 2011.06.25 syat
+	OutlineType nListType = nOutlineType;
 
 	auto& docOutline = GetDocument().docOutline;
 	switch (nOutlineType) {
@@ -96,20 +91,20 @@ bool ViewCommander::Command_FuncList(
 	case OutlineType::Java:			docOutline.MakeFuncList_Java(&funcInfoArr);break;
 	case OutlineType::Cobol:		docOutline.MakeTopicList_cobol(&funcInfoArr);break;
 	case OutlineType::Asm:			docOutline.MakeTopicList_asm(&funcInfoArr);break;
-	case OutlineType::Perl:			docOutline.MakeFuncList_Perl(&funcInfoArr);break;	// Sep. 8, 2000 genta
-	case OutlineType::VisualBasic:	docOutline.MakeFuncList_VisualBasic(&funcInfoArr);break;	// June 23, 2001 N.Nakatani
-	case OutlineType::WZText:		docOutline.MakeTopicList_wztxt(&funcInfoArr);break;		// 2003.05.20 zenryaku 階層付テキスト アウトライン解析
-	case OutlineType::HTML:			docOutline.MakeTopicList_html(&funcInfoArr);break;		// 2003.05.20 zenryaku HTML アウトライン解析
-	case OutlineType::TeX:			docOutline.MakeTopicList_tex(&funcInfoArr);break;		// 2003.07.20 naoh TeX アウトライン解析
-	case OutlineType::BookMark:		docOutline.MakeFuncList_BookMark(&funcInfoArr);break;	// 2001.12.03 hor
-	case OutlineType::RuleFile:		docOutline.MakeFuncList_RuleFile(&funcInfoArr, titleOverride);break;	// 2002.04.01 YAZAKI アウトライン解析にルールファイルを導入
+	case OutlineType::Perl:			docOutline.MakeFuncList_Perl(&funcInfoArr);break;
+	case OutlineType::VisualBasic:	docOutline.MakeFuncList_VisualBasic(&funcInfoArr);break;
+	case OutlineType::WZText:		docOutline.MakeTopicList_wztxt(&funcInfoArr);break;		// 階層付テキスト アウトライン解析
+	case OutlineType::HTML:			docOutline.MakeTopicList_html(&funcInfoArr);break;		// HTML アウトライン解析
+	case OutlineType::TeX:			docOutline.MakeTopicList_tex(&funcInfoArr);break;		// TeX アウトライン解析
+	case OutlineType::BookMark:		docOutline.MakeFuncList_BookMark(&funcInfoArr);break;	// 
+	case OutlineType::RuleFile:		docOutline.MakeFuncList_RuleFile(&funcInfoArr, titleOverride);break;	// アウトライン解析にルールファイルを導入
 //	case OUTLINE_UNKNOWN:	// Jul. 08, 2001 JEPRO 使わないように変更
-	case OutlineType::Python:		docOutline.MakeFuncList_python(&funcInfoArr);break;		// 2007.02.08 genta
-	case OutlineType::Erlang:		docOutline.MakeFuncList_Erlang(&funcInfoArr);break;		// 2009.08.10 genta
-	case OutlineType::FileTree:	/* 特に何もしない*/ ;break;	// 2013.12.08 Moca
+	case OutlineType::Python:		docOutline.MakeFuncList_python(&funcInfoArr);break;		// 
+	case OutlineType::Erlang:		docOutline.MakeFuncList_Erlang(&funcInfoArr);break;		// 
+	case OutlineType::FileTree:	/* 特に何もしない*/ ;break;	// 
 	case OutlineType::Text:
 		// fall though
-		// ここには何も入れてはいけない 2007.02.28 genta 注意書き
+		// ここには何も入れてはいけない
 	default:
 		// プラグインから検索する
 		{

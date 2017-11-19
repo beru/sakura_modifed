@@ -41,15 +41,15 @@ BOOL DicMgr::Search(
 	if (pszKeywordHelpFile[0] == _T('\0')) {
 		return FALSE;
 	}
-	// 2003.06.23 Moca 相対パスは実行ファイルからのパスとして開く
-	// 2007.05.19 ryoji 相対パスは設定ファイルからのパスを優先
+	// 相対パスは実行ファイルからのパスとして開く
+	// 相対パスは設定ファイルからのパスを優先
 	TextInputStream_AbsIni in(pszKeywordHelpFile);
 	if (!in) {
 		return FALSE;
 	}
 
 	wchar_t	szLine[LINEREADBUFSIZE];
-	for (int line=1; in; ++line) {	// 2006.04.10 fon
+	for (int line=1; in; ++line) {
 		// 1行読み込み
 		{
 			wstring tmp = in.ReadLineW(); //fgetws(szLine, _countof(szLine), pFile) != NULL;
@@ -65,7 +65,7 @@ BOOL DicMgr::Search(
 			// 最初のトークンを取得します。
 			wchar_t* pszToken = wcstok(szLine, pszKeySeps);
 			while (pszToken) {
-				int nRes = _wcsnicmp(pszKey, pszToken, nCmpLen);	// 2006.04.10 fon
+				int nRes = _wcsnicmp(pszKey, pszToken, nCmpLen);
 				if (nRes == 0) {
 					int nLen = (int)wcslen(pszWork);
 					for (int i=0; i<nLen; ++i) {
@@ -75,13 +75,13 @@ BOOL DicMgr::Search(
 						}
 					}
 					// キーワードのセット
-					*ppMemKey = new NativeW;	// 2006.04.10 fon
+					*ppMemKey = new NativeW;
 					(*ppMemKey)->SetString(pszToken);
 					// 意味のセット
 					*ppMemMean = new NativeW;
 					(*ppMemMean)->SetString(pszWork);
 
-					*pLine = line;	// 2006.04.10 fon
+					*pLine = line;
 					return TRUE;
 				}
 				pszToken = wcstok(NULL, pszKeySeps);

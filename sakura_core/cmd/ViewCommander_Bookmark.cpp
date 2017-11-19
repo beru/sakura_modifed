@@ -264,9 +264,9 @@ void ViewCommander::Command_Bookmark_Next(void)
 	Point ptXY(0, GetCaret().GetCaretLogicPos().y);
 	int tmp_y;
 
-	nYOld = ptXY.y;					// hor
+	nYOld = ptXY.y;
 
-re_do:;								// hor
+re_do:;
 	if (BookmarkManager(GetDocument().docLineMgr).SearchBookMark(ptXY.y, SearchDirection::Forward, &tmp_y)) {
 		ptXY.y = tmp_y;
 		bFound = true;
@@ -296,20 +296,20 @@ re_do:;								// hor
 // 前のブックマークを探し，見つかったら移動する．
 void ViewCommander::Command_Bookmark_Prev(void)
 {
-	int		nYOld;				// hor
-	bool	bFound	=	false;	// hor
-	bool	bRedo	=	true;	// hor
+	int		nYOld;
+	bool	bFound	=	false;
+	bool	bRedo	=	true;
 
 	Point ptXY(0, GetCaret().GetCaretLogicPos().y);
 	int tmp_y;
 
-	nYOld = ptXY.y;						// hor
+	nYOld = ptXY.y;
 
-re_do:;								// hor
+re_do:;
 	auto& docLineMgr = GetDocument().docLineMgr;
 	if (BookmarkManager(docLineMgr).SearchBookMark(ptXY.y, SearchDirection::Backward, &tmp_y)) {
 		ptXY.y = tmp_y;
-		bFound = true;				// hor
+		bFound = true;
 		Point ptLayout = GetDocument().layoutMgr.LogicToLayout(ptXY);
 		view.MoveCursorSelecting(ptLayout, view.GetSelectionInfo().bSelectingLock);
 	}
@@ -317,7 +317,7 @@ re_do:;								// hor
 		if (!bFound		// 見つからなかった
 			&& bRedo	// 最初の検索
 		) {
-			ptXY.y = (int)docLineMgr.GetLineCount();	// 2002/06/01 MIK
+			ptXY.y = (int)docLineMgr.GetLineCount();
 			bRedo = false;
 			goto re_do;	// 末尾から再検索
 		}
@@ -339,7 +339,7 @@ re_do:;								// hor
 void ViewCommander::Command_Bookmark_Reset(void)
 {
 	BookmarkManager(GetDocument().docLineMgr).ResetAllBookMark();
-	// 2002.01.16 hor 分割したビューも更新
+	// 分割したビューも更新
 	GetEditWindow().Views_Redraw();
 }
 

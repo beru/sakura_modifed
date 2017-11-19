@@ -24,7 +24,7 @@ void ViewCommander::Command_WCHAR(
 
 	size_t nPos;
 	auto& doc = GetDocument();
-	doc.docEditor.SetModified(true, true);	// Jan. 22, 2002 genta
+	doc.docEditor.SetModified(true, true);
 
 	if (view.bHideMouse && 0 <= view.nMousePouse) {
 		view.nMousePouse = -1;
@@ -68,12 +68,11 @@ void ViewCommander::Command_WCHAR(
 					// 指定された桁に対応する行のデータ内の位置を調べる
 					ASSERT_GE(ptXY.x, 0);
 					for (nPos=0; nPos<nLineLen && nPos<(size_t)ptXY.x;) {
-						// 2005-09-02 D.S.Koba GetSizeOfChar
 						size_t nCharChars = NativeW::GetSizeOfChar(pLine, nLineLen, nPos);
 
 						// その他のインデント文字
 						if (0 < nCharChars
-						 && pLine[nPos] != L'\0'	// その他のインデント文字に L'\0' は含まれない	// 2009.02.04 ryoji L'\0'がインデントされてしまう問題修正
+						 && pLine[nPos] != L'\0'	// その他のインデント文字に L'\0' は含まれない
 						 && typeData->szIndentChars[0] != L'\0'
 						) {
 							wchar_t szCurrent[10];
@@ -121,8 +120,8 @@ end_of_for:;
 				view.DeleteData(true);
 			}
 		}else {
-			if (!view.IsInsMode() /* Oct. 2, 2005 genta */) {
-				DelCharForOverwrite(&wcChar, 1);	// 上書き用の一文字削除	// 2009.04.11 ryoji
+			if (!view.IsInsMode()) {
+				DelCharForOverwrite(&wcChar, 1);	// 上書き用の一文字削除
 			}
 		}
 	}
@@ -181,7 +180,7 @@ end_of_for:;
 		break;
 	}
 
-	// 2005.10.11 ryoji 改行時に末尾の空白を削除
+	// 改行時に末尾の空白を削除
 	if (WCODE::IsLineDelimiter(
 			wcChar,
 			GetDllShareData().common.edit.bEnableExtEol
@@ -192,7 +191,7 @@ end_of_for:;
 		view.RTrimPrevLine();
 	}
 
-	view.PostprocessCommand_hokan();	// Jan. 10, 2005 genta 関数化
+	view.PostprocessCommand_hokan();
 }
 
 
@@ -204,9 +203,6 @@ end_of_for:;
 	取得するのでここには来ない．
 
 	@param wChar [in] SJIS漢字コード．上位が1バイト目，下位が2バイト目．
-	
-	@date 2002.10.06 genta 引数の上下バイトの意味を逆転．
-		WM_IME_CHARのwParamに合わせた．
 */
 void ViewCommander::Command_IME_CHAR(WORD wChar)
 {
@@ -216,38 +212,35 @@ void ViewCommander::Command_IME_CHAR(WORD wChar)
 		return;
 	}
 
-	// Oct. 6 ,2002 genta 上下逆転
+	// 上下逆転
 	if ((wChar & 0xff00) == 0) {
 		Command_WCHAR(wChar & 0xff);
 		return;
 	}
-	GetDocument().docEditor.SetModified(true, true);	// Jan. 22, 2002 genta
+	GetDocument().docEditor.SetModified(true, true);
 
  	if (view.bHideMouse && 0 <= view.nMousePouse) {
 		view.nMousePouse = -1;
 		::SetCursor(NULL);
 	}
 
-	// Oct. 6 ,2002 genta バッファに格納する
-	// Aug. 15, 2007 kobake wchar_tバッファに変換する
 	wchar_t szWord[2] = {wChar, 0};
 	size_t nWord = 1;
 	// テキストが選択されているか
 	if (selInfo.IsTextSelected()) {
 		// 矩形範囲選択中か
 		if (selInfo.IsBoxSelecting()) {
-			Command_Indent(szWord, nWord);	// Oct. 6 ,2002 genta 
+			Command_Indent(szWord, nWord);
 			return;
 		}else {
 			view.DeleteData(true);
 		}
 	}else {
-		if (!view.IsInsMode()) {	// Oct. 2, 2005 genta
-			DelCharForOverwrite(szWord, nWord);	// 上書き用の一文字削除	// 2009.04.11 ryoji
+		if (!view.IsInsMode()) {
+			DelCharForOverwrite(szWord, nWord);	// 上書き用の一文字削除
 		}
 	}
 
-	// Oct. 6 ,2002 genta 
 	Point ptLayoutNew;
 	auto& caret = GetCaret();
 	view.InsertData_CEditView(caret.GetCaretLayoutPos(), szWord, nWord, &ptLayoutNew, true);
@@ -256,9 +249,8 @@ void ViewCommander::Command_IME_CHAR(WORD wChar)
 	caret.MoveCursor(ptLayoutNew, true);
 	caret.nCaretPosX_Prev = caret.GetCaretLayoutPos().x;
 
-	view.PostprocessCommand_hokan();	// Jan. 10, 2005 genta 関数化
+	view.PostprocessCommand_hokan();
 }
-
 
 // from ViewCommander_New.cpp
 // Undo 元に戻す
@@ -374,7 +366,6 @@ void ViewCommander::Command_Undo(void)
 				{
 					DeleteOpe* pDeleteOpe = static_cast<DeleteOpe*>(pOpe);
 
-					// 2007.10.17 kobake メモリリークしてました。修正。
 					if (0 < pDeleteOpe->opeLineData.size()) {
 						// データ置換 削除&挿入にも使える
 						Range range;
@@ -460,15 +451,15 @@ void ViewCommander::Command_Undo(void)
 				}
 			}
 		}
-		view.SetDrawSwitch(bDrawSwitchOld);	// hor
-		view.AdjustScrollBars(); // 2007.07.22 ryoji
+		view.SetDrawSwitch(bDrawSwitchOld);
+		view.AdjustScrollBars();
 
 		// Undo後の変更フラグ
-		docEditor.SetModified(bIsModified, true);	// Jan. 22, 2002 genta
+		docEditor.SetModified(bIsModified, true);
 
 		view.bDoing_UndoRedo = false;	// Undo, Redoの実行中か
 
-		view.SetBracketPairPos(true);	// 03/03/07 ai
+		view.SetBracketPairPos(true);
 
 		// 再描画
 		// ルーラー再描画の必要があるときは DispRuler() ではなく他の部分と同時に Call_OnPaint() で描画する	// 2010.08.20 ryoji
@@ -484,9 +475,9 @@ void ViewCommander::Command_Undo(void)
 			view.ReleaseDC(hdc);
 		}
 
-		caret.ShowCaretPosInfo();	// キャレットの行桁位置を表示する	// 2007.10.19 ryoji
+		caret.ShowCaretPosInfo();	// キャレットの行桁位置を表示する
 
-		if (!GetEditWindow().UpdateTextWrap() && bDrawAll) {	// 折り返し方法関連の更新	// 2008.06.10 ryoji
+		if (!GetEditWindow().UpdateTextWrap() && bDrawAll) {	// 折り返し方法関連の更新
 			GetEditWindow().RedrawAllViews(&view);	// 他のペインの表示を更新
 		}
 		if (hwndProgress) {
@@ -494,7 +485,7 @@ void ViewCommander::Command_Undo(void)
 		}
 	}
 
-	caret.nCaretPosX_Prev = GetCaret().GetCaretLayoutPos().x;	// 2007.10.11 ryoji 追加
+	caret.nCaretPosX_Prev = GetCaret().GetCaretLayoutPos().x;
 	view.bDoing_UndoRedo = false;	// Undo, Redoの実行中か
 
 	return;
@@ -552,7 +543,7 @@ void ViewCommander::Command_Redo(void)
 		nOpeBlkNum = pOpeBlk->GetNum();
 		bool bDraw = (nOpeBlkNum < 5) && view.GetDrawSwitch();
 		bool bDrawAll = false;
-		const bool bDrawSwitchOld = view.SetDrawSwitch(bDraw);	// 2007.07.22 ryoji
+		const bool bDrawSwitchOld = view.SetDrawSwitch(bDraw);
 
 		WaitCursor waitCursor(view.GetHwnd(), 1000 < nOpeBlkNum);
 		HWND hwndProgress = NULL;
@@ -581,7 +572,6 @@ void ViewCommander::Command_Redo(void)
 				{
 					InsertOpe* pInsertOpe = static_cast<InsertOpe*>(pOpe);
 
-					// 2007.10.17 kobake メモリリークしてました。修正。
 					if (0 < pInsertOpe->opeLineData.size()) {
 						// データ置換 削除&挿入にも使える
 						Range range;
@@ -687,15 +677,15 @@ void ViewCommander::Command_Redo(void)
 				}
 			}
 		}
-		view.SetDrawSwitch(bDrawSwitchOld); // 2007.07.22 ryoji
-		view.AdjustScrollBars(); // 2007.07.22 ryoji
+		view.SetDrawSwitch(bDrawSwitchOld);
+		view.AdjustScrollBars();
 
 		// Redo後の変更フラグ
-		docEditor.SetModified(bIsModified, true);	// Jan. 22, 2002 genta
+		docEditor.SetModified(bIsModified, true);
 
 		view.bDoing_UndoRedo = false;	// Undo, Redoの実行中か
 
-		view.SetBracketPairPos(true);	// 03/03/07 ai
+		view.SetBracketPairPos(true);
 
 		// 再描画
 		// ルーラー再描画の必要があるときは DispRuler() ではなく他の部分と同時に Call_OnPaint() で描画する	// 2010.08.20 ryoji
@@ -714,9 +704,9 @@ void ViewCommander::Command_Redo(void)
 			view.ReleaseDC(hdc);
 		}
 
-		caret.ShowCaretPosInfo();	// キャレットの行桁位置を表示する	// 2007.10.19 ryoji
+		caret.ShowCaretPosInfo();	// キャレットの行桁位置を表示する
 
-		if (!GetEditWindow().UpdateTextWrap())	// 折り返し方法関連の更新	// 2008.06.10 ryoji
+		if (!GetEditWindow().UpdateTextWrap())	// 折り返し方法関連の更新
 			GetEditWindow().RedrawAllViews(&view);	// 他のペインの表示を更新
 
 		if (hwndProgress) {
@@ -724,7 +714,7 @@ void ViewCommander::Command_Redo(void)
 		}
 	}
 
-	caret.nCaretPosX_Prev = caret.GetCaretLayoutPos().x;	// 2007.10.11 ryoji 追加
+	caret.nCaretPosX_Prev = caret.GetCaretLayoutPos().x;
 	view.bDoing_UndoRedo = false;	// Undo, Redoの実行中か
 
 	return;
@@ -742,7 +732,7 @@ void ViewCommander::Command_Delete(void)
 
 	if (!selInfo.IsTextSelected()) {	// テキストが選択されているか
 		auto& layoutMgr = GetDocument().layoutMgr;
-		// 2008.08.03 nasukoji	選択範囲なしでDELETEを実行した場合、カーソル位置まで半角スペースを挿入した後改行を削除して次行と連結する
+		// 選択範囲なしでDELETEを実行した場合、カーソル位置まで半角スペースを挿入した後改行を削除して次行と連結する
 		auto& caret = GetCaret();
 		if ((int)layoutMgr.GetLineCount() > caret.GetCaretLayoutPos().y) {
 			const Layout* pLayout = layoutMgr.SearchLineByLayoutY(caret.GetCaretLayoutPos().y);
@@ -753,7 +743,7 @@ void ViewCommander::Command_Delete(void)
 					if (pLayout->GetLayoutEol().GetType() != EolType::None) {	// 行終端は改行コードか?
 						Command_InsText(true, L"", 0, false);	// カーソル位置まで半角スペース挿入
 					}else {	// 行終端が折り返し
-						// 折り返し行末ではスペース挿入後、次の文字を削除する	// 2009.02.19 ryoji
+						// 折り返し行末ではスペース挿入後、次の文字を削除する
 
 						// フリーカーソル時の折り返し越え位置での削除はどうするのが妥当かよくわからないが
 						// 非フリーカーソル時（ちょうどカーソルが折り返し位置にある）には次の行の先頭文字を削除したい
@@ -790,8 +780,6 @@ void ViewCommander::Command_Delete_Back(void)
 		return;
 	}
 
-	// May 29, 2004 genta 実際に削除された文字がないときはフラグをたてないように
-	//GetDocument().docEditor.SetModified(true, true);	// Jan. 22, 2002 genta
 	if (selInfo.IsTextSelected()) {				// テキストが選択されているか
 		view.DeleteData(true);
 	}else {
@@ -823,11 +811,10 @@ void ViewCommander::Command_Delete_Back(void)
 			}
 		}
 	}
-	view.PostprocessCommand_hokan();	// Jan. 10, 2005 genta 関数化
+	view.PostprocessCommand_hokan();
 }
 
-
-// 	上書き用の一文字削除	2009.04.11 ryoji
+// 	上書き用の一文字削除
 void ViewCommander::DelCharForOverwrite(
 	const wchar_t* pszInput,
 	size_t nLen

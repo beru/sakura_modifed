@@ -16,7 +16,6 @@ void ViewCommander::Command_ToLower(void)
 	return;
 }
 
-
 // ‘å•¶š
 void ViewCommander::Command_ToUpper(void)
 {
@@ -24,7 +23,6 @@ void ViewCommander::Command_ToUpper(void)
 	view.ConvSelectedArea(F_TOUPPER);
 	return;
 }
-
 
 // ‘SŠp¨”¼Šp
 void ViewCommander::Command_ToHankaku(void)

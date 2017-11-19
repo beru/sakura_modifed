@@ -20,10 +20,10 @@ void ViewCommander::Command_RecKeyMacro(void)
 	if (flags.bRecordingKeyMacro) {									// キーボードマクロの記録中
 		flags.bRecordingKeyMacro = false;
 		flags.hwndRecordingKeyMacro = NULL;							// キーボードマクロを記録中のウィンドウ
-		//@@@ 2002.1.24 YAZAKI キーマクロをマクロ用フォルダに「RecKey.mac」という名で保存
+		// キーマクロをマクロ用フォルダに「RecKey.mac」という名で保存
 		TCHAR szInitDir[MAX_PATH];
 		int nRet;
-		// 2003.06.23 Moca 記録用キーマクロのフルパスをShareData経由で取得
+		// 記録用キーマクロのフルパスをShareData経由で取得
 		nRet = ShareData::getInstance().GetMacroFilename(-1, szInitDir, MAX_PATH);
 		auto& csMacro = GetDllShareData().common.macro;
 		if (nRet <= 0) {
@@ -32,7 +32,6 @@ void ViewCommander::Command_RecKeyMacro(void)
 		}else {
 			_tcscpy(csMacro.szKeyMacroFileName, szInitDir);
 		}
-		//@@@ 2002.2.2 YAZAKI マクロをCSMacroMgrに統一
 		int nSaveResult = pSMacroMgr->Save(
 			STAND_KEYMACRO,
 			G_AppInstance(),
@@ -45,11 +44,7 @@ void ViewCommander::Command_RecKeyMacro(void)
 		flags.bRecordingKeyMacro = true;
 		flags.hwndRecordingKeyMacro = GetMainWindow();	// キーボードマクロを記録中のウィンドウ
 		// キーマクロのバッファをクリアする
-		//@@@ 2002.1.24 CKeyMacroMgrをCEditDocへ移動
-		//@@@ 2002.2.2 YAZAKI マクロをCSMacroMgrに統一
 		pSMacroMgr->Clear(STAND_KEYMACRO);
-//		GetDocument()->CKeyMacroMgr.ClearAll();
-//		GetDllShareData().CKeyMacroMgr.Clear();
 	}
 	// 親ウィンドウのタイトルを更新
 	GetEditWindow().UpdateCaption();
@@ -66,7 +61,6 @@ void ViewCommander::Command_SaveKeyMacro(void)
 	flags.bRecordingKeyMacro = false;
 	flags.hwndRecordingKeyMacro = NULL;	// キーボードマクロを記録中のウィンドウ
 
-	// Jun. 16, 2002 genta
 	if (!pSMacroMgr->IsSaveOk()) {
 		// 保存不可
 		ErrorMessage(view.GetHwnd(), LS(STR_ERR_CEDITVIEW_CMD26));
@@ -75,8 +69,6 @@ void ViewCommander::Command_SaveKeyMacro(void)
 	TCHAR szPath[_MAX_PATH + 1];
 	TCHAR szInitDir[_MAX_PATH + 1];
 	szPath[0] = 0;
-	// 2003.06.23 Moca 相対パスは実行ファイルからのパス
-	// 2007.05.19 ryoji 相対パスは設定ファイルからのパスを優先
 	auto& macroFolder = GetDllShareData().common.macro.szMACROFOLDER;
 	if (_IS_REL_PATH(macroFolder)) {
 		GetInidirOrExedir(szInitDir, macroFolder);
@@ -100,17 +92,13 @@ void ViewCommander::Command_SaveKeyMacro(void)
 //	wcscat(macroFolder, L"\\");
 
 	// キーボードマクロの保存
-	//@@@ 2002.2.2 YAZAKI マクロをCSMacroMgrに統一
-	//@@@ 2002.1.24 YAZAKI
 	if (!pSMacroMgr->Save(STAND_KEYMACRO, G_AppInstance(), szPath)) {
 		ErrorMessage(view.GetHwnd(), LS(STR_ERR_CEDITVIEW_CMD27), szPath);
 	}
 }
 
 
-/*! キーマクロの読み込み
-	@date 2005.02.20 novice デフォルトの拡張子変更
- */
+/*! キーマクロの読み込み */
 void ViewCommander::Command_LoadKeyMacro(void)
 {
 	auto& flags = GetDllShareData().flags;
@@ -122,8 +110,6 @@ void ViewCommander::Command_LoadKeyMacro(void)
 	const TCHAR* pszFolder = GetDllShareData().common.macro.szMACROFOLDER;
 	szPath[0] = 0;
 	
-	// 2003.06.23 Moca 相対パスは実行ファイルからのパス
-	// 2007.05.19 ryoji 相対パスは設定ファイルからのパスを優先
 	if (_IS_REL_PATH(pszFolder)) {
 		GetInidirOrExedir(szInitDir, pszFolder);
 	}else {
@@ -134,8 +120,6 @@ void ViewCommander::Command_LoadKeyMacro(void)
 	dlgOpenFile.Create(
 		G_AppInstance(),
 		view.GetHwnd(),
-// 2005/02/20 novice デフォルトの拡張子変更
-// 2005/07/13 novice 多様なマクロをサポートしているのでデフォルトは全て表示にする
 		_T("*.*"),
 		szInitDir
 	);
@@ -144,7 +128,7 @@ void ViewCommander::Command_LoadKeyMacro(void)
 	}
 
 	// キーボードマクロの読み込み
-	//@@@ 2002.1.24 YAZAKI 読み込みといいつつも、ファイル名をコピーするだけ。実行直前に読み込む
+	// 読み込みといいつつも、ファイル名をコピーするだけ。実行直前に読み込む
 	_tcscpy(GetDllShareData().common.macro.szKeyMacroFileName, szPath);
 //	GetDllShareData().CKeyMacroMgr.LoadKeyMacro(G_AppInstance(), view.GetHwnd(), szPath);
 }
@@ -153,7 +137,7 @@ void ViewCommander::Command_LoadKeyMacro(void)
 void ViewCommander::Command_ExecKeyMacro(void)
 {
 	auto& flags = GetDllShareData().flags;
-	//@@@ 2002.1.24 YAZAKI 記録中は終了してから実行
+	// 記録中は終了してから実行
 	if (flags.bRecordingKeyMacro) {
 		Command_RecKeyMacro();
 	}
@@ -161,11 +145,9 @@ void ViewCommander::Command_ExecKeyMacro(void)
 	flags.hwndRecordingKeyMacro = NULL;	// キーボードマクロを記録中のウィンドウ
 
 	// キーボードマクロの実行
-	//@@@ 2002.1.24 YAZAKI
 	auto& csMacro = GetDllShareData().common.macro;
 	if (csMacro.szKeyMacroFileName[0]) {
 		// ファイルが保存されていたら
-		//@@@ 2002.2.2 YAZAKI マクロをCSMacroMgrに統一
 		bool bLoadResult = pSMacroMgr->Load(
 			view,
 			STAND_KEYMACRO,
@@ -176,7 +158,6 @@ void ViewCommander::Command_ExecKeyMacro(void)
 		if (!bLoadResult) {
 			ErrorMessage(view.GetHwnd(), LS(STR_ERR_CEDITVIEW_CMD28), csMacro.szKeyMacroFileName);
 		}else {
-			// 2007.07.20 genta : flagsオプション追加
 			pSMacroMgr->Exec(STAND_KEYMACRO, G_AppInstance(), view, 0);
 		}
 	}
@@ -186,9 +167,6 @@ void ViewCommander::Command_ExecKeyMacro(void)
 /*! 名前を指定してマクロ実行
 	@param pszPath	マクロのファイルパス、またはマクロのコード。
 	@param pszType	種別。NULLの場合ファイル指定、それ以外の場合は言語の拡張子を指定
-
-	@date 2008.10.23 syat 新規作成
-	@date 2008.12.21 syat 引数「種別」を追加
  */
 void ViewCommander::Command_ExecExtMacro(const wchar_t* pszPathW, const wchar_t* pszTypeW)
 {
@@ -271,9 +249,7 @@ void ViewCommander::Command_ExecExtMacro(const wchar_t* pszPathW, const wchar_t*
 }
 
 
-/*! 外部コマンド実行ダイアログ表示
-	@date 2002.02.02 YAZAKI.
-*/
+/*! 外部コマンド実行ダイアログ表示 */
 void ViewCommander::Command_ExecCommand_Dialog(void)
 {
 	DlgExec dlgExec;
@@ -301,17 +277,12 @@ void ViewCommander::Command_ExecCommand_Dialog(void)
 
 
 // 外部コマンド実行
-// Sept. 20, 2000 JEPRO  名称CMMANDをCOMMANDに変更
-// Oct. 9, 2001   genta  マクロ対応のため引数追加
-// 2002.2.2       YAZAKI ダイアログ呼び出し部とコマンド実行部を分離
-//void CEditView::Command_ExecCommand(const char* cmd_string)
 void ViewCommander::Command_ExecCommand(
 	LPCWSTR cmd_string,
 	const int nFlgOpt,
 	LPCWSTR pszCurDir
-	)	// 2006.12.03 maru 引数の拡張
+	)
 {
-	// From Here Aug. 21, 2001 genta
 	// パラメータ置換 (超暫定)
 	const int bufmax = 1024;
 	wchar_t buf[bufmax + 1];
@@ -324,6 +295,5 @@ void ViewCommander::Command_ExecCommand(
 		buf3 = to_tchar(pszCurDir);
 	}
 	view.ExecCmd(buf2.c_str(), nFlgOpt, (pszCurDir ? buf3.c_str() : nullptr));
-	// To Here Aug. 21, 2001 genta
 }
 

@@ -341,7 +341,7 @@ void ViewCommander::Command_PasteBox(
 		);
 	}
 
-	view.SetDrawSwitch(bDrawSwitchOld);	// 2002.01.25 hor
+	view.SetDrawSwitch(bDrawSwitchOld);
 	return;
 }
 
@@ -366,13 +366,13 @@ void ViewCommander::Command_PasteBox(int option)
 		ErrorBeep();
 		return;
 	}
-	// 2004.07.13 Moca \0コピー対策
+	// \0コピー対策
 	size_t nstrlen;
 	const wchar_t* lptstr = memClip.GetStringPtr(&nstrlen);
 
 	Command_PasteBox(lptstr, nstrlen);
-	view.AdjustScrollBars(); // 2007.07.22 ryoji
-	view.Redraw();			// 2002.01.25 hor
+	view.AdjustScrollBars();
+	view.Redraw();
 }
 
 
@@ -545,7 +545,7 @@ void ViewCommander::Command_AddTail(
 		nDataLen = wcslen(pszData);
 	}
 
-	GetDocument().docEditor.SetModified(true, true);	// Jan. 22, 2002 genta
+	GetDocument().docEditor.SetModified(true, true);
 
 	// ファイルの最後に移動
 	Command_GoFileEnd(false);
@@ -1082,8 +1082,6 @@ void ViewCommander::Command_CopyPath(void)
 	}
 }
 
-
-// May 9, 2000 genta
 // 現在編集中のファイルのパス名とカーソル位置をクリップボードにコピー
 void ViewCommander::Command_CopyTag(void)
 {

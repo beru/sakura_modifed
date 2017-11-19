@@ -12,7 +12,6 @@ const int MSec2Min = 1000 * 60;
 	頻繁に呼び出されるタイマーが既に別の場所にあるとき、それよりも間隔が広くて
 	間隔の厳密さが要求されない用途に利用可能。
 	ファイルの自動保存で使っている。
-	@author genta
 */
 class PassiveTimer {
 public:

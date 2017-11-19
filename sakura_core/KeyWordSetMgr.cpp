@@ -35,8 +35,6 @@ KeywordSetMgr::~KeywordSetMgr(void)
 	@brief 全キーワードセットの削除と初期化
 
 	キーワードセットのインデックスを全て0とする．
-	
-	@date 2004.07.29 Moca 可変長記憶
 */
 void KeywordSetMgr::ResetAllKeywordSet(void)
 {
@@ -62,20 +60,16 @@ const KeywordSetMgr& KeywordSetMgr::operator = (KeywordSetMgr& KeywordSetMgr)
 	// 配列まるごとコピー
 	memcpy_raw(szSetNameArr   , KeywordSetMgr.szSetNameArr   , sizeof(szSetNameArr)		);
 	memcpy_raw(bKeywordCaseArr, KeywordSetMgr.bKeywordCaseArr, sizeof(bKeywordCaseArr)	);
-	memcpy_raw(nStartIdx      , KeywordSetMgr.nStartIdx      , sizeof(nStartIdx	)		); // 2004.07.29 Moca
+	memcpy_raw(nStartIdx      , KeywordSetMgr.nStartIdx      , sizeof(nStartIdx	)		);
 	memcpy_raw(nKeywordNumArr , KeywordSetMgr.nKeywordNumArr , sizeof(nKeywordNumArr)	);
 	memcpy_raw(szKeywordArr   , KeywordSetMgr.szKeywordArr   , sizeof(szKeywordArr)		);
-	memcpy_raw(isSorted       , KeywordSetMgr.isSorted       , sizeof(isSorted)			); // MIK 2000.12.01 binary search
-	memcpy_raw(nKeywordMaxLenArr, KeywordSetMgr.nKeywordMaxLenArr, sizeof(nKeywordMaxLenArr) ); //2014.05.04 Moca
+	memcpy_raw(isSorted       , KeywordSetMgr.isSorted       , sizeof(isSorted)			);
+	memcpy_raw(nKeywordMaxLenArr, KeywordSetMgr.nKeywordMaxLenArr, sizeof(nKeywordMaxLenArr) );
 	return *this;
 }
 
 
-/*! @brief キーワードセットの追加
-
-	@date 2005.01.26 Moca 新規作成
-	@date 2005.01.29 genta サイズ0で作成→reallocするように
-*/
+/*! @brief キーワードセットの追加 */
 bool KeywordSetMgr::AddKeywordSet(
 	const wchar_t*	pszSetName,		// [in] セット名
 	bool			bKeywordCase,	// [in] 大文字小文字の区別．true:あり, false:無し
@@ -99,7 +93,7 @@ bool KeywordSetMgr::AddKeywordSet(
 	szSetNameArr[nIdx][_countof(szSetNameArr[nIdx]) - 1] = L'\0';
 	bKeywordCaseArr[nIdx] = bKeywordCase;
 	nKeywordNumArr[nIdx] = 0;
-	isSorted[nIdx] = 0;	// MIK 2000.12.01 binary search
+	isSorted[nIdx] = 0;
 	return true;
 }
 
@@ -117,11 +111,11 @@ bool KeywordSetMgr::DelKeywordSet(size_t nIdx)
 		memcpy_raw(szSetNameArr[i], szSetNameArr[i + 1], sizeof(szSetNameArr[0]));
 		bKeywordCaseArr[i] = bKeywordCaseArr[i + 1];
 		nKeywordNumArr[i] = nKeywordNumArr[i + 1];
-		nStartIdx[i] = nStartIdx[i + 1];	//	2004.07.29 Moca 可変長記憶
-		isSorted[i] = isSorted[i + 1];	// MIK 2000.12.01 binary search
-		nKeywordMaxLenArr[i] = nKeywordMaxLenArr[i+1];	// 2014.05.04 Moca
+		nStartIdx[i] = nStartIdx[i + 1];
+		isSorted[i] = isSorted[i + 1];
+		nKeywordMaxLenArr[i] = nKeywordMaxLenArr[i+1];
 	}
-	nStartIdx[nKeywordSetNum - 1] = nStartIdx[nKeywordSetNum];	// 2007.07.14 ryoji これが無いと末尾＝最終セットの先頭になってしまう
+	nStartIdx[nKeywordSetNum - 1] = nStartIdx[nKeywordSetNum];	// これが無いと末尾＝最終セットの先頭になってしまう
 	--nKeywordSetNum;
 	if (nKeywordSetNum <= nCurrentKeywordSetIdx) {
 		nCurrentKeywordSetIdx = nKeywordSetNum - 1;
@@ -136,7 +130,6 @@ bool KeywordSetMgr::DelKeywordSet(size_t nIdx)
 
 
 /*! ｎ番目のセットのセット名を返す
-
 	@param nIdx [in] セット番号 0～キーワードセット数-1
 */
 const wchar_t* KeywordSetMgr::GetTypeName(size_t nIdx)
@@ -147,10 +140,7 @@ const wchar_t* KeywordSetMgr::GetTypeName(size_t nIdx)
 	return szSetNameArr[nIdx];
 }
 
-/*! ｎ番目のセットのセット名を再設定
-
-	@date 2005.01.26 Moca 新規作成
-*/
+/*! ｎ番目のセットのセット名を再設定 */
 const wchar_t* KeywordSetMgr::SetTypeName(size_t nIdx, const wchar_t* name)
 {
 	if (!name || nKeywordSetNum <= nIdx) {
@@ -209,7 +199,7 @@ const wchar_t* KeywordSetMgr::UpdateKeyword(
 			return NULL;
 		}
 	}
-	isSorted[nIdx] = 0;	// MIK 2000.12.01 binary search
+	isSorted[nIdx] = 0;
 	wchar_t* p = szKeywordArr[nStartIdx[nIdx] + nIdx2];
 	wcsncpy( p, pszKeyword, MAX_KEYWORDLEN );
 	p[MAX_KEYWORDLEN] = L'\0';
@@ -231,7 +221,6 @@ size_t KeywordSetMgr::AddKeyword(size_t nIdx, const wchar_t* pszKeyword)
 	if (nKeywordSetNum <= nIdx) {
 		return 1;
 	}
-// 2004.07.29 Moca
 	if (!KeywordReAlloc(nIdx, nKeywordNumArr[nIdx] + 1)) {
 		return 2;
 	}
@@ -257,13 +246,11 @@ size_t KeywordSetMgr::AddKeyword(size_t nIdx, const wchar_t* pszKeyword)
 		wcscpy(szKeywordArr[nStartIdx[nIdx] + nKeywordNumArr[nIdx]], pszKeyword);
 	}
 	nKeywordNumArr[nIdx]++;
-	isSorted[nIdx] = 0;	// MIK 2000.12.01 binary search
+	isSorted[nIdx] = 0;
 	return 0;
 }
 
-
 /*! ｎ番目のセットのｍ番目のキーワードを削除
-
 	@param nIdx [in] キーワードセット番号
 	@param nIdx2 [in] キーワード番号
 */
@@ -285,19 +272,17 @@ size_t KeywordSetMgr::DelKeyword(size_t nIdx, size_t nIdx2)
 	}
 	nKeywordNumArr[nIdx]--;
 
-	// 2005.01.26 Moca 1つずらすだけなので、ソートの状態は保持される
-	// isSorted[nIdx] = 0;	// MIK 2000.12.01 binary search
-	KeywordReAlloc(nIdx, nKeywordNumArr[nIdx]);	// 2004.07.29 Moca
+	// 1つずらすだけなので、ソートの状態は保持される
+	// isSorted[nIdx] = 0;
+	KeywordReAlloc(nIdx, nKeywordNumArr[nIdx]);
 
-	// 2014.05.04 Moca キーワード長の再計算
+	// キーワード長の再計算
 	if (nDelKeywordLen == nKeywordMaxLenArr[nIdx]) {
 		KeywordMaxLen(nIdx);
 	}
 	return 0;
 }
 
-
-// MIK START 2000.12.01 binary search
 /*!	キーワードのソートとキーワード長の最大値計算
 
 	@param nIdx [in] キーワードセット番号
@@ -399,9 +384,7 @@ int KeywordSetMgr::SearchKeyword2(
 	}
 	return result;
 }
-// MIK END
 
-// MIK START 2000.12.01 START
 void KeywordSetMgr::SetKeywordCase(size_t nIdx, bool bCase)
 {
 	// 大文字小文字判断は１ビットあれば実現できる。
@@ -417,15 +400,10 @@ bool KeywordSetMgr::GetKeywordCase(size_t nIdx)
 {
 	return bKeywordCaseArr[nIdx];
 }
-// MIK END
 
-// From Here 2004.07.29 Moca 可変長記憶
 /*!	@brief \\0またはTABで区切られた文字列からキーワードを設定
 
 	@return 登録に成功したキーワード数
-	
-	@author Moca
-	@date 2004.07.29 Moca CShareData::ShareData_IO_2内のコードを元に移築・作成
 */
 size_t KeywordSetMgr::SetKeywordArr(
 	size_t			nIdx,			// [in] キーワードセット番号
@@ -442,7 +420,7 @@ size_t KeywordSetMgr::SetKeywordArr(
 		i < nStartIdx[nIdx] + nSize && *ptr != L'\0';
 		++cnt, ++i
 	) {
-		//	May 25, 2003 キーワードの区切りとして\0以外にTABを受け付けるようにする
+		// キーワードの区切りとして\0以外にTABを受け付けるようにする
 		const wchar_t* pTop = ptr;	// キーワードの先頭位置を保存
 		while (*ptr != L'\t' && *ptr != L'\0') {
 			++ptr;
@@ -529,9 +507,6 @@ size_t KeywordSetMgr::CleanKeywords(size_t nIdx)
 
 	@param nIdx [in] キーワードセット番号
 	@return true: もう1つ追加可能, false: 追加不可能
-
-	@date 2005.01.26 Moca 新規作成
-	@date 2005.01.29 genta 割り当て済みの領域に空きがあれば拡張不能でも追加可能
 */
 bool KeywordSetMgr::CanAddKeyword(size_t nIdx)
 {
@@ -625,9 +600,6 @@ size_t KeywordSetMgr::GetAllocSize(size_t nIdx) const
 }
 
 /*! 共有空きスペース
-
-	@date 2004.07.29 Moca 新規作成
-	
 	@return 共有空き領域(キーワード数)
 */
 size_t KeywordSetMgr::GetFreeSize(void) const 
@@ -635,10 +607,7 @@ size_t KeywordSetMgr::GetFreeSize(void) const
 	return MAX_KEYWORDNUM - nStartIdx[nKeywordSetNum];
 }
 
-// To Here 2004.07.29 Moca
-
 // キーワードセット名からセット番号を取得。見つからなければ -1
-//	Uchi 2010/4/14
 int KeywordSetMgr::SearchKeywordSet(const wchar_t* pszKeyword)
 {
 	int nIdx = -1;

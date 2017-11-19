@@ -1,6 +1,6 @@
 #include "StdAfx.h"
 #include "Ope.h"
-#include "mem/Memory.h"// 2002/2/10 aroka
+#include "mem/Memory.h"
 
 
 // OpeƒNƒ‰ƒX\’z

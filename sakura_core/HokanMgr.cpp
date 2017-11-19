@@ -21,7 +21,6 @@ LRESULT APIENTRY HokanList_SubclassProc(
 	LPARAM lParam
 	)
 {
-	// Modified by KEITA for WIN64 2003.9.6
 	Dialog* pDialog = (Dialog*)::GetWindowLongPtr(::GetParent(hwnd), DWLP_USER);
 	HokanMgr* pHokanMgr = (HokanMgr*)::GetWindowLongPtr(::GetParent(hwnd), DWLP_USER);
 	MSG* pMsg;
@@ -32,7 +31,6 @@ LRESULT APIENTRY HokanList_SubclassProc(
 		nVKey = (int) wParam;	// virtual-key code
 		// キー操作を偽造しよう
 		if (nVKey == VK_SPACE) {	//	Space
-// novice 2004/10/10
 			// Shift,Ctrl,Altキーが押されていたか
 			int nIdx = GetCtrlKeyState();
 			if (nIdx == _SHIFT) {
@@ -56,7 +54,7 @@ LRESULT APIENTRY HokanList_SubclassProc(
 			return 0;
 		}
 //		MYTRACE(_T("WM_GETDLGCODE  pMsg->message = %xh\n"), pMsg->message);
-		return DLGC_WANTALLKEYS; // すべてのキーストロークを私に下さい	//	Sept. 17, 2000 jepro 説明の「全て」を「すべて」に統一
+		return DLGC_WANTALLKEYS; // すべてのキーストロークを私に下さい
 	}
 	return CallWindowProc(g_wpHokanListProc, hwnd, uMsg, wParam, lParam);
 }
@@ -84,7 +82,6 @@ HWND HokanMgr::DoModeless(
 	HWND hwndWork = Dialog::DoModeless(hInstance, hwndParent, IDD_HOKAN, lParam, SW_HIDE);
 	OnSize(0, 0);
 	// リストをフック
-	// Modified by KEITA for WIN64 2003.9.6
 	::g_wpHokanListProc = (WNDPROC) ::SetWindowLongPtr(GetItemHwnd(IDC_LIST_WORDS), GWLP_WNDPROC, (LONG_PTR)HokanList_SubclassProc);
 
 	::ShowWindow(GetHwnd(), SW_HIDE);
@@ -110,8 +107,6 @@ void HokanMgr::Hide(void)
 /*!	初期化
 	pMemHokanWord == NULLのとき、補完候補がひとつだったら、補完ウィンドウを表示しないで終了します。
 	Search()呼び出し元で確定処理を進めてください。
-
-	@date 2002.2.17 YAZAKI CShareDataのインスタンスは、CProcessにひとつあるのみ。
 */
 size_t HokanMgr::Search(
 	POINT*			pPt,
@@ -119,11 +114,11 @@ size_t HokanMgr::Search(
 	int				nColumnWidth,
 	const wchar_t*	pszCurWord,
 	const TCHAR*	pszHokanFile,
-	bool			bHokanLoHiCase,	// 入力補完機能：英大文字小文字を同一視する 2001/06/19 asa-o
-	bool			bHokanByFile,	// 編集中データから候補を探す 2003.06.23 Moca
+	bool			bHokanLoHiCase,	// 入力補完機能：英大文字小文字を同一視する
+	bool			bHokanByFile,	// 編集中データから候補を探す
 	int				nHokanType,
 	bool			bHokanByKeyword,
-	NativeW*		pMemHokanWord	// 2001/06/19 asa-o
+	NativeW*		pMemHokanWord
 	)
 {
 	EditView* pEditView = reinterpret_cast<EditView*>(lParam);
@@ -142,13 +137,13 @@ size_t HokanMgr::Search(
 	vKouho.clear();
 	DicMgr::HokanSearch(
 		pszCurWord,
-		bHokanLoHiCase,								// 引数からに変更	2001/06/19 asa-o
+		bHokanLoHiCase,
 		vKouho,
 		0, // Max候補数
 		pszHokanFile
 	);
 
-	// 2003.05.16 Moca 追加 編集中データ内から候補を探す
+	// 編集中データ内から候補を探す
 	if (bHokanByFile) {
 		pEditView->HokanSearchByFile(
 			pszCurWord,
@@ -157,7 +152,7 @@ size_t HokanMgr::Search(
 			1024 // 編集中データからなので数を制限しておく
 		);
 	}
-	// 2012.10.13 Moca 強調キーワードから候補を探す
+	// 強調キーワードから候補を探す
 	if (bHokanByKeyword) {
 		HokanSearchByKeyword(
 			pszCurWord,
@@ -201,7 +196,7 @@ size_t HokanMgr::Search(
 		return 0;
 	}
 
-//	2001/06/19 asa-o 候補が１つの場合補完ウィンドウは表示しない(逐次補完の場合は除く)
+  // 候補が１つの場合補完ウィンドウは表示しない(逐次補完の場合は除く)
 	if (vKouho.size() == 1) {
 		if (pMemHokanWord) {
 			nCurKouhoIdx = -1;
@@ -237,7 +232,7 @@ size_t HokanMgr::Search(
 //@@	::EnableWindow(::GetParent(::GetParent(hwndParent)), FALSE);
 
 	RECT rcDesktop;
-	//	May 01, 2004 genta マルチモニタ対応
+	// マルチモニタ対応
 	::GetMonitorWorkRect(GetHwnd(), &rcDesktop );
 
 	int nX = point.x - nColumnWidth;
@@ -265,7 +260,7 @@ size_t HokanMgr::Search(
 		nCY = point.y - 4 - rcDesktop.top;
 	}
 
-//	2001/06/19 Start by asa-o: 表示位置補正
+  // 表示位置補正
 
 	// 右に入る
 	if (nX + nCX < rcDesktop.right) {
@@ -280,14 +275,11 @@ size_t HokanMgr::Search(
 		nCX = t_max((int)(rcDesktop.right - nX) , 100);	// 最低サイズを100くらいに
 	}
 
-//	2001/06/19 End
-
-//	2001/06/18 Start by asa-o: 補正後の位置・サイズを保存
+  // 補正後の位置・サイズを保存
 	point.x = nX;
 	point.y = nY;
 	nHeight = nCY;
 	nWidth = nCX;
-//	2001/06/18 End
 
 	// はみ出すなら小さくする
 //	if (rcDesktop.bottom < nY + nCY) {
@@ -308,11 +300,9 @@ size_t HokanMgr::Search(
 //	::SetFocus(GetItemHwnd(IDC_LIST_WORDS));
 //	::SetFocus(::GetParent(::GetParent(hwndParent)));
 
-
-//	2001/06/18 asa-o:
 	ShowTip();	// 補完ウィンドウで選択中の単語にキーワードヘルプを表示
 
-//	2003.06.25 Moca 他のメソッドで使っていないので、とりあえず削除しておく
+  // 他のメソッドで使っていないので、とりあえず削除しておく
 	size_t kouhoNum = vKouho.size();
 	vKouho.clear();
 	return kouhoNum;
@@ -381,11 +371,10 @@ BOOL HokanMgr::OnSize(WPARAM wParam, LPARAM lParam)
 	int nWidth = rcDlg.right - rcDlg.left;  // width of client area
 	int nHeight = rcDlg.bottom - rcDlg.top; // height of client area
 
-//	2001/06/18 Start by asa-o: サイズ変更後の位置を保存
+  // サイズ変更後の位置を保存
 	point.x = rcDlg.left - 4;
 	point.y = rcDlg.top - 3;
 	::ClientToScreen(GetHwnd(), &point);
-//	2001/06/18 End
 
 	int nControls = _countof(controls);
 	for (int i=0; i<nControls; ++i) {
@@ -416,7 +405,6 @@ BOOL HokanMgr::OnSize(WPARAM wParam, LPARAM lParam)
 		}
 	}
 
-//	2001/06/18 asa-o:
 	ShowTip();	// 補完ウィンドウで選択中の単語にキーワードヘルプを表示
 
 	return TRUE;
@@ -459,7 +447,6 @@ BOOL HokanMgr::OnKeyDown(WPARAM wParam, LPARAM lParam)
 
 BOOL HokanMgr::OnLbnSelChange(HWND hwndCtl, int wID)
 {
-//	2001/06/18 asa-o:
 	ShowTip();	// 補完ウィンドウで選択中の単語にキーワードヘルプを表示
 	return TRUE;
 }
@@ -502,11 +489,9 @@ BOOL HokanMgr::DoHokan(int nVKey)
 
  	// テキストを貼り付け
 	EditView* pEditView = reinterpret_cast<EditView*>(lParam);
-	//	Apr. 28, 2000 genta
 	pEditView->GetCommander().HandleCommand(F_WordDeleteToStart, false, 0, 0, 0, 0);
 	pEditView->GetCommander().HandleCommand( F_INSTEXT_W, true, (LPARAM)&wszLabel[0], wcslen(&wszLabel[0]), TRUE, 0 );
 
-	// Until here
 //	pEditView->GetCommander().HandleCommand(F_INSTEXT_W, true, (LPARAM)(wszLabel + memCurWord.GetLength()), TRUE, 0, 0);
 	Hide();
 
@@ -591,7 +576,7 @@ int HokanMgr::KeyProc(WPARAM wParam, LPARAM lParam)
 	return -2;
 }
 
-//	2001/06/18 Start by asa-o: 補完ウィンドウで選択中の単語にキーワードヘルプを表示
+// 補完ウィンドウで選択中の単語にキーワードヘルプを表示
 void HokanMgr::ShowTip()
 {
 	HWND hwndCtrl = GetItemHwnd(IDC_LIST_WORDS);
@@ -618,7 +603,7 @@ void HokanMgr::ShowTip()
 	POINT pt;
 	pt.x = point.x + nWidth;
 	pt.y = point.y + 4 + (nItem - nTopItem) * nItemHeight;
-	// 2001/06/19 asa-o 選択中の単語が補完ウィンドウに表示されているなら辞書Tipを表示
+	// 選択中の単語が補完ウィンドウに表示されているなら辞書Tipを表示
 	if (pt.y > point.y && pt.y < point.y + nHeight) {
 		RECT rcHokanWin;
 		::SetRect(&rcHokanWin, point.x, point.y, point.x + nWidth, point.y + nHeight);
@@ -627,7 +612,6 @@ void HokanMgr::ShowTip()
 		}
 	}
 }
-//	2001/06/18 End
 
 bool HokanMgr::AddKouhoUnique(
 	vector_ex<std::wstring>& kouhoList,
@@ -637,7 +621,6 @@ bool HokanMgr::AddKouhoUnique(
 	return kouhoList.push_back_unique(strWord);
 }
 
-//@@@ 2002.01.18 add start
 const DWORD p_helpids[] = {
 	0, 0
 };
@@ -646,6 +629,4 @@ LPVOID HokanMgr::GetHelpIdTable(void)
 {
 	return (LPVOID)p_helpids;
 }
-//@@@ 2002.01.18 add end
-
 

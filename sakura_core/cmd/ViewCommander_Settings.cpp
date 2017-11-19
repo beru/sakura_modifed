@@ -3,7 +3,7 @@
 #include "ViewCommander_inline.h"
 
 #include "typeprop/DlgTypeList.h"
-#include "dlg/DlgFavorite.h"	// 履歴の管理	//@@@ 2003.04.08 MIK
+#include "dlg/DlgFavorite.h"	// 履歴の管理
 #include "EditApp.h"
 #include "util/shell.h"
 #include "PropertyManager.h"
@@ -11,13 +11,10 @@
 
 // ViewCommanderクラスのコマンド(設定系)関数群
 
-/*! ツールバーの表示/非表示
-
-	@date 2006.12.19 ryoji 表示切替は EditWnd::LayoutToolBar(), EditWnd::EndLayoutBars() で行うように変更
-*/
+/*! ツールバーの表示/非表示 */
 void ViewCommander::Command_ShowToolBar(void)
 {
-	auto& editWnd = GetEditWindow();	// Sep. 10, 2002 genta
+	auto& editWnd = GetEditWindow();
 
 	GetDllShareData().common.window.bDispToolBar = (editWnd.toolbar.GetToolbarHwnd() == NULL);	// ツールバー表示
 	editWnd.LayoutToolBar();
@@ -33,13 +30,10 @@ void ViewCommander::Command_ShowToolBar(void)
 }
 
 
-/*! ファンクションキーの表示/非表示
-
-	@date 2006.12.19 ryoji 表示切替は EditWnd::LayoutFuncKey(), EditWnd::EndLayoutBars() で行うように変更
-*/
+/*! ファンクションキーの表示/非表示 */
 void ViewCommander::Command_ShowFuncKey(void)
 {
-	EditWnd& editWnd = GetEditWindow();	// Sep. 10, 2002 genta
+	EditWnd& editWnd = GetEditWindow();
 
 	GetDllShareData().common.window.bDispFuncKeyWnd = !editWnd.funcKeyWnd.GetHwnd();	// ファンクションキー表示
 	editWnd.LayoutFuncKey();
@@ -55,22 +49,16 @@ void ViewCommander::Command_ShowFuncKey(void)
 }
 
 
-/*! タブ(ウィンドウ)の表示/非表示
-
-	@author MIK
-	@date 2003.06.10 新規作成
-	@date 2006.12.19 ryoji 表示切替は EditWnd::LayoutTabBar(), EditWnd::EndLayoutBars() で行うように変更
-	@date 2007.06.20 ryoji グループIDリセット
- */
+/*! タブ(ウィンドウ)の表示/非表示 */
 void ViewCommander::Command_ShowTab(void)
 {
-	auto& editWnd = GetEditWindow();	// Sep. 10, 2002 genta
+	auto& editWnd = GetEditWindow();
 
 	GetDllShareData().common.tabBar.bDispTabWnd = !editWnd.tabWnd.GetHwnd();	// タブバー表示
 	editWnd.LayoutTabBar();
 	editWnd.EndLayoutBars();
 
-	// まとめるときは WS_EX_TOPMOST 状態を同期する	// 2007.05.18 ryoji
+	// まとめるときは WS_EX_TOPMOST 状態を同期する
 	if (GetDllShareData().common.tabBar.bDispTabWnd
 		&& !GetDllShareData().common.tabBar.bDispTabWndMultiWin
 	) {
@@ -90,13 +78,10 @@ void ViewCommander::Command_ShowTab(void)
 }
 
 
-/*! ステータスバーの表示/非表示
-
-	@date 2006.12.19 ryoji 表示切替は EditWnd::LayoutStatusBar(), EditWnd::EndLayoutBars() で行うように変更
-*/
+/*! ステータスバーの表示/非表示 */
 void ViewCommander::Command_ShowStatusBar(void)
 {
-	auto& editWnd = GetEditWindow();	// Sep. 10, 2002 genta
+	auto& editWnd = GetEditWindow();
 
 	GetDllShareData().common.window.bDispStatusBar = !editWnd.statusBar.GetStatusHwnd();	// ステータスバー表示
 	editWnd.LayoutStatusBar();
@@ -111,13 +96,10 @@ void ViewCommander::Command_ShowStatusBar(void)
 	);
 }
 
-/*! ミニマップの表示/非表示
-
-	@date 2014.07.14 新規作成
-*/
+/*! ミニマップの表示/非表示 */
 void ViewCommander::Command_ShowMiniMap(void)
 {
-	auto& editWnd = GetEditWindow();	//	Sep. 10, 2002 genta
+	auto& editWnd = GetEditWindow();
 
 	GetDllShareData().common.window.bDispMiniMap = (editWnd.GetMiniMap().GetHwnd() == NULL);
 	editWnd.LayoutMiniMap();
@@ -141,7 +123,6 @@ void ViewCommander::Command_Type_List(void)
 	result.documentType = GetDocument().docType.GetDocumentType();
 	result.bTempChange = true;
 	if (dlgTypeList.DoModal(G_AppInstance(), view.GetHwnd(), &result)) {
-		// Nov. 29, 2000 genta
 		// 一時的な設定適用機能を無理矢理追加
 		if (result.bTempChange) {
 			HandleCommand(F_CHANGETYPE, true, (LPARAM)result.documentType.GetIndex() + 1, 0, 0, 0);
@@ -238,8 +219,6 @@ void ViewCommander::Command_Font(void)
 	@param shift フォントサイズを拡大or縮小するための変更量(fontSize=0のとき有効)
 
 	@note TrueTypeのみサポート
-
-	@date 2013.04.10 novice 新規作成
 */
 void ViewCommander::Command_SetFontSize(int fontSize, int shift, int mode)
 {
@@ -328,17 +307,11 @@ void ViewCommander::Command_SetFontSize(int fontSize, int shift, int mode)
 
 /*! 現在のウィンドウ幅で折り返し
 
-	@date 2002.01.14 YAZAKI 現在のウィンドウ幅で折り返されているときは、最大値にするように
-	@date 2002.04.08 YAZAKI ときどきウィンドウ幅で折り返されないことがあるバグ修正。
-	@date 2005.08.14 genta ここでの設定は共通設定に反映しない．
-	@date 2005.10.22 aroka 現在のウィンドウ幅→最大値→文書タイプの初期値 をトグルにする
-
 	@note 変更する順序を変更したときはEditWnd::InitMenu()も変更すること
 	@sa EditWnd::InitMenu()
 */
-void ViewCommander::Command_WrapWindowWidth(void)	// Oct. 7, 2000 JEPRO WRAPWINDIWWIDTH を WRAPWINDOWWIDTH に変更
+void ViewCommander::Command_WrapWindowWidth(void)
 {
-	// Jan. 8, 2006 genta 判定処理をview.GetWrapMode()へ移動
 	EditView::TOGGLE_WRAP_ACTION nWrapMode;
 	int newKetas;
 	
@@ -352,12 +325,6 @@ void ViewCommander::Command_WrapWindowWidth(void)	// Oct. 7, 2000 JEPRO WRAPWIND
 
 	GetEditWindow().ChangeLayoutParam(true, doc.layoutMgr.GetTabSpace(), newKetas);
 	
-	// Aug. 14, 2005 genta 共通設定へは反映させない
-//	view.pTypeData->nMaxLineKetas = nViewColNum;
-
-// 2013.12.30 左隅に移動しないように
-//	view.GetTextArea().SetViewLeftCol(0);		// 表示域の一番左の桁(0開始)
-
 	// フォーカス移動時の再描画
 	view.RedrawAll();
 	return;
@@ -365,10 +332,7 @@ void ViewCommander::Command_WrapWindowWidth(void)	// Oct. 7, 2000 JEPRO WRAPWIND
 
 
 // from ViewCommander_New.cpp
-/*!	履歴の管理(ダイアログ)
-	@author	MIK
-	@date	2003/04/07
-*/
+/*!	履歴の管理(ダイアログ) */
 void ViewCommander::Command_Favorite(void)
 {
 	DlgFavorite	dlgFavorite;
@@ -391,9 +355,6 @@ void ViewCommander::Command_Favorite(void)
 		WRAP_WINDOW_WIDTH  ; 右端で折り返す
 	
 	@note ウィンドウが左右に分割されている場合、左側のウィンドウ幅を折り返し幅とする。
-	
-	@date 2008.05.31 nasukoji	新規作成
-	@date 2009.08.28 nasukoji	テキストの最大幅を算出する
 */
 void ViewCommander::Command_TextWrapMethod(TextWrappingMethod nWrapMethod)
 {
@@ -425,13 +386,13 @@ void ViewCommander::Command_TextWrapMethod(TextWrappingMethod nWrapMethod)
 
 	doc.nTextWrapMethodCur = nWrapMethod;	// 設定を記憶
 
-	// 折り返し方法の一時設定適用／一時設定適用解除	// 2008.06.08 ryoji
+	// 折り返し方法の一時設定適用／一時設定適用解除
 	doc.bTextWrapMethodCurTemp = (doc.docType.GetDocumentAttribute().nTextWrapMethod != nWrapMethod);
 
 	// 折り返し位置を変更
 	GetEditWindow().ChangeLayoutParam(false, doc.layoutMgr.GetTabSpace(), nWidth);
 
-	// 2009.08.28 nasukoji	「折り返さない」ならテキスト最大幅を算出、それ以外は変数をクリア
+	// 「折り返さない」ならテキスト最大幅を算出、それ以外は変数をクリア
 	if (doc.nTextWrapMethodCur == TextWrappingMethod::NoWrapping) {
 		doc.layoutMgr.CalculateTextWidth();		// テキスト最大幅を算出する
 		GetEditWindow().RedrawAllViews(nullptr);	// Scroll Barの更新が必要なので再表示を実行する
@@ -474,9 +435,7 @@ void ViewCommander::Command_Select_Count_Mode(int nMode)
 }
 
 
-/*!	@brief 引用符の設定
-	@date Jan. 29, 2005 genta 新規作成
-*/
+/*!	@brief 引用符の設定 */
 void ViewCommander::Command_Set_QuoteString(const wchar_t* quotestr)
 {
 	if (!quotestr) {

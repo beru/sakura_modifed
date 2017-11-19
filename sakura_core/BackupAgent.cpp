@@ -22,7 +22,6 @@ CallbackResultType BackupAgent::OnPreBeforeSave(SaveInfo* pSaveInfo)
 
 	// 共通設定：保存時にバックアップを作成する
 	if (GetDllShareData().common.backup.bBackUp) {
-		//	Jun.  5, 2004 genta ファイル名を与えるように．戻り値に応じた処理を追加．
 		// ファイル保存前にバックアップ処理
 		int nBackupResult = 0;
 		{
@@ -51,15 +50,6 @@ CallbackResultType BackupAgent::OnPreBeforeSave(SaveInfo* pSaveInfo)
 
 
 /*! バックアップの作成
-	@author genta
-	@date 2001.06.12 asa-o
-		ファイルの時刻を元にバックアップファイル名を作成する機能
-	@date 2001.12.11 MIK バックアップファイルをゴミ箱に入れる機能
-	@date 2004.06.05 genta バックアップ対象ファイルを引数で与えるように．
-		名前を付けて保存の時は自分のバックアップを作っても無意味なので．
-		また，バックアップも保存も行わない選択肢を追加．
-	@date 2005.11.26 aroka ファイル名生成をFormatBackUpPathに分離
-
 	@param target_file [in] バックアップ元パス名
 
 	@retval 0 バックアップ作成失敗．
@@ -74,7 +64,7 @@ int BackupAgent::MakeBackUp(
 )
 {
 	// バックアップソースの存在チェック
-	//	Aug. 21, 2005 genta 書き込みアクセス権がない場合も
+	//	書き込みアクセス権がない場合も
 	//	ファイルがない場合と同様に何もしない
 	if ((_taccess(target_file, 2)) == -1) {
 		return 0;
@@ -94,17 +84,16 @@ int BackupAgent::MakeBackUp(
 		return 2;	// 保存中断
 	}
 
-	//@@@ 2002.03.23 start ネットワーク・リムーバブルドライブの場合はごみ箱に放り込まない
+	// ネットワーク・リムーバブルドライブの場合はごみ箱に放り込まない
 	bool dustflag = false;
 	if (bup_setting.bBackUpDustBox) {
 		dustflag = !IsLocalDrive(szPath);
 	}
-	//@@@ 2002.03.23 end
 
 	if (bup_setting.bBackUpDialog) {	// バックアップの作成前に確認
 		ConfirmBeep();
 		int nRet;
-		if (bup_setting.bBackUpDustBox && !dustflag) {	// 共通設定：バックアップファイルをごみ箱に放り込む	//@@@ 2001.12.11 add start MIK	// 2002.03.23
+		if (bup_setting.bBackUpDustBox && !dustflag) {	// 共通設定：バックアップファイルをごみ箱に放り込む
 			nRet = ::MYMESSAGEBOX(
 				EditWnd::getInstance().GetHwnd(),
 				MB_YESNO/*CANCEL*/ | MB_ICONQUESTION | MB_TOPMOST,
@@ -113,7 +102,7 @@ int BackupAgent::MakeBackUp(
 				target_file,
 				szPath
 			);
-		}else {	//@@@ 2001.12.11 add end MIK
+		}else {
 			nRet = ::MYMESSAGEBOX(
 				EditWnd::getInstance().GetHwnd(),
 				MB_YESNOCANCEL | MB_ICONQUESTION | MB_TOPMOST,
@@ -121,9 +110,8 @@ int BackupAgent::MakeBackUp(
 				LS(STR_BACKUP_CONFORM_MSG2),
 				target_file,
 				szPath
-			);	// Jul. 06, 2001 jepro [名前を付けて保存] の場合もあるのでメッセージを修正
-		}	//@@@ 2001.12.11 add MIK
-		//	Jun.  5, 2005 genta 戻り値変更
+			);
+		}
 		if (nRet == IDNO) {
 			return 0;	//	保存継続
 		}else if (nRet == IDCANCEL) {
@@ -131,8 +119,6 @@ int BackupAgent::MakeBackUp(
 		}
 	}
 
-	//	From Here Aug. 16, 2000 genta
-	//	Jun.  5, 2005 genta 1の拡張子を残す版を追加
 	if (bup_setting.GetBackupType() == 3 ||
 		bup_setting.GetBackupType() == 6
 	) {
@@ -172,7 +158,6 @@ int BackupAgent::MakeBackUp(
 			auto_sprintf(pBase, _T("%02d"), i);
 			if (::DeleteFile(szPath) == 0) {
 				::MessageBox(EditWnd::getInstance().GetHwnd(), szPath, LS(STR_BACKUP_ERR_DELETE), MB_OK);
-				//	Jun.  5, 2005 genta 戻り値変更
 				//	失敗しても保存は継続
 				return 0;
 				//	失敗した場合
@@ -204,10 +189,9 @@ int BackupAgent::MakeBackUp(
 			}
 		}
 	}
-	//	To Here Aug. 16, 2000 genta
 
 	// バックアップの作成
-	//	Aug. 21, 2005 genta 現在のファイルではなくターゲットファイルをバックアップするように
+	//	現在のファイルではなくターゲットファイルをバックアップするように
 	TCHAR	szDrive[_MAX_DIR];
 	TCHAR	szDir[_MAX_DIR];
 	TCHAR	szFname[_MAX_FNAME];
@@ -226,8 +210,7 @@ int BackupAgent::MakeBackUp(
 
 	if (::CopyFile(target_file, szPath, FALSE)) {
 		// 正常終了
-		//@@@ 2001.12.11 start MIK
-		if (bup_setting.bBackUpDustBox && !dustflag) {	//@@@ 2002.03.23 ネットワーク・リムーバブルドライブでない
+		if (bup_setting.bBackUpDustBox && !dustflag) {	// ネットワーク・リムーバブルドライブでない
 			TCHAR	szDustPath[_MAX_PATH + 1];
 			_tcscpy(szDustPath, szPath);
 			szDustPath[_tcslen(szDustPath) + 1] = _T('\0');
@@ -246,20 +229,15 @@ int BackupAgent::MakeBackUp(
 				// エラー終了
 			}
 		}
-		//@@@ 2001.12.11 end MIK
 	}else {
 		// エラー終了
-		//	Jun.  5, 2005 genta 戻り値変更
 		return 3;
 	}
-	//	Jun.  5, 2005 genta 戻り値変更
 	return 1;
 }
 
 
 /*! バックアップパスの作成
-
-	@author aroka
 
 	@param szNewPath [out] バックアップ先パス名
 	@param newPathCount [in] szNewPathのサイズ
@@ -267,10 +245,6 @@ int BackupAgent::MakeBackUp(
 
 	@retval true  成功
 	@retval false バッファ不足
-
-	@date 2005.11.29 aroka
-		MakeBackUpから分離．書式を元にバックアップファイル名を作成する機能追加
-	@date 2013.04.15 novice 指定フォルダのメタ文字列展開サポート
 
 	@todo Advanced modeでの世代管理
 */
@@ -293,7 +267,7 @@ bool BackupAgent::FormatBackUpPath(
 
 	if (bup_setting.bBackUpFolder
 	  && (!bup_setting.bBackUpFolderRM || !IsLocalDrive(target_file))
-	) {	// 指定フォルダにバックアップを作成する	// bBackUpFolderRM 追加	2010/5/27 Uchi
+	) {	// 指定フォルダにバックアップを作成する
 		TCHAR selDir[_MAX_PATH];
 		FileNameManager::ExpandMetaToFolder(bup_setting.szBackUpFolder, selDir, _countof(selDir));
 		if (GetFullPathName(selDir, _MAX_PATH, szNewPath, &psNext) == 0) {
@@ -324,7 +298,7 @@ bool BackupAgent::FormatBackUpPath(
 				return false;
 			}
 			break;
-		case 5: //	Jun.  5, 2005 genta 1の拡張子を残す版
+		case 5:
 			if (auto_snprintf_s(pBase, nBaseCount, _T("%ts%ts.bak"), szFname, szExt) == -1) {
 				return false;
 			}
@@ -360,7 +334,7 @@ bool BackupAgent::FormatBackUpPath(
 				return false;
 			}
 			break;
-		//	2001/06/12 Start by asa-o: ファイルに付ける日付を前回の保存時(更新日時)にする
+		// ファイルに付ける日付を前回の保存時(更新日時)にする
 		case 4:	//	日付，時刻
 			{
 				FileTime ctimeLastWrite;
@@ -390,15 +364,13 @@ bool BackupAgent::FormatBackUpPath(
 				}
 			}
 			break;
-	// 2001/06/12 End
 
 		case 3: //	?xx : xx = 00~99, ?は任意の文字
 		case 6: //	Jun.  5, 2005 genta 3の拡張子を残す版
-			//	Aug. 15, 2000 genta
 			//	ここでは作成するバックアップファイル名のみ生成する．
 			//	ファイル名のRotationは確認ダイアログの後で行う．
 			{
-				//	Jun.  5, 2005 genta 拡張子を残せるように処理起点を操作する
+				// 拡張子を残せるように処理起点を操作する
 				TCHAR* ptr;
 				if (bup_setting.GetBackupType() == 3) {
 					ptr = szExt;
@@ -422,7 +394,6 @@ bool BackupAgent::FormatBackUpPath(
 		switch (bup_setting.GetBackupTypeAdv()) {
 		case 4:	//	ファイルの日付，時刻
 			{
-				// 2005.10.20 ryoji FindFirstFileを使うように変更
 				FileTime ctimeLastWrite;
 				GetLastWriteTimestamp(target_file, &ctimeLastWrite);
 				if (!GetDateTimeFormat(szFormat, _countof(szFormat), bup_setting.szBackUpPathAdvanced , ctimeLastWrite.GetSYSTEMTIME())) {
@@ -433,7 +404,7 @@ bool BackupAgent::FormatBackUpPath(
 		case 2:	//	現在の日付，時刻
 		default:
 			{
-				// 2012.12.26 aroka	詳細設定のファイル保存日時と現在時刻で書式を合わせる
+				// 詳細設定のファイル保存日時と現在時刻で書式を合わせる
 				SYSTEMTIME	SystemTime;
 				::GetSystemTime(&SystemTime);			// 現在時刻を取得
 
@@ -453,7 +424,6 @@ bool BackupAgent::FormatBackUpPath(
 
 			TCHAR* folders[10];
 			{
-				//	Jan. 9, 2006 genta VC6対策
 				int idx;
 				for (idx=0; idx<10; ++idx) {
 					folders[idx] = 0;
@@ -504,7 +474,6 @@ bool BackupAgent::FormatBackUpPath(
 		{
 			TCHAR temp[1024];
 			TCHAR* cp;
-			//	2006.03.25 Aroka szExt[0] == '\0'のときのオーバラン問題を修正
 			TCHAR* ep = (szExt[0] != 0) ? &szExt[1] : &szExt[0];
 			assert(newPathCount <= _countof(temp));
 

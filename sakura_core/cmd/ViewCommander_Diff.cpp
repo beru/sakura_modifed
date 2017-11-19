@@ -98,7 +98,7 @@ void ViewCommander::Command_Compare(void)
 	HWND		hwndCompareWnd = NULL;
 	TCHAR		szPath[_MAX_PATH + 1];
 	DlgCompare	dlgCompare;
-	HWND		hwndMsgBox;	//@@@ 2003.06.12 MIK
+	HWND		hwndMsgBox;
 	auto& commonSetting = GetDllShareData().common;
 	auto& csCompare = commonSetting.compare;
 	// 比較後、左右に並べて表示
@@ -117,7 +117,7 @@ void ViewCommander::Command_Compare(void)
 	// 比較後、左右に並べて表示
 	csCompare.bCompareAndTileHorz = dlgCompare.bCompareAndTileHorz;
 
-	// タブウィンドウ時は禁止	//@@@ 2003.06.12 MIK
+	// タブウィンドウ時は禁止
 	if (commonSetting.tabBar.bDispTabWnd
 		&& !commonSetting.tabBar.bDispTabWndMultiWin
 	) {
@@ -147,7 +147,7 @@ void ViewCommander::Command_Compare(void)
 	Commander_COMPARE_core(*this, bDifferent, hwndCompareWnd, poSrc, poDes);
 
 	// 比較後、左右に並べて表示
-// From Here Oct. 10, 2000 JEPRO	チェックボックスをボタン化すれば以下の行(To Here まで)は不要のはずだが
+// チェックボックスをボタン化すれば以下の行(To Here まで)は不要のはずだが
 // うまくいかなかったので元に戻してある…
 	if (GetDllShareData().common.compare.bCompareAndTileHorz) {
 		HWND hWndArr[2];
@@ -158,24 +158,22 @@ void ViewCommander::Command_Compare(void)
 				::ShowWindow( hWndArr[i], SW_RESTORE );
 			}
 		}
-		// デスクトップサイズを得る 2002.1.24 YAZAKI
+		// デスクトップサイズを得る
 		RECT rcDesktop;
-		// May 01, 2004 genta マルチモニタ対応
+		// マルチモニタ対応
 		::GetMonitorWorkRect( hWndArr[0], &rcDesktop );
 		int width = (rcDesktop.right - rcDesktop.left) / 2;
 		for (int i=1; i>=0; --i) {
 			::SetWindowPos(
 				hWndArr[i], 0,
-				width * i + rcDesktop.left, rcDesktop.top, // Oct. 18, 2003 genta タスクバーが左にある場合を考慮
+				width * i + rcDesktop.left, rcDesktop.top, // タスクバーが左にある場合を考慮
 				width, rcDesktop.bottom - rcDesktop.top,
 				SWP_NOOWNERZORDER | SWP_NOZORDER
 			);
 		}
 //		::TileWindows( NULL, MDITILE_VERTICAL, NULL, 2, phwndArr );
 	}
-// To Here Oct. 10, 2000
 
-	// 2002/05/11 YAZAKI 親ウィンドウをうまく設定してみる。
 	if (!bDifferent) {
 		TopInfoMessage(hwndMsgBox, LS(STR_ERR_CEDITVIEW_CMD22));
 	}else {
@@ -189,7 +187,7 @@ void ViewCommander::Command_Compare(void)
 		// カーソルを移動させる
 		GetDllShareData().workBuffer.logicPoint = poSrc;
 		::PostMessage(GetMainWindow(), MYWM_SETCARETPOS, 0, 0);
-		TopWarningMessage(hwndMsgBox, LS(STR_ERR_CEDITVIEW_CMD23));	// 位置を変更してからメッセージ	2008/4/27 Uchi
+		TopWarningMessage(hwndMsgBox, LS(STR_ERR_CEDITVIEW_CMD23));	// 位置を変更してからメッセージ
 	}
 
 	// 開いているウィンドウをアクティブにする
@@ -221,8 +219,6 @@ EncodingType GetDiffCreateTempFileCode(EncodingType code)
 
 /*!	差分表示
 	@note	HandleCommandからの呼び出し対応(ダイアログなし版)
-	@author	maru
-	@date	2005/10/28 これまでのCommand_Diffはview.ViewDiffInfoに名称変更
 */
 void ViewCommander::Command_Diff(const wchar_t* _szDiffFile2, int nFlgOpt)
 {
@@ -238,12 +234,12 @@ void ViewCommander::Command_Diff(const wchar_t* _szDiffFile2, int nFlgOpt)
 	}
 
 	// 自ファイル
-	// 2013.06.21 Unicodeのときは、いつもファイル出力
+	// Unicodeのときは、いつもファイル出力
 	EncodingType code = GetDocument().GetDocumentEncoding();
 	EncodingType saveCode = GetDiffCreateTempFileCode(code);
 	EncodingType code2 = GetFileCharCode(szDiffFile2);
 	EncodingType saveCode2 = GetDiffCreateTempFileCode(code2);
-	// 2014.10.24 コードが違うときは必ずUTF-8ファイル出力
+	// コードが違うときは必ずUTF-8ファイル出力
 	if (saveCode != saveCode2) {
 		saveCode = CODE_UTF8;
 		saveCode2 = CODE_UTF8;
@@ -251,7 +247,7 @@ void ViewCommander::Command_Diff(const wchar_t* _szDiffFile2, int nFlgOpt)
 
 	if (GetDocument().docEditor.IsModified()
 		|| saveCode != code
-		|| !GetDocument().docFile.GetFilePathClass().IsValidPath() // 2014.06.25 Grep/アウトプットも対象にする
+		|| !GetDocument().docFile.GetFilePathClass().IsValidPath() // Grep/アウトプットも対象にする
 	) {
 		if (!view.MakeDiffTmpFile(szTmpFile1, NULL, saveCode, GetDocument().GetDocumentBomExist())) {
 			return;
@@ -291,10 +287,6 @@ void ViewCommander::Command_Diff(const wchar_t* _szDiffFile2, int nFlgOpt)
 
 /*!	差分表示
 	@note	HandleCommandからの呼び出し対応(ダイアログあり版)
-	@author	MIK
-	@date	2002/05/25
-	@date	2002/11/09 編集中ファイルを許可
-	@date	2005/10/29 maru 一時ファイル作成処理をview.MakeDiffTmpFileへ移動
 */
 void ViewCommander::Command_Diff_Dialog(void)
 {
@@ -326,14 +318,14 @@ void ViewCommander::Command_Diff_Dialog(void)
 		}
 	}
 	EncodingType saveCode2 = GetDiffCreateTempFileCode(code2);
-	// 2014.10.24 コードが違うときは必ずUTF-8ファイル出力
+	// コードが違うときは必ずUTF-8ファイル出力
 	if (saveCode != saveCode2) {
 		saveCode = CODE_UTF8;
 		saveCode2 = CODE_UTF8;
 	}
 	if (GetDocument().docEditor.IsModified()
 		|| code != saveCode
-		|| !GetDocument().docFile.GetFilePathClass().IsValidPath() // 2014.06.25 Grep/アウトプットも対象にする
+		|| !GetDocument().docFile.GetFilePathClass().IsValidPath() // Grep/アウトプットも対象にする
 	) {
 		if (!view.MakeDiffTmpFile( szTmpFile1, NULL, saveCode, GetDocument().GetDocumentBomExist() )) { return; }
 		bTmpFile1 = true;
@@ -344,7 +336,7 @@ void ViewCommander::Command_Diff_Dialog(void)
 	// 相手ファイル
 	// UNICODE,UNICODEBEの場合は常に一時ファイルでUTF-8にする
 	TCHAR szTmpFile2[_MAX_PATH * 2];
-	// 2014.06.25 ファイル名がない(=無題,Grep,アウトプット)もTmpFileModeにする
+	// ファイル名がない(=無題,Grep,アウトプット)もTmpFileModeにする
 	bool bTmpFileMode = dlgDiff.bIsModifiedDst || code2 != saveCode2 || dlgDiff.szFile2[0] == _T('\0');
 	if (!bTmpFileMode) {
 		// 未変更でファイルありでASCII系コードの場合のみ,そのままファイルを利用する
@@ -477,7 +469,6 @@ re_do:;
 	if (GetDllShareData().common.search.bSearchAll) {
 		// 見つからなかった、かつ、最初の検索
 		if (!bFound	&& bRedo) {
-			// 2011.02.02 layoutMgr→docLineMgr
 			ptXY.y = (int)GetDocument().docLineMgr.GetLineCount();	// 1個手前を指定
 			bRedo = false;
 			goto re_do;	// 末尾から再検索
@@ -495,10 +486,7 @@ re_do:;
 }
 
 
-/*!	差分表示の全解除
-	@author	MIK
-	@date	2002/05/26
-*/
+/*!	差分表示の全解除 */
 void ViewCommander::Command_Diff_Reset(void)
 {
 	DiffLineMgr(GetDocument().docLineMgr).ResetAllDiffMark();

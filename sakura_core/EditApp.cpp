@@ -74,7 +74,7 @@ bool EditApp::OpenPropertySheet(int nPageNum)
 	// プロパティシートの作成
 	bool bRet = pPropertyManager->OpenPropertySheet(pEditWnd->GetHwnd(), nPageNum, false);
 	if (bRet) {
-		// 2007.10.19 genta マクロ登録変更を反映するため，読み込み済みのマクロを破棄する
+		// マクロ登録変更を反映するため，読み込み済みのマクロを破棄する
 		pSMacroMgr->UnloadAll();
 	}
 	return bRet;

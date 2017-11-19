@@ -4,10 +4,7 @@
 
 // ViewCommanderクラスのコマンド(モード切り替え系)関数群
 
-/*! 挿入／上書きモード切り替え
-
-	@date 2005.10.02 genta InsMode関数化
-*/
+/*! 挿入／上書きモード切り替え */
 void ViewCommander::Command_ChgMod_Ins(void)
 {
 	// 挿入モードか？
@@ -19,12 +16,7 @@ void ViewCommander::Command_ChgMod_Ins(void)
 }
 
 
-// from ViewCommander_New.cpp
-/*! 入力する改行コードを設定
-
-	@author moca
-	@date 2003.06.23 新規作成
-*/
+/*! 入力する改行コードを設定 */
 void ViewCommander::Command_ChgMod_EOL(EolType e)
 {
 	if (EolType::None < e && e < EolType::CodeMax) {
@@ -83,7 +75,7 @@ void ViewCommander::Command_Cancel_Mode(int whereCursorIs)
 				GetSelect().GetFrom(),	// 範囲選択開始
 				GetSelect().GetTo()		// 範囲選択終了
 			);
-			// 2013.04.22 Moca 左上固定はやめる
+			// 左上固定はやめる
 			rcMoveTo = rcSel;
 		}
 		if (whereCursorIs == 1) { // 左上
@@ -104,7 +96,7 @@ void ViewCommander::Command_Cancel_Mode(int whereCursorIs)
 			Command_GoFileEnd(false);
 		}else {
 			if (!GetDllShareData().common.general.bIsFreeCursorMode && bBoxSelect) {
-				// 2013.04.22 Moca 矩形選択のとき左上固定をやめたので代わりにEOLより右だった場合にEOLに補正する
+				// 矩形選択のとき左上固定をやめたので代わりにEOLより右だった場合にEOLに補正する
 				const Layout* pLayout = layoutMgr.SearchLineByLayoutY(ptTo.y);
 				if (pLayout) {
 					ptTo.x = t_min((int)ptTo.x, (int)pLayout->CalcLayoutWidth(layoutMgr));
@@ -115,7 +107,7 @@ void ViewCommander::Command_Cancel_Mode(int whereCursorIs)
 			caret.nCaretPosX_Prev = caret.GetCaretLayoutPos().x;
 		}
 	}else {
-		// 2011.12.05 Moca 選択中の未選択状態でもLockの解除と描画が必要
+		// 選択中の未選択状態でもLockの解除と描画が必要
 		if (selInfo.IsTextSelecting()
 			|| selInfo.IsBoxSelecting()
 		) {

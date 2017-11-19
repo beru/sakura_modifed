@@ -5,7 +5,7 @@
 #include "_main/ControlTray.h"
 #include "uiparts/WaitCursor.h"
 #include "dlg/DlgProperty.h"
-#include "dlg/DlgCancel.h"// 2002/2/8 hor
+#include "dlg/DlgCancel.h"
 #include "dlg/DlgProfileMgr.h"
 #include "doc/DocReader.h"	//  Command_Property_File for _DEBUG
 #include "print/PrintPreview.h"
@@ -68,11 +68,7 @@ void ViewCommander::Command_FileNew_NewWindow(void)
 }
 
 
-/*! @brief ファイルを開く
-
-	@date 2003.03.30 genta 「閉じて開く」から利用するために引数追加
-	@date 2004.10.09 genta 実装をEditDocへ移動
-*/
+/*! @brief ファイルを開く */
 void ViewCommander::Command_FileOpen(
 	const wchar_t* filename,
 	EncodingType nCharCode,
@@ -141,10 +137,6 @@ void ViewCommander::Command_FileOpen(
 	F_FILESAVEALLとの組み合わせのみで使われるコマンド．
 	@param warnbeep [in] true: 保存不要 or 保存禁止のときに警告を出す
 	@param askname	[in] true: ファイル名未設定の時に入力を促す
-
-	@date 2004.02.28 genta 引数warnbeep追加
-	@date 2005.01.24 genta 引数askname追加
-
 */
 bool ViewCommander::Command_FileSave(bool warnbeep, bool askname)
 {
@@ -203,8 +195,6 @@ bool ViewCommander::Command_FileSaveAs(
 	ただし，上書き保存の指示を出すのみで実行結果の確認は行わない．
 
 	上書き禁止及びファイル名未設定のウィンドウでは何も行わない．
-
-	@date 2005.01.24 genta 新規作成
 */
 bool ViewCommander::Command_FileSaveAll(void)
 {
@@ -218,18 +208,14 @@ bool ViewCommander::Command_FileSaveAll(void)
 }
 
 
-// 閉じて(無題)	// Oct. 17, 2000 jepro 「ファイルを閉じる」というキャプションを変更
+// 閉じて(無題)
 void ViewCommander::Command_FileClose(void)
 {
 	GetDocument().docFileOperation.FileClose();
 }
 
 
-/*! @brief 閉じて開く
-
-	@date 2003.03.30 genta 開くダイアログでキャンセルしたとき元のファイルが残るように。
-				ついでにFILEOPENと同じように引数を追加しておく
-*/
+/*! @brief 閉じて開く */
 void ViewCommander::Command_FileClose_Open(
 	LPCWSTR filename,
 	EncodingType nCharCode,
@@ -304,7 +290,6 @@ void ViewCommander::Command_Print_PageSetUp(void)
 }
 
 
-// From Here Feb. 10, 2001 JEPRO 追加
 // C/C++ヘッダファイルまたはソースファイル オープン機能
 bool ViewCommander::Command_Open_HfromtoC(bool bCheckOnly)
 {
@@ -312,16 +297,13 @@ bool ViewCommander::Command_Open_HfromtoC(bool bCheckOnly)
 	if (Command_Open_CCPP(bCheckOnly, false))	return true;
 	ErrorBeep();
 	return false;
-// 2002/03/24 YAZAKI コードの重複を削減
-// 2003.06.28 Moca コメントとして残っていたコードを削除
 }
 
 
-// C/C++ヘッダファイル オープン機能		// Feb. 10, 2001 jepro	説明を「インクルードファイル」から変更
+// C/C++ヘッダファイル オープン機能
 //BOOL ViewCommander::Command_OPENINCLUDEFILE(bool bCheckOnly)
 bool ViewCommander::Command_Open_HHPP(bool bCheckOnly, bool bBeepWhenMiss)
 {
-	// 2003.06.28 Moca ヘッダ・ソースのコードを統合＆削除
 	static const TCHAR* source_ext[] = { _T("c"), _T("cpp"), _T("cxx"), _T("cc"), _T("cp"), _T("c++") };
 	static const TCHAR* header_ext[] = { _T("h"), _T("hpp"), _T("hxx"), _T("hh"), _T("hp"), _T("h++") };
 	return view.OPEN_ExtFromtoExt(
@@ -332,10 +314,8 @@ bool ViewCommander::Command_Open_HHPP(bool bCheckOnly, bool bBeepWhenMiss)
 
 
 // C/C++ソースファイル オープン機能
-//BOOL ViewCommander::Command_OPENCCPP(bool bCheckOnly)	//Feb. 10, 2001 JEPRO	コマンド名を若干変更
 bool ViewCommander::Command_Open_CCPP(bool bCheckOnly, bool bBeepWhenMiss)
 {
-	// 2003.06.28 Moca ヘッダ・ソースのコードを統合＆削除
 	static const TCHAR* source_ext[] = { _T("c"), _T("cpp"), _T("cxx"), _T("cc"), _T("cp"), _T("c++") };
 	static const TCHAR* header_ext[] = { _T("h"), _T("hpp"), _T("hxx"), _T("hh"), _T("hp"), _T("h++") };
 	return view.OPEN_ExtFromtoExt(
@@ -405,7 +385,6 @@ void ViewCommander::Command_PLSQL_Compile_On_SQLPlus(void)
 	}
 	if (GetDocument().docFile.GetFilePathClass().IsValidPath()) {
 		// ファイルパスに空白が含まれている場合はダブルクォーテーションで囲む
-		// 2003.10.20 MIK コード簡略化
 		if (_tcschr(GetDocument().docFile.GetFilePath(), TCODE::SPACE) != NULL) {
 			auto_sprintf( szPath, _T("@\"%ts\"\r\n"), GetDocument().docFile.GetFilePath() );
 		}else {
@@ -542,7 +521,7 @@ void ViewCommander::Command_ProfileMgr( void )
 	}
 }
 
-// 編集の全終了	// 2007.02.13 ryoji 追加
+// 編集の全終了
 void ViewCommander::Command_ExitAllEditors(void)
 {
 	ControlTray::CloseAllEditor(true, GetMainWindow(), true, 0);
@@ -550,10 +529,10 @@ void ViewCommander::Command_ExitAllEditors(void)
 }
 
 
-// サクラエディタの全終了	// Dec. 27, 2000 JEPRO 追加
+// サクラエディタの全終了
 void ViewCommander::Command_ExitAll(void)
 {
-	ControlTray::TerminateApplication(GetMainWindow());	// 2006.12.25 ryoji 引数追加
+	ControlTray::TerminateApplication(GetMainWindow());
 	return;
 }
 
@@ -565,9 +544,6 @@ void ViewCommander::Command_ExitAll(void)
 
 	@retval	true 正常終了
 	@retval	false ファイル作成に失敗
-
-	@author	maru
-	@date	2006.12.10 maru 新規作成
 */
 bool ViewCommander::Command_PutFile(
 	LPCWSTR			filename,	// [in] filename 出力ファイル名
@@ -588,7 +564,7 @@ bool ViewCommander::Command_PutFile(
 		nSaveCharCode = GetDocument().GetDocumentEncoding();
 	}
 
-	// 2007.09.08 genta EditDoc::FileWrite()にならって砂時計カーソル
+	// EditDoc::FileWrite()にならって砂時計カーソル
 	WaitCursor waitCursor(view.GetHwnd());
 
 	std::unique_ptr<CodeBase> pcSaveCode(CodeFactory::CreateCodeBase(nSaveCharCode, 0));
@@ -681,9 +657,6 @@ bool ViewCommander::Command_PutFile(
 
 	@retval	true 正常終了
 	@retval	false ファイルオープンに失敗
-
-	@author	maru
-	@date	2006.12.10 maru 新規作成
 */
 bool ViewCommander::Command_InsFile(
 	LPCWSTR filename,
@@ -705,10 +678,10 @@ bool ViewCommander::Command_InsFile(
 		return false;
 	}
 
-	// 2007.09.08 genta EditDoc::FileLoad()にならって砂時計カーソル
+	// EditDoc::FileLoad()にならって砂時計カーソル
 	WaitCursor waitCursor(view.GetHwnd());
 
-	// 範囲選択中なら挿入後も選択状態にするため	// 2007.04.29 maru
+	// 範囲選択中なら挿入後も選択状態にするため
 	bool bBeforeTextSelected = view.GetSelectionInfo().IsTextSelected();
 	Point ptFrom;
 	if (bBeforeTextSelected) {

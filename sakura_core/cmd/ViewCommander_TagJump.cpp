@@ -3,9 +3,9 @@
 #include "ViewCommander_inline.h"
 
 #include "uiparts/WaitCursor.h"
-#include "dlg/DlgCancel.h"// 2002/2/8 hor
+#include "dlg/DlgCancel.h"
 #include "dlg/DlgTagJumpList.h"
-#include "dlg/DlgTagsMake.h"	//@@@ 2003.05.12 MIK
+#include "dlg/DlgTagsMake.h"
 #include "EditApp.h"
 #include "_os/OsVersionInfo.h"
 #include "util/window.h"
@@ -49,14 +49,10 @@ bool IsFileExists2(const wchar_t* pszFile)
 /*! タグジャンプ
 
 	@param bClose [in] true:元ウィンドウを閉じる
-
-	@date 2003.04.03 genta 元ウィンドウを閉じるかどうかの引数を追加
-	@date 2004.05.13 Moca 行桁位置の指定が無い場合は、行桁を移動しない
-	@date 2011.11.24 Moca Grepフォルダ毎表示対応
 */
 bool ViewCommander::Command_TagJump(bool bClose)
 {
-	// 2004.05.13 Moca 初期値を1ではなく元の位置を継承するように
+	// 初期値を1ではなく元の位置を継承するように
 	// 0以下は未指定扱い。(1開始)
 	int			nJumpToLine;
 	int			nJumpToColumn;
@@ -281,11 +277,9 @@ bool ViewCommander::Command_TagJump(bool bClose)
 		if (!pLine) {
 			goto can_not_tagjump;
 		}
-		//@@@ 2001.12.31 YAZAKI
 		const wchar_t* p = pLine;
 		const wchar_t* p_end = p + nLineLen;
 
-		// From Here Aug. 27, 2001 genta
 		// Borland 形式のメッセージからのTAG JUMP
 		while (p < p_end) {
 			// skip space
@@ -300,31 +294,27 @@ bool ViewCommander::Command_TagJump(bool bClose)
 				GetLineColumn(&p[nBgn + nPathLen], &nJumpToLine, &nJumpToColumn);
 				break;
 			}
-			// Jan. 04, 2001 genta Directoryを対象外にしたので文字列には柔軟に対応
-			// break;	//@@@ 2001.12.31 YAZAKI 「working ...」問題に対処
 			// skip non-space
 			for (; p < p_end && (*p != L' ' && *p != L'\t'); ++p)
 				;
 		}
 	}
 	
-	// 2011.11.29 Grep形式で失敗した後もTagsを検索する
+	// Grep形式で失敗した後もTagsを検索する
 	if (szJumpToFile[0] == L'\0') {
-		if (Command_TagJumpByTagsFile(bClose)) {	//@@@ 2003.04.13
+		if (Command_TagJumpByTagsFile(bClose)) {
 			return true;
 		}
-		// From Here Aug. 27, 2001 genta
 	}
 
-	// Apr. 21, 2003 genta bClose追加
 	if (szJumpToFile[0]) {
-		if (view.TagJumpSub(to_tchar(szJumpToFile), Point(nJumpToColumn, nJumpToLine), bClose)) {	//@@@ 2003.04.13
+		if (view.TagJumpSub(to_tchar(szJumpToFile), Point(nJumpToColumn, nJumpToLine), bClose)) {
 			return true;
 		}
 	}
 
 can_not_tagjump:;
-	view.SendStatusMessage(LS(STR_ERR_TAGJMP1));	//@@@ 2003.04.13
+	view.SendStatusMessage(LS(STR_ERR_TAGJMP1));
 	return false;
 }
 
@@ -332,14 +322,11 @@ can_not_tagjump:;
 // タグジャンプバック
 void ViewCommander::Command_TagJumpBack(void)
 {
-// 2004/06/21 novice タグジャンプ機能追加
 	TagJump tagJump;
 
 	// タグジャンプ情報の参照
 	if (!TagJumpManager().PopTagJump(&tagJump) || !IsSakuraMainWindow(tagJump.hwndReferer)) {
 		view.SendStatusMessage(LS(STR_ERR_TAGJMPBK1));
-		// 2004.07.10 Moca tagJumpNumを0にしなくてもいいと思う
-		// GetDllShareData().tagJumpNum = 0;
 		return;
 	}
 
@@ -356,11 +343,6 @@ void ViewCommander::Command_TagJumpBack(void)
 
 /*
 	タグファイルを作成する。
-
-	@author	MIK
-	@date	2003.04.13	新規作成
-	@date	2003.05.12	ダイアログ表示でフォルダ等を細かく指定できるようにした。
-	@date 2008.05.05 novice GetModuleHandle(NULL)→NULLに変更
 */
 bool ViewCommander::Command_TagsMake(void)
 {
@@ -372,7 +354,7 @@ bool ViewCommander::Command_TagsMake(void)
 		_tcscpy_s(szTargetPath, docFile.GetFilePath());
 		szTargetPath[_tcslen(szTargetPath) - _tcslen(docFile.GetFileName())] = _T('\0');
 	}else {
-		// 20100722 Moca サクラのフォルダからカレントディレクトリに変更
+		// サクラのフォルダからカレントディレクトリに変更
 		::GetCurrentDirectory(_countof(szTargetPath), szTargetPath);
 	}
 
@@ -426,8 +408,6 @@ bool ViewCommander::Command_TagsMake(void)
 	sui.hStdOutput  = hStdOutWrite;
 	sui.hStdError   = hStdOutWrite;
 
-	// To Here Dec. 28, 2002 MIK
-
 	TCHAR	options[1024];
 	_tcscpy(options, _T("--excmd=n"));	// デフォルトのオプション
 	if (dlgTagsMake.nTagsOpt & 0x0001) _tcscat(options, _T(" -R"));	// サブフォルダも対象
@@ -439,10 +419,10 @@ bool ViewCommander::Command_TagsMake(void)
 
 	// コマンドライン文字列作成(MAX:1024)
 	if (IsWin32NT()) {
-		// 2010.08.28 Moca システムディレクトリ付加
+		// システムディレクトリ付加
 		TCHAR szCmdDir[_MAX_PATH];
 		::GetSystemDirectory(szCmdDir, _countof(szCmdDir));
-		// 2006.08.04 genta add /D to disable autorun
+		// add /D to disable autorun
 		auto_sprintf(
 			cmdline,
 			_T("\"%ts\\cmd.exe\" /D /C \"\"%ts\\%ts\" %ts\""),
@@ -452,7 +432,7 @@ bool ViewCommander::Command_TagsMake(void)
 			options			// ctagsオプション
 		);
 	}else {
-		// 2010.08.28 Moca システムディレクトリ付加
+		// 2010システムディレクトリ付加
 		TCHAR szCmdDir[_MAX_PATH];
 		::GetWindowsDirectory(szCmdDir, _countof(szCmdDir));
 		auto_sprintf(
@@ -487,9 +467,7 @@ bool ViewCommander::Command_TagsMake(void)
 
 		// 実行結果の取り込み
 		do {
-			// Jun. 04, 2003 genta CPU消費を減らすために200msec待つ
-			// その間メッセージ処理が滞らないように待ち方をWaitForSingleObjectから
-			// MsgWaitForMultipleObjectに変更
+			// CPU消費を減らすために200msec待つ
 			switch (MsgWaitForMultipleObjects(1, &pi.hProcess, FALSE, 200, QS_ALLEVENTS)) {
 			case WAIT_OBJECT_0:
 				// 終了していればループフラグをFALSEとする
@@ -524,7 +502,6 @@ bool ViewCommander::Command_TagsMake(void)
 					if (read_cnt == 0) {
 						continue;
 					}else {
-						// 2003.11.09 じゅうじ
 						// 正常終了の時はメッセージが出力されないので
 						// 何か出力されたらエラーメッセージと見なす．
 					
@@ -536,8 +513,8 @@ bool ViewCommander::Command_TagsMake(void)
 
 						dlgCancel.CloseDialog(TRUE);
 
-						work[read_cnt] = L'\0';	// Nov. 15, 2003 genta 表示用に0終端する
-						WarningMessage(view.GetHwnd(), LS(STR_ERR_CEDITVIEW_CMD06), work); // 2003.11.09 じゅうじ
+						work[read_cnt] = L'\0';	// 表示用に0終端する
+						WarningMessage(view.GetHwnd(), LS(STR_ERR_CEDITVIEW_CMD06), work);
 
 						return true;
 					}
@@ -566,8 +543,6 @@ finish:
 
 /*
 	ダイレクトタグジャンプ(メッセージ付)
-
-	@date	2010.07.22	新規作成
 */
 bool ViewCommander::Command_TagJumpByTagsFileMsg(bool bMsg)
 {
@@ -581,11 +556,6 @@ bool ViewCommander::Command_TagJumpByTagsFileMsg(bool bMsg)
 
 /*
 	ダイレクトタグジャンプ
-
-	@author	MIK
-	@date	2003.04.13	新規作成
-	@date	2003.05.12	フォルダ階層も考慮して探す
-	@date	
 */
 bool ViewCommander::Command_TagJumpByTagsFile(bool bClose)
 {
@@ -616,7 +586,6 @@ bool ViewCommander::Command_TagJumpByTagsFile(bool bClose)
 
 	// タグジャンプする。
 	if (0 < nMatchAll) {
-		//@@ 2005.03.31 MIK 階層パラメータ追加
 		TCHAR fileName[1024];
 		int   fileLine;
 
@@ -633,9 +602,6 @@ bool ViewCommander::Command_TagJumpByTagsFile(bool bClose)
 /*!
 	キーワードを指定してタグジャンプ(ダイアログ)
 	@param keyword NULL許容
-	@author MIK
-	@date 2005.03.31 新規作成
-	@date 2010.04.02 Moca 無題でも使えるように
 */
 bool ViewCommander::Command_TagJumpByTagsFileKeyword(const wchar_t* keyword)
 {
@@ -677,7 +643,6 @@ bool ViewCommander::Sub_PreProcTagJumpByTagsFile(TCHAR* szCurrentPath, size_t co
 	// 実行可能確認
 	auto& docFile = GetDocument().docFile;
 	if (! docFile.GetFilePathClass().IsValidPath()) {
-		// 2010.04.02 (無題)でもタグジャンプできるように
 		// Grep、アウトプットは行番号タグジャンプがあるので無効にする(要検討)
 		if (
 			EditApp::getInstance().pGrepAgent->bGrepMode

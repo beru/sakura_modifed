@@ -220,7 +220,6 @@ void ViewCommander::Command_LineDeleteToStart(void)
 	}
 
 	// 選択範囲の変更
-	// 2005.06.24 Moca
 	Range range(ptPos, caret.GetCaretLayoutPos());
 	selInfo.SetSelectArea(range);
 
@@ -273,7 +272,6 @@ void ViewCommander::Command_LineDeleteToEnd(void)
 	}
 
 	// 選択範囲の変更
-	// 2005.06.24 Moca
 	Range range(caretLayoutPos, ptPos);
 	selInfo.SetSelectArea(range);
 
@@ -302,7 +300,7 @@ void ViewCommander::Command_Cut_Line(void)
 		return;
 	}
 
-	// 2007.10.04 ryoji 処理簡素化
+	// 処理簡素化
 	view.CopyCurLine(
 		GetDllShareData().common.edit.bAddCRLFWhenCopy,
 		EolType::Unknown,
@@ -340,7 +338,6 @@ void ViewCommander::Command_Delete_Line(void)
 	Command_Delete();
 	pLayout = GetDocument().layoutMgr.SearchLineByLayoutY(caret.GetCaretLayoutPos().y);
 	if (pLayout) {
-		// 2003-04-30 かろと
 		// 行削除した後、フリーカーソルでないのにカーソル位置が行端より右になる不具合対応
 		// フリーカーソルモードでない場合は、カーソル位置を調整する
 		if (!GetDllShareData().common.general.bIsFreeCursorMode) {

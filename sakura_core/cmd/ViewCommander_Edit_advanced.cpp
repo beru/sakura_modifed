@@ -3,14 +3,14 @@
 #include "ViewCommander_inline.h"
 
 #include "uiparts/WaitCursor.h"
-#include "mem/MemoryIterator.h"	// @@@ 2002.09.28 YAZAKI
+#include "mem/MemoryIterator.h"
 #include "_os/OsVersionInfo.h"
 
 // ViewCommanderクラスのコマンド(編集系 高度な操作(除単語/行操作))関数群
 
-using namespace std; // 2002/2/3 aroka to here
+using namespace std;
 
-#ifndef FID_RECONVERT_VERSION  // 2002.04.10 minfu 
+#ifndef FID_RECONVERT_VERSION
 #define FID_RECONVERT_VERSION 0x10000000
 #endif
 #ifndef SCS_CAP_SETRECONVERTSTRING
@@ -26,9 +26,7 @@ void ViewCommander::Command_Indent(wchar_t wcChar, IndentType eIndent)
 
 	auto& selInfo = view.GetSelectionInfo();
 #if 1	// ↓ここを残せば選択幅ゼロを最大にする（従来互換挙動）。無くても Command_Indent() ver0 が適切に動作するように変更されたので、削除しても特に不都合にはならない。
-	// From Here 2001.12.03 hor
 	// SPACEorTABインンデントで矩形選択桁がゼロの時は選択範囲を最大にする
-	// Aug. 14, 2005 genta 折り返し幅をLayoutMgrから取得するように
 	if (eIndent != IndentType::None
 		&& selInfo.IsBoxSelecting()
 		&& GetSelect().GetFrom().x == GetSelect().GetTo().x
@@ -37,7 +35,6 @@ void ViewCommander::Command_Indent(wchar_t wcChar, IndentType eIndent)
 		view.RedrawAll();
 		return;
 	}
-	// To Here 2001.12.03 hor
 #endif
 	Command_Indent(&wcChar, 1, eIndent);
 	return;
@@ -83,7 +80,7 @@ void ViewCommander::Command_Indent(
 	} stabData(layoutMgr.GetTabSpace());
 
 	const bool bSoftTab = (eIndent == IndentType::Tab && view.pTypeData->bInsSpace);
-	GetDocument().docEditor.SetModified(true, true);	// Jan. 22, 2002 genta
+	GetDocument().docEditor.SetModified(true, true);
 
 	auto& caret = GetCaret();
 	auto& selInfo = view.GetSelectionInfo();
@@ -109,21 +106,9 @@ void ViewCommander::Command_Indent(
 		}
 		return;
 	}
-	const bool bDrawSwitchOld = view.SetDrawSwitch(false);	// 2002.01.25 hor
+	const bool bDrawSwitchOld = view.SetDrawSwitch(false);
 	// 矩形範囲選択中か
 	if (selInfo.IsBoxSelecting()) {
-// 2012.10.31 Moca 上書きモードのときの選択範囲削除をやめる
-#if 0
-		// From Here 2001.12.03 hor
-		// 上書モードのときは選択範囲削除
-		if (!view.IsInsMode() /* Oct. 2, 2005 genta */) {
-			selectOld = GetSelect();
-			view.DeleteData(false);
-			GetSelect() = selectOld;
-			selInfo.SetBoxSelect(true);
-		}
-		// To Here 2001.12.03 hor
-#endif
 
 		// 2点を対角とする矩形を求める
 		Range rcSel;
@@ -133,7 +118,7 @@ void ViewCommander::Command_Indent(
 			GetSelect().GetTo()		// 範囲選択終了
 		);
 		// 現在の選択範囲を非選択状態に戻す
-		selInfo.DisableSelectArea(false/*true 2002.01.25 hor*/);
+		selInfo.DisableSelectArea(false);
 
 		/*
 			文字を直前に挿入された文字が、それにより元の位置からどれだけ後ろにずれたか。
@@ -169,7 +154,6 @@ void ViewCommander::Command_Indent(
 			minOffset = -1;
 			for (int nLineNum=rcSel.GetFrom().y; nLineNum<=rcSel.GetTo().y; ++nLineNum) {
 				const Layout* pLayout = layoutMgr.SearchLineByLayoutY(nLineNum);
-				// Nov. 6, 2002 genta NULLチェック追加
 				// これがないとEOF行を含む矩形選択中の文字列入力で落ちる
 				int nIdxFrom, nIdxTo;
 				int xLayoutFrom, xLayoutTo;
@@ -378,7 +362,6 @@ void ViewCommander::Command_Indent(
 
 		GetSelect() = selectOld;
 
-		// From Here 2001.12.03 hor
 		caret.MoveCursor(GetSelect().GetTo(), true);
 		caret.nCaretPosX_Prev = caret.GetCaretLayoutPos().x;
 		if (!view.bDoing_UndoRedo) {	// Undo, Redoの実行中か
@@ -388,11 +371,10 @@ void ViewCommander::Command_Indent(
 				)
 			);
 		}
-		// To Here 2001.12.03 hor
 	}
 	// 再描画
-	view.SetDrawSwitch(bDrawSwitchOld);	// 2002.01.25 hor
-	view.RedrawAll();			// 2002.01.25 hor	// 2009.07.25 ryoji Redraw()->RedrawAll()
+	view.SetDrawSwitch(bDrawSwitchOld);
+	view.RedrawAll();
 	return;
 }
 
@@ -400,7 +382,6 @@ void ViewCommander::Command_Indent(
 // 逆インデント
 void ViewCommander::Command_Unindent(wchar_t wcChar)
 {
-	// Aug. 9, 2003 genta
 	// 選択されていない場合に逆インデントした場合に
 	// 注意メッセージを出す
 	auto& selInfo = view.GetSelectionInfo();
@@ -425,10 +406,10 @@ void ViewCommander::Command_Unindent(wchar_t wcChar)
 	if (selInfo.IsBoxSelecting()) {
 		ErrorBeep();
 //**********************************************
-// 箱型逆インデントについては、保留とする (1998.10.22)
+// 箱型逆インデントについては、保留とする
 //**********************************************
 	}else {
-		GetDocument().docEditor.SetModified(true, true);	// Jan. 22, 2002 genta
+		GetDocument().docEditor.SetModified(true, true);
 
 		Range selectOld;	// 範囲選択
 		selectOld.SetFrom(Point(0, GetSelect().GetFrom().y));
@@ -471,7 +452,7 @@ void ViewCommander::Command_Unindent(wchar_t wcChar)
 						if (pLine[i] != WCODE::SPACE) {
 							break;
 						}
-						// Sep. 23, 2002 genta LayoutMgrの値を使う
+						// LayoutMgrの値を使う
 						if (i >= nTabSpaces) {
 							break;
 						}
@@ -495,7 +476,7 @@ void ViewCommander::Command_Unindent(wchar_t wcChar)
 			// 指定位置の指定長データ削除
 			view.DeleteData2(
 				Point(0, i),
-				nDelLen,	// 2001.12.03 hor
+				nDelLen,
 				nullptr
 			);
 			if (nLineCountPrev != layoutMgr.GetLineCount()) {
@@ -516,7 +497,6 @@ void ViewCommander::Command_Unindent(wchar_t wcChar)
 		}
 		GetSelect() = selectOld;	// 範囲選択
 
-		// From Here 2001.12.03 hor
 		caret.MoveCursor(GetSelect().GetTo(), true);
 		caret.nCaretPosX_Prev = caret.GetCaretLayoutPos().x;
 		if (!view.bDoing_UndoRedo) {	// Undo, Redoの実行中か
@@ -526,19 +506,16 @@ void ViewCommander::Command_Unindent(wchar_t wcChar)
 				)
 			);
 		}
-		// To Here 2001.12.03 hor
 	}
 
 	// 再描画
-	view.RedrawAll();	// 2002.01.25 hor	// 2009.07.25 ryoji Redraw()->RedrawAll()
+	view.RedrawAll();
 }
 
 
 // from ViewCommander_New.cpp
 /*! TRIM Step1
 	非選択時はカレント行を選択して view.ConvSelectedArea → ConvMemory へ
-	@author hor
-	@date 2001.12.03 hor 新規作成
 */
 void ViewCommander::Command_Trim(
 	bool bLeft	//  [in] false: 右TRIM / それ以外: 左TRIM
@@ -627,11 +604,6 @@ bool SortByKeyDesc(SortData* pst1, SortData* pst2) {return CStringRef_comp(pst1-
 	
 	@note とりあえず改行コードを含むデータをソートしているので、
 	ファイルの最終行はソート対象外にしています
-	@author hor
-	@date 2001.12.03 hor 新規作成
-	@date 2001.12.21 hor 選択範囲の調整ロジックを訂正
-	@date 2010.07.27 行ソートでコピーを減らす/NULより後ろも比較対照に
-	@date 2013.06.19 Moca 矩形選択時最終行に改行がない場合は付加+ソート後の最終行の改行を削除
 */
 void ViewCommander::Command_Sort(bool bAsc)	// bAsc:true=昇順, false=降順
 {
@@ -653,7 +625,6 @@ void ViewCommander::Command_Sort(bool bAsc)	// bAsc:true=昇順, false=降順
 	if (selInfo.IsBoxSelecting()) {
 		rangeA = selInfo.select;
 		if (selInfo.select.GetFrom().x == selInfo.select.GetTo().x) {
-			// Aug. 14, 2005 genta 折り返し幅をLayoutMgrから取得するように
 			selInfo.select.SetToX((int)layoutMgr.GetMaxLineKetas());
 		}
 		if (selInfo.select.GetFrom().x<selInfo.select.GetTo().x) {
@@ -678,7 +649,6 @@ void ViewCommander::Command_Sort(bool bAsc)	// bAsc:true=昇順, false=降順
 		// カーソル位置が行頭じゃない ＆ 選択範囲の終端に改行コードがある場合は
 		// その行も選択範囲に加える
 		if (selectOld.GetTo().x > 0) {
-			// 2006.03.31 Moca nSelectLineToOldは、物理行なのでLayout系からDocLine系に修正
 			const DocLine* pDocLine = GetDocument().docLineMgr.GetLine(selectOld.GetTo().y);
 			if (pDocLine && EolType::None != pDocLine->GetEol()) {
 				selectOld.GetTo().y++;
@@ -707,7 +677,6 @@ void ViewCommander::Command_Sort(bool bAsc)	// bAsc:true=昇順, false=降順
 			nColumnFrom = view.LineColumnToIndex(pDocLine, nCF);
 			nColumnTo = view.LineColumnToIndex(pDocLine, nCT);
 			if (nColumnTo < nLineLenWithoutEOL) {	// BOX選択範囲の右端が行内に収まっている場合
-				// 2006.03.31 genta std::string::assignを使って一時変数削除
 				pst->sKey = StringRef(&pLine[nColumnFrom], nColumnTo - nColumnFrom);
 			}else if (nColumnFrom < nLineLenWithoutEOL) {	// BOX選択範囲の右端が行末より右にはみ出している場合
 				pst->sKey = StringRef(&pLine[nColumnFrom], nLineLenWithoutEOL - nColumnFrom);
@@ -759,7 +728,7 @@ void ViewCommander::Command_Sort(bool bAsc)	// bAsc:true=昇順, false=降順
 		}
 		lastData.memLine._SetStringLength(nLen);
 	}
-	// 2010.08.22 Moca swapで削除
+	// swapで削除
 	{
 		std::vector<SortData*> temp;
 		temp.swap(sta);
@@ -810,10 +779,6 @@ void ViewCommander::Command_Sort(bool bAsc)	// bAsc:true=昇順, false=降順
 	
 	@note 改行コードを含むデータを比較しているので、
 	ファイルの最終行はソート対象外にしています
-	
-	@author hor
-	@date 2001.12.03 hor 新規作成
-	@date 2001.12.21 hor 選択範囲の調整ロジックを訂正
 */
 void ViewCommander::Command_Merge(void)
 {
@@ -836,18 +801,17 @@ void ViewCommander::Command_Merge(void)
 		&sSelectOld
 	);
 
-	// 2001.12.21 hor
 	// カーソル位置が行頭じゃない ＆ 選択範囲の終端に改行コードがある場合は
 	// その行も選択範囲に加える
 	if (sSelectOld.GetTo().x > 0) {
 #if 0
-		const Layout* pLayout = layoutMgr.SearchLineByLayoutY(selInfo.select.GetTo().y); // 2007.10.09 kobake 単位混在バグ修正
+		const Layout* pLayout = layoutMgr.SearchLineByLayoutY(selInfo.select.GetTo().y);
 		if (pLayout && EolType::None != pLayout->GetLayoutEol()) {
 			selectOld.GetToPointer()->y++;
 			//selectOld.GetTo().y++;
 		}
 #else
-		// 2010.08.22 Moca ソートと仕様を合わせる
+		// ソートと仕様を合わせる
 		const DocLine* pDocLine = GetDocument().docLineMgr.GetLine(sSelectOld.GetTo().y);
 		if (pDocLine && EolType::None != pDocLine->GetEol()) {
 			sSelectOld.GetTo().y++;
@@ -869,7 +833,7 @@ void ViewCommander::Command_Merge(void)
 	Range selectOld_Layout;
 	layoutMgr.LogicToLayout(sSelectOld, &selectOld_Layout);
 
-	// 2010.08.22 NUL対応修正
+	// NUL対応修正
 	std::vector<StringRef> lineArr;
 	const wchar_t* pLinew = NULL;
 	size_t nLineLenw = 0;
@@ -905,7 +869,7 @@ void ViewCommander::Command_Merge(void)
 			nullptr
 		);
 	}else {
-		// 2010.08.23 未変更なら変更しない
+		// 未変更なら変更しない
 	}
 
 	ASSERT_GE(j, GetDocument().docLineMgr.GetLineCount());
@@ -915,7 +879,6 @@ void ViewCommander::Command_Merge(void)
 
 	// 選択エリアの復元
 	selInfo.select = selectOld_Layout;
-	// 2010.08.22 座標混在バグ
 	selInfo.select.GetTo().y -= (int)nMergeLayoutLines;
 
 	if (nCaretPosYOLD == selInfo.select.GetFrom().y) {
@@ -942,12 +905,7 @@ void ViewCommander::Command_Merge(void)
 
 
 // from ViewCommander_New.cpp
-/* メニューからの再変換対応 minfu 2002.04.09
-
-	@date 2002.04.11 YAZAKI COsVersionInfoのカプセル化を守りましょう。
-	@date 2010.03.17 ATOK用はSCS_SETRECONVERTSTRING => ATRECONVERTSTRING_SETに変更
-		2002.11.20 Stoneeさんの情報
-*/
+/* メニューからの再変換対応 */
 void ViewCommander::Command_Reconvert(void)
 {
 	const int ATRECONVERTSTRING_SET = 1;

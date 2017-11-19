@@ -4,10 +4,7 @@
 #include "env/DllSharedData.h"
 
 
-//	From Here Aug. 21, 2000 genta
-//
 //	自動保存を行うかどうかのチェック
-//
 void AutoSaveAgent::CheckAutoSave()
 {
 	if (passiveTimer.CheckAction()) {
@@ -19,7 +16,7 @@ void AutoSaveAgent::CheckAutoSave()
 			return;				//	ここでは，「無変更でも保存」は無視する
 		}
 
-		//	2003.10.09 zenryaku 保存失敗エラーの抑制
+		// 保存失敗エラーの抑制
 		if (!pDoc->docFile.GetFilePathClass().IsValidPath()) {	//	まだファイル名が設定されていなければ保存しない
 			return;
 		}

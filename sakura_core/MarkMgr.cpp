@@ -99,20 +99,14 @@ bool MarkMgr::NextValid(void)
 	return false;
 }
 
-//	From Here Apr. 1, 2001 genta
 /*!
 	現在のデータを全て消去し、現在位置のポインタをリセットする。
-
-	@par history
-	Apr. 1, 2001 genta 新規追加
 */
 void MarkMgr::Flush(void)
 {
 	markChain.erase(markChain.begin(), markChain.end());
 	nCurpos = 0;
 }
-
-//	To Here
 
 //-----------------------------------
 // AutoMarkMgr

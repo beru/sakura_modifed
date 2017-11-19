@@ -36,7 +36,6 @@ bool ViewCommander::Command_SelectWord(const Point* pptCaretPos)
 		*/
 
 		// 選択範囲の変更
-		// 2005.06.24 Moca
 		si.SetSelectArea(range);
 		// 選択領域描画
 		si.DrawSelectArea();
@@ -61,11 +60,10 @@ void ViewCommander::Command_SelectAll(void)
 	}
 
 	// 先頭へカーソルを移動
-	// Sep. 8, 2000 genta
 	view.AddCurrentLineToHistory();
 	GetCaret().nCaretPosX_Prev = GetCaret().GetCaretLayoutPos().x;
 
-	// Jul. 29, 2006 genta 選択位置の末尾を正確に取得する
+	// 選択位置の末尾を正確に取得する
 	// マクロから取得した場合に正しい範囲が取得できないため
 	//int nX, nY;
 	Range range;
@@ -83,8 +81,6 @@ void ViewCommander::Command_SelectAll(void)
 	@param lparam [in] マクロから使用する拡張フラグ（拡張用に予約）
 
 	note 改行単位で選択を行う。
-
-	@date 2007.11.15 nasukoji	新規作成
 */
 void ViewCommander::Command_SelectLine(int lparam)
 {
@@ -163,7 +159,6 @@ void ViewCommander::Command_Begin_BoxSelect(bool bSelectingLock)
 	}
 
 	auto& si = view.GetSelectionInfo();
-//@@@ 2002.01.03 YAZAKI 範囲選択中にShift+F6を実行すると選択範囲がクリアされない問題に対処
 	if (si.IsTextSelected()) {	// テキストが選択されているか
 		// 現在の選択範囲を非選択状態に戻す
 		si.DisableSelectArea(true);

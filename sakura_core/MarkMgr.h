@@ -61,7 +61,6 @@ public:
 
 	virtual void Add(const Mark& m) = 0;	//	要素の追加
 
-	//	Apr. 1, 2001 genta
 	virtual void Flush(void);	//	要素の全消去
 
 	// 要素の取得

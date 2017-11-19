@@ -10,20 +10,16 @@
 
 // ViewCommanderクラスのコマンド(Grep)関数群
 
-/*! GREPダイアログの表示
-
-	@date 2005.01.10 genta CEditView_Commandより移動
-	@author Yazaki
-*/
+/*! GREPダイアログの表示 */
 void ViewCommander::Command_Grep_Dialog(void)
 {
 	NativeW memCurText;
 	auto& dlgGrep = GetEditWindow().dlgGrep;
-	// 2014.07.01 複数Grepウィンドウを使い分けている場合などに影響しないように、未設定のときだけHistoryを見る
+	// 複数Grepウィンドウを使い分けている場合などに影響しないように、未設定のときだけHistoryを見る
 	bool bGetHistory = (dlgGrep.bSetText == false);
 
 	// 現在カーソル位置単語または選択範囲より検索等のキーを取得
-	bool bSet = view.GetCurrentTextForSearchDlg(memCurText, bGetHistory);	// 2006.08.23 ryoji ダイアログ専用関数に変更
+	bool bSet = view.GetCurrentTextForSearchDlg(memCurText, bGetHistory);
 
 	if (bSet) {
 		dlgGrep.strText = memCurText.GetStringPtr();
@@ -39,10 +35,7 @@ void ViewCommander::Command_Grep_Dialog(void)
 	HandleCommand(F_GREP, true, 0, 0, 0, 0);	// GREPコマンドの発行
 }
 
-/*! GREP実行
-
-	@date 2005.01.10 genta CEditView_Commandより移動
-*/
+/*! GREP実行 */
 void ViewCommander::Command_Grep(void)
 {
 	NativeW mWork1;
@@ -69,7 +62,7 @@ void ViewCommander::Command_Grep(void)
 			&& !AppMode::getInstance().IsDebugMode()
 		)
 	) {
-		// 2011.01.23 Grepタイプ別適用
+		// Grepタイプ別適用
 		if (!doc.docEditor.IsModified() && doc.docLineMgr.GetLineCount() == 0) {
 			TypeConfigNum typeGrep = DocTypeManager().GetDocumentTypeOfExt(_T("grepout"));
 			const TypeConfigMini* pConfig;
@@ -110,7 +103,7 @@ void ViewCommander::Command_Grep(void)
 		}
 	}else {
 		// 編集ウィンドウの上限チェック
-		if (GetDllShareData().nodes.nEditArrNum >= MAX_EDITWINDOWS) {	// 最大値修正	//@@@ 2003.05.31 MIK
+		if (GetDllShareData().nodes.nEditArrNum >= MAX_EDITWINDOWS) {
 			OkMessage(view.GetHwnd(), LS(STR_MAXWINDOW), MAX_EDITWINDOWS);
 			return;
 		}
@@ -202,7 +195,7 @@ void ViewCommander::Command_Grep_Replace(void)
 		);
 	}else {
 		// 編集ウィンドウの上限チェック
-		if (GetDllShareData().nodes.nEditArrNum >= MAX_EDITWINDOWS ){	//最大値修正	//@@@ 2003.05.31 MIK
+		if (GetDllShareData().nodes.nEditArrNum >= MAX_EDITWINDOWS ){	//最大値修正
 			OkMessage( view.GetHwnd(), _T("編集ウィンドウ数の上限は%dです。\nこれ以上は同時に開けません。"), MAX_EDITWINDOWS );
 			return;
 		}
@@ -236,7 +229,7 @@ void ViewCommander::Command_Grep_Replace(void)
 		if (dlgGrepRep.searchOption.bLoHiCase	) _tcscat( pOpt, _T("L") );	// 英大文字と英小文字を区別する
 		if (dlgGrepRep.searchOption.bRegularExp	) _tcscat( pOpt, _T("R") );	// 正規表現
 		if (dlgGrepRep.nGrepOutputLineType == 1	) _tcscat( pOpt, _T("P") );	// 行を出力する
-		// if (dlgGrepRep.nGrepOutputLineType == 2) _tcscat( pOpt, _T("N") );	// 否ヒット行を出力する 2014.09.23
+		// if (dlgGrepRep.nGrepOutputLineType == 2) _tcscat( pOpt, _T("N") );	// 否ヒット行を出力する
 		if (dlgGrepRep.nGrepOutputStyle == 1	) _tcscat( pOpt, _T("1") );	// Grep: 出力形式
 		if (dlgGrepRep.nGrepOutputStyle == 2	) _tcscat( pOpt, _T("2") );	// Grep: 出力形式
 		if (dlgGrepRep.nGrepOutputStyle == 3	) _tcscat( pOpt, _T("3") );

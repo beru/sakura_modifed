@@ -39,8 +39,8 @@ void ViewCommander::Command_Menu_RButton(void)
 		break;
 	case IDM_JUMPDICT:
 		// キーワード辞書ファイルを開く
-		if (view.pTypeData->bUseKeywordHelp) {		// キーワード辞書セレクトを使用する	// 2006.04.10 fon
-			// Feb. 17, 2007 genta 相対パスを実行ファイル基準で開くように
+		if (view.pTypeData->bUseKeywordHelp) {		// キーワード辞書セレクトを使用する
+			// 相対パスを実行ファイル基準で開くように
 			view.TagJumpSub(
 				view.pTypeData->keyHelpArr[view.tipWnd.nSearchDict].szPath,
 				Point(1, view.tipWnd.nSearchLine),
@@ -65,7 +65,6 @@ int ViewCommander::Command_CustMenu(int nMenuIdx)
 {
 	GetEditWindow().GetMenuDrawer().ResetContents();
 
-	// Oct. 3, 2001 genta
 	FuncLookup& FuncLookup = GetDocument().funcLookup;
 
 	if (nMenuIdx < 0 || MAX_CUSTOM_MENU <= nMenuIdx) {
