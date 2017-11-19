@@ -1,14 +1,14 @@
 #include "StdAfx.h"
 #include "doc/layout/LayoutMgr.h"
-#include "doc/layout/Layout.h"/// 2002/2/10 aroka
+#include "doc/layout/Layout.h"
 #include "doc/EditDoc.h"
-#include "doc/DocReader.h" // for _DEBUG
+#include "doc/DocReader.h"
 #include "doc/DocEditor.h"
-#include "doc/logic/DocLine.h"/// 2002/2/10 aroka
-#include "doc/logic/DocLineMgr.h"/// 2002/2/10 aroka
+#include "doc/logic/DocLine.h"
+#include "doc/logic/DocLineMgr.h"
 #include "charset/charcode.h"
-#include "mem/Memory.h"/// 2002/2/10 aroka
-#include "mem/MemoryIterator.h" // 2006.07.29 genta
+#include "mem/Memory.h"
+#include "mem/MemoryIterator.h"
 #include "basis/SakuraBasis.h"
 #include "SearchAgent.h"
 #include "debug/RunningTimer.h"
@@ -20,18 +20,18 @@
 
 LayoutMgr::LayoutMgr()
 	:
-	getIndentOffset(&LayoutMgr::getIndentOffset_Normal)	// Oct. 1, 2002 genta	//	Nov. 16, 2002 メンバー関数ポインタにはクラス名が必要
+	getIndentOffset(&LayoutMgr::getIndentOffset_Normal)
 {
 	pDocLineMgr = nullptr;
 	pTypeConfig = nullptr;
 	nMaxLineKetas = MAXLINEKETAS;
 	nTabSpace = 4;
-	pszKinsokuHead_1.clear();				// 行頭禁則	//@@@ 2002.04.08 MIK
-	pszKinsokuTail_1.clear();				// 行末禁則	//@@@ 2002.04.08 MIK
-	pszKinsokuKuto_1.clear();				// 句読点ぶらさげ	//@@@ 2002.04.17 MIK
+	pszKinsokuHead_1.clear();				// 行頭禁則
+	pszKinsokuTail_1.clear();				// 行末禁則
+	pszKinsokuKuto_1.clear();				// 句読点ぶらさげ
 
-	nTextWidth = 0;			// テキスト最大幅の記憶		// 2009.08.28 nasukoji
-	nTextWidthMaxLine = 0;	// 最大幅のレイアウト行		// 2009.08.28 nasukoji
+	nTextWidth = 0;			// テキスト最大幅の記憶
+	nTextWidthMaxLine = 0;	// 最大幅のレイアウト行
 
 	Init();
 }
@@ -42,8 +42,8 @@ LayoutMgr::~LayoutMgr()
 	_Empty();
 
 	pszKinsokuHead_1.clear();	// 行頭禁則
-	pszKinsokuTail_1.clear();	// 行末禁則			//@@@ 2002.04.08 MIK
-	pszKinsokuKuto_1.clear();	// 句読点ぶらさげ	//@@@ 2002.04.17 MIK
+	pszKinsokuTail_1.clear();	// 行末禁則
+	pszKinsokuKuto_1.clear();	// 句読点ぶらさげ
 }
 
 
@@ -74,7 +74,7 @@ void LayoutMgr::Init()
 	nLines = 0;			// 全物理行数
 	nLineTypeBot = COLORIDX_DEFAULT;
 
-	// EOFレイアウト位置記憶	// 2006.10.07 Moca
+	// EOFレイアウト位置記憶
 	nEOFLine = -1;
 	nEOFColumn = -1;
 }
@@ -112,11 +112,10 @@ void LayoutMgr::SetLayoutInfo(
 	nMaxLineKetas = nMaxLineKetas;
 	nTabSpace = nTabSpace;
 
-	// Oct. 1, 2002 genta タイプによって処理関数を変更する
+	// タイプによって処理関数を変更する
 	// 数が増えてきたらテーブルにすべき
-	switch (refType.nIndentLayout) {	// 折り返しは2行目以降を字下げ表示	//@@@ 2002.09.29 YAZAKI
+	switch (refType.nIndentLayout) {	// 折り返しは2行目以降を字下げ表示
 	case 1:
-		// Nov. 16, 2002 メンバー関数ポインタにはクラス名が必要
 		getIndentOffset = &LayoutMgr::getIndentOffset_Tx2x;
 		break;
 	case 2:
@@ -127,17 +126,15 @@ void LayoutMgr::SetLayoutInfo(
 		break;
 	}
 
-	// 句読点ぶら下げ文字	// 2009.08.07 ryoji
-	// refType.szKinsokuKuto → pszKinsokuKuto_1
+	// 句読点ぶら下げ文字
 	pszKinsokuKuto_1.clear();
-	if (refType.bKinsokuKuto) {	// 2009.08.06 ryoji bKinsokuKutoで振り分ける(Fix)
+	if (refType.bKinsokuKuto) {	// bKinsokuKutoで振り分ける(Fix)
 		for (const wchar_t* p=refType.szKinsokuKuto; *p; ++p) {
 			pszKinsokuKuto_1.push_back_unique(*p);
 		}
 	}
 
 	// 行頭禁則文字
-	// refType.szKinsokuHead → (句読点以外) pszKinsokuHead_1
 	pszKinsokuHead_1.clear();
 	for (const wchar_t* p=refType.szKinsokuHead; *p; ++p) {
 		if (pszKinsokuKuto_1.exist(*p)) {
@@ -148,7 +145,6 @@ void LayoutMgr::SetLayoutInfo(
 	}
 
 	// 行末禁則文字
-	// refType.szKinsokuTail → pszKinsokuTail_1
 	pszKinsokuTail_1.clear();
 	for (const wchar_t* p=refType.szKinsokuTail; *p; ++p) {
 		pszKinsokuTail_1.push_back_unique(*p);
@@ -206,7 +202,7 @@ const Layout* LayoutMgr::SearchLineByLayoutY(
 
 
 	// +++++++わずかに高速版+++++++
-	// 2004.03.28 Moca pLayoutPrevReferより、Top,Botのほうが近い場合は、そちらを利用する
+	// pLayoutPrevReferより、Top,Botのほうが近い場合は、そちらを利用する
 	int nPrevToLineNumDiff = t_abs(nPrevReferLine - (int)nLineNum);
 	if (0
 		|| !pLayoutPrevRefer
@@ -271,7 +267,6 @@ const Layout* LayoutMgr::SearchLineByLayoutY(
 }
 
 
-//@@@ 2002.09.23 YAZAKI Layout*を作成するところは分離して、InsertLineNext()と共通化
 void LayoutMgr::AddLineBottom(Layout* pLayout)
 {
 	if (nLines == 0) {
@@ -287,7 +282,6 @@ void LayoutMgr::AddLineBottom(Layout* pLayout)
 	return;
 }
 
-//@@@ 2002.09.23 YAZAKI Layout*を作成するところは分離して、AddLineBottom()と共通化
 Layout* LayoutMgr::InsertLineNext(
 	Layout* pLayoutPrev,
 	Layout* pLayout
@@ -323,10 +317,7 @@ Layout* LayoutMgr::InsertLineNext(
 	return pLayout;
 }
 
-/* Layoutを作成する
-	@@@ 2002.09.23 YAZAKI
-	@date 2009.08.28 nasukoji	レイアウト長を引数に追加
-*/
+/* Layoutを作成する */
 Layout* LayoutMgr::CreateLayout(
 	DocLine*		pDocLine,
 	Point			ptLogicPos,
@@ -358,7 +349,7 @@ Layout* LayoutMgr::CreateLayout(
 		}
 	}
 
-	// 2009.08.28 nasukoji	「折り返さない」選択時のみレイアウト長を記憶する
+	// 「折り返さない」選択時のみレイアウト長を記憶する
 	// 「折り返さない」以外で計算しないのはパフォーマンス低下を防ぐ目的なので、
 	// パフォーマンスの低下が気にならない程なら全ての折り返し方法で計算する
 	// ようにしても良いと思う。
@@ -371,8 +362,6 @@ Layout* LayoutMgr::CreateLayout(
 
 /*
 || 指定された物理行のデータへのポインタとその長さを返す Ver0
-
-	@date 2002/2/10 aroka CMemory変更
 */
 const wchar_t* LayoutMgr::GetLineStr(
 	size_t nLine,
@@ -387,9 +376,7 @@ const wchar_t* LayoutMgr::GetLineStr(
 	return pLayout->GetDocLineRef()->GetPtr() + pLayout->GetLogicOffset();
 }
 
-/*!	指定された物理行のデータへのポインタとその長さを返す Ver1
-	@date 2002/03/24 YAZAKI GetLineStr(int nLine, int* pnLineLen)と同じ動作に変更。
-*/
+/*!	指定された物理行のデータへのポインタとその長さを返す Ver1 */
 const wchar_t* LayoutMgr::GetLineStr(
 	size_t nLine,
 	size_t* pnLineLen,
@@ -405,8 +392,6 @@ const wchar_t* LayoutMgr::GetLineStr(
 
 /*
 || 指定された位置がレイアウト行の途中の行末かどうか調べる
-
-	@date 2002/4/27 MIK
 */
 bool LayoutMgr::IsEndOfLine(
 	const Point& ptLinePos
@@ -435,9 +420,6 @@ bool LayoutMgr::IsEndOfLine(
 
 	既存の関数では物理行からレイアウト位置を変換する必要があり，
 	処理に無駄が多いため，専用関数を作成
-	
-	@date 2006.07.29 genta
-	@date 2006.10.01 Moca メンバで保持するように。データ変更時には、_DoLayout/DoLayout_Rangeで無効にする。
 */
 void LayoutMgr::GetEndLayoutPos(
 	Point* ptLayoutEnd // [out]
@@ -469,13 +451,6 @@ void LayoutMgr::GetEndLayoutPos(
 			it.addDelta();
 		}
 		ptLayoutEnd->Set((int)it.getColumn(), (int)GetLineCount() - 1);
-		// [EOF]のみ折り返すのはやめる	// 2009.02.17 ryoji
-		//// 2006.10.01 Moca Start [EOF]のみのレイアウト行処理が抜けていたバグを修正
-		//if (GetMaxLineKetas() <= ptLayoutEnd->x) {
-		//	ptLayoutEnd->SetX(0);
-		//	ptLayoutEnd->y++;
-		//}
-		//// 2006.10.01 Moca End
 	}
 	nEOFColumn = ptLayoutEnd->x;
 	nEOFLine = ptLayoutEnd->y;
@@ -501,7 +476,6 @@ Layout* LayoutMgr::DeleteLayoutAsLogical(
 		return nullptr;
 	}
 
-	// 1999.11.22
 	pLayoutPrevRefer = pLayoutInThisArea->GetPrevLayout();
 	nPrevReferLine = nLineOf_pLayoutInThisArea - 1;
 
@@ -529,12 +503,6 @@ Layout* LayoutMgr::DeleteLayoutAsLogical(
 				pLayout->pNext->pPrev = pLayoutWork;
 			}
 		}
-//		if (pLayoutPrevRefer == pLayout) {
-//			// 1999.12.22 前にずらすだけでよいのでは
-//			pLayoutPrevRefer = pLayout->GetPrevLayout();
-//			--nPrevReferLine;
-//		}
-
 		if (0
 			|| (1
 				&& ptDelLogicalFrom.y == pLayout->GetLogicLineNo()
@@ -726,9 +694,6 @@ bool LayoutMgr::SearchWord(
 
 	物理位置(行頭からのバイト数、折り返し無し行位置)
 	→レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
-
-	@date 2004.06.16 Moca インデント表示の際のTABを含む行の座標ずれ修正
-	@date 2007.09.06 kobake 関数名をCaretPos_Phys2LogからLogicToLayoutに変更
 */
 Point LayoutMgr::LogicToLayout(
 	const Point&	ptLogic,	// [in]  ロジック位置
@@ -743,12 +708,11 @@ Point LayoutMgr::LogicToLayout(
 	size_t nCaretPosX = 0;
 	size_t nCaretPosY;
 	const Layout* pLayout;
-	// 2013.05.15 ヒント、ありなしの処理を統合
 	{
 		nLineHint = t_min((int)GetLineCount() - 1, nLineHint);
 		nCaretPosY = t_max<int>(ptLogic.y, nLineHint);
 
-		// 2013.05.12 pLayoutPrevReferを見る
+		// pLayoutPrevReferを見る
 		if (1
 			&& (int)nCaretPosY <= nPrevReferLine
 			&& pLayoutPrevRefer
@@ -803,7 +767,7 @@ Point LayoutMgr::LogicToLayout(
 			// TAB幅を正確に計算するには当初からインデント分を加えておく必要がある．
 			nCaretPosX = pLayout->GetIndent();
 			const wchar_t*	pData;
-			pData = pLayout->GetDocLineRef()->GetPtr() + pLayout->GetLogicOffset(); // 2002/2/10 aroka CMemory変更
+			pData = pLayout->GetDocLineRef()->GetPtr() + pLayout->GetLogicOffset();
 			size_t nDataLen = pLayout->GetLengthWithEOL();
 
 			size_t i;
@@ -826,9 +790,6 @@ Point LayoutMgr::LogicToLayout(
 				}else {
 					nCharKetas = NativeW::GetKetaOfChar(pData, nDataLen, i);
 				}
-//				if (nCharKetas == 0)				// 削除 サロゲートペア対策	2008/7/5 Uchi
-//					nCharKetas = 1;
-
 				// レイアウト加算
 				nCaretPosX += nCharKetas;
 
@@ -879,8 +840,6 @@ Point LayoutMgr::LogicToLayout(
 
 	レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 	→物理位置(行頭からのバイト数、折り返し無し行位置)
-
-	@date 2007.09.06 kobake 関数名をCaretPos_Log2Phys→LayoutToLogicに変更
 */
 PointEx LayoutMgr::LayoutToLogicEx(
 	const Point& ptLayout	// [in]  レイアウト位置
@@ -889,8 +848,6 @@ PointEx LayoutMgr::LayoutToLogicEx(
 	PointEx ptLogic;	// [out] ロジック位置
 	ptLogic.ext = 0;
 	if (ptLayout.y > (int)nLines) {
-		// 2007.10.11 kobake Y値が間違っていたので修正
-		//pptLogic->Set(0, nLines);
 		ptLogic.Set(0, (int)pDocLineMgr->GetLineCount());
 		return ptLogic;
 	}
@@ -924,8 +881,6 @@ PointEx LayoutMgr::LayoutToLogicEx(
 				}
 			}
 		}
-		// 2007.10.11 kobake Y値が間違っていたので修正
-		//pptLogic->Set(0, nLines);
 		ptLogic.Set(0, (int)pDocLineMgr->GetLineCount());
 		return ptLogic;
 	}else {
@@ -955,8 +910,6 @@ checkloop:;
 		}else {
 			nCharKetas = NativeW::GetKetaOfChar(pData, nDataLen, i);
 		}
-//		if (nCharKetas == 0)				// 削除 サロゲートペア対策	2008/7/5 Uchi
-//			nCharKetas = 1;
 
 		// レイアウト加算
 		if ((int)(nX + nCharKetas) > ptLayout.x && !bEOF) {

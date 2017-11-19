@@ -21,9 +21,6 @@ UxTheme::~UxTheme()
 
 	一度しか LoadLibrary() 実行しないこと以外は DllImp::Init() と同じ
 	（UxTheme 未対応 OS での LoadLibrary() 失敗の繰返しを防ぐ）
-
-	@author ryoji
-	@date 2007.04.01 ryoji 新規
 */
 bool UxTheme::InitThemeDll(TCHAR* str)
 {

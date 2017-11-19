@@ -1,9 +1,9 @@
 #pragma once
 
 #include "util/design_template.h"
-#include "Eol.h"// 2002/2/10 aroka
-#include "doc/logic/DocLine.h"// 2002/4/21 YAZAKI
-#include "mem/Memory.h"// 2002/4/21 YAZAKI
+#include "Eol.h"
+#include "doc/logic/DocLine.h"
+#include "mem/Memory.h"
 #include "LayoutExInfo.h"
 #include "view/colors/EColorIndexType.h"
 
@@ -20,7 +20,6 @@ public:
 	/*
 	||  Constructors
 	*/
-	// 2007.08.23 kobake コンストラクタでメンバ変数を初期化するようにした
 	Layout(
 		const DocLine*	pDocLine,		// 実データへの参照
 		Point			ptLogicPos,		// 実データ参照位置
@@ -55,7 +54,7 @@ public:
 	int GetLogicOffset() const { return ptLogicPos.x; }
 	Point GetLogicPos() const { return ptLogicPos; }
 	EColorIndexType GetColorTypePrev() const { return nTypePrev; } //#########汚っ
-	size_t GetLayoutWidth() const { return nLayoutWidth; }		// 2009.08.28 nasukoji	このレイアウト行の改行を含むレイアウト長を返す
+	size_t GetLayoutWidth() const { return nLayoutWidth; }		// このレイアウト行の改行を含むレイアウト長を返す
 
 	// 変更インターフェース
 	void OffsetLogicLineNo(int n) { ptLogicPos.y += n; }
@@ -64,10 +63,10 @@ public:
 	}
 	void SetLayoutWidth(size_t nWidth) { nLayoutWidth = nWidth; }
 
-	// レイアウト幅を計算。改行は含まない。2007.10.11 kobake
+	// レイアウト幅を計算。改行は含まない
 	size_t CalcLayoutWidth(const LayoutMgr& layoutMgr) const;
 
-	// オフセット値をレイアウト単位に変換して取得。2007.10.17 kobake
+	// オフセット値をレイアウト単位に変換して取得
 	int CalcLayoutOffset(const LayoutMgr& layoutMgr,
 							int nStartPos = 0,
 							int nStartOffset = 0) const;
@@ -104,9 +103,9 @@ private:
 	
 	// その他属性
 	EColorIndexType		nTypePrev;		// タイプ 0=通常 1=行コメント 2=ブロックコメント 3=シングルクォーテーション文字列 4=ダブルクォーテーション文字列
-	size_t				nIndent;		// このレイアウト行のインデント数 @@@ 2002.09.23 YAZAKI
+	size_t				nIndent;		// このレイアウト行のインデント数
 	Eol					eol;
-	size_t				nLayoutWidth;	// このレイアウト行の改行を含むレイアウト長（「折り返さない」選択時のみ）	// 2009.08.28 nasukoji
+	size_t				nLayoutWidth;	// このレイアウト行の改行を含むレイアウト長（「折り返さない」選択時のみ）
 	LayoutExInfo		exInfo;			// 色分け詳細情報
 
 private:

@@ -36,8 +36,6 @@ Bregexp::~Bregexp()
 ** @param[in] szPattern 検索パターン
 **
 ** @retval 検索パターン文字列長
-** 
-** @date 2005.03.20 かろと 関数に切り出し
 */
 size_t Bregexp::CheckPattern(const wchar_t* szPattern)
 {

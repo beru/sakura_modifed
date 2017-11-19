@@ -10,7 +10,6 @@
 /*! DllImp をラップ
 	DllImp::DeinitDll を呼び忘れないためのヘルパ的クラス。
 	今のところDeinitDllが使われている箇所が無いので、このクラスの出番はありませんが。
-	2008.05.10 kobake 作成
 */
 template <class DLLIMP>
 class DllHandler {
@@ -44,17 +43,6 @@ enum class InitDllResultType {
 };
 
 // DLLの動的なLoad/Unloadを行うためのクラス
-/*!
-	@author genta
-	@date Jun. 10, 2001 genta
-	@date 2001.07.05 genta InitDll: 引数追加。パスの指定などに使える
-	@date Apr. 15, 2002 genta RegisterEntriesの追加。
-	@date 2007.06.25 genta InitDll: GetDllNameImpを使うように実装を変更．
-	@date 2001.07.05 genta GetDllName: 引数追加。パスの指定などに使える
-	@date 2007.06.25 genta GetDllName: GetDllNameImpを使用する場合は必須ではないので，
-										純粋仮想関数はやめてプレースホルダーを用意する．
-	@date 2008.05.10 kobake 整理。派生クラスは、～Impをオーバーロードすれば良いという方式です。
-*/
 class DllImp {
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                            型                               //
@@ -62,8 +50,6 @@ class DllImp {
 public:
 	/*!
 		アドレスとエントリ名の対応表。RegisterEntriesで使われる。
-		@author YAZAKI
-		@date 2002.01.26
 	*/
 	struct ImportTable {
 		void*		proc;
@@ -141,8 +127,6 @@ protected:
 		
 		デストラクタからDeinitDllImpを呼ぶときは、初期化されているという保証がないので
 		呼び出し前にIsAvailableによる確認を必ず行うこと。
-		
-		@date 2002.04.15 genta 注意書き追加
 	*/
 	virtual bool DeinitDllImp();
 

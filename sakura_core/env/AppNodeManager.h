@@ -8,7 +8,7 @@ class AppNodeGroupHandle;
 // 編集ウィンドウノード
 struct EditNode {
 	ptrdiff_t		nIndex;
-	int				nGroup;						// グループID							//@@@ 2007.06.20 ryoji
+	int				nGroup;						// グループID
 	HWND			hWnd;
 	int				nId;						// 無題Id
 	WIN_CHAR		szTabCaption[_MAX_PATH];	// タブウィンドウ用：キャプション名

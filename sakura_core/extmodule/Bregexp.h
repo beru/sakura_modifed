@@ -21,16 +21,12 @@
 	その安全性を保証するのが難しいため、現時点では両者を１つのクラスに入れた。
 
 	@note このクラスはThread Safeではない。
-
-	@date 2005.03.19 かろと リファクタリング。クラス内部を隠蔽
-	@date 2006.01.22 かろと オプション追加・名称変更(全て行置換用Globalオプション追加のため)
 */
 class Bregexp : public BregexpDll2 {
 public:
 	Bregexp();
 	virtual ~Bregexp();
 
-	// 2006.01.22 かろと オプション追加・名称変更
 	enum Option {
 		optNothing = 0,					// オプションなし
 		optCaseSensitive = 1,			// 大文字小文字区別オプション(/iをつけない)
@@ -57,19 +53,14 @@ public:
 
 	// CJreエミュレーション関数
 	// 検索パターンのコンパイル
-	// 2002/01/19 novice 正規表現による文字列置換
-	// 2002.01.26 hor    置換後文字列を別引数に
-	// 2002.02.01 hor    大文字小文字を無視するオプション追加
-	//>> 2002/03/27 Azumaiya 正規表現置換にコンパイル関数を使う形式を追加
 	bool Compile(const wchar_t* szPattern, int nOption = 0) {
 		return Compile(szPattern, NULL, nOption);
 	}
 	bool Compile(const wchar_t* szPattern0, const wchar_t* szPattern1, int nOption = 0, bool bKakomi = false);	// Replace用
 	bool Match(const wchar_t* szTarget, size_t nLen, size_t nStart = 0);					// 検索を実行する
-	int Replace(const wchar_t* szTarget, size_t nLen, size_t nStart = 0);					// 置換を実行する	// 2007.01.16 ryoji 戻り値を置換個数に変更
+	int Replace(const wchar_t* szTarget, size_t nLen, size_t nStart = 0);					// 置換を実行する
 
 	//-----------------------------------------
-	// 2005.03.19 かろと クラス内部を隠蔽
 	/*! @{
 		@name 結果を得るメソッドを追加し、BREGEXPを外部から隠す
 	*/
@@ -181,8 +172,6 @@ private:
 	static const wchar_t	tmpBuf[2];	// ダミー文字列
 };
 
-
-// Jun. 26, 2001 genta
 // 正規表現ライブラリのバージョン取得
 bool CheckRegexpVersion( HWND hWnd, int nCmpId, bool bShowMsg = false );
 bool CheckRegexpSyntax( const wchar_t* szPattern, HWND hWnd, bool bShowMessage, int nOption = -1, bool bKakomi = false );// 2002/2/1 hor追加

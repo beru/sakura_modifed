@@ -87,7 +87,6 @@ void SakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszBu
 {
 	const EditDoc* pDoc = EditDoc::GetInstance(0); //###
 
-	// Apr. 03, 2003 genta 固定文字列をまとめる
 	const wstring	PRINT_PREVIEW_ONLY		= LSW(STR_PREVIEW_ONLY);	// L"(印刷Previewでのみ使用できます)";
 	const size_t	PRINT_PREVIEW_ONLY_LEN	= PRINT_PREVIEW_ONLY.length();
 	const wstring	NO_TITLE				= LSW(STR_NO_TITLE1);	// L"(無題)";
@@ -129,7 +128,7 @@ void SakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszBu
 				q = wcs_pushW(q, q_max - q, NO_TITLE.c_str(), NO_TITLE_LEN);
 				++p;
 			}else {
-				// 2002.10.13 Moca ファイル名(パスなし)を取得。日本語対応
+				// ファイル名(パスなし)を取得。日本語対応
 				// 万一\\が末尾にあってもその後ろには\0があるのでアクセス違反にはならない。
 				q = wcs_pushT(q, q_max - q, pDoc->docFile.GetFileName());
 				++p;
@@ -143,7 +142,7 @@ void SakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszBu
 			}else {
 				// ポインタを末尾に
 				const wchar_t *dot_position, *end_of_path;
-				r = to_wchar(pDoc->docFile.GetFileName()); // 2002.10.13 Moca ファイル名(パスなし)を取得。日本語対応
+				r = to_wchar(pDoc->docFile.GetFileName()); // ファイル名(パスなし)を取得。日本語対応
 				end_of_path = dot_position = r + wcslen(r);
 				// 後ろから.を探す
 				for (--dot_position; dot_position>r && *dot_position!='.'; --dot_position)
@@ -156,9 +155,7 @@ void SakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszBu
 				++p;
 			}
 			break;
-			// To Here Sep. 16, 2002 genta
 		case L'/':	// 開いているファイルの名前（フルパス。パスの区切りが/）
-			// Oct. 28, 2001 genta
 			if (!pDoc->docFile.GetFilePathClass().IsValidPath()) {
 				q = wcs_pushW(q, q_max - q, NO_TITLE.c_str(), NO_TITLE_LEN);
 				++p;
@@ -173,7 +170,6 @@ void SakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszBu
 				++p;
 			}
 			break;
-		// From Here 2003/06/21 Moca
 		case L'N':	// 開いているファイルの名前(簡易表示)
 			if (!pDoc->docFile.GetFilePathClass().IsValidPath()) {
 				q = wcs_pushW(q, q_max - q, NO_TITLE.c_str(), NO_TITLE_LEN);
@@ -189,7 +185,6 @@ void SakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszBu
 				++p;
 			}
 			break;
-		// To Here 2003/06/21 Moca
 		case L'n':
 			if (!pDoc->docFile.GetFilePathClass().IsValidPath()) {
 				if (EditApp::getInstance().pGrepAgent->bGrepMode) {
@@ -205,7 +200,7 @@ void SakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszBu
 			}
 			++p;
 			break;
-		case L'E':	// 開いているファイルのあるフォルダの名前(簡易表示)	2012/12/2 Uchi
+		case L'E':	// 開いているファイルのあるフォルダの名前(簡易表示)
 			if (!pDoc->docFile.GetFilePathClass().IsValidPath()) {
 				q = wcs_pushW(q, q_max - q, NO_TITLE.c_str(), NO_TITLE_LEN);
 			}else {
@@ -236,7 +231,7 @@ void SakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszBu
 			}
 			++p;
 			break;
-		case L'e':	// 開いているファイルのあるフォルダの名前		2012/12/2 Uchi
+		case L'e':	// 開いているファイルのあるフォルダの名前
 			if (!pDoc->docFile.GetFilePathClass().IsValidPath()) {
 				q = wcs_pushW(q, q_max - q, NO_TITLE.c_str(), NO_TITLE_LEN);
 			}else {
@@ -255,8 +250,7 @@ void SakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszBu
 			}
 			++p;
 			break;
-		// From Here Jan. 15, 2002 hor
-		case L'B':	// タイプ別設定の名前			2013/03/28 Uchi
+		case L'B':	// タイプ別設定の名前
 			{
 				const TypeConfig& typeCongig = pDoc->docType.GetDocumentAttribute();
 				if (typeCongig.nIdx > 0) {	// 基本は表示しない
@@ -265,7 +259,7 @@ void SakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszBu
 				++p;
 			}
 			break;
-		case L'b':	// 開いているファイルの拡張子	2013/03/28 Uchi
+		case L'b':	// 開いているファイルの拡張子
 			if (pDoc->docFile.GetFilePathClass().IsValidPath()) {
 				// ポインタを末尾に
 				const wchar_t *dot_position, *end_of_path;
@@ -281,7 +275,7 @@ void SakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszBu
 			}
 			++p;
 			break;
-		case L'Q':	// 印刷ページ設定の名前			2013/03/28 Uchi
+		case L'Q':	// 印刷ページ設定の名前
 			{
 				PrintSetting* ps = &GetDllShareData().printSettingArr[
 					 pDoc->docType.GetDocumentAttribute().nCurrentPrintSetting];
@@ -297,9 +291,7 @@ void SakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszBu
 				q = wcs_pushW(q, q_max - q, memCurText.GetStringPtr(), memCurText.GetStringLength());
 				++p;
 			}
-		// To Here Jan. 15, 2002 hor
 			break;
-		// From Here 2002/12/04 Moca
 		case L'x':	// 現在の物理桁位置(先頭からのバイト数1開始)
 			{
 				wchar_t szText[11];
@@ -316,7 +308,6 @@ void SakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszBu
 				++p;
 			}
 			break;
-		// To Here 2002/12/04 Moca
 		case L'd':	// 共通設定の日付書式
 			{
 				TCHAR szText[1024];
@@ -339,7 +330,7 @@ void SakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszBu
 			break;
 		case L'p':	// 現在のページ
 			{
-				auto& editWnd = GetMainWindow();	// Sep. 10, 2002 genta
+				auto& editWnd = GetMainWindow();
 				if (editWnd.pPrintPreview) {
 					wchar_t szText[1024];
 					_itow(editWnd.pPrintPreview->GetCurPageNum() + 1, szText, 10);
@@ -353,7 +344,7 @@ void SakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszBu
 			break;
 		case L'P':	// 総ページ
 			{
-				auto& editWnd = GetMainWindow();	// Sep. 10, 2002 genta
+				auto& editWnd = GetMainWindow();
 				if (editWnd.pPrintPreview) {
 					wchar_t szText[1024];
 					_itow(editWnd.pPrintPreview->GetAllPageNum(), szText, 10);
@@ -395,11 +386,11 @@ void SakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszBu
 				++p;
 			}
 			break;
-		case L'V':	// Apr. 4, 2003 genta
+		case L'V':
 			// Version number
 			{
 				wchar_t buf[28]; // 6(符号含むWORDの最大長) * 4 + 4(固定部分)
-				// 2004.05.13 Moca バージョン番号は、プロセスごとに取得する
+				// バージョン番号は、プロセスごとに取得する
 				DWORD dwVersionMS, dwVersionLS;
 				GetAppVersionInfo(NULL, VS_VERSION_INFO, &dwVersionMS, &dwVersionLS);
 				int len = auto_sprintf(buf, L"%d.%d.%d.%d",
@@ -412,9 +403,8 @@ void SakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszBu
 				++p;
 			}
 			break;
-		case L'h':	// Apr. 4, 2003 genta
+		case L'h':
 			// Grep Key文字列 MAX 32文字
-			// 中身はSetParentCaption()より移植
 			{
 				NativeW memDes;
 				// szGrepKey → memDes
@@ -426,7 +416,7 @@ void SakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszBu
 				++p;
 			}
 			break;
-		case L'S':	// Sep. 15, 2005 FILE
+		case L'S':
 			// サクラエディタのフルパス
 			{
 				SFilePath szPath;
@@ -435,7 +425,7 @@ void SakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszBu
 				++p;
 			}
 			break;
-		case 'I':	// May. 19, 2007 ryoji
+		case 'I':
 			// iniファイルのフルパス
 			{
 				TCHAR	szPath[_MAX_PATH + 1];
@@ -445,7 +435,7 @@ void SakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszBu
 				++p;
 			}
 			break;
-		case 'M':	// Sep. 15, 2005 FILE
+		case 'M':
 			// 現在実行しているマクロファイルパスの取得
 			{
 				// 実行中マクロのインデックス番号 (INVALID_MACRO_IDX:無効 / STAND_KEYMACRO:標準マクロ)
@@ -475,7 +465,6 @@ void SakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszBu
 				++p;
 			}
 			break;
-		// Mar. 31, 2003 genta
 		// 条件分岐
 		// ${cond:string1$:string2$:string3$}
 		//	
@@ -542,9 +531,6 @@ void SakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszBu
 	@param part [in] 移動する番号＝読み飛ばす$:の数．-1を与えると最後まで読み飛ばす．
 
 	@return 移動後のポインタ．該当領域の先頭かあるいは$}の直後．
-
-	@author genta
-	@date 2003.03.31 genta 作成
 */
 const wchar_t* SakuraEnvironment::_ExParam_SkipCond(const wchar_t* pszSource, int part)
 {
@@ -590,10 +576,6 @@ const wchar_t* SakuraEnvironment::_ExParam_SkipCond(const wchar_t* pszSource, in
 	@note
 	ポインタの読み飛ばし作業は行わないので，'?'までの読み飛ばしは
 	呼び出し側で別途行う必要がある．
-
-	@author genta
-	@date 2003.03.31 genta 作成
-
 */
 int SakuraEnvironment::_ExParam_Evaluate(const wchar_t* pCond)
 {
@@ -685,7 +667,6 @@ std::tstring SakuraEnvironment::GetDlgInitialDir(bool bControlProcess)
 	switch (eOpenDialogDir) {
 	case OPENDIALOGDIR_CUR:
 		{
-			// 2002.10.25 Moca
 			TCHAR szCurDir[_MAX_PATH];
 			int nCurDir = ::GetCurrentDirectory(_countof(szCurDir), szCurDir);
 			if (nCurDir == 0 || _MAX_PATH < nCurDir) {

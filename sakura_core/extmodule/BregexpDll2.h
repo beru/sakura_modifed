@@ -17,7 +17,6 @@ typedef struct bregexp {
 } BREGEXP_W;
 
 // BREGONIG.DLLをラップしたもの。
-// 2007.09.13 kobake 作成
 class BregexpDll2 : public DllImp {
 public:
 	BregexpDll2();
@@ -25,7 +24,7 @@ public:
 
 protected:
 	// DllImpインタフェース
-	virtual LPCTSTR GetDllNameImp(int nIndex); // Jul. 5, 2001 genta インターフェース変更に伴う引数追加
+	virtual LPCTSTR GetDllNameImp(int nIndex);
 	virtual bool InitDllImp();
 
 protected:

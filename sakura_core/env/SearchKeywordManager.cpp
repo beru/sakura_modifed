@@ -5,9 +5,7 @@
 #include "recent/Recent.h"
 
 
-/*!	aSearchKeys‚ÉpszSearchKey‚ğ’Ç‰Á‚·‚éB
-	YAZAKI
-*/
+/*!	aSearchKeys‚ÉpszSearchKey‚ğ’Ç‰Á‚·‚é */
 void SearchKeywordManager::AddToSearchKeys(const wchar_t* pszSearchKey)
 {
 	RecentSearch recentSearchKey;
@@ -16,9 +14,7 @@ void SearchKeywordManager::AddToSearchKeys(const wchar_t* pszSearchKey)
 	GetDllShareData().common.search.nSearchKeySequence++;
 }
 
-/*!	aReplaceKeys‚ÉpszReplaceKey‚ğ’Ç‰Á‚·‚é
-	YAZAKI
-*/
+/*!	aReplaceKeys‚ÉpszReplaceKey‚ğ’Ç‰Á‚·‚é */
 void SearchKeywordManager::AddToReplaceKeys(const wchar_t* pszReplaceKey)
 {
 	RecentReplace recentReplaceKey;
@@ -29,9 +25,7 @@ void SearchKeywordManager::AddToReplaceKeys(const wchar_t* pszReplaceKey)
 	return;
 }
 
-/*!	aGrepFiles‚ÉpszGrepFile‚ğ’Ç‰Á‚·‚é
-	YAZAKI
-*/
+/*!	aGrepFiles‚ÉpszGrepFile‚ğ’Ç‰Á‚·‚é */
 void SearchKeywordManager::AddToGrepFiles(const TCHAR* pszGrepFile)
 {
 	RecentGrepFile recentGrepFile;
@@ -39,9 +33,7 @@ void SearchKeywordManager::AddToGrepFiles(const TCHAR* pszGrepFile)
 	recentGrepFile.Terminate();
 }
 
-/*!	grepFolders.size()‚ÉpszGrepFolder‚ğ’Ç‰Á‚·‚é
-	YAZAKI
-*/
+/*!	grepFolders.size()‚ÉpszGrepFolder‚ğ’Ç‰Á‚·‚é */
 void SearchKeywordManager::AddToGrepFolders(const TCHAR* pszGrepFolder)
 {
 	RecentGrepFolder recentGrepFolder;

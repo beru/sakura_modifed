@@ -61,8 +61,8 @@ public:
 	
 	static TCHAR GetAccessKeyByIndex(size_t index, bool bZeroOrigin);
 
-	static void GetIniFileNameDirect( LPTSTR pszPrivateIniFile, LPTSTR pszIniFile, LPCTSTR pszProfName );	// 構成設定ファイルからiniファイル名を取得する		// 2007.09.04 ryoji
-	void GetIniFileName( LPTSTR pszIniFileName, LPCTSTR pszProfName, bool bRead = false );	// iniファイル名の取得		// 2007.05.19 ryoji
+	static void GetIniFileNameDirect( LPTSTR pszPrivateIniFile, LPTSTR pszIniFile, LPCTSTR pszProfName );	// 構成設定ファイルからiniファイル名を取得する
+	void GetIniFileName( LPTSTR pszIniFileName, LPCTSTR pszProfName, bool bRead = false );	// iniファイル名の取得
 
 private:
 	DllSharedData* pShareData;

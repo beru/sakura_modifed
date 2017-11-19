@@ -21,9 +21,6 @@ void Layout::DUMP(void)
 }
 
 // レイアウト幅を計算。改行は含まない。
-// 2007.10.11 kobake 作成
-// 2007.11.29 kobake タブ幅が計算されていなかったのを修正
-// 2011.12.26 Moca インデントは含むように変更(座標変換バグ修正)
 size_t Layout::CalcLayoutWidth(const LayoutMgr& layoutMgr) const
 {
 	// ソース
@@ -42,7 +39,7 @@ size_t Layout::CalcLayoutWidth(const LayoutMgr& layoutMgr) const
 	return nWidth;
 }
 
-// オフセット値をレイアウト単位に変換して取得。2007.10.17 kobake
+// オフセット値をレイアウト単位に変換して取得
 int Layout::CalcLayoutOffset(
 	const LayoutMgr& layoutMgr,
 	int nStartPos,

@@ -11,7 +11,7 @@
 DocType::DocType(EditDoc& doc)
 	:
 	doc(doc),
-	nSettingType(0),			// Sep. 11, 2002 genta
+	nSettingType(0),
 	typeConfig(GetDllShareData().typeBasis),
 	nSettingTypeLocked(false)	// 設定値変更可能フラグ
 {
@@ -56,7 +56,7 @@ void DocType::SetDocumentType(
 	// タイプ別設定更新を反映
 	ColorStrategyPool::getInstance().OnChangeSetting();
 	FigureManager::getInstance().OnChangeSetting();
-	this->SetDocumentIcon();	// Sep. 11, 2002 genta
+	this->SetDocumentIcon();
 	doc.SetBackgroundImage();
 }
 
@@ -81,9 +81,6 @@ void DocType::SetDocumentTypeIdx(int id, bool force)
 	
 	タイプ別設定に応じてウィンドウアイコンをファイルに関連づけられた物，
 	または標準のものに設定する．
-	
-	@author genta
-	@date 2002.09.10
 */
 void DocType::SetDocumentIcon()
 {

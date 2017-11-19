@@ -52,7 +52,7 @@ public:
 
 	// Entry Point
 protected:
-	// Aug. 20, 2005 Aroka : 最適化オプションでデフォルトを__fastcallに変更しても
+	// 最適化オプションでデフォルトを__fastcallに変更しても
 	// 影響を受けないようにする．
 	typedef migemo*        (__cdecl *Proc_migemo_open)            (char* dict);
 	typedef void           (__cdecl *Proc_migemo_close)           (migemo* object);

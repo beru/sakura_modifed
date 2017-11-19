@@ -30,7 +30,7 @@ public:
 	bool FileLoadWithoutAutoMacro(
 		LoadInfo*	pLoadInfo			// [in/out]
 	);
-	void ReloadCurrentFile(				// 同一ファイルの再オープン Jul. 26, 2003 ryoji BOMオプション追加
+	void ReloadCurrentFile(				// 同一ファイルの再オープン
 		EncodingType	nCharCode		// [in] 文字コード種別
 	);
 
@@ -46,14 +46,14 @@ public:
 		EncodingType	eCodeType = CODE_NONE,
 		EolType			eEolType = EolType::None,
 		bool			bDialog = true
-	);	// ダイアログでファイル名を入力させ、保存。	// 2006.12.30 ryoji
-	bool FileSave();			// 上書き保存。ファイル名が指定されていなかったらダイアログで入力を促す。	// 2006.12.30 ryoji
+	);	// ダイアログでファイル名を入力させ、保存
+	bool FileSave();			// 上書き保存。ファイル名が指定されていなかったらダイアログで入力を促す
 
 	// クローズ
-	bool FileClose();			// 閉じて(無題)	// 2006.12.30 ryoji
+	bool FileClose();			// 閉じて(無題)
 
 	// その他
-	void FileCloseOpen(				// 閉じて開く	// 2006.12.30 ryoji
+	void FileCloseOpen(				// 閉じて開く
 		const LoadInfo& loadInfo = LoadInfo(_T(""), CODE_AUTODETECT, false)
 	);
 

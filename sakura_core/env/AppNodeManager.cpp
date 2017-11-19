@@ -29,9 +29,6 @@ static bool s_bGSort;	// グループ指定
 	（Lock()期間中にSendMessage()などで他ウィンドウの操作をすると危険性大）
 	CShareData::pEditArrを直接参照したり変更するような箇所には潜在的な危険があるが、
 	対話型で順次操作している範囲であればまず問題は起きない。
-
-	@date 2007.07.05 ryoji 新規導入
-	@date 2007.07.07 genta CShareDataのメンバへ移動
 */
 static Mutex g_editArrMutex(FALSE, GSTR_MUTEX_SAKURA_EDITARR);
 
@@ -66,10 +63,7 @@ static bool __cdecl cmpGetOpenedWindowArr(const EditNodeEx& e1, const EditNodeEx
 //                         グループ                            //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-/** 指定位置の編集ウィンドウ情報を取得する
-
-	@date 2007.06.20 ryoji
-*/
+/** 指定位置の編集ウィンドウ情報を取得する */
 EditNode* AppNodeGroupHandle::GetEditNodeAt(size_t nIndex)
 {
 	DllSharedData* pShare = &GetDllShareData();
@@ -93,9 +87,6 @@ EditNode* AppNodeGroupHandle::GetEditNodeAt(size_t nIndex)
 /** 編集ウィンドウリストへの登録
 
 	@param hWnd   [in] 登録する編集ウィンドウのハンドル
-
-	@date 2003.06.28 MIK CRecent利用で書き換え
-	@date 2007.06.20 ryoji 新規ウィンドウにはグループIDを付与する
 */
 bool AppNodeGroupHandle::AddEditWndList(HWND hWnd)
 {
@@ -105,7 +96,7 @@ bool AppNodeGroupHandle::AddEditWndList(HWND hWnd)
 	EditNode editNode = {0};
 	editNode.hWnd = hWnd;
 
-	{	// 2007.07.07 genta Lock領域
+	{
 		LockGuard<Mutex> guard(g_editArrMutex);
 
 		RecentEditNode	recentEditNode;
@@ -168,15 +159,11 @@ bool AppNodeGroupHandle::AddEditWndList(HWND hWnd)
 }
 
 
-/** 編集ウィンドウリストからの削除
-
-	@date 2003.06.28 MIK CRecent利用で書き換え
-	@date 2007.07.05 ryoji mutexで保護
-*/
+/** 編集ウィンドウリストからの削除 */
 void AppNodeGroupHandle::DeleteEditWndList(HWND hWnd)
 {
-	// ウィンドウをリストから削除する。
-	{	// 2007.07.07 genta Lock領域
+	// ウィンドウをリストから削除する
+	{
 		LockGuard<Mutex> guard(g_editArrMutex);
 
 		RecentEditNode	recentEditNode;
@@ -195,11 +182,6 @@ void AppNodeGroupHandle::DeleteEditWndList(HWND hWnd)
 	@param bExit [in] true: 編集の全終了 / false: すべて閉じる
 	@param bCheckConfirm [in] false:複数ウィンドウを閉じるときの警告を出さない / true:警告を出す（設定による）
 	@param hWndFrom [in] 終了要求元のウィンドウ（警告メッセージの親となる）
-
-	@date 2007.02.13 ryoji 「編集の全終了」を示す引数(bExit)を追加
-	@date 2007.06.22 ryoji nGroup引数を追加
-	@date 2008.11.22 syat 全て→いくつかに変更。複数ウィンドウを閉じる時の警告メッセージを追加
-	@date 2013.03.09 Uchi 終了要求に要求元のウィンドウを渡す
 */
 bool AppNodeGroupHandle::RequestCloseEditor(EditNode* pWndArr, size_t nArrCnt, bool bExit, bool bCheckConfirm, HWND hWndFrom)
 {
@@ -298,9 +280,6 @@ bool AppNodeGroupHandle::RequestCloseEditor(EditNode* pWndArr, size_t nArrCnt, b
 /** 現在の編集ウィンドウの数を調べる
 
 	@param bExcludeClosing [in] 終了中の編集ウィンドウはカウントしない
-
-	@date 2007.06.22 ryoji nGroup引数を追加
-	@date 2008.04.19 ryoji bExcludeClosing引数を追加
 */
 int AppNodeGroupHandle::GetEditorWindowsNum(bool bExcludeClosing/* = true */)
 {
@@ -375,11 +354,7 @@ bool relayMessageToAllEditors(
 	return true;
 }
 
-/** 全編集ウィンドウへメッセージをポストする
-
-	@date 2005.01.24 genta hWndLast == NULLのとき全くメッセージが送られなかった
-	@date 2007.06.22 ryoji nGroup引数を追加、グループ単位で順番に送る
-*/
+/** 全編集ウィンドウへメッセージをポストする */
 bool AppNodeGroupHandle::PostMessageToAllEditors(
 	UINT		uMsg,		// ポストするメッセージ
 	WPARAM		wParam,		// 第1メッセージ パラメータ
@@ -397,11 +372,7 @@ bool AppNodeGroupHandle::PostMessageToAllEditors(
 	);
 }
 
-/** 全編集ウィンドウへメッセージを送る
-
-	@date 2005.01.24 genta m_hWndLast == NULLのとき全くメッセージが送られなかった
-	@date 2007.06.22 ryoji nGroup引数を追加、グループ単位で順番に送る
-*/
+/** 全編集ウィンドウへメッセージを送る */
 bool AppNodeGroupHandle::SendMessageToAllEditors(
 	UINT	uMsg,		// ポストするメッセージ
 	WPARAM	wParam,		// 第1メッセージ パラメータ
@@ -423,10 +394,7 @@ bool AppNodeGroupHandle::SendMessageToAllEditors(
 //                        マネージャ                           //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-/** グループをIDリセットする
-
-	@date 2007.06.20 ryoji
-*/
+/** グループをIDリセットする */
 void AppNodeManager::ResetGroupId()
 {
 	DllSharedData* pShare = &GetDllShareData();
@@ -441,8 +409,6 @@ void AppNodeManager::ResetGroupId()
 }
 
 /** 編集ウィンドウ情報を取得する
-
-	@date 2007.06.20 ryoji
 
 	@warning この関数はpEditArr内の要素へのポインタを返す．
 	pEditArrが変更された後ではアクセスしないよう注意が必要．
@@ -501,9 +467,6 @@ int AppNodeManager::GetNoNameNumber(HWND hWnd)
 
 	@return 配列の要素数を返す
 	@note 要素数>0 の場合は呼び出し側で配列をdelete[]してください
-
-	@date 2003.06.28 MIK CRecent利用で書き換え
-	@date 2007.06.20 ryoji bGroup引数追加、ソート処理を自前のものからqsortに変更
 */
 size_t AppNodeManager::GetOpenedWindowArr(EditNode** ppEditNode, bool bSort, bool bGSort/* = false */)
 {
@@ -593,9 +556,6 @@ size_t AppNodeManager::_GetOpenedWindowArrCore(EditNode** ppEditNode, bool bSort
 
 	@param[in] hwndSrc 移動するウィンドウ
 	@param[in] hwndDst 移動先ウィンドウ
-
-	@author ryoji
-	@date 2007.07.07 genta ウィンドウ配列操作部をCTabWndより移動
 */
 bool AppNodeManager::ReorderTab(HWND hwndSrc, HWND hwndDst)
 {
@@ -659,9 +619,6 @@ bool AppNodeManager::ReorderTab(HWND hwndSrc, HWND hwndDst)
 	@param[in] notifygroups タブの更新が必要なグループのグループID．int[2]を呼び出し元で用意する．
 
 	@return 更新されたhwndDst (移動先が既に閉じられた場合などにNULLに変更されることがある)
-
-	@author ryoji
-	@date 2007.07.07 genta CTabWnd::SeparateGroup()より独立
 */
 HWND AppNodeManager::SeparateGroup(HWND hwndSrc, HWND hwndDst, bool bSrcIsTop, int notifygroups[])
 {
@@ -706,8 +663,6 @@ HWND AppNodeManager::SeparateGroup(HWND hwndSrc, HWND hwndDst, bool bSrcIsTop, i
 	@param[in] hWnd2 比較するウィンドウ2
 	
 	@return 2つのウィンドウが同一グループに属していればtrue
-
-	@date 2007.06.20 ryoji
 */
 bool AppNodeManager::IsSameGroup(HWND hWnd1, HWND hWnd2)
 {

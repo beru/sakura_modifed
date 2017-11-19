@@ -13,7 +13,6 @@ wchar_t* DocReader::GetAllData(size_t* pnDataLen)
 	const DocLine* pDocLine = pDocLineMgr->GetDocLineTop();
 	size_t nDataLen = 0;
 	while (pDocLine) {
-		// Oct. 7, 2002 YAZAKI
 		nDataLen += pDocLine->GetLengthWithoutEOL() + 2;	// \r\nを追加して返すため + 2する。
 		pDocLine = pDocLine->GetNextLine();
 	}
@@ -27,7 +26,6 @@ wchar_t* DocReader::GetAllData(size_t* pnDataLen)
 	
 	nDataLen = 0;
 	while (pDocLine) {
-		// Oct. 7, 2002 YAZAKI
 		size_t nLineLen = pDocLine->GetLengthWithoutEOL();
 		if (0 < nLineLen) {
 			wmemcpy(&pData[nDataLen], pDocLine->GetPtr(), nLineLen);
@@ -49,15 +47,12 @@ const wchar_t* DocReader::GetLineStr(size_t nLine, size_t* pnLineLen)
 		*pnLineLen = 0;
 		return NULL;
 	}
-	// 2002/2/10 aroka CMemory のメンバ変数に直接アクセスしない(inline化されているので速度的な問題はない)
+	// CMemory のメンバ変数に直接アクセスしない(inline化されているので速度的な問題はない)
 	return pDocLine->GetDocLineStrWithEOL(pnLineLen);
 }
 
 /*!
 	指定された行番号の文字列と改行コードを除く長さを取得
-	
-	@author Moca
-	@date 2003.06.22
 */
 const wchar_t* DocReader::GetLineStrWithoutEOL(size_t nLine, size_t* pnLineLen)
 {

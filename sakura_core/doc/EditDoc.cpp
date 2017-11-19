@@ -1,12 +1,12 @@
 #include "StdAfx.h"
 #include <stdlib.h>
-#include <string.h>	// Apr. 03, 2003 genta
+#include <string.h>
 #include <OleCtl.h>
 #include <memory>
 
 #include "doc/EditDoc.h"
-#include "doc/logic/DocLine.h" /// 2002/2/3 aroka
-#include "doc/layout/Layout.h"	// 2007.08.22 ryoji 追加
+#include "doc/logic/DocLine.h"
+#include "doc/layout/Layout.h"
 #include "docplus/ModifyManager.h"
 #include "_main/global.h"
 #include "_main/AppMode.h"
@@ -26,8 +26,8 @@
 #include "env/ShareData.h"
 #include "env/DllSharedData.h"
 #include "func/Funccode.h"
-#include "mem/MemoryIterator.h"	// 2007.08.22 ryoji 追加
-#include "outline/FuncInfoArr.h" /// 2002/2/3 aroka
+#include "mem/MemoryIterator.h"
+#include "outline/FuncInfoArr.h"
 #include "macro/SMacroMgr.h"
 #include "recent/MRUFolder.h"
 #include "util/fileUtil.h"
@@ -43,8 +43,8 @@
 static const EFunctionCode EIsModificationForbidden[] = {
 	F_WCHAR,
 	F_IME_CHAR,
-	F_UNDO,		// 2007.10.12 genta
-	F_REDO,		// 2007.10.12 genta
+	F_UNDO,
+	F_REDO,
 	F_DELETE,
 	F_DELETE_BACK,
 	F_WordDeleteToStart,
@@ -62,11 +62,11 @@ static const EFunctionCode EIsModificationForbidden[] = {
 	F_UNINDENT_TAB,
 	F_INDENT_SPACE,
 	F_UNINDENT_SPACE,
-	F_LTRIM,		// 2001.12.03 hor
-	F_RTRIM,		// 2001.12.03 hor
-	F_SORT_ASC,	// 2001.12.11 hor
-	F_SORT_DESC,	// 2001.12.11 hor
-	F_MERGE,		// 2001.12.11 hor
+	F_LTRIM,
+	F_RTRIM,
+	F_SORT_ASC,
+	F_SORT_DESC,
+	F_MERGE,
 	F_CUT,
 	F_PASTE,
 	F_PASTEBOX,
@@ -74,7 +74,7 @@ static const EFunctionCode EIsModificationForbidden[] = {
 	F_ADDTAIL_W,
 	F_INS_DATE,
 	F_INS_TIME,
-	F_CTRL_CODE_DIALOG,	//@@@ 2002.06.02 MIK
+	F_CTRL_CODE_DIALOG,
 	F_TOLOWER,
 	F_TOUPPER,
 	F_TOHANKAKU,
@@ -82,11 +82,11 @@ static const EFunctionCode EIsModificationForbidden[] = {
 	F_TOZENKAKUHIRA,
 	F_HANKATATOZENKATA,
 	F_HANKATATOZENHIRA,
-	F_TOZENEI,					// 2001/07/30 Misaka
+	F_TOZENEI,
 	F_TOHANEI,
-	F_TOHANKATA,				// 2002/08/29 ai
+	F_TOHANKATA,
 	F_TABTOSPACE,
-	F_SPACETOTAB,  //---- Stonee, 2001/05/27
+	F_SPACETOTAB,
 	F_CODECNV_AUTO2SJIS,
 	F_CODECNV_EMAIL,
 	F_CODECNV_EUC2SJIS,
@@ -111,11 +111,6 @@ static const EFunctionCode EIsModificationForbidden[] = {
 /*!
 	@note
 		pEditWnd はコンストラクタ内では使用しないこと．
-
-	@date 2000.05.12 genta 初期化方法変更
-	@date 2002.2.17 YAZAKI CShareDataのインスタンスは、Processにひとつあるのみ。
-	@date 2002.01.14 YAZAKI 印刷PreviewをCPrintPreviewに独立させたことによる変更
-	@date 2004.06.21 novice タグジャンプ機能追加
 */
 EditDoc::EditDoc(EditApp& app)
 	:
@@ -133,7 +128,6 @@ EditDoc::EditDoc(EditApp& app)
 	layoutMgr.Create(this, &docLineMgr);
 	
 	// レイアウト情報の変更
-	// 2008.06.07 nasukoji	折り返し方法の追加に対応
 	// 「指定桁で折り返す」以外の時は折り返し幅をMAXLINEKETASで初期化する
 	// 「右端で折り返す」は、この後のOnSize()で再設定される
 	const TypeConfig& ref = docType.GetDocumentAttribute();
@@ -143,7 +137,7 @@ EditDoc::EditDoc(EditApp& app)
 	}
 	layoutMgr.SetLayoutInfo(true, ref, ref.nTabSpace, nMaxLineKetas);
 
-	// 自動保存の設定	// Aug, 21, 2000 genta
+	// 自動保存の設定
 	autoSaveAgent.ReloadAutoSaveParam();
 
 	//$$ ModifyManager インスタンスを生成
@@ -152,7 +146,7 @@ EditDoc::EditDoc(EditApp& app)
 	//$$ CodeChecker インスタンスを生成
 	CodeChecker::getInstance();
 
-	// 2008.06.07 nasukoji	テキストの折り返し方法を初期化
+	// テキストの折り返し方法を初期化
 	nTextWrapMethodCur = docType.GetDocumentAttribute().nTextWrapMethod;	// 折り返し方法
 	bTextWrapMethodCurTemp = false;									// 一時設定適用中を解除
 	blfCurTemp = false;
@@ -235,28 +229,24 @@ void EditDoc::InitDoc()
 	AppMode::getInstance().szGrepKey[0] = 0;	//$$
 
 	EditApp::getInstance().pGrepAgent->bGrepMode = false;	// Grepモード	//$$同上
-	autoReloadAgent.watchUpdateType = WatchUpdateType::Query; // Dec. 4, 2002 genta 更新監視方法 $$
+	autoReloadAgent.watchUpdateType = WatchUpdateType::Query; // 更新監視方法 $$
 
-	// 2005.06.24 Moca バグ修正
 	// アウトプットウィンドウで「閉じて(無題)」を行ってもアウトプットウィンドウのまま
 	if (AppMode::getInstance().IsDebugMode()) {
 		AppMode::getInstance().SetDebugModeOFF();
 	}
 
-	// Sep. 10, 2002 genta
-	// アイコン設定はファイル名設定と一体化のためここからは削除
-
 	Clear();
 
 	// 変更フラグ
-	docEditor.SetModified(false, false);	// Jan. 22, 2002 genta
+	docEditor.SetModified(false, false);
 
 	// 文字コード種別
 	const TypeConfig& ref = docType.GetDocumentAttribute();
 	docFile.SetCodeSet(ref.encoding.eDefaultCodetype, ref.encoding.bDefaultBom);
 	docEditor.newLineCode = ref.encoding.eDefaultEoltype;
 
-	// Oct. 2, 2005 genta 挿入モード
+	// 挿入モード
 	docEditor.SetInsMode(GetDllShareData().common.general.bIsINSMode);
 
 	cookie.DeleteAll(L"document");
@@ -341,13 +331,13 @@ void EditDoc::InitAllView(void)
 {
 	nCommandExecNum = 0;	// コマンド実行回数
 	
-	// 2008.05.30 nasukoji	テキストの折り返し方法を初期化
+	// テキストの折り返し方法を初期化
 	nTextWrapMethodCur = docType.GetDocumentAttribute().nTextWrapMethod;	// 折り返し方法
 	bTextWrapMethodCurTemp = false;											// 一時設定適用中を解除
 	blfCurTemp = false;
 	bTabSpaceCurTemp = false;
 	
-	// 2009.08.28 nasukoji	「折り返さない」ならテキスト最大幅を算出、それ以外は変数をクリア
+	// 「折り返さない」ならテキスト最大幅を算出、それ以外は変数をクリア
 	if (nTextWrapMethodCur == TextWrappingMethod::NoWrapping) {
 		layoutMgr.CalculateTextWidth();		// テキスト最大幅を算出する
 	}else {
@@ -359,18 +349,13 @@ void EditDoc::InitAllView(void)
 	return;
 }
 
-/*! ウィンドウの作成等
-
-	@date 2001.09.29 genta マクロクラスを渡すように
-	@date 2002.01.03 YAZAKI tbMyButtonなどをCShareDataからCMenuDrawerへ移動したことによる修正。
-*/
+/*! ウィンドウの作成等 */
 BOOL EditDoc::Create(EditWnd* pEditWnd)
 {
 	MY_RUNNINGTIMER(runningTimer, "EditDoc::Create");
 
 	this->pEditWnd = pEditWnd;
 
-	// Oct. 2, 2001 genta
 	funcLookup.Init(GetDllShareData().common.macro.macroTable, &GetDllShareData().common);
 
 	SetBackgroundImage();
@@ -391,9 +376,6 @@ BOOL EditDoc::Create(EditWnd* pEditWnd)
 	ファイル名を設定すると同時に，ウィンドウアイコンを適切に設定する．
 	
 	@param szFile [in] ファイルのパス名
-	
-	@author genta
-	@date 2002.09.09
 */
 void EditDoc::SetFilePathAndIcon(const TCHAR* szFile)
 {
@@ -477,9 +459,6 @@ void EditDoc::GetEditInfo(
 
 	@retval true  禁止
 	@retval false 許可
-
-	@date 2000.08.14 genta 新規作成
-	@date 2014.07.27 novice 編集禁止の場合の検索方法変更
 */
 bool EditDoc::IsModificationForbidden(EFunctionCode nCommand) const
 {
@@ -518,9 +497,6 @@ bool EditDoc::IsModificationForbidden(EFunctionCode nCommand) const
 	新しいウィンドウを開かずに現在のウィンドウを再利用できるかどうかのテストを行う．
 	変更済み，ファイルを開いている，Grepウィンドウ，アウトプットウィンドウの場合には
 	再利用不可．
-
-	@author Moca
-	@date 2005.06.24 Moca
 */
 bool EditDoc::IsAcceptLoad() const
 {
@@ -543,13 +519,10 @@ bool EditDoc::IsAcceptLoad() const
 /*! コマンドコードによる処理振り分け
 
 	@param[in] nCommand MAKELONG(コマンドコード，送信元識別子)
-
-	@date 2006.05.19 genta 上位16bitに送信元の識別子が入るように変更
-	@date 2007.06.20 ryoji グループ内で巡回するように変更
 */
 bool EditDoc::HandleCommand(EFunctionCode nCommand)
 {
-	// May. 19, 2006 genta 上位16bitに送信元の識別子が入るように変更したので
+	// 上位16bitに送信元の識別子が入るように変更したので
 	// 下位16ビットのみを取り出す
 	switch (LOWORD(nCommand)) {
 	case F_PREVWINDOW:	// 前のウィンドウ
@@ -580,18 +553,16 @@ bool EditDoc::HandleCommand(EFunctionCode nCommand)
 	}
 }
 
-/*!	タイプ別設定の適用を変更
-	@date 2011.12.15 ViewCommander::Command_Type_Listから移動
-*/
+/*!	タイプ別設定の適用を変更 */
 void EditDoc::OnChangeType()
 {
 	// 設定変更を反映させる
-	bTextWrapMethodCurTemp = false;	// 折り返し方法の一時設定適用中を解除	// 2008.06.08 ryoji
+	bTextWrapMethodCurTemp = false;	// 折り返し方法の一時設定適用中を解除
 	blfCurTemp = false;
 	bTabSpaceCurTemp = false;
 	OnChangeSetting();
 
-	// 新規で無変更ならデフォルト文字コードを適用する	// 2011.01.24 ryoji
+	// 新規で無変更ならデフォルト文字コードを適用する
 	if (!docFile.GetFilePathClass().IsValidPath()) {
 		if (!docEditor.IsModified() && docLineMgr.GetLineCount() == 0) {
 			const TypeConfig& types = docType.GetDocumentAttribute();
@@ -601,16 +572,12 @@ void EditDoc::OnChangeType()
 		}
 	}
 
-	// 2006.09.01 ryoji タイプ変更後自動実行マクロを実行する
+	// タイプ変更後自動実行マクロを実行する
 	RunAutoMacro(GetDllShareData().common.macro.nMacroOnTypeChanged);
 }
 
 /*! ビューに設定変更を反映させる
 	@param [in] bDoLayout レイアウト情報の再作成
-
-	@date 2004.06.09 Moca レイアウト再構築中にProgress Barを表示する．
-	@date 2008.05.30 nasukoji	テキストの折り返し方法の変更処理を追加
-	@date 2013.04.22 novice レイアウト情報の再作成を設定できるようにした
 */
 void EditDoc::OnChangeSetting(
 	bool bDoLayout
@@ -736,7 +703,7 @@ void EditDoc::OnChangeSetting(
 			break;
 		case TextWrappingMethod::SettingWidth:
 			if (bTextWrapMethodCurTemp) {
-				// 2013.05.29 現在の一時適用の折り返し幅を使うように
+				// 現在の一時適用の折り返し幅を使うように
 				nMaxLineKetas = layoutMgr.GetMaxLineKetas();
 			}
 			break;
@@ -764,7 +731,7 @@ void EditDoc::OnChangeSetting(
 	EditApp::getInstance().pVisualProgress->ProgressListener::Listen(pOld);
 	pEditWnd->ClearViewCaretPosInfo();
 	
-	// 2009.08.28 nasukoji	「折り返さない」ならテキスト最大幅を算出、それ以外は変数をクリア
+	// 「折り返さない」ならテキスト最大幅を算出、それ以外は変数をクリア
 	if (nTextWrapMethodCur == TextWrappingMethod::NoWrapping) {
 		layoutMgr.CalculateTextWidth();		// テキスト最大幅を算出する
 	}else {
@@ -779,7 +746,7 @@ void EditDoc::OnChangeSetting(
 		pEditWnd->RestorePhysPosOfAllView(posSaveAry);
 	}
 	for (int i=0; i<viewCount; ++i) {
-		pEditWnd->GetView(i).AdjustScrollBars();	// 2008.06.18 ryoji
+		pEditWnd->GetView(i).AdjustScrollBars();
 	}
 	if (hwndProgress) {
 		::ShowWindow(hwndProgress, SW_HIDE);
@@ -808,7 +775,7 @@ BOOL EditDoc::OnFileClose(bool bGrepNoConfirm)
 	}
 
 	// GREPモードで、かつ、「GREPモードで保存確認するか」がOFFだったら、保存確認しない
-	// 2011.11.13 GrepモードでGrep直後は"未編集"状態になっているが保存確認が必要
+	// GrepモードでGrep直後は"未編集"状態になっているが保存確認が必要
 	if (EditApp::getInstance().pGrepAgent->bGrepMode) {
 		if (bGrepNoConfirm) { // Grepで保存確認しないモード
 			return TRUE;
@@ -887,9 +854,9 @@ BOOL EditDoc::OnFileClose(bool bGrepNoConfirm)
 		switch (nRet) {
 		case IDYES:
 			if (docFile.GetFilePathClass().IsValidPath()) {
-				nBool = docFileOperation.FileSave();	// 2006.12.30 ryoji
+				nBool = docFileOperation.FileSave();
 			}else {
-				nBool = docFileOperation.FileSaveAs();	// 2006.12.30 ryoji
+				nBool = docFileOperation.FileSaveAs();
 			}
 			return nBool;
 		case IDNO:
@@ -909,11 +876,6 @@ BOOL EditDoc::OnFileClose(bool bGrepNoConfirm)
 
 	@param type [in] 自動実行マクロ番号
 	@return
-
-	@author ryoji
-	@date 2006.09.01 ryoji 作成
-	@date 2007.07.20 genta HandleCommandに追加情報を渡す．
-		自動実行マクロで発行したコマンドはキーマクロに保存しない
 */
 void EditDoc::RunAutoMacro(int idx, LPCTSTR pszSaveFilePath)
 {
@@ -931,7 +893,7 @@ void EditDoc::RunAutoMacro(int idx, LPCTSTR pszSaveFilePath)
 		if (!(::GetAsyncKeyState(VK_SHIFT) & 0x8000)) {	// Shift キーが押されていなければ実行
 			if (pszSaveFilePath)
 				docFile.SetSaveFilePath(pszSaveFilePath);
-			// 2007.07.20 genta 自動実行マクロで発行したコマンドはキーマクロに保存しない
+			// 自動実行マクロで発行したコマンドはキーマクロに保存しない
 			HandleCommand((EFunctionCode)((F_USERMACRO_0 + idx) | FA_NONRECORD));
 			docFile.SetSaveFilePath(_T(""));
 		}

@@ -18,7 +18,6 @@ public:
 	SearchKeywordManager() {
 		pShareData = &GetDllShareData();
 	}
-	//@@@ 2002.2.2 YAZAKI
 	void AddToSearchKeys(const wchar_t* pszSearchKey);		// searchKeys ‚É pszSearchKey ‚ð’Ç‰Á‚·‚é
 	void AddToReplaceKeys(const wchar_t* pszReplaceKey);	// replaceKeys ‚É pszReplaceKey ‚ð’Ç‰Á‚·‚é
 	void AddToGrepFiles(const TCHAR* pszGrepFile);			// grepFiles ‚É pszGrepFile ‚ð’Ç‰Á‚·‚é

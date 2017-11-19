@@ -25,8 +25,6 @@ struct ARRHEAD {
 
 const unsigned int uShareDataVersion = N_SHAREDATA_VERSION;
 
-// CShareData_new2.cppと統合
-//@@@ 2002.01.03 YAZAKI tbMyButtonなどをShareDataからCMenuDrawerへ移動
 ShareData::ShareData()
 {
 	hFileMap   = NULL;
@@ -120,7 +118,6 @@ bool ShareData::InitShareData()
 		CreateTypeSettings();
 		SetDllShareData(pShareData);
 
-		// 2007.05.19 ryoji 実行ファイルフォルダ->設定ファイルフォルダに変更
 		TCHAR szIniFolder[_MAX_PATH];
 		pShareData->fileNameManagement.iniFolder.bInit = false;
 		GetInidir(szIniFolder);
@@ -133,13 +130,13 @@ bool ShareData::InitShareData()
 		GetAppVersionInfo(NULL, VS_VERSION_INFO,
 			&pShareData->version.dwProductVersionMS, &pShareData->version.dwProductVersionLS);
 
-		pShareData->flags.bEditWndChanging = false;		// 編集ウィンドウ切替中	// 2007.04.03 ryoji
+		pShareData->flags.bEditWndChanging = false;		// 編集ウィンドウ切替中
 		pShareData->flags.bRecordingKeyMacro = false;	// キーボードマクロの記録中
 		pShareData->flags.hwndRecordingKeyMacro = NULL;	// キーボードマクロを記録中のウィンドウ
 
 		pShareData->nodes.nSequences = 0;				// ウィンドウ連番
 		pShareData->nodes.nNonameSequences = 0;
-		pShareData->nodes.nGroupSequences = 0;			// タブグループ連番		// 2007.06.20 ryoji
+		pShareData->nodes.nGroupSequences = 0;			// タブグループ連番
 		pShareData->nodes.nEditArrNum = 0;
 
 		pShareData->handles.hwndTray = NULL;
@@ -150,18 +147,15 @@ bool ShareData::InitShareData()
 			pShareData->dwCustColors[i] = RGB( 255, 255, 255 );
 		}
 
-//@@@ 2001.12.26 YAZAKI MRUリストは、CMRUに依頼する
 		MruFile mru;
 		mru.ClearAll();
-//@@@ 2001.12.26 YAZAKI OPENFOLDERリストは、MruFolderにすべて依頼する
 		MruFolder mruFolder;
 		mruFolder.ClearAll();
 
-// From Here Sept. 19, 2000 JEPRO コメントアウトになっていた初めのブロックを復活しその下をコメントアウト
 // MS ゴシック標準スタイル10ptに設定
 //		// LOGFONTの初期化
 		LOGFONT lf = {0};
-		lf.lfHeight			= DpiPointsToPixels(-10);	// 2009.10.01 ryoji 高DPI対応（ポイント数から算出）
+		lf.lfHeight			= DpiPointsToPixels(-10);	// 高DPI対応（ポイント数から算出）
 		lf.lfWidth			= 0;
 		lf.lfEscapement		= 0;
 		lf.lfOrientation	= 0;
@@ -176,10 +170,7 @@ bool ShareData::InitShareData()
 		lf.lfPitchAndFamily	= 0x31;
 		_tcscpy(lf.lfFaceName, _T("ＭＳ ゴシック"));
 
-		// LoadShareDataでフォントが変わる可能性があるので、ここでは不要 // 2013.04.08 aroka
-		//InitCharWidthCacheCommon();								// 2008/5/17 Uchi
-
-		// キーワードヘルプのフォント ai 02/05/21 Add S
+		// キーワードヘルプのフォント
 		LOGFONT lfIconTitle;	// エクスプローラのファイル名表示に使用されるフォント
 		::SystemParametersInfo(
 			SPI_GETICONTITLELOGFONT,				// system parameter to query or set
@@ -187,30 +178,28 @@ bool ShareData::InitShareData()
 			(PVOID)&lfIconTitle,					// depends on action to be taken
 			0										// user profile update flag
 		);
-		// ai 02/05/21 Add E
 		INT nIconPointSize = lfIconTitle.lfHeight >= 0 ? lfIconTitle.lfHeight : DpiPixelsToPoints(-lfIconTitle.lfHeight, 10);	// フォントサイズ（1/10ポイント単位）
-// To Here Sept. 19,2000
 
 		// [全般]タブ
 		{
 			CommonSetting_General& general = pShareData->common.general;
 
-			general.nMRUArrNum_MAX = 15;			// ファイルの履歴MAX	//Oct. 14, 2000 JEPRO 少し増やした(10→15)
-			general.nOPENFOLDERArrNum_MAX = 15;		// フォルダの履歴MAX	//Oct. 14, 2000 JEPRO 少し増やした(10→15)
+			general.nMRUArrNum_MAX = 15;			// ファイルの履歴MAX
+			general.nOPENFOLDERArrNum_MAX = 15;		// フォルダの履歴MAX
 
 			general.nCaretType = 0;					// カーソルのタイプ 0=win 1=dos
 			general.bIsINSMode = true;				// 挿入／上書きモード
-			general.bIsFreeCursorMode = false;		// フリーカーソルモードか	//Oct. 29, 2000 JEPRO 「なし」に変更
+			general.bIsFreeCursorMode = false;		// フリーカーソルモードか
 
 			general.bStopsBothEndsWhenSearchWord = false;	// 単語単位で移動するときに、単語の両端で止まるか
 			general.bStopsBothEndsWhenSearchParagraph = false;	// 単語単位で移動するときに、単語の両端で止まるか
 
-			general.bCloseAllConfirm = false;		// [すべて閉じる]で他に編集用のウィンドウがあれば確認する		// 2006.12.25 ryoji
+			general.bCloseAllConfirm = false;		// [すべて閉じる]で他に編集用のウィンドウがあれば確認する
 			general.bExitConfirm = false;			// 終了時の確認をする
 			general.nRepeatedScrollLineNum = 3;		// キーリピート時のスクロール行数
 			general.nRepeatedScroll_Smooth = false;	// キーリピート時のスクロールを滑らかにするか
-			general.nPageScrollByWheel = 0;			// キー/マウスボタン + ホイールスクロールでページスクロールする	// 2009.01.17 nasukoji
-			general.nHorizontalScrollByWheel = 0;	// キー/マウスボタン + ホイールスクロールで横スクロールする		// 2009.01.17 nasukoji
+			general.nPageScrollByWheel = 0;			// キー/マウスボタン + ホイールスクロールでページスクロールする
+			general.nHorizontalScrollByWheel = 0;	// キー/マウスボタン + ホイールスクロールで横スクロールする
 
 			general.bUseTaskTray = true;			// タスクトレイのアイコンを使う
 #ifdef _DEBUG
@@ -223,7 +212,7 @@ bool ShareData::InitShareData()
 
 			general.bDispExitingDialog = false;		// 終了ダイアログを表示する
 
-			general.bNoCaretMoveByActivation = false;	// マウスクリックにてアクティベートされた時はカーソル位置を移動しない 2007.10.02 nasukoji (add by genta)
+			general.bNoCaretMoveByActivation = false;	// マウスクリックにてアクティベートされた時はカーソル位置を移動しない
 		}
 
 		// [ウィンドウ]タブ
@@ -235,23 +224,23 @@ bool ShareData::InitShareData()
 			window.bDispFuncKeyWnd = false;			// 次回ウィンドウを開いたときファンクションキーを表示する
 			window.bDispMiniMap = false;			// ミニマップを表示する
 			window.nFuncKeyWnd_Place = 1;			// ファンクションキー表示位置／0:上 1:下
-			window.nFuncKeyWnd_GroupNum = 4;		// 2002/11/04 Moca ファンクションキーのグループボタン数
+			window.nFuncKeyWnd_GroupNum = 4;		// ファンクションキーのグループボタン数
 			window.nMiniMapFontSize = -1;
 			window.nMiniMapQuality = NONANTIALIASED_QUALITY;
 			window.nMiniMapWidth = 150;
 
-			window.bSplitterWndHScroll = true;	// 2001/06/20 asa-o 分割ウィンドウの水平スクロールの同期をとる
-			window.bSplitterWndVScroll = true;	// 2001/06/20 asa-o 分割ウィンドウの垂直スクロールの同期をとる
+			window.bSplitterWndHScroll = true;	// 分割ウィンドウの水平スクロールの同期をとる
+			window.bSplitterWndVScroll = true;	// 分割ウィンドウの垂直スクロールの同期をとる
 
-			// 2001/06/14 asa-o 補完とキーワードヘルプはタイプ別に移動したので削除
-			//	2004.05.13 Moca ウィンドウサイズ固定指定追加に伴う指定方法変更
+			// 補完とキーワードヘルプはタイプ別に移動したので削除
+			// ウィンドウサイズ固定指定追加に伴う指定方法変更
 			window.eSaveWindowSize = WinSizeMode::Save;	// ウィンドウサイズ継承
 			window.nWinSizeType = SIZE_RESTORED;
 			window.nWinSizeCX = CW_USEDEFAULT;
 			window.nWinSizeCY = 0;
 
 			window.bScrollBarHorz = true;					// 水平スクロールバーを使う
-			//	2004.05.13 Moca ウィンドウ位置
+			// ウィンドウ位置
 			window.eSaveWindowPos = WinSizeMode::Default;	// ウィンドウ位置固定・継承
 			window.nWinPosX = CW_USEDEFAULT;
 			window.nWinPosY = 0;
@@ -260,8 +249,8 @@ bool ShareData::InitShareData()
 			window.nRulerBottomSpace = 0;					// ルーラーとテキストの隙間
 			window.nRulerType = 0;							// ルーラーのタイプ
 			window.nLineNumRightSpace = 0;					// 行番号の右の隙間
-			window.nVertLineOffset = -1;					// 2005.11.10 Moca 指定桁縦線
-			window.bUseCompatibleBMP = true;				// 2007.09.09 Moca 画面キャッシュを使う	// 2009.06.09 ryoji false->true
+			window.nVertLineOffset = -1;					// 指定桁縦線
+			window.bUseCompatibleBMP = true;				// 画面キャッシュを使う
 
 			window.bMenuIcon = true;						// メニューにアイコンを表示する
 
@@ -661,15 +650,14 @@ bool ShareData::InitShareData()
 			pShareData->searchKeywords.grepFiles.push_back(_T("*.*"));
 			pShareData->searchKeywords.grepFolders.clear();
 
-			// 2004/06/21 novice タグジャンプ機能追加
+			// タグジャンプ機能追加
 			pShareData->tagJump.tagJumpNum = 0;
-			// 2004.06.22 Moca タグジャンプの先頭
+			// タグジャンプの先頭
 			pShareData->tagJump.tagJumpTop = 0;
-			// From Here 2005.04.03 MIK キーワード指定タグジャンプのHistory保管
+			// キーワード指定タグジャンプのHistory保管
 			pShareData->tagJump.aTagJumpKeywords.clear();
 			pShareData->tagJump.bTagJumpICase = false;
 			pShareData->tagJump.bTagJumpAnyWhere = false;
-			// To Here 2005.04.03 MIK 
 
 			pShareData->history.aExceptMRU.clear();
 
@@ -678,12 +666,12 @@ bool ShareData::InitShareData()
 			pShareData->history.aCommands.clear();
 			pShareData->history.aCurDirs.clear();
 
-			pShareData->nExecFlgOpt = 1;	// 外部コマンド実行の「標準出力を得る」	// 2006.12.03 maru オプションの拡張のため
+			pShareData->nExecFlgOpt = 1;	// 外部コマンド実行の「標準出力を得る」
 
-			pShareData->nDiffFlgOpt = 0;	// DIFF差分表示	//@@@ 2002.05.27 MIK
+			pShareData->nDiffFlgOpt = 0;	// DIFF差分表示
 
-			pShareData->szTagsCmdLine[0] = _T('\0');	// CTAGS	//@@@ 2003.05.12 MIK
-			pShareData->nTagsOpt = 0;	/* CTAGS */	//@@@ 2003.05.12 MIK
+			pShareData->szTagsCmdLine[0] = _T('\0');	// CTAGS
+			pShareData->nTagsOpt = 0;	/* CTAGS */
 
 			pShareData->bLineNumIsCRLF_ForJump = true;	// 指定行へジャンプの「改行単位の行番号」か「折り返し単位の行番号」か
 		}
@@ -700,10 +688,9 @@ bool ShareData::InitShareData()
 		SetDllShareData(pShareData);
 
 		SelectCharWidthCache(CharWidthFontMode::Edit, CharWidthCacheMode::Share);
-		InitCharWidthCache(pShareData->common.view.lf);	// 2008/5/15 Uchi
+		InitCharWidthCache(pShareData->common.view.lf);
 
-		// From Here Oct. 27, 2000 genta
-		//	2014.01.08 Moca サイズチェック追加
+		// サイズチェック追加
 		if (pShareData->vStructureVersion != uShareDataVersion
 			|| pShareData->nSize != sizeof(*pShareData)
 		) {
@@ -714,7 +701,6 @@ bool ShareData::InitShareData()
 			pShareData = nullptr;
 			return false;
 		}
-		// To Here Oct. 27, 2000 genta
 
 	}
 	return true;
@@ -882,7 +868,7 @@ bool ShareData::IsPathOpened(const TCHAR* pszPath, HWND* phwndOwner)
 {
 	*phwndOwner = NULL;
 
-	// 2007.10.01 genta 相対パスを絶対パスに変換
+	// 相対パスを絶対パスに変換
 	// 変換しないとIsPathOpenedで正しい結果が得られず，
 	// 同一ファイルを複数開くことがある．
 	TCHAR szBuf[_MAX_PATH];
@@ -926,8 +912,6 @@ bool ShareData::IsPathOpened(const TCHAR* pszPath, HWND* phwndOwner)
 
 	@retval	true すでに開いていた
 	@retval	false 開いていなかった
-
-	@date 2007.03.12 maru 新規作成
 */
 bool ShareData::ActiveAlreadyOpenedWindow(const TCHAR* pszPath, HWND* phwndOwner, EncodingType nCharCode)
 {

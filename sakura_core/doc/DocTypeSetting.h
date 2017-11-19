@@ -39,12 +39,10 @@ int GetDefaultColorInfoCount();
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                           辞書                              //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-//@@@ 2006.04.10 fon ADD-start
 const int DICT_ABOUT_LEN = 50; // 辞書の説明の最大長 -1
 struct KeyHelpInfo {
 	bool		bUse;						// 辞書を 使用する/しない
 	TCHAR		szAbout[DICT_ABOUT_LEN];	// 辞書の説明(辞書ファイルの1行目から生成)
 	SFilePath	szPath;					// ファイルパス
 };
-//@@@ 2006.04.10 fon ADD-end
 

@@ -14,11 +14,7 @@
 
 
 
-/*! ルールファイルの1行を管理する構造体
-
-	@date 2002.04.01 YAZAKI
-	@date 2007.11.29 kobake 名前変更: oneRule→OneRule
-*/
+/*! ルールファイルの1行を管理する構造体 */
 struct OneRule {
 	wchar_t szMatch[256];
 	size_t	nLength;
@@ -30,13 +26,7 @@ struct OneRule {
 };
 
 
-/*! ルールファイルを読み込み、ルール構造体の配列を作成する
-
-	@date 2002.04.01 YAZAKI
-	@date 2002.11.03 Moca 引数nMaxCountを追加。バッファ長チェックをするように変更
-	@date 2013.06.02 _tfopen_absini,fgetwsをTextInputStream_AbsIniに変更。UTF-8対応。Regex対応
-	@date 2014.06.20 RegexReplace 正規表現置換モード追加
-*/
+/*! ルールファイルを読み込み、ルール構造体の配列を作成する */
 int DocOutline::ReadRuleFile(
 	const TCHAR*	pszFilename,
 	OneRule*		pOneRule,
@@ -45,8 +35,8 @@ int DocOutline::ReadRuleFile(
 	std::wstring&	title
 	)
 {
-	// 2003.06.23 Moca 相対パスは実行ファイルからのパスとして開く
-	// 2007.05.19 ryoji 相対パスは設定ファイルからのパスを優先
+	// 相対パスは実行ファイルからのパスとして開く
+	// 相対パスは設定ファイルからのパスを優先
 	TextInputStream_AbsIni	file = TextInputStream_AbsIni(pszFilename);
 	if (!file.Good()) {
 		return 0;
@@ -193,20 +183,14 @@ int DocOutline::ReadRuleFile(
 	return nCount;
 }
 
-/*! ルールファイルを元に、トピックリストを作成
-
-	@date 2002.04.01 YAZAKI
-	@date 2002.11.03 Moca ネストの深さが最大値を超えるとバッファオーバーランするのを修正
-		最大値以上は追加せずに無視する
-	@date 2007.11.29 kobake OneRule test[1024] でスタックが溢れていたのを修正
-*/
+/*! ルールファイルを元に、トピックリストを作成 */
 void DocOutline::MakeFuncList_RuleFile(
 	FuncInfoArr* pFuncInfoArr,
 	std::tstring& sTitleOverride
 	)
 {
 	// ルールファイルの内容をバッファに読み込む
-	auto test = std::make_unique<OneRule[]>(1024);	// 1024個許可。 2007.11.29 kobake スタック使いすぎなので、ヒープに確保するように修正。
+	auto test = std::make_unique<OneRule[]>(1024);	// 1024個許可
 	bool bRegex;
 	std::wstring title;
 	int nCount = ReadRuleFile(doc.docType.GetDocumentAttribute().szOutlineRuleFilename, test.get(), 1024, bRegex, title);
@@ -393,7 +377,7 @@ void DocOutline::MakeFuncList_RuleFile(
 			nLvStack[k] = test[j].nLv;
 			nDepth = k;
 		}else {
-			// 2002.11.03 Moca 最大値を超えるとバッファオーバーランするから規制する
+			// 最大値を超えるとバッファオーバーランするから規制する
 			// nDepth = nMaxStack;
 			bAppend = false;
 		}
@@ -410,13 +394,7 @@ void DocOutline::MakeFuncList_RuleFile(
 }
 
 
-// From Here 2001.12.03 hor
-/*! ブックマークリスト作成（無理矢理！）
-
-	@date 2002.01.19 aroka 空行をマーク対象にするフラグ bMarkUpBlankLineEnable を導入しました。
-	@date 2005.10.11 ryoji "ａ@" の右２バイトが全角空白と判定される問題の対処
-	@date 2005.11.03 genta 文字列長修正．右端のゴミを除去
-*/
+/*! ブックマークリスト作成（無理矢理！）*/
 void DocOutline::MakeFuncList_BookMark(FuncInfoArr* pFuncInfoArr)
 {
 	size_t nLineLen;
@@ -454,7 +432,7 @@ void DocOutline::MakeFuncList_BookMark(FuncInfoArr* pFuncInfoArr)
 				continue;
 			}
 		}// RTrim
-		// 2005.10.11 ryoji 右から遡るのではなく左から探すように修正（"ａ@" の右２バイトが全角空白と判定される問題の対処）
+		// 右から遡るのではなく左から探すように修正（"ａ@" の右２バイトが全角空白と判定される問題の対処）
 		size_t k;
 		size_t pos_wo_space;
 		k = pos_wo_space = leftspace;
@@ -474,7 +452,6 @@ void DocOutline::MakeFuncList_BookMark(FuncInfoArr* pFuncInfoArr)
 			}
 			k += nCharChars;
 		}
-		// Nov. 3, 2005 genta 文字列長計算式の修正
 		ASSERT_GE(pos_wo_space, leftspace);
 		size_t nLen = pos_wo_space - leftspace;
 		std::vector<wchar_t> szText(nLen + 1);
@@ -486,5 +463,4 @@ void DocOutline::MakeFuncList_BookMark(FuncInfoArr* pFuncInfoArr)
 	}
 	return;
 }
-// To Here 2001.12.03 hor
 

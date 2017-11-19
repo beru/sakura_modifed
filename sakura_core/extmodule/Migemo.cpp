@@ -275,10 +275,10 @@ int Migemo::migemo_load_all()
 		TCHAR* ppath;
 		
 		if (szDict[0] == _T('\0')) {
-			GetInidirOrExedir(path, _T("dict"));	// 2007.05.20 ryoji 相対パスは設定ファイルからのパスを優先
+			GetInidirOrExedir(path, _T("dict"));
 		}else {
 			if (_IS_REL_PATH(szDict)) {
-				GetInidirOrExedir(path, szDict);	// 2007.05.19 ryoji 相対パスは設定ファイルからのパスを優先
+				GetInidirOrExedir(path, szDict);
 			}else {
 				_tcscpy(path, szDict);
 			}
@@ -311,7 +311,7 @@ int Migemo::migemo_load_all()
 		_tcscpy(ppath, _T("zen2han.dat"));
 		migemo_load_t(MIGEMO_DICTID_ZEN2HAN, path);
 
-		// 2011.12.11 Moca 辞書登録後でないとmigemo内臓のものに変更されてしまう
+		// 辞書登録後でないとmigemo内臓のものに変更されてしまう
 		if (bUtf8) {
 			migemo_setproc_char2int(pcre_char2int_utf8);
 			migemo_setproc_int2char(pcre_int2char_utf8);
@@ -344,7 +344,7 @@ int __cdecl pcre_char2int_sjis(const unsigned char* in, unsigned int* out)
 }
 
 
-// C/Migemo ソース中の rxgen.c:default_int2char を元に作成。	// 2009.04.30 miau
+// C/Migemo ソース中の rxgen.c:default_int2char を元に作成
 static int __cdecl pcre_int2char(unsigned int in, unsigned char* out)
 {
     // outは最低でも16バイトはある、という仮定を置く
