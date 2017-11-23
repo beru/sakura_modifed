@@ -60,10 +60,7 @@ void MainToolBar::ProcSearchBox(MSG *msg)
 	}
 }
 
-/*! サブクラス化したツールバーのウィンドウプロシージャ
-	@author ryoji
-	@date 2006.09.06 ryoji
-*/
+/*! サブクラス化したツールバーのウィンドウプロシージャ */
 static WNDPROC g_pOldToolBarWndProc;	// ツールバーの本来のウィンドウプロシージャ
 
 static LRESULT CALLBACK ToolBarWndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -84,11 +81,7 @@ static LRESULT CALLBACK ToolBarWndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARA
 }
 
 
-/* ツールバー作成
-	@date @@@ 2002.01.03 YAZAKI tbMyButtonなどをCShareDataからCMenuDrawerへ移動したことによる修正。
-	@date 2005.08.29 aroka ツールバーの折り返し
-	@date 2006.06.17 ryoji ビジュアルスタイルが有効の場合はツールバーを Rebar に入れてサイズ変更時のちらつきを無くす
-*/
+/* ツールバー作成 */
 void MainToolBar::CreateToolBar(void)
 {
 	if (hwndToolBar)
@@ -387,10 +380,6 @@ bool MainToolBar::EatMessage(MSG* msg)
 	@note Common Control V4.71以降はNMTBCUSTOMDRAWを送ってくるが，
 	Common Control V4.70はLPNMCUSTOMDRAWしか送ってこないので
 	安全のため小さい方に合わせて処理を行う．
-	
-	@author genta
-	@date 2003.07.21 作成
-
 */
 LPARAM MainToolBar::ToolBarOwnerDraw(LPNMCUSTOMDRAW pnmh)
 {
@@ -431,27 +420,15 @@ LPARAM MainToolBar::ToolBarOwnerDraw(LPNMCUSTOMDRAW pnmh)
 }
 
 
-/*! ツールバー更新用タイマーの処理
-	@date 2002.01.03 YAZAKI tbMyButtonなどをCShareDataからCMenuDrawerへ移動したことによる修正。
-	@date 2003.08.29 wmlhq, ryoji nTimerCountの導入
-	@date 2006.01.28 aroka OnTimerから分離
-	@date 2007.04.03 ryoji パラメータ無しにした
-	@date 2008.10.05 nasukoji ツールバー更新部分を外に出した
-	@date 2012.11.29 aroka OnTimerから分離したときのバグ修正
-*/
+/*! ツールバー更新用タイマーの処理 */
 void MainToolBar::OnToolbarTimer(void)
 {
-	// 2012.11.29 aroka ここではカウントアップ不要
-	// owner->IncrementTimerCount(10);
-	UpdateToolbar();	// 2008.09.23 nasukoji	ツールバーの表示を更新する
 }
 
 /*!
 	@brief ツールバーの表示を更新する
 	
 	@note 他から呼べるようにOnToolbarTimer()より切り出した
-	
-	@date 2008.10.05 nasukoji
 */
 void MainToolBar::UpdateToolbar(void)
 {
@@ -534,7 +511,6 @@ size_t MainToolBar::GetSearchKey(std::wstring& strText)
 
 /*!
 ツールバーの検索ボックスにフォーカスを移動する.
-	@date 2006.06.04 yukihane 新規作成
 */
 void MainToolBar::SetFocusSearchBox(void) const
 {

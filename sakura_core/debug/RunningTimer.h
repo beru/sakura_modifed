@@ -15,8 +15,6 @@
 	定義の切り替えのみでタイマーのON/OFFを行えるようにするため，
 	このクラスを直接使わず，後ろにあるMY_RUNNINGTIMERとMY_TRACETIMEを
 	使うこと．
-
-	@date 2002/10/16  genta WriteTrace及びマクロ追加
 */
 class RunningTimer {
 public:

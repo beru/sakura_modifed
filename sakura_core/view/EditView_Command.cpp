@@ -15,12 +15,6 @@
 
 /*
 	指定ファイルの指定位置にタグジャンプする。
-
-	@author	MIK
-	@date	2003.04.13	新規作成
-	@date	2003.04.21 genta bClose追加
-	@date	2004.05.29 Moca 0以下が指定されたときは、善処する
-	@date	2007.02.17 genta 相対パスの基準ディレクトリ指示を追加
 */
 bool EditView::TagJumpSub(
 	const TCHAR*	pszFileName,
@@ -135,11 +129,7 @@ bool EditView::TagJumpSub(
 
 
 
-/*! 指定拡張子のファイルに対応するファイルを開く補助関数
-
-	@date 2003.06.28 Moca ヘッダ・ソースファイルオープン機能のコードを統合
-	@date 2008.04.09 ryoji 処理対象(file_ext)と開く対象(open_ext)の扱いが逆になっていたのを修正
-*/
+/*! 指定拡張子のファイルに対応するファイルを開く補助関数 */
 bool EditView::OPEN_ExtFromtoExt(
 	bool			bCheckOnly,		// [in] true: チェックのみ行ってファイルは開かない
 	bool			bBeepWhenMiss,	// [in] true: ファイルを開けなかった場合に警告音を出す
@@ -245,19 +235,12 @@ open_c:;
 	@retval TGWRAP_FULL 最大値
 	@retval TGWRAP_WINDOW ウィンドウ幅
 	@retval TGWRAP_PROP 設定値
-
-	@date 2006.01.08 genta メニュー表示で同一の判定を使うため，Command_WrapWindowWidth()より分離．
-	@date 2006.01.08 genta 判定条件を見直し
-	@date 2008.06.08 ryoji ウィンドウ幅設定にぶら下げ余白を追加
 */
 EditView::TOGGLE_WRAP_ACTION EditView::GetWrapMode(int* _newKetas)
 {
 	int& newKetas = *_newKetas;
-	//@@@ 2002.01.14 YAZAKI 現在のウィンドウ幅で折り返されているときは、最大値にするコマンド。
-	// 2002/04/08 YAZAKI ときどきウィンドウ幅で折り返されないことがあるバグ修正。
-	// 20051022 aroka 現在のウィンドウ幅→最大値→文書タイプの初期値 をトグルにするコマンド
 	// ウィンドウ幅==文書タイプ||最大値==文書タイプ の場合があるため判定順序に注意する。
-	/*	Jan.  8, 2006 genta
+	/*
 		じゅうじさんの要望により判定方法を再考．現在の幅に合わせるのを最優先に．
 	
 		基本動作： 設定値→ウィンドウ幅
@@ -326,10 +309,7 @@ void EditView::AddToCmdArr(const TCHAR* szCmd)
 	recentCmd.Terminate();
 }
 
-/*! 正規表現の検索パターンを必要に応じて更新する(ライブラリが使用できないときは false を返す)
-	@date 2002.01.16 hor 共通ロジックを関数にしただけ・・・
-	@date 2011.12.18 Moca シーケンス導入。viewの検索文字列長の撤廃。他のビューの検索条件を引き継ぐフラグを追加
-*/
+/*! 正規表現の検索パターンを必要に応じて更新する(ライブラリが使用できないときは false を返す) */
 bool EditView::ChangeCurRegexp(bool bRedrawIfChanged)
 {
 	bool bChangeState = false;
@@ -375,8 +355,6 @@ bool EditView::ChangeCurRegexp(bool bRedrawIfChanged)
 
 /*!
 	カーソル行をクリップボードにコピーする
-
-	@date 2007.10.08 ryoji 新規（Command_Copy()から処理抜き出し）
 */
 void EditView::CopyCurLine(
 	bool	bAddCRLFWhenCopy,		// [in] 折り返し位置に改行コードを挿入するか？

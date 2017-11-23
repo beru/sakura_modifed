@@ -47,8 +47,6 @@ enum PropTypeSheetOrder {
 -----------------------------------------------------------------------*/
 /*!
 	@brief タイプ別設定ダイアログボックス
-
-	@date 2002.2.17 YAZAKI CShareDataのインスタンスは、Processにひとつあるのみ。
 */
 class PropTypes {
 
@@ -60,8 +58,8 @@ public:
 	INT_PTR DoPropertySheet(int);		// プロパティシートの作成
 
 	// インターフェース	
-	void SetTypeData(const TypeConfig& t) { types = t; }	// タイプ別設定データの設定  Jan. 23, 2005 genta
-	void GetTypeData(TypeConfig& t) const { t = types; }	// タイプ別設定データの取得  Jan. 23, 2005 genta
+	void SetTypeData(const TypeConfig& t) { types = t; }	// タイプ別設定データの設定
+	void GetTypeData(TypeConfig& t) const { t = types; }	// タイプ別設定データの取得
 	HWND GetHwndParent()const { return hwndParent; }
 	int GetPageNum() { return nPageNum; }
 	bool GetChangeKeywordSet() const { return bChangeKeywordSet; }

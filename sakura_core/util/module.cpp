@@ -2,11 +2,10 @@
 #include "module.h"
 #include "util/os.h"
 #include "util/fileUtil.h"
-#include <Shlwapi.h>	// 2006.06.17 ryoji
+#include <Shlwapi.h>
 
 /*! 
 	カレントディレクトリを実行ファイルの場所に移動
-	@date 2010.08.28 Moca 新規作成
 */
 void ChangeCurrentDirectoryToExeDir()
 {
@@ -25,9 +24,6 @@ void ChangeCurrentDirectoryToExeDir()
 	}
 }
 
-/*! 
-	@date 2010.08.28 Moca 新規作成
-*/
 HMODULE LoadLibraryExedir(LPCTSTR pszDll)
 {
 	CurrentDirectoryBackupPoint dirBack;
@@ -40,9 +36,6 @@ HMODULE LoadLibraryExedir(LPCTSTR pszDll)
 
 	@param[in] lpszDllName DLL ファイルのパス
 	@return DLL のバージョン番号（失敗時は 0）
-
-	@author ? (from MSDN Library document)
-	@date 2006.06.17 ryoji MSDNライブラリから引用
 */
 DWORD GetDllVersion(LPCTSTR lpszDllName)
 {
@@ -90,10 +83,6 @@ DWORD GetDllVersion(LPCTSTR lpszDllName)
 	@param bSmall [in] true: small icon (16x16) / false: large icon (32x32)
 	
 	@return アイコンハンドル．失敗した場合はNULL．
-	
-	@date 2002.12.02 genta 新規作成
-	@date 2007.05.20 ryoji iniファイルパスを優先
-	@author genta
 */
 HICON GetAppIcon(
 	HINSTANCE hInst,
@@ -144,9 +133,7 @@ struct VS_VERSION_INFO_HEAD {
 	VS_FIXEDFILEINFO Value;
 };
 
-/*! リソースから製品バージョンの取得
-	@date 2004.05.13 Moca 一度取得したらキャッシュする
-*/
+/*! リソースから製品バージョンの取得 */
 void GetAppVersionInfo(
 	HINSTANCE	hInstance,
 	int			nVersionResourceID,

@@ -72,8 +72,6 @@ void TipWnd::Create(HINSTANCE hInstance, HWND hwndParent)
 
 	Wnd::AfterCreateWindowでウィンドウを表示するようになっているのを
 	動かなくするための空関数
-
-	@date 2006.01.09 genta 新規作成
 */
 void TipWnd::AfterCreateWindow(void)
 {
@@ -127,7 +125,6 @@ void TipWnd::ComputeWindowSize(
 	size_t nTextLength = _tcslen(pszText);
 	int nBgn = 0;
 	for (size_t i=0; i<=nTextLength; ++i) {
-		// 2005-09-02 D.S.Koba GetSizeOfChar
 		size_t nCharChars = NativeT::GetSizeOfChar(pszText, nTextLength, i);
 		if ((nCharChars == 1 && _T('\\') == pszText[i] && _T('n') == pszText[i + 1]) || _T('\0') == pszText[i]) {
 			if (0 < i - nBgn) {
@@ -188,8 +185,6 @@ void TipWnd::DrawTipText(
 	size_t nTextLength = _tcslen(pszText);
 	int nBgn = 0;
 	for (size_t i=0; i<=nTextLength; ++i) {
-//		int nCharChars = &pszText[i] - CMemory::MemCharPrev(pszText, nTextLength, &pszText[i]);
-		// 2005-09-02 D.S.Koba GetSizeOfChar
 		size_t nCharChars = NativeT::GetSizeOfChar(pszText, nTextLength, i);
 		if ((nCharChars == 1 && _T('\\') == pszText[i] && _T('n') == pszText[i + 1]) || _T('\0') == pszText[i]) {
 			if (0 < i - nBgn) {

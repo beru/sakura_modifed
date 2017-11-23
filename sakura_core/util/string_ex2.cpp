@@ -243,7 +243,6 @@ const char* GetNextLimitedLengthText(
 	}
 	size_t i;
 	for (i=nBgn; i+1<nTextLen; ++i) {
-		// 2005-09-02 D.S.Koba GetSizeOfChar
 		size_t nCharChars = NativeA::GetSizeOfChar(pText, nTextLen, i);
 		if (nCharChars == 0) {
 			nCharChars = 1;

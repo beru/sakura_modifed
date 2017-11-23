@@ -38,8 +38,6 @@ void Type::InitTypeConfig(size_t nIdx, TypeConfig& type)
 /*!	@brief 共有メモリ初期化/タイプ別設定
 
 	タイプ別設定の初期化処理
-
-	@date 2005.01.30 genta ShareData::Init()から分離．
 */
 void ShareData::InitTypeConfigs(
 	DllSharedData& shareData,
@@ -84,9 +82,6 @@ void ShareData::InitTypeConfigs(
 /*!	@brief 共有メモリ初期化/強調キーワード
 
 	強調キーワード関連の初期化処理
-
-	@date 2005.01.30 genta ShareData::Init()から分離．
-		キーワード定義を関数の外に出し，登録をマクロ化して簡潔に．
 */
 void ShareData::InitKeyword(DllSharedData& shareData)
 {

@@ -124,7 +124,6 @@ DlgTagJumpList::DlgTagJumpList(bool bDirectTagJump)
 	// サイズ変更時に位置を制御するコントロール数
 	assert(_countof(anchorList) == _countof(rcItems));
 
-	// 2010.07.22 Moca ページング採用で 最大値を100→50に減らす
 	pList = new SortedTagJumpList(50);
 	psFindPrev = new TagFindState();
 	psFind0Match = new TagFindState();

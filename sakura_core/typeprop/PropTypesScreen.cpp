@@ -89,7 +89,6 @@ TYPE_NAME_ID<SmartIndentType> SmartIndentArr[] = {
 /*!	2行目以降のインデント方法
 
 	@sa CLayoutMgr::SetLayoutInfo()
-	@date Oct. 1, 2002 genta 
 */
 TYPE_NAME_ID<int> IndentTypeArr[] = {
 	{ 0, STR_WRAP_INDENT_NONE },	// _T("なし")

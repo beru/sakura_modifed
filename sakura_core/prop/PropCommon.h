@@ -9,12 +9,9 @@
 struct DllSharedData;
 class ImageListMgr;
 class SMacroMgr;
-class MenuDrawer;// 2002/2/10 aroka to here
+class MenuDrawer;
 
-/*! プロパティシート番号
-	@date 2008.6.22 Uchi #define -> enum に変更	
-	@date 2008.6.22 Uchi順序変更 Win,Toolbar,Tab,Statusbarの順に、File,FileName 順に
-*/
+/*! プロパティシート番号 */
 enum PropComSheetOrder {
 	ID_PROPCOM_PAGENUM_GENERAL = 0,		// 全般
 	ID_PROPCOM_PAGENUM_WIN,				// ウィンドウ
@@ -44,8 +41,6 @@ enum PropComSheetOrder {
 
 	1つのダイアログボックスに複数のプロパティページが入った構造に
 	なっており、Dialog procedureとEvent Dispatcherがページごとにある．
-
-	@date 2002.2.17 YAZAKI CShareDataのインスタンスは、Processにひとつあるのみ。
 */
 class PropCommon {
 public:
@@ -54,8 +49,7 @@ public:
 	*/
 	PropCommon();
 	~PropCommon();
-	//	Sep. 29, 2001 genta マクロクラスを渡すように;
-//@@@ 2002.01.03 YAZAKI tbMyButtonなどをCShareDataからMenuDrawerへ移動したことによる修正。
+//@@@ tbMyButtonなどをCShareDataからMenuDrawerへ移動したことによる修正。
 	void Create(HWND, ImageListMgr*, MenuDrawer*);	// 初期化
 
 	/*

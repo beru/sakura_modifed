@@ -221,10 +221,6 @@ size_t OutlinePython::ScanNormal(const wchar_t* data, size_t linelen, size_t sta
 	@invariant
 		state==STATE_STRING
 
-	@author genta
-	@date 2007.02.12 新規作成
-	@date 2007.03.23 genta 文字列の継続行の処理を追加
-
 */
 size_t OutlinePython::ScanString(const wchar_t* data, size_t linelen, size_t start_offset)
 {
@@ -347,8 +343,6 @@ void OutlinePython::DoScanLine(const wchar_t* data, size_t linelen, size_t start
 	
 	@par コメント
 	#で始まり，行の継続はない．
-
-	@date 2007.02.08 genta 新規作成
 */
 void DocOutline::MakeFuncList_python(FuncInfoArr* pFuncInfoArr)
 {

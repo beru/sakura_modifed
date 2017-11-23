@@ -52,9 +52,6 @@ void GrepAgent::OnAfterSave(const SaveInfo& saveInfo)
 	AppMode::getInstance().szGrepKey[0] = 0;
 }
 
-/*!
-	@date 2014.03.09 novice 最後の\\を取り除くのをやめる(d:\\ -> d:になる)
-*/
 void GrepAgent::CreateFolders(const TCHAR* pszPath, std::vector<std::tstring>& vPaths)
 {
 	const size_t nPathLen = auto_strlen(pszPath);
@@ -98,9 +95,7 @@ void GrepAgent::CreateFolders(const TCHAR* pszPath, std::vector<std::tstring>& v
 	}
 }
 
-/*! 最後の\\を取り除く
-	@date 2014.03.09 novice 新規作成
-*/
+/*! 最後の\\を取り除く */
 std::tstring GrepAgent::ChopYen( const std::tstring& str )
 {
 	std::tstring dst = str;
@@ -153,10 +148,6 @@ void GrepAgent::AddTail(
   @param[in] pmGrepKey 検索パターン
   @param[in] pmGrepFile 検索対象ファイルパターン(!で除外指定))
   @param[in] pmGrepFolder 検索対象フォルダ
-
-  @date 2008.12.07 nasukoji	ファイル名パターンのバッファオーバラン対策
-  @date 2008.12.13 genta 検索パターンのバッファオーバラン対策
-  @date 2012.10.13 novice 検索オプションをクラスごと代入
 */
 DWORD GrepAgent::DoGrep(
 	EditView&				viewDst,
@@ -663,14 +654,7 @@ DWORD GrepAgent::DoGrep(
 }
 
 
-/*! @brief Grep実行
-
-	@date 2001.06.27 genta	正規表現ライブラリの差し替え
-	@date 2003.06.23 Moca   サブフォルダ→ファイルだったのをファイル→サブフォルダの順に変更
-	@date 2003.06.23 Moca   ファイル名から""を取り除くように
-	@date 2003.03.27 みく   除外ファイル指定の導入と重複検索防止の追加．
-		大部分が変更されたため，個別の変更点記入は無し．
-*/
+/*! @brief Grep実行 */
 int GrepAgent::DoGrepTree(
 	EditView&				viewDst,
 	DlgCancel&				dlgCancel,				// [in] Cancelダイアログへのポインタ
@@ -869,8 +853,6 @@ cancel_return:;
 
 
 	pWorkは充分なメモリ領域を持っているコト
-	@date 2002/08/29 Moca バイナリーデータに対応 pnWorkLen 追加
-	@date 2013.11.05 Moca memMessageに直接追加するように
 */
 void GrepAgent::SetGrepResult(
 	// データ格納先
@@ -1020,10 +1002,6 @@ static void OutputPathInfo(
 
 	@retval -1 GREPのキャンセル
 	@retval それ以外 ヒット数(ファイル検索時はファイル数)
-
-	@date 2001/06/27 genta	正規表現ライブラリの差し替え
-	@date 2002/08/30 Moca FileLoadを使ったテスト版
-	@date 2004/03/28 genta 不要な引数nNest, bGrepSubFolder, pszPathを削除
 */
 int GrepAgent::DoGrepFile(
 	EditView&				viewDst,			// 
@@ -1588,7 +1566,6 @@ private:
 
 /*!
 	Grep置換実行
-	@date 2013.06.12 Moca 新規作成
 */
 int GrepAgent::DoGrepReplaceFile(
 	EditView&				viewDst,

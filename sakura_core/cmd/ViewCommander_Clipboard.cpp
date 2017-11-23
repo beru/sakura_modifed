@@ -562,7 +562,6 @@ void ViewCommander::Command_AddTail(
 	);
 
 	// 挿入データの最後へカーソルを移動
-	// Sep. 2, 2002 すなふき アンダーラインの表示が残ってしまう問題を修正
 	caret.MoveCursor(ptLayoutNew, true);
 	caret.nCaretPosX_Prev = caret.GetCaretLayoutPos().x;
 }

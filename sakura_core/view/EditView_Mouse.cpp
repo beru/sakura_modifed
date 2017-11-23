@@ -506,8 +506,6 @@ normal_action:;
 			連続稼動している場合49.7日毎にカウンタが0になる為、わずかな可能性
 			であるがトリプルクリックが判定できない時がある。
 			行番号表示エリアのトリプルクリックは通常クリックとして扱う。
-	
-	@date 2007.11.15 nasukoji	新規作成
 */
 bool EditView::CheckTripleClick(Point ptMouse)
 {
@@ -605,9 +603,6 @@ void EditView::OnRBUTTONUP(WPARAM fwKeys, int xPos , int yPos)
 	@param fwKeys [in] first message parameter
 	@param xPos [in] マウスカーソルX座標
 	@param yPos [in] マウスカーソルY座標
-	@date 2004.10.11 novice 新規作成
-	@date 2008.10.06 nasukoji	マウス中ボタン押下中のホイール操作対応
-	@date 2009.01.17 nasukoji	ボタンUPでコマンドを起動するように変更
 */
 void EditView::OnMBUTTONDOWN(WPARAM fwKeys, int xPos , int yPos)
 {
@@ -631,8 +626,6 @@ void EditView::OnMBUTTONDOWN(WPARAM fwKeys, int xPos , int yPos)
 	@param fwKeys [in] first message parameter
 	@param xPos [in] マウスカーソルX座標
 	@param yPos [in] マウスカーソルY座標
-	
-	@date 2009.01.17 nasukoji	新規作成（ボタンUPでコマンドを起動するように変更）
 */
 void EditView::OnMBUTTONUP(WPARAM fwKeys, int xPos , int yPos)
 {
@@ -785,9 +778,6 @@ void EditView::AutoScrollOnTimer()
 	@param fwKeys [in] first message parameter
 	@param xPos [in] マウスカーソルX座標
 	@param yPos [in] マウスカーソルY座標
-	@date 2004.10.10 novice 新規作成
-	@date 2004.10.11 novice マウス中ボタン対応のため変更
-	@date 2009.01.17 nasukoji	ボタンUPでコマンドを起動するように変更
 */
 void EditView::OnXLBUTTONDOWN(WPARAM fwKeys, int xPos , int yPos)
 {
@@ -803,8 +793,6 @@ void EditView::OnXLBUTTONDOWN(WPARAM fwKeys, int xPos , int yPos)
 	@param fwKeys [in] first message parameter
 	@param xPos [in] マウスカーソルX座標
 	@param yPos [in] マウスカーソルY座標
-
-	@date 2009.01.17 nasukoji	新規作成（ボタンUPでコマンドを起動するように変更）
 */
 void EditView::OnXLBUTTONUP(WPARAM fwKeys, int xPos , int yPos)
 {
@@ -847,9 +835,6 @@ void EditView::OnXLBUTTONUP(WPARAM fwKeys, int xPos , int yPos)
 	@param fwKeys [in] first message parameter
 	@param xPos [in] マウスカーソルX座標
 	@param yPos [in] マウスカーソルY座標
-	@date 2004.10.10 novice 新規作成
-	@date 2004.10.11 novice マウス中ボタン対応のため変更
-	@date 2009.01.17 nasukoji	ボタンUPでコマンドを起動するように変更
 */
 void EditView::OnXRBUTTONDOWN(WPARAM fwKeys, int xPos , int yPos)
 {
@@ -865,8 +850,6 @@ void EditView::OnXRBUTTONDOWN(WPARAM fwKeys, int xPos , int yPos)
 	@param fwKeys [in] first message parameter
 	@param xPos [in] マウスカーソルX座標
 	@param yPos [in] マウスカーソルY座標
-
-	@date 2009.01.17 nasukoji	新規作成（ボタンUPでコマンドを起動するように変更）
 */
 void EditView::OnXRBUTTONUP(WPARAM fwKeys, int xPos , int yPos)
 {
@@ -1475,8 +1458,6 @@ LRESULT EditView::OnMOUSEHWHEEL(WPARAM wParam, LPARAM lParam)
 
 	@return ページスクロールまたは横スクロールすべき状態の時trueを返す
 	        通常の行スクロールすべき状態の時falseを返す
-
-	@date 2009.01.17 nasukoji	新規作成
 */
 bool EditView::IsSpecialScrollMode(int nSelect)
 {
@@ -2063,9 +2044,7 @@ STDMETHODIMP EditView::Drop(LPDATAOBJECT pDataObject, DWORD dwKeyState, POINTL p
 }
 
 
-/** 独自ドロップファイルメッセージをポストする
-	@date 2008.06.20 ryoji 新規作成
-*/
+/** 独自ドロップファイルメッセージをポストする */
 STDMETHODIMP EditView::PostMyDropFiles(LPDATAOBJECT pDataObject)
 {
 	HGLOBAL hData = GetGlobalData(pDataObject, CF_HDROP);
@@ -2093,9 +2072,7 @@ STDMETHODIMP EditView::PostMyDropFiles(LPDATAOBJECT pDataObject)
 	return S_OK;
 }
 
-/** 独自ドロップファイルメッセージ処理
-	@date 2008.06.20 ryoji 新規作成
-*/
+/** 独自ドロップファイルメッセージ処理 */
 void EditView::OnMyDropFiles(HDROP hDrop)
 {
 	// 普通にメニュー操作ができるように入力状態をフォアグランドウィンドウにアタッチする

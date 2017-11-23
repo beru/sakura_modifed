@@ -26,7 +26,7 @@ public:
 	bool IsDiffUse() const { return bIsDiffUse; }		// DIFF使用中
 
 private:
-	bool bIsDiffUse;		// DIFF差分表示実施中 @@@ 2002.05.25 MIK
+	bool bIsDiffUse;		// DIFF差分表示実施中
 };
 
 // 行に付加するDIFF情報

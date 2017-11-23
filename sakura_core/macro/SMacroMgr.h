@@ -16,7 +16,7 @@ class EditView;
 
 const int STAND_KEYMACRO	= -1;	// 標準マクロ(キーマクロ)
 const int TEMP_KEYMACRO		= -2;	// 一時マクロ(名前を指定してマクロ実行)
-const int INVALID_MACRO_IDX	= -3;	// 無効なマクロのインデックス番号 @date Sep. 15, 2005 FILE
+const int INVALID_MACRO_IDX	= -3;	// 無効なマクロのインデックス番号
 
 struct MacroFuncInfoEx {
 	int			nArgMinSize;
@@ -36,15 +36,9 @@ struct MacroFuncInfo {
 // マクロ関数情報構造体配列
 typedef MacroFuncInfo* MacroFuncInfoArray;
 
-/*-----------------------------------------------------------------------
-クラスの宣言
-
-@date 2002.2.17 YAZAKI CShareDataのインスタンスは、CProcessにひとつあるのみ。
------------------------------------------------------------------------*/
 class SMacroMgr {
 	// データの型宣言
 	MacroManagerBase* savedKeyMacros[MAX_CUSTMACRO];	// キーマクロをカスタムメニューの数だけ管理
-	// Jun. 16, 2002 genta
 	// キーマクロに標準マクロ以外のマクロを読み込めるように
 	MacroManagerBase* pKeyMacro;	// 標準の（保存ができる）キーマクロも管理
 
@@ -133,9 +127,7 @@ private:
 	DllSharedData*	pShareData;
 	MacroManagerBase** Idx2Ptr(int idx);
 
-	/*!	実行中マクロのインデックス番号 (INVALID_MACRO_IDX:無効)
-		@date Sep. 15, 2005 FILE
-	*/
+	/*!	実行中マクロのインデックス番号 (INVALID_MACRO_IDX:無効) */
 	int currentIdx;
 	std::tstring sMacroPath;	// Loadしたマクロ名
 

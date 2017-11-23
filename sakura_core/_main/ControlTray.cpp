@@ -1611,7 +1611,6 @@ int	ControlTray::CreatePopUpMenu_R(void)
 	menuDrawer.MyAppendMenuSep(hMenu, MF_BYPOSITION | MF_SEPARATOR, 0, NULL, false);
 	menuDrawer.MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING, F_ABOUT, _T(""), _T("A"), false);
 	menuDrawer.MyAppendMenuSep(hMenu, MF_BYPOSITION | MF_SEPARATOR, 0, NULL, false);
-	// Jun. 18, 2001 genta ソフトウェア名改称
 	menuDrawer.MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING, F_EXITALL, _T(""), _T("X"), false);
 
 	POINT po;

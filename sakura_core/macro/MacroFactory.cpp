@@ -41,8 +41,6 @@ std::tstring MacroFactory::Ext2Key(const TCHAR* ext)
 	@param f [in] ìoò^Ç∑ÇÈFactoryä÷êî
 	
 	@sa MacroFactory::RegisterExts
-
-	@date 2002.08.25 genta í«â¡
 */
 bool MacroFactory::RegisterCreator(Creator f)
 {

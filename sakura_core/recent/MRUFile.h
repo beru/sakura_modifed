@@ -4,10 +4,9 @@
 #include <vector>
 #include "recent/RecentFile.h"
 
-struct EditInfo; // 2004.04.11 genta パラメータ内のstructを削除するため．doxygen対策
+struct EditInfo;
 class MenuDrawer;
 
-//	@date 2002.2.17 YAZAKI ShareDataのインスタンスは、Processにひとつあるのみ。
 class MruFile {
 public:
 	//	コンストラクタ
@@ -16,7 +15,7 @@ public:
 
 	//	メニューを取得する
 	HMENU CreateMenu(MenuDrawer& menuDrawer) const;	//	うーん。menuDrawerが必要なくなるといいなぁ。
-	HMENU CreateMenu(HMENU hMenu, MenuDrawer& menuDrawer) const;	//	2010/5/21 Uchi
+	HMENU CreateMenu(HMENU hMenu, MenuDrawer& menuDrawer) const;
 	BOOL DestroyMenu(HMENU hMenu) const;
 	
 	//	ファイル名の一覧を教えて

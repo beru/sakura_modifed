@@ -6,9 +6,7 @@
 
 #define MAX_TAG_STRING_LENGTH _MAX_PATH	// 管理する文字列の最大長
 
-/*!	@brief ダイレクトタグジャンプ用検索結果をソートして保持する．
-	@author MIK
-*/
+/*!	@brief ダイレクトタグジャンプ用検索結果をソートして保持する．*/
 class SortedTagJumpList {
 public:
 	SortedTagJumpList(int max);
@@ -34,10 +32,7 @@ public:
 
 	TagJumpInfo* GetPtr(int index);
 
-	/*!	@brief 管理数の最大値を取得する
-
-		@date 2005.04.22 genta 最大値を可変に
-	*/
+	/*!	@brief 管理数の最大値を取得する */
 	int GetCapacity(void) const { return capacity; }
 
 private:

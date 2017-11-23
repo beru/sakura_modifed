@@ -62,7 +62,6 @@ bool Plugin::ReadPluginDefCommon(
 }
 
 // プラグイン定義ファイルのPlugセクションを読み込む
-// @date 2011.08.20 syat Plugセクションも複数定義可能とする
 bool Plugin::ReadPluginDefPlug(
 	DataProfile& profile,
 	DataProfile* profileMlang

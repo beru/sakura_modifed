@@ -18,7 +18,7 @@ bool DiffLineGetter::GetDiffColor(EColorIndexType* pColorIndex) const
 	DiffMark type = GetLineDiffMark();
 	EditView& view = EditWnd::getInstance().GetActiveView();
 
-	// DIFF差分マーク表示	//@@@ 2002.05.25 MIK
+	// DIFF差分マーク表示	
 	if (type != DiffMark::None) {
 		switch (type) {
 		case DiffMark::Append:	// 追加

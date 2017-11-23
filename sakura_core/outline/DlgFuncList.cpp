@@ -855,8 +855,6 @@ int DlgFuncList::GetData(void)
 /*! ツリーコントロールの初期化：Javaメソッドツリー
 
 	Java Method Treeの構築: 関数リストを元にTreeControlを初期化する。
-
-	@date 2002.01.04 genta C++ツリーを統合
 */
 void DlgFuncList::SetTreeJava(
 	HWND hwndDlg,
@@ -921,15 +919,13 @@ void DlgFuncList::SetTreeJava(
 			int	nNestTemplate = 0;
 			nWorkLen = _tcslen(pWork);
 			for (k=0; k<nWorkLen; ++k) {
-				// 2009.9.21 syat ネストが深すぎる際のBOF対策
+				// ネストが深すぎる際のBOF対策
 				if (nClassNest == MAX_JAVA_TREE_NEST) {
 					k = nWorkLen;
 					break;
 				}
-				// 2005-09-02 D.S.Koba GetSizeOfChar
 				nCharChars = NativeT::GetSizeOfChar(pWork, nWorkLen, k);
 				if (nCharChars == 1 && nNestTemplate == 0 && pWork[k] == _T(':')) {
-					//	Jan. 04, 2001 genta
 					//	C++の統合のため、\に加えて::をクラス区切りとみなすように
 					if (k < nWorkLen - 1 && _T(':') == pWork[k + 1]) {
 						auto_memcpy(szClassArr[nClassNest], &pWork[m], k - m);
@@ -1155,8 +1151,6 @@ void DlgFuncList::SetTreeJava(
 /*! リストビューコントロールの初期化：VisualBasic
 
   長くなったので独立させました。
-
-  @date Jul 10, 2003  little YOSHI
 */
 void DlgFuncList::SetListVB(void)
 {
@@ -1401,12 +1395,6 @@ void DlgFuncList::SetListVB(void)
 /*! 汎用ツリーコントロールの初期化：FuncInfo::nDepthを利用して親子を設定
 
 	@param[in] tagjump タグジャンプ形式で出力する
-
-	@date 2002.04.01 YAZAKI
-	@date 2002.11.10 Moca 階層の制限をなくした
-	@date 2007.02.25 genta クリップボード出力をタブジャンプ可能な書式に変更
-	@date 2007.03.04 genta タブジャンプ可能な書式に変更するかどうかのフラグを追加
-	@date 2014.06.06 Moca 他ファイルへのタグジャンプ機能を追加
 */
 void DlgFuncList::SetTree(bool tagjump, bool nolabel)
 {
@@ -2202,10 +2190,6 @@ BOOL DlgFuncList::OnNotify(WPARAM wParam, LPARAM lParam)
 
 	@param[in] hwndList	リストビューのウィンドウハンドル
 	@param[in] sortcol	ソートするカラム番号(0-2)
-
-	@date 2005.04.23 genta 関数として独立させた
-	@date 2005.04.29 genta ソート後の表示位置調整
-	@date 2010.03.17 syat 桁追加
 */
 void DlgFuncList::SortListView(
 	HWND hwndList,
@@ -2264,8 +2248,6 @@ void DlgFuncList::SortListView(
 		FALSE
 	);
 	
-	//	Jan.  9, 2006 genta 先頭から1つ目と2つ目の関数が
-	//	選択された場合にスクロールされなかった
 	int keypos = ListView_GetNextItem(hwndList, -1, LVNI_FOCUSED) - 2;
 	ListView_EnsureVisible(
 		hwndList,
@@ -2274,14 +2256,10 @@ void DlgFuncList::SortListView(
 	);
 }
 
-/*!	ウィンドウサイズが変更された
-
-	@date 2003.06.22 Moca コードの整理(コントロールの処理方法をテーブルに持たせる)
-	@date 2003.08.16 genta 配列はstaticに(無駄な初期化を行わないため)
-*/
+/*!	ウィンドウサイズが変更された */
 BOOL DlgFuncList::OnSize(WPARAM wParam, LPARAM lParam)
 {
-	// 今のところ EditWnd::OnSize() からの呼び出しでは lParam は EditWnd 側 の lParam のまま渡される	// 2010.06.05 ryoji
+	// 今のところ EditWnd::OnSize() からの呼び出しでは lParam は EditWnd 側 の lParam のまま渡される
 	RECT rcDlg;
 	::GetClientRect(GetHwnd(), &rcDlg);
 	lParam = MAKELONG(rcDlg.right - rcDlg.left, rcDlg.bottom -  rcDlg.top);	// 自前で補正
@@ -2577,9 +2555,6 @@ void DlgFuncList::Key2Command(WORD KeyCode)
 	}
 }
 
-/*!
-	@date 2002.10.05 genta
-*/
 void DlgFuncList::Redraw(
 	OutlineType nOutLineType,
 	OutlineType nListType,
@@ -2616,9 +2591,7 @@ void DlgFuncList::SetWindowText(const TCHAR* szTitle)
 	::SetWindowText(GetHwnd(), szTitle);
 }
 
-/** 配色適用処理
-	@date 2010.06.05 ryoji 新規作成
-*/
+/** 配色適用処理 */
 void DlgFuncList::SyncColor(void)
 {
 	if (!IsDocking()) {
@@ -2652,14 +2625,11 @@ void DlgFuncList::SyncColor(void)
 #endif
 }
 
-/** ドッキング対象矩形の取得（スクリーン座標）
-	@date 2010.06.05 ryoji 新規作成
-*/
+/** ドッキング対象矩形の取得（スクリーン座標）*/
 void DlgFuncList::GetDockSpaceRect(LPRECT pRect)
 {
 	EditView* pEditView = (EditView*)lParam;
 	// DlgFuncList と CSplitterWnd の外接矩形
-	// 2014.12.02 ミニマップ対応
 	HWND hwnd[3];
 	RECT rc[3];
 	hwnd[0] = ::GetParent( pEditView->GetHwnd() );	// CSplitterWnd
@@ -2686,9 +2656,7 @@ void DlgFuncList::GetDockSpaceRect(LPRECT pRect)
 	}
 }
 
-/**キャプション矩形取得（スクリーン座標）
-	@date 2010.06.05 ryoji 新規作成
-*/
+/**キャプション矩形取得（スクリーン座標）*/
 void DlgFuncList::GetCaptionRect(LPRECT pRect)
 {
 	RECT rc;
@@ -2700,9 +2668,7 @@ void DlgFuncList::GetCaptionRect(LPRECT pRect)
 	pRect->bottom = pRect->top + (::GetSystemMetrics(SM_CYSMCAPTION) + 1);
 }
 
-/** キャプション上のボタン矩形取得（スクリーン座標）
-	@date 2010.06.05 ryoji 新規作成
-*/
+/** キャプション上のボタン矩形取得（スクリーン座標）*/
 bool DlgFuncList::GetCaptionButtonRect(int nButton, LPRECT pRect)
 {
 	if (!IsDocking()) {
@@ -2720,9 +2686,7 @@ bool DlgFuncList::GetCaptionButtonRect(int nButton, LPRECT pRect)
 	return true;
 }
 
-/** 分割バーへのヒットテスト（スクリーン座標）
-	@date 2010.06.05 ryoji 新規作成
-*/
+/** 分割バーへのヒットテスト（スクリーン座標）*/
 bool DlgFuncList::HitTestSplitter(int xPos, int yPos)
 {
 	if (!IsDocking()) {
@@ -2743,9 +2707,7 @@ bool DlgFuncList::HitTestSplitter(int xPos, int yPos)
 	return bRet;
 }
 
-/** キャプション上のボタンへのヒットテスト（スクリーン座標）
-	@date 2010.06.05 ryoji 新規作成
-*/
+/** キャプション上のボタンへのヒットテスト（スクリーン座標）*/
 int DlgFuncList::HitTestCaptionButton(int xPos, int yPos)
 {
 	if (!IsDocking()) {
@@ -2773,9 +2735,7 @@ int DlgFuncList::HitTestCaptionButton(int xPos, int yPos)
 	return nBtn;
 }
 
-/** WM_NCCALCSIZE 処理
-	@date 2010.06.05 ryoji 新規作成
-*/
+/** WM_NCCALCSIZE 処理 */
 INT_PTR DlgFuncList::OnNcCalcSize(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	if (!IsDocking()) {
@@ -2795,9 +2755,7 @@ INT_PTR DlgFuncList::OnNcCalcSize(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
 	return 1L;
 }
 
-/** WM_NCHITTEST 処理
-	@date 2010.06.05 ryoji 新規作成
-*/
+/** WM_NCHITTEST 処理 */
 INT_PTR DlgFuncList::OnNcHitTest(
 	HWND hwnd,
 	UINT uMsg,
@@ -2830,9 +2788,7 @@ INT_PTR DlgFuncList::OnNcHitTest(
 	return nRet;
 }
 
-/** WM_TIMER 処理
-	@date 2010.06.05 ryoji 新規作成
-*/
+/** WM_TIMER 処理 */
 INT_PTR DlgFuncList::OnTimer(
 	HWND hwnd,
 	UINT uMsg,
@@ -2881,9 +2837,7 @@ INT_PTR DlgFuncList::OnTimer(
 	return 0L;
 }
 
-/** WM_NCMOUSEMOVE 処理
-	@date 2010.06.05 ryoji 新規作成
-*/
+/** WM_NCMOUSEMOVE 処理 */
 INT_PTR DlgFuncList::OnNcMouseMove(
 	HWND hwnd,
 	UINT uMsg,
@@ -2938,9 +2892,7 @@ INT_PTR DlgFuncList::OnNcMouseMove(
 	return 0L;
 }
 
-/** WM_MOUSEMOVE 処理
-	@date 2010.06.05 ryoji 新規作成
-*/
+/** WM_MOUSEMOVE 処理 */
 INT_PTR DlgFuncList::OnMouseMove(
 	HWND hwnd,
 	UINT uMsg,
@@ -3031,9 +2983,7 @@ INT_PTR DlgFuncList::OnMouseMove(
 	return 0L;
 }
 
-/** WM_NCLBUTTONDOWN 処理
-	@date 2010.06.05 ryoji 新規作成
-*/
+/** WM_NCLBUTTONDOWN 処理 */
 INT_PTR DlgFuncList::OnNcLButtonDown(
 	HWND hwnd,
 	UINT uMsg,
@@ -3087,9 +3037,7 @@ INT_PTR DlgFuncList::OnNcLButtonDown(
 	return 1L;
 }
 
-/** WM_LBUTTONUP 処理
-	@date 2010.06.05 ryoji 新規作成
-*/
+/** WM_LBUTTONUP 処理 */
 INT_PTR DlgFuncList::OnLButtonUp(
 	HWND hwnd,
 	UINT uMsg,
@@ -3136,9 +3084,7 @@ INT_PTR DlgFuncList::OnLButtonUp(
 	return 0L;
 }
 
-/** WM_NCPAINT 処理
-	@date 2010.06.05 ryoji 新規作成
-*/
+/** WM_NCPAINT 処理 */
 INT_PTR DlgFuncList::OnNcPaint(
 	HWND hwnd,
 	UINT uMsg,
@@ -3250,9 +3196,7 @@ INT_PTR DlgFuncList::OnNcPaint(
 	return 1L;
 }
 
-/** メニュー処理
-	@date 2010.06.05 ryoji 新規作成
-*/
+/** メニュー処理 */
 void DlgFuncList::DoMenu(POINT pt, HWND hwndFrom)
 {
 	// メニューを作成する
@@ -3427,9 +3371,7 @@ void DlgFuncList::DoMenu(POINT pt, HWND hwndFrom)
 	}
 }
 
-/** 現在の設定に応じて表示を刷新する
-	@date 2010.06.05 ryoji 新規作成
-*/
+/** 現在の設定に応じて表示を刷新する */
 void DlgFuncList::Refresh(void)
 {
 	EditWnd* pEditWnd = EditDoc::GetInstance(0)->pEditWnd;
@@ -3447,8 +3389,6 @@ void DlgFuncList::Refresh(void)
 
 	@param nId [in] 動作指定．OUTLINE_LAYOUT_FOREGROUND: 前面用の動作 / OUTLINE_LAYOUT_BACKGROUND: 背後用の動作 / OUTLINE_LAYOUT_FILECHANGED: ファイル切替用の動作（前面だが特殊）
 	@retval 解析を実行したかどうか．true: 実行した / false: 実行しなかった
-
-	@date 2010.06.10 ryoji 新規作成
 */
 bool DlgFuncList::ChangeLayout(int nId)
 {
@@ -3596,8 +3536,6 @@ bool DlgFuncList::ChangeLayout(int nId)
 
 	wParam: 通知種別
 	lParam: 種別毎のパラメータ
-
-	@date 2010.06.07 ryoji 新規作成
 */
 void DlgFuncList::OnOutlineNotify(WPARAM wParam, LPARAM lParam)
 {
@@ -3613,9 +3551,7 @@ void DlgFuncList::OnOutlineNotify(WPARAM wParam, LPARAM lParam)
 	return;
 }
 
-/** 他ウィンドウにアウトライン通知をポストする
-	@date 2010.06.10 ryoji 新規作成
-*/
+/** 他ウィンドウにアウトライン通知をポストする */
 BOOL DlgFuncList::PostOutlineNotifyToAllEditors(WPARAM wParam, LPARAM lParam)
 {
 	return AppNodeGroupHandle(0).PostMessageToAllEditors(MYWM_OUTLINE_NOTIFY, (WPARAM)wParam, (LPARAM)lParam, GetHwnd());
@@ -3626,9 +3562,7 @@ void DlgFuncList::SetTypeConfig(TypeConfigNum docType, const TypeConfig& type)
 	DocTypeManager().SetTypeConfig(docType, type);
 }
 
-/** コンテキストメニュー処理
-	@date 2010.06.07 ryoji 新規作成
-*/
+/** コンテキストメニュー処理 */
 BOOL DlgFuncList::OnContextMenu(WPARAM wParam, LPARAM lParam)
 {
 	// キャプションかリスト／ツリー上ならメニューを表示する
@@ -3654,9 +3588,7 @@ BOOL DlgFuncList::OnContextMenu(WPARAM wParam, LPARAM lParam)
 	return Dialog::OnContextMenu(wParam, lParam);	// その他のコントロール上ではポップアップヘルプを表示する
 }
 
-/** タイトルバーのドラッグ＆ドロップでドッキング配置する際の移動先矩形を求める
-	@date 2010.06.17 ryoji 新規作成
-*/
+/** タイトルバーのドラッグ＆ドロップでドッキング配置する際の移動先矩形を求める */
 DockSideType DlgFuncList::GetDropRect(
 	POINT ptDrag,
 	POINT ptDrop,

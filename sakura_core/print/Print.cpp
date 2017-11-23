@@ -86,9 +86,6 @@ Print::~Print(void)
 ** 
 ** @param pPD			[i/o]	プリンタダイアログ構造体
 ** @param pMYDEVMODE 	[i/o] 	印刷設定
-
-	@author かろと
-	@date 2003.
 */
 BOOL Print::PrintDlg(
 	PRINTDLG* pPD,
@@ -509,7 +506,6 @@ TCHAR* Print::GetPaperName(int nPaperSize, TCHAR* pszPaperName)
 
 /*!
 	用紙情報の取得
-	@date 2006.08.14 Moca 新規作成 用紙情報の統合
 */
 const PaperInfo* Print::FindPaperInfo(int id)
 {
@@ -525,25 +521,22 @@ const PaperInfo* Print::FindPaperInfo(int id)
 /*!	@brief PrintSettingの初期化
 
 	ここではmdmDevModeの プリンタ設定は取得・初期化しない
-
-	@date 2006.08.14 Moca  Initializeから名称変更。初期化単位をShareDate全てからPrintSetting単位に変更．
-		本関数からDLLSHAREDATAへアクセスする代わりに，CShareDataからPPrintSetting単位で逐一渡してもらう．
 */
 void Print::SettingInitialize(PrintSetting& pPrintSetting, const TCHAR* settingName)
 {
 	_tcscpy_s(pPrintSetting.szPrintSettingName, settingName);		// 印刷設定の名前
 	_tcscpy(pPrintSetting.szPrintFontFaceHan, _T("ＭＳ 明朝"));		// 印刷フォント
 	_tcscpy(pPrintSetting.szPrintFontFaceZen, _T("ＭＳ 明朝"));		// 印刷フォント
-	pPrintSetting.bColorPrint = false;			// カラー印刷			// 2013/4/26 Uchi
+	pPrintSetting.bColorPrint = false;			// カラー印刷
 	pPrintSetting.nPrintFontWidth = 12;			// 印刷フォント幅(1/10mm単位)
 	pPrintSetting.nPrintFontHeight = pPrintSetting.nPrintFontWidth * 2;	// 印刷フォント高さ(1/10mm単位単位)
 	pPrintSetting.nPrintDansuu = 1;				// 段組の段数
 	pPrintSetting.nPrintDanSpace = 70; 			// 段と段の隙間(1/10mm)
 	pPrintSetting.bPrintWordWrap = true;		// 英文ワードラップする
-	pPrintSetting.bPrintKinsokuHead = false;	// 行頭禁則する			//@@@ 2002.04.09 MIK
-	pPrintSetting.bPrintKinsokuTail = false;	// 行末禁則する			//@@@ 2002.04.09 MIK
-	pPrintSetting.bPrintKinsokuRet  = false;	// 改行文字をぶら下げる	//@@@ 2002.04.13 MIK
-	pPrintSetting.bPrintKinsokuKuto = false;	// 2006.08.14 Moca 初期化ミス
+	pPrintSetting.bPrintKinsokuHead = false;	// 行頭禁則する
+	pPrintSetting.bPrintKinsokuTail = false;	// 行末禁則する
+	pPrintSetting.bPrintKinsokuRet  = false;	// 改行文字をぶら下げる
+	pPrintSetting.bPrintKinsokuKuto = false;	// 
 	pPrintSetting.bPrintLineNumber = false;		// 行番号を印刷する
 	pPrintSetting.nPrintLineSpacing = 30;		// 印刷フォント行間 文字の高さに対する割合(%)
 	pPrintSetting.nPrintMarginTY = 100;			// 印刷用紙マージン 上(1/10mm単位)
@@ -572,7 +565,6 @@ void Print::SettingInitialize(PrintSetting& pPrintSetting, const TCHAR* settingN
 
 /*!
 	印字可能桁数の計算
-	@date 2013.05.10 aroka 新規作成
 */
 int Print::CalculatePrintableColumns(PrintSetting& ps, int nPaperAllWidth, int nLineNumberColumns)
 {
@@ -592,7 +584,6 @@ int Print::CalculatePrintableColumns(PrintSetting& ps, int nPaperAllWidth, int n
 
 /*!
 	印字可能行数の計算
-	@date 2013.05.10 aroka 新規作成
 */
 int Print::CalculatePrintableLines(
 	PrintSetting& ps,
@@ -614,7 +605,6 @@ int Print::CalculatePrintableLines(
 
 /*!
 	ヘッダ高さの計算(行送り分こみ)
-	@date 2013.05.16 Uchi 新規作成
 */
 int Print::CalcHeaderHeight(PrintSetting& ps)
 {
@@ -639,7 +629,6 @@ int Print::CalcHeaderHeight(PrintSetting& ps)
 
 /*!
 	フッタ高さの計算(行送り分こみ)
-	@date 2013.05.16 Uchi 新規作成
 */
 int Print::CalcFooterHeight(PrintSetting& ps)
 {

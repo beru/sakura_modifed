@@ -805,8 +805,6 @@ void PrintPreview::OnChangePrintSetting(void)
 }
 
 /*! @brief ページ番号直接指定によるジャンプ
-
-	@author Moca
 **/
 void PrintPreview::OnPreviewGoDirectPage(void)
 {
@@ -1316,7 +1314,6 @@ void PrintPreview::DrawHeaderFooter(HDC hdc, const Rect& rect, bool bHeader)
 
 /* 印刷/印刷Preview ページテキストの色分け処理
 	最初のページ用
-	@date 2013.05.19 Moca 新規追加 
 */
 ColorStrategy* PrintPreview::DrawPageTextFirst(int nPageNum)
 {
@@ -1361,8 +1358,6 @@ ColorStrategy* PrintPreview::DrawPageTextFirst(int nPageNum)
 /* 印刷/印刷Preview ページテキストの描画
 	DrawPageTextでは、行番号を（半角フォントで）印刷。
 	本文はPrint_DrawLineにお任せ
-	@date 2006.08.14 Moca 共通式のくくりだしと、コードの整理 
-	@date 2013.05.19 Moca 色分け処理のpStrategyをページをまたいで利用する
 */
 ColorStrategy* PrintPreview::DrawPageText(
 	HDC				hdc,
@@ -1573,10 +1568,6 @@ void PrintPreview::InitPreviewScrollBar(void)
 
 /*! 印刷／Preview 行描画
 	@param[in] nIndent 行頭折り返しインデント桁数
-
-	@date 2006.08.14 Moca   折り返しインデントが印刷時に反映されるように
-	@date 2007.08    kobake 機械的にUNICODE化
-	@date 2007.12.12 kobake 全角フォントが反映されていない問題を修正
 */
 ColorStrategy* PrintPreview::Print_DrawLine(
 	HDC				hdc,
@@ -1723,8 +1714,6 @@ ColorStrategy* PrintPreview::Print_DrawLine(
 
 /*! 印刷／Preview ブロック描画
 	@param[in] 
-
-	@date 2013.05.01 Uchi Print_DrawLineから切り出し
 */
 void PrintPreview::Print_DrawBlock(
 	HDC				hdc,
@@ -1784,9 +1773,6 @@ void PrintPreview::Print_DrawBlock(
 
 /*! 指定ロジック位置のColorStrategyを取得
 	@param[in] 
-
-	@date 2013.05.01 Uchi 新規作成
-	@date 2014.12.30 Moca 正規表現の違う色が並んでいた場合に色替えできてなかったバグを修正
 */
 ColorStrategy* PrintPreview::GetColorStrategy(
 	const StringRef&	stringLine,

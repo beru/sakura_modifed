@@ -8,7 +8,6 @@
 #include "sakura_rc.h"
 #include "sakura.hh"
 
-//@@@ 2001.02.04 Start by MIK: Popup Help
 static const DWORD p_helpids[] = {	//10000
 	IDC_BUTTON_BACKUP_FOLDER_REF,	HIDC_BUTTON_BACKUP_FOLDER_REF,	// ƒoƒbƒNƒAƒbƒvƒtƒHƒ‹ƒ_ŽQÆ
 	IDC_CHECK_BACKUP,				HIDC_CHECK_BACKUP,				// ƒoƒbƒNƒAƒbƒv‚Ìì¬
@@ -21,26 +20,23 @@ static const DWORD p_helpids[] = {	//10000
 	IDC_CHECK_BACKUPDIALOG,			HIDC_CHECK_BACKUPDIALOG,		// ì¬‘O‚ÉŠm”F
 	IDC_CHECK_BACKUPFOLDER,			HIDC_CHECK_BACKUPFOLDER,		// Žw’èƒtƒHƒ‹ƒ_‚Éì¬
 	IDC_CHECK_BACKUP_FOLDER_RM,		HIDC_CHECK_BACKUP_FOLDER_RM,	// Žw’èƒtƒHƒ‹ƒ_‚Éì¬(ƒŠƒ€[ƒoƒuƒ‹ƒƒfƒBƒA‚Ì‚Ý)
-	IDC_CHECK_BACKUP_DUSTBOX,		HIDC_CHECK_BACKUP_DUSTBOX,		// ƒoƒbƒNƒAƒbƒvƒtƒ@ƒCƒ‹‚ð‚²‚Ý” ‚É•ú‚èž‚Þ	//@@@ 2001.12.11 add MIK
+	IDC_CHECK_BACKUP_DUSTBOX,		HIDC_CHECK_BACKUP_DUSTBOX,		// ƒoƒbƒNƒAƒbƒvƒtƒ@ƒCƒ‹‚ð‚²‚Ý” ‚É•ú‚èž‚Þ
 	IDC_EDIT_BACKUPFOLDER,			HIDC_EDIT_BACKUPFOLDER,			// •Û‘¶ƒtƒHƒ‹ƒ_–¼
 	IDC_EDIT_BACKUP_3,				HIDC_EDIT_BACKUP_3,				// ¢‘ã”
 	IDC_RADIO_BACKUP_TYPE1,			HIDC_RADIO_BACKUP_TYPE1,		// ƒoƒbƒNƒAƒbƒv‚ÌŽí—ÞiŠg’£Žqj
-//	IDC_RADIO_BACKUP_TYPE2,			HIDC_RADIO_BACKUP_TYPE2NEWHID,	// ƒoƒbƒNƒAƒbƒv‚ÌŽí—Þi“ú•tEŽžj // 2002.11.09 Moca HID‚ª.._TYPE3‚Æ‹t‚¾‚Á‚½	// Jun.  5, 2004 genta ”pŽ~
-	IDC_RADIO_BACKUP_TYPE3,			HIDC_RADIO_BACKUP_TYPE3NEWHID,	// ƒoƒbƒNƒAƒbƒv‚ÌŽí—Þi˜A”Ôj// 2002.11.09 Moca HID‚ª.._TYPE2‚Æ‹t‚¾‚Á‚½
-	IDC_RADIO_BACKUP_DATETYPE1,		HIDC_RADIO_BACKUP_DATETYPE1,	// •t‰Á‚·‚é“úŽž‚ÌŽí—Þiì¬“úŽžj	// Jul. 05, 2001 JEPRO ’Ç‰Á
-	IDC_RADIO_BACKUP_DATETYPE2,		HIDC_RADIO_BACKUP_DATETYPE2,	// •t‰Á‚·‚é“úŽž‚ÌŽí—ÞiXV“úŽžj	// Jul. 05, 2001 JEPRO ’Ç‰Á
+	IDC_RADIO_BACKUP_TYPE3,			HIDC_RADIO_BACKUP_TYPE3NEWHID,	// ƒoƒbƒNƒAƒbƒv‚ÌŽí—Þi˜A”Ôj
+	IDC_RADIO_BACKUP_DATETYPE1,		HIDC_RADIO_BACKUP_DATETYPE1,	// •t‰Á‚·‚é“úŽž‚ÌŽí—Þiì¬“úŽžj
+	IDC_RADIO_BACKUP_DATETYPE2,		HIDC_RADIO_BACKUP_DATETYPE2,	// •t‰Á‚·‚é“úŽž‚ÌŽí—ÞiXV“úŽžj
 	IDC_SPIN_BACKUP_GENS,			HIDC_EDIT_BACKUP_3,				// •Û‘¶‚·‚é¢‘ã”‚ÌƒXƒsƒ“
-	IDC_CHECK_BACKUP_RETAINEXT,		HIDC_CHECK_BACKUP_RETAINEXT,	// Œ³‚ÌŠg’£Žq‚ð•Û‘¶	// 2006.08.06 ryoji
-	IDC_CHECK_BACKUP_ADVANCED,		HIDC_CHECK_BACKUP_ADVANCED,		// Ú×Ý’è	// 2006.08.06 ryoji
-	IDC_EDIT_BACKUPFILE,			HIDC_EDIT_BACKUPFILE,			// Ú×Ý’è‚ÌƒGƒfƒBƒbƒgƒ{ƒbƒNƒX	// 2006.08.06 ryoji
-	IDC_RADIO_BACKUP_DATETYPE1A,	HIDC_RADIO_BACKUP_DATETYPE1A,	// •t‰Á‚·‚é“úŽž‚ÌŽí—Þiì¬“úŽžj¦Ú×Ý’èON—p	// 2009.02.20 ryoji
-	IDC_RADIO_BACKUP_DATETYPE2A,	HIDC_RADIO_BACKUP_DATETYPE2A,	// •t‰Á‚·‚é“úŽž‚ÌŽí—ÞiXV“úŽžj¦Ú×Ý’èON—p	// 2009.02.20 ryoji
+	IDC_CHECK_BACKUP_RETAINEXT,		HIDC_CHECK_BACKUP_RETAINEXT,	// Œ³‚ÌŠg’£Žq‚ð•Û‘¶
+	IDC_CHECK_BACKUP_ADVANCED,		HIDC_CHECK_BACKUP_ADVANCED,		// Ú×Ý’è
+	IDC_EDIT_BACKUPFILE,			HIDC_EDIT_BACKUPFILE,			// Ú×Ý’è‚ÌƒGƒfƒBƒbƒgƒ{ƒbƒNƒX
+	IDC_RADIO_BACKUP_DATETYPE1A,	HIDC_RADIO_BACKUP_DATETYPE1A,	// •t‰Á‚·‚é“úŽž‚ÌŽí—Þiì¬“úŽžj¦Ú×Ý’èON—p
+	IDC_RADIO_BACKUP_DATETYPE2A,	HIDC_RADIO_BACKUP_DATETYPE2A,	// •t‰Á‚·‚é“úŽž‚ÌŽí—ÞiXV“úŽžj¦Ú×Ý’èON—p
 //	IDC_STATIC,						-1,
 	0, 0
 };
-//@@@ 2001.02.04 End
 
-//	From Here Jun. 2, 2001 genta
 /*!
 	@param hwndDlg ƒ_ƒCƒAƒƒOƒ{ƒbƒNƒX‚ÌWindow Handle
 	@param uMsg ƒƒbƒZ[ƒW
@@ -214,12 +210,7 @@ INT_PTR PropBackup::DispatchEvent(
 }
 
 
-/*! ƒ_ƒCƒAƒƒOƒf[ƒ^‚ÌÝ’è
-	@date 2004.06.05 genta Œ³‚ÌŠg’£Žq‚ðŽc‚·Ý’è‚ð’Ç‰ÁD
-		“úŽžŽw’è‚Åƒ`ƒFƒbƒNƒ{ƒbƒNƒX‚ª‹ó—“‚ÅŽc‚é‚ÆÝ’è‚³‚ê‚È‚¢–â‘è‚ð”ð‚¯‚é‚½‚ßC
-		IDC_RADIO_BACKUP_TYPE2
-		‚ð”pŽ~‚µ‚ÄƒŒƒCƒAƒEƒg•ÏX
-*/
+/*! ƒ_ƒCƒAƒƒOƒf[ƒ^‚ÌÝ’è */
 void PropBackup::SetData(HWND hwndDlg)
 {
 //	BOOL	bRet;
@@ -232,11 +223,7 @@ void PropBackup::SetData(HWND hwndDlg)
 	::CheckDlgButtonBool(hwndDlg, IDC_CHECK_BACKUP, csBackup.bBackUp);
 	// ƒoƒbƒNƒAƒbƒv‚Ìì¬‘O‚ÉŠm”F
 	::CheckDlgButtonBool(hwndDlg, IDC_CHECK_BACKUPDIALOG, csBackup.bBackUpDialog);
-//	// Žw’èƒtƒHƒ‹ƒ_‚ÉƒoƒbƒNƒAƒbƒv‚ðì¬‚·‚é //	20051107 aroka uƒoƒbƒNƒAƒbƒv‚Ìì¬v‚É˜A“®‚³‚¹‚é
-//	::CheckDlgButton(hwndDlg, IDC_CHECK_BACKUPFOLDER, .backup.bBackUpFolder);
-
 	// ƒoƒbƒNƒAƒbƒvƒtƒ@ƒCƒ‹–¼‚Ìƒ^ƒCƒv 1=(.bak) 2=*_“ú•t.*
-	//	Jun.  5, 2004 genta Œ³‚ÌŠg’£Žq‚ðŽc‚·Ý’è(5,6)‚ð’Ç‰ÁD
 	switch (csBackup.GetBackupType()) {
 	case 2:
 		::CheckDlgButton(hwndDlg, IDC_RADIO_BACKUP_DATETYPE1, 1);	// •t‰Á‚·‚é“ú•t‚Ìƒ^ƒCƒv(Œ»Žž)
@@ -255,7 +242,6 @@ void PropBackup::SetData(HWND hwndDlg)
 		break;
 	}
 	
-	//	Jun.  5, 2004 genta Œ³‚ÌŠg’£Žq‚ðŽc‚·Ý’è(5,6)‚ð’Ç‰ÁD
 	::CheckDlgButton(hwndDlg, IDC_CHECK_BACKUP_RETAINEXT,
 		(csBackup.GetBackupType() == 5 || csBackup.GetBackupType() == 6) ? 1 : 0
 	);
@@ -273,23 +259,23 @@ void PropBackup::SetData(HWND hwndDlg)
 	// ƒoƒbƒNƒAƒbƒvƒtƒ@ƒCƒ‹–¼F“ú•t‚Ì•b
 	::CheckDlgButtonBool(hwndDlg, IDC_CHECK_BACKUP_SEC, csBackup.GetBackupOpt(BKUP_SEC));
 
-	// Žw’èƒtƒHƒ‹ƒ_‚ÉƒoƒbƒNƒAƒbƒv‚ðì¬‚·‚é // 20051107 aroka ˆÚ“®F˜A“®‘ÎÛ‚É‚·‚éB
+	// Žw’èƒtƒHƒ‹ƒ_‚ÉƒoƒbƒNƒAƒbƒv‚ðì¬‚·‚é
 	::CheckDlgButtonBool(hwndDlg, IDC_CHECK_BACKUPFOLDER, csBackup.bBackUpFolder);
-	::CheckDlgButtonBool(hwndDlg, IDC_CHECK_BACKUP_FOLDER_RM, csBackup.bBackUpFolderRM);	// 2010/5/27 Uchi
+	::CheckDlgButtonBool(hwndDlg, IDC_CHECK_BACKUP_FOLDER_RM, csBackup.bBackUpFolderRM);
 
 	// ƒoƒbƒNƒAƒbƒv‚ðì¬‚·‚éƒtƒHƒ‹ƒ_
 	::DlgItem_SetText(hwndDlg, IDC_EDIT_BACKUPFOLDER, csBackup.szBackUpFolder);
 
-	// ƒoƒbƒNƒAƒbƒvƒtƒ@ƒCƒ‹‚ð‚²‚Ý” ‚É•ú‚èž‚Þ	//@@@ 2001.12.11 add MIK
-	::CheckDlgButton(hwndDlg, IDC_CHECK_BACKUP_DUSTBOX, csBackup.bBackUpDustBox ? BST_CHECKED : BST_UNCHECKED);	//@@@ 2001.12.11 add MIK
+	// ƒoƒbƒNƒAƒbƒvƒtƒ@ƒCƒ‹‚ð‚²‚Ý” ‚É•ú‚èž‚Þ	
+	::CheckDlgButton(hwndDlg, IDC_CHECK_BACKUP_DUSTBOX, csBackup.bBackUpDustBox ? BST_CHECKED : BST_UNCHECKED);
 
-	// ƒoƒbƒNƒAƒbƒvæƒtƒHƒ‹ƒ_‚ðÚ×Ý’è‚·‚é // 20051107 aroka
+	// ƒoƒbƒNƒAƒbƒvæƒtƒHƒ‹ƒ_‚ðÚ×Ý’è‚·‚é
 	::CheckDlgButton(hwndDlg, IDC_CHECK_BACKUP_ADVANCED, csBackup.bBackUpPathAdvanced ? BST_CHECKED : BST_UNCHECKED);
 
-	// ƒoƒbƒNƒAƒbƒv‚ðì¬‚·‚éƒtƒHƒ‹ƒ_‚ÌÚ×Ý’è // 20051107 aroka
+	// ƒoƒbƒNƒAƒbƒv‚ðì¬‚·‚éƒtƒHƒ‹ƒ_‚ÌÚ×Ý’è
 	::DlgItem_SetText(hwndDlg, IDC_EDIT_BACKUPFILE, csBackup.szBackUpPathAdvanced);
 
-	// ƒoƒbƒNƒAƒbƒv‚ðì¬‚·‚éƒtƒHƒ‹ƒ_‚ÌÚ×Ý’è // 20051128 aroka
+	// ƒoƒbƒNƒAƒbƒv‚ðì¬‚·‚éƒtƒHƒ‹ƒ_‚ÌÚ×Ý’è
 	switch (csBackup.GetBackupTypeAdv()) {
 	case 2:
 		::CheckDlgButton(hwndDlg, IDC_RADIO_BACKUP_DATETYPE1A, 1);	// •t‰Á‚·‚é“ú•t‚Ìƒ^ƒCƒv(Œ»Žž)
@@ -302,13 +288,11 @@ void PropBackup::SetData(HWND hwndDlg)
 		break;
 	}
 
-	//	From Here Aug. 16, 2000 genta
 	int nN = csBackup.GetBackupCount();
 	nN = nN < 1  ?  1 : nN;
 	nN = nN > 99 ? 99 : nN;
 
-	::SetDlgItemInt(hwndDlg, IDC_EDIT_BACKUP_3, nN, FALSE);	//	Oct. 29, 2001 genta
-	//	To Here Aug. 16, 2000 genta
+	::SetDlgItemInt(hwndDlg, IDC_EDIT_BACKUP_3, nN, FALSE);
 
 	UpdateBackupFile(hwndDlg);
 
@@ -417,21 +401,7 @@ int PropBackup::GetData(HWND hwndDlg)
 	return TRUE;
 }
 
-//	From Here Aug. 16, 2000 genta
-/*!	ƒ`ƒFƒbƒNó‘Ô‚É‰ž‚¶‚Äƒ_ƒCƒAƒƒOƒ{ƒbƒNƒX—v‘f‚ÌEnable/Disable‚ð
-	“KØ‚ÉÝ’è‚·‚é
-
-	@date 2004.06.05 genta Œ³‚ÌŠg’£Žq‚ðŽc‚·Ý’è‚ð’Ç‰ÁD
-		“úŽžŽw’è‚Åƒ`ƒFƒbƒNƒ{ƒbƒNƒX‚ª‹ó—“‚ÅŽc‚é‚ÆÝ’è‚³‚ê‚È‚¢–â‘è‚ð”ð‚¯‚é‚½‚ßC
-		IDC_RADIO_BACKUP_TYPE2
-		‚ð”pŽ~‚µ‚ÄƒŒƒCƒAƒEƒg•ÏX
-	@date 2005.11.07 aroka ƒŒƒCƒAƒEƒg‚É‡‚í‚¹‚Ä‡˜‚ð“ü‚ê‘Ö‚¦AƒCƒ“ƒfƒ“ƒg‚ð®—
-	@date 2005.11.21 aroka Ú×Ý’èƒ‚[ƒh‚Ì§Œä‚ð’Ç‰Á
-	@date 2009.02.20 ryoji IDC_LABEL_BACKUP_HELP‚É‚æ‚é•ÊƒRƒ“ƒgƒ[ƒ‹‰B‚µ‚ð”pŽ~Aif•¶§Œä‚ðShowEnableƒtƒ‰ƒO§Œä‚É’u‚«Š·‚¦‚ÄŠÈ‘f‰»‚µ‚Ä‰º‹L–â‘èC³B
-	                       EVista Aero‚¾‚ÆÚ×Ý’èON‚É‚µ‚Ä‚àÚ×Ý’èOFF€–Ú‚ª‰æ–Ê‚©‚çÁ‚¦‚È‚¢
-	                       EÚ×Ý’èOFF€–Ú‚ª”ñ•\Ž¦‚Å‚Í‚È‚©‚Á‚½‚Ì‚Å‰B‚ê‚Ä‚¢‚Ä‚àTooltipƒwƒ‹ƒv‚ª•\Ž¦‚³‚ê‚é
-	                       EÚ×Ý’èON‚È‚Ì‚ÉƒoƒbƒNƒAƒbƒvì¬OFF‚¾‚ÆÚ×Ý’èOFF€–Ú‚Ì‚Ù‚¤‚ª•\Ž¦‚³‚ê‚é
-*/
+/*!	ƒ`ƒFƒbƒNó‘Ô‚É‰ž‚¶‚Äƒ_ƒCƒAƒƒOƒ{ƒbƒNƒX—v‘f‚ÌEnable/Disable‚ð“KØ‚ÉÝ’è‚·‚é */
 static inline
 void ShowEnable(
 	HWND hWnd,
@@ -491,13 +461,9 @@ void PropBackup::EnableBackupInput(HWND hwndDlg)
 
 	#undef SHOWENABLE
 }
-//	To Here Aug. 16, 2000 genta
 
 
 /*!	ƒoƒbƒNƒAƒbƒvƒtƒ@ƒCƒ‹‚ÌÚ×Ý’èƒGƒfƒBƒbƒgƒ{ƒbƒNƒX‚ð“KØ‚ÉXV‚·‚é
-
-	@date 2005.11.07 aroka V‹K’Ç‰Á
-
 	@note Ú×Ý’èØ‚è‘Ö‚¦Žž‚ÌƒfƒtƒHƒ‹ƒg‚ðƒIƒvƒVƒ‡ƒ“‚É‡‚í‚¹‚é‚½‚ßA
 		szBackUpPathAdvanced ‚ðXV‚·‚é
 */
@@ -505,7 +471,7 @@ void PropBackup::UpdateBackupFile(HWND hwndDlg)	//	ƒoƒbƒNƒAƒbƒvƒtƒ@ƒCƒ‹‚ÌÚ×Ý’
 {
 	wchar_t temp[MAX_PATH];
 	auto& csBackup = common.backup;
-	// ƒoƒbƒNƒAƒbƒv‚ðì¬‚·‚éƒtƒ@ƒCƒ‹ // 20051107 aroka
+	// ƒoƒbƒNƒAƒbƒv‚ðì¬‚·‚éƒtƒ@ƒCƒ‹
 	if (!csBackup.bBackUp) {
 		temp[0] = 0;
 	}else {

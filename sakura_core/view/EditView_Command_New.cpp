@@ -4,19 +4,19 @@
 #include "SearchAgent.h"
 #include "uiparts/WaitCursor.h"
 #include "charset/charcode.h"
-#include "Ope.h" ///	2002/2/3 aroka from here
+#include "Ope.h"
 #include "OpeBlk.h" ///
-#include "doc/EditDoc.h"	//	2002/5/13 YAZAKI ヘッダ整理
+#include "doc/EditDoc.h"
 #include "doc/DocReader.h"
 #include "doc/layout/Layout.h"
 #include "doc/logic/DocLine.h"
 #include "cmd/ViewCommander_inline.h"
 #include "window/EditWnd.h"
 #include "dlg/DlgCtrlCode.h"	// コントロールコードの入力(ダイアログ)
-#include "dlg/DlgFavorite.h"	// 履歴の管理	//@@@ 2003.04.08 MIK
+#include "dlg/DlgFavorite.h"	// 履歴の管理
 #include "debug/RunningTimer.h"
 
-using namespace std; // 2002/2/3 aroka
+using namespace std;
 
 static void StringToOpeLineData(const wchar_t* pLineData, size_t nLineDataLen, OpeLineData& lineData, int opeSeq)
 {
@@ -44,10 +44,7 @@ static void StringToOpeLineData(const wchar_t* pLineData, size_t nLineDataLen, O
 }
 
 
-/*!	現在位置にデータを挿入 Ver0
-
-	@date 2002/03/24 YAZAKI bUndo削除
-*/
+/*!	現在位置にデータを挿入 Ver0 */
 void EditView::InsertData_CEditView(
 	Point ptInsertPos,		// [in] 挿入位置
 	const wchar_t* pData,	// [in] 挿入テキスト
@@ -60,7 +57,6 @@ void EditView::InsertData_CEditView(
 	MY_RUNNINGTIMER(runningTimer, "EditView::InsertData_CEditView");
 #endif
 
-	// 2007.10.18 kobake COpe処理をここにまとめる
 	InsertOpe* pOpe = nullptr;
 	int opeSeq;
 	if (!bDoing_UndoRedo) {	// Undo, Redoの実行中か
@@ -326,11 +322,6 @@ void EditView::InsertData_CEditView(
 	@param _ptCaretPos [in]  削除データの位置
 	@param nDelLen [out] 削除データのサイズ
 	@param pMem [out]  削除したデータ(nullptr可能)
-
-	@date 2002/03/24 YAZAKI bUndo削除
-	@date 2002/05/12 YAZAKI bRedraw, bRedraw2削除（常にFALSEだから）
-	@date 2007/10/17 kobake (重要)pMemの所有者が条件によりCOpeに移ったり移らなかったりする振る舞いは
-	                        非常にややこしく混乱の元になるため、常に、pMemの所有者は移さないように仕様変更。
 */
 void EditView::DeleteData2(
 	const Point&	_ptCaretPos,
@@ -402,10 +393,7 @@ void EditView::DeleteData2(
 }
 
 
-/*!	カーソル位置または選択エリアを削除
-
-	@date 2002/03/24 YAZAKI bUndo削除
-*/
+/*!	カーソル位置または選択エリアを削除 */
 void EditView::DeleteData(
 	bool	bRedraw
 //	BOOL	bUndo	// Undo操作かどうか

@@ -55,8 +55,6 @@ private:
 
 /*!
 	@brief 文字列リソース読み込みクラス
-
-	@date 2011.06.01 nasukoji	新規作成
 */
 
 #define LOADSTR_ADD_SIZE		256			// 文字列リソース用バッファの初期または追加サイズ（TCHAR単位）

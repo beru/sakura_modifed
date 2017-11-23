@@ -93,7 +93,6 @@ void DocOutline::MakeTopicList_txt(FuncInfoArr* pFuncInfoArr)
 		size_t nCharChars2;
 		size_t j;
 		for (j=0; j<nStartsLen; j+=nCharChars2) {
-			// 2005-09-02 D.S.Koba GetSizeOfChar
 			nCharChars2 = NativeW::GetSizeOfChar(pszStarts, nStartsLen, j);
 			if (nCharChars == nCharChars2) {
 				if (wmemcmp(&pLine[i], &pszStarts[j], nCharChars) == 0) {

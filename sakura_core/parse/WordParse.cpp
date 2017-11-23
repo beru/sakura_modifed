@@ -288,7 +288,6 @@ bool WordParse::SearchNextWordPosition(
 			}
 			nCharKind = nCharKindMerge;
 		}
-		// 2005-09-02 D.S.Koba GetSizeOfChar
 		nCharChars = NativeW::GetSizeOfChar(pLine, nLineLen, nIdxNext);
 	}
 	return false;
@@ -333,7 +332,6 @@ bool WordParse::SearchNextWordPosition4KW(
 			}
 			nCharKind = nCharKindMerge;
 		}
-		// 2005-09-02 D.S.Koba GetSizeOfChar
 		nCharChars = NativeW::GetSizeOfChar(pLine, nLineLen, nIdxNext);
 	}
 	return false;

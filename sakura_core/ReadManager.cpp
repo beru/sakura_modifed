@@ -13,8 +13,6 @@
 	@note	Windows用にコーディングしてある
 	@retval	TRUE	正常読み込み
 	@retval	FALSE	エラー(またはユーザによるキャンセル?)
-	@date	2002/08/30 Moca 旧ReadFileを元に作成 ファイルアクセスに関する部分をFileLoadで行う
-	@date	2003/07/26 ryoji BOMの状態の取得を追加
 */
 CodeConvertResult ReadManager::ReadFile_To_CDocLineMgr(
 	DocLineMgr&			docLineMgr,		// [out]

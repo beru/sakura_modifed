@@ -31,8 +31,6 @@ WSHMacroManager::~WSHMacroManager()
 /** WSHƒ}ƒNƒ‚ÌÀs
 
 	@param EditView [in] ‘€ì‘ÎÛEditView
-	
-	@date 2007.07.20 genta : flags’Ç‰Á
 */
 bool WSHMacroManager::ExecKeyMacro(EditView& editView, int flags) const
 {

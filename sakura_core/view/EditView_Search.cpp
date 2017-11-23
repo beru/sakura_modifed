@@ -11,15 +11,12 @@ const size_t STRNCMP_MAX = 100;	// MAXキーワード長：strnicmp文字列比較最大値(Edi
 //                           検索                              //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-/*! キーワード辞書検索の前提条件チェックと、検索
-
-	@date 2006.04.10 fon OnTimer, CreatePopUpMenu_Rから分離
-*/
+/*! キーワード辞書検索の前提条件チェックと、検索 */
 BOOL EditView::KeywordHelpSearchDict(LID_SKH nID, POINT* po, RECT* rc)
 {
 	NativeW memCurText;
 	// キーワードヘルプを使用するか？
-	if (!pTypeData->bUseKeywordHelp)	// キーワードヘルプ機能を使用する	// 2006.04.10 fon
+	if (!pTypeData->bUseKeywordHelp)	// キーワードヘルプ機能を使用する
 		goto end_of_search;
 	// フォーカスがあるか？
 	if (!GetCaret().ExistCaretFocus()) 
@@ -81,32 +78,29 @@ end_of_search:
 	return FALSE;
 }
 
-/*! キーワード辞書検索処理メイン
-
-	@date 2006.04.10 fon KeywordHelpSearchDictから分離
-*/
+/*! キーワード辞書検索処理メイン */
 bool EditView::KeySearchCore(const NativeW* pMemCurText)
 {
 	NativeW*	pMemRefKey;
-	size_t		nCmpLen = STRNCMP_MAX; // 2006.04.10 fon
-	int			nLine; // 2006.04.10 fon
+	size_t		nCmpLen = STRNCMP_MAX;
+	int			nLine;
 	
 	tipWnd.info.SetString(_T(""));	// tooltipバッファ初期化
 	// 1行目にキーワード表示の場合
-	if (pTypeData->bUseKeyHelpKeyDisp) {	// キーワードも表示する	// 2006.04.10 fon
+	if (pTypeData->bUseKeyHelpKeyDisp) {	// キーワードも表示する
 		tipWnd.info.AppendStringLiteral(_T("["));
 		tipWnd.info.AppendString(pMemCurText->GetStringT());
 		tipWnd.info.AppendStringLiteral(_T("]"));
 	}
 	// 途中まで一致を使う場合
 	if (pTypeData->bUseKeyHelpPrefix) {
-		nCmpLen = wcslen(pMemCurText->GetStringPtr());	// 2006.04.10 fon
+		nCmpLen = wcslen(pMemCurText->GetStringPtr());
 	}
 	tipWnd.KeyWasHit = false;
 	for (int i=0; i<pTypeData->nKeyHelpNum; ++i) {	// 最大数：MAX_KEYHELP_FILE
 		auto& keyHelpInfo = pTypeData->keyHelpArr[i];
 		if (keyHelpInfo.bUse) {
-			// 2006.04.10 fon (nCmpLen, pMemRefKey,nSearchLine)引数を追加
+			// (nCmpLen, pMemRefKey,nSearchLine)引数を追加
 			NativeW* pMemRefText;
 			int nSearchResult = dicMgr.DicMgr::Search(
 				pMemCurText->GetStringPtr(),
@@ -120,7 +114,7 @@ bool EditView::KeySearchCore(const NativeW* pMemCurText)
 				// 該当するキーがある
 				LPWSTR pszWork = pMemRefText->GetStringPtr();
 				// 有効になっている辞書を全部なめて、ヒットの都度説明の継ぎ増し
-				if (pTypeData->bUseKeyHelpAllSearch) {	// ヒットした次の辞書も検索	// 2006.04.10 fon
+				if (pTypeData->bUseKeyHelpAllSearch) {	// ヒットした次の辞書も検索
 					// バッファに前のデータが詰まっていたらseparator挿入
 					if (tipWnd.info.GetStringLength() != 0)
 						tipWnd.info.AppendString(LS(STR_ERR_DLGEDITVW5));
@@ -129,7 +123,7 @@ bool EditView::KeySearchCore(const NativeW* pMemCurText)
 					// 辞書のパス挿入
 					{
 						TCHAR szFile[MAX_PATH];
-						// 2013.05.08 表示するのはファイル名(拡張子なし)のみにする
+						// 表示するのはファイル名(拡張子なし)のみにする
 						_tsplitpath(keyHelpInfo.szPath, NULL, NULL, szFile, NULL);
 						tipWnd.info.AppendString(szFile);
 					}
@@ -141,7 +135,7 @@ bool EditView::KeySearchCore(const NativeW* pMemCurText)
 					}// 調査した「意味」を挿入
 					tipWnd.info.AppendStringW(pszWork);
 					delete pMemRefText;
-					delete pMemRefKey;	// 2006.07.02 genta
+					delete pMemRefKey;
 					// タグジャンプ用の情報を残す
 					if (!tipWnd.KeyWasHit) {
 						tipWnd.nSearchDict = i;	// 辞書を開くとき最初にヒットした辞書を開く
@@ -162,7 +156,7 @@ bool EditView::KeySearchCore(const NativeW* pMemCurText)
 					// 調査した「意味」を挿入
 					tipWnd.info.AppendStringW(pszWork);
 					delete pMemRefText;
-					delete pMemRefKey;	// 2006.07.02 genta
+					delete pMemRefKey;
 					// タグジャンプ用の情報を残す
 					tipWnd.nSearchDict = i;
 					tipWnd.nSearchLine = nLine;
@@ -357,8 +351,6 @@ void EditView::GetCurrentTextForSearch(NativeW& memCurText, bool bStripMaxPath /
 
 /*!	現在カーソル位置単語または選択範囲より検索等のキーを取得（ダイアログ用）
 	@return 値を設定したか
-	@date 2006.08.23 ryoji 新規作成
-	@date 2014.07.01 Moca bGetHistory追加、戻り値をboolに変更
 */
 bool EditView::GetCurrentTextForSearchDlg(NativeW& memCurText, bool bGetHistory)
 {
@@ -400,9 +392,6 @@ bool EditView::GetCurrentTextForSearchDlg(NativeW& memCurText, bool bGetHistory)
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 // 現在位置が検索文字列に該当するか
-// 2002.02.08 hor
-// 正規表現で検索したときの速度改善のため、マッチ先頭位置を引数に追加
-// Jun. 26, 2001 genta	正規表現ライブラリの差し替え
 /*
 	@retval 0
 		(パターン検索時) 指定位置以降にマッチはない。
@@ -419,19 +408,18 @@ size_t EditView::IsSearchString(
 	int*		pnSearchEnd
 	) const
 {
-	*pnSearchStart = nPos;	// 2002.02.08 hor
+	*pnSearchStart = nPos;
 
 	if (curSearchOption.bRegularExp) {
 		// 行頭ではない?
-		// 行頭検索チェックは、CBregexpクラス内部で実施するので不要 2003.11.01 かろと
+		// 行頭検索チェックは、CBregexpクラス内部で実施するので不要
 
 		/* 位置を0でMatchInfo呼び出すと、行頭文字検索時に、全て true　となり、
 		** 画面全体が検索文字列扱いになる不具合修正
 		** 対策として、行頭を MacthInfoに教えないといけないので、文字列の長さ・位置情報を与える形に変更
-		** 2003.05.04 かろと
 		*/
 		if (curRegexp.Match(str.GetPtr(), str.GetLength(), nPos)) {
-			*pnSearchStart = curRegexp.GetIndex();	// 2002.02.08 hor
+			*pnSearchStart = curRegexp.GetIndex();
 			*pnSearchEnd = curRegexp.GetLastIndex();
 			return 1;
 		}else {

@@ -233,19 +233,15 @@ int PropTab::GetData(HWND hwndDlg)
 	nSelPos = Combo_GetCurSel(hwndCombo);
 	csTabBar.eTabPosition = TabPosArr[nSelPos].nMethod;
 
-	//	Feb. 11, 2007 genta 新規作成
 	csTabBar.bTab_RetainEmptyWin = DlgButton_IsChecked(hwndDlg, IDC_CHECK_RetainEmptyWindow);
 	csTabBar.bTab_CloseOneWin = DlgButton_IsChecked(hwndDlg, IDC_CHECK_CloseOneWin);
-	csTabBar.bChgWndByWheel = DlgButton_IsChecked(hwndDlg, IDC_CHECK_ChgWndByWheel);	// 2007.04.03 ryoji
-	csTabBar.bNewWindow = DlgButton_IsChecked(hwndDlg, IDC_CHECK_OpenNewWin);  // 2009.06.17
+	csTabBar.bChgWndByWheel = DlgButton_IsChecked(hwndDlg, IDC_CHECK_ChgWndByWheel);
+	csTabBar.bNewWindow = DlgButton_IsChecked(hwndDlg, IDC_CHECK_OpenNewWin);
 
 	return TRUE;
 }
 
-/*! 「タブバー」シート上のアイテムの有効・無効を適切に設定する
-
-	@date 2007.02.12 genta 新規作成
-*/
+/*! 「タブバー」シート上のアイテムの有効・無効を適切に設定する */
 void PropTab::EnableTabPropInput(HWND hwndDlg)
 {
 	
@@ -257,19 +253,19 @@ void PropTab::EnableTabPropInput(HWND hwndDlg)
 	DlgItem_Enable(hwndDlg, IDC_CHECK_GroupMultiTabWnd,		bTabWnd);
 	DlgItem_Enable(hwndDlg, IDC_CHECK_RetainEmptyWindow,	bGroupTabWin);
 	DlgItem_Enable(hwndDlg, IDC_CHECK_CloseOneWin,			bGroupTabWin);
-	DlgItem_Enable(hwndDlg, IDC_CHECK_OpenNewWin,			bGroupTabWin);	// 2009.06.17
+	DlgItem_Enable(hwndDlg, IDC_CHECK_OpenNewWin,			bGroupTabWin);
 	DlgItem_Enable(hwndDlg, IDC_CHECK_DispTabIcon,			bTabWnd);
 	DlgItem_Enable(hwndDlg, IDC_CHECK_SameTabWidth,			bTabWnd);
 	DlgItem_Enable(hwndDlg, IDC_CHECK_DispTabClose,			bTabWnd);
 	DlgItem_Enable(hwndDlg, IDC_TextTabClose,				bTabWnd);
 	DlgItem_Enable(hwndDlg, IDC_TextTabCaption,				bTabWnd);
 	DlgItem_Enable(hwndDlg, IDC_BUTTON_TABFONT,				bTabWnd);
-	DlgItem_Enable(hwndDlg, IDC_STATIC_TABFONT,				bTabWnd);	// 2013/4/24 Uchi
+	DlgItem_Enable(hwndDlg, IDC_STATIC_TABFONT,				bTabWnd);
 	DlgItem_Enable(hwndDlg, IDC_CHECK_SortTabList,			bTabWnd);
 	DlgItem_Enable(hwndDlg, IDC_CHECK_TAB_MULTILINE,		bTabWnd);
 	DlgItem_Enable(hwndDlg, IDC_TAB_POSITION,				bTabWnd);
 	DlgItem_Enable(hwndDlg, IDC_COMBO_TAB_POSITION,			bTabWnd);
 	DlgItem_Enable(hwndDlg, IDC_TABWND_CAPTION,				bTabWnd);
-	DlgItem_Enable(hwndDlg, IDC_CHECK_ChgWndByWheel,		bTabWnd);	// 2007.04.03 ryoji
+	DlgItem_Enable(hwndDlg, IDC_CHECK_ChgWndByWheel,		bTabWnd);
 }
 

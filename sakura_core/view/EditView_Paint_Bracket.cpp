@@ -9,12 +9,10 @@
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 /*!
-	@date 2003/02/18 ai
 	@param flag [in] モード(true:登録, false:解除)
 */
 void EditView::SetBracketPairPos(bool flag)
 {
-	// 03/03/06 ai すべて置換、すべて置換後のUndo&Redoがかなり遅い問題に対応
 	if (bDoing_UndoRedo || !GetDrawSwitch()) {
 		return;
 	}
@@ -75,12 +73,9 @@ void EditView::SetBracketPairPos(bool flag)
 
 /*!
 	対括弧の強調表示
-	@date 2002/09/18 ai
-	@date 2003/02/18 ai 再描画対応の為大改造
 */
 void EditView::DrawBracketPair(bool bDraw)
 {
-	// 03/03/06 ai すべて置換、すべて置換後のUndo&Redoがかなり遅い問題に対応
 	if (bDoing_UndoRedo || !GetDrawSwitch()) {
 		return;
 	}
@@ -299,11 +294,6 @@ static const KAKKO_T g_aKakkos[] = {
 
 	@retval true 成功
 	@retval false 失敗
-
-	@author genta
-	@date Jun. 16, 2000 genta
-	@date Feb. 03, 2001 MIK 全角括弧に対応
-	@date Sep. 18, 2002 ai modeの追加
 */
 bool EditView::SearchBracket(
 	const Point&	ptLayout,
@@ -360,8 +350,6 @@ bool EditView::SearchBracket(
 
 /*!
 	@brief 半角対括弧の検索:順方向
-
-	@author genta
 
 	@param ptLayout [in] 検索開始点の物理座標
 	@param pptLayoutNew [out] 移動先のレイアウト座標
@@ -448,8 +436,6 @@ bool EditView::SearchBracketForward(
 /*!
 	@brief 半角対括弧の検索:逆方向
 
-	@author genta
-
 	@param ptLayout [in] 検索開始点の物理座標
 	@param pptLayoutNew [out] 移動先のレイアウト座標
 	@param upChar [in] 括弧の始まりの文字
@@ -528,8 +514,6 @@ bool EditView::SearchBracketBackward(
 //@@@ 2003.01.09 Start by ai:
 /*!
 	@brief 括弧判定
-
-	@author ai
 
 	@param pLine [in] 
 	@param x

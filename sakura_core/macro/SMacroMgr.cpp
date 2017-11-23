@@ -467,10 +467,6 @@ MacroFuncInfo SMacroMgr::macroFuncInfoArr[] =
 	{F_INVALID,	NULL, {VT_EMPTY, VT_EMPTY, VT_EMPTY, VT_EMPTY},	VT_EMPTY,	NULL}
 };
 
-/*!
-	@date 2002.02.17 YAZAKI ShareDataのインスタンスは、CProcessにひとつあるのみ。
-	@date 2002.04.29 genta オブジェクトの実体は実行時まで生成しない。
-*/
 SMacroMgr::SMacroMgr()
 {
 	MY_RUNNINGTIMER(runningTimer, "SMacroMgr::SMacroMgr");
@@ -519,8 +515,6 @@ void SMacroMgr::ClearAll(void)
 /*! @briefキーマクロのバッファにデータ追加
 
 	@param mbuf [in] 読み込み先マクロバッファ
-	
-	@date 2002.06.16 genta キーマクロの多種対応のため変更
 */
 int SMacroMgr::Append(
 	int				idx,		//
@@ -555,8 +549,6 @@ int SMacroMgr::Append(
 	@param pViewClass [in] macro実行対象のView
 	@param idx [in] マクロ番号。
 	@param flags [in] マクロ実行フラグ．HandleCommandに渡すオプション．
-
-	@date 2007.07.16 genta flags追加
 */
 bool SMacroMgr::Exec(
 	int idx,
@@ -627,8 +619,6 @@ bool SMacroMgr::Exec(
 
 	読み込みに失敗したときはマクロバッファのオブジェクトは解放され，
 	NULLが設定される．
-
-	@author Norio Nakatani, YAZAKI, genta
 */
 bool SMacroMgr::Load(
 	EditView& view,
@@ -698,8 +688,6 @@ bool SMacroMgr::Load(
 
 	マクロの登録を変更した場合に，変更前のマクロが
 	引き続き実行されてしまうのを防ぐ．
-
-	@date 2007.10.19 genta 新規作成
 */
 void SMacroMgr::UnloadAll(void)
 {
@@ -715,8 +703,6 @@ void SMacroMgr::UnloadAll(void)
 	@param idx [in] 読み込み先マクロバッファ番号
 	@param pszPath [in] マクロファイル名
 	@param hInstance [in] インスタンスハンドル
-
-	@author YAZAKI
 */
 bool SMacroMgr::Save(
 	int idx,
@@ -766,13 +752,9 @@ void SMacroMgr::Clear(int idx)
 
 	@param nFuncID [in] 機能番号
 	@return 構造体へのポインタ．見つからなければNULL
-	
-	@date 2002.06.16 genta
-	@date 2003.02.24 macroFuncInfoArrも検索対象にする
 */
 const MacroFuncInfo* SMacroMgr::GetFuncInfoByID(int nFuncID)
 {
-	// Jun. 27, 2002 genta
 	// 番人をコード0として拾ってしまうので，配列サイズによる判定をやめた．
 	for (int i=0; macroFuncInfoCommandArr[i].pszFuncName; ++i) {
 		if (macroFuncInfoCommandArr[i].nFuncID == nFuncID) {
@@ -797,9 +779,6 @@ const MacroFuncInfo* SMacroMgr::GetFuncInfoByID(int nFuncID)
 	ただし，pszFuncNameをNULLにしてしまうと戻り値が常にNULLになって
 	成功判定が行えなくなる．
 	各国語メッセージリソース対応により機能名が日本語でない場合がある	
-
-	@date 2002.06.16 genta 新設のGetFuncInfoById(int)を内部で使うように．
-	@date 2011.04.10 nasukoji 各国語メッセージリソース対応
 */
 wchar_t* SMacroMgr::GetFuncInfoByID(
 	HINSTANCE	hInstance,			// [in] リソース取得のためのInstance Handle
@@ -838,8 +817,6 @@ wchar_t* SMacroMgr::GetFuncInfoByID(
 	
 	@note
 	pszFuncNameJapanese の指す先がNULLの時は日本語名を格納しない．
-	
-	@date 2002.06.16 genta ループ内の文字列コピーを排除
 */
 EFunctionCode SMacroMgr::GetFuncInfoByName(
 	HINSTANCE		hInstance,				// [in]  リソース取得のためのInstance Handle

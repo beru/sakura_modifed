@@ -23,10 +23,7 @@ int ToColorInfoArrIndex_RegularExpression(const EColorIndexType eRegexColorIndex
 	return eRegexColorIndex - COLORIDX_REGEX_FIRST;
 }
 
-/*! 色定数を色番号に変換する関数
-
-	@date 2013.05.08 novice 範囲外のときはテキストを選択する
-*/
+/*! 色定数を色番号に変換する関数 */
 inline
 int ToColorInfoArrIndex(const EColorIndexType eColorIndex)
 {

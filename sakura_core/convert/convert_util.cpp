@@ -168,9 +168,6 @@ void Convert_HaneisuToZeneisu(wchar_t* pData, size_t nLength)
 	全角カタカナ→半角カタカナ
 	濁点の分だけ、文字数は増える可能性がある。最大で2倍になる。
 	pDstにはあらかじめ十分なメモリを確保しておくこと。
-
-	@date 2013.08.28 「ガー」等の濁点・半濁点に続く長音の変換ができていなかったのを修正。
-		ただし、ANSI版とは違い直前の文字がtableZenkata_Kigoの場合は変換しない。
 */
 void Convert_ZenkataToHankata(const wchar_t* pSrc, size_t nSrcLength, wchar_t* pDst, size_t* nDstLength)
 {

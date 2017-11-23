@@ -138,7 +138,6 @@ size_t LayoutMgr::getIndentOffset_Normal(Layout*)
 	前の行の最後のTABの位置をインデント位置として返す．
 	ただし，残り幅が6文字未満の場合はインデントを行わない．
 	
-	@author Yazaki
 	@return インデントすべき文字数
 */
 size_t LayoutMgr::getIndentOffset_Tx2x(Layout* pLayoutPrev)

@@ -48,7 +48,6 @@ const char TABLE_IsUtf7Direct[] = {
 
 /*
 	JIS エスケープシーケンスデータ
-	@author D. S. Koba
 */
 const char JISESCDATA_ASCII[]				= "\x1b""(B";
 const char JISESCDATA_JISX0201Latin[]		= "\x1b""(J";

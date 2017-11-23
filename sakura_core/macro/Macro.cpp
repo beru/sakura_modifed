@@ -7,10 +7,10 @@
 #include "Macro.h"
 #include "_main/ControlTray.h"
 #include "cmd/ViewCommander_inline.h"
-#include "view/EditView.h"		// 2002/2/10 aroka
-#include "macro/SMacroMgr.h"	// 2002/2/10 aroka
-#include "doc/EditDoc.h"		// 2002/5/13 YAZAKI ヘッダ整理
-#include "_os/OleTypes.h"		// 2003-02-21 鬼
+#include "view/EditView.h"
+#include "macro/SMacroMgr.h"
+#include "doc/EditDoc.h"
+#include "_os/OleTypes.h"
 #include "io/TextStream.h"
 #include "window/EditWnd.h"
 #include "env/SakuraEnvironment.h"
@@ -355,9 +355,6 @@ void Macro::AddIntParam(const int nParam)
 	
 	たとえば、F_INSTEXT_Wの1つめ、2つめの引数は文字列、3つめの引数はint、4つめの引数が無し。だったりする場合は、次のようにしましょう。
 	editView.GetCommander().HandleCommand(nFuncID, true, paramArr[0], paramArr[1], *((int*)paramArr[2]), 0);
-	
-	@date 2007.07.20 genta : flags追加．FA_FROMMACROはflagsに含めて渡すものとする．
-		(1コマンド発行毎に毎回演算する必要はないので)
 */
 bool Macro::Exec(EditView& editView, int flags) const
 {
@@ -500,8 +497,6 @@ void Macro::Save(HINSTANCE hInstance, TextOutputStream& out) const
 	@param index	[in] 下位16bit: 機能ID, 上位ワードはそのままMacro::HandleCommand()に渡す．
 	@param arguments [in] 引数
 	@param argSize	[in] 引数の数
-	
-	@date 2007.07.08 genta indexのコマンド番号を下位ワードに制限
 */
 bool Macro::HandleCommand(
 	EditView&			editView,
@@ -1437,12 +1432,6 @@ inline bool VariantToI4(Variant& varCopy, const VARIANT& arg)
 	@param Result  [out] 結果の値を返す場所。戻り値がfalseのときは不定。
 	
 	@return true: 成功, false: 失敗
-
-	@author 鬼
-	@date 2003.02.21 鬼
-	@date 2003.06.01 Moca 関数追加
-	@date 2005.08.05 maru,zenryaku 関数追加
-	@date 2005.11.29 FILE VariantChangeType対応
 */
 bool Macro::HandleFunction(
 	EditView& view,

@@ -113,13 +113,6 @@ Caret::~Caret()
 		bUnderlineDoNotOFFを指定すると高速化できる.
 		同様に同じ桁の上下移動はbVertLineDoNotOFFを指定すると
 		カーソル位置縦線の消去を省いて高速化できる.
-
-	@date 2001.10.20 deleted by novice AdjustScrollBar()を呼ぶ位置を変更
-	@date 2004.04.02 Moca 行だけ有効な座標に修正するのを厳密に処理する
-	@date 2004.09.11 genta bDrawスイッチは動作と名称が一致していないので
-		再描画スイッチ→画面位置調整スイッチと名称変更
-	@date 2009.08.28 nasukoji	テキスト折り返しの「折り返さない」対応
-	@date 2010.11.27 syat アンダーライン、縦線を消去しないフラグを追加
 */
 int Caret::MoveCursor(
 	Point	ptWk_CaretPos,		// [in] 移動先レイアウト位置
@@ -382,13 +375,12 @@ int Caret::MoveCursorToClientPoint(
 	@retval	FALSE 座標は修正されなかった
 	@note	EOFの直前が改行でない場合は、その行に限りEOF以降にも移動可能
 			EOFだけの行は、先頭位置のみ正しい。
-	@date 2004.04.02 Moca 関数化
 */
 bool Caret::GetAdjustCursorPos(
 	Point* pptPosXY
 	)
 {
-	// 2004.03.28 Moca EOFのみのレイアウト行は、0桁目のみ有効.EOFより下の行のある場合は、EOF位置にする
+	// EOFのみのレイアウト行は、0桁目のみ有効.EOFより下の行のある場合は、EOF位置にする
 	size_t nLayoutLineCount = editDoc.layoutMgr.GetLineCount();
 
 	Point ptPosXY2 = *pptPosXY;
@@ -975,8 +967,6 @@ int Caret::Cursor_UPDOWN(int nMoveLines, bool bSelect)
 	@param nCaretColor [in]	キャレットの色種別 (0:通常, 1:IME ON)
 	@param nWidth [in]		キャレット幅
 	@param nHeight [in]		キャレット高
-
-	@date 2006.12.07 ryoji 新規作成
 */
 void Caret::CreateEditCaret(COLORREF crCaret, COLORREF crBack, int nWidth, int nHeight)
 {
@@ -1085,11 +1075,6 @@ POINT Caret::CalcCaretDrawPos(const Point& ptCaretPos) const
 	@return 縦スクロール行数(負:上スクロール/正:下スクロール)
 
 	@note マウス等による移動で不適切な位置に行かないよう座標調整してカーソル移動する
-
-	@date 2007.08.23 ryoji 関数化（MoveCursorToPoint()から処理を抜き出し）
-	@date 2007.09.26 ryoji 半角文字でも中央で左右にカーソルを振り分ける
-	@date 2007.10.23 kobake 引数説明の誤りを修正 ([in/out]→[in])
-	@date 2009.02.17 ryoji レイアウト行末以後のカラム位置指定なら末尾文字の前ではなく末尾文字の後に移動する
 */
 int Caret::MoveCursorProperly(
 	Point	ptNewXY,			// [in] カーソルのレイアウト座標X

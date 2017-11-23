@@ -751,7 +751,6 @@ Point LayoutMgr::LogicToLayout(
 	// Layoutを１つずつ先に進めながらptLogic.yが物理行に一致するLayoutを探す
 	do {
 		if (ptLogic.y == pLayout->GetLogicLineNo()) {
-			// 2013.05.10 Moca 高速化
 			const Layout* pLayoutNext = pLayout->GetNextLayout();
 			if (1
 				&& pLayoutNext
@@ -763,7 +762,7 @@ Point LayoutMgr::LogicToLayout(
 				continue;
 			}
 
-			// 2004.06.16 Moca インデント表示の際に位置がずれる(TAB位置ずれによる)
+			// インデント表示の際に位置がずれる(TAB位置ずれによる)
 			// TAB幅を正確に計算するには当初からインデント分を加えておく必要がある．
 			nCaretPosX = pLayout->GetIndent();
 			const wchar_t*	pData;
@@ -826,7 +825,6 @@ Point LayoutMgr::LogicToLayout(
 		pLayout = pLayout->GetNextLayout();
 	} while (pLayout);
 
-	// 2004.06.16 Moca インデント表示の際の位置ずれ修正
 	ptLayout.Set(
 		pLayout ? (int)nCaretPosX : 0,
 		(int)nCaretPosY

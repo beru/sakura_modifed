@@ -142,9 +142,6 @@ end:
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 /*!	指定桁縦線の描画
-	@date 2005.11.08 Moca 新規作成
-	@date 2006.04.29 Moca 太線・点線のサポート。選択中の反転対策に行ごとに作画するように変更
-	    縦線の色がテキストの背景色と同じ場合は、縦線の背景色をEXORで作画する
 	@note Common::nVertLineOffsetにより、指定桁の前の文字の上に作画されることがある。
 */
 void TextDrawer::DispVerticalLines(
@@ -302,9 +299,7 @@ void TextDrawer::DispNoteLine(
 //                        折り返し桁縦線                       //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-/*!	折り返し桁縦線の描画
-	@date 2009.10.24 ryoji 新規作成
-*/
+/*!	折り返し桁縦線の描画 */
 void TextDrawer::DispWrapLine(
 	Graphics&	gr,			// 作画するウィンドウのDC
 	int			nTop,		// 線を引く上端のクライアント座標y

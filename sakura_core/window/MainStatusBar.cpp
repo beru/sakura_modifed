@@ -90,7 +90,6 @@ void MainStatusBar::DestroyStatusBar()
 	確認することで無駄な処理を省くことが出来る．
 
 	@param msg [in] 表示するメッセージ
-	@date 2005.07.09 genta 新規作成
 	
 	@sa SendStatusMessage2IsEffective
 */

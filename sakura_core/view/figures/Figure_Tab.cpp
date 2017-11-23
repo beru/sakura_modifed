@@ -1,13 +1,12 @@
 #include "StdAfx.h"
-#include "view/EditView.h" // SColorStrategyInfo
+#include "view/EditView.h"
 #include "Figure_Tab.h"
 #include "env/ShareData.h"
 #include "env/DllSharedData.h"
 #include "types/TypeSupport.h"
 
-// 2007.08.28 kobake 追加
 void _DispTab(Graphics& gr, DispPos* pDispPos, const EditView* pView);
-// タブ矢印描画関数	//@@@ 2003.03.26 MIK
+// タブ矢印描画関数
 void _DrawTabArrow(Graphics& gr, int nPosX, int nPosY, int nWidth, int nHeight, bool bBold, COLORREF pColor);
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -24,13 +23,7 @@ bool Figure_Tab::Match(const wchar_t* pText, int nTextLen) const
 //                         描画実装                            //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-/*! TAB描画
-	@date 2001.03.16 by MIK
-	@date 2002.09.22 genta 共通式のくくりだし
-	@date 2002.09.23 genta LayoutMgrの値を使う
-	@date 2003.03.26 MIK タブ矢印表示
-	@date 2013.05.31 novice TAB表示対応(文字指定/短い矢印/長い矢印)
-*/
+/*! TAB描画 */
 void Figure_Tab::DispSpace(Graphics& gr, DispPos* pDispPos, EditView& view, bool bTrans) const
 {
 	DispPos& sPos = *pDispPos;

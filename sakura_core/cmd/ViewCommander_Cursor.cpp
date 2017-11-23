@@ -438,12 +438,6 @@ void ViewCommander::Command_WordLeft(bool bSelect)
 			bUnderlineDoNotOFF = false;
 		}
 
-		// 指定された行のデータ内の位置に対応する桁の位置を調べる
-		// 2007.10.15 kobake 既にレイアウト単位なので変換は不要
-		/*
-		ptLayoutNew.x = view.LineIndexToColumn(pLayout, ptLayoutNew.x);
-		*/
-
 		// カーソル移動
 		caret.GetAdjustCursorPos(&ptLayoutNew);
 		if (bSelect) {
@@ -521,11 +515,6 @@ try_again:;
 			}
 			bUnderlineDoNotOFF = false;
 		}
-		// 指定された行のデータ内の位置に対応する桁の位置を調べる
-		// 2007.10.15 kobake 既にレイアウト単位なので変換は不要
-		/*
-		ptLayoutNew.x = view.LineIndexToColumn(pLayout, ptLayoutNew.x);
-		*/
 		// カーソル移動
 		caret.GetAdjustCursorPos(&ptLayoutNew);
 		if (bSelect) {
@@ -714,21 +703,12 @@ void ViewCommander::Command_HalfPageDown(
 }
 
 
-/*! １ページアップ
-
-	@date 2000.10.10 JEPRO 作成
-	@date 2001.12.13 hor 画面に対するカーソル位置はそのままで
-		１ページアップに動作変更
-	@date 2014.01.10 Moca カーソルが動かないときも画面をScrollするように
-*/	// Oct. 10, 2000 JEPRO added
+// １ページアップ
 void ViewCommander::Command_1PageUp(
 	bool bSelect,
 	int nScrollNum
 	)
 {
-// GetCaret().Cursor_UPDOWN(-view.GetTextArea().nViewRowNum, bSelect);
-
-// 2001.12.03 hor
 //		メモ帳ライクに、画面に対するカーソル位置はそのままで１ページアップ
 	{
 		const bool bDrawSwitchOld = view.SetDrawSwitch(false);
@@ -738,8 +718,6 @@ void ViewCommander::Command_1PageUp(
 			nScrollNum = view.GetTextArea().nViewRowNum - 1;
 		}
 		GetCaret().Cursor_UPDOWN( -nScrollNum, bSelect );
-		// Sep. 11, 2004 genta 同期Scroll処理のため
-		// view.RedrawAllではなくScrollAtを使うように
 		view.SyncScrollV( view.ScrollAtV( nViewTopLine - nScrollNum ));
 		view.SetDrawSwitch(bDrawSwitchOld);
 		view.RedrawAll();
@@ -748,21 +726,12 @@ void ViewCommander::Command_1PageUp(
 }
 
 
-/*!	１ページダウン
-
-	@date 2000.10.10 JEPRO 作成
-	@date 2001.12.13 hor 画面に対するカーソル位置はそのままで
-		１ページダウンに動作変更
-	@date 2014.01.10 Moca カーソルが動かないときも画面をScrollするように
-*/
+//	１ページダウン
 void ViewCommander::Command_1PageDown(
 	bool bSelect,
 	int nScrollNum
 	)
 {
-// GetCaret().Cursor_UPDOWN(view.GetTextArea().nViewRowNum, bSelect);
-
-// 2001.12.03 hor
 //		メモ帳ライクに、画面に対するカーソル位置はそのままで１ページダウン
 	{
 		const bool bDrawSwitchOld = view.SetDrawSwitch(false);
@@ -771,8 +740,6 @@ void ViewCommander::Command_1PageDown(
 			nScrollNum = view.GetTextArea().nViewRowNum - 1;
 		}
 		GetCaret().Cursor_UPDOWN(nScrollNum, bSelect);
-		// Sep. 11, 2004 genta 同期Scroll処理のため
-		// view.RedrawAllではなくScrollAtを使うように
 		view.SyncScrollV(view.ScrollAtV(nViewTopLine + nScrollNum));
 		view.SetDrawSwitch(bDrawSwitchOld);
 		view.RedrawAll();
@@ -786,10 +753,8 @@ void ViewCommander::Command_1PageDown(
 void ViewCommander::Command_GoFileTop(bool bSelect)
 {
 	// 先頭へカーソルを移動
-	// Sep. 8, 2000 genta
 	view.AddCurrentLineToHistory();
 
-	// 2006.07.09 genta 新規関数にまとめた
 	Point pt(
 		!view.GetSelectionInfo().IsBoxSelecting()? 0: GetCaret().GetCaretLayoutPos().x,
 		0
@@ -802,10 +767,9 @@ void ViewCommander::Command_GoFileTop(bool bSelect)
 void ViewCommander::Command_GoFileEnd(bool bSelect)
 {
 	auto& si = view.GetSelectionInfo();
-// 2001.12.13 hor BOX選択中にファイルの最後にジャンプすると[EOF]の行が反転したままになるの修正
 	if (!bSelect) {
 		if (si.IsTextSelected()) {
-			si.DisableSelectArea(true);	// 2001.12.21 hor Add
+			si.DisableSelectArea(true);
 		}else if (si.IsBoxSelecting()) {
 			si.SetBoxSelect(false);
 		}
@@ -814,20 +778,16 @@ void ViewCommander::Command_GoFileEnd(bool bSelect)
 	auto& caret = GetCaret();
 	caret.Cursor_UPDOWN((int)GetDocument().layoutMgr.GetLineCount() , bSelect);
 	Command_Down(bSelect, true);
-	if (!si.IsBoxSelecting()) {							// 2002/04/18 YAZAKI
-		/*	2004.04.19 fotomo
-			改行のない最終行で選択肢ながら文書末へ移動した場合に
-			選択範囲が正しくない場合がある問題に対応
-		*/
-		Command_GoLineEnd(bSelect, 0, 0);				// 2001.12.21 hor Add
+	if (!si.IsBoxSelecting()) {
+		Command_GoLineEnd(bSelect, 0, 0);
 	}
-	caret.MoveCursor(caret.GetCaretLayoutPos(), true);	// 2001.12.21 hor Add
-	// 2002.02.16 hor 矩形選択中を除き直前のカーソル位置をリセット
+	caret.MoveCursor(caret.GetCaretLayoutPos(), true);
+	// 矩形選択中を除き直前のカーソル位置をリセット
 	if (!(si.IsTextSelected() && si.IsBoxSelecting())) {
 		caret.nCaretPosX_Prev = caret.GetCaretLayoutPos().x;
 	}
 
-	// 選択範囲情報メッセージを表示する	// 2009.05.06 ryoji 追加
+	// 選択範囲情報メッセージを表示する
 	if (bSelect) {
 		si.PrintSelectionInfoMsg();
 	}
@@ -841,18 +801,15 @@ void ViewCommander::Command_CurLineCenter(void)
 	auto& textArea = view.GetTextArea();
 	nViewTopLine = GetCaret().GetCaretLayoutPos().y - (textArea.nViewRowNum / 2);
 
-	// sui 02/08/09
 	if (0 > nViewTopLine) {
 		nViewTopLine = 0;
 	}
 	
-	int nScrollLines = nViewTopLine - textArea.GetViewTopLine();	// Sep. 11, 2004 genta 同期用に行数を記憶
+	int nScrollLines = nViewTopLine - textArea.GetViewTopLine();	// 同期用に行数を記憶
 	textArea.SetViewTopLine(nViewTopLine);
 	// フォーカス移動時の再描画
 	view.RedrawAll();
-	// sui 02/08/09
 
-	// Sep. 11, 2004 genta 同期Scrollの関数化
 	view.SyncScrollV(nScrollLines);
 }
 
@@ -860,7 +817,6 @@ void ViewCommander::Command_CurLineCenter(void)
 // 移動履歴を前へたどる
 void ViewCommander::Command_JumpHist_Prev(void)
 {
-	// 2001.12.13 hor
 	// 移動履歴の最後に現在の位置を記憶する
 	// (次の履歴が取得できないときは追加して戻る)
 	if (!view.pHistory->CheckNext()) {
@@ -873,7 +829,6 @@ void ViewCommander::Command_JumpHist_Prev(void)
 			::MessageBox(NULL, _T("Inconsistent Implementation"), _T("PrevValid"), MB_OK);
 		}
 		Point pt = GetDocument().layoutMgr.LogicToLayout(view.pHistory->GetCurrent().GetPosition());
-		// 2006.07.09 genta 選択を考慮
 		view.MoveCursorSelecting(pt, view.GetSelectionInfo().bSelectingLock);
 	}
 }
@@ -887,7 +842,6 @@ void ViewCommander::Command_JumpHist_Next(void)
 			::MessageBox(NULL, _T("Inconsistent Implementation"), _T("NextValid"), MB_OK);
 		}
 		Point pt = GetDocument().layoutMgr.LogicToLayout(view.pHistory->GetCurrent().GetPosition());
-		// 2006.07.09 genta 選択を考慮
 		view.MoveCursorSelecting(pt, view.GetSelectionInfo().bSelectingLock);
 	}
 }
@@ -900,9 +854,6 @@ void ViewCommander::Command_JumpHist_Set(void)
 }
 
 
-// 2001/06/20 Start by asa-o
-
-// from ViewCommander_New.cpp
 // テキストを１行下へScroll
 void ViewCommander::Command_WndScrollDown(void)
 {
@@ -922,8 +873,6 @@ void ViewCommander::Command_WndScrollDown(void)
 		bCaretOff = true;
 	}
 
-	// Sep. 11, 2004 genta 同期用に行数を記憶
-	// Sep. 11, 2004 genta 同期Scrollの関数化
 	view.SyncScrollV(view.ScrollAtV(textArea.GetViewTopLine() - 1));
 
 	// テキストが選択されていない
@@ -945,7 +894,6 @@ void ViewCommander::Command_WndScrollDown(void)
 }
 
 
-// from ViewCommander_New.cpp
 // テキストを１行上へScroll
 void ViewCommander::Command_WndScrollUp(void)
 {
@@ -960,8 +908,6 @@ void ViewCommander::Command_WndScrollUp(void)
 		bCaretOff = true;
 	}
 
-	// Sep. 11, 2004 genta 同期用に行数を記憶
-	// Sep. 11, 2004 genta 同期Scrollの関数化
 	view.SyncScrollV(view.ScrollAtV(textArea.GetViewTopLine() + 1));
 
 	// テキストが選択されていない
@@ -982,14 +928,8 @@ void ViewCommander::Command_WndScrollUp(void)
 	caret.underLine.CaretUnderLineON(true, true);
 }
 
-// 2001/06/20 End
 
-
-// from ViewCommander_New.cpp
-/* 次の段落へ進む
-	2002/04/26 段落の両端で止まるオプションを追加
-	2002/04/19 新規
-*/
+// 次の段落へ進む
 void ViewCommander::Command_GoNextParagraph(bool bSelect)
 {
 	DocLine* pDocLine;
@@ -1052,11 +992,7 @@ void ViewCommander::Command_GoNextParagraph(bool bSelect)
 }
 
 
-// from ViewCommander_New.cpp
-/* 前の段落へ進む
-	2002/04/26 段落の両端で止まるオプションを追加
-	2002/04/19 新規
-*/
+// 前の段落へ進む
 void ViewCommander::Command_GoPrevParagraph(bool bSelect)
 {
 	auto& docLineMgr = GetDocument().docLineMgr;

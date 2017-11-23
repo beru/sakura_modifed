@@ -64,10 +64,7 @@ void EditView_Paint::Call_OnPaint(
 }
 
 
-/* フォーカス移動時の再描画
-
-	@date 2001/06/21 asa-o 「スクロールバーの状態を更新する」「カーソル移動」削除
-*/
+/* フォーカス移動時の再描画 */
 void EditView::RedrawAll()
 {
 	if (!GetHwnd()) {
@@ -432,8 +429,6 @@ Color3Setting EditView::GetColorIndex(
 	@param eColorIndex   選択を含む現在の色
 	@param eColorIndex2  選択以外の現在の色
 	@param eColorIndexBg 背景色
-
-	@date 2013.05.08 novice 範囲外チェック削除
 */
 void EditView::SetCurrentColor(
 	Graphics& gr,
@@ -546,9 +541,6 @@ void EditView::OnPaint(HDC _hdc, PAINTSTRUCT* pPs, BOOL bDrawFromComptibleBmp)
 	@param bDrawFromComptibleBmp  TRUE 画面バッファからhdcに作画する(コピーするだけ)。
 			TRUEの場合、pPs.rcPaint領域外は作画されないが、FALSEの場合は作画される事がある。
 			互換DC/BMPが無い場合は、普通の作画処理をする。
-
-	@date 2007.09.09 Moca 元々無効化されていた第三パラメータのbUseMemoryDCをbDrawFromComptibleBmpに変更。
-	@date 2009.03.26 ryoji 行番号のみ描画を通常の行描画と分離（効率化）
 */
 void EditView::OnPaint2(HDC _hdc, PAINTSTRUCT* pPs, BOOL bDrawFromComptibleBmp)
 {
@@ -843,10 +835,6 @@ void EditView::OnPaint2(HDC _hdc, PAINTSTRUCT* pPs, BOOL bDrawFromComptibleBmp)
 	1回で1ロジック行分を作画する。
 
 	@return EOFを作画したらtrue
-
-	@date 2001.02.17 MIK
-	@date 2001.12.21 YAZAKI 改行記号の描きかたを変更
-	@date 2007.08.31 kobake 引数 bDispBkBitmap を削除
 */
 bool EditView::DrawLogicLine(
 	HDC				_hdc,			// [in]     作画対象
@@ -1281,10 +1269,6 @@ void EditView::DispTextSelected(
 	@param cy ウィンドウの幅
 	@return true: ビットマップを利用可能 / false: ビットマップの作成・更新に失敗
 
-	@date 2007.09.09 Moca EditView::OnSizeから分離。
-		単純に生成するだけだったものを、仕様変更に従い内容コピーを追加。
-		サイズが同じときは何もしないように変更
-
 	@par 互換BMPにはキャレット・カーソル位置横縦線・対括弧以外の情報を全て書き込む。
 		選択範囲変更時の反転処理は、画面と互換BMPの両方を別々に変更する。
 		カーソル位置横縦線変更時には、互換BMPから画面に元の情報を復帰させている。
@@ -1347,7 +1331,6 @@ bool EditView::CreateOrUpdateCompatibleBitmap(int cx, int cy)
 
 	@note 分割ビューが非表示になった場合と
 		親ウィンドウが非表示・最小化された場合に削除される。
-	@date 2007.09.09 Moca 新規作成 
 */
 void EditView::DeleteCompatibleBitmap()
 {
@@ -1365,12 +1348,10 @@ void EditView::DeleteCompatibleBitmap()
 /** 画面キャッシュ用CompatibleDCを用意する
 
 	@param[in] TRUE: 画面キャッシュON
-
-	@date 2007.09.30 genta 関数化
 */
 void EditView::UseCompatibleDC(BOOL fCache)
 {
-	// From Here 2007.09.09 Moca 互換BMPによる画面バッファ
+	// 互換BMPによる画面バッファ
 	if (fCache) {
 		if (!hdcCompatDC) {
 			HDC hdc = ::GetDC(GetHwnd());

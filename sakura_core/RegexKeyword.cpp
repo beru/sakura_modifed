@@ -54,13 +54,10 @@
 /*!	@brief コンストラクタ
 
 	BREGEXP.DLL 初期化、正規表現キーワード初期化を行う。
-
-	@date 2002.2.17 YAZAKI CShareDataのインスタンスは、CProcessにひとつあるのみ。
-	@date 2007.08.12 genta 正規表現DLL指定のため引数追加
 */
 RegexKeyword::RegexKeyword(LPCTSTR regexp_dll )
 {
-	InitDll(regexp_dll);	// 2007.08.12 genta 引数追加
+	InitDll(regexp_dll);
 	MYDBGMSG("RegexKeyword")
 
 	pTypes    = nullptr;

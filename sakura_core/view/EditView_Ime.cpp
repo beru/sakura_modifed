@@ -14,16 +14,12 @@
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 
-/*!	IME ONか
-
-	@date  2006.12.04 ryoji 新規作成（関数化）
-*/
+/*!	IME ONか */
 bool EditView::IsImeON(void)
 {
 	bool bRet;
 	DWORD conv, sent;
 
-	//	From here Nov. 26, 2006 genta
 	HIMC hIme = ImmGetContext(GetHwnd());
 	if (ImmGetOpenStatus(hIme) != FALSE) {
 		ImmGetConversionStatus(hIme, &conv, &sent);
@@ -36,7 +32,6 @@ bool EditView::IsImeON(void)
 		bRet = false;
 	}
 	ImmReleaseContext(GetHwnd(), hIme);
-	//	To here Nov. 26, 2006 genta
 
 	return bRet;
 }
@@ -94,8 +89,6 @@ void EditView::SetIMECompFormFont(void)
 	@param  bUnicode        trueならばUNICODEで構造体を埋める
 	@param  bDocumentFeed   trueならばIMR_DOCUMENTFEEDとして処理する
 	@return   RECONVERTSTRINGのサイズ。0ならIMEは何もしない(はず)
-	@date 2002.04.09 minfu
-	@date 2010.03.16 Moca IMR_DOCUMENTFEED対応
 */
 LRESULT EditView::SetReconvertStruct(
 	PRECONVERTSTRING pReconv,

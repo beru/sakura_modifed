@@ -692,9 +692,6 @@ int AppNodeManager::GetFreeGroupId(void)
 // @retval クローズ後移動するウィンドウ
 //			NULLはタブまとめ表示で無いかグループに他にウィンドウが無い場合
 //
-// @date 2013.04.10 Uchi
-// @date 2013.10.25 Moca 次のウィンドウは「1つ前のアクティブなタブ」にする
-//
 HWND AppNodeManager::GetNextTab(HWND hWndCur)
 {
 	HWND hWnd = NULL;

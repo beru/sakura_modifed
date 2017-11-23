@@ -85,7 +85,6 @@ INT_PTR PropCommon::DlgProc2(
 	}
 }
 
-//	@date 2002.2.17 YAZAKI CShareDataのインスタンスは、Processにひとつあるのみ。
 PropCommon::PropCommon()
 {
 	{
@@ -155,12 +154,9 @@ struct ComPropSheetInfo {
 	unsigned int resId;										// Property sheetに対応するDialog resource
 	INT_PTR (CALLBACK *DProc)(HWND, UINT, WPARAM, LPARAM);	// Dialog Procedure
 };
-//	To Here Jun. 2, 2001 genta
 
 //	キーワード：共通設定タブ順序(プロパティシート)
-/*! プロパティシートの作成
-	@date 2002.2.17 YAZAKI CShareDataのインスタンスは、Processにひとつあるのみ。
-*/
+/*! プロパティシートの作成 */
 INT_PTR PropCommon::DoPropertySheet(int nPageNum, bool bTrayProc)
 {
 	INT_PTR	nRet;
@@ -168,24 +164,20 @@ INT_PTR PropCommon::DoPropertySheet(int nPageNum, bool bTrayProc)
 
 	this->bTrayProc = bTrayProc;
 
-	// From Here Jun. 2, 2001 genta
-	// Feb. 11, 2007 genta URLをTABと入れ換え	// 2007.02.13 順序変更（TABをWINの次に）
 	// 「共通設定」プロパティシートの作成時に必要な情報の配列．
-	// 順序変更 Win,Toolbar,Tab,Statusbarの順に、File,FileName 順に	2008/6/22 Uchi 
-	// DProcの変更	2010/5/9 Uchi
 	static const ComPropSheetInfo ComPropSheetInfoList[] = {
 		{ STR_PROPCOMMON_GENERAL,	IDD_PROP_GENERAL,	PropGeneral::DlgProc_page },
 		{ STR_PROPCOMMON_WINDOW,	IDD_PROP_WIN,		PropWin::DlgProc_page },
-		{ STR_PROPCOMMON_MAINMENU,	IDD_PROP_MAINMENU,	PropMainMenu::DlgProc_page },	// 2010/5/8 Uchi
+		{ STR_PROPCOMMON_MAINMENU,	IDD_PROP_MAINMENU,	PropMainMenu::DlgProc_page },
 		{ STR_PROPCOMMON_TOOLBAR,	IDD_PROP_TOOLBAR,	PropToolbar::DlgProc_page },
 		{ STR_PROPCOMMON_TABS,		IDD_PROP_TAB,		PropTab::DlgProc_page },
-		{ STR_PROPCOMMON_STATBAR,	IDD_PROP_STATUSBAR,	PropStatusbar::DlgProc_page },	// 文字コード表示指定	2008/6/21	Uchi
+		{ STR_PROPCOMMON_STATBAR,	IDD_PROP_STATUSBAR,	PropStatusbar::DlgProc_page },
 		{ STR_PROPCOMMON_EDITING,	IDD_PROP_EDIT,		PropEdit::DlgProc_page },
 		{ STR_PROPCOMMON_FILE,		IDD_PROP_FILE,		PropFile::DlgProc_page },
 		{ STR_PROPCOMMON_FILENAME,	IDD_PROP_FNAME,		PropFileName::DlgProc_page },
 		{ STR_PROPCOMMON_BACKUP,	IDD_PROP_BACKUP,	PropBackup::DlgProc_page },
 		{ STR_PROPCOMMON_FORMAT,	IDD_PROP_FORMAT,	PropFormat::DlgProc_page },
-		{ STR_PROPCOMMON_SEARCH,	IDD_PROP_GREP,		PropGrep::DlgProc_page },	// 2006.08.23 ryoji タイトル変更（Grep -> 検索）
+		{ STR_PROPCOMMON_SEARCH,	IDD_PROP_GREP,		PropGrep::DlgProc_page },
 		{ STR_PROPCOMMON_KEYS,		IDD_PROP_KEYBIND,	PropKeybind::DlgProc_page },
 		{ STR_PROPCOMMON_CUSTMENU,	IDD_PROP_CUSTMENU,	PropCustmenu::DlgProc_page },
 		{ STR_PROPCOMMON_KEYWORD,	IDD_PROP_KEYWORD,	PropKeyword::DlgProc_page },
@@ -211,16 +203,14 @@ INT_PTR PropCommon::DoPropertySheet(int nPageNum, bool bTrayProc)
 		p->lParam      = (LPARAM)this;
 		p->pfnCallback = nullptr;
 	}
-	//	To Here Jun. 2, 2001 genta
 
 	PROPSHEETHEADER psh;
 	memset_raw(&psh, 0, sizeof_raw(psh));
 	
-	//	Jun. 29, 2002 こおり
 	//	Windows 95対策．Property SheetのサイズをWindows95が認識できる物に固定する．
 	psh.dwSize = sizeof_old_PROPSHEETHEADER;
 
-	//	JEPROtest Sept. 30, 2000 共通設定の隠れ[適用]ボタンの正体はここ。行頭のコメントアウトを入れ替えてみればわかる
+	//	共通設定の隠れ[適用]ボタンの正体はここ。行頭のコメントアウトを入れ替えてみればわかる
 	psh.dwFlags    = PSH_NOAPPLYNOW | PSH_PROPSHEETPAGE | PSH_USEPAGELANG;
 	psh.hwndParent = hwndParent;
 	psh.hInstance  = SelectLang::getLangRsrcInstance();
@@ -228,11 +218,10 @@ INT_PTR PropCommon::DoPropertySheet(int nPageNum, bool bTrayProc)
 	psh.pszCaption = LS(STR_PROPCOMMON);	//_T("共通設定");
 	psh.nPages     = nIdx;
 
-	//- 20020106 aroka # psh.nStartPage は unsigned なので負にならない
 	if (nPageNum == -1) {
 		psh.nStartPage = nPageNum;
 	}else
-	if (0 > nPageNum) {			//- 20020106 aroka
+	if (0 > nPageNum) {
 		psh.nStartPage = 0;
 	}else {
 		psh.nStartPage = nPageNum;
@@ -244,7 +233,7 @@ INT_PTR PropCommon::DoPropertySheet(int nPageNum, bool bTrayProc)
 	psh.ppsp = psp;
 	psh.pfnCallback = nullptr;
 
-	nRet = MyPropertySheet(&psh);	// 2007.05.24 ryoji 独自拡張プロパティシート
+	nRet = MyPropertySheet(&psh);
 	if (nRet == -1) {
 		TCHAR*	pszMsgBuf;
 		::FormatMessage(
@@ -270,14 +259,12 @@ INT_PTR PropCommon::DoPropertySheet(int nPageNum, bool bTrayProc)
 	return nRet;
 }
 
-/*!	ShareDataから一時領域へ設定をコピーする
-	@date 2002.12.11 Moca CEditDoc::OpenPropertySheetから移動
-*/
+/*!	ShareDataから一時領域へ設定をコピーする */
 void PropCommon::InitData(void)
 {
 	common = pShareData->common;
 
-	// 2002/04/25 YAZAKI TypeConfig全体を保持する必要はない。	;
+	// TypeConfig全体を保持する必要はない
 	for (int i=0; i<GetDllShareData().nTypesCount; ++i) {
 		KeywordSetIndex indexs;
 		TypeConfig type;
@@ -292,7 +279,6 @@ void PropCommon::InitData(void)
 
 /*!	ShareData に 設定を適用・コピーする
 	@note ShareDataにコピーするだけなので，更新要求などは，利用する側で処理してもらう
-	@date 2002.12.11 Moca CEditDoc::OpenPropertySheetから移動
 */
 void PropCommon::ApplyData(void)
 {
@@ -304,7 +290,6 @@ void PropCommon::ApplyData(void)
 		if (configIdx.IsValidType()) {
 			TypeConfig type;
 			DocTypeManager().GetTypeConfig(configIdx, type);
-			// 2002/04/25 YAZAKI TypeConfig全体を保持する必要はない。
 			// 変更された設定値のコピー
 			for (int j = 0; j < MAX_KEYWORDSET_PER_TYPE; ++j) {
 				type.nKeywordSetIdx[j] = types_nKeywordSetIdx[i].index[j];
@@ -389,15 +374,13 @@ void PropCommon::OnHelp(HWND hwndParent, int nPageID)
 		break;
 	}
 	if (nContextID != -1) {
-		MyWinHelp(hwndParent, HELP_CONTEXT, nContextID);	// 2006.10.10 ryoji MyWinHelpに変更に変更
+		MyWinHelp(hwndParent, HELP_CONTEXT, nContextID);
 	}
 	return;
 }
 
 
-/*!	コントロールにフォント設定する
-	@date 2013.04.24 Uchi
-*/
+/*!	コントロールにフォント設定する */
 HFONT PropCommon::SetCtrlFont(HWND hwndDlg, int idc_ctrl, const LOGFONT& lf)
 {
 	HFONT	hFont;
@@ -414,9 +397,7 @@ HFONT PropCommon::SetCtrlFont(HWND hwndDlg, int idc_ctrl, const LOGFONT& lf)
 }
 
 
-/*!	フォントラベルにフォントとフォント名設定する
-	@date 2013.04.24 Uchi
-*/
+/*!	フォントラベルにフォントとフォント名設定する */
 HFONT PropCommon::SetFontLabel(HWND hwndDlg, int idc_static, const LOGFONT& lf, int nps)
 {
 	HFONT	hFont;

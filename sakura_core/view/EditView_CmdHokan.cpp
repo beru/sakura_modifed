@@ -12,8 +12,6 @@
 	@brief コマンド受信前補完処理
 	
 	補完ウィンドウの非表示
-
-	@date 2005.01.10 genta 関数化
 */
 void EditView::PreprocessCommand_hokan(int nCommand)
 {
@@ -32,9 +30,6 @@ void EditView::PreprocessCommand_hokan(int nCommand)
 
 /*!
 	コマンド実行後補完処理
-
-	@author Moca
-	@date 2005.01.10 genta 関数化
 */
 void EditView::PostprocessCommand_hokan(void)
 {
@@ -58,8 +53,6 @@ void EditView::PostprocessCommand_hokan(void)
 	
 	@param memData [in] 補完する元のテキスト 「Ab」などがくる。
 	@param bAutoDecided [in] 候補が1つだったら確定する
-
-	@date 2005.01.10 genta CEditView_Commandから移動
 */
 void EditView::ShowHokanMgr(NativeW& memData, bool bAutoDecided)
 {
@@ -157,15 +150,6 @@ void EditView::ShowHokanMgr(NativeW& memData, bool bAutoDecided)
 	HokanMgrから呼ばれる
 
 	@return 候補数
-
-	@author Moca
-	@date 2003.06.25
-
-	@date 2005/01/10 genta  CEditView_Commandから移動
-	@date 2007/10/17 kobake 読みやすいようにネストを浅くしました。
-	@date 2008.07.25 nasukoji 大文字小文字を同一視の場合でも候補の振るい落としは完全一致で見る
-	@date 2008.10.11 syat 日本語の補完
-	@date 2010.06.16 Moca ひらがなで続行する場合、直前を漢字に制限
 */
 size_t EditView::HokanSearchByFile(
 	const wchar_t*	pszKey,					// [in]

@@ -138,10 +138,7 @@ bool ColorStrategyInfo::CheckChangeColor(const StringRef& lineStr)
 	return bChange;
 }
 
-/*! 色の切り替え
-
-	@date 2013.05.11 novice 実際の変更は呼び出し側で行う
-*/
+/*! 色の切り替え */
 void ColorStrategyInfo::DoChangeColor(Color3Setting *pcColor)
 {
 	if (pStrategySelect) {

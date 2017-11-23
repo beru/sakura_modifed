@@ -21,13 +21,13 @@ static void LoadPluginTemp(CommonSetting& common, MenuDrawer& menuDrawer);
 static const DWORD p_helpids[] = {	//11700
 	IDC_CHECK_PluginEnable,	HIDC_CHECK_PluginEnable,	// プラグインを有効にする
 	IDC_PLUGINLIST,			HIDC_PLUGINLIST,			// プラグインリスト
-	IDC_PLUGIN_INST_ZIP,	HIDC_PLUGIN_INST_ZIP,		// Zipプラグインを追加	// 2011/11/2 Uchi
+	IDC_PLUGIN_INST_ZIP,	HIDC_PLUGIN_INST_ZIP,		// Zipプラグインを追加
 	IDC_PLUGIN_SearchNew,	HIDC_PLUGIN_SearchNew,		// 新規プラグインを追加
 	IDC_PLUGIN_OpenFolder,	HIDC_PLUGIN_OpenFolder,		// フォルダを開く
 	IDC_PLUGIN_Remove,		HIDC_PLUGIN_Remove,			// プラグインを削除
-	IDC_PLUGIN_OPTION,		HIDC_PLUGIN_OPTION,			// プラグイン設定	// 2010/3/22 Uchi
-	IDC_PLUGIN_README,		HIDC_PLUGIN_README,			// ReadMe表示		// 2011/11/2 Uchi
-	IDC_PLUGIN_URL,			HIDC_PLUGIN_URL,			//配布先			// 2015/01/02 syat
+	IDC_PLUGIN_OPTION,		HIDC_PLUGIN_OPTION,			// プラグイン設定	
+	IDC_PLUGIN_README,		HIDC_PLUGIN_README,			// ReadMe表示
+	IDC_PLUGIN_URL,			HIDC_PLUGIN_URL,			//配布先
 //	IDC_STATIC,			-1,
 	0, 0
 };
@@ -73,7 +73,6 @@ INT_PTR PropPlugin::DispatchEvent(
 		// ダイアログデータの設定 Plugin
 		InitDialog(hwndDlg);
 		SetData(hwndDlg);
-		// Modified by KEITA for WIN64 2003.9.6
 		::SetWindowLongPtr(hwndDlg, DWLP_USER, lParam);
 
 		return TRUE;
@@ -98,7 +97,7 @@ INT_PTR PropPlugin::DispatchEvent(
 							::SetWindowText(::GetDlgItem(hwndDlg, IDC_LABEL_PLUGIN_Author), _T(""));
 							::SetWindowText(::GetDlgItem(hwndDlg, IDC_LABEL_PLUGIN_Version), _T(""));
 						}
-						// 2010.08.21 明らかに使えないときはDisableにする
+						// 明らかに使えないときはDisableにする
 						EPluginState state = pluginTable[sel].state;
 						BOOL bEdit = (state != PLS_DELETED && state != PLS_NONE);
 						::EnableWindow(::GetDlgItem(hwndDlg, IDC_PLUGIN_Remove), bEdit);
@@ -194,12 +193,12 @@ INT_PTR PropPlugin::DispatchEvent(
 					}
 				}
 				break;
-			case IDC_PLUGIN_OPTION:		// プラグイン設定	// 2010/3/22 Uchi
+			case IDC_PLUGIN_OPTION:		// プラグイン設定
 				{
 					HWND hListView = ::GetDlgItem(hwndDlg, IDC_PLUGINLIST);
 					int sel = ListView_GetNextItem(hListView, -1, LVNI_SELECTED);
 					if (sel >= 0 && pluginTable[sel].state == PLS_LOADED) {
-						// 2010.08.21 プラグイン名(フォルダ名)の同一性の確認
+						// プラグイン名(フォルダ名)の同一性の確認
 						Plugin* plugin = PluginManager::getInstance().GetPlugin(sel);
 						wstring sDirName = to_wchar(plugin->GetFolderName().c_str());
 						if (plugin && auto_stricmp(sDirName.c_str(), pluginTable[sel].szName) == 0) {
@@ -222,7 +221,7 @@ INT_PTR PropPlugin::DispatchEvent(
 					::ShellExecute(NULL, _T("open"), sBaseDir.c_str(), NULL, NULL, SW_SHOW);
 				}
 				break;
-			case IDC_PLUGIN_README:		// ReadMe表示	// 2011/11/2 Uchi
+			case IDC_PLUGIN_README:		// ReadMe表示
 				{
 					HWND hListView = ::GetDlgItem(hwndDlg, IDC_PLUGINLIST);
 					int sel = ListView_GetNextItem(hListView, -1, LVNI_SELECTED);
@@ -266,23 +265,19 @@ INT_PTR PropPlugin::DispatchEvent(
 		}
 
 		break;	// WM_COMMAND
-//@@@ 2001.02.04 Start by MIK: Popup Help
 	case WM_HELP:
 		{
 			HELPINFO* p = (HELPINFO*) lParam;
-			MyWinHelp((HWND)p->hItemHandle, HELP_WM_HELP, (ULONG_PTR)(LPVOID)p_helpids);	// 2006.10.10 ryoji MyWinHelpに変更に変更
+			MyWinHelp((HWND)p->hItemHandle, HELP_WM_HELP, (ULONG_PTR)(LPVOID)p_helpids);
 		}
 		return TRUE;
 		// NOTREACHED
 		//break;
-//@@@ 2001.02.04 End
 
-//@@@ 2001.12.22 Start by MIK: Context Menu Help
 	// Context Menu
 	case WM_CONTEXTMENU:
-		MyWinHelp(hwndDlg, HELP_CONTEXTMENU, (ULONG_PTR)(LPVOID)p_helpids);	// 2006.10.10 ryoji MyWinHelpに変更に変更
+		MyWinHelp(hwndDlg, HELP_CONTEXTMENU, (ULONG_PTR)(LPVOID)p_helpids);
 		return TRUE;
-//@@@ 2001.12.22 End
 
 	}
 	return FALSE;
@@ -476,11 +471,7 @@ void PropPlugin::InitDialog(HWND hwndDlg)
 
 }
 
-/*! 「プラグイン」シート上のアイテムの有効・無効を適切に設定する
-
-	@date 2009.12.06 syat 新規作成
-	@date 2010.08.21 Moca プラグイン無効状態でも削除操作などを可能にする
-*/
+/*! 「プラグイン」シート上のアイテムの有効・無効を適切に設定する */
 void PropPlugin::EnablePluginPropInput(HWND hwndDlg)
 {
 	if (!DlgButton_IsChecked(hwndDlg, IDC_CHECK_PluginEnable)) {

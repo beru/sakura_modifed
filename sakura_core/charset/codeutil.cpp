@@ -15,9 +15,6 @@
 	散在する文字に変換された後に，JISに変換されます．
 	
 	@param pszSrc [in] 変換する文字列へのポインタ (Shift JIS)
-	
-	@author すい
-	@date 2002.10.03 1文字のみ扱い，変換まで行うように変更 genta
 */
 unsigned int _mbcjmstojis_ex(unsigned int nSrc, bool* pbNonroundtrip)
 {

@@ -66,12 +66,6 @@ protected:
                                     |+--------    (編集中のファイルが旧ファイル)
                                     +---------    (DIFF差分がないときにメッセージ表示)
 	@note	HandleCommandからの呼び出し対応(ダイアログなし版)
-	@author	MIK
-	@date	2002/05/25
-	@date	2005/10/28	旧Command_Diffから関数名の変更。
-						GetCommander().Command_Diff_Dialogだけでなく新Command_Diff
-						からも呼ばれる関数。maru
-	@date	2013/06/21	ExecCmdを利用するように
 */
 void EditView::ViewDiffInfo(
 	const TCHAR*	pszFile1,
@@ -236,8 +230,6 @@ bool OutputAdapterDiff::OutputA(const char* pBuf, int size)
 	@param	nFlgFile12	[in]	編集中ファイルは...
 									0	ファイル1(旧ファイル)
 									1	ファイル2(新ファイル)
-	@author	MIK
-	@date	2002/05/25
 */
 void EditView::AnalyzeDiffInfo(
 	const char*	pszDiffInfo,
@@ -392,15 +384,7 @@ bool MakeDiffTmpFile_core(
 	return true;
 }
 
-/*!	一時ファイルを作成する
-	@author	MIK
-	@date	2002/05/26
-	@date	2005/10/29	引数変更const char* → char*
-						一時ファイル名の取得処理もここでおこなう。maru
-	@date	2007/08/??	kobake 機械的にUNICODE化
-	@date	2008/01/26	kobake 出力形式修正
-	@date	2013/06/21 エンコードをASCII系にする(SJIS固定をやめる)
-*/
+/*!	一時ファイルを作成する */
 bool EditView::MakeDiffTmpFile(
 	TCHAR* filename,
 	HWND hWnd,

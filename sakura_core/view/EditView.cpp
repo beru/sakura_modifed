@@ -90,7 +90,6 @@ VOID CALLBACK EditViewTimerProc(
 //                        生成と破棄                           //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-//	@date 2002.2.17 YAZAKI CShareDataのインスタンスは、Processにひとつあるのみ。
 EditView::EditView(EditWnd& editWnd)
 	:
 	ViewCalc(*this),
@@ -1108,8 +1107,6 @@ void EditView::SetFont(void)
 	インタラクティブ操作を前提とするため，必要に応じたスクロールを行う．
 	カーソル移動後は上下移動でもカラム位置を保つよう，
 	GetCaret().nCaretPosX_Prevの更新も併せて行う．
-
-	@date 2006.07.09 genta 新規作成
 */
 void EditView::MoveCursorSelecting(
 	Point	ptWk_CaretPos,		// [in] 移動先レイアウト位置
@@ -1459,7 +1456,6 @@ int	EditView::CreatePopUpMenu_R(void)
 
 /*! ポップアップメニューの作成(Sub)
 	hMenuは作成済み
-	@date 2013.06.15 新規作成 ポップアップメニューとメインメニューの表示方法を統合
 */
 int	EditView::CreatePopUpMenuSub(HMENU hMenu, int nMenuIdx, int* pParentMenus)
 {
@@ -2211,11 +2207,7 @@ void EditView::CopySelectedAllLines(
 }
 
 
-/*! クリップボードからデータを取得
-	@date 2005.05.29 novice UNICODE TEXT 対応処理を追加
-	@date 2007.10.04 ryoji MSDEVLineSelect対応処理を追加
-	@date 2008.09.10 bosagami パス貼り付け対応
-*/
+/*! クリップボードからデータを取得 */
 bool EditView::MyGetClipboardData(
 	NativeW& memBuf,
 	bool* pbColumnSelect,
@@ -2247,9 +2239,7 @@ bool EditView::MyGetClipboardData(
 	return true;
 }
 
-/* クリップボードにデータを設定
-	@date 2004.02.17 Moca エラーチェックするように
- */
+/* クリップボードにデータを設定 */
 bool EditView::MySetClipboardData(
 	const char* pszText,
 	size_t nTextLen,
@@ -2547,9 +2537,6 @@ void EditView::CaretUnderLineOFF(
 
 /*!
 	検索／置換／ブックマーク検索時の状態をステータスバーに表示する
-
-	@date 2002.01.26 hor 新規作成
-	@date 2002.12.04 genta 実体をEditWndへ移動
 */
 void EditView::SendStatusMessage(const TCHAR* msg)
 {
@@ -2561,10 +2548,7 @@ void EditView::SendStatusMessage(const TCHAR* msg)
 //                        編集モード                           //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-/*!	挿入モード取得
-
-	@date 2005.10.02 genta 管理方法変更のため関数化
-*/
+/*!	挿入モード取得 */
 bool EditView::IsInsMode(void) const
 {
 	return pEditDoc->docEditor.IsInsMode();
@@ -2690,8 +2674,6 @@ bool EditView::ShowKeywordHelp(
 	
 	@retval true  指定位置または指定範囲内にテキストが存在しない
 			false 指定位置または指定範囲内にテキストが存在する
-
-	@date 2008.08.03 nasukoji	新規作成
 */
 bool EditView::IsEmptyArea(
 	Point ptFrom,

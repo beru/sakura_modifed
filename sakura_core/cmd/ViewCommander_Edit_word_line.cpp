@@ -132,7 +132,6 @@ void ViewCommander::Command_LineCutToStart(void)
 	}
 
 	// ‘I‘ğ”ÍˆÍ‚Ì•ÏX
-	// 2005.06.24 Moca
 	Range range(ptPos, caret.GetCaretLayoutPos());
 	selInfo.SetSelectArea(range);
 

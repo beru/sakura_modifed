@@ -17,8 +17,6 @@
 #endif
 
 #ifdef SEARCH_STRING_SUNDAY_QUICK
-// SearchStringPattern
-// @date 2010.06.22 Moca
 inline
 int SearchStringPattern::GetMapIndex(wchar_t c)
 {
@@ -489,10 +487,7 @@ bool SearchAgent::PrevOrNextWord(
 }
 
 
-/*! 単語検索
-	@date 2003.05.22 かろと 行頭処理など見直し
-	@date 2005.11.26 かろと \rや.が\r\nにヒットしないように
-*/
+/*! 単語検索 */
 // 見つからない場合は０を返す
 bool SearchAgent::SearchWord(
 	Point ptSerachBegin,	// 検索開始位置
@@ -531,7 +526,6 @@ bool SearchAgent::SearchWord(
 					nIdxPosOld = nIdxPos;
 					// 長さ０でマッチしたので、この位置で再度マッチしないように、１文字進める
 					if (nIdxPos == nHitPos) {
-						// 2005-09-02 D.S.Koba GetSizeOfChar
 						nIdxPos += (NativeW::GetSizeOfChar(pLine, nLineLen, nIdxPos) == 2 ? 2 : 1);
 					}
 					if (1

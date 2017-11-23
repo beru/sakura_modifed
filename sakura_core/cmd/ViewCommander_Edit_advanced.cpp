@@ -513,7 +513,6 @@ void ViewCommander::Command_Unindent(wchar_t wcChar)
 }
 
 
-// from ViewCommander_New.cpp
 /*! TRIM Step1
 	非選択時はカレント行を選択して view.ConvSelectedArea → ConvMemory へ
 */

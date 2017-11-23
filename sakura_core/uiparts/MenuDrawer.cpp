@@ -36,7 +36,6 @@ void FillSolidRect(HDC hdc, int x, int y, int cx, int cy, COLORREF clr)
 #endif
 
 
-//	@date 2002.2.17 YAZAKI CShareDataのインスタンスは、CProcessにひとつあるのみ。
 MenuDrawer::MenuDrawer()
 {
 	// 共有データ構造体のアドレスを返す

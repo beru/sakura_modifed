@@ -7,7 +7,6 @@
 
 class MenuDrawer;
 
-// @date 2002.2.17 YAZAKI CShareDataのインスタンスは、CProcessにひとつあるのみ。
 class MruFolder {
 public:
 	// コンストラクタ
@@ -16,7 +15,7 @@ public:
 
 	// メニューを取得する
 	HMENU CreateMenu(MenuDrawer& menuDrawer) const;	// うーん。pMenuDrawerが必要なくなるといいなぁ。
-	HMENU CreateMenu(HMENU hMenu, MenuDrawer& menuDrawer) const;	// 2010/5/21 Uchi
+	HMENU CreateMenu(HMENU hMenu, MenuDrawer& menuDrawer) const;
 	BOOL DestroyMenu(HMENU hMenu) const;
 	
 	// フォルダ名の一覧を教えて

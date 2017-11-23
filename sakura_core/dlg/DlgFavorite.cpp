@@ -1042,7 +1042,7 @@ int FormatFavoriteColumn(
 	bool view
 	)
 {
-	// 2010.03.21 Moca Textに連番を設定することによってアクセスキーにする
+	// Textに連番を設定することによってアクセスキーにする
 	// 0 - 9 A - Z
 	const int mod = index % 36;
 	const TCHAR c = (TCHAR)(((mod) <= 9) ? (_T('0') + mod) : (_T('A') + mod - 10));

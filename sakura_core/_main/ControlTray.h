@@ -75,7 +75,7 @@ public:
 	*/
 	static void DoGrepCreateWindow(HINSTANCE hinst, HWND, DlgGrep& dlgGrep);
 protected:
-	void DoGrep();	// Stonee, 2001/03/21
+	void DoGrep();
 	BOOL TrayMessage(HWND, DWORD, UINT, HICON, const TCHAR*);	// タスクトレイのアイコンに関する処理
 	void OnCommand(WORD, WORD, HWND);	// WM_COMMANDメッセージ処理
 	void OnNewEditor(bool); // 新規ウィンドウ作成処理

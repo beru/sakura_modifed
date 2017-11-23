@@ -219,7 +219,6 @@ void ViewCommander::Command_Jump(void)
 }
 
 
-// from ViewCommander_New.cpp
 // ブックマークの設定・解除を行う(トグル動作)
 void ViewCommander::Command_Bookmark_Set(void)
 {
@@ -334,7 +333,6 @@ re_do:;
 }
 
 
-// from ViewCommander_New.cpp
 // ブックマークをクリアする
 void ViewCommander::Command_Bookmark_Reset(void)
 {

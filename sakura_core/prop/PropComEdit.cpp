@@ -280,8 +280,6 @@ int PropEdit::GetData(HWND hwndDlg)
 	適切に設定する
 
 	@param hwndDlg プロパティシートのWindow Handle
-
-	@date 2013.03.31 novice 新規作成
 */
 void PropEdit::EnableEditPropInput(HWND hwndDlg)
 {

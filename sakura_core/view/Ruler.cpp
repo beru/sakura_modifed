@@ -182,10 +182,7 @@ void Ruler::DrawRulerBg(Graphics& gr)
 	::DeleteObject(hFont);
 }
 
-/*! ルーラー描画
-
-	@date 2005.08.14 genta 折り返し幅をLayoutMgrから取得するように
-*/
+/*! ルーラー描画 */
 void Ruler::DispRuler(HDC hdc)
 {
 	// サポート

@@ -36,7 +36,6 @@ class WordParse {
 public:
 	/*!
 		@brief 現在位置の単語の範囲を調べる staticメンバ
-		@author N.Nakatani
 		@retval true	成功 現在位置のデータは「単語」と認識する。
 		@retval false	失敗 現在位置のデータは「単語」とは言いきれない気がする。
 	*/

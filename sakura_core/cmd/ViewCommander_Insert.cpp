@@ -35,11 +35,7 @@ void ViewCommander::Command_Ins_Time(void)
 }
 
 
-// from ViewCommander_New.cpp
-/*!	コントロールコードの入力(ダイアログ)
-	@author	MIK
-	@date	2002/06/02
-*/
+//	コントロールコードの入力(ダイアログ)
 void ViewCommander::Command_CtrlCode_Dialog(void)
 {
 	DlgCtrlCode dlgCtrlCode;
@@ -47,8 +43,6 @@ void ViewCommander::Command_CtrlCode_Dialog(void)
 	// コントロールコード入力ダイアログを表示する
 	if (dlgCtrlCode.DoModal(G_AppInstance(), view.GetHwnd(), (LPARAM)&GetDocument())) {
 		// コントロールコードを入力する
-		// 2013.06.11 Command_WCHAR -> HandleCommand マクロ記録対応
-		// 2013.12.12 F_WCHAR -> F_CTRL_CODE
 		HandleCommand(F_CTRL_CODE, true, dlgCtrlCode.GetCharCode(), 0, 0, 0);
 	}
 }

@@ -10,16 +10,12 @@
 #include "util/string_ex2.h"
 #include "util/window.h"
 
-/*!	コンストラクタ
-	@date 2002.2.17 YAZAKI CShareDataのインスタンスは、CProcessにひとつあるのみ。
-*/
 MruFile::MruFile()
 {
 	//	初期化。
 	pShareData = &GetDllShareData();
 }
 
-// デストラクタ
 MruFile::~MruFile()
 {
 	recentFile.Terminate();
@@ -30,15 +26,12 @@ MruFile::~MruFile()
 	
 	@param pMenuDrawer [in] (out?) メニュー作成で用いるMenuDrawer
 	
-	@author Norio Nakantani
 	@return 生成したメニューのハンドル
-
-	2010/5/21 Uchi 組み直し
 */
 HMENU MruFile::CreateMenu(MenuDrawer& menuDrawer) const
 {
 	//	空メニューを作る
-	HMENU hMenuPopUp = ::CreatePopupMenu();	// Jan. 29, 2002 genta
+	HMENU hMenuPopUp = ::CreatePopupMenu();
 	return CreateMenu(hMenuPopUp, menuDrawer);
 }
 /*!
@@ -47,10 +40,7 @@ HMENU MruFile::CreateMenu(MenuDrawer& menuDrawer) const
 	@param 追加するメニューのハンドル
 	@param pMenuDrawer [in] (out?) メニュー作成で用いるMenuDrawer
 	
-	@author Norio Nakantani
 	@return 生成したメニューのハンドル
-
-	2010/5/21 Uchi 組み直し
 */
 HMENU MruFile::CreateMenu(HMENU hMenuPopUp, MenuDrawer& menuDrawer) const
 {
@@ -158,8 +148,6 @@ bool MruFile::GetEditInfo(size_t num, EditInfo* pfi) const
 		呼び出し側で領域をあらかじめ用意する必要がある。
 	@retval TRUE  ファイルが見つかった。pfiにファイル情報が格納されている。
 	@retval FALSE 指定されたファイルはMRU Listに無い。
-
-	@date 2001.12.26 CShareData::IsExistInMRUListから移動した。（YAZAKI）
 */
 bool MruFile::GetEditInfo(const TCHAR* pszPath, EditInfo* pfi) const
 {
@@ -178,9 +166,6 @@ bool MruFile::GetEditInfo(const TCHAR* pszPath, EditInfo* pfi) const
 	@param pEditInfo [in] 追加するファイルの情報
 
 	該当ファイルがリムーバブルディスク上にある場合にはMRU Listへの登録は行わない。
-
-	@date 2001.03.29 MIK リムーバブルディスク上のファイルを登録しないようにした。
-	@date 2001.12.26 YAZAKI CShareData::AddMRUListから移動
 */
 void MruFile::Add(EditInfo* pEditInfo)
 {
@@ -209,7 +194,7 @@ void MruFile::Add(EditInfo* pEditInfo)
 	
 	_tsplitpath(pEditInfo->szPath, szDrive, szDir, NULL, NULL);	//	ドライブとフォルダを取り出す。
 
-	//	Jan.  10, 2006 genta USBメモリはRemovable mediaと認識されるようなので，
+	//	USBメモリはRemovable mediaと認識されるようなので，
 	//	一応無効化する．
 	//	リムーバブルなら非登録？
 	//if (/* 「リムーバブルなら登録しない」オン && */ ! IsLocalDrive(szDrive)) {
@@ -229,4 +214,3 @@ void MruFile::Add(EditInfo* pEditInfo)
 	::SHAddToRecentDocs(SHARD_PATH, to_wchar(pEditInfo->szPath));
 }
 
-// EOF

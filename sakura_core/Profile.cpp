@@ -10,8 +10,6 @@
 using namespace std;
 
 /*! Profileを初期化
-	
-	@date 2003-10-21 D.S.Koba STLで書き直す
 */
 void Profile::Init(void)
 {
@@ -154,12 +152,6 @@ bool findLine(
 
 	@retval true  成功
 	@retval false 失敗
-
-	@date 2003-10-21 D.S.Koba STLで書き直す
-	@date 2003-10-26 D.S.Koba ReadProfile()から分離
-	@date 2004-01-29 genta stream使用をやめてCライブラリ使用に．
-	@date 2004-01-31 genta 行の解析の方を別関数にしてReadFileをReadProfileに
-		
 */
 bool Profile::ReadProfile(const TCHAR* pszProfileName)
 {
@@ -200,8 +192,6 @@ bool Profile::ReadProfile(const TCHAR* pszProfileName)
 
 	@retval true  成功
 	@retval false 失敗
-
-	@date 2010/5/19 MainMenu用に作成
 
 	1行300文字までに制限
 */
@@ -278,10 +268,6 @@ bool Profile::ReadProfileRes(
 
 	@retval true  成功
 	@retval false 失敗
-
-	@date 2003-10-21 D.S.Koba STLで書き直す
-	@date 2004-01-28 D.S.Koba ファイル書き込み部を分離
-	@date 2009.06.24 ryoji 別ファイルに書き込んでから置き換える処理を追加
 */
 bool Profile::WriteProfile(
 	const TCHAR* pszProfileName,
@@ -353,9 +339,6 @@ bool Profile::WriteProfile(
 	
 	@retval true  成功
 	@retval false 失敗
-
-	@date 2004-01-28 D.S.Koba WriteProfile()から分離
-	@date 2004-01-29 genta stream使用をやめてCライブラリ使用に．
 */
 bool Profile::_WriteFile(
 	const tstring&			strFilename,	// [in]  ファイル名
@@ -388,8 +371,6 @@ bool Profile::_WriteFile(
 	
 	@retval true 成功
 	@retval false 失敗
-
-	@date 2003-10-22 D.S.Koba 作成
 */
 bool Profile::GetProfileDataImp(
 	const wstring&	strSectionName,	// [in] セクション名
@@ -414,8 +395,6 @@ bool Profile::GetProfileDataImp(
 	
 	@retval true  成功
 	@retval false 失敗(処理を入れていないのでfalseは返らない)
-
-	@date 2003-10-21 D.S.Koba 作成
 */
 bool Profile::SetProfileDataImp(
 	const wstring&	strSectionName,	// [in] セクション名

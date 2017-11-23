@@ -66,10 +66,7 @@ void FuncInfoArr::AppendData(FuncInfo* pFuncInfo)
 }
 
 
-/*! 配列の最後にデータを追加する
-
-	@date 2002.04.01 YAZAKI 深さ導入
-*/
+/*! 配列の最後にデータを追加する */
 void FuncInfoArr::AppendData(
 	size_t			nFuncLineCRLF,		// 関数のある行(CRLF単位)
 	size_t			nFuncColCRLF,		// 関数のある桁(CRLF単位)

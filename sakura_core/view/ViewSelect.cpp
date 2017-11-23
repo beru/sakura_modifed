@@ -143,12 +143,7 @@ void ViewSelect::ChangeSelectAreaByCurrentCursorTEST(
 }
 
 
-/*! 選択領域の描画
-
-	@date 2006.10.01 Moca 重複コード削除．矩形作画改善．
-	@date 2007.09.09 Moca 互換BMPによる画面バッファ
-		画面バッファが有効時、画面と互換BMPの両方の反転処理を行う。
-*/
+/*! 選択領域の描画 */
 void ViewSelect::DrawSelectArea(bool bDrawBracketCursorLine)
 {
 	EditView& view = GetEditView();
@@ -480,8 +475,6 @@ void ViewSelect::DrawSelectArea2(HDC hdc) const
 
 	複数行に渡る選択範囲のうち，nLineNumで指定された1行分だけを描画する．
 	選択範囲は固定されたままnLineNumのみが必要行分変化しながら呼びだされる．
-
-	@date 2006.03.29 Moca 3000桁制限を撤廃．
 */
 void ViewSelect::DrawSelectAreaLine(
 	HDC hdc,			// [in] 描画領域のDevice Context Handle
@@ -614,13 +607,7 @@ void ViewSelect::GetSelectAreaLineFromRange(
 	}
 }
 
-/*!	選択範囲情報メッセージの表示
-
-	@author genta
-	@date 2005.07.09 genta 新規作成
-	@date 2006.06.06 ryoji 選択範囲の行が実在しない場合の対策を追加
-	@date 2006.06.28 syat バイト数カウントを追加
-*/
+/*!	選択範囲情報メッセージの表示 */
 void ViewSelect::PrintSelectionInfoMsg() const
 {
 	auto& view = GetEditView();

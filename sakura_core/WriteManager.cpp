@@ -16,7 +16,6 @@
 /*! バッファ内容をファイルに書き出す (テスト用)
 
 	@note Windows用にコーディングしてある
-	@date 2003.07.26 ryoji BOM引数追加
 */
 CodeConvertResult WriteManager::WriteFile_From_CDocLineMgr(
 	const DocLineMgr&	pcDocLineMgr,	// [in]

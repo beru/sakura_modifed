@@ -1,9 +1,6 @@
 #include "StdAfx.h"
 #include "SortedTagJumpList.h"
 
-/*!
-	@date 2005.04.23 genta 管理数の最大値を指定する引数追加
-*/
 SortedTagJumpList::SortedTagJumpList(int max)
 	:
 	pTagjump(nullptr),
@@ -54,7 +51,6 @@ void SortedTagJumpList::Empty(void)
 
 /*
 	基準フォルダを登録し、基準フォルダIDを取得
-	@date 2010.07.23 Moca 新規追加
 */
 int SortedTagJumpList::AddBaseDir(const TCHAR* baseDir)
 {
@@ -76,7 +72,6 @@ int SortedTagJumpList::AddBaseDir(const TCHAR* baseDir)
 	@param[in] baseDirId	基準フォルダID。0で空文字列指定 (AddBaseDirの戻り値)
 	@retval true  追加した
 	@retval false 追加失敗
-	@date 2010.07.23 Moca baseDirId 追加
 */
 bool SortedTagJumpList::AddParamA(
 	const char* keyword,

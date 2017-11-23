@@ -95,8 +95,6 @@ bool C_IsOperator(wchar_t* szStr, size_t nLen)
 
 /*!
 	改行直前を \ でエスケープしているかどうか判定
-
-	@date 2005.12.06 じゅうじ 最後の1文字しか見ないと2バイトコードの後半がバックスラッシュの場合に誤認する
 */
 static
 bool C_IsLineEsc(const wchar_t* s, size_t len)
@@ -150,8 +148,6 @@ bool CPP_IsFunctionAfterKeyword(const wchar_t* s)
 	Cプリプロセッサの #if/ifdef/ifndef - #else - #endif状態管理クラス
 
 	ネストレベルは32レベル=(sizeof(int) * 8)まで
-	
-	@date 2007.12.15 genta : enablebufの初期値が悪さをすることがあるので0に
 */
 
 class CppPreprocessMng {
@@ -203,12 +199,6 @@ private:
 	if (A) elif (B) elif (C) else (D) endifのような場合には(A)-(D)のどれか1つ
 	だけが実行される．しかし，そうなると1ビットでは管理できないしネストを
 	囲むようなケースでelifを使うことはあまり無いと勝手に決めて見なかったことにする．
-
-	@author genta
-	@date 2004.08.10 新規作成
-	@date 2004.08.13 zenryaku 複数行のディレクティブに対応
-	@date 2007.12.13 じゅうじ : ifの直後にスペースがない場合の対応
-
 */
 size_t CppPreprocessMng::ScanLine(
 	const wchar_t* str,
@@ -1260,7 +1250,6 @@ void EditView::SmartIndent_CPP(wchar_t wcChar)
 					}
 				}
 				if (i < nLineLen) {
-					// 2005-09-02 D.S.Koba GetSizeOfChar
 					nCharChars = NativeW::GetSizeOfChar(pLine, nLineLen, i);
 					if (nCharChars == 1 && (pLine[i] == L')' || pLine[i] == L'}')) {
 						wcChar = pLine[i];

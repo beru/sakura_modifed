@@ -8,7 +8,6 @@
 #include "env/DllSharedData.h"
 
 
-//	@date 2002.2.17 YAZAKI CShareDataのインスタンスは、CProcessにひとつあるのみ。
 SplitterWnd::SplitterWnd()
 	:
 	Wnd(_T("::SplitterWnd")),

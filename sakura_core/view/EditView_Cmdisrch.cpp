@@ -13,9 +13,6 @@
 
 	@return true: コマンド処理済み / false: コマンド処理継続
 
-	@date 2004.09.14 isearch 新規作成
-	@date 2005.01.10 genta 関数化, UNINDENT追加
-
 	@note UNINDENTを通常文字として扱うのは，
 		SHIFT+文字の後でSPACEを入力するようなケースで
 		SHIFTの解放が遅れても文字が入らなくなることを防ぐため．
@@ -73,8 +70,6 @@ void EditView::TranslateCommand_isearch(
 
 /*!
 	ISearch コマンド処理
-
-	@date 2005.01.10 genta 各コマンドに入っていた処理を1カ所に移動
 */
 bool EditView::ProcessCommand_isearch(
 	int	nCommand,
@@ -127,11 +122,6 @@ bool EditView::ProcessCommand_isearch(
 
 	@param mode [in] 検索方法 1:通常, 2:正規表現, 3:MIGEMO
 	@param direction [in] 検索方向 0:後方(上方), 1:前方(下方)
-
-	@author isearch
-	@date 2011.12.15 Moca sCurSearchOption/sSearchOptionと同期をとる
-	@date 2012.10.11 novice sCurSearchOption/sSearchOptionの同期をswitchの前に変更
-	@date 2012.10.11 novice MIGEMOの処理をcase内に移動
 */
 void EditView::ISearchEnter(int mode, SearchDirection direction)
 {
@@ -519,10 +509,6 @@ void EditView::ISearchWordMake(void)
 	メッセージエリアに表示する文字列を構築する
 	
 	@param msg [out] メッセージバッファ
-	
-	@author isearch
-	@date 2004/10/13
-	@date 2005.01.13 genta 文字列修正
 */
 void EditView::ISearchSetStatusMsg(NativeT* msg) const
 {
@@ -558,8 +544,6 @@ void EditView::ISearchSetStatusMsg(NativeT* msg) const
 
 	@param nCommand [in] 調べたいコマンドのID
 	@return true:チェック有り / false: チェック無し
-	
-	@date 2005.01.10 genta 新規作成
 */
 bool EditView::IsISearchEnabled(int nCommand) const
 {

@@ -13,8 +13,6 @@ SelectLang::PSSelLangInfoList SelectLang::psLangInfoList;
 	@brief デストラクタ
 
 	@note 読み込んだメッセージリソースDLLを解放する
-
-	@date 2011.04.10 nasukoji	新規作成
 */
 SelectLang::~SelectLang(void)
 {
@@ -34,8 +32,6 @@ SelectLang::~SelectLang(void)
 	@retval メッセージリソースDLLのインスタンスハンドル
 
 	@note メッセージリソースDLLをロードしていない場合exeのインスタンスハンドルが返る
-
-	@date 2011.04.10 nasukoji	新規作成
 */
 HINSTANCE SelectLang::getLangRsrcInstance(void)
 {
@@ -48,8 +44,6 @@ HINSTANCE SelectLang::getLangRsrcInstance(void)
 	@retval デフォルト言語の文字列（"(Japanese)" または "(English(United States))"）
 
 	@note アプリケーションリソースより読み込んだ "(Japanese)" または "(English(United States))"
-
-	@date 2011.04.10 nasukoji	新規作成
 */
 LPCTSTR SelectLang::getDefaultLangString(void)
 {
@@ -74,8 +68,6 @@ WORD SelectLang::getDefaultLangId(void)
 	@note （LoadString()の引数としてそのまま使用するため）
 	@note デフォルト言語の文字列の読み込みも行う
 	@note プロセス毎にProcessFactoryの最初に1回だけ呼ばれる
-
-	@date 2011.04.10 nasukoji	新規作成
 */
 HINSTANCE SelectLang::InitializeLanguageEnvironment(void)
 {
@@ -153,7 +145,6 @@ HINSTANCE SelectLang::InitializeLanguageEnvironment(void)
 	@brief メッセージリソースDLLをロードする
 	@retval メッセージリソースDLLのインスタンスハンドル
 	@note メッセージリソースDLLが未指定、または読み込みエラー発生の時はNULLが返る
-	@date 2011.04.10 nasukoji	新規作成
 */
 HINSTANCE SelectLang::LoadLangRsrcLibrary(SelLangInfo& lang)
 {
@@ -214,8 +205,6 @@ int ResourceString::nDataTempArrayIndex = 0;							// 最後に使用したバッファのイ
 	@note アプリケーション内の関数への引数とする場合、その関数が本関数を使用
 	@note しているか意識する必要がある（上限を超えれば内容が更新されるため）
 	@note 内容を保持したい場合は LoadString::LoadString() を使用する。
-
-	@date 2011.06.01 nasukoji	新規作成
 */
 LPCTSTR ResourceString::LoadStringSt(UINT uid)
 {
@@ -243,8 +232,6 @@ LPCTSTR ResourceString::LoadStringSt(UINT uid)
 	@note       cStr[0].LoadString(STR_ERR_DLGPRNST1),
 	@note       cStr[1].LoadString(STR_ERR_DLGPRNST2),
 	@note       sizeof(PrintSettingArr[m_nCurrentPrintSetting].szPrintSettingName) - 1, szWork) )
-
-	@date 2011.06.01 nasukoji	新規作成
 */
 LPCTSTR ResourceString::Load(UINT uid)
 {
@@ -268,8 +255,6 @@ LPCTSTR ResourceString::Load(UINT uid)
 	@note 取得したバッファはデストラクタで解放する。
 	@note ANSI版は2バイト文字の都合により（バッファ - 2）バイトまでしか読まない
 	@note 場合があるので1バイト少ない値でバッファ拡張を判定する。
-
-	@date 2011.06.01 nasukoji	新規作成
 */
 size_t ResourceString::LoadStrBuffer::Load(UINT uid)
 {

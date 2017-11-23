@@ -217,7 +217,6 @@ size_t Color_Quote::Match_Quote(
 {
 	size_t nCharChars;
 	for (size_t i=nPos; i<lineStr.GetLength(); ++i) {
-		// 2005-09-02 D.S.Koba GetSizeOfChar
 		nCharChars = t_max((size_t)1, NativeW::GetSizeOfChar(lineStr.GetPtr(), lineStr.GetLength(), i));
 		if (escapeType == StringLiteralType::CPP) {
 			// エスケープ \"

@@ -26,8 +26,6 @@ Pascalインタプリタコンポーネントです。
 	@brief PPA.DLL をサポートするクラス
 
 	DLLの動的ロードを行うため、DllHandlerを継承している。
-
-	@date 2002.2.17 YAZAKI CShareDataのインスタンスは、CProcessにひとつあるのみ。
 */
 class PPA : public DllImp {
 public:

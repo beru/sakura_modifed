@@ -14,8 +14,6 @@ struct DllSharedData;
 	@brief 分割線ウィンドウクラス
 	
 	４分割ウィンドウの管理と分割線の描画を行う。
-	
-	@date 2002.2.17 YAZAKI CShareDataのインスタンスは、CProcessにひとつあるのみ。
 */
 class SplitterWnd : public Wnd {
 public:

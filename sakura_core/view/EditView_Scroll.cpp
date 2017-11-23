@@ -6,9 +6,7 @@
 #include "types/TypeSupport.h"
 #include <limits.h>
 
-/*! スクロールバー作成
-	@date 2006.12.19 ryoji 新規作成（EditView::Createから分離）
-*/
+/*! スクロールバー作成 */
 BOOL EditView::CreateScrollBar()
 {
 	// スクロールバーの作成
@@ -102,9 +100,7 @@ BOOL EditView::CreateScrollBar()
 
 
 
-/*! スクロールバー破棄
-	@date 2006.12.19 ryoji 新規作成
-*/
+/*! スクロールバー破棄 */
 void EditView::DestroyScrollBar()
 {
 	if (hwndVScrollBar) {
@@ -128,9 +124,6 @@ void EditView::DestroyScrollBar()
 	@param nScrollCode [in]	スクロール種別 (Windowsから渡されるもの)
 	@param nPos [in]		スクロール位置(THUMBTRACK用)
 	@retval	実際にスクロールした行数
-
-	@date 2004.09.11 genta スクロール行数を返すように．
-		未使用のhwndScrollBar引数削除．
 */
 int EditView::OnVScroll(int nScrollCode, int nPos)
 {
@@ -190,9 +183,6 @@ int EditView::OnVScroll(int nScrollCode, int nPos)
 	@param nScrollCode [in]	スクロール種別 (Windowsから渡されるもの)
 	@param nPos [in]		スクロール位置(THUMBTRACK用)
 	@retval	実際にスクロールした桁数
-
-	@date 2004.09.11 genta スクロール桁数を返すように．
-		未使用のhwndScrollBar引数削除．
 */
 int EditView::OnHScroll(int nScrollCode, int nPos)
 {
@@ -249,10 +239,6 @@ int EditView::OnHScroll(int nScrollCode, int nPos)
 	タブバーのタブ切替時は SIF_DISABLENOSCROLL フラグでの有効化／無効化が正常に動作しない
 	（不可視でサイズ変更していることによる影響か？）ので SIF_DISABLENOSCROLL で有効／無効
 	の切替に失敗した場合には強制切替する
-
-	@date 2008.05.24 ryoji 有効／無効の強制切替を追加
-	@date 2008.06.08 ryoji 水平スクロール範囲にぶら下げ余白を追加
-	@date 2009.08.28 nasukoji	「折り返さない」選択時のスクロールバー調整
 */
 void EditView::AdjustScrollBars()
 {
@@ -321,8 +307,6 @@ void EditView::AdjustScrollBars()
 
 	@param nPos [in] スクロール位置
 	@retval 実際にスクロールした行数 (正:下方向/負:上方向)
-
-	@date 2004.09.11 genta 行数を戻り値として返すように．(同期スクロール用)
 */
 int EditView::ScrollAtV(int nPos)
 {
@@ -396,10 +380,6 @@ int EditView::ScrollAtV(int nPos)
 
 	@param nPos [in] スクロール位置
 	@retval 実際にスクロールした桁数 (正:右方向/負:左方向)
-
-	@date 2004.09.11 genta 桁数を戻り値として返すように．(同期スクロール用)
-	@date 2008.06.08 ryoji 水平スクロール範囲にぶら下げ余白を追加
-	@date 2009.08.28 nasukoji	「折り返さない」選択時右に行き過ぎないようにする
 */
 int EditView::ScrollAtH(int nPos)
 {
@@ -653,10 +633,6 @@ void EditView::MiniMapRedraw(bool bUpdateAll)
 	
 	@param line [in] スクロール行数 (正:下方向/負:上方向/0:何もしない)
 	
-	@author asa-o
-	@date 2001.06.20 asa-o 新規作成
-	@date 2004.09.11 genta 関数化
-
 	@note 動作の詳細は設定や機能拡張により変更になる可能性がある
 
 */
@@ -682,10 +658,6 @@ void EditView::SyncScrollV(int line)
 	
 	@param col [in] スクロール桁数 (正:右方向/負:左方向/0:何もしない)
 	
-	@author asa-o
-	@date 2001.06.20 asa-o 新規作成
-	@date 2004.09.11 genta 関数化
-
 	@note 動作の詳細は設定や機能拡張により変更になる可能性がある
 */
 void EditView::SyncScrollH(int col)
@@ -703,19 +675,17 @@ void EditView::SyncScrollH(int col)
 #else
 		editView.ScrollAtH(GetTextArea().GetViewLeftCol());
 #endif
-		GetRuler().SetRedrawFlag(); // 2002.02.25 Add By KK スクロール時ルーラー全体を描きなおす。
+		GetRuler().SetRedrawFlag(); // スクロール時ルーラー全体を描きなおす。
 		GetRuler().DispRuler(hdc);
 		::ReleaseDC(GetHwnd(), hdc);
 	}
 }
 
-/** 折り返し桁以後のぶら下げ余白計算
-	@date 2008.06.08 ryoji 新規作成
-*/
+/** 折り返し桁以後のぶら下げ余白計算 */
 size_t EditView::GetWrapOverhang(void) const
 {
 	size_t nMargin = 1;	// 折り返し記号
-	if (!pTypeData->bKinsokuHide) {	// ぶら下げを隠す時はスキップ	2012/11/30 Uchi
+	if (!pTypeData->bKinsokuHide) {	// ぶら下げを隠す時はスキップ
 		if (pTypeData->bKinsokuRet) {
 			nMargin += 1;	// 改行ぶら下げ
 		}
@@ -729,7 +699,6 @@ size_t EditView::GetWrapOverhang(void) const
 /** 「右端で折り返す」用にビューの桁数から折り返し桁数を計算する
 	@param nViewColNum	[in] ビューの桁数
 	@retval 折り返し桁数
-	@date 2008.06.08 ryoji 新規作成
 */
 int EditView::ViewColNumToWrapColNum(int nViewColNum) const
 {
@@ -762,8 +731,6 @@ int EditView::ViewColNumToWrapColNum(int nViewColNum) const
 
 	@note   「折り返さない」選択時は、スクロール後にキャレットが見えなく
 	        ならない様にするために右マージンとして半角3個分固定で加算する。
-
-	@date 2009.08.28 nasukoji	新規作成
 */
 size_t EditView::GetRightEdgeForScrollBar(void)
 {

@@ -681,9 +681,7 @@ bool ImpExpRegex::Export(const wstring& sFileName, wstring& sErrMsg)
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                     キーワードヘルプ                        //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-/*! インポート
-	@date 2010.07.14 Moca ListViewへの設定からtypesへの設定に変更
-*/
+/*! インポート */
 bool ImpExpKeyHelp::Import(const wstring& sFileName, wstring& sErrMsg)
 {
 	wchar_t msgBuff[_MAX_PATH + 1];
@@ -783,7 +781,7 @@ bool ImpExpKeyHelp::Import(const wstring& sFileName, wstring& sErrMsg)
 	}
 	types.nKeyHelpNum = i;
 
-	// 2007.02.03 genta 失敗したら警告する
+	// 失敗したら警告する
 	if (invalid_record > 0) {
 		auto_sprintf_s(msgBuff, LSW(STR_IMPEXP_DIC_RECORD), invalid_record);
 		sErrMsg = msgBuff;
@@ -792,9 +790,7 @@ bool ImpExpKeyHelp::Import(const wstring& sFileName, wstring& sErrMsg)
 	return true;
 }
 
-/*! エクスポート
-	@date 2010.07.14 Moca ListViewからtypesからのエクスポートに変更
-*/
+/*! エクスポート */
 bool ImpExpKeyHelp::Export(const wstring& sFileName, wstring& sErrMsg)
 {
 	TextOutputStream out(to_tchar(sFileName.c_str()));

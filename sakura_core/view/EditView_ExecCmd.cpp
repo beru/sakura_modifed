@@ -76,19 +76,6 @@ protected:
 	@note	子プロセスの標準出力取得はパイプを使用する
 	@note	子プロセスの標準入力への送信は一時ファイルを使用
 
-	@author	N.Nakatani
-	@date	2001/06/23
-	@date	2001/06/30	GAE
-	@date	2002/01/24	YAZAKI	1バイト取りこぼす可能性があった
-	@date	2003/06/04	genta
-	@date	2004/09/20	naoh	多少は見やすく・・・
-	@date	2004/01/23	genta
-	@date	2004/01/28	Moca	改行コードが分割されるのを防ぐ
-	@date	2007/03/18	maru	オプションの拡張
-	@date	2008/06/07	Uchi	Unidoeの使用
-	@date	2009/02/21	ryoji	ビューモードや上書き禁止のときは編集中ウィンドウへは出力しない（指定時はアウトプットへ）
-	@date	2010/04/12	Moca	nFlgOptの0x20,0x40追加。無限出力対策。WM_QUIT対策。UnicodeのCarry周りの修正
-
 	TODO:	標準入力・標準エラーの取込選択。カレントディレクトリ。UTF-8等への対応
 */
 bool EditView::ExecCmd(

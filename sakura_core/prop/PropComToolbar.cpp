@@ -3,15 +3,13 @@
 */
 #include "StdAfx.h"
 #include "prop/PropCommon.h"
-#include "uiparts/MenuDrawer.h" // 2002/2/10 aroka
-#include "uiparts/ImageListMgr.h" // 2005/8/9 aroka
+#include "uiparts/MenuDrawer.h"
+#include "uiparts/ImageListMgr.h"
 #include "util/shell.h"
 #include "util/window.h"
 #include "sakura_rc.h"
 #include "sakura.hh"
 
-
-//@@@ 2001.02.04 Start by MIK: Popup Help
 static const DWORD p_helpids[] = {	//11000
 	IDC_BUTTON_DELETE,				HIDC_BUTTON_DELETE_TOOLBAR,				// ツールバーから機能削除
 	IDC_BUTTON_INSERTSEPARATOR,		HIDC_BUTTON_INSERTSEPARATOR_TOOLBAR,	// セパレータ挿入
@@ -30,9 +28,7 @@ static const DWORD p_helpids[] = {	//11000
 //	IDC_STATIC,						-1,
 	0, 0
 };
-//@@@ 2001.02.04 End
 
-//	From Here Jun. 2, 2001 genta
 /*!
 	@param hwndDlg ダイアログボックスのWindow Handle
 	@param uMsg メッセージ
@@ -49,9 +45,6 @@ INT_PTR CALLBACK PropToolbar::DlgProc_page(
 	return DlgProc(reinterpret_cast<pDispatchPage>(&PropToolbar::DispatchEvent), hwndDlg, uMsg, wParam, lParam);
 }
 
-//	To Here Jun. 2, 2001 genta
-
-//	From Here Apr. 13, 2002 genta
 /*!
 	Owner Draw List Boxに指定の値を挿入する (Windows XPの問題回避用)
 	
@@ -63,8 +56,6 @@ INT_PTR CALLBACK PropToolbar::DlgProc_page(
 	@param index [in] 挿入位置
 	@param value [in] 挿入する値
 	@return 挿入位置。エラーの時はLB_ERRまたはLB_ERRSPACE
-	
-	@date 2002.04.13 genta 
 */
 int Listbox_INSERTDATA(
 	HWND hWnd,				// handle to destination window 
@@ -83,7 +74,6 @@ int Listbox_INSERTDATA(
 	return nIndex1;
 }
 
-//	From Here Apr. 13, 2002 genta
 /*!
 	Owner Draw List Boxに指定の値を追加する (Windows XPの問題回避用)
 	
@@ -95,8 +85,6 @@ int Listbox_INSERTDATA(
 	@param index [in] 挿入位置
 	@param value [in] 挿入する値
 	@return 挿入位置。エラーの時はLB_ERRまたはLB_ERRSPACE
-	
-	@date 2002.04.13 genta 
 */
 int Listbox_ADDDATA(
 	HWND hWnd,              // handle to destination window 
@@ -164,13 +152,10 @@ INT_PTR PropToolbar::DispatchEvent(
 		}
 		/* ダイアログデータの設定 Toolbar */
 		SetData( hwndDlg );
-		// Modified by KEITA for WIN64 2003.9.6
 		::SetWindowLongPtr( hwndDlg, DWLP_USER, lParam );
 
-//	From Here Oct.14, 2000 JEPRO added	(Ref. CPropComCustmenu.cpp 内のWM_INITDIALOGを参考にした)
 		// キー選択時の処理
 		::SendMessage(hwndDlg, WM_COMMAND, MAKELONG(IDC_COMBO_FUNCKIND, CBN_SELCHANGE), (LPARAM)hwndCombo);
-//	To Here Oct. 14, 2000
 
 		::SetTimer(hwndDlg, 1, 300, NULL);
 
@@ -199,7 +184,6 @@ INT_PTR PropToolbar::DispatchEvent(
 			// ダイアログデータの取得 Toolbar
 			GetData(hwndDlg);
 			return TRUE;
-//@@@ 2002.01.03 YAZAKI 最後に表示していたシートを正しく覚えていないバグ修正
 		case PSN_SETACTIVE:
 			nPageNum = ID_PROPCOM_PAGENUM_TOOLBAR;
 			return TRUE;
@@ -226,7 +210,6 @@ INT_PTR PropToolbar::DispatchEvent(
 				}
 				List_ResetContent(hwndFuncList);
 				// 機能一覧に文字列をセット (リストボックス)
-				//	From Here Oct. 15, 2001 genta Lookupを使うように変更
 				size_t nNum = lookup.GetItemCount(nIndex2);
 				for (size_t i=0; i<nNum; ++i) {
 					nIndex1 = lookup.Pos2FuncCode(nIndex2, i);
@@ -254,29 +237,24 @@ INT_PTR PropToolbar::DispatchEvent(
 //						break;
 						nIndex1 = 0;
 					}
-					//	From Here Apr. 13, 2002 genta
 					nIndex1 = ::Listbox_INSERTDATA(hwndResList, nIndex1, 0);
 					if (nIndex1 == LB_ERR || nIndex1 == LB_ERRSPACE) {
 						break;
 					}
-					//	To Here Apr. 13, 2002 genta
 					List_SetCurSel(hwndResList, nIndex1);
 					break;
 
-// 2005/8/9 aroka 折返ボタンが押されたら、右のリストに「ツールバー折返」を追加する。
+// 折返ボタンが押されたら、右のリストに「ツールバー折返」を追加する。
 				case IDC_BUTTON_INSERTWRAP:
 					nIndex1 = List_GetCurSel(hwndResList);
 					if (nIndex1 == LB_ERR) {
 //						break;
 						nIndex1 = 0;
 					}
-					//	From Here Apr. 13, 2002 genta
-					//	2010.06.25 Moca 折り返しのツールバーのボタン番号定数名を変更。最後ではなく固定値にする
 					nIndex1 = ::Listbox_INSERTDATA(hwndResList, nIndex1, MenuDrawer::TOOLBAR_BUTTON_F_TOOLBARWRAP);
 					if (nIndex1 == LB_ERR || nIndex1 == LB_ERRSPACE) {
 						break;
 					}
-					//	To Here Apr. 13, 2002 genta
 					List_SetCurSel(hwndResList, nIndex1);
 					break;
 
@@ -311,12 +289,10 @@ INT_PTR PropToolbar::DispatchEvent(
 						break;
 					}
 					i = List_GetItemData(hwndFuncList, nIndex2);
-					//	From Here Apr. 13, 2002 genta
 					nIndex1 = ::Listbox_INSERTDATA(hwndResList, nIndex1, i);
 					if (nIndex1 == LB_ERR || nIndex1 == LB_ERRSPACE) {
 						break;
 					}
-					//	To Here Apr. 13, 2002 genta
 					List_SetCurSel(hwndResList, nIndex1 + 1);
 					break;
 
@@ -327,14 +303,12 @@ INT_PTR PropToolbar::DispatchEvent(
 						break;
 					}
 					i = List_GetItemData(hwndFuncList, nIndex2);
-					//	From Here Apr. 13, 2002 genta
 					//	ここでは i != 0 だとは思うけど、一応保険です。
 					nIndex1 = ::Listbox_INSERTDATA(hwndResList, nIndex1, i);
 					if (nIndex1 == LB_ERR || nIndex1 == LB_ERRSPACE) {
 						TopErrorMessage(NULL, LS(STR_PROPCOMTOOL_ERR05), nIndex1);
 						break;
 					}
-					//	To Here Apr. 13, 2002 genta
 					List_SetCurSel(hwndResList, nIndex1);
 					break;
 
@@ -349,13 +323,11 @@ INT_PTR PropToolbar::DispatchEvent(
 					if (j == LB_ERR) {
 						break;
 					}
-					//	From Here Apr. 13, 2002 genta
 					nIndex1 = ::Listbox_INSERTDATA(hwndResList, nIndex1 - 1, i);
 					if (nIndex1 == LB_ERR || nIndex1 == LB_ERRSPACE) {
 						TopErrorMessage(NULL, LS(STR_PROPCOMTOOL_ERR05), nIndex1);
 						break;
 					}
-					//	To Here Apr. 13, 2002 genta
 					List_SetCurSel(hwndResList, nIndex1);
 					break;
 
@@ -371,14 +343,12 @@ INT_PTR PropToolbar::DispatchEvent(
 					if (j == LB_ERR) {
 						break;
 					}
-					//	From Here Apr. 13, 2002 genta
 					nIndex1 = ::Listbox_INSERTDATA(hwndResList, nIndex1 + 1, i);
 					if (nIndex1 == LB_ERR || nIndex1 == LB_ERRSPACE) {
 						TopErrorMessage(NULL, LS(STR_PROPCOMTOOL_ERR05), nIndex1);
 						break;
 					}
 					List_SetCurSel(hwndResList, nIndex1);
-					//	To Here Apr. 13, 2002 genta
 					break;
 				}
 				break;
@@ -423,23 +393,19 @@ INT_PTR PropToolbar::DispatchEvent(
 		::KillTimer(hwndDlg, 1);
 		break;
 
-//@@@ 2001.02.04 Start by MIK: Popup Help
 	case WM_HELP:
 		{
 			HELPINFO* p = (HELPINFO*) lParam;
-			MyWinHelp((HWND)p->hItemHandle, HELP_WM_HELP, (ULONG_PTR)(LPVOID)p_helpids);	// 2006.10.10 ryoji MyWinHelpに変更に変更
+			MyWinHelp((HWND)p->hItemHandle, HELP_WM_HELP, (ULONG_PTR)(LPVOID)p_helpids);
 		}
 		return TRUE;
 		// NOTREACHED
 		//break;
-//@@@ 2001.02.04 End
 
-//@@@ 2001.12.22 Start by MIK: Context Menu Help
 	// Context Menu
 	case WM_CONTEXTMENU:
-		MyWinHelp(hwndDlg, HELP_CONTEXTMENU, (ULONG_PTR)(LPVOID)p_helpids);	// 2006.10.10 ryoji MyWinHelpに変更に変更
+		MyWinHelp(hwndDlg, HELP_CONTEXTMENU, (ULONG_PTR)(LPVOID)p_helpids);
 		return TRUE;
-//@@@ 2001.12.22 End
 
 	}
 	return FALSE;
@@ -450,10 +416,10 @@ void PropToolbar::SetData(HWND hwndDlg)
 {
 	// 機能種別一覧に文字列をセット(コンボボックス)
 	HWND hwndCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_FUNCKIND);
-	lookup.SetCategory2Combo(hwndCombo);	//	Oct. 15, 2001 genta
+	lookup.SetCategory2Combo(hwndCombo);
 	
 	// 種別の先頭の項目を選択(コンボボックス)
-	Combo_SetCurSel(hwndCombo, 0);	// Oct. 14, 2000 JEPRO JEPRO 「--未定義--」を表示させないように大元 Funcode.cpp で変更してある
+	Combo_SetCurSel(hwndCombo, 0);	// 「--未定義--」を表示させないように大元 Funcode.cpp で変更してある
 	::PostMessage(hwndCombo, WM_COMMAND, MAKELONG(IDC_COMBO_FUNCKIND, CBN_SELCHANGE), (LPARAM)hwndCombo);
 
 	// コントロールのハンドルを取得
@@ -462,7 +428,7 @@ void PropToolbar::SetData(HWND hwndDlg)
 	// 2014.11.25 フォントの高さが正しくなかったバグを修正
 	int nFontHeight = TextWidthCalc(hwndResList).GetTextHeight();
 
-	int nListItemHeight = 18; // Oct. 18, 2000 JEPRO 「ツールバー」タブでのツールバーアイテムの行間を少し狭くして表示行数を増やした(20→18 これ以上小さくしても効果はないようだ)
+	int nListItemHeight = 18; // 「ツールバー」タブでのツールバーアイテムの行間を少し狭くして表示行数を増やした(20→18 これ以上小さくしても効果はないようだ)
 	if (nListItemHeight < nFontHeight) {
 		nListItemHeight = nFontHeight;
 	}
@@ -471,16 +437,14 @@ void PropToolbar::SetData(HWND hwndDlg)
 	auto& csToolBar = common.toolBar;
 	// ツールバーボタンの情報をセット(リストボックス)
 	for (int i=0; i<csToolBar.nToolBarButtonNum; ++i) {
-		//	From Here Apr. 13, 2002 genta
 		LRESULT lResult = ::Listbox_ADDDATA(hwndResList, (LPARAM)csToolBar.nToolBarButtonIdxArr[i]);
 		if (lResult == LB_ERR || lResult == LB_ERRSPACE) {
 			break;
 		}
-		//	To Here Apr. 13, 2002 genta
 		lResult = List_SetItemHeight(hwndResList, lResult, nListItemHeight);
 	}
 	// ツールバーの先頭の項目を選択(リストボックス)
-	List_SetCurSel(hwndResList, 0);	// Oct. 14, 2000 JEPRO ここをコメントアウトすると先頭項目が選択されなくなる
+	List_SetCurSel(hwndResList, 0);	// ここをコメントアウトすると先頭項目が選択されなくなる
 
 	// フラットツールバーにする／しない 
 	::CheckDlgButton(hwndDlg, IDC_CHECK_TOOLBARISFLAT, csToolBar.bToolBarIsFlat);
@@ -513,11 +477,7 @@ int PropToolbar::GetData(HWND hwndDlg)
 	return TRUE;
 }
 
-/* ツールバーボタンリストのアイテム描画
-	@date 2003.08.27 Moca システムカラーのブラシはCreateSolidBrushをやめGetSysColorBrushに
-	@date 2005.08.09 aroka CPropCommon.cpp から移動
-	@date 2007.11.02 ryoji ボタンとセパレータとで処理を分ける
-*/
+/* ツールバーボタンリストのアイテム描画 */
 void PropToolbar::DrawToolBarItemList(DRAWITEMSTRUCT* pDis)
 {
 	TBBUTTON	tbb;
@@ -529,19 +489,16 @@ void PropToolbar::DrawToolBarItemList(DRAWITEMSTRUCT* pDis)
 
 	RECT rc  = pDis->rcItem;
 	RECT rc0 = pDis->rcItem;
-	rc0.left += 18;//20 //Oct. 18, 2000 JEPRO 行先頭のアイコンとそれに続くキャプションとの間を少し詰めた(20→18)
+	rc0.left += 18;
 	RECT rc1 = rc0;
 	RECT rc2 = rc0;
 
 	if ((int)pDis->itemID < 0) {
 	}else {
 
-//@@@ 2002.01.03 YAZAKI m_tbMyButtonなどをCShareDataからMenuDrawerへ移動したことによる修正。
-//		tbb = m_cShareData.tbMyButton[pDis->itemData];
-//		tbb = pMenuDrawer->tbMyButton[pDis->itemData];
 		tbb = pMenuDrawer->getButton(pDis->itemData);
 
-		// ボタンとセパレータとで処理を分ける	2007.11.02 ryoji
+		// ボタンとセパレータとで処理を分ける
 		wchar_t	szLabel[256];
 		if (tbb.fsStyle & TBSTYLE_SEP) {
 			// テキストだけ表示する
@@ -556,13 +513,11 @@ void PropToolbar::DrawToolBarItemList(DRAWITEMSTRUCT* pDis)
 				auto_strncpy( szLabel, LSW(STR_PROPCOMTOOL_ITEM3), _countof(szLabel) - 1 );
 				szLabel[_countof(szLabel) - 1] = L'\0';
 			}
-		//	From Here Oct. 15, 2001 genta
 		}else {
 			// アイコンとテキストを表示する
 			pIcons->Draw(tbb.iBitmap, pDis->hDC, rc.left + 2, rc.top + 2, ILD_NORMAL);
 			lookup.Funccode2Name(tbb.idCommand, szLabel, _countof(szLabel));
 		}
-		//	To Here Oct. 15, 2001 genta
 
 		// アイテムが選択されている
 		if (pDis->itemState & ODS_SELECTED) {
@@ -582,7 +537,6 @@ void PropToolbar::DrawToolBarItemList(DRAWITEMSTRUCT* pDis)
 //		::DeleteObject(hBrush);
 
 		::SetBkMode(pDis->hDC, TRANSPARENT);
-		// 2014.11.25 topマージンが2固定だとフォントが大きい時に見切れるので変数に変更
 		TextOutW_AnyBuild( pDis->hDC, rc1.left + 4, rc1.top + nToolBarListBoxTopMargin, szLabel, wcslen( szLabel ) );
 
 	}

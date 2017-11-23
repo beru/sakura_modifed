@@ -48,7 +48,6 @@ void DocOutline::MakeFuncList_PLSQL(FuncInfoArr* pFuncInfoArr)
 		pLine = doc.docLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
 		for (size_t i=0; i<nLineLen; ++i) {
 			// 1ƒoƒCƒg•¶Žš‚¾‚¯‚ðˆ—‚·‚é
-			// 2005-09-02 D.S.Koba GetSizeOfChar
 			size_t nCharChars = NativeW::GetSizeOfChar(pLine, nLineLen, i);
 			if (nCharChars == 0) {
 				nCharChars = 1;

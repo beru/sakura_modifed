@@ -197,9 +197,6 @@ CallbackResultType MruListener::OnBeforeClose()
 /*!
 	カレントファイルをMRUに登録する。
 	ブックマークも一緒に登録する。
-
-	@date 2003.03.30 genta 作成
-
 */
 void MruListener::_HoldBookmarks_And_AddToMRU()
 {

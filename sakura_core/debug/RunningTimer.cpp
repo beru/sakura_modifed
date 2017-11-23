@@ -43,9 +43,6 @@ DWORD RunningTimer::Read()
 	return timeGetTime() - nStartTime;
 }
 
-/*!
-	@date 2002.10.15 genta
-*/
 void RunningTimer::WriteTrace(const char* msg) const
 {
 	TRACE(_T("%3d:\"%hs\", %d‡_•b : %hs\n"), nDepth, szText, timeGetTime() - nStartTime, msg);

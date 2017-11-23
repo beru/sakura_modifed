@@ -9,18 +9,16 @@
 #include "view/EditView.h"
 #include "func/Funccode.h"
 #include "Macro.h"
-#include "macro/SMacroMgr.h"// 2002/2/10 aroka
+#include "macro/SMacroMgr.h"
 #include "env/ShareData.h"
 #include "env/DllSharedData.h"
 #include "_os/OleTypes.h"
 
 #define NEVER_USED_PARAM(p) ((void)p)
 
-// 2003.06.01 Moca
 #define omGet (0)
 #define omSet (1)
 
-// 2007.07.26 genta
 PPA::PpaExecInfo* PPA::curInstance = NULL;
 bool PPA::bIsRunning = false;
 
@@ -32,10 +30,9 @@ PPA::~PPA()
 {
 }
 
-// @date 2002.2.17 YAZAKI CShareDataのインスタンスは、CProcessにひとつあるのみ。
 bool PPA::Execute(EditView& editView, int flags)
 {
-	// PPAの多重起動禁止 2008.10.22 syat
+	// PPAの多重起動禁止
 	if (PPA::bIsRunning) {
 		MYMESSAGEBOX(editView.GetHwnd(), MB_OK, LS(STR_ERR_DLGPPA7), LS(STR_ERR_DLGPPA1));
 		fnAbort();
@@ -47,9 +44,9 @@ bool PPA::Execute(EditView& editView, int flags)
 	PpaExecInfo info;
 	info.pEditView = &editView;
 	info.pShareData = &GetDllShareData();
-	info.bError = false;			// 2003.06.01 Moca
-	info.memDebug.SetString("");	// 2003.06.01 Moca
-	info.commandflags = flags | FA_FROMMACRO;	// 2007.07.22 genta
+	info.bError = false;
+	info.memDebug.SetString("");
+	info.commandflags = flags | FA_FROMMACRO;
 	
 	// 実行前にインスタンスを待避する
 	PpaExecInfo* old_instance = curInstance;
@@ -59,7 +56,7 @@ bool PPA::Execute(EditView& editView, int flags)
 	// マクロ実行完了後はここに戻ってくる
 	curInstance = old_instance;
 
-	// PPAの多重起動禁止 2008.10.22 syat
+	// PPAの多重起動禁止
 	PPA::bIsRunning = false;
 	return !info.bError;
 }
@@ -81,9 +78,9 @@ bool PPA::InitDllImp()
 {
 	// PPA.DLLが持っている関数を準備
 
-	// pr. 15, 2002 genta constを付けた
+	// constを付けた
 	// アドレスの入れ場所はオブジェクトに依存するので
-	// tatic配列にはできない。
+	// static配列にはできない。
 	const ImportTable table[] = {
 		{ &fnExecute,		"Execute" },
 		{ &fnSetDeclare,	"SetDeclare" },
@@ -124,48 +121,40 @@ bool PPA::InitDllImp()
 
 #if PPADLL_VER >= 123
 		{ &fnIsRunning, "IsRunning" },
-		{ &fnSetFinishProc, "SetFinishProc"}, // 2003.06.23 Moca
+		{ &fnSetFinishProc, "SetFinishProc"},
 #endif
 
 		{ NULL, 0 }
 	};
 
-	// pr. 15, 2002 genta
 	// DllImpの共通関数化した
 	if (! RegisterEntries(table)) {
 		return false;
 	}
 
-	SetIntFunc((void *)PPA::stdIntFunc);	// 2003.02.24 Moca
+	SetIntFunc((void *)PPA::stdIntFunc);
 	SetStrFunc((void *)PPA::stdStrFunc);
 	SetProc((void *)PPA::stdProc);
 
-	// 2003.06.01 Moca エラーメッセージを追加
 	SetErrProc((void *)PPA::stdError);
 	SetStrObj((void *)PPA::stdStrObj);	// UserErrorMes用
 #if PPADLL_VER >= 123
 	SetFinishProc((void *)PPA::stdFinishProc);
 #endif
 
-	SetDefine("sakura-editor");	// 2003.06.01 Moca SAKURAエディタ用独自関数を準備
-	AddStrObj("UserErrorMes", "", FALSE, 2); // 2003.06.01 デバッグ用文字列変数を用意
+	SetDefine("sakura-editor");
+	AddStrObj("UserErrorMes", "", FALSE, 2);
 
-	// Jun. 16, 2003 genta 一時作業エリア
+	// 一時作業エリア
 	char buf[1024];
 	// コマンドに置き換えられない関数 ＝ PPA無しでは使えない。。。
 	for (int i=0; SMacroMgr::macroFuncInfoArr[i].pszFuncName; ++i) {
-		// 2003.06.08 Moca メモリーリークの修正
-		// 2003.06.16 genta バッファを外から与えるように
-		// 関数登録用文字列を作成する
 		GetDeclarations(SMacroMgr::macroFuncInfoArr[i], buf);
 		SetDefProc(buf);
 	}
 
 	// コマンドに置き換えられる関数 ＝ PPA無しでも使える。
 	for (int i=0; SMacroMgr::macroFuncInfoCommandArr[i].pszFuncName; ++i) {
-		// 2003.06.08 Moca メモリーリークの修正
-		// 2003.06.16 genta バッファを外から与えるように
-		// 関数登録用文字列を作成する
 		GetDeclarations(SMacroMgr::macroFuncInfoCommandArr[i], buf);
 		SetDefProc(buf);
 	}
@@ -178,12 +167,6 @@ bool PPA::InitDllImp()
 	@param szBuffer [out]		生成した文字列を入れるバッファへのポインタ
 
 	@note バッファサイズは 9 + 3 + メソッド名の長さ + 13 * 4 + 9 + 5 は最低必要
-
-	@date 2003.06.01 Moca
-				スタティックメンバに変更
-				macroFuncInfo.pszDataを書き換えないように変更
-
-	@date 2003.06.16 genta 無駄なnew/deleteを避けるためバッファを外から与えるように
 */
 char* PPA::GetDeclarations( const MacroFuncInfo& macroFuncInfo, char* szBuffer )
 {
@@ -229,7 +212,6 @@ char* PPA::GetDeclarations( const MacroFuncInfo& macroFuncInfo, char* szBuffer )
 	}
 	if (i > 0) {	// 引数があったとき
 		char szArgument[8*20];
-		// 2002.12.06 Moca 原因不明だが，strcatがVC6Proでうまく動かなかったため，strcpyにしてみたら動いた
 		strcpy(szArgument, szArguments[0]);
 		for (int j=1; j<i; ++j) {
 			strcat(szArgument, "; ");
@@ -250,7 +232,6 @@ char* PPA::GetDeclarations( const MacroFuncInfo& macroFuncInfo, char* szBuffer )
 			macroFuncInfo.nFuncID
 		);
 	}
-	// Jun. 01, 2003 Moca / Jun. 16, 2003 genta
 	return szBuffer;
 }
 
@@ -288,14 +269,11 @@ void __stdcall PPA::stdStrObj(
 
 	stdProc, stdIntFunc, stdStrFunc がエラーコードを返した場合、PPAから呼び出される。
 	異常終了/不正引数時のエラーメッセージを独自に指定する。
-	@author Moca
 	@param Err_CD IN  0以外各コールバック関数が設定した値
 			 1以上 FuncID + 1
 			 0     PPAのエラー
 			-1以下 その他ユーザ定義エラー
 	@param Err_Mes IN エラーメッセージ
-
-	@date 2003.06.01 Moca
 */
 void __stdcall PPA::stdError(int Err_CD, const char* Err_Mes)
 {
@@ -332,7 +310,7 @@ void __stdcall PPA::stdError(int Err_CD, const char* Err_Mes)
 			auto_sprintf( szMes, LS(STR_ERR_DLGPPA3), FuncID );
 		}
 	}else {
-		// 2007.07.26 genta : ネスト実行した場合にPPAが不正なポインタを渡す可能性を考慮．
+		// ネスト実行した場合にPPAが不正なポインタを渡す可能性を考慮．
 		// 実際には不正なエラーは全てPPA.DLL内部でトラップされるようだが念のため．
 		if (IsBadStringPtrA(Err_Mes, 256)) {
 			pszErr = LS(STR_ERR_DLGPPA6);
@@ -358,10 +336,7 @@ void __stdcall PPA::stdError(int Err_CD, const char* Err_Mes)
 }
 
 //----------------------------------------------------------------------
-/** プロシージャ実行callback
-
-	@date 2007.07.20 genta indexと一緒にフラグを渡す
-*/
+/** プロシージャ実行callback */
 void __stdcall PPA::stdProc(
 	const char*	funcName,
 	const int	index,
@@ -417,8 +392,6 @@ void __stdcall PPA::stdProc(
 	整数値を返す関数を処理する
 
 	PPAから呼びだされる
-	@author Moca
-	@date 2003.02.24 Moca
 */
 void __stdcall PPA::stdIntFunc(
 	const char* FuncName,
@@ -447,12 +420,12 @@ void __stdcall PPA::stdIntFunc(
 			*ResultValue = Ret.uintVal;
 			break;
 		default:
-			*Err_CD = -2; // 2003.06.01 Moca 値変更
+			*Err_CD = -2;
 		}
 		::VariantClear(&Ret);
 		return;
 	}
-	*Err_CD = index + 1; // 2003.06.01 Moca
+	*Err_CD = index + 1;
 	::VariantClear(&Ret);
 	return;
 }
@@ -462,7 +435,6 @@ void __stdcall PPA::stdIntFunc(
 	文字列を返す関数を処理する
 
 	PPAから呼びだされる
-	@date 2003.02.24 Moca CallHandleFunction対応
 */
 void __stdcall PPA::stdStrFunc(
 	const char* FuncName,
@@ -483,7 +455,7 @@ void __stdcall PPA::stdStrFunc(
 			int len;
 			char* buf;
 			Wrap(&Ret.bstrVal)->Get(&buf, &len);
-			curInstance->memRet.SetString(buf, len); // Mar. 9, 2003 genta
+			curInstance->memRet.SetString(buf, len);
 			delete[] buf;
 			*ResultValue = curInstance->memRet.GetStringPtr();
 			::VariantClear(&Ret);
@@ -500,7 +472,6 @@ void __stdcall PPA::stdStrFunc(
 	引数型変換
 
 	文字列で与えられた引数をVARIANT/BSTRに変換してMacro::HandleFunction()を呼びだす
-	@author Moca
 */
 bool PPA::CallHandleFunction(
 	const int index,
@@ -576,12 +547,9 @@ bool PPA::CallHandleFunction(
 
 /*!
 	PPAマクロの実行終了時に呼ばれる
-	
-	@date 2003.06.01 Moca
 */
 void __stdcall PPA::stdFinishProc()
 {
-	// 2007.07.26 genta : 終了処理は不要
 }
 
 #endif

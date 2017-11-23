@@ -43,18 +43,8 @@ public:
 private:
 	std::tstring Ext2Key(const TCHAR* ext);
 
-	// Jan. 31, 2004 genta
-	// バイナリサイズ削減のため拡張子保持用mapを削除
-	// typedef std::map<std::string, Creator> MacroTypeRep;
 	typedef std::list<Creator> MacroEngineRep;
 
-	// Jan. 31, 2004 genta
-	// バイナリサイズ削減のため
-	//MacroTypeRep mMacroExts;	// 拡張子対応表
-	/*!
-		Creatorリスト
-		@date 2002.08.25 genta 追加
-	*/
 	MacroEngineRep mMacroCreators;
 
 };

@@ -28,8 +28,6 @@ public:
 	
 		@param[in] pcEditView マクロ実行対象の編集ウィンドウ
 		@param[in] flags マクロ実行属性．
-		
-		@date 2007.07.20 genta マクロ実行属性を渡すためにflagsを追加
 	*/
 	virtual bool ExecKeyMacro(class EditView& editView, int flags) const = 0;
 	virtual void ExecKeyMacro2(class EditView& editView, int flags);

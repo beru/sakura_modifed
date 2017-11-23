@@ -6,17 +6,12 @@
 #include "util/string_ex2.h"
 #include "util/window.h"
 
-/*!	コンストラクタ
-
-	@date 2002.2.17 YAZAKI CShareDataのインスタンスは、CProcessにひとつあるのみ。
-*/
 MruFolder::MruFolder()
 {
 	// 初期化。
 	pShareData = &GetDllShareData();
 }
 
-// デストラクタ
 MruFolder::~MruFolder()
 {
 	recentFolder.Terminate();
@@ -28,8 +23,6 @@ MruFolder::~MruFolder()
 	@param pMenuDrawer [in] (out?) メニュー作成で用いるMenuDrawer
 	
 	@return 生成したメニューのハンドル
-
-	2010/5/21 Uchi 組み直し
 */
 HMENU MruFolder::CreateMenu(MenuDrawer& menuDrawer) const
 {
@@ -43,7 +36,6 @@ HMENU MruFolder::CreateMenu(MenuDrawer& menuDrawer) const
 	@param 追加するメニューのハンドル
 	@param pMenuDrawer [in] (out?) メニュー作成で用いるMenuDrawer
 	
-	@author Norio Nakantani
 	@return メニューのハンドル
 */
 HMENU MruFolder::CreateMenu(HMENU	hMenuPopUp, MenuDrawer& menuDrawer) const
@@ -104,10 +96,7 @@ void MruFolder::ClearAll()
 	recentFolder.DeleteAllItem();
 }
 
-/*	@brief 開いたフォルダ リストへの登録
-
-	@date 2001.12.26  CShareData::AddOPENFOLDERListから移動した。（YAZAKI）
-*/
+/* @brief 開いたフォルダ リストへの登録 */
 void MruFolder::Add(const TCHAR* pszFolder)
 {
 	if (!pszFolder

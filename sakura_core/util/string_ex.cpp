@@ -111,9 +111,6 @@ TCHAR* strtotcs(TCHAR* dest, const wchar_t* src, size_t count)
 	@param src_count [in] コピーする文字列の末尾
 
 	@retval 実際にコピーされたコピー先領域の1つ後を指すポインタ
-
-	@author genta
-	@date 2003.04.03 genta
 */
 char* strncpy_ex(char* dst, size_t dst_count, const char* src, size_t src_count)
 {
@@ -149,10 +146,6 @@ const char* stristr(const char* s1, const char* s2)
 	return NULL;
 }
 
-/*!
-	@date 2005.04.07 MIK    新規作成
-	@date 2007.10.21 kobake 関数名変更: my_strchri→strichr_j
-*/
 const char* strichr_j(const char* s1, char c2)
 {
 	if (c2 == 0) return ::strchr(s1, 0); // 文字列終端を探すためにc2に0を渡した場合も、正しく処理されるように。 2007.10.16 kobake
@@ -165,10 +158,6 @@ const char* strichr_j(const char* s1, char c2)
 	return NULL;
 }
 
-/*!
-	@date 2005.04.07 MIK    新規作成
-	@date 2007.10.21 kobake 関数名変更: my_strchr→strchr_j
-*/
 const char* strchr_j(const char* str, char c)
 {
 	if (c == 0) return ::strchr(str, 0); // 文字列終端を探すためにcに0を渡した場合も、正しく処理されるように。 2007.10.16 kobake
@@ -182,9 +171,6 @@ const char* strchr_j(const char* str, char c)
 
 /*!
 	strstr()の2byte code対応版
-
-	@date 2005.04.07 MIK 新規作成
-	@date 2007.10.21 kobake 関数名変更: my_strstr→strstr_j
 */
 const char* strstr_j(const char* s1, const char* s2)
 {
@@ -202,9 +188,6 @@ const char* strstr_j(const char* s1, const char* s2)
 	@note
 	Windows APIにあるStrStrIはIE4が入っていないPCでは使用不可のため
 	独自に作成
-
-	@date 2005.04.07 MIK    新規作成
-	@date 2007.10.21 kobake 関数名変更: my_strstri→stristr_j
 */
 const char* stristr_j(const char* s1, const char* s2)
 {
@@ -462,9 +445,6 @@ int wmemicmp_ascii(const wchar_t* p1, const wchar_t* p2, size_t count)
 	先頭にある連続した区切り文字は無視する．
 	
 	@return トークン
-
-	@date 2004.02.15 みく   最適化
-	@date 2007.10.21 kobake テンプレート化
 */
 //$ いちいち手間かかる。。
 namespace {
@@ -569,7 +549,6 @@ int my_mbisalpha2(int c)
 	@param flag [in] 文字列終端チェック (true=stricmp,strnicmp, false=memicmp)
 
 	@retval 0	一致
-	@date 2002.11.29 Moca 0以外の時の戻り値を，「元の値の差」から「大文字としたときの差」に変更
  */
 int __cdecl my_internal_icmp(const char* s1, const char* s2, unsigned int n, unsigned int dcount, bool flag)
 {
