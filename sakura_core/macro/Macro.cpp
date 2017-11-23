@@ -207,9 +207,9 @@ void Macro::AddLParam(
 			// この編集中のテキストから検索する(0x02.未実装)
 			lFlag |= pDlgGrep->searchOption.bLoHiCase		? 0x04 : 0x00;
 			lFlag |= pDlgGrep->searchOption.bRegularExp	? 0x08 : 0x00;
-			lFlag |= (GetDllShareData().common.search.nGrepCharSet == CODE_AUTODETECT) ? 0x10 : 0x00;	// 2002/09/21 Moca 下位互換性のための処理
+			lFlag |= (GetDllShareData().common.search.nGrepCharSet == CODE_AUTODETECT) ? 0x10 : 0x00;	// 下位互換性のための処理
 			lFlag |= GetDllShareData().common.search.nGrepOutputLineType == 1	? 0x20 : 0x00;
-			lFlag |= GetDllShareData().common.search.nGrepOutputLineType == 2	? 0x400000 : 0x00;	// 2014.09.23 否ヒット行
+			lFlag |= GetDllShareData().common.search.nGrepOutputLineType == 2	? 0x400000 : 0x00;	// 否ヒット行
 			lFlag |= (GetDllShareData().common.search.nGrepOutputStyle == 2)		? 0x40 : 0x00;	// CShareDataに入れなくていいの？
 			lFlag |= (GetDllShareData().common.search.nGrepOutputStyle == 3)		? 0x80 : 0x00;
 			EncodingType code = GetDllShareData().common.search.nGrepCharSet;
@@ -431,9 +431,7 @@ void Macro::Save(HINSTANCE hInstance, TextOutputStream& out) const
 	const wchar_t*	pText;
 	NativeW			memWork;
 
-	// 2002.2.2 YAZAKI SMacroMgrに頼む
 	if (SMacroMgr::GetFuncInfoByID( hInstance, nFuncID, szFuncName, szFuncNameJapanese)){
-		// 2014.01.24 Moca マクロ書き出しをtypeを追加して統合
 		out.WriteF( L"S_%ls(", szFuncName );
 		MacroParam* pParam = pParamTop;
 		while (pParam) {
@@ -514,7 +512,6 @@ bool Macro::HandleCommand(
 	case F_WCHAR:		// 文字入力。数値は文字コード
 	case F_IME_CHAR:	// 日本語入力
 	case F_CTRL_CODE:
-		// Jun. 16, 2002 genta
 		if (!arguments[0]) {
 			::MYMESSAGEBOX(
 				NULL,
@@ -524,9 +521,9 @@ bool Macro::HandleCommand(
 			);
 			return false;
 		}
-	case F_PASTE:	// 2011.06.26 Moca
-	case F_PASTEBOX:	// 2011.06.26 Moca
-	case F_TEXTWRAPMETHOD:	// テキストの折り返し方法の指定。数値は、0x0（折り返さない）、0x1（指定桁で折り返す）、0x2（右端で折り返す）	// 2008.05.30 nasukoji
+	case F_PASTE:
+	case F_PASTEBOX:
+	case F_TEXTWRAPMETHOD:	// テキストの折り返し方法の指定。数値は、0x0（折り返さない）、0x1（指定桁で折り返す）、0x2（右端で折り返す）
 	case F_GOLINETOP:	// 行頭に移動。数値は、0x0（デフォルト）、0x1（空白を無視して先頭に移動）、0x2（未定義）、0x4（選択して移動）、0x8（改行単位で先頭に移動）
 	case F_GOLINETOP_SEL:
 	case F_GOLINEEND:	// 行末に移動
@@ -594,8 +591,7 @@ bool Macro::HandleCommand(
 			}
 		}
 		break;
-	case F_CHGMOD_EOL:	// 入力改行コード指定。EolTypeの数値を指定。2003.06.23 Moca
-		// Jun. 16, 2002 genta
+	case F_CHGMOD_EOL:	// 入力改行コード指定。EolTypeの数値を指定
 		if (!arguments[0]) {
 			::MYMESSAGEBOX(
 				NULL,
@@ -606,7 +602,7 @@ bool Macro::HandleCommand(
 			return false;
 		}
 		{
-			// マクロ引数値をEOLタイプ値に変換する	// 2009.08.18 ryoji
+			// マクロ引数値をEOLタイプ値に変換する
 			EolType nEol;
 			switch (arguments[0] ? _wtoi(arguments[0]) : 0) {
 			case 1:		nEol = EolType::CRLF; break;
@@ -623,7 +619,7 @@ bool Macro::HandleCommand(
 			}
 		}
 		break;
-	case F_SET_QUOTESTRING:	// Jan. 29, 2005 genta 追加 テキスト引数1つを取るマクロはここに統合していこう．
+	case F_SET_QUOTESTRING:	// 追加 テキスト引数1つを取るマクロはここに統合していこう．
 		{
 			if (!arguments[0]) {
 				::MYMESSAGEBOX(
@@ -950,15 +946,15 @@ bool Macro::HandleCommand(
 			GetDllShareData().common.search.bAutoCloseDlgFind	= (lFlag & 0x10) ? 1 : 0;
 			GetDllShareData().common.search.bSearchAll			= (lFlag & 0x20) ? 1 : 0;
 			dlgReplace.bPaste			= (lFlag & 0x40) ? 1 : 0;	// CShareDataに入れなくていいの？
-			dlgReplace.bConsecutiveAll	= (lFlag & 0x0400) ? 1 : 0;	// 2007.01.16 ryoji
-			if (LOWORD(index) == F_REPLACE) {	// 2007.07.08 genta コマンドは下位ワード
+			dlgReplace.bConsecutiveAll	= (lFlag & 0x0400) ? 1 : 0;
+			if (LOWORD(index) == F_REPLACE) {	// コマンドは下位ワード
 				// 置換する時は選べない
 				dlgReplace.bSelectedArea = 0;
-			}else if (LOWORD(index) == F_REPLACE_ALL) {	// 2007.07.08 genta コマンドは下位ワード
+			}else if (LOWORD(index) == F_REPLACE_ALL) {	// コマンドは下位ワード
 				// 全置換の時は選べる？
 				dlgReplace.bSelectedArea	= (lFlag & 0x80) ? 1 : 0;
 			}
-			dlgReplace.nReplaceTarget	= (lFlag >> 8) & 0x03;	// 8bitシフト（0x100で割り算）	// 2007.01.16 ryoji 下位 2bitだけ取り出す
+			dlgReplace.nReplaceTarget	= (lFlag >> 8) & 0x03;	// 8bitシフト（0x100で割り算）
 			if (bAddHistory) {
 				GetDllShareData().common.search.bConsecutiveAll = dlgReplace.bConsecutiveAll;
 				GetDllShareData().common.search.bSelectedArea = dlgReplace.bSelectedArea;
@@ -1054,7 +1050,6 @@ bool Macro::HandleCommand(
 
 			LPARAM lFlag = wtoi_def(arguments[ArgIndex+3], 5);
 
-			// 2002/09/21 Moca 文字コードセット
 			EncodingType	nCharSet;
 			{
 				nCharSet = CODE_SJIS;
@@ -1065,7 +1060,6 @@ bool Macro::HandleCommand(
 				if (IsValidCodeTypeExceptSJIS(nCode) || nCode == CODE_AUTODETECT) {
 					nCharSet = (EncodingType)nCode;
 				}
-				// 2013.06.11 5番目の引き数を文字コードにする
 				if (ArgIndex + 5 <= argSize) {
 					nCharSet = (EncodingType)_wtoi(arguments[ArgIndex + 4]);
 				}
@@ -1152,19 +1146,18 @@ bool Macro::HandleCommand(
 		}
 		{
 			// 文字コードセット
-			// Sep. 11, 2004 genta 文字コード設定の範囲チェック
+			// 文字コード設定の範囲チェック
 			EncodingType nCharCode = CODE_NONE;	// デフォルト値
 			if (arguments[1]) {
 				nCharCode = (EncodingType)_wtoi(arguments[1]);
 			}
 			if (LOWORD(index) == F_FILESAVEAS && IsValidCodeOrCPType(nCharCode) && nCharCode != editView.pEditDoc->GetDocumentEncoding()) {
-				// From Here Jul. 26, 2003 ryoji BOM状態を初期化
+				// BOM状態を初期化
 				editView.pEditDoc->SetDocumentEncoding(nCharCode, CodeTypeName(editView.pEditDoc->GetDocumentEncoding()).IsBomDefOn());
-				// To Here Jul. 26, 2003 ryoji BOM状態を初期化
 			}
 
 			// 改行コード
-			int nSaveLineCode = 0;	// デフォルト値	// Sep. 11, 2004 genta 初期値を「変更しない」に
+			int nSaveLineCode = 0;	// デフォルト値「変更しない」
 			if (arguments[2]) {
 				nSaveLineCode = _wtoi(arguments[2]);
 			}
@@ -1181,12 +1174,10 @@ bool Macro::HandleCommand(
 		}
 		break;
 	// 2つの引数が文字列
-	// Jul. 5, 2002 genta
 	case F_EXTHTMLHELP:
-	case F_EXECEXTMACRO:				// 2009.06.14 syat
+	case F_EXECEXTMACRO:
 		editView.GetCommander().HandleCommand(index, true, (LPARAM)arguments[0], (LPARAM)arguments[1], 0, 0);
 		break;
-	// From Here Dec. 4, 2002 genta
 	case F_FILE_REOPEN				: // 開き直す
 	case F_FILE_REOPEN_SJIS			: // SJISで開き直す
 	case F_FILE_REOPEN_JIS			: // JISで開き直す
@@ -1203,7 +1194,6 @@ bool Macro::HandleCommand(
 			editView.GetCommander().HandleCommand(index, true, noconfirm, 0, 0, 0);
 		}
 		break;
-	// To Here Dec. 4, 2002 genta
 	case F_TOPMOST:
 		{
 			int lparam1;
@@ -1212,8 +1202,8 @@ bool Macro::HandleCommand(
 				editView.GetCommander().HandleCommand(index, true, lparam1, 0, 0, 0);
 			}
 		}
-		break;	// Jan. 29, 2005 genta 抜けていた
-	case F_TAGJUMP_KEYWORD:	// @@ 2005.03.31 MIK
+		break;
+	case F_TAGJUMP_KEYWORD:
 		{
 			// 引数はNULLでもOK
 			editView.GetCommander().HandleCommand(index, true, (LPARAM)arguments[0], 0, 0, 0);
@@ -1221,7 +1211,7 @@ bool Macro::HandleCommand(
 		break;
 	case F_NEXTWINDOW:
 	case F_PREVWINDOW:
-		editView.GetDocument().HandleCommand(index);	// 2009.04.11 ryoji F_NEXTWINDOW/F_PREVWINDOWが動作しなかったのを修正
+		editView.GetDocument().HandleCommand(index);
 		break;
 	case F_MESSAGEBOX:	// メッセージボックスの表示
 	case F_ERRORMSG:	// メッセージボックス（エラー）の表示
@@ -1443,7 +1433,6 @@ bool Macro::HandleFunction(
 {
 	Variant varCopy;	// VT_BYREFだと困るのでコピー用
 
-	// 2003-02-21 鬼
 	switch (LOWORD(id)) {
 	case F_GETFILENAME:
 		{
@@ -1453,7 +1442,7 @@ bool Macro::HandleFunction(
 		}
 		return true;
 	case F_GETSAVEFILENAME:
-		// 2006.09.04 ryoji 保存時のファイルのパス
+		// 保存時のファイルのパス
 		{
 			const TCHAR* FileName = view.pEditDoc->docFile.GetSaveFilePath();
 			SysString s(FileName, lstrlen(FileName));
@@ -1474,7 +1463,6 @@ bool Macro::HandleFunction(
 		}
 		return true;
 	case F_EXPANDPARAMETER:
-		// 2003.02.24 Moca
 		{
 			if (numArgs != 1) {
 				return false;
@@ -1495,7 +1483,6 @@ bool Macro::HandleFunction(
 		}
 		return true;
 	case F_GETLINESTR:
-		// 2003.06.01 Moca マクロ追加
 		{
 			if (numArgs != 1) return false;
 			if (VariantChangeType(&varCopy.data, const_cast<VARIANTARG*>(&(args[0])), 0, VT_I4) != S_OK) return false;	// VT_I4として解釈
@@ -1522,7 +1509,6 @@ bool Macro::HandleFunction(
 		}
 		return true;
 	case F_GETLINECOUNT:
-		// 2003.06.01 Moca マクロ追加
 		{
 			if (numArgs != 1) return false;
 			if (VariantChangeType(&varCopy.data, const_cast<VARIANTARG*>(&(args[0])), 0, VT_I4) != S_OK) return false;	// VT_I4として解釈
@@ -1535,13 +1521,12 @@ bool Macro::HandleFunction(
 		}
 		return true;
 	case F_CHGTABWIDTH:
-		// 2004.03.16 zenryaku マクロ追加
 		{
 			if (numArgs != 1) return false;
 			if (VariantChangeType(&varCopy.data, const_cast<VARIANTARG*>(&(args[0])), 0, VT_I4) != S_OK) return false;	// VT_I4として解釈
 			size_t nTab = view.pEditDoc->layoutMgr.GetTabSpace();
 			Wrap(&result)->Receive(nTab);
-			// 2013.04.30 Moca 条件追加。不要な場合はChangeLayoutParamを呼ばない
+			// 不要な場合はChangeLayoutParamを呼ばない
 			if (0 < varCopy.data.iVal && nTab != varCopy.data.iVal) {
 				view.GetDocument().bTabSpaceCurTemp = true;
 				view.editWnd.ChangeLayoutParam(
@@ -1550,7 +1535,7 @@ bool Macro::HandleFunction(
 					view.pEditDoc->layoutMgr.GetMaxLineKetas()
 				);
 
-				// 2009.08.28 nasukoji	「折り返さない」選択時にTAB幅が変更されたらテキスト最大幅の再算出が必要
+				// 「折り返さない」選択時にTAB幅が変更されたらテキスト最大幅の再算出が必要
 				if (view.pEditDoc->nTextWrapMethodCur == TextWrappingMethod::NoWrapping) {
 					// 最大幅の再算出時に各行のレイアウト長の計算も行う
 					view.pEditDoc->layoutMgr.CalculateTextWidth();
@@ -1592,25 +1577,21 @@ bool Macro::HandleFunction(
 		}
 		return true;
 	case F_GETSELCOLUMNTO:
-		// 2005.07.30 maru マクロ追加
 		{
 			Wrap(&result)->Receive(view.GetSelectionInfo().select.GetTo().x + 1);
 		}
 		return true;
 	case F_ISINSMODE:
-		// 2005.07.30 maru マクロ追加
 		{
-			Wrap(&result)->Receive(view.IsInsMode() /* Oct. 2, 2005 genta */);
+			Wrap(&result)->Receive(view.IsInsMode());
 		}
 		return true;
 	case F_GETCHARCODE:
-		// 2005.07.31 maru マクロ追加
 		{
 			Wrap(&result)->Receive(view.pEditDoc->GetDocumentEncoding());
 		}
 		return true;
 	case F_GETLINECODE:
-		// 2005.08.04 maru マクロ追加
 		{
 			int n = 0;
 			switch (view.pEditDoc->docEditor.GetNewLineCode()) {
@@ -1637,19 +1618,16 @@ bool Macro::HandleFunction(
 		}
 		return true;
 	case F_ISPOSSIBLEUNDO:
-		// 2005.08.04 maru マクロ追加
 		{
 			Wrap(&result)->Receive(view.pEditDoc->docEditor.IsEnableUndo());
 		}
 		return true;
 	case F_ISPOSSIBLEREDO:
-		// 2005.08.04 maru マクロ追加
 		{
 			Wrap(&result)->Receive(view.pEditDoc->docEditor.IsEnableRedo());
 		}
 		return true;
 	case F_CHGWRAPCOLUMN:
-		// 2008.06.19 ryoji マクロ追加
 		{
 			if (numArgs != 1) {
 				return false;
@@ -1671,7 +1649,7 @@ bool Macro::HandleFunction(
 		}
 		return true;
 	case F_ISCURTYPEEXT:
-		// 2006.09.04 ryoji 指定した拡張子が現在のタイプ別設定に含まれているかどうかを調べる
+		// 指定した拡張子が現在のタイプ別設定に含まれているかどうかを調べる
 		{
 			if (numArgs != 1) {
 				return false;
@@ -1693,7 +1671,7 @@ bool Macro::HandleFunction(
 		}
 		return true;
 	case F_ISSAMETYPEEXT:
-		// 2006.09.04 ryoji ２つの拡張子が同じタイプ別設定に含まれているかどうかを調べる
+		// ２つの拡張子が同じタイプ別設定に含まれているかどうかを調べる
 		{
 			if (numArgs != 2) {
 				return false;
@@ -1720,7 +1698,7 @@ bool Macro::HandleFunction(
 		}
 		return true;
 	case F_INPUTBOX:
-		// 2011.03.18 syat テキスト入力ダイアログの表示
+		// テキスト入力ダイアログの表示
 		{
 			if (numArgs < 1) {
 				return false;
@@ -1775,7 +1753,7 @@ bool Macro::HandleFunction(
 	case F_INFOMSG:		// メッセージボックス（情報）の表示
 	case F_OKCANCELBOX:	// メッセージボックス（確認：OK／キャンセル）の表示
 	case F_YESNOBOX:	// メッセージボックス（確認：はい／いいえ）の表示
-		// 2011.03.18 syat メッセージボックスの表示
+		// メッセージボックスの表示
 		{
 			if (numArgs < 1) {
 				return false;
@@ -1823,7 +1801,7 @@ bool Macro::HandleFunction(
 		}
 		return true;
 	case F_COMPAREVERSION:
-		// 2011.03.18 syat バージョン番号の比較
+		// バージョン番号の比較
 		{
 			if (numArgs != 2) {
 				return false;
@@ -1849,7 +1827,7 @@ bool Macro::HandleFunction(
 		}
 		return true;
 	case F_MACROSLEEP:
-		// 2011.03.18 syat 指定した時間（ミリ秒）停止する
+		// 指定した時間（ミリ秒）停止する
 		{
 			if (numArgs != 1) {
 				return false;
@@ -1865,7 +1843,7 @@ bool Macro::HandleFunction(
 		return true;
 	case F_FILEOPENDIALOG:
 	case F_FILESAVEDIALOG:
-		// 2011.03.18 syat ファイルダイアログの表示
+		// ファイルダイアログの表示
 		{
 			TCHAR* source;
 			int sourceLength;
@@ -1912,7 +1890,7 @@ bool Macro::HandleFunction(
 		}
 		return true;
 	case F_FOLDERDIALOG:
-		// 2011.03.18 syat フォルダダイアログの表示
+		// フォルダダイアログの表示
 		{
 			TCHAR* source;
 			int sourceLength;
@@ -1949,7 +1927,7 @@ bool Macro::HandleFunction(
 		}
 		return true;
 	case F_GETCLIPBOARD:
-		// 2011.03.18 syat クリップボードの文字列を取得
+		// クリップボードの文字列を取得
 		{
 			int nOpt = 0;
 
@@ -1974,7 +1952,7 @@ bool Macro::HandleFunction(
 		}
 		return true;
 	case F_SETCLIPBOARD:
-		// 2011.03.18 syat クリップボードに文字列を設定
+		// クリップボードに文字列を設定
 		{
 			std::tstring sValue;
 			int nOpt = 0;
@@ -1993,7 +1971,6 @@ bool Macro::HandleFunction(
 				Wrap(&varCopy.data.bstrVal)->GetT(&sValue);
 			}
 
-			// 2013.06.12 オプション設定
 			bool bColumnSelect = ((nOpt & 0x01) == 0x01);
 			bool bLineSelect = ((nOpt & 0x02) == 0x02);
 			bool bRet = view.MySetClipboardData(sValue.c_str(), sValue.size(), bColumnSelect, bLineSelect);

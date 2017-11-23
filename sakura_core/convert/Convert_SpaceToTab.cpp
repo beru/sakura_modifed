@@ -90,15 +90,11 @@ bool Converter_SpaceToTab::DoConvert(NativeW* pData)
 					pDes[nPosDes] = SPACE;
 					++nPosDes;
 				}else {
-					//for (j = nStartPos - 1; (j + nTabWidth) <= nPosX + 1; j += nTabWidth) {
 					for (j=nStartPos/nTabWidth; j<(nPosX/nTabWidth); ++j) {
 						pDes[nPosDes] = TAB;
 						++nPosDes;
 						nStartPos += nTabWidth - (nStartPos % nTabWidth);
 					}
-					// 2003.08.05 Moca
-					// 変換後にTABが1つも入らない場合にスペースを詰めすぎて
-					// バッファをはみ出すのを修正
 					for (j=nStartPos; j<nPosX; ++j) {
 						pDes[nPosDes] = SPACE;
 						++nPosDes;

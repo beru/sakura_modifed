@@ -72,7 +72,6 @@ INT_PTR PropMacro::DispatchEvent(
 		// ダイアログデータの設定 Macro
 		InitDialog(hwndDlg);
 		SetData(hwndDlg);
-		// Modified by KEITA for WIN64 2003.9.6
 		::SetWindowLongPtr(hwndDlg, DWLP_USER, lParam);
 
 		//	Oct. 5, 2002 genta エディット コントロールに入力できるテキストの長さを制限する

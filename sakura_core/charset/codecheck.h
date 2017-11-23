@@ -245,7 +245,7 @@ inline bool IsEucjpSupplemtal(const char* pC) {
 	      && CHARCODE__IS_EUCJP_ZEN1(static_cast<unsigned char>(pC[1]))
 	      && CHARCODE__IS_EUCJP_ZEN2(static_cast<unsigned char>(pC[2])));
 }
-// EUCJP 半角カタカナ文字 2 バイト目か  added by genta
+// EUCJP 半角カタカナ文字 2 バイト目か
 inline bool IsEucjpHankata2(const char c) {
 	return CHARCODE__IS_EUCJP_HANKATA2(static_cast<unsigned char>(c));
 }

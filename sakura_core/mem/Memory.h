@@ -77,7 +77,7 @@ protected:
 	PCHAR& _DebugGetPointerRef() { return pRawData; } // デバッグ用。バッファポインタの参照を返す。
 #endif
 
-private: // 2002/2/10 aroka アクセス権変更
+private:
 	/*
 	|| メンバ変数
 	*/

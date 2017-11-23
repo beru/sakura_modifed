@@ -169,11 +169,11 @@ bool ViewCommander::HandleCommand(
 	case F_FILECLOSE_OPEN:	// 閉じて開く
 		Command_FileClose_Open();
 		break;
-	case F_FILE_REOPEN:				Command_File_Reopen(GetDocument().GetDocumentEncoding(), lparam1 != 0); break;// Dec. 4, 2002 genta
+	case F_FILE_REOPEN:				Command_File_Reopen(GetDocument().GetDocumentEncoding(), lparam1 != 0); break;
 	case F_FILE_REOPEN_SJIS:		Command_File_Reopen(CODE_SJIS, lparam1 != 0); break;		// SJISで開き直す
 	case F_FILE_REOPEN_JIS:			Command_File_Reopen(CODE_JIS, lparam1 != 0); break;			// JISで開き直す
 	case F_FILE_REOPEN_EUC:			Command_File_Reopen(CODE_EUC, lparam1 != 0); break;			// EUCで開き直す
-	case F_FILE_REOPEN_LATIN1:		Command_File_Reopen(CODE_LATIN1, lparam1 != 0); break;		// Latin1で開きなおす	// 2010/3/20 Uchi
+	case F_FILE_REOPEN_LATIN1:		Command_File_Reopen(CODE_LATIN1, lparam1 != 0); break;		// Latin1で開きなおす
 	case F_FILE_REOPEN_UNICODE:		Command_File_Reopen(CODE_UNICODE, lparam1 != 0); break;		// Unicodeで開き直す
 	case F_FILE_REOPEN_UNICODEBE: 	Command_File_Reopen(CODE_UNICODEBE, lparam1 != 0); break;	// UnicodeBEで開き直す
 	case F_FILE_REOPEN_UTF8:		Command_File_Reopen(CODE_UTF8, lparam1 != 0); break;		// UTF-8で開き直す
@@ -238,7 +238,7 @@ bool ViewCommander::HandleCommand(
 	case F_DOWN2:				Command_Down2(view.GetSelectionInfo().bSelectingLock); break;					// カーソル下移動(２行づつ)
 	case F_WORDLEFT:			Command_WordLeft(view.GetSelectionInfo().bSelectingLock); break;					// 単語の左端に移動
 	case F_WORDRIGHT:			Command_WordRight(view.GetSelectionInfo().bSelectingLock); break;				// 単語の右端に移動
-	// 0ct. 29, 2001 genta マクロ向け機能拡張
+	// マクロ向け機能拡張
 	case F_GOLINETOP:			Command_GoLineTop(view.GetSelectionInfo().bSelectingLock, (int)lparam1); break;		// 行頭に移動(折り返し単位/改行単位)
 	case F_GOLINEEND:			Command_GoLineEnd(view.GetSelectionInfo().bSelectingLock, 0, (int)lparam1); break;	// 行末に移動(折り返し単位)
 //	case F_ROLLDOWN:			Command_ROLLDOWN(view.GetSelectionInfo().bSelectingLock); break;					// Scroll Down
@@ -399,7 +399,7 @@ bool ViewCommander::HandleCommand(
 	case F_JUMP_DIALOG:		Command_Jump_Dialog(); break;					// 指定行ヘジャンプダイアログの表示
 	case F_JUMP:			Command_Jump(); break;							// 指定行ヘジャンプ
 	case F_OUTLINE:			bRet = Command_FuncList((ShowDialogType)lparam1, OutlineType::Default); break;	// アウトライン解析
-	case F_OUTLINE_TOGGLE:	bRet = Command_FuncList(ShowDialogType::Toggle, OutlineType::Default); break;	// アウトライン解析(toggle) // 20060201 aroka
+	case F_OUTLINE_TOGGLE:	bRet = Command_FuncList(ShowDialogType::Toggle, OutlineType::Default); break;	// アウトライン解析(toggle)
 	case F_FILETREE:		bRet = Command_FuncList((ShowDialogType)lparam1, OutlineType::FileTree); break;	//ファイルツリー
 	case F_TAGJUMP:			Command_TagJump(lparam1 != 0); break;			// タグジャンプ機能
 	case F_TAGJUMP_CLOSE:	Command_TagJump(true); break;					// タグジャンプ(元ウィンドウClose)

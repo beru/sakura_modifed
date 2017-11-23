@@ -1268,18 +1268,8 @@ int GrepAgent::DoGrepFile(
 				}
 			// 単語のみ検索
 			}else if (searchOption.bWordOnly) {
-				/*
-					2002/02/23 Norio Nakatani
-					単語単位のGrepを試験的に実装。単語はWhereCurrentWord()で判別してますので、
-					英単語やC/C++識別子などの検索条件ならヒットします。
-
-					2002/03/06 YAZAKI
-					Grepにも試験導入。
-					WhereCurrentWordで単語を抽出して、その単語が検索語とあっているか比較する。
-				*/
 				size_t nMatchLen;
 				int nIdx = 0;
-				// Jun. 26, 2003 genta 無駄なwhileは削除
 				while ((pszRes = SearchAgent::SearchStringWord(pLine, nLineLen, nIdx, searchWords, searchOption.bLoHiCase, &nMatchLen))) {
 					nIdx = pszRes - pLine + nMatchLen;
 					++nHitCount;
@@ -1294,7 +1284,6 @@ int GrepAgent::DoGrepFile(
 							memMessage,
 							pszDispFilePath,
 							pszCodeName,
-							//	Jun. 25, 2002 genta
 							//	桁位置は1始まりなので1を足す必要がある
 							nLine,
 							pszRes - pLine + 1,
@@ -1307,7 +1296,7 @@ int GrepAgent::DoGrepFile(
 						);
 					}
 	
-					// 2010.10.31 ryoji 行単位で出力する場合は1つ見つかれば十分
+					// 行単位で出力する場合は1つ見つかれば十分
 					if (grepOption.nGrepOutputLineType != 0 || grepOption.bGrepOutputFileOnly) {
 						break;
 					}
@@ -1315,10 +1304,6 @@ int GrepAgent::DoGrepFile(
 			}else {
 				// 文字列検索
 				int nColumnPrev = 0;
-				//	Jun. 21, 2003 genta ループ条件見直し
-				//	マッチ箇所を1行から複数検出するケースを標準に，
-				//	マッチ箇所を1行から1つだけ検出する場合を例外ケースととらえ，
-				//	ループ継続・打ち切り条件(nGrepOutputLineType)を逆にした．
 				for (;;) {
 					pszRes = SearchAgent::SearchString(
 						pCompareData,
@@ -1355,12 +1340,12 @@ int GrepAgent::DoGrepFile(
 						);
 					}
 						
-					//	Jun. 21, 2003 genta 行単位で出力する場合は1つ見つかれば十分
+					//	行単位で出力する場合は1つ見つかれば十分
 					if (grepOption.nGrepOutputLineType != 0 || grepOption.bGrepOutputFileOnly) {
 						break;
 					}
 					//	探し始める位置を補正
-					//	2003.06.10 Moca マッチした文字列の後ろから次の検索を開始する
+					//	マッチした文字列の後ろから次の検索を開始する
 					//	nClom : マッチ位置
 					//	matchlen : マッチした文字列の長さ
 					size_t nPosDiff = nColumn += nKeyLen - 1;
@@ -1369,7 +1354,7 @@ int GrepAgent::DoGrepFile(
 					nColumnPrev += nPosDiff;
 				}
 			}
-			// 2014.09.23 否ヒット行を出力
+			// 否ヒット行を出力
 			if (grepOption.nGrepOutputLineType == 2) {
 				bool bNoHit = (nHitOldLine == nHitCount);
 				// ヒット数を戻す
@@ -1391,7 +1376,7 @@ int GrepAgent::DoGrepFile(
 					);
 				}
 			}
-			// 2014.09.23 データが多い時はバッファ出力
+			// データが多い時はバッファ出力
 			if (0 < memMessage.GetStringLength() && 2800 < nHitCount - nOutputHitCount) {
 				nOutputHitCount = nHitCount;
 				AddTail(editWnd, viewDst, memMessage, grepOption.bGrepStdout);

@@ -73,7 +73,6 @@ INT_PTR PropEdit::DispatchEvent(
 		EditCtl_LimitText(::GetDlgItem(hwndDlg, IDC_EDIT_FILEOPENDIR), _MAX_PATH - 1);
 		// ダイアログデータの設定 Edit
 		SetData(hwndDlg);
-		// Modified by KEITA for WIN64 2003.9.6
 		::SetWindowLongPtr(hwndDlg, DWLP_USER, lParam);
 
 		// ユーザーがエディット コントロールに入力できるテキストの長さを制限する

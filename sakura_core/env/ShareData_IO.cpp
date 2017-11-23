@@ -546,7 +546,6 @@ void ShareData_IO::ShareData_IO_Common(DataProfile& profile)
 	profile.IOProfileData(pszSecName, LTEXT("nWinSizeType")			, common.window.nWinSizeType);
 	profile.IOProfileData(pszSecName, LTEXT("nWinSizeCX")				, common.window.nWinSizeCX);
 	profile.IOProfileData(pszSecName, LTEXT("nWinSizeCY")				, common.window.nWinSizeCY);
-	// 2004.03.30 Moca *nWinPos*を追加
 	profile.IOProfileData_WrapInt(pszSecName, LTEXT("nSaveWindowPos")	, common.window.eSaveWindowPos);	//#####フラグ名がきもい
 	profile.IOProfileData(pszSecName, LTEXT("nWinPosX")				, common.window.nWinPosX);
 	profile.IOProfileData(pszSecName, LTEXT("nWinPosY")				, common.window.nWinPosY);
@@ -565,7 +564,6 @@ void ShareData_IO::ShareData_IO_Common(DataProfile& profile)
 	profile.IOProfileData(pszSecName, LTEXT("nRulerHeight")				, common.window.nRulerHeight);		// ルーラー高さ
 	profile.IOProfileData(pszSecName, LTEXT("nRulerBottomSpace")			, common.window.nRulerBottomSpace);	// ルーラーとテキストの隙間
 	profile.IOProfileData(pszSecName, LTEXT("nRulerType")					, common.window.nRulerType);			// ルーラーのタイプ
-	// Sep. 18, 2002 genta 追加
 	profile.IOProfileData(pszSecName, LTEXT("nLineNumberRightSpace")	, common.window.nLineNumRightSpace);	// 行番号の右側の隙間
 	profile.IOProfileData(pszSecName, LTEXT("nVertLineOffset")			, common.window.nVertLineOffset);
 	profile.IOProfileData(pszSecName, LTEXT("bUseCompotibleBMP")		, common.window.bUseCompatibleBMP);
@@ -1753,7 +1751,7 @@ void ShareData_IO::ShareData_IO_Plugin(DataProfile& profile, MenuDrawer* pMenuDr
 	for (int i=0; i<MAX_PLUGIN; ++i) {
 		PluginRec& pluginrec = common.plugin.pluginTable[i];
 
-		// 2010.08.04 Moca 書き込み直前に削除フラグで削除扱いにする
+		// 書き込み直前に削除フラグで削除扱いにする
 		if (pluginrec.state == PLS_DELETED) {
 			pluginrec.szName[0] = L'\0';
 			pluginrec.szId[0] = L'\0';

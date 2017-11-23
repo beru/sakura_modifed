@@ -201,7 +201,6 @@ re_do:;
 			si.bSelectingLock = bSelectingLock_Old;	// 選択状態のロック
 		}else if (!pSelectLogic) {
 			// 選択範囲の変更
-			// 2005.06.24 Moca
 			si.SetSelectArea(rangeA);
 
 			if (bRedraw) {

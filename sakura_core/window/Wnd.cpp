@@ -81,7 +81,6 @@ Wnd::~Wnd()
 {
 	if (::IsWindow(hWnd)) {
 		// クラスオブジェクトのポインタをNULLにして拡張ウィンドウメモリに格納しておく
-		// Modified by KEITA for WIN64 2003.9.6
 		::SetWindowLongPtr(hWnd, GWLP_USERDATA, (LONG_PTR)NULL);
 		::DestroyWindow(hWnd);
 	}

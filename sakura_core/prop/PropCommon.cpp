@@ -48,7 +48,6 @@ INT_PTR PropCommon::DlgProc(
 			return FALSE;
 		}
 	default:
-		// Modified by KEITA for WIN64 2003.9.6
 		pPropCommon = (PropCommon*)::GetWindowLongPtr(hwndDlg, DWLP_USER);
 		if (pPropCommon) {
 			return (pPropCommon->*DispatchPage)(hwndDlg, uMsg, wParam, lParam);
@@ -75,7 +74,6 @@ INT_PTR PropCommon::DlgProc2(
 			return FALSE;
 		}
 	default:
-		// Modified by KEITA for WIN64 2003.9.6
 		pPropCommon = (PropCommon*)::GetWindowLongPtr(hwndDlg, DWLP_USER);
 		if (pPropCommon) {
 			return (pPropCommon->*DispatchPage)(hwndDlg, uMsg, wParam, lParam);

@@ -3,10 +3,10 @@
 */
 #pragma once
 
-#include <Windows.h> // 2002/2/10 aroka
+#include <Windows.h>
 #include "basis/SakuraBasis.h"
 #include "util/design_template.h"
-#include "Print.h" // 2002/2/10 aroka
+#include "Print.h"
 
 class ColorStrategy;
 class ColorStrategyPool;

@@ -61,7 +61,6 @@ void DlgProperty::SetData(void)
 
 	HANDLE nFind;
 	WIN32_FIND_DATA	wfd;
-	// Aug. 16, 2000 genta	‘SŠp‰»
 	memProp.AppendString(LS(STR_DLGFLPROP_FILENAME));
 	memProp.AppendString(pEditDoc->docFile.GetFilePath());
 	memProp.AppendStringLiteral(_T("\r\n"));

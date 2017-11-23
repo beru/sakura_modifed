@@ -77,7 +77,7 @@ struct CommonSetting_Window {
 	bool			bDispMiniMap;				// ミニマップを表示する
 	bool			bMenuIcon;					// メニューにアイコンを表示する (アイコン付きメニュー)
 	bool			bScrollBarHorz;				// 水平スクロールバーを使う
-	bool			bUseCompatibleBMP;			// 再作画用互換ビットマップを使う 2007.09.09 Moca
+	bool			bUseCompatibleBMP;			// 再作画用互換ビットマップを使う
 
 	// 位置と大きさの設定
 	WinSizeMode		eSaveWindowSize;			// ウィンドウサイズ継承・固定 WinSizeModeに順ずる
@@ -528,7 +528,7 @@ struct FileTree {
 
 
 struct CommonSetting_OutLine {
-	// 20060201 aroka アウトライン/トピックリスト の位置とサイズを記憶
+	// アウトライン/トピックリスト の位置とサイズを記憶
 	bool		bRememberOutlineWindowPos;	// アウトライン/トピックリスト の位置とサイズを記憶する
 	int			widthOutlineWindow;			// アウトライン/トピックリスト のサイズ(幅)
 	int			heightOutlineWindow;		// アウトライン/トピックリスト のサイズ(高さ)

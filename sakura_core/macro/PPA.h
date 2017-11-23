@@ -43,11 +43,9 @@ public:
 	// PPAメッセージを取得する
 	const char* GetLastMessage(void) const { return szMsg; }
 
-	// Jun. 16, 2003 genta 引数追加
 	static char* GetDeclarations(const MacroFuncInfo&, char* buf);
 
 protected:
-	// Jul. 5, 2001 genta インターフェース変更に伴う引数追加
 public:
 	virtual LPCTSTR GetDllNameImp(int nIndex);
 protected:
@@ -138,12 +136,11 @@ private:
 
 #if PPADLL_VER >= 123
 	PPA_IsRunning fnIsRunning;
-	PPA_SetFinishProc fnSetFinishProc;	// 2003.06.01 Moca
+	PPA_SetFinishProc fnSetFinishProc;
 #endif
 
 public:
 	// exported
-	// 2007.07.22 genta : flags追加
 	bool Execute(class EditView& editView, int flags);
 	void SetSource(const char* ss)
 		{ fnSetSource(ss); }
@@ -236,14 +233,12 @@ private:
 	// メンバ変数
 	char szMsg[80];		// PPAからのメッセージを保持する
 
-	// 2007.07.26 genta : PPAのネストを許容するために，別データ構造とする．
-	
 	struct PpaExecInfo {
 		NativeA			memRet;		// コールバックからDLLに渡す文字列を保持
-		EditView*		pEditView;	// 2003.06.01 Moca
-		DllSharedData*	pShareData;	// 2003.06.01 Moca
-		bool			bError;		// エラーが2回表示されるのを防ぐ	2003.06.01 Moca
-		NativeA			memDebug;	// デバッグ用変数UserErrorMes 2003.06.01 Moca
+		EditView*		pEditView;
+		DllSharedData*	pShareData;
+		bool			bError;		// エラーが2回表示されるのを防ぐ
+		NativeA			memDebug;	// デバッグ用変数UserErrorMes
 		/** オプションフラグ
 		
 			EditView::HandleCommand()にコマンドと一緒に渡すことで
@@ -251,9 +246,7 @@ private:
 		*/
 		int commandflags;	// 
 	};
-	// 2007.07.26 genta : 現在実行中のインスタンス
 	static PpaExecInfo* curInstance;
-	// PPAの多重起動禁止 2008.10.22 syat
 	static bool bIsRunning;	// PPAが同時実行されるのを防ぐ
 
 /*	関数名はCMacroが持つ。

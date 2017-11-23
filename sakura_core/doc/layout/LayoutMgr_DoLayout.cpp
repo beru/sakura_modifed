@@ -438,7 +438,7 @@ int LayoutMgr::DoLayout_Range(
 
 	int nLineNumWork = 0;
 
-	// Moca 途中にまで再構築した場合にEOF位置がずれたまま
+	// 途中にまで再構築した場合にEOF位置がずれたまま
 	// 更新されないので，範囲にかかわらず必ずリセットする．
 	nEOFColumn = -1;
 	nEOFLine = -1;

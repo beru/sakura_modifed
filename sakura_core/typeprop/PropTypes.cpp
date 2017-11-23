@@ -29,7 +29,6 @@ INT_PTR CALLBACK PropTypesCommonProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPA
 			return FALSE;
 		}
 	default:
-		// Modified by KEITA for WIN64 2003.9.6
 		pPropTypes = (PropTypes*)::GetWindowLongPtr(hwndDlg, DWLP_USER);
 		if (pPropTypes) {
 			return (pPropTypes->*pDispatch)(hwndDlg, uMsg, wParam, lParam);

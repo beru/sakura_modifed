@@ -41,7 +41,6 @@ public:
 	virtual bool LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath);		// キーボードマクロをファイルから読み込む
 	virtual bool LoadKeyMacroStr(HINSTANCE hInstance, const TCHAR* pszCode);	// キーボードマクロを文字列から読み込む
 	
-	// Apr. 29, 2002 genta
 	static MacroManagerBase* Creator(class EditView& view, const TCHAR* ext);
 	static void Declare(void);
 

@@ -398,7 +398,7 @@ void DocOutline::MakeFuncList_RuleFile(
 void DocOutline::MakeFuncList_BookMark(FuncInfoArr* pFuncInfoArr)
 {
 	size_t nLineLen;
-	bool bMarkUpBlankLineEnable = GetDllShareData().common.outline.bMarkUpBlankLineEnable;	// 空行をマーク対象にするフラグ 20020119 aroka
+	bool bMarkUpBlankLineEnable = GetDllShareData().common.outline.bMarkUpBlankLineEnable;	// 空行をマーク対象にするフラグ
 	size_t nNewLineLen	= doc.docEditor.newLineCode.GetLen();
 	size_t nLineLast = doc.docLineMgr.GetLineCount();
 

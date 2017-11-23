@@ -33,9 +33,6 @@ public:
 	typedef MacroManagerBase* (*Creator)(class EditView& view, const TCHAR*);
 
 	bool RegisterCreator(Creator);
-	// Jan. 31, 2004 genta
-	// バイナリサイズ削減のためmMacroExtsを削除
-	//bool RegisterExt(const char*, Creator);
 	bool Unregister(Creator);
 
 	MacroManagerBase* Create(class EditView& view, const TCHAR* ext);

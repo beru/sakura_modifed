@@ -45,8 +45,8 @@ static const DWORD p_helpids[] = {	//10900
 	IDC_SPIN_MAX_MRU_FILE,			HIDC_EDIT_MAX_MRU_FILE,
 	IDC_SPIN_MAX_MRU_FOLDER,		HIDC_EDIT_MAX_MRU_FOLDER,
 	IDC_CHECK_MEMDC,				HIDC_CHECK_MEMDC,					// 画面キャッシュを使う
-	IDC_COMBO_WHEEL_PAGESCROLL,		HIDC_COMBO_WHEEL_PAGESCROLL,		// 組み合わせてホイール操作した時ページスクロールする		// 2009.01.17 nasukoji
-	IDC_COMBO_WHEEL_HSCROLL,		HIDC_COMBO_WHEEL_HSCROLL,			// 組み合わせてホイール操作した時横スクロールする			// 2009.01.17 nasukoji
+	IDC_COMBO_WHEEL_PAGESCROLL,		HIDC_COMBO_WHEEL_PAGESCROLL,		// 組み合わせてホイール操作した時ページスクロールする
+	IDC_COMBO_WHEEL_HSCROLL,		HIDC_COMBO_WHEEL_HSCROLL,			// 組み合わせてホイール操作した時横スクロールする
 //	IDC_STATIC,						-1,
 	0, 0
 };
@@ -90,7 +90,6 @@ INT_PTR PropGeneral::DispatchEvent(
 	case WM_INITDIALOG:
 		// ダイアログデータの設定 General
 		SetData(hwndDlg);
-		// Modified by KEITA for WIN64 2003.9.6
 		::SetWindowLongPtr(hwndDlg, DWLP_USER, lParam);
 		// ユーザーがエディット コントロールに入力できるテキストの長さを制限する
 		return TRUE;
@@ -104,15 +103,11 @@ INT_PTR PropGeneral::DispatchEvent(
 		case BN_CLICKED:
 			switch (wID) {
 			case IDC_CHECK_USETRAYICON:	// タスクトレイを使う
-			// From Here 2001.12.03 hor
-			//		操作しにくいって評判だったのでタスクトレイ関係のEnable制御をやめました
-			//@@@ YAZAKI 2001.12.31 IDC_CHECKSTAYTASKTRAYのアクティブ、非アクティブのみ制御。
 				if (DlgButton_IsChecked(hwndDlg, IDC_CHECK_USETRAYICON)) {
 					::EnableWindow(::GetDlgItem(hwndDlg, IDC_CHECK_STAYTASKTRAY), TRUE);
 				}else {
 					::EnableWindow(::GetDlgItem(hwndDlg, IDC_CHECK_STAYTASKTRAY), FALSE);
 				}
-			// To Here 2001.12.03 hor
 				return TRUE;
 
 			case IDC_CHECK_STAYTASKTRAY:	// タスクトレイに常駐
@@ -125,8 +120,6 @@ INT_PTR PropGeneral::DispatchEvent(
 				) {
 					return TRUE;
 				}
-//@@@ 2001.12.26 YAZAKI MRUリストは、CMRUに依頼する
-//				pShareData->sHistory.m_nMRUArrNum = 0;
 				{
 					MruFile mru;
 					mru.ClearAll();
@@ -140,8 +133,6 @@ INT_PTR PropGeneral::DispatchEvent(
 				) {
 					return TRUE;
 				}
-//@@@ 2001.12.26 YAZAKI OPENFOLDERリストは、MruFolderにすべて依頼する
-//				pShareData->sHistory.m_nOPENFOLDERArrNum = 0;
 				{
 					MruFolder mruFolder;	//	MRUリストの初期化。ラベル内だと問題あり？
 					mruFolder.ClearAll();
@@ -150,7 +141,7 @@ INT_PTR PropGeneral::DispatchEvent(
 				return TRUE;
 			}
 			break;	// BN_CLICKED
-		// 2009.01.12 nasukoji	コンボボックスのリストの項目が選択された
+		// コンボボックスのリストの項目が選択された
 		case CBN_SELENDOK:
 			HWND	hwndCombo;
 			int		nSelPos;

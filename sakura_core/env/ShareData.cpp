@@ -449,7 +449,6 @@ bool ShareData::InitShareData()
 
 		// [ツールバー]タブ
 		{
-			// Jan. 30, 2005 genta 関数として独立
 			InitToolButtons(*pShareData);
 		}
 
@@ -525,7 +524,6 @@ bool ShareData::InitShareData()
 
 			macro.szKeyMacroFileName[0] = _T('\0');	// キーワードマクロのファイル名
 
-			// From Here Sep. 14, 2001 genta
 			// Macro登録の初期化
 			MacroRec *mptr = macro.macroTable;
 			for (int i=0; i<MAX_CUSTMACRO; ++i, ++mptr) {
@@ -533,7 +531,6 @@ bool ShareData::InitShareData()
 				mptr->szFile[0] = L'\0';
 				mptr->bReloadWhenExecute = false;
 			}
-			// To Here Sep. 14, 2001 genta
 
 			_tcscpy( macro.szMACROFOLDER, szIniFolder );	// マクロ用フォルダ
 
@@ -627,9 +624,6 @@ bool ShareData::InitShareData()
 				YAZAKI.
 			*/
 			{
-				/*
-					2006.08.16 Moca 初期化単位を PrintSettingに変更。ShareDataには依存しない。
-				*/
 				TCHAR szSettingName[64];
 				int i = 0;
 				auto_sprintf( szSettingName, _T("印刷設定 %d"), i + 1 );

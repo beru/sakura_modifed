@@ -161,7 +161,6 @@ int KeyBind::CreateKeyBindList(
 					memList.AppendString(pszALT);
 				}
 				memList.AppendString(to_wchar(pKeyNameArr[i].szKeyName));
-				// Oct. 31, 2001 genta 
 				if (!pFuncLookup->Funccode2Name(
 					iFunc,
 					szFuncNameJapanese, 255

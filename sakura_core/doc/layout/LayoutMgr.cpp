@@ -59,7 +59,6 @@ void LayoutMgr::Create(
 {
 	_Empty();
 	Init();
-	// Jun. 20, 2003 genta EditDocへのポインタ追加
 	this->pEditDoc = pEditDoc;
 	this->pDocLineMgr = pDocLineMgr;
 }
@@ -815,7 +814,7 @@ Point LayoutMgr::LogicToLayout(
 			}
 		}
 		if (ptLogic.y < pLayout->GetLogicLineNo()) {
-			// ふつうはここには来ないと思うが... (genta)
+			// ふつうはここには来ないと思うが...
 			// Layoutの指す物理行が探している行より先を指していたら打ち切り
 			break;
 		}
@@ -870,7 +869,7 @@ PointEx LayoutMgr::LayoutToLogicEx(
 					ptLogic.Set(0, (int)pDocLineMgr->GetLineCount());
 					return ptLogic;
 				}else {
-					ptLogic.y = pDocLineMgr->GetLineCount() - 1; // 2002/2/10 aroka DocLineMgr変更
+					ptLogic.y = pDocLineMgr->GetLineCount() - 1;
 					bEOF = true;
 					// nX = MAXLINEKETAS;
 					nX = pLayout->GetIndent();

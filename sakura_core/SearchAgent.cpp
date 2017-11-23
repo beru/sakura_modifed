@@ -707,7 +707,7 @@ bool SearchAgent::SearchWord(
 					);
 					if (pszRes) {
 						nHitPos = pszRes - pLine;
-						nIdxPos = nHitPos + nPatternLen;	// マッチ文字列長進めるように変更 2005.10.28 Karoto
+						nIdxPos = nHitPos + nPatternLen;	// マッチ文字列長進めるように変更
 						if (nHitPos >= nHitTo) {
 							if (nHitPosOld != -1) {
 								pMatchRange->SetFromY(nLinePos);	// マッチ行

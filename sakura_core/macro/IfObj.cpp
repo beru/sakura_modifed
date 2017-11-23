@@ -96,9 +96,8 @@ public:
 	    /* [out] */ DWORD __RPC_FAR *pdwHelpContext,
 	    /* [out] */ BSTR __RPC_FAR *pBstrHelpFile)
 	{
-		// Feb. 08, 2004 genta
 		// とりあえず全部NULLを返す (情報無し)
-		//	2014.02.12 各パラメータを設定するように
+		// 各パラメータを設定するように
 		if (memid == -1) {
 			if (pBstrName) {
 				*pBstrName = SysAllocString( name.c_str() );

@@ -157,7 +157,7 @@ bool NormalProcess::InitializeProcess()
 			::GetClientRect(hEditWnd, &rc);
 			::SendMessage(hEditWnd, WM_SIZE, ::IsZoomed(hEditWnd) ? SIZE_MAXIMIZED: SIZE_RESTORED, MAKELONG(rc.right - rc.left, rc.bottom - rc.top));
 		}
-		GrepInfo gi = cmdLine.GetGrepInfo(); // 2002/2/8 aroka ‚±‚±‚ÉˆÚ“®
+		GrepInfo gi = cmdLine.GetGrepInfo();
 		if (!bGrepDlg) {
 			SetMainWindow(pEditWnd->GetHwnd());
 			::ReleaseMutex(hMutex);
@@ -174,7 +174,7 @@ bool NormalProcess::InitializeProcess()
 				gi.bGrepStdout,
 				gi.bGrepHeader,
 				gi.grepSearchOption,
-				gi.charEncoding,	// 2002/09/21 Moca
+				gi.charEncoding,
 				gi.nGrepOutputLineType,
 				gi.nGrepOutputStyle,
 				gi.bGrepOutputFileOnly,

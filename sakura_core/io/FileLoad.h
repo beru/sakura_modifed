@@ -91,10 +91,8 @@ protected:
 	Memory			memEols[3];
 	bool	bEolEx;		// CR/LF以外のEOLが有効か
 	size_t	nMaxEolLen;	// EOLの長さ
-	bool	bBomExist;	// ファイルのBOMが付いているか Jun. 08, 2003 Moca 
+	bool	bBomExist;	// ファイルのBOMが付いているか
 	int		nFlag;		// 文字コードの変換オプション
-	// Jun. 13, 2003 Moca
-	// 状態をenumとしてわかりやすく．
 	enum class FileLoadMode {
 		Close,		// 初期状態
 		Open,		// ファイルオープンのみ

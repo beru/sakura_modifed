@@ -118,11 +118,6 @@ BOOL DlgPrintSetting::OnInitDialog(
 	Combo_SetExtendedUI(GetItemHwnd(IDC_COMBO_FONT_ZEN), TRUE);
 	Combo_SetExtendedUI(GetItemHwnd(IDC_COMBO_PAPER), TRUE);
 
-	// タイマーでの更新をやめて、能動的に更新要求する 2013.5.5 aroka
-	// Dialog::OnInitDialogの奥でOnChangeSettingTypeが呼ばれるのでここでは更新要求しない
-	//	::SetTimer(GetHwnd(), IDT_PrintSetting, 500, NULL);
-	// UpdatePrintableLineAndColumn();
-
 	// ダイアログのフォントの取得
 	hFontDlg = (HFONT)::SendMessage(GetHwnd(), WM_GETFONT, 0, 0);	// ダイアログのフォント
 	LOGFONT	lf;

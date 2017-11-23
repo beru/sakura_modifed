@@ -693,9 +693,9 @@ void DlgFuncList::SetData()
 	// アウトライン ジャンプしたらフォーカスを移す
 	CheckButton(IDC_CHECK_bFunclistSetFocusOnJump, pShareData->common.outline.bFunclistSetFocusOnJump);
 
-	// アウトライン ■位置とサイズを記憶する // 20060201 aroka
+	// アウトライン ■位置とサイズを記憶する
 	CheckButton(IDC_BUTTON_WINSIZE, pShareData->common.outline.bRememberOutlineWindowPos);
-	// ボタンが押されているかはっきりさせる 2008/6/5 Uchi
+	// ボタンが押されているかはっきりさせる
 	SetItemText(IDC_BUTTON_WINSIZE, 
 		pShareData->common.outline.bRememberOutlineWindowPos ? _T("■") : _T("□"));
 
@@ -1796,7 +1796,7 @@ BOOL DlgFuncList::OnInitDialog(
 	col.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
 	col.fmt = LVCFMT_LEFT;
 	col.cx = nColWidthArr[FL_COL_NAME];
-	//	Apr. 23, 2005 genta 行番号を左端へ
+	// 行番号を左端へ
 	col.pszText = const_cast<TCHAR*>(LS(STR_DLGFNCLST_LIST_FUNC));
 	col.iSubItem = FL_COL_NAME;
 	ListView_InsertColumn(hwndList, FL_COL_NAME, &col);
@@ -1808,7 +1808,7 @@ BOOL DlgFuncList::OnInitDialog(
 	col.iSubItem = FL_COL_REMARK;
 	ListView_InsertColumn(hwndList, FL_COL_REMARK, &col);
 
-	// アウトライン位置とサイズを初期化する // 20060201 aroka
+	// アウトライン位置とサイズを初期化する
 	EditView* pEditView = (EditView*)(this->lParam);
 	if (pEditView) {
 		if (!IsDocking() && pShareData->common.outline.bRememberOutlineWindowPos) {
@@ -1992,18 +1992,17 @@ BOOL DlgFuncList::OnBnClicked(int wID)
 		return TRUE;
 	case IDC_BUTTON_COPY:
 		// Windowsクリップボードにコピー 
-		// 2004.02.17 Moca 関数化
 		SetClipboardText(GetHwnd(), memClipText.GetStringPtr(), memClipText.GetStringLength());
 		return TRUE;
 	case IDC_BUTTON_WINSIZE:
-		{// ウィンドウの位置とサイズを記憶 // 20060201 aroka
+		{// ウィンドウの位置とサイズを記憶
 			pShareData->common.outline.bRememberOutlineWindowPos = IsButtonChecked(IDC_BUTTON_WINSIZE);
 		}
-		// ボタンが押されているかはっきりさせる 2008/6/5 Uchi
+		// ボタンが押されているかはっきりさせる
 		SetItemText(IDC_BUTTON_WINSIZE,
 			pShareData->common.outline.bRememberOutlineWindowPos ? _T("■") : _T("□"));
 		return TRUE;
-	// 2002.02.08 オプション切替後List/Treeにフォーカス移動
+	// オプション切替後List/Treeにフォーカス移動
 	case IDC_CHECK_bAutoCloseDlgFuncList:
 	case IDC_CHECK_bMarkUpBlankLineEnable:
 	case IDC_CHECK_bFunclistSetFocusOnJump:
@@ -2275,13 +2274,12 @@ BOOL DlgFuncList::OnSize(WPARAM wParam, LPARAM lParam)
 	for (size_t i=0; i<_countof(anchorList); ++i) {
 		HWND hwndCtrl = GetItemHwnd(anchorList[i].id);
 		ResizeItem(hwndCtrl, ptDefaultSizeClient, ptNew, rcItems[i], anchorList[i].anchor, (anchorList[i].anchor != AnchorStyle::All));
-//	2013.2.6 aroka ちらつき防止用の試行錯誤
+		// ちらつき防止用の試行錯誤
 		if (anchorList[i].anchor == AnchorStyle::All) {
 			::UpdateWindow(hwndCtrl);
 		}
 	}
 
-//	if (IsDocking())
 	{
 		// ダイアログ部分を再描画（ツリー／リストの範囲はちらつかないように除外）
 		::InvalidateRect(GetHwnd(), NULL, FALSE);
@@ -2324,7 +2322,7 @@ BOOL DlgFuncList::OnDestroy(void)
 {
 	Dialog::OnDestroy();
 
-	// アウトライン ■位置とサイズを記憶する	// 20060201 aroka
+	// アウトライン ■位置とサイズを記憶する
 	// 前提条件：lParam が Dialog::OnDestroy でクリアされないこと
 	EditView* pEditView = (EditView*)lParam;
 	HWND hwndEdit = pEditView->editWnd.GetHwnd();
@@ -2535,11 +2533,11 @@ void DlgFuncList::Key2Command(WORD KeyCode)
 		nFuncCode=GetFuncCodeRedraw(nOutlineType);
 		// FALLTHROUGH
 	case F_OUTLINE:
-	case F_OUTLINE_TOGGLE: // 20060201 aroka フォーカスがあるときはリロード
+	case F_OUTLINE_TOGGLE: // フォーカスがあるときはリロード
 	case F_BOOKMARK_VIEW:
 	case F_FILETREE:
 		pEditView=(EditView*)lParam;
-		pEditView->GetCommander().HandleCommand(nFuncCode, true, (LPARAM)ShowDialogType::Reload, 0, 0, 0); // 引数の変更 20060201 aroka
+		pEditView->GetCommander().HandleCommand(nFuncCode, true, (LPARAM)ShowDialogType::Reload, 0, 0, 0);
 
 		break;
 	case F_BOOKMARK_SET:

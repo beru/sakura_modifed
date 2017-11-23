@@ -847,11 +847,6 @@ void PrintPreview::OnPreviewGoPage(int nPage)
 	}
 	nCurPageNum = (short)nPage;
 
-	//	2008.01.29 nasukoji	印刷枚数が2枚の時操作できなくなることへの対処（SetFocusを移動）
-	//	2008.02.01 genta : ボタンのフォーカスが元の動作になるようにするため，
-	//		前ボタンのDisableを後ろへ移動した．
-	//		操作できない現象は「次へ」がDisableにも関わらずフォーカスを与えていたため．
-	//		次・前どちらも，ボタン有効化→フォーカス移動→ボタン無効化の順にした
 	if (0 < nCurPageNum) {
 		//	前のページボタンをオン
 		::EnableWindow(::GetDlgItem(hwndPrintPreviewBar, IDC_BUTTON_PREVPAGE), TRUE);
@@ -859,9 +854,6 @@ void PrintPreview::OnPreviewGoPage(int nPage)
 
 	if (nAllPageNum <= nCurPageNum + 1) {
 		//	最後のページのときは、次のページボタンをオフ。
-		//	Jul. 18, 2001 genta FocusのあるWindowをDisableにすると操作できなくなるのを回避
-		//	Mar. 9, 2003 genta 1ページしか無いときは「前へ」ボタンもDisableされているので、
-		//	最後のページまで達したら「戻る」にフォーカスを移すように
 		::SetFocus(::GetDlgItem(hwndPrintPreviewBar, IDCANCEL));
 		::EnableWindow(::GetDlgItem(hwndPrintPreviewBar, IDC_BUTTON_NEXTPAGE), FALSE);
 	}else {
@@ -871,7 +863,6 @@ void PrintPreview::OnPreviewGoPage(int nPage)
 
 	if (nCurPageNum == 0) {
 		//	最初のページのときは、前のページボタンをオフ。
-		//	Jul. 18, 2001 genta FocusのあるWindowをDisableにすると操作できなくなるのを回避
 		::SetFocus(::GetDlgItem(hwndPrintPreviewBar, IDC_BUTTON_NEXTPAGE));
 		::EnableWindow(::GetDlgItem(hwndPrintPreviewBar, IDC_BUTTON_PREVPAGE), FALSE);
 	}
@@ -1988,7 +1979,6 @@ INT_PTR CALLBACK PrintPreview::PrintPreviewBar_DlgProc(
 	PrintPreview* pPrintPreview;
 	switch (uMsg) {
 	case WM_INITDIALOG:
-		// Modified by KEITA for WIN64 2003.9.6
 		::SetWindowLongPtr(hwndDlg, DWLP_USER, lParam);
 		// 2007.02.11 Moca WM_INITもDispatchEvent_PPBを呼ぶように
 		pPrintPreview = (PrintPreview*)lParam;
@@ -1997,7 +1987,6 @@ INT_PTR CALLBACK PrintPreview::PrintPreviewBar_DlgProc(
 		}
 		return TRUE;
 	default:
-		// Modified by KEITA for WIN64 2003.9.6
 		pPrintPreview = (PrintPreview*)::GetWindowLongPtr(hwndDlg, DWLP_USER);
 		if (pPrintPreview) {
 			return pPrintPreview->DispatchEvent_PPB(hwndDlg, uMsg, wParam, lParam);
@@ -2029,9 +2018,6 @@ INT_PTR PrintPreview::DispatchEvent_PPB(
 
 	switch (uMsg) {
 	case WM_INITDIALOG:
-		// 2007.02.11 Moca DWLP_USER設定は不要
-		//// Modified by KEITA for WIN64 2003.9.6
-		//::SetWindowLongPtr(hwndDlg, DWLP_USER, lParam);
 		{
 			if (IsWin2000_or_later()) {
 				::EnableWindow( ::GetDlgItem(hwndDlg, IDC_CHECK_ANTIALIAS), TRUE );

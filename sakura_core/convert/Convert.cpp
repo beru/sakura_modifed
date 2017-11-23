@@ -96,7 +96,7 @@ void ConvertMediator::ConvMemory(
 	case F_LTRIM:					Converter_Trim(true, bExtEol).CallConvert(pMemory);		break;	// 2001.12.03 hor
 	case F_RTRIM:					Converter_Trim(false, bExtEol).CallConvert(pMemory);	break;	// 2001.12.03 hor
 	// コード変換(xxx2SJIS)
-	// 2014.02.10 Moca F_CODECNV_AUTO2SJIS追加。自動判別でSJIS, Latin1, CESU8になった場合をサポート
+	// 自動判別でSJIS, Latin1, CESU8になった場合をサポート
 	case F_CODECNV_AUTO2SJIS:
 		{
 			int nFlag = true;

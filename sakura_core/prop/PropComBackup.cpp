@@ -52,7 +52,6 @@ INT_PTR CALLBACK PropBackup::DlgProc_page(
 {
 	return DlgProc(reinterpret_cast<pDispatchPage>(&PropBackup::DispatchEvent), hwndDlg, uMsg, wParam, lParam);
 }
-//	To Here Jun. 2, 2001 genta
 
 
 // メッセージ処理
@@ -68,10 +67,7 @@ INT_PTR PropBackup::DispatchEvent(
 	NMHDR*		pNMHDR;
 	NM_UPDOWN*	pMNUD;
 	int			idCtrl;
-//	int			nVal;
-	int			nVal;	// Sept.21, 2000 JEPRO スピン要素を加えたので復活させた
-//	int			nDummy;
-//	int			nCharChars;
+	int			nVal;
 
 	auto& csBackup = common.backup;
 
@@ -79,14 +75,10 @@ INT_PTR PropBackup::DispatchEvent(
 	case WM_INITDIALOG:
 		// ダイアログデータの設定 Backup
 		SetData(hwndDlg);
-		// Modified by KEITA for WIN64 2003.9.6
 		::SetWindowLongPtr(hwndDlg, DWLP_USER, lParam);
 
 		// ユーザーがエディット コントロールに入力できるテキストの長さを制限する
-		//	Oct. 5, 2002 genta バックアップフォルダ名の入力サイズを指定
-		//	Oct. 8, 2002 genta 最後に付加される\の領域を残すためバッファサイズ-1しか入力させない
 		EditCtl_LimitText(::GetDlgItem(hwndDlg, IDC_EDIT_BACKUPFOLDER), _countof2(csBackup.szBackUpFolder) - 1 - 1);
-		// 20051107 aroka
 		EditCtl_LimitText(::GetDlgItem(hwndDlg, IDC_EDIT_BACKUPFILE), _countof2(csBackup.szBackUpPathAdvanced) - 1 - 1);
 		return TRUE;
 
@@ -104,7 +96,6 @@ INT_PTR PropBackup::DispatchEvent(
 				// ダイアログデータの取得 Backup
 				GetData(hwndDlg);
 				return TRUE;
-//@@@ 2002.01.03 YAZAKI 最後に表示していたシートを正しく覚えていないバグ修正
 			case PSN_SETACTIVE:
 				nPageNum = ID_PROPCOM_PAGENUM_BACKUP;
 				return TRUE;
@@ -129,7 +120,6 @@ INT_PTR PropBackup::DispatchEvent(
 			::SetDlgItemInt(hwndDlg, IDC_EDIT_BACKUP_3, nVal, FALSE);
 			return TRUE;
 		}
-//****	To Here Sept. 21, 2000 JEPRO ダイアログ要素にスピンを入れるので以下のWM_NOTIFYをコメントアウトにし下に修正を置いた
 		break;
 
 	case WM_COMMAND:
@@ -140,18 +130,12 @@ INT_PTR PropBackup::DispatchEvent(
 		case BN_CLICKED:
 			switch (wID) {
 			case IDC_RADIO_BACKUP_TYPE1:
-				//	Aug. 16, 2000 genta
-				//	バックアップ方式追加
 			case IDC_RADIO_BACKUP_TYPE3:
 			case IDC_CHECK_BACKUP:
 			case IDC_CHECK_BACKUPFOLDER:
-				//	Aug. 21, 2000 genta
 			case IDC_CHECK_AUTOSAVE:
-			//	Jun.  5, 2004 genta IDC_RADIO_BACKUP_TYPE2を廃止して，
-			//	IDC_RADIO_BACKUP_DATETYPE1, IDC_RADIO_BACKUP_DATETYPE2を同列に持ってきた
 			case IDC_RADIO_BACKUP_DATETYPE1:
 			case IDC_RADIO_BACKUP_DATETYPE2:
-			// 20051107 aroka
 			case IDC_CHECK_BACKUP_ADVANCED:
 				GetData(hwndDlg);
 				UpdateBackupFile(hwndDlg);

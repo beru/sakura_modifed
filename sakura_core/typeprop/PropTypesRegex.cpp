@@ -86,7 +86,6 @@ INT_PTR PropTypesRegex::DispatchEvent(
 
 	switch (uMsg) {
 	case WM_INITDIALOG:
-		// Modified by KEITA for WIN64 2003.9.6
 		::SetWindowLongPtr(hwndDlg, DWLP_USER, lParam);
 
 		// ƒJƒ‰ƒ€’Ç‰Á

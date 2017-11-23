@@ -238,7 +238,7 @@ void LoadAgent::OnAfterLoad(const LoadInfo& loadInfo)
 	pDoc->blfCurTemp = false;
 	pDoc->bTabSpaceCurTemp = false;
 
-	// 2009.08.28 nasukoji	「折り返さない」ならテキスト最大幅を算出、それ以外は変数をクリア
+	// 「折り返さない」ならテキスト最大幅を算出、それ以外は変数をクリア
 	if (pDoc->nTextWrapMethodCur == TextWrappingMethod::NoWrapping) {
 		pDoc->layoutMgr.CalculateTextWidth();		// テキスト最大幅を算出する
 	}else {

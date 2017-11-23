@@ -462,13 +462,10 @@ BOOL DlgFavorite::OnBnClicked(int wID)
 		return TRUE;
 
 	case IDCANCEL:
-		// 2010.03.20 キャンセルを廃止。OKと同じにする。
 		// [X]ボタンを押すと通過する
 		::EndDialog(GetHwnd(), (BOOL)GetData());
 		return TRUE;
 
-	// 2010.03.20 Moca 「お気に入り以外かすべて削除」選択メッセージボックスを廃止し
-	//     それぞれのボタンに変更
 	// すべて削除
 	case IDC_BUTTON_CLEAR:
 		{

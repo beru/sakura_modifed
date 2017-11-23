@@ -85,7 +85,6 @@ LRESULT CALLBACK DefTabWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPara
 // TabWndウィンドウメッセージのコールバック関数
 LRESULT CALLBACK TabWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-	// Modified by KEITA for WIN64 2003.9.6
 	TabWnd* pTabWnd = (TabWnd*)::GetWindowLongPtr(hwnd, GWLP_USERDATA);
 
 	if (pTabWnd) {
@@ -834,7 +833,6 @@ HWND TabWnd::Open(HINSTANCE hInstance, HWND hwndParent)
 		(LPVOID)NULL
 		);
 	if (hwndTab) {
-		// Modified by KEITA for WIN64 2003.9.6
 		::SetWindowLongPtr(hwndTab, GWLP_USERDATA, (LONG_PTR) this);
 		g_pOldWndProc = (WNDPROC)::SetWindowLongPtr(hwndTab, GWLP_WNDPROC, (LONG_PTR) TabWndProc);
 
@@ -933,12 +931,10 @@ void TabWnd::Close(void)
 {
 	if (GetHwnd()) {
 		if (g_pOldWndProc) {
-			// Modified by KEITA for WIN64 2003.9.6
 			::SetWindowLongPtr(hwndTab, GWLP_WNDPROC, (LONG_PTR)g_pOldWndProc);
 			g_pOldWndProc = NULL;
 		}
 		
-		// Modified by KEITA for WIN64 2003.9.6
 		::SetWindowLongPtr(hwndTab, GWLP_USERDATA, (LONG_PTR)NULL);
 
 		if (hwndToolTip) {

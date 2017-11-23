@@ -139,7 +139,6 @@ INT_PTR PropTypesScreen::DispatchEvent(
 		hwndThis = hwndDlg;
 		// ダイアログデータの設定 Screen
 		SetData(hwndDlg);
-		// Modified by KEITA for WIN64 2003.9.6
 		::SetWindowLongPtr(hwndDlg, DWLP_USER, lParam);
 
 		// エディットコントロールの入力文字数制限

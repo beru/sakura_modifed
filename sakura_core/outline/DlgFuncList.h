@@ -8,7 +8,7 @@
 #include "doc/EditDoc.h"
 
 class FuncInfo;
-class FuncInfoArr; // 2002/2/10 aroka
+class FuncInfoArr;
 class DataProfile;
 
 #define OUTLINE_LAYOUT_FOREGROUND (0)
@@ -98,8 +98,8 @@ protected:
 	BOOL OnNotify(WPARAM, LPARAM);
 	BOOL OnSize(WPARAM wParam, LPARAM lParam);
 	BOOL OnMinMaxInfo(LPARAM lParam);
-	BOOL OnDestroy(void); // 20060201 aroka
-	BOOL OnCbnSelChange(HWND hwndCtl, int wID); // 2002/11/1 frozen
+	BOOL OnDestroy(void);
+	BOOL OnCbnSelChange(HWND hwndCtl, int wID);
 	BOOL OnContextMenu(WPARAM, LPARAM);
 	void SetData();	// ダイアログデータの設定
 	int GetData(void);	// ダイアログデータの取得

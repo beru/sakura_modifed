@@ -26,7 +26,7 @@ bool Converter_Trim::DoConvert(NativeW* pData)
 	nBgn = 0;
 	nPosDes = 0;
 	// 変換後に必要なバイト数を調べる
-	while ((pLine = GetNextLineW(pData->GetStringPtr(), pData->GetStringLength(), &nLineLen, &nBgn, &eol, bExtEol))) { // 2002/2/10 aroka CMemory変更
+	while ((pLine = GetNextLineW(pData->GetStringPtr(), pData->GetStringLength(), &nLineLen, &nBgn, &eol, bExtEol))) {
 		if (0 < nLineLen) {
 			nPosDes += nLineLen;
 		}
