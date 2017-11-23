@@ -52,8 +52,6 @@ LRESULT CALLBACK EditViewWndProc(
 	default:
 		pEdit = (EditView*) ::GetWindowLongPtr(hwnd, 0);
 		if (pEdit) {
-			//	May 16, 2000 genta
-			//	From Here
 			if (uMsg == WM_COMMAND) {
 				::SendMessage(::GetParent(pEdit->hwndParent), WM_COMMAND, wParam,  lParam);
 			}else {
@@ -104,7 +102,7 @@ EditView::EditView(EditWnd& editWnd)
 	hwndVScrollBar(NULL),
 	hwndHScrollBar(NULL),
 	pDropTarget(nullptr),
-	bActivateByMouse(false),	// 2007.10.02 nasukoji
+	bActivateByMouse(false),
 	nWheelDelta(0),
 	eWheelScroll(F_0),
 	nMousePouse(0),
@@ -117,7 +115,6 @@ EditView::EditView(EditWnd& editWnd)
 }
 
 
-// 2007.10.23 kobake コンストラクタ内の処理をすべてCreateに移しました。(初期化処理が不必要に分散していたため)
 BOOL EditView::Create(
 	HWND		hwndParent,	// 親
 	EditDoc&	editDoc,	// 参照するドキュメント
@@ -137,13 +134,12 @@ BOOL EditView::Create(
 	}
 
 	pHistory = new AutoMarkMgr;
-	pRegexKeyword = nullptr;				// 2007.04.08 ryoji
+	pRegexKeyword = nullptr;
 
 	SetDrawSwitch(true);
 	pDropTarget = new DropTarget(this);
 	_SetDragMode(FALSE);					// 選択テキストのドラッグ中か
 	bCurSrchKeyMark = false;				// 検索文字列
-	//	Jun. 27, 2001 genta
 	strCurSearchKey.clear();
 	curSearchOption.Reset();				// 検索／置換 オプション
 	bCurSearchUpdate = false;
@@ -151,7 +147,6 @@ BOOL EditView::Create(
 
 	nMyIndex = 0;
 
-	//	Dec. 4, 2002 genta
 	//	メニューバーへのメッセージ表示機能はEditWndへ移管
 
 	// 共有データ構造体のアドレスを返す
@@ -165,15 +160,15 @@ BOOL EditView::Create(
 	hwndSizeBox = NULL;
 
 	ptSrchStartPos_PHY.Set(-1, -1);	// 検索/置換開始時のカーソル位置  (改行単位行先頭からのバイト数(0開始), 改行単位行の行番号(0開始))
-	bSearch = false;					// 検索/置換開始位置を登録するか											// 02/06/26 ai
+	bSearch = false;					// 検索/置換開始位置を登録するか
 	
 	ptBracketPairPos_PHY.Set(-1, -1); // 対括弧の位置 (改行単位行先頭からのバイト数(0開始), 改行単位行の行番号(0開始))
 	ptBracketCaretPos_PHY.Set(-1, -1);
 
-	bDrawBracketPairFlag = false;	// 03/02/18 ai
-	GetSelectionInfo().bDrawSelectArea = false;	// 選択範囲を描画したか		// 02/12/13 ai
+	bDrawBracketPairFlag = false;
+	GetSelectionInfo().bDrawSelectArea = false;	// 選択範囲を描画したか
 
-	crBack = -1;				// テキストの背景色			// 2006.12.16 ryoji
+	crBack = -1;				// テキストの背景色
 	crBack2 = -1;
 	
 	szComposition[0] = _T('\0');
@@ -181,35 +176,28 @@ BOOL EditView::Create(
 	auto& textArea = GetTextArea();
 	// ルーラー表示
 	textArea.SetAreaTop(textArea.GetAreaTop() + GetDllShareData().common.window.nRulerHeight);	// ルーラー高さ
-	GetRuler().SetRedrawFlag();	// ルーラー全体を描き直す時=true   2002.02.25 Add By KK
+	GetRuler().SetRedrawFlag();	// ルーラー全体を描き直す時=true
 	hdcCompatDC = NULL;			// 再描画用コンパチブルＤＣ
 	hbmpCompatBMP = NULL;		// 再描画用メモリＢＭＰ
 	hbmpCompatBMPOld = NULL;	// 再描画用メモリＢＭＰ(OLD)
-	// From Here 2007.09.09 Moca 互換BMPによる画面バッファ
 	nCompatBMPWidth = -1;
 	nCompatBMPHeight = -1;
-	// To Here 2007.09.09 Moca
 	
 	nOldUnderLineY = -1;
 	nOldCursorLineX = -1;
 	nOldCursorVLineWidth = 1;
 	nOldUnderLineYHeightReal = 0;
 
-	//	Jun. 27, 2001 genta	正規表現ライブラリの差し替え
-	//	2007.08.12 genta 初期化にShareDataの値が必要になった
 	curRegexp.InitDll(GetDllShareData().common.search.szRegexpLib);
 
-	// 2004.02.08 hFont_ZENは未使用により削除
 	dwTipTimer = ::GetTickCount();	// 辞書Tip起動タイマー
 	bInMenuLoop = false;				// メニュー モーダル ループに入っています
 //	MYTRACE(_T("EditView::EditView()おわり\n"));
 	bHokan = false;
 
-	//	Aug. 31, 2000 genta
 	pHistory->SetMax(30);
 
-	// from here  2002.04.09 minfu OSによって再変換の方式を変える
-	//	YAZAKI COsVersionInfoのカプセル化は守りましょ。
+	// OSによって再変換の方式を変える
 	if (!OsSupportReconvert()) {
 		// 95 or NTならば
 		uMSIMEReconvertMsg = ::RegisterWindowMessage(RWM_RECONVERT);
@@ -225,18 +213,14 @@ BOOL EditView::Create(
 		// それ以外のOSのときはOS標準を使用する
 		uMSIMEReconvertMsg = 0;
 		uATOKReconvertMsg = 0 ;
-		hAtokModule = 0;	//@@@ 2002.04.14 MIK
+		hAtokModule = 0;
 	}
-	// to here  2002.04.10 minfu
 	
-	// 2004.10.23 isearch
 	nISearchMode = 0;
 	pMigemo = nullptr;
 
-	// 2007.10.02 nasukoji
 	dwTripleClickCheck = 0;		// トリプルクリックチェック用時刻初期化
 
-	// 2010.07.15 Moca
 	mouseDownPos.Set(-INT_MAX, -INT_MAX);
 
 	bMiniMapMouseDown = false;
@@ -251,9 +235,8 @@ BOOL EditView::Create(
 	pTypeData = &editDoc.docType.GetDocumentAttribute();
 	this->nMyIndex = nMyIndex;
 
-	//	2007.08.18 genta 初期化にShareDataの値が必要になった
-	pRegexKeyword = new RegexKeyword(GetDllShareData().common.search.szRegexpLib);	//@@@ 2001.11.17 add MIK
-	pRegexKeyword->RegexKeySetTypes(pTypeData);	//@@@ 2001.11.17 add MIK
+	pRegexKeyword = new RegexKeyword(GetDllShareData().common.search.szRegexpLib);
+	pRegexKeyword->RegexKeySetTypes(pTypeData);
 
 	textArea.SetTopYohaku(GetDllShareData().common.window.nRulerBottomSpace); 	// ルーラーとテキストの隙間
 	textArea.SetAreaTop(textArea.GetTopYohaku());								// 表示域の上端座標
@@ -263,8 +246,6 @@ BOOL EditView::Create(
 	}
 
 	// ウィンドウクラスの登録
-	//	Apr. 27, 2000 genta
-	//	サイズ変更時のちらつきを抑えるためCS_HREDRAW | CS_VREDRAW を外した
 	wc.style			= CS_DBLCLKS | CS_BYTEALIGNCLIENT | CS_BYTEALIGNWINDOW;
 	wc.lpfnWndProc		= EditViewWndProc;
 	wc.cbClsExtra		= 0;
@@ -310,8 +291,6 @@ BOOL EditView::Create(
 	tipWnd.Create(G_AppInstance(), GetHwnd()/*GetDllShareData().sHandles.hwndTray*/);
 
 	// 再描画用コンパチブルＤＣ
-	// 2007.09.09 Moca 互換BMPによる画面バッファ
-	// 2007.09.30 genta 関数化
 	UseCompatibleDC(GetDllShareData().common.window.bUseCompatibleBMP);
 
 	// 垂直分割ボックス
@@ -322,7 +301,7 @@ BOOL EditView::Create(
 	pcsbwHSplitBox->Create(G_AppInstance(), GetHwnd(), FALSE);
 
 	// スクロールバー作成
-	CreateScrollBar();		// 2006.12.19 ryoji
+	CreateScrollBar();
 
 	SetFont();
 
@@ -367,7 +346,6 @@ void EditView::Close()
 	}
 
 	// 再描画用コンパチブルＤＣ
-	//	2007.09.30 genta 関数化
 	//	hbmpCompatBMPもここで削除される．
 	UseCompatibleDC(FALSE);
 
@@ -377,10 +355,10 @@ void EditView::Close()
 	delete pHistory;
 	pHistory = nullptr;
 
-	delete pRegexKeyword;	//@@@ 2001.11.17 add MIK
+	delete pRegexKeyword;
 	pRegexKeyword = nullptr;
 	
-	// 再変換 2002.04.10 minfu
+	// 再変換
 	if (hAtokModule)
 		FreeLibrary(hAtokModule);
 
@@ -430,14 +408,12 @@ LRESULT EditView::DispatchEvent(
 		::SetWindowLongPtr(hwnd, 0, (LONG_PTR) this);
 		return 0L;
 
-		// From Here 2007.09.09 Moca 互換BMPによる画面バッファ
 	case WM_SHOWWINDOW:
 		// ウィンドウ非表示の再に互換BMPを廃棄してメモリーを節約する
 		if (hwnd == GetHwnd() && (BOOL)wParam == FALSE) {
 			DeleteCompatibleBitmap();
 		}
 		return 0L;
-	// To Here 2007.09.09 Moca
 
 	case WM_SIZE:
 		OnSize(LOWORD(lParam), HIWORD(lParam));
@@ -450,7 +426,7 @@ LRESULT EditView::DispatchEvent(
 		return 0L;
 	case WM_KILLFOCUS:
 		OnKillFocus();
-		// 2009.01.17 nasukoji	ホイールスクロール有無状態をクリア
+		// ホイールスクロール有無状態をクリア
 		editWnd.ClearMouseState();
 		return 0L;
 	case WM_CHAR:
@@ -462,7 +438,7 @@ LRESULT EditView::DispatchEvent(
 		}
 		return 0L;
 
-	case WM_IME_NOTIFY:	// Nov. 26, 2006 genta
+	case WM_IME_NOTIFY:
 		if (wParam == IMN_SETCONVERSIONMODE || wParam == IMN_SETOPENSTATUS) {
 			GetCaret().ShowEditCaret();
 		}
@@ -525,62 +501,54 @@ LRESULT EditView::DispatchEvent(
 		return DefWindowProc(hwnd, uMsg, wParam, lParam);
 
 	case WM_IME_CHAR:
-		if (!IsInsMode() /* Oct. 2, 2005 genta */) { /* 上書きモードか？ */
+		if (!IsInsMode()) { /* 上書きモードか？ */
 			GetCommander().HandleCommand(F_IME_CHAR, true, wParam, 0, 0, 0);
 		}
 		return 0L;
 
-	// From Here 2008.03.24 Moca ATOK等の要求にこたえる
 	case WM_PASTE:
 		return GetCommander().HandleCommand(F_PASTE, true, 0, 0, 0, 0);
 
 	case WM_COPY:
 		return GetCommander().HandleCommand(F_COPY, true, 0, 0, 0, 0);
-	// To Here 2008.03.24 Moca
 
 	case WM_KEYUP:
 		// キーリピート状態
 		GetCommander().bPrevCommand = 0;
 		return 0L;
 
-	// 2004.04.27 Moca From Here ALT+xでALTを押したままだとキーリピートがOFFにならない対策
+	// ALT+xでALTを押したままだとキーリピートがOFFにならない対策
 	case WM_SYSKEYUP:
 		GetCommander().bPrevCommand = 0;
 		// 念のため呼ぶ
 		return ::DefWindowProc(hwnd, uMsg, wParam, lParam);
-	// 2004.04.27 To Here
 
 	case WM_LBUTTONDBLCLK:
 		if (bMiniMap) {
 			return 0L;
 		}
-		// 2007.10.02 nasukoji	非アクティブウィンドウのダブルクリック時はここでカーソルを移動する
-		// 2007.10.12 genta フォーカス移動のため，OnLBUTTONDBLCLKより移動
+		// 非アクティブウィンドウのダブルクリック時はここでカーソルを移動する
 		if (bActivateByMouse) {
 			// アクティブなペインを設定
 			editWnd.SetActivePane(nMyIndex);
 			// カーソルをクリック位置へ移動する
 			OnLBUTTONDOWN(wParam, (short)LOWORD(lParam), (short)HIWORD(lParam));	
-			// 2007.10.02 nasukoji
 			bActivateByMouse = false;		// マウスによるアクティベートを示すフラグをOFF
 		}
 		//		MYTRACE(_T(" WM_LBUTTONDBLCLK wParam=%08xh, x=%d y=%d\n"), wParam, LOWORD(lParam), HIWORD(lParam));
 		OnLBUTTONDBLCLK(wParam, (short)LOWORD(lParam), (short)HIWORD(lParam));
 		return 0L;
 
-// novice 2004/10/11 マウス中ボタン対応
 	case WM_MBUTTONDOWN:
 		OnMBUTTONDOWN(wParam, (short)LOWORD(lParam), (short)HIWORD(lParam));
 
 		return 0L;
 
 	case WM_MBUTTONUP:
-		// 2009.01.17 nasukoji	ボタンUPでコマンドを起動するように変更
 		OnMBUTTONUP(wParam, (short)LOWORD(lParam), (short)HIWORD(lParam));
 		return 0L;
 
 	case WM_LBUTTONDOWN:
-		// 2007.10.02 nasukoji
 		bActivateByMouse = false;		// マウスによるアクティベートを示すフラグをOFF
 //		MYTRACE(_T(" WM_LBUTTONDOWN wParam=%08xh, x=%d y=%d\n"), wParam, LOWORD(lParam), HIWORD(lParam));
 		OnLBUTTONDOWN(wParam, (short)LOWORD(lParam), (short)HIWORD(lParam));
@@ -611,7 +579,6 @@ LRESULT EditView::DispatchEvent(
 		OnRBUTTONUP(wParam, (short)LOWORD(lParam), (short)HIWORD(lParam));
 		return 0L;
 
-// novice 2004/10/10 マウスサイドボタン対応
 	case WM_XBUTTONDOWN:
 		switch (HIWORD(wParam)) {
 		case XBUTTON1:
@@ -625,7 +592,6 @@ LRESULT EditView::DispatchEvent(
 		return TRUE;
 
 	case WM_XBUTTONUP:
-		// 2009.01.17 nasukoji	ボタンUPでコマンドを起動するように変更
 		switch (HIWORD(wParam)) {
 		case XBUTTON1:
 			OnXLBUTTONUP(wParam, (short)LOWORD(lParam), (short)HIWORD(lParam));
@@ -639,7 +605,6 @@ LRESULT EditView::DispatchEvent(
 
 	case WM_VSCROLL:
 //		MYTRACE(_T("	WM_VSCROLL nPos=%d\n"), GetScrollPos(hwndVScrollBar, SB_CTL));
-		//	Sep. 11, 2004 genta 同期スクロールの関数化
 		{
 			int Scroll = OnVScroll(
 				(int) LOWORD(wParam), ((int) HIWORD(wParam)) * nVScrollRate);
@@ -654,7 +619,6 @@ LRESULT EditView::DispatchEvent(
 
 	case WM_HSCROLL:
 //		MYTRACE(_T("	WM_HSCROLL nPos=%d\n"), GetScrollPos(hwndHScrollBar, SB_CTL));
-		//	Sep. 11, 2004 genta 同期スクロールの関数化
 		{
 			int Scroll = OnHScroll(
 				(int) LOWORD(wParam), ((int) HIWORD(wParam)));
@@ -711,7 +675,7 @@ LRESULT EditView::DispatchEvent(
 		/*
 		||子ウィンドウの破棄
 		*/
-		if (hwndVScrollBar) {	// Aug. 20, 2005 Aroka
+		if (hwndVScrollBar) {
 			::DestroyWindow(hwndVScrollBar);
 			hwndVScrollBar = NULL;
 		}
@@ -741,9 +705,8 @@ LRESULT EditView::DispatchEvent(
 		::PostMessage(hwndParent, MYWM_SETACTIVEPANE, (WPARAM)nMyIndex, 0);
 		return 0L;
 
-	case MYWM_IME_REQUEST:  // 再変換  by minfu 2002.03.27 // 20020331 aroka
+	case MYWM_IME_REQUEST:  // 再変換
 		
-		// 2002.04.09 switch case に変更  minfu 
 		switch (wParam) {
 		case IMR_RECONVERTSTRING:
 			return SetReconvertStruct((PRECONVERTSTRING)lParam, UNICODE_BOOL);
@@ -751,20 +714,20 @@ LRESULT EditView::DispatchEvent(
 		case IMR_CONFIRMRECONVERTSTRING:
 			return SetSelectionFromReonvert((PRECONVERTSTRING)lParam, UNICODE_BOOL);
 			
-		// 2010.03.16 MS-IME 2002 だと「カーソル位置の前後の内容を参照して変換を行う」の機能
+		// MS-IME 2002 だと「カーソル位置の前後の内容を参照して変換を行う」の機能
 		case IMR_DOCUMENTFEED:
 			return SetReconvertStruct((PRECONVERTSTRING)lParam, UNICODE_BOOL, true);
 			
 		//default:
 		}
-		// 2010.03.16 0LではなくTSFが何かするかもしれないのでDefにまかせる
+		// 0LではなくTSFが何かするかもしれないのでDefにまかせる
 		return ::DefWindowProc(hwnd, uMsg, wParam, lParam);
 	
-	case MYWM_DROPFILES:	// 独自のドロップファイル通知	// 2008.06.20 ryoji
+	case MYWM_DROPFILES:	// 独自のドロップファイル通知
 		OnMyDropFiles((HDROP)wParam);
 		return 0L;
 
-	// 2007.10.02 nasukoji	マウスクリックにてアクティベートされた時はカーソル位置を移動しない
+	// マウスクリックにてアクティベートされた時はカーソル位置を移動しない
 	case WM_MOUSEACTIVATE:
 		LRESULT nRes;
 		nRes = ::DefWindowProc(hwnd, uMsg, wParam, lParam);	// 親に先に処理させる
@@ -773,7 +736,6 @@ LRESULT EditView::DispatchEvent(
 		}
 
 		// マウスクリックによりバックグラウンドウィンドウがアクティベートされた
-		//	2007.10.08 genta オプション追加
 		if (1
 			&& GetDllShareData().common.general.bNoCaretMoveByActivation
 			&& !editWnd.IsActiveApp()
@@ -797,11 +759,9 @@ LRESULT EditView::DispatchEvent(
 				|| (pcsbwVSplitBox && hwndCursorPos == pcsbwVSplitBox->GetHwnd())
 				|| (pcsbwHSplitBox && hwndCursorPos == pcsbwHSplitBox->GetHwnd())
 			) {
-				// 2010.01.19 ryoji
 				// 分割ボックス上にマウスがあるときはアクティブペインを切り替えない
 				// （併せて MYWM_SETACTIVEPANE のポストにより分割線のゴミが残っていた問題も修正）
 			}else {
-				// 2008.05.24 ryoji
 				// スクロールバー上にマウスがあるかもしれないので MYWM_SETACTIVEPANE をポストする
 				// SetActivePane() にはスクロールバーのスクロール範囲調整処理が含まれているが、
 				// このタイミング（WM_MOUSEACTIVATE）でスクロール範囲を変更するのはまずい。
@@ -827,12 +787,10 @@ LRESULT EditView::DispatchEvent(
 	}
 
 	default:
-// << 20020331 aroka 再変換対応 for 95/NT
 		if (0
 			|| (uMSIMEReconvertMsg && (uMsg == uMSIMEReconvertMsg)) 
 			|| (uATOKReconvertMsg && (uMsg == uATOKReconvertMsg))
 		) {
-		// 2002.04.08 switch case に変更 minfu 
 			switch (wParam) {
 			case IMR_RECONVERTSTRING:
 				return SetReconvertStruct((PRECONVERTSTRING)lParam, true);
@@ -842,7 +800,6 @@ LRESULT EditView::DispatchEvent(
 			}
 			return 0L;
 		}
-// >> by aroka
 
 		return DefWindowProc(hwnd, uMsg, wParam, lParam);
 	}
@@ -866,10 +823,8 @@ void EditView::OnSize(int cx, int cy)
 	if (!GetHwnd() 
 		|| (cx == 0 && cy == 0)
 	) {
-		// From Here 2007.09.09 Moca 互換BMPによる画面バッファ
 		// ウィンドウ無効時にも互換BMPを破棄する
 		DeleteCompatibleBitmap();
-		// To Here 2007.09.09 Moca
 		return;
 	}
 
@@ -917,17 +872,15 @@ void EditView::OnSize(int cx, int cy)
 	);
 
 	// 再描画用メモリＢＭＰ
-	// From Here 2007.09.09 Moca 互換BMPによる画面バッファ
 	if (hdcCompatDC) {
 		CreateOrUpdateCompatibleBitmap(cx, cy);
  	}
-	// To Here 2007.09.09 Moca
 
-	// 2008.06.06 nasukoji	サイズ変更時の折り返し位置再計算
+	// サイズ変更時の折り返し位置再計算
 	bool wrapChanged = false;
 	if (pEditDoc->nTextWrapMethodCur == TextWrappingMethod::WindowWidth) {
 		if (nMyIndex == 0) {	// 左上隅のビューのサイズ変更時のみ処理する
-			// 右端で折り返すモードなら右端で折り返す	// 2008.06.08 ryoji
+			// 右端で折り返すモードなら右端で折り返す
 			wrapChanged = editWnd.WrapWindowWidth(0);
 		}
 	}
@@ -973,7 +926,7 @@ void EditView::OnSize(int cx, int cy)
 	}
 
 	// 親ウィンドウのタイトルを更新
-	editWnd.UpdateCaption(); // [Q] genta 本当に必要？
+	editWnd.UpdateCaption(); // [Q] 本当に必要？
 
 	if (editWnd.GetMiniMap().GetHwnd()) {
 		EditView& miniMap = editWnd.GetMiniMap();
@@ -993,7 +946,7 @@ void EditView::OnSetFocus(void)
 	if (bMiniMap) {
 		return;
 	}
-	// 2004.04.02 Moca EOFのみのレイアウト行は、0桁目のみ有効.EOFより下の行のある場合は、EOF位置にする
+	// EOFのみのレイアウト行は、0桁目のみ有効.EOFより下の行のある場合は、EOF位置にする
 	{
 		Point ptPos = GetCaret().GetCaretLayoutPos();
 		if (GetCaret().GetAdjustCursorPos(&ptPos)) {
@@ -1011,7 +964,7 @@ void EditView::OnSetFocus(void)
 	GetRuler().DispRuler(hdc);
 	::ReleaseDC(GetHwnd(), hdc);
 
-	// 03/02/18 対括弧の強調表示(描画) ai
+	// 対括弧の強調表示(描画)
 	bDrawBracketPairFlag = true;
 	DrawBracketPair(true);
 
@@ -1034,7 +987,6 @@ void EditView::OnKillFocus(void)
 	if (bMiniMap) {
 		return;
 	}
-	// 03/02/18 対括弧の強調表示(消去) ai
 	DrawBracketPair(false);
 	bDrawBracketPairFlag = false;
 
@@ -1086,7 +1038,7 @@ void EditView::SetFont(void)
 	// ぜんぶ再描画
 	::InvalidateRect(GetHwnd(), NULL, TRUE);
 
-	//	Oct. 11, 2002 genta IMEのフォントも変更
+	// IMEのフォントも変更
 	SetIMECompFormFont();
 }
 
@@ -1127,16 +1079,10 @@ void EditView::MoveCursorSelecting(
 	}
 	GetCaret().GetAdjustCursorPos(&ptWk_CaretPos);
 	if (bSelect) {
-		/*	現在のカーソル位置によって選択範囲を変更．
-		
-			2004.04.02 Moca 
-			キャレット位置が不正だった場合にMoveCursorの移動結果が
-			引数で与えた座標とは異なることがあるため，
-			nPosX, nPosYの代わりに実際の移動結果を使うように．
-		*/
+		/*	現在のカーソル位置によって選択範囲を変更．*/
 		GetSelectionInfo().ChangeSelectAreaByCurrentCursor(ptWk_CaretPos);
 	}
-	GetCaret().MoveCursor(ptWk_CaretPos, true, nCaretMarginRate);	// 2007.08.22 ryoji nCaretMarginRateが使われていなかった
+	GetCaret().MoveCursor(ptWk_CaretPos, true, nCaretMarginRate);
 	GetCaret().nCaretPosX_Prev = GetCaret().GetCaretLayoutPos().x;
 }
 
@@ -1148,10 +1094,6 @@ void EditView::MoveCursorSelecting(
 
 /*!
 	指定カーソル位置にURLが有る場合のその範囲を調べる
-
-	2007.01.18 kobake URL文字列の受け取りをwstringで行うように変更
-	2007.05.27 ryoji URL色指定の正規表現キーワードにマッチする文字列もURLとみなす
-	                 URLの強調表示OFFのチェックはこの関数内で行うように変更
 */
 bool EditView::IsCurrentPositionURL(
 	const Point& ptCaretPos,	// [in]  カーソル位置
@@ -1161,7 +1103,7 @@ bool EditView::IsCurrentPositionURL(
 {
 	MY_RUNNINGTIMER(runningTimer, "EditView::IsCurrentPositionURL");
 
-	// URLを強調表示するかどうかチェックする	// 2009.05.27 ryoji
+	// URLを強調表示するかどうかチェックする
 	bool bDispUrl = TypeSupport(*this, COLORIDX_URL).IsDisp();
 	bool bUseRegexKeyword = false;
 	if (pTypeData->bUseRegexKeyword) {
@@ -1181,7 +1123,7 @@ bool EditView::IsCurrentPositionURL(
 		return false;	// URL強調表示しないのでURLではない
 	}
 
-	// 正規表現キーワード（URL色指定）行検索開始処理	// 2009.05.27 ryoji
+	// 正規表現キーワード（URL色指定）行検索開始処理
 	if (bUseRegexKeyword) {
 		pRegexKeyword->RegexKeyLineStart();
 	}
@@ -1194,11 +1136,11 @@ bool EditView::IsCurrentPositionURL(
 	*/
 	Point ptXY = pEditDoc->layoutMgr.LayoutToLogic(ptCaretPos);
 	size_t nLineLen;
-	const wchar_t* pLine = pEditDoc->docLineMgr.GetLine(ptXY.y)->GetDocLineStrWithEOL(&nLineLen); // 2007.10.09 kobake レイアウト・ロジック混在バグ修正
+	const wchar_t* pLine = pEditDoc->docLineMgr.GetLine(ptXY.y)->GetDocLineStrWithEOL(&nLineLen);
 
 	int nMatchColor;
 	size_t nUrlLen = 0;
-	int i = t_max(0, (int)ptXY.x - (int)_MAX_PATH);	// 2009.05.22 ryoji 200->_MAX_PATH
+	int i = t_max(0, (int)ptXY.x - (int)_MAX_PATH);
 	//nLineLen = __min(nLineLen, ptXY.x + _MAX_PATH);
 	while (i <= ptXY.x && i < (int)nLineLen) {
 		bool bMatch = (bUseRegexKeyword
@@ -1206,7 +1148,7 @@ bool EditView::IsCurrentPositionURL(
 					&& nMatchColor == COLORIDX_URL);
 		if (!bMatch) {
 			bMatch = (bDispUrl
-						&& (i == 0 || !IS_KEYWORD_CHAR(pLine[i - 1]))	// 2009.05.22 ryoji CColor_Url::BeginColor()と同条件に
+						&& (i == 0 || !IS_KEYWORD_CHAR(pLine[i - 1]))
 						&& IsURL(&pLine[i], (nLineLen - i), &nUrlLen));	// 指定アドレスがURLの先頭ならばTRUEとその長さを返す
 		}
 		if (bMatch) {
@@ -1260,7 +1202,7 @@ VOID EditView::OnTimer(
 				}
 			}
 		}else {
-			if (KeywordHelpSearchDict(LID_SKH_ONTIMER, &po, &rc)) {	// 2006.04.10 fon
+			if (KeywordHelpSearchDict(LID_SKH_ONTIMER, &po, &rc)) {
 				// 辞書Tipを表示
 				tipWnd.Show( po.x, po.y + GetTextMetrics().GetHankakuHeight(), NULL );
 			}
@@ -1296,7 +1238,6 @@ void EditView::ConvSelectedArea(EFunctionCode nFuncCode)
 	size_t nLineLen2;
 	WaitCursor waitCursor(GetHwnd());
 
-	// 2009.07.18 ryoji Logicで記憶するように変更
 	Point ptFromLogic = pEditDoc->layoutMgr.LayoutToLogic(GetSelectionInfo().select.GetFrom());
 
 	// 矩形範囲選択中か
@@ -1311,7 +1252,7 @@ void EditView::ConvSelectedArea(EFunctionCode nFuncCode)
 		);
 
 		// 現在の選択範囲を非選択状態に戻す
-		GetSelectionInfo().DisableSelectArea(false);	// 2009.07.18 ryoji true -> false 各行にアンダーラインが残る問題の修正
+		GetSelectionInfo().DisableSelectArea(false);
 
 		size_t nIdxFrom = 0;
 		size_t nIdxTo = 0;
@@ -1345,7 +1286,6 @@ void EditView::ConvSelectedArea(EFunctionCode nFuncCode)
 					nLineNum + 1
 				);
 
-				// 2007.10.18 COpe整理
 				// 指定位置の指定長データ削除
 				DeleteData2(
 					sPos,
@@ -1364,7 +1304,7 @@ void EditView::ConvSelectedArea(EFunctionCode nFuncCode)
 						memBuf.GetStringPtr(),
 						memBuf.GetStringLength(),
 						&ptLayoutNew,
-						false	// 2009.07.18 ryoji true -> false 各行にアンダーラインが残る問題の修正
+						false
 					);
 
 					// カーソルを移動
@@ -1396,17 +1336,15 @@ void EditView::ConvSelectedArea(EFunctionCode nFuncCode)
 		// データ置換 削除&挿入にも使える
 		ReplaceData_CEditView(
 			GetSelectionInfo().select,
-			memBuf.GetStringPtr(),		// 挿入するデータ	 // 2002/2/10 aroka CMemory変更
-			memBuf.GetStringLength(),	// 挿入するデータの長さ // 2002/2/10 aroka CMemory変更
+			memBuf.GetStringPtr(),		// 挿入するデータ
+			memBuf.GetStringLength(),	// 挿入するデータの長さ
 			false,
 			bDoing_UndoRedo ? nullptr : commander.GetOpeBlk()
 		);
 
-		// From Here 2001.12.03 hor
 		// 選択エリアの復元
-		// 2009.07.18 ryoji LogicからLayoutに戻す
 		Point ptFrom = pEditDoc->layoutMgr.LogicToLayout(ptFromLogic);
-		GetSelectionInfo().SetSelectArea(Range(ptFrom, GetCaret().GetCaretLayoutPos()));	// 2009.07.25 ryoji
+		GetSelectionInfo().SetSelectArea(Range(ptFrom, GetCaret().GetCaretLayoutPos()));
 		GetCaret().MoveCursor(GetSelectionInfo().select.GetTo(), true);
 		GetCaret().nCaretPosX_Prev = GetCaret().GetCaretLayoutPos().x;
 
@@ -1418,9 +1356,8 @@ void EditView::ConvSelectedArea(EFunctionCode nFuncCode)
 				)
 			);
 		}
-		// To Here 2001.12.03 hor
 	}
-	RedrawAll();	// 2009.07.18 ryoji 対象が矩形だった場合も最後に再描画する
+	RedrawAll();	// 対象が矩形だった場合も最後に再描画する
 }
 
 
@@ -1436,18 +1373,17 @@ int	EditView::CreatePopUpMenu_R(void)
 	menuDrawer.ResetContents();
 
 	// 右クリックメニューの定義はカスタムメニュー配列の0番目
-	int nMenuIdx = CUSTMENU_INDEX_FOR_RBUTTONUP;	// マジックナンバー排除	//@@@ 2003.06.13 MIK
+	int nMenuIdx = CUSTMENU_INDEX_FOR_RBUTTONUP;
 
 	// Note: ViewCommander::Command_CustMenu と大体同じ
 	HMENU hMenu = ::CreatePopupMenu();
 
-	// 2010.07.24 Moca オーナードロー対応のために前に移動してMenuDrawer経由で追加する
 	if (!GetSelectionInfo().IsMouseSelecting()) {
 		POINT po;
 		RECT rc;
-		if (KeywordHelpSearchDict(LID_SKH_POPUPMENU_R, &po, &rc)) {	// 2006.04.10 fon
-			menuDrawer.MyAppendMenu(hMenu, 0, IDM_COPYDICINFO, LS(STR_MENU_KEYWORDINFO), _T("K"));	// 2006.04.10 fon ToolTip内容を直接表示するのをやめた
-			menuDrawer.MyAppendMenu(hMenu, 0, IDM_JUMPDICT, LS(STR_MENU_OPENKEYWORDDIC), _T("L"));	// 2006.04.10 fon
+		if (KeywordHelpSearchDict(LID_SKH_POPUPMENU_R, &po, &rc)) {
+			menuDrawer.MyAppendMenu(hMenu, 0, IDM_COPYDICINFO, LS(STR_MENU_KEYWORDINFO), _T("K"));
+			menuDrawer.MyAppendMenu(hMenu, 0, IDM_JUMPDICT, LS(STR_MENU_OPENKEYWORDDIC), _T("L"));
 			menuDrawer.MyAppendMenuSep(hMenu, MF_SEPARATOR, F_0, _T(""));
 		}
 	}
@@ -1490,7 +1426,6 @@ int	EditView::CreatePopUpMenuSub(HMENU hMenu, int nMenuIdx, int* pParentMenus)
 		EFunctionCode code = csCustomMenu.nCustMenuItemFuncArr[nMenuIdx][i];
 		bool bAppend = false;
 		if (code == F_0) {
-			// 2010.07.24 メニュー配列に入れる
 			menuDrawer.MyAppendMenuSep(hMenu, MF_SEPARATOR, F_0, _T(""));
 			bAppend = true;
 		}else if (code == F_MENU_RBUTTON || (F_CUSTMENU_1 <= code && code <= F_CUSTMENU_LAST)) {
@@ -1524,7 +1459,6 @@ int	EditView::CreatePopUpMenuSub(HMENU hMenu, int nMenuIdx, int* pParentMenus)
 			}
 		}
 		if (!bAppend) {
-			//	Oct. 3, 2001 genta
 			funcLookup.Funccode2Name(code, szLabel, 256);
 			// キー
 			if (F_SPECIAL_FIRST <= code && code <= F_SPECIAL_LAST) {
@@ -1549,7 +1483,7 @@ int	EditView::CreatePopUpMenuSub(HMENU hMenu, int nMenuIdx, int* pParentMenus)
 		EFunctionCode id = (EFunctionCode)::GetMenuItemID(hMenu, nPos);
 		UINT fuFlags;
 		// 機能が利用可能か調べる
-		//	Jan.  8, 2006 genta 機能が有効な場合には明示的に再設定しないようにする．
+		// 機能が有効な場合には明示的に再設定しないようにする．
 		if (!IsFuncEnable(GetDocument(), GetDllShareData(), id)) {
 			fuFlags = MF_BYCOMMAND | MF_GRAYED;
 			::EnableMenuItem(hMenu, id, fuFlags);
@@ -1613,14 +1547,7 @@ void EditView::OnChangeSetting()
 	// フォントの変更
 	SetFont();
 
-	// フォントが変わっているかもしれないので、カーソル移動
-	// スクロールバーが移動するので呼び出し元でやる
-	// GetCaret().MoveCursor(GetCaret().GetCaretLayoutPos(), true);
-
-	// スクロールバーの状態を更新する
-	// AdjustScrollBars();
-
-	//	2007.09.30 genta 画面キャッシュ用CompatibleDCを用意する
+	//	画面キャッシュ用CompatibleDCを用意する
 	UseCompatibleDC(csWindow.bUseCompatibleBMP);
 
 	// ウィンドウサイズの変更処理
@@ -1777,7 +1704,7 @@ bool EditView::GetSelectedData(
 	}
 	if (bWithLineNumber) {	// 行番号を付与する
 		// 行番号表示に必要な桁数を計算
-		// 2014.11.30 桁はレイアウト単位である必要がある
+		// 桁はレイアウト単位である必要がある
 		nLineNumCols = GetTextArea().DetectWidthOfLineNumberArea_calculate(&pEditDoc->layoutMgr, true);
 		nLineNumCols += 1;
 		pszLineNum = new wchar_t[nLineNumCols + 1];
@@ -1793,10 +1720,9 @@ bool EditView::GetSelectedData(
 		);
 		memBuf->SetString(L"");
 
-		//<< 2002/04/18 Azumaiya
 		// サイズ分だけ要領をとっておく。
 		// 結構大まかに見ています。
-		int i = rcSel.bottom - rcSel.top + 1; // 2013.05.06 「+1」
+		int i = rcSel.bottom - rcSel.top + 1;
 
 		// 最初に行数分の改行量を計算してしまう。
 		size_t nBufSize = wcslen(WCODE::CRLF) * i;
@@ -1820,7 +1746,6 @@ bool EditView::GetSelectedData(
 
 		// 大まかに見た容量を元にサイズをあらかじめ確保しておく。
 		memBuf->AllocStringBuffer(nBufSize);
-		//>> 2002/04/18 Azumaiya
 
 		bool bExtEol = GetDllShareData().common.edit.bEnableExtEol;
 		nRowNum = 0;
@@ -1830,7 +1755,6 @@ bool EditView::GetSelectedData(
 				// 指定された桁に対応する行のデータ内の位置を調べる
 				nIdxFrom	= LineColumnToIndex(pLayout, rcSel.left );
 				nIdxTo		= LineColumnToIndex(pLayout, rcSel.right);
-				// 2002.02.08 hor
 				// pLineがNULLのとき(矩形エリアの端がEOFのみの行を含むとき)は以下を処理しない
 				ASSERT_GE(nIdxTo, nIdxFrom);
 				if (nIdxTo - nIdxFrom > 0) {
@@ -1850,7 +1774,6 @@ bool EditView::GetSelectedData(
 	}else {
 		memBuf->SetString(L"");
 
-		//<< 2002/04/18 Azumaiya
 		//  これから貼り付けに使う領域の大まかなサイズを取得する。
 		//  大まかというレベルですので、サイズ計算の誤差が（容量を多く見積もる方に）結構出ると思いますが、
 		// まぁ、速さ優先ということで勘弁してください。
@@ -1892,7 +1815,6 @@ bool EditView::GetSelectedData(
 
 		// 調べた長さ分だけバッファを取っておく。
 		memBuf->AllocStringBuffer(nBufSize);
-		//>> 2002/04/18 Azumaiya
 
 		for (nLineNum=GetSelectionInfo().select.GetFrom().y; (int)nLineNum<=GetSelectionInfo().select.GetTo().y; ++nLineNum) {
 			const wchar_t* pLine = pEditDoc->layoutMgr.GetLineStr(nLineNum, &nLineLen, &pLayout);
@@ -1928,7 +1850,6 @@ bool EditView::GetSelectedData(
 			if (EolType::None != pLayout->GetLayoutEol()) {
 				if (nIdxTo >= nLineLen) {
 					memBuf->AppendString(&pLine[nIdxFrom], nLineLen - 1 - nIdxFrom);
-					//	Jul. 25, 2000 genta
 					memBuf->AppendString((neweol == EolType::Unknown) ?
 						(pLayout->GetLayoutEol()).GetValue2() :	//	コード保存
 						appendEol.GetValue2());			//	新規改行コード
@@ -1942,7 +1863,6 @@ bool EditView::GetSelectedData(
 						pszQuote || // 先頭に付ける引用符
 						bWithLineNumber 	// 行番号を付与する
 					) {
-						//	Jul. 25, 2000 genta
 						memBuf->AppendString((neweol == EolType::Unknown) ?
 							pEditDoc->docEditor.GetNewLineCode().GetValue2() :	//	コード保存
 							appendEol.GetValue2());		//	新規改行コード
@@ -1963,7 +1883,6 @@ bool EditView::GetSelectedData(
 /* 選択範囲内の１行の選択
 	@param bCursorPos 選択開始行の代わりにカーソル位置の行を取得
 	通常選択ならロジック行、矩形なら選択範囲内のレイアウト行１行を選択
-	2010.09.04 Moca 新規作成
 */
 bool EditView::GetSelectedDataOne(NativeW& memBuf, size_t nMaxLen)
 {
@@ -2130,7 +2049,6 @@ int EditView::IsCurrentPositionSelected(
 	0	選択エリア内
 	1	選択エリアより後方
 */
-// 2007.09.01 kobake 整理
 int EditView::IsCurrentPositionSelectedTEST(
 	const Point& ptCaretPos,	// カーソル位置
 	const Range& select		//
@@ -2177,7 +2095,7 @@ void EditView::CopySelectedAllLines(
 		sSelect.SetToX(pLayout? pLayout->GetIndent(): 0);
 		GetCaret().GetAdjustCursorPos(&sSelect.GetTo());	// EOF行を超えていたら座標修正
 
-		GetSelectionInfo().DisableSelectArea(false); // 2011.06.03 true →false
+		GetSelectionInfo().DisableSelectArea(false);
 		GetSelectionInfo().SetSelectArea(sSelect);
 
 		GetCaret().MoveCursor(GetSelectionInfo().select.GetTo(), false);
@@ -2185,9 +2103,7 @@ void EditView::CopySelectedAllLines(
 	}
 	// 再描画
 	//	::UpdateWindow();
-	// From Here 2007.09.09 Moca 互換BMPによる画面バッファ
 	Call_OnPaint((int)PaintAreaType::LineNumber | (int)PaintAreaType::Body, false);
-	// To Here 2007.09.09 Moca
 	// 選択範囲をクリップボードにコピー
 	// 選択範囲のデータを取得
 	// 正常時はTRUE,範囲未選択の場合は終了する
@@ -2273,13 +2189,11 @@ bool EditView::MySetClipboardData(
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                      アンダーライン                         //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-/*! カーソルの縦線の座標で作画範囲か
-	@2010.08.21 関数に分離。太線対応
-*/
+/*! カーソルの縦線の座標で作画範囲か */
 inline bool EditView::IsDrawCursorVLinePos(int posX)
 {
 	auto& textArea = GetTextArea();
-	return posX >= textArea.GetAreaLeft() - 2	// 2010.08.10 ryoji テキストと行番号の隙間が半角文字幅より大きいと隙間位置にあるカーソルの縦線が描画される問題修正
+	return posX >= textArea.GetAreaLeft() - 2
 		&& posX >  textArea.GetAreaLeft() - GetDllShareData().common.window.nLineNumRightSpace // 隙間(+1)がないときは線を引かない判定
 		&& posX <= textArea.GetAreaRight();
 }
@@ -2298,11 +2212,6 @@ void EditView::CaretUnderLineON(
 		return;
 	}
 	
-//	2010.08.24 下線・縦線が残るバグの修正
-//	ON(作画)→ON(未作画)のパターンなどで、画面上に線が残ったままになるので座標をクリアしてはいけない
-//	nOldCursorLineX = -1;
-//	nOldUnderLineY  = -1;
-	// 2011.12.06 Moca IsTextSelected → IsTextSelecting に変更。ロック中も下線を表示しない
 	int bCursorLineBgDraw = false;
 	auto& textArea = GetTextArea();
 	
@@ -2337,7 +2246,6 @@ void EditView::CaretUnderLineON(
 	}
 	
 	int nCursorVLineX = -1;
-	// From Here 2007.09.09 Moca 互換BMPによる画面バッファ
 	if (bCursorVLine) {
 		// カーソル位置縦線。-1してキャレットの左に来るように。
 		nCursorVLineX = textArea.GetAreaLeft() + (GetCaret().GetCaretLayoutPos().x - textArea.GetViewLeftCol())
@@ -2382,7 +2290,6 @@ void EditView::CaretUnderLineON(
 		nUnderLineY = textArea.GetAreaTop() + (GetCaret().GetCaretLayoutPos().y - textArea.GetViewTopLine())
 			 * GetTextMetrics().GetHankakuDy() + GetTextMetrics().GetHankakuHeight();
 	}
-	// To Here 2007.09.09 Moca
 
 	if (1
 		&& bDraw
@@ -2497,7 +2404,7 @@ void EditView::CaretUnderLineOFF(
 		nOldUnderLineYHeightReal = 0;
 	}
 
-	// From Here 2007.09.09 Moca 互換BMPによる画面バッファ
+	// 互換BMPによる画面バッファ
 	// カーソル位置縦線
 	if (nOldCursorLineX != -1) {
 		if (1
@@ -2527,7 +2434,6 @@ void EditView::CaretUnderLineOFF(
 		}
 		nOldCursorLineX = -1;
 	}
-	// To Here 2007.09.09 Moca
 }
 
 
@@ -2581,7 +2487,7 @@ void EditView::OnAfterLoad(const LoadInfo& loadInfo)
 	GetCaret().nCaretPosX_Prev = 0;
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-	//	2004.05.13 Moca 改行コードの設定内からここに移動
+	// 改行コードの設定内からここに移動
 	editWnd.GetActiveView().GetCaret().ShowCaretPosInfo();
 }
 
@@ -2601,7 +2507,7 @@ void EditView::AddCurrentLineToHistory(void)
 }
 
 
-//	2001/06/18 Start by asa-o: 補完ウィンドウ用のキーワードヘルプ表示
+// 補完ウィンドウ用のキーワードヘルプ表示
 bool EditView::ShowKeywordHelp(
 	POINT po,
 	LPCWSTR pszHelp,
@@ -2627,16 +2533,15 @@ bool EditView::ShowKeywordHelp(
 			}else {
 				tipWnd.key = memCurText;
 				// 検索実行
-				if (!KeySearchCore(&tipWnd.key))	// 2006.04.10 fon
+				if (!KeySearchCore(&tipWnd.key))
 					return false;
 			}
 			dwTipTimer = 0;	// 辞書Tipを表示している
 
-		// 2001/06/19 Start by asa-o: 辞書Tipの表示位置調整
 			// 辞書Tipのサイズを取得
 			tipWnd.GetWindowSize(&rcTipWin);
 
-			//	May 01, 2004 genta マルチモニタ対応
+			// マルチモニタ対応
 			::GetMonitorWorkRect(tipWnd.GetHwnd(), &rcDesktop);
 
 			// 右に入る
@@ -2653,7 +2558,6 @@ bool EditView::ShowKeywordHelp(
 				// 左に表示
 				po.x = prcHokanWin->left - (rcTipWin.right + 8);
 			}
-		// 2001/06/19 End
 
 			// 辞書Tipを表示
 			tipWnd.Show(po.x, po.y , NULL , &rcTipWin);
@@ -2662,7 +2566,6 @@ bool EditView::ShowKeywordHelp(
 	}
 	return false;
 }
-//	2001/06/18 End
 
 /*!
 	@brief 指定位置または指定範囲がテキストの存在しないエリアかチェックする
@@ -2734,12 +2637,7 @@ void EditView::SetUndoBuffer(bool bPaintLineNumber)
 			// 操作の追加
 			GetDocument().docEditor.opeBuf.AppendOpeBlk(pOpe);
 
-			// 2013.05.01 Moca 正確に変更行を表示するようになったので不要
-			//  if (bPaintLineNumber
-			//   &&	pEditDoc->docEditor.opeBuf.GetCurrentPointer() == 1)	// 全Undo状態からの変更か？	// 2009.03.26 ryoji
-			//  	Call_OnPaint(PaintAreaType::LineNumber, false);	// 自ペインの行番号（変更行）表示を更新 ← 変更行のみの表示更新で済ませている場合があるため
-
-			if (!editWnd.UpdateTextWrap())	{	// 折り返し方法関連の更新	// 2008.06.10 ryoji
+			if (!editWnd.UpdateTextWrap())	{	// 折り返し方法関連の更新
 				if (0 < pOpe->GetNum() - GetDocument().docEditor.nOpeBlkRedawCount) {
 					editWnd.RedrawAllViews(this);	//	他のペインの表示を更新
 				}

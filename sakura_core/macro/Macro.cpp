@@ -792,8 +792,8 @@ bool Macro::HandleCommand(
 		// arguments[1]:
 		//		次の数値の和。
 		//		0x01	標準出力を得る
-		//		0x02	標準出力をキャレット位置に	// 2007.01.02 maru 引数の拡張
-		//		0x04	編集中ファイルを標準入力へ	// 2007.01.02 maru 引数の拡張
+		//		0x02	標準出力をキャレット位置に
+		//		0x04	編集中ファイルを標準入力へ
 		// arguments[2]:カレントディレクトリ
 		if (!arguments[0]) {
 			::MYMESSAGEBOX(
@@ -811,7 +811,7 @@ bool Macro::HandleCommand(
 		}
 		break;
 
-	case F_TRACEOUT:		// 2006.05.01 マクロ用アウトプットウィンドウに出力
+	case F_TRACEOUT:		// マクロ用アウトプットウィンドウに出力
 		// arguments[0]を出力。オプションはarguments[1]に。
 		// arguments[1]:
 		//		次の数値の和。
@@ -832,14 +832,14 @@ bool Macro::HandleCommand(
 		break;
 
 	// はじめの引数は文字列。２つ目と３つ目は数値
-	case F_PUTFILE:		// 2006.12.10 作業中ファイルの一時出力
+	case F_PUTFILE:		// 作業中ファイルの一時出力
 		// arguments[0]に出力。arguments[1]に文字コード。オプションはarguments[2]に。
 		// arguments[2]:
 		//		次の値の和
 		//		0x01	選択範囲を出力（非選択状態なら空ファイルを生成）
 		// no break
 
-	case F_INSFILE:		// 2006.12.10 キャレット位置にファイル挿入
+	case F_INSFILE:		// キャレット位置にファイル挿入
 		// arguments[0]に出力。arguments[1]に文字コード。オプションはarguments[2]に。
 		// arguments[2]:
 		//		現在は特になし

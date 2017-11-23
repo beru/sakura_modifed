@@ -16,7 +16,6 @@
 #include "window/TipWnd.h"
 #include "window/AutoScrollWnd.h"
 #include "DicMgr.h"
-//	Jun. 26, 2001 genta	³‹K•\Œ»ƒ‰ƒCƒuƒ‰ƒŠ‚Ì·‚µ‘Ö‚¦
 #include "extmodule/Bregexp.h"
 #include "Eol.h"				// EolType
 #include "cmd/ViewCommander.h"
@@ -28,14 +27,14 @@
 
 class ViewFont;
 class Ruler;
-class DropTarget; /// 2002/2/3 aroka ƒwƒbƒ_Œy—Ê‰»
+class DropTarget;
 class OpeBlk;///
 class SplitBoxWnd;///
 class RegexKeyword;///
-class AutoMarkMgr; /// 2002/2/3 aroka ƒwƒbƒ_Œy—Ê‰» to here
-class EditDoc;	//	2002/5/13 YAZAKI ƒwƒbƒ_Œy—Ê‰»
-class Layout;	//	2002/5/13 YAZAKI ƒwƒbƒ_Œy—Ê‰»
-class Migemo;	// 2004.09.14 isearch
+class AutoMarkMgr;
+class EditDoc;
+class Layout;
+class Migemo;
 struct ColorStrategyInfo;
 struct Color3Setting;
 class OutputAdapter;
@@ -82,7 +81,6 @@ public:
 	}
 public:
 	// ”wŒi‚Éƒrƒbƒgƒ}ƒbƒv‚ðŽg—p‚·‚é‚©‚Ç‚¤‚©
-	// 2010.10.03 ”wŒiŽÀ‘•
 	bool IsBkBitmap() const { return pEditDoc->hBackImg != NULL; }
 
 public:
