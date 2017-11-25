@@ -430,7 +430,7 @@ void EditView::DeleteData(
 
 		// 矩形範囲選択中か
 		if (selInfo.IsBoxSelecting()) {
-			pEditDoc->docEditor.SetModified(true, bRedraw);	//	2002/06/04 YAZAKI 矩形選択を削除したときに変更マークがつかない。
+			pEditDoc->docEditor.SetModified(true, bRedraw);
 
 			SetDrawSwitch(false);
 			// 選択範囲のデータを取得
@@ -653,8 +653,6 @@ bool EditView::ReplaceData_CEditView3(
 	auto& layoutMgr = pEditDoc->layoutMgr;
 	bool bDelRangeUpdate = false;
 	{
-		//	May. 29, 2000 genta
-		//	From Here
 		//	行の後ろが選択されていたときの不具合を回避するため，
 		//	選択領域から行末以降の部分を取り除く．
 
@@ -700,7 +698,6 @@ bool EditView::ReplaceData_CEditView3(
 				}
 			}
 		}
-		//	To Here
 	}
 
 	// 削除範囲ロジック単位 delRange -> delRangeLogic

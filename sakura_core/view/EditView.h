@@ -183,7 +183,7 @@ protected:
 
 	// 色分け
 public:
-	Color3Setting GetColorIndex(const Layout* pLayout, int nLineNum, int nIndex, ColorStrategyInfo& csInfo, bool bPrev = false);	// 指定位置のColorIndexの取得 02/12/13 ai
+	Color3Setting GetColorIndex(const Layout* pLayout, int nLineNum, int nIndex, ColorStrategyInfo& csInfo, bool bPrev = false);	// 指定位置のColorIndexの取得
 	void SetCurrentColor(Graphics& gr, EColorIndexType, EColorIndexType, EColorIndexType);
 	COLORREF GetTextColorByColorInfo2(const ColorInfo& info, const ColorInfo& info2);
 	COLORREF GetBackColorByColorInfo2(const ColorInfo& info, const ColorInfo& info2);
@@ -405,11 +405,11 @@ private:
 	//                           括弧                              //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 public:
-	bool  SearchBracket(const Point& ptPos, Point* pptLayoutNew, int* mode);	// 対括弧の検索		// modeの追加 02/09/18 ai
+	bool  SearchBracket(const Point& ptPos, Point* pptLayoutNew, int* mode);	// 対括弧の検索
 	bool  SearchBracketForward(Point ptPos, Point* pptLayoutNew,
-						const wchar_t* upChar, const wchar_t* dnChar, int mode);	//	対括弧の前方検索	// modeの追加 02/09/19 ai
+						const wchar_t* upChar, const wchar_t* dnChar, int mode);	//	対括弧の前方検索
 	bool  SearchBracketBackward(Point ptPos, Point* pptLayoutNew,
-						const wchar_t* dnChar, const wchar_t* upChar, int mode);	//	対括弧の後方検索	// modeの追加 02/09/19 ai
+						const wchar_t* dnChar, const wchar_t* upChar, int mode);	//	対括弧の後方検索
 	void DrawBracketPair(bool);								// 対括弧の強調表示
 	bool IsBracket(const wchar_t*, int, int);					// 括弧判定
 

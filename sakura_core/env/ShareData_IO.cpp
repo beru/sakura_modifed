@@ -490,7 +490,6 @@ void ShareData_IO::ShareData_IO_Common(DataProfile& profile)
 	profile.IOProfileData(pszSecName, LTEXT("szMigemoDll"), MakeStringBufferT(common.helper.szMigemoDll));
 	profile.IOProfileData(pszSecName, LTEXT("szMigemoDict"), MakeStringBufferT(common.helper.szMigemoDict));
 	
-	// ai 02/05/23 Add S
 	{// Keword Help Font
 		ShareData_IO_Sub_LogFont(profile, pszSecName, L"khlf", L"khps", L"khlfFaceName",
 			common.helper.lf, common.helper.nPointSize);

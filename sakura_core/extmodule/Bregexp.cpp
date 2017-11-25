@@ -13,7 +13,7 @@
 #include "env/DllSharedData.h"
 
 
-// Compile時、行頭置換(len=0)の時にダミー文字列(１つに統一) by かろと
+// Compile時、行頭置換(len=0)の時にダミー文字列(１つに統一)
 const wchar_t Bregexp::tmpBuf[2] = L"\0";
 
 
@@ -443,7 +443,7 @@ bool Bregexp::Match(const wchar_t* target, size_t len, size_t nStart)
 	}
 
 	szMsg[0] = '\0';		// エラー解除
-	// 拡張関数がない場合は、行の先頭("^")の検索時の特別処理 by かろと
+	// 拡張関数がない場合は、行の先頭("^")の検索時の特別処理
 	if (!ExistBMatchEx()) {
 		/*
 		** 行頭(^)とマッチするのは、nStart=0の時だけなので、それ以外は false

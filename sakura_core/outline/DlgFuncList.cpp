@@ -611,7 +611,6 @@ void DlgFuncList::SetData()
 			item.iItem = (int)i;
 			item.iSubItem = FL_COL_NAME;
 			ListView_SetItem(hwndList, &item);
-			//	To Here Apr. 23, 2005 genta 行番号を左端へ
 
 			item.mask = LVIF_TEXT;
 			if (pFuncInfo->nInfo == 1) {item.pszText = const_cast<TCHAR*>(LS(STR_DLGFNCLST_REMARK01));}else
@@ -719,8 +718,7 @@ void DlgFuncList::SetData()
 		::ShowWindow(GetItemHwnd(IDC_CHECK_bMarkUpBlankLineEnable), SW_HIDE);
 		EnableItem(IDC_CHECK_bMarkUpBlankLineEnable, false);
 	}
-	// 2002/11/1 frozen 項目のソート基準を設定するコンボボックスはブックマーク一覧の以外の時に表示する
-	// Nov. 5, 2002 genta ツリー表示の時だけソート基準コンボボックスを表示
+	// 項目のソート基準を設定するコンボボックスはブックマーク一覧の以外の時に表示する
 	EditView* pEditView = (EditView*)(this->lParam);
 	int nDocType = pEditView->GetDocument().docType.GetDocumentType().GetIndex();
 	if (this->nDocType != nDocType) {
@@ -964,11 +962,9 @@ void DlgFuncList::SetTreeJava(
 			htiClass = TreeView_GetFirstVisible(hwndTree);
 			HTREEITEM htiParent = TVI_ROOT;
 			for (k=0; k<nClassNest; ++k) {
-				//	Apr. 1, 2001 genta
 				//	追加文字列を全角にしたのでメモリもそれだけ必要
 				//	6 == strlen("クラス"), 1 == strlen(L'\0')
 
-				// 2002/10/30 frozen
 				// bAddClass == true の場合の仕様変更
 				// 既存の項目は　「(クラス名)(半角スペース一個)(追加文字列)」
 				// となっているとみなし、szClassArr[k] が 「クラス名」と一致すれば、それを親ノードに設定。
@@ -1060,7 +1056,6 @@ void DlgFuncList::SetTreeJava(
 		TCHAR* pFuncName = &funcName[0];
 		_tcscpy(pFuncName, pWork);
 
-		// 2002/10/27 frozen 追加文字列の種類を増やした
 		switch (pFuncInfo->nInfo) {
 		case FL_OBJ_DEFINITION:		//「定義位置」に追加文字列は不要なため除外
 		case FL_OBJ_NAMESPACE:		//「名前空間」は別の場所で処理してるので除外
@@ -1208,7 +1203,6 @@ void DlgFuncList::SetListVB(void)
 		// 現在の解析結果要素
 		const FuncInfo* pFuncInfo = pFuncInfoArr->GetAt(i);
 
-		//	From Here Apr. 23, 2005 genta 行番号を左端へ
 		// 行番号の表示 false=折り返し単位／true=改行単位
 		if (bLineNumIsCRLF) {
 			auto_sprintf(szText, _T("%d"), pFuncInfo->nFuncLineCRLF);
@@ -1239,7 +1233,6 @@ void DlgFuncList::SetListVB(void)
 		item.iItem = (int)i;
 		item.iSubItem = FL_COL_NAME;
 		ListView_SetItem(hwndList, &item);
-		//	To Here Apr. 23, 2005 genta 行番号を左端へ
 
 		item.mask = LVIF_TEXT;
 

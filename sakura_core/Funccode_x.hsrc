@@ -28,7 +28,7 @@ F_INVALID		= -1,
 F_DEFAULT		= 0,
 F_0				= 0,
 
-// 未定義用(ダミーとしても使う) 	//Oct. 17, 2000 jepro noted
+// 未定義用(ダミーとしても使う)
 F_DISABLE			= 0,	//未使用
 F_NODE				= 0,	//ノード(Main Menu用)
 F_SEPARATOR			= 1,	//セパレータ
@@ -210,7 +210,6 @@ F_MODIFYLINE_PREV_SEL	= 30485,	//(範囲選択)前の変更行へ					なし
 // 矩形選択系
 //F_BOXSELALL			= 30500,	//矩形ですべて選択
 F_BEGIN_BOX				= 30510,	//矩形範囲選択開始						なし
-//Oct. 17, 2000 JEPRO 以下に矩形選択のコマンド名のみ準備しておいた
 F_UP_BOX				= 30511,	//(矩形選択)カーソル上移動
 F_DOWN_BOX				= 30512,	//(矩形選択)カーソル下移動
 F_LEFT_BOX				= 30513,	//(矩形選択)カーソル左移動
@@ -487,7 +486,6 @@ F_CUSTMENU_LAST = F_CUSTMENU_24,
 F_CUSTMENU_BASE		= 31500,	// カスタムメニュー基準番号
 
 // その他
-//F_SENDMAIL		= 31570,		// メール送信	//Oct. 17, 2000 JEPRO メール機能は死んでいるのでコメントアウトにした
 
 //	Windows 95の制約により，WM_COMMANDで使う機能番号として32768以上の値を用いることができません．
 //	メニュー等で使われないマクロ専用のコマンドにはそれ以上の値を割り当てましょう．
@@ -516,7 +514,7 @@ F_SETVIEWTOP			= 32818,		// ビューの上の行数を設定					CLayoutYInt nLineNumber
 F_SETVIEWLEFT			= 32819,		// ビューの左端の桁数を設定					CLayoutXInt nColumnIndex
 
 
-F_FUNCTION_FIRST	= 40000,	// 2003-02-21 鬼 これ以上だと関数
+F_FUNCTION_FIRST	= 40000,	// これ以上だと関数
 
 F_GETFILENAME		= 40001,	// 編集中のファイル名を取得する
 F_GETSAVEFILENAME	= 40018,	// 保存時のファイル名を取得する

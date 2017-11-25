@@ -67,7 +67,7 @@ INT_PTR PropStatusbar::DispatchEvent(
 			GetData(hwndDlg);
 			return TRUE;
 
-		case PSN_SETACTIVE: //@@@ 2002.01.03 YAZAKI 最後に表示していたシートを正しく覚えていないバグ修正
+		case PSN_SETACTIVE:
 			nPageNum = ID_PROPCOM_PAGENUM_STATUSBAR;
 			return TRUE;
 		}

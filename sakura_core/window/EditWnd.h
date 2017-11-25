@@ -23,7 +23,6 @@
 
 static const size_t MENUBAR_MESSAGE_MAX_LEN = 30;
 
-//@@@ 2002.01.14 YAZAKI ˆóüPreview‚ğPrintPreview‚É“Æ—§‚³‚¹‚½‚±‚Æ‚É‚æ‚é•ÏX
 class PrintPreview;
 class DropTarget;
 class Plug;
@@ -237,7 +236,6 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                         À‘••â•                            //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-// by ‹S
 protected:
 	enum class IconClickStatus {
 		None,

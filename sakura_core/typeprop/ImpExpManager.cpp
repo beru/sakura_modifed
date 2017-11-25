@@ -904,7 +904,6 @@ bool ImpExpKeybind::Import(const wstring& sFileName, wstring& sErrMsg)
 					*q = L'\0';
 
 					// 機能名を数値に置き換える。(数値の機能名もあるかも)
-					// @@@ 2002.2.2 YAZAKI マクロをSMacroMgrに統一
 					EFunctionCode n = SMacroMgr::GetFuncInfoByName(G_AppInstance(), p, NULL);
 					if (n == F_INVALID) {
 						if (WCODE::Is09(*p)) {

@@ -352,7 +352,7 @@ Color3Setting EditView::GetColorIndex(
 			//	break;
 		}
 
-		eRet = pLayoutLineFirst->GetColorTypePrev();	// 現在の色を指定	// 02/12/18 ai
+		eRet = pLayoutLineFirst->GetColorTypePrev();	// 現在の色を指定
 		colorInfo = pLayoutLineFirst->GetColorInfo();
 		csInfo.nPosInLogic = pLayoutLineFirst->GetLogicOffset();
 
@@ -610,7 +610,6 @@ void EditView::OnPaint2(HDC _hdc, PAINTSTRUCT* pPs, BOOL bDrawFromComptibleBmp)
 		}
 	}
 
-	// 03/02/18 対括弧の強調表示(消去) ai
 	if (!bUseMemoryDC) {
 		// MemoryDCだとスクロール時に先に括弧だけ表示されて不自然なので後でやる。
 		DrawBracketPair(false);
@@ -630,7 +629,6 @@ void EditView::OnPaint2(HDC _hdc, PAINTSTRUCT* pPs, BOOL bDrawFromComptibleBmp)
 	}
 
 	// ルーラーとテキストの間の余白
-	//@@@ 2002.01.03 YAZAKI 余白が0のときは無駄でした。
 	if (GetTextArea().GetTopYohaku()) {
 		if (!bTransText) {
 			rc.left   = 0;
@@ -642,8 +640,7 @@ void EditView::OnPaint2(HDC _hdc, PAINTSTRUCT* pPs, BOOL bDrawFromComptibleBmp)
 	}
 
 	// 行番号の表示
-	//	From Here Sep. 7, 2001 genta
-	//	Sep. 23, 2002 genta 行番号非表示でも行番号色の帯があるので隙間を埋める
+	//	行番号非表示でも行番号色の帯があるので隙間を埋める
 	if (GetTextArea().GetTopYohaku()) {
 		if (bTransText && pTypeData->colorInfoArr[COLORIDX_GYOU].colorAttr.cBACK == textType.GetBackColor()) {
 		}else {
@@ -655,7 +652,6 @@ void EditView::OnPaint2(HDC _hdc, PAINTSTRUCT* pPs, BOOL bDrawFromComptibleBmp)
 			gr.FillMyRectTextBackColor(rc);
 		}
 	}
-	//	To Here Sep. 7, 2001 genta
 
 	::SetBkMode(gr, TRANSPARENT);
 
@@ -791,7 +787,6 @@ void EditView::OnPaint2(HDC _hdc, PAINTSTRUCT* pPs, BOOL bDrawFromComptibleBmp)
 		GetCaret().underLine.CaretUnderLineON(true, false);
 	}
 
-	// 03/02/18 対括弧の強調表示(描画) ai
 	DrawBracketPair(true);
 
 	// キャレットを現在位置に表示します
@@ -1182,8 +1177,7 @@ void EditView::DispTextSelected(
 
 			bool bOMatch = false;
 
-			// 2005/04/02 かろと ０文字マッチだと反転幅が０となり反転されないので、1/3文字幅だけ反転させる
-			// 選択解除でキャレットの残骸が残る問題を修正
+			// ０文字マッチだと反転幅が０となり反転されないので、1/3文字幅だけ反転させる
 			if (GetSelectionInfo().IsTextSelected() && rcClip.right == rcClip.left &&
 				select.IsLineOne() &&
 				select.GetFrom().x >= GetTextArea().GetViewLeftCol()

@@ -201,10 +201,6 @@ DWORD GrepAgent::DoGrep(
 
 	// アンドゥバッファの処理
 	if (viewDst.GetDocument().docEditor.pOpeBlk) {	// 操作ブロック
-//@@@2002.2.2 YAZAKI NULLじゃないと進まないので、とりあえずコメント。＆NULLのときは、new OpeBlkする。
-//		while (pOpeBlk) {}
-//		delete pOpeBlk;
-//		pOpeBlk = NULL;
 	}else {
 		viewDst.GetDocument().docEditor.pOpeBlk = new OpeBlk;
 		viewDst.GetDocument().docEditor.nOpeBlkRedawCount = 0;
@@ -247,7 +243,6 @@ DWORD GrepAgent::DoGrep(
 		}
 	}	// 正規表現
 
-	//	From Here Jun. 27 genta
 	/*
 		Grepを行うに当たって検索・画面色分け用正規表現バッファも
 		初期化する．これはGrep検索結果の色分けを行うため．
@@ -527,7 +522,6 @@ DWORD GrepAgent::DoGrep(
 
 	memMessage.AppendStringLiteral(L"\r\n\r\n");
 	pszWork = memMessage.GetStringPtr(&nWork);
-//@@@ 2002.01.03 YAZAKI Grep直後はカーソルをGrep直前の位置に動かす
 	size_t tmp_PosY_Layout = viewDst.pEditDoc->layoutMgr.GetLineCount();
 	if (0 < nWork && grepOption.bGrepHeader) {
 		AddTail(editWnd, viewDst, memMessage, grepOption.bGrepStdout);
@@ -1198,13 +1192,6 @@ int GrepAgent::DoGrepFile(
 				int nIndexPrev = -1;
 #endif
 
-				//	Jun. 21, 2003 genta ループ条件見直し
-				//	マッチ箇所を1行から複数検出するケースを標準に，
-				//	マッチ箇所を1行から1つだけ検出する場合を例外ケースととらえ，
-				//	ループ継続・打ち切り条件(nGrepOutputLineType)を逆にした．
-				//	Jun. 27, 2001 genta	正規表現ライブラリの差し替え
-				// From Here 2005.03.19 かろと もはやBREGEXP構造体に直接アクセスしない
-				// 2010.08.25 行頭以外で^にマッチする不具合の修正
 				while (nIndex <= nLineLen && regexp.Match(pLine, nLineLen, nIndex)) {
 
 					// パターン発見
@@ -1240,8 +1227,7 @@ int GrepAgent::DoGrepFile(
 							grepOption
 						);
 					}
-					// To Here 2005.03.19 かろと もはやBREGEXP構造体に直接アクセスしない
-					//	Jun. 21, 2003 genta 行単位で出力する場合は1つ見つかれば十分
+					// 行単位で出力する場合は1つ見つかれば十分
 					if ( grepOption.nGrepOutputLineType != 0 || grepOption.bGrepOutputFileOnly ) {
 						break;
 					}
@@ -1650,13 +1636,6 @@ int GrepAgent::DoGrepReplaceFile(
 				size_t nIndex = 0;
 				size_t nIndexOld = nIndex;
 				int nMatchNum = 0;
-				//	Jun. 21, 2003 genta ループ条件見直し
-				//	マッチ箇所を1行から複数検出するケースを標準に，
-				//	マッチ箇所を1行から1つだけ検出する場合を例外ケースととらえ，
-				//	ループ継続・打ち切り条件(bGrepOutputLine)を逆にした．
-				//	Jun. 27, 2001 genta	正規表現ライブラリの差し替え
-				// From Here 2005.03.19 かろと もはやBREGEXP構造体に直接アクセスしない
-				// 2010.08.25 行頭以外で^にマッチする不具合の修正
 				while (
 					nIndex <= nLineLen
 					&& (  (!grepOption.bGrepPaste && (nMatchNum = regexp.Replace(pLine, nLineLen, nIndex)))
@@ -1680,7 +1659,6 @@ int GrepAgent::DoGrepReplaceFile(
 							pLine + nIndex, matchlen,
 							grepOption
 						);
-						// To Here 2005.03.19 かろと もはやBREGEXP構造体に直接アクセスしない
 						if (grepOption.nGrepOutputLineType != 0 || grepOption.bGrepOutputFileOnly) {
 							bOutput = false;
 						}
@@ -1721,11 +1699,9 @@ int GrepAgent::DoGrepReplaceFile(
 			// 単語のみ検索
 			else if (searchOption.bWordOnly) {
 				/*
-					2002/02/23 Norio Nakatani
 					単語単位のGrepを試験的に実装。単語はWhereCurrentWord()で判別してますので、
 					英単語やC/C++識別子などの検索条件ならヒットします。
 	
-					2002/03/06 YAZAKI
 					Grepにも試験導入。
 					WhereCurrentWordで単語を抽出して、その単語が検索語とあっているか比較する。
 				*/
@@ -1733,7 +1709,6 @@ int GrepAgent::DoGrepReplaceFile(
 				size_t nMatchLen;
 				ptrdiff_t nIdx = 0;
 				ptrdiff_t nOutputPos = 0;
-				// Jun. 26, 2003 genta 無駄なwhileは削除
 				while (pszRes = SearchAgent::SearchStringWord(pLine, nLineLen, nIdx, searchWords, searchOption.bLoHiCase, &nMatchLen)) {
 					nIdx = pszRes - pLine + nMatchLen;
 					if (bOutput) {

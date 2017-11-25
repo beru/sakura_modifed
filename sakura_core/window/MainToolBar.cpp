@@ -45,9 +45,8 @@ void MainToolBar::ProcSearchBox(MSG *msg)
 				//::SetFocus(hWnd);	//先にフォーカスを移動しておかないとキャレットが消える
 				owner.GetActiveView().SetFocus();
 
-				// 検索開始時のカーソル位置登録条件を変更 02/07/28 ai start
+				// 検索開始時のカーソル位置登録条件を変更
 				owner.GetActiveView().ptSrchStartPos_PHY = owner.GetActiveView().GetCaret().GetCaretLogicPos();
-				// 02/07/28 ai end
 
 				// 次を検索
 				owner.OnCommand((WORD)0 /*メニュー*/, (WORD)F_SEARCH_NEXT, (HWND)0);

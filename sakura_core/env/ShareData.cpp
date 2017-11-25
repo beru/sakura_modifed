@@ -621,7 +621,6 @@ bool ShareData::InitShareData()
 		{
 			/* printSettingArr[0]を設定して、残りの1～7にコピーする。
 				必要になるまで遅らせるために、Printに、ShareDataを操作する権限を与える。
-				YAZAKI.
 			*/
 			{
 				TCHAR szSettingName[64];

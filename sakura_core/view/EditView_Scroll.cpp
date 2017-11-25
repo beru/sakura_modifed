@@ -201,7 +201,7 @@ int EditView::OnHScroll(int nScrollCode, int nPos)
 		}
 	}
 
-	GetRuler().SetRedrawFlag(); // YAZAKI
+	GetRuler().SetRedrawFlag();
 	switch (nScrollCode) {
 	case SB_LINELEFT:
 		nScrollVal = ScrollAtH(GetTextArea().GetViewLeftCol() - nHScrollNum);

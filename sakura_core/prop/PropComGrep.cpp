@@ -77,7 +77,6 @@ INT_PTR PropGrep::DispatchEvent(
 				// ダイアログデータの取得 Grep
 				GetData(hwndDlg);
 				return TRUE;
-//@@@ 2002.01.03 YAZAKI 最後に表示していたシートを正しく覚えていないバグ修正
 			case PSN_SETACTIVE:
 				nPageNum = ID_PROPCOM_PAGENUM_GREP;
 				return TRUE;

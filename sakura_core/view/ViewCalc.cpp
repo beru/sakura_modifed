@@ -12,10 +12,7 @@ size_t ViewCalc::GetTabSpace() const
 }
 
 
-/* 指定された桁に対応する行のデータ内の位置を調べる Ver1
-	
-	@@@ 2002.09.28 YAZAKI DocLine版
-*/
+/* 指定された桁に対応する行のデータ内の位置を調べる Ver1 */
 size_t ViewCalc::LineColumnToIndex(
 	const DocLine* pDocLine,
 	size_t nColumn
@@ -35,10 +32,7 @@ size_t ViewCalc::LineColumnToIndex(
 }
 
 
-/* 指定された桁に対応する行のデータ内の位置を調べる Ver1
-	
-	@@@ 2002.09.28 YAZAKI Layoutが必要になりました。
-*/
+/* 指定された桁に対応する行のデータ内の位置を調べる Ver1 */
 size_t ViewCalc::LineColumnToIndex(
 	const Layout* pLayout,
 	size_t nColumn
@@ -62,7 +56,6 @@ size_t ViewCalc::LineColumnToIndex(
   指定された桁に対応する行のデータ内の位置を調べる Ver0
   指定された桁より、行が短い場合はpnLineAllColLenに行全体の表示桁数を返す
   それ以外の場合はpnLineAllColLenに０をセットする
-  @@@ 2002.09.28 YAZAKI Layoutが必要になりました。
 */
 size_t ViewCalc::LineColumnToIndex2(
 	const Layout* pLayout,
@@ -93,8 +86,6 @@ size_t ViewCalc::LineColumnToIndex2(
 
 /*
 ||	指定された行のデータ内の位置に対応する桁の位置を調べる
-||
-||	@@@ 2002.09.28 YAZAKI Layoutが必要になりました。
 */
 size_t ViewCalc::LineIndexToColumn(
 	const Layout* pLayout,
@@ -118,8 +109,6 @@ size_t ViewCalc::LineIndexToColumn(
 
 /*
 ||	指定された行のデータ内の位置に対応する桁の位置を調べる
-||
-||	@@@ 2002.09.28 YAZAKI DocLine版
 */
 size_t ViewCalc::LineIndexToColumn(
 	const DocLine* pDocLine,

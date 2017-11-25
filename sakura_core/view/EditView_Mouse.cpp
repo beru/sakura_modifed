@@ -113,7 +113,6 @@ void EditView::OnLBUTTONDOWN(WPARAM fwKeys, int _xPos , int _yPos)
 						// 現在の選択範囲を非選択状態に戻す
 						GetSelectionInfo().DisableSelectArea(true);
 					}
-//@@@ 2002.01.08 YAZAKI フリーカーソルOFFで複数行選択し、行の後ろをクリックするとそこにキャレットが置かれてしまうバグ修正
 					// カーソル移動。
 					if (ptMouse.y >= textArea.GetAreaTop() && ptMouse.y < textArea.GetAreaBottom()) {
 						if (ptMouse.x >= textArea.GetAreaLeft() && ptMouse.x < textArea.GetAreaRight()
@@ -444,7 +443,6 @@ normal_action:;
 					  カーソル位置変換
 					  物理位置(行頭からのバイト数、折り返し無し行位置)
 					  →レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
-						2002/04/08 YAZAKI 少しでもわかりやすく。
 					*/
 					Range rangeB;
 					pEditDoc->layoutMgr.LogicToLayout(cUrlRange, &rangeB);
@@ -1327,7 +1325,7 @@ LRESULT EditView::OnMOUSEWHEEL2(
 				nRollLineNum = GetTextArea().nViewRowNum - 1;	// 表示域の行数
 			}
 		}else {
-			if (nRollLineNum > 30) {	//@@@ YAZAKI 2001.12.31 10→30へ。
+			if (nRollLineNum > 30) {
 				nRollLineNum = 30;
 			}
 		}

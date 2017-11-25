@@ -95,7 +95,6 @@ BOOL DlgTypeList::OnBnClicked(int wID)
 		//「タイプ別設定一覧」のヘルプ
 		MyWinHelp(GetHwnd(), HELP_CONTEXT, ::FuncID_To_HelpContextID(F_TYPE_LIST));
 		return TRUE;
-	// Nov. 29, 2000	From Here	genta
 	// 適用する型の一時的変更
 	case IDC_BUTTON_TEMPCHANGE:
 		::EndDialog(
@@ -104,7 +103,6 @@ BOOL DlgTypeList::OnBnClicked(int wID)
 			| PROP_TEMPCHANGE_FLAG
 		);
 		return TRUE;
-	// Nov. 29, 2000	To Here
 	case IDOK:
 		::EndDialog(GetHwnd(), List_GetCurSel(GetItemHwnd(IDC_LIST_TYPES)));
 		return TRUE;

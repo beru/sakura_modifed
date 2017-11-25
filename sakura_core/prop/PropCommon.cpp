@@ -123,7 +123,6 @@ PropCommon::~PropCommon()
 
 
 // 初期化
-//@@@ 2002.01.03 YAZAKI tbMyButtonなどをCShareDataからMenuDrawerへ移動したことによる修正。
 void PropCommon::Create(HWND hwndParent, ImageListMgr* pIcons, MenuDrawer* pMenuDrawer)
 {
 	this->hwndParent = hwndParent;	// オーナーウィンドウのハンドル
@@ -134,14 +133,12 @@ void PropCommon::Create(HWND hwndParent, ImageListMgr* pIcons, MenuDrawer* pMenu
 	// common.macro.macroTable（ローカルメンバ）でlookupを初期化する
 	lookup.Init(common.macro.macroTable, &common);	//	機能名・番号resolveクラス．
 
-//@@@ 2002.01.03 YAZAKI tbMyButtonなどをCShareDataからMenuDrawerへ移動したことによる修正。
 	this->pMenuDrawer = pMenuDrawer;
 
 	return;
 }
 
 
-//	From Here Jun. 2, 2001 genta
 /*!
 	「共通設定」プロパティシートの作成時に必要な情報を
 	保持する構造体
@@ -311,11 +308,6 @@ void PropCommon::OnHelp(HWND hwndParent, int nPageID)
 	case IDD_PROP_FILE:
 		nContextID = ::FuncID_To_HelpContextID(F_OPTION_FILE);
 		break;
-//	Sept. 10, 2000 JEPRO ID名を実際の名前に変更するため以下の行はコメントアウト
-//	変更は少し後の行(Sept. 9, 2000)で行っている
-//	case IDD_PROP1P5:
-//		nContextID = 84;
-//		break;
 	case IDD_PROP_TOOLBAR:
 		nContextID = ::FuncID_To_HelpContextID(F_OPTION_TOOLBAR);
 		break;
@@ -329,7 +321,6 @@ void PropCommon::OnHelp(HWND hwndParent, int nPageID)
 		nContextID = ::FuncID_To_HelpContextID(F_OPTION_HELPER);
 		break;
 
-	// From Here Sept. 9, 2000 JEPRO 共通設定のヘルプボタンが効かなくなっていた部分を以下の追加によって修正
 	case IDD_PROP_EDIT:
 		nContextID = ::FuncID_To_HelpContextID(F_OPTION_EDIT);
 		break;

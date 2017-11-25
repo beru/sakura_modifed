@@ -19,8 +19,8 @@ void CType_Java::InitTypeConfigImp(TypeConfig& type)
 	type.nKeywordSetIdx[0] = 4;									// キーワードセット
 	type.eDefaultOutline = OutlineType::Java;						// アウトライン解析方法
 	type.eSmartIndent = SmartIndentType::Cpp;						// スマートインデント種別
-	type.colorInfoArr[COLORIDX_DIGIT].bDisp = true;			// 半角数値を色分け表示			// Mar. 10, 2001 JEPRO
-	type.colorInfoArr[COLORIDX_BRACKET_PAIR].bDisp = true;	// 対括弧の強調をデフォルトONに	// Sep. 21, 2002 genta
+	type.colorInfoArr[COLORIDX_DIGIT].bDisp = true;			// 半角数値を色分け表示
+	type.colorInfoArr[COLORIDX_BRACKET_PAIR].bDisp = true;	// 対括弧の強調をデフォルトONに
 	type.bStringLineOnly = true; // 文字列は行内のみ
 }
 

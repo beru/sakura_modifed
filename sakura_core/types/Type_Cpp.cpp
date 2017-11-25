@@ -22,8 +22,8 @@ bool IsHeadCppKeyword(const wchar_t* pData)
 }
 
 // C/C++
-// VC++の生成するテキストファイルも読めるようにする			Oct. 31, 2000 JEPRO
-// 関連づけ上好ましくないのでdsw,dsp,dep,makははずす		Jan. 24, 2004 genta
+// VC++の生成するテキストファイルも読めるようにする
+// 関連づけ上好ましくないのでdsw,dsp,dep,makははずす
 // ファイル内からの入力補完機能
 void CType_Cpp::InitTypeConfigImp(TypeConfig& type)
 {
@@ -34,18 +34,15 @@ void CType_Cpp::InitTypeConfigImp(TypeConfig& type)
 	// 設定
 	type.lineComment.CopyTo(0, L"//", -1);							// 行コメントデリミタ
 	type.blockComments[0].SetBlockCommentRule(L"/*", L"*/");			// ブロックコメントデリミタ
-	type.blockComments[1].SetBlockCommentRule(L"#if 0", L"#endif");	// ブロックコメントデリミタ2		Jul. 11, 2001 JEPRO
+	type.blockComments[1].SetBlockCommentRule(L"#if 0", L"#endif");	// ブロックコメントデリミタ2
 	type.nKeywordSetIdx[0] = 0;										// キーワードセット
 	type.eDefaultOutline = OutlineType::CPP;							// アウトライン解析方法
 	type.eSmartIndent = SmartIndentType::Cpp;							// スマートインデント種別
-	type.colorInfoArr[COLORIDX_DIGIT].bDisp = true;					// 半角数値を色分け表示				Mar. 10, 2001 JEPRO
-	type.colorInfoArr[COLORIDX_BRACKET_PAIR].bDisp = true;			// 対括弧の強調をデフォルトONに		Sep. 21, 2002 genta 
+	type.colorInfoArr[COLORIDX_DIGIT].bDisp = true;					// 半角数値を色分け表示
+	type.colorInfoArr[COLORIDX_BRACKET_PAIR].bDisp = true;			// 対括弧の強調をデフォルトONに
 	type.bUseHokanByFile = true;										// 入力補完 開いているファイル内から候補を探す
 	type.bStringLineOnly = true; // 文字列は行内のみ
 }
-
-//	Mar. 15, 2000 genta
-//	From Here
 
 /*!
 	関数に用いることができる文字かどうかの判定
@@ -63,9 +60,7 @@ bool C_IsWordChar(wchar_t c)
 		|| (0xa1 <= c && !iswcntrl(c) && !iswspace(c))
 	);
 }
-//	To Here
 
-//	From Here Apr. 1, 2001 genta
 /*!
 	特殊な関数名 "operator" かどうかを判定する。
 
@@ -91,7 +86,6 @@ bool C_IsOperator(wchar_t* szStr, size_t nLen)
 	}
 	return false;
 }
-//	To Here Apr. 1, 2001 genta
 
 /*!
 	改行直前を \ でエスケープしているかどうか判定
@@ -245,7 +239,6 @@ size_t CppPreprocessMng::ScanLine(
 		//	if 0は最初が無効部分とみなす．
 		//	それ以外のif/ifdef/ifndefは最初が有効部分と見なす
 		//	最初の条件によってこの時点ではp < lastptrなので判定省略
-		// 2007/12/13 じゅうじ : #if (0)とスペースを空けない場合の対応
 		if (C_IsSpace(*p, bExtEol) || *p == L'(') {
 			//	if 0 チェック
 			//	skip whitespace
@@ -329,14 +322,11 @@ void DocOutline::MakeFuncList_C(
 	const wchar_t*	pLine;
 	size_t		nLineLen;
 
-	// 2002/10/27 frozen　ここから
 	// nNestLevelを nNestLevel_global を nNestLevel_func に分割した。
 	int			nNestLevel_global = 0;	// nNestLevel_global 関数外の {}のレベル  
 	int			nNestLevel_func   = 0;	//	nNestLevel_func 関数の定義、および関数内の	{}のレベル
-//	int			nNestLevel2;			//	nNestLevel2	()に対する位置 // 2002/10/27 frozen nNastLevel_fparamとnMode2のM2_FUNC_NAME_ENDで代用
 	int			nNestLevel_fparam = 0;	// ()のレベル
 	int			nNestPoint_class = 0;	// 外側から何番目の{がクラスの定義を囲む{か？ (一番外側なら1、0なら無し。bVisibleMemberFuncがfalseの時のみ有効。trueでは常に0)
-	// 2002/10/27 frozen　ここまで
 
 	bool bInInitList = false;	// 関数名調査の際、現在位置が初期化リスト（':'以後）に到達したかどうかを示す
 	int			nNestLevel_template = 0; // template<> func<vector<int>> などの<>の数
@@ -359,7 +349,6 @@ void DocOutline::MakeFuncList_C(
 		999 : 長い単語無視
 	*/
 
-	// 2002/10/27 frozen　ここから
 	// 状態2
 	enum MODE2 {
 		M2_NORMAL			= 0x00,	// 通常
@@ -421,8 +410,8 @@ void DocOutline::MakeFuncList_C(
 
 	szWordPrev[0] = L'\0';
 	szWord[nWordIdx] = L'\0';
-	szNamespace[0] = L'\0';	// 2002/10/27 frozen
-	nNamespaceLen[0] = 0;	// 2002/10/27 frozen
+	szNamespace[0] = L'\0';
+	nNamespaceLen[0] = 0;
 	szItemName[0] = L'\0';
 	szTemplateName[0] = L'\0';
 	nMode = 0;
@@ -435,18 +424,16 @@ void DocOutline::MakeFuncList_C(
 	for (nLineCount=0; nLineCount<doc.docLineMgr.GetLineCount(); ++nLineCount) {
 		pLine = doc.docLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
 
-		//	From Here Aug. 10, 2004 genta
 		//	プリプロセス処理
 		//	コメント中でなければプリプロセッサ指令を先に判定させる
 		size_t i;
-		if (nMode != 8 && nMode != 10) {	// chg 2005/12/6 じゅうじ 次の行が空白でもよい
+		if (nMode != 8 && nMode != 10) {	// 次の行が空白でもよい
 			i = cppPMng.ScanLine(pLine, nLineLen);
 		}else {
 			i = 0;
 		}
 		//	C/C++としての処理が不要なケースでは i == nLineLenとなっているので
 		//	以下の解析処理はSKIPされる．
-		//	To Here Aug. 10, 2004 genta
 #ifdef TRACE_OUTLINE
 		DEBUG_TRACE(_T("line:%ls"), pLine);
 #endif
@@ -455,12 +442,10 @@ void DocOutline::MakeFuncList_C(
 			DEBUG_TRACE(_T("%2d [%lc] %d %x %d %d %d wd[%ls] pre[%ls] tmp[%ls] til[%ls] %d\n"), i, pLine[i], nMode, nMode2,
 				nNestLevel_global, nNestLevel_func, nNestLevel_fparam, szWord, szWordPrev, szTemplateName, szItemName, nWordIdx);
 #endif
-// del start 2005/12/6 じゅうじ
 			// エスケープシーケンスは常に取り除く
 			// シングルクォーテーション文字列読み込み中
 			// ダブルクォーテーション文字列読み込み中
 			// いずれもコメント処理の後へ移動
-// del end 2005/12/6 じゅうじ
 			// コメント読み込み中
 			if (nMode == 8) {
 				if (i < nLineLen - 1 && pLine[i] == '*' && pLine[i + 1] == '/') {
@@ -477,7 +462,6 @@ void DocOutline::MakeFuncList_C(
 				i = nLineLen;
 				continue;
 			}else if (pLine[i] == '\\' && nRawStringTagLen == 0) {
-				// add start 2005/12/6 じゅうじ
 				// エスケープシーケンスは常に取り除く
 				++i;
 			}else if (nMode == 20) {
@@ -513,7 +497,6 @@ void DocOutline::MakeFuncList_C(
 				}else {
 				}
 			}else if (nMode == 1) {
-				// add end 2005/12/6 じゅうじ
 				// 単語読み込み中
 				if (C_IsWordChar(pLine[i])) {
 					++nWordIdx;
@@ -542,7 +525,6 @@ void DocOutline::MakeFuncList_C(
 						szWord[nWordIdx + 1] = L'\0';
 					}
 				}else {
-					// 2002/10/27 frozen　ここから
 					if (nMode2 == M2_NAMESPACE_SAVE) {
 						if (wcscmp(L"final", szWord) == 0 && wcscmp(LSW(STR_OUTLINE_CPP_NONAME), szItemName) != 0) {
 							// strcut name final のfinalはクラス名の一部ではない
@@ -592,7 +574,6 @@ void DocOutline::MakeFuncList_C(
 					if (nMode2 == M2_FUNC_NAME_END) {
 						nMode2 = M2_KR_FUNC;
 					}
-					// 2002/10/27 frozen　ここまで
 					if (nMode2 == M2_NORMAL) {
 						// templateは終わった
 						szTemplateName[0] = L'\0';
@@ -737,7 +718,6 @@ void DocOutline::MakeFuncList_C(
 					nMode = 21;
 					continue;
  				}else if (pLine[i] == '{') {
-					// 2002/10/27 frozen ここから
 					bool bAddFunction = false;
 					if (nMode2 == M2_FUNC_NAME_END || nMode2 == M2_KR_FUNC) {
 						bAddFunction = true;
@@ -815,9 +795,6 @@ void DocOutline::MakeFuncList_C(
 					// nNestLevel2 = 0;
 					continue;
 				}else if (pLine[i] == '}') {
-					// 2002/10/27 frozen ここまで
-					//  2002/10/27 frozen ここから
-//					nNestLevel2 = 0;
 					if (nNestLevel_func == 0) {
 						if (nNestLevel_global != 0) {
 							if (nNestLevel_global == nNestPoint_class) {
@@ -828,19 +805,11 @@ void DocOutline::MakeFuncList_C(
 					}else {
 						--nNestLevel_func;
 					}
-					//  2002/10/27 frozen ここまで
 					nMode = 0;
 					nMode2 = M2_NORMAL;
 					nMode2Old = M2_NORMAL;
 					continue;
 				}else if (pLine[i] == '(') {
-					//  2002/10/27 frozen ここから
-//					if (nNestLevel == 0 && !bCppInitSkip) {
-//						wcscpy(szFuncName, szWordPrev);
-//						nFuncLine = nLineCount + 1;
-//						nNestLevel2 = 1;
-//					}
-//					nMode = 0;
 					size_t nLen = (int)wcslen(szWordPrev);
 					bool bOperator = false;
 					if (nMode2 == M2_NORMAL && nNestLevel_fparam == 0 && C_IsOperator(szWordPrev, nLen)) {
@@ -899,7 +868,6 @@ void DocOutline::MakeFuncList_C(
 						}
 						++nNestLevel_fparam;
 					}
-					//  2002/10/27 frozen ここまで
 					if (nMode2 == M2_TEMPLATE_SAVE || nMode2 == M2_TEMPLATE_WORD) {
 						size_t nItemNameLen = wcslen(szTemplateName);
 						if (nItemNameLen + 1 < nItemNameLenMax) {
@@ -909,11 +877,6 @@ void DocOutline::MakeFuncList_C(
 					}
 					continue;
 				}else if (')' == pLine[i]) {
-					//  2002/10/27 frozen ここから
-//					if (nNestLevel2 == 1) {
-//						nNestLevel2 = 2;
-//					}
-//					nMode = 0;
 					if (nNestLevel_fparam > 0) {
 						--nNestLevel_fparam;
 						//	2007.05.26 genta C++/CLI Attribute内部ではnMode2の変更は行わない
@@ -927,7 +890,6 @@ void DocOutline::MakeFuncList_C(
 							}
 						}
 					}
-					//  2002/10/27 frozen ここまで
 					if (nMode2 == M2_OPERATOR_WORD) {
 						size_t nLen = wcslen(szWordPrev);
 						if (nLen + 1 < _countof(szWordPrev)) {
@@ -943,7 +905,7 @@ void DocOutline::MakeFuncList_C(
 					}
 					continue;
 				}else if (pLine[i] == '[') {
-					// From Here 2007.05.26 genta C++/CLI Attributeの取り扱い
+					// C++/CLI Attributeの取り扱い
 					size_t nLen = (int)wcslen(szWordPrev);
 					if (nMode2 == M2_NORMAL && C_IsOperator(szWordPrev, nLen)) {
 						// 演算子のオペレータだった operator []
@@ -982,12 +944,10 @@ void DocOutline::MakeFuncList_C(
 						}
 					}
 				}else if (pLine[i] == ';') {
-					// To Here 2007.05.26 genta C++/CLI Attributeの取り扱い
-					//  2002/10/27 frozen ここから
 					if (nMode2 == M2_KR_FUNC) {
 						// K&Rスタイルの関数宣言の終了後 M2_FUNC_NAME_END にもどす
 						nMode2 = M2_FUNC_NAME_END;
-					} //	Jan. 30, 2005 genta K&R処理に引き続いて宣言処理も行う．
+					} // K&R処理に引き続いて宣言処理も行う．
 					if (1
 						&& nMode2 == M2_FUNC_NAME_END
 						&& nNestLevel_global < nNamespaceNestMax
@@ -1016,17 +976,14 @@ void DocOutline::MakeFuncList_C(
 					nItemLine = -1;
 					nNestLevel_template = 0;
 					nMode2 = M2_NORMAL;
-					//  2002/10/27 frozen ここまで
 					bNoFunction = true;
 					bDefinedTypedef = false;
 					nMode2Old = M2_NORMAL;
 					nMode = 0;
 					continue;
 				}else if (nNestLevel_fparam == 0 && nMode2 != M2_ATTRIBUTE) {
-					// 2007.05.26 genta C++/CLI Attribute内部では関数名処理は一切行わない
+					// C++/CLI Attribute内部では関数名処理は一切行わない
 					if (C_IsWordChar(pLine[i])) {
-						//	//	Mar. 15, 2000 genta
-						//	From Here
 						//	直前のwordの最後が::か，あるいは直後のwordの先頭が::なら
 						//	クラス限定子と考えて両者を接続する．
 						{
@@ -1048,7 +1005,6 @@ void DocOutline::MakeFuncList_C(
 								}
 								nWordIdx = wcslen(szWord);
 							}
-							//	From Here Apr. 1, 2001 genta
 							//	operator new/delete 演算子の対応
 							else if (1
 								&& (nMode2 == M2_NORMAL)
@@ -1072,12 +1028,10 @@ void DocOutline::MakeFuncList_C(
 								wcscpy_s(szWord, szWordPrev);
 								nWordIdx = wcslen(szWord);
 							}else {
-								//	To Here Apr. 1, 2001 genta
 								nWordIdx = 0;
 							}
 						}
 						//	wcscpy_s(szWordPrev, szWord);	不要？
-						//	To Here
 						if (1
 							&& (pLine[i] == L':')
 							&& (pLine[i+1] != L':')
@@ -1097,17 +1051,13 @@ void DocOutline::MakeFuncList_C(
 						}
 						szWord[nWordIdx] = pLine[i];
 						szWord[nWordIdx + 1] = L'\0';
-						//	//	Mar. 15, 2000 genta
-						//	From Here
 						//	長さチェックは必須
 						if (nWordIdx < nMaxWordLeng) {
 							nMode = 1;
 						}else {
 							nMode = 999;
 						}
-						//	To Here
 					}else {
-						// 2011.12.02 template対応
 						if (nMode2 == M2_NORMAL || nMode2 == M2_OPERATOR_WORD) {
 							if (pLine[i] == L'<') {
 								size_t nLen = (int)wcslen(szWordPrev);
@@ -1156,7 +1106,6 @@ void DocOutline::MakeFuncList_C(
 							wcscpy_s(szWordPrev, szWord);
 							nWordIdx = -1;
 						}
-						// 2002/10/27 frozen ここから
 						if (nMode2 == M2_NAMESPACE_SAVE) {
 #if 0
 							if (pLine[i] == L'>' || pLine[i] == L',' || pLine[i] == L'=')
@@ -1266,7 +1215,6 @@ void EditView::SmartIndent_CPP(wchar_t wcChar)
 			}
 			if (i < nWork) {
 				if ((wcChar == L':' && IsHeadCppKeyword(&pLine[i]))
-					//	Sep. 18, 2002 かろと
 					|| (wcChar == L'{' && pLine[i] != L'#')
 					|| (wcChar == L'(' && pLine[i] != L'#')
 				) {

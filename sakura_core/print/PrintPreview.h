@@ -229,7 +229,7 @@ public:
 protected:
 	TypeConfig typePrint;
 
-	// プレビューから出ても現在のプリンタ情報を記憶しておけるようにstaticにする 2003.05.02 かろと 
+	// プレビューから出ても現在のプリンタ情報を記憶しておけるようにstaticにする
 	static Print	print;						// 現在のプリンタ情報
 
 	bool			bLockSetting;				// 設定のロック

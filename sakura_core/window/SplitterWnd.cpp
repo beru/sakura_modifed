@@ -95,10 +95,6 @@ void SplitterWnd::SetChildWndArr(HWND* hwndEditViewArr)
 		childWndArr[v] = NULL;
 	}
 
-	// 2002/05/11 YAZAKI 不要な処理と思われる
-	// ウィンドウの分割
-//	DoSplit(nHSplitPos, nVSplitPos);
-//	DoSplit(0, 0);
 	return;
 }
 
@@ -400,7 +396,6 @@ void SplitterWnd::DoSplit(int nHorizontal, int nVertical)
 			if (pViewArr[0] && pViewArr[2]) {
 				pViewArr[0]->CopyViewStatus(pViewArr[2]);
 			}
-			// YAZAKI
 			pViewArr[2]->GetTextArea().SetViewTopLine(pViewArr[0]->GetTextArea().GetViewTopLine() + pViewArr[0]->GetTextArea().nViewRowNum);
 		}else if (nAllSplitRowsOld > 1 && nAllSplitColsOld == 1) {
 		}else if (nAllSplitRowsOld == 1 && nAllSplitColsOld > 1) {

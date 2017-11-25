@@ -1863,7 +1863,6 @@ LRESULT EditWnd::DispatchEvent(
 		}
 		return 0L;
 
-	// by 鬼 (2) MYWM_CHECKSYSMENUDBLCLKは不要に, WM_LBUTTONDBLCLK追加
 	case WM_NCLBUTTONDOWN:
 		return OnNcLButtonDown(wParam, lParam);
 
@@ -2062,9 +2061,6 @@ void EditWnd::OnCommand(WORD wNotifyCode, WORD wID , HWND hwndCtl)
 
 
 //	キーワード：メニューバー順序
-//	Sept.14, 2000 Jepro note: メニューバーの項目のキャプションや順番設定などは以下で行っているらしい
-//	Sept.16, 2000 Jepro note: アイコンとの関連付けはCShareData_new2.cppファイルで行っている
-//	2010/5/16	Uchi	動的に作成する様に変更	
 void EditWnd::InitMenu(HMENU hMenu, UINT uPos, BOOL fSystemMenu)
 {
 	int		numMenuItems;
@@ -2167,15 +2163,12 @@ void EditWnd::InitMenu(HMENU hMenu, UINT uPos, BOOL fSystemMenu)
 		CheckFreeSubMenu(GetHwnd(), hMenu, uPos);
 	}
 
-//@@@ 2002.01.14 YAZAKI 印刷PreviewをPrintPreviewに独立させたことによる変更
-//	if (pPrintPreview)	return;	//	印刷Previewモードなら排除。（おそらく排除しなくてもいいと思うんだけど、念のため）
-
 	// 機能が利用可能かどうか、チェック状態かどうかを一括チェック
 	numMenuItems = ::GetMenuItemCount(hMenu);
 	for (nPos=0; nPos<numMenuItems; ++nPos) {
 		EFunctionCode	id = (EFunctionCode)::GetMenuItemID(hMenu, nPos);
 		// 機能が利用可能か調べる
-		//	Jan.  8, 2006 genta 機能が有効な場合には明示的に再設定しないようにする．
+		//	機能が有効な場合には明示的に再設定しないようにする．
 		if (!IsFuncEnable(GetDocument(), *pShareData, id)) {
 			UINT fuFlags = MF_BYCOMMAND | MF_GRAYED;
 			::EnableMenuItem(hMenu, id, fuFlags);
@@ -2372,7 +2365,6 @@ bool EditWnd::InitMenu_Special(HMENU hMenu, EFunctionCode eFunc)
 	case F_FILE_USED_RECENTLY:		// 最近使ったファイル
 		// MRUリストのファイルのリストをメニューにする
 		{
-			//@@@ 2001.12.26 YAZAKI MRUリストは、CMRUに依頼する
 			const MruFile mru;
 			mru.CreateMenu(hMenu, menuDrawer);	//	ファイルメニュー
 			bInList = (mru.MenuLength() > 0);
@@ -2381,7 +2373,6 @@ bool EditWnd::InitMenu_Special(HMENU hMenu, EFunctionCode eFunc)
 	case F_FOLDER_USED_RECENTLY:	// 最近使ったフォルダ
 		// 最近使ったフォルダのメニューを作成
 		{
-			//@@@ 2001.12.26 YAZAKI OPENFOLDERリストは、MruFolderにすべて依頼する
 			const MruFolder mruFolder;
 			mruFolder.CreateMenu(hMenu, menuDrawer);
 			bInList = (mruFolder.MenuLength() > 0);
@@ -2832,7 +2823,7 @@ LRESULT EditWnd::OnSize2( WPARAM wParam, LPARAM lParam, bool bUpdateStatus )
 		::GetClientRect(statusBar.GetStatusHwnd(), &rc);
 		int		nStArr[8];
 		// ※pszLabel[3]: ステータスバー文字コード表示領域は大きめにとっておく
-		const TCHAR*	pszLabel[7] = { _T(""), _T("99999 行 9999 列"), _T("CRLF"), _T("AAAAAAAAAAAA"), _T("Unicode BOM付"), _T("REC"), _T("上書") };	// Oct. 30, 2000 JEPRO 千万行も要らん	文字コード枠を広げる 2008/6/21	Uchi
+		const TCHAR*	pszLabel[7] = { _T(""), _T("99999 行 9999 列"), _T("CRLF"), _T("AAAAAAAAAAAA"), _T("Unicode BOM付"), _T("REC"), _T("上書") };
 		int		nStArrNum = 7;
 		int		nAllWidth = rc.right - rc.left;
 		int		nSbxWidth = ::GetSystemMetrics(SM_CXVSCROLL) + ::GetSystemMetrics(SM_CXEDGE); // サイズボックスの幅
@@ -3180,7 +3171,6 @@ LRESULT EditWnd::OnMouseMove(WPARAM wParam, LPARAM lParam)
 		return 0;
 	}
 
-//@@@ 2002.01.14 YAZAKI 印刷PreviewをPrintPreviewに独立させたことによる変更
 	if (!pPrintPreview) {
 		return 0;
 	}else {
@@ -3284,7 +3274,6 @@ bool EditWnd::OnPrintPageSetting(void)
 	DlgPrintSetting	dlgPrintSetting;
 	bool bRes = dlgPrintSetting.DoModal(
 		G_AppInstance(),
-//@@@ 2002.01.14 YAZAKI 印刷PreviewをPrintPreviewに独立させたことによる変更
 		GetHwnd(),
 		&nCurrentPrintSetting, // 現在選択している印刷設定
 		pShareData->printSettingArr, // 現在の設定はダイアログ側で保持する
@@ -3311,11 +3300,9 @@ bool EditWnd::OnPrintPageSetting(void)
 			bChangePrintSettingNo = true;
 		}
 
-//@@@ 2002.01.14 YAZAKI 印刷PreviewをPrintPreviewに独立させたことによる変更
 		//	印刷Preview時のみ。
 		if (pPrintPreview) {
 			// 現在の印刷設定
-			// 2013.08.27 印刷設定番号が変更された時に対応できていなかった
 			if (bChangePrintSettingNo) {
 				pPrintPreview->SetPrintSetting(&pShareData->printSettingArr[docType.GetDocumentAttribute().nCurrentPrintSetting]);
 			}
@@ -3335,12 +3322,9 @@ bool EditWnd::OnPrintPageSetting(void)
 			EditWnd::getInstance().GetHwnd()
 		);
 	}
-//@@@ 2002.01.14 YAZAKI 印刷PreviewをPrintPreviewに独立させたことによる変更
-	::UpdateWindow(GetHwnd() /* pPrintPreview->GetPrintPreviewBarHANDLE() */);
+	::UpdateWindow(GetHwnd());
 	return bRes;
 }
-
-///////////////////////////// by 鬼
 
 LRESULT EditWnd::OnNcLButtonDown(WPARAM wp, LPARAM lp)
 {
@@ -3373,7 +3357,7 @@ LRESULT EditWnd::OnNcLButtonUp(WPARAM wp, LPARAM lp)
 	return result;
 }
 
-LRESULT EditWnd::OnLButtonDblClk(WPARAM wp, LPARAM lp) // by 鬼(2)
+LRESULT EditWnd::OnLButtonDblClk(WPARAM wp, LPARAM lp)
 {
 	LRESULT result;
 	if (iconClicked != IconClickStatus::None) {
@@ -3827,7 +3811,6 @@ LRESULT EditWnd::WinListMenu(HMENU hMenu, EditNode* pEditNodeArr, size_t nRowNum
 		for (size_t i=0; i<nRowNum; ++i) {
 			// トレイからエディタへの編集ファイル名要求通知
 			::SendMessage(pEditNodeArr[i].GetHwnd(), MYWM_GETFILEINFO, 0, 0);
-////	From Here Oct. 4, 2000 JEPRO commented out & modified	開いているファイル数がわかるように履歴とは違って1から数える
 			const EditInfo*	pfi = (EditInfo*)&pShareData->workBuffer.editInfo_MYWM_GETFILEINFO;
 			FileNameManager::getInstance().GetMenuFullLabel_WinList(szMenu, _countof(szMenu), pfi, pEditNodeArr[i].nId, i, dcFont.GetHDC());
 			menuDrawer.MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING, IDM_SELWINDOW + pEditNodeArr[i].nIndex, szMenu, _T(""));
@@ -4021,7 +4004,7 @@ void  EditWnd::SetActivePane(int nIndex)
 	pEditView = pEditViewArr[nActivePaneIndex];
 
 	// フォーカスを移動する
-	GetView(nOldIndex).GetCaret().underLine.CaretUnderLineOFF(true);	//	2002/05/11 YAZAKI
+	GetView(nOldIndex).GetCaret().underLine.CaretUnderLineOFF(true);
 	if (::GetActiveWindow() == GetHwnd()
 		&& ::GetFocus() != GetActiveView().GetHwnd()
 	) {

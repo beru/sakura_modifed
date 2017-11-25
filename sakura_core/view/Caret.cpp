@@ -152,7 +152,7 @@ int Caret::MoveCursor(
 	bool bDrawPaint = ptWk_CaretPos.y != editView.nOldUnderLineYBg;
 	underLine.SetUnderLineDoNotOFF(bUnderLineDoNotOFF);
 	underLine.SetVertLineDoNotOFF(bVertLineDoNotOFF);
-	underLine.CaretUnderLineOFF(bScroll, bDrawPaint);	//	YAZAKI
+	underLine.CaretUnderLineOFF(bScroll, bDrawPaint);
 	underLine.SetUnderLineDoNotOFF(false);
 	underLine.SetVertLineDoNotOFF(false);
 	
@@ -193,7 +193,6 @@ int Caret::MoveCursor(
 		nScrollColNum = 0;
 	}
 
-	//	From Here 2007.07.28 じゅうじ : 表示行数が3行以下の場合の動作改善
 	// 垂直スクロール量（行数）の算出
 	// 画面が３行以下
 	if (textArea.nViewRowNum <= 3) {
@@ -243,7 +242,6 @@ int Caret::MoveCursor(
 			nScrollRowNum = -(ptWk_CaretPos.y - (int)textArea.GetViewTopLine()) + ((int)textArea.nViewRowNum - nCaretMarginY - 2);
 		}
 	}
-	//	To Here 2007.07.28 じゅうじ
 	if (bScroll) {
 		// スクロール
 		if (0
@@ -323,11 +321,9 @@ int Caret::MoveCursor(
 
 	}
 
-// 02/09/18 対括弧の強調表示 ai Start	03/02/18 ai mod S
 	editView.DrawBracketPair(false);
 	editView.SetBracketPairPos(true);
 	editView.DrawBracketPair(true);
-// 02/09/18 対括弧の強調表示 ai End		03/02/18 ai mod E
 
 	return nScrollRowNum;
 }
@@ -808,7 +804,7 @@ void Caret::ShowCaretPosInfo()
 	// ステータスバーに状態を書き出す
 	}else {
 		TCHAR	szText_1[64];
-		auto_sprintf_s(szText_1, LS(STR_STATUS_ROW_COL), ptCaret.y, ptCaret.x);	// Oct. 30, 2000 JEPRO 千万行も要らん
+		auto_sprintf_s(szText_1, LS(STR_STATUS_ROW_COL), ptCaret.y, ptCaret.x);
 
 		TCHAR	szText_6[16];
 		if (editView.IsInsMode() /* Oct. 2, 2005 genta */) {
@@ -820,11 +816,7 @@ void Caret::ShowCaretPosInfo()
 			::StatusBar_SetText(hwndStatusBar, 0 | SBT_NOBORDERS, _T(""));
 		}
 		::StatusBar_SetText(hwndStatusBar, 1 | 0,             szText_1);
-		//	May 12, 2000 genta
-		//	改行コードの表示を追加．後ろの番号を1つずつずらす
-		//	From Here
 		::StatusBar_SetText(hwndStatusBar, 2 | 0,             szEolMode);
-		//	To Here
 		::StatusBar_SetText(hwndStatusBar, 3 | 0,             szCaretChar);
 		::StatusBar_SetText(hwndStatusBar, 4 | 0,             pszCodeName);
 		::StatusBar_SetText(hwndStatusBar, 5 | SBT_OWNERDRAW, _T(""));
@@ -1028,7 +1020,7 @@ void Caret::CopyCaretStatus(Caret* pCaret) const
 	pCaret->SetCaretLogicPos(GetCaretLogicPos());
 	pCaret->nCaretPosX_Prev = nCaretPosX_Prev;	// ビュー左端からのカーソル桁位置（０オリジン
 
-	//※ キャレットのサイズはコピーしない。2002/05/12 YAZAKI
+	//※ キャレットのサイズはコピーしない。
 }
 
 

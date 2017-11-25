@@ -53,16 +53,16 @@ const wchar_t* g_ppszKeywordsBAT[] = {
 	L"EXIT",
 	L"CTTY",
 	L"ECHO",
-	L"@ECHO",	// Oct. 31, 2000 JEPRO '@' ‚ð‹­’²‰Â”\‚É‚µ‚½‚Ì‚Å’Ç‰Á
+	L"@ECHO",
 	L"LOCK",
 	L"UNLOCK",
 	L"GOTO",
 	L"SHIFT",
 	L"IF",
 	L"FOR",
-	L"DO",		// Nov. 2, 2000 JEPRO ’Ç‰Á
-	L"IN",		// Nov. 2, 2000 JEPRO ’Ç‰Á
-	L"ELSE",	// Nov. 2, 2000 JEPRO ’Ç‰Á Win2000‚ÅŽg‚¦‚é
+	L"DO",
+	L"IN",
+	L"ELSE",
 	L"CLS",
 	L"TRUENAME",
 	L"LOADHIGH",

@@ -29,8 +29,8 @@ public:
 	~FuncInfoArr();	// FuncInfoArrクラス消滅
 	FuncInfo* GetAt(size_t);		// 0<=の指定番号のデータを返す
 	void AppendData(FuncInfo*);	// 配列の最後にデータを追加する
-	void AppendData(size_t, size_t, const TCHAR*, int, size_t nDepth = 0);		// 配列の最後にデータを追加する 2002.04.01 YAZAKI 深さ導入
-	void AppendData(size_t, size_t, const NOT_TCHAR*, int, size_t nDepth = 0);	// 配列の最後にデータを追加する 2002.04.01 YAZAKI 深さ導入
+	void AppendData(size_t, size_t, const TCHAR*, int, size_t nDepth = 0);		// 配列の最後にデータを追加する
+	void AppendData(size_t, size_t, const NOT_TCHAR*, int, size_t nDepth = 0);	// 配列の最後にデータを追加する
 	void AppendData(size_t nLogicLine, size_t nLogicCol, size_t nLayoutLine, size_t nLayoutCol, const TCHAR*, const TCHAR*, int, size_t nDepth = 0);	/* 配列の最後にデータを追加する */
 	void AppendData(size_t nLogicLine, size_t nLogicCol, size_t nLayoutLine, size_t nLayoutCol, const NOT_TCHAR*, const NOT_TCHAR*, int, size_t nDepth = 0);	/* 配列の最後にデータを追加する */
 	size_t	GetNum(void) {	return nFuncInfoArrNum; }	// 配列要素数を返す

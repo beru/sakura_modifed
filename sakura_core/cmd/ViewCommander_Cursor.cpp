@@ -85,7 +85,7 @@ int ViewCommander::Command_Up(bool bSelect, bool bRepeat, int lines)
 		++nRepeat;
 		if (caret.Cursor_UPDOWN(-1, bSelect) != 0 && bRepeat) {
 			for (int i=0; i<csGeneral.nRepeatedScrollLineNum-1; ++i) {		// キーリピート時のScroll行数
-				::UpdateWindow(view.GetHwnd());	// YAZAKI
+				::UpdateWindow(view.GetHwnd());
 				caret.Cursor_UPDOWN(-1, bSelect);
 				++nRepeat;
 			}
@@ -116,7 +116,7 @@ int ViewCommander::Command_Down(bool bSelect, bool bRepeat)
 		if (caret.Cursor_UPDOWN(1, bSelect) != 0 && bRepeat) {
 			for (int i=0; i<csGeneral.nRepeatedScrollLineNum-1; ++i) {	// キーリピート時のScroll行数
 				// ここで再描画。
-				::UpdateWindow(view.GetHwnd());	// YAZAKI
+				::UpdateWindow(view.GetHwnd());
 				caret.Cursor_UPDOWN(1, bSelect);
 				++nRepeat;
 			}

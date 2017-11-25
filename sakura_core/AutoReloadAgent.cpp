@@ -116,7 +116,6 @@ void AutoReloadAgent::CheckFileTimeStamp()
 	}
 	pDoc->docFile.SetFileTime(ftime); // タイムスタンプ更新
 
-	//	From Here Dec. 4, 2002 genta
 	switch (watchUpdateType) {
 	case WatchUpdateType::Notify:
 		{
@@ -179,6 +178,5 @@ void AutoReloadAgent::CheckFileTimeStamp()
 		}
 		break;
 	}
-	//	To Here Dec. 4, 2002 genta
 }
 

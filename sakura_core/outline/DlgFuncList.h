@@ -116,14 +116,7 @@ protected:
 	void SetDocLineFuncList();
 
 	void SetTreeFileSub( HTREEITEM, const TCHAR* );
-	// 2002/11/1 frozen 
 	void SortTree(HWND hWndTree, HTREEITEM htiParent);	// ツリービューの項目をソートする（ソート基準はnSortTypeを使用）
-#if 0
-2002.04.01 YAZAKI SetTreeTxt()、SetTreeTxtNest()は廃止。GetTreeTextNextはもともと使用されていなかった。
-	void SetTreeTxt(HWND);	// ツリーコントロールの初期化：テキストトピックツリー
-	int SetTreeTxtNest(HWND, HTREEITEM, int, int, HTREEITEM*, int);
-	void GetTreeTextNext(HWND, HTREEITEM, int);
-#endif
 
 	void SortListView(HWND hwndList, int sortcol);
 	static int CALLBACK CompareFunc_Asc(LPARAM, LPARAM, LPARAM);

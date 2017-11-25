@@ -13,7 +13,7 @@ bool Color_LineComment::BeginColor(const StringRef& str, size_t nPos)
 		return false;
 	}
 	// 行コメント
-	return pTypeData->lineComment.Match(nPos, str);	//@@@ 2002.09.22 YAZAKI
+	return pTypeData->lineComment.Match(nPos, str);
 }
 
 bool Color_LineComment::EndColor(const StringRef& str, size_t nPos)
@@ -42,9 +42,9 @@ bool Color_BlockComment::BeginColor(const StringRef& str, size_t nPos)
 		return false;
 	}
 	// ブロックコメント
-	if (pBlockComment->Match_CommentFrom(nPos, str)	//@@@ 2002.09.22 YAZAKI
+	if (pBlockComment->Match_CommentFrom(nPos, str)
 	) {
-		// この物理行にブロックコメントの終端があるか		//@@@ 2002.09.22 YAZAKI
+		// この物理行にブロックコメントの終端があるか
 		this->nCommentEnd = pBlockComment->Match_CommentTo(
 			nPos + pBlockComment->getBlockFromLen(),
 			str

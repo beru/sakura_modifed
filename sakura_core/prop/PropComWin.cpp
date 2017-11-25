@@ -15,8 +15,8 @@ static const DWORD p_helpids[] = {	//11200
 	IDC_CHECK_DispTOOLBAR,			HIDC_CHECK_DispTOOLBAR,			// ツールバー表示
 	IDC_CHECK_bScrollBarHorz,		HIDC_CHECK_bScrollBarHorz,		// 水平スクロールバー
 	IDC_CHECK_bMenuIcon,			HIDC_CHECK_bMenuIcon,			// アイコン付きメニュー
-	IDC_CHECK_SplitterWndVScroll,	HIDC_CHECK_SplitterWndVScroll,	// 垂直スクロールの同期	//Jul. 05, 2001 JEPRO 追加
-	IDC_CHECK_SplitterWndHScroll,	HIDC_CHECK_SplitterWndHScroll,	// 水平スクロールの同期	//Jul. 05, 2001 JEPRO 追加
+	IDC_CHECK_SplitterWndVScroll,	HIDC_CHECK_SplitterWndVScroll,	// 垂直スクロールの同期
+	IDC_CHECK_SplitterWndHScroll,	HIDC_CHECK_SplitterWndHScroll,	// 水平スクロールの同期
 	IDC_EDIT_nRulerBottomSpace,		HIDC_EDIT_nRulerBottomSpace,	// ルーラーの高さ
 	IDC_EDIT_nRulerHeight,			HIDC_EDIT_nRulerHeight,			// ルーラーとテキストの間隔
 	IDC_EDIT_nLineNumberRightSpace,	HIDC_EDIT_nLineNumberRightSpace,// 行番号とテキストの隙間
@@ -60,15 +60,13 @@ INT_PTR PropWin::DispatchEvent(
 	LPARAM	lParam 	// second message parameter
 	)
 {
-// From Here Sept. 9, 2000 JEPRO
 	WORD		wNotifyCode;
 	WORD		wID;
-// To Here Sept. 9, 2000
 
 	NMHDR*		pNMHDR;
 	NM_UPDOWN*	pMNUD;
 	int			idCtrl;
-	int			nVal;	// Sept.21, 2000 JEPRO スピン要素を加えたので復活させた
+	int			nVal;
 
 	switch (uMsg) {
 	case WM_INITDIALOG:
@@ -99,7 +97,6 @@ INT_PTR PropWin::DispatchEvent(
 				// ダイアログデータの取得 Window
 				GetData(hwndDlg);
 				return TRUE;
-//@@@ 2002.01.03 YAZAKI 最後に表示していたシートを正しく覚えていないバグ修正
 			case PSN_SETACTIVE:
 				nPageNum = ID_PROPCOM_PAGENUM_WIN;
 				return TRUE;
@@ -174,8 +171,6 @@ INT_PTR PropWin::DispatchEvent(
 			return TRUE;
 		}
 		break;
-//****	To Here Sept. 21, 2000
-//	From Here Sept. 9, 2000 JEPRO
 	case WM_COMMAND:
 		wNotifyCode	= HIWORD(wParam);	// 通知コード
 		wID			= LOWORD(wParam);	// 項目ID､ コントロールID､ またはアクセラレータID
@@ -390,7 +385,6 @@ int PropWin::GetData(HWND hwndDlg)
 }
 
 
-//	From Here Sept. 9, 2000 JEPRO
 //	チェック状態に応じてダイアログボックス要素のEnable/Disableを
 //	適切に設定する
 void PropWin::EnableWinPropInput(HWND hwndDlg)
@@ -406,5 +400,4 @@ void PropWin::EnableWinPropInput(HWND hwndDlg)
 		::EnableWindow(::GetDlgItem(hwndDlg, IDC_RADIO_FUNCKEYWND_PLACE2), FALSE);
 	}
 }
-//	To Here Sept. 9, 2000
 

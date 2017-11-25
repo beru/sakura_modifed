@@ -99,7 +99,6 @@ INT_PTR PropMacro::DispatchEvent(
 				// ダイアログデータの取得 Macro
 				GetData(hwndDlg);
 				return TRUE;
-//@@@ 2002.01.03 YAZAKI 最後に表示していたシートを正しく覚えていないバグ修正
 			case PSN_SETACTIVE:
 				nPageNum = ID_PROPCOM_PAGENUM_MACRO;
 				return TRUE;
@@ -271,7 +270,6 @@ int PropMacro::GetData(HWND hwndDlg)
 		lvItem.mask = LVIF_TEXT;
 		lvItem.iSubItem = 1;
 		lvItem.cchTextMax = MACRONAME_MAX - 1;
-//@@@ 2002.01.03 YAZAKI 共通設定『マクロ』がタブを切り替えるだけで設定が保存されないように。
 		lvItem.pszText = /*pShareData->*/csMacro.macroTable[index].szName;
 		ListView_GetItem(hListView, &lvItem);
 
@@ -280,7 +278,6 @@ int PropMacro::GetData(HWND hwndDlg)
 		lvItem.mask = LVIF_TEXT;
 		lvItem.iSubItem = 2;
 		lvItem.cchTextMax = _MAX_PATH;
-//@@@ 2002.01.03 YAZAKI 共通設定『マクロ』がタブを切り替えるだけで設定が保存されないように。
 		lvItem.pszText = /*pShareData->*/csMacro.macroTable[index].szFile;
 		ListView_GetItem(hListView, &lvItem);
 
@@ -322,7 +319,6 @@ int PropMacro::GetData(HWND hwndDlg)
 	}
 
 	//	マクロディレクトリ
-//@@@ 2002.01.03 YAZAKI 共通設定『マクロ』がタブを切り替えるだけで設定が保存されないように。
 	::DlgItem_GetText(hwndDlg, IDC_MACRODIR, csMacro.szMACROFOLDER, _MAX_PATH);
 	// マクロフォルダの最後の\がなければ付ける
 	AddLastChar(csMacro.szMACROFOLDER, _MAX_PATH, _T('\\'));
@@ -564,7 +560,7 @@ void PropMacro::OnFileDropdown_Macro(HWND hwndDlg)
 		_tcscpy(folder, path);
 		GetInidirOrExedir(path, folder);
 	}
-	_tcscat(path, _T("*.*"));	//	2002/05/01 YAZAKI どんなファイルもどんと来い。
+	_tcscat(path, _T("*.*"));
 
 	// 候補の初期化
 	Combo_ResetContent(hCombo);

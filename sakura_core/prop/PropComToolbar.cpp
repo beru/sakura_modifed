@@ -139,10 +139,9 @@ INT_PTR PropToolbar::DispatchEvent(
 		hwndResList = ::GetDlgItem(hwndDlg, IDC_LIST_RES);
 
 		{
-			// 2014.11.25 フォントの高さが正しくなかったバグを修正
 			TextWidthCalc calc(hwndResList);
 			int nFontHeight = calc.GetTextHeight();
-			nListItemHeight = 18; //Oct. 18, 2000 JEPRO 「ツールバー」タブでの機能アイテムの行間を少し狭くして表示行数を増やした(20→18 これ以上小さくしても効果はないようだ)
+			nListItemHeight = 18;
 			if (nListItemHeight < nFontHeight) {
 				nListItemHeight = nFontHeight;
 				nToolBarListBoxTopMargin = 0;

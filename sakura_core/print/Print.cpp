@@ -67,7 +67,6 @@ Print::Print(void)
 Print::~Print(void)
 {
 	// メモリ割り当て済みならば、解放する
-	// 2003.05.18 かろと
 	if (hDevMode) {
 		::GlobalFree(hDevMode);
 	}
@@ -145,7 +144,7 @@ BOOL Print::PrintDlg(
 	// プリンタがサポートしないbitをセットすると、プリンタドライバによっては、不安定な動きをする場合がある
 	// pMYDEVMODEは、コピーしたいbitで１のものだけセットする
 	// →プリンタから得られた dmFieldsが1でないLength,Width情報に、間違った長さが入っているプリンタドライバでは、
-	//   縦・横が正しく印刷されない不具合となっていた(2003.07.03 かろと)
+	//   縦・横が正しく印刷されない不具合となっていた
 	pMYDEVMODE->dmFields = pDEVMODE->dmFields & (DM_ORIENTATION | DM_PAPERSIZE | DM_PAPERLENGTH | DM_PAPERWIDTH);
 	pMYDEVMODE->dmOrientation	= pDEVMODE->dmOrientation;
 	pMYDEVMODE->dmPaperSize		= pDEVMODE->dmPaperSize;
@@ -216,7 +215,7 @@ BOOL Print::GetDefaultPrinter(MYDEVMODE* pMYDEVMODE)
 	// プリンタがサポートしないbitをセットすると、プリンタドライバによっては、不安定な動きをする場合がある
 	// pMYDEVMODEは、コピーしたいbitで１のものだけコピーする
 	// →プリンタから得られた dmFieldsが1でないLength,Width情報に、間違った長さが入っているプリンタドライバでは、
-	//   縦・横が正しく印刷されない不具合となっていた(2003.07.03 かろと)
+	//   縦・横が正しく印刷されない不具合となっていた
 	pMYDEVMODE->dmFields = pDEVMODE->dmFields & (DM_ORIENTATION | DM_PAPERSIZE | DM_PAPERLENGTH | DM_PAPERWIDTH);
 	pMYDEVMODE->dmOrientation	= pDEVMODE->dmOrientation;
 	pMYDEVMODE->dmPaperSize		= pDEVMODE->dmPaperSize;
@@ -291,7 +290,7 @@ HDC Print::CreateDC(
 	
 	// pMYDEVMODEは、コピーしたいbitで１のものだけコピーする
 	// →プリンタから得られた dmFieldsが1でないLength,Width情報に、間違った長さが入っているプリンタドライバでは、
-	//   縦・横が正しく印刷されない不具合となっていた(2003.07.03 かろと)
+	//   縦・横が正しく印刷されない不具合となっていた
 	pMYDEVMODE->dmFields = pDEVMODE->dmFields & (DM_ORIENTATION | DM_PAPERSIZE | DM_PAPERLENGTH | DM_PAPERWIDTH);
 	pMYDEVMODE->dmOrientation	= pDEVMODE->dmOrientation;
 	pMYDEVMODE->dmPaperSize		= pDEVMODE->dmPaperSize;

@@ -34,9 +34,7 @@ static const DWORD p_helpids[] = {	//10210
 //	IDC_STATIC,							-1,
 	0, 0
 };
-//@@@ 2001.02.04 End
 
-//	From Here Jun. 2, 2001 genta
 /*!
 	@param hwndDlg ダイアログボックスのWindow Handle
 	@param uMsg メッセージ
@@ -52,7 +50,6 @@ INT_PTR CALLBACK PropEdit::DlgProc_page(
 {
 	return DlgProc(reinterpret_cast<pDispatchPage>(&PropEdit::DispatchEvent), hwndDlg, uMsg, wParam, lParam);
 }
-//	To Here Jun. 2, 2001 genta
 
 // メッセージ処理
 INT_PTR PropEdit::DispatchEvent(
@@ -127,7 +124,7 @@ INT_PTR PropEdit::DispatchEvent(
 			GetData(hwndDlg);
 			return TRUE;
 
-		case PSN_SETACTIVE: //@@@ 2002.01.03 YAZAKI 最後に表示していたシートを正しく覚えていないバグ修正
+		case PSN_SETACTIVE:
 			nPageNum = ID_PROPCOM_PAGENUM_EDIT;
 			return TRUE;
 		}

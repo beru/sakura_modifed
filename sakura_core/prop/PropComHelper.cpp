@@ -14,16 +14,12 @@
 static const DWORD p_helpids[] = {	//10600
 	IDC_BUTTON_OPENHELP1,			HIDC_BUTTON_OPENHELP1,			// 外部ヘルプファイル参照
 	IDC_BUTTON_OPENEXTHTMLHELP,		HIDC_BUTTON_OPENEXTHTMLHELP,	// 外部HTMLファイル参照
-//	IDC_CHECK_USEHOKAN,				HIDC_CHECK_USEHOKAN,			// 逐次入力補完
 	IDC_CHECK_m_bHokanKey_RETURN,	HIDC_CHECK_m_bHokanKey_RETURN,	// 候補決定キー（Enter）
 	IDC_CHECK_m_bHokanKey_TAB,		HIDC_CHECK_m_bHokanKey_TAB,		// 候補決定キー（Tab）
 	IDC_CHECK_m_bHokanKey_RIGHT,	HIDC_CHECK_m_bHokanKey_RIGHT,	// 候補決定キー（→）
-//	IDC_CHECK_m_bHokanKey_SPACE,	HIDC_CHECK_m_bHokanKey_SPACE,	// 候補決定キー（Space）
 	IDC_CHECK_HTMLHELPISSINGLE,		HIDC_CHECK_HTMLHELPISSINGLE,	// ビューアの複数起動
 	IDC_EDIT_EXTHELP1,				HIDC_EDIT_EXTHELP1,				// 外部ヘルプファイル名
 	IDC_EDIT_EXTHTMLHELP,			HIDC_EDIT_EXTHTMLHELP,			// 外部HTMLヘルプファイル名
-	//	2007.02.04 genta カーソル位置の単語の辞書検索は共通設定から外した
-	//IDC_CHECK_CLICKKEYSEARCH,		HIDC_CHECK_CLICKKEYSEARCH,		// キャレット位置の単語を辞書検索
 	IDC_BUTTON_KEYWORDHELPFONT,		HIDC_BUTTON_KEYWORDHELPFONT,	// キーワードヘルプのフォント
 	IDC_EDIT_MIGEMO_DLL,			HIDC_EDIT_MIGEMO_DLL,			// Migemo DLLファイル名
 	IDC_BUTTON_OPENMDLL,			HIDC_BUTTON_OPENMDLL,			// Migemo DLLファイル参照
@@ -32,9 +28,7 @@ static const DWORD p_helpids[] = {	//10600
 //	IDC_STATIC,						-1,
 	0, 0
 };
-//@@@ 2001.02.04 End
 
-//	From Here Jun. 2, 2001 genta
 /*!
 	@param hwndDlg ダイアログボックスのWindow Handle
 	@param uMsg メッセージ
@@ -50,7 +44,6 @@ INT_PTR CALLBACK PropHelper::DlgProc_page(
 {
 	return DlgProc(reinterpret_cast<pDispatchPage>(&PropHelper::DispatchEvent), hwndDlg, uMsg, wParam, lParam);
 }
-//	To Here Jun. 2, 2001 genta
 
 // Helper メッセージ処理
 INT_PTR PropHelper::DispatchEvent(
@@ -132,7 +125,6 @@ INT_PTR PropHelper::DispatchEvent(
 					}
 				}
 				return TRUE;
-			// ai 02/05/21 Add S
 			case IDC_BUTTON_KEYWORDHELPFONT:	// キーワードヘルプの「フォント」ボタン
 				{
 					LOGFONT   lf = csHelper.lf;
@@ -150,7 +142,6 @@ INT_PTR PropHelper::DispatchEvent(
 					}
 				}
 				return TRUE;
-			// ai 02/05/21 Add E
 			case IDC_BUTTON_OPENMDLL:	// MIGEMODLL場所指定「参照...」ボタン
 				{
 					DlgOpenFile	dlgOpenFile;
@@ -207,7 +198,6 @@ INT_PTR PropHelper::DispatchEvent(
 				// ダイアログデータの取得 Helper
 				GetData(hwndDlg);
 				return TRUE;
-//@@@ 2002.01.03 YAZAKI 最後に表示していたシートを正しく覚えていないバグ修正
 			case PSN_SETACTIVE:
 				nPageNum = ID_PROPCOM_PAGENUM_HELPER;
 				return TRUE;

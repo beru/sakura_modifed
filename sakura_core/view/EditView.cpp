@@ -57,7 +57,6 @@ LRESULT CALLBACK EditViewWndProc(
 			}else {
 				return pEdit->DispatchEvent(hwnd, uMsg, wParam, lParam);
 			}
-			//	To Here
 		}
 		return ::DefWindowProc(hwnd, uMsg, wParam, lParam);
 	}

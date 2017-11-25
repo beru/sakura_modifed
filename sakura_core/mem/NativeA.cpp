@@ -245,10 +245,10 @@ const char* NativeA::GetCharNext(
 	}else {
 //		pNext = ::CharNext(pDataCurrent);
 		if (
-			// SJIS全角コードの1バイト目か	// Sept. 1, 2000 jepro 'シフト'を'S'に変更
+			// SJIS全角コードの1バイト目か
 			_IS_SJIS_1((unsigned char)pDataCurrent[0])
 			&&
-			// SJIS全角コードの2バイト目か	// Sept. 1, 2000 jepro 'シフト'を'S'に変更
+			// SJIS全角コードの2バイト目か
 			_IS_SJIS_2((unsigned char)pDataCurrent[1])
 		) {
 			pNext = pDataCurrent + 2;
@@ -272,32 +272,6 @@ const char* NativeA::GetCharPrev(const char* pData, size_t nDataLen, const char*
 //#endif
 
 	const char*	pPrev = ::CharPrevA(pData, pDataCurrent);
-
-//===1999.08.12  このやり方だと、ダメだった。===============-
-//
-//	if ((pDataCurrent - 1)[0] == '\0') {
-//		pPrev = pDataCurrent - 1;
-//	}else {
-//		if (pDataCurrent - pData >= 2 &&
-//			// SJIS全角コードの1バイト目か		// Sept. 1, 2000 jepro 'シフト'を'S'に変更
-//			(
-//			((unsigned char)0x81 <= (unsigned char)pDataCurrent[-2] && (unsigned char)pDataCurrent[-2] <= (unsigned char)0x9F) ||
-//			((unsigned char)0xE0 <= (unsigned char)pDataCurrent[-2] && (unsigned char)pDataCurrent[-2] <= (unsigned char)0xFC)
-//			) &&
-//			// SJIS全角コードの2バイト目か		// Sept. 1, 2000 jepro 'シフト'を'S'に変更
-//			(
-//			((unsigned char)0x40 <= (unsigned char)pDataCurrent[-1] && (unsigned char)pDataCurrent[-1] <= (unsigned char)0x7E) ||
-//			((unsigned char)0x80 <= (unsigned char)pDataCurrent[-1] && (unsigned char)pDataCurrent[-1] <= (unsigned char)0xFC)
-//			)
-//		) {
-//			pPrev = pDataCurrent - 2;
-//		}else {
-//			pPrev = pDataCurrent - 1;
-//		}
-//	}
-//	if (pPrev < pData) {
-//		pPrev = pData;
-//	}
 	return pPrev;
 }
 

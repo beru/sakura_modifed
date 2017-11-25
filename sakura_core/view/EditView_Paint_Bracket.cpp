@@ -147,7 +147,6 @@ void EditView::DrawBracketPair(bool bDraw)
 						ColorStrategyInfo csInfo(*this);
 						csInfo.pDispPos = &pos;
 
-						// 03/10/24 ai 折り返し行のColorIndexが正しく取得できない問題に対応
 						Color3Setting cColor = GetColorIndex(pLayout, ptColLine.y, OutputX, csInfo);
 						nColorIndex = cColor.eColorIndex2;
 					}else {
@@ -161,8 +160,6 @@ void EditView::DrawBracketPair(bool bDraw)
 					: TypeSupport(*this, COLORIDX_EVENLINEBG).IsDisp() && ptColLine.y % 2 == 1
 						? COLORIDX_EVENLINEBG
 						: COLORIDX_TEXT);
-				// 03/03/03 ai カーソルの左に括弧があり括弧が強調表示されている状態でShift+←で選択開始すると
-				//             選択範囲内に反転表示されない部分がある問題の修正
 				int caretX = caret.GetCaretLayoutPos().x;
 				bool bCaretHide = (!bCaretChange && (ptColLine.x == caretX || ptColLine.x + 1 == caretX) && caret.GetCaretShowFlag());
 				if (bCaretHide) {
@@ -222,7 +219,7 @@ void EditView::DrawBracketPair(bool bDraw)
 						|| (ptColLine.y == caret.GetCaretLayoutPos().GetY())
 						|| (ptColLine.y - 1 == caret.GetCaretLayoutPos().GetY())
 					) 
-				) {	// 03/02/27 ai 行の間隔が"0"の時にアンダーラインが欠ける事がある為修正
+				) {
 					caret.underLine.CaretUnderLineON(true, false);
 				}
 			}
@@ -312,13 +309,11 @@ bool EditView::SearchBracket(
 		}
 	}
 
-	// 02/09/18 ai Start
 	if ((*mode & 2) == 0) {
 		// カーソルの前方を調べない場合
 		return false;
 	}
 	*mode |= 4;
-	// 02/09/18 ai End
 
 	//	括弧が見つからなかったら，カーソルの直前の文字を調べる
 
@@ -356,7 +351,6 @@ bool EditView::SearchBracket(
 	@retval true 成功
 	@retval false 失敗
 */
-// 03/01/08 ai
 bool EditView::SearchBracketForward(
 	Point	ptPos,
 	Point*	pptLayoutNew,
@@ -370,8 +364,8 @@ bool EditView::SearchBracketForward(
 
 
 	// 初期位置の設定
-	Point ptColLine = pEditDoc->layoutMgr.LogicToLayout(ptPos);	// 02/09/19 ai
-	int nSearchNum = (GetTextArea().GetBottomLine()) - ptColLine.y;					// 02/09/19 ai
+	Point ptColLine = pEditDoc->layoutMgr.LogicToLayout(ptPos);
+	int nSearchNum = (GetTextArea().GetBottomLine()) - ptColLine.y;
 	DocLine* ci = pEditDoc->docLineMgr.GetLine(ptPos.y);
 	const wchar_t* cline = ci->GetDocLineStrWithEOL(&len);
 	const wchar_t* lineend = cline + len;
@@ -388,12 +382,11 @@ bool EditView::SearchBracketForward(
 				cPos = nPos;
 				continue;
 			}
-			// 03/01/08 ai Start
 			if (wcsncmp(upChar, cPos, 1) == 0) {
 				++level;
 			}else if (wcsncmp(dnChar, cPos, 1) == 0) {
 				--level;
-			}// 03/01/08 ai End
+			}
 
 			if (level == 0) {	// 見つかった！
 				ptPos.x = cPos - cline;
@@ -404,14 +397,12 @@ bool EditView::SearchBracketForward(
 			cPos = nPos;	// 次の文字へ
 		}
 
-		// 02/09/19 ai Start
 		--nSearchNum;
 		if (0 > nSearchNum && (mode & 1) == 0) {
 			// 表示領域外を調べないモードで表示領域の終端の場合
 			//SendStatusMessage("対括弧の検索を中断しました");
 			break;
 		}
-		// 02/09/19 ai End
 
 		//	次の行へ
 		ptPos.y++;
@@ -453,8 +444,8 @@ bool EditView::SearchBracketBackward(
 	int level = 1;
 
 	// 初期位置の設定
-	Point ptColLine = pEditDoc->layoutMgr.LogicToLayout(ptPos);	// 02/09/19 ai
-	int nSearchNum = ptColLine.y - GetTextArea().GetViewTopLine();										// 02/09/19 ai
+	Point ptColLine = pEditDoc->layoutMgr.LogicToLayout(ptPos);
+	int nSearchNum = ptColLine.y - GetTextArea().GetViewTopLine();
 	DocLine* ci = pEditDoc->docLineMgr.GetLine(ptPos.y);
 	const wchar_t* cline = ci->GetDocLineStrWithEOL(&len);
 	const wchar_t* cPos = cline + ptPos.x;
@@ -467,12 +458,11 @@ bool EditView::SearchBracketBackward(
 				cPos = pPos;
 				continue;
 			}
-			// 03/01/08 ai Start
 			if (wcsncmp(upChar, pPos, 1) == 0) {
 				++level;
 			}else if (wcsncmp(dnChar, pPos, 1) == 0) {
 				--level;
-			}// 03/01/08 ai End
+			}
 
 			if (level == 0) {	// 見つかった！
 				ptPos.x = pPos - cline;
@@ -483,14 +473,12 @@ bool EditView::SearchBracketBackward(
 			cPos = pPos;	// 次の文字へ
 		}
 
-		// 02/09/19 ai Start
 		--nSearchNum;
 		if (0 > nSearchNum && (mode & 1) == 0) {
 			// 表示領域外を調べないモードで表示領域の先頭の場合
 			//SendStatusMessage("対括弧の検索を中断しました");
 			break;
 		}
-		// 02/09/19 ai End
 
 		//	次の行へ
 		ptPos.y--;
@@ -505,7 +493,6 @@ bool EditView::SearchBracketBackward(
 	return false;
 }
 
-//@@@ 2003.01.09 Start by ai:
 /*!
 	@brief 括弧判定
 

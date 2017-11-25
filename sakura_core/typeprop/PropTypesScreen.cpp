@@ -179,7 +179,7 @@ INT_PTR PropTypesScreen::DispatchEvent(
 		// ボタン／チェックボックスがクリックされた
 		case BN_CLICKED:
 			switch (wID) {
-			/*	2002.04.01 YAZAKI オートインデントを削除（もともと不要）
+			/*
 				アウトライン解析にルールファイル関連を追加
 			*/
 			case IDC_RADIO_OUTLINEDEFAULT:	// アウトライン解析→標準ルール
@@ -322,23 +322,15 @@ INT_PTR PropTypesScreen::DispatchEvent(
 			if (pMNUD->iDelta > 0) {
 				--nVal;
 			}
-//	From Here Oct. 8, 2000 JEPRO 行間も最小0まで設定できるように変更(昔に戻っただけ?)
-//			if (nVal < 1) {
-//				nVal = 1;
-//			}
 			if (nVal < 0) {
 				nVal = 0;
 			}
-//	To Here  Oct. 8, 2000
-			if (nVal > LINESPACE_MAX) { // Feb. 18, 2003 genta 最大値の定数化
+			if (nVal > LINESPACE_MAX) {
 				nVal = LINESPACE_MAX;
 			}
 			::SetDlgItemInt(hwndDlg, IDC_EDIT_LINESPACE, nVal, FALSE);
 			return TRUE;
 		case IDC_SPIN_TABSPACE:
-			//	Sep. 22, 2002 genta
-			// TAB幅
-//			MYTRACE(_T("IDC_SPIN_CHARSPACE\n"));
 			nVal = ::GetDlgItemInt(hwndDlg, IDC_EDIT_TABSPACE, NULL, FALSE);
 			if (pMNUD->iDelta < 0) {
 				++nVal;
@@ -365,7 +357,6 @@ INT_PTR PropTypesScreen::DispatchEvent(
 				GetData(hwndDlg);
 
 				return TRUE;
-//@@@ 2002.01.03 YAZAKI 最後に表示していたシートを正しく覚えていないバグ修正
 			case PSN_SETACTIVE:
 				nPageNum = ID_PROPTYPE_PAGENUM_SCREEN;
 				return TRUE;
@@ -493,7 +484,6 @@ void PropTypesScreen::SetData(HWND hwndDlg)
 	}
 
 	// アウトライン解析方法
-	// 2002.04.01 YAZAKI ルールファイル関連追加
 	{
 		// 標準ルールのコンボボックス初期化
 		HWND	hwndCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_OUTLINES);
@@ -663,7 +653,6 @@ int PropTypesScreen::GetData(HWND hwndDlg)
 	}
 
 	// アウトライン解析方法
-	// 2002.04.01 YAZAKI ルールファイル関連追加
 	{
 		// 標準ルール
 		if (!IsDlgButtonChecked(hwndDlg, IDC_RADIO_OUTLINERULEFILE)) {

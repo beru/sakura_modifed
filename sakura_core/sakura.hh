@@ -111,10 +111,6 @@
 #define HLP000174	174 //行切り取り (折り返し単位)
 #define HLP000137	137 //行削除 (折り返し単位)
 #define HLP000043	43 //行の二重化 (折り返し単位)
-//#define HLP000113	113 //TABインデント		//Jul. 03, 2001 JEPRO TAB・逆TABインデントで定義済み
-//#define HLP000113	113 //逆TABインデント
-//#define HLP000114	114 //SPACEインデント	//Jul. 03, 2001 JEPRO SPACE・逆SPACEインデントで定義済み
-//#define HLP000114	114 //逆SPACEインデント
 #define HLP000036	36 //選択範囲内全行コピー
 #define HLP000037	37 //選択範囲内全行引用符付きコピー
 #define HLP000038	38 //選択範囲内全行行番号付きコピー
@@ -124,8 +120,6 @@
 #define HLP000056	56 //このファイルのパス名をコピー
 #define HLP000175	175 //このファイルのパス名とカーソル位置をコピー
 #define HLP000057	57 //キー割り当て一覧をコピー
-//#define HLP000176	176 //「移動(O)」メニューの一覧
-//#define HLP000177	177 //「選択(S)」メニューの一覧
 #define HLP000210	210 //左(先頭)の空白を削除
 #define HLP000211	211 //右(末尾)の空白を削除
 #define HLP000212	212 //選択行の昇順ソート
@@ -676,13 +670,13 @@
 #define HIDC_COMBO_STRINGLITERAL				11469 //文字列エスケープ
 #define HIDC_CHECK_STRINGLINEONLY				11470 //文字列は行内のみ
 #define HIDC_CHECK_STRINGENDLINE				11471 //終了文字がない場合行末まで色分け
-#define HIDC_BUTTON_HOKANFILE_REF				11500 //入力補完 単語ファイル参照		//Jul. 05, 2001 JEPRO 共通から移動・変更
-#define HIDC_CHECK_HOKANLOHICASE				11510 //入力補完の英大文字小文字		//Jul. 05, 2001 JEPRO 共通から移動・変更
+#define HIDC_BUTTON_HOKANFILE_REF				11500 //入力補完 単語ファイル参照
+#define HIDC_CHECK_HOKANLOHICASE				11510 //入力補完の英大文字小文字
 #define HIDC_CHECK_HOKANBYFILE					11512 //現在のファイルから入力補完
 #define HIDC_COMBO_HOKAN_TYPE					11513 //入力補完種別
 #define HIDC_CHECK_HOKANBYKEYWORD				11514 //強調キーワードから入力補完
-#define HIDC_EDIT_HOKANFILE						11540 //単語ファイル名					//Jul. 05, 2001 JEPRO 共通から移動・変更
-#define HIDC_EDIT_KEYWORDHELPFILE				11541 //辞書ファイル名					//Jul. 05, 2001 JEPRO 共通から移動・変更
+#define HIDC_EDIT_HOKANFILE						11540 //単語ファイル名
+#define HIDC_EDIT_KEYWORDHELPFILE				11541 //辞書ファイル名
 #define HIDC_EDIT_TYPEEXTHELP					11542 //外部ヘルプファイル名
 #define HIDC_BUTTON_TYPEOPENHELP				11543 //外部ヘルプファイル参照
 #define HIDC_EDIT_TYPEEXTHTMLHELP				11544 //外部HTMLヘルプファイル名

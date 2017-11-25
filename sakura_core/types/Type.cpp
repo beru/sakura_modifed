@@ -103,15 +103,15 @@ void ShareData::InitKeyword(DllSharedData& shareData)
 	PopulateKeyword(L"Java",			true,	JAVA);			// セット 4の追加
 	PopulateKeyword(L"CORBA IDL",		true,	CORBA_IDL);		// セット 5の追加
 	PopulateKeyword(L"AWK"	,			true,	AWK);			// セット 6の追加
-	PopulateKeyword(L"MS-DOS batch",	false,	BAT);			// セット 7の追加	// Oct. 31, 2000 JEPRO 'バッチファイル'→'batch' に短縮
-	PopulateKeyword(L"Pascal",			false,	PASCAL);		// セット 8の追加	// Nov. 5, 2000 JEPRO 大・小文字の区別を'しない'に変更
-	PopulateKeyword(L"TeX",				true,	TEX);			// セット 9の追加	// Sept. 2, 2000 jepro Tex →TeX に修正 Bool値は大・小文字の区別
-	PopulateKeyword(L"TeX2",			true,	TEX2);			// セット10の追加	// Jan. 19, 2001 JEPRO 追加
+	PopulateKeyword(L"MS-DOS batch",	false,	BAT);			// セット 7の追加
+	PopulateKeyword(L"Pascal",			false,	PASCAL);		// セット 8の追加
+	PopulateKeyword(L"TeX",				true,	TEX);			// セット 9の追加
+	PopulateKeyword(L"TeX2",			true,	TEX2);			// セット10の追加
 	PopulateKeyword(L"Perl",			true,	PERL);			// セット11の追加
-	PopulateKeyword(L"Perl2",			true,	PERL2);			// セット12の追加	// Jul. 10, 2001 JEPRO Perlから変数を分離・独立
-	PopulateKeyword(L"Visual Basic",	false,	VB);			// セット13の追加	// Jul. 10, 2001 JEPRO
-	PopulateKeyword(L"Visual Basic2",	false,	VB2);			// セット14の追加	// Jul. 10, 2001 JEPRO
-	PopulateKeyword(L"Rich Text",		true,	RTF);			// セット15の追加	// Jul. 10, 2001 JEPRO
+	PopulateKeyword(L"Perl2",			true,	PERL2);			// セット12の追加
+	PopulateKeyword(L"Visual Basic",	false,	VB);			// セット13の追加
+	PopulateKeyword(L"Visual Basic2",	false,	VB2);			// セット14の追加
+	PopulateKeyword(L"Rich Text",		true,	RTF);			// セット15の追加
 
 #undef PopulateKeyword
 }
@@ -140,10 +140,9 @@ void _DefaultConfig(TypeConfig* pType)
 	pType->bTabArrow = TabArrowType::String;	// タブ矢印表示
 	pType->bInsSpace = false;				// スペースの挿入
 	
-	//@@@ 2002.09.22 YAZAKI 以下、lineCommentとblockCommentsを使うように修正
 	pType->lineComment.CopyTo(0, L"", -1);	// 行コメントデリミタ
 	pType->lineComment.CopyTo(1, L"", -1);	// 行コメントデリミタ2
-	pType->lineComment.CopyTo(2, L"", -1);	// 行コメントデリミタ3	//Jun. 01, 2001 JEPRO 追加
+	pType->lineComment.CopyTo(2, L"", -1);	// 行コメントデリミタ3
 	pType->blockComments[0].SetBlockCommentRule(L"", L"");	// ブロックコメントデリミタ
 	pType->blockComments[1].SetBlockCommentRule(L"", L"");	// ブロックコメントデリミタ2
 
@@ -172,7 +171,6 @@ void _DefaultConfig(TypeConfig* pType)
 	encoding.eDefaultEoltype = EolType::CRLF;
 	encoding.bDefaultBom = false;
 
-	//@@@2002.2.4 YAZAKI
 	pType->szExtHelp[0] = L'\0';
 	pType->szExtHtmlHelp[0] = L'\0';
 	pType->bHtmlHelpIsSingle = true;

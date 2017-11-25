@@ -64,7 +64,6 @@ bool SetSpecialFuncName(EFunctionCode code, wchar_t* ptr)
 	return false;
 }
 
-//	From Here Jun. 2, 2001 genta
 /*!
 	@param hwndDlg ダイアログボックスのWindow Handle
 	@param uMsg メッセージ
@@ -76,7 +75,6 @@ INT_PTR CALLBACK PropCustmenu::DlgProc_page(
 {
 	return DlgProc(reinterpret_cast<pDispatchPage>(&PropCustmenu::DispatchEvent), hwndDlg, uMsg, wParam, lParam);
 }
-//	To Here Jun. 2, 2001 genta
 
 // Custom menu メッセージ処理
 INT_PTR PropCustmenu::DispatchEvent(
@@ -136,7 +134,6 @@ INT_PTR PropCustmenu::DispatchEvent(
 			// ダイアログデータの取得 Custom menu
 			GetData(hwndDlg);
 			return TRUE;
-//@@@ 2002.01.03 YAZAKI 最後に表示していたシートを正しく覚えていないバグ修正
 		case PSN_SETACTIVE:
 			nPageNum = ID_PROPCOM_PAGENUM_CUSTMENU;
 
@@ -251,7 +248,6 @@ INT_PTR PropCustmenu::DispatchEvent(
 					KEYCODE keycode[3]={0}; _tctomb(szKey, keycode);
 					csCustomMenu.nCustMenuItemKeyArr[nIdx1][nIdx2] = keycode[0];
 				}
-//@@@ 2002.01.08 YAZAKI カスタムメニューでアクセスキーを消した時、左カッコ (がメニュー項目に一回残るバグ修正
 				if (csCustomMenu.nCustMenuItemKeyArr[nIdx1][nIdx2]) {
 					auto_sprintf_s(szLabel2, LTEXT("%ts(%hc)"),
 						szLabel,
@@ -326,7 +322,7 @@ INT_PTR PropCustmenu::DispatchEvent(
 					if (nIdx2 == LB_ERR) {
 						nIdx2 = 0;
 					}
-					nIdx2 = List_InsertString(hwndLIST_RES, nIdx2, LSW(STR_PROPCOMCUSTMENU_SEP));	// Oct. 18, 2000 JEPRO 「ツールバー」タブで使っているセパレータと同じ線種に統一した
+					nIdx2 = List_InsertString(hwndLIST_RES, nIdx2, LSW(STR_PROPCOMCUSTMENU_SEP));
 					if (nIdx2 == LB_ERR || nIdx2 == LB_ERRSPACE) {
 						break;
 					}
@@ -628,7 +624,7 @@ void PropCustmenu::SetData(HWND hwndDlg)
 	nSpecialFuncsNum = Combo_AddString(hwndCombo, LS(STR_SPECIAL_FUNC));
 
 	// 種別の先頭の項目を選択（コンボボックス）
-	Combo_SetCurSel(hwndCombo, 0);	// Oct. 14, 2000 JEPRO 「--未定義--」を表示させないように大元 Funcode.cpp で変更してある
+	Combo_SetCurSel(hwndCombo, 0);
 
 	// メニュー一覧に文字列をセット（コンボボックス）
 	HWND hwndCOMBO_MENU = ::GetDlgItem(hwndDlg, IDC_COMBO_MENU);
@@ -640,7 +636,7 @@ void PropCustmenu::SetData(HWND hwndDlg)
 	Combo_SetCurSel(hwndCOMBO_MENU, 0);
 	SetDataMenuList(hwndDlg, 0);
 
-//	// カスタムメニューの先頭の項目を選択（リストボックス）	// Oct. 8, 2000 JEPRO ここをコメントアウトすると先頭項目が選択されなくなる
+//	// カスタムメニューの先頭の項目を選択（リストボックス）
 	HWND hwndLIST_RES = ::GetDlgItem(hwndDlg, IDC_LIST_RES);
 	List_SetCurSel(hwndLIST_RES, 0);
 }
@@ -657,7 +653,7 @@ void PropCustmenu::SetDataMenuList(HWND hwndDlg, int nIdx)
 	List_ResetContent(hwndLIST_RES);
 	for (int i=0; i<csCustomMenu.nCustMenuItemNumArr[nIdx]; ++i) {
 		if (csCustomMenu.nCustMenuItemFuncArr[nIdx][i] == 0) {
-			auto_strcpy(szLabel, LSW(STR_PROPCOMCUSTMENU_SEP));	// Oct. 18, 2000 JEPRO 「ツールバー」タブで使っているセパレータと同じ線種に統一した
+			auto_strcpy(szLabel, LSW(STR_PROPCOMCUSTMENU_SEP));
 		}else {
 			EFunctionCode code = csCustomMenu.nCustMenuItemFuncArr[nIdx][i];
 			//	Oct. 3, 2001 genta

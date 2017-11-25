@@ -106,7 +106,7 @@ CodeConvertResult ReadManager::ReadFile_To_CDocLineMgr(
 			// ÉtÉ@ÉCÉãÇ™Ç»Ç¢
 			ErrorMessage(
 				EditWnd::getInstance().GetHwnd(),
-				LS(STR_ERR_DLGDOCLM1),	// Mar. 24, 2001 jepro é·ä±èCê≥
+				LS(STR_ERR_DLGDOCLM1),
 				pszPath
 			);
 		}else if (_taccess(pszPath, 4) == -1) {

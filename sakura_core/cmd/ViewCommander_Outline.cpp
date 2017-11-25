@@ -98,7 +98,6 @@ bool ViewCommander::Command_FuncList(
 	case OutlineType::TeX:			docOutline.MakeTopicList_tex(&funcInfoArr);break;		// TeX アウトライン解析
 	case OutlineType::BookMark:		docOutline.MakeFuncList_BookMark(&funcInfoArr);break;	// 
 	case OutlineType::RuleFile:		docOutline.MakeFuncList_RuleFile(&funcInfoArr, titleOverride);break;	// アウトライン解析にルールファイルを導入
-//	case OUTLINE_UNKNOWN:	// Jul. 08, 2001 JEPRO 使わないように変更
 	case OutlineType::Python:		docOutline.MakeFuncList_python(&funcInfoArr);break;		// 
 	case OutlineType::Erlang:		docOutline.MakeFuncList_Erlang(&funcInfoArr);break;		// 
 	case OutlineType::FileTree:	/* 特に何もしない*/ ;break;	// 

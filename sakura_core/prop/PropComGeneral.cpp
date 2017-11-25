@@ -237,9 +237,8 @@ INT_PTR PropGeneral::DispatchEvent(
 				// ダイアログデータの取得 General
 				GetData(hwndDlg);
 				return TRUE;
-//@@@ 2002.01.03 YAZAKI 最後に表示していたシートを正しく覚えていないバグ修正
 			case PSN_SETACTIVE:
-				nPageNum = ID_PROPCOM_PAGENUM_GENERAL;	// Oct. 25, 2000 JEPRO ZENPAN1→ZENPAN に変更(参照しているのはCPropCommon.cppのみの1箇所)
+				nPageNum = ID_PROPCOM_PAGENUM_GENERAL;
 				return TRUE;
 			}
 			break;
@@ -447,7 +446,6 @@ int PropGeneral::GetData(HWND hwndDlg)
 
 	// タスクトレイを使う
 	csGeneral.bUseTaskTray = DlgButton_IsChecked(hwndDlg, IDC_CHECK_USETRAYICON);
-//@@@ YAZAKI 2001.12.31 bUseTaskTrayに引きづられるように。
 	if (csGeneral.bUseTaskTray) {
 		::EnableWindow(::GetDlgItem(hwndDlg, IDC_CHECK_STAYTASKTRAY), TRUE);
 	}else {

@@ -682,9 +682,7 @@ int PropTypesColor::GetData(HWND hwndDlg)
 	int		nIdx;
 	HWND	hwndWork;
 
-	// From Here May 12, 2001 genta
 	// コメントの開始桁位置の取得
-	// May 21, 2001 genta 桁位置を1から数えるように
 	wchar_t buffer[COMMENT_DELIMITER_BUFFERSIZE];	// LineCommentを取得するためのバッファ
 	int pos;
 	bool en;

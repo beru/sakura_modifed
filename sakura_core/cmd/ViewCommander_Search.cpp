@@ -62,7 +62,7 @@ void ViewCommander::Command_Search_Next(
 	bool	bSelectingLock_Old = false;
 	bool	bFound = false;
 	bool	bDisableSelect = false;
-	bool	b0Match = false;		// 長さ０でマッチしているか？フラグ by かろと
+	bool	b0Match = false;		// 長さ０でマッチしているか？
 	size_t	nIdx = 0;
 	int		nLineNum(0);
 
@@ -350,9 +350,9 @@ void ViewCommander::Command_Search_Prev(bool bReDraw, HWND hwndParent)
 		if (!pLayout) {
 			goto end_of_func;
 		}
-		// カーソル左移動はやめて nIdxは行の長さとしないと[EOF]から改行を前検索した時に最後の改行を検索できない 2003.05.04 かろと
+		// カーソル左移動はやめて nIdxは行の長さとしないと[EOF]から改行を前検索した時に最後の改行を検索できない
 		pLayout = layoutMgr.SearchLineByLayoutY(nLineNum);
-		nIdx = pLayout->GetDocLineRef()->GetLengthWithEOL() + 1;		// 行末のヌル文字(\0)にマッチさせるために+1 2003.05.16 かろと
+		nIdx = pLayout->GetDocLineRef()->GetLengthWithEOL() + 1;		// 行末のヌル文字(\0)にマッチさせるために+1
 	}else {
 		// 指定された桁に対応する行のデータ内の位置を調べる
 		nIdx = view.LineColumnToIndex(pLayout, caret.GetCaretLayoutPos().x);
@@ -633,7 +633,7 @@ void ViewCommander::Command_Replace(HWND hwndParent)
 		}
 
 		/* 最後まで置換した時にOK押すまで置換前の状態が表示されるので、
-		** 置換後、次を検索する前に書き直す 2003.05.17 かろと
+		** 置換後、次を検索する前に書き直す
 		*/
 		view.Redraw();
 
@@ -849,7 +849,6 @@ void ViewCommander::Command_Replace_All()
 			return;
 		}
 
-		// Nov. 9, 2005 かろと 正規表現で選択始点・終点への挿入方法を変更(再)
 		NativeW memRepKey2;
 		NativeW memMatchStr;
 		memMatchStr.SetString(L"$&");
@@ -1178,7 +1177,7 @@ void ViewCommander::Command_Replace_All()
 			}
 		}else {
 			/* 本当は元コードを使うべきなんでしょうが、無駄な処理を避けるために直接たたく。
-			** →nSelectXXXが-1の時に view.ReplaceData_CEditViewを直接たたくと動作不良となるため直接たたくのやめた。2003.05.18 かろと
+			** →nSelectXXXが-1の時に view.ReplaceData_CEditViewを直接たたくと動作不良となるため直接たたくのやめた。
 			*/
 			Command_InsText(false, szREPLACEKEY, nReplaceKey, true, false, bFastMode, bFastMode ? &selectLogic : nullptr);
 			++nReplaceNum;
@@ -1377,7 +1376,7 @@ void ViewCommander::Command_BracketPair(void)
 	bit1(in)  : 前方文字を調べるか？   0:調べない  1:調べる
 	bit2(out) : 見つかった位置         0:後ろ      1:前
 	*/
-	if (view.SearchBracket(GetCaret().GetCaretLayoutPos(), &ptColLine, &mode)) {	// 02/09/18 ai
+	if (view.SearchBracket(GetCaret().GetCaretLayoutPos(), &ptColLine, &mode)) {
 		view.MoveCursorSelecting(ptColLine, view.GetSelectionInfo().bSelectingLock);
 	}else {
 		// 失敗した場合は nCol/nLineには有効な値が入っていない.

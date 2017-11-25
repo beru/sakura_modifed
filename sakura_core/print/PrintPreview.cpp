@@ -698,7 +698,7 @@ void PrintPreview::OnChangePrintSetting(void)
 		nPreview_PaperHeight = 297 * 10;		// 用紙印刷有効高さ
 		nPreview_PaperOffsetLeft = 0;			// 印刷可能位置左端
 		nPreview_PaperOffsetTop = 0;			// 印刷可能位置上端
-		// DEVMODE構造体もA4縦で初期化 2003.07.03 かろと
+		// DEVMODE構造体もA4縦で初期化
 		pPrintSetting->mdmDevMode.dmPaperSize = DMPAPER_A4;
 		pPrintSetting->mdmDevMode.dmOrientation = DMORIENT_PORTRAIT;
 		pPrintSetting->mdmDevMode.dmPaperLength = nPreview_PaperHeight;
@@ -753,13 +753,11 @@ void PrintPreview::OnChangePrintSetting(void)
 
 	ref.nMaxLineKetas = 	bPreview_EnableColumns;
 	ref.bWordWrap =		pPrintSetting->bPrintWordWrap;	// 英文ワードラップをする
-	//	Sep. 23, 2002 genta LayoutMgrの値を使う
 	ref.nTabSpace =		parentWnd.GetDocument().layoutMgr.GetTabSpace();
 
-	//@@@ 2002.09.22 YAZAKI
 	ref.lineComment.CopyTo(0, L"", -1);	// 行コメントデリミタ
 	ref.lineComment.CopyTo(1, L"", -1);	// 行コメントデリミタ2
-	ref.lineComment.CopyTo(2, L"", -1);	// 行コメントデリミタ3	// Jun. 01, 2001 JEPRO 追加
+	ref.lineComment.CopyTo(2, L"", -1);	// 行コメントデリミタ3
 	ref.blockComments[0].SetBlockCommentRule(L"", L"");	// ブロックコメントデリミタ
 	ref.blockComments[1].SetBlockCommentRule(L"", L"");	// ブロックコメントデリミタ2
 
@@ -971,7 +969,6 @@ void PrintPreview::OnPrint(void)
 	}
 
 	// 印刷範囲を指定できるプリンタダイアログを作成
-	//	2003.05.02 かろと
 	PRINTDLG pd = {0};
 #ifndef _DEBUG
 // Debugモードで、hwndOwnerを指定すると、Win2000では落ちるので・・・
@@ -1006,7 +1003,7 @@ void PrintPreview::OnPrint(void)
 	// 印刷開始ページと、印刷ページ数を確認
 	WORD nFrom;
 	WORD nNum;
-	if ((pd.Flags & PD_PAGENUMS) != 0) {	// 2003.05.02 かろと
+	if ((pd.Flags & PD_PAGENUMS) != 0) {
 		nFrom = pd.nFromPage - 1;
 		nNum  = pd.nToPage - nFrom;
 	}else {
@@ -1068,7 +1065,6 @@ void PrintPreview::OnPrint(void)
 		// 印刷 ページ開始
 		print.PrintStartPage(hdc);
 
-		//	From Here Jun. 26, 2003 かろと / おきた
 		//	Windows 95/98ではStartPage()関数の呼び出し時に、属性はリセットされて既定値へ戻ります．
 		//	このとき開発者は次のページの印刷を始める前にオブジェクトを選択し直し，
 		//	マッピングモードをもう一度設定しなければなりません
@@ -1080,7 +1076,6 @@ void PrintPreview::OnPrint(void)
 
 		// 現在のフォントを印刷用半角フォントに設定
 		::SelectObject(hdc, hFontHan);
-		//	To Here Jun. 26, 2003 かろと / おきた
 
 		int nHeaderHeight = Print::CalcHeaderHeight(*pPrintSetting);
 
@@ -2031,14 +2026,13 @@ INT_PTR PrintPreview::DispatchEvent_PPB(
 		case BN_CLICKED:
 			switch (wID) {
 			case IDC_BUTTON_PRINTERSELECT:
-				// From Here 2003.05.03 かろと
 				{
 					// PRINTDLGを初期化
 					PRINTDLG pd = {0};
 					pd.Flags = PD_PRINTSETUP | PD_NONETWORKBUTTON;
 					pd.hwndOwner = parentWnd.GetHwnd();
 					if (print.PrintDlg(&pd, &pPrintSettingOrg->mdmDevMode)) {
-						// 用紙サイズと用紙方向を反映させる 2003.05.03 かろと
+						// 用紙サイズと用紙方向を反映させる
 						pPrintSettingOrg->nPrintPaperSize = pPrintSettingOrg->mdmDevMode.dmPaperSize;
 						pPrintSettingOrg->nPrintPaperOrientation = pPrintSettingOrg->mdmDevMode.dmOrientation;
 						// 印刷Preview スクロールバー初期化
@@ -2052,7 +2046,6 @@ INT_PTR PrintPreview::DispatchEvent_PPB(
 						// ::InvalidateRect(parentWnd.GetHwnd(), NULL, TRUE);
 					}
 				}
-				// To Here 2003.05.03 かろと
 				break;
 			case IDC_BUTTON_PrintSetting:
 				parentWnd.OnPrintPageSetting();

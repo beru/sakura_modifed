@@ -43,7 +43,6 @@ TYPE_NAME_ID<TabPosition> TabPosArr[] = {
 #endif
 };
 
-//	From Here Jun. 2, 2001 genta
 /*!
 	@param hwndDlg[in] ダイアログボックスのWindow Handle
 	@param uMsg[in] メッセージ
@@ -59,7 +58,6 @@ INT_PTR CALLBACK PropTab::DlgProc_page(
 {
 	return DlgProc(reinterpret_cast<pDispatchPage>(&PropTab::DispatchEvent), hwndDlg, uMsg, wParam, lParam);
 }
-//	To Here Jun. 2, 2001 genta
 
 // メッセージ処理
 INT_PTR PropTab::DispatchEvent(
@@ -94,7 +92,6 @@ INT_PTR PropTab::DispatchEvent(
 				// ダイアログデータの取得 Tab
 				GetData(hwndDlg);
 				return TRUE;
-//@@@ 2002.01.03 YAZAKI 最後に表示していたシートを正しく覚えていないバグ修正
 			case PSN_SETACTIVE:
 				nPageNum = ID_PROPCOM_PAGENUM_TAB;
 				return TRUE;

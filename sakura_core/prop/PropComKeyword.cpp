@@ -29,9 +29,7 @@ static const DWORD p_helpids[] = {	//10800
 //	IDC_STATIC,						-1,
 	0, 0
 };
-//@@@ 2001.02.04 End
 
-//	From Here Jun. 2, 2001 genta
 /*!
 	@param hwndDlg ダイアログボックスのWindow Handle
 	@param uMsg メッセージ
@@ -47,7 +45,6 @@ INT_PTR CALLBACK PropKeyword::DlgProc_page(
 {
 	return DlgProc(reinterpret_cast<pDispatchPage>(&PropKeyword::DispatchEvent), hwndDlg, uMsg, wParam, lParam);
 }
-//	To Here Jun. 2, 2001 genta
 INT_PTR CALLBACK PropKeyword::DlgProc_dialog(
 	HWND hwndDlg,
 	UINT uMsg,
@@ -218,7 +215,6 @@ INT_PTR PropKeyword::DispatchEvent(
 				// ダイアログデータの取得 Keyword
 				GetData(hwndDlg);
 				return TRUE;
-//@@@ 2002.01.03 YAZAKI 最後に表示していたシートを正しく覚えていないバグ修正
 			case PSN_SETACTIVE:
 				nPageNum = ID_PROPCOM_PAGENUM_KEYWORD;
 				return TRUE;
@@ -285,7 +281,6 @@ INT_PTR PropKeyword::DispatchEvent(
 					for (i=0; i<GetDllShareData().nTypesCount; ++i) {
 						auto type = std::make_unique<TypeConfig>();
 						DocTypeManager().GetTypeConfig(TypeConfigNum(i), *type);
-						// 2002/04/25 YAZAKI TypeConfig全体を保持する必要はないし、pShareDataを直接見ても問題ない。
 						if (nIndex1 == types_nKeywordSetIdx[i].index[0]
 						||  nIndex1 == types_nKeywordSetIdx[i].index[1]
 						||  nIndex1 == types_nKeywordSetIdx[i].index[2]
@@ -315,7 +310,6 @@ INT_PTR PropKeyword::DispatchEvent(
 					}
 					// 削除対象のセットを使用しているファイルタイプのセットをクリア
 					for (i=0; i<GetDllShareData().nTypesCount; ++i) {
-						// 2002/04/25 YAZAKI TypeConfig全体を保持する必要はない。
 						for (int j=0; j<MAX_KEYWORDSET_PER_TYPE; ++j) {
 							if (nIndex1 == types_nKeywordSetIdx[i].index[j]) {
 								types_nKeywordSetIdx[i].index[j] = -1;

@@ -152,13 +152,13 @@ public:
 	);
 	void PrintStartPage(HDC);		// 印刷 ページ開始
 	void PrintEndPage(HDC);		// 印刷 ページ終了
-	void PrintClose(HDC);			// 印刷 ジョブ終了 // 2003.05.02 かろと 不要なhPrinter削除
+	void PrintClose(HDC);			// 印刷 ジョブ終了
 
 protected:
 	/*
 	||  実装ヘルパ関数
 	*/
-	// DC作成する(処理をまとめた) 2003.05.02 かろと
+	// DC作成する
 	HDC CreateDC(MYDEVMODE* pMYDEVMODE, TCHAR* pszErrMsg);
 	
 	static const PaperInfo* FindPaperInfo(int id);

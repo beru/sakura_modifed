@@ -384,11 +384,9 @@ bool EditView::ExecCmd(
 							work[bufidx] = byteCarry;
 							bufidx += 1;
 						}
-					// end 2008/6/8 Uchi
 					}else if (outputEncoding == CODE_SJIS) {
 						// 読み出した文字列をチェックする
 						// \r\n を \r だけとか漢字の第一バイトだけを出力するのを防ぐ必要がある
-						//@@@ 2002.1.24 YAZAKI 1バイト取りこぼす可能性があった。
 						int j;
 						for (j=0; j<(int)read_cnt-1; ++j) {
 							if (NativeA::GetSizeOfChar(work, read_cnt, j) == 2) {

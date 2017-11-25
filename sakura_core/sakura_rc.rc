@@ -4026,10 +4026,8 @@ BEGIN
 	STR_ERR_DLGEDITWND13		"文字:\t\t%ls (%ts)\n\nSJIS:\t\t%ts\nJIS:\t\t%ts\nEUC:\t\t%ts\nLatin1:\t\t%ts\nUnicode:\t\t%ts\nUTF-8:\t\t%ts\nCESU-8:\t\t%ts"
 	STR_ERR_DLGEDITWND14		"印刷プレビューを実行する前に、プリンタをインストールしてください。\n"
 
-	//		const char*	pszLabel[7] = { "", "99999 行 9999 列", "CRLF", "0000", "Unicode", "REC", "上書" };	//Oct. 30, 2000 JEPRO 千万行も要らん
 	STR_ERR_DLGEDITWND19		""
 	STR_ERR_DLGEDITWND20		"99999 L 9999 C"
-//	STR_ERR_DLGEDITWND20		"99999 行 9999 列"
 	STR_ERR_DLGEDITWND21		"CFLF"
 	STR_ERR_DLGEDITWND22		"0000"
 	STR_ERR_DLGEDITWND23		"Unicode BOM付"
@@ -4082,8 +4080,8 @@ BEGIN
 	STR_ERR_DLGFUNCLKUP04		"ファイル操作系"
 	STR_ERR_DLGFUNCLKUP05		"編集系"
 	STR_ERR_DLGFUNCLKUP06		"カーソル移動系"
-	STR_ERR_DLGFUNCLKUP07		"選択系"		//Oct. 15, 2000 JEPRO 「カーソル移動系」が多くなったので「選択系」として独立化(サブメニュー化は構造上できないので)
-	STR_ERR_DLGFUNCLKUP08		"矩形選択系"	//Oct. 17, 2000 JEPRO 「選択系」に一緒にすると多くなりすぎるので「矩形選択系」も独立させた
+	STR_ERR_DLGFUNCLKUP07		"選択系"
+	STR_ERR_DLGFUNCLKUP08		"矩形選択系"
 	STR_ERR_DLGFUNCLKUP09		"クリップボード系"
 	STR_ERR_DLGFUNCLKUP10		"挿入系"
 	STR_ERR_DLGFUNCLKUP11		"変換系"

@@ -22,7 +22,6 @@ void MruListener::OnAfterSave(const SaveInfo& saveInfo)
 //                        ロード前後                           //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-//@@@ 2001.12.26 YAZAKI MRUリストは、CMRUに依頼する
 void MruListener::OnBeforeLoad(LoadInfo* pLoadInfo)
 {
 	// 再ロード用に現在ファイルをMRU登録しておく

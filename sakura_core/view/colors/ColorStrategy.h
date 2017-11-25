@@ -184,7 +184,6 @@ public:
 	/*
 	|| 色分け
 	*/
-	//@@@ 2002.09.22 YAZAKI
 	void CheckColorMODE(ColorStrategy** ppColorStrategy, int nPos, const StringRef& lineStr);
 	bool IsSkipBeforeLayout();	// レイアウトが行頭からチェックしなくていいか判定
 

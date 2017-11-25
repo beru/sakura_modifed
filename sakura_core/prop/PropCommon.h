@@ -264,7 +264,6 @@ private:
 	void ChangeDateExample(HWND hwndDlg);
 	void ChangeTimeExample(HWND hwndDlg);
 
-	// Sept. 10, 2000 JEPRO	次行を追加
 	void EnableFormatPropInput(HWND hwndDlg);	//	書式設定のON/OFF
 };
 
@@ -314,7 +313,6 @@ protected:
 	int  GetData(HWND);	// ダイアログデータの取得
 
 private:
-	// Sept. 9, 2000 JEPRO		次行を追加
 	void EnableWinPropInput(HWND hwndDlg) ;	//	ウィンドウ設定のON/OFF
 };
 
@@ -384,7 +382,6 @@ protected:
 
 private:
 	void InitDialog(HWND hwndDlg);// Macroページの初期化
-	//	To Here Jun. 2, 2001 genta
 	void SetMacro2List_Macro(HWND hwndDlg);// Macroデータの設定
 	void SelectBaseDir_Macro(HWND hwndDlg);// Macroディレクトリの選択
 	void OnFileDropdown_Macro(HWND hwndDlg);// ファイルドロップダウンが開かれるとき

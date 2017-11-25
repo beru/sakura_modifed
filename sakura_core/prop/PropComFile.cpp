@@ -41,7 +41,6 @@ TYPE_NAME_ID<FileShareMode> ShareModeArr[] = {
 	{ FileShareMode::DenyReadWrite,	STR_EXCLU_DENY_WRITE },		// _T("読み書きを禁止する") },
 };
 
-//	From Here Jun. 2, 2001 genta
 /*!
 	@param hwndDlg ダイアログボックスのWindow Handle
 	@param uMsg メッセージ
@@ -57,7 +56,6 @@ INT_PTR CALLBACK PropFile::DlgProc_page(
 {
 	return DlgProc(reinterpret_cast<pDispatchPage>(&PropFile::DispatchEvent), hwndDlg, uMsg, wParam, lParam);
 }
-// To Here Jun. 2, 2001 genta
 
 // ファイルページ メッセージ処理
 INT_PTR PropFile::DispatchEvent(
@@ -72,9 +70,7 @@ INT_PTR PropFile::DispatchEvent(
 	NMHDR*		pNMHDR;
 	NM_UPDOWN*	pMNUD;
 	int			idCtrl;
-//	int			nVal;
-	int			nVal;	// Sept.21, 2000 JEPRO スピン要素を加えたので復活させた
-//	char		szFolder[_MAX_PATH];
+	int			nVal;
 
 	switch (uMsg) {
 	case WM_INITDIALOG:
@@ -83,26 +79,6 @@ INT_PTR PropFile::DispatchEvent(
 		::SetWindowLongPtr(hwndDlg, DWLP_USER, lParam);
 
 		return TRUE;
-//****	From Here Sept. 21, 2000 JEPRO ダイアログ要素にスピンを入れるので以下のWM_NOTIFYをコメントアウトにし下に修正を置いた
-//	case WM_NOTIFY:
-//		idCtrl = (int)wParam;
-//		pNMHDR = (NMHDR*)lParam;
-//		pMNUD  = (NM_UPDOWN*)lParam;
-////		switch (idCtrl) {
-////		default:
-//			switch (pNMHDR->code) {
-//			case PSN_HELP:
-//				OnHelp(hwndDlg, IDD_PROP_FILE);
-//				return TRUE;
-//			case PSN_KILLACTIVE:
-////				MYTRACE(_T("p2 PSN_KILLACTIVE\n"));
-//				// ダイアログデータの取得 p2
-//				GetData_p2(hwndDlg);
-//				return TRUE;
-//			}
-////		}
-//		break;
-
 	case WM_NOTIFY:
 		idCtrl = (int)wParam;
 		pNMHDR = (NMHDR*)lParam;
@@ -118,7 +94,6 @@ INT_PTR PropFile::DispatchEvent(
 				// ダイアログデータの取得 File
 				GetData(hwndDlg);
 				return TRUE;
-//@@@ 2002.01.03 YAZAKI 最後に表示していたシートを正しく覚えていないバグ修正
 			case PSN_SETACTIVE:
 				nPageNum = ID_PROPCOM_PAGENUM_FILE;
 				return TRUE;
@@ -194,7 +169,6 @@ INT_PTR PropFile::DispatchEvent(
 			// NOTREACHED
 //			break;
 		}
-//****	To Here Sept. 21, 2000 JEPRO ダイアログ要素にスピンを入れるのでWM_NOTIFYをコメントアウトにしその下に修正を置いた
 		break;
 
 	case WM_COMMAND:
@@ -352,7 +326,7 @@ int PropFile::GetData(HWND hwndDlg)
 	if (1 > csFile.nDropFileNumMax) {
 		csFile.nDropFileNumMax = 1;
 	}
-	if (99 < csFile.nDropFileNumMax) {	// Sept. 21, 2000, JEPRO 16より大きいときに99と制限されていたのを修正(16→99と変更)
+	if (99 < csFile.nDropFileNumMax) {
 		csFile.nDropFileNumMax = 99;
 	}
 
@@ -403,7 +377,6 @@ int PropFile::GetData(HWND hwndDlg)
 	return TRUE;
 }
 
-//	From Here Aug. 21, 2000 genta
 /*!	チェック状態に応じてダイアログボックス要素のEnable/Disableを
 	適切に設定する
 
@@ -414,15 +387,15 @@ void PropFile::EnableFilePropInput(HWND hwndDlg)
 
 	//	Drop時の動作
 	if (DlgButton_IsChecked(hwndDlg, IDC_CHECK_bDropFileAndClose)) {
-		::EnableWindow(::GetDlgItem(hwndDlg, IDC_LABEL_AUTOSAVE3), FALSE);	// added Sept. 6, JEPRO 自動保存にしたときだけEnableになるように変更
-		::EnableWindow(::GetDlgItem(hwndDlg, IDC_LABEL_AUTOSAVE4), FALSE);	// added Sept. 6, JEPRO	同上
+		::EnableWindow(::GetDlgItem(hwndDlg, IDC_LABEL_AUTOSAVE3), FALSE);
+		::EnableWindow(::GetDlgItem(hwndDlg, IDC_LABEL_AUTOSAVE4), FALSE);
 		::EnableWindow(::GetDlgItem(hwndDlg, IDC_EDIT_nDropFileNumMax), FALSE);
-		::EnableWindow(::GetDlgItem(hwndDlg, IDC_SPIN_nDropFileNumMax), FALSE);// added Oct. 6, JEPRO ファイルオープンを「閉じて開く」にしたときはDisableになるように変更
+		::EnableWindow(::GetDlgItem(hwndDlg, IDC_SPIN_nDropFileNumMax), FALSE);
 	}else {
-		::EnableWindow(::GetDlgItem(hwndDlg, IDC_LABEL_AUTOSAVE3), TRUE);	// added Sept. 6, JEPRO	同上
-		::EnableWindow(::GetDlgItem(hwndDlg, IDC_LABEL_AUTOSAVE4), TRUE);	// added Sept. 6, JEPRO	同上
+		::EnableWindow(::GetDlgItem(hwndDlg, IDC_LABEL_AUTOSAVE3), TRUE);
+		::EnableWindow(::GetDlgItem(hwndDlg, IDC_LABEL_AUTOSAVE4), TRUE);
 		::EnableWindow(::GetDlgItem(hwndDlg, IDC_EDIT_nDropFileNumMax), TRUE);
-		::EnableWindow(::GetDlgItem(hwndDlg, IDC_SPIN_nDropFileNumMax), TRUE);// added Oct. 6, JEPRO ファイルオープンを「複数ファイルドロップ」にしたときだけEnableになるように変更
+		::EnableWindow(::GetDlgItem(hwndDlg, IDC_SPIN_nDropFileNumMax), TRUE);
 	}
 
 	//	排他するかどうか
@@ -449,12 +422,12 @@ void PropFile::EnableFilePropInput(HWND hwndDlg)
 	if (DlgButton_IsChecked(hwndDlg, IDC_CHECK_AUTOSAVE)) {
 		::EnableWindow(::GetDlgItem(hwndDlg, IDC_EDIT_AUTOBACKUP_INTERVAL), TRUE);
 		::EnableWindow(::GetDlgItem(hwndDlg, IDC_LABEL_AUTOSAVE), TRUE);
-		::EnableWindow(::GetDlgItem(hwndDlg, IDC_LABEL_AUTOSAVE2), TRUE);	// Sept. 6, 2000 JEPRO 自動保存にしたときだけEnableになるように変更
+		::EnableWindow(::GetDlgItem(hwndDlg, IDC_LABEL_AUTOSAVE2), TRUE);
 		::EnableWindow(::GetDlgItem(hwndDlg, IDC_SPIN_AUTOBACKUP_INTERVAL), TRUE);
 	}else {
 		::EnableWindow(::GetDlgItem(hwndDlg, IDC_EDIT_AUTOBACKUP_INTERVAL), FALSE);
 		::EnableWindow(::GetDlgItem(hwndDlg, IDC_LABEL_AUTOSAVE), FALSE);
-		::EnableWindow(::GetDlgItem(hwndDlg, IDC_LABEL_AUTOSAVE2), FALSE);	// Sept. 6, 2000 JEPRO 同上
+		::EnableWindow(::GetDlgItem(hwndDlg, IDC_LABEL_AUTOSAVE2), FALSE);
 		::EnableWindow(::GetDlgItem(hwndDlg, IDC_SPIN_AUTOBACKUP_INTERVAL), FALSE);
 	}
 
@@ -467,5 +440,4 @@ void PropFile::EnableFilePropInput(HWND hwndDlg)
 		::EnableWindow(::GetDlgItem(hwndDlg, IDC_SPIN_ALERT_FILESIZE), FALSE);
 	}
 }
-//	To Here Aug. 21, 2000 genta
 

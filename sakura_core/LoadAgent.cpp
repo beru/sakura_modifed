@@ -76,11 +76,11 @@ next:
 	if (csFile.GetAlertIfFileNotExist()) {
 		if (!fexist(pLoadInfo->filePath)) {
 			InfoBeep();
-			//	Feb. 15, 2003 genta Popupウィンドウを表示しないように．
+			//	Popupウィンドウを表示しないように．
 			//	ここでステータスメッセージを使っても画面に表示されない．
 			TopInfoMessage(
 				EditWnd::getInstance().GetHwnd(),
-				LS(STR_NOT_EXSIST_SAVE),	// Mar. 24, 2001 jepro 若干修正
+				LS(STR_NOT_EXSIST_SAVE),
 				pLoadInfo->filePath.GetBufferPointer()
 			);
 		}

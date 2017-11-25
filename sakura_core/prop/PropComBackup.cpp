@@ -357,7 +357,6 @@ int PropBackup::GetData(HWND hwndDlg)
 		csBackup.SetBackupTypeAdv(4);	// 前回の保存時刻
 	}
 
-	//	From Here Aug. 16, 2000 genta
 	//	世代数の取得
 	int	 nN;
 	nN = ::GetDlgItemInt(hwndDlg, IDC_EDIT_BACKUP_3, NULL, FALSE);	//	Oct. 29, 2001 genta
@@ -372,7 +371,6 @@ int PropBackup::GetData(HWND hwndDlg)
 	nN = nN < 1  ?  1 : nN;
 	nN = nN > 99 ? 99 : nN;
 	csBackup.SetBackupCount(nN);
-	//	To Here Aug. 16, 2000 genta
 
 	return TRUE;
 }
@@ -426,7 +424,7 @@ void PropBackup::EnableBackupInput(HWND hwndDlg)
 	SHOWENABLE(IDC_RADIO_BACKUP_DATETYPE2A,	bAdvanced, bBackup);
 
 	SHOWENABLE(IDC_CHECK_BACKUPFOLDER,			TRUE, bBackup);
-	SHOWENABLE(IDC_LABEL_BACKUP_4,				TRUE, bBackup && bFolder);	// added Sept. 6, JEPRO フォルダ指定したときだけEnableになるように変更
+	SHOWENABLE(IDC_LABEL_BACKUP_4,				TRUE, bBackup && bFolder);
 	SHOWENABLE(IDC_CHECK_BACKUP_FOLDER_RM,		TRUE, bBackup && bFolder);	// 2010/5/27 Uchi
 	SHOWENABLE(IDC_EDIT_BACKUPFOLDER,			TRUE, bBackup && bFolder);
 	SHOWENABLE(IDC_BUTTON_BACKUP_FOLDER_REF,	TRUE, bBackup && bFolder);

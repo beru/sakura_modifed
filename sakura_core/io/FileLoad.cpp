@@ -214,7 +214,7 @@ void FileLoad::FileClose(void)
 	nFileSize		=  0;
 	nFileDataLen	=  0;
 	CharCode		= CODE_DEFAULT;
-	bBomExist		= false; // From Here Jun. 08, 2003
+	bBomExist		= false;
 	nFlag 		=  0;
 	nReadLength	=  0;
 	mode			= FileLoadMode::Close;

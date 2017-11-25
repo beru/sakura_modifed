@@ -128,7 +128,7 @@ private:
 
 public:
 
-	bool	bDrawSelectArea;		// 選択範囲を描画したか	// 02/12/13 ai
+	bool	bDrawSelectArea;		// 選択範囲を描画したか
 
 	// 選択状態
 	bool	bSelectingLock;		// 選択状態のロック

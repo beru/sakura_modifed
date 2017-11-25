@@ -60,7 +60,6 @@ void TextDrawer::DispText(
 
 	if (textArea.IsRectIntersected(rcClip) && rcClip.top >= textArea.GetAreaTop()) {
 
-		//@@@	From Here 2002.01.30 YAZAKI ExtTextOutW_AnyBuildの制限回避
 		if (rcClip.Width() > textArea.GetAreaWidth()) {
 			rcClip.right = rcClip.left + textArea.GetAreaWidth();
 		}
@@ -382,7 +381,6 @@ void TextDrawer::DispLineNumber(
 		// DIFF色設定
 		DiffLineGetter(pDocLine).GetDiffColor(&nColorIndex);
 
-		// 02/10/16 ai
 		// ブックマークの表示
 		if (BookmarkGetter(pDocLine).IsBookmarked()) {
 			if (TypeSupport(view, COLORIDX_MARK).IsDisp()) {

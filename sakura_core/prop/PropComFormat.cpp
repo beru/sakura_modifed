@@ -56,9 +56,7 @@ static const char* p_time_form[] = {
 	"tt hh:mm:ss",
 	NULL
 };
-//@@@ 2002.01.12 add end
 
-//	From Here Jun. 2, 2001 genta
 /*!
 	@param hwndDlg ダイアログボックスのWindow Handle
 	@param uMsg メッセージ
@@ -74,7 +72,6 @@ INT_PTR CALLBACK PropFormat::DlgProc_page(
 {
 	return DlgProc(reinterpret_cast<pDispatchPage>(&PropFormat::DispatchEvent), hwndDlg, uMsg, wParam, lParam);
 }
-//	To Here Jun. 2, 2001 genta
 
 void PropFormat::ChangeDateExample(HWND hwndDlg)
 {
@@ -166,20 +163,16 @@ INT_PTR PropFormat::DispatchEvent(
 			case IDC_RADIO_DFORM_0:
 			case IDC_RADIO_DFORM_1:
 				ChangeDateExample(hwndDlg);
-			//	From Here Sept. 10, 2000 JEPRO
 			//	日付書式 0=標準 1=カスタム
 			//	日付書式をカスタムにするときだけ書式指定文字入力をEnableに設定
 				EnableFormatPropInput(hwndDlg);
-			//	To Here Sept. 10, 2000
 				return 0;
 			case IDC_RADIO_TFORM_0:
 			case IDC_RADIO_TFORM_1:
 				ChangeTimeExample(hwndDlg);
-			//	From Here Sept. 10, 2000 JEPRO
 			//	時刻書式 0=標準 1=カスタム
 			//	時刻書式をカスタムにするときだけ書式指定文字入力をEnableに設定
 				EnableFormatPropInput(hwndDlg);
-			//	To Here Sept. 10, 2000
 				return 0;
 			}
 			break;	// BN_CLICKED
@@ -202,7 +195,6 @@ INT_PTR PropFormat::DispatchEvent(
 				// ダイアログデータの取得 Format
 				GetData(hwndDlg);
 				return TRUE;
-//@@@ 2002.01.03 YAZAKI 最後に表示していたシートを正しく覚えていないバグ修正
 			case PSN_SETACTIVE:
 				nPageNum = ID_PROPCOM_PAGENUM_FORMAT;
 				return TRUE;
@@ -265,11 +257,9 @@ void PropFormat::SetData(HWND hwndDlg)
 	// 時刻書式
 	::DlgItem_SetText(hwndDlg, IDC_EDIT_TFORM, csFormat.szTimeFormat);
 
-	//	From Here Sept. 10, 2000 JEPRO
 	//	日付/時刻書式 0=標準 1=カスタム
 	//	日付/時刻書式をカスタムにするときだけ書式指定文字入力をEnableに設定
 	EnableFormatPropInput(hwndDlg);
-	//	To Here Sept. 10, 2000
 
 	return;
 }
@@ -315,7 +305,6 @@ int PropFormat::GetData(HWND hwndDlg)
 }
 
 
-//	From Here Sept. 10, 2000 JEPRO
 //	チェック状態に応じてダイアログボックス要素のEnable/Disableを
 //	適切に設定する
 void PropFormat::EnableFormatPropInput(HWND hwndDlg)
@@ -338,5 +327,4 @@ void PropFormat::EnableFormatPropInput(HWND hwndDlg)
 		::EnableWindow(::GetDlgItem(hwndDlg, IDC_EDIT_TFORM), FALSE);
 	}
 }
-//	To Here Sept. 10, 2000
 

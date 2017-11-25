@@ -75,11 +75,9 @@ void DlgProperty::SetData(void)
 		CodePage::GetNameNormal(szCpName, pEditDoc->GetDocumentEncoding());
 		memProp.AppendString( szCpName );
 	}
-	// From Here  2008/4/27 Uchi
 	if (pEditDoc->GetDocumentBomExist()) {
 		memProp.AppendString(LS(STR_DLGFLPROP_WITH_BOM));
 	}
-	// To Here  2008/4/27 Uchi
 	memProp.AppendStringLiteral(_T("\r\n"));
 
 	auto_sprintf(szWork, LS(STR_DLGFLPROP_LINE_COUNT), pEditDoc->docLineMgr.GetLineCount());

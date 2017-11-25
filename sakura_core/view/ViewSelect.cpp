@@ -69,7 +69,7 @@ void ViewSelect::DisableSelectArea(bool bDraw, bool bDrawBracketCursorLine)
 	if (bDraw) {
 		DrawSelectArea(bDrawBracketCursorLine);
 	}
-	bDrawSelectArea = false;	// 02/12/13 ai // 2011.12.24 bDraw括弧内から移動
+	bDrawSelectArea = false;
 
 	selectOld.Clear(0);			// 範囲選択(Old)
 	bBeginBoxSelect = false;		// 矩形範囲選択中
@@ -88,7 +88,6 @@ void ViewSelect::ChangeSelectAreaByCurrentCursor(const Point& ptCaretPos)
 {
 	selectOld = select; // 範囲選択(Old)
 
-	//	2002/04/08 YAZAKI コードの重複を排除
 	ChangeSelectAreaByCurrentCursorTEST(
 		ptCaretPos,
 		&select

@@ -264,7 +264,6 @@ void ViewCommander::Command_File_Reopen(
 // ˆóü
 void ViewCommander::Command_Print(void)
 {
-	// g‚Á‚Ä‚¢‚È‚¢ˆ—‚ğíœ 2003.05.04 ‚©‚ë‚Æ
 	Command_Print_Preview();
 
 	// ˆóüÀs

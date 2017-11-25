@@ -121,11 +121,9 @@ INT_PTR PropKeybind::DispatchEvent(
 		hwndEDIT_KEYSFUNC = ::GetDlgItem(hwndDlg, IDC_EDIT_KEYSFUNC);
 
 		// キー選択時の処理
-//	From Here Oct. 14, 2000 JEPRO わかりにくいので選択しないように変更	// Oct. 17, 2000 JEPRO 復活！
-//	// キーリストの先頭の項目を選択（リストボックス）
-		List_SetCurSel(hwndKeyList, 0);	// Oct. 14, 2000 JEPRO ここをコメントアウトすると先頭項目が選択されなくなる
-		::SendMessage(hwndDlg, WM_COMMAND, MAKELONG(IDC_LIST_KEY, LBN_SELCHANGE), (LPARAM)hwndKeyList);	// Oct. 14, 2000 JEPRO ここはどっちでもいい？(わからん)
-//	To Here Oct. 14, 2000
+	// キーリストの先頭の項目を選択（リストボックス）
+		List_SetCurSel(hwndKeyList, 0);
+		::SendMessage(hwndDlg, WM_COMMAND, MAKELONG(IDC_LIST_KEY, LBN_SELCHANGE), (LPARAM)hwndKeyList);
 		::SendMessage(hwndDlg, WM_COMMAND, MAKELONG(IDC_COMBO_FUNCKIND, CBN_SELCHANGE), (LPARAM)hwndCombo);
 
 		::SetTimer(hwndDlg, 1, 300, NULL);
@@ -136,7 +134,6 @@ INT_PTR PropKeybind::DispatchEvent(
 		pNMHDR = (NMHDR*)lParam;
 		switch (pNMHDR->code) {
 		case PSN_HELP:
-//			OnHelp(hwndDlg, IDD_PROP1P5);		// Sept. 9, 2000 JEPRO 実際のID名に変更
 			OnHelp(hwndDlg, IDD_PROP_KEYBIND);
 			return TRUE;
 		case PSN_KILLACTIVE:
@@ -144,7 +141,6 @@ INT_PTR PropKeybind::DispatchEvent(
 			// ダイアログデータの取得 Keybind
 			GetData(hwndDlg);
 			return TRUE;
-//@@@ 2002.01.03 YAZAKI 最後に表示していたシートを正しく覚えていないバグ修正
 		case PSN_SETACTIVE:
 			nPageNum = ID_PROPCOM_PAGENUM_KEYBOARD;
 
@@ -395,7 +391,7 @@ void PropKeybind::SetData(HWND hwndDlg)
 	lookup.SetCategory2Combo(hwndCombo);	//	Oct. 2, 2001 genta
 
 	// 種別の先頭の項目を選択（コンボボックス）
-	Combo_SetCurSel(hwndCombo, 0);	// Oct. 14, 2000 JEPRO JEPRO 「--未定義--」を表示させないように大元 Funcode.cpp で変更してある
+	Combo_SetCurSel(hwndCombo, 0);
 
 	// キー一覧に文字列をセット（リストボックス）
 	HWND hwndKeyList = ::GetDlgItem(hwndDlg, IDC_LIST_KEY);

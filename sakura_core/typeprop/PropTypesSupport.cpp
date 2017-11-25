@@ -152,14 +152,13 @@ INT_PTR PropTypesSupport::DispatchEvent(
 		pNMHDR = (NMHDR*)lParam;
 //		pMNUD  = (NM_UPDOWN*)lParam;
 		switch (pNMHDR->code) {
-		case PSN_HELP:	// Jul. 03, 2001 JEPRO 支援タブのヘルプを有効化
+		case PSN_HELP:
 			OnHelp(hwndDlg, IDD_PROP_SUPPORT);
 			return TRUE;
 		case PSN_KILLACTIVE:
 			// ダイアログデータの取得 p2
 			GetData(hwndDlg);
 			return TRUE;
-//@@@ 2002.01.03 YAZAKI 最後に表示していたシートを正しく覚えていないバグ修正
 		case PSN_SETACTIVE:
 			nPageNum = ID_PROPTYPE_PAGENUM_SUPPORT;
 			return TRUE;
@@ -211,7 +210,6 @@ void PropTypesSupport::SetData(HWND hwndDlg)
 	::CheckDlgButton(hwndDlg, IDC_CHECK_HOKANBYFILE, types.bUseHokanByFile ? BST_CHECKED : BST_UNCHECKED);
 	CheckDlgButtonBool(hwndDlg, IDC_CHECK_HOKANBYKEYWORD, types.bUseHokanByKeyword);
 
-	//@@@ 2002.2.2 YAZAKI
 	::DlgItem_SetText(hwndDlg, IDC_EDIT_TYPEEXTHELP, types.szExtHelp);
 	::DlgItem_SetText(hwndDlg, IDC_EDIT_TYPEEXTHTMLHELP, types.szExtHtmlHelp);
 	::CheckDlgButton(hwndDlg, IDC_CHECK_TYPEHTMLHELPISSINGLE, types.bHtmlHelpIsSingle ? BST_CHECKED : BST_UNCHECKED);
@@ -243,7 +241,6 @@ int PropTypesSupport::GetData(HWND hwndDlg)
 		}
 	}
 
-	//@@@ 2002.2.2 YAZAKI
 	::DlgItem_GetText(hwndDlg, IDC_EDIT_TYPEEXTHELP, types.szExtHelp, _countof2(types.szExtHelp));
 	::DlgItem_GetText(hwndDlg, IDC_EDIT_TYPEEXTHTMLHELP, types.szExtHtmlHelp, _countof2(types.szExtHtmlHelp));
 	types.bHtmlHelpIsSingle = DlgButton_IsChecked(hwndDlg, IDC_CHECK_TYPEHTMLHELPISSINGLE);

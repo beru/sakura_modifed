@@ -105,6 +105,6 @@ bool Color_Found::BeginColor(const StringRef& str, size_t nPos)
 bool Color_Found::EndColor(const StringRef& str, size_t nPos)
 {
 	// マッチ文字列終了検出
-	return (nSearchEnd <= (int)nPos); //+ == では行頭文字の場合、nSearchEndも０であるために文字色の解除ができないバグを修正 2003.05.03 かろと
+	return (nSearchEnd <= (int)nPos);
 }
 

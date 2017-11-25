@@ -426,7 +426,6 @@ bool SearchAgent::PrevOrNextWord(
 	size_t nLineLen;
 	const wchar_t*	pLine = pDocLine->GetDocLineStrWithEOL(&nLineLen);
 	
-	// ABC D[EOF]となっていたときに、Dの後ろにカーソルを合わせ、単語の左端に移動すると、Aにカーソルがあうバグ修正。YAZAKI
 	if (nIdx >= nLineLen) {
 		if (bLeft && nIdx == nLineLen) {
 		}else {
@@ -557,7 +556,7 @@ bool SearchAgent::SearchWord(
 					pDocLine = pDocLine->GetPrevLine();
 					nIdxPos = 0;
 					if (pDocLine) {
-						nHitTo = pDocLine->GetLengthWithEOL() + 1;		// 前の行のNULL文字(\0)にもマッチさせるために+1 2003.05.16 かろと 
+						nHitTo = pDocLine->GetLengthWithEOL() + 1;		// 前の行のNULL文字(\0)にもマッチさせるために+1
 					}
 				}
 			}

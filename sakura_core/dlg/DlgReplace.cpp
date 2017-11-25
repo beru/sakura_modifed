@@ -503,8 +503,6 @@ BOOL DlgReplace::OnBnClicked(int wID)
 			}
 
 			// 置換
-			//@@@ 2002.2.2 YAZAKI 置換コマンドをEditViewに新設
-			//@@@ 2002/04/08 YAZAKI 親ウィンドウのハンドルを渡すように変更。
 			pEditView->GetCommander().HandleCommand(F_REPLACE, true, (LPARAM)GetHwnd(), 0, 0, 0);
 			// 再描画
 			pEditView->GetCommander().HandleCommand(F_REDRAW, true, 0, 0, 0, 0);
