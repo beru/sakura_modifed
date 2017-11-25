@@ -105,9 +105,9 @@ INT_PTR PropTypesRegex::DispatchEvent(
 		col.iSubItem = 1;
 		ListView_InsertColumn(hwndList, 1, &col);
 
-		nPrevIndex = -1;	//@@@ 2003.05.12 MIK
+		nPrevIndex = -1;
 		SetData(hwndDlg);	// ダイアログデータの設定 正規表現キーワード
-		if (!CheckRegexpVersion(hwndDlg, IDC_LABEL_REGEX_VERSION, false)) {	//@@@ 2001.11.17 add MIK
+		if (!CheckRegexpVersion(hwndDlg, IDC_LABEL_REGEX_VERSION, false)) {
 			::DlgItem_SetText(hwndDlg, IDC_LABEL_REGEX_VERSION, LS(STR_PROPTYPEREGEX_NOUSE));
 			// ライブラリがなくて、使用しないになっている場合は、無効にする。
 			if (!IsDlgButtonChecked(hwndDlg, IDC_CHECK_REGEX)) {

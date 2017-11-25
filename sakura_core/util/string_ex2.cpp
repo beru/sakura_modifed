@@ -169,7 +169,7 @@ const wchar_t* GetNextLineW(
 */
 static EolType GetEOLTypeUniBE(const wchar_t* pszData, int nDataLen)
 {
-	// 行終端子のデータの配列(UnicodeBE版) 2000.05.30 Moca
+	// 行終端子のデータの配列(UnicodeBE版)
 	static const wchar_t* aEolTable[EOL_TYPE_NUM] = {
 		L"",									// EolType::None
 		(const wchar_t*)"\x00\x0d\x00\x0a\x00",	// EOL_CRLF

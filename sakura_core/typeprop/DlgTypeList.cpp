@@ -32,7 +32,7 @@ int CheckExt(LPCTSTR sExt, bool *pbRMenu, bool *pbDblClick);
 // 内部使用定数
 static const int PROP_TEMPCHANGE_FLAG = 0x10000;
 
-// タイプ別設定一覧 CDlgTypeList.cpp	//@@@ 2002.01.07 add start MIK
+// タイプ別設定一覧 CDlgTypeList.cpp
 const DWORD p_helpids[] = {	//12700
 	IDC_BUTTON_TEMPCHANGE,	HIDC_TL_BUTTON_TEMPCHANGE,	// 一時適用
 	IDOK,					HIDOK_TL,					// 設定
@@ -51,7 +51,7 @@ const DWORD p_helpids[] = {	//12700
 	IDC_CHECK_EXT_DBLCLICK,	HIDC_TL_CHECK_DBLCLICK,		// ダブルクリックで開く
 //	IDC_STATIC,				-1,
 	0, 0
-};	//@@@ 2002.01.07 add end MIK
+};
 
 // モーダルダイアログの表示
 INT_PTR DlgTypeList::DoModal(HINSTANCE hInstance, HWND hwndParent, Result* psResult)
@@ -93,8 +93,7 @@ BOOL DlgTypeList::OnBnClicked(int wID)
 	switch (wID) {
 	case IDC_BUTTON_HELP:
 		//「タイプ別設定一覧」のヘルプ
-		// Stonee, 2001/03/12 第四引数を、機能番号からヘルプトピック番号を調べるようにした
-		MyWinHelp(GetHwnd(), HELP_CONTEXT, ::FuncID_To_HelpContextID(F_TYPE_LIST));	// 2006.10.10 ryoji MyWinHelpに変更に変更
+		MyWinHelp(GetHwnd(), HELP_CONTEXT, ::FuncID_To_HelpContextID(F_TYPE_LIST));
 		return TRUE;
 	// Nov. 29, 2000	From Here	genta
 	// 適用する型の一時的変更

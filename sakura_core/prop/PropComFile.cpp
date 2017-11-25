@@ -26,11 +26,11 @@ static const DWORD p_helpids[] = {	//01310
 	IDC_SPIN_AUTOBACKUP_INTERVAL,			HIDC_EDIT_AUTOBACKUP_INTERVAL,
 	IDC_SPIN_nDropFileNumMax,				HIDC_EDIT_nDropFileNumMax,
 	IDC_CHECK_RestoreBookmarks,				HIDC_CHECK_RestoreBookmarks,			// 2002.01.16 hor ブックマークの復元
-	IDC_CHECK_QueryIfCodeChange,			HIDC_CHECK_QueryIfCodeChange,			// 前回と異なる文字コードのとき問い合わせを行う	// 2006.08.06 ryoji
-	IDC_CHECK_AlertIfFileNotExist,			HIDC_CHECK_AlertIfFileNotExist,			// 開こうとしたファイルが存在しないとき警告する	// 2006.08.06 ryoji
+	IDC_CHECK_QueryIfCodeChange,			HIDC_CHECK_QueryIfCodeChange,			// 前回と異なる文字コードのとき問い合わせを行う
+	IDC_CHECK_AlertIfFileNotExist,			HIDC_CHECK_AlertIfFileNotExist,			// 開こうとしたファイルが存在しないとき警告する
 	IDC_CHECK_ALERT_IF_LARGEFILE,			HIDC_CHECK_ALERT_IF_LARGEFILE,			// 開こうとしたファイルが大きい場合に警告する
-	IDC_CHECK_NoFilterSaveNew,				HIDC_CHECK_NoFilterSaveNew,				// 新規から保存時は全ファイル表示	// 2006.11.16 ryoji
-	IDC_CHECK_NoFilterSaveFile,				HIDC_CHECK_NoFilterSaveFile,			// 新規以外から保存時は全ファイル表示	// 2006.11.16 ryoji
+	IDC_CHECK_NoFilterSaveNew,				HIDC_CHECK_NoFilterSaveNew,				// 新規から保存時は全ファイル表示
+	IDC_CHECK_NoFilterSaveFile,				HIDC_CHECK_NoFilterSaveFile,			// 新規以外から保存時は全ファイル表示
 //	IDC_STATIC,								-1,
 	0, 0
 };
@@ -155,7 +155,6 @@ INT_PTR PropFile::DispatchEvent(
 			}
 			::SetDlgItemInt(hwndDlg, IDC_EDIT_nDropFileNumMax, nVal, FALSE);
 			return TRUE;
-//@@@ 2001.03.21 Start by MIK
 			// NOTREACHED
 //			break;
 		case IDC_SPIN_AUTOBACKUP_INTERVAL:
@@ -194,7 +193,6 @@ INT_PTR PropFile::DispatchEvent(
 			return TRUE;
 			// NOTREACHED
 //			break;
-//@@@ 2001.03.21 End by MIK
 		}
 //****	To Here Sept. 21, 2000 JEPRO ダイアログ要素にスピンを入れるのでWM_NOTIFYをコメントアウトにしその下に修正を置いた
 		break;
@@ -223,21 +221,18 @@ INT_PTR PropFile::DispatchEvent(
 		}
 		break;
 
-//@@@ 2001.02.04 Start by MIK: Popup Help
 	case WM_HELP:
 		{
 			HELPINFO* p = (HELPINFO*) lParam;
-			MyWinHelp((HWND)p->hItemHandle, HELP_WM_HELP, (ULONG_PTR)(LPVOID)p_helpids);	// 2006.10.10 ryoji MyWinHelpに変更に変更
+			MyWinHelp((HWND)p->hItemHandle, HELP_WM_HELP, (ULONG_PTR)(LPVOID)p_helpids);
 		}
 		return TRUE;
 		// NOTREACHED
 //		break;
-//@@@ 2001.02.04 End
 
-//@@@ 2001.12.22 Start by MIK: Context Menu Help
 	// Context Menu
 	case WM_CONTEXTMENU:
-		MyWinHelp(hwndDlg, HELP_CONTEXTMENU, (ULONG_PTR)(LPVOID)p_helpids);	// 2006.10.10 ryoji MyWinHelpに変更に変更
+		MyWinHelp(hwndDlg, HELP_CONTEXTMENU, (ULONG_PTR)(LPVOID)p_helpids);
 		return TRUE;
 //@@@ 2001.12.22 End
 
@@ -314,7 +309,7 @@ void PropFile::SetData(HWND hwndDlg)
 	::CheckDlgButton(hwndDlg, IDC_CHECK_ALERT_IF_LARGEFILE, csFile.bAlertIfLargeFile);
 	::SetDlgItemInt(hwndDlg, IDC_EDIT_ALERT_FILESIZE, csFile.nAlertFileSize, FALSE);
 
-	// ファイル保存ダイアログのフィルタ設定	// 2006.11.16 ryoji
+	// ファイル保存ダイアログのフィルタ設定
 	::CheckDlgButtonBool(hwndDlg, IDC_CHECK_NoFilterSaveNew, csFile.bNoFilterSaveNew);	// 新規から保存時は全ファイル表示
 	::CheckDlgButtonBool(hwndDlg, IDC_CHECK_NoFilterSaveFile, csFile.bNoFilterSaveFile);	// 新規以外から保存時は全ファイル表示
 
@@ -368,8 +363,8 @@ int PropFile::GetData(HWND hwndDlg)
 	common.backup.EnableAutoBackup(DlgButton_IsChecked(hwndDlg, IDC_CHECK_AUTOSAVE));
 
 	//	自動保存間隔の取得
-	TCHAR szNumBuf[/*6*/ 7];	//@@@ 2001.03.21 by MIK
-	::DlgItem_GetText(hwndDlg, IDC_EDIT_AUTOBACKUP_INTERVAL, szNumBuf, /*5*/ 6);	//@@@ 2001.03.21 by MIK
+	TCHAR szNumBuf[7];
+	::DlgItem_GetText(hwndDlg, IDC_EDIT_AUTOBACKUP_INTERVAL, szNumBuf, 6);
 
 	int nN;
 	TCHAR* pDigit;
@@ -406,7 +401,7 @@ int PropFile::GetData(HWND hwndDlg)
 		csFile.nAlertFileSize = 2048;
 	}
 
-	// ファイル保存ダイアログのフィルタ設定	// 2006.11.16 ryoji
+	// ファイル保存ダイアログのフィルタ設定
 	csFile.bNoFilterSaveNew = DlgButton_IsChecked(hwndDlg, IDC_CHECK_NoFilterSaveNew);	// 新規から保存時は全ファイル表示
 	csFile.bNoFilterSaveFile = DlgButton_IsChecked(hwndDlg, IDC_CHECK_NoFilterSaveFile);	// 新規以外から保存時は全ファイル表示
 
@@ -460,12 +455,12 @@ void PropFile::EnableFilePropInput(HWND hwndDlg)
 		::EnableWindow(::GetDlgItem(hwndDlg, IDC_EDIT_AUTOBACKUP_INTERVAL), TRUE);
 		::EnableWindow(::GetDlgItem(hwndDlg, IDC_LABEL_AUTOSAVE), TRUE);
 		::EnableWindow(::GetDlgItem(hwndDlg, IDC_LABEL_AUTOSAVE2), TRUE);	// Sept. 6, 2000 JEPRO 自動保存にしたときだけEnableになるように変更
-		::EnableWindow(::GetDlgItem(hwndDlg, IDC_SPIN_AUTOBACKUP_INTERVAL), TRUE);	//@@@ 2001.03.21 by MIK
+		::EnableWindow(::GetDlgItem(hwndDlg, IDC_SPIN_AUTOBACKUP_INTERVAL), TRUE);
 	}else {
 		::EnableWindow(::GetDlgItem(hwndDlg, IDC_EDIT_AUTOBACKUP_INTERVAL), FALSE);
 		::EnableWindow(::GetDlgItem(hwndDlg, IDC_LABEL_AUTOSAVE), FALSE);
 		::EnableWindow(::GetDlgItem(hwndDlg, IDC_LABEL_AUTOSAVE2), FALSE);	// Sept. 6, 2000 JEPRO 同上
-		::EnableWindow(::GetDlgItem(hwndDlg, IDC_SPIN_AUTOBACKUP_INTERVAL), FALSE);	//@@@ 2001.03.21 by MIK
+		::EnableWindow(::GetDlgItem(hwndDlg, IDC_SPIN_AUTOBACKUP_INTERVAL), FALSE);
 	}
 
 	// 「開こうとしたファイルが大きい場合に警告を出す」

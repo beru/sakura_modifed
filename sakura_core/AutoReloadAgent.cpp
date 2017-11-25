@@ -36,7 +36,6 @@ void AutoReloadAgent::OnAfterSave(const SaveInfo& saveInfo)
 	//	ファイル更新の通知を元に戻す
 	ResumeWatching();
 
-	// 名前を付けて保存から再ロードが除去された分の不足処理を追加（ANSI版との差異）	// 2009.08.12 ryoji
 	if (!saveInfo.bOverwriteMode) {
 		watchUpdateType = WatchUpdateType::Query;	// 「名前を付けて保存」で対象ファイルが変更されたので更新監視方法をデフォルトに戻す
 	}
@@ -79,7 +78,6 @@ bool AutoReloadAgent::_ToDoChecking() const
 bool AutoReloadAgent::_IsFileUpdatedByOther(FILETIME* pNewFileTime) const
 {
 	// ファイルスタンプをチェックする
-	// 2005.10.20 ryoji FindFirstFileを使うように変更（ファイルがロックされていてもタイムスタンプ取得可能）
 	FileTime ftime;
 	if (GetLastWriteTimestamp(GetListeningDoc()->docFile.GetFilePath(), &ftime)) {
 		if (::CompareFileTime(

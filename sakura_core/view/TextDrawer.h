@@ -33,7 +33,7 @@ public:
 	void DispNoteLine(Graphics& gr, int nTop, int nBottom, int nLeft, int nRight) const;
 
 	// -- -- w’èŒ…cü•`‰æ -- -- //
-	// w’èŒ…cü•`‰æŠÖ”	// 2005.11.08 Moca
+	// w’èŒ…cü•`‰æŠÖ”
 	void DispVerticalLines(Graphics& gr, int nTop, int nBottom, int nLeftCol, int nRightCol) const;
 
 	// -- -- Ü‚è•Ô‚µŒ…cü•`‰æ -- -- //

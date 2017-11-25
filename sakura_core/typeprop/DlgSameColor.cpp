@@ -317,7 +317,7 @@ BOOL DlgSameColor::OnSelChangeListColors(HWND hwndCtl)
 
 		case IDC_BUTTON_SAMEBKCOLOR:
 			for (int j=0; j<COLORIDX_LAST; ++j) {
-				if ((g_ColorAttributeArr[j].fAttribute & COLOR_ATTRIB_NO_BACK) != 0) {	// 2006.12.18 ryoji ƒtƒ‰ƒO—˜—p‚ÅŠÈ‘f‰»
+				if ((g_ColorAttributeArr[j].fAttribute & COLOR_ATTRIB_NO_BACK) != 0) {
 					continue;
 				}
 				if (cr == pTypes->colorInfoArr[j].colorAttr.cBACK) {

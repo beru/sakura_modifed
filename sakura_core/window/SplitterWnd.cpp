@@ -429,7 +429,6 @@ void SplitterWnd::DoSplit(int nHorizontal, int nVertical)
 			}
 		}
 		if (this->nActivePane == 0 || this->nActivePane == 1) {
-			// 2007.10.01 ryoji
 			// 分割無しからの切替時のみ従来コードを実行してアクティブペインを決める。
 			// それ以外の場合はペイン0をアクティブにする。
 			// 従来は、上下に分割しておいて、
@@ -887,8 +886,6 @@ LRESULT SplitterWnd::OnSize(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			pViewArr[3]->SplitBoxOnOff(false, false, bSizeBox);	// 縦・横の分割ボックスのＯＮ／ＯＦＦ
 		}
 	}
-	// デスクトップがちらつくのでだめ!
-	//::InvalidateRect(GetHwnd(), NULL, TRUE);	// 再描画してね。	//@@@ 2003.06.11 MIK
 	return 0L;
 }
 

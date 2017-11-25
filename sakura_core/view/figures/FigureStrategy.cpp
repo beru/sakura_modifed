@@ -64,7 +64,7 @@ bool FigureSpace::DrawImp_StyleSelect(ColorStrategyInfo& csInfo)
 	TypeSupport& currentType1 = (currentType.GetBackColor() == textType.GetBackColor() ? currentTypeBg: currentType);
 	TypeSupport& currentType3 = (currentType2.GetBackColor() == textType.GetBackColor() ? currentTypeBg: currentType2);
 
-	// 空白記号類は特に明示指定した部分以外はなるべく周辺の指定に合わせるようにしてみた	// 2009.05.30 ryoji
+	// 空白記号類は特に明示指定した部分以外はなるべく周辺の指定に合わせるようにしてみた
 	// 例えば、下線を指定していない場合、正規表現キーワード内なら正規表現キーワード側の下線指定に従うほうが自然な気がする。
 	// （そのほうが空白記号の「表示」をチェックしていない場合の表示に近い）
 	//

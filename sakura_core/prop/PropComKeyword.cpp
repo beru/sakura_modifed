@@ -13,7 +13,6 @@
 #include "sakura.hh"
 
 
-//@@@ 2001.02.04 Start by MIK: Popup Help
 static const DWORD p_helpids[] = {	//10800
 	IDC_BUTTON_ADDSET,				HIDC_BUTTON_ADDSET,			// キーワードセット追加
 	IDC_BUTTON_DELSET,				HIDC_BUTTON_DELSET,			// キーワードセット削除
@@ -25,8 +24,8 @@ static const DWORD p_helpids[] = {	//10800
 	IDC_CHECK_KEYWORDCASE,			HIDC_CHECK_KEYWORDCASE,		// キーワードの英大文字小文字区別
 	IDC_COMBO_SET,					HIDC_COMBO_SET,				// 強調キーワードセット名
 	IDC_LIST_KEYWORD,				HIDC_LIST_KEYWORD,			// キーワード一覧
-	IDC_BUTTON_KEYCLEAN		,		HIDC_BUTTON_KEYCLEAN,		// キーワード整理	// 2006.08.06 ryoji
-	IDC_BUTTON_KEYSETRENAME,		HIDC_BUTTON_KEYSETRENAME,	// セットの名称変更	// 2006.08.06 ryoji
+	IDC_BUTTON_KEYCLEAN		,		HIDC_BUTTON_KEYCLEAN,		// キーワード整理
+	IDC_BUTTON_KEYSETRENAME,		HIDC_BUTTON_KEYSETRENAME,	// セットの名称変更
 //	IDC_STATIC,						-1,
 	0, 0
 };
@@ -353,11 +352,10 @@ INT_PTR PropKeyword::DispatchEvent(
 					}
 					return TRUE;
 				case IDC_CHECK_KEYWORDCASE:	// キーワードの英大文字小文字区別
-//					csSpecialKeyword.keywordSetMgr.bKeywordCaseArr[csSpecialKeyword.keywordSetMgr.nCurrentKeywordSetIdx] = ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_KEYWORDCASE);	// MIK 2000.12.01 case sense
 					csSpecialKeyword.keywordSetMgr.SetKeywordCase(
 						csSpecialKeyword.keywordSetMgr.nCurrentKeywordSetIdx,
 						DlgButton_IsChecked(hwndDlg, IDC_CHECK_KEYWORDCASE)
-						);			// MIK 2000.12.01 case sense
+						);
 					return TRUE;
 				case IDC_BUTTON_ADDKEYWORD:	// キーワード追加
 					// ｎ番目のセットのキーワードの数を返す
@@ -386,11 +384,9 @@ INT_PTR PropKeyword::DispatchEvent(
 					// リスト中で選択されているキーワードを削除する
 					Delete_List_Keyword(hwndDlg, hwndLIST_KEYWORD);
 					return TRUE;
-				// From Here 2005.01.26 Moca
 				case IDC_BUTTON_KEYCLEAN:
 					Clean_List_Keyword(hwndDlg, hwndLIST_KEYWORD);
 					return TRUE;
-				// To Here 2005.01.26 Moca
 				case IDC_BUTTON_IMPORT:	// インポート
 					// リスト中のキーワードをインポートする
 					Import_List_Keyword(hwndDlg, hwndLIST_KEYWORD);
@@ -427,23 +423,19 @@ INT_PTR PropKeyword::DispatchEvent(
 		::KillTimer(hwndDlg, 1);
 		break;
 
-//@@@ 2001.02.04 Start by MIK: Popup Help
 	case WM_HELP:
 		{
 			HELPINFO* p = (HELPINFO*) lParam;
-			MyWinHelp((HWND)p->hItemHandle, HELP_WM_HELP, (ULONG_PTR)(LPVOID)p_helpids);	// 2006.10.10 ryoji MyWinHelpに変更に変更
+			MyWinHelp((HWND)p->hItemHandle, HELP_WM_HELP, (ULONG_PTR)(LPVOID)p_helpids);
 		}
 		return TRUE;
 		// NOTREACHED
 		//break;
-//@@@ 2001.02.04 End
 
-//@@@ 2001.12.22 Start by MIK: Context Menu Help
 	// Context Menu
 	case WM_CONTEXTMENU:
-		MyWinHelp(hwndDlg, HELP_CONTEXTMENU, (ULONG_PTR)(LPVOID)p_helpids);	// 2006.10.10 ryoji MyWinHelpに変更に変更
+		MyWinHelp(hwndDlg, HELP_CONTEXTMENU, (ULONG_PTR)(LPVOID)p_helpids);
 		return TRUE;
-//@@@ 2001.12.22 End
 
 	}
 	return FALSE;
@@ -570,7 +562,7 @@ void PropKeyword::Clean_List_Keyword(HWND hwndDlg, HWND hwndLIST_KEYWORD)
 	if (::MessageBox(hwndDlg, LS(STR_PROPCOMKEYWORD_DEL),
 			GSTR_APPNAME, MB_YESNO | MB_ICONQUESTION
 		) == IDYES
-	) {	// 2009.03.26 ryoji MB_ICONSTOP->MB_ICONQUESTION
+	) {
 		auto& keywordSetMgr = common.specialKeyword.keywordSetMgr;
 
 		if (keywordSetMgr.CleanKeywords(keywordSetMgr.nCurrentKeywordSetIdx)) {
@@ -634,7 +626,6 @@ void PropKeyword::SetKeywordSet(HWND hwndDlg, size_t nIdx)
 
 	auto& keywordSetMgr = common.specialKeyword.keywordSetMgr;
 	// キーワードの英大文字小文字区別
-	// MIK 2000.12.01 case sense
 	::CheckDlgButton(hwndDlg, IDC_CHECK_KEYWORDCASE, keywordSetMgr.GetKeywordCase(nIdx));
 
 	// ｎ番目のセットのキーワードの数を返す
@@ -642,7 +633,7 @@ void PropKeyword::SetKeywordSet(HWND hwndDlg, size_t nIdx)
 	HWND hwndList = ::GetDlgItem(hwndDlg, IDC_LIST_KEYWORD);
 	LV_ITEM	lvi;
 
-	// 2005.01.25 Moca/genta リスト追加中は再描画を抑制してすばやく表示
+	// リスト追加中は再描画を抑制してすばやく表示
 	::SendMessage(hwndList, WM_SETREDRAW, FALSE, 0);
 
 	for (size_t i=0; i<nNum; ++i) {
@@ -657,7 +648,7 @@ void PropKeyword::SetKeywordSet(HWND hwndDlg, size_t nIdx)
 	}
 	keywordSetMgr.nCurrentKeywordSetIdx = nIdx;
 
-	// 2005.01.25 Moca/genta リスト追加完了のため再描画許可
+	// リスト追加完了のため再描画許可
 	::SendMessage(hwndList, WM_SETREDRAW, TRUE, 0);
 
 	// キーワード数を表示する。

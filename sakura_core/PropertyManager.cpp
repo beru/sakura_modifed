@@ -29,7 +29,6 @@ bool PropertyManager::OpenPropertySheet(
 	auto pcPropCommon = std::make_unique<PropCommon>();
 	pcPropCommon->Create(hwndOwner, pImageList, pMenuDrawer);
 
-	// 2002.12.11 Moca この部分で行われていたデータのコピーをPropCommonに移動・関数化
 	// 共通設定の一時設定領域にSharaDataをコピーする
 	pcPropCommon->InitData();
 
@@ -40,9 +39,8 @@ bool PropertyManager::OpenPropertySheet(
 	// プロパティシートの作成
 	if (pcPropCommon->DoPropertySheet(nPropComPageNum, bTrayProc)) {
 
-		// 2002.12.11 Moca この部分で行われていたデータのコピーをPropCommonに移動・関数化
 		// ShareData に 設定を適用・コピーする
-		// 2007.06.20 ryoji グループ化に変更があったときはグループIDをリセットする
+		// グループ化に変更があったときはグループIDをリセットする
 		auto& csTabBar = GetDllShareData().common.tabBar;
 		bool bGroup = (csTabBar.bDispTabWnd && !csTabBar.bDispTabWndMultiWin);
 
@@ -106,7 +104,6 @@ bool PropertyManager::OpenPropertySheetTypes(
 
 	// プロパティシートの作成
 	if (pcPropTypes->DoPropertySheet(nPropTypePageNum)) {
-		// 2013.06.10 Moca 印刷終了まで待機する
 		ShareDataLockCounter* pLock = nullptr;
 		ShareDataLockCounter::WaitLock(pcPropTypes->GetHwndParent(), &pLock);
 

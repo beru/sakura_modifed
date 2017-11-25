@@ -129,7 +129,7 @@ void ActivateFrameWindow(HWND hwnd)
 	::BringWindowToTop(hwndActivate);
 
 	if (pShareData) {
-		pShareData->flags.bEditWndChanging = false;	// 編集ウィンドウ切替中OFF	2007.04.03 ryoji
+		pShareData->flags.bEditWndChanging = false;	// 編集ウィンドウ切替中OFF
 	}
 
 	return;

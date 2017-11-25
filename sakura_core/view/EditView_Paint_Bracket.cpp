@@ -113,10 +113,6 @@ void EditView::DrawBracketPair(bool bDraw)
 
 	for (int i=0; i<2; ++i) {
 		// i=0:対括弧,i=1:カーソル位置の括弧
-		// 2011.11.23 ryoji 対括弧 -> カーソル位置の括弧 の順に処理順序を変更
-		//   ＃ { と } が異なる行にある場合に { を BS で消すと } の強調表示が解除されない問題（Wiki BugReport/89）の対策
-		//   ＃ この順序変更によりカーソル位置が括弧でなくなっていても対括弧があれば対括弧側の強調表示は解除される
-
 		Point ptColLine;
 		if (i == 0) {
 			ptColLine = pEditDoc->layoutMgr.LogicToLayout(ptBracketPairPos_PHY);
@@ -152,7 +148,6 @@ void EditView::DrawBracketPair(bool bDraw)
 						csInfo.pDispPos = &pos;
 
 						// 03/10/24 ai 折り返し行のColorIndexが正しく取得できない問題に対応
-						// 2009.02.07 ryoji GetColorIndex に渡すインデックスの仕様変更（元はこっちの仕様だった模様）
 						Color3Setting cColor = GetColorIndex(pLayout, ptColLine.y, OutputX, csInfo);
 						nColorIndex = cColor.eColorIndex2;
 					}else {
@@ -216,7 +211,7 @@ void EditView::DrawBracketPair(bool bDraw)
 					pos.InitDrawPos(Point(nLeft, nTop));
 					GetTextDrawer().DispText(gr, &pos,  &pLine[OutputX], 1, bTrans);
 					GetTextDrawer().DispNoteLine(gr, nTop, nTop + nHeight, nLeft, nLeft + charsWidth * nWidth);
-					// 2006.04.30 Moca 対括弧の縦線対応
+					// 対括弧の縦線対応
 					GetTextDrawer().DispVerticalLines(gr, nTop, nTop + nHeight, ptColLine.x, ptColLine.x + charsWidth); // ※括弧が全角幅である場合を考慮
 					textType.RewindGraphicsState(gr);
 				}

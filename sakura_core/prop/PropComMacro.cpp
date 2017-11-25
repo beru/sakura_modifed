@@ -11,7 +11,6 @@
 #include "sakura.hh"
 
 // Popup Help用ID
-//@@@ 2001.12.22 Start by MIK: Popup Help
 static const DWORD p_helpids[] = {	//11700
 	IDC_MACRODIRREF,	HIDC_MACRODIRREF,	// マクロディレクトリ参照
 	IDC_MACRO_REG,		HIDC_MACRO_REG,		// マクロ設定
@@ -20,15 +19,14 @@ static const DWORD p_helpids[] = {	//11700
 	IDC_MACRONAME,		HIDC_MACRONAME,		// マクロ名
 	IDC_MACROLIST,		HIDC_MACROLIST,		// マクロリスト
 	IDC_MACRODIR,		HIDC_MACRODIR,		// マクロ一覧
-	IDC_CHECK_RELOADWHENEXECUTE,	HIDC_CHECK_RELOADWHENEXECUTE,	// マクロを実行するたびにファイルを読み込みなおす	// 2006.08.06 ryoji
-	IDC_CHECK_MacroOnOpened,		HIDC_CHECK_MacroOnOpened,		// オープン後自動実行マクロ	// 2006.09.01 ryoji
-	IDC_CHECK_MacroOnTypeChanged,	HIDC_CHECK_MacroOnTypeChanged,	// タイプ変更後自動実行マクロ	// 2006.09.01 ryoji
-	IDC_CHECK_MacroOnSave,			HIDC_CHECK_MacroOnSave,			// 保存前自動実行マクロ	// 2006.09.01 ryoji
+	IDC_CHECK_RELOADWHENEXECUTE,	HIDC_CHECK_RELOADWHENEXECUTE,	// マクロを実行するたびにファイルを読み込みなおす
+	IDC_CHECK_MacroOnOpened,		HIDC_CHECK_MacroOnOpened,		// オープン後自動実行マクロ
+	IDC_CHECK_MacroOnTypeChanged,	HIDC_CHECK_MacroOnTypeChanged,	// タイプ変更後自動実行マクロ
+	IDC_CHECK_MacroOnSave,			HIDC_CHECK_MacroOnSave,			// 保存前自動実行マクロ
 	IDC_MACROCANCELTIMER,			HIDC_MACROCANCELTIMER,			// マクロ停止ダイアログ表示待ち時間	// 2011.08.04 syat
 //	IDC_STATIC,			-1,
 	0, 0
 };
-//@@@ 2001.12.22 End
 
 /*!
 	@param hwndDlg ダイアログボックスのWindow Handle
@@ -77,7 +75,6 @@ INT_PTR PropMacro::DispatchEvent(
 		//	Oct. 5, 2002 genta エディット コントロールに入力できるテキストの長さを制限する
 		EditCtl_LimitText(::GetDlgItem(hwndDlg, IDC_MACRONAME), _countof(csMacro.macroTable[0].szName) - 1);
 		Combo_LimitText(::GetDlgItem(hwndDlg, IDC_MACROPATH), _countof(csMacro.macroTable[0].szFile) - 1);
-		// 2003.06.23 Moca
 		EditCtl_LimitText(::GetDlgItem(hwndDlg, IDC_MACRODIR), _countof2(csMacro.szMACROFOLDER) - 1);
 		EditCtl_LimitText(::GetDlgItem(hwndDlg, IDC_MACROCANCELTIMER), 4);
 		return TRUE;
@@ -134,7 +131,7 @@ INT_PTR PropMacro::DispatchEvent(
 				break;
 			}
 			break;	// CBN_DROPDOWN
-		// From Here 2003.06.23 Moca マクロフォルダの最後の\がなければ付ける
+		// マクロフォルダの最後の\がなければ付ける
 		case EN_KILLFOCUS:
 			switch (wID) {
 			case IDC_MACRODIR:
@@ -148,27 +145,22 @@ INT_PTR PropMacro::DispatchEvent(
 				break;
 			}
 			break;
-		// To Here 2003.06.23 Moca
 		}
 
 		break;	// WM_COMMAND
-//@@@ 2001.02.04 Start by MIK: Popup Help
 	case WM_HELP:
 		{
 			HELPINFO* p = (HELPINFO*) lParam;
-			MyWinHelp((HWND)p->hItemHandle, HELP_WM_HELP, (ULONG_PTR)(LPVOID)p_helpids);	// 2006.10.10 ryoji MyWinHelpに変更に変更
+			MyWinHelp((HWND)p->hItemHandle, HELP_WM_HELP, (ULONG_PTR)(LPVOID)p_helpids);
 		}
 		return TRUE;
 		// NOTREACHED
 		//break;
-//@@@ 2001.02.04 End
 
-//@@@ 2001.12.22 Start by MIK: Context Menu Help
 	// Context Menu
 	case WM_CONTEXTMENU:
-		MyWinHelp(hwndDlg, HELP_CONTEXTMENU, (ULONG_PTR)(LPVOID)p_helpids);	// 2006.10.10 ryoji MyWinHelpに変更に変更
+		MyWinHelp(hwndDlg, HELP_CONTEXTMENU, (ULONG_PTR)(LPVOID)p_helpids);
 		return TRUE;
-//@@@ 2001.12.22 End
 
 	}
 	return FALSE;
@@ -212,7 +204,7 @@ void PropMacro::SetData(HWND hwndDlg)
 		lvItem.pszText = const_cast<TCHAR*>(macroRec.bReloadWhenExecute ? _T("on") : _T("off"));
 		ListView_SetItem(hListView, &lvItem);
 
-		// 自動実行マクロ	// 2006.09.01 ryoji
+		// 自動実行マクロ
 		TCHAR szText[8];
 		szText[0] = _T('\0');
 		if (index == csMacro.nMacroOnOpened) {
@@ -265,7 +257,7 @@ int PropMacro::GetData(HWND hwndDlg)
 
 	auto& csMacro = common.macro;
 
-	// 自動実行マクロ変数初期化	// 2006.09.01 ryoji
+	// 自動実行マクロ変数初期化
 	csMacro.nMacroOnOpened = -1;
 	csMacro.nMacroOnTypeChanged = -1;
 	csMacro.nMacroOnSave = -1;
@@ -306,7 +298,7 @@ int PropMacro::GetData(HWND hwndDlg)
 			csMacro.macroTable[index].bReloadWhenExecute = false;
 		}
 
-		// 自動実行マクロ	// 2006.09.01 ryoji
+		// 自動実行マクロ
 		memset_raw(&lvItem, 0, sizeof(lvItem));
 		lvItem.iItem = index;
 		lvItem.mask = LVIF_TEXT;
@@ -332,7 +324,7 @@ int PropMacro::GetData(HWND hwndDlg)
 	//	マクロディレクトリ
 //@@@ 2002.01.03 YAZAKI 共通設定『マクロ』がタブを切り替えるだけで設定が保存されないように。
 	::DlgItem_GetText(hwndDlg, IDC_MACRODIR, csMacro.szMACROFOLDER, _MAX_PATH);
-	// 2003.06.23 Moca マクロフォルダの最後の\がなければ付ける
+	// マクロフォルダの最後の\がなければ付ける
 	AddLastChar(csMacro.szMACROFOLDER, _MAX_PATH, _T('\\'));
 	
 	//	マクロ停止ダイアログ表示待ち時間
@@ -465,7 +457,7 @@ void PropMacro::SetMacro2List_Macro(HWND hwndDlg)
 	lvItem.pszText = const_cast<TCHAR*>(IsDlgButtonChecked(hwndDlg, IDC_CHECK_RELOADWHENEXECUTE) ? _T("on") : _T("off"));
 	ListView_SetItem(hListView, &lvItem);
 
-	// 自動実行マクロ	// 2006.09.01 ryoji
+	// 自動実行マクロ
 	int nMacroOnOpened = -1;
 	int nMacroOnTypeChanged = -1;
 	int nMacroOnSave = -1;
@@ -539,8 +531,6 @@ void PropMacro::SelectBaseDir_Macro(HWND hwndDlg)
 	// 検索フォルダ
 	::DlgItem_GetText(hwndDlg, IDC_MACRODIR, szDir, _countof(szDir));
 
-	// 2003.06.23 Moca 相対パスは実行ファイルからのパス
-	// 2007.05.19 ryoji 相対パスは設定ファイルからのパスを優先
 	if (_IS_REL_PATH(szDir)) {
 		TCHAR folder[_MAX_PATH];
 		_tcscpy(folder, szDir);
@@ -569,8 +559,6 @@ void PropMacro::OnFileDropdown_Macro(HWND hwndDlg)
 	TCHAR path[_MAX_PATH * 2];
 	::DlgItem_GetText(hwndDlg, IDC_MACRODIR, path, _countof(path));
 
-	// 2003.06.23 Moca 相対パスは実行ファイルからのパス
-	// 2007.05.19 ryoji 相対パスは設定ファイルからのパスを優先
 	if (_IS_REL_PATH(path)) {
 		TCHAR folder[_MAX_PATH * 2];
 		_tcscpy(folder, path);
@@ -593,7 +581,7 @@ void PropMacro::OnFileDropdown_Macro(HWND hwndDlg)
 		//	コンボボックスに設定
 		//	でも.と..は勘弁。
 		//if (_tcscmp(wf.cFileName, _T(".")) != 0 && _tcscmp(wf.cFileName, _T("..")) != 0) {
-		if ((wf.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) == 0) {	// 2009.02.12 ryoji フォルダを除外
+		if ((wf.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) == 0) {
 			int result = Combo_AddString(hCombo, wf.cFileName);
 			if (result == CB_ERR || result == CB_ERRSPACE) {
 				break;
@@ -655,7 +643,7 @@ void PropMacro::CheckListPosition_Macro(HWND hwndDlg)
 		::CheckDlgButton(hwndDlg, IDC_CHECK_RELOADWHENEXECUTE, false);
 	}
 
-	// 自動実行マクロ	// 2006.09.01 ryoji
+	// 自動実行マクロ
 	memset_raw(&lvItem, 0, sizeof(lvItem));
 	lvItem.iItem = current;
 	lvItem.mask = LVIF_TEXT;

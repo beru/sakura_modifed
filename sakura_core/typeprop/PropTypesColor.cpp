@@ -207,7 +207,6 @@ LRESULT APIENTRY ColorList_SubclassProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPA
 			&& ((g_ColorAttributeArr[nIndex].fAttribute & COLOR_ATTRIB_NO_TEXT) == 0)
 		) {
 			// 色選択ダイアログ
-			// 2005.11.30 Moca カスタム色保持
 			DWORD* pColors = (DWORD*)::GetProp(hwnd, _T("ptrCustomColors"));
 			if (PropTypesColor::SelectColor(hwnd, &pColorInfo->colorAttr.cTEXT, pColors)) {
 				::InvalidateRect(hwnd, &rcItem, TRUE);

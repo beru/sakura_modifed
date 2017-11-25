@@ -79,7 +79,7 @@ bool ShareData::InitShareData()
 {
 	MY_RUNNINGTIMER(runningTimer, "ShareData::InitShareData");
 
-	hwndTraceOutSource = NULL;	// 2006.06.26 ryoji
+	hwndTraceOutSource = NULL;
 
 	// ファイルマッピングオブジェクト
 	{
@@ -1327,7 +1327,7 @@ void ShareData::InitPopupMenu(DllSharedData& shareData)
 	menu.nCustMenuItemFuncArr[1][6] = F_WINCLOSE;
 	menu.nCustMenuItemKeyArr [1][6] = 'C';
 
-	// タブメニュー	//@@@ 2003.06.14 MIK
+	// タブメニュー
 	n = 0;
 	menu.nCustMenuItemFuncArr[CUSTMENU_INDEX_FOR_TABWND][n] = F_FILESAVE;
 	menu.nCustMenuItemKeyArr [CUSTMENU_INDEX_FOR_TABWND][n] = 'S';

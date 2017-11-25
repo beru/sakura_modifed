@@ -49,7 +49,7 @@ protected:
 	BOOL	OnMove(WPARAM wParam, LPARAM lParam);
 	BOOL	OnMinMaxInfo(LPARAM lParam);
 	BOOL	OnNotify(WPARAM wParam, LPARAM lParam);
-	// @@ 2005.03.31 MIK キーワード入力エリアのイベント処理
+	// キーワード入力エリアのイベント処理
 	BOOL	OnCbnSelChange(HWND hwndCtl, int wID);
 	BOOL	OnCbnEditChange(HWND hwndCtl, int wID);
 	//BOOL	OnEnChange(HWND hwndCtl, int wID);

@@ -413,8 +413,6 @@ void EditView::ISearchExec(bool bNext)
 		// ŒŸõŒ‹‰Ê‚ ‚è
 		// ƒLƒƒƒŒƒbƒgˆÚ“®
 		GetCaret().MoveCursor(matchRange.GetFrom(), true, _CARETMARGINRATE / 3);
-		
-		//	2005.06.24 Moca
 		GetSelectionInfo().SetSelectArea(matchRange);
 
 		bISearchWrap = false;
@@ -468,7 +466,6 @@ void EditView::ISearchBack(void)
 
 	GetCaret().MoveCursor(range.GetFrom(), true, _CARETMARGINRATE / 3);
 	if (nISearchHistoryCount != 0) {
-		//	2005.06.24 Moca
 		GetSelectionInfo().SetSelectArea(range);
 	}
 

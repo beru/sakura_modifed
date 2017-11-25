@@ -85,9 +85,9 @@ protected:
 
 	virtual DECLH(OnMeasureItem		);	// WM_MEASUREITEM
 	virtual DECLH(OnMenuChar		);	// WM_MENUCHAR
-	virtual DECLH(OnNotify			);	// WM_NOTIFY	//@@@ 2003.05.31 MIK
-	virtual DECLH(OnDrawItem		);	// WM_DRAWITEM	// 2006.02.01 ryoji
-	virtual DECLH(OnCaptureChanged	);	// WM_CAPTURECHANGED	// 2006.11.30 ryoji
+	virtual DECLH(OnNotify			);	// WM_NOTIFY
+	virtual DECLH(OnDrawItem		);	// WM_DRAWITEM
+	virtual DECLH(OnCaptureChanged	);	// WM_CAPTURECHANGED
 
 	// デフォルトメッセージ処理
 	virtual LRESULT CallDefWndProc(HWND, UINT, WPARAM, LPARAM);

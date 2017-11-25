@@ -24,7 +24,7 @@ bool IsHeadCppKeyword(const wchar_t* pData)
 // C/C++
 // VC++の生成するテキストファイルも読めるようにする			Oct. 31, 2000 JEPRO
 // 関連づけ上好ましくないのでdsw,dsp,dep,makははずす		Jan. 24, 2004 genta
-// ファイル内からの入力補完機能								2003.06.23 Moca
+// ファイル内からの入力補完機能
 void CType_Cpp::InitTypeConfigImp(TypeConfig& type)
 {
 	// 名前と拡張子
@@ -338,7 +338,7 @@ void DocOutline::MakeFuncList_C(
 	int			nNestPoint_class = 0;	// 外側から何番目の{がクラスの定義を囲む{か？ (一番外側なら1、0なら無し。bVisibleMemberFuncがfalseの時のみ有効。trueでは常に0)
 	// 2002/10/27 frozen　ここまで
 
-	bool bInInitList = false;	// 2010.07.08 ryoji 関数名調査の際、現在位置が初期化リスト（':'以後）に到達したかどうかを示す
+	bool bInInitList = false;	// 関数名調査の際、現在位置が初期化リスト（':'以後）に到達したかどうかを示す
 	int			nNestLevel_template = 0; // template<> func<vector<int>> などの<>の数
 
 	wchar_t		szWordPrev[256];	//	1つ前のword
@@ -471,7 +471,6 @@ void DocOutline::MakeFuncList_C(
 				}
 			}else if (nMode == 10) {
 				// ラインコメント読み込み中
-				// 2003/06/24 zenryaku
 				if (!C_IsLineEsc(pLine, nLineLen)) {
 					nMode = 0;
 				}
@@ -566,7 +565,7 @@ void DocOutline::MakeFuncList_C(
 							wcsncat(szTemplateName, szWord, nItemNameLenMax - nLen);
 							szTemplateName[nItemNameLenMax - 1] = L'\0';
 						}
-					}else if (nNestLevel_func == 0 && (nMode2 == M2_NORMAL || nMode2 == M2_FUNC_NAME_END)) {	// 2010.07.08 ryoji 関数型マクロ呼出しを関数と誤認することがある問題対策として nMode2 == M2_FUNC_NAME_END 条件を追加し、補正がかかるようにした。
+					}else if (nNestLevel_func == 0 && (nMode2 == M2_NORMAL || nMode2 == M2_FUNC_NAME_END)) {
 						if (nMode2 == M2_NORMAL)
 							nItemFuncId = 0;
 						if (wcscmp(szWord, L"class") == 0)
@@ -583,14 +582,14 @@ void DocOutline::MakeFuncList_C(
 							nItemFuncId = FL_OBJ_INTERFACE;
 						else if (wcscmp(szWord, L"typedef") == 0)
 							bDefinedTypedef = true;
-						if (nItemFuncId != 0 && nItemFuncId != FL_OBJ_FUNCTION) {	//  2010.07.08 ryoji nMode2 == M2_FUNC_NAME_END のときは nItemFuncId == 2 のはず
+						if (nItemFuncId != 0 && nItemFuncId != FL_OBJ_FUNCTION) {
 							nMode2 = M2_NAMESPACE_SAVE;
 							nItemLine = nLineCount + 1;
 							wcscpy_s(szItemName, LSW(STR_OUTLINE_CPP_NONAME));
 						}
 					}
 					// else
-					if (nMode2 == M2_FUNC_NAME_END) {	// 2010.07.08 ryoji 上で条件変更したので行頭の else を除去
+					if (nMode2 == M2_FUNC_NAME_END) {
 						nMode2 = M2_KR_FUNC;
 					}
 					// 2002/10/27 frozen　ここまで
@@ -599,8 +598,7 @@ void DocOutline::MakeFuncList_C(
 						szTemplateName[0] = L'\0';
 					}
 
-					//	To Here Mar. 31, 2001 genta
-					// 2004/03/12 zenryaku キーワードに _ と PARAMS を使わせない (GNUのコードが見にくくなるから)
+					// キーワードに _ と PARAMS を使わせない (GNUのコードが見にくくなるから)
 					if (!(wcscmp(L"PARAMS", szWord) == 0 || wcscmp(L"_", szWord) == 0)) {
 						wcscpy_s(szWordPrev, szWord);
 					}
@@ -884,7 +882,7 @@ void DocOutline::MakeFuncList_C(
 							}else {
 								if (!(nMode2 == M2_KR_FUNC && bInInitList) && !(nMode2 == M2_KR_FUNC
 									&& CPP_IsFunctionAfterKeyword(szWordPrev))
-								) {	// 2010.07.08 ryoji 初期化リストに入る以前までは後発の名前を優先的に関数名候補とする
+								) {	// 初期化リストに入る以前までは後発の名前を優先的に関数名候補とする
 									bNoFunction = false;
 								}else {
 									bAdd = false;
@@ -987,7 +985,7 @@ void DocOutline::MakeFuncList_C(
 					// To Here 2007.05.26 genta C++/CLI Attributeの取り扱い
 					//  2002/10/27 frozen ここから
 					if (nMode2 == M2_KR_FUNC) {
-						// zenryaku K&Rスタイルの関数宣言の終了後 M2_FUNC_NAME_END にもどす
+						// K&Rスタイルの関数宣言の終了後 M2_FUNC_NAME_END にもどす
 						nMode2 = M2_FUNC_NAME_END;
 					} //	Jan. 30, 2005 genta K&R処理に引き続いて宣言処理も行う．
 					if (1
@@ -1293,7 +1291,7 @@ void EditView::SmartIndent_CPP(wchar_t wcChar)
 		for (j=caret.GetCaretLogicPos().y; j>=0; --j) {
 			pLine2 = pEditDoc->docLineMgr.GetLine(j)->GetDocLineStrWithEOL(&nLineLen2);
 			if (j == caret.GetCaretLogicPos().y) {
-				// 2005.10.11 ryoji EOF のみの行もスマートインデントの対象にする
+				// EOF のみの行もスマートインデントの対象にする
 				if (!pLine2) {
 					if (caret.GetCaretLogicPos().y == pEditDoc->docLineMgr.GetLineCount())
 						continue;	// EOF のみの行
@@ -1381,7 +1379,7 @@ void EditView::SmartIndent_CPP(wchar_t wcChar)
 			pszData = new wchar_t[nDataLen + nCharChars + 1];
 			wmemcpy(pszData, pLine2, nDataLen);
 			if (wcChar == WCODE::CR || wcChar == L'{' || wcChar == L'(') {
-				// 2005.10.11 ryoji TABキーがSPACE挿入の設定なら追加インデントもSPACEにする
+				// TABキーがSPACE挿入の設定なら追加インデントもSPACEにする
 				//	既存文字列の右端の表示位置を求めた上で挿入するスペースの数を決定する
 				if (pEditDoc->docType.GetDocumentAttribute().bInsSpace) {	// SPACE挿入設定
 					size_t i;

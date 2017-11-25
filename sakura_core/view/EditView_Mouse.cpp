@@ -93,7 +93,7 @@ void EditView::OnLBUTTONDOWN(WPARAM fwKeys, int _xPos , int _yPos)
 	auto& textArea = GetTextArea();
 	textArea.ClientToLayout(ptMouse, &ptNew);
 
-	// 2010.07.15 Moca マウスダウン時の座標を覚えて利用する
+	// マウスダウン時の座標を覚えて利用する
 	mouseDownPos = ptMouse;
 
 	// OLEによるドラッグ & ドロップを使う
@@ -136,7 +136,7 @@ void EditView::OnLBUTTONDOWN(WPARAM fwKeys, int _xPos , int _yPos)
 					DataObject data(memCurText.GetStringPtr(), memCurText.GetStringLength(), GetSelectionInfo().IsBoxSelecting());
 					dwEffects = data.DragDrop(TRUE, dwEffectsSrc);
 					editWnd.SetDragSourceView(nullptr);
-					if (pEditDoc->docEditor.opeBuf.GetCurrentPointer() == nOpe) {	// ドキュメント変更なしか？	// 2007.12.09 ryoji
+					if (pEditDoc->docEditor.opeBuf.GetCurrentPointer() == nOpe) {	// ドキュメント変更なしか？
 						editWnd.SetActivePane(nMyIndex);
 						if ((dwEffectsSrc & dwEffects) == DROPEFFECT_MOVE) {
 							// 移動範囲を削除する
@@ -407,7 +407,6 @@ normal_action:;
 			// 現在のカーソル位置から選択を開始する
 			GetSelectionInfo().bBeginLineSelect = true;
 
-			// 2009.02.22 ryoji 
 			// Command_GoLineEnd()/Command_Right()ではなく次のレイアウトを調べて移動選択する方法に変更
 			// ※Command_GoLineEnd()/Command_Right()は[折り返し末尾文字の右へ移動]＋[次行の先頭文字の右に移動]の仕様だとＮＧ
 			const Layout* pLayout = pEditDoc->layoutMgr.SearchLineByLayoutY(ptNewCaret.y);
@@ -1063,7 +1062,7 @@ void EditView::OnMOUSEMOVE(WPARAM fwKeys, int xPos_, int yPos_)
 		::SetCursor(::LoadCursor(NULL, IDC_IBEAM));
 	}
 
-	// 2010.07.15 Moca ドラッグ開始位置から移動していない場合はMOVEとみなさない
+	// ドラッグ開始位置から移動していない場合はMOVEとみなさない
 	// 遊びは 2px固定とする
 	Point ptMouseMove = ptMouse - mouseDownPos;
 	if (mouseDownPos.x != -INT_MAX && abs(ptMouseMove.x) <= 2 && abs(ptMouseMove.y) <= 2) {
@@ -1228,8 +1227,6 @@ void EditView::OnMOUSEMOVE(WPARAM fwKeys, int xPos_, int yPos_)
 
 /* マウスホイールのメッセージ処理
 	2009.01.17 nasukoji	ホイールスクロールを利用したページスクロール・横スクロール対応
-	2011.11.16 Moca スクロール変化量への対応
-	2013.09.10 Moca スペシャルスクロールの不具合の修正
 */
 LRESULT EditView::OnMOUSEWHEEL2(
 	WPARAM wParam,
@@ -1277,7 +1274,7 @@ LRESULT EditView::OnMOUSEWHEEL2(
 			bKeyPageScroll = IsSpecialScrollMode(GetDllShareData().common.general.nPageScrollByWheel);
 		}
 
-		// 2013.05.30 Moca ホイールスクロールにキー割り当て
+		// ホイールスクロールにキー割り当て
 		int nIdx = GetCtrlKeyState();
 		EFunctionCode nFuncID = nCmdFuncID;
 		if (nFuncID != F_0) {
@@ -1330,7 +1327,6 @@ LRESULT EditView::OnMOUSEWHEEL2(
 		nRollLineNum = 3;
 
 		// レジストリの存在チェック
-		// 2006.06.03 Moca ReadRegistry に書き換え
 		unsigned int uDataLen;	// size of value data
 		TCHAR szValStr[256];
 		uDataLen = _countof(szValStr) - 1;
@@ -1510,7 +1506,7 @@ void EditView::OnLBUTTONUP(WPARAM fwKeys, int xPos , int yPos)
 
 		GetSelectionInfo().SelectEnd();
 
-		// 20100715 Moca マウスクリック座標をリセット
+		// マウスクリック座標をリセット
 		mouseDownPos.Set(-INT_MAX, -INT_MAX);
 
 		GetCaret().underLine.UnderLineUnLock();
@@ -1653,7 +1649,7 @@ void EditView::OnLBUTTONDBLCLK(WPARAM fwKeys, int _xPos , int _yPos)
 	// ダブルクリック位置として記憶
 	GetSelectionInfo().ptMouseRollPosOld = ptMouse;	// マウス範囲選択前回位置(XY座標)
 
-	/*	2007.07.09 maru 機能コードの判定を追加
+	/* 機能コードの判定
 		ダブルクリックからのドラッグでは単語単位の範囲選択(エディタの一般的動作)になるが
 		この動作は、ダブルクリック＝単語選択を前提としたもの。
 		キー割り当ての変更により、ダブルクリック≠単語選択のときには GetSelectionInfo().bBeginWordSelect = true
@@ -1718,7 +1714,7 @@ STDMETHODIMP EditView::DragEnter(
 	// 自分をアクティブペインにする
 	editWnd.SetActivePane(nMyIndex);
 
-	// 現在のカーソル位置を記憶する	// 2007.12.09 ryoji
+	// 現在のカーソル位置を記憶する
 	ptCaretPos_DragEnter = GetCaret().GetCaretLayoutPos();
 	nCaretPosX_Prev_DragEnter = GetCaret().nCaretPosX_Prev;
 
@@ -1748,7 +1744,7 @@ STDMETHODIMP EditView::DragOver(DWORD dwKeyState, POINTL pt, LPDWORD pdwEffect)
 	EditView* pDragSourceView = editWnd.GetDragSourceView();
 
 	// ドラッグ元が他ビューで、このビューのカーソルがドラッグ元の選択範囲内の場合は禁止マークにする
-	// ※自ビューのときは禁止マークにしない（他アプリでも多くはそうなっている模様）	// 2009.06.09 ryoji
+	// ※自ビューのときは禁止マークにしない（他アプリでも多くはそうなっている模様）
 	if (pDragSourceView && !IsDragSource() &&
 		!pDragSourceView->IsCurrentPositionSelected(GetCaret().GetCaretLayoutPos())
 	) {
@@ -1764,13 +1760,13 @@ STDMETHODIMP EditView::DragLeave(void)
 	// 選択テキストのドラッグ中か
 	_SetDragMode(FALSE);
 
-	// DragEnter時のカーソル位置を復元	// 2007.12.09 ryoji
+	// DragEnter時のカーソル位置を復元
 	// ※範囲選択中のときに選択範囲とカーソルが分離すると変だから
 	GetCaret().MoveCursor(ptCaretPos_DragEnter, false);
 	GetCaret().nCaretPosX_Prev = nCaretPosX_Prev_DragEnter;
 	RedrawAll();	// ルーラー、アンダーライン、カーソル位置表示更新
 
-	// 非アクティブ時は表示状態を非アクティブに戻す	// 2007.12.09 ryoji
+	// 非アクティブ時は表示状態を非アクティブに戻す
 	if (!::GetActiveWindow())
 		OnKillFocus();
 
@@ -1793,7 +1789,7 @@ STDMETHODIMP EditView::Drop(LPDATAOBJECT pDataObject, DWORD dwKeyState, POINTL p
 	// 選択テキストのドラッグ中か
 	_SetDragMode(FALSE);
 
-	// 非アクティブ時は表示状態を非アクティブに戻す	// 2007.12.09 ryoji
+	// 非アクティブ時は表示状態を非アクティブに戻す
 	if (!::GetActiveWindow())
 		OnKillFocus();
 
@@ -1819,7 +1815,7 @@ STDMETHODIMP EditView::Drop(LPDATAOBJECT pDataObject, DWORD dwKeyState, POINTL p
 	bBoxData = bDragBoxData;
 
 	auto& caret = GetCaret();
-	// カーソルが選択範囲内にあるときはコピー／移動しない	// 2009.06.09 ryoji
+	// カーソルが選択範囲内にあるときはコピー／移動しない
 	if (pDragSourceView &&
 		!pDragSourceView->IsCurrentPositionSelected(caret.GetCaretLayoutPos())
 	) {
@@ -1919,8 +1915,6 @@ STDMETHODIMP EditView::Drop(LPDATAOBJECT pDataObject, DWORD dwKeyState, POINTL p
 		}
 	}
 	if (!bBoxData) {	// 矩形データ
-		//	2004,05.14 Moca 引数に文字列長を追加
-
 		// 挿入前のキャレット位置を記憶する
 		// （キャレットが行終端より右の場合は埋め込まれる空白分だけ桁位置をシフト）
 		Point ptCaretLogicPos_Old = caret.GetCaretLogicPos();
@@ -1942,14 +1936,11 @@ STDMETHODIMP EditView::Drop(LPDATAOBJECT pDataObject, DWORD dwKeyState, POINTL p
 
 		// 挿入前のキャレット位置から挿入後のキャレット位置までを選択範囲にする
 		Point ptSelectFrom = pEditDoc->layoutMgr.LogicToLayout(ptCaretLogicPos_Old);
-		GetSelectionInfo().SetSelectArea(Range(ptSelectFrom, caret.GetCaretLayoutPos()));	// 2009.07.25 ryoji
+		GetSelectionInfo().SetSelectArea(Range(ptSelectFrom, caret.GetCaretLayoutPos()));
 	}else {
-		// 2004.07.12 Moca クリップボードを書き換えないように
-		// bBoxSelected == TRUE
-		// GetSelectionInfo().IsBoxSelecting() == FALSE
 		// 貼り付け（クリップボードから貼り付け）
 		GetCommander().Command_PasteBox(memBuf.GetStringPtr(), memBuf.GetStringLength());
-		AdjustScrollBars(); // 2007.07.22 ryoji
+		AdjustScrollBars();
 		Redraw();
 	}
 	if (bMove) {
@@ -1957,21 +1948,21 @@ STDMETHODIMP EditView::Drop(LPDATAOBJECT pDataObject, DWORD dwKeyState, POINTL p
 		}else {
 			// 移動モード & 後ろに移動
 
-			// 現在の選択範囲を記憶する	// 2008.03.26 ryoji
+			// 現在の選択範囲を記憶する
 			Range selLogic;
 			pEditDoc->layoutMgr.LayoutToLogic(
 				GetSelectionInfo().select,
 				&selLogic
 			);
 
-			// 以前の選択範囲を記憶する	// 2008.03.26 ryoji
+			// 以前の選択範囲を記憶する
 			Range delLogic;
 			pEditDoc->layoutMgr.LayoutToLogic(
 				select_Old,
 				&delLogic
 			);
 
-			// 現在の行数を記憶する	// 2008.03.26 ryoji
+			// 現在の行数を記憶する
 			size_t nLines_Old = pEditDoc->docLineMgr.GetLineCount();
 
 			// 以前の選択範囲を選択する
@@ -1982,7 +1973,7 @@ STDMETHODIMP EditView::Drop(LPDATAOBJECT pDataObject, DWORD dwKeyState, POINTL p
 			// 選択エリアを削除
 			DeleteData(true);
 
-			// 削除前の選択範囲を復元する	// 2008.03.26 ryoji
+			// 削除前の選択範囲を復元する
 			if (!bBoxData) {
 				// 削除された範囲を考慮して選択範囲を調整する
 				if (selLogic.GetFrom().y == delLogic.GetTo().y) {	// 選択開始が削除末尾と同一行
@@ -2011,7 +2002,7 @@ STDMETHODIMP EditView::Drop(LPDATAOBJECT pDataObject, DWORD dwKeyState, POINTL p
 					selLogic,
 					&select
 				);
-				GetSelectionInfo().SetSelectArea(select);	// 2009.07.25 ryoji
+				GetSelectionInfo().SetSelectArea(select);
 				ptCaretPos_Old = GetSelectionInfo().select.GetTo();
 			}
 
@@ -2019,7 +2010,7 @@ STDMETHODIMP EditView::Drop(LPDATAOBJECT pDataObject, DWORD dwKeyState, POINTL p
 			caret.MoveCursor(ptCaretPos_Old, true);
 			caret.nCaretPosX_Prev = caret.GetCaretLayoutPos().x;
 
-			// 削除位置から移動先へのカーソル移動をUndo操作に追加する	// 2008.03.26 ryoji
+			// 削除位置から移動先へのカーソル移動をUndo操作に追加する
 			Point ptBefore = pEditDoc->layoutMgr.LayoutToLogic(GetSelectionInfo().select.GetFrom());
 			commander.GetOpeBlk()->AppendOpe(
 				new MoveCaretOpe(
@@ -2167,7 +2158,7 @@ void EditView::OnMyDropFiles(HDROP hDrop)
 
 		// 挿入前のキャレット位置から挿入後のキャレット位置までを選択範囲にする
 		Point ptSelectFrom = pEditDoc->layoutMgr.LogicToLayout(ptCaretLogicPos_Old);
-		GetSelectionInfo().SetSelectArea(Range(ptSelectFrom, GetCaret().GetCaretLayoutPos()));	// 2009.07.25 ryoji
+		GetSelectionInfo().SetSelectArea(Range(ptSelectFrom, GetCaret().GetCaretLayoutPos()));
 		GetSelectionInfo().DrawSelectArea();
 		break;
 	}
@@ -2187,7 +2178,7 @@ CLIPFORMAT EditView::GetAvailableClipFormat(LPDATAOBJECT pDataObject)
 		cf = CF_UNICODETEXT;
 	else if (IsDataAvailable(pDataObject, CF_TEXT))
 		cf = CF_TEXT;
-	else if (IsDataAvailable(pDataObject, CF_HDROP))	// 2008.06.20 ryoji
+	else if (IsDataAvailable(pDataObject, CF_HDROP))
 		cf = CF_HDROP;
 
 	return cf;
@@ -2195,12 +2186,11 @@ CLIPFORMAT EditView::GetAvailableClipFormat(LPDATAOBJECT pDataObject)
 
 DWORD EditView::TranslateDropEffect(CLIPFORMAT cf, DWORD dwKeyState, POINTL pt, DWORD dwEffect)
 {
-	if (cf == CF_HDROP)	// 2008.06.20 ryoji
+	if (cf == CF_HDROP)
 		return DROPEFFECT_LINK;
 
 	EditView* pDragSourceView = editWnd.GetDragSourceView();
 
-	// 2008.06.21 ryoji
 	// Win 98/Me 環境では外部からのドラッグ時に GetKeyState() ではキー状態を正しく取得できないため、
 	// Drag & Drop インターフェースで渡される dwKeyState を用いて判定する。
 #if 1

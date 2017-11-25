@@ -61,7 +61,6 @@ enum class BarChangeNotifyType {
 
 
 // 色タイプ
-//@@@ From Here 2006.12.18 ryoji
 #define COLOR_ATTRIB_FORCE_DISP		0x00000001
 #define COLOR_ATTRIB_NO_TEXT		0x00000010
 #define COLOR_ATTRIB_NO_BACK		0x00000020

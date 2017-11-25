@@ -38,7 +38,7 @@ static const wchar_t	szKeyStructureVersion[]			= L"vStructureVersion";
 // カラー（ PropTypes.hからコピー改変 ）
 //static const wchar_t	WSTR_COLORDATA_HEAD2[]	=  L" テキストエディタ色設定 Ver2";
 //static const wchar_t	WSTR_COLORDATA_HEAD21[]	=  L" テキストエディタ色設定 Ver2.1";	// Nov. 2, 2000 JEPRO 変更 [注]. 0.3.9.0:ur3β10以降、設定項目の番号を入れ替えたため
-static const wchar_t	WSTR_COLORDATA_HEAD3[]	=  L" テキストエディタ色設定 Ver3";		// Jan. 15, 2001 Stonee  色設定Ver3ドラフト(設定ファイルのキーを連番→文字列に)	//Feb. 11, 2001 JEPRO 有効にした
+static const wchar_t	WSTR_COLORDATA_HEAD3[]	=  L" テキストエディタ色設定 Ver3";
 //static const wchar_t	WSTR_COLORDATA_HEAD4[]	=  L" テキストエディタ色設定 Ver4";		// 2007.10.02 kobake UNICODE化に際してカラーファイル仕様も変更
 static const wchar_t	szSecColor[]			=  L"SakuraColor";
 
@@ -749,7 +749,7 @@ bool ImpExpKeyHelp::Import(const wstring& sFileName, wstring& sErrMsg)
 		// Path
 		FILE* fp2;
 		const wchar_t* p4 = p2;
-		if (!(fp2=_tfopen_absini(to_tchar(p3), _T("r")))) {	// 2007.02.03 genta 相対パスはsakura.exe基準で開く	// 2007.05.19 ryoji 相対パスは設定ファイルからのパスを優先
+		if (!(fp2=_tfopen_absini(to_tchar(p3), _T("r")))) {	// 2007.02.03 genta 相対パスはsakura.exe基準で開く
 			// 2007.02.03 genta 辞書が見つからない場合の措置．警告を出すが取り込む
 			p4 = LSW(STR_IMPEXP_DIC_NOTFOUND);
 			b_enable_flag = 0;
@@ -1148,7 +1148,7 @@ bool ImpExpKeyword::Export(const wstring& sFileName, wstring& sErrMsg)
 	out.WriteF(bCase ? L"True" : L"False");
 	out.WriteF(L"\n\n");
 
-	common.specialKeyword.keywordSetMgr.SortKeyword(nIdx);	// MIK 2000.12.01 sort keyword
+	common.specialKeyword.keywordSetMgr.SortKeyword(nIdx);
 
 	// ｎ番目のセットのキーワードの数を返す
 	size_t nKeywordNum = common.specialKeyword.keywordSetMgr.GetKeywordNum(nIdx);
@@ -1237,7 +1237,6 @@ bool ImpExpMainMenu::Export(const wstring& sFileName, wstring& sErrMsg)
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                     ファイルツリー                          //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-//	2014.06.07 Moca
 // インポート
 bool ImpExpFileTree::Import(const wstring& sFileName, wstring& sErrMsg)
 {

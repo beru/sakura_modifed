@@ -10,12 +10,12 @@
 #include "sakura_rc.h"
 #include "sakura.hh"
 
-//@@@ 2001.02.04 Start by MIK: Popup Help
+// Popup Help
 static const DWORD p_helpids[] = {	//10210
 	IDC_CHECK_ADDCRLFWHENCOPY,			HIDC_CHECK_ADDCRLFWHENCOPY,				// 折り返し行に改行を付けてコピー
 	IDC_CHECK_COPYnDISABLESELECTEDAREA,	HIDC_CHECK_COPYnDISABLESELECTEDAREA,	// コピーしたら選択解除
-	IDC_CHECK_bEnableNoSelectCopy,		HIDC_CHECK_bEnableNoSelectCopy,			// 選択なしでコピーを可能にする	// 2007.11.18 ryoji
-	IDC_CHECK_bEnableLineModePaste,		HIDC_CHECK_bEnableLineModePaste,		// ラインモード貼り付けを可能にする	// 2007.10.08 ryoji
+	IDC_CHECK_bEnableNoSelectCopy,		HIDC_CHECK_bEnableNoSelectCopy,			// 選択なしでコピーを可能にする
+	IDC_CHECK_bEnableLineModePaste,		HIDC_CHECK_bEnableLineModePaste,		// ラインモード貼り付けを可能にする
 	IDC_CHECK_DRAGDROP,					HIDC_CHECK_DRAGDROP,					// Drag&Drop編集する
 	IDC_CHECK_DROPSOURCE,				HIDC_CHECK_DROPSOURCE,					// ドロップ元にする
 	IDC_CHECK_bNotOverWriteCRLF,		HIDC_CHECK_bNotOverWriteCRLF,			// 上書きモード
@@ -133,21 +133,18 @@ INT_PTR PropEdit::DispatchEvent(
 		}
 		break;	// WM_NOTIFY
 
-//@@@ 2001.02.04 Start by MIK: Popup Help
 	case WM_HELP:
 		{
 			HELPINFO* p = (HELPINFO*) lParam;
-			MyWinHelp((HWND)p->hItemHandle, HELP_WM_HELP, (ULONG_PTR)(LPVOID)p_helpids);	// 2006.10.10 ryoji MyWinHelpに変更に変更
+			MyWinHelp((HWND)p->hItemHandle, HELP_WM_HELP, (ULONG_PTR)(LPVOID)p_helpids);
 		}
 		return TRUE;
 		// NOTREACHED
 		//break;
-//@@@ 2001.02.04 End
 
-//@@@ 2001.12.22 Start by MIK: Context Menu Help
 	// Context Menu
 	case WM_CONTEXTMENU:
-		MyWinHelp(hwndDlg, HELP_CONTEXTMENU, (ULONG_PTR)(LPVOID)p_helpids);	// 2006.10.10 ryoji MyWinHelpに変更に変更
+		MyWinHelp(hwndDlg, HELP_CONTEXTMENU, (ULONG_PTR)(LPVOID)p_helpids);
 		return TRUE;
 //@@@ 2001.12.22 End
 
@@ -177,10 +174,10 @@ void PropEdit::SetData(HWND hwndDlg)
 	// コピーしたら選択解除
 	::CheckDlgButton(hwndDlg, IDC_CHECK_COPYnDISABLESELECTEDAREA, csEdit.bCopyAndDisablSelection);
 
-	// 選択なしでコピーを可能にする	// 2007.11.18 ryoji
+	// 選択なしでコピーを可能にする
 	::CheckDlgButton(hwndDlg, IDC_CHECK_bEnableNoSelectCopy, csEdit.bEnableNoSelectCopy);
 
-	// ラインモード貼り付けを可能にする	// 2007.10.08 ryoji
+	// ラインモード貼り付けを可能にする
 	::CheckDlgButton(hwndDlg, IDC_CHECK_bEnableLineModePaste, csEdit.bEnableLineModePaste ? BST_CHECKED : BST_UNCHECKED);
 
 	// 改行は上書きしない
@@ -235,10 +232,10 @@ int PropEdit::GetData(HWND hwndDlg)
 	// コピーしたら選択解除
 	csEdit.bCopyAndDisablSelection = DlgButton_IsChecked(hwndDlg, IDC_CHECK_COPYnDISABLESELECTEDAREA);
 
-	// 選択なしでコピーを可能にする	// 2007.11.18 ryoji
+	// 選択なしでコピーを可能にする
 	csEdit.bEnableNoSelectCopy = DlgButton_IsChecked(hwndDlg, IDC_CHECK_bEnableNoSelectCopy);
 
-	// ラインモード貼り付けを可能にする	// 2007.10.08 ryoji
+	// ラインモード貼り付けを可能にする
 	csEdit.bEnableLineModePaste = DlgButton_IsChecked(hwndDlg, IDC_CHECK_bEnableLineModePaste);
 
 	// 改行は上書きしない

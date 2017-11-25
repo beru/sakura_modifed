@@ -54,7 +54,6 @@ void MainToolBar::ProcSearchBox(MSG *msg)
 			}
 		}else if (msg->wParam == VK_TAB) {	// タブキー
 			// フォーカスを移動
-			// 2004.10.27 MIK IME表示位置のずれ修正
 			::SetFocus(owner.GetHwnd() );
 		}
 	}
@@ -96,14 +95,13 @@ void MainToolBar::CreateToolBar(void)
 	nFlag = 0;
 
 	auto& csToolBar = GetDllShareData().common.toolBar;
-	// 2006.06.17 ryoji
 	// Rebar ウィンドウの作成
 	if (IsVisualStyle()) {	// ビジュアルスタイル有効
 		hwndReBar = ::CreateWindowEx(
 			WS_EX_TOOLWINDOW,
 			REBARCLASSNAME, // レバーコントロール
 			NULL,
-			WS_CHILD/* | WS_VISIBLE*/ | WS_CLIPSIBLINGS | WS_CLIPCHILDREN |	// 2007.03.08 ryoji WS_VISIBLE 除去
+			WS_CHILD/* | WS_VISIBLE*/ | WS_CLIPSIBLINGS | WS_CLIPCHILDREN |
 			RBS_BANDBORDERS | CCS_NODIVIDER,
 			0, 0, 0, 0,
 			owner.GetHwnd(),
@@ -133,7 +131,7 @@ void MainToolBar::CreateToolBar(void)
 		0,
 		TOOLBARCLASSNAME,
 		NULL,
-		WS_CHILD/* | WS_VISIBLE*/ | WS_CLIPCHILDREN | /*WS_BORDER | */	// 2006.06.17 ryoji WS_CLIPCHILDREN 追加	// 2007.03.08 ryoji WS_VISIBLE 除去
+		WS_CHILD/* | WS_VISIBLE*/ | WS_CLIPCHILDREN | /*WS_BORDER | */
 /*		WS_EX_WINDOWEDGE| */
 		TBSTYLE_TOOLTIPS |
 //		TBSTYLE_WRAPABLE |
@@ -152,24 +150,22 @@ void MainToolBar::CreateToolBar(void)
 			csToolBar.bToolBarIsFlat = false;
 		}
 		TopWarningMessage(owner.GetHwnd(), LS(STR_ERR_DLGEDITWND05));
-		DestroyToolBar();	// 2006.06.17 ryoji
+		DestroyToolBar();
 	}else {
-		// 2006.09.06 ryoji ツールバーをサブクラス化する
+		// ツールバーをサブクラス化する
 		g_pOldToolBarWndProc = (WNDPROC)::SetWindowLongPtr(
 			hwndToolBar,
 			GWLP_WNDPROC,
 			(LONG_PTR)ToolBarWndProc
 		);
 
-		Toolbar_SetButtonSize(hwndToolBar, DpiScaleX(22), DpiScaleY(22));	// 2009.10.01 ryoji 高DPI対応スケーリング
+		Toolbar_SetButtonSize(hwndToolBar, DpiScaleX(22), DpiScaleY(22));
 		Toolbar_ButtonStructSize(hwndToolBar, sizeof(TBBUTTON));
-		//	Oct. 12, 2000 genta
 		//	既に用意されているImage Listをアイコンとして登録
 		pIcons->SetToolBarImages(hwndToolBar);
 		// ツールバーにボタンを追加
-		int count = 0;	//@@@ 2002.06.15 MIK
-		int nToolBarButtonNum = 0;// 2005/8/29 aroka
-		//	From Here 2005.08.29 aroka
+		int count = 0;
+		int nToolBarButtonNum = 0;
 		// はじめにツールバー構造体の配列を作っておく
 		std::vector<TBBUTTON> tbButtons(csToolBar.nToolBarButtonNum);
 		TBBUTTON* pTbbArr = &tbButtons[0];
@@ -194,12 +190,10 @@ void MainToolBar::CreateToolBar(void)
 			}
 			++nToolBarButtonNum;
 		}
-		//	To Here 2005.08.29 aroka
 
 		for (i=0; i<nToolBarButtonNum; ++i) {
 			tbb = pTbbArr[i];
 
-			//@@@ 2002.06.15 MIK start
 			switch (tbb.fsStyle) {
 			case TBSTYLE_DROPDOWN:	// ドロップダウン
 				// 拡張スタイルに設定
@@ -234,7 +228,7 @@ void MainToolBar::CreateToolBar(void)
 						// サイズを設定する
 						tbi.cbSize = sizeof(tbi);
 						tbi.dwMask = TBIF_SIZE;
-						tbi.cx     = (WORD)DpiScaleX(160);	// ボックスの幅	// 2009.10.01 ryoji 高DPI対応スケーリング
+						tbi.cx     = (WORD)DpiScaleX(160);	// ボックスの幅
 						Toolbar_SetButtonInfo(hwndToolBar, tbb.idCommand, &tbi);
 
 						// 位置とサイズを取得する
@@ -253,7 +247,7 @@ void MainToolBar::CreateToolBar(void)
 
 							lf = owner.GetLogfont();
 							//memset_raw(&lf, 0, sizeof(lf));
-							lf.lfHeight			= DpiPointsToPixels(-9); // Jan. 14, 2003 genta ダイアログにあわせてちょっと小さく	// 2009.10.01 ryoji 高DPI対応（ポイント数から算出）
+							lf.lfHeight			= DpiPointsToPixels(-9);
 							lf.lfWidth			= 0;
 							lf.lfEscapement		= 0;
 							lf.lfOrientation	= 0;
@@ -275,7 +269,7 @@ void MainToolBar::CreateToolBar(void)
 							// 入力長制限
 							// Combo_LimitText(hwndSearchBox, (WPARAM)_MAX_PATH - 1);
 
-							// 検索ボックスを更新	// 関数化 2010/6/6 Uchi
+							// 検索ボックスを更新
 							AcceptSharedSearchKey();
 
 							comboDel = ComboBoxItemDeleter(); // 再表示用の初期化
@@ -297,7 +291,6 @@ void MainToolBar::CreateToolBar(void)
 				++count;
 				break;
 			}
-			//@@@ 2002.06.15 MIK end
 		}
 		if (csToolBar.bToolBarIsFlat) {	// フラットツールバーにする／しない
 			lToolType = ::GetWindowLongPtr(hwndToolBar, GWL_STYLE);
@@ -307,7 +300,6 @@ void MainToolBar::CreateToolBar(void)
 		}
 	}
 
-	// 2006.06.17 ryoji
 	// ツールバーを Rebar に入れる
 	if (hwndReBar && hwndToolBar) {
 		// ツールバーの高さを取得する
@@ -315,7 +307,7 @@ void MainToolBar::CreateToolBar(void)
 		DWORD dwRows = Toolbar_GetRows(hwndToolBar);
 
 		// バンド情報を設定する
-		// 以前のプラットフォームに _WIN32_WINNT >= 0x0600 で定義される構造体のフルサイズを渡すと失敗する	// 2007.12.21 ryoji
+		// 以前のプラットフォームに _WIN32_WINNT >= 0x0600 で定義される構造体のフルサイズを渡すと失敗する
 		rbBand.cbSize = CCSIZEOF_STRUCT(REBARBANDINFO, wID);
 		rbBand.fMask  = RBBIM_STYLE | RBBIM_CHILD | RBBIM_CHILDSIZE | RBBIM_SIZE;
 		rbBand.fStyle = RBBS_CHILDEDGE;
@@ -353,7 +345,7 @@ void MainToolBar::DestroyToolBar(void)
 		//if (cTabWnd.owner->GetHwnd()) ::UpdateWindow(cTabWnd.owner->GetHwnd());
 	}
 
-	// 2006.06.17 ryoji Rebar を破棄する
+	// Rebar を破棄する
 	if (hwndReBar) {
 		::DestroyWindow(hwndReBar);
 		hwndReBar = NULL;
@@ -392,7 +384,7 @@ LPARAM MainToolBar::ToolBarOwnerDraw(LPNMCUSTOMDRAW pnmh)
 	case CDDS_ITEMPREPAINT:
 		// 面倒くさいので，枠はToolbarに描いてもらう
 		// アイコンが登録されていないので中身は何も描かれない
-		// 2010.07.15 Moca 検索(ボックス)なら枠を描かない
+		// 検索(ボックス)なら枠を描かない
 		if (pnmh->dwItemSpec == F_SEARCH_BOX) {
 			return CDRF_SKIPDEFAULT;
 		}
@@ -401,10 +393,10 @@ LPARAM MainToolBar::ToolBarOwnerDraw(LPNMCUSTOMDRAW pnmh)
 	case CDDS_ITEMPOSTPAINT:
 		{
 			// 描画
-			// コマンド番号（pnmh->dwItemSpec）からアイコン番号を取得する	// 2007.11.02 ryoji
+			// コマンド番号（pnmh->dwItemSpec）からアイコン番号を取得する
 			int nIconId = Toolbar_GetBitmap(pnmh->hdr.hwndFrom, (WPARAM)pnmh->dwItemSpec);
 
-			int offset = ((pnmh->rc.bottom - pnmh->rc.top) - pIcons->GetCy()) / 2;		// アイテム矩形からの画像のオフセット	// 2007.03.25 ryoji
+			int offset = ((pnmh->rc.bottom - pnmh->rc.top) - pIcons->GetCy()) / 2;		// アイテム矩形からの画像のオフセット
 			int shift = (pnmh->uItemState & (CDIS_SELECTED | CDIS_CHECKED)) ? 1 : 0;	//	Aug. 30, 2003 genta ボタンを押されたらちょっと画像をずらす
 
 			//	Sep. 6, 2003 genta 押下時は右だけでなく下にもずらす

@@ -330,8 +330,8 @@ LRESULT EditView::SetReconvertStruct(
 	if (pReconv) {
 		// 再変換構造体の設定
 		DWORD dwOrgSize = pReconv->dwSize;
-		// 2010.03.17 Moca dwSizeはpReconvを用意する側(IME等)が設定
-		//     のはずなのに Win XP+IME2002+TSF では dwSizeが0で送られてくる
+		// dwSizeはpReconvを用意する側(IME等)が設定
+		// のはずなのに Win XP+IME2002+TSF では dwSizeが0で送られてくる
 		if (dwOrgSize != 0 && dwOrgSize < sizeof(*pReconv) + cbReconvLenWithNull) {
 			// バッファ不足
 			szComposition[0] = _T('\0');
@@ -347,7 +347,6 @@ LRESULT EditView::SetReconvertStruct(
 		pReconv->dwTargetStrLen    = dwCompStrLen;		// 文字単位
 		pReconv->dwTargetStrOffset = dwCompStrOffset;	// バイト単位
 		
-		// 2004.01.28 Moca ヌル終端の修正
 		if (bUnicode) {
 			wchar_t* p = (wchar_t*)(pReconv + 1);
 			if (dwInsByteCount) {

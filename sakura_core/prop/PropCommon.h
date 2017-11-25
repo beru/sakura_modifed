@@ -57,7 +57,6 @@ public:
 	*/
 	INT_PTR DoPropertySheet(int, bool);	// プロパティシートの作成
 
-	// 2002.12.11 Moca 追加
 	void InitData(void);		// DllSharedDataから一時データ領域に設定を複製する
 	void ApplyData(void);		// 一時データ領域からにDllSharedData設定をコピーする
 	int GetPageNum() { return nPageNum; }
@@ -88,7 +87,6 @@ public:
 	*/
 	CommonSetting	common;
 
-	// 2005.01.13 MIK セット数増加
 	struct KeywordSetIndex {
 		int typeId;
 		int index[MAX_KEYWORDSET_PER_TYPE];
@@ -104,15 +102,6 @@ protected:
 	*/
 	void OnHelp(HWND, int);	// ヘルプ
 	int	SearchIntArr(int , int* , int);
-//	void DrawToolBarItemList(DRAWITEMSTRUCT*);	// ツールバーボタンリストのアイテム描画
-//	void DrawColorButton(DRAWITEMSTRUCT*, COLORREF);	// 色ボタンの描画 // 2002.11.09 Moca 未使用
-//	BOOL SelectColor(HWND, COLORREF*);	// 色選択ダイアログ
-
-	//	Jun. 2, 2001 genta
-	//	Event Handler, Dialog Procedureの見直し
-	//	Global関数だったDialog procedureをclassのstatic methodとして
-	//	組み込んだ．
-	//	ここから以下 Macroまで配置の見直しとstatic methodの追加
 
 	// 汎用ダイアログプロシージャ
 	static INT_PTR DlgProc(
@@ -238,7 +227,7 @@ private:
 	void Delete_List_Keyword(HWND, HWND);	// リスト中で選択されているキーワードを削除する
 	void Import_List_Keyword(HWND, HWND);	// リスト中のキーワードをインポートする
 	void Export_List_Keyword(HWND, HWND);	// リスト中のキーワードをエクスポートする
-	void Clean_List_Keyword(HWND, HWND);	// リスト中のキーワードを整理する 2005.01.26 Moca
+	void Clean_List_Keyword(HWND, HWND);	// リスト中のキーワードを整理する
 };
 
 //==============================================================

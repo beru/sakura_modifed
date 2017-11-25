@@ -584,7 +584,7 @@ bool IsDirectory(LPCTSTR pszPath)
 	@note 書き込み後にファイルを再オープンしてタイムスタンプを得ようとすると
 	ファイルがまだロックされていることがあり，上書き禁止と誤認されることがある．
 	FindFirstFileを使うことでファイルのロック状態に影響されずにタイムスタンプを
-	取得できる．(ryoji)
+	取得できる．
 */
 bool GetLastWriteTimestamp(
 	const TCHAR*	pszFileName,	// [in]  ファイルのパス

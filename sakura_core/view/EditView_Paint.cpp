@@ -319,8 +319,8 @@ Color3Setting EditView::GetColorIndex(
 	const Layout*			pLayout,
 	int						nLineNum,
 	int						nIndex,
-	ColorStrategyInfo&	 	csInfo,			// 2010.03.31 ryoji 追加
-	bool					bPrev			// 指定位置の色変更直前まで	2010.06.19 ryoji 追加
+	ColorStrategyInfo&	 	csInfo,
+	bool					bPrev			// 指定位置の色変更直前まで
 	)
 {
 	EColorIndexType eRet = COLORIDX_TEXT;
@@ -353,7 +353,6 @@ Color3Setting EditView::GetColorIndex(
 			//	break;
 		}
 
-		// 2005.11.20 Moca 色が正しくないことがある問題に対処
 		eRet = pLayoutLineFirst->GetColorTypePrev();	// 現在の色を指定	// 02/12/18 ai
 		colorInfo = pLayoutLineFirst->GetColorInfo();
 		csInfo.nPosInLogic = pLayoutLineFirst->GetLogicOffset();
@@ -363,23 +362,6 @@ Color3Setting EditView::GetColorIndex(
 		pool.SetCurrentView(this);
 		pool.NotifyOnStartScanLogic();
 
-		// 2009.02.07 ryoji この関数では pInfo->CheckChangeColor() で色を調べるだけなので以下の処理は不要
-		//
-		////############超仮。本当はVisitorを使うべき
-		//class TmpVisitor{
-		//public:
-		//	static int CalcLayoutIndex(const Layout* pLayout)
-		//	{
-		//		int n = -1;
-		//		while (pLayout) {
-		//			pLayout = pLayout->GetPrevLayout(); // prev or null
-		//			++n;
-		//		}
-		//		return n;
-		//	}
-		//};
-		//pInfo->pDispPos->SetLayoutLineRef(TmpVisitor::CalcLayoutIndex(pLayout));
-		// 2013.12.11 Moca カレント行の色替えで必要になりました
 		csInfo.pDispPos->SetLayoutLineRef(nLineNumFirst);
 	}
 
@@ -547,7 +529,7 @@ void EditView::OnPaint2(HDC _hdc, PAINTSTRUCT* pPs, BOOL bDrawFromComptibleBmp)
 //	MY_RUNNINGTIMER(runningTimer, "EditView::OnPaint");
 	Graphics gr(_hdc);
 
-	// 2004.01.28 Moca デスクトップに作画しないように
+	// デスクトップに作画しないように
 	if (!GetHwnd() || !_hdc) {
 		return;
 	}
@@ -564,7 +546,6 @@ void EditView::OnPaint2(HDC _hdc, PAINTSTRUCT* pPs, BOOL bDrawFromComptibleBmp)
 		);
 #endif
 	
-	// From Here 2007.09.09 Moca 互換BMPによる画面バッファ
 	// 互換BMPからの転送のみによる作画
 	if (bDrawFromComptibleBmp
 		&& hdcCompatDC
@@ -595,10 +576,9 @@ void EditView::OnPaint2(HDC _hdc, PAINTSTRUCT* pPs, BOOL bDrawFromComptibleBmp)
 		::GetWindowRect(this->GetHwnd(), &rect);
 		CreateOrUpdateCompatibleBitmap(rect.right - rect.left, rect.bottom - rect.top);
 	}
-	// To Here 2007.09.09 Moca
 
 	// キャレットを隠す
-	bool bCaretShowFlag_Old = GetCaret().GetCaretShowFlag();	// 2008.06.09 ryoji
+	bool bCaretShowFlag_Old = GetCaret().GetCaretShowFlag();
 	GetCaret().HideCaret_(this->GetHwnd()); // 2002/07/22 novice
 
 	RECT			rc;
@@ -608,19 +588,15 @@ void EditView::OnPaint2(HDC _hdc, PAINTSTRUCT* pPs, BOOL bDrawFromComptibleBmp)
 	// サポート
 	TypeSupport textType(*this, COLORIDX_TEXT);
 
-//@@@ 2001.11.17 add start MIK
 	// 変更があればタイプ設定を行う。
 	if (pTypeData->bUseRegexKeyword || pRegexKeyword->bUseRegexKeyword) { // OFFなのに前回のデータが残ってる
 		// タイプ別設定をする。設定済みかどうかは呼び先でチェックする。
 		pRegexKeyword->RegexKeySetTypes(pTypeData);
 	}
-//@@@ 2001.11.17 add end MIK
 
 	bool bTransText = IsBkBitmap();
 	// メモリＤＣを利用した再描画の場合は描画先のＤＣを切り替える
 	HDC hdcOld = 0;
-	// 2007.09.09 Moca bUseMemoryDCを有効化。
-	// bUseMemoryDC = FALSE;
 	bool bUseMemoryDC = (hdcCompatDC != NULL);
 	assert_warning(gr != hdcCompatDC);
 	if (bUseMemoryDC) {
@@ -699,13 +675,11 @@ void EditView::OnPaint2(HDC _hdc, PAINTSTRUCT* pPs, BOOL bDrawFromComptibleBmp)
 		nLayoutLine = GetTextArea().GetViewTopLine() + (nTop - GetTextArea().GetAreaTop()) / nLineHeight; // ビュー途中から描画
 	}
 
-	// ※ ここにあった描画範囲の 260 文字ロールバック処理は GetColorIndex() に吸収	// 2009.02.11 ryoji
-
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//          描画終了レイアウト絶対行 -> nLayoutLineTo            //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	int nLayoutLineTo = GetTextArea().GetViewTopLine()
-		+ (pPs->rcPaint.bottom - GetTextArea().GetAreaTop() + (nLineHeight - 1)) / nLineHeight - 1;	// 2007.02.17 ryoji 計算を精密化
+		+ (pPs->rcPaint.bottom - GetTextArea().GetAreaTop() + (nLineHeight - 1)) / nLineHeight - 1;
 
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -723,7 +697,7 @@ void EditView::OnPaint2(HDC _hdc, PAINTSTRUCT* pPs, BOOL bDrawFromComptibleBmp)
 	//                      全部の行を描画                         //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-	// 必要な行を描画する	// 2009.03.26 ryoji 行番号のみ描画を通常の行描画と分離（効率化）
+	// 必要な行を描画する
 	if (pPs->rcPaint.right <= GetTextArea().GetAreaLeft()) {
 		while (pos.GetLayoutLineRef() <= nLayoutLineTo) {
 			if (!pos.GetLayoutRef())
@@ -776,9 +750,9 @@ void EditView::OnPaint2(HDC _hdc, PAINTSTRUCT* pPs, BOOL bDrawFromComptibleBmp)
 		if (!bMiniMap) {
 			GetTextDrawer().DispNoteLine(gr, pos.GetDrawPos().y, pPs->rcPaint.bottom, pPs->rcPaint.left, pPs->rcPaint.right);
 		}
-		// 2006.04.29 行部分は行ごとに作画し、ここでは縦線の残りを作画
+		// 行部分は行ごとに作画し、ここでは縦線の残りを作画
 		GetTextDrawer().DispVerticalLines(gr, pos.GetDrawPos().y, pPs->rcPaint.bottom, 0, -1);
-		GetTextDrawer().DispWrapLine(gr, pos.GetDrawPos().y, pPs->rcPaint.bottom);	// 2009.10.24 ryoji
+		GetTextDrawer().DispWrapLine(gr, pos.GetDrawPos().y, pPs->rcPaint.bottom);
 	}
 
 	textType.RewindGraphicsState(gr);
@@ -813,19 +787,16 @@ void EditView::OnPaint2(HDC _hdc, PAINTSTRUCT* pPs, BOOL bDrawFromComptibleBmp)
 		);
 	}
 
-	// From Here 2007.09.09 Moca 互換BMPによる画面バッファ
-	//     アンダーライン描画をメモリDCからのコピー前処理から後に移動
 	if (editWnd.GetActivePane() == nMyIndex) {
 		// アクティブペインは、アンダーライン描画
 		GetCaret().underLine.CaretUnderLineON(true, false);
 	}
-	// To Here 2007.09.09 Moca
 
 	// 03/02/18 対括弧の強調表示(描画) ai
 	DrawBracketPair(true);
 
 	// キャレットを現在位置に表示します
-	if (bCaretShowFlag_Old)	// 2008.06.09 ryoji
+	if (bCaretShowFlag_Old)
 		GetCaret().ShowCaret_(this->GetHwnd()); // 2002/07/22 novice
 	return;
 }
@@ -1194,7 +1165,7 @@ void EditView::DispTextSelected(
 				nSelectTo = nX_Layout;
 			}
 
-			// 2006.03.28 Moca 表示域外なら何もしない
+			// 表示域外なら何もしない
 			if (GetTextArea().GetRightCol() < nSelectFrom) {
 				return;
 			}
@@ -1213,8 +1184,7 @@ void EditView::DispTextSelected(
 			bool bOMatch = false;
 
 			// 2005/04/02 かろと ０文字マッチだと反転幅が０となり反転されないので、1/3文字幅だけ反転させる
-			// 2005/06/26 zenryaku 選択解除でキャレットの残骸が残る問題を修正
-			// 2005/09/29 ryoji スクロール時にキャレットのようなゴミが表示される問題を修正
+			// 選択解除でキャレットの残骸が残る問題を修正
 			if (GetSelectionInfo().IsTextSelected() && rcClip.right == rcClip.left &&
 				select.IsLineOne() &&
 				select.GetFrom().x >= GetTextArea().GetViewLeftCol()
@@ -1229,7 +1199,6 @@ void EditView::DispTextSelected(
 				return;	// ０文字マッチによる反転幅拡張なし
 			}
 
-			// 2006.03.28 Moca ウィンドウ幅が大きいと正しく反転しない問題を修正
 			if (rcClip.right > GetTextArea().GetAreaRight()) {
 				rcClip.right = GetTextArea().GetAreaRight();
 			}

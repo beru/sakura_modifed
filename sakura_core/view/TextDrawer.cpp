@@ -218,7 +218,6 @@ void TextDrawer::DispVerticalLines(
 				break;
 			}
 			int nPosX = nPosXOffset + (nXCol - 1 - textArea.GetViewLeftCol()) * nCharDx;
-			// 2006.04.30 Moca 線の引く範囲・方法を変更
 			// 太線の場合、半分だけ作画する可能性がある。
 			int nPosXBold = nPosX;
 			if (bBold) {
@@ -316,7 +315,6 @@ void TextDrawer::DispWrapLine(
 	const size_t nWrapKetas = view.pEditDoc->layoutMgr.GetMaxLineKetas();
 	const size_t nCharDx = view.GetTextMetrics().GetHankakuDx();
 	int nXPos = textArea.GetAreaLeft() + (nWrapKetas - textArea.GetViewLeftCol()) * nCharDx;
-	//	2005.11.08 Moca 作画条件変更
 	if (textArea.GetAreaLeft() < nXPos && nXPos < textArea.GetAreaRight()) {
 		/// 折り返し記号の色のペンを設定
 		gr.PushPen(wrapType.GetTextColor(), 0);
@@ -349,7 +347,7 @@ void TextDrawer::DispLineNumber(
 	size_t nCharWidth = view.GetTextMetrics().GetHankakuDx();
 	// 行番号表示部分X幅	Sep. 23, 2002 genta 共通式のくくりだし
 	//int nLineNumAreaWidth = pView->GetTextArea().nViewAlignLeftCols * nCharWidth;
-	int nLineNumAreaWidth = view.GetTextArea().GetAreaLeft() - GetDllShareData().common.window.nLineNumRightSpace;	// 2009.03.26 ryoji
+	int nLineNumAreaWidth = view.GetTextArea().GetAreaLeft() - GetDllShareData().common.window.nLineNumRightSpace;
 
 	TypeSupport textType(view, COLORIDX_TEXT);
 	TypeSupport caretLineBg(view, COLORIDX_CARETLINEBG);
@@ -379,7 +377,7 @@ void TextDrawer::DispLineNumber(
 			)
 		) {
 			// 変更フラグ
-			if (TypeSupport(view, COLORIDX_GYOU_MOD).IsDisp()) {	// 2006.12.12 ryoji
+			if (TypeSupport(view, COLORIDX_GYOU_MOD).IsDisp()) {
 				nColorIndex = COLORIDX_GYOU_MOD;	// 行番号（変更行）
 				bGyouMod = true;
 			}
@@ -430,7 +428,7 @@ void TextDrawer::DispLineNumber(
 			bTrans = view.IsBkBitmap() && textType.GetBackColor() == gyouModType.GetBackColor();
 		}
 	}
-	// 2014.01.29 Moca 背景色がテキストと同じなら、透過色として行背景色を適用
+	// 背景色がテキストと同じなら、透過色として行背景色を適用
 	if (bgcolor == textType.GetBackColor()) {
 		bgcolor = backType.GetBackColor();
 		bTrans = view.IsBkBitmap() && textType.GetBackColor() == bgcolor;
@@ -483,7 +481,7 @@ void TextDrawer::DispLineNumber(
 				_itow(nLineNum + 1, szLineNum, 10);
 			}
 			nLineCols = wcslen(szLineNum);
-			nLineNumCols = nLineCols; // 2010.08.17 Moca 位置決定に行番号区切りは含めない
+			nLineNumCols = nLineCols;
 
 			// 行番号区切り 0=なし 1=縦線 2=任意
 			if (typeConfig.nLineTermType == 2) {

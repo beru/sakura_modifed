@@ -40,7 +40,6 @@ void PluginManager::UnloadAllPlugin()
 		delete *it;
 	}
 	
-	// 2010.08.04 Moca plugins.claer‚·‚é
 	plugins.clear();
 }
 

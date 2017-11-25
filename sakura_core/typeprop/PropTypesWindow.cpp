@@ -472,7 +472,7 @@ int PropTypesWindow::GetData(HWND hwndDlg)
 	::DlgItem_GetText(hwndDlg, IDC_EDIT_LINETERMCHAR, szLineTermChar, 2);
 	types.cLineTermChar = szLineTermChar[0];
 
-	// çsî‘çÜÇÃç≈è¨åÖêî		// í«â¡ 2014.08.02 katze
+	// çsî‘çÜÇÃç≈è¨åÖêî
 	types.nLineNumWidth = ::GetDlgItemInt(hwndDlg, IDC_EDIT_LINENUMWIDTH, NULL, FALSE);
 	if (types.nLineNumWidth < LINENUMWIDTH_MIN) {
 		types.nLineNumWidth = LINENUMWIDTH_MIN;

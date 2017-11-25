@@ -26,7 +26,6 @@ public:
 		Range* pSelect);	// 現在のカーソル位置によって選択範囲を変更
 
 	// 選択範囲を指定する(原点未選択)
-	// 2005.06.24 Moca
 	void SetSelectArea(const Range& range) {
 		selectBgn.Set(range.GetFrom());
 		select = range;

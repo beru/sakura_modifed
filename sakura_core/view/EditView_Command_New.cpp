@@ -86,13 +86,13 @@ void EditView::InsertData_CEditView(
 		GetDocument().docEditor.opeBuf.GetNoModifiedSeq()): true;
 
 	// 禁則の有無
-	// 禁則がある場合は1行前から再描画を行う	@@@ 2002.04.19 MIK
+	// 禁則がある場合は1行前から再描画を行う
 	bool bKinsoku = 0
 			|| pTypeData->bWordWrap
-			|| pTypeData->bKinsokuHead	//@@@ 2002.04.19 MIK
-			|| pTypeData->bKinsokuTail	//@@@ 2002.04.19 MIK
-			|| pTypeData->bKinsokuRet	//@@@ 2002.04.19 MIK
-			|| pTypeData->bKinsokuKuto;	//@@@ 2002.04.19 MIK
+			|| pTypeData->bKinsokuHead
+			|| pTypeData->bKinsokuTail
+			|| pTypeData->bKinsokuRet
+			|| pTypeData->bKinsokuKuto;
 
 	size_t nLineAllColLen;
 	ASSERT_GE(ptInsertPos.x, 0);
@@ -100,14 +100,14 @@ void EditView::InsertData_CEditView(
 	NativeW	mem(L"");
 	OpeLineData insData;
 	if (pLine) {
-		// 更新が前行からになる可能性を調べる	// 2009.02.17 ryoji
+		// 更新が前行からになる可能性を調べる
 		// ※折り返し行頭への句読点入力で前の行だけが更新される場合もある
 		// ※挿入位置は行途中でも句読点入力＋ワードラップで前の文字列から続けて前行に回り込む場合もある
 		if (pLayout->GetLogicOffset() && bKinsoku) {	// 折り返しレイアウト行か？
 			bHintPrev = true;	// 更新が前行からになる可能性がある
 		}
 
-		// 更新が次行からになる可能性を調べる	// 2009.02.17 ryoji
+		// 更新が次行からになる可能性を調べる
 		// ※折り返し行末への文字入力や文字列貼り付けで現在行は更新されず次行以後が更新される場合もある
 		// 指定された桁に対応する行のデータ内の位置を調べる
 		size_t nIdxFrom = LineColumnToIndex2(pLayout, ptInsertPos.x, &nLineAllColLen);
@@ -142,7 +142,7 @@ void EditView::InsertData_CEditView(
 			StringToOpeLineData(pData, nDataLen, insData, opeSeq);
 		}
 	}else {
-		// 更新が前行からになる可能性を調べる	// 2009.02.17 ryoji
+		// 更新が前行からになる可能性を調べる
 		const Layout* pLayoutWk = pEditDoc->layoutMgr.GetBottomLayout();
 		if (pLayoutWk && pLayoutWk->GetLayoutEol() == EolType::None && bKinsoku) {	// 折り返しレイアウト行か？（前行の終端で調査）
 			bHintPrev = true;	// 更新が前行からになる可能性がある
@@ -186,21 +186,18 @@ void EditView::InsertData_CEditView(
 	size_t nLineLen2;
 	const wchar_t* pLine2 = pEditDoc->layoutMgr.GetLineStr(pptNewPos->y, &nLineLen2, &pLayout);
 	if (pLine2) {
-		// 2007.10.15 kobake 既にレイアウト単位なので変換は不要
-		pptNewPos->x = pptNewPos->x; //LineIndexToColumn(pLayout, pptNewPos->x);
+		pptNewPos->x = pptNewPos->x;
 	}
 
-	//	Aug. 14, 2005 genta 折り返し幅をLayoutMgrから取得するように
 	if (pptNewPos->x >= (int)pEditDoc->layoutMgr.GetMaxLineKetas()) {
 		if (pTypeData->bKinsokuRet
 		 || pTypeData->bKinsokuKuto
-		) {	//@@@ 2002.04.16 MIK
-			if (pEditDoc->layoutMgr.IsEndOfLine(*pptNewPos)) {	//@@@ 2002.04.18
+		) {
+			if (pEditDoc->layoutMgr.IsEndOfLine(*pptNewPos)) {
 				pptNewPos->x = 0;
 				pptNewPos->y++;
 			}
 		}else {
-			// Oct. 7, 2002 YAZAKI
 			pptNewPos->x = (int)(pLayout->GetNextLayout() ? pLayout->GetNextLayout()->GetIndent() : 0);
 			pptNewPos->y++;
 		}
@@ -244,7 +241,7 @@ void EditView::InsertData_CEditView(
 				// スクロールバーの状態を更新する
 				AdjustScrollBars();
 
-				// 描画開始行位置を調整する	// 2009.02.17 ryoji
+				// 描画開始行位置を調整する
 				if (bHintPrev) {	// 更新が前行からになる可能性がある
 					--nStartLine;
 				}
@@ -256,7 +253,7 @@ void EditView::InsertData_CEditView(
 				nLayoutTop = nStartLine;
 				nLayoutBottom = -1;
 			}else {
-				// 描画開始行位置と描画行数を調整する	// 2009.02.17 ryoji
+				// 描画開始行位置と描画行数を調整する
 				if (bHintPrev) {	// 更新が前行からになる可能性がある
 					--nStartLine;
 					++nModifyLayoutLinesOld;
@@ -293,16 +290,6 @@ void EditView::InsertData_CEditView(
 					GetDocument().docEditor.nOpeBlkRedawCount++;
 				}
 			}
-
-#if 0 // すでに行頭から描画済み
-			// 行番号（変更行）表示は改行単位の行頭から更新する必要がある	// 2009.03.26 ryoji
-			if (bLineModifiedChange) {	// 無変更だった行が変更された
-				const Layout* pLayoutWk = pEditDoc->layoutMgr.SearchLineByLayoutY(nStartLine);
-				if (pLayoutWk && pLayoutWk->GetLogicOffset()) {	// 折り返しレイアウト行か？
-					Call_OnPaint(PaintAreaType::LineNumber, false);
-				}
-			}
-#endif
 		}
 	}
 
@@ -413,7 +400,7 @@ void EditView::DeleteData(
 
 	auto& selInfo = GetSelectionInfo();
 	auto& caret = GetCaret();
-	// テキストの存在しないエリアの削除は、選択範囲のキャンセルとカーソル移動のみとする	// 2008.08.05 ryoji
+	// テキストの存在しないエリアの削除は、選択範囲のキャンセルとカーソル移動のみとする
 	if (selInfo.IsTextSelected()) {		// テキストが選択されているか
 		if (IsEmptyArea(selInfo.select.GetFrom(), selInfo.select.GetTo(), true, selInfo.IsBoxSelecting())) {
 			// カーソルを選択範囲の左上に移動
@@ -762,7 +749,6 @@ bool EditView::ReplaceData_CEditView3(
 
 
 	// 現在の選択範囲を非選択状態に戻す
-	// 2009.07.18 ryoji 置換後→置換前に位置を変更（置換後だと反転が不正になって汚い Wiki BugReport/43）
 	GetSelectionInfo().DisableSelectArea(bRedraw);
 
 	// 文字列置換
@@ -803,7 +789,7 @@ bool EditView::ReplaceData_CEditView3(
 			if (LRArg.nAddLineNum != 0) {
 				Call_OnPaint((int)PaintAreaType::LineNumber | (int)PaintAreaType::Body, false);
 			}else {
-				// 文書末が改行なし→ありに変化したら				// 2009.11.11 ryoji
+				// 文書末が改行なし→ありに変化したら
 				// EOFのみ行が追加になるので、1行余分に描画する。
 				// （文書末が改行あり→なしに変化する場合の末尾EOF消去は描画関数側で行われる）
 				int nAddLine = (LRArg.ptLayoutNew.y > LRArg.delRange.GetTo().y)? 1: 0;
@@ -852,15 +838,6 @@ bool EditView::ReplaceData_CEditView3(
 					GetDocument().docEditor.nOpeBlkRedawCount++;
 				}
 				bUpdateAll = false;
-#if 0 // すでに1行まとめて描画済み
-				// 行番号（変更行）表示は改行単位の行頭から更新する必要がある	// 2009.03.26 ryoji
-				if (bLineModifiedChange) {	// 無変更だった行が変更された
-					const Layout* pLayoutWk = pEditDoc->layoutMgr.SearchLineByLayoutY( LRArg.nModLineFrom );
-					if (pLayoutWk && pLayoutWk->GetLogicOffset()) {	// 折り返しレイアウト行か？
-						Call_OnPaint(PaintAreaType::LineNumber, false);
-					}
-				}
-#endif
 			}
 		}
 	}
@@ -912,7 +889,7 @@ bool EditView::ReplaceData_CEditView3(
 }
 
 
-// 2005.10.11 ryoji 前の行にある末尾の空白を削除
+// 前の行にある末尾の空白を削除
 void EditView::RTrimPrevLine(void)
 {
 	auto& caret = GetCaret();

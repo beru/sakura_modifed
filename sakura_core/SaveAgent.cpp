@@ -32,7 +32,7 @@ CallbackResultType SaveAgent::OnCheckSave(SaveInfo* pSaveInfo)
 		return CallbackResultType::Interrupt;
 	}
 
-	// 他ウィンドウで開いているか確認する	// 2009.04.07 ryoji
+	// 他ウィンドウで開いているか確認する
 	if (!pSaveInfo->IsSamePath(pDoc->docFile.GetFilePath())) {
 		HWND hwndOwner;
 		if (ShareData::getInstance().IsPathOpened(pSaveInfo->filePath, &hwndOwner)) {
@@ -55,7 +55,7 @@ CallbackResultType SaveAgent::OnCheckSave(SaveInfo* pSaveInfo)
 		}
 		try {
 			bool bExist = fexist(pSaveInfo->filePath);
-			Stream out(pSaveInfo->filePath, _T("ab"), true);	// 実際の保存は "wb" だがここは "ab"（ファイル内容は破棄しない）でチェックする	// 2009.08.21 ryoji
+			Stream out(pSaveInfo->filePath, _T("ab"), true);	// 実際の保存は "wb" だがここは "ab"（ファイル内容は破棄しない）でチェックする
 			out.Close();
 			if (!bExist) {
 				::DeleteFile(pSaveInfo->filePath);

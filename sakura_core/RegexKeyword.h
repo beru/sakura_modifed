@@ -9,12 +9,9 @@ struct TypeConfig;
 #define USE_PARENT	// 親を使ってキーワード格納領域を削減する。
 
 
-//@@@ 2001.11.17 add start MIK
 struct RegexKeywordInfo {
 	int	nColorIndex;		// 色指定番号
 };
-//@@@ 2001.11.17 add end MIK
-
 
 // 正規表現キーワード検索情報構造体
 struct RegexInfo {

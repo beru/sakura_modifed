@@ -198,7 +198,7 @@ void ShareData_IO::ShareData_IO_Mru(DataProfile& profile)
 	for (i=0; i<nSize; ++i) {
 		auto_sprintf( szKeyName, LTEXT("MRUFOLDER[%02d]"), i );
 		profile.IOProfileData(pszSecName, szKeyName, pShare->history.szOPENFOLDERArr[i]);
-		// ‚¨‹C‚É“ü‚è	//@@@ 2003.04.08 MIK
+		// ‚¨‹C‚É“ü‚è
 		wcscat(szKeyName, LTEXT(".bFavorite"));
 		profile.IOProfileData(pszSecName, szKeyName, pShare->history.bOPENFOLDERArrFavorite[i]);
 	}
@@ -1256,7 +1256,7 @@ void ShareData_IO::ShareData_IO_Type_One(DataProfile& profile, TypeConfig& types
 	wchar_t	szKeyData[MAX_REGEX_KEYWORDLEN + 20];
 	assert(100 < MAX_REGEX_KEYWORDLEN + 20);
 
-	static const wchar_t* pszForm = LTEXT("%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d");	// MIK
+	static const wchar_t* pszForm = LTEXT("%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d");
 	auto_strcpy(szKeyName, LTEXT("nInts"));
 	if (profile.IsReadingMode()) {
 		if (profile.IOProfileData(pszSecName, szKeyName, MakeStringBufferW(szKeyData))) {
@@ -2185,7 +2185,7 @@ void ShareData_IO_Sub_LogFont(DataProfile& profile, const wchar_t* pszSecName,
 	const wchar_t* pszForm = LTEXT("%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d");
 	wchar_t szKeyData[1024];
 
-	profile.IOProfileData(pszSecName, pszKeyPointSize, nPointSize);	// 2009.10.01 ryoji
+	profile.IOProfileData(pszSecName, pszKeyPointSize, nPointSize);
 	if (profile.IsReadingMode()) {
 		if (profile.IOProfileData(pszSecName, pszKeyLf, MakeStringBufferW(szKeyData))) {
 			int buf[13];

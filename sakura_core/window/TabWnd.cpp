@@ -26,8 +26,7 @@
 #endif
 //#endif
 
-// 2006.01.30 ryoji タブのサイズ／位置に関する定義
-// 2009.10.01 ryoji 高DPI対応スケーリング
+// タブのサイズ／位置に関する定義
 #define TAB_MARGIN_TOP		DpiScaleY(3)
 #define TAB_MARGIN_LEFT		DpiScaleX(1)
 #define TAB_MARGIN_RIGHT	DpiScaleX(47)
@@ -46,7 +45,7 @@
 
 static const RECT rcBtnBase = { 0, 0, 16, 16 };
 
-// 2006.02.01 ryoji タブ一覧メニュー用データ
+// タブ一覧メニュー用データ
 typedef struct {
 	HWND	hwnd;
 	int		iItem;
@@ -100,7 +99,6 @@ LRESULT CALLBACK TabWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 // メッセージ配送
 LRESULT TabWnd::TabWndDispatchEvent(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-	// 2005.09.01 ryoji タブ部のメッセージ処理を個別に関数化し、タブ順序変更の処理を追加
 	switch (uMsg) {
 	case WM_LBUTTONDOWN:
 		return OnTabLButtonDown(wParam, lParam);
@@ -133,7 +131,7 @@ LRESULT TabWnd::TabWndDispatchEvent(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
 		return OnTabNotify(wParam, lParam);
 
 	case WM_HSCROLL:
-		::InvalidateRect(GetHwnd(), NULL, TRUE);	// アクティブタブの位置が変わるのでトップバンドを更新する	// 2006.03.27 ryoji
+		::InvalidateRect(GetHwnd(), NULL, TRUE);	// アクティブタブの位置が変わるのでトップバンドを更新する
 		break;
 
 	case WM_THEMECHANGED:
@@ -258,7 +256,7 @@ LRESULT TabWnd::OnTabLButtonUp(WPARAM wParam, LPARAM lParam)
 		break;
 	}
 
-	BreakDrag();	// 2006.01.28 ryoji ドラッグ状態を解除する(関数化)
+	BreakDrag();
 
 	return 0L;
 }
@@ -731,12 +729,12 @@ TabWnd::TabWnd()
 	Wnd(_T("::TabWnd")),
 	eTabPosition(TabPosition::None),
 	eDragState(DRAG_NONE),
-	bVisualStyle(false),		// 2007.04.01 ryoji
-	bHovering(false),			// 2006.02.01 ryoji
-	bListBtnHilighted(false),	// 2006.02.01 ryoji
-	bCloseBtnHilighted(false),	// 2006.10.21 ryoji
-	eCaptureSrc(CAPT_NONE),		// 2006.11.30 ryoji
-	nTabBorderArray(NULL),		// 2012.04.22 syat
+	bVisualStyle(false),
+	bHovering(false),
+	bListBtnHilighted(false),
+	bCloseBtnHilighted(false),
+	eCaptureSrc(CAPT_NONE),
+	nTabBorderArray(NULL),
 	nTabHover(-1),
 	bTabCloseHover(false),
 	nTabCloseCapture(-1),
@@ -752,7 +750,6 @@ TabWnd::TabWnd()
 	hwndToolTip = NULL;
 	hIml = NULL;
 
-	// 2006.02.17 ryoji ImageList_Duplicate() のアドレスを取得する
 	// （IE4.0 未満の環境でも動作可能なように動的ロード）
     HINSTANCE hinst = ::GetModuleHandle(TEXT("comctl32"));
     *(FARPROC*)&realImageList_Duplicate = ::GetProcAddress(hinst, "ImageList_Duplicate");
@@ -775,12 +772,12 @@ HWND TabWnd::Open(HINSTANCE hInstance, HWND hwndParent)
 	hFont = NULL;
 	g_pOldWndProc = nullptr;
 	hwndToolTip = NULL;
-	bVisualStyle = ::IsVisualStyle();	// 2007.04.01 ryoji
-	eDragState = DRAG_NONE;	//	2005.09.29 ryoji
-	bHovering = false;			// 2006.02.01 ryoji
-	bListBtnHilighted = false;	// 2006.02.01 ryoji
-	bCloseBtnHilighted = false;	// 2006.10.21 ryoji
-	eCaptureSrc = CAPT_NONE;	// 2006.11.30 ryoji
+	bVisualStyle = ::IsVisualStyle();
+	eDragState = DRAG_NONE;
+	bHovering = false;
+	bListBtnHilighted = false;
+	bCloseBtnHilighted = false;
+	eCaptureSrc = CAPT_NONE;
 	eTabPosition = TabPosition::None;
 
 	// ウィンドウクラス作成
@@ -789,8 +786,6 @@ HWND TabWnd::Open(HINSTANCE hInstance, HWND hwndParent)
 		NULL,								// Handle to the class icon.
 		NULL,								// Handle to a small icon
 		::LoadCursor(NULL, IDC_ARROW),		// Handle to the class cursor.
-		// 2006.01.30 ryoji 背景は WM_PAINT で描画するほうがちらつかない（と思う）
-		//(HBRUSH)(COLOR_3DFACE + 1),			// Handle to the class background brush.
 		NULL,								// Handle to the class background brush.
 		NULL,								// Pointer to a null-terminated character string that specifies the resource name of the class menu, as the name appears in the resource file.
 		pszClassName						// Pointer to a null-terminated string or is an atom.
@@ -805,8 +800,7 @@ HWND TabWnd::Open(HINSTANCE hInstance, HWND hwndParent)
 		0,									// extended window style
 		pszClassName,						// Pointer to a null-terminated string or is an atom.
 		pszClassName,						// pointer to window name
-		WS_CHILD/* | WS_VISIBLE*/,			// window style	// 2007.03.08 ryoji WS_VISIBLE 除去
-		// 2006.01.30 ryoji 初期配置見直し
+		WS_CHILD/* | WS_VISIBLE*/,			// window style
 		// ※タブ非表示 -> 表示切替で編集ウィンドウにゴミが表示されることがあるので初期幅はゼロに
 		CW_USEDEFAULT,						// horizontal position of window
 		0,									// vertical position of window
@@ -819,10 +813,7 @@ HWND TabWnd::Open(HINSTANCE hInstance, HWND hwndParent)
 	hwndTab = ::CreateWindow(
 		WC_TABCONTROL,
 		_T(""),
-		//	2004.05.22 MIK 消えるTAB対策でWS_CLIPSIBLINGS追加
-		// 2007.12.06 ryoji TCS_TOOLTIPS追加（タブ用のツールチップはタブに作らせる）
 		WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | TCS_TOOLTIPS,
-		// 2006.01.30 ryoji 初期配置見直し
 		TAB_MARGIN_LEFT,
 		TAB_MARGIN_TOP,
 		rcParent.right - rcParent.left - (TAB_MARGIN_LEFT + TAB_MARGIN_RIGHT),
@@ -839,7 +830,7 @@ HWND TabWnd::Open(HINSTANCE hInstance, HWND hwndParent)
 		// スタイルを変更する。
 		UINT lngStyle;
 		lngStyle = (UINT)::GetWindowLongPtr(hwndTab, GWL_STYLE);
-		//	Feb. 14, 2004 MIK マルチライン化の変更混入戻し
+		// マルチライン化の変更混入戻し
 		lngStyle &= ~(TCS_BUTTONS | TCS_MULTILINE);
 		if (pShareData->common.tabBar.bTabMultiLine) {
 			lngStyle |= TCS_MULTILINE;
@@ -847,13 +838,13 @@ HWND TabWnd::Open(HINSTANCE hInstance, HWND hwndParent)
 			lngStyle |= TCS_SINGLELINE;
 		}
 		bMultiLine = pShareData->common.tabBar.bTabMultiLine;
-		lngStyle |= TCS_TABS | TCS_FOCUSNEVER | TCS_FIXEDWIDTH | TCS_FORCELABELLEFT;	// 2006.01.28 ryoji
+		lngStyle |= TCS_TABS | TCS_FOCUSNEVER | TCS_FIXEDWIDTH | TCS_FORCELABELLEFT;
 		//lngStyle &= ~(TCS_BUTTONS | TCS_SINGLELINE);	//2004.01.31
 		//lngStyle |= TCS_TABS | TCS_MULTILINE;
 		::SetWindowLongPtr(hwndTab, GWL_STYLE, lngStyle);
-		TabCtrl_SetItemSize(hwndTab, MAX_TABITEM_WIDTH, TAB_ITEM_HEIGHT);	// 2006.01.28 ryoji
+		TabCtrl_SetItemSize(hwndTab, MAX_TABITEM_WIDTH, TAB_ITEM_HEIGHT);
 
-		// タブのツールチップスタイルを変更する	// 2007.12.06 ryoji
+		// タブのツールチップスタイルを変更する
 		HWND hwndToolTips;
 		hwndToolTips = TabCtrl_GetToolTips(hwndTab);
 		lngStyle = (UINT)::GetWindowLongPtr(hwndToolTips, GWL_STYLE);
@@ -868,7 +859,6 @@ HWND TabWnd::Open(HINSTANCE hInstance, HWND hwndParent)
 		::SendMessage(hwndTab, WM_SETFONT, (WPARAM)hFont, MAKELPARAM(TRUE, 0));
 
 		// ツールチップを作成する。（タブではなく「閉じる」などのボタン用）
-		// 2005.08.11 ryoji 「重ねて表示」のZ-orderがおかしくなるのでTOPMOST指定を解除
 		hwndToolTip = ::CreateWindowEx(
 			0,
 			TOOLTIPS_CLASS,
@@ -884,7 +874,7 @@ HWND TabWnd::Open(HINSTANCE hInstance, HWND hwndParent)
 			NULL
 			);
 
-		// ツールチップをマルチライン可能にする（SHRT_MAX: Win95でINT_MAXだと表示されない）	// 2007.03.03 ryoji
+		// ツールチップをマルチライン可能にする（SHRT_MAX: Win95でINT_MAXだと表示されない）
 		Tooltip_SetMaxTipWidth(hwndToolTip, SHRT_MAX);
 
 		// タブバーにツールチップを追加する
@@ -901,7 +891,7 @@ HWND TabWnd::Open(HINSTANCE hInstance, HWND hwndParent)
 		ti.rect.bottom = 0;
 		Tooltip_AddTool(hwndToolTip, &ti);
 
-		// 2006.02.22 ryoji イメージリストを初期化する
+		// イメージリストを初期化する
 		InitImageList();
 
 		Refresh();	// タブ非表示から表示に切り替わったときに各ウィンドウの情報をタブ登録する必要がある
@@ -969,9 +959,9 @@ LRESULT TabWnd::OnSize(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		);
 	}
 	
-	LayoutTab();	// 2006.01.28 ryoji タブのレイアウト調整処理
+	LayoutTab();	// タブのレイアウト調整処理
 
-	::InvalidateRect(GetHwnd(), NULL, FALSE);	//	2006.02.01 ryoji
+	::InvalidateRect(GetHwnd(), NULL, FALSE);
 
 	return 0L;
 }
@@ -991,7 +981,7 @@ LRESULT TabWnd::OnDestroy(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		hFont = NULL;
 	}
 
-	// 2006.01.28 ryoji イメージリストを削除
+	// イメージリストを削除
 	if (hIml) {
 		ImageList_Destroy(hIml);
 		hIml = NULL;
@@ -1360,7 +1350,7 @@ LRESULT TabWnd::OnMouseMove(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	// カーソルがボタン上を出入りするときに再描画
 	RECT rcBtn;
 	LPTSTR pszTip = (LPTSTR)-1L;
-	TCHAR szText[80];	// 2007.12.06 ryoji メンバ変数を使う必要は無いのでローカル変数にした
+	TCHAR szText[80];
 
 	GetListBtnRect(&rc, &rcBtn);
 	bHovering = ::PtInRect(&rcBtn, pt) != FALSE;
@@ -1368,7 +1358,7 @@ LRESULT TabWnd::OnMouseMove(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		bListBtnHilighted = bHovering;
 		::InvalidateRect(hwnd, &rcBtn, FALSE);
 
-		// ツールチップ用の文字列作成	// 2007.03.05 ryoji
+		// ツールチップ用の文字列作成
 		pszTip = NULL;	// ボタンの外に出るときは消す
 		if (bListBtnHilighted) {	// ボタンに入ってきた?
 			pszTip = szText;
@@ -1382,7 +1372,7 @@ LRESULT TabWnd::OnMouseMove(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		bCloseBtnHilighted = bHovering;
 		::InvalidateRect(hwnd, &rcBtn, FALSE);
 
-		// ツールチップ用の文字列作成	// 2007.03.05 ryoji
+		// ツールチップ用の文字列作成
 		pszTip = NULL;	// ボタンの外に出るときは消す
 		if (bCloseBtnHilighted) {	// ボタンに入ってきた?
 			pszTip = szText;
@@ -1401,7 +1391,7 @@ LRESULT TabWnd::OnMouseMove(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		}
 	}
 	
-	// ツールチップ更新	// 2007.03.05 ryoji
+	// ツールチップ更新
 	if (pszTip != (LPTSTR)-1L) {	// ボタンへの出入りがあった?
 		TOOLINFO ti = {0};
 		ti.cbSize       = CCSIZEOF_STRUCT(TOOLINFO, lpszText);
@@ -1450,12 +1440,12 @@ LRESULT TabWnd::OnPaint(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 	// ボタンを描画する
 	DrawListBtn(gr, &rc);
-	DrawCloseBtn(gr, &rc);	// 2006.10.21 ryoji 追加
+	DrawCloseBtn(gr, &rc);
 
 	// 上側に境界線を描画する
 	::DrawEdge(gr, &rc, EDGE_ETCHED, BF_TOP);
 
-	// Windowsクラシックスタイルの場合はアクティブタブの上部にトップバンドを描画する	// 2006.03.27 ryoji
+	// Windowsクラシックスタイルの場合はアクティブタブの上部にトップバンドを描画する
 	if (!bVisualStyle) {
 		int nCurSel = TabCtrl_GetCurSel(hwndTab);
 		if (nCurSel >= 0) {
@@ -1547,7 +1537,7 @@ void TabWnd::TabWindowNotify(WPARAM wParam, LPARAM lParam)
 	HWND	hwndUpDown;
 	DWORD	nScrollPos;
 
-	BreakDrag();	// 2006.01.28 ryoji ドラッグ状態を解除する(関数化)
+	BreakDrag();	// ドラッグ状態を解除する(関数化)
 
 	nCount = TabCtrl_GetItemCount(hwndTab);
 	if (nCount <= 0) {
@@ -1568,7 +1558,7 @@ void TabWnd::TabWindowNotify(WPARAM wParam, LPARAM lParam)
 			tcitem.mask    = TCIF_TEXT | TCIF_PARAM;
 			tcitem.pszText = szName;
 			tcitem.lParam  = (LPARAM)lParam;
-			// 2006.01.28 ryoji タブにアイコンイメージを追加する
+			// タブにアイコンイメージを追加する
 			tcitem.mask |= TCIF_IMAGE;
 			tcitem.iImage = GetImageIndex(NULL);
 			TabCtrl_InsertItem(hwndTab, nCount, &tcitem);
@@ -1599,10 +1589,10 @@ void TabWnd::TabWindowNotify(WPARAM wParam, LPARAM lParam)
 			}
 			TabCtrl_DeleteItem(hwndTab, nIndex);
 
-			// 2005.09.01 ryoji スクロール位置調整
+			// スクロール位置調整
 			// （右端のほうのタブアイテムを削除したとき、スクロール可能なのに右に余白ができることへの対策）
 			hwndUpDown = ::FindWindowEx(hwndTab, NULL, UPDOWN_CLASS, 0);	// タブ内の Up-Down コントロール
-			if (hwndUpDown && ::IsWindowVisible(hwndUpDown)) {	// 2007.09.24 ryoji hwndUpDown可視の条件追加
+			if (hwndUpDown && ::IsWindowVisible(hwndUpDown)) {	// hwndUpDown可視の条件追加
 				nScrollPos = LOWORD(UpDown_GetPos(hwndUpDown));
 
 				// 現在位置 nScrollPos と画面表示とを一致させる
@@ -1624,7 +1614,7 @@ void TabWnd::TabWindowNotify(WPARAM wParam, LPARAM lParam)
 				// 自タブアイテムを強制的に可視位置にするために、
 				// 自タブアイテム選択前に一時的に画面左端のタブアイテムを選択する
 				hwndUpDown = ::FindWindowEx(hwndTab, NULL, UPDOWN_CLASS, 0);	// タブ内の Up-Down コントロール
-				nScrollPos = (hwndUpDown && ::IsWindowVisible(hwndUpDown))? LOWORD(UpDown_GetPos(hwndUpDown)): 0;	// 2007.09.24 ryoji hwndUpDown可視の条件追加
+				nScrollPos = (hwndUpDown && ::IsWindowVisible(hwndUpDown))? LOWORD(UpDown_GetPos(hwndUpDown)): 0;
 				TabCtrl_SetCurSel(hwndTab, nScrollPos);
 				TabCtrl_SetCurSel(hwndTab, nIndex);
 
@@ -1660,8 +1650,6 @@ void TabWnd::TabWindowNotify(WPARAM wParam, LPARAM lParam)
 				tcitem.mask    = TCIF_TEXT | TCIF_PARAM;
 				tcitem.pszText = szName;
 				tcitem.lParam  = lParam;
-	
-				// 2006.01.28 ryoji タブのアイコンイメージを変更する
 				tcitem.mask |= TCIF_IMAGE;
 				tcitem.iImage = GetImageIndex(p);
 				TabCtrl_SetItem(hwndTab, nIndex, &tcitem);
@@ -1677,7 +1665,6 @@ void TabWnd::TabWindowNotify(WPARAM wParam, LPARAM lParam)
 		Refresh(lParam != 0);
 		break;
 
-	// Start 2004.07.14 Kazika 追加
 	// タブモード有効になった場合、まとめられる側のウィンドウは隠れる
 	case TabWndNotifyType::Enable:
 		Refresh();
@@ -1690,9 +1677,7 @@ void TabWnd::TabWindowNotify(WPARAM wParam, LPARAM lParam)
 			HideOtherWindows(GetParentHwnd());
 		}
 		break;
-	// End 2004.07.14 Kazika
 
-	// Start 2004.08.27 Kazika 追加
 	// タブモード無効になった場合、隠れていたウィンドウは表示状態となる
 	case TabWndNotifyType::Disable:
 		Refresh();
@@ -1701,9 +1686,8 @@ void TabWnd::TabWindowNotify(WPARAM wParam, LPARAM lParam)
 			TabWnd_ActivateFrameWindow(GetParentHwnd(), false);
 		}
 		break;
-	// End 2004.08.27 Kazika
 
-	case TabWndNotifyType::Adjust:	// ウィンドウ位置合わせ	// 2007.04.03 ryoji
+	case TabWndNotifyType::Adjust:	// ウィンドウ位置合わせ
 		AdjustWindowPlacement();
 		return;
 
@@ -1720,12 +1704,6 @@ void TabWnd::TabWindowNotify(WPARAM wParam, LPARAM lParam)
 			::ShowWindow(hwndTab, SW_SHOW);
 		}
 	}
-
-//	LayoutTab();	// 2006.01.28 ryoji タブのレイアウト調整処理
-
-	// 更新
-//	::InvalidateRect( hwndTab, NULL, FALSE );
-//	::InvalidateRect( GetHwnd(), NULL, FALSE );		// 2006.10.21 ryoji タブ内ボタン再描画のために追加
 
 	return;
 }
@@ -1782,7 +1760,7 @@ void TabWnd::Refresh(bool bEnsureVisible/* = true*/, bool bRebuild/* = false*/)
 		// 見つからなかったので全タブを削除
 		TabCtrl_DeleteAllItems(hwndTab);
 	}else {
-		::SendMessage(hwndTab, WM_SETREDRAW, (WPARAM)FALSE, (LPARAM)0);	// 2005.09.01 ryoji 再描画禁止
+		::SendMessage(hwndTab, WM_SETREDRAW, (WPARAM)FALSE, (LPARAM)0);
 
 		if (bRebuild) {
 			TabCtrl_DeleteAllItems(hwndTab);	// 作成しなおす
@@ -1855,8 +1833,6 @@ void TabWnd::Refresh(bool bEnsureVisible/* = true*/, bool bRebuild/* = false*/)
 			tcitem.mask    = TCIF_TEXT | TCIF_PARAM;
 			tcitem.pszText = szName;
 			tcitem.lParam  = (LPARAM)node.hWnd;
-
-			// 2006.01.28 ryoji タブにアイコンを追加する
 			tcitem.mask |= TCIF_IMAGE;
 			tcitem.iImage = GetImageIndex(&node);
 
@@ -1864,7 +1840,7 @@ void TabWnd::Refresh(bool bEnsureVisible/* = true*/, bool bRebuild/* = false*/)
 			++j;
 		}
 
-		::SendMessage(hwndTab, WM_SETREDRAW, (WPARAM)TRUE, (LPARAM)0);	// 2005.09.01 ryoji 再描画許可
+		::SendMessage(hwndTab, WM_SETREDRAW, (WPARAM)TRUE, (LPARAM)0);	// 再描画許可
 
 		// 選択タブを可視位置にする
 		if (bEnsureVisible) {
@@ -1956,9 +1932,9 @@ void TabWnd::ShowHideWindow(HWND hwnd, BOOL bDisp)
 			if (pShareData->flags.bEditWndChanging) {
 				return;	// 切替の最中(busy)は要求を無視する
 			}
-			pShareData->flags.bEditWndChanging = true;	// 編集ウィンドウ切替中ON	2007.04.03 ryoji
+			pShareData->flags.bEditWndChanging = true;	// 編集ウィンドウ切替中ON
 
-			// 対象ウィンドウのスレッドに位置合わせを依頼する	// 2007.04.03 ryoji
+			// 対象ウィンドウのスレッドに位置合わせを依頼する
 			DWORD_PTR dwResult;
 			::SendMessageTimeout(
 				hwnd,
@@ -1968,7 +1944,7 @@ void TabWnd::ShowHideWindow(HWND hwnd, BOOL bDisp)
 				SMTO_ABORTIFHUNG | SMTO_BLOCK, 10000, &dwResult);
 		}
 		TabWnd_ActivateFrameWindow(hwnd);
-		pShareData->flags.bEditWndChanging = false;	// 編集ウィンドウ切替中OFF	2007.04.03 ryoji
+		pShareData->flags.bEditWndChanging = false;	// 編集ウィンドウ切替中OFF
 	}else {
 		if (csTabBar.bDispTabWnd && !csTabBar.bDispTabWndMultiWin) {
 			::ShowWindow(hwnd, SW_HIDE);
@@ -2060,7 +2036,7 @@ void TabWnd::TabWnd_ActivateFrameWindow(HWND hwnd, bool bForeground)
 void TabWnd::LayoutTab(void)
 {
 	auto& csTabBar = pShareData->common.tabBar;
-	// フォントを切り替える 2011.12.01 Moca
+	// フォントを切り替える
 	bool bChgFont = (memcmp(&lf, &csTabBar.lf, sizeof(lf)) != 0);
 	int nSizeBoxWidth = 0;
 	if (hwndSizeBox) {
@@ -2317,7 +2293,7 @@ HIMAGELIST TabWnd::ImageList_Duplicate(HIMAGELIST himl)
 		if (hImlNew) {
 			return hImlNew;
 		}
-		realImageList_Duplicate = NULL;	// 2006.06.20 ryoji 失敗時は代替処理に切り替え
+		realImageList_Duplicate = NULL;	// 失敗時は代替処理に切り替え
 	}
 
 	// 本物の ImageList_Duplicate() の代替処理
@@ -2430,14 +2406,14 @@ void TabWnd::DrawCloseBtn(Graphics& gr, const LPRECT lprcClient)
 	RECT rcBtn;
 	GetCloseBtnRect(lprcClient, &rcBtn);
 
-	// ボタンの左側にセパレータを描画する	// 2007.02.27 ryoji
+	// ボタンの左側にセパレータを描画する
 	gr.SetPen(::GetSysColor(COLOR_3DSHADOW));
 	::MoveToEx(gr, rcBtn.left - DpiScaleX(4), rcBtn.top + 1, NULL);
 	::LineTo(gr, rcBtn.left - DpiScaleX(4), rcBtn.bottom - 1);
 
 	DrawBtnBkgnd(gr, &rcBtn, bCloseBtnHilighted);
 
-	// 描画イメージを矩形中央にもってくる	// 2009.10.01 ryoji
+	// 描画イメージを矩形中央にもってくる
 	rcBtn.left = rcBtn.left + ((rcBtn.right - rcBtn.left) - (rcBtnBase.right - rcBtnBase.left)) / 2;
 	rcBtn.top = rcBtn.top + ((rcBtn.bottom - rcBtn.top) - (rcBtnBase.bottom - rcBtnBase.top)) / 2;
 	rcBtn.right = rcBtn.left + (rcBtnBase.right - rcBtnBase.left);
@@ -2449,7 +2425,7 @@ void TabWnd::DrawCloseBtn(Graphics& gr, const LPRECT lprcClient)
 	auto& csTabBar = pShareData->common.tabBar;
 	if (csTabBar.bDispTabWnd &&
 		!csTabBar.bDispTabWndMultiWin &&
-		!csTabBar.bTab_CloseOneWin			// 2007.02.13 ryoji 条件追加（ウィンドウの閉じるボタンは全部閉じる）
+		!csTabBar.bTab_CloseOneWin
 	) {
 		DrawCloseFigure(gr, rcBtn);
 	}else {
@@ -2500,7 +2476,7 @@ void TabWnd::GetListBtnRect(const LPRECT lprcClient, LPRECT lprc)
 void TabWnd::GetCloseBtnRect(const LPRECT lprcClient, LPRECT lprc)
 {
 	*lprc = rcBtnBase;
-	DpiScaleRect(lprc);	// 2009.10.01 ryoji 高DPI対応スケーリング
+	DpiScaleRect(lprc);
 	int nSizeBoxWidth = 0;
 	if (hwndSizeBox) {
 		nSizeBoxWidth = ::GetSystemMetrics( SM_CXVSCROLL );
@@ -2650,7 +2626,6 @@ LRESULT TabWnd::TabListMenu(POINT pt, bool bSel/* = true*/, bool bFull/* = false
 		delete[] pEditNode;
 
 		// メニューを作成する
-		// 2007.02.28 ryoji 表示切替をメニューに追加
 		int iMenuSel = -1;
 		UINT uFlags = MF_BYPOSITION | (hIml? MF_OWNERDRAW: MF_STRING);
 		HMENU hMenu = ::CreatePopupMenu();
@@ -2684,7 +2659,6 @@ LRESULT TabWnd::TabListMenu(POINT pt, bool bSel/* = true*/, bool bFull/* = false
 		}
 
 		// メニューを表示する
-		// 2006.04.21 ryoji マルチモニタ対応の修正
 		RECT rcWork;
 		GetMonitorWorkRect(pt, &rcWork);	// モニタのワークエリア
 		int nId = ::TrackPopupMenu(hMenu, TPM_LEFTALIGN | TPM_TOPALIGN | TPM_LEFTBUTTON | TPM_RETURNCMD,

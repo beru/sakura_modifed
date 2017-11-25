@@ -31,11 +31,11 @@ CodeConvertResult ReadManager::ReadFile_To_CDocLineMgr(
 		eCharCode = mediator.CheckKanjiCodeOfFile( pszPath );
 	}
 	if (!IsValidCodeOrCPType(eCharCode)) {
-		eCharCode = type->encoding.eDefaultCodetype;	// 2011.01.24 ryoji デフォルト文字コード
+		eCharCode = type->encoding.eDefaultCodetype;	// デフォルト文字コード
 	}
 	bool bBom;
 	if (eCharCode == type->encoding.eDefaultCodetype) {
-		bBom = type->encoding.bDefaultBom;	// 2011.01.24 ryoji デフォルトBOM
+		bBom = type->encoding.bDefaultBom;	// デフォルトBOM
 	}else {
 		bBom = CodeTypeName( eCharCode ).IsBomDefOn();
 	}
@@ -62,7 +62,6 @@ CodeConvertResult ReadManager::ReadFile_To_CDocLineMgr(
 #endif
 		// ファイルを開く
 		// ファイルを閉じるにはFileCloseメンバ又はデストラクタのどちらかで処理できます
-		//	Jul. 28, 2003 ryoji BOMパラメータ追加
 		fl.FileOpen(type->encoding, pszPath, bBigFile, eCharCode, GetDllShareData().common.file.GetAutoMIMEdecode(), &bBom );
 		pFileInfo->SetBomExist( bBom );
 

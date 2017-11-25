@@ -433,7 +433,6 @@ void Profile::Dump(void)
 {
 #ifdef _DEBUG
 	auto iterEnd = profileData.end();
-	// 2006.02.20 ryoji: map_str_str_iteríœŽž‚ÌC³˜R‚ê‚É‚æ‚éƒRƒ“ƒpƒCƒ‹ƒGƒ‰[C³
 	MYTRACE(_T("\n\nCProfile::DUMP()======================"));
 	for (auto iter=profileData.begin(); iter!=iterEnd; ++iter) {
 		MYTRACE(_T("\n¡strSectionName=%ls"), iter->strSectionName.c_str());

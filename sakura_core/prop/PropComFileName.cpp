@@ -72,7 +72,6 @@ INT_PTR PropFileName::DispatchEvent(
 			col.iSubItem = 1;
 			ListView_InsertColumn(hListView, 1, &col);
 
-			// Apr. 28, 2003 Moca 初期化漏れ修正
 			// ダイアログを開いたときにリストが選択されていてもフィールドが空の場合があった
 			nLastPos_FILENAME = -1;
 
@@ -221,21 +220,17 @@ INT_PTR PropFileName::DispatchEvent(
 		}
 
 		break;	// WM_COMMAND
-//@@@ 2001.02.04 Start by MIK: Popup Help
 	case WM_HELP:
 		{
 			HELPINFO* p = (HELPINFO*) lParam;
-			MyWinHelp((HWND)p->hItemHandle, HELP_WM_HELP, (ULONG_PTR)(LPVOID)p_helpids);	// 2006.10.10 ryoji MyWinHelpに変更に変更
+			MyWinHelp((HWND)p->hItemHandle, HELP_WM_HELP, (ULONG_PTR)(LPVOID)p_helpids);
 		}
 		return TRUE;
-//@@@ 2001.02.04 End
 
-//@@@ 2001.12.22 Start by MIK: Context Menu Help
 	// Context Menu
 	case WM_CONTEXTMENU:
-		MyWinHelp(hwndDlg, HELP_CONTEXTMENU, (ULONG_PTR)(LPVOID)p_helpids);	// 2006.10.10 ryoji MyWinHelpに変更に変更
+		MyWinHelp(hwndDlg, HELP_CONTEXTMENU, (ULONG_PTR)(LPVOID)p_helpids);
 		return TRUE;
-//@@@ 2001.12.22 End
 
 	}
 	return FALSE;

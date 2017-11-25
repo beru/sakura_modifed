@@ -92,7 +92,6 @@ bool EditView::ExecCmd(
 
 	bool bEditable = pEditDoc->IsEditable();
 
-	//	From Here 2006.12.03 maru 引数を拡張のため
 	bool	bGetStdout		= (nFlgOpt & 0x01) != 0;	//	子プロセスの標準出力を得る
 	BOOL	bToEditWindow	= ((nFlgOpt & 0x02) && bEditable) ? TRUE : FALSE;	//	TRUE=編集中のウィンドウ / FALSAE=アウトプットウィンドウ
 	BOOL	bSendStdin		= (nFlgOpt & 0x04) ? TRUE : FALSE;	//	編集中ファイルを子プロセスSTDINに渡す
@@ -114,14 +113,12 @@ bool EditView::ExecCmd(
 	}else {
 		sendEncoding = CODE_SJIS;
 	}
-	//	To Here 2006.12.03 maru 引数を拡張のため
-	// 2010.04.12 Moca 情報出力
 	BOOL bOutputExtInfo	= !bToEditWindow;
 	if (nFlgOpt & 0x20) bOutputExtInfo = TRUE;
 	if (nFlgOpt & 0x40) bOutputExtInfo = FALSE;
 	bool bCurDir = (nFlgOpt & 0x200) == 0x200;
 
-	// 編集中のウィンドウに出力する場合の選択範囲処理用	// 2007.04.29 maru
+	// 編集中のウィンドウに出力する場合の選択範囲処理用
 	Point ptFrom(0, 0);
 	bool bBeforeTextSelected = GetSelectionInfo().IsTextSelected();
 	if (bBeforeTextSelected) {
@@ -139,12 +136,12 @@ bool EditView::ExecCmd(
 	}
 	// hStdOutReadのほうは子プロセスでは使用されないので継承不能にする（子プロセスのリソースを無駄に増やさない）
 	DuplicateHandle(GetCurrentProcess(), hStdOutRead,
-				GetCurrentProcess(), &hStdOutRead,					// 新しい継承不能ハンドルを受け取る	// 2007.01.31 ryoji
+				GetCurrentProcess(), &hStdOutRead,					// 新しい継承不能ハンドルを受け取る
 				0, FALSE,
-				DUPLICATE_CLOSE_SOURCE | DUPLICATE_SAME_ACCESS);	// 元の継承可能ハンドルは DUPLICATE_CLOSE_SOURCE で閉じる	// 2007.01.31 ryoji
+				DUPLICATE_CLOSE_SOURCE | DUPLICATE_SAME_ACCESS);	// 元の継承可能ハンドルは DUPLICATE_CLOSE_SOURCE で閉じる
 
 
-	// From Here 2007.03.18 maru 子プロセスの標準入力ハンドル
+	// 子プロセスの標準入力ハンドル
 	// CDocLineMgr::WriteFileなど既存のファイル出力系の関数のなかには
 	// ファイルハンドルを返すタイプのものがないので、一旦書き出してから
 	// 一時ファイル属性でオープンすることに。
@@ -179,7 +176,6 @@ bool EditView::ExecCmd(
 		bSendStdin = FALSE;
 		hStdIn = GetStdHandle(STD_INPUT_HANDLE);
 		if (!hStdIn) {
-			// 2013.06.12 Moca 標準入力ハンドルを用意する
 			HANDLE hStdInWrite = NULL;
 			if (CreatePipe(&hStdIn, &hStdInWrite, &sa, 1000) == FALSE) {
 				// エラー
@@ -190,7 +186,6 @@ bool EditView::ExecCmd(
 			}
 		}
 	}
-	// To Here 2007.03.18 maru 子プロセスの標準入力ハンドル
 	
 	// CreateProcessに渡すSTARTUPINFOを作成
 	STARTUPINFO	sui = {0};
@@ -213,7 +208,6 @@ bool EditView::ExecCmd(
 		// 実行に失敗した場合、コマンドラインベースのアプリケーションと判断して
 		// command(9x) か cmd(NT) を呼び出す
 
-		// 2010.08.27 Moca システムディレクトリ付加
 		TCHAR szCmdDir[_MAX_PATH];
 		::GetSystemDirectory(szCmdDir, _countof(szCmdDir));
 
@@ -240,7 +234,6 @@ bool EditView::ExecCmd(
 	//	指定されていて，かつ範囲選択が行われていない場合は
 	//	「すべて選択」されているものとして，編集データ全体を
 	//	コマンドの出力結果と置き換える．
-	//	2007.05.20 maru
 	if (1
 		&& !bBeforeTextSelected
 		&& bSendStdin
@@ -281,8 +274,6 @@ bool EditView::ExecCmd(
 			::DlgItem_SetText(dlgCancel.GetHwnd(), IDC_STATIC_CMD, pszCmd);
 		}
 		// 実行したコマンドラインを表示
-		// 2004.09.20 naoh 多少は見やすく・・・
-		// 2006.12.03 maru アウトプットウィンドウにのみ出力
 		if (bOutputExtInfo) {
 			TCHAR szTextDate[1024], szTextTime[1024];
 			SYSTEMTIME systime;
@@ -306,7 +297,6 @@ bool EditView::ExecCmd(
 		const int WORK_NULL_TERMS = sizeof(wchar_t); // 出力用\0の分
 		const int MAX_BUFIDX = 10; // bufidxの分
 		const DWORD MAX_WORK_READ = 1024*5; // 5KiB ReadFileで読み込む限界値
-		// 2010.04.13 Moca バッファサイズの調整 1022 Byte 読み取りを 5KiBに変更
 		// ボトルネックはアウトプットウィンドウへの転送
 		// 相手のプログラムがVC9のstdoutではデフォルトで4096。VC6,VC8やWinXPのtypeコマンドでは1024
 		// テキストモードだと new_cntが改行に\rがつく分だけ向こう側の設定値より多く一度に送られてくる
@@ -399,10 +389,8 @@ bool EditView::ExecCmd(
 						// 読み出した文字列をチェックする
 						// \r\n を \r だけとか漢字の第一バイトだけを出力するのを防ぐ必要がある
 						//@@@ 2002.1.24 YAZAKI 1バイト取りこぼす可能性があった。
-						//	Jan. 28, 2004 Moca 最後の文字はあとでチェックする
 						int j;
 						for (j=0; j<(int)read_cnt-1; ++j) {
-							//	2007.09.10 ryoji
 							if (NativeA::GetSizeOfChar(work, read_cnt, j) == 2) {
 								++j;
 							}else {
@@ -411,7 +399,6 @@ bool EditView::ExecCmd(
 								}
 							}
 						}
-						//	From Here Jan. 28, 2004 Moca
 						//	改行コードが分割されるのを防ぐ
 						if ((DWORD)j == read_cnt - 1) {
 							if (_IS_SJIS_1(work[j])) {
@@ -424,10 +411,8 @@ bool EditView::ExecCmd(
 								j = read_cnt;
 							}
 						}
-						//	To Here Jan. 28, 2004 Moca
 						if (j == (int)read_cnt) {	// ぴったり出力できる場合
 							work[read_cnt] = '\0';
-							//	2006.12.03 maru アウトプットウィンドウor編集中のウィンドウ分岐追加
 							if (!oa.OutputA(work, read_cnt)) {
 								goto finish;
 							}
@@ -435,7 +420,6 @@ bool EditView::ExecCmd(
 						}else {
 							char tmp = work[read_cnt-1];
 							work[read_cnt-1] = '\0';
-							//	2006.12.03 maru アウトプットウィンドウor編集中のウィンドウ分岐追加
 							if (!oa.OutputA(work, read_cnt-1)) {
 								goto finish;
 							}
@@ -461,7 +445,6 @@ bool EditView::ExecCmd(
 						}
 						if (j == (int)read_cnt) {	// ぴったり出力できる場合
 							work[read_cnt] = '\0';
-							//	2006.12.03 maru アウトプットウィンドウor編集中のウィンドウ分岐追加
 							if (!oa.OutputA(work, read_cnt)) {
 								goto finish;
 							}
@@ -472,7 +455,6 @@ bool EditView::ExecCmd(
 							int len = read_cnt - j;
 							memcpy(tmp, &work[j], len);
 							work[j] = '\0';
-							//	2006.12.03 maru アウトプットウィンドウor編集中のウィンドウ分岐追加
 							if (!oa.OutputA(work, j)) {
 								goto finish;
 							}
@@ -490,7 +472,7 @@ bool EditView::ExecCmd(
 					}
 					Sleep(0);
 					
-					// 2010.04.12 Moca 相手が出力しつづけていると止められないから
+					// 相手が出力しつづけていると止められないから
 					// BlockingHookとキャンセル確認を読取ループ中でも行う
 					// bLoopFlag が立っていないときは、すでにプロセスは終了しているからTerminateしない
 					if (!::BlockingHook(dlgCancel.GetHwnd())) {
@@ -536,14 +518,11 @@ user_cancel:
 		}
 
 		if (bCancelEnd && bOutputExtInfo) {
-			//	2006.12.03 maru アウトプットウィンドウにのみ出力
 			// 最後にテキストを追加
 			oa.OutputW(LSW(STR_EDITVIEW_EXECCMD_STOP));
 		}
 		
 		{
-			//	2006.12.03 maru アウトプットウィンドウにのみ出力
-			//	Jun. 04, 2003 genta	終了コードの取得と出力
 			DWORD result;
 			::GetExitCodeProcess(pi.hProcess, &result);
 			if (bOutputExtInfo) {
@@ -566,7 +545,7 @@ user_cancel:
 				);
 				GetSelectionInfo().DrawSelectArea();
 			}
-			//	2006.12.03 maru 編集中のウィンドウに出力時は最後に再描画
+			// 編集中のウィンドウに出力時は最後に再描画
 			RedrawAll();
 		}
 		if (!bCancelEnd) {
@@ -579,7 +558,7 @@ user_cancel:
 
 finish:
 	// 終了処理
-	if (hStdIn) CloseHandle(hStdIn);	// 2007.03.18 maru 標準入力の制御のため
+	if (hStdIn) CloseHandle(hStdIn);	// 2007標準入力の制御のため
 	if (hStdOutWrite) CloseHandle(hStdOutWrite);
 	CloseHandle(hStdOutRead);
 	if (pi.hProcess) CloseHandle(pi.hProcess);

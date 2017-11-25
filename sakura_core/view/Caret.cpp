@@ -76,15 +76,15 @@ Caret::Caret(EditView& editView, const EditDoc& editDoc)
 {
 	nCaretPosX_Prev = 0;	// ビュー左端からのカーソル桁直前の位置(０オリジン)
 
-	crCaret = -1;				// キャレットの色				// 2006.12.16 ryoji
-	hbmpCaret = NULL;			// キャレット用ビットマップ		// 2006.11.28 ryoji
+	crCaret = -1;				// キャレットの色
+	hbmpCaret = NULL;			// キャレット用ビットマップ
 	bClearStatus = true;
 	ClearCaretPosInfoCache();
 }
 
 Caret::~Caret()
 {
-	// キャレット用ビットマップ	// 2006.11.28 ryoji
+	// キャレット用ビットマップ
 	if (hbmpCaret) {
 		DeleteObject(hbmpCaret);
 	}
@@ -143,7 +143,6 @@ int Caret::MoveCursor(
 			nCaretMarginY = 1;
 		}
 	}
-	// 2004.04.02 Moca 行だけ有効な座標に修正するのを厳密に処理する
 	GetAdjustCursorPos(&ptWk_CaretPos);
 	// カーソル位置。ロジック単位。
 	ptCaretPos_Logic = editDoc.layoutMgr.LayoutToLogic(ptWk_CaretPos);
@@ -163,7 +162,7 @@ int Caret::MoveCursor(
 	nScrollMarginRight = SCROLLMARGIN_RIGHT;
 	nScrollMarginLeft = SCROLLMARGIN_LEFT;
 
-	// 2010.08.24 Moca 幅が狭い場合のマージンの調整
+	// 幅が狭い場合のマージンの調整
 	{
 		// カーソルが真ん中にあるときに左右にぶれないように
 		int nNoMove = SCROLLMARGIN_NOMOVE;
@@ -391,15 +390,6 @@ bool Caret::GetAdjustCursorPos(
 			const Layout* pLayout = editDoc.layoutMgr.SearchLineByLayoutY(ptPosXY2.y);
 			if (pLayout->GetLayoutEol() == EolType::None) {
 				ptPosXY2.x = (int)editView.LineIndexToColumn(pLayout, pLayout->GetLengthWithEOL());
-				// [EOF]のみ折り返すのはやめる	// 2009.02.17 ryoji
-				// 復活するなら ptPosXY2.x に折り返し行インデントを適用するのがよい
-
-				// EOFだけ折り返されているか
-				//	Aug. 14, 2005 genta 折り返し幅をLayoutMgrから取得するように
-				//if (ptPosXY2.x >= editDoc.layoutMgr.GetMaxLineKetas()) {
-				//	ptPosXY2.y++;
-				//	ptPosXY2.x = 0;
-				//}
 			}else {
 				// EOFだけの行
 				ptPosXY2.y++;
@@ -439,7 +429,6 @@ void Caret::ShowEditCaret()
 	※キャレットはスレッドにひとつだけなので例えばエディットボックスがフォーカス取得すれば
 	　別形状のキャレットに暗黙的に差し替えられるしフォーカスを失えば暗黙的に破棄される
 
-	2007.12.11 ryoji
 	ドラッグアンドドロップ編集中はキャレットが必要で暗黙破棄の要因も無いので例外的に表示する
 */
 	if (::GetFocus() != editView.GetHwnd() && !editView.bDragMode) {
@@ -566,7 +555,7 @@ void Caret::ShowEditCaret()
 	if (!ExistCaretFocus()) {
 		// キャレットがなかった場合
 		// キャレットの作成
-		CreateEditCaret(crCaret, crBack, nCaretWidth, nCaretHeight);	// 2006.12.07 ryoji
+		CreateEditCaret(crCaret, crBack, nCaretWidth, nCaretHeight);
 		bCaretShowFlag = false; // 2002/07/22 novice
 	}else {
 		if (
@@ -579,7 +568,7 @@ void Caret::ShowEditCaret()
 			::DestroyCaret();
 
 			// キャレットの作成
-			CreateEditCaret(crCaret, crBack, nCaretWidth, nCaretHeight);	// 2006.12.07 ryoji
+			CreateEditCaret(crCaret, crBack, nCaretWidth, nCaretHeight);
 			bCaretShowFlag = false; // 2002/07/22 novice
 		}else {
 			// キャレットはあるし、大きさも変わっていない場合
@@ -599,8 +588,8 @@ void Caret::ShowEditCaret()
 		ShowCaret_(editView.GetHwnd()); // 2002/07/22 novice
 	}
 
-	this->crCaret = crCaret;	//	2006.12.07 ryoji
-	editView.crBack2 = crBack;		//	2006.12.07 ryoji
+	this->crCaret = crCaret;
+	editView.crBack2 = crBack;
 	editView.SetIMECompFormPos();
 }
 
@@ -1113,7 +1102,6 @@ int Caret::MoveCursorProperly(
 	}
 	// カーソルがテキスト最下端行にあるか
 	if (ptNewXY.y >= (int)layoutMgr.GetLineCount()) {
-		// 2004.04.03 Moca EOFより後ろの座標調整は、MoveCursor内でやってもらうので、削除
 	// カーソルがテキスト最上端行にあるか
 	}else if (ptNewXY.y < 0) {
 		ptNewXY.Set(0, 0);
@@ -1147,7 +1135,6 @@ int Caret::MoveCursorProperly(
 		nPosX += (int)it.getColumn();
 		if (it.end()) {
 			i = it.getIndex();
-			//nPosX -= it.getColumnDelta();	// 2009.02.17 ryoji コメントアウト（末尾文字の後に移動する）
 		}
 
 		if (i >= nLineLen) {

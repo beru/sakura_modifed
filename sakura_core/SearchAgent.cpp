@@ -382,7 +382,6 @@ const wchar_t* SearchAgent::SearchStringWord(
 
 
 // 現在位置の単語の範囲を調べる
-// 2001/06/23 N.Nakatani WhereCurrentWord()変更 WhereCurrentWord_2をコールするようにした
 bool SearchAgent::WhereCurrentWord(
 	size_t	nLineNum,
 	size_t	nIdx,
@@ -822,7 +821,7 @@ void SearchAgent::ReplaceData(DocLineReplaceArg* pArg)
 				// ここで pDlgCancel を delete すると delete から戻るまでの間に
 				// ダイアログ破棄 -> 編集画面へフォーカス移動 -> キャレット位置調整
 				// まで一気に動くので無効なレイアウト情報参照で異常終了することがある
-				pDlg->DeleteAsync();	// 自動破棄を遅延実行する	// 2008.05.28 ryoji
+				pDlg->DeleteAsync();	// 自動破棄を遅延実行する
 			}
 		}
 	};

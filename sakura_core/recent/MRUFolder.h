@@ -33,6 +33,6 @@ protected:
 	struct DllSharedData* pShareData;			// ‹¤—Lƒƒ‚ƒŠ‚ğQÆ‚·‚é‚æB
 
 private:
-	RecentFolder recentFolder;	// —š—ğ	//@@@ 2003.04.08 MIK
+	RecentFolder recentFolder;	// —š—ğ
 };
 

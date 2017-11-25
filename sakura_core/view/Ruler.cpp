@@ -27,7 +27,7 @@ void Ruler::_DrawRulerCaret(
 {
 	// •`‰æ—Ìˆæ -> hRgn
 	RECT rc;
-	rc.left = nCaretDrawPosX + 1;	// 2012.07.27 Moca 1px‰E‚ÉC³
+	rc.left = nCaretDrawPosX + 1;
 	rc.right = rc.left + editView.GetTextMetrics().GetHankakuDx() - 1;
 	rc.top = 0;
 	rc.bottom = editView.GetTextArea().GetAreaTop() - editView.GetTextArea().GetTopYohaku() - 1;
@@ -136,7 +136,6 @@ void Ruler::DrawRulerBg(Graphics& gr)
 	
 	// ‰ºü (ƒ‹[ƒ‰[‚Æ–{•¶‚Ì‹«ŠE)
 	//	Aug. 14, 2005 genta Ü‚è•Ô‚µ•‚ðLayoutMgr‚©‚çŽæ“¾‚·‚é‚æ‚¤‚É
-	//	2005.11.10 Moca 1dot‘«‚è‚È‚¢
 	size_t nMaxLineKetas = editDoc.layoutMgr.GetMaxLineKetas();
 	int nToX = textArea.GetAreaLeft() + ((int)nMaxLineKetas - textArea.GetViewLeftCol()) * editView.GetTextMetrics().GetHankakuDx() + 1;
 	if (nToX > textArea.GetAreaRight()) {

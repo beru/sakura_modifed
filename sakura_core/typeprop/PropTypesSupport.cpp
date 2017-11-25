@@ -18,11 +18,11 @@ static const DWORD p_helpids3[] = {	//11500
 	IDC_CHECK_HOKANBYFILE,			HIDC_CHECK_HOKANBYFILE,				// 現在のファイルから入力補完
 	IDC_CHECK_HOKANBYKEYWORD,		HIDC_CHECK_HOKANBYKEYWORD,			// 強調キーワードから入力補完
 
-	IDC_EDIT_TYPEEXTHELP,			HIDC_EDIT_TYPEEXTHELP,				// 外部ヘルプファイル名	// 2006.08.06 ryoji
-	IDC_BUTTON_TYPEOPENHELP,		HIDC_BUTTON_TYPEOPENHELP,			// 外部ヘルプファイル参照	// 2006.08.06 ryoji
-	IDC_EDIT_TYPEEXTHTMLHELP,		HIDC_EDIT_TYPEEXTHTMLHELP,			// 外部HTMLヘルプファイル名	// 2006.08.06 ryoji
-	IDC_BUTTON_TYPEOPENEXTHTMLHELP,	HIDC_BUTTON_TYPEOPENEXTHTMLHELP,	// 外部HTMLヘルプファイル参照	// 2006.08.06 ryoji
-	IDC_CHECK_TYPEHTMLHELPISSINGLE,	HIDC_CHECK_TYPEHTMLHELPISSINGLE,	// ビューアを複数起動しない	// 2006.08.06 ryoji
+	IDC_EDIT_TYPEEXTHELP,			HIDC_EDIT_TYPEEXTHELP,				// 外部ヘルプファイル名
+	IDC_BUTTON_TYPEOPENHELP,		HIDC_BUTTON_TYPEOPENHELP,			// 外部ヘルプファイル参照
+	IDC_EDIT_TYPEEXTHTMLHELP,		HIDC_EDIT_TYPEEXTHTMLHELP,			// 外部HTMLヘルプファイル名
+	IDC_BUTTON_TYPEOPENEXTHTMLHELP,	HIDC_BUTTON_TYPEOPENEXTHTMLHELP,	// 外部HTMLヘルプファイル参照
+	IDC_CHECK_TYPEHTMLHELPISSINGLE,	HIDC_CHECK_TYPEHTMLHELPISSINGLE,	// ビューアを複数起動しない
 
 	IDC_CHECK_CHKENTERATEND,		HIDC_CHECK_CHKENTERATEND,			// 保存時に改行コードの混在を警告する	// 2013/4/14 Uchi
 	//	IDC_STATIC,						-1,
@@ -81,8 +81,6 @@ INT_PTR PropTypesSupport::DispatchEvent(
 				{
 					DlgOpenFile	dlgOpenFile;
 					TCHAR			szPath[_MAX_PATH + 1];
-					// 2003.06.23 Moca 相対パスは実行ファイルからのパスとして開く
-					// 2007.05.19 ryoji 相対パスは設定ファイルからのパスを優先
 					if (_IS_REL_PATH(types.szHokanFile)) {
 						GetInidirOrExedir(szPath, types.szHokanFile);
 					}else {
@@ -105,8 +103,6 @@ INT_PTR PropTypesSupport::DispatchEvent(
 				{
 					DlgOpenFile	dlgOpenFile;
 					TCHAR			szPath[_MAX_PATH + 1];
-					// 2003.06.23 Moca 相対パスは実行ファイルからのパスとして開く
-					// 2007.05.21 ryoji 相対パスは設定ファイルからのパスを優先
 					if (_IS_REL_PATH(types.szExtHelp)) {
 						GetInidirOrExedir(szPath, types.szExtHelp, true);
 					}else {
@@ -129,8 +125,6 @@ INT_PTR PropTypesSupport::DispatchEvent(
 				{
 					DlgOpenFile	dlgOpenFile;
 					TCHAR			szPath[_MAX_PATH + 1];
-					// 2003.06.23 Moca 相対パスは実行ファイルからのパスとして開く
-					// 2007.05.21 ryoji 相対パスは設定ファイルからのパスを優先
 					if (_IS_REL_PATH(types.szExtHtmlHelp)) {
 						GetInidirOrExedir(szPath, types.szExtHtmlHelp, true);
 					}else {
@@ -172,23 +166,19 @@ INT_PTR PropTypesSupport::DispatchEvent(
 		}
 		break;
 
-// From Here Jul. 05, 2001 JEPRO: Popup Help
 	case WM_HELP:
 		{
 			HELPINFO* p = (HELPINFO*) lParam;
-			MyWinHelp((HWND)p->hItemHandle, HELP_WM_HELP, (ULONG_PTR)(LPVOID)p_helpids3);	// 2006.10.10 ryoji MyWinHelpに変更に変更
+			MyWinHelp((HWND)p->hItemHandle, HELP_WM_HELP, (ULONG_PTR)(LPVOID)p_helpids3);
 		}
 		return TRUE;
 		// NOTREACHED
 //		break;
-// To Here  Jul. 05, 2001
 
-//@@@ 2001.11.17 add start MIK
 	// Context Menu
 	case WM_CONTEXTMENU:
-		MyWinHelp(hwndDlg, HELP_CONTEXTMENU, (ULONG_PTR)(LPVOID)p_helpids3);	// 2006.10.10 ryoji MyWinHelpに変更に変更
+		MyWinHelp(hwndDlg, HELP_CONTEXTMENU, (ULONG_PTR)(LPVOID)p_helpids3);
 		return TRUE;
-//@@@ 2001.11.17 add end MIK
 
 	}
 	return FALSE;
@@ -218,7 +208,7 @@ void PropTypesSupport::SetData(HWND hwndDlg)
 	// 入力補完機能：英大文字小文字を同一視する
 	::CheckDlgButton(hwndDlg, IDC_CHECK_HOKANLOHICASE, types.bHokanLoHiCase ? BST_CHECKED : BST_UNCHECKED);
 
-	// 2003.06.25 Moca ファイルからの補完機能
+	// ファイルからの補完機能
 	::CheckDlgButton(hwndDlg, IDC_CHECK_HOKANBYFILE, types.bUseHokanByFile ? BST_CHECKED : BST_UNCHECKED);
 	CheckDlgButtonBool(hwndDlg, IDC_CHECK_HOKANBYKEYWORD, types.bUseHokanByKeyword);
 

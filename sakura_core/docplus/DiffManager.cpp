@@ -59,7 +59,7 @@ bool DiffLineGetter::DrawDiffMark(
 {
 	DiffMark type = GetLineDiffMark();
 
-	if (type != DiffMark::None) {	// DIFF差分マーク表示	//@@@ 2002.05.25 MIK
+	if (type != DiffMark::None) {	// DIFF差分マーク表示
 		int	cy = y + nLineHeight / 2;
 
 		gr.PushPen(color, 0);

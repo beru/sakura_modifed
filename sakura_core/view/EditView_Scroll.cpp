@@ -386,8 +386,6 @@ int EditView::ScrollAtH(int nPos)
 	if (nPos < 0) {
 		nPos = 0;
 	}
-	//	Aug. 18, 2003 ryoji 変数のミスを修正
-	//	ウィンドウの幅をきわめて狭くしたときに編集領域が行番号から離れてしまうことがあった．
 	//	Aug. 14, 2005 genta 折り返し幅をLayoutMgrから取得するように
 	else {
 		int nPos2 = (int)(GetRightEdgeForScrollBar() + GetWrapOverhang()) - GetTextArea().nViewColNum;
@@ -486,7 +484,6 @@ void EditView::ScrollDraw(
 			&rcScroll,	// スクロール長方形の構造体のアドレス
 			NULL, NULL , NULL, SW_ERASE | SW_INVALIDATE
 		);
-		// From Here 2007.09.09 Moca 互換BMPによる画面バッファ
 		if (hbmpCompatBMP) {
 			// 互換BMPもスクロール処理のためにBitBltで移動させる
 			::BitBlt(
@@ -542,7 +539,6 @@ void EditView::ScrollDraw(
 		rcClip3.bottom = GetTextArea().GetAreaBottom();
 		InvalidateRect(&rcClip3, FALSE);
 	}
-	// To Here 2007.09.09 Moca
 
 	if (nScrollRowNum != 0) {
 		InvalidateRect(&rcClip);

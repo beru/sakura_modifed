@@ -426,7 +426,7 @@ void CommandLine::ParseCommandLine(LPCTSTR pszCmdLineSrc, bool bResponse)
 				break;
 			case CMDLINEOPT_GCODE:
 				gi.charEncoding = (EncodingType)AtoiOptionInt(arg);	break;
-			case CMDLINEOPT_GROUP:	// GROUP	// 2007.06.26 ryoji
+			case CMDLINEOPT_GROUP:
 				nGroup = AtoiOptionInt(arg);
 				break;
 			case CMDLINEOPT_DEBUGMODE:

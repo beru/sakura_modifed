@@ -101,7 +101,7 @@ public:
 private:
 	// キーワード格納領域
 	wchar_t	szKeywordArr[MAX_KEYWORDNUM][MAX_KEYWORDLEN + 1];	
-	char	isSorted[MAX_SETNUM];	// ソートしたかどうかのフラグ(INI未保存)	 //MIK
+	char	isSorted[MAX_SETNUM];	// ソートしたかどうかのフラグ(INI未保存)
 
 protected:
 	/*! キーワードセットの開始位置(INI未保存)

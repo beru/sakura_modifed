@@ -7,7 +7,6 @@
 #include "env/DllSharedData.h"
 #include "doc/EditDoc.h"
 
-// 2014.07.26 katze
 //#define USE_LOG10			// この行のコメントを外すと行番号の最小桁数の計算にlog10()を用いる
 #ifdef USE_LOG10
 #include <math.h>
@@ -184,9 +183,7 @@ bool TextArea::DetectWidthOfLineNumberArea(bool bRedraw)
 		if (bRedraw && view.GetDrawSwitch()) {
 			// 再描画
 			view.GetCaret().underLine.Lock();
-			// From Here 2007.09.09 Moca 互換BMPによる画面バッファ
 			view.Call_OnPaint((int)PaintAreaType::LineNumber | (int)PaintAreaType::Ruler | (int)PaintAreaType::Body, false); // メモリＤＣを使用してちらつきのない再描画
-			// To Here 2007.09.09 Moca
 			view.GetCaret().underLine.UnLock();
 			view.GetCaret().ShowEditCaret();
 			/*
@@ -227,8 +224,8 @@ int TextArea::DetectWidthOfLineNumberArea_calculate(const LayoutMgr* pLayoutMgr,
 	if (0 < nAllLines) {
 		int i;
 
-		// 行番号の桁数を決める 2014.07.26 katze
-		// nLineNumWidthは純粋に数字の桁数を示し、先頭の空白を含まない（仕様変更） 2014.08.02 katze
+		// 行番号の桁数を決める
+		// nLineNumWidthは純粋に数字の桁数を示し、先頭の空白を含まない（仕様変更）
 #ifdef USE_LOG10
 		// 表示している行数の桁数を求める
 		nWork = (int)(log10( (double)nAllLines) +1);	// 10を底とする対数(小数点以下切り捨て)+1で桁数
@@ -254,8 +251,7 @@ int TextArea::DetectWidthOfLineNumberArea_calculate(const LayoutMgr* pLayoutMgr,
 		return (i +1);
 #endif
 	}else {
-		//	2003.09.11 wmlhq 行番号が1桁のときと幅を合わせる
-		// 最小桁数を可変に変更 2014.07.26 katze	// 先頭の空白分を加算する 2014.07.31 katze
+		// 行番号が1桁のときと幅を合わせる
 		return view.pTypeData->nLineNumWidth +1;
 	}
 }

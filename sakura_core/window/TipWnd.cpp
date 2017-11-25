@@ -44,8 +44,6 @@ void TipWnd::Create(HINSTANCE hInstance, HWND hwndParent)
 	);
 
 	// 基底クラスメンバ呼び出し
-	// 2006.01.09 ryoji 初期状態を不可視にする
-	// 実質的には見えないTipWndが最前面にあると判断されてしまう場合があるため
 	Wnd::Create(
 		hwndParent,
 		WS_EX_TOOLWINDOW, // extended window style	// 2002/2/3 GAE

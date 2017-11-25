@@ -130,9 +130,9 @@ void PropCommon::Create(HWND hwndParent, ImageListMgr* pIcons, MenuDrawer* pMenu
 	this->hwndParent = hwndParent;	// オーナーウィンドウのハンドル
 	this->pIcons = pIcons;
 
-	// 2007.11.02 ryoji マクロ設定を変更したあと、画面を閉じないでカスタムメニュー、ツールバー、
-	//                  キー割り当ての画面に切り替えた時に各画面でマクロ設定の変更が反映されるよう、
-	//                  common.macro.macroTable（ローカルメンバ）でlookupを初期化する
+	// マクロ設定を変更したあと、画面を閉じないでカスタムメニュー、ツールバー、
+	// キー割り当ての画面に切り替えた時に各画面でマクロ設定の変更が反映されるよう、
+	// common.macro.macroTable（ローカルメンバ）でlookupを初期化する
 	lookup.Init(common.macro.macroTable, &common);	//	機能名・番号resolveクラス．
 
 //@@@ 2002.01.03 YAZAKI tbMyButtonなどをCShareDataからMenuDrawerへ移動したことによる修正。
@@ -299,7 +299,6 @@ void PropCommon::ApplyData(void)
 
 
 // ヘルプ
-// Stonee, 2001/05/18 機能番号からヘルプトピック番号を調べるようにした
 void PropCommon::OnHelp(HWND hwndParent, int nPageID)
 {
 	int		nContextID;
@@ -353,11 +352,10 @@ void PropCommon::OnHelp(HWND hwndParent, int nPageID)
 	case IDD_PROP_KEYBIND:
 		nContextID = ::FuncID_To_HelpContextID(F_OPTION_KEYBIND);
 		break;
-	// To Here Sept. 9, 2000
 	case IDD_PROP_MACRO:	//@@@ 2002.01.02
 		nContextID = ::FuncID_To_HelpContextID(F_OPTION_MACRO);
 		break;
-	case IDD_PROP_FNAME:	// 2002.12.09 Moca FNAME追加
+	case IDD_PROP_FNAME:
 		nContextID = ::FuncID_To_HelpContextID(F_OPTION_FNAME);
 		break;
 	case IDD_PROP_PLUGIN:	//@@@ 2002.01.02

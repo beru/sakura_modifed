@@ -66,7 +66,7 @@ public:
 		bool					bGrepStdout,
 		bool					bGrepHeader,
 		const SearchOption&		searchOption,
-		EncodingType			nGrepCharSet,			// 2002/09/21 Moca 文字コードセット選択
+		EncodingType			nGrepCharSet,			// 文字コードセット選択
 		int						nGrepOutputLineType,
 		int						nGrepOutputStyle,
 		bool					bGrepOutputFileOnly,	// [in] ファイル毎最初のみ出力

@@ -181,7 +181,7 @@ void Macro::AddLParam(
 			lFlag |= editView.editWnd.dlgReplace.bPaste					? 0x40 : 0x00;	// CShareDataに入れなくていいの？
 			lFlag |= GetDllShareData().common.search.bSelectedArea				? 0x80 : 0x00;	// 置換する時は選べない
 			lFlag |= editView.editWnd.dlgReplace.nReplaceTarget << 8;	// 8bitシフト（0x100で掛け算）
-			lFlag |= GetDllShareData().common.search.bConsecutiveAll				? 0x0400: 0x00;	// 2007.01.16 ryoji
+			lFlag |= GetDllShareData().common.search.bConsecutiveAll				? 0x0400: 0x00;
 			AddIntParam(lFlag);
 		}
 		break;
@@ -235,7 +235,7 @@ void Macro::AddLParam(
 		break;
 	case F_CHGMOD_EOL:
 		{
-			// EOLタイプ値をマクロ引数値に変換する	// 2009.08.18 ryoji
+			// EOLタイプ値をマクロ引数値に変換する
 			int nFlag;
 			switch ((EolType)lParam) {
 			case EolType::CRLF:	nFlag = 1; break;
@@ -1545,7 +1545,6 @@ bool Macro::HandleFunction(
 		}
 		return true;
 	case F_ISTEXTSELECTED:
-		// 2005.07.30 maru マクロ追加
 		{
 			if (view.GetSelectionInfo().IsTextSelected()) {
 				if (view.GetSelectionInfo().IsBoxSelecting()) {
@@ -1559,19 +1558,16 @@ bool Macro::HandleFunction(
 		}
 		return true;
 	case F_GETSELLINEFROM:
-		// 2005.07.30 maru マクロ追加
 		{
 			Wrap(&result)->Receive(view.GetSelectionInfo().select.GetFrom().y + 1);
 		}
 		return true;
 	case F_GETSELCOLUMNFROM:
-		// 2005.07.30 maru マクロ追加
 		{
 			Wrap(&result)->Receive(view.GetSelectionInfo().select.GetFrom().x + 1);
 		}
 		return true;
 	case F_GETSELLINETO:
-		// 2005.07.30 maru マクロ追加
 		{
 			Wrap(&result)->Receive(view.GetSelectionInfo().select.GetTo().y + 1);
 		}

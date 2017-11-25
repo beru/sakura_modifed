@@ -199,7 +199,7 @@ LRESULT PrintPreview::OnPaint(
 
 	// マージン枠の表示
 	Graphics gr(hdc);
-	gr.SetPen(RGB(128, 128, 128)); // 2006.08.14 Moca 127を128に変更
+	gr.SetPen(RGB(128, 128, 128));
 	::Rectangle(hdc,
 		nPreview_ViewMarginLeft + pPrintSetting->nPrintMarginLX,
 		nDirectY * (nPreview_ViewMarginTop + pPrintSetting->nPrintMarginTY),
@@ -767,10 +767,10 @@ void PrintPreview::OnChangePrintSetting(void)
 	ref.colorInfoArr[COLORIDX_COMMENT].bDisp = false;
 	ref.colorInfoArr[COLORIDX_SSTRING].bDisp = false;
 	ref.colorInfoArr[COLORIDX_WSTRING].bDisp = false;
-	ref.bKinsokuHead = pPrintSetting->bPrintKinsokuHead,	// 行頭禁則する	//@@@ 2002.04.08 MIK
-	ref.bKinsokuTail = pPrintSetting->bPrintKinsokuTail,	// 行末禁則する	//@@@ 2002.04.08 MIK
-	ref.bKinsokuRet = pPrintSetting->bPrintKinsokuRet,	// 改行文字をぶら下げる	//@@@ 2002.04.13 MIK
-	ref.bKinsokuKuto = pPrintSetting->bPrintKinsokuKuto,	// 句読点をぶら下げる	//@@@ 2002.04.17 MIK
+	ref.bKinsokuHead = pPrintSetting->bPrintKinsokuHead,	// 行頭禁則する
+	ref.bKinsokuTail = pPrintSetting->bPrintKinsokuTail,	// 行末禁則する
+	ref.bKinsokuRet = pPrintSetting->bPrintKinsokuRet,	// 改行文字をぶら下げる
+	ref.bKinsokuKuto = pPrintSetting->bPrintKinsokuKuto,	// 句読点をぶら下げる
 	pLayoutMgr_Print->SetLayoutInfo(true, ref, ref.nTabSpace, ref.nMaxLineKetas);
 	nAllPageNum = (WORD)(pLayoutMgr_Print->GetLineCount() / (bPreview_EnableLines * pPrintSetting->nPrintDansuu));		// 全ページ数
 	if (0 < pLayoutMgr_Print->GetLineCount() % (bPreview_EnableLines * pPrintSetting->nPrintDansuu)) {
@@ -1023,7 +1023,7 @@ void PrintPreview::OnPrint(void)
 	// 親ウィンドウを無効化
 	::EnableWindow(parentWnd.GetHwnd(), FALSE);
 
-	// 2013.06.10 Moca キーワード強調設定をロックして、印刷中に共通設定を更新されないようにする
+	// キーワード強調設定をロックして、印刷中に共通設定を更新されないようにする
 	ShareDataLockCounter lock;
 
 	// 印刷 ジョブ開始
@@ -1472,13 +1472,13 @@ ColorStrategy* PrintPreview::DrawPageText(
 				pLayout->GetDocLineRef()->GetLengthWithEOL(),
 				pLayout->GetLogicOffset(),
 				nLineLen,
-				pLayout->GetIndent(), // 2006.05.16 Add Moca. レイアウトインデント分ずらす。
+				pLayout->GetIndent(), // レイアウトインデント分ずらす。
 				pPrintSetting->bColorPrint ? pLayout : NULL,
 				pStrategy
 			);
 		}
 
-		// 2006.08.14 Moca 行番号が縦線の場合は1度に引く
+		// 行番号が縦線の場合は1度に引く
 		if (pPrintSetting->bPrintLineNumber
 			&& typeConfig.nLineTermType == 1
 		) {
@@ -1567,7 +1567,7 @@ ColorStrategy* PrintPreview::Print_DrawLine(
 	size_t			nDocLineLen,
 	size_t			nLineStart,
 	size_t			nLineLen,
-	size_t			nIndent,	// 2006.08.14 Moca 追加
+	size_t			nIndent,
 	const Layout*	pLayout,	// 色付用Layout
 	ColorStrategy*	pStrategyStart
 	)
@@ -1980,7 +1980,6 @@ INT_PTR CALLBACK PrintPreview::PrintPreviewBar_DlgProc(
 	switch (uMsg) {
 	case WM_INITDIALOG:
 		::SetWindowLongPtr(hwndDlg, DWLP_USER, lParam);
-		// 2007.02.11 Moca WM_INITもDispatchEvent_PPBを呼ぶように
 		pPrintPreview = (PrintPreview*)lParam;
 		if (pPrintPreview) {
 			return pPrintPreview->DispatchEvent_PPB(hwndDlg, uMsg, wParam, lParam);
@@ -2074,18 +2073,15 @@ INT_PTR PrintPreview::DispatchEvent_PPB(
 				// 次ページ
 				OnPreviewGoNextPage();
 				break;
-			// From Here 2007.02.11 Moca ダイレクトジャンプおよびアンチエイリアス
 			case IDC_BUTTON_DIRECTPAGE:
 				OnPreviewGoDirectPage();
 				break;
 			case IDC_CHECK_ANTIALIAS:
 				OnCheckAntialias();
 				break;
-			// To Here 2007.02.11 Moca
 			case IDC_BUTTON_HELP:
 				// 印刷Previewのヘルプ
-				// Stonee, 2001/03/12 第四引数を、機能番号からヘルプトピック番号を調べるようにした
-				MyWinHelp(hwndDlg, HELP_CONTEXT, ::FuncID_To_HelpContextID(F_PRINT_PREVIEW));	// 2006.10.10 ryoji MyWinHelpに変更に変更
+				MyWinHelp(hwndDlg, HELP_CONTEXT, ::FuncID_To_HelpContextID(F_PRINT_PREVIEW));
 				break;
 			case IDOK:
 				// 印刷実行

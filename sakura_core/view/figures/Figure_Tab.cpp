@@ -51,8 +51,7 @@ void Figure_Tab::DispSpace(Graphics& gr, DispPos* pDispPos, EditView& view, bool
 	rcClip2.bottom = sPos.GetDrawPos().y + nLineHeight;
 
 	if (pArea->IsRectIntersected(rcClip2)) {
-		if (tabType.IsDisp() && TabArrowType::String == pTypeData->bTabArrow) {	// タブ通常表示	//@@@ 2003.03.26 MIK
-			//@@@ 2001.03.16 by MIK
+		if (tabType.IsDisp() && TabArrowType::String == pTypeData->bTabArrow) {	// タブ通常表示
 			::ExtTextOutW_AnyBuild(
 				gr,
 				sPos.GetDrawPos().x,
@@ -78,13 +77,13 @@ void Figure_Tab::DispSpace(Graphics& gr, DispPos* pDispPos, EditView& view, bool
 
 			// タブ矢印表示
 			if (tabType.IsDisp()) {
-				// 文字色や太字かどうかを現在の DC から調べる	// 2009.05.29 ryoji 
+				// 文字色や太字かどうかを現在の DC から調べる
 				// （検索マッチ等の状況に柔軟に対応するため、ここは記号の色指定には決め打ちしない）
 				//	太字かどうか設定も見る様にする 2013/4/11 Uchi
 				// 2013.06.21 novice 文字色、太字をGraphicsから取得
 
 				if (TabArrowType::Short == pTypeData->bTabArrow) {
-					if (rcClip2.left <= sPos.GetDrawPos().x) { // Apr. 1, 2003 MIK 行番号と重なる
+					if (rcClip2.left <= sPos.GetDrawPos().x) { // 行番号と重なる
 						_DrawTabArrow(
 							gr,
 							sPos.GetDrawPos().x,

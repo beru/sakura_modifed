@@ -39,7 +39,7 @@ public:
 	*/
 	void ResetContents(void);
 	//void MyAppendMenu(HMENU , int , int , const char*, BOOL = TRUE);	/* メニュー項目を追加 */
-	void MyAppendMenu(HMENU hMenu, int nFlag, UINT_PTR nFuncId, const TCHAR*     pszLabel, const TCHAR*     pszKey, bool bAddKeyStr = true, int nForceIconId = -1);	/* メニュー項目を追加 */	// お気に入り	//@@@ 2003.04.08 MIK	// add pszKey	2010/5/17 Uchi
+	void MyAppendMenu(HMENU hMenu, int nFlag, UINT_PTR nFuncId, const TCHAR*     pszLabel, const TCHAR*     pszKey, bool bAddKeyStr = true, int nForceIconId = -1);	/* メニュー項目を追加 */
 	void MyAppendMenu(HMENU hMenu, int nFlag, UINT_PTR nFuncId, const NOT_TCHAR* pszLabel, const NOT_TCHAR* pszKey, bool bAddKeyStr = true, int nForceIconId = -1) {
 		MyAppendMenu(hMenu, nFlag, nFuncId, to_tchar(pszLabel), to_tchar(pszKey), bAddKeyStr, nForceIconId);
 	}

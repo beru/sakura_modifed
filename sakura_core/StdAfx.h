@@ -121,7 +121,6 @@
 #include "charset/charcode.h"
 #include "charset/codecheck.h"
 
-// 2010.04.19 Moca include‚Ì‘å‹K–Í®—
 #ifndef SAKURA_PCH_MODE_MIN
 #define SAKURA_PCH_MODE_DLLSHARE 1
 #endif

@@ -21,7 +21,7 @@ static const DWORD p_helpids[] = {	//11000
 	IDC_COMBO_FUNCKIND,				HIDC_COMBO_FUNCKIND_TOOLBAR,			// 機能の種別
 	IDC_LIST_FUNC,					HIDC_LIST_FUNC_TOOLBAR,					// 機能一覧
 	IDC_LIST_RES,					HIDC_LIST_RES_TOOLBAR,					// ツールバー一覧
-	IDC_BUTTON_INSERTWRAP,			HIDC_BUTTON_INSERTWRAP,					// ツールバー折返	// 2006.08.06 ryoji
+	IDC_BUTTON_INSERTWRAP,			HIDC_BUTTON_INSERTWRAP,					// ツールバー折返
 	IDC_LABEL_MENUFUNCKIND,			(DWORD)-1,
 	IDC_LABEL_MENUFUNC,				(DWORD)-1,
 	IDC_LABEL_TOOLBAR,				(DWORD)-1,
@@ -503,7 +503,7 @@ void PropToolbar::DrawToolBarItemList(DRAWITEMSTRUCT* pDis)
 		if (tbb.fsStyle & TBSTYLE_SEP) {
 			// テキストだけ表示する
 			if (tbb.idCommand == F_SEPARATOR) {
-				auto_strncpy( szLabel, LSW(STR_PROPCOMTOOL_ITEM1), _countof(szLabel) - 1 );	// nLength 未使用 2003/01/09 Moca
+				auto_strncpy( szLabel, LSW(STR_PROPCOMTOOL_ITEM1), _countof(szLabel) - 1 );
 				szLabel[_countof(szLabel) - 1] = L'\0';
 			}else if (tbb.idCommand == F_MENU_NOT_USED_FIRST) {
 				// ツールバー折返

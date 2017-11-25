@@ -110,7 +110,7 @@ public:
 		@retval true Windows XP or later
 	*/
 	bool _IsWinXP_or_later() {
-		return (osVersionInfo.dwMajorVersion >= 6 ||	// 2006.06.17 ryoji Ver 6.0, 7.0,...‚àŠÜ‚ß‚é
+		return (osVersionInfo.dwMajorVersion >= 6 ||	// Ver 6.0, 7.0,...‚àŠÜ‚ß‚é
 			(osVersionInfo.dwMajorVersion >= 5 && osVersionInfo.dwMinorVersion >= 1));
 	}
 

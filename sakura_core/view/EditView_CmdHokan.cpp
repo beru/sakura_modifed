@@ -112,7 +112,7 @@ void EditView::ShowHokanMgr(NativeW& memData, bool bAutoDecided)
 		memData.GetStringPtr(),
 		pTypeData->szHokanFile,
 		pTypeData->bHokanLoHiCase,
-		pTypeData->bUseHokanByFile, // 2003.06.22 Moca
+		pTypeData->bUseHokanByFile,
 		pTypeData->nHokanType,
 		pTypeData->bUseHokanByKeyword,
 		pMemHokanWord
@@ -122,7 +122,7 @@ void EditView::ShowHokanMgr(NativeW& memData, bool bAutoDecided)
 		if (bHokan) {
 			hokanMgr.Hide();
 			bHokan = false;
-			// 2003.06.25 Moca 失敗してたら、ビープ音を出して補完終了。
+			// 失敗してたら、ビープ音を出して補完終了。
 			ErrorBeep();
 		}
 	}else if (bAutoDecided && nKouhoNum == 1) { //	候補1つのみ→確定。
@@ -130,8 +130,6 @@ void EditView::ShowHokanMgr(NativeW& memData, bool bAutoDecided)
 			hokanMgr.Hide();
 			bHokan = false;
 		}
-		// 2004.05.14 Moca HokanMgr::Search側で改行を削除するようにし、直接書き換えるのをやめた
-
 		GetCommander().Command_WordDeleteToStart();
 		GetCommander().Command_InsText(true, memHokanWord.GetStringPtr(), memHokanWord.GetStringLength(), true);
 	}else {
@@ -222,7 +220,7 @@ size_t EditView::HokanSearchByFile(
 				if (kindMerge == CK_NULL) {	// kindPreとkindCurが別種
 					if (kindCur == CK_HIRA) {
 						kindMerge = kindCur;		// ひらがななら続行
-						// 2010.06.16 Moca 漢字のみ送り仮名を候補に含める
+						// 漢字のみ送り仮名を候補に含める
 						if (kindPre != CK_ZEN_ETC) {
 							nWordLenStop = (int)nWordLen;
 						}

@@ -3,7 +3,7 @@
 #include <ShellAPI.h>// HDROP
 #include "_main/global.h"
 #include "MainToolBar.h"
-#include "TabWnd.h"	//@@@ 2003.05.31 MIK
+#include "TabWnd.h"
 #include "func/FuncKeyWnd.h"
 #include "MainStatusBar.h"
 #include "view/EditView.h"
@@ -64,7 +64,6 @@ public:
 	//                           作成                              //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//	Mar. 7, 2002 genta 文書タイプ用引数追加
-	// 2007.06.26 ryoji グループ指定引数追加
 	// 作成
 	HWND Create(
 		EditDoc*		pEditDoc,
@@ -104,13 +103,13 @@ public:
 	LRESULT OnLButtonDown(WPARAM, LPARAM);
 	LRESULT OnMouseMove(WPARAM, LPARAM);
 	LRESULT OnMouseWheel(WPARAM, LPARAM);
-	bool DoMouseWheel(WPARAM wParam, LPARAM lParam);	// マウスホイール処理	// 2007.10.16 ryoji
+	bool DoMouseWheel(WPARAM wParam, LPARAM lParam);	// マウスホイール処理
 	LRESULT OnHScroll(WPARAM, LPARAM);
 	LRESULT OnVScroll(WPARAM, LPARAM);
 	int	OnClose(HWND hWndFrom, bool);	// 終了時の処理
 	void OnDropFiles(HDROP);			// ファイルがドロップされた
 	bool OnPrintPageSetting(void);		// 印刷ページ設定
-	LRESULT OnTimer(WPARAM, LPARAM);	// WM_TIMER 処理	// 2007.04.03 ryoji
+	LRESULT OnTimer(WPARAM, LPARAM);	// WM_TIMER 処理
 	void OnEditTimer(void);				// タイマーの処理
 	void OnCaptionTimer(void);
 	void OnSysMenuTimer(void);
@@ -124,7 +123,7 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	
 	// ファイル名変更通知
-	void ChangeFileNameNotify(const TCHAR* pszTabCaption, const TCHAR* pszFilePath, bool bIsGrep);	//@@@ 2003.05.31 MIK, 2006.01.28 ryoji ファイル名、Grepモードパラメータを追加
+	void ChangeFileNameNotify(const TCHAR* pszTabCaption, const TCHAR* pszFilePath, bool bIsGrep);
 	
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                         メニュー                            //
@@ -134,7 +133,7 @@ public:
 	bool InitMenu_Special(HMENU , EFunctionCode);
 	void InitMenubarMessageFont(void);			//	メニューバーへのメッセージ表示機能をEditWndより移管	//	Dec. 4, 2002 genta
 	LRESULT WinListMenu(HMENU hMenu, EditNode* pEditNodeArr, size_t nRowNum, bool bFull);	// ウィンドウ一覧メニュー作成処理		2006.03.23 fon
-	LRESULT PopupWinList(bool bMousePos);		// ウィンドウ一覧ポップアップ表示処理		2006.03.23 fon	// 2007.02.28 ryoji フルパス指定のパラメータを削除
+	LRESULT PopupWinList(bool bMousePos);		// ウィンドウ一覧ポップアップ表示処理
 	void RegisterPluginCommand();				// プラグインコマンドをエディタに登録する
 	void RegisterPluginCommand(int id);			// プラグインコマンドをエディタに登録する
 	void RegisterPluginCommand(Plug* id);		// プラグインコマンドをエディタに登録する
@@ -145,12 +144,12 @@ public:
 	//                           整形                              //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	void LayoutMainMenu(void);		// メインメニュー					// 2010/5/16 Uchi
-	void LayoutToolBar(void);		// ツールバーの配置処理				// 2006.12.19 ryoji
-	void LayoutFuncKey(void);		// ファンクションキーの配置処理		// 2006.12.19 ryoji
-	void LayoutTabBar(void);		// タブバーの配置処理				// 2006.12.19 ryoji
-	void LayoutStatusBar(void);		// ステータスバーの配置処理			// 2006.12.19 ryoji
+	void LayoutToolBar(void);		// ツールバーの配置処理
+	void LayoutFuncKey(void);		// ファンクションキーの配置処理
+	void LayoutTabBar(void);		// タブバーの配置処理
+	void LayoutStatusBar(void);		// ステータスバーの配置処理
 	void LayoutMiniMap();			// ミニマップの配置処理
-	void EndLayoutBars(bool bAdjust = true);	// バーの配置終了処理		// 2006.12.19 ryoji
+	void EndLayoutBars(bool bAdjust = true);	// バーの配置終了処理
 
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -170,7 +169,7 @@ public:
 	//                           情報                              //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	
-	// 自アプリがアクティブかどうか	// 2007.03.08 ryoji
+	// 自アプリがアクティブかどうか
 	bool IsActiveApp() const { return bIsActiveApp; }
 	
 	// ツールチップのテキストを取得。2007.09.08 kobake 追加
@@ -193,7 +192,7 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                      ウィンドウ操作                         //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-	void WindowTopMost(int); // 2004.09.21 Moca
+	void WindowTopMost(int);
 	
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                        ビュー管理                           //
@@ -205,18 +204,17 @@ public:
 	void Views_Redraw();
 	void SetActivePane(int);	// アクティブなペインを設定
 	int GetActivePane(void) const { return nActivePaneIndex; }	// アクティブなペインを取得		2007.08.26 kobake const追加
-	bool SetDrawSwitchOfAllViews(bool bDraw);						// すべてのペインの描画スイッチを設定する	2008.06.08 ryoji
+	bool SetDrawSwitchOfAllViews(bool bDraw);						// すべてのペインの描画スイッチを設定する
 	void RedrawAllViews(EditView* pViewExclude);					// すべてのペインをRedrawする
 	void Views_DisableSelectArea(bool bRedraw);
 	bool DetectWidthOfLineNumberAreaAllPane(bool bRedraw);	// すべてのペインで、行番号表示に必要な幅を再設定する（必要なら再描画する）
-	bool WrapWindowWidth(int nPane);	// 右端で折り返す			2008.06.08 ryoji
-	bool UpdateTextWrap(void);		// 折り返し方法関連の更新	2008.06.10 ryoji
+	bool WrapWindowWidth(int nPane);	// 右端で折り返す
+	bool UpdateTextWrap(void);		// 折り返し方法関連の更新
 	//	Aug. 14, 2005 genta TAB幅と折り返し位置の更新
 	void ChangeLayoutParam(bool bShowProgress, size_t nTabSize, size_t nMaxLineKetas);
 	//	Aug. 14, 2005 genta
 	PointEx* SavePhysPosOfAllView();
 	void RestorePhysPosOfAllView(PointEx* pptPosArray);
-	// 互換BMPによる画面バッファ 2007.09.09 Moca
 	void Views_DeleteCompatibleBitmap(); // EditViewの画面バッファを削除
 	
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -253,7 +251,7 @@ protected:
 
 protected:
 	// ドロップダウンメニュー
-	int	CreateFileDropDownMenu(HWND);	// 開く(ドロップダウン)	//@@@ 2002.06.15 MIK
+	int	CreateFileDropDownMenu(HWND);	// 開く(ドロップダウン)
 
 	// タイマー
 	void Timer_ONOFF(bool); // 更新の開始／停止 20060128 aroka
@@ -281,7 +279,7 @@ public:
 	bool GetDragMode() const				{ return bDragMode; }
 	const Point& GetDragPosOrg() const		{ return ptDragPosOrg; }
 	
-	// IDropTarget実装		2008.06.20 ryoji
+	// IDropTarget実装
 	STDMETHODIMP DragEnter(LPDATAOBJECT, DWORD, POINTL, LPDWORD);
 	STDMETHODIMP DragOver(DWORD, POINTL, LPDWORD);
 	STDMETHODIMP DragLeave(void);
@@ -309,7 +307,7 @@ private:
 public:
 	// 子ウィンドウ
 	MainToolBar		toolbar;		// ツールバー
-	TabWnd			tabWnd;			// タブウィンドウ	//@@@ 2003.05.31 MIK
+	TabWnd			tabWnd;			// タブウィンドウ
 	FuncKeyWnd		funcKeyWnd;		// ファンクションバー
 	MainStatusBar	statusBar;		// ステータスバー
 	PrintPreview*	pPrintPreview;	// 印刷Preview表示情報。必要になったときのみインスタンスを生成する。
@@ -330,8 +328,8 @@ public:
 	DlgSetCharSet	dlgSetCharSet;	//「文字コードセット設定」ダイアログ
 
 private:
-	// 2010.04.10 Moca  public -> private. 起動直後は[0]のみ有効 4つとは限らないので注意
 	EditDoc* 		pEditDoc;
+	// 起動直後は[0]のみ有効 4つとは限らないので注意
 	EditView*		pEditViewArr[4];		// ビュー
 	EditView*		pEditView;			// 有効なビュー
 	EditView*		pEditViewMiniMap;		// ミニマップ
@@ -350,7 +348,7 @@ private:
 	UINT			uATOKReconvertMsg;
 
 	// 状態
-	bool			bIsActiveApp;			// 自アプリがアクティブかどうか	// 2007.03.08 ryoji
+	bool			bIsActiveApp;			// 自アプリがアクティブかどうか
 	LPTSTR			pszLastCaption;
 	LPTSTR			pszMenubarMessage;		// メニューバー右端に表示するメッセージ
 public:
@@ -375,7 +373,7 @@ private:
 	DropTarget*		pDropTarget;
 
 	// その他フラグ
-	BOOL			bUIPI;		// エディタ－トレイ間でのUI特権分離確認用フラグ	// 2007.06.07 ryoji
+	BOOL			bUIPI;		// エディタ－トレイ間でのUI特権分離確認用フラグ
 	IconClickStatus	iconClicked;
 
 public:

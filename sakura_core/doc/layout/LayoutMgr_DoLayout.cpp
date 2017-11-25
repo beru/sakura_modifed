@@ -468,7 +468,7 @@ int LayoutMgr::DoLayout_Range(
 
 	while (pWork->pDocLine) {
 		pWork->lineStr		= pWork->pDocLine->GetStringRefWithEOL();
-		pWork->eKinsokuType	= KinsokuType::None;	//@@@ 2002.04.20 MIK
+		pWork->eKinsokuType	= KinsokuType::None;
 		pWork->nBgn			= 0;
 		pWork->nPos			= 0;
 		pWork->nWordBgn		= 0;

@@ -164,7 +164,7 @@ void _DefaultConfig(TypeConfig* pType)
 	// 2001/06/19 asa-o
 	pType->bHokanLoHiCase = false;			// 入力補完機能：英大文字小文字を同一視する
 
-	//	2003.06.23 Moca ファイル内からの入力補完機能
+	// ファイル内からの入力補完機能
 	pType->bUseHokanByFile = true;			// 入力補完 開いているファイル内から候補を探す
 	pType->bUseHokanByKeyword = false;		// 強調キーワードから入力補完
 
@@ -182,7 +182,7 @@ void _DefaultConfig(TypeConfig* pType)
 
 	pType->bAutoIndent = true;			// オートインデント
 	pType->bAutoIndent_ZENSPACE = true;	// 日本語空白もインデント
-	pType->bRTrimPrevLine = false;		// 2005.10.11 ryoji 改行時に末尾の空白を削除
+	pType->bRTrimPrevLine = false;		// 改行時に末尾の空白を削除
 
 	pType->nIndentLayout = 0;	// 折り返しは2行目以降を字下げ表示
 
@@ -218,27 +218,24 @@ void _DefaultConfig(TypeConfig* pType)
 	pType->eSmartIndent = SmartIndentType::None;		// スマートインデント種別
 	pType->nImeState = IME_CMODE_NOCONVERSION;	// IME入力
 
-	pType->szOutlineRuleFilename[0] = L'\0';		//Dec. 4, 2000 MIK
-	pType->bKinsokuHead = false;					// 行頭禁則				//@@@ 2002.04.08 MIK
-	pType->bKinsokuTail = false;					// 行末禁則				//@@@ 2002.04.08 MIK
-	pType->bKinsokuRet  = false;					// 改行文字をぶら下げる	//@@@ 2002.04.13 MIK
-	pType->bKinsokuKuto = false;					// 句読点をぶら下げる	//@@@ 2002.04.17 MIK
-	pType->szKinsokuHead[0] = 0;					// 行頭禁則				//@@@ 2002.04.08 MIK
-	pType->szKinsokuTail[0] = 0;					// 行末禁則				//@@@ 2002.04.08 MIK
-	wcscpy_s(pType->szKinsokuKuto, L"、。，．､｡,.");	// 句読点ぶら下げ文字	// 2009.08.07 ryoji
+	pType->szOutlineRuleFilename[0] = L'\0';
+	pType->bKinsokuHead = false;					// 行頭禁則
+	pType->bKinsokuTail = false;					// 行末禁則
+	pType->bKinsokuRet  = false;					// 改行文字をぶら下げる
+	pType->bKinsokuKuto = false;					// 句読点をぶら下げる
+	pType->szKinsokuHead[0] = 0;					// 行頭禁則
+	pType->szKinsokuTail[0] = 0;					// 行末禁則
+	wcscpy_s(pType->szKinsokuKuto, L"、。，．､｡,.");	// 句読点ぶら下げ文字
 
 	pType->bUseDocumentIcon = false;				// 文書に関連づけられたアイコンを使う
 
-//@@@ 2001.11.17 add start MIK
 	for (size_t i=0; i<_countof(pType->regexKeywordArr); ++i) {
 		pType->regexKeywordArr[i].nColorIndex = COLORIDX_REGEX1;
 	}
 	pType->regexKeywordList[0] = L'\0';
 	pType->bUseRegexKeyword = false;
-//@@@ 2001.11.17 add end MIK
 	pType->nRegexKeyMagicNumber = 0;
 
-//@@@ 2006.04.10 fon ADD-start
 	for (size_t i=0; i<MAX_KEYHELP_FILE; ++i) {
 		auto& attr = pType->keyHelpArr[i];
 		attr.bUse = false;
@@ -250,19 +247,18 @@ void _DefaultConfig(TypeConfig* pType)
 	pType->bUseKeyHelpAllSearch = false;	// ヒットした次の辞書も検索(&A)
 	pType->bUseKeyHelpKeyDisp = false;	// 1行目にキーワードも表示する(&W)
 	pType->bUseKeyHelpPrefix = false;		// 選択範囲で前方一致検索(&P)
-//@@@ 2006.04.10 fon ADD-end
 
-	// 2005.11.08 Moca 指定位置縦線の設定
+	// 指定位置縦線の設定
 	for (size_t i=0; i<MAX_VERTLINES; ++i) {
 		pType->nVertLineIdx[i] = 0;
 	}
 	pType->nNoteLineOffset = 0;
 
-	//  保存時に改行コードの混在を警告する	2013/4/14 Uchi
+	//  保存時に改行コードの混在を警告する
 	pType->bChkEnterAtEnd = true;
 
 	pType->bUseTypeFont = false;				// タイプ別フォントの使用
 
-	pType->nLineNumWidth = LINENUMWIDTH_MIN;	// 行番号最小桁数 2014.08.02 katze
+	pType->nLineNumWidth = LINENUMWIDTH_MIN;	// 行番号最小桁数
 }
 

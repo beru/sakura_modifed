@@ -95,7 +95,7 @@ protected:
 		size_t			nDocLineLen,
 		size_t			nLineStart,
 		size_t			nLineLen,
-		size_t			nIndent,	// 折り返しインデント桁数 // 2006.08.14 Moca
+		size_t			nIndent,	// 折り返しインデント桁数
 		const Layout*	pLayout = nullptr,	// 色付用Layout
 		ColorStrategy*	pStrategyStart = nullptr
 	);
@@ -166,7 +166,6 @@ public:
 protected:
 	EditWnd&		parentWnd;	//	親のEditEnd。
 
-	// 2006.08.17 Moca YAZAKIさんのメモの通りDC/BMPをCEditDocからPrintPreviewへ移動
 	HDC				hdcCompatDC;		// 再描画用コンパチブルDC
 	HBITMAP			hbmpCompatBMP;		// 再描画用メモリBMP
 	HBITMAP			hbmpCompatBMPOld;	// 再描画用メモリBMP(OLD)

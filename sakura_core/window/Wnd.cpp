@@ -206,9 +206,9 @@ LRESULT Wnd::DispatchEvent(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
 
 	CALLH(WM_MEASUREITEM		, OnMeasureItem		);
 	CALLH(WM_MENUCHAR			, OnMenuChar		);
-	CALLH(WM_NOTIFY				, OnNotify			);	//@@@ 2003.05.31 MIK
-	CALLH(WM_DRAWITEM			, OnDrawItem		);	// 2006.02.01 ryoji
-	CALLH(WM_CAPTURECHANGED		, OnCaptureChanged	);	// 2006.11.30 ryoji
+	CALLH(WM_NOTIFY				, OnNotify			);
+	CALLH(WM_DRAWITEM			, OnDrawItem		);
+	CALLH(WM_CAPTURECHANGED		, OnCaptureChanged	);
 
 	default:
 		if (WM_APP <= msg && msg <= 0xBFFF) {

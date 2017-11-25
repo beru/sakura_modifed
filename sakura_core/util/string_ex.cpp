@@ -552,9 +552,6 @@ int my_mbisalpha2(int c)
  */
 int __cdecl my_internal_icmp(const char* s1, const char* s2, unsigned int n, unsigned int dcount, bool flag)
 {
-//	2002.11.29 Moca 元の値を保持する必要がなくなったため *_lo, *_upを削除
-//	int	c1, c1_lo, c1_up;
-//	int	c2, c2_lo, c2_up;
 	int 	c1, c2;
 	bool	prev1, prev2; // 前の文字が SJISの１バイト目か
 #ifdef MY_ICMP_MBS
@@ -575,8 +572,6 @@ int __cdecl my_internal_icmp(const char* s1, const char* s2, unsigned int n, uns
 //		c2 = c2_lo = c2_up = (int)((unsigned int)*p2);
 		c1 = (int)((unsigned int)*p1);
 		c2 = (int)((unsigned int)*p2);
-
-		// 2002.11.29 Moca 文字列の終端に達したか調べる部分 は後方へ移動
 
 		// 文字１の日本語チェックを行い比較用の大文字小文字をセットする
 		if (prev1) {	// 前の文字が日本語１バイト目
@@ -628,8 +623,6 @@ int __cdecl my_internal_icmp(const char* s1, const char* s2, unsigned int n, uns
 //		if ((c1_lo - c2_lo) && (c1_up - c2_up)) return c1 - c2;	// 戻り値は元の文字の差
 		if (c1 - c2) return c1 - c2;	// 戻り値は大文字に変換した文字の差
 
-		/* 2002.11.29 Moca 戻り値を変更したことにより，小文字→大文字変換の後に移動
-		   片方だけ NULL文字 の場合は上の比較した時点で return するためその処理は不要 */
 		if (flag) {
 			// 文字列の終端に達したか調べる
 			if (!c1) return 0;
@@ -643,7 +636,6 @@ int __cdecl my_internal_icmp(const char* s1, const char* s2, unsigned int n, uns
 
 // skr_towupper() / skr_tolower()
 //
-// 2010.09.28 ryoji
 // BugReport/64: towupper(c) によって U+00e0-U+00fc と U+0020 が同一視される問題の対策
 // VC のランタイムは c < 256 の条件ではなぜか locale に対応した "ANSI 系の" 変換テーブル引きを行っている模様
 // （Unicode 系変換関数なのに locale が "Japanese" だと c < 256 の範囲では SJIS 用らしき変換テーブルが使われる）

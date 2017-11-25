@@ -3,13 +3,12 @@
 */
 #include "StdAfx.h"
 #include "prop/PropCommon.h"
-#include "dlg/DlgWinSize.h"	//	2004.05.13 Moca
+#include "dlg/DlgWinSize.h"
 #include "util/shell.h"
 #include "sakura_rc.h"
 #include "sakura.hh"
 #include "_main/Process.h"
 
-//@@@ 2001.02.04 Start by MIK: Popup Help
 static const DWORD p_helpids[] = {	//11200
 	IDC_CHECK_DispFUNCKEYWND,		HIDC_CHECK_DispFUNCKEYWND,		// ファンクションキー表示
 	IDC_CHECK_DispSTATUSBAR,		HIDC_CHECK_DispSTATUSBAR,		// ステータスバー表示
@@ -28,17 +27,14 @@ static const DWORD p_helpids[] = {	//11200
 	IDC_SPIN_nRulerHeight,			HIDC_EDIT_nRulerHeight,
 	IDC_SPIN_nLineNumberRightSpace,	HIDC_EDIT_nLineNumberRightSpace,
 	IDC_SPIN_FUNCKEYWND_GROUPNUM,	HIDC_EDIT_FUNCKEYWND_GROUPNUM,
-	IDC_WINCAPTION_ACTIVE,			HIDC_WINCAPTION_ACTIVE,			// アクティブ時	//@@@ 2003.06.15 MIK
-	IDC_WINCAPTION_INACTIVE,		HIDC_WINCAPTION_INACTIVE,		// 非アクティブ時	//@@@ 2003.06.15 MIK
-	IDC_BUTTON_WINSIZE,				HIDC_BUTTON_WINSIZE,			// 位置と大きさの設定	// 2006.08.06 ryoji
+	IDC_WINCAPTION_ACTIVE,			HIDC_WINCAPTION_ACTIVE,			// アクティブ時
+	IDC_WINCAPTION_INACTIVE,		HIDC_WINCAPTION_INACTIVE,		// 非アクティブ時
+	IDC_BUTTON_WINSIZE,				HIDC_BUTTON_WINSIZE,			// 位置と大きさの設定
 	IDC_COMBO_LANGUAGE,				HIDC_COMBO_LANGUAGE,			// 言語選択
-	//	Feb. 11, 2007 genta TAB関連は「タブバー」シートへ移動
 //	IDC_STATIC,						-1,
 	0, 0
 };
-//@@@ 2001.02.04 End
 
-//	From Here Jun. 2, 2001 genta
 /*!
 	@param hwndDlg ダイアログボックスのWindow Handle
 	@param uMsg メッセージ
@@ -53,8 +49,7 @@ INT_PTR CALLBACK PropWin::DlgProc_page(
 	)
 {
 	return DlgProc(reinterpret_cast<pDispatchPage>(&PropWin::DispatchEvent), hwndDlg, uMsg, wParam, lParam);
-	}
-//	To Here Jun. 2, 2001 genta
+}
 
 
 // メッセージ処理
@@ -193,7 +188,7 @@ INT_PTR PropWin::DispatchEvent(
 				EnableWinPropInput(hwndDlg);
 				break;
 
-			// From Here 2004.05.13 Moca 「位置と大きさの設定」ボタン
+			// 「位置と大きさの設定」ボタン
 			//	ウィンドウ設定ダイアログにて起動時のウィンドウ状態指定
 			case IDC_BUTTON_WINSIZE:
 				{
@@ -218,30 +213,24 @@ INT_PTR PropWin::DispatchEvent(
 					csWindow.nWinPosY = rc.left;
 				}
 				break;
-			// To Here 2004.05.13 Moca
 			}
 			break;
 		}
 		break;
-//	To Here Sept. 9, 2000
 
-//@@@ 2001.02.04 Start by MIK: Popup Help
 	case WM_HELP:
 		{
 			HELPINFO* p = (HELPINFO*) lParam;
-			MyWinHelp((HWND)p->hItemHandle, HELP_WM_HELP, (ULONG_PTR)(LPVOID)p_helpids);	// 2006.10.10 ryoji MyWinHelpに変更に変更
+			MyWinHelp((HWND)p->hItemHandle, HELP_WM_HELP, (ULONG_PTR)(LPVOID)p_helpids);
 		}
 		return TRUE;
 		// NOTREACHED
 		//break;
-//@@@ 2001.02.04 End
 
-//@@@ 2001.12.22 Start by MIK: Context Menu Help
 	// Context Menu
 	case WM_CONTEXTMENU:
-		MyWinHelp(hwndDlg, HELP_CONTEXTMENU, (ULONG_PTR)(LPVOID)p_helpids);	// 2006.10.10 ryoji MyWinHelpに変更に変更
+		MyWinHelp(hwndDlg, HELP_CONTEXTMENU, (ULONG_PTR)(LPVOID)p_helpids);
 		return TRUE;
-//@@@ 2001.12.22 End
 
 	}
 	return FALSE;
@@ -267,14 +256,8 @@ void PropWin::SetData(HWND hwndDlg)
 		::CheckDlgButton(hwndDlg, IDC_RADIO_FUNCKEYWND_PLACE1, FALSE);
 		::CheckDlgButton(hwndDlg, IDC_RADIO_FUNCKEYWND_PLACE2, TRUE);
 	}
-	// 2002/11/04 Moca ファンクションキーのグループボタン数
+	// ファンクションキーのグループボタン数
 	::SetDlgItemInt(hwndDlg, IDC_EDIT_FUNCKEYWND_GROUPNUM, csWindow.nFuncKeyWnd_GroupNum, FALSE);
-
-	// From Here@@@ 2003.06.13 MIK
-	//	Feb. 12, 2007 genta TAB関連は「タブバー」シートへ移動
-
-	// To Here@@@ 2003.06.13 MIK
-	//	Feb. 11, 2007 genta TAB関連は「タブバー」シートへ移動
 
 	// 次回ウィンドウを開いたときステータスバーを表示する
 	::CheckDlgButton(hwndDlg, IDC_CHECK_DispSTATUSBAR, csWindow.bDispStatusBar);
@@ -283,17 +266,8 @@ void PropWin::SetData(HWND hwndDlg)
 	::SetDlgItemInt(hwndDlg, IDC_EDIT_nRulerHeight, csWindow.nRulerHeight, FALSE);
 	// ルーラーとテキストの隙間
 	::SetDlgItemInt(hwndDlg, IDC_EDIT_nRulerBottomSpace, csWindow.nRulerBottomSpace, FALSE);
-	//	Sep. 18. 2002 genta 行番号とテキストの隙間
+	// 行番号とテキストの隙間
 	::SetDlgItemInt(hwndDlg, IDC_EDIT_nLineNumberRightSpace, csWindow.nLineNumRightSpace, FALSE);
-
-	// ルーラーのタイプ//	del 2008/7/4 Uchi
-//	if (csWindow.nRulerType == 0) {
-//		::CheckDlgButton(hwndDlg, IDC_RADIO_nRulerType_0, TRUE);
-//		::CheckDlgButton(hwndDlg, IDC_RADIO_nRulerType_1, FALSE);
-//	}else {
-//		::CheckDlgButton(hwndDlg, IDC_RADIO_nRulerType_0, FALSE);
-//		::CheckDlgButton(hwndDlg, IDC_RADIO_nRulerType_1, TRUE);
-//	}
 
 	// 水平スクロールバー
 	::CheckDlgButton(hwndDlg, IDC_CHECK_bScrollBarHorz, csWindow.bScrollBarHorz);
@@ -301,21 +275,18 @@ void PropWin::SetData(HWND hwndDlg)
 	// アイコン付きメニュー
 	::CheckDlgButton(hwndDlg, IDC_CHECK_bMenuIcon, csWindow.bMenuIcon);
 
-	//	2001/06/20 Start by asa-o:	スクロールの同期
+	// スクロールの同期
 	::CheckDlgButton(hwndDlg, IDC_CHECK_SplitterWndVScroll, csWindow.bSplitterWndVScroll);
 	::CheckDlgButton(hwndDlg, IDC_CHECK_SplitterWndHScroll, csWindow.bSplitterWndHScroll);
-	//	2001/06/20 End
 
-	//	Apr. 05, 2003 genta ウィンドウキャプションのカスタマイズ
-	EditCtl_LimitText(::GetDlgItem(hwndDlg, IDC_WINCAPTION_ACTIVE  ), _countof(csWindow.szWindowCaptionActive  ) - 1);	//@@@ 2003.06.13 MIK
-	EditCtl_LimitText(::GetDlgItem(hwndDlg, IDC_WINCAPTION_INACTIVE), _countof(csWindow.szWindowCaptionInactive) - 1);	//@@@ 2003.06.13 MIK
+	// ウィンドウキャプションのカスタマイズ
+	EditCtl_LimitText(::GetDlgItem(hwndDlg, IDC_WINCAPTION_ACTIVE  ), _countof(csWindow.szWindowCaptionActive  ) - 1);
+	EditCtl_LimitText(::GetDlgItem(hwndDlg, IDC_WINCAPTION_INACTIVE), _countof(csWindow.szWindowCaptionInactive) - 1);
 	::DlgItem_SetText(hwndDlg, IDC_WINCAPTION_ACTIVE, csWindow.szWindowCaptionActive);
 	::DlgItem_SetText(hwndDlg, IDC_WINCAPTION_INACTIVE, csWindow.szWindowCaptionInactive);
 
-	//	Fronm Here Sept. 9, 2000 JEPRO
-	//	ファンクションキーを表示する時だけその位置指定をEnableに設定
+	// ファンクションキーを表示する時だけその位置指定をEnableに設定
 	EnableWinPropInput(hwndDlg);
-	//	To Here Sept. 9, 2000
 
 	// 言語選択
 	HWND hwndCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_LANGUAGE);
@@ -354,7 +325,7 @@ int PropWin::GetData(HWND hwndDlg)
 		csWindow.nFuncKeyWnd_Place = 1;
 	}
 
-	// 2002/11/04 Moca ファンクションキーのグループボタン数
+	// ファンクションキーのグループボタン数
 	csWindow.nFuncKeyWnd_GroupNum = ::GetDlgItemInt(hwndDlg, IDC_EDIT_FUNCKEYWND_GROUPNUM, NULL, FALSE);
 	if (csWindow.nFuncKeyWnd_GroupNum < 1) {
 		csWindow.nFuncKeyWnd_GroupNum = 1;
@@ -363,20 +334,8 @@ int PropWin::GetData(HWND hwndDlg)
 		csWindow.nFuncKeyWnd_GroupNum = 12;
 	}
 
-	// From Here@@@ 2003.06.13 MIK
-	//	Feb. 12, 2007 genta TAB関連は「タブバー」シートへ移動
-	// To Here@@@ 2003.06.13 MIK
-
 	// 次回ウィンドウを開いたときステータスバーを表示する 
 	csWindow.bDispStatusBar = DlgButton_IsChecked(hwndDlg, IDC_CHECK_DispSTATUSBAR);
-
-	// ルーラーのタイプ//	del 2008/7/4 Uchi
-//	if (DlgButton_IsChecked(hwndDlg, IDC_RADIO_nRulerType_0)) {
-//		csWindow.nRulerType = 0;
-//	}
-//	if (DlgButton_IsChecked(hwndDlg, IDC_RADIO_nRulerType_1)) {
-//		csWindow.nRulerType = 1;
-//	}
 
 	// ルーラー高さ
 	csWindow.nRulerHeight = ::GetDlgItemInt(hwndDlg, IDC_EDIT_nRulerHeight, NULL, FALSE);

@@ -34,11 +34,11 @@
 #define HLP000015	15 //開く
 #define HLP000020	20 //上書き保存
 #define HLP000021	21 //名前を付けて保存
-#define HLP000313	313 //すべて上書き保存	// 2006.10.05 ryoji
-#define HLP000287	287 //保存して閉じる	// 2006.10.05 ryoji
+#define HLP000313	313 //すべて上書き保存
+#define HLP000287	287 //保存して閉じる
 #define HLP000017	17 //閉じて(無題)
 #define HLP000119	119 //閉じて開く
-#define HLP000283	283 //開き直す	//@@@ 2003.06.15 MIK
+#define HLP000283	283 //開き直す
 #define HLP000156	156 //SJISで開き直す
 #define HLP000157	157 //JISで開き直す
 #define HLP000158	158 //EUCで開き直す
@@ -59,7 +59,7 @@
 #define HLP000363	363 //プロファイルマネージャ
 #define HLP000029	29 //最近使ったファイル
 #define HLP000023	23 //最近使ったフォルダ
-#define HLP000030	30 //編集の全終了	// 2007.02.13 ryoji
+#define HLP000030	30 //編集の全終了
 #define HLP000028	28 //サクラエディタの全終了
 #define HLP000031	31 //「編集(E)」メニューの一覧
 #define HLP000032	32 //元に戻す(Undo)
@@ -76,7 +76,7 @@
 #define HLP000164	164 //日付挿入
 #define HLP000165	165 //時刻挿入
 #define HLP000255	255	//コントロールコードの入力
-#define HLP000289	289 //カーソル移動	// 2006.10.11 ryoji
+#define HLP000289	289 //カーソル移動
 #define HLP000220	220 //カーソル上移動（2行ごと）
 #define HLP000221	221 //カーソル下移動（2行ごと）
 #define HLP000222	222 //単語の左端に移動
@@ -168,14 +168,14 @@
 #define HLP000362	362 //Grep置換
 #define HLP000063	63 //指定行へジャンプ
 #define HLP000064	64 //アウトライン解析
-#define HLP000317	317 //アウトライン解析(トグル)	// 2006.10.11 ryoji
+#define HLP000317	317 //アウトライン解析(トグル)
 #define HLP000065	65 //タグジャンプ
 #define HLP000066	66 //タグジャンプバック
 #define HLP000278	278 //タグジャンプ一覧
 #define HLP000280	280 //タグファイルの作成
 #define HLP000281	281 //ダイレクトタグジャンプ
-#define HLP000291	291 //閉じてタグジャンプ(元ウィンドウclose)	// 2006.10.11 ryoji
-#define HLP000310	310 //キーワードを指定してタグジャンプ	// 2006.10.05 ryoji
+#define HLP000291	291 //閉じてタグジャンプ(元ウィンドウclose)
+#define HLP000310	310 //キーワードを指定してタグジャンプ
 #define HLP000111	111 //入力補完
 #define HLP000116	116 //ファイル内容比較
 #define HLP000183	183 //対括弧の検索
@@ -184,19 +184,19 @@
 #define HLP000207	207 //前のブックマークへ
 #define HLP000208	208 //ブックマークの全解除
 #define HLP000209	209 //ブックマークの一覧
-#define HLP000304	304 //前方インクリメンタルサーチ	// 2006.10.05 ryoji
-#define HLP000305	305 //後方インクリメンタルサーチ	// 2006.10.05 ryoji
-#define HLP000306	306 //正規表現前方インクリメンタルサーチ	// 2006.10.05 ryoji
-#define HLP000307	307 //正規表現後方インクリメンタルサーチ	// 2006.10.05 ryoji
-#define HLP000308	308 //MIGEMO前方インクリメンタルサーチ	// 2006.10.05 ryoji
-#define HLP000309	309 //MIGEMO後方インクリメンタルサーチ	// 2006.10.05 ryoji
+#define HLP000304	304 //前方インクリメンタルサーチ
+#define HLP000305	305 //後方インクリメンタルサーチ
+#define HLP000306	306 //正規表現前方インクリメンタルサーチ
+#define HLP000307	307 //正規表現後方インクリメンタルサーチ
+#define HLP000308	308 //MIGEMO前方インクリメンタルサーチ
+#define HLP000309	309 //MIGEMO後方インクリメンタルサーチ
 #define HLP000364	364 //次の関数リストマーク
 #define HLP000365	365 //前の関数リストマーク
 #define HLP000368	368 //ファイルツリー
 #define HLP000068	68 //「ツール(T)」メニューの一覧
 #define HLP000069	69 //ツールバーを表示(隠す)
 #define HLP000070	70 //ファンクションキーを表示(隠す)
-#define HLP000282	282	//タブの表示／非表示	//@@@ 2003.06.10 MIK
+#define HLP000282	282	//タブの表示／非表示
 #define HLP000134	134 //ステータスバーを表示(隠す)
 #define HLP000371	371 //ミニマップの表示
 #define HLP000072	72 //タイプ別設定一覧
@@ -206,21 +206,20 @@
 #define HLP000075	75 //タイプ別設定 『カラー』プロパティ
 #define HLP000319	319 //タイプ別設定 『ウィンドウ』プロパティ	// 2013.04.13
 #define HLP000197	197 //タイプ別設定 『支援』プロパティ
-#define HLP000203	203 //タイプ別設定 『正規表現キーワード』プロパティ	//@@@ 2001.11.17 add MIK
-#define HLP000315	315 //タイプ別設定 『キーワードヘルプ』プロパティ	// 2006.10.06 ryoji
-#define HLP000077	77 //設定フォルダ（iniフォルダ）	// 2007.09.09 maru
-#define HLP000078	78 //ユーザー別設定					// 2007.09.23 maru
-#define HLP000079	79 //Visual Style					// 2007.09.30 maru
-#define HLP000080	80 //Virtual Store					// 2007.09.30 maru
+#define HLP000203	203 //タイプ別設定 『正規表現キーワード』プロパティ
+#define HLP000315	315 //タイプ別設定 『キーワードヘルプ』プロパティ
+#define HLP000077	77 //設定フォルダ（iniフォルダ）
+#define HLP000078	78 //ユーザー別設定	
+#define HLP000079	79 //Visual Style
+#define HLP000080	80 //Virtual Store
 #define HLP000076	76 //共通設定
 #define HLP000081	81 //共通設定 『全般』プロパティ
 #define HLP000146	146 //共通設定 『ウィンドウ』プロパティ
-#define HLP000150	150 //共通設定 『タブバー』プロパティ	// 2007.02.13 ryoji
+#define HLP000150	150 //共通設定 『タブバー』プロパティ
 #define HLP000144	144 //共通設定 『編集』プロパティ
 #define HLP000083	83 //共通設定 『ファイル』プロパティ
 #define HLP000145	145 //共通設定 『バックアップ』プロパティ
 #define HLP000082	82 //共通設定 『書式』プロパティ
-//#define HLP000147	147 //共通設定 『クリッカブルURL』プロパティ	// 2007.02.13 ryoji 廃止
 #define HLP000148	148 //共通設定 『Grep』プロパティ
 #define HLP000084	84 //共通設定 『キー割り当て』プロパティ
 #define HLP000087	87 //共通設定 『カスタムメニュー』プロパティ
@@ -255,33 +254,33 @@
 #define HLP000019	19 //すべてのウィンドウを閉じる
 #define HLP000092	92 //次のウィンドウ
 #define HLP000091	91 //前のウィンドウ
-#define HLP000314	314 //ウィンドウ一覧	// 2006.10.05 ryoji
-#define HLP000311	311 //結合して表示	// 2006.10.05 ryoji
+#define HLP000314	314 //ウィンドウ一覧
+#define HLP000311	311 //結合して表示
 #define HLP000138	138 //重ねて表示
 #define HLP000140	140 //上下に並べて表示
 #define HLP000139	139 //左右に並べて表示
-#define HLP000312	312 //常に手前に表示	// 2006.10.05 ryoji
+#define HLP000312	312 //常に手前に表示
 #define HLP000141	141 //縦方向に最大化
 #define HLP000098	98 //横方向に最大化
 #define HLP000096	96 //すべて最小化
 #define HLP000187	187 //再描画
 #define HLP000188	188 //アウトプット
 #define HLP000097	97 //(ウィンドウリスト)
-#define HLP000320	320 //グループを閉じる		// 2007.06.20 ryoji
-#define HLP000321	321 //次のグループ			// 2007.07.04 ryoji
-#define HLP000322	322 //前のグループ			// 2007.07.04 ryoji
-#define HLP000323	323 //タブを右に移動		// 2007.07.04 ryoji
-#define HLP000324	324 //タブを左に移動		// 2007.07.04 ryoji
-#define HLP000325	325 //新規グループ			// 2007.07.04 ryoji
-#define HLP000326	326 //次のグループに移動	// 2007.07.04 ryoji
-#define HLP000327	327 //前のグループに移動	// 2007.07.04 ryoji
-#define HLP000333	333 //このタブ以外を閉じる	// 2009.07.07 syat
-#define HLP000334	334 //左をすべて閉じる		// 2009.07.07 syat
-#define HLP000335	335 //右をすべて閉じる		// 2009.07.07 syat
-#define HLP000328	328 //編集文書の一時出力			// 2007.09.29 maru
-#define HLP000329	329 //編集文書にファイル挿入		// 2007.09.29 maru
-#define HLP000330	330 //引用符の変更					// 2007.09.29 maru
-#define HLP000331	331 //トレース出力					// 2007.09.29 maru
+#define HLP000320	320 //グループを閉じる
+#define HLP000321	321 //次のグループ
+#define HLP000322	322 //前のグループ
+#define HLP000323	323 //タブを右に移動
+#define HLP000324	324 //タブを左に移動
+#define HLP000325	325 //新規グループ
+#define HLP000326	326 //次のグループに移動
+#define HLP000327	327 //前のグループに移動
+#define HLP000333	333 //このタブ以外を閉じる
+#define HLP000334	334 //左をすべて閉じる
+#define HLP000335	335 //右をすべて閉じる
+#define HLP000328	328 //編集文書の一時出力
+#define HLP000329	329 //編集文書にファイル挿入
+#define HLP000330	330 //引用符の変更
+#define HLP000331	331 //トレース出力
 #define HLP000099	99 //「ヘルプ(H)」メニューの一覧
 #define HLP000100	100 //ヘルプ目次
 #define HLP000101	101 //キーワード検索
@@ -312,7 +311,7 @@
 #define HLP000218	218 //再変換
 #define HLP000219	219 //折り返し位置に改行をつけてコピー
 #define HLP000233	233 //範囲選択開始
-#define HLP000290	290 //（選択）カーソル移動	// 2006.10.11 ryoji
+#define HLP000290	290 //（選択）カーソル移動
 #define HLP000234	234 //（選択）カーソル上移動（2行ごと）
 #define HLP000235	235 //（選択）カーソル下移動（2行ごと）
 #define HLP000236	236 //（選択）単語の左端に移動
@@ -357,8 +356,8 @@
 #define HLP000253	253	//前の差分へ
 #define HLP000254	254	//差分表示の全解除
 #define HLP000286	286	//ウィンドウの位置と大きさ
-#define HLP000316	316	//文字色／背景色統一	// 2006.10.07 ryoji
-#define HLP000318	318	//キャレット位置辞書検索機能ON/OFF	// 2006.10.11 ryoji
+#define HLP000316	316	//文字色／背景色統一
+#define HLP000318	318	//キャレット位置辞書検索機能ON/OFF
 #define HLP000297	297	//文字コードセット指定
 
 #define HLP000300	300 //ファイルタイプ
@@ -418,14 +417,14 @@
 #define HIDC_RADIO_BACKUP_TYPE1					10060 //バックアップの種類（拡張子）
 //#define HIDC_RADIO_BACKUP_TYPE3					10061 //バックアップの種類（日付・時刻）
 //#define HIDC_RADIO_BACKUP_TYPE2					10062 //バックアップの種類（連番）
-#define HIDC_RADIO_BACKUP_TYPE2NEWHID			10061 //バックアップの種類（日付・時刻）// 2002.11.09 Moca ヘルプ・ソースのコメントがTYPE2と逆だったため名称変更しヘルプファイルにIDを合わせた
-#define HIDC_RADIO_BACKUP_TYPE3NEWHID			10062 //バックアップの種類（連番）// 2002.11.09 Moca ヘルプ・ソースのコメントがTYPE3と逆だったため名称変更しヘルプファイルにIDを合わせた
+#define HIDC_RADIO_BACKUP_TYPE2NEWHID			10061 //バックアップの種類（日付・時刻）
+#define HIDC_RADIO_BACKUP_TYPE3NEWHID			10062 //バックアップの種類（連番）
 #define HIDC_RADIO_BACKUP_DATETYPE1				10063 //付加する日時の種類（作成日時）//Jul. 05, 2001 JEPRO 追加
 #define HIDC_RADIO_BACKUP_DATETYPE2				10064 //付加する日時の種類（更新日時）//Jul. 05, 2001 JEPRO 追加
-#define HIDC_CHECK_BACKUP_RETAINEXT				10065 //元の拡張子を保存	// 2006.08.06 ryoji
-#define HIDC_CHECK_BACKUP_ADVANCED				10066 //詳細設定	// 2006.08.06 ryoji
-#define HIDC_RADIO_BACKUP_DATETYPE1A			10067 //付加する日時の種類（作成日時）※詳細設定ON用	// 2009.02.20 ryoji
-#define HIDC_RADIO_BACKUP_DATETYPE2A			10068 //付加する日時の種類（更新日時）※詳細設定ON用	// 2009.02.20 ryoji
+#define HIDC_CHECK_BACKUP_RETAINEXT				10065 //元の拡張子を保存
+#define HIDC_CHECK_BACKUP_ADVANCED				10066 //詳細設定
+#define HIDC_RADIO_BACKUP_DATETYPE1A			10067 //付加する日時の種類（作成日時）※詳細設定ON用
+#define HIDC_RADIO_BACKUP_DATETYPE2A			10068 //付加する日時の種類（更新日時）※詳細設定ON用
 
 #define HIDC_BUTTON_DELETE						10100 //メニューから機能削除
 #define HIDC_BUTTON_INSERTSEPARATOR				10101 //セパレータ挿入
@@ -437,15 +436,15 @@
 #define HIDC_BUTTON_EXPORT						10107 //エクスポート
 #define HIDC_COMBO_FUNCKIND						10130 //機能の種別
 #define HIDC_COMBO_MENU							10131 //メニューの種別
-#define HIDC_EDIT_MENUNAME						10132 //メニュー名	// 2009.02.20 ryoji
-#define HIDC_BUTTON_MENUNAME					10133 //メニュー名設定	// 2009.02.20 ryoji
+#define HIDC_EDIT_MENUNAME						10132 //メニュー名
+#define HIDC_BUTTON_MENUNAME					10133 //メニュー名設定
 #define HIDC_LIST_FUNC							10150 //機能一覧
 #define HIDC_LIST_RES							10151 //メニュー一覧
 #define HIDC_CHECK_SUBMENU						10152 //サブメニューとして表示
 #define HIDC_CHECK_ADDCRLFWHENCOPY				10210 //折り返し行に改行を付けてコピー
 #define HIDC_CHECK_COPYnDISABLESELECTEDAREA		10211 //コピーしたら選択解除
-#define HIDC_CHECK_bEnableNoSelectCopy			10216 //選択なしでコピーを可能にする	// 2007.11.18 ryoji
-#define HIDC_CHECK_bEnableLineModePaste			10215 //ラインモード貼り付けを可能にする	// 2007.10.08 ryoji
+#define HIDC_CHECK_bEnableNoSelectCopy			10216 //選択なしでコピーを可能にする
+#define HIDC_CHECK_bEnableLineModePaste			10215 //ラインモード貼り付けを可能にする
 #define HIDC_CHECK_DRAGDROP						10212 //ドラッグ＆ドロップ編集する
 #define HIDC_CHECK_DROPSOURCE					10213 //ドロップ元にする
 #define HIDC_CHECK_bNotOverWriteCRLF			10214 //改行は上書きしない
@@ -470,10 +469,10 @@
 #define HIDC_EDIT_AUTOBACKUP_INTERVAL			10340 //自動保存間隔
 #define HIDC_EDIT_nDropFileNumMax				10341 //ファイルドロップ最大数
 #define HIDC_CHECK_RestoreBookmarks				10342 //ブックマークの復元
-#define HIDC_CHECK_QueryIfCodeChange			10343 //前回と異なる文字コードのとき問い合わせを行う	// 2006.08.06 ryoji
-#define HIDC_CHECK_AlertIfFileNotExist			10344 //開こうとしたファイルが存在しないとき警告する	// 2006.08.06 ryoji
-#define HIDC_CHECK_NoFilterSaveNew				10345 //新規から保存時は全ファイル表示	// 2006.11.16 ryoji
-#define HIDC_CHECK_NoFilterSaveFile				10346 //新規以外から保存時は全ファイル表示	// 2006.11.16 ryoji
+#define HIDC_CHECK_QueryIfCodeChange			10343 //前回と異なる文字コードのとき問い合わせを行う
+#define HIDC_CHECK_AlertIfFileNotExist			10344 //開こうとしたファイルが存在しないとき警告する
+#define HIDC_CHECK_NoFilterSaveNew				10345 //新規から保存時は全ファイル表示
+#define HIDC_CHECK_NoFilterSaveFile				10346 //新規以外から保存時は全ファイル表示
 #define HIDC_CHECK_ALERT_IF_LARGEFILE			10347 //開こうとしたファイルが大きい場合に警告する
 #define HIDC_COMBO_FILESHAREMODE				10348 //排他制御
 #define HIDC_CHECK_bUneditableIfUnwritable		10349 //上書き禁止検出時は編集禁止にする
@@ -487,13 +486,13 @@
 #define HIDC_RADIO_DFORM_1						10461 //日付書式（カスタム）
 #define HIDC_RADIO_TFORM_0						10462 //時刻書式（標準）
 #define HIDC_RADIO_TFORM_1						10463 //時刻書式（カスタム）
-#define HIDC_CHECK_bCaretTextForSearch			10500 //カーソル位置の文字列をデフォルトの検索文字列にする	// 2006.08.23 ryoji
+#define HIDC_CHECK_bCaretTextForSearch			10500 //カーソル位置の文字列をデフォルトの検索文字列にする
 #define HIDC_CHECK_bGrepExitConfirm				10510 //GREPの保存確認
 #define HIDC_CHECK_GTJW_RETURN					10511 //タグジャンプ（エンターキー）
 #define HIDC_CHECK_GTJW_LDBLCLK					10512 //タグジャンプ（ダブルクリック）
-#define HIDC_CHECK_GREPREALTIME					10513 //リアルタイムで表示する	// 2006.08.08 ryoji
-#define HIDC_EDIT_REGEXPLIB						10514 //正規表現ライブラリ選択	// 2007.09.02 genta
-#define HIDC_LABEL_REGEXPVER					10515 //正規表現ライブラリ選択	// 2007.09.02 genta
+#define HIDC_CHECK_GREPREALTIME					10513 //リアルタイムで表示する
+#define HIDC_EDIT_REGEXPLIB						10514 //正規表現ライブラリ選択
+#define HIDC_LABEL_REGEXPVER					10515 //正規表現ライブラリ選択
 #define HIDC_COMBO_TAGJUMP						10516 //タグファイルの検索
 #define HIDC_COMBO_KEYWORD_TAGJUMP				10517 //タグファイルの検索
 //#define HIDC_BUTTON_HOKANFILE_REF				10600 //入力補完 単語ファイル参照			//Jul. 05, 2001 JEPRO タイプ別に移動
@@ -514,10 +513,10 @@
 //#define HIDC_EDIT_KEYWORDHELPFILE				10641 //辞書ファイル名						//Jul. 05, 2001 JEPRO タイプ別に移動
 #define HIDC_EDIT_EXTHELP1						10642 //外部ヘルプファイル名
 #define HIDC_EDIT_EXTHTMLHELP					10643 //外部HTMLヘルプファイル名
-#define HIDC_EDIT_MIGEMO_DLL					10650 //Migemo DLLファイル名	// 2006.08.06 ryoji
-#define HIDC_BUTTON_OPENMDLL					10651 //Migemo DLLファイル参照	// 2006.08.06 ryoji
-#define HIDC_EDIT_MIGEMO_DICT					10652 //Migemo 辞書ファイル名	// 2006.08.06 ryoji
-#define HIDC_BUTTON_OPENMDICT					10653 //Migemo 辞書ファイル参照	// 2006.08.06 ryoji
+#define HIDC_EDIT_MIGEMO_DLL					10650 //Migemo DLLファイル名
+#define HIDC_BUTTON_OPENMDLL					10651 //Migemo DLLファイル参照
+#define HIDC_EDIT_MIGEMO_DICT					10652 //Migemo 辞書ファイル名
+#define HIDC_BUTTON_OPENMDICT					10653 //Migemo 辞書ファイル参照
 #define HIDC_BUTTON_IMPORT_KEYBIND				10700 //インポート
 #define HIDC_BUTTON_EXPORT_KEYBIND				10701 //エクスポート
 #define HIDC_BUTTON_ASSIGN						10702 //キー割り当て
@@ -538,10 +537,10 @@
 #define HIDC_BUTTON_DELKEYWORD					10804 //キーワード削除
 #define HIDC_BUTTON_IMPORT_KEYWORD				10805 //インポート
 #define HIDC_BUTTON_EXPORT_KEYWORD				10806 //エクスポート
-#define HIDC_BUTTON_KEYCLEAN					10807 //キーワード整理	// 2006.08.06 ryoji
+#define HIDC_BUTTON_KEYCLEAN					10807 //キーワード整理
 #define HIDC_CHECK_KEYWORDCASE					10810 //キーワードの英大文字小文字区別
 #define HIDC_COMBO_SET							10830 //強調キーワードセット名
-#define HIDC_BUTTON_KEYSETRENAME				10831 //セットの名称変更	// 2006.08.06 ryoji
+#define HIDC_BUTTON_KEYSETRENAME				10831 //セットの名称変更
 #define HIDC_LIST_KEYWORD						10840 //キーワード一覧
 #define HIDC_BUTTON_CLEAR_MRU_FILE				10900 //履歴をクリア（ファイル）
 #define HIDC_BUTTON_CLEAR_MRU_FOLDER			10901 //履歴をクリア（フォルダ）
@@ -554,7 +553,7 @@
 #define HIDC_CHECK_EXITCONFIRM					10916 //終了の確認
 #define HIDC_CHECK_STOPS_WORD					10917 //単語単位で移動するときに単語の両端に止まる
 #define HIDC_CHECK_STOPS_PARAGRAPH				10918 //段落単位で移動するときに段落の両端に止まる
-#define HIDC_CHECK_CLOSEALLCONFIRM				10919 //[すべて閉じる]で他に編集用のウィンドウがあれば確認する	// 2006.12.25 ryoji
+#define HIDC_CHECK_CLOSEALLCONFIRM				10919 //[すべて閉じる]で他に編集用のウィンドウがあれば確認する
 #define HIDC_CHECK_NOMOVE_ACTIVATE_BY_MOUSE		10920 //マウスクリックでアクティブになったときはカーソルをクリック位置に移動しない 2007.10.08 genta
 #define HIDC_COMBO_WHEEL_PAGESCROLL				10921 //組み合わせてホイール操作した時ページスクロールする	// 2009.01.17 nasukoji
 #define HIDC_COMBO_WHEEL_HSCROLL				10922 //組み合わせてホイール操作した時横スクロールする	// 2009.01.17 nasukoji
@@ -574,7 +573,7 @@
 #define HIDC_COMBO_FUNCKIND_TOOLBAR				11030 //機能の種別
 #define HIDC_LIST_FUNC_TOOLBAR					11040 //機能一覧
 #define HIDC_LIST_RES_TOOLBAR					11041 //メニュー一覧
-#define HIDC_BUTTON_INSERTWRAP					11042 //ツールバー折返	// 2006.08.06 ryoji
+#define HIDC_BUTTON_INSERTWRAP					11042 //ツールバー折返
 #define HIDC_CHECK_bSelectClickedURL			11110 //クリッカブルURL
 #define HIDC_CHECK_DispFUNCKEYWND				11210 //ファンクションキー
 #define HIDC_CHECK_DispSTATUSBAR				11211 //ステータスバー
@@ -583,11 +582,11 @@
 #define HIDC_CHECK_bMenuIcon					11214 //アイコン付きメニュー
 #define HIDC_CHECK_SplitterWndVScroll			11216 //垂直スクロールの同期
 #define HIDC_CHECK_SplitterWndHScroll			11217 //水平スクロールの同期
-#define HIDC_CHECK_DispTabWnd					11218 //タブウィンドウ表示	//@@@ 2003.05.31 MIK
-#define HIDC_CHECK_GroupMultiTabWnd				11219 //ウィンドウをまとめてグループ化する	//@@@ 2003.05.31 MIK
-#define HIDC_WINCAPTION_ACTIVE					11220 //ウィンドウアクティブ時キャプション	//@@@ 2003.06.15 MIK
-#define HIDC_WINCAPTION_INACTIVE				11221 //ウィンドウ非アクティブ時キャプション	//@@@ 2003.06.15 MIK
-#define HIDC_TABWND_CAPTION						11222 //タブウィンドウキャプション	//@@@ 2003.06.15 MIK
+#define HIDC_CHECK_DispTabWnd					11218 //タブウィンドウ表示
+#define HIDC_CHECK_GroupMultiTabWnd				11219 //ウィンドウをまとめてグループ化する
+#define HIDC_WINCAPTION_ACTIVE					11220 //ウィンドウアクティブ時キャプション
+#define HIDC_WINCAPTION_INACTIVE				11221 //ウィンドウ非アクティブ時キャプション
+#define HIDC_TABWND_CAPTION						11222 //タブウィンドウキャプション
 #define HIDC_EDIT_nRulerBottomSpace				11240 //ルーラー（テキストとの隙間）
 #define HIDC_EDIT_nRulerHeight					11241 //ルーラー（高さ）
 #define HIDC_EDIT_nLineNumberRightSpace			11242 //行番号とテキストの隙間
@@ -595,12 +594,12 @@
 #define HIDC_RADIO_FUNCKEYWND_PLACE2			11261 //ファンクションキー表示位置（下）
 #define HIDC_EDIT_FUNCKEYWND_GROUPNUM			11262 //ファンクションキーのグループボタン数
 #define	HIDC_BUTTON_WINSIZE						11263 //位置と大きさの設定
-#define HIDC_CHECK_SameTabWidth					11270 //等幅	// 2006.08.06 ryoji
-#define HIDC_CHECK_DispTabIcon					11271 //アイコン表示	// 2006.08.06 ryoji
-#define HIDC_CHECK_SortTabList					11272 //タブ一覧ソート	// 2006.08.06 ryoji
-#define HIDC_CHECK_RetainEmptyWindow			11273 //最後のファイルを閉じたとき(無題)文書を残す	// 2007.02.13 ryoji
-#define HIDC_CHECK_CloseOneWin					11274 //ウィンドウの閉じるボタンは現在のファイルのみ閉じる	// 2007.02.13 ryoji
-#define HIDC_CHECK_ChgWndByWheel				11275 //マウスホイールでタブ切替	// 2007.04.03 ryoji
+#define HIDC_CHECK_SameTabWidth					11270 //等幅
+#define HIDC_CHECK_DispTabIcon					11271 //アイコン表示
+#define HIDC_CHECK_SortTabList					11272 //タブ一覧ソート
+#define HIDC_CHECK_RetainEmptyWindow			11273 //最後のファイルを閉じたとき(無題)文書を残す
+#define HIDC_CHECK_CloseOneWin					11274 //ウィンドウの閉じるボタンは現在のファイルのみ閉じる
+#define HIDC_CHECK_ChgWndByWheel				11275 //マウスホイールでタブ切替
 #define HIDC_CHECK_OpenNewWin					11276 //外部から起動するときは新しいウィンドウ開く	// 2009.06.19
 #define HIDC_BUTTON_TABFONT						11277 //タブフォント
 #define HIDC_CHECK_INHERIT_KEY_OTHER_VIEW		11278 //次・前検索で他のビューの検索条件を引き継ぐ
@@ -609,10 +608,10 @@
 #define HIDC_COMBO_TAB_POSITION					11281 //タブ表示位置
 #define HIDC_CHECK_WORDWRAP						11310 //英文ワードラップ
 #define HIDC_CHECK_INS_SPACE					11311 //スペースの挿入
-#define HIDC_CHECK_KINSOKUHEAD					11312 //行頭禁則	//@@@ 2002.04.08 MIK
-#define HIDC_CHECK_KINSOKUTAIL					11313 //行頭禁則	//@@@ 2002.04.08 MIK
-#define HIDC_CHECK_KINSOKURET					11314 //改行文字をぶら下げる	//@@@ 2002.04.14 MIK
-#define HIDC_CHECK_KINSOKUKUTO					11315 //句読点をぶら下げる	//@@@ 2002.04.17 MIK
+#define HIDC_CHECK_KINSOKUHEAD					11312 //行頭禁則
+#define HIDC_CHECK_KINSOKUTAIL					11313 //行頭禁則
+#define HIDC_CHECK_KINSOKURET					11314 //改行文字をぶら下げる
+#define HIDC_CHECK_KINSOKUKUTO					11315 //句読点をぶら下げる
 #define HIDC_EDIT_TABSPACE						11330 //TAB幅
 #define HIDC_COMBO_IMESWITCH					11331 //IMEのON/OFF状態
 #define HIDC_COMBO_IMESTATE						11332 //IMEの入力モード
@@ -625,18 +624,18 @@
 #define HIDC_EDIT_LINESPACE						11344 //行間の隙間
 #define HIDC_EDIT_INDENTCHARS					11345 //その他のインデント対象文字
 #define HIDC_EDIT_TABVIEWSTRING					11346 //TAB表示文字列
-#define HIDC_EDIT_KINSOKUHEAD					11347 //行頭禁則	//@@@ 2002.04.08 MIK
-#define HIDC_EDIT_KINSOKUTAIL					11348 //行頭禁則	//@@@ 2002.04.08 MIK
+#define HIDC_EDIT_KINSOKUHEAD					11347 //行頭禁則
+#define HIDC_EDIT_KINSOKUTAIL					11348 //行頭禁則
 #define HIDC_COMBO_WRAPMETHOD					11349 //テキストの折り返し方法		// 2008.05.30 nasukoji
-#define HIDC_CHECK_TAB_ARROW					11350 //矢印表示	// 2006.08.06 ryoji
-#define HIDC_COMBO_INDENTLAYOUT					11351 //折り返し行インデント	// 2006.08.06 ryoji
-#define HIDC_CHECK_RTRIM_PREVLINE				11352 //改行時に末尾の空白を削除	// 2006.08.06 ryoji
-#define HIDC_RADIO_OUTLINEDEFAULT				11353 //標準ルール	// 2006.08.06 ryoji
-#define HIDC_RADIO_OUTLINERULEFILE				11354 //ルールファイル	// 2006.08.06 ryoji
-#define HIDC_EDIT_OUTLINERULEFILE				11355 //ルールファイル名	// 2006.08.06 ryoji
+#define HIDC_CHECK_TAB_ARROW					11350 //矢印表示
+#define HIDC_COMBO_INDENTLAYOUT					11351 //折り返し行インデント
+#define HIDC_CHECK_RTRIM_PREVLINE				11352 //改行時に末尾の空白を削除
+#define HIDC_RADIO_OUTLINEDEFAULT				11353 //標準ルール
+#define HIDC_RADIO_OUTLINERULEFILE				11354 //ルールファイル
+#define HIDC_EDIT_OUTLINERULEFILE				11355 //ルールファイル名
 #define HIDC_BUTTON_RULEFILE_REF				11356 //ルールファイル参照	// 2006/09/09 novice
-#define HIDC_CHECK_DOCICON						11357 //文書アイコンを使う	// 2006.08.06 ryoji
-#define HIDC_EDIT_KINSOKUKUTO					11358 //句読点ぶら下げ文字	// 2009.08.07 ryoji
+#define HIDC_CHECK_DOCICON						11357 //文書アイコンを使う
+#define HIDC_EDIT_KINSOKUKUTO					11358 //句読点ぶら下げ文字
 #define HIDC_CHECK_USETYPEFONT					11359 //タイプ別フォント使用する
 #define HIDC_BUTTON_TYPEFONT					11360 //タイプ別フォント
 #define HIDC_BUTTON_TEXTCOLOR					11400 //文字色
@@ -681,45 +680,45 @@
 #define HIDC_RADIO_LINETERMTYPE0				11464 //行番号区切り（なし）
 #define HIDC_RADIO_LINETERMTYPE1				11465 //行番号区切り（縦線）
 #define HIDC_RADIO_LINETERMTYPE2				11466 //行番号区切り（任意）
-#define HIDC_BUTTON_KEYWORD_SELECT				11467 //強調キーワード2～10	// 2006.08.06 ryoji
-#define HIDC_EDIT_VERTLINE						11468 //縦線の桁指定	// 2006.08.06 ryoji
+#define HIDC_BUTTON_KEYWORD_SELECT				11467 //強調キーワード2～10
+#define HIDC_EDIT_VERTLINE						11468 //縦線の桁指定
 #define HIDC_COMBO_STRINGLITERAL				11469 //文字列エスケープ
 #define HIDC_CHECK_STRINGLINEONLY				11470 //文字列は行内のみ
 #define HIDC_CHECK_STRINGENDLINE				11471 //終了文字がない場合行末まで色分け
 #define HIDC_BUTTON_HOKANFILE_REF				11500 //入力補完 単語ファイル参照		//Jul. 05, 2001 JEPRO 共通から移動・変更
 #define HIDC_CHECK_HOKANLOHICASE				11510 //入力補完の英大文字小文字		//Jul. 05, 2001 JEPRO 共通から移動・変更
-#define HIDC_CHECK_HOKANBYFILE					11512 //現在のファイルから入力補完		// 2003.06.25 Moca
+#define HIDC_CHECK_HOKANBYFILE					11512 //現在のファイルから入力補完
 #define HIDC_COMBO_HOKAN_TYPE					11513 //入力補完種別
 #define HIDC_CHECK_HOKANBYKEYWORD				11514 //強調キーワードから入力補完
 #define HIDC_EDIT_HOKANFILE						11540 //単語ファイル名					//Jul. 05, 2001 JEPRO 共通から移動・変更
 #define HIDC_EDIT_KEYWORDHELPFILE				11541 //辞書ファイル名					//Jul. 05, 2001 JEPRO 共通から移動・変更
-#define HIDC_EDIT_TYPEEXTHELP					11542 //外部ヘルプファイル名	// 2006.08.06 ryoji
-#define HIDC_BUTTON_TYPEOPENHELP				11543 //外部ヘルプファイル参照	// 2006.08.06 ryoji
-#define HIDC_EDIT_TYPEEXTHTMLHELP				11544 //外部HTMLヘルプファイル名	// 2006.08.06 ryoji
-#define HIDC_BUTTON_TYPEOPENEXTHTMLHELP			11545 //外部HTMLヘルプファイル参照	// 2006.08.06 ryoji
-#define HIDC_CHECK_TYPEHTMLHELPISSINGLE			11546 //ビューアを複数起動しない	// 2006.08.06 ryoji
-#define HIDC_CHECK_CHKENTERATEND				11547 //終了時、改行の一致を検査する	// 2013/4/14 Uchi
+#define HIDC_EDIT_TYPEEXTHELP					11542 //外部ヘルプファイル名
+#define HIDC_BUTTON_TYPEOPENHELP				11543 //外部ヘルプファイル参照
+#define HIDC_EDIT_TYPEEXTHTMLHELP				11544 //外部HTMLヘルプファイル名
+#define HIDC_BUTTON_TYPEOPENEXTHTMLHELP			11545 //外部HTMLヘルプファイル参照
+#define HIDC_CHECK_TYPEHTMLHELPISSINGLE			11546 //ビューアを複数起動しない
+#define HIDC_CHECK_CHKENTERATEND				11547 //終了時、改行の一致を検査する
 #define HIDC_COMBO_LANGUAGE						11548 //言語選択
 #define HIDC_COMBO_DEFAULT_CODETYPE				14300 //デフォルト文字コード
 #define HIDC_CHECK_PRIOR_CESU8					14301 //自動判別時にCESU-8を優先する
-#define HIDC_COMBO_DEFAULT_EOLTYPE				14302 //デフォルト改行コード	// 2011.01.24 ryoji
-#define HIDC_CHECK_DEFAULT_BOM					14303 //デフォルトBOM			// 2011.01.24 ryoji
+#define HIDC_COMBO_DEFAULT_EOLTYPE				14302 //デフォルト改行コード
+#define HIDC_CHECK_DEFAULT_BOM					14303 //デフォルトBOM
 #define HIDC_CHECK_TYPE_SUPPORT_CP				14304 //コードページ
-#define HIDC_BUTTON_REGEX_IMPORT	11600	//インポート	//@@@ 2001.11.17 add MIK
-#define HIDC_BUTTON_REGEX_EXPORT	11601	//エクスポート	//@@@ 2001.11.17 add MIK
-#define HIDC_BUTTON_REGEX_INS		11602	//挿入			//@@@ 2001.11.17 add MIK
-#define HIDC_BUTTON_REGEX_ADD		11603	//追加			//@@@ 2001.11.17 add MIK
-#define HIDC_BUTTON_REGEX_UPD		11604	//更新			//@@@ 2001.11.17 add MIK
-#define HIDC_BUTTON_REGEX_DEL		11605	//削除			//@@@ 2001.11.17 add MIK
-#define HIDC_BUTTON_REGEX_TOP		11606	//先頭			//@@@ 2001.11.17 add MIK
-#define HIDC_BUTTON_REGEX_LAST		11607	//最終			//@@@ 2001.11.17 add MIK
-#define HIDC_BUTTON_REGEX_UP		11608	//上へ			//@@@ 2001.11.17 add MIK
-#define HIDC_BUTTON_REGEX_DOWN		11609	//下へ			//@@@ 2001.11.17 add MIK
-#define HIDC_CHECK_REGEX			11610	//正規表現キーワードを使用する	//@@@ 2001.11.17 add MIK
-#define HIDC_COMBO_REGEX_COLOR		11630	//色			//@@@ 2001.11.17 add MIK
-#define HIDC_EDIT_REGEX				11640	//正規表現キーワード	//@@@ 2001.11.17 add MIK
-#define HIDC_LIST_REGEX				11650	//リスト		//@@@ 2001.11.17 add MIK
-#define HIDC_LABEL_REGEX_VERSION	11670	//正規表現キーワードライブラリバージョン	//@@@ 2002.01.03
+#define HIDC_BUTTON_REGEX_IMPORT	11600	//インポート
+#define HIDC_BUTTON_REGEX_EXPORT	11601	//エクスポート
+#define HIDC_BUTTON_REGEX_INS		11602	//挿入
+#define HIDC_BUTTON_REGEX_ADD		11603	//追加
+#define HIDC_BUTTON_REGEX_UPD		11604	//更新
+#define HIDC_BUTTON_REGEX_DEL		11605	//削除
+#define HIDC_BUTTON_REGEX_TOP		11606	//先頭
+#define HIDC_BUTTON_REGEX_LAST		11607	//最終
+#define HIDC_BUTTON_REGEX_UP		11608	//上へ
+#define HIDC_BUTTON_REGEX_DOWN		11609	//下へ
+#define HIDC_CHECK_REGEX			11610	//正規表現キーワードを使用する
+#define HIDC_COMBO_REGEX_COLOR		11630	//色
+#define HIDC_EDIT_REGEX				11640	//正規表現キーワード
+#define HIDC_LIST_REGEX				11650	//リスト
+#define HIDC_LABEL_REGEX_VERSION	11670	//正規表現キーワードライブラリバージョン
 #define HIDC_MACRODIRREF			11700	//マクロディレクトリ参照
 #define HIDC_MACRO_REG				11701	//マクロ設定
 #define HIDC_COMBO_MACROID			11730	//ID
@@ -727,26 +726,26 @@
 #define HIDC_MACRONAME				11740	//マクロ名
 #define HIDC_MACROLIST				11741	//マクロリスト
 #define HIDC_MACRODIR				11750	//マクロ一覧
-#define HIDC_CHECK_RELOADWHENEXECUTE	11751	//マクロを実行するたびにファイルを読み込みなおす	// 2006.08.06 ryoji
+#define HIDC_CHECK_RELOADWHENEXECUTE	11751	//マクロを実行するたびにファイルを読み込みなおす
 #define HIDC_CHECK_MEMDC			11752	//画面キャッシュを使う
-#define HIDC_CHECK_MacroOnOpened		11753	//オープン後自動実行マクロ	// 2006.09.01 ryoji
-#define HIDC_CHECK_MacroOnTypeChanged	11754	//タイプ変更後自動実行マクロ	// 2006.09.01 ryoji
-#define HIDC_CHECK_MacroOnSave		11755	//保存前自動実行マクロ	// 2006.09.01 ryoji
+#define HIDC_CHECK_MacroOnOpened		11753	//オープン後自動実行マクロ
+#define HIDC_CHECK_MacroOnTypeChanged	11754	//タイプ変更後自動実行マクロ
+#define HIDC_CHECK_MacroOnSave		11755	//保存前自動実行マクロ
 #define HIDC_PLUGINLIST				11756	//プラグインリスト
 #define HIDC_CHECK_PluginEnable		11757	//プラグインを有効にする
 #define HIDC_PLUGIN_SearchNew		11758	//新規プラグインを追加
 #define HIDC_PLUGIN_Remove			11759	//新規プラグインを削除
-#define HIDC_PLUGIN_OPTION			11760	//プラグインオプション設定	// 2010/3/22 Uchi
-#define HIDC_LIST_PLUGIN_OPTIONS	11761	//プラグインオプションリスト	// 2010/3/22 Uchi
-#define HIDC_EDIT_PLUGIN_OPTION		11762	//プラグインオプション編集		// 2010/3/22 Uchi
-#define HIDC_MACROCANCELTIMER		11763	//マクロ停止ダイアログ表示待ち時間	// 2011.08.04 syat
+#define HIDC_PLUGIN_OPTION			11760	//プラグインオプション設定
+#define HIDC_LIST_PLUGIN_OPTIONS	11761	//プラグインオプションリスト
+#define HIDC_EDIT_PLUGIN_OPTION		11762	//プラグインオプション編集
+#define HIDC_MACROCANCELTIMER		11763	//マクロ停止ダイアログ表示待ち時間
 #define HIDC_PLUGIN_OpenFolder		11764	//プラグインフォルダを開く
 #define HIDC_EDIT_AUTOLOAD_DELAY	11765	//自動読込時遅延
-#define HIDC_CHECK_KINSOKUHIDE		11766	//ぶら下げを隠す			// 2012.11.30 Uchi
-#define HIDC_PLUGIN_README			11767	//ReadMe表示					// 2011/11/2 Uchi
-#define HIDC_PLUGIN_INST_ZIP		11768	//Zipプラグインを追加			// 2011/11/2 Uchi
-#define HIDC_EDIT_LINENUMWIDTH		11769	//行番号の最小桁数				// 2014.08.02 katze
-#define HIDC_PLUGIN_URL				11770	//プラグイン配布元				// 2015.01.02 syat
+#define HIDC_CHECK_KINSOKUHIDE		11766	//ぶら下げを隠す
+#define HIDC_PLUGIN_README			11767	//ReadMe表示
+#define HIDC_PLUGIN_INST_ZIP		11768	//Zipプラグインを追加
+#define HIDC_EDIT_LINENUMWIDTH		11769	//行番号の最小桁数
+#define HIDC_PLUGIN_URL				11770	//プラグイン配布元
 
 //検索ダイアログ
 #define HIDC_FIND_BUTTON_SEARCHNEXT			11800	//次を検索
@@ -786,7 +785,7 @@
 #define HIDC_REP_STATIC_JRE32VER		11919	//正規表現バージョン
 #define HIDC_REP_BUTTON_SETMARK			11920   //検索該当行をマーク
 #define HIDC_REP_CHECK_SEARCHALL		11921   //先頭（末尾）から再検索
-#define HIDC_REP_CHECK_CONSECUTIVEALL	11922   //「すべて置換」は置換の繰返し	// 2007.01.16 ryoji
+#define HIDC_REP_CHECK_CONSECUTIVEALL	11922   //「すべて置換」は置換の繰返し
 #define HIDC_REP_RADIO_LINEDELETE		11923	//置換対象：行削除
 
 //GREP
@@ -844,7 +843,7 @@
 #define HIDC_FL_CHECK_bFunclistSetFocusOnJump	12207	//ジャンプでフォーカス移動する
 #define HIDC_FL_CHECK_bMarkUpBlankLineEnable	12208	//空行を無視する
 #define HIDC_COMBO_nSortType	12209	//順序
-#define HIDC_FL_BUTTON_WINSIZE	12210	//ウィンドウ位置保存	// 2006.08.06 ryoji
+#define HIDC_FL_BUTTON_WINSIZE	12210	//ウィンドウ位置保存
 #define HIDC_FL_BUTTON_MENU		12211	//ウィンドウの位置メニュー
 #define HIDC_FL_BUTTON_SETTING	12212	//設定
 
@@ -886,20 +885,20 @@
 #define HIDC_PS_EDIT_MARGINBY		12516	//余白下
 #define HIDC_PS_EDIT_MARGINLX		12517	//余白左
 #define HIDC_PS_EDIT_MARGINRX		12518	//余白右
-#define HIDC_PS_CHECK_KINSOKUHEAD	12519	//行頭禁則	//@@@ 2002.04.09 MIK
-#define HIDC_PS_CHECK_KINSOKUTAIL	12520	//行末禁則	//@@@ 2002.04.09 MIK
-#define HIDC_PS_CHECK_KINSOKURET	12521	//改行文字をぶら下げる	//@@@ 2002.04.14 MIK
-#define HIDC_PS_CHECK_KINSOKUKUTO	12522	//句読点をぶら下げる	//@@@ 2002.04.17 MIK
-#define HIDC_PS_EDIT_HEAD1			12523	//ヘッダー(左寄せ)		// 2006.10.11 ryoji
-#define HIDC_PS_EDIT_HEAD2			12524	//ヘッダー(中央寄せ)	// 2006.10.11 ryoji
-#define HIDC_PS_EDIT_HEAD3			12525	//ヘッダー(右寄せ)		// 2006.10.11 ryoji
-#define HIDC_PS_EDIT_FOOT1			12526	//フッター(左寄せ)		// 2006.10.11 ryoji
-#define HIDC_PS_EDIT_FOOT2			12527	//フッター(中央寄せ)	// 2006.10.11 ryoji
-#define HIDC_PS_EDIT_FOOT3			12528	//フッター(右寄せ)		// 2006.10.11 ryoji
-#define HIDC_PS_CHECK_COLORPRINT	12529	//カラー印刷			// 2013/4/26 Uchi
+#define HIDC_PS_CHECK_KINSOKUHEAD	12519	//行頭禁則
+#define HIDC_PS_CHECK_KINSOKUTAIL	12520	//行末禁則
+#define HIDC_PS_CHECK_KINSOKURET	12521	//改行文字をぶら下げる
+#define HIDC_PS_CHECK_KINSOKUKUTO	12522	//句読点をぶら下げる
+#define HIDC_PS_EDIT_HEAD1			12523	//ヘッダー(左寄せ)
+#define HIDC_PS_EDIT_HEAD2			12524	//ヘッダー(中央寄せ)
+#define HIDC_PS_EDIT_HEAD3			12525	//ヘッダー(右寄せ)
+#define HIDC_PS_EDIT_FOOT1			12526	//フッター(左寄せ)
+#define HIDC_PS_EDIT_FOOT2			12527	//フッター(中央寄せ)
+#define HIDC_PS_EDIT_FOOT3			12528	//フッター(右寄せ)
+#define HIDC_PS_CHECK_COLORPRINT	12529	//カラー印刷
 #define HIDC_PS_EDIT_FONTHEIGHT		12530	//フォント高さ
-#define HIDC_PS_FONT_HEAD			12531	//ヘッダー(フォント)	// 2013/5/16 Uchi
-#define HIDC_PS_FONT_FOOT			12532	//フッター(フォント)	// 2013/5/16 Uchi
+#define HIDC_PS_FONT_HEAD			12531	//ヘッダー(フォント)
+#define HIDC_PS_FONT_FOOT			12532	//フッター(フォント)
 
 //プロパティ
 #define HIDOK_PROP				12600	//
@@ -962,7 +961,7 @@
 #define HIDC_OPENDLG_COMBO_MRU	13104	//最近のファイル
 #define HIDC_OPENDLG_COMBO_OPENFOLDER	13105	//最近のフォルダ
 #define HIDC_OPENDLG_COMBO_EOL	13106	//改行コード
-#define HIDC_OPENDLG_CHECK_BOM	13107	//BOM	// 2006.08.06 ryoji
+#define HIDC_OPENDLG_CHECK_BOM	13107	//BOM
 #define HIDC_OPENDLG_CHECK_CP	13108	//CP
 
 //DIFF差分表示
@@ -983,8 +982,8 @@
 #define HIDC_DIFF_IDCANCEL			13214	//キャンセル
 #define HIDC_BUTTON_DIFF_HELP		13215	//ヘルプ
 #define HIDC_CHECK_DIFF_EXEC_STATE	13216	//DIFF差分がないときにメッセージ表示
-#define HIDC_CHECK_DIFF_NOTIFYNOTFOUND	13217	// 見つからないときにメッセージを表示	// 2006.10.10 ryoji
-#define HIDC_CHECK_DIFF_SEARCHALL		13218	// 先頭（末尾）から再検索する	// 2006.10.10 ryoji//コントロールコード
+#define HIDC_CHECK_DIFF_NOTIFYNOTFOUND	13217	// 見つからないときにメッセージを表示
+#define HIDC_CHECK_DIFF_SEARCHALL		13218	// 先頭（末尾）から再検索する
 
 //コントロールコード
 #define HIDC_LIST_CTRLCODE			13300
@@ -1008,7 +1007,6 @@
 #define HIDC_CHECK_FNAME_SHORTPATH		13412
 #define HIDC_EDIT_FNAME_SHORTMAXWIDTH	13413
 
-//履歴の管理	//@@@ 2003.04.08 MIK
 //#define	HIDC_FAVORITE_DIALOG		13500	//ダイアログ用
 #define	HIDC_FAVORITE_IDOK			13501
 #define	HIDC_FAVORITE_IDCANCEL		13502
@@ -1021,7 +1019,7 @@
 #define	HIDC_LIST_FAVORITE_GREPFILE	13515
 #define	HIDC_LIST_FAVORITE_GREPFOLDER	13516
 #define	HIDC_LIST_FAVORITE_CMD		13517
-#define	HIDC_BUTTON_FAVORITE_CLEAR	13518	//履歴の削除	// 2006.10.10 ryoji
+#define	HIDC_BUTTON_FAVORITE_CLEAR	13518	//履歴の削除
 #define	HIDC_BUTTON_FAVORITE_DELETE_NOFAVORATE	13519
 #define	HIDC_BUTTON_FAVORITE_DELETE_NOTFOUND	13520
 #define	HIDC_BUTTON_FAVORITE_DELETE_SELECTED	13521
@@ -1049,7 +1047,7 @@
 #define	HIDC_BUTTON_TAG_MAKE_HELP	13707
 #define	HIDC_BUTTON_TAG_MAKE_FOLDER_UP	13708
 
-//ウィンドウの位置と大きさ	2004.05.13 Moca
+//ウィンドウの位置と大きさ
 #define	HIDC_EDIT_WX			13801
 #define	HIDC_EDIT_WY			13802
 #define	HIDC_EDIT_SX			13803
@@ -1062,10 +1060,10 @@
 #define	HIDC_RADIO_WINPOS_SAVE	13810
 #define	HIDC_RADIO_WINPOS_SET	13811
 #define	HIDC_COMBO_WINTYPE		13812
-#define HIDOK_WINSIZE				13813	// 2006.10.10 ryoji
-#define HIDC_BUTTON_WINSIZE_HELP	13814	// 2006.10.10 ryoji
+#define HIDOK_WINSIZE				13813
+#define HIDC_BUTTON_WINSIZE_HELP	13814
 
-//タイプ別設定「キーワードヘルプ」タブ	// 2006.10.10 ryoji
+//タイプ別設定「キーワードヘルプ」タブ
 #define HIDC_CHECK_KEYHELP				13900		//キーワードヘルプ機能を使う
 #define HIDC_LIST_KEYHELP				13901		//辞書ファイル一覧(&L)
 #define HIDC_BUTTON_KEYHELP_UPD			13902		//更新(&E)
@@ -1083,7 +1081,7 @@
 #define HIDC_BUTTON_KEYHELP_IMPORT		13914		//インポート
 #define HIDC_BUTTON_KEYHELP_EXPORT		13915		//エクスポート
 
-//文字色／背景色設定ダイアログ	// 2006.10.10 ryoji
+//文字色／背景色設定ダイアログ
 #define HIDOK_SAMECOLOR					14000		// OK
 #define HIDCANCEL_SAMECOLOR				14001		// キャンセル
 #define HIDC_BUTTON_SAMECOLOR_HELP		14002		// ヘルプ
@@ -1093,7 +1091,7 @@
 #define HIDC_LIST_SAMECOLOR_ITEMINFO	14006		// 選択中の色に対応する項目のリスト
 #define HIDC_STATIC_COLOR				14007		// 統一色
 
-//強調キーワードの設定ダイアログ	// 2006.10.10 ryoji
+//強調キーワードの設定ダイアログ
 #define HIDOK_KEYWORD_SELECT			14100		// OK
 #define HIDCANCEL_KEYWORD_SELECT		14101		// キャンセル
 #define HIDC_COMBO_KEYWORD_SELECT		14102		// 強調キーワード1～10

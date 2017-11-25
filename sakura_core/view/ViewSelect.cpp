@@ -270,11 +270,9 @@ void ViewSelect::DrawSelectArea2(HDC hdc) const
 {
 	auto& view = GetEditView();
 
-	// 2006.10.01 Moca 重複コード統合
 	HBRUSH	hBrush = ::CreateSolidBrush(SELECTEDAREA_RGB);
 	HBRUSH	hBrushOld = (HBRUSH)::SelectObject(hdc, hBrush);
 	int		nROP_Old = ::SetROP2(hdc, SELECTEDAREA_ROP2);
-	// From Here 2007.09.09 Moca 互換BMPによる画面バッファ
 	HBRUSH	hBrushCompatOld = 0;
 	int		nROPCompatOld = 0;
 	bool bCompatBMP = view.hbmpCompatBMP && hdc != view.hdcCompatDC;
@@ -282,7 +280,6 @@ void ViewSelect::DrawSelectArea2(HDC hdc) const
 		hBrushCompatOld = (HBRUSH)::SelectObject(view.hdcCompatDC, hBrush);
 		nROPCompatOld = ::SetROP2(view.hdcCompatDC, SELECTEDAREA_ROP2);
 	}
-	// To Here 2007.09.09 Moca
 
 //	MYTRACE(_T("DrawSelectArea()  bBeginBoxSelect=%hs\n", bBeginBoxSelect?"true":"false"));
 	auto& textArea = view.GetTextArea();
@@ -311,7 +308,7 @@ void ViewSelect::DrawSelectArea2(HDC hdc) const
 		rcOld.right  = t_max((int)rcOld.right , (int)textArea.GetViewLeftCol() );
 		rcOld.right  = t_min((int)rcOld.right , (int)textArea.GetRightCol() + 1);
 		rcOld.top    = t_max((int)rcOld.top   , (int)textArea.GetViewTopLine() );
-		rcOld.bottom = t_max((int)rcOld.bottom, (int)textArea.GetViewTopLine() - 1);	// 2010.11.02 ryoji 追加（画面上端よりも上にある矩形選択を解除するとルーラーが反転表示になる問題の修正）
+		rcOld.bottom = t_max((int)rcOld.bottom, (int)textArea.GetViewTopLine() - 1);
 		rcOld.bottom = t_min((int)rcOld.bottom, (int)textArea.GetBottomLine()  );
 
 		RECT rcOld2;
@@ -332,7 +329,7 @@ void ViewSelect::DrawSelectArea2(HDC hdc) const
 		rcNew.right  = t_max((int)rcNew.right , (int)textArea.GetViewLeftCol());
 		rcNew.right  = t_min((int)rcNew.right , (int)textArea.GetRightCol() + 1);
 		rcNew.top    = t_max((int)rcNew.top   , (int)textArea.GetViewTopLine());
-		rcNew.bottom = t_max((int)rcNew.bottom, (int)textArea.GetViewTopLine() - 1);	// 2010.11.02 ryoji 追加（画面上端よりも上にある矩形選択を解除するとルーラーが反転表示になる問題の修正）
+		rcNew.bottom = t_max((int)rcNew.bottom, (int)textArea.GetViewTopLine() - 1);
 		rcNew.bottom = t_min((int)rcNew.bottom, (int)textArea.GetBottomLine() );
 
 		RECT rcNew2;
@@ -349,17 +346,8 @@ void ViewSelect::DrawSelectArea2(HDC hdc) const
 		{
 			// 旧選択矩形と新選択矩形のリージョンを結合し､ 重なりあう部分だけを除去します
 			if (::CombineRgn(hrgnDraw, hrgnOld, hrgnNew, RGN_XOR) != NULLREGION) {
-
-				// 2002.02.16 hor
-				// 結合後のエリアにEOFが含まれる場合はEOF以降の部分を除去します
-				// 2006.10.01 Moca リーソースリークを修正したら、チラつくようになったため、
-				// 抑えるために EOF以降をリージョンから削除して1度の作画にする
-
-				// 2006.10.01 Moca Start EOF位置計算をGetEndLayoutPosに書き換え。
 				Point ptLast;
 				view.pEditDoc->layoutMgr.GetEndLayoutPos(&ptLast);
-				// 2006.10.01 Moca End
-				// 2011.12.26 EOFのぶら下がり行は反転し、EOFのみの行は反転しない
 				const Layout* pBottom = view.pEditDoc->layoutMgr.GetBottomLayout();
 				if (pBottom && pBottom->GetLayoutEol() == EolType::None) {
 					ptLast.x = 0;
@@ -373,24 +361,20 @@ void ViewSelect::DrawSelectArea2(HDC hdc) const
 				) {
 					//	Jan. 24, 2004 genta nLastLenは物理桁なので変換必要
 					//	最終行にTABが入っていると反転範囲が不足する．
-					//	2006.10.01 Moca GetEndLayoutPosで処理するためColumnToIndexは不要に。
 					RECT rcNew;
 					rcNew.left   = textArea.GetAreaLeft() + (textArea.GetViewLeftCol() + ptLast.x) * nCharWidth;
 					rcNew.right  = textArea.GetAreaRight();
 					rcNew.top    = textArea.GenerateYPx(ptLast.y);
 					rcNew.bottom = rcNew.top + nCharHeight;
 					
-					// 2006.10.01 Moca GDI(リージョン)リソースリーク修正
 					HRGN hrgnEOFNew = ::CreateRectRgnIndirect(&rcNew);
 					::CombineRgn(hrgnDraw, hrgnDraw, hrgnEOFNew, RGN_DIFF);
 					::DeleteObject(hrgnEOFNew);
 				}
 				::PaintRgn(hdc, hrgnDraw);
-				// From Here 2007.09.09 Moca 互換BMPによる画面バッファ
-				if (bCompatBMP) {
+				if (bCompatBMP) { 
 					::PaintRgn(view.hdcCompatDC, hrgnDraw);
 				}
-				// To Here 2007.09.09 Moca
 			}
 		}
 
@@ -457,14 +441,11 @@ void ViewSelect::DrawSelectArea2(HDC hdc) const
 		}
 	}
 
-	// From Here 2007.09.09 Moca 互換BMPによる画面バッファ
 	if (bCompatBMP) {
 		::SetROP2(view.hdcCompatDC, nROPCompatOld);
 		::SelectObject(view.hdcCompatDC, hBrushCompatOld);
 	}
-	// To Here 2007.09.09 Moca
 
-	// 2006.10.01 Moca 重複コード統合
 	::SetROP2(hdc, nROP_Old);
 	::SelectObject(hdc, hBrushOld);
 	::DeleteObject(hBrush);
@@ -502,7 +483,7 @@ void ViewSelect::DrawSelectAreaLine(
 				nPosX++;
 				break;
 			}
-			// 2006.03.28 Moca 画面外まで求めたら打ち切る
+			// 画面外まで求めたら打ち切る
 			if ((int)it.getColumn() > textArea.GetRightCol()) {
 				break;
 			}
@@ -518,7 +499,6 @@ void ViewSelect::DrawSelectAreaLine(
 		}
 	}
 	
-	// 2006.03.28 Moca ウィンドウ幅が大きいと正しく反転しない問題を修正
 	if (nSelectFrom < textArea.GetViewLeftCol()) {
 		nSelectFrom = textArea.GetViewLeftCol();
 	}
@@ -539,15 +519,13 @@ void ViewSelect::DrawSelectAreaLine(
 		view.GetCaret().underLine.CaretUnderLineOFF(true, false, true);
 		*(const_cast<Range*>(&select)) = selectOld;
 		
-		// 2006.03.28 Moca 表示域内のみ処理する
+		// 表示域内のみ処理する
 		if (nSelectFrom <= textArea.GetRightCol() && textArea.GetViewLeftCol() < nSelectTo) {
 			HRGN hrgnDraw = ::CreateRectRgn(rcClip.left, rcClip.top, rcClip.right, rcClip.bottom);
 			::PaintRgn(hdc, hrgnDraw);
-			// From Here 2007.09.09 Moca 互換BMPによる画面バッファ
 			if (bCompatBMP) {
 				::PaintRgn(view.hdcCompatDC, hrgnDraw);
 			}
-			// To Here 2007.09.09 Moca
 			::DeleteObject(hrgnDraw);
 		}
 	}
@@ -569,13 +547,11 @@ void ViewSelect::GetSelectAreaLineFromRange(
 		if (IsBoxSelecting()) {		// 矩形範囲選択中
 			nSelectFrom = range.GetFrom().x;
 			nSelectTo   = range.GetTo().x;
-			// 2006.09.30 Moca From 矩形選択時[EOF]とその右側は反転しないように修正。処理を追加
 			// 2011.12.26 [EOF]単独行以外なら反転する
 			if ((int)view.pEditDoc->layoutMgr.GetLineCount() <= nLineNum) {
 				nSelectFrom = -1;
 				nSelectTo = -1;
 			}
-			// 2006.09.30 Moca To
 		}else {
 			if (range.IsLineOne()) {
 				nSelectFrom = range.GetFrom().x;
@@ -594,7 +570,7 @@ void ViewSelect::GetSelectAreaLineFromRange(
 				}
 			}
 		}
-		// 2006.05.24 Moca 矩形選択/フリーカーソル選択(選択開始/終了行)で
+		// 矩形選択/フリーカーソル選択(選択開始/終了行)で
 		// To < From になることがある。必ず From < To になるように入れ替える。
 		if (nSelectTo < nSelectFrom) {
 			t_swap(nSelectFrom, nSelectTo);
@@ -631,8 +607,6 @@ void ViewSelect::PrintSelectionInfoMsg() const
 	}
 
 	TCHAR msg[128];
-	//	From here 2006.06.06 ryoji 選択範囲の行が実在しない場合の対策
-
 	int select_line;
 	if (select.GetTo().y >= (int)nLineCount) {	// 最終行が実在しない
 		select_line = (int)nLineCount - select.GetFrom().y + 1;
@@ -640,7 +614,6 @@ void ViewSelect::PrintSelectionInfoMsg() const
 		select_line = select.GetTo().y - select.GetFrom().y + 1;
 	}
 	
-	//	To here 2006.06.06 ryoji 選択範囲の行が実在しない場合の対策
 	if (IsBoxSelecting()) {
 		//	矩形の場合は幅と高さだけでごまかす
 		int select_col = select.GetFrom().x - select.GetTo().x;
@@ -769,7 +742,6 @@ void ViewSelect::PrintSelectionInfoMsg() const
 						++nLineNum
 					) {
 						pLine = view.pEditDoc->layoutMgr.GetLineStr(nLineNum, &nLineLen, &pLayout);
-						//	2006.06.06 ryoji 指定行のデータが存在しない場合の対策
 						if (!pLine)
 							break;
 						select_sum += pLayout->GetLengthWithoutEOL() + pLayout->GetLayoutEol().GetLen();

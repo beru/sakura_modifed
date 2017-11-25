@@ -192,7 +192,7 @@ bool FileNameManager::ExpandMetaToFolder(LPCTSTR pszSrc, LPTSTR pszDes, int nDes
 				// exeのあるフォルダ
 				GetExedir(szPath);
 				nMetaLen = 6;
-			// %SAKURADATA%	// 2007.06.06 ryoji
+			// %SAKURADATA%
 			}else if (auto_strnicmp(_T("SAKURADATA%"), ps, 11) == 0) {
 				// iniのあるフォルダ
 				GetInidir(szPath);

@@ -453,7 +453,7 @@ BOOL DlgFavorite::OnBnClicked(int wID)
 	switch (wID) {
 	case IDC_BUTTON_HELP:
 		// ÉwÉãÉv
-		MyWinHelp(GetHwnd(), HELP_CONTEXT, ::FuncID_To_HelpContextID(F_FAVORITE));	// 2006.10.10 ryoji MyWinHelpÇ…ïœçXÇ…ïœçX
+		MyWinHelp(GetHwnd(), HELP_CONTEXT, ::FuncID_To_HelpContextID(F_FAVORITE));
 		return TRUE;
 
 	case IDOK:

@@ -44,7 +44,7 @@ private:
     HWND		hwndToolBar;
 
 	// 子ウィンドウ
-    HWND		hwndReBar;		// Rebar ウィンドウ	//@@@ 2006.06.17 ryoji
+    HWND		hwndReBar;		// Rebar ウィンドウ
 	HWND		hwndSearchBox;	// 検索コンボボックス
 
 	// フォント

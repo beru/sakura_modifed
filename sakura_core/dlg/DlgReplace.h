@@ -27,7 +27,7 @@ public:
 	void ChangeView(LPARAM);	// モードレス時：置換・検索対象となるビューの変更
 
 	SearchOption	searchOption;		// 検索オプション
-	bool			bConsecutiveAll;	//「すべて置換」は置換の繰返し  2007.01.16 ryoji
+	bool			bConsecutiveAll;	//「すべて置換」は置換の繰返し
 	std::wstring	strText;			// 検索文字列
 	std::wstring	strText2;			// 置換後文字列
 	int				nReplaceKeySequence;// 置換後シーケンス
@@ -56,8 +56,8 @@ protected:
 	BOOL OnInitDialog(HWND, WPARAM, LPARAM);
 	BOOL OnDestroy();
 	BOOL OnBnClicked(int);
-	BOOL OnActivate(WPARAM wParam, LPARAM lParam);	// 2009.11.29 ryoji
-	LPVOID GetHelpIdTable(void);	//@@@ 2002.01.18 add
+	BOOL OnActivate(WPARAM wParam, LPARAM lParam);
+	LPVOID GetHelpIdTable(void);
 
 	void SetData(void);		// ダイアログデータの設定
 	void SetCombosList(void);	// 検索文字列/置換後文字列リストの設定

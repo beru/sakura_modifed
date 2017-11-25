@@ -229,7 +229,6 @@ HGLOBAL GetGlobalData(LPDATAOBJECT pDataObject, CLIPFORMAT cfFormat)
 	fe.ptd = NULL;
 	fe.dwAspect = DVASPECT_CONTENT;
 	fe.lindex = -1;
-	// 2006.01.16 Moca fe.tymed = -1Ç©ÇÁTYMED_HGLOBALÇ…ïœçXÅB
 	fe.tymed = TYMED_HGLOBAL;
 
 	HGLOBAL hDest = NULL;

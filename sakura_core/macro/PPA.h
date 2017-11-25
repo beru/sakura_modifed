@@ -94,7 +94,7 @@ private:
 	// 以下は PPA.DLL Version 1.23 で追加された関数 --
 	#if PPADLL_VER >= 123
 	typedef BYTE (WINAPI *PPA_IsRunning)();
-	typedef void (WINAPI *PPA_SetFinishProc)(void* p);	// 2003.06.01 Moca
+	typedef void (WINAPI *PPA_SetFinishProc)(void* p);
 	#endif // PPADLL_VER >= 123
 
 	PPA_Execute    fnExecute;
@@ -213,22 +213,22 @@ public:
 #if PPADLL_VER >= 123
 	BOOL IsRunning()
 		{ return (BOOL)fnIsRunning(); }
-	void SetFinishProc(void* proc)	// 2003.06.01 Moca
+	void SetFinishProc(void* proc)
 		{ fnSetFinishProc(proc); }
 #endif
 
 private:
 	// コールバックプロシージャ群
-	static void __stdcall stdStrObj(const char*, int, BYTE, int*, char**);	// 2003.06.01 Moca
+	static void __stdcall stdStrObj(const char*, int, BYTE, int*, char**);
 
 	static void __stdcall stdProc(const char* FuncName, const int index, const char* Argument[], const int ArgSize, int* Err_CD);
 	static void __stdcall stdIntFunc(const char* FuncName, const int index,
-		const char* Argument[], const int ArgSize, int* Err_CD, int* ResultValue); // 2002.02.24 Moca
+		const char* Argument[], const int ArgSize, int* Err_CD, int* ResultValue);
 	static void __stdcall stdStrFunc(const char* FuncName, const int index, const char* Argument[], const int ArgSize, int* Err_CD, char** ResultValue);
-	static bool CallHandleFunction(const int index, const char* Arg[], int ArgSize, VARIANT* Result); // 2002.02.24 Moca
+	static bool CallHandleFunction(const int index, const char* Arg[], int ArgSize, VARIANT* Result);
 
-	static void __stdcall stdError(int, const char*);	// 2003.06.01 Moca
-	static void __stdcall stdFinishProc();	// 2003.06.01 Moca
+	static void __stdcall stdError(int, const char*);
+	static void __stdcall stdFinishProc();
 
 	// メンバ変数
 	char szMsg[80];		// PPAからのメッセージを保持する

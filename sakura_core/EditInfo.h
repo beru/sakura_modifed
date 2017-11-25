@@ -55,7 +55,7 @@ struct EditInfo {
 		bIsDebug(false),
 		nWindowSizeX(-1),
 		nWindowSizeY(-1),
-		nWindowOriginX(CW_USEDEFAULT),	//	2004.05.13 Moca ÅgéwíËñ≥ÇµÅhÇ-1Ç©ÇÁCW_USEDEFAULTÇ…ïœçX
+		nWindowOriginX(CW_USEDEFAULT),
 		nWindowOriginY(CW_USEDEFAULT)
 	{
 		szPath[0] = '\0';

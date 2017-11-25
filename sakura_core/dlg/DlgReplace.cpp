@@ -204,7 +204,6 @@ int DlgReplace::GetData(void)
 	// 英大文字と英小文字を区別する
 	searchOption.bLoHiCase = IsButtonChecked(IDC_CHK_LOHICASE);
 
-	// 2001/06/23 N.Nakatani
 	// 単語単位で探す
 	searchOption.bWordOnly = IsButtonChecked(IDC_CHK_WORD);
 
@@ -522,7 +521,6 @@ BOOL DlgReplace::OnBnClicked(int wID)
 				pEditView->bSearch = false;
 			}
 
-			// すべて行置換時の処置は「すべて置換」は置換の繰返しオプションOFFの場合にして削除 2007.01.16 ryoji
 			pEditView->GetCommander().HandleCommand(F_REPLACE_ALL, true, 0, 0, 0, 0);
 			pEditView->GetCommander().HandleCommand(F_REDRAW, true, 0, 0, 0, 0);
 

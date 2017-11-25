@@ -11,20 +11,20 @@
 
 
 static const DWORD p_helpids[] = {
-	IDC_CHECK_DispTabWnd,			HIDC_CHECK_DispTabWnd,			// タブウィンドウ表示	//@@@ 2003.05.31 MIK
+	IDC_CHECK_DispTabWnd,			HIDC_CHECK_DispTabWnd,			// タブウィンドウ表示
 	IDC_CHECK_GroupMultiTabWnd,		HIDC_CHECK_GroupMultiTabWnd,	// ウィンドウをまとめてグループ化する
-	IDC_CHECK_RetainEmptyWindow,	HIDC_CHECK_RetainEmptyWindow,	// 最後のファイルを閉じたとき(無題)文書を残す	// 2007.02.13 ryoji
-	IDC_CHECK_CloseOneWin,			HIDC_CHECK_CloseOneWin,			// ウィンドウの閉じるボタンは現在のファイルのみ閉じる	// 2007.02.13 ryoji
+	IDC_CHECK_RetainEmptyWindow,	HIDC_CHECK_RetainEmptyWindow,	// 最後のファイルを閉じたとき(無題)文書を残す
+	IDC_CHECK_CloseOneWin,			HIDC_CHECK_CloseOneWin,			// ウィンドウの閉じるボタンは現在のファイルのみ閉じる
 	IDC_CHECK_OpenNewWin,			HIDC_CHECK_OpenNewWin,			// 外部から起動するときは新しいウィンドウで開く 2009.06.19
-	IDC_CHECK_DispTabIcon,			HIDC_CHECK_DispTabIcon,			// アイコン表示	// 2006.08.06 ryoji
-	IDC_CHECK_SameTabWidth,			HIDC_CHECK_SameTabWidth,		// 等幅	// 2006.08.06 ryoji
+	IDC_CHECK_DispTabIcon,			HIDC_CHECK_DispTabIcon,			// アイコン表示
+	IDC_CHECK_SameTabWidth,			HIDC_CHECK_SameTabWidth,		// 等幅
 	IDC_CHECK_DispTabClose,			HIDC_CHECK_DispTabClose,		// タブを閉じるボタン表示	// 2012.04.14 syat
 	IDC_BUTTON_TABFONT,				HIDC_BUTTON_TABFONT,			// タブフォント
-	IDC_CHECK_SortTabList,			HIDC_CHECK_SortTabList,			// タブ一覧ソート	// 2006.08.06 ryoji
+	IDC_CHECK_SortTabList,			HIDC_CHECK_SortTabList,			// タブ一覧ソート
 	IDC_CHECK_TAB_MULTILINE,		HIDC_CHECK_TAB_MULTILINE,		// タブ多段
 	IDC_COMBO_TAB_POSITION,			HIDC_COMBO_TAB_POSITION,		// タブ表示位置
-	IDC_TABWND_CAPTION,				HIDC_TABWND_CAPTION,			// タブウィンドウキャプション	//@@@ 2003.06.15 MIK
-	IDC_CHECK_ChgWndByWheel,		HIDC_CHECK_ChgWndByWheel,		// マウスホイールでウィンドウ切り替え 2007.04.03 ryoji
+	IDC_TABWND_CAPTION,				HIDC_TABWND_CAPTION,			// タブウィンドウキャプション
+	IDC_CHECK_ChgWndByWheel,		HIDC_CHECK_ChgWndByWheel,		// マウスホイールでウィンドウ切り替え
 	0, 0
 };
 
@@ -133,26 +133,22 @@ INT_PTR PropTab::DispatchEvent(
 			}
 		}
 		break;
-//@@@ 2001.02.04 Start by MIK: Popup Help
 	case WM_HELP:
 		{
 			HELPINFO* p = (HELPINFO*) lParam;
-			MyWinHelp((HWND)p->hItemHandle, HELP_WM_HELP, (ULONG_PTR)(LPVOID)p_helpids);	// 2006.10.10 ryoji MyWinHelpに変更に変更
+			MyWinHelp((HWND)p->hItemHandle, HELP_WM_HELP, (ULONG_PTR)(LPVOID)p_helpids);
 		}
 		return TRUE;
 		// NOTREACHED
 		//break;
-//@@@ 2001.02.04 End
 
-//@@@ 2001.12.22 Start by MIK: Context Menu Help
 	// Context Menu
 	case WM_CONTEXTMENU:
-		MyWinHelp(hwndDlg, HELP_CONTEXTMENU, (ULONG_PTR)(LPVOID)p_helpids);	// 2006.10.10 ryoji MyWinHelpに変更に変更
+		MyWinHelp(hwndDlg, HELP_CONTEXTMENU, (ULONG_PTR)(LPVOID)p_helpids);
 		return TRUE;
-//@@@ 2001.12.22 End
 
 	case WM_DESTROY:
-		// タブ フォント破棄	// 2013/4/24 Uchi
+		// タブ フォント破棄
 		if (hTabFont) {
 			::DeleteObject(hTabFont);
 			hTabFont = NULL;
@@ -169,12 +165,12 @@ void PropTab::SetData(HWND hwndDlg)
 	auto& csTabBar = common.tabBar;
 
 	//	Feb. 11, 2007 genta「ウィンドウ」シートより移動
-	CheckDlgButtonBool(hwndDlg, IDC_CHECK_DispTabWnd, csTabBar.bDispTabWnd);	//@@@ 2003.05.31 MIK
-	CheckDlgButtonBool(hwndDlg, IDC_CHECK_SameTabWidth, csTabBar.bSameTabWidth);	//@@@ 2006.01.28 ryoji
-	CheckDlgButtonBool(hwndDlg, IDC_CHECK_DispTabIcon, csTabBar.bDispTabIcon);	//@@@ 2006.01.28 ryoji
+	CheckDlgButtonBool(hwndDlg, IDC_CHECK_DispTabWnd, csTabBar.bDispTabWnd);
+	CheckDlgButtonBool(hwndDlg, IDC_CHECK_SameTabWidth, csTabBar.bSameTabWidth);
+	CheckDlgButtonBool(hwndDlg, IDC_CHECK_DispTabIcon, csTabBar.bDispTabIcon);
 	CheckDlgButtonBool(hwndDlg, IDC_CHECK_SortTabList, csTabBar.bSortTabList);			//@@@ 2006.03.23 fon
 	CheckDlgButtonBool(hwndDlg, IDC_CHECK_TAB_MULTILINE, csTabBar.bTabMultiLine );
-	CheckDlgButtonBool(hwndDlg, IDC_CHECK_GroupMultiTabWnd, !csTabBar.bDispTabWndMultiWin); //@@@ 2003.05.31 MIK
+	CheckDlgButtonBool(hwndDlg, IDC_CHECK_GroupMultiTabWnd, !csTabBar.bDispTabWndMultiWin);
 	EditCtl_LimitText(::GetDlgItem(hwndDlg, IDC_TABWND_CAPTION), _countof(csTabBar.szTabWndCaption) - 1);
 	::DlgItem_SetText(hwndDlg, IDC_TABWND_CAPTION, csTabBar.szTabWndCaption);
 
@@ -203,7 +199,7 @@ void PropTab::SetData(HWND hwndDlg)
 	//	Feb. 11, 2007 genta 新規作成
 	CheckDlgButtonBool(hwndDlg, IDC_CHECK_RetainEmptyWindow, csTabBar.bTab_RetainEmptyWin);
 	CheckDlgButtonBool(hwndDlg, IDC_CHECK_CloseOneWin, csTabBar.bTab_CloseOneWin);
-	CheckDlgButtonBool(hwndDlg, IDC_CHECK_ChgWndByWheel, csTabBar.bChgWndByWheel);	// 2007.04.03 ryoji
+	CheckDlgButtonBool(hwndDlg, IDC_CHECK_ChgWndByWheel, csTabBar.bChgWndByWheel);
 	CheckDlgButtonBool(hwndDlg, IDC_CHECK_OpenNewWin, csTabBar.bNewWindow); // 2009.06.17
 
 	// タブ フォント	// 2013/4/24 Uchi
@@ -218,8 +214,8 @@ int PropTab::GetData(HWND hwndDlg)
 	auto& csTabBar = common.tabBar;
 	//	Feb. 11, 2007 genta「ウィンドウ」シートより移動
 	csTabBar.bDispTabWnd = DlgButton_IsChecked(hwndDlg, IDC_CHECK_DispTabWnd);
-	csTabBar.bSameTabWidth = DlgButton_IsChecked(hwndDlg, IDC_CHECK_SameTabWidth);		// 2006.01.28 ryoji
-	csTabBar.bDispTabIcon = DlgButton_IsChecked(hwndDlg, IDC_CHECK_DispTabIcon);		// 2006.01.28 ryoji
+	csTabBar.bSameTabWidth = DlgButton_IsChecked(hwndDlg, IDC_CHECK_SameTabWidth);
+	csTabBar.bDispTabIcon = DlgButton_IsChecked(hwndDlg, IDC_CHECK_DispTabIcon);
 	csTabBar.bSortTabList = DlgButton_IsChecked(hwndDlg, IDC_CHECK_SortTabList);		// 2006.03.23 fon
 	csTabBar.bDispTabWndMultiWin = !DlgButton_IsChecked(hwndDlg, IDC_CHECK_GroupMultiTabWnd);
 	::DlgItem_GetText(hwndDlg, IDC_TABWND_CAPTION, csTabBar.szTabWndCaption, _countof(csTabBar.szTabWndCaption));

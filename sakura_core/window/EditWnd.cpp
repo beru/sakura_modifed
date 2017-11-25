@@ -371,7 +371,7 @@ void EditWnd::_GetTabGroupInfo(TabGroupInfo* pTabGroupInfo, int& nGroup)
 	if (pShareData->common.tabBar.bDispTabWnd && !pShareData->common.tabBar.bDispTabWndMultiWin) {
 		if (nGroup < 0)	// 不正なグループID
 			nGroup = 0;	// グループ指定無し（最近アクティブのグループに入れる）
-		EditNode* pEditNode = AppNodeGroupHandle(nGroup).GetEditNodeAt(0);	// グループの先頭ウィンドウ情報を取得	// 2007.06.20 ryoji
+		EditNode* pEditNode = AppNodeGroupHandle(nGroup).GetEditNodeAt(0);	// グループの先頭ウィンドウ情報を取得
 		hwndTop = pEditNode? pEditNode->GetHwnd(): NULL;
 
 		if (hwndTop) {
@@ -430,7 +430,7 @@ void EditWnd::_AdjustInMonitor(const TabGroupInfo& tabGroupInfo)
 		&& !pShareData->common.tabBar.bDispTabWndMultiWin
 		&& tabGroupInfo.hwndTop
 	) {
-		// 現在の先頭ウィンドウから WS_EX_TOPMOST 状態を引き継ぐ	// 2007.05.18 ryoji
+		// 現在の先頭ウィンドウから WS_EX_TOPMOST 状態を引き継ぐ
 		DWORD dwExStyle = (DWORD)::GetWindowLongPtr(tabGroupInfo.hwndTop, GWL_EXSTYLE);
 		::SetWindowPos(GetHwnd(), (dwExStyle & WS_EX_TOPMOST)? HWND_TOPMOST: HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
 
@@ -512,7 +512,7 @@ void EditWnd::_AdjustInMonitor(const TabGroupInfo& tabGroupInfo)
 		) {
 			::ShowWindow(GetHwnd(), SW_SHOWMAXIMIZED);
 		}else
-		// 2004.05.14 Moca ウィンドウサイズを直接指定する場合は、最小化表示を受け入れる
+		// ウィンドウサイズを直接指定する場合は、最小化表示を受け入れる
 		if (csWindow.eSaveWindowSize == WinSizeMode::Set &&
 			csWindow.nWinSizeType == SIZE_MINIMIZED
 		) {
@@ -557,7 +557,7 @@ HWND EditWnd::Create(
 	//	Dec. 4, 2002 genta
 	InitMenubarMessageFont();
 
-	pDropTarget = new DropTarget(this);	// 右ボタンドロップ用	// 2008.06.20 ryoji
+	pDropTarget = new DropTarget(this);	// 右ボタンドロップ用
 
 	// 2009.01.17 nasukoji	ホイールスクロール有無状態をクリア
 	ClearMouseState();
@@ -566,7 +566,7 @@ HWND EditWnd::Create(
 	CreateAccelTbl();
 
 	// ウィンドウ数制限
-	if (pShareData->nodes.nEditArrNum >= MAX_EDITWINDOWS) {	// 最大値修正	//@@@ 2003.05.31 MIK
+	if (pShareData->nodes.nEditArrNum >= MAX_EDITWINDOWS) {	// 最大値修正
 		OkMessage(NULL, LS(STR_MAXWINDOW), MAX_EDITWINDOWS);
 		return NULL;
 	}
@@ -582,16 +582,13 @@ HWND EditWnd::Create(
 		return NULL;
 	}
 
-	// 初回アイドリング検出用のゼロ秒タイマーをセットする	// 2008.04.19 ryoji
+	// 初回アイドリング検出用のゼロ秒タイマーをセットする
 	// ゼロ秒タイマーが発動（初回アイドリング検出）したら MYWM_FIRST_IDLE を起動元プロセスにポストする。
 	// ※起動元での起動先アイドリング検出については ControlTray::OpenNewEditor を参照
 	::SetTimer(GetHwnd(), IDT_FIRST_IDLE, 0, NULL);
 
 	// 編集ウィンドウリストへの登録
-	// 2011.01.12 ryoji この処理は以前はウィンドウ可視化よりも後の位置にあった
-	// Vista/7 での初回表示アニメーション抑止（rev1868）とのからみで、ウィンドウが可視化される時点でタブバーに全タブが揃っていないと見苦しいのでここに移動。
-	// AddEditWndList() で自ウィンドウにポストされる MYWM_TAB_WINDOW_NOTIFY(TWNT_ADD) はタブバー作成後の初回アイドリング時に処理されるので特に問題は無いはず。
-	if (!AppNodeGroupHandle(nGroup).AddEditWndList(GetHwnd())) {	// 2007.06.26 ryoji nGroup引数追加
+	if (!AppNodeGroupHandle(nGroup).AddEditWndList(GetHwnd())) {
 		OkMessage(GetHwnd(), LS(STR_MAXWINDOW), MAX_EDITWINDOWS);
 		::DestroyWindow(GetHwnd());
 		hWnd = NULL;
@@ -663,12 +660,12 @@ HWND EditWnd::Create(
 
 	// ドロップされたファイルを受け入れる
 	::DragAcceptFiles(GetHwnd(), TRUE);
-	pDropTarget->Register_DropTarget(hWnd);	// 右ボタンドロップ用	// 2008.06.20 ryoji
+	pDropTarget->Register_DropTarget(hWnd);	// 右ボタンドロップ用
 
 	// アクティブ情報
-	bIsActiveApp = (::GetActiveWindow() == GetHwnd());	// 2007.03.08 ryoji
+	bIsActiveApp = (::GetActiveWindow() == GetHwnd());
 
-	// エディタ－トレイ間でのUI特権分離の確認（Vista UIPI機能） 2007.06.07 ryoji
+	// エディタ－トレイ間でのUI特権分離の確認（Vista UIPI機能）
 	if (IsWinVista_or_later()) {
 		bUIPI = FALSE;
 		::SendMessage(pShareData->handles.hwndTray, MYWM_UIPI_CHECK,  (WPARAM)0, (LPARAM)GetHwnd());
@@ -682,7 +679,7 @@ HWND EditWnd::Create(
 		}
 	}
 
-	ShareData::getInstance().SetTraceOutSource(GetHwnd());	// TraceOut()起動元ウィンドウの設定	// 2006.06.26 ryoji
+	ShareData::getInstance().SetTraceOutSource(GetHwnd());	// TraceOut()起動元ウィンドウの設定
 
 	// Aug. 29, 2003 wmlhq
 	nTimerCount = 0;
@@ -715,7 +712,7 @@ void EditWnd::OpenDocumentWhenStart(
 			// ファイルが既に開かれている
 			if (loadInfo.bOpened) {
 				::PostMessage(GetHwnd(), WM_CLOSE, 0, 0);
-				// 2004.07.12 Moca return NULLだと、メッセージループを通らずにそのまま破棄されてしまい、タブの終了処理が抜ける
+				// return NULLだと、メッセージループを通らずにそのまま破棄されてしまい、タブの終了処理が抜ける
 				//	この後は正常ルートでメッセージループに入った後WM_CLOSEを受信して直ちにCLOSE & DESTROYとなる．
 				//	その中で編集ウィンドウの削除が行われる．
 			}
@@ -789,7 +786,6 @@ void EditWnd::LayoutMainMenu()
 			break;
 		case MainMenuType::Leaf:
 			// メニューラベルの作成
-			// 2014.05.04 Moca プラグイン/マクロ等を置けるようにFunccode2Nameを使うように
 			{
 				wchar_t szLabelW[256];
 				GetDocument().funcLookup.Funccode2Name(mainMenu->nFunc, szLabelW, 256);
@@ -997,7 +993,6 @@ static inline BOOL MyIsDialogMessage(HWND hwnd, MSG* msg)
 
 // 複数プロセス版
 // メッセージループ
-// 2004.02.17 Moca GetMessageのエラーチェック
 void EditWnd::MessageLoop(void)
 {
 	MSG	msg;
@@ -1073,7 +1068,6 @@ LRESULT EditWnd::DispatchEvent(
 		// メニューアクセスキー押下時の処理(WM_MENUCHAR処理)
 		return menuDrawer.OnMenuChar(hwnd, uMsg, wParam, lParam);
 
-	// 2007.09.09 Moca 互換BMPによる画面バッファ
 	case WM_SHOWWINDOW:
 		if (!wParam) {
 			Views_DeleteCompatibleBitmap();
@@ -1118,7 +1112,7 @@ LRESULT EditWnd::DispatchEvent(
 		idCtl = (UINT) wParam;				// コントロールのID
 		lpdis = (DRAWITEMSTRUCT*) lParam;	// 項目描画情報
 		if (idCtl == IDW_STATUSBAR) {
-			if (lpdis->itemID == 5) { // 2003.08.26 Moca idがずれて作画されなかった
+			if (lpdis->itemID == 5) {
 				int	nColor;
 				if (pShareData->flags.bRecordingKeyMacro	// キーボードマクロの記録中
 				 && pShareData->flags.hwndRecordingKeyMacro == GetHwnd()	// キーボードマクロを記録中のウィンドウ
@@ -1130,7 +1124,7 @@ LRESULT EditWnd::DispatchEvent(
 				::SetTextColor(lpdis->hDC, ::GetSysColor(nColor));
 				::SetBkMode(lpdis->hDC, TRANSPARENT);
 				
-				// 2003.08.26 Moca 上下中央位置に作画
+				// 上下中央位置に作画
 				TEXTMETRIC tm;
 				::GetTextMetrics(lpdis->hDC, &tm);
 				int y = (lpdis->rcItem.bottom - lpdis->rcItem.top - tm.tmHeight + 1) / 2 + lpdis->rcItem.top;
@@ -1190,7 +1184,7 @@ LRESULT EditWnd::DispatchEvent(
 	case WM_ACTIVATEAPP:
 		bIsActiveApp = (wParam != 0);	// 自アプリがアクティブかどうか
 
-		// アクティブ化なら編集ウィンドウリストの先頭に移動する		// 2007.04.08 ryoji WM_SETFOCUS から移動
+		// アクティブ化なら編集ウィンドウリストの先頭に移動する
 		if (bIsActiveApp) {
 			AppNodeGroupHandle(0).AddEditWndList(GetHwnd());	// リスト移動処理
 
@@ -1198,7 +1192,7 @@ LRESULT EditWnd::DispatchEvent(
 			ClearMouseState();
 		}
 
-		// タイマーON/OFF		// 2007.03.08 ryoji WM_ACTIVATEから移動
+		// タイマーON/OFF
 		UpdateCaption();
 		funcKeyWnd.Timer_ONOFF(bIsActiveApp); // 20060126 aroka
 		this->Timer_ONOFF(bIsActiveApp); // 20060128 aroka
@@ -1206,7 +1200,7 @@ LRESULT EditWnd::DispatchEvent(
 		return 0L;
 
 	case WM_ENABLE:
-		// 右ドロップファイルの受け入れ設定／解除	// 2009.01.09 ryoji
+		// 右ドロップファイルの受け入れ設定／解除
 		// Note: DragAcceptFilesを適用した左ドロップについては Enable/Disable で自動的に受け入れ設定／解除が切り替わる
 		if ((BOOL)wParam) {
 			pDropTarget->Register_DropTarget(hWnd);
@@ -1216,7 +1210,7 @@ LRESULT EditWnd::DispatchEvent(
 		return 0L;
 
 	case WM_WINDOWPOSCHANGED:
-		// ポップアップウィンドウの表示切替指示をポストする	// 2007.10.22 ryoji
+		// ポップアップウィンドウの表示切替指示をポストする
 		// ・WM_SHOWWINDOWはすべての表示切替で呼ばれるわけではないのでWM_WINDOWPOSCHANGEDで処理
 		//   （タブグループ解除などの設定変更時はWM_SHOWWINDOWは呼ばれない）
 		// ・即時切替だとタブ切替に干渉して元のタブに戻ってしまうことがあるので後で切り替える
@@ -1230,7 +1224,7 @@ LRESULT EditWnd::DispatchEvent(
 		return ::DefWindowProc(hwnd, uMsg, wParam, lParam);
 
 	case MYWM_SHOWOWNEDPOPUPS:
-		::ShowOwnedPopups(hWnd, (BOOL)wParam);	// 2007.10.22 ryoji
+		::ShowOwnedPopups(hWnd, (BOOL)wParam);
 		return 0L;
 
 	case WM_SIZE:
@@ -1241,15 +1235,13 @@ LRESULT EditWnd::DispatchEvent(
 		}
 		return OnSize(wParam, lParam);
 
-	// From here 2003.05.31 MIK
 	case WM_MOVE:
-		// From Here 2004.05.13 Moca ウィンドウ位置継承
+		// ウィンドウ位置継承
 		//	最後の位置を復元するため，移動されるたびに共有メモリに位置を保存する．
 		if (WinSizeMode::Save == pShareData->common.window.eSaveWindowPos) {
 			if (!::IsZoomed(GetHwnd()) && !::IsIconic(GetHwnd())) {
-				// 2005.11.23 Moca ワークエリア座標だとずれるのでスクリーン座標に変更
 				// Aero Snapで縦方向最大化で終了して次回起動するときは元のサイズにする必要があるので、
-				// GetWindowRect()ではなくGetWindowPlacement()で得たワークエリア座標をスクリーン座標に変換して記憶する	// 2009.09.02 ryoji
+				// GetWindowRect()ではなくGetWindowPlacement()で得たワークエリア座標をスクリーン座標に変換して記憶する
 				WINDOWPLACEMENT wp;
 				wp.length = sizeof(wp);
 				::GetWindowPlacement(GetHwnd(), &wp);	// ワークエリア座標
@@ -1261,15 +1253,12 @@ LRESULT EditWnd::DispatchEvent(
 				pShareData->common.window.nWinPosY = rcWin.top;
 			}
 		}
-		// To Here 2004.05.13 Moca ウィンドウ位置継承
 		return DefWindowProc(hwnd, uMsg, wParam, lParam);
-	// To here 2003.05.31 MIK
 	case WM_SYSCOMMAND:
-		// タブまとめ表示では閉じる動作はオプション指定に従う	// 2006.02.13 ryoji
+		// タブまとめ表示では閉じる動作はオプション指定に従う
 		//	Feb. 11, 2007 genta 動作を選べるように(MDI風と従来動作)
-		// 2007.02.22 ryoji Alt+F4 のデフォルト機能でモード毎の動作が得られるようになった
 		if (wParam == SC_CLOSE) {
-			// 印刷Previewモードでウィンドウを閉じる操作のときはPreviewを閉じる	// 2007.03.04 ryoji
+			// 印刷Previewモードでウィンドウを閉じる操作のときはPreviewを閉じる
 			if (pPrintPreview) {
 				PrintPreviewModeONOFF();	// 印刷Previewモードのオン/オフ
 				return 0L;
@@ -1291,7 +1280,7 @@ LRESULT EditWnd::DispatchEvent(
 	case WM_CHAR:
 	case WM_IME_CHAR:
 	case WM_KEYUP:
-	case WM_SYSKEYUP:	// 2004.04.28 Moca ALT+キーのキーリピート処理のため追加
+	case WM_SYSKEYUP:	// ALT+キーのキーリピート処理のため
 	case WM_ENTERMENULOOP:
 #if 0
 	case MYWM_IME_REQUEST:   // 再変換対応 by minfu 2002.03.27	20020331 aroka
@@ -1314,16 +1303,14 @@ LRESULT EditWnd::DispatchEvent(
 	case WM_SETFOCUS:
 //		MYTRACE(_T("WM_SETFOCUS\n"));
 
-		// Aug. 29, 2003 wmlhq & ryojiファイルのタイムスタンプのチェック処理 OnTimer に移行
 		nTimerCount = 9;
 
-		// ビューにフォーカスを移動する	// 2007.10.16 ryoji
+		// ビューにフォーカスを移動する
 		if (!pPrintPreview && pEditView) {
 			::SetFocus(GetActiveView().GetHwnd());
 		}
 		lRes = 0;
 
-//@@@ 2002.01.14 YAZAKI 印刷PreviewをPrintPreviewに独立させたことによる変更
 		// 印刷Previewモードのときは、キー操作は全部PrintPreviewBarへ転送
 		if (pPrintPreview) {
 			pPrintPreview->SetFocusToPrintPreviewBar();
@@ -1332,7 +1319,6 @@ LRESULT EditWnd::DispatchEvent(
 
 	case WM_NOTIFY:
 		pnmh = (LPNMHDR) lParam;
-		//	From Here Feb. 15, 2004 genta 
 		//	ステータスバーのダブルクリックでモード切替ができるようにする
 		if (statusBar.GetStatusHwnd() && pnmh->hwndFrom == statusBar.GetStatusHwnd()) {
 			if (pnmh->code == NM_DBLCLK) {
@@ -1409,12 +1395,8 @@ LRESULT EditWnd::DispatchEvent(
 			}
 			return 0L;
 		}
-		//	To Here Feb. 15, 2004 genta 
 
 		switch (pnmh->code) {
-		// 2007.09.08 kobake TTN_NEEDTEXTの処理をA版とW版に分けて明示的に処理するようにしました。
-		//                   ※テキストが80文字を超えそうならTOOLTIPTEXT::lpszTextを利用してください。
-		// 2008.11.03 syat   矩形範囲選択開始のツールチップで80文字超えていたのでlpszTextに変更。
 		case TTN_NEEDTEXT:
 			{
 				static TCHAR szText[256] = {0};
@@ -1432,14 +1414,12 @@ LRESULT EditWnd::DispatchEvent(
 				if (nId != 0) OnCommand((WORD)0 /*メニュー*/, (WORD)nId, (HWND)0);
 			}
 			return FALSE;
-		//	From Here Jul. 21, 2003 genta
 		case NM_CUSTOMDRAW:
 			if (pnmh->hwndFrom == toolbar.GetToolbarHwnd()) {
 				//	ツールバーのOwner Draw
 				return toolbar.ToolBarOwnerDraw((LPNMCUSTOMDRAW)pnmh);
 			}
 			break;
-		//	To Here Jul. 21, 2003 genta
 		}
 		return 0L;
 	case WM_COMMAND:
@@ -1477,7 +1457,7 @@ LRESULT EditWnd::DispatchEvent(
 
 		// ドロップされたファイルを受け入れるのを解除
 		::DragAcceptFiles(hwnd, FALSE);
-		pDropTarget->Revoke_DropTarget();	// 右ボタンドロップ用	// 2008.06.20 ryoji
+		pDropTarget->Revoke_DropTarget();	// 右ボタンドロップ用
 
 		// 編集ウィンドウリストからの削除
 		AppNodeGroupHandle(GetHwnd()).DeleteEditWndList(GetHwnd());
@@ -1497,7 +1477,6 @@ LRESULT EditWnd::DispatchEvent(
 		return 0L;
 
 	case WM_THEMECHANGED:
-		// 2006.06.17 ryoji
 		// ビジュアルスタイル／クラシックスタイルが切り替わったらツールバーを再作成する
 		// （ビジュアルスタイル: Rebar 有り、クラシックスタイル: Rebar 無し）
 		if (toolbar.GetToolbarHwnd()) {
@@ -1510,7 +1489,7 @@ LRESULT EditWnd::DispatchEvent(
 		return 0L;
 
 	case MYWM_UIPI_CHECK:
-		// エディタ－トレイ間でのUI特権分離の確認メッセージ	2007.06.07 ryoji
+		// エディタ－トレイ間でのUI特権分離の確認メッセージ
 		bUIPI = TRUE;	// トレイからの返事を受け取った
 		return 0L;
 
@@ -1520,7 +1499,7 @@ LRESULT EditWnd::DispatchEvent(
 				(HWND)lParam,
 				(wParam & PM_CLOSE_GREPNOCONFIRM) == PM_CLOSE_GREPNOCONFIRM
 			)
-		) { // Jan. 23, 2002 genta 警告抑制
+		) {
 			// プラグイン：DocumentCloseイベント実行
 			Plug::Array plugs;
 			WSHIfObj::List params;
@@ -1536,14 +1515,14 @@ LRESULT EditWnd::DispatchEvent(
 				(*it)->Invoke(GetActiveView(), params);
 			}
 
-			// タブまとめ表示では閉じる動作はオプション指定に従う	// 2006.02.13 ryoji
+			// タブまとめ表示では閉じる動作はオプション指定に従う
 			if ((wParam & PM_CLOSE_EXIT) != PM_CLOSE_EXIT) {	// 全終了要求でない場合
 				// タブまとめ表示で(無題)を残す指定の場合、残ウィンドウが１個なら新規エディタを起動して終了する
 				if (pShareData->common.tabBar.bDispTabWnd &&
 					!pShareData->common.tabBar.bDispTabWndMultiWin &&
 					pShareData->common.tabBar.bTab_RetainEmptyWin
 				) {
-					// 自グループ内の残ウィンドウ数を調べる	// 2007.06.20 ryoji
+					// 自グループ内の残ウィンドウ数を調べる
 					int nGroup = AppNodeManager::getInstance().GetEditNode(GetHwnd())->GetGroup();
 					if (AppNodeGroupHandle(nGroup).GetEditorWindowsNum() == 1) {
 						EditNode* pEditNode = AppNodeManager::getInstance().GetEditNode(GetHwnd());
@@ -1587,33 +1566,31 @@ LRESULT EditWnd::DispatchEvent(
 			SelectLang::ChangeLang(GetDllShareData().common.window.szLanguageDll);
 			ShareData::getInstance().RefreshString();
 
-			// メインメニュー	2010/5/16 Uchi
+			// メインメニュー
 			LayoutMainMenu();
 
-			// Oct 10, 2000 ao
 			// 設定変更時、ツールバーを再作成するようにする（バーの内容変更も反映）
 			toolbar.DestroyToolBar();
 			LayoutToolBar();
-			// Oct 10, 2000 ao ここまで
 
-			// 2008.10.05 nasukoji	非アクティブなウィンドウのツールバーを更新する
+			// 非アクティブなウィンドウのツールバーを更新する
 			// アクティブなウィンドウはタイマにより更新されるが、それ以外のウィンドウは
 			// タイマを停止させており設定変更すると全部有効となってしまうため、ここで
 			// ツールバーを更新する
 			if (!bIsActiveApp)
 				toolbar.UpdateToolbar();
 
-			// ファンクションキーを再作成する（バーの内容、位置、グループボタン数の変更も反映）	// 2006.12.19 ryoji
+			// ファンクションキーを再作成する（バーの内容、位置、グループボタン数の変更も反映）
 			funcKeyWnd.Close();
 			LayoutFuncKey();
 
-			// タブバーの表示／非表示切り替え	// 2006.12.19 ryoji
+			// タブバーの表示／非表示切り替え
 			LayoutTabBar();
 
-			// ステータスバーの表示／非表示切り替え	// 2006.12.19 ryoji
+			// ステータスバーの表示／非表示切り替え
 			LayoutStatusBar();
 
-			// 水平スクロールバーの表示／非表示切り替え	// 2006.12.19 ryoji
+			// 水平スクロールバーの表示／非表示切り替え
 			{
 				bool b1 = !pShareData->common.window.bScrollBarHorz;
 				for (int i=0; i<GetAllViewCount(); ++i) {
@@ -1627,7 +1604,7 @@ LRESULT EditWnd::DispatchEvent(
 
 			LayoutMiniMap();
 
-			// バー変更で画面が乱れないように	// 2006.12.19 ryoji
+			// バー変更で画面が乱れないように
 			EndLayoutBars();
 
 			// アクセラレータテーブルを再作成する(Wine用)
@@ -1648,7 +1625,7 @@ LRESULT EditWnd::DispatchEvent(
 										SWP_SHOWWINDOW | SWP_NOACTIVATE
 										| SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER);
 
-						// このウィンドウの WS_EX_TOPMOST 状態を全ウィンドウに反映する	// 2007.05.18 ryoji
+						// このウィンドウの WS_EX_TOPMOST 状態を全ウィンドウに反映する
 						WindowTopMost(((DWORD)::GetWindowLongPtr(GetHwnd(), GWL_EXSTYLE) & WS_EX_TOPMOST)? 1: 2);
 					}
 				}else {
@@ -1665,11 +1642,9 @@ LRESULT EditWnd::DispatchEvent(
 				}
 			}
 
-			//	Aug, 21, 2000 genta
 			GetDocument().autoSaveAgent.ReloadAutoSaveParam();
-
 			GetDocument().OnChangeSetting();	// ビューに設定変更を反映させる
-			GetDocument().docType.SetDocumentIcon();	// Sep. 10, 2002 genta 文書アイコンの再設定
+			GetDocument().docType.SetDocumentIcon();	// 文書アイコンの再設定
 
 			break;
 		case PM_CHANGESETTING_FONT:
@@ -1691,12 +1666,6 @@ LRESULT EditWnd::DispatchEvent(
 
 				// アウトライン解析画面処理
 				bool bAnalyzed = false;
-#if 0
-				if (/* 必要なら変更条件をここに記述する（将来用） */) {
-					// アウトライン解析画面の位置を現在の設定に合わせる
-					bAnalyzed = dlgFuncList.ChangeLayout(OUTLINE_LAYOUT_BACKGROUND);	// 外部からの変更通知と同等の扱い
-				}
-#endif
 				if (dlgFuncList.GetHwnd() && !bAnalyzed) {	// アウトラインを開いていれば再解析
 					// SHOW_NORMAL: 解析方法が変化していれば再解析される。そうでなければ描画更新（変更されたカラーの適用）のみ。
 					EFunctionCode nFuncCode = dlgFuncList.GetFuncCodeRedraw(dlgFuncList.nOutlineType);
@@ -1757,7 +1726,7 @@ LRESULT EditWnd::DispatchEvent(
 		
 	case MYWM_SETCARETPOS:	// カーソル位置変更通知
 		{
-			//	2006.07.09 genta LPARAMに新たな意味を追加
+			//	LPARAMに新たな意味を追加
 			//	bit 0 (MASK 1): (bit 1==0のとき) 0/選択クリア, 1/選択開始・変更
 			//	bit 1 (MASK 2): 0: bit 0の設定に従う．1:現在の選択ロックs状態を継続
 			//	既存の実装では どちらも0なので強制解除と解釈される．
@@ -1768,7 +1737,6 @@ LRESULT EditWnd::DispatchEvent(
 				bSelect = GetActiveView().GetSelectionInfo().bSelectingLock;
 			}
 			
-			//	2006.07.09 genta 強制解除しない
 			/*
 			カーソル位置変換
 			 物理位置(行頭からのバイト数、折り返し無し行位置)
@@ -1777,7 +1745,7 @@ LRESULT EditWnd::DispatchEvent(
 			*/
 			Point* ppoCaret = &(pShareData->workBuffer.logicPoint);
 			Point ptCaretPos = GetDocument().layoutMgr.LogicToLayout(*ppoCaret);
-			// 改行の真ん中にカーソルが来ないように	// 2007.08.22 ryoji
+			// 改行の真ん中にカーソルが来ないように
 			// Note. もとが改行単位の桁位置なのでレイアウト折り返しの桁位置を超えることはない。
 			//       選択指定(bSelect==TRUE)の場合にはどうするのが妥当かよくわからないが、
 			//       2007.08.22現在ではアウトライン解析ダイアログから桁位置0で呼び出される
@@ -1790,13 +1758,12 @@ LRESULT EditWnd::DispatchEvent(
 					}
 				}
 			}
-			//	2006.07.09 genta 選択範囲を考慮して移動
+			//	選択範囲を考慮して移動
 			//	MoveCursorの位置調整機能があるので，最終行以降への
 			//	移動指示の調整もMoveCursorにまかせる
 			GetActiveView().MoveCursorSelecting(ptCaretPos, bSelect, _CARETMARGINRATE / 3);
 		}
 		return 0L;
-
 
 	case MYWM_GETCARETPOS:	// カーソル位置取得要求
 		/*
@@ -1844,7 +1811,6 @@ LRESULT EditWnd::DispatchEvent(
 		return nLineLen;
 	}
 
-	// 2010.05.11 Moca MYWM_ADDSTRINGLEN_Wを追加 NULセーフ
 	case MYWM_ADDSTRINGLEN_W:
 		{
 			EDIT_CHAR* pWork = pShareData->workBuffer.GetWorkBuffer<EDIT_CHAR>();
@@ -1854,7 +1820,7 @@ LRESULT EditWnd::DispatchEvent(
 		}
 		return 0L;
 
-	// タブウィンドウ	//@@@ 2003.05.31 MIK
+	// タブウィンドウ
 	case MYWM_TAB_WINDOW_NOTIFY:
 		tabWnd.TabWindowNotify(wParam, lParam);
 		{
@@ -1865,23 +1831,23 @@ LRESULT EditWnd::DispatchEvent(
 		}
 		return 0L;
 
-	// アウトライン	// 2010.06.06 ryoji
+	// アウトライン
 	case MYWM_OUTLINE_NOTIFY:
 		dlgFuncList.OnOutlineNotify(wParam, lParam);
 		return 0L;
 
-	// バーの表示・非表示	//@@@ 2003.06.10 MIK
+	// バーの表示・非表示
 	case MYWM_BAR_CHANGE_NOTIFY:
 		if (GetHwnd() != (HWND)lParam) {
 			switch ((BarChangeNotifyType)wParam) {
 			case BarChangeNotifyType::Toolbar:
-				LayoutToolBar();	// 2006.12.19 ryoji
+				LayoutToolBar();
 				break;
 			case BarChangeNotifyType::FuncKey:
-				LayoutFuncKey();	// 2006.12.19 ryoji
+				LayoutFuncKey();
 				break;
 			case BarChangeNotifyType::Tab:
-				LayoutTabBar();		// 2006.12.19 ryoji
+				LayoutTabBar();
 				if (pShareData->common.tabBar.bDispTabWnd
 					&& !pShareData->common.tabBar.bDispTabWndMultiWin
 				) {
@@ -1894,13 +1860,13 @@ LRESULT EditWnd::DispatchEvent(
 				}
 				break;
 			case BarChangeNotifyType::StatusBar:
-				LayoutStatusBar();		// 2006.12.19 ryoji
+				LayoutStatusBar();
 				break;
 			case BarChangeNotifyType::MiniMap:
 				LayoutMiniMap();
 				break;
 			}
-			EndLayoutBars();	// 2006.12.19 ryoji
+			EndLayoutBars();
 		}
 		return 0L;
 
@@ -1930,7 +1896,7 @@ LRESULT EditWnd::DispatchEvent(
 		return 0;
 
 	case WM_NCACTIVATE:
-		// 編集ウィンドウ切替中（タブまとめ時）はタイトルバーのアクティブ／非アクティブ状態をできるだけ変更しないように（１）	// 2007.04.03 ryoji
+		// 編集ウィンドウ切替中（タブまとめ時）はタイトルバーのアクティブ／非アクティブ状態をできるだけ変更しないように（１）
 		// 前面にいるのが編集ウィンドウならアクティブ状態を保持する
 		if (pShareData->flags.bEditWndChanging && IsSakuraMainWindow(::GetForegroundWindow())) {
 			wParam = TRUE;	// アクティブ
@@ -1942,7 +1908,7 @@ LRESULT EditWnd::DispatchEvent(
 		return lRes;
 
 	case WM_SETTEXT:
-		// 編集ウィンドウ切替中（タブまとめ時）はタイトルバーのアクティブ／非アクティブ状態をできるだけ変更しないように（２）	// 2007.04.03 ryoji
+		// 編集ウィンドウ切替中（タブまとめ時）はタイトルバーのアクティブ／非アクティブ状態をできるだけ変更しないように（２）
 		// タイマーを使用してタイトルの変更を遅延する
 		if (pShareData->flags.bEditWndChanging) {
 			delete[] pszLastCaption;
@@ -1993,51 +1959,6 @@ int	EditWnd::OnClose(HWND hWndActive, bool bGrepNoConfirm)
 			::SetForegroundWindow(hWndActive);	// タスクトレイ
 		}
 	}
-
-#if 0
-	// 2005.09.01 ryoji タブまとめ表示の場合は次のウィンドウを前面に（終了時のウィンドウちらつきを抑制）
-	if (pShareData->common.tabBar.bDispTabWnd
-		&& !pShareData->common.tabBar.bDispTabWndMultiWin
-	) {
-		int i, j;
-		EditNode* p = nullptr;
-		int nCount = AppNodeManager::getInstance()->GetOpenedWindowArr(&p, false);
-		if (nCount > 1) {
-			for (i=0; i<nCount; ++i) {
-				if (p[i].GetHwnd() == GetHwnd())
-					break;
-			}
-			if (i < nCount) {
-				for (j=i+1; j<nCount; ++j) {
-					if (p[j].nGroup == p[i].nGroup)
-						break;
-				}
-				if (j >= nCount) {
-					for (j=0; j<i; ++j) {
-						if (p[j].nGroup == p[i].nGroup)
-							break;
-					}
-				}
-				if (j != i) {
-					HWND hwnd = p[j].GetHwnd();
-					{
-						// 2006.01.28 ryoji
-						// タブまとめ表示でこの画面が非表示から表示に変わってすぐ閉じる場合(タブの中クリック時等)、
-						// 以前のウィンドウが消えるよりも先に一気にここまで処理が進んでしまうと
-						// あとで画面がちらつくので、以前のウィンドウが消えるのをちょっとだけ待つ
-						int iWait = 0;
-						while (::IsWindowVisible(hwnd) && iWait++ < 20)
-							::Sleep(1);
-					}
-					if (!::IsWindowVisible(hwnd)) {
-						ActivateFrameWindow(hwnd);
-					}
-				}
-			}
-		}
-		if (p) delete[] p;
-	}
-#endif	// 0
 
 	return nRet;
 }
@@ -2095,7 +2016,7 @@ void EditWnd::OnCommand(WORD wNotifyCode, WORD wID , HWND hwndCtl)
 			const MruFolder mruFolder;
 			LPCTSTR pszFolderPath = mruFolder.GetPath(wID - IDM_SELOPENFOLDER);
 
-			// Stonee, 2001/12/21 UNCであれば接続を試みる
+			// UNCであれば接続を試みる
 			NetConnect(pszFolderPath);
 
 			//「ファイルを開く」ダイアログ
@@ -2650,7 +2571,7 @@ void EditWnd::OnDropFiles(HDROP hDrop)
 		cFiles = csFile.nDropFileNumMax;
 	}
 
-	// アクティブにする	// 2009.08.20 ryoji 処理開始前に無条件でアクティブ化
+	// アクティブにする
 	ActivateFrameWindow(GetHwnd());
 
 	for (size_t i=0; i<cFiles; ++i) {
@@ -2671,7 +2592,6 @@ void EditWnd::OnDropFiles(HDROP hDrop)
 			mru.Add(pfi);
 		}else {
 			// 変更フラグがオフで、ファイルを読み込んでいない場合
-			//	2005.06.24 Moca
 			if (GetDocument().IsAcceptLoad()) {
 				// ファイル読み込み
 				LoadInfo loadInfo(szFile, CODE_AUTODETECT, false);
@@ -2684,7 +2604,7 @@ void EditWnd::OnDropFiles(HDROP hDrop)
 					GetDocument().docFileOperation.FileCloseOpen(loadInfo);
 				}else {
 					// 編集ウィンドウの上限チェック
-					if (pShareData->nodes.nEditArrNum >= MAX_EDITWINDOWS) {	// 最大値修正	//@@@ 2003.05.31 MIK
+					if (pShareData->nodes.nEditArrNum >= MAX_EDITWINDOWS) {	// 最大値修正
 						OkMessage(NULL, LS(STR_MAXWINDOW), MAX_EDITWINDOWS);
 						return;
 					}
@@ -2725,7 +2645,7 @@ LRESULT EditWnd::OnTimer(WPARAM wParam, LPARAM lParam)
 		break;
 	case IDT_FIRST_IDLE:
 		dlgFuncList.bEditWndReady = true;	// エディタ画面の準備完了
-		AppNodeGroupHandle(0).PostMessageToAllEditors(MYWM_FIRST_IDLE, ::GetCurrentProcessId(), 0, NULL);	// プロセスの初回アイドリング通知	// 2008.04.19 ryoji
+		AppNodeGroupHandle(0).PostMessageToAllEditors(MYWM_FIRST_IDLE, ::GetCurrentProcessId(), 0, NULL);	// プロセスの初回アイドリング通知
 		::PostMessage(pShareData->handles.hwndTray, MYWM_FIRST_IDLE, (WPARAM)::GetCurrentProcessId(), (LPARAM)0);
 		::KillTimer(hWnd, wParam);
 		break;
@@ -2873,7 +2793,7 @@ LRESULT EditWnd::OnSize2( WPARAM wParam, LPARAM lParam, bool bUpdateStatus )
 				}
 			}else {
 				// Aero Snapの縦方向最大化状態で終了して次回起動するときは元のサイズにする必要があるので、
-				// GetWindowRect()ではなくGetWindowPlacement()で得たワークエリア座標をスクリーン座標に変換して記憶する	// 2009.09.02 ryoji
+				// GetWindowRect()ではなくGetWindowPlacement()で得たワークエリア座標をスクリーン座標に変換して記憶する
 				WINDOWPLACEMENT wp;
 				wp.length = sizeof(wp);
 				::GetWindowPlacement(GetHwnd(), &wp);	// ワークエリア座標
@@ -3119,7 +3039,7 @@ LRESULT EditWnd::OnSize2( WPARAM wParam, LPARAM lParam, bool bUpdateStatus )
 		(eDockSideFL == DockSideType::Left)? nFuncListWidth: 0,
 		(eDockSideFL == DockSideType::Top)? nTop + nFuncListHeight: nTop,
 		((eDockSideFL == DockSideType::Left || eDockSideFL == DockSideType::Right)? cx - nFuncListWidth: cx) - nMiniMapWidth,
-		(eDockSideFL == DockSideType::Top || eDockSideFL == DockSideType::Bottom)? nHeight - nFuncListHeight: nHeight,	//@@@ 2003.05.31 MIK
+		(eDockSideFL == DockSideType::Top || eDockSideFL == DockSideType::Bottom)? nHeight - nFuncListHeight: nHeight,
 		TRUE
 	);
 
@@ -3461,9 +3381,6 @@ LRESULT EditWnd::OnNcLButtonUp(WPARAM wp, LPARAM lp)
 	}else if (wp == HTSYSMENU) {
 		result = 0;
 	}else {
-		//	2004.05.23 Moca メッセージミス修正
-		//	フレームのダブルクリック時後にウィンドウサイズ
-		//	変更モードなっていた
 		result = DefWindowProc(GetHwnd(), WM_NCLBUTTONUP, wp, lp);
 	}
 
@@ -3481,17 +3398,16 @@ LRESULT EditWnd::OnLButtonDblClk(WPARAM wp, LPARAM lp) // by 鬼(2)
 
 		result = 0;
 	}else {
-		// 2004.05.23 Moca メッセージミス修正
 		result = DefWindowProc(GetHwnd(), WM_LBUTTONDBLCLK, wp, lp);
 	}
 
 	return result;
 }
 
-// ドロップダウンメニュー(開く)	@@@ 2002.06.15 MIK
+// ドロップダウンメニュー(開く)
 int	EditWnd::CreateFileDropDownMenu(HWND hwnd)
 {
-	// メニュー表示位置を決める	// 2007.03.25 ryoji
+	// メニュー表示位置を決める
 	// ※ TBN_DROPDOWN 時の NMTOOLBAR::iItem や NMTOOLBAR::rcButton にはドロップダウンメニュー(開く)ボタンが
 	//    複数あるときはどれを押した時も１個目のボタン情報が入るようなのでマウス位置からボタン位置を求める
 	POINT po;
@@ -3568,7 +3484,7 @@ int	EditWnd::CreateFileDropDownMenu(HWND hwnd)
 		po.x,
 		po.y,
 		0,
-		GetHwnd(),	// 2009.02.03 ryoji アクセスキー有効化のため hwnd -> GetHwnd() に変更
+		GetHwnd(),
 		NULL
 	);
 
@@ -3660,7 +3576,7 @@ void EditWnd::InitMenubarMessageFont(void)
 
 	// LOGFONTの初期化
 	LOGFONT lf = {0};
-	lf.lfHeight			= DpiPointsToPixels(-9);	// 2009.10.01 ryoji 高DPI対応（ポイント数から算出）
+	lf.lfHeight			= DpiPointsToPixels(-9);	// 高DPI対応（ポイント数から算出）
 	lf.lfWidth			= 0;
 	lf.lfEscapement		= 0;
 	lf.lfOrientation	= 0;
@@ -3693,7 +3609,7 @@ void EditWnd::InitMenubarMessageFont(void)
 */
 void EditWnd::PrintMenubarMessage(const TCHAR* msg)
 {
-	if (!::GetMenu(GetHwnd()))	// 2007.03.08 ryoji 追加
+	if (!::GetMenu(GetHwnd()))
 		return;
 
 	POINT	po, poFrame;
@@ -3767,7 +3683,7 @@ void EditWnd::ChangeFileNameNotify(const TCHAR* pszTabCaption, const TCHAR* _psz
 	int nIndex;
 	
 	if (!pszTabCaption) pszTabCaption = _T("");	// ガード
-	if (!pszFilePath) pszFilePath = _FT("");	// ガード 2006.01.28 ryoji
+	if (!pszFilePath) pszFilePath = _FT("");
 	
 	RecentEditNode	recentEditNode;
 	nIndex = recentEditNode.FindItemByHwnd(GetHwnd());
@@ -3778,7 +3694,6 @@ void EditWnd::ChangeFileNameNotify(const TCHAR* pszTabCaption, const TCHAR* _psz
 			_tcsncpy(p->szTabCaption, pszTabCaption, size);
 			p->szTabCaption[size] = _T('\0');
 
-			// 2006.01.28 ryoji ファイル名、Grepモード追加
 			size = _countof2(p->szFilePath) - 1;
 			_tcsncpy(p->szFilePath, pszFilePath, size);
 			p->szFilePath[size] = _T('\0');
@@ -3828,7 +3743,7 @@ void EditWnd::WindowTopMost(int top)
 
 	::SetWindowPos(GetHwnd(), hwndInsertAfter, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
 
-	// タブまとめ時は WS_EX_TOPMOST 状態を全ウィンドウで同期する	// 2007.05.18 ryoji
+	// タブまとめ時は WS_EX_TOPMOST 状態を全ウィンドウで同期する
 	auto& csTabBar = pShareData->common.tabBar;
 	if (pShareData->common.tabBar.bDispTabWnd && !pShareData->common.tabBar.bDispTabWndMultiWin) {
 		hwndInsertAfter = GetHwnd();
@@ -3892,7 +3807,7 @@ LRESULT EditWnd::PopupWinList(bool bMousePos)
 	if (tabWnd.GetHwnd()) {
 		tabWnd.TabListMenu(pt);
 	}else {
-		menuDrawer.ResetContents();	// 2009.06.02 ryoji 追加
+		menuDrawer.ResetContents();
 		EditNode* pEditNodeArr;
 		HMENU hMenu = ::CreatePopupMenu();	// 2006.03.23 fon
 		size_t nRowNum = AppNodeManager::getInstance().GetOpenedWindowArr(&pEditNodeArr, true);
@@ -4120,7 +4035,7 @@ void  EditWnd::SetActivePane(int nIndex)
 	nActivePaneIndex = nIndex;
 	pEditView = pEditViewArr[nActivePaneIndex];
 
-	// フォーカスを移動する	// 2007.10.16 ryoji
+	// フォーカスを移動する
 	GetView(nOldIndex).GetCaret().underLine.CaretUnderLineOFF(true);	//	2002/05/11 YAZAKI
 	if (::GetActiveWindow() == GetHwnd()
 		&& ::GetFocus() != GetActiveView().GetHwnd()
@@ -4128,7 +4043,6 @@ void  EditWnd::SetActivePane(int nIndex)
 		// ::SetFocus()でフォーカスを切り替える
 		::SetFocus(GetActiveView().GetHwnd());
 	}else {
-		// 2010.04.08 ryoji
 		// 起動と同時にエディットボックスにフォーカスのあるダイアログを表示すると当該エディットボックスに
 		// キャレットが表示されない問題(*1)を修正するのため、内部的な切り替えをするのはアクティブペインが
 		// 切り替わるときだけにした。← EditView::OnKillFocus()は自スレッドのキャレットを破棄するので
@@ -4312,7 +4226,7 @@ void EditWnd::ChangeLayoutParam(bool bShowProgress, size_t nTabSize, size_t nMax
 	ClearViewCaretPosInfo();
 
 	// 座標の復元
-	// レイアウト変更途中はカーソル移動の画面スクロールを見せない	// 2008.06.18 ryoji
+	// レイアウト変更途中はカーソル移動の画面スクロールを見せない
 	const bool bDrawSwitchOld = SetDrawSwitchOfAllViews(false);
 	RestorePhysPosOfAllView(posSave);
 	SetDrawSwitchOfAllViews(bDrawSwitchOld);
@@ -4320,14 +4234,14 @@ void EditWnd::ChangeLayoutParam(bool bShowProgress, size_t nTabSize, size_t nMax
 	for (int i=0; i<GetAllViewCount(); ++i) {
 		if (GetView(i).GetHwnd()) {
 			InvalidateRect(GetView(i).GetHwnd(), NULL, TRUE);
-			GetView(i).AdjustScrollBars();	// 2008.06.18 ryoji
+			GetView(i).AdjustScrollBars();
 		}
 	}
 	if (GetMiniMap().GetHwnd()) {
 		InvalidateRect(GetMiniMap().GetHwnd(), NULL, TRUE);
 		GetMiniMap().AdjustScrollBars();
 	}
-	GetActiveView().GetCaret().ShowCaretPosInfo();	// 2009.07.25 ryoji
+	GetActiveView().GetCaret().ShowCaretPosInfo();
 
 	if (hwndProgress) {
 		::ShowWindow(hwndProgress, SW_HIDE);

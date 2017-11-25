@@ -24,34 +24,34 @@ static const DWORD p_helpids1[] = {	//11300
 	IDC_EDIT_TABSPACE,				HIDC_EDIT_TABSPACE,			// TAB幅 // Sep. 19, 2002 genta
 	IDC_SPIN_TABSPACE,				HIDC_EDIT_TABSPACE,
 	IDC_EDIT_TABVIEWSTRING,			HIDC_EDIT_TABVIEWSTRING,	// TAB表示文字列
-	IDC_CHECK_TAB_ARROW,			HIDC_CHECK_TAB_ARROW,		// 矢印表示	// 2006.08.06 ryoji
+	IDC_CHECK_TAB_ARROW,			HIDC_CHECK_TAB_ARROW,		// 矢印表示
 	IDC_CHECK_INS_SPACE,			HIDC_CHECK_INS_SPACE,		// スペースの挿入
 
-	IDC_CHECK_INDENT,				HIDC_CHECK_INDENT,			// 自動インデント	// 2006.08.19 ryoji
-	IDC_CHECK_INDENT_WSPACE,		HIDC_CHECK_INDENT_WSPACE,	// 全角空白もインデント	// 2006.08.19 ryoji
+	IDC_CHECK_INDENT,				HIDC_CHECK_INDENT,			// 自動インデント
+	IDC_CHECK_INDENT_WSPACE,		HIDC_CHECK_INDENT_WSPACE,	// 全角空白もインデント
 	IDC_COMBO_SMARTINDENT,			HIDC_COMBO_SMARTINDENT,		// スマートインデント
 	IDC_EDIT_INDENTCHARS,			HIDC_EDIT_INDENTCHARS,		// その他のインデント対象文字
-	IDC_COMBO_INDENTLAYOUT,			HIDC_COMBO_INDENTLAYOUT,	// 折り返し行インデント	// 2006.08.06 ryoji
-	IDC_CHECK_RTRIM_PREVLINE,		HIDC_CHECK_RTRIM_PREVLINE,	// 改行時に末尾の空白を削除	// 2006.08.06 ryoji
+	IDC_COMBO_INDENTLAYOUT,			HIDC_COMBO_INDENTLAYOUT,	// 折り返し行インデント
+	IDC_CHECK_RTRIM_PREVLINE,		HIDC_CHECK_RTRIM_PREVLINE,	// 改行時に末尾の空白を削除
 
-	IDC_RADIO_OUTLINEDEFAULT,		HIDC_RADIO_OUTLINEDEFAULT,	// 標準ルール	// 2006.08.06 ryoji
+	IDC_RADIO_OUTLINEDEFAULT,		HIDC_RADIO_OUTLINEDEFAULT,	// 標準ルール
 	IDC_COMBO_OUTLINES,				HIDC_COMBO_OUTLINES,		// アウトライン解析方法
-	IDC_RADIO_OUTLINERULEFILE,		HIDC_RADIO_OUTLINERULEFILE,	// ルールファイル	// 2006.08.06 ryoji
-	IDC_EDIT_OUTLINERULEFILE,		HIDC_EDIT_OUTLINERULEFILE,	// ルールファイル名	// 2006.08.06 ryoji
+	IDC_RADIO_OUTLINERULEFILE,		HIDC_RADIO_OUTLINERULEFILE,	// ルールファイル
+	IDC_EDIT_OUTLINERULEFILE,		HIDC_EDIT_OUTLINERULEFILE,	// ルールファイル名
 	IDC_BUTTON_RULEFILE_REF,		HIDC_BUTTON_RULEFILE_REF,	// ルールファイル参照	// 2006/09/09 novice
 
 	IDC_CHECK_USETYPEFONT,			HIDC_CHECK_USETYPEFONT,		// タイプ別フォント使用する
 	IDC_BUTTON_TYPEFONT,			HIDC_BUTTON_TYPEFONT,		// タイプ別フォント
 
 	IDC_CHECK_WORDWRAP,				HIDC_CHECK_WORDWRAP,		// 英文ワードラップ
-	IDC_CHECK_KINSOKURET,			HIDC_CHECK_KINSOKURET,		// 改行文字をぶら下げる	//@@@ 2002.04.14 MIK
-	IDC_CHECK_KINSOKUHIDE,			HIDC_CHECK_KINSOKUHIDE,		// ぶら下げを隠す		// 2012.11.30 Uchi
-	IDC_CHECK_KINSOKUKUTO,			HIDC_CHECK_KINSOKUKUTO,		// 句読点をぶら下げる	//@@@ 2002.04.17 MIK
-	IDC_EDIT_KINSOKUKUTO,			HIDC_EDIT_KINSOKUKUTO,		// 句読点ぶら下げ文字	// 2009.08.07 ryoji
-	IDC_CHECK_KINSOKUHEAD,			HIDC_CHECK_KINSOKUHEAD,		// 行頭禁則	//@@@ 2002.04.08 MIK
-	IDC_EDIT_KINSOKUHEAD,			HIDC_EDIT_KINSOKUHEAD,		// 行頭禁則	//@@@ 2002.04.08 MIK
-	IDC_CHECK_KINSOKUTAIL,			HIDC_CHECK_KINSOKUTAIL,		// 行末禁則	//@@@ 2002.04.08 MIK
-	IDC_EDIT_KINSOKUTAIL,			HIDC_EDIT_KINSOKUTAIL,		// 行末禁則	//@@@ 2002.04.08 MIK
+	IDC_CHECK_KINSOKURET,			HIDC_CHECK_KINSOKURET,		// 改行文字をぶら下げる
+	IDC_CHECK_KINSOKUHIDE,			HIDC_CHECK_KINSOKUHIDE,		// ぶら下げを隠す
+	IDC_CHECK_KINSOKUKUTO,			HIDC_CHECK_KINSOKUKUTO,		// 句読点をぶら下げる
+	IDC_EDIT_KINSOKUKUTO,			HIDC_EDIT_KINSOKUKUTO,		// 句読点ぶら下げ文字
+	IDC_CHECK_KINSOKUHEAD,			HIDC_CHECK_KINSOKUHEAD,		// 行頭禁則
+	IDC_EDIT_KINSOKUHEAD,			HIDC_EDIT_KINSOKUHEAD,		// 行頭禁則
+	IDC_CHECK_KINSOKUTAIL,			HIDC_CHECK_KINSOKUTAIL,		// 行末禁則
+	IDC_EDIT_KINSOKUTAIL,			HIDC_EDIT_KINSOKUTAIL,		// 行末禁則
 //	IDC_STATIC,						-1,
 	0, 0
 };
@@ -66,11 +66,11 @@ TYPE_NAME_ID<OutlineType> OlmArr[] = {
 	{ OutlineType::Cobol,	STR_OUTLINE_COBOL },
 	{ OutlineType::Perl,	STR_OUTLINE_PERL },			// Sep. 8, 2000 genta
 	{ OutlineType::Asm,		STR_OUTLINE_ASM },
-	{ OutlineType::VisualBasic,		STR_OUTLINE_VB },			// 2001/06/23 N.Nakatani
+	{ OutlineType::VisualBasic,		STR_OUTLINE_VB },
 	{ OutlineType::Python,	STR_OUTLINE_PYTHON },		// 2007.02.08 genta
 	{ OutlineType::Erlang,	STR_OUTLINE_ERLANG },		// 2009.08.10 genta
-	{ OutlineType::WZText,	STR_OUTLINE_WZ },			// 2003.05.20 zenryaku, 2003.06.23 Moca 名称変更
-	{ OutlineType::HTML,	STR_OUTLINE_HTML },			// 2003.05.20 zenryaku
+	{ OutlineType::WZText,	STR_OUTLINE_WZ },
+	{ OutlineType::HTML,	STR_OUTLINE_HTML },
 	{ OutlineType::TeX,		STR_OUTLINE_TEX },			// 2003.07.20 naoh
 	{ OutlineType::Text,	STR_OUTLINE_TEXT }			// Jul. 08, 2001 JEPRO 常に最後尾におく
 };
@@ -200,8 +200,6 @@ INT_PTR PropTypesScreen::DispatchEvent(
 				{
 					DlgOpenFile	dlgOpenFile;
 					TCHAR			szPath[_MAX_PATH + 1];
-					// 2003.06.23 Moca 相対パスは実行ファイルからのパスとして開く
-					// 2007.05.19 ryoji 相対パスは設定ファイルからのパスを優先
 					if (_IS_REL_PATH(types.szOutlineRuleFilename)) {
 						GetInidirOrExedir(szPath, types.szOutlineRuleFilename);
 					}else {
@@ -382,26 +380,22 @@ INT_PTR PropTypesScreen::DispatchEvent(
 //		MYTRACE(_T("pMNUD->iDelta		=%d\n"),		pMNUD->iDelta);
 		break;
 
-//@@@ 2001.02.04 Start by MIK: Popup Help
 	case WM_HELP:
 		{
 			HELPINFO* p = (HELPINFO*) lParam;
-			MyWinHelp((HWND)p->hItemHandle, HELP_WM_HELP, (ULONG_PTR)(LPVOID)p_helpids1);	// 2006.10.10 ryoji MyWinHelpに変更に変更
+			MyWinHelp((HWND)p->hItemHandle, HELP_WM_HELP, (ULONG_PTR)(LPVOID)p_helpids1);
 		}
 		return TRUE;
 		// NOTREACHED
 //		break;
-//@@@ 2001.02.04 End
 
-//@@@ 2001.11.17 add start MIK
 	// Context Menu
 	case WM_CONTEXTMENU:
-		MyWinHelp(hwndDlg, HELP_CONTEXTMENU, (ULONG_PTR)(LPVOID)p_helpids1);	// 2006.10.10 ryoji MyWinHelpに変更に変更
+		MyWinHelp(hwndDlg, HELP_CONTEXTMENU, (ULONG_PTR)(LPVOID)p_helpids1);
 		return TRUE;
-//@@@ 2001.11.17 add end MIK
 
 	case WM_DESTROY:
-		// タイプフォント破棄	// 2013/6/23 Uchi
+		// タイプフォント破棄
 		if (hTypeFont) {
 			::DeleteObject(hTypeFont);
 			hTypeFont = NULL;
@@ -439,7 +433,7 @@ void PropTypesScreen::SetData(HWND hwndDlg)
 		::DlgItem_SetText(hwndDlg, IDC_EDIT_TABVIEWSTRING, types.szTabViewString);		// TAB表示(8文字)
 		::EnableWindow(::GetDlgItem(hwndDlg, IDC_EDIT_TABVIEWSTRING), types.bTabArrow == TabArrowType::String);	// Mar. 31, 2003 genta 矢印表示のON/OFFをTAB文字列設定に連動させる
 
-		// 矢印表示	//@@@ 2003.03.26 MIK
+		// 矢印表示
 		hwndCombo = ::GetDlgItem(hwndDlg, IDC_CHECK_TAB_ARROW);
 		Combo_ResetContent(hwndCombo);
 		nSelPos = 0;
@@ -494,7 +488,7 @@ void PropTypesScreen::SetData(HWND hwndDlg)
 		}
 		Combo_SetCurSel(hwndCombo, nSelPos);
 
-		// 改行時に末尾の空白を削除	// 2005.10.11 ryoji
+		// 改行時に末尾の空白を削除
 		::CheckDlgButton(hwndDlg, IDC_CHECK_RTRIM_PREVLINE, types.bRTrimPrevLine);
 	}
 
@@ -517,7 +511,7 @@ void PropTypesScreen::SetData(HWND hwndDlg)
 			}
 		}
 
-		// ルールファイル	// 2003.06.23 Moca ルールファイル名は使わなくてもセットしておく
+		// ルールファイル	
 		::EnableWindow(::GetDlgItem(hwndDlg, IDC_EDIT_OUTLINERULEFILE), TRUE);
 		::DlgItem_SetText(hwndDlg, IDC_EDIT_OUTLINERULEFILE, types.szOutlineRuleFilename);
 
@@ -554,20 +548,20 @@ void PropTypesScreen::SetData(HWND hwndDlg)
 		::CheckDlgButtonBool(hwndDlg, IDC_CHECK_WORDWRAP, types.bWordWrap);
 
 		// 禁則処理
-		{	//@@@ 2002.04.08 MIK start
+		{
 			::CheckDlgButtonBool(hwndDlg, IDC_CHECK_KINSOKUHEAD, types.bKinsokuHead);
 			::CheckDlgButtonBool(hwndDlg, IDC_CHECK_KINSOKUTAIL, types.bKinsokuTail);
-			::CheckDlgButtonBool(hwndDlg, IDC_CHECK_KINSOKURET,  types.bKinsokuRet );	// 改行文字をぶら下げる	//@@@ 2002.04.13 MIK
-			::CheckDlgButtonBool(hwndDlg, IDC_CHECK_KINSOKUKUTO, types.bKinsokuKuto);	// 句読点をぶら下げる	//@@@ 2002.04.17 MIK
-			::CheckDlgButtonBool(hwndDlg, IDC_CHECK_KINSOKUHIDE, types.bKinsokuHide);	// ぶら下げを隠す			// 2011/11/30 Uchi
+			::CheckDlgButtonBool(hwndDlg, IDC_CHECK_KINSOKURET,  types.bKinsokuRet );	// 改行文字をぶら下げる
+			::CheckDlgButtonBool(hwndDlg, IDC_CHECK_KINSOKUKUTO, types.bKinsokuKuto);	// 句読点をぶら下げる
+			::CheckDlgButtonBool(hwndDlg, IDC_CHECK_KINSOKUHIDE, types.bKinsokuHide);	// ぶら下げを隠す
 			EditCtl_LimitText(::GetDlgItem(hwndDlg, IDC_EDIT_KINSOKUHEAD), _countof(types.szKinsokuHead) - 1);
 			EditCtl_LimitText(::GetDlgItem(hwndDlg, IDC_EDIT_KINSOKUTAIL), _countof(types.szKinsokuTail) - 1);
-			EditCtl_LimitText(::GetDlgItem(hwndDlg, IDC_EDIT_KINSOKUKUTO), _countof(types.szKinsokuKuto) - 1);	// 2009.08.07 ryoji
+			EditCtl_LimitText(::GetDlgItem(hwndDlg, IDC_EDIT_KINSOKUKUTO), _countof(types.szKinsokuKuto) - 1);
 			::DlgItem_SetText(hwndDlg, IDC_EDIT_KINSOKUHEAD, types.szKinsokuHead);
 			::DlgItem_SetText(hwndDlg, IDC_EDIT_KINSOKUTAIL, types.szKinsokuTail);
-			::DlgItem_SetText(hwndDlg, IDC_EDIT_KINSOKUKUTO, types.szKinsokuKuto);	// 2009.08.07 ryoji
+			::DlgItem_SetText(hwndDlg, IDC_EDIT_KINSOKUKUTO, types.szKinsokuKuto);
 			::EnableWindow(::GetDlgItem(hwndDlg, IDC_CHECK_KINSOKUHIDE), (types.bKinsokuRet || types.bKinsokuKuto) ? TRUE : FALSE);	// ぶら下げを隠すの有効化	2012/11/30 Uchi
-		}	//@@@ 2002.04.08 MIK end
+		}
 	}
 }
 
@@ -632,7 +626,7 @@ int PropTypesScreen::GetData(HWND hwndDlg)
 			types.szTabViewString[i] = szTab[i];
 		}
 
-		// タブ矢印表示	//@@@ 2003.03.26 MIK
+		// タブ矢印表示
 		hwndCombo = ::GetDlgItem(hwndDlg, IDC_CHECK_TAB_ARROW);
 		nSelPos = Combo_GetCurSel(hwndCombo);
 		types.bTabArrow = TabArrowArr[nSelPos].nMethod;		// テキストの折り返し方法
@@ -664,7 +658,7 @@ int PropTypesScreen::GetData(HWND hwndDlg)
 		nSelPos = Combo_GetCurSel(hwndCombo);
 		types.nIndentLayout = IndentTypeArr[nSelPos].nMethod;	// 折り返し部インデント種別
 
-		// 改行時に末尾の空白を削除	// 2005.10.11 ryoji
+		// 改行時に末尾の空白を削除
 		types.bRTrimPrevLine = ::IsDlgButtonCheckedBool(hwndDlg, IDC_CHECK_RTRIM_PREVLINE);
 	}
 
@@ -683,7 +677,7 @@ int PropTypesScreen::GetData(HWND hwndDlg)
 			types.eDefaultOutline = OutlineType::RuleFile;
 		}
 
-		// ルールファイル	// 2003.06.23 Moca ルールを使っていなくてもファイル名を保持
+		// ルールファイル
 		::DlgItem_GetText(hwndDlg, IDC_EDIT_OUTLINERULEFILE, types.szOutlineRuleFilename, _countof2(types.szOutlineRuleFilename));
 	}
 
@@ -704,16 +698,16 @@ int PropTypesScreen::GetData(HWND hwndDlg)
 		types.bWordWrap = ::IsDlgButtonCheckedBool(hwndDlg, IDC_CHECK_WORDWRAP);
 
 		// 禁則処理
-		{	//@@@ 2002.04.08 MIK start
+		{
 			types.bKinsokuHead = ::IsDlgButtonCheckedBool(hwndDlg, IDC_CHECK_KINSOKUHEAD);
 			types.bKinsokuTail = ::IsDlgButtonCheckedBool(hwndDlg, IDC_CHECK_KINSOKUTAIL);
-			types.bKinsokuRet  = ::IsDlgButtonCheckedBool(hwndDlg, IDC_CHECK_KINSOKURET );	// 改行文字をぶら下げる	//@@@ 2002.04.13 MIK
-			types.bKinsokuKuto = ::IsDlgButtonCheckedBool(hwndDlg, IDC_CHECK_KINSOKUKUTO);	// 句読点をぶら下げる	//@@@ 2002.04.17 MIK
-			types.bKinsokuHide = ::IsDlgButtonCheckedBool(hwndDlg, IDC_CHECK_KINSOKUHIDE);	// ぶら下げを隠す		// 2011/11/30 Uchi
+			types.bKinsokuRet  = ::IsDlgButtonCheckedBool(hwndDlg, IDC_CHECK_KINSOKURET );	// 改行文字をぶら下げる
+			types.bKinsokuKuto = ::IsDlgButtonCheckedBool(hwndDlg, IDC_CHECK_KINSOKUKUTO);	// 句読点をぶら下げる
+			types.bKinsokuHide = ::IsDlgButtonCheckedBool(hwndDlg, IDC_CHECK_KINSOKUHIDE);	// ぶら下げを隠す
 			::DlgItem_GetText(hwndDlg, IDC_EDIT_KINSOKUHEAD, types.szKinsokuHead, _countof(types.szKinsokuHead));
 			::DlgItem_GetText(hwndDlg, IDC_EDIT_KINSOKUTAIL, types.szKinsokuTail, _countof(types.szKinsokuTail));
-			::DlgItem_GetText(hwndDlg, IDC_EDIT_KINSOKUKUTO, types.szKinsokuKuto, _countof(types.szKinsokuKuto));	// 2009.08.07 ryoji
-		}	//@@@ 2002.04.08 MIK end
+			::DlgItem_GetText(hwndDlg, IDC_EDIT_KINSOKUKUTO, types.szKinsokuKuto, _countof(types.szKinsokuKuto));
+		}
 
 	}
 

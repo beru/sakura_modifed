@@ -6,7 +6,7 @@
 #include "doc/layout/Layout.h"
 #include "types/TypeSupport.h"
 
-static int IsNumber(const StringRef& str, int offset);	// 数値ならその長さを返す	//@@@ 2001.02.17 by MIK
+static int IsNumber(const StringRef& str, int offset);	// 数値ならその長さを返す
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                         半角数値                            //
@@ -40,7 +40,6 @@ bool Color_Numeric::EndColor(const StringRef& str, size_t nPos)
 //                         実装補助                            //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-//@@@ 2001.11.07 Start by MIK
 /*
  * 数値なら長さを返す。
  * 10進数の整数または小数。16進数(正数)。
@@ -345,15 +344,12 @@ static int IsNumber(const StringRef& str, /*const wchar_t* buf,*/ int offset/*, 
 			++p; ++i;
 		}
 		// "-", "-." だけなら数値でない
-		//@@@ 2001.11.09 start MIK
-		//if (i <= 2) return 0;
-		//if (*(p - 1)  == L'.') return i - 1;  // 最後が "." なら含めない
 		if (i == 1) return 0;
 		if (*(p - 1) == L'.') {
 			--i;
 			if (i == 1) return 0;
 			return i;
-		}  //@@@ 2001.11.09 end MIK
+		}
 		// 接尾語
 		if (p < q) {
 			if (0
@@ -420,34 +416,7 @@ static int IsNumber(const StringRef& str, /*const wchar_t* buf,*/ int offset/*, 
 		return i;
 	}
 
-#if 0
-	else if (*p == L'&') {  // VBの16進数
-		++p; ++i;
-		if ((p < q) && (*p == L'H')) {
-			++p; ++i;
-			while (p < q) {
-				if (0
-					|| (*p >= L'0' && *p <= L'9')
-					|| (*p >= L'A' && *p <= L'F')
-					|| (*p >= L'a' && *p <= L'f')
-				) {
-					++p; ++i;
-				}else {
-					break;
-				}
-			}
-			// "&H" だけなら数値でない
-			if (i == 2) i = 0;
-			return i;
-		}
-
-		// "&" だけなら数値でない
-		return 0;
-	}
-#endif
-
 	// 数値ではない
 	return 0;
 }
-//@@@ 2001.11.07 End by MIK
 

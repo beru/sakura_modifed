@@ -34,7 +34,6 @@ struct MYDEVMODE {
 	DWORD	dmDisplayFrequency;
 };
 
-// 2006.08.14 Moca 用紙情報の統合 PaperInfo新設
 // 用紙情報
 struct PaperInfo {
 	int				nId;			// 用紙ID
@@ -68,10 +67,10 @@ struct PrintSetting {
 	short		nPrintPaperSize;					// 用紙サイズ
 	bool		bColorPrint;						// カラー印刷			// 2013/4/26 Uchi
 	bool		bPrintWordWrap;						// 英文ワードラップする
-	bool		bPrintKinsokuHead;					// 行頭禁則する		//@@@ 2002.04.09 MIK
-	bool		bPrintKinsokuTail;					// 行末禁則する		//@@@ 2002.04.09 MIK
-	bool		bPrintKinsokuRet;					// 改行文字のぶら下げ	//@@@ 2002.04.13 MIK
-	bool		bPrintKinsokuKuto;					// 句読点のぶらさげ	//@@@ 2002.04.17 MIK
+	bool		bPrintKinsokuHead;					// 行頭禁則する
+	bool		bPrintKinsokuTail;					// 行末禁則する
+	bool		bPrintKinsokuRet;					// 改行文字のぶら下げ
+	bool		bPrintKinsokuKuto;					// 句読点のぶらさげ
 	bool		bPrintLineNumber;					// 行番号を印刷する
 
 	MYDEVMODE	mdmDevMode;							// プリンタ設定 DEVMODE用

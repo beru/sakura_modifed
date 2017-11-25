@@ -11,7 +11,6 @@
 #include "sakura_rc.h"
 #include "sakura.hh"
 
-//@@@ 2001.02.04 Start by MIK: Popup Help
 TYPE_NAME_ID<int> SpecialScrollModeArr[] = {
 	{ 0,									STR_SCROLL_WITH_NO_KEY },		// _T("組み合わせなし") },
 	{ (int)MouseFunctionType::CenterClick,		STR_SCROLL_WITH_MID_BTN },		// _T("マウス中ボタン") },
@@ -30,7 +29,7 @@ static const DWORD p_helpids[] = {	//10900
 	IDC_CHECK_USETRAYICON,			HIDC_CHECK_USETRAYICON,				// タスクトレイを使う
 	IDC_CHECK_STAYTASKTRAY,			HIDC_CHECK_STAYTASKTRAY,			// タスクトレイに常駐
 	IDC_CHECK_REPEATEDSCROLLSMOOTH,	HIDC_CHECK_REPEATEDSCROLLSMOOTH,	// 少し滑らかにする
-	IDC_CHECK_CLOSEALLCONFIRM,		HIDC_CHECK_CLOSEALLCONFIRM,			// [すべて閉じる]で他に編集用のウィンドウがあれば確認する	// 2006.12.25 ryoji
+	IDC_CHECK_CLOSEALLCONFIRM,		HIDC_CHECK_CLOSEALLCONFIRM,			// [すべて閉じる]で他に編集用のウィンドウがあれば確認する
 	IDC_CHECK_EXITCONFIRM,			HIDC_CHECK_EXITCONFIRM,				// 終了の確認
 	IDC_CHECK_STOPS_BOTH_ENDS_WHEN_SEARCH_WORD, HIDC_CHECK_STOPS_WORD,	// 単語単位で移動するときに単語の両端に止まる
 	IDC_CHECK_STOPS_BOTH_ENDS_WHEN_SEARCH_PARAGRAPH, HIDC_CHECK_STOPS_PARAGRAPH,	// 段落単位で移動するときに段落の両端に止まる
@@ -253,23 +252,19 @@ INT_PTR PropGeneral::DispatchEvent(
 //		MYTRACE(_T("pMNUD->iDelta  =%d\n"), pMNUD->iDelta);
 		break;
 
-//@@@ 2001.02.04 Start by MIK: Popup Help
 	case WM_HELP:
 		{
 			HELPINFO* p = (HELPINFO*) lParam;
-			MyWinHelp((HWND)p->hItemHandle, HELP_WM_HELP, (ULONG_PTR)(LPVOID)p_helpids);	// 2006.10.10 ryoji MyWinHelpに変更に変更
+			MyWinHelp((HWND)p->hItemHandle, HELP_WM_HELP, (ULONG_PTR)(LPVOID)p_helpids);
 		}
 		return TRUE;
 		// NOTREACHED
 //		break;
-//@@@ 2001.02.04 End
 
-//@@@ 2001.12.22 Start by MIK: Context Menu Help
 	// Context Menu
 	case WM_CONTEXTMENU:
-		MyWinHelp(hwndDlg, HELP_CONTEXTMENU, (ULONG_PTR)(LPVOID)p_helpids);	// 2006.10.10 ryoji MyWinHelpに変更に変更
+		MyWinHelp(hwndDlg, HELP_CONTEXTMENU, (ULONG_PTR)(LPVOID)p_helpids);
 		return TRUE;
-//@@@ 2001.12.22 End
 
 	}
 	return FALSE;
@@ -302,7 +297,7 @@ void PropGeneral::SetData(HWND hwndDlg)
 	//	2007.10.08 genta マウスクリックでアクティブになったときはカーソルをクリック位置に移動しない (2007.10.02 by nasukoji)
 	::CheckDlgButton(hwndDlg, IDC_CHECK_NOMOVE_ACTIVATE_BY_MOUSE, csGeneral.bNoCaretMoveByActivation);
 
-	// [すべて閉じる]で他に編集用のウィンドウがあれば確認する	// 2006.12.25 ryoji
+	// [すべて閉じる]で他に編集用のウィンドウがあれば確認する
 	::CheckDlgButton(hwndDlg, IDC_CHECK_CLOSEALLCONFIRM, csGeneral.bCloseAllConfirm);
 
 	// 終了時の確認をする
@@ -341,7 +336,6 @@ void PropGeneral::SetData(HWND hwndDlg)
 	}
 	Combo_SetCurSel(hwndCombo, nSelPos);
 
-	// 2007.09.09 Moca 画面キャッシュ設定追加
 	// 画面キャッシュを使う
 	::CheckDlgButton(hwndDlg, IDC_CHECK_MEMDC, common.window.bUseCompatibleBMP);
 
@@ -395,7 +389,7 @@ int PropGeneral::GetData(HWND hwndDlg)
 	// 段落単位で移動するときに、段落の両端で止まるか
 	csGeneral.bStopsBothEndsWhenSearchParagraph = DlgButton_IsChecked(hwndDlg, IDC_CHECK_STOPS_BOTH_ENDS_WHEN_SEARCH_PARAGRAPH);
 
-	// [すべて閉じる]で他に編集用のウィンドウがあれば確認する	// 2006.12.25 ryoji
+	// [すべて閉じる]で他に編集用のウィンドウがあれば確認する
 	csGeneral.bCloseAllConfirm = DlgButton_IsChecked(hwndDlg, IDC_CHECK_CLOSEALLCONFIRM);
 
 	// 終了時の確認をする
@@ -413,7 +407,6 @@ int PropGeneral::GetData(HWND hwndDlg)
 	HWND	hwndCombo;
 	int		nSelPos;
 
-	// 2007.09.09 Moca 画面キャッシュ設定追加
 	// 画面キャッシュを使う
 	common.window.bUseCompatibleBMP = DlgButton_IsChecked(hwndDlg, IDC_CHECK_MEMDC);
 
@@ -435,7 +428,7 @@ int PropGeneral::GetData(HWND hwndDlg)
 		csGeneral.nMRUArrNum_MAX = MAX_MRU;
 	}
 
-	{	// 履歴の管理	//@@@ 2003.04.09 MIK
+	{	// 履歴の管理
 		RecentFile	cRecentFile;
 		cRecentFile.UpdateView();
 		cRecentFile.Terminate();
@@ -450,7 +443,7 @@ int PropGeneral::GetData(HWND hwndDlg)
 		csGeneral.nOPENFOLDERArrNum_MAX = MAX_OPENFOLDER;
 	}
 
-	{	// 履歴の管理	//@@@ 2003.04.09 MIK
+	{	// 履歴の管理
 		RecentFolder	cRecentFolder;
 		cRecentFolder.UpdateView();
 		cRecentFolder.Terminate();

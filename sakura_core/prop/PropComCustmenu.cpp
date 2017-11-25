@@ -23,7 +23,7 @@ extern const int gSpecialFuncsCount;
 
 static	int 	nSpecialFuncsNum;		// 特別機能のコンボボックス内での番号
 
-//@@@ 2001.02.04 Start by MIK: Popup Help
+// Popup Help
 static const DWORD p_helpids[] = {	//10100
 	IDC_BUTTON_DELETE,				HIDC_BUTTON_DELETE,				// メニューから機能削除
 	IDC_BUTTON_INSERTSEPARATOR,		HIDC_BUTTON_INSERTSEPARATOR,	// セパレータ挿入
@@ -35,8 +35,8 @@ static const DWORD p_helpids[] = {	//10100
 	IDC_BUTTON_EXPORT,				HIDC_BUTTON_EXPORT,				// エクスポート
 	IDC_COMBO_FUNCKIND,				HIDC_COMBO_FUNCKIND,			// 機能の種別
 	IDC_COMBO_MENU,					HIDC_COMBO_MENU,				// メニューの種別
-	IDC_EDIT_MENUNAME,				HIDC_EDIT_MENUNAME,				// メニュー名		// 2009.02.20 ryoji
-	IDC_BUTTON_MENUNAME,			HIDC_BUTTON_MENUNAME,			// メニュー名設定	// 2009.02.20 ryoji
+	IDC_EDIT_MENUNAME,				HIDC_EDIT_MENUNAME,				// メニュー名
+	IDC_BUTTON_MENUNAME,			HIDC_BUTTON_MENUNAME,			// メニュー名設定
 	IDC_LIST_FUNC,					HIDC_LIST_FUNC,					// 機能一覧
 	IDC_LIST_RES,					HIDC_LIST_RES,					// メニュー一覧
 	IDC_CHECK_SUBMENU,				HIDC_CHECK_SUBMENU,				// サブメニューとして表示
@@ -140,7 +140,7 @@ INT_PTR PropCustmenu::DispatchEvent(
 		case PSN_SETACTIVE:
 			nPageNum = ID_PROPCOM_PAGENUM_CUSTMENU;
 
-			// 表示を更新する（マクロ設定画面でのマクロ名変更を反映）	// 2007.11.02 ryoji
+			// 表示を更新する（マクロ設定画面でのマクロ名変更を反映）
 			nIdx1 = Combo_GetCurSel(hwndCOMBO_MENU);
 			nIdx2 = List_GetCurSel(hwndLIST_RES);
 			nIdx3 = Combo_GetCurSel(hwndCOMBO_FUNCKIND);
@@ -597,21 +597,19 @@ INT_PTR PropCustmenu::DispatchEvent(
 		::KillTimer(hwndDlg, 1);
 		break;
 
-//@@@ 2001.02.04 Start by MIK: Popup Help
 	case WM_HELP:
 		{
 			HELPINFO* p = (HELPINFO*) lParam;
-			MyWinHelp((HWND)p->hItemHandle, HELP_WM_HELP, (ULONG_PTR)(LPVOID)p_helpids);	// 2006.10.10 ryoji MyWinHelpに変更に変更
+			MyWinHelp((HWND)p->hItemHandle, HELP_WM_HELP, (ULONG_PTR)(LPVOID)p_helpids);
 		}
 		return TRUE;
 		// NOTREACHED
 		//break;
 //@@@ 2001.02.04 End
 
-//@@@ 2001.12.22 Start by MIK: Context Menu Help
 	// Context Menu
 	case WM_CONTEXTMENU:
-		MyWinHelp(hwndDlg, HELP_CONTEXTMENU, (ULONG_PTR)(LPVOID)p_helpids);	// 2006.10.10 ryoji MyWinHelpに変更に変更
+		MyWinHelp(hwndDlg, HELP_CONTEXTMENU, (ULONG_PTR)(LPVOID)p_helpids);
 		return TRUE;
 //@@@ 2001.12.22 End
 

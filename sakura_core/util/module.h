@@ -4,7 +4,7 @@ void GetAppVersionInfo(HINSTANCE, int, DWORD*, DWORD*);	// ƒŠƒ\[ƒX‚©‚ç»•iƒo[ƒ
 
 HICON GetAppIcon(HINSTANCE hInst, int nResource, const TCHAR* szFile, bool bSmall = false);
 
-DWORD GetDllVersion(LPCTSTR lpszDllName);	// ƒVƒFƒ‹‚âƒRƒ‚ƒ“ƒRƒ“ƒgƒ[ƒ‹ DLL ‚Ìƒo[ƒWƒ‡ƒ“”Ô†‚ğæ“¾	// 2006.06.17 ryoji
+DWORD GetDllVersion(LPCTSTR lpszDllName);	// ƒVƒFƒ‹‚âƒRƒ‚ƒ“ƒRƒ“ƒgƒ[ƒ‹ DLL ‚Ìƒo[ƒWƒ‡ƒ“”Ô†‚ğæ“¾
 
 void ChangeCurrentDirectoryToExeDir();
 

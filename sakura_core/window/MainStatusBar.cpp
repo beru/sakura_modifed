@@ -20,7 +20,7 @@ void MainStatusBar::CreateStatusBar()
 
 	// ステータスバー
 	hwndStatusBar = ::CreateStatusWindow(
-		WS_CHILD/* | WS_VISIBLE*/ | WS_EX_RIGHT | SBARS_SIZEGRIP,	// 2007.03.08 ryoji WS_VISIBLE 除去
+		WS_CHILD/* | WS_VISIBLE*/ | WS_EX_RIGHT | SBARS_SIZEGRIP,
 		_T(""),
 		owner.GetHwnd(),
 		IDW_STATUSBAR

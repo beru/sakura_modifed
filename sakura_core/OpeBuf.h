@@ -24,7 +24,7 @@ public:
 	// 状態
 	bool IsEnableUndo() const;					// Undo可能な状態か
 	bool IsEnableRedo() const;					// Redo可能な状態か
-	int GetCurrentPointer(void) const { return nCurrentPointer; }	// 現在位置を返す	// 2007.12.09 ryoji
+	int GetCurrentPointer(void) const { return nCurrentPointer; }	// 現在位置を返す
 	int GetNextSeq() const { return nCurrentPointer + 1; }
 	int GetNoModifiedSeq() const { return nNoModifiedIndex; }
 

@@ -22,7 +22,6 @@ Color_KeywordSet::Color_KeywordSet()
 }
 
 
-// 2005.01.13 MIK 強調キーワード数追加に伴う配列化
 bool Color_KeywordSet::BeginColor(const StringRef& str, size_t nPos)
 {
 	if (!str.IsValid()) {

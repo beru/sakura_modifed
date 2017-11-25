@@ -822,7 +822,7 @@ BOOL EditDoc::OnFileClose(bool bGrepNoConfirm)
 		);
 		switch (nRet) {
 		case IDYES:
-			nBool = docFileOperation.FileSaveAs();	// 2006.12.30 ryoji
+			nBool = docFileOperation.FileSaveAs();
 			return nBool;
 		case IDNO:
 			return TRUE;

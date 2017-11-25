@@ -71,7 +71,7 @@ public:
 	//	•\Ž¦‚·‚é–¼‘O‚ÌŽæ“¾
 	const TCHAR* GetTitle(int idx) const {
 		return (0 <= idx && idx < MAX_CUSTMACRO) ?
-		pShareData->common.macro.macroTable[idx].GetTitle() : NULL;	// 2007.11.02 ryoji
+		pShareData->common.macro.macroTable[idx].GetTitle() : NULL;
 	}
 	
 	//	•\Ž¦–¼‚ÌŽæ“¾

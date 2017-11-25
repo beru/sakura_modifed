@@ -448,8 +448,6 @@ bool RegexKeyword::RegexKeyCheckSyntax(const wchar_t* s)
 	return false;
 }
 
-//@@@ 2001.11.17 add end MIK
-
 // static
 DWORD RegexKeyword::GetNewMagicNumber()
 {

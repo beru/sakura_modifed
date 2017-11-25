@@ -49,7 +49,7 @@ public:
 	DockSideType GetDockSide() { return eDockSide; }
 
 protected:
-	INT_PTR DispatchEvent(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM lParam);	// 2007.11.07 ryoji 標準以外のメッセージを捕捉する
+	INT_PTR DispatchEvent(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM lParam);	// 標準以外のメッセージを捕捉する
 
 	CommonSetting_OutLine& CommonSet(void) { return pShareData->common.outline; }
 	TypeConfig& TypeSet(void) { return type; }

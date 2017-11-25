@@ -8,7 +8,6 @@
 #include "_main/global.h"
 
 
-// 2006.08.14 Moca 用紙名一覧の重複削除・情報の統合
 const PaperInfo Print::paperInfoArr[] = {
 	// 	用紙ID, 幅
 	{DMPAPER_A4,                  2100,  2970, _T("A4 (210 x 297 mm)")},
@@ -385,7 +384,6 @@ BOOL Print::GetPaperSize(
 	short	nWork;
 	
 	if (pDEVMODE->dmFields &  DM_PAPERSIZE) {
-		// 2006.08.14 Moca swich/caseテーブルを廃止して 用紙情報を統合
 		const PaperInfo* pi = FindPaperInfo(pDEVMODE->dmPaperSize);
 		if (pi) {
 			*pnPaperAllWidth = pi->nAllWidth;
@@ -494,7 +492,6 @@ void Print::PrintClose(HDC hdc)
 // 用紙の名前を取得
 TCHAR* Print::GetPaperName(int nPaperSize, TCHAR* pszPaperName)
 {
-	// 2006.08.14 Moca 用紙情報の統合
 	const PaperInfo* paperInfo = FindPaperInfo(nPaperSize);
 	if (paperInfo) {
 		_tcscpy(pszPaperName, paperInfo->pszName);

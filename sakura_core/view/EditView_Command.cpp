@@ -36,7 +36,6 @@ bool EditView::TagJumpSub(
 
 	//	Feb. 17, 2007 genta 実行ファイルからの相対指定の場合は
 	//	予め絶対パスに変換する．(キーワードヘルプジャンプで用いる)
-	// 2007.05.19 ryoji 相対パスは設定ファイルからのパスを優先
 	TCHAR szJumpToFile[1024];
 	if (bRelFromIni && _IS_REL_PATH(pszFileName)) {
 		GetInidirOrExedir(szJumpToFile, pszFileName);
@@ -69,7 +68,6 @@ bool EditView::TagJumpSub(
 	// ファイルを開いているか
 	HWND hwndOwner;
 	if (ShareData::getInstance().IsPathOpened(szJumpToFile, &hwndOwner)) {
-		// 2004.05.13 Moca マイナス値は無効
 		if (0 < ptJumpTo.y) {
 			POINT poCaret;
 			// カーソルを移動させる
@@ -109,16 +107,10 @@ bool EditView::TagJumpSub(
 		if (!bSuccess)	// ファイルが開けなかった
 			return false;
 
-		// Apr. 23, 2001 genta
-		// hwndOwnerに値が入らなくなってしまったために
-		// Tag Jump Backが動作しなくなっていたのを修正
 		if (!ShareData::getInstance().IsPathOpened(szJumpToFile, &hwndOwner))
 			return false;
 	}
 
-	// 2006.12.30 ryoji 閉じる処理は最後に（処理位置移動）
-	// Apr. 2003 genta 閉じるかどうかは引数による
-	// grep結果からEnterでジャンプするところにCtrl判定移動
 	if (bClose) {
 		ViewCommander& commander = GetCommander();
 		commander.Command_WinClose();	// 挑戦するだけ。
@@ -198,11 +190,6 @@ open_c:;
 		// ファイルを開いているか
 		if (ShareData::getInstance().IsPathOpened(szPath, &hwndOwner)) {
 		}else {
-			// 2011.01.12 ryoji エラーは表示しないでおく
-			// ファイルサイズが大きすぎて読むかどうか問い合わせているような場合でもエラー表示になるのは変
-			// OpenNewEditor()または起動された側のメッセージ表示で十分と思われる
-
-			//ErrorMessage(this->GetHwnd(), _T("%ts\n\n%ts\n\n"), errmes, szPath);
 			return false;
 		}
 	}
@@ -210,8 +197,6 @@ open_c:;
 	ActivateFrameWindow(hwndOwner);
 
 // 2004/06/21 novice タグジャンプ機能追加
-// 2004/07/09 genta/Moca タグジャンプバックの登録が取り除かれていたが、
-//            こちらでも従来どおり登録する
 	TagJump	tagJump;
 	/*
 	  カーソル位置変換
@@ -379,7 +364,7 @@ void EditView::CopyCurLine(
 			(neweol == EolType::Unknown) ?
 				pLayout->GetLayoutEol().GetValue2() : Eol(neweol).GetValue2()
 		);
-	}else if (bAddCRLFWhenCopy) {	// 2007.10.08 ryoji bAddCRLFWhenCopy対応処理追加
+	}else if (bAddCRLFWhenCopy) {
 		memBuf.AppendString(
 			(neweol == EolType::Unknown) ?
 				WCODE::CRLF : Eol(neweol).GetValue2()

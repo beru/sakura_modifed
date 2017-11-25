@@ -616,7 +616,7 @@ void ViewCommander::Command_Replace(HWND hwndParent)
 					}
 					// 無限置換しないように、１文字増やしたので１文字選択に変更
 					// 選択始点・終点への挿入の場合も０文字マッチ時は動作は同じになるので
-					GetSelect().SetTo(layoutMgr.LogicToLayout(Point((int)nIdxTo, pLayout->GetLogicLineNo())));	// 2007.01.19 ryoji 行位置も取得する
+					GetSelect().SetTo(layoutMgr.LogicToLayout(Point((int)nIdxTo, pLayout->GetLogicLineNo())));
 				}
 				// 行末から検索文字列末尾までの文字数
 				ASSERT_GE(nLen, nIdxTo);
@@ -625,7 +625,7 @@ void ViewCommander::Command_Replace(HWND hwndParent)
 				if (colDiff < pLayout->GetDocLineRef()->GetEol().GetLen()) {
 					// 改行にかかっていたら、行全体をINSTEXTする。
 					colDiff = 0;
-					GetSelect().SetTo(layoutMgr.LogicToLayout(Point((int)nLen, pLayout->GetLogicLineNo())));	// 2007.01.19 ryoji 追加
+					GetSelect().SetTo(layoutMgr.LogicToLayout(Point((int)nLen, pLayout->GetLogicLineNo())));
 				}
 				// 置換後文字列への書き換え(行末から検索文字列末尾までの文字を除く)
 				Command_InsText(false, regexp.GetString(), regexp.GetStringLen() - colDiff, true);
@@ -1175,7 +1175,6 @@ void ViewCommander::Command_Replace_All()
 						if (bFastMode) {
 							selectLogic.SetTo(Point((int)nLen, (int)nLogicLineNum));
 						}else {
-							// 2007.01.19 ryoji 追加
 							GetSelect().SetTo(layoutMgr.LogicToLayout(Point((int)nLen, (int)nLogicLineNum)));
 						}
 						ptOld.x = (int)pDocLine->GetLengthWithoutEOL() + 1;	//$$ 単位混在

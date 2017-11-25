@@ -9,11 +9,10 @@
 #include "sakura_rc.h"
 #include "sakura.hh"
 
-#define STR_SHIFT_PLUS        _T("Shift+")  //@@@ 2001.11.08 add MIK
-#define STR_CTRL_PLUS         _T("Ctrl+")  //@@@ 2001.11.08 add MIK
-#define STR_ALT_PLUS          _T("Alt+")  //@@@ 2001.11.08 add MIK
+#define STR_SHIFT_PLUS        _T("Shift+")
+#define STR_CTRL_PLUS         _T("Ctrl+")
+#define STR_ALT_PLUS          _T("Alt+")
 
-//@@@ 2001.02.04 Start by MIK: Popup Help
 static const DWORD p_helpids[] = {	//10700
 	IDC_BUTTON_IMPORT,				HIDC_BUTTON_IMPORT_KEYBIND,		// インポート
 	IDC_BUTTON_EXPORT,				HIDC_BUTTON_EXPORT_KEYBIND,		// エクスポート
@@ -35,9 +34,7 @@ static const DWORD p_helpids[] = {	//10700
 //	IDC_STATIC,						-1,
 	0, 0
 };
-//@@@ 2001.02.04 End
 
-//	From Here Jun. 2, 2001 genta
 /*!
 	@param hwndDlg ダイアログボックスのWindow Handle
 	@param uMsg メッセージ
@@ -53,9 +50,7 @@ INT_PTR CALLBACK PropKeybind::DlgProc_page(
 {
 	return DlgProc(reinterpret_cast<pDispatchPage>(&PropKeybind::DispatchEvent), hwndDlg, uMsg, wParam, lParam);
 }
-//	To Here Jun. 2, 2001 genta
 
-// From Here Oct. 13, 2000 Studio CでMr.コーヒー氏に教わったやり方ですがうまくいってません
 // ウィンドウプロシージャの中で・・・
 LRESULT CALLBACK CPropComKeybindWndProc(
 	HWND hwndDlg,
@@ -74,8 +69,6 @@ LRESULT CALLBACK CPropComKeybindWndProc(
 	}
 	return 0;
 }
-// To Here Oct. 13, 2000
-
 
 // Keybind メッセージ処理
 INT_PTR PropKeybind::DispatchEvent(
@@ -135,7 +128,7 @@ INT_PTR PropKeybind::DispatchEvent(
 //	To Here Oct. 14, 2000
 		::SendMessage(hwndDlg, WM_COMMAND, MAKELONG(IDC_COMBO_FUNCKIND, CBN_SELCHANGE), (LPARAM)hwndCombo);
 
-		::SetTimer(hwndDlg, 1, 300, NULL);	// 2007.11.02 ryoji
+		::SetTimer(hwndDlg, 1, 300, NULL);
 
 		return TRUE;
 
@@ -155,7 +148,7 @@ INT_PTR PropKeybind::DispatchEvent(
 		case PSN_SETACTIVE:
 			nPageNum = ID_PROPCOM_PAGENUM_KEYBOARD;
 
-			// 表示を更新する（マクロ設定画面でのマクロ名変更を反映）	// 2007.11.02 ryoji
+			// 表示を更新する（マクロ設定画面でのマクロ名変更を反映）
 			nIndex = List_GetCurSel(hwndKeyList);
 			nIndex2 = Combo_GetCurSel(hwndCombo);
 			nIndex3 = List_GetCurSel(hwndFuncList);
@@ -259,8 +252,7 @@ INT_PTR PropKeybind::DispatchEvent(
 					i |= _ALT;
 				}
 				nFuncCode = csKeybind.pKeyNameArr[nIndex].nFuncCodeArr[i];
-				// Oct. 2, 2001 genta
-				// 2007.11.02 ryoji F_DISABLEなら未割付
+				// F_DISABLEなら未割付
 				if (nFuncCode == F_DISABLE) {
 					auto_strcpy(szLabel, LSW(STR_PROPCOMKEYBIND_UNASSIGN));
 				}else {
@@ -282,7 +274,7 @@ INT_PTR PropKeybind::DispatchEvent(
 				nAssignedKeyNum = KeyBind::GetKeyStrList(	// 機能に対応するキー名の取得(複数)
 					G_AppInstance(), csKeybind.nKeyNameArrNum, (KeyData*)csKeybind.pKeyNameArr,
 					&ppcAssignedKeyList, nFuncCode,
-					FALSE	// 2007.02.22 ryoji デフォルト機能は取得しない
+					FALSE	// デフォルト機能は取得しない
 				);	
 				// 割り当てキーリストをクリアして値の設定
 				List_ResetContent(hwndAssignedkeyList);
@@ -309,7 +301,6 @@ INT_PTR PropKeybind::DispatchEvent(
 				return TRUE;
 			}
 
-//@@@ 2001.11.08 add start MIK
 		}else
 		if (hwndAssignedkeyList == hwndCtl) {
 			switch (wNotifyCode) {
@@ -360,13 +351,12 @@ INT_PTR PropKeybind::DispatchEvent(
 					return TRUE;
 				}
 			}
-//@@@ 2001.11.08 add end MIK
 
 		}
 		break;
 
 	case WM_TIMER:
-		// ボタンの有効／無効を切り替える	// 2007.11.02 ryoji
+		// ボタンの有効／無効を切り替える
 		nIndex = List_GetCurSel(hwndKeyList);
 		nIndex2 = Combo_GetCurSel(hwndCombo);
 		nIndex3 = List_GetCurSel(hwndFuncList);
@@ -375,26 +365,22 @@ INT_PTR PropKeybind::DispatchEvent(
 		break;
 
 	case WM_DESTROY:
-		::KillTimer(hwndDlg, 1);	// 2007.11.02 ryoji
+		::KillTimer(hwndDlg, 1);
 		break;
 
-//@@@ 2001.02.04 Start by MIK: Popup Help
 	case WM_HELP:
 		{
 			HELPINFO* p = (HELPINFO*) lParam;
-			MyWinHelp((HWND)p->hItemHandle, HELP_WM_HELP, (ULONG_PTR)(LPVOID)p_helpids);	// 2006.10.10 ryoji MyWinHelpに変更に変更
+			MyWinHelp((HWND)p->hItemHandle, HELP_WM_HELP, (ULONG_PTR)(LPVOID)p_helpids);
 		}
 		return TRUE;
 		// NOTREACHED
 		//break;
-//@@@ 2001.02.04 End
 
-//@@@ 2001.11.07 Start by MIK: Context Menu Help
 	// Context Menu
 	case WM_CONTEXTMENU:
-		MyWinHelp(hwndDlg, HELP_CONTEXTMENU, (ULONG_PTR)(LPVOID)p_helpids);	// 2006.10.10 ryoji MyWinHelpに変更に変更
+		MyWinHelp(hwndDlg, HELP_CONTEXTMENU, (ULONG_PTR)(LPVOID)p_helpids);
 		return TRUE;
-//@@@ 2001.11.07 End
 
 	}
 	return FALSE;
@@ -480,11 +466,10 @@ void PropKeybind::Import(HWND hwndDlg)
 	// ダイアログデータの設定 Keybind
 	// 2012.11.18 aroka キー一覧の更新は全アイテムを更新する。
 	ChangeKeyList(hwndDlg);
-	//@@@ 2001.11.07 modify start MIK: 機能に割り当てられているキーを更新する。// 2012.11.18 aroka コメント修正
+	// 機能に割り当てられているキーを更新する
 	HWND			hwndCtrl;
 	hwndCtrl = ::GetDlgItem(hwndDlg, IDC_LIST_FUNC);
 	::SendMessage(hwndDlg, WM_COMMAND, MAKELONG(IDC_LIST_FUNC, LBN_SELCHANGE), (LPARAM)hwndCtrl);
-	//@@@ 2001.11.07 modify end MIK
 }
 
 

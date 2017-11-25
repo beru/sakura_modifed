@@ -162,7 +162,7 @@ INT_PTR PropBackup::DispatchEvent(
 		case EN_CHANGE: // 20051107 aroka フォルダが変更されたらリアルタイムにエディットボックス内を更新
 			switch (wID) {
 			case IDC_EDIT_BACKUPFOLDER:
-				// 2009.02.21 ryoji 後ろに\が追加されるので，1文字余裕をみる必要がある．
+				// 後ろに\が追加されるので，1文字余裕をみる必要がある．
 				::DlgItem_GetText(hwndDlg, IDC_EDIT_BACKUPFOLDER, csBackup.szBackUpFolder, _countof2(csBackup.szBackUpFolder) - 1);
 				UpdateBackupFile(hwndDlg);
 				break;
@@ -171,21 +171,18 @@ INT_PTR PropBackup::DispatchEvent(
 		}
 		break;	// WM_COMMAND
 
-//@@@ 2001.02.04 Start by MIK: Popup Help
 	case WM_HELP:
 		{
 			HELPINFO* p = (HELPINFO*) lParam;
-			MyWinHelp((HWND)p->hItemHandle, HELP_WM_HELP, (ULONG_PTR)(LPVOID)p_helpids);	// 2006.10.10 ryoji MyWinHelpに変更に変更
+			MyWinHelp((HWND)p->hItemHandle, HELP_WM_HELP, (ULONG_PTR)(LPVOID)p_helpids);
 		}
 		return TRUE;
 		// NOTREACHED
 		//break;
-//@@@ 2001.02.04 End
 
-//@@@ 2001.12.22 Start by MIK: Context Menu Help
 	// Context Menu
 	case WM_CONTEXTMENU:
-		MyWinHelp(hwndDlg, HELP_CONTEXTMENU, (ULONG_PTR)(LPVOID)p_helpids);	// 2006.10.10 ryoji MyWinHelpに変更に変更
+		MyWinHelp(hwndDlg, HELP_CONTEXTMENU, (ULONG_PTR)(LPVOID)p_helpids);
 		return TRUE;
 //@@@ 2001.12.22 End
 
@@ -349,8 +346,8 @@ int PropBackup::GetData(HWND hwndDlg)
 	//	Oct. 8, 2002 genta 後ろに\が追加されるので，1文字余裕を見る必要がある．
 	::DlgItem_GetText(hwndDlg, IDC_EDIT_BACKUPFOLDER, csBackup.szBackUpFolder, _countof2(csBackup.szBackUpFolder) - 1);
 
-	// バックアップファイルをごみ箱に放り込む	//@@@ 2001.12.11 add MIK
-	csBackup.bBackUpDustBox = DlgButton_IsChecked(hwndDlg, IDC_CHECK_BACKUP_DUSTBOX);	//@@@ 2001.12.11 add MIK
+	// バックアップファイルをごみ箱に放り込む
+	csBackup.bBackUpDustBox = DlgButton_IsChecked(hwndDlg, IDC_CHECK_BACKUP_DUSTBOX);
 
 	// 指定フォルダにバックアップを作成する詳細設定 // 20051107 aroka
 	csBackup.bBackUpPathAdvanced = DlgButton_IsChecked(hwndDlg, IDC_CHECK_BACKUP_ADVANCED);
@@ -428,7 +425,7 @@ void PropBackup::EnableBackupInput(HWND hwndDlg)
 
 	// 詳細設定
 	SHOWENABLE(IDC_EDIT_BACKUPFILE,			TRUE, bBackup && bAdvanced);
-//	SHOWENABLE(IDC_LABEL_BACKUP_HELP,		bAdvanced, bBackup);	// 不可視のまま放置（他コントロール隠しの方式は廃止） 2009.02.20 ryoji
+//	SHOWENABLE(IDC_LABEL_BACKUP_HELP,		bAdvanced, bBackup);	// 不可視のまま放置（他コントロール隠しの方式は廃止）
 	SHOWENABLE(IDC_LABEL_BACKUP_HELP2,		bAdvanced, bBackup);
 	SHOWENABLE(IDC_RADIO_BACKUP_DATETYPE1A,	bAdvanced, bBackup);
 	SHOWENABLE(IDC_RADIO_BACKUP_DATETYPE2A,	bAdvanced, bBackup);
@@ -438,7 +435,7 @@ void PropBackup::EnableBackupInput(HWND hwndDlg)
 	SHOWENABLE(IDC_CHECK_BACKUP_FOLDER_RM,		TRUE, bBackup && bFolder);	// 2010/5/27 Uchi
 	SHOWENABLE(IDC_EDIT_BACKUPFOLDER,			TRUE, bBackup && bFolder);
 	SHOWENABLE(IDC_BUTTON_BACKUP_FOLDER_REF,	TRUE, bBackup && bFolder);
-	SHOWENABLE(IDC_CHECK_BACKUP_DUSTBOX,		TRUE, bBackup);	//@@@ 2001.12.11 add MIK
+	SHOWENABLE(IDC_CHECK_BACKUP_DUSTBOX,		TRUE, bBackup);
 
 	// 作成前に確認
 	SHOWENABLE(IDC_CHECK_BACKUPDIALOG,		TRUE, bBackup);

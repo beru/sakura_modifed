@@ -213,7 +213,7 @@ void DlgTagJumpList::SetData(void)
 			SetItemText(IDC_KEYWORD, pszKeyword);
 		}
 	}else {
-		// From Here 2005.04.03 MIK Ý’è’l‚Ì“Ç‚Ýž‚Ý
+		// Ý’è’l‚Ì“Ç‚Ýž‚Ý
 		HWND hwndKey;
 		hwndKey = GetItemHwnd(IDC_KEYWORD);
 
@@ -353,7 +353,6 @@ int DlgTagJumpList::GetData(void)
 		cRecentTagJumpKeyword.AppendItem(pszKeyword);
 		cRecentTagJumpKeyword.Terminate();
 	}
-	// To Here 2005.04.03 MIK
 	if (nIndex == -1 || nIndex >= pList->GetCapacity()) return FALSE;
 
 	return TRUE;

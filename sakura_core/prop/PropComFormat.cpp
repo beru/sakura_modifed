@@ -11,7 +11,7 @@
 #include "sakura.hh"
 
 
-//@@@ 2001.02.04 Start by MIK: Popup Help
+// Popup Help
 static const DWORD p_helpids[] = {	//10400
 	IDC_EDIT_DFORM,						HIDC_EDIT_DFORM,		// 日付書式
 	IDC_EDIT_TFORM,						HIDC_EDIT_TFORM,		// 時刻書式
@@ -217,23 +217,19 @@ INT_PTR PropFormat::DispatchEvent(
 //		MYTRACE(_T("pMNUD->iDelta  =%d\n"), pMNUD->iDelta);
 		break;	// WM_NOTIFY
 
-//@@@ 2001.02.04 Start by MIK: Popup Help
 	case WM_HELP:
 		{
 			HELPINFO* p = (HELPINFO*) lParam;
-			MyWinHelp((HWND)p->hItemHandle, HELP_WM_HELP, (ULONG_PTR)(LPVOID)p_helpids);	// 2006.10.10 ryoji MyWinHelpに変更に変更
+			MyWinHelp((HWND)p->hItemHandle, HELP_WM_HELP, (ULONG_PTR)(LPVOID)p_helpids);
 		}
 		return TRUE;
 		// NOTREACHED
 		break;
-//@@@ 2001.02.04 End
 
-//@@@ 2001.12.22 Start by MIK: Context Menu Help
 	// Context Menu
 	case WM_CONTEXTMENU:
-		MyWinHelp(hwndDlg, HELP_CONTEXTMENU, (ULONG_PTR)(LPVOID)p_helpids);	// 2006.10.10 ryoji MyWinHelpに変更に変更
+		MyWinHelp(hwndDlg, HELP_CONTEXTMENU, (ULONG_PTR)(LPVOID)p_helpids);
 		return TRUE;
-//@@@ 2001.12.22 End
 
 	}
 	return FALSE;

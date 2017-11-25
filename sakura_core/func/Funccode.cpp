@@ -681,7 +681,7 @@ int FuncID_To_HelpContextID(EFunctionCode nFuncID)
 	case F_TOZENKAKUHIRA:			return HLP000051;	// 半角＋全カタ→全角・ひらがな
 	case F_HANKATATOZENKATA:		return HLP000123;	// 半角カタカナ→全角カタカナ
 	case F_HANKATATOZENHIRA:		return HLP000124;	// 半角カタカナ→全角ひらがな
-	case F_TOZENEI:					return HLP000200;	// 半角英数→全角英数a //Stonee, 2001/09/26 番号修正
+	case F_TOZENEI:					return HLP000200;	// 半角英数→全角英数
 	case F_TOHANEI:					return HLP000215;	// 全角英数→半角英数
 	case F_TABTOSPACE:				return HLP000182;	// TAB→空白
 	case F_SPACETOTAB:				return HLP000196;	// 空白→TAB

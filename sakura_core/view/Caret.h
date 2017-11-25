@@ -82,7 +82,7 @@ public:
 	//                   初期化・終了処理など                      //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-	// キャレットの作成。2006.12.07 ryoji
+	// キャレットの作成
 	void CreateEditCaret(
 		COLORREF crCaret,
 		COLORREF crBack,
@@ -194,8 +194,8 @@ public:
 	// キャレット見た目
 private:
 	Size		sizeCaret;		// キャレットのサイズ。ピクセル単位。
-	COLORREF	crCaret;			// キャレットの色				// 2006.12.07 ryoji
-	HBITMAP		hbmpCaret;		// キャレットのビットマップ		// 2006.11.28 ryoji
+	COLORREF	crCaret;			// キャレットの色
+	HBITMAP		hbmpCaret;		// キャレットのビットマップ
 	bool		bCaretShowFlag;
 
 	// アンダーライン

@@ -89,7 +89,7 @@ void VisualProgress::_Doing(int nPer)
 	HWND hwndProgress = EditWnd::getInstance().statusBar.GetProgressHwnd();
 	if (hwndProgress) {
 		if (nOldValue != nPer) {
-			Progress_SetPos(hwndProgress, nPer + 1); // 2013.06.10 Moca Vista/7等でプログレスバーがアニメーションで遅れる対策
+			Progress_SetPos(hwndProgress, nPer + 1); // Vista/7等でプログレスバーがアニメーションで遅れる対策
 			Progress_SetPos(hwndProgress, nPer);
 			nOldValue = nPer;
 		}

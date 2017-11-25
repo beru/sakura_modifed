@@ -68,7 +68,7 @@ void MruListener::OnBeforeLoad(LoadInfo* pLoadInfo)
 	if (pLoadInfo->eCharCode == CODE_NONE) {
 		const TypeConfigMini* type;
 		if (DocTypeManager().GetTypeConfigMini(pLoadInfo->nType, &type)) {
-			pLoadInfo->eCharCode = type->encoding.eDefaultCodetype;	// 無効値の回避	// 2011.01.24 ryoji CODE_DEFAULT -> eDefaultCodetype
+			pLoadInfo->eCharCode = type->encoding.eDefaultCodetype;	// 無効値の回避
 		}else {
 			pLoadInfo->eCharCode = GetDllShareData().typeBasis.encoding.eDefaultCodetype;
 		}
@@ -137,23 +137,21 @@ void MruListener::OnAfterLoad(const LoadInfo& loadInfo)
 			// ファイルの最後に移動
 			view.GetCommander().HandleCommand(F_GOFILEEND, false, 0, 0, 0, 0);
 		}else {
-			view.GetTextArea().SetViewTopLine(eiOld.nViewTopLine); // 2001/10/20 novice
-			view.GetTextArea().SetViewLeftCol(eiOld.nViewLeftCol); // 2001/10/20 novice
-			// From Here Mar. 28, 2003 MIK
+			view.GetTextArea().SetViewTopLine(eiOld.nViewTopLine);
+			view.GetTextArea().SetViewLeftCol(eiOld.nViewLeftCol);
 			// 改行の真ん中にカーソルが来ないように。
-			const DocLine *pTmpDocLine = pDoc->docLineMgr.GetLine(eiOld.ptCursor.y);	// 2008.08.22 ryoji 改行単位の行番号を渡すように修正
+			const DocLine *pTmpDocLine = pDoc->docLineMgr.GetLine(eiOld.ptCursor.y);
 			if (pTmpDocLine) {
 				if ((int)pTmpDocLine->GetLengthWithoutEOL() < eiOld.ptCursor.x) {
 					ptCaretPos.x--;
 				}
 			}
-			// To Here Mar. 28, 2003 MIK
 			view.GetCaret().MoveCursor(ptCaretPos, true);
 			view.GetCaret().nCaretPosX_Prev = view.GetCaret().GetCaretLayoutPos().x;
 		}
 	}
 
-	// ブックマーク復元  // 2002.01.16 hor
+	// ブックマーク復元
 	if (bIsExistInMRU) {
 		if (GetDllShareData().common.file.GetRestoreBookmarks()) {
 			BookmarkManager(pDoc->docLineMgr).SetBookMarks(eiOld.szMarkLines);

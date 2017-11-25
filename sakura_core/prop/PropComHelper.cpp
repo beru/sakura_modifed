@@ -11,7 +11,6 @@
 #include "sakura.hh"
 
 
-//@@@ 2001.02.04 Start by MIK: Popup Help
 static const DWORD p_helpids[] = {	//10600
 	IDC_BUTTON_OPENHELP1,			HIDC_BUTTON_OPENHELP1,			// 外部ヘルプファイル参照
 	IDC_BUTTON_OPENEXTHTMLHELP,		HIDC_BUTTON_OPENEXTHTMLHELP,	// 外部HTMLファイル参照
@@ -26,10 +25,10 @@ static const DWORD p_helpids[] = {	//10600
 	//	2007.02.04 genta カーソル位置の単語の辞書検索は共通設定から外した
 	//IDC_CHECK_CLICKKEYSEARCH,		HIDC_CHECK_CLICKKEYSEARCH,		// キャレット位置の単語を辞書検索	// 2006.03.24 fon
 	IDC_BUTTON_KEYWORDHELPFONT,		HIDC_BUTTON_KEYWORDHELPFONT,	// キーワードヘルプのフォント
-	IDC_EDIT_MIGEMO_DLL,			HIDC_EDIT_MIGEMO_DLL,			// Migemo DLLファイル名	// 2006.08.06 ryoji
-	IDC_BUTTON_OPENMDLL,			HIDC_BUTTON_OPENMDLL,			// Migemo DLLファイル参照	// 2006.08.06 ryoji
-	IDC_EDIT_MIGEMO_DICT,			HIDC_EDIT_MIGEMO_DICT,			// Migemo 辞書ファイル名	// 2006.08.06 ryoji
-	IDC_BUTTON_OPENMDICT,			HIDC_BUTTON_OPENMDICT,			// Migemo 辞書ファイル参照	// 2006.08.06 ryoji
+	IDC_EDIT_MIGEMO_DLL,			HIDC_EDIT_MIGEMO_DLL,			// Migemo DLLファイル名
+	IDC_BUTTON_OPENMDLL,			HIDC_BUTTON_OPENMDLL,			// Migemo DLLファイル参照
+	IDC_EDIT_MIGEMO_DICT,			HIDC_EDIT_MIGEMO_DICT,			// Migemo 辞書ファイル名
+	IDC_BUTTON_OPENMDICT,			HIDC_BUTTON_OPENMDICT,			// Migemo 辞書ファイル参照
 //	IDC_STATIC,						-1,
 	0, 0
 };
@@ -93,8 +92,6 @@ INT_PTR PropHelper::DispatchEvent(
 				{
 					DlgOpenFile	dlgOpenFile;
 					TCHAR		szPath[_MAX_PATH];
-					// 2003.06.23 Moca 相対パスは実行ファイルからのパス
-					// 2007.05.21 ryoji 相対パスは設定ファイルからのパスを優先
 					if (_IS_REL_PATH(csHelper.szExtHelp)) {
 						GetInidirOrExedir(szPath, csHelper.szExtHelp, true);
 					}else {
@@ -117,8 +114,6 @@ INT_PTR PropHelper::DispatchEvent(
 				{
 					DlgOpenFile	dlgOpenFile;
 					TCHAR		szPath[_MAX_PATH];
-					// 2003.06.23 Moca 相対パスは実行ファイルからのパス
-					// 2007.05.21 ryoji 相対パスは設定ファイルからのパスを優先
 					if (_IS_REL_PATH(csHelper.szExtHtmlHelp)) {
 						GetInidirOrExedir(szPath, csHelper.szExtHtmlHelp, true);
 					}else {
@@ -145,7 +140,7 @@ INT_PTR PropHelper::DispatchEvent(
 
 					if (MySelectFont(&lf, &nPointSize, hwndDlg, false)) {
 						csHelper.lf = lf;
-						csHelper.nPointSize = nPointSize;	// 2009.10.01 ryoji
+						csHelper.nPointSize = nPointSize;
 						// キーワードヘルプ フォント表示	// 2013/4/24 Uchi
 						HFONT hFont = SetFontLabel(hwndDlg, IDC_STATIC_KEYWORDHELPFONT, csHelper.lf, csHelper.nPointSize);
 						if (hKeywordHelpFont) {
@@ -160,8 +155,6 @@ INT_PTR PropHelper::DispatchEvent(
 				{
 					DlgOpenFile	dlgOpenFile;
 					TCHAR		szPath[_MAX_PATH];
-					// 2003.06.23 Moca 相対パスは実行ファイルからのパス
-					// 2007.05.21 ryoji 相対パスは設定ファイルからのパスを優先
 					if (_IS_REL_PATH(csHelper.szMigemoDll)) {
 						GetInidirOrExedir(szPath, csHelper.szMigemoDll, true);
 					}else {
@@ -184,7 +177,6 @@ INT_PTR PropHelper::DispatchEvent(
 				{
 					TCHAR	szPath[_MAX_PATH];
 					// 検索フォルダ
-					// 2007.05.27 ryoji 相対パスは設定ファイルからのパスを優先
 					if (_IS_REL_PATH(csHelper.szMigemoDict)) {
 						GetInidirOrExedir(szPath, csHelper.szMigemoDict, true);
 					}else {
@@ -230,23 +222,19 @@ INT_PTR PropHelper::DispatchEvent(
 //		MYTRACE(_T("pMNUD->iDelta  =%d\n"), pMNUD->iDelta);
 		break;	// WM_NOTIFY
 
-//@@@ 2001.02.04 Start by MIK: Popup Help
 	case WM_HELP:
 		{
 			HELPINFO* p = (HELPINFO*) lParam;
-			MyWinHelp((HWND)p->hItemHandle, HELP_WM_HELP, (ULONG_PTR)(LPVOID)p_helpids);	// 2006.10.10 ryoji MyWinHelpに変更に変更
+			MyWinHelp((HWND)p->hItemHandle, HELP_WM_HELP, (ULONG_PTR)(LPVOID)p_helpids);
 		}
 		return TRUE;
 		// NOTREACHED
 		//break;
-//@@@ 2001.02.04 End
 
-//@@@ 2001.12.22 Start by MIK: Context Menu Help
 	// Context Menu
 	case WM_CONTEXTMENU:
-		MyWinHelp(hwndDlg, HELP_CONTEXTMENU, (ULONG_PTR)(LPVOID)p_helpids);	// 2006.10.10 ryoji MyWinHelpに変更に変更
+		MyWinHelp(hwndDlg, HELP_CONTEXTMENU, (ULONG_PTR)(LPVOID)p_helpids);
 		return TRUE;
-//@@@ 2001.12.22 End
 
 	case WM_DESTROY:
 		// キーワードヘルプ フォント破棄	// 2013/4/24 Uchi

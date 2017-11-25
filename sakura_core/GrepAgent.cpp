@@ -35,7 +35,7 @@ CallbackResultType GrepAgent::OnBeforeClose()
 	// GREP処理中は終了できない
 	if (bGrepRunning) {
 		// アクティブにする
-		ActivateFrameWindow(EditWnd::getInstance().GetHwnd());	//@@@ 2003.06.25 MIK
+		ActivateFrameWindow(EditWnd::getInstance().GetHwnd());
 		TopInfoMessage(
 			EditWnd::getInstance().GetHwnd(),
 			LS(STR_GREP_RUNNINNG)
@@ -47,7 +47,6 @@ CallbackResultType GrepAgent::OnBeforeClose()
 
 void GrepAgent::OnAfterSave(const SaveInfo& saveInfo)
 {
-	// 名前を付けて保存から再ロードが除去された分の不足処理を追加（ANSI版との差異）	// 2009.08.12 ryoji
 	bGrepMode = false;	// grepウィンドウは通常ウィンドウ化
 	AppMode::getInstance().szGrepKey[0] = 0;
 }
@@ -161,7 +160,7 @@ DWORD GrepAgent::DoGrep(
 	bool					bGrepStdout,
 	bool					bGrepHeader,
 	const SearchOption&		searchOption,
-	EncodingType			nGrepCharSet,	// 2002/09/21 Moca 文字コードセット選択
+	EncodingType			nGrepCharSet,
 	int						nGrepOutputLineType,
 	int						nGrepOutputStyle,
 	bool					bGrepOutputFileOnly,
@@ -278,12 +277,9 @@ DWORD GrepAgent::DoGrep(
 	viewDst.editWnd.dlgGrepReplace.bSetText = true;
 	hwndCancel = dlgCancel.DoModeless(G_AppInstance(), viewDst.hwndParent, IDD_GREPRUNNING);
 	::SetDlgItemInt(hwndCancel, IDC_STATIC_HITCOUNT, 0, FALSE);
-	::DlgItem_SetText(hwndCancel, IDC_STATIC_CURFILE, _T(" "));	// 2002/09/09 Moca add
-	::CheckDlgButton(hwndCancel, IDC_CHECK_REALTIMEVIEW, csSearch.bGrepRealTimeView);	// 2003.06.23 Moca
+	::DlgItem_SetText(hwndCancel, IDC_STATIC_CURFILE, _T(" "));
+	::CheckDlgButton(hwndCancel, IDC_CHECK_REALTIMEVIEW, csSearch.bGrepRealTimeView);
 
-	//	2008.12.13 genta パターンが長すぎる場合は登録しない
-	//	(正規表現が途中で途切れると困るので)
-	//	2011.12.10 Moca 表示の際に...に切り捨てられるので登録するように
 	wcsncpy_s(AppMode::getInstance().szGrepKey, _countof(AppMode::getInstance().szGrepKey), pmGrepKey->GetStringPtr(), _TRUNCATE);
 	this->bGrepMode = true;
 
@@ -370,7 +366,7 @@ DWORD GrepAgent::DoGrep(
 	std::vector<std::tstring> vPaths;
 	CreateFolders(pmGrepFolder->GetStringPtr(), vPaths);
 
-	nWork = pmGrepKey->GetStringLength(); // 2003.06.10 Moca あらかじめ長さを計算しておく
+	nWork = pmGrepKey->GetStringLength(); // あらかじめ長さを計算しておく
 
 	// 最後にテキストを追加
 	NativeW memWork;
@@ -476,7 +472,7 @@ DWORD GrepAgent::DoGrep(
 		SearchAgent::CreateWordList(searchWords, pmGrepKey->GetStringPtr(), pmGrepKey->GetStringLength());
 	}
 
-	if (0 < nWork) { // 2003.06.10 Moca ファイル検索の場合は表示しない // 2004.09.26 条件誤り修正
+	if (0 < nWork) { // ファイル検索の場合は表示しない
 		if (searchOption.bWordOnly) {
 		// 単語単位で探す
 			memMessage.AppendString(LSW(STR_GREP_COMPLETE_WORD));	// L"    (単語単位で探す)\r\n"
@@ -507,7 +503,7 @@ DWORD GrepAgent::DoGrep(
 		memMessage.AppendStringLiteral(L")\r\n");
 	}
 
-	if (0 < nWork) { // 2003.06.10 Moca ファイル検索の場合は表示しない // 2004.09.26 条件誤り修正
+	if (0 < nWork) { // ファイル検索の場合は表示しない
 		if (grepOption.nGrepOutputLineType == 1) {
 			// 該当行
 			pszWork = LSW(STR_GREP_SHOW_MATCH_LINE);	// L"    (一致した行を出力)\r\n"
@@ -543,9 +539,6 @@ DWORD GrepAgent::DoGrep(
 	//	正規表現の初期化を上へ移動
 
 	// 表示処理ON/OFF
-	// 2003.06.23 Moca 共通設定で変更できるように
-	// 2008.06.08 ryoji 全ビューの表示ON/OFFを同期させる
-//	SetDrawSwitch(false);
 	if (!editWnd.UpdateTextWrap()) {		// 折り返し方法関連の更新
 		editWnd.RedrawAllViews(&viewDst);	// 他のペインの表示を更新
 	}
@@ -589,7 +582,7 @@ DWORD GrepAgent::DoGrep(
 		}
 		nGrepTreeResult += nTreeRet;
 	}
-	dlgCancel.SetItemText(IDC_STATIC_CURFILE, LTEXT(" "));	// 2002/09/09 Moca add
+	dlgCancel.SetItemText(IDC_STATIC_CURFILE, LTEXT(" "));
 
 	// 残っているメッセージを出力
 	if (0 < memMessage.GetStringLength()) {
@@ -639,7 +632,7 @@ DWORD GrepAgent::DoGrep(
 	editWnd.SetDrawSwitchOfAllViews(bDrawSwitchOld);
 
 	// 再描画
-	if (!editWnd.UpdateTextWrap()) {	// 折り返し方法関連の更新	// 2008.06.10 ryoji
+	if (!editWnd.UpdateTextWrap()) {	// 折り返し方法関連の更新
 		editWnd.RedrawAllViews(nullptr);
 	}
 
@@ -890,13 +883,13 @@ void GrepAgent::SetGrepResult(
 		memBuf.AppendString(strWork);
 		memBuf.AppendStringT(pszCodeName);
 		memBuf.AppendStringLiteral(L": ");
-		nMaxOutStr = 2000; // 2003.06.10 Moca 最大長変更
+		nMaxOutStr = 2000;
 		break;
 	// WZ風
 	case 2:
 		::auto_sprintf( strWork, L"・(%6I64d,%-5d): ", nLine, nColumn );
 		memBuf.AppendString(strWork);
-		nMaxOutStr = 2500; // 2003.06.10 Moca 最大長変更
+		nMaxOutStr = 2500;
 		break;
 	// 結果のみ
 	case 3:
@@ -910,17 +903,17 @@ void GrepAgent::SetGrepResult(
 		pDispData = pCompareData;
 		k = nLineLen - nEolCodeLen;
 		if (nMaxOutStr < k) {
-			k = nMaxOutStr; // 2003.06.10 Moca 最大長変更
+			k = nMaxOutStr;
 		}
 	// 該当部分
 	}else {
 		pDispData = pMatchData;
 		k = nMatchLen;
 		if (nMaxOutStr < k) {
-			k = nMaxOutStr; // 2003.06.10 Moca 最大長変更
+			k = nMaxOutStr;
 		}
 		// 該当部分に改行を含む場合はその改行コードをそのまま利用する(次の行に空行を作らない)
-		// 2003.06.10 Moca k==0のときにバッファアンダーランしないように
+		// k==0のときにバッファアンダーランしないように
 		if (0 < k && WCODE::IsLineDelimiter(pMatchData[ k - 1 ], GetDllShareData().common.edit.bEnableExtEol)) {
 			bEOL = false;
 		}
@@ -1050,10 +1043,8 @@ int GrepAgent::DoGrepFile(
 	if (nKeyLen == 0) {
 		TCHAR szCpName[100];
 		if (grepOption.nGrepCharSet == CODE_AUTODETECT) {
-			// 2003.06.10 Moca コード判別処理をここに移動．
 			// 判別エラーでもファイル数にカウントするため
 			// ファイルの日本語コードセット判別
-			// 2014.06.19 Moca ファイル名のタイプ別のm_encodingに変更
 			CodeMediator mediator( type->encoding );
 			nCharCode = mediator.CheckKanjiCodeOfFile(pszFullPath);
 			if (!IsValidCodeOrCPType(nCharCode)) {
@@ -1137,7 +1128,6 @@ int GrepAgent::DoGrepFile(
 	try {
 		// ファイルを開く
 		// FileCloseで明示的に閉じるが、閉じていないときはデストラクタで閉じる
-		// 2003.06.10 Moca 文字コード判定処理もFileOpenで行う
 		nCharCode = fl.FileOpen(type->encoding, pszFullPath, true, grepOption.nGrepCharSet, GetDllShareData().common.file.GetAutoMIMEdecode() );
 		TCHAR szCpName[100];
 		{
@@ -1178,11 +1168,10 @@ int GrepAgent::DoGrepFile(
 					if (dlgCancel.IsCanceled()) {
 						return -1;
 					}
-					//	2003.06.23 Moca 表示設定をチェック
 					editWnd.SetDrawSwitchOfAllViews(
 						dlgCancel.IsButtonChecked(IDC_CHECK_REALTIMEVIEW)
 					);
-					// 2002/08/30 Moca 進行状態を表示する(5MB以上)
+					// 進行状態を表示する(5MB以上)
 					if (5000000 < fl.GetFileSize()) {
 						int nPercent = fl.GetPercent();
 						if (5 <= nPercent - nOldPercent) {
@@ -1256,8 +1245,8 @@ int GrepAgent::DoGrepFile(
 					if ( grepOption.nGrepOutputLineType != 0 || grepOption.bGrepOutputFileOnly ) {
 						break;
 					}
-					//	探し始める位置を補正
-					//	2003.06.10 Moca マッチした文字列の後ろから次の検索を開始する
+					// 探し始める位置を補正
+					// マッチした文字列の後ろから次の検索を開始する
 					if (matchlen <= 0) {
 						matchlen = NativeW::GetSizeOfChar(pLine, nLineLen, nIndex);
 						if (matchlen <= 0) {
@@ -1592,7 +1581,6 @@ int GrepAgent::DoGrepReplaceFile(
 	try {
 		// ファイルを開く
 		// FileCloseで明示的に閉じるが、閉じていないときはデストラクタで閉じる
-		// 2003.06.10 Moca 文字コード判定処理もFileOpenで行う
 		nCharCode = fl.FileOpen(type->encoding, pszFullPath, true, grepOption.nGrepCharSet, GetDllShareData().common.file.GetAutoMIMEdecode(), &bBom );
 		WriteData output(nHitCount, pszFullPath, nCharCode, bBom, grepOption.bGrepBackup, memMessage );
 		TCHAR szCpName[100];
@@ -1635,11 +1623,10 @@ int GrepAgent::DoGrepReplaceFile(
 				if (dlgCancel.IsCanceled()) {
 					return -1;
 				}
-				//	2003.06.23 Moca 表示設定をチェック
 				EditWnd::getInstance().SetDrawSwitchOfAllViews(
 					dlgCancel.IsButtonChecked(IDC_CHECK_REALTIMEVIEW)
 				);
-				// 2002/08/30 Moca 進行状態を表示する(5MB以上)
+				// 進行状態を表示する(5MB以上)
 				if (5000000 < fl.GetFileSize()) {
 					int nPercent = fl.GetPercent();
 					if (5 <= nPercent - nOldPercent) {
@@ -1716,8 +1703,8 @@ int GrepAgent::DoGrepReplaceFile(
 						outBuffer.AppendString( &pLine[nIndexOld], nIndex - nIndexOld );
 					}
 					outBuffer.AppendNativeData( mGrepReplace );
-					//	探し始める位置を補正
-					//	2003.06.10 Moca マッチした文字列の後ろから次の検索を開始する
+					// 探し始める位置を補正
+					// マッチした文字列の後ろから次の検索を開始する
 					if (matchlen <= 0) {
 						matchlen = NativeW::GetSizeOfChar(pLine, nLineLen, nIndex);
 						if (matchlen <= 0) {
@@ -1826,10 +1813,10 @@ int GrepAgent::DoGrepReplaceFile(
 						outBuffer.AppendString( pCompareData, nColumn );
 					}
 					outBuffer.AppendNativeData( mGrepReplace );
-					//	探し始める位置を補正
-					//	2003.06.10 Moca マッチした文字列の後ろから次の検索を開始する
-					//	nClom : マッチ位置
-					//	matchlen : マッチした文字列の長さ
+					// 探し始める位置を補正
+					// マッチした文字列の後ろから次の検索を開始する
+					// nClom : マッチ位置
+					// matchlen : マッチした文字列の長さ
 					ptrdiff_t nPosDiff = nColumn + nKeyLen;
 					pCompareData += nPosDiff;
 					nCompareLen -= nPosDiff;

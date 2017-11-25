@@ -49,7 +49,7 @@ public:
 protected:
 	EditView* view;
 	bool	bLineHead;			// 行頭か
-	bool	bFirst;				// 先頭か？	//@@@ 2003.05.31 MIK
+	bool	bFirst;				// 先頭か？
 	int		nFlgFile12;
 };
 
@@ -73,14 +73,6 @@ void EditView::ViewDiffInfo(
 	int				nFlgOpt,
 	bool 			bUTF8
 	)
-/*
-	bool	bFlgCase,		// 大文字小文字同一視
-	bool	bFlgBlank,		// 空白無視
-	bool	bFlgWhite,		// 空白変更無視
-	bool	bFlgBLine,		// 空行無視
-	bool	bFlgTabSpc,		// TAB-SPACE変換
-	bool	bFlgFile12,		// 編集中のファイルが旧ファイル
-*/
 {
 	WaitCursor	waitCursor(this->GetHwnd());
 	int		nFlgFile12 = 1;
@@ -92,7 +84,6 @@ void EditView::ViewDiffInfo(
 	GetExedir(cmdline, _T("diff.exe"));
 	SplitPath_FolderAndFile(cmdline, szExeFolder, NULL);
 
-	//	From Here Dec. 28, 2002 MIK
 	//	diff.exeの存在チェック
 	if (!IsFileExists(cmdline, true)) {
 		WarningMessage(GetHwnd(), LS(STR_ERR_DLGEDITVWDIFF2));
@@ -103,7 +94,6 @@ void EditView::ViewDiffInfo(
 	// 今あるDIFF差分を消去する。
 	if (DiffManager::getInstance().IsDiffUse())
 		GetCommander().Command_Diff_Reset();
-		//pEditDoc->docLineMgr.ResetAllDiffMark();
 
 	// オプションを作成する
 	TCHAR	szOption[16];	// "-cwbBt"
@@ -116,8 +106,6 @@ void EditView::ViewDiffInfo(
 	if (_tcscmp(szOption, _T("-")) == 0) _tcscpy(szOption, _T(""));	// オプションなし
 	if (nFlgOpt & 0x0020) nFlgFile12 = 0;
 	else                  nFlgFile12 = 1;
-
-	//	To Here Dec. 28, 2002 MIK
 
 	{
 		// コマンドライン文字列作成(MAX:1024)
@@ -151,7 +139,7 @@ void EditView::ViewDiffInfo(
 		}
 	}
 
-	//DIFF差分が見つからなかったときにメッセージ表示
+	// DIFF差分が見つからなかったときにメッセージ表示
 	if (nFlgOpt & 0x0040) {
 		if (!DiffManager::getInstance().IsDiffUse()) {
 			InfoMessage( this->GetHwnd(), LS(STR_ERR_DLGEDITVWDIFF5) );
@@ -159,18 +147,17 @@ void EditView::ViewDiffInfo(
 	}
 
 
-	//分割したビューも更新
+	// 分割したビューも更新
 	editWnd.Views_Redraw();
 
 	return;
-					}
+}
 
 bool OutputAdapterDiff::OutputA(const char* pBuf, int size)
 {
 	if (size == -1) {
 		size = auto_strlen(pBuf);
 	}
-	//@@@ 2003.05.31 MIK
 	//	先頭がBinary filesならバイナリファイルのため意味のある差分が取られなかった
 	if (bFirst) {
 		bFirst = false;
@@ -193,12 +180,6 @@ bool OutputAdapterDiff::OutputA(const char* pBuf, int size)
 					nDiffLen = 0;
 					szDiffData[nDiffLen++] = pBuf[j];
 				}
-				/*
-				else if (pBuf[j] == '<' || pBuf[j] == '>' || pBuf[j] == '-') {
-					bDiffInfo = false;
-					nDiffLen = 0;
-				}
-				*/
 			}
 		}else {
 			// 行末に達したか？

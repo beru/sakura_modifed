@@ -121,7 +121,7 @@ public:
 	bool MySetClipboardData(const wchar_t*, size_t, bool bColumnSelect, bool = false);	// クリップボードにデータを設定
 
 	// 利用
-	void CopyCurLine(bool bAddCRLFWhenCopy, EolType neweol, bool bEnableLineModePaste);	// カーソル行をクリップボードにコピーする	// 2007.10.08 ryoji
+	void CopyCurLine(bool bAddCRLFWhenCopy, EolType neweol, bool bEnableLineModePaste);	// カーソル行をクリップボードにコピーする
 	void CopySelectedAllLines(const wchar_t*, bool);			// 選択範囲内の全行をクリップボードにコピーする
 
 
@@ -169,7 +169,6 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                           描画                              //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-	// 2006.05.14 Moca  互換BMPによる画面バッファ
 	// 2007.09.30 genta CompatibleDC操作関数
 protected:
 	// ロジック行を1行描画
@@ -390,7 +389,7 @@ public:
 	size_t IsSearchString(const StringRef& str, size_t, int*, int*) const;	// 現在位置が検索文字列に該当するか	// 2002.02.08 hor 引数追加
 
 	void GetCurrentTextForSearch(NativeW&, bool bStripMaxPath = true, bool bTrimSpaceTab = false);			// 現在カーソル位置単語または選択範囲より検索等のキーを取得
-	bool GetCurrentTextForSearchDlg(NativeW&, bool bGetHistory = false);		// 現在カーソル位置単語または選択範囲より検索等のキーを取得（ダイアログ用） 2006.08.23 ryoji
+	bool GetCurrentTextForSearchDlg(NativeW&, bool bGetHistory = false);		// 現在カーソル位置単語または選択範囲より検索等のキーを取得（ダイアログ用）
 
 private:
 	// インクリメンタルサーチ 

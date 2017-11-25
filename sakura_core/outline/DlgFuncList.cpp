@@ -741,12 +741,11 @@ void DlgFuncList::SetData()
 			::EnableWindow(hWnd_Combo_Sort, TRUE);
 		}
 		::ShowWindow(hWnd_Combo_Sort , SW_SHOW);
-		Combo_ResetContent(hWnd_Combo_Sort); // 2002.11.10 Moca 追加
+		Combo_ResetContent(hWnd_Combo_Sort);
 		Combo_AddString(hWnd_Combo_Sort , LS(STR_DLGFNCLST_SORTTYPE1));
 		Combo_AddString(hWnd_Combo_Sort , LS(STR_DLGFNCLST_SORTTYPE2));
 		Combo_SetCurSel(hWnd_Combo_Sort , nSortType);
 		::ShowWindow(GetItemHwnd(IDC_STATIC_nSortType), SW_SHOW);
-		// 2002.11.10 Moca 追加 ソートする
 		if (nSortType == 1) {
 			SortTree(::GetDlgItem(GetHwnd() , IDC_TREE_FL), TVI_ROOT);
 		}
@@ -758,7 +757,6 @@ void DlgFuncList::SetData()
 		EnableItem(IDC_COMBO_nSortType, false);
 		::ShowWindow(GetItemHwnd(IDC_COMBO_nSortType), SW_HIDE);
 		::ShowWindow(GetItemHwnd(IDC_STATIC_nSortType), SW_HIDE);
-		//ListView_SortItems(hwndList, CompareFunc_Asc, (LPARAM)this);  // 2005.04.05 zenryaku ソート状態を保持
 		SortListView(hwndList, nSortCol);	// 2005.04.23 genta 関数化(ヘッダ書き換えのため)
 	}
 }
@@ -872,7 +870,7 @@ void DlgFuncList::SetTreeJava(
 	HTREEITEM		htiSelectedTop = NULL;
 	HTREEITEM		htiSelected = NULL;
 	TV_ITEM			tvi;
-	int				nDummylParam = -64000;	// 2002.11.10 Moca クラス名のダミーlParam ソートのため
+	int				nDummylParam = -64000;	// クラス名のダミーlParam ソートのため
 	TCHAR			szClassArr[MAX_JAVA_TREE_NEST][64];	// Jan. 04, 2001 genta クラス名エリアの拡大 // 2009.9.21 syat ネストが深すぎる際のBOF対策
 
 	EnableItem(IDC_BUTTON_COPY, true);
@@ -1255,14 +1253,12 @@ void DlgFuncList::SetListVB(void)
 
 		item.mask = LVIF_TEXT;
 
-		// 2001/06/23 N.Nakatani for Visual Basic
-		//	Jun. 26, 2001 genta 半角かな→全角に
 		auto_memset(szText, _T('\0'), _countof(szText));
 		auto_memset(szType, _T('\0'), _countof(szType));
 		auto_memset(szOption, _T('\0'), _countof(szOption));
 		if (((pFuncInfo->nInfo >> 8) & 0x01) == 1) {
 			// スタティック宣言(Static)
-			// 2006.12.12 Moca 末尾にスペース追加
+			// 末尾にスペース追加
 			_tcscpy(szOption, LS(STR_DLGFNCLST_VB_STATIC));
 		}
 		switch ((pFuncInfo->nInfo >> 4) & 0x0f) {
@@ -1283,7 +1279,6 @@ void DlgFuncList::SetListVB(void)
 				_tcscpy(szType, LS(STR_DLGFNCLST_VB_FUNCTION));
 				break;
 
-			// 2006.12.12 Moca ステータス→プロシージャに変更
 			case 2:		// プロシージャ(Sub)
 				_tcscpy(szType, LS(STR_DLGFNCLST_VB_PROC));
 				break;
@@ -1325,7 +1320,7 @@ void DlgFuncList::SetListVB(void)
 			_tcsncat(szType, LS(STR_DLGFNCLST_VB_DECL), _countof(szType) - _tcslen(szType));
 		}
 
-		TCHAR szTypeOption[256]; // 2006.12.12 Moca auto_sprintfの入出力で同一変数を使わないための作業領域追加
+		TCHAR szTypeOption[256]; // auto_sprintfの入出力で同一変数を使わないための作業領域追加
 		if (nInfo == 0) {
 			szTypeOption[0] = _T('\0');	//	2006.12.17 genta 全体を0で埋める必要はない
 		}else
@@ -1342,7 +1337,6 @@ void DlgFuncList::SetListVB(void)
 		// クリップボードにコピーするテキストを編集
 		if (item.pszText[0] != _T('\0')) {
 			// 検出結果の種類(関数,,,)があるとき
-			// 2006.12.12 Moca szText を自分自身にコピーしていたバグを修正
 			auto_sprintf(
 				szText,
 				_T("%ts(%d,%d): "),
@@ -1452,7 +1446,7 @@ void DlgFuncList::SetTree(bool tagjump, bool nolabel)
 			//	※が、2段階深くなることは考慮していないので注意。
 			//	　もちろん、2段階以上浅くなることは考慮済み。
 
-			// 2002.11.10 Moca 追加 確保したサイズでは足りなくなった。再確保
+			// 確保したサイズでは足りなくなった。再確保
 			if (nStackDepth <= pFuncInfo->nDepth + 1) {
 				nStackDepth = pFuncInfo->nDepth + 4; // 多めに確保しておく
 				HTREEITEM* phTi;
@@ -1501,7 +1495,7 @@ void DlgFuncList::SetTree(bool tagjump, bool nolabel)
 		}
 
 		// クリップボードコピー用テキストを作成する
-		//	2003.06.22 Moca dummy要素はツリーに入れるがTAGJUMPには加えない
+		// dummy要素はツリーに入れるがTAGJUMPには加えない
 		if (pFuncInfo->IsAddClipText()) {
 			NativeT text;
 			if (tagjump) {
@@ -1770,7 +1764,6 @@ BOOL DlgFuncList::OnInitDialog(
 	LV_COLUMN	col;
 	HWND hwndList = ::GetDlgItem(hwndDlg, IDC_LIST_FL);
 	::SetWindowLongPtr(hwndList, GWL_STYLE, ::GetWindowLongPtr(hwndList, GWL_STYLE) | LVS_SHOWSELALWAYS);
-	// 2005.10.21 zenryaku 1行選択
 	ListView_SetExtendedListViewStyle(hwndList,
 		ListView_GetExtendedListViewStyle(hwndList) | LVS_EX_FULLROWSELECT | LVS_EX_INFOTIP);
 
@@ -1974,8 +1967,7 @@ BOOL DlgFuncList::OnBnClicked(int wID)
 		return TRUE;
 	case IDC_BUTTON_HELP:
 		//「アウトライン解析」のヘルプ
-		// Apr. 5, 2001 JEPRO 修正漏れを追加 (Stonee, 2001/03/12 第四引数を、機能番号からヘルプトピック番号を調べるようにした)
-		MyWinHelp(GetHwnd(), HELP_CONTEXT, ::FuncID_To_HelpContextID(F_OUTLINE));	// 2006.10.10 ryoji MyWinHelpに変更に変更
+		MyWinHelp(GetHwnd(), HELP_CONTEXT, ::FuncID_To_HelpContextID(F_OUTLINE));
 		return TRUE;
 	case IDOK:
 		return OnJump();
@@ -2238,9 +2230,7 @@ void DlgFuncList::SortListView(
 
 		ListView_SortItems(hwndList, (bSortDesc ? CompareFunc_Desc : CompareFunc_Asc), (LPARAM)this);
 	}
-	//	2005.04.23 zenryaku 選択された項目が見えるようにする
-
-	//	Apr. 29, 2005 genta 一旦一番下にスクロールさせる
+	//	一旦一番下にスクロールさせる
 	ListView_EnsureVisible(
 		hwndList,
 		ListView_GetItemCount(hwndList) - 1,

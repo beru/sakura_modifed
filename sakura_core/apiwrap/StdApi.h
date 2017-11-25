@@ -138,7 +138,6 @@ namespace ApiWrap {
 using namespace ApiWrap;
 
 
-// Sep. 22, 2003 MIK
 // 古いSDK対策．新しいSDKでは不要
 #ifndef _WIN64
 #ifndef DWORD_PTR

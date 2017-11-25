@@ -85,9 +85,9 @@ protected:
 
 	// カラー用データ
 	DWORD			dwCustColors[16];						// フォントDialogカスタムパレット
-	int				nSet[ MAX_KEYWORDSET_PER_TYPE ];		// keyword set index  2005.01.13 MIK
+	int				nSet[ MAX_KEYWORDSET_PER_TYPE ];		// keyword set index
 	int				nCurrentColorType;					// 現在選択されている色タイプ
-	KeywordSetMgr*	pKeywordSetMgr;						// メモリ削減のためポインタに  Mar. 31, 2003 genta
+	KeywordSetMgr*	pKeywordSetMgr;
 	bool			bChangeKeywordSet;
 
 	// フォント表示用データ
@@ -199,7 +199,7 @@ protected:
 	bool Import(HWND);											// インポート
 	bool Export(HWND);											// エクスポート
 private:
-	BOOL RegexKakomiCheck(const wchar_t* s);	//@@@ 2001.11.17 add MIK
+	BOOL RegexKakomiCheck(const wchar_t* s);
 
 	bool CheckKeywordList(HWND, const TCHAR*, int);
 

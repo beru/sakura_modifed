@@ -9,25 +9,22 @@
 #include "sakura_rc.h"
 #include "sakura.hh"
 
-//@@@ 2001.02.04 Start by MIK: Popup Help
 static const DWORD p_helpids[] = {	//10500
 	IDC_EDIT_REGEXPLIB,					HIDC_EDIT_REGEXPLIB,				// 正規表現ライブラリ選択	// 2007.09.02 genta
 	IDC_LABEL_REGEXP,					HIDC_EDIT_REGEXPLIB,
 	IDC_LABEL_REGEXP_VER,				HIDC_LABEL_REGEXPVER,				// 正規表現ライブラリバージョン	// 2007.09.02 genta
-	IDC_CHECK_bCaretTextForSearch,		HIDC_CHECK_bCaretTextForSearch,		// カーソル位置の文字列をデフォルトの検索文字列にする	// 2006.08.23 ryoji
-	IDC_CHECK_INHERIT_KEY_OTHER_VIEW,	HIDC_CHECK_INHERIT_KEY_OTHER_VIEW,	// 次・前検索で他のビューの検索条件を引き継ぐ	// 2011.12.18 Moca
+	IDC_CHECK_bCaretTextForSearch,		HIDC_CHECK_bCaretTextForSearch,		// カーソル位置の文字列をデフォルトの検索文字列にする
+	IDC_CHECK_INHERIT_KEY_OTHER_VIEW,	HIDC_CHECK_INHERIT_KEY_OTHER_VIEW,	// 次・前検索で他のビューの検索条件を引き継ぐ
 	IDC_CHECK_bGrepExitConfirm,			HIDC_CHECK_bGrepExitConfirm,		// GREPの保存確認
 	IDC_CHECK_GTJW_RETURN,				HIDC_CHECK_GTJW_RETURN,				// タグジャンプ（エンターキー）
 	IDC_CHECK_GTJW_LDBLCLK,				HIDC_CHECK_GTJW_LDBLCLK,			// タグジャンプ（ダブルクリック）
-	IDC_CHECK_GREPREALTIME,				HIDC_CHECK_GREPREALTIME,			// リアルタイムで表示する	// 2006.08.08 ryoji
+	IDC_CHECK_GREPREALTIME,				HIDC_CHECK_GREPREALTIME,			// リアルタイムで表示する
 	IDC_COMBO_TAGJUMP,					HIDC_COMBO_TAGJUMP,					// タグファイルの検索
 	IDC_COMBO_KEYWORD_TAGJUMP,			HIDC_COMBO_KEYWORD_TAGJUMP,			// タグファイルの検索
 //	IDC_STATIC,							-1,
 	0, 0
 };
-//@@@ 2001.02.04 End
 
-//	From Here Jun. 2, 2001 genta
 /*!
 	@param hwndDlg ダイアログボックスのWindow Handle
 	@param uMsg メッセージ
@@ -43,7 +40,6 @@ INT_PTR CALLBACK PropGrep::DlgProc_page(
 {
 	return DlgProc(reinterpret_cast<pDispatchPage>(&PropGrep::DispatchEvent), hwndDlg, uMsg, wParam, lParam);
 }
-//	To Here Jun. 2, 2001 genta
 
 // メッセージ処理
 INT_PTR PropGrep::DispatchEvent(
@@ -96,23 +92,19 @@ INT_PTR PropGrep::DispatchEvent(
 		}
 		break;
 
-//@@@ 2001.02.04 Start by MIK: Popup Help
 	case WM_HELP:
 		{
 			HELPINFO* p = (HELPINFO*) lParam;
-			MyWinHelp((HWND)p->hItemHandle, HELP_WM_HELP, (ULONG_PTR)(LPVOID)p_helpids);	// 2006.10.10 ryoji MyWinHelpに変更に変更
+			MyWinHelp((HWND)p->hItemHandle, HELP_WM_HELP, (ULONG_PTR)(LPVOID)p_helpids);
 		}
 		return TRUE;
 		// NOTREACHED
 		//break;
-//@@@ 2001.02.04 End
 
-//@@@ 2001.12.22 Start by MIK: Context Menu Help
 	// Context Menu
 	case WM_CONTEXTMENU:
-		MyWinHelp(hwndDlg, HELP_CONTEXTMENU, (ULONG_PTR)(LPVOID)p_helpids);	// 2006.10.10 ryoji MyWinHelpに変更に変更
+		MyWinHelp(hwndDlg, HELP_CONTEXTMENU, (ULONG_PTR)(LPVOID)p_helpids);
 		return TRUE;
-//@@@ 2001.12.22 End
 
 	}
 	return FALSE;
@@ -127,7 +119,7 @@ struct TagJumpMode {
 void PropGrep::SetData(HWND hwndDlg)
 {
 	auto& csSearch = common.search;
-	// 2006.08.23 ryoji カーソル位置の文字列をデフォルトの検索文字列にする
+	// カーソル位置の文字列をデフォルトの検索文字列にする
 	CheckDlgButtonBool(hwndDlg, IDC_CHECK_bCaretTextForSearch, csSearch.bCaretTextForSearch);
 	CheckDlgButtonBool(hwndDlg, IDC_CHECK_INHERIT_KEY_OTHER_VIEW, csSearch.bInheritKeyOtherView);
 
@@ -135,7 +127,7 @@ void PropGrep::SetData(HWND hwndDlg)
 	CheckDlgButtonBool(hwndDlg, IDC_CHECK_bGrepExitConfirm, csSearch.bGrepExitConfirm);
 
 	// Grep結果のリアルタイム表示
-	CheckDlgButtonBool(hwndDlg, IDC_CHECK_GREPREALTIME, csSearch.bGrepRealTimeView);	// 2006.08.08 ryoji ID修正
+	CheckDlgButtonBool(hwndDlg, IDC_CHECK_GREPREALTIME, csSearch.bGrepRealTimeView);
 
 	
 	// Grepモード: エンターキーでタグジャンプ
@@ -194,7 +186,7 @@ int PropGrep::GetData(HWND hwndDlg)
 {
 	auto& csSearch = common.search;
 
-	// 2006.08.23 ryoji カーソル位置の文字列をデフォルトの検索文字列にする
+	// カーソル位置の文字列をデフォルトの検索文字列にする
 	csSearch.bCaretTextForSearch = DlgButton_IsChecked(hwndDlg, IDC_CHECK_bCaretTextForSearch);
 	csSearch.bInheritKeyOtherView = DlgButton_IsChecked(hwndDlg, IDC_CHECK_INHERIT_KEY_OTHER_VIEW);
 
@@ -202,7 +194,7 @@ int PropGrep::GetData(HWND hwndDlg)
 	csSearch.bGrepExitConfirm = DlgButton_IsChecked(hwndDlg, IDC_CHECK_bGrepExitConfirm);
 
 	// Grep結果のリアルタイム表示
-	csSearch.bGrepRealTimeView = DlgButton_IsChecked(hwndDlg, IDC_CHECK_GREPREALTIME);	// 2006.08.08 ryoji ID修正
+	csSearch.bGrepRealTimeView = DlgButton_IsChecked(hwndDlg, IDC_CHECK_GREPREALTIME);
 
 	// Grepモード: エンターキーでタグジャンプ
 	csSearch.bGTJW_Return = DlgButton_IsChecked(hwndDlg, IDC_CHECK_GTJW_RETURN);
