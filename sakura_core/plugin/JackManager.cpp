@@ -82,13 +82,13 @@ ERegisterPlugResult JackManager::RegisterPlug(
 	switch (ppId) {
 	case PP_OUTLINE:					// アウトライン解析方法を追加
 		{
-			OutlineType nMethod = Plug::GetOutlineType(plug->GetFunctionCode());	// 2011/8/20 syat プラグ複数化のためGetOutlineType仕様変更// 2010/5/1 Uchi 関数化
+			OutlineType nMethod = Plug::GetOutlineType(plug->GetFunctionCode());
 			PropTypesScreen::AddOutlineMethod(nMethod, plug->sLabel.c_str());
 		}
 		break;
 	case PP_SMARTINDENT:				// スマートインデント方法を追加
 		{
-			SmartIndentType nMethod = Plug::GetSmartIndentType(plug->GetFunctionCode());	// 2011/8/20 syat プラグ複数化のためGetOutlineType仕様変更// 2010/5/1 Uchi 関数化
+			SmartIndentType nMethod = Plug::GetSmartIndentType(plug->GetFunctionCode());
 			PropTypesScreen::AddSIndentMethod(nMethod, plug->sLabel.c_str());
 		}
 		break;

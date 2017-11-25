@@ -89,7 +89,6 @@ bool Color_Found::BeginColor(const StringRef& str, size_t nPos)
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//        検索ヒットフラグ設定 -> bSearchStringMode            //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-	// 2002.02.08 hor 正規表現の検索文字列マークを少し高速化
 	if (pView->curSearchOption.bWordOnly || (nSearchResult && nSearchStart < (int)nPos)) {
 		nSearchResult = pView->IsSearchString(
 			str,

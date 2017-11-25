@@ -96,7 +96,7 @@ void EditView::RedrawAll()
 	AdjustScrollBars();
 }
 
-// 2001/06/21 Start by asa-o 再描画
+// 再描画
 void EditView::Redraw()
 {
 	if (!GetHwnd()) {
@@ -339,7 +339,6 @@ Color3Setting EditView::GetColorIndex(
 	const Layout* pLayoutLineFirst = pLayout;
 	int nLineNumFirst = nLineNum;
 	{
-		// 2002/2/10 aroka CMemory変更
 		csInfo.pLineOfLogic = pLayout->GetDocLineRef()->GetPtr();
 
 		// 論理行の最初のレイアウト情報を取得 -> pLayoutLineFirst
@@ -761,8 +760,8 @@ void EditView::OnPaint2(HDC _hdc, PAINTSTRUCT* pPs, BOOL bDrawFromComptibleBmp)
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                       ルーラー描画                          //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-	if (pPs->rcPaint.top < GetTextArea().GetRulerHeight()) { // ルーラーが再描画範囲にあるときのみ再描画する 2002.02.25 Add By KK
-		GetRuler().SetRedrawFlag(); // 2002.02.25 Add By KK ルーラー全体を描画。
+	if (pPs->rcPaint.top < GetTextArea().GetRulerHeight()) { // ルーラーが再描画範囲にあるときのみ再描画する
+		GetRuler().SetRedrawFlag(); // ルーラー全体を描画。
 		GetRuler().DispRuler(gr);
 	}
 

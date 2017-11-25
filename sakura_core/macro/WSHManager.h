@@ -32,8 +32,5 @@ protected:
 	std::wstring source;
 	std::wstring engineName;
 	WSHIfObj::List params;
-	// 2009.10.29 syat WSHIfObj‚ÖˆÚ“®
-	////	2007.07.20 genta : flags’Ç‰Á
-	//static void ReadyCommands(CIfObj *Object, MacroFuncInfo *Info, int flags);
 };
 

@@ -6,7 +6,7 @@ class OpeBuf;
 
 #include <vector>
 #include "_main/global.h"
-class OpeBlk;/// 2002/2/10 aroka
+class OpeBlk;
 
 
 /*-----------------------------------------------------------------------

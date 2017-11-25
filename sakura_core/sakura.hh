@@ -409,18 +409,16 @@
 #define HIDC_CHECK_BACKUP_SEC					10016 //バックアップファイル名（秒）
 #define HIDC_CHECK_BACKUPDIALOG					10017 //作成前に確認
 #define HIDC_CHECK_BACKUPFOLDER					10018 //指定フォルダに作成
-#define HIDC_CHECK_BACKUP_DUSTBOX				10019 //バックアップをごみ箱に放り込む	//@@@ 2002.01.03
-#define HIDC_CHECK_BACKUP_FOLDER_RM				10020 //指定フォルダに作成(リムーバブルメディアのみ)	// 2010/5/27 Uchi
+#define HIDC_CHECK_BACKUP_DUSTBOX				10019 //バックアップをごみ箱に放り込む
+#define HIDC_CHECK_BACKUP_FOLDER_RM				10020 //指定フォルダに作成(リムーバブルメディアのみ)
 #define HIDC_EDIT_BACKUPFOLDER					10040 //保存フォルダ名
 #define HIDC_EDIT_BACKUP_3						10041 //世代数
 #define HIDC_EDIT_BACKUPFILE					10042 //保存ファイル名
 #define HIDC_RADIO_BACKUP_TYPE1					10060 //バックアップの種類（拡張子）
-//#define HIDC_RADIO_BACKUP_TYPE3					10061 //バックアップの種類（日付・時刻）
-//#define HIDC_RADIO_BACKUP_TYPE2					10062 //バックアップの種類（連番）
 #define HIDC_RADIO_BACKUP_TYPE2NEWHID			10061 //バックアップの種類（日付・時刻）
 #define HIDC_RADIO_BACKUP_TYPE3NEWHID			10062 //バックアップの種類（連番）
-#define HIDC_RADIO_BACKUP_DATETYPE1				10063 //付加する日時の種類（作成日時）//Jul. 05, 2001 JEPRO 追加
-#define HIDC_RADIO_BACKUP_DATETYPE2				10064 //付加する日時の種類（更新日時）//Jul. 05, 2001 JEPRO 追加
+#define HIDC_RADIO_BACKUP_DATETYPE1				10063 //付加する日時の種類（作成日時）
+#define HIDC_RADIO_BACKUP_DATETYPE2				10064 //付加する日時の種類（更新日時）
 #define HIDC_CHECK_BACKUP_RETAINEXT				10065 //元の拡張子を保存
 #define HIDC_CHECK_BACKUP_ADVANCED				10066 //詳細設定
 #define HIDC_RADIO_BACKUP_DATETYPE1A			10067 //付加する日時の種類（作成日時）※詳細設定ON用
@@ -450,7 +448,7 @@
 #define HIDC_CHECK_bNotOverWriteCRLF			10214 //改行は上書きしない
 #define HIDC_CHECK_bOverWriteFixMode			10218 //文字幅に合わせてスペースを詰める
 #define HIDC_CHECK_bOverWriteBoxDelete			10219 //矩形入力で選択範囲を削除する
-#define HIDC_CHECK_CONVERTEOLPASTE				10217 //改行コードを変換して貼り付ける // 2009.02.28 salarm
+#define HIDC_CHECK_CONVERTEOLPASTE				10217 //改行コードを変換して貼り付ける
 #define HIDC_RADIO_CURDIR						10220 //カレントフォルダ
 #define HIDC_RADIO_MRUDIR						10221 //最近使ったフォルダ
 #define HIDC_RADIO_SELDIR						10222 //指定フォルダ
@@ -495,22 +493,16 @@
 #define HIDC_LABEL_REGEXPVER					10515 //正規表現ライブラリ選択
 #define HIDC_COMBO_TAGJUMP						10516 //タグファイルの検索
 #define HIDC_COMBO_KEYWORD_TAGJUMP				10517 //タグファイルの検索
-//#define HIDC_BUTTON_HOKANFILE_REF				10600 //入力補完 単語ファイル参照			//Jul. 05, 2001 JEPRO タイプ別に移動
-//#define HIDC_BUTTON_KEYWORDHELPFILE_REF			10601 //キーワードヘルプファイル参照	//Jul. 05, 2001 JEPRO タイプ別に移動
 #define HIDC_BUTTON_OPENHELP1					10602 //外部ヘルプファイル参照
 #define HIDC_BUTTON_OPENEXTHTMLHELP				10603 //外部HTMLファイル参照
 #define HIDC_BUTTON_KEYWORDHELPFONT				11611 //キーワードヘルプのフォント	//重複回避
 #define HIDC_CHECK_USEHOKAN						10610 //逐次入力補完
-//#define HIDC_CHECK_HOKANLOHICASE				10611 //入力補完の英大文字小文字			//Jul. 05, 2001 JEPRO タイプ別に移動
 #define HIDC_CHECK_m_bHokanKey_RETURN			10612 //候補決定キー（Enter）
 #define HIDC_CHECK_m_bHokanKey_TAB				10613 //候補決定キー（Tab）
 #define HIDC_CHECK_m_bHokanKey_RIGHT			10614 //候補決定キー（→）
 #define HIDC_CHECK_m_bHokanKey_SPACE			10615 //候補決定キー（Space）
-//#define HIDC_CHECK_USEKEYWORDHELP				10616 //キーワードヘルプ機能				//Jul. 05, 2001 JEPRO タイプ別に移動
 #define HIDC_CHECK_HTMLHELPISSINGLE				10617 //ビューアの複数起動
-#define HIDC_CHECK_CLICKKEYSEARCH				10618 //キャレット位置の単語を辞書検索		// 2006.03.24 fon
-//#define HIDC_EDIT_HOKANFILE						10640 //単語ファイル名					//Jul. 05, 2001 JEPRO タイプ別に移動
-//#define HIDC_EDIT_KEYWORDHELPFILE				10641 //辞書ファイル名						//Jul. 05, 2001 JEPRO タイプ別に移動
+#define HIDC_CHECK_CLICKKEYSEARCH				10618 //キャレット位置の単語を辞書検索
 #define HIDC_EDIT_EXTHELP1						10642 //外部ヘルプファイル名
 #define HIDC_EDIT_EXTHTMLHELP					10643 //外部HTMLヘルプファイル名
 #define HIDC_EDIT_MIGEMO_DLL					10650 //Migemo DLLファイル名
@@ -602,7 +594,7 @@
 #define HIDC_CHECK_OpenNewWin					11276 //外部から起動するときは新しいウィンドウ開く	// 2009.06.19
 #define HIDC_BUTTON_TABFONT						11277 //タブフォント
 #define HIDC_CHECK_INHERIT_KEY_OTHER_VIEW		11278 //次・前検索で他のビューの検索条件を引き継ぐ
-#define HIDC_CHECK_DispTabClose					11279 //タブを閉じるボタン表示	// 2012.04.14 syat
+#define HIDC_CHECK_DispTabClose					11279 //タブを閉じるボタン表示
 #define HIDC_CHECK_TAB_MULTILINE				11280 //タブ多段
 #define HIDC_COMBO_TAB_POSITION					11281 //タブ表示位置
 #define HIDC_CHECK_WORDWRAP						11310 //英文ワードラップ
@@ -942,7 +934,6 @@
 #define HIDC_JUMP_RADIO_LINENUM_CRLF	12808	//改行単位
 
 //バージョン情報
-//#define HIDC_ABOUT_BUTTON_CONTACT	12900	//	del 2008/7/4 Uchi
 #define HIDOK_ABOUT					12901	//
 #define HIDC_ABOUT_EDIT_ABOUT		12902	//
 
@@ -955,7 +946,7 @@
 //オープンファイル
 #define HIDOK_OPENDLG	13100
 #define HIDCANCEL_OPENDLG	13101
-#define HIDC_OPENDLG_BUTTON_HELP 13102	//ヘルプ	//@@@ 2002.01.10
+#define HIDC_OPENDLG_BUTTON_HELP 13102	//ヘルプ
 #define HIDC_OPENDLG_COMBO_CODE	13103	//文字コードセット
 #define HIDC_OPENDLG_COMBO_MRU	13104	//最近のファイル
 #define HIDC_OPENDLG_COMBO_OPENFOLDER	13105	//最近のフォルダ

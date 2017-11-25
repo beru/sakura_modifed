@@ -149,7 +149,7 @@ void Macro::AddLParam(
 		}
 		break;
 
-	case F_BOOKMARK_PATTERN:	//2002.02.08 hor
+	case F_BOOKMARK_PATTERN:
 	case F_SEARCH_NEXT:
 	case F_SEARCH_PREV:
 		{
@@ -528,7 +528,7 @@ bool Macro::HandleCommand(
 	case F_GOLINETOP_SEL:
 	case F_GOLINEEND:	// 行末に移動
 	case F_GOLINEEND_SEL:
-	case F_SELECT_COUNT_MODE:	// 文字カウントの方法を指定。数値は、0x0（変更せず取得のみ）、0x1（文字数）、0x2（バイト数）、0x3（文字数⇔バイト数トグル）	// 2009.07.06 syat
+	case F_SELECT_COUNT_MODE:	// 文字カウントの方法を指定。数値は、0x0（変更せず取得のみ）、0x1（文字数）、0x2（バイト数）、0x3（文字数⇔バイト数トグル）
 	case F_OUTLINE:	// アウトライン解析のアクションを指定。数値は、0x0（画面表示）、0x1（画面表示＆再解析）、0x2（画面表示トグル）
 	case F_CHANGETYPE:
 	case F_TOGGLE_KEY_SEARCH:
@@ -687,7 +687,7 @@ bool Macro::HandleCommand(
 		}
 		break;
 	// 一つ目の引数は文字列、二つ目の引数は数値
-	case F_BOOKMARK_PATTERN:	// 2002.02.08 hor
+	case F_BOOKMARK_PATTERN:
 		if (!arguments[0]) {
 			::MYMESSAGEBOX(
 				NULL,

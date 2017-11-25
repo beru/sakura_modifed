@@ -21,7 +21,7 @@ public:
 	*/
 	void Show(int, int, const TCHAR*, RECT* pRect = nullptr);	// Tipを表示
 	void Hide(void);	// Tipを消す
-	void GetWindowSize(LPRECT pRect);		// 2001/06/19 asa-o ウィンドウのサイズを得る
+	void GetWindowSize(LPRECT pRect);		// ウィンドウのサイズを得る
 
 	void ChangeFont(LOGFONT* lf) {
 		if (hFont) {
@@ -30,14 +30,14 @@ public:
 		hFont = ::CreateFontIndirect(lf);
 	}
 
-protected: // 2002/2/10 aroka アクセス権変更
+protected:
 	HFONT		hFont;
 
 public:
 	NativeW		key;			// キーの内容データ
 	bool		KeyWasHit;		// キーがヒットしたか
-	int			nSearchLine;	// 辞書のヒット行	// 2006.04.10 fon
-	int			nSearchDict;	// ヒット辞書番号	// 2006.04.10 fon
+	int			nSearchLine;	// 辞書のヒット行
+	int			nSearchDict;	// ヒット辞書番号
 
 	NativeT		info;			// Tipの内容データ
 	bool		bAlignLeft;		// 右側揃えでチップを表示

@@ -143,7 +143,7 @@ void DlgReplace::SetData(void)
 	// 置換 ダイアログを自動的に閉じる
 	CheckButton(IDC_CHECK_bAutoCloseDlgReplace, csSearch.bAutoCloseDlgReplace);
 
-	// 先頭（末尾）から再検索 2002.01.26 hor
+	// 先頭（末尾）から再検索
 	CheckButton(IDC_CHECK_SEARCHALL, csSearch.bSearchAll);
 
 	// クリップボードから貼り付ける？

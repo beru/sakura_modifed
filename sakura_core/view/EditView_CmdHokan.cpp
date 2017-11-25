@@ -258,7 +258,7 @@ size_t EditView::HokanSearchByFile(
 			if (nRet != 0) continue;
 
 			// カーソル位置の単語は候補からはずす
-			if (ptCur.y == i && nWordBegin <= ptCur.x && ptCur.x <= nWordBegin + (int)nWordLen) {	// 2010.02.20 syat 修正// 2008.11.09 syat 修正
+			if (ptCur.y == i && nWordBegin <= ptCur.x && ptCur.x <= nWordBegin + (int)nWordLen) {
 				continue;
 			}
 

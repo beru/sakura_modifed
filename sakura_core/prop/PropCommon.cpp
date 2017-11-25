@@ -56,9 +56,8 @@ INT_PTR PropCommon::DlgProc(
 		}
 	}
 }
-//	To Here Jun. 2, 2001 genta
 
-// 独立ウィンドウ用 2013.3.14 aroka
+// 独立ウィンドウ用
 INT_PTR PropCommon::DlgProc2(
 	INT_PTR (PropCommon::*DispatchPage)(HWND, UINT, WPARAM, LPARAM),
 	HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam

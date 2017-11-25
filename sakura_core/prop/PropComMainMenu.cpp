@@ -296,7 +296,7 @@ INT_PTR PropMainMenu::DispatchEvent(
 					pFuncWk->sName = to_wchar(ptdi->item.pszText);
 				}
 				if (strNameOld != pFuncWk->sName) {
-					// ラベルを編集したらリソースからの文字列取得をやめる 2012.10.14 syat 各国語対応
+					// ラベルを編集したらリソースからの文字列取得をやめる
 					pFuncWk->nFunc = F_NODE;
 				}
 				ptdi->item.pszText = const_cast<TCHAR*>(MakeDispLabel(pFuncWk));
@@ -906,7 +906,7 @@ void PropMainMenu::SetData(HWND hwndDlg)
 			break;
 		case MainMenuType::Node:
 			pFuncWk->bIsNode = true;
-			// ラベル編集後のノードはiniから、それ以外はリソースからラベルを取得 2012.10.14 syat 各国語対応
+			// ラベル編集後のノードはiniから、それ以外はリソースからラベルを取得
 			if (pFuncWk->nFunc == F_NODE) {
 				pFuncWk->sName = RemoveAmpersand(pFunc->sName);
 			}else {
@@ -1004,7 +1004,7 @@ bool PropMainMenu::GetDataTree(
 			break;
 		default:
 			if (pFuncWk->bIsNode) {
-				// コマンド定義外のIDの場合、ノードとして扱う 2012.10.14 syat 各国語対応
+				// コマンド定義外のIDの場合、ノードとして扱う
 				pFunc->type = MainMenuType::Node;
 				pFunc->sName[0] = L'\0';	// 名前は、リソースから取得するため空白に設定
 				break;

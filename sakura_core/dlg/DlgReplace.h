@@ -34,10 +34,10 @@ public:
 	bool			bSelectedArea;		// 選択範囲内置換
 	bool			bNotifyNotFound;	// 検索／置換  見つからないときメッセージを表示
 	bool			bSelected;			// テキスト選択中か
-	int				nReplaceTarget;		// 置換対象		2001.12.03 hor
-	bool			bPaste;				// 貼り付け？	2001.12.03 hor
-	int				nReplaceCnt;		// すべて置換の実行結果		// 2002.02.08 hor
-	bool			bCanceled;			// すべて置換で中断したか	// 2002.02.08 hor
+	int				nReplaceTarget;		// 置換対象
+	bool			bPaste;				// 貼り付け？
+	int				nReplaceCnt;		// すべて置換の実行結果
+	bool			bCanceled;			// すべて置換で中断したか
 
 	Point			ptEscCaretPos_PHY;	// 検索/置換開始時のカーソル位置退避エリア
 

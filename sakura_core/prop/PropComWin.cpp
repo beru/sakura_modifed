@@ -369,12 +369,11 @@ int PropWin::GetData(HWND hwndDlg)
 	// アイコン付きメニュー
 	csWindow.bMenuIcon = DlgButton_IsChecked(hwndDlg, IDC_CHECK_bMenuIcon);
 
-	//	2001/06/20 Start by asa-o:	スクロールの同期
+	// スクロールの同期
 	csWindow.bSplitterWndVScroll = DlgButton_IsChecked(hwndDlg, IDC_CHECK_SplitterWndVScroll);
 	csWindow.bSplitterWndHScroll = DlgButton_IsChecked(hwndDlg, IDC_CHECK_SplitterWndHScroll);
-	//	2001/06/20 End
 
-	//	Apr. 05, 2003 genta ウィンドウキャプションのカスタマイズ
+	// ウィンドウキャプションのカスタマイズ
 	::DlgItem_GetText(hwndDlg, IDC_WINCAPTION_ACTIVE, csWindow.szWindowCaptionActive,
 		_countof(csWindow.szWindowCaptionActive));
 	::DlgItem_GetText(hwndDlg, IDC_WINCAPTION_INACTIVE, csWindow.szWindowCaptionInactive,

@@ -24,7 +24,7 @@
 static const size_t MENUBAR_MESSAGE_MAX_LEN = 30;
 
 //@@@ 2002.01.14 YAZAKI 印刷PreviewをPrintPreviewに独立させたことによる変更
-class PrintPreview; // 2002/2/10 aroka
+class PrintPreview;
 class DropTarget;
 class Plug;
 class EditDoc;
@@ -32,7 +32,7 @@ struct DllSharedData;
 
 
 // メインウィンドウ内コントロールID
-#define IDT_EDIT		455  // 20060128 aroka
+#define IDT_EDIT		455
 #define IDT_TOOLBAR		456
 #define IDT_CAPTION		457
 #define IDT_FIRST_IDLE	458
@@ -128,14 +128,14 @@ public:
 	void InitMenu(HMENU, UINT, BOOL);
 	void InitMenu_Function(HMENU , EFunctionCode, const wchar_t*, const wchar_t*);
 	bool InitMenu_Special(HMENU , EFunctionCode);
-	void InitMenubarMessageFont(void);			//	メニューバーへのメッセージ表示機能をEditWndより移管	//	Dec. 4, 2002 genta
-	LRESULT WinListMenu(HMENU hMenu, EditNode* pEditNodeArr, size_t nRowNum, bool bFull);	// ウィンドウ一覧メニュー作成処理		2006.03.23 fon
+	void InitMenubarMessageFont(void);			//	メニューバーへのメッセージ表示機能をEditWndより移管
+	LRESULT WinListMenu(HMENU hMenu, EditNode* pEditNodeArr, size_t nRowNum, bool bFull);	// ウィンドウ一覧メニュー作成処理
 	LRESULT PopupWinList(bool bMousePos);		// ウィンドウ一覧ポップアップ表示処理
 	void RegisterPluginCommand();				// プラグインコマンドをエディタに登録する
 	void RegisterPluginCommand(int id);			// プラグインコマンドをエディタに登録する
 	void RegisterPluginCommand(Plug* id);		// プラグインコマンドをエディタに登録する
 
-	void SetMenuFuncSel(HMENU hMenu, EFunctionCode nFunc, const wchar_t* sKey, bool flag);				// 表示の動的選択	2010/5/19 Uchi
+	void SetMenuFuncSel(HMENU hMenu, EFunctionCode nFunc, const wchar_t* sKey, bool flag);				// 表示の動的選択
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                           整形                              //
@@ -251,7 +251,7 @@ protected:
 	int	CreateFileDropDownMenu(HWND);	// 開く(ドロップダウン)
 
 	// タイマー
-	void Timer_ONOFF(bool); // 更新の開始／停止 20060128 aroka
+	void Timer_ONOFF(bool); // 更新の開始／停止
 
 	// メニュー
 	void CheckFreeSubMenu(HWND, HMENU, UINT);		// メニューバーの無効化を検査	2010/6/18 Uchi
@@ -261,7 +261,7 @@ protected:
 	// 周期内でnTimerCountをインクリメント
 	void IncrementTimerCount(int nInterval) {
 		++nTimerCount;
-		if (nInterval <= nTimerCount) { // 2012.11.29 aroka 呼び出し間隔のバグ修正
+		if (nInterval <= nTimerCount) {
 			nTimerCount = 0;
 		}
 	}

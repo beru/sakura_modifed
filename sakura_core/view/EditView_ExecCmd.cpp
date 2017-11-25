@@ -530,7 +530,7 @@ user_cancel:
 				auto_sprintf_s(endCode, LSW(STR_EDITVIEW_EXECCMD_RET), result);
 				oa.OutputW(endCode);
 			}
-			// 2004.09.20 naoh 終了コードが1以上の時はアウトプットをアクティブにする
+			// 終了コードが1以上の時はアウトプットをアクティブにする
 			if (!bToEditWindow && result > 0 && oa.IsActiveDebugWindow()) {
 				ActivateFrameWindow( GetDllShareData().handles.hwndDebug );
 			}

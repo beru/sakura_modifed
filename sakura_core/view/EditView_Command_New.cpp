@@ -262,12 +262,9 @@ void EditView::InsertData_CEditView(
 					++nModifyLayoutLinesOld;
 				}
 
-	//			ps.rcPaint.left = textArea.GetAreaLeft();
 				ps.rcPaint.left = 0;
 				ps.rcPaint.right = textArea.GetAreaRight();
 
-				// 2002.02.25 Mod By KK 次行 (ptInsertPos.y - textArea.GetViewTopLine() - 1); => (ptInsertPos.y - textArea.GetViewTopLine());
-				//ps.rcPaint.top = textArea.GetAreaTop() + GetTextMetrics().GetHankakuDy() * (ptInsertPos.y - textArea.GetViewTopLine() - 1);
 				ps.rcPaint.top = textArea.GenerateYPx(nStartLine);
 				ps.rcPaint.bottom = textArea.GenerateYPx(nStartLine + nModifyLayoutLinesOld);
 				nLayoutTop = nStartLine;
@@ -421,7 +418,7 @@ void EditView::DeleteData(
 
 	// テキストが選択されているか
 	if (selInfo.IsTextSelected()) {
-		WaitCursor waitCursor(this->GetHwnd());  // 2002.02.05 hor
+		WaitCursor waitCursor(this->GetHwnd());
 		if (!bDoing_UndoRedo) {	// Undo, Redoの実行中か
 			// 操作の追加
 			commander.GetOpeBlk()->AppendOpe(
@@ -435,7 +432,7 @@ void EditView::DeleteData(
 		if (selInfo.IsBoxSelecting()) {
 			pEditDoc->docEditor.SetModified(true, bRedraw);	//	2002/06/04 YAZAKI 矩形選択を削除したときに変更マークがつかない。
 
-			SetDrawSwitch(false);	// 2002.01.25 hor
+			SetDrawSwitch(false);
 			// 選択範囲のデータを取得
 			// 正常時はTRUE,範囲未選択の場合はFALSEを返す
 			// ２点を対角とする矩形を求める
@@ -480,7 +477,7 @@ void EditView::DeleteData(
 					);
 				}
 			}
-			SetDrawSwitch(true);	// 2002.01.25 hor
+			SetDrawSwitch(true);
 
 			// 行番号表示に必要な幅を設定
 			if (editWnd.DetectWidthOfLineNumberAreaAllPane(true)) {

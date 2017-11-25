@@ -189,10 +189,10 @@ void PropEdit::SetData(HWND hwndDlg)
 	// 矩形入力で選択範囲を削除する
 	CheckDlgButtonBool(hwndDlg, IDC_CHECK_bOverWriteBoxDelete, csEdit.bOverWriteFixMode);
 
-	// URLがクリックされたら選択するか	// 2007.02.11 genta このページへ移動
+	// URLがクリックされたら選択するか
 	::CheckDlgButton(hwndDlg, IDC_CHECK_bSelectClickedURL, csEdit.bSelectClickedURL);
 
-	// 改行コードを変換して貼り付ける	// 2009.02.28 salarm
+	// 改行コードを変換して貼り付ける
 	::CheckDlgButton(hwndDlg, IDC_CHECK_CONVERTEOLPASTE, csEdit.bConvertEOLPaste ? BST_CHECKED : BST_UNCHECKED);
 
 	// ファイルダイアログの初期位置
@@ -247,10 +247,10 @@ int PropEdit::GetData(HWND hwndDlg)
 	// 矩形入力で選択範囲を削除する
 	csEdit.bOverWriteBoxDelete = DlgButton_IsChecked(hwndDlg, IDC_CHECK_bOverWriteBoxDelete);
 
-	// URLがクリックされたら選択するか	// 2007.02.11 genta このページへ移動
+	// URLがクリックされたら選択するか
 	csEdit.bSelectClickedURL = DlgButton_IsChecked(hwndDlg, IDC_CHECK_bSelectClickedURL);
 
-	//	改行コードを変換して貼り付ける	// 2009.02.28 salarm
+	//	改行コードを変換して貼り付ける
 	csEdit.bConvertEOLPaste = DlgButton_IsChecked(hwndDlg, IDC_CHECK_CONVERTEOLPASTE);
 
 	if (DlgButton_IsChecked(hwndDlg, IDC_RADIO_CURDIR)) {

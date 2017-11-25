@@ -296,9 +296,7 @@ protected:
 	int  GetData(HWND);	// ダイアログデータの取得
 
 private:
-	//	Aug. 16, 2000 genta
 	void EnableBackupInput(HWND hwndDlg);	//	バックアップ設定のON/OFF
-	//	20051107 aroka
 	void UpdateBackupFile(HWND hwndDlg);	//	バックアップファイルの詳細設定
 };
 

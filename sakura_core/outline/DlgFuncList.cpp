@@ -663,7 +663,7 @@ void DlgFuncList::SetData()
 				memClipText.AppendStringLiteral(L"\r\n");
 			}
 		}
-		// 2002.02.08 hor Listは列幅調整とかを実行する前に表示しとかないと変になる
+		// Listは列幅調整とかを実行する前に表示しとかないと変になる
 		::ShowWindow(hwndList, SW_SHOW);
 		// 列の幅をデータに合わせて調整
 		ListView_SetColumnWidth(hwndList, FL_COL_ROW, LVSCW_AUTOSIZE);
@@ -702,7 +702,6 @@ void DlgFuncList::SetData()
 	// ダイアログを自動的に閉じるならフォーカス移動オプションは関係ない
 	EnableItem(IDC_CHECK_bFunclistSetFocusOnJump, !pShareData->common.outline.bAutoCloseDlgFuncList);
 
-	// 2002.02.08 hor
 	//（IDC_LIST_FLもIDC_TREE_FLも常に存在していて、nViewTypeによって、どちらを表示するかを選んでいる）
 	HWND hwndShow = (nViewType == VIEWTYPE_LIST)? hwndList: hwndTree;
 	::ShowWindow(hwndShow, SW_SHOW);
@@ -710,7 +709,6 @@ void DlgFuncList::SetData()
 		::SetFocus(hwndShow);
 	}
 
-	// 2002.02.08 hor
 	// 空行をどう扱うかのチェックボックスはブックマーク一覧のときだけ表示する
 	if (nListType == OutlineType::BookMark) {
 		EnableItem(IDC_CHECK_bMarkUpBlankLineEnable, true);
@@ -863,15 +861,15 @@ void DlgFuncList::SetTreeJava(
 	size_t nFuncColTop(INT_MAX);
 	TV_INSERTSTRUCT	tvis;
 	const TCHAR*	pPos;
-    TCHAR           szLabel[64 + 6];  // Jan. 07, 2001 genta クラス名エリアの拡大
-	HTREEITEM		htiGlobal = NULL;	// Jan. 04, 2001 genta C++と統合
+	TCHAR           szLabel[64 + 6];
+	HTREEITEM		htiGlobal = NULL;
 	HTREEITEM		htiClass;
 	HTREEITEM		htiItem;
 	HTREEITEM		htiSelectedTop = NULL;
 	HTREEITEM		htiSelected = NULL;
 	TV_ITEM			tvi;
 	int				nDummylParam = -64000;	// クラス名のダミーlParam ソートのため
-	TCHAR			szClassArr[MAX_JAVA_TREE_NEST][64];	// Jan. 04, 2001 genta クラス名エリアの拡大 // 2009.9.21 syat ネストが深すぎる際のBOF対策
+	TCHAR			szClassArr[MAX_JAVA_TREE_NEST][64];
 
 	EnableItem(IDC_BUTTON_COPY, true);
 
@@ -1003,8 +1001,6 @@ void DlgFuncList::SetTreeJava(
 
 				// クラス名のアイテムが登録されていないので登録
 				if (!htiClass) {
-					// 2002/10/28 frozen 上からここへ移動
-					// 2002/10/28 frozen +9は追加する文字列の最大長（" 名前空間"が最大）// 2011.09.25 syat プラグインによる拡張対応
 					std::vector<TCHAR> className(_tcslen(szClassArr[k]) + 1 + pFuncInfoArr->AppendTextLenMax());
 					TCHAR* pClassName = &className[0];
 					_tcscpy(pClassName, szClassArr[k]);
@@ -1040,16 +1036,11 @@ void DlgFuncList::SetTreeJava(
 			}
 			htiClass = htiParent;
 		}else {
-			//	Jan. 04, 2001 genta
 			//	Global空間の場合 (C++のみ)
 
-			// 2002/10/27 frozen ここから
-			// 2007.05.26 genta "__interface" をクラスに類する扱いにする
-			// 2011.09.25 syat プラグインで追加された要素をクラスに類する扱いにする
 			if (FL_OBJ_CLASS <= pFuncInfo->nInfo  && pFuncInfo->nInfo <= FL_OBJ_ELEMENT_MAX) {
 				htiClass = TVI_ROOT;
 			}else {
-			// 2002/10/27 frozen ここまで
 				if (!htiGlobal) {
 					TV_INSERTSTRUCT	tvg = {0};
 					std::tstring sGlobal = to_tchar(pFuncInfoArr->GetAppendText(FL_OBJ_GLOBAL).c_str());
@@ -1231,7 +1222,6 @@ void DlgFuncList::SetListVB(void)
 		item.lParam	= i;
 		ListView_InsertItem(hwndList, &item);
 
-		// 2010.03.17 syat 桁追加
 		// 行番号の表示 false=折り返し単位／true=改行単位
 		if (bLineNumIsCRLF) {
 			auto_sprintf(szText, _T("%d"), pFuncInfo->nFuncColCRLF);
@@ -1366,7 +1356,7 @@ void DlgFuncList::SetListVB(void)
 		}
 	}
 
-	// 2002.02.08 hor Listは列幅調整とかを実行する前に表示しとかないと変になる
+	// Listは列幅調整とかを実行する前に表示しとかないと変になる
 	::ShowWindow(hwndList, SW_SHOW);
 	// 列の幅をデータに合わせて調整
 	ListView_SetColumnWidth(hwndList, FL_COL_ROW, LVSCW_AUTOSIZE);
@@ -1778,7 +1768,6 @@ BOOL DlgFuncList::OnInitDialog(
 	col.iSubItem = FL_COL_ROW;
 	ListView_InsertColumn(hwndList, FL_COL_ROW, &col);
 
-	// 2010.03.17 syat 桁追加
 	col.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
 	col.fmt = LVCFMT_LEFT;
 	col.cx = nColWidthArr[FL_COL_COL];
@@ -2063,7 +2052,7 @@ BOOL DlgFuncList::OnNotify(WPARAM wParam, LPARAM lParam)
 			}
 			break;
 		case NM_DBLCLK:
-			// 2002.02.16 hor Treeのダブルクリックでフォーカス移動できるように 3/4
+			// Treeのダブルクリックでフォーカス移動できるように 3/4
 			OnJump();
 			bWaitTreeProcess=true;
 			::SetWindowLongPtr(GetHwnd(), DWLP_MSGRESULT, TRUE);	// ツリーの展開／縮小をしない
@@ -2077,7 +2066,7 @@ BOOL DlgFuncList::OnNotify(WPARAM wParam, LPARAM lParam)
 			Key2Command(((TV_KEYDOWN *)lParam)->wVKey);
 			return TRUE;
 		case NM_KILLFOCUS:
-			// 2002.02.16 hor Treeのダブルクリックでフォーカス移動できるように 4/4
+			// Treeのダブルクリックでフォーカス移動できるように 4/4
 			if (bWaitTreeProcess) {
 				if (pShareData->common.outline.bFunclistSetFocusOnJump) {
 					::SetFocus(pEditView->GetHwnd());
@@ -2190,20 +2179,14 @@ void DlgFuncList::SortListView(
 	LV_COLUMN col;
 	int col_no;
 
-	//	Apr. 23, 2005 genta 行番号を左端へ
-
-//	if (sortcol == 1) {
 	{
 		col_no = FL_COL_NAME;
 		col.mask = LVCF_TEXT;
-	// From Here 2001.12.03 hor
-	//	col.pszText = _T("関数名 *");
 		if (nListType == OutlineType::BookMark) {
 			col.pszText = const_cast<TCHAR*>(sortcol == col_no ? LS(STR_DLGFNCLST_LIST_TEXT_M) : LS(STR_DLGFNCLST_LIST_TEXT));
 		}else {
 			col.pszText = const_cast<TCHAR*>(sortcol == col_no ? LS(STR_DLGFNCLST_LIST_FUNC_M) : LS(STR_DLGFNCLST_LIST_FUNC));
 		}
-	// To Here 2001.12.03 hor
 		col.iSubItem = 0;
 		ListView_SetColumn(hwndList, col_no, &col);
 
@@ -2213,7 +2196,6 @@ void DlgFuncList::SortListView(
 		col.iSubItem = 0;
 		ListView_SetColumn(hwndList, col_no, &col);
 
-		// 2010.03.17 syat 桁追加
 		col_no = FL_COL_COL;
 		col.mask = LVCF_TEXT;
 		col.pszText = const_cast<TCHAR*>(sortcol == col_no ? LS(STR_DLGFNCLST_LIST_COL_M) : LS(STR_DLGFNCLST_LIST_COL));
@@ -2221,12 +2203,10 @@ void DlgFuncList::SortListView(
 		ListView_SetColumn(hwndList, col_no, &col);
 
 		col_no = FL_COL_REMARK;
-	// From Here 2001.12.07 hor
 		col.mask = LVCF_TEXT;
 		col.pszText = const_cast<TCHAR*>(sortcol == col_no ? LS(STR_DLGFNCLST_LIST_M) : _T(""));
 		col.iSubItem = 0;
 		ListView_SetColumn(hwndList, col_no, &col);
-	// To Here 2001.12.07 hor
 
 		ListView_SortItems(hwndList, (bSortDesc ? CompareFunc_Desc : CompareFunc_Asc), (LPARAM)this);
 	}
@@ -2433,7 +2413,7 @@ bool DlgFuncList::TagJumpTimer(
 BOOL DlgFuncList::OnJump(
 	bool bCheckAutoClose,
 	bool bFileJump
-	)	// 2002.02.08 hor 引数追加
+	)
 {
 	size_t nLineTo;
 	size_t nColTo;

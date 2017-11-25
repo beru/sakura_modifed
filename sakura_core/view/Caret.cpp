@@ -294,14 +294,13 @@ int Caret::MoveCursor(
 		editView.AdjustScrollBars();
 	}
 
-	// 横スクロールが発生したら、ルーラー全体を再描画 2002.02.25 Add By KK
+	// 横スクロールが発生したら、ルーラー全体を再描画
 	if (nScrollColNum != 0) {
 		// 次回DispRuler呼び出し時に再描画。（bDraw=falseのケースを考慮した。）
 		editView.GetRuler().SetRedrawFlag();
 	}
 
 	// カーソル行アンダーラインのON
-	//CaretUnderLineON(bDraw); //2002.02.27 Del By KK アンダーラインのちらつきを低減
 	if (bScroll) {
 		// キャレットの表示・更新
 		ShowEditCaret();
@@ -1076,7 +1075,7 @@ int Caret::MoveCursorProperly(
 		ptNewXY.y = 0;
 	}
 	
-	// 2011.12.26 EOF以下の行だった場合で矩形のときは、最終レイアウト行へ移動する
+	// EOF以下の行だった場合で矩形のときは、最終レイアウト行へ移動する
 	auto& layoutMgr = editDoc.layoutMgr;
 	auto& selectionInfo = editView.GetSelectionInfo();
 	if (1
@@ -1085,7 +1084,7 @@ int Caret::MoveCursorProperly(
 	) {
 		const Layout* layoutEnd = layoutMgr.GetBottomLayout();
 		bool bEofOnly = (layoutEnd && layoutEnd->GetLayoutEol() != EolType::None) || !layoutEnd;
-	 	// 2012.01.09 ぴったり[EOF]位置にある場合は位置を維持(1つ上の行にしない)
+	 	// ぴったり[EOF]位置にある場合は位置を維持(1つ上の行にしない)
 	 	if (1
 	 		&& bEofOnly
 	 		&& ptNewXY.y == layoutMgr.GetLineCount()

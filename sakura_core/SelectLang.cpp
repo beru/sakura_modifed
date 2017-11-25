@@ -382,4 +382,3 @@ HINSTANCE SelectLang::ChangeLang(UINT nIndex)
 	return psLangInfo->hInstance;
 }
 
-// [EOF]

@@ -120,7 +120,6 @@ public:
 		return oldIdx;
 	}
 
-	// Oct. 22, 2008 syat ˆêƒ}ƒNƒ“±“ü
 	MacroManagerBase* SetTempMacro(MacroManagerBase* newMacro);
 
 private:

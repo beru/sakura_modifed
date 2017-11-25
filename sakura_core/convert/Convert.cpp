@@ -93,8 +93,8 @@ void ConvertMediator::ConvMemory(
 	// 文字種変換、整形
 	case F_TABTOSPACE:				Converter_TabToSpace(nTabWidth, nStartColumn, bExtEol).CallConvert(pMemory);break;	// TAB→空白
 	case F_SPACETOTAB:				Converter_SpaceToTab(nTabWidth, nStartColumn, bExtEol).CallConvert(pMemory);break;	// 空白→TAB
-	case F_LTRIM:					Converter_Trim(true, bExtEol).CallConvert(pMemory);		break;	// 2001.12.03 hor
-	case F_RTRIM:					Converter_Trim(false, bExtEol).CallConvert(pMemory);	break;	// 2001.12.03 hor
+	case F_LTRIM:					Converter_Trim(true, bExtEol).CallConvert(pMemory);		break;
+	case F_RTRIM:					Converter_Trim(false, bExtEol).CallConvert(pMemory);	break;
 	// コード変換(xxx2SJIS)
 	// 自動判別でSJIS, Latin1, CESU8になった場合をサポート
 	case F_CODECNV_AUTO2SJIS:

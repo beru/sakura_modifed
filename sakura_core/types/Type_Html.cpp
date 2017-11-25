@@ -57,7 +57,7 @@ void DocOutline::MakeTopicList_html(FuncInfoArr* pFuncInfoArr)
 	size_t nLineCount;
 	/*	同じ見出し要素（hy）を次に上位レベルの見出し(hx)が現れるまで同じ深さにそろえます。
 		このため、見出しの深さを記憶しておきます。
-		下位レベルの見出しの深さは現れるまで不定で、前の章節での深さは影響しません。 2008.08.15 aroka
+		下位レベルの見出しの深さは現れるまで不定で、前の章節での深さは影響しません。
 	*/
 	int nHeadDepth[6 + 1];		// [0]は 空けておく
 	for (k=0; k<=6; ++k) {

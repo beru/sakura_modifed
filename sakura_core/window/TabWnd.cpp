@@ -2601,7 +2601,7 @@ LRESULT TabWnd::TabListMenu(POINT pt, bool bSel/* = true*/, bool bFull/* = false
 				++nSelfTab;
 			}
 			// 表示文字でソートする
-			if (nSelfTab > 0 && csTabBar.bSortTabList)	// 2006.03.23 fon 変更
+			if (nSelfTab > 0 && csTabBar.bSortTabList)
 				qsort(pData, nSelfTab, sizeof(pData[0]), compTABMENU_DATA);
 		}
 

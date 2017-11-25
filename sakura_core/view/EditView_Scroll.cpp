@@ -269,10 +269,8 @@ void EditView::AdjustScrollBars()
 		::SetScrollInfo(hwndVScrollBar, SB_CTL, &si, TRUE);
 		this->nVScrollRate = nVScrollRate;				// 垂直スクロールバーの縮尺
 		
-		//	Nov. 16, 2002 genta
 		//	縦スクロールバーがDisableになったときは必ず全体が画面内に収まるように
 		//	スクロールさせる
-		//	2005.11.01 aroka 判定条件誤り修正 (バーが消えてもスクロールしない)
 		bool bEnable = (GetTextArea().nViewRowNum < (int)nAllLines);
 		if (bEnable != (::IsWindowEnabled(hwndVScrollBar) != 0)) {
 			::EnableWindow(hwndVScrollBar, bEnable? TRUE: FALSE);	// SIF_DISABLENOSCROLL 誤動作時の強制切替
@@ -292,7 +290,6 @@ void EditView::AdjustScrollBars()
 		si.nTrackPos = 1;
 		::SetScrollInfo(hwndHScrollBar, SB_CTL, &si, TRUE);
 
-		//	2006.1.28 aroka 判定条件誤り修正 (バーが消えてもスクロールしない)
 		bool bEnable = (GetTextArea().nViewColNum < (int)GetRightEdgeForScrollBar());
 		if (bEnable != (::IsWindowEnabled(hwndHScrollBar) != 0)) {
 			::EnableWindow(hwndHScrollBar, bEnable? TRUE: FALSE);	// SIF_DISABLENOSCROLL 誤動作時の強制切替
@@ -439,7 +436,6 @@ int EditView::ScrollAtH(int nPos)
 			::UpdateWindow(GetHwnd());
 		}
 	}
-	//	2006.1.28 aroka 判定条件誤り修正 (バーが消えてもスクロールしない)
 	// 先にAdjustScrollBarsを呼んでしまうと、二度目はここまでこないので、
 	// GetRuler().DispRulerが呼ばれない。そのため、順序を入れ替えた。
 	GetRuler().SetRedrawFlag(); // ルーラーを再描画する。

@@ -967,7 +967,7 @@ void EditView::OnMOUSEMOVE(WPARAM fwKeys, int xPos_, int yPos_)
 		// マウスによる範囲選択中でない場合
 		POINT		po;
 		::GetCursorPos(&po);
-		//	2001/06/18 asa-o: 補完ウィンドウが表示されていない
+		// 補完ウィンドウが表示されていない
 		if (!bHokan) {
 			// 辞書Tipが起動されている
 			if (dwTipTimer == 0) {
@@ -994,7 +994,7 @@ void EditView::OnMOUSEMOVE(WPARAM fwKeys, int xPos_, int yPos_)
 			}
 		}else {
 			// 行選択エリア?
-			if (ptMouse.x < textArea.GetAreaLeft() || ptMouse.y < textArea.GetAreaTop()) {	//	2002/2/10 aroka
+			if (ptMouse.x < textArea.GetAreaLeft() || ptMouse.y < textArea.GetAreaTop()) {
 				// 矢印カーソル
 				if (ptMouse.y >= textArea.GetAreaTop()) {
 					::SetCursor(::LoadCursor(G_AppInstance(), MAKEINTRESOURCE(IDC_CURSOR_RVARROW)));
@@ -1535,7 +1535,7 @@ void EditView::OnLBUTTONDBLCLK(WPARAM fwKeys, int _xPos , int _yPos)
 			}
 			{
 				// URLを開く
-				// 2009.05.21 syat UNCパスだと1分以上無応答になることがあるのでスレッド化
+				// UNCパスだと1分以上無応答になることがあるのでスレッド化
 				WaitCursor waitCursor(GetHwnd());	// カーソルを砂時計にする
 
 				unsigned int nThreadId;
@@ -1558,14 +1558,14 @@ void EditView::OnLBUTTONDBLCLK(WPARAM fwKeys, int _xPos , int _yPos)
 		}
 
 		// GREP出力モードまたはデバッグモード かつ マウス左ボタンダブルクリックでタグジャンプ の場合
-		//	2004.09.20 naoh 外部コマンドの出力からTagjumpできるように
+		// 外部コマンドの出力からTagjumpできるように
 		if (1
 			&& (EditApp::getInstance().pGrepAgent->bGrepMode || AppMode::getInstance().IsDebugMode())
 			&& GetDllShareData().common.search.bGTJW_DoubleClick
 		) {
 			// タグジャンプ機能
 			if (GetCommander().Command_TagJump()) {
-				// 2013.05.27 タグジャンプ失敗時は通常の処理を実行する
+				// タグジャンプ失敗時は通常の処理を実行する
 				return;
 			}
 		}

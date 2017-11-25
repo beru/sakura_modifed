@@ -22,7 +22,7 @@ public:
 	*/
 	SplitterWnd();
 	~SplitterWnd();
-private: // 2002/2/3 aroka
+private:
 	/*
 	||  Attributes & Operations
 	*/
@@ -39,7 +39,7 @@ private: // 2002/2/3 aroka
 	int				nDragPosX;			// ドラッグ位置Ｘ
 	int				nDragPosY;			// ドラッグ位置Ｙ
 	int				nActivePane;		// アクティブなペイン
-public: // 2002/2/3 aroka
+public:
 	HWND Create(HINSTANCE, HWND, EditWnd* pEditWnd);	// 初期化
 	void SetChildWndArr(HWND*);	// 子ウィンドウの設定 
 	void DoSplit(int, int);		// ウィンドウの分割
@@ -53,8 +53,8 @@ public: // 2002/2/3 aroka
 	void HSplitOnOff(void);		// 横分割ＯＮ／ＯＦＦ
 	void VHSplitOnOff(void);	// 縦横分割ＯＮ／ＯＦＦ
 //	LRESULT DispatchEvent(HWND, UINT, WPARAM, LPARAM);	// ダイアログのメッセージ処理
-	int GetAllSplitRows() { return nAllSplitRows;} // 2002/2/3 aroka
-	int GetAllSplitCols() { return nAllSplitCols;} // 2002/2/3 aroka
+	int GetAllSplitRows() { return nAllSplitRows;}
+	int GetAllSplitCols() { return nAllSplitCols;}
 protected:
 	// 仮想関数
 	virtual LRESULT DispatchEvent_WM_APP(HWND, UINT, WPARAM, LPARAM);	// アプリケーション定義のメッセージ(WM_APP <= msg <= 0xBFFF)

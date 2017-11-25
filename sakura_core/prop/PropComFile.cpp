@@ -25,7 +25,7 @@ static const DWORD p_helpids[] = {	//01310
 	IDC_EDIT_nDropFileNumMax,				HIDC_EDIT_nDropFileNumMax,				// ファイルドロップ最大数
 	IDC_SPIN_AUTOBACKUP_INTERVAL,			HIDC_EDIT_AUTOBACKUP_INTERVAL,
 	IDC_SPIN_nDropFileNumMax,				HIDC_EDIT_nDropFileNumMax,
-	IDC_CHECK_RestoreBookmarks,				HIDC_CHECK_RestoreBookmarks,			// 2002.01.16 hor ブックマークの復元
+	IDC_CHECK_RestoreBookmarks,				HIDC_CHECK_RestoreBookmarks,			// ブックマークの復元
 	IDC_CHECK_QueryIfCodeChange,			HIDC_CHECK_QueryIfCodeChange,			// 前回と異なる文字コードのとき問い合わせを行う
 	IDC_CHECK_AlertIfFileNotExist,			HIDC_CHECK_AlertIfFileNotExist,			// 開こうとしたファイルが存在しないとき警告する
 	IDC_CHECK_ALERT_IF_LARGEFILE,			HIDC_CHECK_ALERT_IF_LARGEFILE,			// 開こうとしたファイルが大きい場合に警告する
@@ -282,7 +282,6 @@ void PropFile::SetData(HWND hwndDlg)
 	// 一度にドロップ可能なファイル数
 	::SetDlgItemInt(hwndDlg, IDC_EDIT_nDropFileNumMax, csFile.nDropFileNumMax, FALSE);
 
-	//	From Here Aug. 21, 2000 genta
 	//	自動保存の有効・無効
 	::CheckDlgButton(hwndDlg, IDC_CHECK_AUTOSAVE, common.backup.IsAutoBackupEnabled());
 
@@ -293,11 +292,10 @@ void PropFile::SetData(HWND hwndDlg)
 
 	auto_sprintf_s(buf, _T("%d"), nN);
 	::DlgItem_SetText(hwndDlg, IDC_EDIT_AUTOBACKUP_INTERVAL, buf);
-	//	To Here Aug. 21, 2000 genta
 
-	//	Oct. 27, 2000 genta	カーソル位置復元フラグ
+	// カーソル位置復元フラグ
 	::CheckDlgButton(hwndDlg, IDC_CHECK_RestoreCurPosition, csFile.GetRestoreCurPosition());
-	// 2002.01.16 hor ブックマーク復元フラグ
+	// ブックマーク復元フラグ
 	::CheckDlgButton(hwndDlg, IDC_CHECK_RestoreBookmarks, csFile.GetRestoreBookmarks());
 	//	Nov. 12, 2000 genta	MIME Decodeフラグ
 	::CheckDlgButton(hwndDlg, IDC_CHECK_AutoMIMEDecode, csFile.GetAutoMIMEdecode());
@@ -358,7 +356,6 @@ int PropFile::GetData(HWND hwndDlg)
 		csFile.nDropFileNumMax = 99;
 	}
 
-	//	From Here Aug. 16, 2000 genta
 	//	自動保存を行うかどうか
 	common.backup.EnableAutoBackup(DlgButton_IsChecked(hwndDlg, IDC_CHECK_AUTOSAVE));
 
@@ -379,11 +376,9 @@ int PropFile::GetData(HWND hwndDlg)
 	nN = nN > 35791 ? 35791 : nN;
 	common.backup.SetAutoBackupInterval(nN);
 
-	//	To Here Aug. 16, 2000 genta
-
-	//	Oct. 27, 2000 genta	カーソル位置復元フラグ
+	// カーソル位置復元フラグ
 	csFile.SetRestoreCurPosition(DlgButton_IsChecked(hwndDlg, IDC_CHECK_RestoreCurPosition));
-	// 2002.01.16 hor ブックマーク復元フラグ
+	// ブックマーク復元フラグ
 	csFile.SetRestoreBookmarks(DlgButton_IsChecked(hwndDlg, IDC_CHECK_RestoreBookmarks));
 	//	Nov. 12, 2000 genta	MIME Decodeフラグ
 	csFile.SetAutoMIMEdecode(DlgButton_IsChecked(hwndDlg, IDC_CHECK_AutoMIMEDecode));

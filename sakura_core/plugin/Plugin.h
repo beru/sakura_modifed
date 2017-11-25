@@ -81,15 +81,11 @@ public:
 	// 補助関数
 public:
 	// Plug Function番号の計算(クラス外でも使えるバージョン)
-	// 2010/4/19 Uchi
-	// 2011/8/20 syat 関数コードの割り当て直し
 	static inline EFunctionCode GetPluginFunctionCode(PluginId nPluginId, PlugId nPlugId) {
 		return static_cast<EFunctionCode>((nPluginId%20 * 100) + (nPluginId/20 * 50) + nPlugId + F_PLUGCOMMAND_FIRST);
 	}
 
 	// PluginId番号の計算(クラス外でも使えるバージョン)
-	// 2010/4/19 Uchi
-	// 2011/8/20 syat 関数コードの割り当て直し
 	static inline PluginId GetPluginId(EFunctionCode nFunctionCode) {
 		if (nFunctionCode >= F_PLUGCOMMAND_FIRST && nFunctionCode < F_PLUGCOMMAND_LAST) {
 			return PluginId((nFunctionCode - F_PLUGCOMMAND_FIRST)/100 + (nFunctionCode%100/50 * 20));
@@ -98,8 +94,6 @@ public:
 	}
 
 	// PluginNo番号の計算(クラス外でも使えるバージョン)
-	// 2010/6/24 Uchi
-	// 2011/8/20 syat 関数コードの割り当て直し
 	static inline PlugId GetPlugId(EFunctionCode nFunctionCode) {
 		if (nFunctionCode >= F_PLUGCOMMAND_FIRST && nFunctionCode < F_PLUGCOMMAND_LAST) {
 			return PlugId(nFunctionCode%100 - (nFunctionCode%100/50 * 50));

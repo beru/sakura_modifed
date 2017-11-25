@@ -347,14 +347,11 @@ void PropGeneral::SetData(HWND hwndDlg)
 
 	// タスクトレイを使う
 	::CheckDlgButton(hwndDlg, IDC_CHECK_USETRAYICON, csGeneral.bUseTaskTray);
-// From Here 2001.12.03 hor
-//@@@ YAZAKI 2001.12.31 ここは制御する。
 	if (csGeneral.bUseTaskTray) {
 		::EnableWindow(::GetDlgItem(hwndDlg, IDC_CHECK_STAYTASKTRAY), TRUE);
 	}else {
 		::EnableWindow(::GetDlgItem(hwndDlg, IDC_CHECK_STAYTASKTRAY), FALSE);
 	}
-// To Here 2001.12.03 hor
 	// タスクトレイに常駐
 	::CheckDlgButton(hwndDlg, IDC_CHECK_STAYTASKTRAY, csGeneral.bStayTaskTray);
 

@@ -604,7 +604,7 @@ bool ViewCommander::HandleCommand(
 	case F_HOKAN:			Command_Hokan(); break;			// 入力補完
 	case F_HELP_CONTENTS:	Command_Help_Contents(); break;	// ヘルプ目次
 	case F_HELP_SEARCH:		Command_Help_Search(); break;	// ヘルプトキーワード検索
-	case F_TOGGLE_KEY_SEARCH:	Command_ToggleKeySearch((int)lparam1); break;	// キャレット位置の単語を辞書検索する機能ON-OFF		// 2006.03.24 fon
+	case F_TOGGLE_KEY_SEARCH:	Command_ToggleKeySearch((int)lparam1); break;	// キャレット位置の単語を辞書検索する機能ON-OFF
 	case F_MENU_ALLFUNC:									// コマンド一覧
 		// 再帰処理対策
 		view.SetUndoBuffer(true);

@@ -32,7 +32,7 @@ public:
 	void JoinPrev(void);			// 前のグループに移動
 
 	LRESULT TabWndDispatchEvent(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
-	LRESULT TabListMenu(POINT pt, bool bSel = true, bool bFull = false, bool bOtherGroup = true);	// タブ一覧メニュー作成処理	// 2006.03.23 fon
+	LRESULT TabListMenu(POINT pt, bool bSel = true, bool bFull = false, bool bOtherGroup = true);	// タブ一覧メニュー作成処理
 
 	void SizeBox_ONOFF(bool bSizeBox);
 	HWND GetHwndSizeBox() {

@@ -170,12 +170,6 @@ BOOL Print::PrintDlg(
 BOOL Print::GetDefaultPrinter(MYDEVMODE* pMYDEVMODE)
 {
 	PRINTDLG	pd;
-	// 2009.08.08 印刷で用紙サイズ、横指定が効かない問題対応 syat
-	//// すでに DEVMODEを取得済みなら、何もしない
-	//if (hDevMode != NULL) {
-	//	return TRUE;
-	//}
-
 	// DEVMODEを取得済みでない場合、取得する
 	if (!hDevMode) {
 		//
@@ -389,7 +383,7 @@ BOOL Print::GetPaperSize(
 			*pnPaperAllWidth = pi->nAllWidth;
 			*pnPaperAllHeight = pi->nAllHeight;
 		}else {
-			// 2001.12.21 hor マウスでクリックしたままリスト外に出るとここにくるけど、
+			// マウスでクリックしたままリスト外に出るとここにくるけど、
 			//	異常ではないので FALSE を返すことにする
 			return FALSE;
 		}

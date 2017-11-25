@@ -102,7 +102,7 @@ void DocOutline::MakeFuncList_Java(FuncInfoArr* pFuncInfoArr)
 				}
 			/* 単語読み込み中 */
 			}else if (mode == FuncListJavaMode::Word) {
-				// 2011.09.16 syat アウトライン解析で日本語が含まれている部分が表示されない
+				// アウトライン解析で日本語が含まれている部分が表示されない
 				if (! WCODE::IsBlank(pLine[i]) &&
 					! WCODE::IsLineDelimiter(pLine[i], bExtEol) &&
 					! WCODE::IsControlCode(pLine[i]) &&

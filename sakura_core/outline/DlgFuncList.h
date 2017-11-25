@@ -125,14 +125,11 @@ protected:
 	void GetTreeTextNext(HWND, HTREEITEM, int);
 #endif
 
-	//	Apr. 23, 2005 genta リストビューのソートを関数として独立させた
 	void SortListView(HWND hwndList, int sortcol);
 	static int CALLBACK CompareFunc_Asc(LPARAM, LPARAM, LPARAM);
 	static int CALLBACK CompareFunc_Desc(LPARAM, LPARAM, LPARAM);
 
-	// 2001.12.03 hor
-//	void SetTreeBookMark(HWND);		// ツリーコントロールの初期化：ブックマーク
-	LPVOID GetHelpIdTable(void);	//@@@ 2002.01.18 add
+	LPVOID GetHelpIdTable(void);
 	void Key2Command(WORD);			//	キー操作→コマンド変換
 	bool HitTestSplitter(int xPos, int yPos);
 	int HitTestCaptionButton(int xPos, int yPos);
@@ -163,11 +160,10 @@ private:
 	*/
 	int	nViewType;
 
-	// 2002.02.16 hor Treeのダブルクリックでフォーカス移動できるように 1/4
+	// Treeのダブルクリックでフォーカス移動できるように 1/4
 	// (無理矢理なのでどなたか修正お願いします)
 	bool bWaitTreeProcess;
 
-	// 2002/11/1 frozen
 	// ツリービューをソートする基準
 	// 0 デフォルト(ノードに関連づけれられた値順)
 	// 1 アルファベット順

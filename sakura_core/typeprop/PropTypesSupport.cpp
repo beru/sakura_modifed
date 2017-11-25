@@ -42,7 +42,7 @@ static std::vector<HokanMethod>* GetHokanMethodList()
 }
 
 
-// 2001/06/13 Start By asa-o: タイプ別設定の支援タブに関する処理
+// タイプ別設定の支援タブに関する処理
 
 // メッセージ処理
 INT_PTR PropTypesSupport::DispatchEvent(
@@ -204,7 +204,6 @@ void PropTypesSupport::SetData(HWND hwndDlg)
 		}
 	}
 
-//	2001/06/19 asa-o
 	// 入力補完機能：英大文字小文字を同一視する
 	::CheckDlgButton(hwndDlg, IDC_CHECK_HOKANLOHICASE, types.bHokanLoHiCase ? BST_CHECKED : BST_UNCHECKED);
 
@@ -224,7 +223,6 @@ void PropTypesSupport::SetData(HWND hwndDlg)
 // ダイアログデータの取得
 int PropTypesSupport::GetData(HWND hwndDlg)
 {
-//	2001/06/19	asa-o
 	// 入力補完機能：英大文字小文字を同一視する
 	types.bHokanLoHiCase = DlgButton_IsChecked(hwndDlg, IDC_CHECK_HOKANLOHICASE);
 

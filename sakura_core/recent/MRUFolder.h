@@ -2,7 +2,7 @@
 
 // MRUリストと呼ばれるリストを管理する。フォルダ版。
 
-#include <Windows.h> /// BOOL,HMENU // 2002/2/10 aroka
+#include <Windows.h>
 #include "recent/RecentFolder.h"
 
 class MenuDrawer;

@@ -105,7 +105,7 @@ public:
 	// ウィンドウ標準操作
 	void DestroyWindow();
 
-private: // 2002/2/10 aroka アクセス権変更
+private:
 	HINSTANCE	hInstance;	// アプリケーションインスタンスのハンドル
 	HWND		hwndParent;	// オーナーウィンドウのハンドル
 	HWND		hWnd;			// このダイアログのハンドル

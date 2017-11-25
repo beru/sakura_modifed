@@ -520,7 +520,6 @@ void TextDrawer::DispLineNumber(
 
 	// 行属性描画 ($$$分離予定)
 	if (pDocLine) {
-		// 2001.12.03 hor
 		// とりあえずブックマークに縦線
 		if (BookmarkGetter(pDocLine).IsBookmarked() && !markType.IsDisp()) {
 			gr.PushPen(colorType.GetTextColor(), 2);

@@ -127,7 +127,7 @@ bool PluginManager::SearchNewPluginDir(
 			}
 			if (!isNotInstalled) { continue; }
 
-			// 2011.08.20 syat plugin.defが存在しないフォルダは飛ばす
+			// plugin.defが存在しないフォルダは飛ばす
 			if (!IsFileExists((sSearchDir + wf.cFileName + _T("\\") + PII_FILENAME).c_str(), true)) {
 				continue;
 			}

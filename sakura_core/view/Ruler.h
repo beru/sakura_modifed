@@ -25,7 +25,7 @@ public:
 	bool GetRedrawFlag() { return bRedrawRuler; }
 	
 private:
-	// ルーラーのキャレットのみ描画 2002.02.25 Add By KK
+	// ルーラーのキャレットのみ描画
 	void DrawRulerCaret(Graphics& gr);
 	
 	void _DrawRulerCaret(Graphics& gr, int nCaretDrawX, int nCaretWidth);

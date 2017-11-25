@@ -813,7 +813,7 @@ bool ImpExpKeyHelp::Export(const wstring& sFileName, wstring& sErrMsg)
 bool ImpExpKeybind::Import(const wstring& sFileName, wstring& sErrMsg)
 {
 	const tstring strPath = to_tchar(sFileName.c_str());
-	const size_t keyNameSize = _countof(common.keyBind.pKeyNameArr) - 1; // 最後の１要素はダミー用に予約 2012.11.25 aroka
+	const size_t keyNameSize = _countof(common.keyBind.pKeyNameArr) - 1; // 最後の１要素はダミー用に予約
 	CommonSetting_KeyBind sKeyBind = common.keyBind;
 
 	// オープン
@@ -927,9 +927,6 @@ bool ImpExpKeybind::Import(const wstring& sFileName, wstring& sErrMsg)
 		return false;
 	}
 
-	// データのコピー 	// マウスコードの固定と重複排除 2012.11.19 aroka
-	//common.keyBind.nKeyNameArrNum = nKeyNameArrNum;
-	//memcpy_raw(common.keyBind.pKeyNameArr, pKeyNameArr, sizeof_raw(pKeyNameArr));
 	int nKeyNameArrUsed = common.keyBind.nKeyNameArrNum; // 使用済み領域
 	for (int j=sKeyBind.nKeyNameArrNum-1; j>=0; --j) {
 		if ((bVer2 || bVer3) && sKeyBind.pKeyNameArr[j].nKeyCode <= 0) { // マウスコードは先頭に固定されている KeyCodeが同じなのでKeyNameで判別
@@ -1132,7 +1129,6 @@ bool ImpExpKeyword::Export(const wstring& sFileName, wstring& sErrMsg)
 		return false;
 	}
 	out.WriteF(L"// ");
-	// 2012.03.10 syat キーワードに「%」を含む場合にエクスポート結果が不正
 	out.WriteString(common.specialKeyword.keywordSetMgr.GetTypeName(nIdx));
 	out.WriteF(WSTR_KEYWORD_HEAD);
 
@@ -1146,7 +1142,6 @@ bool ImpExpKeyword::Export(const wstring& sFileName, wstring& sErrMsg)
 	size_t nKeywordNum = common.specialKeyword.keywordSetMgr.GetKeywordNum(nIdx);
 	for (size_t i=0; i<nKeywordNum; ++i) {
 		// ｎ番目のセットのｍ番目のキーワードを返す
-		// 2012.03.10 syat キーワードに「%」を含む場合にエクスポート結果が不正
 		out.WriteString(common.specialKeyword.keywordSetMgr.GetKeyword(nIdx, i));
 		out.WriteF(L"\n");
 	}

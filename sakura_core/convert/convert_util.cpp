@@ -104,7 +104,7 @@ void Convert_ZenhiraToZenkata(wchar_t* pData, size_t nLength)
 }
 
 // 全角カタカナ→全角ひらがな (文字数は不変)
-// 2012.06.17 syat 「ヵ」「ヶ」を「か」「け」に変換しない
+// 「ヵ」「ヶ」を「か」「け」に変換しない
 inline wchar_t ZenkataToZenhira_(wchar_t c) { return ((c >= L'ァ' && c <= L'ヴ') || (c >= L'ヽ' && c <= L'ヾ')) ? L'ぁ' + (c - L'ァ') : c; }
 void Convert_ZenkataToZenhira(wchar_t* pData, size_t nLength)
 {
@@ -214,7 +214,7 @@ void Convert_ToHankaku(const wchar_t* pSrc, size_t nSrcLength, wchar_t* pDst, si
 		if (d != c) { *dst++ = d; }
 		else {
 			// 小さい「ゝ」「ゞ」は全角カタカナ（「ヽ」「ヾ」）には変換できても半角カタカナまでは変換できないので無変換
-			// 小さい「か」「け」、「結合゛(u3099)」「結合゜(u309A)」「゛(u309B)」「゜(u309C)」は変換可能  // 2012.06.09 syat
+			// 小さい「か」「け」、「結合゛(u3099)」「結合゜(u309A)」「゛(u309B)」「゜(u309C)」は変換可能
 			if ((c >= L'\u3097' && c <= L'\u3098') || (c >= L'\u309D' && c <= L'\u309F')) { *dst++ = c; }
 			else {
 				// 全角ひらがなを全角カタカナにしてから半角カタカナに変換する

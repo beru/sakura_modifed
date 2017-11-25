@@ -76,8 +76,8 @@ void ViewCommander::Command_Search_Next(
 	// bFastMode
 	int nLineNumLogic(0);
 
-	bool bRedo = false;	// hor
-	int nIdxOld = 0;	// hor
+	bool bRedo = false;
+	int nIdxOld = 0;
 	auto& layoutMgr = GetDocument().layoutMgr;
 
 	if (pSelectLogic) {
@@ -157,9 +157,9 @@ void ViewCommander::Command_Search_Next(
 		nIdx = caret.GetCaretLogicPos().x;
 	}
 
-	nLineNumOld = nLineNum;	// hor
-	bRedo		= true;		// hor
-	nIdxOld		= (int)nIdx;		// hor
+	nLineNumOld = nLineNum;
+	bRedo		= true;
+	nIdxOld		= (int)nIdx;
 
 re_do:;
 	// 現在位置より後ろの位置を検索する
@@ -296,7 +296,7 @@ void ViewCommander::Command_Search_Prev(bool bReDraw, HWND hwndParent)
 {
 	bool		bSelectingLock_Old = false;
 	bool		bFound = false;
-	bool		bRedo = false;			// hor
+	bool		bRedo = false;
 	bool		bDisableSelect = false;
 	size_t		nLineNumOld = 0;
 	size_t		nIdxOld = 0;
@@ -517,13 +517,6 @@ void ViewCommander::Command_Replace(HWND hwndParent)
 		}
 	}
 	
-	// 矩形選択？
-//			bBeginBoxSelect = view.GetSelectionInfo().IsBoxSelecting();
-
-	// カーソル左移動
-	//HandleCommand(F_LEFT, true, 0, 0, 0, 0);	//？？？
-	// To Here 2001.12.03 hor
-
 	// テキスト選択解除
 	// 現在の選択範囲を非選択状態に戻す
 	view.GetSelectionInfo().DisableSelectArea(true);

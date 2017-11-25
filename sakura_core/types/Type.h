@@ -27,25 +27,25 @@ enum class OutlineType {
 	Java,
 	Cobol,
 	Asm,
-	Perl,				// Sep. 8, 2000 genta
+	Perl,				// 
 	VisualBasic,
 	WZText,				// 階層付テキストアウトライン解析
 	HTML,				// HTMLアウトライン解析
-	TeX,				// 2003.07.20 naoh TeXアウトライン解析
-	RuleFile,			// 2002.04.01 YAZAKI ルールファイル用
-	Python,				// 2007.02.08 genta Pythonアウトライン解析
-	Erlang,				// 2009.08.10 genta Erlangアウトライン解析
+	TeX,				// TeXアウトライン解析
+	RuleFile,			// ルールファイル用
+	Python,				// Pythonアウトライン解析
+	Erlang,				// Erlangアウトライン解析
 	//	新しいアウトライン解析は必ずこの直前へ挿入
 	CodeMax,
-	BookMark,			// 2001.12.03 hor
-	PlugIn,				// 2009.10.29 syat プラグインによるアウトライン解析
+	BookMark,			// 
+	PlugIn,				// プラグインによるアウトライン解析
 	FileTree,			// ファイルツリー
-	Default = -1,		// 2001.12.03 hor
+	Default = -1,		// 
 	UnknownOutlineType	= 99,
-	Tree = 100,			// 汎用ツリー 2010.03.28 syat
+	Tree = 100,			// 汎用ツリー
 	TreeTagJump = 101,	// 汎用ツリー(タグジャンプ付き)
-	ClassTree = 200,	// 汎用ツリー(クラス) 2010.03.28 syat
-	List = 300,			// 汎用リスト 2010.03.28 syat
+	ClassTree = 200,	// 汎用ツリー(クラス)
+	List = 300,			// 汎用リスト
 };
 
 // スマートインデント種別
@@ -167,14 +167,13 @@ struct TypeConfig {
 	SmartIndentType		eSmartIndent;					// スマートインデント種別
 	int					nImeState;						// 初期IME状態	Nov. 20, 2000 genta
 
-	//	2001/06/14 asa-o 補完のタイプ別設定
+	// 補完のタイプ別設定
 	SFilePath			szHokanFile;					// 入力補完 単語ファイル
 	int					nHokanType;						// 入力補完 種別(プラグイン)
 	// ファイル内からの入力補完機能
 	bool				bUseHokanByFile;				// 入力補完 開いているファイル内から候補を探す
 	bool				bUseHokanByKeyword;				// 強調キーワードから入力補完
 	
-	//	2001/06/19 asa-o
 	bool				bHokanLoHiCase;					// 入力補完機能：英大文字小文字を同一視する
 
 	SFilePath			szExtHelp;						// 外部ヘルプ１

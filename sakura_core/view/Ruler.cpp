@@ -10,8 +10,8 @@ Ruler::Ruler(const EditView& editView, const EditDoc& editDoc)
 	editView(editView),
 	editDoc(editDoc)
 {
-	nOldRulerDrawX = 0;	// 前回描画したルーラーのキャレット位置 2002.02.25 Add By KK
-	nOldRulerWidth = 0;	// 前回描画したルーラーのキャレット幅   2002.02.25 Add By KK
+	nOldRulerDrawX = 0;	// 前回描画したルーラーのキャレット位置
+	nOldRulerWidth = 0;	// 前回描画したルーラーのキャレット幅
 }
 
 Ruler::~Ruler()
@@ -54,7 +54,7 @@ void Ruler::_DrawRulerCaret(
 }
 
 /*! 
-	ルーラーのキャレットを再描画	2002.02.25 Add By KK
+	ルーラーのキャレットを再描画
 	@param hdc [in] デバイスコンテキスト
 	DispRulerの内容を元に作成
 */
@@ -196,7 +196,7 @@ void Ruler::DispRuler(HDC hdc)
 	// 描画対象
 	Graphics gr(hdc);
 	auto& caret = editView.GetCaret();
-	// 2002.02.25 Add By KK ルーラー全体を描き直す必要がない場合は、ルーラ上のキャレットのみ描きなおす 
+	// ルーラー全体を描き直す必要がない場合は、ルーラ上のキャレットのみ描きなおす 
 	if (!bRedrawRuler) {
 		DrawRulerCaret(gr);
 	}else {
@@ -211,10 +211,10 @@ void Ruler::DispRuler(HDC hdc)
 			_DrawRulerCaret(gr, caret.CalcCaretDrawPos(caret.GetCaretLayoutPos()).x, caret.GetCaretSize().cx);
 		}
 
-		bRedrawRuler = false;	// bRedrawRuler = true で指定されるまで、ルーラのキャレットのみを再描画 2002.02.25 Add By KK
+		bRedrawRuler = false;	// bRedrawRuler = true で指定されるまで、ルーラのキャレットのみを再描画
 	}
 
-	// 描画したルーラーのキャレット位置・幅を保存 2002.02.25 Add By KK
+	// 描画したルーラーのキャレット位置・幅を保存
 	nOldRulerDrawX = caret.CalcCaretDrawPos(caret.GetCaretLayoutPos()).x;
 	nOldRulerWidth = caret.GetCaretSize().cx ;
 }

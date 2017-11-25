@@ -19,7 +19,7 @@ public:
 	~WaitCursor();
 
 	bool IsEnable() { return bEnable; }
-private: // 2002/2/10 aroka
+private:
 	HCURSOR	hCursor;
 	HCURSOR	hCursorOld;
 	bool	bEnable;

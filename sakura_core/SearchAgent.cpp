@@ -430,7 +430,7 @@ bool SearchAgent::PrevOrNextWord(
 	if (nIdx >= nLineLen) {
 		if (bLeft && nIdx == nLineLen) {
 		}else {
-			// 2011.12.26 EOFより右へ行こうとするときもfalseを返すように
+			// EOFより右へ行こうとするときもfalseを返すように
 			// nIdx = nLineLen - LogicInt(1);
 			return false;
 		}
@@ -628,7 +628,7 @@ bool SearchAgent::SearchWord(
 						for (size_t iSW=0; iSW<nSize; ++iSW) {
 							auto& searchWord = searchWords[iSW];
 							if (searchWord.second == nNextWordTo2 - nNextWordFrom2) {
-								const wchar_t* pData = pDocLine->GetPtr();	// 2002/2/10 aroka CMemory変更
+								const wchar_t* pData = pDocLine->GetPtr();
 								// 1 == 大文字小文字の区別
 								if ((!searchOption.bLoHiCase && auto_memicmp(&(pData[nNextWordFrom2]), searchWord.first, searchWord.second) == 0) ||
 									(searchOption.bLoHiCase && auto_memcmp(&(pData[nNextWordFrom2]), searchWord.first, searchWord.second) == 0)
@@ -881,8 +881,8 @@ void SearchAgent::ReplaceData(DocLineReplaceArg* pArg)
 	bool bSetMark = false;
 	// 後ろから処理していく
 	for (; i >= pArg->delRange.GetFrom().y && pDocLine; --i) {
-		const wchar_t* pLine = pDocLine->GetPtr(); // 2002/2/10 aroka CMemory変更
-		size_t nLineLen = pDocLine->GetLengthWithEOL(); // 2002/2/10 aroka CMemory変更
+		const wchar_t* pLine = pDocLine->GetPtr();
+		size_t nLineLen = pDocLine->GetLengthWithEOL();
 		DocLine* pDocLinePrev = pDocLine->GetPrevLine();
 		DocLine* pDocLineNext = pDocLine->GetNextLine();
 		// 現在行の削除開始位置を調べる
@@ -895,7 +895,7 @@ void SearchAgent::ReplaceData(DocLineReplaceArg* pArg)
 		if (i == pArg->delRange.GetTo().y) {
 			nWorkLen = pArg->delRange.GetTo().x - nWorkPos;
 		}else {
-			nWorkLen = nLineLen - nWorkPos; // 2002/2/10 aroka CMemory変更
+			nWorkLen = nLineLen - nWorkPos;
 		}
 
 		if (nWorkLen == 0) {
@@ -905,14 +905,14 @@ void SearchAgent::ReplaceData(DocLineReplaceArg* pArg)
 		// 改行も削除するんかぃのぉ・・・？
 		ASSERT_GE(nLineLen, pDocLine->GetEol().GetLen());
 		if (pDocLine->GetEol() != EolType::None &&
-			nWorkPos + nWorkLen > (int)(nLineLen - pDocLine->GetEol().GetLen()) // 2002/2/10 aroka CMemory変更
+			nWorkPos + nWorkLen > (int)(nLineLen - pDocLine->GetEol().GetLen())
 		) {
 			// 削除する長さに改行も含める
-			nWorkLen = nLineLen - nWorkPos; // 2002/2/10 aroka CMemory変更
+			nWorkLen = nLineLen - nWorkPos;
 		}
 
 		// 行全体の削除
-		if (nWorkLen >= nLineLen) { // 2002/2/10 aroka CMemory変更
+		if (nWorkLen >= nLineLen) {
 			// 削除した行の総数
 			++(pArg->nDeletedLineNum);
 			// 行オブジェクトの削除、リスト変更、行数--
@@ -926,7 +926,7 @@ void SearchAgent::ReplaceData(DocLineReplaceArg* pArg)
 			docLineMgr.DeleteLine(pDocLine);
 			pDocLine = nullptr;
 		// 次の行と連結するような削除
-		}else if (nWorkPos + nWorkLen >= nLineLen) { // 2002/2/10 aroka CMemory変更
+		}else if (nWorkPos + nWorkLen >= nLineLen) {
 			if (pArg->pMemDeleted) {
 				if (pDocLineNext && pArg->pMemDeleted->size() == 0) {
 					// 1行以内の行末削除のときだけ、次の行のseqが保存されないので必要
@@ -1020,8 +1020,6 @@ void SearchAgent::ReplaceData(DocLineReplaceArg* pArg)
 				delLine.memLine.SetString(&pLine[nWorkPos], nWorkLen);
 				delLine.nSeq = ModifyVisitor().GetLineModifiedSeq(pDocLine);
 			}
-			{// 20020119 aroka ブロック内に pWork を閉じ込めた
-				// 2002/2/10 aroka CMemory変更 何度も GetLength,GetPtr をよばない。
 				size_t nNewLen = nLineLen - nWorkLen + nInsLen;
 				size_t nAfterLen = nLineLen - (nWorkPos + nWorkLen);
 				if (1
@@ -1139,7 +1137,6 @@ prev_line:;
 		// 全テキストの最後の次の行を追加しようとしていることを示す
 		pArg->nInsSeq = 0;
 	}else {
-		// 2002/2/10 aroka 何度も GetPtr を呼ばない
 		if (!bInsertLineMode) {
 			memCurLine.swap(pDocLine->_GetDocLineData());
 			size_t nLineLen;

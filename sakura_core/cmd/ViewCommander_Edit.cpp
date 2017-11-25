@@ -304,7 +304,7 @@ void ViewCommander::Command_Undo(void)
 		nOpeBlkNum = pOpeBlk->GetNum();
 		bool bDraw = (nOpeBlkNum < 5) && view.GetDrawSwitch();
 		bool bDrawAll = false;
-		const bool bDrawSwitchOld = view.SetDrawSwitch(bDraw);	// hor
+		const bool bDrawSwitchOld = view.SetDrawSwitch(bDraw);
 
 
 		WaitCursor waitCursor(view.GetHwnd(), 1000 < nOpeBlkNum);

@@ -64,15 +64,15 @@ TYPE_NAME_ID<OutlineType> OlmArr[] = {
 	{ OutlineType::PLSQL,	STR_OUTLINE_PLSQL },
 	{ OutlineType::Java,	STR_OUTLINE_JAVA },
 	{ OutlineType::Cobol,	STR_OUTLINE_COBOL },
-	{ OutlineType::Perl,	STR_OUTLINE_PERL },			// Sep. 8, 2000 genta
+	{ OutlineType::Perl,	STR_OUTLINE_PERL },			// 
 	{ OutlineType::Asm,		STR_OUTLINE_ASM },
 	{ OutlineType::VisualBasic,		STR_OUTLINE_VB },
-	{ OutlineType::Python,	STR_OUTLINE_PYTHON },		// 2007.02.08 genta
-	{ OutlineType::Erlang,	STR_OUTLINE_ERLANG },		// 2009.08.10 genta
+	{ OutlineType::Python,	STR_OUTLINE_PYTHON },		// 
+	{ OutlineType::Erlang,	STR_OUTLINE_ERLANG },		// 
 	{ OutlineType::WZText,	STR_OUTLINE_WZ },
 	{ OutlineType::HTML,	STR_OUTLINE_HTML },
-	{ OutlineType::TeX,		STR_OUTLINE_TEX },			// 2003.07.20 naoh
-	{ OutlineType::Text,	STR_OUTLINE_TEXT }			// Jul. 08, 2001 JEPRO 常に最後尾におく
+	{ OutlineType::TeX,		STR_OUTLINE_TEX },			// 
+	{ OutlineType::Text,	STR_OUTLINE_TEXT }			// 
 };
 
 TYPE_NAME_ID<TabArrowType> TabArrowArr[] = {
@@ -445,7 +445,7 @@ void PropTypesScreen::SetData(HWND hwndDlg)
 		}
 		Combo_SetCurSel(hwndCombo, nSelPos);
 
-		::CheckDlgButtonBool(hwndDlg, IDC_CHECK_INS_SPACE, types.bInsSpace);				// SPACEの挿入 [チェックボックス]	// From Here 2001.12.03 hor
+		::CheckDlgButtonBool(hwndDlg, IDC_CHECK_INS_SPACE, types.bInsSpace);				// SPACEの挿入 [チェックボックス]
 	}
 
 	// インデント

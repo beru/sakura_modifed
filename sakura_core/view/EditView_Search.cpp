@@ -5,7 +5,7 @@
 #include "parse/WordParse.h"
 #include "util/string_ex2.h"
 
-const size_t STRNCMP_MAX = 100;	// MAXキーワード長：strnicmp文字列比較最大値(EditView::KeySearchCore) 	// 2006.04.10 fon
+const size_t STRNCMP_MAX = 100;	// MAXキーワード長：strnicmp文字列比較最大値(EditView::KeySearchCore)
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                           検索                              //
@@ -51,7 +51,7 @@ BOOL EditView::KeywordHelpSearchDict(LID_SKH nID, POINT* po, RECT* rc)
 	}
 	// 選択範囲のデータを取得(複数行選択の場合は先頭の行のみ)
 	if (GetSelectedDataOne(memCurText, STRNCMP_MAX + 1)) {
-	// キャレット位置の単語を取得する処理		2006.03.24 fon
+	// キャレット位置の単語を取得する処理
 	}else if (GetDllShareData().common.search.bUseCaretKeyword) {
 		if (!GetParser().GetCurrentWord(&memCurText))
 			goto end_of_search;

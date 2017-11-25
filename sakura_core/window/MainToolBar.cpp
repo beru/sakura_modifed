@@ -217,9 +217,9 @@ void MainToolBar::CreateToolBar(void)
 						
 						// セパレータ作る
 						memset_raw(&my_tbb, 0, sizeof(my_tbb));
-						my_tbb.fsStyle   = TBSTYLE_BUTTON;  // ボタンにしないと描画が乱れる 2005/8/29 aroka
+						my_tbb.fsStyle   = TBSTYLE_BUTTON;  // ボタンにしないと描画が乱れる
 						my_tbb.idCommand = tbb.idCommand;	// 同じIDにしておく
-						if (tbb.fsState & TBSTATE_WRAP) {   // 折り返し 2005/8/29 aroka
+						if (tbb.fsState & TBSTATE_WRAP) {   // 折り返し
 							my_tbb.fsState |=  TBSTATE_WRAP;
 						}
 						Toolbar_AddButtons(hwndToolBar, 1, &my_tbb);

@@ -252,13 +252,12 @@ void ViewCommander::Command_Bookmark_Set(void)
 }
 
 
-// from ViewCommander_New.cpp
 // 次のブックマークを探し，見つかったら移動する
 void ViewCommander::Command_Bookmark_Next(void)
 {
-	int		nYOld;				// hor
-	bool	bFound	=	false;	// hor
-	bool	bRedo	=	true;	// hor
+	int		nYOld;
+	bool	bFound	=	false;
+	bool	bRedo	=	true;
 
 	Point ptXY(0, GetCaret().GetCaretLogicPos().y);
 	int tmp_y;

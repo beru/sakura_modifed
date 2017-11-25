@@ -23,8 +23,6 @@ public:
 	int GetCount(void) { return nCount; }
 
 protected:
-	// 2014.10.30 syat ConvertTypesExtToDlgExt‚ðCDocTypeManager‚ÉˆÚ“®
-	//bool ConvertTypesExtToDlgExt( const TCHAR *pszSrcExt, TCHAR *pszDstExt );
 
 private:
 	struct FileExtInfoTag {

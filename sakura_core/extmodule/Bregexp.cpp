@@ -587,7 +587,7 @@ bool CheckRegexpVersion(
 	@param szPattern [in] チェックする正規表現
 	@param hWnd [in] メッセージボックスの親ウィンドウ
 	@param bShowMessage [in] 初期化失敗時にエラーメッセージを出すフラグ
-	@param nOption [in] 大文字と小文字を無視して比較するフラグ // 2002/2/1 hor追加
+	@param nOption [in] 大文字と小文字を無視して比較するフラグ
 
 	@retval true 正規表現は規則通り
 	@retval false 文法に誤りがある。または、ライブラリが使用できない。

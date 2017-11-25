@@ -464,7 +464,6 @@ void PropKeybind::Import(HWND hwndDlg)
 	}
 
 	// ダイアログデータの設定 Keybind
-	// 2012.11.18 aroka キー一覧の更新は全アイテムを更新する。
 	ChangeKeyList(hwndDlg);
 	// 機能に割り当てられているキーを更新する
 	HWND			hwndCtrl;

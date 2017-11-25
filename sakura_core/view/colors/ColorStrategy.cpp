@@ -364,7 +364,7 @@ const ColorAttributeData g_ColorAttributeArr[] =
 	{_T("MOD"), 0},
 	{_T("EBK"), COLOR_ATTRIB_NO_TEXT | COLOR_ATTRIB_NO_EFFECTS},
 	{_T("TAB"), 0},
-	{_T("SPC"), 0},	// 2002.04.28 Add By KK
+	{_T("SPC"), 0},
 	{_T("ZEN"), 0},
 	{_T("CTL"), 0},
 	{_T("EOL"), 0},

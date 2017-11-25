@@ -84,7 +84,7 @@ void TipWnd::Show(int nX, int nY, const TCHAR* szText, RECT* pRect)
 	const TCHAR* pszInfo = info.GetStringPtr();
 	HDC hdc = ::GetDC(GetHwnd());
 
-	// サイズを計算済み	2001/06/19 asa-o
+	// サイズを計算済み
 	RECT rc;
 	if (pRect) {
 		rc = *pRect;
@@ -250,7 +250,7 @@ LRESULT TipWnd::OnPaint(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l_Param)
 }
 
 
-// 2001/06/19 Start by asa-o: ウィンドウのサイズを得る
+// ウィンドウのサイズを得る
 void TipWnd::GetWindowSize(LPRECT pRect)
 {
 	HDC hdc = ::GetDC(GetHwnd());

@@ -69,7 +69,6 @@ public:
 	size_t GetCommandCount() const;	// プラグインコマンドの数を返す
 	Plug* GetCommandById(int id) const;	// IDに合致するコマンドプラグを返す
 	const Plug::Array& GetPlugs(EJack jack) const;	// プラグを返す
-	// TODO: 作りが一貫してないので整理する syat
 
 	// メンバ変数
 private:

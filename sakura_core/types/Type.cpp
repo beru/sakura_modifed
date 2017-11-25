@@ -137,8 +137,8 @@ void _DefaultConfig(TypeConfig* pType)
 		pType->nKeywordSetIdx[i] = -1;
 	}
 	wcscpy_s(pType->szTabViewString, _EDITL("^       "));	// TAB表示文字列
-	pType->bTabArrow = TabArrowType::String;	// タブ矢印表示	// 2001.12.03 hor	// default on 2013/4/11 Uchi
-	pType->bInsSpace = false;				// スペースの挿入	// 2001.12.03 hor
+	pType->bTabArrow = TabArrowType::String;	// タブ矢印表示
+	pType->bInsSpace = false;				// スペースの挿入
 	
 	//@@@ 2002.09.22 YAZAKI 以下、lineCommentとblockCommentsを使うように修正
 	pType->lineComment.CopyTo(0, L"", -1);	// 行コメントデリミタ
@@ -155,13 +155,10 @@ void _DefaultConfig(TypeConfig* pType)
 
 	pType->nColorInfoArrNum = COLORIDX_LAST;
 
-	// 2001/06/14 Start by asa-o
 	pType->szHokanFile[0] = 0;		// 入力補完 単語ファイル
-	// 2001/06/14 End
 
 	pType->nHokanType = 0;
 
-	// 2001/06/19 asa-o
 	pType->bHokanLoHiCase = false;			// 入力補完機能：英大文字小文字を同一視する
 
 	// ファイル内からの入力補完機能

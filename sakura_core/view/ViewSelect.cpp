@@ -77,7 +77,7 @@ void ViewSelect::DisableSelectArea(bool bDraw, bool bDrawBracketCursorLine)
 	bBeginWordSelect = false;		// 単語単位選択中
 	nLastSelectedByteLen = 0;		// 前回選択時の選択バイト数
 
-	// 2002.02.16 hor 直前のカーソル位置をリセット
+	// 直前のカーソル位置をリセット
 	view2.GetCaret().nCaretPosX_Prev = view.GetCaret().GetCaretLayoutPos().GetX();
 
 }
@@ -284,16 +284,6 @@ void ViewSelect::DrawSelectArea2(HDC hdc) const
 //	MYTRACE(_T("DrawSelectArea()  bBeginBoxSelect=%hs\n", bBeginBoxSelect?"true":"false"));
 	auto& textArea = view.GetTextArea();
 	if (IsBoxSelecting()) {		// 矩形範囲選択中
-		// 2001.12.21 hor 矩形エリアにEOFがある場合、RGN_XORで結合すると
-		// EOF以降のエリアも反転してしまうので、この場合はRedrawを使う
-		// 2002.02.16 hor ちらつきを抑止するためEOF以降のエリアが反転したらもう一度反転して元に戻すことにする
-		//if ((GetTextArea().GetViewTopLine()+nViewRowNum+1 >= pEditDoc->layoutMgr.GetLineCount()) &&
-		//   (select.GetTo().y+1 >= pEditDoc->layoutMgr.GetLineCount() ||
-		//	selectOld.GetTo().y+1 >= pEditDoc->layoutMgr.GetLineCount())) {
-		//	Redraw();
-		//	return;
-		//}
-
 		const int nCharWidth = view.GetTextMetrics().GetHankakuDx();
 		const int nCharHeight = view.GetTextMetrics().GetHankakuDy();
 
@@ -547,7 +537,7 @@ void ViewSelect::GetSelectAreaLineFromRange(
 		if (IsBoxSelecting()) {		// 矩形範囲選択中
 			nSelectFrom = range.GetFrom().x;
 			nSelectTo   = range.GetTo().x;
-			// 2011.12.26 [EOF]単独行以外なら反転する
+			// [EOF]単独行以外なら反転する
 			if ((int)view.pEditDoc->layoutMgr.GetLineCount() <= nLineNum) {
 				nSelectFrom = -1;
 				nSelectTo = -1;
@@ -667,7 +657,7 @@ void ViewSelect::PrintSelectionInfoMsg() const
 					--select_line;
 				}
 
-				// 2009.07.07 syat nLastSelectedByteLenが0の場合は、差分ではなく全体を変換する（モード切替時にキャッシュクリアするため）
+				// nLastSelectedByteLenが0の場合は、差分ではなく全体を変換する（モード切替時にキャッシュクリアするため）
 
 				if (bSelectAreaChanging && nLastSelectedByteLen && select.GetFrom() == selectOld.GetFrom()) {
 					// 範囲が後方に拡大された
@@ -718,8 +708,8 @@ void ViewSelect::PrintSelectionInfoMsg() const
 			}else {
 				//  文字数でカウント
 
-				// 2009.07.07 syat カウント方法を切り替えながら選択範囲を拡大・縮小すると整合性が
-				//                とれなくなるため、モード切替時にキャッシュをクリアする。
+				// カウント方法を切り替えながら選択範囲を拡大・縮小すると整合性が
+				// とれなくなるため、モード切替時にキャッシュをクリアする。
 				thiz->nLastSelectedByteLen = 0;
 
 				//	1行だけ選択されている場合
@@ -734,8 +724,6 @@ void ViewSelect::PrintSelectionInfoMsg() const
 						- view.LineColumnToIndex(pLayout, select.GetFrom().x);
 
 					//	GetSelectedDataと似ているが，先頭行と最終行は排除している
-					//	Aug. 16, 2005 aroka nLineNumはfor以降でも使われるのでforの前で宣言する
-					//	VC .NET以降でもMicrosoft拡張を有効にした標準動作はVC6と同じことに注意
 					int nLineNum;
 					for (nLineNum = select.GetFrom().y + 1;
 						nLineNum < select.GetTo().y;

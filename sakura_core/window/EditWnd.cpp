@@ -680,13 +680,10 @@ HWND EditWnd::Create(
 
 	ShareData::getInstance().SetTraceOutSource(GetHwnd());	// TraceOut()起動元ウィンドウの設定
 
-	// Aug. 29, 2003 wmlhq
 	nTimerCount = 0;
-	// タイマーを起動	タイマーのIDと間隔を変更 20060128 aroka
 	if (::SetTimer(GetHwnd(), IDT_EDIT, 500, NULL) == 0) {
 		WarningMessage(GetHwnd(), LS(STR_ERR_DLGEDITWND03));
 	}
-	// ツールバーのタイマーを分離した 20060128 aroka
 	Timer_ONOFF(true);
 
 	// デフォルトのIMEモード設定
@@ -777,7 +774,7 @@ void EditWnd::LayoutMainMenu()
 		mainMenu = &pMenu->mainMenuTbl[pMenu->nMenuTopIdx[i]];
 		switch (mainMenu->type) {
 		case MainMenuType::Node:
-			// ラベル未設定かつFunctionコードがありならストリングテーブルから取得 2012/10/18 syat 各国語対応
+			// ラベル未設定かつFunctionコードがありならストリングテーブルから取得
 			pszName = (mainMenu->sName[0] == L'\0' && mainMenu->nFunc != F_NODE)
 								? LS(mainMenu->nFunc) : to_tchar(mainMenu->sName);
 			::AppendMenu(hMenu, MF_POPUP | MF_STRING | (nCount <= 1 ? MF_GRAYED : 0), (UINT_PTR)CreatePopupMenu(), 
@@ -1281,9 +1278,6 @@ LRESULT EditWnd::DispatchEvent(
 	case WM_KEYUP:
 	case WM_SYSKEYUP:	// ALT+キーのキーリピート処理のため
 	case WM_ENTERMENULOOP:
-#if 0
-	case MYWM_IME_REQUEST:   // 再変換対応 by minfu 2002.03.27	20020331 aroka
-#endif
 		if (GetActiveView().nAutoScrollMode) {
 			GetActiveView().AutoScrollExit();
 		}
@@ -1925,13 +1919,6 @@ LRESULT EditWnd::DispatchEvent(
 		return DefWindowProc(hwnd, uMsg, wParam, lParam);
 
 	default:
-#if 0
-// << 20020331 aroka 再変換対応 for 95/NT
-		if (uMsg == uMSIMEReconvertMsg || uMsg == uATOKReconvertMsg) {
-			return Views_DispatchEvent(hwnd, uMsg, wParam, lParam);
-		}
-// >> by aroka
-#endif
 		return DefWindowProc(hwnd, uMsg, wParam, lParam);
 	}
 }
@@ -3289,9 +3276,9 @@ bool EditWnd::OnPrintPageSetting(void)
 	int nCurrentPrintSetting = docType.GetDocumentAttribute().nCurrentPrintSetting;
 	int nLineNumberColumns;
 	if (pPrintPreview) {
-		nLineNumberColumns = GetActiveView().GetTextArea().DetectWidthOfLineNumberArea_calculate(pPrintPreview->pLayoutMgr_Print); // 印刷Preview時は文書の桁数 2013.5.10 aroka
+		nLineNumberColumns = GetActiveView().GetTextArea().DetectWidthOfLineNumberArea_calculate(pPrintPreview->pLayoutMgr_Print); // 印刷Preview時は文書の桁数
 	}else {
-		nLineNumberColumns = 3; // ファイルメニューからの設定時は最小値 2013.5.10 aroka
+		nLineNumberColumns = 3; // ファイルメニューからの設定時は最小値
 	}
 
 	DlgPrintSetting	dlgPrintSetting;
@@ -3300,8 +3287,8 @@ bool EditWnd::OnPrintPageSetting(void)
 //@@@ 2002.01.14 YAZAKI 印刷PreviewをPrintPreviewに独立させたことによる変更
 		GetHwnd(),
 		&nCurrentPrintSetting, // 現在選択している印刷設定
-		pShareData->printSettingArr, // 現在の設定はダイアログ側で保持する 2013.5.1 aroka
-		nLineNumberColumns // 行番号表示用に桁数を渡す 2013.5.10 aroka
+		pShareData->printSettingArr, // 現在の設定はダイアログ側で保持する
+		nLineNumberColumns // 行番号表示用に桁数を渡す
 	) > 0;
 
 	if (bRes) {
@@ -3760,7 +3747,7 @@ void EditWnd::WindowTopMost(int top)
 }
 
 
-// タイマーの更新を開始／停止する。 20060128 aroka
+// タイマーの更新を開始／停止する。
 // ツールバー表示はタイマーにより更新しているが、
 // アプリのフォーカスが外れたときにウィンドウからON/OFFを
 //	呼び出してもらうことにより、余計な負荷を停止したい。
@@ -3808,7 +3795,7 @@ LRESULT EditWnd::PopupWinList(bool bMousePos)
 	}else {
 		menuDrawer.ResetContents();
 		EditNode* pEditNodeArr;
-		HMENU hMenu = ::CreatePopupMenu();	// 2006.03.23 fon
+		HMENU hMenu = ::CreatePopupMenu();
 		size_t nRowNum = AppNodeManager::getInstance().GetOpenedWindowArr(&pEditNodeArr, true);
 		WinListMenu(hMenu, pEditNodeArr, nRowNum, true);
 		// メニューを表示する
@@ -4070,7 +4057,7 @@ void  EditWnd::SetActivePane(int nIndex)
 		// モードレス時：検索対象となるビューの変更
 		hokanMgr.ChangeView((LPARAM)&GetActiveView());
 	}
-	if (dlgFuncList.GetHwnd()) {	//「アウトライン」ダイアログ	20060201 aroka
+	if (dlgFuncList.GetHwnd()) {	//「アウトライン」ダイアログ	
 		// モードレス時：現在位置表示の対象となるビューの変更
 		dlgFuncList.ChangeView((LPARAM)&GetActiveView());
 	}

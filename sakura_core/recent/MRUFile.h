@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Windows.h> /// BOOL,HMENU // 2002/2/10 aroka
+#include <Windows.h>
 #include <vector>
 #include "recent/RecentFile.h"
 
