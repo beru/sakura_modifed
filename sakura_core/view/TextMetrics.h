@@ -1,7 +1,5 @@
 #pragma once
 
-// 2007.08.25 kobake ’Ç‰Á
-
 #include <vector>
 
 class TextMetrics;

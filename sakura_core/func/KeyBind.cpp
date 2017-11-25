@@ -498,8 +498,8 @@ EFunctionCode KeyBind::GetFuncCodeAt(KeyData& keyData, int nState, bool bGetDefF
 		//keycode,			keyname,							なし,				Shitf+,				Ctrl+,					Shift+Ctrl+,		Alt+,					Shit+Alt+,			Ctrl+Alt+,				Shift+Ctrl+Alt+
 		{ VKEX_DBL_CLICK,	(LPCTSTR)STR_KEY_BIND_DBL_CLICK,	{ F_SELECTWORD,		F_SELECTWORD,		F_SELECTWORD,			F_SELECTWORD,		F_SELECTWORD,			F_SELECTWORD,		F_SELECTWORD,			F_SELECTWORD }, }, //Feb. 19, 2001 JEPRO Altと右クリックの組合せは効かないので右クリックメニューのキー割り当てをはずした
 		{ VKEX_R_CLICK,		(LPCTSTR)STR_KEY_BIND_R_CLICK,		{ F_MENU_RBUTTON,	F_MENU_RBUTTON,		F_MENU_RBUTTON,			F_MENU_RBUTTON,		F_0,					F_0,				F_0,					F_0 }, },
-		{ VKEX_MDL_CLICK,	(LPCTSTR)STR_KEY_BIND_MID_CLICK,	{ F_AUTOSCROLL,		F_0,				F_0,					F_0,				F_0,					F_0,				F_0,					F_0 }, }, // novice 2004/10/11 マウス中ボタン対応
-		{ VKEX_LSD_CLICK,	(LPCTSTR)STR_KEY_BIND_LSD_CLICK,	{ F_0,				F_0,				F_0,					F_0,				F_0,					F_0,				F_0,					F_0 }, }, // novice 2004/10/10 マウスサイドボタン対応
+		{ VKEX_MDL_CLICK,	(LPCTSTR)STR_KEY_BIND_MID_CLICK,	{ F_AUTOSCROLL,		F_0,				F_0,					F_0,				F_0,					F_0,				F_0,					F_0 }, },
+		{ VKEX_LSD_CLICK,	(LPCTSTR)STR_KEY_BIND_LSD_CLICK,	{ F_0,				F_0,				F_0,					F_0,				F_0,					F_0,				F_0,					F_0 }, },
 		{ VKEX_RSD_CLICK,	(LPCTSTR)STR_KEY_BIND_RSD_CLICK,	{ F_0,				F_0,				F_0,					F_0,				F_0,					F_0,				F_0,					F_0 }, },
 		{ VKEX_TRI_CLICK,	(LPCTSTR)STR_KEY_BIND_TRI_CLICK,	{ F_SELECTLINE,		F_SELECTLINE,		F_SELECTLINE,			F_SELECTLINE,		F_SELECTLINE,			F_SELECTLINE,		F_SELECTLINE,			F_SELECTLINE }, },
 		{ VKEX_QUA_CLICK,	(LPCTSTR)STR_KEY_BIND_QUA_CLICK,	{ F_SELECTALL,		F_SELECTALL,		F_SELECTALL,			F_SELECTALL,		F_SELECTALL,			F_SELECTALL,		F_SELECTALL,			F_SELECTALL }, },

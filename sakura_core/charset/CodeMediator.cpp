@@ -135,7 +135,7 @@ EncodingType CodeMediator::CheckKanjiCode(ESI* pEsi)
 /*
 	日本語コードセット判別
 
-	戻り値】2007.08.14 kobake 戻り値をintからEncodingTypeへ変更
+	戻り値
 	SJIS		CODE_SJIS
 	JIS			CODE_JIS
 	EUC			CODE_EUC
@@ -163,7 +163,7 @@ EncodingType CodeMediator::CheckKanjiCode(const char* pBuf, size_t nBufLen)
 /*
 || ファイルの日本語コードセット判別
 ||
-|| 【戻り値】2007.08.14 kobake 戻り値をintからEncodingTypeへ変更
+|| 【戻り値】
 ||	SJIS		CODE_SJIS
 ||	JIS			CODE_JIS
 ||	EUC			CODE_EUC

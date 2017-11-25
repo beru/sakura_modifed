@@ -257,7 +257,7 @@ void TipWnd::GetWindowSize(LPRECT pRect)
 	const TCHAR* pszText = info.GetStringPtr();
 	// ウィンドウのサイズを得る
 	ComputeWindowSize(hdc, hFont, pszText , pRect);
-	ReleaseDC(GetHwnd(), hdc); // 2007.10.10 kobake ReleaseDCが抜けていたのを修正
+	ReleaseDC(GetHwnd(), hdc);
 }
 
 // 2001/06/19 End

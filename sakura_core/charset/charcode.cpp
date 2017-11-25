@@ -21,33 +21,6 @@ namespace WCODE
 {
 	bool CalcHankakuByFont(wchar_t);
 
-#if 0
-	/*!
-		句読点か
-		2008.04.27 kobake CLayoutMgr::IsKutoTen から分離
-
-		@param[in] c1 調べる文字1バイト目
-		@param[in] c2 調べる文字2バイト目
-		@retval true 句読点である
-		@retval false 句読点でない
-	*/
-	bool IsKutoten(wchar_t wc)
-	{
-		// 句読点定義
-		static const wchar_t* KUTOTEN =
-			L"｡､,."
-			L"。、，．"
-		;
-
-		const wchar_t* p;
-		for (p = KUTOTEN; *p; ++p) {
-			if (*p == wc) return true;
-		}
-		return false;
-	}
-#endif
-
-
 	/*!
 		UNICODE文字情報のキャッシュクラス。
 		1文字当たり2ビットで、値を保存しておく。

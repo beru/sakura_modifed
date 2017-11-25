@@ -177,7 +177,7 @@ F_MODIFYLINE_PREV	= 30394,	//前の変更行へ								なし
 // 選択系
 F_SELECTWORD		= 30400,	//現在位置の単語選択						なし
 F_SELECTALL			= 30401,	//すべて選択								なし
-F_SELECTLINE		= 30403,	//1行選択									int param	// 2007.10.06 nasukoji
+F_SELECTLINE		= 30403,	//1行選択									int param	// 
 F_BEGIN_SEL			= 30410,	//範囲選択開始								なし
 F_UP_SEL			= 30411,	//(範囲選択)カーソル上移動					int lines
 F_DOWN_SEL			= 30412,	//(範囲選択)カーソル下移動					なし
@@ -241,7 +241,6 @@ F_COPY_CRLF		= 30603,	//CRLF改行でコピー										なし
 F_PASTE			= 30604,	//貼り付け(クリップボードから貼り付け)					なし
 F_PASTEBOX		= 30605,	//矩形貼り付け(クリップボードから矩形貼り付け)			なし
 
-//2007.09.18 kobake WCHARを求めるメッセージのメッセージ名を変更: 「*」→「*_W」
 F_INSTEXT_W					= 30606,	//テキストを貼り付け							const WCHAR* text, bool bNoWaitCursor
 F_ADDTAIL_W					= 30607,	//最後にテキストを追加							const WCHAR* text, int length
 F_COPYLINES					= 30610,	//選択範囲内全行コピー							なし

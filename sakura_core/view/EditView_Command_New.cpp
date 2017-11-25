@@ -293,7 +293,6 @@ void EditView::InsertData_CEditView(
 		}
 	}
 
-	// 2007.10.18 kobake ‚±‚±‚ÅCOpeˆ—‚ð‚Ü‚Æ‚ß‚é
 	if (!bDoing_UndoRedo) {
 		pOpe->ptCaretPos_PHY_After = pEditDoc->layoutMgr.LayoutToLogic(*pptNewPos);
 		pOpe->nOrgSeq = nInsSeq;
@@ -327,7 +326,6 @@ void EditView::DeleteData2(
 	}
 	size_t nIdxFrom = LineColumnToIndex(pLayout, _ptCaretPos.x);
 
-	// 2007.10.18 kobake COpe‚Ì¶¬‚ð‚±‚±‚É‚Ü‚Æ‚ß‚é
 	DeleteOpe*	pOpe = nullptr;
 	size_t columnFrom = LineIndexToColumn(pLayout, nIdxFrom);
 	size_t columnTo = LineIndexToColumn(pLayout, nIdxFrom + nDelLen);
@@ -369,7 +367,6 @@ void EditView::DeleteData2(
 			pMem->AppendNativeData(memDeleted[i].memLine);
 		}
 	}
-	// 2007.10.18 kobake COpe‚Ì’Ç‰Á‚ð‚±‚±‚É‚Ü‚Æ‚ß‚é
 	if (pOpe) {
 		pOpe->opeLineData.swap(memDeleted);
 		pOpe->ptCaretPos_PHY_After = pEditDoc->layoutMgr.LayoutToLogic(_ptCaretPos);

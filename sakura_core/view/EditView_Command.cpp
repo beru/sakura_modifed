@@ -24,7 +24,6 @@ bool EditView::TagJumpSub(
 	bool*			pbJumpToSelf	// [out] オプションnullptr可。自分にジャンプしたか
 	)
 {
-	// 2004/06/21 novice タグジャンプ機能追加
 	TagJump	tagJump;
 
 	if (pbJumpToSelf) {
@@ -49,7 +48,6 @@ bool EditView::TagJumpSub(
 		_tcscpy(szJumpToFile, szWork);
 	}
 
-// 2004/06/21 novice タグジャンプ機能追加
 // 2004/07/05 みちばな
 // 同一ファイルだとSendMesssageで GetCaret().GetCaretLayoutPos().GetX2(),GetCaret().GetCaretLayoutPos().yが更新されてしまい、
 // ジャンプ先の場所がジャンプ元として保存されてしまっているので、
@@ -196,7 +194,6 @@ open_c:;
 	// アクティブにする
 	ActivateFrameWindow(hwndOwner);
 
-// 2004/06/21 novice タグジャンプ機能追加
 	TagJump	tagJump;
 	/*
 	  カーソル位置変換

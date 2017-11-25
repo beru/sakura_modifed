@@ -234,9 +234,9 @@
 #define HLP000152	152 //共通設定『メインメニュー』タブ
 #define HLP000279	279 //履歴の管理
 #define HLP000071	71 //フォント設定
-#define HLP000340	340 //テキストの折り返し方法			// 2008.05.31 nasukoji
+#define HLP000340	340 //テキストの折り返し方法
 #define HLP000184	184 //折り返し桁数
-#define HLP000336	336 //文字カウント方法		// 2009.07.06 syat
+#define HLP000336	336 //文字カウント方法
 #define HLP000125	125 //キーマクロの記録開始／終了
 #define HLP000127	127 //キーマクロの保存
 #define HLP000128	128 //キーマクロの読み込み
@@ -529,7 +529,6 @@
 #define HIDC_LIST_FUNC_KEYBIND					10750 //機能一覧
 #define HIDC_LIST_KEY							10751 //キー一覧
 #define HIDC_LIST_ASSIGNEDKEYS					10752 //機能に割り当てられているキー
-//#define HIDC_CHECK_ACCELTBL_EACHWIN				10760 //ウィンドウ毎にアクセラレータテーブルを作成する(Wine用)	// nasukoji 2009.08.11
 #define HIDC_BUTTON_ADDSET						10800 //キーワードセット追加
 #define HIDC_BUTTON_DELSET						10801 //キーワードセット削除
 #define HIDC_BUTTON_ADDKEYWORD					10802 //キーワード追加
@@ -555,8 +554,8 @@
 #define HIDC_CHECK_STOPS_PARAGRAPH				10918 //段落単位で移動するときに段落の両端に止まる
 #define HIDC_CHECK_CLOSEALLCONFIRM				10919 //[すべて閉じる]で他に編集用のウィンドウがあれば確認する
 #define HIDC_CHECK_NOMOVE_ACTIVATE_BY_MOUSE		10920 //マウスクリックでアクティブになったときはカーソルをクリック位置に移動しない 2007.10.08 genta
-#define HIDC_COMBO_WHEEL_PAGESCROLL				10921 //組み合わせてホイール操作した時ページスクロールする	// 2009.01.17 nasukoji
-#define HIDC_COMBO_WHEEL_HSCROLL				10922 //組み合わせてホイール操作した時横スクロールする	// 2009.01.17 nasukoji
+#define HIDC_COMBO_WHEEL_PAGESCROLL				10921 //組み合わせてホイール操作した時ページスクロールする
+#define HIDC_COMBO_WHEEL_HSCROLL				10922 //組み合わせてホイール操作した時横スクロールする
 #define HIDC_HOTKEY_TRAYMENU					10940 //左クリックメニューのショートカットキー
 #define HIDC_EDIT_REPEATEDSCROLLLINENUM			10941 //スクロール行数
 #define HIDC_EDIT_MAX_MRU_FILE					10942 //ファイル履歴の最大数
@@ -625,15 +624,15 @@
 #define HIDC_EDIT_INDENTCHARS					11345 //その他のインデント対象文字
 #define HIDC_EDIT_TABVIEWSTRING					11346 //TAB表示文字列
 #define HIDC_EDIT_KINSOKUHEAD					11347 //行頭禁則
-#define HIDC_EDIT_KINSOKUTAIL					11348 //行頭禁則
-#define HIDC_COMBO_WRAPMETHOD					11349 //テキストの折り返し方法		// 2008.05.30 nasukoji
+#define HIDC_EDIT_KINSOKUTAIL					11348 //行頭禁則f
+#define HIDC_COMBO_WRAPMETHOD					11349 //テキストの折り返し方法
 #define HIDC_CHECK_TAB_ARROW					11350 //矢印表示
 #define HIDC_COMBO_INDENTLAYOUT					11351 //折り返し行インデント
 #define HIDC_CHECK_RTRIM_PREVLINE				11352 //改行時に末尾の空白を削除
 #define HIDC_RADIO_OUTLINEDEFAULT				11353 //標準ルール
 #define HIDC_RADIO_OUTLINERULEFILE				11354 //ルールファイル
 #define HIDC_EDIT_OUTLINERULEFILE				11355 //ルールファイル名
-#define HIDC_BUTTON_RULEFILE_REF				11356 //ルールファイル参照	// 2006/09/09 novice
+#define HIDC_BUTTON_RULEFILE_REF				11356 //ルールファイル参照
 #define HIDC_CHECK_DOCICON						11357 //文書アイコンを使う
 #define HIDC_EDIT_KINSOKUKUTO					11358 //句読点ぶら下げ文字
 #define HIDC_CHECK_USETYPEFONT					11359 //タイプ別フォント使用する

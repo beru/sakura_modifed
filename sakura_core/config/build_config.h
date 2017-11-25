@@ -47,7 +47,7 @@ static const bool UNICODE_BOOL = true;
 // -- -- -- -- ↑以上、ビルド設定完了 -- -- -- -- //
 
 
-// デバッグ検証用：newされた領域をわざと汚す。2007.11.27 kobake
+// デバッグ検証用：newされた領域をわざと汚す
 #ifdef FILL_STRANGE_IN_NEW_MEMORY
 	#include <stdlib.h> // malloc,free
 	inline void _fill_new_memory(void* p, size_t nSize, const char* pSrc, size_t nSrcLen)

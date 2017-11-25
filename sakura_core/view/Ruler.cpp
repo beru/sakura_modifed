@@ -18,7 +18,6 @@ Ruler::~Ruler()
 {
 }
 
-// 2007.08.26 kobake UNICODE用にX位置を変更
 void Ruler::_DrawRulerCaret(
 	Graphics& gr,
 	int nCaretDrawPosX,
@@ -79,7 +78,7 @@ void Ruler::DrawRulerCaret(Graphics& gr)
 		// 元位置をクリア nOldRulerWidth
 		this->_DrawRulerCaret(gr, nOldRulerDrawX, nOldRulerWidth);
 
-		// 新しい位置で描画   2007.08.26 kobake UNICODE用にX位置を変更
+		// 新しい位置で描画
 		this->_DrawRulerCaret(
 			gr,
 			caret.CalcCaretDrawPos(caret.GetCaretLayoutPos()).x,
@@ -88,7 +87,7 @@ void Ruler::DrawRulerCaret(Graphics& gr)
 	}
 }
 
-// ルーラーの背景のみ描画 2007.08.29 kobake 追加
+// ルーラーの背景のみ描画
 void Ruler::DrawRulerBg(Graphics& gr)
 {
 	// 必要なインターフェース

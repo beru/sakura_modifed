@@ -33,7 +33,6 @@ typedef StringBufferW StringBufferT;
 #define MakeStringBufferT0(S) StringBufferT(S, 0)
 
 
-// 2007.09.24 kobake データ変換部を子クラスに分離
 // 各種データ変換付きProfile
 class DataProfile : public Profile {
 private:
@@ -178,7 +177,6 @@ public:
 		}
 	}
 
-	// 2007.08.14 kobake 追加
 	// intを介して任意型の入出力を行う
 	template <class T>
 	bool IOProfileData_WrapInt(const wchar_t* pszSectionName, const wchar_t* pszEntryKey, T& nEntryValue) {

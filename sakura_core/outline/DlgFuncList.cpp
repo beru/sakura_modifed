@@ -2509,7 +2509,6 @@ LPVOID DlgFuncList::GetHelpIdTable(void)
 void DlgFuncList::Key2Command(WORD KeyCode)
 {
 	EditView*	pEditView;
-// novice 2004/10/10
 	// Shift,Ctrl,AltƒL[‚ª‰Ÿ‚³‚ê‚Ä‚¢‚½‚©
 	int nIdx = GetCtrlKeyState();
 	auto& csKeyBind = pShareData->common.keyBind;

@@ -203,7 +203,6 @@ LoadResultType LoadAgent::OnLoad(const LoadInfo& loadInfo)
 	}
 
 	// レイアウト情報の変更
-	// 2008.06.07 nasukoji	折り返し方法の追加に対応
 	// 「指定桁で折り返す」以外の時は折り返し幅をMAXLINEKETASで初期化する
 	// 「右端で折り返す」は、この後のOnSize()で再設定される
 	const TypeConfig& ref = pDoc->docType.GetDocumentAttribute();
@@ -229,7 +228,7 @@ void LoadAgent::OnAfterLoad(const LoadInfo& loadInfo)
 	// 親ウィンドウのタイトルを更新
 	pDoc->pEditWnd->UpdateCaption();
 
-	// -- -- ※ InitAllViewでやってたこと -- -- //	// 2009.08.28 nasukoji	CEditView::OnAfterLoad()からここに移動
+	// -- -- ※ InitAllViewでやってたこと -- --
 	pDoc->nCommandExecNum = 0;
 
 	// テキストの折り返し方法を初期化

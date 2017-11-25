@@ -34,7 +34,6 @@ typedef std::vector<LineData> OpeLineData;
 	Undoのためにに操作手順を記録するために用いる。
 	1オブジェクトが１つの操作を表す。
 */
-// 2007.10.17 kobake 解放漏れを防ぐため、データをポインタではなくインスタンス実体で持つように変更
 class Ope {
 public:
 	Ope(OpeCode eCode);	// Opeクラス構築

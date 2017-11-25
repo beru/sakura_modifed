@@ -79,8 +79,8 @@ void Figure_Tab::DispSpace(Graphics& gr, DispPos* pDispPos, EditView& view, bool
 			if (tabType.IsDisp()) {
 				// 文字色や太字かどうかを現在の DC から調べる
 				// （検索マッチ等の状況に柔軟に対応するため、ここは記号の色指定には決め打ちしない）
-				//	太字かどうか設定も見る様にする 2013/4/11 Uchi
-				// 2013.06.21 novice 文字色、太字をGraphicsから取得
+				//	太字かどうか設定も見る様にする
+				// 文字色、太字をGraphicsから取得
 
 				if (TabArrowType::Short == pTypeData->bTabArrow) {
 					if (rcClip2.left <= sPos.GetDrawPos().x) { // 行番号と重なる

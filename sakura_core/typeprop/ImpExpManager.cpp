@@ -35,11 +35,7 @@ static const wchar_t	szKeyPluginSmartIndentId[]		= L"szPluginSmartIndentId";
 static const wchar_t	szKeyVersion[]					= L"szVersion";
 static const wchar_t	szKeyStructureVersion[]			= L"vStructureVersion";
 
-// カラー（ PropTypes.hからコピー改変 ）
-//static const wchar_t	WSTR_COLORDATA_HEAD2[]	=  L" テキストエディタ色設定 Ver2";
-//static const wchar_t	WSTR_COLORDATA_HEAD21[]	=  L" テキストエディタ色設定 Ver2.1";	// Nov. 2, 2000 JEPRO 変更 [注]. 0.3.9.0:ur3β10以降、設定項目の番号を入れ替えたため
 static const wchar_t	WSTR_COLORDATA_HEAD3[]	=  L" テキストエディタ色設定 Ver3";
-//static const wchar_t	WSTR_COLORDATA_HEAD4[]	=  L" テキストエディタ色設定 Ver4";		// 2007.10.02 kobake UNICODE化に際してカラーファイル仕様も変更
 static const wchar_t	szSecColor[]			=  L"SakuraColor";
 
 // 正規表現キーワード
@@ -49,12 +45,11 @@ static const wchar_t	WSTR_REGEXKW_HEAD[]		= L"// 正規表現キーワード Ver1\n";
 static const wchar_t	WSTR_KEYHELP_HEAD[]		= L"// キーワード辞書設定 Ver1\n";
 
 // キー割り当て
-static const wchar_t	WSTR_KEYBIND_HEAD4[]	= L"SakuraKeyBind_Ver4";	// 2013.12.05 syat 多言語対応
-static const wchar_t	WSTR_KEYBIND_HEAD3[]	= L"SakuraKeyBind_Ver3";	// 2007.10.05 kobake ファイル形式をini形式に変更
-static const wchar_t	WSTR_KEYBIND_HEAD2[]	= L"// テキストエディタキー設定 Ver2";	// (旧バージョン(ANSI版)） 読み込みのみ対応 2008/5/3 by Uchi
+static const wchar_t	WSTR_KEYBIND_HEAD4[]	= L"SakuraKeyBind_Ver4";
+static const wchar_t	WSTR_KEYBIND_HEAD3[]	= L"SakuraKeyBind_Ver3";
+static const wchar_t	WSTR_KEYBIND_HEAD2[]	= L"// テキストエディタキー設定 Ver2";
 
 // カスタムメニューファイル
-// 2007.10.02 kobake UNICODE化に際して、カスタムメニューファイルの仕様を変更
 static       wchar_t	WSTR_CUSTMENU_HEAD_V2[]	= L"SakuraEditorMenu_Ver2";
 
 // キーワード定義ファイル
@@ -697,15 +692,12 @@ bool ImpExpKeyHelp::Import(const wstring& sFileName, wstring& sErrMsg)
 	while (in && i<MAX_KEYHELP_FILE) {
 		wstring buff = in.ReadLineW();
 
-		// 2007.02.03 genta コメントみたいな行は黙ってスキップ
-		// 2007.10.08 kobake 空行もスキップ
 		if (buff[0] == LTEXT('\0') ||
 			buff[0] == LTEXT('\n') ||
 			buff[0] == LTEXT('#') ||
 			buff[0] == LTEXT(';') ||
 			(buff[0] == LTEXT('/') && buff[1] == LTEXT('/'))
 		) {
-			//	2007.02.03 genta 処理を継続
 			continue;
 		}
 

@@ -38,7 +38,7 @@ static const DWORD p_helpids1[] = {	//11300
 	IDC_COMBO_OUTLINES,				HIDC_COMBO_OUTLINES,		// アウトライン解析方法
 	IDC_RADIO_OUTLINERULEFILE,		HIDC_RADIO_OUTLINERULEFILE,	// ルールファイル
 	IDC_EDIT_OUTLINERULEFILE,		HIDC_EDIT_OUTLINERULEFILE,	// ルールファイル名
-	IDC_BUTTON_RULEFILE_REF,		HIDC_BUTTON_RULEFILE_REF,	// ルールファイル参照	// 2006/09/09 novice
+	IDC_BUTTON_RULEFILE_REF,		HIDC_BUTTON_RULEFILE_REF,	// ルールファイル参照
 
 	IDC_CHECK_USETYPEFONT,			HIDC_CHECK_USETYPEFONT,		// タイプ別フォント使用する
 	IDC_BUTTON_TYPEFONT,			HIDC_BUTTON_TYPEFONT,		// タイプ別フォント
@@ -96,7 +96,7 @@ TYPE_NAME_ID<int> IndentTypeArr[] = {
 	{ 2, STR_WRAP_INDENT_BOL },		// _T("論理行先頭")
 };
 
-// 2008.05.30 nasukoji	テキストの折り返し方法
+// テキストの折り返し方法
 TYPE_NAME_ID<TextWrappingMethod> WrapMethodArr[] = {
 	{ TextWrappingMethod::NoWrapping,	STR_WRAP_METHOD_NO_WRAP },		// _T("折り返さない")
 	{ TextWrappingMethod::SettingWidth,	STR_WRAP_METHOD_SPEC_WIDTH },	// _T("指定桁で折り返す")
@@ -414,7 +414,7 @@ void PropTypesScreen::SetData(HWND hwndDlg)
 
 	// レイアウト
 	{
-		// 2008.05.30 nasukoji	テキストの折り返し方法
+		// テキストの折り返し方法
 		HWND	hwndCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_WRAPMETHOD);
 		Combo_ResetContent(hwndCombo);
 		int nSelPos = 0;
@@ -574,7 +574,7 @@ int PropTypesScreen::GetData(HWND hwndDlg)
 
 	// レイアウト
 	{
-		// 2008.05.30 nasukoji	テキストの折り返し方法
+		// テキストの折り返し方法
 		HWND	hwndCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_WRAPMETHOD);
 		int		nSelPos = Combo_GetCurSel(hwndCombo);
 		types.nTextWrapMethod = WrapMethodArr[nSelPos].nMethod;		// テキストの折り返し方法

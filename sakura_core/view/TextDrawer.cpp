@@ -19,11 +19,7 @@ const TextArea& TextDrawer::GetTextArea() const
 using namespace std;
 
 
-/*
-テキスト表示
-@@@ 2002.09.22 YAZAKI    const unsigned char* pDataを、const char* pDataに変更
-@@@ 2007.08.25 kobake 戻り値を void に変更。引数 x, y を DispPos に変更
-*/
+/* テキスト表示 */
 void TextDrawer::DispText(
 	HDC			hdc,
 	DispPos*	pDispPos,
@@ -70,8 +66,6 @@ void TextDrawer::DispText(
 		}
 
 		// ウィンドウの左にあふれた文字数 -> nBefore
-		// 2007.09.08 kobake注 「ウィンドウの左」ではなく「クリップの左」を元に計算したほうが描画領域を節約できるが、
-		//                        バグが出るのが怖いのでとりあえずこのまま。
 		size_t nBeforeLogic = 0;
 		size_t nBeforeLayout = 0;
 		if (x < 0) {

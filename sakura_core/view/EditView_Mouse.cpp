@@ -56,7 +56,7 @@ void EditView::OnLBUTTONDOWN(WPARAM fwKeys, int _xPos , int _yPos)
 
 	size_t		nIdx;
 	int			nWork;
-	int			nFuncID = 0;				// 2007.12.02 nasukoji	マウス左クリックに対応する機能コード
+	int			nFuncID = 0;				// マウス左クリックに対応する機能コード
 
 	if (pEditDoc->layoutMgr.GetLineCount() == 0) {
 		return;
@@ -75,8 +75,7 @@ void EditView::OnLBUTTONDOWN(WPARAM fwKeys, int _xPos , int _yPos)
 		dwTipTimer = ::GetTickCount();		// 辞書Tip起動タイマー
 	}
 
-	// 2007.10.02 nasukoji	トリプルクリックであることを示す
-	// 2007.12.02 nasukoji	トリプルクリックをチェック
+	// トリプルクリックであることを示す
 	bool tripleClickMode = CheckTripleClick(ptMouse);
 	if (tripleClickMode) {
 		// マウス左トリプルクリックに対応する機能コードはcommon.pKeyNameArr[5]に入っている
@@ -97,7 +96,7 @@ void EditView::OnLBUTTONDOWN(WPARAM fwKeys, int _xPos , int _yPos)
 	mouseDownPos = ptMouse;
 
 	// OLEによるドラッグ & ドロップを使う
-	// 2007.12.02 nasukoji	トリプルクリック時はドラッグを開始しない
+	// トリプルクリック時はドラッグを開始しない
 	if (!tripleClickMode && GetDllShareData().common.edit.bUseOLE_DragDrop) {
 		if (GetDllShareData().common.edit.bUseOLE_DropSource) {		// OLEによるドラッグ元にするか
 			// 行選択エリアをドラッグした
@@ -162,7 +161,7 @@ void EditView::OnLBUTTONDOWN(WPARAM fwKeys, int _xPos , int _yPos)
 
 normal_action:;
 
-	// ALTキーが押されている、かつトリプルクリックでない		// 2007.11.15 nasukoji	トリプルクリック対応
+	// ALTキーが押されている、かつトリプルクリックでない
 	if (GetKeyState_Alt() && !tripleClickMode) {
 		if (GetSelectionInfo().IsTextSelected()) {	// テキストが選択されているか
 			// 現在の選択範囲を非選択状態に戻す
@@ -183,7 +182,7 @@ normal_action:;
 		GetSelectionInfo().SelectBeginBox();
 
 		::SetCapture(GetHwnd());
-		caret.HideCaret_(GetHwnd()); // 2002/07/22 novice
+		caret.HideCaret_(GetHwnd());
 		// 現在のカーソル位置から選択を開始する
 		GetSelectionInfo().BeginSelectArea();
 		caret.underLine.CaretUnderLineOFF(true);
@@ -213,11 +212,11 @@ normal_action:;
 		// 範囲選択開始 & マウスキャプチャー
 		GetSelectionInfo().SelectBeginNazo();
 		::SetCapture(GetHwnd());
-		caret.HideCaret_(GetHwnd()); // 2002/07/22 novice
+		caret.HideCaret_(GetHwnd());
 
 		Point ptNewCaret = caret.GetCaretLayoutPos();
 		bool bSetPtNewCaret = false;
-		if (tripleClickMode) {		// 2007.11.15 nasukoji	トリプルクリックを処理する
+		if (tripleClickMode) {
 			// 1行選択でない場合は選択文字列を解除
 			// トリプルクリックが1行選択でなくてもクアドラプルクリックを有効とする
 			if (nFuncID != F_SELECTLINE) {
@@ -313,7 +312,7 @@ normal_action:;
 		GetSelectionInfo().ChangeSelectAreaByCurrentCursor(ptNewCaret);
 
 		bool bSelectWord = false;
-		// CTRLキーが押されている、かつトリプルクリックでない		// 2007.11.15 nasukoji	トリプルクリック対応
+		// CTRLキーが押されている、かつトリプルクリックでない
 		if (GetKeyState_Control() && !tripleClickMode) {
 			GetSelectionInfo().bBeginWordSelect = true;		// 単語単位選択中
 			if (!GetSelectionInfo().IsTextSelected()) {
@@ -345,15 +344,6 @@ normal_action:;
 						NULL
 					);
 					if (bWhareResult) {
-						// 指定された行のデータ内の位置に対応する桁の位置を調べる。
-						// 2007.10.15 kobake 既にレイアウト単位なので変換は不要
-						/*
-						pLine            = pEditDoc->layoutMgr.GetLineStr(range.GetFrom().y, &nLineLen, &pLayout);
-						range.SetFromX(LineIndexToColumn(pLayout, range.GetFrom().x));
-						pLine            = pEditDoc->layoutMgr.GetLineStr(range.GetTo().y, &nLineLen, &pLayout);
-						range.SetToX(LineIndexToColumn(pLayout, range.GetTo().x));
-						*/
-
 						nWork = IsCurrentPositionSelected(
 							range.GetFrom()	// カーソル位置
 						);
@@ -372,15 +362,6 @@ normal_action:;
 					if (pEditDoc->layoutMgr.WhereCurrentWord(
 						GetSelectionInfo().select.GetTo().y, nIdx, &range, NULL, NULL)
 					) {
-						// 指定された行のデータ内の位置に対応する桁の位置を調べる
-						// 2007.10.15 kobake 既にレイアウト単位なので変換は不要
-						/*
-						pLine = pEditDoc->layoutMgr.GetLineStr(range.GetFrom().y, &nLineLen, &pLayout);
-						range.SetFromX(LineIndexToColumn(pLayout, range.GetFrom().x));
-						pLine = pEditDoc->layoutMgr.GetLineStr(range.GetTo().y, &nLineLen, &pLayout);
-						range.SetToX(LineIndexToColumn(pLayout, range.GetTo().x));
-						*/
-
 						nWork = IsCurrentPositionSelected(range.GetFrom());
 						if (nWork == -1 || nWork == 0) {
 							GetSelectionInfo().select.SetTo(range.GetFrom());
@@ -402,7 +383,7 @@ normal_action:;
 			}
 		}
 		// 行番号エリアをクリックした
-		// 2008.05.22 nasukoji	シフトキーを押している場合は行頭クリックとして扱う
+		// シフトキーを押している場合は行頭クリックとして扱う
 		if (ptMouse.x < textArea.GetAreaLeft() && !GetKeyState_Shift()) {
 			// 現在のカーソル位置から選択を開始する
 			GetSelectionInfo().bBeginLineSelect = true;
@@ -579,7 +560,6 @@ void EditView::OnRBUTTONUP(WPARAM fwKeys, int xPos , int yPos)
 
 	int		nIdx;
 	int		nFuncID;
-// novice 2004/10/10
 	// Shift,Ctrl,Altキーが押されていたか
 	nIdx = GetCtrlKeyState();
 	// マウス右クリックに対応する機能コードはcommon.pKeyNameArr[1]に入っている
@@ -595,7 +575,6 @@ void EditView::OnRBUTTONUP(WPARAM fwKeys, int xPos , int yPos)
 }
 
 
-// novice 2004/10/11 マウス中ボタン対応
 /*!
 	@brief マウス中ボタンを押したときの処理
 
@@ -770,7 +749,6 @@ void EditView::AutoScrollOnTimer()
 	}
 }
 
-// novice 2004/10/10 マウスサイドボタン対応
 /*!
 	@brief マウスサイドボタン1を押したときの処理
 
@@ -1082,7 +1060,7 @@ void EditView::OnMOUSEMOVE(WPARAM fwKeys, int xPos_, int yPos_)
 	}else {
 		// 座標指定によるカーソル移動
 		if ((ptMouse.x < textArea.GetAreaLeft() || dwTripleClickCheck)&& GetSelectionInfo().bBeginLineSelect) {	// 行単位選択中
-			// 2007.11.15 nasukoji	上方向の行選択時もマウスカーソルの位置の行が選択されるようにする
+			// 上方向の行選択時もマウスカーソルの位置の行が選択されるようにする
 			Point nNewPos(0, ptMouse.y);
 
 			// 1行の高さ
@@ -1173,14 +1151,6 @@ void EditView::OnMOUSEMOVE(WPARAM fwKeys, int xPos_, int yPos_)
 					nullptr
 				);
 				if (bResult) {
-					// 指定された行のデータ内の位置に対応する桁の位置を調べる
-					// 2007.10.15 kobake 既にレイアウト単位なので変換は不要
-					/*
-					pLine     = pEditDoc->layoutMgr.GetLineStr(range.GetFrom().y, &nLineLen, &pLayout);
-					range.SetFromX(LineIndexToColumn(pLayout, range.GetFrom().x));
-					pLine     = pEditDoc->layoutMgr.GetLineStr(range.GetTo().y, &nLineLen, &pLayout);
-					range.SetToX(LineIndexToColumn(pLayout, range.GetTo().x));
-					*/
 					int nWorkF = IsCurrentPositionSelectedTEST(
 						range.GetFrom(), // カーソル位置
 						select
@@ -1225,9 +1195,7 @@ void EditView::OnMOUSEMOVE(WPARAM fwKeys, int xPos_, int yPos_)
 #endif
 
 
-/* マウスホイールのメッセージ処理
-	2009.01.17 nasukoji	ホイールスクロールを利用したページスクロール・横スクロール対応
-*/
+/* マウスホイールのメッセージ処理 */
 LRESULT EditView::OnMOUSEWHEEL2(
 	WPARAM wParam,
 	LPARAM lParam,
@@ -1265,7 +1233,6 @@ LRESULT EditView::OnMOUSEWHEEL2(
 	}
 
 	{
-		// 2009.01.17 nasukoji	キー/マウスボタン + ホイールスクロールで横スクロールする
 		bool bHorizontal = false;
 		bool bKeyPageScroll = false;
 		if (nCmdFuncID == F_0) {
@@ -1502,7 +1469,7 @@ void EditView::OnLBUTTONUP(WPARAM fwKeys, int xPos , int yPos)
 	if (GetSelectionInfo().IsMouseSelecting()) {	// 範囲選択中
 		// マウス キャプチャを解放
 		::ReleaseCapture();
-		GetCaret().ShowCaret_(GetHwnd()); // 2002/07/22 novice
+		GetCaret().ShowCaret_(GetHwnd());
 
 		GetSelectionInfo().SelectEnd();
 
@@ -1534,7 +1501,6 @@ static unsigned __stdcall ShellExecuteProc(LPVOID lpParameter)
 
 
 // マウス左ボタンダブルクリック
-// 2007.01.18 kobake IsCurrentPositionURL仕様変更に伴い、処理の書き換え
 void EditView::OnLBUTTONDBLCLK(WPARAM fwKeys, int _xPos , int _yPos)
 {
 	Point ptMouse(_xPos, _yPos);
@@ -1543,7 +1509,6 @@ void EditView::OnLBUTTONDBLCLK(WPARAM fwKeys, int _xPos , int _yPos)
 	std::wstring	wstrURL;
 	const wchar_t*	pszMailTo = L"mailto:";
 
-	// 2007.10.06 nasukoji	クアドラプルクリック時はチェックしない
 	if (! dwTripleClickCheck) {
 		// カーソル位置にURLが有る場合のその範囲を調べる
 		if (
@@ -1606,11 +1571,10 @@ void EditView::OnLBUTTONDBLCLK(WPARAM fwKeys, int _xPos , int _yPos)
 		}
 	}
 
-// novice 2004/10/10
 	// Shift,Ctrl,Altキーが押されていたか
 	int	nIdx = GetCtrlKeyState();
 
-	// マウス左クリックに対応する機能コードはcommon.pKeyNameArr[?]に入っている 2007.11.15 nasukoji
+	// マウス左クリックに対応する機能コードはcommon.pKeyNameArr[?]に入っている
 	EFunctionCode nFuncID = GetDllShareData().common.keyBind.pKeyNameArr[
 		(int)(dwTripleClickCheck ? MouseFunctionType::QuadrapleClick : MouseFunctionType::DoubleClick)
 	].nFuncCodeArr[nIdx];
@@ -1636,14 +1600,11 @@ void EditView::OnLBUTTONDBLCLK(WPARAM fwKeys, int _xPos , int _yPos)
 		::SendMessage(::GetParent(hwndParent), WM_COMMAND, MAKELONG(nFuncID, CMD_FROM_MOUSE),  (LPARAM)NULL);
 	}
 
-	// 2007.10.06 nasukoji	クアドラプルクリック時もここで抜ける
 	if (dwTripleClickCheck) {
 		dwTripleClickCheck = 0;	// トリプルクリックチェック OFF（次回は通常クリック）
 		return;
 	}
 
-	// 2007.11.06 nasukoji	ダブルクリックが単語選択でなくてもトリプルクリックを有効とする
-	// 2007.10.02 nasukoji	トリプルクリックチェック用に時刻を取得
 	dwTripleClickCheck = ::GetTickCount();
 
 	// ダブルクリック位置として記憶
@@ -1667,7 +1628,7 @@ void EditView::OnLBUTTONDBLCLK(WPARAM fwKeys, int _xPos , int _yPos)
 		}
 	}
 	::SetCapture(GetHwnd());
-	GetCaret().HideCaret_(GetHwnd()); // 2002/07/22 novice
+	GetCaret().HideCaret_(GetHwnd());
 	if (GetSelectionInfo().IsTextSelected()) {
 		// 常時選択範囲の範囲
 		GetSelectionInfo().selectBgn.SetTo(GetSelectionInfo().select.GetTo());

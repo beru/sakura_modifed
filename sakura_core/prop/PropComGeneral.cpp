@@ -294,7 +294,7 @@ void PropGeneral::SetData(HWND hwndDlg)
 	// 段落単位で移動するときに、段落の両端で止まるか
 	::CheckDlgButton(hwndDlg, IDC_CHECK_STOPS_BOTH_ENDS_WHEN_SEARCH_PARAGRAPH, csGeneral.bStopsBothEndsWhenSearchParagraph);
 
-	//	2007.10.08 genta マウスクリックでアクティブになったときはカーソルをクリック位置に移動しない (2007.10.02 by nasukoji)
+	//	マウスクリックでアクティブになったときはカーソルをクリック位置に移動しない
 	::CheckDlgButton(hwndDlg, IDC_CHECK_NOMOVE_ACTIVATE_BY_MOUSE, csGeneral.bNoCaretMoveByActivation);
 
 	// [すべて閉じる]で他に編集用のウィンドウがあれば確認する
@@ -309,7 +309,7 @@ void PropGeneral::SetData(HWND hwndDlg)
 	// キーリピート時のスクロールを滑らかにするか
 	::CheckDlgButton(hwndDlg, IDC_CHECK_REPEATEDSCROLLSMOOTH, csGeneral.nRepeatedScroll_Smooth);
 
-	// 2009.01.17 nasukoji	組み合わせてホイール操作した時ページスクロールする
+	// 組み合わせてホイール操作した時ページスクロールする
 	HWND	hwndCombo;
 	int		nSelPos;
 
@@ -324,7 +324,7 @@ void PropGeneral::SetData(HWND hwndDlg)
 	}
 	Combo_SetCurSel(hwndCombo, nSelPos);
 
-	// 2009.01.12 nasukoji	組み合わせてホイール操作した時横スクロールする
+	// 組み合わせてホイール操作した時横スクロールする
 	hwndCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_WHEEL_HSCROLL);
 	Combo_ResetContent(hwndCombo);
 	nSelPos = 0;
@@ -383,7 +383,7 @@ int PropGeneral::GetData(HWND hwndDlg)
 
 	// 単語単位で移動するときに、単語の両端で止まるか
 	csGeneral.bStopsBothEndsWhenSearchWord = DlgButton_IsChecked(hwndDlg, IDC_CHECK_STOPS_BOTH_ENDS_WHEN_SEARCH_WORD);
-	//	2007.10.08 genta マウスクリックでアクティブになったときはカーソルをクリック位置に移動しない (2007.10.02 by nasukoji)
+	// マウスクリックでアクティブになったときはカーソルをクリック位置に移動しない
 	csGeneral.bNoCaretMoveByActivation = DlgButton_IsChecked(hwndDlg, IDC_CHECK_NOMOVE_ACTIVATE_BY_MOUSE);
 
 	// 段落単位で移動するときに、段落の両端で止まるか
@@ -403,7 +403,6 @@ int PropGeneral::GetData(HWND hwndDlg)
 	// キーリピート時のスクロールを滑らかにするか
 	csGeneral.nRepeatedScroll_Smooth = DlgButton_IsChecked(hwndDlg, IDC_CHECK_REPEATEDSCROLLSMOOTH);
 
-	// 2009.01.17 nasukoji	組み合わせてホイール操作した時ページスクロールする
 	HWND	hwndCombo;
 	int		nSelPos;
 
@@ -414,7 +413,7 @@ int PropGeneral::GetData(HWND hwndDlg)
 	nSelPos = Combo_GetCurSel(hwndCombo);
 	csGeneral.nPageScrollByWheel = SpecialScrollModeArr[nSelPos].nMethod;		// ページスクロールとする組み合わせ操作
 
-	// 2009.01.17 nasukoji	組み合わせてホイール操作した時横スクロールする
+	// 組み合わせてホイール操作した時横スクロールする
 	hwndCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_WHEEL_HSCROLL);
 	nSelPos = Combo_GetCurSel(hwndCombo);
 	csGeneral.nHorizontalScrollByWheel = SpecialScrollModeArr[nSelPos].nMethod;	// 横スクロールとする組み合わせ操作

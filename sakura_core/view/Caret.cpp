@@ -137,7 +137,6 @@ int Caret::MoveCursor(
 	if (editView.GetSelectionInfo().IsMouseSelecting()) {	// 範囲選択中
 		nCaretMarginY = 0;
 	}else {
-		//	2001/10/20 novice
 		nCaretMarginY = textArea.nViewRowNum / nCaretMarginRate;
 		if (1 > nCaretMarginY) {
 			nCaretMarginY = 1;
@@ -292,7 +291,7 @@ int Caret::MoveCursor(
 		}
 
 		// スクロールバーの状態を更新する
-		editView.AdjustScrollBars(); // 2001/10/20 novice
+		editView.AdjustScrollBars();
 	}
 
 	// 横スクロールが発生したら、ルーラー全体を再描画 2002.02.25 Add By KK
@@ -348,7 +347,6 @@ int Caret::MoveCursorFastMode(
 || 必要に応じて縦/横スクロールもする
 || 垂直スクロールをした場合はその行数を返す(正／負)
 */
-// 2007.09.11 kobake 関数名変更: MoveCursorToPoint→MoveCursorToClientPoint
 int Caret::MoveCursorToClientPoint(
 	const POINT& ptClientPos,
 	bool test,
@@ -556,7 +554,7 @@ void Caret::ShowEditCaret()
 		// キャレットがなかった場合
 		// キャレットの作成
 		CreateEditCaret(crCaret, crBack, nCaretWidth, nCaretHeight);
-		bCaretShowFlag = false; // 2002/07/22 novice
+		bCaretShowFlag = false;
 	}else {
 		if (
 			GetCaretSize() != Size(nCaretWidth, nCaretHeight)
@@ -569,11 +567,11 @@ void Caret::ShowEditCaret()
 
 			// キャレットの作成
 			CreateEditCaret(crCaret, crBack, nCaretWidth, nCaretHeight);
-			bCaretShowFlag = false; // 2002/07/22 novice
+			bCaretShowFlag = false;
 		}else {
 			// キャレットはあるし、大きさも変わっていない場合
 			// キャレットを隠す
-			HideCaret_(editView.GetHwnd()); // 2002/07/22 novice
+			HideCaret_(editView.GetHwnd());
 		}
 	}
 
@@ -581,11 +579,10 @@ void Caret::ShowEditCaret()
 	SetCaretSize(nCaretWidth, nCaretHeight);
 
 	// キャレットの位置を調整
-	// 2007.08.26 kobake キャレットX座標の計算をUNICODE仕様にした。
 	::SetCaretPos(ptDrawPos.x, ptDrawPos.y);
 	if (bShowCaret) {
 		// キャレットの表示
-		ShowCaret_(editView.GetHwnd()); // 2002/07/22 novice
+		ShowCaret_(editView.GetHwnd());
 	}
 
 	this->crCaret = crCaret;
@@ -602,7 +599,6 @@ void Caret::ShowEditCaret()
 	@note ステータスバーの出力内容の変更はCEditWnd::OnSize()の
 		カラム幅計算に影響があることに注意
 */
-// 2007.10.17 kobake 重複するコードを整理
 void Caret::ShowCaretPosInfo()
 {
 	// 必要なインターフェース
@@ -1003,7 +999,6 @@ void Caret::CreateEditCaret(COLORREF crCaret, COLORREF crBack, int nWidth, int n
 }
 
 
-// 2002/07/22 novice
 /*!
 	キャレットの表示
 */

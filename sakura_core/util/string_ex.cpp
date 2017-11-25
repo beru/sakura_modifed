@@ -148,7 +148,7 @@ const char* stristr(const char* s1, const char* s2)
 
 const char* strichr_j(const char* s1, char c2)
 {
-	if (c2 == 0) return ::strchr(s1, 0); // 文字列終端を探すためにc2に0を渡した場合も、正しく処理されるように。 2007.10.16 kobake
+	if (c2 == 0) return ::strchr(s1, 0); // 文字列終端を探すためにc2に0を渡した場合も、正しく処理されるように
 
 	int C2 = my_toupper(c2);
 	for (const char* p1=s1; *p1; ++p1) {
@@ -160,7 +160,7 @@ const char* strichr_j(const char* s1, char c2)
 
 const char* strchr_j(const char* str, char c)
 {
-	if (c == 0) return ::strchr(str, 0); // 文字列終端を探すためにcに0を渡した場合も、正しく処理されるように。 2007.10.16 kobake
+	if (c == 0) return ::strchr(str, 0); // 文字列終端を探すためにcに0を渡した場合も、正しく処理されるように
 
 	for (const char* p1=str; *p1; ++p1) {
 		if (*p1 == c) return p1;

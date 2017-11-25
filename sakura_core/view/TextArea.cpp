@@ -176,8 +176,6 @@ bool TextArea::DetectWidthOfLineNumberArea(bool bRedraw)
 		view.GetClientRect(&rc);
 		int nCxVScroll = ::GetSystemMetrics(SM_CXVSCROLL);		// 垂直スクロールバーの横幅
 		nViewCx = rc.Width() - nCxVScroll - GetAreaLeft();	// 表示域の幅
-		// 2008.05.27 nasukoji	表示域の桁数も算出する（右端カーソル移動時の表示場所ずれへの対処）
-		// nViewColNum = t_max(0, nViewCx - 1) / pView->GetTextMetrics().GetHankakuDx();	// 表示域の桁数
 		UpdateViewColRowNums();
 
 		if (bRedraw && view.GetDrawSwitch()) {
@@ -312,7 +310,7 @@ void TextArea::GenerateLeftRect(RECT* rc, int nColCount) const
 
 void TextArea::GenerateRightRect(RECT* rc, int nColCount) const
 {
-	rc->left   = nViewAlignLeft + nViewCx - nColCount * editView.GetTextMetrics().GetHankakuDx(); // 2008.01.26 kobake 符号が逆になってたのを修正
+	rc->left   = nViewAlignLeft + nViewCx - nColCount * editView.GetTextMetrics().GetHankakuDx();
 	rc->right  = nViewAlignLeft + nViewCx;
 	rc->top    = nViewAlignTop;
 	rc->bottom = nViewAlignTop  + nViewCy;

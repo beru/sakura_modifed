@@ -9,8 +9,6 @@
 
 /*!
 	Singletonパターン
-
-	2008.03.03 kobake 作成
 */
 template <class T>
 class TSingleton {
@@ -30,8 +28,6 @@ private:
 /*!
 	1個しかインスタンスが存在しないクラスからのインスタンス取得インターフェースをstaticで提供。
 	Singletonパターンとは異なり、Instance()呼び出しにより、インスタンスが自動生成されない点に注意。
-
-	2007.10.23 kobake 作成
 */
 template <class T>
 class TSingleInstance {

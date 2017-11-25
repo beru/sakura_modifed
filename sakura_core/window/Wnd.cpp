@@ -145,7 +145,7 @@ HWND Wnd::Create(
 	// 初期ウィンドウサイズ
 	// ウィンドウの作成
 
-	// Windowsフックにより、ウィンドウが作成されるタイミングを横取りする 2007.10.01 kobake
+	// Windowsフックにより、ウィンドウが作成されるタイミングを横取りする
 	CWindowCreationHook::Use();
 
 	hWnd = ::CreateWindowEx(

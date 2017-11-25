@@ -3,7 +3,6 @@
 #include "util/string_ex.h"
 
 // ヒープを用いないvector
-// 2007.09.23 kobake 作成。
 template <class ELEMENT_TYPE, size_t MAX_SIZE, class SET_TYPE = const ELEMENT_TYPE&>
 class StaticVector {
 public:
@@ -51,7 +50,6 @@ private:
 };
 
 // ヒープを用いない文字列クラス
-// 2007.09.23 kobake 作成。
 template <class CHAR_TYPE, size_t N_BUFFER_COUNT>
 class StaticString {
 private:

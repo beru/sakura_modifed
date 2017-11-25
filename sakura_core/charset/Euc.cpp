@@ -69,7 +69,6 @@ size_t Euc::EucjpToUni(const char* pSrc, const size_t nSrcLen, wchar_t* pDst, bo
 
 
 // EUC→Unicodeコード変換
-// 2007.08.13 kobake 追加
 CodeConvertResult Euc::EUCToUnicode(const Memory& src, NativeW* pDstMem)
 {
 	// ソース取得

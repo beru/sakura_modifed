@@ -48,9 +48,6 @@ struct TabGroupInfo {
 };
 
 // 編集ウィンドウ（外枠）管理クラス
-// 2002.02.17 YAZAKI CShareDataのインスタンスは、Processにひとつあるのみ。
-// 2007.10.30 kobake IsFuncEnable,IsFuncCheckedをFunccode.hに移動
-// 2007.10.30 kobake OnHelp_MenuItemをCEditAppに移動
 class EditWnd :
 	public TSingleton<EditWnd>,
 	public DocListenerEx
@@ -158,12 +155,12 @@ public:
 	void PrintPreviewModeONOFF(void);	// 印刷Previewモードのオン/オフ
 	
 	// アイコン
-	void SetWindowIcon(HICON, int);	//	Sep. 10, 2002 genta
-	void GetDefaultIcon(HICON* hIconBig, HICON* hIconSmall) const;	//	Sep. 10, 2002 genta
-	bool GetRelatedIcon(const TCHAR* szFile, HICON* hIconBig, HICON* hIconSmall) const;	//	Sep. 10, 2002 genta
-	void SetPageScrollByWheel(bool bState) { bPageScrollByWheel = bState; }		// ホイール操作によるページスクロール有無を設定する（TRUE=あり, FALSE=なし）	// 2009.01.17 nasukoji
-	void SetHScrollByWheel(bool bState) { bHorizontalScrollByWheel = bState; }	// ホイール操作による横スクロール有無を設定する（TRUE=あり, FALSE=なし）	// 2009.01.17 nasukoji
-	void ClearMouseState(void);		// 2009.01.17 nasukoji	マウスの状態をクリアする（ホイールスクロール有無状態をクリア）
+	void SetWindowIcon(HICON, int);	// 
+	void GetDefaultIcon(HICON* hIconBig, HICON* hIconSmall) const;	// 
+	bool GetRelatedIcon(const TCHAR* szFile, HICON* hIconBig, HICON* hIconSmall) const;	// 
+	void SetPageScrollByWheel(bool bState) { bPageScrollByWheel = bState; }		// ホイール操作によるページスクロール有無を設定する（TRUE=あり, FALSE=なし）
+	void SetHScrollByWheel(bool bState) { bHorizontalScrollByWheel = bState; }	// ホイール操作による横スクロール有無を設定する（TRUE=あり, FALSE=なし）
+	void ClearMouseState(void);		// マウスの状態をクリアする（ホイールスクロール有無状態をクリア）
 	
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                           情報                              //
@@ -172,7 +169,7 @@ public:
 	// 自アプリがアクティブかどうか
 	bool IsActiveApp() const { return bIsActiveApp; }
 	
-	// ツールチップのテキストを取得。2007.09.08 kobake 追加
+	// ツールチップのテキストを取得
 	void GetTooltipText(TCHAR* wszBuf, size_t nBufCount, int nID) const;
 	
 	// 印刷Preview中かどうか
@@ -180,8 +177,8 @@ public:
 		return pPrintPreview != nullptr;
 	}
 	
-	bool IsPageScrollByWheel() const { return bPageScrollByWheel; }		// ホイール操作によるページスクロール有無	// 2009.01.17 nasukoji
-	bool IsHScrollByWheel() const { return bHorizontalScrollByWheel; }	// ホイール操作による横スクロール有無		// 2009.01.17 nasukoji
+	bool IsPageScrollByWheel() const { return bPageScrollByWheel; }		// ホイール操作によるページスクロール有無	
+	bool IsHScrollByWheel() const { return bHorizontalScrollByWheel; }	// ホイール操作による横スクロール有無
 	
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                           表示                              //
@@ -203,7 +200,7 @@ public:
 	void Views_RedrawAll();
 	void Views_Redraw();
 	void SetActivePane(int);	// アクティブなペインを設定
-	int GetActivePane(void) const { return nActivePaneIndex; }	// アクティブなペインを取得		2007.08.26 kobake const追加
+	int GetActivePane(void) const { return nActivePaneIndex; }	// アクティブなペインを取得
 	bool SetDrawSwitchOfAllViews(bool bDraw);						// すべてのペインの描画スイッチを設定する
 	void RedrawAllViews(EditView* pViewExclude);					// すべてのペインをRedrawする
 	void Views_DisableSelectArea(bool bRedraw);
@@ -357,9 +354,9 @@ public:
 private:
 	int				nCurrentFocus;				// 現在のフォーカス情報
 	int				nWinSizeType;				// サイズ変更のタイプ。SIZE_MAXIMIZED, SIZE_MINIMIZED 等。
-	bool			bPageScrollByWheel;			// ホイール操作によるページスクロールあり	// 2009.01.17 nasukoji
-	bool			bHorizontalScrollByWheel;	// ホイール操作による横スクロールあり		// 2009.01.17 nasukoji
-	HACCEL			hAccelWine;					// ウィンドウ毎のアクセラレータテーブルのハンドル(Wine用)	// 2009.08.15 nasukoji
+	bool			bPageScrollByWheel;			// ホイール操作によるページスクロールあり
+	bool			bHorizontalScrollByWheel;	// ホイール操作による横スクロールあり
+	HACCEL			hAccelWine;					// ウィンドウ毎のアクセラレータテーブルのハンドル(Wine用)
 	HACCEL			hAccel;						// アクセラレータテーブル(共有 or ウィンドウ毎)
 
 	// フォント・イメージ

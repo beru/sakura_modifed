@@ -4,8 +4,6 @@
 //                 メッセージボックス：実装                    //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-// 2007.10.02 kobake メッセージボックスの使用はデバッグ時に限らないので、「Debug～」という名前を廃止
-
 // テキスト整形機能付きMessageBox
 int VMessageBoxF(HWND hwndOwner, UINT uType, LPCTSTR lpCaption, LPCTSTR lpText, va_list& v);
 int MessageBoxF (HWND hwndOwner, UINT uType, LPCTSTR lpCaption, LPCTSTR lpText, ...);

@@ -554,12 +554,11 @@ HWND EditWnd::Create(
 
 	auto_memset(pszMenubarMessage, _T(' '), MENUBAR_MESSAGE_MAX_LEN);	// null終端は不要
 
-	//	Dec. 4, 2002 genta
 	InitMenubarMessageFont();
 
 	pDropTarget = new DropTarget(this);	// 右ボタンドロップ用
 
-	// 2009.01.17 nasukoji	ホイールスクロール有無状態をクリア
+	// ホイールスクロール有無状態をクリア
 	ClearMouseState();
 
 	// ウィンドウ毎にアクセラレータテーブルを作成する(Wine用)
@@ -1188,14 +1187,14 @@ LRESULT EditWnd::DispatchEvent(
 		if (bIsActiveApp) {
 			AppNodeGroupHandle(0).AddEditWndList(GetHwnd());	// リスト移動処理
 
-			// 2009.01.17 nasukoji	ホイールスクロール有無状態をクリア
+			// ホイールスクロール有無状態をクリア
 			ClearMouseState();
 		}
 
 		// タイマーON/OFF
 		UpdateCaption();
-		funcKeyWnd.Timer_ONOFF(bIsActiveApp); // 20060126 aroka
-		this->Timer_ONOFF(bIsActiveApp); // 20060128 aroka
+		funcKeyWnd.Timer_ONOFF(bIsActiveApp);
+		this->Timer_ONOFF(bIsActiveApp);
 
 		return 0L;
 
@@ -3650,7 +3649,7 @@ void EditWnd::PrintMenubarMessage(const TCHAR* msg)
 		pnCaretPosInfoDx[i] = (nCaretPosInfoCharWidth);
 	}
 	*/
-	::ExtTextOut(hdc, rc.left, rc.top, ETO_CLIPPED | ETO_OPAQUE,&rc,pszMenubarMessage,nStrLen,NULL/*pnCaretPosInfoDx*/); // 2007.10.17 kobake めんどいので今のところは文字間隔配列を使わない。
+	::ExtTextOut(hdc, rc.left, rc.top, ETO_CLIPPED | ETO_OPAQUE,&rc,pszMenubarMessage,nStrLen,NULL/*pnCaretPosInfoDx*/);
 	::SelectObject(hdc, hFontOld);
 	::ReleaseDC(GetHwnd(), hdc);
 }
@@ -3853,7 +3852,6 @@ LRESULT EditWnd::WinListMenu(HMENU hMenu, EditNode* pEditNodeArr, size_t nRowNum
 	return 0L;
 }
 
-// 2007.09.08 kobake 追加
 // ツールチップのテキストを取得
 void EditWnd::GetTooltipText(TCHAR* wszBuf, size_t nBufCount, int nID) const
 {
@@ -4392,9 +4390,7 @@ void EditWnd::CreateAccelTbl(void)
 	hAccel = hAccelWine ? hAccelWine : pShareData->handles.hAccel;
 }
 
-/*! ウィンドウ毎に作成したアクセラレータテーブルを破棄する
-	@datet 2009.08.15 Hidetaka Sakai, nasukoji
-*/
+/*! ウィンドウ毎に作成したアクセラレータテーブルを破棄する */
 void EditWnd::DeleteAccelTbl(void)
 {
 	hAccel = NULL;

@@ -91,7 +91,6 @@ namespace WCODE {
 	bool CalcHankakuByFont(wchar_t c);
 
 	// ”¼Šp•¶š(c’·’·•ûŒ`)‚©‚Ç‚¤‚©”»’è
-	// 2007.08.30 kobake ’Ç‰Á
 	inline bool IsHankaku(wchar_t wc)
 	{
 		// ¦‚Ù‚Ú–¢ŒŸØB

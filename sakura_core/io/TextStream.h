@@ -27,7 +27,6 @@ private:
 };
 
 // テキスト出力ストリーム
-// 2008.01.26 kobake 出力文字コードを任意で指定できるように変更
 class TextOutputStream : public OutputStream {
 public:
 	// コンストラクタ・デストラクタ

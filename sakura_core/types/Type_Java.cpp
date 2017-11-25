@@ -142,7 +142,7 @@ void DocOutline::MakeFuncList_Java(FuncInfoArr* pFuncInfoArr)
 						Point ptPosXY_Layout = doc.layoutMgr.LogicToLayout(ptPosXY_Logic);
 						wchar_t szWork[256];
 						if (0 < auto_snprintf_s(szWork, _countof(szWork), L"%ls::%ls", szClass, LSW(STR_OUTLINE_JAVA_DEFPOS))) {
-							pFuncInfoArr->AppendData(ptPosXY_Logic.y + 1, ptPosXY_Layout.y + 1, szWork, nFuncId); //2007.10.09 kobake レイアウト・ロジックの混在バグ修正
+							pFuncInfoArr->AppendData(ptPosXY_Logic.y + 1, ptPosXY_Layout.y + 1, szWork, nFuncId);
 						}
 					}
 

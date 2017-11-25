@@ -18,7 +18,7 @@ public:
 	// ルーラー描画 (背景とキャレット)
 	void DispRuler(HDC);
 	
-	// ルーラーの背景のみ描画 2007.08.29 kobake 追加
+	// ルーラーの背景のみ描画
 	void DrawRulerBg(Graphics& gr);
 	
 	void SetRedrawFlag() { bRedrawRuler = true; }
@@ -39,8 +39,8 @@ private:
 	const EditDoc&	editDoc;
 	
 	// 状態
-	bool	bRedrawRuler;		// ルーラー全体を描き直す時 = true      2002.02.25 Add By KK
-	int		nOldRulerDrawX;	// 前回描画したルーラーのキャレット位置 2002.02.25 Add By KK  2007.08.26 kobake 名前変更
-	int		nOldRulerWidth;	// 前回描画したルーラーのキャレット幅   2002.02.25 Add By KK  2007.08.26 kobake 名前変更
+	bool	bRedrawRuler;		// ルーラー全体を描き直す時 = true
+	int		nOldRulerDrawX;	// 前回描画したルーラーのキャレット位置
+	int		nOldRulerWidth;	// 前回描画したルーラーのキャレット幅
 };
 

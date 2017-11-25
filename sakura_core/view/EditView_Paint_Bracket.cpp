@@ -238,7 +238,6 @@ void EditView::DrawBracketPair(bool bDraw)
 
 //======================================================================
 // ‘ÎŠ‡ŒÊ‚Ì‘Î‰ž•\
-// 2007.10.16 kobake
 struct KAKKO_T {
 	const wchar_t* sStr;
 	const wchar_t* eStr;
@@ -304,7 +303,7 @@ bool EditView::SearchBracket(
 	if (!cline)	//	ÅŒã‚Ìs‚É–{•¶‚ª‚È‚¢ê‡
 		return false;
 
-	// Š‡ŒÊˆ— 2007.10.16 kobake
+	// Š‡ŒÊˆ—
 	for (const KAKKO_T* p=g_aKakkos; p->sStr; ++p) {
 		if (wcsncmp(p->sStr, &cline[ptPos.x], 1) == 0) {
 			return SearchBracketForward(ptPos, pptLayoutNew, p->sStr, p->eStr, *mode);
@@ -523,7 +522,7 @@ bool EditView::IsBracket(
 	int size
 	)
 {
-	// Š‡ŒÊˆ— 2007.10.16 kobake
+	// Š‡ŒÊˆ—
 	if (size == 1) {
 		for (const KAKKO_T* p=g_aKakkos; p->sStr; ++p) {
 			if (wcsncmp(p->sStr, &pLine[x], 1) == 0) {

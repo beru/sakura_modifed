@@ -286,7 +286,7 @@ void EditView::AdjustScrollBars()
 		si.cbSize = sizeof(si);
 		si.fMask = SIF_ALL | SIF_DISABLENOSCROLL;
 		si.nMin  = 0;
-		si.nMax  = (int)GetRightEdgeForScrollBar() - 1;		// 2009.08.28 nasukoji	スクロールバー制御用の右端座標を取得
+		si.nMax  = (int)GetRightEdgeForScrollBar() - 1;		// スクロールバー制御用の右端座標を取得
 		si.nPage = GetTextArea().nViewColNum;			// 表示域の桁数
 		si.nPos  = GetTextArea().GetViewLeftCol();		// 表示域の一番左の桁(0開始)
 		si.nTrackPos = 1;

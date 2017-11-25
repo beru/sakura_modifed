@@ -579,7 +579,7 @@ void EditView::OnPaint2(HDC _hdc, PAINTSTRUCT* pPs, BOOL bDrawFromComptibleBmp)
 
 	// キャレットを隠す
 	bool bCaretShowFlag_Old = GetCaret().GetCaretShowFlag();
-	GetCaret().HideCaret_(this->GetHwnd()); // 2002/07/22 novice
+	GetCaret().HideCaret_(this->GetHwnd());
 
 	RECT			rc;
 	int				nLineHeight = GetTextMetrics().GetHankakuDy();
@@ -797,7 +797,7 @@ void EditView::OnPaint2(HDC _hdc, PAINTSTRUCT* pPs, BOOL bDrawFromComptibleBmp)
 
 	// キャレットを現在位置に表示します
 	if (bCaretShowFlag_Old)
-		GetCaret().ShowCaret_(this->GetHwnd()); // 2002/07/22 novice
+		GetCaret().ShowCaret_(this->GetHwnd());
 	return;
 }
 

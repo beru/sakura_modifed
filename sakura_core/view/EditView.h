@@ -261,7 +261,6 @@ public:
 	//                       テキスト選択                          //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 public:
-	// 2002/01/19 novice public属性に変更
 	bool GetSelectedDataSimple(NativeW&);// 選択範囲のデータを取得
 	bool GetSelectedDataOne(NativeW& memBuf, size_t nMaxLen);
 	bool GetSelectedData(NativeW*, bool, const wchar_t*, bool, bool bAddCRLFWhenCopy, EolType neweol = EolType::Unknown);	// 選択範囲のデータを取得
