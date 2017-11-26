@@ -19,7 +19,13 @@ using namespace std;
 // カスタムカラー用の識別文字列
 static const TCHAR* TSTR_PTRCUSTOMCOLORS = _T("ptrCustomColors");
 
+namespace {
 WNDPROC	wpColorListProc;
+int bgColorSampleLeft;
+int bgColorSampleRight;
+int fgColorSampleLeft;
+int fgColorSampleRight;
+} // namespace {
 
 static const DWORD p_helpids2[] = {	//11400
 	IDC_LIST_COLORS,				HIDC_LIST_COLORS,				// 色指定
@@ -203,7 +209,7 @@ LRESULT APIENTRY ColorList_SubclassProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPA
 			::InvalidateRect(hwnd, &rcItem, TRUE);
 		}else
 		// 前景色見本 矩形
-		if (rcItem.right - 27 <= xPos && xPos <= rcItem.right - 27 + 12
+		if (fgColorSampleLeft <= xPos && xPos <= fgColorSampleRight
 			&& ((g_ColorAttributeArr[nIndex].fAttribute & COLOR_ATTRIB_NO_TEXT) == 0)
 		) {
 			// 色選択ダイアログ
@@ -214,7 +220,7 @@ LRESULT APIENTRY ColorList_SubclassProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPA
 			}
 		}else
 		// 前景色見本 矩形
-		if (rcItem.right - 13 <= xPos && xPos <= rcItem.right - 13 + 12
+		if (bgColorSampleLeft <= xPos && xPos <= bgColorSampleRight
 			&& ((g_ColorAttributeArr[nIndex].fAttribute & COLOR_ATTRIB_NO_BACK) == 0)
 		) {
 			// 色選択ダイアログ
@@ -983,7 +989,6 @@ void PropTypesColor::RearrangeKeywordSet(HWND hwndDlg)
 void PropTypesColor::DrawColorListItem(DRAWITEMSTRUCT* pDis)
 {
 	ColorInfo*	pColorInfo;
-//	RECT		rc0,rc1,rc2;
 	RECT		rc1;
 	COLORREF	cRim = (COLORREF)::GetSysColor(COLOR_3DSHADOW);
 
@@ -994,9 +999,7 @@ void PropTypesColor::DrawColorListItem(DRAWITEMSTRUCT* pDis)
 	// 描画対象
 	Graphics gr(pDis->hDC);
 
-//	rc0 = pDis->rcItem;
 	rc1 = pDis->rcItem;
-//	rc2 = pDis->rcItem;
 
 	// アイテムデータの取得
 	pColorInfo = (ColorInfo*)pDis->itemData;
@@ -1064,16 +1067,19 @@ void PropTypesColor::DrawColorListItem(DRAWITEMSTRUCT* pDis)
 		::LineTo(gr,	rc1.left + 5, rc1.bottom - 3);
 		::LineTo(gr,	rc1.right - 2, rc1.top + 4);
 	}
-//	return;
 
+  int colorSampleWidth = 12 * (double)GetDeviceCaps(pDis->hDC, LOGPIXELSX) / 96 + 0.5;
 
 	if ((g_ColorAttributeArr[pColorInfo->nColorIdx].fAttribute & COLOR_ATTRIB_NO_BACK) == 0) {
 		// 背景色 見本矩形
 		rc1 = pDis->rcItem;
-		rc1.left = rc1.right - 13;
+		rc1.left = rc1.right - (colorSampleWidth + 1);
 		rc1.top += 2;
-		rc1.right = rc1.left + 12;
+		rc1.right = rc1.left + colorSampleWidth;
 		rc1.bottom -= 2;
+
+    bgColorSampleLeft = rc1.left;
+    bgColorSampleRight = rc1.right;
 
 		gr.SetBrushColor(pColorInfo->colorAttr.cBACK);
 		gr.SetPen(cRim);
@@ -1083,16 +1089,19 @@ void PropTypesColor::DrawColorListItem(DRAWITEMSTRUCT* pDis)
 	if ((g_ColorAttributeArr[pColorInfo->nColorIdx].fAttribute & COLOR_ATTRIB_NO_TEXT) == 0) {
 		// 前景色 見本矩形
 		rc1 = pDis->rcItem;
-		rc1.left = rc1.right - 27;
+		rc1.left = rc1.right - (2 * colorSampleWidth + 3);
 		rc1.top += 2;
-		rc1.right = rc1.left + 12;
+		rc1.right = rc1.left + colorSampleWidth;
 		rc1.bottom -= 2;
+
+    fgColorSampleLeft = rc1.left;
+    fgColorSampleRight = rc1.right;
+
 		gr.SetBrushColor(pColorInfo->colorAttr.cTEXT);
 		gr.SetPen(cRim);
 		::RoundRect(pDis->hDC, rc1.left, rc1.top, rc1.right, rc1.bottom , 3, 3);
 	}
 }
-
 
 // 色選択ダイアログ
 BOOL PropTypesColor::SelectColor(

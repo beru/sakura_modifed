@@ -140,8 +140,6 @@ CodeConvertResult ReadManager::ReadFile_To_CDocLineMgr(
 		return CodeConvertResult::Failure; //####INTERRUPT
 	}
 
-	// 行変更状態をすべてリセット
-//	ModifyVisitor().ResetAllModifyFlag(docLineMgr, 0);
 	return eRet;
 }
 

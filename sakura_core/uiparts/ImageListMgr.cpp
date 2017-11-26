@@ -62,17 +62,20 @@ bool ImageListMgr::Create(HINSTANCE hInstance)
 		return true;
 	}
 
-	HBITMAP	hRscbmp;			//	リソースから読み込んだひとかたまりのBitmap
-	HBITMAP	hFOldbmp = NULL;	//	SetObjectで得られた1つ前のハンドルを保持する
-	HDC		dcFrom = 0;			//	描画用
-	int		nRetPos;			//	後処理用
-	cx = cy = 16;
+  // 高DPI対応
+  HDC screen = GetDC(0);
+  int logPixelsX = GetDeviceCaps(screen, LOGPIXELSX);
+  int logPixelsY = GetDeviceCaps(screen, LOGPIXELSY);
+  ReleaseDC(0, screen);
+  double scaleX = (double)logPixelsX / 96;
+  double scaleY = (double)logPixelsY / 96;
+	cx = 16 * scaleX + 0.5;
+  cy = 16 * scaleY + 0.5;
 
-	nRetPos = 0;
 	do {
 		TCHAR szPath[_MAX_PATH];
 		GetInidirOrExedir(szPath, FN_TOOL_BMP);
-		hRscbmp = (HBITMAP)::LoadImage(NULL, szPath, IMAGE_BITMAP, 0, 0,
+	  HBITMAP	hRscbmp = (HBITMAP)::LoadImage(NULL, szPath, IMAGE_BITMAP, 0, 0,
 			LR_LOADFROMFILE | LR_CREATEDIBSECTION | LR_LOADMAP3DCOLORS);
 
 		if (!hRscbmp) {	// ローカルファイルの読み込み失敗時はリソースから取得
@@ -81,65 +84,40 @@ bool ImageListMgr::Create(HINSTANCE hInstance)
 			hRscbmp = (HBITMAP)::LoadImage(hInstance, MAKEINTRESOURCE(IDB_MYTOOL), IMAGE_BITMAP, 0, 0,
 				LR_CREATEDIBSECTION | LR_LOADMAP3DCOLORS );
 			if (!hRscbmp) {
-				//	正常終了と同じコードだとdcFromを不正に解放してしまう
-				nRetPos = 2;
 				break;
 			}
 		}
-		hIconBitmap = hRscbmp;
-
-		//	透過色を得るためにDCにマップする
-		dcFrom = CreateCompatibleDC(0);	//	転送元用
-		if (!dcFrom) {
-			nRetPos = 1;
-			break;
-		}
-
-		//	まずbitmapをdcにmapする
-		//	こうすることでCreateCompatibleBitmapで
-		//	hRscbmpと同じ形式のbitmapを作れる．
-		//	単にCreateCompatibleDC(0)で取得したdcや
-		//	スクリーンのDCに対してCreateCompatibleBitmapを
-		//	使うとモノクロBitmapになる．
-		hFOldbmp = (HBITMAP)SelectObject(dcFrom, hRscbmp);
-		if (!hFOldbmp) {
-			nRetPos = 4;
-			break;
-		}
-
+	  HDC	dcFrom = CreateCompatibleDC(0);	//	転送元用
+		if (!dcFrom) break;
+    ::SelectObject(dcFrom, hRscbmp);
 		cTrans = GetPixel(dcFrom, 0, 0);//	取得した画像の(0,0)の色を背景色として使う
-		
-		//	もはや処理とは無関係だが，後学のためにコメントのみ残しておこう
-		//---------------------------------------------------------
-		//	BitmapがMemoryDCにAssignされている間はbitmapハンドルを
-		//	使っても正しいbitmapが取得できない．
-		//	つまり，DCへの描画命令を発行してもその場でBitmapに
-		//	反映されるわけではない．
-		//	BitmapをDCから取り外して初めて内容の保証ができる
 
-		//	DCのmap/unmapが速度に大きく影響するため，
-		//	横長のBitmapを作って一括登録するように変更
-		//	これによって250msecくらい速度が改善される．
-		//---------------------------------------------------------
-
+    //	透過色を得るためにDCにマップする
+    if (logPixelsX == 96) {
+		  hIconBitmap = hRscbmp;
+    }else {
+      // 高DPI対応
+      // アイコン画像を拡大、高解像度なアイコンデータがあれば良いのだが…
+      BITMAP bmp;
+      ::GetObject(hRscbmp, sizeof(bmp), &bmp);
+      int dstW = bmp.bmWidth * scaleX + 0.5;
+      int dstH = bmp.bmHeight * scaleY + 0.5;
+      hIconBitmap = ::CreateCompatibleBitmap(dcFrom, dstW, dstH);
+      if (hIconBitmap) {
+        HDC	dcTo = CreateCompatibleDC(0);	//	転送元用
+		    if (dcTo) {
+          ::SelectObject(dcTo, hIconBitmap);
+          SetStretchBltMode(dcTo, BLACKONWHITE);
+          BOOL ret = ::StretchBlt(dcTo, 0, 0, dstW, dstH, dcFrom, 0, 0, bmp.bmWidth, bmp.bmHeight, SRCCOPY);
+          DeleteDC(dcTo);
+        }
+		    DeleteObject(hRscbmp);
+      }
+    }
+    DeleteDC(dcFrom);
 	}while (0);	//	1回しか通らない. breakでここまで飛ぶ
 
-	//	後処理
-	switch (nRetPos) {
-	case 0:
-		//	hRscBmpをdcFromから切り離しておく必要がある
-		//	アイコン描画変更時に過って削除されていた
-		SelectObject(dcFrom, hFOldbmp);
-	case 4:
-		DeleteDC(dcFrom);
-	case 2:
-	case 1:
-		//	hRscbmpは hIconBitmap としてオブジェクトと
-		//	同じだけ保持されるので解放してはならない
-		break;
-	}
-
-	return nRetPos == 0;
+	return hIconBitmap != 0;
 }
 
 
@@ -265,7 +243,6 @@ void ImageListMgr::DitherBlt2(
 
 	DeleteObject(bmpMask);
 	return;
-
 }
 
 /*! @brief アイコンの描画

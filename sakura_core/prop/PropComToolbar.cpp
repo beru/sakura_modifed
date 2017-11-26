@@ -125,7 +125,6 @@ INT_PTR PropToolbar::DispatchEvent(
 	LPDRAWITEMSTRUCT	pDis;
 	int					nIndex1;
 	int					nIndex2;
-//	int					nIndex3;
 	int					i;
 	int					j;
 	static int			nListItemHeight;
@@ -141,7 +140,7 @@ INT_PTR PropToolbar::DispatchEvent(
 		{
 			TextWidthCalc calc(hwndResList);
 			int nFontHeight = calc.GetTextHeight();
-			nListItemHeight = 18;
+			nListItemHeight = pIcons->GetCy() + 2;
 			if (nListItemHeight < nFontHeight) {
 				nListItemHeight = nFontHeight;
 				nToolBarListBoxTopMargin = 0;
@@ -179,7 +178,6 @@ INT_PTR PropToolbar::DispatchEvent(
 			OnHelp(hwndDlg, IDD_PROP_TOOLBAR);
 			return TRUE;
 		case PSN_KILLACTIVE:
-//			MYTRACE(_T("PROP_TOOLBAR PSN_KILLACTIVE\n"));
 			// ダイアログデータの取得 Toolbar
 			GetData(hwndDlg);
 			return TRUE;
@@ -233,7 +231,6 @@ INT_PTR PropToolbar::DispatchEvent(
 				case IDC_BUTTON_INSERTSEPARATOR:
 					nIndex1 = List_GetCurSel(hwndResList);
 					if (nIndex1 == LB_ERR) {
-//						break;
 						nIndex1 = 0;
 					}
 					nIndex1 = ::Listbox_INSERTDATA(hwndResList, nIndex1, 0);
@@ -243,11 +240,10 @@ INT_PTR PropToolbar::DispatchEvent(
 					List_SetCurSel(hwndResList, nIndex1);
 					break;
 
-// 折返ボタンが押されたら、右のリストに「ツールバー折返」を追加する。
+        // 折返ボタンが押されたら、右のリストに「ツールバー折返」を追加する。
 				case IDC_BUTTON_INSERTWRAP:
 					nIndex1 = List_GetCurSel(hwndResList);
 					if (nIndex1 == LB_ERR) {
-//						break;
 						nIndex1 = 0;
 					}
 					nIndex1 = ::Listbox_INSERTDATA(hwndResList, nIndex1, MenuDrawer::TOOLBAR_BUTTON_F_TOOLBARWRAP);
@@ -398,10 +394,7 @@ INT_PTR PropToolbar::DispatchEvent(
 			MyWinHelp((HWND)p->hItemHandle, HELP_WM_HELP, (ULONG_PTR)(LPVOID)p_helpids);
 		}
 		return TRUE;
-		// NOTREACHED
-		//break;
 
-	// Context Menu
 	case WM_CONTEXTMENU:
 		MyWinHelp(hwndDlg, HELP_CONTEXTMENU, (ULONG_PTR)(LPVOID)p_helpids);
 		return TRUE;
@@ -418,20 +411,13 @@ void PropToolbar::SetData(HWND hwndDlg)
 	lookup.SetCategory2Combo(hwndCombo);
 	
 	// 種別の先頭の項目を選択(コンボボックス)
-	Combo_SetCurSel(hwndCombo, 0);	// 「--未定義--」を表示させないように大元 Funcode.cpp で変更してある
+	Combo_SetCurSel(hwndCombo, 0);
 	::PostMessage(hwndCombo, WM_COMMAND, MAKELONG(IDC_COMBO_FUNCKIND, CBN_SELCHANGE), (LPARAM)hwndCombo);
 
-	// コントロールのハンドルを取得
+  // コントロールのハンドルを取得
 	HWND hwndResList = ::GetDlgItem(hwndDlg, IDC_LIST_RES);
-
 	int nFontHeight = TextWidthCalc(hwndResList).GetTextHeight();
-
-	int nListItemHeight = 18; // 「ツールバー」タブでのツールバーアイテムの行間を少し狭くして表示行数を増やした(20→18 これ以上小さくしても効果はないようだ)
-	if (nListItemHeight < nFontHeight) {
-		nListItemHeight = nFontHeight;
-	}
-//	nListItemHeight+=2;
-
+	int nListItemHeight = std::max(pIcons->GetCy() + 2, nFontHeight);
 	auto& csToolBar = common.toolBar;
 	// ツールバーボタンの情報をセット(リストボックス)
 	for (int i=0; i<csToolBar.nToolBarButtonNum; ++i) {
@@ -443,12 +429,9 @@ void PropToolbar::SetData(HWND hwndDlg)
 	}
 	// ツールバーの先頭の項目を選択(リストボックス)
 	List_SetCurSel(hwndResList, 0);	// ここをコメントアウトすると先頭項目が選択されなくなる
-
 	// フラットツールバーにする／しない 
 	::CheckDlgButton(hwndDlg, IDC_CHECK_TOOLBARISFLAT, csToolBar.bToolBarIsFlat);
-	return;
 }
-
 
 // ダイアログデータの取得 Toolbar
 int PropToolbar::GetData(HWND hwndDlg)
@@ -480,14 +463,12 @@ void PropToolbar::DrawToolBarItemList(DRAWITEMSTRUCT* pDis)
 {
 	TBBUTTON	tbb;
 
-//	HBRUSH hBrush = ::CreateSolidBrush(::GetSysColor(COLOR_WINDOW));
 	HBRUSH hBrush = ::GetSysColorBrush(COLOR_WINDOW);
 	::FillRect(pDis->hDC, &pDis->rcItem, hBrush);
-//	::DeleteObject(hBrush);
 
 	RECT rc  = pDis->rcItem;
 	RECT rc0 = pDis->rcItem;
-	rc0.left += 18;
+	rc0.left += 2;
 	RECT rc1 = rc0;
 	RECT rc2 = rc0;
 
@@ -519,24 +500,20 @@ void PropToolbar::DrawToolBarItemList(DRAWITEMSTRUCT* pDis)
 
 		// アイテムが選択されている
 		if (pDis->itemState & ODS_SELECTED) {
-//			hBrush = ::CreateSolidBrush(::GetSysColor(COLOR_HIGHLIGHT));
 			hBrush = ::GetSysColorBrush(COLOR_HIGHLIGHT);
 			::SetTextColor(pDis->hDC, ::GetSysColor(COLOR_HIGHLIGHTTEXT));
 		}else {
-//			hBrush = ::CreateSolidBrush(::GetSysColor(COLOR_WINDOW));
 			hBrush = ::GetSysColorBrush(COLOR_WINDOW);
 			::SetTextColor(pDis->hDC, ::GetSysColor(COLOR_WINDOWTEXT));
 		}
-		rc1.left++;
+		rc1.left += pIcons->GetCx() + 2;
 		rc1.top++;
 		rc1.right--;
 		rc1.bottom--;
 		::FillRect(pDis->hDC, &rc1, hBrush);
-//		::DeleteObject(hBrush);
 
 		::SetBkMode(pDis->hDC, TRANSPARENT);
 		TextOutW_AnyBuild( pDis->hDC, rc1.left + 4, rc1.top + nToolBarListBoxTopMargin, szLabel, wcslen( szLabel ) );
-
 	}
 
 	// アイテムにフォーカスがある

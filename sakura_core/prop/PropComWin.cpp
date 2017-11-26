@@ -9,6 +9,11 @@
 #include "sakura.hh"
 #include "_main/Process.h"
 
+// 設定値の上限・下限
+// ルーラの高さ
+const int IDC_SPIN_nRulerHeight_MIN = 4;
+const int IDC_SPIN_nRulerHeight_MAX = 64;
+
 static const DWORD p_helpids[] = {	//11200
 	IDC_CHECK_DispFUNCKEYWND,		HIDC_CHECK_DispFUNCKEYWND,		// ファンクションキー表示
 	IDC_CHECK_DispSTATUSBAR,		HIDC_CHECK_DispSTATUSBAR,		// ステータスバー表示

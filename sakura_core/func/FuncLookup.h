@@ -35,7 +35,7 @@ public:
 	FuncLookup() : pMacroRec(nullptr) {}
 
 	void Init(MacroRec* pMacroRec, CommonSetting* pCom) {
-		pMacroRec = pMacroRec;
+		this->pMacroRec = pMacroRec;
 		pCommon = pCom;
 	}
 

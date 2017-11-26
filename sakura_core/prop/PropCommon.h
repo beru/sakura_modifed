@@ -49,7 +49,6 @@ public:
 	*/
 	PropCommon();
 	~PropCommon();
-//@@@ tbMyButton‚È‚Ç‚ğCShareData‚©‚çMenuDrawer‚ÖˆÚ“®‚µ‚½‚±‚Æ‚É‚æ‚éC³B
 	void Create(HWND, ImageListMgr*, MenuDrawer*);	// ‰Šú‰»
 
 	/*

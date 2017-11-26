@@ -103,13 +103,13 @@ const bool TABLE_WctombSpec[] = {
 static const unsigned short TABLE_SjisPoorcodeDef[] = {
 	0x81be, // ¾
 	0x81bf, // ¿
-	0x81ca, // Ê  (0xeef9 ‚©‚ç•ÏX)
+	0x81ca, // Ê
 	0x81da, // Ú
 	0x81db, // Û
 	0x81df, // ß
 	0x81e0, // à
 	0x81e3, // ã
-	0x81e6, // æ  (0x879a ‚©‚ç•ÏX)
+	0x81e6, // æ
 	0x81e7, // ç
 	0x8754, // ‡T
 	0x8755, // ‡U

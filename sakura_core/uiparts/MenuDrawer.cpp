@@ -14,28 +14,6 @@
 // メニューの選択色を淡くする
 #define DRAW_MENU_SELECTION_LIGHT
 
-// // メニューアイコンを3Dボタンにする(旧仕様)
-// // 未定義なら、選択色との混合色とフラットな枠で選択を表現
-// #define DRAW_MENU_ICON_3DBUTTON
-
-// // メニューのDISABLE/セパレータに影を落とす(旧仕様)
-// #define DRAW_MENU_3DSTYLE
-
-
-#if 0 // 未使用
-void FillSolidRect(HDC hdc, int x, int y, int cx, int cy, COLORREF clr)
-{
-//	ASSERT_VALID(this);
-//	ASSERT(hDC != NULL);
-
-	RECT rect;
-	::SetBkColor(hdc, clr);
-	::SetRect(&rect, x, y, x + cx, y + cy);
-	::ExtTextOutW_AnyBuild(hdc, 0, 0, ETO_OPAQUE, &rect, NULL, 0, NULL);
-}
-#endif
-
-
 MenuDrawer::MenuDrawer()
 {
 	// 共有データ構造体のアドレスを返す
@@ -755,11 +733,8 @@ void MenuDrawer::ResetContents(void)
 	nMenuHeight = nMenuFontHeight + 4; // margin
 	if (pShareData->common.window.bMenuIcon) {
 		// 最低アイコン分の高さを確保
-		if (20 > nMenuHeight) {
-			nMenuHeight = 20;
-		}
+    nMenuHeight = std::max(nMenuHeight, pIcons->GetCy() + 4);
 	}
-
 	return;
 }
 
@@ -919,7 +894,7 @@ int MenuDrawer::MeasureItem(int nFuncID, int* pnItemHeight)
 
 	int nMenuWidth = rc.Width() + 3;
 	if (pShareData->common.window.bMenuIcon) {
-		nMenuWidth += 28+ DpiScaleX(8); // アイコンと枠 + アクセスキー隙間
+		nMenuWidth += pIcons->GetCx() + 12 + DpiScaleX(8); // アイコンと枠 + アクセスキー隙間
 	}else {
 		// WM_MEASUREITEMで報告するメニュー幅より実際の幅は1文字分相当位広いので、その分は加えない
 		nMenuWidth += ::GetSystemMetrics(SM_CXMENUCHECK) + 2 + 2;
@@ -945,7 +920,7 @@ void MenuDrawer::DrawItem(DRAWITEMSTRUCT* lpdis)
 	const int nCyCheck = ::GetSystemMetrics(SM_CYMENUCHECK);
 
 	if (bMenuIconDraw) {
-		nIndentLeft  = 29; // 2+[2+16+2]+2 +5
+		nIndentLeft  = 13 + pIcons->GetCx(); // 2+[2+16+2]+2 +5
 	}else {
 		nIndentLeft = 2 + 2 + nCxCheck;
 	}
@@ -1027,21 +1002,11 @@ void MenuDrawer::DrawItem(DRAWITEMSTRUCT* lpdis)
 	if (lpdis->itemID == F_0) {
 		// セパレータの作画(セパレータのFuncCodeはF_SEPARETORではなくF_0)
 		int y = lpdis->rcItem.top + (lpdis->rcItem.bottom - lpdis->rcItem.top) / 2;
-#ifdef DRAW_MENU_3DSTYLE
-		int nSepColor = COLOR_3DSHADOW;
-#else
 		int nSepColor = (::GetSysColor(COLOR_3DSHADOW) != ::GetSysColor(COLOR_MENU) ? COLOR_3DSHADOW : COLOR_3DHIGHLIGHT);
-#endif
 		HPEN hPen = ::CreatePen(PS_SOLID, 1, ::GetSysColor(nSepColor));
 		HPEN hPenOld = (HPEN)::SelectObject(hdc, hPen);
 		::MoveToEx(hdc, lpdis->rcItem.left + (bMenuIconDraw ? nIndentLeft : 3), y, NULL);
 		::LineTo(  hdc, lpdis->rcItem.right - 2, y);
-#ifdef DRAW_MENU_3DSTYLE
-		HPEN hPen3d = ::CreatePen(PS_SOLID, 1, ::GetSysColor(COLOR_3DHIGHLIGHT));
-		(void)::SelectObject(hdc, hPen3d);
-		::MoveToEx(hdc, lpdis->rcItem.left + (bMenuIconDraw ? nIndentLeft - 3: 3), y + 1, NULL);
-		::LineTo(  hdc, lpdis->rcItem.right - 2, y + 1);
-#endif
 		::SelectObject(hdc, hPenOld);
 		::DeleteObject(hPen);
 		
@@ -1152,28 +1117,6 @@ void MenuDrawer::DrawItem(DRAWITEMSTRUCT* lpdis)
 	}
 	// TAB文字の後ろ側のテキストを描画する
 	if (j < nItemStrLen) {
-#ifdef DRAW_MENU_3DSTYLE
-		// アイテムが使用不可
-		if (lpdis->itemState & ODS_DISABLED && !(lpdis->itemState & ODS_SELECTED)) {
-			COLORREF colOld = ::SetTextColor(hdc, ::GetSysColor(COLOR_3DHIGHLIGHT));
-			rcText.left++;
-			rcText.top++;
-			rcText.right++;
-			rcText.bottom++;
-			::DrawText(
-				hdc,
-				&pszItemStr[j + 1],
-				-1,
-				&rcText,
-				DT_SINGLELINE | DT_VCENTER | DT_EXPANDTABS | DT_RIGHT
-			);
-			rcText.left--;
-			rcText.top--;
-			rcText.right--;
-			rcText.bottom--;
-			::SetTextColor(hdc, colOld);
-		}
-#endif
 		::DrawText(
 			hdc,
 			&pszItemStr[j + 1],
@@ -1183,24 +1126,6 @@ void MenuDrawer::DrawItem(DRAWITEMSTRUCT* lpdis)
 		);
 	}
 	// TAB文字の前側のテキストを描画する
-#ifdef DRAW_MENU_3DSTYLE
-	// アイテムが使用不可
-	if (lpdis->itemState & ODS_DISABLED && !(lpdis->itemState & ODS_SELECTED)) {
-		COLORREF colOld = ::SetTextColor(hdc, ::GetSysColor(COLOR_3DHIGHLIGHT));
-
-		rcText.left++;
-		rcText.top++;
-		rcText.right++;
-		rcText.bottom++;
-		::DrawText(hdc, pszItemStr, j, &rcText, DT_SINGLELINE | DT_VCENTER | DT_EXPANDTABS | DT_LEFT);
-
-		rcText.left--;
-		rcText.top--;
-		rcText.right--;
-		rcText.bottom--;
-		::SetTextColor(hdc, colOld);
-	}
-#endif
 	::DrawText(
 		hdc,
 		pszItemStr,
@@ -1212,28 +1137,19 @@ void MenuDrawer::DrawItem(DRAWITEMSTRUCT* lpdis)
 	::SetBkMode(hdc, nBkModeOld);
 
 	// 16*16のアイコンを上下中央へ置いたときの上の座標
-	int nIconTop = lpdis->rcItem.top + (lpdis->rcItem.bottom - lpdis->rcItem.top) / 2 - (16/2);
+	int nIconTop = lpdis->rcItem.top + (lpdis->rcItem.bottom - lpdis->rcItem.top) / 2 - (pIcons->GetCy()/2);
 
 	// 枠は アイコン横幅xメニュー縦幅で表示し真ん中にアイコンを置く
 
 	if (bMenuIconDraw && (lpdis->itemState & ODS_CHECKED)) {
 		// アイコンを囲む枠
-#ifdef DRAW_MENU_ICON_3DBUTTON
-		// チェック状態なら凹んだ3D枠を描画する
-		SplitBoxWnd::Draw3dRect(
-			hdc, lpdis->rcItem.left + 1, lpdis->rcItem.top,
-			2 + 16 + 2, lpdis->rcItem.bottom - lpdis->rcItem.top,
-			::GetSysColor(COLOR_3DSHADOW),
-			::GetSysColor(COLOR_3DHIGHLIGHT)
-		);
-#else
 		{
 			// フラットな枠 + 半透明の背景色
 			HBRUSH hBrush = ::GetSysColorBrush(COLOR_HIGHLIGHT);
 			const int MENUICO_PADDING = 0;
 			const int MENUICO_BORDER  = 1;
 			const int MENUICO_PB  = MENUICO_PADDING + MENUICO_BORDER;
-			const int MENUICO_SIZE = MENUICO_PB + 16 + MENUICO_PB;
+			const int MENUICO_SIZE = MENUICO_PB + pIcons->GetCx() + MENUICO_PB;
 			const int left = lpdis->rcItem.left + 2 - MENUICO_PB;
 			const int top = nIconTop - MENUICO_PB;
 			RECT rc;
@@ -1261,19 +1177,6 @@ void MenuDrawer::DrawItem(DRAWITEMSTRUCT* lpdis)
 			::FillRect(hdc, &rc, hbr);
 			::DeleteObject(hbr);
 		}
-#endif
-
-#ifdef DRAW_MENU_ICON_3DBUTTON
-		// アイテムが選択されていない場合は3D枠の中を明るく塗りつぶす
-		if (lpdis->itemState & ODS_SELECTED) {
-		}else {
-			HBRUSH hbr = ::GetSysColorBrush(COLOR_3DLIGHT);
-			RECT rc;
-			::SetRect(&rc, lpdis->rcItem.left + 2 + 1, lpdis->rcItem.top + 1,
-				lpdis->rcItem.left + 1 + 2 + 16 + 2 - 1, lpdis->rcItem.bottom - 1);
-			::FillRect(hdc, &rc, hbr);
-		}
-#endif
 	}
 
 	// 機能の画像が存在するならメニューアイコン?を描画する
@@ -1286,15 +1189,6 @@ void MenuDrawer::DrawItem(DRAWITEMSTRUCT* lpdis)
 			}else {
 				if (lpdis->itemState & ODS_CHECKED) {
 				}else {
-#ifdef DRAW_MENU_ICON_3DBUTTON
-					// アイコンを囲む枠(メニューの高さいっぱい)
-					SplitBoxWnd::Draw3dRect(
-						hdc, lpdis->rcItem.left + 1, lpdis->rcItem.top,
-						2 + 16 + 2, lpdis->rcItem.bottom - lpdis->rcItem.top,
-						::GetSysColor(COLOR_3DHIGHLIGHT),
-						::GetSysColor(COLOR_3DSHADOW)
-					);
-#endif
 				}
 			}
 		}
@@ -1323,8 +1217,8 @@ void MenuDrawer::DrawItem(DRAWITEMSTRUCT* lpdis)
 			// チェックマークの表示
 			if (bMenuIconDraw) {
 				// だいたい中心座標
-				int nX = lpdis->rcItem.left + 16/2;
-				int nY = nIconTop + 16/2;
+				int nX = lpdis->rcItem.left + pIcons->GetCx()/2;
+				int nY = nIconTop + pIcons->GetCy()/2;
 				HPEN hPen   = NULL;
 				HPEN hPenOld = NULL;
 				// チェックの色を黒(未指定)からテキスト色に変更

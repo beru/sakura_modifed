@@ -1,7 +1,5 @@
 #pragma once
 
-// IsUtf16SurrogHi()AIsUtf16SurrogLow() ŠÖ”‚ğcharset/codechecker.h ‚ÉˆÚ“®
-
 #include "CodeBase.h"
 
 class Unicode : public CodeBase {

@@ -386,8 +386,6 @@ normal_action:;
 			// 現在のカーソル位置から選択を開始する
 			GetSelectionInfo().bBeginLineSelect = true;
 
-			// Command_GoLineEnd()/Command_Right()ではなく次のレイアウトを調べて移動選択する方法に変更
-			// ※Command_GoLineEnd()/Command_Right()は[折り返し末尾文字の右へ移動]＋[次行の先頭文字の右に移動]の仕様だとＮＧ
 			const Layout* pLayout = pEditDoc->layoutMgr.SearchLineByLayoutY(ptNewCaret.y);
 			if (pLayout) {
 				Point ptCaret;

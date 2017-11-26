@@ -133,8 +133,6 @@ public:
 	void Command_WordRight(bool bSelect);			// 単語の右端に移動
 	void Command_GoLineTop(bool bSelect, int lparam);	// 行頭に移動（折り返し単位）
 	void Command_GoLineEnd(bool bSelect, int, int);	// 行末に移動（折り返し単位）
-//	void Command_ROLLDOWN(int);						// Scroll Down
-//	void Command_ROLLUP(int);						// Scroll Up
 	void Command_HalfPageUp(bool bSelect, int);		// 半ページアップ
 	void Command_HalfPageDown(bool bSelect, int);	// 半ページダウン
 	void Command_1PageUp(bool bSelect, int);		// １ページアップ	
@@ -168,9 +166,7 @@ public:
 	void Command_Begin_Select(void);		// 範囲選択開始
 
 	// 矩形選択系
-//	void Command_BOXSELECTALL(void);		// 矩形ですべて選択
 	void Command_Begin_BoxSelect(bool bSelectingLock = false);	// 矩形範囲選択開始
-//	int Command_UP_BOX(BOOL);				// (矩形選択)カーソル上移動
 
 	// クリップボード系
 	void Command_Cut(void);						// 切り取り（選択範囲をクリップボードにコピーして削除

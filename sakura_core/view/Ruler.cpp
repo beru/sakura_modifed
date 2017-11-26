@@ -96,10 +96,12 @@ void Ruler::DrawRulerBg(Graphics& gr)
 	// サポート
 	TypeSupport rulerType(editView, COLORIDX_RULER);
 
+  double dpiScale = ((double)GetDeviceCaps((HDC)gr, LOGPIXELSX) / 96);
+
 	// フォント設定 (ルーラー上の数字用)
 	LOGFONT	lf = {0};
-	lf.lfHeight			= 1 - pCommon->window.nRulerHeight;
-	lf.lfWidth			= 5;
+	lf.lfHeight			= -(pCommon->window.nRulerHeight / 1.5 + 0.5);
+	lf.lfWidth			= pCommon->window.nRulerHeight / 3 + 0.5;
 	lf.lfEscapement		= 0;
 	lf.lfOrientation	= 0;
 	lf.lfWeight			= 400;
@@ -144,6 +146,8 @@ void Ruler::DrawRulerBg(Graphics& gr)
 
 	// 目盛を描画
 	int i = textArea.GetViewLeftCol();
+  int lenMedium = nY / 3 * 2;
+  int lenSmall = nY / 3;
 	while (i <= textArea.GetRightCol() + 1 && i <= nMaxLineKetas) {
 		// ルーラー終端の区切り(大)
 		if (i == nMaxLineKetas) {
@@ -159,11 +163,11 @@ void Ruler::DrawRulerBg(Graphics& gr)
 		// 5目盛おきの区切り(中)
 		}else if (i % 5 == 0) {
 			::MoveToEx(gr, nX, nY, NULL);
-			::LineTo(gr, nX, nY - 6);
+			::LineTo(gr, nX, nY - lenMedium);
 		// 毎目盛の区切り(小)
 		}else {
 			::MoveToEx(gr, nX, nY, NULL);
-			::LineTo(gr, nX, nY - 3);
+			::LineTo(gr, nX, nY - lenSmall);
 		}
 
 		nX += (int)editView.GetTextMetrics().GetHankakuDx();

@@ -153,7 +153,7 @@ bool ViewCommander::HandleCommand(
 	case F_FILESAVECLOSE:
 		// 保存＆閉じる
 		// 保存が不要なら単に閉じる
-		{	// Command_FileSave()とは別に保存不要をチェック	//### Command_FileSave() は実際に保存した場合だけ true を返すようになった（仕様変更？）
+		{	// Command_FileSave()とは別に保存不要をチェック
 			if (!GetDllShareData().common.file.bEnableUnmodifiedOverwrite && !GetDocument().docEditor.IsModified()) {
 				Command_WinClose();
 				break;
@@ -241,8 +241,6 @@ bool ViewCommander::HandleCommand(
 	// マクロ向け機能拡張
 	case F_GOLINETOP:			Command_GoLineTop(view.GetSelectionInfo().bSelectingLock, (int)lparam1); break;		// 行頭に移動(折り返し単位/改行単位)
 	case F_GOLINEEND:			Command_GoLineEnd(view.GetSelectionInfo().bSelectingLock, 0, (int)lparam1); break;	// 行末に移動(折り返し単位)
-//	case F_ROLLDOWN:			Command_ROLLDOWN(view.GetSelectionInfo().bSelectingLock); break;					// Scroll Down
-//	case F_ROLLUP:				Command_ROLLUP(view.GetSelectionInfo().bSelectingLock); break;					// Scroll Up
 	case F_HalfPageUp:			Command_HalfPageUp(view.GetSelectionInfo().bSelectingLock, (int)lparam1); break;				// 半ページアップ	
 	case F_HalfPageDown:		Command_HalfPageDown(view.GetSelectionInfo().bSelectingLock, (int)lparam1); break;			// 半ページダウン	
 	case F_1PageUp:				Command_1PageUp(view.GetSelectionInfo().bSelectingLock, (int)lparam1); break;					// １ページアップ	
@@ -284,8 +282,6 @@ bool ViewCommander::HandleCommand(
 	case F_WORDRIGHT_SEL:	Command_WordRight(true); break;					// (範囲選択)単語の右端に移動
 	case F_GOLINETOP_SEL:	Command_GoLineTop(true, (int)lparam1); break;		// (範囲選択)行頭に移動(折り返し単位/改行単位)
 	case F_GOLINEEND_SEL:	Command_GoLineEnd(true, 0, (int)lparam1); break;		// (範囲選択)行末に移動(折り返し単位)
-//	case F_ROLLDOWN_SEL:	Command_ROLLDOWN(TRUE); break;					// (範囲選択)Scroll Down
-//	case F_ROLLUP_SEL:		Command_ROLLUP(TRUE); break;					// (範囲選択)Scroll Up
 	case F_HalfPageUp_Sel:	Command_HalfPageUp(true, (int)lparam1); break;				//(範囲選択)半ページアップ
 	case F_HalfPageDown_Sel:Command_HalfPageDown(true, (int)lparam1); break;			//(範囲選択)半ページダウン
 	case F_1PageUp_Sel:		Command_1PageUp(true, (int)lparam1); break;					//(範囲選択)１ページアップ
@@ -298,7 +294,6 @@ bool ViewCommander::HandleCommand(
 	case F_MODIFYLINE_PREV_SEL:	Command_ModifyLine_Prev( true ); break;			//(範囲選択)前の変更行へ
 
 	// 矩形選択系
-//	case F_BOXSELALL:		Command_BOXSELECTALL(); break;			// 矩形ですべて選択
 	case F_BEGIN_BOX:		Command_Begin_BoxSelect(true); break;	// 矩形範囲選択開始
 	case F_UP_BOX:			Sub_BoxSelectLock((int)lparam1); this->Command_Up(true, bRepeat); break;		// (矩形選択)カーソル上移動
 	case F_DOWN_BOX:		Sub_BoxSelectLock((int)lparam1); this->Command_Down(true, bRepeat); break;	// (矩形選択)カーソル下移動
@@ -309,7 +304,6 @@ bool ViewCommander::HandleCommand(
 	case F_WORDLEFT_BOX:	Sub_BoxSelectLock((int)lparam1); this->Command_WordLeft(true);break;			// (矩形選択)単語の左端に移動
 	case F_WORDRIGHT_BOX:	Sub_BoxSelectLock((int)lparam1); this->Command_WordRight(true);break;		// (矩形選択)単語の右端に移動
 	case F_GOLOGICALLINETOP_BOX:Sub_BoxSelectLock((int)lparam2); this->Command_GoLineTop(true, 8 | (int)lparam1);break;	// (矩形選択)行頭に移動(改行単位)
-//	case F_GOLOGICALLINEEND_BOX:Sub_BoxSelectLock(lparam2); this->Command_GoLineEnd(true, 0, 8 | lparam1);break;	// (矩形選択)行末に移動(改行単位)
 	case F_GOLINETOP_BOX:	Sub_BoxSelectLock((int)lparam2); this->Command_GoLineTop(true, (int)lparam1);break;		// (矩形選択)行頭に移動(折り返し単位/改行単位)
 	case F_GOLINEEND_BOX:	Sub_BoxSelectLock((int)lparam2); this->Command_GoLineEnd(true, 0, (int)lparam1);break;	// (矩形選択)行末に移動(折り返し単位/改行単位)
 	case F_HalfPageUp_BOX:	Sub_BoxSelectLock((int)lparam2); this->Command_HalfPageUp(true, (int)lparam1); break;		// (矩形選択)半ページアップ
