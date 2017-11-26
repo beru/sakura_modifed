@@ -92,7 +92,7 @@ HICON GetAppIcon(
 	)
 {
 	// ÉTÉCÉYÇÃê›íË
-	int size = (bSmall ? 16 : 32);
+	int size = (bSmall ? GetSystemMetrics(SM_CXSMICON) : GetSystemMetrics(SM_CXICON));
 
 	TCHAR szPath[_MAX_PATH];
 

@@ -197,7 +197,7 @@ HWND ControlTray::Create(HINSTANCE hInstance)
 	MY_RUNNINGTIMER(runningTimer, "ControlTray::Create");
 
 	// 同名同クラスのウィンドウが既に存在していたら、失敗
-	hInstance = hInstance;
+	this->hInstance = hInstance;
 	std::tstring strProfileName = to_tchar(CommandLine::getInstance().GetProfileName());
 	std::tstring strCEditAppName = GSTR_CEDITAPP;
 	strCEditAppName += strProfileName;
