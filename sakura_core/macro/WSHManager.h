@@ -17,7 +17,6 @@ public:
 	WSHMacroManager(std::wstring const AEngineName);
 	virtual ~WSHMacroManager();
 
-	// 2007.07.20 genta : flags’Ç‰Á
 	virtual bool ExecKeyMacro(EditView& editView, int flags) const;
 	virtual bool LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath);
 	virtual bool LoadKeyMacroStr(HINSTANCE hInstance, const TCHAR* pszCode);

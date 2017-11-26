@@ -41,7 +41,6 @@ private:
 	int		nCount;		// 個数
 	bool	bOverflow;	// オーバーフロー
 	
-	//	2005.04.22 genta 最大値を可変に
 	const int	capacity;	// 管理する情報の最大数
 
 	void Free(TagJumpInfo* item);

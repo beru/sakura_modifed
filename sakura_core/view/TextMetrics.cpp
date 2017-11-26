@@ -103,7 +103,7 @@ const int* TextMetrics::GenerateDxArray(
 	bHigh = false;
 	for (size_t i=0; i<nLength; ++i, ++p, ++q) {
 		if (*q == WCODE::TAB) {
-			// TAB対応	2013/5/7 Uchi
+			// TAB対応
 			if (i > 0 && *(q-1) == WCODE::TAB) {
 				*p = nTabSpace * nHankakuDx;
 				nLayoutCnt += nTabSpace;
@@ -112,7 +112,7 @@ const int* TextMetrics::GenerateDxArray(
 				nLayoutCnt += (nTabSpace - nLayoutCnt % nTabSpace);
 			}
 			bHigh = false;
-		// サロゲートチェック BMP 以外は全角扱い	2008/7/5 Uchi
+		// サロゲートチェック BMP 以外は全角扱い
 		}else if (IsUTF16High(*q)) {
 			*p = nHankakuDx*2;
 			nLayoutCnt += 2;
@@ -135,11 +135,11 @@ const int* TextMetrics::GenerateDxArray(
 		}else if (WCODE::IsHankaku(*q)) {
 			*p = nHankakuDx;
 			++nLayoutCnt;
-			bHigh = false;				// サロゲートペア対策	2008/7/5 Uchi
+			bHigh = false;
 		}else {
 			*p = nHankakuDx*2;
 			nLayoutCnt += 2;
-			bHigh = false;				// サロゲートペア対策	2008/7/5 Uchi
+			bHigh = false;
 		}
 	}
 

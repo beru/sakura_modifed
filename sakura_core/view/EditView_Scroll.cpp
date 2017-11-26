@@ -227,7 +227,6 @@ int EditView::OnHScroll(int nScrollCode, int nPos)
 		nScrollVal = ScrollAtH(0);
 		break;
 	case SB_RIGHT:
-		//	Aug. 14, 2005 genta 折り返し幅をLayoutMgrから取得するように
 		nScrollVal = ScrollAtH((int)pEditDoc->layoutMgr.GetMaxLineKetas() - GetTextArea().nViewColNum);
 		break;
 	}
@@ -383,12 +382,11 @@ int EditView::ScrollAtH(int nPos)
 	if (nPos < 0) {
 		nPos = 0;
 	}
-	//	Aug. 14, 2005 genta 折り返し幅をLayoutMgrから取得するように
 	else {
 		int nPos2 = (int)(GetRightEdgeForScrollBar() + GetWrapOverhang()) - GetTextArea().nViewColNum;
 		if (nPos2 < nPos) {
 			nPos = nPos2;
-			//	May 29, 2004 genta 折り返し幅よりウィンドウ幅が大きいときにWM_HSCROLLが来ると
+			//	折り返し幅よりウィンドウ幅が大きいときにWM_HSCROLLが来ると
 			//	nPosが負の値になることがあり，その場合にスクロールバーから編集領域が
 			//	離れてしまう．
 			if (nPos < 0) {

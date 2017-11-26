@@ -28,7 +28,7 @@ bool Color_Select::BeginColorEx(const StringRef& str, int nPos, int nLineNum, co
 		return false;
 	}
 
-	// 2011.12.27 レイアウト行頭で1回だけ確認してあとはメンバー変数をみる
+	// レイアウト行頭で1回だけ確認してあとはメンバー変数をみる
 	if (nSelectLine == nLineNum) {
 		return (nSelectStart <= nPos && nPos < nSelectEnd);
 	}

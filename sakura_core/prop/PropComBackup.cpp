@@ -184,7 +184,6 @@ INT_PTR PropBackup::DispatchEvent(
 	case WM_CONTEXTMENU:
 		MyWinHelp(hwndDlg, HELP_CONTEXTMENU, (ULONG_PTR)(LPVOID)p_helpids);
 		return TRUE;
-//@@@ 2001.12.22 End
 
 	}
 	return FALSE;
@@ -296,7 +295,6 @@ int PropBackup::GetData(HWND hwndDlg)
 
 	// バックアップファイル名のタイプ 1=(.bak) 2=*_日付.*
 	if (DlgButton_IsChecked(hwndDlg, IDC_RADIO_BACKUP_TYPE1)) {
-		//	Jun.  5, 2005 genta 拡張子を残すパターンを追加
 		if (DlgButton_IsChecked(hwndDlg, IDC_CHECK_BACKUP_RETAINEXT)) {
 			csBackup.SetBackupType(5);
 		}else {
@@ -334,11 +332,9 @@ int PropBackup::GetData(HWND hwndDlg)
 
 	// 指定フォルダにバックアップを作成する
 	csBackup.bBackUpFolder = DlgButton_IsChecked(hwndDlg, IDC_CHECK_BACKUPFOLDER);
-	csBackup.bBackUpFolderRM = DlgButton_IsChecked(hwndDlg, IDC_CHECK_BACKUP_FOLDER_RM);	// 2010/5/27 Uchi
+	csBackup.bBackUpFolderRM = DlgButton_IsChecked(hwndDlg, IDC_CHECK_BACKUP_FOLDER_RM);
 
 	// バックアップを作成するフォルダ
-	//	Oct. 5, 2002 genta サイズをsizeof()で指定
-	//	Oct. 8, 2002 genta 後ろに\が追加されるので，1文字余裕を見る必要がある．
 	::DlgItem_GetText(hwndDlg, IDC_EDIT_BACKUPFOLDER, csBackup.szBackUpFolder, _countof2(csBackup.szBackUpFolder) - 1);
 
 	// バックアップファイルをごみ箱に放り込む
@@ -359,15 +355,8 @@ int PropBackup::GetData(HWND hwndDlg)
 
 	//	世代数の取得
 	int	 nN;
-	nN = ::GetDlgItemInt(hwndDlg, IDC_EDIT_BACKUP_3, NULL, FALSE);	//	Oct. 29, 2001 genta
+	nN = ::GetDlgItemInt(hwndDlg, IDC_EDIT_BACKUP_3, NULL, FALSE);
 
-//	for (nN=0, pDigit=szNumBuf; *pDigit!='\0'; ++pDigit) {
-//		if ('0' <= *pDigit && *pDigit <= '9') {
-//			nN = nN * 10 + *pDigit - '0';
-//		}
-//		else
-//			break;
-//	}
 	nN = nN < 1  ?  1 : nN;
 	nN = nN > 99 ? 99 : nN;
 	csBackup.SetBackupCount(nN);
@@ -384,7 +373,7 @@ void ShowEnable(
 	)
 {
 	::ShowWindow(hWnd, bShow? SW_SHOW: SW_HIDE);
-	::EnableWindow(hWnd, bEnable && bShow);		// bShow=false,bEnable=trueの場合ショートカットキーが変な動きをするので修正	2010/5/27 Uchi
+	::EnableWindow(hWnd, bEnable && bShow);		// bShow=false,bEnable=trueの場合ショートカットキーが変な動きをするので
 }
 
 void PropBackup::EnableBackupInput(HWND hwndDlg)
@@ -408,7 +397,7 @@ void PropBackup::EnableBackupInput(HWND hwndDlg)
 	SHOWENABLE(IDC_LABEL_BACKUP_3,			!bAdvanced, bBackup && bType3);
 	SHOWENABLE(IDC_EDIT_BACKUP_3,			!bAdvanced, bBackup && bType3);
 	SHOWENABLE(IDC_SPIN_BACKUP_GENS,		!bAdvanced, bBackup && bType3);
-	SHOWENABLE(IDC_CHECK_BACKUP_RETAINEXT,	!bAdvanced, bBackup && (bType1 || bType3));	//	Jun.  5, 2005 genta 追加
+	SHOWENABLE(IDC_CHECK_BACKUP_RETAINEXT,	!bAdvanced, bBackup && (bType1 || bType3));
 	SHOWENABLE(IDC_CHECK_BACKUP_YEAR,		!bAdvanced, bBackup && (bDate1 || bDate2));
 	SHOWENABLE(IDC_CHECK_BACKUP_MONTH,		!bAdvanced, bBackup && (bDate1 || bDate2));
 	SHOWENABLE(IDC_CHECK_BACKUP_DAY,		!bAdvanced, bBackup && (bDate1 || bDate2));
@@ -425,7 +414,7 @@ void PropBackup::EnableBackupInput(HWND hwndDlg)
 
 	SHOWENABLE(IDC_CHECK_BACKUPFOLDER,			TRUE, bBackup);
 	SHOWENABLE(IDC_LABEL_BACKUP_4,				TRUE, bBackup && bFolder);
-	SHOWENABLE(IDC_CHECK_BACKUP_FOLDER_RM,		TRUE, bBackup && bFolder);	// 2010/5/27 Uchi
+	SHOWENABLE(IDC_CHECK_BACKUP_FOLDER_RM,		TRUE, bBackup && bFolder);
 	SHOWENABLE(IDC_EDIT_BACKUPFOLDER,			TRUE, bBackup && bFolder);
 	SHOWENABLE(IDC_BUTTON_BACKUP_FOLDER_REF,	TRUE, bBackup && bFolder);
 	SHOWENABLE(IDC_CHECK_BACKUP_DUSTBOX,		TRUE, bBackup);

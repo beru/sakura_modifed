@@ -1760,7 +1760,7 @@ void ShareData_IO::ShareData_IO_Plugin(DataProfile& profile, MenuDrawer* pMenuDr
 		auto_sprintf(szKeyName, LTEXT("P[%02d].Id"), i);
 		profile.IOProfileData(pszSecName, szKeyName, MakeStringBufferW(pluginrec.szId));
 		auto_sprintf(szKeyName, LTEXT("P[%02d].CmdNum"), i);
-		profile.IOProfileData(pszSecName, szKeyName, pluginrec.nCmdNum);	// 2010/7/4 Uchi
+		profile.IOProfileData(pszSecName, szKeyName, pluginrec.nCmdNum);
 		pluginrec.state = (pluginrec.szId[0] == '\0' ? PLS_NONE : PLS_STOPPED);
 		// Command ‰¼Ý’è
 		if (pluginrec.szId[0] != '\0' && pluginrec.nCmdNum >0) {

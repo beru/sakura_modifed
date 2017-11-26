@@ -475,3 +475,4 @@ enum EFunctionCode{
 };
 
 #endif /* SAKURA_HEADERMAKE_2034D8F5_AE65_408D_9F53_D3DEA240C67BI_H_ */
+/*[EOF]*/

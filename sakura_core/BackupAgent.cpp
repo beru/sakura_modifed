@@ -183,7 +183,6 @@ int BackupAgent::MakeBackUp(
 				//	失敗した場合
 				//	後で考える
 				::MessageBox(EditWnd::getInstance().GetHwnd(), szPath, LS(STR_BACKUP_ERR_MOVE), MB_OK);
-				//	Jun.  5, 2005 genta 戻り値変更
 				//	失敗しても保存は継続
 				return 0;
 			}
@@ -366,7 +365,7 @@ bool BackupAgent::FormatBackUpPath(
 			break;
 
 		case 3: //	?xx : xx = 00~99, ?は任意の文字
-		case 6: //	Jun.  5, 2005 genta 3の拡張子を残す版
+		case 6: //	3の拡張子を残す版
 			//	ここでは作成するバックアップファイル名のみ生成する．
 			//	ファイル名のRotationは確認ダイアログの後で行う．
 			{

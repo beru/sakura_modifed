@@ -38,7 +38,7 @@ int ToColorInfoArrIndex(const EColorIndexType eColorIndex)
 	return COLORIDX_TEXT;
 }
 
-// カラー名＜＞インデックス番号の変換	//@@@ 2002.04.30
+// カラー名＜＞インデックス番号の変換
 int GetColorIndexByName(const TCHAR* name);
 const TCHAR* GetColorNameByIndex(int index);
 

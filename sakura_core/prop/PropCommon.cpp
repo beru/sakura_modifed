@@ -342,16 +342,16 @@ void PropCommon::OnHelp(HWND hwndParent, int nPageID)
 	case IDD_PROP_KEYBIND:
 		nContextID = ::FuncID_To_HelpContextID(F_OPTION_KEYBIND);
 		break;
-	case IDD_PROP_MACRO:	//@@@ 2002.01.02
+	case IDD_PROP_MACRO:
 		nContextID = ::FuncID_To_HelpContextID(F_OPTION_MACRO);
 		break;
 	case IDD_PROP_FNAME:
 		nContextID = ::FuncID_To_HelpContextID(F_OPTION_FNAME);
 		break;
-	case IDD_PROP_PLUGIN:	//@@@ 2002.01.02
+	case IDD_PROP_PLUGIN:
 		nContextID = ::FuncID_To_HelpContextID(F_OPTION_PLUGIN);
 		break;
-	case IDD_PROP_MAINMENU:	//@@@ 2010/6/2 Uchi
+	case IDD_PROP_MAINMENU:
 		nContextID = ::FuncID_To_HelpContextID(F_OPTION_MAINMENU);
 		break;
 

@@ -331,7 +331,6 @@ void ViewCommander::Command_WrapWindowWidth(void)
 }
 
 
-// from ViewCommander_New.cpp
 /*!	履歴の管理(ダイアログ) */
 void ViewCommander::Command_Favorite(void)
 {

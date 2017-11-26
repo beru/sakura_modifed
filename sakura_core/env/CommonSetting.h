@@ -587,7 +587,6 @@ struct CommonSetting_Others {
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                          ステータスバー                     //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-// 2008/6/21	Uchi
 struct CommonSetting_StatusBar {
 	// 表示文字コードの指定
 	bool		bDispUniInSjis;				// SJISで文字コード値をUnicodeで表示する

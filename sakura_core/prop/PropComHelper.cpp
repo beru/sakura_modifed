@@ -133,7 +133,7 @@ INT_PTR PropHelper::DispatchEvent(
 					if (MySelectFont(&lf, &nPointSize, hwndDlg, false)) {
 						csHelper.lf = lf;
 						csHelper.nPointSize = nPointSize;
-						// キーワードヘルプ フォント表示	// 2013/4/24 Uchi
+						// キーワードヘルプ フォント表示
 						HFONT hFont = SetFontLabel(hwndDlg, IDC_STATIC_KEYWORDHELPFONT, csHelper.lf, csHelper.nPointSize);
 						if (hKeywordHelpFont) {
 							::DeleteObject(hKeywordHelpFont);
@@ -227,7 +227,7 @@ INT_PTR PropHelper::DispatchEvent(
 		return TRUE;
 
 	case WM_DESTROY:
-		// キーワードヘルプ フォント破棄	// 2013/4/24 Uchi
+		// キーワードヘルプ フォント破棄
 		if (hKeywordHelpFont) {
 			::DeleteObject(hKeywordHelpFont);
 			hKeywordHelpFont = NULL;
@@ -256,7 +256,7 @@ void PropHelper::SetData(HWND hwndDlg)
 	// HtmlHelpビューアはひとつ
 	::CheckDlgButton(hwndDlg, IDC_CHECK_HTMLHELPISSINGLE, csHelper.bHtmlHelpIsSingle ? BST_CHECKED : BST_UNCHECKED);
 
-	// キーワードヘルプ フォント	// 2013/4/24 Uchi
+	// キーワードヘルプ フォント
 	hKeywordHelpFont = SetFontLabel(hwndDlg, IDC_STATIC_KEYWORDHELPFONT, csHelper.lf, csHelper.nPointSize);
 
 	// migemo dict

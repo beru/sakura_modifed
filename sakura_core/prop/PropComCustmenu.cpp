@@ -7,7 +7,7 @@
 #include "env/ShareData.h"
 #include "util/shell.h"
 #include "util/window.h"
-#include "typeprop/ImpExpManager.h"	// 20210/4/23 Uchi
+#include "typeprop/ImpExpManager.h"
 #include "sakura_rc.h"
 #include "sakura.hh"
 
@@ -48,7 +48,6 @@ static const DWORD p_helpids[] = {	//10100
 //	IDC_STATIC,						-1,
 	0, 0
 };
-//@@@ 2001.02.04 End
 
 static
 bool SetSpecialFuncName(EFunctionCode code, wchar_t* ptr)
@@ -239,7 +238,6 @@ INT_PTR PropCustmenu::DispatchEvent(
 						return TRUE;
 					}
 				}
-				//	Oct. 3, 2001 genta
 				if (!lookup.Funccode2Name(csCustomMenu.nCustMenuItemFuncArr[nIdx1][nIdx2], szLabel, 255)) {
 					SetSpecialFuncName(csCustomMenu.nCustMenuItemFuncArr[nIdx1][nIdx2], szLabel);
 				}
@@ -296,8 +294,6 @@ INT_PTR PropCustmenu::DispatchEvent(
 						List_AddString(hwndLIST_FUNC, LS(gSpecialFuncs[i].nNameId));
 					}
 				}else if (nIdx3 != CB_ERR) {
-					// Oct. 3, 2001 genta
-					// 専用ルーチンに置き換え
 					lookup.SetListItem(hwndLIST_FUNC, nIdx3);
 				}
 				return TRUE;
@@ -401,7 +397,6 @@ INT_PTR PropCustmenu::DispatchEvent(
 						csCustomMenu.nCustMenuItemFuncArr[nIdx1][i] = csCustomMenu.nCustMenuItemFuncArr[nIdx1][i - 1];
 						csCustomMenu.nCustMenuItemKeyArr[nIdx1][i] = csCustomMenu.nCustMenuItemKeyArr[nIdx1][i - 1];
 					}
-					//	Oct. 3, 2001 genta
 					if (nIdx3 == nSpecialFuncsNum) {
 						// 特殊機能
 						eFuncCode = gSpecialFuncs[nIdx4].nFunc;
@@ -456,7 +451,6 @@ INT_PTR PropCustmenu::DispatchEvent(
 					}else {
 						eFuncCode = lookup.Pos2FuncCode(nIdx3, nIdx4);
 					}
-					//	Oct. 3, 2001 genta
 					if (eFuncCode == F_DISABLE) {
 						break;
 					}
@@ -601,13 +595,11 @@ INT_PTR PropCustmenu::DispatchEvent(
 		return TRUE;
 		// NOTREACHED
 		//break;
-//@@@ 2001.02.04 End
 
 	// Context Menu
 	case WM_CONTEXTMENU:
 		MyWinHelp(hwndDlg, HELP_CONTEXTMENU, (ULONG_PTR)(LPVOID)p_helpids);
 		return TRUE;
-//@@@ 2001.12.22 End
 
 	}
 	return FALSE;
@@ -619,7 +611,7 @@ void PropCustmenu::SetData(HWND hwndDlg)
 {
 	// 機能種別一覧に文字列をセット（コンボボックス）
 	HWND hwndCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_FUNCKIND);
-	lookup.SetCategory2Combo(hwndCombo);	//	Oct. 3, 2001 genta
+	lookup.SetCategory2Combo(hwndCombo);
 	// 特別機能追加
 	nSpecialFuncsNum = Combo_AddString(hwndCombo, LS(STR_SPECIAL_FUNC));
 
@@ -656,7 +648,6 @@ void PropCustmenu::SetDataMenuList(HWND hwndDlg, int nIdx)
 			auto_strcpy(szLabel, LSW(STR_PROPCOMCUSTMENU_SEP));
 		}else {
 			EFunctionCode code = csCustomMenu.nCustMenuItemFuncArr[nIdx][i];
-			//	Oct. 3, 2001 genta
 			if (!lookup.Funccode2Name(code, szLabel, 256)) {
 				SetSpecialFuncName(code, szLabel);
 			}
@@ -673,7 +664,7 @@ void PropCustmenu::SetDataMenuList(HWND hwndDlg, int nIdx)
 		::List_AddString(hwndLIST_RES, szLabel2);
 	}
 	
-	//	Oct. 15, 2001 genta メニュー名を設定
+	// メニュー名を設定
 	::DlgItem_SetText(hwndDlg, IDC_EDIT_MENUNAME, csCustomMenu.szCustMenuNameArr[nIdx]);
 
 	CheckDlgButtonBool(hwndDlg, IDC_CHECK_SUBMENU, csCustomMenu.bCustMenuPopupArr[nIdx]);

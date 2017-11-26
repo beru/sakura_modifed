@@ -25,15 +25,13 @@ AutoReloadAgent::AutoReloadAgent()
 
 void AutoReloadAgent::OnBeforeSave(const SaveInfo& saveInfo)
 {
-	//	Sep. 7, 2003 genta
-	//	保存が完了するまではファイル更新の通知を抑制する
+	// 保存が完了するまではファイル更新の通知を抑制する
 	PauseWatching();
 }
 
 void AutoReloadAgent::OnAfterSave(const SaveInfo& saveInfo)
 {
-	//	Sep. 7, 2003 genta
-	//	ファイル更新の通知を元に戻す
+	// ファイル更新の通知を元に戻す
 	ResumeWatching();
 
 	if (!saveInfo.bOverwriteMode) {
@@ -68,7 +66,7 @@ bool AutoReloadAgent::_ToDoChecking() const
 		|| hwndActive != EditWnd::getInstance().GetHwnd()
 		|| !GetListeningDoc()->docFile.GetFilePathClass().IsValidPath()
 		|| GetListeningDoc()->docFile.IsFileTimeZero()	// 現在編集中のファイルのタイムスタンプ
-		|| GetListeningDoc()->pEditWnd->pPrintPreview	// 印刷Preview中	2013/5/8 Uchi
+		|| GetListeningDoc()->pEditWnd->pPrintPreview	// 印刷Preview中
 	) {
 		return false;
 	}
@@ -84,7 +82,7 @@ bool AutoReloadAgent::_IsFileUpdatedByOther(FILETIME* pNewFileTime) const
 				&GetListeningDoc()->docFile.GetFileTime().GetFILETIME(),
 				&ftime.GetFILETIME()
 			) != 0
-		) {	//	Aug. 13, 2003 wmlhq タイムスタンプが古く変更されている場合も検出対象とする
+		) {	// タイムスタンプが古く変更されている場合も検出対象とする
 			*pNewFileTime = ftime.GetFILETIME();
 			return true;
 		}

@@ -59,7 +59,7 @@ void Figure_Tab::DispSpace(Graphics& gr, DispPos* pDispPos, EditView& view, bool
 				ExtTextOutOption() & ~(bTrans? ETO_OPAQUE: 0),
 				&rcClip2,
 				pTypeData->szTabViewString,
-				tabDispWidth <= 8 ? tabDispWidth : 8, // Sep. 22, 2002 genta
+				tabDispWidth <= 8 ? tabDispWidth : 8,
 				pMetrics->GetDxArray_AllHankaku()
 			);
 		}else {
@@ -71,7 +71,7 @@ void Figure_Tab::DispSpace(Graphics& gr, DispPos* pDispPos, EditView& view, bool
 				ExtTextOutOption() & ~(bTrans? ETO_OPAQUE: 0),
 				&rcClip2,
 				L"        ",
-				tabDispWidth <= 8 ? tabDispWidth : 8, // Sep. 22, 2002 genta
+				tabDispWidth <= 8 ? tabDispWidth : 8,
 				pMetrics->GetDxArray_AllHankaku()
 			);
 
@@ -100,7 +100,7 @@ void Figure_Tab::DispSpace(Graphics& gr, DispPos* pDispPos, EditView& view, bool
 						gr,
 						nPosLeft,
 						sPos.GetDrawPos().y,
-						nCharWidth * tabDispWidth - (nPosLeft -  sPos.GetDrawPos().x),	// Tab Areaˆê”t‚É 2013/4/11 Uchi
+						nCharWidth * tabDispWidth - (nPosLeft -  sPos.GetDrawPos().x),	// Tab Areaˆê”t‚É
 						pMetrics->GetHankakuHeight(),
 						gr.GetCurrentMyFontBold() || pTypeData->colorInfoArr[COLORIDX_TAB].fontAttr.bBoldFont,
 						gr.GetCurrentTextForeColor()

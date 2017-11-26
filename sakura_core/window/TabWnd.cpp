@@ -515,7 +515,6 @@ bool TabWnd::ReorderTab(int nSrcTab, int nDstTab)
 	TabCtrl_GetItem(hwndTab, nDstTab, &tcitem);
 	hwndDst = (HWND)tcitem.lParam;
 
-	//	2007.07.07 genta CShareData::ReorderTabとして独立
 	if (! AppNodeManager::getInstance().ReorderTab(hwndSrc, hwndDst)) {
 		return false;
 	}
@@ -581,7 +580,6 @@ bool TabWnd::SeparateGroup(HWND hwndSrc, HWND hwndDst, POINT ptDrag, POINT ptDro
 		::SetWindowPos(hwndSrc, hwndTop, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
 	}
 
-	//	2007.07.07 genta 内部的なグループ移動の操作をCShareDataへ移動
 	int notifygroups[2];
 	hwndDst = appNodeMgr.SeparateGroup(hwndSrc, hwndDst, bSrcIsTop, notifygroups);
 
@@ -653,7 +651,6 @@ bool TabWnd::SeparateGroup(HWND hwndSrc, HWND hwndDst, POINT ptDrag, POINT ptDro
 	}
 
 	// 再表示メッセージをブロードキャストする。
-	//	2007.07.07 genta 2回ループに
 	for (size_t group=0; group<_countof(notifygroups); ++group) {
 		AppNodeGroupHandle(notifygroups[group]).PostMessageToAllEditors(
 			MYWM_TAB_WINDOW_NOTIFY,
@@ -839,8 +836,6 @@ HWND TabWnd::Open(HINSTANCE hInstance, HWND hwndParent)
 		}
 		bMultiLine = pShareData->common.tabBar.bTabMultiLine;
 		lngStyle |= TCS_TABS | TCS_FOCUSNEVER | TCS_FIXEDWIDTH | TCS_FORCELABELLEFT;
-		//lngStyle &= ~(TCS_BUTTONS | TCS_SINGLELINE);	//2004.01.31
-		//lngStyle |= TCS_TABS | TCS_MULTILINE;
 		::SetWindowLongPtr(hwndTab, GWL_STYLE, lngStyle);
 		TabCtrl_SetItemSize(hwndTab, MAX_TABITEM_WIDTH, TAB_ITEM_HEIGHT);
 
@@ -1635,7 +1630,6 @@ void TabWnd::TabWindowNotify(WPARAM wParam, LPARAM lParam)
 			TCITEM tcitem;
 			RecentEditNode	cRecentEditNode;
 			TCHAR szName[1024];
-			//	Jun. 19, 2004 genta
 			EditNode* p = AppNodeManager::getInstance().GetEditNode((HWND)lParam);
 			GetTabName(p, false, true, szName, _countof(szName));
 

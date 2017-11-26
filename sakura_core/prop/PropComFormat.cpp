@@ -26,9 +26,7 @@ static const DWORD p_helpids[] = {	//10400
 //	IDC_STATIC,							-1,
 	0, 0
 };
-//@@@ 2001.02.04 End
 
-//@@@ 2002.01.12 add start
 static const char* p_date_form[] = {
 	"yyyy'”N'M'ŒŽ'd'“ú'",
 	"yyyy'”N'M'ŒŽ'd'“ú('dddd')'",

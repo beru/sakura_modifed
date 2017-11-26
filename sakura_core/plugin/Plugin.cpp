@@ -2,7 +2,7 @@
 	@brief プラグイン基本クラス
 */
 #include "StdAfx.h"
-#include <vector>		// wstring_split用 2010/4/4 Uchi
+#include <vector>		// wstring_split用
 #include "Plugin.h"
 #include "JackManager.h"
 
@@ -142,7 +142,7 @@ bool Plugin::ReadPluginDefCommand(
 	return true;
 }
 
-// プラグイン定義ファイルのOptionセクションを読み込む	// 2010/3/24 Uchi
+// プラグイン定義ファイルのOptionセクションを読み込む
 bool Plugin::ReadPluginDefOption(
 	DataProfile& profile,
 	DataProfile* profileMlang
@@ -243,7 +243,7 @@ int Plugin::AddCommand(
 	return newPlug->GetFunctionCode();
 }
 
-// 文字列分割	2010/4/4 Uchi
+// 文字列分割
 //	独立させたほうがいいのだが
 std::vector<std::wstring> wstring_split(
 	std::wstring sTrg,

@@ -177,7 +177,7 @@ void EditView::DrawBracketPair(bool bDraw)
 					// 色設定
 					TypeSupport textType(*this, COLORIDX_TEXT);
 					textType.SetGraphicsState_WhileThisObj(gr);
-					// 2013.05.24 背景色がテキストの背景色と同じならカーソル行の背景色を適用
+					// 背景色がテキストの背景色と同じならカーソル行の背景色を適用
 					TypeSupport colorIndexType(*this, nColorIndex);
 					TypeSupport colorIndexBgType(*this, nColorIndexBg);
 					TypeSupport* pColorBack = &colorIndexType;
@@ -265,7 +265,6 @@ static const KAKKO_T g_aKakkos[] = {
 };
 
 
-//	Jun. 16, 2000 genta
 /*!
 	@brief 対括弧の検索
 
@@ -296,7 +295,6 @@ bool EditView::SearchBracket(
 	Point ptPos = pEditDoc->layoutMgr.LayoutToLogic(ptLayout);
 	const wchar_t* cline = pEditDoc->docLineMgr.GetLine(ptPos.y)->GetDocLineStrWithEOL(&len);
 
-	//	Jun. 19, 2000 genta
 	if (!cline)	//	最後の行に本文がない場合
 		return false;
 
@@ -323,7 +321,7 @@ bool EditView::SearchBracket(
 
 	const wchar_t* bPos = NativeW::GetCharPrev(cline, ptPos.x, cline + ptPos.x);
 	ptrdiff_t nCharSize = cline + ptPos.x - bPos;
-	// 括弧処理 2007.10.16 kobake
+	// 括弧処理
 	if (nCharSize == 1) {
 		ptPos.x = bPos - cline;
 		for (const KAKKO_T* p=g_aKakkos; p->sStr; ++p) {
@@ -521,5 +519,4 @@ bool EditView::IsBracket(
 	}
 	return false;
 }
-//@@@ 2003.01.09 End
 

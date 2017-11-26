@@ -75,7 +75,7 @@ void GrepAgent::CreateFolders(const TCHAR* pszPath, std::vector<std::tstring>& v
 		}
 		*q = _T('\0');
 #if 0
-		// 2011.12.25 仕様変更。最後の\\は取り除く
+		// 最後の\\は取り除く
 		int	nFolderLen = q - &szTmp[0];
 		if (0 < nFolderLen) {
 			int nCharChars = &szTmp[nFolderLen] - CNativeT::GetCharPrev(&szTmp[0], nFolderLen, &szTmp[nFolderLen]);
@@ -185,7 +185,6 @@ DWORD GrepAgent::DoGrep(
 	int			nHitCount = 0;
 	DlgCancel	dlgCancel;
 	HWND		hwndCancel;
-	//	Jun. 27, 2001 genta	正規表現ライブラリの差し替え
 	Bregexp		regexp;
 	NativeW		memMessage;
 	size_t		nWork;
@@ -262,7 +261,7 @@ DWORD GrepAgent::DoGrep(
 		return 0;
 	}
 
-	// 2014.06.13 別ウィンドウで検索したとき用にGrepダイアログの検索キーを設定
+	// 別ウィンドウで検索したとき用にGrepダイアログの検索キーを設定
 	viewDst.editWnd.dlgGrep.strText = pmGrepKey->GetStringPtr();
 	viewDst.editWnd.dlgGrep.bSetText = true;
 	viewDst.editWnd.dlgGrepReplace.strText = pmGrepKey->GetStringPtr();
@@ -278,8 +277,6 @@ DWORD GrepAgent::DoGrep(
 	wcsncpy_s(AppMode::getInstance().szGrepKey, _countof(AppMode::getInstance().szGrepKey), pmGrepKey->GetStringPtr(), _TRUNCATE);
 	this->bGrepMode = true;
 
-	//	2007.07.22 genta
-	//	バージョン番号取得のため，処理を前の方へ移動した
 	SearchStringPattern pattern;
 	{
 		// 検索パターンのコンパイル
@@ -327,15 +324,12 @@ DWORD GrepAgent::DoGrep(
 		}
 	}
 
-	// 2002.02.08 Grepアイコンも大きいアイコンと小さいアイコンを別々にする。
+	// Grepアイコンも大きいアイコンと小さいアイコンを別々にする。
 	HICON	hIconBig, hIconSmall;
-	// Dec, 2, 2002 genta アイコン読み込み方法変更
 	hIconBig   = GetAppIcon(G_AppInstance(), ICON_DEFAULT_GREP, FN_GREP_ICON, false);
 	hIconSmall = GetAppIcon(G_AppInstance(), ICON_DEFAULT_GREP, FN_GREP_ICON, true);
 
-	// Sep. 10, 2002 genta
-	// EditWndに新設した関数を使うように
-	auto& editWnd = EditWnd::getInstance();	// Sep. 10, 2002 genta
+	auto& editWnd = EditWnd::getInstance();
 	editWnd.SetWindowIcon(hIconSmall, ICON_SMALL);
 	editWnd.SetWindowIcon(hIconBig, ICON_BIG);
 
@@ -371,7 +365,7 @@ DWORD GrepAgent::DoGrep(
 		memWork2.SetNativeData(*pmGrepKey);
 		const TypeConfig& type = viewDst.pEditDoc->docType.GetDocumentAttribute();
 		if (!type.colorInfoArr[COLORIDX_WSTRING].bDisp) {
-			// 2011.11.28 色指定が無効ならエスケープしない
+			// 色指定が無効ならエスケープしない
 		}else
 		if (type.stringType == StringLiteralType::CPP
 			|| type.stringType == StringLiteralType::CSharp
@@ -401,7 +395,7 @@ DWORD GrepAgent::DoGrep(
 			memWork2.SetNativeData( memReplace );
 			const TypeConfig& type = viewDst.pEditDoc->docType.GetDocumentAttribute();
 			if (!type.colorInfoArr[COLORIDX_WSTRING].bDisp) {
-				// 2011.11.28 色指定が無効ならエスケープしない
+				// 色指定が無効ならエスケープしない
 			}else
 			if (0
 				|| type.stringType == StringLiteralType::CPP
@@ -481,7 +475,7 @@ DWORD GrepAgent::DoGrep(
 		memMessage.AppendString(pszWork);
 
 		if (searchOption.bRegularExp) {
-			//	2007.07.22 genta : 正規表現ライブラリのバージョンも出力する
+			// 正規表現ライブラリのバージョンも出力する
 			memMessage.AppendString(LSW(STR_GREP_REGEX_DLL));	// L"    (正規表現:"
 			memMessage.AppendStringT(regexp.GetVersionT());
 			memMessage.AppendStringLiteral(L")\r\n");
@@ -529,9 +523,6 @@ DWORD GrepAgent::DoGrep(
 	memMessage._SetStringLength(0);
 	pszWork = NULL;
 	
-	//	2007.07.22 genta バージョンを取得するために，
-	//	正規表現の初期化を上へ移動
-
 	// 表示処理ON/OFF
 	if (!editWnd.UpdateTextWrap()) {		// 折り返し方法関連の更新
 		editWnd.RedrawAllViews(&viewDst);	// 他のペインの表示を更新
@@ -615,7 +606,6 @@ DWORD GrepAgent::DoGrep(
 	// アンドゥバッファの処理
 	viewDst.SetUndoBuffer();
 
-	// Apr. 13, 2001 genta
 	// Grep実行後はファイルを変更無しの状態にする．
 	viewDst.pEditDoc->docEditor.SetModified(false, false);
 
@@ -789,7 +779,6 @@ int GrepAgent::DoGrepTree(
 			}
 
 			// フォルダ名を作成する。
-			// 2010.08.01 キャンセルでメモリーリークしてました
 			std::tstring currentPath  = pszPath;
 			currentPath += _T("\\");
 			currentPath += lpFileName;
@@ -819,7 +808,6 @@ int GrepAgent::DoGrepTree(
 			if (nGrepTreeResult == -1) {
 				goto cancel_return;
 			}
-			//dlgCancel.SetItemText(IDC_STATIC_CURPATH, pszPath);	//@@@ 2002.01.10 add サブフォルダから戻ってきたら...
 		}
 	}
 
@@ -1012,9 +1000,9 @@ int GrepAgent::DoGrepFile(
 {
 	int		nHitCount;
 	LONGLONG	nLine;
-	const wchar_t*	pszRes; // 2002/08/29 const付加
+	const wchar_t*	pszRes;
 	EncodingType	nCharCode;
-	const wchar_t*	pCompareData; // 2002/08/29 const付加
+	const wchar_t*	pCompareData;
 	bool	bOutFileName;
 	bOutFileName = false;
 	Eol	eol;
@@ -1027,13 +1015,12 @@ int GrepAgent::DoGrepFile(
 	const TCHAR* pszDispFilePath = (grepOption.bGrepSeparateFolder || grepOption.bGrepOutputBaseFolder) ? pszRelPath : pszFullPath;
 
 	//	ここでは正規表現コンパイルデータの初期化は不要
-	const TCHAR* pszCodeName; // 2002/08/29 const付加
+	const TCHAR* pszCodeName;
 	pszCodeName = _T("");
 	nHitCount = 0;
 	nLine = 0;
 
 	// 検索条件が長さゼロの場合はファイル名だけ返す
-	// 2002/08/29 行ループの前からここに移動
 	if (nKeyLen == 0) {
 		TCHAR szCpName[100];
 		if (grepOption.nGrepCharSet == CODE_AUTODETECT) {
@@ -1139,7 +1126,6 @@ int GrepAgent::DoGrepFile(
 		int nOutputHitCount = 0;
 
 		// 検索条件が長さゼロの場合はファイル名だけ返す
-		// 2002/08/29 ファイルオープンの手前へ移動
 		
 		// 注意 : fl.ReadLine が throw する可能性がある
 		while (fl.ReadLine(&unicodeBuffer, &eol) != CodeConvertResult::Failure) {
@@ -1537,7 +1523,7 @@ int GrepAgent::DoGrepReplaceFile(
 	const SearchOption&		searchOption,
 	const GrepOption&		grepOption,
 	const SearchStringPattern& pattern,
-	Bregexp&				regexp,		//	Jun. 27, 2001 genta	正規表現ライブラリの差し替え
+	Bregexp&				regexp,
 	int*					pnHitCount,
 	const TCHAR*			pszFullPath,
 	const TCHAR*			pszBaseFolder,
@@ -1600,7 +1586,6 @@ int GrepAgent::DoGrepReplaceFile(
 			++nLine;
 	
 			// 処理中のユーザー操作を可能にする
-			// 2010.08.31 間隔を1/32にする
 			if (((nLine%32 == 0)|| 10000 < nLineLen ) && !::BlockingHook( dlgCancel.GetHwnd() )) {
 				return -1;
 			}
@@ -1720,7 +1705,6 @@ int GrepAgent::DoGrepReplaceFile(
 						// Grep結果を、memMessageに格納する
 						SetGrepResult(
 							memMessage, pszDispFilePath, pszCodeName,
-							//	Jun. 25, 2002 genta
 							//	桁位置は1始まりなので1を足す必要がある
 							nLine, pszRes - pLine + 1, pLine, nLineLen, nEolCodeLen,
 							pszRes, nMatchLen,
@@ -1733,7 +1717,6 @@ int GrepAgent::DoGrepReplaceFile(
 					output.OutputHead();
 					++nHitCount;
 					++(*pnHitCount);
-					//	May 22, 2000 genta
 					if (((*pnHitCount)%128) == 0 || *pnHitCount < 128) {
 						dlgCancel.SetItemInt(IDC_STATIC_HITCOUNT, *pnHitCount, FALSE );
 					}
@@ -1749,7 +1732,6 @@ int GrepAgent::DoGrepReplaceFile(
 				size_t nColumnPrev = 0;
 				const wchar_t*	pCompareData = pLine;
 				size_t nCompareLen = nLineLen;
-				//	Jun. 21, 2003 genta ループ条件見直し
 				//	マッチ箇所を1行から複数検出するケースを標準に，
 				//	マッチ箇所を1行から1つだけ検出する場合を例外ケースととらえ，
 				//	ループ継続・打ち切り条件(bGrepOutputLine)を逆にした．
@@ -1780,7 +1762,6 @@ int GrepAgent::DoGrepReplaceFile(
 					output.OutputHead();
 					++nHitCount;
 					++(*pnHitCount);
-					//	May 22, 2000 genta
 					if (((*pnHitCount)%128) == 0 || *pnHitCount < 128) {
 						dlgCancel.SetItemInt(IDC_STATIC_HITCOUNT, *pnHitCount, FALSE );
 					}
@@ -1801,7 +1782,7 @@ int GrepAgent::DoGrepReplaceFile(
 			}
 			output.AppendBuffer(outBuffer);
 	
-			// 2014.09.23 データが多い時はバッファ出力
+			// データが多い時はバッファ出力
 			if (0 < memMessage.GetStringLength() && 2800 < nHitCount - nOutputHitCount) {
 				nOutputHitCount = nHitCount;
 				AddTail(editWnd, viewDst, memMessage, grepOption.bGrepStdout);

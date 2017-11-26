@@ -55,7 +55,6 @@
 #include <wchar.h>
 
 #ifndef SAKURA_PCH_MODE_MIN
-// 2010.04.19 èdÇªÇ§Ç»ÇÃÇ≈í«â¡
 #include <HtmlHelp.h>
 #include <ObjIdl.h>
 #include <ShlObj.h>

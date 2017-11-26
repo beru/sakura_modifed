@@ -232,7 +232,7 @@ size_t NativeW::GetSizeOfChar(
 		return 0;
 	}
 
-	// サロゲートチェック					2008/7/5 Uchi
+	// サロゲートチェック
 	if (IsUTF16High(pData[nIdx])) {
 		if (nIdx + 1 < nDataLen && IsUTF16Low(pData[nIdx + 1])) {
 			// サロゲートペア 2個分
@@ -255,7 +255,7 @@ size_t NativeW::GetKetaOfChar(
 		return 0;
 	}
 
-	// サロゲートチェック BMP 以外は全角扱い		2008/7/5 Uchi
+	// サロゲートチェック BMP 以外は全角扱い
 	if (IsUTF16High(pData[nIdx])) {
 		return 2;	// 仮
 	}
@@ -296,7 +296,7 @@ const wchar_t* NativeW::GetCharNext(
 		return &pData[nDataLen];
 	}
 
-	// サロゲートペア対応	2008/7/6 Uchi
+	// サロゲートペア対応
 	if (IsUTF16High(*pDataCurrent)) {
 		if (IsUTF16Low(*pNext)) {
 			pNext += 1;

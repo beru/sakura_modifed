@@ -547,7 +547,6 @@ void ViewCommander::Command_Trim(
 }
 
 
-// from ViewCommander_New.cpp
 // 物理行のソートに使う構造体
 struct SortData {
 	const NativeW* pMemLine;
@@ -769,7 +768,6 @@ void ViewCommander::Command_Sort(bool bAsc)	// bAsc:true=昇順, false=降順
 }
 
 
-// from ViewCommander_New.cpp
 /*! @brief 物理行のマージ
 
 	連続する物理行で内容が同一の物を1行にまとめます．
@@ -903,7 +901,6 @@ void ViewCommander::Command_Merge(void)
 }
 
 
-// from ViewCommander_New.cpp
 /* メニューからの再変換対応 */
 void ViewCommander::Command_Reconvert(void)
 {

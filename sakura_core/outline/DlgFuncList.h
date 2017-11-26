@@ -145,7 +145,6 @@ protected:
 	bool TagJumpTimer(const TCHAR*, Point, bool);
 
 private:
-	//	May 18, 2001 genta
 	/*!
 		@brief アウトライン解析種別
 

@@ -85,7 +85,7 @@ void DocOutline::MakeFuncList_VisualBasic(FuncInfoArr* pFuncInfoArr)
 							(L'a' <= pLine[i] &&	pLine[i] <= L'z')||
 							(L'A' <= pLine[i] &&	pLine[i] <= L'Z')||
 							(L'0' <= pLine[i] &&	pLine[i] <= L'9')||
-							(L'\u00a1' <= pLine[i] && !iswcntrl(pLine[i]) && !iswspace(pLine[i])) // 2013.05.08 “ú–{Œê‘Î‰ž
+							(L'\u00a1' <= pLine[i] && !iswcntrl(pLine[i]) && !iswspace(pLine[i])) // “ú–{Œê‘Î‰ž
 						)
 					)
 					|| nCharChars == 2

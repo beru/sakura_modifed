@@ -31,7 +31,7 @@ bool WSHPlugin::ReadPluginDef(
 	// コマンドの読み込み
 	ReadPluginDefCommand(profile, profileMlang);
 
-	// オプション定義の読み込み	// 2010/3/24 Uchi
+	// オプション定義の読み込み
 	ReadPluginDefOption(profile, profileMlang);
 
 	// 文字列定義の読み込み

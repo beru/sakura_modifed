@@ -26,7 +26,7 @@ MruFolder::~MruFolder()
 */
 HMENU MruFolder::CreateMenu(MenuDrawer& menuDrawer) const
 {
-	HMENU hMenuPopUp = ::CreatePopupMenu();	// Jan. 29, 2002 genta
+	HMENU hMenuPopUp = ::CreatePopupMenu();
 	return CreateMenu(hMenuPopUp, menuDrawer);
 }
 

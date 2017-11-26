@@ -33,7 +33,6 @@ void EditView::OnLBUTTONDOWN(WPARAM fwKeys, int _xPos , int _yPos)
 		bHokan = false;
 	}
 
-	// isearch 2004.10.22 isearchをキャンセルする
 	if (nISearchMode > 0) {
 		ISearchExit();
 	}
@@ -412,8 +411,6 @@ normal_action:;
 				}
 			}
 
-			//	Apr. 14, 2003 genta
-			//	行番号の下をクリックしてドラッグを開始するとおかしくなるのを修正
 			//	行番号をクリックした場合にはGetSelectionInfo().ChangeSelectAreaByCurrentCursor()にて
 			//	GetSelectionInfo().select.GetTo().x/GetSelectionInfo().select.GetTo().yに-1が設定されるが、上の
 			//	GetCommander().Command_GoLineEnd(), Command_Right()によって行選択が行われる。
@@ -506,7 +503,6 @@ bool EditView::CheckTripleClick(Point ptMouse)
 
 	// 行番号表示エリアでない、かつクリックプレスからダブルクリック時間以内、
 	// かつダブルクリックの許容ずれピクセル以下のずれの時トリプルクリックとする
-	//	2007.10.12 genta/dskoba システムのダブルクリック速度，ずれ許容量を取得
 	if ((ptMouse.x >= GetTextArea().GetAreaLeft())&&
 		(::GetTickCount() - dwTripleClickCheck <= GetDoubleClickTime())&&
 		(dpos.x <= GetSystemMetrics(SM_CXDOUBLECLK)) &&
@@ -564,7 +560,7 @@ void EditView::OnRBUTTONUP(WPARAM fwKeys, int xPos , int yPos)
 	nFuncID = GetDllShareData().common.keyBind.pKeyNameArr[(int)MouseFunctionType::RightClick].nFuncCodeArr[nIdx];
 	if (nFuncID != 0) {
 		// コマンドコードによる処理振り分け
-		//	May 19, 2006 genta マウスからのメッセージはCMD_FROM_MOUSEを上位ビットに入れて送る
+		// マウスからのメッセージはCMD_FROM_MOUSEを上位ビットに入れて送る
 		::PostMessage(::GetParent(hwndParent), WM_COMMAND, MAKELONG(nFuncID, CMD_FROM_MOUSE), (LPARAM)NULL);
 	}
 //	// 右クリックメニュー
@@ -639,7 +635,7 @@ void EditView::OnMBUTTONUP(WPARAM fwKeys, int xPos , int yPos)
 		}
 	}else if (nFuncID != 0) {
 		// コマンドコードによる処理振り分け
-		//	May 19, 2006 genta マウスからのメッセージはCMD_FROM_MOUSEを上位ビットに入れて送る
+		// マウスからのメッセージはCMD_FROM_MOUSEを上位ビットに入れて送る
 		::PostMessage(::GetParent(hwndParent), WM_COMMAND, MAKELONG(nFuncID, CMD_FROM_MOUSE),  (LPARAM)NULL);
 	}
 	if (nAutoScrollMode) {
@@ -796,7 +792,7 @@ void EditView::OnXLBUTTONUP(WPARAM fwKeys, int xPos , int yPos)
 	nFuncID = GetDllShareData().common.keyBind.pKeyNameArr[(int)MouseFunctionType::LeftSideClick].nFuncCodeArr[nIdx];
 	if (nFuncID != 0) {
 		// コマンドコードによる処理振り分け
-		//	May 19, 2006 genta マウスからのメッセージはCMD_FROM_MOUSEを上位ビットに入れて送る
+		// マウスからのメッセージはCMD_FROM_MOUSEを上位ビットに入れて送る
 		::PostMessage(::GetParent(hwndParent), WM_COMMAND, MAKELONG(nFuncID, CMD_FROM_MOUSE),  (LPARAM)NULL);
 	}
 
@@ -855,7 +851,7 @@ void EditView::OnXRBUTTONUP(WPARAM fwKeys, int xPos , int yPos)
 	nFuncID = GetDllShareData().common.keyBind.pKeyNameArr[(int)MouseFunctionType::RightSideClick].nFuncCodeArr[nIdx];
 	if (nFuncID != 0) {
 		// コマンドコードによる処理振り分け
-		//	May 19, 2006 genta マウスからのメッセージはCMD_FROM_MOUSEを上位ビットに入れて送る
+		// マウスからのメッセージはCMD_FROM_MOUSEを上位ビットに入れて送る
 		::PostMessage(::GetParent(hwndParent), WM_COMMAND, MAKELONG(nFuncID, CMD_FROM_MOUSE),  (LPARAM)NULL);
 	}
 
@@ -1015,9 +1011,8 @@ void EditView::OnMOUSEMOVE(WPARAM fwKeys, int xPos_, int yPos_)
 				)
 			) {
 				// 手カーソル
-				SetHandCursor();		// Hand Cursorを設定 2013/1/29 Uchi
+				SetHandCursor();		// Hand Cursorを設定
 			}else {
-				// migemo isearch 2004.10.22
 				if (nISearchMode > 0) {
 					if (nISearchDirection == SearchDirection::Forward) {
 						::SetCursor(::LoadCursor(G_AppInstance(), MAKEINTRESOURCE(IDC_CURSOR_ISEARCH_F)));
@@ -1358,7 +1353,7 @@ LRESULT EditView::OnMOUSEWHEEL2(
 		}
 		nWheelDelta += zDelta;
 
-		// 2011.05.18 APIのスクロール量に従う
+		// APIのスクロール量に従う
 		int nRollNum = abs(nWheelDelta) * nRollLineNum / 120;
 		// 次回持越しの変化量(上記式Deltaのあまり。スクロール方向とzDeltaは符号が反対)
 		nWheelDelta = (abs(nWheelDelta) - nRollNum * 120 / nRollLineNum) * ((nScrollCode == SB_LINEUP) ? 1 : -1);
@@ -1378,7 +1373,6 @@ LRESULT EditView::OnMOUSEWHEEL2(
 		const int nCount = ((nScrollCode == SB_LINEUP) ? -1 : 1) * (bSmooth ? 1 : nRollNum);
 
 		for (i=0; i<nRollActions; ++i) {
-			//	Sep. 11, 2004 genta 同期スクロール行数
 			if (bHorizontal) {
 				SyncScrollH(ScrollAtH(GetTextArea().GetViewLeftCol() + nCount));
 			}else {
@@ -1594,7 +1588,7 @@ void EditView::OnLBUTTONDBLCLK(WPARAM fwKeys, int _xPos , int _yPos)
 
 	if (nFuncID != 0) {
 		// コマンドコードによる処理振り分け
-		//	May 19, 2006 genta マウスからのメッセージはCMD_FROM_MOUSEを上位ビットに入れて送る
+		// マウスからのメッセージはCMD_FROM_MOUSEを上位ビットに入れて送る
 		::SendMessage(::GetParent(hwndParent), WM_COMMAND, MAKELONG(nFuncID, CMD_FROM_MOUSE),  (LPARAM)NULL);
 	}
 
@@ -1985,7 +1979,6 @@ STDMETHODIMP EditView::Drop(LPDATAOBJECT pDataObject, DWORD dwKeyState, POINTL p
 	SetUndoBuffer();
 
 	::GlobalUnlock(hData);
-	// 2004.07.12 fotomo/もか メモリーリークの修正
 	if ((GMEM_LOCKCOUNT & ::GlobalFlags(hData)) == 0) {
 		::GlobalFree(hData);
 	}

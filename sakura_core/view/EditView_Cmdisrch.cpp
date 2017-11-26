@@ -49,12 +49,12 @@ void EditView::TranslateCommand_isearch(
 		break;
 
 	case F_INDENT_TAB:	// TABはインデントではなく単なるTAB文字と見なす
-	case F_UNINDENT_TAB:	// genta追加
+	case F_UNINDENT_TAB:
 		nCommand = F_ISEARCH_ADD_CHAR;
 		lparam1 = '\t';
 		break;
 	case F_INDENT_SPACE:	// スペースはインデントではなく単なるTAB文字と見なす
-	case F_UNINDENT_SPACE:	// genta追加
+	case F_UNINDENT_SPACE:
 		nCommand = F_ISEARCH_ADD_CHAR;
 		lparam1 = ' ';
 		break;
@@ -96,22 +96,22 @@ bool EditView::ProcessCommand_isearch(
 
 	// 検索モードへの移行
 	case F_ISEARCH_NEXT:
-		ISearchEnter(1, SearchDirection::Forward);		// 前方インクリメンタルサーチ // 2004.10.13 isearch
+		ISearchEnter(1, SearchDirection::Forward);		// 前方インクリメンタルサーチ
 		return true;
 	case F_ISEARCH_PREV:
-		ISearchEnter(1, SearchDirection::Backward);	// 後方インクリメンタルサーチ // 2004.10.13 isearch
+		ISearchEnter(1, SearchDirection::Backward);	// 後方インクリメンタルサーチ
 		return true;
 	case F_ISEARCH_REGEXP_NEXT:
-		ISearchEnter(2, SearchDirection::Forward);		// 前方正規表現インクリメンタルサーチ  // 2004.10.13 isearch
+		ISearchEnter(2, SearchDirection::Forward);		// 前方正規表現インクリメンタルサーチ
 		return true;
 	case F_ISEARCH_REGEXP_PREV:
-		ISearchEnter(2, SearchDirection::Backward);	// 後方正規表現インクリメンタルサーチ  // 2004.10.13 isearch
+		ISearchEnter(2, SearchDirection::Backward);	// 後方正規表現インクリメンタルサーチ
 		return true;
 	case F_ISEARCH_MIGEMO_NEXT:
-		ISearchEnter(3, SearchDirection::Forward);		// 前方MIGEMOインクリメンタルサーチ    // 2004.10.13 isearch
+		ISearchEnter(3, SearchDirection::Forward);		// 前方MIGEMOインクリメンタルサーチ
 		return true;
 	case F_ISEARCH_MIGEMO_PREV:
-		ISearchEnter(3, SearchDirection::Backward);	// 後方MIGEMOインクリメンタルサーチ    // 2004.10.13 isearch
+		ISearchEnter(3, SearchDirection::Backward);	// 後方MIGEMOインクリメンタルサーチ
 		return true;
 	}
 	return false;
@@ -172,7 +172,7 @@ void EditView::ISearchEnter(int mode, SearchDirection direction)
 				pMigemo->InitDll();
 			}
 			// migemo dll チェック
-			//	Jan. 10, 2005 genta 設定変更で使えるようになっている
+			//	設定変更で使えるようになっている
 			//	可能性があるので，使用可能でなければ一応初期化を試みる
 			if (!pMigemo->IsAvailable() && pMigemo->InitDll() != InitDllResultType::Success) {
 				WarningBeep();
@@ -192,7 +192,7 @@ void EditView::ISearchEnter(int mode, SearchDirection direction)
 			break;
 		}
 		
-		//	Feb. 04, 2005 genta	検索開始位置を記録
+		//	検索開始位置を記録
 		//	インクリメンタルサーチ間でモードを切り替える場合には開始と見なさない
 		if (nISearchMode == 0) {
 			ptSrchStartPos_PHY = GetCaret().GetCaretLogicPos();

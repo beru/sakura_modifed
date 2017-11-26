@@ -5,7 +5,7 @@
 #include "prop/PropCommon.h"
 #include "env/ShareData.h"
 #include "env/DocTypeManager.h"
-#include "typeprop/ImpExpManager.h"	// 20210/4/23 Uchi
+#include "typeprop/ImpExpManager.h"
 #include "dlg/DlgInput1.h"
 #include "util/shell.h"
 #include <memory>
@@ -249,7 +249,6 @@ INT_PTR PropKeyword::DispatchEvent(
 					}
 					// モードレスダイアログの表示
 					szKeyword[0] = 0;
-					//	Oct. 5, 2002 genta 長さ制限の設定を修正．バッファオーバーランしていた．
 					if (!dlgInput1.DoModal(
 						G_AppInstance(),
 						hwndDlg,
@@ -610,7 +609,7 @@ void PropKeyword::SetKeywordSet(HWND hwndDlg, size_t nIdx)
 	::EnableWindow(::GetDlgItem(hwndDlg, IDC_CHECK_KEYWORDCASE), TRUE);
 	::EnableWindow(::GetDlgItem(hwndDlg, IDC_LIST_KEYWORD), TRUE);
 	::EnableWindow(::GetDlgItem(hwndDlg, IDC_BUTTON_ADDKEYWORD), TRUE);
-	//	Jan. 29, 2005 genta キーワードセット切り替え直後はキーワードは未選択
+	//	キーワードセット切り替え直後はキーワードは未選択
 	//	そのため有効にしてすぐにタイマーで無効になる．
 	//	なのでここで無効にしておく．
 	::EnableWindow(::GetDlgItem(hwndDlg, IDC_BUTTON_EDITKEYWORD), FALSE);

@@ -25,7 +25,6 @@ void EditView::TranslateCommand_grep(
 		return;
 
 	if (nCommand == F_WCHAR) {
-		//	Jan. 23, 2005 genta •¶Žš”»’è–Y‚ê
 		if (WCODE::IsLineDelimiter((wchar_t)lparam1, GetDllShareData().common.edit.bEnableExtEol)
 			&& GetDllShareData().common.search.bGTJW_Return
 		) {

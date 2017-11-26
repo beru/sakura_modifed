@@ -89,7 +89,7 @@ void EditView::RedrawAll()
 	// 親ウィンドウのタイトルを更新
 	editWnd.UpdateCaption();
 
-	//	Jul. 9, 2005 genta	選択範囲の情報をステータスバーへ表示
+	// 選択範囲の情報をステータスバーへ表示
 	GetSelectionInfo().PrintSelectionInfoMsg();
 
 	// スクロールバーの状態を更新する
@@ -112,7 +112,6 @@ void EditView::Redraw()
 	OnPaint(hdc, &ps, FALSE);
 	::ReleaseDC(GetHwnd(), hdc);
 }
-// 2001/06/21 End
 
 void EditView::RedrawLines(int top, int bottom)
 {
@@ -329,7 +328,7 @@ Color3Setting EditView::GetColorIndex(
 		Color3Setting cColor = { COLORIDX_TEXT, COLORIDX_TEXT, COLORIDX_TEXT };
 		return cColor;
 	}
-	// 2014.12.30 Skipモードの時もCOLORIDX_TEXT
+	// Skipモードの時もCOLORIDX_TEXT
 	if (ColorStrategyPool::getInstance().IsSkipBeforeLayout()) {
 		Color3Setting cColor = { COLORIDX_TEXT, COLORIDX_TEXT, COLORIDX_TEXT };
 		return cColor;
@@ -429,7 +428,7 @@ void EditView::SetCurrentColor(
 	const ColorInfo& infoBg = pTypeData->colorInfoArr[nColorIdxBg];
 	COLORREF fgcolor = GetTextColorByColorInfo2(info, info2);
 	gr.SetTextForeColor(fgcolor);
-	// 2012.11.21 背景色がテキストとおなじなら背景色はカーソル行背景
+	// 背景色がテキストとおなじなら背景色はカーソル行背景
 	const ColorInfo& info3 = (info2.colorAttr.cBACK == crBack ? infoBg : info2);
 	COLORREF bkcolor = (nColorIdx == nColorIdx2) ? info3.colorAttr.cBACK : GetBackColorByColorInfo2(info, info3);
 	gr.SetTextBackColor(bkcolor);
@@ -646,7 +645,7 @@ void EditView::OnPaint2(HDC _hdc, PAINTSTRUCT* pPs, BOOL bDrawFromComptibleBmp)
 		}else {
 			rc.left   = 0;
 			rc.top    = GetTextArea().GetRulerHeight();
-			rc.right  = GetTextArea().GetLineNumberWidth(); //	Sep. 23 ,2002 genta 余白はテキスト色のまま残す
+			rc.right  = GetTextArea().GetLineNumberWidth();
 			rc.bottom = GetTextArea().GetAreaTop();
 			gr.SetTextBackColor(pTypeData->colorInfoArr[COLORIDX_GYOU].colorAttr.cBACK);
 			gr.FillMyRectTextBackColor(rc);
@@ -766,7 +765,7 @@ void EditView::OnPaint2(HDC _hdc, PAINTSTRUCT* pPs, BOOL bDrawFromComptibleBmp)
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	// メモリＤＣを利用した再描画の場合はメモリＤＣに描画した内容を画面へコピーする
 	if (bUseMemoryDC) {
-		// 2010.10.11 先に描くと背景固定のスクロールなどでの表示が不自然になる
+		// 先に描くと背景固定のスクロールなどでの表示が不自然になる
 		DrawBracketPair(false);
 
 		::BitBlt(
@@ -1053,7 +1052,6 @@ bool EditView::DrawLayoutLine(ColorStrategyInfo& csInfo)
 		if (GetSelectionInfo().IsTextSelected() && selectType.IsDisp()) {
 			// 選択範囲の指定色：必要ならテキストのない部分の矩形選択を作画
 			Range selectArea = GetSelectionInfo().GetSelectAreaLine(csInfo.pDispPos->GetLayoutLineRef(), pLayout);
-			// 2010.10.04 スクロール分の足し忘れ
 			int nSelectFromPx = GetTextMetrics().GetHankakuDx() * (selectArea.GetFrom().x - textArea.GetViewLeftCol());
 			int nSelectToPx   = GetTextMetrics().GetHankakuDx() * (selectArea.GetTo().x - textArea.GetViewLeftCol());
 			if (nSelectFromPx < nSelectToPx && selectArea.GetTo().x != INT_MAX) {
@@ -1279,7 +1277,6 @@ bool EditView::CreateOrUpdateCompatibleBitmap(int cx, int cy)
 			// 互換BMPの作成に失敗
 			// 今後も失敗を繰り返す可能性が高いので
 			// hdcCompatDCをNULLにすることで画面バッファ機能をこのウィンドウのみ無効にする。
-			//	2007.09.29 genta 関数化．既存のBMPも解放
 			UseCompatibleDC(FALSE);
 		}
 		::ReleaseDC(GetHwnd(), hdc);

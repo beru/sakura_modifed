@@ -391,7 +391,7 @@ INT_PTR PropTypesColor::DispatchEvent(
 						nSet[0] = nIdx - 1;
 					}
 					dlgKeywordSelect.DoModal(::GetModuleHandle(NULL), hwndDlg, nSet);
-					RearrangeKeywordSet(hwndDlg);	// Jan. 23, 2005 genta キーワードセット再配置
+					RearrangeKeywordSet(hwndDlg);	// キーワードセット再配置
 					// 強調キーワード1を反映する。
 					if (nSet[0] == -1) {
 						Combo_SetCurSel(hwndCombo, 0);
@@ -601,7 +601,6 @@ void PropTypesColor::SetData(HWND hwndDlg)
 	Combo_ResetContent(hwndWork);  // コンボボックスを空にする
 	// 一行目は空白
 	Combo_AddString(hwndWork, L" ");
-	//	Mar. 31, 2003 genta KeywordSetMgrをポインタに
 	if (0 < pKeywordSetMgr->nKeywordSetNum) {
 		for (size_t i=0; i<pKeywordSetMgr->nKeywordSetNum; ++i) {
 			Combo_AddString(hwndWork, pKeywordSetMgr->GetTypeName(i));

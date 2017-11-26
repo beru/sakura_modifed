@@ -28,7 +28,7 @@ CodeBase* CodeFactory::CreateCodeBase(
 	case CODE_UTF7:			return new Utf7();
 	case CODE_UNICODEBE:	return new UnicodeBe();
 	case CODE_CESU8:		return new Cesu8();
-	case CODE_LATIN1:		return new Latin1();	// 2010/3/20 Uchi
+	case CODE_LATIN1:		return new Latin1();
 	case CODE_CPACP:		return new CodePage(codeType);
 	case CODE_CPOEM:		return new CodePage(codeType);
 	default:

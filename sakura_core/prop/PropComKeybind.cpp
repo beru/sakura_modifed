@@ -4,7 +4,7 @@
 #include "StdAfx.h"
 #include "prop/PropCommon.h"
 #include "env/ShareData.h"
-#include "typeprop/ImpExpManager.h"	// 20210/4/23 Uchi
+#include "typeprop/ImpExpManager.h"
 #include "util/shell.h"
 #include "sakura_rc.h"
 #include "sakura.hh"
@@ -185,7 +185,7 @@ INT_PTR PropKeybind::DispatchEvent(
 				if (nIndex == LB_ERR || nIndex2 == CB_ERR || nIndex3 == LB_ERR) {
 					return TRUE;
 				}
-				nFuncCode = lookup.Pos2FuncCode(nIndex2, nIndex3);	// Oct. 2, 2001 genta
+				nFuncCode = lookup.Pos2FuncCode(nIndex2, nIndex3);
 				i = 0;
 				if (IsDlgButtonChecked(hwndDlg, IDC_CHECK_SHIFT)) {
 					i |= _SHIFT;
@@ -264,7 +264,7 @@ INT_PTR PropKeybind::DispatchEvent(
 				nIndex = List_GetCurSel(hwndKeyList);
 				nIndex2 = Combo_GetCurSel(hwndCombo);
 				nIndex3 = List_GetCurSel(hwndFuncList);
-				nFuncCode = lookup.Pos2FuncCode(nIndex2, nIndex3);	// Oct. 2, 2001 genta
+				nFuncCode = lookup.Pos2FuncCode(nIndex2, nIndex3);
 				// 機能に対応するキー名の取得(複数)
 				NativeT**	ppcAssignedKeyList;
 				nAssignedKeyNum = KeyBind::GetKeyStrList(	// 機能に対応するキー名の取得(複数)
@@ -292,7 +292,7 @@ INT_PTR PropKeybind::DispatchEvent(
 				nIndex2 = Combo_GetCurSel(hwndCombo);
 				// 機能一覧に文字列をセット（リストボックス）
 				if (nIndex2 != CB_ERR) {
-					lookup.SetListItem(hwndFuncList, nIndex2);	//	Oct. 2, 2001 genta
+					lookup.SetListItem(hwndFuncList, nIndex2);
 				}
 				return TRUE;
 			}
@@ -388,7 +388,7 @@ void PropKeybind::SetData(HWND hwndDlg)
 {
 	// 機能種別一覧に文字列をセット（コンボボックス）
 	HWND hwndCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_FUNCKIND);
-	lookup.SetCategory2Combo(hwndCombo);	//	Oct. 2, 2001 genta
+	lookup.SetCategory2Combo(hwndCombo);
 
 	// 種別の先頭の項目を選択（コンボボックス）
 	Combo_SetCurSel(hwndCombo, 0);

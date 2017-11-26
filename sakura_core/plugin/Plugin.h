@@ -35,7 +35,7 @@ typedef int PlugId;
 #define PII_STRING					L"String"		// 文字列情報
 
 #define PII_COMMAND					L"Command"		// コマンド情報
-#define PII_OPTION					L"Option"		// オプション定義情報	// 2010/3/24 Uchi
+#define PII_OPTION					L"Option"		// オプション定義情報
 
 
 class Plugin;
@@ -135,7 +135,7 @@ public:
 	Plugin& plugin;					// 親プラグイン
 };
 
-// オプション定義	// 2010/3/24 Uchi
+// オプション定義
 std::vector<std::wstring> wstring_split(std::wstring, wchar_t);
 
 class PluginOption {
@@ -224,13 +224,13 @@ public:
 	// 操作
 public:
 	virtual int AddCommand(const wchar_t* handler, const wchar_t* label, const wchar_t* icon, bool doRegister);	// コマンドを追加する
-	int 	GetCommandCount()	{ return nCommandCount; }			// コマンド数を返す	2010/7/4 Uchi
+	int 	GetCommandCount()	{ return nCommandCount; }			// コマンド数を返す
 
 protected:
 	bool ReadPluginDefCommon(DataProfile& profile, DataProfile* profileMlang);	// プラグイン定義ファイルのCommonセクションを読み込む
 	bool ReadPluginDefPlug(DataProfile& profile, DataProfile* profileMlang);	// プラグイン定義ファイルのPlugセクションを読み込む
 	bool ReadPluginDefCommand(DataProfile& profile, DataProfile* profileMlang);	// プラグイン定義ファイルのCommandセクションを読み込む
-	bool ReadPluginDefOption(DataProfile& profile, DataProfile* profileMlang);	// プラグイン定義ファイルのOptionセクションを読み込む	// 2010/3/24 Uchi
+	bool ReadPluginDefOption(DataProfile& profile, DataProfile* profileMlang);	// プラグイン定義ファイルのOptionセクションを読み込む
 	bool ReadPluginDefString(DataProfile& profile, DataProfile* profileMlang);	// プラグイン定義ファイルのStringセクションを読み込む
 
 	// Plugインスタンスの作成。ReadPluginDefPlug/Command から呼ばれる。
@@ -266,7 +266,7 @@ public:
 	tstring sBaseDir;
 	tstring sOptionDir;
 	tstring sLangName;		// 言語名
-	PluginOption::Array options;		// オプション	// 2010/3/24 Uchi
+	PluginOption::Array options;		// オプション
 	std::vector<std::wstring> aStrings;	// 文字列
 private:
 	bool bLoaded;

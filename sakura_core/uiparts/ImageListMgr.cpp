@@ -41,7 +41,7 @@ void FillSolidRect(
 //	Destructor
 ImageListMgr::~ImageListMgr()
 {
-	//	2003.07.21 Image List‚Ì‘ã‚í‚è‚É•`‰æ—pbitmap‚ð‰ð•ú
+	// Image List‚Ì‘ã‚í‚è‚É•`‰æ—pbitmap‚ð‰ð•ú
 	if (hIconBitmap) {
 		DeleteObject(hIconBitmap);
 	}
@@ -259,7 +259,6 @@ void ImageListMgr::DitherBlt2(
 	SelectObject(hdcMem, bmpMemOld);
 	DeleteDC(hdcMem);
 
-	//	Jul. 21, 2003 genta
 	::SelectObject(hdcMem2, bmpMem2Old);
 	::DeleteObject(bmpMem2);
 	::DeleteDC(hdcMem2);

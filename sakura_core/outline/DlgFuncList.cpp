@@ -99,11 +99,9 @@ int CALLBACK DlgFuncList::CompareFunc_Asc(
 	if (!pFuncInfo2) {
 		return -1;
 	}
-	//	Apr. 23, 2005 genta 行番号を左端へ
 	if (pDlgFuncList->nSortCol == FL_COL_NAME) {	// 名前でソート
 		return auto_stricmp(pFuncInfo1->memFuncName.GetStringPtr(), pFuncInfo2->memFuncName.GetStringPtr());
 	}
-	//	Apr. 23, 2005 genta 行番号を左端へ
 	if (pDlgFuncList->nSortCol == FL_COL_ROW) {	// 行（＋桁）でソート
 		if (pFuncInfo1->nFuncLineCRLF < pFuncInfo2->nFuncLineCRLF) {
 			return -1;
@@ -351,7 +349,7 @@ HWND DlgFuncList::DoModeless(
 		CommonSet().nDockOutline = nOutlineType;
 	}
 
-	// 2007.04.18 genta : 「フォーカスを移す」と「自動的に閉じる」がチェックされている場合に
+	// 「フォーカスを移す」と「自動的に閉じる」がチェックされている場合に
 	// ダブルクリックを行うと，trueのまま残ってしまうので，ウィンドウを開いたときにリセットする．
 	bWaitTreeProcess = false;
 
@@ -674,7 +672,6 @@ void DlgFuncList::SetData()
 		ListView_SetColumnWidth(hwndList, FL_COL_NAME, ListView_GetColumnWidth(hwndList, FL_COL_NAME) + 16);
 		ListView_SetColumnWidth(hwndList, FL_COL_REMARK, ListView_GetColumnWidth(hwndList, FL_COL_REMARK) + 16);
 
-		// 2005.07.05 ぜっと
 		DWORD dwExStyle  = ListView_GetExtendedListViewStyle(hwndList);
 		dwExStyle |= LVS_EX_FULLROWSELECT;
 		ListView_SetExtendedListViewStyle(hwndList, dwExStyle);
@@ -753,7 +750,7 @@ void DlgFuncList::SetData()
 		EnableItem(IDC_COMBO_nSortType, false);
 		::ShowWindow(GetItemHwnd(IDC_COMBO_nSortType), SW_HIDE);
 		::ShowWindow(GetItemHwnd(IDC_STATIC_nSortType), SW_HIDE);
-		SortListView(hwndList, nSortCol);	// 2005.04.23 genta 関数化(ヘッダ書き換えのため)
+		SortListView(hwndList, nSortCol);
 	}
 }
 
@@ -954,7 +951,6 @@ void DlgFuncList::SetTreeJava(
 		}
 		if (0 < nClassNest) {
 			int	k;
-			//	Jan. 04, 2001 genta
 			//	関数先頭のセット(ツリー構築で使う)
 			pWork = pWork + m; // 2 == lstrlen("::");
 
@@ -1085,7 +1081,7 @@ void DlgFuncList::SetTreeJava(
 		memClipText.AppendString(szText);		// クリップボードコピー用テキスト
 		// "%ts%ls\r\n"
 		memClipText.AppendNativeDataT(pFuncInfo->memFuncName);
-		memClipText.AppendString(pFuncInfo->nInfo == FL_OBJ_DECLARE ? pFuncInfoArr->GetAppendText(FL_OBJ_DECLARE).c_str() : L""); 	//	Jan. 04, 2001 genta C++で使用
+		memClipText.AppendString(pFuncInfo->nInfo == FL_OBJ_DECLARE ? pFuncInfoArr->GetAppendText(FL_OBJ_DECLARE).c_str() : L"");
 		memClipText.AppendStringLiteral(L"\r\n");
 
 		// 現在カーソル位置のメソッドかどうか調べる
@@ -1110,7 +1106,6 @@ void DlgFuncList::SetTreeJava(
 				htiSelected = htiItem;
 			}
 		}
-		//	Jan. 04, 2001 genta
 		//	deleteはその都度行うのでここでは不要
 	}
 	// ソート、ノードの展開をする
@@ -1246,15 +1241,15 @@ void DlgFuncList::SetListVB(void)
 		}
 		switch ((pFuncInfo->nInfo >> 4) & 0x0f) {
 			case 2  :	// プライベート(Private)
-				_tcsncat(szOption, LS(STR_DLGFNCLST_VB_PRIVATE), _countof(szOption) - _tcslen(szOption)); //	2006.12.17 genta サイズ誤り修正
+				_tcsncat(szOption, LS(STR_DLGFNCLST_VB_PRIVATE), _countof(szOption) - _tcslen(szOption));
 				break;
 
 			case 3  :	// フレンド(Friend)
-				_tcsncat(szOption, LS(STR_DLGFNCLST_VB_FRIEND), _countof(szOption) - _tcslen(szOption)); //	2006.12.17 genta サイズ誤り修正
+				_tcsncat(szOption, LS(STR_DLGFNCLST_VB_FRIEND), _countof(szOption) - _tcslen(szOption));
 				break;
 
 			default :	// パブリック(Public)
-				_tcsncat(szOption, LS(STR_DLGFNCLST_VB_PUBLIC), _countof(szOption) - _tcslen(szOption)); //	2006.12.17 genta サイズ誤り修正
+				_tcsncat(szOption, LS(STR_DLGFNCLST_VB_PUBLIC), _countof(szOption) - _tcslen(szOption));
 		}
 		int nInfo = pFuncInfo->nInfo;
 		switch (nInfo & 0x0f) {
@@ -1305,7 +1300,7 @@ void DlgFuncList::SetListVB(void)
 
 		TCHAR szTypeOption[256]; // auto_sprintfの入出力で同一変数を使わないための作業領域追加
 		if (nInfo == 0) {
-			szTypeOption[0] = _T('\0');	//	2006.12.17 genta 全体を0で埋める必要はない
+			szTypeOption[0] = _T('\0');
 		}else
 		if (szOption[0] == _T('\0')) {
 			auto_sprintf(szTypeOption, _T("%ts"), szType);
@@ -1492,7 +1487,6 @@ void DlgFuncList::SetTree(bool tagjump, bool nolabel)
 					+ _tcslen(pszFileName)
 					+ 20
 				);
-				//	2007.03.04 genta タグジャンプできる形式で書き込む
 				text.AppendString(pszFileName);
 				
 				if (0 < pFuncInfo->nFuncLineCRLF) {
@@ -1756,7 +1750,6 @@ BOOL DlgFuncList::OnInitDialog(
 	col.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
 	col.fmt = LVCFMT_LEFT;
 	col.cx = rc.right - rc.left - (nColWidthArr[1] + nColWidthArr[2] + nColWidthArr[3]) - nCxVScroll - 8;
-	//	Apr. 23, 2005 genta 行番号を左端へ
 	col.pszText = const_cast<TCHAR*>(LS(STR_DLGFNCLST_LIST_LINE_M));
 	col.iSubItem = FL_COL_ROW;
 	ListView_InsertColumn(hwndList, FL_COL_ROW, &col);
@@ -2085,7 +2078,6 @@ BOOL DlgFuncList::OnNotify(WPARAM wParam, LPARAM lParam)
 				type->bOutlineSortDesc = bSortDesc;
 				SetTypeConfig(TypeConfigNum(nDocType), *type);
 			}
-			//	Apr. 23, 2005 genta 関数として独立させた
 			SortListView(hwndList, nSortCol);
 			return TRUE;
 		case NM_CLICK:
@@ -2450,7 +2442,7 @@ BOOL DlgFuncList::OnJump(
 
 				pShareData->workBuffer.logicPoint = poCaret;
 
-				//	2006.07.09 genta 移動時に選択状態を保持するように
+				// 移動時に選択状態を保持するように
 				::SendMessage(((EditView*)lParam)->editWnd.GetHwnd(),
 					MYWM_SETCARETPOS, 0, PM_SETCARETPOS_KEEPSELECT );
 			}
@@ -2470,12 +2462,10 @@ BOOL DlgFuncList::OnJump(
 }
 
 
-//@@@ 2002.01.18 add start
 LPVOID DlgFuncList::GetHelpIdTable(void)
 {
 	return (LPVOID)p_helpids;
 }
-//@@@ 2002.01.18 add end
 
 
 // キー操作をコマンドに変換するヘルパー関数

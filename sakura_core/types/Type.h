@@ -97,7 +97,6 @@ enum class StringLiteralType {
 
 // タイプ別設定
 struct TypeConfig {
-	// 2007.09.07 変数名変更: nMaxLineSize→nMaxLineKetas
 	size_t				nIdx;
 	int					id;
 	TCHAR				szTypeName[64];				// タイプ属性：名称
@@ -165,7 +164,7 @@ struct TypeConfig {
 	FileTree			fileTree;						// ファイルツリー設定
 
 	SmartIndentType		eSmartIndent;					// スマートインデント種別
-	int					nImeState;						// 初期IME状態	Nov. 20, 2000 genta
+	int					nImeState;						// 初期IME状態
 
 	// 補完のタイプ別設定
 	SFilePath			szHokanFile;					// 入力補完 単語ファイル
@@ -180,7 +179,7 @@ struct TypeConfig {
 	SFilePath			szExtHtmlHelp;					// 外部HTMLヘルプ
 	bool				bHtmlHelpIsSingle;				// HtmlHelpビューアはひとつ
 
-	bool				bChkEnterAtEnd;					// 保存時に改行コードの混在を警告する	2013/4/14 Uchi
+	bool				bChkEnterAtEnd;					// 保存時に改行コードの混在を警告する
 
 	EncodingConfig		encoding;						// エンコードオプション
 

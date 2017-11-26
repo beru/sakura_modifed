@@ -252,7 +252,6 @@ void ViewCommander::Command_IME_CHAR(WORD wChar)
 	view.PostprocessCommand_hokan();
 }
 
-// from ViewCommander_New.cpp
 // Undo Œ³‚É–ß‚·
 void ViewCommander::Command_Undo(void)
 {
@@ -492,7 +491,6 @@ void ViewCommander::Command_Undo(void)
 }
 
 
-// from ViewCommander_New.cpp
 // Redo ‚â‚è’¼‚µ
 void ViewCommander::Command_Redo(void)
 {

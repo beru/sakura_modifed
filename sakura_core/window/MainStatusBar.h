@@ -10,7 +10,7 @@ public:
 	MainStatusBar(EditWnd& owner);
 	void CreateStatusBar();		// ステータスバー作成
 	void DestroyStatusBar();	// ステータスバー破棄
-	void SendStatusMessage2(const TCHAR* msg);	//	Jul. 9, 2005 genta メニューバー右端には出したくない長めのメッセージを出す
+	void SendStatusMessage2(const TCHAR* msg);	// メニューバー右端には出したくない長めのメッセージを出す
 	/*!	SendStatusMessage2()が効き目があるかを予めチェック
 		@note もしSendStatusMessage2()でステータスバー表示以外の処理を追加
 		する場合にはここを変更しないと新しい場所への出力が行われない．

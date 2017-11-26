@@ -91,7 +91,7 @@ CodeConvertResult Euc::EUCToUnicode(const Memory& src, NativeW* pDstMem)
 	pDstMem->_GetMemory()->SetRawDataHoldBuffer( pDst, nDstLen*sizeof(wchar_t) );
 
 	//$$ SJISを介しているので無駄にデータを失うかも？
-	// エラーを返すようにする。	2008/5/12 Uchi
+	// エラーを返すようにする。
 	if (!bError) {
 		return CodeConvertResult::Complete;
 	}else {
@@ -178,11 +178,10 @@ CodeConvertResult Euc::UnicodeToEUC(const NativeW& src, Memory* pDstMem)
 	}
 }
 
-// 文字コード表示用	UNICODE → Hex 変換	2008/6/9 Uchi
+// 文字コード表示用	UNICODE → Hex 変換
 CodeConvertResult Euc::UnicodeToHex(const wchar_t* cSrc, size_t iSLen, TCHAR* pDst, const CommonSetting_StatusBar* psStatusbar)
 {
 	NativeW charBuffer;
-	// 2008/6/21 Uchi
 	if (psStatusbar->bDispUniInEuc) {
 		// Unicodeで表示
 		return CodeBase::UnicodeToHex(cSrc, iSLen, pDst, psStatusbar);

@@ -243,7 +243,6 @@ CodeConvertResult ShiftJis::UnicodeToHex(const wchar_t* cSrc, size_t iSLen, TCHA
 	TCHAR*			pd;
 	bool			bbinary = false;
 
-	// 2008/6/21 Uchi
 	if (psStatusbar->bDispUniInSjis) {
 		// Unicode‚Å•\Ž¦
 		return CodeBase::UnicodeToHex(cSrc, iSLen, pDst, psStatusbar);

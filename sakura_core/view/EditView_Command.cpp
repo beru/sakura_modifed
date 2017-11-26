@@ -33,7 +33,7 @@ bool EditView::TagJumpSub(
 	// 参照元ウィンドウ保存
 	tagJump.hwndReferer = EditWnd::getInstance().GetHwnd();
 
-	//	Feb. 17, 2007 genta 実行ファイルからの相対指定の場合は
+	//	実行ファイルからの相対指定の場合は
 	//	予め絶対パスに変換する．(キーワードヘルプジャンプで用いる)
 	TCHAR szJumpToFile[1024];
 	if (bRelFromIni && _IS_REL_PATH(pszFileName)) {
@@ -48,7 +48,6 @@ bool EditView::TagJumpSub(
 		_tcscpy(szJumpToFile, szWork);
 	}
 
-// 2004/07/05 みちばな
 // 同一ファイルだとSendMesssageで GetCaret().GetCaretLayoutPos().GetX2(),GetCaret().GetCaretLayoutPos().yが更新されてしまい、
 // ジャンプ先の場所がジャンプ元として保存されてしまっているので、
 // その前で保存するように変更。

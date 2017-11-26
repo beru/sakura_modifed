@@ -201,7 +201,7 @@ const wchar_t* SearchAgent::SearchString(
 
 	// 線形探索
 	ASSERT_GE(nLineLen, nPatternLen);
-	const size_t nCompareTo = nLineLen - nPatternLen;	//	Mar. 4, 2001 genta
+	const size_t nCompareTo = nLineLen - nPatternLen;
 #if defined(SEARCH_STRING_SUNDAY_QUICK) && !defined(SEARCH_STRING_KMP)
 	// SUNDAY_QUICKのみ版
 	if (!bLoHiCase || nPatternLen > 5) {
@@ -605,7 +605,6 @@ bool SearchAgent::SearchWord(
 		std::vector<std::pair<const wchar_t*, size_t>> searchWords; // 単語の開始位置と長さの配列。
 		CreateWordList(searchWords, pszPattern, nPatternLen);
 		/*
-			2001/06/23 Norio Nakatani
 			単語単位の検索を試験的に実装。単語はWhereCurrentWord()で判別してますので、
 			英単語やC/C++識別子などの検索条件ならヒットします。
 		*/
@@ -843,7 +842,7 @@ void SearchAgent::ReplaceData(DocLineReplaceArg* pArg)
 		pArg->pMemDeleted->reserve(pArg->delRange.GetTo().y + 1 - pArg->delRange.GetFrom().y);
 	}
 
-	// 2012.01.10 行内の削除&挿入のときの操作を1つにする
+	// 行内の削除&挿入のときの操作を1つにする
 	bool bChangeOneLine = false;	// 行内の挿入
 	bool bInsOneLine = false;
 	bool bLastEOLReplace = false;	// 「最後改行」を「最後改行」で置換
@@ -929,7 +928,6 @@ void SearchAgent::ReplaceData(DocLineReplaceArg* pArg)
 			if (pArg->pMemDeleted) {
 				if (pDocLineNext && pArg->pMemDeleted->size() == 0) {
 					// 1行以内の行末削除のときだけ、次の行のseqが保存されないので必要
-					// 2014.01.07 最後が改行の範囲を最後が改行のデータで置換した場合を変更
 					if (!bLastEOLReplace) {
 						pArg->pMemDeleted->emplace_back();
 						LineData& delLine =  pArg->pMemDeleted->back();
@@ -1019,6 +1017,7 @@ void SearchAgent::ReplaceData(DocLineReplaceArg* pArg)
 				delLine.memLine.SetString(&pLine[nWorkPos], nWorkLen);
 				delLine.nSeq = ModifyVisitor().GetLineModifiedSeq(pDocLine);
 			}
+			{
 				size_t nNewLen = nLineLen - nWorkLen + nInsLen;
 				size_t nAfterLen = nLineLen - (nWorkPos + nWorkLen);
 				if (1

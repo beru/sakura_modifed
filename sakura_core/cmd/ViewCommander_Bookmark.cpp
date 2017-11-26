@@ -16,7 +16,6 @@ void ViewCommander::Command_Jump_SrchStartPos(void)
 	}else {
 		ErrorBeep();
 	}
-	return;
 }
 
 /*! 指定行へジャンプダイアログの表示 */
@@ -288,7 +287,6 @@ re_do:;
 		view.SendStatusMessage(LS(STR_ERR_SRNEXT2));
 		AlertNotFound(view.GetHwnd(), false, LS(STR_BOOKMARK_NEXT_NOT_FOUND));
 	}
-	return;
 }
 
 // 前のブックマークを探し，見つかったら移動する．
@@ -378,7 +376,6 @@ void ViewCommander::Command_FuncList_Next(void)
 	}
 	view.SendStatusMessage(LS(STR_ERR_SRNEXT2));
 	AlertNotFound( view.GetHwnd(), false, LS(STR_FUCLIST_NEXT_NOT_FOUND));
-	return;
 }
 
 // 前のブックマークを探し，見つかったら移動する．
@@ -413,6 +410,5 @@ void ViewCommander::Command_FuncList_Prev(void)
 	}
 	view.SendStatusMessage(LS(STR_ERR_SRPREV2));
 	AlertNotFound( view.GetHwnd(), false, LS(STR_FUCLIST_PREV_NOT_FOUND) );
-	return;
 }
 

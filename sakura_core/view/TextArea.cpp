@@ -78,7 +78,7 @@ void TextArea::UpdateAreaMetrics(HDC hdc)
 	}
 
 	// 表示域の再計算
-	// 2010.08.24 Dx/Dyを使うので後で設定
+	// Dx/Dyを使うので後で設定
 	UpdateViewColRowNums();
 }
 
@@ -168,7 +168,6 @@ bool TextArea::DetectWidthOfLineNumberArea(bool bRedraw)
 		nViewAlignLeftCols = 0;
 	}
 
-	//	Sep 18, 2002 genta
 	nViewAlignLeftNew += GetDllShareData().common.window.nLineNumRightSpace;
 	if (nViewAlignLeftNew != GetAreaLeft()) {
 		Rect			rc;
@@ -240,7 +239,7 @@ int TextArea::DetectWidthOfLineNumberArea_calculate(const LayoutMgr* pLayoutMgr,
 		}
 		// 表示している行数と比較し、大きい方の値を取る
 		for (i= view.pTypeData->nLineNumWidth; i<LINENUMWIDTH_MAX; ++i) {
-			if (nWork > nAllLines) {	// Oct. 18, 2003 genta 式を整理
+			if (nWork > nAllLines) {
 				break;
 			}
 			nWork *= 10;

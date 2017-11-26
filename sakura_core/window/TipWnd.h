@@ -50,7 +50,6 @@ protected:
 	void DrawTipText(HDC, HFONT, const TCHAR*);	// ウィンドウのテキストを表示
 
 	// 仮想関数
-	//	Jan. 9, 2006 genta
 	virtual void AfterCreateWindow(void);
 
 	// 仮想関数 メッセージ処理 詳しくは実装を参照

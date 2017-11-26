@@ -108,7 +108,6 @@ const char* GetNextLine(
 {
 	size_t nBgn = *pnBgn;
 
-	//	May 15, 2000 genta
 	pEol->SetType(EolType::None);
 	if (*pnBgn >= nDataLen) {
 		return NULL;

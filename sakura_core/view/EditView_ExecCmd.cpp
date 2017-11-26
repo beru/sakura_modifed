@@ -95,8 +95,6 @@ bool EditView::ExecCmd(
 	bool	bGetStdout		= (nFlgOpt & 0x01) != 0;	//	子プロセスの標準出力を得る
 	BOOL	bToEditWindow	= ((nFlgOpt & 0x02) && bEditable) ? TRUE : FALSE;	//	TRUE=編集中のウィンドウ / FALSAE=アウトプットウィンドウ
 	BOOL	bSendStdin		= (nFlgOpt & 0x04) ? TRUE : FALSE;	//	編集中ファイルを子プロセスSTDINに渡す
-	// BOOL	bIOUnicodeGet	= nFlgOpt & 0x08 ? TRUE : FALSE;	//	標準出力をUnicodeで行う	2008/6/17 Uchi
-	// BOOL	bIOUnicodeSend	= nFlgOpt & 0x10 ? TRUE : FALSE;	//	標準入力をUnicodeで行う	2008/6/20 Uchi
 	EncodingType outputEncoding;
 	if (nFlgOpt & 0x08) {
 		outputEncoding = CODE_UNICODE;
@@ -217,7 +215,7 @@ bool EditView::ExecCmd(
 			_T("\"%ts\\%ts\" %ts%ts%ts"),
 			szCmdDir,
 			_T("cmd.exe"),
-			(outputEncoding == CODE_UNICODE ? _T("/U") : _T("")),		// Unicdeモードでコマンド実行	2008/6/17 Uchi
+			(outputEncoding == CODE_UNICODE ? _T("/U") : _T("")),		// Unicdeモードでコマンド実行
 			(bGetStdout ? _T("/C ") : _T("/K ")),
 			pszCmd
 		);
@@ -253,7 +251,7 @@ bool EditView::ExecCmd(
 	// hStdInも親プロセスでは使用しないが、Win9x系では子プロセスが終了してから
 	// クローズするようにしないと一時ファイルが自動削除されない
 	CloseHandle(hStdOutWrite);
-	hStdOutWrite = NULL;	// 2007.09.08 genta 二重closeを防ぐ
+	hStdOutWrite = NULL;
 
 	if (bGetStdout) {
 		DWORD	new_cnt;
@@ -305,12 +303,6 @@ bool EditView::ExecCmd(
 		// 実行結果の取り込み
 		do {
 			// プロセスが終了していないか確認
-			// Jun. 04, 2003 genta CPU消費を減らすために200msec待つ
-			// その間メッセージ処理が滞らないように待ち方をWaitForSingleObjectから
-			// MsgWaitForMultipleObjectに変更
-			// Jan. 23, 2004 genta
-			// 子プロセスの出力をどんどん受け取らないと子プロセスが
-			// 停止してしまうため，待ち時間を200msから20msに減らす
 			switch (MsgWaitForMultipleObjects(1, &pi.hProcess, FALSE, 20, QS_ALLEVENTS)) {
 			case WAIT_OBJECT_0:
 				// 終了していればループフラグをfalseとする
@@ -348,10 +340,9 @@ bool EditView::ExecCmd(
 					read_cnt += bufidx;													// work内の実際のサイズにする
 
 					if (read_cnt == 0) {
-						// Jan. 23, 2004 genta while追加のため制御を変更
 						break;
 					}
-					// Unicode で データを受け取る start 2008/6/8 Uchi
+					// Unicode で データを受け取る
 					if (outputEncoding == CODE_UNICODE) {
 						char byteCarry = 0;
 						wchar_t* workw = (wchar_t*)work;
@@ -365,7 +356,7 @@ bool EditView::ExecCmd(
 							// 読み出した文字列をチェックする
 							if (workw[read_cntw-1] == L'\r') {
 								bCarry = true;
-								read_cntw -= 1; // 2010.04.12 1文字余分に消されてた
+								read_cntw -= 1;
 								workw[read_cntw] = L'\0';
 							}
 							if (!oa.OutputW(workw, read_cntw)) {
@@ -373,7 +364,7 @@ bool EditView::ExecCmd(
 							}
 							bufidx = 0;
 							if (bCarry) {
-								workw[0] = L'\r'; // 2010.04.12 'r' -> '\r'
+								workw[0] = L'\r';
 								bufidx = sizeof(wchar_t);
 								DEBUG_TRACE(_T("ExecCmd: Carry last character [CR]\n"));
 							}
@@ -461,7 +452,6 @@ bool EditView::ExecCmd(
 							DEBUG_TRACE(_T("ExecCmd: Carry last character [%x]\n"), tmp[0]);
 						}
 					}
-					// Jan. 23, 2004 genta
 					// 子プロセスの出力をどんどん受け取らないと子プロセスが
 					// 停止してしまうため，バッファが空になるまでどんどん読み出す．
 					new_cnt = 0;

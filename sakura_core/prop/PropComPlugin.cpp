@@ -9,7 +9,7 @@
 #include "uiparts/MenuDrawer.h"
 #include "util/shell.h"
 #include "dlg/DlgOpenFile.h"
-#include "dlg/DlgPluginOption.h"	// 2010/3/22 Uchi
+#include "dlg/DlgPluginOption.h"
 #include "io/TextStream.h"
 #include "io/ZipFile.h"
 #include "sakura_rc.h"
@@ -484,7 +484,7 @@ void PropPlugin::EnablePluginPropInput(HWND hwndDlg)
 	}
 }
 
-//	Readme ファイルの取得	2011/11/2 Uchi
+//	Readme ファイルの取得
 std::tstring PropPlugin::GetReadMeFile(const std::tstring& sName)
 {
 	auto& pluginMgr = PluginManager::getInstance();
@@ -518,7 +518,7 @@ std::tstring PropPlugin::GetReadMeFile(const std::tstring& sName)
 	return sReadMeName;
 }
 
-//	Readme ファイルの表示	2011/11/2 Uchi
+//	Readme ファイルの表示
 bool PropPlugin::BrowseReadMe(const std::tstring& sReadMeName)
 {
 	// -- -- -- -- コマンドライン文字列を生成 -- -- -- -- //
@@ -555,7 +555,7 @@ bool PropPlugin::BrowseReadMe(const std::tstring& sReadMeName)
 static void LoadPluginTemp(CommonSetting& common, MenuDrawer& menuDrawer)
 {
 	{
-		// 2013.05.31 コントロールプロセスなら即時読み込み
+		// コントロールプロセスなら即時読み込み
 		PluginManager::getInstance().LoadAllPlugin(&common);
 		// ツールバーアイコンの更新
 		const Plug::Array& plugs = JackManager::getInstance().GetPlugs(PP_COMMAND);

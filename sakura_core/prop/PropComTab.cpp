@@ -15,7 +15,7 @@ static const DWORD p_helpids[] = {
 	IDC_CHECK_GroupMultiTabWnd,		HIDC_CHECK_GroupMultiTabWnd,	// ウィンドウをまとめてグループ化する
 	IDC_CHECK_RetainEmptyWindow,	HIDC_CHECK_RetainEmptyWindow,	// 最後のファイルを閉じたとき(無題)文書を残す
 	IDC_CHECK_CloseOneWin,			HIDC_CHECK_CloseOneWin,			// ウィンドウの閉じるボタンは現在のファイルのみ閉じる
-	IDC_CHECK_OpenNewWin,			HIDC_CHECK_OpenNewWin,			// 外部から起動するときは新しいウィンドウで開く 2009.06.19
+	IDC_CHECK_OpenNewWin,			HIDC_CHECK_OpenNewWin,			// 外部から起動するときは新しいウィンドウで開く
 	IDC_CHECK_DispTabIcon,			HIDC_CHECK_DispTabIcon,			// アイコン表示
 	IDC_CHECK_SameTabWidth,			HIDC_CHECK_SameTabWidth,		// 等幅
 	IDC_CHECK_DispTabClose,			HIDC_CHECK_DispTabClose,		// タブを閉じるボタン表示
@@ -118,7 +118,7 @@ INT_PTR PropTab::DispatchEvent(
 					if (MySelectFont(&lf, &nPointSize, hwndDlg, false)) {
 						csTabBar.lf = lf;
 						csTabBar.nPointSize = nPointSize;
-						// タブ フォント表示	// 2013/4/24 Uchi
+						// タブ フォント表示
 						HFONT hFont = SetFontLabel(hwndDlg, IDC_STATIC_TABFONT, csTabBar.lf, csTabBar.nPointSize);
 						if (hTabFont) {
 							::DeleteObject(hTabFont);
@@ -161,7 +161,6 @@ void PropTab::SetData(HWND hwndDlg)
 {
 	auto& csTabBar = common.tabBar;
 
-	//	Feb. 11, 2007 genta「ウィンドウ」シートより移動
 	CheckDlgButtonBool(hwndDlg, IDC_CHECK_DispTabWnd, csTabBar.bDispTabWnd);
 	CheckDlgButtonBool(hwndDlg, IDC_CHECK_SameTabWidth, csTabBar.bSameTabWidth);
 	CheckDlgButtonBool(hwndDlg, IDC_CHECK_DispTabIcon, csTabBar.bDispTabIcon);
@@ -193,13 +192,12 @@ void PropTab::SetData(HWND hwndDlg)
 	}
 	Combo_SetCurSel(hwndCombo, nSelPos);
 
-	//	Feb. 11, 2007 genta 新規作成
 	CheckDlgButtonBool(hwndDlg, IDC_CHECK_RetainEmptyWindow, csTabBar.bTab_RetainEmptyWin);
 	CheckDlgButtonBool(hwndDlg, IDC_CHECK_CloseOneWin, csTabBar.bTab_CloseOneWin);
 	CheckDlgButtonBool(hwndDlg, IDC_CHECK_ChgWndByWheel, csTabBar.bChgWndByWheel);
-	CheckDlgButtonBool(hwndDlg, IDC_CHECK_OpenNewWin, csTabBar.bNewWindow); // 2009.06.17
+	CheckDlgButtonBool(hwndDlg, IDC_CHECK_OpenNewWin, csTabBar.bNewWindow);
 
-	// タブ フォント	// 2013/4/24 Uchi
+	// タブ フォント
 	hTabFont = SetFontLabel(hwndDlg, IDC_STATIC_TABFONT, csTabBar.lf, csTabBar.nPointSize);
 
 	EnableTabPropInput(hwndDlg);
@@ -209,7 +207,6 @@ void PropTab::SetData(HWND hwndDlg)
 int PropTab::GetData(HWND hwndDlg)
 {
 	auto& csTabBar = common.tabBar;
-	//	Feb. 11, 2007 genta「ウィンドウ」シートより移動
 	csTabBar.bDispTabWnd = DlgButton_IsChecked(hwndDlg, IDC_CHECK_DispTabWnd);
 	csTabBar.bSameTabWidth = DlgButton_IsChecked(hwndDlg, IDC_CHECK_SameTabWidth);
 	csTabBar.bDispTabIcon = DlgButton_IsChecked(hwndDlg, IDC_CHECK_DispTabIcon);

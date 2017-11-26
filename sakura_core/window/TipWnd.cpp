@@ -260,5 +260,4 @@ void TipWnd::GetWindowSize(LPRECT pRect)
 	ReleaseDC(GetHwnd(), hdc);
 }
 
-// 2001/06/19 End
 

@@ -114,7 +114,6 @@ void ViewCommander::Command_Copy(
 			selInfo.DisableSelectArea(true);
 		}
 	}
-	return;
 }
 
 
@@ -203,8 +202,6 @@ void ViewCommander::Command_Paste(int option)
 		// テキストを貼り付け
 		Command_InsText(true, pszText, nTextLen, true, bLineSelect);
 	}
-
-	return;
 }
 
 // メモリデータを矩形貼り付け用のデータと解釈して処理する。
@@ -342,7 +339,6 @@ void ViewCommander::Command_PasteBox(
 	}
 
 	view.SetDrawSwitch(bDrawSwitchOld);
-	return;
 }
 
 
@@ -599,7 +595,6 @@ void ViewCommander::Command_CopyLinesWithLineNumber(void)
 		NULL,	// 引用符
 		true	// 行番号を付与する
 	);
-	return;
 }
 
 

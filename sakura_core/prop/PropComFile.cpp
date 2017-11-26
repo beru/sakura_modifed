@@ -208,7 +208,6 @@ INT_PTR PropFile::DispatchEvent(
 	case WM_CONTEXTMENU:
 		MyWinHelp(hwndDlg, HELP_CONTEXTMENU, (ULONG_PTR)(LPVOID)p_helpids);
 		return TRUE;
-//@@@ 2001.12.22 End
 
 	}
 	return FALSE;
@@ -271,13 +270,13 @@ void PropFile::SetData(HWND hwndDlg)
 	::CheckDlgButton(hwndDlg, IDC_CHECK_RestoreCurPosition, csFile.GetRestoreCurPosition());
 	// ブックマーク復元フラグ
 	::CheckDlgButton(hwndDlg, IDC_CHECK_RestoreBookmarks, csFile.GetRestoreBookmarks());
-	//	Nov. 12, 2000 genta	MIME Decodeフラグ
+	// MIME Decodeフラグ
 	::CheckDlgButton(hwndDlg, IDC_CHECK_AutoMIMEDecode, csFile.GetAutoMIMEdecode());
-	//	Oct. 03, 2004 genta 前回と異なる文字コードのときに問い合わせを行うかどうかのフラグ
+	// 前回と異なる文字コードのときに問い合わせを行うかどうかのフラグ
 	::CheckDlgButtonBool(hwndDlg, IDC_CHECK_QueryIfCodeChange, csFile.GetQueryIfCodeChange());
-	//	Oct. 09, 2004 genta 開こうとしたファイルが存在しないとき警告するかどうかのフラグ
+	// 開こうとしたファイルが存在しないとき警告するかどうかのフラグ
 	::CheckDlgButton(hwndDlg, IDC_CHECK_AlertIfFileNotExist, csFile.GetAlertIfFileNotExist());
-	//	ファイルサイズが大きい場合に警告を出す
+	// ファイルサイズが大きい場合に警告を出す
 	::CheckDlgButton(hwndDlg, IDC_CHECK_ALERT_IF_LARGEFILE, csFile.bAlertIfLargeFile);
 	::SetDlgItemInt(hwndDlg, IDC_EDIT_ALERT_FILESIZE, csFile.nAlertFileSize, FALSE);
 
@@ -354,11 +353,11 @@ int PropFile::GetData(HWND hwndDlg)
 	csFile.SetRestoreCurPosition(DlgButton_IsChecked(hwndDlg, IDC_CHECK_RestoreCurPosition));
 	// ブックマーク復元フラグ
 	csFile.SetRestoreBookmarks(DlgButton_IsChecked(hwndDlg, IDC_CHECK_RestoreBookmarks));
-	//	Nov. 12, 2000 genta	MIME Decodeフラグ
+	// MIME Decodeフラグ
 	csFile.SetAutoMIMEdecode(DlgButton_IsChecked(hwndDlg, IDC_CHECK_AutoMIMEDecode));
-	//	Oct. 03, 2004 genta 前回と異なる文字コードのときに問い合わせを行うかどうかのフラグ
+	// 前回と異なる文字コードのときに問い合わせを行うかどうかのフラグ
 	csFile.SetQueryIfCodeChange(DlgButton_IsChecked(hwndDlg, IDC_CHECK_QueryIfCodeChange));
-	//	Oct. 03, 2004 genta 前回と異なる文字コードのときに問い合わせを行うかどうかのフラグ
+	// 前回と異なる文字コードのときに問い合わせを行うかどうかのフラグ
 	csFile.SetAlertIfFileNotExist(DlgButton_IsChecked(hwndDlg, IDC_CHECK_AlertIfFileNotExist));
 	// 開こうとしたファイルが大きい場合に警告する
 	csFile.bAlertIfLargeFile = DlgButton_IsChecked(hwndDlg, IDC_CHECK_ALERT_IF_LARGEFILE);

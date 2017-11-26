@@ -40,8 +40,6 @@ struct GrepOption {
 	{}
 };
 
-//	Jun. 26, 2001 genta	正規表現ライブラリの差し替え
-//	Mar. 28, 2004 genta DoGrepFileから不要な引数を削除
 class GrepAgent : public DocListenerEx {
 public:
 	GrepAgent();
@@ -111,7 +109,7 @@ private:
 		const SearchOption&		searchOption,
 		const GrepOption&		grepOption,
 		const SearchStringPattern& pattern,
-		Bregexp&				regexp,		//	Jun. 27, 2001 genta	正規表現ライブラリの差し替え
+		Bregexp&				regexp,
 		int*					pnHitCount,
 		const TCHAR*			pszFullPath,
 		const TCHAR*			pszBaseFolder,
@@ -177,7 +175,7 @@ private:
 	std::vector<std::pair<const wchar_t*, size_t>> searchWords;
 	NativeW memBuf;
 	NativeW unicodeBuffer;
-	FileLoad fl;	// 2012/12/18 Uchi 検査するファイルのデフォルトの文字コードを取得する様に
+	FileLoad fl;
 	int oldSetHitCnt;
 	LONGLONG oldCheckTime = 0;
 };

@@ -21,8 +21,6 @@ CallbackResultType SaveAgent::OnCheckSave(SaveInfo* pSaveInfo)
 {
 	EditDoc* pDoc = GetListeningDoc();
 
-	//	Jun.  5, 2004 genta
-	//	ビューモードのチェックをEditDocから上書き保存処理に移動
 	//	同名で上書きされるのを防ぐ
 	if (AppMode::getInstance().IsViewMode()
 		&& pSaveInfo->IsSamePath(pDoc->docFile.GetFilePath())

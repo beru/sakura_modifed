@@ -1011,7 +1011,7 @@ bool PropMainMenu::GetDataTree(
 			}
 			if (pFuncWk->nFunc >= F_SPECIAL_FIRST && pFuncWk->nFunc <= F_SPECIAL_LAST) {
 				pFunc->type = MainMenuType::Special;
-				// 2014.05.04 nLevel == 0 ‚Ì‚Æ‚«‚à"–¼‘O‚È‚µ"‚É‚·‚é
+				// nLevel == 0 ‚Ì‚Æ‚«‚à"–¼‘O‚È‚µ"‚É‚·‚é
 					pFunc->sName[0] = L'\0';
 			}else {
 				if (pFuncWk->nFunc == F_OPTION) {

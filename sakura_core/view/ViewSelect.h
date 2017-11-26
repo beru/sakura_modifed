@@ -90,14 +90,13 @@ public:
 		GetSelectAreaLineFromRange(ret, nLineNum, pLayout, select);
 		return ret;
 	}
-	// 選択情報データの作成	2005.07.09 genta
+	// 選択情報データの作成
 	void PrintSelectionInfoMsg() const;
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                         状態取得                            //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	// テキストが選択されているか
-	// 2002/03/29 Azumaiya インライン関数化
 	bool IsTextSelected() const {
 		return select.IsValid();
 //		return 0 != (
@@ -106,7 +105,6 @@ public:
 	}
 
 	// テキストの選択中か
-	// 2002/03/29 Azumaiya インライン関数化
 	bool IsTextSelecting() const {
 		// ジャンプ回数を減らして、一気に判定。
 		return bSelectingLock || IsTextSelected();

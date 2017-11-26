@@ -65,7 +65,6 @@ static       wchar_t	WSTR_FILETREE_HEAD_V1[]	= L"SakuraEditorFileTree_Ver1";
 
 // Exportファイル名の作成
 //	  タイプ名などファイルとして扱うことを考えていない文字列を扱う
-//		2010/4/12 Uchi
 static wchar_t* MakeExportFileName(wchar_t* res, const wchar_t* trg, const wchar_t* ext)
 {
 	wchar_t		conv[_MAX_PATH + 1];
@@ -706,7 +705,7 @@ bool ImpExpKeyHelp::Import(const wstring& sFileName, wstring& sErrMsg)
 			auto_memcmp(buff.c_str(), LTEXT("KDct["), 5) != 0 ||
 			auto_memcmp(&buff[7], LTEXT("]="), 2) != 0
 		) {
-			//	2007.02.03 genta 処理を継続
+			// 処理を継続
 			++invalid_record;
 			continue;
 		}
@@ -724,16 +723,14 @@ bool ImpExpKeyHelp::Import(const wstring& sFileName, wstring& sErrMsg)
 		}// 結果の確認
 		if (!p3 ||			// カンマが1個足りない
 			(p3 == p1) //||			// カンマが2個足りない
-			//	2007.02.03 genta ファイル名にカンマがあるかもしれない
-			//(wcsstr(p3,",") != NULL)	// カンマが多すぎる
 		) {
-			//	2007.02.03 genta 処理を継続
+			// 処理を継続
 			++invalid_record;
 			continue;
 		}
 		// valueのチェック
 		// ON/OFF
-		//	2007.02.03 genta 1でなければ1にする
+		// 1でなければ1にする
 		unsigned int b_enable_flag = (unsigned int)_wtoi(p1);
 		if (b_enable_flag > 1) {
 			b_enable_flag = 1;
@@ -741,8 +738,8 @@ bool ImpExpKeyHelp::Import(const wstring& sFileName, wstring& sErrMsg)
 		// Path
 		FILE* fp2;
 		const wchar_t* p4 = p2;
-		if (!(fp2=_tfopen_absini(to_tchar(p3), _T("r")))) {	// 2007.02.03 genta 相対パスはsakura.exe基準で開く
-			// 2007.02.03 genta 辞書が見つからない場合の措置．警告を出すが取り込む
+		if (!(fp2=_tfopen_absini(to_tchar(p3), _T("r")))) {	// 相対パスはsakura.exe基準で開く
+			// 辞書が見つからない場合の措置．警告を出すが取り込む
 			p4 = LSW(STR_IMPEXP_DIC_NOTFOUND);
 			b_enable_flag = 0;
 		}else {
@@ -758,7 +755,7 @@ bool ImpExpKeyHelp::Import(const wstring& sFileName, wstring& sErrMsg)
 		}
 
 		// 良さそうなら
-		types.keyHelpArr[i].bUse = (b_enable_flag != 0);	// 2007.02.03 genta
+		types.keyHelpArr[i].bUse = (b_enable_flag != 0);
 		_tcscpy_s(types.keyHelpArr[i].szAbout, to_tchar(p4));
 		_tcscpy(types.keyHelpArr[i].szPath,  to_tchar(p3));
 		++i;
@@ -845,7 +842,7 @@ bool ImpExpKeybind::Import(const wstring& sFileName, wstring& sErrMsg)
 		in.IOProfileData(szSecInfo, L"KEYBIND_COUNT", sKeyBind.nKeyNameArrNum);
 		if (sKeyBind.nKeyNameArrNum < 0 || sKeyBind.nKeyNameArrNum > keyNameSize) {	bVer3=false; bVer4=false; } // 範囲チェック
 
-		ShareData_IO::IO_KeyBind(in, sKeyBind, true);	// 2008/5/25 Uchi
+		ShareData_IO::IO_KeyBind(in, sKeyBind, true);
 	}
 
 	if (!bVer3 && !bVer4) {
@@ -1023,7 +1020,7 @@ bool ImpExpCustMenu::Import(const wstring& sFileName, wstring& sErrMsg)
 		return false;
 	}
 
-	ShareData_IO::IO_CustMenu(profile, common.customMenu, true);			// 2008/5/24 Uchi
+	ShareData_IO::IO_CustMenu(profile, common.customMenu, true);
 
 	return true;
 }
@@ -1153,7 +1150,6 @@ bool ImpExpKeyword::Export(const wstring& sFileName, wstring& sErrMsg)
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                     メインメニュー                          //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-//	2010/5/23 Uchi
 // インポート
 bool ImpExpMainMenu::Import(const wstring& sFileName, wstring& sErrMsg)
 {

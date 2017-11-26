@@ -65,20 +65,13 @@ public:
 	static INT_PTR CALLBACK DlgProc_page(
 		HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam );
 
-	//	Jun. 2, 2001 genta
-	//	ここにあったEvent Handlerはprotectedエリアに移動した．
-
 	HWND				hwndParent;	// オーナーウィンドウのハンドル
 	HWND				hwndThis;		// このダイアログのハンドル
 	PropComSheetOrder	nPageNum;
 	DllSharedData*		pShareData;
 	int					nKeywordSet1;
-	//	Oct. 16, 2000 genta
 	ImageListMgr*	pIcons;	//	Image List
 	
-	//	Oct. 2, 2001 genta 外部マクロ追加に伴う，対応部分の別クラス化
-	//	Oct. 15, 2001 genta Lookupはダイアログボックス内で別インスタンスを作るように
-	//	(検索対象として，設定用common領域を指すようにするため．)
 	FuncLookup			lookup;
 
 	MenuDrawer*		pMenuDrawer;
@@ -122,8 +115,8 @@ protected:
 	void Import(HWND);	// インポートする
 	void Export(HWND);	// エクスポートする
 
-	HFONT SetCtrlFont(HWND hwndDlg, int idc_static, const LOGFONT& lf);				// コントロールにフォント設定する		// 2013/4/24 Uchi
-	HFONT SetFontLabel(HWND hwndDlg, int idc_static, const LOGFONT& lf, int nps);	// フォントラベルにフォントとフォント名設定する	// 2013/4/24 Uchi
+	HFONT SetCtrlFont(HWND hwndDlg, int idc_static, const LOGFONT& lf);				// コントロールにフォント設定する
+	HFONT SetFontLabel(HWND hwndDlg, int idc_static, const LOGFONT& lf, int nps);	// フォントラベルにフォントとフォント名設定する
 };
 
 
@@ -162,7 +155,6 @@ protected:
 	int  GetData(HWND);	// ダイアログデータの取得
 
 private:
-	//	Aug. 21, 2000 genta
 	void EnableFilePropInput(HWND hwndDlg);	//	ファイル設定のON/OFF
 };
 
@@ -364,7 +356,7 @@ protected:
 	int  GetData(HWND);	// ダイアログデータの取得
 
 private:
-	void SetRegexpVersion(HWND); // 2007.08.12 genta バージョン表示
+	void SetRegexpVersion(HWND);
 };
 
 //==============================================================

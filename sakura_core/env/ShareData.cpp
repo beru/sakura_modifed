@@ -583,7 +583,7 @@ bool ShareData::InitShareData()
 		{
 			CommonSetting_StatusBar& statusbar = pShareData->common.statusBar;
 
-			// 表示文字コードの指定		2008/6/21	Uchi
+			// 表示文字コードの指定
 			statusbar.bDispUniInSjis		= false;	// SJISで文字コード値をUnicodeで表示する
 			statusbar.bDispUniInJis			= false;	// JISで文字コード値をUnicodeで表示する
 			statusbar.bDispUniInEuc			= false;	// EUCで文字コード値をUnicodeで表示する

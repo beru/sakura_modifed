@@ -41,7 +41,6 @@ void Profile::ReadOneline(
 	}
 
 	// セクション取得
-	//	Jan. 29, 2004 genta compare使用
 	if (1
 		&& line.compare(0, 1, LTEXT("[")) == 0 
 		&& line.find(LTEXT("=")) == line.npos
@@ -87,7 +86,6 @@ void Profile::ReadOneline(
 	}
 
 	// セクション取得
-	//	Jan. 29, 2004 genta compare使用
 	const wchar_t* lineEnd = line + len;
 	const wchar_t* eqPos = std::find(line, lineEnd, '=');
 
@@ -282,7 +280,7 @@ bool Profile::WriteProfile(
     
 	std::vector<wstring> vecLine;
 	if (pszComment) {
-		vecLine.push_back(LTEXT(";") + wstring(pszComment));		// //->;	2008/5/24 Uchi
+		vecLine.push_back(LTEXT(";") + wstring(pszComment));
 		vecLine.push_back(LTEXT(""));
 	}
 	auto iterEnd = profileData.end();

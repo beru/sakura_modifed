@@ -103,8 +103,8 @@ protected:
 	bool Import(HWND);											// インポート
 	bool Export(HWND);											// エクスポート
 
-	HFONT SetCtrlFont(HWND hwndDlg, int idc_static, const LOGFONT& lf);								// コントロールにフォント設定する		// 2013/4/24 Uchi
-	HFONT SetFontLabel(HWND hwndDlg, int idc_static, const LOGFONT& lf, int nps, bool bUse = true);	// フォントラベルにフォントとフォント名設定する	// 2013/4/24 Uchi
+	HFONT SetCtrlFont(HWND hwndDlg, int idc_static, const LOGFONT& lf);								// コントロールにフォント設定する
+	HFONT SetFontLabel(HWND hwndDlg, int idc_static, const LOGFONT& lf, int nps, bool bUse = true);	// フォントラベルにフォントとフォント名設定する
 };
 
 
@@ -164,7 +164,7 @@ protected:
 protected:
 	void DrawColorListItem(DRAWITEMSTRUCT*);				// 色種別リスト オーナー描画
 	void EnableTypesPropInput(HWND hwndDlg);				// タイプ別設定のカラー設定のON/OFF
-	void RearrangeKeywordSet(HWND);							// キーワードセット再配置  Jan. 23, 2005 genta
+	void RearrangeKeywordSet(HWND);							// キーワードセット再配置
 	void DrawColorButton(DRAWITEMSTRUCT* , COLORREF);		// 色ボタンの描画
 public:
 	static BOOL SelectColor(HWND , COLORREF*, DWORD*);		// 色選択ダイアログ

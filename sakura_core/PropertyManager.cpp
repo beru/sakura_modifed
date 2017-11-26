@@ -96,7 +96,6 @@ bool PropertyManager::OpenPropertySheetTypes(
 	auto pType = std::make_unique<TypeConfig>();
 	DocTypeManager().GetTypeConfig(nSettingType, *pType);
 	pcPropTypes->SetTypeData(*pType);
-	// Mar. 31, 2003 genta メモリ削減のためポインタに変更しProperySheet内で取得するように
 
 	if (nPageNum != -1) {
 		nPropTypePageNum = nPageNum;

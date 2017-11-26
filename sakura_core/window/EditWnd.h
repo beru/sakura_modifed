@@ -59,7 +59,6 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                           作成                              //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-	//	Mar. 7, 2002 genta 文書タイプ用引数追加
 	// 作成
 	HWND Create(
 		EditDoc*		pEditDoc,
@@ -139,7 +138,7 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                           整形                              //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-	void LayoutMainMenu(void);		// メインメニュー					// 2010/5/16 Uchi
+	void LayoutMainMenu(void);		// メインメニュー
 	void LayoutToolBar(void);		// ツールバーの配置処理
 	void LayoutFuncKey(void);		// ファンクションキーの配置処理
 	void LayoutTabBar(void);		// タブバーの配置処理
@@ -183,7 +182,7 @@ public:
 	//                           表示                              //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	void PrintMenubarMessage(const TCHAR* msg);
-	void SendStatusMessage(const TCHAR* msg);		//	Dec. 4, 2002 genta 実体をEditViewから移動
+	void SendStatusMessage(const TCHAR* msg);
 	
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                      ウィンドウ操作                         //
@@ -206,9 +205,7 @@ public:
 	bool DetectWidthOfLineNumberAreaAllPane(bool bRedraw);	// すべてのペインで、行番号表示に必要な幅を再設定する（必要なら再描画する）
 	bool WrapWindowWidth(int nPane);	// 右端で折り返す
 	bool UpdateTextWrap(void);		// 折り返し方法関連の更新
-	//	Aug. 14, 2005 genta TAB幅と折り返し位置の更新
 	void ChangeLayoutParam(bool bShowProgress, size_t nTabSize, size_t nMaxLineKetas);
-	//	Aug. 14, 2005 genta
 	PointEx* SavePhysPosOfAllView();
 	void RestorePhysPosOfAllView(PointEx* pptPosArray);
 	void Views_DeleteCompatibleBitmap(); // EditViewの画面バッファを削除
@@ -252,8 +249,8 @@ protected:
 	void Timer_ONOFF(bool); // 更新の開始／停止
 
 	// メニュー
-	void CheckFreeSubMenu(HWND, HMENU, UINT);		// メニューバーの無効化を検査	2010/6/18 Uchi
-	void CheckFreeSubMenuSub(HMENU, int);			// メニューバーの無効化を検査	2010/6/18 Uchi
+	void CheckFreeSubMenu(HWND, HMENU, UINT);		// メニューバーの無効化を検査
+	void CheckFreeSubMenuSub(HMENU, int);			// メニューバーの無効化を検査
 
 //public:
 	// 周期内でnTimerCountをインクリメント
@@ -347,7 +344,7 @@ private:
 	LPTSTR			pszLastCaption;
 	LPTSTR			pszMenubarMessage;		// メニューバー右端に表示するメッセージ
 public:
-	int				nTimerCount;			// OnTimer用 2003.08.29 wmlhq
+	int				nTimerCount;			// OnTimer用
 	PointEx*		posSaveAry;
 private:
 	int				nCurrentFocus;				// 現在のフォーカス情報

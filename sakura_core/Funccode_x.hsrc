@@ -37,7 +37,7 @@ F_MACRO_EXTRA		= 2,	//外部マクロ（50番以上）
 F_PLUGCOMMAND		= 3,	//プラグイン
 F_DUMMY_MAX_CODE    = 10,	//特別10である必要はないけど 10まで予約
 
-//	2007.07.07 genta 状況通知フラグ
+//	状況通知フラグ
 //	コマンドが送られた状況をコマンドと併せて通知する．
 FA_FROMKEYBOARD		 = 0x00010000,	// キーボードアクセラレータからのコマンド
 FA_FROMMACRO		 = 0x00020000,	// マクロからのコマンド実行
@@ -81,13 +81,10 @@ F_FILE_REOPEN_CESU8			= 30118,	//CESU-8で開き直す					bool bNoConform
 F_FILE_REOPEN				= 30119,	//現在と同じ文字コードで開き直す	bool bNoConfirm
 F_FILESAVEALL				= 30120,	//すべて上書き保存					なし
 F_FILESAVE_QUIET			= 30121,	//上書き保存(限定動作)				なし
-F_FILE_REOPEN_LATIN1		= 30122,	//Latin1で開き直す					bool bNoConform	// 2010/3/20 Uchi
+F_FILE_REOPEN_LATIN1		= 30122,	//Latin1で開き直す					bool bNoConform
 F_PRINT						= 30150,	//印刷								なし
 F_PRINT_PREVIEW				= 30151,	//印刷プレビュー					なし
 F_PRINT_PAGESETUP			= 30152,	//印刷ページ設定					なし
-//F_PRINT_DIALOG			= 30151,	//印刷ダイアログ					？
-//F_OPEN_HHPP					= 30160,	//同名のC/C++ヘッダファイルを開く	bool bCheckOnly	// del	2008/6/23 Uchi
-//F_OPEN_CCPP					= 30161,	//同名のC/C++ソースファイルを開く	bool bCheckOnly	// del	2008/6/23 Uchi
 F_OPEN_HfromtoC				= 30162,	//同名のC/C++ヘッダ(ソース)を開く	bool bCheckOnly
 F_ACTIVATE_SQLPLUS			= 30170,	//Oracle SQL*Plusをアクティブ表示	なし
 F_PLSQL_COMPILE_ON_SQLPLUS	= 30171,	//Oracle SQL*Plusで実行				なし
@@ -451,7 +448,6 @@ F_EXTHTMLHELP		= 31451,	// 外部HTMLヘルプ									const WCHAR* helpfile, const W
 F_ABOUT				= 31455,	// バージョン情報									なし
 
 
-//	Jul. 4, 2000 genta
 F_USERMACRO_0		= 31600,	// 登録マクロ開始
 
 
@@ -575,8 +571,7 @@ F_GETVIEWCOLUMNS	= 40057,	// ビューの列数取得
 F_CREATEMENU		= 40058,	// メニュー作成
 
 
-//	= 2005,.01.10 genta ISearch用補助コード
-//	2007.07.07 genta 16bit以内に収めないと状況コードと衝突するのでコードを変更
+// ISearch用補助コード
 F_ISEARCH_ADD_CHAR	= 0xC001,	//	Incremental Searchへ1文字へ追加
 F_ISEARCH_ADD_STR	= 0xC002,	//	Incremental Searchへ文字列へ追加
 F_ISEARCH_DEL_BACK	= 0xC003,	//	Incremental Searchの末尾から1文字削除

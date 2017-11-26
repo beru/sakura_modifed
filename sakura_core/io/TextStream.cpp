@@ -1,8 +1,8 @@
 #include "StdAfx.h"
 #include "TextStream.h"
 #include "charset/CodeFactory.h"
-#include "charset/ShiftJis.h"	// move from CodeMediator.h	2010/6/14 Uchi
-#include "charset/Utf8.h"		// move from CodeMediator.h	2010/6/14 Uchi
+#include "charset/ShiftJis.h"
+#include "charset/Utf8.h"
 #include "Eol.h"
 #include "util/fileUtil.h"			// _IS_REL_PATH
 #include "util/module.h"

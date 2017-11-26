@@ -391,7 +391,6 @@ int PropFileName::MoveListViewItem_FILENAME(
 	TCHAR szTo[_MAX_PATH];
 	int nCount = ListView_GetItemCount(hListView);
 
-	//	2004.03.24 dskoba
 	if (nIndex > nCount - 1) {
 		nIndex = nCount - 1;
 	}

@@ -21,7 +21,7 @@ static const DWORD p_helpids1[] = {	//11300
 	IDC_SPIN_CHARSPACE,				HIDC_EDIT_CHARSPACE,
 	IDC_EDIT_LINESPACE,				HIDC_EDIT_LINESPACE,		// 行の間隔
 	IDC_SPIN_LINESPACE,				HIDC_EDIT_LINESPACE,
-	IDC_EDIT_TABSPACE,				HIDC_EDIT_TABSPACE,			// TAB幅 // Sep. 19, 2002 genta
+	IDC_EDIT_TABSPACE,				HIDC_EDIT_TABSPACE,			// TAB幅
 	IDC_SPIN_TABSPACE,				HIDC_EDIT_TABSPACE,
 	IDC_EDIT_TABVIEWSTRING,			HIDC_EDIT_TABVIEWSTRING,	// TAB表示文字列
 	IDC_CHECK_TAB_ARROW,			HIDC_CHECK_TAB_ARROW,		// 矢印表示
@@ -146,7 +146,7 @@ INT_PTR PropTypesScreen::DispatchEvent(
 		EditCtl_LimitText(GetDlgItem(hwndDlg, IDC_EDIT_TYPEEXTS       ), _countof(types.szTypeExts     ) - 1);
 		EditCtl_LimitText(GetDlgItem(hwndDlg, IDC_EDIT_INDENTCHARS    ), _countof(types.szIndentChars  ) - 1);
 		EditCtl_LimitText(GetDlgItem(hwndDlg, IDC_EDIT_TABVIEWSTRING  ), _countof(types.szTabViewString) - 1);
-		EditCtl_LimitText(GetDlgItem(hwndDlg, IDC_EDIT_OUTLINERULEFILE), _countof2(types.szOutlineRuleFilename) - 1);	//	Oct. 5, 2002 genta 画面上でも入力制限
+		EditCtl_LimitText(GetDlgItem(hwndDlg, IDC_EDIT_OUTLINERULEFILE), _countof2(types.szOutlineRuleFilename) - 1);	// 画面上でも入力制限
 
 		if (types.nIdx == 0) {
 			::EnableWindow(::GetDlgItem(hwndDlg, IDC_EDIT_TYPENAME), FALSE);	// 設定の名前
@@ -163,7 +163,7 @@ INT_PTR PropTypesScreen::DispatchEvent(
 			switch (wID) {
 			case IDC_CHECK_TAB_ARROW:
 				{
-					// Mar. 31, 2003 genta 矢印表示のON/OFFをTAB文字列設定に連動させる
+					// 矢印表示のON/OFFをTAB文字列設定に連動させる
 					HWND hwndCombo = ::GetDlgItem(hwndDlg, IDC_CHECK_TAB_ARROW);
 					int nSelPos = Combo_GetCurSel(hwndCombo);
 					if (TabArrowType::String == TabArrowArr[nSelPos].nMethod) {
@@ -242,7 +242,7 @@ INT_PTR PropTypesScreen::DispatchEvent(
 						types.bUseTypeFont = true;		// タイプ別フォントの使用
 						::CheckDlgButton(hwndDlg, IDC_CHECK_USETYPEFONT, types.bUseTypeFont);
 						::EnableWindow(::GetDlgItem(hwndDlg, IDC_CHECK_USETYPEFONT), types.bUseTypeFont);
-						// フォント表示	// 2013/6/23 Uchi
+						// フォント表示
 						HFONT hFont = SetFontLabel(hwndDlg, IDC_STATIC_TYPEFONT, types.lf, types.nPointSize, types.bUseTypeFont);
 						if (hTypeFont) {
 							::DeleteObject(hTypeFont);
@@ -251,7 +251,7 @@ INT_PTR PropTypesScreen::DispatchEvent(
 					}
 				}
 				return TRUE;
-			case IDC_CHECK_USETYPEFONT:	// 2013/6/24 Uchi
+			case IDC_CHECK_USETYPEFONT:
 				if (!IsDlgButtonChecked(hwndDlg, IDC_CHECK_USETYPEFONT)) {
 					::EnableWindow(::GetDlgItem(hwndDlg, IDC_CHECK_USETYPEFONT), FALSE);
 					// フォント表示
@@ -264,7 +264,7 @@ INT_PTR PropTypesScreen::DispatchEvent(
 				return TRUE;
 			case IDC_CHECK_KINSOKURET:		// 改行文字をぶら下げる
 			case IDC_CHECK_KINSOKUKUTO:		// 句読点をぶら下げる
-				// ぶら下げを隠すの有効化	2012/11/30 Uchi
+				// ぶら下げを隠すの有効化
 				::EnableWindow(::GetDlgItem(hwndDlg, IDC_CHECK_KINSOKUHIDE), 
 					IsDlgButtonChecked(hwndDlg, IDC_CHECK_KINSOKURET) 
 				 || IsDlgButtonChecked(hwndDlg, IDC_CHECK_KINSOKUKUTO));
@@ -307,7 +307,7 @@ INT_PTR PropTypesScreen::DispatchEvent(
 			if (nVal < 0) {
 				nVal = 0;
 			}
-			if (nVal > COLUMNSPACE_MAX) { // Feb. 18, 2003 genta 最大値の定数化
+			if (nVal > COLUMNSPACE_MAX) {
 				nVal = COLUMNSPACE_MAX;
 			}
 			::SetDlgItemInt(hwndDlg, IDC_EDIT_CHARSPACE, nVal, FALSE);
@@ -420,9 +420,9 @@ void PropTypesScreen::SetData(HWND hwndDlg)
 		::SetDlgItemInt(hwndDlg, IDC_EDIT_MAXLINELEN, types.nMaxLineKetas, FALSE);	// 折り返し文字数
 		::SetDlgItemInt(hwndDlg, IDC_EDIT_CHARSPACE, types.nColumnSpace, FALSE);			// 文字の間隔
 		::SetDlgItemInt(hwndDlg, IDC_EDIT_LINESPACE, types.nLineSpace, FALSE);			// 行の間隔
-		::SetDlgItemInt(hwndDlg, IDC_EDIT_TABSPACE, types.nTabSpace, FALSE);			// TAB幅	//	Sep. 22, 2002 genta
+		::SetDlgItemInt(hwndDlg, IDC_EDIT_TABSPACE, types.nTabSpace, FALSE);			// TAB幅
 		::DlgItem_SetText(hwndDlg, IDC_EDIT_TABVIEWSTRING, types.szTabViewString);		// TAB表示(8文字)
-		::EnableWindow(::GetDlgItem(hwndDlg, IDC_EDIT_TABVIEWSTRING), types.bTabArrow == TabArrowType::String);	// Mar. 31, 2003 genta 矢印表示のON/OFFをTAB文字列設定に連動させる
+		::EnableWindow(::GetDlgItem(hwndDlg, IDC_EDIT_TABVIEWSTRING), types.bTabArrow == TabArrowType::String);	// 矢印表示のON/OFFをTAB文字列設定に連動させる
 
 		// 矢印表示
 		hwndCombo = ::GetDlgItem(hwndDlg, IDC_CHECK_TAB_ARROW);
@@ -467,7 +467,7 @@ void PropTypesScreen::SetData(HWND hwndDlg)
 		// その他のインデント対象文字
 		::DlgItem_SetText(hwndDlg, IDC_EDIT_INDENTCHARS, types.szIndentChars);
 
-		// 折り返し行インデント	//	Oct. 1, 2002 genta コンボボックスに変更
+		// 折り返し行インデント
 		hwndCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_INDENTLAYOUT);
 		Combo_ResetContent(hwndCombo);
 		nSelPos = 0;
@@ -550,7 +550,7 @@ void PropTypesScreen::SetData(HWND hwndDlg)
 			::DlgItem_SetText(hwndDlg, IDC_EDIT_KINSOKUHEAD, types.szKinsokuHead);
 			::DlgItem_SetText(hwndDlg, IDC_EDIT_KINSOKUTAIL, types.szKinsokuTail);
 			::DlgItem_SetText(hwndDlg, IDC_EDIT_KINSOKUKUTO, types.szKinsokuKuto);
-			::EnableWindow(::GetDlgItem(hwndDlg, IDC_CHECK_KINSOKUHIDE), (types.bKinsokuRet || types.bKinsokuKuto) ? TRUE : FALSE);	// ぶら下げを隠すの有効化	2012/11/30 Uchi
+			::EnableWindow(::GetDlgItem(hwndDlg, IDC_CHECK_KINSOKUHIDE), (types.bKinsokuRet || types.bKinsokuKuto) ? TRUE : FALSE);	// ぶら下げを隠すの有効化
 		}
 	}
 }
@@ -583,7 +583,7 @@ int PropTypesScreen::GetData(HWND hwndDlg)
 		if (types.nColumnSpace < 0) {
 			types.nColumnSpace = 0;
 		}
-		if (types.nColumnSpace > COLUMNSPACE_MAX) { // Feb. 18, 2003 genta 最大値の定数化
+		if (types.nColumnSpace > COLUMNSPACE_MAX) {
 			types.nColumnSpace = COLUMNSPACE_MAX;
 		}
 
@@ -592,7 +592,7 @@ int PropTypesScreen::GetData(HWND hwndDlg)
 		if (types.nLineSpace < 0) {
 			types.nLineSpace = 0;
 		}
-		if (types.nLineSpace > LINESPACE_MAX) {	// Feb. 18, 2003 genta 最大値の定数化
+		if (types.nLineSpace > LINESPACE_MAX) {
 			types.nLineSpace = LINESPACE_MAX;
 		}
 
@@ -643,7 +643,7 @@ int PropTypesScreen::GetData(HWND hwndDlg)
 		// その他のインデント対象文字
 		::DlgItem_GetText(hwndDlg, IDC_EDIT_INDENTCHARS, types.szIndentChars, _countof(types.szIndentChars));
 
-		// 折り返し行インデント	//	Oct. 1, 2002 genta コンボボックスに変更
+		// 折り返し行インデント
 		hwndCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_INDENTLAYOUT);
 		nSelPos = Combo_GetCurSel(hwndCombo);
 		types.nIndentLayout = IndentTypeArr[nSelPos].nMethod;	// 折り返し部インデント種別

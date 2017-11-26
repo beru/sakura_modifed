@@ -122,7 +122,6 @@ static void my_va_forward(va_list& v, const char* field, const char* prefix)
 	case 'x':
 	case 'X':
 		{
-			// 2014.06.12 64bit’l‘Î‰ž
 			const char *p = prefix;
 			if (p[0]=='I' && p[1]=='6' && p[2]=='4') {
 				va_arg(v,LONGLONG);
@@ -167,7 +166,6 @@ static void my_va_forward(va_list& v, const wchar_t* field, const wchar_t* prefi
 	case L'u':
 	case L'x':
 	case L'X':
-		// 2014.06.12 64bit’l‘Î‰ž
 		{
 			const wchar_t *p = prefix;
 			if (p[0] == L'I' && p[1] == L'6' && p[2] == L'4') {

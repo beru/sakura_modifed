@@ -24,7 +24,7 @@ static const DWORD p_helpids3[] = {	//11500
 	IDC_BUTTON_TYPEOPENEXTHTMLHELP,	HIDC_BUTTON_TYPEOPENEXTHTMLHELP,	// 外部HTMLヘルプファイル参照
 	IDC_CHECK_TYPEHTMLHELPISSINGLE,	HIDC_CHECK_TYPEHTMLHELPISSINGLE,	// ビューアを複数起動しない
 
-	IDC_CHECK_CHKENTERATEND,		HIDC_CHECK_CHKENTERATEND,			// 保存時に改行コードの混在を警告する	// 2013/4/14 Uchi
+	IDC_CHECK_CHKENTERATEND,		HIDC_CHECK_CHKENTERATEND,			// 保存時に改行コードの混在を警告する
 	//	IDC_STATIC,						-1,
 	0, 0
 };
@@ -214,7 +214,7 @@ void PropTypesSupport::SetData(HWND hwndDlg)
 	::DlgItem_SetText(hwndDlg, IDC_EDIT_TYPEEXTHTMLHELP, types.szExtHtmlHelp);
 	::CheckDlgButton(hwndDlg, IDC_CHECK_TYPEHTMLHELPISSINGLE, types.bHtmlHelpIsSingle ? BST_CHECKED : BST_UNCHECKED);
 
-	// 保存時に改行コードの混在を警告する	2013/4/14 Uchi
+	// 保存時に改行コードの混在を警告する
 	::CheckDlgButton(hwndDlg, IDC_CHECK_CHKENTERATEND, types.bChkEnterAtEnd ? BST_CHECKED : BST_UNCHECKED);
 }
 
@@ -245,13 +245,11 @@ int PropTypesSupport::GetData(HWND hwndDlg)
 	::DlgItem_GetText(hwndDlg, IDC_EDIT_TYPEEXTHTMLHELP, types.szExtHtmlHelp, _countof2(types.szExtHtmlHelp));
 	types.bHtmlHelpIsSingle = DlgButton_IsChecked(hwndDlg, IDC_CHECK_TYPEHTMLHELPISSINGLE);
 
-	// 保存時に改行コードの混在を警告する	2013/4/14 Uchi
+	// 保存時に改行コードの混在を警告する
 	types.bChkEnterAtEnd = DlgButton_IsChecked(hwndDlg, IDC_CHECK_CHKENTERATEND);
 
 	return TRUE;
 }
-
-// 2001/06/13 End
 
 // 補完種別の追加
 void PropTypesSupport::AddHokanMethod(int nMethod, const wchar_t* szName)

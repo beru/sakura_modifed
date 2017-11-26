@@ -117,7 +117,6 @@ bool PluginManager::SearchNewPluginDir(
 			auto_stricmp(wf.cFileName, _T("unuse")) != 0
 		) {
 			// インストール済みチェック。フォルダ名＝プラグインテーブルの名前ならインストールしない
-			// 2010.08.04 大文字小文字同一視にする
 			bool isNotInstalled = true;
 			for (int iNo=0; iNo<MAX_PLUGIN; ++iNo) {
 				if (auto_stricmp(wf.cFileName, to_tchar(pluginTable[iNo].szName)) == 0) {
@@ -373,7 +372,7 @@ int PluginManager::InstallPlugin(
 		errorMsg = LSW(STR_PLGMGR_INST_ID);
 		return -1;
 	}
-	// 2010.08.04 ID使用不可の文字を確認
+	// ID使用不可の文字を確認
 	//  後々ファイル名やiniで使うことを考えていくつか拒否する
 	static const wchar_t szReservedChars[] = L"/\\,[]*?<>&|;:=\" \t";
 	for (size_t x=0; x<_countof(szReservedChars); ++x) {
@@ -399,7 +398,7 @@ int PluginManager::InstallPlugin(
 		if (wcscmp(sId.c_str(), pluginTable[iNo].szId) == 0) {	// ID一致
 			if (!bUpdate) {
 				const TCHAR* msg = LS(STR_PLGMGR_INST_NAME);
-				// 2010.08.04 削除中のIDは元の位置へ追加(復活させる)
+				// 削除中のIDは元の位置へ追加(復活させる)
 				if (pluginTable[iNo].state != PLS_DELETED &&
 					ConfirmMessage(hWndOwner, msg, static_cast<const TCHAR*>(pszPluginName), static_cast<const wchar_t*>(pluginTable[iNo].szName)) != IDYES
 				) {
@@ -424,7 +423,7 @@ int PluginManager::InstallPlugin(
 	pluginTable[nEmpty].szId[MAX_PLUGIN_ID-1] = '\0';
 	pluginTable[nEmpty].state = isDuplicate ? PLS_UPDATED : PLS_INSTALLED;
 
-	// コマンド数の設定	2010/7/11 Uchi
+	// コマンド数の設定
 	int			i;
 	wchar_t		szPlugKey[10];
 	wstring		sPlugCmd;
@@ -479,12 +478,12 @@ bool PluginManager::LoadAllPlugin(CommonSetting* common)
 		if (pluginTable[iNo].szName[0] == '\0') {
 			continue;
 		}
-		// 2010.08.04 削除状態を見る(今のところ保険)
+		// 削除状態を見る(今のところ保険)
 		if (pluginTable[iNo].state == PLS_DELETED) {
 			continue;
 		}
 		if (GetPlugin(iNo)) {
-			continue; // 2013.05.31 読み込み済み
+			continue; // 読み込み済み
 		}
 		std::tstring name = to_tchar(pluginTable[iNo].szName);
 		Plugin* plugin = LoadPlugin(sBaseDir.c_str(), name.c_str(), szLangName.c_str());
@@ -613,7 +612,7 @@ void PluginManager::UninstallPlugin(CommonSetting& common, int id)
 {
 	PluginRec* pluginTable = common.plugin.pluginTable;
 
-	// 2010.08.04 ここではIDを保持する。後で再度追加するときに同じ位置に追加
+	// ここではIDを保持する。後で再度追加するときに同じ位置に追加
 	// PLS_DELETEDのszId/szNameはiniを保存すると削除されます
 //	pluginTable[id].szId[0] = '\0';
 	pluginTable[id].szName[0] = '\0';

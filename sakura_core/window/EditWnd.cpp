@@ -701,7 +701,6 @@ void EditWnd::OpenDocumentWhenStart(
 {
 	if (argLoadInfo.filePath.Length()) {
 		::ShowWindow(GetHwnd(), SW_SHOW);
-		// Oct. 03, 2004 genta コード確認は設定に依存
 		LoadInfo loadInfo = argLoadInfo;
 		bool bReadResult = GetDocument().docFileOperation.FileLoadWithoutAutoMacro(&loadInfo);	// 自動実行マクロは後で別の場所で実行される
 		if (!bReadResult) {
@@ -1252,7 +1251,6 @@ LRESULT EditWnd::DispatchEvent(
 		return DefWindowProc(hwnd, uMsg, wParam, lParam);
 	case WM_SYSCOMMAND:
 		// タブまとめ表示では閉じる動作はオプション指定に従う
-		//	Feb. 11, 2007 genta 動作を選べるように(MDI風と従来動作)
 		if (wParam == SC_CLOSE) {
 			// 印刷Previewモードでウィンドウを閉じる操作のときはPreviewを閉じる
 			if (pPrintPreview) {
@@ -1741,7 +1739,7 @@ LRESULT EditWnd::DispatchEvent(
 			// 改行の真ん中にカーソルが来ないように
 			// Note. もとが改行単位の桁位置なのでレイアウト折り返しの桁位置を超えることはない。
 			//       選択指定(bSelect==TRUE)の場合にはどうするのが妥当かよくわからないが、
-			//       2007.08.22現在ではアウトライン解析ダイアログから桁位置0で呼び出される
+			//       現在ではアウトライン解析ダイアログから桁位置0で呼び出される
 			//       パターンしかないので実用上特に問題は無い。
 			if (!bSelect) {
 				const DocLine *pTmpDocLine = GetDocument().docLineMgr.GetLine(ppoCaret->y);
@@ -1872,14 +1870,6 @@ LRESULT EditWnd::DispatchEvent(
 	case WM_LBUTTONDBLCLK:
 		return OnLButtonDblClk(wParam, lParam);
 
-#if 0
-	case WM_IME_NOTIFY:	// Nov. 26, 2006 genta
-		if (wParam == IMN_SETCONVERSIONMODE || wParam == IMN_SETOPENSTATUS) {
-			GetActiveView().GetCaret().ShowEditCaret();
-		}
-		return DefWindowProc(hwnd, uMsg, wParam, lParam);
-#endif
-
 	case WM_NCPAINT:
 		DefWindowProc(hwnd, uMsg, wParam, lParam);
 		if (!statusBar.GetStatusHwnd()) {
@@ -1924,7 +1914,7 @@ LRESULT EditWnd::DispatchEvent(
 
 /*! 終了時の処理
 
-	@param hWndFrom [in] 終了要求の Wimdow Handle	// 2013/4/9 Uchi
+	@param hWndFrom [in] 終了要求の Wimdow Handle
 
 	@retval TRUE: 終了して良い / FALSE: 終了しない
 */
@@ -1935,7 +1925,7 @@ int	EditWnd::OnClose(HWND hWndActive, bool bGrepNoConfirm)
 	if (!nRet) {
 		return nRet;
 	}
-	// パラメータでハンドルを貰う様にしたので検索を削除	2013/4/9 Uchi
+	// パラメータでハンドルを貰う様にしたので検索を削除
 	if (hWndActive) {
 		// アクティブ化制御ウィンドウをアクティブ化する
 		if (IsSakuraMainWindow(hWndActive)) {
@@ -1981,7 +1971,7 @@ void EditWnd::OnCommand(WORD wNotifyCode, WORD wID , HWND hwndCtl)
 	switch (wNotifyCode) {
 	// メニューからのメッセージ
 	case 0:
-	case CMD_FROM_MOUSE: // 2006.05.19 genta マウスから呼びだされた場合
+	case CMD_FROM_MOUSE: // マウスから呼びだされた場合
 		// ウィンドウ切り替え
 		if (wID - IDM_SELWINDOW >= 0 && wID - IDM_SELWINDOW < (int)pShareData->nodes.nEditArrNum) {
 			ActivateFrameWindow(pShareData->nodes.pEditArr[wID - IDM_SELWINDOW].GetHwnd());
@@ -1993,7 +1983,7 @@ void EditWnd::OnCommand(WORD wNotifyCode, WORD wID , HWND hwndCtl)
 			EditInfo checkEditInfo;
 			mru.GetEditInfo(wID - IDM_SELMRU, &checkEditInfo);
 			LoadInfo loadInfo(checkEditInfo.szPath, checkEditInfo.nCharCode, false);
-			GetDocument().docFileOperation.FileLoad(&loadInfo);	//	Oct.  9, 2004 genta 共通関数化
+			GetDocument().docFileOperation.FileLoad(&loadInfo);
 		}
 		// 最近使ったフォルダ
 		else if (wID - IDM_SELOPENFOLDER >= 0 && wID - IDM_SELOPENFOLDER < 999) {
@@ -2034,8 +2024,6 @@ void EditWnd::OnCommand(WORD wNotifyCode, WORD wID , HWND hwndCtl)
 			}
 
 			// コマンドコードによる処理振り分け
-			//	May 19, 2006 genta 上位ビットを渡す
-			//	Jul. 7, 2007 genta 上位ビットを定数に
 			GetDocument().HandleCommand((EFunctionCode)(wID | 0));
 		}
 		break;
@@ -2438,7 +2426,7 @@ bool EditWnd::InitMenu_Special(HMENU hMenu, EFunctionCode eFunc)
 }
 
 
-// メニューバーの無効化を検査	2010/6/18 Uchi
+// メニューバーの無効化を検査
 void EditWnd::CheckFreeSubMenu(HWND hWnd, HMENU hMenu, UINT uPos)
 {
 	int cMenuItems = ::GetMenuItemCount(hMenu);
@@ -2451,7 +2439,7 @@ void EditWnd::CheckFreeSubMenu(HWND hWnd, HMENU hMenu, UINT uPos)
 	}
 }
 
-// メニューバーの無効化を検査	2010/6/18 Uchi
+// メニューバーの無効化を検査
 void EditWnd::CheckFreeSubMenuSub(HMENU hMenu, int nLv)
 {
 	int numMenuItems = ::GetMenuItemCount(hMenu);
@@ -2471,7 +2459,6 @@ void EditWnd::CheckFreeSubMenuSub(HMENU hMenu, int nLv)
 
 
 //	フラグにより表示文字列の選択をする。
-//		2010/5/19	Uchi
 void EditWnd::SetMenuFuncSel(HMENU hMenu, EFunctionCode nFunc, const wchar_t* sKey, bool flag)
 {
 	const wchar_t* sName = L"";
@@ -3610,7 +3597,7 @@ void EditWnd::PrintMenubarMessage(const TCHAR* msg)
 	rc.top = po.y - nCaretPosInfoCharHeight - 2;
 	rc.bottom = rc.top + nCaretPosInfoCharHeight;
 	::SetTextColor(hdc, ::GetSysColor(COLOR_MENUTEXT));
-	//	Sep. 6, 2003 genta Windows XP(Luna)の場合にはCOLOR_MENUBARを使わなくてはならない
+	// Windows XP(Luna)の場合にはCOLOR_MENUBARを使わなくてはならない
 	COLORREF bkColor =
 		::GetSysColor(IsWinXP_or_later() ? COLOR_MENUBAR : COLOR_MENU);
 	::SetBkColor(hdc, bkColor);
@@ -4305,7 +4292,7 @@ void EditWnd::RestorePhysPosOfAllView(PointEx* pptPosArray)
 		}
 		Point ptPosXY = layoutMgr.LogicToLayoutEx(pptPosArray[i * numOfPositions + 5]);
 		auto& caret = view.GetCaret();
-		caret.MoveCursor(ptPosXY, false); // 2013.06.05 bScrollをtrue=>falase
+		caret.MoveCursor(ptPosXY, false);
 		caret.nCaretPosX_Prev = caret.GetCaretLayoutPos().x;
 
 		int nLeft = 0;

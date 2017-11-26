@@ -3,7 +3,7 @@
 #include "view/EditView.h"
 #include "doc/EditDoc.h"
 #include "doc/DocReader.h"
-#include "charset/charcode.h"  // 2006.06.28 rastiv
+#include "charset/charcode.h"
 #include "window/EditWnd.h"
 #include "parse/WordParse.h"
 #include "sakura_rc.h"

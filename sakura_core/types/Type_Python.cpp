@@ -365,7 +365,7 @@ void DocOutline::MakeFuncList_python(FuncInfoArr* pFuncInfoArr)
 		
 		if (python_analyze_state.IsLogicalLineTop()) {
 			//	indent check
-			//	May 15, 2007 genta 桁位置colはデータオフセットdと独立にしないと
+			//	桁位置colはデータオフセットdと独立にしないと
 			//	文字列比較がおかしくなる
 			for (depth=0, col=0; col<nLineLen; ++col) {
 				//	calculate indent level
@@ -405,7 +405,7 @@ void DocOutline::MakeFuncList_python(FuncInfoArr* pFuncInfoArr)
 				continue;
 			}
 
-			//	2006.02.28 genta 区切りチェック
+			//	区切りチェック
 			//	define, classic等が対象にならないように，後ろにスペースかタブが
 			//	続くことを確認．
 			//	本当は継続行として次の行に関数名を書くことも文法上は可能だが
@@ -431,7 +431,7 @@ void DocOutline::MakeFuncList_python(FuncInfoArr* pFuncInfoArr)
 				}
 			}
 
-			//	2007.02.08 genta 手抜きコメント
+			//	手抜きコメント
 			//	厳密には，ここで継続行を入れることが可能だが，
 			//	そんなレアなケースは考慮しない
 			
@@ -446,7 +446,6 @@ void DocOutline::MakeFuncList_python(FuncInfoArr* pFuncInfoArr)
 				++w_end)
 				;
 			
-			//	2007.02.08 genta 手抜きコメント
 			//	厳密には，この後に括弧に囲まれた引数あるいは継承元クラスが
 			//	括弧に囲まれて入り，さらに:と続くが
 			//	継続行の可能性があるので，そこまでチェックしない

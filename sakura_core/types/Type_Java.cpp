@@ -118,7 +118,6 @@ void DocOutline::MakeFuncList_Java(FuncInfoArr* pFuncInfoArr)
 					nWordIdx += nCharChars;
 				}else {
 					/* クラス宣言部分を見つけた */
-					//	Oct. 10, 2002 genta interfaceも対象に
 					if (wcscmp(L"class", szWordPrev) == 0 ||
 						wcscmp(L"interface", szWordPrev) == 0
 					) {
@@ -208,7 +207,6 @@ void DocOutline::MakeFuncList_Java(FuncInfoArr* pFuncInfoArr)
 					continue;
 				}else if (L'{' == pLine[i]) {
 					if (0 < nClassNestArrNum && nNestLevel2Arr[nClassNestArrNum - 1] == 2) {
-						//	Oct. 10, 2002 genta
 						//	メソッド中でさらにメソッドを定義することはないので
 						//	ネストレベル判定追加 class/interfaceの直下の場合のみ判定する
 						if (nClassNestArr[nClassNestArrNum - 1] == nNestLevel - 1
@@ -321,7 +319,6 @@ void DocOutline::MakeFuncList_Java(FuncInfoArr* pFuncInfoArr)
 							nNestLevel2Arr[nClassNestArrNum - 1] = 0;
 						}
 					}else {
-						//	Oct. 10, 2002 genta
 						//	abstract にも対応
 						if (pLine2[k] == L'{' || pLine2[k] == L';' ||
 							__iscsym(pLine2[k])
@@ -341,7 +338,6 @@ void DocOutline::MakeFuncList_Java(FuncInfoArr* pFuncInfoArr)
 					continue;
 				}else if (L';' == pLine[i]) {
 					if (0 < nClassNestArrNum && nNestLevel2Arr[nClassNestArrNum - 1] == 2) {
-						//	Oct. 10, 2002 genta
 						// 関数の中で別の関数の宣言部を使うことって，Javaであるの？
 						if (1
 							&& nClassNestArr[nClassNestArrNum - 1] == nNestLevel - 1
@@ -401,7 +397,7 @@ void DocOutline::MakeFuncList_Java(FuncInfoArr* pFuncInfoArr)
 
 const wchar_t* g_ppszKeywordsJAVA[] = {
 	L"abstract",
-	L"assert",	// Mar. 8, 2003 genta
+	L"assert",
 	L"boolean",
 	L"break",
 	L"byte",
@@ -437,7 +433,7 @@ const wchar_t* g_ppszKeywordsJAVA[] = {
 	L"return",
 	L"short",
 	L"static",
-	L"strictfp",	// Mar. 8, 2003 genta
+	L"strictfp",
 	L"super",
 	L"switch",
 	L"synchronized",

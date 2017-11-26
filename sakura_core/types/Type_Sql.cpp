@@ -85,7 +85,7 @@ void DocOutline::MakeFuncList_PLSQL(FuncInfoArr* pFuncInfoArr)
 					(L'a' <= pLine[i] &&	pLine[i] <= L'z')||
 					(L'A' <= pLine[i] &&	pLine[i] <= L'Z')||
 					(L'0' <= pLine[i] &&	pLine[i] <= L'9')||
-					(L'\u00a1' <= pLine[i] && !iswcntrl(pLine[i]) && !iswspace(pLine[i])) // 2013.05.08 日本語対応
+					(L'\u00a1' <= pLine[i] && !iswcntrl(pLine[i]) && !iswspace(pLine[i])) // 日本語対応
 					))
 				 || nCharChars == 2
 				) {
@@ -193,7 +193,7 @@ void DocOutline::MakeFuncList_PLSQL(FuncInfoArr* pFuncInfoArr)
 					(L'a' <= pLine[i] &&	pLine[i] <= L'z')||
 					(L'A' <= pLine[i] &&	pLine[i] <= L'Z')||
 					(L'0' <= pLine[i] &&	pLine[i] <= L'9')||
-					(L'\u00a1' <= pLine[i] && !iswcntrl(pLine[i]) && !iswspace(pLine[i]))|| // 2013.05.08 日本語対応
+					(L'\u00a1' <= pLine[i] && !iswcntrl(pLine[i]) && !iswspace(pLine[i]))|| // 日本語対応
 					L'\t' == pLine[i] ||
 					L' ' == pLine[i] ||
 					WCODE::IsLineDelimiter(pLine[i], bExtEol) ||
@@ -283,7 +283,7 @@ void DocOutline::MakeFuncList_PLSQL(FuncInfoArr* pFuncInfoArr)
 								(L'a' <= pLine[i] && pLine[i] <= L'z')||
 								(L'A' <= pLine[i] && pLine[i] <= L'Z')||
 								(L'0' <= pLine[i] && pLine[i] <= L'9')||
-								(L'\u00a1' <= pLine[i] && !iswcntrl(pLine[i]) && !iswspace(pLine[i])) // 2013.05.08 日本語対応
+								(L'\u00a1' <= pLine[i] && !iswcntrl(pLine[i]) && !iswspace(pLine[i])) // 日本語対応
 							)
 						)
 						|| nCharChars == 2

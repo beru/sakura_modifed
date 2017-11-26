@@ -414,7 +414,7 @@ bool EditView::MakeDiffTmpFile(
 	}
 	if (bError) {
 		out.Close();
-		_tunlink(filename);	// 関数の実行に失敗したとき、一時ファイルの削除は関数内で行う。2005.10.29
+		_tunlink(filename);	// 関数の実行に失敗したとき、一時ファイルの削除は関数内で行う。
 		WarningMessage( NULL, LS(STR_DIFF_FAILED_TEMP) );
 	}
 

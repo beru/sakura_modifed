@@ -38,7 +38,7 @@ bool Converter_ToLower::DoConvert(NativeW* pData)
 			c = 0x00FF;
 		}
 		// Latin Extended-A •ÏŠ·(ŠÜ“Œ‰¢“™)
-		else if (c==0x0130) { // 2014.11.25 0x0130=>0x0131‚ÍŠÔˆá‚¢B0x0130=>0x0069‚É•ÏX
+		else if (c==0x0130) {
 			c = 0x0069; // i
 		}
 		else if ((c >= 0x0100 && c <= 0x0137) || (c >= 0x014A && c <= 0x0177)) {

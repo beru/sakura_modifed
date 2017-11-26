@@ -3,16 +3,16 @@
 */
 #include "StdAfx.h"
 #include "prop/PropCommon.h"
-#include "extmodule/Bregexp.h"	// 2007.08/12 genta バージョン取得
+#include "extmodule/Bregexp.h"
 #include "util/shell.h"
 #include "util/window.h"
 #include "sakura_rc.h"
 #include "sakura.hh"
 
 static const DWORD p_helpids[] = {	//10500
-	IDC_EDIT_REGEXPLIB,					HIDC_EDIT_REGEXPLIB,				// 正規表現ライブラリ選択	// 2007.09.02 genta
+	IDC_EDIT_REGEXPLIB,					HIDC_EDIT_REGEXPLIB,				// 正規表現ライブラリ選択
 	IDC_LABEL_REGEXP,					HIDC_EDIT_REGEXPLIB,
-	IDC_LABEL_REGEXP_VER,				HIDC_LABEL_REGEXPVER,				// 正規表現ライブラリバージョン	// 2007.09.02 genta
+	IDC_LABEL_REGEXP_VER,				HIDC_LABEL_REGEXPVER,				// 正規表現ライブラリバージョン
 	IDC_CHECK_bCaretTextForSearch,		HIDC_CHECK_bCaretTextForSearch,		// カーソル位置の文字列をデフォルトの検索文字列にする
 	IDC_CHECK_INHERIT_KEY_OTHER_VIEW,	HIDC_CHECK_INHERIT_KEY_OTHER_VIEW,	// 次・前検索で他のビューの検索条件を引き継ぐ
 	IDC_CHECK_bGrepExitConfirm,			HIDC_CHECK_bGrepExitConfirm,		// GREPの保存確認
@@ -85,7 +85,7 @@ INT_PTR PropGrep::DispatchEvent(
 //		}
 		break;	// WM_NOTIFY
 	case WM_COMMAND:
-		//	2007.08.12 genta 正規表現DLLの変更に応じてVersionを再取得する
+		// 正規表現DLLの変更に応じてVersionを再取得する
 		if (wParam == MAKEWPARAM(IDC_EDIT_REGEXPLIB, EN_KILLFOCUS)) {
 			SetRegexpVersion(hwndDlg);
 		}
@@ -135,7 +135,7 @@ void PropGrep::SetData(HWND hwndDlg)
 	// Grepモード: ダブルクリックでタグジャンプ
 	CheckDlgButtonBool(hwndDlg, IDC_CHECK_GTJW_LDBLCLK, csSearch.bGTJW_DoubleClick);
 
-	//	2007.08.12 genta 正規表現DLL
+	// 正規表現DLL
 	EditCtl_LimitText(::GetDlgItem(hwndDlg, IDC_EDIT_REGEXPLIB), _countof(csSearch.szRegexpLib) - 1);
 	::DlgItem_SetText(hwndDlg, IDC_EDIT_REGEXPLIB, csSearch.szRegexpLib);
 	SetRegexpVersion(hwndDlg);
@@ -201,7 +201,7 @@ int PropGrep::GetData(HWND hwndDlg)
 	// Grepモード: ダブルクリックでタグジャンプ
 	csSearch.bGTJW_DoubleClick = DlgButton_IsChecked(hwndDlg, IDC_CHECK_GTJW_LDBLCLK);
 
-	//	2007.08.12 genta 正規表現DLL
+	// 正規表現DLL
 	::DlgItem_GetText(hwndDlg, IDC_EDIT_REGEXPLIB, csSearch.szRegexpLib, _countof(csSearch.szRegexpLib));
 
 	HWND hwndCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_TAGJUMP);

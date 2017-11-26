@@ -35,7 +35,7 @@ public:
 	
 	// MRU系
 	bool IsPathOpened(const TCHAR* pszPath, HWND* phwndOwner); // 指定ファイルが開かれているか調べる
-	bool ActiveAlreadyOpenedWindow(const TCHAR* pszPath, HWND* phwndOwner, EncodingType nCharCode); // 指定ファイルが開かれているか調べつつ、多重オープン時の文字コード衝突も確認 // 2007.03.16
+	bool ActiveAlreadyOpenedWindow(const TCHAR* pszPath, HWND* phwndOwner, EncodingType nCharCode); // 指定ファイルが開かれているか調べつつ、多重オープン時の文字コード衝突も確認
 
 	// デバッグ  今は主にマクロ・外部コマンド実行用
 	void TraceOut(LPCTSTR lpFmt, ...);	// アウトプットウィンドウに出力(printfフォーマット)

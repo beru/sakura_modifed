@@ -39,7 +39,7 @@ void MainToolBar::ProcSearchBox(MSG *msg)
 				owner.GetActiveView().bCurSearchUpdate = true;
 				owner.GetActiveView().ChangeCurRegexp();
 
-				// 検索ボックスを更新	// 2010/6/6 Uchi
+				// 検索ボックスを更新
 				AcceptSharedSearchKey();
 
 				//::SetFocus(hWnd);	//先にフォーカスを移動しておかないとキャレットが消える
@@ -235,7 +235,6 @@ void MainToolBar::CreateToolBar(void)
 						Toolbar_GetItemRect(hwndToolBar, count-1, &rc);
 
 						// コンボボックスを作る
-						// Mar. 8, 2003 genta 検索ボックスを1ドット下にずらした
 						hwndSearchBox = CreateWindow(_T("COMBOBOX"), _T("Combo"),
 								WS_CHILD | WS_VISIBLE | WS_TABSTOP | WS_VSCROLL | CBS_DROPDOWN
 								/*| CBS_SORT*/ | CBS_AUTOHSCROLL /*| CBS_DISABLENOSCROLL*/,
@@ -254,19 +253,11 @@ void MainToolBar::CreateToolBar(void)
 							lf.lfItalic			= FALSE;
 							lf.lfUnderline		= FALSE;
 							lf.lfStrikeOut		= FALSE;
-							//lf.lfCharSet		= GetDllShareData().common.sView.lf.lfCharSet;
 							lf.lfOutPrecision	= OUT_TT_ONLY_PRECIS;		// Raster Font を使わないように
-							//lf.lfClipPrecision	= GetDllShareData().common.sView.lf.lfClipPrecision;
-							//lf.lfQuality		= GetDllShareData().common.sView.lf.lfQuality;
-							//lf.lfPitchAndFamily	= GetDllShareData().common.sView.lf.lfPitchAndFamily;
-							//_tcsncpy(lf.lfFaceName, GetDllShareData().common.sView.lf.lfFaceName, _countof(lf.lfFaceName));	// 画面のフォントに設定	2012/11/27 Uchi
 							hFontSearchBox = ::CreateFontIndirect(&lf);
 							if (hFontSearchBox) {
 								::SendMessage(hwndSearchBox, WM_SETFONT, (WPARAM)hFontSearchBox, MAKELONG (TRUE, 0));
 							}
-
-							// 入力長制限
-							// Combo_LimitText(hwndSearchBox, (WPARAM)_MAX_PATH - 1);
 
 							// 検索ボックスを更新
 							AcceptSharedSearchKey();
@@ -396,9 +387,9 @@ LPARAM MainToolBar::ToolBarOwnerDraw(LPNMCUSTOMDRAW pnmh)
 			int nIconId = Toolbar_GetBitmap(pnmh->hdr.hwndFrom, (WPARAM)pnmh->dwItemSpec);
 
 			int offset = ((pnmh->rc.bottom - pnmh->rc.top) - pIcons->GetCy()) / 2;		// アイテム矩形からの画像のオフセット
-			int shift = (pnmh->uItemState & (CDIS_SELECTED | CDIS_CHECKED)) ? 1 : 0;	//	Aug. 30, 2003 genta ボタンを押されたらちょっと画像をずらす
+			int shift = (pnmh->uItemState & (CDIS_SELECTED | CDIS_CHECKED)) ? 1 : 0;	// ボタンを押されたらちょっと画像をずらす
 
-			//	Sep. 6, 2003 genta 押下時は右だけでなく下にもずらす
+			// 押下時は右だけでなく下にもずらす
 			pIcons->Draw(nIconId, pnmh->hdc, pnmh->rc.left + offset + shift, pnmh->rc.top + offset + shift,
 				(pnmh->uItemState & CDIS_DISABLED) ? ILD_MASK : ILD_NORMAL
 			);
@@ -456,7 +447,7 @@ void MainToolBar::UpdateToolbar(void)
 void MainToolBar::AcceptSharedSearchKey()
 {
 	if (hwndSearchBox) {
-		// 2013.05.28 Combo_ResetContentだとちらつくのでDeleteStringでリストだけ削除
+		// Combo_ResetContentだとちらつくのでDeleteStringでリストだけ削除
 		while (Combo_GetCount(hwndSearchBox) > 0) {
 			Combo_DeleteString(hwndSearchBox, 0);
 		}

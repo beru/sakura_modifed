@@ -4,7 +4,7 @@
 #include "types/Type.h" // use DlgTypeList定義
 #include "window/EditWnd.h"
 #include "typeprop/DlgTypeList.h"
-#include "typeprop/ImpExpManager.h"	// 2010/4/24 Uchi
+#include "typeprop/ImpExpManager.h"
 #include "env/ShareData.h"
 #include "env/DocTypeManager.h"
 #include "util/shell.h"
@@ -76,7 +76,6 @@ BOOL DlgTypeList::OnLbnDblclk(int wID)
 {
 	switch (wID) {
 	case IDC_LIST_TYPES:
-		// Nov. 29, 2000	genta
 		// 動作変更: 指定タイプの設定ダイアログ→一時的に別の設定を適用
 		::EndDialog(
 			GetHwnd(),
@@ -345,12 +344,10 @@ void DlgTypeList::SetData(int selIdx)
 	return;
 }
 
-//@@@ 2002.01.18 add start
 LPVOID DlgTypeList::GetHelpIdTable(void)
 {
 	return (LPVOID)p_helpids;
 }
-//@@@ 2002.01.18 add end
 
 static void SendChangeSetting()
 {
@@ -383,7 +380,6 @@ static void SendChangeSettingType2(int nType)
 }
 
 // タイプ別設定インポート
-// 2010/4/12 Uchi
 bool DlgTypeList::Import()
 {
 	HWND hwndList = GetItemHwnd(IDC_LIST_TYPES);
@@ -430,7 +426,6 @@ bool DlgTypeList::Import()
 }
 
 // タイプ別設定エクスポート
-// 2010/4/12 Uchi
 bool DlgTypeList::Export()
 {
 	HWND hwndList = GetItemHwnd(IDC_LIST_TYPES);
@@ -451,7 +446,6 @@ bool DlgTypeList::Export()
 }
 
 // タイプ別設定初期化
-// 2010/4/12 Uchi
 bool DlgTypeList::InitializeType(void)
 {
 	HWND hwndDlg = GetHwnd();

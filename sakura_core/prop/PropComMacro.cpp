@@ -72,7 +72,7 @@ INT_PTR PropMacro::DispatchEvent(
 		SetData(hwndDlg);
 		::SetWindowLongPtr(hwndDlg, DWLP_USER, lParam);
 
-		//	Oct. 5, 2002 genta エディット コントロールに入力できるテキストの長さを制限する
+		// エディット コントロールに入力できるテキストの長さを制限する
 		EditCtl_LimitText(::GetDlgItem(hwndDlg, IDC_MACRONAME), _countof(csMacro.macroTable[0].szName) - 1);
 		Combo_LimitText(::GetDlgItem(hwndDlg, IDC_MACROPATH), _countof(csMacro.macroTable[0].szFile) - 1);
 		EditCtl_LimitText(::GetDlgItem(hwndDlg, IDC_MACRODIR), _countof2(csMacro.szMACROFOLDER) - 1);

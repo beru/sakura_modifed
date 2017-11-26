@@ -107,7 +107,7 @@ void TextDrawer::DispText(
 			}
 			nWorkWidth += pDrawDxArray[nDrawLength++];
 		}
-		// サロゲートペア対策	2008/7/5 Uchi	Update 7/8 Uchi
+		// サロゲートペア対策
 		if (nDrawLength < nDrawDataMaxLength && pDrawDxArray[nDrawLength] == 0) {
 			++nDrawLength;
 		}
@@ -338,8 +338,7 @@ void TextDrawer::DispLineNumber(
 
 	unsigned int nLineHeight = (unsigned int)view.GetTextMetrics().GetHankakuDy();
 	size_t nCharWidth = view.GetTextMetrics().GetHankakuDx();
-	// 行番号表示部分X幅	Sep. 23, 2002 genta 共通式のくくりだし
-	//int nLineNumAreaWidth = pView->GetTextArea().nViewAlignLeftCols * nCharWidth;
+	// 行番号表示部分X幅
 	int nLineNumAreaWidth = view.GetTextArea().GetAreaLeft() - GetDllShareData().common.window.nLineNumRightSpace;
 
 	TypeSupport textType(view, COLORIDX_TEXT);
@@ -434,7 +433,7 @@ void TextDrawer::DispLineNumber(
 		bDispLineNumTrans = true;
 	}else if (TypeSupport(view, COLORIDX_GYOU).IsDisp()) { // 行番号表示／非表示
 		Font font = colorType.GetTypeFont();
-	 	// 2013.12.30 変更行の色・フォント属性をDIFFブックマーク行に継承するように
+	 	// 変更行の色・フォント属性をDIFFブックマーク行に継承するように
 		if (bGyouMod && nColorIndex != COLORIDX_GYOU_MOD) {
 			bool bChange = true;
 			if (gyouType.IsBoldFont() == colorType.IsBoldFont()) {
@@ -477,13 +476,11 @@ void TextDrawer::DispLineNumber(
 
 			// 行番号区切り 0=なし 1=縦線 2=任意
 			if (typeConfig.nLineTermType == 2) {
-				//	Sep. 22, 2002 genta
 				szLineNum[nLineCols] = typeConfig.cLineTermChar;
 				szLineNum[++nLineCols] = '\0';
 			}
 		}
 
-		//	Sep. 23, 2002 genta
 		int drawNumTop = (view.GetTextArea().nViewAlignLeftCols - nLineNumCols - 1) * (nCharWidth);
 		::ExtTextOutW_AnyBuild(gr,
 			drawNumTop,

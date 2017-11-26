@@ -147,7 +147,7 @@ bool CPP_IsFunctionAfterKeyword(const wchar_t* s)
 class CppPreprocessMng {
 public:
 	CppPreprocessMng(void) :
-		// 2007.12.15 genta : bitpatternを0にしないと，
+		// bitpatternを0にしないと，
 		// いきなり#elseが現れたときにパターンがおかしくなる
 		ismultiline(false),
 		maxnestlevel(32),
@@ -242,7 +242,6 @@ size_t CppPreprocessMng::ScanLine(
 		if (C_IsSpace(*p, bExtEol) || *p == L'(') {
 			//	if 0 チェック
 			//	skip whitespace
-			//	2007.12.15 genta
 			for (; (C_IsSpace(*p, bExtEol) || *p==L'(') && p<lastptr; ++p)
 				;
 			if (*p == L'0') {
@@ -266,7 +265,6 @@ size_t CppPreprocessMng::ScanLine(
 			}
 		}
 	}else if (p+4 < lastptr && wcsncmp_literal(p, L"else") == 0) {
-		//	2007.12.14 genta : #ifが無く#elseが出たときのガード追加
 		if (0 < stackptr && stackptr < (int)maxnestlevel) {
 			enablebuf ^= bitpattern;
 		}
@@ -352,11 +350,10 @@ void DocOutline::MakeFuncList_C(
 	// 状態2
 	enum MODE2 {
 		M2_NORMAL			= 0x00,	// 通常
-		M2_ATTRIBUTE		= 0x02,	// C++/CLI attribute : 2007.05.26 genta
+		M2_ATTRIBUTE		= 0x02,	// C++/CLI attribute
 		M2_TEMPLATE			= 0x03, // "template<" でM2_TEMPLATEになり '>' でM2_NORMALに戻る
 		M2_NAMESPACE_SAVE	= 0x11,	// ネームスペース名調査中
 			// 「通常」状態で単語 "class" "struct" "union" "enum" "namespace", "__interface" を読み込むと、この状態になり、';' '{' ',' '>' '='を読み込むと「通常」になる。
-			//	2007.05.26 genta キーワードに__interface追加
 			//
 			// ':' を読み込むと「ネームスペース名調査完了」へ移行すると同時に
 			// szWordをszItemNameに保存し、あとで ':' 又は '{' の直前の単語が調べられるようにしている。
@@ -416,7 +413,6 @@ void DocOutline::MakeFuncList_C(
 	szTemplateName[0] = L'\0';
 	nMode = 0;
 	
-	//	Aug. 10, 2004 genta プリプロセス処理クラス
 	CppPreprocessMng cppPMng;
 	bool bExtEol = GetDllShareData().common.edit.bEnableExtEol;
 	
@@ -560,7 +556,7 @@ void DocOutline::MakeFuncList_C(
 							nItemFuncId = FL_OBJ_ENUM;
 						else if (wcscmp(szWord, L"union") == 0)
 							nItemFuncId = FL_OBJ_UNION;
-						else if (wcscmp(szWord, L"__interface") == 0) // 2007.05.26 genta "__interface" をクラスに類する扱いにする
+						else if (wcscmp(szWord, L"__interface") == 0)
 							nItemFuncId = FL_OBJ_INTERFACE;
 						else if (wcscmp(szWord, L"typedef") == 0)
 							bDefinedTypedef = true;
@@ -739,7 +735,6 @@ void DocOutline::MakeFuncList_C(
 						
 						wcscpy(&szNamespace[nNamespaceLen[nNestLevel_global]] , szItemName);
 						szItemName[0] = L'\0';
-						//	Jan. 30, 2005 genta M2_KR_FUNC 追加
 						//	関数の後ろにconst, throw または初期化子があると
 						//	M2_KR_FUNCに遷移して，';'が見つからないとその状態のまま
 						//	中括弧に遭遇する．
@@ -771,13 +766,11 @@ void DocOutline::MakeFuncList_C(
 						pFuncInfoArr->AppendData(nItemLine, ptPosXY.y + 1, szNamespace, nItemFuncId);
 						bDefinedTypedef = false;
 						nItemLine = -1;
-						//	Jan. 30, 2005 genta M2_KR_FUNC 追加
 						if (!bAddFunction) {
 							szNamespace[nNamespaceLen[nNestLevel_global]] = L':';
 							nNamespaceLen[nNestLevel_global] += 2;
 						}
 					}else {
-						//	Jan. 30, 2005 genta M2_KR_FUNC 追加
 						if (bAddFunction) {
 							++nNestLevel_func;
 						}else {
@@ -787,7 +780,6 @@ void DocOutline::MakeFuncList_C(
 							}
 						}
 					}
-					// bCppInitSkip = false;	//	Mar. 4, 2001 genta
 					nNestLevel_template = 0;
 					nMode = 0;
 					nMode2 = M2_NORMAL;
@@ -830,7 +822,7 @@ void DocOutline::MakeFuncList_C(
 							}
 						}
 					}
-					//	2007.05.26 genta C++/CLI nMode2 == M2_NAMESPACE_ENDの場合を対象外に
+					//	C++/CLI nMode2 == M2_NAMESPACE_ENDの場合を対象外に
 					//	NAMESPACE_END(class クラス名 :の後ろ)においては()を関数とみなさない．
 					//	TEMPLATE<sizeof(int)> のようなケースでsizeofを関数と誤認する．
 					if (1
@@ -879,7 +871,7 @@ void DocOutline::MakeFuncList_C(
 				}else if (')' == pLine[i]) {
 					if (nNestLevel_fparam > 0) {
 						--nNestLevel_fparam;
-						//	2007.05.26 genta C++/CLI Attribute内部ではnMode2の変更は行わない
+						// C++/CLI Attribute内部ではnMode2の変更は行わない
 						if (nNestLevel_fparam == 0 && nMode2 != M2_ATTRIBUTE && nMode2 != M2_TEMPLATE_WORD) {
 							if (nMode2 == M2_NORMAL) {
 								bInInitList = false;
@@ -1077,7 +1069,6 @@ void DocOutline::MakeFuncList_C(
 								szTemplateName[0] = L'\0';
 							}
 						}
-						//	Aug. 13, 2004 genta
 						//	szWordPrevが失われないうちにoperatorの判定を行う
 						//	operatorの判定は前にクラス名が付いている可能性があるので
 						//	専用の判定関数を使うべし．
@@ -1374,7 +1365,6 @@ void EditView::SmartIndent_CPP(wchar_t wcChar)
 
 		int nSrcLen = rangeA.GetTo().x - rangeA.GetFrom().x;
 		if (nSrcLen >= _countof(pszSrc) - 1) {
-			//	Sep. 18, 2002 genta メモリリーク対策
 			delete[] pszData;
 			return;
 		}

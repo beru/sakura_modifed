@@ -40,7 +40,6 @@ struct EditInfo {
 	int			nWindowOriginX;							// ウィンドウ  物理位置(ピクセル数・マイナス値も有効)
 	int			nWindowOriginY;							// ウィンドウ  物理位置(ピクセル数・マイナス値も有効)
 	
-	// Mar. 7, 2002 genta
 	// Constructor 確実に初期化するため
 	EditInfo()
 		:

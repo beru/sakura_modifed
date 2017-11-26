@@ -470,11 +470,9 @@ CodeConvertResult Jis::UnicodeToJIS(const NativeW& src, Memory* pDstMem)
 }
 
 
-// 文字コード表示用	UNICODE → Hex 変換	2008/6/9 Uchi
+// 文字コード表示用	UNICODE → Hex 変換
 CodeConvertResult Jis::UnicodeToHex(const wchar_t* cSrc, size_t iSLen, TCHAR* pDst, const CommonSetting_StatusBar* psStatusbar)
 {
-
-	// 2008/6/21 Uchi
 	if (psStatusbar->bDispUniInJis) {
 		// Unicodeで表示
 		return CodeBase::UnicodeToHex(cSrc, iSLen, pDst, psStatusbar);

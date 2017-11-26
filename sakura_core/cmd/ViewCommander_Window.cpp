@@ -315,7 +315,6 @@ void ViewCommander::Command_Tile_H(void)
 }
 
 
-// from ViewCommander_New.cpp
 /*! í‚Éè‘O‚É•\¦ */
 void ViewCommander::Command_WinTopMost(LPARAM lparam)
 {

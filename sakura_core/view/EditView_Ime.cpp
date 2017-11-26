@@ -105,7 +105,7 @@ LRESULT EditView::SetReconvertStruct(
 	if (GetSelectionInfo().IsBoxSelecting())
 		return 0;
 
-	// 2010.04.06 ビューモードでは何もしない
+	// ビューモードでは何もしない
 	if (AppMode::getInstance().IsViewMode()) {
 		return 0;
 	}
@@ -185,7 +185,7 @@ LRESULT EditView::SetReconvertStruct(
 	}
 	const wchar_t* pLine = pCurDocLine->GetPtr();
 
-	// 2010.04.17 行頭から←選択だと「SelectToが改行の後ろの位置」にあるため範囲を調整する
+	// 行頭から←選択だと「SelectToが改行の後ろの位置」にあるため範囲を調整する
 	// フリーカーソル選択でも行末より後ろにカーソルがある
 	if ((int)nLineLen < ptSelect.x) {
 		// 改行直前をIMEに渡すカーソル位置ということにする
@@ -402,7 +402,7 @@ LRESULT EditView::SetReconvertStruct(
 	return sizeof(RECONVERTSTRING) + cbReconvLenWithNull;
 }
 
-// 再変換用 エディタ上の選択範囲を変更する 2002.04.09 minfu
+// 再変換用 エディタ上の選択範囲を変更する
 LRESULT EditView::SetSelectionFromReonvert(
 	const RECONVERTSTRING* pReconv,
 	bool bUnicode
@@ -434,7 +434,6 @@ LRESULT EditView::SetSelectionFromReonvert(
 			if (pReconv->dwSize < (pReconv->dwStrOffset + pReconv->dwCompStrOffset)) {
 				return 0;
 			}
-			// 2010.03.17 sizeof(pReconv)+1ではなくdwStrOffsetを利用するように
 			const char* p = ((const char*)(pReconv)) + pReconv->dwStrOffset;
 			memBuf._GetMemory()->SetRawData(p, pReconv->dwCompStrOffset );
 			ShiftJis::SJISToUnicode(*(memBuf._GetMemory()), &memBuf);
@@ -450,7 +449,6 @@ LRESULT EditView::SetSelectionFromReonvert(
 			) {
 				return 0;
 			}
-			// 2010.03.17 sizeof(pReconv)+1ではなくdwStrOffsetを利用するように
 			const char* p= ((const char*)pReconv) + pReconv->dwStrOffset;
 			memBuf._GetMemory()->SetRawData(p + pReconv->dwCompStrOffset, pReconv->dwCompStrLen);
 			ShiftJis::SJISToUnicode(*(memBuf._GetMemory()), &memBuf);

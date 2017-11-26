@@ -105,12 +105,11 @@ public:
 	static EFunctionCode GetFuncInfoByName(HINSTANCE , const wchar_t* , wchar_t*);	// 関数名→機能ID，機能名日本語
 	static bool CanFuncIsKeyMacro(int);	// キーマクロに記録可能な機能かどうかを調べる
 	
-	// Jun. 16, 2002 genta
 	static const MacroFuncInfo* GetFuncInfoByID(int);
 	
 	bool IsSaveOk(void);
 
-	// Sep. 15, 2005 FILE	実行中マクロのインデックス番号操作 (INVALID_MACRO_IDX:無効)
+	// FILE	実行中マクロのインデックス番号操作 (INVALID_MACRO_IDX:無効)
 	int GetCurrentIdx(void) const {
 		return currentIdx;
 	}

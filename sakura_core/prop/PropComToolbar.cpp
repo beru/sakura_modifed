@@ -424,7 +424,6 @@ void PropToolbar::SetData(HWND hwndDlg)
 	// コントロールのハンドルを取得
 	HWND hwndResList = ::GetDlgItem(hwndDlg, IDC_LIST_RES);
 
-	// 2014.11.25 フォントの高さが正しくなかったバグを修正
 	int nFontHeight = TextWidthCalc(hwndResList).GetTextHeight();
 
 	int nListItemHeight = 18; // 「ツールバー」タブでのツールバーアイテムの行間を少し狭くして表示行数を増やした(20→18 これ以上小さくしても効果はないようだ)

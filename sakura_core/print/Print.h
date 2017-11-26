@@ -65,7 +65,7 @@ struct PrintSetting {
 	int			nPrintMarginRX;						// 印刷用紙マージン 右(mm単位)
 	short		nPrintPaperOrientation;				// 用紙方向 DMORIENT_PORTRAIT (1) または DMORIENT_LANDSCAPE (2)
 	short		nPrintPaperSize;					// 用紙サイズ
-	bool		bColorPrint;						// カラー印刷			// 2013/4/26 Uchi
+	bool		bColorPrint;						// カラー印刷
 	bool		bPrintWordWrap;						// 英文ワードラップする
 	bool		bPrintKinsokuHead;					// 行頭禁則する
 	bool		bPrintKinsokuTail;					// 行末禁則する

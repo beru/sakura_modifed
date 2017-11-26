@@ -91,7 +91,6 @@ public:
 	bool WhereCurrentWord(size_t, size_t, size_t* , size_t*, NativeW*, NativeW*);	// 現在位置の単語の範囲を調べる
 
 	bool PrevOrNextWord(size_t, size_t, size_t* , bool bLEFT, bool bStopsBothEnds);	// 現在位置の左右の単語の先頭位置を調べる
-	//	Jun. 26, 2001 genta	正規表現ライブラリの差し替え
 	bool SearchWord(Point ptSerachBegin, SearchDirection eDirection, Range* pMatchRange, const SearchStringPattern& pattern); // 単語検索
 
 	void ReplaceData(DocLineReplaceArg*);

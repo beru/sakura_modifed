@@ -932,7 +932,6 @@ void my_splitpath_w(
 static size_t FileMatchScore(const TCHAR* file1, const TCHAR* file2);
 
 // フルパスからファイル名の.以降を分離する
-// 2014.06.15 フォルダ名に.が含まれた場合、フォルダが分離されたのを修正
 static
 void FileNameSepExt(
 	const TCHAR *file,

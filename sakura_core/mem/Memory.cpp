@@ -229,7 +229,7 @@ void Memory::AllocBuffer(size_t nNewDataLen)
 		if (nDataBufSize < nWorkLen) {
 			// 頻繁な再確保を行わないようにする為に必要量の倍のサイズにする。
 			nWorkLen <<= 1;
-			// 2014.06.25 有効データ長が0の場合はfree & malloc
+			// 有効データ長が0の場合はfree & malloc
 			if (nRawLen == 0) {
 				free( pRawData );
 				pRawData = NULL;

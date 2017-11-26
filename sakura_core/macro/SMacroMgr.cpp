@@ -371,7 +371,6 @@ MacroFuncInfo SMacroMgr::macroFuncInfoCommandArr[] =
 	{F_HELP_SEARCH,				LTEXT("HelpSearch"),		{VT_EMPTY, VT_EMPTY, VT_EMPTY, VT_EMPTY},	VT_EMPTY,	NULL}, // ヘルプキーワード検索
 	{F_MENU_ALLFUNC,			LTEXT("CommandList"),		{VT_EMPTY, VT_EMPTY, VT_EMPTY, VT_EMPTY},	VT_EMPTY,	NULL}, // コマンド一覧
 	{F_EXTHELP1,				LTEXT("ExtHelp1"),			{VT_EMPTY, VT_EMPTY, VT_EMPTY, VT_EMPTY},	VT_EMPTY,	NULL}, // 外部ヘルプ１
-	// Jul. 5, 2002 genta 引数追加
 	{F_EXTHTMLHELP,				LTEXT("ExtHtmlHelp"),		{VT_BSTR,  VT_BSTR,  VT_EMPTY, VT_EMPTY},	VT_EMPTY,	NULL}, // 外部HTMLヘルプ
 	{F_ABOUT,					LTEXT("About"),				{VT_EMPTY, VT_EMPTY, VT_EMPTY, VT_EMPTY},	VT_EMPTY,	NULL}, // バージョン情報
 
@@ -455,9 +454,6 @@ MacroFuncInfo SMacroMgr::macroFuncInfoArr[] =
 	{F_CREATEMENU,				L"CreateMenu",				{VT_I4,    VT_BSTR,  VT_EMPTY, VT_EMPTY},	VT_I4,		NULL }, //メニュー作成
 
 	// 終端
-	// Jun. 27, 2002 genta
-	// 終端としては決して現れないものを使うべきなので，
-	// FuncIDを-1に変更．(0は使われる)
 	{F_INVALID,	NULL, {VT_EMPTY, VT_EMPTY, VT_EMPTY, VT_EMPTY},	VT_EMPTY,	NULL}
 };
 
@@ -1056,7 +1052,6 @@ bool SMacroMgr::CanFuncIsKeyMacro(int nFuncID)
 */
 MacroManagerBase** SMacroMgr::Idx2Ptr(int idx)
 {
-	//	Jun. 16, 2002 genta
 	//	キーマクロ以外のマクロを読み込めるように
 	if (idx == STAND_KEYMACRO) {
 		return &pKeyMacro;

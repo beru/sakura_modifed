@@ -169,7 +169,6 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                           描画                              //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-	// 2007.09.30 genta CompatibleDC操作関数
 protected:
 	// ロジック行を1行描画
 	bool DrawLogicLine(
@@ -266,7 +265,7 @@ public:
 	bool GetSelectedData(NativeW*, bool, const wchar_t*, bool, bool bAddCRLFWhenCopy, EolType neweol = EolType::Unknown);	// 選択範囲のデータを取得
 	int IsCurrentPositionSelected(Point ptCaretPos);					// 指定カーソル位置が選択エリア内にあるか
 	int IsCurrentPositionSelectedTEST(const Point& ptCaretPos, const Range& select) const; // 指定カーソル位置が選択エリア内にあるか
-	// 2006.07.09 genta 行桁指定によるカーソル移動(選択領域を考慮)
+	// 行桁指定によるカーソル移動(選択領域を考慮)
 	void MoveCursorSelecting(Point ptWk_CaretPos, bool bSelect, int = _CARETMARGINRATE);
 	void ConvSelectedArea(EFunctionCode);									// 選択エリアのテキストを指定方法で変換
 	// 指定位置または指定範囲がテキストの存在しないエリアかチェックする

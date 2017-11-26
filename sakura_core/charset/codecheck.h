@@ -312,7 +312,6 @@ inline bool IsUtf7SetO(const CHAR_TYPE c) {
 template < typename CHAR_TYPE >
 inline bool IsUtf7Direct(const CHAR_TYPE c) {
 	return IsUtf7SetD(c) || IsUtf7SetO(c);
-	// 2012.11.08 Set O Ç‡ì«Ç›çûÇﬂÇÈÇÊÇ§Ç…
 }
 
 // UTF-7 Set B (Modified BASE64) ÇÃï∂éöÇ©

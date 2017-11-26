@@ -374,7 +374,7 @@ UINT_PTR CALLBACK OFNHookProc(
 						::lstrcpyn(pData->szPath, pData->pOf->lpstrFile, _MAX_PATH);
 					}else {
 						_tsplitpath( pData->pOf->lpstrFile, NULL, NULL, NULL, szDefExt );
-						if (szDefExt[0] == _T('.') /* && szDefExt[1] != _T('\0') */) {	// 既に拡張子がついている	2文字目のチェックの削除	2008/6/14 Uchi
+						if (szDefExt[0] == _T('.')) {	// 既に拡張子がついている
 						// .のみの場合にも拡張子付きとみなす。
 							lstrcpyn(pData->szPath, pData->pOf->lpstrFile, _MAX_PATH);
 						}else {

@@ -25,7 +25,6 @@ void MruListener::OnAfterSave(const SaveInfo& saveInfo)
 void MruListener::OnBeforeLoad(LoadInfo* pLoadInfo)
 {
 	// 再ロード用に現在ファイルをMRU登録しておく
-	// Mar. 30, 2003 genta ブックマーク保存のためMRUへ登録
 	_HoldBookmarks_And_AddToMRU();	// ← 新規オープン（ファイル名未設定）では何もしない
 
 	// 文字コード指定は明示的であるか
@@ -162,7 +161,7 @@ void MruListener::OnAfterLoad(const LoadInfo& loadInfo)
 	// MRUリストへの登録
 	EditInfo	eiNew;
 	pDoc->GetEditInfo(&eiNew);
-	// 2014.07.04 ブックマークの保持(エディタが落ちたときブックマークが消えるため)
+	// ブックマークの保持(エディタが落ちたときブックマークが消えるため)
 	if (bIsExistInMRU) {
 		if (GetDllShareData().common.file.GetRestoreBookmarks()) {
 			// SetBookMarksでデータがNUL区切りに書き換わっているので再取得
@@ -180,7 +179,6 @@ void MruListener::OnAfterLoad(const LoadInfo& loadInfo)
 
 CallbackResultType MruListener::OnBeforeClose()
 {
-	// Mar. 30, 2003 genta サブルーチンにまとめた
 	_HoldBookmarks_And_AddToMRU();
 
 	return CallbackResultType::Continue;

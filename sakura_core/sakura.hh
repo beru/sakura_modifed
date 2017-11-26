@@ -46,7 +46,7 @@
 #define HLP000159	159 //Unicodeで開き直す
 #define HLP000256	256 //UnicodeBEで開き直す
 #define HLP000160	160 //UTF-8で開き直す
-#define HLP000337	337 //CESU-8で開き直す	163から変更	2010/4/27 Uchi
+#define HLP000337	337 //CESU-8で開き直す
 #define HLP000161	161 //UTF-7で開き直す
 #define HLP000162	162 //印刷
 #define HLP000120	120 //印刷プレビュー
@@ -194,11 +194,11 @@
 #define HLP000134	134 //ステータスバーを表示(隠す)
 #define HLP000371	371 //ミニマップの表示
 #define HLP000072	72 //タイプ別設定一覧
-#define HLP000338	338 //タイプ別設定インポート	// 2010/5/1 Uchi
+#define HLP000338	338 //タイプ別設定インポート
 #define HLP000073	73 //タイプ別設定
 #define HLP000074	74 //タイプ別設定 『スクリーン』プロパティ
 #define HLP000075	75 //タイプ別設定 『カラー』プロパティ
-#define HLP000319	319 //タイプ別設定 『ウィンドウ』プロパティ	// 2013.04.13
+#define HLP000319	319 //タイプ別設定 『ウィンドウ』プロパティ
 #define HLP000197	197 //タイプ別設定 『支援』プロパティ
 #define HLP000203	203 //タイプ別設定 『正規表現キーワード』プロパティ
 #define HLP000315	315 //タイプ別設定 『キーワードヘルプ』プロパティ
@@ -359,8 +359,8 @@
 //#define HLP000302	302 //色設定ファイル
 // note: 303 は 「このファイル名をコピー」が使用
 //#define HLP000304	304 //メタ文字列の仕様 HLP000272
-#define HLP000089	89 //利用可能な正規表現	// 2007.09.30
-#define HLP000108	108 //1行選択	// 2007.12.01
+#define HLP000089	89 //利用可能な正規表現
+#define HLP000108	108 //1行選択
 
 #define HLP000284	284	//ExpandParameter
 #define HLP000288	288	//文字入力
@@ -539,7 +539,7 @@
 #define HIDC_CHECK_STOPS_WORD					10917 //単語単位で移動するときに単語の両端に止まる
 #define HIDC_CHECK_STOPS_PARAGRAPH				10918 //段落単位で移動するときに段落の両端に止まる
 #define HIDC_CHECK_CLOSEALLCONFIRM				10919 //[すべて閉じる]で他に編集用のウィンドウがあれば確認する
-#define HIDC_CHECK_NOMOVE_ACTIVATE_BY_MOUSE		10920 //マウスクリックでアクティブになったときはカーソルをクリック位置に移動しない 2007.10.08 genta
+#define HIDC_CHECK_NOMOVE_ACTIVATE_BY_MOUSE		10920 //マウスクリックでアクティブになったときはカーソルをクリック位置に移動しない
 #define HIDC_COMBO_WHEEL_PAGESCROLL				10921 //組み合わせてホイール操作した時ページスクロールする
 #define HIDC_COMBO_WHEEL_HSCROLL				10922 //組み合わせてホイール操作した時横スクロールする
 #define HIDC_HOTKEY_TRAYMENU					10940 //左クリックメニューのショートカットキー
@@ -585,7 +585,7 @@
 #define HIDC_CHECK_RetainEmptyWindow			11273 //最後のファイルを閉じたとき(無題)文書を残す
 #define HIDC_CHECK_CloseOneWin					11274 //ウィンドウの閉じるボタンは現在のファイルのみ閉じる
 #define HIDC_CHECK_ChgWndByWheel				11275 //マウスホイールでタブ切替
-#define HIDC_CHECK_OpenNewWin					11276 //外部から起動するときは新しいウィンドウ開く	// 2009.06.19
+#define HIDC_CHECK_OpenNewWin					11276 //外部から起動するときは新しいウィンドウ開く
 #define HIDC_BUTTON_TABFONT						11277 //タブフォント
 #define HIDC_CHECK_INHERIT_KEY_OTHER_VIEW		11278 //次・前検索で他のビューの検索条件を引き継ぐ
 #define HIDC_CHECK_DispTabClose					11279 //タブを閉じるボタン表示
@@ -842,14 +842,6 @@
 #define HIDC_CMP_LIST_FILES		12306	//ファイル一覧
 #define HIDC_CMP_STATIC_COMPARESRC	12307	//ソースファイル
 
-//印刷	del Uchi 2010/4/26
-//#define HIDOK_PP			12400	//OK
-//#define HIDCANCEL_PP		12401	//キャンセル
-//#define HIDC_PP_EDIT_FROM	12402	//ページから
-//#define HIDC_PP_EDIT_TO		12403	//ページまで
-//#define HIDC_PP_RADIO_ALL	12404	//すべて
-//#define HIDC_PP_RADIO_FROMTO	12405	//指定
-
 //印刷設定
 #define HIDC_PS_BUTTON_EDITSETTINGNAME	12500	//設定名変更
 #define HIDOK_PS					12501	//OK
@@ -887,7 +879,6 @@
 
 //プロパティ
 #define HIDOK_PROP				12600	//
-//#define HIDCANCEL_PROP			12601	//	del 2008/7/4 Uchi
 #define HIDC_PROP_BUTTON_HELP	12602	//
 #define HIDC_PROP_EDIT1			12603	//
 
@@ -1080,7 +1071,6 @@
 #define HIDCANCEL_KEYWORD_SELECT		14101		// キャンセル
 #define HIDC_COMBO_KEYWORD_SELECT		14102		// 強調キーワード1～10
 
-// 共通設定ステータスバー			// 2008/6/21	Uchi
 #define HIDC_CHECK_DISP_UNICODE_IN_SJIS	14200		// SJISで文字コード値をUnicodeで表示する
 #define HIDC_CHECK_DISP_UNICODE_IN_JIS	14201		// JISで文字コード値をUnicodeで表示する
 #define HIDC_CHECK_DISP_UNICODE_IN_EUC	14202		// EUCで文字コード値をUnicodeで表示する
@@ -1088,7 +1078,6 @@
 #define HIDC_CHECK_DISP_SP_CODEPOINT	14204		// サロゲートペアをコードポイントで表示する
 #define HIDC_CHECK_DISP_SELCOUNT_BY_BYTE	14205	// 選択文字数を文字単位ではなくバイト単位で表示する
 
-// 共通設定メインメニュー			// 2010/5/16	Uchi
 #define HIDC_TREE_RES						14400	//メニュー一覧
 #define HIDC_BUTTON_TREE_DELETE				14401	//メニューから機能削除
 #define HIDC_BUTTON_TREE_INSERT_NODE 		14402	//メニューへノード追加

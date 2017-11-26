@@ -349,7 +349,7 @@ int PropWin::GetData(HWND hwndDlg)
 		csWindow.nRulerBottomSpace = 32;
 	}
 
-	//	Sep. 18. 2002 genta 行番号とテキストの隙間
+	// 行番号とテキストの隙間
 	csWindow.nLineNumRightSpace = ::GetDlgItemInt(hwndDlg, IDC_EDIT_nLineNumberRightSpace, NULL, FALSE);
 	if (csWindow.nLineNumRightSpace < 0) {
 		csWindow.nLineNumRightSpace = 0;
@@ -391,11 +391,11 @@ void PropWin::EnableWinPropInput(HWND hwndDlg)
 {
 	//	ファクションキーを表示するかどうか
 	if (DlgButton_IsChecked(hwndDlg, IDC_CHECK_DispFUNCKEYWND)) {
-		::EnableWindow(::GetDlgItem(hwndDlg, IDC_EDIT_FUNCKEYWND_GROUPNUM), TRUE);	// IDC_GROUP_FUNCKEYWND_POSITION->IDC_EDIT_FUNCKEYWND_GROUPNUM 2008/7/4 Uchi
+		::EnableWindow(::GetDlgItem(hwndDlg, IDC_EDIT_FUNCKEYWND_GROUPNUM), TRUE);
 		::EnableWindow(::GetDlgItem(hwndDlg, IDC_RADIO_FUNCKEYWND_PLACE1), TRUE);
 		::EnableWindow(::GetDlgItem(hwndDlg, IDC_RADIO_FUNCKEYWND_PLACE2), TRUE);
 	}else {
-		::EnableWindow(::GetDlgItem(hwndDlg, IDC_EDIT_FUNCKEYWND_GROUPNUM), FALSE);	// IDC_GROUP_FUNCKEYWND_POSITION->IDC_EDIT_FUNCKEYWND_GROUPNUM 2008/7/4 Uchi
+		::EnableWindow(::GetDlgItem(hwndDlg, IDC_EDIT_FUNCKEYWND_GROUPNUM), FALSE);
 		::EnableWindow(::GetDlgItem(hwndDlg, IDC_RADIO_FUNCKEYWND_PLACE1), FALSE);
 		::EnableWindow(::GetDlgItem(hwndDlg, IDC_RADIO_FUNCKEYWND_PLACE2), FALSE);
 	}

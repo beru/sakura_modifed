@@ -9,7 +9,6 @@ public:
 	// CodeBaseインターフェース
 	CodeConvertResult CodeToUnicode(const Memory& src, NativeW* pDst){ return EUCToUnicode(src, pDst); }	// 特定コード → UNICODE    変換
 	CodeConvertResult UnicodeToCode(const NativeW& src, Memory* pDst){ return UnicodeToEUC(src, pDst); }	// UNICODE    → 特定コード 変換
-// GetEolはCodeBaseに移動	2010/6/13 Uchi
 	CodeConvertResult UnicodeToHex(const wchar_t* pSrc, size_t iSLen, TCHAR* pDst, const CommonSetting_StatusBar* psStatusbar);	// UNICODE → Hex 変換
 
 public:

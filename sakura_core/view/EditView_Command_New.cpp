@@ -205,7 +205,7 @@ void EditView::InsertData_CEditView(
 
 	// 状態遷移
 	if (!bDoing_UndoRedo) {	// Undo, Redoの実行中か
-		pEditDoc->docEditor.SetModified(true, bRedraw);	//	Jan. 22, 2002 genta
+		pEditDoc->docEditor.SetModified(true, bRedraw);
 	}
 
 	// 再描画
@@ -218,11 +218,10 @@ void EditView::InsertData_CEditView(
 
 		if (bRedraw) {
 			int nStartLine(ptInsertPos.y);
-			// 2013.05.08 折り返し行でEOF直前で改行したときEOFが再描画されないバグの修正
 			if (nModifyLayoutLinesOld < 1) {
 				nModifyLayoutLinesOld = 1;
 			}
-			// 2011.12.26 正規表現キーワード・検索文字列などは、ロジック行頭までさかのぼって更新する必要がある
+			// 正規表現キーワード・検索文字列などは、ロジック行頭までさかのぼって更新する必要がある
 			{
 				const Layout* pLayoutLineFirst = pEditDoc->layoutMgr.SearchLineByLayoutY(ptInsertPos.y);
 				while (pLayoutLineFirst && pLayoutLineFirst->GetLogicOffset() != 0) {
@@ -273,7 +272,7 @@ void EditView::InsertData_CEditView(
 			HDC hdc = this->GetDC();
 			OnPaint(hdc, &ps, FALSE);
 			this->ReleaseDC(hdc);
-			// 2014.07.16 他のビュー(ミニマップ)の再描画を抑制する
+			// 他のビュー(ミニマップ)の再描画を抑制する
 			if (nInsLineNum == 0) {
 				for (int i=0; i<editWnd.GetAllViewCount(); ++i) {
 					EditView* pView = &editWnd.GetView(i);
@@ -570,7 +569,7 @@ void EditView::DeleteData(
 		);
 	}
 
-	pEditDoc->docEditor.SetModified(true, bRedraw);	//	Jan. 22, 2002 genta
+	pEditDoc->docEditor.SetModified(true, bRedraw);
 
 	if (pEditDoc->layoutMgr.GetLineCount() > 0) {
 		if (caret.GetCaretLayoutPos().GetY() > (int)pEditDoc->layoutMgr.GetLineCount() - 1) {
@@ -633,8 +632,6 @@ void EditView::ReplaceData_CEditView2(
 
 
 // データ置換 削除&挿入にも使える
-// Jun 23, 2000 genta 変数名を書き換え忘れていたのを修正
-// Jun. 1, 2000 genta DeleteDataから移動した
 bool EditView::ReplaceData_CEditView3(
 	Range		delRange,			// [in]  削除範囲レイアウト単位
 	OpeLineData*	pMemCopyOfDeleted,	// [out] 削除されたデータのコピー(NULL可能)
@@ -666,10 +663,7 @@ bool EditView::ReplaceData_CEditView3(
 		bLineModifiedChange = (line)? !ModifyVisitor().IsLineModified(pLayout->GetDocLineRef(), GetDocument().docEditor.opeBuf.GetNoModifiedSeq()): true;
 		if (line) {
 			size_t pos = LineColumnToIndex(pLayout, delRange.GetFrom().x);
-			//	Jun. 1, 2000 genta
 			//	同一行の行末以降のみが選択されている場合を考慮する
-
-			//	Aug. 22, 2000 genta
 			//	開始位置がEOFの後ろのときは次行に送る処理を行わない
 			//	これをやってしまうと存在しない行をPointして落ちる．
 			if (delRange.GetFrom().y < (int)layoutMgr.GetLineCount() - 1 && pos >= len) {
@@ -760,12 +754,9 @@ bool EditView::ReplaceData_CEditView3(
 		layoutMgr.ReplaceData_CLayoutMgr(&LRArg);
 	}
 
-	//	Jan. 30, 2001 genta
-	//	再描画の時点でファイル更新フラグが適切になっていないといけないので
-	//	関数の末尾からここへ移動
 	// 状態遷移
 	if (pOpeBlk) {	// Undo, Redoの実行中か
-		pEditDoc->docEditor.SetModified(true, bRedraw);	//	Jan. 22, 2002 genta
+		pEditDoc->docEditor.SetModified(true, bRedraw);
 	}
 
 	// 行番号表示に必要な幅を設定
@@ -776,7 +767,6 @@ bool EditView::ReplaceData_CEditView3(
 		// 再描画
 		if (bRedraw) {
 			// 再描画ヒント レイアウト行の増減
-			//	Jan. 30, 2001 genta	貼り付けで行数が減る場合の考慮が抜けていた
 			if (LRArg.nAddLineNum != 0) {
 				Call_OnPaint((int)PaintAreaType::LineNumber | (int)PaintAreaType::Body, false);
 			}else {
@@ -792,7 +782,7 @@ bool EditView::ReplaceData_CEditView3(
 
 				/* 再描画ヒント 変更されたレイアウト行From(レイアウト行の増減が0のとき使う) */
 				ps.rcPaint.top = GetTextArea().GenerateYPx(LRArg.nModLineFrom);
-				// 2011.12.26 正規表現キーワード・検索文字列などは、ロジック行頭までさかのぼって更新する必要がある
+				// 正規表現キーワード・検索文字列などは、ロジック行頭までさかのぼって更新する必要がある
 				{
 					const Layout* pLayoutLineFirst = layoutMgr.SearchLineByLayoutY(LRArg.nModLineFrom);
 					while (pLayoutLineFirst && pLayoutLineFirst->GetLogicOffset() != 0) {
@@ -868,12 +858,10 @@ bool EditView::ReplaceData_CEditView3(
 		caret.nCaretPosX_Prev = caret.GetCaretLayoutPos().GetX();
 	}
 
-// 2013.06.29 MoveCaretOpeは不要。ReplaceOpeのみにする
 	if (pnInsSeq) {
 		*pnInsSeq = bFastMode ? DLRArg.nInsSeq : LRArg.nInsSeq;
 	}
 
-	//	Jan. 30, 2001 genta
 	//	ファイル全体の更新フラグが立っていないと各行の更新状態が表示されないので
 	//	フラグ更新処理を再描画より前に移動する
 	return  bUpdateAll;

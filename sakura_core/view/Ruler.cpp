@@ -134,7 +134,6 @@ void Ruler::DrawRulerBg(Graphics& gr)
 	int nY = textArea.GetRulerHeight() - 2;
 	
 	// ‰ºü (ƒ‹[ƒ‰[‚Æ–{•¶‚Ì‹«ŠE)
-	//	Aug. 14, 2005 genta Ü‚è•Ô‚µ•‚ðLayoutMgr‚©‚çŽæ“¾‚·‚é‚æ‚¤‚É
 	size_t nMaxLineKetas = editDoc.layoutMgr.GetMaxLineKetas();
 	int nToX = textArea.GetAreaLeft() + ((int)nMaxLineKetas - textArea.GetViewLeftCol()) * editView.GetTextMetrics().GetHankakuDx() + 1;
 	if (nToX > textArea.GetAreaRight()) {

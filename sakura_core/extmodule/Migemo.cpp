@@ -317,7 +317,7 @@ int Migemo::migemo_load_all()
 			migemo_setproc_int2char(pcre_int2char_utf8);
 		}else {
 			migemo_setproc_char2int(pcre_char2int_sjis);
-			migemo_setproc_int2char(pcre_int2char);	// 2009.04.30 miau
+			migemo_setproc_int2char(pcre_int2char);
 		}
 	}
 	return 1;

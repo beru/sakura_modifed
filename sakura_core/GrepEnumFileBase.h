@@ -145,7 +145,7 @@ public:
 						if (pExceptItems && pExceptItems->IsExist(lpFullPath)) {
 						}else {
 							vpItems.emplace_back(lpName, w32fd.nFileSizeLow);
-							++found; // 2011.11.19
+							++found;
 							if (pExceptItems && nKeyDirLen) {
 								// フォルダを含んだパスなら検索済みとして除外指定に追加する
 								pExceptItems->vpItems.emplace_back(lpFullPath, w32fd.nFileSizeLow);

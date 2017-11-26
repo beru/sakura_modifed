@@ -214,7 +214,7 @@ size_t mbstowcs2(wchar_t* dst, const char* src, size_t dst_count)
 size_t mbstowcs2(wchar_t* pDst, int nDstCount, const char* pSrc, int nSrcCount)
 {
 	int ret = MultiByteToWideChar(
-		CP_SJIS,				// 2008/5/12 Uchi
+		CP_SJIS,
 		0,
 		pSrc,
 		nSrcCount,
@@ -246,7 +246,7 @@ wchar_t* mbstowcs_new(const char* pSrc, size_t nSrcLen, int* pnDstLen)
 {
 	// 必要な領域サイズ
 	int nNewLength = MultiByteToWideChar(
-		CP_SJIS,				// 2008/5/12 Uchi
+		CP_SJIS,
 		0,
 		pSrc,
 		(int)nSrcLen,
@@ -259,7 +259,7 @@ wchar_t* mbstowcs_new(const char* pSrc, size_t nSrcLen, int* pnDstLen)
 
 	// 変換
 	nNewLength = MultiByteToWideChar(
-		CP_SJIS,				// 2008/5/12 Uchi
+		CP_SJIS,
 		0,
 		pSrc,
 		(int)nSrcLen,
@@ -283,7 +283,7 @@ char* wcstombs_new(const wchar_t* pSrc, size_t nSrcLen)
 {
 	// 必要な領域サイズ
 	int nNewLength = WideCharToMultiByte(
-		CP_SJIS,				// 2008/5/12 Uchi
+		CP_SJIS,
 		0,
 		pSrc,
 		(int)nSrcLen,
@@ -298,7 +298,7 @@ char* wcstombs_new(const wchar_t* pSrc, size_t nSrcLen)
 
 	// 変換
 	nNewLength = WideCharToMultiByte(
-		CP_SJIS,				// 2008/5/12 Uchi
+		CP_SJIS,
 		0,
 		pSrc,
 		(int)nSrcLen,
@@ -323,7 +323,7 @@ void mbstowcs_vector(const char* pSrc, size_t nSrcLen, std::vector<wchar_t>* ret
 {
 	// 必要な容量
 	int nNewLen = MultiByteToWideChar(
-		CP_SJIS,				// 2008/5/12 Uchi
+		CP_SJIS,
 		0,
 		pSrc,
 		(int)nSrcLen,
@@ -336,7 +336,7 @@ void mbstowcs_vector(const char* pSrc, size_t nSrcLen, std::vector<wchar_t>* ret
 
 	// 変換
 	nNewLen = MultiByteToWideChar(
-		CP_SJIS,				// 2008/5/12 Uchi
+		CP_SJIS,
 		0,
 		pSrc,
 		(int)nSrcLen,
@@ -356,7 +356,7 @@ void wcstombs_vector(const wchar_t* pSrc, size_t nSrcLen, std::vector<char>* ret
 {
 	// 必要な容量
 	int nNewLen = WideCharToMultiByte(
-		CP_SJIS,				// 2008/5/12 Uchi
+		CP_SJIS,
 		0,
 		pSrc,
 		(int)nSrcLen,
@@ -371,7 +371,7 @@ void wcstombs_vector(const wchar_t* pSrc, size_t nSrcLen, std::vector<char>* ret
 
 	// 変換
 	nNewLen = WideCharToMultiByte(
-		CP_SJIS,				// 2008/5/12 Uchi
+		CP_SJIS,
 		0,
 		pSrc,
 		(int)nSrcLen,

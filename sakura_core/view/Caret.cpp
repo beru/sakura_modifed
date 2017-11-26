@@ -171,7 +171,7 @@ int Caret::MoveCursor(
 		nScrollMarginLeft  = t_min(nScrollMarginLeft,  nMin);
 	}
 	
-	//	Aug. 14, 2005 genta 折り返し幅をLayoutMgrから取得するように
+	// 折り返し幅をLayoutMgrから取得するように
 	if ((int)editDoc.layoutMgr.GetMaxLineKetas() > textArea.nViewColNum
 		&& ptWk_CaretPos.GetX() > textArea.GetViewLeftCol() + textArea.nViewColNum - nScrollMarginRight
 	) {
@@ -186,7 +186,7 @@ int Caret::MoveCursor(
 		}
 	}
 
-	// 2013.12.30 bScrollがOFFのときは横スクロールしない
+	// bScrollがOFFのときは横スクロールしない
 	if (bScroll) {
 		textArea.SetViewLeftCol(textArea.GetViewLeftCol() - nScrollColNum);
 	}else {
@@ -314,7 +314,6 @@ int Caret::MoveCursor(
 		// キャレットの行桁位置を表示する
 		ShowCaretPosInfo();
 
-		//	Sep. 11, 2004 genta 同期スクロールの関数化
 		//	bScroll == FALSEの時にはスクロールしないので，実行しない
 		editView.SyncScrollV(-nScrollRowNum);	//	方向が逆なので符号反転が必要
 		editView.SyncScrollH(-nScrollColNum);	//	方向が逆なので符号反転が必要
@@ -428,7 +427,6 @@ void Caret::ShowEditCaret()
 		sizeCaret.cx = 0;
 		return;
 	}
-	// 2014.07.02 GetDrawSwitchを見る
 	if (!editView.GetDrawSwitch()) {
 		return;
 	}
@@ -470,9 +468,9 @@ void Caret::ShowEditCaret()
 	// カーソルのタイプ = win
 	if (csGeneral.GetCaretType() == 0) {
 		nCaretHeight = GetHankakuHeight();					// キャレットの高さ
-		if (editView.IsInsMode() /* Oct. 2, 2005 genta */) {
+		if (editView.IsInsMode()) {
 			nCaretWidth = 2; // 2px
-			// 2011.12.22 システムの設定に従う(けど2px以上)
+			// システムの設定に従う(けど2px以上)
 			DWORD dwWidth;
 			if (::SystemParametersInfo(SPI_GETCARETWIDTH, 0, &dwWidth, 0) && 2 < dwWidth) {
 				nCaretWidth = t_min((int)dwWidth, GetHankakuDx());
@@ -507,7 +505,7 @@ void Caret::ShowEditCaret()
 		}
 	// カーソルのタイプ = dos
 	}else if (csGeneral.GetCaretType() == 1) {
-		if (editView.IsInsMode() /* Oct. 2, 2005 genta */) {
+		if (editView.IsInsMode()) {
 			nCaretHeight = GetHankakuHeight() / 2;			// キャレットの高さ
 		}else {
 			nCaretHeight = GetHankakuHeight();				// キャレットの高さ
@@ -627,14 +625,13 @@ void Caret::ShowCaretPosInfo()
 		CodePage::GetNameShort(szCodeName, editDoc.GetDocumentEncoding());
 		memCodeName.AppendString(szCodeName);
 		if (editDoc.GetDocumentBomExist()) {
-			memCodeName.AppendStringLiteral(_T("#"));		// BOM付(メニューバーなので小さく)	// 2013/4/17 Uchi
+			memCodeName.AppendStringLiteral(_T("#"));		// BOM付(メニューバーなので小さく)
 		}
 	}
 	pszCodeName = memCodeName.GetStringPtr();
 
 
 	// -- -- -- -- 改行モード -> szEolMode -- -- -- -- //
-	//	May 12, 2000 genta
 	//	改行コードの表示を追加
 	Eol cNlType = editDoc.docEditor.GetNewLineCode();
 	const TCHAR* szEolMode = cNlType.GetName();
@@ -647,7 +644,7 @@ void Caret::ShowCaretPosInfo()
 		ptCaret.x = 0;
 		ptCaret.y = GetCaretLogicPos().y;
 		if (pLayout) {
-			// 2014.01.10 改行のない大きい行があると遅いのでキャッシュする
+			// 改行のない大きい行があると遅いのでキャッシュする
 			int offset;
 			if (nLineLogicNoCache == pLayout->GetLogicLineNo()
 				&& nLineNoCache == GetCaretLayoutPos().y
@@ -675,7 +672,7 @@ void Caret::ShowCaretPosInfo()
 				nLogicOffsetCache = pLayout->GetLogicOffset();
 				nLineNoCache = GetCaretLayoutPos().y;
 			}else {
-			// 2013.05.11 折り返しなしとして計算する
+			// 折り返しなしとして計算する
 				const Layout* pLayout50 = pLayout;
 				int nLineNum = GetCaretLayoutPos().y;
 				for (;;) {
@@ -728,7 +725,7 @@ void Caret::ShowCaretPosInfo()
 		if (nIdx < (int)nLineLen) {
 			if (nIdx < (int)nLineLen - (pLayout->GetLayoutEol().GetLen() ? 1 : 0)) {
 				//auto_sprintf(szCaretChar, _T("%04x"),);
-				// 任意の文字コードからUnicodeへ変換する		2008/6/9 Uchi
+				// 任意の文字コードからUnicodeへ変換する
 				CodeBase* pCode = CodeFactory::CreateCodeBase(editDoc.GetDocumentEncoding(), false);
 				CommonSetting_StatusBar* psStatusbar = &GetDllShareData().common.statusBar;
 				CodeConvertResult ret = pCode->UnicodeToHex(&pLine[nIdx], nLineLen - nIdx, szCaretChar, psStatusbar);
@@ -807,7 +804,7 @@ void Caret::ShowCaretPosInfo()
 		auto_sprintf_s(szText_1, LS(STR_STATUS_ROW_COL), ptCaret.y, ptCaret.x);
 
 		TCHAR	szText_6[16];
-		if (editView.IsInsMode() /* Oct. 2, 2005 genta */) {
+		if (editView.IsInsMode()) {
 			_tcscpy_s(szText_6, LS(STR_INS_MODE_INS));	// "挿入"
 		}else {
 			_tcscpy_s(szText_6, LS(STR_INS_MODE_OVR));	// "上書"
@@ -1124,7 +1121,7 @@ int Caret::MoveCursorProperly(
 		}
 
 		if (i >= nLineLen) {
-			// 2011.12.26 フリーカーソル/矩形でデータ付きEOFの右側へ移動できるように
+			// フリーカーソル/矩形でデータ付きEOFの右側へ移動できるように
 			// フリーカーソルモードか
 			if (0
 				|| GetDllShareData().common.general.bIsFreeCursorMode
@@ -1132,7 +1129,6 @@ int Caret::MoveCursorProperly(
 				|| (editView.bDragMode && editView.bDragBoxData) /* OLE DropTarget && 矩形データ */
 			) {
 				// 折り返し幅とレイアウト行桁数（ぶら下げを含む）のどちらか大きいほうまでカーソル移動可能
-				//	Aug. 14, 2005 genta 折り返し幅をLayoutMgrから取得するように
 				int nMaxX = t_max(nPosX, (int)layoutMgr.GetMaxLineKetas());
 				nPosX = ptNewXY.x;
 				if (nPosX < 0) {

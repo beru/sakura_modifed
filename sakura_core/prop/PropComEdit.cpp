@@ -21,7 +21,6 @@ static const DWORD p_helpids[] = {	//10210
 	IDC_CHECK_bNotOverWriteCRLF,		HIDC_CHECK_bNotOverWriteCRLF,			// 上書きモード
 	IDC_CHECK_bOverWriteFixMode,		HIDC_CHECK_bOverWriteFixMode,			// 文字幅に合わせてスペースを詰める
 	IDC_CHECK_bOverWriteBoxDelete,		HIDC_CHECK_bOverWriteBoxDelete,			// 矩形入力で選択範囲を削除する
-	//	2007.02.11 genta クリッカブルURLをこのページに移動
 	IDC_CHECK_bSelectClickedURL,		HIDC_CHECK_bSelectClickedURL,			// クリッカブルURL
 	IDC_CHECK_CONVERTEOLPASTE,			HIDC_CHECK_CONVERTEOLPASTE,				// 改行コードを変換して貼り付ける
 	IDC_RADIO_CURDIR,					HIDC_RADIO_CURDIR,						// カレントフォルダ
@@ -143,7 +142,6 @@ INT_PTR PropEdit::DispatchEvent(
 	case WM_CONTEXTMENU:
 		MyWinHelp(hwndDlg, HELP_CONTEXTMENU, (ULONG_PTR)(LPVOID)p_helpids);
 		return TRUE;
-//@@@ 2001.12.22 End
 
 	}
 	return FALSE;

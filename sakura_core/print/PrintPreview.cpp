@@ -787,7 +787,7 @@ void PrintPreview::OnChangePrintSetting(void)
 	OnPreviewGoPage(nCurPageNum);
 	bLockSetting = bLockOld;
 
-	// 2014.07.23 レイアウト行番号で行番号幅が合わない時は再計算
+	// レイアウト行番号で行番号幅が合わない時は再計算
 	if (pPrintSetting->bPrintLineNumber) {
 		// 行番号表示に必要な桁数を計算
 		int tempLineNum = parentWnd.GetActiveView().GetTextArea().DetectWidthOfLineNumberArea_calculate(pLayoutMgr_Print);
@@ -895,7 +895,7 @@ void PrintPreview::OnPreviewZoom(BOOL bZoomUp)
 	
 	//	縮小ボタンのON/OFF
 	if (nPreview_Zoom == MIN_PREVIEW_ZOOM) {
-		// 2013.05.30 FocusがDisableなウィンドウだとマウススクロールできない対策
+		// FocusがDisableなウィンドウだとマウススクロールできない対策
 		HWND focus = ::GetFocus();
 		if (focus == GetDlgItem(hwndPrintPreviewBar, IDC_BUTTON_ZOOMDOWN)) {
 			::SetFocus(parentWnd.GetHwnd());
@@ -906,7 +906,7 @@ void PrintPreview::OnPreviewZoom(BOOL bZoomUp)
 	}
 	//	拡大ボタンのON/OFF
 	if (nPreview_Zoom == MAX_PREVIEW_ZOOM) {
-		// 2013.05.30 FocusがDisableなウィンドウだとマウススクロールできない対策
+		// FocusがDisableなウィンドウだとマウススクロールできない対策
 		HWND focus = ::GetFocus();
 		if (focus == GetDlgItem(hwndPrintPreviewBar, IDC_BUTTON_ZOOMUP)) {
 			::SetFocus(parentWnd.GetHwnd());
@@ -1015,7 +1015,7 @@ void PrintPreview::OnPrint(void)
 	DlgCancel	dlgPrinting;
 	dlgPrinting.DoModeless(EditApp::getInstance().GetAppInstance(), parentWnd.GetHwnd(), IDD_PRINTING);
 	dlgPrinting.SetItemText(IDC_STATIC_JOBNAME, szJobName);
-	dlgPrinting.SetItemText(IDC_STATIC_PROGRESS, _T(""));	// XPS対応 2013/5/8 Uchi
+	dlgPrinting.SetItemText(IDC_STATIC_PROGRESS, _T(""));
 
 	// 親ウィンドウを無効化
 	::EnableWindow(parentWnd.GetHwnd(), FALSE);
@@ -1058,7 +1058,6 @@ void PrintPreview::OnPrint(void)
 		nCurPageNum = nFrom + (WORD)i;
 
 		// 印刷過程を表示
-		//	Jun. 18, 2001 genta ページ番号表示の計算ミス修正
 		auto_sprintf_s(szProgress, _T("%d/%d"), i + 1, nNum);
 		dlgPrinting.SetItemText(IDC_STATIC_PROGRESS, szProgress);
 
@@ -1578,7 +1577,7 @@ ColorStrategy* PrintPreview::Print_DrawLine(
 	int nDx = pPrintSetting->nPrintFontWidth;
 
 	// タブ幅取得
-	size_t nTabSpace = parentWnd.GetDocument().layoutMgr.GetTabSpace(); //	Sep. 23, 2002 genta LayoutMgrの値を使う
+	size_t nTabSpace = parentWnd.GetDocument().layoutMgr.GetTabSpace();
 
 	// 文字間隔配列を生成
 	vector<int> vDxArray;
@@ -1599,10 +1598,10 @@ ColorStrategy* PrintPreview::Print_DrawLine(
 	int nKind     = 0; // 0:半角 1:全角 2:タブ
 	int nKindLast = 2; // 直前のnKind状態
 
-	// 色設定	2012-03-07 ossan
+	// 色設定
 	StringRef cStringLine(pLine, nDocLineLen);
 	ColorStrategy* pStrategy = pStrategyStart;
-	// 2014.12.30 色はGetColorStrategyで次の色になる前に取得する必要がある
+	// 色はGetColorStrategyで次の色になる前に取得する必要がある
 	int nColorIdx = ToColorInfoArrIndex( pStrategy ? pStrategy->GetStrategyColor() : COLORIDX_TEXT );
 
 	for (
@@ -1685,7 +1684,7 @@ ColorStrategy* PrintPreview::Print_DrawLine(
 	// フォントを元 (半角) に戻す
 	::SelectObject(hdc, hFontHan);
 
-	// 色を元に戻す	2012-03-07 ossan
+	// 色を元に戻す
 	if (pLayout) {
 		int nColorIdx = ToColorInfoArrIndex(COLORIDX_TEXT);
 		if (nColorIdx != -1) {

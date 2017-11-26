@@ -93,7 +93,7 @@ struct SaveInfo {
 	FilePath		filePath;	// 保存ファイル名
 	EncodingType	eCharCode;	// 保存文字コードセット
 	bool			bBomExist;	// 保存時BOM付加
-	bool			bChgCodeSet;// 文字コードセット変更	2013/5/19 Uchi
+	bool			bChgCodeSet;// 文字コードセット変更
 	Eol				eol;		// 保存改行コード
 
 	// モード

@@ -228,7 +228,7 @@ void ViewSelect::DrawSelectArea(bool bDrawBracketCursorLine)
 				view.GetCaret().underLine.UnLock();
 				view.ReleaseDC(hdc);
 			}
-			// 2010.10.10 0幅選択(解除)状態での、カーソル位置ライン復帰(リージョン外)
+			// 0幅選択(解除)状態での、カーソル位置ライン復帰(リージョン外)
 			if (bDrawBracketCursorLine) {
 				view.GetCaret().underLine.CaretUnderLineON(true, false);
 			}
@@ -241,14 +241,14 @@ void ViewSelect::DrawSelectArea(bool bDrawBracketCursorLine)
 		}
 		HDC hdc = view.GetDC();
 		DrawSelectArea2(hdc);
-		// 2011.12.02 選択解除状態での、カーソル位置ライン復帰
+		// 選択解除状態での、カーソル位置ライン復帰
 		if (bDrawBracketCursorLine) {
 			view.GetCaret().underLine.CaretUnderLineON(true, false);
 		}
 		view.ReleaseDC(hdc);
 	}
 
-	// 2011.12.02 選択解除状態になると対括弧強調ができなくなるバグ対策
+	// 選択解除状態になると対括弧強調ができなくなるバグ対策
 	if (!IsTextSelecting()) {
 		// ただし選択ロック中はここでは強調表示されない
 		bDrawSelectArea = false;
@@ -258,7 +258,7 @@ void ViewSelect::DrawSelectArea(bool bDrawBracketCursorLine)
 		}
 	}
 
-	//	Jul. 9, 2005 genta 選択領域の情報を表示
+	// 選択領域の情報を表示
 	PrintSelectionInfoMsg();
 }
 
@@ -348,8 +348,6 @@ void ViewSelect::DrawSelectArea2(HDC hdc) const
 					|| selectOld.GetFrom().y >= ptLast.y
 					|| selectOld.GetTo().y >= ptLast.y
 				) {
-					//	Jan. 24, 2004 genta nLastLenは物理桁なので変換必要
-					//	最終行にTABが入っていると反転範囲が不足する．
 					RECT rcNew;
 					rcNew.left   = textArea.GetAreaLeft() + (textArea.GetViewLeftCol() + ptLast.x) * nCharWidth;
 					rcNew.right  = textArea.GetAreaRight();

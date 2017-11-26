@@ -342,8 +342,6 @@ void ViewCommander::Command_Activate_SQLPlus(void)
 // Oracle SQL*PlusÇ≈é¿çs
 void ViewCommander::Command_PLSQL_Compile_On_SQLPlus(void)
 {
-//	HGLOBAL		hgClip;
-//	char*		pszClip;
 	int			nRet;
 	BOOL		nBool;
 	TCHAR		szPath[MAX_PATH + 2];
@@ -365,10 +363,8 @@ void ViewCommander::Command_PLSQL_Compile_On_SQLPlus(void)
 		switch (nRet) {
 		case IDYES:
 			if (GetDocument().docFile.GetFilePathClass().IsValidPath()) {
-				//nBool = HandleCommand(F_FILESAVE, true, 0, 0, 0, 0);
 				nBool = Command_FileSave();
 			}else {
-				//nBool = HandleCommand(F_FILESAVEAS_DIALOG, true, 0, 0, 0, 0);
 				nBool = Command_FileSaveAs_Dialog(NULL, CODE_NONE, EolType::None);
 			}
 			if (!nBool) {
@@ -426,26 +422,21 @@ void ViewCommander::Command_Browse(void)
 		ErrorBeep();
 		return;
 	}
-//	char	szURL[MAX_PATH + 64];
-//	auto_sprintf( szURL, L"%ls", GetDocument().docFile.GetFilePath() );
-	// URLÇäJÇ≠
-//	::ShellExecuteEx(NULL, L"open", szURL, NULL, NULL, SW_SHOW);
-
-    SHELLEXECUTEINFO info; 
-    info.cbSize = sizeof(info);
-    info.fMask = 0;
-    info.hwnd = NULL;
-    info.lpVerb = NULL;
-    info.lpFile = GetDocument().docFile.GetFilePath();
-    info.lpParameters = NULL;
-    info.lpDirectory = NULL;
-    info.nShow = SW_SHOWNORMAL;
-    info.hInstApp = 0;
-    info.lpIDList = NULL;
-    info.lpClass = NULL;
-    info.hkeyClass = 0; 
-    info.dwHotKey = 0;
-    info.hIcon =0;
+	SHELLEXECUTEINFO info; 
+	info.cbSize = sizeof(info);
+	info.fMask = 0;
+	info.hwnd = NULL;
+	info.lpVerb = NULL;
+	info.lpFile = GetDocument().docFile.GetFilePath();
+	info.lpParameters = NULL;
+	info.lpDirectory = NULL;
+	info.nShow = SW_SHOWNORMAL;
+	info.hInstApp = 0;
+	info.lpIDList = NULL;
+	info.lpClass = NULL;
+	info.hkeyClass = 0; 
+	info.dwHotKey = 0;
+	info.hIcon =0;
 
 	::ShellExecuteEx(&info);
 

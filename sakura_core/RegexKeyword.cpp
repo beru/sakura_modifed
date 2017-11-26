@@ -153,7 +153,7 @@ bool RegexKeyword::RegexKeySetTypes(const TypeConfig *pTypesPtr)
 
 	if (nTypeId == pTypesPtr->id
 		&& nCompiledMagicNumber == pTypesPtr->nRegexKeyMagicNumber
-		&& pTypes  // 2014.07.02 ğŒ’Ç‰Á
+		&& pTypes
 	) {
 		return true;
 	}

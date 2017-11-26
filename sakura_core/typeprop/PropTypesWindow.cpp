@@ -55,7 +55,6 @@ TYPE_NAME_ID<int> ImeSwitchArr[] = {
 	{ 2, STR_IME_SWITCH_OFF },
 };
 
-//	Nov. 20, 2000 genta
 TYPE_NAME_ID<int> ImeStateArr[] = {
 	{ 0, STR_IME_STATE_DEF },
 	{ 1, STR_IME_STATE_FULL },

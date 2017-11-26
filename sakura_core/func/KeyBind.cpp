@@ -417,7 +417,7 @@ TCHAR* KeyBind::GetMenuLabel(
 	if (pszLabel[0] == _T('\0')) {
 		_tcscpy(pszLabel, _T("-- undefined name --"));
 	}
-	// アクセスキーの追加	2010/5/17 Uchi
+	// アクセスキーの追加
 	_tcsncpy_s(pszLabel, LABEL_MAX, MakeMenuLabel(pszLabel, pszKey), _TRUNCATE);
 
 	// 機能に対応するキー名を追加するか
