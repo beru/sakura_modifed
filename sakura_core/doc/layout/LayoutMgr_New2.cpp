@@ -119,7 +119,7 @@ void LayoutMgr::ReplaceData_CLayoutMgr(
 		colorInfo,
 		ctwArg
 	);
-	ASSERT_GE(nLines, nWork_nLines);
+
 	pArg->nAddLineNum = nLines - nWork_nLines;	// 変更後の全行数との差分
 	if (pArg->nAddLineNum == 0) {
 		pArg->nAddLineNum = nModifyLayoutLinesOld - pArg->nModLineTo;	// 再描画ヒント レイアウト行の増減

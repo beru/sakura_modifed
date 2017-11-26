@@ -987,7 +987,6 @@ void MenuDrawer::DrawItem(DRAWITEMSTRUCT* lpdis)
 		rcFillMenuBack.left = nXIconMenu;
 		::FillRect(hdc, &rcFillMenuBack, hBrush);
 
-//		hBrush = ::GetSysColorBrush(COLOR_3DFACE);
 		COLORREF colMenu   = ::GetSysColor(COLOR_MENU);
 		COLORREF colFace = ::GetSysColor(COLOR_3DFACE);
 		COLORREF colIconBack;

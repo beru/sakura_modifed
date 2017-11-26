@@ -66,7 +66,7 @@ bool ImageListMgr::Create(HINSTANCE hInstance)
 	HBITMAP	hFOldbmp = NULL;	//	SetObjectで得られた1つ前のハンドルを保持する
 	HDC		dcFrom = 0;			//	描画用
 	int		nRetPos;			//	後処理用
-	cx = cy  = 16;
+	cx = cy = 16;
 
 	nRetPos = 0;
 	do {
