@@ -46,7 +46,7 @@ void TipWnd::Create(HINSTANCE hInstance, HWND hwndParent)
 	// 基底クラスメンバ呼び出し
 	Wnd::Create(
 		hwndParent,
-		WS_EX_TOOLWINDOW, // extended window style	// 2002/2/3 GAE
+		WS_EX_TOOLWINDOW, // extended window style
 		pszClassName,	// Pointer to a null-terminated string or is an atom.
 		pszClassName, // pointer to window name
 		WS_POPUP | WS_CLIPCHILDREN | WS_BORDER, // window style

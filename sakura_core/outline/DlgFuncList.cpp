@@ -1566,7 +1566,7 @@ void DlgFuncList::SetTreeFile()
 	int nFuncInfo = 0;
 	std::vector<HTREEITEM> hParentTree;
 	hParentTree.push_back(TVI_ROOT);
-	for (int i=0; i<(int)fileTreeSetting.items.size(); ++i) {
+	for (size_t i=0; i<fileTreeSetting.items.size(); ++i) {
 		TCHAR szPath[_MAX_PATH];
 		TCHAR szPath2[_MAX_PATH];
 		const FileTreeItem& item = fileTreeSetting.items[i];

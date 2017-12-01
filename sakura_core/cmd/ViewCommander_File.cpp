@@ -113,8 +113,8 @@ void ViewCommander::Command_FileOpen(
 
 		loadInfo.filePath = files[0].c_str();
 		// 他のファイルは新規ウィンドウ
-		int nSize = (int)files.size();
-		for (int i=1; i<nSize; ++i) {
+		size_t nSize = files.size();
+		for (size_t i=1; i<nSize; ++i) {
 			LoadInfo filesLoadInfo = loadInfo;
 			filesLoadInfo.filePath = files[i].c_str();
 			ControlTray::OpenNewEditor(

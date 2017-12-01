@@ -427,7 +427,7 @@ DWORD GrepAgent::DoGrep(
 	memMessage.AppendString(LSW(STR_GREP_SEARCH_FOLDER));	// L"ƒtƒHƒ‹ƒ_   "
 	{
 		std::tstring grepFolder;
-		for (int i=0; i<(int)vPaths.size(); ++i) {
+		for (size_t i=0; i<vPaths.size(); ++i) {
 			if (i) {
 				grepFolder += _T(';');
 			}

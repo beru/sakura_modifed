@@ -78,7 +78,6 @@ protected:
 	DllSharedData*		pShareData;
 	TypeConfig			types;
 
-	// スクリーン用データ	2010/5/10 CPropTypes_P1_Screen.cppから移動
 	static std::vector<TYPE_NAME_ID2<OutlineType>> OlmArr;			// アウトライン解析ルール配列
 	static std::vector<TYPE_NAME_ID2<SmartIndentType>> SIndentArr;	// スマートインデントルール配列
 

@@ -741,7 +741,7 @@ BOOL DlgFileTree::OnBnClicked(int wID)
 						htiInsert = TVI_LAST;
 					}
 					HTREEITEM htiItemFirst = NULL;
-					for (int i=0; i<(int)aFileNames.size(); ++i) {
+					for (size_t i=0; i<aFileNames.size(); ++i) {
 						NativeT memFile = aFileNames[i].c_str();
 						memFile.ReplaceT(_T("%"), _T("%%"));
 						FileTreeItem item;

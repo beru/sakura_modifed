@@ -13,7 +13,7 @@ Subject::Subject()
 Subject::~Subject()
 {
 	// ƒŠƒXƒi‚ğ‰ğœ
-	for (int i=0; i<(int)vListenersRef.size(); ++i) {
+	for (size_t i=0; i<vListenersRef.size(); ++i) {
 		vListenersRef[i]->Listen(NULL);
 	}
 	vListenersRef.clear();
@@ -22,7 +22,7 @@ Subject::~Subject()
 void Subject::_AddListener(Listener* pListener)
 {
 	// Šù‚É’Ç‰ÁÏ‚İ‚È‚ç‰½‚à‚µ‚È‚¢
-	for (int i=0; i<(int)vListenersRef.size(); ++i) {
+	for (size_t i=0; i<vListenersRef.size(); ++i) {
 		if (vListenersRef[i] == pListener) {
 			return;
 		}
@@ -34,7 +34,7 @@ void Subject::_AddListener(Listener* pListener)
 void Subject::_RemoveListener(Listener* pListener)
 {
 	// ”z—ñ‚©‚çíœ
-	for (int i=0; i<(int)vListenersRef.size(); ++i) {
+	for (size_t i=0; i<vListenersRef.size(); ++i) {
 		if (vListenersRef[i] == pListener) {
 			vListenersRef.erase(vListenersRef.begin() + i);
 			break;

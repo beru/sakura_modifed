@@ -48,7 +48,7 @@ ShareData::~ShareData()
 		CloseHandle(hFileMap);
 	}
 	if (pvTypeSettings) {
-		for (int i=0; i<(int)pvTypeSettings->size(); ++i) {
+		for (size_t i=0; i<pvTypeSettings->size(); ++i) {
 			delete (*pvTypeSettings)[i];
 			(*pvTypeSettings)[i] = nullptr;
 		}
@@ -825,7 +825,7 @@ void ShareData::ConvertLangValues(std::vector<std::wstring>& values, bool bSetVa
 	assert(pvTypeSettings);
 	indexBackup = index;
 	ConvertLangValue(shareData.typeBasis.szTypeName, STR_TYPE_NAME_BASIS);
-	for (int i=0; i<(int)GetTypeSettings().size(); ++i) {
+	for (size_t i=0; i<GetTypeSettings().size(); ++i) {
 		index = indexBackup;
 		TypeConfig& type = *(GetTypeSettings()[i]);
 		ConvertLangValue2(type.szTypeName, STR_TYPE_NAME_BASIS);
@@ -1433,7 +1433,7 @@ std::vector<TypeConfig*>& ShareData::GetTypeSettings()
 void ShareData::InitFileTree(FileTree* setting)
 {
 	setting->bProject = true;
-	for (int i=0; i<(int)_countof(setting->items); ++i) {
+	for (size_t i=0; i<_countof(setting->items); ++i) {
 		FileTreeItem& item = setting->items[i];
 		item.eFileTreeItemType = FileTreeItemType::Grep;
 		item.szTargetPath = _T("");

@@ -168,8 +168,7 @@ bool OutputAdapterDiff::OutputA(const char* pBuf, int size)
 	}
 
 	// 読み出した文字列をチェックする
-	int j;
-	for (j=0; j<(int)size/*-1*/; ++j) {
+	for (size_t j=0; j<size/*-1*/; ++j) {
 		if (bLineHead) {
 			if (pBuf[j] != '\n' && pBuf[j] != '\r') {
 				bLineHead = false;
