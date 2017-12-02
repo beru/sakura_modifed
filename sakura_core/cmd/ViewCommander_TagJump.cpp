@@ -470,9 +470,9 @@ bool ViewCommander::Command_TagsMake(void)
 			// CPU消費を減らすために200msec待つ
 			switch (MsgWaitForMultipleObjects(1, &pi.hProcess, FALSE, 200, QS_ALLEVENTS)) {
 			case WAIT_OBJECT_0:
-				// 終了していればループフラグをFALSEとする
+				// 終了していればループフラグをfalseとする
 				// ただしループの終了条件は プロセス終了 && パイプが空
-				bLoopFlag = FALSE;
+				bLoopFlag = false;
 				break;
 			case WAIT_OBJECT_0 + 1:
 				// 処理中のユーザー操作を可能にする

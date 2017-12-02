@@ -614,10 +614,6 @@ LRESULT ControlTray::DispatchEvent(
 				wHotKeyCode
 			);
 
-//@@			// 共有データの保存
-//@@			pShareData->SaveShareData();
-
-			// アクセラレータテーブルの再作成
 			// アクセラレータテーブル破棄
 			DeleteAccelTbl();
 			// アクセラレータテーブル作成

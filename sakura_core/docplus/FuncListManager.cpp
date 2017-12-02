@@ -8,10 +8,12 @@ bool FuncListManager::IsLineFuncList(const DocLine* pDocLine, bool bFlag) const
 {
 	return pDocLine->mark.funcList.GetFuncListMark() != bFlag;
 }
+
 bool FuncListManager::GetLineFuncList(const DocLine* pDocLine) const
 {
 	return pDocLine->mark.funcList.GetFuncListMark();
 }
+
 void FuncListManager::SetLineFuncList(DocLine* pDocLine, bool bFlag)
 {
 	pDocLine->mark.funcList = bFlag;

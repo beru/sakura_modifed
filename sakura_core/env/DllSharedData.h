@@ -121,7 +121,7 @@ struct DllSharedData {
 	DWORD						dwCustColors[16];						// フォントDialogカスタムパレット
 
 	// プラグイン
-	uint16_t					plugCmdIcons[MAX_PLUGIN*MAX_PLUG_CMD];	// プラグイン コマンド ICON 番号
+	uint16_t					plugCmdIcons[MAX_PLUGIN * MAX_PLUG_CMD];	// プラグイン コマンド ICON 番号
 	size_t						maxToolBarButtonNum;					// ツールバーボタン 最大値
 
 	// -- -- 保存対象 -- -- //

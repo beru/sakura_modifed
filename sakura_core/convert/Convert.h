@@ -6,9 +6,6 @@ class ConvertMediator {
 public:
 	// 機能種別によるバッファの変換
 	static void ConvMemory(NativeW* pMemory, EFunctionCode nFuncCode, int nTabWidth, int nStartColumn);
-
-protected:
-	static void Command_TRIM2(NativeW* pMemory, bool bLeft);
 };
 
 class Converter {

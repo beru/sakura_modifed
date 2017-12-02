@@ -49,7 +49,6 @@ protected:
 	//                       ÉfÅ[É^ïœä∑ïî                          //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 protected:
-	//bool
 	void profile_to_value(const wstring& profile, bool* value) {
 		if (profile != L"0") *value = true;
 		else *value = false;
@@ -57,13 +56,17 @@ protected:
 	void value_to_profile(const bool& value, wstring* profile) {
 		*profile = _work_itow(value ? 1 : 0);
 	}
-	// int
 	void profile_to_value(const wstring& profile, int* value) {
 		*value = _wtoi(profile.c_str());
 	}
+	void profile_to_value(const wstring& profile, unsigned int* value) {
+		*value = (unsigned int)_wtoi(profile.c_str());
+	}
+#ifdef _WIN64
 	void profile_to_value(const wstring& profile, size_t* value) {
 		*value = _wtoi(profile.c_str());
 	}
+#endif
 	void value_to_profile(const int& value, wstring* profile) {
 		*profile = _work_itow(value);
 	}
@@ -84,7 +87,6 @@ protected:
 // Type.hÇincludeÇµÇ»Ç¢Ç∆Ç¢ÇØÇ»Ç¢Ç©ÇÁîpé~
 //	AS_INT(EOutlineType) 
 	AS_INT(WORD)
-	AS_INT(UINT)
 
 	// char
 	void profile_to_value(const wstring& profile, char* value) {

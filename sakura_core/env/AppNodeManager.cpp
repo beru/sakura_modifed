@@ -66,20 +66,18 @@ static bool __cdecl cmpGetOpenedWindowArr(const EditNodeEx& e1, const EditNodeEx
 /** 指定位置の編集ウィンドウ情報を取得する */
 EditNode* AppNodeGroupHandle::GetEditNodeAt(size_t nIndex)
 {
-	DllSharedData* pShare = &GetDllShareData();
-
+	auto& nodes = GetDllShareData().nodes;
 	size_t iIndex = 0;
-	for (size_t i=0; i<pShare->nodes.nEditArrNum; ++i) {
-		if (nGroup == 0 || nGroup == pShare->nodes.pEditArr[i].nGroup) {
-			if (IsSakuraMainWindow(pShare->nodes.pEditArr[i].hWnd)) {
+	for (size_t i=0; i<nodes.nEditArrNum; ++i) {
+		if (nGroup == 0 || nGroup == nodes.pEditArr[i].nGroup) {
+			if (IsSakuraMainWindow(nodes.pEditArr[i].hWnd)) {
 				if (iIndex == nIndex) {
-					return &pShare->nodes.pEditArr[i];
+					return &nodes.pEditArr[i];
 				}
 				++iIndex;
 			}
 		}
 	}
-
 	return NULL;
 }
 
@@ -90,7 +88,7 @@ EditNode* AppNodeGroupHandle::GetEditNodeAt(size_t nIndex)
 */
 bool AppNodeGroupHandle::AddEditWndList(HWND hWnd)
 {
-	DllSharedData* pShare = &GetDllShareData();
+	auto& nodes = GetDllShareData().nodes;
 
 	TabWndNotifyType subCommand = TabWndNotifyType::Add;
 	EditNode editNode = {0};
@@ -120,24 +118,24 @@ bool AppNodeGroupHandle::AddEditWndList(HWND hWnd)
 
 		// ウィンドウ連番
 		if (::GetWindowLongPtr(hWnd, sizeof(LONG_PTR)) == 0) {
-			pShare->nodes.nSequences++;
-			::SetWindowLongPtr(hWnd, sizeof(LONG_PTR) , (LONG_PTR)pShare->nodes.nSequences);
+			nodes.nSequences++;
+			::SetWindowLongPtr(hWnd, sizeof(LONG_PTR) , (LONG_PTR)nodes.nSequences);
 
 			// 連番を更新する。
-			editNode.nIndex = pShare->nodes.nSequences;
+			editNode.nIndex = nodes.nSequences;
 			editNode.nId = -1;
 
 			// タブグループ連番
 			if (nGroup > 0) {
 				editNode.nGroup = nGroup;	// 指定のグループ
-				if (pShare->nodes.nGroupSequences < nGroup) {
+				if (nodes.nGroupSequences < nGroup) {
 					// 指定グループが現在のGroup Sequencesを超えていた場合の補正
-					pShare->nodes.nGroupSequences = nGroup;
+					nodes.nGroupSequences = nGroup;
 				}
 			}else {
 				EditNode* p = recentEditNode.GetItem(0);
 				if (!p) {
-					editNode.nGroup = ++pShare->nodes.nGroupSequences;	// 新規グループ
+					editNode.nGroup = ++nodes.nGroupSequences;	// 新規グループ
 				}else {
 					editNode.nGroup = p->nGroup;	// 最近アクティブのグループ
 				}
@@ -283,11 +281,11 @@ bool AppNodeGroupHandle::RequestCloseEditor(EditNode* pWndArr, size_t nArrCnt, b
 */
 int AppNodeGroupHandle::GetEditorWindowsNum(bool bExcludeClosing/* = true */)
 {
-	DllSharedData* pShare = &GetDllShareData();
+	auto& nodes = GetDllShareData().nodes;
 	int cnt = 0;
 	auto& appNodeMgr = AppNodeManager::getInstance();
-	for (size_t i=0; i<pShare->nodes.nEditArrNum; ++i) {
-		auto& node = pShare->nodes.pEditArr[i];
+	for (size_t i=0; i<nodes.nEditArrNum; ++i) {
+		auto& node = nodes.pEditArr[i];
 		if (IsSakuraMainWindow(node.hWnd)) {
 			if (1
 				&& nGroup != 0
@@ -396,8 +394,7 @@ bool AppNodeGroupHandle::SendMessageToAllEditors(
 /** グループをIDリセットする */
 void AppNodeManager::ResetGroupId()
 {
-	DllSharedData* pShare = &GetDllShareData();
-	auto& nodes = pShare->nodes;
+	auto& nodes = GetDllShareData().nodes;
 	int nGroup = ++nodes.nGroupSequences;
 	for (size_t i=0; i<nodes.nEditArrNum; ++i) {
 		auto& node = nodes.pEditArr[i];
@@ -416,8 +413,7 @@ void AppNodeManager::ResetGroupId()
 */
 EditNode* AppNodeManager::GetEditNode(HWND hWnd)
 {
-	DllSharedData* pShare = &GetDllShareData();
-	auto& nodes = pShare->nodes;
+	auto& nodes = GetDllShareData().nodes;
 	for (size_t i=0; i<nodes.nEditArrNum; ++i) {
 		auto& node = nodes.pEditArr[i];
 		if (hWnd == node.hWnd) {
@@ -433,12 +429,12 @@ EditNode* AppNodeManager::GetEditNode(HWND hWnd)
 // 無題番号取得
 int AppNodeManager::GetNoNameNumber(HWND hWnd)
 {
-	DllSharedData* pShare = &GetDllShareData();
+	auto& nodes = GetDllShareData().nodes;
 	EditNode* editNode = GetEditNode(hWnd);
 	if (editNode) {
 		if (editNode->nId == -1) {
-			pShare->nodes.nNonameSequences++;
-			editNode->nId = pShare->nodes.nNonameSequences;
+			nodes.nNonameSequences++;
+			editNode->nId = nodes.nNonameSequences;
 		}
 		return editNode->nId;
 	}
@@ -477,8 +473,7 @@ size_t AppNodeManager::GetOpenedWindowArr(EditNode** ppEditNode, bool bSort, boo
 // GetOpenedWindowArr関数コア処理部
 size_t AppNodeManager::_GetOpenedWindowArrCore(EditNode** ppEditNode, bool bSort, bool bGSort/* = false */)
 {
-	DllSharedData* pShare = &GetDllShareData();
-	auto& nodes = pShare->nodes;
+	auto& nodes = GetDllShareData().nodes;
 
 	// 編集ウィンドウ数を取得する。
 	*ppEditNode = nullptr;
@@ -558,7 +553,7 @@ size_t AppNodeManager::_GetOpenedWindowArrCore(EditNode** ppEditNode, bool bSort
 */
 bool AppNodeManager::ReorderTab(HWND hwndSrc, HWND hwndDst)
 {
-	DllSharedData* pShare = &GetDllShareData();
+	auto& nodes = GetDllShareData().nodes;
 	EditNode* p = nullptr;
 	int nSrcTab = -1;
 	int nDstTab = -1;
@@ -585,7 +580,6 @@ bool AppNodeManager::ReorderTab(HWND hwndSrc, HWND hwndDst)
 	ptrdiff_t nIndex;
 
 	nArr0 = p[nDstTab].nIndex;
-	auto& nodes = pShare->nodes;
 	nIndex = nodes.pEditArr[nArr0].nIndex;
 	if (nSrcTab < nDstTab) {
 		// タブ左方向ローテート
@@ -621,7 +615,7 @@ bool AppNodeManager::ReorderTab(HWND hwndSrc, HWND hwndDst)
 */
 HWND AppNodeManager::SeparateGroup(HWND hwndSrc, HWND hwndDst, bool bSrcIsTop, int notifygroups[])
 {
-	DllSharedData* pShare = &GetDllShareData();
+    auto& nodes = GetDllShareData().nodes;
 
 	LockGuard<Mutex> guard(g_editArrMutex);
 
@@ -631,13 +625,13 @@ HWND AppNodeManager::SeparateGroup(HWND hwndSrc, HWND hwndDst, bool bSrcIsTop, i
 	int nDstGroup;
 	if (!pDstEditNode) {
 		hwndDst = NULL;
-		nDstGroup = ++pShare->nodes.nGroupSequences;	// 新規グループ
+		nDstGroup = ++nodes.nGroupSequences;	// 新規グループ
 	}else {
 		nDstGroup = pDstEditNode->nGroup;	// 既存グループ
 	}
 
 	pSrcEditNode->nGroup = nDstGroup;
-	pSrcEditNode->nIndex = ++pShare->nodes.nSequences;	// タブ並びの最後（起動順の最後）にもっていく
+	pSrcEditNode->nIndex = ++nodes.nSequences;	// タブ並びの最後（起動順の最後）にもっていく
 
 	// 非表示のタブを既存グループに移動するときは非表示のままにするので
 	// 内部情報も先頭にはならないよう、必要なら先頭ウィンドウと位置を交換する。
@@ -681,8 +675,7 @@ bool AppNodeManager::IsSameGroup(HWND hWnd1, HWND hWnd2)
 // 空いているグループ番号を取得する
 int AppNodeManager::GetFreeGroupId(void)
 {
-	DllSharedData* pShare = &GetDllShareData();
-	return ++pShare->nodes.nGroupSequences;	// 新規グループ
+	return ++GetDllShareData().nodes.nGroupSequences;	// 新規グループ
 }
 
 // Close した時の次のWindowを取得する

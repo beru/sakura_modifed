@@ -195,9 +195,6 @@ void DlgDiff::SetData(void)
 		CheckButton(IDC_RADIO_DIFF_FILE1, true);
 		CheckButton(IDC_RADIO_DIFF_FILE2, false);
 	}
-	//EnableItem(IDC_FRAME_DIFF_FILE12), false);
-	//EnableItem(IDC_RADIO_DIFF_FILE1), false);
-	//EnableItem(IDC_RADIO_DIFF_FILE2), false);
 
 	// DIFF差分が見つからないときにメッセージを表示
 	if (nDiffFlgOpt & 0x0040) CheckButton(IDC_CHECK_DIFF_EXEC_STATE, true);
