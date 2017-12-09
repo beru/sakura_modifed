@@ -398,7 +398,6 @@ void LayoutMgr::_OnLine2(LayoutWork* pWork)
 		pWork->pLayout = pWork->pLayout->GetNextLayout();
 		pWork->pLayout->SetColorTypePrev(pWork->colorPrev);
 		pWork->pLayout->GetLayoutExInfo()->SetColorInfo(pWork->exInfoPrev.DetachColorInfo());
-		(*pWork->pnExtInsLineNum)++;								// Ä•`‰æ‚µ‚Ä‚Ù‚µ‚¢s” + 1
 	}else {
 		pWork->pLayout = InsertLineNext(pWork->pLayout, pWork->_CreateLayout(this));
 	}
@@ -459,7 +458,6 @@ int LayoutMgr::DoLayout_Range(
 	pWork->nModifyLayoutLinesNew	= 0;
 	// ˆø”
 	pWork->ptDelLogicalFrom		= _ptDelLogicalFrom;
-	pWork->pnExtInsLineNum		= 0;
 
 	if (pWork->pColorStrategy) {
 		pWork->pColorStrategy->InitStrategyStatus();

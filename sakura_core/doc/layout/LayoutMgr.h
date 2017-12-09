@@ -232,7 +232,6 @@ protected:
 		int				nModifyLayoutLinesNew;
 		
 		// ƒ‹[ƒvŠO (DoLayout_Rangeˆø”)
-		int*			pnExtInsLineNum;
 		Point			ptDelLogicalFrom;
 
 		// ŠÖ”
