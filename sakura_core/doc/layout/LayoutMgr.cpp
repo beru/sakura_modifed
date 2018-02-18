@@ -103,13 +103,13 @@ void LayoutMgr::SetLayoutInfo(
 {
 	MY_RUNNINGTIMER(runningTimer, "LayoutMgr::SetLayoutInfo");
 
-	assert_warning((!bDoLayout && nMaxLineKetas == nMaxLineKetas) || bDoLayout);
-	assert_warning((!bDoLayout && nTabSpace == refType.nTabSpace) || bDoLayout);
+	assert_warning((!bDoLayout && this->nMaxLineKetas == nMaxLineKetas) || bDoLayout);
+	assert_warning((!bDoLayout && this->nTabSpace == refType.nTabSpace) || bDoLayout);
 
 	// タイプ別設定
 	pTypeConfig = &refType;
-	nMaxLineKetas = nMaxLineKetas;
-	nTabSpace = nTabSpace;
+	this->nMaxLineKetas = nMaxLineKetas;
+	this->nTabSpace = nTabSpace;
 
 	// タイプによって処理関数を変更する
 	// 数が増えてきたらテーブルにすべき

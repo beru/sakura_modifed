@@ -3978,9 +3978,8 @@ void EditWnd::Views_Redraw()
 	GetActiveView().Redraw();
 }
 
-
 // アクティブなペインを設定
-void  EditWnd::SetActivePane(int nIndex)
+void EditWnd::SetActivePane(int nIndex)
 {
 	assert_warning(nIndex < GetAllViewCount());
 	DEBUG_TRACE(_T("EditWnd::SetActivePane %d\n"), nIndex);
