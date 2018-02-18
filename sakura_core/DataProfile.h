@@ -53,35 +53,35 @@ protected:
 		if (profile != L"0") *value = true;
 		else *value = false;
 	}
-	void value_to_profile(const bool& value, wstring* profile) {
+	void value_to_profile(bool value, wstring* profile) {
 		*profile = _work_itow(value ? 1 : 0);
 	}
 	void profile_to_value(const wstring& profile, int* value) {
 		*value = _wtoi(profile.c_str());
 	}
-	void profile_to_value(const wstring& profile, unsigned int* value) {
-		*value = (unsigned int)_wtoi(profile.c_str());
-	}
-#ifdef _WIN64
-	void profile_to_value(const wstring& profile, size_t* value) {
-		*value = _wtoi(profile.c_str());
-	}
-#endif
-	void profile_to_value(const wstring& profile, long* value) {
-		*value = _wtol(profile.c_str());
-	}
 	void value_to_profile(int value, wstring* profile) {
 		*profile = _work_itow(value);
 	}
-	void value_to_profile(size_t value, wstring* profile) {
-		ASSERT_GE(INT32_MAX, value);
-		*profile = _work_itow((int)value);
+	void profile_to_value(const wstring& profile, unsigned int* value) {
+		*value = (unsigned int)_wtoi(profile.c_str());
 	}
 	void value_to_profile(unsigned int value, wstring* profile) {
     wchar_t buff[64];
     _i64tow((int64_t)value, buff, 10);
 		*profile = buff;
 	}
+	void profile_to_value(const wstring& profile, long* value) {
+		*value = _wtol(profile.c_str());
+	}
+#ifdef _WIN64
+	void profile_to_value(const wstring& profile, size_t* value) {
+		*value = _wtoi(profile.c_str());
+	}
+	void value_to_profile(size_t value, wstring* profile) {
+		ASSERT_GE(INT32_MAX, value);
+		*profile = _work_itow((int)value);
+	}
+#endif
 
 	// intŽ®“üo—ÍŽÀ‘•ƒ}ƒNƒ
 	#define AS_INT(TYPE) \
@@ -105,7 +105,7 @@ protected:
 			*value = '\0';
 		}
 	}
-	void value_to_profile(const char& value, wstring* profile) {
+	void value_to_profile(char value, wstring* profile) {
 		wchar_t buf[2] = {0};
 		mbtowc(buf, &value, 1);
 		profile->assign(1, buf[0]);
@@ -114,7 +114,7 @@ protected:
 	void profile_to_value(const wstring& profile, wchar_t* value) {
 		*value = profile[0];
 	}
-	void value_to_profile(const wchar_t& value, wstring* profile) {
+	void value_to_profile(wchar_t value, wstring* profile) {
 		profile->assign(1, value);
 	}
 	// StringBufferW
