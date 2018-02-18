@@ -126,7 +126,9 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                        サイズ変更                           //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-	void SetCaretSize(int nW, int nH) { sizeCaret.Set(nW, nH); }						// キャレットサイズを設定
+	void SetCaretSize(int nW, int nH) {
+    sizeCaret.Set(nW, nH);
+  }
 
 	
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //

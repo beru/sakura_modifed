@@ -144,8 +144,6 @@ BOOL EditView::Create(
 	bCurSearchUpdate = false;
 	nCurSearchKeySequence = -1;
 
-	nMyIndex = 0;
-
 	//	メニューバーへのメッセージ表示機能はEditWndへ移管
 
 	// 共有データ構造体のアドレスを返す
