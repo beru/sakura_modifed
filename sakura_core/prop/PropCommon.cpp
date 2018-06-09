@@ -213,9 +213,8 @@ INT_PTR PropCommon::DoPropertySheet(int nPageNum, bool bTrayProc)
 	psh.nPages     = nIdx;
 
 	if (nPageNum == -1) {
-		psh.nStartPage = nPageNum;
-	}else
-	if (0 > nPageNum) {
+		psh.nStartPage = this->nPageNum;
+	}else if (0 > nPageNum) {
 		psh.nStartPage = 0;
 	}else {
 		psh.nStartPage = nPageNum;

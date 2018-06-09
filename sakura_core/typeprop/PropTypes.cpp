@@ -155,7 +155,7 @@ INT_PTR PropTypes::DoPropertySheet(int nPageNum)
 
 	// psh.nStartPage ‚Í unsigned ‚È‚Ì‚Å•‰‚É‚È‚ç‚È‚¢
 	if (nPageNum == -1) {
-		psh.nStartPage = nPageNum;
+		psh.nStartPage = this->nPageNum;
 	}else if (0 > nPageNum) {
 		psh.nStartPage = 0;
 	}else {
